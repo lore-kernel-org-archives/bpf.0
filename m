@@ -1,149 +1,154 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0DF30E821
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 21:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747AF34E75D;
+	Fri, 22 May 2026 21:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779484763; cv=none; b=ns9JHtB6A4NimGbDetBh1/jjQuZyWVEiHUNVxc8+hW7YBvbDkHMwvI58J/7HG3KH638mZz/nu0tErQM86OLtY0fjT63UTK8EL+vQzQSqfVF49e2AsXZKdxGtsiv8vBdumarCBqZn5VWOBkYQc4QtHFk/3gJFPOxaHIsyKeBgHuY=
+	t=1779484871; cv=none; b=DlOcEz+pJDshyiJ3j99Cy+hUV11cbeRFf1vLgjsK6CUFAC94E+PJ/gfeghtRcFRqSwQBzzxRT13GTXXOFyEorHLGGbZbHBdkZIv1e/kgXtb7YhITTvzgHRqeXHcOjT/6w/qfYHACE5OqesmS9Hm5LjOGyspXabwhDlTMNqLH0vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779484763; c=relaxed/simple;
-	bh=L9wbN1T4LDGePzg75yM9dmh/F/pg8lluRRQrq19Elbg=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gVe2AgoSJ/wqNL2N6/OC8JKVuaam8zi5MnMeOeKGxHsjVwVXayKJKxuobnAtd1guvCJykjJpq1rNFAxDigrnf8bajpsU65YzrLlRReIr/wWuUPfmqJ8GMJ5wnxUaUpBOME/qbnUhsFL7qm+zfz2Jf5+uzzCPl3pvn+zPWqEInTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i7heXhti; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779484871; c=relaxed/simple;
+	bh=KX+UGJxvACTM0XgxhWcXHcJQR/Qgp9qgAFdqLjEC4eo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oEpMAW7qTuPJSwZF/5PvSaEWqSDu94dnSXgGMjTJUiLcC3eQ/MyjWuxIbG3qhy/UHZHkBV069aSc3ZkK15lnHufGB+vWGgSpwg1ykiS/ziSENMPy4QtJ3r4alg7aYAIbnFs07iFXsTuKElrATaDGtysNourFE8cc1BJh0ilmgfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=K8urikE/; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i7heXhti"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4891c00e7aeso56164455e9.2
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 14:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779484760; x=1780089560; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8Ojzs/5/GrhBIbAEZOryGvNL55Luuz8K7dEMD1BYwVg=;
-        b=i7heXhtiSSTO9VeebO2wXWtTCeMTErdqwJncHrBUWNksKCVOQpF4sHqDkKSFnyzmJ8
-         mfn3X6gxyoUH/OxEhSSp1t80YayuVrqwLRFZAd3WZblEDCGTMTiN4GxHFjbpAoVUU6rw
-         InnutzvbrNfK80eiIRHx5PI7tgihtLwz9ES8AgCDgg+gfF/u5ZTz/aMJKphTKGwNziDf
-         RTu7eKDMRSWIdG5dNCQIwV0rpe0AQhNRJSdMpZjVz/LgSjfVcg5G78VBLZr1AaK8llNd
-         MPEgxbM8dLSBQ0i+DwaxjWjDaaKUqrjuK8zcpe2F/jWtMFGOiKlundpObOdxDqTp/mwy
-         XKow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779484760; x=1780089560;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Ojzs/5/GrhBIbAEZOryGvNL55Luuz8K7dEMD1BYwVg=;
-        b=B35gzeSfNNmcuKasp5ZHZ8f0dRUCOlreklW8XLTz+1kUv3u2K78ur7LluX2q/YwXtv
-         dVzK+EyPjsnBjzhiuvbN2y0GSNx9JKSTroQ//LTBjn5wCkfLxWpodBCM0y5UI+iPvhQ5
-         fBuzyiB/njALXhbOZt7OW7dojN2PztFk2SCvo1lXARzG5jCLlwOwlT2Ml3QGC9Pf/mhG
-         Qfgx2fvx7HaOUod2uvq9+n9iwCUkTe/ilcxgbMyil947lSSDpUAeFyRU2+d0mgrsdrZs
-         yo6TLJ6JpRK5XDib+/toVjctTqWQUdzXzCkII0/y6mKPh+8GuoKAMjUCA/vbBstxQ0QT
-         ysGA==
-X-Forwarded-Encrypted: i=1; AFNElJ95Mm4AXy3fwM3TIwAuBN8nwwD+h3fMuKhc+8mS5FC3zMjxP+XC/FLHWNgKvOG8S37Zdwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWjsChiMaz5FxUUDkWtE5vi1hbAnxPImteuh+lwsOLcJ2tpUPW
-	K0W0UnHk4mr1zE8u4B/VXgk2nSLk+mCfZSmKTyn+/0Rj9yINn55MDqbunBzK47Nd
-X-Gm-Gg: Acq92OGbM8Szy1HT3ehN4a7r8bUzTzOfAeQoYkFoSC1u3q9OZTZAJBOezMMpABL9Fij
-	Cnrdv/9qg1kemn9tQPuMcgx/v/ORRypiEtYrVUhd4wdv1TbIgnHxE9JYvoGngYCRsqHk/WgCG6M
-	RAiIgAmhYSRXcwxRg1tLgRGWgPoPdH/6HG/X1ui4NOOI1zAexD85T5T0/yoz1Aq/Nkob62H1wRy
-	tl//4Niv8T2fJ5dekDG1ezKFkNS6K2ilJyl2gBdlsJpf3yV9x4Xt4syMhylL5533MW07FlbUyiU
-	oMiUAMwXEb4YNYKuZfbnGkYJjwIYqkj7JS1himYaDEm/wCJuULMikEaWw5HDCfkwTt58bbhP3iY
-	AnjWgKbtsj3ZYUj0xQAW1AUOT3zvCh+NTGkJw1sxNFSj5iNP+fzzHEU70cvnI507MRPhxsshvK+
-	iOlgLXz0WKOJk=
-X-Received: by 2002:a05:600c:4ecc:b0:490:3c90:2cda with SMTP id 5b1f17b1804b1-490426cef73mr73301715e9.20.1779484759881;
-        Fri, 22 May 2026 14:19:19 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490424b5b80sm37865495e9.6.2026.05.22.14.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2026 14:19:19 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 22 May 2026 23:19:17 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 04/12] uprobes/x86: Move optimized uprobe from nop5 to
- nop10
-Message-ID: <ahDIVTM5WfVqiYE6@krava>
-References: <20260521124411.31133-1-jolsa@kernel.org>
- <20260521124411.31133-5-jolsa@kernel.org>
- <CAEf4BzZ+MToBKJS9Vdu=YZrX+2kRpUcmWejVhuoqhtu-ijqDAQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="K8urikE/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=8UdR20fVEbdrOYeVfjj1eEdjlIDyN73OPZeHlIip6fg=; b=K8urikE/ondsbqWeQ1JLSXAtpn
+	fUeOu/LzCGtS3G0qeEgxou5+VKmS2zHawD+xUUurcoPXQALEwOcc3xp3ZqnaiMc1Wg4h6Jt7Se03H
+	ALgGvOiege7SzonPiphDDRDZPwnEg8ue/CLvQhVEo71d9fGoH6wdMsiaZL/FmtBZpXo85gtFT0hAz
+	Xw1nxHcAmuJqvKQBnpKyhjJ5H8fVaCuGItrdk8ewves321PBqIqY7xRubbBd99wDxTXdztIrUGgrE
+	/LLflo7IOtgupo+I1nN/XtPl/Ru8p5vplToZX3/ORyDrWSD4N8lcUvBYrcNrXdDsSgRp0USe+CF4P
+	DSVh0iCQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQXIn-000KvG-1f;
+	Fri, 22 May 2026 23:21:05 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQXIn-000Gv6-0T;
+	Fri, 22 May 2026 23:21:05 +0200
+Message-ID: <a9345efb-b691-4fc1-9bad-d571bd324c25@iogearbox.net>
+Date: Fri, 22 May 2026 23:21:04 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZ+MToBKJS9Vdu=YZrX+2kRpUcmWejVhuoqhtu-ijqDAQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] libbpf: fix off-by-one in emit_signature_match
+ jump offset
+To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Cc: ast@kernel.org, memxor@gmail.com
+References: <20260521152217.2345235-1-kpsingh@kernel.org>
+ <20260521152217.2345235-2-kpsingh@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260521152217.2345235-2-kpsingh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28008/Fri May 22 08:24:46 2026)
 
-On Fri, May 22, 2026 at 11:50:44AM -0700, Andrii Nakryiko wrote:
-> On Thu, May 21, 2026 at 5:44 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Andrii reported an issue with optimized uprobes [1] that can clobber
-> > redzone area with call instruction storing return address on stack
-> > where user code may keep temporary data without adjusting rsp.
-> >
-> > Fixing this by moving the optimized uprobes on top of 10-bytes nop
-> > instruction, so we can squeeze another instruction to escape the
-> > redzone area before doing the call, like:
-> >
-> >   lea -0x80(%rsp), %rsp
-> >   call tramp
-> >
-> > Note the lea instruction is used to adjust the rsp register without
-> > changing the flags.
-> >
-> > We use nop10 and following transofrmation to optimized instructions
-> > above and back as suggested by Peterz [2].
-> >
-> > Optimize path (int3_update_optimize):
-> >
-> >   1) Initial state after set_swbp() installed the uprobe:
-> >       cc 2e 0f 1f 84 00 00 00 00 00
-> >
-> >      From offset 0 this is INT3 followed by the tail of the original
-> >      10-byte NOP.
-> >
-> >   2) Trap the call slot before rewriting the NOP tail:
-> >       cc 2e 0f 1f 84 [cc] 00 00 00 00
-> >
-> >      From offset 0 this traps on the uprobe INT3.  A thread reaching
-> >      offset 5 traps on the temporary INT3 instead of seeing a partially
-> >      patched call.
-> >
-> >   3) Rewrite the LEA tail and call displacement, keeping both INT3 bytes:
-> >       cc [8d 64 24 80] cc [d0 d1 d2 d3]
-> >
-> >      From offset 0 and offset 5 this still traps.  The bytes between
-> >      them are not executable entry points while both traps are in place.
-> >
-> >   4) Restore the call opcode at offset 5:
-> >       cc 8d 64 24 80 [e8] d0 d1 d2 d3
-> >
-> >      From offset 0 this still traps.  From offset 5 the instruction is
-> >      the final CALL to the uprobe trampoline.
-> >
+On 5/21/26 5:22 PM, KP Singh wrote:
+> The offset for the cleanup-label jump is computed before the MOV R7
+> instruction is emitted, but the JMP lands after it. Account for the
+> extra insn in the offset calculation (-2 instead of -1). Drop the
+> redundant self-loop in the else branch; gen->error = -ERANGE already
+> marks the generation as failed.
 > 
-> I'm sorry if I'm slow, but I don't understand why we need that second
-> cc at offset 5? Isn't original nop10 processed by CPU as single
-> instruction? So it will either be at ip of nop10, or at ip+10, no? If
-> we trap at ip and in int3 handler +10 from there while we are
-> installing lea+call, why do we need cc on byte 5?
+> Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
+
+Fixes: ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+
+The fb2b0e290147 does not touch emit_signature_match as pointed out.
+
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+
+Other than that, lgtm:
+
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+
+> ---
+>   tools/lib/bpf/gen_loader.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> I.e., I don't understand how CPU can end up being at ip+5 until we
-> finalize lea+call sequence? Can it?
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index cd5c2543f54d..9478b8f78f26 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -592,13 +592,12 @@ static void emit_signature_match(struct bpf_gen *gen)
+>   		gen->hash_insn_offset[i] = gen->insn_cur - gen->insn_start;
+>   		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_3, 0, 0, 0, 0, 0));
+>   
+> -		off =  -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
+> +		off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
+>   		if (is_simm16(off)) {
+>   			emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
+>   			emit(gen, BPF_JMP_REG(BPF_JNE, BPF_REG_2, BPF_REG_3, off));
+>   		} else {
+>   			gen->error = -ERANGE;
+> -			emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
 
-hum, so I though it's for the case when you do unoptimize+optimize,
-then you can have cpu executing the previous lea and hitting the int3
-on +5 offset.. but as pointed by Peter (and you) the call instruction
-never changes, so now I'm not sure why we need it
+It would make sense to move this into a separate commit, and then also clean
+up the same in emit_check_err() in one go?
 
-jirka
+>   		}
+>   	}
+>   }
+
