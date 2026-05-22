@@ -1,153 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F43E2F28E3
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 14:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92D1386450
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 15:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779461300; cv=none; b=RVPVBVsUjXkV/xdYrxanJxwi80qMqO/DOIRsMnu8+q4QMC8YxVPXbFGTZ1ipiYyPTxjnNal/DO1JHmb9A8T3Chkbchm4GuY8NNOszOG2uc1ecXrWsna2qu43GENC7ms1qSFl2We9Fj56KGAATi9U4LFL0cRmLQIq6KC5V8irPiQ=
+	t=1779462007; cv=none; b=Ff0bz5Gm+20gncCiu1pVgz8+4KDMZUhXKgaNn+2Jy1BUgI9fchrNFVjj3AXSbJO6F0LfZyPlGeF3v50nksEzS/ahBl6wVamk/O9QNAH7EybGrV21o/VNh6dwBA/F2xi/Ny8Pt3OQqh7dgX3e2M9Tg4r4aApoLwzAD4tePpdpFHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779461300; c=relaxed/simple;
-	bh=kahulLXVs2gebZttEn5I0KmOoBBiLS3zFm0xahEo05A=;
+	s=arc-20240116; t=1779462007; c=relaxed/simple;
+	bh=oAZ04sJhuG8qV9Cybcw2Il9Ow6uFuXxfOJ4UM6vM4VM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XZFGRN6+DLRF7quwNqhgRP/6xY/3eDLmAACpVTF6oY8/+CvOcwcgiLmvK2NIABba8nuZT52ZtmYUkj2pSqORiPWNJF8ecb1hw5n3xVBv9ElDl7XWjaY1+kKz2nCw+em0Hwn0SYo9P044+1nlDHXmAyO5Sm2arVaGbYwdUpcdueg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXlotj9J; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=PLW8whXq1gRWlR1yZeI8b/Tvaa7Bi+T62iWbhKzsmAZQETs9lxHc5B7/urtKhW/UH7jMASH5uLyn90/CcF+baOq7RxSHnD5m/9o+gyjxbX/3dHZhftJzE8EH3Xc/wupOD+6rtkkEf13PLoDle1YnGTLIxul31UfVjjerYapWfP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ffVxWHrH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXlotj9J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7EB1F000E9;
-	Fri, 22 May 2026 14:48:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ffVxWHrH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863311F00ADE;
+	Fri, 22 May 2026 14:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779461299;
-	bh=1BQLQ0CgvRrz5tZEY0CYjrlwvjvvF+xmmmC43fIL9JA=;
+	s=k20260515; t=1779462003;
+	bh=j3PmHRxUE9v1bwz3IpJDs8tUC8breqTVX9FmQwfQQxo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nXlotj9JAsC3tYsrhLuRb64OhdRyvKzf7SmwXhIinkK+YzCAsj10YUOg5LibHlrKQ
-	 t2Hoj5osqqpd2UDct439+fwhRBcmbaRSLYPWz7/tV+GdCM44TvcuNvvwJlwLidX5Xt
-	 ZtZjjILb69LxIV2fscLHP1ddg7GE0rwAYenpeLYFS4HAhKUUMFHZ2/+JWlxt7nYBWg
-	 I2y45ExkSlY78RuiTQJYCehkO+fvwQxfUPnX3oOVmVjZN27zXEUcKUoZxJJDgm8oI5
-	 PpnVUnUGoxt5W0dCXHCK+DVve83ItAybgyQyZXmR6sqDfGzBxcfDFv8iisuZMb8Uc6
-	 X3Z16pMmE4k4A==
+	b=ffVxWHrHx9vkmIQpaq/ViTcvdR7F9ou2v5+d+WyqPb0lrUJ7JJs/HK4R99+RyFyTm
+	 +Q1aYdG0wYziyCRzGbm8WIAHTBckPG6kGG/EG2J+WeTrZXgcYT9XBhCBG394qAXToi
+	 OQhg7L7xuG5pH27ZAsgoulcLP7rxjiw4uLe2mxz5Vl6t1mvyZviMFyZByOBgTLVes8
+	 jALXweNncwM53BLu2zTttawAq6y5e0P69FnoEvhlk/Mvmyp7totCNSLROsec3gFsWh
+	 JhulHkUXyHeoevucX4ChRS2gO4zCCFM/dHRTwndr8YxeSZU51M+t+WvEb4NUpdxwlC
+	 kaCCRVd1TE29A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/3] bpf: Add simple xattr support to bpffs
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Add bpffs xattr API
+ coverage test
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260522135626.120732-1-daniel@iogearbox.net>
-References: <20260522135626.120732-1-daniel@iogearbox.net>
+In-Reply-To: <20260522135626.120732-2-daniel@iogearbox.net>
+References: <20260522135626.120732-2-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 22 May 2026 14:48:18 +0000
-Message-Id: <20260522144818.DD7EB1F000E9@smtp.kernel.org>
+Date: Fri, 22 May 2026 14:59:53 +0000
+Message-Id: <20260522145953.863311F00ADE@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Unprivileged users can exhaust kernel memory via unbounded user.* =
-extended attributes on bpffs.
-- [High] NULL pointer dereference in bpf_fs_initxattrs() if an LSM returns =
-a NULL xattr value.
+- [Medium] The test `test_umount_lifetime` attempts to verify that root dir=
+ectory xattrs are cleared upon umount, but trivially succeeds because the x=
+attr was never actually set on the root directory.
 --
 
-commit 57543eec66ace3d4d002256a01cff4f1797f61e2
+commit eee62f5b4a9e13a37724984ba00f475e46c7075f
 Author: Daniel Borkmann <daniel@iogearbox.net>
 
-bpf: Add simple xattr support to bpffs
+selftests/bpf: Add bpffs xattr API coverage test
 
-This commit adds support for extended attributes on bpffs inodes, allowing =
-user
-space and BPF LSM programs to attach metadata to pinned objects or director=
-ies.
-The xattr store is in-memory and lives only for the lifetime of the mount.
+This commit adds basic bpffs xattr API coverage tests, including validation
+of supported namespaces, flag semantics, inode types, and mount-scoped
+lifetimes.
 
-> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> index 25c06a0118258..638aa996cbaf4 100644
-> --- a/kernel/bpf/inode.c
-> +++ b/kernel/bpf/inode.c
-
-[ ... ]
-
-> @@ -762,22 +821,151 @@ static int bpf_show_options(struct seq_file *m, st=
-ruct dentry *root)
->  	return 0;
->  }
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c b/tools=
+/testing/selftests/bpf/prog_tests/bpffs_xattr.c
+> new file mode 100644
+> index 0000000000000..3d02e30da338e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c
 
 [ ... ]
 
-> +static int bpf_fs_xattr_set(const struct xattr_handler *handler,
-> +			    struct mnt_idmap *idmap, struct dentry *unused,
-> +			    struct inode *inode, const char *name,
-> +			    const void *value, size_t size, int flags)
+> +static void test_umount_lifetime(void)
 > +{
-> +	struct bpf_fs_inode *bi =3D BPF_FS_I(inode);
-> +	struct simple_xattrs *xattrs;
-> +	struct simple_xattr *old;
+> +	char dir[64], path[128], buf[16];
+> +	int map_fd =3D -1, err;
 > +
-> +	name =3D xattr_full_name(handler, name);
-> +	xattrs =3D simple_xattrs_lazy_alloc(&bi->xattrs, value, flags);
-> +	if (IS_ERR_OR_NULL(xattrs))
-> +		return PTR_ERR(xattrs);
-> +	old =3D simple_xattr_set(xattrs, name, value, size, flags);
+> +	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
+> +		return;
+> +	snprintf(path, sizeof(path), "%s/m", dir);
+> +
+> +	map_fd =3D bpf_map_create(BPF_MAP_TYPE_ARRAY, "x", 4, 4, 1, NULL);
+> +	if (!ASSERT_GE(map_fd, 0, "map_create"))
+> +		goto out;
+> +	if (!ASSERT_OK(bpf_obj_pin(map_fd, path), "pin"))
+> +		goto out;
+> +	ASSERT_OK(setxattr(path, "user.k", val_a, sizeof(val_a), XATTR_CREATE),
+> +		  "set");
+> +
+> +	close(map_fd);
+> +	map_fd =3D -1;
+> +
+> +	if (!ASSERT_OK(umount(dir), "umount"))
+> +		goto out;
+> +	if (!ASSERT_OK(mount("bpf", dir, "bpf", 0, NULL), "mount_fresh"))
+> +		goto out;
+> +
+> +	err =3D access(path, F_OK);
+> +	ASSERT_EQ(err, -1, "path_gone_ret");
+> +	ASSERT_EQ(errno, ENOENT, "path_gone_errno");
+> +
+> +	err =3D getxattr(dir, "user.k", buf, sizeof(buf));
 
-[Severity: High]
-Does this code allow an unprivileged user to exhaust kernel memory?
+[Severity: Medium]
+Does this test actually verify the root directory's xattr lifetime?
 
-Because bpffs can be mounted in an unprivileged user namespace
-(FS_USERNS_MOUNT), a user could create directories and repeatedly set user.*
-extended attributes.
+It looks like the user.k xattr is set on the pinned map file (path) earlier
+in the function, but after remounting, this check looks for the xattr on the
+mount root (dir).
 
-Since simple_xattr_set() does not enforce per-inode limits like
-simple_xattr_set_limited() does, couldn't this lead to an unbounded memory
-allocation and soft lockups during rhashtable traversals?
+Because user.k was never set on dir initially, won't this check trivially
+succeed with ENODATA?
 
-> +	if (IS_ERR(old))
-> +		return PTR_ERR(old);
-> +	simple_xattr_free_rcu(old);
-> +	inode_set_ctime_current(inode);
-> +	return 0;
+> +	ASSERT_EQ(err, -1, "root_xattr_gone_ret");
+> +	ASSERT_EQ(errno, ENODATA, "root_xattr_gone_errno");
+> +out:
+> +	if (map_fd >=3D 0)
+> +		close(map_fd);
+> +	umount(dir);
+> +	rmdir(dir);
 > +}
-
-[ ... ]
-
-> +static int bpf_fs_initxattrs(struct inode *inode,
-> +			     const struct xattr *xattr_array, void *fs_info)
-> +{
-> +	struct bpf_fs_inode *bi =3D BPF_FS_I(inode);
-> +	const struct xattr *xattr;
-> +	size_t len;
-> +
-> +	CLASS(simple_xattrs, xattrs)();
-> +	if (IS_ERR(xattrs))
-> +		return PTR_ERR(xattrs);
-> +
-> +	for (xattr =3D xattr_array; xattr->name !=3D NULL; xattr++) {
-> +		CLASS(simple_xattr, new_xattr)(xattr->value, xattr->value_len);
-> +		if (IS_ERR(new_xattr))
-> +			break;
-> +
-> +		len =3D strlen(xattr->name) + 1;
-> +		new_xattr->name =3D kmalloc(XATTR_SECURITY_PREFIX_LEN + len,
-
-[Severity: High]
-Can this cause a NULL pointer dereference?
-
-If an LSM program returns a NULL xattr value, the simple_xattr class
-constructor will call simple_xattr_alloc() which can return NULL.
-
-The IS_ERR(new_xattr) check evaluates to false for a NULL pointer, leading
-to a NULL pointer dereference when accessing new_xattr->name here.
-
-> +					  GFP_KERNEL_ACCOUNT);
-> +		if (!new_xattr->name)
-> +			break;
-> +
-> +		memcpy(new_xattr->name, XATTR_SECURITY_PREFIX,
-> +		       XATTR_SECURITY_PREFIX_LEN);
-
-[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522135626.1207=
-32-1-daniel@iogearbox.net?part=3D1
+32-1-daniel@iogearbox.net?part=3D2
