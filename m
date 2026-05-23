@@ -1,97 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4515345753
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 10:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5201638332D
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 12:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779530910; cv=none; b=aVlyNILubKQtZOr3b935yFv/0xRXmT7fvfWkEbW9iS4uh1PS7omtRRE8+cBfYcOSAAtZWxau/kz2gU3+k+qEOy9JMvcrt1Wd5/n8fYOyy0/Viti3Qif6+ICV9HiSdSnZ9F/63qUZyxXYcMjh4mcJ6YxBdDrtvaQKz/bEMn+rU8s=
+	t=1779540045; cv=none; b=kuhJMFZePo/3iUgy+ZN2ZF03zcmK3uEDaL/a1kTj3LZfPodu3Vp+dY9E+193xP/JH3n/ei/yD1AAWO6eNxh1sG78GO5H8oHbR0bf/uzVB9ErWfzIe4TWPcu/ioCCwG2ZM8yoFxwYztohUGEAziT4gPfp1lG1Tu1xatSJEY3V1Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779530910; c=relaxed/simple;
-	bh=oKFundsfiZ8How+jTrbT7HNuqvCyo8PSQCgsOQkQLQs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d44aEVfZM5yVvNDHOiG5Eot2/0nmCzf8hT4l+yCFv3V5W2X35H5i9+UMOenJ0aKXuW5QIjQzCBcDUVWhvfTCWtwhO95raMVS87p1fN939Vktvalo/VHojLohusMaIpuchCBl+j9EjHECLWPr/iSVFrRdXOM1Fd4B3whLgBQDgH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CgwPhPOT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779540045; c=relaxed/simple;
+	bh=Ehxr5ZZxvn0wUwMUfOy9afLMd5ZU5eM6FSLjW6I3Nes=;
+	h=From:To:CC:Date:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=iDATEYH0Ia7ejJXjdlZJuB98aNVUyH8GXAlIINmVLtXanx6PwGWS0NTSmeR39uTu+URD0jIwCV60YHJYlQqnskzo/Ely95kICwXwQ0q2U7RiYj5+o38QWGhIp+T3OModIlvWCxLXjMbfLpQOcO4KD2wVWEFapzxfE0uZwclGF50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WCNu32yC; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CgwPhPOT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584DB1F000E9;
-	Sat, 23 May 2026 10:08:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779530909;
-	bh=J3vWKTmATVCwd5BAXxgYLejn+r5UwHI/s6gfTN+dgFs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CgwPhPOTEZu7IObpvZRKGM5xwCOciYh2lcIrunPaR50QvE37u/3f4N4+mXx++pndk
-	 GXUiyv5xpiGjyjTNldyiQdqo3zSFhoiE2eStsneG7JcmJRUP6kzWTdlwAbPcelB1Bn
-	 o4LS8gUIhpm57WLUGXDXSk/WLcZOSurOdBLesogGFsNR9Zo7t+mPNIsxRP+6N0p/9F
-	 5UfWjwXXDkv8gK7+Lvu1KqC0jtLoenAOhtllrpOqn5El9DacdlxE+9M5o6ZbAtlMfF
-	 hqQ9ELFcdKdDC+44PdyY0NiAufqoErt8mqiXkGMJyXTwc4oVcPTTU/67yMyp7F/+Z6
-	 3/W+y7Qffpq8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add return value tests for lsm
- cgroup
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260523085806.417723-3-xukuohai@huaweicloud.com>
-References: <20260523085806.417723-3-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 23 May 2026 10:08:28 +0000
-Message-Id: <20260523100829.584DB1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WCNu32yC"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-516d78df76aso17723151cf.3
+        for <bpf@vger.kernel.org>; Sat, 23 May 2026 05:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1779540043; x=1780144843; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:user-agent
+         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r58xVPNF+m0WFGkWYL2Am/X2Rl0rlWvrIW8LmGz9DRE=;
+        b=WCNu32yCiv1YXVEhFOy7w0t7hQ2sPcbAV920Q3qZ8dqZiFAtNx2rrt9J4QKM4yD23v
+         fgv/EFoKou1dpN7ixN8a34mWlnord6foMhh2b7v428twmP+whydYWUmXCm4H0//KDHo7
+         4Ha+f2c2y0P9lcW6NUeyCI5KgBarVZw/KgXNyhuKIqMAcQlcq2BViK84fDrISUoE3gZg
+         uiEZU/JDUfcuib5xj708E/jWNiSusfWLF9Dpu+1DggUvSLq8UcoyqASP/g7yvxynUej5
+         ifuJ05Sl8ZMJtl15doEpjTxeyWMrWg0gNfFnhcA0jM4CrSPeUtRysvqSDwXFZyq0YcEo
+         ao1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779540043; x=1780144843;
+        h=content-transfer-encoding:mime-version:subject:user-agent
+         :references:in-reply-to:message-id:date:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r58xVPNF+m0WFGkWYL2Am/X2Rl0rlWvrIW8LmGz9DRE=;
+        b=FOMEQwvpb6wiPxIyjtCAvylPdoxb7i5nhRG2xYv7XDy3JeasaZhAbulpyQSMifwe9g
+         AmQfGw+CfP+5lfpTT54oS6GYOadIVh848FwHrtDoqmO1+OvLjcId4lGpoUw+iEhAQJ5T
+         OCK/HEomIMDXJ7FKR0g/0TgqIvjR/j8v6b9S7scZdP7rnbBPMJKMAIrQkTNObkoUnbKl
+         YJbICUIkX6nw2bneBaJwNALErg8kUWIw/KE0uS9JoCP+85u+Qf66ubrhRyofv8CM4Slf
+         WnBzB5Iis7GongXuD+mhwQB/9QeND6voKfZfwvWhYEPaVjABfHjZQHUbITO5PaWX55Jk
+         3o7A==
+X-Forwarded-Encrypted: i=1; AFNElJ+CELxT5/yLUBhCUJ65VfcI/Cuhi37Ppoa3M/XfxDIXybtsDU0R9+1d+0vq6htYXLYemb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnDLrXiXkI/35D4xI+IFrsOmjqXKOngp01foaAUu7pdGb9QNGN
+	S8yIoByANXpE8yvHaHUpouQjDJMGmQGLLeqiP2VY6gJOFA1j+BPPCI8QHT/w+lWFHg==
+X-Gm-Gg: Acq92OGtq6VK/i1GlOpTUL+p7gx+M4JznSGLstUPEu5mC6lN86IWRUfsP/6xiUtJqqg
+	L5Wadq0x5UoVtfyXqlHMKZd96KdOWlPNl469bNaZ/WEyiP9vtjWtTkwLGVpVT7amLjdOuRZd105
+	aKUgfzWP8aAlgJFHbgZKIKyjI/x8lf1pqPwz5JC3v4y/5gJ+ApNUgcDp/MN5SJ2YZFTh+FJj9R8
+	a05DrhvfXCSGETqiTkMcZ2YKRSzykxRrZ/Z+MgGO/fDe2r/AALgS0OngSgrL65qTBUgamSpaOHF
+	jvcfxKxOCaUdKBOLVgXGaE639KItcWA1B4gSjVMQm3MHkYM45suKQJ6AvkkIJPrprbuBwQ6uojy
+	eZ5mlga4PC20zjF9BBD/WXSAoKDsm/JVNK5MFw06OTjFJIuaE1S2MB+BD0/S2Lk9vKtxOHsmYKh
+	n2S99TfK3yzAXcu2jK6i4R2+M=
+X-Received: by 2002:a05:622a:190d:b0:516:d955:ea2 with SMTP id d75a77b69052e-516d955144fmr78384601cf.0.1779540043159;
+        Sat, 23 May 2026 05:40:43 -0700 (PDT)
+Received: from [10.234.26.20] ([108.147.98.161])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-516d8c91c42sm39025591cf.14.2026.05.23.05.40.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 May 2026 05:40:42 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC: KP Singh <kpsingh@kernel.org>, LSM List <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>
+Date: Sat, 23 May 2026 07:40:41 -0500
+Message-ID: <19e54da1d28.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+In-Reply-To: <CAADnVQLbCz8nCLS2W=Hpk3hVSBqHGuGyVjeKYPnNDhhu_1UiPQ@mail.gmail.com>
+References: <20260522023234.3778588-1-kpsingh@kernel.org>
+ <CAHC9VhTk3qovnQQjK0C_FWU605j6Yi+-poMVVMS8WycRFg9xhQ@mail.gmail.com>
+ <CAADnVQLbCz8nCLS2W=Hpk3hVSBqHGuGyVjeKYPnNDhhu_1UiPQ@mail.gmail.com>
+User-Agent: AquaMail/1.58.1 (build: 105801620)
+Subject: Re: [PATCH bpf-next 00/13] Signed BPF + IPE Policies
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] BPF test programs for the `socket_create` LSM hook incorrectly decl=
-are `struct task_struct *task` as their argument instead of `int family`.
+On May 23, 2026 3:40:46 AM Alexei Starovoitov 
+<alexei.starovoitov@gmail.com> wrote:
+> On Fri, May 22, 2026 at 8:56 PM Paul Moore <paul@paul-moore.com> wrote:
+>>
+>> Blaise has recorded Alexei's NACK on the Hornet patchset and addressed
+>> the TOCTOU that Alexei identified.
+>
+> It wasn't addressed. You simply ignored my feedback.
+
+Blaise most certainly did update his patches based on your feedback. 
+Perhaps there were multiple issues that weren't communicated well?
+
+> sashiko spotted it too.
+> All other sashiko bugs were ignored as well.
+
+Link? I didn't see any feedback from sashiko feedback on list and to the 
+best of my knowledge it hasn't been enabled for LSM patches.
+
 --
+paul-moore.com
 
-commit b7003df7335bb1051987324aa639e3088d3673b5
-Author: Xu Kuohai <xukuohai@huawei.com>
 
-selftests/bpf: Add return value tests for lsm cgroup
 
-This commit adds tests to check return values set by the bpf_set_retval()
-helper for lsm cgroup programs.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_lsm.c b/tools/tes=
-ting/selftests/bpf/progs/verifier_lsm.c
-> index 38e8e91768620..2072671ed6439 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_lsm.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_lsm.c
-
-[ ... ]
-
-> @@ -188,4 +188,49 @@ int BPF_PROG(null_check, struct file *file)
->  	return 0;
->  }
-> =20
-> +SEC("lsm_cgroup/socket_create")
-> +__description("lsm_cgroup with -4095~0 retval test 1")
-> +__success
-> +int BPF_PROG(lsm_cgroup_set_retval_zero_valid, struct task_struct *task)
-
-[Severity: Low]
-Is this argument type correct for the socket_create hook? The LSM hook for
-socket_create expects (int family, int type, int protocol, int kern), so
-the first argument should be int family.
-
-Using struct task_struct *task incorrectly casts the first integer argument
-to a pointer. While it works here because the argument isn't dereferenced,
-could this cause issues if this code is used as a template and the argument
-is accessed in other tests?
-
-> +{
-> +	bpf_set_retval(0);
-> +	return 0;
-> +}
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523085806.4177=
-23-1-xukuohai@huaweicloud.com?part=3D2
