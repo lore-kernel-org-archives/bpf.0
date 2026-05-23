@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6BF322533
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CA6324B32
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555516; cv=none; b=Gsv+PEJ+r8a1qQUjWV8xzg4o7bE9QTRI1BCzq23V4p8t7+T4K34gGmFbgeyu0vbBKpTcSgX9WLG7ygJx0s8l+XXoYn45x/De6oCccdMQ+704WuZQixe/3NosoZEwgwRp5ykLdQJqs4QMJ24mHORZAQUc7NAsWjHNB+jUGGlVPvw=
+	t=1779555517; cv=none; b=oRvmyMXLuGwyvAqhbHc8BX+8iiskCj7IHkBIsFlMpLTzvqymoiKfzlpuzjSxzlYvLhuWuB8McxmONZjgGNLSQuZns0dyxRWmLs0r99MOr5SsMKTr+HAm9YkLFUcjZcHqbwrGyJvmG3EjU5WswgnYyYBebCLjLnLit17NwSkhX9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555516; c=relaxed/simple;
-	bh=vquQzjwYD4k2yvjwWLFtCXlDq9evqcqzxDDUzSblsrQ=;
+	s=arc-20240116; t=1779555517; c=relaxed/simple;
+	bh=Ms33cKPMo5En6J9Tq8n8GPB74vTuve63eBThTc+2qP0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WZC2JIXCoTiuZgKjGydY7n2ioAaCUrdU6CYewjcmGuVCPismalF0AMsT10hvOgkjshLTF1oWPljMI9+XQXYJSfK0ehwXyrBHGV9bz/S6sFJ0LJOvvRUOc3hJG4c3bzNps6PyC3FPhS24BsP/3vDLvL8vnRLM8hWNVSX+XMdl1pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=B4ResIp45FxwCFhl9eH6sDmB5I2tWSiiRSCLulQFaJKOEN56NG5JhQ3JTlechUZhXqM+SnlyBvyzsDc8OmIaE7MjieeH+Gz06BuT3tNGkVA1yWodHVoPWja5N86rn3PvzoIYwEtP8DbFxtanAVMNFT4JepPKW0+ZVAF8hrwh/pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8F6CBEE908DA0; Sat, 23 May 2026 09:58:32 -0700 (PDT)
+	id 39F14EE901941; Sat, 23 May 2026 09:58:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v5 11/11] tests: Add a few clang true signature tests
-Date: Sat, 23 May 2026 09:58:32 -0700
-Message-ID: <20260523165832.1233886-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v5 10/11] btf_encoder: Handle optimized parameter properly
+Date: Sat, 23 May 2026 09:58:27 -0700
+Message-ID: <20260523165827.1232923-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260523165712.1225231-1-yonghong.song@linux.dev>
 References: <20260523165712.1225231-1-yonghong.song@linux.dev>
@@ -38,279 +38,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Three tests are added.
+Ensure to skip optimized parameter so btf can generate
+proper true signatures.
 
-Test 1: VERBOSE=3D1 ./clang_parm_optimized.sh
-  BTF:   BTF: int foo(int a, int c);
-  DWARF: DWARF: int foo(int a, int b, int c);
-where parameber 'b' is unused.
+In the first patch of the patch set, with DW_CC_nocall filtering, 875 fun=
+ctions
+have signature changed. With a series of improvement, eventually only 18 =
+functions
+remain and unfortunately these functions cannot be converted to true sign=
+atures
+due to locations. For example,
 
-Test 2: VERBOSE=3D1 ./clang_parm_optimized_stack.sh
-  BTF:   BTF: int foo(int a, int i);
-  DWARF: DWARF: int foo(int a, int b, int c, int d, int e, int f, int g, =
-int h, int i);
-where parameters 'b' to 'h' are unused.
+0x0242f1f7:   DW_TAG_subprogram
+                DW_AT_name      ("memblock_find_in_range")
+                DW_AT_calling_convention        (DW_CC_nocall)
+                DW_AT_type      (0x0242decc "phys_addr_t")
+                ...
 
-Test 3: VERBOSE=3D1 ./clang_parm_aggregate.sh
-  BTF (x86_64):  long foo(long a__f1, struct t b, int i);
-  BTF (aarch64): long foo(struct t a, struct t b, int i);
-  DWARF:         long foo(struct t a, struct t b, int i);
-where the 'struct t' definition is 'struct t { long f1; long f2; };', and
-a.f2 is not used in the function for x86_64 arch.
+0x0242f22e:     DW_TAG_formal_parameter
+                  DW_AT_location        (indexed (0x14a) loclist =3D 0x00=
+5595bc:
+                     [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5=
+ RDI
+                     [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg1=
+4 R14
+                     [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entr=
+y_value(DW_OP_reg5 RDI), DW_OP_stack_value
+                     [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg1=
+4 R14)
+                  DW_AT_name    ("start")
+                  DW_AT_type    (0x0242decc "phys_addr_t")
+                  ...
+
+0x0242f239:     DW_TAG_formal_parameter
+                  DW_AT_location        (indexed (0x14b) loclist =3D 0x00=
+5595e6:
+                     [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4=
+ RSI
+                     [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3=
+ RBX
+                     [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entr=
+y_value(DW_OP_reg4 RSI), DW_OP_stack_value
+                     [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3=
+ RBX)
+                  DW_AT_name    ("end")
+                  DW_AT_type    (0x0242decc "phys_addr_t")
+                  ...
+
+0x0242f245:     DW_TAG_formal_parameter
+                  DW_AT_location        (indexed (0x14c) loclist =3D 0x00=
+559610:
+                     [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg=
+4 RSI+0)
+                  DW_AT_name    ("size")
+                  DW_AT_type    (0x0242decc "phys_addr_t")
+                  ...
+
+0x0242f250:     DW_TAG_formal_parameter
+                  DW_AT_const_value     (4096)
+                  DW_AT_name    ("align")
+                  DW_AT_type    (0x0242decc "phys_addr_t")
+                  ...
+
+The third parameter 'size' is not from RDX. Hence, true signature is not =
+possible for this function.
+
+I also did some experiments on arm64. The number of signature-changed fun=
+citons
+is 863 and finally there are 70 functions cannot be converted to true sig=
+natures.
+Through dwarf comparison of x86_64 vs. arm64, llvm arm64 backend looks li=
+ke having
+more relaxation to compute parameter values for those signature-changed f=
+unctions.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tests/clang_parm_aggregate.sh       | 85 +++++++++++++++++++++++++++++
- tests/clang_parm_optimized.sh       | 63 +++++++++++++++++++++
- tests/clang_parm_optimized_stack.sh | 63 +++++++++++++++++++++
- 3 files changed, 211 insertions(+)
- create mode 100755 tests/clang_parm_aggregate.sh
- create mode 100755 tests/clang_parm_optimized.sh
- create mode 100755 tests/clang_parm_optimized_stack.sh
+ btf_encoder.c | 32 +++++++++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/tests/clang_parm_aggregate.sh b/tests/clang_parm_aggregate.s=
-h
-new file mode 100755
-index 0000000..9502f8b
---- /dev/null
-+++ b/tests/clang_parm_aggregate.sh
-@@ -0,0 +1,85 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 633bc61..26be31d 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1257,15 +1257,21 @@ static int32_t btf_encoder__save_func(struct btf_=
+encoder *encoder, struct functi
+ 	struct btf *btf =3D encoder->btf;
+ 	struct llvm_annotation *annot;
+ 	struct parameter *param;
+-	uint8_t param_idx =3D 0;
++	uint8_t param_idx =3D 0, skip_idx =3D 0;
+ 	int str_off, err =3D 0;
+=20
+ 	if (!state)
+ 		return -ENOMEM;
+=20
++	if (encoder->true_signature && encoder->cu->producer_clang) {
++		ftype__for_each_parameter(ftype, param) {
++			if (param->optimized) skip_idx++;
++		}
++	}
 +
-+source test_lib.sh
+ 	state->addr =3D function__addr(fn);
+ 	state->elf =3D func;
+-	state->nr_parms =3D ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
++	state->nr_parms =3D ftype->nr_parms - skip_idx + (ftype->unspec_parms ?=
+ 1 : 0);
+ 	state->ret_type_id =3D ftype->tag.type =3D=3D 0 ? 0 : encoder->type_id_=
+off + ftype->tag.type;
+ 	if (state->nr_parms > 0) {
+ 		state->parms =3D zalloc(state->nr_parms * sizeof(*state->parms));
+@@ -1297,14 +1303,34 @@ static int32_t btf_encoder__save_func(struct btf_=
+encoder *encoder, struct functi
+ 	state->reordered_parm =3D ftype->reordered_parm;
+ 	ftype__for_each_parameter(ftype, param) {
+ 		const char *name;
++		char *final_name =3D NULL;
+=20
+ 		/* No location info/optimized + reordered means optimized out. */
+ 		if (ftype->reordered_parm && (!param->has_loc || param->optimized)) {
+ 			state->nr_parms--;
+ 			continue;
+ 		}
+-		name =3D parameter__name(param) ?: "";
++		if (encoder->true_signature && encoder->cu->producer_clang && param->o=
+ptimized)
++			continue;
 +
-+outdir=3D$(make_tmpdir)
++		name =3D parameter__name(param);
++		if (!name) {
++			name =3D "";
++		} else if (param->true_sig_member_name) {
++			/* Non-null param->true_sig_member_name indicates that the parameter
++			 * name is <parameter_name>__<field_name>.
++			 */
++			if (asprintf(&final_name, "%s__%s", name, param->true_sig_member_name=
+) =3D=3D -1) {
++				err =3D -ENOMEM;
++				goto out;
++			}
++			name =3D final_name;
++		}
 +
-+# Comment this out to save test data.
-+trap cleanup EXIT
+ 		str_off =3D btf__add_str(btf, name);
++		if (final_name)
++			free(final_name);
 +
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+struct t { long f1; long f2; };
-+__attribute__((noinline)) static long foo(struct t a, struct t b, int i)
-+{
-+        return a.f1 + b.f1 + b.f2 + i;
-+}
-+
-+struct t p1, p2;
-+int i;
-+int main()
-+{
-+        return (int)foo(p1, p2, i);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+verbose_log "BTF: $btf_optimized  DWARF: $dwarf"
-+
-+arch=3D$(uname -m)
-+
-+if [[ "$arch" =3D=3D "x86_64" ]]; then
-+	# On x86_64, clang emits DW_CC_nocall for optimized functions,
-+	# so pahole should detect the optimization and produce a
-+	# different BTF signature.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		error_log "BTF and DWARF signatures should be different and they are n=
-ot: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+elif [[ "$arch" =3D=3D "aarch64" ]]; then
-+	# On arm64, clang does not emit DW_CC_nocall, so pahole cannot
-+	# detect the optimization. BTF and DWARF signatures are expected
-+	# to be the same.
-+	if [[ "$btf_cmp" !=3D "$dwarf" ]]; then
-+		error_log "On arm64, BTF and DWARF signatures should be the same but t=
-hey are not: BTF: $btf_optimized ; DWARF $dwarf"
-+		test_fail
-+	fi
-+else
-+	# On other architectures, skip if we cannot determine the
-+	# expected behavior.
-+	if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+		info_log "skip: no optimization detected on $arch"
-+		test_skip
-+	fi
-+fi
-+test_pass
-diff --git a/tests/clang_parm_optimized.sh b/tests/clang_parm_optimized.s=
-h
-new file mode 100755
-index 0000000..81d50af
---- /dev/null
-+++ b/tests/clang_parm_optimized.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+__attribute__((noinline)) static int foo(int a, int b, int c)
-+{
-+	return a * c - a - c;
-+}
-+
-+int a, b, c;
-+int main()
-+{
-+	return foo(a, b, c);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	printf "   BTF: %s  DWARF: %s\n" "$btf_optimized" "$dwarf"
-+fi
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	error_log "BTF and DWARF signatures should be different and they are no=
-t: BTF: $btf_optimized ; DWARF $dwarf"
-+	test_fail
-+fi
-+test_pass
-diff --git a/tests/clang_parm_optimized_stack.sh b/tests/clang_parm_optim=
-ized_stack.sh
-new file mode 100755
-index 0000000..afdc355
---- /dev/null
-+++ b/tests/clang_parm_optimized_stack.sh
-@@ -0,0 +1,63 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of true_signatures."
-+
-+clang_true=3D"${outdir}/clang_true"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+cat > ${clang_true}.c << EOF
-+__attribute__((noinline)) static int foo(int a, int b, int c, int d, int=
- e, int f, int g, int h, int i)
-+{
-+        return a * i - a - i;
-+}
-+
-+int a, b, c, d, e, f, g, h, i;
-+int main()
-+{
-+        return foo(a, b, c, d, e, f, g, h, i);
-+}
-+EOF
-+
-+CFLAGS=3D"$CFLAGS -g -O2"
-+${CC} ${CFLAGS} -o $clang_true ${clang_true}.c
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not compile ${clang_true}.c"
-+	test_fail
-+fi
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3D+true_signature $clang=
-_true
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for $clang_true"
-+	test_fail
-+fi
-+
-+btf_optimized=3D$(pfunct --all --format_path=3Dbtf $clang_true |grep "fo=
-o")
-+if [[ -z "$btf_optimized" ]]; then
-+	info_log "skip: no optimizations applied."
-+	test_skip
-+fi
-+
-+btf_cmp=3D$btf_optimized
-+dwarf=3D$(pfunct --all $clang_true |grep "foo")
-+
-+if [[ -n "$VERBOSE" ]]; then
-+	printf "   BTF: %s  DWARF: %s\n" "$btf_optimized" "$dwarf"
-+fi
-+
-+if [[ "$btf_cmp" =3D=3D "$dwarf" ]]; then
-+	error_log "BTF and DWARF signatures should be different and they are no=
-t: BTF: $btf_optimized ; DWARF $dwarf"
-+	test_fail
-+fi
-+test_pass
+ 		if (str_off < 0) {
+ 			err =3D str_off;
+ 			goto out;
 --=20
 2.53.0-Meta
 
