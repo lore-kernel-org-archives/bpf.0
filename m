@@ -1,109 +1,113 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E67271443
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779554965; cv=pass; b=pmvTGlkMiFDY8EjTyetowisCyf1APHmefPdmYWMhnpQsSCUhN9gn9TuwrmaC/+d+Hi/MjG700zM0H7oFLUO01X6NL37Q2ML670Pu0ZDRrI0UUw+RwIgRgig2QCZGiVYjObFXhY6rGVgzYuS2MF45hsS53nkEuXhiEZbX50mShc0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779554965; c=relaxed/simple;
-	bh=EIa8bm3wefqdftkj44KMQX6I0eapyj2RnpgMUVefGr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kr+22rZCGRsILBEn0GuKwfv60nKgX8ROs/DI5bsUxp4dwjuA+rinsGj3VJ2QxiieKEjawdn2VjrZLrZRtj94DcCKdonoLuLF0xUG0xOSQJLlMkWDhtBGyOQSqgLmvKXdXo1HUCxVtvsOkzdTzDwkEo6EV/WfGFeSgE2437cdsrs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gMphvjga; arc=pass smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C6F232395
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779555107; cv=none; b=E+zLdQMAulk46pwWCeDJlj0UEoyEKlqRHpKHtLJlY12SWj+gfNDEntpv1GhQXgXJdOsGtE23ehOYjmLv1dodVhckm/a5googaCfnoANk0E+iqLgmLhY9vUdYo5WWwXqYVv5Pa80XXN2VecYak1H1aQHrnJlSiH/O2AFE3s+8lsU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779555107; c=relaxed/simple;
+	bh=FdW76xjgTxvfORhJkVh48XAHy7DSlcCxObVVQxEN1xM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RuXe7RlGNd3+ID2R2cLeiFrvW9aAK6Kz7UI3EPDSglk2wrMB9JnhyHdR+DVvQBx01Dn/6ZaQtDvCkfpXvkY3RQTejUFbctswg2cB6U8UWIICnIyq3v1N7CJueVNvndBR5iZzEwqufx2kzAgC2kx45BK2f16oAMBZv79Pn66p84A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkZpRjVd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gMphvjga"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so86519965e9.0
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 09:49:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779554962; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gyxuoMxknvG+4BK10B9uKQBLbSiaxucK5tsf22kCzcdk2t0CbCt2bjYnkuEYk3HoxS
-         kozCL6hhPW4vSPfNRcTCMCN4W3veEFAIYnO+Dkez4c4bogFpJpBPx15KAPAO86DbVT2i
-         iFIvrgwr43FY6dQ25vEMuTZ8qFosMSVeSlmAE5Gv2uF3joGU5aOIN2ulnY+OZOB611cy
-         YA4OxbFz1VKaPy9D2VnRwDkPTMcdFTLjhODefb78Y7P0QERoI3ujkD7kbhjiXDnAonan
-         EYwmhcypF1+HMi/jUZbDTO//w8SMK6sKOYyBmb8D6O3ck3oAwHVZFZ9iYlXVOEyxvekj
-         gGWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EIa8bm3wefqdftkj44KMQX6I0eapyj2RnpgMUVefGr0=;
-        fh=KBVwTRsj+r4gmWQpI9u7v4OUUGhRs3MfWcNLQEI9OoA=;
-        b=SvRrhts5u0177BoTzcEo8Njlu7RMTZVndv6D5H7wTvW1ZyRAfEd5brJzBWZTBC9yIE
-         SMki1GOBzTBodYhvaScnqQpT7kTrv6g9aHMF3bpj1MArqcavQBk6Uae/na3NkCcWYrja
-         P/hEFsVM97WoWhaZ1Mjbx57m9ZFMujvgk3TkgbQqaFLBLZNnz204VDbPXvVQnGGThnZE
-         ZVqpwg35qMuA/hhIvQO5m2qcsYmSnVRyrroPs0j8S1mHN7y8aNJRDHl/TjOS8whzkGmN
-         7MH/pA85jWbQ1YQyLtWUCJ8KbzjDQythID1cKlyHTB2KFi+Xbal4QU4QAcmdV5mRemXW
-         Sefg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779554962; x=1780159762; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EIa8bm3wefqdftkj44KMQX6I0eapyj2RnpgMUVefGr0=;
-        b=gMphvjgaFstTp34uoGnV1dbF6GiURqLPxX3ljzQUDBuTARAIjVwi9w5U5KvFmyL1Ot
-         6EHLL8E+307uPfMhVDZCX1Eqjd6Qa9yWExfIAvgIb1oDFo/xWETMPuGMhE3NKgtFiLjW
-         FWe39RnLbl7wLT1ve/cAaWEpNTX+oRZVu/lzpPAPT8BdLDmfm1zuLJjyQKJv2qq/kXvx
-         vDjCK3OeLLDq5hBgKzeYagVeVTYuC4U138PgmiJQYu9QWMG4RjMAZ5x37gaCkRpuxJ9+
-         hldDUk9tcQmCsxGsHc5KkUoKpIyrUZy1Y+G3Flc79DRn+Je/ccF2sNkPE6nGWIcvBQIp
-         Tjmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779554962; x=1780159762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EIa8bm3wefqdftkj44KMQX6I0eapyj2RnpgMUVefGr0=;
-        b=n39CsobAnQhG8CtZa3W36MTB/hlsRANpChECnbx0vNdOlsGmB/YjcZS010FdXqBFxl
-         nlP+B9Qkf0KTlR8gKZX4uf55fNpSowQkOb312ZlHGPfHH2csAWWq8e5AMcyEo3uQtrKh
-         aE4UULr+mJ1IdQ1zqPwQSNPahpztgAlnDUfbA6X3KPn4GthVrzuHJLF7lyI3HKBhevOn
-         t9D/xzBjdAtEvkz01iHjx9S1RO2N2Yx0XDLndYJAflfaOKVJkn+MRzW3Y/2WtHaUM1Wt
-         Ke2Ejlm46yvYZqtk6FfqAvsLtw92iidkFD08gVYWG1QY5l9YBOBrxeqUF2EBZSYAQqEQ
-         AUjA==
-X-Forwarded-Encrypted: i=1; AFNElJ8ysnJoQutmLk1YSQMTT4BEfcVdEl2RwknLvmOTl+5bpqa84Rr+3DK5MCgo77wgpTUpKSM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/G3+jpzyjeQHWyfiDU+JMBLcc10azV8NpUmNakUUDh2cdStA+
-	6xvbGzbdb1Y1BiVfQkYlkJETrkI9e0fctxlHby7B4Mp/Ht/T5V37D9QlzD47jhmpbK22bTEvfl5
-	76JJ93+DwafyonkqTmqQ1n9DONEDMm4l/TjFEmdQ=
-X-Gm-Gg: Acq92OGPHLgXHpyQVbIMx7Mn+LeH+XkEdu6RiN0QJlbZGgs29S5pVi9Iv+frW0YPgGP
-	m1mlv6U7R6ubjcaiTbdROM/P7QG1vbubM0EgW4OhhL4OnAHadYYDeGZod5sEdbxODs0OLjneBRl
-	XhyNrI4Dcl5UhBgDcNvxSxphi7dQtXOTo8Cj/Lj14DMokv7x6Vm/vnaB4vpiIC7bvLYhwoMud+Q
-	Js6WsSMqiwB1coftp0Ziedi7tnWgUXlxUtwCgzvvsmVgZhzVbk0lrcA4O/AMjL+XZiE04oC0KdT
-	ht57zqUdIfb+ZSRbVLzuqmvNMZsrg+CzQAmnCAS1W0gPG/nSCFvFTWcUHnkyi2TIY2LU
-X-Received: by 2002:a05:600c:4e0c:b0:489:1a63:509c with SMTP id
- 5b1f17b1804b1-490422608cemr136597435e9.0.1779554962257; Sat, 23 May 2026
- 09:49:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkZpRjVd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7838A1F000E9;
+	Sat, 23 May 2026 16:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779555105;
+	bh=5qW7p+a1MBi05Xx0g6iy9scYXNJ4Kvtyo0Y+duVw8HA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fkZpRjVdrOI+X+xn5SYXoapriGFcfZIU5/OvjqEftG5J+Fuf88rfyqeWaamjOIv9Y
+	 QJ09o88YF0Ww2re3G7DMBe87ArFgbjzbetmv2AFZVkduMmkzuswwkQbbBbdmTYcx0Y
+	 bfyZSIg1JnJVlmsqC84Aj6EnEe36idkO82x3KWiMs9TUh38cEMz4bcHCYYWL6quMQ6
+	 EVB2GjZWWp/CUAbAnXdR5rWvx213CuPmHVGkebmFCMUoaQME8F5Ft7110vHKX8cUJk
+	 aJJRwOWvEWTiu4rYrzyCueso9ffpccQpdvSXFdk9cn+X2royZnemQ6nvBsWIre3HDO
+	 p+LJ52IfcwujQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4] libbpf: fix UAF in strset__add_str()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Carlos Llamas" <cmllamas@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260523162722.2718940-1-cmllamas@google.com>
+References: <20260523162722.2718940-1-cmllamas@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 23 May 2026 16:51:45 +0000
+Message-Id: <20260523165145.7838A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260522023234.3778588-1-kpsingh@kernel.org> <20260522023234.3778588-6-kpsingh@kernel.org>
-In-Reply-To: <20260522023234.3778588-6-kpsingh@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 23 May 2026 18:49:11 +0200
-X-Gm-Features: AVHnY4LErFJSCm8vXvIVuhSpX1QDsKcWsBatlBn4YeIC0InaTOnQJ0A0Ch0pTNM
-Message-ID: <CAADnVQL4ZXwGwxBb-Z6W1m3K8+Vs8HYUZQa5-dvpqpy-8p0cgQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 05/13] bpf: compute prog->digest at BPF_PROG_LOAD entry
-To: KP Singh <kpsingh@kernel.org>
-Cc: LSM List <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Paul Moore <paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 22, 2026 at 4:32=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
-:
->
-> add_subprog_and_kfunc relocates kfunc CALLs by patching insn->imm
-> and src_reg, and bpf_prog_calc_tag has no rule to mask kfunc CALL
-> fields.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments do not follow the BPF subsystem kernel style gu=
+idelines.
+--
 
-add_subprog_and_kfunc() doesn't modify the insn stream afaict.
-Do you mean that bpf_check_btf_info() resolves CO-RE relos?
-but loader prog doesn't use CO-RE.
-I don't quite see the point of the patch.
+commit 85499e76a5baa5992df9be7379523577757796bf
+Author: Carlos Llamas <cmllamas@google.com>
+
+libbpf: fix UAF in strset__add_str()
+
+This commit fixes a use-after-free issue where strset_add_str_mem()
+reallocation could cause the string pointer to become dangling if it
+pointed into the old buffer. It refactors the logic into a new helper
+function strset_str_append() that reconstructs the pointer when necessary.
+
+> diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+> index 2464bcbd04e03..b9faca828f09a 100644
+> --- a/tools/lib/bpf/strset.c
+> +++ b/tools/lib/bpf/strset.c
+> @@ -107,6 +107,38 @@ static void *strset_add_str_mem(struct strset *set, =
+size_t add_sz)
+
+[ ... ]
+
+> +static long strset_str_append(struct strset *set, const char *s)
+> +{
+> +	uintptr_t old_data =3D (uintptr_t)set->strs_data;
+> +	uintptr_t old_s =3D (uintptr_t)s;
+> +	long len =3D strlen(s) + 1;
+> +	void *p;
+> +
+> +	/* Hashmap keys are always offsets within set->strs_data, so to even
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem prefers the modern kernel multi-line
+comment style which requires the opening /* to be on its own line. Could
+this be updated to match the BPF style guidelines?
+
+> +	 * look up some string from the "outside", we need to first append it
+> +	 * at the end, so that it can be addressed with an offset. Luckily,
+> +	 * until set->strs_data_len is incremented, that string is just a piece
+> +	 * of garbage for the rest of the code, so no harm, no foul. On the
+> +	 * other hand, if the string is unique, it's already appended and
+> +	 * ready to be used, only a simple set->strs_data_len increment away.
+> +	 */
+> +	p =3D strset_add_str_mem(set, len);
+> +	if (!p)
+> +		return -ENOMEM;
+> +
+> +	/* The set->strs_data might have reallocated and if 's' pointed
+
+[Severity: Low]
+This isn't a bug either, but this comment also doesn't follow the preferred
+BPF subsystem multi-line comment style with the opening /* on its own line.
+
+> +	 * to an internal string within the old buffer, then it became
+> +	 * dangling and needs to be reconstructed before the copy.
+> +	 */
+> +	if (old_data && old_data !=3D (uintptr_t)set->strs_data &&
+> +	    old_s >=3D old_data && old_s < old_data + set->strs_data_len)
+> +		s =3D set->strs_data + (old_s - old_data);
+> +
+> +	memcpy(p, s, len);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523162722.2718=
+940-1-cmllamas@google.com?part=3D1
