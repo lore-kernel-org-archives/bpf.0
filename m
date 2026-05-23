@@ -1,122 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8370830BF4F;
-	Sat, 23 May 2026 17:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555912; cv=none; b=DU4vtEAHPGOdQK+iZXE68St88ZMUTpcXfJYtqFFVg+R0Gze/ZhoLKAmNZ3+vCilf3gmTIH8yGKLKYB4Qm9oHXkgTbvOtiaJHHg8EqAxBUBYOwaCYxhWrjp/EEJxVM9XRDflMwmWjFShD86qQxDHKpJ4xbDGXNxvXUYQGQH/QAUY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555912; c=relaxed/simple;
-	bh=onX9zQ1spS/mSWAVbKWsIMn4/sI9Ekdyqd0bIqixNVI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SFCQtNC1flfFHcseS5Bqmiw2VOLoM7eY3FirsDO+KU20KO18ZKVvHRMCCdxMXt+wmdLLOByWjl/1ZWhHwm0zDANPmSEy8kRLrKRNqP/YYkCRBPictJ+kT3V1SWGJ1zWl2WUwLMzhNiY9oTEfQK5dqyX6FloR/hiZMr0pqOfpBLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeY9+inN; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49932D5940
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 17:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779556789; cv=pass; b=J74cJzjfWMeaf6Cj+c3dinqEfEBZAYBq3vzJwDPniRQIjx6tKIpO3wp9aI5H8EtN7YdsdEa6/pI2UrkeYsP7qGQ6VpR+Qv0hPCMXEgE/RiDJ0xyWHx/AsaTGeOrkBmyWyiCKYDoXOkpRO1JKojxGhXLLG+RN5ot45+EtanslsO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779556789; c=relaxed/simple;
+	bh=K1T3+eD9aA+OMvgd6PqU3zP6/5UBn+pjCxI+BISD4p8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GkNTon4RMSAhGw5qNk9xg0dmqDIBpw0/h/CJHKTsaRB7+p6xBtopn146TCaDH50chdzbF+1YZLs9JCxTwleLjHI3xZOQVzIkh/GaW6hVDajqSGNd06rRftkDNvhRRkNGPuAEBXL1ktXHwrPnT6LaohcDINbjb1mHJwCVkDnlBdc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FmapnEgW; arc=pass smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeY9+inN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37AB1F000E9;
-	Sat, 23 May 2026 17:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779555911;
-	bh=cyagchc+kw2OslMdfkJZxkXMgAfRo9BAeFphUwryhZg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CeY9+inNutTviQaB+CKacJ7gSaPXHGUcF2PtZgmBgNM5h+uqEYTxbi82miEh1qYK5
-	 CrRVzwScyYXiTsofjaZKKsG+91XmOvoDHfcgc9aTWju/vKTAn+964HsmQBZGAS7lr3
-	 zTCgTnEktWw1FdkW885zm/KuK7gWaPRxixbR8xDy+siTsyxQrCd77eBW6+iCPR13Th
-	 Y6HSri8/oGdlJGggetQc0Ft3bTG9NHLurzDykQwn2Q2lhj0keOrHyiAyatZ9em0vmx
-	 LZ/QoT16w3P+yrgfKabnSGtaf0Dawcv5akkg/P/jjypD04/8XkheWmO7ruZb3M9neI
-	 WxFDrFzYBNIdA==
-Content-Type: multipart/mixed; boundary="===============2686473054313733903=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FmapnEgW"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso52138785e9.1
+        for <bpf@vger.kernel.org>; Sat, 23 May 2026 10:19:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779556786; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DH0YP3emreE0wWtIV0iz9C/pjjL04ArgpyIbLekfERR1IRlgnUbSK3S61KA1zpPZEd
+         cjF4b9FqVot/qNHUsF6xbZF8PFsFp3AGntwgypGWkFtjrXg9O4J6Kdkoopjstr5nw5cr
+         qdooBQv4qOlrLaKt7fmthMJr9DOU/e2p7Fnx722T2NOFnPeS7WmT7OFQeuovxQT5iLLe
+         XSD3ZIFlH1s6UufCs/1qqZZzWNvaIRujNxwxN07PySdU28VRv2Vqfe2b5CjsRdTojXEO
+         9WCOx5QIkIgRfj5Xiyf37xuF0YAdjpPkDrCqJoZ9w8e/jdsq2Yi9rAvnzWxPaGjicl+O
+         GlbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=40aScu3o7jyER+7kTPK+D6ptkCZ+Wk4tkciyEzTWbok=;
+        fh=n+CFhUxPc2M2/wbvXX8s5niLFzTAK2LP9rvtwhlHEkQ=;
+        b=RMQMhJNE/oATKgwTTLKMeqHsGd+h5gnr3ebIjTUFj3u9dZD5AHVTjJNb1A5YvQL36p
+         H3QsPYF9WRYbDfKEMkIyEfB3vYfM46Ml9kKXWx31Zw3bkfcvidQVbR4atF9NS0R99T0r
+         HW80b/yYzynydjB5y5NyXeCkLPB+HTnHKMVxI5SmsGAfvvp6Qo2DPbJVFZPN49/b6SAg
+         I8Hl/Cd5fI19wGR7utQIPVxV6cZB2iydYHU4hEHDavMi7NUj5RvQynJJg5tVC43pxFKv
+         t4trIUZmZKCZm0BAglhm/7rmEm21s8lsimLPC/T9fCjlTdZP7Ky1g/+nyS59pixEB7Ei
+         PKUw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779556786; x=1780161586; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=40aScu3o7jyER+7kTPK+D6ptkCZ+Wk4tkciyEzTWbok=;
+        b=FmapnEgW+t/qXrYFlRR6CiNQho+6JdY6zHiIJrj3z7Cju0g8xBj5aNzg5+2vEf5wam
+         1qJE8GTahqWyTU/ceWXDMvVwFhVkWCWY8oPZSWncDZyVEB6ksJEe1ib5Ve+6opinoF7R
+         SzAXJQpK6I65dRJSDwSu0OWwu8Ig+XNFMrdJede940h0EMJAKffgDmFImIK6Uj1eerGE
+         0grBvsEwdrJBIi3F6LYNp38n0D3AeGdlw/oLx57p0xsmH7qC9zKZaGYzffmacqgkmhhw
+         wcDvbvvAMZ0hzAchzGrpHtj3q/nH6a1Dv+W4BaUi+9JOgpmkgwLFPatgxAFvHj+29swH
+         Dv3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779556786; x=1780161586;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=40aScu3o7jyER+7kTPK+D6ptkCZ+Wk4tkciyEzTWbok=;
+        b=YgEgaOdta5dL6TohBSHLFYmEMjyATppILaEC1rWAkD4sBz9/bApvbmLn9ZY8IQkdti
+         MeP2pPAq/ppckKznb47MV+nswONpSS0JL+vRVkVjXPuk8ficvZcfQXN+Vp8GXyOLCUDX
+         MQtPvsIv29OcM/RSjG+nNRyzLXskqxLMqLjNJjz5MZ9PX67H2s0RngBmNVYwIUM2e2xG
+         V7b1jCXFGlXRh8VhGoRUmlb64W0EUNgjaZik+ZWgmJeo2ZNsioW+T6A3szx0FagGc9n5
+         DANcdObJsi4XvU4361kZHCcbIGle5LS7uWOv52TdF99XZYcMWcMUiOmtEmXPlQ1vylVB
+         w1NQ==
+X-Gm-Message-State: AOJu0YyRCOF2fUgD9zUxYzXa/y9HLKd5H3tsWCBGQmz/oK4SQIk4irEg
+	rDhKoLqHG10RINZjxWo5U3PiSFE+jsExA6BdZnmCuJWLZFS6AmCAVnSRJ0ycBNEEdtt/21S9l6V
+	bq/xQUta4UhbzLT30ImPOWHlziS1LjUw=
+X-Gm-Gg: Acq92OHsGP/N9Ii/i4qcExyEaSdv3t44ETDi5gKUjx+t20nqVhB4jPSQzX6QGDMjYtC
+	6G3eU9P6wZ4WoefT4yrW8Q0YQ5H27GGCsGnAmYB+8MITUjkti8f/BmguyQjpc7uu3pZ6vHByDxz
+	8zXIpx5MhW+80i6lNk525RPvLwfaqp3FSeHjwgQk17jduZkrzvcpGoZN3EZs7Wj0bRp/+qqKJRh
+	TiLWzXAFIjDXoDgCC0IUmbQZ+pMCNm0YUQT3dAqKLW2OldQdJ5Sapm+wrlG4pfcPreFbyR5q+Bj
+	SvNecKrw9WzyHGw+/3RUSwFs4Ob5CL7NlW52qcWeUzzRb+Y+1C5cKc4ukBWwvg79Ie1hqkHbw7z
+	AWr0=
+X-Received: by 2002:a05:600c:6287:b0:48f:eb8b:997a with SMTP id
+ 5b1f17b1804b1-49042ae285bmr129991135e9.31.1779556786114; Sat, 23 May 2026
+ 10:19:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <69de57e1bd8a95a848f06b6acc9f105e80a87a27ae206afd83a6d5f1004bd9b5@mail.kernel.org>
-In-Reply-To: <20260523162722.2718940-1-cmllamas@google.com>
-References: <20260523162722.2718940-1-cmllamas@google.com>
-Subject: Re: [PATCH v4] libbpf: fix UAF in strset__add_str()
-From: bot+bpf-ci@kernel.org
-To: cmllamas@google.com,mykyta.yatsenko5@gmail.com,andrii.nakryiko@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
-Cc: kernel-team@android.com,linux-kernel@vger.kernel.org,cmllamas@google.com,yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 23 May 2026 17:05:10 +0000 (UTC)
+References: <20260523160025.16363-2-paul@paul-moore.com> <CAHC9VhR6RSq1TUgAyvHmaF01h87Cazy=BNJhk654BP8yfeSwng@mail.gmail.com>
+ <CAADnVQ+WTfgO636GqgxzJ6r=jENpG704kmNAsy-X8=WyjMOV+g@mail.gmail.com> <19e55c1c1f0.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+In-Reply-To: <19e55c1c1f0.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 23 May 2026 19:19:35 +0200
+X-Gm-Features: AVHnY4K_2LOQGo6EDOyrLqN2RlxJguE4BGreszcdQyAdCmg4grCbohDxA-2rs98
+Message-ID: <CAADnVQ+JDtc_GdxCv6tWAT03k85PTc0+zdcpCQ6NU-T8yJcu0A@mail.gmail.com>
+Subject: Re: [PATCH] lsm,bpf: fix security_bpf_prog_load() error handling
+To: Paul Moore <paul@paul-moore.com>
+Cc: bpf <bpf@vger.kernel.org>, LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============2686473054313733903==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
-> index 2464bcbd04e0..b9faca828f09 100644
-> --- a/tools/lib/bpf/strset.c
-> +++ b/tools/lib/bpf/strset.c
-> @@ -107,6 +107,38 @@ static void *strset_add_str_mem(struct strset *set, size_t add_sz)
->  			      set->strs_data_len, set->strs_data_max_len, add_sz);
->  }
+On Sat, May 23, 2026 at 6:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
 >
-> +static long strset_str_append(struct strset *set, const char *s)
-> +{
-> +	uintptr_t old_data = (uintptr_t)set->strs_data;
-> +	uintptr_t old_s = (uintptr_t)s;
-> +	long len = strlen(s) + 1;
-> +	void *p;
-> +
-> +	/* Hashmap keys are always offsets within set->strs_data, so to even
-> +	 * look up some string from the "outside", we need to first append it
-> +	 * at the end, so that it can be addressed with an offset. Luckily,
-> +	 * until set->strs_data_len is incremented, that string is just a piece
-> +	 * of garbage for the rest of the code, so no harm, no foul. On the
-> +	 * other hand, if the string is unique, it's already appended and
-> +	 * ready to be used, only a simple set->strs_data_len increment away.
-> +	 */
-> +	p = strset_add_str_mem(set, len);
-> +	if (!p)
-> +		return -ENOMEM;
-> +
-> +	/* The set->strs_data might have reallocated and if 's' pointed
-> +	 * to an internal string within the old buffer, then it became
-> +	 * dangling and needs to be reconstructed before the copy.
-> +	 */
-> +	if (old_data && old_data != (uintptr_t)set->strs_data &&
-> +	    old_s >= old_data && old_s < old_data + set->strs_data_len)
-> +		s = set->strs_data + (old_s - old_data);
-> +
-> +	memcpy(p, s, len);
-> +
-> +	return len;
-> +}
+> On May 23, 2026 11:25:55 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Sat, May 23, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+> >> On Sat, May 23, 2026 at 12:00=E2=80=AFPM Paul Moore <paul@paul-moore.c=
+om> wrote:
+> >>>
+> >>> If security_bpf_prog_load() fails there is no need to call into
+> >>> security_bpf_prog_free() as the LSM will handle the cleanup of any pa=
+rtial
+> >>> LSM state before returning to the caller with an error.  Thankfully t=
+his
+> >>> isn't an issue with any of the existing code as the LSMs which curren=
+tly
+> >>> provide BPF hook callback implementations don't allocate any internal
+> >>> state, but this is something we want to fix for potential future user=
+s.
+> >>>
+> >>> Cc: bpf@vger.kernel.org
+> >>> Cc: linux-security-module@vger.kernel.org
+> >>> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> >>> ---
+> >>> kernel/bpf/syscall.c | 4 +---
+> >>> 1 file changed, 1 insertion(+), 3 deletions(-)
+> >>
+> >> Alexei, I'm assuming you would prefer to take this via the BPF tree?
+> >
+> > Paul, I see that you're intentionally trying to piss me off.
+> > It's not going to work :)
+>
+> I promise you that is not the case. I was looking at the sashiko results =
+of
+> the latest Hornet patch and it identified this potential issue in the err=
+or
+> handling code that is an issue independent of Hornet. I posted the quick
+> little patch above to fix the issue, and since the diffstat is solely in
+> kernel/bpf/syscall.c I figured you would want to merge it via the BPF tre=
+e;
+> if that is not the case let me know.
 
-Does a similar use-after-free still exist in the btf__add_* APIs (e.g.
-btf__add_str) when called with strings from btf__name_by_offset() on an
-unmodifiable BTF?
+It's in a queue. You can monitor it here:
+https://patchwork.kernel.org/project/netdevbpf/list/?series=3D&submitter=3D=
+&state=3D&q=3D&archive=3D&delegate=3D121173
 
-If a user passes a string retrieved via btf__name_by_offset(), the
-string pointer points directly into btf->raw_data. Inside the btf__add_*
-APIs, btf_ensure_modifiable(btf) is called first, which calls
-btf_invalidate_raw_data() and frees btf->raw_data.
-
-Could this leave the s pointer dangling before it even reaches this
-check? The check added here uses old_data which corresponds to
-btf->strs_set, not the freed btf->raw_data, so it wouldn't rescue the
-pointer.
-
-This concern was raised by sashiko-bot@kernel.org on lore but was not
-addressed in subsequent patch versions.
-
-Reference: https://lore.kernel.org/all/20260518053124.2EF28C2BCB7@smtp.kernel.org/
-
-> +
->  /* Find string offset that corresponds to a given string *s*.
->   * Returns:
->   *   - >0 offset into string data, if string is found;
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26338132147
---===============2686473054313733903==--
+But please be advised that when submitters ignore issues
+found by bots and maintainers agree with bot findings
+we mark patches as changes requested.
