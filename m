@@ -1,125 +1,136 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7356D35E95C
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 08:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779525018; cv=none; b=CfSEww5ZxlOK91wub19+Zkvh8wI0AT23VssHTGDJ8aq3TLn3UhBzOTqpR/G3naNsxriQnZTdgrh/v1hDEG63W/8i1m88YMpogwBBbPyDqCz5lMzNdPlURLNX4Unq3M++m9yyAYSaZjtUAAR3ipDnxDDmlFC4qPiX3qOG6ORl+Ng=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779525018; c=relaxed/simple;
-	bh=dc3cyu+G96Uz0mDs4rxrvr4WW2uo7W5uvC1JD1XZ3SY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=o71AwUv4mMCnrKbNBa9cU5Nj2kvzfDqVERMcMQOtCFie+40hfrmDhJOn5sWAxcARofANtxJipPzm6y2oM62b4GbjuUfO7kLWI7dtkfrQ6mxXhJ1vS4nwq4r2aoWduJA3g3d7cKJV+YRjWC+PZZeQZOydP703hzoyalIMxToflHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JGMSU+++; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA6D3603EC
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 08:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779525053; cv=pass; b=VT4xMY65A+GCZe9NEma1ZvkNSfBanlKh92ZgFkFZ73Y05vTaeUse8iEac8M58Ek3hDUjcHhm4pD2y3PS6NiEI/iZlhrVq0euxG1QDLfBWB1YRpWxnj4ZxIQUZ5mkbyr4pUsXEj3vk4q9/qcmaP0NlPdZ2BhRBmNxFRK9jyFdNrI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779525053; c=relaxed/simple;
+	bh=5YUzcTRs3VRlWzNPlCfwQ7vEMTYY0urRriVE52jCL4g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gH7MZJglDM6+Xbo42UT5Nf9rW7x7Cc1hvBhK1tgBFkSZ9ExHhQNYcYFddiZiLy4JQTQFagmImrFAMm0jExdAjB5eJW17Yj2JAJF3EKbaNGcIw/uW5wtvphMrMl9F1X0AUV78xx0Fow9MEQSImZWMr9iPKodviH/oqU5W0XCqsQs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QekVDG0L; arc=pass smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JGMSU+++"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82fa366fb79so10396183b3a.2
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 01:30:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QekVDG0L"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4526a8170ceso4044244f8f.2
+        for <bpf@vger.kernel.org>; Sat, 23 May 2026 01:30:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779525051; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fdXvtkoUSYDu85czV3MQ7QRokQBuMd42xY05FQOwq6XgQ9UbPeBQHZ7wD5WGc+vryx
+         U+it64UUUBDhAd9J0tE4Xxv8AHAqgJtsmlvsKQbYZbtyzpaUGb/I1KxjgQyV/eb0ArhM
+         5epEwgFEjbj6+DFxgEA+OQoYKQgiEPbSYR2GOzmrT7BT0uZkcYXzD4dHLsY0dyCWeejv
+         lgDuCtyrD29oqtQjEzKIbb6BfwQdcziS3QdW8Mkz7UEYLbnsgIVW8GZcn+WRcIn2l7CC
+         jzUSLp8tXlYY5rvfRBZ5Fgp3KIXSVDi04aRilwsXrBHsEasWyKaPvEj4zr0zL3/hYyCL
+         FuqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qb9SR2DPOiU+QQKzv/kuhzlmQzJ/gw+m3RLW3kd81Sc=;
+        fh=WYSF3SsiJhGVXJBb7Gjy/Gw+A6MeZC9o3Ol65WG4oL8=;
+        b=N2HnXqp6GF/7ThTaaZXBWSG5oNShytZqD3+CyGa0xB8EiKfMIVOce3IAadkR0rVNh7
+         tw3vQbKRsag7XcH3q85q/nmAUP9LEUlSXuHxQkJueIEK9yuygyiUhKANSUZam+X/n0IN
+         rPBzkpM8ZzyncQZNzKbkaLw1iJ3EMq3Bg1wdWbFl3I+ieTqcAe/lRHPLABd5BrUijfOk
+         UN1+nXMMerrfIPxug1pLVRDkyZfz+LL4VjVPFJlTZjjOhWpkLp3+ce/PGKQVpRRY/k29
+         T81bYv043zhozduDZv1pvnJquTxuGBIMVtrne9C1vsIcdGIde3mid+xQ1WIbIiRb0tmH
+         DBaw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779525012; x=1780129812; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6BrgoOQVhpg7Rxx27XWaxTVhF4O9VIqN8X5Igv+HArY=;
-        b=JGMSU+++G9d538s0e/IdGl1foYSqEJ4RwIVFrQXUeP4HivwYdYlp8kq7vlifm6K/eQ
-         hAiWJp7aUYJj/Tlf/DL4i8o9jX/TS3nsllUVeOe/oYdOacxIfvr88E0RRV4+vj47Pza+
-         sLS0lqzxBvwd1urXvHBB6QUYNyHms+65rowpfd4JI689HNZeuIQPu+tSfmHTSQ5iUW0T
-         LId2XmDq/VkJ2/inj/JfF6s6bTsA+iGttyL6z+uL7CjApLsafV8sLqFPLLecWnn45Qai
-         MJVZbkjNUCC6GmVO9Gou3xjrS6SKSprinM/sQGzGxas04pNzs4c+PkkxRrMc3Js0LWPc
-         zS/w==
+        d=gmail.com; s=20251104; t=1779525051; x=1780129851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qb9SR2DPOiU+QQKzv/kuhzlmQzJ/gw+m3RLW3kd81Sc=;
+        b=QekVDG0LxZE00PFpSwlcysI4zdS/+J36IB//NhnNjtNs46hMvKP2EXH8/7Afx2/jNB
+         FQoSNHSe7sw/KqJJ+YHF0lj2JUtwiCMyKZwGPvBd/ijW9SVZNZ/aZpxdSO/gn6DxdLiR
+         WgN2HlwqDbd0B2LAcsiMGP2Fryaa2NG0/YATnnfdTBnJM8qc+BC94o4XN6nRg6ioEXR5
+         4fFDbFCnSjBk0vZuQwCQk83frfqpetz6Uy5c+dZjsnNOidgG3NLgElqnjiLhV48heoH7
+         0fVhRvuEk5VBDaF2f1dXvX4sy1SFFA2zIV5HRV7TNRJeUNfBPocJAoR6TTpfoTGpc1Rs
+         WOtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779525012; x=1780129812;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6BrgoOQVhpg7Rxx27XWaxTVhF4O9VIqN8X5Igv+HArY=;
-        b=ggAKlG+RatMfAl1IDBTkjM4h2Cy7SjPE+PxyL47XEz0g2zke6+eF0DRrWTWon94ABQ
-         mvG/agR0r+yXEvo5ay5SjYYT0OxhBtcje39I9okVDnEQlwxTW0oRL3RDfa+Srl1X4u8p
-         ZPtB67A+LHftFFMR0iZ7HKrMneCc6gakQG3hVfY2oUkil3lC7gqQ+fygNrIZcgmeMYzV
-         cHiPSz1nh4YTQSxQWRTu1jskhKZVZZmC+V8n8tqoBxjRielC3+oEfluwWMg3VwXVcp4W
-         YcOZydE3YAfVQxlKzyWmNYZvwWAXzVIDfm+RSS/9YpWDYTgm4J5k+dZBnGKhDLjOWKX+
-         hzQw==
-X-Forwarded-Encrypted: i=1; AFNElJ+NsjnX+Mn8VL2JZnjzDElneEbbQrgYIeZgQO30x8q6Hc+6IKXhdurKUp4adNOSrl1gKbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxozDwa00lTvY6phSMG+j1DEQn9UwcYCsAWNTZpcvKQb4cYpy3K
-	Tq+NowVE68gwENIcAtfIWyQEA1su7dx2Us/RYf+utuXnWn9hOcwwrUbmAsbH4/Ubc9kUTZaJWT1
-	vZTMPYA==
-X-Received: from pful9.prod.google.com ([2002:a05:6a00:1409:b0:82f:b53f:40d7])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1789:b0:81f:5037:a317
- with SMTP id d2e1a72fcca58-8415f15a6a3mr6389881b3a.11.1779525011515; Sat, 23
- May 2026 01:30:11 -0700 (PDT)
-Date: Sat, 23 May 2026 08:29:38 +0000
-In-Reply-To: <20260523083001.2911931-1-kuniyu@google.com>
+        d=1e100.net; s=20251104; t=1779525051; x=1780129851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qb9SR2DPOiU+QQKzv/kuhzlmQzJ/gw+m3RLW3kd81Sc=;
+        b=Zrtxk8ZaM+uwyfpIS3wzvoCimDdcQ5aP0Kk8Dvjo26VZYOtfI/OZz4Qo08UvMTEeJ0
+         W0/9EzQFlL8dYMktLuaPOF5X3kiK6N/ufl7aXy7DzvcHPGrcxE4yHYtcSbVjdloLxLm3
+         xaJn12GYQmusY+fzDJaY3/jmZ6yo+I/edOltx5MvanIkysgAHcqaEb6kbc11unnct7Rq
+         f1DEpT+Jm9DJSjeEi6J4KFvc/15uTGZPDegUVrYFqmp5JhMVcH7MeLdQcSs0U1K0oSHj
+         0+f+ECx0TxFS8PMxEjdEtbiyfdm9Wskoa9fLUxOcw5YF/+pGf8xVpsnhTRaJjYV6uTAq
+         in6g==
+X-Forwarded-Encrypted: i=1; AFNElJ+VzxCICd5h8aHN50l5bSCJxesHRJcld2mA/NXwwtKza6RVhPTpLGaKW/BUpHzn06PianI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6URYD1YAu7wGIntlNPelwLcIehB8YLivenQR8ljnubg6N683A
+	Wh3hgRHfJPK2SbxVIsE2+v3OWarwoFVy27leJfzN6VRfrd5Q22fi/gctwIIODdQh7Uy1WbFwHH1
+	blYkUJjv3SU24TyRVYPPPtCyw1ZxP3DE=
+X-Gm-Gg: Acq92OHVz2EAAptUby9Td0yXEEi6Zq0zoZee7TLewLtt6z53+ujIUX6K6mPKG4BhPl3
+	4dO1Unn+uJjXOhgZCDN7m/h/DNyxXS7x2FNL/br+nKKCARuCK5Lyzp/5YgWymwrREy7ycylwOm3
+	2JYfB/E+hJ7hv5DZHDptadxWfoSz1U18j4Y7LEaA3szBA/sW8bykyiukvd2O23Pu+JJ89zVnOS2
+	c+837BCLEIyd69PQXZuRmIJw0D/hvsQByHLnPLEzx7DIneOoyF1+vKPUYK7CW4VdyDhN3AUxakg
+	iKDvsmF1ZkWUzBHHEZ8vRteh8u/yqCeVIxL30cXs0VO5fNHwtLIwwtIh+zdnXTMJZ+Nfkw==
+X-Received: by 2002:a05:6000:610:b0:44a:fe14:3738 with SMTP id
+ ffacd0b85a97d-45eb36905a7mr11621529f8f.10.1779525050512; Sat, 23 May 2026
+ 01:30:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260523083001.2911931-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.54.0.746.g67dd491aae-goog
-Message-ID: <20260523083001.2911931-10-kuniyu@google.com>
-Subject: [PATCH v3 bpf-next 09/11] bpf: tcp: Factorise bpf_skops_established().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+MIME-Version: 1.0
+References: <20260523074736.222994-1-anand.himanshu17@gmail.com>
+In-Reply-To: <20260523074736.222994-1-anand.himanshu17@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 23 May 2026 10:30:39 +0200
+X-Gm-Features: AVHnY4KFkqYicZohpfIyHaeHMubyajvE_tZdPWjwjBunk_m4tAcgSI_CrWuo1JE
+Message-ID: <CAADnVQJm+VnU9==jPmc=rn0s_SOkCqri_EyUDxWa4ZEho1nr5A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Add nelems overflow check in btf_find_field_one()
+To: Himanshu Anand <anand.himanshu17@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We will call BPF SOCK_OPS prog with BPF_SOCK_OPS_RCVQ_CB.
+On Sat, May 23, 2026 at 9:47=E2=80=AFAM Himanshu Anand
+<anand.himanshu17@gmail.com> wrote:
+>
+> btf_find_field_one() multiplies a u32 nelems accumulator by each
+> nested array level's element count without checking for overflow.
+> The sibling function __btf_resolve_size() already guards against
+> the same overflow pattern (btf.c line 2110).
+>
+> Currently the BTF array verifier (btf_array_resolve) rejects BTF
+> blobs whose total array size would overflow u32, so this code path
+> is not reachable with crafted BTF input on kernels that include
+> that check.  Add check_mul_overflow() anyway to keep
+> btf_find_field_one() self-consistent with __btf_resolve_size()
+> and to guard against future changes in the validation ordering.
+>
+> Fixes: 994796c0256c ("bpf: create repeated fields for arrays.")
+> Signed-off-by: Himanshu Anand <anand.himanshu17@gmail.com>
+> ---
+>  kernel/bpf/btf.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a62d78581207..b767a9fcf095 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -3765,7 +3765,8 @@ static int btf_find_field_one(const struct btf *btf=
+,
+>          */
+>         for (i =3D 0; i < MAX_RESOLVE_DEPTH && btf_type_is_array(var_type=
+); i++) {
+>                 array =3D btf_array(var_type);
+> -               nelems *=3D array->nelems;
+> +               if (check_mul_overflow(nelems, array->nelems, &nelems))
+> +                       return -E2BIG;
 
-It requires a similar setup to bpf_skops_established(), and the
-only difference is the skb data length.
+It's unnecessary.
+see __btf_resolve_size() and btf_array_resolve().
 
-Let's factor out the common logic into bpf_skops_common_locked().
-
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- net/ipv4/tcp_input.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index d5c9e65d9760..c4ba4f1e9d9e 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -179,8 +179,9 @@ static void bpf_skops_parse_hdr(struct sock *sk, struct sk_buff *skb)
- 	BPF_CGROUP_RUN_PROG_SOCK_OPS(&sock_ops);
- }
- 
--static void bpf_skops_established(struct sock *sk, int bpf_op,
--				  struct sk_buff *skb)
-+static void bpf_skops_common_locked(struct sock *sk, int bpf_op,
-+				    struct sk_buff *skb,
-+				    unsigned int end_offset)
- {
- 	struct bpf_sock_ops_kern sock_ops;
- 
-@@ -191,12 +192,18 @@ static void bpf_skops_established(struct sock *sk, int bpf_op,
- 	sock_ops.is_fullsock = 1;
- 	sock_ops.is_locked_tcp_sock = 1;
- 	sock_ops.sk = sk;
--	/* sk with TCP_REPAIR_ON does not have skb in tcp_finish_connect */
- 	if (skb)
--		bpf_skops_init_skb(&sock_ops, skb, tcp_hdrlen(skb));
-+		bpf_skops_init_skb(&sock_ops, skb, end_offset);
- 
- 	BPF_CGROUP_RUN_PROG_SOCK_OPS(&sock_ops);
- }
-+
-+static void bpf_skops_established(struct sock *sk, int bpf_op,
-+				  struct sk_buff *skb)
-+{
-+	/* sk with TCP_REPAIR_ON does not have skb in tcp_finish_connect */
-+	bpf_skops_common_locked(sk, bpf_op, skb, skb ? tcp_hdrlen(skb) : 0);
-+}
- #else
- static void bpf_skops_parse_hdr(struct sock *sk, struct sk_buff *skb)
- {
--- 
-2.54.0.746.g67dd491aae-goog
-
+pw-bot: cr
