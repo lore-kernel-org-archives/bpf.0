@@ -1,89 +1,114 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECA5223DCE;
-	Sat, 23 May 2026 15:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19162836E
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779550995; cv=none; b=dejexuulyEEmt1GP6JDSHXilbZa4J+EW2sgeJ5q4CtYTaa0HE52XZTnR8zaDGkC/8xgM8lP87ubcqc45ssoez5tFr91rW5ipB7u/vQ9h+pZ6pTfSILyxxfQUZNWJy+zFYz9+dQ0CpN6wVCo1LC80VEKgLal5Yv2PZpTX5hbJiwY=
+	t=1779552033; cv=none; b=aXKpmyI1h6G/qT3Fdj3s7zOYCAwYmZZ5u/xziJM5qx8lkLx2e+OJNBdeH3ANWqQm83dVUn5RtmIBF68KC7RdJ4S0K8A8FAeisQrFMG/q8ddJ2qRhYZPXNdGbyihjVC2YMHXSYDvy/yUngOe2S93D4Uwz/7GYKyBXoVpdR6MVttc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779550995; c=relaxed/simple;
-	bh=/FarOusraaRDyEuS/mEr11UOvNbD1hDeVElYGxSJa1o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EiCysAel0sh0BkhMuvwnr6kccnJu4/REdMw9oFCUzEqOOQEZxK/EbzVuTS6jCtjIICxdSw4mLwQG+NaQScNvN/ZCnzEXwhAhoLDUhGxSOvJbmCl+fHmBJfbILoK6XGdFiOF8ZPiFoncoPgg9UPI/Wl32y7PPSXR8drdziG/MvHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=jEYatmfV; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1779552033; c=relaxed/simple;
+	bh=D/x8usnB5ajIhBy2PeUrrXP7yx/0Jn19puJ4vENcs6w=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=YSC+iwv/PnV1+wzY5Tfe7FL+jBoUTQznsfXR9P5u418d1TClCZ9sjktPR+qR2vBSOqIJK7Iz6oXRdULlQeIGXfUqoJvv4rZld9m9EJGAIW0y0sRg2buI60hzHZdzffRiLmNf+CDHmjhP5UolEhpqAhRtDuujSjJxJQLC+a5WAOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XLzVWfyV; arc=none smtp.client-ip=209.85.222.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="jEYatmfV"
-Received: from narnia (unknown [40.86.181.13])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 1573720B7167;
-	Sat, 23 May 2026 08:43:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1573720B7167
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1779550984;
-	bh=acIj4vWKr0SqCmR5CKEDUtpdjYqdNyAG7m++nOXhjSs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=jEYatmfViNwX9ZgJW1g/Fxb0tiJuxE7KQxPD3/HcT6+vDRl2mU5bct8dezgjv1ZxI
-	 QflXUJ/8zi/BOyIWaJeNRHvLl51RvRGUFJHEbSqGnfO2pJ2ktR4IEo5HJxfvCc/Gd1
-	 n1AoNp1AXfaycHZnJjJYSuYdnLkaVgLKkjp41nBQ=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: KP Singh <kpsingh@kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, James Bottomley
- <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH bpf-next 00/13] Signed BPF + IPE Policies
-In-Reply-To: <19e54ddf1a0.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-References: <20260522023234.3778588-1-kpsingh@kernel.org>
- <CAHC9VhTk3qovnQQjK0C_FWU605j6Yi+-poMVVMS8WycRFg9xhQ@mail.gmail.com>
- <CAADnVQLbCz8nCLS2W=Hpk3hVSBqHGuGyVjeKYPnNDhhu_1UiPQ@mail.gmail.com>
- <19e54da1d28.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <19e54ddf1a0.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-Date: Sat, 23 May 2026 08:43:09 -0700
-Message-ID: <8733ziyvw2.fsf@microsoft.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XLzVWfyV"
+Received: by mail-qk1-f196.google.com with SMTP id af79cd13be357-911796e9885so773824985a.0
+        for <bpf@vger.kernel.org>; Sat, 23 May 2026 09:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1779552031; x=1780156831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FWD7BWDYZBw/gKocdgdJ5q9U2RLUzktkAiTp++3aV34=;
+        b=XLzVWfyVUMwSpnKLdHx5faGFeCarIYsQTcZEQiTwN3YdsMw6BvuKa8q6QymdMajT99
+         fR78me0olx+bxj6cMuHaluHl1WMAONxSQkG3TMwKnsB+AUVsRy9KZRsUCXyAMVWFH5nm
+         rNhn2602+AZzvzn8Z20IuQ4ELayNim91eLDyk3IeH7EVX+H7l8lbus+KRlDgdDd6mVnD
+         vQDt5QHiMIy1iksQCWWnVkLpy5qs8Wmy06x4PZC9qPsVtC9kToFeljnfduhq5P+P2jm9
+         mIE18kNJn4eJ/dWSr+CRsCV4v6mJf9jWeZMs4BsoMxwgMaOWG49FBg3kzlLFTKeLPBAU
+         Tu3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779552031; x=1780156831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FWD7BWDYZBw/gKocdgdJ5q9U2RLUzktkAiTp++3aV34=;
+        b=EnTujdlHigUeZefNUm+ahs1igjP2B7Ae7lTRzIRi63ulLp1szDy+ePymAGuE9JTxlV
+         WPsG0RGaoASQsJpNz/WDNDkATBhU/+janpP4Dq0FxJp5CcHQRSRpvTwgy3Kw3AYGHklt
+         epjjc4bvHfgeSul1xJuNS+TOpm96pw8wyyt8omr80M9WZN5ma9YGXT5D3gLQjjmBXxEP
+         avcAyV2CamV0JAAPT1bxBWqzomIQIqONUhByGf56w1TN/McQvqc3RpHbeKYgIJDw5jOT
+         GuR/7Ue+o4IUvojjnVEbrhxl6q7BLjHH0+aDHmAKNV5J9cHUWAuL99XmRCvu2Hk7EghM
+         anHg==
+X-Gm-Message-State: AOJu0YxbyEUyZmyQbAcK7PRDWY4TrDf41h6TZ2y5aoh+XbR/yuL077Yg
+	koWUIRAMFaSls3wh7S8I6ffie8bdkr0j6ibMoPv29kCh3X1CYpF3PVGbTO/AalMxqCVopnPev1h
+	Sd6RiPm94
+X-Gm-Gg: Acq92OEFfkZmjLhhml/y4AYM4wjP0XyVVHPyUI1L4gyEbwgVc1JlPrpTosdgTcpm9xv
+	xythNFFWkQLcxCQt6cL6WdplGmHJKav3paicm0X8rAif21ByVz10Q9iTfvHr6CP7BDP7Yep/Chn
+	eAeHWxgv7pnE3+GRnDiCFyUxAxz7BWwsePbWbNiIsJEWep4LVZ6Ern1h3LooNe/hOx2DzG/ucz7
+	3hq/fqs7dRJx1NEABl8ujS2kbFbHDlgA38ft2QC3QSAZ7Wj59fxTAH1/IVHD5JIJoG1Pgr2p+bT
+	A8XNL4wI8G2nB7oTI3JJa8mDoZE6CuEWYmLK+4PANxmvAz7hEXwLNm0WtrbhT1EIs8YnCHYG8r0
+	+hqPEmdj4xE/zErljWW/uzoOwkh3Kc1fkTM8f1rwplPHOwJC/NN7A/tz1GeF6Cfjvv4cpVu4Rvh
+	c2m8wo2DBPtWHEWDakjAsa2zuZnUHW4Vev7A+s5WvYVImB3jC/XJMPejxYu+E=
+X-Received: by 2002:a05:620a:4511:b0:911:7100:86b2 with SMTP id af79cd13be357-914a23a292cmr1625172385a.22.1779552030566;
+        Sat, 23 May 2026 09:00:30 -0700 (PDT)
+Received: from localhost (h7.113.131.40.static.ip.windstream.net. [40.131.113.7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-914bb906fb3sm429773885a.19.2026.05.23.09.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 May 2026 09:00:29 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH] lsm,bpf: fix security_bpf_prog_load() error handling
+Date: Sat, 23 May 2026 12:00:26 -0400
+Message-ID: <20260523160025.16363-2-paul@paul-moore.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1420; i=paul@paul-moore.com; h=from:subject; bh=D/x8usnB5ajIhBy2PeUrrXP7yx/0Jn19puJ4vENcs6w=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBqEc8ZgAKD0VJTH0uL4NBeAbLYbYm8H58uih3JN ohWO/MMflCJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCahHPGQAKCRDqIPLalzeJ c6qKD/90S40zZWZS8w7kqtjvvhazaPuufM/d7pvzKsx6KFwVlyRdi9VPTPUVJB9AoSSCa5ondr7 agjLNvwsxWQ6jn2VGv3YQTYtKX6Aj50dJO9ZxKMsA/LnCio8opHg6nuxyHqprZhMrxQeRMyfSEq fWwbG9i1wQDNe8Sc+3xP7TgXyHkX0VnFzwhxSQ5oCJo+opb5nPWMb4ZNwj1EvaHfs3LVTJEUmA/ xP6ORZDh19Ywa30Lbtke1ibwPB9908Vrqzposr6EfqR7chcupPEevYBuRfkfSYKcoPev9JaO6Fd GVAmQ73r2JwjZMd3309QQB6vg2cgu0NWALYqgPGrDZktvkfhPro+dhbNPyKyrSQmudAgtqbBuzT 02GBENtqU4azqYz0FnS+6xc9IqD42qV5MF8p1AhBMnLwf18ZEsTKFhMpYWnv74EvVXzUIBVyUna fnGaaY0yalj3z6evqCfkKfL4TkqqwGx4FyPXQv5jEsPSCTg7gyJ6L/QXJAra3/S/QvCLiKjVxD/ QNEO+ta2iTM5BXuI2IusU3pp5VQ9YVzX84A2jq6n0cqG0NH/svJ2OceESsQQ8xP2q/aadJdNc/o /oZBE9isDkKtAVfgsb8kV/LnUfJAj56/kmzOkL7EfSXyGFMM0G+oias5PkAU2TLiMOdMbUx5yd3 Gpxe1OQuncv9Mmw==
+X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
+Content-Transfer-Encoding: 8bit
 
-Paul Moore <paul@paul-moore.com> writes:
+If security_bpf_prog_load() fails there is no need to call into
+security_bpf_prog_free() as the LSM will handle the cleanup of any partial
+LSM state before returning to the caller with an error.  Thankfully this
+isn't an issue with any of the existing code as the LSMs which currently
+provide BPF hook callback implementations don't allocate any internal
+state, but this is something we want to fix for potential future users.
 
-> On May 23, 2026 7:40:42 AM Paul Moore <paul@paul-moore.com> wrote:
->> On May 23, 2026 3:40:46 AM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>>
->>> sashiko spotted it too.
->>> All other sashiko bugs were ignored as well.
->>
->> Link? I didn't see any feedback from sashiko feedback on list and to the
->> best of my knowledge it hasn't been enabled for LSM patches.
->
-> https://sashiko.dev/#/patchset/20260507191416.2984054-1-bboscaccy%40linux.microsoft.com
->
-> Blaise, I know you've got another patch coming soon - please take a look at 
-> the link above and see if there is anything else that needs to be addressed.
->
+Cc: bpf@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ kernel/bpf/syscall.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Yeah, it found a few things I corrected. It's hooked into the bpf list,
-not the lsm list currently. With all melodrama and bravado aside, The
-TOCTOU issue it found wasn't the actual attack vector and it completely
-missed the real one that Eric found. It seems to be lacking the
-multi-step reasoning that vuln researchers actually use. 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a3c0214ca934..ac07280098e9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3076,7 +3076,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
+ 
+ 	err = security_bpf_prog_load(prog, attr, token, uattr.is_kernel);
+ 	if (err)
+-		goto free_prog_sec;
++		goto free_prog;
+ 
+ 	/* run eBPF verifier */
+ 	err = bpf_check(&prog, attr, uattr, uattr_size);
+@@ -3122,8 +3122,6 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
+ 	__bpf_prog_put_noref(prog, prog->aux->real_func_cnt);
+ 	return err;
+ 
+-free_prog_sec:
+-	security_bpf_prog_free(prog);
+ free_prog:
+ 	free_uid(prog->aux->user);
+ 	if (prog->aux->attach_btf)
+-- 
+2.54.0
 
-Most of it looked like AI slop, and I'm not too keen on providing more
-free training material for AI folks to run inference on, so I didn't
-respond directly to the bot spam emails.
-
-Sashiko seems to take major issue with the existing user keyring
-verification too *shrug*.
-
-I'll take a second look when I'm back home next week and see if there is
-anything real leftover after this patchset.
-
--blaise
-
-> --
-> paul-moore.com
