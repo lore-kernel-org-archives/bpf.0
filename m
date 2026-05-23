@@ -1,20 +1,21 @@
 Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5329D1F5825
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EBF2F531B
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555447; cv=none; b=DoCXAauEDWYtrsuBoSwYH7X9sui92QYoiO1gZmQlEQTWaHfvBnwiWpfNoYyuCWP+gF3TxlHG6KEKDjVEw9WkNd2AjkKOZNmcdbFEexnu1qSHJX6kvXHtRQvxwb+3vkRIWVw6TaNTiJ5/9c3bIYlo8tnWWVBPEpEtOURK4cxbAH0=
+	t=1779555451; cv=none; b=NkNk5hVHIMp+fPR4SqwdRETJe+SwOHNAp60FY1YbxNRxxM4O9BXu27nYDhTQuACDi4lPY9penlO2/Ozd+im190HQt+Q87tMhV4uXOuzgtjIMZLkMb5e7esaS98kmRYPCBmPI8xt231FPJiSlj+7QsC6AKJun4r32z/NzliHeyOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555447; c=relaxed/simple;
-	bh=rVo6L7hZrc+YxPeXBi39TL3wT8LCkklB8k7XksaAQd0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XYY3Fma38h+nCQ1gwhYLFNxjmtKJvS2gt0DhRaNSwsrid58DoxoXWPuecYbQHW+rh+QZHPC03JxlHwaEsRGOCWdypPy6Lm+/9Uu0cBGLree3xMe9OBnCjwulLpwP0CyH9AhN/yfL436E/WHeQbTqDu6wTpTKIcHy8BW2G1eOpYY=
+	s=arc-20240116; t=1779555451; c=relaxed/simple;
+	bh=38VxHEj8Gb5MV9dJ6kc2F8jflzlrfQdq6u2Gl6ZjjsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=O2fVFJxKQGGwhDZKald2Cwt8iXPPqzl/Lzbbob8NvaMMQZO1e/DwSxc0RXv/wyTG7YG7ZLV3m4tVRw3b3HvG07cq0pOPwe7Jx1tYce1tvRqGBr9myKaLWVoOu8VsOQ/hz48aWJLmlRa1bTuq22wD4rex0Pf58xZyACi/2RwxUVQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CEEA4EE8FB8C9; Sat, 23 May 2026 09:57:12 -0700 (PDT)
+	id 32CA4EE8FB96E; Sat, 23 May 2026 09:57:28 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -23,10 +24,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v5 00/11] pahole: Encode true signatures in kernel BTF
-Date: Sat, 23 May 2026 09:57:12 -0700
-Message-ID: <20260523165712.1225231-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v5 03/11] dwarf_loader: Handle signatures with dead arguments
+Date: Sat, 23 May 2026 09:57:28 -0700
+Message-ID: <20260523165728.1226989-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260523165712.1225231-1-yonghong.song@linux.dev>
+References: <20260523165712.1225231-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,199 +38,228 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Current vmlinux BTF encoding is based on the source level signatures.
-But the compiler may do some optimization and changed the signature.
-If the user tried with source level signature, their initial implementati=
-on
-may have wrong results and then the user need to check what is the
-problem and work around it, e.g. through kprobe since kprobe does not
-need vmlinux BTF.
+For llvm dwarf, the dead argument may be in the middle of
+DW_TAG_subprogram. So we introduce skip_idx in order to
+match expected registers properly.
 
-Majority of changed signatures are due to dead argument elimination.
-The following is a more complex one. The original source signature:
-  typedef struct {
-        union {
-                void            *kernel;
-                void __user     *user;
-        };
-        bool            is_kernel : 1;
-  } sockptr_t;
-  typedef sockptr_t bpfptr_t;
-  static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
-After compiler optimization, the signature becomes:
-  static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ..=
-. }
-In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockpt=
-r_t.
-This makes it easier for developers to understand what changed.
+For example:
+  0x00042897:   DW_TAG_subprogram
+                  DW_AT_name      ("create_dev")
+                  DW_AT_calling_convention        (DW_CC_nocall)
+                  DW_AT_type      (0x0002429a "int")
+                  ...
 
-The new signature needs to properly follow ABI specification based on
-locations. Otherwise, that signature should be discarded. For example,
-
-    0x0242f1f7:   DW_TAG_subprogram
-                    DW_AT_name      ("memblock_find_in_range")
-                    DW_AT_calling_convention        (DW_CC_nocall)
-                    DW_AT_type      (0x0242decc "phys_addr_t")
+  0x000428ab:     DW_TAG_formal_parameter
+                    DW_AT_name    ("name")
+                    DW_AT_type    (0x000242ed "char *")
                     ...
-    0x0242f22e:     DW_TAG_formal_parameter
-                      DW_AT_location        (indexed (0x14a) loclist =3D =
-0x005595bc:
-                         [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_=
-reg5 RDI
-                         [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_=
-reg14 R14
-                         [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_=
-entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
-                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
-reg14 R14)
-                      DW_AT_name    ("start")
-                      DW_AT_type    (0x0242decc "phys_addr_t")
-                      ...
-    0x0242f239:     DW_TAG_formal_parameter
-                      DW_AT_location        (indexed (0x14b) loclist =3D =
-0x005595e6:
-                         [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_=
-reg4 RSI
-                         [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_=
-reg3 RBX
-                         [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_=
-entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
-                         [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_=
-reg3 RBX)
-                      DW_AT_name    ("end")
-                      DW_AT_type    (0x0242decc "phys_addr_t")
-                      ...
-    0x0242f245:     DW_TAG_formal_parameter
-                      DW_AT_location        (indexed (0x14c) loclist =3D =
-0x00559610:
-                         [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_=
-breg4 RSI+0)
-                      DW_AT_name    ("size")
-                      DW_AT_type    (0x0242decc "phys_addr_t")
-                      ...
-    0x0242f250:     DW_TAG_formal_parameter
-                      DW_AT_const_value     (4096)
-                      DW_AT_name    ("align")
-                      DW_AT_type    (0x0242decc "phys_addr_t")
-                      ...
 
-The third argument should correspond to RDX for x86_64. But the location =
-suggests that
-the parameter value is stored in the address with 'RSI + 0'. It is not cl=
-ear whether
-the parameter value is stored in RDX or not. So we have to discard this f=
-unciton in
-vmlinux BTF to avoid incorrect true signatures.
+  0x000428b5:     DW_TAG_formal_parameter
+                    DW_AT_location        (indexed (0x3f) loclist =3D 0x0=
+00027f8:
+                       [0xffffffff87681370, 0xffffffff8768137a): DW_OP_re=
+g5 RDI
+                       [0xffffffff8768137a, 0xffffffff87681392): DW_OP_re=
+g3 RBX
+                       [0xffffffff87681392, 0xffffffff876813ae): DW_OP_en=
+try_value(DW_OP_reg5 RDI), DW_OP_stack_value)
+                    DW_AT_name    ("dev")
+                    DW_AT_type    (0x00026859 "dev_t")
+                    ...
 
-For llvm, any function having
-  DW_AT_calling_convention        (DW_CC_nocall)
-in dwarf DW_TAG_subprogram will indicate that this function has signature=
- changed.
-I did experiment with latest bpf-next. For x86_64, there are 69103 kernel=
- functions
-and 875 kernel functions having signature changed. A series of patches ar=
-e intended
-to ensure true signatures are properly represented. Eventually, only 18 f=
-unctions
-cannot have true signatures due to locations.
+With skip_idx, we can identify that the second original argument
+'dev' becomes the first one after optimization.
 
-For arm64, there are 863 kernel functions having signature changed, and
-70 functions cannot have true signatures due to locations. I checked thos=
-e
-functions and look like llvm arm64 backend more relaxed to compute parame=
-ter
-values.
+The previous patch has the following:
+  0x0533fd03:   DW_TAG_subprogram
+                  DW_AT_name      ("acpi_irq_penalty_update")
+                  DW_AT_calling_convention        (DW_CC_nocall)
+                  DW_AT_type      (0x05334dc7 "int")
+                  ...
 
-For full testing, I enabled true signature support in kernel scripts/Make=
-file.btf like below:
-  -pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
-attributes
-  +pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3D=
-attributes --btf_features=3D+true_signature
+  0x0533fd15:     DW_TAG_formal_parameter
+                    DW_AT_name    ("str")
+                    DW_AT_type    (0x05335918 "char *")
+                    ...
 
-For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, =
-which
-can precisely identify which function has signature changed. This can fil=
-ter
-majority of functions where their signature won't change. Patch 2 did a p=
-rescan
-of parameter registers to accommodate some cases where the optimization c=
-ould
-happen but didn't. Patches 3 to 9 tried to find functions with true signa=
-ture.
-Patch 10 enables to btf encoder to properly generate BTF.
-Patch 11 includes a few tests.
+  0x0533fd1f:     DW_TAG_formal_parameter
+                    DW_AT_location        (indexed (0x3b) loclist =3D 0x0=
+0eb9d83:
+                       [0xffff80008419f2e0, 0xffff80008419f324): DW_OP_re=
+g1 W1
+                       [0xffff80008419f324, 0xffff80008419f47c): DW_OP_re=
+g19 W19
+                       [0xffff80008419f47c, 0xffff80008419f494): DW_OP_en=
+try_value(DW_OP_reg1 W1), DW_OP_stack_value
+                       [0xffff80008419f494, 0xffff80008419f498): DW_OP_re=
+g19 W19)
+                    DW_AT_name    ("used")
+                    DW_AT_type    (0x05334dc7 "int")
+                    ...
 
-Changelog:
-  v4 -> v5:
-    - v4: https://lore.kernel.org/bpf/20260326013144.2901265-1-yonghong.s=
-ong@linux.dev/
-    - Check info.signature_changed only under clang.
-    - Fix an uninitialized varable issue (var reg_dix) for gcc.
-  v3 -> v4:
-    - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.s=
-ong@linux.dev/
-    - Add simple prescan of parameter registers in order to get true sign=
-atures
-      for those functions where optimization could happen but compiler di=
-dn't do it.
-    - Do not create a new name (e.g. "uattr__is_kernel") with malloc at p=
-arameter_reg()
-      stage. Instead remember both "uattr" and "is_kernel" and later gene=
-rate the
-      name "uattr_is_kernel" in btf encoder.
-    - Add comments to explain how to handle parameters which may take two=
- registers.
-    - Fix some test failures on aarch64.
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.s=
-ong@linux.dev/
-    - Change tests by using newly added test_lib.sh.
-    - Simplify to get bool variable producer_clang.
-    - Try to avoid producer_clang appearance in dwarf_loader.c in order t=
-o avoid
-      clear separation between clang and gcc.
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.s=
-ong@linux.dev/
-    - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel=
- build
-      will crash pahole.
-    - Fix an early return in parameter__reg() which didn't do pthread_mut=
-ex_unlock()
-      which caused the deadlock for arm64.
-    - Add a few more places to guard with producer_clang and conf->true_s=
-ignature
-      to maintain the previous behavior if not clang or conf->true_signat=
-ure is false.
+It is also handled properly with parameter 'str' will have W0 register.
 
-Yonghong Song (11):
-  dwarf_loader: Reduce parameter checking with clang
-    DW_AT_calling_convention attr
-  dwarf_loader: Prescan all parameters with expected registers
-  dwarf_loader: Handle signatures with dead arguments
-  dwarf_loader: Refactor initial ret -1 to be macro PARM_DEFAULT_FAIL
-  dwarf_laoder: Handle locations with DW_OP_fbreg
-  dwarf_loader: Change exprlen checking condition in parameter__reg()
-  dwarf_loader: Detect optimized parameters with locations having
-    constant values
-  dwarf_loader: Check whether two-reg parameter actually use two regs or
-    not
-  dwarf_loader: Handle expression lists
-  btf_encoder: Handle optimized parameter properly
-  tests: Add a few clang true signature tests
+With this patch, I checked x86_64 that the number of invalid true signatu=
+res is reduced
+from 532 to 96. This suggests that majority of optimized functions are ca=
+used by
+dead arguments.
 
- btf_encoder.c                       |  32 +-
- dwarf_loader.c                      | 552 ++++++++++++++++++++++++++--
- dwarves.h                           |   3 +
- tests/clang_parm_aggregate.sh       |  85 +++++
- tests/clang_parm_optimized.sh       |  63 ++++
- tests/clang_parm_optimized_stack.sh |  63 ++++
- 6 files changed, 769 insertions(+), 29 deletions(-)
- create mode 100755 tests/clang_parm_aggregate.sh
- create mode 100755 tests/clang_parm_optimized.sh
- create mode 100755 tests/clang_parm_optimized_stack.sh
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ dwarf_loader.c | 93 +++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 88 insertions(+), 5 deletions(-)
 
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index f0ac699..49993ee 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1195,10 +1195,62 @@ static ptrdiff_t __dwarf_getlocations(Dwarf_Attri=
+bute *attr,
+=20
+ struct func_info {
+ 	bool signature_changed;
++	int skip_idx;
+ 	int nr_params;
+ 	int param_start_regs[MAX_PRESCAN_PARAMS];
+ };
+=20
++static int __get_type_byte_size(Dwarf_Die *die, struct cu *cu)
++{
++	Dwarf_Attribute attr;
++	if (dwarf_attr(die, DW_AT_type, &attr) =3D=3D NULL)
++		return 0;
++
++	Dwarf_Die type_die;
++	if (dwarf_formref_die(&attr, &type_die) =3D=3D NULL)
++		return 0;
++
++	/* A type does not have byte_size.
++	 * 0x000dac83: DW_TAG_formal_parameter
++			 DW_AT_location        (indexed (0x385) loclist =3D 0x00016175:
++			   [0xffff800080098cb0, 0xffff800080098cb4): DW_OP_breg8 W8+0
++			   [0xffff800080098cb4, 0xffff800080098ff4): DW_OP_breg31 WSP+16, DW_=
+OP_deref
++			   [0xffff800080099054, 0xffff80008009908c): DW_OP_breg31 WSP+16, DW_=
+OP_deref)
++			 DW_AT_name    ("ubuf")
++			 DW_AT_decl_file       ("/home/yhs/work/bpf-next/arch/arm64/kernel/pt=
+race.c")
++			 DW_AT_decl_line       (886)
++			 DW_AT_type    (0x000d467e "const void *")
++
++	  * 0x000d467e: DW_TAG_pointer_type
++			  DW_AT_type      (0x000c4320 "const void")
++
++	  * 0x000c4320: DW_TAG_const_type
++	  */
++	if (dwarf_tag(&type_die) =3D=3D DW_TAG_pointer_type)
++		return cu->addr_size;
++
++	uint64_t bsize =3D attr_numeric(&type_die, DW_AT_byte_size);
++	if (bsize =3D=3D 0)
++		return __get_type_byte_size(&type_die, cu);
++
++	return bsize;
++}
++
++static int get_type_byte_size(Dwarf_Die *die, struct cu *cu)
++{
++	int byte_size =3D 0;
++
++	Dwarf_Attribute attr;
++	if (dwarf_attr(die, DW_AT_abstract_origin, &attr)) {
++		Dwarf_Die origin;
++		if (dwarf_formref_die(&attr, &origin))
++			byte_size =3D __get_type_byte_size(&origin, cu);
++	} else {
++		byte_size =3D __get_type_byte_size(die, cu);
++	}
++	return byte_size;
++}
++
+ /* Get the first DW_OP_X (should be a register) from a parameter's DW_AT=
+_location. */
+ static int parameter__peek_first_reg(Dwarf_Die *die)
+ {
+@@ -1292,8 +1344,9 @@ static struct parameter *parameter__new(Dwarf_Die *=
+die, struct cu *cu,
+ 	struct parameter *parm =3D tag__alloc(cu, sizeof(*parm));
+=20
+ 	if (parm !=3D NULL) {
+-		bool has_const_value;
++		bool has_const_value, true_sig_enabled;
+ 		Dwarf_Attribute attr;
++		int reg_idx;
+=20
+ 		tag__init(&parm->tag, cu, die);
+ 		parm->name =3D attr_string(die, DW_AT_name, conf);
+@@ -1303,8 +1356,10 @@ static struct parameter *parameter__new(Dwarf_Die =
+*die, struct cu *cu,
+ 		if (!info->signature_changed) {
+ 			if (cu->producer_clang || param_idx >=3D cu->nr_register_params)
+ 				return parm;
+-		} else if (param_idx >=3D cu->nr_register_params) {
+-			return parm;
++		} else {
++			reg_idx =3D param_idx - info->skip_idx;
++			if (reg_idx >=3D cu->nr_register_params)
++				return parm;
+ 		}
+=20
+ 		/* Parameters which use DW_AT_abstract_origin to point at
+@@ -1342,9 +1397,10 @@ static struct parameter *parameter__new(Dwarf_Die =
+*die, struct cu *cu,
+ 		 */
+ 		has_const_value =3D dwarf_attr(die, DW_AT_const_value, &attr) !=3D NUL=
+L;
+ 		parm->has_loc =3D dwarf_attr(die, DW_AT_location, &attr) !=3D NULL;
++		true_sig_enabled =3D conf->true_signature && info->signature_changed;
+=20
+ 		if (parm->has_loc) {
+-			int expected_reg =3D cu->register_params[param_idx];
++			int expected_reg =3D cu->register_params[reg_idx];
+ 			int actual_reg =3D parameter__reg(&attr, expected_reg);
+=20
+ 			if (actual_reg < 0)
+@@ -1357,8 +1413,35 @@ static struct parameter *parameter__new(Dwarf_Die =
+*die, struct cu *cu,
+ 				 * contents.
+ 				 */
+ 				parm->unexpected_reg =3D 1;
+-		} else if (has_const_value) {
++		} else if (has_const_value && !cu->producer_clang) {
++			parm->optimized =3D 1;
++		} else if (true_sig_enabled) {
++			int byte_size, num_regs, next_reg_idx;
++
++			if (param_idx + 1 < info->nr_params) {
++				int next_start =3D info->param_start_regs[param_idx + 1];
++				if (next_start >=3D 0) {
++					/* check whether we should preserve the argument or not */
++					byte_size =3D get_type_byte_size(die, cu);
++					/* byte_size 0 should not happen. */
++					if (!byte_size) {
++						parm->unexpected_reg =3D 1;
++						return parm;
++					}
++
++					num_regs =3D (byte_size + cu->addr_size - 1) / cu->addr_size;
++					next_reg_idx =3D reg_idx + num_regs;
++					if (next_reg_idx < cu->nr_register_params &&
++					    next_start =3D=3D cu->register_params[next_reg_idx]) {
++						if (byte_size > cu->addr_size)
++							info->skip_idx--;
++						return parm;
++					}
++				}
++			}
++
+ 			parm->optimized =3D 1;
++			info->skip_idx++;
+ 		}
+ 	}
+=20
 --=20
 2.53.0-Meta
 
