@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDF431E839
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576E631F9AB
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 16:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555476; cv=none; b=TxIfAu8kF6Tols7WWFVYViHnaXDUT3IHsMEfs1vdccSIU3m2u9h0P9R3s4oPe0pI5yNEgz4V6bObavFpTY/sUxRuEWkhHP+AJm84XAGlreenvPCAhDYVYSnS54ZLpHBiL28le5SDnfmJ2X6cfxHRHk/2VFUWSrEkhFANdeOUkQk=
+	t=1779555482; cv=none; b=UKqfrxyMWyxZgiWkz9IYusTLCKe+Q0MgNtTeYEvUrYrZJlomjPZIc2KeraSr674OBn67Vxoo/Fu7uLRZDytcFnyPyjmK61Ik+gu8iaRgU6UoQTfCh8j/mrM3atMZ2MvsYU0oChdRHrPrkHR6aVfCZ/w7xM3MSljVSURMr8PYtGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555476; c=relaxed/simple;
-	bh=vLGWYSZmhgl19a644igY9grP9mSQlAV80hPIFvW55KM=;
+	s=arc-20240116; t=1779555482; c=relaxed/simple;
+	bh=RmRhhYj8VdD2cUjUXGlribS8f83VkYTyzjbsd4/77To=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Om64xSmm2QO+0I+lAejAlekcqc+UVeOh8ROzK0pqqbHANzB0UuGodTtp6AtYn/7Co9gJIIeE0masGTq7Xjvr5dhp92iL6u4tceou0Bg9+ihDQAHebtLNQRYhFwcocZYygvRB3N1pxRD23MSAN7kGxO1Ki7aMNZ+KlCswOjVQYBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=Gv0Ar0V3zjL+o9dMPzMbgPJBSxoeyA4vtnHelOShGaOTkxITkbaZqS7+G+o067hyEnZZTe5H6NGWsuVvj3ZaX8StuWohhLUjuZYLDMuVliB1zwNrLt/9eyUEaaNzu/LmJVQgjMwmPS4BJeHmgjzzWElI0J0eT+27ReYUlrznRbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 084D9EE9015CE; Sat, 23 May 2026 09:57:43 -0700 (PDT)
+	id 416F1EE901630; Sat, 23 May 2026 09:57:55 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v5 06/11] dwarf_loader: Change exprlen checking condition in parameter__reg()
-Date: Sat, 23 May 2026 09:57:43 -0700
-Message-ID: <20260523165743.1227875-1-yonghong.song@linux.dev>
+Subject: [PATCH dwarves v5 08/11] dwarf_loader: Check whether two-reg parameter actually use two regs or not
+Date: Sat, 23 May 2026 09:57:55 -0700
+Message-ID: <20260523165755.1229215-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260523165712.1225231-1-yonghong.song@linux.dev>
 References: <20260523165712.1225231-1-yonghong.song@linux.dev>
@@ -38,30 +38,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The change does not change any functionalities. But it allows
-DW_OP_stack_value preserved in longer location list for future
-parameter checking.
+For a parameter whose type occuplies two registers, for x86_64 and aarch6=
+4,
+the parameter will actually use two registers. S390 is different
+as it allocates on stack and pass a pointer to the function.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- dwarf_loader.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ dwarf_loader.c | 11 +++++++++++
+ dwarves.h      |  1 +
+ 2 files changed, 12 insertions(+)
 
 diff --git a/dwarf_loader.c b/dwarf_loader.c
-index bf8b973..4b65e30 100644
+index 97f576a..b888783 100644
 --- a/dwarf_loader.c
 +++ b/dwarf_loader.c
-@@ -1308,7 +1308,7 @@ static int parameter__reg(Dwarf_Attribute *attr, in=
-t expected_reg, struct conf_l
- 		 * DW_OP_stack_value instructs interpreter to pop current value from
- 		 * DWARF expression evaluation stack, and thus is not important here.
- 		 */
--		if (exprlen > 1 && expr[exprlen - 1].atom =3D=3D DW_OP_stack_value)
-+		if (exprlen =3D=3D 2 && expr[exprlen - 1].atom =3D=3D DW_OP_stack_valu=
-e)
- 			exprlen--;
+@@ -1100,6 +1100,16 @@ static void arch__set_register_params(const GElf_E=
+hdr *ehdr, struct cu *cu)
+ 	}
+ }
 =20
- 		if (exprlen !=3D 1)
++static bool arch__agg_use_two_regs(const GElf_Ehdr *ehdr)
++{
++	switch (ehdr->e_machine) {
++	case EM_S390:
++		return false;
++	default:
++		return true;
++	}
++}
++
+ static struct template_type_param *template_type_param__new(Dwarf_Die *d=
+ie, struct cu *cu, struct conf_load *conf)
+ {
+ 	struct template_type_param *ttparm =3D tag__alloc(cu, sizeof(*ttparm));
+@@ -3562,6 +3572,7 @@ static int cu__set_common(struct cu *cu, struct con=
+f_load *conf,
+=20
+ 	cu->little_endian =3D ehdr.e_ident[EI_DATA] =3D=3D ELFDATA2LSB;
+ 	cu->nr_register_params =3D arch__nr_register_params(&ehdr);
++	cu->agg_use_two_regs =3D arch__agg_use_two_regs(&ehdr);
+ 	arch__set_register_params(&ehdr, cu);
+ 	return 0;
+ }
+diff --git a/dwarves.h b/dwarves.h
+index b49e651..2d94dff 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -307,6 +307,7 @@ struct cu {
+ 	uint8_t		 uses_global_strings:1;
+ 	uint8_t		 little_endian:1;
+ 	uint8_t		 producer_clang:1;
++	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
+ 	uint8_t		 nr_register_params;
+ 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+ 	int		 functions_saved;
 --=20
 2.53.0-Meta
 
