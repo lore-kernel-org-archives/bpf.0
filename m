@@ -1,114 +1,110 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014E6277026
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 07:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDEE349CCA
+	for <bpf@vger.kernel.org>; Sat, 23 May 2026 08:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779522464; cv=none; b=DH3VLHU0CtESF92EyBUpJQMw19c5VjdhVh/I0gxqIyZByWTxqa9vX7sfmflOku2BlRDF68DnwfXpIvqT9vgMX6zyy2pSgQmdLbJF9IpOkuSbQ5G3TFbe6Y/Qd1nxMgiWElmi10O3i3pml9Z4RJuEC+U838VOpRanFy0BLv/1vE0=
+	t=1779524437; cv=none; b=Q8MXjZV0IHIXXdgXQj6jsu8R0REFlM7vUlaauT2kjdaIdOIOIMg7Nn+L5Lbv7VQ2LRSlMqLiLaENG+dnHlhOLZc87TZfMH2HHd2tGq86yO/KGEzqUrvb009uloz2JxLBQDQ85GNY4z9cp0ytW+q9YOMXwQZBXrEuDBrKF/RmpmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779522464; c=relaxed/simple;
-	bh=PfOZOqf/Waxp0fKjVOuhbKDiF6dKL6Sj8HRebM4Q1V0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d7NSSkMOGJn0+dr1/xJHl7Ot8oRJKIsgORKbCy6bpWMpLiVVS+ggtGOw7YiXf51atocJMY1gx1OjMSQkroRN1WLp6ij6j/R+FhRgJ/iO7jxP1ssPCpBK6jmTdfrK1b459ehzQ0uiGns8IfRV2FXr5W+QFrOWiDWACrVS0chLyWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C8vswjWY; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779524437; c=relaxed/simple;
+	bh=kodOdkozDv+0FKdHF4BJpnNgYRnX8RDb7FE2/UeuiL4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lFCUcmnFLMV5OvIQQNf5PAgwyvyWjyaxqHAHT1oBD2VJphkVD+w7EFRgFv9bhxZKvMsNmRfm8HoopUNm1KjZ7+4cG63WG9xKA98WqHgNnwApFCOM+Z1Q+ysinuxb4M2EFBB0WysDkY8PFnK90Kp0/jGLbGW/rUKyorOfp+hav1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hwoy2Fji; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8vswjWY"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4903997fcb5so25124575e9.2
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 00:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779522460; x=1780127260; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=886s+5LC/+p5MSUDP6l54CeyLMiGkzDEGBKqbzvyzIg=;
-        b=C8vswjWYTSTgt0ItAXi+dBNod4df/o7FqIaU8FKVnpt3Dh14uc9NfZbOiNn0Eyxgcr
-         DBLaa7T9VjInc/efs2Vf0NhOmxfWRPeY0TkIz8VBXrW2TpyCC8sgoLM/G/zb2HLoWG8B
-         18+qDpXIDbBpcN9IQAbNWTHD/MqQLJE7sfJCgtp08AVo6YiyAgBtCOvphqkK15yVUes4
-         +mh/z12rFI/vPb5onYYfFRhjpIXE5HUNZJTCeClaR2j2113oQKzFHmd4Qd3ju8FcV3RG
-         7xrAM1KkQO5Wmnvd+qUYeaBaKk+Fc/T8aFXIip7mQWcjk8fG9wR58BqZK4PG+ybB0Y36
-         SJ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779522460; x=1780127260;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=886s+5LC/+p5MSUDP6l54CeyLMiGkzDEGBKqbzvyzIg=;
-        b=AyRIypHPmMumtkTijF8PCGB4TCm0SYxkvJVAhKsOC+j70/lI6A2XOdX8MgNMkcnLkg
-         q9Xo5/rP3rwsQtMZ6W5r/bGKLHgJ+Itq+tj+9My5W7GpGdzaYhMB2lnF9FniNyaH/GDg
-         2X/2hmOXhRdqT0aZoo7eIGDO6Wzlcqz3ZPn9HUkq8QNSGCYshu2QR0U6pPYsDnrMDgin
-         jxygYbVUk6+oWvuzCxfbSjc73rZICVDzGTdRtClB/lmobNfqb3GTEG1v4cp2rzshCEms
-         Dyi5RJEkDuTWVymeT0WX57u+WWvG5C8pv7zc3s3awLNmT8twoRcxgOdC4FExa0NHYtaW
-         639g==
-X-Gm-Message-State: AOJu0YzSZW6zZjN2+vopCdUT6dVKbZ6+o9AKZqUT4DYGVAyZE32QB33b
-	z+x/42Or2IMZca6gn/ayz9lCDARZvbD7G4x9PcPZV+TTzFXdDIACGeNU
-X-Gm-Gg: Acq92OGmp2k4wEJ0gMmpwLF0xNUXhkdBx+3kMtjbHfyvI+XZejX+liRqJkfaTqtXkxW
-	WGl/j9R6D/CFgtXwJo73m/8zykeN4Ipon5PR/wLYiyAu/93b73GOhBTDc3Pn87EVp4vjEEdzPku
-	UTifRj/bH7Bas6EXoTjIJTkz3DvCQorBpaU2Gc/dEZnUnRKm8+fZunmAFhIcI3U9ekGhFybSqae
-	o5vj0w85cvU5H7fJsPkbZr9EpurZghDmnRQOlPKoRDx9X7LXCZBGmfqgKWvAvj7TyL8L6lewr0r
-	sAdsfr8jHnvkJFD105BlJverupci8reBGK2ZWvJ4LsTECB9AoGM2r/2p+O1UYS2CQxlbYiB91Lo
-	KexHNNmgEUnHH8j67PnwfPHTzXbYHghxTyifd5g6PaqPOttCfhln8EMLNdfHCRlo+V56T2FHFyH
-	9H9SxmEnrhVAiDd7HUnBrpKda4o0I5sCynFVRfwpyrzelfmzNiEgO4nbXiY2jBOApNGiHIJs2Gu
-	QPiNoZTSPfTwuTTXzTvWBZsREYTmqQ4sOTLOLXaA8ZbU8IM79i6O1NlU6viR4othXcliortqFoE
-	lzyOx118RQQq+g==
-X-Received: by 2002:a05:600c:5298:b0:48f:e230:c3fb with SMTP id 5b1f17b1804b1-490428ddd40mr103713885e9.33.1779522460245;
-        Sat, 23 May 2026 00:47:40 -0700 (PDT)
-Received: from localhost.localdomain ([149.22.234.166])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490424974a8sm49822375e9.4.2026.05.23.00.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 00:47:39 -0700 (PDT)
-From: Himanshu Anand <anand.himanshu17@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Himanshu Anand <anand.himanshu17@gmail.com>
-Subject: [PATCH bpf v2] bpf: Add nelems overflow check in btf_find_field_one()
-Date: Sat, 23 May 2026 08:47:36 +0100
-Message-Id: <20260523074736.222994-1-anand.himanshu17@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hwoy2Fji"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F931F00A3A;
+	Sat, 23 May 2026 08:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779524436;
+	bh=1KzlPdzU/aWmDY/40p39bjH5TO6zgQuwsMcU6h4IKdA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Hwoy2FjinTFsD1ZNESa+ahPShOZ8wApciRUCeFhQVEUZkPHqO09WAXBsV1W0Vm77h
+	 cXmImUY0pZYPgDANtZBLzniYFcfmUGGJRzmGAjdBZehP+YGAbl7RoFParWSysKjArp
+	 6klstWQDnHNrH41aGhJCggXEU0nFXAB2o/SHvRqOeLRVwMbPBrSPLgvxpnDFkwZfT7
+	 P0T1cwzVgHhWhp+fV7leF1OAqMq/xL0nF3WzORhod5rF+TV1ceIiMi8RQYjF8LHYAR
+	 XOrCPv6D1gqwUDPNASGIi0/7K1NsOFekFUE/yTov8OjSGFCspJffWJF37L7Wj3XBFG
+	 HDde8qBVeM4TQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: Add nelems overflow check in
+ btf_find_field_one()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Himanshu Anand" <anand.himanshu17@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260523074736.222994-1-anand.himanshu17@gmail.com>
+References: <20260523074736.222994-1-anand.himanshu17@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 23 May 2026 08:20:35 +0000
+Message-Id: <20260523082035.D2F931F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-btf_find_field_one() multiplies a u32 nelems accumulator by each
-nested array level's element count without checking for overflow.
-The sibling function __btf_resolve_size() already guards against
-the same overflow pattern (btf.c line 2110).
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Currently the BTF array verifier (btf_array_resolve) rejects BTF
-blobs whose total array size would overflow u32, so this code path
-is not reachable with crafted BTF input on kernels that include
-that check.  Add check_mul_overflow() anyway to keep
-btf_find_field_one() self-consistent with __btf_resolve_size()
-and to guard against future changes in the validation ordering.
+Pre-existing issues:
+- [Critical] The patch leaves a critical 32-bit integer overflow in `btf_re=
+peat_fields()` unprotected, leading to a stack buffer overflow.
+--
 
-Fixes: 994796c0256c ("bpf: create repeated fields for arrays.")
-Signed-off-by: Himanshu Anand <anand.himanshu17@gmail.com>
----
- kernel/bpf/btf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+commit d1acecf46d6faa37ff66d19a08184489e682b397
+Author: Himanshu Anand <anand.himanshu17@gmail.com>
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a62d78581207..b767a9fcf095 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3765,7 +3765,8 @@ static int btf_find_field_one(const struct btf *btf,
- 	 */
- 	for (i = 0; i < MAX_RESOLVE_DEPTH && btf_type_is_array(var_type); i++) {
- 		array = btf_array(var_type);
--		nelems *= array->nelems;
-+		if (check_mul_overflow(nelems, array->nelems, &nelems))
-+			return -E2BIG;
- 		var_type = btf_type_by_id(btf, array->type);
- 	}
- 	if (i == MAX_RESOLVE_DEPTH)
--- 
-2.34.1
+bpf: Add nelems overflow check in btf_find_field_one()
 
+This commit adds an overflow check when multiplying nested array element
+counts in btf_find_field_one(). This aims to make the logic consistent with
+__btf_resolve_size() and guards against future validation ordering changes.
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a62d785812076..b767a9fcf095d 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -3765,7 +3765,8 @@ static int btf_find_field_one(const struct btf *btf,
+>  	 */
+>  	for (i =3D 0; i < MAX_RESOLVE_DEPTH && btf_type_is_array(var_type); i++=
+) {
+>  		array =3D btf_array(var_type);
+> -		nelems *=3D array->nelems;
+> +		if (check_mul_overflow(nelems, array->nelems, &nelems))
+> +			return -E2BIG;
+>  		var_type =3D btf_type_by_id(btf, array->type);
+>  	}
+>  	if (i =3D=3D MAX_RESOLVE_DEPTH)
+
+[Severity: Critical]
+This isn't a bug introduced by this patch, but does the bounds check in
+btf_repeat_fields() further down in this function still have a 32-bit
+integer overflow?
+
+The commit message mentions that btf_array_resolve() prevents the total
+array size from overflowing u32, meaning sz * nelems <=3D U32_MAX. However,
+could a crafted BTF union with 11 struct members (field_cnt =3D 11) and an
+element size of 8 bypass the validation if nelems is 390451573?
+
+The array size check would pass since 390451573 * 8 =3D 3123612584 <=3D U32=
+_MAX.
+
+When btf_repeat_fields() is called at the end of this function:
+
+    if (nelems > 1) {
+        ret =3D btf_repeat_fields(info, info_cnt, 1, nelems - 1, sz);
+        ...
+    }
+
+Is the multiplication field_cnt * (repeat_cnt + 1) inside
+btf_repeat_fields() evaluated as a 32-bit operation? If so,
+11 * 390451573 =3D 4294967303, which wraps around to 7.
+
+Since 7 <=3D 11, wouldn't this bypass the bounds check and lead to an
+out-of-bounds memcpy on the stack-allocated info_arr[BTF_FIELDS_MAX],
+potentially overwriting kernel stack memory?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523074736.2229=
+94-1-anand.himanshu17@gmail.com?part=3D1
