@@ -1,196 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6398327C08
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 09:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B716340DB8;
+	Sat, 23 May 2026 09:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779527563; cv=none; b=UAvYgO7Vjcm3gHJMMcBlt+pLXnpymYD3IDzz7uWzGwljZe6Uixw4kjdPKYKCssEZBI5z7kN/4OgaDfpEqCUZTYqdfMrFCLmVBnKQtZSITcazUzZ7fFU/eCDCMSaVl4rNcFiuRrNDZQnil6L+0P57vCBobECd8LdKh3umVnmevTk=
+	t=1779527958; cv=none; b=iKFsdq/6N92uOHVCv8X9+JaAT1LH0n37dMKU7cVi92i7s42PYJrHzXUz5OkQphwUg9trtN1N9ehXIBVfkSplPPrr4zzZOQE/7qSFckyE7KnFUtk72a0DnKtJsB0kksaebYYPK9pV+ypEfgDB1khjMxZb1KszJTPZ407yQtDiD8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779527563; c=relaxed/simple;
-	bh=v/suMUgd7IxtaYi2TAF/VeTjU7nRjRVVB0g4VvdMp3s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PZgeka6u5mJreIR9QMT8GysTS5Sjxx1z2wi53z+ktlkFeVxGs0z1QeH4FAZY0M5os3zHc7PgxxhxtikFmOmNpo35aTtn5EbDVUVDiWkGE38qV1IsrF7WoeyCfBykmZF1rIzzJj2TofJAIhrvzoe0ZS4NNPeCFcUeMdXKLUjt9r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LYcKCJ7N; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LYcKCJ7N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B251F000E9;
-	Sat, 23 May 2026 09:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779527561;
-	bh=DN1DuuFJX+lGLYyWjrzAwfgrBzUuAwM+cDQ1g/MrcDE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LYcKCJ7NTV6TjUvqXQpoCxcFrS+BLHdtfz+ouj5v1om+WVarhSYzRBK9I4TCoC2HF
-	 aCSroUuLhcK3sppVx88BUZfrSc8IUiwplY9lOOgAg4ossr0SrlFYa1VWm6ctxyhz6N
-	 Ajv0Pg5t2A4GSPkhZOFvbJxZNWhD82pDCPXmzejhjhuyQ5msxIhpMIPqr8j42yPiWa
-	 +YUnzgnBekBBKCxOciJnyrxfjRPZVf54SxCHGU3DlYm/Xj4MuTfh1aBRStbaZKALT4
-	 kuKRDsIZShZbj6ktU3xb3Ouo7ZtGNTCSaMVi+q0i/cKMr1PZ86mB7yJjRk6Y8cn4QZ
-	 FlwpXpOKx10Og==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 11/11] selftest: bpf: Add test for
- BPF_SOCK_OPS_RCVQ_CB.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260523083001.2911931-12-kuniyu@google.com>
-References: <20260523083001.2911931-12-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 23 May 2026 09:12:41 +0000
-Message-Id: <20260523091241.59B251F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1779527958; c=relaxed/simple;
+	bh=OcXvGhCIx0gnN9hZgqDI0XkbVbhmCU2xUKZvmj3bmmY=;
+	h=Subject:From:To:Cc:References:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=L1xdoAdpy8gFFrMy7pq+D+znFvzsrpa/S2yhnPotV3yAcKQ5xsRRNV6d5m26kan20pKb4LhI0PST+bDvRmsCbGTtRvuDBtuy24T+weghFZRNyU2EfrI+pP9mN4o/Jdq7luEKhO7syjdTM3Qt6gsUls+X869pkWQWjzxelCQfJGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Cx4eoRcRFqBqMMAA--.36613S3;
+	Sat, 23 May 2026 17:19:13 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxfcIPcRFqjbiNAA--.4434S3;
+	Sat, 23 May 2026 17:19:12 +0800 (CST)
+Subject: Re: [PATCH v1 1/3] LoongArch: BPF: Fix tail call prologue alignment
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>, Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260521070128.28086-1-yangtiezhu@loongson.cn>
+ <20260521070128.28086-2-yangtiezhu@loongson.cn>
+Message-ID: <136ca454-80d6-3373-be21-d55a7de61412@loongson.cn>
+Date: Sat, 23 May 2026 17:19:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20260521070128.28086-2-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxfcIPcRFqjbiNAA--.4434S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWF47Zry7ur4kWFyrtw4fWFX_yoWrCr45pF
+	Wxuws5CrWvgr17CF17tw48Wr4ayFZ5GrW7WryUZ345Cr43ur92gF1fKay3uF98Ar48AF1F
+	qr1Yyw1Y9F4DA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUU
+	UUU==
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] The test case incorrectly asserts that `SO_RCVLOWAT` is automati=
-cally updated to `RPC_DESC_SIZE` (8) immediately after `recv()` reads the f=
-irst RPC frame.
-- [Low] Multi-line comments do not follow the mandatory BPF subsystem style.
-- [Low] Incorrect ASSERT macros used for file descriptor validation.
---
+On 2026/5/21 下午3:01, Tiezhu Yang wrote:
+> Currently, the LoongArch BPF JIT assumes a fixed number of instructions to
+> skip when performing a tail call, but actually it does not account for the
+> difference between the main programs and the subprograms. The subprograms
+> do not initialize the Tail Call Count (TCC), leading to an incorrect jump
+> offset that skips functional instructions (like stack adjustment).
+> 
+> To fix this issue, add a NOP instruction in the subprogram prologue where
+> the TCC initialization would normally be. This ensures that both the main
+> programs and the subprograms have consistent prologue layouts, allowing
+> tail calls to always land on the correct instruction regardless of the
+> target program type.
+> 
+> Fixes: c0fcc955ff82 ("LoongArch: BPF: Fix the tailcall hierarchy")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   arch/loongarch/net/bpf_jit.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 24913dc7f4e8..aefe5fa1c584 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -149,12 +149,15 @@ static void build_prologue(struct jit_ctx *ctx)
+>   		emit_insn(ctx, nop);
+>   
+>   	/*
+> -	 * First instruction initializes the tail call count (TCC)
+> -	 * register to zero. On tail call we skip this instruction,
+> -	 * and the TCC is passed in REG_TCC from the caller.
+> +	 * Initialize or align the TCC register slot.
+> +	 * For main programs, TCC is zeroed. For subprograms, a nop is emitted
+> +	 * to keep the prologue size consistent, ensuring tail calls skip the
+> +	 * correct number of instructions.
+>   	 */
+>   	if (is_main_prog)
+>   		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_ZERO, 0);
+> +	else
+> +		emit_insn(ctx, nop);
+>   
+>   	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, -stack_adjust);
 
-commit ab873db7faa26eaced426077409e35dd60974a4f
-Author: Kuniyuki Iwashima <kuniyu@google.com>
-Subject: selftest: bpf: Add test for BPF_SOCK_OPS_RCVQ_CB.
+IMO, the code itself looks good, but the code comment and the commit
+message are not accurate, I will send v2 next week, something like this:
 
-This commit introduces a new selftest for the BPF_SOCK_OPS_RCVQ_CB hook.
-It simulates an RPC frame exchange over TCP to verify that a BPF program
-can dynamically adjust sk_rcvlowat and properly control epoll wakeups.
+----->8-----
+LoongArch: BPF: Keep prologue size consistent
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_autolowat.c b/too=
-ls/testing/selftests/bpf/prog_tests/tcp_autolowat.c
-> new file mode 100644
-> index 0000000000000..5e971c42a32a4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_autolowat.c
+The BPF JIT assumes consistent prologue size to preserve text symmetry
+and layout alignment across different function frames. But the current
+JIT implementation emits a shortened prologue for subprograms, because
+it skips the Tail Call Count (TCC) initialization required only by main
+programs, resulting in a layout difference.
 
-[ ... ]
+A tail call can never target a subprogram because the verifier strictly
+prevents subprograms from being inserted into a BPF_MAP_TYPE_PROG_ARRAY.
+Nevertheless, keeping the prologue size consistent is still vital for the
+JIT infrastructure. Without this symmetry, either dynamic text patching
+or reliable stack unwinding can miscalculate instruction boundaries,
+leading to a kernel crash.
 
-> +	{
-> +		.desc =3D {
-> +			{.header_len =3D 100, .payload_len =3D 150},
-> +			{.header_len =3D 200, .payload_len =3D 500},
-> +		},
-> +		.event =3D {
-> +			{ .type =3D RPC_EVENT_AUTOLOWAT,	.val =3D 1},
+Fix this by emitting a NOP instruction in the subprogram prologue where
+the TCC initialization would normally be. This ensures that both main
+programs and subprograms keep the prologue size consistent, preserving
+text symmetry and layout alignment across all function frames.
 
-[ ... ]
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+  arch/loongarch/net/bpf_jit.c | 9 ++++++---
+  1 file changed, 6 insertions(+), 3 deletions(-)
 
-> +			/* skb has the first payload and 1 byte of the next descriptor. */
-> +			{.type =3D RPC_EVENT_SEND,	.len =3D 150 + 1},
-> +			{.type =3D RPC_EVENT_EPOLL,	.nfds =3D 1},
-> +			{.type =3D RPC_EVENT_RCVLOWAT,	.rcvlowat =3D RPC_DESC_SIZE + 150 + 10=
-0},
-> +			/* After reading the first RPC message, SO_RCVLOWAT should be RPC_DES=
-C_SIZE. */
-> +			{.type =3D RPC_EVENT_RECV,	.len =3D RPC_DESC_SIZE + 150 + 100},
-> +			{.type =3D RPC_EVENT_EPOLL,	.nfds =3D 0},
-> +			{.type =3D RPC_EVENT_RCVLOWAT,	.rcvlowat =3D RPC_DESC_SIZE},
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 24913dc7f4e8..976383a859e1 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -149,12 +149,15 @@ static void build_prologue(struct jit_ctx *ctx)
+  		emit_insn(ctx, nop);
 
-[Severity: Medium]
-Does this assertion accurately reflect the kernel's behavior?
+  	/*
+-	 * First instruction initializes the tail call count (TCC)
+-	 * register to zero. On tail call we skip this instruction,
+-	 * and the TCC is passed in REG_TCC from the caller.
++	 * Initialize or align the TCC register slot.
++	 * For main programs, TCC is zeroed. For subprograms, a NOP is emitted
++	 * to keep the prologue size consistent, preserving text symmetry and
++	 * layout alignment across different function frames.
+  	 */
+  	if (is_main_prog)
+  		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_ZERO, 0);
++	else
++		emit_insn(ctx, nop);
 
-The test calls recv() here, which executes in process context. However,
-tcp_recvmsg() does not trigger the BPF_SOCK_OPS_RCVQ_CB hook, as that hook
-only runs when new SKBs are enqueued from the network stack.
+  	emit_insn(ctx, addid, LOONGARCH_GPR_SP, LOONGARCH_GPR_SP, -stack_adjust);
 
-Since no new network packet has arrived yet, the BPF program hasn't run to
-update sk->sk_rcvlowat. Could this cause sk->sk_rcvlowat to remain at 258
-instead of dropping to 8 (RPC_DESC_SIZE), resulting in a test failure here?
+-- 
 
-> +			/* The second descriptor is available. */
-> +			{.type =3D RPC_EVENT_SEND,	.len =3D RPC_DESC_SIZE - 1},
-> +			{.type =3D RPC_EVENT_EPOLL,	.nfds =3D 0},
-> +			{.type =3D RPC_EVENT_RCVLOWAT,	.rcvlowat =3D RPC_DESC_SIZE + 200 + 50=
-0},
-> +		},
-> +	},
-> +};
+Thanks,
+Tiezhu
 
-[ ... ]
-
-> +static int tcp_autolowat_setup_cb(struct tcp_autolowat_test_cb *cb, int =
-family)
-> +{
-> +	struct epoll_event ev =3D {};
-> +	int err;
-> +	int i;
-> +
-> +	for (i =3D 0; i < ARRAY_SIZE(cb->fd); i++)
-> +		cb->fd[i] =3D -1;
-> +
-> +	cb->saved_netns =3D open("/proc/self/ns/net", O_RDONLY);
-> +	if (!ASSERT_NEQ(cb->saved_netns, -1, "save netns"))
-
-[Severity: Low]
-Is it preferred to use the ASSERT_OK_FD() macro here instead of ASSERT_NEQ()
-for file descriptor validation, to better align with modern BPF selftest
-patterns?
-
-> +		goto err;
-> +
-> +	err =3D unshare(CLONE_NEWNET);
-> +	if (!ASSERT_OK(err, "unshare"))
-> +		goto err;
-> +
-> +	err =3D system("ip link set dev lo up");
-> +	if (!ASSERT_OK(err, "set up lo"))
-> +		goto err;
-> +
-> +	cb->server =3D start_server(family, SOCK_STREAM, NULL, 0, 0);
-> +	if (!ASSERT_NEQ(cb->server, -1, "start_server"))
-
-[Severity: Low]
-Similarly, could this use ASSERT_OK_FD() as well? This pattern is repeated
-for connect_to_fd(), accept(), and epoll_create1() below.
-
-> +		goto err;
-> +
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/tcp_autolowat.c b/tools/te=
-sting/selftests/bpf/progs/tcp_autolowat.c
-> new file mode 100644
-> index 0000000000000..41eacfdb34aa1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/tcp_autolowat.c
-
-[ ... ]
-
-> +	/* Since LLVM commit 324e27e8bad83ca23a3cd276d7e2e729b1b0b8c7,
-> +	 * clang omits the "copy_len =3D=3D 0" check below, which is necessary
-> +	 * to satisfy the BPF verifier's range check for bpf_skb_load_bytes().
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but could we update these multi-line comments to follow
-the preferred BPF subsystem style, where the opening /* is placed on its
-own line?
-
-> +	barrier_var(copy_len);
-> +
-> +	/* Do not swap the order of the two copy_len checks below.
-> +	 * The BPF verifier somehow does not properly track the minimum
-> +	 * value for 'copy_len =3D=3D 0'.
-
-[Severity: Low]
-This isn't a bug, but this comment also starts the text on the same line as
-the opening /*.
-
-> +	 *
-> +	 * 91: (15) if r7 =3D=3D 0x0 goto pc+40      ; R7=3Dscalar(smin=3Dsmin3=
-2=3D-247,smax=3Dsmax32=3D8)
-> +	 * 92: (25) if r7 > 0x8 goto pc+39       ; R7=3Dscalar(smin=3Dsmin32=3D=
-0,smax=3Dumax=3Dsmax32=3Dumax32=3D8,var_off=3D(0x0; 0xf))
-> +	 *
-> +	 * This does not occur if copy_len is u32.
-> +	 */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523083001.2911=
-931-1-kuniyu@google.com?part=3D11
