@@ -1,220 +1,122 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BCD1E834B
-	for <bpf@vger.kernel.org>; Sat, 23 May 2026 17:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779555695; cv=pass; b=E6CZPLHScJ+hKNi5AdMEXLlkPRkB9i7XYkwi/Ug1h2weCdTaOGoxVe4f4R09Zm41HQIYq0Nceki1AzJtOQRjA3L4zQFELcCVEvM+8cqKL+zP8TB7c2xXInOtLMKWAigqKWeZ3fKvSmGOQiN6rwgbPrraKXDqnEP1Rnt8w/nRMNA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779555695; c=relaxed/simple;
-	bh=cEmrk462oGjeu+ADXPndK8LVZiOJEDqSfM9ebCI1RUY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FcXyD2yzEZ5lqMsWjaOPOgXFw9crFYHhILeHzqjapj88mlvrm8imuW0t2uKqsRPlk+pcXdLXGSJg4LQPtgeKoQ+LBFeWmtjPWCXYbROZlzgS89Oh/uKAnQsiR48Rod0TzCgUVuUPQxlAxvb96nHG6lVGrJs/nc2DJM0KqpSSNjo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eRmK7I7C; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8370830BF4F;
+	Sat, 23 May 2026 17:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779555912; cv=none; b=DU4vtEAHPGOdQK+iZXE68St88ZMUTpcXfJYtqFFVg+R0Gze/ZhoLKAmNZ3+vCilf3gmTIH8yGKLKYB4Qm9oHXkgTbvOtiaJHHg8EqAxBUBYOwaCYxhWrjp/EEJxVM9XRDflMwmWjFShD86qQxDHKpJ4xbDGXNxvXUYQGQH/QAUY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779555912; c=relaxed/simple;
+	bh=onX9zQ1spS/mSWAVbKWsIMn4/sI9Ekdyqd0bIqixNVI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=SFCQtNC1flfFHcseS5Bqmiw2VOLoM7eY3FirsDO+KU20KO18ZKVvHRMCCdxMXt+wmdLLOByWjl/1ZWhHwm0zDANPmSEy8kRLrKRNqP/YYkCRBPictJ+kT3V1SWGJ1zWl2WUwLMzhNiY9oTEfQK5dqyX6FloR/hiZMr0pqOfpBLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeY9+inN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eRmK7I7C"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-49048e043e5so10083545e9.1
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 10:01:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779555692; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gQLi2BCQR+tg22mTT8j8ViMo+hml9MS+xPAiQcYQSoXo4A6rEyGxkywM2QPF+cMqBG
-         WsEgu7zTZG8i72MXtibQHk3+usn4xj6M/p7s5Ik9lgaYD+ckKs48Io6ePj3k6FGE7zHx
-         H6SMV8bJ/aBqfTD5O+F5jCPmegWFvY2ZKOTUzNVwwlHcsBz3AiJuwh7PvobjfG4sCT+V
-         wXyRyIjzHh3vHs0i8pqIG1TM5z3bSWHGWVIm6n/IW0YbZqjbGr+59HT1S7d/TVdW1tNA
-         ZEEfgHolliYnDSJsozN1yebgxE2NcErklGUxaz8rZXdNLBsVw41wnXTV2ApBlFQ0juJa
-         znVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9f5AmCFliRhUxxEAOVXzXyssTmCJ1zSC0wsG9UgnqpE=;
-        fh=Gw3mdSJIJMH8iXTVOz1Fzr83AlflwdmAqIc/sRvPB8s=;
-        b=FM7IdeHGT8e6t9SrPvZCcwyzc080PndxCy1b7TSDBu3n7Pla+hrRT3WgeZRqis/n7H
-         L1mc6UqWv5YAtRoYCXXHydqJvpgX2L4ddhx8Q8Bg79UB0YcyJzLHgRzG7ZY5QeJzk/kC
-         k744k8ShdQq1RCGM/CrHss6tZlhLsRxMrZdmc+GMxxVGRbHR/CZKe4ZKy8MtyiA35B8c
-         KVBKKw+eE55IyUrHaXZZhpsLVKjFdjlMCZo+v+AS18JL6ah4nrOJ6kAvw5VdLfOhMdur
-         QCAq3UfGvxIV1sxPq6VaYWvVz/p7xm+Q5vYaCnapLKyP75SVTANI6HR1Umy5w4t6Ii5p
-         Si/Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779555692; x=1780160492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9f5AmCFliRhUxxEAOVXzXyssTmCJ1zSC0wsG9UgnqpE=;
-        b=eRmK7I7Ci+1ZHCBfOE6TqXmx1WnX8k/s/25k+RvvbZSBZrGLCK2UmhERI17R+1mzhi
-         yMPtfgobEMqgqGE4UkXvYgA70wHXqIoKi/VDjKGUsib8Kd+VinhYBwfAlKYfmr8HSgmc
-         Ev1f2rrtsA8gs7iaxzVTko7kczgjU4jpFXQt+Ei2iRSNFS8eSm+ujoFy0lkDkWX/SdF7
-         jTnCsTZbQ7B9EV6Tj2t7faEMluaSKSxCYJRr33aklE2eyo8ilfFVEZKkqbvee5oLOOqq
-         8oVyUSQghUI88sm9v5Z7/m0xmpPN6/ne8BgBTbgTwZvLrbRtsB6+GgpnGpfGZ4DbB1MX
-         ytNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779555692; x=1780160492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9f5AmCFliRhUxxEAOVXzXyssTmCJ1zSC0wsG9UgnqpE=;
-        b=iBar0WNW06foFRVFDbtd7N7fuP3pRC6QQbBmU+B2gZyruY+BvBFomwlauv1hOEqwMT
-         X2Zw8/xLGRBxdtGLNGQhf89jyitVM2Xut6oNMZOF14j9xja2uAEyQTAzX/U239rEB+1y
-         GUtZKKXjTDp0DV3wDHrLCVqn97Phgte3j1sq97lkW+E7yESpwnYrh6w+1HCtdmh4r/nh
-         Mofv9c6Q7WU9OU1idBuYjLnJJciM6griL2Y59EHMYfjhY1kfgrI3MpxQ74eHLMPS5H/M
-         fkG7xzF1Ai13T/fFev+D2QZj2nwCwlyNmMHJU53d4KoAE+mP9xzGDmXNqdGq9SRkZ7ld
-         3jTA==
-X-Forwarded-Encrypted: i=1; AFNElJ9P3C77lCRuC0y40C5IaVifqEu0ZCljd5jYCkInz2D/E50mII/+NuwWOSXX4Q0b0UNvFmc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4Exybon/xz+5YsOa658uHfQytyQiRzWkc5uuYkDFH+aWfbud6
-	ApkZus2V7U/NF82LPkrSC59jBK/aopJYAWkPiqEvnx446vQq5bRZbJIYg8vJ2CrHq2OLaSh0i0V
-	5QwE/07o2WK2ZUZOuQ8r45RPy7aYd9pI=
-X-Gm-Gg: Acq92OEye10vJVEUfOylcuc3py3K/brUgHZdi1rmH4Mj5Dyc3ZwI5zHRujGzIjr1koX
-	LV5eST6fH72VOR9HBVimDbiGDCZVgADLkqQ5/5esjyzBcnb8AqetlnwNC1ax230wGJ/DYYf83Hk
-	7CrDOmmhbYsrUJlZHuM21bvn+9Bqo2TL0tetQGMJPvk9JlR1ASCcZJrEmq6Q3OsMD+FL06ccHVi
-	Clw1qTUf0h977I4+/jTUjFqAp9CSx3gu+wuqt3rmN/26/C/c5/kfRRtP4iqpAbjaaoui8tErHnp
-	zHF4EtdLQEzyixSrBp5U2mwxeLF4eLOUOIY0OV9nX49+75DQPvaZqTlUZLB/JRfCJyw+J6wla+F
-	+184=
-X-Received: by 2002:a05:600c:4ecc:b0:48f:e249:4094 with SMTP id
- 5b1f17b1804b1-490426d4bf0mr129148105e9.18.1779555691921; Sat, 23 May 2026
- 10:01:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeY9+inN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37AB1F000E9;
+	Sat, 23 May 2026 17:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779555911;
+	bh=cyagchc+kw2OslMdfkJZxkXMgAfRo9BAeFphUwryhZg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CeY9+inNutTviQaB+CKacJ7gSaPXHGUcF2PtZgmBgNM5h+uqEYTxbi82miEh1qYK5
+	 CrRVzwScyYXiTsofjaZKKsG+91XmOvoDHfcgc9aTWju/vKTAn+964HsmQBZGAS7lr3
+	 zTCgTnEktWw1FdkW885zm/KuK7gWaPRxixbR8xDy+siTsyxQrCd77eBW6+iCPR13Th
+	 Y6HSri8/oGdlJGggetQc0Ft3bTG9NHLurzDykQwn2Q2lhj0keOrHyiAyatZ9em0vmx
+	 LZ/QoT16w3P+yrgfKabnSGtaf0Dawcv5akkg/P/jjypD04/8XkheWmO7ruZb3M9neI
+	 WxFDrFzYBNIdA==
+Content-Type: multipart/mixed; boundary="===============2686473054313733903=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260522023234.3778588-1-kpsingh@kernel.org> <20260522023234.3778588-7-kpsingh@kernel.org>
-In-Reply-To: <20260522023234.3778588-7-kpsingh@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 23 May 2026 19:01:20 +0200
-X-Gm-Features: AVHnY4IgpP9nB-uNXblxkUX447jJ_6u_pp-3jTyj86wvJ9EN9xcferBciMbRCrA
-Message-ID: <CAADnVQ+CN1vOxaEOY_uTAXOc1wVkh9_tXR69CeEBmm4f10y=ZA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 06/13] bpf: resolve loader-style kfunc CALLs
- against prog BTF
-To: KP Singh <kpsingh@kernel.org>
-Cc: LSM List <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Paul Moore <paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <69de57e1bd8a95a848f06b6acc9f105e80a87a27ae206afd83a6d5f1004bd9b5@mail.kernel.org>
+In-Reply-To: <20260523162722.2718940-1-cmllamas@google.com>
+References: <20260523162722.2718940-1-cmllamas@google.com>
+Subject: Re: [PATCH v4] libbpf: fix UAF in strset__add_str()
+From: bot+bpf-ci@kernel.org
+To: cmllamas@google.com,mykyta.yatsenko5@gmail.com,andrii.nakryiko@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
+Cc: kernel-team@android.com,linux-kernel@vger.kernel.org,cmllamas@google.com,yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 23 May 2026 17:05:10 +0000 (UTC)
 
-On Fri, May 22, 2026 at 4:32=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
-:
->
-> gen_loader-emitted signed loaders cannot bake vmlinux BTF ids into
-> kfunc CALL imm at sign time. Add a new pseudo
-> BPF_PSEUDO_KFUNC_CALL_PROG_BTF that gen_loader emits in src_reg, with
-> imm holding the FUNC type id in the loader's own prog BTF.
->
-> In add_subprog_and_kfunc, look the FUNC up by name in vmlinux BTF,
-> patch imm with the resolved id, and rewrite src_reg back to
-> BPF_PSEUDO_KFUNC_CALL so downstream passes see a normal kfunc CALL.
-> Leave standard src_reg calls unchanged.
->
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-> ---
->  include/linux/bpf_verifier.h   |  6 ++++
->  include/uapi/linux/bpf.h       |  5 ++++
->  kernel/bpf/verifier.c          | 54 ++++++++++++++++++++++++++++++++--
->  tools/include/uapi/linux/bpf.h |  5 ++++
->  4 files changed, 67 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 185b2aa43a42..396b85830996 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -959,6 +959,12 @@ static inline bool bpf_pseudo_kfunc_call(const struc=
-t bpf_insn *insn)
->                insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL;
+--===============2686473054313733903==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+> index 2464bcbd04e0..b9faca828f09 100644
+> --- a/tools/lib/bpf/strset.c
+> +++ b/tools/lib/bpf/strset.c
+> @@ -107,6 +107,38 @@ static void *strset_add_str_mem(struct strset *set, size_t add_sz)
+>  			      set->strs_data_len, set->strs_data_max_len, add_sz);
 >  }
 >
-> +static inline bool bpf_pseudo_kfunc_call_prog_btf(const struct bpf_insn =
-*insn)
+> +static long strset_str_append(struct strset *set, const char *s)
 > +{
-> +       return insn->code =3D=3D (BPF_JMP | BPF_CALL) &&
-> +              insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL_PROG_BTF;
+> +	uintptr_t old_data = (uintptr_t)set->strs_data;
+> +	uintptr_t old_s = (uintptr_t)s;
+> +	long len = strlen(s) + 1;
+> +	void *p;
+> +
+> +	/* Hashmap keys are always offsets within set->strs_data, so to even
+> +	 * look up some string from the "outside", we need to first append it
+> +	 * at the end, so that it can be addressed with an offset. Luckily,
+> +	 * until set->strs_data_len is incremented, that string is just a piece
+> +	 * of garbage for the rest of the code, so no harm, no foul. On the
+> +	 * other hand, if the string is unique, it's already appended and
+> +	 * ready to be used, only a simple set->strs_data_len increment away.
+> +	 */
+> +	p = strset_add_str_mem(set, len);
+> +	if (!p)
+> +		return -ENOMEM;
+> +
+> +	/* The set->strs_data might have reallocated and if 's' pointed
+> +	 * to an internal string within the old buffer, then it became
+> +	 * dangling and needs to be reconstructed before the copy.
+> +	 */
+> +	if (old_data && old_data != (uintptr_t)set->strs_data &&
+> +	    old_s >= old_data && old_s < old_data + set->strs_data_len)
+> +		s = set->strs_data + (old_s - old_data);
+> +
+> +	memcpy(p, s, len);
+> +
+> +	return len;
 > +}
+
+Does a similar use-after-free still exist in the btf__add_* APIs (e.g.
+btf__add_str) when called with strings from btf__name_by_offset() on an
+unmodifiable BTF?
+
+If a user passes a string retrieved via btf__name_by_offset(), the
+string pointer points directly into btf->raw_data. Inside the btf__add_*
+APIs, btf_ensure_modifiable(btf) is called first, which calls
+btf_invalidate_raw_data() and frees btf->raw_data.
+
+Could this leave the s pointer dangling before it even reaches this
+check? The check added here uses old_data which corresponds to
+btf->strs_set, not the freed btf->raw_data, so it wouldn't rescue the
+pointer.
+
+This concern was raised by sashiko-bot@kernel.org on lore but was not
+addressed in subsequent patch versions.
+
+Reference: https://lore.kernel.org/all/20260518053124.2EF28C2BCB7@smtp.kernel.org/
+
 > +
->  __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
->                                       const char *fmt, va_list args);
->  __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 552bc5d9afbd..06056e714e8e 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1382,6 +1382,11 @@ enum {
->   * bpf_call->imm =3D=3D btf_id of a BTF_KIND_FUNC in the running kernel
->   */
->  #define BPF_PSEUDO_KFUNC_CALL  2
-> +/* when bpf_call->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL_PROG_BTF,
-> + * bpf_call->imm =3D=3D btf_id of a BTF_KIND_FUNC in the program's
-> + * prog BTF. The verifier resolves it to a vmlinux btf_id by name.
-> + */
-> +#define BPF_PSEUDO_KFUNC_CALL_PROG_BTF 3
->
->  enum bpf_addr_space_cast {
->         BPF_ADDR_SPACE_CAST =3D 1,
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index f0e45cfa5b34..1b5d06b9d74a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3088,6 +3088,47 @@ bool bpf_prog_has_kfunc_call(const struct bpf_prog=
- *prog)
->         return !!prog->aux->kfunc_tab;
->  }
->
-> +/*
-> + * Resolve a gen_loader-emitted kfunc CALL by FUNC name in vmlinux BTF,
-> + * then rewrite src_reg back to BPF_PSEUDO_KFUNC_CALL. Caller must have
-> + * already filtered for BPF_PSEUDO_KFUNC_CALL_PROG_BTF.
-> + */
-> +static int resolve_loader_kfunc(struct bpf_verifier_env *env,
-> +                               struct bpf_insn *insn, int insn_idx)
-> +{
-> +       struct btf *prog_btf =3D env->prog->aux->btf;
-> +       const struct btf_type *t;
-> +       const char *name;
-> +       s32 vmlinux_id;
-> +
-> +       if (!prog_btf || !btf_vmlinux || insn->off) {
-> +               verbose(env, "kfunc call insn %d: PROG_BTF resolution req=
-uires prog BTF and insn->off =3D=3D 0\n",
-> +                       insn_idx);
-> +               return -EINVAL;
-> +       }
-> +       t =3D btf_type_by_id(prog_btf, insn->imm);
-> +       if (!t || !btf_type_is_func(t)) {
-> +               verbose(env, "kfunc call insn %d: imm %d is not a FUNC in=
- prog BTF\n",
-> +                       insn_idx, insn->imm);
-> +               return -EINVAL;
-> +       }
-> +       name =3D btf_name_by_offset(prog_btf, t->name_off);
-> +       if (!name || !name[0]) {
-> +               verbose(env, "kfunc call insn %d: prog-BTF FUNC has no na=
-me\n",
-> +                       insn_idx);
-> +               return -EINVAL;
-> +       }
-> +       vmlinux_id =3D btf_find_by_name_kind(btf_vmlinux, name, BTF_KIND_=
-FUNC);
-> +       if (vmlinux_id < 0) {
-> +               verbose(env, "kfunc call insn %d: %s not found in vmlinux=
- BTF\n",
-> +                       insn_idx, name);
-> +               return vmlinux_id;
-> +       }
-> +       insn->imm =3D vmlinux_id;
-> +       insn->src_reg =3D BPF_PSEUDO_KFUNC_CALL;
-> +       return 0;
+>  /* Find string offset that corresponds to a given string *s*.
+>   * Returns:
+>   *   - >0 offset into string data, if string is found;
 
-Ohh. So this patch does it.
-Probably worth squashing the patches then?
+[ ... ]
 
-Also since the resolution into kernel kfunc is by name only,
-it feels odd to create a fake prog BTF proto just for the name.
-What is an alternative?
 
-Also note that we were discussing allowing the replacement of kfuncs
-by modules with the same name. This kfunc should be
-immutable?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26338132147
+--===============2686473054313733903==--
