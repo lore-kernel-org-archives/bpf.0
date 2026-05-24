@@ -1,162 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp10.goneo.de (smtp10.goneo.de [85.220.189.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E4E126BF7;
-	Sun, 24 May 2026 12:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFE33126D7;
+	Sun, 24 May 2026 12:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.220.189.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779625386; cv=none; b=fxKfYHtfHnkfNQ5Tal+99sKd3vbMvBTkacWdh/2YoAeLiX52ifR+8ASKcI4gdv8picy/vJ4zJ9mzq645fAnj5N7qmTXdjxrg+k0H5OlrksCnO22mEXIBbUE8Xoq5fCCytc0V/kga9wOqutXT10if02g8QJ0dGCkTBYpYtoBq8Yg=
+	t=1779626062; cv=none; b=SESb6B/cpZfcfVVafQPaFzWCgefRRSkVCwc9bw5vDGykEAgD5fc37hQLfqm88zHpiXHQQUm6UueJaNy3WWZbJhx6+jEVBrD9dqD7CqmfeYNbQWBkMFTP/QW9VXcFqNUyq5eUBPBqoeXRZoo4wZUyPg5s0Sqt7vF41B2dBGkaFu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779625386; c=relaxed/simple;
-	bh=QUVCPf2q2cWrRc96veEM2vYj0iLPBZpk0+f/qtJE6u8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=e/q1b1IQLM49m4jOaNPE7PLdZFJzGdUBnMtA1Y2NQYcEsMC0cbj7wa89MtDiTF5MmDAV8ZAcd3rmr3Jnrl0c6Ec6vvFLar0DHrOG+uhmyZu0ES5qA9jdmasB07OD6fNgXVsW8/IA+p1gwBtdPWb1dAMHjoD9NlbFs4BHzK6wMgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPnaLy1c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779626062; c=relaxed/simple;
+	bh=szCCrtLdtFoE4dM7+O2m93gCw/j67O8g9H50uE1R6mM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QuZk5l/3yMZIT4KlDhi8jUpyOD5GFpabWccfk+2syK9Dg/jUAN53PEakdZXvKoes/CMVuZrHtjZNW4IdQFHN9R4Lm7RUb4bMeUSFV3QlY4uPt3V71lK0LbWVxtsqxAcWKZJU5MV66QOo6b4WM3xEvLFl+fINyYgzbSHHdF2y/Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de; spf=pass smtp.mailfrom=tk154.de; dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b=tLLbrGh2; arc=none smtp.client-ip=85.220.189.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tk154.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPnaLy1c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E5A1F000E9;
-	Sun, 24 May 2026 12:23:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779625385;
-	bh=gx/zHL+zQGX1U1zL7cCY4B8oehpkgV/+a8Y6IQr6t9E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LPnaLy1cs3dFl4TZ8j3xxaGzjorWGiGAYczqK0WIhuljgk1pqBLp6CYms6jjCO2mI
-	 b3YL2FjJ/EN4kLSFABbl8amMN19Ii3Jmxb6RHpCVPfeZ0f7n9Qfaq5Y1dylNToPjS7
-	 efqoOc8gLQsEJFdpVpVzvuGwkAywStR+hO3XR71uaSk5zgDCaUQZEw0N0Z6U2QXI6a
-	 hzUPujagJZoKT41ZS5p2HQwAhcKCjhbp6NYcjoh9LDpUvEFtLWejOH3W/Pp7QOISs4
-	 wftmcmVwFRlINXz64hpFtPFjd5W2rvvfmg0OoORU4+gyx6PW7AGe6de8lppnIYqke2
-	 p9LNYbgFXwBUg==
-Content-Type: multipart/mixed; boundary="===============7443696486554360034=="
+	dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b="tLLbrGh2"
+Received: from hub2.goneo.de (hub2.goneo.de [85.220.129.53])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519)
+	(No client certificate requested)
+	by smtp10.goneo.de (Postfix) with ESMTPS id 09ABA240060;
+	Sun, 24 May 2026 14:26:43 +0200 (CEST)
+Received: from hub2.goneo.de (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by hub2.goneo.de (Postfix) with ESMTPS id 643D2240114;
+	Sun, 24 May 2026 14:26:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tk154.de; s=DKIM001;
+	t=1779625601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NW2Brjv/gjqCBnukCyK/ebm4jUVcireHaKeLcTr3dUU=;
+	b=tLLbrGh2DePrDrYHwUHWy3+06nv4Fwl5HUlmBmgWsoED67ROtKmEf2Z36JcrY78yOi8lhP
+	NVOTQF9DXbuQw4jY/sSc/SlLgqekYpaQwD0SjllULsiklSF0+rKCK6sXSk3IS1YMdUdu0x
+	tZosi0KNlZhwc7lsnD2JCg7JMvx30fxMFpllL5001oMHsmTKBZuu5GRGBoeVcWQ7J7/EHh
+	q+xolqXa0zM2FrYA8nfJcFm+cbWR7zEAqKsdNzdINIi/wtD9NpspHMm7UOEASwfQ+W72ws
+	70tOEsRnaCNoKFLdzEY+azCI+jz5FhZV6XB2DTLD76LUHmAouhFoYq5KrFIcIQ==
+Received: from Til-Notebook.lan (unknown [IPv6:2a00:1f:5743:3300:7fdc:421c:b21a:ba71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hub2.goneo.de (Postfix) with ESMTPSA id D39EA240102;
+	Sun, 24 May 2026 14:26:37 +0200 (CEST)
+From: Til Kaiser <mail@tk154.de>
+To: netdev@vger.kernel.org
+Cc: marcin.s.wojtas@gmail.com,
+	linux@armlinux.org.uk,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	mcroce@microsoft.com,
+	sven.auhagen@voleatech.de,
+	bpf@vger.kernel.org,
+	Til Kaiser <mail@tk154.de>
+Subject: [PATCH] net: mvpp2: fix skb not reflecting XDP modifications on XDP_PASS
+Date: Sun, 24 May 2026 14:23:34 +0200
+Message-ID: <20260524122334.1730451-1-mail@tk154.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a0b9a09127618cb4e3dd1aae92ef25aab9beb90bd533490ec5be7789420d9ef4@mail.kernel.org>
-In-Reply-To: <20260524114243.259916-1-find.dhiraj@gmail.com>
-References: <20260524114243.259916-1-find.dhiraj@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Add kernel-doc for arena page kfuncs
-From: bot+bpf-ci@kernel.org
-To: find.dhiraj@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,alexei.starovoitov@gmail.com,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,emil@etsalapatis.com,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 24 May 2026 12:23:04 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Rspamd-UID: 50deb9
+X-Rspamd-UID: 580b41
 
---===============7443696486554360034==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+When an XDP program uses bpf_xdp_adjust_head() or bpf_xdp_adjust_tail()
+and then returns XDP_PASS, the driver ignores the updated xdp_buff
+pointers and builds the skb from hardcoded offsets derived from the
+original RX descriptor. This means any packet modifications made by the
+XDP program are silently discarded before the skb reaches the network
+stack.
 
-> The page-management kfuncs exposed by BPF arena -
-> bpf_arena_alloc_pages(), bpf_arena_free_pages() and
-> bpf_arena_reserve_pages() - are part of the BPF kfunc ABI but lack
-> rendered documentation. Their contracts (valid argument ranges,
-> sleepable-only context, and the set of error returns) are today only
-> discoverable by reading kernel/bpf/arena.c.
+Fix this by saving the post-XDP data pointer offset and length back into
+rx_offset and rx_bytes when XDP_PASS is returned, so the subsequent
+skb_reserve()/skb_put() calls use the actual packet geometry as seen by
+the XDP program. When no XDP program is loaded the variables retain
+their original descriptor-derived values and the non-XDP fast path is
+unaffected.
 
-Is the description 'sleepable-only context' accurate here? The BPF
-verifier supports calling bpf_arena_alloc_pages() and bpf_arena_free_pages()
-in non-sleepable contexts by dynamically replacing the calls with their
-non-sleepable variants. Looking at the BTF_ID_FLAGS definitions, they do not
-include KF_SLEEPABLE. While the code documentation was fixed in v2 to reflect
-this, the commit message text was not updated.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 49a8f7b1beef..948a43159106 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -870,6 +870,31 @@ static void arena_free_irq(struct irq_work *iw)
->
->  __bpf_kfunc_start_defs();
->
-> +/**
-> + * bpf_arena_alloc_pages() - Allocate pages within a BPF arena.
-> + * @p__map: Pointer to a ``BPF_MAP_TYPE_ARENA`` map.
-> + * @addr__ign: Page-aligned user-space address within the arena at which to
-> + *	       place the allocation, or %NULL to let the kernel choose. When
-> + *	       non-NULL the address must fall inside the arena's user VMA
-> + *	       range; otherwise the allocation fails.
-> + * @page_cnt: Number of pages to allocate. Must be non-zero and no greater
-> + *	      than the arena's configured size in pages.
-> + * @node_id: NUMA node hint for the backing pages, or %NUMA_NO_NODE.
-> + * @flags: Reserved for future use; must be 0.
-> + *
-> + * Allocates @page_cnt pages and inserts them into the arena at the offset
-> + * corresponding to @addr__ign (or at an arbitrary free offset when
-> + * @addr__ign is %NULL). The pages become accessible to the BPF program
-> + * immediately and to user space through the arena's mmap()ed region.
-> + *
-> + * Return:
-> + * * The user-space virtual address of the start of the allocated region on
-> + *   success. The BPF JIT translates this address for accesses from the BPF
-> + *   program.
-> + * * %NULL if @p__map is not an arena, @flags is non-zero, @page_cnt is zero
-> + *   or exceeds the arena size, @addr__ign is misaligned or outside the
-> + *   arena, @node_id is invalid, or the kernel is out of memory.
-> + */
-
-Are there missing failure conditions in this documentation? It appears
-bpf_arena_alloc_pages() can also return NULL if the requested address is
-already allocated, or if there is no contiguous free space of the requested
-size in the arena.
-
-[ ... ]
-
-> @@ -913,6 +952,26 @@ void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_c
->  	arena_free_pages(arena, (long)ptr__ign, page_cnt, false);
->  }
->
-> +/**
-> + * bpf_arena_reserve_pages() - Reserve a page range within a BPF arena.
-> + * @p__map: Pointer to a ``BPF_MAP_TYPE_ARENA`` map.
-> + * @ptr__ign: Page-aligned user-space virtual address of the start of the
-> + *	      range to reserve.
-> + * @page_cnt: Number of pages to reserve. Zero is permitted and is a no-op.
-> + *
-> + * Marks @page_cnt pages starting at @ptr__ign as reserved so that subsequent
-> + * bpf_arena_alloc_pages() calls will not place allocations in that range.
-> + * No physical pages are allocated by this kfunc; the range is simply
-> + * excluded from the arena's free space.
-> + *
-> + * Return:
-> + * * 0 on success, or when @page_cnt is zero.
-> + * * -EINVAL if @p__map is not an arena or the requested range falls outside
-> + *   the arena's user VMA.
-> + * * -EBUSY if any page in the requested range is already allocated, or if
-> + *   contention on the arena's internal spinlock prevents the operation from
-> + *   completing.
-> + */
-
-Does this documentation correctly describe the error returns? Looking at
-arena_reserve_pages() in kernel/bpf/arena.c, there's a mismatch between the
-documented -EINVAL return for misaligned addresses and the actual
-implementation:
-
-arena_reserve_pages() {
-    ...
-    if (uaddr & ~PAGE_MASK)
-        return 0;
-    ...
-}
-
-The documentation implies that misalignment should return -EINVAL (as it's
-a validation error), but the code silently succeeds with return 0.
-
-For consistency, bpf_arena_alloc_pages() has the same behavior (returns
-NULL for misalignment) and its documentation correctly states it returns
-NULL for misaligned addresses. Should either the code be changed to return
--EINVAL for misalignment to match the new documentation, or should the
-documentation be updated to state that misaligned addresses result in
-returning 0 (no-op)?
-
-Also, does this need to document -ENOMEM? If range_tree_clear() fails to
-allocate a new node during a split operation, it seems this can return
--ENOMEM.
-
-
+Fixes: 07dd0a7aae7f ("mvpp2: add basic XDP support")
+Signed-off-by: Til Kaiser <mail@tk154.de>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26360590766
---===============7443696486554360034==--
+diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+index f442b874bb59..27d4feebcb59 100644
+--- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
++++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+@@ -3920,7 +3920,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
+ 		unsigned int frag_size;
+ 		dma_addr_t dma_addr;
+ 		phys_addr_t phys_addr;
+-		int pool, rx_bytes, err, ret;
++		int pool, rx_bytes, rx_offset, err, ret;
+ 		struct page *page;
+ 		void *data;
+ 
+@@ -3933,6 +3933,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
+ 		rx_status = mvpp2_rxdesc_status_get(port, rx_desc);
+ 		rx_bytes = mvpp2_rxdesc_size_get(port, rx_desc);
+ 		rx_bytes -= MVPP2_MH_SIZE;
++		rx_offset = MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM;
+ 		dma_addr = mvpp2_rxdesc_dma_addr_get(port, rx_desc);
+ 
+ 		pool = (rx_status & MVPP2_RXD_BM_POOL_ID_MASK) >>
+@@ -3998,6 +3999,10 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
+ 				continue;
+ 			}
+ 
++			/* Update offset and length to reflect any XDP adjustments. */
++			rx_offset = xdp.data     - data;
++			rx_bytes  = xdp.data_end - xdp.data;
++
+ 			metasize = xdp.data - xdp.data_meta;
+ 		}
+ 
+@@ -4036,7 +4041,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
+ 		ps.rx_packets++;
+ 		ps.rx_bytes += rx_bytes;
+ 
+-		skb_reserve(skb, MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM);
++		skb_reserve(skb, rx_offset);
+ 		skb_put(skb, rx_bytes);
+ 		if (metasize)
+ 			skb_metadata_set(skb, metasize);
+-- 
+2.54.0
+
