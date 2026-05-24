@@ -1,126 +1,108 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5032F3438B5
-	for <bpf@vger.kernel.org>; Sun, 24 May 2026 02:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28F22356D9
+	for <bpf@vger.kernel.org>; Sun, 24 May 2026 03:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779591553; cv=none; b=ixlM8OKMOTD+Xif5qQv9NrdPpZQRf4Y47N3xjkKh1C0SO0s+MvDOHuxcfwk9/DRW5DcUEZMy2h8tHA2R/2ks/pBXicZs9fvj316JORad1zrdIqr1L0JqhQnYkEHteQngi6BhHn9u42b8RWIbZpbHBYN4//7D1UiWqIKL03u8+Ks=
+	t=1779593440; cv=none; b=uEH9ra3agLX/hW9ytCed2Fxy3x7jFK6FS2Sbgf5nbeUNF86K4tavMgwoxmEU67mfj8bAy+JliXo1cPwlSn0RmveD0MDPyDLKQKS2yu2Uf4o034TEoiNma9lqSaDpywMoyZuaX4oNCjY/JSoyH3NR+STjSFAYOtJpx4NAbbRgfFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779591553; c=relaxed/simple;
-	bh=UbgCFgvmWaN3PxrtD/I70PhR4vT5giki3jZ1lSQlgl8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rFnjV+wMO/a0MWlVRc3StzLolJInn2bNmghi4LgelgTvlkpoWuok4Pe0cOLOHBi2dM330ZiRd/+wc4P+NPdQguqTEuvVgsNHpJeX0zonrjN2tW+SCAQM+WdOSm8yPEL/oOqLFbbaM2Q1xFGz6F85BeS1on/Ca+8CC1mdX4zvw1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rL99RfpL; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779593440; c=relaxed/simple;
+	bh=ngziuAyO5kJc2LlwMD4vrmcPIgcw0Bd2EACEGX38TiI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ku0v4luMPQGg4uAKefct6If514jXv6xFjDla2C7OyAd12ZJz8pBSdhAGbxaprg5ADd6dboWkbGbEN6h9+UQATUHY+MI/0DbbmQtTnAchIsFYW6tR2XIx4oA+P9BAvbB8703tSf5GM2pzy8xCX8WKG/YROkVKTcmAP6hLV33LoLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXDVqK++; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rL99RfpL"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2b4583f0a1aso59486995ad.3
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 19:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779591550; x=1780196350; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bYwNNVyWKj7ua+gpS+KEFegejp3wiD0Ae6Di3tktjdI=;
-        b=rL99RfpLUyFCIcILAomGuyLHN/+3tqWIwETNEP9f78Gcl7XtyfCu4Nnu5la0Njssyd
-         o9CjCXDrJAp7HOxkMbbPMYAyD+7sX4PyGxNILxQR5fz3YNlKS8wUlP+ccBwEh2mMJJ7d
-         bzjwSA6s2NfAledFfrtjuNOWHnpVbaAE0ZBWZvUDNc1L+CnXfAgZqFgHerb9MCyyhiBr
-         6VLTW9PzvgN9CxCL3iRFWGe9TDondjfUpaWd76PXwny1WIJdbXdSlAs+jRR5jubtYtGo
-         cp6Pw/5xIi01BDTBgNM4e1M3TNwilos50+FZJiGb+SFID6/ZPmyNF8wn5LdcSbuxLhCM
-         F1LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779591550; x=1780196350;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bYwNNVyWKj7ua+gpS+KEFegejp3wiD0Ae6Di3tktjdI=;
-        b=mZMmyu7L9LDdxElfz5Lc37HUpj2MKfX2cMOmMkHec0JhtxP4FXju4r43jDEvTD+Zty
-         mFW8H22ArTssJY7wkNqGfnr/nzy2P2K6asgZGE8lsgGrWfS6QyyEKcWhQpsVbK8hH7FL
-         quDs115mrQmL+eKOt/ercfvEPBe1BgQvY9W7+E7oofY2sEUu7kBVNH3BbubhCG+eYsAt
-         xkbmwxP6huTJ3ooCrB8TIp8WIMDvbDcxPHFKRY6E8MDA6/Ar2E5l5y//Rov1uolPVgvy
-         cUu4uNdzSSdV9uetwHr67Im95VwHmqToeTbyed/qkf+O2PgIwSa1kZox1Pr2Warz0I/O
-         9NJA==
-X-Forwarded-Encrypted: i=1; AFNElJ+AD/wfzlontMKuZQ9rZbbl+38z3Vrx7RYpy6Ir6iYzu9Hc4R2eZLCYCHvMKT2u02cqmME=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ8bMFNZuCgAXiqILPo+B/xUJRUZotg8JxJ0OTnLo4+nqU9cQf
-	CGPlG2YKHhKGpboo4kZTU0WuNdoEbQpBEYBnaMWK0upVLyRY1CcjjhHj
-X-Gm-Gg: Acq92OEpGIYjWGr4s9bgdoRjDIc538eCEOuZPlRBJ0ZH41ZPQPEJbBYSWwWxNXaNv7x
-	6/J8huo+hIl13HfuXXnU+L8AJ6DIvzOE0Nfo106rGX+HJ+8ES3jrrm4r0sSq/aCzfkDuOK/WgtU
-	j/c6ZF+s7JGNjUNswBvvAu207V/Ilg+/hm+chsO5trnM5w0H9qSKHhlLlxtirQVTW+w5n5SiOXD
-	cJi2rlwHaQhh8KLiWlVH20OkZ3rU9XetByLQhQwlDfzRRQuI6pIgQ4DlipQeAjB4bEHbKdkJYG5
-	HbE0eydIE5i56G9i+9EMW3YjtWderxFsCuttI/odzmtjLTj9rA8OSDN7Y5dj2uXywJaZmeA/tBJ
-	r6W6cQAcvtT+dVt1mySMu0pnj5TDiF5oiUhCFpGhMxL/sdJ84YwiUo8U2qw3nA3uNZVoEiqK9Kk
-	Kk0V9mWy6W9B1U7T3y1Gt00ijmZJ6bsbE=
-X-Received: by 2002:a17:903:2450:b0:2be:3626:dd49 with SMTP id d9443c01a7336-2beb06eaa4bmr100475355ad.8.1779591550322;
-        Sat, 23 May 2026 19:59:10 -0700 (PDT)
-Received: from archlinux ([205.254.163.44])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58b386esm62212935ad.44.2026.05.23.19.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 19:59:09 -0700 (PDT)
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Subject: [PATCH v2] bpf: replace pop/push emptiness check with bpf_list_empty()
-Date: Sun, 24 May 2026 08:28:53 +0530
-Message-ID: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXDVqK++"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963AE1F000E9;
+	Sun, 24 May 2026 03:30:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779593439;
+	bh=llYpOyInnJDQIe/gdFq/8mp/nKbTGfXn0aBZU/FS/Xk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=JXDVqK++AhxJJ7gqEQs6dAyTmAEBAv5+nq/xAvvcC4WycIkwa0l3Ky5VB97LUwARn
+	 sYxDr92iBI65qgT6WKOJNjZyKuiiGt8gKcFImtNHdsyQBCfEnCL1X2pPTTRrTR4h6P
+	 bdt99si9p1kVs9ROD/x1R1IgFcvDMK0JWk2meoyeDdir6+ACUS52HNKchT3Rdl5Z5R
+	 iut/xi6Rl5aoM4VHd7bFf84Y9/ndVPTEIytWPds7+H/vcoQTmrlAgF1Vyg+AGTCD9q
+	 p8IU8ovmuiG4FMcazYZAzPTVNrYoOOyv3yPygBO9eRBin8UjwYf9P1da6kThyyYR1H
+	 QOwWEChnYG4PA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] bpf: replace pop/push emptiness check with
+ bpf_list_empty()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
+References: <20260524025853.13786-1-suchitkarunakaran@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 24 May 2026 03:30:39 +0000
+Message-Id: <20260524033039.963AE1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Simplify fq_flows_is_empty() by replacing the pop/push based emptiness
-check with a direct call to bpf_list_empty().
-This avoids unnecessary list mutation and simplifies the code while
-preserving correctness.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The patch introduces a call to `bpf_list_empty()`, which is an unde=
+clared function, resulting in a build failure.
+--
 
-Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+commit 9fb6024323da084c2713bff3f8a0e6018dc6bd72
+Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 
-Changes since v1:
-- Removed unused variable node
----
- tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+bpf: replace pop/push emptiness check with bpf_list_empty()
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-index 1a3233a275c7..8107f5934d2d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-@@ -196,18 +196,13 @@ fq_flows_remove_front(struct bpf_list_head *head, struct bpf_spin_lock *lock,
- static bool
- fq_flows_is_empty(struct bpf_list_head *head, struct bpf_spin_lock *lock)
- {
--	struct bpf_list_node *node;
-+	bool empty;
- 
- 	bpf_spin_lock(lock);
--	node = bpf_list_pop_front(head);
--	if (node) {
--		bpf_list_push_front(head, node);
--		bpf_spin_unlock(lock);
--		return false;
--	}
-+	empty = bpf_list_empty(head);
- 	bpf_spin_unlock(lock);
- 
--	return true;
-+	return empty;
- }
- 
- /* flow->age is used to denote the state of the flow (not-detached, detached, throttled)
--- 
-2.54.0
+This commit simplifies fq_flows_is_empty() by replacing a pop/push check wi=
+th
+a direct call to bpf_list_empty(). The intention is to avoid unnecessary li=
+st
+mutation and simplify the code.
 
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c b/tools/tes=
+ting/selftests/bpf/progs/bpf_qdisc_fq.c
+> index 1a3233a275c7e..8107f5934d2d7 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
+> @@ -196,18 +196,13 @@ fq_flows_remove_front(struct bpf_list_head *head, s=
+truct bpf_spin_lock *lock,
+>  static bool
+>  fq_flows_is_empty(struct bpf_list_head *head, struct bpf_spin_lock *lock)
+>  {
+> -	struct bpf_list_node *node;
+> +	bool empty;
+> =20
+>  	bpf_spin_lock(lock);
+> -	node =3D bpf_list_pop_front(head);
+> -	if (node) {
+> -		bpf_list_push_front(head, node);
+> -		bpf_spin_unlock(lock);
+> -		return false;
+> -	}
+> +	empty =3D bpf_list_empty(head);
+
+[Severity: Low]
+Does bpf_list_empty() exist? A search of the codebase doesn't show this
+function being defined as a BPF helper, kfunc, or macro anywhere in the ker=
+nel
+source or BPF headers.
+
+Since BPF list structures are opaque, their access must be mediated by
+verifier-recognized kfuncs. Will this cause a build failure due to an impli=
+cit
+declaration?
+
+Could the existing bpf_list_front() kfunc be used instead to check list
+emptiness without mutation?
+
+>  	bpf_spin_unlock(lock);
+> =20
+> -	return true;
+> +	return empty;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260524025853.1378=
+6-1-suchitkarunakaran@gmail.com?part=3D1
