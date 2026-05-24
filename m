@@ -1,178 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8F4390987
-	for <bpf@vger.kernel.org>; Sun, 24 May 2026 11:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335447262E;
+	Sun, 24 May 2026 12:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779623806; cv=none; b=L7AV4LIQwn15vsSxlcsmhGcTbfftV1iiDdZDzDwmQ/OskFDK4GM5TrBPljvX00Uw6nAmqzhEwI2I/wiD8g5/K5wsMJUh0FtdLxBZmOEP5uQg/jeHzcX2bBfLW3OwOSqmHFTVuQDU1rnFkOl65VpoEMoMl0NHv9pBI8ANp6hciiQ=
+	t=1779624518; cv=none; b=QHyRjhh0E9AKLO/Msvgnw7SKkUWhEXLeLFyj6cDGjBUaVjSGthdT53fmQ49PwPLRapxpPW9XdKAl38OMCDRTlprij0zpiFVQse807OIotJofChgKbu08tQCiP9tIQJ7jWhn7EUk/RmsNBJBdEhLO9soP96usTI+1/y/3n3VbpKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779623806; c=relaxed/simple;
-	bh=CLCMMm00XC969F/EyWfD7hQ/cx2zkr2TIjU8qvLERGo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hJPHpzSlorTJGIfHNbr4ZLhRy3oGN6x+s87Ef5n8e9p8DX6ZTz2xWeY8TPd8SrP/ViY2Kle+aEqYUmY7gsHVDWvskwdlntuTHxovVriIrGqGaGMegrlTUl2Bx7LcsdIET7VbLLzVkrQj6VDZTmJf24aQvkmQIF5Mvu/ZVnCRR4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OV8ajD/U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779624518; c=relaxed/simple;
+	bh=sdG7tvIW9lndCrK6s/uSOPgd6OJni+FrUCwZ31XMcOE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=riMds4lHDqfxS/sa1Sc+h5guymmBSEnq1ABhBIXOB7/Iy0HLQfSNtUzq4dLakZk85dnFtPNIH/NVX31/TfU+EdRH4Gyqy+kaJi8D3wod6GSu28TbH2vn6rzV89buJ/jt5gFEBIrVoSNZjeWnRFux2bP1PQDbSULhjdNxxzlHjuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ezh6iad7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OV8ajD/U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF4C1F000E9;
-	Sun, 24 May 2026 11:56:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ezh6iad7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927491F000E9;
+	Sun, 24 May 2026 12:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779623805;
-	bh=gBcNMTWbUGZ9U4gmMWRMaHPWe37QLuPZyMkkAr9QSi0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OV8ajD/U7fKwWUp3r8et31mYi2+uTuzFUE3M/oNAkb4lC3WKXdDSbQWwVoQ7x1bgZ
-	 DCpwGor2p+b1LQtmKGrQiVzIksKrB6q/SvEG6KX8cdq4/NhYbcZED8Atnvo/CTFhyd
-	 D1QwKs19ufnEk567F3yxSExcORNnkf7+mV7KI1vk0uOk3K/vrGK2A4yRFJJHUo0ZbR
-	 pj67sE/gdHHKuYaUWV5sYSFxbTwcAIQ0yqEA2cbSBoJUW+gGHKMR5YAItAM4QtHPoG
-	 OyqoUucOBE70x2O9hWDcRo7fRt+tHQFeJwhvYC3ZPdw/UAhOV3Eg5dtWycAIK4u4KG
-	 aL5GBm5jPVdsA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: Add kernel-doc for arena page kfuncs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dhiraj Shah" <find.dhiraj@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260524114243.259916-1-find.dhiraj@gmail.com>
-References: <20260524114243.259916-1-find.dhiraj@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 24 May 2026 11:56:44 +0000
-Message-Id: <20260524115644.EDF4C1F000E9@smtp.kernel.org>
+	s=k20260515; t=1779624516;
+	bh=KjxZLmIvNZn781qBk858sQDEpPVuyzd7nax09pb2kvo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Ezh6iad7xdJVUOeJcsSety/wUG6NVoh7D8204VPKMpxudj2ocqRnKgMsdhFN8Xmjo
+	 7sxQEn5Ws9HH0U6tDoWMPjOeWsU7LwUAnJ9x6SriPQYAQQhAANSBpODdO79ZFVQBsK
+	 b+b/jX/tkxLsEwVG3/vhqqS7G+UWhSaN3J4V8yAV3MR82a60Zrn35qHfzOsL3YSvNa
+	 FxLDWRFE7d+C+3jxDDpuO4DXk37FPb5oCkm/+6h3Jgam9Q0b8a5yC7yesjMJV4o1tf
+	 EqrWjB6aLcChjsM0nf8L15va667ebOo+ru9VC40F573Q2ZSTBkpcNKBvjtyaJX7R1R
+	 Rtqs8OtCZg04A==
+Content-Type: multipart/mixed; boundary="===============5249304446152511709=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <b4b4ca51ae8e281a37707cbcd2ba8349dabc6c630e96461929be0872fd8ed0e6@mail.kernel.org>
+In-Reply-To: <20260524-libbpf-load-vmlinux-btf-in-gen_loader-mode-v1-1-6f57f191a7ad@google.com>
+References: <20260524-libbpf-load-vmlinux-btf-in-gen_loader-mode-v1-1-6f57f191a7ad@google.com>
+Subject: Re: [PATCH] libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+From: bot+bpf-ci@kernel.org
+To: sidnayyar@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,gprocida@google.com,maennich@google.com,sidnayyar@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 24 May 2026 12:08:36 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+--===============5249304446152511709==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-New issues:
-- [Medium] The commit message incorrectly claims that the BPF arena kfuncs =
-have a "sleepable-only context" contract.
-- [Low] The newly added kernel-doc comments omit several failure conditions=
- and error returns for the BPF arena kfuncs.
+> commit c1abfce71ecf8c95413f5afe0d153662877e0ad0
+> Author: Siddharth Nayyar <sidnayyar@google.com>
+>
+>     libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+>
+>     During light skeleton generation (`bpftool gen skeleton -L`), libbpf
+>     runs in gen_loader mode. Previously, `bpf_object__load_vmlinux_btf()`
+>     completely bypassed loading the kernel vmlinux BTF (`obj->btf_vmlinux`)
+>     if `gen_loader` was active.
+>
+>     However, BPF `struct_ops` maps (such as `sched_ext_ops` maps) require
+>     resolving the kernel-side struct type IDs and member sizes at
+>     compile/skeleton generation time. Without loading `btf_vmlinux`, libbpf
+>     cannot query the kernel BTF types, causing light skeleton generation for
+>     `struct_ops` to fail or omit crucial type information.
+>
+>     Fix this by modifying the check to load `btf_vmlinux` even in
+>     `gen_loader` mode if the BPF object actually requires kernel vmlinux BTF
+>     (e.g. contains `struct_ops` maps).
+>
+>     Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 
-Pre-existing issues:
-- [High] `bpf_arena_reserve_pages()` silently returns 0 (success) when pass=
-ed a non-page-aligned address, failing to actually reserve the pages.
-- [High] `range_tree_clear()` corrupts the range tree and leaks free space =
-if memory allocation fails.
---
+This looks like a bug fix for gen_loader mode with struct_ops maps. Should
+this include:
 
-commit 4e0172dd044fa3635f4bf80032c1bc3a4a5ac292
-Author: Dhiraj Shah <find.dhiraj@gmail.com>
+  Fixes: 67234743736a ("libbpf: Generate loader program out of BPF ELF file.")
 
-bpf: Add kernel-doc for arena page kfuncs
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index ab2071fdd3e8..6163e53a2056 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -3590,7 +3590,10 @@ static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
+>  	int err;
+>
+>  	/* btf_vmlinux could be loaded earlier */
+> -	if (obj->btf_vmlinux || obj->gen_loader)
+> +	if (obj->btf_vmlinux)
+> +		return 0;
+> +
+> +	if (obj->gen_loader && !obj_needs_vmlinux_btf(obj))
+>  		return 0;
+>
+>  	if (!force && !obj_needs_vmlinux_btf(obj))
 
-This commit adds kernel-doc comments for BPF arena page-management kfuncs
-and renders them under a new subsection in Documentation/bpf/kfuncs.rst.
-No functional changes are introduced.
+Alexei Starovoitov raised a design concern about this approach in v1. He
+requested an end-to-end solution where struct-ops and sched-ext programs are
+fully supported in light skeleton (lksel) mode, rather than just this
+incremental fix. His specific comment was: "That's a step, but please provide
+an end-to-end solution where struct-ops and sched-ext programs are supported
+in lksel mode. This step alone may be more confusing to users than helpful."
 
-> The page-management kfuncs exposed by BPF arena -
-> bpf_arena_alloc_pages(), bpf_arena_free_pages() and
-> bpf_arena_reserve_pages() - are part of the BPF kfunc ABI but lack
-> rendered documentation. Their contracts (valid argument ranges,
-> sleepable-only context, and the set of error returns) are today only
+This feedback has not been addressed - no v2 was posted and no author response
+was provided.
 
-[Severity: Medium]
-Is the description "sleepable-only context" accurate here?
+Reference: https://lore.kernel.org/bpf/CAADnVQ+M6pJJJ_YY5QO_EYJyDfd=TNs=A1xFB9_RFLTqaM=w_g@mail.gmail.com/
 
-The BPF verifier supports calling bpf_arena_alloc_pages() and
-bpf_arena_free_pages() in non-sleepable contexts by dynamically replacing
-the calls with their non-sleepable variants
-(bpf_arena_alloc_pages_non_sleepable and
-bpf_arena_free_pages_non_sleepable).
 
-Additionally, the BTF_ID_FLAGS for these kfuncs do not appear to include
-the KF_SLEEPABLE flag.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> discoverable by reading kernel/bpf/arena.c.
-
-[ ... ]
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 49a8f7b1beef5..948a431591063 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-
-[ ... ]
-
-> + * Return:
-> + * * The user-space virtual address of the start of the allocated region=
- on
-> + *   success. The BPF JIT translates this address for accesses from the =
-BPF
-> + *   program.
-> + * * %NULL if @p__map is not an arena, @flags is non-zero, @page_cnt is =
-zero
-> + *   or exceeds the arena size, @addr__ign is misaligned or outside the
-> + *   arena, @node_id is invalid, or the kernel is out of memory.
-> + */
->  __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u=
-32 page_cnt,
-
-[Severity: Low]
-Are there missing failure conditions in this documentation?
-
-It appears bpf_arena_alloc_pages() can also return %NULL if the requested
-address is already allocated, or if there is no contiguous free space of
-the requested size in the arena.
-
-[ ... ]
-
-> + * Return:
-> + * * 0 on success, or when @page_cnt is zero.
-> + * * -EINVAL if @p__map is not an arena or the requested range falls out=
-side
-> + *   the arena's user VMA.
-> + * * -EBUSY if any page in the requested range is already allocated, or =
-if
-> + *   contention on the arena's internal spinlock prevents the operation =
-from
-> + *   completing.
-> + */
->  __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u3=
-2 page_cnt)
-
-[Severity: Low]
-Does this also need to document -ENOMEM?
-
-If range_tree_clear() fails to allocate a new node during a split operation,
-it seems this can return -ENOMEM.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does arena_reserve_pages()
-silently fail when passed a non-page-aligned address?
-
-In arena_reserve_pages(), if the user-provided address is not page-aligned:
-
-kernel/bpf/arena.c:arena_reserve_pages() {
-    ...
-    if (uaddr & ~PAGE_MASK)
-        return 0;
-    ...
-}
-
-Since 0 indicates success for this kfunc, doesn't this mislead the caller
-into believing the pages were successfully reserved? No pages are actually
-reserved in the arena's range tree, which could allow subsequent
-bpf_arena_alloc_pages() calls to allocate that exact memory.
-
-[Severity: High]
-This is a pre-existing issue, but does range_tree_clear() corrupt the range
-tree and leak free space if memory allocation fails?
-
-When range_tree_clear() clears a range that strictly overlaps the middle of
-an existing range node, it splits the node. It removes the original node,
-reinserts the left portion, and then calls kmalloc_nolock() to allocate a
-new node for the right portion.
-
-If kmalloc_nolock() fails (returning -ENOMEM), the function returns
-immediately and the right portion of the original node is never reinserted.
-Since this tree tracks free space in the arena, does losing a node
-permanently leak that free space and make it unavailable for future
-allocations?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260524114243.2599=
-16-1-find.dhiraj@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26360291945
+--===============5249304446152511709==--
