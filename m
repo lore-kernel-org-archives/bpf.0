@@ -1,111 +1,129 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977FF26ED3C
-	for <bpf@vger.kernel.org>; Sun, 24 May 2026 03:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31C0202963
+	for <bpf@vger.kernel.org>; Sun, 24 May 2026 03:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779593836; cv=pass; b=RHXKmZm7GN+4pmOS3Srj1m2rl8UF5Y5Ich8WdQUzYJzVd++kr3Nm81JYpa8S5OH0GeCrRTK2d0eJqgX7Nd7iYi3vJgrQTHBqYndaeOdQvNxlW8O4Ls+SnVDbZv+js2Z5JuCjfuRcwF5bgA6xhqCEGyMvlN+Fg453rxvKu2r3jU8=
+	t=1779594480; cv=pass; b=r20djXhNytUJGJxy7fH9GO2g+gBY4fWnU/7m5/jjG8D1QQiRaHpJotaAWrJdQhvCu3KGXDhP1BjbtqpA8pTN2kGKO348NMz2mvGjFgzuDkKqt9T0MvrPcQbngEjZXqUWN3vOufKVjqxFgirCYkCGf/qUVutp4q+PqwHT3Cm0HDc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779593836; c=relaxed/simple;
-	bh=Mff4l/ItXu9ZqNqYUtUuiPAKYv3iw1pM9tr4xWQgEVg=;
+	s=arc-20240116; t=1779594480; c=relaxed/simple;
+	bh=5OE7VDk7Xk8tK0kdONIg6DMt2T69ox9oBKpsyuCN5qc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r8jQ1DY9Nn4Uf4qN/EB8guwQ46PGMipAStBr5lzUZvmH0zTW8ZTtS9izK53Y6Xi/4dYcfC7Rcud+hjc+0iWUY5SX3TYqHjwREMf2Vrs3IyE2DOL4ba0HXrF/CZGea/IHsxaGhQdW0p6h9p60XOpfWJs2Vm0gJ4CKbw8DWbU9AHA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V7YkrgAf; arc=pass smtp.client-ip=74.125.82.43
+	 To:Cc:Content-Type; b=dTiGBWsLDjHRdIijCAoJZ1NpTYcipN3opmJ8KBs7XR0fKv3/gAYmSii57zhgPZGFCjC8yvP+8Fhc5rvzr/apFKorc6p51aGTYpL93jUCK0aOaRsx82yuKA+iowdtKOtb/L8euQqnDyHXqSfzeDYIOpAy5I/9B0cIfavfI80RsYY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vLQOq1ww; arc=pass smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V7YkrgAf"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-13663f68983so2416700c88.0
-        for <bpf@vger.kernel.org>; Sat, 23 May 2026 20:37:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779593834; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vLQOq1ww"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-136a89595c3so612496c88.1
+        for <bpf@vger.kernel.org>; Sat, 23 May 2026 20:47:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779594478; cv=none;
         d=google.com; s=arc-20240605;
-        b=kPyn1PPcyENbc7fLKMyojPmkGEqeAapDe4Vrl/0gK2h3XiKU0ui5QNK2PDDhG8fEsf
-         dHNwDs+e/ZkcNV25uq+zfSxsuK3yv3BggQp8GgGBJtAEoFXgc1fIUSGF56Js+d781JFU
-         R+XRs+xD9aaK8y+n8gcZfkGy/pKRVPekFZnoskfWWmY5i4L929nFIytS52EEpkXtMqCl
-         wpj1tuxSCGWA7YEWt7ndVpbabDCfz5jV160sImCVxLcqiLj1emloDMxXk9bBzEbE2B6l
-         +Jyi/3n2VG+CL5T8+FQnZZDmcVQ2qjXnNwbTj43svzKjdonc2VHOtekmXv36YUZDRRdj
-         OFuQ==
+        b=dK3lntIF2QAtKzS9KVcMQrAnOJFL8vaB3uDLs3Ovv8J4Rzfn1Zv3jHIa6Jmbbi7eTs
+         MuiTS2aEr42+5aQXGqKHH6b2ckRDElb+pCPBc03MztS0AxmMy5cOr1uk+DMW3Dr7XtyU
+         i04STEccJY+UNKAeSA0k1vGPq+ULPTQbmma9YA7aSrxBm/EvwE6cXhCRKQPBfDaMVD0A
+         Zr3DMTOve8Tx2+mbXWAh63D8ZiL6KRVh+dRPJ/WjBfrkBotdlxqzsbyi+7R7LIgGDyOr
+         N5lf6UcpjFyHA1ibQVhJWw02cTmbmkNJyBSELvJbbvZgZkRe/vAl2coIUqTAc1e5VZUR
+         8V+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=xu+3Mbkt9D4gGjs6xNbDhlWV9Mr0QNOutO1d5HR5CM4=;
-        fh=D23vILBglrzplMTd9IBX6lXVNoPfOEFQe9X+q2mDFok=;
-        b=lqVLMcnT++SYrtvMQ6k991mq+kBRfbSXDxUOgMtzLM/POT1KVuoKiHJd/rJH+7W84z
-         whB8/015rsde4nTXwRYLfKaOrBi/iK+vjpG++mtnVUlM8V0ENs360HcqusifIyZMUwXg
-         v6dMK7MniXacXvPg9ChdNdCsuBQH4HVV2dMgAUQT+m8zkq4w3arfbLtckKk95dVp1T5Q
-         oM1reMPEKSb0f6RrM8VOQn4uwIyWg2Uvc6EsxAcvob4+MGEj7TJqgvchpqoeZgYxsvAI
-         VKj4rn97CDeySIBwZtPCxiQxKUWIBirowrcVV2vXDkMi+O0VME83JK3y/qzCzMOxHdEI
-         bVkQ==;
+        bh=nIK0xfX2Hyamn7E86WRboAaD6BU+mm8VtXXVXqn33C0=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=CbkznxU50UaUliBaAhqdGgHpSOXWez14z53FuM6XHUAEcXCfjRhS/xCLr7LLQcKsZn
+         WaRmYPL2JeKuxHs1Xy+y9ZZHtJOwhpUeHd5QpwB7KDOdm9TeZiCz4Nb82J9YT5igfRfH
+         84XooKswU148lwQ5Mz6Ufbyl1SUKE4y/Yy5+ZrqmHYQWMRKoUEunOhnP2yaLXzMg8GKw
+         BBG34O8ppH6QDQ25cNNJw41Uoqq2HZF3+uRlqqOCLYGroVOJ974M9PIofDQYGAjkAhcL
+         Vr60Yr3I0AqmMJRhx8sW12mkaqNXd2fVgPQQWGiRjD+mNfpAtDXE9itmA41kViLkq7g+
+         Bs/g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779593834; x=1780198634; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779594478; x=1780199278; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xu+3Mbkt9D4gGjs6xNbDhlWV9Mr0QNOutO1d5HR5CM4=;
-        b=V7YkrgAfuUKjud69rP53WFp+/WN8XKChKRFb+RWCPY625tHwQa77BewPHwsE3a10Eu
-         4XFleIzq7Av1UwTxxGEz4zHPEKbR72Tf44MBJC6vlK96DuCG2uXckdpTsIhUh80NDu0m
-         hd1xa1s2QrITJkeg3oazUvZWD734csdHU2Aw2kvQ9uTE5ZVtOt1XZFVAI8eyjK2zao0z
-         u51Q2aqXpfy7gSPh2YztWCgS1nceFEpgMC8eP5OyWwTxsl3Ymrimc+BYY6FmWxIsVDh8
-         JnzvJrMbNpWZdH20z4rU8HBsiGPaYriTvQVU2bUKoVJMj23eJ+px3Tt3AobERityynMH
-         CkZw==
+        bh=nIK0xfX2Hyamn7E86WRboAaD6BU+mm8VtXXVXqn33C0=;
+        b=vLQOq1wwhFe4ujVkBZo5KTR8FNxFuFFKiqbfZn+mYJg29fMEcO9Ckz4sr3cCiCK+i6
+         0R1N1SS6rjfTqpcMbJ2bYD1+L9DqIMl/UrP+zkxf3+oGZdPRrWxLk7X5Bfe83F6/PUph
+         AHGAltyyS8TIeINRR786zRvRqsi8QDkEGdegQo3FsWz23WzPwWjymnh1u/jxJM/7cjAk
+         qFPhbAdTkTLwsdolWabUE86dnpSLmq62HRfX9j74fVa4j3zEJMGWnnBwEYLpmN4Tvos+
+         JHSbdLPnltiGEfy7/SCnVw5IIu8bBmP8n2HhVt45soH8EyW974k4DIyqOM8vZus8zhB2
+         6W+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779593834; x=1780198634;
+        d=1e100.net; s=20251104; t=1779594478; x=1780199278;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xu+3Mbkt9D4gGjs6xNbDhlWV9Mr0QNOutO1d5HR5CM4=;
-        b=GV0xXIc9d2tqBJUPquWNpc/vOwh65JXpcteqfsbf/SfrWg1ZSr+fvrTKT5ZAkzc29K
-         gGI5XjiVl9i/gpAyIEvu8mzgISKtXwfXuSvt20xE8U2eOV9bru+Oam8yce3/EwrGimKr
-         1om5ypI5NZ1gv/5g7Musk0cNSOwfTsR7AJbvLDq8B1ilM58cpAv4Pmv2Jin/W/PQH6A1
-         ZqFKgdAhsTarEIhayGyrMIIhcbuC8B0x3hLcb9qMyBY3SfpEcs5WP+lOqposPFdi2Ttf
-         AEUJENFl2trUhOugDt17o8eULYFldgdAKAYW/TPRC5tybzwzb961jiqlFof/2mrq6Swn
-         slpQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+wF+IMIZe9mTdt3S2VwNKA4cCdyY3B5fvm1pmmOdJ+d+lYoeAZRSNDNayzMocpTjwfLWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaBLpmLc4SpY/7QaDa7zAHkaDHlp5nZqya28Rjz/4yJtp7Q0zM
-	F6X7lOE+paqNLiIuE2Pv0efedFPjSKWKIxts+v/rHsn3E4tno4+DkTmmZhFBbkz2RbjperDSoUa
-	dwmKe0HrOJuLXBYFPXlBf0MrSK5u7P9wcuDtoQ0PB
-X-Gm-Gg: Acq92OGEhu0RjRmAv1MGzskXKeFUUtBqTNwBbs4oQkP5oYpojnR97q777z5Uy3OfJAl
-	rHBvpPciQ7VRzD6NlLwV247B3RhTDHGjWnN0OKsyWXlpkm3l8FKuVhEArszMX8YhGwlru+/4kBp
-	wNBpuZ9boLJYTZ2AIFe2ViGouIjER8nzklUFBE9JPV1MaEdnB6D8+frRpRjtQHBjXwVtOsmwUdy
-	uXWUsT+rTsEVvBekgdZQsoQ+JWKtolEkqvhLSia7VJtPKW43ji59VJt9Ed5hl9GKi7YtfNaIzz8
-	VeGrHTk0vY2Zh30J3/gb3hYM69de9ySYDt/HzLXWsshEp1d110Ckoc+8moeNOWkZJDadUKj+1su
-	3r8TtLq9vzUeq4O2prBGBUnPknrLGY5wqlJMq8tT4CfOrfVoNt0KSM9QbjRxqqbaITRMoyzPAmA
-	==
-X-Received: by 2002:a05:7022:126:b0:136:3520:7234 with SMTP id
- a92af1059eb24-1365f70aad4mr3408534c88.12.1779593832929; Sat, 23 May 2026
- 20:37:12 -0700 (PDT)
+        bh=nIK0xfX2Hyamn7E86WRboAaD6BU+mm8VtXXVXqn33C0=;
+        b=m0UbnlF+8poId8P+ITUcbkSDG8dDO1ZY+bVmGKVUfMN9P/Fet8JUAEuUgCBm+qEJp4
+         LnXWCe4ymdAgccXYwSzMB+B3B+5ligr5midc0vnbn6jwvEtjR7WrCsN/oVAL1Rp8zuyv
+         uz4+GB5IRq+GmGqeizi24yqDj8Pu/IgcdBktl5JycNkEBuom2KK0EXLviRx5j1aMmnJA
+         G9pV1raMIPLGe0NMu31uPNdxJpYzJ07C6jsphEWmjuB8t92u7tb+sjhr3++qarisk5BC
+         +1c0mC5FG97xVyyC4KhizIemH5Hym0ReLawfskZydaiHAgS2dJSJvcz7O5nr8JXnQXG3
+         B5Fw==
+X-Gm-Message-State: AOJu0YwifWd5OoUTEYwZ4TNX79FEDVEY7httIpyosygu3qWYFX+vChd2
+	EZmnm4eXMciOnWyLrZElremA5USYSTMyh9Dui14g88utcNux6hxgGZd3cnBIb/TprIDkx59Y5zy
+	+zoVfmsQXd/5tIGsjzY61jcSJ6MRC0Xxt5IaIRCSV
+X-Gm-Gg: Acq92OFoAQueoFcklv3peWwlROZNlY5YjJlQ5//TbeCz23yVkTN7+06IUUuAvtgGwpP
+	bgLNUx6AZWXlU9/kquEuwFeDIyxkOkfqkrLvQgaEqTHAo5B7VPIolA8Vn1JUZDD1KstE049yGYx
+	BIpmDPqhOlCf+hhX6bGFOS3+OSY77d38dCnr1OGFdjI+SJo8QpWGVSj6cecWJuMIVPO6ecaJzrS
+	EU6NCWgP7KN0WEKQL/b+WJFTHektxh60TTuQyWpGDve5XNch9/v73AUlCgXLVV9VZ1lIsSffe9Y
+	ZPaEcFXzS0lZbOf0hOCufG2IUmvgdISPJRMrA9BuCheZm2T2AfPPkklIEGP2gRrSIDSKWcNzLBg
+	/mByTAEzoWpU2hBkm++AVcykYR4YiGPV96ksCyCyTQHz16Iw/zQ+r2XvOrlFPPos=
+X-Received: by 2002:a05:7022:ea5b:b0:136:8bdd:3f66 with SMTP id
+ a92af1059eb24-1368bdd40d4mr1248528c88.5.1779594477020; Sat, 23 May 2026
+ 20:47:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260523083001.2911931-7-kuniyu@google.com> <0c3701f35cdef6411722a91c596d736cc9e88e3d7a14564caf5354302eb92d98@mail.kernel.org>
-In-Reply-To: <0c3701f35cdef6411722a91c596d736cc9e88e3d7a14564caf5354302eb92d98@mail.kernel.org>
+References: <20260523083001.2911931-7-kuniyu@google.com> <20260523092933.DE3551F000E9@smtp.kernel.org>
+In-Reply-To: <20260523092933.DE3551F000E9@smtp.kernel.org>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Sat, 23 May 2026 20:37:01 -0700
-X-Gm-Features: AVHnY4KgiB0CX2qyM7pkseVw3XHqXKIJ_6Yv9JljSTiebp-5w9SA3Cknk1SaxvE
-Message-ID: <CAAVpQUCzzCwCK9+_GRJt53emU_9YQg3zL5Sg=vpPHue1KYr4bA@mail.gmail.com>
+Date: Sat, 23 May 2026 20:47:45 -0700
+X-Gm-Features: AVHnY4JlVRld-DseQgriiR1Pv_34W0zaElGZi5_HUpKyHBFKYF7flx8n3RbMLio
+Message-ID: <CAAVpQUBvP0NLoc66ur=MGiHTbvdsEpHQJwQokTvkW1O9f8ehCg@mail.gmail.com>
 Subject: Re: [PATCH v3 bpf-next 06/11] bpf: tcp: Make BPF_SOCK_OPS_RCVQ_CB and
  SOCKMAP mutually exclusive.
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me, 
-	edumazet@google.com, ncardwell@google.com, willemb@google.com, 
-	ukyab@berkeley.edu, kuni1840@gmail.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 23, 2026 at 2:20=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Sat, May 23, 2026 at 2:29=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 4 potential issu=
+e(s) to consider:
+> - [High] The mutual exclusion between BPF_SOCK_OPS_RCVQ_CB and SOCKMAP is=
+ completely bypassed due to a Time-of-Check to Time-of-Use (TOCTOU) race co=
+ndition.
+> - [High] tcp_in_sockmap() fails to detect a sockmap if an Upper Layer Pro=
+tocol (ULP) like TLS is attached, allowing the mutual exclusion to be bypas=
+sed.
+> - [Low] Calling tcp_in_sockmap() in net/core/filter.c breaks the build wh=
+en CONFIG_BPF_SYSCALL is disabled.
+> - [Low] Using relational operators on pointers from different array objec=
+ts is undefined behavior in C.
+> --
+>
+> commit ebabac3763475d472254639d69b23d839f36111b
+> Author: Kuniyuki Iwashima <kuniyu@google.com>
+>
+> bpf: tcp: Make BPF_SOCK_OPS_RCVQ_CB and SOCKMAP mutually exclusive.
+>
+> This patch aims to make BPF_SOCK_OPS_RCVQ_CB and SOCKMAP mutually exclusi=
+ve,
+> as both can intercept and handle socket receive queues. It introduces che=
+cks
+> in tcp_bpf_update_proto() and __bpf_sock_ops_cb_flags_set() to prevent
+> both from being enabled on the same socket simultaneously.
 >
 > > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index c6a6853909c4..bc95d8e7b62e 100644
+> > index c6a6853909c4b..bc95d8e7b62e8 100644
 > > --- a/include/net/tcp.h
 > > +++ b/include/net/tcp.h
 > > @@ -2853,6 +2853,7 @@ struct sk_msg;
@@ -118,12 +136,10 @@ On Sat, May 23, 2026 at 2:20=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
 > >  void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
 > >  #ifdef CONFIG_BPF_STREAM_PARSER
 > > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index 3608036632a8..1fb63b264b18 100644
+> > index 3608036632a81..1fb63b264b181 100644
 > > --- a/net/core/filter.c
 > > +++ b/net/core/filter.c
->
 > [ ... ]
->
 > > @@ -5382,12 +5382,34 @@ static int bpf_sol_tcp_getsockopt(struct sock *=
 sk, int optname,
 > >       return 0;
@@ -141,6 +157,17 @@ sk, int optname,
 > > +     write_lock_bh(&sk->sk_callback_lock);
 > > +
 > > +     if (unlikely(tcp_in_sockmap(sk))) {
+>
+> [Severity: Low]
+> Does calling tcp_in_sockmap() unconditionally here break the build when
+> CONFIG_BPF_SYSCALL is disabled? The declaration in include/net/tcp.h is
+> guarded by #ifdef CONFIG_BPF_SYSCALL, but there does not appear to be a
+> dummy fallback for when it is disabled.
+
+Will fix.
+
+
+>
 > > +             write_unlock_bh(&sk->sk_callback_lock);
 > > +             return -EBUSY;
 > > +     }
@@ -151,12 +178,9 @@ sk, int optname,
 > > +
 > > +     return 0;
 > > +}
-> > +
->
 > [ ... ]
->
 > > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> > index cc0bd73f36b6..7e7966b095f9 100644
+> > index cc0bd73f36b6d..7e7966b095f9a 100644
 > > --- a/net/ipv4/tcp_bpf.c
 > > +++ b/net/ipv4/tcp_bpf.c
 > > @@ -705,6 +705,16 @@ int tcp_bpf_strp_read_sock(struct strparser *strp,=
@@ -173,6 +197,30 @@ sk, int optname,
 > > +     return &tcp_bpf_prots[0][0] <=3D prot &&
 > > +             prot <=3D &tcp_bpf_prots[TCP_BPF_NUM_PROTS - 1][TCP_BPF_N=
 UM_CFGS - 1];
+>
+> [Severity: Low]
+> Is this pointer comparison safe? In C, relational comparisons (<=3D, >=3D=
+)
+> between pointers that do not point to the same array object result in
+> undefined behavior.
+>
+> [Severity: High]
+> Does this logic fail to detect a sockmap if an Upper Layer Protocol (ULP)
+> like TLS is attached?
+>
+> If a socket is already in a sockmap and a ULP is attached, the ULP
+> initialization replaces sk->sk_prot with its own protocol structure
+> (e.g., tls_prots).
+>
+> This would cause tcp_in_sockmap() to return false, allowing
+> __bpf_sock_ops_cb_flags_set() to enable BPF_SOCK_OPS_RCVQ_CB_FLAG
+> and bypass the mutual exclusion.
+
+I'll check sk->sk_prot->destroy() instead since it's not
+overwritten by kTLS.
+
+
+>
 > > +}
 > > +
 > >  int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool=
@@ -188,96 +236,33 @@ _psock *psock, bool restore)
 > > +     } else if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_C=
 B_FLAG)) {
 > > +             return -EBUSY;
->                    ^^^^
 >
-> A subsystem pattern flags this as potentially concerning: the commit
-> message explains that write_lock_bh(&sk->sk_callback_lock) is taken to
-> synchronise with tcp_bpf_update_proto(), but does tcp_bpf_update_proto()
-> actually take sk->sk_callback_lock?
+> [Severity: High]
+> Can sock_map_update_elem() and bpf_sol_tcp_setsockopt() race here, allowi=
+ng
+> both features to be enabled?
 >
-> Looking at the call chain, tcp_bpf_update_proto() is invoked from the
-> SOCKMAP path through:
+> sock_map_update_elem() does not call sock_owned_by_user() and only takes
+> bh_lock_sock(sk). This means it can execute concurrently with
+> bpf_sol_tcp_setsockopt() from another thread which holds lock_sock(sk)
+> (because lock_sock() releases the slock spinlock).
 >
-> sock_map_link() in net/core/sock_map.c
->   -> sock_map_init_proto()
->      -> tcp_bpf_update_proto()
+> If Thread A in sock_map_update_elem() calls tcp_bpf_update_proto(), it
+> checks BPF_SOCK_OPS_TEST_FLAG() before sk->sk_callback_lock is ever
+> acquired.
 >
-> In sock_map_link(), sk_callback_lock is acquired after sock_map_init_prot=
-o()
-> completes, not before.
-
-Oh I assumed it's under lock since sock_map_del_link() and
-sk_psock_drop() call it under the lock.
-
-I'll move sock_map_init_proto() under the lock as well.
-
-
-> The lock is taken when setting sk_user_data to the
-> psock, but sock_map_init_proto() runs outside the lock and calls
-> sock_replace_proto() to write sk->sk_prot without holding sk_callback_loc=
-k.
+> Concurrently, Thread B in bpf_sol_tcp_setsockopt() takes
+> sk->sk_callback_lock, finds tcp_in_sockmap() is false because Thread A
+> hasn't replaced sk->sk_prot yet, sets the BPF_SOCK_OPS_RCVQ_CB_FLAG,
+> and unlocks.
 >
-> Is there a race here? Consider this interleaving (the commit message
-> acknowledges sock_map_update_elem only holds bh_lock_sock(), so it can ru=
-n
-> concurrently with setsockopt that holds the socket lock):
->
->   CPU 0 (sockmap path)                   CPU 1 (BPF setsockopt RCVQ_CB)
->   sock_map_link():                       __bpf_sock_ops_cb_flags_set():
->     sk_psock_init():                       (val has RCVQ_CB, current=3D0)
->       lock sk_callback_lock
->       set sk_user_data =3D psock
->       unlock sk_callback_lock
->     sock_map_init_proto():
->       tcp_bpf_update_proto():
->         BPF_SOCK_OPS_TEST_FLAG: 0
->         (no flag yet, check passes)
->                                            write_lock_bh(sk_callback_lock=
-)
->                                            tcp_in_sockmap(sk): sk_prot
->                                            still old, returns false
->                                            tp->bpf_sock_ops_cb_flags =3D =
-val
->                                            (RCVQ_CB set)
->                                            write_unlock_bh
->         sock_replace_proto(sk,
->           &tcp_bpf_prots[][])
->         (sk_prot now in tcp_bpf_prots)
->
-> Final state: sk_prot is in tcp_bpf_prots[][] AND bpf_sock_ops_cb_flags ha=
-s
-> BPF_SOCK_OPS_RCVQ_CB_FLAG. Both features are now enabled, which violates =
-the
-> mutual exclusion goal.
->
-> The validation checks in tcp_bpf_update_proto() and __bpf_sock_ops_cb_fla=
-gs_set()
-> each check shared state before the exclusion point, not under common excl=
-usion.
-> Running a lockset analysis on the two shared variables:
->
->   bpf_sock_ops_cb_flags: written by __bpf_sock_ops_cb_flags_set under
->   sk_callback_lock; read by tcp_bpf_update_proto with no lock.
->   Lockset intersection =3D {sk_callback_lock} intersect {} =3D {}.
->
->   sk->sk_prot: read by tcp_in_sockmap under sk_callback_lock; written by
->   sock_replace_proto (called from tcp_bpf_update_proto) with no lock.
->   Lockset intersection =3D {} intersect {sk_callback_lock} =3D {}.
->
-> Could the synchronization be strengthened so both paths access both varia=
-bles
-> under the same lock?
+> Thread A then continues and replaces sk->sk_prot to the sockmap protocol,
+> resulting in both features being active on the same socket.
 >
 > >       }
 > >
 > >       if (sk->sk_family =3D=3D AF_INET6) {
 >
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/263285=
-41814
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260523083001.29=
+11931-1-kuniyu@google.com?part=3D6
