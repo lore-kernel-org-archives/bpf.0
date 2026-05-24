@@ -1,154 +1,160 @@
 Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FB12ECEA5
-	for <bpf@vger.kernel.org>; Sun, 24 May 2026 09:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E48F2D5940
+	for <bpf@vger.kernel.org>; Sun, 24 May 2026 11:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779615750; cv=pass; b=blrrel7TMBB93LohC8gaxEN38z6+YVJqSwb129XMR/TyKZQCumJvhYP7jvbteOZMmrZr5gdeo5TdcMJ2LQ1j1xSMiBMskgSUmUFqaJWIwxKvRD9wxF0GNiVz1GJv0nS8JD9/y5TWC77nvu5MKz1/u+9xbiK3zGeACdKGA07nh4g=
+	t=1779621766; cv=pass; b=SSvkrh9uZbjj5Bs/aRcepSYb8UE4LWuNN5P3iezdoaGDINUcif98jfCF2MrpCzJSQahOi7/BEOP2Lu+yZdl2WnvqmkE7bDcAaoQVoqBqosctiTrixcj4SbXkxn7JK0sB1f2NtJvQwy8n7OWmChVEXt5PeOeEfMmI77p8vQBYAns=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779615750; c=relaxed/simple;
-	bh=kpGDEHky44D7aGTv8CTz7sc1B6m/sRELfqhdOYIoZT0=;
+	s=arc-20240116; t=1779621766; c=relaxed/simple;
+	bh=O+JZPaK3uRnpTVdRdyFVDzHP/W2oZHJawf02YCzFly4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Eo2Io/HypJEBWU1BbW13ddRC2uhjrtUdk8Hzq2k1t+9O9Kdzch7H+19V7ZOPqZt+iNAuexDqVgVryw0WPj3YewIibm2ozOlpxIaQcdfB3DsnVGiN1VHr3gnnjV8SJW2Dl01yxfIlQ4xzO/A1XpGBh+t1K6bo/zl97SgQ0jACOOs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCHjleG+; arc=pass smtp.client-ip=209.85.221.51
+	 To:Cc:Content-Type; b=QgMMWC3HhQ2b/5n32EN+8eJg/yqJMIrMi/PNVnxoMdATm1MgmA+Dy8SfdTLZOCxv4u+AUi6d7EbnInyhCxqp+FOrr/cLtlTMlkA/fHY6Wzb20ZBcpBofakxq+z6W4Ptdf1r8tcykNBYpfdFgky7aRGOAb7Fnw+mq/IomspV/u2A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyW8SkrH; arc=pass smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCHjleG+"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43eb05b1875so4669830f8f.3
-        for <bpf@vger.kernel.org>; Sun, 24 May 2026 02:42:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779615748; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyW8SkrH"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-449d6c68ed8so5168927f8f.0
+        for <bpf@vger.kernel.org>; Sun, 24 May 2026 04:22:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779621758; cv=none;
         d=google.com; s=arc-20240605;
-        b=eZYQ4QkLPDxHd5tIBjwaLqpHivVMGG5q9huQudfXpa4f7jGyhcXD6wRpZqvTnA4qyo
-         jKQDhG8a+79fXXxQyKDy1qXWeY1NtUgLuFSFKmJrUAQwkd0iQ/gLjOQdYOvPImoJ/c98
-         hPulOtE2/pBHLEy1wuaFXqe47Vk/Sr/QvTrVC85kPb6SjU1JHbnitQz/8illzSfa11Ua
-         m/bK0frT7GJf1gkMdLYB5g7YNcoDIJuJC5xDNcFhxUyV5fKQeTLgmtshWvrUwgnU6fFX
-         301RtFXXZd7kzJZYWfukhv9DTAjPkMqNwv9ER4D/0/Lb344D6MKutHsWI1jvBKUBevTo
-         WDow==
+        b=N6ZLMaQtCg3LDG+3Oqn2cz9qUoXnoTxbugLeaL66dhDvpuKgfVpLYVBEHizBRIoJw/
+         3u6aMmoDyRuaA03rpNPaLMcrOSHVVbtSE4CWj9WCpq7DvN0NEI/2bfVo6RJe+R51tj2g
+         McatpgEqGi0FoGpGu3sRbQQ1LT35/gmlS2H5e98SQ8nIHy0AbVjggkXDyJ1XX/ptWjLx
+         SIYXjd1uPvemHp+gqTUsLaYNzejoxmGojwY7o2hO4Uac9Akh8T0cK86G9rYjd6FzODC8
+         uU/Tcck+HOJUleHAG4iv5Kyr7NU1ec1cZzuk8V0Q6OnJAzisU6RpxRrnLCegTDPuF4Wp
+         KCrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+YHWJhB00XO9xUYo8X6jeelZAujnKbGOj7a+VulNcKU=;
-        fh=ermKvBCul76cIUI/1XqOI16rsdVXJSl+aPn0KT43BBQ=;
-        b=ZA7jdAu3MsZBRsC1XRd4VGx4FY6ANV9zxdSMR1rXmgW0jmk7jtTY06e6wjh3zf6PVo
-         0J6UyctZa3MQPyNkrra8BLDjtwoQqYV52/3bCJ10w8emkNrBLNLl+OFPkQqy3AViYClM
-         oGrlA2SbgyW9B+2d3tHKEU6zvTHzw6/kAfwYB3mPHyoFL9tKzDl1t8xzJEc973+IEcRq
-         gQNSSOU5+oRkeDQazWx1JJ/D+UverRvyXh/pvD6r5YHcK30Q6sQuLcdj/tHaBmm/3Jgr
-         cqXg0jRFMx1xoEBjRNA9DGjIn3a64/VMawKR50n/zB/QSesm7xRNOS8xsAUtQ7OJ7EcK
-         gXAw==;
+        bh=JYSKa/1O4kDWFIkCrrL8W7AexNe9Onv81BeAx+bBfI8=;
+        fh=NQA+fdPCvGbFYqivaPDcFENgLUgAsnhGW9Kv6sBnL9U=;
+        b=i10GVWZOwq1tAR3MMvn0FnmGlKksjhD+bXapsTKl4RwiONfa978yCfl1XArroKlAbt
+         iwfAYMpJFWV14sp61pLD0EZsHs72FXbSHqPMbdNTw+4h0E2RygK7q0DXwmsUT6urkF46
+         kw9Yi45UwfXOtQ/jkdmmKt8dTyzQivksCIr/jW1zjoDFLGZSXLlF7cV2OeNLalX0DYfT
+         dkt6ItP8yPhN/JAxBoqwbgrElbEeHS0Nkyv4F9CScFMyxNVzdvNbYZuvlgvDw2GADV2p
+         XGA9JMZzbdl5Bfa91sN/L6LHCWLKNr3E9A1FlpeIo85Wb9m3NZh8MPetkm0z7+IjRm/B
+         u+IA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779615748; x=1780220548; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779621758; x=1780226558; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+YHWJhB00XO9xUYo8X6jeelZAujnKbGOj7a+VulNcKU=;
-        b=XCHjleG+KgdrXqbFwZHVmkZc+yvP10Am2fscOX3Bbe6WBl3hDycTJQlj/JAKCPhlwe
-         +/p0+aAm0J6BBGmWqLrN2XhhmAstcXGb8w1V9Sur271UUvjEb3GDoeGnomizubIWBUje
-         oEZNlPre15hekfZhdCWiebD/AnZK05FqIRX9Md96LdqgtgykTJeSd0j99WwB5wbPjyD+
-         +OXOxshNM/uIwxhGeLIKOuDbmwOQGW0iq9ilBOct3fXIELS5dLUeWUv58FSSpOM8W+7r
-         9H/YIxoZsWdzSFAryPo0sE2BBlDcVCWhGwFRu8xMnFZqsvK88s231ScetBYQVMzfU3Go
-         0okA==
+        bh=JYSKa/1O4kDWFIkCrrL8W7AexNe9Onv81BeAx+bBfI8=;
+        b=fyW8SkrHpdAp0E10iPgLN4TZJpk2OlISyv5ozXCIVPOd7D2/eDJDYOH2p2jYkuoptK
+         tzuaRtnwbECR2zjnISJcnL6m70BdPShM8C44Plua/pKRwW5E4j5RehDSkgIY6iEohDNw
+         yHofDReNq1PN2D5LKlFEvPRUXYNWqJaQRqqnA/CbCo3gtfX22ZiCRM6J64G6jBkuq1Uz
+         6IG8sczDjWpQ7MMJe6rDWMfmWumb7dFedFWztRBBc6hnbXrA9aiqhLcFmecXbm04GPAr
+         V1wguZkwSSLZm8TaY886ZJ3n8UBqg3aOsfTmB2pSlsbnyzi03ArfyVp1cU9VaRTsXV3u
+         6YPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779615748; x=1780220548;
+        d=1e100.net; s=20251104; t=1779621758; x=1780226558;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+YHWJhB00XO9xUYo8X6jeelZAujnKbGOj7a+VulNcKU=;
-        b=jmLu4RLPdbuPAyuCXT48zwkOVjHS64WA3xz9d9XSyvfvm8Deg1f0cq9BzgspD3bB9K
-         wBbubhkZ8L0u+UtaW2SG0Wqu3xJEp69DY6lsmXHDPdtDZpHBQ1KDBB+TYQGK7s/NwUAm
-         S8IH3PwkEaez8vyclOe0t+WaetprpLn7qzB+2d9SEN4ZT3U5vAxBtFpkcT/nNqq8zmY7
-         82Ha121/KBN2D16piEOzC03TS4lo/VWi3QqVlTAcaoRtWXdPZBbN1lIBtvc8QRbT52Ib
-         IMJgUzhPt+57qf22m0KoTeEdQY+wR2Yvr4dZE3IA+7cskJcyjEwVE9ws07z/Y6oZJdeU
-         hanQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8TNhIabyf9ZKbTAm7iyp5TJkaIhyyUDlKxYXK6/nBXFLi9vFrHdh/Uf/xhYUgJq4M5tSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt3b8HGr5mbnD2wuJk63RsRjQWnXE+/OK5A0O2/0T6ADW0Pey7
-	qN0y8ObgYB7tUXCU03zwUcmQi+QRdXGOFJWvVa8GBen6krWvUpA/j4lAHkpq8Y6ZJ+cvq0DRelj
-	MG1pWKdYjqJ/gYul6uZYKYvVLYjYpm9fCasSKM/ZkqQ==
-X-Gm-Gg: Acq92OGicW5HIf7eweEJZd2sxlh0h8ATu+C2ElS/NsAuEs7YORQaPLochxn842kRvgY
-	C+9cCMcqa66Aui1IygLYUtt1+dt3GJ8Jd9H/NgNzmLIowfspbmGWXlvJbQJ72H1ksM8rY7MCGcX
-	X7XSzxP6a7G7O3Mb7gmlDNdlrWWmqSrSGN8RQPUTS1JfZvYZ/ka1TCJr5V4rJt4trMYUa4Ep4hL
-	IuvwxcGI/x43Z14ED/SeQRfY4Tp4uXf7yO5DWp+El1RCHuwGvv++i/XKDI2zsg2WA2D94K86g86
-	JoMXWhDosicqm/Fbazdpp2PsTsmjBRYjOwokze1r70O9MYvZZ5k1uN8HnavZJIKx00K8Dg==
-X-Received: by 2002:a05:6000:260a:b0:452:c246:ab7a with SMTP id
- ffacd0b85a97d-45eb36970dfmr19280461f8f.14.1779615747468; Sun, 24 May 2026
- 02:42:27 -0700 (PDT)
+        bh=JYSKa/1O4kDWFIkCrrL8W7AexNe9Onv81BeAx+bBfI8=;
+        b=N6Gi3SdoZUvllMbukzQUOD8KHH3EQW17xf8A1b0TntoyTtNSP5VBcPf2wMVu2DkgO6
+         zCsvdbSpMHuBFqoR/6RPwGj5H9kAP1TV+WszOO2Km92bhRfn3wU2xaUBfcbbcWgzMeFF
+         djhdNmAOuQAtwabeBUgzFfes/FR3PMqLYHNB9yvGbx2yXG942TP20PnkhteCE0vMWiHa
+         Z2sEl9jSkrSExNA9AnzwUVCLTgGs1RfbvsYze5VJ7ztne5EmI9H4o2hnHmCPW6I8ky3V
+         1xXaF5/FKTHpJGRiz9AnEWmc2gercxug5yDUoGXjgU5PPfbYmorcPD1ofmvpuzP3vs4h
+         erPg==
+X-Forwarded-Encrypted: i=1; AFNElJ8NDYoiJLZ7jlKed64YIExHtFh0jtwUbkZ/PYmg8eT5lT2jJ8up57SUr0PfNUwSrdTUkz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweffFlL2z3L/7r+EyznYwU1QAyGR+G4rIGSCUN6qs0LZAbzy5i
+	3eWwNX0wNosi/r7DytoBHLnTHXqplZdWARrq+VZaE3GVfpxZ+/RWN9j3bCvfIt8XZDFqRDlA6oT
+	CcKhGEbgCNXbNUDVyUB4HyNa9lhKK/qU=
+X-Gm-Gg: Acq92OEsRE4ZAzeD6HqMMLpzuIq0FmtjPnMBSbEOoRRbMdeCfK8tUHapem5rFb7OqFI
+	WHm92JpzVkbTTtu8zvCZhmufks/FUzp8iX/kULnOWWeiE/ou1WkKuKqaR6+rmqoiOxOom5M1rBD
+	SXC+8sTAP3lSqyguN3J6Ki9snv3wMt+8xV+opV9mpvvIygg3KxGdovKISv+114kZhYnXtxLxiBq
+	El8AXnJi2V+jc1RGrAkptYyQ/7oFg8DRYHSB2iwI+RmwShYaC1DKlV0NAhQH+If5P7sGO3ulEmJ
+	aoJ9gW8y6bJGDReRVV8rUYNBsHhmwk6rgYpwIuJCp8ZPpIUt2XHoGCqcSnidGDAbZegL/w==
+X-Received: by 2002:a05:6000:468c:b0:43b:5b25:67f8 with SMTP id
+ ffacd0b85a97d-45eb38b392bmr12088047f8f.20.1779621757808; Sun, 24 May 2026
+ 04:22:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260524082944.10625-1-chensong_2000@126.com> <e5ca9aed83f28248172fb088e55dc1cf7170417b0e45ec564ee0da4791bcee99@mail.kernel.org>
-In-Reply-To: <e5ca9aed83f28248172fb088e55dc1cf7170417b0e45ec564ee0da4791bcee99@mail.kernel.org>
+References: <20260515071504.2054786-2-yuyanghuang@google.com>
+ <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
+ <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
+In-Reply-To: <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 24 May 2026 11:42:16 +0200
-X-Gm-Features: AVHnY4IVWKG8k7bSfLUkleZNHpRfJW5ta8gRjAg90Clhq1l1Dg87PeyarCgG_dQ
-Message-ID: <CAADnVQKVwHLX8-jo48zAijROpJ_K1VqgF=gG2oxiO0Mw7EeObA@mail.gmail.com>
-Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: bot+bpf-ci@kernel.org
-Cc: Song Chen <chensong_2000@126.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Kaitao Cheng <kaitao.cheng@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Chris Mason <clm@meta.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Date: Sun, 24 May 2026 13:22:26 +0200
+X-Gm-Features: AVHnY4I78oJkw5wlqyzmj1cIkIp7UAJvj1KW0IsPVe2CbVCPVcMgnKOQ0enezFI
+Message-ID: <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
+ caller-declared size
+To: Yuyang Huang <yuyanghuang@google.com>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: bot+bpf-ci@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
+	Lorenzo Colitti <lorenzo@google.com>, Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 24, 2026 at 11:15=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Thu, May 21, 2026 at 1:41=E2=80=AFPM Yuyang Huang <yuyanghuang@google.co=
+m> wrote:
 >
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 17d4ab0a8206..425c9f5c64fa 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -8673,6 +8673,47 @@ static int btf_check_iter_kfuncs(struct btf *btf=
-, const char *func_name,
-> >       return 0;
-> >  }
-> >
-> > +static int btf_check_kfunc_name(struct btf *btf, const char *func_name=
-, u32 kind)
-> > +{
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +     struct btf_module *btf_mod, *tmp;
-> > +#endif
-> > +     s32 id;
-> > +     int ret =3D 0;
-> > +
-> > +     if (!btf_is_module(btf))
-> > +             goto out;
+> >This looks like a bug fix for an out-of-bounds write vulnerability.
+> >Should this include a Fixes: tag to identify which commit introduced the
+> >unconditional copy_to_user() calls for query.revision without checking
+> >the user-provided buffer size?
 >
-> During v2 review, Alexei Starovoitov suggested a different approach: inst=
-ead
-> of rejecting duplicate kfunc registration, he proposed allowing module kf=
-uncs
-> to override kernel kfuncs, similar to livepatching. He stated: "imo that'=
-s a
-> more interesting use case than helping out-of-tree module to produce nici=
-er
-> error" and "I'm not convinced that we should be doing it... because ^^^ i=
-s
-> what I think we should be doing instead."
+>  > Fixes: 3fe213c040b3 ("adding ci files")
 >
-> The author requested implementation guidance on how the override mechanis=
-m
-> would determine which kfunc to call, but received no maintainer response.
->
-> Should this implementation be reconsidered?
+> I completely missed this checkpatch comment. I will add the Fixes tag
+> in v2 if there is a consensus that this patch is the right approach to
+> resolve the issue.
 
-It was considered and I said later to defer this idea for now.
-AI should consider the whole discussion thread instead of immediate replies=
-.
-I guess in this case the threads were broken into multiple
-due to different subjects.
+AI is wrong.
+The fixes tag should probably point to 053c8e1f235dc or a subsequent patch?
 
-Song,
-in the future please try to use one subject.
+bpf_mprog_query() and tcx_prog_query() were only introduced there.
+How come your userspace passes shorter uatter to query newer
+BPF_TCX_EGRESS attachment?
 
-Also "kernel/bpf/btf.c:" is not a valid prefix.
-I will fix it up while applying when trees are ffwded after pending PR.
+Please provide more details.
+
+I'm still not convinced that what you're saying:
+"
+For example, our Android net_test  suite uses this legacy 40-byte
+Python ctypes struct layout:
+
+  # legacy 40-byte layout (pre-revision field)
+  BpfAttrProgQuery =3D cstruct.Struct(
+    "bpf_attr_prog_query", "=3DIIIIQI4xQ",
+    "target_fd attach_type query_flags attach_flags prog_ids_ptr
+prog_cnt prog_attach_flags"
+  )
+  # Invoked via: syscall(__NR_bpf, BPF_PROG_QUERY, &attr, 40)
+"
+is a kernel bug.
+
+Looks like user space is querying new attachment types
+with old structure.
+Potentially the check can only be around:
+        case BPF_TCX_INGRESS:
+        case BPF_TCX_EGRESS:
+                return tcx_prog_query(attr, uattr);
+
+to be nice to broken user space,
+but, really, attr->query.attach_type shouldn't be equal to BPF_TCX_EGRESS
+with a smaller uattr.
+
+pw-bot: cr
