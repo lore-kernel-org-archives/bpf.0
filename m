@@ -1,114 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D13F33B6EA
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 15:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6016B382F14
+	for <bpf@vger.kernel.org>; Mon, 25 May 2026 15:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779722276; cv=none; b=slzGsvEVGRxZ3Z8ABbjNcT5qqiN5iz4HT83MYfKy+e6PCr/a4lNphdaoJR6KhSCsqWAR9s7Om3Bf+RmNQ25tsDLrKjte2yKNUVKZmqweyC6skh0IVl0X52rtvz+UzNunthSJK6dQmTDSO5H5+XQZh0kJKACVLz6SYezQJJTmtFc=
+	t=1779723840; cv=none; b=DpiFJ1vctWqZ8MkLVcZLFznb03JvH0m231P0sEYads4JXOzwAbvnHXxb6apH8cAkamrABTV9CS1Bp3HCaX1ug9gPoRVsHLDsFPtiR3fO9VV0x5sawUPiU9FwDpnYyjvONVzBPzrS8tfn3E+tZz+FaQPjTOUKVQZxQSMY3HE8hmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779722276; c=relaxed/simple;
-	bh=essyR8KhcxscWTOQNqw1Fi+H16k8mZkMZC3sTbEiJZQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ruJbsUZlFtEyOzjHRX8Y8Oam3aalrDe5YwIjzGAU8eEsr8a5UwCV9OOntWVJqqRjB7mAkhi0zDlySVvERaQN99OrrMvdoIG1VB7O+r0s8QpR3pSkI3weLUVZZXzElpTULXlDf7DcnthUhr2+dnXmPStuGFCIywkwPd64q4HTX3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlI8PQQG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779723840; c=relaxed/simple;
+	bh=aMZRjOFT5FjzGfTu9MbE+34/GXhCUK+r+60ybmg16ps=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrgE4eeVLXg8LQyAXCsv3cOqDMLtcDHsgmf4DiSQuJo4NOa1MYi37evtmPLry1Mjz2g7SLUyUvlA+egnW3hJIEeWAAXse+5sPsQFDV8q7lkplnUNOHixVCN7IliZhy8P9IQVHsoAiMG9rCpMASNcjkLIgtQZ3YBnjtIrRnRH0Lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ujwy4iEu; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlI8PQQG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035AB1F000E9;
-	Mon, 25 May 2026 15:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779722275;
-	bh=7eJEUYqvQzGxCvl7eF41LFl2ghO6tKOrWePLHB3b2yE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FlI8PQQG4LpAt8fhnqTZiOw9cBKhsyKJk+l1Rsy2ifv6zFIWX68k0K/P9O0viQciC
-	 eoGIqmxlnsm2Z7p5nwF0cNpZXzK+/CvYfOHabn+lUIFU9yAZmAVoA5zQN2bG7TQKFd
-	 R0icvcb+7WHnDrxTYRUmdvCVRfcBFgkKS6XaLcLS17Cviso/m/3DSBTdXj0KiNcowU
-	 KvOAodv2XOPDwYqUvTGhActgG+VNQGLEnnmu644ExXwu4y7GdtNVNwdROkXZTi3AeZ
-	 DgYegtqm8uFn3AOkzsTtnqqBqQNV8nVWfmfNesRNOwnELuXYat6FZwmXxSfusQb563
-	 S3doHGaeJVekA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add tests to verify the fix of
- encapsulating VxLAN in lwt
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ujwy4iEu"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44a14580111so7305846f8f.0
+        for <bpf@vger.kernel.org>; Mon, 25 May 2026 08:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779723838; x=1780328638; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=abZqFBSzztWZdpGscSRSKYjWVyMSes28s0s+iKg65LE=;
+        b=Ujwy4iEuwO2vlCKIkU3W53dVfQ1yj7dfkluinrG8Q4RlWivwhwV9/DGyqp/K1hlOPr
+         kAEHChStfs0ND4ecW8OkIi7FOJnS1MyBkn21n5NMTbf3P73RlotLJoHHNZ849kT28AvD
+         bowelmPsOwqkXpq3DyHQ06vDMbwoevamA6Lbz3i9OjcDZ9K+f+fMJTwFsaiJVzyOq60b
+         4UCmGo0Aigl5o5ow7/HQdgUkqAe9cVTU4ai0mt42hzqs1+Wyy57gTwkkj8gMbZusIgez
+         5jk254x9BNNlBRJ0NQw2AVc8IpQ6+vOMycVsLE6/PzI/A7RI1W0fSJ8dgDqFdIHGA+NW
+         fwSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779723838; x=1780328638;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=abZqFBSzztWZdpGscSRSKYjWVyMSes28s0s+iKg65LE=;
+        b=bnMTO6deesScicKTrre2Y09Gdf+hjWEX5KJmkpb9hc6ixqOveLlqwcwFe/QcDuwfiJ
+         RWCTU+JCtrE6sYEQlR9MD0gs6TVHVshnEWuwxUeARDLilK01OjvANXMXECF43GqrlC9N
+         wxefjzmSksYtL08TwtPFRiGEzJdGm8Koek6IhFjkCVNUS0IUUyAQQLGHV6lwiuBJqOcS
+         RNn+RyJVPcCmKFKJi2Jdp+1eTYvDIhl59ZBkEcuotksFz6A0udkgMbz6DPbrz+MfPd93
+         ycD/JM/T0C0keXN9pBVbAr6Vf25RFG+JrQXu+3iI6I6vuWcMRZzxGSrlZEO4A6k2uVTU
+         3jtQ==
+X-Gm-Message-State: AOJu0YxaWXHiUJtgcbt+cggJDhoBAAMERkQ9W+A1YbIdIdzmUqNnd4h3
+	Ep0O/90Coiddw6rFCmUzamUINCGJDt0tXQNh5LWI1LNs0iRWlF3CQ4D5
+X-Gm-Gg: Acq92OFMHzxobcVRA34dMPsJtCBdIclmDnl7nganf0ZjqBVoNG3sR9o84os6vYj3AhQ
+	IoXBH/hP6+bP6lbXOQ+YN3thcUiRr4gCeVcj/jaiB07C5kjVo1ABW8BZbOZpukGxMjmh/sZiK9V
+	OJal0BCcBckso3txRs1EM7rVZ++Jh8CFe/GTezDEXtBMbcQGclFHMMDUIlAvxUm2Z1He1vjIzEa
+	GLsMKQRqDP4P1b3qWzmFO3iKFQwlQSGMVgS/Da6CUpTvYogmR9NsgzaFhboQxOlahg6kgCGFAZ5
+	QrVVkYrF9cabjGCbpozjaiv9HIXZ0ZHtAxiflcYC9I+KpuYNi4FS6TExPhK+J/3ihQde5Mh+YZO
+	J0OWKTc6CjtBN5lxx2nQTngtI1p0mvnFBEQKYdIjTlHDZmp4ygbXG64oY+AYkJGDwHWgpeDlwEW
+	pyBwcI5A//ijo=
+X-Received: by 2002:a05:6000:4283:b0:44d:261:54c5 with SMTP id ffacd0b85a97d-45eb38b7934mr24032618f8f.30.1779723837463;
+        Mon, 25 May 2026 08:43:57 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5e484sm27025259f8f.30.2026.05.25.08.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2026 08:43:57 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 25 May 2026 17:43:55 +0200
+To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260525142650.2569-3-leon.hwang@linux.dev>
-References: <20260525142650.2569-3-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 25 May 2026 15:17:54 +0000
-Message-Id: <20260525151755.035AB1F000E9@smtp.kernel.org>
+Subject: Re: [PATCHv3 07/12] selftests/bpf: Emit nop,nop10 instructions combo
+ for x86_64 arch
+Message-ID: <ahRuO6X_Kox3tVXH@krava>
+References: <20260521124411.31133-8-jolsa@kernel.org>
+ <20260521132121.EEB4E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260521132121.EEB4E1F000E9@smtp.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comments do not follow the modern kernel/BPF comment sty=
-le.
---
+On Thu, May 21, 2026 at 01:21:21PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Changing the USDT_NOP macro to emit a 10-byte NOP breaks libbpf discovery, disables kernel uprobe optimizations, and relies on an architecturally unsafe patching concept.
+> --
 
-commit cb1735fb3bcd5263a9150a9e452a94ee09b427e7
-Author: Leon Hwang <leon.hwang@linux.dev>
+all the other changes are in other commits, I keep the changes separated
+for now, we can squash them later if we think it's good idea
 
-selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in lwt
+jirka
 
-This commit adds two tests to verify that the skb transport header is corre=
-ctly
-set when encapsulating VxLAN using the bpf_lwt_push_encap() helper for both
-IPv4 and IPv6.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tool=
-s/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> --- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-[ ... ]
-> @@ -538,3 +545,149 @@ void test_lwt_ip_encap_ipv4(void)
->  	if (test__start_subtest("ingress"))
->  		lwt_ip_encap(IPV4_ENCAP, INGRESS, "");
->  }
-> +
-> +/* VxLAN Setup/topology:
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred BPF
-subsystem comment style? The modern multi-line comment style places the ope=
-ning
-/* on its own line, with the text starting on the following line.
-
-> + *
-> + * NS1 (IP*_ADDR_1)                NS2                  NS3 (IP*_ADDR_4)
-[ ... ]
-> +	SYS(fail_close, "ip    a add %s/32  dev veth8", IP4_ADDR_VXLAN);
-> +	SYS(fail_close, "ip -6 a add %s/128 dev veth8", IP6_ADDR_VXLAN);
-> +	/* Standard VxLAN devices to decap the encapsulated packets.  The inner
-
-[Severity: Low]
-This isn't a bug, but here is another instance where the multi-line comment
-could be adjusted to have the opening /* on a separate line.
-
-> +	 * Ethernet frame uses a broadcast dst MAC so the IP stack accepts it
-> +	 * without ARP or FDB configuration.
-> +	 */
-> +	SYS(fail_close, "ip link add vxlan4 type vxlan id 1 dstport 4789 local =
-%s dev veth8 nolearning noudpcsum",
-[ ... ]
-> +	return -1;
-> +}
-> +
-> +/* VxLAN encap tests (IPv4-outer and IPv6-outer variants).
-
-[Severity: Low]
-This isn't a bug, but this comment block also places text on the same line =
-as
-the opening /*.
-
-> + *
-> + * Test 1 - functional: the BPF LWT xmit program encapsulates the packet
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260525142650.2569=
--1-leon.hwang@linux.dev?part=3D2
+> 
+> commit 963f950434fd00b2b52a00da58d5968fea9d4ebc
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+> 
+> This commit updates the USDT_NOP macro for x86_64 to emit a 1-byte nop
+> followed by a 10-byte nop. This is intended to test new uprobe
+> optimization support in the kernel.
+> 
+> > diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests/bpf/usdt.h
+> > --- a/tools/testing/selftests/bpf/usdt.h
+> > +++ b/tools/testing/selftests/bpf/usdt.h
+> [ ... ]
+> > @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
+> >  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+> >  #define USDT_NOP			nop 0
+> >  #elif defined(__x86_64__)
+> > -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x00, 0x0 /* nop, nop5 */
+> > +#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
+> 
+> [Severity: Medium]
+> Does this change to a 10-byte nop break the libbpf discovery logic?
+> 
+> Looking at has_nop_combo() in tools/lib/bpf/usdt.c, it seems to
+> explicitly check for the 6-byte sequence (0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00).
+> 
+> If has_nop_combo() returns false, the target IP won't advance to the
+> multi-byte nop, leaving the probe at the 1-byte instruction.
+> 
+> Since the kernel's can_optimize() in arch/x86/kernel/uprobes.c requires
+> an instruction length of 5, does this cause the selftest to silently
+> degrade to the slower int3 breakpoint path rather than testing the
+> intended optimization?
+> 
+> Additionally, is it safe to replace a 10-byte nop with a 5-byte call on
+> x86_64?
+> 
+> The 5-byte call pushes IP + 5 to the stack. When the uprobe trampoline
+> returns, execution would resume at IP + 5, which lands exactly in the
+> middle of the 10-byte nop sequence.
+> 
+> Could those remaining 5 bytes (0x00, 0x00, 0x00, 0x00, 0x00) be
+> incorrectly decoded, leading to unexpected behavior like memory
+> corruption or application crashes?
+> 
+> Would using two consecutive 5-byte nops instead of a single 10-byte
+> nop safely provide the padding needed for a 5-byte patch?
+> 
+> >  #else
+> >  #define USDT_NOP			nop
+> >  #endif
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260521124411.31133-8-jolsa@kernel.org?part=1
