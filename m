@@ -1,80 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B52282F3E;
-	Mon, 25 May 2026 16:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7918235C01
+	for <bpf@vger.kernel.org>; Mon, 25 May 2026 18:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779727006; cv=none; b=IvK8pYmMeo4HkJo9JUPfULGqyKCnzIvkzv52arnO9pzqueYLffpBQYuF8MdRt3mw0VPGoNpmudS39c6EnSEy8BvhylPNNRZaLA0ZX4U+6R3+XtmJ6m2Au++BObdGFhWVhRsKfy1VgH6q0zoR0U/FkjaCxFL0KwHaWt9v51PEhuw=
+	t=1779732106; cv=none; b=m+nNRNXXFCOMPS7hFHk8tE+iuOPcqahNMtKiKhJ7B6kldASW7ss7Km5KlBbFOMNx1kzlr3W6OKSj9DbUMITyRa0qWhk6UiXoluU9gPklqcKKZo/QgmEyDyu82RuPQR9vrkd0jXAxKUcgo7QdSsbgq6+4Smh7POj2p6cCWPdONMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779727006; c=relaxed/simple;
-	bh=8QMEmF8K6+SwfF1T9r1YL3dIwMga2dH+ZBRAYE482RI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Qgl4QQnq+l712iF3wvZ+mbPifRl45vZjD7pmEc60GIPkpecHVu7bQwR/FA3a7eh50wLZcZZ93hAaGMZsV/NeC1U1xaONYfbk2KLryc5rutd47ca1Sls159XL897jmse4tZg2mDUwjCVvTFlB1mWmJ68u2acgrJ+/PJyEpEbLzcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPO31xjf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779732106; c=relaxed/simple;
+	bh=uQDtGl1GZehCkeUJvy50GOF0qMnGqzE+lOEJiutJFMI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Bta2tjJ1B3ud/yHlb4BnqC2KRmrlhk9oRPmVfgLt3kYdZXzpw7/Nfz1uK197BybO7tayVUHwihT2EgSefCiAjwGgQ6uoSTAh28xVGI+Hr/rTR06F96mTsDWG5KiAs38j6MkGYjjkp/gEoBl/uuTsnU9hw9CZGCZPsQtOGyeuVAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=E5UBQEQA; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPO31xjf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B921F1F000E9;
-	Mon, 25 May 2026 16:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779727005;
-	bh=fLvFBz01chHF2Dz6LQXQ4kXGryk0+H6+SSheBDkFVV8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nPO31xjfXTr+zHZ17GaOLYOFmqMckKh7I3WdrvQ/wQadInTOBi2G5J0FJ9ShrxbWU
-	 dY1m9wnW1YVLAQ2jSfTjkhgvQ6i1u/wuyHlTPbZSHq41YML8QG52WYGC6+xb94VC9h
-	 Xz2fL4iCwWBUPHlZC2Yv7Q00LiZ9shKxIjwtqy7ywPRwUtWiNm4taC1cJtwZlLS6sg
-	 MYX/79AJnI87j/I2oxONqZPtBd3BWmqcdWjQM28S9L2ZqtiRz3Pdy67qjVOulJyurC
-	 sel7OyxzK8BHjQaxgbfNHgehIgE1l4Z+rk/hdBQ9OIdlxV684kRZ8ITUlsJF+Mfkdx
-	 KRg1xKFg4Gtzg==
-Content-Type: multipart/mixed; boundary="===============0714806253349847334=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="E5UBQEQA"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1329fc4bf77so7608124c88.1
+        for <bpf@vger.kernel.org>; Mon, 25 May 2026 11:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779732104; x=1780336904; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
+        b=E5UBQEQAnOUrlMiUQguDe1X4CPzHyqtORL9Him/enfTHhgntKUJq8sb++nZzg5UVH8
+         Cs6koqmuY+OjrtnYp5zwe5qPrGNPJX6OHnGK/ovag6PakFRACMjqo8mqAhmXbxJCGE8p
+         9cGsPqMxKL5NApvUdNIV1jd92SLxwOpCz/W32Wc4iy6ncJL2JZQTe+D9m7boXFV/GABY
+         7+Q0sR28LVPOmFt2TxxPQnUFeWJ1oyhOmKi92Z3joVWWmrXp256ZGgaNsUPixq3gVnmT
+         mUxC8KU93bv3Tz2H3/7gM5rt4tTpbkBDbChuqf+bB4R0ZKqJofgD473Z8m5tvID/Las6
+         2FqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779732104; x=1780336904;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
+        b=i1xdBmblnZJZqwDp+dIebxgYKe3s2ZLWv2dnnd9Pav0baxUR4XUKjMPEqe8BoGbE9t
+         vBKavdQgekH/RxtS+nITruAo/L4LScd+Wl/1SBH9Gc++kpwArpMUIu3YaIrSmBJYBPv8
+         /+uT9GQEsfNXWzOJoeNWfk8d7BugpNwPK3XggL2Yf/DND0ybcRCbJ2zpdOGN4JsWe+MA
+         RzTYT3vvDeeitwuBHHO+9PKF0OvFFBOcD+2xXtFhx/DBcS4rQl9zJxuzJ1MQ8InTUaHS
+         z+K//VKglORAB6Hz7jBJdVoNmijbQa750JmvOucjuTCjBev5D4h+RL7H5VXcy0hmA/iK
+         lDWw==
+X-Forwarded-Encrypted: i=1; AFNElJ/D3Z642RkhCX6NHZwP0N6qlQFJnemVff/Sdm0NSPo7hMaqKqV6zFrDxKQPs2BirXqHnfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyf78CRIsr17PkbOkM6LQm40Fjc7Kk7NNcNbXtFIE5qIC+VEsQY
+	6AKRW4DCANVmRKIEXWz6m1Bwg9sl/uRBwWy1f8dV++ZLzYomEJUpfuIo4JCgex8ZmH0=
+X-Gm-Gg: Acq92OGc8iCXk2IZqOo94+vTIXEh5WD22H7C5jjLlqk5qaqADnCuCozqCC7jIVnx+To
+	zcwjcXQ77tTG41mo3yNsjrUXx/KQ00+67IFz/OTP7dCtZ9jER69afOw1QEt+2O/0SA+DArjSgR0
+	DLSRzLZ5mykkJVD8TSA6rZRlwxAa8YWeDghNwNCR991mTsCPmehBqiMZy0W1lwzoEVZ2eiWO0u9
+	Wh/hFo7VWrwDTtjK86jPtDaxuacmM2cOrqbw0Ki/tsyDVmhsS0JL5jVozQRfyrUPkmK04ghGprG
+	tUkk7spdZvYSbJ067LbLkfTxf3x0yAvStZcsxEG8V0krkhYSJLmS4MQ9ehcIoldvTRVaAbtSRXV
+	XmTgJlQ2bkd1PV35CWBQ9dUcH6Ei4tB6XMA8EU+EDpUepa9NvRkW8T/ME5OJB8ZU9S8B8Zl6JWt
+	05C7s=
+X-Received: by 2002:a05:7022:ef01:b0:12c:8f92:c6ba with SMTP id a92af1059eb24-1365fc7b48cmr5378838c88.34.1779732103455;
+        Mon, 25 May 2026 11:01:43 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::cc2])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a2e634csm7642048c88.2.2026.05.25.11.01.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2026 11:01:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <d8cff7fda54cee7804535f32b9df53a6eee9d45b00acfac63296e8c4a110e1a0@mail.kernel.org>
-In-Reply-To: <20260524114243.259916-1-find.dhiraj@gmail.com>
-References: <20260524114243.259916-1-find.dhiraj@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Add kernel-doc for arena page kfuncs
-From: bot+bpf-ci@kernel.org
-To: find.dhiraj@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,alexei.starovoitov@gmail.com,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,emil@etsalapatis.com,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 25 May 2026 16:36:44 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 25 May 2026 14:01:33 -0400
+Message-Id: <DIRYDGLWJJWI.1PACVYJDRYBJ2@etsalapatis.com>
+Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Alexei Starovoitov"
+ <alexei.starovoitov@gmail.com>
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-3-1a5831230821@bootlin.com>
+ <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
+ <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
+ <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
+ <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
+ <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
+ <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
+In-Reply-To: <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
 
---===============0714806253349847334==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> bpf: Add kernel-doc for arena page kfuncs
+On Mon May 25, 2026 at 5:05 AM EDT, Alexis Lothor=C3=A9 wrote:
+> On Fri May 22, 2026 at 7:13 PM CEST, Emil Tsalapatis wrote:
+>> On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
+>>> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
+>>>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
+>>>> <alexis.lothore@bootlin.com> wrote:
+>>>>>
+>>>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
+>>>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF F=
+oundation)
+>>>>> > <alexis.lothore@bootlin.com> wrote:
+>>>
+>>> [...]
+>>>
+>>>>> >> +config BPF_JIT_KASAN
+>>>>> >> +       bool
+>>>>> >> +       depends on HAVE_EBPF_JIT_KASAN
+>>>>> >> +       default y if BPF_JIT && KASAN_GENERIC
+>>>>> >
+>>>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
+>>>>>
+>>>>> Meaning, making it an explicit user-selectable option ?
+>>>>>
+>>>>> If so, the current design choice is voluntary and based on the feedba=
+ck
+>>>>> received on the original RFC, where I have been suggested to
+>>>>> automatically enable the KASAN instrumentation in BPF programs if KAS=
+AN
+>>>>> support is enabled in the kernel ([1]). But if a user-selectable togg=
+le
+>>>>> is eventually a better solution, I'm fine with changing it.
+>>>>
+>>>> Let's not add more config knobs.
+>>>> Even this patch looks redundant.
+>>>> Inside JIT do instrumentation when KASAN_GENERIC is set.
+>>>
+>>> (with quite some delay) I think it would be better to keep this new
+>>> BPF_JIT_KASAN, because aside from the possibility to use it in
+>>> bpf_jit_comp.c, it allows to update tests affected by KASAN
+>>> instrumentation in a nicer way. For example, the test_loader subtests
+>>> that monitor JITted instructions are confused by KASAN. I can either
+>>> skip them or make them smarter when KASAN is enabled for BPF, but in
+>>> both cases, it would be nicer to just adapt the behavior based on a
+>>> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
+>>> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
+>>> still does not make it a config knob, that just creates an internal
+>>> Kconfig option that is automatically turned on when KASAN and JIT are
+>>> enabled at build time.
+>>
+>> Having a togglable config knob gives us the option to set up KASAN for
+>> the kernel but not for BPF, and I don't see why we'd want that. Imo we a=
+re
+>> already paying the cost of KASAN for the rest of the kernel, there is no
+>> incentive to not run it for the BPF JIT. Having to eat the complexity co=
+st
+>> in the selftests seems reasonable if the alternative means a cleaner
+>> interface for the user (preventing them from choosing an unreasonable
+>> combination of options).
 >
-> The page-management kfuncs exposed by BPF arena -
-> bpf_arena_alloc_pages(), bpf_arena_free_pages() and
-> bpf_arena_reserve_pages() - are part of the BPF kfunc ABI but lack
-> rendered documentation. Their contracts (valid argument ranges,
-> sleepable-only context, and the set of error returns) are today only
-                    ^^^^^^^^^^^^^^^^^^^^
-> discoverable by reading kernel/bpf/arena.c.
+> Again, this does not expose a togglable knob, this is a purely internal
+> kconfig, automatically enabled if CONFIG_KASAN_GENERIC is set and if the
+> architecture-specific Kconfig defines HAVE_EBPF_JIT_KASAN (since we want
+> it for x86 only), and there would be no way to enable KASAN for kernel
+> only and not for BPF, or the other way around. What I am proposing is
+> just an internal, architecture-agnostice kconfig to avoid conditioning
+> some selftests to any architecture.=20
 
-Is the description "sleepable-only context" accurate here? The BPF
-verifier supports calling bpf_arena_alloc_pages() and
-bpf_arena_free_pages() in non-sleepable contexts by dynamically
-replacing the calls with their non-sleepable variants.
+Makes sense, in this case this seems reasonable.
 
-Looking at the BTF_ID_FLAGS definitions, they do not include
-KF_SLEEPABLE. While the code documentation was fixed in v2 to reflect
-this, the commit message text was not updated.
+>
+> Alexis
 
-This was flagged by both bot+bpf-ci@kernel.org and sashiko-bot@kernel.org
-in their reviews of v2:
-
-https://lore.kernel.org/bpf/a0b9a09127618cb4e3dd1aae92ef25aab9beb90bd533490ec5be7789420d9ef4@mail.kernel.org/
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26409601656
---===============0714806253349847334==--
