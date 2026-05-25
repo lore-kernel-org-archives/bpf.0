@@ -1,117 +1,197 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243B135E1C0;
-	Mon, 25 May 2026 07:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.7
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DA415ECCC;
+	Mon, 25 May 2026 08:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779695409; cv=none; b=XdP9R7xSLyGB/lNYTVSnFHOeuqCiHtYMKg05aemmKgnv+SUmN//Om/abmwia21TlxCg8Ykppb2ZnM3bNMPmc4EvBSlMT8HhI1WjrZ850QHRlvlmDaAy5F+wTXT10Qvkc8iANNaKlfZ7eex2sFwscvb0qj/qhGKtr+foCJnT1mJ8=
+	t=1779696095; cv=none; b=nP9xyzll4yLfSdzdWnJgpYepwsK/7s8i/rF7H/GeZr07+69Sg8nzpXeYmQw2yy45K8q996XalkYwkfJkTpnn11pyp9eK+yUa05TnzibJ/9A5mqkWH2i/Wya9rsfqhox0EAzEdB0Q65F6PqXX4jnga8IEuiAmUxXqmkTnpXQugSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779695409; c=relaxed/simple;
-	bh=0z3FwoPCmTDA6eH9A7Wd6SvYizMYZW+8/bK5PbzUxdg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hizLCVA+Z4CVpUkR1QjG2vcH8/WBgsB1lC7MmEN8DeRvKRXqY3a7MaIcSkgWYfx2kFdwMa3UdgswSeuMyL3EDNSGbjmejO5KRhcls1JdZcdclanqZvri9fdR6qesgOa/B2Rr0xrKBCrXqI/Bdo87ZTknTT0JeRUXF36XSAOxTQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=Ejrow0VE; arc=none smtp.client-ip=220.197.31.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1779696095; c=relaxed/simple;
+	bh=DqNzwrd0I5meiHoTPh1oTbGQ2oglAwf0hjhojpIZtjw=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRTxVkzys5VDHMeacJcEmS/D+RAu48CVdEOqLmLLV3CHgEKTCWhkUd3pNEAuMOGIJo0fXkL6D5zQlKexGmPPDFcnMhWgc17M7sft+y12ZZh2dyI9VvX9/foA5Hp2Pm1iphJcaCvMNQ3UVt+s1YBFTmzWy1/Vh88Z9FZc+rs6TYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=oi8TQ0x3; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="Ejrow0VE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=LVPOoFvr82rb5v2iSCz0LdXvYwgsBV5EypSpRRlKRBg=;
-	b=Ejrow0VECiHZYVO92FkJGQ4cC7gVtFwI8EbpVPUDkI8Rfk/cSoHAFXLvfcS+8X
-	71pPHpRmEoB6wg2QCwpMr3ErEi8+TslANogX4/g73S3CwZlynB0bcBLiJaujKzuy
-	RAk68rQvKPgjzv0WVijAFJZ4R0HrtyoCzuaV6uaI25N+o=
-Received: from [10.41.105.18] (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wD3_0Wg_hNq5X35AA--.1368S2;
-	Mon, 25 May 2026 15:47:46 +0800 (CST)
-Message-ID: <ea0903f9-8fe3-41eb-940d-00b469cef26e@126.com>
-Date: Mon, 25 May 2026 15:47:44 +0800
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="oi8TQ0x3"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id C3A6920B7166; Mon, 25 May 2026 01:01:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C3A6920B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1779696077;
+	bh=a/3OpYSo7pi6L2H8KYxVX0pCbOmL1iviVE9A8mWM6fU=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=oi8TQ0x3y+QA64J+IjyUy33bkzwlppB+pb0CmgiDCkAEmWEdVn6MsiP4GZ6fi9jhc
+	 YYEdCNV/yqS++KqDW3oT7gp2SKN/rWcSKesJFv5ZzGJ02WvvN3+hTpi+g60xK7k1Jh
+	 F5ZDkRKeCKORE8Whs+sPJDZDUghCAmwd3mAwpMRc=
+Date: Mon, 25 May 2026 01:01:17 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+	horms@kernel.org, shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
+	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
+	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
+Subject: Re: [PATCH net v2 1/2] net: mana: Add NULL guards in teardown path
+ to prevent panic on attach failure
+Message-ID: <ahQBzTUrhzvsy22C@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260522233555.1099342-1-dipayanroy@linux.microsoft.com>
+ <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Kaitao Cheng <kaitao.cheng@linux.dev>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-References: <20260524082944.10625-1-chensong_2000@126.com>
- <e5ca9aed83f28248172fb088e55dc1cf7170417b0e45ec564ee0da4791bcee99@mail.kernel.org>
- <CAADnVQKVwHLX8-jo48zAijROpJ_K1VqgF=gG2oxiO0Mw7EeObA@mail.gmail.com>
-Content-Language: en-US
-From: Song Chen <chensong_2000@126.com>
-In-Reply-To: <CAADnVQKVwHLX8-jo48zAijROpJ_K1VqgF=gG2oxiO0Mw7EeObA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_0Wg_hNq5X35AA--.1368S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFy3GFy3Jw15tr18JF4ktFb_yoW8CF1DpF
-	4rJF4YkF40y345X34Ig3WDWr1Yyry5Gw4a9Fn5KayfZrZ0grsFqFW0kw45uayIkr48Gw1I
-	vw4j9a9Yvw4fZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jRlk3UUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsgJHxmoT-qID7gAA35
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
 
-Hi,
-
-在 2026/5/24 17:42, Alexei Starovoitov 写道:
-> On Sun, May 24, 2026 at 11:15 AM <bot+bpf-ci@kernel.org> wrote:
->>
->>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>> index 17d4ab0a8206..425c9f5c64fa 100644
->>> --- a/kernel/bpf/btf.c
->>> +++ b/kernel/bpf/btf.c
->>> @@ -8673,6 +8673,47 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
->>>        return 0;
->>>   }
->>>
->>> +static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
->>> +{
->>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->>> +     struct btf_module *btf_mod, *tmp;
->>> +#endif
->>> +     s32 id;
->>> +     int ret = 0;
->>> +
->>> +     if (!btf_is_module(btf))
->>> +             goto out;
->>
->> During v2 review, Alexei Starovoitov suggested a different approach: instead
->> of rejecting duplicate kfunc registration, he proposed allowing module kfuncs
->> to override kernel kfuncs, similar to livepatching. He stated: "imo that's a
->> more interesting use case than helping out-of-tree module to produce nicier
->> error" and "I'm not convinced that we should be doing it... because ^^^ is
->> what I think we should be doing instead."
->>
->> The author requested implementation guidance on how the override mechanism
->> would determine which kfunc to call, but received no maintainer response.
->>
->> Should this implementation be reconsidered?
+On Fri, May 22, 2026 at 04:33:12PM -0700, Dipayaan Roy wrote:
+> When queue allocation fails partway through, the error cleanup frees
+> and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
+> mana_remove(), mana_change_mtu() recovery, and internal error handling
+> in mana_alloc_queues() can subsequently call into functions that
+> dereference these pointers without NULL checks:
 > 
-> It was considered and I said later to defer this idea for now.
-> AI should consider the whole discussion thread instead of immediate replies.
-> I guess in this case the threads were broken into multiple
-> due to different subjects.
+> - mana_chn_setxdp() dereferences apc->rxqs[0], causing a NULL pointer
+>   dereference panic (CR2: 0000000000000000 at mana_chn_setxdp+0x26).
+> - mana_destroy_vport() iterates apc->rxqs without a NULL check.
+> - mana_fence_rqs() iterates apc->rxqs without a NULL check.
+> - mana_dealloc_queues() iterates apc->tx_qp without a NULL check.
 > 
-> Song,
-> in the future please try to use one subject.
-
-will do. AI review is really amazing and I'm so impressed to its smartness.
-
+> Add NULL guards for apc->rxqs in mana_fence_rqs(),
+> mana_destroy_vport(), and before the mana_chn_setxdp() call. Add a
+> NULL guard for apc->tx_qp in mana_dealloc_queues() to skip TX queue
+> draining when TX queues were never allocated or already freed.
 > 
-> Also "kernel/bpf/btf.c:" is not a valid prefix.
-> I will fix it up while applying when trees are ffwded after pending PR.
+> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
+> 
+> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Hi, 
 
-will do and I appreciate it.
+I will send a v3 to fix the fixes tag issue highlighted in:
+https://netdev-ctrl.bots.linux.dev/logs/build/1099669/14590738/verify_fixes/summary
 
-Song
-
+> ---
+>  drivers/net/ethernet/microsoft/mana/mana_en.c | 70 +++++++++++--------
+>  1 file changed, 41 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 9afc786b297a..0582803907a8 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -1727,6 +1727,9 @@ static void mana_fence_rqs(struct mana_port_context *apc)
+>  	struct mana_rxq *rxq;
+>  	int err;
+>  
+> +	if (!apc->rxqs)
+> +		return;
+> +
+>  	for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+>  		rxq = apc->rxqs[rxq_idx];
+>  		err = mana_fence_rq(apc, rxq);
+> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_context *apc)
+>  	struct mana_rxq *rxq;
+>  	u32 rxq_idx;
+>  
+> -	for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> -		rxq = apc->rxqs[rxq_idx];
+> -		if (!rxq)
+> -			continue;
+> +	if (apc->rxqs) {
+>  
+> -		mana_destroy_rxq(apc, rxq, true);
+> -		apc->rxqs[rxq_idx] = NULL;
+> +		for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> +			rxq = apc->rxqs[rxq_idx];
+> +			if (!rxq)
+> +				continue;
+> +
+> +			mana_destroy_rxq(apc, rxq, true);
+> +			apc->rxqs[rxq_idx] = NULL;
+> +		}
+>  	}
+>  
+>  	mana_destroy_txq(apc);
+> @@ -3269,7 +3275,8 @@ static int mana_dealloc_queues(struct net_device *ndev)
+>  	if (apc->port_is_up)
+>  		return -EINVAL;
+>  
+> -	mana_chn_setxdp(apc, NULL);
+> +	if (apc->rxqs)
+> +		mana_chn_setxdp(apc, NULL);
+>  
+>  	if (gd->gdma_context->is_pf && !apc->ac->bm_hostmode)
+>  		mana_pf_deregister_filter(apc);
+> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device *ndev)
+>  	 * number of queues.
+>  	 */
+>  
+> -	for (i = 0; i < apc->num_queues; i++) {
+> -		txq = &apc->tx_qp[i].txq;
+> -		tsleep = 1000;
+> -		while (atomic_read(&txq->pending_sends) > 0 &&
+> -		       time_before(jiffies, timeout)) {
+> -			usleep_range(tsleep, tsleep + 1000);
+> -			tsleep <<= 1;
+> -		}
+> -		if (atomic_read(&txq->pending_sends)) {
+> -			err = pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> -			if (err) {
+> -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> -					   err, atomic_read(&txq->pending_sends),
+> -					   txq->gdma_txq_id);
+> +	if (apc->tx_qp) {
+> +		for (i = 0; i < apc->num_queues; i++) {
+> +			txq = &apc->tx_qp[i].txq;
+> +			tsleep = 1000;
+> +			while (atomic_read(&txq->pending_sends) > 0 &&
+> +			       time_before(jiffies, timeout)) {
+> +				usleep_range(tsleep, tsleep + 1000);
+> +				tsleep <<= 1;
+> +			}
+> +			if (atomic_read(&txq->pending_sends)) {
+> +				err =
+> +				    pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> +				if (err) {
+> +					netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> +						   err,
+> +					    atomic_read(&txq->pending_sends),
+> +					    txq->gdma_txq_id);
+> +				}
+> +				break;
+>  			}
+> -			break;
+>  		}
+> -	}
+>  
+> -	for (i = 0; i < apc->num_queues; i++) {
+> -		txq = &apc->tx_qp[i].txq;
+> -		while ((skb = skb_dequeue(&txq->pending_skbs))) {
+> -			mana_unmap_skb(skb, apc);
+> -			dev_kfree_skb_any(skb);
+> +		for (i = 0; i < apc->num_queues; i++) {
+> +			txq = &apc->tx_qp[i].txq;
+> +			while ((skb = skb_dequeue(&txq->pending_skbs))) {
+> +				mana_unmap_skb(skb, apc);
+> +				dev_kfree_skb_any(skb);
+> +			}
+> +			atomic_set(&txq->pending_sends, 0);
+>  		}
+> -		atomic_set(&txq->pending_sends, 0);
+>  	}
+> +
+>  	/* We're 100% sure the queues can no longer be woken up, because
+>  	 * we're sure now mana_poll_tx_cq() can't be running.
+>  	 */
+> -- 
+> 2.43.0
+> 
