@@ -1,98 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007DA3F5BEF;
-	Mon, 25 May 2026 15:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B52282F3E;
+	Mon, 25 May 2026 16:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779724210; cv=none; b=C7K//k7Cn8gEmbiyq2Nkpcpt8nVlDxuDlk83Ale+C80uhdGVTJMEJ5edyB2pt3iVcQbqSvtOXCb492xRmIKRk4jiBhzxPJWStr5OLUFuMrdg8OIBThlHZhYGicjOK/kVWWS+uvgMfQrO3J7sEYR2dtsmtSNpsdvNk/1pC/eoXMg=
+	t=1779727006; cv=none; b=IvK8pYmMeo4HkJo9JUPfULGqyKCnzIvkzv52arnO9pzqueYLffpBQYuF8MdRt3mw0VPGoNpmudS39c6EnSEy8BvhylPNNRZaLA0ZX4U+6R3+XtmJ6m2Au++BObdGFhWVhRsKfy1VgH6q0zoR0U/FkjaCxFL0KwHaWt9v51PEhuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779724210; c=relaxed/simple;
-	bh=T1yEKu2XrXZ2E5FotMqmGDPZgliYgWQNSJw71ovZlf4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Wsnbh12SMmxhRWjJZ9YgTqF0tPoem/V7bwhd/K0REFsLgaUuJe155iDELE1xW43X3tbf9QtxpvxwxHcBKKGJY0RxBrOe3VKUMKo7ttB42gBsAXqlO43rIiolGqkc3gqhWBRuC83RcE1onP8LaokL6XwyxT4rYptuceNI5aw8Jd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjYzFiUb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779727006; c=relaxed/simple;
+	bh=8QMEmF8K6+SwfF1T9r1YL3dIwMga2dH+ZBRAYE482RI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Qgl4QQnq+l712iF3wvZ+mbPifRl45vZjD7pmEc60GIPkpecHVu7bQwR/FA3a7eh50wLZcZZ93hAaGMZsV/NeC1U1xaONYfbk2KLryc5rutd47ca1Sls159XL897jmse4tZg2mDUwjCVvTFlB1mWmJ68u2acgrJ+/PJyEpEbLzcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPO31xjf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjYzFiUb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 944691F000E9;
-	Mon, 25 May 2026 15:50:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPO31xjf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B921F1F000E9;
+	Mon, 25 May 2026 16:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779724208;
-	bh=7DFSewy4HiHsulqVjDY+J795cQvlcQzlXeEXsle8lBQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VjYzFiUbbB+KydlfY9Z4MuBygfHZEOhzzF8hqPM3jzuAT12EAGWi4sWZ5Kj7xTBmG
-	 /xgXWuskpWqOfF/++ekEIAsipeAeQb3YtnKrQnv1758Mmm97CNXTov68HsnU7ff+cT
-	 5WPDO01gr5uSuD8EesHTGnWwfCDqLnLRq9HUAX2SED9u5AdOZxvlTTWIODe+Pntcpi
-	 bHQnGL28WCVobvfZpLzPe+XKfGpoDvRcskhXnXu/QJRk1AFBymhjlbuU9uCvSG5UbJ
-	 ZqD0nShvHeADxBhybW/GnMY1bwvu6WG8sgtinirBkF0AbNyu6WkTYy1he2ImOo86lK
-	 Z8JDU7xInsufQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9389A380AA66;
-	Mon, 25 May 2026 15:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1779727005;
+	bh=fLvFBz01chHF2Dz6LQXQ4kXGryk0+H6+SSheBDkFVV8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=nPO31xjfXTr+zHZ17GaOLYOFmqMckKh7I3WdrvQ/wQadInTOBi2G5J0FJ9ShrxbWU
+	 dY1m9wnW1YVLAQ2jSfTjkhgvQ6i1u/wuyHlTPbZSHq41YML8QG52WYGC6+xb94VC9h
+	 Xz2fL4iCwWBUPHlZC2Yv7Q00LiZ9shKxIjwtqy7ywPRwUtWiNm4taC1cJtwZlLS6sg
+	 MYX/79AJnI87j/I2oxONqZPtBd3BWmqcdWjQM28S9L2ZqtiRz3Pdy67qjVOulJyurC
+	 sel7OyxzK8BHjQaxgbfNHgehIgE1l4Z+rk/hdBQ9OIdlxV684kRZ8ITUlsJF+Mfkdx
+	 KRg1xKFg4Gtzg==
+Content-Type: multipart/mixed; boundary="===============0714806253349847334=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot
- installs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177972421514.2623932.18366712575128006806.git-patchwork-notify@kernel.org>
-Date: Mon, 25 May 2026 15:50:15 +0000
-References: <20260517211232.1670594-2-tj@kernel.org>
-In-Reply-To: <20260517211232.1670594-2-tj@kernel.org>
-To: Tejun Heo <tj@kernel.org>
-Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, memxor@gmail.com, catalin.marinas@arm.com,
- will@kernel.org, tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, akpm@linux-foundation.org, david@kernel.org,
- rppt@kernel.org, emil@etsalapatis.com, sched-ext@lists.linux.dev,
- bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Message-Id: <d8cff7fda54cee7804535f32b9df53a6eee9d45b00acfac63296e8c4a110e1a0@mail.kernel.org>
+In-Reply-To: <20260524114243.259916-1-find.dhiraj@gmail.com>
+References: <20260524114243.259916-1-find.dhiraj@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Add kernel-doc for arena page kfuncs
+From: bot+bpf-ci@kernel.org
+To: find.dhiraj@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,alexei.starovoitov@gmail.com,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,emil@etsalapatis.com,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 25 May 2026 16:36:44 +0000 (UTC)
 
-Hello:
+--===============0714806253349847334==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> bpf: Add kernel-doc for arena page kfuncs
+>
+> The page-management kfuncs exposed by BPF arena -
+> bpf_arena_alloc_pages(), bpf_arena_free_pages() and
+> bpf_arena_reserve_pages() - are part of the BPF kfunc ABI but lack
+> rendered documentation. Their contracts (valid argument ranges,
+> sleepable-only context, and the set of error returns) are today only
+                    ^^^^^^^^^^^^^^^^^^^^
+> discoverable by reading kernel/bpf/arena.c.
 
-On Sun, 17 May 2026 11:12:25 -1000 you wrote:
-> Add ptep_try_install(ptep, new_pte): atomically set *ptep to new_pte
-> iff it is currently pte_none(). Returns true on success, false if the
-> slot was already populated or the arch has no implementation.
-> 
-> The intended caller is the upcoming bpf_arena kernel-side fault
-> recovery path. The install runs from a page fault and may have to
-> contend with locks already held by the faulting kernel caller, so
-> keeping it lock-free via cmpxchg is the safe choice.
-> 
-> [...]
+Is the description "sleepable-only context" accurate here? The BPF
+verifier supports calling bpf_arena_alloc_pages() and
+bpf_arena_free_pages() in non-sleepable contexts by dynamically
+replacing the calls with their non-sleepable variants.
 
-Here is the summary with links:
-  - [1/8] mm: Add ptep_try_install() for lockless empty-slot installs
-    (no matching commit)
-  - [2/8] bpf: Recover arena kernel faults with scratch page
-    (no matching commit)
-  - [3/8] bpf: Add sleepable variant of bpf_arena_alloc_pages for kernel callers
-    https://git.kernel.org/bpf/bpf-next/c/f211c81ddc36
-  - [4/8] bpf: Add bpf_struct_ops_for_each_prog()
-    https://git.kernel.org/bpf/bpf-next/c/7c48a28c1bbe
-  - [5/8] bpf/arena: Add bpf_arena_map_kern_vm_start() and bpf_prog_arena()
-    https://git.kernel.org/bpf/bpf-next/c/53cc12a2dc88
-  - [6/8] sched_ext: Require an arena for cid-form schedulers
-    (no matching commit)
-  - [7/8] sched_ext: Sub-allocator over kernel-claimed BPF arena pages
-    (no matching commit)
-  - [8/8] sched_ext: Convert ops.set_cmask() to arena-resident cmask
-    (no matching commit)
+Looking at the BTF_ID_FLAGS definitions, they do not include
+KF_SLEEPABLE. While the code documentation was fixed in v2 to reflect
+this, the commit message text was not updated.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This was flagged by both bot+bpf-ci@kernel.org and sashiko-bot@kernel.org
+in their reviews of v2:
+
+https://lore.kernel.org/bpf/a0b9a09127618cb4e3dd1aae92ef25aab9beb90bd533490ec5be7789420d9ef4@mail.kernel.org/
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26409601656
+--===============0714806253349847334==--
