@@ -1,157 +1,159 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3EC3E4C95
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 08:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F723E5584;
+	Mon, 25 May 2026 09:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779699444; cv=none; b=laDJ2sOpq/XeAvI+vqzabTvnVAa8v1H5hBH0BttKx2VSgTMQ1zEa5RMEsq+i8OPbq8WK9wG+DInBEcAhjVIpjAx/1OPndACMujjr0kjH5rtuEooYCE59AVUuiPAs3+Fzr+rgkh5b6HBufE/TJf447o16O/z4R26184BNvAfIi0Q=
+	t=1779699946; cv=none; b=Brich36AnOFAU34FfoGVdI8aXqJ+meJVfZaX4YHxfQk+Fh5/mKW9iz5IExVNFFv/fi7+9MmuUQplVrDhypl0D1x7pK1DHdrvjnxzu5okfVn5Ti/STZrdn/0/mkbJ7EF4SFa3+f/c1kh+Kt5FzRd40lqtqOPfqpF8IVKwSrIPsFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779699444; c=relaxed/simple;
-	bh=f3qr2WAjwbp+8HoJQLYnFKf5OJ7xyLwrZfLvH+wZhg8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O9D6xmYy70o+LoDUqHekuGzfXwsFGEtI6GoJD9v0tcxZhbkU7+g+5QVafPeywh26dXw19UhFZkZq6Y57kMcIl0+YvvmPTff817IdVRrApUhdYd16kD0vXJlq/InPkjFLCqPo4kssjnjRlfU6PJZFh+iqvOhEx9QKw8SHiqzcMoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gP8r53nqrzYQtkf
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 16:56:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 2FCF240573
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 16:57:14 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgDnRS7oDhRqpvsNDg--.36805S2;
-	Mon, 25 May 2026 16:57:14 +0800 (CST)
-Message-ID: <e116eaee-b911-4ddd-a8e6-2054083af03d@huaweicloud.com>
-Date: Mon, 25 May 2026 16:57:12 +0800
+	s=arc-20240116; t=1779699946; c=relaxed/simple;
+	bh=YGBgB8DKElrV4R88Fy3fqbu8+6iow6N9sAidpgWS8Vc=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:Mime-Version:
+	 References:In-Reply-To; b=r+7ZSwAg+s3VvmlbeQ6Kjr4rWyryda7WwHa1Pd+7phYh8PsAFPemaxvxziOgMUM2lGFPGsViPovwLPcjpeS6G0/8g2slQc9J4Xb67tLvZXkv46B1lsf0gFl1/gpnrU6N+ai7ZJ3V1vsYppcZ9SdexKmdlpjTCIkGalsUgdN9kbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Fx+Uvlj9; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Fx+Uvlj9"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 92C751A36AE;
+	Mon, 25 May 2026 09:05:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 54B44603DC;
+	Mon, 25 May 2026 09:05:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B71FC10812103;
+	Mon, 25 May 2026 11:05:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1779699932; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=EbTl273WowpTVFd0f4oge0/+s8K6R22iN2Gqank6L1c=;
+	b=Fx+Uvlj9hDV8t2hT+BbSnAxNsdOpOaJIechqvnvpMOkSitZzXRjbsdPmMEWqyKUFfSsFqJ
+	09p3+5rjCc8SD5giFz2CNAPnkmaK402kZ1+6NUodo6410UYt45sJg+eUEcarYV6jiVsG7K
+	3r7plioTNGCAIgXGCNJ+2+ZTHyduDJ07uQslX/NevZyhzexSjWxmYTd3uD3CWiJVY0Dx6L
+	1Io8kWVF0On9LOxU2++gFB1HzzqUg55GF2+VuffbtA126LB+ZWF26BfdlTvZICqiAoOO3B
+	zd+yqqxctwthai14JAAAUMFcgFwq3eBOVqm4oxh90R+vs0N3KX+iOH5nwmbVzw==
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 25 May 2026 11:05:16 +0200
+Message-Id: <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
+ Starovoitov" <alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf: Add return value check for BPF_LSM_CGROUP
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260523085806.417723-2-xukuohai@huaweicloud.com>
- <20260523094804.AE9DD1F000E9@smtp.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260523094804.AE9DD1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgDnRS7oDhRqpvsNDg--.36805S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurykZF43Xry7Jr1xCw1Utrb_yoWrGF4Dpr
-	Z3G390yr1DJFZFgwnrta1kZF1Fyr4UX3yrGr98Jr90van0qrWxJFyYgrWa934ayr48Cw1I
-	qF4jva9Fva4UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVj
-	vjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-3-1a5831230821@bootlin.com>
+ <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
+ <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
+ <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
+ <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
+ <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
+In-Reply-To: <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 5/23/2026 5:48 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> 
-> New issues:
-> - [High] The bounds validation for bpf_set_retval() can be bypassed by passing a pointer instead of a scalar, leading to the exact kernel panic the patch attempts to fix.
-> 
-> Pre-existing issues:
-> - [High] Bounds enforcement is strictly restricted to BPF_PROG_TYPE_LSM, completely neglecting other vulnerable cgroup program types like BPF_PROG_TYPE_CGROUP_DEVICE.
-> --
-> 
-> commit db7ea535b43831ef01a0cbacc405e0287e5dd010
-> Author: Xu Kuohai <xukuohai@huawei.com>
-> 
-> bpf: Add return value check for BPF_LSM_CGROUP
-> 
-> This commit adds validation for the return value set by the bpf_set_retval()
-> helper in BPF_LSM_CGROUP programs. It verifies that the provided argument
-> falls within the valid return value range for the target hook to prevent
-> kernel panics.
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 7fb88e1cd7c4d..fe60a695de558 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -10462,6 +10462,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->>   	case BPF_FUNC_set_retval:
->>   		if (prog_type == BPF_PROG_TYPE_LSM &&
->>   		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does restricting this check to
-> BPF_PROG_TYPE_LSM leave other cgroup program types vulnerable?
-> 
-> Programs like BPF_PROG_TYPE_CGROUP_DEVICE can also call bpf_set_retval()
-> with arbitrary positive values. If such a program returns 1 (allow)
-> after setting a positive return value like 1234, the value propagates
-> through __cgroup_bpf_check_dev_permission() and bdev_permission(), causing
-> bdev_file_open_by_dev() to return ERR_PTR(1234).
+On Fri May 22, 2026 at 7:13 PM CEST, Emil Tsalapatis wrote:
+> On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
+>> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
+>>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
+>>> <alexis.lothore@bootlin.com> wrote:
+>>>>
+>>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
+>>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Fo=
+undation)
+>>>> > <alexis.lothore@bootlin.com> wrote:
+>>
+>> [...]
+>>
+>>>> >> +config BPF_JIT_KASAN
+>>>> >> +       bool
+>>>> >> +       depends on HAVE_EBPF_JIT_KASAN
+>>>> >> +       default y if BPF_JIT && KASAN_GENERIC
+>>>> >
+>>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
+>>>>
+>>>> Meaning, making it an explicit user-selectable option ?
+>>>>
+>>>> If so, the current design choice is voluntary and based on the feedbac=
+k
+>>>> received on the original RFC, where I have been suggested to
+>>>> automatically enable the KASAN instrumentation in BPF programs if KASA=
+N
+>>>> support is enabled in the kernel ([1]). But if a user-selectable toggl=
+e
+>>>> is eventually a better solution, I'm fine with changing it.
+>>>
+>>> Let's not add more config knobs.
+>>> Even this patch looks redundant.
+>>> Inside JIT do instrumentation when KASAN_GENERIC is set.
+>>
+>> (with quite some delay) I think it would be better to keep this new
+>> BPF_JIT_KASAN, because aside from the possibility to use it in
+>> bpf_jit_comp.c, it allows to update tests affected by KASAN
+>> instrumentation in a nicer way. For example, the test_loader subtests
+>> that monitor JITted instructions are confused by KASAN. I can either
+>> skip them or make them smarter when KASAN is enabled for BPF, but in
+>> both cases, it would be nicer to just adapt the behavior based on a
+>> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
+>> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
+>> still does not make it a config knob, that just creates an internal
+>> Kconfig option that is automatically turned on when KASAN and JIT are
+>> enabled at build time.
 >
-> Since 1234 is not a valid negative error code, IS_ERR() would return false,
-> potentially leading to a kernel panic when the caller attempts to
-> dereference 1234 as a file pointer.
->
+> Having a togglable config knob gives us the option to set up KASAN for
+> the kernel but not for BPF, and I don't see why we'd want that. Imo we ar=
+e
+> already paying the cost of KASAN for the rest of the kernel, there is no
+> incentive to not run it for the BPF JIT. Having to eat the complexity cos=
+t
+> in the selftests seems reasonable if the alternative means a cleaner
+> interface for the user (preventing them from choosing an unreasonable
+> combination of options).
 
-Good catch! Confirmed with a PoC.
+Again, this does not expose a togglable knob, this is a purely internal
+kconfig, automatically enabled if CONFIG_KASAN_GENERIC is set and if the
+architecture-specific Kconfig defines HAVE_EBPF_JIT_KASAN (since we want
+it for x86 only), and there would be no way to enable KASAN for kernel
+only and not for BPF, or the other way around. What I am proposing is
+just an internal, architecture-agnostice kconfig to avoid conditioning
+some selftests to any architecture.=20
 
-> Should we extend this validation to all cgroup program types?
-> 
+Alexis
 
-I think so, will do.
-
->> +			struct bpf_retval_range range;
->> +			struct bpf_reg_state *r1 = &regs[BPF_REG_1];
->> +
->>   			if (!env->prog->aux->attach_func_proto->type) {
->>   				/* Make sure programs that attach to void
->>   				 * hooks don't try to modify return value.
->> @@ -10469,6 +10472,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->>   				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
->>   				return -EINVAL;
->>   			}
->> +
->> +			bpf_lsm_get_retval_range(env->prog, &range);
->> +			range.return_32bit = true;
->> +			if (!retval_range_within(range, r1)) {
-> 
-> [Severity: High]
-> Can this bounds check be bypassed if a pointer is passed instead of a scalar?
-> 
-> Because bpf_set_retval_proto uses ARG_ANYTHING, check_func_arg() allows
-> pointer registers when env->allow_ptr_leaks is true (which is the case
-> with CAP_BPF).
-> 
-> If a pointer like PTR_TO_STACK is passed without a variable offset,
-> its s32_min_value and s32_max_value are both 0. Since 0 falls within the
-> valid [-MAX_ERRNO, 0] range, retval_range_within() will allow it.
-> 
-> At runtime, the 64-bit pointer address would be truncated to a 32-bit integer,
-> potentially yielding an arbitrary positive return value and causing the exact
-> kernel panic this patch intends to fix.
-> 
-> Should the verifier explicitly ensure that R1 is a SCALAR_VALUE before
-> validating its range?
->
-
-Yes, will check if R1 is SCALAR in next version
-
->> +				verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
->> +				return -EINVAL;
->> +			}
->>   		}
->>   		break;
->>   	case BPF_FUNC_dynptr_data:
-> 
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
