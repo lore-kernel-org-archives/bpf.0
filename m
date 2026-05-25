@@ -1,144 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D82305677
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 23:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C652AD2C;
+	Mon, 25 May 2026 23:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779750693; cv=none; b=Lco6drrw/Y8RbufPDGsl1FnkR12oROnnSmwrnAR+44aaikw/pbvMkLx3DeZCvoR2ADGBiiOmdM8ewSekoNAG/kom6vDctjomoiyF5xA4s2BCvHZVi/bnXxHy8wux5gxkdapgGNBE9dKpWvOwlq1Zl5qLnM+WVuoTwGJ2eBucCtk=
+	t=1779751055; cv=none; b=HwelAKSyIfjIxomJrtBRgEY/pLTxAziOiv3xeccSGTspCKQTnhqUhag2SdpC7Qo2YwjLAM2tcGjjsZRkSFMFm1WVVKOFce/dHIEXNSYAFVxseBVaTczmf+zajh/5LLdInnjhsUjr1CqprUWGghiH0QHVpF+SKArkPThBUjYsWvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779750693; c=relaxed/simple;
-	bh=+0mwPhzTIenyX59ZkA3eWcZMC/NSDmRUeM0ohrWwzYM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mFtqDE3u6mXPviPS0QqLsUhP5EZcTdPtYwgKBvOAkkTFOicv7KKzZOuphllg9D4XV3mnLYmOp/y33MAm17Ex5t8xGswmC6pcHISSXFdLCjy9ZYQyVVAxyvCNlItl55gOr0Pl2XYVmAaJmAMLqaJYZTY7eEGA4DzJjUEl5AaCErM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=na+bMHoa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779751055; c=relaxed/simple;
+	bh=+gZCWH6NmPkj93kThXkzkE8RXtU+epCU76X8ys27mVI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=INkPlC09d/d39NfmNFw4KTJMjMy5YPp3oOf5yDboHBt9jFvQNCQhxxMw8jPtxkqCv4ICO6NhZn/wAgcBmIVXaSnQFLUVJrBc0//TZmU4iPQBkRHhO3x39Mq92zQ4hsZYkxKOeaZ/eObFORHsUjs8jrVJXfKdPr6N8sVyhPrLkPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W12NhCIi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="na+bMHoa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895201F000E9;
-	Mon, 25 May 2026 23:11:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W12NhCIi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC461F000E9;
+	Mon, 25 May 2026 23:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779750691;
-	bh=+YJ+oiTLCYjniqGJ/xO5m7rYAInNKxkT0fya6901onQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=na+bMHoaeUnsAdkJI7FcKCxru4NC11UYh/deUvq2AL9b13DMBJKBE2BO9/XBb1Gbw
-	 +eEwrtHE4FGcB5tOK3lbEis10e1+O5zT18s+JUoxsHsL/WobG6k7H3/DkhWykmmiKU
-	 ANweOtV4MQ2+lQ5zrJOcLNRfaigqflF0Ol48hC4PGzD/p+GBMUIszqqmr4uZpkS58c
-	 2IeaEwG5LRCMdCjTGpJSqUUMURqOuVvncvVfrBoxnAi+yFkplcE0jl1hq6jlPXnCrM
-	 zCcn7nT78lqyBk7NHzNj4FYpdViC1beVhWAXTq4+u57QtxRCHntlwfar02ezYzJbFD
-	 +gOFVFQY0pW6A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf: Factor out stack_map build ID
- helpers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260525223948.1920986-2-ihor.solodrai@linux.dev>
-References: <20260525223948.1920986-2-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 25 May 2026 23:11:31 +0000
-Message-Id: <20260525231131.895201F000E9@smtp.kernel.org>
+	s=k20260515; t=1779751054;
+	bh=Dwl6ydZM/8zB2TIBPrd8gXE7DHTIdqyKikZ8RPJEhb8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=W12NhCIia7qpznW+As4LMNmwpyibjCxLdWCIJi8MjkJ7NGUIqLY5vBxkYfcmzoH7+
+	 dtSZv1F0ejP558VPDR04kuK4vvn0CtEgIknYCp1yk0Ni/HM8LFkiXZ1z+9Y0gY400V
+	 RjUVQDtOWUKj1bjBegoCH9uI4zSb352EUzETT7wbxP+wXv1jxOPWKIgugqf0dDXBDH
+	 ctsqgRSSG3Zp8U33hiT//lA5jlI6knnes3Hf7iT0u4FzYzGLlRB7UrQZWXv0GAK7Ad
+	 Ofw4qD0Gv8C0C4Jm8cIAM0GnIMkaakUvhvGWGUWwwPKR3xl7icYYAwt2ieqw98HCjA
+	 33u/FmSG+R3Rw==
+Content-Type: multipart/mixed; boundary="===============3593931110788409390=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <d08bc35721d0745ccc6f281763df6bf8b638883399746f401594dff72eee805e@mail.kernel.org>
+In-Reply-To: <20260525223948.1920986-2-ihor.solodrai@linux.dev>
+References: <20260525223948.1920986-2-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v7 1/3] bpf: Factor out stack_map build ID helpers
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: puranjay@kernel.org,shakeel.butt@linux.dev,mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 25 May 2026 23:17:33 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The refactored VMA caching logic bypasses the cache for fallback=
- cases and evicts valid VMAs, directly contradicting the patch's stated goa=
-l.
---
-
-commit e38559ed451d61a994765f3bfb260cc14edd3569
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-bpf: Factor out stack_map build ID helpers
-
-This patch refactors stack_map_get_build_id_offset() to use helpers and
-continue-driven control flow. It also attempts to optimize VMA caching
-by updating the cached VMA on the fallback-to-IP branch to prevent
-redundant parsing attempts for anonymous or failing VMAs.
-
-Link: https://lore.kernel.org/bpf/CAEf4Bzac9uWWqBvzH0iFzKvJcq3vxscZ3pKm0sUH=
-mN-F-z9wVQ@mail.gmail.com/
-Link: https://lore.kernel.org/bpf/226398c1ff3f2b686c0aeb010408d85fb15df13f9=
-ff60a045bee31e79b9e41e9@mail.kernel.org/
+--===============3593931110788409390==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index da3d328f5c15a..e23be7d445038 100644
+> index da3d328f5c15..e23be7d44503 100644
 > --- a/kernel/bpf/stackmap.c
 > +++ b/kernel/bpf/stackmap.c
+> @@ -152,6 +152,28 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+>  			 : build_id_parse_nofault(vma, build_id, NULL);
+>  }
+>
+> +static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
+> +{
+> +	id->status = BPF_STACK_BUILD_ID_IP;
+> +	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
+> +}
+> +
+> +static inline u64 stack_map_build_id_offset(unsigned long vm_pgoff,
+> +					    unsigned long vm_start, u64 ip)
+> +{
+> +	return (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
+> +}
+> +
+> +static inline void stack_map_build_id_set_valid(struct bpf_stack_build_id *id,
+> +						u64 offset,
+> +						const unsigned char *build_id)
+> +{
+> +	id->status = BPF_STACK_BUILD_ID_VALID;
+> +	id->offset = offset;
+> +	if (id->build_id != build_id)
+> +		memcpy(id->build_id, build_id, BUILD_ID_SIZE_MAX);
+> +}
+
+In bpf_get_stack(), the destination buffer can be a BPF map value that is
+concurrently readable locklessly by user-space. Since the buffer initially
+contains the raw instruction pointer (ip), does setting status to VALID
+before writing the offset create a data race?
+
+A concurrent lockless reader polling the status field might observe the
+VALID status while the union still holds the raw ip instead of the correct
+file offset, and before the build_id string is fully copied.
+
+Prior to this patch, the offset was written before the status. Could this
+reordering of assignments cause concurrent readers to observe stale data?
+
+This was raised by sashiko-bot in v6 review and acknowledged by the author
+as needing to be fixed in the next version, but was not addressed:
+
+https://lore.kernel.org/bpf/20260521231600.E14FD1F000E9@smtp.kernel.org/
 
 [ ... ]
 
-> @@ -165,44 +187,45 @@ static int fetch_build_id(struct vm_area_struct *vm=
-a, unsigned char *build_id, b
->  static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_=
-offs,
->  					  u32 trace_nr, bool user, bool may_fault)
->  {
 
-[ ... ]
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
->  	for (i =3D 0; i < trace_nr; i++) {
->  		u64 ip =3D READ_ONCE(id_offs[i].ip);
-> +		u64 offset;
-> =20
-> -		if (range_in_vma(prev_vma, ip, ip)) {
-> +		if (prev_build_id && range_in_vma(prev_vma, ip, ip)) {
->  			vma =3D prev_vma;
-> -			memcpy(id_offs[i].build_id, prev_build_id, BUILD_ID_SIZE_MAX);
-> -			goto build_id_valid;
-> +			offset =3D stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip=
-);
-> +			stack_map_build_id_set_valid(&id_offs[i], offset, prev_build_id);
-> +			continue;
->  		}
->  		vma =3D find_vma(current->mm, ip);
-> -		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
-> +		if (!vma || vma_is_anonymous(vma) ||
-> +		    fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
->  			/* per entry fall back to ips */
-> -			id_offs[i].status =3D BPF_STACK_BUILD_ID_IP;
-> -			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			prev_vma =3D vma;
-> +			prev_build_id =3D NULL;
-
-[Severity: Medium]
-Does setting prev_build_id to NULL here inadvertently defeat the VMA caching
-optimization mentioned in the commit message?
-
-The commit message states the intent is to update prev_vma and prev_build_id
-on this fallback branch so the cache reflects the actual VMA seen. However,
-the cache check at the top of the loop now requires prev_build_id to be
-non-NULL:
-
-    if (prev_build_id && range_in_vma(prev_vma, ip, ip)) {
-
-Since prev_build_id is set to NULL on failure, won't consecutive IPs falling
-into the same anonymous or failing VMA bypass the cache completely and trig=
-ger
-redundant find_vma() lookups?
-
-Also, does overwriting prev_vma with the failing VMA while disabling the
-cache hit (via NULL prev_build_id) evict the last successful VMA from the
-cache, potentially degrading performance if stack frames interleave?
-
-> +			continue;
->  		}
-> -build_id_valid:
-> -		id_offs[i].offset =3D (vma->vm_pgoff << PAGE_SHIFT) + ip - vma->vm_sta=
-rt;
-> -		id_offs[i].status =3D BPF_STACK_BUILD_ID_VALID;
-> +		offset =3D stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
-> +		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
->  		prev_vma =3D vma;
->  		prev_build_id =3D id_offs[i].build_id;
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260525223948.1920=
-986-1-ihor.solodrai@linux.dev?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26422948694
+--===============3593931110788409390==--
