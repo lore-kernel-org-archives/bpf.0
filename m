@@ -1,186 +1,81 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168103AA1B5
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 09:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388881CFBA;
+	Mon, 25 May 2026 13:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779700824; cv=none; b=TQL0mrhF82Q2VS05e1T2gLL+Ew4pP198hF2MMWsfl4/PhyzBFRXAHU/k1zlvlAFj+Zq4Czdxk7VUcEFm56zxP8VzNag8YsnIDRLmRhx/ZV8AVnVZdRE7Ae/ae1hBsoMLTVr+pPC4xI6hm0Ofnz6tHEYUIGhgRvx8wgoi7EudzVc=
+	t=1779717206; cv=none; b=eRKvU0iasMd2rvVg+paxaq46qOJ3GsmJ1P094N57gODeCZzB08vE5UTMKDgJgs8c/AuUof64GBYEM3W/Rzp61ysj1qw68YswzTbU3jex3YuWDWRVN4OF0yWd8Nz1t4xs3R6fl6bx+Hs+zvvIE6aRiRWWSR992YDZSXJUYwWQMUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779700824; c=relaxed/simple;
-	bh=eoIjGVys9Sm423vlMOv8UCXJnx7/3ydXByfeim9xswM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=REJbcgSGv00U5Hm49diYriW61h0gN8SAMeBtc/HEqr5UewqrayNZoto4sW5OHWOgTAKORKU2DO/1in6ePWsRSFuh9j+DLdt5faxEwn2FlfqBgT6vT3rbwZwkS+RerU0oI9NFm0h9I46cXtoiRvQHDv+X+DiavVkDVmOZf7Ve5UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OH59pHa6; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779717206; c=relaxed/simple;
+	bh=bjoUdqXw5ZZA2qoB+sLV+XrCCuZWsgMzhcFViEhm+EY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=A2DhANjhc9mCYIXyzJ/vg3vtsHwrhdXnVIGTKTpx6Zrdmlfn0BXB1SDS4ci2UW8aJqoXO7QCaJYBilmzcbzlo6LD/tXIgJHOdW5QtTVNDYdI26oOzqvRBSmzKwBDLKK6FH328zOmFZhoC6eKKiSFAdyy4Kxpoq6shXtrJAuyCYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZofNUtFm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OH59pHa6"
-Message-ID: <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779700821;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I+eeKht/TCorkLGr3qhDvSA2GY+v+dhddDd9N0vNzJE=;
-	b=OH59pHa62MLKpHXZDcV2HRLnP05+4v/mrvRglfb9zsZzOs1bKreXTAkRoNQHcu0IqeX676
-	XTiCCd/6bbr+UF9Vf82QkM0m5F3TDLkg7IQ/pewetU4wAtr2j1XfO7JMmeP4uHivpiUUPk
-	t6EcMPSXbRAcyWoZuhDYh5LeQ6Bnwbw=
-Date: Mon, 25 May 2026 17:18:53 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZofNUtFm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24481F00A3A;
+	Mon, 25 May 2026 13:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779717204;
+	bh=0qi46Rt48Kr9CUNAuhE8+AogLbpV9sC1dRJVHiMwYPc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ZofNUtFm5U/XV4i9kVPHrrDIXF9313RyDI8LJtiwZSy9/VhGCaigGL6511xRPjTtS
+	 VbsCFniamG+JHdoMqb3VHy0QF9svac365gfi3bRU804rnpYgUIsCe1aksCmXhsp55X
+	 2ArU1lADUxPY8Ysx16tJ0PzesohFt8ilBMjWcKzs0rHbwZjfHSAtzs5gajQ48yQ9P1
+	 6f836RPtX0W1yiiLlo57ydsr01vaaRXFZHLiFY4+2OyosenF5uFoOswutUbPxqw+vT
+	 wDq0yb4p90aVyNabCjOeX0ezVG3PI0np44ocTc6tGPJvCdX+p5El8uP89EkNlzyzcS
+	 wkWPXq4ZXBzGQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0ECC380AA60;
+	Mon, 25 May 2026 13:53:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: Song Chen <chensong_2000@126.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
- alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org
-References: <20260524082944.10625-1-chensong_2000@126.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <20260524082944.10625-1-chensong_2000@126.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH v2] cgroup/rstat: validate cpu before css_rstat_cpu()
+ access
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177971721165.2579362.15091579325825161865.git-patchwork-notify@kernel.org>
+Date: Mon, 25 May 2026 13:53:31 +0000
+References: <20260516070849.106141-1-a0yami@mailbox.org>
+In-Reply-To: <20260516070849.106141-1-a0yami@mailbox.org>
+To: Qing Ming <a0yami@mailbox.org>
+Cc: tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk, hannes@cmpxchg.org,
+ mkoutny@suse.com, mhocko@kernel.org, roman.gushchin@linux.dev,
+ shakeel.butt@linux.dev, muchun.song@linux.dev, akpm@linux-foundation.org,
+ ast@kernel.org, haoluo@google.com, yosry@kernel.org, cgroups@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, bpf@vger.kernel.org
 
-在 2026/5/24 16:29, Song Chen 写道:
-> I had an ebpf program which calls a kfunc defined and
-> implemented in one of my kernel modules, it was working
-> fine in 6.16, but was rejected to run by libbpf in 6.19,
-> the error message was:
+Hello:
+
+This patch was applied to bpf/bpf.git (master)
+by Tejun Heo <tj@kernel.org>:
+
+On Sat, 16 May 2026 15:08:49 +0800 you wrote:
+> css_rstat_updated() is exposed as a BPF kfunc and accepts a
+> caller-provided cpu argument. The function uses cpu for per-cpu rstat
+> lookups without checking whether it refers to a valid possible CPU.
 > 
-> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
-> incompatible with vmlinux [94389]
+> A BPF iter/cgroup program with CAP_BPF and CAP_PERFMON can pass an
+> invalid cpu value. On an unfixed UBSCAN_BOUNDS test kernel, cpu ==
+> 0x7fffffff triggers:
 > 
-> The reason is there is a new added kfunc in kernel 6.19
-> which happens to be the same name with my kfunc. However the
-> error message is not obvious enough to address problem
-> immediately.
-> 
-> Therefore, this patches searches duplicated kfunc in
-> both btf_vmlinux and btf_modules list before a kernel module
-> attempts to register kfuncs through register_btf_kfunc_id_set,
-> it prints clear error message and returns error code if same name
-> kfunc has already implemented and registered, then developer
-> knows at the first place.
-> 
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
-> Signed-off-by: Song Chen <chensong_2000@126.com>
-> 
-> ---
-> changelog:
-> v1 --- v2:
-> libbpf has already specified which module this kfunc belongs to as
-> ebpf code onwer's expectation, then verifier uses
-> find_kallsyms_symbol_value to search kfunc's addr.
-> 
-> v2 --- v3:
-> After v2, I tried a new idea of introducing a namespace in libbpf
-> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
-> please see [1]. Alex suggested to go back to report an error during
-> kmod load on conflicting kfunc name for now. What's more, v2 only
-> searched bpf_vmlinux, v3 also traverses btf_modules list.
-> 
-> [1]:https://lore.kernel.org/all/CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com/
-> ---
->  kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 43 insertions(+), 1 deletion(-)
->
+> [...]
 
-btf: reject to register duplicated kfunc
- 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 4872d2a6c42d..a14ad3720872 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
->  	return 0;
->  }
->  
-> +static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
-> +{
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +	struct btf_module *btf_mod, *tmp;
-> +#endif
-> +	s32 id;
-> +	int ret = 0;
+Here is the summary with links:
+  - [v2] cgroup/rstat: validate cpu before css_rstat_cpu() access
+    https://git.kernel.org/bpf/bpf/c/8817005efbdf
 
-This ret variable may be unnecessary.
-
-> +
-> +	if (!btf_is_module(btf))
-> +		goto out;
-> +
-> +	id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
-> +					func_name, kind);
-
-It seems unnecessary to split this call across multiple lines. Also,
-some of the continuation-line indentation elsewhere does not appear
-to follow the kernel coding style.
-
-> +	if (id >= 0) {
-> +		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
-> +					func_name, id);
-> +		ret = -EINVAL;
-> +		goto out;
-
-return -EINVAL;
-
-> +	}
-> +
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +	mutex_lock(&btf_module_mutex);
-> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> +		if (btf_mod->btf == btf)
-> +			continue;
-> +		id = btf_find_by_name_kind(btf_mod->btf,
-> +					func_name, kind);
-> +		if (id >= 0) {
-> +			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
-> +					func_name, id, btf_mod->module->name);
-
-follow the kernel coding style
-
-> +			ret = -EINVAL;
-> +			break;
-
-mutex_unlock(&btf_module_mutex);
-return -EINVAL;
-
-> +		}
-> +	}
-> +	mutex_unlock(&btf_module_mutex);
-> +#endif
-> +
-> +out:
-> +	return ret;
-> +}
-> +
->  static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
->  {
->  	const struct btf_type *func;
-> @@ -8631,7 +8672,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
->  
->  	/* sanity check kfunc name */
->  	func_name = btf_name_by_offset(btf, func->name_off);
-> -	if (!func_name || !func_name[0])
-> +	if (!func_name || !func_name[0]
-> +			|| btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
-
-follow the kernel coding style
-
->  		return -EINVAL;
->  
->  	func = btf_type_by_id(btf, func->type);
-
+You are awesome, thank you!
 -- 
-Thanks
-Kaitao Cheng
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
