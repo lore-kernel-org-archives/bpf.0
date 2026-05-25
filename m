@@ -1,150 +1,153 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF9E3F4100
-	for <bpf@vger.kernel.org>; Mon, 25 May 2026 15:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779723873; cv=none; b=B98xBluG+HkGx4GH66q54SqPBctUmQ1zGRG3K7K7zcjvpxxbnmBpVeSSrMhVPEiCn50mDvnStbDT1OBYEFyR+fTs74l4KZ+PE3qAmagNCb+8C0PZ3KeJ/+8zbRIzeYFrwXEbF1DgLxaxvyWRLRk43ADOIiyhIloZxopfESysiZU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779723873; c=relaxed/simple;
-	bh=8I//0fF31shqnHdQVH3tf8VYjvF+jvSDARogBpqIyJ4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aiD+pp/arz+G3NkpXM4z9iK5dJhvUlIo5mUmzJTaZBZH10scyaVunGR2xYnVcq2YTibItGdZFbT5tyimgn/YHpfwMOok+K5f6IM5Nr2jf3qXB3euW8f7OeMKJHNxNq3EGHjJ+wGb3XNoxLbC2UkQFfv7N7mjFugG677HyMy4U2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUMl9iAp; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA843F54DF
+	for <bpf@vger.kernel.org>; Mon, 25 May 2026 15:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779723933; cv=pass; b=R7zyafNeNouVwnwtqj2PRSrFHV38SrRmxVvy4J1b4AP2a92occfSsU0KKGRnT02qwQiS+AsqUAdekgJSLXrCr2/o4RptkqK0bPxzzAWXfYUnS9Q2jqAg8lgIKUX734Zp2zirnus/5nZWo66LZTj3PN6BiwGHF0RzC+hLjGL/dbE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779723933; c=relaxed/simple;
+	bh=K1bIRSu1qsTH0QLG5z+7HNXdx36VKK8jxuEIgQjNPag=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JcJ3e//7vIYqImWidfdt/ET035HfMcbaaL7pwdXPuf+Ne9bQYXluJwm8K6ySix0zXDp4YLlSLBI2VVLNtDSinY6ORSoU6z97PrdDxA71it7h/eMrEiZGjSpFqhvduhc4RA43jIAZFKkXzj6c+MxU0cNnWwgcc9nBmPGFkdm3AnI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6pgB3Wt; arc=pass smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUMl9iAp"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-49039a8851fso40857405e9.2
-        for <bpf@vger.kernel.org>; Mon, 25 May 2026 08:44:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6pgB3Wt"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-44dd5cb0f81so7031102f8f.0
+        for <bpf@vger.kernel.org>; Mon, 25 May 2026 08:45:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779723931; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OqxFxJLHpMjKOliLo510NH3NEYsHhOEVIaqT57rWOpdFIsserGHXjtGaXddkaoD8eM
+         4HBlYUG+2dKNJJD7kYSGUQVHQpn8l6aJksFz4UliFHcjgMr0cT79hK1Rc8gxAmPPrIH2
+         sf+iGmvqjWVND28ZUzrE6xNI7ubQ/YI5BPH5uMoOi10TcZxZRW0QXbKAWdX9H31/Vmc8
+         QKylTzmNyNE1p46bbLs7/P8cGjxjfuxpTTR4EpREpfsZRDz8dPNT4O0+jOD/RSgAfctL
+         K4Pk5IG/aD74YzWoryIbk5bhNXaJoFpv0Bbz3RW9KGisFLhGMhDapc150JbDiUtkAl8J
+         xaLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v/KJeVQcoYJeZ7NEMluoiY5LeaLQ6MRIkXZPWciIjMs=;
+        fh=Jf/U4DUc6ciPl6SikLFsyhnRzyx7oUjddyDlQPw4ZS4=;
+        b=P587LPZRMebt//neAcy7RYZ/525arvAcPUyfyI5oyEQeK2Dmba1vtzCtHKIYZ9fDui
+         ym6PXbF5Lf0j6Mm1OAYSy3jRFCqoZuOpbsY8dq2FgUSVV3Tnjh0EaQGtzAqwNvC8pcEz
+         xgP+SftQC3J25PSOg6fiJfZbIKDoPjSUcdT+wiWjT9YP1Mz9Ukjdyi5AxecrTv12HbA3
+         hGK8IY1LxLvswb0jQ7Bu35YNz6w+xM9YrgZw4BhJdA5kf4/DPkLzQ7tnOQpOiIEf4Rjk
+         XBGpS++kCbl39E0bdZi7MPtGCnAapDYbYNVtqyTg8bKiHyLLwiwqixT37rvVju/XFBUH
+         54aQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779723870; x=1780328670; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GbnAv3QXs5/3MlM8KeCmv8axZFk210oLn3UWBRtrOME=;
-        b=iUMl9iApVVHRPDOv5VUDQJJJoyHt3Ejn8fAMYik8e4TQoADQwwoFxxusE8zzWkSFeq
-         Ty8DTakXd3gGkbTDc/VT5yrRwqHHWxFwYXxq+I71xLBG2+iP9m6wvTmg24+YvcA0XETb
-         VVHd5p6EESr4gEpJfSpWjdOjyjDPzhUCOz/A8qyL4rDPvmTyHaJeXL2ywIXKgGs/RIq7
-         8baYGqu1ojlH/16PmCUtCF98PNKjZBiEpyJ3zSZ0EIf+GEwOx33VqQmKqT8SMFrQ6M5A
-         g7a5kEh9Y8g9fisV1wYZc/tPajXyoil5KKBxyBQXff/EFj6mlSQzv9el3enNWBqitaCY
-         JHzA==
+        d=gmail.com; s=20251104; t=1779723931; x=1780328731; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v/KJeVQcoYJeZ7NEMluoiY5LeaLQ6MRIkXZPWciIjMs=;
+        b=M6pgB3WtvGwGn8rQoRvcnuXC2ILRMa2oPTiRP7pwyH2+k5pDnttK1tey8WtVL6KGok
+         R3O577yYDyvA0GlLBr6F8ptAUTk0E0rXtRu2xw5GS/c+Z+Fau6z1gXJuwFXVEq9OGxov
+         iBpayiKL+SdnU9KdyUNJsXMu0wEai/Rp6OxTd5Asy4dAZWnClKPncksgTYBfZl/UQchb
+         37OWwFOPInEXlEx+Qtc2N48tMly0eA/U0M1Bo43Mt0O4cMVUx8DNIDnIz+cuRMzfiyt3
+         +y9gzTsbJBKlwG+OZvQl6UZwi7ZL+Stev0yaIdho6BZpf74SdDWSObUr3ORXUln0r98H
+         EBFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779723870; x=1780328670;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbnAv3QXs5/3MlM8KeCmv8axZFk210oLn3UWBRtrOME=;
-        b=TVtitB+EwBtFdx8PFSKcqyK9S7vNZwkFCoVpu9+rJRohVuzVKrdAxF0O5lH7Kz65fg
-         fbat10RWattYvVs/IU2BeauM0K8HetDuaLPZTIhn9wQ+rMOA+RLZw7oiCcPle9/Jp5No
-         BeqauDSxECBUy4CEPoiQqYFX2Cu49w5BVvWmXtSfi+1BgDz4g8gIHh6yhdudj5xkdAjL
-         0MU2PqzXMCW2g1PFV32qDWXOE+63vpRqQw09iZH6/1niK8KRE18biGnEhAxgdrP5f1Rp
-         w3Wx3AL6Gbw8l4TLIAkGstO1wRWiLCFoB6zKbaahv9VRhqdjiHyT05NhbztdS4XxlWxe
-         aMHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/sRFqI9I8xfcGcF4qEoNKr7hSzz8F/rl92SLNktAq0L/w8InXBXZHz8y4JUhck4wAAjq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ7JOp3bXdcY3OCFe/Enk2/ii/F5VDJyHlMtHU1OMEGa0uggLN
-	3MTibNdBc4b4n65gyQKYPHYwbAw8TE3/LwKdHBGWaUExMorcr0IOE38z6j/5p1EI
-X-Gm-Gg: Acq92OF+OTw9hwLrKnnX1zY5DdHhiLdxT2Hj7BZVhUEpm+HeCR5WSt3LzRROjGzP3iO
-	iQ20PHFj9N5wmbSXJK+2Qne4bLkSt9E6efNsW/SjwnNDa+CbUpqR88kdg02eqUXWCwd7HKtYCOV
-	keXHQVzX7J/Oc2PMOVrswDawKc5YzVze+h3rdzlo1e3CynAYuliYHbOLJhlwGxrCcJy387N/uxN
-	Sb2XoeHknseyNabhfJ60+ZYjXle597fwjxgXhEhwXyRPHce1O0VFQOwy++h04/pIlMTfJXmlDGK
-	DYJQzZTz0EJmRjqid8jgNcs0p9412lyqJdhd7N04ogEg1VEe2n6KeEaf4C3HooYxvyyja5M+rvD
-	K+ric8+Mg3WCQwNdGHQblCFonU5l8xS5PFARDdyCtN5U+li9jDtKILsIwxAnyoLbJu75Rytg0aA
-	qevhBnJwTryQm8drLVML5oHA==
-X-Received: by 2002:a05:600c:a012:b0:490:5191:6e26 with SMTP id 5b1f17b1804b1-490519170bamr183269425e9.18.1779723870241;
-        Mon, 25 May 2026 08:44:30 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d48e23sm27013607f8f.20.2026.05.25.08.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2026 08:44:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 25 May 2026 17:44:27 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 08/12] selftests/bpf: Change uprobe syscall tests to
- use nop10
-Message-ID: <ahRuW4IfVZgyps5k@krava>
-References: <20260521124411.31133-1-jolsa@kernel.org>
- <20260521124411.31133-9-jolsa@kernel.org>
- <CAEf4BzZn0NvNwuPdh10z+MAdw-9K6CgZ0XnAL0J4XRpQHhFv2w@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1779723931; x=1780328731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=v/KJeVQcoYJeZ7NEMluoiY5LeaLQ6MRIkXZPWciIjMs=;
+        b=GGNMEquCCf3iBQtW6Ar/+c7NM9Dlg5PQGVjBS3HmoWb7GBvjKr7bb06meVM/8QyF5u
+         fFD4E1KlAyHL0iz2Ji/hGHlsrkr7Xdgptan1y5yACs6qHqG/MOWacJIi/6pjJAkSPNYo
+         df6Y+j2U0MGPjQ3xEWCwuhmiwJ9zJY5k0nqbcwCOBVXRY2wfErMV7mw7mXYk/wMxjfKH
+         qfzdDjvEUkFP31db7FK+C8+DkrmLP6P4yNNU5StQEdgEArNusk+MNAFmt6MWxfJ3+DcX
+         m0NLx8XYYPoUocsbdGmXnKVxPrpy24qSMB1GAJ0r3Ron0shqi6loDvLh0E9TSxyYvXAx
+         SO0w==
+X-Forwarded-Encrypted: i=1; AFNElJ8JowHg1oGSk79i9uEZy26f4H50mKxApVGd31I/Lo7ToeimOgx1ShM0f/yUKsiz2NKEin0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpawGhXBqeuWfUovq/xmxzTEnkj/cOrHv9tS90KEk+FebzS32B
+	V+ZxXSrY5Tei9LbJzyTrQjGx99NuBvpGedbcJsOhmyKMuFOCqy6BgK2t2Nh+M1u3JpAZiQy6kcn
+	6zFkNBnaJhMkNvLXlrGAjZUmOSpccYbs=
+X-Gm-Gg: Acq92OEozoJmziF3hVqhuktw1OKtQJRW+yZsg+d6F2MOqSkSJjXITH7TjsegonQ3QGT
+	gTsO427FJernK+wuPyHm5LHJ8gkVqDAa66WAB0MCc7KDkWNc560vdZVBp69D/T+qPh33piCYKCT
+	NYcVbjbEiTQv7xo2rYwsSsqCV24Y3jmKEytsw/6exI6Ywcf5B7+LOxihdYlOT7mtII2bky6B3m5
+	OEFQ/DCqOqsLYN0iJynGYe6hhmU0SSgSxxh8fXp/uBIsxgxLhrfXxY3ReiykmApn9Wkld2Xk0kk
+	S/hzmsuexrltK45+a86ZrTQMRUA5p3Qz7CTAyd2IL3WUrOlW8ycfopBM3u2f6YLCJGvNMJ2s0Er
+	ckZzTk2s+s7cH0RdQhdfrYLhFO6D68ohB+De3
+X-Received: by 2002:a5d:59ae:0:b0:45e:8526:7dcb with SMTP id
+ ffacd0b85a97d-45eb30deecdmr22155169f8f.7.1779723930477; Mon, 25 May 2026
+ 08:45:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZn0NvNwuPdh10z+MAdw-9K6CgZ0XnAL0J4XRpQHhFv2w@mail.gmail.com>
+References: <20260522172219.1423324-1-tj@kernel.org>
+In-Reply-To: <20260522172219.1423324-1-tj@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 25 May 2026 08:45:19 -0700
+X-Gm-Features: AVHnY4IIG790PDlY0_eU6bDIBpmGdEOYyU8PJIW44rY53Ae4UthkEJDV1ZzBOrU
+Message-ID: <CAADnVQJ2r6qYRw-kRe-55Pwg9zAhj7SQkOd_eH=JSAyBFKKymg@mail.gmail.com>
+Subject: Re: [PATCHSET v4 sched_ext/for-7.2] bpf/arena: Direct kernel-side access
+To: Tejun Heo <tj@kernel.org>
+Cc: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, linux-mm <linux-mm@kvack.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 22, 2026 at 11:57:04AM -0700, Andrii Nakryiko wrote:
-> On Thu, May 21, 2026 at 5:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Optimized uprobes are now on top of 10-bytes nop instructions,
-> > reflect that in existing tests.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  .../selftests/bpf/benchs/bench_trigger.c      |  2 +-
-> >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 28 ++++++++++---------
-> >  tools/testing/selftests/bpf/prog_tests/usdt.c | 25 ++++++++++-------
-> >  tools/testing/selftests/bpf/usdt_2.c          |  2 +-
-> >  4 files changed, 32 insertions(+), 25 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> > index 2f22ec61667b..a60b8173cdc4 100644
-> > --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> > +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> > @@ -398,7 +398,7 @@ static void *uprobe_producer_ret(void *input)
-> >  #ifdef __x86_64__
-> >  __nocf_check __weak void uprobe_target_nop5(void)
-> 
-> heh, nop5 -> nop_a_lot ;)
-> 
-> 
-> >  {
-> > -       asm volatile (".byte 0x0f, 0x1f, 0x44, 0x00, 0x00");
-> > +       asm volatile (".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00");
-> >  }
-> >
-> 
-> [...]
-> 
-> > @@ -420,7 +421,8 @@ static void *check_attach(struct uprobe_syscall_executed *skel, trigger_t trigge
-> >         ASSERT_EQ(skel->bss->executed, executed, "executed");
-> >
-> >         /* .. and check the trampoline is as expected. */
-> > -       call = (struct __arch_relative_insn *) addr;
-> > +       ASSERT_OK(memcmp(addr, lea_rsp, 5), "lea_rsp");
-> > +       call = (struct __arch_relative_insn *)(addr + 5);
-> >         tramp = (void *) (call + 1) + call->raddr;
-> >         ASSERT_EQ(call->op, 0xe8, "call");
-> >         ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
-> > @@ -432,7 +434,7 @@ static void check_detach(void *addr, void *tramp)
-> >  {
-> >         /* [uprobes_trampoline] stays after detach */
-> >         ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
-> > -       ASSERT_OK(memcmp(addr, nop5, 5), "nop5");
-> > +       ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B");
-> 
-> yeah, not jump anymore?
+On Fri, May 22, 2026 at 10:22=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+>
+> Patches 1-2 (atomic PTE install + arena scratch-page recovery)
+> --------------------------------------------------------------
+>
+>   mm: Add ptep_try_set() for lockless empty-slot installs
+>   bpf: Recover arena kernel faults with scratch page
+>
+> Patches 3-5 (helpers used by struct_ops registration)
+> -----------------------------------------------------
+>
+>   bpf: Add sleepable variant of bpf_arena_alloc_pages for kernel callers
+>   bpf: Add bpf_struct_ops_for_each_prog()
+>   bpf/arena: Add bpf_arena_map_kern_vm_start() and bpf_prog_arena()
+>
+> Patches 6-8 (sched_ext: arena auto-discovery, allocator, set_cmask)
+> -------------------------------------------------------------------
+>
+>   sched_ext: Require an arena for cid-form schedulers
+>   sched_ext: Sub-allocator over kernel-claimed BPF arena pages
+>   sched_ext: Convert ops.set_cmask() to arena-resident cmask
+>
+> Patch 6 reads each member prog's prog->aux->arena via bpf_prog_arena() an=
+d
+> requires the cid-form struct_ops to reference exactly one arena. Patch 7
+> builds a gen_pool sub-allocator inside that arena. Patch 8 converts
+> set_cmask() to write into arena memory. BPF dereferences via __arena like
+> any other arena struct, no probe-reads.
+>
+> Base
+> ----
+>
+> sched_ext/for-7.2 (f31e89a8f583)
+>
+> Git tree: git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git =
+arena-direct-v4
 
-mixed up the selftest change.. I had it fixed already,
-new version will have both fixes ;-)
+I created a stable branch bpf-next/arena_direct_access
+with the first 5 patches and merged it into bpf-next/master.
 
-thanks,
-jirka
+Tejun,
+please pull it into sched-ext tree as well.
 
-> 
-> >  }
-> >
-> >  static void check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
-> 
-> [...]
+Let's do any follow ups on top.
+
+Thanks everyone!
