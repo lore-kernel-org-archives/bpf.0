@@ -1,159 +1,186 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F723E5584;
-	Mon, 25 May 2026 09:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168103AA1B5
+	for <bpf@vger.kernel.org>; Mon, 25 May 2026 09:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779699946; cv=none; b=Brich36AnOFAU34FfoGVdI8aXqJ+meJVfZaX4YHxfQk+Fh5/mKW9iz5IExVNFFv/fi7+9MmuUQplVrDhypl0D1x7pK1DHdrvjnxzu5okfVn5Ti/STZrdn/0/mkbJ7EF4SFa3+f/c1kh+Kt5FzRd40lqtqOPfqpF8IVKwSrIPsFE=
+	t=1779700824; cv=none; b=TQL0mrhF82Q2VS05e1T2gLL+Ew4pP198hF2MMWsfl4/PhyzBFRXAHU/k1zlvlAFj+Zq4Czdxk7VUcEFm56zxP8VzNag8YsnIDRLmRhx/ZV8AVnVZdRE7Ae/ae1hBsoMLTVr+pPC4xI6hm0Ofnz6tHEYUIGhgRvx8wgoi7EudzVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779699946; c=relaxed/simple;
-	bh=YGBgB8DKElrV4R88Fy3fqbu8+6iow6N9sAidpgWS8Vc=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:Mime-Version:
-	 References:In-Reply-To; b=r+7ZSwAg+s3VvmlbeQ6Kjr4rWyryda7WwHa1Pd+7phYh8PsAFPemaxvxziOgMUM2lGFPGsViPovwLPcjpeS6G0/8g2slQc9J4Xb67tLvZXkv46B1lsf0gFl1/gpnrU6N+ai7ZJ3V1vsYppcZ9SdexKmdlpjTCIkGalsUgdN9kbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Fx+Uvlj9; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1779700824; c=relaxed/simple;
+	bh=eoIjGVys9Sm423vlMOv8UCXJnx7/3ydXByfeim9xswM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=REJbcgSGv00U5Hm49diYriW61h0gN8SAMeBtc/HEqr5UewqrayNZoto4sW5OHWOgTAKORKU2DO/1in6ePWsRSFuh9j+DLdt5faxEwn2FlfqBgT6vT3rbwZwkS+RerU0oI9NFm0h9I46cXtoiRvQHDv+X+DiavVkDVmOZf7Ve5UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OH59pHa6; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Fx+Uvlj9"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 92C751A36AE;
-	Mon, 25 May 2026 09:05:34 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 54B44603DC;
-	Mon, 25 May 2026 09:05:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B71FC10812103;
-	Mon, 25 May 2026 11:05:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1779699932; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=EbTl273WowpTVFd0f4oge0/+s8K6R22iN2Gqank6L1c=;
-	b=Fx+Uvlj9hDV8t2hT+BbSnAxNsdOpOaJIechqvnvpMOkSitZzXRjbsdPmMEWqyKUFfSsFqJ
-	09p3+5rjCc8SD5giFz2CNAPnkmaK402kZ1+6NUodo6410UYt45sJg+eUEcarYV6jiVsG7K
-	3r7plioTNGCAIgXGCNJ+2+ZTHyduDJ07uQslX/NevZyhzexSjWxmYTd3uD3CWiJVY0Dx6L
-	1Io8kWVF0On9LOxU2++gFB1HzzqUg55GF2+VuffbtA126LB+ZWF26BfdlTvZICqiAoOO3B
-	zd+yqqxctwthai14JAAAUMFcgFwq3eBOVqm4oxh90R+vs0N3KX+iOH5nwmbVzw==
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 25 May 2026 11:05:16 +0200
-Message-Id: <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
- Starovoitov" <alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OH59pHa6"
+Message-ID: <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779700821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+eeKht/TCorkLGr3qhDvSA2GY+v+dhddDd9N0vNzJE=;
+	b=OH59pHa62MLKpHXZDcV2HRLnP05+4v/mrvRglfb9zsZzOs1bKreXTAkRoNQHcu0IqeX676
+	XTiCCd/6bbr+UF9Vf82QkM0m5F3TDLkg7IQ/pewetU4wAtr2j1XfO7JMmeP4uHivpiUUPk
+	t6EcMPSXbRAcyWoZuhDYh5LeQ6Bnwbw=
+Date: Mon, 25 May 2026 17:18:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
- <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
- <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
- <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
- <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
-In-Reply-To: <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
+To: Song Chen <chensong_2000@126.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org
+References: <20260524082944.10625-1-chensong_2000@126.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <20260524082944.10625-1-chensong_2000@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri May 22, 2026 at 7:13 PM CEST, Emil Tsalapatis wrote:
-> On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
->> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
->>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
->>> <alexis.lothore@bootlin.com> wrote:
->>>>
->>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
->>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Fo=
-undation)
->>>> > <alexis.lothore@bootlin.com> wrote:
->>
->> [...]
->>
->>>> >> +config BPF_JIT_KASAN
->>>> >> +       bool
->>>> >> +       depends on HAVE_EBPF_JIT_KASAN
->>>> >> +       default y if BPF_JIT && KASAN_GENERIC
->>>> >
->>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
->>>>
->>>> Meaning, making it an explicit user-selectable option ?
->>>>
->>>> If so, the current design choice is voluntary and based on the feedbac=
-k
->>>> received on the original RFC, where I have been suggested to
->>>> automatically enable the KASAN instrumentation in BPF programs if KASA=
-N
->>>> support is enabled in the kernel ([1]). But if a user-selectable toggl=
-e
->>>> is eventually a better solution, I'm fine with changing it.
->>>
->>> Let's not add more config knobs.
->>> Even this patch looks redundant.
->>> Inside JIT do instrumentation when KASAN_GENERIC is set.
->>
->> (with quite some delay) I think it would be better to keep this new
->> BPF_JIT_KASAN, because aside from the possibility to use it in
->> bpf_jit_comp.c, it allows to update tests affected by KASAN
->> instrumentation in a nicer way. For example, the test_loader subtests
->> that monitor JITted instructions are confused by KASAN. I can either
->> skip them or make them smarter when KASAN is enabled for BPF, but in
->> both cases, it would be nicer to just adapt the behavior based on a
->> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
->> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
->> still does not make it a config knob, that just creates an internal
->> Kconfig option that is automatically turned on when KASAN and JIT are
->> enabled at build time.
+在 2026/5/24 16:29, Song Chen 写道:
+> I had an ebpf program which calls a kfunc defined and
+> implemented in one of my kernel modules, it was working
+> fine in 6.16, but was rejected to run by libbpf in 6.19,
+> the error message was:
+> 
+> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+> incompatible with vmlinux [94389]
+> 
+> The reason is there is a new added kfunc in kernel 6.19
+> which happens to be the same name with my kfunc. However the
+> error message is not obvious enough to address problem
+> immediately.
+> 
+> Therefore, this patches searches duplicated kfunc in
+> both btf_vmlinux and btf_modules list before a kernel module
+> attempts to register kfuncs through register_btf_kfunc_id_set,
+> it prints clear error message and returns error code if same name
+> kfunc has already implemented and registered, then developer
+> knows at the first place.
+> 
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
+> Signed-off-by: Song Chen <chensong_2000@126.com>
+> 
+> ---
+> changelog:
+> v1 --- v2:
+> libbpf has already specified which module this kfunc belongs to as
+> ebpf code onwer's expectation, then verifier uses
+> find_kallsyms_symbol_value to search kfunc's addr.
+> 
+> v2 --- v3:
+> After v2, I tried a new idea of introducing a namespace in libbpf
+> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
+> please see [1]. Alex suggested to go back to report an error during
+> kmod load on conflicting kfunc name for now. What's more, v2 only
+> searched bpf_vmlinux, v3 also traverses btf_modules list.
+> 
+> [1]:https://lore.kernel.org/all/CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com/
+> ---
+>  kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 43 insertions(+), 1 deletion(-)
 >
-> Having a togglable config knob gives us the option to set up KASAN for
-> the kernel but not for BPF, and I don't see why we'd want that. Imo we ar=
-e
-> already paying the cost of KASAN for the rest of the kernel, there is no
-> incentive to not run it for the BPF JIT. Having to eat the complexity cos=
-t
-> in the selftests seems reasonable if the alternative means a cleaner
-> interface for the user (preventing them from choosing an unreasonable
-> combination of options).
 
-Again, this does not expose a togglable knob, this is a purely internal
-kconfig, automatically enabled if CONFIG_KASAN_GENERIC is set and if the
-architecture-specific Kconfig defines HAVE_EBPF_JIT_KASAN (since we want
-it for x86 only), and there would be no way to enable KASAN for kernel
-only and not for BPF, or the other way around. What I am proposing is
-just an internal, architecture-agnostice kconfig to avoid conditioning
-some selftests to any architecture.=20
+btf: reject to register duplicated kfunc
+ 
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 4872d2a6c42d..a14ad3720872 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+>  	return 0;
+>  }
+>  
+> +static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
+> +{
+> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> +	struct btf_module *btf_mod, *tmp;
+> +#endif
+> +	s32 id;
+> +	int ret = 0;
 
-Alexis
+This ret variable may be unnecessary.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +
+> +	if (!btf_is_module(btf))
+> +		goto out;
+> +
+> +	id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
+> +					func_name, kind);
+
+It seems unnecessary to split this call across multiple lines. Also,
+some of the continuation-line indentation elsewhere does not appear
+to follow the kernel coding style.
+
+> +	if (id >= 0) {
+> +		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
+> +					func_name, id);
+> +		ret = -EINVAL;
+> +		goto out;
+
+return -EINVAL;
+
+> +	}
+> +
+> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> +	mutex_lock(&btf_module_mutex);
+> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+> +		if (btf_mod->btf == btf)
+> +			continue;
+> +		id = btf_find_by_name_kind(btf_mod->btf,
+> +					func_name, kind);
+> +		if (id >= 0) {
+> +			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
+> +					func_name, id, btf_mod->module->name);
+
+follow the kernel coding style
+
+> +			ret = -EINVAL;
+> +			break;
+
+mutex_unlock(&btf_module_mutex);
+return -EINVAL;
+
+> +		}
+> +	}
+> +	mutex_unlock(&btf_module_mutex);
+> +#endif
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+>  static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+>  {
+>  	const struct btf_type *func;
+> @@ -8631,7 +8672,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+>  
+>  	/* sanity check kfunc name */
+>  	func_name = btf_name_by_offset(btf, func->name_off);
+> -	if (!func_name || !func_name[0])
+> +	if (!func_name || !func_name[0]
+> +			|| btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
+
+follow the kernel coding style
+
+>  		return -EINVAL;
+>  
+>  	func = btf_type_by_id(btf, func->type);
+
+-- 
+Thanks
+Kaitao Cheng
 
