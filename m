@@ -1,94 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F9D25B0BE
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6F737DEAD
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779826667; cv=none; b=QocGxT5okbh+rl72uQM3EhGbVuFnp+Hbz5gyw/AQohfQkUb4QTpHjoKFhrLxNaaTP8hu8hCCjcpmCeUUF1045LFfoqJC8OI86yXyRIYQhQHvZ9htokl+9GY5p1JkctK1TL+PYVm1bUAvG+9N6nUtCcsLX3mULzgJVqiIj3nXN7E=
+	t=1779826954; cv=none; b=SHQdjpQmjRbdwq8mbYpCFKShHPHm1i9aSfmDqFIuweIVGRAB2QxrpX3V7UGCRHbxXs3u3guzm8fLo5o0fIrt/xX3vyne/J/FT98dVDteCMGbVeHPkO2v2l8I+c1sljtEPz0NH2jZrM3JsWoi9hohxalfAM1+fni0mjUhuEpEzr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779826667; c=relaxed/simple;
-	bh=DGsdWwpgLr8ZHtiSFZ4l0Djg1Nd8uEJI1nPD8hkRunE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=OpJrTkOPhY6sHHbfMzbCjjrQ5WGRos/E1ezB7m7qKJ2G3RX1xQg3R4B8OZRyX8gUoYCJVttkaKL9Ggpf2KbgFMx5w2qpGGxGOZkmZgQ6mOjtmSfAVq5KTKa3B5f7ivA6B6puoZmT8HSYX8BbhbUErLFGeR9WnGMFoz+vVbh1224=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lqDSW6BQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779826954; c=relaxed/simple;
+	bh=I20tgbqv3Pvsj8jq+N4mxWwkQW23UNTnz2n6E8RX8QM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Wd14DHAAOBk6z5Fk23a9HVeMjtGGwcnPJ86eudhZsr14V+rssMPRTjXtGpgs02avnvqX78137bZRWGSSQ4A/UKX2+B8gdhaArKKr9jybgjsHePLoRIbiWGTuj4ooAbu2D7GbSN8MIa2TvQPR0DxuzKRAQ3G/28alMDPunsWJ4VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/1NXo6E; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lqDSW6BQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D190D1F000E9;
-	Tue, 26 May 2026 20:17:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/1NXo6E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631751F00A3A;
+	Tue, 26 May 2026 20:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779826666;
-	bh=+JfWsD9G9izWAuLbKWLwH3arUXiiSqOeAp2KVI46ppg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=lqDSW6BQAVojIM271SqkbWrTOAYPQHP75sOwetsXDuiEg6af7u40nS7X9Z+dZWLj/
-	 il/RSGDoeabKtOMLlyfkFcT7JCSaBZsEtlEecrRovyP5Wf5mJtTeakWcGyF+f3G2Uh
-	 fLCyO+K9ktqhMYE44lJpmpGWXgSM4k/9nYITR93uKWlWPYiHKmH5PeyyloMNrkWIWs
-	 C13Xl80xPQXjHP7kitckxWlZX0tfzRsbU/Hv8TVlSCSNbJpAk0tEo3bcsnIHq7F2Hu
-	 ilIZGtkt4VB33SrGA5IuzS1XNv2S4ormGB3+KF+C6d6j6aj8qtGltqckb9xJnnpmWM
-	 cvaC6Wo0PWIIA==
-Content-Type: multipart/mixed; boundary="===============7570166684319625877=="
+	s=k20260515; t=1779826952;
+	bh=iwRdWOYoM/afwM0b4cLj/rE/By7mTK8BJACnPEq9zP8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=g/1NXo6E3aQCyAxdaxl+bzE597KAjpeJrk3MgdRkJE1fj1m6Q+KKm5/gNfl2CdRHT
+	 gLFikY9YfBv5uvfwFHqx5Jd6JMJlSQiBlCugjXA1ENzbQ62OFFJJGmu/Anp45tRsUk
+	 DToTEsGwTOmQ4Nh1XSQ5Rorg91BTSDehinx262YLZdqij2QIYLkzvJJ2Xs4GNvfKtJ
+	 iEz+XXOuQLBRoNyfdFXtX3u9+QFutcDuS2xxCh+7wGMnJAWLzLN+K+q1/qWxwP3XXh
+	 SOU7KbV4MzBhu5+dZYp5/GzoCsYI/D8SFVUxXNrPhfl/CbowRPv0DU5HjBg1/gyW5u
+	 sn9pMPtFNQ2ag==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 7/7] selftests/bpf: add bpf_icmp_send
+ recursion test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mahe Tardy" <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526153708.279717-8-mahe.tardy@gmail.com>
+References: <20260526153708.279717-8-mahe.tardy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 20:22:31 +0000
+Message-Id: <20260526202232.631751F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <61ddcbe99f39faa28a822a24e5e400f9e5825fb37305a5832d58bd48e1faea9f@mail.kernel.org>
-In-Reply-To: <20260526-better-1m-reporting-v2-5-e7ec61c45d41@gmail.com>
-References: <20260526-better-1m-reporting-v2-5-e7ec61c45d41@gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/6] bpf: report register diff summary for hot callchains
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 20:17:45 +0000 (UTC)
 
---===============7570166684319625877==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Attaching to the system-wide root cgroup without PID filtering i=
+ntercepts all system-wide loopback ICMP traffic, causing data races and net=
+work disruption.
+- [Low] Multi-line comments do not follow the mandated BPF subsystem style.
+--
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 54b7ad65b7fc..d09c014462f1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+commit a40313de8eec16152c739a5ecc571fcd166b9bba
+Author: Mahe Tardy <mahe.tardy@gmail.com>
+
+selftests/bpf: add bpf_icmp_send recursion test
+
+This commit adds a test to verify that recursive calls to bpf_icmp_send
+from a BPF program return -EBUSY and stop early.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
+ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
 
 [ ... ]
 
-> @@ -17527,7 +17564,9 @@ static int do_check(struct bpf_verifier_env *env)
->  		insn_aux = &env->insn_aux_data[env->insn_idx];
->
->  		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
-> -			print_hotspots(env);
-> +			err = print_hotspots(env);
-> +			if (err)
-> +				return err;
->  			verbose(env,
->  				"BPF program is too large. Processed %d insn\n",
->  				env->insn_processed);
+> @@ -201,3 +202,42 @@ void test_icmp_send_unreach_tc(void)
+>  	bpf_link__destroy(link);
+>  	icmp_send__destroy(skel);
+>  }
+> +
+> +void test_icmp_send_unreach_recursion(void)
+> +{
 
-Should diagnostic allocation failures mask the complexity limit verdict?
+[ ... ]
 
-When the verifier hits BPF_COMPLEXITY_LIMIT_INSNS, do_check() now calls
-print_hotspots() and returns its error before emitting the standard "BPF
-program is too large" message.
+> +	trigger_prog_read_icmp_errqueue(skel, ICMP_HOST_UNREACH, AF_INET,
+> +					"127.0.0.1");
+> +
+> +	/* Because there's recursion involved, the first call will return at
+> +	 * index 1 since it will return the second, and the second call will
+> +	 * return at index 0 since it will return the first.
+> +	 */
 
-If bpf_sample_state_diffs() returns -ENOMEM from kvrealloc() during
-diagnostic printing, do_check() propagates that error to userspace instead
-of the expected -E2BIG. The program is correctly rejected, but the
-user-visible error shifts from "program too large" to "out of memory"
-purely because diagnostic output failed to allocate.
+[Severity: Low]
+This isn't a bug, but BPF subsystem multi-line comments should have the
+opening /* on its own line.
 
-Would it be better to ignore or log-and-discard errors from print_hotspots()
-so that -E2BIG and the "too large" message are always produced when the
-complexity limit is reached?
+> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testin=
+g/selftests/bpf/progs/icmp_send.c
+> --- a/tools/testing/selftests/bpf/progs/icmp_send.c
+> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
 
-This concern was raised in v1 by bot+bpf-ci@kernel.org:
-https://lore.kernel.org/bpf/e98190c9cf56e356e517d69e5409b8fa34ee99342287c612418fbfe57319e1c4@mail.kernel.org/
+[ ... ]
 
+> @@ -125,4 +128,45 @@ int tc_egress(struct __sk_buff *skb)
+>  	return TCX_DROP;
+>  }
+> =20
+> +SEC("cgroup_skb/egress")
+> +int recursion(struct __sk_buff *skb)
+> +{
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[ ... ]
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26471389564
---===============7570166684319625877==--
+> +	} else if (iph->protocol !=3D IPPROTO_ICMP) {
+> +		return SK_PASS;
+> +	}
+> +
+> +	/* This call will provoke a recursion: the ICMP packet generated by the
+> +	 * kfunc will re-trigger this program since we are in the root cgroup in
+> +	 * which the kernel ICMP socket belongs. However when re-entering the
+> +	 * kfunc, it should return EBUSY.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but this multi-line comment should also have the opening
+/* on its own line.
+
+> +	ret =3D bpf_icmp_send(skb, unreach_type, unreach_code);
+> +	rec_kfunc_rets[rec_count & 1] =3D ret;
+> +	__sync_fetch_and_add(&rec_count, 1);
+
+[Severity: Medium]
+Could attaching to the system-wide root cgroup without PID filtering
+intercept all system-wide loopback ICMP traffic and disrupt other processes?
+
+Because ICMP traffic is not filtered by port, any ICMP traffic to 127.0.0.1
+on the host will trigger this BPF program and generate unintended ICMP
+Destination Unreachable replies.
+
+Also, can concurrent executions cause a data race here? Two CPUs could read
+the same rec_count, overwrite each other's return values in the array, and
+corrupt the state, causing test flakes.
+
+Would filtering by the test's PID securely isolate the test? The recursive
+kernel socket call executes synchronously in the same task context, which
+should make PID filtering reliable here.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526153708.2797=
+17-1-mahe.tardy@gmail.com?part=3D7
