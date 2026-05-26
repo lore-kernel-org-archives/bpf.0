@@ -1,139 +1,143 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6998D3B6374
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDA418B0F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779827714; cv=none; b=qnSQRAQmE+SukAoun/eCvri7iTxpsuyQnlOmub4bfqiUULlYvnpyXbi8KpFrVlNzKSsqAbDRbMPmu8RbS0o+m6/0+BjOvfz6RloftPWH9QyNbA7qdMijirKRAU5vqaGE6CSsW6xZRIT578EfDnJKRsivQWDIvq73C+lP/OqwAVs=
+	t=1779828468; cv=none; b=QLCBtMm7/Z/Py18QOXsoyH5IqPEp3xm3TKWDdVDpUnBVxWdl6Q1Shhvyt/2nES7nv+pY09SprBxm+8t3Zsz4kwEB47mdbSUl7sQUceTWQmW3EC4vWlwwFuB0BRvP2vedYVwAWdJci/6H6cuhXVNOGe/dIcSZ08N8+54vSKt9TEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779827714; c=relaxed/simple;
-	bh=6kYZgsyU+MdFgWQWs6RsWRTaES8w0MvIrm74tGaOQ94=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R/SRlMnZNLt9D+eaS6x4Rf9+hZnB1BO1dowfMm6Ajlyz+FzSnHo3Qosl3umMCPWyM6GHAV/lvnLH5ZgogPzpH5S3YbYpGtZXNXyzuqmeDKScflHp4w3kLAPvRvity9MyyvHwaAZGf3M4e6KtUG9sj/MWbBHK/A5RN0YfkBufLUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GJMZ5m8S; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779828468; c=relaxed/simple;
+	bh=V5ougp40DY1H9zXzFsmFHsm33ofsao/93epdVKnawqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rxu0VmhaIgs9qdeJQhZrQmEhM9wlDJUONT9H9M8TISETlnxgumWdiAr6x1ZTvrVAQjpFV3troCaAtEeqZDliz5vNUgEa/o0F3QQHGajDh/SB+VEbOox4vhoVqZ/AKvxitWfQLrZiHi0M9dSeH2PI+ARtUvGO9hyD2D9iTnpaSRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ieGZpX7a; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GJMZ5m8S"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-36aa4ae1f11so1915645a91.1
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 13:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779827713; x=1780432513; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/ayKa+wXv9mBm8YmojF2TWUJ13IEkeuAAhZGYZ06n1w=;
-        b=GJMZ5m8SiMtGbFF8V1LuE1AeX//+Yp57iXNlLl3hdxQK2PHIbc+/TTtw3m7L4NWFLA
-         8RqOz2RH4K6PlkfLKZt1X+4JRR5vdc2GLU3PYONFqCagVekia8HkwFVN4yQlccS/wu6l
-         hkZLRZ23DfglVPDE2uuoy/cin1N2MbNAEHhWEXUtiX7yTpC4AeD0e5r9VIw2Do+Rg6az
-         XBHHGCYoXn7fzr2MeB60ox8sKkJdxcSj8p7IzSGjPoB9Jp7xte58dkKpIDK5OHOLl9cQ
-         zlXbq1OLPN/6NXddmmnEshA20hQwPI0QSFnDMrkwbHJIrCW4aIjskab1DqA9LjGG430Y
-         EmqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779827713; x=1780432513;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ayKa+wXv9mBm8YmojF2TWUJ13IEkeuAAhZGYZ06n1w=;
-        b=gXn4h5TuwrZOK+fR7xeOfIFJxeNuw3b3Ode/OJSGYg6t612WcI+CuyOO8PWy43kHVl
-         xVPkTNrrC7BmTwQQEvTuDmpJ7f5ev985CdZ6zFT2jSlOOT2utBahtsYE+fRWaBqYYjVj
-         2nUuP2L5SD8NibWkXTziJP+1gpXkFzGglK36/NcZQcC7/I9btSuItwZAnEkpSwukGHUd
-         1LyQNoYsOdyZMkutl1wunHdPau04AQ63C9JvmIGMAWTIHv7MZPdpqg0d/9JC8+4xOtz/
-         6SITG6k62QIFFrtJ0F6XniYF+ehLkacNSbbK6aawgrHhrt1bsRoKR3XE2qUxht+uTlkO
-         vdRw==
-X-Forwarded-Encrypted: i=1; AFNElJ/joNh/SqzmWUjN4yNa1ZZ+kF8QlQMQDrWfd3lzbkPAWcf9d62/JPRY2fsnfap4VAwnVC8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgBBlXcXtIUT9fvLCcpCTilKZBvpj53pvrLJsG5O0rLNDiZxSw
-	0wwc7H8unIgK0AYhMouAyYchJk+E4b+uiGBYblOfw3OdN0W42fRdiE7S
-X-Gm-Gg: Acq92OFAs4DDdGRVbGPcKvJlvBrbBHt5tfo2DsEAb7xApBKi213lTqfD61BO5Eh+lm3
-	adOmUrxiXiivnqHRA9E0PFoDKJUxJvjOGhqCRYNBMOiW+7fjVpNUMbADwMLRMeSpo90Tei3ofV3
-	WCzOSTozH/W2wnUfM06QFQlmjLJRRC+OzK8KWQxAoBS1IKohh8Nf3anBZIUo8LbpFBjn0haBRJ9
-	+HnlmKBgJzNOYwTC0LzPpn9Z0DTNIUZH/kEErbOh0FSlV8+7LEq3avhxb28A+S70Yxl0sC9fXCI
-	O0boy0chYkuSPU/lzG5genBEL6QliQHUK7dQLMhHaTHjFFzWTbsvTnxIEXRy8U1Edc5vUYm7lw6
-	G+8qiPuyzgTJjEx4akB5JuQpuxmshnFeiipq4ka3ssQcDQK5bSZxGvyADLNoZ1NYG99mzzk9duf
-	NKy5sTUh1NfEe2niuMFOW9QwufikT69t6uFSSJHdv/5zvgzbnTcnpaaAVINv2bhod3zuE4Bi6zB
-	A==
-X-Received: by 2002:a17:90b:4c50:b0:369:bddb:79bd with SMTP id 98e67ed59e1d1-36a676c6a95mr19311575a91.25.1779827712708;
-        Tue, 26 May 2026 13:35:12 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36adc0a6e94sm7985475a91.4.2026.05.26.13.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 13:35:12 -0700 (PDT)
-Message-ID: <fbc242b2830a0190348e8fdc3f98c08f455995ec.camel@gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/6] bpf: report register diff summary
- for hot callchains
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
- clm@meta.com, 	ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 13:35:09 -0700
-In-Reply-To: <61ddcbe99f39faa28a822a24e5e400f9e5825fb37305a5832d58bd48e1faea9f@mail.kernel.org>
-References: <20260526-better-1m-reporting-v2-5-e7ec61c45d41@gmail.com>
-	 <61ddcbe99f39faa28a822a24e5e400f9e5825fb37305a5832d58bd48e1faea9f@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ieGZpX7a"
+Date: Tue, 26 May 2026 13:47:36 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779828464;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KnCflD3IDljS85fEYVFf30i3uDGjT7cYAgP9fl0QajM=;
+	b=ieGZpX7a/mWgXww4IgmhPHiQvNDaBwDPsD7pJYVTTd+HUn40TrxoquQgiXUFMY52eYCpBA
+	F2ldPx5tHks9GxGqGWNemrylJFFLNA9ZMVNBts3Uguw9LwGic43703VYBDJxvwAWl+hVUI
+	OhoJ8VNLUdQqj2SiLQBFbId+x5WtcSo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v3 bpf-next 10/11] bpf: tcp: Add SOCK_OPS rcvlowat hook.
+Message-ID: <202652620435.m7WK.martin.lau@linux.dev>
+References: <20260523083001.2911931-1-kuniyu@google.com>
+ <20260523083001.2911931-11-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260523083001.2911931-11-kuniyu@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2026-05-26 at 20:17 +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 54b7ad65b7fc..d09c014462f1 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
->=20
-> [ ... ]
->=20
-> > @@ -17527,7 +17564,9 @@ static int do_check(struct bpf_verifier_env *en=
-v)
-> > =C2=A0		insn_aux =3D &env->insn_aux_data[env->insn_idx];
-> >=20
-> > =C2=A0		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
-> > -			print_hotspots(env);
-> > +			err =3D print_hotspots(env);
-> > +			if (err)
-> > +				return err;
-> > =C2=A0			verbose(env,
-> > =C2=A0				"BPF program is too large. Processed %d insn\n",
-> > =C2=A0				env->insn_processed);
->=20
-> Should diagnostic allocation failures mask the complexity limit verdict?
->=20
-> When the verifier hits BPF_COMPLEXITY_LIMIT_INSNS, do_check() now calls
-> print_hotspots() and returns its error before emitting the standard "BPF
-> program is too large" message.
->=20
-> If bpf_sample_state_diffs() returns -ENOMEM from kvrealloc() during
-> diagnostic printing, do_check() propagates that error to userspace instea=
-d
-> of the expected -E2BIG. The program is correctly rejected, but the
-> user-visible error shifts from "program too large" to "out of memory"
-> purely because diagnostic output failed to allocate.
->=20
-> Would it be better to ignore or log-and-discard errors from print_hotspot=
-s()
-> so that -E2BIG and the "too large" message are always produced when the
-> complexity limit is reached?
-
-I don't think this is a real life concern. If system can't allocate
-10-20Kb of memory, there are bigger problems on the host.
-
-> This concern was raised in v1 by bot+bpf-ci@kernel.org:
-> https://lore.kernel.org/bpf/e98190c9cf56e356e517d69e5409b8fa34ee99342287c=
-612418fbfe57319e1c4@mail.kernel.org/
->=20
->=20
+On Sat, May 23, 2026 at 08:29:39AM +0000, Kuniyuki Iwashima wrote:
+> Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVQ_CB.
+> 
+> Let's invoke the BPF SOCK_OPS prog when
+> 
+>   1. TCP stack enqueues skb to sk->sk_receive_queue
+>      -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
+> 
+>   2. TCP recvmsg() completes
+>      -> __tcp_cleanup_rbuf()
+> 
+> This will allow the BPF prog to parse each skb and dynamically
+> adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
+> until sufficient data (e.g., a full RPC frame) is available
+> in the receive queue.
+> 
+> Note that the direct access to bpf_sock_ops.data is intentionally
+> disabled by passing 0 as end_offset.
+> 
+> Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
+> with bpf_sock_ops because payload is not in the linear area
+> with TCP header/data split on and skb may contain a RPC
+> descriptor in skb frag.  This also simplifies the BPF prog.
+> 
+> The placement of tcp_bpf_rcvlowat() in tcp_ofo_queue() and
+> tcp_fastopen_add_skb() is chosen to provide the same snapshot
+> with tcp_queue_rcv().
+> 
+> For example, if tcp_bpf_rcvlowat() were called before updating
+> TCP_SKB_CB(skb)->seq in tcp_fastopen_add_skb(), BPF prog would
+> need to implement an unlikely if branch to strip SYN.
+> 
+> In addition, TCP stack can queue overlapping skb into recvq.
+> Once rcv_nxt is updated with a new skb, BPF prog cannot infer
+> the previous one from skb->len.
+> 
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->=20
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/264713=
-89564
+> v2: Add explanation of tcp_bpf_rcvlowat() placement.
+> ---
+>  include/net/tcp.h       | 12 ++++++++++++
+>  net/ipv4/tcp.c          |  2 ++
+>  net/ipv4/tcp_fastopen.c |  2 ++
+>  net/ipv4/tcp_input.c    | 10 ++++++++++
+>  4 files changed, 26 insertions(+)
+> 
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index bc95d8e7b62e..a409f2ea710f 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -2889,12 +2889,24 @@ static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
+>  	skops->skb = skb;
+>  	skops->skb_data_end = skb->data + end_offset;
+>  }
+> +
+> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
+> +
+> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+> +{
+> +	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_CB_FLAG))
+> +		bpf_skops_rcvlowat(sk, skb);
+> +}
+>  #else
+>  static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
+>  				      struct sk_buff *skb,
+>  				      unsigned int end_offset)
+>  {
+>  }
+> +
+> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+> +{
+> +}
+>  #endif
+>  
+>  /* Call BPF_SOCK_OPS program that returns an int. If the return value
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 3afeb69a547a..f7e32891bb4e 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
+>  		tcp_mstamp_refresh(tp);
+>  		tcp_send_ack(sk);
+>  	}
+> +
+> +	tcp_bpf_rcvlowat(sk, NULL);
+
+hmm... so NULL is a way for the bpf prog to tell where it is called?
+
+With skb NULL, what does the bpf prog usually do?
