@@ -1,65 +1,64 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4277F3FE67A
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D003D649F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779804938; cv=none; b=GNbDwTxifQeSgNTj8eANdd1/0HpNQNNSp8K/AshsZCz07ihWByL9KuLR/3+wFlBcUw00TRIf+pBiokNgut7uZQKLbOCSmqFmz2bCder7vNf1zsGEa3g4ihuB7BYabwTqYWMfx9IDwP4EEQrLm3umZoEUGYdwyMDEzt5fQeIuZ9w=
+	t=1779804941; cv=none; b=E40g9lO71w7lTXLHXt+bFwR34V3zbidy1I871DqHDhfAMV1AVpFBXwwvuxH+ziAyHsxEJQ/0UQvKRRZUf8OHFOfuLFmFs/Bgy5CdR7NtatuhIoH/5Gv/MjFytLDUicUJuwCl1M+scJ/JkI+L/AHvZsD1OmgEUKRVVHQ/+w8cqYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779804938; c=relaxed/simple;
-	bh=EdQq3aQ9KLzrDuftlkOM+TyHQLT0aDiS6zspb266sQU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WEnqCl0HcBeYQef7d/H4SQ5VrY7Rzp6Yhe8QEpqRDLdElhZeve18BVJuOWMsm7B3Utj+rzwxTA7xVjQK9tSuoRvcwjN1i6tYrNXz9lUiYaUSaYEVJduD5x+xSxg901EEswXg87jVSbInHNZkdAuZCW8fTvn3iofiQ1sUpgxP0m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JtaEhSiT; arc=none smtp.client-ip=209.85.221.74
+	s=arc-20240116; t=1779804941; c=relaxed/simple;
+	bh=r7zcdF8qutzChq8XLk+oXcsBhNew8W4i+fhDiWfimoc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uzP+A80yJfLotqG0f7ytLd1DQrfLTTlmOSy5RvYtVUGC7KCkuWmQGWrnikJCfXbT51ilIMmgybpcN0gqoTaYOtcVjammSKCQVrc6HQIiuPhffcgNYI5nKUgRaC2zbr8F3u1xYVQ0u0AXOK+5Ds+XJ/En0rIo7z+p3TzZOD6p7A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iteVPtF3; arc=none smtp.client-ip=209.85.208.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JtaEhSiT"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-43d7730e9e3so6455852f8f.2
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:15:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iteVPtF3"
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-688b057233aso3503379a12.3
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:15:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779804935; x=1780409735; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wzpgf/wuecL2JBBMYkdRk+Xbi/3WeFb52lS50xAT3C0=;
-        b=JtaEhSiTW2eLZtmb5uJDnGV+oJV6ww+pkMOEuvAmrijsArF+on5cJ9IYjUG/IpiHOx
-         aTvI/hKjTw5qfUBmbB87EOKQY+rRb+rVNCotoq62Pj/wRIvFa31Lut1BPhKDFXdwCPyk
-         pi3UNqDd82db6cAzGrjl8OHWvWMdIt8mksaB711F+R/dO4QJa0Qxl9WagCd8QXs7lMAV
-         CeyTgztIkF8VWglfEn1tuyhd/NDydb9tuuhI7k4Z6D9kO9ANeczzOBYnIlTc7brGqOtJ
-         7BJywBF9XLojtTdGfEMqAl1FINTW+k/jS7i9q8UG9bPgV8HF/7Gw9dJE3XnYtg7uuDgy
-         19ZQ==
+        d=google.com; s=20251104; t=1779804937; x=1780409737; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ev6aA3Xe6T1Sew1C3oAjJbhgzPbzt+OHYmVBfkfyNE=;
+        b=iteVPtF3xk7Ykwf3qZcSj32wywLJxB4dVFfRcmAf3qSilkwNIgq1HUQrw6KWKMY8z7
+         7tA0rz5Xcq+uQdEZizE6qLbUZ3vAXg7nZCu7iMlmur/4pAHN3X0jKXE9GOPZqlF3MYm4
+         62UCsEHMguB+3KGhiDCuFDtyoQL7MSuuwkWAl9sya5anOe1ez+zcdA0SHR8Ku2rgCRpG
+         qSsKg4nRTxMPQ181DIinvajfdOogb+TJURR5z81piKwmxvoi/K9Pa9KmzBRypPGKUrA2
+         0YDZeWFyvuunCf0gZP7V88kmkT7CW2BOTtkJ3wOhR+MhDw/rbuIAVU2CAvUE2QhOF4tA
+         81Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779804935; x=1780409735;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wzpgf/wuecL2JBBMYkdRk+Xbi/3WeFb52lS50xAT3C0=;
-        b=lx5f+2t3MTeUVuQwmq7YyAuU4mDOwBxCkqG1xvsboxYb2yDT282A4p8lweFmPSXqV8
-         ZGdSiKhbyjox2k+y6lXfYAa20UaDJwQS1sd/zRYYhUXLn8fw3o8cyevVAAxMfbNxNksA
-         naqaKaxiXbNl8O/bsM7hp9+fONh4/cvrye27ULFgTpylMex8Gq6cThPS+bgTJYw29bue
-         DbEeH9dzoRJJ8m455WWlLzCrzMkG1IhjtjvRZZwePZlKvqpZ2SKtPEF0NmkltLdPvfnJ
-         dvlrb6RgHDRWrcpPe/wSyrZaB2U+/2WJ/zbg0iA4rjSxSmqgT9PRcTb7xAXV8gODuy6R
-         776A==
-X-Gm-Message-State: AOJu0YyWZ2ddk4nScoxGcHap+dhi9LZKIQXckYk6RWmRKZuvYsg74W1q
-	GnDfg0RN49T3+msTFmn2uxdDfOkDET1Kbp1n9X0DO2qqsH2YL2hMHWeBwmZWZdz+E1JVOlc42Ml
-	XRZIB09y251Z3fumobA==
-X-Received: from wmxb15-n1.prod.google.com ([2002:a05:600d:844f:10b0:490:507b:f39f])
+        d=1e100.net; s=20251104; t=1779804937; x=1780409737;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ev6aA3Xe6T1Sew1C3oAjJbhgzPbzt+OHYmVBfkfyNE=;
+        b=llyoNFL5qAtftOST+yei27/nSvy9H+tD2GM0sUETtxAyPdZZG1aqiOeWZl62nn618z
+         g4u9PAUrEoB0MqK/kivI6e6K7DSU5a56Uf+Z56f6+oHLvckGQMJOl/mj8DbJxQsgvxkN
+         FtRZVLwxw6zkkQ9W2firpiY+n+wYp5UWD/zAJ7kor4S60WPCCfp9epbWwt9jzJJ29hqW
+         rM/fQCXmZ8429SN3JCMQ0nc9kDf8Qa1LYMZf1NRgA6nMHIlk0nZLhLQY9Uco3aiGHLWp
+         PYOVAkn1qgeOg78ccr7NDrqEqpPoQcn/iB79E43wiMwlcdGmJeP2qdc7hvVkI6wnwi9u
+         MPGg==
+X-Gm-Message-State: AOJu0YxReZI1OoDptu1DrcRXNrFlbm9Kvw6qFABFGf7zOfc88UUTolJh
+	Y8lX+tuXiEkNNtDs7wGy1PYtP4twwo1pkC5grALuR+OqhEgMvS3ukVNswbrW5ym00Z6K+JsPrEd
+	+2ikVjYB/vfaOhgXO6g==
+X-Received: from edk1-n2.prod.google.com ([2002:a05:6402:4041:20b0:688:fdf7:74b0])
  (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3d96:b0:490:5429:1513 with SMTP id 5b1f17b1804b1-49054291bbamr250856825e9.6.1779804935406;
- Tue, 26 May 2026 07:15:35 -0700 (PDT)
-Date: Tue, 26 May 2026 14:15:33 +0000
+ 2002:a05:6402:5293:b0:67f:97eb:b0ef with SMTP id 4fb4d7f45d1cf-6889c476e4cmr9916226a12.15.1779804936629;
+ Tue, 26 May 2026 07:15:36 -0700 (PDT)
+Date: Tue, 26 May 2026 14:15:34 +0000
+In-Reply-To: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAAWrFWoC/5WNSw6CMBQAr2K69hla+0FX3sMYU+AVXgItKdhoC
- HcXSEx06XJmMTOxASPhwM67iUVMNFDwCxz3O1Y21tcIVC3MRCZ0poSAloqid9AGW0HqWvKPJxS
- jA/JQo7+vHiN0oUKQ0sj8KK2V2rAl2Ed09Nxm19vCDQ1jiK/tnfhqPxv5zyZx4KCdMo6fuDW2u tQh1C0eytCx9ZPEd1v/1RaQgTYqcypXp6LUP+15nt9wNRbpQQEAAA==
-X-Change-Id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
+References: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
 X-Mailer: b4 0.14.3
-Message-ID: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
-Subject: [PATCH v3 0/3] libbpf: support STRUCT_OPS in light skeletons
+Message-ID: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-1-5b4fa2a5e1a4@google.com>
+Subject: [PATCH v3 1/3] libbpf: load vmlinux BTF in gen_loader mode for struct_ops
 From: Siddharth Nayyar <sidnayyar@google.com>
 To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -69,65 +68,43 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, gprocida@google.com,
 	maennich@google.com, Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-This series enables support for BPF `STRUCT_OPS` maps (such as
-`sched_ext_ops` used by sched_ext) when using light skeletons (i.e.
-`gen_loader` mode).
+During light skeleton generation (`bpftool gen skeleton -L`), libbpf
+runs in gen_loader mode. Previously, `bpf_object__load_vmlinux_btf()`
+completely bypassed loading the kernel vmlinux BTF (`obj->btf_vmlinux`)
+if `gen_loader` was active.
 
-Previously, generating light skeletons for objects containing
-`STRUCT_OPS` maps would fail or produce incomplete results because
-`gen_loader` lacked support for several key features required by
-`STRUCT_OPS` maps, specifically:
+However, BPF `struct_ops` maps (such as `sched_ext_ops` maps) require
+resolving the kernel-side struct type IDs and member sizes at
+compile/skeleton generation time. Without loading `btf_vmlinux`, libbpf
+cannot query the kernel BTF types, causing light skeleton generation for
+`struct_ops` to fail or omit crucial type information.
 
-1. Loading `vmlinux` BTF to resolve kernel-side type information.
-2. Correctly plumbing `btf_vmlinux_value_type_id` into map creation
-   attributes.
-3. Ensuring `btf_key_type_id` is zeroed out to satisfy kernel safety
-   checks.
-4. Plumbing the userspace BTF FD (`btf_fd`) when
-   `btf_vmlinux_value_type_id` is present but `btf_value_type_id` is
-   zero (which is always the case for `STRUCT_OPS` maps).
-
-This series addresses these limitations by:
-
-- Loading `vmlinux` BTF in `gen_loader` mode when the BPF object
-  contains `struct_ops` maps.
-- Explicitly zeroing out `btf_key_type_id` for `STRUCT_OPS` maps to
-  satisfy kernel validations.
-- Plumbing `btf_vmlinux_value_type_id` during map creation in
-  `gen_loader`.
-- Fixing `btf_fd` copying logic in `gen_loader` to populate it if either
-  `btf_value_type_id` or `btf_vmlinux_value_type_id` is set.
-
-With these changes, it is now possible to generate and use light
-skeletons for BPF programs utilizing `STRUCT_OPS`, such as custom
-sched_ext schedulers.
+Fix this by modifying the check to load `btf_vmlinux` even in
+`gen_loader` mode if the BPF object actually requires kernel vmlinux BTF
+(e.g. contains `struct_ops` maps).
 
 Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
-Changes in v3:
-- Remove erroneous change contracting map creation attribute size in gen_loader.
-- Link to v2: https://lore.kernel.org/r/20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v2-0-6750f5859bc6@google.com
+ tools/lib/bpf/libbpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Expand the series to 3 patches to fully support STRUCT_OPS in gen_loader.
-- Add a patch to explicitly zero out btf_key_type_id for STRUCT_OPS maps.
-- Add a patch to plumb btf_vmlinux_value_type_id and btf_fd in gen_loader.
-- Link to v1: https://lore.kernel.org/r/20260524-libbpf-load-vmlinux-btf-in-gen_loader-mode-v1-1-6f57f191a7ad@google.com
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3a80a018fc7d..cb1b7ea884a7 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3590,7 +3590,10 @@ static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
+ 	int err;
+ 
+ 	/* btf_vmlinux could be loaded earlier */
+-	if (obj->btf_vmlinux || obj->gen_loader)
++	if (obj->btf_vmlinux)
++		return 0;
++
++	if (obj->gen_loader && !obj_needs_vmlinux_btf(obj))
+ 		return 0;
+ 
+ 	if (!force && !obj_needs_vmlinux_btf(obj))
 
----
-Siddharth Nayyar (3):
-      libbpf: load vmlinux BTF in gen_loader mode for struct_ops
-      libbpf: zero out btf_key_type_id for STRUCT_OPS maps
-      libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
-
- tools/lib/bpf/gen_loader.c | 3 ++-
- tools/lib/bpf/libbpf.c     | 6 +++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
----
-base-commit: c6e99c10fd9855082568cbd71bb2cc5dc90eda53
-change-id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
-
-Best regards,
 -- 
-Siddharth Nayyar <sidnayyar@google.com>
+2.54.0.746.g67dd491aae-goog
 
