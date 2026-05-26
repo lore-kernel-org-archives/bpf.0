@@ -1,128 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF6738F928
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 03:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9B3382289;
+	Tue, 26 May 2026 03:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779764681; cv=none; b=B7GPUPNeeaG7mtmBOGJ7D/uuu2dizMuqrEpGwghHrsNj5HEm8dwn5l+LoJn9s75/YF8SNuAskr+GQyFrFVj5rqWuDQRM7H+/hDrfz3Y82BLvRNb9STO4/3NopQ6Xi9S5blNnujtl/5JBy8q9asgXa4OpHWVom6FCsIp7iiWH02I=
+	t=1779764780; cv=none; b=IBu9ClLN8anDDXEvxFscs6u0LxDySGcOalOmatPbtqbyR7uTiU/efiKdSnZ4HAdrFN/FBxl7+7lABfG6pr9qGzJpP1XNVD/xgXVxzZlcU3xjk3SgWf/jz+Zx7CC0zwOzs0xQYqQ3VIbgqZ4xRt6aoOqdHXeq0SIqe3orW/f3T0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779764681; c=relaxed/simple;
-	bh=XIaB7vtqgYoCePJI7G2LSvSaYog7k0Am/lneJErh8WQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=vAJIWxCoh3kKV3+j+NkDqc/6vFHQI/CZzfx9lZW7Q23wQahQv+e6IABDMNNtt56G8dNTwGvE9aGHc/y3yAQF2ZartyJglJ0UJ3SpWg9CzAfxWW89YG7c22lAllIXIyisVykmU+nSYh6exxVzjjwbsbiDS9QBbg7LaeWJUonLLsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdLwyTdF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779764780; c=relaxed/simple;
+	bh=PLfC3hhP65/R8Ef/PrNCGEFxKULcxSgtxTKT3eRkj68=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GW23eJtxmJ4fjj/ckfclDhVWKwSobkQH1Wmhrp+abXAW9fZKbQ31r+/N/pK3cEJGtzlnd22kdDPZg1chDAHdMV8+ftmrlT7F2urNTWIUVlVSUb4iF+CkBC+DN+whUHNMCQ2FhHTVd9K7Kk5UouBlOZOU/qyT8xhskiOx/Hceulk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEZUsMWJ reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdLwyTdF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C191D1F00A3A;
-	Tue, 26 May 2026 03:04:39 +0000 (UTC)
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEZUsMWJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6B91F000E9;
+	Tue, 26 May 2026 03:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779764680;
-	bh=QQ49nET6z0+FSSiJrUU6kR6I4m02AFAJ2+LYICK6qTg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PdLwyTdFW3dcM+D1dI1/wVEUcRvdj/EvuQOWLRqAG+Qm0CL3Yzi/0eNlxJNDnT/c/
-	 EcfUMpnoOQV8wao9BQ2fXuPz/5g0V2KoMozWjvRejEeKCWyiY/O8BDD5554Ds+1xFp
-	 pHMRnUHaNJ3zlhfvnnva12di8UxOVA4kZPc9+L282CEPWiCKifVwpZdbILp88soyHN
-	 tQbk+7lXpE9S5LxLx4b/dPvpMz4HM0uFo0AOWh+/HgCpTePygt9GT2v1n11JF/e8E3
-	 tT2NTRnQeqc8LsVCgGLIVklD9YfAQjQAQsFwGc3Z7x9sTmYrRVhVn4KZWKF1kaSYx/
-	 lioFEjziXEP3Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v7 05/11] bpf: Pass flags in
- bpf_link_create for struct_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: hannes@cmpxchg.org, tj@kernel.org, bpf@vger.kernel.org, mkoutny@suse.com
-In-Reply-To: <8dfc661158419f7331cc645368b051a424229fdc.1779760876.git.zhuhui@kylinos.cn>
-References: <8dfc661158419f7331cc645368b051a424229fdc.1779760876.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 03:04:39 +0000
-Message-Id: <20260526030439.C191D1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1779764778;
+	bh=bD1DxynsoU0auV377W9yW3PuxMlzlNdl+Ii+zM/7Nyw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OEZUsMWJZw+E2RPT7SKO+DpKRsUypIy4D1QbA93XYWm2kMCltw5/oEklDClh5LEJy
+	 5lSKehzlacNUJqsYr+GRe7JLbgf1x09YNwO7zMvJGGT1yp3pMjzrZnqF3UqvsX0w2i
+	 UxGVr9958J6eJhwfaq84fQZCCRE0h6gXORUvlP+LILyQh1+uFhtvronjqICIH3k71a
+	 n7BEl4G6kAWOpsfMzLBBAfhFdlbakJ0krQreyQGgADtIIoAUjxAjgJ0Q4FB2f+PuLb
+	 cibao5KCroPmmz4ejin76N8MkSL1Bqy6pdPJ0XD7RvaFjAx5Y2A0QGCBOoERO3y869
+	 iZt6awx6fsXjg==
+Content-Type: multipart/mixed; boundary="===============1607772065207942128=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <8739793736cb8eb1ec6e271f59142e97a34af26ccb023469e23e5b47bed2aa61@mail.kernel.org>
+In-Reply-To: <8bfb7027abcc02c21db565cf52d6af78a6ce5b7d.1779760876.git.zhuhui@kylinos.cn>
+References: <8bfb7027abcc02c21db565cf52d6af78a6ce5b7d.1779760876.git.zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH bpf-next v7 03/11] libbpf: fix return value on memory allocation failure
+From: bot+bpf-ci@kernel.org
+To: hui.zhu@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,inwardvessel@gmail.com,akpm@linux-foundation.org,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,sdf@fomichev.me,kpsingh@kernel.org,chen.dylane@linux.dev,yatsenko@meta.com,leon.hwang@linux.dev,a.s.protopopov@gmail.com,ameryhung@gmail.com,tklauser@distanz.ch,eyal.birger@gmail.com,rongtao@cestc.cn,haoluo@google.com,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayu
+ an.chen@linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,cgroups@vger.kernel.org,linux-mm@kvack.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: geliang@kernel.org,baohua@kernel.org,laoar.shao@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 26 May 2026 03:06:17 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] Use-after-free of bpf_struct_ops_link on error path due to con=
-current cgroup_bpf_release().
-- [Low] Missing UAPI flag validation allows BPF_F_ALLOW_OVERRIDE for non-cg=
-roup struct_ops.
---
+--===============1607772065207942128==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 0fc91684192f5637c6cbd64910eb1eb3203843c6
-Author: Hui Zhu <zhuhui@kylinos.cn>
-Subject: bpf: Pass flags in bpf_link_create for struct_ops
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index ab2071fdd3e8..1e8688975d16 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -13701,7 +13701,7 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+>
+>  	link = calloc(1, sizeof(*link));
+>  	if (!link)
+> -		return libbpf_err_ptr(-EINVAL);
+> +		return libbpf_err_ptr(-ENOMEM);
+>
+>  	/* kern_vdata should be prepared during the loading phase. */
+>  	err = bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0);
 
-This commit extends bpf_struct_ops_link to include a flags field, populated
-from attr->link_create.flags during link creation. This allows userspace to
-pass flags like BPF_F_ALLOW_OVERRIDE when attaching a struct_ops.
+This is a pre-existing issue, but can this dereference a NULL map->st_ops
+pointer?
 
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index e63f926d87283..45a6cc1d86c83 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -1425,7 +1425,8 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
->  	struct cgroup *cgrp;
->  	int err;
-> =20
-> -	if (attr->link_create.flags & ~BPF_F_CGROUP_FD)
-> +	if (attr->link_create.flags & ~(BPF_F_CGROUP_FD |
-> +					BPF_F_ALLOW_OVERRIDE))
->  		return -EINVAL;
+If a user manually changes a map's type to BPF_MAP_TYPE_STRUCT_OPS using
+bpf_map__set_type(), or if a malformed BPF object file defines a map in the
+.maps section with this type, map->st_ops is never allocated.
 
-[Severity: Low]
-Does this allow userspace to pass BPF_F_ALLOW_OVERRIDE even when
-BPF_F_CGROUP_FD is not specified?
+The bpf_object_init_struct_ops() function only allocates st_ops for maps
+found in the .struct_ops and .struct_ops.link sections.
 
-For non-cgroup struct_ops, this flag would be accepted but silently ignored
-by the kernel. Should this reject the combination with -EINVAL to safely
-allow future reuse of the flag bit?
+Because bpf_map__is_struct_ops() only checks map->def.type, could a missing
+NULL check on map->st_ops here and in bpf_map__init_kern_struct_ops() lead to
+a crash when privileged daemons parse untrusted BPF ELF files?
 
-> =20
->  	map =3D bpf_map_get(attr->link_create.map_fd);
-[ ... ]
-> @@ -1463,6 +1464,7 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
->  			goto err_out;
->  		}
->  	}
-> +	link->flags =3D attr->link_create.flags;
-> =20
->  	err =3D bpf_link_prime(&link->link, &link_primer);
->  	if (err)
+Reviewed-by lore thread: https://lore.kernel.org/bpf/20260526024145.5309F1F000E9@smtp.kernel.org/
 
-[Severity: Critical]
-Can this error path trigger a use-after-free on the link object if
-cgroup_bpf_release() runs concurrently?
 
-If cgroup_bpf_release() iterates the struct_ops_links list and processes
-the link before bpf_link_prime() returns an error:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Thread 1 (cgroup_bpf_release):
-    bpf_link_inc_not_zero(link);
-    link->cgroup =3D NULL;
-
-Thread 2 would see this in the bpf_struct_ops_link_create() error path:
-
-kernel/bpf/bpf_struct_ops.c:bpf_struct_ops_link_create() {
-...
-err_put_cgroup:
-    if (link && link->cgroup)
-        cgroup_bpf_detach_struct_ops(link->cgroup, link);
-err_out:
-    bpf_map_put(map);
-    kfree(link);
-    return err;
-}
-
-Since link->cgroup was set to NULL by Thread 1, the error path incorrectly
-skips cgroup_bpf_detach_struct_ops() and unconditionally calls kfree(link).
-
-Because Thread 1 still holds a valid refcount, won't it later call
-st_link->link.ops->detach() and bpf_link_put() on the freed link memory?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1779760876.gi=
-t.zhuhui@kylinos.cn?part=3D5
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26429228214
+--===============1607772065207942128==--
