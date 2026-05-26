@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4144D3E0C59
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 16:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7F74219FA
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 17:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779813891; cv=none; b=iVVYNGKmTZHA5yLxMpzAWdOWEoRp75JKjTVIbYqWcNdBo4ODKhiggiJajKnKlhIp3N27aHiq4atF+CI/mTtd6ABEsQ+XEeVC/vG+5THGPbNymuiEc3f5/75sNSDrr9pt2jDeOKWfgE2qcdCwYoyfF+WTPjbQj6h7HMMB2MyY0tU=
+	t=1779818051; cv=none; b=Jwb54JZOHjLPp6NDkGmFzR+H1OPafddE0U/E4rMeW6iyWX3aQfto0QUACNqTR1yL2NwBxDnPg7pABgKDKHKugfP6Ao+5UOMySqdUW7uBnIRxqqfDMIAaimpzwGJ154//sHFrBBIHNjqnFdahQxGMHUmNt8maNaHalTSAlRCEn3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779813891; c=relaxed/simple;
-	bh=O64DPGPz5nh/Y6ItVdywSqDvSJoAY9nQkdsiGzyOjfo=;
+	s=arc-20240116; t=1779818051; c=relaxed/simple;
+	bh=O261xfHQ+PEf+uVmnIwUmJpjinAF5/zq8NqM5NsbMsY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KrPttVS9x1+fvC6Les9DRoJEKIN3QyQ8h6VkIJSLp6AVjlyUXRB1t69dH0yFThpo6FPQu31C91UwFt/cqcnB/pX9d3YP+hbLpa44UlR1F3Ja+bmT5MxmatTQ5dgUMotnGuSjXmVo4P2WnPJ0Jz9LYQAwyXFFLno/nSHM1H89d1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZ/JvXw5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bZofisaXJvWB+yJcny2Kkf+ARt+3o8MoUClmdiwfHRIajs/GrVBtZiu0IgkUjxabUSH+CXahNCxTE8Gw7exf/i/LoctoH8wTQcpgcfgH9edjZYEFT7jGquuObaW+3zN8k0pZHNP5LnUivO2ynKY6Um1Gqaa+sXnRzPMy/suS21A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doA9BlEH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZ/JvXw5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853601F000E9;
-	Tue, 26 May 2026 16:44:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doA9BlEH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCC1F000E9;
+	Tue, 26 May 2026 17:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779813888;
-	bh=Gzcjrj6f8gaiFxH5qNEg6KadXFHbfAVI1uibPdOVae0=;
+	s=k20260515; t=1779818049;
+	bh=LB+xcBLJ3KDIL85FhSYp8ttGiWXOn2Qf7qfeBsBAZZw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kZ/JvXw5Do7LnoBkIlz/Owf1Whm7hR7xMyMSFEDj6O6BiWoolGWfKxKacTJbYrxzd
-	 m5fCgQaml/zPAgLd2pEtfPoMzhZ176ype+4tl1HBDKF+4ilKx4wtA5cQBjGGnlaxvY
-	 rswSKOh9mpgLaY6cyAP0r7Eyb1Vu4/XyUx2VGC7trGYZqf3SHnmHtVUeeCzuhwHAxS
-	 ouzLbDR6NJD/fwRKimuOmHnO2sjnDWehbo191VQ4mJl5bsaRBYGqThduWHy1vHZwnq
-	 pA3xJyGqVT2QHbUkEedQ+s2hu5qWzhVYOAQzQxrFRwQnLZdRhtySbNW9IcEZhTedeZ
-	 QaHTIk8tBf8Vg==
+	b=doA9BlEHMG83jkbnqyYPaNx27Q8LqABn4KbM1FFlN/W+EFaTPb7WEXoxzeakTozgH
+	 T+r0u3J6AFQeDKhz/yWrMA2UrAyFh0D+6QV/HJbaQbWaM4UDcOT8rjCZ7IRoPw77A3
+	 TZKxnp/2GTHvpb+PY6vmN3eX/iDcJUhYtGicn4TZBl39wmMI01/Hln5c6A8zAzQapV
+	 FYE0pn3JnsjYHb1h/odZd67su2/7MSv3KjgPH3m5YrDJlOP9Q6TNjFB7WqxnAi634N
+	 O5Sl/50syV8C2ii5QFXX2WK6yZnHiv99cB4kKrc7JdEsN8veiveryNHw7MikU8Mvhl
+	 rDpNEPsFqyarA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND 2/2] selftest: seccomp: Adjust test for using
- both `STRICT` and `FILTER`
+Subject: Re: [PATCH v2 05/12] irq & spin_lock: Add counted interrupt
+ disabling/enabling
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jamie Hill-Daniel" <clubby789@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526-seccomp-combined-v1-2-304b1cc3ad24@hill-daniel.co.uk>
-References: <20260526-seccomp-combined-v1-2-304b1cc3ad24@hill-daniel.co.uk>
+To: "Boqun Feng" <boqun@kernel.org>
+Cc: ojeda@kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260526152148.30514-6-boqun@kernel.org>
+References: <20260526152148.30514-6-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 16:44:48 +0000
-Message-Id: <20260526164448.853601F000E9@smtp.kernel.org>
+Date: Tue, 26 May 2026 17:54:08 +0000
+Message-Id: <20260526175409.7CFCC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,82 +46,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-New issues:
-- [Medium] The updated selftests crash with SIGKILL due to unhandled strict=
- seccomp constraints.
-
-Pre-existing issues:
-- [Critical] The internal kernel mode `SECCOMP_MODE_COMBINED` is leaked to =
-userspace via `prctl` and `/proc/pid/status`, causing ABI breakage.
+- [Critical] An NMI occurring inside local_interrupt_enable() corrupts the =
+per-CPU saved IRQ flags, leading to permanently disabled hardware interrupt=
+s.
+- [High] Skipping softirq processing in `__irq_exit_rcu()` without re-trigg=
+ering it in `local_interrupt_enable()` leads to indefinite softirq starvati=
+on.
 --
 
-commit fb241f2f33856c48dd4d8cab04014fc026770de7
-Author: Jamie Hill-Daniel <clubby789@gmail.com>
+commit 2a089d1e2525d387b14ef2c6eb7f3576f07d6bc4
+Author: Boqun Feng <boqun@kernel.org>
 
-selftest: seccomp: Adjust test for using both STRICT and FILTER
+irq & spin_lock: Add counted interrupt disabling/enabling
 
-This patch updates the seccomp selftests to expect a successful transition
-to STRICT mode after FILTER mode is already applied, renaming the test
-to mode_filter_combined.
+This commit introduces new local interrupt disabling APIs that use a per-CPU
+counter to support nesting. This avoids accidental early interrupt enabling
+when locks are nested or used with guard facilities.
 
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+Link: https://patch.msgid.link/20260121223933.1568682-6-lyude@redhat.com
+
+> diff --git a/include/linux/interrupt_rc.h b/include/linux/interrupt_rc.h
+> new file mode 100644
+> --- /dev/null
+> +++ b/include/linux/interrupt_rc.h
 [ ... ]
-> -TEST(mode_filter_cannot_move_to_strict)
-> +TEST(mode_filter_combined)
->  {
->  	struct sock_filter filter[] =3D {
->  		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-> @@ -534,8 +534,7 @@ TEST(mode_filter_cannot_move_to_strict)
->  	ASSERT_EQ(0, ret);
-> =20
->  	ret =3D prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT, NULL, 0, 0);
-> -	EXPECT_EQ(-1, ret);
-> -	EXPECT_EQ(EINVAL, errno);
-> +	ASSERT_EQ(0, ret);
-
-[Severity: Medium]
-When this test finishes, the kselftest framework attempts to exit the proce=
-ss
-by calling glibc's _exit(), which invokes the exit_group syscall.
-
-Since strict seccomp mode only permits read, write, _exit (__NR_exit),
-and sigreturn, won't the forbidden exit_group syscall cause the test process
-to be immediately killed with SIGKILL?
-
-It appears the test must manually exit via syscall(__NR_exit, 0) to avoid
-falsely reporting a failure, similar to how TEST(mode_strict_support)
-handles it.
-
-Additionally, does this patch also need to update
-TEST(seccomp_syscall_mode_lock)?
-
-With the new kernel behavior, that test's transition to strict mode will now
-succeed, causing it to execute the seccomp() syscall while in strict mode,
-which will result in another immediate SIGKILL.
+> +static inline void local_interrupt_enable(void)
+> +{
+> +	int new_count;
+> +
+> +	new_count =3D hardirq_disable_exit();
+> +
+> +	if ((new_count & HARDIRQ_DISABLE_MASK) =3D=3D 0) {
+> +		unsigned long flags;
+> +
+> +		flags =3D raw_cpu_read(local_interrupt_disable_state.flags);
 
 [Severity: Critical]
-This is a pre-existing issue, but the underlying kernel patch appears to le=
-ak
-the internal SECCOMP_MODE_COMBINED (4) state to userspace.
+Can the per-CPU saved IRQ flags be corrupted if an NMI occurs here?
 
-When a process successfully transitions to strict mode after a filter is
-installed, its internal state becomes 4.
+After hardirq_disable_exit() decrements the count to zero, but before the
+saved flags are read, there is an unprotected window. If an NMI fires in
+this window, the interrupted thread's count is 0 but its hardware IRQs are
+still disabled.
 
-If this value is directly exposed to userspace via prctl(PR_GET_SECCOMP)
-and the /proc/pid/status file's Seccomp: field, could this break ABI
-contracts?
+If the NMI handler or a function it calls uses local_interrupt_disable() or
+spin_lock_irq_disable(), it will see the count is 0, assume it is the
+outermost caller, and overwrite the per-CPU flags with its own IRQ state.
 
-The UAPI headers only define SECCOMP_MODE_DISABLED (0),=20
-SECCOMP_MODE_STRICT (1), and SECCOMP_MODE_FILTER (2).=20
+Since hardware IRQs were disabled when the NMI hit, the saved flags will
+reflect disabled IRQs. When the NMI returns, the interrupted thread reads
+these corrupted per-CPU flags and passes them to local_irq_restore(),
+which would permanently disable hardware interrupts on that CPU.
 
-Exposing an undocumented internal mode to userspace might cause sandbox
-monitoring tools, init systems, or security daemons that expect standard
-UAPI values to malfunction or crash.
+> +		local_irq_restore(flags);
+> +		/*
+> +		 * TODO: re-read preempt count can be avoided, but it needs
+> +		 * should_resched() taking another parameter as the current
+> +		 * preempt count
+> +		 */
+> +#ifdef CONFIG_PREEMPTION
+> +		if (should_resched(0))
+> +			__preempt_schedule();
+> +#endif
+> +	}
+> +}
 
->  }
+[ ... ]
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 10af5ed859e73..d1ab1799794ca 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+[ ... ]
+> @@ -728,7 +731,16 @@ static inline void __irq_exit_rcu(void)
+>  #endif
+>  	account_hardirq_exit(current);
+>  	preempt_count_sub(HARDIRQ_OFFSET);
+> -	if (!in_interrupt() && local_softirq_pending()) {
+> +	/*
+> +	 * Interrupts may happen between hardirq_disable_enter() and
+> +	 * local_irq_save() in local_interrupt_disable(), if irq_exit() invokes
+> +	 * softirq here, we may have a softirq handler calling
+> +	 * local_interrupt_disable() but it won't disable the irq because
+> +	 * hardirq disabling count is already 1, hence we need to prevent
+> +	 * invoking softirq when a local_interrupt_disable() is ongoing.
+> +	 */
+> +	if (!in_interrupt() && !hardirq_disable_count() &&
+> +	    local_softirq_pending()) {
+
+[Severity: High]
+Does skipping softirq processing here lead to indefinite softirq starvation?
+
+By skipping invoke_softirq() when hardirq_disable_count() > 0, any scheduled
+softirqs (such as timers, RCU callbacks, or networking) are left pending.
+
+When the critical section ends, local_interrupt_enable() decrements the
+count and re-enables hardware interrupts, but it does not check
+local_softirq_pending() to flush these deferred softirqs.
+
+Will these pending softirqs stall indefinitely until another, unrelated
+hardware interrupt fires, potentially causing RCU stalls or network hangs
+in low-activity periods?
+
+>  		/*
+>  		 * If we left hrtimers unarmed, make sure to arm them now,
+>  		 * before enabling interrupts to run SoftIRQ.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-seccomp-co=
-mbined-v1-0-304b1cc3ad24@hill-daniel.co.uk?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526152148.3051=
+4-1-boqun@kernel.org?part=3D5
