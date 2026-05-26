@@ -1,193 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0108232D0FC
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 02:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831D631715F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 02:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779763811; cv=none; b=NLXnjroZ0Yejx9yvvwN2nINLi6nxNSS1inCXmThLVdAKTUJ6daVdpE0Oj+C+JjgIAzOsOLzJl6bjSYoxgfQiqp5yWRf/BbDkxsZYIO6hmpA3UImVrdQF4CVrdh3ILI1UIZC2OBy8411XsiebxRcFPa68IfUDTBbfou/ZWkB2JcQ=
+	t=1779763932; cv=none; b=FKuvGiKMYehHpWdX0JdlaHRQw5ZLHBggHK+PLAa3IfmOyWz/sVX/r3338i2gqWHW2hljNWqNgQeL8T/TJ8T2ZiWLquvsHWqlUveDTFlApTBEcHHsXNVpHPFUBufVJxCkBUrIQyRFKTQA6E2cYsaQ7/ZQ7+PS2Kqti+9tPut9nrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779763811; c=relaxed/simple;
-	bh=W8ygCA+3Ku7eBoEW7vBScsQC3u8Jgp8OerUoxFtz/tQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JkcK1NjFXd/O7G1JwXaLL0soMM+rYZR9AgtsukmftHycXRMVnisGfFnNQ9aMgYCZN2YU1naEXDPq1aOpfHFTRdLm9SY9rS/f9DK+6X5gBt4GhVOaFjUD/no2zFJNl4w0gu3Pp4mUHf60tsltS5o9ZztjWZM7s3hdlDkXxGtxVZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKQdp3ao; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779763932; c=relaxed/simple;
+	bh=o9wMTxhYiDKmflOFYsWj2G5+KhuWu2fGjh/QrAEnzwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K3pLU6wV0Tv3KY5h3eRJKjtl+S8Ed3V2Fpz49VJbDoBRJuh7jDx32B8fgNH5MPkLd5Yjdp7FEZHLTITL8R4ygUYh8VQp/Ei3Zgtm/smGh06WwwDzJidafezT+GW2f7vPEECd21gyXwExxNqJVXl0l0BQwra4DXEZKWAf6pTJPIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev; spf=none smtp.mailfrom=northecho.dev; dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b=TEbOSmrq; arc=none smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=northecho.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKQdp3ao"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02111F00A3A;
-	Tue, 26 May 2026 02:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779763808;
-	bh=sq6kyfBe4cglVLw7UCDkg98Gwpo/wgIJrG9+nfI4ZNY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MKQdp3aoVgTSonc+28TZabVV6XDbMwiBd3eMI8awEzhi6FlyR6Kepza2UvcFPbe4z
-	 a5JexWodUsQXPU29012ZggkI7FpfCLfvLmIxwi80X/klNv99PMtQKk4ybDELx4jwzU
-	 jYRC5D9gwu/V8HPmjsYhHW5ziE4Nlrh5PSE+wl8kH9rMPukJI+JO8NhgLyGHs0CgaZ
-	 kDNWC1Q+KIKJeovTNslMnwpHDAW4m9N2VkvZ14w37hNPjIr/73ApkNzQu+uaPeXRlL
-	 4DqMsYGwdGo3GZ9JlAt3XF4Eu7wKV13ttSe0DfpUJKNCTHji81QDhaHbRgTBmRvWYE
-	 wnxcstH4ts21g==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v7 08/11] selftests/bpf: Add tests for
- memcg_bpf_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: bpf@vger.kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, tj@kernel.org
-In-Reply-To: <722df14b403dfbb123f1a1df3c72fbbfb998a31f.1779760876.git.zhuhui@kylinos.cn>
-References: <722df14b403dfbb123f1a1df3c72fbbfb998a31f.1779760876.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 02:50:07 +0000
-Message-Id: <20260526025007.C02111F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b="TEbOSmrq"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-65c30aabe8dso914955d50.3
+        for <bpf@vger.kernel.org>; Mon, 25 May 2026 19:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=northecho-dev.20251104.gappssmtp.com; s=20251104; t=1779763928; x=1780368728; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=naGseeLsZOt5/A5Mc1MGjXdOC/ihUE1Cs3gNHn6WygY=;
+        b=TEbOSmrqKq3smUDcMdEMyNVgqupAbh3DDq0dAoGy9owBXUAEFgnpDhtzgn5FbS062k
+         Ks+Ha2gHno4vvvrvN1o2Fwle9wjNrpSOasnJ6UVdCeMtV3dNDNqrs3BpYn9oqvpmKaZ3
+         PY3MJ+ItyQ+Z+miQU6l3S3HFbDklKhxRVoh/6CjB/QA0boj4eFh19/k4pPZW7AI877BJ
+         RvCwnXWzkO8FG5ZvKLwk04dxb3LX+CRk7ifKP28TIXv/BuW8G5RNzgB5yRTRoMkhYkoY
+         XquAleCLQ8+Hods1tjYaHw/tALUfDRh1MCb8QwWjlCskWWQKH69foWgSDGtHWCKXwBeT
+         DlbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779763928; x=1780368728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=naGseeLsZOt5/A5Mc1MGjXdOC/ihUE1Cs3gNHn6WygY=;
+        b=c2mffpJuCbFmnymUs3Rkiz+YdtAdJpGGu0jZKSfO7Jz6sXKW+6GA1DaFlOr2GpwbJs
+         OkUMJ+qVgBoRAgU1/JzUjtFpTRTEW2y4jJC2akZ2nVJR4N8qq5ufntb5SMtgrFQKzGEg
+         D26vyeJXOf+Y8nBDJkSMTIUyh8IZg2NrIwasIrkIeUUeXvdLK4GRrTYjmBRPzuGSLioU
+         EgzPEMr07kGe15HbrTzJQvNjIGaw8+F2pfN5IKaJT/2o4tuAKG5y5yooMwXVVKLwRN7b
+         B9huAjAV8VfE5shnYLog3Bw5HHV+h0LemVfsEdq4K6hP/X341Zs49dEuGbh4jJJ47C35
+         HLxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/kG/ieUf2sEdZlUbHidUJ8t2ZwHvn43EES6WhVdpke5Sxsm/BAz/+P7ABzQ/jHHHGqYe0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwBdJ0l80ZSb/0FX28uWXufq1oiAXI8SksPAthQ1q9nfwIKG2x
+	ZLvDx1hsz6Q0KAGyq9oc2cCXJLjv3V4+IJL+eJMymlmnmmqTOVDdnUDJwWa0Dksec4U7
+X-Gm-Gg: Acq92OH6yUl3Sbp6XVOhQfriKdKjl0WwKXKRErxMfdU8UHd/e8MheJwaM4BNPy89gnG
+	4yGYWoH/fB9RX9XaAq+zFy0gjsjIQcXivl7zug87lvw8N5tp4LzCTfeKcBJOiw6Zqnjy/mt9fLG
+	6fDH1FjsK87Smj8nBGWV+KWCTkGYiY9M8DDicqVrsrJV9FAx8fwbCDDph1Tttv5C+rds6zsB+bC
+	uvn59ElbGbGs4cTkstvjQ+ce4DTtjLCeRO4Afuca2FlZBsU4ipL5tEtN2XzQ0ztk4EWOrPQJNih
+	zpflK1EJwzOsllHV7FLERj5ikxqkwzg5zBx2npiFNPHSYXP0y+6AZU+fvDRnDe14eWtk8LwLlz/
+	eALzuz1tPofQ40Kyqzsy5Sa8QTy6h14SuIg1hBiTonGjtwHRnWIDAIuNGbdVJLp36rvhEydgoys
+	ngnCzhUrX/+YCrL7tToOC+M5xxwKM2rIg9uqpF2dEeqCZ7J4kDlMfGAa3d/bTx7Ri5UnqdgwEGr
+	oYVrJaRcL6tVPE=
+X-Received: by 2002:a05:690c:f:b0:79a:8e00:a5bf with SMTP id 00721157ae682-7d3373a7a95mr124613927b3.1.1779763928408;
+        Mon, 25 May 2026 19:52:08 -0700 (PDT)
+Received: from kelso.tail8e61da.ts.net (99-10-92-174.lightspeed.rlghnc.sbcglobal.net. [99.10.92.174])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7d38c33c935sm54938797b3.36.2026.05.25.19.52.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2026 19:52:07 -0700 (PDT)
+From: Christopher Lusk <clusk@northecho.dev>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH net v3] net: tls: use sync AEAD for sk_msg BPF sockets
+Date: Mon, 25 May 2026 22:51:54 -0400
+Message-ID: <20260526025154.60607-1-clusk@northecho.dev>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] The inline assembly in `read_file` fails to actually trigger memor=
-y access and page faults.
-- [Medium] Error paths in `real_test_memcg_ops` leave child processes orpha=
-ned, preventing cgroup cleanup.
-- [Medium] The commit message references a `get_high_delay_ms` hook, but th=
-e implemented hook is `memcg_charged`.
-- [Low] Missing file descriptor validation after manual map lookup using `b=
-pf_map__fd()`.
-- [Low] TOCTOU race condition from closing temporary file descriptors gener=
-ated by `mkstemp()`.
+The kTLS TX path can hand an open record to a sk_msg verdict
+program before encryption.  If the verdict applies fewer bytes
+than the open record contains, tls_push_record() splits
+ctx->open_rec into the record being encrypted and a remainder.
+The synchronous path reattaches that remainder before continuing.
+
+With an async AEAD provider, crypto_aead_encrypt() can return
+-EINPROGRESS after ctx->open_rec has been unhooked but before the
+split remainder is reattached.  The remainder is no longer
+reachable through ctx->open_rec or ctx->tx_list, silently dropping
+transmitted data and leaking the unreachable tls_rec.  The same
+composition also entangles the user-page zerocopy lifetime rules
+with an async completion path.
+
+A sockmap cannot be attached to a socket after an inet ULP is
+installed: sk_psock_init() returns -EINVAL when
+inet_csk_has_ulp() is true.  So the supported ordering for
+sockmap + kTLS TX is sockmap first, TLS_TX setup second.  When
+TLS_TX setup sees an existing sk_psock, allocate the AEAD with
+CRYPTO_ALG_ASYNC masked out and latch the TX zerocopy gate
+(sw_ctx_tx->async_capable) so the buggy composition becomes
+structurally unreachable.  Ordinary kTLS sockets without sk_msg
+BPF attached are unaffected and continue to use async-capable
+providers.
+
+Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+Cc: stable@vger.kernel.org # 4.20+
+Signed-off-by: Christopher Lusk <clusk@northecho.dev>
+Assisted-by: Codex:gpt-5.5
+Assisted-by: Claude:claude-opus-4-7
+---
+
+Changes since v2 [1]:
+- Per netdev maintainer guidance [2], replace the Option-C
+  drain-on-error fix with a setup-time surface narrowing in
+  tls_set_sw_offload(): when a sockmap is already attached at
+  TLS_TX setup, request a synchronous AEAD (CRYPTO_ALG_ASYNC in
+  the allocation mask) and set sw_ctx_tx->async_capable = 1.
+  Both moves are needed: latching async_capable alone disables
+  zerocopy but tls_do_encryption() can still return -EINPROGRESS
+  on the copy path; selecting a sync provider removes that return
+  path for sk_msg-attached sockets.
+- Drop the selftest from the series per Jakub's note that the
+  existing sockmap + TLS coverage at
+  tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c exercises
+  this configuration [3].  That suite covers sockmap + kTLS
+  policy paths broadly; the specific async-pcrypt pass-then-drop
+  failure mode from the v2 reproducer was validated for v3 on
+  QEMU/KVM with a KASAN+LOCKDEP-instrumented kernel against net
+  base 2156a29aecff before send.
+- Single-patch series.
+
+Changes since v1:
+- v1's remainder-rooting fix was incomplete; Sashiko AI review
+  surfaced a real UAF in the v2 follow-up that John Fastabend
+  endorsed on the v1 thread [4].  The surface-narrowing approach
+  in v3 makes both failure modes unreachable by avoiding the
+  async + sk_msg composition entirely rather than patching each
+  continuation point.
+
+[1] https://lore.kernel.org/all/20260521025840.976378-1-clusk@northecho.dev/
+[2] https://lore.kernel.org/all/20260525133028.58494274@kernel.org/
+[3] https://lore.kernel.org/all/20260525133048.2dc6d8d3@kernel.org/
+[4] https://lore.kernel.org/all/huduxtn6parzgiaf5cyiyrrvjjvx6jsdedowvrd4nkwmuyeind@j6migjgofh2i/
+
+ net/tls/tls_sw.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 964ebc268..0000000 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -2867,7 +2867,20 @@ int tls_set_sw_offload(struct sock *sk, int tx,
+ 	rec_seq = crypto_info_rec_seq(src_crypto_info, cipher_desc);
+
+ 	if (!*aead) {
+-		*aead = crypto_alloc_aead(cipher_desc->cipher_name, 0, 0);
++		u32 mask = 0;
++
++		if (tx) {
++			struct sk_psock *psock;
++
++			psock = sk_psock_get(sk);
++			if (psock) {
++				mask = CRYPTO_ALG_ASYNC;
++				sw_ctx_tx->async_capable = 1;
++				sk_psock_put(sk, psock);
++			}
++		}
++
++		*aead = crypto_alloc_aead(cipher_desc->cipher_name, 0, mask);
+ 		if (IS_ERR(*aead)) {
+ 			rc = PTR_ERR(*aead);
+ 			*aead = NULL;
 --
-
-commit 239c9254e915ce7f13738ad4bc04054bec8bf86e
-Author: Hui Zhu <zhuhui@kylinos.cn>
-
-selftests/bpf: Add tests for memcg_bpf_ops
-
-Add a comprehensive selftest suite for the memcg_bpf_ops functionality. The=
-se
-tests validate that BPF programs can correctly influence memory cgroup
-throttling behavior by implementing the new hooks.
-
->     The test suite is added in `prog_tests/memcg_ops.c` and covers
->     several key scenarios:
->    =20
->     1. `test_memcg_ops_over_high`:
->        Verifies that a BPF program can trigger throttling on a low-priori=
-ty
->        cgroup by returning a delay from the `get_high_delay_ms` hook when=
- a
->        high-priority cgroup is under pressure.
->    =20
->     2. `test_memcg_ops_below_low_over_high`:
->        Tests the combination of the `below_low` and `get_high_delay_ms`
->        hooks, ensuring they work together as expected.
->    =20
->     3. `test_memcg_ops_below_min_over_high`:
->        Validates the interaction between the `below_min` and
->        `get_high_delay_ms` hooks.
-
-[Severity: Medium]
-The commit message mentions the get_high_delay_ms hook multiple times, but =
-the
-code implements memcg_charged_impl which attaches to struct_ops/memcg_charg=
-ed.
-Could the commit message be updated to reflect the actual hook name used?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/t=
-esting/selftests/bpf/prog_tests/memcg_ops.c
-> new file mode 100644
-> index 0000000000000..19fd4fde22660
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-[ ... ]
-> +int read_file(const char *filename, int iterations)
-> +{
-[ ... ]
-> +	for (int iter =3D 0; iter < iterations; iter++) {
-> +		for (i =3D 0; i < FILE_SIZE; i +=3D page_size) {
-> +			/* access a byte to trigger page fault */
-> +			p =3D &map[i];
-> +			__asm__ __volatile__("" : : "r"(p) : "memory");
-> +		}
-> +
-> +		if (env.verbosity >=3D VERBOSE_NORMAL)
-> +			printf("%s %d %d done\n", __func__, getpid(), iter);
-> +	}
-
-[Severity: High]
-Does this inline assembly actually trigger a memory access?
-
-The "r"(p) constraint just loads the address into a general-purpose registe=
-r,
-but doesn't dereference it. The memory clobber also does not force a read of
-the pointer's target memory.=20
-
-Should this be dereferenced, such as "r"(*p) or explicitly via=20
-(void)*(volatile char *)p, to ensure a page fault is triggered?
-
-[ ... ]
-> +static void real_test_memcg_ops(int read_times)
-> +{
-> +	int ret;
-> +	char data_file1[] =3D "/tmp/test_data_1_XXXXXX";
-> +	char data_file2[] =3D "/tmp/test_data_2_XXXXXX";
-> +	char time_file1[] =3D "/tmp/test_time_1_XXXXXX";
-> +	char time_file2[] =3D "/tmp/test_time_2_XXXXXX";
-> +	pid_t pid1, pid2;
-> +	double time1, time2;
-> +	int status;
-> +
-> +	ret =3D mkstemp(data_file1);
-> +	if (!ASSERT_GE(ret, 0, "mkstemp"))
-> +		return;
-> +	close(ret);
-
-[Severity: Low]
-By closing the file descriptor returned by mkstemp() immediately and then
-having the child process reopen it later with fopen(), does this introduce a
-time of check to time of use race condition?
-
-Would it be safer to pass the file descriptor to the child process or use a
-different mechanism for temporary file handling?
-
-[ ... ]
-> +	ret =3D waitpid(pid1, &status, 0);
-> +	if (!ASSERT_GT(ret, 0, "child1 waitpid"))
-> +		goto cleanup;
-> +	if (!ASSERT_TRUE(WIFEXITED(status), "child1 exited normally"))
-> +		goto cleanup;
-> +	if (!ASSERT_EQ(WEXITSTATUS(status), 0, "child1 exit status"))
-> +		goto cleanup;
-> +
-> +	ret =3D waitpid(pid2, &status, 0);
-
-[Severity: Medium]
-If the waitpid for pid1 fails, or if pid1 exits abnormally or returns a
-non-zero status, the code jumps to cleanup without waiting for or terminati=
-ng
-pid2.
-
-Will this leave pid2 running in the background and attached to the
-high-priority cgroup, preventing cgroup cleanup and affecting subsequent
-tests?
-
-[ ... ]
-> +void test_memcg_ops_over_high(void)
-> +{
-[ ... ]
-> +	map =3D bpf_object__find_map_by_name(skel->obj, ".bss");
-> +	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name .bss"))
-> +		goto out;
-> +
-> +	map_fd =3D bpf_map__fd(map);
-> +	bss_data =3D calloc(1, bpf_map__value_size(map));
-
-[Severity: Low]
-Should map_fd be validated before being used?
-
-The BPF subsystem selftest guidelines recommend checking file descriptors
-returned after manual lookups, for example with ASSERT_GE(map_fd, 0, ...).
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1779760876.gi=
-t.zhuhui@kylinos.cn?part=3D8
+2.54.0
