@@ -1,193 +1,229 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BAFC3B5F66
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 16:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE453B6C0B
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 16:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779812596; cv=none; b=go9Xx1j50aBC9a1/BgS3H6E5rp4cY6VQv1AslOnfFbyAS9jIkoGnxG1cBF8M1v4FR3tRNZMBQLak5sLCntuCRc8qTCzDXEVCB80Gl8cYOluX26S7iLQWptyoXmZsoXL0HtDNi4b1YBw/O9XkWsVzTBw88IDZKMgdUe/c56aSo+k=
+	t=1779812625; cv=none; b=T0tGJ8wz55+cpz4Wthtx3lqNMWI7PAyz+LqX4NFJCWL0Usozpef/4KFVd6eVA6Jc05c7Tehy6ou5JvETlI+0IXN0pzu+kV/toF+lSfxatGOIyIQfQS0voQnoLx0pzHcg+EoHy0WsFE7v8UVJW36sea8ISe3NWrzIb89tdScrsLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779812596; c=relaxed/simple;
-	bh=dAvQA/uEoxcnQpjzJdRy6iTKQgkIrmDkJiuukk1go7s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fOk+J30cGoMLOALjiBe5BbCQxPY7GFv8PDnlJ7ejAtuxH3KCRG6w/87g9nyE0rv3+HW+gryq9PiuzXk6Lju1JRMbi9ZkBs5ecNkNYV1xpMNNUHZqiPU6k7+4SKwHg7pc10BEqgQHbYAw754WMFKBoLU1RmREm6Ls9trNzlx/2+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8hhzAbG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779812625; c=relaxed/simple;
+	bh=vv5B0lNNGYhGFVWPQgSt9e9eD2K6zdVphhDsNEtMxuo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fukZUauMeOyQVckteKdMfrAgT5/DqBugqLdotDpK9MVpWmIjrc58GTofNamkywqeYd77IhugiDelzPq59nlqgHlyTH1lRfNqLP3jvNun7TWYTMfQ64Sg8pF5LzgKnsktCt5LSL8B85ScphiytcLrHbhp31B03KN98KsBzQSArxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TStq3JlD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8hhzAbG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C1F1F000E9;
-	Tue, 26 May 2026 16:23:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TStq3JlD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 482791F00ADE
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 16:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779812592;
-	bh=Hsemjfxo8eTkBELzULjxgNKpufvoTAjjExUTN25aTfk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=j8hhzAbGVPTiDrbDy151rzjwmnoYXSCLb/a4aSZrAlUwdLtl2ZCOMszF/uP+oHbPA
-	 7vwejFnQbrBHYrpK0AMEST5gB3lspPKL7+nzNyy0vIti0SLv5dKQw6wBfKFj+SiaNR
-	 XY8Tr8mcYUcX9chfXTmCjRBC6kbvPE9QJA2Gc+WJ/KKvFM2xvgGEPqZ7mJAarEyZdd
-	 CVx0ZV5ZvzMhWVaAUhomt9zefWRZo7RWq4wm/7bbmG3tR9gWXXUw0KtJ5+1fDH2VTM
-	 0bNMTy2T2CUv2oAXS8+Fi8s7hwzJSHWX8kAq3+H6lvQgWK81wGxNMLQhao/UWAN3CH
-	 0VtkmFXHfEE8g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
- with `SECCOMP_MODE_FILTER`
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jamie Hill-Daniel" <clubby789@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
-References: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 16:23:11 +0000
-Message-Id: <20260526162312.44C1F1F000E9@smtp.kernel.org>
+	s=k20260515; t=1779812622;
+	bh=1LfCRbFeQtW7WSChOCQSjGbiNuhognVwN4bLp5KK0AE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=TStq3JlDrpSueRt484vq6aHU7lfzem+1XeGBiGFi4cXDarHA3YnaDLdqjW3+fOU1t
+	 tMXMd7w9hlQg2pFxjFShVDPnl3vcTN2oBZxYr1TZgkV9pPWCmg9m9+6hidb3oxeTOc
+	 dsKhhFmGMplbazZl9dSCHj9CXlG8dekI8avlqWf4w3oJu0hK3B7u7H85nRGm1zj+Ed
+	 JoAYS3EsfzZStRuMK8LMHcFB104XhoayZsWVgcnkE4cl4fLvJnnzCCpi7aVFE6L4Al
+	 2SMy1+MECebBqQ+jwVIADWHGwHWBpGMXz7uZfstV6FKtZ8rwOznjPyJVxMfAYK+6Ew
+	 n+sA4YOFZB4hA==
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49040362e4aso52180005e9.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 09:23:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ826q8raB0hdQOno3HVeuehaTdJ3zH3niTH/aQLFWeM9phFAhyFqXqeicuHPVGPBEgNW6c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/Qw59fegTqvadIy4GqTy4ANcpJ5V/Xw2CH8hYf2MpmjXLUvGq
+	+VoSqyZcAqigYHM21KGQx14yHohi75Qeket3ihPPDJA3T9o5gfT2Em2SMKXuscReZJFgIuK2zUF
+	cevpyIRINz8FsHolrt5PcLB8wUqMTwAhCm3hy6oNI
+X-Received: by 2002:a05:600c:310c:b0:490:53d3:4753 with SMTP id
+ 5b1f17b1804b1-49053d34968mr242027385e9.31.1779812620803; Tue, 26 May 2026
+ 09:23:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260522023234.3778588-1-kpsingh@kernel.org> <87zf1qxeyl.fsf@microsoft.com>
+In-Reply-To: <87zf1qxeyl.fsf@microsoft.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Tue, 26 May 2026 18:23:29 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ5ndrnDPgdzusksPbbYoHHxdnrXi-t9DHi9Jey2z7uJfQ@mail.gmail.com>
+X-Gm-Features: AVHnY4JFyd01k3j4yQlMFQkg5FQkS8Y5_JiLxkJx6BnidkZyOkYvuqmgwiab1WA
+Message-ID: <CACYkzJ5ndrnDPgdzusksPbbYoHHxdnrXi-t9DHi9Jey2z7uJfQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] Signed BPF + IPE Policies
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Linux Security Module list <linux-security-module@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Paul Moore <paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] SECCOMP_MODE_COMBINED allows a ptracer to completely bypass strict=
- mode restrictions via system call manipulation.
-- [High] The internal SECCOMP_MODE_COMBINED constant is leaked to userspace=
-, violating ABI stability.
-- [High] Checkpoint/Restore (CRIU) and Ptrace filter dumping are broken for=
- processes in COMBINED mode.
-- [High] Thread synchronization (TSYNC) is broken and causes state inconsis=
-tencies for processes in COMBINED mode.
-- [Medium] The transition from SECCOMP_MODE_STRICT to SECCOMP_MODE_COMBINED=
- is structurally unreachable.
---
+On Sat, 23 May 2026, 18:34 Blaise Boscaccy,
+<bboscaccy@linux.microsoft.com> wrote:
+>
+> KP Singh <kpsingh@kernel.org> writes:
+>
+> > This series continues the "Signed BPF programs" work and adds
+> > the missing pieces needed for an LSM to do policy enforcement
+> > and addresses the concerns raised by the developers of Hornet.
+> >
+> > One signing scheme, please.
+> >
+> > BPF does not need a second signing scheme. It needs a policy
+> > framework that consumes the verdict the existing signing pipeline
+> > produces. Two parallel signing stacks is harmful UX for Cilium,
+> > bpftrace, systemd, distros, and everyone shipping signed lskels.
+> > Hornet has been NACK'd repeatedly by the BPF maintainers [1][2]
+> > on layering and TOCTOU grounds.
+> >
+> > What this series adds
+> >
+> > - prog->aux->sig (verdict + keyring) and prog->aux->is_kernel,
+> >   populated by the syscall path before security_bpf_prog_load
+> >   fires.
+> > - bpf_loader_verify_metadata kfunc -- the metadata check is now
+> >   kernel C code, not BPF bytecode. The verifier injects the
+> >   calling prog->aux as an implicit argument via KF_IMPLICIT_ARGS.
+> > - Loader-side prog BTF with BPF_PSEUDO_KFUNC_CALL_PROG_BTF so
+> >   the kfunc CALL is reproducible across build hosts and resolved
+> >   at load time.
+> > - security_bpf_prog_load_post_integrity LSM hook, fired by the
+> >   kfunc on a successful metadata check.
+> > - IPE properties (bpf_signature, bpf_keyring, bpf_kernel) and
+> >   two ops (BPF_PROG_LOAD, BPF_PROG_LOAD_POST_INTEGRITY).
+> >
+> > This series address concerns raised by the Hornet developers:
+> >
+> > * The metadata hash check should be in kernel C, not BPF
+> >   bytecode -- Blaise Boscaccy [3]:
+> >
+>
+> That's a gross misrepresentation of some of my previous statements on
+> the subject. We can go back and forth on this until the cows home with
+> increasing vitriolic rhetoric, but that's really just a waste of
+>
+> everyone's time. Your "trusted loader" design flat-out doesn't work for
 
-commit c1df2665317e85f0cd779f5b52a0ed4763185a42
-Author: Jamie Hill-Daniel <clubby789@gmail.com>
+I totally agree, I have wasted a lot of time arguing with you and it's
+up to the maintainers and Linus to decide here.
 
-seccomp: Allow using SECCOMP_MODE_STRICT with SECCOMP_MODE_FILTER
+> our security requirements, and those of others. You keep screaming that
+> we need to "write our own trusted loader" and that isn't really solving
+> anything.
+>
+> You just posted a trusted loader bugfix here.
+> https://lore.kernel.org/linux-security-module/20260522215337.662271-1-kpsingh@kernel.org/
+>
+> What's your path for that now and in the future? How are you getting
+> people to rebuild their out-of-tree trusted loaders if there is a bug in
+> them? Are you expecting sysadmins to subscribe to the bpf mailing list
+> and watch for patches to libbpf and then rebuild an entire corpus of
+> eBPF lskel programs?
 
-It is currently impossible to enable SECCOMP_MODE_STRICT if
-SECCOMP_MODE_FILTER is enabled, and vice-versa. This makes using
-seccomp difficult in environments such as Docker, which installs a
-seccomp filter by default.
+How do you get people to update their software? Don't you folks update
+libraries? If users write their own loaders, they are responsible for
+vulnerability management, just as they are for any other piece of
+software. Not all trusted software lives in the kernel (eg. systemd,
+privileged daemons, software with access to sensitive credentials).
 
-Introduce a new internal SECCOMP_MODE_COMBINED
-that runs strict checks, followed by any installed filters.
+Your arguments are illogical and abrasive. Furthermore, your
+requirements are a moving target and you haven't explained the threat
+model supporting them, despite repeated requests.
 
-Link: https://github.com/moby/moby/issues/42082
+>
+> What if there is a security vulnerability or a CVE in the generated code
+> that gets emitted, how are you handling that? We have processes in place
+> to handle updates, bugfixes and vulnerabilities in the kernel. None
+> exist for your "trusted loader" paradigm. You can publish a CVE for
+> libbpf, but there is no way to publish a CVE for an infinite number of
+> random unknown bpf program in the wild or to notify users that their
+> programs are effected, or for them to know which programs are actually
+> effected and which ones aren't.
+>
+> Also as an aside, it looks like some of this patchset is copy-pasted
+> from https://lore.kernel.org/linux-security-module/20260507191416.2984054-11-bboscaccy@linux.microsoft.com/
+> Which is fine of course, since this is open source software and all, but
+> attribution would be appreciated if you use my code in the future :)
 
-> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-> index 25f62867a16d9..8201a050d358f 100644
-> --- a/kernel/seccomp.c
-> +++ b/kernel/seccomp.c
-> @@ -33,6 +33,8 @@
-> =20
->  /* Not exposed in headers: strictly internal use only. */
->  #define SECCOMP_MODE_DEAD	(SECCOMP_MODE_FILTER + 1)
-> +/* Run SECCOMP_MODE_STRICT checks, followed by SECCOMP_MODE_FILTER  */
-> +#define SECCOMP_MODE_COMBINED (SECCOMP_MODE_DEAD + 1)
+There are only so many ways to write IPE policies, but I am happy to
+add attribution, I will add it in the next rev.
 
-[Severity: High]
-Does this new internal mode leak to userspace and break ABI expectations?
+- KP
 
-Looking at prctl_get_seccomp(), it returns current->seccomp.mode directly.
-This will now return 4 to userspace for tasks in combined mode, but userspa=
-ce
-utilities like systemd and container runtimes strictly expect the mode to be
-0 (DISABLED), 1 (STRICT), or 2 (FILTER).
-
-[Severity: High]
-Will setting current->seccomp.mode to SECCOMP_MODE_COMBINED break thread
-synchronization (TSYNC)?
-
-seccomp_can_sync_threads() validates sibling threads and only allows
-synchronization if they are in SECCOMP_MODE_DISABLED or
-SECCOMP_MODE_FILTER. If any thread is in SECCOMP_MODE_COMBINED, this
-validation unconditionally fails and SECCOMP_FILTER_FLAG_TSYNC operations
-abort with -ESRCH.
-
-[Severity: High]
-Can this new mode prevent checkpoint/restore (CRIU) and ptrace filter
-dumping?
-
-get_nth_filter(), which is the backend for PTRACE_SECCOMP_GET_FILTER and
-seccomp metadata inspection, explicitly enforces the condition:
-
-    if (task->seccomp.mode !=3D SECCOMP_MODE_FILTER)
-        return ERR_PTR(-EINVAL);
-
-When a process runs in SECCOMP_MODE_COMBINED, this validation will fail,
-making it impossible to inspect, dump, or checkpoint the attached seccomp
-BPF filters.
-
-[ ... ]
-
-> @@ -432,14 +434,21 @@ static u32 seccomp_run_filters(const struct seccomp=
-_data *sd,
->  }
->  #endif /* CONFIG_SECCOMP_FILTER */
-> =20
-> -static inline bool seccomp_may_assign_mode(unsigned long seccomp_mode)
-> +/**
-> + * seccomp_needs_combined: internal function for checking if requested m=
-ode
-> + * needs to be upgraded to SECCOMP_MODE_COMBINED.
-> + *
-> + */
-> +static inline bool seccomp_needs_combined(unsigned long seccomp_mode)
->  {
->  	assert_spin_locked(&current->sighand->siglock);
-> =20
-> -	if (current->seccomp.mode && current->seccomp.mode !=3D seccomp_mode)
-> -		return false;
-> +	if ((current->seccomp.mode =3D=3D SECCOMP_MODE_STRICT ||
-> +	     current->seccomp.mode =3D=3D SECCOMP_MODE_FILTER) &&
-> +	    current->seccomp.mode !=3D seccomp_mode)
-> +		return true;
-
-[Severity: Medium]
-Is the transition from SECCOMP_MODE_STRICT to SECCOMP_MODE_COMBINED
-structurally unreachable?
-
-In strict mode, the __secure_computing_strict() hook runs during syscall
-entry and unconditionally kills the process via SIGKILL if it attempts to
-execute any syscall other than read, write, _exit, or sigreturn.
-
-Any attempt to invoke prctl or seccomp to install a filter while in
-strict mode will result in immediate termination, preventing the upgrade.
-
-> -	return true;
-> +	return false;
->  }
-
-[ ... ]
-
-> @@ -1407,6 +1416,9 @@ int __secure_computing(void)
->  		WARN_ON_ONCE(1);
->  		do_exit(SIGKILL);
->  		return -1;
-> +	case SECCOMP_MODE_COMBINED:
-> +		__secure_computing_strict(this_syscall);
-> +		return __seccomp_filter(this_syscall, false);
-
-[Severity: High]
-Could this sequence allow a ptracer to completely bypass strict mode
-restrictions via system call manipulation?
-
-If the original system call is permitted by the strict check (for example,
-read), __secure_computing_strict() passes and __seccomp_filter()
-evaluates the BPF filter.
-
-If the filter returns SECCOMP_RET_TRACE, a ptracer is notified and can use
-PTRACE_SETREGS to modify the system call number (for example, changing it
-to execve).
-
-While __seccomp_filter() correctly re-evaluates the newly injected syscall
-against the BPF filter, __secure_computing_strict() is never re-run. If
-the filter permits the new syscall, it will execute, allowing the ptracer to
-completely bypass the strict mode sandbox.
-
->  	default:
->  		BUG();
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-seccomp-co=
-mbined-v1-0-304b1cc3ad24@hill-daniel.co.uk?part=3D1
+>
+>
+> -blaise
+>
+>
+>
+> >   The bpf_loader_verify_metadata kfunc moves the hash check from
+> >   inline BPF instructions into kernel C code.
+> >
+> > * LSMs cannot observe the verification result at hook time --
+> >   Paul Moore [4]:
+> >
+> >   prog->aux->sig.verdict and sig.keyring are populated before any
+> >   LSM hook runs. Furthermore, security_bpf_prog_load_post_integrity
+> >   hook fires after the in-kernel hash check for consumers that want
+> >   to observe or gate the post-integrity transition.
+> >
+> >
+> > [1] Alexei Starovoitov, NACK on Hornet (TOCTOU + layering),
+> >     https://lore.kernel.org/all/CAADnVQJ1CRvTXBU771KaYzrx-vRaWF+k164DcFOqOsCxmuL+ig@mail.gmail.com/
+> > [2] Daniel Borkmann, NACK on Hornet v3,
+> >     https://lore.kernel.org/all/798dba24-b5a7-4584-a1f6-793883fe9b5e@iogearbox.net/
+> > [3] Blaise Boscaccy, Hornet v6 (C-side hash verification rationale),
+> >     https://lore.kernel.org/all/20260429191431.2345448-1-bboscaccy@linux.microsoft.com/
+> > [4] Paul Moore, push for post-verifier observability,
+> >     https://lore.kernel.org/all/CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com/
+> >
+> >
+> > KP Singh (13):
+> >   bpf: expose signature verdict to LSMs via bpf_prog_aux
+> >   bpf: include prog BTF in the signed loader signature scope
+> >   bpf, libbpf: load prog BTF in the skel_internal loader
+> >   bpf: add bpf_loader_verify_metadata kfunc
+> >   bpf: compute prog->digest at BPF_PROG_LOAD entry
+> >   bpf: resolve loader-style kfunc CALLs against prog BTF
+> >   libbpf: generate prog BTF for loader programs
+> >   bpftool gen: embed loader prog BTF in the lskel header
+> >   lsm: add bpf_prog_load_post_integrity hook
+> >   bpf: invoke security_bpf_prog_load_post_integrity from the metadata
+> >     kfunc
+> >   ipe: add BPF program signature properties
+> >   ipe: gate post-integrity BPF program loads
+> >   selftests/bpf: add IPE BPF policy integration tests
+> >
+> >  include/linux/bpf.h                           |  19 +++
+> >  include/linux/bpf_verifier.h                  |   6 +
+> >  include/linux/btf.h                           |   1 +
+> >  include/linux/lsm_hook_defs.h                 |   1 +
+> >  include/linux/security.h                      |   6 +
+> >  include/uapi/linux/bpf.h                      |   5 +
+> >  kernel/bpf/btf.c                              |   8 +
+> >  kernel/bpf/check_btf.c                        |  18 +-
+> >  kernel/bpf/helpers.c                          |  65 ++++++++
+> >  kernel/bpf/syscall.c                          |  76 ++++++++-
+> >  kernel/bpf/verifier.c                         |  58 ++++++-
+> >  security/ipe/Kconfig                          |  14 ++
+> >  security/ipe/audit.c                          |  13 ++
+> >  security/ipe/eval.c                           |  57 +++++++
+> >  security/ipe/eval.h                           |   5 +
+> >  security/ipe/hooks.c                          |  42 +++++
+> >  security/ipe/hooks.h                          |   9 +
+> >  security/ipe/ipe.c                            |   4 +
+> >  security/ipe/policy.h                         |  11 ++
+> >  security/ipe/policy_parser.c                  |  20 +++
+> >  security/security.c                           |  17 ++
+> >  tools/bpf/bpftool/gen.c                       |  21 +++
+> >  tools/bpf/bpftool/sign.c                      |  17 +-
+> >  tools/include/uapi/linux/bpf.h                |   5 +
+> >  tools/lib/bpf/bpf_gen_internal.h              |   2 +
+> >  tools/lib/bpf/gen_loader.c                    | 127 +++++++++++---
+> >  tools/lib/bpf/libbpf.h                        |   4 +-
+> >  tools/lib/bpf/skel_internal.h                 |  67 +++++---
+> >  .../selftests/bpf/test_signed_bpf_ipe.sh      | 156 ++++++++++++++++++
+> >  tools/testing/selftests/bpf/vmtest.sh         |   4 +-
+> >  30 files changed, 775 insertions(+), 83 deletions(-)
+> >  create mode 100755 tools/testing/selftests/bpf/test_signed_bpf_ipe.sh
+> >
+> > --
+> > 2.53.0
