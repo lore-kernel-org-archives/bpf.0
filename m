@@ -1,96 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.archlinux.org (mail.archlinux.org [95.216.189.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5913DE452;
-	Tue, 26 May 2026 12:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4223F88AA;
+	Tue, 26 May 2026 12:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.189.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779797594; cv=none; b=CyRAzO1KbtS+pTgamjZpOPNV2sAX+iOhiZbAV8nNpfxtoVysKdoxnLQRSPswh6fpLwVx3KbEtBddCjprAZBp2x6S+If823v4z49WLyRQYJ6N5OmPdyp3mWLyvEI4sGroK71jDdaX4qkSY5a8DTqhUXrK4GehLycHblni8kGHWmI=
+	t=1779798465; cv=none; b=YrrxGG847tfeWEhARZvj2WgDQzIP/cuyCX3vyZZDj58TQEiKdRsfMv+/9BxvT+vgidhq3rRiZkcwTkhstP1c15MH8u+fVIaSChBuf09N+X4UirgDqcUxJosEqg/j2Lh4YajfBG86xrOkhGL55qBsd/9YS6H8FpsD03M7jq6WHV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779797594; c=relaxed/simple;
-	bh=xdZ95vC7Fq+5QOpWFwACtL945TcKENWkRlGQAi3Pqxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=c07BkhLhVjplTx60So/KqxmqU+7ptx5D645viAf06q9mQPC0YQi/jTG2ra5AiboIjmfdMmPpA+lDvTqMYaX7gE0IFyKiudGVmI69lKL6e4snrGjv0LPjT5r+DKdvh9rUDgC80U9kN8UatFZiGHBwYuNfPQ4zNe17Hw7v/cOmcxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBN1jLKQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779798465; c=relaxed/simple;
+	bh=vDlPE3WlLowbB4twTPNt5oAOKEs7T3k99UMNQRP9CcM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PCQW2HGgXmqu9gcuiGCD/CLzy0bCeTJK8X/zHnOm37PBQlPvY2+/WJnv4jS4zRjvj43EQEsIQ/NnYzdUkPyxzxVplVbxqBOByCPuzrrYgjTO3FanAvAPciw3azCc6O15uIc70GTZIfqrQULf0h1qAiErGfKntR3WXEAQLLYiw+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org; spf=pass smtp.mailfrom=archlinux.org; dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=0PaXCVkX; dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=qAvsEodf; arc=none smtp.client-ip=95.216.189.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=archlinux.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBN1jLKQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027D71F000E9;
-	Tue, 26 May 2026 12:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779797592;
-	bh=/PlMCsG58Og/BWJOZjzosw89h+7oCgPRyFVhhD89mOI=;
-	h=Date:From:To:Cc:Subject;
-	b=MBN1jLKQCBE6osvlhdtm2gMvYGTR31Mgw0Yp7GGqU+Zs/I1YW0R+dAl3oP1a2XowY
-	 fSPytVz0WjsDArx/y0bM6y+Jqv4gYgpAy6kShRwXt8E9xsXGUieeyPdYgDmN/sJBWb
-	 ioGcCp+AsU0gCgxHUg2ZgYLe0ZjiCJlRa/OtnCxjeDpqFWsAF8f4+tYMnKYEOW5ngi
-	 RjkEt4srnx4jzatcU6VXLp+HQxB51mhwcO8jmVsF0AseQt980u3nOiciAtlfnsl8J9
-	 gGQhG+K57EFQUMeCM2Bn35K95HQsB9RghNlKXTNKNgtxyAAhbgQGvsG7l5/Au8OqA4
-	 GJG4D6RswMEiQ==
-Date: Tue, 26 May 2026 13:13:08 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <ahWOVFZZScPjm2Ow@sirena.org.uk>
+	dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="0PaXCVkX";
+	dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="qAvsEodf"
+Message-ID: <2d93a9e4-0c36-4bc7-8e94-b15f69ebda79@archlinux.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=archlinux.org;
+	s=dkim-rsa; t=1779798460;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
+	b=0PaXCVkXBjwxgV57Gtk9GND9h+M3olt9dDZsAZSMh69khuwz+7omoquMv7bxY+X2NwBvDs
+	7cJghWP+kfKXxa/Mzj4ItNhRylLxtHEbXT2U/CdXfxlLvJjJ5rkSidgc2aBrQrTiI+CPaf
+	ofc7Q62sZXcpwYR2fUFCbVV0KYA5RBkUnwqkS7dvPSc8p+xrEimxO3yvUJhT2LR8N394lG
+	zKL5TDaB8eCxpGZRhxbfjUn9RFNKl2xluA2p7u5kkai+avEVgv9hwAOtKMW2EVgYqK2xAn
+	EZYIc0WKVZAH1Nb4ZDiz1NIO/snRu/iHOKTOeHm8VeRYVTieMy8yWHVg8nfo1l/UbnU8Tv
+	k5Yk3bdm2ZtFa0+WU70NGuYxJOHWvVeBaFwICiatUOh8gM6R/WS3IFlU9YbXwjVzymwuFc
+	XKuulQ5BeoNzGUlr/QrMDgw1cdIvgtAwKofD4IsvIOGsRR1yNR3JjzQoMvKvrQPONqF6JZ
+	OMMNLxAhP1LGiCUgH2GoiCYXngwwZmE2ZcjLiIEAmlhKl2r0JyV2gMJn4Uke4zTOViHDJQ
+	/gJXPKLMTm5lh6Zjv6J183nbfZ/UIz4eehTUQeqX6uRy6jBru/K/rs1ICZHdgd/GSKMS+z
+	nP5SILf6vZKcsnA0+D/43BN50nXByYlhjDbPB2kBPA+oekNoiga84=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=archlinux.org;
+	s=dkim-ed25519; t=1779798460;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
+	b=qAvsEodfYN9Au3PfLWPaXQEfyjbOcwD3RqWnSlsvTSJQ3NP8ZX9wWEW0wqValvrgMDgl0u
+	ST8XcV+dvsfuSMCQ==
+Authentication-Results: mail.archlinux.org;
+	auth=pass smtp.auth=kpcyrd smtp.mailfrom=kpcyrd@archlinux.org
+Date: Tue, 26 May 2026 14:27:36 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9IyIlIE3sgCOvARk"
-Content-Disposition: inline
+Subject: Re: [PATCH v5 07/14] module: Make module authentication usable
+ without MODULE_SIG
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Petr Pavlu <petr.pavlu@suse.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
+ <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
+ <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
+ Mattia Rizzolo <mattia@mapreri.org>, Christian Heusel <christian@heusel.eu>,
+ =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
+ Eric Biggers <ebiggers@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
+ debian-kernel@lists.debian.org,
+ Holger Levsen <holger@reproducible-builds.org>
+References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
+ <20260505-module-hashes-v5-7-e174a5a49fce@weissschuh.net>
+ <0a0736a4-2cdd-49f2-9062-e2f18d769fc0@suse.com>
+ <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
+Content-Language: de-DE, en-US
+From: kpcyrd <kpcyrd@archlinux.org>
+In-Reply-To: <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 5/26/26 1:38 PM, Thomas Weißschuh wrote:
+> On 2026-05-26 12:53:22+0200, Petr Pavlu wrote:
+>> Should MODULE_SIG_FORCE be renamed to MODULE_AUTH_FORCE, along with
+>> renaming the sig_enforce functionality in kernel/module/auth.c to
+>> auth_enforce?
+> 
+> Given that it is a user-visible symbol we'll need to be a bit careful
+> not to break existing configurations.
+> I'll try to use the new "transitional" kconfig attribute.
+A slightly softer worded alternative (yet semantically equivalent) name could be 
+MODULE_AUTH_REQUIRE. No strong opinion though, I think MODULE_AUTH_* does make 
+sense.
 
---9IyIlIE3sgCOvARk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I initially shared the concern about renaming well established config options, 
+but the transitional feature does seem to be a good fit for this.
 
-Hi all,
-
-After merging the bpf-next tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
-
-/tmp/next/build/kernel/bpf/core.c:3379:13: error: redefinition of
-'bpf_arena_handle_page_fault'
- 3379 | __weak bool bpf_arena_handle_page_fault(unsigned long addr, bool is_write,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from /tmp/next/build/include/linux/bpf.h:9,
-                 from /tmp/next/build/include/linux/filter.h:9,
-                 from /tmp/next/build/kernel/bpf/core.c:21:
-/tmp/next/build/include/linux/bpf_defs.h:12:20: note: previous definition
-of 'bpf_arena_handle_page_fault' with type 'bool(long unsigned int,
-bool, long unsigned int)' {aka '_Bool(long unsigned int, _Bool, long
-unsigned int)'}
-   12 | static inline bool bpf_arena_handle_page_fault(unsigned long addr, bool is_write,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  dc11a4dba2464 (bpf: Recover arena kernel faults with scratch page)
-
-I have used the version from next-20260525 instead.
-
---9IyIlIE3sgCOvARk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoVjlMACgkQJNaLcl1U
-h9DQlgf/Qig5mKcOhHHXLfl4Pmy3pnzesly2426k2yGQRac+Onu751S42w8jdSYd
-dx4sT0+FWhIxFt8sHJILnqOxyfgZDT3RTJmOYahCRU8Gbns5sycCl77uAE6EWhUP
-Kw3QFrNORAuMfqkrYy7JrblJwK2MDL1X9yzMXmUMaWUFWCclf7UqeWk5PL5c608N
-wrV1wvEyaLVf+bJx0PS+gHj4rsxc77bXjJT2D5+AxnadOK17ZE0OdpW2zOkMw9v+
-6xXd0ADyikNOuwhst/kQsmbSMrsS8Vd6fYSk9CaGfvZ6Py4OB/wRnK3jdE9FHKe+
-I+9uonfnxb+PEv6fKWEl3DCGae+aOw==
-=QxUj
------END PGP SIGNATURE-----
-
---9IyIlIE3sgCOvARk--
+Sincerely,
+kpcyrd
