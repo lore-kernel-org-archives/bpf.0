@@ -1,121 +1,365 @@
-Received: from mail.archlinux.org (mail.archlinux.org [95.216.189.61])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4223F88AA;
-	Tue, 26 May 2026 12:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.189.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C092A155C82;
+	Tue, 26 May 2026 12:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779798465; cv=none; b=YrrxGG847tfeWEhARZvj2WgDQzIP/cuyCX3vyZZDj58TQEiKdRsfMv+/9BxvT+vgidhq3rRiZkcwTkhstP1c15MH8u+fVIaSChBuf09N+X4UirgDqcUxJosEqg/j2Lh4YajfBG86xrOkhGL55qBsd/9YS6H8FpsD03M7jq6WHV4=
+	t=1779799535; cv=none; b=T6RB2E50Mh/er0XoSn1kPK7Rg4z2m/CrnEeplxG2yWZDT90h93uzqjcgvo5BOrKC/CRJ971a7JJg9fqj1KknYbhr0AmFr/HhG0PE6KUDPRlnx3eoE5fffOCpng6VndMg3XWCmPCfQNV1Nly09aDdxqke7+D7fVoFM9Utghujh20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779798465; c=relaxed/simple;
-	bh=vDlPE3WlLowbB4twTPNt5oAOKEs7T3k99UMNQRP9CcM=;
+	s=arc-20240116; t=1779799535; c=relaxed/simple;
+	bh=3hvHVVE6/Pg1LacAPceqgczetzfzG5ZAqzzGtPibWRs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PCQW2HGgXmqu9gcuiGCD/CLzy0bCeTJK8X/zHnOm37PBQlPvY2+/WJnv4jS4zRjvj43EQEsIQ/NnYzdUkPyxzxVplVbxqBOByCPuzrrYgjTO3FanAvAPciw3azCc6O15uIc70GTZIfqrQULf0h1qAiErGfKntR3WXEAQLLYiw+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org; spf=pass smtp.mailfrom=archlinux.org; dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=0PaXCVkX; dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=qAvsEodf; arc=none smtp.client-ip=95.216.189.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=archlinux.org
+	 In-Reply-To:Content-Type; b=Xh3MC3YtQeh0dWdu+WBsxQgI8vPlD9a9LWEOaO1nVG+yTcOV/fgZqLUlIIhFTe6B2d5PrkImrpM8LnOL91wtgcOqjqqsSZ/XpSgiN6fc+/WGO9vAYAYlK/3z/tBnrDDskg4r6lwPQHjZIZxVKd/wKWf5vQT64VQaIdf82iQ4eDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLFTsAWM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="0PaXCVkX";
-	dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="qAvsEodf"
-Message-ID: <2d93a9e4-0c36-4bc7-8e94-b15f69ebda79@archlinux.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-rsa; t=1779798460;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
-	b=0PaXCVkXBjwxgV57Gtk9GND9h+M3olt9dDZsAZSMh69khuwz+7omoquMv7bxY+X2NwBvDs
-	7cJghWP+kfKXxa/Mzj4ItNhRylLxtHEbXT2U/CdXfxlLvJjJ5rkSidgc2aBrQrTiI+CPaf
-	ofc7Q62sZXcpwYR2fUFCbVV0KYA5RBkUnwqkS7dvPSc8p+xrEimxO3yvUJhT2LR8N394lG
-	zKL5TDaB8eCxpGZRhxbfjUn9RFNKl2xluA2p7u5kkai+avEVgv9hwAOtKMW2EVgYqK2xAn
-	EZYIc0WKVZAH1Nb4ZDiz1NIO/snRu/iHOKTOeHm8VeRYVTieMy8yWHVg8nfo1l/UbnU8Tv
-	k5Yk3bdm2ZtFa0+WU70NGuYxJOHWvVeBaFwICiatUOh8gM6R/WS3IFlU9YbXwjVzymwuFc
-	XKuulQ5BeoNzGUlr/QrMDgw1cdIvgtAwKofD4IsvIOGsRR1yNR3JjzQoMvKvrQPONqF6JZ
-	OMMNLxAhP1LGiCUgH2GoiCYXngwwZmE2ZcjLiIEAmlhKl2r0JyV2gMJn4Uke4zTOViHDJQ
-	/gJXPKLMTm5lh6Zjv6J183nbfZ/UIz4eehTUQeqX6uRy6jBru/K/rs1ICZHdgd/GSKMS+z
-	nP5SILf6vZKcsnA0+D/43BN50nXByYlhjDbPB2kBPA+oekNoiga84=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-ed25519; t=1779798460;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DumjHkMnQiUKEXczcFzbHTJ12Og3qEh2uESbAgSH9Z0=;
-	b=qAvsEodfYN9Au3PfLWPaXQEfyjbOcwD3RqWnSlsvTSJQ3NP8ZX9wWEW0wqValvrgMDgl0u
-	ST8XcV+dvsfuSMCQ==
-Authentication-Results: mail.archlinux.org;
-	auth=pass smtp.auth=kpcyrd smtp.mailfrom=kpcyrd@archlinux.org
-Date: Tue, 26 May 2026 14:27:36 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLFTsAWM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16F81F000E9;
+	Tue, 26 May 2026 12:45:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779799533;
+	bh=QzlfLKei3OF/tSTWl5q71VoQJ0uXecHs8Dxb+dYN9G4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NLFTsAWMim8BkpWfM13Ly59xEKPU0Gh340MP2ykVv6v7CucDM8RMVDkl0RU8kOWv5
+	 ZgUwwfWA6Y0O3Bv52yc6C4UCN8Gdpv+sY73hXVMF5IgxzOyV7DHN0ywB0iBh1B5ZUr
+	 sNc2S2C9x5k2lf+3OkuU1WufuYGwUvX/rfOOnQk5UGAtzhozONeCKBkr1rYaWbRIpH
+	 w+1VCdz9YrDSKNgjzqz5Ja8ZI06r5AvQU0oAZl8JvkGm065SjZ/ZzTxUfO+DJUk781
+	 CzaEjH5dLhj6ywN0EpBCKC7xAZ5vAHQ9Kxox4/Co/pSSg3/XNbJtrRRP14CY790KzX
+	 MD8kcSakTORtA==
+Message-ID: <7fd673df-22f3-4d70-a779-ea0b878188b3@kernel.org>
+Date: Tue, 26 May 2026 14:45:25 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 07/14] module: Make module authentication usable
- without MODULE_SIG
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Petr Pavlu <petr.pavlu@suse.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
- <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
- <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
- Mattia Rizzolo <mattia@mapreri.org>, Christian Heusel <christian@heusel.eu>,
- =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
- Eric Biggers <ebiggers@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
- debian-kernel@lists.debian.org,
- Holger Levsen <holger@reproducible-builds.org>
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260505-module-hashes-v5-7-e174a5a49fce@weissschuh.net>
- <0a0736a4-2cdd-49f2-9062-e2f18d769fc0@suse.com>
- <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
-Content-Language: de-DE, en-US
-From: kpcyrd <kpcyrd@archlinux.org>
-In-Reply-To: <4ee3c775-1fbf-45e1-8b77-5f9034f45125@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/8] bpf: Recover arena kernel faults with scratch page
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260522172219.1423324-1-tj@kernel.org>
+ <20260522172219.1423324-3-tj@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260522172219.1423324-3-tj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 5/26/26 1:38 PM, Thomas Weißschuh wrote:
-> On 2026-05-26 12:53:22+0200, Petr Pavlu wrote:
->> Should MODULE_SIG_FORCE be renamed to MODULE_AUTH_FORCE, along with
->> renaming the sig_enforce functionality in kernel/module/auth.c to
->> auth_enforce?
+On 5/22/26 19:22, Tejun Heo wrote:
+> From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > 
-> Given that it is a user-visible symbol we'll need to be a bit careful
-> not to break existing configurations.
-> I'll try to use the new "transitional" kconfig attribute.
-A slightly softer worded alternative (yet semantically equivalent) name could be 
-MODULE_AUTH_REQUIRE. No strong opinion though, I think MODULE_AUTH_* does make 
-sense.
+> BPF arena usage is becoming more prevalent, but kernel <-> BPF communication
+> over arena memory is awkward today. Data has to be staged through a trusted
+> kernel pointer with extra code and copying on the BPF side. While reads
+> through arena pointers can use a fault-safe helper, writes don't have a good
+> solution. The in-line alternative would need instruction emulation or asm
+> fixup labels.
+> 
+> Enable direct kernel-side reads and writes within GUARD_SZ / 2 of any
+> handed-in arena pointer, without bounds checking. A per-arena scratch page
+> is installed by the arch fault path into empty arena kernel PTEs - x86 from
+> page_fault_oops() for not-present faults, arm64 from __do_kernel_fault() for
+> translation faults, both after the existing exception-table and KFENCE
+> handling. The faulting instruction retries and the access is also reported
+> through the program's BPF stream, preserving error reporting.
+> 
+> bpf_prog_find_from_stack() resolves the current BPF program (and its arena)
+> from the kernel stack - no new bpf_run_ctx state is added. Recovery covers
+> the 4 GiB arena plus the upper half-guard (GUARD_SZ / 2). The lower
+> half-guard is excluded because well-behaved kfuncs only access forward from
+> arena pointers. The kfunc-author contract - access at most GUARD_SZ / 2 past
+> a handed-in pointer - is documented in Documentation/bpf/kfuncs.rst.
+> 
+> The install is lock-free via ptep_try_set(). On race-loss the winning
+> installer's PTE is already valid, so the access retry succeeds. The arena
+> clear path uses ptep_get_and_clear() so installer and clearer race through
+> atomic accessors. No flush_tlb_kernel_range() afterwards. Stale "not mapped"
+> entries just cause one extra re-fault, cheaper than a global IPI on every
+> install.
+> 
+> Scratch exists only to keep the kernel from oopsing on an in-line arena
+> access. Its presence at a PTE means the BPF program has already
+> malfunctioned, and the violation is reported through the program's BPF
+> stream. The only requirement for behavior on a scratched PTE is that the
+> kernel doesn't crash. In particular, any user-side access through such a PTE
+> may segfault. The shared scratch page is freed once during map destruction.
+> 
+> BPF instruction faults continue to use the existing JIT exception-table
+> path. This patch changes only the kernel-text fault path. No UAPI flag is
+> added. The new behavior is the default.
+> 
+> v2: Use ptep_get_and_clear() in apply_range_clear_cb(). (David)
+> v3: Stub bpf_arena_handle_page_fault() for !CONFIG_BPF_SYSCALL. (lkp)
+> 
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Cc: David Hildenbrand <david@kernel.org>
+> ---
+>  Documentation/bpf/kfuncs.rst |  14 +++
+>  arch/arm64/mm/fault.c        |  10 +-
+>  arch/x86/mm/fault.c          |  12 ++-
+>  include/linux/bpf.h          |   1 +
+>  include/linux/bpf_defs.h     |  19 ++++
+>  kernel/bpf/arena.c           | 177 +++++++++++++++++++++++++++--------
+>  kernel/bpf/core.c            |   5 +
+>  7 files changed, 191 insertions(+), 47 deletions(-)
+>  create mode 100644 include/linux/bpf_defs.h
+> 
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 75e6c078e0e7..6d497e720998 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -462,6 +462,20 @@ In order to accommodate such requirements, the verifier will enforce strict
+>  PTR_TO_BTF_ID type matching if two types have the exact same name, with one
+>  being suffixed with ``___init``.
+>  
+> +2.8 Accessing arena memory through kfunc arguments
+> +--------------------------------------------------
+> +
+> +A read or write at any address inside an arena does not oops the kernel.
+> +Unallocated arena pages are lazily backed by a scratch page and the
+> +access is reported through the program's BPF stream as an error. Only
+> +the BPF program's correctness is affected; the kernel itself remains
+> +intact.
+> +
+> +The arena is followed by a ``GUARD_SZ / 2`` (32 KiB) guard region that
+> +is also covered by this recovery. A kfunc handed an arena pointer may
+> +therefore access up to ``GUARD_SZ / 2`` past it without bounds-checking
+> +against the arena. Larger accesses must verify the range explicitly.
+> +
+>  .. _BPF_kfunc_lifecycle_expectations:
+>  
+>  3. kfunc lifecycle expectations
+> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+> index 920a8b244d59..0d58d667fcd8 100644
+> --- a/arch/arm64/mm/fault.c
+> +++ b/arch/arm64/mm/fault.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/bpf_defs.h>
+>  #include <linux/extable.h>
+>  #include <linux/kfence.h>
+>  #include <linux/signal.h>
+> @@ -416,9 +417,12 @@ static void __do_kernel_fault(unsigned long addr, unsigned long esr,
+>  	} else if (addr < PAGE_SIZE) {
+>  		msg = "NULL pointer dereference";
+>  	} else {
+> -		if (esr_fsc_is_translation_fault(esr) &&
+> -		    kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
+> -			return;
+> +		if (esr_fsc_is_translation_fault(esr)) {
+> +			if (kfence_handle_page_fault(addr, esr & ESR_ELx_WNR, regs))
+> +				return;
+> +			if (bpf_arena_handle_page_fault(addr, esr & ESR_ELx_WNR, regs->pc))
+> +				return;
+> +		}
+>  
+>  		msg = "paging request";
+>  	}
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index f0e77e084482..b0f103ddbd23 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/sched/task_stack.h>	/* task_stack_*(), ...		*/
+>  #include <linux/kdebug.h>		/* oops_begin/end, ...		*/
+>  #include <linux/memblock.h>		/* max_low_pfn			*/
+> +#include <linux/bpf_defs.h>		/* bpf_arena_handle_page_fault	*/
+>  #include <linux/kfence.h>		/* kfence_handle_page_fault	*/
+>  #include <linux/kprobes.h>		/* NOKPROBE_SYMBOL, ...		*/
+>  #include <linux/mmiotrace.h>		/* kmmio_handler, ...		*/
+> @@ -688,10 +689,13 @@ page_fault_oops(struct pt_regs *regs, unsigned long error_code,
+>  	if (IS_ENABLED(CONFIG_EFI))
+>  		efi_crash_gracefully_on_page_fault(address);
+>  
+> -	/* Only not-present faults should be handled by KFENCE. */
+> -	if (!(error_code & X86_PF_PROT) &&
+> -	    kfence_handle_page_fault(address, error_code & X86_PF_WRITE, regs))
+> -		return;
+> +	/* Only not-present faults should be handled by KFENCE or BPF arena. */
+> +	if (!(error_code & X86_PF_PROT)) {
+> +		if (kfence_handle_page_fault(address, error_code & X86_PF_WRITE, regs))
+> +			return;
+> +		if (bpf_arena_handle_page_fault(address, error_code & X86_PF_WRITE, regs->ip))
+> +			return;
+> +	}
+>  
+>  oops:
+>  	/*
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 0136a108d083..831996c411cf 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -6,6 +6,7 @@
+>  
+>  #include <uapi/linux/bpf.h>
+>  #include <uapi/linux/filter.h>
+> +#include <linux/bpf_defs.h>
+>  
+>  #include <crypto/sha2.h>
+>  #include <linux/workqueue.h>
+> diff --git a/include/linux/bpf_defs.h b/include/linux/bpf_defs.h
+> new file mode 100644
+> index 000000000000..2185cd3966d4
+> --- /dev/null
+> +++ b/include/linux/bpf_defs.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Subset of bpf.h declarations, split out so files that need only these
+> + * declarations can avoid bpf.h's full include cost.
+> + */
+> +#ifndef _LINUX_BPF_DEFS_H
+> +#define _LINUX_BPF_DEFS_H
+> +
+> +#ifdef CONFIG_BPF_SYSCALL
+> +bool bpf_arena_handle_page_fault(unsigned long addr, bool is_write, unsigned long fault_ip);
+> +#else
+> +static inline bool bpf_arena_handle_page_fault(unsigned long addr, bool is_write,
+> +					       unsigned long fault_ip)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+> +#endif /* _LINUX_BPF_DEFS_H */
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 08d008cc471e..1c0b87ecc817 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -53,6 +53,7 @@ struct bpf_arena {
+>  	u64 user_vm_start;
+>  	u64 user_vm_end;
+>  	struct vm_struct *kern_vm;
+> +	struct page *scratch_page;
+>  	struct range_tree rt;
+>  	/* protects rt */
+>  	rqspinlock_t spinlock;
+> @@ -118,6 +119,11 @@ struct apply_range_data {
+>  	int i;
+>  };
+>  
+> +struct clear_range_data {
+> +	struct llist_head *free_pages;
+> +	struct page *scratch_page;
+> +};
+> +
+>  static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
+>  {
+>  	struct apply_range_data *d = data;
+> @@ -144,33 +150,59 @@ static void flush_vmap_cache(unsigned long start, unsigned long size)
+>  	flush_cache_vmap(start, start + size);
+>  }
 
-I initially shared the concern about renaming well established config options, 
-but the transitional feature does seem to be a good fit for this.
+There is still the chance that apply_range_set_cb() could race with scratch
+insertion, right?
 
-Sincerely,
-kpcyrd
+Shouldn't we also be using ptep_try_set() there?
+
+The nasty thing is handling whether ptep_try_set() actually works.
+
+Something like the following on top, maybe?
+
+
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 49a8f7b1beef5..086bea3f3698e 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -122,19 +122,27 @@ static int apply_range_set_cb(pte_t *pte, unsigned long
+addr, void *data)
+ {
+        struct apply_range_data *d = data;
+        struct page *page;
++       pte_t pteval;
+
+        if (!data)
+                return 0;
+-       /* sanity check */
+-       if (unlikely(!pte_none(ptep_get(pte))))
+-               return -EBUSY;
+
+        page = d->pages[d->i];
+        /* paranoia, similar to vmap_pages_pte_range() */
+        if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
+                return -EINVAL;
+
+-       set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
++       pteval = mk_pte(page, PAGE_KERNEL);
++#ifdef ptep_try_set
++       if (unlikely(!ptep_try_set(pte, pteval)))
++               return -EBUSY;
++#else
++       if (unlikely(!pte_none(ptep_get(pte))))
++               return -EBUSY;
++
++       set_pte_at(&init_mm, addr, pte, pteval);
++#endif
+        d->i++;
+        return 0;
+ }
+
+-- 
+Cheers,
+
+David
