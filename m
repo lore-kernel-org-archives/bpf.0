@@ -1,68 +1,41 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D163D891B
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 09:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058753CFF67;
+	Tue, 26 May 2026 09:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779788836; cv=none; b=sOaoEqFPvt2pPoYDaqZ5miuoIy2QOPAAJSEjAfq0KtVNYJ3xB1tp8+DdvedqmH6D7GHHEsqCsNUCYVrb9qPwiAjlr2Qr6yqziz4eGwoXJjC9jjeSG4oGvQVGv21YhlVpCYlaXmOftBlT3SQgvOBGCe5KgkgNpoHfqum5DySjo8s=
+	t=1779789297; cv=none; b=LUP7vLAUlJMQ3oIpIQOwLd2dHanQpO7G3DtnvyKyOtcQ2yVUmVpJhxofbXVShDhBVSOEY/DhWPJ0pV0zldQfNEuDMquERj6gptP02+o0C9ED6IzyrAa/XPUeQr9LQE1/IiNPF3eY38Xh1wvpxv7gU+LUdheUrNCq3MMNPjcVqQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779788836; c=relaxed/simple;
-	bh=8+nGGSKlUH2wqELDfgHiAT/VMPWJ2mHhPQF2ouWQF0w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KwBddoO5A0psIZIUOw/mOQnLMUTDl0kcLLA0X/nOznZrkCNIUHc4Mk1k3IsQNkqSehFHUVDm8EbSsUyfxAoKjm7lrlRQYe2F6CXo4ZrDRuBYaY3lsdzcC+wB3CrxC5XbNqjbKS4vwimPB/bjXnWjYlxkvOx00AhA1+1geTROXPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EjQTkHLZ; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1779789297; c=relaxed/simple;
+	bh=miEeCBMcADzfnSU72ss37HUGuciPbDpIdbVe24F5Aes=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=RJAktGD2aWfWMeWzYTOaidqjaT1MNwXhvF+yEZR6RgrUzw94Y5nfqqMqYPLIGAiQiKirlCPC+xZ1lUOT/N+9KN/5IuI8GzOeEm9uxo+v43dAZE6qi7Z3QiZnoJwob2Zew9d2kGTQxohvE7qRrhgGscz6dhl5jXF5NArJz+1HBVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=j1rJIL8W; arc=none smtp.client-ip=130.149.7.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EjQTkHLZ"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490426d72f7so36691995e9.3
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 02:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779788832; x=1780393632; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R17d81rZFtdCmrvPdq6FOwdkUs8CSvLL3BM8+TQqKKA=;
-        b=EjQTkHLZWZ8pVUg9gk59c/Y6msmKTq3bu4UiXtP0lNvzAnW1HzNIQOI+8h362r8uOz
-         65J1roOpeed/GO/dcNRKF4mcOqiVwLlqNNBvo5kKdzC6J9wILMHJ9BvPhY9ry3PrsA4i
-         n4rqddafwx34au/rxzpyxQdfV+/h8Wumnpkqoei2H9VUro489toB9gas7h1XDJkUk8CH
-         O+9MN48NZdDBK0b+NhQ0p8I8EarJxSJgpWwmOXqd9qDajMs394MTLqyIaOkGFsYIRRjm
-         3rP/59t6+CkpeqFn2g9Jsq3yp1J79p7PG+5nH+WBxj0dEoelXcyuvD+avrfoVM++dNME
-         5pWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779788832; x=1780393632;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R17d81rZFtdCmrvPdq6FOwdkUs8CSvLL3BM8+TQqKKA=;
-        b=R0pciccFo7Uf+gEYwY7ftBorR4uv+QjXehciMLi0hXNgSEUBmEwuv64lSWOJo37Qu9
-         /IfOEwLhVV0GdQQNpcBC6Cp3/y69jUu79DivZTznJiUebKwLNc2nfIIAQHMdDNHkiF3w
-         bt2OScQ4Vte0dgsgu4Q3frl5uf6Fmjbo+1AxEgOhWVxAwZAChV0C5Z/F3XXOFTYGvcMQ
-         A18Kf/xyEgVWiVMZrDqc/06XNfl3hqSrKfMRLIm/3/NVzjeI97gZ65Ad3RW2MN1gllEE
-         zekuzy2gcfJXhE1vXUGv8CjjxhIITT4RyLrJRiDQ5yd9Vcd84LFNaPDRzP/RFqOUGrwL
-         T79A==
-X-Forwarded-Encrypted: i=1; AFNElJ+qgogiFOsMEpc+Y8SveRvhlQM9Tb9kJ6SxqJCaWbaNxjjn4ATCu6ZM+oZOVvqeZVDQH5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlly7m/oAFzsqTXbZ4Mw0Bx4C9c9S7FmRKWo068p6e7EsAzQrg
-	oaKNBdcHBqK4Eg/ZJqY30fQW173wFvmEW6hTYz8LWWPbjALQKUqkG5Nz+p1dqpzpt8I=
-X-Gm-Gg: Acq92OEdlN9+DldeOdbeZwgpLvVgOFngV3wFMta0Jc4CXwaZtXL57H9VnwBXOCw1IJ0
-	mBD4vzDDHXmliYFHNeG8CpjKCY7nOTMzWIrp1sTnZu3ISKCj4uR/eilHIqs6B6qiyZJ/zAxWype
-	xJb8iuqE53Aarevf+HQswo6jEW/UeC0Ogt0bufm8//23Iuy10DyoCYJRdUaGNyaqJtwEbwAOjSg
-	hvDXZaYcqXQPbVpXva3VviZNitamHi6drwHsRhXH0Ulu7CLY1LkNH8w14+k5j13P2IaKRmXxQNc
-	tEv5Cl4KK7RngOlzGbDoTm7bC4nj30dpCYZqBRoIY/7TCufCmB9KyKl19nFP2zAg7kKixEaqp5r
-	OdxNzb12Ux19yTTJ2TcPFiwC5gyQKmJNRCJs80HDwiwht/5Rb9U4GEgT5ViJDSXNe5RY6dKTGp9
-	049uDL25MMWs9OnhMp0CktWPsMhIPe9tdjQmu4IZcAa0xYw3W0oMRb0dNpA09smNS+mdo7rJIwQ
-	zPqkr59th/AP/69yrfR3o4OBsmsmcDOqyI76/YQ9L6ePbEDys/mbwdJHZ/yYBuI+hHGVqVu7+eS
-	mcnW
-X-Received: by 2002:a05:600c:6209:b0:490:601f:d776 with SMTP id 5b1f17b1804b1-490601fd9admr168561055e9.3.1779788832071;
-        Tue, 26 May 2026 02:47:12 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490454a0b9asm307921735e9.11.2026.05.26.02.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2026 02:47:11 -0700 (PDT)
-Message-ID: <8de0e6ad-987a-4729-bbd0-8399968dbb48@suse.com>
-Date: Tue, 26 May 2026 11:47:09 +0200
+	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="j1rJIL8W"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
+  d=tu-berlin.de; s=dkim-tub26; t=1779789293;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uu1DCIAj1Ns9Z0EbybzFF5Wawgb/gJir9NHTGkNNBhQ=;
+  b=j1rJIL8WqnxMpJNzcNVs+FdXC0UzB9xiBf2Vj/j3aO+jqf5Ciq9zi4D3
+   iBfjO1Y/QJYQCoCfRNUWrFsrVplor7bT/dBH6ZPRFfcnIjbjzmSakOJ6r
+   TM0eJCNrgrgHY8L1o5HKgVVcqjMR/r/mWR3tgmVQn5qnXJzIqjtZXEu8t
+   dnnyYCAt7BFqwh0jEeDCyk+gNseJ3N7S5sszj2wlt4kODvMqRROpZ5ZGt
+   2h65lh8yg7xiSKZE3DMZsGtTmrLTg10CM7J4AI3l2f3lxaJFMiK77QIk3
+   kG++bdJnQv4yLuAjywdUlXplLyeMV6LmuuepAQOCSqPB/qqxi9ol81/8b
+   g==;
+X-CSE-ConnectionGUID: Q5R6PfsyTYi9E8b5mwrpig==
+X-CSE-MsgGUID: gcOEOEnnSpST5sM3y6DcJw==
+X-IronPort-AV: E=Sophos;i="6.24,169,1774306800"; 
+   d="scan'208";a="61775935"
+Received: from bulkmail.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.143])
+  by mailrelay.tu-berlin.de with ESMTP; 26 May 2026 11:54:45 +0200
+Message-ID: <24d10b53-c545-4141-95a5-5c49c35c5d6c@tu-berlin.de>
+Date: Tue, 26 May 2026 11:54:43 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,66 +43,435 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/14] module: Switch load_info::len to size_t
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
- <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
- <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
- Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
- Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?=
- <mcaju95@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
- debian-kernel@lists.debian.org
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260505-module-hashes-v5-6-e174a5a49fce@weissschuh.net>
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: Simon Schippers <simon@schippers-hamm.de>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+	<kernel-team@cloudflare.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+ <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+ <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
+ <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
+ <20260508190626.4285fac0@kernel.org>
+ <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
+ <20260510085602.57c7a081@kernel.org>
+ <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
+ <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
+ <b78f002a-8cb9-4857-bf8f-0137e790f644@kernel.org>
+ <873511fa-4316-4411-a76b-ec4c5805abd3@schippers-hamm.de>
+ <18855e57-f050-411f-9958-d4babcc81ba3@kernel.org>
+ <14348957-d061-4124-9bac-45df9cf6686c@schippers-hamm.de>
+ <9a57bb41-114e-492b-9eaa-52237675bb7c@schippers-hamm.de>
+ <4ae9400a-8919-4ffc-8db3-0c334e2aa462@tu-berlin.de>
+ <8e8b877b-a7ce-4b2f-9567-64c8dbb48411@schippers-hamm.de>
+ <463e91cb-6c45-4d91-8737-39779fec5a49@tu-berlin.de>
+ <b1c2d2c1-a70a-4bf4-baff-d0ac2f878722@schippers-hamm.de>
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260505-module-hashes-v5-6-e174a5a49fce@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
+From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+In-Reply-To: <b1c2d2c1-a70a-4bf4-baff-d0ac2f878722@schippers-hamm.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 5/5/26 11:05 AM, Thomas Weißschuh wrote:
-> Switching the types will make some later changes cleaner.
+On 5/23/26 6:09 PM, Simon Schippers wrote:
+> On 5/22/26 18:26, Jonas Köppeler wrote:
+>> On 5/22/26 10:41, Simon Schippers wrote:
+>>> On 5/22/26 09:14, Jonas Köppeler wrote:
+>>>> On 5/19/26 10:51 PM, Simon Schippers wrote:
+>>>>> On 5/12/26 23:55, Simon Schippers wrote:
+>>>>>> On 5/12/26 15:54, Jesper Dangaard Brouer wrote:
+>>>>>>>>> Nope, I'm using a bpftrace program to keep track of the inflight/limit
+>>>>>>>>> in a BPF hashmap.  Reading from /sys will not be accurate.
+>>>>>>>> Ah nice.
+>>>>>>> Add the option --hist to have both NAPI and BQL histograms printed when
+>>>>>>> script ends.  This will give you an accurate pattern of how inflight and
+>>>>>>> limit evolves.
+>>>>>>>
+>>>>>>>>> I moved the selftests into a github repo [1] to allow us to collaborate
+>>>>>>>>> and evaluate the changes more easily.  I explicitly kept the new BPF
+>>>>>>>>> based BQL tracking as a commit[2] for your benefit.
+>>>>>>>>>
+>>>>>>>>>      [1]https://github.com/netoptimizer/veth-backpressure-performance-testing/tree/main/selftests
+>>>>>>>>>
+>>>>>>>>>      [2]https://github.com/netoptimizer/veth-backpressure-performance-testing/commit/f25c5dc92977
+>>>>>>>> Thanks for sharing. After minor issues I was able to set it up
+>>>>>>>> (currently I am just using plain v5, will look at the coalescing patch
+>>>>>>>> when I find the time):
+>>>>>>>>
+>>>>>>>> Can confirm the latency reduction with the default settings, in my case
+>>>>>>>> 4.888ms to 0.241ms.
+>>>>>>>>
+>>>>>>>> With the same script I was also able to see a performance slow down:
+>>>>>>>> veth_bql_test_virtme.sh --qdisc fq_codel --nrules 0
+>>>>>>>> --> ~510 Kpps
+>>>>>>>> Same with --bql-disable
+>>>>>>>> --> ~570 Kpps
+>>>>>>>> --> 12% faster
+>>>>>>>>
+>>>>>>> Thanks for running these benchmarks.
+>>>>>>>
+>>>>>>> Notice that --nrules 0 can easily result in no-queuing (on average),
+>>>>>>> because the veth NAPI consumer is faster than the producer.  You will
+>>>>>>> likely see BQL inflight=1 and sink reported avg latency very low
+>>>>>>> (remember it okay that sink get high latency penalty as long at ping
+>>>>>>> latency remains low, as that show AQM is working).
+>>>>>> I ran the benchmarks with --hist and I see what you mean.
+>>>>>> I have very similar results.
+>>>>>>
+>>>>>> Is Jonas way [1] of modifiying pktgen maybe the best option to ensure
+>>>>>> that the producer is faster than the consumer?
+>>>>>>
+>>>>>> [1] Link:https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-8274b62920df@tu-dortmund.de/
+>>>>>>
+>>>>>>> Hi, so what I found is that pktgen does not respect
+>>>>>>> __QUEUE_STATE_STACK_OFF. So the test data above is invalid, since it
+>>>>>>> just sent packets even if the BQL "stopped" the queue. So I patched
+>>>>>>> pktgen with the following:
+>>>>>>>
+>>>>>>> -       if (unlikely(netif_xmit_frozen_or_drv_stopped(txq))) {
+>>>>>>> +       if (unlikely(netif_xmit_frozen_or_stopped(txq))) {
+>>>>>> After thinking more about the implementation I see possible issues:
+>>>>>>
+>>>>>> 1. netdev_tx_completed_queue() never reports more than burst=64 packets:
+>>>>>>
+>>>>>> BQL only increments the limit if the queue was starved. That means:
+>>>>>> "The queue was over-limit in the last interval (the last time completion
+>>>>>> processing ran), and there is no more data in the queue (i.e. it’s
+>>>>>> empty)" [2]
+>>>>>> But as only 64 packets are reported at max, the queue can only grow when
+>>>>>> it is <= 64 packets. And then it can only stay at a limit >64 until the
+>>>>>> next decrease of the limit.
+>>>>>>
+>>>>>>
+>>>>>> 2. netdev_tx_completed_queue() is called in irregular intervals:
+>>>>>>
+>>>>>> If the consumer is slow it is called approx each tx_coal_usecs.
+>>>>>> But if the consumer is fast it is called way more frequent, probably
+>>>>>> in irregular intervals depending on the scheduling.
+>>>>>> However, "BQL depends on periodic completion interrupts" [2].
+>>>>>>
+>>>>>> --> How about adding something like an interrupt that triggers every
+>>>>>>        10us and calls netdev_tx_completed_queue() with n_bql collected from
+>>>>>>        (multiple) veth_xdp_rcv runs? That could solve 1. and 2.
+>>>>> Hi,
+>>>>>
+>>>>> I worked on a new version (see attachment) that addresses both issues.
+>>>>>
+>>>>> The major change is that instead of tracking the timestamp and packet
+>>>>> count as local variables in veth_xdp_rcv(), they are now stored
+>>>>> persistently in veth_rq as struct veth_bql_state. This allows completions
+>>>>> to accumulate across multiple NAPI poll calls, so
+>>>>> netdev_tx_completed_queue() can report more than 64 packets at once
+>>>>> (see point 1). To get the time I am using (the fast) sched_clock() with
+>>>>> a trick to avoid issues when switching between CPUs.
+>>>>>
+>>>>> For point 2, the coalescing deadline is now checked both before the
+>>>>> receive loop (to flush completions that timed out since the previous
+>>>>> poll) and after each consumed packet, making completion intervals more
+>>>>> regular. Still the intervals can be smaller than
+>>>>> VETH_BQL_COAL_TX_USECS, but I guess this is fine.
+>>>>>
+>>>>> I also found out that the BQL limit correlates closely with
+>>>>> VETH_BQL_COAL_TX_USECS. It essentially reflects the latency we are
+>>>>> targeting. I raised the default to 100 µs to allow DQL to converge to a
+>>>>> higher limit (for reaching 255 in the testing below).
+>>>>>
+>>>>> With the patched pktgen (respecting __QUEUE_STATE_STACK_XOFF), testing
+>>>>> shows:
+>>>>> - --nrules 0: DQL limit reaches (up to) ~255
+>>>>> - --nrules 10000: DQL limit converges to ~0 (with --gro-disable)
+>>>>>
+>>>>> These results are what I would expect from a BQL algorithm, but more
+>>>>> testing is needed of course.
+>>>>>
+>>>>> What do you think?
+>>>> Hi,
+>>>>
+>>>> This is exactly what I had in mind for implementing the BQL algorithm
+>>>> in this case. I did some testing with pktgen of this patch and also
+>>>> compared it to the v5 version.
+>>>>
+>>>> You can find an extension of the benchmark script with pktgen here [1],
+>>>> as well as a wrapper script (veth_bql_bench.sh) to run the test script
+>>>> with and without --bql-disable to report the difference. I also
+>>>> configured pktgen to use the qdisc as suggested by Jesper.
+>>> Great, I will use your pktgen solution from now on.
+>>>
+>>> Didn't know about the qdisc option, is there a performance difference
+>>> with/without it? Or is it to have ping working next to pktgen?
+>> Did not see any big difference performance-wise, but as you say, ping
+>> works better with pktgen then.
+>>
+>>> Consider to do a pull request :)
+>>>
+>>>> Note: bpftrace needs to be disabled, otherwise it becomes the
+>>>> bottleneck (at least on my machine) and pktgen throughput is halved
+>>>> when enabled.
+>>> Good to know.
+>>>
+>>>> Here are the results:
+>>>>
+>>>> v5 (not time-based):
+>>>> --nrules 0 --pktgen --no-bpftrace
+>>>> ========================================
+>>>> Results (average over 10 runs):
+>>>> ========================================
+>>>>                          BQL on    BQL off
+>>>> ---                    ------    -------
+>>>> Throughput (pps)      1980871    2169898
+>>>> Ping RTT avg (ms)       0.065      0.162
+>>>> Throughput diff         -8.7%   // BQL 8.7% lower throughput
+>>>> RTT diff               -59.9%   // BQL 60% lower latency
+>>>> ========================================
+>>>>
+>>>> Simon's time-based version:
+>>>>
+>>>> Test args: --nrules 0 --pktgen --no-bpftrace
+>>>> ========================================
+>>>> Results (average over 10 runs):
+>>>> ========================================
+>>>>                              BQL on      BQL off
+>>>> ---                        ------      -------
+>>>> Throughput (pps)          2166335      2153398
+>>>> Ping RTT avg (ms)           0.165        0.165
+>>>> Throughput diff              0.6%
+>>>> RTT diff                     0.0%
+>>>>
+>>>> --pktgen --no-bpftrace --nrules 3500
+>>>> ========================================
+>>>> Results (average over 10 runs):
+>>>> ========================================
+>>>>                              BQL on      BQL off
+>>>> ---                        ------      -------
+>>>> Throughput (pps)            28569        28696
+>>>> Ping RTT avg (ms)           1.327        8.409
+>>>> Throughput diff             -0.4%
+>>>> RTT diff                   -84.2%
+>>>>
+>>> I think we should run benchmarks against the stock net-next to
+>>> be safe.
+>> --nrules 0 --pktgen --no-bpftrace
+>> ========================================
+>> Results (average over 10 runs):
+>> ========================================
+>>                       net-next
+>> ---                  -------
+>> Throughput (pps)     2285421
+>> Ping RTT avg (ms)    0.161
+>>
+>> (slightly adjusted the output to better communicate the results)
+>>
+>> So in my case this means BQL implementation has ~5% lower throughput
+>> compared to net-next. But please double check.
+>>
+> Yes, I will benchmark myself.
+>
+> There are probably some places where we can gain performance.
+> For example, I see ptr_ring_empty() which could be swapped for
+> __ptr_ring_empty() which would save a spinlock and unlock.
+>
+>>>> Seems to work now as expected.
+>>> Yes, but I think we have to keep these points in mind:
+>>>
+>>> 1. Limit/Inflight can be bigger than VETH_RING_SIZE, because
+>>>      packets can be enqueued in the same time as they are read out,
+>>>      so netdev_tx_completed_queue() can theoretically be called with
+>>>      many number of packets.
+>>>      I do not think it is deal-breaking though.
+>>>      I could see such high limits/inflights when looking at the /sys
+>>>      BQL statistics..
+>> For me this makes sense, that inflight just means the number of
+>> packets not yet 'completed' or the number of packets that you
+>> can send between two completion calls. I think this is not specific
+>  From my understanding, I do think that this behavior is
+> pretty specific.
+>
+> Typically BQL-enabled NIC drivers clear packets out of some
+> internal buffer in their completion interrupt (or something
+> similar). And after that they call netdev_tx_completed_queue().
 
-Since the updated version drops the patch "module: Deduplicate signature
-extraction", I believe this change is no longer necessary.
+You are right, because descriptors are freed at the same time when they 
+are accounted for.
 
-> size_t is also the semantically correct type for this field.
-> 
-> As both 'size_t' and 'unsigned long' are always the same size, this
-> should be risk-free.
+>> to this implementation. But for long intervals this might result in
+>> some problems because you can just fill the veth_ring to its capacity
+>> quickly, and increasing latency if the receiver is slow.
+> Yes, but I think the latency can only be approx. as big as the
+> interval (can be higher with GRO enabled).
 
-The module 'len' would now start in init_module() as 'unsigned long',
-then change in copy_module_from_user() to size_t, and then back to
-'unsigned long' when calling copy_chunked_from_user(). The current code
-is more consistent and mostly uses 'unsigned long', matching the syscall
-interface.
+I think it's more like ~2.x times added latency in the worst case,
+which is normal BQL behavior, but for large intervals 2x is a lot.
+Of course this value is also capped by the time it takes to process
+the 256 packets that fit in the ring buffer.
 
--- 
-Thanks,
-Petr
+For example, for a test run with fq_codel and 20K rules, and a ping
+baseline of 1.7 ms without pktgen load, the results are:
+tx-usecs   p99_ping_rtt (ms)
+--------   -----------------
+      0           5.223
+    100           6.910
+    500           7.197
+   1000           6.967
+   5000          16.233
+  10000          25.033
+  20000          44.133
+
+Also, the interval is sometimes dominated by the processing time of
+a packet batch (and other effects). The default is 8 packets/batch
+(see gro_normal_batch). This means that for 7 packets you see
+processing times on the order of a few hundred nanoseconds, but for
+the 8th you see the processing time of the whole batch (see table below).
+With a ruleset > 1000 entries, this exceeds the default tx-usecs value,
+which is why the p99 RTT increase is even larger than 2x tx-usecs
+-- as you can see in the table for tx-usecs values 0-5000.
+
+tx-usecs 0 nrules 0
+Percentile   per-packet processing time (µs)
+----------   -------------
+     p5             0.316
+    p25             0.382
+    p50             0.442
+    p75             0.508 -- fast enqueue to skb_list
+    p95            68.304 -- batch processing time
+
+Setting gro_normal_batch to 1 makes the interval times more
+accurate and improves p99 RTT slightly, though it's still > 2x the
+tx-usecs latency increase.
+
+However, using smaller values > 0 means that you can benefit
+from bql, but the actual interval might be larger than the
+configured value. I do not think this is a deal breaker, but
+something worth noting where the latencies come from.
+
+Also worth noting: using fq_codel is better to use in this
+case because it can fast track sparse flows. using sfq the
+ping packet can get head of line blocked by the current quantum
+of sfq, if my understanding is correct.
+
+>> To illustrate this have a look at [1]. There are some plots that
+>> show the rtt vs. tx-usec config depending on nrules.
+>>
+>> [1] https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark/results/tx-usecs
+>>
+> Nice plots! Great for finding a sane default value.
+
+I did some more measurements to better understand whats
+happening. I will upload the results latest by tomorrow
+to the github repository mentioned above.
+
+>>> 2. sched_clock() is only valid on the same CPU. When a different
+>>>      CPU starts executing its sched_clock() can be in the past compared
+>>>      to the sched_clock() value saved by the previous CPU.
+>>>      My trick...
+>>>      min(s->time, sched_clock())
+>>>      ... avoids potentially extremely long intervals between
+>>>      netdev_tx_completed_queue() calls but is not perfect of course.
+>>>      I think CPU hopping happens rarely enough for this to matter..
+>>>      And also we have to keep this in mind [1]:
+>>>      "An architecture may or may not provide an implementation of
+>>>      sched_clock() on its own. If a local implementation is not provided,
+>>>      the system jiffy counter will be used as sched_clock()."
+>> So the problem with this is that with jiffies you have like millisecond
+>> interval granularity, which might be too long in order to work properly.
+>> Given the receiver completes 128 packet in 1ms (queue_completed interval),
+>> the bql will set the limit at 256. Then the tx thread can quickly fill
+>> the ring, and it then basically stopped until the 1ms interval is over.
+>>
+>
+> Linux Mint only has 100Hz jiffies :^)
+
+ok so 10ms granularity. Effectively disables BQL for the most part.
+However, you can still benefit if your receive side is very slow.
+
+>
+> I think you misunderstand something.
+>
+> +	if (peer_txq && state->n_bql && ptr_ring_empty(&rq->xdp_ring)) {
+> +		smp_rmb();
+> +		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
+> +			veth_bql_complete(state, peer_txq);
+> +	}
+>
+> This snippet completes whenever the queue is empty and the
+> netdev queue is stopped due to BQL.
+> So then the interval is smaller than 1ms.
+> I think, that is the reason why the pps is fine for 1ms in
+> your benchmarks.
+
+Without that snippet the queue stalls during ramp-up and
+throughput never gets off the ground. But once the BQL limit has
+stabilized, the snippet is no longer invoked -- with --nrules 0
+the queue is never stopped, and with a slow receiver the queue is
+not empty. So the snippet is needed for correct ramp-up, but it
+doesn't affect steady-state throughput in these tests. This is also
+confirmed by a test where I measure the time between intervals.
+For 1000us across all nrules configurations the time ranges between
+1000-1400us.
+
+The variance of the time between intervals is also quite good in
+general, but not always exact the configured value. For most cases
++-5% from p50 value of the real interval.
+Migrations between CPUs can also shorten an interval: if the new
+CPU's sched_clock() is ahead of the previous one (say by 15 ms),
+the apparent elapsed time within the current interval is inflated,
+so only ~5 ms of real time remains before the deadline fires (with
+the configured tx-usecs at 20 ms). Without migrations the interval
+stays consistently close to the configured value. I don't think
+this is a problem in practice -- it just adds some variance to the
+p5 of the measured interval.
+
+>> I don't know how much this matters in practice. Not sure which architectures still hit the jiffies fallback.When in doubt we could disable BQL for those, or pin it to a "virtual queue size" via limit_min / limit_max similar to the v5 behavior and call queue_completed for every packet. Wdyt?
+> Yes, probably not relevant, I think I would just disable it for those
+> architectures, avoiding possible regressions.
+>
+>>> 3. Inflight can be stuck at a value>0 for a long time when packet
+>>>      enqueueing stops. Only when packets are enqueued again,
+>>>      (on the next veth_xdp_rcv() call,) netdev_tx_completed_queue() is
+>>>      executed and inflight is set to 0 again.
+>>>      Can also be seen when looking at the /sys BQL statistics.
+>> This happens if the ring empties before the next queue_completed fires,
+>> right?
+>>
+> Exactly.
+>
+>> Another thing: Is it counterintuitive to set the tx_usec_coal on the
+>> receive device? Because this is a bql related config that is normally
+>> configured on the TX side?
+> Yes, I would say so.
+>
+>>> BTW: Yesterday, I worked on and refactored the code into its own .h
+>>>        file as a library and it also works fine for TUN/TAP (+vhost-net)
+>>>        for me :)
+>> Nice! Thank you.
+>> Jonas
+>>
+>>> Thanks for your work!
+>>> Simon
+>>>
+>>> [1] Link: https://docs.kernel.org/timers/timekeeping.html
+>>>
+>>>> [1]https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark
+>>>>
+>>>> Thanks,
+>>>> Jonas
+>>>>
+>>>>> Thanks!
+>>>>>
+>>>>> BTW: I think that this implementation could also work for other
+>>>>>         software interfaces.
+>>>>>
+>>>>>> [2] Link:https://medium.com/@tom_84912/byte-queue-limits-the-unauthorized-biography-61adc5730b83
+>>>>>>
+>>>>>>> There is an important gotcha. We actually have micro-burst of queuing
+>>>>>>> (likely due to scheduling noise). Reading BQL stats from /sys will show
+>>>>>>> BQL inflight=1, but when using the option --hist is it visible that
+>>>>>>> @inflight have a long tail (see below signature).  The "qdisc" output
+>>>>>>> line also shows this happening via requeues increasing (approx 17/sec in
+>>>>>>> a test with 567Kpps). (this was with the time-based BQL impl).
+>>>>>> I understand..
+>>>>>>
