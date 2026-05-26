@@ -1,209 +1,162 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E23353EE0
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779829653; cv=pass; b=M91/2+r2V39kcLWAJDYFQenbTYdL4EHeFzOHG//ui65ZB669Urn5IU35BcNFdzJbHA+RshcjvWvpLUZ6METEcxmMULj+81RipkVKEWgRcHlrz/UaSKTVxHKUZMQZnH5OHMI4Qpc76QwfU/DXs6NKaEqp1iOcpu0sYNUW/kAq+Z0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779829653; c=relaxed/simple;
-	bh=XqF3j13cxi/d9CWy5HLYmYXPbEh0BqsKm5gpvCmGXeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Psc3YWrSKOGiSITml1nBYNkRhnepqy5xWINrYLsF5lAZbHjSu0CiB9iZdaEBfNhiUrCg2yxn9YmpZt8CL2i6J1/pCSJmsE4IinHuekygoe0zKEteMi1i4IkaZ3jRdEP9h+LGNa/HKG6Xvp7/P5t7bmNoOAy7OPP7UcvTYCXsGbM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W6ZIWRmM; arc=pass smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C080C274B5F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779830119; cv=none; b=Q/Fr5m3lOgrucrgTFA7iVe/uDEl+r5RK5MNaaqB77R8eeGkRFgQO6py+XURGVRu+IW/bN0jrV7T6DMywOW+2qbmF9crlZ+V8JoyLd3lMgmeRco7gP+ts3wATcmaJxIj8ciGpxcg23Bs9+QYgkAmoebK5c5oOBH5+Y69CaeDwdSU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779830119; c=relaxed/simple;
+	bh=FH5noe86sxovdumF+A6OQodBeqPiuF750cFQhbJwlW8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UJR5Ys3x+TRi88yEMH7aogOnb5lb4xO/+ohxV/u+YkYJeuae5gu/SXr17RO8tBfKkt/I30HiJ8ARkaPfZPEZhd4NTiA9Yxkz6eJ/GSL0obrKu5Ytx+RGhiFYTiWXQlRQCdQl5KFOWzZsaeeVE4yL/kR378YG0mInSMOMm2RJ8zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0WRmQHM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W6ZIWRmM"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1363fe80fe8so5470720c88.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:07:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779829651; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fCaaUh13yV8oMZ+wXWVIX174J/vfx4MsSTRZIUr/ShGGQwrckfqXy14NhBhKffnynP
-         BIXhLKXjrRnhNceJEIJFvITDepMscvGEgdV7hHEId82odfKGgWm1mL+LWc5fDdGuHpYw
-         h4kl136vf6M3JLZvFEZdLAiRiVXXIvhL/hAj2WcqzXL1ZVyEp2hOwbtz4VG6HUfoDpsH
-         /qjsG+335xP7ZxmOwvqXi2F7jv/9NsKz0Y8xJTGmCbeh4rR6WEag8XZnY8Si0glmB9mN
-         mB+N0Rmslw1F1sWPNU1AlAaJ9MXs2ju0JQdHjK4fjW/iNfcjjLUAZcwc1uVH64baGlPK
-         yPig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FuG/OCefuxvzv1MSr9xGrIiR1NYDCf8b3OUyrtpmtVc=;
-        fh=4CoPT1z+TIVkb2AHXitxvxvKJwvf4ErpAc7DsAZXfIg=;
-        b=bwdtT5MB9KPmyOHSCQ91NfgVDWN44yO38T4XhrFe8QWEEp39f56/ed6Vvkfskcp3JB
-         /zf4RfGJXznGG2YQ1vNBOkTMzsW0zL/VQGYnNwEbMwzszhs8Nem3iSdFJ6vNpoU9ZpgX
-         xZd42LBgiwCaXYtvYccj3YVfw2UkNbvlsxbIK8H/anJvhPpgV7H84Yl1SUysj0X2/pVl
-         kfQf2eZiib/jmz2/YEk1qH65ux7556mu7MKWASrtnjgGD50pSveZKObxcdmQa9eQS4W3
-         FK6dIcvEDmOzHe8SLHCqRLR8Pca5df1TZa2RTnGnG9dfMiezTUI9NYT4/diVrQLpN6Yc
-         dIpA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779829651; x=1780434451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FuG/OCefuxvzv1MSr9xGrIiR1NYDCf8b3OUyrtpmtVc=;
-        b=W6ZIWRmMhs7Q0zcLhSKbx0SViCSZEe2H4fp42duJaVm0T4KcRdbgWipLCvJex4CpFv
-         G6T7uJAp5GiukeZC2E/b4Eaayc6r/+dO2UoArnO6eDLPWizDTy/IvD+LTY7AjDiC9yOQ
-         qoVogXuBnNW+mRuzSHDbjAP+Dmw+K/M3E3twPfrRj/WHGioBC28aIYIxwUKkkeQbK3PM
-         w4EdarYOpSM/UmiXEiaTNRIY1dX91kXZQh+VialBBhMXBmWAJ0N9ByjlCqhH3p2UEB5k
-         RLEmDiPaR2pJfHdgwZPffld6W6mjYa1e4VaQP8Dqc71gc75cZEgp85gfIOtXr6wuSk/s
-         Nh/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779829651; x=1780434451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FuG/OCefuxvzv1MSr9xGrIiR1NYDCf8b3OUyrtpmtVc=;
-        b=q8b+O7vHYj4fDuXAokD1l+uLVNFFbP3dKR4gYtQRbgMlJEAFPYSI78WAZmwUQmI9My
-         +y9/3X5cwjUeAp6vq/eWx0CB6Z81dwC2rLezgp0JN5reamCVcV21AI6iIibXZTOAZUPG
-         dm2Ku+SfQVOoEra/IAlfDXy3DhgBmgw9+u/S+Gz6jN8Cl6MO2y2habFD6mOwM9o0YfB9
-         w+Q0yK6U4uJibkvks5xJOmz2vUjH4yGCu/JTCBxrUDMqwgixpurs4IeBLtuVMzUCOTQI
-         alFgFJePZN9MEZN7gBl5KfSo/iLGXqngnBgbkEPcAYnZBdt0TsXhl02G+piXbJkvqcff
-         sd6g==
-X-Forwarded-Encrypted: i=1; AFNElJ8Hj/qp9XUHGkrblzbUiKRScnJYg4zTvwo4z08qBtyZqRvrykH/mDSM909hidCMM9wu2Hw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywld3JOyaiMaoCwZsE1u5wZpvFJ2/eAm0juan5zY2NQx8YiR1Hr
-	rZ8FsPyOvknpkTmyHSb2rTI9dgf/Aj2vD33EAwF5IoHRk5+uWsqHo4rRJE8JDmJJqO0a9Qw37Ji
-	eRjjNdF5Hvg7sv2IWBFKcufGozt/Ifly88EZP+SCg
-X-Gm-Gg: Acq92OEsQCxLfutmwf86E8U7VmwFYjVix6JC+67naXmSwzCdHEPKtdJDq+nNnctahkb
-	95KyowA6xAseArA7tuUB1bQCHpOHhmdFt4CqGAOjVCaCaJ9Gs+Ud4PK+16ZO+yMO+Yj5uJ/MGnG
-	uC9+Kfvlw7o9REfHzILR9AjxUy6D284c326aMa2U+b6fd513RICiRwKBHvyxxvn05m1qqyM0wxJ
-	+NoQwQyXIR10CS1zcepgTxfVv/26g3JfNV+D0PYFqJMgRBaK78Zfu4Ph5q+gSxBa2IwHur1yymW
-	haOVM9QRhoDy5wyQtlZBxRWS4/bpxs+JXQ/pvNPQub+EDgHXYJwHWqegtbxd3YkAp0jcNTuLZ+z
-	0LF8kWyP2jLRpquGgrD58eMBx2OZT8VcHUA8aUrhZqtATfgRoaj/B2IgEUiR5
-X-Received: by 2002:a05:7022:b9e:b0:12d:ca32:5a7 with SMTP id
- a92af1059eb24-1365f81907cmr6430290c88.10.1779829650600; Tue, 26 May 2026
- 14:07:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0WRmQHM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3937F1F000E9;
+	Tue, 26 May 2026 21:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779830118;
+	bh=bKm4Ta1oFCfs+ABn9QoNWMRb2b4R3KG8j0lYdFCVjvA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=m0WRmQHMgd8dYFJL64JUY2l/NYOt/2E9HzNvJPAIuHc1wMMJxjuaL+gktmbrYuqhr
+	 oSAsHBAVLueBENoVnGpq7bLWJK94tQ7+PGcXys4etpobtd5A3ISFaD+yYHMK+E8YoS
+	 /vNnyqAk3X5+OvLJkYybk2u44QbWem6CDgXJ4NmmFnYL9i6iPk7lGTYKIcUNdLAYuS
+	 1WLXvP6lRN1iDMitPMi3sJmyXr5wK4GrLkr+b6juQdBdu/wblhIE1TX6y2yBcVBg5E
+	 ZpFCChn2I0IlgF6uzYN9tQN+CPy/qvek4Wc7I1nbM+8YWLD4576aXIIG20SMx+FpV/
+	 GKwj/ajA/L3OQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv4 09/13] selftests/bpf: Change uprobe syscall tests to
+ use nop10
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526205840.173790-10-jolsa@kernel.org>
+References: <20260526205840.173790-10-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 21:15:17 +0000
+Message-Id: <20260526211518.3937F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260523083001.2911931-1-kuniyu@google.com> <20260523083001.2911931-11-kuniyu@google.com>
- <202652620435.m7WK.martin.lau@linux.dev>
-In-Reply-To: <202652620435.m7WK.martin.lau@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 26 May 2026 14:07:19 -0700
-X-Gm-Features: AVHnY4LBglR5_PGxMxSrpIx4L85PylgzLxFNRSg3vNN7axUqqTCkyPBE673xDRU
-Message-ID: <CAAVpQUCd_eDq2nVz=um3T3iR5x7dSX1Rpi1YVTF0T5j16ok95g@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 10/11] bpf: tcp: Add SOCK_OPS rcvlowat hook.
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 26, 2026 at 1:47=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On Sat, May 23, 2026 at 08:29:39AM +0000, Kuniyuki Iwashima wrote:
-> > Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVQ_CB.
-> >
-> > Let's invoke the BPF SOCK_OPS prog when
-> >
-> >   1. TCP stack enqueues skb to sk->sk_receive_queue
-> >      -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
-> >
-> >   2. TCP recvmsg() completes
-> >      -> __tcp_cleanup_rbuf()
-> >
-> > This will allow the BPF prog to parse each skb and dynamically
-> > adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
-> > until sufficient data (e.g., a full RPC frame) is available
-> > in the receive queue.
-> >
-> > Note that the direct access to bpf_sock_ops.data is intentionally
-> > disabled by passing 0 as end_offset.
-> >
-> > Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
-> > with bpf_sock_ops because payload is not in the linear area
-> > with TCP header/data split on and skb may contain a RPC
-> > descriptor in skb frag.  This also simplifies the BPF prog.
-> >
-> > The placement of tcp_bpf_rcvlowat() in tcp_ofo_queue() and
-> > tcp_fastopen_add_skb() is chosen to provide the same snapshot
-> > with tcp_queue_rcv().
-> >
-> > For example, if tcp_bpf_rcvlowat() were called before updating
-> > TCP_SKB_CB(skb)->seq in tcp_fastopen_add_skb(), BPF prog would
-> > need to implement an unlikely if branch to strip SYN.
-> >
-> > In addition, TCP stack can queue overlapping skb into recvq.
-> > Once rcv_nxt is updated with a new skb, BPF prog cannot infer
-> > the previous one from skb->len.
-> >
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > ---
-> > v2: Add explanation of tcp_bpf_rcvlowat() placement.
-> > ---
-> >  include/net/tcp.h       | 12 ++++++++++++
-> >  net/ipv4/tcp.c          |  2 ++
-> >  net/ipv4/tcp_fastopen.c |  2 ++
-> >  net/ipv4/tcp_input.c    | 10 ++++++++++
-> >  4 files changed, 26 insertions(+)
-> >
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index bc95d8e7b62e..a409f2ea710f 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -2889,12 +2889,24 @@ static inline void bpf_skops_init_skb(struct bp=
-f_sock_ops_kern *skops,
-> >       skops->skb =3D skb;
-> >       skops->skb_data_end =3D skb->data + end_offset;
-> >  }
-> > +
-> > +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
-> > +
-> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
-kb)
-> > +{
-> > +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_CB_FLAG)=
-)
-> > +             bpf_skops_rcvlowat(sk, skb);
-> > +}
-> >  #else
-> >  static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
-> >                                     struct sk_buff *skb,
-> >                                     unsigned int end_offset)
-> >  {
-> >  }
-> > +
-> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
-kb)
-> > +{
-> > +}
-> >  #endif
-> >
-> >  /* Call BPF_SOCK_OPS program that returns an int. If the return value
-> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > index 3afeb69a547a..f7e32891bb4e 100644
-> > --- a/net/ipv4/tcp.c
-> > +++ b/net/ipv4/tcp.c
-> > @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copi=
-ed)
-> >               tcp_mstamp_refresh(tp);
-> >               tcp_send_ack(sk);
-> >       }
-> > +
-> > +     tcp_bpf_rcvlowat(sk, NULL);
->
-> hmm... so NULL is a way for the bpf prog to tell where it is called?
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] The usdt.h header was not updated to redefine the default USDT_N=
+OP to 10 bytes, which will cause the usdt test to reliably fail.
+- [Medium] check_detach() only verifies the restoration of the first 5 byte=
+s of the 10-byte NOP and uses a signed char array that can cause compiler w=
+arnings.
+- [Medium] Benchmark functions and external reporting names were not update=
+d to reflect the new 10-byte NOP behavior, producing misleading metrics.
+--
 
-Yes.  The selftest fetches bpf_cast_to_kern_ctx(ops)->skb first to
-check it since we need to access skb->cb anyway to read
-TCP_SKB_CB()->{seq,end_seq} for non-NULL case.
+commit d8fb3aec4d3eab73b6231c402e78efd3cd47f8f0
+Author: Jiri Olsa <jolsa@kernel.org>
 
+selftests/bpf: Change uprobe syscall tests to use nop10
 
->
-> With skb NULL, what does the bpf prog usually do?
+Optimized uprobes are now on top of 10-bytes nop instructions,
+reflect that in existing tests.
 
-In that case, the prog reads tp->copied_seq and some sequence
-numbers from sk local storage and calls kfunc to adjust sk->sk_rcvlowat.
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/t=
+esting/selftests/bpf/benchs/bench_trigger.c
+> index 2f22ec61667b9..a60b8173cdc46 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+> @@ -398,7 +398,7 @@ static void *uprobe_producer_ret(void *input)
+>  #ifdef __x86_64__
+>  __nocf_check __weak void uprobe_target_nop5(void)
+>  {
+> -	asm volatile (".byte 0x0f, 0x1f, 0x44, 0x00, 0x00");
+> +	asm volatile (".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x=
+00, 0x00");
+>  }
+
+[Severity: Medium]
+This isn't a bug, but the function name uprobe_target_nop5 and the associat=
+ed
+reporting names in the benchmark registry (like uprobe-nop5) still use the
+nop5 suffix. Since they now use a 10-byte NOP, should these be updated to
+nop10 to avoid misleading benchmark metrics?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
+ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> index 955a37751b52d..90851d1e4624f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+[ ... ]
+> @@ -430,9 +432,11 @@ static void *check_attach(struct uprobe_syscall_exec=
+uted *skel, trigger_t trigge
+> =20
+>  static void check_detach(void *addr, void *tramp)
+>  {
+> +	static const char nop10_prefix[] =3D { 0x66, 0x2e, 0x0f, 0x1f, 0x84 };
+> +
+
+[Severity: Medium]
+Is char the correct type here? The value 0x84 exceeds the maximum positive
+value for a signed char, which can trigger compiler warnings on architectur=
+es
+where char is signed. Could this be changed to unsigned char instead?
+
+Also, the optimized uprobe attachment replaces the full 10-byte NOP. Does
+verifying only the first 5 bytes adequately test that the detach correctly
+restored the original instruction stream?
+
+>  	/* [uprobes_trampoline] stays after detach */
+>  	ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
+> -	ASSERT_OK(memcmp(addr, nop5, 5), "nop5");
+> +	ASSERT_OK(memcmp(addr, nop10_prefix, 5), "nop10_prefix");
+>  }
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testin=
+g/selftests/bpf/prog_tests/usdt.c
+> index 69759b27794d7..fda3a298ccfc7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+> @@ -252,7 +252,7 @@ extern void usdt_1(void);
+>  extern void usdt_2(void);
+> =20
+>  static unsigned char nop1[1] =3D { 0x90 };
+> -static unsigned char nop1_nop5_combo[6] =3D { 0x90, 0x0f, 0x1f, 0x44, 0x=
+00, 0x00 };
+> +static unsigned char nop1_nop10_combo[11] =3D { 0x90, 0x66, 0x2e, 0x0f, =
+0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftes=
+ts/bpf/usdt_2.c
+> index 789883aaca4c3..b359b389f6c00 100644
+> --- a/tools/testing/selftests/bpf/usdt_2.c
+> +++ b/tools/testing/selftests/bpf/usdt_2.c
+> @@ -3,7 +3,7 @@
+>  #if defined(__x86_64__)
+> =20
+>  /*
+> - * Include usdt.h with default nop,nop5 instructions combo.
+> + * Include usdt.h with default nop,nop10 instructions combo.
+>   */
+>  #include "usdt.h"
+
+[Severity: Medium]
+It appears tools/testing/selftests/bpf/usdt.h was not updated in this patch
+to redefine USDT_NOP to 10 bytes for x86_64.
+
+Since usdt_2.c includes usdt.h to build its probes, won't it still compile
+with the old 6-byte sequence? This would cause find_instr() in usdt.c to fa=
+il
+to locate nop1_nop10_combo and result in test failures.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526205840.1737=
+90-10-jolsa@kernel.org?part=3D1
