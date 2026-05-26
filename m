@@ -1,105 +1,175 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293B539524B;
-	Tue, 26 May 2026 06:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778EF23D297
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 06:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779777591; cv=none; b=Su1tYRj0bbm081deFuUcSclikO63Cm8me/sqtoGX8jGuFiCbEca45FJA2RiUpzVbqs9BUBUJaMK0rJUGPeUBxKIcvva48N/nfDjf4je07hM/03krgLp3WR7RWveRfVX7JoSZFT5a5h185vLmuRYV0KWvIx0+ZuO/J7YAAXjFvK4=
+	t=1779777878; cv=none; b=A0AWitU0vsCbQwsnnJLWL2rhIdKIQ7CO/XoRsQsDZGRWK0GgCpbwce5q0wVl5Tokc6zNi/MgV4icpIApPKfFPjnlrlaQoM7SvaoStptk+DpJZfSMweCBH3eztc9U/48dynbZ9JgP+VzJD9Z74eCQk7hEHGVGSXOHW0ai3XFKIWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779777591; c=relaxed/simple;
-	bh=InmskBsL43DvgxQ4LZbni0cgwDfdI+KD/WkqFlumQJI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nDRa9LjYgwZGDxWdcQ8G49L9aJ0Nad+ud8UQOJxUZBchylwV5200UUF4n7ix1p7D5tMWO+7pf2ENqgPukIj0qelW86IL9Dnhz3se8z+pzyA/RwYWAjyJK4gFrpU6DN9Y+ugOebMQEGldOlx211X0NnrnfF9eA+ikhdOdtwoug80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxRektQBVqYUsNAA--.31804S3;
-	Tue, 26 May 2026 14:39:42 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAxGMEpQBVqHV2RAA--.64236S2;
-	Tue, 26 May 2026 14:39:38 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] libbpf: Add __NR_bpf definition for LoongArch
-Date: Tue, 26 May 2026 14:39:36 +0800
-Message-ID: <20260526063936.16769-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1779777878; c=relaxed/simple;
+	bh=cLgEFYb9vPxgOhRC0ZF0n+Bf95kheC+pGLWemGnfodE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AVVltGAuOGIjsZgmMPtn5WxAO+3sCwyOUFMfU87o9oeEruPCD0LSTYG7UK1LVYex2Dw6BWzsnBuOf9kh5+vYpYecSGsDz0lR/ohgN2qfGY75Seco2kM8FvBAjytGKebCIu2zOw9zBtakbhOncOp4UZhn9VVsG1sYJV/mOEfXMB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i0h5xWi6; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i0h5xWi6"
+Message-ID: <d92bc603-e345-4dee-9ae9-6ad45e4e6642@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779777874;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DeEV2RRWQsIvQLf46WVN6yblZQZCu/TNWjyKT0rKgO4=;
+	b=i0h5xWi64e1mCrdbRhD8PWRHV36oUuAj4/VLRHWQReoudCWnkWInwKKpUcV7qG/JaiPp8i
+	pMroPjWZ2cxNNWigqTfR5/p7JtasT6W6NfOXGiP0mAsqmSnXTXB1uai1/rxxp4LaEwV42c
+	4MGluiNqz8aHSOst79LbTtdz0t7WSNc=
+Date: Tue, 26 May 2026 14:44:24 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxGMEpQBVqHV2RAA--.64236S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KFy7Gw43Kw1DJFy7JF1kZwc_yoW8Ar4xpw
-	4UCa40kr15GFW5Jw10vFsYqw43Grn7tryjqayrCw4xCFs5J3WxJr1qvFZ8ZF1aqw4Fk342
-	kr1Yg3s8Zr18AwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU90b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-	6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVj
-	vjDU0xZFpf9x07jepB-UUUUU=
+Subject: Re: [PATCH net v3] net: tls: use sync AEAD for sk_msg BPF sockets
+To: Christopher Lusk <clusk@northecho.dev>, Jakub Kicinski <kuba@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260526025154.60607-1-clusk@northecho.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260526025154.60607-1-clusk@northecho.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-LoongArch uses the generic syscall table, where __NR_bpf is defined
-as 280 in include/uapi/asm-generic/unistd.h.
 
-To align with other architectures, add the __NR_bpf definition for
-LoongArch to avoid a potential compilation failure: "error __NR_bpf
-not defined. libbpf does not support your arch."
+On 5/26/26 10:51 AM, Christopher Lusk wrote:
+> The kTLS TX path can hand an open record to a sk_msg verdict
+> program before encryption.  If the verdict applies fewer bytes
+> than the open record contains, tls_push_record() splits
+> ctx->open_rec into the record being encrypted and a remainder.
+> The synchronous path reattaches that remainder before continuing.
+>
+> With an async AEAD provider, crypto_aead_encrypt() can return
+> -EINPROGRESS after ctx->open_rec has been unhooked but before the
+> split remainder is reattached.  The remainder is no longer
+> reachable through ctx->open_rec or ctx->tx_list, silently dropping
+> transmitted data and leaking the unreachable tls_rec.  The same
+> composition also entangles the user-page zerocopy lifetime rules
+> with an async completion path.
+>
+> A sockmap cannot be attached to a socket after an inet ULP is
+> installed: sk_psock_init() returns -EINVAL when
+> inet_csk_has_ulp() is true.  So the supported ordering for
+> sockmap + kTLS TX is sockmap first, TLS_TX setup second.  When
+> TLS_TX setup sees an existing sk_psock, allocate the AEAD with
+> CRYPTO_ALG_ASYNC masked out and latch the TX zerocopy gate
+> (sw_ctx_tx->async_capable) so the buggy composition becomes
+> structurally unreachable.  Ordinary kTLS sockets without sk_msg
+> BPF attached are unaffected and continue to use async-capable
+> providers.
+>
+> Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+> Cc: stable@vger.kernel.org # 4.20+
+> Signed-off-by: Christopher Lusk <clusk@northecho.dev>
+> Assisted-by: Codex:gpt-5.5
+> Assisted-by: Claude:claude-opus-4-7
+> ---
+>
+> Changes since v2 [1]:
+> - Per netdev maintainer guidance [2], replace the Option-C
+>    drain-on-error fix with a setup-time surface narrowing in
+>    tls_set_sw_offload(): when a sockmap is already attached at
+>    TLS_TX setup, request a synchronous AEAD (CRYPTO_ALG_ASYNC in
+>    the allocation mask) and set sw_ctx_tx->async_capable = 1.
+>    Both moves are needed: latching async_capable alone disables
+>    zerocopy but tls_do_encryption() can still return -EINPROGRESS
+>    on the copy path; selecting a sync provider removes that return
+>    path for sk_msg-attached sockets.
+> - Drop the selftest from the series per Jakub's note that the
+>    existing sockmap + TLS coverage at
+>    tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c exercises
+>    this configuration [3].  That suite covers sockmap + kTLS
+>    policy paths broadly; the specific async-pcrypt pass-then-drop
+>    failure mode from the v2 reproducer was validated for v3 on
+>    QEMU/KVM with a KASAN+LOCKDEP-instrumented kernel against net
+>    base 2156a29aecff before send.
+> - Single-patch series.
+>
+> Changes since v1:
+> - v1's remainder-rooting fix was incomplete; Sashiko AI review
+>    surfaced a real UAF in the v2 follow-up that John Fastabend
+>    endorsed on the v1 thread [4].  The surface-narrowing approach
+>    in v3 makes both failure modes unreachable by avoiding the
+>    async + sk_msg composition entirely rather than patching each
+>    continuation point.
+>
+> [1] https://lore.kernel.org/all/20260521025840.976378-1-clusk@northecho.dev/
+> [2] https://lore.kernel.org/all/20260525133028.58494274@kernel.org/
+> [3] https://lore.kernel.org/all/20260525133048.2dc6d8d3@kernel.org/
+> [4] https://lore.kernel.org/all/huduxtn6parzgiaf5cyiyrrvjjvx6jsdedowvrd4nkwmuyeind@j6migjgofh2i/
+>
+>   net/tls/tls_sw.c | 15 ++++++++++++++-
+>   1 file changed, 14 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 964ebc268..0000000 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -2867,7 +2867,20 @@ int tls_set_sw_offload(struct sock *sk, int tx,
+>   	rec_seq = crypto_info_rec_seq(src_crypto_info, cipher_desc);
+>
+>   	if (!*aead) {
+> -		*aead = crypto_alloc_aead(cipher_desc->cipher_name, 0, 0);
+> +		u32 mask = 0;
+> +
+> +		if (tx) {
+> +			struct sk_psock *psock;
+> +
+> +			psock = sk_psock_get(sk);
+> +			if (psock) {
+> +				mask = CRYPTO_ALG_ASYNC;
+> +				sw_ctx_tx->async_capable = 1;
+> +				sk_psock_put(sk, psock);
+> +			}
+> +		}
+> +
+> +		*aead = crypto_alloc_aead(cipher_desc->cipher_name, 0, mask);
+>   		if (IS_ERR(*aead)) {
+>   			rc = PTR_ERR(*aead);
+>   			*aead = NULL;
+> --
+> 2.54.0
 
-This is a follow up patch of:
+If async_capable is set to 1, the zerocopy path in tls_sw_sendmsg() is 
+skipped.
+Unfortunately ktls with bpf_msg_pop_data() does not work correctly under 
+this
+copy path.
 
-  commit b0c47807d31d ("bpf: Add sparc support to tools and samples.")
-  commit bad1926dd2f6 ("bpf, s390: fix build for libbpf and selftest suite")
-  commit ca31ca8247e2 ("tools/bpf: fix perf build error with uClibc (seen on ARC)")
-  commit e32cb12ff52a ("bpf, mips: Fix build errors about __NR_bpf undeclared")
+tls_clone_plaintext_msg() aliases msg_pl onto msg_en's plaintext area 
+(in-place encryption).
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/build/feature/test-bpf.c | 2 ++
- tools/lib/bpf/bpf.c            | 2 ++
- 2 files changed, 4 insertions(+)
+BPF runs bpf_msg_pop_data(msg, 0, 2). This shifts msg_pl's SG entry 
+forward by 2 bytes.
+The two SGs now point to the same page at different offsets. Physical 
+memory overlaps but the start of
+address differ.
 
-diff --git a/tools/build/feature/test-bpf.c b/tools/build/feature/test-bpf.c
-index e7a405f83af6..89d59674f39b 100644
---- a/tools/build/feature/test-bpf.c
-+++ b/tools/build/feature/test-bpf.c
-@@ -20,6 +20,8 @@
- #  define __NR_bpf 6319
- # elif defined(__mips__) && defined(_ABI64)
- #  define __NR_bpf 5315
-+# elif defined(__loongarch__)
-+#  define __NR_bpf 280
- # else
- #  error __NR_bpf not defined. libbpf does not support your arch.
- # endif
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 3cd705802330..bc513aa8f404 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -59,6 +59,8 @@
- #  define __NR_bpf 6319
- # elif defined(__mips__) && defined(_ABI64)
- #  define __NR_bpf 5315
-+# elif defined(__loongarch__)
-+#  define __NR_bpf 280
- # else
- #  error __NR_bpf not defined. libbpf does not support your arch.
- # endif
--- 
-2.42.0
+I think selecting a sync provider via mask = CRYPTO_ALG_ASYNC is 
+sufficient to
+remove the -EINPROGRESS return path.
+
+May be time to remove skmsg from ktls? (disable by default first, 
+re-enable via a new ktls module_param?)
+
 
