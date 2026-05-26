@@ -1,63 +1,63 @@
 Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F6E33FE33
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF2F3AC0DD
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779824257; cv=none; b=QBOEo6qVewYN9ogpWurKk+yMkbhCT7ChARWf34MjqjR0jPOOv2u1Wkx2m9ZSkhPysG49VhJUIVG00FtmznceBk9aR7BBi9IQSj5B0lgUKSuwCJ7zfvGruXiS7F/sJ2jrhLmdslAX1SqELr6OTfE66YEMHZYEgr67QkO+PHEyG4Q=
+	t=1779824258; cv=none; b=q6zfo/eAYIX6O7hVJMzX2ZD/ElFR4j9pSStJXItpoq1fSajT0mKNgaiim1MhhiP6tq2oSU9TMw3a6ZIn5Ev4VBFP2rJacG/c0CLBPIdIu3o4PKALovNMkV/8bNHe6wdULHNldkECu/mL17lSuy8YTE2dFUSMGRMBvxMDj2eNlPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779824257; c=relaxed/simple;
-	bh=gjupsk5p0Vg6YsV+/ZTI03Y27beIqbjx6pO9seZS55g=;
+	s=arc-20240116; t=1779824258; c=relaxed/simple;
+	bh=CIx/wbIY+h0O3qhg794H9N5puKyMZqIXFqmREPW3X38=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lS3IjLDMBIngf1A+yxSHgK5L7dM+Bn3jxKISJ+aXo6GcZuRBoJmOarwnLj9VbZhf+jscbEN0BCOR2uPKMYX/UPKbOiDzUyI4EPzypmAghQMiEwr9a043vvQK9eOjmjxSXglhhYcNc75yo4ItVfoSPRG3GophGcaGBKP/kXklVgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oGKdOOoF; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version:Content-Type; b=WxSm7pSaIZQ6FINeb/mvU9LOKCNil4wo4sIvdDReKiN33rRCnbAUw5NzD+ln/S2NBa2Tw7zKvseAERvOpBVTTMcCxp7XWcg94zjcuo+0xwz9HEN6rCOSsPq2ngyUeR8+zWCJvLQuI48Ns9XIgNWnqyvbCXA8JyGXxb1t2FGBOlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=stL2yUJU; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oGKdOOoF"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-366375c4076so4750692a91.3
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stL2yUJU"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3699cdeec05so4734706a91.3
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779824255; x=1780429055; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779824256; x=1780429056; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p99VX1yeeZf2ANnLp0K1bHNizFtrBqv0Q1pV3jdOFNg=;
-        b=oGKdOOoFRI/CUMAZ09aQ8zda8lrqQg8t1fcUkK2JSJVB0kfymFiYbScmH/f2oBMz5D
-         tZ/FE3lRJKmlCBlPVLUujihqYf1Ua4LpoO6//qfDNT5nbe04NR9EDuDY69g4jb1aYo7l
-         RI7yxHpr5D8hvBX3+JAHRb2kYLmUdMP+dKjQx1RgRSLczxBgztSXRo2J1JRPjrw7BQUx
-         BTSZyn5b2b57QgPIZhGU6L7umupeRs5BTzZT3xQbiXgsPVNMM9K4pcL2gD9HZM0ITvoc
-         G877dpY4e+HupyZ/5B5xc1t3mUDlsP4gJPGITcKPfecxCvK6k7oNhOrGbhASSUyigVhb
-         ykWw==
+        bh=QMywEO/xTDK++kG9pCAaD0ZUp3EUmpHCYjtqjv7Eqo4=;
+        b=stL2yUJUZ7sNWB1yHabX6b4trrC//YNAoWZKQfK/zj0PO0DjPvcj5TRFN6aRARhngm
+         KP8kX2X/2zbreLc3kLzdDF5KbcrbXVuUinQW3jygnM4ITOIF34qYDaIZFih56Focc2fZ
+         GhaYmpbYVsdxQn8n8cO05tNQESzG7ecIKdJS4+zSGwFhiaFJYddxXbi/bmvjWKo9C83R
+         Zt5N++U/tdHfWNTMKzVIZzaUHIMTZmDyHMU/IKu1ZCMMcGjlc+FfBXHCzlKgErjPXv+Y
+         nsvTN2ZjfHBzFzzopRDHm3y2wwNcTySBS+2FxonV4vbjZsW+beJrTlsCXahCLJmTpf7J
+         J9Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779824255; x=1780429055;
+        d=1e100.net; s=20251104; t=1779824256; x=1780429056;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=p99VX1yeeZf2ANnLp0K1bHNizFtrBqv0Q1pV3jdOFNg=;
-        b=EI25QbTmtmW6oGTWjgf/OGlM7CoFzie9IKyGI1xg7x4p+0V8nqV/gG3ELnYuLr33nA
-         wj/CK19QQVR5TMw9Z9EkUmGh8hRVpaVgd3rYg21EEYPV6mhTemOD9sw0tcyGgmNhCHXW
-         2E6tEGobh/tsJjq1umIUoLmILnvG6lyZ5SurZcCPRb1yicjlhi/V7GDoOIfNjN8gHzWx
-         qZkUyCIx2yM/gXfaZKJ92lN4Z7ZPZTyJciT9lWZdFGGaGnkP3I+4BYvocyL2+UkuuH8r
-         8Fj3t0pnHnpwa4b/KCSBzM0o4Kih5mXuVTbJ3rtoymPlEeCpdqgdHPaasbhCCDbxFMoC
-         d4ow==
-X-Gm-Message-State: AOJu0YylPNNXvn+kvXxYmvfYkNqo8tSSH+0/YK4fLN4BYVietfbFM73i
-	tnFiCQOd7/L/rU+xPZ62TVuB3yH3ZMHs7lZ8mh+rdpI1+umV92iw6q1dip/L5QBSNFo=
-X-Gm-Gg: Acq92OEWtFaYDP1gLnfY0RbpXZ+kdGYLCwYrrwwwRlrKy6rw39c6fcSyIk3Vb2BD6uU
-	SgVYMkaUpgAnBBAFS0pcjcNnKH+fWWGLyslyyFRkUf1tXWlqMcjA4rL6Vw3PFejh0t1sF/wQmrM
-	iaVk/b/dkB9ENVjPm9OD+A1f2j9IcCoRpXBybin310194V9LSw8pXnOOQ4Ln0sZZ1aJYkX6dLFT
-	9mxkYDGVkVODctGioZ8Q7oDgB0LLVxZTgBu3uqe5tgP0otM0PHIJV8ny+3t9c1iVyhtk0txFBZo
-	lVjtW8ZITysBFWd8rpzerM/WzNNcHyaLJLuA4FQVlkno+pc43Oe6kwDzHkztQdjZIupM0uTFIXp
-	1y/gpu7HxgXPDWr0DwpYFNqD+KXfnkUs77zN+duTqdn8rRpkEXI8ykzKzSRGLBi39GbJog9h4+2
-	aNfp0IXG9aaynmBHMdZL1RA4BCo3Utn5Vi8XVxCz8diZR2qTjIlx0zruZyg/IOQLcbBpq3dexDt
-	vTYFA==
-X-Received: by 2002:a17:90b:5445:b0:36b:218c:719e with SMTP id 98e67ed59e1d1-36b218c7792mr1210592a91.21.1779824255091;
-        Tue, 26 May 2026 12:37:35 -0700 (PDT)
+        bh=QMywEO/xTDK++kG9pCAaD0ZUp3EUmpHCYjtqjv7Eqo4=;
+        b=VWsRPQQt6b5lhuytrRDqgf20YEM6rUN/w1gm2/fZ+atXkzPE+RmG/yvMnLFsWj0X8j
+         99W/V7GyB4St6PbJYJCrppPC+fNUoeUcDyGCjVo5sH23le8a3/wrib1OKKmp1tfN826x
+         byenZ23K8BC30e5IX4Ikoy8oku2WX/tdATNDkQUhrSwPp0JshHxlOaFUcnWpwz/py+pU
+         FGTKR8UNl0uavQbm5mGLI31hvXZRBfkDZaQDgGgwOaNol20LBaVCrus0xRbLFt/dXlv5
+         57UnO7Uuw3zIlRr+C6bQbTWUCJJejlJqq5bDG7YKWPUZ9CfqqJTTFli+zG8s009ZNeYj
+         vPqw==
+X-Gm-Message-State: AOJu0Yw4DV1gK/Oo8dvuLJF15VGzcurT/RclQYewizmZ3NLjcbm4XxjH
+	cHkoOwUAdX/4hnUs/69VoJ0+TG7xEiCKL7ZZuA+w9TeW8HRpRESpdVD1B3X2YlRxQeM=
+X-Gm-Gg: Acq92OF9Aqu7kFdAdyFcf/dGIfZDEgsmb9eCNIgs/3LkK81efBAFP4l/yWqqbJq/U1q
+	k/ehGAM9+mV7i/lHuFSN1fDQNROF8XIosSXcrqzbGVIcFP45D7t1YaDw4aJrenQRuF7L0jTvD0P
+	YMUwk7WYCjnbx33+t1QUw90qwiUky8EZ0+cgYZhx+RaSAPWu/E370I3y/KcfPAcMziAT2xI7orw
+	2ytQRPSfDqQdNE+mztqiCidMytHQlr4xTEVQqtBokYUYUn32qP8bcSEczDwBtb2FGdO7kiJFba7
+	C6tr9hpLYG7npTj+/i0pW5FXB8HVtJjtkYt2JN+/Ye6ij7E5Tz1xrMgeK9iqWZYBj0Byq+kCoPJ
+	LYvqHzMcTecE4tRIgFmONPy/kzKVBXIFsBFYC+Ikf3hsJP5gQWR+iA2cBQUiNwhCKx/zgLLaUCE
+	1aEktxlZdZzczxcgffpKUg7rdqpGBgXLbHf1p99dkCFvarZVQyO0VL3YK4BAgLhXy2Ky3wgZUAH
+	sxc2g==
+X-Received: by 2002:a17:90b:350a:b0:36a:fcf5:64d2 with SMTP id 98e67ed59e1d1-36afcf566b1mr5169264a91.16.1779824256031;
+        Tue, 26 May 2026 12:37:36 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 12:37:34 -0700 (PDT)
+        Tue, 26 May 2026 12:37:35 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH RFC bpf-next v2 2/6] bpf: compute loops hierarchy
-Date: Tue, 26 May 2026 12:37:16 -0700
-Message-ID: <20260526-better-1m-reporting-v2-2-e7ec61c45d41@gmail.com>
+Subject: [PATCH RFC bpf-next v2 3/6] selftests/bpf: test cases for loop hierarchy computation
+Date: Tue, 26 May 2026 12:37:17 -0700
+Message-ID: <20260526-better-1m-reporting-v2-3-e7ec61c45d41@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
 References: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
@@ -83,318 +83,283 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Add an analysis phase computing the loops hierarchy to the bpf
-verifier. The algorithm is based on the paper:
-"A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
-adapted to be non-recursive.
-
-Record the loops hierarchy per instruction:
-- The field insn_aux_data->loop_header records the innermost loop
-  header containing it.
-- The field insn_aux_data->loop records additional information about
-  the loop if this instruction is a loop header (at the moment it only
-  tracks irreduciblity of the loop, additional information will be
-  added later).
-
-Subsequent patches use loop header entries as sampling points for
-callchain profiling, for better error reports when the 1M instruction
-budget is exhausted.
+Test cases covering the following branches in bpf_compute_loops():
+- Case B: simple backedge creating a loop (loop_single)
+- Case B: two independent loops (loop_two_independent)
+- Case B + D: nested loops where inner header's loop_header points to
+  outer (loop_nested)
+- Case C: diamond CFG with no loops (fwd_edges_no_loop)
+- Case D: sibling inner loops within one outer loop
+  (loop_nested_siblings)
+- Three levels of loop nesting (loop_three_levels)
+- Loop with if-else body containing forward branches
+  (loop_with_if_else)
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  10 +++
- kernel/bpf/Makefile          |   2 +-
- kernel/bpf/fixups.c          |   5 ++
- kernel/bpf/loops.c           | 184 +++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |  10 ++-
- 5 files changed, 209 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+ .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
+ 2 files changed, 235 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5cbad3b64130..d0a1fb135cbf 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -656,6 +656,10 @@ struct bpf_iarray {
- 	u32 items[];
- };
- 
-+struct bpf_loop {
-+	bool irreducible;
-+};
-+
- struct bpf_insn_aux_data {
- 	union {
- 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
-@@ -742,6 +746,10 @@ struct bpf_insn_aux_data {
- 	u16 const_reg_map_mask;
- 	u16 const_reg_subprog_mask;
- 	u32 const_reg_vals[10];
-+	/* index of a loop header of the innermost loop containing this instruction, -1 if none */
-+	s32 loop_header;
-+	/* additional information about the loop if this instruction is a loop header */
-+	struct bpf_loop *loop;
- };
- 
- #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
-@@ -1608,4 +1616,6 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env);
- int bpf_fixup_call_args(struct bpf_verifier_env *env);
- int bpf_do_misc_fixups(struct bpf_verifier_env *env);
- 
-+int bpf_compute_loops(struct bpf_verifier_env *env);
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 4dc41bf5780c..787d183ba5b4 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
- 
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o loops.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 12739add2dda..57294524dab8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -450,6 +450,11 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- 			aux_data[i].jt = NULL;
- 		}
- 
-+		if (aux_data[i].loop) {
-+			kvfree(aux_data[i].loop);
-+			aux_data[i].loop = NULL;
-+		}
-+
- 		if (bpf_is_ldimm64(&insns[i]))
- 			i++;
- 	}
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 219ff2969868..35d92d176c1f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -57,6 +57,7 @@
+ #include "verifier_live_stack.skel.h"
+ #include "verifier_liveness_exp.skel.h"
+ #include "verifier_load_acquire.skel.h"
++#include "verifier_loop_hierarchy.skel.h"
+ #include "verifier_loops1.skel.h"
+ #include "verifier_lwt.skel.h"
+ #include "verifier_map_in_map.skel.h"
+@@ -208,6 +209,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
+ void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
+ void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
+ void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
++void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
+ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
+ void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
+ void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
 new file mode 100644
-index 000000000000..1f0b10c57957
+index 000000000000..84cabfa42485
 --- /dev/null
-+++ b/kernel/bpf/loops.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
+@@ -0,0 +1,233 @@
++// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#include <linux/slab.h>
-+#include <linux/bpf_verifier.h>
-+
-+struct dfs_state {
-+	u32 traversed:1;
-+	u32 next_succ:31;
-+};
-+
-+struct loops_dfs {
-+	struct dfs_state *state;
-+	int *dfs_pos;
-+	int *stack;
-+};
-+
-+static void mark_irreducible(struct bpf_verifier_env *env, int h)
-+{
-+	env->insn_aux_data[h].loop->irreducible = true;
-+}
-+
-+static int mark_header(struct bpf_verifier_env *env, int h)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+
-+	if (!aux[h].loop) {
-+		aux[h].loop = kvzalloc_obj(struct bpf_loop, GFP_KERNEL_ACCOUNT);
-+		if (!aux[h].loop)
-+			return -ENOMEM;
-+	}
-+	return 0;
-+}
-+
-+static int assign_header(struct bpf_verifier_env *env, struct loops_dfs *dfs, int n, int h)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int *dfs_pos = dfs->dfs_pos;
-+	int err, nh;
-+
-+	err = mark_header(env, h);
-+	if (err)
-+		return err;
-+
-+	/* Don't encode self-loops, otherwise can't reflect loops nesting structure. */
-+	if (n == h)
-+		return 0;
-+
-+	/* Make sure that loop headers up the chain are sorted by dfs_pos. */
-+	while (aux[n].loop_header != -1) {
-+		nh = aux[n].loop_header;
-+		if (nh == h)
-+			return 0;
-+		if (dfs_pos[nh] < dfs_pos[h]) {
-+			aux[n].loop_header = h;
-+			n = h;
-+			h = nh;
-+		} else {
-+			n = nh;
-+		}
-+	}
-+	aux[n].loop_header = h;
-+	return 0;
-+}
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
 +/*
-+ * As described in "A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
-+ * adapted to be non-recursive.
++ * kernel/bpf/loops.c:compute_loops() distinguish between
++ * the following cases:
++ * - B: backedge -> simple loop
++ * - C: cross edge to non-loop node -> no-op
++ * - D: edge to node whose header is in DFS path -> nested loop
++ * - E: edge to node whose header is NOT in DFS path -> irreducible
++ *
++ * Below test cases cover the above branches in various combinations.
 + */
-+static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_dfs *dfs,
-+				    int subprog_idx)
++
++/* Case B: single bounded loop. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  1       1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
++__msg("          3: {{.*}} (95) exit")
++__naked void loop_single(void)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct dfs_state *state = dfs->state;
-+	int start = env->subprog_info[subprog_idx].start;
-+	int *dfs_pos = dfs->dfs_pos;
-+	int *stack = dfs->stack;
-+	int err, s, h, cur, stack_sz;
-+	struct bpf_iarray *succ;
-+
-+	stack[0] = start;
-+	state[start].traversed = true;
-+	state[start].next_succ = 0;
-+	dfs_pos[start] = 1;
-+	stack_sz = 1;
-+	do {
-+		cur = stack[stack_sz - 1];
-+		succ = bpf_insn_successors(env, cur);
-+		if (state[cur].next_succ == succ->cnt) {
-+			dfs_pos[cur] = 0;
-+			stack_sz--;
-+			continue;
-+		}
-+		s = succ->items[state[cur].next_succ];
-+		if (!state[s].traversed) {
-+			/* Case A:  start -> ... -> cur -> s [unxplored] */
-+			state[s].traversed = true;
-+			state[s].next_succ = 0;
-+			stack[stack_sz] = s;
-+			dfs_pos[s] = stack_sz + 1;
-+			stack_sz++;
-+			continue;
-+		}
-+		/* 's' is fully explored at this point */
-+		if (dfs_pos[s]) {
-+			/*
-+			 * start -> ... -> s -> cur --.
-+			 *                 ^          |
-+			 *                 '----------'
-+			 * Case B: 's' is in the current DFS path.
-+			 */
-+			err = assign_header(env, dfs, cur, s);
-+			if (err)
-+				return err;
-+		} else if (aux[s].loop_header == -1) {
-+			/*
-+			 * start -> ... -> ... -> s -> ... -> end
-+			 *           |            ^
-+			 *           '---> cur ---'
-+			 * Case C: 's' is explored, not in the current DFS path,
-+			 * and not a part of any loop.
-+			 */
-+		} else if (dfs_pos[aux[s].loop_header]) {
-+			/*
-+			 *                 .----------------------.
-+			 *                 v                      |
-+			 * start -> ... -> h -> ... -> ... -> s --'
-+			 *                       |            ^
-+			 *	                 '---> cur ---'
-+			 * Case D: 's' is explored, not in current DFS path,
-+			 * but it's innermost loop header is.
-+			 */
-+			err = assign_header(env, dfs, cur, aux[s].loop_header);
-+			if (err)
-+				return err;
-+		} else {
-+			/* case E */
-+			h = aux[s].loop_header;
-+			mark_irreducible(env, h);
-+			/* can also mark 's' as reentry, but no need for now */
-+			while (aux[h].loop_header != -1) {
-+				h = aux[h].loop_header;
-+				if (dfs_pos[h]) {
-+					err = assign_header(env, dfs, cur, h);
-+					if (err)
-+						return err;
-+					break;
-+				}
-+				mark_irreducible(env, h);
-+			}
-+		}
-+		state[cur].next_succ++;
-+	} while (stack_sz);
-+
-+	return 0;
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
-+int bpf_compute_loops(struct bpf_verifier_env *env)
++/* Case B: two independent loops at the same nesting level. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  2       1: {{.*}} (07) r0 += 1")
++__msg("  2   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
++__msg("          3: {{.*}} (b7) r1 = 0")
++__msg("  1       4: {{.*}} (07) r1 += 1")
++__msg("  1   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
++__msg("          6: {{.*}} (95) exit")
++__naked void loop_two_independent(void)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int i, err = 0, len = env->prog->len;
-+	struct loops_dfs dfs = {};
-+
-+	dfs.dfs_pos = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	dfs.state = kvcalloc(len, sizeof(struct dfs_state), GFP_KERNEL_ACCOUNT);
-+	dfs.stack = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	if (!dfs.dfs_pos || !dfs.state || !dfs.stack) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	for (i = 0; i < len; i++)
-+		aux[i].loop_header = -1;
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		err = compute_loops_in_subprog(env, &dfs, i);
-+		if (err)
-+			goto out;
-+	}
-+
-+out:
-+	kvfree(dfs.dfs_pos);
-+	kvfree(dfs.stack);
-+	kvfree(dfs.state);
-+	return err;
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	if r0 < 10 goto 1b;				\
++	r1 = 0;						\
++2:	r1 += 1;					\
++	if r1 < 10 goto 2b;				\
++	exit;						\
++"	::: __clobber_all);
 +}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3d569e36128c..2b3584712ad2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19627,13 +19627,17 @@ static void log_program(struct bpf_verifier_env *env)
- 	u32 insn_cnt = env->prog->len;
- 	u32 i, j;
- 
--	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
-+	verbose(env, "Program dump (scc? loop_header? insn#: live_regs_before):\n");
- 	for (i = 0; i < insn_cnt; ++i) {
- 		verbose_linfo(env, i, "    ; ");
- 		if (env->insn_aux_data[i].scc)
- 			verbose(env, "%3d ", env->insn_aux_data[i].scc);
- 		else
- 			verbose(env, "    ");
-+		if (env->insn_aux_data[i].loop_header >= 0)
-+			verbose(env, "%3d ", env->insn_aux_data[i].loop_header);
-+		else
-+			verbose(env, "    ");
- 		verbose(env, "%3d: ", i);
- 		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
- 			if (insn_aux[i].live_regs_before & BIT(j))
-@@ -19791,6 +19795,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
- 
-+	ret = bpf_compute_loops(env);
-+	if (ret < 0)
-+		goto skip_full_check;
 +
- 	ret = bpf_compute_scc(env);
- 	if (ret < 0)
- 		goto skip_full_check;
++/* Case B + D: nested loops. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  1       1: {{.*}} (07) r0 += 1")		/* outer loop header */
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")		/* outer loop insn */
++__msg("  1   1   3: {{.*}} (07) r1 += 1")		/* inner loop header */
++__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2") /* inner loop insn */
++__msg("  1   1   5: {{.*}} (a5) if r0 < 0xa goto pc-5") /* outer loop insn */
++__msg("          6: {{.*}} (95) exit")
++__naked void loop_nested(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	r1 = 0;						\
++2:	r1 += 1;					\
++	if r1 < 5 goto 2b;				\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Case C: forward edges, no loops. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
++__msg("          1: {{.*}} (25) if r0 > 0x0 goto pc+2")
++__msg("          2: {{.*}} (b7) r0 = 2")
++__msg("          3: {{.*}} (05) goto pc+1")
++__msg("          4: {{.*}} (b7) r0 = 3")
++__msg("          5: {{.*}} (95) exit")
++__naked void fwd_edges_no_loop(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	if r0 > 0 goto 1f;				\
++	r0 = 2;						\
++	goto 2f;					\
++1:	r0 = 3;						\
++2:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Case B + D: two sibling inner loops within one outer loop. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  1       1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")
++__msg("  1   1   3: {{.*}} (07) r1 += 1")
++__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
++__msg("  1   1   5: {{.*}} (b7) r2 = 0")
++__msg("  1   1   6: {{.*}} (07) r2 += 1")
++__msg("  1   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
++__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
++__msg("          9: {{.*}} (95) exit")
++__naked void loop_nested_siblings(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	r1 = 0;						\
++2:	r1 += 1;					\
++	if r1 < 5 goto 2b;				\
++	r2 = 0;						\
++3:	r2 += 1;					\
++	if r2 < 5 goto 3b;				\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Three levels of nesting. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  1       1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")
++__msg("  1   1   3: {{.*}} (07) r1 += 1")
++__msg("  1   3   4: {{.*}} (b7) r2 = 0")
++__msg("  1   3   5: {{.*}} (07) r2 += 1")
++__msg("  1   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
++__msg("  1   3   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
++__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
++__msg("          9: {{.*}} (95) exit")
++__naked void loop_three_levels(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	r1 = 0;						\
++2:	r1 += 1;					\
++	r2 = 0;						\
++3:	r2 += 1;					\
++	if r2 < 3 goto 3b;				\
++	if r1 < 5 goto 2b;				\
++	if r0 < 10 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Loop with an if-else body (forward branch inside loop, Case C). */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (b7) r0 = 0")
++__msg("  1       1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (bf) r1 = r0")
++__msg("  1   1   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
++__msg("  1   1   4: {{.*}} (b7) r1 = 1")
++__msg("  1   1   5: {{.*}} (0f) r0 += r1")
++__msg("  1   1   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
++__msg("          7: {{.*}} (95) exit")
++__naked void loop_with_if_else(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++1:	r0 += 1;					\
++	r1 = r0;					\
++	if r1 > 5 goto 2f;				\
++	r1 = 1;						\
++2:	r0 += r1;					\
++	if r0 < 100 goto 1b;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Case E: irreducible loop. */
++SEC("socket")
++__success
++__log_level(2)
++__msg("Program dump")
++__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
++__msg("          1: {{.*}} (b7) r1 = 0")
++__msg("          2: {{.*}} (25) if r0 > 0x5 goto pc+2")
++__msg("  1       3: {{.*}} (b7) r1 = 1")
++__msg("  1   3   4: {{.*}} (05) goto pc+1")
++__msg("          5: {{.*}} (b7) r1 = 2")
++__msg("  1   3   6: {{.*}} (0f) r0 += r1")
++__msg("  1   3   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
++__msg("          8: {{.*}} (95) exit")
++__naked void loop_irreducible(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 = 0;						\
++	if r0 > 5 goto 2f;				\
++1:	r1 = 1;						\
++	goto 3f;					\
++2:	r1 = 2;						\
++3:	r0 += r1;					\
++	if r0 < 16 goto 1b;				\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 2.54.0
