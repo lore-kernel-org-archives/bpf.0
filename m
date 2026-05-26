@@ -1,113 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F228C3B19B7;
-	Tue, 26 May 2026 16:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A5B3B27EE;
+	Tue, 26 May 2026 16:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779812357; cv=none; b=itxdztiWLroq5jADMuo3NCHnl6vGkc9bC3WNnuzhjmY2xfTfgW03rnyC7ldGzn6Ie4UABa/Hc0zZDUKP2unMPAOPAblpWfYhX9o5J/HPm7zkA9brxU5/eUHzc5gYooh2X4MuqQaYSTdCg9m6fDu6VP7/bTbDepp4Vl5C2qMWLeY=
+	t=1779812414; cv=none; b=WwctoFZCzox+nwUcWKsxtL/Wx3w4GtzmymZ4cg/v4ChPFPh58AB7FWa6xGVrrAmrW7vBDAIp4g2E61tj84Y2QpFN4Hu+7jI25gpO46Nn6tvGa/BflJTh3gDfh+fgWvuyykSQCpHa5AXML+3zLSra1Nh7cxgNWymPhY4IGnUAlu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779812357; c=relaxed/simple;
-	bh=dXTt1/BNFKEIsvObIYoVeEbSzI6qvqdsnRC5y7Qr5eI=;
+	s=arc-20240116; t=1779812414; c=relaxed/simple;
+	bh=+XLjAnpY0unB67nbg87e232NzbGjChx2swTu8HKQO4A=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HjxvNhv+wVNEcR6Kq8U9A0D2US6GIwBv1LQZ66VXaNEci5uhqX2jAO6qIpz8jtKgFLvxJqY3KjMzdNve5zihJGICCszRBAiBRtZvw4RKHmNp1xVQmS824wIW9lx5KdpAxHMJ1/2bi5l5Uc9zb4qx7/rEK41Q78aDNtJV0/LJRzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sglml3+h reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=jpmWyTutu7cpYX/QZDkfgbGL4amcu5hdPr043P3BK9kS6yx/Rs/2R3Ru9ZcssGrusGHXCUI+DJxj1N1458l5fnJd5xVfLwZfZ2T6uteUz7nwkEwyAxq1B0H8mFww2u0LQGTdCOhiRRunHD0B+EsCHEeFv1TCrLPzfhSOSsl+AiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H5wCsFUe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sglml3+h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C251F00A3A;
-	Tue, 26 May 2026 16:19:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H5wCsFUe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340341F000E9;
+	Tue, 26 May 2026 16:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779812353;
-	bh=5SkN1TCAV3N8KFPanxpJeqssiy4h9kR0l/w2B37WK8E=;
+	s=k20260515; t=1779812412;
+	bh=SU/C5hMx3jXUsOUwsZTH9TaiXLT9pBNB1gWC2GAYxB8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Sglml3+haM8qJZ9vSTtJSlZa5SxfhKaBRf9IdPeA6oEpPtA8GEFOK5svfmw27mTab
-	 Gseoc94vtic5LZ6qdEiGdamwlxAUk4fpVI97K/xIvEisLoqM+K/NnAwg444GpVnOrC
-	 nXl/M0mOvYDTzFTLxvkbiqhGpv+PABEgVAyZW/bvBNKVH3D91649Vm/BaNneH8xOFX
-	 WOL84NTnT17Tp9MZSkbBCsUqV0xIj7jc0QiwRKHCTCUva2HNYUeS2rVWcJtu7r3YNw
-	 qkA+kGp4rxNWrEOdS6ogbef8ulrRKU7ORKjBjZD/h1fNxGsi3BRZpbOArGM5BcuaMM
-	 Lx70DZzjgyFYw==
-Content-Type: multipart/mixed; boundary="===============0782269710716244881=="
+	b=H5wCsFUe+JTpcjRMW/O1Gw4OLYgCSw2wr1zZw6rRK8RylisVUIc6rHWBt+NXFzt9a
+	 kX60ozmNWZeqD1dh7K2UjqpoaI4Gj5Pw5bwDQjLxDY0fUkyMMGDlDurN5+BbhkfGz6
+	 Djk+eWpNYFONHyajlAHewiTr7AZDk9QnVjE43N1/u20OCsi3Oib4L6sJbLe2BgJC2L
+	 MlAaQXErTCosiOOU2k373c0+rcv8rjJupbky4FzO0ka9E3be3z2vwee5FmLpiNxpKG
+	 23LT/qyWT5HWoWpyQS8EGaiBRRkiaXJ1xRxHU8kI5h0fML6XbYq1KzREejmPnP2OSX
+	 xTZdezlTkyRXQ==
+Content-Type: multipart/mixed; boundary="===============7371411648816245416=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7b24386ec0b31b63dc8c46477712fd4946306034ec9d17c461e59c2132e4f1bf@mail.kernel.org>
-In-Reply-To: <20260526152148.30514-6-boqun@kernel.org>
-References: <20260526152148.30514-6-boqun@kernel.org>
-Subject: Re: [PATCH v2 05/12] irq & spin_lock: Add counted interrupt disabling/enabling
+Message-Id: <1dd140384d8509230a38c31f8753dec9a21f77f585178e41a60746b5f631fb40@mail.kernel.org>
+In-Reply-To: <20260526153708.279717-5-mahe.tardy@gmail.com>
+References: <20260526153708.279717-5-mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/7] selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
 From: bot+bpf-ci@kernel.org
-To: boqun@kernel.org,peterz@infradead.org
-Cc: catalin.marinas@arm.com,will@kernel.org,jonas@southpole.se,stefan.kristiansson@saunalahti.fi,shorne@gmail.com,hca@linux.ibm.com,gor@linux.ibm.com,agordeev@linux.ibm.com,borntraeger@linux.ibm.com,svens@linux.ibm.com,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,arnd@arndb.de,juri.lelli@redhat.com,vincent.guittot@linaro.org,dietmar.eggemann@arm.com,rostedt@goodmis.org,bsegall@google.com,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,boqun@kernel.org,longman@redhat.com,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,ojeda@kernel.org,gary@garyguo.net,bjorn3_gh@protonmail.com,lossin@kernel.org,a.hindborg@kernel.org,aliceryhl@google.com,tmgross@umich.edu,dakr@kernel.org,ruanjinjie@huawei.com,lyude@redhat.com,thuth@redhat.com,sohil.mehta@intel.com,xin@zytor.co
- m,pawan.kumar.gupta@linux.intel.com,nikunj@amd.com,joelagnelf@nvidia.com,andriy.shevchenko@linux.intel.com,rdunlap@infradead.org,ynorov@nvidia.com,bigeasy@linutronix.de,linux-kernel@vger.kernel.org,linux-openrisc@vger.kernel.org,linux-s390@vger.kernel.org,linux-arch@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,rust-for-linux@vger.kernel.org,work@onurozkan.dev,daniel.almeida@collabora.com,boqun.feng@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 16:19:12 +0000 (UTC)
+To: mahe.tardy@gmail.com,bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,yonghong.song@linux.dev,jordan@jrife.io,netdev@vger.kernel.org,netfilter-devel@vger.kernel.org,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 26 May 2026 16:20:12 +0000 (UTC)
 
---===============0782269710716244881==
+--===============7371411648816245416==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-> index 241277cd34cf..9d6012ac929d 100644
-> --- a/include/linux/spinlock.h
-> +++ b/include/linux/spinlock.h
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> new file mode 100644
+> index 000000000000..0dc6b6ceafb4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> @@ -0,0 +1,149 @@
 
 [ ... ]
 
-> @@ -427,6 +444,11 @@ static __always_inline bool _spin_trylock_irqsave(spinlock_t *lock, unsigned lon
->  }
->  #define spin_trylock_irqsave(lock, flags) _spin_trylock_irqsave(lock, &(flags))
->
-> +static __always_inline int spin_trylock_irq_disable(spinlock_t *lock)
+> +static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int code)
 > +{
-> +	return raw_spin_trylock_irq_disable(&lock->rlock);
-> +}
+> +	int srv_fd = -1, client_fd = -1;
+> +	struct sockaddr_in addr;
+> +	socklen_t len = sizeof(addr);
 > +
+> +	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, TIMEOUT_MS);
+> +	if (!ASSERT_GE(srv_fd, 0, "start_server"))
+> +		return;
 
-Should spin_trylock_irq_disable() include the sparse and clang
-context-analysis annotations that all other spin_trylock_* variants
-carry?
+Jordan Rife raised a style concern in v6 about using ASSERT_OK_FD
+instead of ASSERT_GE for file descriptor checks. While this was addressed
+for client_fd and cgroup_fd, the srv_fd check here still uses ASSERT_GE.
+Should this be ASSERT_OK_FD for consistency?
 
-Looking at the other trylock variants in the same file:
+https://lore.kernel.org/bpf/q46w47cqezttz2otf76tncxu7sovhywy2dqwcbajigp64uhbtz@eimvxfeeexuz/
 
-spin_trylock():
-    static __always_inline int spin_trylock(spinlock_t *lock)
-        __cond_acquires(true, lock) __no_context_analysis
+[ ... ]
 
-spin_trylock_bh():
-    static __always_inline int spin_trylock_bh(spinlock_t *lock)
-        __cond_acquires(true, lock) __no_context_analysis
+> +void test_icmp_send_unreach_cgroup(void)
+> +{
+> +	struct icmp_send *skel;
+> +	int cgroup_fd = -1;
+> +
+> +	skel = icmp_send__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		goto cleanup;
+> +
+> +	cgroup_fd = test__join_cgroup("/icmp_send_unreach_cgroup");
+> +	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
+> +		goto cleanup;
+> +
+> +	skel->links.egress =
+> +		bpf_program__attach_cgroup(skel->progs.egress, cgroup_fd);
+> +	if (!ASSERT_OK_PTR(skel->links.egress, "prog_attach_cgroup"))
+> +		goto cleanup;
+> +
+> +	for (int code = 0; code <= NR_ICMP_UNREACH; code++) {
+> +		/* The TCP stack reacts differently when asking for
+> +		 * fragmentation, let's ignore it for now.
+> +		 */
+> +		if (code == ICMP_FRAG_NEEDED)
+> +			continue;
+> +
+> +		trigger_prog_read_icmp_errqueue(skel, code);
+> +		ASSERT_EQ(skel->data->kfunc_ret, 0, "kfunc_ret");
+> +	}
+> +
+> +	/* Test an invalid code */
+> +	trigger_prog_read_icmp_errqueue(skel, -1);
+> +	ASSERT_EQ(skel->data->kfunc_ret, -EINVAL, "kfunc_ret");
+> +
+> +cleanup:
+> +	icmp_send__destroy(skel);
+> +	close(cgroup_fd);
 
-spin_trylock_irq():
-    static __always_inline int spin_trylock_irq(spinlock_t *lock)
-        __cond_acquires(true, lock) __no_context_analysis
+Jordan Rife raised a concern in v6 about the cleanup path potentially
+closing an invalid file descriptor. Should this be guarded with
+'if (cgroup_fd != -1)' before calling close(cgroup_fd)?
 
-_spin_trylock_irqsave():
-    static __always_inline bool _spin_trylock_irqsave(spinlock_t *lock, unsigned long *flags)
-        __cond_acquires(true, lock) __no_context_analysis
+https://lore.kernel.org/bpf/q46w47cqezttz2otf76tncxu7sovhywy2dqwcbajigp64uhbtz@eimvxfeeexuz/
 
-The RT counterpart in include/linux/spinlock_rt.h has the
-__cond_acquires(true, lock) annotation:
+> +}
 
-    static __always_inline int spin_trylock_irq_disable(spinlock_t *lock)
-        __cond_acquires(true, lock)
-
-And the underlying _raw_spin_trylock_irq_disable() in spinlock_api_smp.h
-also has __cond_acquires(true, lock):
-
-    static __always_inline bool _raw_spin_trylock_irq_disable(raw_spinlock_t *lock)
-        __cond_acquires(true, lock)
-
-The wrapper spin_trylock_irq_disable() in spinlock.h is the only place
-where these annotations are missing. This would break sparse static
-analysis and clang's thread-safety analysis for this function, causing
-inconsistent static-checking behavior compared to all peer trylock APIs.
+[ ... ]
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26458754996
---===============0782269710716244881==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26459248718
+--===============7371411648816245416==--
