@@ -1,171 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158E33A7593;
-	Tue, 26 May 2026 13:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7515F224234
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 13:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779803761; cv=none; b=CvxfbLLH/Y660V6J8fEd40tIOuVu7YfcSfpOTjxeM2E2DxzQ23dWbTfBJTdnuz60zohi0wBbgRt1g347zm2BnNJOBmqFZTgqWDWXGwoINXA/Bx5Jy/egO8FjwuZZHav1TUqrlEDhKo3z6of6H8BJSapJqDZRxNzk/EwEsqKuqQI=
+	t=1779803828; cv=none; b=d4V0UadhN2QzBX1YycjywtFKznlr6z7F1/c4ieoZp/bXLZWDNJrJ3LFMjCTgGpagr4NxAh6WQQ2yEro9CpNWqB+XjbeUIDFe06DOHbr9JUuBMZw0TH7X2S3adWZyb/l7trk0CdNjX4SGYOSpnD3Ja5Nth73+l7f6WKcp56+oaM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779803761; c=relaxed/simple;
-	bh=vnnWi8dQWB6l6Nohl4NkH7BA9KxtqRwgLLtVy1y56UE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ZPxj41/k/cDOtPKhLa22bNWZlg3E/ihW8cBGgHI6QZ1nyg2a9d1USf7ZMgcX3UDoEwj772IyGQL1WJrn0V19sMIoN7JYiQ8jJ7gc6mm5D3OdN1a9ARlhYF6DDR5uMxyqIOuNPOJl4QyqMJyOCzleJNEhKXCePOnDu/+aB7Kdv3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpYL4+vd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779803828; c=relaxed/simple;
+	bh=J9P8J65FWnrCxAS3S85F/S+Q+A0OBIonmEWbCPvAYUk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Ec19Y71qdrCC2d1gAR7cj4JGboPNImVy9aYuvS2h4/T1dV+Q3K+1lODwBpjBQAjJtZFD+9QElv+X5lhrsPV3RUBoa5XTZm1kzTFFE2r4Y1Qa9yaVCwitUzpj9xZfONuOPz24s3qWzgBNhlN1dqyBouwfhqPHUTFHQ9md+Q50S64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gK2dZf1N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpYL4+vd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E101F000E9;
-	Tue, 26 May 2026 13:55:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gK2dZf1N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104231F000E9;
+	Tue, 26 May 2026 13:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779803759;
-	bh=JrULAy9Gw7dTgt2CJtfRApgaaTOMPseygZFxD/MyYIc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hpYL4+vdLIvxzm4niRZbcwUQmOfWQKSCxGGGerPKb5a0oewhWWBG8CqeRfwdDEXbG
-	 yegqQzLLyw/9J5+v9sqzryZnTCqlOADSCFq7MNoZERdQOGEjLoTJJSkrQnLtRueeVc
-	 FNbvehqYXTpwDR88AlqPDoRirz6HPdGiWLWpT7//N4oPfuRTjvGYV9lf+xP5oK7B0E
-	 dq2Gc4xNO8Jb03sYKC4W7EfKGYOHk29nPvx5GE+zQRLhtDEgKY3syHFCR5uiq64ChO
-	 fKaqkFIxmPbuinhNTdpoCUbFufv5wV+T+yVOBxsEWiiAOEutfGVqz31YBKw2Kugw5S
-	 3Dlr7Gs3flskA==
-Content-Type: multipart/mixed; boundary="===============1624879100367785041=="
+	s=k20260515; t=1779803827;
+	bh=4eK5ab5zMs9H7r0DCaJHwTZ5f5qF8fARJrBuFmJdHXs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gK2dZf1N9TM+aOb4WcIDUIGj+KAY9gukcIFKBa2/GshSWgm/9yrw9aAvmb1X2GJ8h
+	 R87BYlKqPlGMhflVvozN4W6io2W2RMU+xNn5WoEqjaUNVfJR5kDLhYwAqRV/7s0ZUc
+	 4FrqhsAqQtZPT6df7+/Dsw6MugpAoBNv07DZAMLPMZfaOHal+dY7LfDedp3/z6Gz6P
+	 7uWrwEYNxgZ8KbXdqt1A0wbQLOcgAq31daLV3jZ1VML8jrBlo8+WFdooF0uhqLmb+L
+	 /eh7x7t8LyRl8VmebARnvbuGQzogJUTtVmlupZUP7p0EQm9MRVAqxaKCPQn0Dhlbjz
+	 kSkGpC7vRAjqw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 3/3] libbpf: plumb btf_vmlinux_value_type_id and
+ btf_fd in gen_loader
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v2-3-6750f5859bc6@google.com>
+References: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v2-3-6750f5859bc6@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 13:57:06 +0000
+Message-Id: <20260526135707.104231F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2f53799c49f16b688b2780733a6175235b730b0edbe15747309771e5a84130a7@mail.kernel.org>
-In-Reply-To: <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
-References: <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
-Subject: Re: [PATCH 1/2] bpf: cgroup: fix sysctl new value replacement
-From: bot+bpf-ci@kernel.org
-To: dawei.feng@seu.edu.cn,martin.lau@linux.dev
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kees@kernel.org,joel.granados@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,jianhao.xu@seu.edu.cn,dawei.feng@seu.edu.cn,stable@vger.kernel.org,zilin@seu.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 13:55:59 +0000 (UTC)
 
---===============1624879100367785041==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The patch incorrectly reduces `attr_size` when constructing the BP=
+F map creation attributes, silently truncating and discarding the `map_extr=
+a` field.
+--
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b6..8715a014c21d 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
+commit 72a5ab975182d8bdeec79a02a460190b45ceeb56
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-[ ... ]
+libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
 
-> @@ -1878,7 +1878,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
->   * to provided by user buffer, so that next BPF program in the chain
->   * can treat it as a replacement.
->   *
-> - * This function will return %-EPERM if an attached program is found and
-> - * returned value != 1 during execution. In all other cases 0 is returned.
-> + * This function will return %-EPERM if an attached program is found and
-> + * returned value != 1 during execution. In all other cases 0 is returned.
->   */
+This commit updates the gen_loader map creation logic to include
+btf_vmlinux_value_type_id and conditionally copy the loaded btf_fd into
+the BPF attributes blob. It also alters the attr_size calculation based
+on an assumption about the layout of union bpf_attr.
 
-Should the function documentation be updated to reflect the actual return
-value convention?
+>     Previously, the `gen_loader` map creation generator
+>     (`bpf_gen__map_create()`) completely omitted plumbing
+>     `btf_vmlinux_value_type_id` because `attr_size` was calculated only up
+>     to `map_extra` (which resides before `btf_vmlinux_value_type_id` in
+>     `union bpf_attr`).
 
-After commit 4e63acdff864, bpf_prog_run_array_cg() returns 0 on success,
-not 1. The comment still states "returned value != 1 during execution" but
-the code now checks for '!ret' (i.e., ret == 0). The documentation should
-say "returned value != 0" to match the actual behavior.
+[Severity: High]
+Is this description accurate regarding the layout of union bpf_attr?
 
-> @@ -1935,7 +1935,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
->
->  	kfree(ctx.cur_val);
->
-> -	if (ret == 1 && ctx.new_updated) {
-> +	if (!ret && ctx.new_updated) {
->  		kfree(*buf);
->  		*buf = ctx.new_val;
->  		*pcount = ctx.new_len;
+Looking at the structure layout, map_extra is actually located immediately
+after btf_vmlinux_value_type_id, not before it.
 
-Can this cause memory corruption?
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index cd5c2543f54d8..27b0353d1082e 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -507,7 +507,7 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+>  			 __u32 key_size, __u32 value_size, __u32 max_entries,
+>  			 struct bpf_map_create_opts *map_attr, int map_idx)
+>  {
+> -	int attr_size =3D offsetofend(union bpf_attr, map_extra);
+> +	int attr_size =3D offsetofend(union bpf_attr, btf_vmlinux_value_type_id=
+);
 
-The caller proc_sys_call_handler() allocates the buffer with kvzalloc():
+[Severity: High]
+Does this change silently truncate the map_extra field from the generated
+system call arguments?
 
-fs/proc/proc_sysctl.c:proc_sys_call_handler() {
-    ...
-    kbuf = kvzalloc(count + 1, GFP_KERNEL);
-    ...
-}
+Since map_extra actually follows btf_vmlinux_value_type_id in union bpf_att=
+r,
+reducing attr_size to offsetofend(..., btf_vmlinux_value_type_id) completely
+strips map_extra from the payload.
 
-kvzalloc() may fall back to vmalloc() for large allocations, but this
-code uses kfree() instead of kvfree() to free *buf. Using kfree() on
-vmalloc memory corrupts memory.
+When add_data() copies attr_size bytes, the kernel will subsequently assume
+map_extra is 0. This seems like it would break functionality for maps that
+rely on map_extra when loaded via light skeletons, such as BPF_MAP_TYPE_ARE=
+NA
+(where it represents the mmap address) and BPF_MAP_TYPE_BLOOM_FILTER (where
+it specifies the number of hash functions).
 
-This is fixed in a later commit 155dfbd42ab8 ("bpf: cgroup: Use kvfree
-instead of kfree in __cgroup_bpf_run_filter_sysctl") which includes a
-KASAN crash report demonstrating the bug.
-
-Should this patch use kvfree() instead of kfree()?
-
-
-Also, Martin KaFai Lau raised a concern about the null terminator handling
-during the May 2024 review of a similar fix.
-
-In the discussion at:
-https://lore.kernel.org/bpf/ca8136e0-5d2a-402b-ad03-cc8a218affd4@linux.dev/
-
-Martin requested that the patch adjust *pcount to exclude the null
-terminator if present. The concern is that proc_sys_call_handler may reject
-the value with EINVAL if the null terminator is included in the count.
-
-The suggested fix from that discussion was:
-
-    if (!(*buf)[ctx.new_len])
-        *pcount = ctx.new_len - 1;
-    else
-        *pcount = ctx.new_len;
-
-Should this patch include the null terminator handling improvement?
-
-
-> commit f089fd0540601290c72ecfd2ff3f0c817952970a
-> Author: Dawei Feng <dawei.feng@seu.edu.cn>
->
->     bpf: cgroup: fix sysctl new value replacement
->
->     Commit 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
->     helpers") changed the success return value to 0, but failed to update the
->     corresponding check in __cgroup_bpf_run_filter_sysctl(). Since
->     bpf_prog_run_array_cg() now returns 0 on success, the legacy ret == 1
->     condition is never satisfied. As a result, the modified value is ignored,
->     and bpf_sysctl_set_new_value() fails to replace the write buffer.
->
->     Fix this by checking for a return value of 0 instead, so cgroup/sysctl
->     programs can correctly replace the pending sysctl buffer.
->
->     This bug was discovered during a manual code review. Tested via a
->     cgroup/sysctl BPF reproducer overriding writes to a target sysctl.
->     Pre-fix, bpf_sysctl_set_new_value("foo") was silently ignored: the write
->     returned 8192 and the value remained "600". Post-fix, the BPF replacement
->     buffer properly propagates: the write returns 3 and the value updates to
->     "foo".
->
->     Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
-
-Is the Fixes: tag pointing to the correct commit?
-
-Commit 4e63acdff864 (2019) originally used 'ret == 1' correctly, as
-BPF_PROG_RUN_ARRAY_CG returned 1 on success at that time.
-
-However, commit f10d05966196 ("bpf: Make BPF_PROG_RUN_ARRAY return -err
-instead of allow boolean") from 2022 changed BPF_PROG_RUN_ARRAY_CG to
-return 0 on success instead of 1. That commit updated the final return
-statement from 'return ret == 1 ? 0 : -EPERM;' to 'return ret;', but
-forgot to update the 'if (ret == 1 && ctx.new_updated)' check.
-
-Should the Fixes: tag be:
-
-  Fixes: f10d05966196 ("bpf: Make BPF_PROG_RUN_ARRAY return -err instead of allow boolean")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26451027650
---===============1624879100367785041==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-libbpf-loa=
+d-vmlinux-btf-in-gen_loader-mode-v2-0-6750f5859bc6@google.com?part=3D3
