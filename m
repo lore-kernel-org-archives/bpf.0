@@ -1,286 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD233655D3;
-	Tue, 26 May 2026 15:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370881D5CFB
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 15:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779808946; cv=none; b=uZs2LVl5eeR9eLtCwLjixY9mRCnrj76x8bF84NPWZ1NMbu6/Hi87iwmeHGuRZQuSzeyHu0o0yZb9DSdYyroKkE2+KaT/FOLENr52wkgwDUpuSFUXIcDDxgpxnRy8mT1jHVjli3YHxlGgCO8WhG0C+tTA1k9qhh7K8sfazbTy9ak=
+	t=1779809321; cv=none; b=VMJ5NyogPI7QcZJ//HVQbUGP18qBDP50r9GvVmVdV5bP2WoCMyx1Ut6uQo9hp54w4/0sVltFQ9iKV2ME7JEFcIer67aj1iTtLHGsNwk1l87ckqAZSAMpjw6UvfodZKkhdmQ+Dan12dcNkR1P+6rRfp+LEYjOwSDuCmjZvc7aY3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779808946; c=relaxed/simple;
-	bh=IvVHarsdCZX3Et2iJECFHRt/SzOVbYcAlOSwalXKdKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PUqkF9ZkRfrWS4afResShzsYEIi2mMDHgznoGzmo7cuJYwc2udDl2ZINIKA3qkfkqA9vDJd2yqXianBzC12UFZLUDwsVeUZt3cOK9LVm11ULp+bbx5lNEdI1hv4ynPss1k69RobcbqMnoSlLeaEfj1isYl3AZYmajAgn6p4DPcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=meNKiqFD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779809321; c=relaxed/simple;
+	bh=LsPpajqk5PKwskbSTzhEfOKaIlgezGYNg9XRMFLRW+M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lVVs2Z2+aZ5R6IKAGH8vVSlQDHcCTmmIY49/PxWpxBWQfgUxkclAXQuAmzCfRmvI9QzslNWLgipAs26xRt23WvH3TPw3Hgtu+p0+XpsskCiqmiJMgzj/QS0s/0HCvs1koDgm9nA1OHZUxkCdS923yfdbiFa0dsPHHhW8gMUSdp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T++/NWHu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="meNKiqFD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC1C1F00A3A;
-	Tue, 26 May 2026 15:22:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T++/NWHu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC111F000E9;
+	Tue, 26 May 2026 15:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779808944;
-	bh=i3zOmPyu90dULOuLD4c8bYaft4Tw4zBGIm4qBCcguJQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=meNKiqFD3tQ6N6BcLG2aGEHfFJRozeMW7Kc3WUXTcdkej7oW6Ddd2eJkF5K7C481o
-	 dTV5B1TTn66EQc/2uP7sonxsUMOX5DMolQYhACkBs9zVFmIQAYrrvcc6qStc+8Sh6b
-	 uhZma/bu0h2ON52P1hJRwzDiDyE+lCRHKTeZ8f2k6kT9yois/z2eXs/RIzw9NhiE9x
-	 bM9LAWPRFjHmInv0Yc8KowQCWdiKqlZhScSTJfFoXd8evNZJDGemkR1iXNAZc/hjTR
-	 4CO/2DMBo9cjRUGDBDi6Hm2Vz+NaRgxFLJ4cHv9iH8IAHrrkb+1o+1lLTxApnzU2QE
-	 aD2hD584+rCKA==
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfauth.phl.internal (Postfix) with ESMTP id C15ACF4007A;
-	Tue, 26 May 2026 11:22:21 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Tue, 26 May 2026 11:22:21 -0400
-X-ME-Sender: <xms:rboVatLweiDJXm17KQ8Opy26_A1LlWbclVSWvWxIkMOOALfrKXjpGw>
-    <xme:rboVauDEvxkXX3SWT1c9oZ5ra_5ZBcf5jo7wu9GE0CeSdGMctCbzidRDxxiy54-3P
-    IobOzwnfUhAZNKiGq4h84TfmkRElr_aQdSvqGVjTzIcAXy6b30-BQ>
-X-ME-Received: <xmr:rboVarmpsX_09hxuVT7lHBzwVQubGNE601vCBVVftvCoI3Mq-y2R4K5d8MdoyjK431ERTAhNYPPf_0g29Sp1MN0T5UO7XW4h>
-X-ME-Proxy-Cause: dmFkZTEIsgBVfZQI0OdfcY/RCEsGZQvScgaCncCUwE3uecoCsgHqp2OC8k/Of1VK4ItHYi
-    l0hsZsg9YT9U5JYZ6O06GKU5ooMQWMBZ7PhpwFPsWRPSXPfc63XZe0WRTGPkfjr9uufzlv
-    PWIMkxVYubGpPxQ6A1Y/IQZfimDb8209gLI8E1kXVqTJaoEHKeaBUIsnA8X7Amcm+MMAgE
-    U66eohkoHdBxoqEZnpC6h9K+3X341ap+0FX4m66bRUvn/aV4tKXY22RZQ24uMj2Ci0Wx8c
-    3726fhp5lV3b4xzJr8aU/XjX0EYIZqxiQVYWa/2PXqoRZYrw1OpUgmEeMJAKLjIuNIu2FD
-    /+npKX5IqALG0qB3VO88MGCAog15J6bYG5vSaLQILVZF5Njd2qVNFoPTlpXBlBslZknY+X
-    pO02fCeoPMSoqf2vCYF+xqyog+Bd+Ggu+cNO7KJa9/6svUFRn0/O8/zKxh5n6Xjo0JIC0u
-    G5uwvF2lvF5jDD82571VQB4zUtis2q9jVILXvRJXP/us+paAo1CW0URJzkRVaK5MRkvr+1
-    SSS8Gn51NnHdEkvIduGV9Ws8tlAcljrX/QX+g89oSiAFOFpJp+ZWqrpTJ21f/M15srAyBR
-    vrbMHbSzmofia4/czb2bU0BMxA8GkfqlUYdzjlPwSMZdAFpf7MvMyRZzn/qQ
-X-ME-Proxy: <xmx:rboVag1ASqX9JrC9LGp0bIieYDclRCXm43NZQMaqMUEIdEhYdyMKaA>
-    <xmx:rboVaqdKWSm_UbIlM1tDJIwHjqFAc0qmpEIV4kdnaNSjaCNLMaNMVg>
-    <xmx:rboVarc_5DmXWGjk3F8zh7B4m56jwnIjcSdGJEGSfA2pST7vrsPe_Q>
-    <xmx:rboVarBPgVJFgGF_R-dRhdN8GHGaB_hiHzCEjvMEbNlZCXFRr1isAg>
-    <xmx:rboVahGWSHEPIvYqhrN9DKbBR09P4GtUM40ynIMxjjHo81DUhi-JaN_I>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 May 2026 11:22:20 -0400 (EDT)
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,	Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,	Boqun Feng <boqun@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
-	Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org,	linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org,	linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH v2 12/12] s390/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
-Date: Tue, 26 May 2026 08:21:48 -0700
-Message-ID: <20260526152148.30514-13-boqun@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260526152148.30514-1-boqun@kernel.org>
-References: <20260526152148.30514-1-boqun@kernel.org>
+	s=k20260515; t=1779809319;
+	bh=CrllTQdc3g0JJGgq+YnzJ+V1uPfcBHZcqYgvvcuFY+0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=T++/NWHuF6tbOdhAQnEbmCW7yaMy9/5yeTcLnnY6N88SSvC2Jt+YkFTyhU7HaBOTA
+	 WE0F/bRjKOkps+jx5rLYF3uMGcDeXQlWiZiOJSx9/e7QeWNeo33Cu1H3d5Cg9SmPSX
+	 fUxvBmr0PMOlRKSjwddaFZzZ01wdoLVg48sewNVLysMyYeaYqADMgsTGIu+w8ZCZCi
+	 j2QPkJjXyRMWXwti0bpeHsFnziCKmo3tXRxU+NoihRlrzJTCkhqG3aH1AkfmJTI5rS
+	 i9VbDIvmu4jQgRIpeV1uUBgVr32z9SKeQIpJGdXJqnqaej6Qa4eZKKjZaLId9Wrccu
+	 GU6GIUqrlU/XA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 3/3] libbpf: plumb btf_vmlinux_value_type_id and
+ btf_fd in gen_loader
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-3-5b4fa2a5e1a4@google.com>
+References: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-3-5b4fa2a5e1a4@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 15:28:39 +0000
+Message-Id: <20260526152839.AEC111F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Heiko Carstens <hca@linux.ibm.com>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] The patch hardcodes the compilation machine's `btf_vmlinux_value_t=
+ype_id` into the generated BPF loader, breaking cross-kernel portability fo=
+r `STRUCT_OPS` light skeletons.
+- [High] The patch fails to plumb `value_type_btf_obj_fd`, breaking `STRUCT=
+_OPS` map creation for interfaces defined in kernel modules.
+--
 
-Convert s390's preempt_count to 64 bit, and change the preempt
-primitives accordingly.
+commit 85945ed0f098d529baa42010d50804b0ec6cb5d7
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Boqun Feng <boqun@kernel.org>
-Link: https://patch.msgid.link/20260509181249.16281C67-hca@linux.ibm.com
----
- arch/s390/Kconfig               |  1 +
- arch/s390/include/asm/lowcore.h | 13 +++++++----
- arch/s390/include/asm/preempt.h | 41 +++++++++++++++------------------
- 3 files changed, 29 insertions(+), 26 deletions(-)
+libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index ecbcbb781e40..cbbca82f8443 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -276,6 +276,7 @@ config S390
- 	select PCI_MSI			if PCI
- 	select PCI_MSI_ARCH_FALLBACKS	if PCI_MSI
- 	select PCI_QUIRKS		if PCI
-+	select HAS_SEPARATE_PREEMPT_RESCHED_BITS
- 	select SPARSE_IRQ
- 	select SWIOTLB
- 	select SYSCTL_EXCEPTION_TRACE
-diff --git a/arch/s390/include/asm/lowcore.h b/arch/s390/include/asm/lowcore.h
-index 50ffe75adeb4..0974ab278169 100644
---- a/arch/s390/include/asm/lowcore.h
-+++ b/arch/s390/include/asm/lowcore.h
-@@ -160,10 +160,15 @@ struct lowcore {
- 	/* SMP info area */
- 	__u32	cpu_nr;				/* 0x03a0 */
- 	__u32	softirq_pending;		/* 0x03a4 */
--	__s32	preempt_count;			/* 0x03a8 */
--	__u32	spinlock_lockval;		/* 0x03ac */
--	__u32	spinlock_index;			/* 0x03b0 */
--	__u8	pad_0x03b4[0x03b8-0x03b4];	/* 0x03b4 */
-+	union {
-+		struct {
-+			__u32	need_resched;	/* 0x03a8 */
-+			__u32	count;		/* 0x03ac */
-+		} preempt;
-+		__u64	preempt_count;		/* 0x03a8 */
-+	};
-+	__u32	spinlock_lockval;		/* 0x03b0 */
-+	__u32	spinlock_index;			/* 0x03b4 */
- 	__u64	percpu_offset;			/* 0x03b8 */
- 	__u8	pad_0x03c0[0x0400-0x03c0];	/* 0x03c0 */
- 
-diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
-index 0a25d4648b4c..1d5e4d7e9e1b 100644
---- a/arch/s390/include/asm/preempt.h
-+++ b/arch/s390/include/asm/preempt.h
-@@ -8,11 +8,8 @@
- #include <asm/cmpxchg.h>
- #include <asm/march.h>
- 
--/*
-- * Use MSB so it is possible to read preempt_count with LLGT which
-- * reads the least significant 31 bits with a single instruction.
-- */
--#define PREEMPT_NEED_RESCHED	0x80000000
-+/* Use MSB for PREEMPT_NEED_RESCHED mostly because it is available. */
-+#define PREEMPT_NEED_RESCHED	0x8000000000000000UL
- 
- /*
-  * We use the PREEMPT_NEED_RESCHED bit as an inverted NEED_RESCHED such
-@@ -26,25 +23,25 @@
-  */
- static __always_inline int preempt_count(void)
- {
--	unsigned long lc_preempt, count;
-+	unsigned long lc_preempt;
-+	int count;
- 
--	BUILD_BUG_ON(sizeof_field(struct lowcore, preempt_count) != sizeof(int));
--	lc_preempt = offsetof(struct lowcore, preempt_count);
-+	lc_preempt = offsetof(struct lowcore, preempt.count);
- 	/* READ_ONCE(get_lowcore()->preempt_count) & ~PREEMPT_NEED_RESCHED */
- 	asm_inline(
--		ALTERNATIVE("llgt	%[count],%[offzero](%%r0)\n",
--			    "llgt	%[count],%[offalt](%%r0)\n",
-+		ALTERNATIVE("ly		%[count],%[offzero](%%r0)\n",
-+			    "ly		%[count],%[offalt](%%r0)\n",
- 			    ALT_FEATURE(MFEATURE_LOWCORE))
- 		: [count] "=d" (count)
- 		: [offzero] "i" (lc_preempt),
- 		  [offalt] "i" (lc_preempt + LOWCORE_ALT_ADDRESS),
--		  "m" (((struct lowcore *)0)->preempt_count));
-+		  "m" (((struct lowcore *)0)->preempt.count));
- 	return count;
- }
- 
--static __always_inline void preempt_count_set(int pc)
-+static __always_inline void preempt_count_set(unsigned long pc)
- {
--	int old, new;
-+	unsigned long old, new;
- 
- 	old = READ_ONCE(get_lowcore()->preempt_count);
- 	do {
-@@ -63,12 +60,12 @@ static __always_inline void preempt_count_set(int pc)
- 
- static __always_inline void set_preempt_need_resched(void)
- {
--	__atomic_and(~PREEMPT_NEED_RESCHED, &get_lowcore()->preempt_count);
-+	__atomic64_and(~PREEMPT_NEED_RESCHED, (long *)&get_lowcore()->preempt_count);
- }
- 
- static __always_inline void clear_preempt_need_resched(void)
- {
--	__atomic_or(PREEMPT_NEED_RESCHED, &get_lowcore()->preempt_count);
-+	__atomic64_or(PREEMPT_NEED_RESCHED, (long *)&get_lowcore()->preempt_count);
- }
- 
- static __always_inline bool test_preempt_need_resched(void)
-@@ -88,8 +85,8 @@ static __always_inline void __preempt_count_add(int val)
- 
- 			lc_preempt = offsetof(struct lowcore, preempt_count);
- 			asm_inline(
--				ALTERNATIVE("asi	%[offzero](%%r0),%[val]\n",
--					    "asi	%[offalt](%%r0),%[val]\n",
-+				ALTERNATIVE("agsi	%[offzero](%%r0),%[val]\n",
-+					    "agsi	%[offalt](%%r0),%[val]\n",
- 					    ALT_FEATURE(MFEATURE_LOWCORE))
- 				: "+m" (((struct lowcore *)0)->preempt_count)
- 				: [offzero] "i" (lc_preempt), [val] "i" (val),
-@@ -98,7 +95,7 @@ static __always_inline void __preempt_count_add(int val)
- 			return;
- 		}
- 	}
--	__atomic_add(val, &get_lowcore()->preempt_count);
-+	__atomic64_add(val, (long *)&get_lowcore()->preempt_count);
- }
- 
- static __always_inline void __preempt_count_sub(int val)
-@@ -119,15 +116,15 @@ static __always_inline bool __preempt_count_dec_and_test(void)
- 
- 	lc_preempt = offsetof(struct lowcore, preempt_count);
- 	asm_inline(
--		ALTERNATIVE("alsi	%[offzero](%%r0),%[val]\n",
--			    "alsi	%[offalt](%%r0),%[val]\n",
-+		ALTERNATIVE("algsi	%[offzero](%%r0),%[val]\n",
-+			    "algsi	%[offalt](%%r0),%[val]\n",
- 			    ALT_FEATURE(MFEATURE_LOWCORE))
- 		: "=@cc" (cc), "+m" (((struct lowcore *)0)->preempt_count)
- 		: [offzero] "i" (lc_preempt), [val] "i" (-1),
- 		[offalt] "i" (lc_preempt + LOWCORE_ALT_ADDRESS));
- 	return (cc == 0) || (cc == 2);
- #else
--	return __atomic_add_const_and_test(-1, &get_lowcore()->preempt_count);
-+	return __atomic64_add_const_and_test(-1, (long *)&get_lowcore()->preempt_count);
- #endif
- }
- 
-@@ -141,7 +138,7 @@ static __always_inline bool should_resched(int preempt_offset)
- 
- static __always_inline int __preempt_count_add_return(int val)
- {
--	return val + __atomic_add(val, &get_lowcore()->preempt_count);
-+	return val + __atomic64_add(val, (long *)&get_lowcore()->preempt_count);
- }
- 
- static __always_inline int __preempt_count_sub_return(int val)
--- 
-2.50.1 (Apple Git-155)
+This commit plumbs btf_vmlinux_value_type_id into the BPF map creation
+system call attributes for STRUCT_OPS maps. It also modifies the condition
+for copying btf_fd to populate the file descriptor when either
+btf_value_type_id or btf_vmlinux_value_type_id is set.
 
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index cd5c2543f54d8..a9be0c241025f 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -525,13 +525,14 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+>  	attr.max_entries =3D tgt_endian(max_entries);
+>  	attr.btf_key_type_id =3D tgt_endian(map_attr->btf_key_type_id);
+>  	attr.btf_value_type_id =3D tgt_endian(map_attr->btf_value_type_id);
+> +	attr.btf_vmlinux_value_type_id =3D tgt_endian(map_attr->btf_vmlinux_val=
+ue_type_id);
+
+[Severity: High]
+Does hardcoding btf_vmlinux_value_type_id here break cross-kernel
+portability for STRUCT_OPS light skeletons?
+
+Light skeletons are designed to be portable across different kernel
+versions without relying on libbpf at runtime. Because BTF type IDs
+are not stable across kernel builds, passing the build machine's BTF
+ID to the target kernel might cause the target kernel's
+sys_bpf(MAP_CREATE) to resolve to the wrong type or fail entirely with
+-EINVAL.
+
+Should gen_loader dynamically resolve the target kernel's BTF ID at
+runtime, similarly to how it handles attach_btf_id?
+
+[Severity: High]
+Does this also miss plumbing value_type_btf_obj_fd for STRUCT_OPS
+interfaces defined in kernel modules?
+
+When a STRUCT_OPS map targets a kernel module, libbpf sets
+value_type_btf_obj_fd in bpf_map_create_opts and adds
+BPF_F_VTYPE_BTF_OBJ_FD to map_flags. The patch propagates map_flags
+into gen_loader's map creation attributes but ignores
+value_type_btf_obj_fd.
+
+In bpf_gen__map_create(), attr_size is calculated as offsetofend(union
+bpf_attr, map_extra), which truncates the struct before
+value_type_btf_obj_fd. As a result, the generated loader program passes
+the BPF_F_VTYPE_BTF_OBJ_FD flag to the kernel but implicitly provides 0
+for the FD. The target kernel attempts to read BTF from fd=3D0 (stdin)
+and rejects the map with -EINVAL.
+
+Furthermore, even if the FD field were included, the loader cannot
+hardcode the build machine's module FD; it must dynamically resolve
+the module BTF FD on the target machine.
+
+> =20
+>  	map_create_attr =3D add_data(gen, &attr, attr_size);
+>  	pr_debug("gen: map_create: %s idx %d type %d value_type_id %d, attr: of=
+f %d size %d\n",
+>  		 map_name, map_idx, map_type, map_attr->btf_value_type_id,
+>  		 map_create_attr, attr_size);
+> =20
+> -	if (map_attr->btf_value_type_id)
+> +	if (map_attr->btf_value_type_id || map_attr->btf_vmlinux_value_type_id)
+>  		/* populate union bpf_attr with btf_fd saved in the stack earlier */
+>  		move_stack2blob(gen, attr_field(map_create_attr, btf_fd), 4,
+>  				stack_off(btf_fd));
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-libbpf-loa=
+d-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com?part=3D3
