@@ -1,304 +1,405 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A23B27DC
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779824261; cv=none; b=bZbc9piEEVCacyE/OvRkJQmjYg83yzcRoZ1gGJ+s5+OsZW6+X0C++M1L1ui2GxF3lTyXBUYScrceF7wIel0wSc9CkX4BTugG4uklwtaoWiErYqm5ruP9cE8mBde6ywIy6TbfYt4EJjUdNLJntPBpAU1pB7rUpq2SFqjrNVzd4V0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779824261; c=relaxed/simple;
-	bh=P1EoxFmtZtb+aGnDkht1W4GhExpp0KTQCqbQRamjOWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mt2L/5FIAyo6CUCcdXeute/U/PzB07oYfwS4HEAHA6BULu8HDx4r1aEn6m/PZ+MQNe5MAxm1ZeH/TSAYN72h/yX4b4L+qi9Wnja/NzWFNimNejkD8pdIAtnTesIzWcrD4vDZwEPDnY6lmMqMG/qOITQ+awoKZqvIo1dlU0vWGTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fTIqHEPz; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348CC3B0AC6;
+	Tue, 26 May 2026 19:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779824611; cv=fail; b=iLcFDBQWH5zcEgQRL/0mRvnPxFTeTqLxOHIpfwQhP1FvvEoTBB9UJPN/VLx2h/aSkwJpCHiAobXqBB1Wl5l4bwy9wlG6i5vtMKCKhzPgQRTGb0B89RiZ40/toG0pZBib2a8bYPMEXc6ZKu/+VjUDKDarCHIHM7ROaC67QBehhjI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779824611; c=relaxed/simple;
+	bh=gRDKPEJcX1ul4opj+koSYNjQiu/X7cY8T9ilxMkkPgE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=R1nlIVUMz6xTOtmSmJTSerOYdUla/jnxRT8/eQUudqfqr8UyVGNTl6mjp7aSyqOufGCDW02dJNXvzthB6gs4NdR42DT5XPtB26FF5bFIKdVBRhcWukGp3zsCwpNVakXhSK5HDgIebKvSnpeXvLuXDrhFSEN1RDbt/nrmm2JSuvM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QKMiM8IV; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fTIqHEPz"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-366139223e4so6703965a91.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779824259; x=1780429059; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s4DbxjiA7H6ybmYaA/cibw3/avZAHPnGrov6Z7d/SfM=;
-        b=fTIqHEPzzmg0sw+WQbE5RaFntX3WtRf0SHi+B/hloShNlvKLI6sO9kKiQHW8SR90W2
-         qCEcDZT9yMg7gHyhXY70oPGU6+WIVBWjqUhl7Z+LwZnT4vLNRIdqVELzwWhHjspL5K9U
-         LxROopeyqv6G2SY/9U1mDnPQ7FAIGUsGAO3lc+GIRNGs6Dw9xwR3ap+P+NP2tBZxlT5r
-         uBlIbw2qZwN97O6jxpQiH5QwJiRnE/SvWTLJuUNYQXYXrYklxzrjxn5YoDV01qUpB/uD
-         hdJSZjndp4crUXzKsu+6uolgGPdvd8Lu3vVOcK6wL/kZ8f95yjkt7/gkqhwCCEYJcOZb
-         SPGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779824259; x=1780429059;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=s4DbxjiA7H6ybmYaA/cibw3/avZAHPnGrov6Z7d/SfM=;
-        b=Se9/wxPxzfK5H2uNsontatgn89T6LOgzGq8lO8zrxzTkKnNVTF5qpLhRBstts+ddyj
-         UQ4lTMnaD6dYlyczlx91vBZE03Jhm5BbgWXpjtXh7RQ9ZbreBCSfj8F1Xv47lWbgwXGb
-         yJuhGvViktNN1VFwNewkDq3fFVlFpEcw6zlbNbAaEo3c+uCIARNOJri15B32xAMQXwJR
-         5WdfiRVZHM7myz3Wq7mTQ6vs5tN5fPyRqqwVvxDBe7auhmk+IQ+2srEX3zAM5mqqytr2
-         q3ahLJWSN88dh/Q0GIobxnHBrqvDK4VGdkskLA57bQW8IaXd899b6jxOhD0KPdSk3tYx
-         UIlQ==
-X-Gm-Message-State: AOJu0YwCvepkPN3rq+DbCxc/YhptlhLbZfbAcHSEuCMgZzx0evMNrKX3
-	b/p2SXarEtCCmJgha0S8Q8j2HAKxTsnWKIpXRrgxzT5XIzZoK4IZYP+f0V3zojrhNzk=
-X-Gm-Gg: Acq92OG30lrgTK3Y7RcW0Tu8wVhLSr9NCOu9tP/pXpOplNSe9OFw8rLGDu0V6yKb3D+
-	6kHP9kSlU8yZncABho4Gk2ol7l7DlA0yL1oJnSIf219qVjXT2NgbsOF8bZZF8yQIszeuOBPc2nE
-	jQE/pLfMjEAiOA2B0YadI6wCrfLrExCAgGCq7WGre8A5z588r2auTat7jjsAubJ/wdiJaDnEERB
-	Vk8BYrr7YwdBI3Sqpa2efikgInuSE/qdJyhLEgQSqRM5deSyEfGZDW7dmnlThUKC6jEkYylqS2B
-	G5hd0UbwYGkJBaRw4DMmIwXK0zpvhjNyzpFujA5lexri5iZx1sPNgXddXKF+HdTJsFP95CBtUEu
-	mkViUhC5j1qIhoYj04uLHj9Iw0HXmRAHyP/jbkByYNBscd7jpXAmIqhRFj5NwcGHVapCT0NrrIV
-	ST/Os9SrdNH8HAxPlZ2525LJFlPKFa+TBMuJkkARUptR8p1of170kwP6oHcYZG+YIoUJ8=
-X-Received: by 2002:a17:90b:2c83:b0:368:147b:536a with SMTP id 98e67ed59e1d1-36a67504c8dmr18786062a91.14.1779824258931;
-        Tue, 26 May 2026 12:37:38 -0700 (PDT)
-Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 12:37:38 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org
-Cc: daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH RFC bpf-next v2 6/6] selftests/bpf: test budget exhaustion profiling report
-Date: Tue, 26 May 2026 12:37:20 -0700
-Message-ID: <20260526-better-1m-reporting-v2-6-e7ec61c45d41@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
-References: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QKMiM8IV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779824609; x=1811360609;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=gRDKPEJcX1ul4opj+koSYNjQiu/X7cY8T9ilxMkkPgE=;
+  b=QKMiM8IVW2gGvzdyfic+NbdsdCaZ4qYzL/kdvJ9ucQmbgM0bw3MdvzPC
+   bfZVV8ZtXuU+rPXbJZKU2eFvQeCc0PNDtC69R2/S0q7Ww/t8HxL4hiU1T
+   uSejn93pGaG126PivZWR8EopLdScDk6VK+1oFTGZ9ykr8DkIc+cBMy9wl
+   2CC4x0WIzjJpeQyptp+6Gh/K37LKNu8H+AgsGPS6yDsujOFpztlU7C2CG
+   OiAsB8bFIX44Aq/RSuqc+nvByHls7kFPPwzYg3VCxWRBtZzLf7ny1sr6j
+   X62A3xtHu5Y56WxJW9+1Qc7TZBPJCUzdDdlwfaxKhUq2TqZO75pF839xH
+   w==;
+X-CSE-ConnectionGUID: byx66LDWRvqjjCWKPkaMTw==
+X-CSE-MsgGUID: ua0/yHdATgi2dR99Mnsn1Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="90952711"
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="90952711"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 12:43:29 -0700
+X-CSE-ConnectionGUID: EvCbFV1NQDyWQlVsE1SHjQ==
+X-CSE-MsgGUID: It+aAhLgTwS9XZc1YMwuLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="243844371"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 12:43:28 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 26 May 2026 12:43:27 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Tue, 26 May 2026 12:43:27 -0700
+Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.39) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 26 May 2026 12:43:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HVnVQrnVxapsS7XmwzIKjwoiSxS0FGFSiIlmyTCo3a0Qj4rGO5gKoivdiloS7oI1uSfi3SoN/E4pMIMFkeRqFJHGBe0COLWrBP2f/PjQWG/1yDHhZerB0xK+imi93Z2EHnhmuU7VfJF4R7FcpYgzpaYd3w7o8cTe1AXKDm/2OEw8pJ7xRcFnzq9qashYrADEUmuMDbHFGPMyleVnEMocmfgFzAxbiDbULNpd08d6TXiP7DKn5eBethEBvHmNSqvDtYhm2LNI0mx9FUPiaWPIMbaw9EV0zXoLs7jBzrVWJLFMaLh7Xu9zdNNwM4t+xPpvOtbsQWeySaGlL0dogXDZrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iO+nwFCjQYM5mChzMR8H6BqHmPgbEwQR+jdW3GHO9Og=;
+ b=sFgA+mIZbKMq3cMY9KNHxA4WAtFdZxIxWwH4nnFrR7T6DU70c1LXtbcrp2cNgMTbuws1DzesQd+rEb/MXaGADsGdbZ3xRpbprd0Bu0W9/nmnZuJx3pzdNs+FMDCYPNAeFEMxnPshMgHE6rGwV4K6JLOAEZZ3IRkO3T3ZGJ5me0cg3cQXTgd9TsaKp/ESAvuZC3HCPdq8V5nvS9kFjBXeBiajrUhq8EoF1uRdYpA+Bm2DxehxBoGpFHsgpC4dQDl6S3/16nm9YeRG8SGOLD0Lj8INbTGme+AotMVDh40d8GKIrs79H04vaQ2D/Xjkd9Eo5Ts4lFlOFfj/x7Izb8/59Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ DM3PPFD5EE188BF.namprd11.prod.outlook.com (2603:10b6:f:fc00::f53) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.11; Tue, 26 May
+ 2026 19:43:23 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0048.019; Tue, 26 May 2026
+ 19:43:23 +0000
+Date: Tue, 26 May 2026 21:43:08 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
+	<jonathan.lemon@gmail.com>, <sdf@fomichev.me>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
+	<horms@kernel.org>, <andrew+netdev@lunn.ch>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>, Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net v4 0/5] xsk: fix meta and publish of cq issues
+Message-ID: <ahX3zCRWTD2v7kwn@boxer>
+References: <20260520004244.55663-1-kerneljasonxing@gmail.com>
+ <ag75Xicuk6JwkTkC@boxer>
+ <CAL+tcoAJ3i-WGnVx-9ASF29gPNAaP2ucw76x3ftLog-b1TPf_w@mail.gmail.com>
+ <ag8ByhbrNNJaESYi@boxer>
+ <CAL+tcoA8BkJc5jy3de3cBE69UboR66SCbLVD6B-0ffHGhXp_gw@mail.gmail.com>
+ <ag8VgX2TxYIMJZB/@boxer>
+ <CAL+tcoBy5bb2iqOfYw1Ayr85WBRRDmsPqxmquSojNgM1U21UXg@mail.gmail.com>
+ <CAL+tcoDbUkj1nJcE0HUt4Fy7FEr6oqVbpmj6utDc44KqVW+68A@mail.gmail.com>
+ <ahChjcRmM+wEx2uq@boxer>
+ <CAL+tcoBud6+nZ=Zeq-Ja+nnOcfwt71Z_QBofOS3qyrNt3Tkkvw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoBud6+nZ=Zeq-Ja+nnOcfwt71Z_QBofOS3qyrNt3Tkkvw@mail.gmail.com>
+X-ClientProxiedBy: VI1PR06CA0085.eurprd06.prod.outlook.com
+ (2603:10a6:803:8c::14) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DM3PPFD5EE188BF:EE_
+X-MS-Office365-Filtering-Correlation-Id: 17b81517-88e0-4a2e-5730-08debb5f0c40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|22082099003|18002099003|56012099006|6133799003|4143699003|5023799004|11063799006|3023799007;
+X-Microsoft-Antispam-Message-Info: zkPF+f9Imqy4sGqISDBn0TCrPmqPqDcxbqVVZuZ/eK9J9Qc9Y/rGwEWQJaAkFYNBNIapKrdVoTQCum94wOH9Vag5ygoznIPY2XxL2pHlZ6XLIJ6nalWIMEMM8VXOxBJKPO2CtSi/nNQrFYW41QNx9XAzCeEv3fqoJmZoBtd/vWTmJW5xrQXOHxq9SMrwkidM/7sp4JBzBU2cCIu6/32fvffRd6Iusqmq3UErPK/h45kx5w3X1c/8IHzQve3xZWZVgbCGmKN0f0t7yLRBf6OPjPLW/UeVj1jlNSw1YUPvivZd6IsXJLQhoWs2u73Fa5epSb03OsbRQmyVbPC9EMqi2UgM4bXe9gzeil3C3qKOd7b6teuxBV29Ejx2sd3uR023b64h941YPg1zu+pw78i2HQVVc0TbtYfZA4hmVTiHVgS9LHxjsP88oPG9GBTKauM8A4thRivI0bTHNRch/3VG0rOwVVVi0Y9zZFRzaLTYS7AoPULlFZW5N1k8v3Jv0eZRXgdXxH+BCrJuxMJayUNCJ5UHg78M8FsjsIvTNrh0KHZfbQ4P8w9bnetrkX0tbA+2lTRbHCJ5gW17eXrY45F8ezmjC7tVsnqa8stoN/jzWe4bHbVi3VGNwLX3vwzFU7AK7ufm2ksPhNOdqAf4uTv2nouEyKx4JtzgaNjr9SoPHQnitskMlSb8AsPU4qXicufY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(22082099003)(18002099003)(56012099006)(6133799003)(4143699003)(5023799004)(11063799006)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3ZMNUNtSTZSMk5veGhjZWlIN0RFM3JOMnF6Q2hIVXdoQjJVbnBYN0JkL0M1?=
+ =?utf-8?B?NDh0QjY1ekxoUWFCWTBrSU5rZWcxTThLRkFKTW02bCtoem13V1pPYkQ0NGty?=
+ =?utf-8?B?WWpKei8wdnlXMlUvMWYyUVJub0tmaDA5VUI0TkxJalRnVGFVVXF0b0VWSERB?=
+ =?utf-8?B?V2wycW1PRndlU1F0VkIyNWx1RTlEVUliampFNEZNYjNXME5yb044dnhSV1Z2?=
+ =?utf-8?B?ZHZBNWRVb3NLYlBvalVqNkRTQnl2bkVzb2hLeE0xSjQyVGRCMHRlOTRoWThV?=
+ =?utf-8?B?QVYvSGdvSFB0N0FGZHd1YzBtcW5mR1pocDVKS2JYOVp5ODN6MTEwclIxZWZT?=
+ =?utf-8?B?L1Z2QW9xUzMxZWtieG9TN1pLWU5zemR3blNsYUdvQmRqT3JudWdMcFUzclQ5?=
+ =?utf-8?B?T2FCUFh5SmRBbGJTMkp4WnNGRERUMkVna2N5TDFkZkYxQysxOXRjNE52ODQ0?=
+ =?utf-8?B?M3htUVE0ek1nZUxUVFZRajJwS3czbkhUVDdaZXZQQ25iRzJxV0w4QkN1cGpV?=
+ =?utf-8?B?SWREYVduLzZaRHR2dDRKNkYrclBqRnNDb0pvUXlieHZpTEswdmkrdXNpSHRF?=
+ =?utf-8?B?dVRDeWVvNWh2R1dQNks4YkFyZ0gyaW05b1gyOE5tWFE4N0ZNazIxRTZsYkZR?=
+ =?utf-8?B?N1pZOWgxRVphZFY3bHFyTDREanZNMjhVbkJPaGlybmF2UVdia3lpcXlQRFJL?=
+ =?utf-8?B?UXVYYU5jMUdwMGx1L1p1bU5GYUMzazN3djRXdmQ0OVVOQldQM25aaFZwVldn?=
+ =?utf-8?B?VTNIRzhtY2FnbHpLbVE1cVAvckZpSkR2djZsb1hoaXpkT2drU1lHUFBGQjV5?=
+ =?utf-8?B?VWNhS1RDeUJXaWRRcENSb0N4MHRxdUd0Z2dHSTVHbXJFc1E4NlF5eERiMGN4?=
+ =?utf-8?B?czZudVhTVXBYNnhNY2U3MXo5OTNTUk9aTXFySUlXLzdmL0N5QVhrQlRyUmFv?=
+ =?utf-8?B?S0pTOHQ5R0JNTnBZS2NwUllMZnpFNEJ0M2FGMFlVaTZDemZKR0kwTGpRa2pq?=
+ =?utf-8?B?MEs0aVZUZjlVeGtRUS90Q2RyanZjN3dZcTQvWVQ3Nm8wN3BKTEloNlpxbHdI?=
+ =?utf-8?B?c3BZNjNUMUpwLzgraWprT0hZR3dMd3BOOExXa1QxRXhocXRmc3pmeTZuZzdE?=
+ =?utf-8?B?TWk5aGY0S1BMQSs4eFZTeUdITEhrWEtNSDZCVWVPQ3hJWDlwRE5sUEFqcHky?=
+ =?utf-8?B?clN5K1JBV21EMzhXTlJZQU9BR2oxbTNFa09zMnd0Y2ZjdWdjOUI2WERKNG1s?=
+ =?utf-8?B?bFpzY0U2RnYxM3p3Q0E3UG8zc2lMZWVmTE9OVFpaNXlLcFdJa0I3U3U5SDRK?=
+ =?utf-8?B?K1FHUnVzNnhCNGNiNHVacXlHd3B3cXpRQUI2SVdmOU56U2xsVk1XZXhIelpZ?=
+ =?utf-8?B?VU4reXpDVUxaNXdrVjZUamlrNEVwdFM0WWc4V3IvbjNOcTN5Nnd4Z0N2Y3ZK?=
+ =?utf-8?B?MEtRbGk3U2E3L1VGT01UbW5hUGdqN3VwWU5XOWlrTHRxMSt0SGozQ3JKdmJZ?=
+ =?utf-8?B?UVpPWmhRZ0VDbFh3d0RkVTBCQmNNbStEcVBQU2NTSWE1d05KYmZOZlBGSnIw?=
+ =?utf-8?B?dVJBZVZiT1E4c2lWV2VZWHFnUlRCSDBCUTNtR2FIRGpDbVJLNEJaclJFT2li?=
+ =?utf-8?B?V2NLTkdDRitjTG93dkxKVVVra096N2lmM3lsMzBtVWYwWnp6Tit4VVVoUmRP?=
+ =?utf-8?B?YWhqL1N3RnRNeTB4YkJyTzVIWXJSc29PWU5BRVNBTTlBN2VRNUlHbHlRMHlp?=
+ =?utf-8?B?NXJwSUVxSW5qV1YrTWlmcWZZN0JBWDJXM2RPTUNDVy9oUy9vOFU3bVRSSGdk?=
+ =?utf-8?B?clAxRWF6VVFnQ25aOCtHZU55MmZSTjlsbWYxRU15OGNrQlREUTJtUmgwVGZX?=
+ =?utf-8?B?Si9ndmtleTRNWlNxam5XdjFZKzhkUGdBRms5TDFJSTJmSGpLV09RNHZLMWNS?=
+ =?utf-8?B?SWRBamwzTXk2NnR0cWMxdS9rdFpMU1ZaaEIrcjZVUTJ1MU00ay9FeTErZDZr?=
+ =?utf-8?B?Y2x6K010VlYrZmZMM08zSldCTXZjQnlBSkUzTk5TclZRUzZ1cUtsV3BNblJh?=
+ =?utf-8?B?RFJkOSt6RkZReFRwUjJtaC94c2wrckdrV0ZoOGhMSUpsNHM4NGlYaGFaTWlM?=
+ =?utf-8?B?YmxpUS9DRzRxNTlVRHoyRHJTWk5xUW9lZXZwYXNZQmN6eWE3V1FEYWVIZkdT?=
+ =?utf-8?B?NWRRVFNyQllaYXVFWXFIK2EvZmlmWE9kNmZxbkdjSWlPY1A0SUNjNXlZODJu?=
+ =?utf-8?B?NkJGdFl4SDV2dHFWbFVjQlNnWHY4Z2JxMnYvNTFnZGxFUGZLN0U0TitZODJH?=
+ =?utf-8?B?M25PTm4zVFpSL1VYTTRJZSsyR2NxY0laaVhOMGFNa1lnWUNVejk2dlVlcFp0?=
+ =?utf-8?Q?HFxhhUD1h7wG0Wa4=3D?=
+X-Exchange-RoutingPolicyChecked: inp42z9QO+BlGd+4VoG6SZy6lEWc6cDkw/sBcYoBiKx0DWEX8VmtMvTRXU2EmRQ60+geuo5Ah4Oh5qQDTqY9/24EaAl06UEzcQ9l3+TLi3JkyHITHuJwEFijOvq5g/0RH76EEgkK0oRfxzzkFcPekQpJZsv8jvWgUp9X9Dl2mIHDSw4WHZOM7MJFkbBJOcFrY7JOPtoaN2mT7H32iZeKNSsJBKnBrUf5b8bdc0D57rsOIzwBbxdg4WFpHRvBfBkg5Gkl/l5fQ5re4L3RHOs1gNCPfrEgK9BO1eEQzAsAAr9yAQTjJXM3h4y/hD0efUQwH2MZCBxw+TxID/9hajjUvQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17b81517-88e0-4a2e-5730-08debb5f0c40
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2026 19:43:23.6677
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k17dF4AfjgIdRw+tJigWRkfXC/BKUTgl5J8QJ8BZ5juLdIYro/TYNDmB+obPoYqTI5/ZT5PjpT6Cjz0IIhmoTZsaks4Ttn8cLvQQPLfGD84=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPFD5EE188BF
+X-OriginatorOrg: intel.com
 
-Add verifier selftests that exhaust the 1M instruction budget and
-verify that the new profiling report is produced:
-- nested function calls with inner loop, check that stack trace is
-  print correctly;
-- two loops on the same level, check that both are reported;
-- iterator-based loop with non-converging register, check that
-  register is in the report;
-- iterator-based loop with non-converging stack slot, check that stack
-  slot is in the report.
+On Sat, May 23, 2026 at 07:49:00AM +0800, Jason Xing wrote:
+> On Sat, May 23, 2026 at 2:34 AM Maciej Fijalkowski
+> <maciej.fijalkowski@intel.com> wrote:
+> >
+> > On Fri, May 22, 2026 at 09:48:39PM +0800, Jason Xing wrote:
+> > > On Fri, May 22, 2026 at 4:55 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> > > >
+> > > > On Thu, May 21, 2026 at 10:24 PM Maciej Fijalkowski
+> > > > <maciej.fijalkowski@intel.com> wrote:
+> > > > >
+> > > > > On Thu, May 21, 2026 at 09:07:30PM +0800, Jason Xing wrote:
+> > > > > > On Thu, May 21, 2026 at 9:00 PM Maciej Fijalkowski
+> > > > > > <maciej.fijalkowski@intel.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, May 21, 2026 at 08:41:08PM +0800, Jason Xing wrote:
+> > > > > > > > On Thu, May 21, 2026 at 8:24 PM Maciej Fijalkowski
+> > > > > > > > <maciej.fijalkowski@intel.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Wed, May 20, 2026 at 08:42:39AM +0800, Jason Xing wrote:
+> > > > > > > > > > From: Jason Xing <kernelxing@tencent.com>
+> > > > > > > > > >
+> > > > > > > > > > The series is the product of previous review from sashiko[1].
+> > > > > > > > > >
+> > > > > > > > > > 1) META
+> > > > > > > > > > patch 1: address TOCTOU around metadata.
+> > > > > > > > > >
+> > > > > > > > > > 2) PUBLISH of CQ
+> > > > > > > > > > patch 2: make sure xsk_addr->addrs[] can be published to cq when
+> > > > > > > > > >          overflow occurs.
+> > > > > > > > > > patch 3: keep cleaning up the continuation descs (more than 17) and
+> > > > > > > > > >          publish its address when overflow occurs.
+> > > > > > > > > > patch 4: like patch 3, but only handles the invalid descs cases.
+> > > > > > > > > >
+> > > > > > > > > > [1]: https://lore.kernel.org/all/20260502200722.53960-1-kerneljasonxing@gmail.com/
+> > > > > > > > > >
+> > > > > > > > > > ---
+> > > > > > > > > > V4
+> > > > > > > > > > Link: https://lore.kernel.org/all/20260517063311.28921-1-kerneljasonxing@gmail.com/
+> > > > > > > > > > 1. correct the description of xmit path in patch 3 (sashiko)
+> > > > > > > > > > 2. move set logic into xmit path in patch 3 (Stan)
+> > > > > > > > > >
+> > > > > > > > > > V3
+> > > > > > > > > > Link: https://lore.kernel.org/all/20260515123018.80147-1-kerneljasonxing@gmail.com/
+> > > > > > > > > > 1. avoid breaking previous usage of sendto, and siliently handle
+> > > > > > > > > > overflow case (Stan, sashiko)
+> > > > > > > > > > 2. add one particular exception process in patch 4 (sashiko)
+> > > > > > > > > > 3. adjust the selftest to make sure it passes in either virutal or
+> > > > > > > > > > physical machines, which includes add usleep to support physical machine.
+> > > > > > > > > >
+> > > > > > > > > > V2
+> > > > > > > > > > Link: https://lore.kernel.org/all/20260510012310.88570-1-kerneljasonxing@gmail.com/
+> > > > > > > > > > 1. adjust selftests (Jakub)
+> > > > > > > > > > 2. add READ_ONCE in patch 1 (Stan)
+> > > > > > > > >
+> > > > > > > > > FWIW I still get test failures (yes with patch 5 applied). PTAL.
+> > > > > > > >
+> > > > > > > > Thanks for the test. But I've tried with ixgbe driver...
+> > > > > > > >
+> > > > > > > > I noticed there are some flaky tests which have nothing to do with the
+> > > > > > > > series. Can you confirm that it's not caused because of the series?
+> > > > > > >
+> > > > > > > That explains the different results as i am using i40e/ice which have
+> > > > > > > multi-buffer support whereas ixgbe does not even support mbuf at XDP.
+> > > > > > > Broken tests are from mbuf cases.
+> > > > > >
+> > > > > > That's weird. I never expected the failed tests to be about multi-buffer.
+> > > > > >
+> > > > > > Are they the same as the output you attached last time? Or something
+> > > > > > new? Could you please share it so that I can investigate the root
+> > > > > > cause?
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_budget_report.c   | 175 +++++++++++++++++++++
- 2 files changed, 177 insertions(+)
+[...]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 35d92d176c1f..61a732a499b0 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -14,6 +14,7 @@
- #include "verifier_basic_stack.skel.h"
- #include "verifier_bitfield_write.skel.h"
- #include "verifier_bounds.skel.h"
-+#include "verifier_budget_report.skel.h"
- #include "verifier_bounds_deduction.skel.h"
- #include "verifier_bounds_deduction_non_const.skel.h"
- #include "verifier_bounds_mix_sign_unsign.skel.h"
-@@ -169,6 +170,7 @@ void test_verifier_bounds(void)               { RUN(verifier_bounds); }
- void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_deduction); }
- void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_bounds_deduction_non_const); }
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_unsign); }
-+void test_verifier_budget_report(void)        { RUN(verifier_budget_report); }
- void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_stack); }
- void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); }
- void test_verifier_bswap(void)                { RUN(verifier_bswap); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_budget_report.c b/tools/testing/selftests/bpf/progs/verifier_budget_report.c
-new file mode 100644
-index 000000000000..7b87e53831c2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_budget_report.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC("tracepoint")
-+__failure
-+__log_level(1)
-+__msg("two_level_calls():")
-+__msg("  0: (85) call pc+1")
-+__msg("  1: (95) exit")
-+__msg("two_level_calls__l1():")
-+__msg("  2: (85) call pc+1")
-+__msg("  3: (95) exit")
-+__msg("two_level_calls__l2():")
-+__msg("  4: (b7) r0 = 0")
-+__msg("  5: (07) r0 += 1")
-+__msg("  6: (05) goto pc-2")
-+__msg("#1 most visited simulated stacktrace (visited 499999 times):")
-+__msg("  two_level_calls/0 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("  two_level_calls__l1/2 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("  two_level_calls__l2/5 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("BPF program is too large. Processed 1000001 insn")
-+__naked void two_level_calls(void)
-+{
-+	asm volatile ("					\
-+	call two_level_calls__l1;		\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+__used
-+static __naked void two_level_calls__l1(void)
-+{
-+	asm volatile ("					\
-+	call two_level_calls__l2;		\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+__used
-+static __naked void two_level_calls__l2(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	goto 1b;					\
-+"	::: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__failure
-+__log_level(1)
-+__msg("two_loops():")
-+__msg("  0: (b7) r6 = 250000")
-+__msg("  1: (b7) r0 = 0")
-+__msg("  2: (07) r0 += 1")
-+__msg("  3: (ad) if r0 < r6 goto pc-2")
-+__msg("  4: (b7) r0 = 0")
-+__msg("  5: (07) r0 += 1")
-+__msg("  6: (05) goto pc-2")
-+__msg("#1 most visited simulated stacktrace (visited 250000 times):")
-+__msg("  two_loops/2 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("#2 most visited simulated stacktrace (visited 249999 times):")
-+__msg("  two_loops/5 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("BPF program is too large")
-+__naked void two_loops(void)
-+{
-+	asm volatile ("					\
-+	r6 = 250000;					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < r6 goto 1b;				\
-+	r0 = 0;						\
-+2:	r0 += 1;					\
-+	goto 2b;					\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure
-+__log_level(1)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("iter_loop():")
-+__msg("  8: (bf) r1 = r6")
-+__msg("  9: (85) call bpf_iter_num_next")
-+__msg("  10: (15) if r0 == 0x0 goto pc+3")
-+__msg("  11: (07) r7 += 1")
-+__msg("  12: (25) if r7 > 0xf4240 goto pc+1")
-+__msg("  13: (05) goto pc-6")
-+__msg("#1 most visited simulated stacktrace (visited 142856 times):")
-+__msg("  iter_loop/8 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("#2 most visited simulated stacktrace (visited 142856 times):")
-+__msg("  iter_loop/9 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("    Most varying: R7 (frame 0)")
-+__msg("BPF program is too large. Processed 1000001 insn")
-+__naked void iter_loop(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -16;					\
-+	w2 = 0;						\
-+	w3 = 1000000;					\
-+	call %[bpf_iter_num_new];			\
-+	r7 = 0;						\
-+	r6 = r10;					\
-+	r6 += -16;					\
-+1:	r1 = r6;					\
-+	call %[bpf_iter_num_next];			\
-+	if r0 == 0 goto 2f;				\
-+	r7 += 1;					\
-+	if r7 > 1000000 goto 2f;			\
-+	goto 1b;					\
-+2:	r1 = r6;					\
-+	call %[bpf_iter_num_destroy];			\
-+	r0 = r7;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure
-+__log_level(1)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("iter_stack_varying():")
-+__msg("  10: (85) call bpf_iter_num_next")
-+__msg("#1 most visited simulated stacktrace (visited 111110 times):")
-+__msg("  iter_stack_varying/10 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
-+__msg("    Most varying: fp-24 (frame 0)")
-+__msg("BPF program is too large. Processed 1000001 insn")
-+__naked void iter_stack_varying(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -16;					\
-+	w2 = 0;						\
-+	w3 = 1000000;					\
-+	call %[bpf_iter_num_new];			\
-+	r8 = 0;						\
-+	*(u64 *)(r10 - 24) = r8;			\
-+	r6 = r10;					\
-+	r6 += -16;					\
-+1:	r1 = r6;					\
-+	call %[bpf_iter_num_next];			\
-+	if r0 == 0 goto 2f;				\
-+	r8 = *(u64 *)(r10 - 24);			\
-+	r8 += 1;					\
-+	*(u64 *)(r10 - 24) = r8;			\
-+	if r8 > 1000000 goto 2f;			\
-+	goto 1b;					\
-+2:	r1 = r6;					\
-+	call %[bpf_iter_num_destroy];			\
-+	r0 = *(u64 *)(r10 - 24);			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_iter_num_new),
-+	  __imm(bpf_iter_num_next),
-+	  __imm(bpf_iter_num_destroy)
-+	: __clobber_all);
-+}
-+
-+void iter_num_btf_fixup(void)
-+{
-+	bpf_iter_num_new(0, 0, 0);
-+	bpf_iter_num_next(0);
-+	bpf_iter_num_destroy(0);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+> > > >
+> > > > Sorry, Maciej. I managed to get one server with i40e nic but still
+> > > > couldn't reproduce it. Can you try the attachment (that is the
+> > > > replacement for v4-0005) instead? I removed those nasty CONT test
+> > > > cases...
+> > >
+> > > Ah, I think I eventually figured out a solution. Maciej, could you
+> > > please test the 2nd patch instead?
+> > >
+> > > This patch reworks the CONTD test cases. Cross finger.
+> >
+> > Please don't rush things here, I believe we need to think a bit more here.
+> > I have second thoughts about overall approach.
+> >
+> > My understanding wrt CQ was that it is a container that holds descriptors
+> > which have been successfully transmitted. Now we want to add also leftover
+> > descriptors from broken packets, which might confuse user space sides in
+> > case they were relying on behavior described above.
+> >
+> > The intent is right of course as we don't want to lose UMEM descs, but I
+> > feel like we need a separate mechanism for that rather than putting
+> > invalid descs to CQ.
+> 
+> I don't sense anything strange here if we stick to put those
+> invalid/overflowed descriptors into cq. AF_XDP is only a tunnel that
+> transfers the data. That's it. A bit like how the physical link works,
+> which means it possibly drops data because of congestion.
+> 
+> Upper protocol is used to guarantee when to (re)transmit a packet -
+> the mechanism is the ACK driven in terms of TCP. TCP is absolutely
+> capable of finding such an abnormal thing happening by checking the
+> seq of incoming ack. My takeaway from this is we don't need to
+> deliberately design new stuff to fulfill direct and immediate
+> communication.
 
--- 
-2.54.0
+AF_XDP is often used for L2/L3 forwarding, UDP, custom transports, so I
+was afraid some existing solutions might be relying on CQ entries implying
+successful Tx.
+
+Generally this issue is highly unlikely yet a thing we need to address so
+let's follow your approach, but for that we need to update documentation
+and align ZC side so that we would not have to deviate test cases.
+
+> 
+> CQ works somehow as a notification that tells user space whether the
+> kernel receives the data from the app and handles them. Without
+> putting them in the CQ, the only thing for userspace to do is simply
+> wait.
+
+I don't follow the last part of the sentence but let's disregard it.
+Userspace gets errno/retcode in generic xmit so it is aware of underlying
+issues and then it's app job to act upon it.
+
+> 
+> With that said, IMHO, I cannot figure out why we need a separate queue
+> or something like that. Of course, a new notification that handles all
+> the possible/potential exceptions and contributes to the performance
+> of the upper layer is worth a try :) The latter is crucial.
+
+We discussed with Magnus it would be good to have a dedicated xsk_queue
+stat for that case, such as 'oversized_descs' which would be bumped by the
+amount of descs produced to CQ.
+
+> 
+> >
+> > Does it make sense?
+> >
+> > Besides, even though we would stay with proposed changes, behavior between
+> > modes should be aligned. Right now ZC seems to be broken in touched
+> > regions here - when we hit the limit of frags via pool->xdp_zc_max_segs,
+> > we break the loop and discard the packet, never post it to CQ and these
+> > descs are lost from user space POV. Then we would continue on next call
+> > and interpret the rest of too big packet as a separate one (clamped) and
+> > therefore submit corrupted packet to HW.
+> 
+> Right, this is how the previous selftests changes pollute the
+> subsequent tests after that. I think the new version of the attachment
+> should pass all the tests since I put all the CONTD tests separately
+> into another two functions? It's pointless to test those in the zc
+> mode.
+
+We need analogous fix on ZC, then no such quirks in tests should exist.
+Test is doing the same thing regardless of underlying mode. Only the range
+differ (MAX_SKB_FRAGS vs pool->xdp_zc_max_segs).
+
+To wrap up, I see it like this, moving forward:
+1. fix docs
+2. add ss stat
+3. wait for me with ZC fixes (I'm slow!)
+4. inspect if tests will fly
+
+Let me know your thoughts! Maybe Stan wants to chime in?
+Maciej
+
+> 
+> As to the series, if no objections or any suggestions jump into the
+> thread, I'll post the series within a week.
+> 
+> Thanks,
+> Jason
+> 
+> >
+> > I'll be looking at ZC API but i do think we need a common approach,
+> > mode-agnostic.
+> >
+> > Thanks,
+> > Maciej
+> >
+> > >
+> > > Thanks,
+> > > Jason
+> > >
+> > > >
+> > > > Really I don't think I have much time to spend on these tests which
+> > > > makes me feel extremely annoyed... It's not easy to analyze the code
+> > > > without a reproducer. The good news is that now I highly suspect that
+> > > > this kind of CONT test cases pollute the whole cq which affects other
+> > > > tests. Before I give up on the 0003/0004 patches, I'd like to hear
+> > > > some advice from you. Thank you.
+> > > >
+> > > > My original intention was to push batch xmit forward but at that time
+> > > > sashiko pointed out some unrelated bugs accidentally.
+> > > >
+> > > > Thanks,
+> > > > Jason
+> > > >
+> > > > >
+> > > > > >
+> > > > > > Thanks,
+> > > > > > Jason
+> > > > > >
+> > > > > > >
+> > > > > > > >
+> > > > > > > > Thanks,
+> > > > > > > > Jason
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > Jason Xing (5):
+> > > > > > > > > >   xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+> > > > > > > > > >   xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
+> > > > > > > > > >   xsk: drain continuation descs after overflow in xsk_build_skb()
+> > > > > > > > > >   xsk: drain continuation descs on invalid descriptor in
+> > > > > > > > > >     __xsk_generic_xmit()
+> > > > > > > > > >   selftests/xsk: drain CQ to wait for TX completion
+> > > > > > > > > >
+> > > > > > > > > >  include/net/xdp_sock.h                        |  1 +
+> > > > > > > > > >  net/xdp/xsk.c                                 | 44 +++++++++++++----
+> > > > > > > > > >  .../selftests/bpf/prog_tests/test_xsk.c       | 48 +++++++++++--------
+> > > > > > > > > >  3 files changed, 63 insertions(+), 30 deletions(-)
+> > > > > > > > > >
+> > > > > > > > > > --
+> > > > > > > > > > 2.43.7
+> > > > > > > > > >
+> >
+> >
