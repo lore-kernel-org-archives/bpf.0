@@ -1,113 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD587E792
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF68033FE33
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779823971; cv=none; b=Vf/tVfewgizmzx4G0fmVPtOkKag1zXW14GnxM7oHry4Cm7QpmZH+FMfwxdtAikM32bTj0csQsdlwzj+9vBpKdZqXQxGabJgMRc6YKHnFKlaRYOHJct8IOPQca+A/gj7c9c7sttGrfzsXM4Dltq5djYW5D9w+nnXin+UNd1yiGmo=
+	t=1779824255; cv=none; b=L4i93wmQvfS5rAl7FdbruNvCM238mblgn+zHw9Tbtaycd9Bx3G/B/TVzaRezk3EyoLtohRsFwyCCyd671X5pCRz4ZdJ30NjdKQUyNLmA4pwNNtClEFbPcktOkdY0882UH30+QZdFuMCZv/RRwM3kHwjY7yp7mP7DfES8e3iPeF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779823971; c=relaxed/simple;
-	bh=a5ct/eHdaXinzA0e/Z3Lnbta7J3cKXXmD4hsG8LRKI8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HFAjX9+6XzK8hjPBEBb+uiDqWitQlSlGwVWvHc0E0XHuyH9NGufYsBWfAtTVNCD2QWUxq0IIL0TxQ9W+qnqiqswX/iXz9TLp9LOhGl+nj5TceQOz4pXWg6X/GN9XygihU/v32xj84ux5OnWIXbYVdsjSM4FBkE1uEoA5htMBFFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xl1sKtfv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779824255; c=relaxed/simple;
+	bh=zweWelgF7OqUzU3q1xGKvPxSWxDyRVOYY7AAQp52YtQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G77Gy88uDkRdEmkn3roZcD87aF2uVKfSmLlIjACafTMCqVHHP+Iq4+IOE9AyyG0Zx5VsJ+OZ7MPpv+N8nUoLa9AH4ZJ+WUZhDbRPJhWsG3Cum+cM9EZxtAD+UpsoX3VILtwyjvVRBw49mIvU+cDKNpVZpd0epRJdvIeKMZNaxG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4PVzzaU; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xl1sKtfv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92CC1F000E9;
-	Tue, 26 May 2026 19:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779823969;
-	bh=940TWhyTCZuZ2VFlyZVFbKOAuqKFV5cE3b6yFHhruGc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Xl1sKtfv+KHDuKo9qGmDSug9COxl8x8Cha+ryIVouRI1k+LS/Laft3iIRl2lgROev
-	 7IklKIS36ds8Zzp2Aq3qaPXAitMSjjPmyQRkttzFAm2JljEwdUx880vdnZfz90Sb10
-	 6ZdmqUyrGSnek0TSPo+LyaCVHPuPQCQDTUXatymeWQ6VWRHWXtC2zic2GVnCBeTNlX
-	 6N8ECS9D6sl0FxFxY1IlyTTxbyziQ74FqUw59OKFkgOvqERDQ2aGIXj9qKnuxvEL3j
-	 g/pPmmMT7c/cuFJWAAFjAsxMzSTwrQsOBqM4it1i8e4QZ3IPGui/ZD6lC5ldqWIclo
-	 y+znTB8+3gkyw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 5/7] selftests/bpf: add bpf_icmp_send kfunc
- cgroup_skb IPv6 tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526153708.279717-6-mahe.tardy@gmail.com>
-References: <20260526153708.279717-6-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 19:32:48 +0000
-Message-Id: <20260526193248.B92CC1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4PVzzaU"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3684a6f3b0bso5450440a91.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779824253; x=1780429053; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=md2uP6TWkc+nCFlw3b5bLsdZ2L7ZjormopHq9oHVT0w=;
+        b=D4PVzzaUfs0N5h4/ngkBRcOMH8xCXVSBEEHAsRZk+nM51k1IWw0K3OXa5LolwnqVKF
+         TdduAwM21gU5CWnx6GMbxCololcX7UkkkxF5x5+86OiQ6Dx5vb3kNUxVQOH9KqSR0Vo4
+         hvGuFi+WC/5/N3JEYcjx9NQwslwj4iQ0Cs9yD93yqGbVth+KEPLGiMDeF4+XMb1nODVd
+         8c90Yd2IvWa2h5AHqFkAWZVByeg71VhsVvQ6EEmd9UD77t156a6gdcShaMqO0x0R/ZMz
+         18FduCtiaxl0SImN7q9qESixd6TERM6gc7tkQ2XPFvS6mHYsqJNwge53LKlAewlCL0mP
+         TE9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779824253; x=1780429053;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=md2uP6TWkc+nCFlw3b5bLsdZ2L7ZjormopHq9oHVT0w=;
+        b=H35qLKEcAWg3wuDzhZVcwVWia5d3HcOqH7O9P9E7BiD1u4zxeJ8D2rQixVnXh5yygq
+         7v1iuglwwvXR+xoV/x0f6JhG9NtZO5uxpXtR9XHdjPSWbsMZWBXHQ9JnieZXUZsm6pq3
+         CozmnU+0eQDpr6x65PlakHQpuRB2yu73cizzmh6t0QnJLZfC8TkHL88yf6OvFOE65ZAN
+         I438lOeASG/AjQtV5To0lI/KIz3DpngR5hKcTMioGNFCkO5MT92twin76vgAQP9ZpJRZ
+         3FPi6oH8XSUO9njiaeMOB/Ub6oRbHZ9Olwh1QrA7jXja/moTgVMnFSYRc48cJHgzkWta
+         5sXg==
+X-Gm-Message-State: AOJu0YyRFWJCvQTKCc+BfH1BdwsZ3rOgVCQ8uT6P9qLaTkH4U2B19FQV
+	L8fY7LMgm4IJodaAeevykY3URF2ROPfVrNQ2U9JoD8Ge36qdJ4SoLc1KSd0P9mrXx1s=
+X-Gm-Gg: Acq92OGdqXfYdeWo5ZeKYmCqzaL7Gra5AlPmQ4S3Z7kw0W0euXznrmcxlG+sFXO9gNj
+	VYDa68NhuWPE03uC01j2vYs94+sfn8lujB0KHaJfqO18rwK34yheRKyLW48p8YzQsdPj8Zx/v3g
+	KdHpJRGoLSHyZbfkhCG3nmroIOZ8n4U+X8sNr86PKu8V7WtY+64PEuV14wLBa3hryK0R3BeMV3z
+	k2RjMo23uN3AnmYAuJ6zRFwiyk/ibGyOx/vdR+XYB+HBIRyn3llZ0YH6quuc5k2sVscNiC9CHGI
+	6CnBnKH6C0tRKGxg/4PGiC4q40dBF0Diy6YCIMQ50Uh2EtmVDCBGI8cYp5UO1Rko82rmkN5tNLB
+	y059pDRox9hvznwjOFu6ncwP7gzy9m1AznaCXM/BgvzF9/CLdsEX2phQdI+IY/lsWz9lEMC0zXv
+	2y/Zctj+pgaQLuVLDFdYpY+3+/T39hPowrSx5XXpuGMzQmXtE/iGHDLMKf7gmQ+Q0ilEs=
+X-Received: by 2002:a17:90b:48c7:b0:368:3fa8:dbfa with SMTP id 98e67ed59e1d1-36a6bcba085mr12565217a91.7.1779824252924;
+        Tue, 26 May 2026 12:37:32 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2026 12:37:32 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH RFC bpf-next v2 0/6] bpf: better error reporting when verifier hits 1M instructions limit
+Date: Tue, 26 May 2026 12:37:14 -0700
+Message-ID: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260525-better-1m-reporting-1d795a21cf72
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Type confusion and address truncation in getsockname() due to us=
-ing struct sockaddr_in for IPv6 addresses.
---
+When the BPF verifier exceeds the 1M instruction budget, the current
+error output shows a random execution trace that happens to be active
+at the moment, which is not very helpful for debugging.
 
-commit 0cc9d08ecac1ed3d21b7e5cbf50d68e27cb610de
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+This series improves the error report using a profiler-inspired
+approach: collect and count "callchain" stack traces that the verifier
+visits during program validation, and report the top 3 hottest traces
+when the budget is exhausted. To minimize performance an memory impact
+of such profiling, only collect samples when verifier visits loop
+headers, iterator next, may_goto and callback-calling instructions.
 
-selftests/bpf: add bpf_icmp_send kfunc cgroup_skb IPv6 tests
+For callchains ending at iterator next, may_goto, or callback-calling
+instructions, identify which registers or stack slots most frequently
+differ between cached and current states.
 
-This test extends the existing cgroup_skb tests for the bpf_icmp_send
-kfunc by adding IPv6 support.
+Here is an example of the report for scx lavd_dispatch, with verifier
+limited to 200K instructions to trigger the error:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
-ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> index 0dc6b6ceafb4a..1d6900d6a8f8c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+  lavd_dispatch():
+    ; void BPF_STRUCT_OPS(lavd_dispatch, s32 cpu, struct task_struct *prev) @ main.bpf.c:889
+    ... disassembly ...
 
-[ ... ]
+  consume_task():
+    ; bool consume_task(u64 cpu_dsq_id, u64 cpdom_dsq_id) @ balance.bpf.c:410
+    ... disassembly ...
 
-> @@ -79,14 +94,15 @@ static void read_icmp_errqueue(int sockfd, int expect=
-ed_code)
->  	ASSERT_FAIL("no IP_RECVERR/IPV6_RECVERR control message found");
->  }
-> =20
-> -static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int =
-code)
-> +static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int =
-code,
-> +					    int af, const char *ip)
->  {
->  	int srv_fd =3D -1, client_fd =3D -1;
->  	struct sockaddr_in addr;
->  	socklen_t len =3D sizeof(addr);
-> =20
-> -	srv_fd =3D start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, TIMEOUT_M=
-S);
-> -	if (!ASSERT_GE(srv_fd, 0, "start_server"))
-> +	srv_fd =3D start_server(af, SOCK_STREAM, ip, 0, TIMEOUT_MS);
-> +	if (!ASSERT_OK_FD(srv_fd, "start_server"))
->  		return;
-> =20
->  	if (getsockname(srv_fd, (struct sockaddr *)&addr, &len)) {
-> @@ -94,6 +110,8 @@ static void trigger_prog_read_icmp_errqueue(struct icm=
-p_send *skel, int code)
->  		return;
->  	}
->  	skel->bss->server_port =3D ntohs(addr.sin_port);
+  #1 most visited simulated stacktrace (visited 1807 times):
+    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
+    consume_task/2715 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:316)
 
-[Severity: Medium]
-When af is AF_INET6, does this cause an address truncation in getsockname()
-since addr is defined as struct sockaddr_in?
+  #2 most visited simulated stacktrace (visited 1682 times):
+    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
+    consume_task/2994 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:386)
 
-For an IPv6 socket, getsockname() requires struct sockaddr_in6 which is
-larger than struct sockaddr_in. While reading addr.sin_port happens to map
-to the same memory offset as sin6_port, could this lead to type confusion
-if the address fields are ever used?
+  #3 most visited simulated stacktrace (visited 8 times):
+    lavd_dispatch/255 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1022)
+      Most varying: R7 (frame 0)
 
-Would it be safer to use struct sockaddr_storage here to ensure enough space
-for either address family, similar to what is used in connect_to_fd_nonbloc=
-k()?
+  BPF program is too large. Processed 200001 insn
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526153708.2797=
-17-1-mahe.tardy@gmail.com?part=3D5
+Changelog:
+v1 -> v2 (bots):
+  - Use kvfree() in bpf_compute_loops().
+  - Adjust fwd_edges_no_loop test case to avoid dead code elimination
+    converting 'if' to 'goto'.
+  - Use GFP_KERNEL_ACCOUNT for callchain entry allocation in
+    update_callchain_profile().
+  - Zero-initialize 'cc' in update_callchain_profile() to avoid
+    copying uninitialized stack memory to the heap.
+  - Use %td instead of %ld for ptrdiff_t format specifier in
+    print_callchain_entry() and disasm_subprog().
+  - Size printed_subs bitmap as BPF_MAX_SUBPROGS + 2 to account for
+    fake and exception subprograms.
+  - Fix bpf_sample_state_diffs() inner loop to iterate from head
+    instead of pos_i, avoiding container_of() on the dummy list head.
+  - Add DIFF_OTHER to distinguish states that differ because of idmap
+    or other inconsistencies.
+
+v1: https://lore.kernel.org/bpf/20260526-better-1m-reporting-v1-0-51e4f2c59780@gmail.com/T/
+---
+Eduard Zingerman (6):
+      bpf: move live registers and scc printout to a standalone function
+      bpf: compute loops hierarchy
+      selftests/bpf: test cases for loop hierarchy computation
+      bpf: report hot simulated callchains when 1M instructions limit is met
+      bpf: report register diff summary for hot callchains
+      selftests/bpf: test budget exhaustion profiling report
+
+ include/linux/bpf_verifier.h                       |  39 ++++
+ kernel/bpf/Makefile                                |   2 +-
+ kernel/bpf/fixups.c                                |   5 +
+ kernel/bpf/liveness.c                              |  22 +-
+ kernel/bpf/loops.c                                 | 184 ++++++++++++++++
+ kernel/bpf/states.c                                | 180 ++++++++++++++--
+ kernel/bpf/verifier.c                              | 233 +++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   4 +
+ .../selftests/bpf/progs/verifier_budget_report.c   | 175 ++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c      |   2 +-
+ .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
+ 11 files changed, 1034 insertions(+), 45 deletions(-)
+---
+base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
+change-id: 20260525-better-1m-reporting-1d795a21cf72
