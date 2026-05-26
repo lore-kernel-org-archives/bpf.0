@@ -1,120 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951873FDBF1
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4277F3FE67A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779804210; cv=none; b=Brp/a81rgbisRjFDwcQeT0/OzdtpTwT3jVw0kGrNyK/pP1v9MY1av0ovnVIkQE28vZLG5+O0ovHO/Qn56rktVYItnu3D6j95g04ryPaPCrQWqD1BTh9iIyzqqjn5i6vh+ROAuRIBSsGLISAr0vrJFLWGZxQdJEFxd03ZmbcobUg=
+	t=1779804938; cv=none; b=GNbDwTxifQeSgNTj8eANdd1/0HpNQNNSp8K/AshsZCz07ihWByL9KuLR/3+wFlBcUw00TRIf+pBiokNgut7uZQKLbOCSmqFmz2bCder7vNf1zsGEa3g4ihuB7BYabwTqYWMfx9IDwP4EEQrLm3umZoEUGYdwyMDEzt5fQeIuZ9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779804210; c=relaxed/simple;
-	bh=DI9CHT+SbGvvZQksRJiYkvPuG8VgUqjMwDCcl8Jjf14=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uiQu19lTuQQTZ6qQEW9LyXvSP7wUi55oLUw2PDqzJlBZ8L7gmExAyh15/DtBOeVNFt0oCQFCtLAdbb92IaUF58iZHIGQujNujrTUMW9t6CJROVNdbfCY/9ETsr1N6i6q/xvc99dzmx6nT1cmAegNh3xT0dWlpa1kREO5/rEjx4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8ISg70Q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779804938; c=relaxed/simple;
+	bh=EdQq3aQ9KLzrDuftlkOM+TyHQLT0aDiS6zspb266sQU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WEnqCl0HcBeYQef7d/H4SQ5VrY7Rzp6Yhe8QEpqRDLdElhZeve18BVJuOWMsm7B3Utj+rzwxTA7xVjQK9tSuoRvcwjN1i6tYrNXz9lUiYaUSaYEVJduD5x+xSxg901EEswXg87jVSbInHNZkdAuZCW8fTvn3iofiQ1sUpgxP0m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JtaEhSiT; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8ISg70Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 187C01F000E9;
-	Tue, 26 May 2026 14:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779804209;
-	bh=xQyYO6AnsZg6O1viyXAc6GC8G68LA1RBliDlhPzTIBY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C8ISg70QPvBcL3PgvhAZItghP7vpoNtT8nklUqoHx1GE2gPiwk7SRdu0Uqnf37mcO
-	 yoorz8E4qxI9KVOXXlj5g/9kbUeXUWWm9SGOqjPyfGiy+Gty+FrfCaugX49DhNamCA
-	 kDrYPHM5vVLSsCbfXqd5VyjvhuiE/oNK8sAlR7BJSXvMZ4ikDRM2nlU8SOjdvQT2dj
-	 AKA4rvOKBL/vgVygsSVisjddNS1/zIwZvbnCqaOBsxf7cKzkYyUUwdwWLvIMw8/ruQ
-	 MsyVwU6PWBHClf0fSptQ78gRKsO/YhTVBiXbdlmPZ0vOYgrOUkwakINJjKfJugygvg
-	 LyQDx7/I1wi6w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/2] bpf: cgroup: fix sysctl new value replacement
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dawei Feng" <dawei.feng@seu.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
-References: <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 14:03:28 +0000
-Message-Id: <20260526140329.187C01F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JtaEhSiT"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-43d7730e9e3so6455852f8f.2
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779804935; x=1780409735; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wzpgf/wuecL2JBBMYkdRk+Xbi/3WeFb52lS50xAT3C0=;
+        b=JtaEhSiTW2eLZtmb5uJDnGV+oJV6ww+pkMOEuvAmrijsArF+on5cJ9IYjUG/IpiHOx
+         aTvI/hKjTw5qfUBmbB87EOKQY+rRb+rVNCotoq62Pj/wRIvFa31Lut1BPhKDFXdwCPyk
+         pi3UNqDd82db6cAzGrjl8OHWvWMdIt8mksaB711F+R/dO4QJa0Qxl9WagCd8QXs7lMAV
+         CeyTgztIkF8VWglfEn1tuyhd/NDydb9tuuhI7k4Z6D9kO9ANeczzOBYnIlTc7brGqOtJ
+         7BJywBF9XLojtTdGfEMqAl1FINTW+k/jS7i9q8UG9bPgV8HF/7Gw9dJE3XnYtg7uuDgy
+         19ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779804935; x=1780409735;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wzpgf/wuecL2JBBMYkdRk+Xbi/3WeFb52lS50xAT3C0=;
+        b=lx5f+2t3MTeUVuQwmq7YyAuU4mDOwBxCkqG1xvsboxYb2yDT282A4p8lweFmPSXqV8
+         ZGdSiKhbyjox2k+y6lXfYAa20UaDJwQS1sd/zRYYhUXLn8fw3o8cyevVAAxMfbNxNksA
+         naqaKaxiXbNl8O/bsM7hp9+fONh4/cvrye27ULFgTpylMex8Gq6cThPS+bgTJYw29bue
+         DbEeH9dzoRJJ8m455WWlLzCrzMkG1IhjtjvRZZwePZlKvqpZ2SKtPEF0NmkltLdPvfnJ
+         dvlrb6RgHDRWrcpPe/wSyrZaB2U+/2WJ/zbg0iA4rjSxSmqgT9PRcTb7xAXV8gODuy6R
+         776A==
+X-Gm-Message-State: AOJu0YyWZ2ddk4nScoxGcHap+dhi9LZKIQXckYk6RWmRKZuvYsg74W1q
+	GnDfg0RN49T3+msTFmn2uxdDfOkDET1Kbp1n9X0DO2qqsH2YL2hMHWeBwmZWZdz+E1JVOlc42Ml
+	XRZIB09y251Z3fumobA==
+X-Received: from wmxb15-n1.prod.google.com ([2002:a05:600d:844f:10b0:490:507b:f39f])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:3d96:b0:490:5429:1513 with SMTP id 5b1f17b1804b1-49054291bbamr250856825e9.6.1779804935406;
+ Tue, 26 May 2026 07:15:35 -0700 (PDT)
+Date: Tue, 26 May 2026 14:15:33 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAWrFWoC/5WNSw6CMBQAr2K69hla+0FX3sMYU+AVXgItKdhoC
+ HcXSEx06XJmMTOxASPhwM67iUVMNFDwCxz3O1Y21tcIVC3MRCZ0poSAloqid9AGW0HqWvKPJxS
+ jA/JQo7+vHiN0oUKQ0sj8KK2V2rAl2Ed09Nxm19vCDQ1jiK/tnfhqPxv5zyZx4KCdMo6fuDW2u tQh1C0eytCx9ZPEd1v/1RaQgTYqcypXp6LUP+15nt9wNRbpQQEAAA==
+X-Change-Id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
+X-Mailer: b4 0.14.3
+Message-ID: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
+Subject: [PATCH v3 0/3] libbpf: support STRUCT_OPS in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, gprocida@google.com, 
+	maennich@google.com, Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+This series enables support for BPF `STRUCT_OPS` maps (such as
+`sched_ext_ops` used by sched_ext) when using light skeletons (i.e.
+`gen_loader` mode).
 
-Pre-existing issues:
-- [Critical] Calling kfree() on the sysctl buffer can cause a kernel panic =
-because the buffer is originally allocated with kvzalloc() and may be backe=
-d by vmalloc().
-- [High] The BPF-provided sysctl replacement buffer is not explicitly NUL-t=
-erminated, which violates the VFS sysctl contract and risks out-of-bounds r=
-eads in downstream proc handlers.
---
+Previously, generating light skeletons for objects containing
+`STRUCT_OPS` maps would fail or produce incomplete results because
+`gen_loader` lacked support for several key features required by
+`STRUCT_OPS` maps, specifically:
 
-commit 87d6f30bc7d66708176be678dd7992a7d205d7b2
-Author: Dawei Feng <dawei.feng@seu.edu.cn>
+1. Loading `vmlinux` BTF to resolve kernel-side type information.
+2. Correctly plumbing `btf_vmlinux_value_type_id` into map creation
+   attributes.
+3. Ensuring `btf_key_type_id` is zeroed out to satisfy kernel safety
+   checks.
+4. Plumbing the userspace BTF FD (`btf_fd`) when
+   `btf_vmlinux_value_type_id` is present but `btf_value_type_id` is
+   zero (which is always the case for `STRUCT_OPS` maps).
 
-bpf: cgroup: fix sysctl new value replacement
+This series addresses these limitations by:
 
-This commit changes the success check from ret =3D=3D 1 to !ret in
-__cgroup_bpf_run_filter_sysctl(). This allows cgroup/sysctl BPF programs to
-correctly replace the pending sysctl buffer after bpf_prog_run_array_cg()
-returns 0 on success.
+- Loading `vmlinux` BTF in `gen_loader` mode when the BPF object
+  contains `struct_ops` maps.
+- Explicitly zeroing out `btf_key_type_id` for `STRUCT_OPS` maps to
+  satisfy kernel validations.
+- Plumbing `btf_vmlinux_value_type_id` during map creation in
+  `gen_loader`.
+- Fixing `btf_fd` copying logic in `gen_loader` to populate it if either
+  `btf_value_type_id` or `btf_vmlinux_value_type_id` is set.
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b61..8715a014c21d9 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1935,7 +1935,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table=
-_header *head,
-> =20
->  	kfree(ctx.cur_val);
-> =20
-> -	if (ret =3D=3D 1 && ctx.new_updated) {
-> +	if (!ret && ctx.new_updated) {
->  		kfree(*buf);
+With these changes, it is now possible to generate and use light
+skeletons for BPF programs utilizing `STRUCT_OPS`, such as custom
+sched_ext schedulers.
 
-[Severity: Critical]
-This is a pre-existing issue, but by activating this code path, could this
-kfree() trigger a kernel panic?
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+---
+Changes in v3:
+- Remove erroneous change contracting map creation attribute size in gen_loader.
+- Link to v2: https://lore.kernel.org/r/20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v2-0-6750f5859bc6@google.com
 
-Looking at proc_sys_call_handler(), the original sysctl write buffer is
-allocated using kvzalloc(), which means it might be backed by vmalloc()
-for larger allocations. If kfree() is called on a vmalloc address, it would
-cause an invalid virtual-to-physical translation.
+Changes in v2:
+- Expand the series to 3 patches to fully support STRUCT_OPS in gen_loader.
+- Add a patch to explicitly zero out btf_key_type_id for STRUCT_OPS maps.
+- Add a patch to plumb btf_vmlinux_value_type_id and btf_fd in gen_loader.
+- Link to v1: https://lore.kernel.org/r/20260524-libbpf-load-vmlinux-btf-in-gen_loader-mode-v1-1-6f57f191a7ad@google.com
 
-I noticed this is fixed in a later commit (bpf: cgroup: Use kvfree instead
-of kfree in __cgroup_bpf_run_filter_sysctl), but should this patch be
-self-contained to avoid exposing this bug?
+---
+Siddharth Nayyar (3):
+      libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+      libbpf: zero out btf_key_type_id for STRUCT_OPS maps
+      libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
 
->  		*buf =3D ctx.new_val;
+ tools/lib/bpf/gen_loader.c | 3 ++-
+ tools/lib/bpf/libbpf.c     | 6 +++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+---
+base-commit: c6e99c10fd9855082568cbd71bb2cc5dc90eda53
+change-id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
 
-[Severity: High]
-This isn't a bug introduced by this patch, but now that this buffer
-replacement path is reachable, does this violate the VFS sysctl contract
-for null-termination?
+Best regards,
+-- 
+Siddharth Nayyar <sidnayyar@google.com>
 
-The VFS sysctl contract guarantees that the write buffer passed to proc
-handlers is a null-terminated string. Since ctx.new_val is allocated with
-kmalloc_track_caller() which does not zero-initialize memory, and the
-helper copies the buffer without explicitly appending a null byte, the
-memory past the new length could contain uninitialized garbage.
-
-Could this lead to out-of-bounds reads when downstream handlers pass this
-buffer to string-parsing functions like kstrtoint()?
-
->  		*pcount =3D ctx.new_len;
->  	} else {
->  		kfree(ctx.new_val);
->  	}
-> =20
->  	return ret;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526131035.1312=
-864-1-dawei.feng@seu.edu.cn?part=3D1
