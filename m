@@ -1,175 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6567312B94;
-	Tue, 26 May 2026 21:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEA835B653
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779829245; cv=none; b=K0w362XSpVF8EIqquKaYx1qzO5Bgai7mOcDGQu0OhYprzFe1WIXyTzeQszfRSYSzfL/ydv8RayX2Kqrnizalz4TkyJ6N6LJRC4dqkQ97sAJUL9w9Q/97PiES9/8JRLP+bcINKTQjonIsRk0ZVWUOrokas1Qkocb8ZqUOHpm0JCk=
+	t=1779829313; cv=none; b=D1h/W5Q2Vz3AQrPszQjAoEuCHVMhkm1gL3VAP8W77D1bHpvV/oPmfrQykHcnzN1MRgfzzc5LgzGJP0rPZL4BZvaHvq5fDw90y9d0KQwpGY+xpQjxme21B3bqdLp/WQ8xZ3sOPDjbVC0MdyNm8wfI3R8GtDmdZN4OXSopcLB/Fo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779829245; c=relaxed/simple;
-	bh=UZUwSoifazI3bA/13pF9yBBi7oX7VXUeFJSv8OxIijw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uChIKOvT+KvNTRe8RjBpQQ3KmENjAJtC2bzp3s+Lgl2W50YMuIrvpbt8SEKa/5OV7l11a8Ze3MNxxIuweeOK5hqYcFdP12yl2v8FvTJ7lUmZJh39aMpZUNvwx+BASWrPuQlou/fI4ImCPKK+FIadKhamUAkoFxblfmWZn/o0HYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c4mgShzI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779829313; c=relaxed/simple;
+	bh=/7gxm0ztRnL4VuNYQ5xyhxMZvgVwQzORjO023WXMEnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IuLwDl+mkX9DETqzpoqPBrsPNOWCY5+g2NgbPiiLKfSYDriWVuPVEEZm15AocBaL7XYvVAeBVARtSiQcDt9XEnDp3OU4UFCCM9F+o6rXMDkmR50s1wo+HZfQCvpKbiRaYXIrNFJ/wA8/Sw4P7WLoOIQvBS8tu9pjaUWesXEDaoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hZkRa4uX; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c4mgShzI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAE41F00A3F;
-	Tue, 26 May 2026 21:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779829244;
-	bh=b7wvFH+Xr0yqFw4N528YKcfcaty0O3gLU760nPtliBw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=c4mgShzIgIlL4zKkXWM24pmaYW6zSxOIuaauo8Ke7Pw52lo7YHAlMNLsyoJaNf52z
-	 KIMKXuSTRfSkcD9Gr+Wa/hbJkYZql2SHBtX/VZnstLxShnYPi9/WKKq/OjCiO/t1SR
-	 mo5qTFcoHNH1WA7iMN6E1VFU9HfOBWHgNmAcRwyGg0h+U1RMx5ZFTSriDuSWiCDO9q
-	 69RuSdDDs5xcajs6XYfuC1HOwGQ7rndzs8zjAxPWi8SKp045phsM7bRaTJ+u+93eWT
-	 9mBW7vzLvguMlyL8fr/yhnIHBXm+dEPxDIx7DCpNbLJ44TTaxmPCN+Ms3QzqQABXBA
-	 wIV/aQb3B26pQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv4 13/13] selftests/bpf: Add tests for forked/cloned optimized uprobes
-Date: Tue, 26 May 2026 22:58:40 +0200
-Message-ID: <20260526205840.173790-14-jolsa@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260526205840.173790-1-jolsa@kernel.org>
-References: <20260526205840.173790-1-jolsa@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hZkRa4uX"
+Date: Tue, 26 May 2026 14:01:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779829308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tU6iIA1AHS++grQa49/VChzcNhRWRhTecBu3tlxsvGw=;
+	b=hZkRa4uXrVppnjhxzAayd/BJtN3jysuXFZ6KiVG0e8it1mhjEWqdhjyy/tMwv+TCacvGHa
+	8RWpUT2KaR3twHCDny6bJ5wC/jHAwc/mocLd+ZkNAVPDtxGTycK+01VUWhprZCce4CQV5a
+	D9tEGF5WQHyctCJOHw5MV+8FdwYTJEM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v3 bpf-next 11/11] selftest: bpf: Add test for
+ BPF_SOCK_OPS_RCVQ_CB.
+Message-ID: <202652620533.bfqf.martin.lau@linux.dev>
+References: <20260523083001.2911931-1-kuniyu@google.com>
+ <20260523083001.2911931-12-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260523083001.2911931-12-kuniyu@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-Adding tests for forked/cloned optimized uprobes and make
-sure the child can properly execute optimized probe for
-both fork (dups mm) and clone with CLONE_VM.
+On Sat, May 23, 2026 at 08:29:40AM +0000, Kuniyuki Iwashima wrote:
+> +static void tcp_do_autolowat(struct bpf_sock_ops *skops,
+> +			     struct tcp_autolowat_cb *cb,
+> +			     struct tcp_sock *tp)
+> +{
+> +	struct bpf_sock_ops_kern *skops_kern;
+> +	struct tcp_skb_cb *tcb;
+> +	struct sk_buff *skb;
+> +	u32 seq, end_seq;
+> +	int ret = 0, i;
+> +
+> +	skops_kern = bpf_cast_to_kern_ctx(skops);
+> +	skb = skops_kern->skb;
+> +
+> +	if (!skb)
+> +		goto update;
+> +
+> +	tcb = bpf_core_cast(skb->cb, struct tcp_skb_cb);
+> +	seq = tcb->seq;
+> +	end_seq = tcb->end_seq - !!(tcb->tcp_flags & TCPHDR_FIN);
+> +
+> +	LOG("Start parsing skb: seq: %u, end_seq: %u, len: %u, "
+> +	    "rpc_desc_seq: %u, rpc_end_seq: %u, rpc_buff_len: %u",
+> +	    SEQ(seq), SEQ(end_seq), end_seq - seq,
+> +	    CB_SEQ(rpc_desc_seq), CB_SEQ(rpc_end_seq), cb->rpc_desc_buff_len);
+> +
+> +	if (cb->rpc_desc_buff_len != RPC_DESC_SIZE) {
+> +		ret = tcp_parse_descriptor(skops, cb, seq, end_seq);
+> +		if (ret)
+> +			goto update;
+> +	}
+> +
+> +	i = 0;
+> +
+> +	while (1) {
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 88 +++++++++++++++++++
- 1 file changed, 88 insertions(+)
+A nit. It may be useful to take a look at progs/arena_htab.c or
+rbtree_search.c on the 'for (i = zero; i < xyz && can_loop; i++)' usage.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index efff0c515184..033d32b4cc27 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -4,6 +4,8 @@
- 
- #ifdef __x86_64__
- 
-+#define _GNU_SOURCE
-+#include <sched.h>
- #include <unistd.h>
- #include <asm/ptrace.h>
- #include <linux/compiler.h>
-@@ -936,6 +938,88 @@ static void test_uprobe_error(void)
- 	ASSERT_EQ(errno, EPROTO, "errno");
- }
- 
-+__attribute__((aligned(16)))
-+__nocf_check __weak __naked void uprobe_fork_test(void)
-+{
-+	asm volatile (
-+		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10 */
-+		"ret\n"
-+	);
-+}
-+
-+static int child_func(void *arg)
-+{
-+	struct uprobe_syscall_executed *skel = arg;
-+
-+	/* Make sure the child's probe is still there and optimized.. */
-+	if (memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)))
-+		_exit(1);
-+
-+	skel->bss->pid = getpid();
-+
-+	/* .. and it executes properly. */
-+	uprobe_fork_test();
-+
-+	if (skel->bss->executed != 3)
-+		_exit(2);
-+
-+	_exit(0);
-+}
-+
-+static void test_uprobe_fork_optimized(bool clone_vm)
-+{
-+	struct uprobe_syscall_executed *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	unsigned long offset;
-+	int pid, status, err;
-+	char stack[65535];
-+
-+	offset = get_uprobe_offset(&uprobe_fork_test);
-+	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-+		return;
-+
-+	skel = uprobe_syscall_executed__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+				-1, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-+		goto cleanup;
-+
-+	skel->bss->pid = getpid();
-+
-+	/* Trigger optimization of uprobe in uprobe_fork_test.  */
-+	uprobe_fork_test();
-+	uprobe_fork_test();
-+
-+	/* Make sure it got optimied. */
-+	if (!ASSERT_OK(memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)), "optimized"))
-+		goto cleanup;
-+
-+	if (clone_vm) {
-+		pid = clone(child_func, stack + sizeof(stack), CLONE_VM|SIGCHLD, skel);
-+		if (!ASSERT_GT(pid, 0, "clone"))
-+			goto cleanup;
-+	} else {
-+		pid = fork();
-+		if (!ASSERT_GE(pid, 0, "fork"))
-+			goto cleanup;
-+		if (pid == 0)
-+			child_func(skel);
-+	}
-+
-+	/* Wait for the child and verify it exited properly with 0. */
-+	err = waitpid(pid, &status, 0);
-+	if (ASSERT_EQ(err, pid, "waitpid")) {
-+		ASSERT_EQ(WIFEXITED(status), 1, "child_exited");
-+		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
-+	}
-+
-+cleanup:
-+	uprobe_syscall_executed__destroy(skel);
-+}
-+
- static void __test_uprobe_syscall(void)
- {
- 	if (test__start_subtest("uretprobe_regs_equal"))
-@@ -956,6 +1040,10 @@ static void __test_uprobe_syscall(void)
- 		test_uprobe_race();
- 	if (test__start_subtest("uprobe_red_zone"))
- 		test_uprobe_red_zone();
-+	if (test__start_subtest("uprobe_optimized_fork"))
-+		test_uprobe_fork_optimized(false);
-+	if (test__start_subtest("uprobe_optimized_clone_vm"))
-+		test_uprobe_fork_optimized(true);
- 	if (test__start_subtest("uprobe_error"))
- 		test_uprobe_error();
- 	if (test__start_subtest("uprobe_regs_equal"))
--- 
-2.54.0
+#> ./veristat tcp_autolowat.bpf.o
+Processing 'tcp_autolowat.bpf.o'...
+File                 Program                   Verdict  Duration (us)  Insns  States  Program size  Jited size
+-------------------  ------------------------  -------  -------------  -----  ------  ------------  ----------
+tcp_autolowat.bpf.o  tcp_autolowat             success         245961  12624     338           141         939
 
+The "Insns" could likely be reduced to ~1000s level.
