@@ -1,60 +1,62 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF68033FE33
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A763AA4E4
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779824255; cv=none; b=L4i93wmQvfS5rAl7FdbruNvCM238mblgn+zHw9Tbtaycd9Bx3G/B/TVzaRezk3EyoLtohRsFwyCCyd671X5pCRz4ZdJ30NjdKQUyNLmA4pwNNtClEFbPcktOkdY0882UH30+QZdFuMCZv/RRwM3kHwjY7yp7mP7DfES8e3iPeF8=
+	t=1779824256; cv=none; b=H/9lGxSsybHIqssVWEgSpPSgMZJjrCkfRmSpGptPgtI95PRJheuusUMTjKFKkBsZIf8CDoQrEoRj6XRH1GAwKQ4C6PjLI7rqcru7SNvAAwqGZw8C0DkW4Bxv6hDroLaN1eLrs/cAwKUB0Y3Fcqm0zQP00FJC4onzA6y3w2+qbBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779824255; c=relaxed/simple;
-	bh=zweWelgF7OqUzU3q1xGKvPxSWxDyRVOYY7AAQp52YtQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G77Gy88uDkRdEmkn3roZcD87aF2uVKfSmLlIjACafTMCqVHHP+Iq4+IOE9AyyG0Zx5VsJ+OZ7MPpv+N8nUoLa9AH4ZJ+WUZhDbRPJhWsG3Cum+cM9EZxtAD+UpsoX3VILtwyjvVRBw49mIvU+cDKNpVZpd0epRJdvIeKMZNaxG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4PVzzaU; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1779824256; c=relaxed/simple;
+	bh=qxUU4NsEs7k2OTqrY1S+ckPHLEWT4E9usme9KiPGmaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UzMJMTSBG7SZ7Nh/tyvljLfumoGBwEd6g5MY5iD0LgyTKrFPMUYjBC3sgR/VMiKGvgVlzkPE+OWV4MWz/lu8kakf84lZEztFZGIXmvxYRq1Fcl4pR7H1VeCmxAEcbI7xYw8jfxj9fkAGxq80KLzYXuiHU20f0axpiNhBwPQkr5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2z9RjZx; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4PVzzaU"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3684a6f3b0bso5450440a91.1
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2z9RjZx"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3695bf7d082so9834175a91.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779824253; x=1780429053; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=md2uP6TWkc+nCFlw3b5bLsdZ2L7ZjormopHq9oHVT0w=;
-        b=D4PVzzaUfs0N5h4/ngkBRcOMH8xCXVSBEEHAsRZk+nM51k1IWw0K3OXa5LolwnqVKF
-         TdduAwM21gU5CWnx6GMbxCololcX7UkkkxF5x5+86OiQ6Dx5vb3kNUxVQOH9KqSR0Vo4
-         hvGuFi+WC/5/N3JEYcjx9NQwslwj4iQ0Cs9yD93yqGbVth+KEPLGiMDeF4+XMb1nODVd
-         8c90Yd2IvWa2h5AHqFkAWZVByeg71VhsVvQ6EEmd9UD77t156a6gdcShaMqO0x0R/ZMz
-         18FduCtiaxl0SImN7q9qESixd6TERM6gc7tkQ2XPFvS6mHYsqJNwge53LKlAewlCL0mP
-         TE9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779824253; x=1780429053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779824254; x=1780429054; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=md2uP6TWkc+nCFlw3b5bLsdZ2L7ZjormopHq9oHVT0w=;
-        b=H35qLKEcAWg3wuDzhZVcwVWia5d3HcOqH7O9P9E7BiD1u4zxeJ8D2rQixVnXh5yygq
-         7v1iuglwwvXR+xoV/x0f6JhG9NtZO5uxpXtR9XHdjPSWbsMZWBXHQ9JnieZXUZsm6pq3
-         CozmnU+0eQDpr6x65PlakHQpuRB2yu73cizzmh6t0QnJLZfC8TkHL88yf6OvFOE65ZAN
-         I438lOeASG/AjQtV5To0lI/KIz3DpngR5hKcTMioGNFCkO5MT92twin76vgAQP9ZpJRZ
-         3FPi6oH8XSUO9njiaeMOB/Ub6oRbHZ9Olwh1QrA7jXja/moTgVMnFSYRc48cJHgzkWta
-         5sXg==
-X-Gm-Message-State: AOJu0YyRFWJCvQTKCc+BfH1BdwsZ3rOgVCQ8uT6P9qLaTkH4U2B19FQV
-	L8fY7LMgm4IJodaAeevykY3URF2ROPfVrNQ2U9JoD8Ge36qdJ4SoLc1KSd0P9mrXx1s=
-X-Gm-Gg: Acq92OGdqXfYdeWo5ZeKYmCqzaL7Gra5AlPmQ4S3Z7kw0W0euXznrmcxlG+sFXO9gNj
-	VYDa68NhuWPE03uC01j2vYs94+sfn8lujB0KHaJfqO18rwK34yheRKyLW48p8YzQsdPj8Zx/v3g
-	KdHpJRGoLSHyZbfkhCG3nmroIOZ8n4U+X8sNr86PKu8V7WtY+64PEuV14wLBa3hryK0R3BeMV3z
-	k2RjMo23uN3AnmYAuJ6zRFwiyk/ibGyOx/vdR+XYB+HBIRyn3llZ0YH6quuc5k2sVscNiC9CHGI
-	6CnBnKH6C0tRKGxg/4PGiC4q40dBF0Diy6YCIMQ50Uh2EtmVDCBGI8cYp5UO1Rko82rmkN5tNLB
-	y059pDRox9hvznwjOFu6ncwP7gzy9m1AznaCXM/BgvzF9/CLdsEX2phQdI+IY/lsWz9lEMC0zXv
-	2y/Zctj+pgaQLuVLDFdYpY+3+/T39hPowrSx5XXpuGMzQmXtE/iGHDLMKf7gmQ+Q0ilEs=
-X-Received: by 2002:a17:90b:48c7:b0:368:3fa8:dbfa with SMTP id 98e67ed59e1d1-36a6bcba085mr12565217a91.7.1779824252924;
-        Tue, 26 May 2026 12:37:32 -0700 (PDT)
+        bh=AyAytekswurD/SjpVDxfarR+cCcDe+YITeUIACrXm6I=;
+        b=F2z9RjZxjlo5vIaoi31JIGVUdAwSjOFF/kX+DIQsHXXSnlQmjzEK5udKrpef+CCqIU
+         wU0Ds8sixrAKxm/U/1+K1t+ZOKdLNrHr0/HHE0X7aeRmTgEvoKGDjT/L/43l88bRn2Rz
+         aMn1CzLUXuDJZz7STojFtBPrwkRD2Cw2QPlytTxjzlEWyg7T3bsHfwHS3EI9FRULJshr
+         WoOLpazVKPR9M5QBn8BTkHbel2WYAw1v31SaGS5nBxuBUB8v+bQUk/T11Ld+eamMaSSD
+         3m890ftpSrr3fAIGPJBd4puF1DHtDDgdejQKZgHYxUTta+mwAx9Ou3/UvlDJB76XS/L3
+         8lZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779824254; x=1780429054;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AyAytekswurD/SjpVDxfarR+cCcDe+YITeUIACrXm6I=;
+        b=n4yKfk9EqWZpXyh/kJqi394N1FWXt/uMUXfeVibabCKWY6KhhRDh6Jcpg8ew1lnt7V
+         K7CijHyUm06jfVq+T8LqO5t4JSafi1ajINrj9p/0//ZapKaHb03cdTiaV4EIS/hqGguz
+         l36Q3z+qOOS6xvr2USdS5RErB7+bssv6cGwNvbfLA5eHMak9iiduqC1jobIFNNW8eooW
+         TvQdn8hH4WwiOoc9TN9pKSNuXfMO8glbaEaKFpNb+sUk38l1QyAafifuqiqWBEgLy/gg
+         A3kyOow3u87m6NIbjJWQZYfgRlj0KKrFy9QOamObXc0ZIkutm5uMJcdS+0VkW08IDduC
+         inTQ==
+X-Gm-Message-State: AOJu0YzFXg9gSR4cGnWIvUefajoNTWPNBNVRRuPuno7Jep8OCWKSJYi+
+	4XYy+tU7a5mkzcp17Cc7hieMwf5vQpmXe/irCKQ7Z9GXcHFLe7NHr6MubLKzKKaK8wU=
+X-Gm-Gg: Acq92OGcxKwR25kEJ62Yi9ZN4EAkyb7wC0gCJRjxhKX8k0sg3sh3u1aVGPXhrR7wVbE
+	20iLT/iOhU31Rqy4OSNwBvfj/0E1Q/fJoSFUFdKeRw5yRF2VqC4BUi7/CKQL1grmLFr4A305HZN
+	cbWt383kpgEfxS8pRUIrQcLZ0+NC2ckRkHw6VsnnHWBqOXehIF7+Q5K8p3hwyo/k+QzCntdUL9k
+	V6q/CPnIWrwvtfoF6+5DXxsMdcNECUHzQpnya0DSASkHcT/F7P/ZwBZYBpCrkABQL8rNkQIT3D7
+	AK7N4zfqlm0aHxYKyOJQ0xw1TeEAdKbI+zDj37vL2W+irQoMj2iX6v4I82qP5BnLQlXQGPnjw0/
+	h6oxmUomgFAYrDnSabBS0y5l3xvc/X2m2WuFiIyBR5GjeabUlJWoq7F+nMA5fPhDVHhK4839q1Q
+	3al8ZEhHMJhkGpcSSveMEkzcHL3zy/o1NT4wVfty3ZpYxUSzXBqtCjRfQH9yycnw+VIJ4=
+X-Received: by 2002:a17:90b:3744:b0:36a:bfe3:3d7 with SMTP id 98e67ed59e1d1-36abfe3080bmr7358473a91.14.1779824254097;
+        Tue, 26 May 2026 12:37:34 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 12:37:32 -0700 (PDT)
+        Tue, 26 May 2026 12:37:33 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -65,10 +67,12 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH RFC bpf-next v2 0/6] bpf: better error reporting when verifier hits 1M instructions limit
-Date: Tue, 26 May 2026 12:37:14 -0700
-Message-ID: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
+Subject: [PATCH RFC bpf-next v2 1/6] bpf: move live registers and scc printout to a standalone function
+Date: Tue, 26 May 2026 12:37:15 -0700
+Message-ID: <20260526-better-1m-reporting-v2-1-e7ec61c45d41@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
+References: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,89 +80,127 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260525-better-1m-reporting-1d795a21cf72
 Content-Transfer-Encoding: 8bit
 
-When the BPF verifier exceeds the 1M instruction budget, the current
-error output shows a random execution trace that happens to be active
-at the moment, which is not very helpful for debugging.
+Tests for multiple analyses performed by the verifier need the
+verifier log to contain analysis results alongside the program
+disassembly. This patch moves log level 2 program dump from
+bpf_compute_live_registers() to a standalone function called from
+bpf_check(), in order to provide a common logging function for such
+analyses (and thus avoid printing program disassembly multiple times).
 
-This series improves the error report using a profiler-inspired
-approach: collect and count "callchain" stack traces that the verifier
-visits during program validation, and report the top 3 hottest traces
-when the budget is exhausted. To minimize performance an memory impact
-of such profiling, only collect samples when verifier visits loop
-headers, iterator next, may_goto and callback-calling instructions.
+This is a preparatory refactoring, subsequent commit extends this log
+with loop hierarchy.
 
-For callchains ending at iterator next, may_goto, or callback-calling
-instructions, identify which registers or stack slots most frequently
-differ between cached and current states.
-
-Here is an example of the report for scx lavd_dispatch, with verifier
-limited to 200K instructions to trigger the error:
-
-  lavd_dispatch():
-    ; void BPF_STRUCT_OPS(lavd_dispatch, s32 cpu, struct task_struct *prev) @ main.bpf.c:889
-    ... disassembly ...
-
-  consume_task():
-    ; bool consume_task(u64 cpu_dsq_id, u64 cpdom_dsq_id) @ balance.bpf.c:410
-    ... disassembly ...
-
-  #1 most visited simulated stacktrace (visited 1807 times):
-    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
-    consume_task/2715 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:316)
-
-  #2 most visited simulated stacktrace (visited 1682 times):
-    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
-    consume_task/2994 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:386)
-
-  #3 most visited simulated stacktrace (visited 8 times):
-    lavd_dispatch/255 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1022)
-      Most varying: R7 (frame 0)
-
-  BPF program is too large. Processed 200001 insn
-
-Changelog:
-v1 -> v2 (bots):
-  - Use kvfree() in bpf_compute_loops().
-  - Adjust fwd_edges_no_loop test case to avoid dead code elimination
-    converting 'if' to 'goto'.
-  - Use GFP_KERNEL_ACCOUNT for callchain entry allocation in
-    update_callchain_profile().
-  - Zero-initialize 'cc' in update_callchain_profile() to avoid
-    copying uninitialized stack memory to the heap.
-  - Use %td instead of %ld for ptrdiff_t format specifier in
-    print_callchain_entry() and disasm_subprog().
-  - Size printed_subs bitmap as BPF_MAX_SUBPROGS + 2 to account for
-    fake and exception subprograms.
-  - Fix bpf_sample_state_diffs() inner loop to iterate from head
-    instead of pos_i, avoiding container_of() on the dummy list head.
-  - Add DIFF_OTHER to distinguish states that differ because of idmap
-    or other inconsistencies.
-
-v1: https://lore.kernel.org/bpf/20260526-better-1m-reporting-v1-0-51e4f2c59780@gmail.com/T/
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
-Eduard Zingerman (6):
-      bpf: move live registers and scc printout to a standalone function
-      bpf: compute loops hierarchy
-      selftests/bpf: test cases for loop hierarchy computation
-      bpf: report hot simulated callchains when 1M instructions limit is met
-      bpf: report register diff summary for hot callchains
-      selftests/bpf: test budget exhaustion profiling report
+ kernel/bpf/liveness.c                              | 22 +--------------
+ kernel/bpf/verifier.c                              | 31 ++++++++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c      |  2 +-
+ 3 files changed, 33 insertions(+), 22 deletions(-)
 
- include/linux/bpf_verifier.h                       |  39 ++++
- kernel/bpf/Makefile                                |   2 +-
- kernel/bpf/fixups.c                                |   5 +
- kernel/bpf/liveness.c                              |  22 +-
- kernel/bpf/loops.c                                 | 184 ++++++++++++++++
- kernel/bpf/states.c                                | 180 ++++++++++++++--
- kernel/bpf/verifier.c                              | 233 +++++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   4 +
- .../selftests/bpf/progs/verifier_budget_report.c   | 175 ++++++++++++++++
- .../selftests/bpf/progs/verifier_live_stack.c      |   2 +-
- .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
- 11 files changed, 1034 insertions(+), 45 deletions(-)
----
-base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
-change-id: 20260525-better-1m-reporting-1d795a21cf72
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 0aadfbae0acc..16d030fdd83a 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -2209,7 +2209,7 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	struct insn_live_regs *state;
+ 	int insn_cnt = env->prog->len;
+-	int err = 0, i, j;
++	int err = 0, i;
+ 	bool changed;
+ 
+ 	/* Use the following algorithm:
+@@ -2270,26 +2270,6 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 	for (i = 0; i < insn_cnt; ++i)
+ 		insn_aux[i].live_regs_before = state[i].in;
+ 
+-	if (env->log.level & BPF_LOG_LEVEL2) {
+-		verbose(env, "Live regs before insn:\n");
+-		for (i = 0; i < insn_cnt; ++i) {
+-			if (env->insn_aux_data[i].scc)
+-				verbose(env, "%3d ", env->insn_aux_data[i].scc);
+-			else
+-				verbose(env, "    ");
+-			verbose(env, "%3d: ", i);
+-			for (j = BPF_REG_0; j < BPF_REG_10; ++j)
+-				if (insn_aux[i].live_regs_before & BIT(j))
+-					verbose(env, "%d", j);
+-				else
+-					verbose(env, ".");
+-			verbose(env, " ");
+-			bpf_verbose_insn(env, &insns[i]);
+-			if (bpf_is_ldimm64(&insns[i]))
+-				i++;
+-		}
+-	}
+-
+ out:
+ 	kvfree(state);
+ 	return err;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c8d980fdd709..3d569e36128c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19619,6 +19619,34 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	return 0;
+ }
+ 
++/* Various log level 2 information about the program */
++static void log_program(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *insn_aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	u32 insn_cnt = env->prog->len;
++	u32 i, j;
++
++	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
++	for (i = 0; i < insn_cnt; ++i) {
++		verbose_linfo(env, i, "    ; ");
++		if (env->insn_aux_data[i].scc)
++			verbose(env, "%3d ", env->insn_aux_data[i].scc);
++		else
++			verbose(env, "    ");
++		verbose(env, "%3d: ", i);
++		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
++			if (insn_aux[i].live_regs_before & BIT(j))
++				verbose(env, "%d", j);
++			else
++				verbose(env, ".");
++		verbose(env, " ");
++		bpf_verbose_insn(env, &insns[i]);
++		if (bpf_is_ldimm64(&insns[i]))
++			i++;
++	}
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	      struct bpf_log_attr *attr_log)
+ {
+@@ -19771,6 +19799,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
++	if (env->log.level & BPF_LOG_LEVEL2)
++		log_program(env);
++
+ 	ret = mark_fastcall_patterns(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 401152b2b64f..923572df4bbf 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -64,7 +64,7 @@ SEC("socket")
+ __log_level(2)
+ __msg("stack use/def subprog#0 must_write_not_same_slot (d0,cs0):")
+ __msg("6: (7b) *(u64 *)(r2 +0) = r0{{$}}")
+-__msg("Live regs before insn:")
++__msg("Program dump")
+ __naked void must_write_not_same_slot(void)
+ {
+ 	asm volatile (
+
+-- 
+2.54.0
