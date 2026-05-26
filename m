@@ -1,156 +1,281 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7F74219FA
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 17:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779818051; cv=none; b=Jwb54JZOHjLPp6NDkGmFzR+H1OPafddE0U/E4rMeW6iyWX3aQfto0QUACNqTR1yL2NwBxDnPg7pABgKDKHKugfP6Ao+5UOMySqdUW7uBnIRxqqfDMIAaimpzwGJ154//sHFrBBIHNjqnFdahQxGMHUmNt8maNaHalTSAlRCEn3k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779818051; c=relaxed/simple;
-	bh=O261xfHQ+PEf+uVmnIwUmJpjinAF5/zq8NqM5NsbMsY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bZofisaXJvWB+yJcny2Kkf+ARt+3o8MoUClmdiwfHRIajs/GrVBtZiu0IgkUjxabUSH+CXahNCxTE8Gw7exf/i/LoctoH8wTQcpgcfgH9edjZYEFT7jGquuObaW+3zN8k0pZHNP5LnUivO2ynKY6Um1Gqaa+sXnRzPMy/suS21A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doA9BlEH; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8749242189A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 17:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779818054; cv=pass; b=EqPIcTeBfIiFRn3DcTnhhiMG1ffQyGlhgvSvy4wL5Dz0xjZVmT3bZVpPylx9lANXZe3Pa4+50o7QdP/Tor3ufFejNRP1uGt8cBcDVdR7lY+N4ZblOtt1PM57MreXx0DGBG4y/Nm9F0Yr8cB+Ri59sJ3ZXL+O7Dziapav5mF1AMw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779818054; c=relaxed/simple;
+	bh=mo51nLE6P1wJoADFxd9GxwL23mh9JvgaYmz4OryT76M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DDxvzDqYAteghVjeP5vys+zfg2xOYOR1KoMH3aWGnGp6yBO6VOz9eBD/K6pXGVXOmyRD6a6cR4SHhLjUHJ1pjRqS1gHaV7/QYVI4sXtDQMZxxePz0GCFKKO4aTnwwNN7ctDh4kcTkO0QjqB8aW7jkNCwftfGMPqrWHkZ11xKi6I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ib77nFs6; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doA9BlEH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCC1F000E9;
-	Tue, 26 May 2026 17:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779818049;
-	bh=LB+xcBLJ3KDIL85FhSYp8ttGiWXOn2Qf7qfeBsBAZZw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=doA9BlEHMG83jkbnqyYPaNx27Q8LqABn4KbM1FFlN/W+EFaTPb7WEXoxzeakTozgH
-	 T+r0u3J6AFQeDKhz/yWrMA2UrAyFh0D+6QV/HJbaQbWaM4UDcOT8rjCZ7IRoPw77A3
-	 TZKxnp/2GTHvpb+PY6vmN3eX/iDcJUhYtGicn4TZBl39wmMI01/Hln5c6A8zAzQapV
-	 FYE0pn3JnsjYHb1h/odZd67su2/7MSv3KjgPH3m5YrDJlOP9Q6TNjFB7WqxnAi634N
-	 O5Sl/50syV8C2ii5QFXX2WK6yZnHiv99cB4kKrc7JdEsN8veiveryNHw7MikU8Mvhl
-	 rDpNEPsFqyarA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 05/12] irq & spin_lock: Add counted interrupt
- disabling/enabling
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Boqun Feng" <boqun@kernel.org>
-Cc: ojeda@kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260526152148.30514-6-boqun@kernel.org>
-References: <20260526152148.30514-6-boqun@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 17:54:08 +0000
-Message-Id: <20260526175409.7CFCC1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ib77nFs6"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7cfd0d8eb09so74064647b3.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:54:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779818051; cv=none;
+        d=google.com; s=arc-20240605;
+        b=U08NClMvaJD8EGB8vBg/9j3MbLVZ9LPwQKoLMkzoAG4rxvmjuSkVyj5Jm4OivZC8/v
+         mtLFx1y1yTGErLuYO866IRox9zX6XJ/ublytnnHrvBqOaiG/q0v0ZaDGsn9l6+cxZ5md
+         nCAoxLHeiza+2QoJQ3g5BwX7opjOlFmS4mAEWy3tbUKLr/WyNvja5GFJ5H4+UwcbhrAe
+         9RPYHaRPrYyvfMmUt3UpwRPigtd28ZePunSMo00NpkjAlYf/jc7EooRPuY0zVJgiXLT4
+         5hC1QlkRgqgxs5kL369xgLBwRPgycVkVDwgIWJ5R8fK66nSgJdEK6Bm67FGlau9ReT9v
+         gbtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aLSY4XkeDLqds8/zCxtUpFNC/XRt0rRFn6Ll8whM7pc=;
+        fh=Toy6KGrAPK3N3ICJ0ecXrI/1oTKJjDXHP6DQCs1/fj8=;
+        b=Kd8k03giAyqW+KSi8XA67ij4vTsQa79zZpM0/NOhiKSG962VDTUL7LYkdMrFU/1QAD
+         iTgeI/0EPdBLZuggHpt3DBLa5jqXV0K9RAijFnb64ag5Owr/EP9JQuT9b82nCF+DYcGq
+         V0xTYlE8HykB+JvnMYEqsU4sPIL42uPQfrRjUUUG5In9Z/avhS5IuWX1l/bF6MlwWWT1
+         RmqofDIKZQw/vgMIvAFmyT4cEVTMmLkJc62bJqFg9gvotNh09HAByDJejT6d16WkS60I
+         Sy4SCS6A+gsFi9MEkem5ANsgMmXAB/DR7mw219rpdLdWVQx+kiO6h/Wms1Q8E/pVX8VL
+         XCZw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779818051; x=1780422851; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLSY4XkeDLqds8/zCxtUpFNC/XRt0rRFn6Ll8whM7pc=;
+        b=ib77nFs6PJXs5sRgg/mrPnmRglSkC6wVC9/kWFyr/m/qv+M5KMIrAMsBA//gf57pR4
+         3HR4Ndm8F9S0Hqc2TW5VeYARM31oWfJLvqzhkFzD2ZiagJIzfr+ZUGYJ0xjssQnqp4Hv
+         IWv6M257FRN3IAH6NqoALlQjyMq+IpXBCcnFwZRv00XRQ/ZDW3M1/MyCaTtK+9R8wdTF
+         aVeD3I+SedxxZ0Vco+c8bqG84ypX4ujerC7JLtAI931rqjwAVIuCWnkHOV8sDK8B5PXS
+         cru3/fwT/J+hm1f7yH0+D1qf5OeLddv2WxjvPPdmA9j95svCBr3Lcih4civmDZf5Ux3d
+         q02A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779818051; x=1780422851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aLSY4XkeDLqds8/zCxtUpFNC/XRt0rRFn6Ll8whM7pc=;
+        b=N48EzRVKLqcbH3jyKCbK94aIh60waW91KfWEqUy0cB4Tlxs0aLcvOP2PRxu55H9yZf
+         2PdObIvSsjJ0oVsDzhIezuvFaNMB7dYzf9wncDgzbqoxwXLGVbD8YmqVfiDUKwGV/ufk
+         aB0S6ZruX8fJiJNkjCzJYha4U2HfrB7KobcGIUJKsdMh9pxa1smwGlEv2Q6zwnES0CT3
+         SBL2tFqWGzwAfgqopUgz352YA4yFyF/t6FCxS4k9QYIz0oGPfBqTNECNoGjHrGcHSU/U
+         s2SJGKeOIUjTCe4Xsih3Y7IqLZwc0lYnVeBXkGuxPidK2CINuZ5VjSiJRtBUOYbEcjjV
+         NBQQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9YVqxy/fH1dk2EHRDPxrl8x1H5ezJdRSFH0UEPrND5ZgILBaPrbLSCDwU+4+zmxTrByIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcCF4wt4pUKTWG88b5Y+Fc/myKOmKGfG5h6b0kVM+aXYUSBuxy
+	S6BI3pRBX3l8/KUVje7CC0Vu7kEWolrXqE5/tCfHrrsBhMVZqNdyIcFmDqd+K6xkVc02WkZaTsO
+	Pen8d/l3AF64VIjaPIanql+LMCh6APY3meUT3
+X-Gm-Gg: Acq92OGJbgKKX/kZHmdGhDnOwAI3FiI412IXzq04wUeotRdfMUbAQ8zMz9tbDdPVmeq
+	Q/lDjVnz7GAV7aivQgOxC6deBMLWyf+fvVylT4sBvHY7gjpZlC+iBLInOjUOB/UHxkDa0eUFD+u
+	mwSXkUvf/v6rgftvg1vCmj9vvlOZwlWSUIg7OOHCz+wrDLEasL3osD+Ius7Em5mfYEafjwDi/EL
+	lOU3O16cUhfxcI7GFdUZ03Lmn8AHZjTy+lkRsVpsYyU57UNLd0XYykSlxEGvOD47doDPM7EcCLF
+	OAJU8zhXHTMlWVDUhrIgI5iP2+4Jwu1EyA==
+X-Received: by 2002:a05:690c:2608:b0:79f:b903:88c4 with SMTP id
+ 00721157ae682-7d33b348725mr203522267b3.46.1779818051399; Tue, 26 May 2026
+ 10:54:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260519215841.2984970-10-martin.lau@linux.dev>
+ <20260519225002.986EB1F00893@smtp.kernel.org> <2026519225454.By6y.martin.lau@linux.dev>
+In-Reply-To: <2026519225454.By6y.martin.lau@linux.dev>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 26 May 2026 10:54:00 -0700
+X-Gm-Features: AVHnY4KQI0xvn76Ojfwqn5BJzEfVnS3IaHKSZ2mEix5eW3t_R7baX6yhDJhmSvc
+Message-ID: <CAMB2axPDDom8sD7u+2Fgo9dZO1ereX-unai8EW1SmsiDrnzzwQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 09/12] bpf: Add infrastructure to support
+ attaching struct_ops to cgroups
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] An NMI occurring inside local_interrupt_enable() corrupts the =
-per-CPU saved IRQ flags, leading to permanently disabled hardware interrupt=
-s.
-- [High] Skipping softirq processing in `__irq_exit_rcu()` without re-trigg=
-ering it in `local_interrupt_enable()` leads to indefinite softirq starvati=
-on.
---
+On Tue, May 19, 2026 at 4:58=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
+>
+> On Tue, May 19, 2026 at 10:50:02PM +0000, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 4 potential is=
+sue(s) to consider:
+> > - [High] bpf_cgroup_struct_ops_foreach does not skip dummy items, leadi=
+ng to unintended execution of cfi_stubs.
+> > - [High] Using a loadable module's cfi_stubs as a dummy sentinel causes=
+ a Use-After-Free when the module is unloaded and reloaded.
+> > - [Medium] The macro bpf_cgroup_struct_ops_foreach uses rcu_dereference=
+(), which is incompatible with sleepable struct_ops programs.
+> > - [Medium] cgroup_bpf_struct_ops_register() lacks concurrency protectio=
+n and global uniqueness enforcement.
+> > --
+> >
+> > commit bad29e4e0d1357905491993ee45063766d0f7705
+> > Author: Martin KaFai Lau <martin.lau@kernel.org>
+> >
+> > bpf: Add infrastructure to support attaching struct_ops to cgroups
+> >
+> > This patch adds necessary infrastructure to attach a struct_ops
+> > map to a cgroup. The initial need was to support migrating
+> > the legacy BPF_PROG_TYPE_SOCK_OPS to a struct_ops.
+> >
+> > > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> > > index b2e79c2b41d51..8080f4a5c14b6 100644
+> > > --- a/include/linux/bpf-cgroup.h
+> > > +++ b/include/linux/bpf-cgroup.h
+> >
+> > [ ... ]
+> >
+> > > @@ -110,6 +112,18 @@ struct bpf_prog_list {
+> > >     u32 flags;
+> > >  };
+> > >
+> > > +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)       =
+       \
+> > > +   for (item =3D rcu_dereference((cgrp)->bpf.effective[atype])->item=
+s;\
+> > > +        ((var) =3D READ_ONCE(item->kdata));                         =
+ \
+> > > +        item++)
+> >
+> > [Severity: High]
+> > Does this macro need to skip dummy sentinel items?
+> >
+> > In cgroups with BPF_F_ALLOW_MULTI, compute_effective_progs() inserts du=
+mmy
+> > sentinel items at the boundaries between cgroup levels. For struct_ops,=
+ this
+> > dummy is the cfi_stubs pointer.
+> >
+> > This macro appears to iterate over all non-NULL items and fails to skip=
+ the
+> > dummy sentinel, which could cause the subsystem to repeatedly yield the
+> > cfi_stubs pointer as a valid attached struct_ops instance.
+>
+> The ops in the cfi_stubs is safe to be called. It intentionally skips
+> checking for dummy in the fast path.
+>
+> >
+> > [Severity: Medium]
+> > Will this rcu_dereference() trigger Lockdep warnings for sleepable stru=
+ct_ops
+> > programs?
+> >
+> > The commit message mentions adding free_after_mult_rcu_gp to support a =
+mix of
+> > sleepable and non-sleepable struct_ops, but plain rcu_dereference() enf=
+orces
+> > rcu_read_lock_held().
+> >
+> > If a subsystem iterates the array while holding rcu_read_lock_trace()
+> > (required for sleepable execution), this might trigger a 'suspicious
+> > rcu_dereference_check() usage' warning. Conversely, if it holds
+> > rcu_read_lock(), the struct_ops program cannot sleep without causing a =
+panic.
+>
+> The proposed bpf_tcp_ops only has non-sleepable programs.
+>
+> The future sleepable callsite will need another version of foreach or
+> rcu_dereference_check can be used here also. I think rcu_dereference_chec=
+k
+> is better.
+>
+> >
+> > > +
+> > > +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_at=
+tach_type atype)
+> > > +{
+> >
+> > [ ... ]
+> >
+> > > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > > index a033aa479ab6e..d496db48d2b86 100644
+> > > --- a/kernel/bpf/cgroup.c
+> > > +++ b/kernel/bpf/cgroup.c
+> > > @@ -24,6 +24,29 @@
+> > >  DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF=
+_ATTACH_TYPE);
+> > >  EXPORT_SYMBOL(cgroup_bpf_enabled_key);
+> > >
+> > > +static u32 struct_ops_type_id[MAX_CGROUP_BPF_ATTACH_TYPE];
+> > > +static void *struct_ops_cfi_stubs[MAX_CGROUP_BPF_ATTACH_TYPE];
+> > > +static bool struct_ops_mult_rcu[MAX_CGROUP_BPF_ATTACH_TYPE];
+> > > +
+> > > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cf=
+i_stubs, bool mult_rcu)
+> > > +{
+> > > +   struct_ops_type_id[atype] =3D type_id;
+> > > +   struct_ops_cfi_stubs[atype] =3D cfi_stubs;
+> > > +   struct_ops_mult_rcu[atype] =3D mult_rcu;
+> > > +}
+> >
+> > [Severity: Medium]
+> > Does this registration function need concurrency protection to prevent =
+global
+> > array corruption?
+> >
+> > If two modules are loaded concurrently and declare the same cgroup_atyp=
+e, it
+> > seems this could cause a data race or silently overwrite the registered=
+ type_id
+> > and cfi_stubs of a legitimate module.
+>
+> This will be a bug in the subsystems having the same cgroup_atype
+>
+> but (the next one)...
+>
+> >
+> > > +
+> > > +static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 t=
+ype_id)
+> >
+> > [ ... ]
+> >
+> > >  static void *bpf_cgroup_array_dummy(enum cgroup_bpf_attach_type atyp=
+e)
+> > >  {
+> > > +   if (cgroup_bpf_is_struct_ops_atype(atype))
+> > > +           return struct_ops_cfi_stubs[atype];
+> > >     return bpf_prog_dummy();
+> > >  }
+> >
+> > [Severity: High]
+> > Can using a loadable module's cfi_stubs as a dummy sentinel cause a
+> > use-after-free when the module is unloaded and reloaded?
+> >
+> > If all maps are detached, the module providing the struct_ops can be un=
+loaded,
+> > and its cfi_stubs memory freed. However, the cgroup's effective array m=
+ight
+> > still retain the dangling pointer to the freed cfi_stubs if BPF_F_ALLOW=
+_MULTI
+> > was set.
+> >
+> > If the module is reloaded, cgroup_bpf_struct_ops_register() updates
+> > struct_ops_cfi_stubs[atype] with a new pointer. If a user then queries =
+the
+> > cgroup via BPF_PROG_QUERY, the loop checks
+> > item->prog =3D=3D bpf_cgroup_array_dummy(atype) to skip the dummy. Sinc=
+e the
+> > array contains the old freed pointer, it won't match the new cfi_stubs
+> > pointer, and the query loop might mistakenly treat the old dummy as a v=
+alid
+> > map, causing a use-after-free when calling bpf_struct_ops_kdata_map_id(=
+).
+>
+> Agree. This will be an issue on BPF_PROG_QUERY when the module reload.
+> I did think about the module reload case but I have only considered the
+> rcu-reader in bpf_cgroup_struct_ops_foreach.
+> BPF_PROG_QUERY does not use rcu_read_lock and depends on cgroup_lock.
+> This will need to be addressed.
+>
 
-commit 2a089d1e2525d387b14ef2c6eb7f3576f07d6bc4
-Author: Boqun Feng <boqun@kernel.org>
+Also thinking of the potential problems of leaving dangling cfi_stubs,
+but I don't see any other cases.
 
-irq & spin_lock: Add counted interrupt disabling/enabling
-
-This commit introduces new local interrupt disabling APIs that use a per-CPU
-counter to support nesting. This avoids accidental early interrupt enabling
-when locks are nested or used with guard facilities.
-
-Link: https://patch.msgid.link/20260121223933.1568682-6-lyude@redhat.com
-
-> diff --git a/include/linux/interrupt_rc.h b/include/linux/interrupt_rc.h
-> new file mode 100644
-> --- /dev/null
-> +++ b/include/linux/interrupt_rc.h
-[ ... ]
-> +static inline void local_interrupt_enable(void)
-> +{
-> +	int new_count;
-> +
-> +	new_count =3D hardirq_disable_exit();
-> +
-> +	if ((new_count & HARDIRQ_DISABLE_MASK) =3D=3D 0) {
-> +		unsigned long flags;
-> +
-> +		flags =3D raw_cpu_read(local_interrupt_disable_state.flags);
-
-[Severity: Critical]
-Can the per-CPU saved IRQ flags be corrupted if an NMI occurs here?
-
-After hardirq_disable_exit() decrements the count to zero, but before the
-saved flags are read, there is an unprotected window. If an NMI fires in
-this window, the interrupted thread's count is 0 but its hardware IRQs are
-still disabled.
-
-If the NMI handler or a function it calls uses local_interrupt_disable() or
-spin_lock_irq_disable(), it will see the count is 0, assume it is the
-outermost caller, and overwrite the per-CPU flags with its own IRQ state.
-
-Since hardware IRQs were disabled when the NMI hit, the saved flags will
-reflect disabled IRQs. When the NMI returns, the interrupted thread reads
-these corrupted per-CPU flags and passes them to local_irq_restore(),
-which would permanently disable hardware interrupts on that CPU.
-
-> +		local_irq_restore(flags);
-> +		/*
-> +		 * TODO: re-read preempt count can be avoided, but it needs
-> +		 * should_resched() taking another parameter as the current
-> +		 * preempt count
-> +		 */
-> +#ifdef CONFIG_PREEMPTION
-> +		if (should_resched(0))
-> +			__preempt_schedule();
-> +#endif
-> +	}
-> +}
-
-[ ... ]
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 10af5ed859e73..d1ab1799794ca 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-[ ... ]
-> @@ -728,7 +731,16 @@ static inline void __irq_exit_rcu(void)
->  #endif
->  	account_hardirq_exit(current);
->  	preempt_count_sub(HARDIRQ_OFFSET);
-> -	if (!in_interrupt() && local_softirq_pending()) {
-> +	/*
-> +	 * Interrupts may happen between hardirq_disable_enter() and
-> +	 * local_irq_save() in local_interrupt_disable(), if irq_exit() invokes
-> +	 * softirq here, we may have a softirq handler calling
-> +	 * local_interrupt_disable() but it won't disable the irq because
-> +	 * hardirq disabling count is already 1, hence we need to prevent
-> +	 * invoking softirq when a local_interrupt_disable() is ongoing.
-> +	 */
-> +	if (!in_interrupt() && !hardirq_disable_count() &&
-> +	    local_softirq_pending()) {
-
-[Severity: High]
-Does skipping softirq processing here lead to indefinite softirq starvation?
-
-By skipping invoke_softirq() when hardirq_disable_count() > 0, any scheduled
-softirqs (such as timers, RCU callbacks, or networking) are left pending.
-
-When the critical section ends, local_interrupt_enable() decrements the
-count and re-enables hardware interrupts, but it does not check
-local_softirq_pending() to flush these deferred softirqs.
-
-Will these pending softirqs stall indefinitely until another, unrelated
-hardware interrupt fires, potentially causing RCU stalls or network hangs
-in low-activity periods?
-
->  		/*
->  		 * If we left hrtimers unarmed, make sure to arm them now,
->  		 * before enabling interrupts to run SoftIRQ.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526152148.3051=
-4-1-boqun@kernel.org?part=3D5
+In this instance, it seems adding a cgroup_bpf_enabled() guard in
+__cgroup_bpf_query should be enough. The dangling cfi_stubs will not
+be cleared until update_effective_progs(), which happens during the
+first struct_ops map attachment. cgroup_bpf_enabled() will be false
+until a struct_ops map is attached.
