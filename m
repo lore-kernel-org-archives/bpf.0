@@ -1,143 +1,129 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDA418B0F
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF1B2264D6;
+	Tue, 26 May 2026 20:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779828468; cv=none; b=QLCBtMm7/Z/Py18QOXsoyH5IqPEp3xm3TKWDdVDpUnBVxWdl6Q1Shhvyt/2nES7nv+pY09SprBxm+8t3Zsz4kwEB47mdbSUl7sQUceTWQmW3EC4vWlwwFuB0BRvP2vedYVwAWdJci/6H6cuhXVNOGe/dIcSZ08N8+54vSKt9TEY=
+	t=1779829126; cv=none; b=WG1dP/rAQV25b2DmgD6IRvPYZ3g0QKmRMtv8oUNcINsZed5SgTCsYcoT+Ptf6yesvLxdWdOcVj4CnvJYxWh9gr2f5L7ngKl2sGFhgkqOnPPAsS0zgEMG0VhXTER1GuYWNO2zmIV4mvlRvyDhBLjXUaI373FeMrMfMGnGzNDUfNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779828468; c=relaxed/simple;
-	bh=V5ougp40DY1H9zXzFsmFHsm33ofsao/93epdVKnawqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rxu0VmhaIgs9qdeJQhZrQmEhM9wlDJUONT9H9M8TISETlnxgumWdiAr6x1ZTvrVAQjpFV3troCaAtEeqZDliz5vNUgEa/o0F3QQHGajDh/SB+VEbOox4vhoVqZ/AKvxitWfQLrZiHi0M9dSeH2PI+ARtUvGO9hyD2D9iTnpaSRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ieGZpX7a; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779829126; c=relaxed/simple;
+	bh=2/0AgAfIcE3K7jqkkNWZwz7Bm6ixy/m4uuTQoYZ8d8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XA2PYtOJpXi5TEgNX0944fCqGSgmwAABoMY9veh8DOmeRTc7Ca7i61JBvfnQ4nx1fv4Ee2vOaNjl8lW5vd06QbL93biRnB2jYo+iIzirTs90VDtAXLUXv6u5vDByXqw+LFywu/El6/hMJDReVgE25mj9sK1jDxIXwO9W7p0b+iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JcInqzRJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ieGZpX7a"
-Date: Tue, 26 May 2026 13:47:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779828464;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KnCflD3IDljS85fEYVFf30i3uDGjT7cYAgP9fl0QajM=;
-	b=ieGZpX7a/mWgXww4IgmhPHiQvNDaBwDPsD7pJYVTTd+HUn40TrxoquQgiXUFMY52eYCpBA
-	F2ldPx5tHks9GxGqGWNemrylJFFLNA9ZMVNBts3Uguw9LwGic43703VYBDJxvwAWl+hVUI
-	OhoJ8VNLUdQqj2SiLQBFbId+x5WtcSo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v3 bpf-next 10/11] bpf: tcp: Add SOCK_OPS rcvlowat hook.
-Message-ID: <202652620435.m7WK.martin.lau@linux.dev>
-References: <20260523083001.2911931-1-kuniyu@google.com>
- <20260523083001.2911931-11-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JcInqzRJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8C21F000E9;
+	Tue, 26 May 2026 20:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779829125;
+	bh=C9Ums9y0roCN9p7E4pmxIDMn0pbs8TMPD+4e21NSewI=;
+	h=From:To:Cc:Subject:Date;
+	b=JcInqzRJ/plUQLUdvHqWHbMFQl7WLQTFHV2jdQaLg0MhlMLWQiGOHTiyTRxaMK59U
+	 kMs/OZubdQjhsPdSjIAw+GskbyVuxdPpJcpvpoBblRuk4YgVFB+OCTdyk1Cxmsab+3
+	 fpHleL38tYcDAPsGw1eOiD4H3bl9avYSCErcNEFt/4qcRzBTGylZdgvpm7oTXzALtw
+	 4rYA8Em1jbi74TRrpP5bBO4qzMVpyTgX9IyhqpNPymW4vIdJpx2KiU32fyjYjG9y4E
+	 o4BkMwGD1QElnp8FMQdPOsbtlqDIgKJuFyZIx5aMH6EEHFyggLMGxn6Mg1rJFXZtJO
+	 VjB7jZi5/RaWg==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCHv4 00/13] uprobes/x86: Fix red zone issue for optimized uprobes
+Date: Tue, 26 May 2026 22:58:27 +0200
+Message-ID: <20260526205840.173790-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260523083001.2911931-11-kuniyu@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Sat, May 23, 2026 at 08:29:39AM +0000, Kuniyuki Iwashima wrote:
-> Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVQ_CB.
-> 
-> Let's invoke the BPF SOCK_OPS prog when
-> 
->   1. TCP stack enqueues skb to sk->sk_receive_queue
->      -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
-> 
->   2. TCP recvmsg() completes
->      -> __tcp_cleanup_rbuf()
-> 
-> This will allow the BPF prog to parse each skb and dynamically
-> adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
-> until sufficient data (e.g., a full RPC frame) is available
-> in the receive queue.
-> 
-> Note that the direct access to bpf_sock_ops.data is intentionally
-> disabled by passing 0 as end_offset.
-> 
-> Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
-> with bpf_sock_ops because payload is not in the linear area
-> with TCP header/data split on and skb may contain a RPC
-> descriptor in skb frag.  This also simplifies the BPF prog.
-> 
-> The placement of tcp_bpf_rcvlowat() in tcp_ofo_queue() and
-> tcp_fastopen_add_skb() is chosen to provide the same snapshot
-> with tcp_queue_rcv().
-> 
-> For example, if tcp_bpf_rcvlowat() were called before updating
-> TCP_SKB_CB(skb)->seq in tcp_fastopen_add_skb(), BPF prog would
-> need to implement an unlikely if branch to strip SYN.
-> 
-> In addition, TCP stack can queue overlapping skb into recvq.
-> Once rcv_nxt is updated with a new skb, BPF prog cannot infer
-> the previous one from skb->len.
-> 
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
-> v2: Add explanation of tcp_bpf_rcvlowat() placement.
-> ---
->  include/net/tcp.h       | 12 ++++++++++++
->  net/ipv4/tcp.c          |  2 ++
->  net/ipv4/tcp_fastopen.c |  2 ++
->  net/ipv4/tcp_input.c    | 10 ++++++++++
->  4 files changed, 26 insertions(+)
-> 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index bc95d8e7b62e..a409f2ea710f 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -2889,12 +2889,24 @@ static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
->  	skops->skb = skb;
->  	skops->skb_data_end = skb->data + end_offset;
->  }
-> +
-> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
-> +
-> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
-> +{
-> +	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_CB_FLAG))
-> +		bpf_skops_rcvlowat(sk, skb);
-> +}
->  #else
->  static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
->  				      struct sk_buff *skb,
->  				      unsigned int end_offset)
->  {
->  }
-> +
-> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
-> +{
-> +}
->  #endif
->  
->  /* Call BPF_SOCK_OPS program that returns an int. If the return value
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 3afeb69a547a..f7e32891bb4e 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
->  		tcp_mstamp_refresh(tp);
->  		tcp_send_ack(sk);
->  	}
-> +
-> +	tcp_bpf_rcvlowat(sk, NULL);
+hi,
+Andrii reported an issue with optimized uprobes [1] that can clobber
+redzone area with call instruction storing return address on stack
+where user code may keep temporary data without adjusting rsp.
 
-hmm... so NULL is a way for the bpf prog to tell where it is called?
+Fixing this by moving the optimized uprobes on top of 10-bytes nop
+instruction, so we can squeeze another instruction to escape the
+redzone area before doing the call.
 
-With skb NULL, what does the bpf prog usually do?
+Note we need upstream update first for patch 3 (github.com/libbpf/usdt),
+if we decide to take this change.
+
+thanks,
+jirka
+
+
+v1: https://lore.kernel.org/bpf/20260514135342.22130-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260518105957.123445-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260521124411.31133-1-jolsa@kernel.org/
+
+v4 changes:
+- do not use 2nd int3 (ont +5 offset) because the call instruction
+  is allways the same for the given nop10 address [Andrii/Peter]
+- unmap unused trampoline vma after unsuccesfull optimization [sashiko]
+- small change to patch#2 moved user_64bit_mode earlier in the path
+  and pass/use mm_struct pointer directly from arch_uprobe_optimize
+  instead of gettting current->mm
+  Andrii, keeping your ack, please shout otherwise
+
+v3 changes:
+- use nop10 update suggested by Peter in [2]
+- remove struct uprobe_trampoline object, use vma objects directly instead
+- selftests fixes [sashiko]
+- ack from Andrii
+
+v2 changes:
+- several selftest fixes [sashiko]
+- consolidate is_lea_insn and is_call_insn insto single check [Jakub Sitnicki]
+- use proper mm_struct object in __in_uprobe_trampoline check [sashiko]
+- allow to copy uprobe trampolines vma objects on fork [sashiko]
+- change uprobe syscall detection error from -ENXIO to -EPROTO [Andrii]
+- added fork/clone tests
+- I kept the selftest changes and nop5->nop10 changes in separate
+  commits for easier review, we can squash them later if we want to keep
+  bisect working properly
+
+
+[1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel.org/
+[2] https://lore.kernel.org/bpf/20260518104306.GU3102624@noisy.programming.kicks-ass.net/#t
+---
+Andrii Nakryiko (1):
+      selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+
+Jiri Olsa (12):
+      uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
+      uprobes/x86: Remove struct uprobe_trampoline object
+      uprobes/x86: Allow to copy uprobe trampolines on fork
+      uprobes/x86: Unmap trampoline vma object in case it's unused
+      uprobes/x86: Move optimized uprobe from nop5 to nop10
+      libbpf: Change has_nop_combo to work on top of nop10
+      libbpf: Detect uprobe syscall with new error
+      selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+      selftests/bpf: Change uprobe syscall tests to use nop10
+      selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
+      selftests/bpf: Add reattach tests for uprobe syscall
+      selftests/bpf: Add tests for forked/cloned optimized uprobes
+
+ arch/x86/kernel/uprobes.c                               | 379 +++++++++++++++++++++++++++++++++++++++++++-----------------------------
+ include/linux/uprobes.h                                 |   5 -
+ kernel/events/uprobes.c                                 |  10 --
+ kernel/fork.c                                           |   1 -
+ tools/lib/bpf/features.c                                |   4 +-
+ tools/lib/bpf/usdt.c                                    |  16 +--
+ tools/testing/selftests/bpf/bench.c                     |  20 ++--
+ tools/testing/selftests/bpf/benchs/bench_trigger.c      |  38 ++++----
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |   2 +-
+ tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c | 307 +++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ tools/testing/selftests/bpf/prog_tests/usdt.c           |  74 ++++++++++++--
+ tools/testing/selftests/bpf/progs/test_usdt.c           |  25 +++++
+ tools/testing/selftests/bpf/usdt.h                      |   2 +-
+ tools/testing/selftests/bpf/usdt_2.c                    |  15 ++-
+ 14 files changed, 653 insertions(+), 245 deletions(-)
