@@ -1,171 +1,454 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D709D1A9F96
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 18:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76087421EE6
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 18:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779819508; cv=none; b=Oy6oBsWR2T2zLbzqgxp0SW/2p4eABSJS4b3+4Qvej7k1m3QZCFb81N5CAfcwZtYjUQ+4OUewNc1Qr4r9vJr6MOPd4P0jxZ7oqxDvvqgckc16TwBpKfL5Tmfvo6sTRKu6DM9O7UOONG2STN+Io6OpkLxju4TgIxniq89Okigy0A8=
+	t=1779819526; cv=none; b=VKfs58CmrWVtJYGcEAEGGTIWSS308glGXSeR7+3P4lp9kAzUAGIgY917mXPFH0jRBfGse9kQFwkm18BOyLfWjcpETpAbL0jIFcb7iHEvNAXjOEBSIYf8pTEguRqx/i5Fd5YXRGsAftMMdRcVBj8RmSOeFPHJgHAy/Q+6KlTe11Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779819508; c=relaxed/simple;
-	bh=4eGYRHrHaEPHG719BLY+KWtnIY2ZpjanjcKNH8ZLLbs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qmMuCScmsQ5Z439aMka2XuFVOoTKh5FhqF8QXXAcCMQZl61kcn5LtxctyO6/OynDI+NRvvEgBMxEzJbgWoudmbQX8WT35axZcWQE8dktsxGRaKkfVhd4RRXTnV0dPcqz0yQDXcV3jsLlOljX+U2zYquU6uWy4D+HBx3zrZtur+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=laDJYl7E; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779819526; c=relaxed/simple;
+	bh=dHwCb/jaWFZblbV8PL4QSPxPmmAmE/aNS+JRUS0F0ms=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RSlwkNdU0hURNORYi7fJexow9uCel0nD2m51tsIiO15rcI685pi2PecnMoOf5n7Zjqua3DNcXM/0B+EPfVGgcPval392uGFJLrwZDLTAOH73NrIAVzN5XrBBEOFJ3R1SwhGaDkTiAMoC9FCWWKt9t+XRL3sjXdf2lgJvE+843X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R4E6i1Og; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laDJYl7E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EAD1F000E9;
-	Tue, 26 May 2026 18:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779819506;
-	bh=dlJygGh/ny7/9+r1HdxJNgt1ToyOc/t+TwmPQx0tk3Q=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=laDJYl7EsOPb+N227+Dd5p/2/BB9Ovwk0y0cs7dK+94V8jm9vktdRS5P6+W3WcBKi
-	 /K0Vx+DN8VJnyTWspBGVxAj+kpYSiF5yPux1/Bj+dAJ8pzSsd3C934+qX1zBGon8yB
-	 LkHcnkuBwTQ05QOHRIH2sxS8HN/H3wcfd7AGThGUd9ZyWngLuWw4p0nqnbV6Vo7PoG
-	 Jh3Aio51tUNnRdEw43pWyXbqTGYXfc+LlOfT8zJ0/2IShavB2JqhXqXAx7QW2BDHL6
-	 JzgJQjl3C/Up1HFjbiucIJ5ZtGH7knQrr4H2XZYw40kX5qP8YQNwqN5Jh3ChbVEHTx
-	 IY5OcazpOazWw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 06/12] irq: Add KUnit test for refcounted interrupt
- enable/disable
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Boqun Feng" <boqun@kernel.org>
-Cc: bpf@vger.kernel.org, ojeda@kernel.org
-In-Reply-To: <20260526152148.30514-7-boqun@kernel.org>
-References: <20260526152148.30514-7-boqun@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 18:18:25 +0000
-Message-Id: <20260526181826.58EAD1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R4E6i1Og"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779819519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6IQIP999eK485a8uuNTSJjDdhCqmFSziRnrv6S+qll4=;
+	b=R4E6i1OgqBM0t7WdFxxDsMt2Pfuj1UWULwukm2f+BnzBlI9YWm7OQtDsvU0bPoyVe2k8nj
+	YB+k0NM9OFb+AOg/HaYBRzEofpxhhjSKW3bP6aJ9OksJ3ssgGtmenCMPFyOU6DU1UcCzis
+	CdXRI9FahB+oGyEnuu1N+hUbCWTi3sw=
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	acme@kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	jose.marchesi@oracle.com,
+	David Faust <david.faust@oracle.com>,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH 2/2] Add support for DW_TAG_GNU_annotation
+Date: Tue, 26 May 2026 11:18:18 -0700
+Message-ID: <20260526181818.4159927-2-vineet.gupta@linux.dev>
+In-Reply-To: <20260526181818.4159927-1-vineet.gupta@linux.dev>
+References: <20260526181818.4159927-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] KUnit test assertions are executed while hardware interrupts are d=
-isabled, causing a `GFP_KERNEL` allocation and kernel BUG if a test expecta=
-tion fails.
-- [High] The test suite lacks robust teardown and initialization to protect=
- the kernel from leaking disabled interrupt states.
-- [Low] The KUnit test is unconditionally compiled when CONFIG_KUNIT is ena=
-bled, bypassing subsystem-specific test configs.
-- [Low] Missing closing parenthesis in a code comment.
---
+gcc 16 was first release to support DW_TAG_GNU_annotation and this patch
+enables the same in pahole. Bulk of changes are in dwarf_loader but
+btf_encoder also gains support with minimal changes.
 
-commit ad24a2af47c3509344d4c410cf8820cb3d8e2b06
-Author: Lyude Paul <lyude@redhat.com>
+GCC encodes btf_type_tag and btf_decl_tag annotations differently from
+LLVM. While LLVM uses DW_TAG_LLVM_annotation (0x6000) as child DIEs,
+GCC uses DW_TAG_GNU_annotation (0x6001) as standalone sibling DIEs
+referenced via DW_AT_GNU_annotation (0x2139) attributes, with chaining
+through the same attribute on annotation DIEs themselves.
 
-irq: Add KUnit test for refcounted interrupt enable/disable
+Handle both encoding styles:
 
-Adds a KUnit test suite to verify the refcounted interrupt enable and
-disable functionality.
+For btf_type_tag (pointer annotations):
+- Recognize DW_TAG_GNU_annotation alongside DW_TAG_LLVM_annotation in
+  child annotation scanning.
+- Follow DW_AT_GNU_annotation attribute chains on pointer types for
+  GCC-style btf_type_tag resolution, with cycle detection.
+- Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation in the
+  internal representation so downstream code works unchanged.
 
-Link: https://patch.msgid.link/20260121223933.1568682-7-lyude@redhat.com
+For btf_decl_tag (function/struct/member annotations):
+- Add add_gnu_annotation_chain() to follow DW_AT_GNU_annotation
+  attribute chains on function, struct, and member DIEs.
+- GCC puts DW_AT_GNU_annotation on the function/struct DIE itself
+  (not as child DIEs), referencing sibling annotation DIEs that chain
+  via the same attribute.
 
-> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
-> index 86a2e5ae08f9a..44c4d6fc502ac 100644
-> --- a/kernel/irq/Makefile
-> +++ b/kernel/irq/Makefile
-> @@ -16,3 +16,4 @@ obj-$(CONFIG_SMP) +=3D affinity.o
->  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) +=3D debugfs.o
->  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) +=3D matrix.o
->  obj-$(CONFIG_IRQ_KUNIT_TEST) +=3D irq_test.o
-> +obj-$(CONFIG_KUNIT) +=3D refcount_interrupt_test.o
+Also:
+- Silently skip standalone DW_TAG_GNU_annotation DIEs at CU level.
+- Update pfunct-btf-decl-tags.sh test to use GCC 16+ when available and
+  now passes.
 
-[Severity: Low]
-Should this test be guarded by a subsystem-specific configuration option li=
-ke
-CONFIG_IRQ_KUNIT_TEST instead of CONFIG_KUNIT?
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+ btf_encoder.c                 |   1 +
+ dutil.h                       |   8 +++
+ dwarf_loader.c                | 129 +++++++++++++++++++++++++++++-----
+ dwarves.h                     |   3 +-
+ dwarves_fprintf.c             |   8 ++-
+ tests/pfunct-btf-decl-tags.sh |  32 ++++++---
+ 6 files changed, 152 insertions(+), 29 deletions(-)
 
-Building it unconditionally when CONFIG_KUNIT is enabled means the test
-will automatically execute on any kernel with KUnit globally enabled, which
-might bypass subsystem test configs and increase test execution times.
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 633bc6162ce0..d5af706d7638 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -1831,6 +1831,7 @@ static int btf_encoder__encode_tag(struct btf_encoder *encoder, struct tag *tag,
+ 		name = namespace__name(tag__namespace(tag));
+ 		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPEDEF, ref_type_id, name, false);
+ 	case DW_TAG_LLVM_annotation:
++	case DW_TAG_GNU_annotation:
+ 		name = tag__btf_type_tag(tag)->value;
+ 		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPE_TAG, ref_type_id, name, false);
+ 	case DW_TAG_structure_type:
+diff --git a/dutil.h b/dutil.h
+index ff78aa6dfd10..abe0e62b412f 100644
+--- a/dutil.h
++++ b/dutil.h
+@@ -35,6 +35,14 @@
+ #define DW_TAG_LLVM_annotation 0x6000
+ #endif
+ 
++#ifndef DW_TAG_GNU_annotation
++#define DW_TAG_GNU_annotation 0x6001
++#endif
++
++#ifndef DW_AT_GNU_annotation
++#define DW_AT_GNU_annotation 0x2139
++#endif
++
+ static inline __attribute__((const)) bool is_power_of_2(unsigned long n)
+ {
+         return (n != 0 && ((n & (n - 1)) == 0));
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 365cc24e212d..b34fbed8b670 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -908,6 +908,12 @@ static int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t b
+ 	return -ENOMEM;
+ }
+ 
++static bool die__tag_is_annotation(Dwarf_Die *die)
++{
++	unsigned int tag = dwarf_tag(die);
++	return tag == DW_TAG_LLVM_annotation || tag == DW_TAG_GNU_annotation;
++}
++
+ static int add_llvm_annotation(Dwarf_Die *die, int component_idx, struct conf_load *conf,
+ 			       struct list_head *head)
+ {
+@@ -943,7 +949,7 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
+ 
+ 	die = &child;
+ 	do {
+-		if (dwarf_tag(die) == DW_TAG_LLVM_annotation) {
++		if (die__tag_is_annotation(die)) {
+ 			ret = add_llvm_annotation(die, component_idx, conf, head);
+ 			if (ret)
+ 				return ret;
+@@ -953,6 +959,32 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
+ 	return 0;
+ }
+ 
++static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
++				    struct conf_load *conf, struct list_head *head)
++{
++	Dwarf_Attribute attr;
++	Dwarf_Die annot_die;
++
++	if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
++	    dwarf_formref_die(&attr, &annot_die) == NULL)
++		return 0;
++
++	for (;;) {
++		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
++			break;
++
++		int ret = add_llvm_annotation(&annot_die, component_idx, conf, head);
++		if (ret)
++			return ret;
++
++		if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
++		    dwarf_formref_die(&attr, &annot_die) == NULL)
++			break;
++	}
++
++	return 0;
++}
++
+ int class_member__dwarf_recode_bitfield(struct class_member *member,
+ 					struct cu *cu)
+ {
+@@ -1596,6 +1628,8 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+ 		return NULL;
+ 
+ 	tag__init(&tag->tag, cu, die);
++	/* Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation internally */
++	tag->tag.tag = DW_TAG_LLVM_annotation;
+ 	tag->value = attr_string(die, DW_AT_const_value, conf);
+ 	return tag;
+ }
+@@ -1635,26 +1669,65 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 	Dwarf_Die *cdie, child;
+ 	const char *name;
+ 
+-	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+-	 * and return
+-	 */
+-	if (!dwarf_haschildren(die) || dwarf_child(die, &child) != 0 ||
+-	    conf->skip_encoding_btf_type_tag)
++	if (conf->skip_encoding_btf_type_tag)
+ 		return tag__new(die, cu);
+ 
+-	/* Otherwise, check DW_TAG_LLVM_annotation child tags */
+-	cdie = &child;
+-	do {
+-		if (dwarf_tag(cdie) != DW_TAG_LLVM_annotation)
+-			continue;
++	/* Check for LLVM-style child annotation tags */
++	if (dwarf_haschildren(die) && dwarf_child(die, &child) == 0) {
++		cdie = &child;
++		do {
++			if (!die__tag_is_annotation(cdie))
++				continue;
+ 
+-		name = attr_string(cdie, DW_AT_name, conf);
+-		if (strcmp(name, "btf_type_tag") != 0)
+-			continue;
++			name = attr_string(cdie, DW_AT_name, conf);
++			if (strcmp(name, "btf_type_tag") != 0)
++				continue;
+ 
+-		if (die__add_btf_type_tag(&tag, die, cdie, cu, conf))
+-			return NULL;
+-	} while (dwarf_siblingof(cdie, cdie) == 0);
++			if (die__add_btf_type_tag(&tag, die, cdie, cu, conf))
++				return NULL;
++		} while (dwarf_siblingof(cdie, cdie) == 0);
++	}
++
++	/* Check for GCC-style DW_AT_GNU_annotation attribute */
++	if (tag == NULL) {
++		Dwarf_Attribute attr;
++		Dwarf_Die annot_die;
++		Dwarf_Off visited[256];
++		int nr_visited = 0;
++
++		if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
++		    dwarf_formref_die(&attr, &annot_die) != NULL) {
++			for (;;) {
++				Dwarf_Off off = dwarf_dieoffset(&annot_die);
++				bool cycle = false;
++				int i;
++
++				for (i = 0; i < nr_visited; i++) {
++					if (visited[i] == off) {
++						cycle = true;
++						break;
++					}
++				}
++				if (cycle || nr_visited >= (int)ARRAY_SIZE(visited))
++					break;
++				visited[nr_visited++] = off;
++
++				if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
++					break;
++
++				name = attr_string(&annot_die, DW_AT_name, conf);
++				if (strcmp(name, "btf_type_tag") != 0)
++					break;
++
++				if (die__add_btf_type_tag(&tag, die, &annot_die, cu, conf))
++					return NULL;
++
++				if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
++				    dwarf_formref_die(&attr, &annot_die) == NULL)
++					break;
++			}
++		}
++	}
+ 
+ 	return tag ? &tag->tag : tag__new(die, cu);
+ }
+@@ -1684,6 +1757,12 @@ static struct tag *die__create_new_class(Dwarf_Die *die, struct cu *cu, struct c
+ 		}
+ 	}
+ 
++	if (class != NULL &&
++	    add_gnu_annotation_chain(die, -1, conf, &class->type.namespace.annots) != 0) {
++		class__delete(class, cu);
++		class = NULL;
++	}
++
+ 	return class ? &class->type.namespace.tag : NULL;
+ }
+ 
+@@ -2045,10 +2124,13 @@ static int die__process_class(Dwarf_Die *die, struct type *class,
+ 			cu__hash(cu, &member->tag);
+ 			if (add_child_llvm_annotations(die, member_idx, conf, &class->namespace.annots))
+ 				return -ENOMEM;
++			if (add_gnu_annotation_chain(die, member_idx, conf, &class->namespace.annots))
++				return -ENOMEM;
+ 			member_idx++;
+ 		}
+ 			continue;
+ 		case DW_TAG_LLVM_annotation:
++		case DW_TAG_GNU_annotation:
+ 			if (add_llvm_annotation(die, -1, conf, &class->namespace.annots))
+ 				return -ENOMEM;
+ 			continue;
+@@ -2354,6 +2436,7 @@ static int die__process_function(Dwarf_Die *die, struct ftype *ftype,
+ 				goto out_enomem;
+ 			continue;
+ 		case DW_TAG_LLVM_annotation:
++		case DW_TAG_GNU_annotation:
+ 			if (add_llvm_annotation(die, -1, conf, &(tag__function(&ftype->tag)->annots)))
+ 				goto out_enomem;
+ 			continue;
+@@ -2402,6 +2485,12 @@ static struct tag *die__create_new_function(Dwarf_Die *die, struct cu *cu, struc
+ 		function = NULL;
+ 	}
+ 
++	if (function != NULL &&
++	    add_gnu_annotation_chain(die, -1, conf, &function->annots) != 0) {
++		function__delete(function, cu);
++		function = NULL;
++	}
++
+ 	return function ? &function->proto.tag : NULL;
+ }
+ 
+@@ -2463,6 +2552,9 @@ static struct tag *__die__process_tag(Dwarf_Die *die, struct cu *cu,
+ 		 */
+ 		tag = &unsupported_tag;
+ 		break;
++	case DW_TAG_GNU_annotation:
++		tag = &unsupported_tag;
++		break;
+ 	case DW_TAG_label:
+ 		if (conf->ignore_labels)
+ 			tag = &unsupported_tag; // callers will assume conf->ignore_labels is true
+@@ -2488,7 +2580,8 @@ static int die__process_unit(Dwarf_Die *die, struct cu *cu, struct conf_load *co
+ 			// XXX special case DW_TAG_dwarf_procedure, appears when looking at a recent ~/bin/perf
+ 			// Investigate later how to properly support this...
+ 			if (dwarf_tag(die) != DW_TAG_dwarf_procedure &&
+-			    dwarf_tag(die) != DW_TAG_label) // conf->ignore_labels == true, see die__process_tag()
++			    dwarf_tag(die) != DW_TAG_label && // conf->ignore_labels == true, see die__process_tag()
++			    dwarf_tag(die) != DW_TAG_GNU_annotation)
+ 				tag__print_not_supported(die);
+ 			continue;
+ 		}
+diff --git a/dwarves.h b/dwarves.h
+index 5ec16e750e83..42b8e39aa2dd 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -670,7 +670,8 @@ static inline int tag__is_tag_type(const struct tag *tag)
+ 	       tag->tag == DW_TAG_volatile_type ||
+ 	       tag->tag == DW_TAG_atomic_type ||
+ 	       tag->tag == DW_TAG_unspecified_type ||
+-	       tag->tag == DW_TAG_LLVM_annotation;
++	       tag->tag == DW_TAG_LLVM_annotation ||
++	       tag->tag == DW_TAG_GNU_annotation;
+ }
+ 
+ static inline const char *tag__decl_file(const struct tag *tag,
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index 1ec478c2a027..a514d7e98923 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -140,6 +140,8 @@ const char *dwarf_tag_name(const uint32_t tag)
+ 		return dwarf_gnu_tag_names[tag - DW_TAG_MIPS_loop];
+ 	else if (tag == DW_TAG_LLVM_annotation)
+ 		return "LLVM_annotation";
++	else if (tag == DW_TAG_GNU_annotation)
++		return "GNU_annotation";
+ 	return "INVALID";
+ }
+ 
+@@ -658,6 +660,7 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
+ 		snprintf(bf, len, "%s", variable__name(tag__variable(tag)));
+ 		break;
+ 	case DW_TAG_LLVM_annotation:
++	case DW_TAG_GNU_annotation:
+ 		type = cu__type(cu, tag->type);
+ 		if (type == NULL && tag->type != 0)
+ 			tag__id_not_found_snprintf(bf, len, tag->type);
+@@ -731,7 +734,7 @@ static type_id_t skip_llvm_annotations(const struct cu *cu, type_id_t id)
+ 		if (id == 0)
+ 			break;
+ 		type = cu__type(cu, id);
+-		if (type == NULL || type->tag != DW_TAG_LLVM_annotation || type->type == id)
++		if (type == NULL || (type->tag != DW_TAG_LLVM_annotation && type->tag != DW_TAG_GNU_annotation) || type->type == id)
+ 			break;
+ 		id = type->type;
+ 	}
+@@ -936,7 +939,8 @@ print_modifier: {
+ 		else
+ 			printed += enumeration__fprintf(type, &tconf, fp);
+ 		break;
+-	case DW_TAG_LLVM_annotation: {
++	case DW_TAG_LLVM_annotation:
++	case DW_TAG_GNU_annotation: {
+ 		struct tag *ttype = cu__type(cu, type->type);
+ 		if (ttype) {
+ 			type = ttype;
+diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
+index 35884b4e8687..5fdddc09f179 100755
+--- a/tests/pfunct-btf-decl-tags.sh
++++ b/tests/pfunct-btf-decl-tags.sh
+@@ -13,17 +13,21 @@ trap cleanup EXIT
+ 
+ title_log "Check that pfunct can print btf_decl_tags read from BTF."
+ 
+-# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
+-# in upstream version 16.
+-# UPTODO: add a check here for that.
++# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac7027f180b).
++# Use gcc if available and version >= 16, otherwise fall back to clang.
+ 
++GCC=${GCC:-gcc}
+ CLANG=${CLANG:-clang}
+-if ! command -v $CLANG > /dev/null; then
+-	error_log "Need clang for test $0"
+-	test_fail
++
++use_gcc=0
++if command -v $GCC > /dev/null; then
++	gcc_ver=$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
++	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
++		use_gcc=1
++	fi
+ fi
+ 
+-(cat <<EOF
++src=$(cat <<EOF
+ #define __tag(x) __attribute__((btf_decl_tag(#x)))
+ 
+ __tag(a) __tag(b) __tag(c) void foo(void) {}
+@@ -31,7 +35,19 @@ __tag(a) __tag(b)          void bar(void) {}
+ __tag(a)                   void buz(void) {}
+ 
+ EOF
+-) | $CLANG --target=bpf -c -g -x c -o $tmpobj -
++)
++
++if [ "$use_gcc" -eq 1 ]; then
++	info_log "Using $GCC (version $gcc_ver) for btf_decl_tag test"
++	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
++	pahole -J $tmpobj 2>/dev/null
++elif command -v $CLANG > /dev/null; then
++	info_log "Using $CLANG for btf_decl_tag test"
++	echo "$src" | $CLANG --target=bpf -c -g -x c -o $tmpobj -
++else
++	error_log "Need gcc >= 16 or clang for test $0"
++	test_fail
++fi
+ 
+ # tags order is not guaranteed
+ sort_tags=$(cat <<EOF
+-- 
+2.54.0
 
-> diff --git a/kernel/irq/refcount_interrupt_test.c b/kernel/irq/refcount_i=
-nterrupt_test.c
-> new file mode 100644
-> index 0000000000000..b4f224595f261
-> --- /dev/null
-> +++ b/kernel/irq/refcount_interrupt_test.c
-> @@ -0,0 +1,109 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for refcounted interrupt enable/disables.
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/interrupt_rc.h>
-> +
-> +#define TEST_IRQ_ON() KUNIT_EXPECT_FALSE(test, irqs_disabled())
-> +#define TEST_IRQ_OFF() KUNIT_EXPECT_TRUE(test, irqs_disabled())
-> +
-> +/* =3D=3D=3D=3D=3D Test cases =3D=3D=3D=3D=3D */
-> +static void test_single_irq_change(struct kunit *test)
-> +{
-> +	local_interrupt_disable();
-> +	TEST_IRQ_OFF();
-
-[Severity: High]
-Could this trigger a sleeping in atomic context BUG if the test expectation
-fails?
-
-If TEST_IRQ_OFF() or TEST_IRQ_ON() fails, KUnit invokes kunit_fail(), which
-uses GFP_KERNEL to allocate memory for the failure message. Since GFP_KERNEL
-implies __GFP_DIRECT_RECLAIM, doing this while hardware interrupts are
-disabled violates atomic context rules.
-
-Would it be safer to save the interrupt state to a local variable inside the
-atomic section and evaluate the KUnit assertion after interrupts are safely
-re-enabled?
-
-[ ... ]
-
-> +static struct kunit_case test_cases[] =3D {
-> +	KUNIT_CASE(test_single_irq_change),
-> +	KUNIT_CASE(test_nested_irq_change),
-> +	KUNIT_CASE(test_multiple_irq_change),
-> +	KUNIT_CASE(test_irq_save),
-> +	{},
-> +};
-> +
-> +/* (init and exit are the same */
-
-[Severity: Low]
-This isn't a bug, but it looks like there is a missing closing parenthesis
-at the end of this comment.
-
-> +static int test_init(struct kunit *test)
-> +{
-> +	TEST_IRQ_ON();
-> +
-> +	return 0;
-> +}
-> +
-> +static void test_exit(struct kunit *test)
-> +{
-> +	TEST_IRQ_ON();
-> +}
-
-[Severity: High]
-Does this test suite need more robust teardown to protect the kernel from
-leaking disabled interrupt states?
-
-If a test case fails to balance local_interrupt_disable() and
-local_interrupt_enable(), it will return with hardware interrupts permanent=
-ly
-disabled. Because test_exit() only checks the state but does not repair it,
-the KUnit kthread will continue executing with interrupts disabled, which c=
-an
-lead to a system hang, RCU stall, or softlockup.
-
-Should test_exit() explicitly restore a safe interrupt environment, and
-should test_init() fail the test suite if it detects interrupts are already
-disabled?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526152148.3051=
-4-1-boqun@kernel.org?part=3D6
