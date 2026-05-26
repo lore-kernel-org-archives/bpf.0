@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF1B2264D6;
-	Tue, 26 May 2026 20:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6482DAFBB;
+	Tue, 26 May 2026 20:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779829126; cv=none; b=WG1dP/rAQV25b2DmgD6IRvPYZ3g0QKmRMtv8oUNcINsZed5SgTCsYcoT+Ptf6yesvLxdWdOcVj4CnvJYxWh9gr2f5L7ngKl2sGFhgkqOnPPAsS0zgEMG0VhXTER1GuYWNO2zmIV4mvlRvyDhBLjXUaI373FeMrMfMGnGzNDUfNQ=
+	t=1779829136; cv=none; b=Dr9wmTfsoDHBgi5abLfYGWueVO9TXHFUwqwwFkDqSqo9FHE4YC8Fm0p+n+h636dN2jNamBkKWwtRYhjTrarTu8rDz2GgP5zpuukces8/pKXPaBvkO6A2tcGuTgwss8ZP5texF+2J4+tCM6Wynzv9EE6n6VAIuCKwMVcVEoNCyfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779829126; c=relaxed/simple;
-	bh=2/0AgAfIcE3K7jqkkNWZwz7Bm6ixy/m4uuTQoYZ8d8U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XA2PYtOJpXi5TEgNX0944fCqGSgmwAABoMY9veh8DOmeRTc7Ca7i61JBvfnQ4nx1fv4Ee2vOaNjl8lW5vd06QbL93biRnB2jYo+iIzirTs90VDtAXLUXv6u5vDByXqw+LFywu/El6/hMJDReVgE25mj9sK1jDxIXwO9W7p0b+iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JcInqzRJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779829136; c=relaxed/simple;
+	bh=ZTP4ebl2idR1a3f+DvY1B5rzSJ78v1Y/nM8K7a6Ga/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uuNAFKRS1QKptymRe8/x6gXf6/bCzPgK5Yw4uTIhtkNMay2ZW8C+j7/RF6WnZ7gBeFl8OSkOo+ha0YKXu+7fkpsGE3TPyemV2S8K1vF6WcabVrCQNwyqtP8J76kagM3EMuW+2EI8eXe2EiZ4sCJBYWue5X2n+JlYrUHYz2APBR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GaSLefV0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JcInqzRJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8C21F000E9;
-	Tue, 26 May 2026 20:58:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GaSLefV0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56031F000E9;
+	Tue, 26 May 2026 20:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779829125;
-	bh=C9Ums9y0roCN9p7E4pmxIDMn0pbs8TMPD+4e21NSewI=;
-	h=From:To:Cc:Subject:Date;
-	b=JcInqzRJ/plUQLUdvHqWHbMFQl7WLQTFHV2jdQaLg0MhlMLWQiGOHTiyTRxaMK59U
-	 kMs/OZubdQjhsPdSjIAw+GskbyVuxdPpJcpvpoBblRuk4YgVFB+OCTdyk1Cxmsab+3
-	 fpHleL38tYcDAPsGw1eOiD4H3bl9avYSCErcNEFt/4qcRzBTGylZdgvpm7oTXzALtw
-	 4rYA8Em1jbi74TRrpP5bBO4qzMVpyTgX9IyhqpNPymW4vIdJpx2KiU32fyjYjG9y4E
-	 o4BkMwGD1QElnp8FMQdPOsbtlqDIgKJuFyZIx5aMH6EEHFyggLMGxn6Mg1rJFXZtJO
-	 VjB7jZi5/RaWg==
+	s=k20260515; t=1779829134;
+	bh=AZplZ0V5vfefnPds4w+lyGUlqzD+4ADV0U133iOSc3Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=GaSLefV0xwKB9vZSbQ0uiXBXJ0GArtT5zaACKJ38tLSNQh7hPUfiMxn/1Nw1UXJ9t
+	 DuObnjKmZBHjLrzYCD/B2SeRypseXexGLGy+QIc8BbSMSb+Dfms9rFr5z5VR7s4yao
+	 7qQwLTW7WHdgLecCH9ucATz+4OouLkdcNj4wRh0Xi/CE1uUDU414cOxwsEKaQLVHvt
+	 kvNd9a/3KZ83GVEvjekE6AGPA1F6GGgukVEx09xWRClr2t0Hc7iJahSNSgaCpgbeNa
+	 Po+ICoDkl0ZgBu5N3CBCokPPmsB9F0Lzlv+OFd5VjkYEg8TJQiu5Ltt9oUq6rkWySS
+	 uvZcN2GR5IXJw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -33,10 +34,12 @@ To: Oleg Nesterov <oleg@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv4 00/13] uprobes/x86: Fix red zone issue for optimized uprobes
-Date: Tue, 26 May 2026 22:58:27 +0200
-Message-ID: <20260526205840.173790-1-jolsa@kernel.org>
+Subject: [PATCHv4 01/13] uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
+Date: Tue, 26 May 2026 22:58:28 +0200
+Message-ID: <20260526205840.173790-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260526205840.173790-1-jolsa@kernel.org>
+References: <20260526205840.173790-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,85 +48,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-Andrii reported an issue with optimized uprobes [1] that can clobber
-redzone area with call instruction storing return address on stack
-where user code may keep temporary data without adjusting rsp.
+In the unregister path we use __in_uprobe_trampoline check with
+current->mm for the VMA lookup, which is wrong, because we are
+in the tracer context, not the traced process.
 
-Fixing this by moving the optimized uprobes on top of 10-bytes nop
-instruction, so we can squeeze another instruction to escape the
-redzone area before doing the call.
+Add mm_struct pointer argument to __in_uprobe_trampoline and
+changing related callers to pass proper mm_struct pointer.
 
-Note we need upstream update first for patch 3 (github.com/libbpf/usdt),
-if we decide to take this change.
-
-thanks,
-jirka
-
-
-v1: https://lore.kernel.org/bpf/20260514135342.22130-1-jolsa@kernel.org/
-v2: https://lore.kernel.org/bpf/20260518105957.123445-1-jolsa@kernel.org/
-v3: https://lore.kernel.org/bpf/20260521124411.31133-1-jolsa@kernel.org/
-
-v4 changes:
-- do not use 2nd int3 (ont +5 offset) because the call instruction
-  is allways the same for the given nop10 address [Andrii/Peter]
-- unmap unused trampoline vma after unsuccesfull optimization [sashiko]
-- small change to patch#2 moved user_64bit_mode earlier in the path
-  and pass/use mm_struct pointer directly from arch_uprobe_optimize
-  instead of gettting current->mm
-  Andrii, keeping your ack, please shout otherwise
-
-v3 changes:
-- use nop10 update suggested by Peter in [2]
-- remove struct uprobe_trampoline object, use vma objects directly instead
-- selftests fixes [sashiko]
-- ack from Andrii
-
-v2 changes:
-- several selftest fixes [sashiko]
-- consolidate is_lea_insn and is_call_insn insto single check [Jakub Sitnicki]
-- use proper mm_struct object in __in_uprobe_trampoline check [sashiko]
-- allow to copy uprobe trampolines vma objects on fork [sashiko]
-- change uprobe syscall detection error from -ENXIO to -EPROTO [Andrii]
-- added fork/clone tests
-- I kept the selftest changes and nop5->nop10 changes in separate
-  commits for easier review, we can squash them later if we want to keep
-  bisect working properly
-
-
-[1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel.org/
-[2] https://lore.kernel.org/bpf/20260518104306.GU3102624@noisy.programming.kicks-ass.net/#t
+Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Andrii Nakryiko (1):
-      selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+ arch/x86/kernel/uprobes.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Jiri Olsa (12):
-      uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
-      uprobes/x86: Remove struct uprobe_trampoline object
-      uprobes/x86: Allow to copy uprobe trampolines on fork
-      uprobes/x86: Unmap trampoline vma object in case it's unused
-      uprobes/x86: Move optimized uprobe from nop5 to nop10
-      libbpf: Change has_nop_combo to work on top of nop10
-      libbpf: Detect uprobe syscall with new error
-      selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
-      selftests/bpf: Change uprobe syscall tests to use nop10
-      selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
-      selftests/bpf: Add reattach tests for uprobe syscall
-      selftests/bpf: Add tests for forked/cloned optimized uprobes
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index ebb1baf1eb1d..2be6707e3320 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -761,9 +761,9 @@ void arch_uprobe_clear_state(struct mm_struct *mm)
+ 		destroy_uprobe_trampoline(tramp);
+ }
+ 
+-static bool __in_uprobe_trampoline(unsigned long ip)
++static bool __in_uprobe_trampoline(struct mm_struct *mm, unsigned long ip)
+ {
+-	struct vm_area_struct *vma = vma_lookup(current->mm, ip);
++	struct vm_area_struct *vma = vma_lookup(mm, ip);
+ 
+ 	return vma && vma_is_special_mapping(vma, &tramp_mapping);
+ }
+@@ -776,14 +776,14 @@ static bool in_uprobe_trampoline(unsigned long ip)
+ 
+ 	rcu_read_lock();
+ 	if (mmap_lock_speculate_try_begin(mm, &seq)) {
+-		found = __in_uprobe_trampoline(ip);
++		found = __in_uprobe_trampoline(mm, ip);
+ 		retry = mmap_lock_speculate_retry(mm, seq);
+ 	}
+ 	rcu_read_unlock();
+ 
+ 	if (retry) {
+ 		mmap_read_lock(mm);
+-		found = __in_uprobe_trampoline(ip);
++		found = __in_uprobe_trampoline(mm, ip);
+ 		mmap_read_unlock(mm);
+ 	}
+ 	return found;
+@@ -1044,7 +1044,7 @@ static int copy_from_vaddr(struct mm_struct *mm, unsigned long vaddr, void *dst,
+ 	return 0;
+ }
+ 
+-static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
++static bool __is_optimized(struct mm_struct *mm, uprobe_opcode_t *insn, unsigned long vaddr)
+ {
+ 	struct __packed __arch_relative_insn {
+ 		u8 op;
+@@ -1053,7 +1053,7 @@ static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
+ 
+ 	if (!is_call_insn(insn))
+ 		return false;
+-	return __in_uprobe_trampoline(vaddr + 5 + call->raddr);
++	return __in_uprobe_trampoline(mm, vaddr + 5 + call->raddr);
+ }
+ 
+ static int is_optimized(struct mm_struct *mm, unsigned long vaddr)
+@@ -1064,7 +1064,7 @@ static int is_optimized(struct mm_struct *mm, unsigned long vaddr)
+ 	err = copy_from_vaddr(mm, vaddr, &insn, 5);
+ 	if (err)
+ 		return err;
+-	return __is_optimized((uprobe_opcode_t *)&insn, vaddr);
++	return __is_optimized(mm, (uprobe_opcode_t *)&insn, vaddr);
+ }
+ 
+ static bool should_optimize(struct arch_uprobe *auprobe)
+-- 
+2.54.0
 
- arch/x86/kernel/uprobes.c                               | 379 +++++++++++++++++++++++++++++++++++++++++++-----------------------------
- include/linux/uprobes.h                                 |   5 -
- kernel/events/uprobes.c                                 |  10 --
- kernel/fork.c                                           |   1 -
- tools/lib/bpf/features.c                                |   4 +-
- tools/lib/bpf/usdt.c                                    |  16 +--
- tools/testing/selftests/bpf/bench.c                     |  20 ++--
- tools/testing/selftests/bpf/benchs/bench_trigger.c      |  38 ++++----
- tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |   2 +-
- tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c | 307 +++++++++++++++++++++++++++++++++++++++++++++++++++++-----
- tools/testing/selftests/bpf/prog_tests/usdt.c           |  74 ++++++++++++--
- tools/testing/selftests/bpf/progs/test_usdt.c           |  25 +++++
- tools/testing/selftests/bpf/usdt.h                      |   2 +-
- tools/testing/selftests/bpf/usdt_2.c                    |  15 ++-
- 14 files changed, 653 insertions(+), 245 deletions(-)
