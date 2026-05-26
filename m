@@ -1,254 +1,120 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0D53CFF60
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 11:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E567233E344;
+	Tue, 26 May 2026 12:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779796721; cv=none; b=DV9h9MbDtDKIMM93KPLuIVIDSGzTTM1e5VSonof0wWPz8ZS11S0Hz3Jjw5HpFdS1Bjb6+e0d9SWdnv7OXxznYyiIHQMpUa/r4LccFP5wlI588rucvf+K6KJtuL7uWisWI2DjoKdjcA4DA8t4GVlUyVA0eqZMhvYpX6Xd76EHjYA=
+	t=1779796950; cv=none; b=jRbfGyKyLosJ9dFidteTMiOfmpEnS63/ySvPGwwGRkMdeCo+AQvIt4/BLbzLtghxeZjZ4/xW++RAVlfRg4DLCE8G1aejjiJ5sKU8YWzcHzvFnnV7E40AdwDviapsvmnh5i4Tbtu9VKEsVdTBnMtaU4Fz/7jt9KQdd7isahlDMBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779796721; c=relaxed/simple;
-	bh=5W28sDVkarRvqQjMAW82poEsdm8er4gFoT6JmY4x6m0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=um/Xvqmtom3sk1jBB3IAFdW+u9BUA0a6jY2EbTCZIt1bIB9UB5Y0veddDidfp5Se7E8FE5dndaV/ULpSum2e6mYGb8AGGlKJE1kGrMcucuORBk6vTB2/Bov4f7jO1Rvs+CZGq6LePmSAiorYAzcylBdYsq5faDwVolZc4UkeIP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VA0Jqz6j; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1779796950; c=relaxed/simple;
+	bh=HC/RRl7IeOAinVVv8FTx45RsO7SLy1U7LXFQtVtsiX4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n0UGxsI4+y3n9OMURD5wqU1jYUFXlMdeAtpli8Ek2LeP3yEB6DWG2rbxvgWC3/I10zX/a/8Bp/OgVEZ00WDlnpHRJyNpO2DlBH+pbZlHm4Uf+2LiFQRALQyxdvGvyPXhIAZpERRSA1yzahW7i4V8L1V8qzZYpJMn0VIpTNOpggc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRVQDXRO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VA0Jqz6j"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43d734223e4so6637757f8f.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 04:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779796711; x=1780401511; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AcvYzWTe1Y/hmlEUR12/Xq71LkSjxZ5X+aWQvNFuVk4=;
-        b=VA0Jqz6jVFQ3yG6JwjGmfh7ff1Fgh1ZUasbed4oLwSnhPy7hmDa+VJXhPlslsr2lf3
-         dCfGJ/BlvpK1djedBbs/RsSwK5sU6gfpJx8y7ghea+Iex1zA1kt4/BJ1gJrVVakaU4uW
-         3eykLx+EnyHxFFSbLmeIbeX83v8kggpomupg3YRCqE80PBMwgzB+a6ZAKXoX5sh9fJdZ
-         0yplQBP9f+MfgOhTiS5MqoerJ7SFFfLvBkmvNjcQWynCwIsp0xAQczN02eM+05m7iAnS
-         adXc25rRVCCaBiYcu+s0zDLRDRgYRepTcPicuWltRB26Bf8Zx40bV1/0tKp1NQ5Nttxq
-         x78Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779796711; x=1780401511;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AcvYzWTe1Y/hmlEUR12/Xq71LkSjxZ5X+aWQvNFuVk4=;
-        b=OS+RMGgA41MgQNIM+rNLe2A16YkL0ELlaZaVmXRCj08YELfxtI1Z+54g3LgwZPbRk9
-         82bbwiSuUGcwFpWz8932lENJFwIHHR39xFfIIfruTl0E4W31CzS9iWropXJF1AGQx5BN
-         35sbafOgw+JORd9Bi/hqtEPXE2yTQbT6Ty/zv3n1w4aFXtVtXDpH99/oCa/+Xk+V72U3
-         Q1RDrOwPoYd4pXHqiN8LNLJpnLe8N/SWt3SZ+MMHHJiiI76M2NQrGzrPUcC1ETHwI4sw
-         7efwv/kPVVnW/U7PbYEwzeekZVpSkTD2TlQjbAsUK5sqpW0GQnwRMgBHHen21z+XIhTb
-         NhQw==
-X-Forwarded-Encrypted: i=1; AFNElJ8fpeTpQIaWVEgcIORuaJBaa9ATxulMRNlxvRf2sXP59Qb06PmsUO5LV+bn3p/wiGm0Ps4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkSAfy/BChtL9b/SPXxIDciYR4v7MtIB8tDPWfZNBa4YIu/SWX
-	TE3VEh1GeyTZBVQKzR7JpXIZNzBdEXYHB4FNmPveLTU84pNOibh0PGBfeRFVcTovf84=
-X-Gm-Gg: Acq92OFjr99dfhkuWcyn23mlWnE6omzj0RSaKUjHzqrFq58xbdVHKDVP/grET7YPphW
-	TXdHUbW+9akmZ4i1A7UYRSOO15AKRGII2g/GEbSZnnS8tdST2mSEljx6EO1maVX4/6nuqcXsqwZ
-	HGVGYyIVnjlodIINPeslBC/WP7bpSOzZ8oZ+lP+ROXWTNpXEm4fIt8c4dH4dezNhsaTorf7wUES
-	OCgnxZHBOFwUr6WALyydC9Jz5MgisHnqqTbZCX/bUQAo/1ccfKtBA2x2kH0auoKQ2eutnRnTUAf
-	WK+HPHIsfJsbCuPOTlICOg74vYVuvMlLHZO0m/GZx99NJdO9OCOpNSoMeruhErn3M0exNXv8jL2
-	aGQ+fULPc0RDSsn/NNoxXcRZL+KdS12AjMcWN7WF6z87HfMlj8OWbYO+U++nI1uJHZzWOGbPref
-	S8d870gwTe6RGunCB0blWKSzQeQuc50ijujYH5/Cy/3SciV2MFvDaT6UUBgKJkok+w+iuaFpKeU
-	zMu2CtMT/fLTSGDJ/zYFblmg9EjcDV7g8gy59TbWgu5cXYrUWaAjLy4qdWGp1Kj2u5gew==
-X-Received: by 2002:a05:6000:2888:b0:45d:4c30:81a6 with SMTP id ffacd0b85a97d-45eb30de822mr28814928f8f.5.1779796711490;
-        Tue, 26 May 2026 04:58:31 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d4741bsm36462739f8f.22.2026.05.26.04.58.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2026 04:58:31 -0700 (PDT)
-Message-ID: <885a7940-3fcd-4fc4-b80e-cd82a817defd@suse.com>
-Date: Tue, 26 May 2026 13:58:29 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRVQDXRO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164611F000E9;
+	Tue, 26 May 2026 12:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779796946;
+	bh=oFZlcdmvc6uWeWfWn5ncZbAd8VOp345YbTiD6AiVdyU=;
+	h=From:Date:Subject:To:Cc;
+	b=dRVQDXROub6YH+v1/eDSykgyZ4AB+PQbBLV96lBX6YcY1qDkXGkD1P9phBkSC/5JT
+	 KEDDHyXhdWwcmCNIV5U5W8m/kaGLknLhyTqf4x7yWJleMY4gkmupTa/fbn+Ij2Ltpg
+	 uPAqeujWFeiipRXbfN0ebVPygsFsCUxr+N38MuprTbQ3hagtN/w8OoILI+kPTdbclo
+	 ydfMKy8SPgFEcwKCeJu1ra+iU9/1QwTKRh0Q5afXDBLoFHcaMwVhfkd45+br0NyBs+
+	 rrtOXJLWs/cV7OatdDkdIjNW5/rGbmCFrouJ0lGl4wtkofoAGNSiO3mJYdCMQG0tUx
+	 hiZMXldI5H11g==
+From: Christian Brauner <brauner@kernel.org>
+Date: Tue, 26 May 2026 14:02:22 +0200
+Subject: [PATCH v2] bpf: add bpf_real_inode() kfunc
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/14] module: Move authentication logic into dedicated
- new file
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
- <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
- <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
- Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
- Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?=
- <mcaju95@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
- debian-kernel@lists.debian.org
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260505-module-hashes-v5-8-e174a5a49fce@weissschuh.net>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260505-module-hashes-v5-8-e174a5a49fce@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260526-work-bpf-verity-v2-1-cd0b1850d31b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAM2LFWoC/3WOyw6CMBBFf4V07RAohKgr/8Ow6GMKFdOSKVYJ4
+ d9tce3y3Jl7ZjYWkCwGdi02RhhtsN4l4KeCqVG4AcHqxIxXvKsa3sHb0wRyNhBTcVlBtI3hZyk
+ EbzlLrZnQ2M9hvPc/Di/5QLVkTd6QIiBIEk6NOYomlDnKo9GGxdN6fBPrrPh/ONZQAxq8oFZtp
+ 7W6TUgOn6WngfX7vn8B9E2lqdwAAAA=
+X-Change-ID: 20260326-work-bpf-verity-a43f28baa242
+To: linux-fsdevel@vger.kernel.org
+Cc: Amir Goldstein <amir73il@gmail.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+ bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.16-dev-fffa9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=HC/RRl7IeOAinVVv8FTx45RsO7SLy1U7LXFQtVtsiX4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSJdl+Y+L+I92O4hAtb67avhueDnya80jPQZHZqcPhgt
+ v/PzqZXHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABORZ2dkOBQSHVt4coZQkHug
+ uk/6gg23D7BmpQl80OlRr1so0rVjGyPDnis1Ha1JqxIvb3XIu/Hqy+xXMmeDOro52ZPaTFusDp/
+ nBQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 5/5/26 11:05 AM, Thomas Weißschuh wrote:
-> The module authentication functionality will also be used by the
-> hash-based module authentication. To make it usable even if
-> CONFIG_MODULE_SIG is disabled, move it to a new file.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
-> [...]
-> diff --git a/kernel/module/auth.c b/kernel/module/auth.c
-> index 956ac63d9d33..831a13eb0c9b 100644
-> --- a/kernel/module/auth.c
-> +++ b/kernel/module/auth.c
-> @@ -5,10 +5,16 @@
->   * Written by David Howells (dhowells@redhat.com)
->   */
->  
-> +#include <linux/errno.h>
->  #include <linux/export.h>
->  #include <linux/module.h>
-> +#include <linux/module_signature.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/security.h>
-> +#include <linux/string.h>
->  #include <linux/types.h>
-> +#include <uapi/linux/module.h>
-> +#include "internal.h"
->  
->  #undef MODULE_PARAM_PREFIX
->  #define MODULE_PARAM_PREFIX "module."
-> @@ -30,3 +36,82 @@ void set_module_sig_enforced(void)
->  {
->  	sig_enforce = true;
->  }
-> +
-> +static int mod_verify_sig(const void *mod, struct load_info *info)
-> +{
-> +	struct module_signature ms;
-> +	size_t sig_len, modlen = info->len;
-> +	int ret;
-> +
-> +	if (modlen <= sizeof(ms))
-> +		return -EBADMSG;
-> +
-> +	memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
-> +
-> +	ret = mod_check_sig(&ms, modlen, "module");
-> +	if (ret)
-> +		return ret;
-> +
-> +	sig_len = be32_to_cpu(ms.sig_len);
-> +	modlen -= sig_len + sizeof(ms);
-> +	info->len = modlen;
-> +
-> +	return module_sig_check(mod, modlen, mod + modlen, sig_len);
-> +}
-> +
-> +int module_auth_check(struct load_info *info, int flags)
-> +{
-> +	int err = -ENODATA;
-> +	const unsigned long markerlen = sizeof(MODULE_SIGNATURE_MARKER) - 1;
-> +	const char *reason;
-> +	const void *mod = info->hdr;
-> +	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
-> +				       MODULE_INIT_IGNORE_VERMAGIC);
-> +	/*
-> +	 * Do not allow mangled modules as a module with version information
-> +	 * removed is no longer the module that was signed.
-> +	 */
-> +	if (!mangled_module &&
-> +	    info->len > markerlen &&
-> +	    memcmp(mod + info->len - markerlen, MODULE_SIGNATURE_MARKER, markerlen) == 0) {
-> +		/* We truncate the module to discard the signature */
-> +		info->len -= markerlen;
-> +		err = mod_verify_sig(mod, info);
-> +		if (!err) {
-> +			info->auth_ok = true;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * We don't permit modules to be loaded into the trusted kernels
-> +	 * without a valid signature on them, but if we're not enforcing,
-> +	 * certain errors are non-fatal.
-> +	 */
-> +	switch (err) {
-> +	case -ENODATA:
-> +		reason = "unsigned module";
-> +		break;
-> +	case -ENOPKG:
-> +		reason = "module with unsupported crypto";
-> +		break;
-> +	case -ENOKEY:
-> +		reason = "module with unavailable key";
-> +		break;
-> +
-> +	default:
-> +		/*
-> +		 * All other errors are fatal, including lack of memory,
-> +		 * unparseable signatures, and signature check failures --
-> +		 * even if signatures aren't required.
-> +		 */
-> +		return err;
-> +	}
-> +
-> +	if (is_module_sig_enforced()) {
-> +		pr_notice("Loading of %s is rejected\n", reason);
-> +		return -EKEYREJECTED;
-> +	}
-> +
-> +	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-> +}
+Add a sleepable BPF kfunc that resolves the real inode backing a dentry
+via d_real_inode(). On overlay/union filesystems the inode attached to
+the dentry is the overlay inode which does not carry the underlying
+device information. d_real_inode() resolves through the overlay and
+returns the inode from the lower, real filesystem.
 
-The resulting call chain of the module authentication/signature
-functions is as follows:
+This is used in the RestrictFilesytemAccess bpf program that has been
+merged into systemd a little while ago.
 
-ima_read_modsig() -----------------------------,
-                                               v
-module_auth_check() -> mod_verify_sig() -> mod_check_sig()
-                             |
-                             |-> module_sig_check()
-                             '-> module_hash_check()
+Link: https://github.com/systemd/systemd/pull/41340 [1]
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Changes in v2:
+- Tag bpf_real_inode() with KF_RET_NULL and document that it returns
+  NULL for negative dentries; LSM hooks such as security_inode_create()
+  pass negative dentries, and without the flag the verifier marks the
+  return as PTR_TRUSTED and skips the NULL check.
+- Link to v1: https://patch.msgid.link/20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org
+---
+ fs/bpf_fs_kfuncs.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-I think this logic is quite hard to follow because mod_verify_sig(),
-mod_check_sig() and module_sig_check() have very similar names.
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index e4e51a1d0de2..761fbe0fec5d 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -353,6 +353,21 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
+ }
+ #endif /* CONFIG_CGROUPS */
+ 
++/**
++ * bpf_real_inode - get the real inode backing a dentry
++ * @dentry: dentry to resolve
++ *
++ * If the dentry is on a union/overlay filesystem, return the underlying, real
++ * inode that hosts the data.  Otherwise return the inode attached to the
++ * dentry itself.
++ *
++ * Return: The real inode backing the dentry, or NULL for a negative dentry.
++ */
++__bpf_kfunc struct inode *bpf_real_inode(struct dentry *dentry)
++{
++	return d_real_inode(dentry);
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+@@ -363,6 +378,7 @@ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+ static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
 
-The naming of module_auth_check(), module_sig_check() and
-module_hash_check() looks good to me, but I would prefer to rename
-mod_check_sig() and mod_verify_sig(). Perhaps mod_check_sig() could be
-renamed to mod_check_sig_header(), and mod_verify_sig() to
-mod_dispatch_auth_check()?
+---
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+change-id: 20260326-work-bpf-verity-a43f28baa242
 
-Otherwise, the patch looks ok to me. Feel free to add:
-
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-
--- 
-Thanks,
-Petr
