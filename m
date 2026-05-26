@@ -1,103 +1,207 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C87139A4B9;
-	Tue, 26 May 2026 03:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0823A963A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 03:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779764785; cv=none; b=VL38BjkGxR5vLh/sMZkDywoCJ4QFkdhyaVkcMJ/MI05QSoP5bDI1sVuvt8RqHwjXnnjF/8HAYsqKsHDxLFCTsswB7RIzg7RKinQuBla7LTmygZ8Iea+21CQ7tclNUk9HcskhP3v58r/YjCbpqMWRavSj9epDH2N//2SqVn+q8jo=
+	t=1779765061; cv=none; b=dumwJq8rerDHsWnC8fBtp62vuikAwCnFuJwMD1Ay61Jj38A7Wg7Ws0VEFOKymrMefYtmMsJJHdhrYi85mxjaS05KZYYXmQztYU8YIeHCqj5WIqzyqi6YcrUhYoLj31sx8t4hcCwuoxz3ctjmGPt63t2EySZJ5w45FgRZVn+/if8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779764785; c=relaxed/simple;
-	bh=HGQjZzHGgQDL4Zj5+ktUND7tDt+ywvnOB3+uu9LM9LY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=BOKK7v0HJ1tl5qyRjZ4ndaJzTtoaxN839jmUfvNZGB5xmL8+LETPWqZTry4pTzS5AP+N6o1L5v+kzZ+xtEy1c+VrK0+qV0XYSB7Ip3VyoRG7dB/hhHLaAZN+NtI3nuDmk/Lk73EE9u0V+LemfomG+ZVBgdDoCO4VzgcvKT9bNuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=miAoSySF reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779765061; c=relaxed/simple;
+	bh=iXYr1AMu/gnNQIY54OR1MHNCkjdoE2LybCYm1T0L1fE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OB1L66mfAUJRkU0uJUNH8kzGtWowRwHF4jNFqwbluMjNMF3X3DRijm9j5+W6n/IjO4MF5VX8x9c39oyjmRKPUTsHigXsuSCQ6Gh0RbUcQ31DkKqx1J6u9CBQSCmIa7rNvkVNnK96zXS+3JgtAT2a4UBjeRKX7vnsK+rzP2Ptw30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZQFnrgF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="miAoSySF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A3C1F00A3C;
-	Tue, 26 May 2026 03:06:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZQFnrgF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF2D1F000E9;
+	Tue, 26 May 2026 03:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779764784;
-	bh=PuCwAibjo4il47YSW70WARwryK18pod4qEuZtgh/MWA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=miAoSySF8EVzWhz9imT+sy+M1nNqxZMYQ/mRAuANUa7IRGhkoFUFvGaCHhfy6O4kc
-	 3pHnFJX0uT4iyiCvjjscyxM6wUC0etmm7CntOOJNa7Cl5W1rcAqpumZi6zMF1aJM77
-	 TBZ3IDrPj7i/SJ169dsorvg6uvpic5KuK3HJWYGJQLQiQjizT8l9CoXzSEdwjqfaJn
-	 xQzSxTlVYAc8bdOLuBFjyrPhT9aDHdPBJsSWwH00pMYSkFnvzZSI52CVtd5cS6bocN
-	 GP0+7TfEA+jzNj+xVOo5MacobpWF5zod7rvHE7YxvEaH+kWMlcZ9wzAc1TgljLAsVo
-	 X4o5dXXHEV1oQ==
-Content-Type: multipart/mixed; boundary="===============0436309527624145819=="
+	s=k20260515; t=1779765058;
+	bh=7piWC9I/W1z1aAhKh5m2yhLiZ0vyi0DB1p5c6NXyG4I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZZQFnrgF98DtNCfAKCj5tCe18vNOA2D/EbTSgm5unsOtAu8BdcGO2/8I4MQt9dpyN
+	 rC1q02VqoiSeZoSjuV/qUuKnunCeljkUG5VtO03kVegsYCyS1Rb0Pz2mnH5WezETPr
+	 pS4PGr1e80lfxbUVMcZYJtmKgoLWc3DgxvHcYA6pMHuvJVYoTulrJDqmYrro7Gpj8s
+	 lYxGaE0nzsGIUTL4WOBIRPoW5CloT24cjQz9xw6tb449Pg5bnKpFq8dM4z60t/JDwq
+	 i8MdKhH1uM+cPVJPpl3gwnpGXdO+05dN2mBFtPEHJfOW249IzZF/wcyiw6W4avXIVy
+	 VwAfy84659eoQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next v7 11/11] samples/bpf: Add memcg priority
+ control and async reclaim example
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Zhu" <hui.zhu@linux.dev>
+Cc: tj@kernel.org, hannes@cmpxchg.org, bpf@vger.kernel.org, mkoutny@suse.com
+In-Reply-To: <39784d6dba757f4fb82134192419094ce42c5af5.1779760876.git.zhuhui@kylinos.cn>
+References: <39784d6dba757f4fb82134192419094ce42c5af5.1779760876.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 03:10:57 +0000
+Message-Id: <20260526031057.DAF2D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <975872964206d12a299b9d3e938e6e312db4e96bb23f748d97dd6c05d6aee2b1@mail.kernel.org>
-In-Reply-To: <b3af3d0f9a925f79a6e4e7218e8ce84dfbeb5254.1779760876.git.zhuhui@kylinos.cn>
-References: <b3af3d0f9a925f79a6e4e7218e8ce84dfbeb5254.1779760876.git.zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH bpf-next v7 10/11] selftests/bpf: Add selftest for memcg async reclaim via BPF
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,inwardvessel@gmail.com,akpm@linux-foundation.org,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,sdf@fomichev.me,kpsingh@kernel.org,chen.dylane@linux.dev,yatsenko@meta.com,leon.hwang@linux.dev,a.s.protopopov@gmail.com,ameryhung@gmail.com,tklauser@distanz.ch,eyal.birger@gmail.com,rongtao@cestc.cn,haoluo@google.com,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayu
- an.chen@linux.dev,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,cgroups@vger.kernel.org,linux-mm@kvack.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: geliang@kernel.org,baohua@kernel.org,zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 03:06:23 +0000 (UTC)
 
---===============0436309527624145819==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [Medium] Non-atomic updates to the global `aggregation_map` in the `handl=
+e_count_memcg_events` tracepoint lead to data races and lost PGFAULT update=
+s.
+- [Medium] Atomic one-shot guards permanently leak in error paths, deadlock=
+ing the async reclaim functionality.
+- [Low] `parse_u64` relies entirely on `errno` and fails to detect complete=
+ly non-numeric input strings, silently returning 0.
+- [Low] Ignoring the return value of `__atomic_add_fetch` and using a subse=
+quent `READ_ONCE` introduces an unnecessary race window.
+--
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c9b3dfe2498b..29de8e2fe55d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6576,7 +6576,9 @@ F:	mm/memcontrol-v1.h
+commit 0eac8db0526f6826e19ed8ba2b922d7d358b6032
+Author: Hui Zhu <zhuhui@kylinos.cn>
+Subject: samples/bpf: Add memcg priority control and async reclaim example
 
-[ ... ]
+This commit adds a sample program demonstrating the memcg_bpf_ops feature.
+It provides priority-based memory throttling and workqueue-driven
+asynchronous page reclaim using a BPF program and userspace loader.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+> diff --git a/samples/bpf/memcg.bpf.c b/samples/bpf/memcg.bpf.c
 > new file mode 100644
-> index 000000000000..bf25967c911c
+> index 0000000000000..0995284794ac7
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-> @@ -0,0 +1,333 @@
+> +++ b/samples/bpf/memcg.bpf.c
+[ ... ]
+> +static int async_free(void *map, int *key, void *value)
+> +{
+> +	struct cgroup_memcg cm;
+> +	bool started_wq =3D false;
+> +	int i;
+> +
+> +	if (get_cgroup_memcg_from_id(local_config.low_cgroup_id, &cm) !=3D 0)
+> +		return 0;
 
+[Severity: Medium]
+Can the async_free_run guard permanently leak if get_cgroup_memcg_from_id
+fails? Returning early here skips the lock release at the end of the
+function, which would deadlock the async reclaim functionality.
+
+> +
+> +	for (i =3D 0; i < ASYNC_FREE_LOOP_MAX; i++) {
+[ ... ]
+> +	}
+> +
+> +	put_cgroup_memcg(&cm);
+> +
+> +	if (!started_wq)
+> +		__atomic_exchange_n(&async_free_run, 0, __ATOMIC_RELEASE);
+> +	return 0;
+> +}
+[ ... ]
+> +SEC("tp/memcg/count_memcg_events")
+> +int handle_count_memcg_events(
+> +		struct trace_event_raw_memcg_rstat_events *ctx)
+> +{
+[ ... ]
+> +	current_ts =3D bpf_ktime_get_ns();
+> +
+> +	if (current_ts - data->window_start_ts < ONE_SECOND_NS) {
+> +		data->sum +=3D ctx->val;
+
+[Severity: Medium]
+Can this non-atomic update to the global aggregation_map lead to data races
+and lost PGFAULT updates? Since this map is shared across all CPUs,
+concurrent PGFAULT events executing the tracepoint might perform read,
+modify, write operations simultaneously.
+
+Should BPF atomic instructions or a bpf_spin_lock be used here?
+
+> +	} else {
+> +		data->window_start_ts =3D current_ts;
+> +		data->sum =3D ctx->val;
+> +	}
+[ ... ]
+> +static __always_inline unsigned int
+> +__memcg_charged_impl(struct mem_cgroup *memcg, unsigned int nr_pages)
+> +{
+> +	struct wq_elem *elem;
+> +	__u32 key =3D 0;
+> +	u64 expected =3D 0;
+> +	s64 cur_allocated;
+> +	s64 cur_old_allocated;
+> +
+> +	__atomic_add_fetch(&allocated, nr_pages, __ATOMIC_RELAXED);
+> +	cur_allocated =3D READ_ONCE(allocated);
+
+[Severity: Low]
+Is there a race window introduced by ignoring the return value of
+__atomic_add_fetch and performing a separate READ_ONCE? A concurrent
+increment by another CPU between the add and the read could cause
+cur_allocated to observe an inconsistent or skipped value.=20
+
+Could the return value of __atomic_add_fetch be assigned directly to
+eliminate this window?
+
+> +	cur_old_allocated =3D READ_ONCE(old_allocated);
+> +	if (abs_diff(cur_allocated, cur_old_allocated) < ONE_MB_PAGE_COUNT)
+> +		goto out;
+> +	WRITE_ONCE(old_allocated, cur_allocated);
+> +
+> +	if (get_usage() < local_config.async_trigger_bytes)
+> +		goto out;
+> +
+> +	if (__atomic_compare_exchange_n(&async_free_run,
+> +					&expected, 1,
+> +					false,
+> +					__ATOMIC_ACQ_REL,
+> +					__ATOMIC_RELAXED)) {
+> +		elem =3D bpf_map_lookup_elem(&wq_map, &key);
+> +		if (!elem)
+> +			return 0;
+
+[Severity: Medium]
+Does this early return also leak the async_free_run guard if the map lookup
+fails? Like the early return in async_free, this skips resetting the guard
+and could deadlock the state machine.
+
+> +
+> +		bpf_wq_start(&elem->work, 0);
+> +	}
+> +
+> +out:
+> +	return 0;
+> +}
+[ ... ]
+> diff --git a/samples/bpf/memcg.c b/samples/bpf/memcg.c
+> new file mode 100644
+> index 0000000000000..0929d868e6d8f
+> --- /dev/null
+> +++ b/samples/bpf/memcg.c
+[ ... ]
+> +static uint64_t parse_u64(const char *str, const char *prog)
+> +{
+> +	uint64_t value;
+> +
+> +	errno =3D 0;
+> +	value =3D strtoull(str, NULL, 10);
+> +	if (errno !=3D 0) {
+
+[Severity: Low]
+Does this code silently return 0 for completely non-numeric input strings?
+
+The strtoull function does not set errno if the input string contains no
+valid digits. Since the endptr argument is NULL, could malformed arguments
+like --async_trigger_bytes abc silently return 0 instead of raising an
+error?
+
+> +		fprintf(stderr, "ERROR: strtoull '%s' failed: %d\n",
+> +			str, errno);
+> +		usage(prog);
+> +		exit(-errno);
+> +	}
+> +	return value;
+> +}
 [ ... ]
 
-> +void test_memcg_async_reclaim(void)
-> +{
-> +	u64 cgroup_id, old_max, new_max;
-> +	int cgroup_fd, ret;
-> +	struct memcg_async_reclaim *skel;
-> +	struct bpf_link *link = NULL;
-> +	char data_file1[] = "/tmp/test_data_1_XXXXXX";
-> +	char data_file2[] = "/tmp/test_data_2_XXXXXX";
-
-Can skel be dereferenced if it isn't initialized? The skel variable is
-declared without initialization to NULL, while link is explicitly
-initialized to NULL. If control reaches the cleanup block without
-memcg_async_reclaim__open_and_load() succeeding, skel remains
-uninitialized:
-
-> +cleanup:
-> +	bpf_link__destroy(link);
-> +	memcg_async_reclaim__detach(skel);
-> +	memcg_async_reclaim__destroy(skel);
-
-The generated detach and destroy helpers will dereference skel through
-obj->skeleton. Other tests in prog_tests/ check if (skel) before calling
-detach/destroy to handle this case safely.
-
-This was raised by XIAO WU in v6 review
-(https://lore.kernel.org/all/20260423171516.00004adc@gmail.com/) in the
-context of memcg_ops hierarchies test, but the same pattern appears in
-this new async_reclaim test added in v7.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26429228214
---===============0436309527624145819==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1779760876.gi=
+t.zhuhui@kylinos.cn?part=3D11
