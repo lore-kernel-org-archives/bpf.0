@@ -1,63 +1,63 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF2F3AC0DD
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7A13ACF15
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779824258; cv=none; b=q6zfo/eAYIX6O7hVJMzX2ZD/ElFR4j9pSStJXItpoq1fSajT0mKNgaiim1MhhiP6tq2oSU9TMw3a6ZIn5Ev4VBFP2rJacG/c0CLBPIdIu3o4PKALovNMkV/8bNHe6wdULHNldkECu/mL17lSuy8YTE2dFUSMGRMBvxMDj2eNlPA=
+	t=1779824259; cv=none; b=nTjYpwR4CHxi1LxXLfEbNdcSMKZ+JzSqmBJNQKjFpzgb+eGT8VZ4/Y8FCaH8PiHpRNoTzxWh2/WudqEkJ14qghdOHVR738kEIGPKhN7adYmR3LyZ9m02hj0FnvGgDox5h+I7nS8FV4dLDPkSf+gocFYkeFOeADgRqIWUqEr4iPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779824258; c=relaxed/simple;
-	bh=CIx/wbIY+h0O3qhg794H9N5puKyMZqIXFqmREPW3X38=;
+	s=arc-20240116; t=1779824259; c=relaxed/simple;
+	bh=iJS7ojukI/JPybk25WQ4Mzg6FELELVbt1Ri52W0PAVM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WxSm7pSaIZQ6FINeb/mvU9LOKCNil4wo4sIvdDReKiN33rRCnbAUw5NzD+ln/S2NBa2Tw7zKvseAERvOpBVTTMcCxp7XWcg94zjcuo+0xwz9HEN6rCOSsPq2ngyUeR8+zWCJvLQuI48Ns9XIgNWnqyvbCXA8JyGXxb1t2FGBOlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=stL2yUJU; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version:Content-Type; b=ubqQXd3nLB03bWmzjidrULA0Ymfhuw6FBvP3Ubqwr5F8HdjqK6/Rro3oB1wVEbyswli4Be8JqN3JYtA6vMPD0v4Fc6Fk6t8W0E4ah4QCMa49FqzGWheuQDYSdSuhhrAZODQx7gx9EIB/aQSK8KyM9YTriPhai1vx11o3RK9eO7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EORpC7L1; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stL2yUJU"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3699cdeec05so4734706a91.3
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EORpC7L1"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-36abfe17c11so2870023a91.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779824256; x=1780429056; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779824257; x=1780429057; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QMywEO/xTDK++kG9pCAaD0ZUp3EUmpHCYjtqjv7Eqo4=;
-        b=stL2yUJUZ7sNWB1yHabX6b4trrC//YNAoWZKQfK/zj0PO0DjPvcj5TRFN6aRARhngm
-         KP8kX2X/2zbreLc3kLzdDF5KbcrbXVuUinQW3jygnM4ITOIF34qYDaIZFih56Focc2fZ
-         GhaYmpbYVsdxQn8n8cO05tNQESzG7ecIKdJS4+zSGwFhiaFJYddxXbi/bmvjWKo9C83R
-         Zt5N++U/tdHfWNTMKzVIZzaUHIMTZmDyHMU/IKu1ZCMMcGjlc+FfBXHCzlKgErjPXv+Y
-         nsvTN2ZjfHBzFzzopRDHm3y2wwNcTySBS+2FxonV4vbjZsW+beJrTlsCXahCLJmTpf7J
-         J9Vw==
+        bh=MeAMxyCOlQSb5Ht7uA27Gi2g/itFzY5gixplaTQXGIE=;
+        b=EORpC7L1j+DmMdw0SfVUPEP1C6HmrGe+h93WyRr81KX+DSte/jEXH30lCX0HXWWAQk
+         /p+BGlHkzVCRxvPWg3C9mdM3GC/JhCQlAakLG1Nd3+DUm0EQpO/oF/SJcyBj9EH3oEkO
+         HXTxkWdCNHRv/m4zBcyBxjVH1yMxvVjI9UgsIbsQ0uLwP5+8FriOfm3A9w4zH5Ip7E8R
+         jIxoTDX/2L2rv6eckx9PqVncFKc9EC+6/ajR3jNowPPMwgH/CoisodircjFiK3W9vJ6e
+         DLLLmr7fjW31RNFR3i5zGs2FduhWuJcs2nLjGd/rdD+h31MbSSf38xyUwiIPVVv1Zupp
+         J9tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779824256; x=1780429056;
+        d=1e100.net; s=20251104; t=1779824257; x=1780429057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QMywEO/xTDK++kG9pCAaD0ZUp3EUmpHCYjtqjv7Eqo4=;
-        b=VWsRPQQt6b5lhuytrRDqgf20YEM6rUN/w1gm2/fZ+atXkzPE+RmG/yvMnLFsWj0X8j
-         99W/V7GyB4St6PbJYJCrppPC+fNUoeUcDyGCjVo5sH23le8a3/wrib1OKKmp1tfN826x
-         byenZ23K8BC30e5IX4Ikoy8oku2WX/tdATNDkQUhrSwPp0JshHxlOaFUcnWpwz/py+pU
-         FGTKR8UNl0uavQbm5mGLI31hvXZRBfkDZaQDgGgwOaNol20LBaVCrus0xRbLFt/dXlv5
-         57UnO7Uuw3zIlRr+C6bQbTWUCJJejlJqq5bDG7YKWPUZ9CfqqJTTFli+zG8s009ZNeYj
-         vPqw==
-X-Gm-Message-State: AOJu0Yw4DV1gK/Oo8dvuLJF15VGzcurT/RclQYewizmZ3NLjcbm4XxjH
-	cHkoOwUAdX/4hnUs/69VoJ0+TG7xEiCKL7ZZuA+w9TeW8HRpRESpdVD1B3X2YlRxQeM=
-X-Gm-Gg: Acq92OF9Aqu7kFdAdyFcf/dGIfZDEgsmb9eCNIgs/3LkK81efBAFP4l/yWqqbJq/U1q
-	k/ehGAM9+mV7i/lHuFSN1fDQNROF8XIosSXcrqzbGVIcFP45D7t1YaDw4aJrenQRuF7L0jTvD0P
-	YMUwk7WYCjnbx33+t1QUw90qwiUky8EZ0+cgYZhx+RaSAPWu/E370I3y/KcfPAcMziAT2xI7orw
-	2ytQRPSfDqQdNE+mztqiCidMytHQlr4xTEVQqtBokYUYUn32qP8bcSEczDwBtb2FGdO7kiJFba7
-	C6tr9hpLYG7npTj+/i0pW5FXB8HVtJjtkYt2JN+/Ye6ij7E5Tz1xrMgeK9iqWZYBj0Byq+kCoPJ
-	LYvqHzMcTecE4tRIgFmONPy/kzKVBXIFsBFYC+Ikf3hsJP5gQWR+iA2cBQUiNwhCKx/zgLLaUCE
-	1aEktxlZdZzczxcgffpKUg7rdqpGBgXLbHf1p99dkCFvarZVQyO0VL3YK4BAgLhXy2Ky3wgZUAH
-	sxc2g==
-X-Received: by 2002:a17:90b:350a:b0:36a:fcf5:64d2 with SMTP id 98e67ed59e1d1-36afcf566b1mr5169264a91.16.1779824256031;
-        Tue, 26 May 2026 12:37:36 -0700 (PDT)
+        bh=MeAMxyCOlQSb5Ht7uA27Gi2g/itFzY5gixplaTQXGIE=;
+        b=l2yZwzBWpMFSKXx9pbVoF6CQneHkt/4zQGiJL6M6Njm458sZzofMq7Vhrmbc1KtSQq
+         vXbq5H0fuPnfiDQxfUVV6wGdiCI1rbd3YW7o4BTDKve2M6g0eqca43mUeRp/mxrCW2zJ
+         ofp8fN3ZDZKuWjNzpLVJfSItQu0nfBIctkv6VYIbPaTZDjk3TD1RCghfX3CSOMbPnLxN
+         JLONOprNpcG9NfBaerkteUwtTRlVwgswaMI6VigcfCyxGcDzKNLI5ynJGQcfdIfAKOoF
+         CHzi86la5yh9y9TT12Mhm8GugUvsfs56do3J0cFi/C2ZJiqfuOhrJ+CpCzpQoFzbQMkU
+         pdkQ==
+X-Gm-Message-State: AOJu0Yx8YPlCrbmgQ5fPjQI3m21Vx+1RV+i5AAj7Q37RWrA2gmZe0E6A
+	iGWKarSvEdQ+Xq1bhqocwP0qXQa/iCEQmfmAdFdr9t51/BOCL+FW/1LjmBRp1Fks87I=
+X-Gm-Gg: Acq92OG1Q8qgS/WB1ll+NnByrWnu6joGAGzb5ixCDuIixv/5mEH7aMW6H8uWKzP/RzX
+	NqsP+FEPyuGAayXf54PQQcdSXYz+z5V/fv5wWly2VL6+lOx5czQcxK9QXq7XiNMauo9zrSEUQ3y
+	j/4wQixJxwBdVC+WctS3jXZTM/S3EZ3AEl5ttJirK8/3rECLDlq903UedBKx/u0uK+kYzMNuEt8
+	DvWgyJcR3XuZF4q2/43DwcWoEmUt/18Y8ROYoboJ2LLYJ0neJfcOduxQFNcuMLCXsXoK0FBPmWv
+	9lGSTmHn5eIXGWYpabpf9zHvSSKCiJE1RL80JmFESrTOX5Fbvhw0ubqecKp/I7HWCDKw8Reyaug
+	4Juovb4s979aZ8Yp7bYvIvHssbxpUpEJkZ8blRsbGMgoVz8t4MhRcbIZ17VDquULlCv0BLOxb/S
+	EEaDYfTXPYuqfmjZPmYg8xmzKkb2AEehaMHCkoeKwPYuoTjcHqkI1sURAiT6pp/5gKvgRWq6t8o
+	HbcEg==
+X-Received: by 2002:a17:90b:2f8e:b0:366:1172:597e with SMTP id 98e67ed59e1d1-36a67472642mr18132451a91.9.1779824257025;
+        Tue, 26 May 2026 12:37:37 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a72c913a1sm12617283a91.15.2026.05.26.12.37.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 12:37:35 -0700 (PDT)
+        Tue, 26 May 2026 12:37:36 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH RFC bpf-next v2 3/6] selftests/bpf: test cases for loop hierarchy computation
-Date: Tue, 26 May 2026 12:37:17 -0700
-Message-ID: <20260526-better-1m-reporting-v2-3-e7ec61c45d41@gmail.com>
+Subject: [PATCH RFC bpf-next v2 4/6] bpf: report hot simulated callchains when 1M instructions limit is met
+Date: Tue, 26 May 2026 12:37:18 -0700
+Message-ID: <20260526-better-1m-reporting-v2-4-e7ec61c45d41@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
 References: <20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com>
@@ -83,283 +83,278 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Test cases covering the following branches in bpf_compute_loops():
-- Case B: simple backedge creating a loop (loop_single)
-- Case B: two independent loops (loop_two_independent)
-- Case B + D: nested loops where inner header's loop_header points to
-  outer (loop_nested)
-- Case C: diamond CFG with no loops (fwd_edges_no_loop)
-- Case D: sibling inner loops within one outer loop
-  (loop_nested_siblings)
-- Three levels of loop nesting (loop_three_levels)
-- Loop with if-else body containing forward branches
-  (loop_with_if_else)
+When the verifier exceeds the 1M instruction budget, the current error
+output shows a random execution trace that happens to be active when
+the limit is hit, which is not very helpful for debugging.
+
+To rectify this, employ a profiler-inspired technique:
+collect and count "callchain" stack traces that the verifier visits
+during program validation and report the top 3 hot traces. Sample
+callchains at instructions marked as force checkpoints and loop header
+entries.
+
+When 1M instructions is met, print a report containing:
+- callchains verifier visited most often;
+- disassembly of the subprograms referenced from the printed
+  callchains.
+
+Here is an example of the report:
+
+  budget_nested_call_loop():
+    ; asm volatile ("                                     \ @ verifier_budget_report.c:44
+    0: (b7) r0 = 0
+    1: (85) call pc+1
+    2: (95) exit
+
+  budget_nested_call_loop__inner():
+    ; asm volatile ("                                     \ @ verifier_budget_report.c:54
+    3: (b7) r0 = 0
+    4: (07) r0 += 1
+    5: (05) goto pc-2
+
+  #1 most visited simulated stacktrace (visited 499999 times):
+    budget_nested_call_loop/1 (.../verifier_budget_report.c:44)
+    budget_nested_call_loop__inner/4 (.../verifier_budget_report.c:54)
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
- 2 files changed, 235 insertions(+)
+ include/linux/bpf_verifier.h |  14 ++++
+ kernel/bpf/verifier.c        | 155 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 169 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 219ff2969868..35d92d176c1f 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -57,6 +57,7 @@
- #include "verifier_live_stack.skel.h"
- #include "verifier_liveness_exp.skel.h"
- #include "verifier_load_acquire.skel.h"
-+#include "verifier_loop_hierarchy.skel.h"
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
-@@ -208,6 +209,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
- void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
- void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
- void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
-+void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-new file mode 100644
-index 000000000000..84cabfa42485
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-@@ -0,0 +1,233 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d0a1fb135cbf..347a155d8e21 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -9,6 +9,8 @@
+ #include <linux/filter.h> /* for MAX_BPF_STACK */
+ #include <linux/tnum.h>
+ #include <linux/cnum.h>
++#include <linux/hashtable.h>
++#include <linux/jhash.h>
+ 
+ /* Maximum variable offset umax_value permitted when resolving memory accesses.
+  * In practice this is far bigger than any realistic pointer offset; this limit
+@@ -660,6 +662,17 @@ struct bpf_loop {
+ 	bool irreducible;
+ };
+ 
++struct bpf_callchain {
++	u32 insn_idx[MAX_CALL_FRAMES];
++	u32 curframe;
++};
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++struct bpf_callchain_entry {
++	struct hlist_node node;
++	struct bpf_callchain cc;
++	u64 count;
++};
++
+ struct bpf_insn_aux_data {
+ 	union {
+ 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
+@@ -1043,6 +1056,7 @@ struct bpf_verifier_env {
+ 	u32 scc_cnt;
+ 	struct bpf_iarray *succ;
+ 	struct bpf_iarray *gotox_tmp_buf;
++	DECLARE_HASHTABLE(callchain_htab, 8);
+ };
+ 
+ static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2b3584712ad2..54b7ad65b7fc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17247,6 +17247,152 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+ 	return INSN_IDX_UPDATED;
+ }
+ 
++static void compute_callchain(struct bpf_verifier_state *st, struct bpf_callchain *cc)
++{
++	int i;
++
++	cc->curframe = st->curframe;
++	for (i = 0; i <= st->curframe; i++)
++		cc->insn_idx[i] = bpf_frame_insn_idx(st, i);
++}
++
++static int update_callchain_profile(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
++{
++	struct bpf_callchain_entry *entry;
++	struct bpf_callchain cc = {};
++	u32 hash;
++
++	compute_callchain(st, &cc);
++	hash = jhash2(cc.insn_idx, cc.curframe + 1, cc.curframe + 1);
++	hash_for_each_possible(env->callchain_htab, entry, node, hash) {
++		if (entry->cc.curframe == cc.curframe &&
++		    !memcmp(entry->cc.insn_idx, cc.insn_idx, (cc.curframe + 1) * sizeof(u32))) {
++			entry->count++;
++			return 0;
++		}
++	}
++	entry = kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
++	if (!entry)
++		return -ENOMEM;
++	entry->cc = cc;
++	entry->count = 1;
++	hash_add(env->callchain_htab, &entry->node, hash);
++	return 0;
++}
++
++static void free_callchain_profile(struct bpf_verifier_env *env)
++{
++	struct bpf_callchain_entry *entry;
++	struct hlist_node *tmp;
++	int bkt;
++
++	hash_for_each_safe(env->callchain_htab, bkt, tmp, entry, node) {
++		hash_del(&entry->node);
++		kfree(entry);
++	}
++}
++
++static void print_callchain_entry(struct bpf_verifier_env *env,
++				  struct bpf_callchain_entry *entry, int idx)
++{
++	struct bpf_callchain *cc = &entry->cc;
++	const struct bpf_line_info *linfo;
++	struct bpf_subprog_info *sub;
++	int i, insn_idx;
++
++	verbose(env, "#%d most visited simulated stacktrace (visited %llu times):\n",
++		idx, entry->count);
++	for (i = 0; i <= cc->curframe; i++) {
++		insn_idx = cc->insn_idx[i];
++		sub = bpf_find_containing_subprog(env, insn_idx);
++		linfo = bpf_find_linfo(env->prog, insn_idx);
++		if (sub->name)
++			verbose(env, "  %s/%d", sub->name, insn_idx);
++		else
++			verbose(env, "  subprog#%td/%d", sub - env->subprog_info, insn_idx);
++		if (linfo)
++			verbose(env, " (%s:%u)",
++				btf_name_by_offset(env->prog->aux->btf, linfo->file_name_off),
++				BPF_LINE_INFO_LINE_NUM(linfo->line_col));
++		verbose(env, "\n");
++	}
++}
++
++static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	u32 i, end = (sub + 1)->start;
++
++	if (sub->name)
++		verbose(env, "%s():\n", sub->name);
++	else
++		verbose(env, "subprog#%td:\n", sub - env->subprog_info);
++	env->prev_linfo = NULL;
++	for (i = sub->start; i < end; i++) {
++		verbose_linfo(env, i, "  ; ");
++		verbose(env, "  %d: ", i);
++		bpf_verbose_insn(env, &env->prog->insnsi[i]);
++		if (bpf_is_ldimm64(&env->prog->insnsi[i]))
++			i++;
++	}
++}
 +
 +/*
-+ * kernel/bpf/loops.c:compute_loops() distinguish between
-+ * the following cases:
-+ * - B: backedge -> simple loop
-+ * - C: cross edge to non-loop node -> no-op
-+ * - D: edge to node whose header is in DFS path -> nested loop
-+ * - E: edge to node whose header is NOT in DFS path -> irreducible
-+ *
-+ * Below test cases cover the above branches in various combinations.
++ * Print several most visited simulated stack traces,
++ * and a disasembly of related subprograms.
 + */
-+
-+/* Case B: single bounded loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          3: {{.*}} (95) exit")
-+__naked void loop_single(void)
++static void print_hotspots(struct bpf_verifier_env *env)
 +{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
++	DECLARE_BITMAP(printed_subs, BPF_MAX_SUBPROGS + 2) = {};
++	struct bpf_callchain_entry *top[3] = {};
++	struct bpf_callchain_entry *entry;
++	struct bpf_subprog_info *sub;
++	int i, j, bkt, nr_top = 0;
++
++	if (!(env->log.level & BPF_LOG_LEVEL))
++		return;
++
++	/* Collect the hottest callchains */
++	hash_for_each(env->callchain_htab, bkt, entry, node) {
++		for (i = 0; i < 3; i++) {
++			if (!top[i] || entry->count > top[i]->count) {
++				memmove(&top[i + 1], &top[i], (2 - i) * sizeof(top[0]));
++				top[i] = entry;
++				break;
++			}
++		}
++	}
++
++	for (i = 0; i < 3 && top[i]; i++)
++		nr_top++;
++
++	if (!nr_top)
++		return;
++
++	if (!(env->log.level & BPF_LOG_LEVEL2))
++		bpf_vlog_reset(&env->log, 0);
++
++	/* Identify callchain subprograms and print disasm of those */
++	for (i = 0; i < nr_top; i++) {
++		struct bpf_callchain *cc = &top[i]->cc;
++
++		for (j = 0; j <= cc->curframe; j++) {
++			sub = bpf_find_containing_subprog(env, cc->insn_idx[j]);
++			__set_bit(sub - env->subprog_info, printed_subs);
++		}
++	}
++
++	for_each_set_bit(i, printed_subs, env->subprog_cnt) {
++		disasm_subprog(env, &env->subprog_info[i]);
++		verbose(env, "\n");
++	}
++
++	/* Print the hot callchains */
++	for (i = 0; i < nr_top; i++) {
++		print_callchain_entry(env, top[i], i + 1);
++		verbose(env, "\n");
++	}
 +}
 +
-+/* Case B: two independent loops at the same nesting level. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  2       1: {{.*}} (07) r0 += 1")
-+__msg("  2   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          3: {{.*}} (b7) r1 = 0")
-+__msg("  1       4: {{.*}} (07) r1 += 1")
-+__msg("  1   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
-+__msg("          6: {{.*}} (95) exit")
-+__naked void loop_two_independent(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 10 goto 2b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
+ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ {
+ 	int err;
+@@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		insn_aux = &env->insn_aux_data[env->insn_idx];
+ 
+ 		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
++			print_hotspots(env);
+ 			verbose(env,
+ 				"BPF program is too large. Processed %d insn\n",
+ 				env->insn_processed);
+@@ -17390,6 +17537,12 @@ static int do_check(struct bpf_verifier_env *env)
+ 		state->last_insn_idx = env->prev_insn_idx;
+ 		state->insn_idx = env->insn_idx;
+ 
++		if (bpf_is_force_checkpoint(env, env->insn_idx) || insn_aux->loop) {
++			err = update_callchain_profile(env, state);
++			if (err)
++				return err;
++		}
 +
-+/* Case B + D: nested loops. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")		/* outer loop header */
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")		/* outer loop insn */
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")		/* inner loop header */
-+__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2") /* inner loop insn */
-+__msg("  1   1   5: {{.*}} (a5) if r0 < 0xa goto pc-5") /* outer loop insn */
-+__msg("          6: {{.*}} (95) exit")
-+__naked void loop_nested(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Case C: forward edges, no loops. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("          1: {{.*}} (25) if r0 > 0x0 goto pc+2")
-+__msg("          2: {{.*}} (b7) r0 = 2")
-+__msg("          3: {{.*}} (05) goto pc+1")
-+__msg("          4: {{.*}} (b7) r0 = 3")
-+__msg("          5: {{.*}} (95) exit")
-+__naked void fwd_edges_no_loop(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	if r0 > 0 goto 1f;				\
-+	r0 = 2;						\
-+	goto 2f;					\
-+1:	r0 = 3;						\
-+2:	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Case B + D: two sibling inner loops within one outer loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
-+__msg("  1   1   5: {{.*}} (b7) r2 = 0")
-+__msg("  1   1   6: {{.*}} (07) r2 += 1")
-+__msg("  1   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
-+__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          9: {{.*}} (95) exit")
-+__naked void loop_nested_siblings(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 5 goto 3b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Three levels of nesting. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   4: {{.*}} (b7) r2 = 0")
-+__msg("  1   3   5: {{.*}} (07) r2 += 1")
-+__msg("  1   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
-+__msg("  1   3   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
-+__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          9: {{.*}} (95) exit")
-+__naked void loop_three_levels(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 3 goto 3b;				\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Loop with an if-else body (forward branch inside loop, Case C). */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (bf) r1 = r0")
-+__msg("  1   1   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
-+__msg("  1   1   4: {{.*}} (b7) r1 = 1")
-+__msg("  1   1   5: {{.*}} (0f) r0 += r1")
-+__msg("  1   1   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
-+__msg("          7: {{.*}} (95) exit")
-+__naked void loop_with_if_else(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = r0;					\
-+	if r1 > 5 goto 2f;				\
-+	r1 = 1;						\
-+2:	r0 += r1;					\
-+	if r0 < 100 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/* Case E: irreducible loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("          1: {{.*}} (b7) r1 = 0")
-+__msg("          2: {{.*}} (25) if r0 > 0x5 goto pc+2")
-+__msg("  1       3: {{.*}} (b7) r1 = 1")
-+__msg("  1   3   4: {{.*}} (05) goto pc+1")
-+__msg("          5: {{.*}} (b7) r1 = 2")
-+__msg("  1   3   6: {{.*}} (0f) r0 += r1")
-+__msg("  1   3   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
-+__msg("          8: {{.*}} (95) exit")
-+__naked void loop_irreducible(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r1 = 0;						\
-+	if r0 > 5 goto 2f;				\
-+1:	r1 = 1;						\
-+	goto 3f;					\
-+2:	r1 = 2;						\
-+3:	r0 += r1;					\
-+	if r0 < 16 goto 1b;				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 		if (bpf_is_prune_point(env, env->insn_idx)) {
+ 			err = bpf_is_state_visited(env, env->insn_idx);
+ 			if (err < 0)
+@@ -19673,6 +19826,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 		return -ENOMEM;
+ 
+ 	env->bt.env = env;
++	hash_init(env->callchain_htab);
+ 
+ 	len = (*prog)->len;
+ 	env->insn_aux_data =
+@@ -19945,6 +20099,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	bpf_clear_insn_aux_data(env, 0, env->prog->len);
+ 	vfree(env->insn_aux_data);
+ err_free_env:
++	free_callchain_profile(env);
+ 	bpf_stack_liveness_free(env);
+ 	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env->scc_info);
 
 -- 
 2.54.0
