@@ -1,127 +1,141 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25D3355F57
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05B3FF1AB;
+	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805603; cv=none; b=NExb5TObJ8/EuwUVHGDBYZOVXz+1X44rpUzvblwIjzCIET4nDjSOF9k9VY+6HnOODzRhZkjvmnopPzts41OaA4Q2M5i9yTlBj2Idrg+pskYfGE3HQY+cTcwsSezXGrV1+ciMVs7GsLS+TQdvWDWrZPHOuYmOn8xw3oZXYJlNCwg=
+	t=1779805787; cv=none; b=AUc5MNpjfYJLd9hFWghdGyk54Ry0pxtYN4CLMwfXQ56mLdFKOSrU81ME70q3qMDpc3R5RwvbJh3BTNo3iCIxb486dS3kJQtsuWKYQX24pIUocgxs0k2Kgij5ULalyfjHg1VI+P4azaIuZ9Q2FADLWEH9eduU3FU5Ih79+n1TcIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805603; c=relaxed/simple;
-	bh=YeBVCeauekm9I4EZoE9KgKDLAKsaRIrAyNxRCFPDe0Q=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OmnTrpTIVCLhtzI5z7VYxPfN8YUNlGu2MXERcbZlhL/aZD284yTw/GOz6JVrn6zvHqD2dWpF1yP1JrfF09BWrKWRP3AyIURFloxsF8wAEBtzH6E50xm983zsXQ0zPixOBoQE/Ofe1aoth3BkQ+ThQO6UrSt2EEWr8QBtxF3UMk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUawmq9n; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779805787; c=relaxed/simple;
+	bh=01QZ3Oc+k3R391wthpsoqAJ4A4j9P7bKR8UG9T3xXXo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKJewTHD96pW9neIFhdR92mobyLjNtcTYZSdmdGQSY4pAFXP+l6pBsQmpd+IrTIYWkFYWa7ivmjlQfpSYYArIvLuCz0VhDrYBERngxlUpUGDjDnGHMfBZSvHryFg6PXuS7RLoq0VXEfqQfrlCVtI1n3yuvcdOLkUbtfQXa4tymA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzsWz/vl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUawmq9n"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so112099215e9.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779805600; x=1780410400; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UyMYHXc7gW0Hm+VADntLu7+SEKFOAsvci8NMt8Y69Uc=;
-        b=KUawmq9nFNY6LYNFtwpPQ5uLUaJZsTJsh3gHPeVoj933QngpNCprUuhI590HG02Ijw
-         ixFgwXsux2suz1IAhwJGtEmRvW7YiVVC7GmYpEVLrH4MLXqIc9xVUchEc1LIZYEqW0J7
-         92wIeliuoxTL+opCb8ItmLUQCl8LYIeWr8pQabAnXqXW5t8wEZfboGgRrBs+kqLIH9RB
-         0w/6AXM9RBFO7EG4yUPGA1WuMVIJ0WFnjlUdAIUaMG5PNciqQzGnXiOpjYfLjz86bzKa
-         68KKHXkbAf12BEETYUVoo5PGRvVY7tSzTE9gi4mgs+vtahQuHwsLBko4z0mA770Jtu+X
-         k6dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779805600; x=1780410400;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UyMYHXc7gW0Hm+VADntLu7+SEKFOAsvci8NMt8Y69Uc=;
-        b=iNw++llEBLJ7hAf2KFvdOcS8fPfThn7KY+CsESZJxvuhz0/Uyc4IhcDqHFDlUT6bgl
-         1SJ6JLOBIOjeGpPPsIQRWPNLsR5IP6n+ApsmZahXjudpyO89Ruxa5+uGlY5NPP3TcjV1
-         kEma7KuWtE3P7+2aUpcx4g59wuR4IxoQ95cTel68IUce3JgBtr09yRzspH+Ag+j3DIz0
-         eKDZAfdHQYEYKqsDNJ44g75PzhilzeyC9ioFpiFkev4B5XyUpkzERXX55PF2SCNT/SCF
-         /5ZJ/32XKyflqNq8f/u24DPWbUyehlVJLSQR1xBp6Q+GJm1m1LkSjH8gFDM999lSZOJZ
-         Kf+A==
-X-Forwarded-Encrypted: i=1; AFNElJ8bVxbl8pcAQsJUYLkcUf+DyfwvAz1TPXZm9nHfCFoIKwzs4iGPvHMIBSeMQJ9Ri9yFODg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkRIFpIpAYB5diUybCoIMdT16WJSWGNRJZajhdxkjDvDD8M4Di
-	8j32fnjto9V3C8YhWKbKjAOUCglqVBxA2/E0A8100W0X2D6nn3S1KrpF
-X-Gm-Gg: Acq92OHpRkd9yjdF0rs452xNZhKpN8hnL7zaWD2ZGaSFPgesg19apnoIXNTRViNS8Jv
-	xzNnyjx6gCO0yB9sadJNdllEpSj0SKBBkq42gYhkJH7e87mpl+cARik8nLk0AHYqG7jxKvf9X4O
-	qSR+ghNQutum6dly1lGCtLnORtpi6mxfMi4gHyH6LpJ0jpu4v+NqvhoAY059wrCcBLBNhYUMjcS
-	UTSuOeQOV1k9vXXmPFLZ39y+p63MkOfM+MsbSmdMcUFf6dg4/W8efBjccKl+AIMaXj/7VShbufP
-	v91bZZGn2xajqiJf+CaJGccRWoEMq8rGbE5kuaDa31RfxNAX/VB9FQ96Ms/8wFTLNA8MCKlW3VI
-	3vqMTctDOBTy7BXYQjSU5F6M6sWmFwVc0Xdr8NmmwxloSm6qcSlBpwBcuF9afSkczxPeyz6eodP
-	L9DfDuUgu1QzGCpHQ6
-X-Received: by 2002:a05:600c:628f:b0:490:5057:f602 with SMTP id 5b1f17b1804b1-49050580d79mr258141665e9.17.1779805599766;
-        Tue, 26 May 2026 07:26:39 -0700 (PDT)
-Received: from krava ([2a00:102a:403b:6530:533a:f167:d705:6aca])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d71688sm37991070f8f.33.2026.05.26.07.26.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 07:26:39 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 26 May 2026 16:26:36 +0200
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 05/12] libbpf: Change has_nop_combo to work on top of
- nop10
-Message-ID: <ahWtnED2e7RU64B4@krava>
-References: <20260521124411.31133-1-jolsa@kernel.org>
- <20260521124411.31133-6-jolsa@kernel.org>
- <CAEf4BzY3bV+gkA4fRm=jzaTowG1QtXogLDOKkG3CrR5EWzDPcg@mail.gmail.com>
- <ahDKatbb_ixUY_XF@krava>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzsWz/vl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D741F000E9;
+	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779805785;
+	bh=GSX/o3tGKH8prhZQKAGSjMb4rUlV/Z55PxckME59z4U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EzsWz/vlNWJNW+NMA+grSpGmEAlzW1dMhzljG4DDGQOP42grQ3eEtdXE+yg/tu0nJ
+	 e2v3LjX3uBcVx2JXnnVCBQNmCVQI7uLKvZgmd7Nxrd6B+jZBk85BEhu6L9hr4AWOhN
+	 DmVXv8lzXWvF/wiKNTotwFW8EP7Ra+ZA35C0sV8SMVdKBC9j5ntx1+ijctMD6qQYF9
+	 3qUB2mKBtFBdFI85Oqtg3YjaU1gaQYfEjc1plhfWPXZUkEMZg3O4ZfPw+YIn8ZesD3
+	 5FkFfGfwX6V0F/bhrOcnpOSpiV6QT7FJQ6li+thvYCff9a1ujIZiIrS55YWerf7k2a
+	 Zd7p7PpJbHEkA==
+Date: Tue, 26 May 2026 10:29:44 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, live-patching@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Joshua Peisach <jpeisach@ubuntu.com>,
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
+	Anthony Iliopoulos <ailiop@suse.com>,
+	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	KP Singh <kpsingh@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <ahWuWBrZlFsAVZo2@laps>
+References: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+ <agzAwjKhOhuANz_P@laps>
+ <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
+ <ag8lOe6dAOgnWmsQ@laps>
+ <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
+ <ahGufsGqmLZZQL4M@laps>
+ <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ahDKatbb_ixUY_XF@krava>
+In-Reply-To: <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
 
-On Fri, May 22, 2026 at 11:28:10PM +0200, Jiri Olsa wrote:
-> On Fri, May 22, 2026 at 11:52:56AM -0700, Andrii Nakryiko wrote:
-> > On Thu, May 21, 2026 at 5:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > We now expect nop combo with 10 bytes nop instead of 5 bytes nop,
-> > > fixing has_nop_combo to reflect that.
-> > >
-> > > Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
-> > > Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  tools/lib/bpf/usdt.c | 16 ++++++++--------
-> > >  1 file changed, 8 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> > > index e3710933fd52..484a4354e82b 100644
-> > > --- a/tools/lib/bpf/usdt.c
-> > > +++ b/tools/lib/bpf/usdt.c
-> > > @@ -305,7 +305,7 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
-> > >
-> > >         /*
-> > >          * Detect kernel support for uprobe() syscall, it's presence means we can
-> > > -        * take advantage of faster nop5 uprobe handling.
-> > > +        * take advantage of faster nop10 uprobe handling.
-> > >          * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
-> > 
-> > Would be nice to add commit that switches nop5 to nop10 (but until it
-> > lands hash is not stable, so, hmmm, maybe we'll land this patch
-> > separately? send it a bit later to bpf-next?)
-> 
-> hm, I think that would affect the subtest_optimized_attach usdt test
-> which depend on this behaviour, will check
+On Tue, May 26, 2026 at 03:10:45PM +0200, Daniel Borkmann wrote:
+>On 5/23/26 3:41 PM, Sasha Levin wrote:
+>>On Thu, May 21, 2026 at 11:16:46AM -0700, Song Liu wrote:
+>>>On Thu, May 21, 2026 at 8:31 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>>On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
+>>>>>On 5/19/26 9:57 PM, Sasha Levin wrote:
+>>>>>>Sure, this would also work. How do you see this happening? Can we let a certain
+>>>>>>user/pid/etc disable the allowlist if they choose to?
+>>>>>
+>>>>>I don't think we should, given then we're back to square one where root
+>>>>>or some other user would be able to just override/bypass an LSM.
+>>>>
+>>>>killswitch already disables itself when lockdown is active. We can easily
+>>>>disable it too when one of the LSMs that cares about this is active.
+>>>>
+>>>>>[...]
+>>>>>>How do you see this working with the allowlist?
+>>>>>
+>>>>>We should look at the underlying areas where most of the CVE-like fixes
+>>>>>took place (these days should be more easily doable given Claude and friends)
+>>>>>and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
+>>>>>new hooks which BPF LSM can consume where you can then have a policy to reject
+>>>>>requests and tighten the attack surface. For example, the AF_ALG stuff you
+>>>>
+>>>>So we could grow the LSM tentacles deeper into the kernel, and we can see where
+>>>>current CVEs are happening, which I suspect is the darker corners of the kernel
+>>>>(old unmaintained, rarely used code), but this definitely won't stay the case,
+>>>>right? Newer and better LLMs will discover issues elsewhere, and once the low
+>>>>hanging fruits are picked off of the current target subsystems, researchers
+>>>>will move elsewhere. We will be dooming ourselves to an endless cat and mouse
+>>>>game where we go add LSM hooks after some big security issue goes public.
+>>>
+>>>Do we really need to add new LSM hooks for recent CVEs?
+>>>
+>>>The LSM hooks are designed to cover all the user-kernel interfaces. Then
+>>>with properly designed policies, we should have coverage for potential CVEs.
+>>>Existing LSM hooks may not be perfect, but we can improve the hooks,
+>>>potentially with the help of smart LLMs, so that these hooks can cover
+>>>future security issues. In some cases, we will need new policies, but I don't
+>>>think new hooks will be needed for most of these CVEs.
+>>
+>>Running a quick LLM evaluation on the last ~70 severe CVEs, it seems that about
+>>40% is doable with the current hooks.
+>
+>
+>Interesting, do you have some more details in which areas your eval sees new
+>lsm hooks missing?
 
-usdt/optimized_attach will fail without this change,
-I'll make note to update it later when we have the hash
+The recent ones I saw fall into about 5 buckets:
 
-jirka
+1. Kernel-thread / workqueue context: LSM hooks fire but current is a worker,
+not the actual attacker. Lots of ksmbd, ceph-msgr, and async cleanup races land
+here.
+
+2. Driver: pci_driver.probe, notifier_call_chain, ib_* RDMA callbacks, ndo_*,
+bus dispatch tables all sit below any LSM hook. Big chunk of mlx5, RDMA, USB,
+i3c, DRM bugs.
+
+3. Per-packet softirq RX: security_sock_rcv_skb only fires inside
+sk_filter_trim_cap, which UDP encap_rcv bypasses and L2/bridge protocols never
+reach. Covers Bluetooth softirq, bond, IPv6 softirq, TCP-MD5/AO timing leaks,
+etc.
+
+4. Netfilter: config path is well-gated via security_netlink_send, but
+per-match callbacks, set GC, and flowtable cleanup have nothing. That's where
+most of the recent netfilter CVEs actually fire.
+
+5. Crypto subsystem + io_uring per-opcode: crypto/ has zero LSM hooks.
+
+-- 
+Thanks,
+Sasha
