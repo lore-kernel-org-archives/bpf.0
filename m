@@ -1,58 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A495E35E957;
-	Tue, 26 May 2026 15:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F7E3624CC;
+	Tue, 26 May 2026 15:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779808940; cv=none; b=eHGYZQISA8vs8zAmSOp9wLg3KzdSQ5Gj1YubXAyCWxgIEYdYGseVBLcuN9Xu61FDGASo7zybFj/WsZgj9WQGDyI0M6nzba+WwG6NKkTS3AI/89zNIb/uaY1S0eFX1DCA+aXjw+njfsVaTbUqEC046r7hoTBEmYT3/kZiKuQinr0=
+	t=1779808943; cv=none; b=PHCk7sk+pyOON0kL1/N2depeU358PayovNQm4Mb4JlgBvvKUfb3qRTLGdEN5N0G1B1DVgpbpCeY1GIP2tVe81kb+S/pxClogKMowSsLLeWCKxmDMlLbrr9tu2UhCEFx7TrpQrYIUNKB+Nskoc994ldXlNTJTZEj6qFIxUrQbmCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779808940; c=relaxed/simple;
-	bh=ZkuDvku83t97+XBYhvWo9Uns8mWKuzVanjRuYZy6FiQ=;
+	s=arc-20240116; t=1779808943; c=relaxed/simple;
+	bh=Z82SRTfViDGMogbdljsdRjgJQzLo4HNgFr7e4VKosb0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NlgFPTzqWkI+XcjeppIzo0F/3IwspH8xfcqLJ1iX2N6rimpRm9C3zUTQewak+5q53r87jFMIiNMA0MK9AqRQu3e7JhFiiq32L8kNfjwjUQiJmqhNUDtR9zMzBKgHVIpi1vYAVoE0xBoBnv/ac7GkeBKHro9aojyHWO/LFF0R6g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kg/XUJJC; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=XBctrkf9Amw3a0ZXjWnaaB8N4wAySsA+08TDEwv9LlGeKlTNEZ9/3+f6aaoqRZo7si02zaZrBaDJImHdrAd+BXrxG63g1J7CyCCdJcsbGMuhkxTbrlnrjxTx5CDjA5OvEYOQotCpz6wXFb3Gs8BNHvf+eR2iIULiem7xBWmEJy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKz0/w7K; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kg/XUJJC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3B2D1F00ACF;
-	Tue, 26 May 2026 15:22:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKz0/w7K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610CB1F00ACF;
+	Tue, 26 May 2026 15:22:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779808938;
-	bh=uDm3SE+wj14K2ZLchywSqxzxQe3Kn/14VxTpFaIuLFY=;
+	s=k20260515; t=1779808941;
+	bh=v42NgC0fdcn56Nn20BKSdfY3OACyeZqMYj+lGiSubwU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Kg/XUJJC6RliATTRDG0SVtVXqL+gpknSIcmVOIoKNykD6tNqjBAEFeaE7bQRoUg5A
-	 9EdvJ9xYw4dInTc8CofmzQ8GnTo87jmZS8kEdpTaTJYFevP0X7MLEXCCjo0mGj0mT7
-	 rPvjp+13uK+UU1Mm5OMSFcbh9tWK8rDBm7KERjYtQQjvZtfCmTjLRCebIV5EogIPQg
-	 c3gKSlvVdCpe3s2vu16yD83meu50VgSFQQr1lpoeFYUpNHNBViKWdPeONvd+pf9ZnK
-	 1mZIO8lAO2+6kKzBapZUUV6oG2DSjvGEP2jdFRT0ENGHv3HDMcxno+wRRuXZMnoFcg
-	 wOYbyp7FLadxw==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0BE25F40076;
-	Tue, 26 May 2026 11:22:16 -0400 (EDT)
+	b=mKz0/w7K1qylS5jNvyCmz1m7auRHdjWi6yDCyDiZuKJD3ICpbwm8U4N1Gr/pxcNiC
+	 AAiCE7KP6Vo50untPL/Gg4ZAA2Qns6mba0Tn51aM8i3ff5dPC14ivbyPliRTuFpXn9
+	 bYHPU/SgNHpdx7b1Qqe4mwxUYMY8ttpnvwsP5nowEPozzBb/t6kKQ8FeiZXGywlImq
+	 3Kdq3RZlLwXEB6/SXZFkHgzdO/tf/bjb+q1d5c9VlK3NbD+R9zBCFEqyFfLMWSRMgs
+	 HKVxMM/l1yKPbulztHMYorzhFvQVhBYGUJwUUaqmYlioCpZic7ejlYboRYihj5r/xg
+	 pwGrM34B7pgYQ==
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id ABCF7F40088;
+	Tue, 26 May 2026 11:22:19 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Tue, 26 May 2026 11:22:16 -0400
-X-ME-Sender: <xms:p7oVamcud7pgeqZUyckTJfI-qxiv7-r60UkN-iJNwGbsB5as_pFxfQ>
-    <xme:p7oVajTiDBFAkFvg8mQ5-CxOFNzMM2Z15yRDHFlQI5ID1EINDweWer6IYj45uCX-v
-    F29n1fmPnKptN1rEW7FRytcbH9t44T1EPhcBhEnQ8cwmAGm-XliGA>
-X-ME-Received: <xmr:p7oVamzOQzk3zJnfjgT2N6ww_jYglzmn59q69o-ME8k41RENbkZq4OGLGUPwyY0K_YB7MyB1yON1ds3SRPVXfq3hoZl0pQbq>
+  by phl-compute-04.internal (MEProxy); Tue, 26 May 2026 11:22:19 -0400
+X-ME-Sender: <xms:q7oVauMbRKNIcX0buzYVFJuTvXI9SkBq-xdFlaGdjs37_H7M2keGOg>
+    <xme:q7oVah1hxPf5Dza9y-hrZnlIIqvzC7EovsT2RD-HXRZTwikP8QLisRToVsdwwXkMO
+    whTpQk-UWFPnCHszsuiAE6FHvTfrm2CXRgRniq5mU_YamvXDjycBQ>
+X-ME-Received: <xmr:q7oVarL9QhokwshDQoNQ_fcm6RNTgsRzyKCwLd2R6uiOPl7_Uy7o_oNsAo49SZm59IT00mUhhOoTPOhUu-Mk1WftJoZVTabC>
 X-ME-Proxy-Cause: dmFkZTFpmA1McbnqjIdDoCcC8/dKh9RDeYcaA/XB6dgQZoHsdisS7Rnte/RUY2pDCqsaCf
     lYH/GXfkGRmzTYnB4S+g0DoIzy4KUSXH1v1hqWsXA4v5WIAvvT6c8zNgUsod23Kpq2+47O
     yYMzbMVdimQJPpKCDvwUMQiSwLgkBGzQ1ckebHI5CwcU5PXtm0paPap1/zDmdG+vWcQc/M
     pmWI2idDed0xMRSQV9XOsN/PBFcH6SBYELvyO/AtrMtpHg8r71AQlMzDlEp1H1iVazK3oS
-    DonyrliF9qRbQD87XBn6QOt2bC/09pqeijaNsBJFU0GwQ/sar+bEYdVoRVtkXuEiBwHIRY
-    NvmRzh3HKhTixLa9Yn44SeOJDKNB4emdE7Zg6eb6qu0SJAJyYk7TBJPpbtw/8VWjWgRilP
-    LwsQlLqbO47h14uao9G3vhgfKyEJrZKGPAdXvTlqYclnCbpAmE2nXMAcxfN0wHm76Lme6N
-    Iowx0J9CdnEy+E189qIJZ5I9dE4gMQBaqH1/S62Ot9HGBFylDe3CpM4uEAUHkRI0uUEOi1
-    wh+Jq9LdZKZrCAHLtoZKbuj1vubHqyERkwPxdgYDLYAlHqxQsggXqKiHFgg1xD6KC9fGFr
-    utR9wT6WMzr3FFToF4LzVvv9rilxQmyrMtcdfdcqAwv3Hg6NWmB4R0Co56bQ
-X-ME-Proxy: <xmx:p7oVahpDGALUJdREfN54wvpzznnoUF7Gi9DmePljRr-Z_uIhaiMtBg>
-    <xmx:qLoVaq5ab9r-MEakB--S5SHZpLWigHu_Df_r6xeQzMc5IEAHUTXhIQ>
-    <xmx:qLoVatu0qbUg-cPV1_hi7dgcI-S7Fvbsem4NnsnOr1vG2ZdX-HjDkA>
-    <xmx:qLoVamBLBIIzTwzY-PP0nhOcghsWnEUEioe_52dAEWHoCa93MWv0iw>
-    <xmx:qLoVakjSVAxH9BkMe-6C46t2Nzd4lrZF1RwFgvoAVZdaeHvi2e9uvXpn>
+    DonyrliF9qRbQD87XBn6QOt2bC/09pqeijaNsBJFU0GwQ/sar+bEYdVoRVtkXuEiBwHIVJ
+    +vPnz7YRz2gRtfvdleAquLDzEvrynvx94NYhsHKQkHBAYDBJmTuhALx1WmJ0oQVkmj5ABW
+    UtUh4XZureKmq68D7B+MJ1NE+qtTkPqUsgs7UFLReMFU7Uth479W+ocM97I1qfPl/F1LhS
+    qloIyRSVZETQHrb0OqeC+IKcktI/o29cw0IsNSiQA6VV8Q0gO+9Yi7oaA9mx+x7RScD0EK
+    0KiuLh09SFrpIterdpQufJFc6lDZrOnzg5g5/cHE5HDzrM4BqcRXMrbhIbyKelQv1rW4s+
+    QKJKBJTXjKVO4MrZ1Qe0AuVk6j53/jm5tPzZ4bafWuOsGC/UB6YsUeyJ+meA
+X-ME-Proxy: <xmx:q7oVahK3KF5rWO6Cxodzim136HwCpZJjxX58mkb-XD9rdEgP_0j0SA>
+    <xmx:q7oVash1nM2frd15FRj_8EsBQrqJQyJ1RylNmYxmJ4KhM7tMGH6yGQ>
+    <xmx:q7oVasRCqeNDM6F5Ccx-wb9wa0so2a0ldZLv0GodRTpcLAYH-b7HDA>
+    <xmx:q7oVajlKHbKt_A_5HNJUPCnJz2wsFaqlkeJJgX-eumGpKZRPJfhxpQ>
+    <xmx:q7oVamZYFQ40bG-EvVA7dVNWDf9FKnmOta6BN2NC1WrtUWiuZckwXLmX>
 Feedback-ID: i8dbe485b:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 May 2026 11:22:15 -0400 (EDT)
+ 26 May 2026 11:22:18 -0400 (EDT)
 From: Boqun Feng <boqun@kernel.org>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
@@ -102,9 +102,9 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
 	rust-for-linux@vger.kernel.org,
 	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
 	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH v2 09/12] sched: Avoid signed comparison of preempt_count() in __cant_migrate()
-Date: Tue, 26 May 2026 08:21:45 -0700
-Message-ID: <20260526152148.30514-10-boqun@kernel.org>
+Subject: [PATCH v2 11/12] arm64: sched/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+Date: Tue, 26 May 2026 08:21:47 -0700
+Message-ID: <20260526152148.30514-12-boqun@kernel.org>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260526152148.30514-1-boqun@kernel.org>
 References: <20260526152148.30514-1-boqun@kernel.org>
@@ -116,33 +116,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently preempt_count() is always a non-negative int on all archs
-(PREEMPT_NEED_RESCHED archs will mask out the MSB when return
-preempt_count()), hence the checking in __cant_migrate() is in fact just
-checking whether preempt_count() is 0 or not. In a future change, we are
-going to use all the 32 bits of preempt_count(), which would make
-negative int values possible from preempt_count(). Therefore convert the
-"> 0" comparison into a zero checking to prepare for the future change.
-No functional changes are intended.
+ARM64 already uses 64bit preempt count and the need reschedule bit is
+maintained in a separate 32bit than the preempt count. Therefore preempt
+count has enough bits to represent 16 level of NMI nesting, hence enable
+it for ARM64. This saves a per-CPU variable and additional instructions
+in the NMI path.
 
 Signed-off-by: Boqun Feng <boqun@kernel.org>
 ---
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 75dba7cc09bd..636e6a15f104 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9207,7 +9207,7 @@ void __cant_migrate(const char *file, int line)
- 	if (!IS_ENABLED(CONFIG_PREEMPT_COUNT))
- 		return;
- 
--	if (preempt_count() > 0)
-+	if (preempt_count())
- 		return;
- 
- 	if (time_before(jiffies, prev_jiffy + HZ) && prev_jiffy)
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index fe60738e5943..8178cb857115 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -248,6 +248,7 @@ config ARM64
+ 	select PCI_SYSCALL if PCI
+ 	select POWER_RESET
+ 	select POWER_SUPPLY
++	select HAS_SEPARATE_PREEMPT_RESCHED_BITS
+ 	select SPARSE_IRQ
+ 	select SWIOTLB
+ 	select SYSCTL_EXCEPTION_TRACE
 -- 
 2.50.1 (Apple Git-155)
 
