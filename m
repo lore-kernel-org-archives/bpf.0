@@ -1,141 +1,86 @@
-Received: from pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.162.73.231])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB49219301;
-	Tue, 26 May 2026 19:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.162.73.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04639318EE2
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 19:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779823416; cv=none; b=H+n7Ll34hALOuCDhOSJBa/GEQNtEo78H+yRaIuphPVg3LD+j5KTK5w8RjdP1PCWzU/N3+jDdD42+KvYqCfA3YGMHw5ErjAWs7Bp1RT77+4AX/lu/5Z4aepQfAOLbxF7Rc+8LIMs+fXtwmaSJki7LYbRPQKqsbshu+AsuSVUWpRI=
+	t=1779823485; cv=none; b=PRzvu2hW790K5DD0ufEpEMRMK/5tJ7aEbf0YIIEfbMOkJjezX2RFI4e3DIHZQFYVaPqsCY2w8M/l4HeaYD6uD7HaIbMv3RFi1WV2NKr9OTvM1zscXQj6+OgTjsrKyWLFhBDEGzpHLPK825Tg3WmBbUnl8Qt4oNci3nCdtRS6PIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779823416; c=relaxed/simple;
-	bh=xSAHuzhnv6e8U1m3dmcLOx7TglmUIAozHqyQTb713eM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=puFKFDySgqaOoMY3v1RZmk6KD3Tj7HOo8rrTTz5WLz4fHQlgxMtiEoW4jenLVzQN3+w2rKcyOfTAf0XpczFGo0FxBSCv4gwEp9kL4d+zypEGqV+lC45GZIxfJoDvwYkXQ2nQefcnzEJRajOh/5xi9N0Xx/3MLYRmVomQiECXOQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=sdvhjHg8; arc=none smtp.client-ip=35.162.73.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	s=arc-20240116; t=1779823485; c=relaxed/simple;
+	bh=yNwsXwP2iC8mNINa9AZ4QLRWCzQX6aAsEz16WvbyXwA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UQEDHYqS2wJ8EIY3q5ayhVBdV9vnqUFp0u6xVSve3RaIM0RTSdnEQDEd1vALSw5flU9By2kE+lv61ptquOylpBJN2Jy6ELWBXzWQrX3+sWk/CuZtNuNVeKbfwnzXFr+4OWsezG+yCNTeLlG4UXF2FIHqJ+CkKEg20qsQaH4zJlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDtvui2T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="sdvhjHg8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1779823415; x=1811359415;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Sgajywb0c9W4z+XMC1HocV4U0cjHkMGlj+AS3vvfOb4=;
-  b=sdvhjHg8VTJVAg6ZcZG9oCa4ScMMplX/xtx436g8yfAWmN+KHzVZqpjI
-   8ZUHTvROk8sI9MBBafpjHzAcBQCGiVUur20mSmwj1Og/mSZl1qVxvILeV
-   qswAF5wbPd4wL6ux1PhcmnpR+342RlezmcxNiESppDOfOZKvsHoe8VwvI
-   +z5VFFhWxk6qm3jk9vV7xyOyfrmUEsf8gkfiEmdeG9zqbzMvlUJRDsJ+7
-   WVPkO/dirytJkul8GVx2qniAM/s+ep/TCJ+nmeP/3EFwGmfananPQ1Enn
-   IBIm6Xv0F9C6zTb+MmM7GpJ3zNZFCG/AAWKek+UnyLhdx9ydJeWhjfBG9
-   A==;
-X-CSE-ConnectionGUID: krsg8C1SQ8G4tS0prj+bsQ==
-X-CSE-MsgGUID: utt+6dtbQzCWytuJUknqQg==
-X-IronPort-AV: E=Sophos;i="6.24,170,1774310400"; 
-   d="scan'208";a="20301064"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 19:23:35 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:4829]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.28.237:2525] with esmtp (Farcaster)
- id 7977181f-585a-4c4d-8b8e-f1d45d1e5235; Tue, 26 May 2026 19:23:34 +0000 (UTC)
-X-Farcaster-Flow-ID: 7977181f-585a-4c4d-8b8e-f1d45d1e5235
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Tue, 26 May 2026 19:23:34 +0000
-Received: from dev-dsk-gyokhan-1b-83b48b3c.eu-west-1.amazon.com (10.13.234.1)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Tue, 26 May 2026 19:23:32 +0000
-From: Gyokhan Kochmarla <gyokhan@amazon.de>
-To: <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>
-CC: <jolsa@kernel.org>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, Andrii Nakryiko
-	<andrii@kernel.org>, Gyokhan Kochmarla <gyokhan@amazon.de>
-Subject: [PATCH 6.12] x86/fgraph: Fix return_to_handler regs.rsp value
-Date: Tue, 26 May 2026 19:23:24 +0000
-Message-ID: <20260526192324.79459-1-gyokhan@amazon.de>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDtvui2T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843F11F000E9;
+	Tue, 26 May 2026 19:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779823483;
+	bh=VtkR4rbDeG8bpdxoNkMFftkSPfZqWtwKnaIe+WMwjqA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VDtvui2TkwiX8dkPqBM4RvOpTD3Mv8boECwH/CNjKEdzm8zalAgS+rwME19DaAECR
+	 7Q64dBo+akAasyZ3Rd3YV4+IvvSn0iCEC8MbQQrQFOS2taiApiy8icbQA2qDQFTa4P
+	 zRbYdIg95btVOWRNhCbJrkLmFYuAEleTr2V0/sOyePMwEaCzCAZCfgb4dSBhgbqx83
+	 v1ghG0AY4Z+taDUYpOCCeb+5rtHW4wZNwxDf2rCvhjT3DTHx1R2elr25O2hm+zpes8
+	 4S39WVIFU9yN8RqfSDfFwyxbTW7SqpMzdOBOoSqHDntDopbEC+okMec4LMwY7V9Nmv
+	 U+TnhM/wik6PA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 4/7] selftests/bpf: add bpf_icmp_send kfunc
+ cgroup_skb tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mahe Tardy" <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526153708.279717-5-mahe.tardy@gmail.com>
+References: <20260526153708.279717-5-mahe.tardy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 19:24:43 +0000
+Message-Id: <20260526192443.843F11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-ClientProxiedBy: EX19D037UWB001.ant.amazon.com (10.13.138.123) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 
-From: Jiri Olsa <jolsa@kernel.org>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comment does not follow the required BPF subsystem style.
+--
 
-commit 8bc11700e0d23d4fdb7d8d5a73b2e95de427cabc upstream.
+commit 67ff0f6d65a210627d2fdadf8ec80c32d95d6a59
+Author: Mahe Tardy <mahe.tardy@gmail.com>
 
-The previous change (Fixes commit) messed up the rsp register value,
-which is wrong because it's already adjusted with FRAME_SIZE, we need
-the original rsp value.
+selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
 
-This change does not affect fprobe current kernel unwind, the !perf_hw_regs
-path perf_callchain_kernel:
+This commit adds a test for the bpf_icmp_send kfunc using a cgroup_skb
+egress program. It verifies that ICMP unreach messages are correctly sent
+back to the client and read from the socket's error queue.
 
-        if (perf_hw_regs(regs)) {
-                if (perf_callchain_store(entry, regs->ip))
-                        return;
-                unwind_start(&state, current, regs, NULL);
-        } else {
-                unwind_start(&state, current, NULL, (void *)regs->sp);
-        }
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
+ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> new file mode 100644
+> index 0000000000000..0dc6b6ceafb4a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
 
-which uses pt_regs.sp as first_frame boundary (FRAME_SIZE shift makes
-no difference, unwind stil stops at the right frame).
+[ ... ]
 
-This change fixes the other path when we want to unwind directly from
-pt_regs sp/fp/ip state, which is coming in following change.
+> @@ -126,10 +126,10 @@ void test_icmp_send_unreach_cgroup(void)
+> +	for (int code =3D 0; code <=3D NR_ICMP_UNREACH; code++) {
+> +		/* The TCP stack reacts differently when asking for
+> +		 * fragmentation, let's ignore it for now.
+> +		 */
 
-Fixes: 20a0bc10272f ("x86/fgraph,bpf: Fix stack ORC unwind from kprobe_multi return probe")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/bpf/20260126211837.472802-2-jolsa@kernel.org
-Signed-off-by: Gyokhan Kochmarla <gyokhan@amazon.de>
----
- arch/x86/kernel/ftrace_64.S | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred
+kernel comment style for the BPF subsystem? The style guidelines require
+the opening /* to be on its own line.
 
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 8a3cff618692..143fc62bf6f8 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -349,6 +349,9 @@ SYM_CODE_START(return_to_handler)
- 	UNWIND_HINT_UNDEFINED
- 	ANNOTATE_NOENDBR
- 
-+	/* Store original rsp for pt_regs.sp value. */
-+	movq %rsp, %rdi
-+
- 	/* Restore return_to_handler value that got eaten by previous ret instruction. */
- 	subq $8, %rsp
- 	UNWIND_HINT_FUNC
-@@ -359,7 +362,7 @@ SYM_CODE_START(return_to_handler)
- 	movq %rax, RAX(%rsp)
- 	movq %rdx, RDX(%rsp)
- 	movq %rbp, RBP(%rsp)
--	movq %rsp, RSP(%rsp)
-+	movq %rdi, RSP(%rsp)
- 	movq %rsp, %rdi
- 
- 	call ftrace_return_to_handler
--- 
-2.47.3
+> +		if (code =3D=3D ICMP_FRAG_NEEDED)
+> +			continue;
 
-
-
-
-Amazon Web Services Development Center Germany GmbH
-Tamara-Danz-Str. 13
-10243 Berlin
-Geschaeftsfuehrung: Christof Hellmis, Andreas Stieger
-Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
-Sitz: Berlin
-Ust-ID: DE 365 538 597
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526153708.2797=
+17-1-mahe.tardy@gmail.com?part=3D4
