@@ -1,107 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11093BFE44
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779830354; cv=none; b=hCI7ia6ABGQfojehd9xj75OChdYtqtkDuNSpXqJUxDA6G7hRvhtJ9+SwZYgiUXkOBmGvaomynStSJsOpSU5awzfdXhvEKRaPjcOyu0SezTWmFJ/tO3aRNMJgNcwUnksJJjM87tFknKL9pnrPHwH76GuNScxLKt1hwLA01d/BSBE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779830354; c=relaxed/simple;
-	bh=XhYcHXNFsf+ixdSMcn9o7pqkcmTAd93BD0ahpMLqJqw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rA77DHyMD3GvbR64xK5KRoTGf0Vl85X+Pz/vIi7/jqv1QFyy849x5psE5iXjq2eLQz7rxbrD/U8y+WNZ9qWswwI1JioIkdZRiClGdClsZn4Fhp/3x2+R/LnWY+1pIsguqT/vK/G7Ajy8J2viPUZIGWuXQ3Q0ujpNzkFoqrg5ifQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBXIaXh0; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B633C140D
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779830532; cv=pass; b=pcbHPGfPaoFEMbSM5e8cXDcZRRt483OEBfQ7SfEgYAZWdjn6VRbdo+Wteb/Za2MS3vZDFPwxCUsxb3cuU/dvwAPB+8p5p5oflkqeC3tCgApmPwYT56032qzJ1V921nbVVRDob8mU5OVYFFJpZXQVm6GEtm5Zf95JooIe4N/Ywao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779830532; c=relaxed/simple;
+	bh=h2pRzbCs5OlGfRvvPszd4XwFbSVhfsO5zU3RTXajg64=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eWlVPmJ+oNy5d3Xy/LF2a2U4AuALnSZjup1/w9RKMgqMfKmzvsHDNFcOvuP5UfEZmZQK+t/CEaHxU5drGSrf66vnotQyvfU8zYc2BKTWKp6zwNybj/hTPw1xWjXOH/kh4+6ESYuMdLzsN4qgmLV4oK7u/5WsafJnAPlz8KeCEMQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vQhNTL8+; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBXIaXh0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759B01F00A3C;
-	Tue, 26 May 2026 21:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779830352;
-	bh=pRbq6cJYftBBb+ju1DByGDqD9kqe9BD6GTXHoYPxvPE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IBXIaXh0m2GRj/gK9Q7cde4YMRqLpZMoUiEevMCO+C6WtFBckYGNBH0bSLl8G+LJX
-	 ed9UJJY9TqMYD/QeVUvEgdErEIWa3y1rI5QfZN4nOmFag5Mu5WG7TvZX7XHTazTXwf
-	 g7SkD8RPx7B8J3HMD1fjMXxkUOJTBMnAXqNfq5VKVSLGnixGJd8la/01MTjpRcHqdt
-	 L00gzfk1ATOZj1n4bkvIVg9xraSzVUkZ/44iwOTu/e+bPSwSX5Yh7J/Bf+DFpKDAKn
-	 UNoiqRyNYnOLVUHhqHpz3WyURHo6jwY1s/v8vMllMM8+iXE4JOQ+leO8f4FnZLmhkR
-	 bBc+m8YrPnXzQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv4 08/13] selftests/bpf: Emit nop,nop10 instructions
- combo for x86_64 arch
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526205840.173790-9-jolsa@kernel.org>
-References: <20260526205840.173790-9-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 21:19:12 +0000
-Message-Id: <20260526211912.759B01F00A3C@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vQhNTL8+"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1363e78746eso6538374c88.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:22:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779830530; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Tz0fRqUmAsEwn+KIzsvamrSTe+JAYqf5UfTZRXxqGdkH5vs6QB3OaaGi2DzVq9ew+T
+         q5ivGxo86GpQ36NKjg5L/V2rh/8Ft03io0EERoovIH1Bo0tgjsjfml6Ln04igMLZPxuI
+         CT000CDlvG4JPvpsRTrezERs1YHaRjl34NPVX2m1q4crYjkxr3j9DNNQ6AJFTOcFCLx2
+         gex6uNCnS7i9+Li5nYk90zUjEkUC9tPm81i61ONp/R9fZNKUQbfiF09UyCg2ZBPoRirn
+         QXva75Fog72hMgdBljedQ6v39EgMZJD4D4bp1qdg3ggTRQ7scnEnLTLOj/od4txY+foM
+         pbQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VP4mbJpM8WH2IyEvSBYTVLRBzgCHnu41ehX3TVFH8Hk=;
+        fh=SXZ4xXwIgbC0A0NvnlSueHgFPnWcVI6GXW2uxP7JU8M=;
+        b=aPB00TfMovmpNDnqICsxW35C6E5ctXew2hYDRUp5nHdOQsJX3qvwjebHPFckHErEfF
+         LizBwMCX8+dXWXUUJqkkjkUVfg7EOibeCXkTcmQYKih70/DAfi1QvxT22W45sNkd5oZo
+         kU+MPrvHmOzX2ALgk9f2xVhHlvLsg70qWwCOJPwLz3rFlGhFYnuNhFWPCLK7fFNY/HaS
+         7kWfXBRD0O0BdfT965kIW4sVzeuNCgLRw0w/ASsgCWr3ZiJeIbxv6TOuGqszVv6aG7Ls
+         Wr5oEIAbcvO/079LAB//oX7TD1HSkradIcer3GCPHcfTwl45YYN5f7QRIGym8DcTM9pp
+         tS/Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779830530; x=1780435330; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VP4mbJpM8WH2IyEvSBYTVLRBzgCHnu41ehX3TVFH8Hk=;
+        b=vQhNTL8+e8b5J1mAiDM8tKggXDpSqD8JOqidf7yV9ca6HZZDKcd1o1WjjM1ZQXWKA9
+         LItYMBazZHJI+tHwaCjs7XEXNbQS5IkGvDcb4fYZ/KsIBlQrSQIEsmZSZmblRtxJTHuo
+         Gw72fhDTFDrNJPYtKjqF+IpYjOEmH8w3tXTqqYd9eadAoEQctuii7r5maoy7A5nQAG/i
+         REjmy/kLXNQsIMHLh9Jo23HngDyxGACMkb+fBrU2Mk3hyZ3ji3eHaM20LM2qLgymLe/N
+         ZJNq4hPjB3kglGQwK2f5jP0As5OIaYjBrxeFJ6/g5P9bXdAeY7N4fxh5FzGe+yA+lrnv
+         AegA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779830530; x=1780435330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VP4mbJpM8WH2IyEvSBYTVLRBzgCHnu41ehX3TVFH8Hk=;
+        b=VlkVO6SnHu0ZXXC9CGLAO/vGIql+OnSFZ+OLp2ykqcxg2JzeJf5CjZpvQ6FqyUslZw
+         L7BlCPUjnLs0AI8Ll1z39PiMGXMdM1OmTqjMtpDfw+OqbeLuev7UHPXTV5xJM6nXlY7a
+         FJZmA0TBhe5fQ5lhKEi9ntxijX9kwrZTBWlFK2xB8xUOgWTYAjkQlth9WoZNQPk4VfB9
+         Www+G/mf+w30p3NweQaqRnfQhknRnUBU1QTMIYZwSogZZt7rxuytFVos95doegIruoPv
+         95op3LBi5bQp1eFNhhDcv4ZVGsBKatJ8ONyCJTb4vcGqoqjMd6AqFSqLtHO0b24Gc3I6
+         vzJQ==
+X-Forwarded-Encrypted: i=1; AFNElJ82OnRJRjScMEK4CFch6wG2N4rNPjmLIfbaUvkeTgB8JWd+b6vbeTSlCxNPNe3FtofNqtk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycsCB2kEE63lUS3e8zn7L+rmGopR5DL0vuqyF03ZmCoaS5sw95
+	JVDyBOHsd/ucBSEKxDRHT9nKEsS7d9AjtGBi7IDhbEUqSwsVR8EKi8B1c8BXZmT3WSLl0k7PYc1
+	a0Q818jIh1tIigD1sbvsXZhHFTT6n166Te+c8pSvM
+X-Gm-Gg: Acq92OELh8bgSR/etE9kfaG291dcyf+I19/FZ4ACJd0GI5gVWcDWsL77M2NmK0OAd8Q
+	EDwc3Mke7RuzxfBSlgDkqgYiV9016AhQApznPnLNyrTS2GqG36pof9Eo6NHjIySGejEMmmJP4C1
+	bN3snGafocD2MN2lMgcTztj2wu3J9yAAJLOJkNJPcHOjqXCLxkB1eYRWkiCOu02OJNS43G6+jZ/
+	ghewJotrGzzjKjJ1YQZVf6v54zP4FUjVqxp9Aqgo/qeipRP4BisIKyFBMOl3WpXm/KyDAP5bNQ3
+	g+qPcJOEpCy/xml7fQc8CKSGo15K877P0xUTkgrYm2ZASjIXe6OtQiLh9bRq8VzPuuPy1lKPQ8V
+	lT0CBqKNwilu1gSaI8ltQWxqFCI54z8FxeJUWPRkGxuRK1VSeEbMZHlG6+Qh/
+X-Received: by 2002:a05:7022:e997:b0:134:feba:40e with SMTP id
+ a92af1059eb24-1365f600934mr6305256c88.6.1779830529265; Tue, 26 May 2026
+ 14:22:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260523083001.2911931-1-kuniyu@google.com> <20260523083001.2911931-4-kuniyu@google.com>
+ <202652620632.prOx.martin.lau@linux.dev>
+In-Reply-To: <202652620632.prOx.martin.lau@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Tue, 26 May 2026 14:21:56 -0700
+X-Gm-Features: AVHnY4IrxL6GuXy1gEDVGjcRdn1esdgGUIAOzsUq5l9tkNCP9wmrwYPRcO3ehEA
+Message-ID: <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 03/11] bpf: tcp: Support bpf_skb_load_bytes()
+ for BPF_SOCK_OPS_RCVQ_CB.
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jason Xing <kerneljasonxing@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Changing the default `USDT_NOP` to an 11-byte `nop,nop10` sequen=
-ce breaks `prog_tests/usdt.c` and introduces an unsupported instruction seq=
-uence for libbpf and the kernel.
-- [Low] The commit message contains an unfilled `[1] TBD` placeholder.
---
+On Tue, May 26, 2026 at 1:34=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
+>
+> On Sat, May 23, 2026 at 08:29:32AM +0000, Kuniyuki Iwashima wrote:
+> > When a TCP skb is queued to sk->sk_receive_queue, BPF SOCK_OPS
+> > prog can be called with BPF_SOCK_OPS_RCVQ_CB.
+> >
+> > In this hook, we want to parse the RPC descriptor in the skb
+> > and adjust sk->sk_rcvlowat based on the RPC frame size.
+> >
+> > However, we cannot access payload via bpf_sock_ops.data on
+> > modern NICs with TCP header/data split on as the payload is
+> > not placed in the linear area.
+> >
+> > Let's support bpf_skb_load_bytes() for BPF_SOCK_OPS_RCVQ_CB.
+> >
+> > Three notes:
+> >
+> >   1) bpf_sock_ops_kern.skb will be NULL when the BPF prog is
+> >       invoked from recvmsg().
+> >
+> >   2) Access to bpf_sock_ops.data will be disabled by passing
+> >       0 end_offset to bpf_skops_init_skb().
+> >
+> >   3) ____bpf_skb_load_bytes() is called directly instead of
+> >      __bpf_skb_load_bytes() to allow compilers to inline it
+> >      instead of generating a tail-call.
+>
+> Some observations below.
+>
+> >
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > ---
+> > v2: Explain why using ____ version instead of __
+> > ---
+> >  net/core/filter.c | 34 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 4a50fe2cd863..fa8a7c7d86eb 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -7760,6 +7760,38 @@ static const struct bpf_func_proto bpf_sk_assign=
+_proto =3D {
+> >       .arg3_type      =3D ARG_ANYTHING,
+> >  };
+> >
+> > +BPF_CALL_4(bpf_sock_ops_skb_load_bytes, struct bpf_sock_ops_kern *, bp=
+f_sock,
+> > +        u32, offset, void *, to, u32, len)
+> > +{
+> > +     int err;
+> > +
+> > +     if (bpf_sock->op !=3D BPF_SOCK_OPS_RCVQ_CB) {
+>
+> bpf_dynptr_from_skb() and bpf_dynptr_slice() kfunc could also be consider=
+ed.
+> One less bpf_sock->op check in filter.c to maintain and could also avoid
+> a data copy. There is a bpf_cast_to_kern_ctx() to get to a trusted
+> skops_kern pointer but this will need changes in verifier.c to get to
+> skops_kern->skb (e.g. in type_is_trusted_or_null) and this is the tradeof=
+f.
 
-commit 7b65abd3a4116a7fb1cc328d784f515175461d44
-Author: Jiri Olsa <jolsa@kernel.org>
+Maybe a dumb question, but does it add extra cost (extra dynptr
+function call?) if data overlaps two frags, or can dynptr handle it
+seamlessly with a single bpf_dynptr_slice() ?
 
-selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+In our case, the data copy is ~16 bytes, so the cost will not be
+a big problem I think.
 
-This commit updates the default USDT_NOP instruction sequence for the x86_64
-architecture. It replaces the 6-byte nop,nop5 combination with an 11-byte
-nop,nop10 sequence to utilize nop10 optimization support.
 
->     Now that we have nop10 optimization support in kernel, let's emit
->     nop,nop10 for usdt probe. We leave it up to the library to use
->     desirable nop instruction.
->    =20
->     [1] TBD
+>
+> If this new rcvq callback is added to the 'bpf_tcp_ops' proposal [1],
+> all this will go away. 'struct sk_buff *skb' can be directly passed to an
+> ops of the 'bpf_tcp_ops'. Supporting '*skb' in a struct_ops has already
+> been done in the bpf_qdisc.
+>
+> [1]: https://lore.kernel.org/bpf/20260519215841.2984970-11-martin.lau@lin=
+ux.dev/
 
-[Severity: Low]
-This isn't a bug, but there is an unfilled placeholder "[1] TBD" left in the
-commit message.
+Oh I missed the series, the struct_ops conversion looks nice !
+Since this work isn't urgent, I can wait for your series if mine
+churns it.
 
-> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests=
-/bpf/usdt.h
-> index c71e21df38b32..75687f50f4e21 100644
-> --- a/tools/testing/selftests/bpf/usdt.h
-> +++ b/tools/testing/selftests/bpf/usdt.h
-[ ... ]
-> @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
->  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
->  #define USDT_NOP			nop 0
->  #elif defined(__x86_64__)
-> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x0=
-0, 0x0 /* nop, nop5 */
-> +#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1=
-f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
-
-[Severity: Medium]
-Will this 11-byte sequence break the USDT selftests?
-
-It looks like subtest_optimized_attach() in prog_tests/usdt.c explicitly
-searches for the 6-byte nop1_nop5_combo and might fail the ASSERT_OK_PTR
-check when usdt_2.c emits this new 11-byte nop,nop10 sequence instead.
-
-Additionally, does libbpf's has_nop_combo() or the kernel's can_optimize()
-in arch/x86/kernel/uprobes.c currently support optimizing this 10-byte NOP?
-If not, this might result in a loss of the intended optimization rather than
-an improvement.
-
->  #else
->  #define USDT_NOP			nop
->  #endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526205840.1737=
-90-9-jolsa@kernel.org?part=3D1
+Jason's series is adding a new op, and I guess this can be
+integrated too ?
+https://lore.kernel.org/bpf/20260521135244.40869-5-kerneljasonxing@gmail.co=
+m/
