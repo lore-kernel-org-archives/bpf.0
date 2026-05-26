@@ -1,124 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF9D1C862F
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 02:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36A71C862F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 02:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779763948; cv=none; b=KD/SOvcWB0f8/4lyQwdo93ZfEgRvGDKRzeBx2PEOfMKnzGERyc3PrJLI8BtuRiBLAcC+8VydWRU7vp0EqbnaJG6TLMM8R1sULW3LCiijOFD+akywpLuqzPs85nMjGpnNdGdcb9ig4EZxCzIw/RIyJ/8omLke+BWldjjM1SPJEn0=
+	t=1779763954; cv=none; b=qE9NlXzqOziQsraKL1KDH1yirbPSGlX3rI6/GgbgUi92k+BmbE2I5fhFydqPjLBTjKNBxNZrLDJhNW6fqP7/8QwMZ1KW2OKcDHef4IOICx3o2tsN9cLjzDNH6QlJb5v/tsD4vx9k3p32lt650LbcezAxsQW2Q8hQE/WfGcjKLWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779763948; c=relaxed/simple;
-	bh=5RkxAJqyXU1rhiHrKkZSRjlW+HVOrESNIP8RAbUjLOQ=;
+	s=arc-20240116; t=1779763954; c=relaxed/simple;
+	bh=99ksPYRccVg6FmvRERA9Z/LirlHKJ+m3hffKsMhqP1Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZsGxl1suTZjxZ8d6zbqSp/Ho1+ARkmd2gPSSEPBUArZzHgLa9a+ys8ypLu9iwqdJA51eJwUrLrKnZwMweTIEB1ZGwLalXdHgKvymcykqJjjRTfoq9N9MFuxw6nqfgyqJqWzt8JLHTr+kC0L4qTFwZLWPeUDWiwR5xfauEuRZ0vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2UVY0iK; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=JTU7YuHSUQt9lqHV3mUMVg6mH9Wktv3PiQW6ZyTJIhf/toBLbZjnFwu1cRFl7n82Bqpb+SrU1py+2Je0VGJomRrbfwn/rEltpaPYxDAmowz87Z8BUUD4CJaxp9EBcTZagLojmHovSfjofG8SwpaKLR89E3UFwWFAp0eJVsYvbbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oC+mMdE6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2UVY0iK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B6B71F000E9;
-	Tue, 26 May 2026 02:52:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oC+mMdE6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094B21F000E9;
+	Tue, 26 May 2026 02:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779763947;
-	bh=dbDeevtOOAIgJ0g64hjHIKr+72hf/XltTsMUGivFd3M=;
+	s=k20260515; t=1779763953;
+	bh=q3p9sBqdPGDraE/qwD99JZCD3yWwcoiCE7TJPwjFP2U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R2UVY0iKDpvwfEqmWah1f22FTrmvasr9T0kbj4Dt5IiyFMwLC/p31CCJAhSADS/eu
-	 MSFLRbw1VrCgZM6dgTCDiOE18aYoSiHWGjO6CEIqQa6lPw/k1D1GjTY9nKH6FAHp3z
-	 /kd2D4ADEbOLlxt6lT3CLIiqAdaZCy7QtojNQJmPazJe812h+IwG+sQFfRiLUL0YyW
-	 pqwHNzmXlPMSwqYjwYXduuURfl0j5b1KIuoYcljlPpF7xB3aXjsZ+I9sAvK2iZTCjs
-	 Csbmjwiub4dwIt58opdgPib+ga3LU/vSRrj8zDz7jwr6wgtVpHW82ihpAWv1viAP4r
-	 QrzekeYkJRUwQ==
+	b=oC+mMdE6khaPyWAinAG68q+6tqzElGVrABFD7o0ZYd+i4Vh6m3h6pVTcVqk/sHmv2
+	 AHX4oHSsvY1NMvC3/f6ocsnxiNppJM5u0iiJL2xy2BrlArk7pRS21egwSDn6cEwVHW
+	 oTrVzj3bZmjNkIs4tC9+DMnm78/R8BtnEfvno/UuRI2bwwtbW7iz0T/OXTGR7VQrhS
+	 rQfDvwFEAwc5XSehJBhf7ZjliejkpHXtm3OioTcWRunWAY0xi9XZEbHUxbbiO5sCvU
+	 apD0yBh3qPLWmm1lZGeDNwTmm5a4uTKjEKe1u9bAAoTOMxUMq1pNxqpza+tQr6m+Qs
+	 vHayrxrAx1phw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v7 07/11] mm/bpf: Add
- bpf_try_to_free_mem_cgroup_pages kfunc
+Subject: Re: [RFC PATCH bpf-next v7 09/11] selftests/bpf: Add test for
+ memcg_bpf_ops hierarchies
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: tj@kernel.org, hannes@cmpxchg.org, bpf@vger.kernel.org, mkoutny@suse.com
-In-Reply-To: <13b10d91aff4307580d1a601f1592efe42a92b05.1779760876.git.zhuhui@kylinos.cn>
-References: <13b10d91aff4307580d1a601f1592efe42a92b05.1779760876.git.zhuhui@kylinos.cn>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, bpf@vger.kernel.org
+In-Reply-To: <f2740b58570c06c275946f31f60858e875d7bdfe.1779760876.git.zhuhui@kylinos.cn>
+References: <f2740b58570c06c275946f31f60858e875d7bdfe.1779760876.git.zhuhui@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 02:52:26 +0000
-Message-Id: <20260526025227.1B6B71F000E9@smtp.kernel.org>
+Date: Tue, 26 May 2026 02:52:32 +0000
+Message-Id: <20260526025233.094B21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] The kfunc `bpf_try_to_free_mem_cgroup_pages` returns `-EINVAL` on =
-invalid arguments, but its return type is `unsigned long`.
-- [High] Unsanitized `gfp_mask` passed from a BPF program to direct memory =
-reclaim creates a potential deadlock with filesystem and IO locks.
-- [Medium] The `bpf_try_to_free_mem_cgroup_pages` function is missing the m=
-andatory `__bpf_kfunc` annotation in its definition.
+- [Medium] The test reuses the identical `low_mcg_ops` map for both the par=
+ent and child overrides, failing to properly test the override mechanism an=
+d clobbering its own state during cleanup.
+- [Low] The test verifies that the third attachment fails but does not chec=
+k if it fails with the correct error code (-EBUSY) as claimed in the commit=
+ message.
 --
 
-commit b01a6dd524da08098df4a7bba12f4b90457b1089
+commit ac1e7b9da1794e345399c9485b390263c35e79df
 Author: Hui Zhu <zhuhui@kylinos.cn>
-   =20
-mm/bpf: Add bpf_try_to_free_mem_cgroup_pages kfunc
-   =20
-This commit introduces the bpf_try_to_free_mem_cgroup_pages kfunc, allowing
-BPF programs to trigger memory reclamation for a specific memory cgroup. It
-delegates to the core try_to_free_mem_cgroup_pages function and includes
-custom swappiness parsing.
+selftests/bpf: Add test for memcg_bpf_ops hierarchies
 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 1f726a7b22e36..0353c8736aa5d 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
+This commit adds a new selftest, test_memcg_ops_hierarchies, to validate
+the behavior of attaching memcg_bpf_ops in a nested cgroup hierarchy. It
+verifies the enforcement of the BPF_F_ALLOW_OVERRIDE flag across a
+three-level deep cgroup subtree.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/t=
+esting/selftests/bpf/prog_tests/memcg_ops.c
+> index 19fd4fde22660..b4084e9327eba 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> @@ -559,3 +559,76 @@ void test_memcg_ops_below_min_over_high(void)
 
 [ ... ]
 
-> +unsigned long bpf_try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
-> +					       unsigned long nr_pages,
-> +					       gfp_t gfp_mask,
-> +					       unsigned int reclaim_options,
-> +					       int swappiness)
-> +{
+> +	skel =3D memcg_ops__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "memcg_ops__open_and_load"))
+> +		goto cleanup;
+> +
+> +	map =3D bpf_object__find_map_by_name(skel->obj, "low_mcg_ops");
+> +	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name low_mcg_ops"))
+> +		goto cleanup;
+> +
+> +	opts.target_fd =3D first;
+> +	opts.flags =3D BPF_F_ALLOW_OVERRIDE | BPF_F_CGROUP_FD;
+> +	link1 =3D bpf_map__attach_struct_ops_opts(map, &opts);
+> +	if (!ASSERT_OK_PTR(link1, "bpf_map__attach_struct_ops_opts"))
+> +		goto cleanup;
+> +
+> +	opts.target_fd =3D second;
+> +	opts.flags =3D BPF_F_CGROUP_FD;
+> +	link2 =3D bpf_map__attach_struct_ops_opts(map, &opts);
 
 [Severity: Medium]
-Is the __bpf_kfunc macro missing from the function definition? Without this
-annotation, the compiler might inline or optimize out the function,
-especially when LTO is enabled, which would prevent the function from
-appearing in BTF and cause BPF program load failures.
+Is it intentional to reuse the identical low_mcg_ops map for both the
+parent and child overrides?
 
-> +	int *swapiness_ptr;
+Because the overriding pointer is physically identical to the overridden on=
+e,
+this might not genuinely prove that the kernel substituted the operations.
+
+Also, could this clobber the state during cleanup since the kernel's
+bpf_memcg_ops_unreg() clears descendant cgroups by checking map pointer
+equality?
+
+Would it be better to retrieve a distinct map, such as high_mcg_ops, for
+the child cgroup to correctly test overriding?
+
+> +	if (!ASSERT_OK_PTR(link2, "bpf_map__attach_struct_ops_opts"))
+> +		goto cleanup;
 > +
-> +	if (swappiness > SWAPPINESS_ANON_ONLY)
-> +		return -EINVAL;
+> +	opts.target_fd =3D third;
+> +	opts.flags =3D BPF_F_CGROUP_FD;
+> +	link3 =3D bpf_map__attach_struct_ops_opts(map, &opts);
+> +	if (!ASSERT_ERR_PTR(link3, "bpf_map__attach_struct_ops_opts"))
 
-[Severity: High]
-Does returning a negative error code from a function with an unsigned long
-return type cause issues for BPF programs? Returning -EINVAL here will
-result in a very large positive value. A BPF program might interpret this
-massive value as a highly successful reclaim operation rather than an error.
-Should the return type be changed to a signed type like ssize_t, or should
-it return 0 on validation failure?
+[Severity: Low]
+The commit message states that attaching another struct_ops to the deepest
+cgroup fails with -EBUSY. Does ASSERT_ERR_PTR() only check for a generic
+failure pointer?
 
-> +	else if (swappiness < MIN_SWAPPINESS)
-> +		swapiness_ptr =3D NULL;
-> +	else
-> +		swapiness_ptr =3D &swappiness;
+Should this test explicitly verify that errno =3D=3D EBUSY to ensure the
+hierarchical restriction logic is failing for the exact reason expected?
+
+> +		goto cleanup;
 > +
-> +	return try_to_free_mem_cgroup_pages(memcg, nr_pages, gfp_mask,
-> +					    reclaim_options, swapiness_ptr);
-
-[Severity: High]
-Could an arbitrary gfp_mask passed by a BPF program cause a deadlock?
-
-Because the function is KF_SLEEPABLE and gfp_mask is not constrained, a
-BPF program executing while filesystem or IO locks are held could pass
-flags like GFP_KERNEL.
-
-If direct reclaim recurses into filesystem shrinkers, it might attempt to
-acquire the exact same locks, leading to an AB-BA deadlock or system hang.
-Should the gfp_mask be sanitized to strip flags like __GFP_FS and __GFP_IO
-before delegating to the core reclaim path?
-
-> +}
+> +cleanup:
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1779760876.gi=
-t.zhuhui@kylinos.cn?part=3D7
+t.zhuhui@kylinos.cn?part=3D9
