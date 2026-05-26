@@ -1,121 +1,127 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4BB3FF8AE
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25D3355F57
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779804945; cv=none; b=s7FuFKMDDg8TA4dCHRAVguNZrsTK0BQRuayXmFpjJz2Tc94vf/g2aVzAWV8h0/IgcmoX2QVBT7qcYnnkEK49AP6t7wzuzb/fvOoAWxPFxt4dR8K/8LEZ3KOv2wlrn9HfiQ+kPozuPFj6MKY8NmE2eSy2Fpbi+t4z2Djvwjsijjw=
+	t=1779805603; cv=none; b=NExb5TObJ8/EuwUVHGDBYZOVXz+1X44rpUzvblwIjzCIET4nDjSOF9k9VY+6HnOODzRhZkjvmnopPzts41OaA4Q2M5i9yTlBj2Idrg+pskYfGE3HQY+cTcwsSezXGrV1+ciMVs7GsLS+TQdvWDWrZPHOuYmOn8xw3oZXYJlNCwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779804945; c=relaxed/simple;
-	bh=SrP6SKRKlEW+kzm6E5gyWOnirxv86MAAGseQB9sR5b0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nR0ylYJ5pCEu210VaPPPnfZnom64Tvxp4cIjomy7MKEkI2SupgHBIPOvsvgyItS9btGZyH/bq4d6xwMXr1UdvHINofQgDooXd2WkSYWx97kJK1r+ipPZ+Peg9jzXQzUDICj6iFr29flIy11XUMU+yrdrwpZ3vd1Yw9b1Ljen//Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BITSzV+1; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
+	s=arc-20240116; t=1779805603; c=relaxed/simple;
+	bh=YeBVCeauekm9I4EZoE9KgKDLAKsaRIrAyNxRCFPDe0Q=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OmnTrpTIVCLhtzI5z7VYxPfN8YUNlGu2MXERcbZlhL/aZD284yTw/GOz6JVrn6zvHqD2dWpF1yP1JrfF09BWrKWRP3AyIURFloxsF8wAEBtzH6E50xm983zsXQ0zPixOBoQE/Ofe1aoth3BkQ+ThQO6UrSt2EEWr8QBtxF3UMk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUawmq9n; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BITSzV+1"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-6889b2a4afcso288766a12.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:15:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUawmq9n"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so112099215e9.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779804940; x=1780409740; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNY8rXPMnN6yvu32biXhw7JSMAJZadKBrhVosmLObKM=;
-        b=BITSzV+1ZjbzjpZu5/Otr6JwbJNMpT0G1TOVnPZSqujH440tjqjjO9ultIeOevD751
-         K2DJY4JMX7lZWyj7vxDlxUXBtEz3+kJjRZjTCQQfCv2ro/SgBG332zX5i4ODQCVDTUUr
-         BfFeLE6MXNHeCVJIhYLMxbtwe6PWWnZ8TwGFKo82uYI6pFbZcsPxhluHzmaf4rCGP7Ak
-         MRpJv0yMfaf6IlBmDGc3z77gXewZxgeXNk+J84seASBP/+yEEU5GMevZgXtU9GZ3aP+T
-         3G5Wl3ws/EEie/p/sAocmDo/8RqLpQVR9jNvvEZuK+e38yO6FG1E/JeQ8WLDyfVCcGS7
-         EEsA==
+        d=gmail.com; s=20251104; t=1779805600; x=1780410400; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UyMYHXc7gW0Hm+VADntLu7+SEKFOAsvci8NMt8Y69Uc=;
+        b=KUawmq9nFNY6LYNFtwpPQ5uLUaJZsTJsh3gHPeVoj933QngpNCprUuhI590HG02Ijw
+         ixFgwXsux2suz1IAhwJGtEmRvW7YiVVC7GmYpEVLrH4MLXqIc9xVUchEc1LIZYEqW0J7
+         92wIeliuoxTL+opCb8ItmLUQCl8LYIeWr8pQabAnXqXW5t8wEZfboGgRrBs+kqLIH9RB
+         0w/6AXM9RBFO7EG4yUPGA1WuMVIJ0WFnjlUdAIUaMG5PNciqQzGnXiOpjYfLjz86bzKa
+         68KKHXkbAf12BEETYUVoo5PGRvVY7tSzTE9gi4mgs+vtahQuHwsLBko4z0mA770Jtu+X
+         k6dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779804940; x=1780409740;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNY8rXPMnN6yvu32biXhw7JSMAJZadKBrhVosmLObKM=;
-        b=bgqv5VtTHn/qmVYbybNgFSRUyvxpTbf9p1Uwp4r8V0RUS4SZW5S/2W0yVs8ejd4bgC
-         Hj+vhk0sO+UAOsQ64xXdD4lRhjrp9ow6F7E7DZuzAXH9XQnJJhdBO8Dj8ESvCCaylzIQ
-         5uilekrxOoeCNV6O9La2xGswGz4883RoMIpxtgA5YzsXv8yzf29x9YfX0jciBSqDUpwH
-         uCxHZzy1miU9jekGJExPcg5dmavoCdKXYW1OO4uGhETUh+cuoFx216FpnuEg00db4IiT
-         GctMiBV/AxYSPQczh9f4maXPhRpX+K6PkP7ITzBtYt9ziu+dh1OdR9FC4jY6b94I84a4
-         V36A==
-X-Gm-Message-State: AOJu0Yzf5+ODZ9YbCfk1PT5UUHqwZm/Me6raDJIG1os0wnyZc+HCg/I5
-	JD4rYWPf3uRIZC3eUCAlwt5GSi+HJDBFHCeBKuPcTkAT4H3Q3Ph/5CfuGyxPxnC81tISRW9HgWa
-	8HyeHTDBs+TJ2rHLGdw==
-X-Received: from edvt5.prod.google.com ([2002:a05:6402:205:b0:672:b7c7:1edd])
- (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:458e:b0:683:e55a:d165 with SMTP id 4fb4d7f45d1cf-6889c422dc0mr10289653a12.2.1779804940058;
- Tue, 26 May 2026 07:15:40 -0700 (PDT)
-Date: Tue, 26 May 2026 14:15:36 +0000
-In-Reply-To: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
+        d=1e100.net; s=20251104; t=1779805600; x=1780410400;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UyMYHXc7gW0Hm+VADntLu7+SEKFOAsvci8NMt8Y69Uc=;
+        b=iNw++llEBLJ7hAf2KFvdOcS8fPfThn7KY+CsESZJxvuhz0/Uyc4IhcDqHFDlUT6bgl
+         1SJ6JLOBIOjeGpPPsIQRWPNLsR5IP6n+ApsmZahXjudpyO89Ruxa5+uGlY5NPP3TcjV1
+         kEma7KuWtE3P7+2aUpcx4g59wuR4IxoQ95cTel68IUce3JgBtr09yRzspH+Ag+j3DIz0
+         eKDZAfdHQYEYKqsDNJ44g75PzhilzeyC9ioFpiFkev4B5XyUpkzERXX55PF2SCNT/SCF
+         /5ZJ/32XKyflqNq8f/u24DPWbUyehlVJLSQR1xBp6Q+GJm1m1LkSjH8gFDM999lSZOJZ
+         Kf+A==
+X-Forwarded-Encrypted: i=1; AFNElJ8bVxbl8pcAQsJUYLkcUf+DyfwvAz1TPXZm9nHfCFoIKwzs4iGPvHMIBSeMQJ9Ri9yFODg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkRIFpIpAYB5diUybCoIMdT16WJSWGNRJZajhdxkjDvDD8M4Di
+	8j32fnjto9V3C8YhWKbKjAOUCglqVBxA2/E0A8100W0X2D6nn3S1KrpF
+X-Gm-Gg: Acq92OHpRkd9yjdF0rs452xNZhKpN8hnL7zaWD2ZGaSFPgesg19apnoIXNTRViNS8Jv
+	xzNnyjx6gCO0yB9sadJNdllEpSj0SKBBkq42gYhkJH7e87mpl+cARik8nLk0AHYqG7jxKvf9X4O
+	qSR+ghNQutum6dly1lGCtLnORtpi6mxfMi4gHyH6LpJ0jpu4v+NqvhoAY059wrCcBLBNhYUMjcS
+	UTSuOeQOV1k9vXXmPFLZ39y+p63MkOfM+MsbSmdMcUFf6dg4/W8efBjccKl+AIMaXj/7VShbufP
+	v91bZZGn2xajqiJf+CaJGccRWoEMq8rGbE5kuaDa31RfxNAX/VB9FQ96Ms/8wFTLNA8MCKlW3VI
+	3vqMTctDOBTy7BXYQjSU5F6M6sWmFwVc0Xdr8NmmwxloSm6qcSlBpwBcuF9afSkczxPeyz6eodP
+	L9DfDuUgu1QzGCpHQ6
+X-Received: by 2002:a05:600c:628f:b0:490:5057:f602 with SMTP id 5b1f17b1804b1-49050580d79mr258141665e9.17.1779805599766;
+        Tue, 26 May 2026 07:26:39 -0700 (PDT)
+Received: from krava ([2a00:102a:403b:6530:533a:f167:d705:6aca])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d71688sm37991070f8f.33.2026.05.26.07.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2026 07:26:39 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 26 May 2026 16:26:36 +0200
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 05/12] libbpf: Change has_nop_combo to work on top of
+ nop10
+Message-ID: <ahWtnED2e7RU64B4@krava>
+References: <20260521124411.31133-1-jolsa@kernel.org>
+ <20260521124411.31133-6-jolsa@kernel.org>
+ <CAEf4BzY3bV+gkA4fRm=jzaTowG1QtXogLDOKkG3CrR5EWzDPcg@mail.gmail.com>
+ <ahDKatbb_ixUY_XF@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com>
-X-Mailer: b4 0.14.3
-Message-ID: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-3-5b4fa2a5e1a4@google.com>
-Subject: [PATCH v3 3/3] libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
-From: Siddharth Nayyar <sidnayyar@google.com>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, gprocida@google.com, 
-	maennich@google.com, Siddharth Nayyar <sidnayyar@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ahDKatbb_ixUY_XF@krava>
 
-BPF `STRUCT_OPS` maps (such as `sched_ext_ops` maps) require resolving
-and plumbing the kernel-side structure value type ID
-(`btf_vmlinux_value_type_id`) into the BPF map creation system call
-attributes. Additionally, when `btf_vmlinux_value_type_id` is supplied,
-the kernel requires a valid userspace BTF file descriptor (`btf_fd`) to
-be supplied to verify types.
+On Fri, May 22, 2026 at 11:28:10PM +0200, Jiri Olsa wrote:
+> On Fri, May 22, 2026 at 11:52:56AM -0700, Andrii Nakryiko wrote:
+> > On Thu, May 21, 2026 at 5:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > We now expect nop combo with 10 bytes nop instead of 5 bytes nop,
+> > > fixing has_nop_combo to reflect that.
+> > >
+> > > Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
+> > > Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  tools/lib/bpf/usdt.c | 16 ++++++++--------
+> > >  1 file changed, 8 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> > > index e3710933fd52..484a4354e82b 100644
+> > > --- a/tools/lib/bpf/usdt.c
+> > > +++ b/tools/lib/bpf/usdt.c
+> > > @@ -305,7 +305,7 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
+> > >
+> > >         /*
+> > >          * Detect kernel support for uprobe() syscall, it's presence means we can
+> > > -        * take advantage of faster nop5 uprobe handling.
+> > > +        * take advantage of faster nop10 uprobe handling.
+> > >          * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
+> > 
+> > Would be nice to add commit that switches nop5 to nop10 (but until it
+> > lands hash is not stable, so, hmmm, maybe we'll land this patch
+> > separately? send it a bit later to bpf-next?)
+> 
+> hm, I think that would affect the subtest_optimized_attach usdt test
+> which depend on this behaviour, will check
 
-Previously, the `gen_loader` map creation generator
-(`bpf_gen__map_create()`) omitted plumbing `btf_vmlinux_value_type_id`.
-Furthermore, `gen_loader.c` only copied the loaded `btf_fd` from the
-stack to the attributes blob if `btf_value_type_id` was non-zero.
-Because `STRUCT_OPS` maps explicitly zero out `btf_value_type_id`, the
-loader program skipped copying `btf_fd`, leaving it as `0` (standard
-input), which caused the kernel's `btf_get_by_fd(0)` check to fail.
+usdt/optimized_attach will fail without this change,
+I'll make note to update it later when we have the hash
 
-Fix this by:
-
-1. Copying `btf_vmlinux_value_type_id` from the options inside
-   `bpf_gen__map_create()`.
-2. Modifying the `btf_fd` copying condition to populate `btf_fd` if
-   either `btf_value_type_id` OR `btf_vmlinux_value_type_id` is set.
-
-Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
----
- tools/lib/bpf/gen_loader.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index cd5c2543f54d..a9be0c241025 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -525,13 +525,14 @@ void bpf_gen__map_create(struct bpf_gen *gen,
- 	attr.max_entries = tgt_endian(max_entries);
- 	attr.btf_key_type_id = tgt_endian(map_attr->btf_key_type_id);
- 	attr.btf_value_type_id = tgt_endian(map_attr->btf_value_type_id);
-+	attr.btf_vmlinux_value_type_id = tgt_endian(map_attr->btf_vmlinux_value_type_id);
- 
- 	map_create_attr = add_data(gen, &attr, attr_size);
- 	pr_debug("gen: map_create: %s idx %d type %d value_type_id %d, attr: off %d size %d\n",
- 		 map_name, map_idx, map_type, map_attr->btf_value_type_id,
- 		 map_create_attr, attr_size);
- 
--	if (map_attr->btf_value_type_id)
-+	if (map_attr->btf_value_type_id || map_attr->btf_vmlinux_value_type_id)
- 		/* populate union bpf_attr with btf_fd saved in the stack earlier */
- 		move_stack2blob(gen, attr_field(map_create_attr, btf_fd), 4,
- 				stack_off(btf_fd));
-
--- 
-2.54.0.746.g67dd491aae-goog
-
+jirka
