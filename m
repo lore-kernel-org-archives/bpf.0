@@ -1,111 +1,247 @@
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2483D649F
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AA031ED93
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779792245; cv=none; b=LcnKV9Hd8zg9GZ+ioWgoiaj/iwGuSJE4mtmTVSpd1zvE9gMGxY/X7Lu+nZZHmMhCmbN2wQSRVYRwZ1KmclCORQ25miSugxMc5JlEz2XA18ivBesgjpWxg4VkD37e/St0rX+WTFrqcFrQ5Bu9vLOTl9KjIrVuk1vxwIgKask2Vsc=
+	t=1779792357; cv=none; b=dfD+qklBXPBMUNEiLaouvtL6U2CkLhSlmCQszJSjOggqGEdHqAPkpAtIcFk2OhcGWJPY8pc6ho+Ha2tFa0lCOjYueptzZ1x0NWcwkrJ5z9TquBqeM8nnzd64zhnI8/cGgSYfvgxy6+7+7608xRg1l1A+OYEz5SuqP5Ygdb+jvgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779792245; c=relaxed/simple;
-	bh=HsOr8rpplJjgS7Av7/K41Jv793JfILZijFQlo8B/bws=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uXrNwnhr9oxrO3xf+QiiLGeE+gSo+hBEV7Ui61ufkLcC96DSZboudeP5+AudfQzH2AKZmkhjygZPvl5anLcPfAMQ+qGtV6JrGe06nuTbExmzoaNlz4atTrr4NaVpbI7RIhIiw2uaNN+X2cPo+AIQBapgrG435EgqRtcmcHqiLw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJ1aoNQV; arc=none smtp.client-ip=209.85.210.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779792357; c=relaxed/simple;
+	bh=oK1QDRvM5f7kBY5FVGX3VKXC9wYIHsLcJZ2ZFsvxj2s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iuBxzRjKJ52Y0AElebWxzGWSiW1bwxeVP4hT67JjdaFn0T/HTcPSuk5d0hw7w8jp+M22rKBlN/9NX7GyaopKtWuMxcGvDuo3WIlrzEEPRwGBktBw8kezQeIC0EhiKQqArmL2yj5mt+y3WNs+6VRaZILEpLRSRp4SiyG7bkvO6zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRMcZCOp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJ1aoNQV"
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-83537a80ab6so7242690b3a.1
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 03:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779792243; x=1780397043; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0woIQHOIcIhPQzNkOpwE+A4HIJ4EcK8YFk4nOva52aE=;
-        b=OJ1aoNQVqzQF6siB4fYX9SI6yBYbVgGw/iR33y06CYsRABLEhZWFI5940eaNCjXW7A
-         aXzOC+Ce18+xfxW52sw11RtbDpBtFkq2+IAV5649yXE/Ys0W69I3hYvw5SMjS3yLgWtH
-         srKwaEqC8MrTBLu2vMXW8u4+W8wLAUyESER1jCYFdweKiDagonxfxj/lB5apJBPRasbx
-         lRQExOIH2RODBgwdoToqpQt5rqSux14FrwXsCO/CCDPAU0LkFuWCdH1Y0wUhq7dqrp2J
-         2MFS7kQBo/AHvN6CvSrg4Fmoa/Y0ZU9gkCrfzLiNAzWW/OG1kYhjDThAUFe7l98WDQzt
-         rOhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779792243; x=1780397043;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0woIQHOIcIhPQzNkOpwE+A4HIJ4EcK8YFk4nOva52aE=;
-        b=dVfiaWviHmxYMiNR+rnvw6fYvrugPBC2pjRtdN7Zlaib8PL/Ptwp8tp6AXYTWLhyuj
-         fhZDLJU4ocrOiGsAy8/Mq8g+oHeaVerHPMw3lteLKEaVy+hIUknUH4Ua8P3bNydw9Ebb
-         o1ulIVgCRgQ2ev5N4mx/jZfyIdDbO6Fux5lykKg+RLjsqoT0R+OE9u6zJybadi8UVJgS
-         TDOVXx57a4iyShEyMt0LWKoAS3zCzeQywl49EutL4PJvbaBLpiBC9/s48pvz64C3qsGe
-         jb4H2cJJk1eh7S0rMmvMerxs7nsae1D2HrTzdH7hesgyJgq/7q6vaKp3qKBkDZDXwzyb
-         Y9Qg==
-X-Gm-Message-State: AOJu0YybwJgh/kKms5DBJJgiHUAm8+c6aRi5X3CUvEAvdBEczrp0Mu9m
-	ENDW9iwKG6+2yiHPvO4H+ykhhutzYdcQiPp80lCVZ9cKGGPPaGhk0WM6
-X-Gm-Gg: Acq92OFwj+5Pe7nfUtP7OqBXnkF43nLUkk7A4c8HqViswY+lwA5NgDFSYAB8gSPXO9D
-	U8+ESJIgM1RN2nFB6M2cz2ATXhye0vrOrX0z0DlcC2SsMHnBMbdM4WXDX7CLvnyN8k5i6A7ypYw
-	UwIHbyK2jxHmKTHol0qoFknH6mTJqbJfpJx9NQ7m02Ox/eSlImhIqBSA3n2S/yxCUfQDC+oZBF3
-	H7O77Pb+ceOPsG4qd9JayTE2Q6UWlzENYH5ZeJ2mwRN9PjZ7HnOCs16e7WJbE3dGWpXiQjO0QUd
-	8VlryLRlAKu6jFcK8p1Fwri4FN6zGnWvaLPWC42pxhNYL23rvOesi7nX6oB7GPKWRiR8jn8tBGe
-	IcqvPOFNgINZGBtdvBCRgP4yTdVsG5VwxH5AfXhjKTsFlxn2bqv68IwtMFWtLk9sGnH2PkR45dg
-	NMSI6copSghUeQU9j/87iRzpVGkoglAylZe0k48Kh0sv/anFud4INq1WndeK9C
-X-Received: by 2002:a05:6a00:1c8a:b0:837:7e7d:3d2 with SMTP id d2e1a72fcca58-8415f332b6cmr18931174b3a.31.1779792243590;
-        Tue, 26 May 2026 03:44:03 -0700 (PDT)
-Received: from KIPREYXIAO-MC2.tencent.com ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84164afe2dasm12132890b3a.19.2026.05.26.03.44.01
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 26 May 2026 03:44:02 -0700 (PDT)
-From: Zhenghang Xiao <kipreyyy@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: bpf@vger.kernel.org,
-	Zhenghang Xiao <kipreyyy@gmail.com>
-Subject: [PATCH bpf] bpf: add rcu_read_lock_trace to bpf_timer_cb
-Date: Tue, 26 May 2026 18:43:57 +0800
-Message-ID: <20260526104357.35779-1-kipreyyy@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRMcZCOp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3791F000E9;
+	Tue, 26 May 2026 10:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779792356;
+	bh=MAsuM4Q4UFn+V6ZpnrKdtLDkxsQXIyAh7M5FakTHW9s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cRMcZCOpX0fZqTjKxTu6P65+POYlMX2EsanaZ0yDpaaWfM+XyfdKn3SDYmmT87TSk
+	 BYOQNYVEkINHpmcX1xi/2gichBW5ajTGaW7o97cARc3zIcG7YTDrJLxRav0HW5oThs
+	 HwbYNTXDoWe/v1O6qSwW9TA8T6B8at8XEngbWozZV70Po3T5JQN3Us2WA0PNFhMFzg
+	 Ccx2T3N1ZzYUhZonJcKletWQJvmI8ynY63oKXF9NHeok0SSai2m+hKjz6E68rAZozS
+	 8bmqHLhl5fy/WKNOe1TgFv2z91XlyGdAMAG/dGqiY0n2wl3p52qVMKvs9boOZuN/bL
+	 fAU7jw7wQ78yQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC bpf-next 4/6] bpf: report hot simulated callchains
+ when 1M instructions limit is met
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526-better-1m-reporting-v1-4-51e4f2c59780@gmail.com>
+References: <20260526-better-1m-reporting-v1-4-51e4f2c59780@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 10:45:55 +0000
+Message-Id: <20260526104556.5A3791F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_timer_cb() invokes the BPF callback without holding
-rcu_read_lock_trace(), unlike bpf_wq_work() which correctly wraps its
-callback in a trace RCU reader section. The free path in
-bpf_async_cb_rcu_tasks_trace_free() uses call_rcu_tasks_trace() to wait
-for running callbacks before freeing bpf_async_cb, but this
-synchronization is ineffective for timers since they never enter a trace
-RCU reader section.
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] Missing Memcg Accounting for callchain profiles
+- [High] Stack buffer overflow when updating printed_subs bitmap
+- [Medium] Uninitialized stack memory copied to heap in update_callchain_pr=
+ofile
+- [Low] Log buffer truncation due to subprogram disassemblies preceding cal=
+lchain summary
+- [Low] Compiler warning on 32-bit architectures due to incorrect format sp=
+ecifier for ptrdiff_t
+--
 
-Add rcu_read_lock_trace()/rcu_read_unlock_trace() around callback_fn() in
-bpf_timer_cb() to match the bpf_wq_work() pattern. migrate_disable() is
-not needed because the timer callback already runs in softirq context
-which prevents migration.
+commit 77e8a884bb6c0c1595ff19bac7fba4cb9e4a26ac
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
-Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
----
- kernel/bpf/helpers.c | 2 ++
- 1 file changed, 2 insertions(+)
+bpf: report hot simulated callchains when 1M instructions limit is met
+   =20
+This patch introduces a mechanism to report the hottest simulated callchains
+when the BPF verifier hits the 1M instruction budget. It collects and counts
+callchains during verification, printing a summary and disassembly of the
+relevant subprograms to help debugging.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2bb60200c266..5056aae41c77 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1204,7 +1204,9 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
- 
- 	key = map_key_from_value(map, value, &idx);
- 
-+	rcu_read_lock_trace();
- 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
-+	rcu_read_unlock_trace();
- 	/* The verifier checked that return value is zero. */
- 
- 	this_cpu_write(hrtimer_running, NULL);
--- 
-2.50.1 (Apple Git-155)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2b3584712ad28..8eb8f1ce17c76 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
+[ ... ]
+
+> @@ -17247,6 +17247,152 @@ static int check_indirect_jump(struct bpf_verif=
+ier_env *env, struct bpf_insn *in
+>  	return INSN_IDX_UPDATED;
+>  }
+> =20
+> +static void compute_callchain(struct bpf_verifier_state *st, struct bpf_=
+callchain *cc)
+> +{
+> +	int i;
+> +
+> +	cc->curframe =3D st->curframe;
+> +	for (i =3D 0; i <=3D st->curframe; i++)
+> +		cc->insn_idx[i] =3D bpf_frame_insn_idx(st, i);
+> +}
+> +
+> +static int update_callchain_profile(struct bpf_verifier_env *env, struct=
+ bpf_verifier_state *st)
+> +{
+> +	struct bpf_callchain_entry *entry;
+> +	struct bpf_callchain cc;
+> +	u32 hash;
+> +
+> +	compute_callchain(st, &cc);
+> +	hash =3D jhash2(cc.insn_idx, cc.curframe + 1, cc.curframe + 1);
+> +	hash_for_each_possible(env->callchain_htab, entry, node, hash) {
+> +		if (entry->cc.curframe =3D=3D cc.curframe &&
+> +		    !memcmp(entry->cc.insn_idx, cc.insn_idx, (cc.curframe + 1) * sizeo=
+f(u32))) {
+> +			entry->count++;
+> +			return 0;
+> +		}
+> +	}
+> +	entry =3D kzalloc(sizeof(*entry), GFP_KERNEL);
+
+[Severity: High]
+Does this code allow an unprivileged user (or one inside a container) to
+bypass memory limits?
+
+Since the verifier allocates these callchain profiles dynamically during
+verification (up to the 1M instruction budget), missing the __GFP_ACCOUNT
+flag could cause large amounts of unaccounted kernel memory to be consumed,
+potentially leading to an OOM condition.
+
+> +	if (!entry)
+> +		return -ENOMEM;
+> +	entry->cc =3D cc;
+
+[Severity: Medium]
+Will this copy uninitialized stack memory to the heap?
+
+In compute_callchain(), only cc.curframe and the active elements of the
+cc.insn_idx array are initialized. The remainder of the array on the stack
+remains uninitialized. Assigning the whole struct here copies those
+uninitialized bytes, which will trigger KMSAN warnings.
+
+> +	entry->count =3D 1;
+> +	hash_add(env->callchain_htab, &entry->node, hash);
+> +	return 0;
+> +}
+
+[ ... ]
+
+> +static void print_callchain_entry(struct bpf_verifier_env *env,
+> +				  struct bpf_callchain_entry *entry, int idx)
+> +{
+> +	struct bpf_callchain *cc =3D &entry->cc;
+> +	const struct bpf_line_info *linfo;
+> +	struct bpf_subprog_info *sub;
+> +	int i, insn_idx;
+> +
+> +	verbose(env, "#%d most visited simulated stacktrace (visited %llu times=
+):\n",
+> +		idx, entry->count);
+> +	for (i =3D 0; i <=3D cc->curframe; i++) {
+> +		insn_idx =3D cc->insn_idx[i];
+> +		sub =3D bpf_find_containing_subprog(env, insn_idx);
+> +		linfo =3D bpf_find_linfo(env->prog, insn_idx);
+> +		if (sub->name)
+> +			verbose(env, "  %s/%d", sub->name, insn_idx);
+> +		else
+> +			verbose(env, "  subprog#%ld/%d", sub - env->subprog_info, insn_idx);
+
+[Severity: Low]
+Does this generate a compiler warning on 32-bit architectures?
+
+The expression sub - env->subprog_info yields a ptrdiff_t. On 32-bit system=
+s,
+ptrdiff_t is typically int, so using %ld causes a -Wformat warning. Could t=
+his
+be changed to %td?
+
+> +		if (linfo)
+> +			verbose(env, " (%s:%u)",
+> +				btf_name_by_offset(env->prog->aux->btf, linfo->file_name_off),
+> +				BPF_LINE_INFO_LINE_NUM(linfo->line_col));
+> +		verbose(env, "\n");
+> +	}
+> +}
+> +
+> +static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subp=
+rog_info *sub)
+> +{
+> +	u32 i, end =3D (sub + 1)->start;
+> +
+> +	if (sub->name)
+> +		verbose(env, "%s():\n", sub->name);
+> +	else
+> +		verbose(env, "subprog#%ld:\n", sub - env->subprog_info);
+
+[Severity: Low]
+Similar to the previous comment, does this need %td instead of %ld for the
+ptrdiff_t type?
+
+> +	env->prev_linfo =3D NULL;
+> +	for (i =3D sub->start; i < end; i++) {
+> +		verbose_linfo(env, i, "  ; ");
+> +		verbose(env, "  %d: ", i);
+> +		bpf_verbose_insn(env, &env->prog->insnsi[i]);
+> +		if (bpf_is_ldimm64(&env->prog->insnsi[i]))
+> +			i++;
+> +	}
+> +}
+> +
+> +/*
+> + * Print several most visited simulated stack traces,
+> + * and a disasembly of related subprograms.
+> + */
+> +static void print_hotspots(struct bpf_verifier_env *env)
+> +{
+> +	DECLARE_BITMAP(printed_subs, BPF_MAX_SUBPROGS) =3D {};
+
+[Severity: High]
+Does this code overflow the stack array when processing fake or exception
+subprograms?
+
+The verifier allocates extra slots for fake and exception subprograms, mean=
+ing
+env->subprog_cnt can reach BPF_MAX_SUBPROGS + 2. Sizing the bitmap strictly
+for BPF_MAX_SUBPROGS could result in out-of-bounds stack writes in the loop
+below.
+
+> +	struct bpf_callchain_entry *top[3] =3D {};
+> +	struct bpf_callchain_entry *entry;
+> +	struct bpf_subprog_info *sub;
+> +	int i, j, bkt, nr_top =3D 0;
+
+[ ... ]
+
+> +	for_each_set_bit(i, printed_subs, env->subprog_cnt) {
+> +		disasm_subprog(env, &env->subprog_info[i]);
+> +		verbose(env, "\n");
+> +	}
+> +
+> +	/* Print the hot callchains */
+> +	for (i =3D 0; i < nr_top; i++) {
+> +		print_callchain_entry(env, top[i], i + 1);
+> +		verbose(env, "\n");
+> +	}
+> +}
+
+[Severity: Low]
+Could printing the disassemblies first cause the callchain summary to be
+truncated?
+
+For non-trivial BPF programs, subprograms can contain thousands of
+instructions. If these are printed before the hot callchains, the
+user-provided log buffer might fill up completely, preventing the actual
+callchain summary from being visible.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-better-1m-=
+reporting-v1-0-51e4f2c59780@gmail.com?part=3D4
