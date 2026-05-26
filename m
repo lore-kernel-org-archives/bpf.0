@@ -1,96 +1,137 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942703FFAC6
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499FC25A655
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805821; cv=none; b=GfQkQDHgDDdewISENAXMXBVWKMx+38XhmldpGlgpbyDBLVALG4KHg5Bl0vayYq95Oihy2X0qgiearpV0UCn+tm6dJWJqosfzrWXiAcXzKtjaTqZL8YbUZAXgH7GBrZEeOn82fFAzynbWHtIeAKNH9FcjBSvjGnQlJl8G9SaGfgM=
+	t=1779806106; cv=none; b=ALefV/iq9nbpzsld+r7TRam7FU3+HTr0r+rv5ryHLWYkXLQSd6pLtda3H56lK0MqRd8WWMN26V8eVzWurxtQY4mSPPw06tRmAMv8CipDpJf01pYjIPxuMkNqiIV9A+06Mcpwbd1J1oKFoEs1ax3FXG13cOiBcuQaJPlN7/dpGJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805821; c=relaxed/simple;
-	bh=lG0SD9cXN/5Qk4VXl7q4UfDEDkoq1CrJuW/0BYgMDBI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TgwPPrAKgkt7lGNFg1A+kcCIG7gLQIPmvUDJ0my5xw9/LPERdVCFzftbCxFB2FZNzEdjZqAF9g1GR5i0shrjTjFUG6PG7DkxxD4zt+4HwtKk2HjY/5fo67yzQu0HGahPvt52wBCTLSbGsXwArhXAyiWwVcO3+8M1zC7X+2+C6GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl2tuid7; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779806106; c=relaxed/simple;
+	bh=wfQin35MVxAfYir3Tp7o+QwFmuTCwZ/5VE6YpZUHAgc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YP6sNEyQ7Uc0gK/n1k9qW9BaM318qN0o4x1k3o7+V3Ea0g6hbIKZUHLaTWw9G+l3yCqkgk82KSJtzRNjGVTEi7HOKyqDSZVgxsryHm1899IgmP1cMNUgIkTRHuiE1jCKaNpKmE2GJnVW8p3w7/SI2rWZpxL5VocSbo0xnFgWOGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERAxseIr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl2tuid7"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so78353515e9.0
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779805819; x=1780410619; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=T45Ou7ZWfmCD8W0zzIfAADcxBltvQlyL9M3hYTeHQiQ=;
-        b=Yl2tuid786He6HnhdbPNKhrRGdI1UMgasQGDrBjAAsCvNhO5FG8FwHdjcJIWWDcswY
-         s54rxVS5Z9lQBTbqVaBON6ovhqAM1Idgpfriii3a2S91vDbbH7iWobZMFvS66ef3u6Cp
-         kIlXlgIqfafHUPyo13XoS838bDqWDOiR0DJsHWzAXJnt7s7/q9BSHGGahWiZk648e+yT
-         R0xlhOOZPEpjH3C2gs68id0aEdhlqBrqKW976ctzhPxCQuBYV3zqJVlsT/GA/f7WrFpe
-         PAANoydgc8v+kOAk+XQpCHKZ+cg+d8bRIsx1nCTNUfbnu4ljZXSyLeUohOvYkYqaSwF4
-         ahDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779805819; x=1780410619;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T45Ou7ZWfmCD8W0zzIfAADcxBltvQlyL9M3hYTeHQiQ=;
-        b=ou3/xleUNihcF0tzyabbWLk2U3MAiiMOcbiNOXFfq2AOEEZbluPBdt9MBhByFvB7ED
-         fDNH8WI7xomNTt5KyR5zUTC+nlmw+PlnBaDvO+icguKzd46eHVtBwSEXfzLRDQFFyxOS
-         Crv+tdSIAWZqdHkHbgVy9xX8fu+yuJBWHj/chhMEg8kgyUwSaFy6aRmli+dESTx+tMWx
-         FbHKIY82n9A2tZZMS2J2q72wk2lHO0qC29AxWW8jkZr9y7RYFFKjXv+7z1kA26cTdrsM
-         cLbM5JFxNN9Yt/Uxxc8kLHqfTWX7HCYlRLjVoUthK512PAhZvTcGe+wWaLDWT+9adGi6
-         CGGw==
-X-Forwarded-Encrypted: i=1; AFNElJ+te/kR0JGrHyQEOPSZUAqdv5misz9poEvNGd74Qupbb7bw93zbsI2JAQXFByksNM2hT3E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCATwzkL+6zvKi9IKzccNpRnQKUG4/KFK+tWzWc31lDsSnCQnc
-	Pi3EQH07SyzCFsuZig4xef97wyJI9AkKEDoqR6PacoiNogk1UP974kUK
-X-Gm-Gg: Acq92OE96/rdcF14eHQ3M8V1eK9r5q2eAf0mRAK+IckmX6Gt8rB6r169eSJkSKYvuLC
-	L5LRjNBHKGO+aFYfmfeHjnyO19cIxAcn+OJOvkI0HvVg9x3Dk2m2ZMcJbkIJ7Xcrnlm9RL2gzYN
-	bWvZyoSqMnO0Jebbwi1DTljpa8WsfOwlelrAt7HZt6sAUAJgHHpQWypn2Hj6xAMfnbGYfJQ4i4p
-	wHcnzyCIye8537TqPIgC1MjVz5eusITs8Tp1ujOzmuTt/SWORF2yAZ8YOF11cRjlBhwi2GmXmQN
-	dsK30v84xZ4BzC8Tcxhm/2VzdveFx+XV5x68RNAFUo/k/+T3MtquckKvvF05U6gdRuQZ8+w9R3y
-	C2Z314LeYCIkHjRIv2J6D2qigcm++rCogmwwdT7lIbjjRyQIZhFMHmAuq+cmd70MyK4/c0RzEam
-	eyxQgA8u4/uBAFkePQFG16C5o2Xg8=
-X-Received: by 2002:a05:600d:6451:10b0:48a:563c:c8c0 with SMTP id 5b1f17b1804b1-4904249d11amr228458775e9.7.1779805818565;
-        Tue, 26 May 2026 07:30:18 -0700 (PDT)
-Received: from krava ([2a00:102a:403b:6530:533a:f167:d705:6aca])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490428e5adcsm124007855e9.21.2026.05.26.07.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 07:30:18 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 26 May 2026 16:30:14 +0200
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: sashiko-bot@kernel.org, sashiko-reviews@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: Re: [PATCHv3 07/12] selftests/bpf: Emit nop,nop10 instructions combo
- for x86_64 arch
-Message-ID: <ahWudlB0zTRvfBE6@krava>
-References: <20260521124411.31133-8-jolsa@kernel.org>
- <20260521132121.EEB4E1F000E9@smtp.kernel.org>
- <87bje277zf.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERAxseIr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D48301F00A3A;
+	Tue, 26 May 2026 14:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779806104;
+	bh=ISj5WOZkyxHQ2g+UOqU7zEKgMXDvCvhtt0n9YjA0TM4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ERAxseIrf82p7vUgeed3CtkI1tQP+wlwLMrS9fA0vc53/s3jBsgLLUZLwyH7auUZ/
+	 v9Bo39yhCm5xuK7zyyaAHgZ7BtqZzdp/juGPo/KPaRfH8lHdyo6MVQpifRtFos4Tk4
+	 8gs57hvgNmfmoNcaZvfSLv+q6NHPqmzk2+WNHkJMFAOXAn0DBNyjDX6vSTOolx34KR
+	 OSHWYdoO4qfXWzbYLpaIwLIhPQ1aYxbKx2dPE2JM3zDcbnj91nxFh38ufenj3htfOQ
+	 kY0iJE+gkzt1E27MgaFW6LOrkzXDX3DgvFpXCBt9ovIZjfszP6jM/8dgs/xfLDRVHB
+	 EQT5zYyJukjKw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 1/3] libbpf: load vmlinux BTF in gen_loader mode for
+ struct_ops
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-1-5b4fa2a5e1a4@google.com>
+References: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v3-1-5b4fa2a5e1a4@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 14:35:03 +0000
+Message-Id: <20260526143504.D48301F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bje277zf.fsf@cloudflare.com>
 
-On Tue, May 26, 2026 at 12:58:28PM +0200, Jakub Sitnicki wrote:
-> On Thu, May 21, 2026 at 01:21 PM GMT, sashiko-bot@kernel.org wrote:
-> 
-> [...]
-> 
-> > Would using two consecutive 5-byte nops instead of a single 10-byte
-> > nop safely provide the padding needed for a 5-byte patch?
-> 
-> Perhaps worth clarifying that nop5,nop5 wouldn't allow us to leave the
-> CALL in nop10 tail after the optimize/unoptimize cycle.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Critical] Light skeletons generated for `struct_ops` maps silently bake =
+in the build host's specific BTF type IDs and struct layouts, breaking cros=
+s-kernel portability.
+- [High] The patch introduces a severe regression for light skeleton genera=
+tion, causing build failures on machines lacking kernel BTF and adding unne=
+cessary parsing overhead for CO-RE programs.
+- [High] Light skeletons (`gen_loader`) lack the necessary logic to populat=
+e and attach `struct_ops` maps, rendering the feature unusable even with th=
+is patch.
+--
 
-right, also we need to have single instruction for that
-to have some assurance the app won't jump in the middle
+commit 10cd8d15c2eb1d7b8f90e84836d289ccbf14bdbc
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-jirka
+libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+
+This commit modifies bpf_object__load_vmlinux_btf() to allow loading the
+host's vmlinux BTF even in gen_loader mode. This is intended to resolve
+kernel-side struct type IDs and member sizes required for struct_ops maps
+during light skeleton generation.
+
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3a80a018fc7d5..cb1b7ea884a77 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -3590,7 +3590,10 @@ static int bpf_object__load_vmlinux_btf(struct bpf=
+_object *obj, bool force)
+>  	int err;
+> =20
+>  	/* btf_vmlinux could be loaded earlier */
+> -	if (obj->btf_vmlinux || obj->gen_loader)
+> +	if (obj->btf_vmlinux)
+> +		return 0;
+> +
+> +	if (obj->gen_loader && !obj_needs_vmlinux_btf(obj))
+>  		return 0;
+
+[Severity: High]
+Will this cause build failures for standard CO-RE programs in environments
+without a kernel BTF (like CI containers)?
+
+The function obj_needs_vmlinux_btf() evaluates to true for any BPF object
+containing standard CO-RE relocations. Prior to this patch, gen_loader
+unconditionally bypassed loading the vmlinux BTF because light skeletons
+defer all CO-RE relocations to the target kernel's runtime.
+
+By deferring to obj_needs_vmlinux_btf(), bpftool is forced to load the
+build host's vmlinux BTF for almost all light skeletons. This adds parsing
+overhead and will abort generation if /sys/kernel/btf/vmlinux is missing.
+
+[Severity: Critical]
+Does this break the cross-kernel portability of light skeletons by hardcodi=
+ng
+the build host's BTF type IDs?
+
+By allowing bpf_object__load_vmlinux_btf() to run on the build host during
+gen_loader execution, the btf_vmlinux_value_type_id and map value_size are
+resolved against the build host's specific vmlinux BTF.
+
+When bpf_gen__map_create() later writes this map_attr->btf_vmlinux_value_ty=
+pe_id
+into the loader program's bpf_attr array, it passes the build host's arbitr=
+ary
+BTF type ID to the target kernel. Since gen_loader lacks CO-RE dynamic
+relocation logic for this ID, it could lead to map creation failures or sil=
+ent
+memory corruption if the ID collides with a different struct on the target.
+
+[Severity: High]
+Can the generated loader actually populate and attach struct_ops maps?
+
+For a struct_ops map to function, it needs to be populated with BPF program
+function pointers via bpf_map_update_elem() and then attached. However, the
+gen_loader implementation only seems to emit bpf_gen__map_update_elem() for
+internal maps like .rodata and .data.
+
+It appears to lack the logic to patch st_ops->kern_vdata with dynamically
+loaded BPF program FDs, and the generated _skel__attach() doesn't include
+attachment logic for struct_ops maps. Does this mean the generated loader
+will merely create an empty, unattached struct_ops map even with this chang=
+e?
+
+> =20
+>  	if (!force && !obj_needs_vmlinux_btf(obj))
+>  		return 0;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-libbpf-loa=
+d-vmlinux-btf-in-gen_loader-mode-v3-0-5b4fa2a5e1a4@google.com?part=3D1
