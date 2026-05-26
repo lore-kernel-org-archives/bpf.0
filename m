@@ -1,145 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6F737DEAD
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAB13B7B8C
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 20:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779826954; cv=none; b=SHQdjpQmjRbdwq8mbYpCFKShHPHm1i9aSfmDqFIuweIVGRAB2QxrpX3V7UGCRHbxXs3u3guzm8fLo5o0fIrt/xX3vyne/J/FT98dVDteCMGbVeHPkO2v2l8I+c1sljtEPz0NH2jZrM3JsWoi9hohxalfAM1+fni0mjUhuEpEzr4=
+	t=1779827198; cv=none; b=eB7JmQK6MtbCyHmFwOiAzWwFlpJyB1C0jG6QU2gY5B2ZH2DHbyN6qI+mF1NnOEBQZ9U4HmFIV6wEhh/lF5pVu145MXUponpWkMI958bzjbSaKnLyEkt07G8LywOJA9nQitpVCCcFdA4iseJtmijc2n33ktW+mq03P4q94VY8n2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779826954; c=relaxed/simple;
-	bh=I20tgbqv3Pvsj8jq+N4mxWwkQW23UNTnz2n6E8RX8QM=;
+	s=arc-20240116; t=1779827198; c=relaxed/simple;
+	bh=1nQJUb3aodjb+tscZeuS/4VsZxKUjP2hTx46U9AyZGc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Wd14DHAAOBk6z5Fk23a9HVeMjtGGwcnPJ86eudhZsr14V+rssMPRTjXtGpgs02avnvqX78137bZRWGSSQ4A/UKX2+B8gdhaArKKr9jybgjsHePLoRIbiWGTuj4ooAbu2D7GbSN8MIa2TvQPR0DxuzKRAQ3G/28alMDPunsWJ4VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/1NXo6E; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=M1LjFqmL7As474jSTbroHigSBhhCYdl9lsUHWl6z/TEvYxMb9CgG1ohHjG/tKHNN4OoF++0yD0FLlj02Vxj1rVPxMeqSLa8gbUtAifrPJcZQk+iqQ/rUu/kkMHUe39I9343j2nEiexJKQdfhoKYieKuQgoTTSFstzWv4Y2+Z/9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5OsiJ64; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/1NXo6E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631751F00A3A;
-	Tue, 26 May 2026 20:22:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5OsiJ64"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBC91F000E9;
+	Tue, 26 May 2026 20:26:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779826952;
-	bh=iwRdWOYoM/afwM0b4cLj/rE/By7mTK8BJACnPEq9zP8=;
+	s=k20260515; t=1779827195;
+	bh=3jzL65umVSS96WF7aPRzk3jxKvqamlj8L/30hQ61WyY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g/1NXo6E3aQCyAxdaxl+bzE597KAjpeJrk3MgdRkJE1fj1m6Q+KKm5/gNfl2CdRHT
-	 gLFikY9YfBv5uvfwFHqx5Jd6JMJlSQiBlCugjXA1ENzbQ62OFFJJGmu/Anp45tRsUk
-	 DToTEsGwTOmQ4Nh1XSQ5Rorg91BTSDehinx262YLZdqij2QIYLkzvJJ2Xs4GNvfKtJ
-	 iEz+XXOuQLBRoNyfdFXtX3u9+QFutcDuS2xxCh+7wGMnJAWLzLN+K+q1/qWxwP3XXh
-	 SOU7KbV4MzBhu5+dZYp5/GzoCsYI/D8SFVUxXNrPhfl/CbowRPv0DU5HjBg1/gyW5u
-	 sn9pMPtFNQ2ag==
+	b=l5OsiJ64J+NypTEpX3gwetgLwXwbvVB40kXOw+XBLJf7Wc4+u+qvyOSTQfFM/Gbg9
+	 d4SgD3C2wOHv3vspPeRWXGBa7+SUusOkfRiMGdFYFnZl/DKS2tKD1nqCNgZ1D4f9MF
+	 Ezqrk3tFLM2B7rp9RKAfaj1MfBD/EUBwrHAfFWVcHjVFK8AhbUwbVIS/QTqYurNJ5p
+	 bstLedtyjhk0vNiov0IZ4qY1/0Hp/keP4xyzP1U8wDU6TuZO8f4ASoay02EPnXdElN
+	 5XKFJjwHmN4iCwhSDGOQtAUwb4BnQNzwU+mZnBG7M7NxUcZ4/79YO8d+3EE74eJriX
+	 Y/hKwZXYI7fPw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 7/7] selftests/bpf: add bpf_icmp_send
- recursion test
+Subject: Re: [PATCH RFC bpf-next v2 2/6] bpf: compute loops hierarchy
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526153708.279717-8-mahe.tardy@gmail.com>
-References: <20260526153708.279717-8-mahe.tardy@gmail.com>
+In-Reply-To: <20260526-better-1m-reporting-v2-2-e7ec61c45d41@gmail.com>
+References: <20260526-better-1m-reporting-v2-2-e7ec61c45d41@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 20:22:31 +0000
-Message-Id: <20260526202232.631751F00A3A@smtp.kernel.org>
+Date: Tue, 26 May 2026 20:26:35 +0000
+Message-Id: <20260526202635.6FBC91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Attaching to the system-wide root cgroup without PID filtering i=
-ntercepts all system-wide loopback ICMP traffic, causing data races and net=
-work disruption.
-- [Low] Multi-line comments do not follow the mandated BPF subsystem style.
+- [High] Worst-case O(N^2) algorithmic complexity in assign_header() lackin=
+g cond_resched() leads to soft lockup.
 --
 
-commit a40313de8eec16152c739a5ecc571fcd166b9bba
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+commit 5ba437ec70f22b36c162a26467753448539086e8
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-selftests/bpf: add bpf_icmp_send recursion test
+bpf: compute loops hierarchy
 
-This commit adds a test to verify that recursive calls to bpf_icmp_send
-from a BPF program return -EBUSY and stop early.
+This commit introduces an analysis phase to the bpf verifier that computes
+the loops hierarchy using a non-recursive adaptation of the Wei et al.
+algorithm. It records the innermost loop header per instruction to be used
+as sampling points for callchain profiling.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
-ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+> new file mode 100644
+> index 0000000000000..1f0b10c57957a
+> --- /dev/null
+> +++ b/kernel/bpf/loops.c
 
 [ ... ]
 
-> @@ -201,3 +202,42 @@ void test_icmp_send_unreach_tc(void)
->  	bpf_link__destroy(link);
->  	icmp_send__destroy(skel);
->  }
-> +
-> +void test_icmp_send_unreach_recursion(void)
+> +static int assign_header(struct bpf_verifier_env *env, struct loops_dfs =
+*dfs, int n, int h)
 > +{
-
-[ ... ]
-
-> +	trigger_prog_read_icmp_errqueue(skel, ICMP_HOST_UNREACH, AF_INET,
-> +					"127.0.0.1");
+> +	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
+> +	int *dfs_pos =3D dfs->dfs_pos;
+> +	int err, nh;
 > +
-> +	/* Because there's recursion involved, the first call will return at
-> +	 * index 1 since it will return the second, and the second call will
-> +	 * return at index 0 since it will return the first.
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but BPF subsystem multi-line comments should have the
-opening /* on its own line.
-
-> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testin=
-g/selftests/bpf/progs/icmp_send.c
-> --- a/tools/testing/selftests/bpf/progs/icmp_send.c
-> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
-
-[ ... ]
-
-> @@ -125,4 +128,45 @@ int tc_egress(struct __sk_buff *skb)
->  	return TCX_DROP;
->  }
-> =20
-> +SEC("cgroup_skb/egress")
-> +int recursion(struct __sk_buff *skb)
-> +{
-
-[ ... ]
-
-> +	} else if (iph->protocol !=3D IPPROTO_ICMP) {
-> +		return SK_PASS;
+> +	err =3D mark_header(env, h);
+> +	if (err)
+> +		return err;
+> +
+> +	/* Don't encode self-loops, otherwise can't reflect loops nesting struc=
+ture. */
+> +	if (n =3D=3D h)
+> +		return 0;
+> +
+> +	/* Make sure that loop headers up the chain are sorted by dfs_pos. */
+> +	while (aux[n].loop_header !=3D -1) {
+> +		nh =3D aux[n].loop_header;
+> +		if (nh =3D=3D h)
+> +			return 0;
+> +		if (dfs_pos[nh] < dfs_pos[h]) {
+> +			aux[n].loop_header =3D h;
+> +			n =3D h;
+> +			h =3D nh;
+> +		} else {
+> +			n =3D nh;
+> +		}
 > +	}
-> +
-> +	/* This call will provoke a recursion: the ICMP packet generated by the
-> +	 * kfunc will re-trigger this program since we are in the root cgroup in
-> +	 * which the kernel ICMP socket belongs. However when re-entering the
-> +	 * kfunc, it should return EBUSY.
-> +	 */
 
-[Severity: Low]
-This isn't a bug, but this multi-line comment should also have the opening
-/* on its own line.
+[Severity: High]
+Could this while loop lead to a cpu soft lockup under specific pathological
+conditions?
 
-> +	ret =3D bpf_icmp_send(skb, unreach_type, unreach_code);
-> +	rec_kfunc_rets[rec_count & 1] =3D ret;
-> +	__sync_fetch_and_add(&rec_count, 1);
+With deeply nested loops and cross-edges, it appears possible to force
+repeated O(n) traversals of this header chain for O(n) nodes without
+actually modifying the chain. Given the 1 million bpf instruction limit,
+this worst-case O(n^2) algorithmic complexity might result in a massive
+number of iterations.
 
-[Severity: Medium]
-Could attaching to the system-wide root cgroup without PID filtering
-intercept all system-wide loopback ICMP traffic and disrupt other processes?
+Because neither this chain traversal nor the surrounding search algorithm in
+compute_loops_in_subprog() seem to call cond_resched(), does this risk
+stalling the cpu core long enough to trigger a system soft lockup or a
+local denial of service?
 
-Because ICMP traffic is not filtered by port, any ICMP traffic to 127.0.0.1
-on the host will trigger this BPF program and generate unintended ICMP
-Destination Unreachable replies.
-
-Also, can concurrent executions cause a data race here? Two CPUs could read
-the same rec_count, overwrite each other's return values in the array, and
-corrupt the state, causing test flakes.
-
-Would filtering by the test's PID securely isolate the test? The recursive
-kernel socket call executes synchronously in the same task context, which
-should make PID filtering reliable here.
+> +	aux[n].loop_header =3D h;
+> +	return 0;
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526153708.2797=
-17-1-mahe.tardy@gmail.com?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-better-1m-=
+reporting-v2-0-e7ec61c45d41@gmail.com?part=3D2
