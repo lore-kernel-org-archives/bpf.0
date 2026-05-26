@@ -1,86 +1,125 @@
-Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59A53D9684;
-	Tue, 26 May 2026 13:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCE93EDE7A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 13:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779801267; cv=none; b=ei0kNgO3qk5Kb69N6McfqwXRiIWb/Ja0flgfuqKDeWlTTFHoITQaLv7Gh1tt/w3PgSOguunx7QGmdCUrq3DncXQhQq30GW4P1zShogJxmC6txlnwIeVp9hHffepFutP1m/znc18hC8ZWYcSh4sG6/ybVv10RcRJZ/gTjpLDu+Sk=
+	t=1779801294; cv=none; b=AHciU4qLCRwMmlJIrYSRJgiazbiE+aMrM+PqageNmGadOeSK/3qT7woo2ijJ8LnvQAJnzH+KrDB2maKRHII+E93cKxoEFrzCYi8vn+6T1Bq0IAI1SP5J9g7P1Cv4Q/XBrjruUQ5xv7GrBK4sNI2MUuQDyMP5b3UN2SEboaXVSmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779801267; c=relaxed/simple;
-	bh=gokfZwCNMyuzMMDSjM01R8L57LnbWRvThDzMOCWY/rU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WQjUm4gNJbxLNbP8rQnCEVHQhn3XmfN9P3lyqnoBUPPrywZfce62Hu6a5u5F7PPyLxVufeqoiPIIIoAy07+nOostQ2fzhUvNv4cqppyc63WQ3Njzv0FkbKlxCJKCUpzZMCqR6dKTusC5dQdmP15uZhcNuzfztr1SqixrbRjLwo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=Sde3WWp0; arc=none smtp.client-ip=45.254.49.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1779801294; c=relaxed/simple;
+	bh=/+TDbtQdoXZLR15lIobccDcb+fb9SD6eVXuxnbR2M98=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bStz0Ta2Ns6FD7A7Sl4zi8XZkuvSXfWNrRcxRqbE1vWICIb6Wohlcnx5yM8GWfolQkIC/vda+AUA5h+MIjB7iAg7CBAp7Am6zpt8w67sPw9FM/bpNFzoepjm9za7QI422oPt/oA6ichJl2MLieyA/NY2IJZwMCaKq/6UuXiJXOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WgInIwyk; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="Sde3WWp0"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3fe349540;
-	Tue, 26 May 2026 21:09:02 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: martin.lau@linux.dev
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	joel.granados@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	Dawei Feng <dawei.feng@seu.edu.cn>
-Subject: [PATCH 0/2] bpf: cgroup: fix sysctl new-value handling in __cgroup_bpf_run_filter_sysctl
-Date: Tue, 26 May 2026 21:08:58 +0800
-Message-Id: <20260526130900.1312698-1-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WgInIwyk"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49042aeeb75so55571015e9.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 06:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1779801290; x=1780406090; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P15uXtg9HdllBQIu/ZsCrfbcDnCOaC1HB3obrbgjmNc=;
+        b=WgInIwykVVoaGAUgaZcwBgPb2XaDQMvOOS2HFW9/o0cQ0HUO1ZApKEHQ8RW4TtLo7Q
+         P0mg/PO6DDRxxTinG9zEP4hYMAMIYBNCHzD2gC9d4XHrk533aUfTsOUTxQ2cT77UpFzy
+         7WI917lhsD43I1Zvr1pMY+XEkFOvYej7aY4h2sc1In8bxj5qJnjlQTbeSV+whjwcW8L3
+         rl4d80CAUdQZmrA25YMNaSrUK3qshiAwA1BJCR4uxhTmL5xmDiKmWxnta6B6HjsCkV6Y
+         nrrS/j/5mHD2Ug5dyQvXBvTz6pC9OMDa7i/iry8dzDHSmtWjgBoG+UCFGAFxHKmGuQV5
+         K/4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779801290; x=1780406090;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P15uXtg9HdllBQIu/ZsCrfbcDnCOaC1HB3obrbgjmNc=;
+        b=maBJynSivj30NZH1cP1AIPvt6nFMBOUvINTmI6SIAUNoxJSokkMItMoN5OMmGo04tF
+         6dQeFEaTMIsOLaVm9d/1Gju6oznBigYQuMZtO0ywzLr5pD99eif351NsuoCgBzV93hl2
+         ikS/dgyyyhQsUhdy2Z17+ifbOpMN4Gy/+vfIpzSgCFR3DZdLL88+C7E+kNpAq3T4yFbc
+         idXgMW2GTXGpucltLsWhqg7h3sRs/RDViiVEm3tG9BGnJ2cJt6GzITPZd8PqNQGK0X14
+         1gRVM10FVvv/psUY981rqhBaWxBpxohxoL5gf37Q6ZKZujjWtCI3lAaG9PK6WP/xX8NU
+         6ljA==
+X-Forwarded-Encrypted: i=1; AFNElJ+CiEpA4Rt4b8dpyf5kMe5f50mfwGfaOZNBSigr98QMWCJYYI0O/CFCyyssqcf+MJxwyeg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLgE5YRtkkBMm4qayg7N3x2pH65BIBVgDmLTd552z299/G0LEY
+	Lj384Hq+QIkh5XZaXvqCmHVydI7iKuYcYc8mSgvB/4CtBXbNIbBkQHc3h2GGErdMhLY=
+X-Gm-Gg: Acq92OHWLBp/TmZXi+KHQw1RgWoDGQ2JuCGJr8WPwbGPiyNDEDGubEtey1Af3h0ekzp
+	NWX/hgOhIlqK8EZ4V09BxYw8q3ZG16/epzLSccwcPK9SMos2ZO90qHAXRTOxecMqdomPRlijXXM
+	GyYhF6qBBQ6VPUGI26wwA+LmcKDMX1cZUhHsn4UwyEmuSzd7JZFp7JN5+ekcP1x8yrdlR1VkAIU
+	JC81m58XoRt1APbOI7CJGq0ZZENRD/nZQw8PgYO5OwP3ONG2vvn4fxTMqHT9f/f7qvtFUPTWEuu
+	71l4XI+I7FtaVQZoha322LxblJXrVcjCGy5TUM7SKh3Gbsk1ojJuNuoRq5VE/TzvvQ/m8JLc0hf
+	GuermHSU9PnDWwbMdqeU37gTepopmoFezY/zZXrbja6yyajpM+jymuFgc6bnI+ALS5/lR4vO01t
+	t5Q6noJ6E1BDILk5NaMolUbxnSUrygzN7K4kje03GaLae6
+X-Received: by 2002:a05:600c:4f91:b0:490:6e12:5418 with SMTP id 5b1f17b1804b1-4906e12552emr91630705e9.23.1779801289895;
+        Tue, 26 May 2026 06:14:49 -0700 (PDT)
+Received: from [192.168.42.79] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9f58dsm34868452f8f.5.2026.05.26.06.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2026 06:14:49 -0700 (PDT)
+Message-ID: <a050130e-d354-411a-bfcd-afcfde4cafdc@suse.com>
+Date: Tue, 26 May 2026 15:14:47 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/14] module: Prepare for additional module
+ authentication mechanisms
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
+ <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
+ <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
+ Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+ Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?=
+ <mcaju95@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
+ debian-kernel@lists.debian.org
+References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
+ <20260505-module-hashes-v5-10-e174a5a49fce@weissschuh.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260505-module-hashes-v5-10-e174a5a49fce@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e6467293303a2kunm71d1d5ad20b6
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSkpOVk8YSR9DT05IGR9DT1YeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0
-	NVSktLVUtZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=Sde3WWp0qqDHmKGjRpCORW70DLXTw1XBWEW0aK2T0oJ+oOyncQZXZk2nK9S1Ddhm9qv1/aKbtA6ed7/dUprtwlDhNrKdhspthAptNos9/u6GdKzIYtwPh8yObLjUaNCHr0wZJ8X4E6V8iAWTq7WN7Y+mL7yrOZ6VbAgNrMZsQWQ=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=mT+RG8JQB38zDvcV0lHDokBtae26kvtD9dO7uSCPTd0=;
-	h=date:mime-version:subject:message-id:from;
 
-This series fixes two bugs in __cgroup_bpf_run_filter_sysctl().
+On 5/5/26 11:05 AM, Thomas Weißschuh wrote:
+> Reorganize the code to make it easier to add the new hash-based module
+> authentication.
+> 
+> Also drop the now unnecessary stub for module_sig_check().
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-Patch 1 restores cgroup/sysctl new-value replacement after
-4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
-changed the success return value to 0 but left the replacement path
-checking for ret == 1.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Patch 2 fixes the buffer free primitive for that same path. The sysctl
-write buffer originates from proc_sys_call_handler(), which allocates it
-with kvzalloc(), so freeing it with kfree() is incorrect when the
-allocation falls back to vmalloc().
-
-Patch 1 validated with a cgroup/sysctl BPF reproducer overriding a target
-sysctl write.
-Patch 2 reproduced on a v7.1-rc4 QEMU x86_64 guest with KASAN and
-CONFIG_FAILSLAB. After applying the fix, rerunning the reproducer no
-longer triggers the Oops.
-
-Dawei Feng (2):
-  bpf: cgroup: fix sysctl new value replacement
-  bpf: cgroup: Use kvfree instead of kfree in
-    __cgroup_bpf_run_filter_sysctl
-
- kernel/bpf/cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
--- 
-2.34.1
+-- Petr
