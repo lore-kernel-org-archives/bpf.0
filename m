@@ -1,141 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05B3FF1AB;
-	Tue, 26 May 2026 14:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942703FFAC6
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 14:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805787; cv=none; b=AUc5MNpjfYJLd9hFWghdGyk54Ry0pxtYN4CLMwfXQ56mLdFKOSrU81ME70q3qMDpc3R5RwvbJh3BTNo3iCIxb486dS3kJQtsuWKYQX24pIUocgxs0k2Kgij5ULalyfjHg1VI+P4azaIuZ9Q2FADLWEH9eduU3FU5Ih79+n1TcIw=
+	t=1779805821; cv=none; b=GfQkQDHgDDdewISENAXMXBVWKMx+38XhmldpGlgpbyDBLVALG4KHg5Bl0vayYq95Oihy2X0qgiearpV0UCn+tm6dJWJqosfzrWXiAcXzKtjaTqZL8YbUZAXgH7GBrZEeOn82fFAzynbWHtIeAKNH9FcjBSvjGnQlJl8G9SaGfgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805787; c=relaxed/simple;
-	bh=01QZ3Oc+k3R391wthpsoqAJ4A4j9P7bKR8UG9T3xXXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GKJewTHD96pW9neIFhdR92mobyLjNtcTYZSdmdGQSY4pAFXP+l6pBsQmpd+IrTIYWkFYWa7ivmjlQfpSYYArIvLuCz0VhDrYBERngxlUpUGDjDnGHMfBZSvHryFg6PXuS7RLoq0VXEfqQfrlCVtI1n3yuvcdOLkUbtfQXa4tymA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzsWz/vl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779805821; c=relaxed/simple;
+	bh=lG0SD9cXN/5Qk4VXl7q4UfDEDkoq1CrJuW/0BYgMDBI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TgwPPrAKgkt7lGNFg1A+kcCIG7gLQIPmvUDJ0my5xw9/LPERdVCFzftbCxFB2FZNzEdjZqAF9g1GR5i0shrjTjFUG6PG7DkxxD4zt+4HwtKk2HjY/5fo67yzQu0HGahPvt52wBCTLSbGsXwArhXAyiWwVcO3+8M1zC7X+2+C6GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl2tuid7; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzsWz/vl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D741F000E9;
-	Tue, 26 May 2026 14:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779805785;
-	bh=GSX/o3tGKH8prhZQKAGSjMb4rUlV/Z55PxckME59z4U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EzsWz/vlNWJNW+NMA+grSpGmEAlzW1dMhzljG4DDGQOP42grQ3eEtdXE+yg/tu0nJ
-	 e2v3LjX3uBcVx2JXnnVCBQNmCVQI7uLKvZgmd7Nxrd6B+jZBk85BEhu6L9hr4AWOhN
-	 DmVXv8lzXWvF/wiKNTotwFW8EP7Ra+ZA35C0sV8SMVdKBC9j5ntx1+ijctMD6qQYF9
-	 3qUB2mKBtFBdFI85Oqtg3YjaU1gaQYfEjc1plhfWPXZUkEMZg3O4ZfPw+YIn8ZesD3
-	 5FkFfGfwX6V0F/bhrOcnpOSpiV6QT7FJQ6li+thvYCff9a1ujIZiIrS55YWerf7k2a
-	 Zd7p7PpJbHEkA==
-Date: Tue, 26 May 2026 10:29:44 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, live-patching@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Joshua Peisach <jpeisach@ubuntu.com>,
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
-	Anthony Iliopoulos <ailiop@suse.com>,
-	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	KP Singh <kpsingh@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <ahWuWBrZlFsAVZo2@laps>
-References: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
- <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
- <agzAwjKhOhuANz_P@laps>
- <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
- <ag8lOe6dAOgnWmsQ@laps>
- <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
- <ahGufsGqmLZZQL4M@laps>
- <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl2tuid7"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so78353515e9.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 07:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779805819; x=1780410619; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T45Ou7ZWfmCD8W0zzIfAADcxBltvQlyL9M3hYTeHQiQ=;
+        b=Yl2tuid786He6HnhdbPNKhrRGdI1UMgasQGDrBjAAsCvNhO5FG8FwHdjcJIWWDcswY
+         s54rxVS5Z9lQBTbqVaBON6ovhqAM1Idgpfriii3a2S91vDbbH7iWobZMFvS66ef3u6Cp
+         kIlXlgIqfafHUPyo13XoS838bDqWDOiR0DJsHWzAXJnt7s7/q9BSHGGahWiZk648e+yT
+         R0xlhOOZPEpjH3C2gs68id0aEdhlqBrqKW976ctzhPxCQuBYV3zqJVlsT/GA/f7WrFpe
+         PAANoydgc8v+kOAk+XQpCHKZ+cg+d8bRIsx1nCTNUfbnu4ljZXSyLeUohOvYkYqaSwF4
+         ahDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779805819; x=1780410619;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T45Ou7ZWfmCD8W0zzIfAADcxBltvQlyL9M3hYTeHQiQ=;
+        b=ou3/xleUNihcF0tzyabbWLk2U3MAiiMOcbiNOXFfq2AOEEZbluPBdt9MBhByFvB7ED
+         fDNH8WI7xomNTt5KyR5zUTC+nlmw+PlnBaDvO+icguKzd46eHVtBwSEXfzLRDQFFyxOS
+         Crv+tdSIAWZqdHkHbgVy9xX8fu+yuJBWHj/chhMEg8kgyUwSaFy6aRmli+dESTx+tMWx
+         FbHKIY82n9A2tZZMS2J2q72wk2lHO0qC29AxWW8jkZr9y7RYFFKjXv+7z1kA26cTdrsM
+         cLbM5JFxNN9Yt/Uxxc8kLHqfTWX7HCYlRLjVoUthK512PAhZvTcGe+wWaLDWT+9adGi6
+         CGGw==
+X-Forwarded-Encrypted: i=1; AFNElJ+te/kR0JGrHyQEOPSZUAqdv5misz9poEvNGd74Qupbb7bw93zbsI2JAQXFByksNM2hT3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCATwzkL+6zvKi9IKzccNpRnQKUG4/KFK+tWzWc31lDsSnCQnc
+	Pi3EQH07SyzCFsuZig4xef97wyJI9AkKEDoqR6PacoiNogk1UP974kUK
+X-Gm-Gg: Acq92OE96/rdcF14eHQ3M8V1eK9r5q2eAf0mRAK+IckmX6Gt8rB6r169eSJkSKYvuLC
+	L5LRjNBHKGO+aFYfmfeHjnyO19cIxAcn+OJOvkI0HvVg9x3Dk2m2ZMcJbkIJ7Xcrnlm9RL2gzYN
+	bWvZyoSqMnO0Jebbwi1DTljpa8WsfOwlelrAt7HZt6sAUAJgHHpQWypn2Hj6xAMfnbGYfJQ4i4p
+	wHcnzyCIye8537TqPIgC1MjVz5eusITs8Tp1ujOzmuTt/SWORF2yAZ8YOF11cRjlBhwi2GmXmQN
+	dsK30v84xZ4BzC8Tcxhm/2VzdveFx+XV5x68RNAFUo/k/+T3MtquckKvvF05U6gdRuQZ8+w9R3y
+	C2Z314LeYCIkHjRIv2J6D2qigcm++rCogmwwdT7lIbjjRyQIZhFMHmAuq+cmd70MyK4/c0RzEam
+	eyxQgA8u4/uBAFkePQFG16C5o2Xg8=
+X-Received: by 2002:a05:600d:6451:10b0:48a:563c:c8c0 with SMTP id 5b1f17b1804b1-4904249d11amr228458775e9.7.1779805818565;
+        Tue, 26 May 2026 07:30:18 -0700 (PDT)
+Received: from krava ([2a00:102a:403b:6530:533a:f167:d705:6aca])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490428e5adcsm124007855e9.21.2026.05.26.07.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2026 07:30:18 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 26 May 2026 16:30:14 +0200
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: sashiko-bot@kernel.org, sashiko-reviews@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: Re: [PATCHv3 07/12] selftests/bpf: Emit nop,nop10 instructions combo
+ for x86_64 arch
+Message-ID: <ahWudlB0zTRvfBE6@krava>
+References: <20260521124411.31133-8-jolsa@kernel.org>
+ <20260521132121.EEB4E1F000E9@smtp.kernel.org>
+ <87bje277zf.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
+In-Reply-To: <87bje277zf.fsf@cloudflare.com>
 
-On Tue, May 26, 2026 at 03:10:45PM +0200, Daniel Borkmann wrote:
->On 5/23/26 3:41 PM, Sasha Levin wrote:
->>On Thu, May 21, 2026 at 11:16:46AM -0700, Song Liu wrote:
->>>On Thu, May 21, 2026 at 8:31 AM Sasha Levin <sashal@kernel.org> wrote:
->>>>On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
->>>>>On 5/19/26 9:57 PM, Sasha Levin wrote:
->>>>>>Sure, this would also work. How do you see this happening? Can we let a certain
->>>>>>user/pid/etc disable the allowlist if they choose to?
->>>>>
->>>>>I don't think we should, given then we're back to square one where root
->>>>>or some other user would be able to just override/bypass an LSM.
->>>>
->>>>killswitch already disables itself when lockdown is active. We can easily
->>>>disable it too when one of the LSMs that cares about this is active.
->>>>
->>>>>[...]
->>>>>>How do you see this working with the allowlist?
->>>>>
->>>>>We should look at the underlying areas where most of the CVE-like fixes
->>>>>took place (these days should be more easily doable given Claude and friends)
->>>>>and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
->>>>>new hooks which BPF LSM can consume where you can then have a policy to reject
->>>>>requests and tighten the attack surface. For example, the AF_ALG stuff you
->>>>
->>>>So we could grow the LSM tentacles deeper into the kernel, and we can see where
->>>>current CVEs are happening, which I suspect is the darker corners of the kernel
->>>>(old unmaintained, rarely used code), but this definitely won't stay the case,
->>>>right? Newer and better LLMs will discover issues elsewhere, and once the low
->>>>hanging fruits are picked off of the current target subsystems, researchers
->>>>will move elsewhere. We will be dooming ourselves to an endless cat and mouse
->>>>game where we go add LSM hooks after some big security issue goes public.
->>>
->>>Do we really need to add new LSM hooks for recent CVEs?
->>>
->>>The LSM hooks are designed to cover all the user-kernel interfaces. Then
->>>with properly designed policies, we should have coverage for potential CVEs.
->>>Existing LSM hooks may not be perfect, but we can improve the hooks,
->>>potentially with the help of smart LLMs, so that these hooks can cover
->>>future security issues. In some cases, we will need new policies, but I don't
->>>think new hooks will be needed for most of these CVEs.
->>
->>Running a quick LLM evaluation on the last ~70 severe CVEs, it seems that about
->>40% is doable with the current hooks.
->
->
->Interesting, do you have some more details in which areas your eval sees new
->lsm hooks missing?
+On Tue, May 26, 2026 at 12:58:28PM +0200, Jakub Sitnicki wrote:
+> On Thu, May 21, 2026 at 01:21 PM GMT, sashiko-bot@kernel.org wrote:
+> 
+> [...]
+> 
+> > Would using two consecutive 5-byte nops instead of a single 10-byte
+> > nop safely provide the padding needed for a 5-byte patch?
+> 
+> Perhaps worth clarifying that nop5,nop5 wouldn't allow us to leave the
+> CALL in nop10 tail after the optimize/unoptimize cycle.
 
-The recent ones I saw fall into about 5 buckets:
+right, also we need to have single instruction for that
+to have some assurance the app won't jump in the middle
 
-1. Kernel-thread / workqueue context: LSM hooks fire but current is a worker,
-not the actual attacker. Lots of ksmbd, ceph-msgr, and async cleanup races land
-here.
-
-2. Driver: pci_driver.probe, notifier_call_chain, ib_* RDMA callbacks, ndo_*,
-bus dispatch tables all sit below any LSM hook. Big chunk of mlx5, RDMA, USB,
-i3c, DRM bugs.
-
-3. Per-packet softirq RX: security_sock_rcv_skb only fires inside
-sk_filter_trim_cap, which UDP encap_rcv bypasses and L2/bridge protocols never
-reach. Covers Bluetooth softirq, bond, IPv6 softirq, TCP-MD5/AO timing leaks,
-etc.
-
-4. Netfilter: config path is well-gated via security_netlink_send, but
-per-match callbacks, set GC, and flowtable cleanup have nothing. That's where
-most of the recent netfilter CVEs actually fire.
-
-5. Crypto subsystem + io_uring per-opcode: crypto/ has zero LSM hooks.
-
--- 
-Thanks,
-Sasha
+jirka
