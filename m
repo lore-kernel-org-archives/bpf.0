@@ -1,72 +1,75 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8282B3CCA12
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 11:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6973D88EB
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 11:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779794546; cv=none; b=ZPmd+YkkRx5U9ip/fAmXHF1P6vfmRaDKHmo1l8bUgoOxwrYKspgcE0yq6HTN31GmVVpXdMxzxbrzZ88nH3Ii3FFhjnXoPoIX0IB45EsGF9S/3RqPulhJLuZwz5py2CDWASGXyF8HZ+f5Jzh5qa2yIJDf924vkuszft2og9B8E/I=
+	t=1779794647; cv=none; b=LC3MsKr558Tw4oMXZC2N2Na4p1ExJDk4JVrJVSqsbkTQniA1RdSYn8N4w+6wrfYynG5k2y7Dko+Z6Dea/uUWMTH9APcCBNqXSzabjyIO53t0hhAVgPI9+NdpMIFm3QiXZnXfKUA1ysfNtzh9fHfnA1UbB0MrIkVt9FahvV9hcZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779794546; c=relaxed/simple;
-	bh=EVKVIefgDC/PBqL6YGHoR67wmzrgbiJyMXmA/9DVfZE=;
+	s=arc-20240116; t=1779794647; c=relaxed/simple;
+	bh=LJm7kzA1F7xgQuVpe4RPKARq2eDiYAq3Tx/+jQxWBdU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DK7haO1s+p0VdFplCBKwV+Rw53iEKDcy4H88pK6hVFKPRtHWMz0qE85L5sP9//ule+SQpsi4zBraVPTFyorcoa8OsLFPmdY6eb0KlMIJ9a/RvqEA6d+Mc5FfrRPyDCZJxcVdbD0pE78DW3DFRZ4j6Cdit/Y5UxLi81GoiTYm+lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J43ZLOEB; arc=none smtp.client-ip=209.85.216.48
+	 Content-Type:MIME-Version; b=o0ihoeSvALnHOBYmsL63EH9UbBMRy5CnKbB0zDZt/tUpZ46pMk33x3+9mvgbbRf3WUAaxi9WrwthR+7YwAIlCqy1iTLva1ek3M2FIIqPITOAIBy2/czKPJz6fDk3fR8oJHGO3W4Px2qLA/mL2GzauS1gYlH+1Uc2ipiFdqowMU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVGOVDsd; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J43ZLOEB"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36a7bbb9698so2138393a91.2
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 04:22:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVGOVDsd"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-82f8b60e485so4371725b3a.0
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 04:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779794545; x=1780399345; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779794646; x=1780399446; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=EVKVIefgDC/PBqL6YGHoR67wmzrgbiJyMXmA/9DVfZE=;
-        b=J43ZLOEBMbnnRwvOtiwDUqdKGk69YLFxBvhZkcH3PBBQuSI0vOtmzipCV9V2OAgaa5
-         nlVP3swVKFYnmHZxPD8G7VEWHo+NJzyqAPVwfGeMY8ktKfKisM9NdjqlMHfk4kCuwad4
-         qsC+4tftk3G09Oss4plMykDHE6avdny3ctOH+8cYOxvmXfGr3ktq6rJooWJfFPoPynHg
-         I/prdGUem6c8aMsse1knM4VRF0NUgBBsbMn4xMfX0YmutD/htXLBE7zGrekOcvOcZiCe
-         U3rYKw7Xz4uPYTXFfY3ZwNSHXqc1/FAOnHNxriTHaxy4h7DADEWNskpuFGUB5O1Ivfcn
-         bl2w==
+        bh=4BbwmD+u95B2BK/F9aWaJoeLcyKNoyc8YLZsStYq2mA=;
+        b=cVGOVDsd6GRugwMeJzeqOfzIkEtcTsVN4dRdoIJXqRmLZ9lWthEhKfNkyICmIpI5Lt
+         fqo+9+N/f9I0mYk0fURSKJWji52Gl83L2cGvoc3oHxk4IpLtfW8MncTCzAXNDx6vah0t
+         H/dL7vD01clcno7rZ9/i+yfu/Rv+/EsVyS5Q2YDCcF4v5Wh+uS9zxuT5PAud77syZfUt
+         Xtl6B14Fx7QIonEhunBxcexlwLhIF6a+4RJmFWxqwdCwlGd/Giwo4CPuXQL3WZizsa/j
+         eOZhfs0Al/+MSKXgwg9eo6xGw2Lc16FQJPiaPssXVKGAI/PYerpidphzdbqGK3TqzqHq
+         72iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779794545; x=1780399345;
+        d=1e100.net; s=20251104; t=1779794646; x=1780399446;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EVKVIefgDC/PBqL6YGHoR67wmzrgbiJyMXmA/9DVfZE=;
-        b=WvLtkHwvK19+7SY6eylur0HGEIHY0mA/rutE4SH24l69SH0ITWpzDfpAI5foOCPUbn
-         Juu12cQApVLmZ2r02YAJqwAiq29mVQC0QB91rxuS1hLOXd/vdYWz2P3LPZsdE6QINxHB
-         FkZKuvLgwu+ApBAm5KXFvKzi3g2ArOYm9HQYHCaTMKqA1U04paMY4M9+jFxO+nWs7MeO
-         zDOwrpvoVGvZJwm9Rz7Oh986JpB52uUeiKdjh+a8HZSlGu8uhZrRFRY2GrX4plW8Gmie
-         XqI21h0WEsjYQZfK3DZJDXCjXTrHxK3SCeAI1Lua8p1gYj2LygD41wTBc1l4mtXhz/k1
-         cCbA==
-X-Gm-Message-State: AOJu0YyLJD8EJ2T0McS1ftuxuOSjJLLmbYQRVGU72fbSE1zwDtqQGWGK
-	Bb9ta1srWdWqqAiUOKPRcfWyQPVhRcACdORmrOGwOUCsWt1MddIip5IGdtpd1wgR1zM=
-X-Gm-Gg: Acq92OHq0/56A0jF0DrjNy78EAJcHYNmv2ok/+lx8dXH8YUpaqhvtphPtGrNTCewa2g
-	mehNAPG6Kde4dm6lUOIRW1Hwf3srO4zpcPwIMGaqbdpof/SEIDyQpXcmSXZKA3ID83Hi9XpiY/R
-	KSIaHG6Z0hcz2Af/jfe81u08AVoCs1j9YqNnnA+40jIKSZowTb5KpA9WvWN6Ke6gfodUX2jSaO1
-	OE+XLDJ/CkeiTkoLe3Ns5hOZGRs4kpAdTCk3FD69OcZMtAnm1t1WnyapTD9c9t+a+rpqv/yZ93g
-	r7IQHbxAOHUEqoOQ0YuniCLu47qAogtj5BEaQyf8xJpthCXW1odu2exfbrlwPIGzqRb71I676Ns
-	bMeYZvU9WQG4eciThq474FLdlY9for0DXPqG8EEisNNUiav6RETRAs+8hSVzhkGTod3AiIuhmFd
-	GR5VgRxwOo3KfkuJvhRXqtgujdzvu0TwjZMlQ/D5IXQSsckFZCZtQnOb925Mg8gw==
-X-Received: by 2002:a17:90b:1b47:b0:366:3517:1aa2 with SMTP id 98e67ed59e1d1-36a671e9069mr17418698a91.0.1779794544803;
-        Tue, 26 May 2026 04:22:24 -0700 (PDT)
+        bh=4BbwmD+u95B2BK/F9aWaJoeLcyKNoyc8YLZsStYq2mA=;
+        b=i+bn5AzwuGzflS2uDAPE7jN4iO7PO9boUK3wfLmBLbqO5n8PhDszJSqlz0B2teCt3J
+         zmsG3pZ7KSzWwL5L7zjtZD2SJvT2fwXiSzxDLFU22yNcP4sNuCPKQtzXNmNDDLSC2bHf
+         DmARa0VRnRGxMApC3TgKNl3kd10rg4e7fK8IP5NkFJz5qt827yDGlSHspKKMyRXOlXj6
+         LDuK3tW7g2acY4wrtw/8c1tnpWXI7NtZBOsR8JKZ8rIAMYkubu+2tkw7zf0QPHj5yZgW
+         4hQjSNFcSqG8O3h2+xriqFlebIxrntabE0qa+0prv/2eFc3duHK6RvW/+7Nun7ye8NFn
+         2huw==
+X-Forwarded-Encrypted: i=1; AFNElJ87PltV7l0Ovccam0jzM7Yc5yaeO0sQ1udYm99PbQxmAiSVwmbdplYNStHjs118mc05fU8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyni0UZcs2sFgasfIT1d7anDx0kie/itDFWV33JXJ8LBHuAgc4U
+	SzokqeeJUHnZWdSev63vVZerg+l+MNLeTimz/mxxcsAklPdrDVAvr8+L
+X-Gm-Gg: Acq92OHrMAGbjmB12cS0r7GJfooCJr6P5j8H93A+GFF1sZxVpy/PePyM0dFYSPzxnqy
+	2mRcn1USgVkaNUSvGRp2E0p7Tg0L1WjAEojBq1q9ivEYSZbrwRsDtxUcnttU9Hx2XoGrFVGj4Hv
+	TFyofsxFY+vQ0GhiV5HwXzoTAKFS0Y9AQAkJiu2chR9TLSx6WUNMXPaXkcoPN/J05LBj1yu84g6
+	NYGdBqk4fjVdQj8UR3Td5u9wZ09xiAlk38hi6ilYUeO+NRJtXGZKUdvsAtVeI1O1iJSCiiIVgus
+	By9Pe9UBYfWkxgubIPMilkLHHZpYO3xF9p7VjpKqOCGmBmuItWdylNkVVer3NgLFoc0IPCAKGTj
+	MWYKKTMQYvVzK1bDC/668ay/P88pJpeXZOOO4gDBN9LWzocOq8fmV/ICWbK+2oz9WPAIpEQzP9q
+	WC1K8mI/UX03XD1P3/jve6Ns8SO8K9nnMbn2Q1Bh+UD8NwRmVpwiMK0U6/dkahYw==
+X-Received: by 2002:a05:6a20:7289:b0:39b:89e0:2e37 with SMTP id adf61e73a8af0-3b328cfdaacmr18130153637.14.1779794645837;
+        Tue, 26 May 2026 04:24:05 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a721c7baasm15720019a91.9.2026.05.26.04.22.24
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c852054c8absm10348107a12.16.2026.05.26.04.24.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 04:22:24 -0700 (PDT)
-Message-ID: <d2c217ffaae81022cd323394c3c759a8d36d0549.camel@gmail.com>
-Subject: Re: [PATCH RFC bpf-next 3/6] selftests/bpf: test cases for loop
- hierarchy computation
+        Tue, 26 May 2026 04:24:05 -0700 (PDT)
+Message-ID: <26773f781a5d10d85de16c42333a55bfb38b03aa.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 4/6] bpf: report hot simulated callchains
+ when 1M instructions limit is met
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Date: Tue, 26 May 2026 04:22:21 -0700
-In-Reply-To: <20260526102514.AFE3C1F000E9@smtp.kernel.org>
-References: <20260526-better-1m-reporting-v1-3-51e4f2c59780@gmail.com>
-	 <20260526102514.AFE3C1F000E9@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev, martin.lau@kernel.org,
+ clm@meta.com, 	ihor.solodrai@linux.dev
+Date: Tue, 26 May 2026 04:24:02 -0700
+In-Reply-To: <f2a61e399ccf5c0974341ec757dbb88c69f61840907aa0bd162564589ad2279b@mail.kernel.org>
+References: <20260526-better-1m-reporting-v1-4-51e4f2c59780@gmail.com>
+	 <f2a61e399ccf5c0974341ec757dbb88c69f61840907aa0bd162564589ad2279b@mail.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-9 
@@ -77,57 +80,33 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2026-05-26 at 10:25 +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] The expected verifier log output in `fwd_edges_no_loop` incorr=
-ectly expects an unconditional jump `(05)` for a conditional jump instructi=
-on, which will cause the selftest to fail.
-> --
->=20
-> commit f35c2f4d237eac02dd241fbf85f69d40722f62de
-> Author: Eduard Zingerman <eddyz87@gmail.com>
->=20
-> selftests/bpf: test cases for loop hierarchy computation
->=20
-> This commit adds test cases covering various branches in bpf_compute_loop=
-s
-> for loop hierarchy computation. It includes tests for single bounded loop=
-s,
-> independent loops, nested loops, diamond control flow graphs, and irreduc=
-ible
-> loops.
->=20
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.=
-c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-> > new file mode 100644
-> > index 0000000000000..db26157e3e14a
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
->=20
-> [ ... ]
->=20
-> > +/* Case C: forward edges, no loops. */
-> > +SEC("socket")
-> > +__success
-> > +__log_level(2)
-> > +__msg("=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0: {{.*}=
-} (b7) r0 =3D 1")
-> > +__msg("=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1: {{.*}=
-} (05) goto pc+2")
->=20
-> [Severity: Medium]
-> Will this test case fail because of a mismatch in the expected verifier l=
-og?
->=20
-> The inline assembly below uses "if r0 > 0 goto 1f;", which is a condition=
-al
-> jump. This translates to opcode 0x25 (if r0 > 0x0 goto pc+2), but the __m=
-sg
-> assertion explicitly expects opcode 0x05 (goto pc+2), which is an
-> unconditional jump.
-
-The code is adjusted by constant prop phase.
-I'll just the test case to call urandom() and keep conditionals.
+On Tue, 2026-05-26 at 10:05 +0000, bot+bpf-ci@kernel.org wrote:
 
 [...]
+
+> > +static int update_callchain_profile(struct bpf_verifier_env *env, stru=
+ct bpf_verifier_state *st)
+> > +{
+> > +	struct bpf_callchain_entry *entry;
+> > +	struct bpf_callchain cc;
+> > +	u32 hash;
+> > +
+> > +	compute_callchain(st, &cc);
+> > +	hash =3D jhash2(cc.insn_idx, cc.curframe + 1, cc.curframe + 1);
+> > +	hash_for_each_possible(env->callchain_htab, entry, node, hash) {
+> > +		if (entry->cc.curframe =3D=3D cc.curframe &&
+> > +		=C2=A0=C2=A0=C2=A0 !memcmp(entry->cc.insn_idx, cc.insn_idx, (cc.curf=
+rame + 1) * sizeof(u32))) {
+> > +			entry->count++;
+> > +			return 0;
+> > +		}
+> > +	}
+> > +	entry =3D kzalloc(sizeof(*entry), GFP_KERNEL);
+>=20
+> Should this allocation use GFP_KERNEL_ACCOUNT instead?=C2=A0 Looking acro=
+ss
+> kernel/bpf/verifier.c, every other transient verifier allocation uses
+> GFP_KERNEL_ACCOUNT (see kzalloc_obj, kvzalloc_obj, krealloc, and
+> kvcalloc throughout the file).
+
+It should.
