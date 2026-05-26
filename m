@@ -1,62 +1,60 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0F6372B57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE76437474A
 	for <bpf@vger.kernel.org>; Tue, 26 May 2026 15:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779809852; cv=none; b=pGpozH612qQu1DcpJ3FNGictUm6HlHIIFOD39kd0UtxTdfRmwsvAL/YCLpEc0NLGAr4GpDjsJgjao/qRCsIijO/t71CD8od9FVxCvkowh3r0ASxHXALbBNUkalToZLEe76QUr66EpBd23XAb9r9UMW63nVem1aNC7YNZ3+naDEI=
+	t=1779809852; cv=none; b=BWMLHcgHlEjUQBzaYJdgLNlHzRhcwMJ8NWWVzVJReiH93G6AezWK9BBTL/4y5PDjUirBFWP188M3/n/UNwATj0tQZvTi3dV5M7eWEO65y9KXtvBtsZy3/GcQ/Z2i4ptHEzX61zVbkUr9c6xKIJgFKdXzwtkNSzLhWWvsIMk3Rrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779809852; c=relaxed/simple;
-	bh=1pjlie0SZbihJhm/H8HkIsvHkQvq7UuDSVIPyjk1gqw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OLp1U9/eIZ3fUy5GHXVhyaNVqjk/dYGioKRzu+Id3yc7evJSu6DBdnbcZFI5gY0OgSm+9tD9FBp15zta6c77e1gtqsR4X43LlSOoyk44S7xv9yAN3Un3hcTmTOFlj35aLBDxyw51/eKxylrn/CeGTbYnZbY7Z8L7xRjzCfDyz8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JCgoEo7f; arc=none smtp.client-ip=209.85.128.44
+	bh=SuNCKboR9/qMnKV199RmrKzsF4XnE5gzMhvdzv4lxUk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OIL/wVlsGQJHqkFnJGksgYnxzUfwuFVWbHdc+3xWcrUm3An8XeqZfQJ2W6TKWz0Qpt1K9FOX5jDsoa/2vRDbLxZbs/GGiOBkiOq357G7CpvpZy3w9G30SQajat7PSjO3izUheKCP/Q3sfLfe/a/xRhWlcamBxrp/grnpPxRqF/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkvB071C; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JCgoEo7f"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4903d5c67bfso27085465e9.1
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 08:37:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkvB071C"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso43383245e9.2
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 08:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779809848; x=1780414648; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qkEuidHNkvKdjtXgm8w9hW6ayaG6am8ME4nrnhrHgGE=;
-        b=JCgoEo7fmOBJJrk4I08STeSSOCw8yULmuVpmee4m69MUguLLooGYmVAhFhXsW31J+c
-         12VgaW9aI1JDzQSJ8Mfx2ACf5K8uu+o0tlzzxmIJvItTFZy0f+jrjqFDMJXfGTznndDq
-         mcPf+944MN6aADnXT8R9itMN+elmef5l6L4ikK2/35aBeaPciXuNvQNSFQuA/Jb+fkrj
-         i9OLm+M+fQA9eq+HrKJyYSshYCv3bfbwlLAUR6UMPnUGzICpe4OqeCE6YHPebB6ZS9Be
-         ma/iNIrT9a4f31bixOx1WFA1YrcxACmxLFtbqnJ9WZGcb0xnkVUuys3o9uWDuvBSmwuE
-         GFXQ==
+        d=gmail.com; s=20251104; t=1779809849; x=1780414649; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mEu5haSOg9MswhbLQuLwhfuoJ04JYV0iIkWmF1VBvMA=;
+        b=WkvB071CxkUfIm/2/yI5hloTKjLTL9aaMIzQmYu8NKsiupx0NfvPTxnCKXcq7QY3GH
+         ed3SSIcHGmE9aVUpahwQkEKOhoDXRkdWTJSxZtaVKxhUPCpsqSOANAasRbqAHLGs+8Pz
+         5Y2LXEG2AFvNm0Eom0xeKbwyjQSha0TUEL9kZLdCbw1PvtmtH/QCa3/DeKoHxKb06Wn2
+         KxN4TX/yk13qAnMSVlcmTMOVeSHzgohreF9HRjg1G9Brx2xJlcsSZRxacwTNV8Tw8FOJ
+         0FGpccpUvOh9KJy1RrTIxVLlq7FEOQ6CLxLZiPsNw0AyMPxwrKYbE2Lb90+cpu2s9utL
+         IDOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779809848; x=1780414648;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qkEuidHNkvKdjtXgm8w9hW6ayaG6am8ME4nrnhrHgGE=;
-        b=Qq56RwF+VIzTpetVcuAqK5ezo9hoROimpEnfpNkBmttKuwGO9aXyab0NOHtaDGpKJ4
-         VwAhcnAa3bgYgFbMOXY+OKrtUU2B0HpuqnbPLmI8FCDFfurlYrp76PA+IRPfe4Erdx9Z
-         hvFu3ez7goDJQOPch7BTddC6AFCgkffyeMcdunQb0PyLXKrIMQxNN5sy5Zc+Mf0R3to5
-         Lda7dzedVGb2f/Cqv6SmcXkgRSbkb0yZbYxLIAyevrCCP85UnD9HOAC8L95SIR3eZ5BW
-         8aCzK7muKpZ1mw/LkupYGRm0ZW9WVYroej1efZIzGLqzsIZXjmhpcyvMgUugt2+7wmch
-         OtdQ==
-X-Gm-Message-State: AOJu0YyvqzJVQXTfdeWryXFKK7S+WsCpKUxrW4pWlk5C1oSvGha8di1w
-	4mAmhaWWL0uh8lFx6mpJnkaMKd/Ro1MlkidE/4O2fzySinyJK2PynShfLTHpU2BA/vA=
-X-Gm-Gg: Acq92OHBntqR86w6dIcCXDhBrvoD8b7iGX7kI8q+GfCDrgaJ9P02hZ3ZLY65CLiVEvU
-	KPRqUoPPw8tkcDpsuj4iz2sude7b/hZbusGKQoRJW0NPsRMgRezW3cESrMTzCq0S9ylDXaPXJPT
-	SOWvlQI/Ei+0aMIQzPpHJ9k+ZBAvAG3Mw5KeCIu08gc8HTYOKldQoY0HE5su/c2kP+GcBBVdPDH
-	3VTU5GpKmDNQH4pDlnfn6f4eNkM3tWpDbFOtFmpgYN0E4Nsz2P3oqlsUEsHt6SU3I0rqdfQHZ4H
-	zjDgH7eqi16YiIdj+yQ6VxCrNACQfmj395Oy9Tn6e8ig3OLhZnzxu1bdUsll/yTLtVQ064wSXgo
-	+bQbKBar/t0lhLZFKuizPG9ilnCyClWWafV+GpCN/m0NK6vIKCSU6TcoHa6Y4CifwmAESBC6XO2
-	1zOwnaB5xjy/maBhSuEhfh5+FnjOo=
-X-Received: by 2002:a05:600c:4ecc:b0:48a:557e:6b4f with SMTP id 5b1f17b1804b1-490426d2805mr289728565e9.23.1779809848372;
-        Tue, 26 May 2026 08:37:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779809849; x=1780414649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mEu5haSOg9MswhbLQuLwhfuoJ04JYV0iIkWmF1VBvMA=;
+        b=hf895JkN0X/A1ICgtMYslZG/hWyIUcpPv7KLjJbjazFtYFXfYY+mGog6LPd0yndYK2
+         Rac7ELLvswqQKHu2qynjjvX8zaQkcgD42CLJihqJrto86vIR8sR3tUivrqaHEFYNqSmX
+         qI8bdPJX5dBk0Tw7Jye4uU9EBCXRcr4RpzTJqEYdAv0nSGQcdjWfLp0zX6JsZ6EZasdf
+         tOQZQBw19cRMBjqvhHC8WeOoQ34IPz0xkNoeE/31mqlQ0s3FpyfDLPCW654lfHB1BvwE
+         f5bkacJ8EpmBBpHUYF60yw4WfuU3qtltSKilDeNVcnjrAp/qbFZuOSP1ho765QjU5qsi
+         dKJg==
+X-Gm-Message-State: AOJu0YwkEPxSTvxUObNp8G9/4S4Qm3h1+iJtrt7AjD6EBMJzkI+cZCOn
+	WGLAx9sQeE+SEuiRbzwE87yanyESxxG+2mm9RffTO2f2SRZRRQ+IknD47KRcIniS
+X-Gm-Gg: Acq92OG6eRzW3I0RQK1ekYBhOwDlsnMXt6CRfmleIF8HUWc/XCdGlNbb8Vk2DsJYUC3
+	lVWl66dFdQnCcRlGsbzoxcTvAleqfJjpyrfCijDZzyVURjcFTp0UOGpWDKNBFG7blnmmayOoq7T
+	200pxsIwD6OsudxPmkB/URfFpiGC6N5pVirWJrADUV9f0KHhxEVdG3H5CRqeUD8ETLXB151+vKc
+	p/29INP8kdZ0EcEO9FdzwGy3ZZliivJoFACmcCZlEgFOwARHbiYA6U/ezSPuuA7n+YhueJ1fa6f
+	9CAX7d24/B2mJd4vL01etn3uIaDHmxGgfP3gUjTKTYPDE/KXQiy4ZXYEuIkX2Clg2Jga5aUEykW
+	3GascgOEIWyahgzEf1bqlK73p5mMXMcf4gd8Rp6B1xOXhZNmYW/lMfwZAYE5SDp0f2k3CLyVcv7
+	PxsnIfHalO7VgVoa2z+tJzWxAx0L0=
+X-Received: by 2002:a05:600c:8484:b0:48a:906b:14ca with SMTP id 5b1f17b1804b1-490426cd8c4mr338065445e9.20.1779809844415;
+        Tue, 26 May 2026 08:37:24 -0700 (PDT)
 Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4907df9edeasm1083655e9.9.2026.05.26.08.37.27
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4907df9edeasm1083655e9.9.2026.05.26.08.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 08:37:28 -0700 (PDT)
+        Tue, 26 May 2026 08:37:23 -0700 (PDT)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: martin.lau@linux.dev,
@@ -72,12 +70,10 @@ Cc: martin.lau@linux.dev,
 	kuba@kernel.org,
 	pabeni@redhat.com,
 	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v7 5/7] selftests/bpf: add bpf_icmp_send kfunc cgroup_skb IPv6 tests
-Date: Tue, 26 May 2026 15:37:06 +0000
-Message-Id: <20260526153708.279717-6-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v7 0/7] bpf: add icmp_send kfunc
+Date: Tue, 26 May 2026 15:37:01 +0000
+Message-Id: <20260526153708.279717-1-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260526153708.279717-1-mahe.tardy@gmail.com>
-References: <20260526153708.279717-1-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,255 +82,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This test extends the existing cgroup_skb tests with IPv6 support.
+Hello,
 
-Note that we need to set IPV6_RECVERR on the socket for IPv6 in
-connect_to_fd_nonblock otherwise the error will be ignored even if we
-are in the middle of the TCP handshake. See in
-net/ipv6/datagram.c:ipv6_icmp_error for more details.
+This is v7 of adding the icmp_send kfunc, as suggested during LSF/MM/BPF
+2025[^1]. The goal is to allow cgroup_skb programs to actively reject
+east-west traffic, similarly to what is possible to do with netfilter
+reject target. Applications can receive early feedback that something
+went wrong during the TCP handshake.
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../bpf/prog_tests/icmp_send_kfunc.c          | 77 +++++++++++++------
- tools/testing/selftests/bpf/progs/icmp_send.c | 48 +++++++++---
- 2 files changed, 92 insertions(+), 33 deletions(-)
+The first step to implement this is using ICMP control messages, with
+the ICMP_DEST_UNREACH type with various code ICMP_NET_UNREACH,
+ICMP_HOST_UNREACH, ICMP_PROT_UNREACH, etc. This is easier to implement
+than a TCP RST reply and will already hint the client TCP stack to abort
+the connection and not retry extensively.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-index 0dc6b6ceafb4..1d6900d6a8f8 100644
---- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-@@ -8,15 +8,17 @@
- #define TIMEOUT_MS 1000
+Note that this is different than the sock_destroy kfunc, that along
+calls tcp_abort and thus sends a reset, destroying the underlying
+socket.
 
- #define ICMP_DEST_UNREACH 3
-+#define ICMPV6_DEST_UNREACH 1
+Caveats of this kfunc design are that a program can call this function N
+times, thus send N ICMP unreach control messages and that the program
+can return from the BPF filter with pass leading to a potential
+confusing situation where the TCP connection was established while the
+client received ICMP_DEST_UNREACH messages.
 
- #define ICMP_FRAG_NEEDED 4
- #define NR_ICMP_UNREACH 15
-+#define ICMPV6_REJECT_ROUTE 6
+v2 updates:
+- fix a build error from a missing function call rename;
+- avoid changing return line in bpf_kfunc_init;
+- return SK_DROP from the kfunc (similarly to bpf_redirect);
+- check the return value in the selftest.
 
- static int connect_to_fd_nonblock(int server_fd)
- {
- 	struct sockaddr_storage addr;
- 	socklen_t len = sizeof(addr);
--	int fd, err;
-+	int fd, err, on = 1;
+v3 update:
+- fix an undefined reference build error.
 
- 	if (getsockname(server_fd, (struct sockaddr *)&addr, &len))
- 		return -1;
-@@ -25,6 +27,12 @@ static int connect_to_fd_nonblock(int server_fd)
- 	if (fd < 0)
- 		return -1;
+v4 updates:
+- prevent the kfunc to be called recursively and add a test (thanks to
+  Martin).
+- do not fetch dst route when unnecessary (thanks to Martin).
+- extend the test for IPv6 (thanks to Martin).
+- use SK_DROP in examples and use non blocking sockets for testing
+  (thanks to Martin).
+- test when the kfunc returns -EINVAL (thanks to Jordan).
+- add the kfunc to bpf_kfunc_set_skb as suggested by Alexei.
+- guard the IPv4 parts with IS_ENABLED(CONFIG_INET).
+- fix a wrong initial value for client_fd (thanks to Yonghong).
+- add documentation to the kfunc.
+- to Jordan: I couldn't include <linux/icmp.h> because of redefines from
+  <network_helpers.h>.
 
-+	if (addr.ss_family == AF_INET6 &&
-+	    setsockopt(fd, IPPROTO_IPV6, IPV6_RECVERR, &on, sizeof(on)) < 0) {
-+		close(fd);
-+		return -1;
-+	}
-+
- 	err = connect(fd, (struct sockaddr *)&addr, len);
- 	if (err < 0 && errno != EINPROGRESS) {
- 		close(fd);
-@@ -34,8 +42,14 @@ static int connect_to_fd_nonblock(int server_fd)
- 	return fd;
- }
+v5 updates:
+- kfunc name is now icmp_send and takes the control message type as
+  parameter for future potential extension (daniel)
+- drop the net patches to route packet since now the kfunc is limited to
+  cgroup_skb and tc progs (daniel & martin)
+- linearize skb headers (sashiko)
+- zero SKB control block (sashiko)
+- bind to port 0 instead of fixed port (sashiko)
+- poll to wait for POLLERR event (sashiko)
+- do not use ASSERT_EQ in CMSG_NXTHDR loop (sashiko)
+- fix comment about byte order (sashiko)
+- fix endianness IP address issue (sashiko)
+- add forgotten cleanup_cgroup_environment (sashiko)
+- let packets pass in recursion test (sashiko)
+- clarify evaluation order for recursion test (sashiko)
 
--static void read_icmp_errqueue(int sockfd, int expected_code)
-+static void read_icmp_errqueue(int sockfd, int expected_code, int af)
- {
-+	int expected_ee_type = (af == AF_INET) ? ICMP_DEST_UNREACH :
-+						 ICMPV6_DEST_UNREACH;
-+	int expected_origin = (af == AF_INET) ? SO_EE_ORIGIN_ICMP :
-+						SO_EE_ORIGIN_ICMP6;
-+	int expected_level = (af == AF_INET) ? IPPROTO_IP : IPPROTO_IPV6;
-+	int expected_type = (af == AF_INET) ? IP_RECVERR : IPV6_RECVERR;
- 	struct sock_extended_err *sock_err;
- 	char ctrl_buf[512];
- 	struct msghdr msg = {
-@@ -61,15 +75,16 @@ static void read_icmp_errqueue(int sockfd, int expected_code)
- 		return;
+v6 updates (all from sashiko):
+- bring back the net patches to route packet since tc ingress needs it.
+- rename the ip_route_reply helpers from fetch to fill.
+- call pskb_network_may_pull on the cloned pkt.
+- check explicitly that we received one and only one ICMP err ctrl msg.
 
- 	for (; cm; cm = CMSG_NXTHDR(&msg, cm)) {
--		if (cm->cmsg_level != IPPROTO_IP || cm->cmsg_type != IP_RECVERR)
-+		if (cm->cmsg_level != expected_level ||
-+		    cm->cmsg_type != expected_type)
- 			continue;
+v7 updates:
+- use consume_skb on success path (stanislav)
+- replace recursion protection with CPU_ARRAY by checking the nature of
+  the sk (daniel, offline)
+- use reverse xmas tree in read_icmp_errqueue (jordan)
+- use ASSERT_OK_FD instead of ASSERT_GE whenever possible (jordan)
+- add a test for tc (jordan)
+- better filtering from host cgroup test progs (sashiko)
 
- 		sock_err = (struct sock_extended_err *)CMSG_DATA(cm);
+[^1]: https://lwn.net/Articles/1022034/
 
--		if (!ASSERT_EQ(sock_err->ee_origin, SO_EE_ORIGIN_ICMP,
--			       "sock_err_origin_icmp"))
-+		if (!ASSERT_EQ(sock_err->ee_origin, expected_origin,
-+			       "sock_err_origin"))
- 			return;
--		if (!ASSERT_EQ(sock_err->ee_type, ICMP_DEST_UNREACH,
-+		if (!ASSERT_EQ(sock_err->ee_type, expected_ee_type,
- 			       "sock_err_type_dest_unreach"))
- 			return;
- 		ASSERT_EQ(sock_err->ee_code, expected_code, "sock_err_code");
-@@ -79,14 +94,15 @@ static void read_icmp_errqueue(int sockfd, int expected_code)
- 	ASSERT_FAIL("no IP_RECVERR/IPV6_RECVERR control message found");
- }
+Link to v6: https://lore.kernel.org/bpf/20260518122842.218522-1-mahe.tardy@gmail.com/
 
--static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int code)
-+static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int code,
-+					    int af, const char *ip)
- {
- 	int srv_fd = -1, client_fd = -1;
- 	struct sockaddr_in addr;
- 	socklen_t len = sizeof(addr);
+Mahe Tardy (7):
+  net: move netfilter nf_reject_fill_skb_dst to core ipv4
+  net: move netfilter nf_reject6_fill_skb_dst to core ipv6
+  bpf: add bpf_icmp_send kfunc
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb tests
+  selftests/bpf: add bpf_icmp_send kfunc cgroup_skb IPv6 tests
+  selftests/bpf: add bpf_icmp_send kfunc tc tests
+  selftests/bpf: add bpf_icmp_send recursion test
 
--	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, TIMEOUT_MS);
--	if (!ASSERT_GE(srv_fd, 0, "start_server"))
-+	srv_fd = start_server(af, SOCK_STREAM, ip, 0, TIMEOUT_MS);
-+	if (!ASSERT_OK_FD(srv_fd, "start_server"))
- 		return;
+ include/net/ip6_route.h                       |   2 +
+ include/net/route.h                           |   1 +
+ net/core/filter.c                             | 109 ++++++++
+ net/ipv4/netfilter/nf_reject_ipv4.c           |  19 +-
+ net/ipv4/route.c                              |  15 ++
+ net/ipv6/netfilter/nf_reject_ipv6.c           |  17 +-
+ net/ipv6/route.c                              |  18 ++
+ .../bpf/prog_tests/icmp_send_kfunc.c          | 243 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/icmp_send.c | 172 +++++++++++++
+ 9 files changed, 563 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/icmp_send.c
 
- 	if (getsockname(srv_fd, (struct sockaddr *)&addr, &len)) {
-@@ -94,6 +110,8 @@ static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int code)
- 		return;
- 	}
- 	skel->bss->server_port = ntohs(addr.sin_port);
-+	skel->bss->unreach_type = (af == AF_INET) ? ICMP_DEST_UNREACH :
-+						    ICMPV6_DEST_UNREACH;
- 	skel->bss->unreach_code = code;
-
- 	client_fd = connect_to_fd_nonblock(srv_fd);
-@@ -103,13 +121,33 @@ static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel, int code)
- 	}
-
- 	/* Skip reading ICMP error queue if code is invalid */
--	if (code >= 0 && code <= NR_ICMP_UNREACH)
--		read_icmp_errqueue(client_fd, code);
-+	if (code >= 0 && ((af == AF_INET && code <= NR_ICMP_UNREACH) ||
-+			  (af == AF_INET6 && code <= ICMPV6_REJECT_ROUTE)))
-+		read_icmp_errqueue(client_fd, code, af);
-
- 	close(client_fd);
- 	close(srv_fd);
- }
-
-+static void run_icmp_test(struct icmp_send *skel, int af, const char *ip,
-+			  int max_code)
-+{
-+	for (int code = 0; code <= max_code; code++) {
-+		/* The TCP stack reacts differently when asking for
-+		 * fragmentation, let's ignore it for now.
-+		 */
-+		if (af == AF_INET && code == ICMP_FRAG_NEEDED)
-+			continue;
-+
-+		trigger_prog_read_icmp_errqueue(skel, code, af, ip);
-+		ASSERT_EQ(skel->data->kfunc_ret, 0, "kfunc_ret");
-+	}
-+
-+	/* Test an invalid code */
-+	trigger_prog_read_icmp_errqueue(skel, -1, af, ip);
-+	ASSERT_EQ(skel->data->kfunc_ret, -EINVAL, "kfunc_ret");
-+}
-+
- void test_icmp_send_unreach_cgroup(void)
- {
- 	struct icmp_send *skel;
-@@ -128,20 +166,11 @@ void test_icmp_send_unreach_cgroup(void)
- 	if (!ASSERT_OK_PTR(skel->links.egress, "prog_attach_cgroup"))
- 		goto cleanup;
-
--	for (int code = 0; code <= NR_ICMP_UNREACH; code++) {
--		/* The TCP stack reacts differently when asking for
--		 * fragmentation, let's ignore it for now.
--		 */
--		if (code == ICMP_FRAG_NEEDED)
--			continue;
--
--		trigger_prog_read_icmp_errqueue(skel, code);
--		ASSERT_EQ(skel->data->kfunc_ret, 0, "kfunc_ret");
--	}
-+	if (test__start_subtest("ipv4"))
-+		run_icmp_test(skel, AF_INET, "127.0.0.1", NR_ICMP_UNREACH);
-
--	/* Test an invalid code */
--	trigger_prog_read_icmp_errqueue(skel, -1);
--	ASSERT_EQ(skel->data->kfunc_ret, -EINVAL, "kfunc_ret");
-+	if (test__start_subtest("ipv6"))
-+		run_icmp_test(skel, AF_INET6, "::1", ICMPV6_REJECT_ROUTE);
-
- cleanup:
- 	icmp_send__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testing/selftests/bpf/progs/icmp_send.c
-index 6d0be0a9afe1..6e1ba539eeb0 100644
---- a/tools/testing/selftests/bpf/progs/icmp_send.c
-+++ b/tools/testing/selftests/bpf/progs/icmp_send.c
-@@ -5,10 +5,11 @@
-
- /* 127.0.0.1 in host byte order */
- #define SERVER_IP 0x7F000001
--
--#define ICMP_DEST_UNREACH 3
-+/* ::1 in host byte order (last 32-bit word) */
-+#define SERVER_IP6_LO 0x00000001
-
- __u16 server_port = 0;
-+int unreach_type = 0;
- int unreach_code = 0;
- int kfunc_ret = -1;
-
-@@ -18,19 +19,48 @@ int egress(struct __sk_buff *skb)
- 	void *data = (void *)(long)skb->data;
- 	void *data_end = (void *)(long)skb->data_end;
- 	struct iphdr *iph;
-+	struct ipv6hdr *ip6h;
- 	struct tcphdr *tcph;
-+	__u8 version;
-
--	iph = data;
--	if ((void *)(iph + 1) > data_end || iph->version != 4 ||
--	    iph->protocol != IPPROTO_TCP || iph->daddr != bpf_htonl(SERVER_IP))
-+	if (data + 1 > data_end)
- 		return SK_PASS;
-
--	tcph = (void *)iph + iph->ihl * 4;
--	if ((void *)(tcph + 1) > data_end ||
--	    tcph->dest != bpf_htons(server_port))
-+	version = (*((__u8 *)data)) >> 4;
-+
-+	if (version == 4) {
-+		iph = data;
-+		if ((void *)(iph + 1) > data_end ||
-+		    iph->protocol != IPPROTO_TCP ||
-+		    iph->daddr != bpf_htonl(SERVER_IP))
-+			return SK_PASS;
-+
-+		tcph = (void *)iph + iph->ihl * 4;
-+		if ((void *)(tcph + 1) > data_end ||
-+		    tcph->dest != bpf_htons(server_port))
-+			return SK_PASS;
-+
-+	} else if (version == 6) {
-+		ip6h = data;
-+		if ((void *)(ip6h + 1) > data_end ||
-+		    ip6h->nexthdr != IPPROTO_TCP)
-+			return SK_PASS;
-+
-+		if (ip6h->daddr.in6_u.u6_addr32[0] != 0 ||
-+		    ip6h->daddr.in6_u.u6_addr32[1] != 0 ||
-+		    ip6h->daddr.in6_u.u6_addr32[2] != 0 ||
-+		    ip6h->daddr.in6_u.u6_addr32[3] != bpf_htonl(SERVER_IP6_LO))
-+			return SK_PASS;
-+
-+		tcph = (void *)(ip6h + 1);
-+		if ((void *)(tcph + 1) > data_end ||
-+		    tcph->dest != bpf_htons(server_port))
-+			return SK_PASS;
-+	} else {
- 		return SK_PASS;
-+	}
-
--	kfunc_ret = bpf_icmp_send(skb, ICMP_DEST_UNREACH, unreach_code);
-+	kfunc_ret = bpf_icmp_send(skb, unreach_type, unreach_code);
-
- 	return SK_DROP;
- }
 --
 2.34.1
 
