@@ -1,133 +1,160 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17806380FC2
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 22:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2943AB274
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 22:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779833794; cv=none; b=qu7+86a7798VlAyGP1+9tNmDTWVnSr2h+FlXOR5OH0FEiI8zl6u8DiE3A423bV7sw1duQ/IBZshUTf2aRYhVlx5JooXS1LAZ00Rhh6HzJ0e4yJe+dFR0CGgLMrjML5cUv7V5K18YNOx+BnziF0ZZxlDBURjWuId8ObCsSMo95KQ=
+	t=1779833961; cv=none; b=UEqYRWa3q9PspoU4l08xjaQzP4fIgJpYVMtvaW6/LME8xBt89x4PguQaO3BF72MPbTdAyheYg2+RiDmVXMnVIzawzDWNNhySYEbkMUVZxatXoLJJj5/IokBzNHzXvGsTwde2hlNUPYq6vWHU72HyqIL9Ri852+g+i9tr2UQSilE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779833794; c=relaxed/simple;
-	bh=8XRM4wiJ5jNXpJetksnmAVa5jpDVg6ilKLOp4qDmY8U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=N5t83e5iPLKnJn9essZmsmGVs43UbPRJmMExxVlJV2wdCiAhxgvyZDHv8bjWmnCcfazs+1LQK7TtnV/zcD7v7h2rEY/ffU0xqIl0+fOupYJP6Z+CF+fOC3jRxJsfmWLJI63ODe+DLIpQGdz/iKhaoDPrO+74z998BZcS+EHv69s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=aNk6PVhn; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1779833961; c=relaxed/simple;
+	bh=envHOoEXdbQHLaKgyL7ZW2BwDnWgLk8X8th6AltJnHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hA8uAa8P+vkJfdIjd7NmRJdPcrzw8YsfDrUJhZGPNioPpLbm48S/26XqKlB1go1o6i0MAYTA+W3CvRN3zVTDiAjPirIKZrnwD1t6jCaBf1tDeqT7DZioNyupVkJIISTwDIcXHqDsu72GKxghs64Z71w6E5jb5McU3XOpu1GMxTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HMfgArSS; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="aNk6PVhn"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8353c9f24d2so5575183b3a.3
-        for <bpf@vger.kernel.org>; Tue, 26 May 2026 15:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779833791; x=1780438591; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QXPmI5+ogRi0iUoso0vRs88WKRO67ENSRqzfnBRQpWM=;
-        b=aNk6PVhnuElr7GD/d1bCzglzRHDgnYvgxdXWI8BTY2pnaPi1k6DdjC/pAPoGbKChu+
-         vK2mAphY3VfSLhdQsl6J93iW4ZW5TIZhMI3agK4FlafYg5sefRWplcB/BnjSom/m53KX
-         IW9jvIB90u8Wp70NrxnyAEtfYsnPT1z4Ur+goyQmG+/oy8b/mc/UGleOdkNeo+KW328H
-         N7FwFfcTXSzBe25UKiwrwGItDd/Ba7zegdHXcIRjzZbXU3KaPApDME6xfATIXRY8LQci
-         Wi55ec5nLN8Hidb9sKKBZ6UkzVstDyRlH/LBPwl8n6UaQJZjZ3PjwUIJyHxT/gGpoAiA
-         zYUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779833791; x=1780438591;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QXPmI5+ogRi0iUoso0vRs88WKRO67ENSRqzfnBRQpWM=;
-        b=fTTobdxJdOMs512RRPh5bN8tSpHBz59SHydvCQf3ksdHn860juD6ZxrPEA/wx8AIJO
-         1yrJhLSjkzCX00HlGHzf1/PyaXRRTHa39GrYo4enTUMBiKBqFNgSanF7tY++Go3QLaK/
-         IioH+10gydKoyZPyjRBM3GwkW0g7VFRc6+E6B/KDMGz81TIjFO2WrQnB1JDRlQeIGQj6
-         JQuFaNrf7X+Wl+6D0+G0jeVUw82JOAfJ53FEvr9fP7k43ZkqlDh3iCoUuiVM1mzXZCcT
-         KHRtlT968ksVVzreyI2UKDa/5inh3Kzi2/HkwGbP1iQavZPKoat4xOzT94mFCNW7jIU0
-         mlFQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8ONDhA/iToM+aZOANEbbdPFLVXthpbFpbktLG5hwfEIexT2int/TDg5YYZ+fLodgM2tSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCh87jBE9pPxiTqh20ByTPdU+7lBkJv9Jczb4EvAJG/GE3IsxZ
-	6EEtuOStQYoRfessdFYZ507b0P3bu3P9DKZNNZZ+bgYj9ieG/jStH1JPeKx/7FmhHnI=
-X-Gm-Gg: Acq92OHrl35kM2YrK+WBBo9Ge5o3/qwbhkq/KFmONxINBLdhORaFnw5GXUkXMmcAZx1
-	JWEY8UuYgm4Oiey6kwDLUrGWXJiN6C3qi3eRvQOsPtwWhTDWz+FmbMEiJD5c+Zayt8/QFw6uO68
-	yE6bFMjoxtYWb05d8vPxa4SKzohVobtiS/EiM0h/RZjuEnJOzXOwYq68/akwjRRZAUkuYYDg/o2
-	Zjl5OGQslRD7WlPVRFQBf3667siOTGTwkGUE9k12RkfuwxMmsxRd+0QhxT1sqwRrIvKsX/K1wSJ
-	WkdhLx0IAridxpr75lx1CCzbM68a/yO5Q6dOq5Ie/RqvObjEBT441wC5ISv9HI3GZB/mlocKGuo
-	E2lMc+oVF9IjX1ruu3fqvHSqbZFoerbIhaeY1MRc/0/8ae/qgZC708QiVpDFc5olP2a9hzD6xTh
-	v8vqM/s7I5sFjRK3eFecPPXueTitSCHtXqT8g=
-X-Received: by 2002:a05:6a00:f03:b0:82a:6f69:7f72 with SMTP id d2e1a72fcca58-8415f588372mr19630265b3a.47.1779833791493;
-        Tue, 26 May 2026 15:16:31 -0700 (PDT)
-Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d70bb18bsm305464b3a.34.2026.05.26.15.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2026 15:16:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HMfgArSS"
+Date: Tue, 26 May 2026 15:18:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779833956;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SyuVFahkAp/svWfCsIZIaHuIgfkZodrvkEEDAqQlApc=;
+	b=HMfgArSSxuC73K9AypF3xsyN0dmmEh8SFTAjbZhnp/kA745vg3DQZL0iNiH6ABSB8fuLkv
+	VDcyunbNqEp1y2H8YV6qUzvTkAEjtwLq0sKa24tCL4SkGft+gCxYqjCQuOgWh8C3wVYv7y
+	2+oUq1t1Lc/Zik97vvZhxgPL1/7RcgA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Jason Xing <kerneljasonxing@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 bpf-next 03/11] bpf: tcp: Support bpf_skb_load_bytes()
+ for BPF_SOCK_OPS_RCVQ_CB.
+Message-ID: <2026526214538.Vhly.martin.lau@linux.dev>
+References: <20260523083001.2911931-1-kuniyu@google.com>
+ <20260523083001.2911931-4-kuniyu@google.com>
+ <202652620632.prOx.martin.lau@linux.dev>
+ <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 26 May 2026 18:16:30 -0400
-Message-Id: <DISYF7LAA8C0.55I0KJ1R3Z2L@etsalapatis.com>
-Subject: Re: [PATCH 1/2] bpf: cgroup: fix sysctl new value replacement
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Dawei Feng" <dawei.feng@seu.edu.cn>, <martin.lau@linux.dev>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <kees@kernel.org>,
- <joel.granados@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <jianhao.xu@seu.edu.cn>, <stable@vger.kernel.org>, "Zilin Guan"
- <zilin@seu.edu.cn>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260526131035.1312864-1-dawei.feng@seu.edu.cn>
- <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
-In-Reply-To: <20260526131035.1312864-2-dawei.feng@seu.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue May 26, 2026 at 9:10 AM EDT, Dawei Feng wrote:
-> Commit 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
-> helpers") changed the success return value to 0, but failed to update the
-> corresponding check in __cgroup_bpf_run_filter_sysctl(). Since
-> bpf_prog_run_array_cg() now returns 0 on success, the legacy ret =3D=3D 1
-> condition is never satisfied. As a result, the modified value is ignored,
-> and bpf_sysctl_set_new_value() fails to replace the write buffer.
->
-> Fix this by checking for a return value of 0 instead, so cgroup/sysctl
-> programs can correctly replace the pending sysctl buffer.
->
-> This bug was discovered during a manual code review. Tested via a
-> cgroup/sysctl BPF reproducer overriding writes to a target sysctl.
-> Pre-fix, bpf_sysctl_set_new_value("foo") was silently ignored: the write
-> returned 8192 and the value remained "600". Post-fix, the BPF replacement
-> buffer properly propagates: the write returns 3 and the value updates to
-> "foo".
->
-> Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpe=
-rs")
-> Cc: stable@vger.kernel.org
->
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
-> ---
+On Tue, May 26, 2026 at 02:21:56PM -0700, Kuniyuki Iwashima wrote:
+> On Tue, May 26, 2026 at 1:34 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+> >
+> > On Sat, May 23, 2026 at 08:29:32AM +0000, Kuniyuki Iwashima wrote:
+> > > When a TCP skb is queued to sk->sk_receive_queue, BPF SOCK_OPS
+> > > prog can be called with BPF_SOCK_OPS_RCVQ_CB.
+> > >
+> > > In this hook, we want to parse the RPC descriptor in the skb
+> > > and adjust sk->sk_rcvlowat based on the RPC frame size.
+> > >
+> > > However, we cannot access payload via bpf_sock_ops.data on
+> > > modern NICs with TCP header/data split on as the payload is
+> > > not placed in the linear area.
+> > >
+> > > Let's support bpf_skb_load_bytes() for BPF_SOCK_OPS_RCVQ_CB.
+> > >
+> > > Three notes:
+> > >
+> > >   1) bpf_sock_ops_kern.skb will be NULL when the BPF prog is
+> > >       invoked from recvmsg().
+> > >
+> > >   2) Access to bpf_sock_ops.data will be disabled by passing
+> > >       0 end_offset to bpf_skops_init_skb().
+> > >
+> > >   3) ____bpf_skb_load_bytes() is called directly instead of
+> > >      __bpf_skb_load_bytes() to allow compilers to inline it
+> > >      instead of generating a tail-call.
+> >
+> > Some observations below.
+> >
+> > >
+> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > ---
+> > > v2: Explain why using ____ version instead of __
+> > > ---
+> > >  net/core/filter.c | 34 ++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 34 insertions(+)
+> > >
+> > > diff --git a/net/core/filter.c b/net/core/filter.c
+> > > index 4a50fe2cd863..fa8a7c7d86eb 100644
+> > > --- a/net/core/filter.c
+> > > +++ b/net/core/filter.c
+> > > @@ -7760,6 +7760,38 @@ static const struct bpf_func_proto bpf_sk_assign_proto = {
+> > >       .arg3_type      = ARG_ANYTHING,
+> > >  };
+> > >
+> > > +BPF_CALL_4(bpf_sock_ops_skb_load_bytes, struct bpf_sock_ops_kern *, bpf_sock,
+> > > +        u32, offset, void *, to, u32, len)
+> > > +{
+> > > +     int err;
+> > > +
+> > > +     if (bpf_sock->op != BPF_SOCK_OPS_RCVQ_CB) {
+> >
+> > bpf_dynptr_from_skb() and bpf_dynptr_slice() kfunc could also be considered.
+> > One less bpf_sock->op check in filter.c to maintain and could also avoid
+> > a data copy. There is a bpf_cast_to_kern_ctx() to get to a trusted
+> > skops_kern pointer but this will need changes in verifier.c to get to
+> > skops_kern->skb (e.g. in type_is_trusted_or_null) and this is the tradeoff.
+> 
+> Maybe a dumb question, but does it add extra cost (extra dynptr
+> function call?) if data overlaps two frags, or can dynptr handle it
+> seamlessly with a single bpf_dynptr_slice() ?
 
-The bot makes a similar point, but can you swap the order of the
-patches? Patch 1/2 makes the invalid kfree more easily triggerable,
-and patch 2/2 fixes it. Swapping them avoids the issue entirely.
+Right, there is an extra bpf_dynptr_from_skb(). I don't think we have
+benchmarked it.
 
->  kernel/bpf/cgroup.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b6..8715a014c21d 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1935,7 +1935,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table=
-_header *head,
-> =20
->  	kfree(ctx.cur_val);
-> =20
-> -	if (ret =3D=3D 1 && ctx.new_updated) {
-> +	if (!ret && ctx.new_updated) {
->  		kfree(*buf);
->  		*buf =3D ctx.new_val;
->  		*pcount =3D ctx.new_len;
+If I read it correctly, unlike bpf_xdp_pointer, the skb_header_pointer
+will still copy even if the data is in one frag. It works well if the data
+is in the headlen and the worst case is to copy, which is the same as
+load_bytes.
 
+It is a readonly use case. Maybe the bpf prog can directly read the frag.
+Regardless, it is useful to have a kfunc/helper to read it.
+
+> 
+> In our case, the data copy is ~16 bytes, so the cost will not be
+> a big problem I think.
+> 
+> 
+> >
+> > If this new rcvq callback is added to the 'bpf_tcp_ops' proposal [1],
+> > all this will go away. 'struct sk_buff *skb' can be directly passed to an
+> > ops of the 'bpf_tcp_ops'. Supporting '*skb' in a struct_ops has already
+> > been done in the bpf_qdisc.
+> >
+> > [1]: https://lore.kernel.org/bpf/20260519215841.2984970-11-martin.lau@linux.dev/
+> 
+> Oh I missed the series, the struct_ops conversion looks nice !
+> Since this work isn't urgent, I can wait for your series if mine
+> churns it.
+> 
+> Jason's series is adding a new op, and I guess this can be
+> integrated too ?
+> https://lore.kernel.org/bpf/20260521135244.40869-5-kerneljasonxing@gmail.com/
+
+imo, a new sock_ops cb should be added as an ops in struct_ops. For example,
+in patch 4 of that series, bpf_skops_rx_timestamping assigns u64 to 'u32
+args[4]', which is adding tech debt to the current sock_ops interface.
+For the timestamping case, it could be a separate ops for the
+'struct sock' instead of 'struct tcp_sock' because it should
+at least work for both TCP and UDP.
