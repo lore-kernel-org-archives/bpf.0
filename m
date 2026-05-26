@@ -1,141 +1,193 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7443B47FD;
-	Tue, 26 May 2026 16:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BAFC3B5F66
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 16:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779812418; cv=none; b=OAyNR8TXrRGtczEKtN3qsRvFHZ5N77JVngLkJLFVECks5AhkUNWK29Q5okDcEFfU+iEJLwsAh6wUpYic/KMYU8b2ZRtTmY5UTzwPKlAe9ThV4jCeh9pJAvYmJWRrT6h3WWQ/vdKNlD97dE5jbNwI2EU1bp66Y9puOw4lvO7P0os=
+	t=1779812596; cv=none; b=go9Xx1j50aBC9a1/BgS3H6E5rp4cY6VQv1AslOnfFbyAS9jIkoGnxG1cBF8M1v4FR3tRNZMBQLak5sLCntuCRc8qTCzDXEVCB80Gl8cYOluX26S7iLQWptyoXmZsoXL0HtDNi4b1YBw/O9XkWsVzTBw88IDZKMgdUe/c56aSo+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779812418; c=relaxed/simple;
-	bh=LNzcUEFKM3rHewgRlY/HtPpw16korDka0RAidYMf+KY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=c+/Hk+m4dK+3G8+R3l6ztWzrTvzfXQL6xj8pB3tZ5nhYdpIni3+t2LVRFWkqGXYfP3CwHRrIXg9+Jk2beskmj9xWwLnfSeeb3cHdo13jLZAo9EaVEwMCk/Bzy0JdEl8V135NEG2L730rC3taunMp/Mpp4NLJdW7JYGan+qKKWjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WmJPN2Vw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779812596; c=relaxed/simple;
+	bh=dAvQA/uEoxcnQpjzJdRy6iTKQgkIrmDkJiuukk1go7s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=fOk+J30cGoMLOALjiBe5BbCQxPY7GFv8PDnlJ7ejAtuxH3KCRG6w/87g9nyE0rv3+HW+gryq9PiuzXk6Lju1JRMbi9ZkBs5ecNkNYV1xpMNNUHZqiPU6k7+4SKwHg7pc10BEqgQHbYAw754WMFKBoLU1RmREm6Ls9trNzlx/2+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8hhzAbG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmJPN2Vw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB851F000E9;
-	Tue, 26 May 2026 16:20:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8hhzAbG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C1F1F000E9;
+	Tue, 26 May 2026 16:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779812416;
-	bh=uzRt0vOXQxsGI9u7t/+Q2pQZCKwVypSMRt8xxBQ14B0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WmJPN2VwKYI+6G+7eNsmqi8FZIcd850lFrIfva6YVIsIlTU0WRta2mqHfEazY8Xh1
-	 btSV45rTDvJ1zQUMAUVX1SeOnA+pt47+eEyy59+j5MP3YLNfnhcXVDLAXVYuz2A3WB
-	 kZZaclVYtnwmXJWDIrYU9nPlHLjJgzReA/yykqRFxMwmSXJtY6jqSamHNky5qjMZBt
-	 XYFpcldu1CzfpM/rEGEHnftNQXDSTSjCQk+bWGWg14I3nR+IXUdMHp575aEcRK3C0+
-	 o9WSE1greKw2UPZy9zr3gpe7PIxVqEU9x5BS9wVEOFQkXXxy5NilnlMKFdnO3IW8sq
-	 gxZQ40m3tV6Eg==
-Content-Type: multipart/mixed; boundary="===============6950901046391295818=="
+	s=k20260515; t=1779812592;
+	bh=Hsemjfxo8eTkBELzULjxgNKpufvoTAjjExUTN25aTfk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=j8hhzAbGVPTiDrbDy151rzjwmnoYXSCLb/a4aSZrAlUwdLtl2ZCOMszF/uP+oHbPA
+	 7vwejFnQbrBHYrpK0AMEST5gB3lspPKL7+nzNyy0vIti0SLv5dKQw6wBfKFj+SiaNR
+	 XY8Tr8mcYUcX9chfXTmCjRBC6kbvPE9QJA2Gc+WJ/KKvFM2xvgGEPqZ7mJAarEyZdd
+	 CVx0ZV5ZvzMhWVaAUhomt9zefWRZo7RWq4wm/7bbmG3tR9gWXXUw0KtJ5+1fDH2VTM
+	 0bNMTy2T2CUv2oAXS8+Fi8s7hwzJSHWX8kAq3+H6lvQgWK81wGxNMLQhao/UWAN3CH
+	 0VtkmFXHfEE8g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jamie Hill-Daniel" <clubby789@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+References: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 16:23:11 +0000
+Message-Id: <20260526162312.44C1F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <e05eecf46884c32961a01faff14a72c8382f2a3083999cb88158a1958ffd83d1@mail.kernel.org>
-In-Reply-To: <20260526153708.279717-2-mahe.tardy@gmail.com>
-References: <20260526153708.279717-2-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next v7 1/7] net: move netfilter nf_reject_fill_skb_dst to core ipv4
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,yonghong.song@linux.dev,jordan@jrife.io,netdev@vger.kernel.org,netfilter-devel@vger.kernel.org,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 26 May 2026 16:20:16 +0000 (UTC)
 
---===============6950901046391295818==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] SECCOMP_MODE_COMBINED allows a ptracer to completely bypass strict=
+ mode restrictions via system call manipulation.
+- [High] The internal SECCOMP_MODE_COMBINED constant is leaked to userspace=
+, violating ABI stability.
+- [High] Checkpoint/Restore (CRIU) and Ptrace filter dumping are broken for=
+ processes in COMBINED mode.
+- [High] Thread synchronization (TSYNC) is broken and causes state inconsis=
+tencies for processes in COMBINED mode.
+- [Medium] The transition from SECCOMP_MODE_STRICT to SECCOMP_MODE_COMBINED=
+ is structurally unreachable.
+--
 
-> diff --git a/include/net/route.h b/include/net/route.h
-> index f90106f383c5..300d292cd9a1 100644
-> --- a/include/net/route.h
-> +++ b/include/net/route.h
-> @@ -173,6 +173,7 @@ struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
->  				    const struct sock *sk);
->  struct dst_entry *ipv4_blackhole_route(struct net *net,
->  				       struct dst_entry *dst_orig);
-> +int ip_route_reply_fill_dst(struct sk_buff *skb);
->
->  static inline struct rtable *ip_route_output_key(struct net *net, struct flowi4 *flp)
->  {
+commit c1df2665317e85f0cd779f5b52a0ed4763185a42
+Author: Jamie Hill-Daniel <clubby789@gmail.com>
+
+seccomp: Allow using SECCOMP_MODE_STRICT with SECCOMP_MODE_FILTER
+
+It is currently impossible to enable SECCOMP_MODE_STRICT if
+SECCOMP_MODE_FILTER is enabled, and vice-versa. This makes using
+seccomp difficult in environments such as Docker, which installs a
+seccomp filter by default.
+
+Introduce a new internal SECCOMP_MODE_COMBINED
+that runs strict checks, followed by any installed filters.
+
+Link: https://github.com/moby/moby/issues/42082
+
+> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> index 25f62867a16d9..8201a050d358f 100644
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -33,6 +33,8 @@
+> =20
+>  /* Not exposed in headers: strictly internal use only. */
+>  #define SECCOMP_MODE_DEAD	(SECCOMP_MODE_FILTER + 1)
+> +/* Run SECCOMP_MODE_STRICT checks, followed by SECCOMP_MODE_FILTER  */
+> +#define SECCOMP_MODE_COMBINED (SECCOMP_MODE_DEAD + 1)
+
+[Severity: High]
+Does this new internal mode leak to userspace and break ABI expectations?
+
+Looking at prctl_get_seccomp(), it returns current->seccomp.mode directly.
+This will now return 4 to userspace for tasks in combined mode, but userspa=
+ce
+utilities like systemd and container runtimes strictly expect the mode to be
+0 (DISABLED), 1 (STRICT), or 2 (FILTER).
+
+[Severity: High]
+Will setting current->seccomp.mode to SECCOMP_MODE_COMBINED break thread
+synchronization (TSYNC)?
+
+seccomp_can_sync_threads() validates sibling threads and only allows
+synchronization if they are in SECCOMP_MODE_DISABLED or
+SECCOMP_MODE_FILTER. If any thread is in SECCOMP_MODE_COMBINED, this
+validation unconditionally fails and SECCOMP_FILTER_FLAG_TSYNC operations
+abort with -ESRCH.
+
+[Severity: High]
+Can this new mode prevent checkpoint/restore (CRIU) and ptrace filter
+dumping?
+
+get_nth_filter(), which is the backend for PTRACE_SECCOMP_GET_FILTER and
+seccomp metadata inspection, explicitly enforces the condition:
+
+    if (task->seccomp.mode !=3D SECCOMP_MODE_FILTER)
+        return ERR_PTR(-EINVAL);
+
+When a process runs in SECCOMP_MODE_COMBINED, this validation will fail,
+making it impossible to inspect, dump, or checkpoint the attached seccomp
+BPF filters.
 
 [ ... ]
 
-> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> index 3d62d45d84bd..ff79992ce098 100644
-> --- a/net/ipv4/route.c
-> +++ b/net/ipv4/route.c
-> @@ -2945,6 +2945,21 @@ struct rtable *ip_route_output_flow(struct net *net, struct flowi4 *flp4,
+> @@ -432,14 +434,21 @@ static u32 seccomp_run_filters(const struct seccomp=
+_data *sd,
 >  }
->  EXPORT_SYMBOL_GPL(ip_route_output_flow);
->
-> +int ip_route_reply_fill_dst(struct sk_buff *skb)
-> +{
-> +	struct rtable *rt;
-> +	struct flowi4 fl4 = {
-> +		.daddr = ip_hdr(skb)->saddr
-> +	};
-                   ^^^^
+>  #endif /* CONFIG_SECCOMP_FILTER */
+> =20
+> -static inline bool seccomp_may_assign_mode(unsigned long seccomp_mode)
+> +/**
+> + * seccomp_needs_combined: internal function for checking if requested m=
+ode
+> + * needs to be upgraded to SECCOMP_MODE_COMBINED.
+> + *
+> + */
+> +static inline bool seccomp_needs_combined(unsigned long seccomp_mode)
+>  {
+>  	assert_spin_locked(&current->sighand->siglock);
+> =20
+> -	if (current->seccomp.mode && current->seccomp.mode !=3D seccomp_mode)
+> -		return false;
+> +	if ((current->seccomp.mode =3D=3D SECCOMP_MODE_STRICT ||
+> +	     current->seccomp.mode =3D=3D SECCOMP_MODE_FILTER) &&
+> +	    current->seccomp.mode !=3D seccomp_mode)
+> +		return true;
 
-Can ip_hdr(skb)->saddr be accessed safely here?
+[Severity: Medium]
+Is the transition from SECCOMP_MODE_STRICT to SECCOMP_MODE_COMBINED
+structurally unreachable?
 
-Now that this is exported for BPF kfuncs, it can be reached from early
-hooks like TC ingress where the IPv4 header might not be linearized yet.
+In strict mode, the __secure_computing_strict() hook runs during syscall
+entry and unconditionally kills the process via SIGKILL if it attempts to
+execute any syscall other than read, write, _exit, or sigreturn.
 
-If a malformed packet contains less than sizeof(struct iphdr) bytes of
-linear data, accessing the saddr field could read beyond the available
-linear buffer.
+Any attempt to invoke prctl or seccomp to install a filter while in
+strict mode will result in immediate termination, preventing the upgrade.
 
-Does this function need validation via pskb_may_pull() or similar to
-ensure the header is accessible?
+> -	return true;
+> +	return false;
+>  }
 
-Note: This concern was raised by sashiko-bot@kernel.org in v4 review
-(https://lore.kernel.org/bpf/20260421111320.D97D9C2BCB0@smtp.kernel.org/)
-and repeated in v6. The author responded that 'it should be fine since
-it's the caller responsability to make sure the header has been
-linearized, and we are calling pskb_network_may_pull' but the function
-itself does not validate this, leaving it vulnerable if called
-incorrectly.
+[ ... ]
 
-> +
-> +	rt = ip_route_output_key(dev_net(skb->dev), &fl4);
-                                               ^^^^^^^^
+> @@ -1407,6 +1416,9 @@ int __secure_computing(void)
+>  		WARN_ON_ONCE(1);
+>  		do_exit(SIGKILL);
+>  		return -1;
+> +	case SECCOMP_MODE_COMBINED:
+> +		__secure_computing_strict(this_syscall);
+> +		return __seccomp_filter(this_syscall, false);
 
-Can skb->dev be NULL here?
+[Severity: High]
+Could this sequence allow a ptracer to completely bypass strict mode
+restrictions via system call manipulation?
 
-While safe in its original netfilter context, a BPF_PROG_TYPE_NETFILTER
-program attached to the NF_INET_LOCAL_OUT hook will receive locally
-generated SKBs before skb->dev is assigned (in __ip_local_out before
-ip_output).
+If the original system call is permitted by the strict check (for example,
+read), __secure_computing_strict() passes and __seccomp_filter()
+evaluates the BPF filter.
 
-If called from such contexts, dev_net(skb->dev) would trigger a kernel
-panic.
+If the filter returns SECCOMP_RET_TRACE, a ptracer is notified and can use
+PTRACE_SETREGS to modify the system call number (for example, changing it
+to execve).
 
-Does this function need a NULL check on skb->dev?
+While __seccomp_filter() correctly re-evaluates the newly injected syscall
+against the BPF filter, __secure_computing_strict() is never re-run. If
+the filter permits the new syscall, it will execute, allowing the ptracer to
+completely bypass the strict mode sandbox.
 
-Note: This concern was raised by sashiko-bot@kernel.org in v4 review
-(https://lore.kernel.org/bpf/20260421111320.D97D9C2BCB0@smtp.kernel.org/)
-and repeated in v6. The author responded that 'We can't attach such
-program as now it's only cgroup_skb and tc, outdated' but the function
-is exported via EXPORT_SYMBOL_GPL without any enforcement, making it
-callable from contexts where skb->dev might be NULL.
+>  	default:
+>  		BUG();
+>  	}
 
-> +	if (IS_ERR(rt))
-> +		return PTR_ERR(rt);
-> +	skb_dst_set(skb, &rt->dst);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(ip_route_reply_fill_dst);
-> +
->  /* called with rcu_read_lock held */
->  static int rt_fill_info(struct net *net, __be32 dst, __be32 src,
->  			struct rtable *rt, u32 table_id, dscp_t dscp,
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26459248718
---===============6950901046391295818==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-seccomp-co=
+mbined-v1-0-304b1cc3ad24@hill-daniel.co.uk?part=3D1
