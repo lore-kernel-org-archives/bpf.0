@@ -1,120 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E567233E344;
-	Tue, 26 May 2026 12:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5265B3E8C6A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 12:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779796950; cv=none; b=jRbfGyKyLosJ9dFidteTMiOfmpEnS63/ySvPGwwGRkMdeCo+AQvIt4/BLbzLtghxeZjZ4/xW++RAVlfRg4DLCE8G1aejjiJ5sKU8YWzcHzvFnnV7E40AdwDviapsvmnh5i4Tbtu9VKEsVdTBnMtaU4Fz/7jt9KQdd7isahlDMBA=
+	t=1779797584; cv=none; b=kgSdtesZyaEo8W5QJcT7NgxNkB8VxaBqyqnJNFEo9WwW7YWyJlnDcXOz/dEqIrHzfQSxeQh7c4kV1Msx0jRKIAXIheWJux25x1tjcdPEKcrM9QDm5aY42nF1+KJimuTx9efCT2R3MH6/DKMGoZ6SxTMz4Z5eCQmTQDqKOfE7PwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779796950; c=relaxed/simple;
-	bh=HC/RRl7IeOAinVVv8FTx45RsO7SLy1U7LXFQtVtsiX4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n0UGxsI4+y3n9OMURD5wqU1jYUFXlMdeAtpli8Ek2LeP3yEB6DWG2rbxvgWC3/I10zX/a/8Bp/OgVEZ00WDlnpHRJyNpO2DlBH+pbZlHm4Uf+2LiFQRALQyxdvGvyPXhIAZpERRSA1yzahW7i4V8L1V8qzZYpJMn0VIpTNOpggc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRVQDXRO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779797584; c=relaxed/simple;
+	bh=pOAcjYzz/U4h24Eskb6+XHs/xOejt1MVBD2qiXMKAPY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=svb+p4/QyKet4z2k5MmytIyTekQomu6jkbpKdXoupu8FFkXMAcCG0Z/ZO1oj89eKK2kSagFwBQayn6C6JgRBBLHgDjTCTL2pgtuzyakzsX3PtBTMtk7XfJweKtFmkpPLW3K8uKZzZ7sqDcvL3LGn+Rb9smkr2Ys5wc3D9UH9nMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GpTgbt6l; arc=none smtp.client-ip=209.85.218.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRVQDXRO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164611F000E9;
-	Tue, 26 May 2026 12:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779796946;
-	bh=oFZlcdmvc6uWeWfWn5ncZbAd8VOp345YbTiD6AiVdyU=;
-	h=From:Date:Subject:To:Cc;
-	b=dRVQDXROub6YH+v1/eDSykgyZ4AB+PQbBLV96lBX6YcY1qDkXGkD1P9phBkSC/5JT
-	 KEDDHyXhdWwcmCNIV5U5W8m/kaGLknLhyTqf4x7yWJleMY4gkmupTa/fbn+Ij2Ltpg
-	 uPAqeujWFeiipRXbfN0ebVPygsFsCUxr+N38MuprTbQ3hagtN/w8OoILI+kPTdbclo
-	 ydfMKy8SPgFEcwKCeJu1ra+iU9/1QwTKRh0Q5afXDBLoFHcaMwVhfkd45+br0NyBs+
-	 rrtOXJLWs/cV7OatdDkdIjNW5/rGbmCFrouJ0lGl4wtkofoAGNSiO3mJYdCMQG0tUx
-	 hiZMXldI5H11g==
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 26 May 2026 14:02:22 +0200
-Subject: [PATCH v2] bpf: add bpf_real_inode() kfunc
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GpTgbt6l"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-bd9a6aae530so687243066b.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 05:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779797580; x=1780402380; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UIl3E/KIplY8UrahHH32aBs14FSe0oCJM9lCiFtGNHw=;
+        b=GpTgbt6lGiKiJVHEThOwhAv/ViJ9pKyeGdmAVl6PicFK2N0Kz5sWPwlA8wD7DYB8S4
+         gJMW04rh+pIFhDDEoNb/j00UrqOeM7rOC+o1+g6oB/OZYLKgfUDQtCzKU6uaWqlfuZZy
+         J1tMaITzd9RPBG3+QfYp1rsL+JinHCy2Lun/GNp5U48qBcePadckl1zVvpAska9s7IV7
+         avPMSm8lq5yX0Q5aZHViOKlQoPlAgMBdn8NIDh3iRvQPxXcB6bFFZ6x1KXCm1ZB7amaT
+         g9+UuE/f7ek5EApfWcw9uhUntg3tpMXmeNpluqMisJfpZkPbw5HOh40ejEIhSkETsOVN
+         xJvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779797580; x=1780402380;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UIl3E/KIplY8UrahHH32aBs14FSe0oCJM9lCiFtGNHw=;
+        b=IfYe51Wp8jFGsMbm/11c5kbWYE4/1HlJCj9RIq6+o/XiAEWFbZybdCI0dSRfNXDsik
+         caRoM1hQu0SSKIMWxt2XZdk00hYram1rXMU8dDZ81BexAqYyETRzpLJcH7ip9HaopX0w
+         xUjtyEBsyHXK5V0K8Laij9pGXqm8ghkHLxgJIyJLS69uAWqgMyjoAVeR/rUaLbgacXBt
+         DEveXGsI/PelKwOmv8LgzsxaUI0yhxEuf35hiPjTsBELZudc9qsaOE2XTJjjrAT0iwEW
+         IHdivO2yp7MJJlcqiu5pcC9jPcanQW8Xwr4OEEdmnRnnCqH4H8wm/3Vqjw32E8/LAcOp
+         4TkQ==
+X-Gm-Message-State: AOJu0YxYdkudAdQ693rX96wVPexJKSKbV2IF44/8NlAwK1IQHBK/8lZQ
+	fFLYLAeGc75xn9c8n9xAcngZvSiaXyhr8rT27jZYo5MNOfQz7LJk2D7T5fo1rrJNraN2+AQwMMG
+	H0+gx0HUMofi2XpCB6Q==
+X-Received: from ejdbw10.prod.google.com ([2002:a17:907:fd8a:b0:bb8:69be:b9f0])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:907:c003:b0:bd5:7a3:a593 with SMTP id a640c23a62f3a-bdd2b0d6a45mr1184970266b.46.1779797580315;
+ Tue, 26 May 2026 05:13:00 -0700 (PDT)
+Date: Tue, 26 May 2026 12:12:55 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAEeOFWoC/5XNQQ6CMBCF4auQrh1Da6HqynsYYgqdlkmgJQUbD
+ OHuAokHcPm/xfsWNmIkHNk9W1jERCMFv4U4ZaxptXcIZLZmIhdlXggBHdX1YKEL2kDqO/LvGer
+ JAnlw6F/7jhH6YBCkVPJ6kVrLUrHtcIhoaT6wZ7V1S+MU4uewE9/XHyP/YRIHDqUtlOU3rpU2D xeC6/DchJ5V67p+AUlreI/lAAAA
+X-Change-Id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
+X-Mailer: b4 0.14.3
+Message-ID: <20260526-libbpf-load-vmlinux-btf-in-gen_loader-mode-v2-0-6750f5859bc6@google.com>
+Subject: [PATCH v2 0/3] libbpf: support STRUCT_OPS in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, gprocida@google.com, 
+	maennich@google.com, Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260526-work-bpf-verity-v2-1-cd0b1850d31b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAM2LFWoC/3WOyw6CMBBFf4V07RAohKgr/8Ow6GMKFdOSKVYJ4
- d9tce3y3Jl7ZjYWkCwGdi02RhhtsN4l4KeCqVG4AcHqxIxXvKsa3sHb0wRyNhBTcVlBtI3hZyk
- EbzlLrZnQ2M9hvPc/Di/5QLVkTd6QIiBIEk6NOYomlDnKo9GGxdN6fBPrrPh/ONZQAxq8oFZtp
- 7W6TUgOn6WngfX7vn8B9E2lqdwAAAA=
-X-Change-ID: 20260326-work-bpf-verity-a43f28baa242
-To: linux-fsdevel@vger.kernel.org
-Cc: Amir Goldstein <amir73il@gmail.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
- bpf@vger.kernel.org, "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.16-dev-fffa9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=brauner@kernel.org;
- h=from:subject:message-id; bh=HC/RRl7IeOAinVVv8FTx45RsO7SLy1U7LXFQtVtsiX4=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSJdl+Y+L+I92O4hAtb67avhueDnya80jPQZHZqcPhgt
- v/PzqZXHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABORZ2dkOBQSHVt4coZQkHug
- uk/6gg23D7BmpQl80OlRr1so0rVjGyPDnis1Ha1JqxIvb3XIu/Hqy+xXMmeDOro52ZPaTFusDp/
- nBQA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Add a sleepable BPF kfunc that resolves the real inode backing a dentry
-via d_real_inode(). On overlay/union filesystems the inode attached to
-the dentry is the overlay inode which does not carry the underlying
-device information. d_real_inode() resolves through the overlay and
-returns the inode from the lower, real filesystem.
+This series enables support for BPF `STRUCT_OPS` maps (such as
+`sched_ext_ops` used by sched_ext) when using light skeletons (i.e.
+`gen_loader` mode).
 
-This is used in the RestrictFilesytemAccess bpf program that has been
-merged into systemd a little while ago.
+Previously, generating light skeletons for objects containing
+`STRUCT_OPS` maps would fail or produce incomplete results because
+`gen_loader` lacked support for several key features required by
+`STRUCT_OPS` maps, specifically:
 
-Link: https://github.com/systemd/systemd/pull/41340 [1]
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+1. Loading `vmlinux` BTF to resolve kernel-side type information.
+2. Correctly plumbing `btf_vmlinux_value_type_id` into map creation
+   attributes.
+3. Ensuring `btf_key_type_id` is zeroed out to satisfy kernel safety
+   checks.
+4. Plumbing the userspace BTF FD (`btf_fd`) when
+   `btf_vmlinux_value_type_id` is present but `btf_value_type_id` is
+   zero (which is always the case for `STRUCT_OPS` maps).
+
+This series addresses these limitations by:
+
+- Loading `vmlinux` BTF in `gen_loader` mode when the BPF object
+  contains `struct_ops` maps.
+- Explicitly zeroing out `btf_key_type_id` for `STRUCT_OPS` maps to
+  satisfy kernel validations.
+- Expanding the map creation attribute size in `gen_loader` to include
+  `btf_vmlinux_value_type_id` and plumbing it.
+- Fixing `btf_fd` copying logic in `gen_loader` to populate it if either
+  `btf_value_type_id` or `btf_vmlinux_value_type_id` is set.
+
+With these changes, it is now possible to generate and use light
+skeletons for BPF programs utilizing `STRUCT_OPS`, such as custom
+sched_ext schedulers.
+
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
 Changes in v2:
-- Tag bpf_real_inode() with KF_RET_NULL and document that it returns
-  NULL for negative dentries; LSM hooks such as security_inode_create()
-  pass negative dentries, and without the flag the verifier marks the
-  return as PTR_TRUSTED and skips the NULL check.
-- Link to v1: https://patch.msgid.link/20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org
----
- fs/bpf_fs_kfuncs.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-index e4e51a1d0de2..761fbe0fec5d 100644
---- a/fs/bpf_fs_kfuncs.c
-+++ b/fs/bpf_fs_kfuncs.c
-@@ -353,6 +353,21 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
- }
- #endif /* CONFIG_CGROUPS */
- 
-+/**
-+ * bpf_real_inode - get the real inode backing a dentry
-+ * @dentry: dentry to resolve
-+ *
-+ * If the dentry is on a union/overlay filesystem, return the underlying, real
-+ * inode that hosts the data.  Otherwise return the inode attached to the
-+ * dentry itself.
-+ *
-+ * Return: The real inode backing the dentry, or NULL for a negative dentry.
-+ */
-+__bpf_kfunc struct inode *bpf_real_inode(struct dentry *dentry)
-+{
-+	return d_real_inode(dentry);
-+}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
-@@ -363,6 +378,7 @@ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_real_inode, KF_SLEEPABLE | KF_RET_NULL)
- BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
- 
- static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
+- Expand the series to 3 patches to fully support STRUCT_OPS in gen_loader.
+- Add a patch to explicitly zero out btf_key_type_id for STRUCT_OPS maps.
+- Add a patch to plumb btf_vmlinux_value_type_id and btf_fd in gen_loader.
+- Link to v1: https://lore.kernel.org/r/20260524-libbpf-load-vmlinux-btf-in-gen_loader-mode-v1-1-6f57f191a7ad@google.com
 
 ---
-base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
-change-id: 20260326-work-bpf-verity-a43f28baa242
+Siddharth Nayyar (3):
+      libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+      libbpf: zero out btf_key_type_id for STRUCT_OPS maps
+      libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
+
+ tools/lib/bpf/gen_loader.c | 5 +++--
+ tools/lib/bpf/libbpf.c     | 6 +++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+---
+base-commit: c6e99c10fd9855082568cbd71bb2cc5dc90eda53
+change-id: 20260522-libbpf-load-vmlinux-btf-in-gen_loader-mode-4474834aa467
+
+Best regards,
+-- 
+Siddharth Nayyar <sidnayyar@google.com>
 
