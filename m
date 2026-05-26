@@ -1,107 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335153D9035
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2483D649F
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779791116; cv=none; b=ofjHznI4L/xvOIBHZclzMYR6PSPTBccxxFr14IB6BDFeZEHYhsBq1uGmlZ+e7ngLU59TZ2DEoDaoaN6mAg9P7b+W60IHNQTFRn/sfe65m6OLUcbytaHRAGKudMub/Pvf1KaDrksv+WLDqWZt+CEzDDqPz2xLuk4M8x8I2ayK7Ps=
+	t=1779792245; cv=none; b=LcnKV9Hd8zg9GZ+ioWgoiaj/iwGuSJE4mtmTVSpd1zvE9gMGxY/X7Lu+nZZHmMhCmbN2wQSRVYRwZ1KmclCORQ25miSugxMc5JlEz2XA18ivBesgjpWxg4VkD37e/St0rX+WTFrqcFrQ5Bu9vLOTl9KjIrVuk1vxwIgKask2Vsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779791116; c=relaxed/simple;
-	bh=WfE0AATCEPgroFvIlEqq2krzpEkzSON3pKCWKMDt+PA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=U/4XiDnXuar+RedM4ZuUJdg/r1w9vXSTv22TvMjcfKhyk3baAxfvAAbl/UDgDmh9LQ+zxPzeLbFz4KoXjdcWc0SZ7YwgGXzRQmUIKR80E3NKUgrhRcDZAA0nVjT8T0j/lwNUh543uVEBA3ZHoAQnqzd+s19wyZlHceTINxyHpAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhTYc35Y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779792245; c=relaxed/simple;
+	bh=HsOr8rpplJjgS7Av7/K41Jv793JfILZijFQlo8B/bws=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uXrNwnhr9oxrO3xf+QiiLGeE+gSo+hBEV7Ui61ufkLcC96DSZboudeP5+AudfQzH2AKZmkhjygZPvl5anLcPfAMQ+qGtV6JrGe06nuTbExmzoaNlz4atTrr4NaVpbI7RIhIiw2uaNN+X2cPo+AIQBapgrG435EgqRtcmcHqiLw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJ1aoNQV; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhTYc35Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE3C1F000E9;
-	Tue, 26 May 2026 10:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779791114;
-	bh=aty2Zuq6/D1tqkcG9d4/2mQlX82rU42LQQ4tZvd2AQs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BhTYc35YNpRlYyImdAFClRujJklvYWmK0zy01LbN5WGGSR2NTzQ4mk9lFL5SQ1UNQ
-	 VnBAyRDiRJHQhvyiKIqQA/72xZ2Izceo+K3CJB18czRbdS6+d8mkn+toWXTzAym+ZL
-	 FaRKNLv6ztaPK8oPZUSnirOJeXdsA9tqu6yti/E/+Tj6BGV+0UzQ14hkVJG468Vzl3
-	 pYoUNN2ZmTLgx8gL/5Q09CIgsfjDOzLIQhp4uE5ZWllCVIlN3BklqZaDctOsA4P/5P
-	 1Bn7cJARmOmeOIQbADeCxI2EGGMoT+w79zS9zUVMXBP4l8jvgNzDzOq7FTqDEEqmP4
-	 5xXLohZFlnIDA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 3/6] selftests/bpf: test cases for loop
- hierarchy computation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526-better-1m-reporting-v1-3-51e4f2c59780@gmail.com>
-References: <20260526-better-1m-reporting-v1-3-51e4f2c59780@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 10:25:14 +0000
-Message-Id: <20260526102514.AFE3C1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJ1aoNQV"
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-83537a80ab6so7242690b3a.1
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 03:44:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779792243; x=1780397043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0woIQHOIcIhPQzNkOpwE+A4HIJ4EcK8YFk4nOva52aE=;
+        b=OJ1aoNQVqzQF6siB4fYX9SI6yBYbVgGw/iR33y06CYsRABLEhZWFI5940eaNCjXW7A
+         aXzOC+Ce18+xfxW52sw11RtbDpBtFkq2+IAV5649yXE/Ys0W69I3hYvw5SMjS3yLgWtH
+         srKwaEqC8MrTBLu2vMXW8u4+W8wLAUyESER1jCYFdweKiDagonxfxj/lB5apJBPRasbx
+         lRQExOIH2RODBgwdoToqpQt5rqSux14FrwXsCO/CCDPAU0LkFuWCdH1Y0wUhq7dqrp2J
+         2MFS7kQBo/AHvN6CvSrg4Fmoa/Y0ZU9gkCrfzLiNAzWW/OG1kYhjDThAUFe7l98WDQzt
+         rOhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779792243; x=1780397043;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0woIQHOIcIhPQzNkOpwE+A4HIJ4EcK8YFk4nOva52aE=;
+        b=dVfiaWviHmxYMiNR+rnvw6fYvrugPBC2pjRtdN7Zlaib8PL/Ptwp8tp6AXYTWLhyuj
+         fhZDLJU4ocrOiGsAy8/Mq8g+oHeaVerHPMw3lteLKEaVy+hIUknUH4Ua8P3bNydw9Ebb
+         o1ulIVgCRgQ2ev5N4mx/jZfyIdDbO6Fux5lykKg+RLjsqoT0R+OE9u6zJybadi8UVJgS
+         TDOVXx57a4iyShEyMt0LWKoAS3zCzeQywl49EutL4PJvbaBLpiBC9/s48pvz64C3qsGe
+         jb4H2cJJk1eh7S0rMmvMerxs7nsae1D2HrTzdH7hesgyJgq/7q6vaKp3qKBkDZDXwzyb
+         Y9Qg==
+X-Gm-Message-State: AOJu0YybwJgh/kKms5DBJJgiHUAm8+c6aRi5X3CUvEAvdBEczrp0Mu9m
+	ENDW9iwKG6+2yiHPvO4H+ykhhutzYdcQiPp80lCVZ9cKGGPPaGhk0WM6
+X-Gm-Gg: Acq92OFwj+5Pe7nfUtP7OqBXnkF43nLUkk7A4c8HqViswY+lwA5NgDFSYAB8gSPXO9D
+	U8+ESJIgM1RN2nFB6M2cz2ATXhye0vrOrX0z0DlcC2SsMHnBMbdM4WXDX7CLvnyN8k5i6A7ypYw
+	UwIHbyK2jxHmKTHol0qoFknH6mTJqbJfpJx9NQ7m02Ox/eSlImhIqBSA3n2S/yxCUfQDC+oZBF3
+	H7O77Pb+ceOPsG4qd9JayTE2Q6UWlzENYH5ZeJ2mwRN9PjZ7HnOCs16e7WJbE3dGWpXiQjO0QUd
+	8VlryLRlAKu6jFcK8p1Fwri4FN6zGnWvaLPWC42pxhNYL23rvOesi7nX6oB7GPKWRiR8jn8tBGe
+	IcqvPOFNgINZGBtdvBCRgP4yTdVsG5VwxH5AfXhjKTsFlxn2bqv68IwtMFWtLk9sGnH2PkR45dg
+	NMSI6copSghUeQU9j/87iRzpVGkoglAylZe0k48Kh0sv/anFud4INq1WndeK9C
+X-Received: by 2002:a05:6a00:1c8a:b0:837:7e7d:3d2 with SMTP id d2e1a72fcca58-8415f332b6cmr18931174b3a.31.1779792243590;
+        Tue, 26 May 2026 03:44:03 -0700 (PDT)
+Received: from KIPREYXIAO-MC2.tencent.com ([43.132.141.25])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84164afe2dasm12132890b3a.19.2026.05.26.03.44.01
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 26 May 2026 03:44:02 -0700 (PDT)
+From: Zhenghang Xiao <kipreyyy@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: bpf@vger.kernel.org,
+	Zhenghang Xiao <kipreyyy@gmail.com>
+Subject: [PATCH bpf] bpf: add rcu_read_lock_trace to bpf_timer_cb
+Date: Tue, 26 May 2026 18:43:57 +0800
+Message-ID: <20260526104357.35779-1-kipreyyy@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The expected verifier log output in `fwd_edges_no_loop` incorrec=
-tly expects an unconditional jump `(05)` for a conditional jump instruction=
-, which will cause the selftest to fail.
---
+bpf_timer_cb() invokes the BPF callback without holding
+rcu_read_lock_trace(), unlike bpf_wq_work() which correctly wraps its
+callback in a trace RCU reader section. The free path in
+bpf_async_cb_rcu_tasks_trace_free() uses call_rcu_tasks_trace() to wait
+for running callbacks before freeing bpf_async_cb, but this
+synchronization is ineffective for timers since they never enter a trace
+RCU reader section.
 
-commit f35c2f4d237eac02dd241fbf85f69d40722f62de
-Author: Eduard Zingerman <eddyz87@gmail.com>
+Add rcu_read_lock_trace()/rcu_read_unlock_trace() around callback_fn() in
+bpf_timer_cb() to match the bpf_wq_work() pattern. migrate_disable() is
+not needed because the timer callback already runs in softirq context
+which prevents migration.
 
-selftests/bpf: test cases for loop hierarchy computation
+Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
+Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
+---
+ kernel/bpf/helpers.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This commit adds test cases covering various branches in bpf_compute_loops
-for loop hierarchy computation. It includes tests for single bounded loops,
-independent loops, nested loops, diamond control flow graphs, and irreducib=
-le
-loops.
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 2bb60200c266..5056aae41c77 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1204,7 +1204,9 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+ 
+ 	key = map_key_from_value(map, value, &idx);
+ 
++	rcu_read_lock_trace();
+ 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
++	rcu_read_unlock_trace();
+ 	/* The verifier checked that return value is zero. */
+ 
+ 	this_cpu_write(hrtimer_running, NULL);
+-- 
+2.50.1 (Apple Git-155)
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c =
-b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-> new file mode 100644
-> index 0000000000000..db26157e3e14a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-
-[ ... ]
-
-> +/* Case C: forward edges, no loops. */
-> +SEC("socket")
-> +__success
-> +__log_level(2)
-> +__msg("          0: {{.*}} (b7) r0 =3D 1")
-> +__msg("          1: {{.*}} (05) goto pc+2")
-
-[Severity: Medium]
-Will this test case fail because of a mismatch in the expected verifier log?
-
-The inline assembly below uses "if r0 > 0 goto 1f;", which is a conditional
-jump. This translates to opcode 0x25 (if r0 > 0x0 goto pc+2), but the __msg
-assertion explicitly expects opcode 0x05 (goto pc+2), which is an
-unconditional jump.
-
-> +__msg("          2: {{.*}} (b7) r0 =3D 2")
-> +__msg("          3: {{.*}} (05) goto pc+1")
-> +__msg("          4: {{.*}} (b7) r0 =3D 3")
-> +__msg("          5: {{.*}} (95) exit")
-> +__naked void fwd_edges_no_loop(void)
-> +{
-> +	asm volatile ("					\
-> +	r0 =3D 1;						\
-> +	if r0 > 0 goto 1f;				\
-> +	r0 =3D 2;						\
-> +	goto 2f;					\
-> +1:	r0 =3D 3;						\
-> +2:	exit;						\
-> +"	::: __clobber_all);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-better-1m-=
-reporting-v1-0-51e4f2c59780@gmail.com?part=3D3
