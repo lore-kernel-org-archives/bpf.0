@@ -1,108 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC0D39733E
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9B73D649A
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 10:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779790060; cv=none; b=NbPkSL9Eg/eM71904QAHD7chk+a6XmD4RC6i1FudNnj/9xorZ+GfKv8YHQ7JJUGrxAjEjzghAUmYxqmqw3vugSQnefHhHV5S0vj/kGV6LHeK3q7+YjK7zdMIHTHWHdFTyFsx2SRUjjehMVMO/NM7ao2A5Dyw1/GGbs2qj2NrKRI=
+	t=1779790082; cv=none; b=r38XK3ugKGlC/Z1tYHOpUAu/16RLamiq0GRu3XRtV7YkSDFN2AzsQPpROMLwKYaq+Fd/iPcxx3ZuOa3XPecMRpNvmciy/5wKtC52Ze/Px1KhgdI4eQHJ+WIQ1/HK69GQ1OgeUvZwDzPEE2NeWjl/vW4eB3fCJ/poNpA7I+N/Ws8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779790060; c=relaxed/simple;
-	bh=2+Aw8KFmXkmw+R4NR004OLgX4Y/M6BTSxaovwFQ9YGY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gK6vxJOcwkgZJ8iSWfVSXwXj+PBGgUzuh2osKc6T/WmFNt0D5t682j8FLgzxCI4KOaTTq3bBk0An8VN6YD2huhESuhcmB3tM4Lf+F07VSePZGOrPmZqLwv1KKRK4MWe1BvmTuDv+qAGvbAVEk36lCjr/cm19Wfdr1eYWYGYxU2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8+WOMs3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779790082; c=relaxed/simple;
+	bh=UhEIIQ/fF6JUzP2E7jtUaa6TUP1Hc0Cfz/k0EoiURMk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CNgmCWFy+h4xC6XqMjZopTm4maNsnhUkhKgIxw8eF9A1zsuZMPbofMsgglMgO+F6YN/X54lfPta341UNvjPGfNxNqYhtVN2/XesUriSGlU5wIRIFTPD/mOUTZ6buYqTgcQTvSRmAhKkn8VxqAQvI17ZEhTOKEv0c+JGXA646Jw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhM5d4PB; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8+WOMs3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD69D1F000E9;
-	Tue, 26 May 2026 10:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779790059;
-	bh=bL1GdqEfGbGp9yi/ZGP1lq1NN5ID+g9ycIcEYNhd4NY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c8+WOMs31v53vm9azFsbNaPMATpYcGNyuUsx8WULs72Vz68Y6D9U9YuAQhyO7mS0M
-	 TkOkaTh/5N8JLa68T2zFUpr9bzsgTPSdMRpdZd7/MKgfsOcdhDlsvLKR4mv9FrAEAJ
-	 DJ4rcFgRSuIphpZHXwRwEfCrTf/F8yoALA3zko0635uJRs0RI6fgtKTZuGISp+eRaN
-	 U+PFaX+6o6zDStoYOfiunLn+6BdC3IDimK7o7soPcMuhdksYVxxorWgwctt9AKD/yh
-	 QVwjF2JTukWY1k0jtdwzZOlFDAaEztkUG8zqe9L9wZd5Sl96UnN+BgqtX98JCpWpJ0
-	 Mz3XbSwywuKsw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 2/6] bpf: compute loops hierarchy
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526-better-1m-reporting-v1-2-51e4f2c59780@gmail.com>
-References: <20260526-better-1m-reporting-v1-2-51e4f2c59780@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 10:07:38 +0000
-Message-Id: <20260526100738.DD69D1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhM5d4PB"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48d146705b4so109946475e9.3
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 03:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779790079; x=1780394879; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UhEIIQ/fF6JUzP2E7jtUaa6TUP1Hc0Cfz/k0EoiURMk=;
+        b=nhM5d4PByi4xSAS3U27yxW6KF7L/hBEubEIAYTggJ7kZsUjlNlRmhewLoXbG4Nvtpg
+         gUoAYxvkEGaXOK800aKwD9aSU1yQDk75udsSOC0l00GpyDLcgMDcqc6CDDJ3EZiJWT9k
+         BhAFSDTUKVCphiWAaryStKMXl1KYZkGs+vF6stY6TsxLjSkLKg0H80s+mfBTL7ClDQxi
+         wrh/oNB6+vFekhmJv5/NNq756L8RvneHRa4K9RxViy+hRDot6TAack2lxRoRuO+e1Era
+         7M4UcTDFPMnWsTCzzTeGHJp/F2A27v/iijQ/SIQp5PA2vfyWk6Ly2m4K59/Esw6+hxHN
+         cXaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779790079; x=1780394879;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UhEIIQ/fF6JUzP2E7jtUaa6TUP1Hc0Cfz/k0EoiURMk=;
+        b=hE3bAXWVMiheURRYgrT0CgI4VO5q0jNn3QPf2oTBx2IrUM2Pl6XuoyJjJ2Xr16pm48
+         u7svN6+vh2SY46rMTr7fJZo52QO4ypdZMvmcumoZ/QlXn7f3VP/zFcYWO+lQp1h4D2G3
+         JudKo+jUB8UpyNQOLtg6tPeHgf3jFbrahd17i2AOHTf7uQIbK1dqdOCI77ANIYDpyOwM
+         LlsYA0JEja952XVaWlZ3xBQARopfgq9lkkhvhuJQYP3QGnZ8rwbulWln5I5xWNqpF+7D
+         DrcT+d3/avI0xy+fxgCtF7SiL0EgoGeliojR30YTwQ1gDO2+Uc7XoU1p3G2lyqwQ3mph
+         U6hg==
+X-Gm-Message-State: AOJu0Yxkz0P1c7lVGQOBDhxExYQlxdV3e+H00R7hKfEnPDA5h5heBAjs
+	oMngJo1vRjnNahO01Lvp7ILx6IQtzHD+AaW733b2O7N/5qvzgpYBKkfTdJSy2Q==
+X-Gm-Gg: Acq92OFpVWCPDBZUYXcFclVjKM0RozUGumw1L3nShwSivEG1KJndjJGeuEGSoTO5x8F
+	H209FWEmPmoxZlxH0jNe9o6jWTylkR7B1hgVPvBhj+vr1817qMBJ5vddFsIH61b0USUMgAy8tA8
+	8PrEMfBisnGnm7h/Oy1LLMgretblObc3VD5CIQSy1iToUrzZUVDBROvwVcPiQBQB6tgEqFFxq2T
+	n+mnbfFQneFSu1J1gf0ya3wFTBsdmQ299Ab3X3881rEXPp1F9DS/sQGxD8n4joTkMZJ2+ODj1Ug
+	S6dVZ9uxKTUHQmgEDQyYntEpyVVcshYdQf4POI6RusPv6wBfwH/41jClxd8PuHSSu5vBiE3PcX5
+	g95tEsUn3vXeJGrKK9AjooGgCJjR9fsfuUQh9lSV0KauLoim1lY0FASrZXxEOAowMExK4eJH96+
+	Z2qk739AN41OjNn339TLW7hbEFi5ijoJTQgbSFZJOgxiwRaSZsA3H3J0dDMvfQuN7gLI9LzXu4Q
+	rhr+rCTQGs=
+X-Received: by 2002:a05:600c:530c:b0:490:5527:3be2 with SMTP id 5b1f17b1804b1-49055273be6mr204156145e9.32.1779790079105;
+        Tue, 26 May 2026 03:07:59 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490454c60b5sm344635055e9.1.2026.05.26.03.07.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2026 03:07:58 -0700 (PDT)
+Message-ID: <eed59d12-969f-4135-a84b-4965743692cd@gmail.com>
+Date: Tue, 26 May 2026 11:07:56 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/3] tracing: Expose tracepoint BTF ids via
+ tracefs
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: bpf@vger.kernel.org, rostedt@goodmis.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, linux-trace-kernel@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>
+References: <20260518-generic_tracepoint-v2-0-b755a5cf67bb@meta.com>
+ <20260518-generic_tracepoint-v2-2-b755a5cf67bb@meta.com>
+Content-Language: en-US
+In-Reply-To: <20260518-generic_tracepoint-v2-2-b755a5cf67bb@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf_compute_loops() incorrectly uses kfree() to free memory alloca=
-ted with kvcalloc().
---
+Hi Steven,
 
-commit ef2f37474f7b031f628d088384c6723a83200838
-Author: Eduard Zingerman <eddyz87@gmail.com>
+Gentle ping on this patch from the series.
 
-bpf: compute loops hierarchy
+Since this part touches tracing, I’d appreciate your thoughts on the
+tracing changes whenever you have a chance.
 
-This commit adds an analysis phase to the BPF verifier to compute the
-loops hierarchy using a non-recursive algorithm. It records the loop
-header per instruction and tracks loop irreducibility to provide better
-callchain profiling.
-
-> diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-> new file mode 100644
-> index 0000000000000..4bbcd923e960a
-> --- /dev/null
-> +++ b/kernel/bpf/loops.c
-
-[ ... ]
-
-> +int bpf_compute_loops(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
-> +	int i, err =3D 0, len =3D env->prog->len;
-> +	struct loops_dfs dfs =3D {};
-> +
-> +	dfs.dfs_pos =3D kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-> +	dfs.state =3D kvcalloc(len, sizeof(struct dfs_state), GFP_KERNEL_ACCOUN=
-T);
-> +	dfs.stack =3D kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-> +	if (!dfs.dfs_pos || !dfs.state || !dfs.stack) {
-> +		err =3D -ENOMEM;
-> +		goto out;
-> +	}
-
-[ ... ]
-
-> +out:
-> +	kfree(dfs.dfs_pos);
-> +	kfree(dfs.stack);
-> +	kfree(dfs.state);
-
-[Severity: High]
-Should these be freed using kvfree() instead of kfree()?
-
-Since these arrays are allocated using kvcalloc() and BPF programs can cont=
-ain
-up to 1 million instructions, the allocations can grow to several megabytes.
-In such cases, kvcalloc() will fall back to vmalloc().
-
-Calling kfree() on a vmalloc address will blindly call virt_to_page() for a
-virtual address, which can lead to a kernel panic or slab corruption.
-
-> +	return err;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526-better-1m-=
-reporting-v1-0-51e4f2c59780@gmail.com?part=3D2
+Thanks,
+Mykyta
