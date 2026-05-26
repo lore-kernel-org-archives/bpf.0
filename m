@@ -1,113 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208103491C4
-	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D646D3C2B95
+	for <bpf@vger.kernel.org>; Tue, 26 May 2026 21:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779831380; cv=none; b=Tj4SdeTXrCe5/Cp9EqsNzrr+gy0/wcx2MgHoZfYMoT+onphCRTrbJ9MpPw507TvSqqA8vfDsDDXpmFrYbG2piww0doDhOgHDzVG++xeit6+vKTvfslOgSK1JwO+aQ/On76nXsTfzVFoHBaRRJ3Bi8xSR4eYJzTtTjM29V2lKRVc=
+	t=1779831462; cv=none; b=uEV6Wh63mKJVSmvBTGntD3qA++IKjqHoj/kG/7hWA80GC1teeimrn+JeNwYAEYY9NgrEaj0n8FSB9PW5OM7vwb/bgpbL7b4Dz3in/V9voOKOs3Q5v8G12nquhn2SvuB+3Xiurmneeg87gRxoIC8/t8LHua65UICShg8wKd7hgao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779831380; c=relaxed/simple;
-	bh=MgnksHi84SPHN6OVCOVfzYbnS6C/47M7QViWVOgm3Pw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LJNs7gHuUTQ+lbgmsJaJQD9ciZiTc04INqDfX7Woac5PiQoSDaNATujaDhUvkNN0hnJfzMB+wjDToNYTaZisrVoc+dydj0c3uAefbbUgBY85sAgegrPPB3Cy04IXnI1fL2Wgr9C47WTbazaOisvGsyIsiaRnNq0ooARvHvvDTzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4d51lxu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779831462; c=relaxed/simple;
+	bh=HG4xVfrnXi6E1NzBFUDPFHVSXE8Fty3+vuRYUDgcfZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZgS/KtjEkRHch8QQv6IIfo6sqguccQ0yQXvt4f1+n2NMYHvHMr9PfQpbUAzk8hMtuXnAzaGcIpSHDjenxZETFt27T5Q1dreePXCEcEkdmSdrs4zz/Q2QYto+oogIVEKv5ETc3ifzNRaOoXQ+vERJFYemta9j6Q5170dvqzk/Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rgfl20Cq; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4d51lxu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0731F000E9;
-	Tue, 26 May 2026 21:36:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779831378;
-	bh=wKO5t/FAfSGB6ZzJytirV2bf/gcfsTTqYOVXfttSjqc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=U4d51lxuHuEepCNMO0PDt/mP8ivTDCpe19uHMhlinYH7UwLxF1PGyTaE2JD+ZCd2E
-	 RkuP9PXuWtoQxKBMNdSH7eYbTSLwaXPpAocaTIlofGTNDykWMlxZQiJjyAAgTibmpj
-	 +6qzlY+FdhjVR6J0VSyFr25dPo0b6z7qJGmR/fuCTXzk/crNHz7QCzI/u5AN7k20L/
-	 rn0LfDkphgaZM7D71NGDfqthgR5Msi3Z5iEKPfS8m+vHqDv2jSRJqXEObAq4i8qlyT
-	 EacvdF308aCowXtVmCARyg8Un9yohG9T99/9eQ0Xl3BS+9cl5OfIP3FfqCUP0HMt5z
-	 3cin31kue0jIw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv4 07/13] libbpf: Detect uprobe syscall with new error
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260526205840.173790-8-jolsa@kernel.org>
-References: <20260526205840.173790-8-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 26 May 2026 21:36:18 +0000
-Message-Id: <20260526213618.6D0731F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rgfl20Cq"
+Date: Tue, 26 May 2026 14:37:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779831456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kjRuisyNNQy4ku/kSHiUBl5SugkhEtzAPwYa6riXyjU=;
+	b=rgfl20CqrU3y8FA9y64GaR+mCfFJ5UFGNKG9hea0P2dA1eC88SlZmItgk2UMtDfijvJzV+
+	EMrKlAVlTk/UqJ4BG3hF0OVUAqvfDbuA/25A109zsS4mIJEqi1Otg1p+SQb5s5FYUTV5M1
+	oDD5bDi4G7E4JHnLjXKkPI62bbiChKg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 09/12] bpf: Add infrastructure to support
+ attaching struct_ops to cgroups
+Message-ID: <2026526211020.HhEJ.martin.lau@linux.dev>
+References: <20260519215841.2984970-10-martin.lau@linux.dev>
+ <20260519225002.986EB1F00893@smtp.kernel.org>
+ <2026519225454.By6y.martin.lau@linux.dev>
+ <CAMB2axPDDom8sD7u+2Fgo9dZO1ereX-unai8EW1SmsiDrnzzwQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMB2axPDDom8sD7u+2Fgo9dZO1ereX-unai8EW1SmsiDrnzzwQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The uprobe syscall feature detection and selftest changes expect=
- the kernel to return `-EPROTO`, but the corresponding kernel patch is miss=
-ing from the tree, causing test failures and feature regression.
---
+On Tue, May 26, 2026 at 10:54:00AM -0700, Amery Hung wrote:
+> > > > +static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 type_id)
+> > >
+> > > [ ... ]
+> > >
+> > > >  static void *bpf_cgroup_array_dummy(enum cgroup_bpf_attach_type atype)
+> > > >  {
+> > > > +   if (cgroup_bpf_is_struct_ops_atype(atype))
+> > > > +           return struct_ops_cfi_stubs[atype];
+> > > >     return bpf_prog_dummy();
+> > > >  }
+> > >
+> > > [Severity: High]
+> > > Can using a loadable module's cfi_stubs as a dummy sentinel cause a
+> > > use-after-free when the module is unloaded and reloaded?
+> > >
+> > > If all maps are detached, the module providing the struct_ops can be unloaded,
+> > > and its cfi_stubs memory freed. However, the cgroup's effective array might
+> > > still retain the dangling pointer to the freed cfi_stubs if BPF_F_ALLOW_MULTI
+> > > was set.
+> > >
+> > > If the module is reloaded, cgroup_bpf_struct_ops_register() updates
+> > > struct_ops_cfi_stubs[atype] with a new pointer. If a user then queries the
+> > > cgroup via BPF_PROG_QUERY, the loop checks
+> > > item->prog == bpf_cgroup_array_dummy(atype) to skip the dummy. Since the
+> > > array contains the old freed pointer, it won't match the new cfi_stubs
+> > > pointer, and the query loop might mistakenly treat the old dummy as a valid
+> > > map, causing a use-after-free when calling bpf_struct_ops_kdata_map_id().
+> >
+> > Agree. This will be an issue on BPF_PROG_QUERY when the module reload.
+> > I did think about the module reload case but I have only considered the
+> > rcu-reader in bpf_cgroup_struct_ops_foreach.
+> > BPF_PROG_QUERY does not use rcu_read_lock and depends on cgroup_lock.
+> > This will need to be addressed.
+> >
+> 
+> Also thinking of the potential problems of leaving dangling cfi_stubs,
+> but I don't see any other cases.
+> 
+> In this instance, it seems adding a cgroup_bpf_enabled() guard in
+> __cgroup_bpf_query should be enough. The dangling cfi_stubs will not
+> be cleared until update_effective_progs(), which happens during the
+> first struct_ops map attachment. cgroup_bpf_enabled() will be false
+> until a struct_ops map is attached.
 
-commit 241886d344e64ee01c001ddedecbb173dc73fef3
-Author: Jiri Olsa <jolsa@kernel.org>
+In __cgroup_struct_ops_link_detach, the static_branch_dec is done without
+the cgroup_lock() for now. May be moving it before the cgroup_unlock()
+is enough?
 
-libbpf: Detect uprobe syscall with new error
-   =20
-This commit updates libbpf feature detection and selftests to expect -EPROTO
-instead of -ENXIO for the uprobe syscall. The change is intended to align
-with an optimized uprobe fix in the kernel.
+__cgroup_bpf_query() has already held cgroup_lock(). I was thinking to
+use cgroup_lock() in cgroup_bpf_struct_ops_register() also but it will
+need a cgroup_bpf_struct_ops_"un"register() when the module is in
+MODULE_STATE_GOING.
 
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index 4f19a0d79b0cf..a37aaea5253e5 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -577,10 +577,10 @@ static int probe_ldimm64_full_range_off(int token_f=
-d)
->  static int probe_uprobe_syscall(int token_fd)
->  {
->  	/*
-> -	 * If kernel supports uprobe() syscall, it will return -ENXIO when call=
-ed
-> +	 * If kernel supports uprobe() syscall, it will return -EPROTO when cal=
-led
->  	 * from the outside of a kernel-generated uprobe trampoline.
->  	 */
-> -	return syscall(__NR_uprobe) < 0 && errno =3D=3D ENXIO;
-> +	return syscall(__NR_uprobe) < 0 && errno =3D=3D EPROTO;
-
-[Severity: Medium]
-The commit message mentions a "previous optimized uprobe fix", but is that
-patch present in the current tree?
-
-In arch/x86/kernel/uprobes.c, sys_uprobe() still returns -ENXIO. Does this
-cause probe_uprobe_syscall() to return false and silently disable the
-optimized uprobes feature?
-
->  }
->  #else
->  static int probe_uprobe_syscall(int token_fd)
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
-ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> index 955a37751b52d..c944136252c6d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> @@ -762,7 +762,7 @@ static void test_uprobe_error(void)
->  	long err =3D syscall(__NR_uprobe);
-> =20
->  	ASSERT_EQ(err, -1, "error");
-> -	ASSERT_EQ(errno, ENXIO, "errno");
-> +	ASSERT_EQ(errno, EPROTO, "errno");
-
-[Severity: Medium]
-Will this test now deterministically fail? Since the kernel still returns
--ENXIO, it seems errno will be ENXIO instead of EPROTO.
-
->  }
-> =20
->  static void __test_uprobe_syscall(void)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260526205840.1737=
-90-8-jolsa@kernel.org?part=3D1
+Either way, this should fail early in __cgroup_bpf_query() once detected.
