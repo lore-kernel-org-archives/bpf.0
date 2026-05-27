@@ -1,81 +1,190 @@
-Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13F6271A71;
-	Wed, 27 May 2026 14:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D863D9666
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 15:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779893795; cv=none; b=F6ZR6YF+RYuD7rHcm2M2EnSopYDXCD1W0jzc32x+KzTibHaU/2RxNoas5Gz/LRS4pU5OfbSp5zc/00nRtlljr1z6DKp4OuAdxKrj1olmC9uVBti7KEyQa8M7Zl1mZ7Koqq0k/dZSAkbXtR25CGpvXIN6dlWv/rZZO0AAmIQfHE0=
+	t=1779896692; cv=none; b=OdR2o3QGMIrDOdAE2Ao5U8G3M+sbs5mMjSITEFiJCnWZ8jn1Hm2AEi6vmyLOQ+dpiM3Ntunvf7yoJKdjmucPYNUxeCXnQ18kFJuLmHneYAQQi+0dOXu0aAGJC30mHe1Yr+QN7qP2obJtDDh2lEoO/deEsQE397Fa+7z1TzJxdts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779893795; c=relaxed/simple;
-	bh=1TmkfWrvfjU9Oexaw3JXK8IYB0E5N2bdveGsvKTozeo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZglfYviZxyC+CSH+PyD/zAzwk+P3pklD39VzA1hAnwzZt7Yc1/TTad27XT51FfGtX2VyYM0AxKI5kj0uMXb9VuhrQyp9ysAEq6v4t24NJXFShYwmRb84SfxOGqv61ca+CQBqJF1CF2oUg5WrKyelnYHG3e+RmScx9E5tswhLKIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ZNjAv0Ci; arc=none smtp.client-ip=45.254.49.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1779896692; c=relaxed/simple;
+	bh=JRVgpFmbRjh7bJLYYJjYzs1K0iJKy2BpBuHo3cYsDfI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rAP6xDccGX07igeqNMscpqyxLg7R+7ESl+pl9gYddqPE0LtxFBW42KNnjk1MiFkVXF6jg0fYsOnGcDu/41R9KWxD9uOOnu2C9UY98mGi9wkBrXXp1OFeo5+xxJaXnOVr+NVVmkN00QRQtyJwJg268B8xHv0/SxZRuM+lM8lam+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sYHo+u+R; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ZNjAv0Ci"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 400cf3418;
-	Wed, 27 May 2026 22:51:11 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: emil@etsalapatis.com,
-	martin.lau@linux.dev
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	joel.granados@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn
-Subject: Re: [PATCH 1/2] bpf: cgroup: fix sysctl new value replacement
-Date: Wed, 27 May 2026 22:51:12 +0800
-Message-Id: <20260527145112.1858843-1-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <DISYF7LAA8C0.55I0KJ1R3Z2L@etsalapatis.com>
-References: <DISYF7LAA8C0.55I0KJ1R3Z2L@etsalapatis.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sYHo+u+R"
+Message-ID: <2fd62ec0-c594-4ac2-a95d-29eafbcb74d6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779896678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fswUnI9q78WgkM0igmVl4iKvvWN/p7M51WA068cywCs=;
+	b=sYHo+u+R/Ay7Axr7WPIVp6rQyo9OifxAVtBZ97wRRuu2Y/F3gQXObPgpFrLOasaSj2yf1d
+	RSBieMqGfnG8lVEpcH0Fu9GasO6+hNDg0g2UUOBvj5tOv5wKk2h2hah7ESxfO2PbmcHWuC
+	2K41sPVIUTq+HSP7teOoOuMIe8BS3RA=
+Date: Wed, 27 May 2026 08:43:54 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e69eb0a5e03a2kunm14ff3b834476a
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDS0xPVhgfQkkeSkhIGRpJQ1YeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktJSE
-	5DQ1VKS0tVS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=ZNjAv0Ci1/5T4uoIHBFau0iT48dVS9lgTsHvs6chsGba0RJWa/kRnH64GpieiY2On9Mqff9cyWoH07AF/A2nOWTYI+g4AKjEMc2gyt2+reuoQFKQoiPAl1inQ7gt7LFv+0ZqXeQKXnHjwqoP1bZ0bDreD5mwxYaVO8/NWUu/yqQ=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=XsQnUDGkg2Cukaht9mz+3Qf1Ty2QVkmow43B0QE7vzw=;
-	h=date:mime-version:subject:message-id:from;
+Subject: Re: [RFC PATCH bpf-next v7 04/11] libbpf: introduce
+ bpf_map__attach_struct_ops_opts()
+Content-Language: en-GB
+To: Hui Zhu <hui.zhu@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ JP Kobryn <inwardvessel@gmail.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, KP Singh <kpsingh@kernel.org>,
+ Tao Chen <chen.dylane@linux.dev>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Leon Hwang <leon.hwang@linux.dev>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Tobias Klauser <tklauser@distanz.ch>,
+ Eyal Birger <eyal.birger@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ Hao Luo <haoluo@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Kees Cook <kees@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com,
+ Jan Hendrik Farr <kernel@jfarr.cc>, Christian Brauner <brauner@kernel.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Willem de Bruijn
+ <willemb@google.com>, Jason Xing <kerneljasonxing@gmail.com>,
+ Paul Chaignon <paul.chaignon@gmail.com>,
+ Chen Ridong <chenridong@huaweicloud.com>, Lance Yang <lance.yang@linux.dev>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: geliang@kernel.org, baohua@kernel.org
+References: <cover.1779760876.git.zhuhui@kylinos.cn>
+ <20bdaa33cc19364f5f10208c79ef94fe43bd5ac1.1779760876.git.zhuhui@kylinos.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20bdaa33cc19364f5f10208c79ef94fe43bd5ac1.1779760876.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Emil,
 
-On Wed, May 27, 2026 at 6:16 AM, Emil Tsalapatis wrote:
-> The bot makes a similar point, but can you swap the order of the
-> patches? Patch 1/2 makes the invalid kfree more easily triggerable,
-> and patch 2/2 fixes it. Swapping them avoids the issue entirely.
 
-Thanks for the review.
+On 5/25/26 7:20 PM, Hui Zhu wrote:
+> From: Roman Gushchin <roman.gushchin@linux.dev>
+>
+> Introduce bpf_map__attach_struct_ops_opts(), an extended version of
+> bpf_map__attach_struct_ops(), which takes additional struct
+> bpf_struct_ops_opts argument.
+>
+> This allows to pass a target_fd argument and the BPF_F_CGROUP_FD flag
+> and attach the struct ops to a cgroup as a result.
+>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>   tools/lib/bpf/libbpf.c   | 20 +++++++++++++++++---
+>   tools/lib/bpf/libbpf.h   | 14 ++++++++++++++
+>   tools/lib/bpf/libbpf.map |  1 +
+>   3 files changed, 32 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 1e8688975d16..a1b54da1ded2 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -13683,11 +13683,18 @@ static int bpf_link__detach_struct_ops(struct bpf_link *link)
+>   	return close(link->fd);
+>   }
+>   
+> -struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+> +struct bpf_link *bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
+> +						 const struct bpf_struct_ops_opts *opts)
+>   {
+> +	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts);
+>   	struct bpf_link_struct_ops *link;
+> +	int err, fd, target_fd;
+>   	__u32 zero = 0;
+> -	int err, fd;
+> +
+> +	if (!OPTS_VALID(opts, bpf_struct_ops_opts)) {
+> +		pr_warn("map '%s': invalid opts\n", map->name);
+> +		return libbpf_err_ptr(-EINVAL);
+> +	}
+>   
+>   	if (!bpf_map__is_struct_ops(map)) {
+>   		pr_warn("map '%s': can't attach non-struct_ops map\n", map->name);
+> @@ -13724,7 +13731,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+>   		return &link->link;
+>   	}
+>   
+> -	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, NULL);
+> +	link_opts.flags = OPTS_GET(opts, flags, 0);
+> +	target_fd = OPTS_GET(opts, target_fd, 0);
+> +	fd = bpf_link_create(map->fd, target_fd, BPF_STRUCT_OPS, &link_opts);
+>   	if (fd < 0) {
+>   		free(link);
+>   		return libbpf_err_ptr(fd);
+> @@ -13736,6 +13745,11 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+>   	return &link->link;
+>   }
+>   
+> +struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+> +{
+> +	return bpf_map__attach_struct_ops_opts(map, NULL);
+> +}
+> +
+>   /*
+>    * Swap the back struct_ops of a link with a new struct_ops map.
+>    */
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index bba4e8464396..18af178547ad 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -945,6 +945,20 @@ bpf_program__attach_cgroup_opts(const struct bpf_program *prog, int cgroup_fd,
+>   struct bpf_map;
+>   
+>   LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
+> +
+> +struct bpf_struct_ops_opts {
+> +	/* size of this struct, for forward/backward compatibility */
+> +	size_t sz;
+> +	__u32 flags;
+> +	__u32 target_fd;
+> +	__u64 expected_revision;
+> +	size_t :0;
+> +};
+> +#define bpf_struct_ops_opts__last_field expected_revision
+> +
+> +LIBBPF_API struct bpf_link *
+> +bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
+> +				const struct bpf_struct_ops_opts *opts);
+>   LIBBPF_API int bpf_link__update_map(struct bpf_link *link, const struct bpf_map *map);
+>   
+>   struct bpf_iter_attach_opts {
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index dfed8d60af05..6105619b5ecf 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -454,6 +454,7 @@ LIBBPF_1.7.0 {
+>   		bpf_prog_assoc_struct_ops;
+>   		bpf_program__assoc_struct_ops;
+>   		btf__permute;
+> +		bpf_map__attach_struct_ops_opts;
 
-I will address these points in the v2 patch series by taking the following
-actions:
-1. Reorder the original patch series.
-2. Fix the potential out-of-bounds reads reported by the Sashiko AI review
-   in an additional third patch.
+Function bpf_map__attach_struct_ops_opts should be in
+LIBBPF_1.8.0.
 
-I will send out the v2 series soon.
+>   } LIBBPF_1.6.0;
+>   
+>   LIBBPF_1.8.0 {
 
-Best regards,
-Dawei
