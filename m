@@ -1,185 +1,109 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124D03563DD
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291F03783AF;
+	Wed, 27 May 2026 09:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779874305; cv=none; b=uuXueylhbDEFYFl4W12cfejLYKd1jQoScUqW5uTZccYhqtogLCt+2qWOQx95Pdj68YsPqRhhXwtr6hdxHgtdro+3FxYUbM3GFfuKu6neJ+UNp4XsZegZnmQUqhwoVkrCQixbUlB93Zop7liLXbBKyDXUx6V06CRoj7isbaGFy+0=
+	t=1779874712; cv=none; b=MysC2jQJ34MBzE3FJu6CCeH8wYY4scxPJr6HloU4yLEUIxSuEjeb7eTlrFbBklDPP9/Qr9+kR6/1yH4IqwUOXqIbukhclx4BGwHQjWdj8Fsa7rCVUTuQf34hb57OYEFqLxVcDNJJT3O8EHuRQoGdbqQCuUJuwGrMO2ddCQkhpH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779874305; c=relaxed/simple;
-	bh=Ucv7tb+rmrQP+8WizGjWiU6fScLBdmJqqU5mtPvlgP4=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=i6x4WOJHKc+GCOsB6kiSyRn5PoKQ6A2MUx7OI6zyQ2E4QIIsFaeJtZ/ixlrmVBkKRK9ZAquofNf8ZvriDt7BonEHQ04z9KnwLWTC8fViStLWvrZtXaeIf7d7utb534pRRthAzag/2xsLtLl90GkiEyzXCWOKfTU2MDlfLcKSlpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fsjTDaB0; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779874712; c=relaxed/simple;
+	bh=6qZqFcxUhtLffjqo4KyIWK1FZl81UuCOmaM2W18nhxo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n/Ny6VOrpjqO45RWryhtf3kP9dMhBFakx2Qo0LlP/frNjN1ZhqIu+SBphv3XgHS+VkXVzZraVWbRCzGHudpeCm2xUbGlpRh1W84dl2mwi+oAQJGg/e3wgbZkYokG0eCRDIvnkOycDMHZjyoNET28QUo871Du2dFOTH2QJxSu0T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fr7UQCUm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fsjTDaB0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fr7UQCUm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8211F000E9;
+	Wed, 27 May 2026 09:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779874706;
+	bh=5EPgL4FAe9Q1HpUW4tud1I2dVamBDFhNI1A3ygm0Wgw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fr7UQCUm5cprOrQGU5TbDClX+R7dEqRJjoGjS0k5gjydzKuG1ACoNftI/UA+F9ZYV
+	 kUAjPhUGoVpcUj8H4cLZ00oBUZK5oxIBiyuxLccRqsuZPv8L6vnbNO6e5AbFUsmP9O
+	 hRwUh+bWssxFUwT9RMOkWFh8U0sQ6pY/o6w/hkJRkSaESagT8LptRA8x3Y6kR6O2Z/
+	 BryXQg098y6OJ9ZI3SMWHBpn8H0MU7+hO95viQNGdondhORmhsxy0aY1XgSfmfWjVo
+	 LgyOBf7KaZ/RLeZLaociiRSH30fkZbJGbXxZVcFCRxRM/JvjIbfEYFdTcCXGWYVypC
+	 Mhd7NZs0NEfyQ==
+Message-ID: <f7f35169-f77d-4678-8797-a2ad00d89e6c@kernel.org>
+Date: Wed, 27 May 2026 11:38:21 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779874291;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cuHmtgVXBwRM6gWFejLSgCD1TBA09WsjOdpw2obbiq8=;
-	b=fsjTDaB0b5qte/WIAecQkAPIKuw6nVsSpbTIf+6BctJmOUjYfsumfoQYf78vDzLMK/tLkg
-	sYJMZhqLPfJv6F3AW/vyoB54xZhJCtm5zSdmguKpEea7cU/8I/fEoI2pbaMG2IUuW4Eml/
-	Q0UQQ2PfILGhwbSHJD8pIjDYJGnG6cI=
-Date: Wed, 27 May 2026 09:31:25 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "teawater" <hui.zhu@linux.dev>
-Message-ID: <7f440116b23fba1e20fe70fda502ad66f7dbf158@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH bpf-next v7 00/11] mm: BPF struct_ops for dynamic
- memory protection and async reclaim
-To: "Usama Arif" <usama.arif@linux.dev>
-Cc: "Usama Arif" <usama.arif@linux.dev>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Michal
- Hocko" <mhocko@kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Muchun Song"
- <muchun.song@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
- davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
- Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
- Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
- "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
- <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
- Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
- <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Jeff Xu"
- <jeffxu@chromium.org>, mkoutny@suse.com, "Jan Hendrik Farr"
- <kernel@jfarr.cc>, "Christian Brauner" <brauner@kernel.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Brian Gerst" <brgerst@gmail.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>, "Willem de Bruijn"
- <willemb@google.com>, "Jason Xing" <kerneljasonxing@gmail.com>, "Paul
- Chaignon" <paul.chaignon@gmail.com>, "Chen Ridong"
- <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
- "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- geliang@kernel.org, baohua@kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
-In-Reply-To: <20260526134115.816081-1-usama.arif@linux.dev>
-References: <20260526134115.816081-1-usama.arif@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20260527070239.2252948-1-hch@lst.de>
+ <20260527070239.2252948-2-hch@lst.de>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
->=20
->=20On Tue, 26 May 2026 10:20:00 +0800 Hui Zhu <hui.zhu@linux.dev> wrote:
->=20
->=20>=20
->=20> From: Hui Zhu <zhuhui@kylinos.cn>
-> >=20=20
->=20>  Overview:
-> >  This series introduces BPF struct_ops support for the memory control=
-ler,
-> >  enabling userspace BPF programs to implement custom, dynamic memory
-> >  management policies per cgroup. The feature allows BPF programs to h=
-ook
-> >  into the core reclaim and charge paths without requiring kernel
-> >  modifications, providing a flexible alternative to static knobs such=
- as
-> >  memory.low and memory.min.
-> >=20=20
->=20>  The series enables two complementary use cases.
-> >=20=20
-...
-...
-...
->=20>=20=20
->=20>  Asynchronous proactive reclaim: the memcg_charged and memcg_unchar=
-ged
-> >  hooks, combined with the BPF workqueue mechanism and the new
-> >  bpf_try_to_free_mem_cgroup_pages() kfunc, enable BPF programs to per=
-form
-> >  proactive background reclaim without blocking the charge path. The
-> >  pattern works as follows: the memcg_charged callback tracks accumula=
-ted
-> >  memory usage; when usage crosses a configurable threshold, it enqueu=
-es an
-> >  asynchronous work item via bpf_wq_start() and returns immediately wi=
-thout
-> >  throttling the charging task. The workqueue callback then invokes
-> >  bpf_try_to_free_mem_cgroup_pages() to reclaim pages from the target
-> >  cgroup; if usage remains elevated after reclaim, the callback re-enq=
-ueues
-> >  itself to continue. This allows a BPF program to keep a cgroup's
-> >  footprint below its hard limit (memory.max) entirely in the backgrou=
-nd,
-> >  avoiding the OOM killer or direct-reclaim stalls that would otherwis=
-e
-> >  occur. The selftest for this feature (patch 10/11) validates the
-> >  mechanism concretely: a workload that writes and mmaps a 64 MB file =
-inside
-> >  a 32 MB cgroup reliably triggers memory.events "max" events without =
-BPF;
-> >  with the async reclaim program attached, the "max" counter does not
-> >  increase at all across the same workload.
-> >=20
->=20Hi Hui,
->=20
->=20Thanks for the series.
-> Would it not be simpler to just have another memcg knob, something like
-> memory.high_async.
-> When memory usage > memory.high_async, queue a per-memcg work item that=
- calls
-> try_to_free_mem_cgroup_pages() until usage drops back below some thresh=
-old.
-> I am not sure I see what programability aspect from bpf you need here.
->=20
->=20Thanks
+On 5/27/26 09:02, Christoph Hellwig wrote:
+> The kmem_cache_alloc_bulk return value is weird.  It returns the number
+> of allocated objects, but that must always be 0 or the requested number
+> based on the implementations and the handling in the callers, but that
+> assumption is not actually documented anywhere, which confuses automated
+> review tools.
+> 
+> Fix this by returning a bool if the allocation succeeded and adding a
+> kerneldoc comment explaining the API.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Hi Usama,
+Would 0 / -ENOMEM be more like what people would expect? I guess both that
+and bool are better than the current API.
 
-That's a good question.
-
-By introducing a new BPF kfunc bpf_try_to_free_mem_cgroup_pages,
-a BPF program can flexibly control when to start and stop async
-reclaim, rather than being constrained to trigger and stop based
-solely on memcg usage or one or two fixed events, as with
-traditional proactive reclaim interfaces.
-
-For example, async reclaim could be triggered based on PSI, or
-on the number of page faults, or even on a combination of
-multiple events working together to decide both when to start
-and when to stop async reclaim.
-
-That is the motivation behind adding the BPF kfunc
-bpf_try_to_free_mem_cgroup_pages in this patch set.
-
-I admit the cover letter did not explain this well enough, and
-the example code does not demonstrate this use case either. I
-will address both in the next version.
-
-Best,
-Hui
-
->=20
->=20>=20
->=20> 08/11 selftests/bpf: Add tests for memcg_bpf_ops
-> >  Adds prog_tests/memcg_ops.c covering three scenarios:
-> >  memcg_charged-only throttling, below_low + memcg_charged
-> >  interaction, and below_min + memcg_charged interaction. A
-> >  tracepoint on memcg:count_memcg_events (PGFAULT) is used to
-> >  detect memory pressure and trigger hooks accordingly.
-...
-...
-...
-> >  --=20
->=20>  2.43.0
-> >
->
