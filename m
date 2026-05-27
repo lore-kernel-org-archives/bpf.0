@@ -1,166 +1,144 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830A73E63AE
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F2C3C2B84
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779875834; cv=none; b=E4BeGqBD/VripAwI5ivZKqEWnSJyiNi45WayvwKGPwbmm1YIYdxcwmZjDD6zYvNpbLXRIkziU1rd8BVUmzqXllBGiVaI1sCTO+n02Uy0+5m/UWnAtxGD/ErD2GO2srPYLjgmByxALxHoR8YSQucHVAHdd1/O/jcBSysKkgrbCO4=
+	t=1779875843; cv=none; b=KnDQiIe7vSQbWge5lh0a1N+0NUZmOnHLxiZ3bM+K6MOT+b2m3wgQGD6aYa6XgavLhLMaq+g24wvonUq5t5/TqgmsfN50omkblwtXWQTwfd6ufVIFDHtOAHCPGyOTT+V+MSIjHCKe98lTbpRVh3O4WtaSI+4Z9JhQXY5ZrH4pAlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779875834; c=relaxed/simple;
-	bh=Tuai1Axfjkxum1GztuUcohIb7OIi67bbFU7uLGV2pY8=;
+	s=arc-20240116; t=1779875843; c=relaxed/simple;
+	bh=++tgT2Sz0TpWfiXXAm/QF+e/DOGLWBskiZrFnEqVsSE=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jwWtFC//jos9lqHWzRuf/65oErfEoZgMdlgFyv5bzA9P4wfGR2QZ2i1T8UORWHCxAS9blIzAdUztt2aF9jA3l2hCvrjro6jsXfVoVRG+AtspyWk9UTSixdegr1xNTWLcryMbbg9p5ceixY8kycXaxNHSev6tQbmjVh5935bCLeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kTjMV1y1; arc=none smtp.client-ip=209.85.128.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=tOFMBCnAp7QHeWPB/uMN2cMtn3GpSTAFT0mgScNIv7FBMW9/XcEnr5/jwmGZjticufoYfZslKH2Fp2sMz+kn/AgYDEaxDdcge6Tce3onNiH1GomiQBxVwxy7+hGcR8i2IF6kApPHie1C+1VM7969+kfAjVLsgM5CsYhYijpuxjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ef2ISrmG; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kTjMV1y1"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4904127c32cso33425865e9.2
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 02:57:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ef2ISrmG"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44e1860558fso7296843f8f.0
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 02:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779875831; x=1780480631; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XuaoXI5CN/vWA5ZvTeay7KhFRspk+qd3be2g4mt/zXc=;
-        b=kTjMV1y1zqPnyl6QajXeHnlLCnLph+IccY66NKXzp9VWpwtkabUzQA5sbthZHTE/T4
-         exsAxdpphFY1OOn7qaNH5tYADUKlYO7YkvMg2Pe6XyhuwCivGyv66QPcBR5mhXEvJjyD
-         Snug2jFR6E/cCSPsKMiKQkAxIipfwVc40D1rUmHekng9kytALn+p+IZwv4LOboYKeH1Z
-         xq4MB9x68YJe9RhqOsZsOSCnxrQeNdq9kSTUTmhHdfzULRlZmpS2sWm42XP5Z9xgXfNn
-         nPmgUIZ2ua8rlf9lH6xHpUrlf2P/TdcdWVjdk6cQYk+jDg2ETwzDXOeFJZ4sSy1qLh/8
-         rZ3g==
+        d=gmail.com; s=20251104; t=1779875840; x=1780480640; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FC7ZL5PTAZWI+jfnZHPihHv7ZDUJ8Gkzr3+eQaCgs2w=;
+        b=ef2ISrmGJTwyC0W2lJUFlZveNzYTKzrz2iwdHCMOozi855p8TCpAlp6oa8X6psQsu3
+         nrxHsySRjFC47aDvLtq7rrveebF+ZhJb817AZpmSR2J6xNxkK1GpRKEOz0thLxbu1lyb
+         HRyNeF2dICah85TGm1/AKVI7XTmihxgyUxLJpuT0Ca+LzqAcV7RCJJmin8b10/T4XCrw
+         SxfvNj5Pr2IW55GxobTSGAlhvEhpi/Wp/NXutHWSrignfDxkLUUmcukO3ESpmfa5LP5W
+         V8pDMXSenxGorPC0ReT7Xf+zATyOsn0hM2YQ0Yzb978iQIkyOiR0qIJaHsS7FitL0GY9
+         cXVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779875831; x=1780480631;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XuaoXI5CN/vWA5ZvTeay7KhFRspk+qd3be2g4mt/zXc=;
-        b=nLWQCNjmeO0AHJ00WbNKq5znZs9vyWge+BlIWkRnD73mGr/MLyizfO5hvgL8/jNtM7
-         MhZl5xhC38DNypEVGvWw/Wkv3Vp0YM3Vid9V1NVf4DnHJGyCu3HZ8x88p1twygnfj+bo
-         PnQsoWxUVXesM/ABHM0wusW9QILdBLV5yIkZS13uKPcDEEudPmU1UlrLHr4huGCIi8gh
-         dyyRdwcwbOseAsKgTGWqqlLfXT46JhTbrQASdwuazdrfvn8L4OVhXiUpAcWl4JiLAYIt
-         M494ucYaEQGgdoeu3wkioh9GNr23OWNx/Evf+G00qSX2/gmWoS5nDWKuyC8rhBsYTQk8
-         abQA==
-X-Forwarded-Encrypted: i=1; AFNElJ/HzOlYfY8rSyzr245JK+ulIOu/iTC+EWaSNJHlvPbpdwnBQuDbohnFPL74f7P8KjGxjz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi+wgE4H1AcrlraCHmVaIyMBjZrTIVxKJF9ClYHx0M1y6X5KO5
-	J1uaGt6sj5821z9OWPs7oLQszOD/+YJKFEOSwyJWgre8rdoJI101Wemy
-X-Gm-Gg: Acq92OE3GnohpDzgiFiFpp+lEmjL561ddezXKC1LPi3hgwP70GBecHjoTjKRltSJf5N
-	iKzcvj8Shlvg0JaQygp0V++WEa/WSHHvCyYgOAD8CWAQACcm1tGp4K6ULo8Rexl3hRtiwVi6jjv
-	9VTe7GzYECubwoPFgse9aFE6bpUhkg6oghmctF9pVx3jyUicwROoRAEzDGRVvYVM1sQQnZwikkz
-	lIkSDM5Kos7fZ3a2TkxIPIldJUDsqreP9cAe3lzDprHt9SlCUObNeI+0ZLk7zWixL1EtjuIp+nT
-	5l3qzqO30xz8kBgs43dQlx4SllFDZW5+699Iew34+nIA8dQ++Mdq+Q1IWNnr+cFQdUZnxTO8xL5
-	EtVOZjV3tMNvkqrukz5Bspa3JgJFc+KmiKJvS4v7c3HukXJ2NE2uHgVSx17MmeQ0G1ex5/17QEd
-	ik2RG9gzMZgVymDUCZVF/QE6bFQw==
-X-Received: by 2002:a05:600c:4688:b0:490:4224:e0a2 with SMTP id 5b1f17b1804b1-49042ae265bmr385107545e9.33.1779875830564;
-        Wed, 27 May 2026 02:57:10 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779875840; x=1780480640;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FC7ZL5PTAZWI+jfnZHPihHv7ZDUJ8Gkzr3+eQaCgs2w=;
+        b=tVbyLkZ6mAPOSIn4w8F+XljBGyEUcfXYmbsGWtBB+kbJh8/z0c1lXxvI0JTh7ATnQS
+         /CVS/x7V6+iCVq/ijtZqo0f8AdSW7eVCH+wEUJ6FxapiYLwnrlZVdTTn6RnlyuBM8iXX
+         X+b8MoS8c1OXu4LzIAy3YNVrvUsOFe0Y/NHPqaNO5bAgDbFliWl6N+1Z3To7BMHmDIKv
+         FfAX3L4p3WDnIBQKyFrbYerI7/hlg0EMdOOYHsGBJdNZPbilWfGTe2X2IcVGkD4tIxEX
+         lHJs4h6iJdFV3BBdljKOnu7lU/WTKYr8fKJJsXKsbRrbCwwNQ5OUy2p5+8o5t/NKiMa7
+         QpFQ==
+X-Gm-Message-State: AOJu0YzEPpykRsXOJDc1CoofDTSPFvq6hZaXcI6GGo6dRiqnAOP64bmN
+	HtLCMh+QjUeBG0p2qFbmynrmNeUWe2Fk1SSLrFXU4ePopkzFk05qgF5cdXDdyQ==
+X-Gm-Gg: Acq92OE2wpv6HbTRqRjL44y2eQQgLWe7zBLa/KgRHPNun6ll7zywdSEsD1H54Dd+i8k
+	0KiRKnhnKV975DUGcs8qkHSWBlj/9PN1xlXZCwdeP7Kt6N6p6QsR+R9xat3Zkp/8aKdcSB/ne3N
+	2SUtYwy9YA8Fy+1uYlt3i+Oud5pzHBLkpu1lM49mzJbcaWXnWYnmSnX/zMci4Rc66927LkF37nz
+	wTtNo7mPAw8qcoIUVwhO7XglRk9ka1Z7PMvnM9c90f4x1QFUX5uLOYPHvfOK8E352AZAHAeBmCi
+	xZIhuO4aEkwDJ5BTojL9O5OwmDHqA1FRJS2vPH7CNSeoB5arxQyQyF6+G+VXqllvUMZgAwICd1F
+	69ONXT04f34bJM0X0Ah43AdSZUFkdz7b+XyFkGO4tzq+KDkFk6ofRrVmSqDU43jsmbJT+3bytjy
+	CGuqRnpo1E5dnYkHUUf9ROkREFGA==
+X-Received: by 2002:a5d:64e4:0:b0:45e:779a:302c with SMTP id ffacd0b85a97d-45eb38d297amr39611266f8f.29.1779875839707;
+        Wed, 27 May 2026 02:57:19 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb54a6cdsm4845867f8f.2.2026.05.27.02.57.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb4bae01sm4843151f8f.0.2026.05.27.02.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 02:57:10 -0700 (PDT)
+        Wed, 27 May 2026 02:57:19 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 27 May 2026 11:57:08 +0200
-To: bot+bpf-ci@kernel.org
-Cc: oleg@redhat.com, peterz@infradead.org, mingo@kernel.org,
-	mhiramat@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCHv4 04/13] uprobes/x86: Unmap trampoline vma object in case
- it's unused
-Message-ID: <aha_9GF7AYzVRSsm@krava>
-References: <20260526205840.173790-5-jolsa@kernel.org>
- <addf3472e04583c864492a9343420c1e0356b324b4a84a71145dd759d8ec367d@mail.kernel.org>
+Date: Wed, 27 May 2026 11:57:17 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv4 06/13] libbpf: Change has_nop_combo to work on top of
+ nop10
+Message-ID: <aha__UZNxWCT2ZFj@krava>
+References: <20260526205840.173790-7-jolsa@kernel.org>
+ <20260526212840.1053C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <addf3472e04583c864492a9343420c1e0356b324b4a84a71145dd759d8ec367d@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260526212840.1053C1F000E9@smtp.kernel.org>
 
-On Tue, May 26, 2026 at 09:46:49PM +0000, bot+bpf-ci@kernel.org wrote:
-> > commit 68883203f0583fb1a8d79536f5c8945542974abd
-> > Author: Jiri Olsa <jolsa@kernel.org>
-> > Date:   Tue May 26 22:58:31 2026 +0200
-> >
-> >     uprobes/x86: Unmap trampoline vma object in case it's unused
-> >
-> >     In case the optimization fails, we leak new-ly created trampoline
-> >     vma mapping (in case we just created it), let's unmap it.
-> >
-> >     Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> >     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On Tue, May 26, 2026 at 09:28:39PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] The patch invalidly replaces `nop5` optimization support with `nop10`, which cannot be optimized by the kernel, breaks backward compatibility for existing binaries, and causes selftest failures.
+> --
 > 
-> Should this Fixes: tag point to a9fe6f54968c instead? The vma leak bug
-> was actually introduced by commit a9fe6f54968c ("uprobes/x86: Remove
-> struct uprobe_trampoline object"), not ba2bfc97b462. Commit a9fe6f54968c
-> removed the destroy_uprobe_trampoline() cleanup call, and its commit
-> message explicitly states: "The new vma leak is fixed in following
-> change."
-
-there's no a9fe6f54968c hash yet
-
+> commit df13b5dc7675e7ea56d8d1775d22295b93e92ab0
+> Author: Jiri Olsa <jolsa@kernel.org>
 > 
-> Suggested: Fixes: a9fe6f54968c ("uprobes/x86: Remove struct
-> uprobe_trampoline object")
+> libbpf: Change has_nop_combo to work on top of nop10
 > 
-> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > index c8af41ed681a..af5af7d67999 100644
-> > --- a/arch/x86/kernel/uprobes.c
-> > +++ b/arch/x86/kernel/uprobes.c
-> > @@ -677,11 +677,14 @@ static unsigned long find_nearest_trampoline(unsigned long vaddr)
-> >  	return high_tramp;
-> >  }
-> >
-> > -static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr)
-> > +static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr,
-> > +						    bool *new_mapping)
+> This commit updates the USDT nop combo detection to expect a 10-byte nop
+> instead of a 5-byte nop. It updates has_nop_combo() to match the new byte
+> sequence.
+> 
+> > diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> > index e3710933fd52a..484a4354e82ba 100644
+> > --- a/tools/lib/bpf/usdt.c
+> > +++ b/tools/lib/bpf/usdt.c
+> [ ... ]
+> > @@ -596,14 +596,14 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
+> >  #if defined(__x86_64__)
+> >  static bool has_nop_combo(int fd, long off)
 > >  {
-> >  	VMA_ITERATOR(vmi, mm, 0);
-> >  	struct vm_area_struct *vma;
-> >
-> > +	*new_mapping = false;
-> > +
-> >  	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
-> >  		return ERR_PTR(-EINVAL);
-> >
+> > -	unsigned char nop_combo[6] = {
+> > -		0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
+> > +	unsigned char nop_combo[11] = {
+> > +		0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00,
+> >  	};
+> > -	unsigned char buf[6];
+> > +	unsigned char buf[11];
+> >  
+> > -	if (pread(fd, buf, 6, off) != 6)
+> > +	if (pread(fd, buf, 11, off) != 11)
+> >  		return false;
+> > -	return memcmp(buf, nop_combo, 6) == 0;
+> > +	return memcmp(buf, nop_combo, 11) == 0;
+> >  }
 > 
-> Does this fix address the VMA leak scenario across fork chains? In v2,
-> sashiko-bot raised a concern about inherited-but-not-tracked VMAs:
+> [Severity: High]
+> Does replacing the 5-byte nop detection with a 10-byte nop detection break the
+> kernel's uprobe optimization logic?
 > 
-> https://lore.kernel.org/bpf/20260518114208.CE128C2BCF6@smtp.kernel.org/
-> 
-> When VM_DONTCOPY is removed, child processes inherit trampoline VMAs
-> but their tracking list (mm->uprobes_state.head_tramps) is empty. When
-> the child executes a uprobe, get_uprobe_trampoline() fails to find the
-> inherited VMA and creates a duplicate trampoline.
-> 
-> Child fork:
->   dup_mmap()
->     copies trampoline VMA to child
->   mm_init_uprobes_state()
->     initializes head_tramps as empty (parent's state not copied)
-> 
-> Child executes uprobe:
->   arch_uprobe_optimize()
->     get_uprobe_trampoline()
->       head_tramps is empty, fails to find inherited VMA
->       create_uprobe_trampoline()
->         find_nearest_trampoline() finds new unmapped area
->         installs second duplicate trampoline VMA
-> 
-> In a deep fork chain, each generation inherits all previous VMAs, has an
-> empty head_tramps list, and creates a new VMA. Can this cause linear
-> accumulation of redundant VMAs, eventually exhausting vm.max_map_count?
-> 
-> While this patch addresses unmapping failed optimization attempts, it
-> does not prevent the inherited-but-not-tracked VMA leak scenario in fork
-> chains.
+> Looking at the kernel's can_optimize() in arch/x86/kernel/uprobes.c, it
+> strictly requires the replaced instruction to be exactly 5 bytes. A 10-byte
+> instruction fails this length check, causing the kernel to silently abort
+> optimization and fall back to an unoptimized int3 probe.
 
-there's not head_tramps list anymore, was removed by earlier:
-      uprobes/x86: Remove struct uprobe_trampoline object
+this seems wrong, the related kernel change is part of the patchset
 
 jirka
+
+> 
+> Additionally, replacing this entirely rather than supplementing it means
+> libbpf no longer recognizes the nop5 combo in existing binaries. This causes
+> existing USDTs to fall back to unoptimized probes and breaks BPF selftests
+> that expect the +1 offset applied.
+> 
+> Finally, if the kernel ever updated can_optimize() to allow 10-byte nops,
+> sys_uprobe() currently hardcodes a return adjustment of regs->ip += 5.
+> Returning +5 bytes into a 10-byte instruction would resume execution in the
+> middle of the nop sequence, which could cause an application crash.
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260526205840.173790-7-jolsa@kernel.org?part=1
