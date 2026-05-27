@@ -1,193 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B393C4B7A
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A343914EB
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779866842; cv=none; b=RHhJPjrxOBJgaVde4EBYdu0Dl3eUjOLI+XjoK+DT7U0crI1I8Xr3thNzpmeg2U6+jCHza+OGjYcUEMt2szgzOyBZiLxrnq7nAHEcljtNvqRxf7vCG0l6XncMy2qZwO8CeHdqiCHPoearqWkBjgd+V8hALB0pa6ZwiB5cL808m2o=
+	t=1779867007; cv=none; b=WoDV3GgNmmzfzXX6jxPs5l3VOmp7s68/72JhcT1UScEakhIxtQE5OIMWNydjL2RJtgEB+K5YpvEMLfrkdSAu0PssK2yJp3Zc42ICPmHRA+qFk4Ac2uUxuXlO4BAgL/HiY71wbPZzLrWtCS1GDb1ZlkJOX5yymvbMOZkjBgMUQeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779866842; c=relaxed/simple;
-	bh=jxry32N3qfZTWmofe3d4aeMYVKztIT/G8JGSIUjlfDs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AlB+B3jjJ7u2jjOFYuN1Ra7Eq0KPbny667PfkJ1RjRBZU83H+aWd9bt8F4CymcLW9+bFqUod5fszyASjzn/g0tphtLFeHizessCQU+/GC4GQC9Llj7rtW1buTnQ8tr6wpZRvwoBaDuoCZTeSf2Sl14iEAiVjGf2MTtMqU5anX5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGBvMy4I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779867007; c=relaxed/simple;
+	bh=JekZNHK27OV2qfw8tweEz4qRmOqn5klLOdLH6TbWIvQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IEqAxgyfgW/WOtd0T2pzbiJN2usebc4KsgAnTA6ZwywQWsHn9TMbAU5Z02TIkR0eZfcV1RAUpi8cJf3c117HAzllBT8aRPhWD3ABfLVdPlJ7oCng06EkNAzqHTiZ32AGcML4S1Ug3PLeAn5lSGpe0+E8CW0vgJxrumWZ56KaCRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=itCf3/gI; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGBvMy4I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A141F000E9;
-	Wed, 27 May 2026 07:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779866838;
-	bh=PAk2JZmvpxLvXiltUAVIkdvdQvZqrqshVJxxA0CMUHs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BGBvMy4I87nL3qPQN8j4NLb0zRDzxhXfQCC3yGW0dHy8jqxisOJpr7bhBcrM31Ei7
-	 9PWHwlg+qmj0TYroxLnUEegj3MPV2Hze+1xUk3nuahFLkzV+oyuXeoOWJDryRcqfHJ
-	 R/qOYtGrdaLBABNrSFcT6tctu2UNCgIjVcXNmAzSbaSasva8JW5HiRY87Zjzsr3M0f
-	 AFnUdPOuEwQPiQqKPfiuzZxhzeNr//NiEtCcWPZxDj87xdoPqtoFsqH6YWSS+9uzT1
-	 iZ8VrDvQNho34KcYBOh5Jk1p36vIUYyV7pR0Z8KdbCdkrQXsnfWDcW/6TZRZyehhN8
-	 4hyPH6p5Puy0Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christoph Hellwig" <hch@lst.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
-References: <20260527070239.2252948-2-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 07:27:17 +0000
-Message-Id: <20260527072718.42A141F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="itCf3/gI"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2babfd18435so51257185ad.1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779867005; x=1780471805; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=71d3Zbk+EkoVNmUawh4eU+wTRPiNKxzex4RZfCeYnBg=;
+        b=itCf3/gIXjAQ4jQTW3gb+YxTrxClqBt9fGSaj0e14AM87C5dK/M6rinCYw6FcG9YCk
+         OV95PXZloJIGxIArNMCKAZ4W6Al0ciRF/f/0w1RgYnMlUarXLwnoIDWePIL9hJn+BQMP
+         bg8tD4Xnc/P6/h5BeT+DbQC7gOC8tTkNz25F2v/Mgg26BpaERWV4quQnFMUnprNle4qw
+         WOEXgXWiSi8ofk11m9tS4YsYv2KI8ihV+c/fU+xrnXweFjYXMXKF/j3JD82OBD9ZT5z1
+         6bmzYgLEaqvGuBAfG7tmLcxrcQ0PS2cbKNT47CGuihG5XMpMneX4s5BlEUU6L69g+Lvp
+         LIWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779867005; x=1780471805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=71d3Zbk+EkoVNmUawh4eU+wTRPiNKxzex4RZfCeYnBg=;
+        b=ILrPvfyW4tgy+VASRBw2ZppLmdEzc04T+Vpd5lV2/mgrbEi6PIoYCl07kifxnAGrQd
+         UeOl8l7NMd/03RxD3o85erqOxkopW+e6OFS5C391kPezhOD5m5Psyh2LRjXNvmYbqhoC
+         lNb2N3Q5JCJUvVAuQswaZEdKPwhAvHbz6FOs6AmdVcxW/FD3955XCACDFSY5aHqmjZGT
+         7vxG0Ho3OHqkOeYHqWuyc3mD//xwKZJkFlidMMau6P2Gu4eCcVWK7MrOZAW2f6/qARI6
+         QMH3I4aidbX4E5AEXVZwH8uEM0sbYMftHcEhLMbGDUUxPknsRWtmvoR6ZhBBYNjrwVAb
+         Afww==
+X-Gm-Message-State: AOJu0YyY767U5hyp1CaTPLwJN1uvtEvwbVysEJ+52FZl2VMdI6fwXZp7
+	5q6ze5qKS9vT4rdVCXeHVGFShv/4ln04ZyMqobvCHnVNjtFtwpSXysX3RNDOF2Qu
+X-Gm-Gg: Acq92OEteVDA8LDfrNdYQet9kA3uBTCOWnfgPfZUc7WZ0ePBf2I8U8Pm2h3wWJ8Qcgp
+	4Q51CNQ1xhhuAM7fRZeyOkW1PoX0pC0uwmRpiJyKMRGQTHZj/4/D0Q9cvSBkQ/xxFWEwSo45sxb
+	qCw31KPZYLZmpFrM7Kq4MeVv2G728q6G/QWPAGzTk6xQo2VWfNZ7fU+HPodCDOiTPDKY+m9QUp/
+	bhwivyulJoB5VI0iY1dqBVr0rz0rK8fG3oOfwKrhoNkLQ/KVl/BWp6MbXajDI87iLwMenjRbAv4
+	zNNjFuP8qq0NwM+kTHBe3ddBpugGKAAKa4DHEGNZW4uxGlM6gVUiFvyq6n/PC9XaZS8fg2oxpdy
+	qlXWeZ/Gb+k2FlwKsNthtdqjanCRl9v42H+k78BCkuMHmXA/Dc2oq3JLxp8y8CdrZAIBN8BVGwn
+	5dJghItMmVJBlgqrdNGNxsyVlQVG+DOMzpLBkSvRxp
+X-Received: by 2002:a17:903:46cb:b0:2bc:f3c5:ff0a with SMTP id d9443c01a7336-2beb060dda9mr234719925ad.30.1779867005283;
+        Wed, 27 May 2026 00:30:05 -0700 (PDT)
+Received: from badger ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 00:30:04 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH RFC bpf-next v3 0/6] bpf: better error reporting when verifier hits 1M instructions limit
+Date: Wed, 27 May 2026 00:29:48 -0700
+Message-ID: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260525-better-1m-reporting-1d795a21cf72
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] The patch fails to set the reserved page tables count upon a succe=
-ssful bulk allocation in `panthor_vm_prepare_map_op_ctx()`, leaving it at 0.
-- [High] `kmem_cache_alloc_bulk_noprof` incorrectly returns `false` (failur=
-e) when requested to allocate 0 objects, causing false-positive allocation =
-failures.
-- [Medium] The patch removes the assignment to `num` in `do_kmem_cache_size=
-_bulk()`, causing an uninitialized variable to be passed to `kmem_cache_fre=
-e_bulk()`.
-- [Low] The patch leaves an undeclared identifier `ret` in `do_kmem_cache_s=
-ize()`, causing a build failure.
---
+When the BPF verifier exceeds the 1M instruction budget, the current
+error output shows a random execution trace that happens to be active
+at the moment, which is not very helpful for debugging.
 
-commit d2aac103779e2c77c7fc949b832a9d8ab2aaa90f
-Author: Christoph Hellwig <hch@lst.de>
+This series improves the error report using a profiler-inspired
+approach: collect and count "callchain" stack traces that the verifier
+visits during program validation, and report the top 3 hottest traces
+when the budget is exhausted. To minimize performance an memory impact
+of such profiling, only collect samples when verifier visits loop
+headers, iterator next, may_goto and callback-calling instructions.
 
-mm/slab: improve kmem_cache_alloc_bulk
+For callchains ending at iterator next, may_goto, or callback-calling
+instructions, identify which registers or stack slots most frequently
+differ between cached and current states.
 
-This patch changes the return type of kmem_cache_alloc_bulk from an int
-to a bool to clearly indicate whether the allocation succeeded or failed.
-It updates the slab implementation, tests, and callers to match the new
-behavior.
+Here is an example of the report for scx lavd_dispatch (an old
+version), with verifier limited to 200K instructions to trigger the
+error:
 
-> diff --git a/drivers/gpu/drm/panthor/panthor_mmu.c b/drivers/gpu/drm/pant=
-hor/panthor_mmu.c
-> index 75d98dad7b1dd..b80d7e1d51237 100644
-> --- a/drivers/gpu/drm/panthor/panthor_mmu.c
-> +++ b/drivers/gpu/drm/panthor/panthor_mmu.c
-> @@ -1274,10 +1274,9 @@ static int panthor_vm_prepare_map_op_ctx(struct pa=
-nthor_vm_op_ctx *op_ctx,
->  		goto err_cleanup;
->  	}
-> =20
-> -	ret =3D kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, pt_count,
-> -				    op_ctx->rsvd_page_tables.pages);
-> -	op_ctx->rsvd_page_tables.count =3D ret;
-> -	if (ret !=3D pt_count) {
-> +	if (!kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, pt_count,
-> +			op_ctx->rsvd_page_tables.pages)) {
-> +		op_ctx->rsvd_page_tables.count =3D 0;
->  		ret =3D -ENOMEM;
->  		goto err_cleanup;
->  	}
+  lavd_dispatch():
+    ; void BPF_STRUCT_OPS(lavd_dispatch, s32 cpu, struct task_struct *prev) @ main.bpf.c:889
+    ... disassembly ...
 
-[Severity: High]
-Does this omit setting op_ctx->rsvd_page_tables.count to pt_count on succes=
-s?
-Since op_ctx is initialized via memset previously, the count will remain 0,
-which could lead to memory leaks when these page tables are consumed or
-cleaned up later.
+  consume_task():
+    ; bool consume_task(u64 cpu_dsq_id, u64 cpdom_dsq_id) @ balance.bpf.c:410
+    ... disassembly ...
 
-[ ... ]
+  #1 most visited simulated stacktrace (visited 1807 times):
+    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
+    consume_task/2715 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:316)
 
-> diff --git a/lib/test_meminit.c b/lib/test_meminit.c
-> index d028a6552cd61..8f178fdf80ff1 100644
-> --- a/lib/test_meminit.c
-> +++ b/lib/test_meminit.c
-> @@ -229,14 +229,12 @@ static int __init do_kmem_cache_size(size_t size, b=
-ool want_ctor,
->  	for (iter =3D 0; iter < 10; iter++) {
->  		/* Do a test of bulk allocations */
->  		if (!want_rcu && !want_ctor) {
-> -			int ret;
-> -
-> -			ret =3D kmem_cache_alloc_bulk(c, alloc_mask, BULK_SIZE, bulk_array);
-> -			if (!ret) {
-> +			if (!kmem_cache_alloc_bulk(c, alloc_mask, BULK_SIZE,
-> +					bulk_array)) {
->  				fail =3D true;
->  			} else {
->  				int i;
-> -				for (i =3D 0; i < ret; i++)
-> +				for (i =3D 0; i < BULK_SIZE; i++)
->  					fail |=3D check_buf(bulk_array[i], size, want_ctor, want_rcu, want_=
-zero);
->  				kmem_cache_free_bulk(c, ret, bulk_array);
+  #2 most visited simulated stacktrace (visited 1682 times):
+    lavd_dispatch/124 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1107)
+    consume_task/2994 (.../scx/scheds/rust/scx_lavd/src/bpf/balance.bpf.c:386)
 
-[Severity: Low]
-Will this cause a compilation error? The local variable ret is removed from
-this scope, but it is still used in the kmem_cache_free_bulk() call above.
+  #3 most visited simulated stacktrace (visited 8 times):
+    lavd_dispatch/255 (.../scx/scheds/rust/scx_lavd/src/bpf/main.bpf.c:1022)
+      Most varying: R7 (frame 0)
 
->  			}
-> @@ -354,17 +352,18 @@ static int __init do_kmem_cache_size_bulk(int size,=
- int *total_failures)
-> =20
->  	c =3D kmem_cache_create("test_cache", size, size, 0, NULL);
->  	for (iter =3D 0; (iter < maxiter) && !fail; iter++) {
-> -		num =3D kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
-> -					    objects);
-> -		for (i =3D 0; i < num; i++) {
-> +		if (!kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
-> +				objects))
-> +			continue;
-> +
-> +		for (i =3D 0; i < ARRAY_SIZE(objects); i++) {
->  			bytes =3D count_nonzero_bytes(objects[i], size);
->  			if (bytes)
->  				fail =3D true;
->  			fill_with_garbage(objects[i], size);
->  		}
-> =20
-> -		if (num)
-> -			kmem_cache_free_bulk(c, num, objects);
-> +		kmem_cache_free_bulk(c, num, objects);
+  BPF program is too large. Processed 200001 insn
 
-[Severity: Medium]
-Is num uninitialized here? It's no longer assigned the result of the
-allocation call, so passing it to kmem_cache_free_bulk() might use
-indeterminate stack data and lead to memory corruption.
+Changelog:
+v2 -> v3 (bots):
+  - Compare leaf instruction index in callchain_matches_state().
+  - Use cmp_int() in stat_diff_cmp() to avoid overflow warnings.
+  - Add a comment in bpf_sample_state_diffs() on why it can't stale.
+  - Add cond_resched() call in bpf_compute_loops() to guard against
+    pathological inputs.
+v1 -> v2 (bots):
+  - Use kvfree() in bpf_compute_loops().
+  - Adjust fwd_edges_no_loop test case to avoid dead code elimination
+    converting 'if' to 'goto'.
+  - Use GFP_KERNEL_ACCOUNT for callchain entry allocation in
+    update_callchain_profile().
+  - Zero-initialize 'cc' in update_callchain_profile() to avoid
+    copying uninitialized stack memory to the heap.
+  - Use %td instead of %ld for ptrdiff_t format specifier in
+    print_callchain_entry() and disasm_subprog().
+  - Size printed_subs bitmap as BPF_MAX_SUBPROGS + 2 to account for
+    fake and exception subprograms.
+  - Fix bpf_sample_state_diffs() inner loop to iterate from head
+    instead of pos_i, avoiding container_of() on the dummy list head.
+  - Add DIFF_OTHER to distinguish states that differ because of idmap
+    or other inconsistencies.
 
->  	}
->  	kmem_cache_destroy(c);
->  	*total_failures +=3D fail;
+v1: https://lore.kernel.org/bpf/20260526-better-1m-reporting-v1-0-51e4f2c59780@gmail.com/T/
+v2: https://lore.kernel.org/bpf/20260526-better-1m-reporting-v2-0-e7ec61c45d41@gmail.com/T/
+---
+Eduard Zingerman (6):
+      bpf: move live registers and scc printout to a standalone function
+      bpf: compute loops hierarchy
+      selftests/bpf: test cases for loop hierarchy computation
+      bpf: report hot simulated callchains when 1M instructions limit is met
+      bpf: report register diff summary for hot callchains
+      selftests/bpf: test budget exhaustion profiling report
 
-[ ... ]
-
-> diff --git a/mm/slub.c b/mm/slub.c
-> index a2bf3756ca7d0..d9790e7c17f6c 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -7382,12 +7392,8 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache=
- *s, gfp_t flags, size_t size,
-> -int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size=
-_t size,
-> -				 void **p)
-> +bool kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags,
-> +		size_t size, void **p)
->  {
->  	unsigned int i =3D 0;
->  	void *kfence_obj;
-> =20
->  	if (!size)
-> -		return 0;
-> +		return false;
-
-[Severity: High]
-Does this incorrectly report an allocation failure when size is 0?
-Previously, callers interpreting the return value against size (ret !=3D si=
-ze)
-would treat 0 objects allocated for a request of 0 as a success. Returning
-false here contradicts the typical kernel behavior where allocating 0 items
-is a successful no-op, and might cause callers to incorrectly abort with
-an error.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527070239.2252=
-948-2-hch@lst.de?part=3D1
+ include/linux/bpf_verifier.h                       |  39 ++++
+ kernel/bpf/Makefile                                |   2 +-
+ kernel/bpf/fixups.c                                |   5 +
+ kernel/bpf/liveness.c                              |  22 +-
+ kernel/bpf/loops.c                                 | 196 +++++++++++++++++
+ kernel/bpf/states.c                                | 184 ++++++++++++++--
+ kernel/bpf/verifier.c                              | 233 +++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   4 +
+ .../selftests/bpf/progs/verifier_budget_report.c   | 175 ++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c      |   2 +-
+ .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
+ 11 files changed, 1050 insertions(+), 45 deletions(-)
+---
+base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
+change-id: 20260525-better-1m-reporting-1d795a21cf72
