@@ -1,62 +1,62 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B044C3C2B81
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87AC3BE623
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779867008; cv=none; b=XcqOmzjCh2FIFT670HhlY1aRzbGxyv/KumNCZbMCOBCy+iH6uf2QywYXid3YB8n5xuq0A1uZ9NkYKnUcl4RfIeTmfuypecf906d+LhEAsm0bYxukjysVGwsJ8JKoFAxRSpCCWpuGopgBtui+AzxFi5rFcoalo6FM6YMnKHXx+ho=
+	t=1779867009; cv=none; b=NjxDkifVbWBgl4Uo9HSxCfejpAwTODmBDo0ENChExIHAVGAsVSvs3/XofvDAqx/fJAlNWM1gOVrnp5UyBv9Xi636qeob7q7IGStGuyM6944lYNmCtST8ki+JtgMdzGRF0isla9PPHdxXo8Jb8YKcineKdcIyzJLnB87odhrJ30s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779867008; c=relaxed/simple;
-	bh=00LfnSRhQPc8NwCIz1Zo0P0wM1qahPv0VdmWV7pRIcQ=;
+	s=arc-20240116; t=1779867009; c=relaxed/simple;
+	bh=YWqc4woh/9dSrVNxJGRdB6aLU0ZbNj71WU5Cx6qRGY4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q7MOsTIxkQG/SQxYUMuPaPqJeTTSltn5vd17+J3kiEdJZgshovZNjAdkbtUKENJzjoUZA22maS2VrsuSIMBPkb8mKNeMplwoPG3ze5USlo3eBj5xqeHoIYgXd/CFI15izOg/GE00A7sTEWXYQG2aaWvNniY9tTiwBufPl+eUyj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IiHxHbR1; arc=none smtp.client-ip=209.85.214.176
+	 MIME-Version:Content-Type; b=h98iqfCrjxv1wpoWG53RfJ+Z7yEptvF9fKtTF1vyOjSaKZSYCV5eVQ4yQ+bdxdku7UTqPheIctA/ExTArmHqDZokg+bzuJmXzMp85tUF7Et060/7/HaRufDddPF84M5wOv5f3pB4iGWl7IAFVFMjO8awomEfdcUYRJBuVkdxdpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YdSI5KUa; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IiHxHbR1"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b45cb89f7eso76918905ad.0
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YdSI5KUa"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba4efedbeaso86197105ad.1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779867006; x=1780471806; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779867007; x=1780471807; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=npGqVhP8n9x6x471sGBoVF4CI1h8RVxBdHiIBPxf/24=;
-        b=IiHxHbR1trugnLAV28z5GltVtP9NZVmgD3Y+Nxrnf83Rmgg5nxGkxG0FoMCG3beO+h
-         9fO4BDmFmSPH1O34bY3uO7BCW8cLUfPpJlcZgybkW+m2HPcFb/d35j3+aiTukhkNrA1w
-         w/pimAggDlfNWAldm4KW+vIpM5APeG8X4hEpW6CQEDsBQpuyT7m+5bIuhN+mtieYp50b
-         pjiHKQtfO7b9Cun1vyUJa88/r4pnrmGzSlPgLKUODUaDynMMl+UUvRMOYa/Y+xPqNvux
-         6w75aEWLwxBjZUq/fGfanxagctAMZMfqIs8hG98Xc2jyhehcg6Q8CvM1S0EkIW8Cr28i
-         bt0A==
+        bh=lohoenMotyMbRmEhEDshxbrM7q8cjRNCyEwZfAWuu2M=;
+        b=YdSI5KUaiHbXw0z1Ot/DeaX+zygkXIpQpd65zCvmRnOb6AcxklckJ1u9iLFBRg20bb
+         r6P29ErxD4Edn9T7EPQlhGlWTAXTfCrtSRgGmINCc3CoNdi9HKrlERnsMPyq63iwD5dQ
+         3NBbCSHlXZVKYCjgiCQtdpJiy80hhKfk9/b0abuDWbzDBi8aj0lXPOtYBzUJcwy5QDrp
+         gdB5LObYcA0Dpar+GbD8nR5qS1pp+Cw4E1XXxOPEauy6ahtMd6jWzAy/BSH98WqBkaRr
+         ATgFYAaBYs0/QeolwWUJ8d3YaY1MPvR+aizg9j7RAzLMW9TFMBSVZyciuHTcXREH012X
+         STgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779867006; x=1780471806;
+        d=1e100.net; s=20251104; t=1779867007; x=1780471807;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=npGqVhP8n9x6x471sGBoVF4CI1h8RVxBdHiIBPxf/24=;
-        b=gogP51xd717PpwHve+O1m80mWmoFAOpR11omJ3zhOW5l9R0bGlqyYW7Y7JLDHZl9l+
-         9bJ2Fb9Fuq6kaVQKdZDDQ67VLUqr7HFIFqp/c2tSKP4KKmS7PDerJndTHEmHUJ7ML8Da
-         tDduETkinz4VHWBS6sUxDNHrYuez9WenqCYewT6LSFpD7zPyzbsB1SB8DHyU8fJ8pHNt
-         EJSZlvw/RtTJJmTv8s2fXGoyOoU9EuXfKVG7Dowk+tFyOxwfKlVeupYwT/2te5CqFMkT
-         K+NOJW96TRGbhm6PVNnjURwn/i5tHYtcUKkraOAsRPjBf+IV7KHntjPnixd3A9OHGSrh
-         TOdA==
-X-Gm-Message-State: AOJu0YzDXGD8F8pQxb7OXpPhE2N4ytapX47ttdZ6GMCKEII1RvuYly1D
-	uNWGZTFaVzmd+IdjQqlVLF2DiAnPi63VTQ/ARXZ2zVAVzS7MMbK5O4Hl6H9JCB9i
-X-Gm-Gg: Acq92OEo4UJcXiLkg1IMDV0DHD3HZ4LlsX9hfkNpAdPCug67EItvrcwnjxghNzYuota
-	ZTM0pKtMYTFty5U8Bmk4L860NK147Wcmk6oKUz8XA8C+J2g9lxhxyUmqi3kstS+ITL39n/Q9mQT
-	jWS6zIxOBbwcmCcKz7i5Q4l2pFmQWNMdNsCaE4RErnWTx2h08QPBPLdhRm9hvbkCsYzmuxHtqZ1
-	1QC5teGLpIelDHYzuuhGZWPJOuq1LLqadWt7nMgwmF4zs9ZPWbjuFHO+u/G+5hqRYZ9sQrkJ6S8
-	Ij2eV6iExYPbT7duxGy40t2YC3dan+D+C8IoMvTwi9kwOAQF6NVTwkPSeJliV2+iMNTEDyEFQv7
-	2pIcIFJqL3/4Bv19m80Z4Ij/T2vLjwbFE7IEvK0r3iTmeToyfxU926kCtSR+TtGmGjjkYSMeEaj
-	VxhQ/3ivcQOBwppTcNHlZFAsfYmU+C2OkLXB7FxfiPkmRN7eGk/3o=
-X-Received: by 2002:a17:902:e78e:b0:2bd:657f:3a1b with SMTP id d9443c01a7336-2beb065d2b3mr228804655ad.40.1779867006043;
+        bh=lohoenMotyMbRmEhEDshxbrM7q8cjRNCyEwZfAWuu2M=;
+        b=lzioTZKnab/9GtOg/Iiankg47/8BXta+HZVB5XBa+9X+WZlw7SNBAUEHdEcjoQZobm
+         KIWqoglKojwabBmT+6IH6agcvRVd24ui48FLnDNJtcpOfTHmUoY3ABpdwHN3M1Mci3N8
+         91QE3S9FLEnZb2pbkTJGpkJdAJnI1fOFTAzLjASQexaEI+9YLuyzCw2pn0/wkwK9rlgg
+         /Yqt3DFFYpfqli27mR0Rh5uyv7S8Ahg1ZqP+F3bMnVolsST+Zmw8OBCWkWADPjEtk/Pp
+         SoaNqZf064/R4pphyxHHRnvcEVXQlJQ3kTUSPSToUpU8ZdPjLSuexZyETb5Gg6Nwh96/
+         8o3A==
+X-Gm-Message-State: AOJu0Yy0iV34GOfP9zoNuk88g1XMohE4rqxAeGqyzIPuvlkZ3GmoQf7O
+	QrNkcDCXSaW5XkbGl5dGnRDVjs59nFjwYsYPEa8GZDcYsJDsefRvV1spssxpOYAJ
+X-Gm-Gg: Acq92OEtStiyIvPJupTxaJjk1cHKouNNcctt5T+Z5bcdFdkWrPS1NdUcZwMfN2ajCe2
+	WJJTAqtt1DONHBInpDe8Vo11k2fnX46itqERSj75DZD0859Zqr+A5dxkhfqZAWEovm0olRRGMbY
+	teVshrjNFgjLU/OrTxjZ3gFk9lDv5lkodTQ8e14ggGxH+0zDKQZewVw6UFQYkMEK6VCd+8DHdom
+	EPJAHh9qv/itl+mzRKddnczxyK+YPvVuMEXH/OBASaIrvU/gBjTeHJ+KJk9Vzl71A1PdEkDy5F5
+	zo1nRhkEiJnBaPgko/VBxcNQADZcJ1LP/4fM1LxH4kq8aZEtlIXkA375NIs2HNFhycUfcERDs9a
+	e4Db3yzlMjNQ1dcZsad4Cd4aDQaZGplvg2W0LHR7DuR8XLDCgIt5JZk0KYaT0xhDzr7sCzo9l4m
+	sg8EIiy1MQtAd7MsuofVoWqQlqMvBNfcOu+34gdvBJ5LNg8sfxwYJ4rTbrnG1X2Q==
+X-Received: by 2002:a17:902:ccd0:b0:2b4:5f19:1d34 with SMTP id d9443c01a7336-2beb05eec0amr268454135ad.17.1779867006769;
         Wed, 27 May 2026 00:30:06 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.05
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 00:30:05 -0700 (PDT)
+        Wed, 27 May 2026 00:30:06 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,9 +66,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH RFC bpf-next v3 1/6] bpf: move live registers and scc printout to a standalone function
-Date: Wed, 27 May 2026 00:29:49 -0700
-Message-ID: <20260527-better-1m-reporting-v3-1-b3ede0588a75@gmail.com>
+Subject: [PATCH RFC bpf-next v3 2/6] bpf: compute loops hierarchy
+Date: Wed, 27 May 2026 00:29:50 -0700
+Message-ID: <20260527-better-1m-reporting-v3-2-b3ede0588a75@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
 References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
@@ -81,125 +81,330 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Tests for multiple analyses performed by the verifier need the
-verifier log to contain analysis results alongside the program
-disassembly. This patch moves log level 2 program dump from
-bpf_compute_live_registers() to a standalone function called from
-bpf_check(), in order to provide a common logging function for such
-analyses (and thus avoid printing program disassembly multiple times).
+Add an analysis phase computing the loops hierarchy to the bpf
+verifier. The algorithm is based on the paper:
+"A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
+adapted to be non-recursive.
 
-This is a preparatory refactoring, subsequent commit extends this log
-with loop hierarchy.
+Record the loops hierarchy per instruction:
+- The field insn_aux_data->loop_header records the innermost loop
+  header containing it.
+- The field insn_aux_data->loop records additional information about
+  the loop if this instruction is a loop header (at the moment it only
+  tracks irreduciblity of the loop, additional information will be
+  added later).
+
+Subsequent patches use loop header entries as sampling points for
+callchain profiling, for better error reports when the 1M instruction
+budget is exhausted.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/liveness.c                              | 22 +--------------
- kernel/bpf/verifier.c                              | 31 ++++++++++++++++++++++
- .../selftests/bpf/progs/verifier_live_stack.c      |  2 +-
- 3 files changed, 33 insertions(+), 22 deletions(-)
+ include/linux/bpf_verifier.h |  10 +++
+ kernel/bpf/Makefile          |   2 +-
+ kernel/bpf/fixups.c          |   5 ++
+ kernel/bpf/loops.c           | 196 +++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        |  10 ++-
+ 5 files changed, 221 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 0aadfbae0acc..16d030fdd83a 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -2209,7 +2209,7 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
- 	struct bpf_insn *insns = env->prog->insnsi;
- 	struct insn_live_regs *state;
- 	int insn_cnt = env->prog->len;
--	int err = 0, i, j;
-+	int err = 0, i;
- 	bool changed;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 5cbad3b64130..d0a1fb135cbf 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -656,6 +656,10 @@ struct bpf_iarray {
+ 	u32 items[];
+ };
  
- 	/* Use the following algorithm:
-@@ -2270,26 +2270,6 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
- 	for (i = 0; i < insn_cnt; ++i)
- 		insn_aux[i].live_regs_before = state[i].in;
- 
--	if (env->log.level & BPF_LOG_LEVEL2) {
--		verbose(env, "Live regs before insn:\n");
--		for (i = 0; i < insn_cnt; ++i) {
--			if (env->insn_aux_data[i].scc)
--				verbose(env, "%3d ", env->insn_aux_data[i].scc);
--			else
--				verbose(env, "    ");
--			verbose(env, "%3d: ", i);
--			for (j = BPF_REG_0; j < BPF_REG_10; ++j)
--				if (insn_aux[i].live_regs_before & BIT(j))
--					verbose(env, "%d", j);
--				else
--					verbose(env, ".");
--			verbose(env, " ");
--			bpf_verbose_insn(env, &insns[i]);
--			if (bpf_is_ldimm64(&insns[i]))
--				i++;
--		}
--	}
--
- out:
- 	kvfree(state);
- 	return err;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c8d980fdd709..3d569e36128c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19619,6 +19619,34 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return 0;
- }
- 
-+/* Various log level 2 information about the program */
-+static void log_program(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *insn_aux = env->insn_aux_data;
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	u32 insn_cnt = env->prog->len;
-+	u32 i, j;
++struct bpf_loop {
++	bool irreducible;
++};
 +
-+	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
-+	for (i = 0; i < insn_cnt; ++i) {
-+		verbose_linfo(env, i, "    ; ");
-+		if (env->insn_aux_data[i].scc)
-+			verbose(env, "%3d ", env->insn_aux_data[i].scc);
-+		else
-+			verbose(env, "    ");
-+		verbose(env, "%3d: ", i);
-+		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
-+			if (insn_aux[i].live_regs_before & BIT(j))
-+				verbose(env, "%d", j);
-+			else
-+				verbose(env, ".");
-+		verbose(env, " ");
-+		bpf_verbose_insn(env, &insns[i]);
-+		if (bpf_is_ldimm64(&insns[i]))
-+			i++;
-+	}
+ struct bpf_insn_aux_data {
+ 	union {
+ 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
+@@ -742,6 +746,10 @@ struct bpf_insn_aux_data {
+ 	u16 const_reg_map_mask;
+ 	u16 const_reg_subprog_mask;
+ 	u32 const_reg_vals[10];
++	/* index of a loop header of the innermost loop containing this instruction, -1 if none */
++	s32 loop_header;
++	/* additional information about the loop if this instruction is a loop header */
++	struct bpf_loop *loop;
+ };
+ 
+ #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
+@@ -1608,4 +1616,6 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env);
+ int bpf_fixup_call_args(struct bpf_verifier_env *env);
+ int bpf_do_misc_fixups(struct bpf_verifier_env *env);
+ 
++int bpf_compute_loops(struct bpf_verifier_env *env);
++
+ #endif /* _LINUX_BPF_VERIFIER_H */
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 4dc41bf5780c..787d183ba5b4 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
+ endif
+ CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
+ 
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o loops.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 12739add2dda..57294524dab8 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -450,6 +450,11 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
+ 			aux_data[i].jt = NULL;
+ 		}
+ 
++		if (aux_data[i].loop) {
++			kvfree(aux_data[i].loop);
++			aux_data[i].loop = NULL;
++		}
++
+ 		if (bpf_is_ldimm64(&insns[i]))
+ 			i++;
+ 	}
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+new file mode 100644
+index 000000000000..aec11248d048
+--- /dev/null
++++ b/kernel/bpf/loops.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/slab.h>
++#include <linux/bpf_verifier.h>
++
++struct dfs_state {
++	u32 traversed:1;
++	u32 next_succ:31;
++};
++
++struct loops_dfs {
++	struct dfs_state *state;
++	int *dfs_pos;
++	int *stack;
++};
++
++static void mark_irreducible(struct bpf_verifier_env *env, int h)
++{
++	env->insn_aux_data[h].loop->irreducible = true;
 +}
 +
- int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	      struct bpf_log_attr *attr_log)
- {
-@@ -19771,6 +19799,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
++static int mark_header(struct bpf_verifier_env *env, int h)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++
++	if (!aux[h].loop) {
++		aux[h].loop = kvzalloc_obj(struct bpf_loop, GFP_KERNEL_ACCOUNT);
++		if (!aux[h].loop)
++			return -ENOMEM;
++	}
++	return 0;
++}
++
++static int assign_header(struct bpf_verifier_env *env, struct loops_dfs *dfs, int n, int h)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int *dfs_pos = dfs->dfs_pos;
++	int err, nh;
++
++	err = mark_header(env, h);
++	if (err)
++		return err;
++
++	/* Don't encode self-loops, otherwise can't reflect loops nesting structure. */
++	if (n == h)
++		return 0;
++
++	/* Make sure that loop headers up the chain are sorted by dfs_pos. */
++	while (aux[n].loop_header != -1) {
++		nh = aux[n].loop_header;
++		if (nh == h)
++			return 0;
++		if (dfs_pos[nh] < dfs_pos[h]) {
++			aux[n].loop_header = h;
++			n = h;
++			h = nh;
++		} else {
++			n = nh;
++		}
++	}
++	aux[n].loop_header = h;
++	return 0;
++}
++
++/*
++ * As described in "A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
++ * adapted to be non-recursive.
++ */
++static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_dfs *dfs,
++				    int subprog_idx)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct dfs_state *state = dfs->state;
++	int start = env->subprog_info[subprog_idx].start;
++	int *dfs_pos = dfs->dfs_pos;
++	int *stack = dfs->stack;
++	int i, s, h, err, cur, stack_sz;
++	struct bpf_iarray *succ;
++
++	stack[0] = start;
++	state[start].traversed = true;
++	state[start].next_succ = 0;
++	dfs_pos[start] = 1;
++	stack_sz = 1;
++	i = 0;
++	do {
++		/*
++		 * The algorithm should be very fast in practice,
++		 * guard against pathological inputs, just in case.
++		 */
++		if (i++ == 1024) {
++			i = 0;
++			if (signal_pending(current))
++				return -EAGAIN;
++			cond_resched();
++		}
++
++		cur = stack[stack_sz - 1];
++		succ = bpf_insn_successors(env, cur);
++		if (state[cur].next_succ == succ->cnt) {
++			dfs_pos[cur] = 0;
++			stack_sz--;
++			continue;
++		}
++		s = succ->items[state[cur].next_succ];
++		if (!state[s].traversed) {
++			/* Case A:  start -> ... -> cur -> s [unxplored] */
++			state[s].traversed = true;
++			state[s].next_succ = 0;
++			stack[stack_sz] = s;
++			dfs_pos[s] = stack_sz + 1;
++			stack_sz++;
++			continue;
++		}
++		/* 's' is fully explored at this point */
++		if (dfs_pos[s]) {
++			/*
++			 * start -> ... -> s -> cur --.
++			 *                 ^          |
++			 *                 '----------'
++			 * Case B: 's' is in the current DFS path.
++			 */
++			err = assign_header(env, dfs, cur, s);
++			if (err)
++				return err;
++		} else if (aux[s].loop_header == -1) {
++			/*
++			 * start -> ... -> ... -> s -> ... -> end
++			 *           |            ^
++			 *           '---> cur ---'
++			 * Case C: 's' is explored, not in the current DFS path,
++			 * and not a part of any loop.
++			 */
++		} else if (dfs_pos[aux[s].loop_header]) {
++			/*
++			 *                 .----------------------.
++			 *                 v                      |
++			 * start -> ... -> h -> ... -> ... -> s --'
++			 *                       |            ^
++			 *	                 '---> cur ---'
++			 * Case D: 's' is explored, not in current DFS path,
++			 * but it's innermost loop header is.
++			 */
++			err = assign_header(env, dfs, cur, aux[s].loop_header);
++			if (err)
++				return err;
++		} else {
++			/* case E */
++			h = aux[s].loop_header;
++			mark_irreducible(env, h);
++			/* can also mark 's' as reentry, but no need for now */
++			while (aux[h].loop_header != -1) {
++				h = aux[h].loop_header;
++				if (dfs_pos[h]) {
++					err = assign_header(env, dfs, cur, h);
++					if (err)
++						return err;
++					break;
++				}
++				mark_irreducible(env, h);
++			}
++		}
++		state[cur].next_succ++;
++	} while (stack_sz);
++
++	return 0;
++}
++
++int bpf_compute_loops(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int i, err = 0, len = env->prog->len;
++	struct loops_dfs dfs = {};
++
++	dfs.dfs_pos = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
++	dfs.state = kvcalloc(len, sizeof(struct dfs_state), GFP_KERNEL_ACCOUNT);
++	dfs.stack = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
++	if (!dfs.dfs_pos || !dfs.state || !dfs.stack) {
++		err = -ENOMEM;
++		goto out;
++	}
++	for (i = 0; i < len; i++)
++		aux[i].loop_header = -1;
++	for (i = 0; i < env->subprog_cnt; i++) {
++		err = compute_loops_in_subprog(env, &dfs, i);
++		if (err)
++			goto out;
++	}
++
++out:
++	kvfree(dfs.dfs_pos);
++	kvfree(dfs.stack);
++	kvfree(dfs.state);
++	return err;
++}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3d569e36128c..2b3584712ad2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19627,13 +19627,17 @@ static void log_program(struct bpf_verifier_env *env)
+ 	u32 insn_cnt = env->prog->len;
+ 	u32 i, j;
+ 
+-	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
++	verbose(env, "Program dump (scc? loop_header? insn#: live_regs_before):\n");
+ 	for (i = 0; i < insn_cnt; ++i) {
+ 		verbose_linfo(env, i, "    ; ");
+ 		if (env->insn_aux_data[i].scc)
+ 			verbose(env, "%3d ", env->insn_aux_data[i].scc);
+ 		else
+ 			verbose(env, "    ");
++		if (env->insn_aux_data[i].loop_header >= 0)
++			verbose(env, "%3d ", env->insn_aux_data[i].loop_header);
++		else
++			verbose(env, "    ");
+ 		verbose(env, "%3d: ", i);
+ 		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
+ 			if (insn_aux[i].live_regs_before & BIT(j))
+@@ -19791,6 +19795,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  	if (ret < 0)
  		goto skip_full_check;
  
-+	if (env->log.level & BPF_LOG_LEVEL2)
-+		log_program(env);
++	ret = bpf_compute_loops(env);
++	if (ret < 0)
++		goto skip_full_check;
 +
- 	ret = mark_fastcall_patterns(env);
+ 	ret = bpf_compute_scc(env);
  	if (ret < 0)
  		goto skip_full_check;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 401152b2b64f..923572df4bbf 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -64,7 +64,7 @@ SEC("socket")
- __log_level(2)
- __msg("stack use/def subprog#0 must_write_not_same_slot (d0,cs0):")
- __msg("6: (7b) *(u64 *)(r2 +0) = r0{{$}}")
--__msg("Live regs before insn:")
-+__msg("Program dump")
- __naked void must_write_not_same_slot(void)
- {
- 	asm volatile (
 
 -- 
 2.53.0
