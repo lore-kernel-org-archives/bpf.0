@@ -1,168 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3B62459E5
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E722032FA2C
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779891044; cv=none; b=Q3oMRR9ddVHySUi2O7johG307cnnqIKxA4pQJr4qi+pCapb9uNrqO7+H/36uAGelqoiBci33W5I/IZn7cedpa307KH0vLRMy5suzNwp/DNGcMlUHDU2obmgnes9Y2en5xWYCkxkXqKZVTuekgGLD/5enKGJ109y86gq5cLZy9IY=
+	t=1779891442; cv=none; b=ko6JmyJKSjRD7Hlp8uNeF8mzlDtcPkHzJ/Dv/+Sg//DlhWH9NLq+pUFgmD17wg0MaBaRye1qLLYtIZicA5ZkS0ucMteFgEb5Yod4boZjQL7fRr2HFXk5ZdQNClLmkgURCiTWZr/w+xnqy6ue0axEFBg0kfOltcrCOpBrTsZd3A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779891044; c=relaxed/simple;
-	bh=UyRTCRZ48neXRrSbpouwBubiwyAcivtvc4ZzzJqW6CY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DBqd/uR4yvnjQDoOtSVjjSp7t5iETAsD0jEUoH19KjCwNrjC73tmr9Fi7PQnPXFfFkLn2YtUrSif43TxGZvjBHDQxav8es3QFwXjn+l2XBxV+kHrOjczYJbGTC7hy0bEqAzZajxa4dawK8Xr76Go1SxUE0D4oJ0Y68FI077OvUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GunCRIdZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779891442; c=relaxed/simple;
+	bh=GqkBkA0ux+YD7JioYqk+V1T0qYPcj0feX93g4HGLcqs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hanNl0yABCcLErhwxVhASxqP/X/h3fdizAyszWifwpcEn9dWA5+rPuSw0OYBoB3KSvwETKJcQaFxW1U0OmTNey9wb16UQRdHcl93Fsl8bPfTMWKxg/BxqmJzYv3X8jul19t7AOqZDh/zgloXWD3S6SoLfD/I1sFzzlaX2Bzg+tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjSpN2H1; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GunCRIdZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B632E1F000E9;
-	Wed, 27 May 2026 14:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779891043;
-	bh=MOo/KfV7cqDWgWw8V6/Dka49eHXe2NH/b8KTlaAswLc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GunCRIdZEQCAYWeu61gEh/xa5xHUBVTUxQHjiT8C2zOZemiWhBC9x/wwdBmOQkXWG
-	 qOL2+6w+gG3mKJW0ld/oXatnfRHFJqVsIzKPH3YoEYjdbmLI8waeR9Cc1nLAoWRHcY
-	 3WX88vQRTN8Grr2YZMJS5lVrsjjpyk9L1LwhUr7b8T2GjNnVAwBEe5k5NJwKrOECYe
-	 AOrJ2IB+X0sI4y177+nd7JhAz5tqTf8eEgvD5dVKgGwlwB2OL+RlCG3naZx1tMnQ2l
-	 5mvTkz9PdKfZcUqH0a9/AezBbKxNRg05V3BCj5nWrtGKnt9rIgoYcHhSZWuS4cZZu0
-	 GYUocZHh7azlQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 3/3] libbpf: plumb btf_vmlinux_value_type_id and
- btf_fd in gen_loader
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Siddharth Nayyar" <sidnayyar@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
-References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 14:10:42 +0000
-Message-Id: <20260527141042.B632E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjSpN2H1"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7de4be15125so11285453a34.0
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779891440; x=1780496240; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/jshKEkryiFgJPhBjTFxZ1Zd5Ycopkm0kpYznZELan4=;
+        b=VjSpN2H1vYnAC0Pgzom7GVsB3XVz28KFpb9juBqVY8H8SMiy9Og3a1KX0BtN4fvugK
+         C+BYhlkR1N4YghXdNTSSv4vBd3vVhc135+FDmthcczhfNSvsvymCWzqwkwSmpgBl8t51
+         UT+9lluGRrBGVJvHBXgHWlCeOyxoSvJsPnOuw7Bi8Sp2Sxm/d3k4rV2GpeGFGaH/YdvO
+         XKOniFD7vJcsjqf8y4sgz0BSswAMeDa6148D7qlqFnK3qGr32k2bn/XtQKTru5JIHWUJ
+         gJIGCyS713JO3zjaoJFg7s8h3VA5QKRgiH9mUPrG/eZGzFpWISOm8Ns5xZiuZ1ERhnLm
+         odTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779891440; x=1780496240;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/jshKEkryiFgJPhBjTFxZ1Zd5Ycopkm0kpYznZELan4=;
+        b=Yr9KjpZdcmpKmPsd1ybpxqsvgjUQ6Ijlil8bPOkG+ZO/MYlMGrRRJ6Jqg0CQBQcCwF
+         lD2tozR/uykEvcyF1cp47s7KgYqRRDRS7yLNh0+468dNArkjNp+nGO95o7CZIrzu37sV
+         1MZ6O81d2uDo6a7EujdKLL+9tEXlzLhEudj/vxVoynW7fE8XWlk6rEsGLz7mZC2LUQOT
+         31xcA15+blKudv4Xw6nAiDbmHpT/SP9NXil9wLVkCMTychKYIjXIaO46n01802gNF9D3
+         SS6O/V+1HpUvStDr6ftyeK4kVK8pLPc0v8YPM1Q6+/QM5Jq3QY7pWxobnDekAig5o+vf
+         pR8w==
+X-Gm-Message-State: AOJu0YxoJEjJaxYT0lT2IEPk8w9zks/7VDXy8hBTfBCiEC2bW+dsORXM
+	2MLy5+AAP+lTLiAa3mi2xJQ7/cwwemBCX/n9MH0o/Wf4reZoufrJXDzB
+X-Gm-Gg: Acq92OHHyhXuEeaCYwvvadjFRQUZmc08bWj0GkMrJh+qghJ+JcyI3LYT+6LtrRfLskF
+	TIN4qGmWYlgnpLtAHPR2IewEYtAmELzcixvwW7joDIgsJiYvf5bsvRg3rXrzCsGjCDUsNEBmfls
+	lsGzv2/PAE8tR7CB65CCDb243DhT3/4JeqdXbSGm6EpYrkwrct6fRc5KCVJVQitEUyBiknqwRr3
+	z1FO5jfP/Gp3fpXQ37QX/ik4Jn/LLr8Wx5xeMGpjkhA3vqwiRXET/di51aqVzqA0UUPglve9Sli
+	g7LSachX5rtmqDqRyz/MD10zw7l/vioKwqbsLl3v4GE7BMLxlDIYktAskRmJcjwv848ru2q6VDw
+	76PXYqSpXyxZyWhsUWE3cTfmjZsgwep0iXfrSYr739l5xlQAqYWwlbt5d45zcqixZ9v7oxc/8mi
+	AG+WZ5nL2H30a/Pu8bEvCl9MGz7XTV4nBXT0X1KDzlO17S0YxuhkHvMsHfpB14Ul+EoG79Rrn9w
+	YvsJ5UsICNDJyK9Tg==
+X-Received: by 2002:a05:6830:61c6:b0:7d7:f146:8738 with SMTP id 46e09a7af769-7e5fee5ec6cmr15466189a34.12.1779891439617;
+        Wed, 27 May 2026 07:17:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:72::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e60667af4csm11732221a34.27.2026.05.27.07.17.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 May 2026 07:17:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 27 May 2026 07:17:17 -0700
+Message-Id: <DITIUUJ1PNU5.26Z6XGZ2GQG2R@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <gprocida@google.com>, <maennich@google.com>, <martin.lau@kernel.org>,
+ <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH v4 1/3] libbpf: load vmlinux BTF in gen_loader mode for
+ struct_ops
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <sidnayyar@google.com>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <martin.lau@linux.dev>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>
+X-Mailer: aerc
+References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com> <556048bab0cc9bda9a7dfe2d041308d35eed943c9295aeabd69d34414e2a9f4c@mail.kernel.org>
+In-Reply-To: <556048bab0cc9bda9a7dfe2d041308d35eed943c9295aeabd69d34414e2a9f4c@mail.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+On Wed May 27, 2026 at 6:39 AM PDT, bot+bpf-ci wrote:
+>> commit 29cedaf6d7d80a7e880a2e639f40fbafcbaf2e65
+>> Author: Siddharth Nayyar <sidnayyar@google.com>
+>> Date:   Wed May 27 12:52:57 2026 +0000
+>>
+>>     libbpf: load vmlinux BTF in gen_loader mode for struct_ops
+>>
+>>     During light skeleton generation (`bpftool gen skeleton -L`), libbpf
+>>     runs in gen_loader mode. Previously, `bpf_object__load_vmlinux_btf()=
+`
+>>     completely bypassed loading the kernel vmlinux BTF (`obj->btf_vmlinu=
+x`)
+>>     if `gen_loader` was active.
+>>
+>>     However, BPF `struct_ops` maps (such as `sched_ext_ops` maps) requir=
+e
+>>     resolving the kernel-side struct type IDs and member sizes at
+>>     compile/skeleton generation time. Without loading `btf_vmlinux`, lib=
+bpf
+>>     cannot query the kernel BTF types, causing light skeleton generation=
+ for
+>>     `struct_ops` to fail or omit crucial type information.
+>>
+>>     Fix this by modifying the check to load `btf_vmlinux` even in
+>>     `gen_loader` mode if the BPF object contains `struct_ops` maps.
+>>
+>>     Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+>
+> Alexei Starovoitov requested in v3 review that a selftest be added to
+> prove struct_ops light skeletons work end-to-end:
+>
+>   "The selftest is mandatory to prove that."
+>   https://lore.kernel.org/bpf/CAADnVQ+AA_fmRw7uRwdL2TMyMbpWeebOQKb=3D0wvp=
+KiQR6Ee5xQ@mail.gmail.com/
+>
+> This requirement has not been addressed in v4. Should a selftest be added
+> to demonstrate that struct_ops light skeletons work correctly with this
+> change?
 
-New issues:
-- [High] The patch truncates the bpf_attr payload, dropping `value_type_btf=
-_obj_fd`, which breaks module-backed STRUCT_OPS maps in gen_loader.
+thanks bot.
 
-Pre-existing issues:
-- [Critical] Double-close of `inner_map_fd` in the gen_loader cleanup path =
-can hijack and close an unrelated file descriptor.
-- [High] The condition to populate `btf_fd` incorrectly omits `btf_key_type=
-_id`, causing map creation to fail if only a key BTF type is defined.
-- [High] Memory leak of dynamic arrays `gen->relos`, `gen->ksyms`, and `gen=
-->core_relos` in the error path.
---
-
-commit b58090bc2b448f8a5c71dbba37463b5a9e73fdd5
-Author: Siddharth Nayyar <sidnayyar@google.com>
-
-libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
-
-This commit updates the BPF map creation generator to plumb the kernel-side
-structure value type ID (btf_vmlinux_value_type_id) into the map creation
-system call attributes. It also modifies the condition for copying the
-userspace BTF file descriptor so it populates btf_fd when either
-btf_value_type_id or btf_vmlinux_value_type_id is set.
-
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-> @@ -525,13 +525,14 @@ void bpf_gen__map_create(struct bpf_gen *gen,
->  	attr.max_entries =3D tgt_endian(max_entries);
->  	attr.btf_key_type_id =3D tgt_endian(map_attr->btf_key_type_id);
->  	attr.btf_value_type_id =3D tgt_endian(map_attr->btf_value_type_id);
-> +	attr.btf_vmlinux_value_type_id =3D tgt_endian(map_attr->btf_vmlinux_val=
-ue_type_id);
-
-[Severity: High]
-Does this code truncate the bpf_attr payload and drop value_type_btf_obj_fd?
-
-At the top of bpf_gen__map_create(), attr_size is calculated as
-offsetofend(union bpf_attr, map_extra). However, value_type_btf_obj_fd was
-introduced after map_extra in the union. By plumbing btf_vmlinux_value_type=
-_id
-here without expanding attr_size, the loader may send a truncated payload to
-the kernel.
-
-For module-backed struct_ops maps, libbpf sets the BPF_F_VTYPE_BTF_OBJ_FD f=
-lag,
-but the kernel would receive value_type_btf_obj_fd =3D 0 (stdin). Could this
-cause btf_get_by_fd(0) to fail and break map creation?
-
-> =20
->  	map_create_attr =3D add_data(gen, &attr, attr_size);
->  	pr_debug("gen: map_create: %s idx %d type %d value_type_id %d, attr: of=
-f %d size %d\n",
->  		 map_name, map_idx, map_type, map_attr->btf_value_type_id,
->  		 map_create_attr, attr_size);
-> =20
-> -	if (map_attr->btf_value_type_id)
-> +	if (map_attr->btf_value_type_id || map_attr->btf_vmlinux_value_type_id)
-
-[Severity: High]
-This is a pre-existing issue, but does this condition incorrectly omit
-btf_key_type_id?
-
-If a map defines only a BTF key type but no value type, btf_key_type_id wil=
-l be
-non-zero while btf_value_type_id remains zero.
-
-This means gen_loader would skip populating btf_fd in this case, sending
-btf_fd =3D 0 alongside the non-zero btf_key_type_id. Since the kernel stric=
-tly
-validates that btf_fd must be valid if any BTF type ID is set, will the ker=
-nel
-reject this with -EINVAL?
-
->  		/* populate union bpf_attr with btf_fd saved in the stack earlier */
->  		move_stack2blob(gen, attr_field(map_create_attr, btf_fd), 4,
->  				stack_off(btf_fd));
-
-[Severity: Critical]
-This is a pre-existing issue, but can the inner map handling later in this
-function lead to a double-close regression in the cleanup path?
-
-When emit_sys_close_stack() is called for inner_map_fd, it issues the sys_c=
-lose
-BPF helper but doesn't zero out the memory slot containing the file descrip=
-tor
-on the loader stack.
-
-If a subsequent command in the loader program fails, the cleanup routine lo=
-ops
-over the loader stack and calls sys_close on any file descriptor greater th=
-an
-zero. Because the inner_map_fd slot was never cleared, it gets closed a sec=
-ond
-time. If another thread opened a new file or socket in the interim, could t=
-his
-hijack and close the unrelated resource?
-
-[Severity: High]
-This is a pre-existing issue, but is there a memory leak in the error path =
-for
-the dynamic arrays used during generation?
-
-The arrays gen->relos, gen->ksyms, and gen->core_relos are dynamically allo=
-cated
-using libbpf_reallocarray(). They are expected to be freed by cleanup_relos=
-()
-at the end of bpf_gen__prog_load().
-
-If the loader encounters an error earlier in the process, the program aborts
-and bpf_gen__free() is called. However, bpf_gen__free() appears to fail to =
-free
-these arrays or call cleanup_relos(), causing a permanent memory leak. For
-long-running daemons parsing untrusted objects, could this be exploited to
-cause an out-of-memory crash?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-libbpf-loa=
-d-vmlinux-btf-in-gen_loader-mode-v4-0-27daa15487a9@google.com?part=3D3
+pw-bot: cr
