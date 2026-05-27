@@ -1,104 +1,78 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDB43B27F5
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 19:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EE637472D
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 19:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779911588; cv=none; b=gIwHm6nXMOexg2OpDty/jaus3FKPkVD2LNm4gUhqkuMOydugV1Erc6SgHm672Rbe3ZqpqarObED9E816FGZLPAr5LYr9g1cjtPqk7ZK+nTuJ5sjdClQLU7MAKsgoPc/KYPXwnULxIFm/5Zn1GYc+tYsEyUThJJ/qJLZeeDdEZt8=
+	t=1779911693; cv=none; b=JE4CW5+7VPBTH5HTW0kzkvg7RJWhk0Ylh8CHgIyrEOo6V4Vhvb3IC2MDYHcW04uGTSqfINsMT5tRNjnoviAgAPgS7VvFhsgv3ucSNf8qsSNAGM4iXLQ4WioyPHwaEEmwvu8E6SlRaedemFCNOK59+wcPvgdmQFbv1NLKigA6ZOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779911588; c=relaxed/simple;
-	bh=ESpWEv8U7i/rwZrk159PCTa8esnF553wJdOucCIE2xI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sstGJeB+fXUtFz5x3qVpaOIxto5D4S81JrDsmd7vHef+Z8fjgQYVEcA/k4zB3NFtqwUmxpa16JgGgiKVrIz+u/5d3HjyJwTvjx+WeyqQAYhOwiegq//UbwtDvZXMpO5obwzmworJW3iokN/0n2LcsihJ7bcp8Yl7dF/+7MzfAbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tHo2OWCW; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779911693; c=relaxed/simple;
+	bh=UydY+4H7spO6fhBmPwyXeOfz2ryeRKbVqjWjSB+kdLo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KU7wBEahYeFopshOPGtU8nazDG2es0jgULcv4KxveNrlnui6S/uu4xSZEevQR1ibLaPQSPBa0P2V/ORjc5gl1GjpueQTkbsfQZOfWcX1NMC0ZdrHXRlE1KEPttipgA/+5fQUaKYScz/W1r2DE5ViLBCwEM0vgJl+xk1g5cpsgaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Di8IYSQM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tHo2OWCW"
-Date: Wed, 27 May 2026 12:52:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779911574;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LrC/E5OOEeBssNuQEBba+PXsRMzs7+0VDFGOMKZnl4c=;
-	b=tHo2OWCWF9KY921Ly0Tx/o/TqLfAdgZ8WGqi8CJxjSDuHfRRK2GmbhH1Udzewbv7EHX1k5
-	/9ehA64Ire+BJpPmSaf5RrS4uJRcus261bYuTxvZcWS8D0RVLlVvs2FQrQcq2hk0MS0mpX
-	/x//OtHMdsV2exINFT61dby6S7MqONQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 bpf-next 03/11] bpf: tcp: Support bpf_skb_load_bytes()
- for BPF_SOCK_OPS_RCVQ_CB.
-Message-ID: <202652719515.aUpT.martin.lau@linux.dev>
-References: <20260523083001.2911931-1-kuniyu@google.com>
- <20260523083001.2911931-4-kuniyu@google.com>
- <202652620632.prOx.martin.lau@linux.dev>
- <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
- <2026526214538.Vhly.martin.lau@linux.dev>
- <CAL+tcoCSU9KFZsV33LE2R89iUzb5b3Xm+h6QObs5GOuRYR3sMQ@mail.gmail.com>
- <2026527192229.olv9.martin.lau@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Di8IYSQM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAEE1F00A3D
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 19:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779911692;
+	bh=UydY+4H7spO6fhBmPwyXeOfz2ryeRKbVqjWjSB+kdLo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=Di8IYSQMc+R5x4VFnA7k458svnaW1znFlisJeoAmbqqLoBo5/hkS/FHwGQ9f2DB6B
+	 cYieW1I/TapgFT0NcuKD3Ypw6NAJrC30dRKbv3hVPM4Nf1LptSKaun4Cv+JNF1Sijq
+	 /Pvz6rx0ZszArWua3+BSykcyNCUPuIChP/7xURPAdGIzXa8mUFoEi/rHEm3Q3syr6F
+	 jAkRHYwt4XV2ZsHvWorcGZa4t51d7Bj2VSw8Np8VLKOx20KVYel7mqJodLHNoh/JPS
+	 qgA7U532zND6Riy+t+FifXSj2kfagkOiJJd6243fUSWeBQZQhLDc1IDnht6l9XxlV+
+	 nzFOlxF+v8xag==
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-914db83362aso400637785a.1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 12:54:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8NYWGSluj3wg6btP7UpVxBJeoT0TGo4EPiE4GdMwctsJ78lsM+pau0majwV8GWDAfiNpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHKX7stNwRyseHDg72rlFVph7gnyVWos1bKAMe7EahXcRXXdsg
+	Poj63HWpP3hGNWxCdJAXF5UHAPldALjqNadwG4tQIdySHshMoFUwuFRsD9Y8up347T1haaZeKrz
+	zcJKobekqFTZm/LJK7BbCu/XWFDzUt6Y=
+X-Received: by 2002:a05:620a:c4a:b0:8f2:1ccf:46d2 with SMTP id
+ af79cd13be357-914a23e5d99mr3566882485a.32.1779911691486; Wed, 27 May 2026
+ 12:54:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026527192229.olv9.martin.lau@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+References: <20260527192632.2109419-1-tj@kernel.org>
+In-Reply-To: <20260527192632.2109419-1-tj@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Wed, 27 May 2026 12:54:40 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7vOMp+T7jxWUABaicCBrqApH8sEDYG1HGgSBY=FFYJeg@mail.gmail.com>
+X-Gm-Features: AVHnY4LFPs60fQRIoAWmY7ushCjwbYwdL6B3WcqeCMCqTMkHajj1UyyChsT7ElY
+Message-ID: <CAPhsuW7vOMp+T7jxWUABaicCBrqApH8sEDYG1HGgSBY=FFYJeg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix bpf_arena_handle_page_fault()
+ redefinition without CONFIG_BPF_SYSCALL
+To: Tejun Heo <tj@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2026 at 12:46:25PM -0700, Martin KaFai Lau wrote:
-> > > > > If this new rcvq callback is added to the 'bpf_tcp_ops' proposal [1],
-> > > > > all this will go away. 'struct sk_buff *skb' can be directly passed to an
-> > > > > ops of the 'bpf_tcp_ops'. Supporting '*skb' in a struct_ops has already
-> > > > > been done in the bpf_qdisc.
-> > > > >
-> > > > > [1]: https://lore.kernel.org/bpf/20260519215841.2984970-11-martin.lau@linux.dev/
-> > > >
-> > > > Oh I missed the series, the struct_ops conversion looks nice !
-> > > > Since this work isn't urgent, I can wait for your series if mine
-> > > > churns it.
-> > > >
-> > > > Jason's series is adding a new op, and I guess this can be
-> > > > integrated too ?
-> > > > https://lore.kernel.org/bpf/20260521135244.40869-5-kerneljasonxing@gmail.com/
-> > >
-> > > imo, a new sock_ops cb should be added as an ops in struct_ops. For example,
-> > > in patch 4 of that series, bpf_skops_rx_timestamping assigns u64 to 'u32
-> > > args[4]', which is adding tech debt to the current sock_ops interface.
-> > > For the timestamping case, it could be a separate ops for the
-> > > 'struct sock' instead of 'struct tcp_sock' because it should
-> > > at least work for both TCP and UDP.
-> > 
-> > Sorry, I don't get it. What is the tech debt in this? And
-> > bpf_skops_rx_timestamping() only outputs the timestamps, which has
-> > nothing to do with either 'sock' or 'tcp_sock'.
-> 
-> Did I say the tech debt is in bpf_skops_rx_timestamping?
-> I said the tech debt of the bpf_sock_ops[_kern] interface.
-> Besides always memzero the whole &sockops, the way that the bpf prog
-> needs to get a u64 timestamp from u32 is not thrilling in 2026.
-> args[4] is also not reliable when the earlier cgroup bpf prog
-> writes to replylong. We had already hit some of these in our rx net
-> timestamping discussion a few years ago. I suggest you go back
-> and revisit.
-> 
-> > 
-> > Could you show me what to do next? Thanks in advance. It sounds like
-> > the tx side of bpf timestamping should be adjusted accordingly?
-> 
-> imo, the bpf_tcp_ops can land first. and then add net timestamping
-> ops (existing tx and the new rx) in bpf_sock_ops.
-To be clear, for bpf_sock_ops, I meant a struct_ops named bpf_sock_ops (or
-another better name).
+On Wed, May 27, 2026 at 12:26=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> On configs with CONFIG_BPF=3Dy but CONFIG_BPF_SYSCALL=3Dn (e.g. arm
+> multi_v7_defconfig), kernel/bpf/core.c defines a __weak
+> bpf_arena_handle_page_fault() while bpf_defs.h already supplies a static
+> inline stub for it, causing a redefinition error. Build the __weak
+> definition only under CONFIG_BPF_SYSCALL, matching the bpf_defs.h
+> declaration and the CONFIG_BPF_SYSCALL-gated strong definition in arena.c=
+.
+>
+> Fixes: dc11a4dba246 ("bpf: Recover arena kernel faults with scratch page"=
+)
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+
+Acked-by: Song Liu <song@kernel.org>
