@@ -1,62 +1,62 @@
 Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019E03C4545
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF63C73E5
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779867011; cv=none; b=O8DiJV7GLeWaTXXTF/b3/t4n2KtYFWygJOkqZ8mgADLSVXIce5Krnaudp5BpsW633PSFBW9PytAPG1XZv2l5dmV4smngcHTHbaN1xBq+z84YSG3WNu0p/g96bxAsrFBjIAAoXyBjilm7XjIYxr3O87V0CSEUd70guPXl0022OMM=
+	t=1779867012; cv=none; b=S44NHGSAfRaGWr8vhHkJ04rOYVXb/nIeutUmOc2L6iBA3s9zxao9ZoYGnIMoKWr5bUygmkC3pdduDkfYHPsLXEuBit0Z0YuWB1Fbthc+DSA32GC11OrMPDrjUK5lLYW1KuNq7SWlovi/dor2ftdcfadPVIkjekACb15ex3Eu8oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779867011; c=relaxed/simple;
-	bh=Mjsxo2olXXMAUDQh/NafahGd87S670Kk8RRyp9mJSyY=;
+	s=arc-20240116; t=1779867012; c=relaxed/simple;
+	bh=IYdOg8Txhoe8hHJ9zOHmHLo9dlrekv5mT8esg2VMy1w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NyBbHqL5qz89Ho5XyE0ZOvNYmezob0Ofug7AiO8cnVP9eiri/hCxnP6ObV7GVJLELApypx6tLBRJygkI+Abd0bZSExAA+/q+GtAZdjqcMtLDw27Z4JFnrICso9lxiIpXlCUA1mGrfaCxOPQZ82mUdjukdGo5606L+TXSLFfOcQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jwct0avf; arc=none smtp.client-ip=209.85.214.181
+	 MIME-Version:Content-Type; b=iZbgSVC4bZZyXmLfVxr6s26VOT5srHKtfOXUaCMP3fdYSmvsAkyPprmNrQus0CRbacsiDNkrhWT91AXemR3uOFJcha/WCRfzT61GZHKg7QSNm6jN+tTbV1+scZSUd+XLAGCDeV6vgiZ0wIwcPnid72T0DH6p/79GW1cvykl7EV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mU1w+FXI; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jwct0avf"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ba928852a5so79630935ad.1
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mU1w+FXI"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2bd2051167eso56235015ad.1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1779867009; x=1780471809; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OOPSHeBxHMbUBMPJOHsusulUxFzYakXUemD4yVZlOOo=;
-        b=jwct0avfjDGsxFaz73hYE4EU4lvbwk1pXT4KccJg0fjy3aJhLvVu6/gCo2LTTvo29x
-         9Bx5qaG3I0zTKaQG/7rQE9Gi4R161xoFMomzntz1bY+MIJu+tLsDBBh0J7HJ/+3/oqcd
-         DCZnh6BEndNBlYDGKZHbSMosAjaTK3CJVu6PzWnXPnoArV2O9/gi3TfhSmkDHPNVicex
-         UM5yR1zFvFtRH7MoTkK/V3OorSkPrWXTp1ifqZsIQPZysgS0n5PJt7IkyycC1LJeHZEr
-         WfWMR8JzwNwVx47pQqci3OvZY5Z8jf4G1UUAJye5xBT6z2aQSbrQRZeL4H99Y8TFcAL8
-         PgwA==
+        bh=ydsRROw4wB3tRYRj0upYmPjfXGsF5btBdL0BaKYCSc8=;
+        b=mU1w+FXIuX/pO8jejDF2ffpNIOwZU0v3+UYCOka1nogZYlxxG5MJUc9txus6dU1FFx
+         wTmjwBAE33ONd/6tm2h1fPjgqDcOoagK/ISr+SIO/IZCy3KbrqiZzfDv50/7otHFqJn3
+         6DdDP2gH4lakdAGLiN2f9hiQOu388QYSKRKQwDutNGVrwzXxSyBVJlNlAlUz41Dgsqcc
+         XuXr3H3b7eKtJoFD9gFtbrIg/2H40KGodK5T3efEdyFk6dWx+JgY2od7Ge4A1pcA94NL
+         7zGH96Kd6TWt6VrMH1HKBfQqoLCd6pu9xoLAuTXMHo9+/9iN1uFcSmTEg9cTANVAn183
+         uRwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1779867009; x=1780471809;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OOPSHeBxHMbUBMPJOHsusulUxFzYakXUemD4yVZlOOo=;
-        b=X7enkUqXSQeH3Nl2bnL+pYenX6/rh363XN7RwDL2Z/YihSKASRonhyUu1tebQSc4bx
-         wa33+8/DJH8fayQuVdZAyWu1wtWgeJ5q/ZNXsuy3hVzW8yT7uPElLexRHhRV8Y03vdgo
-         dATblFko5Dy80h9TdmXmVT/Lhjc5ArKTzbfJtD4koSolZ0M66K79VtWNr5pzOGqyxXch
-         tkCYO5mChrs+kfTfYhEUAYiT7k/G2pcVe047yN1ZUeQ0frOzOA+Z3sZErklqYkze1s06
-         YI3iu8y6o/WAjxew1l26DKPa+vIiYj0hp2K7lEhO7EGw8bdFehFmqxEcVyvuzKwUTA3F
-         NUxg==
-X-Gm-Message-State: AOJu0YwU8q0v8OGwLdXVqqk+5BL6pvCyqrzYeOvaO7H1v90LpJw2X6ef
-	XYk/cPQZyf9rlaiA1xCZPC7wGoNYK+rYHwAEZBjLbmQs7cCyIz3isvOnRPcO9GUV
-X-Gm-Gg: Acq92OH7PF750g9hMVi5tgKlUJY5WOC1ge48pqyh9sRMi7CnSI4FHPAMJ8RLn0CEZ5Z
-	qWpSAe+dKVmne38oCkVkOEXFPyI/CBIC0X50/JcC3bMCZ0mjbXypBfxGRythfOYIbRZ7teRHCIZ
-	qLCjErxbW4jH4Nfge+LrgoCbmGzLCPzisdqnYq+02j6wJ+n2rjCvGHGe+jX218vtGG2QjRhoVAG
-	PzUvOP8Jp2QXjzlYJD0yMcg3yxThjHcTXmIOLlDezwk5vw/zQqggrgu+go5tigy/vismvaG8ok/
-	KXnhp5s5ahRTEy5QYPVLrePSlNe2XJdJd1mjOHMW+uQeWyPTaeAOho8Eag0vHWY6tH25cg6ZibC
-	EyGAPTiYS8GREuGLRGCApvFVTVmXR1wShDyM6FGgsJCPLqZVBC1DT1ot/P7WOe7rNZug8dQyNQY
-	czFA+quRva/cuhUHsTvrwjDG/9S/gF8YJGJZAwrTYhQz8wMcSbw8M=
-X-Received: by 2002:a17:903:15c7:b0:2bd:6cab:85d with SMTP id d9443c01a7336-2beb06ead0cmr259534775ad.3.1779867007567;
-        Wed, 27 May 2026 00:30:07 -0700 (PDT)
+        bh=ydsRROw4wB3tRYRj0upYmPjfXGsF5btBdL0BaKYCSc8=;
+        b=sAwP24lIOWOoGjXb2WWkfId8X9iW3H7GI+ysiJE9R1Yma7P3oYQ0Mw6aZxVitfA9xQ
+         tPTAZN2xQcdjFRZsHHEwMl3ootxQLX9c0ti2pXSQpjkh0VzM1jb1dOLtzxBlNjMCCYRR
+         Tlv6ZSrhYsfGM6ZSa7SyX5vZkPsj2en8VIvCYmkZwKHxwk6a5Cz98/2kbve+0ZPtYNrw
+         m6aQ1/v7cjSS54FpaJcRxEU5oM7J/6VdDKVuMqwTi+XHZJwkLYeptQ0RqcFOKuefCSDs
+         Sb/0pK38LwhMs2QTRGAodhMci/qmlAnNkPVlHmSHgRTZ8jdUVsjECoMWwtyZSECVX5Bs
+         ujig==
+X-Gm-Message-State: AOJu0YxOgVJhIHstdJwubnjRwte/HSJNkq2x7WtOlkCpd5DlA/dYX0So
+	kvoyxygX25ZTejJerZG/rcKxzhpw1jhxKA/7fp+dQf57qL7ePtfO++cvdR1Ts6Ua
+X-Gm-Gg: Acq92OH3xQB+bTANef9wKi6xrpVQy41mq9DC90VhEaRK1gbEYWAgBN6D/gHdAHtIbB4
+	QpRu8q3R1uP6twcHSEyLGu5KXyCIP5AWfUZSyAg+SS0eL/8jRvpvgkmJlVVNEKCFedPaGEc/a/L
+	+rmgFY9vkThenenex8JkzU69HleljkV80ahnYc2jhirTVb9wQmAJ1PGvURmpNkfqR1DEmRZXrzA
+	DvOD6tt59dbiGFl5KsBADcf8I5W8tlIrMKPhejxvwnGoSY/6yqFRPW2yj8ugwqL1UZpZQVtRF1Y
+	K//spgUDa+OL5xST1BIAbSA5X9lv0vsSmpLU8b7wR7gB+V+U4wY5c7qREbICg5pBmjrGxsZLaOu
+	Zb2ARiy+KbHv1Vrb7fgvJvB0yfAY985KH1EzPVB9juhYNPz0iy4hY6b7E7S/XgZGDwW9JzBt115
+	5n+a7iW1Cu0yze0V4cb8NWR9NYluXqiqfEZfq7cYWIOSgU4K3AkvI=
+X-Received: by 2002:a17:903:3b83:b0:2b2:ec31:25b0 with SMTP id d9443c01a7336-2beb0616d02mr239813805ad.29.1779867009339;
+        Wed, 27 May 2026 00:30:09 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 00:30:07 -0700 (PDT)
+        Wed, 27 May 2026 00:30:09 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,9 +66,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH RFC bpf-next v3 3/6] selftests/bpf: test cases for loop hierarchy computation
-Date: Wed, 27 May 2026 00:29:51 -0700
-Message-ID: <20260527-better-1m-reporting-v3-3-b3ede0588a75@gmail.com>
+Subject: [PATCH RFC bpf-next v3 5/6] bpf: report register diff summary for hot callchains
+Date: Wed, 27 May 2026 00:29:53 -0700
+Message-ID: <20260527-better-1m-reporting-v3-5-b3ede0588a75@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
 References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
@@ -81,283 +81,543 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Test cases covering the following branches in bpf_compute_loops():
-- Case B: simple backedge creating a loop (loop_single)
-- Case B: two independent loops (loop_two_independent)
-- Case B + D: nested loops where inner header's loop_header points to
-  outer (loop_nested)
-- Case C: diamond CFG with no loops (fwd_edges_no_loop)
-- Case D: sibling inner loops within one outer loop
-  (loop_nested_siblings)
-- Three levels of loop nesting (loop_three_levels)
-- Loop with if-else body containing forward branches
-  (loop_with_if_else)
+When a hot callchain ends at a iter_next, may_goto, or
+callback-calling instruction, compare cached states from
+explored_states to identify which registers or stack slots most
+frequently differ between states. Report the top 3 most varying
+locations.
+
+The full states diff computation would require some statistical
+analysis similar to k-means. To keep things simple, approximate this
+by modifying states_equal() to return the first location where old and
+current states differ, and counting most frequent diff locations.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_loop_hierarchy.c  | 233 +++++++++++++++++++++
- 2 files changed, 235 insertions(+)
+ include/linux/bpf_verifier.h |  15 ++++
+ kernel/bpf/states.c          | 184 +++++++++++++++++++++++++++++++++++++------
+ kernel/bpf/verifier.c        |  57 +++++++++++---
+ 3 files changed, 225 insertions(+), 31 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 219ff2969868..35d92d176c1f 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -57,6 +57,7 @@
- #include "verifier_live_stack.skel.h"
- #include "verifier_liveness_exp.skel.h"
- #include "verifier_load_acquire.skel.h"
-+#include "verifier_loop_hierarchy.skel.h"
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
-@@ -208,6 +209,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
- void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
- void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
- void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
-+void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-new file mode 100644
-index 000000000000..84cabfa42485
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-@@ -0,0 +1,233 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 347a155d8e21..cc83359774f5 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -662,6 +662,17 @@ struct bpf_loop {
+ 	bool irreducible;
+ };
+ 
++struct bpf_state_diff {
++	u8 slot;
++	u8 frame;
++	enum {
++		DIFF_OTHER,
++		DIFF_REG,
++		DIFF_STACK,
++		DIFF_ARG,
++	} kind;
++};
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
+ struct bpf_callchain {
+ 	u32 insn_idx[MAX_CALL_FRAMES];
+ 	u32 curframe;
+@@ -1631,5 +1642,9 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env);
+ int bpf_do_misc_fixups(struct bpf_verifier_env *env);
+ 
+ int bpf_compute_loops(struct bpf_verifier_env *env);
++int bpf_sample_state_diffs(struct bpf_verifier_env *env,
++			   struct bpf_callchain *cc,
++			   struct bpf_state_diff *top_diffs,
++			   int *nr_diffs);
+ 
+ #endif /* _LINUX_BPF_VERIFIER_H */
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 877338136009..b1256658189d 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -4,6 +4,7 @@
+ #include <linux/bpf_verifier.h>
+ #include <linux/cnum.h>
+ #include <linux/filter.h>
++#include <linux/sort.h>
+ 
+ #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
+ 
+@@ -696,7 +697,7 @@ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
+ 
+ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		      struct bpf_func_state *cur, struct bpf_idmap *idmap,
+-		      enum exact_level exact)
++		      enum exact_level exact, struct bpf_state_diff *diff)
+ {
+ 	int i, spi;
+ 
+@@ -720,8 +721,11 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 				old_type = STACK_INVALID;
+ 			if (cur_type == STACK_POISON)
+ 				cur_type = STACK_INVALID;
+-			if (i >= cur->allocated_stack || old_type != cur_type)
++			if (i >= cur->allocated_stack || old_type != cur_type) {
++				diff->slot = spi;
++				diff->kind = DIFF_STACK;
+ 				return false;
++			}
+ 		}
+ 
+ 		if (old->stack[spi].slot_type[i % BPF_REG_SIZE] == STACK_INVALID ||
+@@ -735,8 +739,11 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		/* explored stack has more populated slots than current stack
+ 		 * and these slots were used
+ 		 */
+-		if (i >= cur->allocated_stack)
++		if (i >= cur->allocated_stack) {
++			diff->slot = spi;
++			diff->kind = DIFF_STACK;
+ 			return false;
++		}
+ 
+ 		/*
+ 		 * 64 and 32-bit scalar spills vs MISC/INVALID slots and vice versa.
+@@ -748,8 +755,11 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			old_reg = scalar_reg_for_stack(env, &old->stack[spi], im);
+ 			cur_reg = scalar_reg_for_stack(env, &cur->stack[spi], im);
+ 			if (old_reg && cur_reg) {
+-				if (!regsafe(env, old_reg, cur_reg, idmap, exact))
++				if (!regsafe(env, old_reg, cur_reg, idmap, exact)) {
++					diff->slot = spi;
++					diff->kind = DIFF_STACK;
+ 					return false;
++				}
+ 				i += (im == 0 ? BPF_REG_SIZE - 1 : 3);
+ 				continue;
+ 			}
+@@ -763,13 +773,16 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		    cur->stack[spi].slot_type[i % BPF_REG_SIZE] == STACK_ZERO)
+ 			continue;
+ 		if (old->stack[spi].slot_type[i % BPF_REG_SIZE] !=
+-		    cur->stack[spi].slot_type[i % BPF_REG_SIZE])
++		    cur->stack[spi].slot_type[i % BPF_REG_SIZE]) {
+ 			/* Ex: old explored (safe) state has STACK_SPILL in
+ 			 * this stack slot, but current has STACK_MISC ->
+ 			 * this verifier states are not equivalent,
+ 			 * return false to continue verification of this path
+ 			 */
++			diff->slot = spi;
++			diff->kind = DIFF_STACK;
+ 			return false;
++		}
+ 		if (i % BPF_REG_SIZE != BPF_REG_SIZE - 1)
+ 			continue;
+ 		/* Both old and cur are having same slot_type */
+@@ -786,16 +799,22 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			 * return false to continue verification of this path
+ 			 */
+ 			if (!regsafe(env, &old->stack[spi].spilled_ptr,
+-				     &cur->stack[spi].spilled_ptr, idmap, exact))
++				     &cur->stack[spi].spilled_ptr, idmap, exact)) {
++				diff->slot = spi;
++				diff->kind = DIFF_STACK;
+ 				return false;
++			}
+ 			break;
+ 		case STACK_DYNPTR:
+ 			old_reg = &old->stack[spi].spilled_ptr;
+ 			cur_reg = &cur->stack[spi].spilled_ptr;
+ 			if (old_reg->dynptr.type != cur_reg->dynptr.type ||
+ 			    old_reg->dynptr.first_slot != cur_reg->dynptr.first_slot ||
+-			    !check_ids(old_reg->ref_obj_id, cur_reg->ref_obj_id, idmap))
++			    !check_ids(old_reg->ref_obj_id, cur_reg->ref_obj_id, idmap)) {
++				diff->slot = spi;
++				diff->kind = DIFF_STACK;
+ 				return false;
++			}
+ 			break;
+ 		case STACK_ITER:
+ 			old_reg = &old->stack[spi].spilled_ptr;
+@@ -810,15 +829,21 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			    old_reg->iter.btf_id != cur_reg->iter.btf_id ||
+ 			    old_reg->iter.state != cur_reg->iter.state ||
+ 			    /* ignore {old_reg,cur_reg}->iter.depth, see above */
+-			    !check_ids(old_reg->ref_obj_id, cur_reg->ref_obj_id, idmap))
++			    !check_ids(old_reg->ref_obj_id, cur_reg->ref_obj_id, idmap)) {
++				diff->slot = spi;
++				diff->kind = DIFF_STACK;
+ 				return false;
++			}
+ 			break;
+ 		case STACK_IRQ_FLAG:
+ 			old_reg = &old->stack[spi].spilled_ptr;
+ 			cur_reg = &cur->stack[spi].spilled_ptr;
+ 			if (!check_ids(old_reg->ref_obj_id, cur_reg->ref_obj_id, idmap) ||
+-			    old_reg->irq.kfunc_class != cur_reg->irq.kfunc_class)
++			    old_reg->irq.kfunc_class != cur_reg->irq.kfunc_class) {
++				diff->slot = spi;
++				diff->kind = DIFF_STACK;
+ 				return false;
++			}
+ 			break;
+ 		case STACK_MISC:
+ 		case STACK_ZERO:
+@@ -827,6 +852,8 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			continue;
+ 		/* Ensure that new unhandled slot types return false by default */
+ 		default:
++			diff->slot = spi;
++			diff->kind = DIFF_STACK;
+ 			return false;
+ 		}
+ 	}
+@@ -839,7 +866,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+  */
+ static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			   struct bpf_func_state *cur, struct bpf_idmap *idmap,
+-			   enum exact_level exact)
++			   enum exact_level exact, struct bpf_state_diff *diff)
+ {
+ 	int i, nslots;
+ 
+@@ -852,8 +879,11 @@ static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *
+ 			  &old->stack_arg_regs[i] : &not_init;
+ 		cur_arg = i < cur->out_stack_arg_cnt ?
+ 			  &cur->stack_arg_regs[i] : &not_init;
+-		if (!regsafe(env, old_arg, cur_arg, idmap, exact))
++		if (!regsafe(env, old_arg, cur_arg, idmap, exact)) {
++			diff->slot = i;
++			diff->kind = DIFF_ARG;
+ 			return false;
++		}
+ 	}
+ 
+ 	return true;
+@@ -933,7 +963,8 @@ static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *c
+  * the current state will reach 'bpf_exit' instruction safely
+  */
+ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_state *old,
+-			      struct bpf_func_state *cur, u32 insn_idx, enum exact_level exact)
++			      struct bpf_func_state *cur, u32 insn_idx,
++			      enum exact_level exact, struct bpf_state_diff *diff)
+ {
+ 	u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
+ 	u16 i;
+@@ -947,13 +978,16 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	for (i = 0; i < MAX_BPF_REG; i++)
+ 		if (((1 << i) & live_regs) &&
+ 		    !regsafe(env, &old->regs[i], &cur->regs[i],
+-			     &env->idmap_scratch, exact))
++			     &env->idmap_scratch, exact)) {
++			diff->slot = i;
++			diff->kind = DIFF_REG;
+ 			return false;
++		}
+ 
+-	if (!stacksafe(env, old, cur, &env->idmap_scratch, exact))
++	if (!stacksafe(env, old, cur, &env->idmap_scratch, exact, diff))
+ 		return false;
+ 
+-	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch, exact))
++	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch, exact, diff))
+ 		return false;
+ 
+ 	return true;
+@@ -970,11 +1004,14 @@ static void reset_idmap_scratch(struct bpf_verifier_env *env)
+ static bool states_equal(struct bpf_verifier_env *env,
+ 			 struct bpf_verifier_state *old,
+ 			 struct bpf_verifier_state *cur,
+-			 enum exact_level exact)
++			 enum exact_level exact,
++			 struct bpf_state_diff *diff)
+ {
+ 	u32 insn_idx;
+ 	int i;
+ 
++	diff->kind = DIFF_OTHER;
 +
-+/*
-+ * kernel/bpf/loops.c:compute_loops() distinguish between
-+ * the following cases:
-+ * - B: backedge -> simple loop
-+ * - C: cross edge to non-loop node -> no-op
-+ * - D: edge to node whose header is in DFS path -> nested loop
-+ * - E: edge to node whose header is NOT in DFS path -> irreducible
-+ *
-+ * Below test cases cover the above branches in various combinations.
-+ */
+ 	if (old->curframe != cur->curframe)
+ 		return false;
+ 
+@@ -999,8 +1036,11 @@ static bool states_equal(struct bpf_verifier_env *env,
+ 		insn_idx = bpf_frame_insn_idx(old, i);
+ 		if (old->frame[i]->callsite != cur->frame[i]->callsite)
+ 			return false;
+-		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx, exact))
++		if (!func_states_equal(env, old->frame[i], cur->frame[i],
++				       insn_idx, exact, diff)) {
++			diff->frame = i;
+ 			return false;
++		}
+ 	}
+ 	return true;
+ }
+@@ -1231,6 +1271,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	struct bpf_verifier_state_list *new_sl;
+ 	struct bpf_verifier_state_list *sl;
+ 	struct bpf_verifier_state *cur = env->cur_state, *new;
++	struct bpf_state_diff diff = {};
+ 	bool force_new_state, add_new_state, loop;
+ 	int n, err, states_cnt = 0;
+ 	struct list_head *pos, *tmp, *head;
+@@ -1320,7 +1361,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			 * => unsafe memory access at 11 would not be caught.
+ 			 */
+ 			if (is_iter_next_insn(env, insn_idx)) {
+-				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN, &diff)) {
+ 					struct bpf_func_state *cur_frame;
+ 					struct bpf_reg_state *iter_state, *iter_reg;
+ 					int spi;
+@@ -1345,13 +1386,13 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			}
+ 			if (is_may_goto_insn_at(env, insn_idx)) {
+ 				if (sl->state.may_goto_depth != cur->may_goto_depth &&
+-				    states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
++				    states_equal(env, &sl->state, cur, RANGE_WITHIN, &diff)) {
+ 					loop = true;
+ 					goto hit;
+ 				}
+ 			}
+ 			if (bpf_calls_callback(env, insn_idx)) {
+-				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
++				if (states_equal(env, &sl->state, cur, RANGE_WITHIN, &diff)) {
+ 					loop = true;
+ 					goto hit;
+ 				}
+@@ -1359,7 +1400,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			}
+ 			/* attempt to detect infinite loop to avoid unnecessary doomed work */
+ 			if (states_maybe_looping(&sl->state, cur) &&
+-			    states_equal(env, &sl->state, cur, EXACT) &&
++			    states_equal(env, &sl->state, cur, EXACT, &diff) &&
+ 			    !iter_active_depths_differ(&sl->state, cur) &&
+ 			    sl->state.may_goto_depth == cur->may_goto_depth &&
+ 			    sl->state.callback_unroll_depth == cur->callback_unroll_depth) {
+@@ -1392,7 +1433,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 		}
+ 		/* See comments for mark_all_regs_read_and_precise() */
+ 		loop = incomplete_read_marks(env, &sl->state);
+-		if (states_equal(env, &sl->state, cur, loop ? RANGE_WITHIN : NOT_EXACT)) {
++		if (states_equal(env, &sl->state, cur, loop ? RANGE_WITHIN : NOT_EXACT, &diff)) {
+ hit:
+ 			sl->hit_cnt++;
+ 
+@@ -1588,3 +1629,102 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 	list_add(&new_sl->node, head);
+ 	return 0;
+ }
 +
-+/* Case B: single bounded loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          3: {{.*}} (95) exit")
-+__naked void loop_single(void)
++static bool callchain_matches_state(struct bpf_callchain *cc,
++				    struct bpf_verifier_state *st)
 +{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
++	int i;
++
++	if (st->curframe != cc->curframe)
++		return false;
++	for (i = 0; i < (int)cc->curframe; i++)
++		if (st->frame[i + 1]->callsite != cc->insn_idx[i])
++			return false;
++	return st->insn_idx == cc->insn_idx[cc->curframe];
 +}
 +
-+/* Case B: two independent loops at the same nesting level. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  2       1: {{.*}} (07) r0 += 1")
-+__msg("  2   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("          3: {{.*}} (b7) r1 = 0")
-+__msg("  1       4: {{.*}} (07) r1 += 1")
-+__msg("  1   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
-+__msg("          6: {{.*}} (95) exit")
-+__naked void loop_two_independent(void)
++struct state_diff_cnt {
++	struct bpf_state_diff diff;
++	u32 cnt;
++};
++
++static int state_diff_cmp(const void *a, const void *b)
 +{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	if r0 < 10 goto 1b;				\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 10 goto 2b;				\
-+	exit;						\
-+"	::: __clobber_all);
++	return cmp_int(((struct state_diff_cnt *)b)->cnt, ((struct state_diff_cnt *)a)->cnt);
 +}
 +
-+/* Case B + D: nested loops. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")		/* outer loop header */
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")		/* outer loop insn */
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")		/* inner loop header */
-+__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2") /* inner loop insn */
-+__msg("  1   1   5: {{.*}} (a5) if r0 < 0xa goto pc-5") /* outer loop insn */
-+__msg("          6: {{.*}} (95) exit")
-+__naked void loop_nested(void)
++static bool state_diff_eq(struct bpf_state_diff *a, struct bpf_state_diff *b)
 +{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
++	return a->frame == b->frame && a->slot == b->slot && a->kind == b->kind;
 +}
 +
-+/* Case C: forward edges, no loops. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("          1: {{.*}} (25) if r0 > 0x0 goto pc+2")
-+__msg("          2: {{.*}} (b7) r0 = 2")
-+__msg("          3: {{.*}} (05) goto pc+1")
-+__msg("          4: {{.*}} (b7) r0 = 3")
-+__msg("          5: {{.*}} (95) exit")
-+__naked void fwd_edges_no_loop(void)
++int bpf_sample_state_diffs(struct bpf_verifier_env *env,
++			   struct bpf_callchain *cc,
++			   struct bpf_state_diff *top_diffs,
++			   int *nr_diffs)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	if r0 > 0 goto 1f;				\
-+	r0 = 2;						\
-+	goto 2f;					\
-+1:	r0 = 3;						\
-+2:	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
++	struct bpf_verifier_state_list *sl_i, *sl_j;
++	struct state_diff_cnt *diff_cnts = NULL;
++	struct list_head *pos_i, *pos_j, *head;
++	u32 leaf_insn, callsite, hash_idx;
++	int i, cap = 0, nr_locs = 0;
 +
-+/* Case B + D: two sibling inner loops within one outer loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
-+__msg("  1   1   5: {{.*}} (b7) r2 = 0")
-+__msg("  1   1   6: {{.*}} (07) r2 += 1")
-+__msg("  1   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
-+__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          9: {{.*}} (95) exit")
-+__naked void loop_nested_siblings(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	if r1 < 5 goto 2b;				\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 5 goto 3b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
++	leaf_insn = cc->insn_idx[cc->curframe];
++	callsite = cc->curframe > 0 ? cc->insn_idx[cc->curframe - 1] : BPF_MAIN_FUNC;
++	hash_idx = (leaf_insn ^ callsite) % env->prog->len;
++	head = &env->explored_states[hash_idx];
 +
-+/* Three levels of nesting. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   1   3: {{.*}} (07) r1 += 1")
-+__msg("  1   3   4: {{.*}} (b7) r2 = 0")
-+__msg("  1   3   5: {{.*}} (07) r2 += 1")
-+__msg("  1   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
-+__msg("  1   3   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
-+__msg("  1   1   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("          9: {{.*}} (95) exit")
-+__naked void loop_three_levels(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = 0;						\
-+2:	r1 += 1;					\
-+	r2 = 0;						\
-+3:	r2 += 1;					\
-+	if r2 < 3 goto 3b;				\
-+	if r1 < 5 goto 2b;				\
-+	if r0 < 10 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
++	/*
++	 * Single bucket accumulates up to 64 states, no cond_resched() necessary.
++	 * See limits in is_state_visited().
++	 */
++	list_for_each(pos_i, head) {
++		sl_i = container_of(pos_i, struct bpf_verifier_state_list, node);
++		if (!callchain_matches_state(cc, &sl_i->state))
++			continue;
++		list_for_each(pos_j, head) {
++			struct bpf_state_diff diff = {};
 +
-+/* Loop with an if-else body (forward branch inside loop, Case C). */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (b7) r0 = 0")
-+__msg("  1       1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (bf) r1 = r0")
-+__msg("  1   1   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
-+__msg("  1   1   4: {{.*}} (b7) r1 = 1")
-+__msg("  1   1   5: {{.*}} (0f) r0 += r1")
-+__msg("  1   1   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
-+__msg("          7: {{.*}} (95) exit")
-+__naked void loop_with_if_else(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+1:	r0 += 1;					\
-+	r1 = r0;					\
-+	if r1 > 5 goto 2f;				\
-+	r1 = 1;						\
-+2:	r0 += r1;					\
-+	if r0 < 100 goto 1b;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
++			if (pos_i == pos_j)
++				continue;
++			sl_j = container_of(pos_j, struct bpf_verifier_state_list, node);
++			if (!callchain_matches_state(cc, &sl_j->state))
++				continue;
++			if (states_equal(env, &sl_i->state, &sl_j->state, NOT_EXACT, &diff))
++				continue;
++			if (diff.kind == DIFF_OTHER)
++				continue;
++			for (i = 0; i < nr_locs; i++) {
++				if (state_diff_eq(&diff_cnts[i].diff, &diff)) {
++					diff_cnts[i].cnt++;
++					goto next;
++				}
++			}
++			if (nr_locs == cap) {
++				int new_cap = cap ? cap * 2 : 16;
++				struct state_diff_cnt *new;
 +
-+/* Case E: irreducible loop. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("Program dump")
-+__msg("          0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("          1: {{.*}} (b7) r1 = 0")
-+__msg("          2: {{.*}} (25) if r0 > 0x5 goto pc+2")
-+__msg("  1       3: {{.*}} (b7) r1 = 1")
-+__msg("  1   3   4: {{.*}} (05) goto pc+1")
-+__msg("          5: {{.*}} (b7) r1 = 2")
-+__msg("  1   3   6: {{.*}} (0f) r0 += r1")
-+__msg("  1   3   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
-+__msg("          8: {{.*}} (95) exit")
-+__naked void loop_irreducible(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r1 = 0;						\
-+	if r0 > 5 goto 2f;				\
-+1:	r1 = 1;						\
-+	goto 3f;					\
-+2:	r1 = 2;						\
-+3:	r0 += r1;					\
-+	if r0 < 16 goto 1b;				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
++				new = kvrealloc(diff_cnts, new_cap * sizeof(*new),
++						GFP_KERNEL_ACCOUNT);
++				if (!new) {
++					kvfree(diff_cnts);
++					return -ENOMEM;
++				}
++				memset(new + cap, 0, (new_cap - cap) * sizeof(*new));
++				diff_cnts = new;
++				cap = new_cap;
++			}
++			diff_cnts[nr_locs].diff = diff;
++			diff_cnts[nr_locs].cnt = 1;
++			nr_locs++;
++next:;
++		}
++	}
 +
-+char _license[] SEC("license") = "GPL";
++	sort(diff_cnts, nr_locs, sizeof(*diff_cnts), state_diff_cmp, NULL);
++	*nr_diffs = min(nr_locs, *nr_diffs);
++	for (i = 0; i < *nr_diffs; i++)
++		top_diffs[i] = diff_cnts[i].diff;
++	kvfree(diff_cnts);
++	return 0;
++}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 54b7ad65b7fc..d09c014462f1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17292,13 +17292,13 @@ static void free_callchain_profile(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
+-static void print_callchain_entry(struct bpf_verifier_env *env,
+-				  struct bpf_callchain_entry *entry, int idx)
++static int print_callchain_entry(struct bpf_verifier_env *env,
++				 struct bpf_callchain_entry *entry, int idx)
+ {
+ 	struct bpf_callchain *cc = &entry->cc;
+ 	const struct bpf_line_info *linfo;
+ 	struct bpf_subprog_info *sub;
+-	int i, insn_idx;
++	int i, err, insn_idx;
+ 
+ 	verbose(env, "#%d most visited simulated stacktrace (visited %llu times):\n",
+ 		idx, entry->count);
+@@ -17316,6 +17316,38 @@ static void print_callchain_entry(struct bpf_verifier_env *env,
+ 				BPF_LINE_INFO_LINE_NUM(linfo->line_col));
+ 		verbose(env, "\n");
+ 	}
++
++	insn_idx = cc->insn_idx[cc->curframe];
++	if (bpf_is_force_checkpoint(env, insn_idx)) {
++		struct bpf_state_diff top_diffs[3];
++		int nr_diffs = ARRAY_SIZE(top_diffs);
++
++		err = bpf_sample_state_diffs(env, cc, top_diffs, &nr_diffs);
++		if (err)
++			return err;
++		for (i = 0; i < nr_diffs; i++) {
++			struct bpf_state_diff *d = &top_diffs[i];
++
++			switch (d->kind) {
++			case DIFF_REG:
++				verbose(env, "    Most varying: R%d (frame %d)\n",
++					d->slot, d->frame);
++				break;
++			case DIFF_STACK:
++				verbose(env, "    Most varying: fp-%d (frame %d)\n",
++					(d->slot + 1) * BPF_REG_SIZE, d->frame);
++				break;
++			case DIFF_ARG:
++				verbose(env, "    Most varying: arg#%d (frame %d)\n",
++					d->slot, d->frame);
++				break;
++			default:
++				/* shouldn't really happen */
++				continue;
++			}
++		}
++	}
++	return 0;
+ }
+ 
+ static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
+@@ -17340,16 +17372,16 @@ static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subprog_info
+  * Print several most visited simulated stack traces,
+  * and a disasembly of related subprograms.
+  */
+-static void print_hotspots(struct bpf_verifier_env *env)
++static int print_hotspots(struct bpf_verifier_env *env)
+ {
+ 	DECLARE_BITMAP(printed_subs, BPF_MAX_SUBPROGS + 2) = {};
+ 	struct bpf_callchain_entry *top[3] = {};
+ 	struct bpf_callchain_entry *entry;
+ 	struct bpf_subprog_info *sub;
+-	int i, j, bkt, nr_top = 0;
++	int i, j, err, bkt, nr_top = 0;
+ 
+ 	if (!(env->log.level & BPF_LOG_LEVEL))
+-		return;
++		return 0;
+ 
+ 	/* Collect the hottest callchains */
+ 	hash_for_each(env->callchain_htab, bkt, entry, node) {
+@@ -17366,7 +17398,7 @@ static void print_hotspots(struct bpf_verifier_env *env)
+ 		nr_top++;
+ 
+ 	if (!nr_top)
+-		return;
++		return 0;
+ 
+ 	if (!(env->log.level & BPF_LOG_LEVEL2))
+ 		bpf_vlog_reset(&env->log, 0);
+@@ -17388,9 +17420,14 @@ static void print_hotspots(struct bpf_verifier_env *env)
+ 
+ 	/* Print the hot callchains */
+ 	for (i = 0; i < nr_top; i++) {
+-		print_callchain_entry(env, top[i], i + 1);
++		err = print_callchain_entry(env, top[i], i + 1);
++		if (err)
++			return err;
++
+ 		verbose(env, "\n");
+ 	}
++
++	return 0;
+ }
+ 
+ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+@@ -17527,7 +17564,9 @@ static int do_check(struct bpf_verifier_env *env)
+ 		insn_aux = &env->insn_aux_data[env->insn_idx];
+ 
+ 		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+-			print_hotspots(env);
++			err = print_hotspots(env);
++			if (err)
++				return err;
+ 			verbose(env,
+ 				"BPF program is too large. Processed %d insn\n",
+ 				env->insn_processed);
 
 -- 
 2.53.0
