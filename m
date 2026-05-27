@@ -1,62 +1,62 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87AC3BE623
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3719C3914EB
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779867009; cv=none; b=NjxDkifVbWBgl4Uo9HSxCfejpAwTODmBDo0ENChExIHAVGAsVSvs3/XofvDAqx/fJAlNWM1gOVrnp5UyBv9Xi636qeob7q7IGStGuyM6944lYNmCtST8ki+JtgMdzGRF0isla9PPHdxXo8Jb8YKcineKdcIyzJLnB87odhrJ30s=
+	t=1779867010; cv=none; b=g3z7B9vy+bXC/xy3MzPPWfr1I5O8sTbTwRF7ARXm6d+DKKKvVkXxOlM8LqaIBEGomphP3WE06ym/Q1PFcmGf9JFcYNCNOSk19VRDHnd6npPnJmWq1TsDoFBVKl4d1pVKdO1daUx1RnV5lngqtstSLPUMoN8JZB9PsiySvWiSdK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779867009; c=relaxed/simple;
-	bh=YWqc4woh/9dSrVNxJGRdB6aLU0ZbNj71WU5Cx6qRGY4=;
+	s=arc-20240116; t=1779867010; c=relaxed/simple;
+	bh=qDsJzDDEcTL8L1hNY+bb5nLM0VWjtIOBZQZS4p0bk2A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h98iqfCrjxv1wpoWG53RfJ+Z7yEptvF9fKtTF1vyOjSaKZSYCV5eVQ4yQ+bdxdku7UTqPheIctA/ExTArmHqDZokg+bzuJmXzMp85tUF7Et060/7/HaRufDddPF84M5wOv5f3pB4iGWl7IAFVFMjO8awomEfdcUYRJBuVkdxdpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YdSI5KUa; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version:Content-Type; b=EE+ZtG/vcGmoVktuznfWJldt9RCgjIyJtasTYUEpnKI9bjhw+VGW6XPZuyLy0kRPWDv/wWdIKUxQabqnoOLeSBnCZSfzz3oaa2QAjLxfBwvy6onwN1tcYF8N4WtFUz0jUykKykz62qCbrGdOQOEC1FWMKDwQFc0WO2c5AZQzQS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kC4LvIdM; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YdSI5KUa"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba4efedbeaso86197105ad.1
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kC4LvIdM"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ba6485d219so88004215ad.3
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779867007; x=1780471807; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779867009; x=1780471809; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lohoenMotyMbRmEhEDshxbrM7q8cjRNCyEwZfAWuu2M=;
-        b=YdSI5KUaiHbXw0z1Ot/DeaX+zygkXIpQpd65zCvmRnOb6AcxklckJ1u9iLFBRg20bb
-         r6P29ErxD4Edn9T7EPQlhGlWTAXTfCrtSRgGmINCc3CoNdi9HKrlERnsMPyq63iwD5dQ
-         3NBbCSHlXZVKYCjgiCQtdpJiy80hhKfk9/b0abuDWbzDBi8aj0lXPOtYBzUJcwy5QDrp
-         gdB5LObYcA0Dpar+GbD8nR5qS1pp+Cw4E1XXxOPEauy6ahtMd6jWzAy/BSH98WqBkaRr
-         ATgFYAaBYs0/QeolwWUJ8d3YaY1MPvR+aizg9j7RAzLMW9TFMBSVZyciuHTcXREH012X
-         STgQ==
+        bh=Lwh7VybBvuZ7GLwmP84JffxrF1ekgF1ODLcd4+q9lsU=;
+        b=kC4LvIdMmI6YN1A2ldln11WSsBOpQxcMT8W/enWDCpVcwDrFUGyvB74WSr8JDPAOmF
+         P2qbaHhpH3rJjKeQAij5v3G/BD6bioV94zKOgmYQM5AtGhGVPaBOV20vRKkKN8O5Mt36
+         KgXpsBEg8MLR/YURtspSEKSHAHbvnigSwiO88JgDdAY4Wwh7qX/ln0mUIxdujqySHp92
+         P/nlO9l2gFvuLEY80DF1W9xW3JrTOf6mUkjw4Zd9YogkroXziVdujjCIideCaIiFnDB6
+         6ZVNlBvj4OhumKFgt6Vc18QnVmSEJK7wu937lms72uvOWaze91pVZBYiq3fSiL36VDlP
+         IOiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779867007; x=1780471807;
+        d=1e100.net; s=20251104; t=1779867009; x=1780471809;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lohoenMotyMbRmEhEDshxbrM7q8cjRNCyEwZfAWuu2M=;
-        b=lzioTZKnab/9GtOg/Iiankg47/8BXta+HZVB5XBa+9X+WZlw7SNBAUEHdEcjoQZobm
-         KIWqoglKojwabBmT+6IH6agcvRVd24ui48FLnDNJtcpOfTHmUoY3ABpdwHN3M1Mci3N8
-         91QE3S9FLEnZb2pbkTJGpkJdAJnI1fOFTAzLjASQexaEI+9YLuyzCw2pn0/wkwK9rlgg
-         /Yqt3DFFYpfqli27mR0Rh5uyv7S8Ahg1ZqP+F3bMnVolsST+Zmw8OBCWkWADPjEtk/Pp
-         SoaNqZf064/R4pphyxHHRnvcEVXQlJQ3kTUSPSToUpU8ZdPjLSuexZyETb5Gg6Nwh96/
-         8o3A==
-X-Gm-Message-State: AOJu0Yy0iV34GOfP9zoNuk88g1XMohE4rqxAeGqyzIPuvlkZ3GmoQf7O
-	QrNkcDCXSaW5XkbGl5dGnRDVjs59nFjwYsYPEa8GZDcYsJDsefRvV1spssxpOYAJ
-X-Gm-Gg: Acq92OEtStiyIvPJupTxaJjk1cHKouNNcctt5T+Z5bcdFdkWrPS1NdUcZwMfN2ajCe2
-	WJJTAqtt1DONHBInpDe8Vo11k2fnX46itqERSj75DZD0859Zqr+A5dxkhfqZAWEovm0olRRGMbY
-	teVshrjNFgjLU/OrTxjZ3gFk9lDv5lkodTQ8e14ggGxH+0zDKQZewVw6UFQYkMEK6VCd+8DHdom
-	EPJAHh9qv/itl+mzRKddnczxyK+YPvVuMEXH/OBASaIrvU/gBjTeHJ+KJk9Vzl71A1PdEkDy5F5
-	zo1nRhkEiJnBaPgko/VBxcNQADZcJ1LP/4fM1LxH4kq8aZEtlIXkA375NIs2HNFhycUfcERDs9a
-	e4Db3yzlMjNQ1dcZsad4Cd4aDQaZGplvg2W0LHR7DuR8XLDCgIt5JZk0KYaT0xhDzr7sCzo9l4m
-	sg8EIiy1MQtAd7MsuofVoWqQlqMvBNfcOu+34gdvBJ5LNg8sfxwYJ4rTbrnG1X2Q==
-X-Received: by 2002:a17:902:ccd0:b0:2b4:5f19:1d34 with SMTP id d9443c01a7336-2beb05eec0amr268454135ad.17.1779867006769;
-        Wed, 27 May 2026 00:30:06 -0700 (PDT)
+        bh=Lwh7VybBvuZ7GLwmP84JffxrF1ekgF1ODLcd4+q9lsU=;
+        b=tLDWCvDwWd9N/adijLEkP5OSa5sEgUBjYAn4DWFkKNOQnzgrgQ7KvqqoyZy7Np7969
+         xeiVqeEfRUt4XfywrVSH5Cas2x4JtK/m6TN7I+ySKu4lo9NH4IHIcAJg2BnsXPSUGAk8
+         HyVQwJMSd7EgFRnxKHBjLdiRLxdjdLQTPQU6whlsEsI9pZL0Gpd8MLBkhNLHoL9vaT+J
+         TdcFZzdw42v79aqRFA0Q9CVorZAHZM2eedBx4P8WEyqclLST4sNdrvUHurbhkiuJfCW7
+         z6h5bMJjPMXm8pf4Qf4rWbXrOQx8VehKgoNy+po++H2a04nTcA3Lk05iTsY7y97RZ5Ev
+         OMXA==
+X-Gm-Message-State: AOJu0YyYZYiG9x3z9tYXtky/bksN8tXhM5RNQnrC2SlljU2UgKmTuJz2
+	j1DWi1mHhCfXxgoZ1h9h2nn3fTPB0VFBB93r+AvFxqWMDotDc0nladdNkcne0OBC
+X-Gm-Gg: Acq92OG9bORM7wYIdRZnddZA90lj8lVFX+7vAFeO9FHlWx7PO0Ieg6T1F1tUM4VXhgd
+	nqCZvVX+kL2GyzlA9dTBZn8lkK+5Wt5An/i6Qqwamk5cUhcKLo/H5kGNnBLkRA3IMHqm+SQq+z8
+	4wJRKuT1v7SPcUb2TQGKMCBU4scqpmMciHgoTTGUvRQ16AlU1PTr9P/3REyVtLkSclPOsS0JMzb
+	PCrMsZR2DMoUS/u+roQehKHrBKvB3n7TqbFtkNRBi9B+jwyQwTXMTEY0JCOVQKYMJuPatCyHrEn
+	E0fBDBV4locOeRvFc5aCg8WiQ8YYLPIP8g52js/nc24pO5ubuxvsX12jLOI6pwiyRgrIhYfu6Zg
+	xRPWpImG9LxHkZ3VAFFh61ytGiGLeQ3wD71m5zpi2z7OImBfgA9Hadjz73i7nxrlc2ckfzLcSDQ
+	SxkyqQVfSaEmw+yq8UTcoUzjWQQPwTDiA2sc/M7Cj+
+X-Received: by 2002:a17:902:e885:b0:2bd:8dbd:17e6 with SMTP id d9443c01a7336-2beb067b61emr247816785ad.35.1779867008460;
+        Wed, 27 May 2026 00:30:08 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bed2061c59sm89242325ad.2.2026.05.27.00.30.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 00:30:06 -0700 (PDT)
+        Wed, 27 May 2026 00:30:08 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -66,9 +66,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH RFC bpf-next v3 2/6] bpf: compute loops hierarchy
-Date: Wed, 27 May 2026 00:29:50 -0700
-Message-ID: <20260527-better-1m-reporting-v3-2-b3ede0588a75@gmail.com>
+Subject: [PATCH RFC bpf-next v3 4/6] bpf: report hot simulated callchains when 1M instructions limit is met
+Date: Wed, 27 May 2026 00:29:52 -0700
+Message-ID: <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
 References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
@@ -81,330 +81,278 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Add an analysis phase computing the loops hierarchy to the bpf
-verifier. The algorithm is based on the paper:
-"A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
-adapted to be non-recursive.
+When the verifier exceeds the 1M instruction budget, the current error
+output shows a random execution trace that happens to be active when
+the limit is hit, which is not very helpful for debugging.
 
-Record the loops hierarchy per instruction:
-- The field insn_aux_data->loop_header records the innermost loop
-  header containing it.
-- The field insn_aux_data->loop records additional information about
-  the loop if this instruction is a loop header (at the moment it only
-  tracks irreduciblity of the loop, additional information will be
-  added later).
+To rectify this, employ a profiler-inspired technique:
+collect and count "callchain" stack traces that the verifier visits
+during program validation and report the top 3 hot traces. Sample
+callchains at instructions marked as force checkpoints and loop header
+entries.
 
-Subsequent patches use loop header entries as sampling points for
-callchain profiling, for better error reports when the 1M instruction
-budget is exhausted.
+When 1M instructions is met, print a report containing:
+- callchains verifier visited most often;
+- disassembly of the subprograms referenced from the printed
+  callchains.
+
+Here is an example of the report:
+
+  budget_nested_call_loop():
+    ; asm volatile ("                                     \ @ verifier_budget_report.c:44
+    0: (b7) r0 = 0
+    1: (85) call pc+1
+    2: (95) exit
+
+  budget_nested_call_loop__inner():
+    ; asm volatile ("                                     \ @ verifier_budget_report.c:54
+    3: (b7) r0 = 0
+    4: (07) r0 += 1
+    5: (05) goto pc-2
+
+  #1 most visited simulated stacktrace (visited 499999 times):
+    budget_nested_call_loop/1 (.../verifier_budget_report.c:44)
+    budget_nested_call_loop__inner/4 (.../verifier_budget_report.c:54)
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  10 +++
- kernel/bpf/Makefile          |   2 +-
- kernel/bpf/fixups.c          |   5 ++
- kernel/bpf/loops.c           | 196 +++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |  10 ++-
- 5 files changed, 221 insertions(+), 2 deletions(-)
+ include/linux/bpf_verifier.h |  14 ++++
+ kernel/bpf/verifier.c        | 155 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 169 insertions(+)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5cbad3b64130..d0a1fb135cbf 100644
+index d0a1fb135cbf..347a155d8e21 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -656,6 +656,10 @@ struct bpf_iarray {
- 	u32 items[];
+@@ -9,6 +9,8 @@
+ #include <linux/filter.h> /* for MAX_BPF_STACK */
+ #include <linux/tnum.h>
+ #include <linux/cnum.h>
++#include <linux/hashtable.h>
++#include <linux/jhash.h>
+ 
+ /* Maximum variable offset umax_value permitted when resolving memory accesses.
+  * In practice this is far bigger than any realistic pointer offset; this limit
+@@ -660,6 +662,17 @@ struct bpf_loop {
+ 	bool irreducible;
  };
  
-+struct bpf_loop {
-+	bool irreducible;
++struct bpf_callchain {
++	u32 insn_idx[MAX_CALL_FRAMES];
++	u32 curframe;
++};
++
++struct bpf_callchain_entry {
++	struct hlist_node node;
++	struct bpf_callchain cc;
++	u64 count;
 +};
 +
  struct bpf_insn_aux_data {
  	union {
  		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
-@@ -742,6 +746,10 @@ struct bpf_insn_aux_data {
- 	u16 const_reg_map_mask;
- 	u16 const_reg_subprog_mask;
- 	u32 const_reg_vals[10];
-+	/* index of a loop header of the innermost loop containing this instruction, -1 if none */
-+	s32 loop_header;
-+	/* additional information about the loop if this instruction is a loop header */
-+	struct bpf_loop *loop;
+@@ -1043,6 +1056,7 @@ struct bpf_verifier_env {
+ 	u32 scc_cnt;
+ 	struct bpf_iarray *succ;
+ 	struct bpf_iarray *gotox_tmp_buf;
++	DECLARE_HASHTABLE(callchain_htab, 8);
  };
  
- #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
-@@ -1608,4 +1616,6 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env);
- int bpf_fixup_call_args(struct bpf_verifier_env *env);
- int bpf_do_misc_fixups(struct bpf_verifier_env *env);
+ static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2b3584712ad2..54b7ad65b7fc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17247,6 +17247,152 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+ 	return INSN_IDX_UPDATED;
+ }
  
-+int bpf_compute_loops(struct bpf_verifier_env *env);
-+
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 4dc41bf5780c..787d183ba5b4 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
- 
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o loops.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 12739add2dda..57294524dab8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -450,6 +450,11 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- 			aux_data[i].jt = NULL;
- 		}
- 
-+		if (aux_data[i].loop) {
-+			kvfree(aux_data[i].loop);
-+			aux_data[i].loop = NULL;
-+		}
-+
- 		if (bpf_is_ldimm64(&insns[i]))
- 			i++;
- 	}
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-new file mode 100644
-index 000000000000..aec11248d048
---- /dev/null
-+++ b/kernel/bpf/loops.c
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/slab.h>
-+#include <linux/bpf_verifier.h>
-+
-+struct dfs_state {
-+	u32 traversed:1;
-+	u32 next_succ:31;
-+};
-+
-+struct loops_dfs {
-+	struct dfs_state *state;
-+	int *dfs_pos;
-+	int *stack;
-+};
-+
-+static void mark_irreducible(struct bpf_verifier_env *env, int h)
++static void compute_callchain(struct bpf_verifier_state *st, struct bpf_callchain *cc)
 +{
-+	env->insn_aux_data[h].loop->irreducible = true;
++	int i;
++
++	cc->curframe = st->curframe;
++	for (i = 0; i <= st->curframe; i++)
++		cc->insn_idx[i] = bpf_frame_insn_idx(st, i);
 +}
 +
-+static int mark_header(struct bpf_verifier_env *env, int h)
++static int update_callchain_profile(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_callchain_entry *entry;
++	struct bpf_callchain cc = {};
++	u32 hash;
 +
-+	if (!aux[h].loop) {
-+		aux[h].loop = kvzalloc_obj(struct bpf_loop, GFP_KERNEL_ACCOUNT);
-+		if (!aux[h].loop)
-+			return -ENOMEM;
-+	}
-+	return 0;
-+}
-+
-+static int assign_header(struct bpf_verifier_env *env, struct loops_dfs *dfs, int n, int h)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int *dfs_pos = dfs->dfs_pos;
-+	int err, nh;
-+
-+	err = mark_header(env, h);
-+	if (err)
-+		return err;
-+
-+	/* Don't encode self-loops, otherwise can't reflect loops nesting structure. */
-+	if (n == h)
-+		return 0;
-+
-+	/* Make sure that loop headers up the chain are sorted by dfs_pos. */
-+	while (aux[n].loop_header != -1) {
-+		nh = aux[n].loop_header;
-+		if (nh == h)
++	compute_callchain(st, &cc);
++	hash = jhash2(cc.insn_idx, cc.curframe + 1, cc.curframe + 1);
++	hash_for_each_possible(env->callchain_htab, entry, node, hash) {
++		if (entry->cc.curframe == cc.curframe &&
++		    !memcmp(entry->cc.insn_idx, cc.insn_idx, (cc.curframe + 1) * sizeof(u32))) {
++			entry->count++;
 +			return 0;
-+		if (dfs_pos[nh] < dfs_pos[h]) {
-+			aux[n].loop_header = h;
-+			n = h;
-+			h = nh;
-+		} else {
-+			n = nh;
 +		}
 +	}
-+	aux[n].loop_header = h;
++	entry = kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
++	if (!entry)
++		return -ENOMEM;
++	entry->cc = cc;
++	entry->count = 1;
++	hash_add(env->callchain_htab, &entry->node, hash);
 +	return 0;
++}
++
++static void free_callchain_profile(struct bpf_verifier_env *env)
++{
++	struct bpf_callchain_entry *entry;
++	struct hlist_node *tmp;
++	int bkt;
++
++	hash_for_each_safe(env->callchain_htab, bkt, tmp, entry, node) {
++		hash_del(&entry->node);
++		kfree(entry);
++	}
++}
++
++static void print_callchain_entry(struct bpf_verifier_env *env,
++				  struct bpf_callchain_entry *entry, int idx)
++{
++	struct bpf_callchain *cc = &entry->cc;
++	const struct bpf_line_info *linfo;
++	struct bpf_subprog_info *sub;
++	int i, insn_idx;
++
++	verbose(env, "#%d most visited simulated stacktrace (visited %llu times):\n",
++		idx, entry->count);
++	for (i = 0; i <= cc->curframe; i++) {
++		insn_idx = cc->insn_idx[i];
++		sub = bpf_find_containing_subprog(env, insn_idx);
++		linfo = bpf_find_linfo(env->prog, insn_idx);
++		if (sub->name)
++			verbose(env, "  %s/%d", sub->name, insn_idx);
++		else
++			verbose(env, "  subprog#%td/%d", sub - env->subprog_info, insn_idx);
++		if (linfo)
++			verbose(env, " (%s:%u)",
++				btf_name_by_offset(env->prog->aux->btf, linfo->file_name_off),
++				BPF_LINE_INFO_LINE_NUM(linfo->line_col));
++		verbose(env, "\n");
++	}
++}
++
++static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	u32 i, end = (sub + 1)->start;
++
++	if (sub->name)
++		verbose(env, "%s():\n", sub->name);
++	else
++		verbose(env, "subprog#%td:\n", sub - env->subprog_info);
++	env->prev_linfo = NULL;
++	for (i = sub->start; i < end; i++) {
++		verbose_linfo(env, i, "  ; ");
++		verbose(env, "  %d: ", i);
++		bpf_verbose_insn(env, &env->prog->insnsi[i]);
++		if (bpf_is_ldimm64(&env->prog->insnsi[i]))
++			i++;
++	}
 +}
 +
 +/*
-+ * As described in "A New Algorithm for Identifying Loops in Decompilation" by Wei et al,
-+ * adapted to be non-recursive.
++ * Print several most visited simulated stack traces,
++ * and a disasembly of related subprograms.
 + */
-+static int compute_loops_in_subprog(struct bpf_verifier_env *env, struct loops_dfs *dfs,
-+				    int subprog_idx)
++static void print_hotspots(struct bpf_verifier_env *env)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct dfs_state *state = dfs->state;
-+	int start = env->subprog_info[subprog_idx].start;
-+	int *dfs_pos = dfs->dfs_pos;
-+	int *stack = dfs->stack;
-+	int i, s, h, err, cur, stack_sz;
-+	struct bpf_iarray *succ;
++	DECLARE_BITMAP(printed_subs, BPF_MAX_SUBPROGS + 2) = {};
++	struct bpf_callchain_entry *top[3] = {};
++	struct bpf_callchain_entry *entry;
++	struct bpf_subprog_info *sub;
++	int i, j, bkt, nr_top = 0;
 +
-+	stack[0] = start;
-+	state[start].traversed = true;
-+	state[start].next_succ = 0;
-+	dfs_pos[start] = 1;
-+	stack_sz = 1;
-+	i = 0;
-+	do {
-+		/*
-+		 * The algorithm should be very fast in practice,
-+		 * guard against pathological inputs, just in case.
-+		 */
-+		if (i++ == 1024) {
-+			i = 0;
-+			if (signal_pending(current))
-+				return -EAGAIN;
-+			cond_resched();
-+		}
++	if (!(env->log.level & BPF_LOG_LEVEL))
++		return;
 +
-+		cur = stack[stack_sz - 1];
-+		succ = bpf_insn_successors(env, cur);
-+		if (state[cur].next_succ == succ->cnt) {
-+			dfs_pos[cur] = 0;
-+			stack_sz--;
-+			continue;
-+		}
-+		s = succ->items[state[cur].next_succ];
-+		if (!state[s].traversed) {
-+			/* Case A:  start -> ... -> cur -> s [unxplored] */
-+			state[s].traversed = true;
-+			state[s].next_succ = 0;
-+			stack[stack_sz] = s;
-+			dfs_pos[s] = stack_sz + 1;
-+			stack_sz++;
-+			continue;
-+		}
-+		/* 's' is fully explored at this point */
-+		if (dfs_pos[s]) {
-+			/*
-+			 * start -> ... -> s -> cur --.
-+			 *                 ^          |
-+			 *                 '----------'
-+			 * Case B: 's' is in the current DFS path.
-+			 */
-+			err = assign_header(env, dfs, cur, s);
-+			if (err)
-+				return err;
-+		} else if (aux[s].loop_header == -1) {
-+			/*
-+			 * start -> ... -> ... -> s -> ... -> end
-+			 *           |            ^
-+			 *           '---> cur ---'
-+			 * Case C: 's' is explored, not in the current DFS path,
-+			 * and not a part of any loop.
-+			 */
-+		} else if (dfs_pos[aux[s].loop_header]) {
-+			/*
-+			 *                 .----------------------.
-+			 *                 v                      |
-+			 * start -> ... -> h -> ... -> ... -> s --'
-+			 *                       |            ^
-+			 *	                 '---> cur ---'
-+			 * Case D: 's' is explored, not in current DFS path,
-+			 * but it's innermost loop header is.
-+			 */
-+			err = assign_header(env, dfs, cur, aux[s].loop_header);
-+			if (err)
-+				return err;
-+		} else {
-+			/* case E */
-+			h = aux[s].loop_header;
-+			mark_irreducible(env, h);
-+			/* can also mark 's' as reentry, but no need for now */
-+			while (aux[h].loop_header != -1) {
-+				h = aux[h].loop_header;
-+				if (dfs_pos[h]) {
-+					err = assign_header(env, dfs, cur, h);
-+					if (err)
-+						return err;
-+					break;
-+				}
-+				mark_irreducible(env, h);
++	/* Collect the hottest callchains */
++	hash_for_each(env->callchain_htab, bkt, entry, node) {
++		for (i = 0; i < 3; i++) {
++			if (!top[i] || entry->count > top[i]->count) {
++				memmove(&top[i + 1], &top[i], (2 - i) * sizeof(top[0]));
++				top[i] = entry;
++				break;
 +			}
 +		}
-+		state[cur].next_succ++;
-+	} while (stack_sz);
-+
-+	return 0;
-+}
-+
-+int bpf_compute_loops(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int i, err = 0, len = env->prog->len;
-+	struct loops_dfs dfs = {};
-+
-+	dfs.dfs_pos = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	dfs.state = kvcalloc(len, sizeof(struct dfs_state), GFP_KERNEL_ACCOUNT);
-+	dfs.stack = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	if (!dfs.dfs_pos || !dfs.state || !dfs.stack) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	for (i = 0; i < len; i++)
-+		aux[i].loop_header = -1;
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		err = compute_loops_in_subprog(env, &dfs, i);
-+		if (err)
-+			goto out;
 +	}
 +
-+out:
-+	kvfree(dfs.dfs_pos);
-+	kvfree(dfs.stack);
-+	kvfree(dfs.state);
-+	return err;
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3d569e36128c..2b3584712ad2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19627,13 +19627,17 @@ static void log_program(struct bpf_verifier_env *env)
- 	u32 insn_cnt = env->prog->len;
- 	u32 i, j;
- 
--	verbose(env, "Program dump (scc? insn#: live_regs_before):\n");
-+	verbose(env, "Program dump (scc? loop_header? insn#: live_regs_before):\n");
- 	for (i = 0; i < insn_cnt; ++i) {
- 		verbose_linfo(env, i, "    ; ");
- 		if (env->insn_aux_data[i].scc)
- 			verbose(env, "%3d ", env->insn_aux_data[i].scc);
- 		else
- 			verbose(env, "    ");
-+		if (env->insn_aux_data[i].loop_header >= 0)
-+			verbose(env, "%3d ", env->insn_aux_data[i].loop_header);
-+		else
-+			verbose(env, "    ");
- 		verbose(env, "%3d: ", i);
- 		for (j = BPF_REG_0; j < BPF_REG_10; ++j)
- 			if (insn_aux[i].live_regs_before & BIT(j))
-@@ -19791,6 +19795,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
- 
-+	ret = bpf_compute_loops(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++	for (i = 0; i < 3 && top[i]; i++)
++		nr_top++;
 +
- 	ret = bpf_compute_scc(env);
- 	if (ret < 0)
- 		goto skip_full_check;
++	if (!nr_top)
++		return;
++
++	if (!(env->log.level & BPF_LOG_LEVEL2))
++		bpf_vlog_reset(&env->log, 0);
++
++	/* Identify callchain subprograms and print disasm of those */
++	for (i = 0; i < nr_top; i++) {
++		struct bpf_callchain *cc = &top[i]->cc;
++
++		for (j = 0; j <= cc->curframe; j++) {
++			sub = bpf_find_containing_subprog(env, cc->insn_idx[j]);
++			__set_bit(sub - env->subprog_info, printed_subs);
++		}
++	}
++
++	for_each_set_bit(i, printed_subs, env->subprog_cnt) {
++		disasm_subprog(env, &env->subprog_info[i]);
++		verbose(env, "\n");
++	}
++
++	/* Print the hot callchains */
++	for (i = 0; i < nr_top; i++) {
++		print_callchain_entry(env, top[i], i + 1);
++		verbose(env, "\n");
++	}
++}
++
+ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ {
+ 	int err;
+@@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		insn_aux = &env->insn_aux_data[env->insn_idx];
+ 
+ 		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
++			print_hotspots(env);
+ 			verbose(env,
+ 				"BPF program is too large. Processed %d insn\n",
+ 				env->insn_processed);
+@@ -17390,6 +17537,12 @@ static int do_check(struct bpf_verifier_env *env)
+ 		state->last_insn_idx = env->prev_insn_idx;
+ 		state->insn_idx = env->insn_idx;
+ 
++		if (bpf_is_force_checkpoint(env, env->insn_idx) || insn_aux->loop) {
++			err = update_callchain_profile(env, state);
++			if (err)
++				return err;
++		}
++
+ 		if (bpf_is_prune_point(env, env->insn_idx)) {
+ 			err = bpf_is_state_visited(env, env->insn_idx);
+ 			if (err < 0)
+@@ -19673,6 +19826,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 		return -ENOMEM;
+ 
+ 	env->bt.env = env;
++	hash_init(env->callchain_htab);
+ 
+ 	len = (*prog)->len;
+ 	env->insn_aux_data =
+@@ -19945,6 +20099,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	bpf_clear_insn_aux_data(env, 0, env->prog->len);
+ 	vfree(env->insn_aux_data);
+ err_free_env:
++	free_callchain_profile(env);
+ 	bpf_stack_liveness_free(env);
+ 	kvfree(env->cfg.insn_postorder);
+ 	kvfree(env->scc_info);
 
 -- 
 2.53.0
