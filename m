@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FA33FAE10;
-	Wed, 27 May 2026 11:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303303F9270;
+	Wed, 27 May 2026 11:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779882068; cv=none; b=AHILqBuEYOodk6KLv9iyrkaG9UL3aecEboyavWiIdbjLnrtjPRniTva5/W8LJhWXYzKKBzpb4QBvK55Uqfi5wCQ1WtiWGt/YhqQ6yxQhJf2Zbp8lQglqbekPZMDoBfia/MyO2ys/0o9bcYRlKOd/npommIGb16iQFF83UdgbpEg=
+	t=1779882079; cv=none; b=XdH/3Zu571OM9WuLM37BPGvE1ARYW+kNCv5Dq4nkIaU03/0h/+I+SC1nIAEydwp2KAKVEqzo82N0FKm+L81v3vceveHFkkBXbG8hwXOabY2mJNTkbY/nlmj/2G8EvsWM3zPLokI4NpB3xxT3Htu2TdEQmA9Dc/s8YrRDuydv4Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779882068; c=relaxed/simple;
-	bh=iSPD96GGzc5zezh2BnZqDhffP2ZKg5Hz8BCaajoqcro=;
+	s=arc-20240116; t=1779882079; c=relaxed/simple;
+	bh=bTR4oxYA+F9NmTSwYOzfQoe0goAyxBrw88zAIRXeRTc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hccDKUEBw21xECaWpEmaYoJCfRSEu2fiE/QuEU0/pw8tstG/59ycE1cxnpstp48LCC4UdiikaaBpA4WNQCkR5SGG+OyUTzHlg209beSRCt+nZ8+n15rs2/8WNS4qXBjQIKNzCyEJ1UGYl9VXEBThuZrSaWUrXXKqSxza+xhnyJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jg1n4qEn; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=b0lKQ3ofyxfNUtr9QIVt5k1pNobQ3OMLu3uuZxvRO6eVVW3WuecQKLJ1ETH6+sXNtIxAaxZuGrlPttvvn3tgPKG1zq/8kx9nMND86fuGZZvoSaKywDTQrmlRNFYkTPpCROT7Ql957mxNsDurbnADMWief8UJndqRPtB5RORLUU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dh7B9dt1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jg1n4qEn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30EE41F000E9;
-	Wed, 27 May 2026 11:41:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dh7B9dt1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4BC91F000E9;
+	Wed, 27 May 2026 11:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779882065;
-	bh=M4AFrrk3LOJG/yJgNU1JqJ8r07QOp5DjyGtbEagjVTE=;
+	s=k20260515; t=1779882076;
+	bh=DmygLWCAfWehd2T/8BJ9g5b5Ozq1qPHC3aZIFcJ8iKc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jg1n4qEnyOVvZ+e6qMViUGuyAmNE1Dt+z39sL+RlrbEjmAvbQdLBBaIY/raRpDpi4
-	 i8Yy6CnnO9yg9Wzhefj2mq/++DZCBFpojwcUvJx08hQRVy6qMPXh6FjO0GjydgWm4e
-	 rMltA8cCUfGrRf/daJl9J/DbeOeDgLDzqvHb0R4CiN0/Yxx+VNH1roVgERtHLaJRQx
-	 d8Gs3en/ihFJitE0UISbRzA2HTHEzxzhUJKypN8SUsTnbWgHjon3qWc5qoOjCUzy1m
-	 O3fyf9EPGgKQViaiLOhMLdAwOc+8MlsPsffVFNfZphwMZLjGk916eo4yoMnhnkZAV6
-	 iNLprrGAwEJfQ==
+	b=Dh7B9dt1wujY2L+bMDWgPUiQNTTO/xLm57U82FLp3LDc8v0llCQ9y4uh8OlTrN26H
+	 FdZ55OAwZLd6RMe3sZeovGW5e+NFtXVwCDDEs2iW0UM7jfik/kTyQhroo9QSFbwJ8h
+	 /zLQELuuWS0QAqZOn+5oefAyKke8N/GMQ/wuXmtHER5blW97Il7caz1O6iOKeTTDHF
+	 RQyyZ3IBVF1s7P74Mo0VJoGdLrb6UlY5NeSv/rki/FL41lJyY7bv+lwDzHMTu1RU5r
+	 eCpW880U6p2B4ozMD1UwudLOHzRyZJ0hq7ETV4POPpnmNOTC/svSAtd9xkKQX7uMss
+	 Gazc8CUGBGMYw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv6 bpf-next 06/29] bpf: Move trampoline image setup into bpf_trampoline_ops callbacks
-Date: Wed, 27 May 2026 13:39:28 +0200
-Message-ID: <20260527113951.46265-7-jolsa@kernel.org>
+Subject: [PATCHv6 bpf-next 07/29] bpf: Add bpf_trampoline_add/remove_prog functions
+Date: Wed, 27 May 2026 13:39:29 +0200
+Message-ID: <20260527113951.46265-8-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260527113951.46265-1-jolsa@kernel.org>
 References: <20260527113951.46265-1-jolsa@kernel.org>
@@ -52,159 +52,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Moving trampoline image setup into bpf_trampoline_ops callbacks,
-so we can have different image handling for multi attachment which
-is coming in following changes.
+Separate bpf_trampoline_add/remove_prog functions from
+__bpf_trampoline_link/unlink functions to be able to add/remove
+trampoline programs without the image being updated in following
+changes. No functional change is intended.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/trampoline.c | 66 ++++++++++++++++++++++++-----------------
- 1 file changed, 38 insertions(+), 28 deletions(-)
+ kernel/bpf/trampoline.c | 108 +++++++++++++++++++++++-----------------
+ 1 file changed, 61 insertions(+), 47 deletions(-)
 
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 848f256e1701..7661738c1bd0 100644
+index 7661738c1bd0..70724b0d8fb8 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -60,11 +60,10 @@ static void trampoline_unlock(struct bpf_trampoline *tr)
+@@ -820,41 +820,16 @@ static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
+ 	return 0;
  }
  
- struct bpf_trampoline_ops {
--	int (*register_fentry)(struct bpf_trampoline *tr, void *new_addr, void *data);
--	int (*unregister_fentry)(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr,
--				 void *data);
--	int (*modify_fentry)(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr,
--			     void *new_addr, bool lock_direct_mutex, void *data);
-+	int (*register_fentry)(struct bpf_trampoline *tr, struct bpf_tramp_image *im, void *data);
-+	int (*unregister_fentry)(struct bpf_trampoline *tr, u32 orig_flags, void *data);
-+	int (*modify_fentry)(struct bpf_trampoline *tr, u32 orig_flags, struct bpf_tramp_image *im,
-+			     bool lock_direct_mutex, void *data);
- };
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-@@ -426,9 +425,11 @@ static int bpf_trampoline_update_fentry(struct bpf_trampoline *tr, u32 orig_flag
- 	return bpf_arch_text_poke(ip, old_t, new_t, old_addr, new_addr);
- }
- 
--static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
--			     void *old_addr, void *data __maybe_unused)
-+static void bpf_tramp_image_put(struct bpf_tramp_image *im);
-+
-+static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags, void *data __maybe_unused)
+-static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+-				      struct bpf_trampoline *tr,
+-				      struct bpf_prog *tgt_prog,
+-				      const struct bpf_trampoline_ops *ops,
+-				      void *data)
++static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
++				   struct bpf_tramp_link *link,
++				   int cnt)
  {
-+	void *old_addr = tr->cur_image->image;
- 	int ret;
+ 	struct bpf_fsession_link *fslink = NULL;
+ 	enum bpf_tramp_prog_type kind;
+ 	struct bpf_tramp_link *link_exiting;
+ 	struct hlist_head *prog_list;
+-	int err = 0;
+-	int cnt = 0, i;
  
- 	if (tr->func.ftrace_managed)
-@@ -436,13 +437,19 @@ static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
- 	else
- 		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, NULL);
- 
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	bpf_tramp_image_put(tr->cur_image);
-+	tr->cur_image = NULL;
-+	return 0;
- }
- 
--static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
--			 void *old_addr, void *new_addr,
-+static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags, struct bpf_tramp_image *im,
- 			 bool lock_direct_mutex, void *data __maybe_unused)
- {
-+	void *old_addr = tr->cur_image->image;
-+	void *new_addr = im->image;
- 	int ret;
- 
- 	if (tr->func.ftrace_managed) {
-@@ -451,12 +458,20 @@ static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
- 		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr,
- 						   new_addr);
- 	}
--	return ret;
-+
-+	if (ret)
-+		return ret;
-+
-+	bpf_tramp_image_put(tr->cur_image);
-+	tr->cur_image = im;
-+	return 0;
- }
- 
- /* first time registering */
--static int register_fentry(struct bpf_trampoline *tr, void *new_addr, void *data __maybe_unused)
-+static int register_fentry(struct bpf_trampoline *tr, struct bpf_tramp_image *im,
-+			   void *data __maybe_unused)
- {
-+	void *new_addr = im->image;
- 	void *ip = tr->func.addr;
- 	unsigned long faddr;
- 	int ret;
-@@ -474,7 +489,11 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr, void *data
- 		ret = bpf_trampoline_update_fentry(tr, 0, NULL, new_addr);
- 	}
- 
--	return ret;
-+	if (ret)
-+		return ret;
-+
-+	tr->cur_image = im;
-+	return 0;
- }
- 
- static const struct bpf_trampoline_ops trampoline_ops = {
-@@ -664,9 +683,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		return PTR_ERR(tlinks);
- 
- 	if (total == 0) {
--		err = ops->unregister_fentry(tr, orig_flags, tr->cur_image->image, data);
--		bpf_tramp_image_put(tr->cur_image);
--		tr->cur_image = NULL;
-+		err = ops->unregister_fentry(tr, orig_flags, data);
- 		goto out;
- 	}
- 
-@@ -734,11 +751,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 
- 	if (tr->cur_image)
- 		/* progs already running at this address */
--		err = ops->modify_fentry(tr, orig_flags, tr->cur_image->image,
--					 im->image, lock_direct_mutex, data);
-+		err = ops->modify_fentry(tr, orig_flags, im, lock_direct_mutex, data);
- 	else
- 		/* first time registering */
--		err = ops->register_fentry(tr, im->image, data);
-+		err = ops->register_fentry(tr, im, data);
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	if (err == -EAGAIN) {
-@@ -750,22 +766,16 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		goto again;
- 	}
- #endif
--	if (err)
--		goto out_free;
- 
--	if (tr->cur_image)
--		bpf_tramp_image_put(tr->cur_image);
--	tr->cur_image = im;
-+out_free:
-+	if (err)
-+		bpf_tramp_image_free(im);
- out:
- 	/* If any error happens, restore previous flags */
- 	if (err)
- 		tr->flags = orig_flags;
- 	kfree(tlinks);
- 	return err;
+ 	kind = bpf_attach_type_to_tramp(link->link.prog);
+-	if (tr->extension_prog)
+-		/* cannot attach fentry/fexit if extension prog is attached.
+-		 * cannot overwrite extension prog either.
+-		 */
+-		return -EBUSY;
 -
--out_free:
--	bpf_tramp_image_free(im);
--	goto out;
+-	for (i = 0; i < BPF_TRAMP_MAX; i++)
+-		cnt += tr->progs_cnt[i];
+-
+-	if (kind == BPF_TRAMP_REPLACE) {
+-		/* Cannot attach extension if fentry/fexit are in use. */
+-		if (cnt)
+-			return -EBUSY;
+-		err = bpf_freplace_check_tgt_prog(tgt_prog);
+-		if (err)
+-			return err;
+-		tr->extension_prog = link->link.prog;
+-		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_NOP,
+-					  BPF_MOD_JUMP, NULL,
+-					  link->link.prog->bpf_func);
+-	}
+ 	if (kind == BPF_TRAMP_FSESSION) {
+ 		prog_list = &tr->progs_hlist[BPF_TRAMP_FENTRY];
+ 		cnt++;
+@@ -882,17 +857,64 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ 	} else {
+ 		tr->progs_cnt[kind]++;
+ 	}
+-	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
+-	if (err) {
+-		hlist_del_init(&link->tramp_hlist);
+-		if (kind == BPF_TRAMP_FSESSION) {
+-			tr->progs_cnt[BPF_TRAMP_FENTRY]--;
+-			hlist_del_init(&fslink->fexit.tramp_hlist);
+-			tr->progs_cnt[BPF_TRAMP_FEXIT]--;
+-		} else {
+-			tr->progs_cnt[kind]--;
+-		}
++	return 0;
++}
++
++static void bpf_trampoline_remove_prog(struct bpf_trampoline *tr,
++				    struct bpf_tramp_link *link)
++{
++	struct bpf_fsession_link *fslink;
++	enum bpf_tramp_prog_type kind;
++
++	kind = bpf_attach_type_to_tramp(link->link.prog);
++	if (kind == BPF_TRAMP_FSESSION) {
++		fslink = container_of(link, struct bpf_fsession_link, link.link);
++		hlist_del_init(&fslink->fexit.tramp_hlist);
++		tr->progs_cnt[BPF_TRAMP_FEXIT]--;
++		kind = BPF_TRAMP_FENTRY;
++	}
++	hlist_del_init(&link->tramp_hlist);
++	tr->progs_cnt[kind]--;
++}
++
++static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
++				      struct bpf_trampoline *tr,
++				      struct bpf_prog *tgt_prog,
++				      const struct bpf_trampoline_ops *ops,
++				      void *data)
++{
++	enum bpf_tramp_prog_type kind;
++	int err = 0;
++	int cnt = 0, i;
++
++	kind = bpf_attach_type_to_tramp(link->link.prog);
++	if (tr->extension_prog)
++		/* cannot attach fentry/fexit if extension prog is attached.
++		 * cannot overwrite extension prog either.
++		 */
++		return -EBUSY;
++
++	for (i = 0; i < BPF_TRAMP_MAX; i++)
++		cnt += tr->progs_cnt[i];
++
++	if (kind == BPF_TRAMP_REPLACE) {
++		/* Cannot attach extension if fentry/fexit are in use. */
++		if (cnt)
++			return -EBUSY;
++		err = bpf_freplace_check_tgt_prog(tgt_prog);
++		if (err)
++			return err;
++		tr->extension_prog = link->link.prog;
++		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_NOP,
++					  BPF_MOD_JUMP, NULL,
++					  link->link.prog->bpf_func);
+ 	}
++	err = bpf_trampoline_add_prog(tr, link, cnt);
++	if (err)
++		return err;
++	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
++	if (err)
++		bpf_trampoline_remove_prog(tr, link);
+ 	return err;
  }
  
- static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+@@ -927,16 +949,8 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+ 		guard(mutex)(&tgt_prog->aux->ext_mutex);
+ 		tgt_prog->aux->is_extended = false;
+ 		return err;
+-	} else if (kind == BPF_TRAMP_FSESSION) {
+-		struct bpf_fsession_link *fslink =
+-			container_of(link, struct bpf_fsession_link, link.link);
+-
+-		hlist_del_init(&fslink->fexit.tramp_hlist);
+-		tr->progs_cnt[BPF_TRAMP_FEXIT]--;
+-		kind = BPF_TRAMP_FENTRY;
+ 	}
+-	hlist_del_init(&link->tramp_hlist);
+-	tr->progs_cnt[kind]--;
++	bpf_trampoline_remove_prog(tr, link);
+ 	return bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
+ }
+ 
 -- 
 2.54.0
 
