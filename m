@@ -1,100 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FE145106F
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 18:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAA336495D;
+	Wed, 27 May 2026 19:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779905279; cv=none; b=hWI2S97APUHvMejps+6VIkBN3tw6JUGnV2HOH/MLrMtd7GBE2vXidsNzXkTzeB6CBMv5iZL8T8ZLUrr2PBN72gLyWi8xA80p0pp9AUB8DglvfSRpcKlzdb1gDxcq3pC1yGoJghYGSLaDK08pW5PYtci4IiVlAA2jzRu4mL56avg=
+	t=1779909175; cv=none; b=LfL+GpXRxwFgZiII5zhqzVqNTPs7BpxaB0XUSxRG4gYfxfqPAui89fGzqlw4uuBRhTqDOujw5q4F309JJKKebwLHOaMGmEufxSRc0gKTBGcgcyyzgwwQqrY5pl1SvA95PY6M9j9pm+ueKUj/T0m6JIyt9QiS8u9jeu7OpMtPVwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779905279; c=relaxed/simple;
-	bh=oG/YfU6vpOzLUxoCYyT+JIRQ3SCMPv60omqcVfRXTO4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mOTuFpfK4dzZSFttMwvgVcJO+32MnfbZqYEQz+4c8efSJv6Iz7NGZBf8KLiCmuHJOMkhAThsYVtiyIHnA8TUJLY0Xg5Ksal8Sz+Sxh40CbbVs2CQc695S/skSHX7TUws3nqR9cuAcMr7vS2MyObWIeNxfbxTL8GVVbnZDISv8LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3EgSA9N; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779909175; c=relaxed/simple;
+	bh=OMBhp36SGhBUxYsENPfb9uF3VzY8cW8Q8Xw5p9ehcs8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XkcA2/lklmofWjMOwpaxrQDC7Zz5T+It8dFbl8ZlTXbtOopJDygu3Jmv6h5/J2Z3E6U7r8RwXXeH6b+YhUAAQmvmSWiJ4E5W4bUGa78KkbSa9HjKatFWDy/3NgoYeRIH7I5M02VeTBKkvCghto/XeQYkAnqgp+hL72b91ROgfIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OffYYVPf; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3EgSA9N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CEC1F000E9;
-	Wed, 27 May 2026 18:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779905277;
-	bh=pg6miN1E9av1/tI8OIzk2W3jO5AZvhMS29E+7E1hyPU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Q3EgSA9N/2x6GBN9vuZ4M609HNqkBv8H64433BtyFv/vuIzV8y9TxUwRnjoOeJWnr
-	 sZLtoTUlzOwLIXem6oBj3bDGidAQUpKW3H/cu+LlY3zJTz4c0T8/nvIGVc05dMi1kA
-	 guW1hBWas+31MjNbB++55a1LreftltmhwQ4GPtcX6ygj7EqvhHuQiEEF1xX9kX7cEO
-	 gDMlzdN+1zvPoI+6mBcdx0JWa9O81Z9j/2gSSD64DWYwzegxlQsnv4tO7Y6AswNd6H
-	 UKjqn3WgI0MLfhM7UEcoSCU+rcVDfhV9ZShBGk0aIhGUfBzYucjBbA28smdSZm9D2C
-	 VuOr80iHe83+Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/4] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Breno Leitao" <leitao@debian.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260527-bootconfig_using_tools-v1-4-b6906a86e7d5@debian.org>
-References: <20260527-bootconfig_using_tools-v1-4-b6906a86e7d5@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 18:07:57 +0000
-Message-Id: <20260527180757.B4CEC1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OffYYVPf"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id E07214E42D69;
+	Wed, 27 May 2026 19:12:44 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9282A601A1;
+	Wed, 27 May 2026 19:12:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1697A10888BE4;
+	Wed, 27 May 2026 21:12:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1779909163; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=pqol5pOcp80VinncolPKrRnV5MzpAOgtnDii24qMsFA=;
+	b=OffYYVPfGFCF2dx9rYcIraiIMq+j7bOIll6Qp7FRxkUrDxdIt410u8733cY+NqOiejfA0H
+	1uAeQI6/4IFZs8Zcv+kM6tsLUGlqD49XqYMd25HLACFjPIBLJQMC3s7FihDKpTSWXO7Kv8
+	13ar0VGPk+K9c6lIwHgSRP0Qv9+da1ZagwHopr5Bptzw9oFKGmvtsSVEDo37Rq7UJtfLsv
+	5oYh9c6E8JfwLKqk+7zGRU38il8afy96ie9wOwVP9yvoJrp2rFSoUrr26fRoQZtShFB34H
+	Ezud/a+RvKwm2whD1hidf/fSnLKMd5QQrTMu6yhrCI2DAT7LTygHdoVYJqtKKw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 27 May 2026 21:12:31 +0200
+Subject: [PATCH bpf-next] x86/ftrace: relocate %rip-relative percpu refs in
+ dynamic trampolines
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260527-fix_call_depth_in_trampoline-v1-1-1c1abc8ae310@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM4QrCIBSG4VsZ53eCGVurW4khenZsJ8yJ2hiM3
+ fusfr58H88GmRJThnuzQaKFM8+hxvnUAE4mPEnwWBuUVJ1s1VU4XjUa7/VIsUyagy7JvOPsOZD
+ opcW2u10k9g4qERPV/49/gI1OBFoLDP8lf+yLsHx12PcDDo4qhYoAAAA=
+X-Change-ID: 20260527-fix_call_depth_in_trampoline-80bc56930c8f
+To: Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Uros Bizjak <ubizjak@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ ebpf@linuxfoundation.org, Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Unconditional application of embedded bootconfig `kernel` keys byp=
-asses the `bootconfig` parameter opt-in requirement.
---
+With CONFIG_CALL_DEPTH_TRACKING enabled on an x86 retbleed-affected
+platform (eg: Skylake), with retbleed=stuff, registering a dynamic
+ftrace trampoline crashes on the first call into the traced function:
 
-commit 571add72b0db9b7dbd9f5c179025b85435fd8e31
-Author: Breno Leitao <leitao@debian.org>
+  [    9.630365] BUG: unable to handle page fault for address: ffff88817ae18880
+  [    9.630365] #PF: supervisor write access in kernel mode
+  [    9.630365] #PF: error_code(0x0002) - not-present page
+  [    9.630365] PGD 4b53067 P4D 4b53067 PUD 0
+  [    9.630365] Oops: Oops: 0002 [#1] SMP PTI
+  [    9.630365] CPU: 3 UID: 0 PID: 187 Comm: usleep Not tainted 7.0.10 #243 PREEMPT(full)
+  [    9.630365] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.17.0-2-2 04/01/2014
+  [    9.630365] RIP: 0010:0xffffffffc0400058
+  [    9.630365] Code: 24 78 00 00 00 00 48 89 ea 48 89 54 24 20 48 8b b4 24 b8 00 00 00 48 8b bc 24 b0 00 00 00 48 89 bc 24 80 00 00 00 48 83 ef 05 <65> 48 c1 3d 1f a8 b6 02 05 48 8b 15 f6 00 00 00 4c 89 3c 24 4c 89
+  [    9.630365] RSP: 0018:ffffc90000a3fe60 EFLAGS: 00010382
+  [    9.630365] RAX: ffffffffffffffff RBX: ffffc90000a3ff58 RCX: 0000000000000000
+  [    9.630365] RDX: ffffc90000a3ff48 RSI: ffffffff82198e40 RDI: ffffffff813f5654
+  [    9.630365] RBP: ffffc90000a3ff48 R08: 0000000000000000 R09: 0000000000000000
+  [    9.630365] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8881030d3780
+  [    9.630365] R13: 00000000000000e6 R14: 0000000000000000 R15: 0000000000000000
+  [    9.630365] FS:  00007f081d131740(0000) GS:ffff8881b7eae000(0000) knlGS:0000000000000000
+  [    9.630365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [    9.630365] CR2: ffff88817ae18880 CR3: 00000001033dc006 CR4: 00000000003706f0
+  [    9.630365] Call Trace:
+  [    9.630365]  <TASK>
+  [    9.630365]  ? find_held_lock+0x2b/0x80
+  [    9.630365]  ? exc_page_fault+0x74/0x220
+  [    9.630365]  ? lock_release+0xe1/0x320
+  [    9.630365]  ? __x64_sys_clock_nanosleep+0x9/0x1a0
+  [    9.630365]  ? lockdep_hardirqs_on_prepare+0xd9/0x190
+  [    9.630365]  ? trace_hardirqs_on+0x18/0x100
+  [    9.630365]  __x64_sys_clock_nanosleep+0x9/0x1a0
+  [    9.630365]  do_syscall_64+0x100/0x5f0
+  [    9.630365]  ? exc_page_fault+0x1e0/0x220
+  [    9.630365]  ? call_depth_return_thunk+0x2a/0xd0
+  [    9.630365]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+  [    9.630365] RIP: 0033:0x7f081d20ad83
+  [    9.630365] Code: ff ff c3 0f 1f 40 00 83 ff 03 74 7b 83 ff 02 b8 fa ff ff ff 49 89 ca 0f 44 f8 80 3d c6 d2 10 00 00 74 14 b8 e6 00 00 00 0f 05 <f7> d8 c3 66 2e 0f 1f 84 00 00 00 00 00 48 83 ec 28 48 89 54 24 10
+  [    9.630365] RSP: 002b:00007ffd539e1328 EFLAGS: 00000202 ORIG_RAX: 00000000000000e6
+  [    9.630365] RAX: ffffffffffffffda RBX: 0000000000000103 RCX: 00007f081d20ad83
+  [    9.630365] RDX: 00007ffd539e1340 RSI: 0000000000000000 RDI: 0000000000000000
+  [    9.630365] RBP: 00007ffd539e14f8 R08: 0000000000000000 R09: 0000000000000000
+  [    9.630365] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
+  [    9.630365] R13: 00007ffd539e1510 R14: 00007f081d370000 R15: 00005619c9d78338
+  [    9.630365]  </TASK>
+  [    9.630365] Modules linked in:
+  [    9.630365] CR2: ffff88817ae18880
+  [    9.630365] ---[ end trace 0000000000000000 ]---
+  [    9.630365] RIP: 0010:0xffffffffc0400058
+  [    9.630365] Code: 24 78 00 00 00 00 48 89 ea 48 89 54 24 20 48 8b b4 24 b8 00 00 00 48 8b bc 24 b0 00 00 00 48 89 bc 24 80 00 00 00 48 83 ef 05 <65> 48 c1 3d 1f a8 b6 02 05 48 8b 15 f6 00 00 00 4c 89 3c 24 4c 89
+  [    9.630365] RSP: 0018:ffffc90000a3fe60 EFLAGS: 00010382
+  [    9.630365] RAX: ffffffffffffffff RBX: ffffc90000a3ff58 RCX: 0000000000000000
+  [    9.630365] RDX: ffffc90000a3ff48 RSI: ffffffff82198e40 RDI: ffffffff813f5654
+  [    9.630365] RBP: ffffc90000a3ff48 R08: 0000000000000000 R09: 0000000000000000
+  [    9.630365] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8881030d3780
+  [    9.630365] R13: 00000000000000e6 R14: 0000000000000000 R15: 0000000000000000
+  [    9.630365] FS:  00007f081d131740(0000) GS:ffff8881b7eae000(0000) knlGS:0000000000000000
+  [    9.630365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [    9.630365] CR2: ffff88817ae18880 CR3: 00000001033dc006 CR4: 00000000003706f0
+  [    9.630365] Kernel panic - not syncing: Fatal exception
 
-x86/setup: prepend embedded bootconfig cmdline before parse_early_param
+This small reproducer allows to easily trigger the crash:
 
-This commit prepends the embedded bootconfig kernel subtree to the command
-line in setup_arch() before parse_early_param() runs. It allows early
-parameter handlers to see bootconfig values without runtime parsing, while
-avoiding duplicate registrations in setup_boot_config().
+  # echo 'p __x64_sys_clock_nanosleep' > /sys/kernel/tracing/kprobe_events
+  # echo 1 > /sys/kernel/tracing/events/kprobes/p___x64_sys_clock_nanosleep_0/enable
+  # usleep 1
 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 46882ce79c3a4..592c4c79c974b 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
+Monitoring the crash under GDB points to the exact instruction in charge
+of incrementing the call depth:
 
-[ ... ]
+  sarq $5, %gs:__x86_call_depth(%rip)
 
-> @@ -924,6 +925,8 @@ void __init setup_arch(char **cmdline_p)
->  	builtin_cmdline_added =3D true;
->  #endif
-> =20
-> +	xbc_prepend_embedded_cmdline(boot_command_line, COMMAND_LINE_SIZE);
-> +
+This instruction matches the one inserted by the ftrace_regs_caller from
+ftrace_64.S. This emitted code was likely working fine until the
+introduction of commit 59bec00ace28 ("x86/percpu: Introduce
+%rip-relative addressing to PER_CPU_VAR()"): it has made the call depth
+accounting addressing relative to $rip, instead of being based on an
+absolute address. As this code exact location depends on where the
+trampoline lives in memory, the corresponding displacement needs to be
+adjusted at runtime to actually correctly find the per-cpu
+__x86_call_depth value, otherwise the targeted address is wrong, leading
+to the page fault seen above.
 
-[Severity: High]
-Does this unconditional call bypass the bootconfig opt-in requirement?
+Fix the %rip-relative displacement of the copied CALL_DEPTH_ACCOUNT
+instruction (from ftrace_regs_caller) by calling
+text_poke_apply_relocation(), as it is done for example by the x86 BPF
+JIT compiler through x86_call_depth_emit_accounting(). This corrects
+both CALL_DEPTH_ACCOUNT slots, in ftrace_caller and ftrace_regs_caller.
 
-Documentation/admin-guide/bootconfig.rst specifies that embedded bootconfigs
-must be explicitly enabled via the bootconfig command-line parameter, unless
-CONFIG_BOOT_CONFIG_FORCE is set.
+Fixes: 59bec00ace28 ("x86/percpu: Introduce %rip-relative addressing to PER_CPU_VAR()")
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ arch/x86/kernel/ftrace.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Could this create a semantic inconsistency if a user boots without the
-bootconfig parameter? It appears setup_boot_config() would correctly ignore
-the embedded init.* keys, but these embedded kernel.* keys would still be
-forcefully applied.
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 0543b57f54ee..357df1b2922c 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -375,6 +375,13 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 			goto fail;
+ 	}
+ 
++	/*
++	 * Generated trampoline may contain rip-relative addressing which
++	 * displacement needs to be fixed
++	 */
++	text_poke_apply_relocation(trampoline, trampoline, size,
++				   (void *)start_offset, size);
++
+ 	/*
+ 	 * The address of the ftrace_ops that is used for this trampoline
+ 	 * is stored at the end of the trampoline. This will be used to
 
-Furthermore, does this impact the bootconfig fail-safe recovery mechanism?
-If a malformed embedded kernel.* key (such as an invalid console=3D or mem=
-=3D)
-causes a kernel panic, would an administrator be unable to disable it by
-removing bootconfig from the bootloader command line?
+---
+base-commit: aef70d0806e39b83f1fbecc32c72cc328751292a
+change-id: 20260527-fix_call_depth_in_trampoline-80bc56930c8f
 
->  	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
->  	*cmdline_p =3D command_line;
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-bootconfig=
-_using_tools-v1-0-b6906a86e7d5@debian.org?part=3D4
