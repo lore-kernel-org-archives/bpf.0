@@ -1,82 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AFF30DD2A
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 08:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F5A3E3144;
+	Wed, 27 May 2026 08:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779871815; cv=none; b=kkYI/NfbdLojPT6oBX7P438OazDDabmBcWWZoDDhWs+zlXHbc4bgxXu3fLWaqCcV7VnPyGjc5qLignFgStuttiUAkIzaCKHTOP82nAgXcdc3ltPawypzHS1GkYnf6EFz/vULaKF+tttc94I9Bq38c5V/LTqzElf2txgD2gSgTuA=
+	t=1779871910; cv=none; b=OPOx11vl4n20Nqukz0DdLWJEHJaWDde8E9y4Q4KnobfxT/RKt8DnenwkkniH9rtjsz+2JMpVWTwaFKkpv7Nt8YC7ci+ixTf2i8jclDsluSP7UN5rDEY6ms2Sih00QlhJrbGBgU54SM35kltNA8CTvZ0zOzjl9WSCjKj80rEktQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779871815; c=relaxed/simple;
-	bh=LA9uv/m4NyyMqpcLnGdcUMDBzhfe9z2Xtl+Lvh00W7M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OR56xaMPaRjDHakv2L/HVeybVhzx6VSsyE8EXChmrYH5K0qT2MrYDFiH3SzaZLvzLInlElZNRUeiNP0VmFf6lVia3tIL6Ky9MvVVsFrsXM3guLSpxw1w6n2heBfKxyfcACxytTgVDDgdCmYP1iuPCT/IxYFRrLtdDkfvq6Q9FjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCjIsdLY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779871910; c=relaxed/simple;
+	bh=+hPcOcfHsa8a3ANFA1UCHnJst8TfVpFirCBR15QJVio=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=snCrvFk/6PNMXyqtjawrfSAn2lQ8EUGRHJiehzK6zgvyHGr1QfxOxttUFjhhmf4wr9VHxRZCgYivo7mePBaDrddxR+dhnOnMO2FcuX2izlJoUjHwocdctYssCIIv6zgAnCcYCKAuJicKpE97jE0xkGlV5TVbu9kHRP7CVsAjmEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4bj/hmQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCjIsdLY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DD21F00A3A;
-	Wed, 27 May 2026 08:50:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4bj/hmQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AD71F00A3D;
+	Wed, 27 May 2026 08:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779871813;
-	bh=neza1uTcKNBDxaMuvM9JJfdxSvhB89MB/ejXGqqTXW4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jCjIsdLY1SbB4CL+BRcI9907SJgWGfFKmI0N2298ANjupQD9EC4q5+NnXTCfz2dgP
-	 7xR/6UcIW4JriPgeBek5jaT7EKEtgg19lNM73vtVjDd3Q/beLVmL0KdbEkjX9BzcC+
-	 gkzqFnuafQ1TZlxSCMWFI1xM0KVCd6l6fMKrncqe5gcpXvvxyG1Tpdy+gpJS9qh6LE
-	 SSZu+mwD+OXgnNRtsZHivzDScFApMlCcMtRxCw3wsUKjEDv57ySfKGR8O2ekkur6mb
-	 5fx/nJzUxjNnnsawhqUF6kQQnrSVO1eqhVuA8c0VyO7+GWchrDJ+f/LESeBWGrvsvI
-	 bonENAO62Wrzg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next v3 3/6] selftests/bpf: test cases for loop
- hierarchy computation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260527-better-1m-reporting-v3-3-b3ede0588a75@gmail.com>
-References: <20260527-better-1m-reporting-v3-3-b3ede0588a75@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 08:50:13 +0000
-Message-Id: <20260527085013.D0DD21F00A3A@smtp.kernel.org>
+	s=k20260515; t=1779871908;
+	bh=cw6Hq3fwY9dORsY8hW5a014rXACoZ3Q9ELeTsBjnSJM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=A4bj/hmQa3H0KsSybQA679jZY8C2M2EBxCmGFd4kLjKqsNk3QWKHZjyPK5mXRkcfX
+	 VpWCAte43G/7b72JGRYwED2VJuyypr5CTDlz+B/TBjr+N205H33pNj87fbEH7GjTMD
+	 f4IzoJPCYeB66bnO4D2+DjO3keQikG9pILexzAijVpqCIMzJOir5m7RmSLWK4oBGUx
+	 HpxXjQHd9D1kqOUe/dWA+5FlGHtZur/fBmi1sPvyfdRgQVFYYfU4QdQGQhpaG5w5EU
+	 Y1D1Hds9rZPfYSD7ptH/l2KRCdPsgF384y4fFB2IicC6PJSaekfzn3Pg06DbJM/mVv
+	 ywTh7ch9dWuXw==
+Message-ID: <e4dcfbc8-2666-452c-90b2-25c4b2c50c9f@kernel.org>
+Date: Wed, 27 May 2026 10:51:42 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+To: Christoph Hellwig <hch@lst.de>, Vlastimil Babka <vbabka@kernel.org>,
+ Harry Yoo <harry@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Matt Fleming <mfleming@cloudflare.com>,
+ kernel-team <kernel-team@cloudflare.com>
+References: <20260527070239.2252948-1-hch@lst.de>
+ <20260527070239.2252948-2-hch@lst.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The commit message omits the test case for irreducible loops (Case =
-E), which is implemented in the patch.
---
 
-commit 0c9a2a0bab3cd380638bc61a05140fb934767741
-Author: Eduard Zingerman <eddyz87@gmail.com>
 
-selftests/bpf: test cases for loop hierarchy computation
+On 27/05/2026 09.02, Christoph Hellwig wrote:
+> The kmem_cache_alloc_bulk return value is weird.  It returns the number
+> of allocated objects, but that must always be 0 or the requested number
+> based on the implementations and the handling in the callers, but that
+> assumption is not actually documented anywhere, which confuses automated
+> review tools.
+> 
 
-This commit adds test cases for loop hierarchy computation to the BPF
-selftests. It covers various branches in bpf_compute_loops() to ensure
-correct handling of single, nested, independent, and irreducible loops.
+I remember, this API behavior was requested by AKPM when I developed
+kmem_cache_alloc_bulk.  I trusted AKPM's decision, but I cannot explain
+why this choice was made.
 
-> Test cases covering the following branches in bpf_compute_loops():
-> - Case B: simple backedge creating a loop (loop_single)
-> - Case B: two independent loops (loop_two_independent)
-> - Case B + D: nested loops where inner header's loop_header points to
->   outer (loop_nested)
-> - Case C: diamond CFG with no loops (fwd_edges_no_loop)
-> - Case D: sibling inner loops within one outer loop
->   (loop_nested_siblings)
-> - Three levels of loop nesting (loop_three_levels)
-> - Loop with if-else body containing forward branches
->   (loop_with_if_else)
+I kept the netdev code usage below. The current napi_skb_cache_get_bulk
+have a retry logic that assumes that a partial bulk number can be
+returned (which it cannot as Hellwig explains).  Cc Alex/Olek please
+review the changes below as you added this retry logic.
 
-[Severity: Low]
-This isn't a bug, but could the commit message also mention the test case
-for irreducible loops? The patch includes the implementation for
-loop_irreducible() (Case E) in the code, but it appears to be omitted from
-this list.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-better-1m-=
-reporting-v3-0-b3ede0588a75@gmail.com?part=3D3
+> Fix this by returning a bool if the allocation succeeded and adding a
+> kerneldoc comment explaining the API.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/gpu/drm/msm/msm_iommu.c       |  6 +--
+>   drivers/gpu/drm/panthor/panthor_mmu.c | 12 +++---
+>   include/linux/slab.h                  |  6 ++-
+>   io_uring/io_uring.c                   | 23 +++++------
+>   lib/test_meminit.c                    | 19 +++++----
+>   mm/kasan/kasan_test_c.c               |  5 +--
+>   mm/kfence/kfence_test.c               |  9 +++--
+>   mm/slub.c                             | 58 +++++++++++++++------------
+>   net/bpf/test_run.c                    |  7 ++--
+>   net/core/skbuff.c                     | 24 ++++++-----
+>   tools/include/linux/slab.h            |  2 +-
+>   tools/testing/shared/linux.c          | 19 ++++-----
+>   12 files changed, 93 insertions(+), 97 deletions(-)
+> 
+
+[...]
+
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 44ac121cfccb..73045b688385 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -288,11 +288,11 @@ static inline struct sk_buff *napi_skb_cache_get(bool alloc)
+>   
+>   	local_lock_nested_bh(&napi_alloc_cache.bh_lock);
+>   	if (unlikely(!nc->skb_count)) {
+> -		if (alloc)
+> -			nc->skb_count = kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> -						GFP_ATOMIC | __GFP_NOWARN,
+> -						NAPI_SKB_CACHE_BULK,
+> -						nc->skb_cache);
+> +		if (alloc && kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> +						   GFP_ATOMIC | __GFP_NOWARN,
+> +						   NAPI_SKB_CACHE_BULK,
+> +						   nc->skb_cache))
+> +			nc->skb_count = NAPI_SKB_CACHE_BULK;
+>   		if (unlikely(!nc->skb_count)) {
+>   			local_unlock_nested_bh(&napi_alloc_cache.bh_lock);
+>   			return NULL;
+> @@ -353,16 +353,18 @@ u32 napi_skb_cache_get_bulk(void **skbs, u32 n)
+>   
+>   	/* No enough cached skbs. Try refilling the cache first */
+>   	bulk = min(NAPI_SKB_CACHE_SIZE - nc->skb_count, NAPI_SKB_CACHE_BULK);
+> -	nc->skb_count += kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> -					       GFP_ATOMIC | __GFP_NOWARN, bulk,
+> -					       &nc->skb_cache[nc->skb_count]);
+> +	if (kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> +				  GFP_ATOMIC | __GFP_NOWARN, bulk,
+> +				  &nc->skb_cache[nc->skb_count]))
+> +		nc->skb_count += bulk;
+>   	if (likely(nc->skb_count >= n))
+>   		goto get;
+>   
+>   	/* Still not enough. Bulk-allocate the missing part directly, zeroed */
+> -	n -= kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> -				   GFP_ATOMIC | __GFP_ZERO | __GFP_NOWARN,
+> -				   n - nc->skb_count, &skbs[nc->skb_count]);
+> +	if (kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
+> +				  GFP_ATOMIC | __GFP_ZERO | __GFP_NOWARN,
+> +				  n - nc->skb_count, &skbs[nc->skb_count]))
+> +		n = nc->skb_count;
+>   	if (likely(nc->skb_count >= n))
+>   		goto get;
+>   
