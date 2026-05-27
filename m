@@ -1,149 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B01F406279;
-	Wed, 27 May 2026 13:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9BB2E7F25;
+	Wed, 27 May 2026 13:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779886862; cv=none; b=jLMz7HSuGKa5wleniXsSRWxJhCDnLgNv6Mik6imOgnBLk77DpQhdVYJ2Cwbo51W1bhLjgAKM94o+WtUEkIUs/kQg5gECpvsmASx6NrwccjlKsrYQgB8iv7yD/yWQ1uoApTION/wZzKrUBKSWgVzNb1LbcweLHAryQpUlLRE0lls=
+	t=1779888295; cv=none; b=IyjykZrcz4VEcjoVP+hvfPE1XSS2hRT+fFX7d58zKnpMYj94gGA4TyIMtFWvc/95bRQ8nJxiY4BLx07V9TEiKzx3iFaNfcVwxzgX4+6ZBUtwOtCKojmyox7V2ujUovn0p5X2si4u0uBXkS6Skc09/7fx2iRFLXJTICTM5kiQqlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779886862; c=relaxed/simple;
-	bh=wteeOWqFtArRQCr5tPFdFfQRi6IavlrVpdHlVoTyP4o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=A7PCOZtRjA0OGdDBZochpFD612XVrYmwK+WZ7fuZ+YTAx5ZRG+vpoUpj8jgKPBN7rNhgbtDemHukwGIQS+zgJN5ZV9P1G/VWkI+GT/CEtGwy9J7DzB5GKM5PitmFZhSHES0ezdhqgbUL5l9+wDZHYhrYCKGpZEnoFeD2efchwUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2259crJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779888295; c=relaxed/simple;
+	bh=0HGClSyXBXxyXG26RzRZS7w3G2ipIvuqzIRh1ydQ3W4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IB2uMv2gsvjtkn1aivfrYhvRBQZ0+LTHHpYNSKF26vPiyBGaWlEvpEuUx9caWiKuJaXNC0aGhwoNuiReHlhoX+ya5sjBdQIV+6ncpKF8MeWIrdmaMZkkNGBMqQhErj42UCG3PDY90FFcWrzKgORo53+xn06G3T9sB7mKid4X9pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FumuuEQW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2259crJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843B21F000E9;
-	Wed, 27 May 2026 13:01:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FumuuEQW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412E91F000E9;
+	Wed, 27 May 2026 13:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779886861;
-	bh=ewCZvotD2nMM/jjWYtZrGs+J8TAeFzVbz9UBT46h7c8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=P2259crJ4T61qpz0XGUiJIV20jSRagZ6SL9jLMALgA7jNIhj1VMXA0CAG+YnMjFcp
-	 XiFwZXKGei55tEc7YwvkSYH0M74pt/BEG0dsEu2Q6PAQ1lJUpraElHGB9659Az7HUZ
-	 CGVuUCHkHfccVY5PZI2KhwSib5ObtiCTvYVfWJ+mFS+30s4KAs3c71aiU8DDXmDE4s
-	 ikdzKNbabZ4iD3dof0j8fc1/HPRQd6l5ByK2d1wq2RwCvQbC74o+OXTgxrzC3dOF68
-	 A7HrkvUH6me6YoyoqGpa2gcopCLboMCgMfiWr9bcLJQVyg/ga9GJtnvBVS4rJQLSpz
-	 y9jjvoUdPOc0Q==
-Content-Type: multipart/mixed; boundary="===============6680819981936320450=="
+	s=k20260515; t=1779888294;
+	bh=0HGClSyXBXxyXG26RzRZS7w3G2ipIvuqzIRh1ydQ3W4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FumuuEQWtmuF/BJmD55PoeOE/v92cl36iWgBylm0ngcfZoD5L83yq4/kULhaU0p23
+	 u0pQrFsLbF/Qo3blkzBhKeYDfpqLO+j+HnohfXhchKZmk9G2+7zwY07glrG74TllxR
+	 K7+W8KtC6tlm0ZfvXD0s7pFosIfdud18beEfJ1uwj2z4jQrmAYTO84FJxrv2gJMCHC
+	 8eDlQAR8n6LhGolaf4aM8yVD8GXt41OKRHN6XWZyO2EBsJL6cie5HtUKWGhf8YAILm
+	 FvtynKWoSEsAAsI5/00B67ltc/IgmGDRbHFDp47JG/xQZpZ5StB50qGuQ2oNbn/tyN
+	 8EBowBhM5Traw==
+Date: Wed, 27 May 2026 14:24:49 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <23a429b4-bdf1-4f96-b3af-7ab3186e99d3@sirena.org.uk>
+References: <ahWOVFZZScPjm2Ow@sirena.org.uk>
+ <CAADnVQ+yjm0SJ0UQMeuS82MLDeo1bvZKSMMDh-K8D9-PNu=p8w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d020aa03b31a01086809801d91e1dd620b2fa26c375d7e7796bf59dee8af3cc0@mail.kernel.org>
-In-Reply-To: <20260527121207.2312181-4-puranjay@kernel.org>
-References: <20260527121207.2312181-4-puranjay@kernel.org>
-Subject: Re: [PATCH v4 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,will@kernel.org,mark.rutland@arm.com,catalin.marinas@arm.com,leo.yan@arm.com,robh@kernel.org,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,james.clark@linaro.org,irogers@google.com,adrian.hunter@intel.com,shuah@kernel.org,leitao@debian.org,ravi.bangoria@amd.com,eranian@google.com,memxor@gmail.com,usama.arif@linux.dev,linux-arm-kernel@lists.infradead.org,linux-perf-users@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 27 May 2026 13:01:00 +0000 (UTC)
-
---===============6680819981936320450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c..aede95e27784 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-
-[ ... ]
-
-> @@ -774,32 +795,96 @@ void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
-
-[ ... ]
-
-> +/*
-> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> + * self-recording and return 0 if the snapshot state appears disturbed.
-> + */
-> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-> +{
-> +	unsigned long flags;
-> +	int nr_hw, nr_copied = 0;
-> +	u64 brbfcr, brbcr;
-> +
-> +	if (!cnt)
-> +		return 0;
-> +
-> +	/* Guard against running on a CPU without BRBE (e.g. big.LITTLE). */
-> +	if (!cpu_has_brbe())
-> +		return 0;
-> +
-> +	/*
-> +	 * Pause BRBE first to avoid recording our own branches. The
-> +	 * sysreg read/write and ISB are branchless, so pausing before
-> +	 * checking BRBCR avoids polluting the buffer with our own
-> +	 * conditional branches.
-> +	 */
-> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> +	isb();
-> +
-> +	/* Bail out if BRBE is not enabled (BRBCR_EL1 == 0). */
-> +	if (!brbcr) {
-> +		write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +		return 0;
-> +	}
-
-A subsystem pattern flags this as potentially concerning: when
-BRBCR_EL1 is not enabled, the function restores BRBFCR_EL1 and returns
-immediately. Should the write_sysreg_s that restores BRBFCR_EL1 be
-followed by an isb() before the return?
-
-Looking at other code paths in this function, both the success path and
-the PMU-overflow-detection path restore BRBFCR_EL1 followed by isb()
-before returning. The early-exit path here omits the barrier, meaning
-there is a function return (RET branch) right after the control register
-write without an intervening isb().
-
-ARM64 guidelines typically require an isb() after writes to control
-system registers to ensure the change takes effect before subsequent
-operations. While BRBE is disabled in this path, and eventual exception
-entry/exit will provide synchronization, the inconsistency with the
-other exit paths is worth checking.
-
-> +
-> +	/* Block local exception delivery while reading the buffer. */
-> +	flags = local_daif_save();
-> +
-> +	/*
-> +	 * A PMU overflow before local_daif_save() could have re-enabled
-> +	 * BRBE, clearing the PAUSED bit. The overflow handler already
-> +	 * restored BRBE to its correct state, so just bail out.
-> +	 */
-> +	if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
-> +		local_daif_restore(flags);
-> +		return 0;
-> +	}
-
-[ ... ]
-
-> +	brbe_invalidate();
-> +
-> +	/* Restore BRBCR before unpausing via BRBFCR, matching brbe_enable(). */
-> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
-> +	isb();
-> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +	/* Ensure BRBE is unpaused before returning to the caller. */
-> +	isb();
-> +	local_daif_restore(flags);
-> +
-> +	return nr_copied;
-> +}
-
-[ ... ]
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yBgt/TPiuRRzj/+6"
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+yjm0SJ0UQMeuS82MLDeo1bvZKSMMDh-K8D9-PNu=p8w@mail.gmail.com>
+X-Cookie: No alcohol, dogs or horses.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+--yBgt/TPiuRRzj/+6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26510917353
---===============6680819981936320450==--
+On Tue, May 26, 2026 at 03:08:06PM -0700, Alexei Starovoitov wrote:
+
+> thoughts on the best way to fix it ?
+> Pls send it to bpf-next. I think it's fine for it to be in one tree only.
+
+That's fine from a -next point of view since bpf gets merged first,
+you'll also need to ensure that the sched_ext stuff doesn't get sent to
+Linus until the bpf changes have landed or flag the dependency up to
+him.
+
+--yBgt/TPiuRRzj/+6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoW8KAACgkQJNaLcl1U
+h9Ax+Af9FshkywdeD8aHR6Ecrc7ZYwpMdLWtt7h+Pz6LHttcHF+i8KOxs0akomXc
+meW86c2er19FNqtrRzSe0+OlQc2fmjWlWN0Ybh1TSvt6n/99pf4JtdT96bp6/zri
+ckZHaTx4R/WSENn+uS5TRrxfWvBFhOrDmtc9QjQtMwRPdgS4Jj6xyBAjekn7k5G3
+RZWFpbz/dP6Ka2Zsq4ZLdMmHlbhm3lY9UcYRWuVHqk+2D+VGZf/WBqEQxWkzlAdj
+MH1Z9KJaQJAga+bVoTA1i34S9FuySv9HjKj7cdGYrT9wqgpqZWUqCQJ5UKAAJ+bd
+5Ot3/uZVMG116Joev//DMYUMLCbSig==
+=gKeV
+-----END PGP SIGNATURE-----
+
+--yBgt/TPiuRRzj/+6--
