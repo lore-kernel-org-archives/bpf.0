@@ -1,124 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7675B3CFF60;
-	Wed, 27 May 2026 08:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B07B3CF689
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 08:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779869174; cv=none; b=I7Az8ygC3n8B/PppLJbvunCSuSwsNV/GhHpkZkKfuYpj1VZ2WKOcvw48VAv8dMhPJsrGERGc7ygzrirAiL/Bt4CNj656da6609Xa2p6O0xfmy1oqbWmpPLb9DLAXmLn9I/LH7tL88JSDS3JXDv2Ffj4MsuQhgPU82SzDE4tyCsU=
+	t=1779869188; cv=none; b=Au5S95zikHsKe/LPVJokWhNJlfDCONP+8J1KfGS2Q9rEcfS9eNT53YQ4scjxwDi/u/h9UTNyjkOJ+mrDxN+KqGm9jVTAValv38cuEL5rO0AjVTT9amo+I58cNXoD7TD/KsSR84z8cZNdd7DJRaGtbrsz/C/6ZYtaokX1isxvSfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779869174; c=relaxed/simple;
-	bh=8H9wP9dZyVPNsLBzJBtkOZIqqSlX8NHtTMlgj+jXU5g=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FQpsUsOtTuCefU0wJ8XOyAya/1mzXjUcGHgn95HnpDTCN0wsuyY1GU554kq5rOVY1UyPh05CKCdi6ESpsdh9ZxLTvmTLOIf/v2IBlmUbED2nVTzB3SD5gVOjaQQKS8jWDoNNn7JKb63McGbJOAd3Jl24nJYzQzF+cyS92232G+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6PGQue6; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6PGQue6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850491F000E9;
-	Wed, 27 May 2026 08:06:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779869171;
-	bh=lpK6kddP4Ix2XusLSMFGgv8M+O0QzdAtvCCz2UObz5c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=c6PGQue6MBcq1HU0LectbimcWVsYrSeSCnm19VgUo5wK/ci2PwCIHwi90D+0qT7cI
-	 ULLjARGw+8Z+EicHVCSN9WMAyXx0HDNXzqA47jcRIJkpAaMwYE+Wabx/lrtbzWRh+7
-	 stFw51CDuH1QkckvQJRQcJbeeSx4L/0Xff0ew2T0iXUMakGlFdPStzXC6/ereDOA4C
-	 ATBV4654sWlNpSrta0Q22AvJ+0ivkrstYejESwl3czcq03OLw59iC1Lki58v7iNcBI
-	 LQ3WjWgrvyA37qRUOfSQBCTtf/0+NVTrbQYb91w9JEdJ7Ztnf+HtOI6O+tPtOlrJeh
-	 fhRlTNCc9VzcQ==
-Content-Type: multipart/mixed; boundary="===============8353182931888954691=="
+	s=arc-20240116; t=1779869188; c=relaxed/simple;
+	bh=yXhnmlqn6x0Qf5z9mhVW9Ue33vEccoa7DzYQrKwNw4I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cNwH323AwZ2kLXpUcpKh1wwKDWXG88Z4/8OGgvBmjOcPZqcq3IwRlVG3ktcdHQEzxPn3BBa2Slt4kK7w/2ljnusFKi0My1t9n9c62k8kDbtFSSutJj6Qq87ls0k5v5HZE1V4rmeTaoNrQDFbBUOg3ovnPaHtlp2y5vGsjKLQwIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 71A7168BEB; Wed, 27 May 2026 10:06:24 +0200 (CEST)
+Date: Wed, 27 May 2026 10:06:24 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: sashiko-reviews@lists.linux.dev
+Cc: Christoph Hellwig <hch@lst.de>, bpf@vger.kernel.org
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+Message-ID: <20260527080624.GA20439@lst.de>
+References: <20260527070239.2252948-2-hch@lst.de> <20260527072718.42A141F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <de6652ce9d1367daf217fcb5793419db9d967757b7b7857b00ae1c0c008f46ec@mail.kernel.org>
-In-Reply-To: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
-References: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
-Subject: Re: [PATCH bpf-next v1] bpf: Use hlist_nulls_replace_rcu() when updating htab elements
-From: bot+bpf-ci@kernel.org
-To: xuanqiang.luo@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,luoxuanqiang@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 27 May 2026 08:06:11 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527072718.42A141F000E9@smtp.kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
---===============8353182931888954691==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, May 27, 2026 at 07:27:17AM +0000, sashiko-bot@kernel.org wrote:
+> Does this omit setting op_ctx->rsvd_page_tables.count to pt_count on success?
+> Since op_ctx is initialized via memset previously, the count will remain 0,
+> which could lead to memory leaks when these page tables are consumed or
+> cleaned up later.
 
->     bpf: Use hlist_nulls_replace_rcu() when updating htab elements
->
->     When updating an existing element, the current code does
->     hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu(), exposing
->     a transient state where both old and new elements are visible to
->     concurrent RCU traversals.
->
->     Use hlist_nulls_replace_rcu() to atomically replace the old element in
->     place, so RCU readers always see a consistent hash chain.
->
->     Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Yes, fixed.
 
-This looks like a bug fix that should include:
+> >  			} else {
+> >  				int i;
+> > -				for (i = 0; i < ret; i++)
+> > +				for (i = 0; i < BULK_SIZE; i++)
+> >  					fail |= check_buf(bulk_array[i], size, want_ctor, want_rcu, want_zero);
+> >  				kmem_cache_free_bulk(c, ret, bulk_array);
+> 
+> [Severity: Low]
+> Will this cause a compilation error? The local variable ret is removed from
+> this scope, but it is still used in the kmem_cache_free_bulk() call above.
 
-  Fixes: 4fe8435909fd ("bpf: convert htab map to hlist_nulls")
+Yes, no idea why this didn't get included in my build after
+enabling it earlier.
 
-The bug was introduced by commit 4fe8435909fd which added the
-hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu() pattern,
-exposing a transient state where both old and new elements are visible
-to concurrent RCU traversals.
+> 
+> >  			}
+> > @@ -354,17 +352,18 @@ static int __init do_kmem_cache_size_bulk(int size, int *total_failures)
+> >  
+> >  	c = kmem_cache_create("test_cache", size, size, 0, NULL);
+> >  	for (iter = 0; (iter < maxiter) && !fail; iter++) {
+> > -		num = kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
+> > -					    objects);
+> > -		for (i = 0; i < num; i++) {
+> > +		if (!kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
+> > +				objects))
+> > +			continue;
+> > +
+> > +		for (i = 0; i < ARRAY_SIZE(objects); i++) {
+> >  			bytes = count_nonzero_bytes(objects[i], size);
+> >  			if (bytes)
+> >  				fail = true;
+> >  			fill_with_garbage(objects[i], size);
+> >  		}
+> >  
+> > -		if (num)
+> > -			kmem_cache_free_bulk(c, num, objects);
+> > +		kmem_cache_free_bulk(c, num, objects);
+> 
+> [Severity: Medium]
+> Is num uninitialized here? It's no longer assigned the result of the
+> allocation call, so passing it to kmem_cache_free_bulk() might use
+> indeterminate stack data and lead to memory corruption.
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 3dd9b4924ae4..b20e82bd253d 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -1246,18 +1246,16 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
->  		goto err;
->  	}
->
-> -	/* add new element to the head of the list, so that
-> -	 * concurrent search will find it before old elem
-> -	 */
-> -	hlist_nulls_add_head_rcu(&l_new->hash_node, head);
->  	if (l_old) {
-> -		hlist_nulls_del_rcu(&l_old->hash_node);
-> +		hlist_nulls_replace_rcu(&l_old->hash_node, &l_new->hash_node);
->
->  		/* l_old has already been stashed in htab->extra_elems, free
->  		 * its special fields before it is available for reuse.
->  		 */
->  		if (htab_is_prealloc(htab))
->  			check_and_free_fields(htab, l_old);
-> +	} else {
-> +		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
->  	}
+Yes, this should use ARRAY_SIZE directly as well.
 
-Does this atomic replacement approach actually solve the lookup problem?
+> > +bool kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags,
+> > +		size_t size, void **p)
+> >  {
+> >  	unsigned int i = 0;
+> >  	void *kfence_obj;
+> >  
+> >  	if (!size)
+> > -		return 0;
+> > +		return false;
+> 
+> [Severity: High]
+> Does this incorrectly report an allocation failure when size is 0?
 
-During review of Hou Tao's earlier v1 patch that used the same approach,
-Alexei Starovoitov raised a fundamental concern:
+It correctly reports one as that's how all callers treat a 0 return.
 
-  "This atomic replacement doesn't really solve anything. lookup will see
-   one element. That element could be deleted by another thread. bucket
-   lock and either two step update or single step don't change anything
-   from the pov of bpf prog doing lookup."
+Update version in git here, not reposting until more human comments
+arrive:
 
-Reference: https://lore.kernel.org/bpf/CAADnVQKD94q-G4N=w9PJU+k6gPhM8GmUYcyfj=33B_mKX6Qbjw@mail.gmail.com/
-
-Hou Tao acknowledged this limitation and abandoned this approach in v2,
-instead implementing atomic updates only for htab of maps. This patch
-appears to be a re-implementation of the abandoned v1 approach without
-addressing the fundamental concerns raised during that review.
-
-Can you clarify how this approach addresses the concerns that led to
-abandonment of the similar change in Hou Tao's earlier patch series?
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26496972451
---===============8353182931888954691==--
+https://git.infradead.org/?p=users/hch/misc.git;a=shortlog;h=refs/heads/fix-kmem_cache_alloc_bulk
