@@ -1,127 +1,152 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B00A2641CA
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 05:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69948405F7
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 05:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779858607; cv=none; b=d1v322xN9ojCk1laNLcIxbdtDp3Rh4AP3goAAN8rMC4/0pumEZJism2pi+c1XpEEevdqpYxO6voTZQaN2YSgmAhZbU/RIjMyo1yjOBkcf6eCpHltuHYpjqB4wdbIIWzQ5Pub5LmD7hb3XXkrXx98u/DMkY3JV1aVHUR4+x8X8rw=
+	t=1779859587; cv=none; b=pg1YY0QJErTJlXFOQHxQ/hALYK659ul1T0bC07Td8ID2z93lWtC4Ma+nPdSby8proopsyE3U33C5u1ZBjCe8AZhv1XAik9xsnIIJXWhWipqSpn+EZ60cjY+ODCAu4tRa+ZRJ5n8zn4KQ8av4eRe16+Ne7DtxiRXl/XaSvPZ1yuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779858607; c=relaxed/simple;
-	bh=VyOnXcpGm/inx51RutfGq0M/zxoQoXB4CG3Po2BqFqY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A90IjSO4AMBPH4Ze2lz8cZWK1TSLueid27sccHx16RwmM7tuh66eo0UmTYs6DEZslEM5B9glTkGI+/2n2i2AqZk9Q2dZteIF0yFpfCmjrkxdajC9hcF2nGmWMhZDNmZOZhZJwO6dWhHLyeiDkqlJnoSSFbNQ8WjXnyItkPxc3R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jmc3J/D2; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779859587; c=relaxed/simple;
+	bh=WEhDZ++slbWPB+Yb8K9OtkosQWMf8J3K7K2A4MwVDxc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZD1m4PzPM7/cQKz8tPlf6ovGCZZ/xUOaRhAXEd5zb8SpJ1D3aFyEzzBFTeOdr73BfwqPmSmQqJye3L3tIHgHeceJAes7a3S0Jmfax9yBqwn3Qyn/eew8t6FQuPHJQYQf2f119c9Dvz3bVF+kqRmieR6okAMyLnUA3MV/5NkxK0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Snpw/GoW; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jmc3J/D2"
-Message-ID: <4626d285-57ab-46c9-b75b-d56efe7417fc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779858593;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BQ0nSkTL5Xw0hG+M09Zs46qBW5dJlnpLwrgeyBbp8zM=;
-	b=jmc3J/D2MKDBzRQyVrJhMcKOg7DcjIo35waGrbNWqqUDD2uvYAnxUNieWRfUx8TCx3bJBA
-	1m832uYzh717Erdn6fTDUoI5kcfSRrxYuSoAaL51KfTOSV7eBydmu+UBixmLOXrrMA0Z3l
-	ulQAyHpkZ1tZijR56f0iGmj2mlRoF84=
-Date: Wed, 27 May 2026 13:09:44 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Snpw/GoW"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-36af4b7840aso1858940a91.3
+        for <bpf@vger.kernel.org>; Tue, 26 May 2026 22:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779859586; x=1780464386; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+izZGAVsti5zvwhRlmRKEL+2HzPRMlNhWQLgHFnK51c=;
+        b=Snpw/GoWgaYVLullGg/dGJV6403QMyQyGw3NjNyBWd9/ZxhDTBnJtmfg50WrXO7m+p
+         I18ZSCbeQ/J5zmqHT9OQqa8x61ieuXTpWptIj327gEYGG1DyZLbj0yIA+Bik8T95gWdU
+         L6dzdqgJ2ycR1OW0ZYeJyv7O+IrWaX+R0hosaMCquCwbt8ehs86/XFDIqSTOvMtRRP4d
+         yXBkHZCTB5hNhv0us/7d9azEnmIEN4UGbRq9KXDSHNxAZKnCfP6ZgJbVo7ZW64SNC/nk
+         Ko6OsDsB1g1QpRV6q8xBHhtcxO6CeHP44ONkDkLjino/SvXHi4KWTyom1JQAS0/zheH9
+         pTCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779859586; x=1780464386;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+izZGAVsti5zvwhRlmRKEL+2HzPRMlNhWQLgHFnK51c=;
+        b=EKSbf0xaylAN2ovrX2yrLdr3wCDBC0rwBXT66OnJFYLPbhaOjCpR2t68XDqxtsbGm3
+         JZ/wDjWjh4NzXXuoQhAEbyUKrF7ke5Tzr5gBdaIjQC6XoZeH/s1/gn7+ZOmfE2velPCH
+         BnAOKoR5QXHsv46K2nz7TCajVdcKWSMYd51R8/f7XpYz5/i9l59ZaxJwPkymWHOcLOKs
+         bmNfN4T6ikceZLvmt3ns7+smDblJGGGgeMKYTVe/lgth+tUOyAkzmfSSShZXGbfFjgsa
+         GDn8YYZ5qdOM1mUqp2EhWkMWsNEwfT5GJiQf9FN8cTP8sDldpaAtYum6v/NJsWcc59N4
+         tSZg==
+X-Forwarded-Encrypted: i=1; AFNElJ97iXrFyQJtCph5fmfFlddGQBui13RamCkSZFC71BLjXZJzECrEqv+1USjN4XRTz5cZbug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW0fWDoD/03PwrJdtsrKEVvf0xEl7fELxHichl2E2YcSrdEG1p
+	jtQEB8Wr3omXhdwMfXNZoLXVuv2X4x735x5cZTQ26vGUW4xXFJLHta+N
+X-Gm-Gg: Acq92OEFx+iSB1DBXrP8ySDNmxVWc989T2qKXK4AhI8EvPZjG8Y45YuGsWVgh0qE68k
+	h6UuSWaWLI8yPOweCoOa8PluKE+gH7V9RtMaC6yi86MKvsKZRsYhyZwbqlAWq/1HtYctUvQLQ/s
+	wafY1L2WZUFslkAKjgMD6j1HfkUE+zn7Cthv4Ob/qNcl5UBhcNJPF7z3y1tYsgkoMF10dpXCXPj
+	5mRckE4+M62CeDAE+v9ZZF7gszkGF1CUaCBANYFydo77mKAMAVAwfZLZDfK37tCi46fmXbtkkw+
+	oAdhxWbpnw6eocE3C0k3hCvdaUBrTdQ2kqUP8a32CnklB7OCQYbJnXAAA8kMthpcT6NJf3LwU3X
+	OsOflrROJaN2OsBtsvlH7zRjvM3ZbyUzYb1/EO5AoVtqWSVijys/2bF1Ri2RBIJzRgumwKyfdCR
+	E+XjtBhnsC3ksVWsPsXKr9EZy/FKkgUTQo9RPcc0EhaxfE+UM=
+X-Received: by 2002:a17:903:1b43:b0:2b7:abc0:3bd7 with SMTP id d9443c01a7336-2beb035b8edmr246804415ad.9.1779859585668;
+        Tue, 26 May 2026 22:26:25 -0700 (PDT)
+Received: from localhost.localdomain ([220.83.29.221])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58e4fcfsm144891465ad.71.2026.05.26.22.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2026 22:26:24 -0700 (PDT)
+From: Taegu Ha <hataegu0826@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Taegu Ha <hataegu0826@gmail.com>
+Subject: [PATCH bpf 0/1] bpf: reject overlarge global subprog argument sizes
+Date: Wed, 27 May 2026 14:25:38 +0900
+Message-ID: <20260527052539.3388700-1-hataegu0826@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net v3] net: tls: use sync AEAD for sk_msg BPF sockets
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Christopher Lusk <clusk@northecho.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260526025154.60607-1-clusk@northecho.dev>
- <d92bc603-e345-4dee-9ae9-6ad45e4e6642@linux.dev>
- <20260526161101.691d4cb7@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260526161101.691d4cb7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+This fixes a verifier argument-size overflow in global BPF subprogram
+calls.
 
-On 5/27/26 7:11 AM, Jakub Kicinski wrote:
-> On Tue, 26 May 2026 14:44:24 +0800 Jiayuan Chen wrote:
->> If async_capable is set to 1, the zerocopy path in tls_sw_sendmsg() is
->> skipped.
->> Unfortunately ktls with bpf_msg_pop_data() does not work correctly under
->> this
->> copy path.
->>
->> tls_clone_plaintext_msg() aliases msg_pl onto msg_en's plaintext area
->> (in-place encryption).
->>
->> BPF runs bpf_msg_pop_data(msg, 0, 2). This shifts msg_pl's SG entry
->> forward by 2 bytes.
->> The two SGs now point to the same page at different offsets. Physical
->> memory overlaps but the start of
->> address differ.
-> Ugh, do you mean that the memcopy path is broken? There are other
-> conditions under which we may fall into it than just !async_capable :(
-> Small send with MSG_MORE is probably the easiest?
->
-> So we need to fix that one way or the other.
+For global subprogram generic pointer arguments, the verifier derives the
+pointee size from program BTF and stores it as u32. That value is later
+passed to check_mem_reg(), which feeds a signed int access-size path. For
+stack pointers, the value is negated to mark the call-site validation path
+where STACK_POISON is allowed.
 
+That conversion is unsafe for BTF-resolved sizes above INT_MAX. A type
+such as int[0x3fffffff] resolves to 0xfffffffc bytes. On the vulnerable
+stack path, (int)0xfffffffc becomes -4, and the negation validates only a
+four-byte stack object. The callee is still verified with the original
+large memory size, so the caller/callee memory contract is inconsistent.
 
-Yes, the memcopy path is broken, but only when combined with sockmap's 
-pop helper.
+I confirmed the issue with a non-executing raw-BTF verifier reproducer. On
+a vulnerable kernel, the verifier accepted a program with:
 
+  - caller object: a four-byte stack slot
+  - BTF callee argument: int[0x3fffffff]
+  - resolved BTF size: 0xfffffffc
+  - accepted callee access: *(u32 *)(r1 + 4)
 
-msg_pl and msg_en share the underlying page:
+The relevant vulnerable verifier log contained:
 
-                        msg_pl           msg_pl end
-                          ^                     ^
-                   |------|------------------|-------|
-                   | hdr |   plaintext     |  tag  |
-                   |------|------------------|-------|
-                   ^                                      ^
-                   |                                       |
-               msg_en                         msg_en end
+  R1=mem_or_null(id=1,sz=0xfffffffc)
+  r0 = *(u32 *)(r1 +4)
 
-Before encryption, sge->offset += prot->prepend_size is applied
-to msg_en so that the encryption's dst and src point to the same
-block of memory.
+The program was only loaded to prove verifier acceptance. It was not
+attached or executed.
 
-But once pop has run — i.e. msg_pl's start advances — the encryption's 
-dst and src
-are no longer the same.
+The fix rejects sizes that cannot be represented by the signed verifier
+access-size API before any conversion, and adds a verifier regression test
+that expects:
 
-crypto_ctr_crypt():
-When dst and src have the same address, crypto saves the encryption 
-result into a
-temporary buffer and then writes it back to dst.
+  R1 memory size 4294967292 is too large
 
-When dst and src have different addresses, the crypto module treats them 
-as two
+Security and reachability:
 
-separate buffers and stops considering in-place mode.
+This is reachable from BPF-loadable contexts that can supply program BTF
+and BPF-to-BPF global subprogram calls: direct CAP_BPF or CAP_SYS_ADMIN
+callers, explicit BPF token delegation, or privileged BPF loader services
+that accept user-controlled BPF objects. The delegated-loader case is
+relevant to bpfman/bpfd-style deployments where an API/RBAC boundary can
+ask a privileged daemon to perform the BTF and program load. The issue is
+not reachable by ordinary unprivileged users on systems where unprivileged
+BPF is disabled.
 
-it's complicated to process pop/push + head/mid/tail...
+Validation performed:
 
->> I think selecting a sync provider via mask = CRYPTO_ALG_ASYNC is
->> sufficient to
->> remove the -EINPROGRESS return path.
->>
->> May be time to remove skmsg from ktls? (disable by default first,
->> re-enable via a new ktls module_param?)
-> Yes, we asked John F off-list to get his attention and I think there's
-> only a vague plan to start using kTLS + sockmap, no current user
-> (sorry if I misread / misremembered).
->
-> module params aren't a great API. If we want to deprecate it let's just
-> remove the integration in net-next. You have my vote..
+  - vulnerable QEMU guest: raw-BTF reproducer accepted
+  - patched QEMU guest: raw-BTF reproducer rejected the oversized size
+  - git diff --check
+  - scripts/checkpatch.pl --strict
+  - git apply --check on a clean tree
+  - clean worktree object build:
+    kernel/bpf/verifier.o kernel/bpf/btf.o
+  - git send-email --dry-run
+
+Full BPF selftests were not run in this environment because clang is not
+installed.
+
+Taegu Ha (1):
+  bpf: reject overlarge global subprog argument sizes
+
+ kernel/bpf/verifier.c                           |  7 ++++++-
+ .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
