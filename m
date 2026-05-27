@@ -1,183 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EF13CCFD9;
-	Wed, 27 May 2026 07:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7675B3CFF60;
+	Wed, 27 May 2026 08:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779868386; cv=none; b=MZJ51ScsWTpi5VCT5CCiGJL1qroTWrPGv5Z/EiktUHE5c86/kD1Fpi4rFI6tkWZm8jX9SK19cSWxyvRsXtCrdBkIzXlpgo8fl+y5aW+2rMeUZsKZOjycaT8c6rhFVkwaTpTkmoPn+D8hh1YlMbAGr4MhVyL0Q6KmgjutVJ1qfjU=
+	t=1779869174; cv=none; b=I7Az8ygC3n8B/PppLJbvunCSuSwsNV/GhHpkZkKfuYpj1VZ2WKOcvw48VAv8dMhPJsrGERGc7ygzrirAiL/Bt4CNj656da6609Xa2p6O0xfmy1oqbWmpPLb9DLAXmLn9I/LH7tL88JSDS3JXDv2Ffj4MsuQhgPU82SzDE4tyCsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779868386; c=relaxed/simple;
-	bh=JQfPs4qyF8FMAJp0acXsGiDjC8SL5SQPb/DEVP9U/NY=;
+	s=arc-20240116; t=1779869174; c=relaxed/simple;
+	bh=8H9wP9dZyVPNsLBzJBtkOZIqqSlX8NHtTMlgj+jXU5g=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WusN877t/4u+UwmbtMbb10q4NCqiMs7tKvxH1F1pbP4Ym+zj8IOK7p786Ig3fSGWemLzO1zEwxn3OwqYQxAA5DoIolphx7VYdTSRJIIqL+whNtljrcqjxnGZJfT3vJfiexov1Nw/BRkGvXjS+juie6I8qTUQ9/h/J1fB4Wg/Nq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/LoAvJP; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=FQpsUsOtTuCefU0wJ8XOyAya/1mzXjUcGHgn95HnpDTCN0wsuyY1GU554kq5rOVY1UyPh05CKCdi6ESpsdh9ZxLTvmTLOIf/v2IBlmUbED2nVTzB3SD5gVOjaQQKS8jWDoNNn7JKb63McGbJOAd3Jl24nJYzQzF+cyS92232G+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6PGQue6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/LoAvJP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF041F000E9;
-	Wed, 27 May 2026 07:53:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6PGQue6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850491F000E9;
+	Wed, 27 May 2026 08:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779868384;
-	bh=Y+kGq0uunmREFgzVVLHHxPdC664CmUzrN4A02+MaM5c=;
+	s=k20260515; t=1779869171;
+	bh=lpK6kddP4Ix2XusLSMFGgv8M+O0QzdAtvCCz2UObz5c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y/LoAvJPd3wM9J66save3K6aXvb9rA0mMByndjKNrGjyUpfzpPle8B7OLNvHCqtKg
-	 q7BGrOHY8N0MHjNtOcbmzF0zQhT4xSCFSscIbWL7kmkUaGCge8m7D3HTPOroftHtlV
-	 1Q5YY+9ivs21hp4cFgJyRDziiCPltn4FSaPHz6AMCBGz7DE3IeLw1yK9B7vvkqsGa7
-	 Mxw7Kr0JgyEv1n38pCyiiHR3id5tkI/HG589dmSHxuATcIQ9/yE06ZAXRNRYIsDY/S
-	 m3h6OUojhIoGQAAez+DI/K0q08EYGW28qS67jpy1c6z33xfTR/Ii1mfqznW5u2+/ou
-	 j2P1mnPXDtjbw==
-Content-Type: multipart/mixed; boundary="===============2215855977696880001=="
+	b=c6PGQue6MBcq1HU0LectbimcWVsYrSeSCnm19VgUo5wK/ci2PwCIHwi90D+0qT7cI
+	 ULLjARGw+8Z+EicHVCSN9WMAyXx0HDNXzqA47jcRIJkpAaMwYE+Wabx/lrtbzWRh+7
+	 stFw51CDuH1QkckvQJRQcJbeeSx4L/0Xff0ew2T0iXUMakGlFdPStzXC6/ereDOA4C
+	 ATBV4654sWlNpSrta0Q22AvJ+0ivkrstYejESwl3czcq03OLw59iC1Lki58v7iNcBI
+	 LQ3WjWgrvyA37qRUOfSQBCTtf/0+NVTrbQYb91w9JEdJ7Ztnf+HtOI6O+tPtOlrJeh
+	 fhRlTNCc9VzcQ==
+Content-Type: multipart/mixed; boundary="===============8353182931888954691=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <582275f111aae9b0fb4520a98c60b5014751114022782c3aadeced2c21cbb3c7@mail.kernel.org>
-In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
-References: <20260527070239.2252948-2-hch@lst.de>
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+Message-Id: <de6652ce9d1367daf217fcb5793419db9d967757b7b7857b00ae1c0c008f46ec@mail.kernel.org>
+In-Reply-To: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
+References: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
+Subject: Re: [PATCH bpf-next v1] bpf: Use hlist_nulls_replace_rcu() when updating htab elements
 From: bot+bpf-ci@kernel.org
-To: hch@lst.de,vbabka@kernel.org,harry@kernel.org,akpm@linux-foundation.org
-Cc: hao.li@linux.dev,cl@gentwo.org,rientjes@google.com,roman.gushchin@linux.dev,hawk@kernel.org,linux-arm-msm@vger.kernel.org,dri-devel@lists.freedesktop.org,freedreno@lists.freedesktop.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,io-uring@vger.kernel.org,kasan-dev@googlegroups.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 27 May 2026 07:53:04 +0000 (UTC)
+To: xuanqiang.luo@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,luoxuanqiang@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 27 May 2026 08:06:11 +0000 (UTC)
 
---===============2215855977696880001==
+--===============8353182931888954691==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/drivers/gpu/drm/panthor/panthor_mmu.c b/drivers/gpu/drm/panthor/panthor_mmu.c
-> index 75d98dad7b1d..b80d7e1d5123 100644
-> --- a/drivers/gpu/drm/panthor/panthor_mmu.c
-> +++ b/drivers/gpu/drm/panthor/panthor_mmu.c
-> @@ -1274,10 +1274,9 @@ static int panthor_vm_prepare_map_op_ctx(struct panthor_vm_op_ctx *op_ctx,
->  		goto err_cleanup;
+>     bpf: Use hlist_nulls_replace_rcu() when updating htab elements
+>
+>     When updating an existing element, the current code does
+>     hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu(), exposing
+>     a transient state where both old and new elements are visible to
+>     concurrent RCU traversals.
+>
+>     Use hlist_nulls_replace_rcu() to atomically replace the old element in
+>     place, so RCU readers always see a consistent hash chain.
+>
+>     Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+
+This looks like a bug fix that should include:
+
+  Fixes: 4fe8435909fd ("bpf: convert htab map to hlist_nulls")
+
+The bug was introduced by commit 4fe8435909fd which added the
+hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu() pattern,
+exposing a transient state where both old and new elements are visible
+to concurrent RCU traversals.
+
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 3dd9b4924ae4..b20e82bd253d 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -1246,18 +1246,16 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+>  		goto err;
 >  	}
 >
-> -	ret = kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, pt_count,
-> -				    op_ctx->rsvd_page_tables.pages);
-> -	op_ctx->rsvd_page_tables.count = ret;
-> -	if (ret != pt_count) {
-> +	if (!kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, pt_count,
-> +			op_ctx->rsvd_page_tables.pages)) {
-> +		op_ctx->rsvd_page_tables.count = 0;
->  		ret = -ENOMEM;
->  		goto err_cleanup;
+> -	/* add new element to the head of the list, so that
+> -	 * concurrent search will find it before old elem
+> -	 */
+> -	hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+>  	if (l_old) {
+> -		hlist_nulls_del_rcu(&l_old->hash_node);
+> +		hlist_nulls_replace_rcu(&l_old->hash_node, &l_new->hash_node);
+>
+>  		/* l_old has already been stashed in htab->extra_elems, free
+>  		 * its special fields before it is available for reuse.
+>  		 */
+>  		if (htab_is_prealloc(htab))
+>  			check_and_free_fields(htab, l_old);
+> +	} else {
+> +		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
 >  	}
 
-Does this omit setting op_ctx->rsvd_page_tables.count to pt_count on success?
+Does this atomic replacement approach actually solve the lookup problem?
 
-Since op_ctx is initialized via memset previously, the count will remain 0 when
-the allocation succeeds. This could lead to memory leaks when these page tables
-are consumed or cleaned up later, since the cleanup code won't know about the
-allocated page tables.
+During review of Hou Tao's earlier v1 patch that used the same approach,
+Alexei Starovoitov raised a fundamental concern:
 
-The original code set the count to ret on both success and failure. The
-updated code only sets count = 0 in the failure path, but doesn't set
-count = pt_count in the success path.
+  "This atomic replacement doesn't really solve anything. lookup will see
+   one element. That element could be deleted by another thread. bucket
+   lock and either two step update or single step don't change anything
+   from the pov of bpf prog doing lookup."
 
-[ ... ]
+Reference: https://lore.kernel.org/bpf/CAADnVQKD94q-G4N=w9PJU+k6gPhM8GmUYcyfj=33B_mKX6Qbjw@mail.gmail.com/
 
-> diff --git a/lib/test_meminit.c b/lib/test_meminit.c
-> index 6298f66c964b..3727dee7c262 100644
-> --- a/lib/test_meminit.c
-> +++ b/lib/test_meminit.c
-> @@ -229,14 +229,12 @@ static int __init do_kmem_cache_size(size_t size, bool want_ctor,
->  	for (iter = 0; iter < 10; iter++) {
->  		/* Do a test of bulk allocations */
->  		if (!want_rcu && !want_ctor) {
-> -			int ret;
-> -
-> -			ret = kmem_cache_alloc_bulk(c, alloc_mask, BULK_SIZE, bulk_array);
-> -			if (!ret) {
-> +			if (!kmem_cache_alloc_bulk(c, alloc_mask, BULK_SIZE,
-> +					bulk_array)) {
->  				fail = true;
->  			} else {
->  				int i;
-> -				for (i = 0; i < ret; i++)
-> +				for (i = 0; i < BULK_SIZE; i++)
->  					fail |= check_buf(bulk_array[i], size, want_ctor, want_rcu, want_zero);
->  				kmem_cache_free_bulk(c, ret, bulk_array);
->  			}
+Hou Tao acknowledged this limitation and abandoned this approach in v2,
+instead implementing atomic updates only for htab of maps. This patch
+appears to be a re-implementation of the abandoned v1 approach without
+addressing the fundamental concerns raised during that review.
 
-Will this cause a compilation error?
-
-The local variable ret is removed from this scope, but it's still used in the
-kmem_cache_free_bulk() call. This should fail to compile because ret is
-undeclared.
-
-The fix should probably replace ret with BULK_SIZE in the free call:
-
-	kmem_cache_free_bulk(c, BULK_SIZE, bulk_array);
-
-
-> @@ -354,17 +352,18 @@ static int __init do_kmem_cache_size_bulk(int size, int *total_failures)
->
->  	c = kmem_cache_create("test_cache", size, size, 0, NULL);
->  	for (iter = 0; (iter < maxiter) && !fail; iter++) {
-> -		num = kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
-> -					    objects);
-> -		for (i = 0; i < num; i++) {
-> +		if (!kmem_cache_alloc_bulk(c, GFP_KERNEL, ARRAY_SIZE(objects),
-> +				objects))
-> +			continue;
-> +
-> +		for (i = 0; i < ARRAY_SIZE(objects); i++) {
->  			bytes = count_nonzero_bytes(objects[i], size);
->  			if (bytes)
->  				fail = true;
->  			fill_with_garbage(objects[i], size);
->  		}
->
-> -		if (num)
-> -			kmem_cache_free_bulk(c, num, objects);
-> +		kmem_cache_free_bulk(c, num, objects);
->  	}
->  	kmem_cache_destroy(c);
->  	*total_failures += fail;
-
-Is num uninitialized here?
-
-It's no longer assigned the result of the allocation call. Passing it to
-kmem_cache_free_bulk() will use indeterminate stack data, which could lead to
-memory corruption. The fix should probably be:
-
-	kmem_cache_free_bulk(c, ARRAY_SIZE(objects), objects);
+Can you clarify how this approach addresses the concerns that led to
+abandonment of the similar change in Hou Tao's earlier patch series?
 
 [ ... ]
-
-> diff --git a/mm/slub.c b/mm/slub.c
-> index a2bf3756ca7d..d9790e7c17f6 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-
-[ ... ]
-
-> @@ -7352,18 +7362,18 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
->  	 */
->  	unsigned int i = 0;
->  	void *kfence_obj;
->
->  	if (!size)
-> -		return 0;
-> +		return false;
-
-Does this incorrectly report an allocation failure when size is 0?
-
-Previously, callers interpreting the return value against size (ret != size)
-would treat 0 objects allocated for a request of 0 as a success. Returning
-false here contradicts the typical kernel behavior where allocating 0 items is
-a successful no-op.
-
-This might cause callers to incorrectly abort with an error when they request
-0 objects, which should be a valid no-op case.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26496962101
---===============2215855977696880001==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26496972451
+--===============8353182931888954691==--
