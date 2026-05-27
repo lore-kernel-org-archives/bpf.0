@@ -1,119 +1,96 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA72329C7C
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779892074; cv=pass; b=Hyog5xyo4s66lNXy9iQ/C36zH2LUipnCZoj8jPLHSERbuVLRqGBrSH4kh/OsnF6kuzQAwvfq62BWtWFF3pK+KItLgevzTxhH8C81IbEPoBxtQdV0/QAeEgYFU9ZIuQ9hF83mnESi74GW8spSMkCCkESYJAQ83yEJv4KMmxE8/Z0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779892074; c=relaxed/simple;
-	bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WIa/6aF/vxw6HFruxB1ISpS+bPN5tI2/832enCxPXwuZ8EdEdsdOSMi4IyKFV/W9OtK1uR/LFPDHYxYU0U2o/HwYR7hC3wv2t+GiOxLfclkXuItJ1zGQN6VJZw/lQa6UXjSNTUfO4Q6qF1aM7qGSoNWraVMyoVrkuju3eSRALn4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uoK+JU+u; arc=pass smtp.client-ip=74.125.224.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4203644C3
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779892480; cv=none; b=IdaJomhgjRvavhvm16SEwouvOhmxG8EsNpt+r6HW4tzit+nlxZrhgMZzhIO562P+ga43n2FrwWdnkLjUeqLbAQo+y7DGsBG7lCz20mo0Id4ynfOBuI7EUoICynKao6kYA4uVjOgMYiQlnUN4D5kAymWzWLUKgou8gi/rUEmn6QY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779892480; c=relaxed/simple;
+	bh=DzU6Z6CX/Wd9J+plkLRKW2hpcGZqI6GLcYTu8IEtcEc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JPheSJSzQAEBGNwCico/jZ9qfqmJHxxbrzijp2jU5F+W1IKe90+P8zWsncvbmRD2asArwOTb3ZvexQeJEzMqVNWrF0/CrnKvzXei4T1Moygjb+LQFB7p1gElr48VaJWcPR8YGENBakgzaFoltH1q+u9RphTpwGtojRllK/EKC4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdQq46Pu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uoK+JU+u"
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-65c37eafcbeso12411728d50.1
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:27:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779892072; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UFnCneTC7opsPORTaNEMR6cPHZZueapE2LSEyVi1WPioGSFDcuy4KSm3HwaCvuZ/fd
-         z/18xJvSuP+NmU+vpGfmvJ1qYrG+vZqoydGDHJA/YbuusVsFPWTZc1T05j+a8fAebl0M
-         edsnWj5AVxIM+MvH2oy6PhokCtyeJ4rvWtPBnqXhguzrrJBTYidwvhk4mEgn+ZiNy3dO
-         gZ8QTQL6J9ow3xkfubbNeY3rZavOC3uazSdMAEvZ10G6nB218IEXwMhKinKoiDHXR/61
-         rhmd0N2bXC56eYPRNcHaENrF1TguQsQW6OjKWTf2ovlOLQ6P1wn0UuvzW9Gi9EC0N0k+
-         ChrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=kU6dcguiKYgST0n992G7A+z4JNJJrso7rx4n+78HsrmaYHK+5Yu7Nk2mC4A3v7oVhL
-         PgiicoMAOVSGESE/UX+4RSGFNTkMhonw4RbRqOVlg0zDhuQrV7X+HVMcCpwky7EbTHHS
-         QBxzY+ZH/ll+GVs0m8ndzp7+2WSaY/df/dvxeIZa0wYBxiKEa4myaMPqsBGpekGLxU1f
-         jCz9/pV6k293wmAsTyO+IbH0PXdGnl4bQbV01wJEiixF0BVQqEHE9cBpQBVDWjiwQ8w6
-         /saFoElOQtgDoOkrTQAVlrg0hhSKxjH340zca2Y+3UlRh53oSvKRq7pLcSA4VDjyimuW
-         49Vw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779892072; x=1780496872; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
-        b=uoK+JU+u98wD/2vfXB8KvWwRDVSvYpXoprUr2xCmN/vyogPWI+UnkR5aa5CLF/DFWr
-         A6Qnm/cwri5an+9UCnpQSX2qqWIHMvJYCg3ip9zevkVA1QgcW1/Ll+rzD6YsK/RVC/lB
-         WmJ8CzNvouxNMLPf+R7+4ki14V1dNIDsODU3mwAhLOWER2IpZUTiPtd579lvSIpANQor
-         nqo/EWvZH7lwnkETVWGdowcdCGPjwHrPCz2UUxBLU0AckCOjS/ezOBdPlMU/wqnn6O0N
-         wCAZhC1/zOndM/nwh2QnuPVbgbGctIWrBJ7QIB7ycjKd36ZI9ylwfi2EJizJ1h7QmrB7
-         JkCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779892072; x=1780496872;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
-        b=MgkrhgN5GtSoxjMQ//lhWMmk9F54qCgw2oE2szflsIt1BHcvOSm6/ZDhyYtwWzDtvc
-         FmwvOQXbGaUucYpgTFTuouQMZKSUBHsW9A0qS1NFpPqabpUtZCdN/2MWHddAzhkkPZ2h
-         /LWkBQb+R+QdUEzWZnWnnw+lGqVxXARZxVUVnzsvErhGuN2ZFfOEzvISUeY38PPR3JCB
-         QBilvY8SfFVLwMqXZ2l9XJXPtwjZZnMXwbC6DlbDe7UyAW1omZw75vxuPN2g7r2ErsvX
-         vqHpY30t02faiD0ZMu6o/YOWupUSliGaLKO5bJMcalFzAODh5KMwrfNK0SqzHJcrFk0t
-         HUGg==
-X-Gm-Message-State: AOJu0Yxue90xXYhTFxUvsdaseY7Auu5MgT1zvpVTQtnkZ3ilDtMnzYOu
-	+JeUCGRkooT82lLJLO+42fjTJQivC7e+NBcB93OU1fRznmzsWeZsjehUbSndvoH1Fsg7i81jCh7
-	j18nz1xwq3aJ2Jp9IScOkeoOVLFPPL3154YjEYX5jqjG9XTSLsQVylwvj
-X-Gm-Gg: Acq92OH5rLqiFYj6wXqkQQ40sUZEQUckeV/bLY95fgNUit1S0RArx58EW4lo1PkBwPI
-	A5llNC1ssMstdYqdl3X6KSgycQCFJkTSVXiDt0E/pM9Zsd8xfB3/Zh3rE1ZgbfQqiO3UQuL56iv
-	3ZxkbzBT0sNQax9aUjSrsJMutB/n2vHTI6YhlCj9t3H45GsOygVmwuQPN9hL1lce7mn1NXgN8Dc
-	46iTYVB0Xgv0o0EwsUoK9SMgX4qjnVF+GIE9AzHuWfdMRcf16fHogta0rlMqw7BLkogDeuRZDMj
-	70kfz0dMY8p3ocJG6727Nz7vx70Xar0I2gRTrqmX96c0GRU=
-X-Received: by 2002:a05:690e:44e3:b0:655:aceb:4062 with SMTP id
- 956f58d0204a3-65ec98196a3mr18160634d50.28.1779892071374; Wed, 27 May 2026
- 07:27:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdQq46Pu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7B71F000E9;
+	Wed, 27 May 2026 14:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779892478;
+	bh=DzU6Z6CX/Wd9J+plkLRKW2hpcGZqI6GLcYTu8IEtcEc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cdQq46PuyzPEWTjLPHplt+T8dKzSJVSZbr6rwltWFBYujWJTtgs7GmiNO+uvfGq8h
+	 28J77NyTV5yo/ax0BfOnm+81sFbSBdcrOsR8BbdL299w7uaFQVVxDNvAyw0veMwzkv
+	 z7G3DfJZk86oz/U0ZMjPSTXeo9ZGlshF6VHIzUogqHpBzOrW6QDqSLeCei+gF9tfhH
+	 FGknAEvTVz3bRDytPcfUqFenvgW7F70XEYK9C6GbRp6iYh9cBT0uy5Kt0MdjMAIsSF
+	 Pfm3xvr6xPJCSwDuzxyENpvSt6V+1UVPdbT12WUMExm3qkWPPZkGLbHJhr/FFBksFD
+	 ACQZyDkbB8GdQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv6 bpf-next 13/29] bpf: Add support for tracing multi
+ link
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260527113951.46265-14-jolsa@kernel.org>
+References: <20260527113951.46265-14-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 27 May 2026 14:34:37 +0000
+Message-Id: <20260527143437.EB7B71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
- <20260527141042.B632E1F000E9@smtp.kernel.org>
-In-Reply-To: <20260527141042.B632E1F000E9@smtp.kernel.org>
-From: Sid Nayyar <sidnayyar@google.com>
-Date: Wed, 27 May 2026 15:27:39 +0100
-X-Gm-Features: AVHnY4LVyxM33KMk2U-BKoGICs3t9VlSWi0yECqbSJyqbPhrzB1u3fMTEGxO1d0
-Message-ID: <CA+OvW8Y4aRCtJR5_84VGPiySto_MvAZQkL1agXRk7j200vbZsw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] libbpf: plumb btf_vmlinux_value_type_id and btf_fd
- in gen_loader
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2026 at 3:10=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 4 potential issu=
-e(s) to consider:
->
-> New issues:
-> - [High] The patch truncates the bpf_attr payload, dropping `value_type_b=
-tf_obj_fd`, which breaks module-backed STRUCT_OPS maps in gen_loader.
->
-> Pre-existing issues:
-> - [Critical] Double-close of `inner_map_fd` in the gen_loader cleanup pat=
-h can hijack and close an unrelated file descriptor.
-> - [High] The condition to populate `btf_fd` incorrectly omits `btf_key_ty=
-pe_id`, causing map creation to fail if only a key BTF type is defined.
-> - [High] Memory leak of dynamic arrays `gen->relos`, `gen->ksyms`, and `g=
-en->core_relos` in the error path.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] check_dup_ids() uses kmemdup() to duplicate an array that can be u=
+p to 4MB in size, risking allocation failures and kernel log spam, and then=
+ sorts it without yielding, which can trigger soft lockups.
+- [Low] The patch relies on undefined symbols and incomplete struct types (=
+`is_tracing_multi`, `struct bpf_tracing_multi_link`, `bpf_trampoline_multi_=
+attach`, `bpf_trampoline_multi_detach`), which will cause compilation failu=
+res.
+--
 
-There seems to be a lot of feedback to unpack here. I will address
-these concerns and refresh the patch series once I have reviewed them
-and incorporated the required changes.
+Note: The format of this review has been altered to provide a free-form sum=
+mary of the findings due to recitation restrictions. The original patch cod=
+e is not quoted.
 
-Thanks,
-Siddharth Nayyar
+commit 5f2896efaf9a14c18ba8b610461b77f1dfabba8d
+Author: Jiri Olsa <jolsa@kernel.org>
+bpf: Add support for tracing multi link
+
+This commit adds a new link type, bpf_tracing_multi_link, to allow
+attaching a BPF program to multiple function BTF IDs. It introduces
+new fields in bpf_attr::link_create for passing the BTF IDs array
+and its count.
+
+[Severity: High]
+In the newly added check_dup_ids() function, the code uses kmemdup()
+with GFP_KERNEL to duplicate the IDs array. Since cnt can be up to
+MAX_TRACING_MULTI_CNT (which is 1,048,576), this can result in an
+order-10 contiguous kmalloc allocation of up to 4MB. Could this cause
+spurious -ENOMEM errors and spam the kernel log with allocation
+warnings on fragmented systems? It appears the caller correctly used
+kvmalloc_objs() for the original array.
+
+Additionally, check_dup_ids() calls sort() on this potentially large
+array. Sorting over 1 million elements without yielding (such as using
+cond_resched()) might hog the CPU. Can this trigger RCU stalls or soft
+lockup watchdogs?
+
+[Severity: Low]
+There appear to be undefined symbols and incomplete struct types used
+in this patch, such as is_tracing_multi(), struct bpf_tracing_multi_link,
+bpf_trampoline_multi_attach(), and bpf_trampoline_multi_detach(). For
+example, the nodes_cnt field is accessed on what seems to be an
+incomplete type. While the commit message mentions that some functions
+were previously added, are they missing from this specific patch, which
+might cause compilation failures?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527113951.4626=
+5-14-jolsa@kernel.org?part=3D1
