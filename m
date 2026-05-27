@@ -1,102 +1,137 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F2C3C2B84
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22693E834C
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779875843; cv=none; b=KnDQiIe7vSQbWge5lh0a1N+0NUZmOnHLxiZ3bM+K6MOT+b2m3wgQGD6aYa6XgavLhLMaq+g24wvonUq5t5/TqgmsfN50omkblwtXWQTwfd6ufVIFDHtOAHCPGyOTT+V+MSIjHCKe98lTbpRVh3O4WtaSI+4Z9JhQXY5ZrH4pAlA=
+	t=1779875869; cv=none; b=U1BJXH/z9cbg62wY2nlSNRo97a60GWPCE8UPeqTfJnSiPHHKx7PhKUz34Y6Ap68mnimcYajwh70DehRDjDU81L1H+lI2HAUDNjh4O4dLDiQT6f5DmXp0KnIIjrcNV8ySphGZ/SVAAC2b9sMeMcjgzD593QM36LTOvTP84jj1RbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779875843; c=relaxed/simple;
-	bh=++tgT2Sz0TpWfiXXAm/QF+e/DOGLWBskiZrFnEqVsSE=;
+	s=arc-20240116; t=1779875869; c=relaxed/simple;
+	bh=rhr6p3Lg7XJ0vMqzbFcdeO2CJajTB0zXczci4HQ/HsE=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tOFMBCnAp7QHeWPB/uMN2cMtn3GpSTAFT0mgScNIv7FBMW9/XcEnr5/jwmGZjticufoYfZslKH2Fp2sMz+kn/AgYDEaxDdcge6Tce3onNiH1GomiQBxVwxy7+hGcR8i2IF6kApPHie1C+1VM7969+kfAjVLsgM5CsYhYijpuxjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ef2ISrmG; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=g856Fnt5pJ2tyABppjaGI3Y7nntLRjlnfhxDAPcnl70qLdw6i9ltd3DyARwqCf2r8PQ7bZ6E9x0yQ/+e2zNzOsJwEWlowGlqXvl7ST1rm7MUsDVpEwXa2kVhv3ykfvfhz1+1cnMjYEaArSvPv9mmsZyGoDWdODcuVADkeYtUdwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/L/Lf3u; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ef2ISrmG"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44e1860558fso7296843f8f.0
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 02:57:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/L/Lf3u"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so121196395e9.0
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 02:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779875840; x=1780480640; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FC7ZL5PTAZWI+jfnZHPihHv7ZDUJ8Gkzr3+eQaCgs2w=;
-        b=ef2ISrmGJTwyC0W2lJUFlZveNzYTKzrz2iwdHCMOozi855p8TCpAlp6oa8X6psQsu3
-         nrxHsySRjFC47aDvLtq7rrveebF+ZhJb817AZpmSR2J6xNxkK1GpRKEOz0thLxbu1lyb
-         HRyNeF2dICah85TGm1/AKVI7XTmihxgyUxLJpuT0Ca+LzqAcV7RCJJmin8b10/T4XCrw
-         SxfvNj5Pr2IW55GxobTSGAlhvEhpi/Wp/NXutHWSrignfDxkLUUmcukO3ESpmfa5LP5W
-         V8pDMXSenxGorPC0ReT7Xf+zATyOsn0hM2YQ0Yzb978iQIkyOiR0qIJaHsS7FitL0GY9
-         cXVw==
+        d=gmail.com; s=20251104; t=1779875865; x=1780480665; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HK5/dim6I8THjlnPnIlV2fUiqEghMFcOuVhn1AO2dDg=;
+        b=k/L/Lf3u4zd84kdccNmUARhogwRWSOf+kCuW1jYcojLrYxH87hUxCm7ksOLJvxpZP9
+         YMumFySwGUCIBEZbFwlfw6ZNZ1KDv8Stpo1f0DwfunoKKWO44EBKB8Qb6m9/yGxyPLl9
+         bkkV1BW0pqyvc0fURAzDRkc+RKgN0sct/d4DqlQpsRruz2MRyMr/hA2ff4fMCG7ZvIYY
+         N7CAlsvMHoES6kMpmf4uYfrpxLiqBgH6zqS4SjqN6l4mY4R3hgyLjC1Jra10HBf0MS1m
+         dHdrnv/Z4Jew7wg1jUFWdF8FS047Y5DMWZ1AHIQsraBOqKjHsoNPPdLYW3jnGlRC8Rif
+         oDkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779875840; x=1780480640;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FC7ZL5PTAZWI+jfnZHPihHv7ZDUJ8Gkzr3+eQaCgs2w=;
-        b=tVbyLkZ6mAPOSIn4w8F+XljBGyEUcfXYmbsGWtBB+kbJh8/z0c1lXxvI0JTh7ATnQS
-         /CVS/x7V6+iCVq/ijtZqo0f8AdSW7eVCH+wEUJ6FxapiYLwnrlZVdTTn6RnlyuBM8iXX
-         X+b8MoS8c1OXu4LzIAy3YNVrvUsOFe0Y/NHPqaNO5bAgDbFliWl6N+1Z3To7BMHmDIKv
-         FfAX3L4p3WDnIBQKyFrbYerI7/hlg0EMdOOYHsGBJdNZPbilWfGTe2X2IcVGkD4tIxEX
-         lHJs4h6iJdFV3BBdljKOnu7lU/WTKYr8fKJJsXKsbRrbCwwNQ5OUy2p5+8o5t/NKiMa7
-         QpFQ==
-X-Gm-Message-State: AOJu0YzEPpykRsXOJDc1CoofDTSPFvq6hZaXcI6GGo6dRiqnAOP64bmN
-	HtLCMh+QjUeBG0p2qFbmynrmNeUWe2Fk1SSLrFXU4ePopkzFk05qgF5cdXDdyQ==
-X-Gm-Gg: Acq92OE2wpv6HbTRqRjL44y2eQQgLWe7zBLa/KgRHPNun6ll7zywdSEsD1H54Dd+i8k
-	0KiRKnhnKV975DUGcs8qkHSWBlj/9PN1xlXZCwdeP7Kt6N6p6QsR+R9xat3Zkp/8aKdcSB/ne3N
-	2SUtYwy9YA8Fy+1uYlt3i+Oud5pzHBLkpu1lM49mzJbcaWXnWYnmSnX/zMci4Rc66927LkF37nz
-	wTtNo7mPAw8qcoIUVwhO7XglRk9ka1Z7PMvnM9c90f4x1QFUX5uLOYPHvfOK8E352AZAHAeBmCi
-	xZIhuO4aEkwDJ5BTojL9O5OwmDHqA1FRJS2vPH7CNSeoB5arxQyQyF6+G+VXqllvUMZgAwICd1F
-	69ONXT04f34bJM0X0Ah43AdSZUFkdz7b+XyFkGO4tzq+KDkFk6ofRrVmSqDU43jsmbJT+3bytjy
-	CGuqRnpo1E5dnYkHUUf9ROkREFGA==
-X-Received: by 2002:a5d:64e4:0:b0:45e:779a:302c with SMTP id ffacd0b85a97d-45eb38d297amr39611266f8f.29.1779875839707;
-        Wed, 27 May 2026 02:57:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779875865; x=1780480665;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HK5/dim6I8THjlnPnIlV2fUiqEghMFcOuVhn1AO2dDg=;
+        b=RW2YiPwfSblHKz1nNijNCdgGUi4h1Zhw54h0S4D7d3X7EWJ3BgTyvlIcXCZsY3G5+S
+         gfJW+aBxRpROlmm/5ROVWQupRyzsiDSlDWsuPX0tR4rWKqPd6pZb6vUFTXzqH35N8ef6
+         9q5rwatcX5QKRjoN4X9paNklhVpJtxuFWvEhTimV5HAHOFN3m5JAraZlNE50r7V+/A7C
+         yUC6Jtwx0aqQKfmGjs1tTjoxm/maGYi1mvxJTCTwe/h/qGWkK//FXEdqINcwQ4CaPfOW
+         sJ+RZTzYd9lloTe99k4b4TWlvUFHzlsNjI+RPAFSnkRxc+wpuMT8TLsP+cy/0uDa7YxQ
+         mxlQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/8K9DJ+z77TO1PNj6Ir9j2bLuTXfeKof5HZ41KL4Co+GS0mbZsL2rhK2r4laCFsnHKd9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6Gs5Vi1F6gDquF3F9g8P27dFlRgqRF0CCuF6dzNKjSw+fu86t
+	NdVeAhxZXJ0qSh1XTr9ZRv+97aZ7jCwfWFs2ANnxMaAGbdgbiIE0mnjO
+X-Gm-Gg: Acq92OHGlkhb2SGPe33A2t0fx5aXag+R7PF2P3ENLE6sNUKOCZ09qwVedhUSvBUyC8d
+	6PKv1l2o8XM6L74UNlCl3UVMtw2CT2GpqtSa55Q6SXQErZbCGT7HOry4j35KN3HpN+OaMsMhlfL
+	zcwxCatW5iUNo2tfvsN3AMR/jks4Hu26eqqZqAk+sJJaZsBNhk9ujBuKR7UFHL+JS0Xb/zSxCoY
+	oZ79UuQFim0YlhoPJ45hSP3DBgoapFh494mOVH4kOyhCSqucOoQhXPzvSH8Q7MfqYZc+p6slznn
+	NiTvDlvBtPWJBaprrUmQws7kwguujOCAVncr1MzF7tVKeyF9myM/2gcGanFJjpE8LScyRwvGMMW
+	lHeOjsSCLYyhOIGLR07iyGuI6EPQB/mVliGwXELMTqckspEtD45p+VDhnyEjGOXIsVKjxZmx0Cz
+	tUAHrEwdqdrzvQqrcc4vzz5RqeGg==
+X-Received: by 2002:a05:600c:674a:b0:490:5057:f5f7 with SMTP id 5b1f17b1804b1-49050580a91mr306966745e9.11.1779875864661;
+        Wed, 27 May 2026 02:57:44 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb4bae01sm4843151f8f.0.2026.05.27.02.57.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49045284855sm390114725e9.0.2026.05.27.02.57.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 02:57:19 -0700 (PDT)
+        Wed, 27 May 2026 02:57:44 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 27 May 2026 11:57:17 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Wed, 27 May 2026 11:57:42 +0200
+To: bot+bpf-ci@kernel.org
+Cc: oleg@redhat.com, peterz@infradead.org, mingo@kernel.org,
+	mhiramat@kernel.org, andrii@kernel.org, jakub@cloudflare.com,
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
+	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
+	ihor.solodrai@linux.dev
 Subject: Re: [PATCHv4 06/13] libbpf: Change has_nop_combo to work on top of
  nop10
-Message-ID: <aha__UZNxWCT2ZFj@krava>
+Message-ID: <ahbAFrjEvM5m_3l1@krava>
 References: <20260526205840.173790-7-jolsa@kernel.org>
- <20260526212840.1053C1F000E9@smtp.kernel.org>
+ <4ea9f26531f9e53da6c8e5c8a638ef7aeaffd6b3fb6ed20e742069783e660e05@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260526212840.1053C1F000E9@smtp.kernel.org>
+In-Reply-To: <4ea9f26531f9e53da6c8e5c8a638ef7aeaffd6b3fb6ed20e742069783e660e05@mail.kernel.org>
 
-On Tue, May 26, 2026 at 09:28:39PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] The patch invalidly replaces `nop5` optimization support with `nop10`, which cannot be optimized by the kernel, breaks backward compatibility for existing binaries, and causes selftest failures.
-> --
+On Tue, May 26, 2026 at 09:46:37PM +0000, bot+bpf-ci@kernel.org wrote:
+> > commit 5ad96df841a0877eeca7d2cbe4b3f726b7fd0b72
+> > Author: Jiri Olsa <jolsa@kernel.org>
+> > Date:   Tue May 26 22:58:33 2026 +0200
+> >
+> >     libbpf: Change has_nop_combo to work on top of nop10
+> >
+> >     We now expect nop combo with 10 bytes nop instead of 5 bytes nop,
+> >     fixing has_nop_combo to reflect that.
+> >
+> >     Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
+> >     Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> >     Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> >     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > 
-> commit df13b5dc7675e7ea56d8d1775d22295b93e92ab0
-> Author: Jiri Olsa <jolsa@kernel.org>
+> The Fixes: tag references commit 41a5c7df4466 which originally added
+> has_nop_combo() with correct nop5 support. However, the actual bug was
+> introduced by commit af734a7ddb4e which changed the kernel's uprobe
+> implementation from nop5 to nop10. Should the tag be:
 > 
-> libbpf: Change has_nop_combo to work on top of nop10
-> 
-> This commit updates the USDT nop combo detection to expect a 10-byte nop
-> instead of a 5-byte nop. It updates has_nop_combo() to match the new byte
-> sequence.
+>   Fixes: af734a7ddb4e ("uprobes/x86: Move optimized uprobe from nop5 to nop10")
+
+af734a7ddb4e hash is not available, the patch:
+  uprobes/x86: Move optimized uprobe from nop5 to nop10
+
+is part of this patchset
+
 > 
 > > diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> > index e3710933fd52a..484a4354e82ba 100644
+> > index e3710933fd52..484a4354e82b 100644
 > > --- a/tools/lib/bpf/usdt.c
 > > +++ b/tools/lib/bpf/usdt.c
-> [ ... ]
+> > @@ -305,7 +305,7 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
+> >
+> >  	/*
+> >  	 * Detect kernel support for uprobe() syscall, it's presence means we can
+> > -	 * take advantage of faster nop5 uprobe handling.
+> > +	 * take advantage of faster nop10 uprobe handling.
+> >  	 * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
+> >  	 */
+> 
+> The comment at the end of this block references commit 56101b69c919 which
+> added the uprobe syscall. Andrii Nakryiko noted in v3 review that it would
+> be good to also reference the commit that switches nop5 to nop10, though he
+> acknowledged the hash isn't stable until it lands. Now that af734a7ddb4e is
+> available, could this be updated to reference both commits?
+
+I proposed to change the comment after this gets merged
+
+> 
 > > @@ -596,14 +596,14 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
 > >  #if defined(__x86_64__)
 > >  static bool has_nop_combo(int fd, long off)
@@ -108,7 +143,7 @@ On Tue, May 26, 2026 at 09:28:39PM +0000, sashiko-bot@kernel.org wrote:
 > >  	};
 > > -	unsigned char buf[6];
 > > +	unsigned char buf[11];
-> >  
+> >
 > > -	if (pread(fd, buf, 6, off) != 6)
 > > +	if (pread(fd, buf, 11, off) != 11)
 > >  		return false;
@@ -116,29 +151,12 @@ On Tue, May 26, 2026 at 09:28:39PM +0000, sashiko-bot@kernel.org wrote:
 > > +	return memcmp(buf, nop_combo, 11) == 0;
 > >  }
 > 
-> [Severity: High]
-> Does replacing the 5-byte nop detection with a 10-byte nop detection break the
-> kernel's uprobe optimization logic?
-> 
-> Looking at the kernel's can_optimize() in arch/x86/kernel/uprobes.c, it
-> strictly requires the replaced instruction to be exactly 5 bytes. A 10-byte
-> instruction fails this length check, causing the kernel to silently abort
-> optimization and fall back to an unoptimized int3 probe.
+> This isn't a bug, but Jakub Sitnicki suggested in v1 review using
+> ARRAY_SIZE(buf) instead of repeating the scalar value 11. The author
+> preferred keeping the literal number for simplicity, though the value
+> now appears in 5 locations (array declarations, pread size, pread check,
+> memcmp size).
 
-this seems wrong, the related kernel change is part of the patchset
+and I replied to that then
 
 jirka
-
-> 
-> Additionally, replacing this entirely rather than supplementing it means
-> libbpf no longer recognizes the nop5 combo in existing binaries. This causes
-> existing USDTs to fall back to unoptimized probes and breaks BPF selftests
-> that expect the +1 offset applied.
-> 
-> Finally, if the kernel ever updated can_optimize() to allow 10-byte nops,
-> sys_uprobe() currently hardcodes a return adjustment of regs->ip += 5.
-> Returning +5 bytes into a 10-byte instruction would resume execution in the
-> middle of the nop sequence, which could cause an application crash.
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260526205840.173790-7-jolsa@kernel.org?part=1
