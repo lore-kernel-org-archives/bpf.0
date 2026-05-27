@@ -1,185 +1,184 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAA336495D;
-	Wed, 27 May 2026 19:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBBF368271
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 19:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779909175; cv=none; b=LfL+GpXRxwFgZiII5zhqzVqNTPs7BpxaB0XUSxRG4gYfxfqPAui89fGzqlw4uuBRhTqDOujw5q4F309JJKKebwLHOaMGmEufxSRc0gKTBGcgcyyzgwwQqrY5pl1SvA95PY6M9j9pm+ueKUj/T0m6JIyt9QiS8u9jeu7OpMtPVwE=
+	t=1779909366; cv=none; b=cepurKzGyWW3zugkWoZld9ZuR+jqNoJtwpL2nWBONF7MAW0k5vkWMhFlGsW29p05EFDniR0A58C4ax0ffwTZxt3yI3Y9JhL2p7Z+DZ/bbMavhR7h/vmi+m/ffE9GCNyJEhf0ClJVuPIhAJzY7GMdc4CJXoP1o8P8Zmxzu1CS7dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779909175; c=relaxed/simple;
-	bh=OMBhp36SGhBUxYsENPfb9uF3VzY8cW8Q8Xw5p9ehcs8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XkcA2/lklmofWjMOwpaxrQDC7Zz5T+It8dFbl8ZlTXbtOopJDygu3Jmv6h5/J2Z3E6U7r8RwXXeH6b+YhUAAQmvmSWiJ4E5W4bUGa78KkbSa9HjKatFWDy/3NgoYeRIH7I5M02VeTBKkvCghto/XeQYkAnqgp+hL72b91ROgfIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OffYYVPf; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1779909366; c=relaxed/simple;
+	bh=W3T4QxdLFfHbdc/KmpcaHHy9IfSTsNZ4bf6F6ZMHiTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=epYHrJ++iVSPfgl2aYUgd5kVILp6xFn0tPwRbKbbQxNFOa4yZG73bYs0hRKw/cqISwiQH7ypcUA7L2/tjBhJOeUzOL7K99NL9qr+2Pt8mAbEnBB3+l+8MnbxySRJr0DigXQtFxRJeRccaTQbykC0i18e+OfuthqeDA7LdrgT4oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ValWSb2X; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OffYYVPf"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id E07214E42D69;
-	Wed, 27 May 2026 19:12:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9282A601A1;
-	Wed, 27 May 2026 19:12:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1697A10888BE4;
-	Wed, 27 May 2026 21:12:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1779909163; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=pqol5pOcp80VinncolPKrRnV5MzpAOgtnDii24qMsFA=;
-	b=OffYYVPfGFCF2dx9rYcIraiIMq+j7bOIll6Qp7FRxkUrDxdIt410u8733cY+NqOiejfA0H
-	1uAeQI6/4IFZs8Zcv+kM6tsLUGlqD49XqYMd25HLACFjPIBLJQMC3s7FihDKpTSWXO7Kv8
-	13ar0VGPk+K9c6lIwHgSRP0Qv9+da1ZagwHopr5Bptzw9oFKGmvtsSVEDo37Rq7UJtfLsv
-	5oYh9c6E8JfwLKqk+7zGRU38il8afy96ie9wOwVP9yvoJrp2rFSoUrr26fRoQZtShFB34H
-	Ezud/a+RvKwm2whD1hidf/fSnLKMd5QQrTMu6yhrCI2DAT7LTygHdoVYJqtKKw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 27 May 2026 21:12:31 +0200
-Subject: [PATCH bpf-next] x86/ftrace: relocate %rip-relative percpu refs in
- dynamic trampolines
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ValWSb2X"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82f8b60e485so5183123b3a.0
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 12:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779909364; x=1780514164; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jVdozbgHNmRboTjJqPe1n9RlPVUR0qDZvYcaF2yAV8s=;
+        b=ValWSb2XLrdf3Bw6PhZo9e+CRjbSLnpGiuOU5m4gAa41n1wUh8H8bFDhf+XAJslB2h
+         /448U7HWQ4FjK9XeYxEPgefvubM0bnISKWa4CRNt0kdZhJW9VR8eJ7A4/2z6Zm/BPAGf
+         g6as7/kz4YuAY9lGEGPGfeXwks+Jj/7TSoPLrbW/RwJALfQtBo8XlwucBqaWKcOBQLM1
+         2nYgOZYX6G9y4RbrYBZYfdvtIJGEs8VsQOZL0pzOdXDwcAwwdy3+n3B2fxv6xsZk+2vM
+         EdM5rf0i0mq4LAgb3fqvp63PgK+3fNb1QQoxS1zJs6PpS2hYI52rHrKMfSfmjckYmd9Q
+         b4aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779909364; x=1780514164;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVdozbgHNmRboTjJqPe1n9RlPVUR0qDZvYcaF2yAV8s=;
+        b=KfaPs9TPYqkk4SBPJ4yh+5nlaVSD9nvB4G3+zCsuyX85CQrhNr9nzUuoPO8LYtRQ4Q
+         OVahFD2EcMQvXcQmqyyh4Vkvs4Q86w0l4jMuPceLxOIKXOQ0obYiE8+E+TgItMk1b8dM
+         ONvLuiCiken/OLHDHphh7VHg0r3i1uh3IAG1v4r4D/1eAYPp4HTes3A/OyJVZRymWcK8
+         uPbQUB03u8epIKoK2Jf7t229LmEGdasoTgE8ugHwrpD/5PfrfRbaDBrdPvP/BvH+ESfn
+         c1EjfTH4boIwQOiOcc0s0tNlLeoJZyWpZzJX2xaf9zhrOKi03tKbzJrqjuTw1t3yEOAn
+         DsFw==
+X-Forwarded-Encrypted: i=1; AFNElJ8ccXexpjOIqjFT2PwAwQg3qkbpO7zx1dX8kDmzZSFK5TjiU2Yo4+Fy5FT6QLHnfpgzgKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUOYR1BzUshfr1Us1kTVZW+hmAqZNtTdlLHNmOUNB6HuE5nD3N
+	ov7Erbn9988Ybmseix1+iqC8FtT4DpWwycn4OPLd9uPS5eVZVqlePYZZ
+X-Gm-Gg: Acq92OFbpZ81Hig8E1v2AIN88nu9jjCN0JPz7u/NtTYyXtnwcku9ZZHrwtPPbHrERHL
+	Huu3QgCimZbdpaBbTMGtquP5polplZHn4r1Y5oSjerZAJiiobZ0OUB+lgZYtEZPH29uG1QAQDMw
+	JVKkuEtHNw0wNG4d8xQdinY7mHH5gJWTFAJmaFiFzoWwnD4gie1zxuo3eyzfdFf5IQaul73Fhld
+	POFAcd/YwRYQO+MYU490q2zVpp+2H6BTh5hFD8JgZFbMEjN5qgpfUIUtWwErKtHKSTympQ1hsJI
+	YuQeFqBmbB9z8a2mExHXjViEu013UnOCkxUcCn0LIXhxvr1uspCNgl/d/qgjT+nsUeRnQ99XEVC
+	q1WLbTNXm0cOPrik5FmzX7wmy3k8v2LG9uKGzfz5kEPC/AIfiHXP58a8RKty1rtXNs1eaEJ+YAF
+	gEoX6b059jWN+JIkFr3maLTcfhZ7si2ZRM
+X-Received: by 2002:a05:6a00:2384:b0:827:4bca:f1a2 with SMTP id d2e1a72fcca58-8415f0f02cbmr22578450b3a.10.1779909364354;
+        Wed, 27 May 2026 12:16:04 -0700 (PDT)
+Received: from john-p8 ([98.97.42.209])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d70bb18bsm3595235b3a.34.2026.05.27.12.16.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 12:16:03 -0700 (PDT)
+Date: Wed, 27 May 2026 12:16:02 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Jakub Kicinski <kuba@kernel.org>, 
+	Christopher Lusk <clusk@northecho.dev>, Sabrina Dubroca <sd@queasysnail.net>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net v3] net: tls: use sync AEAD for sk_msg BPF sockets
+Message-ID: <ahdAboFpUAZ8aaWm@john-p8>
+References: <20260526025154.60607-1-clusk@northecho.dev>
+ <d92bc603-e345-4dee-9ae9-6ad45e4e6642@linux.dev>
+ <20260526161101.691d4cb7@kernel.org>
+ <4626d285-57ab-46c9-b75b-d56efe7417fc@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260527-fix_call_depth_in_trampoline-v1-1-1c1abc8ae310@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM4QrCIBSG4VsZ53eCGVurW4khenZsJ8yJ2hiM3
- fusfr58H88GmRJThnuzQaKFM8+hxvnUAE4mPEnwWBuUVJ1s1VU4XjUa7/VIsUyagy7JvOPsOZD
- opcW2u10k9g4qERPV/49/gI1OBFoLDP8lf+yLsHx12PcDDo4qhYoAAAA=
-X-Change-ID: 20260527-fix_call_depth_in_trampoline-80bc56930c8f
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- ebpf@linuxfoundation.org, Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <4626d285-57ab-46c9-b75b-d56efe7417fc@linux.dev>
 
-With CONFIG_CALL_DEPTH_TRACKING enabled on an x86 retbleed-affected
-platform (eg: Skylake), with retbleed=stuff, registering a dynamic
-ftrace trampoline crashes on the first call into the traced function:
+On Wed, May 27, 2026 at 01:09:44PM +0800, Jiayuan Chen wrote:
+>
+>On 5/27/26 7:11 AM, Jakub Kicinski wrote:
+>>On Tue, 26 May 2026 14:44:24 +0800 Jiayuan Chen wrote:
+>>>If async_capable is set to 1, the zerocopy path in tls_sw_sendmsg() is
+>>>skipped.
+>>>Unfortunately ktls with bpf_msg_pop_data() does not work correctly under
+>>>this
+>>>copy path.
+>>>
+>>>tls_clone_plaintext_msg() aliases msg_pl onto msg_en's plaintext area
+>>>(in-place encryption).
+>>>
+>>>BPF runs bpf_msg_pop_data(msg, 0, 2). This shifts msg_pl's SG entry
+>>>forward by 2 bytes.
+>>>The two SGs now point to the same page at different offsets. Physical
+>>>memory overlaps but the start of
+>>>address differ.
+>>Ugh, do you mean that the memcopy path is broken? There are other
+>>conditions under which we may fall into it than just !async_capable :(
+>>Small send with MSG_MORE is probably the easiest?
+>>
+>>So we need to fix that one way or the other.
+>
+>
+>Yes, the memcopy path is broken, but only when combined with sockmap's 
+>pop helper.
+>
+>
+>msg_pl and msg_en share the underlying page:
+>
+>                       msg_pl           msg_pl end
+>                         ^                     ^
+>                  |------|------------------|-------|
+>                  | hdr |   plaintext     |  tag  |
+>                  |------|------------------|-------|
+>                  ^                                      ^
+>                  |                                       |
+>              msg_en                         msg_en end
+>
+>Before encryption, sge->offset += prot->prepend_size is applied
+>to msg_en so that the encryption's dst and src point to the same
+>block of memory.
+>
+>But once pop has run — i.e. msg_pl's start advances — the encryption's 
+>dst and src
+>are no longer the same.
+>
+>crypto_ctr_crypt():
+>When dst and src have the same address, crypto saves the encryption 
+>result into a
+>temporary buffer and then writes it back to dst.
+>
+>When dst and src have different addresses, the crypto module treats 
+>them as two
+>
+>separate buffers and stops considering in-place mode.
+>
+>it's complicated to process pop/push + head/mid/tail...
 
-  [    9.630365] BUG: unable to handle page fault for address: ffff88817ae18880
-  [    9.630365] #PF: supervisor write access in kernel mode
-  [    9.630365] #PF: error_code(0x0002) - not-present page
-  [    9.630365] PGD 4b53067 P4D 4b53067 PUD 0
-  [    9.630365] Oops: Oops: 0002 [#1] SMP PTI
-  [    9.630365] CPU: 3 UID: 0 PID: 187 Comm: usleep Not tainted 7.0.10 #243 PREEMPT(full)
-  [    9.630365] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.17.0-2-2 04/01/2014
-  [    9.630365] RIP: 0010:0xffffffffc0400058
-  [    9.630365] Code: 24 78 00 00 00 00 48 89 ea 48 89 54 24 20 48 8b b4 24 b8 00 00 00 48 8b bc 24 b0 00 00 00 48 89 bc 24 80 00 00 00 48 83 ef 05 <65> 48 c1 3d 1f a8 b6 02 05 48 8b 15 f6 00 00 00 4c 89 3c 24 4c 89
-  [    9.630365] RSP: 0018:ffffc90000a3fe60 EFLAGS: 00010382
-  [    9.630365] RAX: ffffffffffffffff RBX: ffffc90000a3ff58 RCX: 0000000000000000
-  [    9.630365] RDX: ffffc90000a3ff48 RSI: ffffffff82198e40 RDI: ffffffff813f5654
-  [    9.630365] RBP: ffffc90000a3ff48 R08: 0000000000000000 R09: 0000000000000000
-  [    9.630365] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8881030d3780
-  [    9.630365] R13: 00000000000000e6 R14: 0000000000000000 R15: 0000000000000000
-  [    9.630365] FS:  00007f081d131740(0000) GS:ffff8881b7eae000(0000) knlGS:0000000000000000
-  [    9.630365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [    9.630365] CR2: ffff88817ae18880 CR3: 00000001033dc006 CR4: 00000000003706f0
-  [    9.630365] Call Trace:
-  [    9.630365]  <TASK>
-  [    9.630365]  ? find_held_lock+0x2b/0x80
-  [    9.630365]  ? exc_page_fault+0x74/0x220
-  [    9.630365]  ? lock_release+0xe1/0x320
-  [    9.630365]  ? __x64_sys_clock_nanosleep+0x9/0x1a0
-  [    9.630365]  ? lockdep_hardirqs_on_prepare+0xd9/0x190
-  [    9.630365]  ? trace_hardirqs_on+0x18/0x100
-  [    9.630365]  __x64_sys_clock_nanosleep+0x9/0x1a0
-  [    9.630365]  do_syscall_64+0x100/0x5f0
-  [    9.630365]  ? exc_page_fault+0x1e0/0x220
-  [    9.630365]  ? call_depth_return_thunk+0x2a/0xd0
-  [    9.630365]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-  [    9.630365] RIP: 0033:0x7f081d20ad83
-  [    9.630365] Code: ff ff c3 0f 1f 40 00 83 ff 03 74 7b 83 ff 02 b8 fa ff ff ff 49 89 ca 0f 44 f8 80 3d c6 d2 10 00 00 74 14 b8 e6 00 00 00 0f 05 <f7> d8 c3 66 2e 0f 1f 84 00 00 00 00 00 48 83 ec 28 48 89 54 24 10
-  [    9.630365] RSP: 002b:00007ffd539e1328 EFLAGS: 00000202 ORIG_RAX: 00000000000000e6
-  [    9.630365] RAX: ffffffffffffffda RBX: 0000000000000103 RCX: 00007f081d20ad83
-  [    9.630365] RDX: 00007ffd539e1340 RSI: 0000000000000000 RDI: 0000000000000000
-  [    9.630365] RBP: 00007ffd539e14f8 R08: 0000000000000000 R09: 0000000000000000
-  [    9.630365] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
-  [    9.630365] R13: 00007ffd539e1510 R14: 00007f081d370000 R15: 00005619c9d78338
-  [    9.630365]  </TASK>
-  [    9.630365] Modules linked in:
-  [    9.630365] CR2: ffff88817ae18880
-  [    9.630365] ---[ end trace 0000000000000000 ]---
-  [    9.630365] RIP: 0010:0xffffffffc0400058
-  [    9.630365] Code: 24 78 00 00 00 00 48 89 ea 48 89 54 24 20 48 8b b4 24 b8 00 00 00 48 8b bc 24 b0 00 00 00 48 89 bc 24 80 00 00 00 48 83 ef 05 <65> 48 c1 3d 1f a8 b6 02 05 48 8b 15 f6 00 00 00 4c 89 3c 24 4c 89
-  [    9.630365] RSP: 0018:ffffc90000a3fe60 EFLAGS: 00010382
-  [    9.630365] RAX: ffffffffffffffff RBX: ffffc90000a3ff58 RCX: 0000000000000000
-  [    9.630365] RDX: ffffc90000a3ff48 RSI: ffffffff82198e40 RDI: ffffffff813f5654
-  [    9.630365] RBP: ffffc90000a3ff48 R08: 0000000000000000 R09: 0000000000000000
-  [    9.630365] R10: 0000000000000000 R11: 0000000000000001 R12: ffff8881030d3780
-  [    9.630365] R13: 00000000000000e6 R14: 0000000000000000 R15: 0000000000000000
-  [    9.630365] FS:  00007f081d131740(0000) GS:ffff8881b7eae000(0000) knlGS:0000000000000000
-  [    9.630365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [    9.630365] CR2: ffff88817ae18880 CR3: 00000001033dc006 CR4: 00000000003706f0
-  [    9.630365] Kernel panic - not syncing: Fatal exception
+For our use case (not deployed yet, but deployed in non-kTLS case)
+all we do is observe data and possible drop the skb if it has
+malicious HTTP headers for example.
 
-This small reproducer allows to easily trigger the crash:
+All this push/pop/... in the middle of the kTLS stack is painful.
 
-  # echo 'p __x64_sys_clock_nanosleep' > /sys/kernel/tracing/kprobe_events
-  # echo 1 > /sys/kernel/tracing/events/kprobes/p___x64_sys_clock_nanosleep_0/enable
-  # usleep 1
+One option we start rejecting these helpers? That would resolve most
+the pain I suspect. The original thought was we do have use cases
+now for userspace proxy where we insert headers.
 
-Monitoring the crash under GDB points to the exact instruction in charge
-of incrementing the call depth:
+>
+>>>I think selecting a sync provider via mask = CRYPTO_ALG_ASYNC is
+>>>sufficient to
+>>>remove the -EINPROGRESS return path.
+>>>
+>>>May be time to remove skmsg from ktls? (disable by default first,
+>>>re-enable via a new ktls module_param?)
+>>Yes, we asked John F off-list to get his attention and I think there's
+>>only a vague plan to start using kTLS + sockmap, no current user
+>>(sorry if I misread / misremembered).
 
-  sarq $5, %gs:__x86_call_depth(%rip)
+I'm not against a cleaner solution here.
 
-This instruction matches the one inserted by the ftrace_regs_caller from
-ftrace_64.S. This emitted code was likely working fine until the
-introduction of commit 59bec00ace28 ("x86/percpu: Introduce
-%rip-relative addressing to PER_CPU_VAR()"): it has made the call depth
-accounting addressing relative to $rip, instead of being based on an
-absolute address. As this code exact location depends on where the
-trampoline lives in memory, the corresponding displacement needs to be
-adjusted at runtime to actually correctly find the per-cpu
-__x86_call_depth value, otherwise the targeted address is wrong, leading
-to the page fault seen above.
+Another idea: We just add a simple sockops BPF hook with the sk_buff?
+No updating sg lists, manipulating data packet sizes and so on.
 
-Fix the %rip-relative displacement of the copied CALL_DEPTH_ACCOUNT
-instruction (from ftrace_regs_caller) by calling
-text_poke_apply_relocation(), as it is done for example by the x86 BPF
-JIT compiler through x86_call_depth_emit_accounting(). This corrects
-both CALL_DEPTH_ACCOUNT slots, in ftrace_caller and ftrace_regs_caller.
+That would solve the vast majority of any future use case if we have
+a user that really started running kTLS and wanted the security stack
+to keep working. Even openssl usage of kTLS has really ground to a
+halt after it was initially added as far as I can tell.
 
-Fixes: 59bec00ace28 ("x86/percpu: Introduce %rip-relative addressing to PER_CPU_VAR()")
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- arch/x86/kernel/ftrace.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Something like this already on the list for recv side of tcp.
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 0543b57f54ee..357df1b2922c 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -375,6 +375,13 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 			goto fail;
- 	}
- 
-+	/*
-+	 * Generated trampoline may contain rip-relative addressing which
-+	 * displacement needs to be fixed
-+	 */
-+	text_poke_apply_relocation(trampoline, trampoline, size,
-+				   (void *)start_offset, size);
-+
- 	/*
- 	 * The address of the ftrace_ops that is used for this trampoline
- 	 * is stored at the end of the trampoline. This will be used to
+  [PATCH v3 bpf-next 10/11] bpf: tcp: Add SOCK_OPS rcvlowat hook
 
----
-base-commit: aef70d0806e39b83f1fbecc32c72cc328751292a
-change-id: 20260527-fix_call_depth_in_trampoline-80bc56930c8f
-
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-
+>>
+>>module params aren't a great API. If we want to deprecate it let's just
+>>remove the integration in net-next. You have my vote..
