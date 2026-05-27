@@ -1,52 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C5A3B19DB;
-	Wed, 27 May 2026 19:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7F13B38B0;
+	Wed, 27 May 2026 19:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779911365; cv=none; b=Ow1xmaZkgD8oS1Hnqe8k0aF9Xah43jMSyXkhb//LK08jqZxCyIoqBFfHwJp4urv2XqVwEI94Il96ATj/hubFFEJcp4IKDgqesedPca/YDL6V9HYNnRlQVDscKKenal0T1i/SIcCXH5C4fMDwC2HEaVfRJcqlx4nqetzv2kIilbY=
+	t=1779911370; cv=none; b=UVNKvl+IDoxeoo8m8/lp3Jde6A9bjCJsRsOTgZl8zqlVA5me2Rs2HJ2myncii6dW73W7iG2h9alamW2EC3KDkb0/ZNoa2KiX9LemQaV0biiC2bubY3VPU5RPzLIU6QzdfkE8+TOfGO36veU5LL5Dbo+cr5udDDBFb9xaxkUsNW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779911365; c=relaxed/simple;
-	bh=Jb5QGemEzr2Ow1OIBgpTeZj0Wu1VSG29ghYR1AhhT1E=;
+	s=arc-20240116; t=1779911370; c=relaxed/simple;
+	bh=iWRnW7c/D4D42UN4Vjjhqv7xCegANtRBrS8sQcvdO/4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KRdpxby32kj0G1sU1mPNhR2smJjH6HkXjFhbtviZc1dNCw4tsEav6JaKX+TMWjQ+puvTGGvCqRmuPkqgS/Q3hPYIBorg1KN7soEyIs5OefuSdhsuiO4ICCyCFZmDay2SXqzNfPSiE0sfaoxVy6l2w9i4tsGaKLHPSs8O7EohPic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mzeo38co; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=lnCNWNSqtGMIda8ed6syhCR01oJnSlojiTGVkXfALChUd/k1m742LSkKsS4cNL6z7ZVgHAbFndo2BxdIJabyQMZsuleIYK6TxaRjE0PV6fDGTmJ/fRbnL3UtjQksHH+2wc/DZjCO+TMn2tcMDtze3FicHog4QY9YL3kjSfCLuCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+09WYla; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mzeo38co"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4661F00ACF;
-	Wed, 27 May 2026 19:49:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+09WYla"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C681F00A3D;
+	Wed, 27 May 2026 19:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779911363;
-	bh=Jb5QGemEzr2Ow1OIBgpTeZj0Wu1VSG29ghYR1AhhT1E=;
+	s=k20260515; t=1779911368;
+	bh=iWRnW7c/D4D42UN4Vjjhqv7xCegANtRBrS8sQcvdO/4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Mzeo38cohRcK7fyckwGGR2eKTLeVuZOhfsYenQX832D3pQhjRz2Pai4Af2GAPGRYS
-	 8KmSnp57fZ1Ohqr3r+I+A7SkbdlCubw9Ja/dwXR0m4m3m8tKA8pvxbe4Pg9TA/fLcG
-	 LL+pQxFIneGiRNuu2piqmX5yxr+8AKt0nsuWhfVtq7mPoM0uSb+bLKcxRdzYXbvhrV
-	 zGWnCJn9gUxYc6d6PrmlLoeZ9n9YhVKkgEnSB38NtDjmAZCZltQV0KGllbKEV/s7H0
-	 dCV8Rg3ezHMaYyutbbegHc9WG+j4ZGVg2lN20WfuKnriFqmfH7oTap+awPz+rHYftZ
-	 dOK/6eMt1YhHA==
+	b=f+09WYlaSBgJHHHGdns7T/JDeiqCrnLeqJFdAPLR7FLDs1QmmUvhTAH4JWQbD5Y3f
+	 ZazmNipojH5Nj18z5v00qzw86HapRRz9cJNqJg4XWiaA/TzdJAPjjm3KMyAnZKQ3oy
+	 A+tcYesn6olW0tF6MPxnCJenH5nD6vLu8BCid0kuxrZwZSj7+4BUfpbrfoYZ3PSJ4i
+	 PKRkMhID8IJ+X78iKQUFQP2J82bjM3jZvqi6zrPPTXHTEkVqTH1uPBW3WdRaHrc0w4
+	 u5+mf8YlyHlRPkVsZ9fYHNd5nHu3vOJWe1MIK7NAnt4sjLD1Sm+580IkgEGMvbmMnp
+	 OpXixWGU4M9IA==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	gregkh@linuxfoundation.org
 Cc: Sasha Levin <sashal@kernel.org>,
-	yangfeng@kylinos.cn,
+	jolsa@kernel.org,
 	rostedt@goodmis.org,
 	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	jolsa@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	x86@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
 	bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Gyokhan Kochmarla <gyokhan@amazon.de>
-Subject: Re: [PATCH 6.12] tracing: Fix the bug where bpf_get_stackid returns -EFAULT on the ARM64
-Date: Wed, 27 May 2026 15:49:01 -0400
-Message-ID: <20260527-agent5-item009-tracing@kernel.org>
+Subject: Re: [PATCH 6.12] x86/fgraph: Fix return_to_handler regs.rsp value
+Date: Wed, 27 May 2026 15:49:04 -0400
+Message-ID: <20260527-agent5-item012-x86fgraph@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260526192012.76223-1-gyokhan@amazon.de>
-References: <20260526192012.76223-1-gyokhan@amazon.de>
+In-Reply-To: <20260526192324.79459-1-gyokhan@amazon.de>
+References: <20260526192324.79459-1-gyokhan@amazon.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,11 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> commit fd2f74f8f3d3c1a524637caf5bead9757fae4332 upstream.
->
-> When using bpf_program__attach_kprobe_multi_opts on ARM64 to hook a BPF program
-> that contains the bpf_get_stackid function, the BPF program fails
-> to obtain the stack trace and returns -EFAULT.
+> commit 8bc11700e0d23d4fdb7d8d5a73b2e95de427cabc upstream.
 
 Queued for 6.12.y, thanks.
 
