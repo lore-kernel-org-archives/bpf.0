@@ -1,109 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291F03783AF;
-	Wed, 27 May 2026 09:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830A73E63AE
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779874712; cv=none; b=MysC2jQJ34MBzE3FJu6CCeH8wYY4scxPJr6HloU4yLEUIxSuEjeb7eTlrFbBklDPP9/Qr9+kR6/1yH4IqwUOXqIbukhclx4BGwHQjWdj8Fsa7rCVUTuQf34hb57OYEFqLxVcDNJJT3O8EHuRQoGdbqQCuUJuwGrMO2ddCQkhpH0=
+	t=1779875834; cv=none; b=E4BeGqBD/VripAwI5ivZKqEWnSJyiNi45WayvwKGPwbmm1YIYdxcwmZjDD6zYvNpbLXRIkziU1rd8BVUmzqXllBGiVaI1sCTO+n02Uy0+5m/UWnAtxGD/ErD2GO2srPYLjgmByxALxHoR8YSQucHVAHdd1/O/jcBSysKkgrbCO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779874712; c=relaxed/simple;
-	bh=6qZqFcxUhtLffjqo4KyIWK1FZl81UuCOmaM2W18nhxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n/Ny6VOrpjqO45RWryhtf3kP9dMhBFakx2Qo0LlP/frNjN1ZhqIu+SBphv3XgHS+VkXVzZraVWbRCzGHudpeCm2xUbGlpRh1W84dl2mwi+oAQJGg/e3wgbZkYokG0eCRDIvnkOycDMHZjyoNET28QUo871Du2dFOTH2QJxSu0T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fr7UQCUm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779875834; c=relaxed/simple;
+	bh=Tuai1Axfjkxum1GztuUcohIb7OIi67bbFU7uLGV2pY8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jwWtFC//jos9lqHWzRuf/65oErfEoZgMdlgFyv5bzA9P4wfGR2QZ2i1T8UORWHCxAS9blIzAdUztt2aF9jA3l2hCvrjro6jsXfVoVRG+AtspyWk9UTSixdegr1xNTWLcryMbbg9p5ceixY8kycXaxNHSev6tQbmjVh5935bCLeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kTjMV1y1; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fr7UQCUm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8211F000E9;
-	Wed, 27 May 2026 09:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779874706;
-	bh=5EPgL4FAe9Q1HpUW4tud1I2dVamBDFhNI1A3ygm0Wgw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fr7UQCUm5cprOrQGU5TbDClX+R7dEqRJjoGjS0k5gjydzKuG1ACoNftI/UA+F9ZYV
-	 kUAjPhUGoVpcUj8H4cLZ00oBUZK5oxIBiyuxLccRqsuZPv8L6vnbNO6e5AbFUsmP9O
-	 hRwUh+bWssxFUwT9RMOkWFh8U0sQ6pY/o6w/hkJRkSaESagT8LptRA8x3Y6kR6O2Z/
-	 BryXQg098y6OJ9ZI3SMWHBpn8H0MU7+hO95viQNGdondhORmhsxy0aY1XgSfmfWjVo
-	 LgyOBf7KaZ/RLeZLaociiRSH30fkZbJGbXxZVcFCRxRM/JvjIbfEYFdTcCXGWYVypC
-	 Mhd7NZs0NEfyQ==
-Message-ID: <f7f35169-f77d-4678-8797-a2ad00d89e6c@kernel.org>
-Date: Wed, 27 May 2026 11:38:21 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kTjMV1y1"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4904127c32cso33425865e9.2
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 02:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779875831; x=1780480631; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XuaoXI5CN/vWA5ZvTeay7KhFRspk+qd3be2g4mt/zXc=;
+        b=kTjMV1y1zqPnyl6QajXeHnlLCnLph+IccY66NKXzp9VWpwtkabUzQA5sbthZHTE/T4
+         exsAxdpphFY1OOn7qaNH5tYADUKlYO7YkvMg2Pe6XyhuwCivGyv66QPcBR5mhXEvJjyD
+         Snug2jFR6E/cCSPsKMiKQkAxIipfwVc40D1rUmHekng9kytALn+p+IZwv4LOboYKeH1Z
+         xq4MB9x68YJe9RhqOsZsOSCnxrQeNdq9kSTUTmhHdfzULRlZmpS2sWm42XP5Z9xgXfNn
+         nPmgUIZ2ua8rlf9lH6xHpUrlf2P/TdcdWVjdk6cQYk+jDg2ETwzDXOeFJZ4sSy1qLh/8
+         rZ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779875831; x=1780480631;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XuaoXI5CN/vWA5ZvTeay7KhFRspk+qd3be2g4mt/zXc=;
+        b=nLWQCNjmeO0AHJ00WbNKq5znZs9vyWge+BlIWkRnD73mGr/MLyizfO5hvgL8/jNtM7
+         MhZl5xhC38DNypEVGvWw/Wkv3Vp0YM3Vid9V1NVf4DnHJGyCu3HZ8x88p1twygnfj+bo
+         PnQsoWxUVXesM/ABHM0wusW9QILdBLV5yIkZS13uKPcDEEudPmU1UlrLHr4huGCIi8gh
+         dyyRdwcwbOseAsKgTGWqqlLfXT46JhTbrQASdwuazdrfvn8L4OVhXiUpAcWl4JiLAYIt
+         M494ucYaEQGgdoeu3wkioh9GNr23OWNx/Evf+G00qSX2/gmWoS5nDWKuyC8rhBsYTQk8
+         abQA==
+X-Forwarded-Encrypted: i=1; AFNElJ/HzOlYfY8rSyzr245JK+ulIOu/iTC+EWaSNJHlvPbpdwnBQuDbohnFPL74f7P8KjGxjz8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi+wgE4H1AcrlraCHmVaIyMBjZrTIVxKJF9ClYHx0M1y6X5KO5
+	J1uaGt6sj5821z9OWPs7oLQszOD/+YJKFEOSwyJWgre8rdoJI101Wemy
+X-Gm-Gg: Acq92OE3GnohpDzgiFiFpp+lEmjL561ddezXKC1LPi3hgwP70GBecHjoTjKRltSJf5N
+	iKzcvj8Shlvg0JaQygp0V++WEa/WSHHvCyYgOAD8CWAQACcm1tGp4K6ULo8Rexl3hRtiwVi6jjv
+	9VTe7GzYECubwoPFgse9aFE6bpUhkg6oghmctF9pVx3jyUicwROoRAEzDGRVvYVM1sQQnZwikkz
+	lIkSDM5Kos7fZ3a2TkxIPIldJUDsqreP9cAe3lzDprHt9SlCUObNeI+0ZLk7zWixL1EtjuIp+nT
+	5l3qzqO30xz8kBgs43dQlx4SllFDZW5+699Iew34+nIA8dQ++Mdq+Q1IWNnr+cFQdUZnxTO8xL5
+	EtVOZjV3tMNvkqrukz5Bspa3JgJFc+KmiKJvS4v7c3HukXJ2NE2uHgVSx17MmeQ0G1ex5/17QEd
+	ik2RG9gzMZgVymDUCZVF/QE6bFQw==
+X-Received: by 2002:a05:600c:4688:b0:490:4224:e0a2 with SMTP id 5b1f17b1804b1-49042ae265bmr385107545e9.33.1779875830564;
+        Wed, 27 May 2026 02:57:10 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb54a6cdsm4845867f8f.2.2026.05.27.02.57.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 02:57:10 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 27 May 2026 11:57:08 +0200
+To: bot+bpf-ci@kernel.org
+Cc: oleg@redhat.com, peterz@infradead.org, mingo@kernel.org,
+	mhiramat@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCHv4 04/13] uprobes/x86: Unmap trampoline vma object in case
+ it's unused
+Message-ID: <aha_9GF7AYzVRSsm@krava>
+References: <20260526205840.173790-5-jolsa@kernel.org>
+ <addf3472e04583c864492a9343420c1e0356b324b4a84a71145dd759d8ec367d@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-Content-Language: en-US
-To: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20260527070239.2252948-1-hch@lst.de>
- <20260527070239.2252948-2-hch@lst.de>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <addf3472e04583c864492a9343420c1e0356b324b4a84a71145dd759d8ec367d@mail.kernel.org>
 
-On 5/27/26 09:02, Christoph Hellwig wrote:
-> The kmem_cache_alloc_bulk return value is weird.  It returns the number
-> of allocated objects, but that must always be 0 or the requested number
-> based on the implementations and the handling in the callers, but that
-> assumption is not actually documented anywhere, which confuses automated
-> review tools.
+On Tue, May 26, 2026 at 09:46:49PM +0000, bot+bpf-ci@kernel.org wrote:
+> > commit 68883203f0583fb1a8d79536f5c8945542974abd
+> > Author: Jiri Olsa <jolsa@kernel.org>
+> > Date:   Tue May 26 22:58:31 2026 +0200
+> >
+> >     uprobes/x86: Unmap trampoline vma object in case it's unused
+> >
+> >     In case the optimization fails, we leak new-ly created trampoline
+> >     vma mapping (in case we just created it), let's unmap it.
+> >
+> >     Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
+> >     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > 
-> Fix this by returning a bool if the allocation succeeded and adding a
-> kerneldoc comment explaining the API.
+> Should this Fixes: tag point to a9fe6f54968c instead? The vma leak bug
+> was actually introduced by commit a9fe6f54968c ("uprobes/x86: Remove
+> struct uprobe_trampoline object"), not ba2bfc97b462. Commit a9fe6f54968c
+> removed the destroy_uprobe_trampoline() cleanup call, and its commit
+> message explicitly states: "The new vma leak is fixed in following
+> change."
+
+there's no a9fe6f54968c hash yet
+
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Suggested: Fixes: a9fe6f54968c ("uprobes/x86: Remove struct
+> uprobe_trampoline object")
+> 
+> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> > index c8af41ed681a..af5af7d67999 100644
+> > --- a/arch/x86/kernel/uprobes.c
+> > +++ b/arch/x86/kernel/uprobes.c
+> > @@ -677,11 +677,14 @@ static unsigned long find_nearest_trampoline(unsigned long vaddr)
+> >  	return high_tramp;
+> >  }
+> >
+> > -static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr)
+> > +static struct vm_area_struct *get_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr,
+> > +						    bool *new_mapping)
+> >  {
+> >  	VMA_ITERATOR(vmi, mm, 0);
+> >  	struct vm_area_struct *vma;
+> >
+> > +	*new_mapping = false;
+> > +
+> >  	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
+> >  		return ERR_PTR(-EINVAL);
+> >
+> 
+> Does this fix address the VMA leak scenario across fork chains? In v2,
+> sashiko-bot raised a concern about inherited-but-not-tracked VMAs:
+> 
+> https://lore.kernel.org/bpf/20260518114208.CE128C2BCF6@smtp.kernel.org/
+> 
+> When VM_DONTCOPY is removed, child processes inherit trampoline VMAs
+> but their tracking list (mm->uprobes_state.head_tramps) is empty. When
+> the child executes a uprobe, get_uprobe_trampoline() fails to find the
+> inherited VMA and creates a duplicate trampoline.
+> 
+> Child fork:
+>   dup_mmap()
+>     copies trampoline VMA to child
+>   mm_init_uprobes_state()
+>     initializes head_tramps as empty (parent's state not copied)
+> 
+> Child executes uprobe:
+>   arch_uprobe_optimize()
+>     get_uprobe_trampoline()
+>       head_tramps is empty, fails to find inherited VMA
+>       create_uprobe_trampoline()
+>         find_nearest_trampoline() finds new unmapped area
+>         installs second duplicate trampoline VMA
+> 
+> In a deep fork chain, each generation inherits all previous VMAs, has an
+> empty head_tramps list, and creates a new VMA. Can this cause linear
+> accumulation of redundant VMAs, eventually exhausting vm.max_map_count?
+> 
+> While this patch addresses unmapping failed optimization attempts, it
+> does not prevent the inherited-but-not-tracked VMA leak scenario in fork
+> chains.
 
-Would 0 / -ENOMEM be more like what people would expect? I guess both that
-and bool are better than the current API.
+there's not head_tramps list anymore, was removed by earlier:
+      uprobes/x86: Remove struct uprobe_trampoline object
 
+jirka
