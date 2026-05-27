@@ -1,130 +1,262 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E5F17745;
-	Wed, 27 May 2026 21:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779916317; cv=none; b=o0XsUlIPpSUZiKfSKsn42ENb1dJATDQklUPVliw+E0C+kcRpGun6gD4VG4e7GmiqKh1IzsBw9A1G8AIcENqv8QRtV0KseTVhSz0FHNAdB4xQpMGxmZkdAPxR/W2urityE/1DQskubhFlUYMtxBu/R/vjivMjzaEW+STMZIAccu0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779916317; c=relaxed/simple;
-	bh=+tdvtZybaTGdkUt2cSFxQLxVTezSuX3ZQ3CkK5l8g94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vw0++dD6VFAhx0CdMa7YOBlK9jqnaTbC80j/vRn+kOIdqzbNkerRwvjLgE0GvuzNNeFF0yNB6jEjXcTaMOQ6vwtkUr/UMzlFy2UBTtAYNtp64TsluR/omcLeMA4YcdpCgjiSx1+NC+jPjmSpjSNr9sfi4vp8p3ChWuXSWxLQG7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dydfSLim; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3624386578
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 21:39:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779917975; cv=pass; b=uaZbDvd75OK8Rku8U3fmqYxXANW1YZyU5yA30iDsSF2Z/Fj8QOB2FsCs+KWXHuXGaWgyxTsNl6u30AM/QGf+ixSRTigPeRIJp9mazknADxF2LgpH12KpxbFzllvCgj2+qpRFhMxnmyhndp8GIH1dxdD4Wnj3b+AUf17rEX6ygfM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779917975; c=relaxed/simple;
+	bh=Azl2N1qDX28IMFT3anmcWnp4A6VApp9TiA9migTR4bk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=plEier0oxKfdKdHsa7w1whq1+W/98Okq0SpdrNce7KbLPWp1IGM5c51/FAOhFrZspf+DOZjQsq8bNHRduLIFIhyCd+RiHkj48NUmzu7zzgBdVlQ5k6FHRvrEDZ2ZYRUJux/SsvLButQBLZN3Q2LWrR8IxA95sGMtcDgPF9T6c80=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vPQojiSA; arc=pass smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dydfSLim"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=wiNTn2pYeyuyayfVhMFJ/aFf1jF3wRjZNYIMEvLzZ0s=; b=dydfSLimwyfPmigTBMCujAZICg
-	qiZ0DnjS6QG5mT3Xk7JmeCbY9l3lK8w4Hg6IBjWOagNnNb/tjdIjhrED3/HIZNpa27AiZsxClWJUu
-	7+ZkJIqL/DPa2/qxPdbQWY2meXtnJTSis/iW1v1TIYSkgABqdAeywEB7FDhc0Oh1pMFPPqFO1diWC
-	bOsS46TNcQd1HZLkWMwlOm9FGpviLHCzdLbrGVxa5HLQstifo2FK0uWYvG/z9eHiGi+F91D12dOIf
-	CT00pVaw3wKVttGJjReynVf/k0ksQTZeqoNQ879jtzuEeHLm0remU3BnRkoKuw0RttTlQQDOmdYaI
-	gHHwJtTw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wSLXM-00000003MQT-2jnq;
-	Wed, 27 May 2026 21:11:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 28A03300673; Wed, 27 May 2026 23:11:35 +0200 (CEST)
-Date: Wed, 27 May 2026 23:11:35 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	ebpf@linuxfoundation.org,
-	Bastien Curutchet <bastien.curutchet@bootlin.com>
-Subject: Re: [PATCH bpf-next] x86/ftrace: relocate %rip-relative percpu refs
- in dynamic trampolines
-Message-ID: <20260527211135.GA343181@noisy.programming.kicks-ass.net>
-References: <20260527-fix_call_depth_in_trampoline-v1-1-1c1abc8ae310@bootlin.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vPQojiSA"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-135e88b8e55so6640806c88.0
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:39:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779917973; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ILd/eAhCZ/qpNY6qh6YflmA1b2KzGhGOx//+HNFjm+MdVfI8YTtJsXmVQEdq423DZA
+         FHMfUP8W6Xv3/R4wndDy5yO8ZiBDUMCQip5sFYIrB94imLPBhkBfCP46+iU55Zmm/ycA
+         yjSXhhA/fkLOZpW8KZGwf9gDl9fSsFMjy/NqhXTw7gUMYOqZQCdrN47NuOkGsEiLkjdH
+         MGNqrNUtQjwk/r0E9MzT8lWyFUw7C9mHEb2qFQZCt0UFJAjteT3DuijxmkJk3Ov3/DLy
+         57K/cYdt9DKtz+WEM9OCSuHxO/9n2O1tDZMT4AU8851z/gsFMHNQr4TJ6RRXTMvbZffZ
+         H49w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jsWR6kFTZIW/F9UtjVVCYshPAK5/7mRvni26PxYshbs=;
+        fh=I6XCVfO1tTv6gcoJNDlAkAOBBQgQjxJ01O4UXmnzxoA=;
+        b=aTphH5ms+dTc6bzShCxuZsG0JlUlfADpZHTSlxT3lwnCVxvWwk4pjNUmgCHmIboQe8
+         guCvALZFnXq2XFon24TXT5fJZbkcBoId6aFHIOUzVidGyRHXQq2P19NsY11QvaADpVv2
+         cUteO8ZgSfkH+xXdNec5WI9I3jyd5SdfuyDJ2h14c7MbObvKshYLM+FzkyRD/N4i87jc
+         Z2XcvJkPczSs7CsOCEOyfAUL21yxR6w6vUhyuC+feBcRZ1TBl1QfPoDI2VDuvDBk7EEu
+         bs1EHLrX/ea3ZAtWNFvbex6lvKD5vi7mpkk4s3jl6PFhdWth7FbEHiTSj+2Y6squwjcH
+         RBNw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779917973; x=1780522773; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jsWR6kFTZIW/F9UtjVVCYshPAK5/7mRvni26PxYshbs=;
+        b=vPQojiSA7p0TZHjl6cQ3se2J3VYhu/NfzatXHTvTjPX5Qv5sh3mYnY+Mgdsh52g4iE
+         YED3A1khsiatCMe6oEnB7god8lFTqd/CNVN2oNYY438BDAJRs/UorLffhTLD9bqvkZSr
+         i+U5hEFyhlzQEm1UuFWBt0ERdXtx6qWZSzxETXvsCFIBFfNhVZ0J+NkWVQgq7/abwJxv
+         mqGNNrU/U3j8gmfFOSTQ/Z8v4ogfEPIA2exF+fL+GIKg1QOF1OpwoZ+3yOvN9JVb3bgt
+         2iJydvO4SaEco4hbq2GiAYGba6VtKKpahP1qKbbJUxvHfwuPcxF/ZMuYq4jNJq+Q7dnA
+         KJxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779917973; x=1780522773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jsWR6kFTZIW/F9UtjVVCYshPAK5/7mRvni26PxYshbs=;
+        b=HAoaD3dUbBFv44huUIYCT7MuluH1RLSd1/XOEtET1IYS2j7xF58OKHu6G3B9q9KKj2
+         oDfuhNpENNBwc6Mh/Kj7y59xqlHYRz3kFYUOd7Y+MKKDOX+tQUXAtCB944GRXVV8igM9
+         RtltJQfYR9E9swGODp0RtHPRizdg0k1GlF4ty7GqXszFEUJk0C5goJl6vliAw7nW/kYG
+         96s47EulQ0ynK5JA0gHXwzCqGtP5E5vfP6D3k/6o5dvgxZ9IwtP2MjGHAruggoe2i5r4
+         yoEV5nKrr/s1XqSSvNsyoEoWvyGNd2J0hW9+aS46A2Er5h3cezBt7XwUtfb9UVyxHwgG
+         4kCw==
+X-Forwarded-Encrypted: i=1; AFNElJ8ETR6/WwtJ9+FM1xnVz6t7GxgVTFX6a91bb2aZlpJmnOWUpKQck+ZXyTwoBt3xyv77AB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxae0AXw/YDPyM4gQtwQH70hAoSFwfJAT6BhtlGyGAyFf45RYbu
+	k50tW3ipBki7flgFsW3w4tFx5tY3apLMcOzfw6XST434905aX59dfgGEXcipWTvH7O700N5uEtB
+	N4f7RoK5iRXOckt1HGYW3aQKKUKAro4410A4olMFm
+X-Gm-Gg: Acq92OGNKZY6Xeqj8UO5SWam2wjOGh4E90S83oC6502QtxefATO2Nd7zayz0slg7nBQ
+	b8hfatjqhO79r7rtX92puiU9JZ6X42Zgqgvt+oInIAMhHNvCrUzWI4vQCxkI9or4kwroLztdEar
+	WDmj1oy8dfFkK7oPe4N+zWXqr7KtroNzNKpLV6nhRGk76nlL7JX0FN6OgjlpOIw8IGU7c4mUKNA
+	BfYoyz20m8vTRJU3xsCjjrCwd5iR0HlSvfh/QLFN322tdb2V7izJ5kRspw7vtI1L+LAZj4ly+kS
+	SB4x3d01Wn3BaW8qFAcSb9SybxSVXs31I3cxmvgs3nDlztwrEx5mYbYpH10WE9su8b7OWNB5pqK
+	y73RfsL1LylkD/cdl0KoqyTvB2v9NSjJRPz1TtFd1OGcoyWyGt1/ns/AaoUYy
+X-Received: by 2002:a05:7022:68a3:b0:130:9b78:b18d with SMTP id
+ a92af1059eb24-1365fc62681mr9035515c88.34.1779917972029; Wed, 27 May 2026
+ 14:39:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260527-fix_call_depth_in_trampoline-v1-1-1c1abc8ae310@bootlin.com>
+References: <20260523083001.2911931-1-kuniyu@google.com> <20260523083001.2911931-4-kuniyu@google.com>
+ <202652620632.prOx.martin.lau@linux.dev> <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
+ <2026526214538.Vhly.martin.lau@linux.dev> <CAL+tcoCSU9KFZsV33LE2R89iUzb5b3Xm+h6QObs5GOuRYR3sMQ@mail.gmail.com>
+ <2026527192229.olv9.martin.lau@linux.dev>
+In-Reply-To: <2026527192229.olv9.martin.lau@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Wed, 27 May 2026 14:39:20 -0700
+X-Gm-Features: AVHnY4LZ1ZekIy85DRxvpz6p_60yQs1GhUjCCtYFD08nRjEQ4pr1PZ0F3sLp3G8
+Message-ID: <CAAVpQUCUV=N0dEi8H51Y0oZytnohkJT1=B6zT3gxEKvb_5bukg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 03/11] bpf: tcp: Support bpf_skb_load_bytes()
+ for BPF_SOCK_OPS_RCVQ_CB.
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jason Xing <kerneljasonxing@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2026 at 09:12:31PM +0200, Alexis Lothoré (eBPF Foundation) wrote:
-> With CONFIG_CALL_DEPTH_TRACKING enabled on an x86 retbleed-affected
-> platform (eg: Skylake), with retbleed=stuff, registering a dynamic
-> ftrace trampoline crashes on the first call into the traced function:
-> 
+On Wed, May 27, 2026 at 12:47=E2=80=AFPM Martin KaFai Lau <martin.lau@linux=
+.dev> wrote:
+>
+> On Wed, May 27, 2026 at 12:01:11PM +0800, Jason Xing wrote:
+> > On Wed, May 27, 2026 at 6:19=E2=80=AFAM Martin KaFai Lau <martin.lau@li=
+nux.dev> wrote:
+> > >
+> > > On Tue, May 26, 2026 at 02:21:56PM -0700, Kuniyuki Iwashima wrote:
+> > > > On Tue, May 26, 2026 at 1:34=E2=80=AFPM Martin KaFai Lau <martin.la=
+u@linux.dev> wrote:
+> > > > >
+> > > > > On Sat, May 23, 2026 at 08:29:32AM +0000, Kuniyuki Iwashima wrote=
+:
+> > > > > > When a TCP skb is queued to sk->sk_receive_queue, BPF SOCK_OPS
+> > > > > > prog can be called with BPF_SOCK_OPS_RCVQ_CB.
+> > > > > >
+> > > > > > In this hook, we want to parse the RPC descriptor in the skb
+> > > > > > and adjust sk->sk_rcvlowat based on the RPC frame size.
+> > > > > >
+> > > > > > However, we cannot access payload via bpf_sock_ops.data on
+> > > > > > modern NICs with TCP header/data split on as the payload is
+> > > > > > not placed in the linear area.
+> > > > > >
+> > > > > > Let's support bpf_skb_load_bytes() for BPF_SOCK_OPS_RCVQ_CB.
+> > > > > >
+> > > > > > Three notes:
+> > > > > >
+> > > > > >   1) bpf_sock_ops_kern.skb will be NULL when the BPF prog is
+> > > > > >       invoked from recvmsg().
+> > > > > >
+> > > > > >   2) Access to bpf_sock_ops.data will be disabled by passing
+> > > > > >       0 end_offset to bpf_skops_init_skb().
+> > > > > >
+> > > > > >   3) ____bpf_skb_load_bytes() is called directly instead of
+> > > > > >      __bpf_skb_load_bytes() to allow compilers to inline it
+> > > > > >      instead of generating a tail-call.
+> > > > >
+> > > > > Some observations below.
+> > > > >
+> > > > > >
+> > > > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > > > ---
+> > > > > > v2: Explain why using ____ version instead of __
+> > > > > > ---
+> > > > > >  net/core/filter.c | 34 ++++++++++++++++++++++++++++++++++
+> > > > > >  1 file changed, 34 insertions(+)
+> > > > > >
+> > > > > > diff --git a/net/core/filter.c b/net/core/filter.c
+> > > > > > index 4a50fe2cd863..fa8a7c7d86eb 100644
+> > > > > > --- a/net/core/filter.c
+> > > > > > +++ b/net/core/filter.c
+> > > > > > @@ -7760,6 +7760,38 @@ static const struct bpf_func_proto bpf_s=
+k_assign_proto =3D {
+> > > > > >       .arg3_type      =3D ARG_ANYTHING,
+> > > > > >  };
+> > > > > >
+> > > > > > +BPF_CALL_4(bpf_sock_ops_skb_load_bytes, struct bpf_sock_ops_ke=
+rn *, bpf_sock,
+> > > > > > +        u32, offset, void *, to, u32, len)
+> > > > > > +{
+> > > > > > +     int err;
+> > > > > > +
+> > > > > > +     if (bpf_sock->op !=3D BPF_SOCK_OPS_RCVQ_CB) {
+> > > > >
+> > > > > bpf_dynptr_from_skb() and bpf_dynptr_slice() kfunc could also be =
+considered.
+> > > > > One less bpf_sock->op check in filter.c to maintain and could als=
+o avoid
+> > > > > a data copy. There is a bpf_cast_to_kern_ctx() to get to a truste=
+d
+> > > > > skops_kern pointer but this will need changes in verifier.c to ge=
+t to
+> > > > > skops_kern->skb (e.g. in type_is_trusted_or_null) and this is the=
+ tradeoff.
+> > > >
+> > > > Maybe a dumb question, but does it add extra cost (extra dynptr
+> > > > function call?) if data overlaps two frags, or can dynptr handle it
+> > > > seamlessly with a single bpf_dynptr_slice() ?
+> > >
+> > > Right, there is an extra bpf_dynptr_from_skb(). I don't think we have
+> > > benchmarked it.
+> > >
+> > > If I read it correctly, unlike bpf_xdp_pointer, the skb_header_pointe=
+r
+> > > will still copy even if the data is in one frag. It works well if the=
+ data
+> > > is in the headlen and the worst case is to copy, which is the same as
+> > > load_bytes.
+> > >
+> > > It is a readonly use case. Maybe the bpf prog can directly read the f=
+rag.
+> > > Regardless, it is useful to have a kfunc/helper to read it.
+> > >
+> > > >
+> > > > In our case, the data copy is ~16 bytes, so the cost will not be
+> > > > a big problem I think.
+> > > >
+> > > >
+> > > > >
+> > > > > If this new rcvq callback is added to the 'bpf_tcp_ops' proposal =
+[1],
+> > > > > all this will go away. 'struct sk_buff *skb' can be directly pass=
+ed to an
+> > > > > ops of the 'bpf_tcp_ops'. Supporting '*skb' in a struct_ops has a=
+lready
+> > > > > been done in the bpf_qdisc.
+> > > > >
+> > > > > [1]: https://lore.kernel.org/bpf/20260519215841.2984970-11-martin=
+.lau@linux.dev/
+> > > >
+> > > > Oh I missed the series, the struct_ops conversion looks nice !
+> > > > Since this work isn't urgent, I can wait for your series if mine
+> > > > churns it.
+> > > >
+> > > > Jason's series is adding a new op, and I guess this can be
+> > > > integrated too ?
+> > > > https://lore.kernel.org/bpf/20260521135244.40869-5-kerneljasonxing@=
+gmail.com/
+> > >
+> > > imo, a new sock_ops cb should be added as an ops in struct_ops. For e=
+xample,
+> > > in patch 4 of that series, bpf_skops_rx_timestamping assigns u64 to '=
+u32
+> > > args[4]', which is adding tech debt to the current sock_ops interface=
+.
+> > > For the timestamping case, it could be a separate ops for the
+> > > 'struct sock' instead of 'struct tcp_sock' because it should
+> > > at least work for both TCP and UDP.
+> >
+> > Sorry, I don't get it. What is the tech debt in this? And
+> > bpf_skops_rx_timestamping() only outputs the timestamps, which has
+> > nothing to do with either 'sock' or 'tcp_sock'.
+>
+> Did I say the tech debt is in bpf_skops_rx_timestamping?
+> I said the tech debt of the bpf_sock_ops[_kern] interface.
+> Besides always memzero the whole &sockops, the way that the bpf prog
+> needs to get a u64 timestamp from u32 is not thrilling in 2026.
+> args[4] is also not reliable when the earlier cgroup bpf prog
+> writes to replylong. We had already hit some of these in our rx net
+> timestamping discussion a few years ago. I suggest you go back
+> and revisit.
 
-> 
-> This small reproducer allows to easily trigger the crash:
-> 
->   # echo 'p __x64_sys_clock_nanosleep' > /sys/kernel/tracing/kprobe_events
->   # echo 1 > /sys/kernel/tracing/events/kprobes/p___x64_sys_clock_nanosleep_0/enable
->   # usleep 1
-> 
-> Monitoring the crash under GDB points to the exact instruction in charge
-> of incrementing the call depth:
-> 
->   sarq $5, %gs:__x86_call_depth(%rip)
-> 
-> This instruction matches the one inserted by the ftrace_regs_caller from
-> ftrace_64.S. This emitted code was likely working fine until the
-> introduction of commit 59bec00ace28 ("x86/percpu: Introduce
-> %rip-relative addressing to PER_CPU_VAR()"): it has made the call depth
-> accounting addressing relative to $rip, instead of being based on an
-> absolute address. As this code exact location depends on where the
-> trampoline lives in memory, the corresponding displacement needs to be
-> adjusted at runtime to actually correctly find the per-cpu
-> __x86_call_depth value, otherwise the targeted address is wrong, leading
-> to the page fault seen above.
-> 
-> Fix the %rip-relative displacement of the copied CALL_DEPTH_ACCOUNT
-> instruction (from ftrace_regs_caller) by calling
-> text_poke_apply_relocation(), as it is done for example by the x86 BPF
-> JIT compiler through x86_call_depth_emit_accounting(). This corrects
-> both CALL_DEPTH_ACCOUNT slots, in ftrace_caller and ftrace_regs_caller.
-> 
-> Fixes: 59bec00ace28 ("x86/percpu: Introduce %rip-relative addressing to PER_CPU_VAR()")
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->  arch/x86/kernel/ftrace.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> index 0543b57f54ee..357df1b2922c 100644
-> --- a/arch/x86/kernel/ftrace.c
-> +++ b/arch/x86/kernel/ftrace.c
-> @@ -375,6 +375,13 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
->  			goto fail;
->  	}
->  
-> +	/*
-> +	 * Generated trampoline may contain rip-relative addressing which
-> +	 * displacement needs to be fixed
-> +	 */
-> +	text_poke_apply_relocation(trampoline, trampoline, size,
-> +				   (void *)start_offset, size);
-> +
->  	/*
->  	 * The address of the ftrace_ops that is used for this trampoline
->  	 * is stored at the end of the trampoline. This will be used to
+I remember the tech debt was mentioned when I implemented
+BPF SYN proxy in SOCK_OPS too.
 
-I went and had a quick grep through the tree to see if there are more
-sites that were missed in the conversion (commit 17bce3b2ae2d), but I
-couldn't find another one.
+>
+> >
+> > Could you show me what to do next? Thanks in advance. It sounds like
+> > the tx side of bpf timestamping should be adjusted accordingly?
+>
+> imo, the bpf_tcp_ops can land first. and then add net timestamping
+> ops (existing tx and the new rx) in bpf_sock_ops.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
+Sounds good to me.  I'll rebase TCP AutoLOWAT feature on top
+of the struct_ops series.
