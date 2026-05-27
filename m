@@ -1,64 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A63C3B19C4;
-	Wed, 27 May 2026 19:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C5A3B19DB;
+	Wed, 27 May 2026 19:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779911362; cv=none; b=PsUVtW8vhNTKi2zgWUNuANhlOs7LNifkgPf+loIeyEV0R1CeCogBG9veUvl3NyAT+d8EoELV/nTkf+zNdYAiSFoXsfoQ0dQMSJd6MbjZIE+KsqBFScL5OsL4axFBlmLDJXVCL8Dx+Lwp24+Oyixb4t1frqhiWjMQI0IsaaVyebw=
+	t=1779911365; cv=none; b=Ow1xmaZkgD8oS1Hnqe8k0aF9Xah43jMSyXkhb//LK08jqZxCyIoqBFfHwJp4urv2XqVwEI94Il96ATj/hubFFEJcp4IKDgqesedPca/YDL6V9HYNnRlQVDscKKenal0T1i/SIcCXH5C4fMDwC2HEaVfRJcqlx4nqetzv2kIilbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779911362; c=relaxed/simple;
-	bh=+2/IF8/JJ0MfBQpgoL+K9NYbBdfrHP0u0VxQeTTYRgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QfEL7dh6mDArvt+Z57N5C6Mg36nhpFaIgTApADPI7DDiywOnyKtwNQwtLYHzj8zXl33xZ4ecGOpTFYyrlCLmrkamnSmwhsVY0fKrxv8Ldr4x6hTn+TBczwJousZAtV1zDatQ1SR1ifBtdROwtM4r31ZZxUjHNyQfGVGA00sg+mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWIb2xZo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779911365; c=relaxed/simple;
+	bh=Jb5QGemEzr2Ow1OIBgpTeZj0Wu1VSG29ghYR1AhhT1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KRdpxby32kj0G1sU1mPNhR2smJjH6HkXjFhbtviZc1dNCw4tsEav6JaKX+TMWjQ+puvTGGvCqRmuPkqgS/Q3hPYIBorg1KN7soEyIs5OefuSdhsuiO4ICCyCFZmDay2SXqzNfPSiE0sfaoxVy6l2w9i4tsGaKLHPSs8O7EohPic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mzeo38co; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWIb2xZo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA081F000E9;
-	Wed, 27 May 2026 19:49:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mzeo38co"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4661F00ACF;
+	Wed, 27 May 2026 19:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779911361;
-	bh=jcVnpiKqpr3a5NXcIfBMM61Zdaozomcn7Ijfq9qQO4A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=CWIb2xZoWpqOmiK+YO9T1NphkVjKZtG8w/LbcNuRAFhZN9tUsWV5t0c/NAMEClSLe
-	 lhhYf0UA65DJSI8hUsThl9q5tUJCY1Pd3UhNdFXFK0ilA8Mydu3gkteRQTNuDDDy77
-	 1FbxLaCrowzmZPBWkbV4k04fM11gQ37fuZQGmjg8kibxOXTUyCr9IuT7nAgTHWgOmy
-	 IyxnGw9VWMg8Mho0YK/7Z9o3OHHy0MszI12QEYeFTdYWmH07Pedj0/oxekmCSycQ7a
-	 LhQc1goo3J/ThiBfv/Q1hBBP8SqXA+kVVpX8G9wlmQm29eUES9i/dmZssW1DH/IPuG
-	 1NETIkiG6XY4A==
-Date: Wed, 27 May 2026 15:49:18 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: sashiko-reviews@lists.linux.dev, Dylan Hatch <dylanbhatch@google.com>,
- bpf@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, Indu Bhagat
- <ibhagatgnu@gmail.com>
-Subject: Re: [PATCH v16 05/20] unwind_user/sframe: Add support for reading
- .sframe contents
-Message-ID: <20260527154918.5204c6da@fedora>
-In-Reply-To: <7fa7ea0c-80fb-4a3e-abc9-8f3dbd7968b1@linux.ibm.com>
-References: <20260521142546.3908498-6-jremus@linux.ibm.com>
-	<20260521151811.23FD61F000E9@smtp.kernel.org>
-	<7fa7ea0c-80fb-4a3e-abc9-8f3dbd7968b1@linux.ibm.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=k20260515; t=1779911363;
+	bh=Jb5QGemEzr2Ow1OIBgpTeZj0Wu1VSG29ghYR1AhhT1E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Mzeo38cohRcK7fyckwGGR2eKTLeVuZOhfsYenQX832D3pQhjRz2Pai4Af2GAPGRYS
+	 8KmSnp57fZ1Ohqr3r+I+A7SkbdlCubw9Ja/dwXR0m4m3m8tKA8pvxbe4Pg9TA/fLcG
+	 LL+pQxFIneGiRNuu2piqmX5yxr+8AKt0nsuWhfVtq7mPoM0uSb+bLKcxRdzYXbvhrV
+	 zGWnCJn9gUxYc6d6PrmlLoeZ9n9YhVKkgEnSB38NtDjmAZCZltQV0KGllbKEV/s7H0
+	 dCV8Rg3ezHMaYyutbbegHc9WG+j4ZGVg2lN20WfuKnriFqmfH7oTap+awPz+rHYftZ
+	 dOK/6eMt1YhHA==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	yangfeng@kylinos.cn,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mark.rutland@arm.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	jolsa@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	bpf@vger.kernel.org,
+	Gyokhan Kochmarla <gyokhan@amazon.de>
+Subject: Re: [PATCH 6.12] tracing: Fix the bug where bpf_get_stackid returns -EFAULT on the ARM64
+Date: Wed, 27 May 2026 15:49:01 -0400
+Message-ID: <20260527-agent5-item009-tracing@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260526192012.76223-1-gyokhan@amazon.de>
+References: <20260526192012.76223-1-gyokhan@amazon.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 22 May 2026 11:26:00 +0200
-Jens Remus <jremus@linux.ibm.com> wrote:
+> commit fd2f74f8f3d3c1a524637caf5bead9757fae4332 upstream.
+>
+> When using bpf_program__attach_kprobe_multi_opts on ARM64 to hook a BPF program
+> that contains the bpf_get_stackid function, the BPF program fails
+> to obtain the stack trace and returns -EFAULT.
 
-> Previously (see v15) the code was using user_read_access_begin() and
-> user_read_access_end().  IIUC scoped_user_read_access_size() is just
-> another mean to express the same and it behaves the same.  So if the
-> issue brought up by Sashiko AI review is valid, then it would also
-> exist with the previous implementation.
+Queued for 6.12.y, thanks.
 
-Note, Sashiko's reviews are statistical, which means you can get
-different issues brought up by running it twice on the same code.
-
--- Steve
+--
+Thanks,
+Sasha
