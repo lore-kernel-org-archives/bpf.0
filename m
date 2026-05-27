@@ -1,185 +1,175 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6839C43D51A;
-	Wed, 27 May 2026 16:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD393A8741
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 16:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779900147; cv=none; b=EXYdfpVoWHN0ZEH6C5OboFiBuM9WAFooc2CS1kVJqobWcFuVS8QiIMlfPL+Es5PRBXuLnhDdYtl7boOCwsA1VUSops0KX2DDJ65RgPxCWTWe6KyuqftdvzMOtJIdDlfmbB9vf3Xc0UtKOcApvP0MDUGce9wLTWZmSMv9BCQVLvc=
+	t=1779901180; cv=none; b=Pe8BMidcHgm5KKA3C0wuZSWr+DXPwdDAjqEKpDpo9+HV4WxPduMT+w/glJ5Ucvs+fstUdnwEeHqen+5RcLlFkjuBj8G/jPp07nWF+n09Iyg3XNDU+3HfdH3sYIqzAAqlsDE50LeSdutpwa1h4rLzrSdRNgDwkbLO4DNwEYLwGVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779900147; c=relaxed/simple;
-	bh=u8TivqtfuxjXhVadzsvzmKZSENicQ9GEXwCok1K8r5c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F7VDUkdaU5ZDHchKm2rKnP2Ezm2EgKrFaT+lTqIS4pmWOGJ6ElnTXzpcBwK1lOXPaBvrMgj5jy/7uIRyaVDRZULhSrJHfDiLXx6m8OKtWueai1G2woxDoZobOxrBULpJDqoaa1usDUIk5e6S0U5mcit10TF9LVSr94Tyt8k5ibI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Nz7giBmb; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1779901180; c=relaxed/simple;
+	bh=LU9L02kowGpNnB5MXU5rmt8ZMZk5riYW8QfW6X+Q904=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=amrTO70JsFes80JA125EEqkfWgzGYU/AiDSAXuokEWmMHPHtk2DYDmeYEz8XXhMvZTMYZW8nir9642TUZHD1nsQkA6sR0ikL0cVMf6fqcTMMhbsQsOvm6mqFlTyn6QeVpBnD0X5we1ZbWTUR47GBqGTLs/Is9k3AvIS7GIh5Ero=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fa2/Vd3g; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Nz7giBmb"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=k0G/1hIbcwmtxPWuX+E3Ksr2kN5fJ2sgTjtC/gyLWxY=; b=Nz7giBmbwNisqgY+a5gG6Eb+qy
-	bV+eKAg/SRf0ePKhglzJnle8RmWYE9B3VeTPS3f1Iaxq2KMyznOcx65UW5/aXyunnAbYhOEDJsWjM
-	1Ot5atLUweQ0C4rWBzDyneEWZQtKicgctTtIEQWBVlBgXikpuYuusa7CV1UKN+UIBdFNjX10LUENz
-	7R0ozz36ct2TXdLeDNo1v35HUBNqkgGmpxp8FIhsIeC9uSvbW3GspvJtvkFh0K7Fjkiee7NpiC0dT
-	Kv7/8SvBl4DsKaksR+KHFYNPChL2vANCPBh6C8dtdw44UdZxJ2k+yRGHIOYz66/tkhv5DhBKPfk/T
-	ct35a6Tg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wSHKb-003JPp-1p;
-	Wed, 27 May 2026 16:42:09 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 27 May 2026 09:41:36 -0700
-Subject: [PATCH 3/4] bootconfig: add xbc_prepend_embedded_cmdline() helper
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fa2/Vd3g"
+Message-ID: <549d58c6-05f0-4176-98ec-c88e96ee4375@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779901166;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y5Uv03Ujj428n5sCQ9PwAg+yJsQrd1cz70XxOo1jmLc=;
+	b=Fa2/Vd3gbi6YG8N2SewLk8TSArhbXjjruuc5wEBR7DpmJZi/2w0Wd3DgAYf7YoWnGYG7ER
+	Bb6lIk3acqxivK4o7CBx7lzZ8OjtAG9hiDxI+ywSURuSjaLa/y6T9gKRsq39l2ytutu+nP
+	V0mcUDp0Tiv/YG4XN1BWZ7oAPYYwqaM=
+Date: Wed, 27 May 2026 09:59:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260527-bootconfig_using_tools-v1-3-b6906a86e7d5@debian.org>
-References: <20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org>
-In-Reply-To: <20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
- Nicolas Schier <nsc@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3922; i=leitao@debian.org;
- h=from:subject:message-id; bh=u8TivqtfuxjXhVadzsvzmKZSENicQ9GEXwCok1K8r5c=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqFx7NGCQMUYnbaKnSbk7h4OGGd3VLD4EJ2cz4T
- CMvgvv8qbqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCahcezQAKCRA1o5Of/Hh3
- bVrNEACu7MeK46jFKUKXtk8wKh3StVbD3VleWAz6o4Sq83L2tXb+o3dbCT4GpUvJZ82s6UzU1H2
- zTCC/b/0UVJeayLxUhXa48mjX93F9DfvBZ2u0R+kn511/HngFc9hzjSl4LY3saA+9T+VNc3KANw
- 7fk4t4c27F9X4oW4nZsDEjoVAiWStZxUs5zJzOS8vwEDAIi0lFAYcd2rhqa+XM/9vv3BRe7a7uy
- mHFOp2/xBkmtv0v7om8/3CwMLs7xP0B64QkE237meSOsVcom4P29YsPfPKF5wFD5jBHXJQJzYiI
- ov5BMLYJ8VPZ3FZYsMWj2W3HPOV7HuKr+iffNmugYZSwdlE96986bBDT7GfHHe6Se0iS2CMuZv3
- DgZSAvjqkIHI08Kj5GfKbBch7esA5AbyjtVtPD6bdPXObsgqwi3RF+9AOsIAYso5fEzQPbB4olv
- NpjFQvp4O0EWQ4BT6THBQtmRSpyGD4uwytXGET0Sv93cmF0av2ak30nlmsyBUupugEG67rc9ul5
- 5z6F5jkj3RhDi5dF+WF/V/i646A3LVvzOQV8aGIrOmsnVNQHLT7UMAv9vWEa4yE2jy1G2yT+LG5
- ApOjZ/FfSqxeOM67Ynt8QIb+6RwifJ/i3v7EuJ8Sac2iD1pcxF2Khj2mrcpbQBRs8xVlRtJVPRG
- UvdK2SxEycyOCqQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Subject: Re: [PATCH bpf 1/1] bpf: reject overlarge global subprog argument
+ sizes
+Content-Language: en-GB
+To: Taegu Ha <hataegu0826@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260527052539.3388700-1-hataegu0826@gmail.com>
+ <20260527052539.3388700-2-hataegu0826@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260527052539.3388700-2-hataegu0826@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a helper that prepends the build-time-rendered embedded bootconfig
-"kernel" subtree (embedded_kernel_cmdline[] from embedded-cmdline.S) to
-a cmdline buffer with a separating space. Architectures call this from
-setup_arch() before parse_early_param() so early_param() handlers
-(mem=, earlycon=, loglevel=, ...) see values supplied via the embedded
-bootconfig.
 
-On overflow the helper logs an error and leaves the cmdline untouched
-rather than panicking. Booting without the embedded values is better
-than refusing to boot, and the error tells the user why their embedded
-keys are missing.
 
-When CONFIG_BOOT_CONFIG_EMBED_CMDLINE=n, the public declaration in
-<linux/bootconfig.h> resolves to a no-op stub so callers compile
-unchanged.
+On 5/26/26 10:25 PM, Taegu Ha wrote:
+> Global subprogram argument checking derives generic pointer sizes from BTF
+> and passes the resolved size to check_mem_reg() as a u32. The access-size
+> validation path then uses a signed int, and stack pointers negate the value
+> before calling check_helper_mem_access().
+>
+> A BTF type such as int[0x3fffffff] resolves to 0xfffffffc bytes. On a stack
+> pointer, (int)mem_size becomes -4 and the negation validates only four
+> bytes. A caller can therefore pass a four-byte stack slot while the callee
+> is verified with a nearly 4GiB memory argument, allowing accesses outside
+> the caller object.
+>
+> This was confirmed with a non-executing raw-BTF reproducer. On a
+> vulnerable kernel, the verifier accepted a program where the caller passed
+> a four-byte stack slot, while the callee argument was described by BTF as
+> int[0x3fffffff]. The verifier log showed:
+>
+>    R1=mem_or_null(id=1,sz=0xfffffffc)
+>    r0 = *(u32 *)(r1 +4)
+>
+> The program was only loaded to prove verifier acceptance and was not
+> attached or executed.
+>
+> Reject sizes that cannot be represented by the signed verifier access-size
+> API before any conversion. Cast the non-stack case after the bound check to
+> make the conversion explicit, and add a verifier regression test for the
+> oversized BTF argument.
+>
+> Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+> Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
+> ---
+>   kernel/bpf/verifier.c                           |  7 ++++++-
+>   .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
+>   2 files changed, 23 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7fb88e1cd7c4..1007f204a1f5 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7107,6 +7107,11 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
+>   	struct bpf_reg_state saved_reg;
+>   	int err;
+>   
+> +	if (mem_size > S32_MAX) {
+> +		verbose(env, "R%d memory size %u is too large\n", regno, mem_size);
+> +		return -EACCES;
+> +	}
+> +
+>   	if (bpf_register_is_null(reg))
+>   		return 0;
+>   
+> @@ -7119,7 +7124,7 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
+>   		mark_ptr_not_null_reg(reg);
+>   	}
+>   
+> -	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
+> +	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : (int)mem_size;
+>   
+>   	err = check_helper_mem_access(env, regno, size, BPF_READ, true, NULL);
+>   	err = err ?: check_helper_mem_access(env, regno, size, BPF_WRITE, true, NULL);
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> index 1e08aff7532e..0ff8f85b4d46 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> @@ -151,6 +151,23 @@ int anon_user_mem_valid(void *ctx)
+>   	return subprog_user_anon_mem(&t);
+>   }
+>   
+> +__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
+> +{
+> +	return p ? (*p)[1] : 0;
+> +}
+> +
+> +SEC("?tracepoint")
+> +__failure __log_level(2)
+> +__msg("R1 memory size 4294967292 is too large")
+> +int anon_user_mem_huge_size_invalid(void *ctx)
+> +{
+> +	int (*p)[0x3fffffff];
+> +	int tiny = 42;
+> +
+> +	p = (void *)&tiny;
+> +	return subprog_user_anon_mem_huge(p) + tiny;
+> +}
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- include/linux/bootconfig.h |  7 +++++++
- lib/bootconfig.c           | 48 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
+Without verifier.c change, verification is successful.
 
-diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-index 1c7f3b74ffcf..dcb0c86cbc54 100644
---- a/include/linux/bootconfig.h
-+++ b/include/linux/bootconfig.h
-@@ -308,4 +308,11 @@ static inline const char *xbc_get_embedded_bootconfig(size_t *size)
- }
- #endif
- 
-+/* Build-time-rendered bootconfig cmdline prepended in setup_arch() */
-+#ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
-+void __init xbc_prepend_embedded_cmdline(char *dst, size_t size);
-+#else
-+static inline void xbc_prepend_embedded_cmdline(char *dst, size_t size) { }
-+#endif
-+
- #endif
-diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-index 3a102c9122f7..10c62c8600c8 100644
---- a/lib/bootconfig.c
-+++ b/lib/bootconfig.c
-@@ -19,6 +19,7 @@
- #include <linux/errno.h>
- #include <linux/cache.h>
- #include <linux/compiler.h>
-+#include <linux/printk.h>
- #include <linux/sprintf.h>
- #include <linux/memblock.h>
- #include <linux/string.h>
-@@ -34,6 +35,53 @@ const char * __init xbc_get_embedded_bootconfig(size_t *size)
- 	return (*size) ? embedded_bootconfig_data : NULL;
- }
- #endif
-+
-+#ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
-+/* embedded_kernel_cmdline is defined in embedded-cmdline.S */
-+extern __visible const char embedded_kernel_cmdline[];
-+extern __visible const char embedded_kernel_cmdline_end[];
-+
-+/**
-+ * xbc_prepend_embedded_cmdline() - Prepend embedded bootconfig cmdline
-+ * @dst: cmdline buffer to prepend into (must already contain a NUL byte)
-+ * @size: total capacity of @dst in bytes
-+ *
-+ * Prepend the build-time-rendered "kernel" subtree of the embedded
-+ * bootconfig to @dst. The rendered string already ends with a single
-+ * space (the xbc_snprint_cmdline() invariant), which serves as the
-+ * separator between the embedded keys and any existing content of @dst.
-+ * On overflow, log an error and leave @dst untouched rather than
-+ * silently truncating: booting without the embedded values is better
-+ * than refusing to boot, and the error message tells the user why
-+ * their embedded keys are missing.
-+ *
-+ * Intended to be called from setup_arch() before parse_early_param() so
-+ * that early_param() handlers see the embedded values.
-+ */
-+void __init xbc_prepend_embedded_cmdline(char *dst, size_t size)
-+{
-+	size_t embed_len = embedded_kernel_cmdline_end - embedded_kernel_cmdline;
-+	size_t dst_len;
-+
-+	if (!size || embed_len <= 1)	/* trailing NUL only */
-+		return;
-+	embed_len--;			/* exclude trailing NUL byte */
-+
-+	dst_len = strnlen(dst, size);
-+	if (embed_len + dst_len + 1 > size) {
-+		pr_err("embedded bootconfig cmdline (%zu bytes) does not fit in COMMAND_LINE_SIZE with %zu bytes already used; ignoring embedded values\n",
-+		       embed_len, dst_len);
-+		return;
-+	}
-+
-+	if (dst_len)
-+		memmove(dst + embed_len, dst, dst_len + 1);
-+	else
-+		dst[embed_len] = '\0';
-+	memcpy(dst, embedded_kernel_cmdline, embed_len);
-+}
-+#endif
-+
- #endif
- 
- /*
+The objdump:
 
--- 
-2.54.0
+0000000000000160 <subprog_user_anon_mem_huge>:
+; {
+       44:       b4 00 00 00 00 00 00 00 w0 = 0x0
+;       return p ? (*p)[1] : 0;
+       45:       15 01 01 00 00 00 00 00 if r1 == 0x0 goto +0x1 <L0>
+       46:       61 10 04 00 00 00 00 00 w0 = *(u32 *)(r1 + 0x4)
+<L0>:
+       47:       95 00 00 00 00 00 00 00 exit
+
+0000000000000040 <anon_user_mem_huge_size_invalid>:
+;       int tiny = 42;
+        8:       b4 01 00 00 2a 00 00 00 w1 = 0x2a
+        9:       63 1a fc ff 00 00 00 00 *(u32 *)(r10 - 0x4) = w1
+       10:       bf a1 00 00 00 00 00 00 r1 = r10
+       11:       07 01 00 00 fc ff ff ff r1 += -0x4
+;       return subprog_user_anon_mem_huge(p) + tiny;
+       12:       85 10 00 00 ff ff ff ff call -0x1
+                 0000000000000060:  R_BPF_64_32  subprog_user_anon_mem_huge
+       13:       61 a1 fc ff 00 00 00 00 w1 = *(u32 *)(r10 - 0x4)
+       14:       0c 01 00 00 00 00 00 00 w1 += w0
+       15:       bc 10 00 00 00 00 00 00 w0 = w1
+       16:       95 00 00 00 00 00 00 00 exit
+
+The big 0x3fffffff does not really matter.
+
+> +
+>   __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
+>   {
+>   	return (*p1) * (*p2); /* good, no need for NULL checks */
 
