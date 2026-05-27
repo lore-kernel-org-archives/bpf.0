@@ -1,86 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9BB2E7F25;
-	Wed, 27 May 2026 13:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B1540B6F6
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 13:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779888295; cv=none; b=IyjykZrcz4VEcjoVP+hvfPE1XSS2hRT+fFX7d58zKnpMYj94gGA4TyIMtFWvc/95bRQ8nJxiY4BLx07V9TEiKzx3iFaNfcVwxzgX4+6ZBUtwOtCKojmyox7V2ujUovn0p5X2si4u0uBXkS6Skc09/7fx2iRFLXJTICTM5kiQqlw=
+	t=1779888328; cv=none; b=nXX7KoqOxCJTahJL3XfH3B1EHHNfyfjn/IegluyLLD4Grn0/jxmVWfCZdx8qJ+Ao3ccPfBB3i//iF3lyKAqqcNP77JQyDHb6GNXVP3GaVfV/Yjbjj+VnncBCwXVXZTLQao6yyiLd+u71CkL64yyKRulP75tztt4tMeBYrePhzYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779888295; c=relaxed/simple;
-	bh=0HGClSyXBXxyXG26RzRZS7w3G2ipIvuqzIRh1ydQ3W4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IB2uMv2gsvjtkn1aivfrYhvRBQZ0+LTHHpYNSKF26vPiyBGaWlEvpEuUx9caWiKuJaXNC0aGhwoNuiReHlhoX+ya5sjBdQIV+6ncpKF8MeWIrdmaMZkkNGBMqQhErj42UCG3PDY90FFcWrzKgORo53+xn06G3T9sB7mKid4X9pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FumuuEQW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779888328; c=relaxed/simple;
+	bh=k8ppozzTL3enNurS3PxCZ2gyjOCjKwBnAiAmwsIo8j0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nXXMlFRIjWHoNS6tLdGORyYPc4s0HPKhF87qPv7EKUGFOu/iDzdxGYB3gamn/q6b4ar8x6mPMqSom59VGOS3dN8uwq3pGU13uwUUpcDkehRy6+6Wxm+GtIWnXxy7xucxDM0eM/4QqgyZ0q9MibY9XtlRUdITTkiHuZiGvbe+ZwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUMPUoVP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FumuuEQW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412E91F000E9;
-	Wed, 27 May 2026 13:24:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUMPUoVP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDBDF1F000E9;
+	Wed, 27 May 2026 13:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779888294;
-	bh=0HGClSyXBXxyXG26RzRZS7w3G2ipIvuqzIRh1ydQ3W4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FumuuEQWtmuF/BJmD55PoeOE/v92cl36iWgBylm0ngcfZoD5L83yq4/kULhaU0p23
-	 u0pQrFsLbF/Qo3blkzBhKeYDfpqLO+j+HnohfXhchKZmk9G2+7zwY07glrG74TllxR
-	 K7+W8KtC6tlm0ZfvXD0s7pFosIfdud18beEfJ1uwj2z4jQrmAYTO84FJxrv2gJMCHC
-	 8eDlQAR8n6LhGolaf4aM8yVD8GXt41OKRHN6XWZyO2EBsJL6cie5HtUKWGhf8YAILm
-	 FvtynKWoSEsAAsI5/00B67ltc/IgmGDRbHFDp47JG/xQZpZ5StB50qGuQ2oNbn/tyN
-	 8EBowBhM5Traw==
-Date: Wed, 27 May 2026 14:24:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <23a429b4-bdf1-4f96-b3af-7ab3186e99d3@sirena.org.uk>
-References: <ahWOVFZZScPjm2Ow@sirena.org.uk>
- <CAADnVQ+yjm0SJ0UQMeuS82MLDeo1bvZKSMMDh-K8D9-PNu=p8w@mail.gmail.com>
+	s=k20260515; t=1779888327;
+	bh=bNfmt/tyEsfOqJ5Ze7eNUfB8UFGaDu28fGJngKaRKp8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PUMPUoVPsv/RRfH1giVeUtewLoyDE0eNNo8M8KtSxPRvKPIH7pt4mwehtvIgunwtr
+	 XhwLzykoifq4wk7PiG6lQY+BFFs09O945WyUK9JjiRAPoApzV/gA1JwV1UOXxZw5Pe
+	 YdOHFjo9NjfEzrhNG3EtTqU2V1wt8EyAZKEkjMNy10HdjgAkjvI87HAQTRJbXx8cj4
+	 r5rLOzCJM3p7AYonZv7vgDlDAN2RlmPw+15OGz5kZ0l+g0vBxCZN+dQz1yKPNVfYkF
+	 equGsV5Ggu4REYmUtvDy/dt0pgLo1FLD0yFnUf2ioRRtr8L14w1uaVMsXizKdYUWeW
+	 yp4qa7M3Xj0mw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 1/3] libbpf: load vmlinux BTF in gen_loader mode for
+ struct_ops
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com>
+References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 27 May 2026 13:25:26 +0000
+Message-Id: <20260527132526.EDBDF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yBgt/TPiuRRzj/+6"
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+yjm0SJ0UQMeuS82MLDeo1bvZKSMMDh-K8D9-PNu=p8w@mail.gmail.com>
-X-Cookie: No alcohol, dogs or horses.
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Enabling light skeleton generation for `struct_ops` maps exposes i=
+ncomplete and fundamentally broken loader logic, which will always fail on =
+the target system.
+--
 
---yBgt/TPiuRRzj/+6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+commit 241c33de1404c9ec6cd0b388a0a3bc61171e6646
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-On Tue, May 26, 2026 at 03:08:06PM -0700, Alexei Starovoitov wrote:
+libbpf: load vmlinux BTF in gen_loader mode for struct_ops
 
-> thoughts on the best way to fix it ?
-> Pls send it to bpf-next. I think it's fine for it to be in one tree only.
+This patch modifies the BTF loading logic in libbpf to ensure vmlinux BTF
+is loaded even in gen_loader mode if the BPF object contains struct_ops map=
+s.
+This provides the necessary type information for generating light skeletons.
 
-That's fine from a -next point of view since bpf gets merged first,
-you'll also need to ensure that the sched_ext stuff doesn't get sent to
-Linus until the bpf changes have landed or flag the dependency up to
-him.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3a80a018fc7d5..b159faae7f9c6 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
---yBgt/TPiuRRzj/+6
-Content-Type: application/pgp-signature; name="signature.asc"
+[ ... ]
 
------BEGIN PGP SIGNATURE-----
+> @@ -3590,7 +3590,11 @@ static int bpf_object__load_vmlinux_btf(struct bpf=
+_object *obj, bool force)
+>  	int err;
+> =20
+>  	/* btf_vmlinux could be loaded earlier */
+> -	if (obj->btf_vmlinux || obj->gen_loader)
+> +	if (obj->btf_vmlinux)
+> +		return 0;
+> +
+> +	/* only struct_ops maps need btf_vmlinux in gen_loader */
+> +	if (obj->gen_loader && !obj_maps_need_vmlinux_btf(obj))
+>  		return 0;
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoW8KAACgkQJNaLcl1U
-h9Ax+Af9FshkywdeD8aHR6Ecrc7ZYwpMdLWtt7h+Pz6LHttcHF+i8KOxs0akomXc
-meW86c2er19FNqtrRzSe0+OlQc2fmjWlWN0Ybh1TSvt6n/99pf4JtdT96bp6/zri
-ckZHaTx4R/WSENn+uS5TRrxfWvBFhOrDmtc9QjQtMwRPdgS4Jj6xyBAjekn7k5G3
-RZWFpbz/dP6Ka2Zsq4ZLdMmHlbhm3lY9UcYRWuVHqk+2D+VGZf/WBqEQxWkzlAdj
-MH1Z9KJaQJAga+bVoTA1i34S9FuySv9HjKj7cdGYrT9wqgpqZWUqCQJ5UKAAJ+bd
-5Ot3/uZVMG116Joev//DMYUMLCbSig==
-=gKeV
------END PGP SIGNATURE-----
+[Severity: High]
+Does enabling struct_ops for light skeletons result in a generated loader
+that works correctly on the target system?
 
---yBgt/TPiuRRzj/+6--
+It appears the gen_loader logic statically embeds the build host's
+btf_vmlinux_value_type_id into the BPF_MAP_CREATE attributes buffer. Since
+BTF IDs vary across kernel versions and configurations, won't passing the
+build host's BTF ID to a different target kernel cause the syscall to fail
+with -EINVAL or incorrectly associate the map with the wrong kernel structu=
+re?
+Shouldn't the loader dynamically resolve this ID using bpf_btf_find_by_name=
+_kind
+on the target kernel instead?
+
+Additionally, struct_ops maps require their map values to be populated with
+the runtime FDs of the loaded BPF programs. Does gen_loader currently have
+the necessary logic to emit BPF instructions that read dynamically generated
+prog_fds from the loader's stack, patch them into the map value buffer, and
+update the map?
+
+Furthermore, does the skel__attach() function generated by
+bpftool gen skeleton -L handle struct_ops map attachment? It seems to only
+iterate over programs, entirely omitting the struct_ops map attachment that
+is normally handled by bpf_map__attach_struct_ops().
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-libbpf-loa=
+d-vmlinux-btf-in-gen_loader-mode-v4-0-27daa15487a9@google.com?part=3D1
