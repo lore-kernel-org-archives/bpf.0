@@ -1,77 +1,316 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1594C40FDA0
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 13:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3852F421EF8;
+	Wed, 27 May 2026 13:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779889238; cv=none; b=r1rquHkG50qA6vkUPkOVe5ybUYJUzd01JYdo0SSKLMJlO65J+SbdzxvApycaeRHtmJmEdIvja5OLREE8V+ninP6e4mgLxKrVHhTFxQ8JIbzaY6TtspNmWIWSKNrhwD/9OkRoB5NX2garBrDSnjAe4i0w0S3JxIDSIHpotK0VuJU=
+	t=1779890084; cv=none; b=WyZeNDeTLw9i6wJ1U7EpXgZ01cvWxVosunDSbJEXifxAsaN42k4CJUIERCoVR1epMmOMvOkBq+oootDkqaNy6AeFoUm72dinZXmnY0gClMzueaV6abKfIZDcuyPrqrP8pmm5UMhDjDdq6wNwR8xWFVv1Df+B6RbdZsmNHhbfiTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779889238; c=relaxed/simple;
-	bh=zBnqFwJS2yVjxtoW6v1LXOru0S4kJQOnIYkjY9t21lA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oN9t2pdWMAL1aJ5yp+0iAX9vOFQ/MmD/E4HknWxpSqvMvZq9p6D1TK2zYYRhhi+1+u/bCP0SQ5EVk5LDTUJeICneNRGvJkrDbQjH+ZPCfXOK0z0HZu2p3VI93wwrhwgO9BzcgbMqsShIBcV6yFRs8jg8zBQg5H+zwZv1Yi/AH0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rtuUcI1z; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779890084; c=relaxed/simple;
+	bh=Yy4Gt4aFye5JnmKyYUFK+AR4vsm2XFeQ/m1d2hBS7qc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FygOQhZ2PRrf7HR63JcEFRbZkYZB0x7f9P+bNNkLsxX/QxfttiCt/gpjaUn+/C42OIaGs4SlxcGamHNtdGxPZeuWIl6RIM7homdHz2+DEIxHM9O7+dfFTrvCRiKyVTCe3ccyY3YfL9bg95AUFiTaSjgVuIos7qABnBZW6Woa/8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VGUyqxVZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rtuUcI1z"
-Message-ID: <69d589a0-dcdd-47b5-905f-f7b5d3c483de@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779889231;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mVk4BypCf9T7mGm14228pz8b/IEOnfCruXIgb+bymeM=;
-	b=rtuUcI1zvNmMbIOu2COoCh5d9DWqtYhmO1GeEQ95sk4WArtnenPz3mDMGoWyuOQe9qTCL3
-	Ui3OPDTJ+i51SqN0KAWVxY2crhc2ClS+xiY2Ly0qBtk5YsUAPk0UWRyNzACTx76e+LV/EC
-	HU6jFq6+11m48Qoo9AtE/4HE61Vl6X4=
-Date: Wed, 27 May 2026 21:40:19 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VGUyqxVZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2E01F000E9;
+	Wed, 27 May 2026 13:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779890077;
+	bh=UlOaUS7TXUGx3YtTh2z7CrtLGwyGtIup6lIGoTqcR7M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=VGUyqxVZ9vjfUl6nRK+DWhl31C57qdGDjf3WwvWuck2Gm7wMlyYxoiCRHRRmKAG8l
+	 5ApTQWQobJY8hf42K/SBtoJo49vIdX7DEZ3FUBVcvRk7WWKsXyT/jhev9w5UyX0J1P
+	 Ypv/HlJ8WoI5NW2w10jGffO6hlGHQ0u1q9FHltbHyS6a8hYfvX+u3qXT+zCOh0GOvF
+	 UziCioumYPt/uNbdXHpaCpFhsrz4YnMniCzuGnGJX0ZayG8xi8tmB6Mm0+ska2d0JQ
+	 Cw/Sgm1x09ra9befXiwpohqWYkI3Lt9kQ3JZAmXezW8diTMkFK6074hkQrJ3OjzH+g
+	 x63CY+cldrWLA==
+From: hawk@kernel.org
+To: netdev@vger.kernel.org
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v6 2/5] veth: implement Byte Queue Limits (BQL) for latency reduction
+Date: Wed, 27 May 2026 15:54:13 +0200
+Message-ID: <20260527135418.1166665-3-hawk@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260527135418.1166665-1-hawk@kernel.org>
+References: <20260527135418.1166665-1-hawk@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add tests to verify the fix of
- encapsulating VxLAN in lwt
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260525142650.2569-3-leon.hwang@linux.dev>
- <20260525151755.035AB1F000E9@smtp.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260525151755.035AB1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 2026/5/25 23:17, sashiko-bot@kernel.org wrote:
-[...]
->> +	 * Ethernet frame uses a broadcast dst MAC so the IP stack accepts it
->> +	 * without ARP or FDB configuration.
->> +	 */
->> +	SYS(fail_close, "ip link add vxlan4 type vxlan id 1 dstport 4789 local %s dev veth8 nolearning noudpcsum",
-> [ ... ]
->> +	return -1;
->> +}
->> +
->> +/* VxLAN encap tests (IPv4-outer and IPv6-outer variants).
-> 
-> [Severity: Low]
-> This isn't a bug, but this comment block also places text on the same line as
-> the opening /*.
-> 
+From: Jesper Dangaard Brouer <hawk@kernel.org>
 
-Will update all the comments with BPF comment style.
+Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
+reduce TX drops") gave qdiscs control over veth by returning
+NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
+a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
+a dark buffer, adding base latency because the qdisc has no visibility
+into how many bytes are already queued there.
 
-Thanks,
-Leon
+Add BQL support so the qdisc gets feedback and can begin shaping traffic
+before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
+under UDP load from ~6.61ms to ~0.36ms (18x).
 
->> + *
->> + * Test 1 - functional: the BPF LWT xmit program encapsulates the packet
-> [ ... ]
-> 
+Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
+the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
+has no link speed -- the ptr_ring drains at CPU speed and is
+packet-indexed, not byte-indexed, so bytes are not the natural unit.
+With byte-based charging, small packets sneak many more entries into
+the ring before STACK_XOFF fires, deepening the dark buffer under
+mixed-size workloads.  Testing with a concurrent min-size packet flood
+shows 3.7x ping RTT degradation with skb->len charging versus no
+change with fixed-unit charging.
+
+Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
+confirming the ring is not full.  The charge must precede the produce
+because the NAPI consumer can run on another CPU and complete the SKB
+the instant it becomes visible in the ring.  Doing both under the same
+lock avoids a pre-charge/undo pattern -- BQL is only charged when
+produce is guaranteed to succeed.
+
+BQL is enabled only when a real qdisc is attached (guarded by
+!qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
+for TXQ modification like dql_queued(). For lltx devices, like veth,
+this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
+producer_lock provides additional serialization that would allow
+BQL to work correctly even with noqueue, though that combination
+is not currently enabled, as the netstack will drop and warn.
+
+Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
+entry.  This is necessary because the qdisc can be replaced live while
+SKBs are in-flight -- each SKB must carry the charge decision made at
+enqueue time rather than re-checking the peer's qdisc at completion.
+
+Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
+clears promptly when producer and consumer run on different CPUs.
+
+BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
+alongside the existing DRV_XOFF (ring full).  Both must be clear for
+the queue to transmit.  Reset BQL state in veth_napi_del_range() after
+synchronize_net() to avoid racing with in-flight veth_poll() calls.
+Clamp the reset loop to the peer's real_num_tx_queues, since the peer
+may have fewer TX queues than the local device has RX queues (e.g. when
+veth is enslaved to a bond with XDP attached).
+
+Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+---
+ drivers/net/veth.c | 86 ++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 75 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 0cfb19b760dd..21ff78533943 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -34,9 +34,13 @@
+ #define DRV_VERSION	"1.0"
+ 
+ #define VETH_XDP_FLAG		BIT(0)
++#define VETH_BQL_FLAG		BIT(1)
+ #define VETH_RING_SIZE		256
+ #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
+ 
++/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
++#define VETH_BQL_UNIT		1
++
+ #define VETH_XDP_TX_BULK_SIZE	16
+ #define VETH_XDP_BATCH		16
+ 
+@@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
+ 	return (unsigned long)ptr & VETH_XDP_FLAG;
+ }
+ 
++static bool veth_ptr_is_bql(void *ptr)
++{
++	return (unsigned long)ptr & VETH_BQL_FLAG;
++}
++
++static struct sk_buff *veth_ptr_to_skb(void *ptr)
++{
++	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
++}
++
++static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
++{
++	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
++}
++
+ static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
+ {
+ 	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
+@@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
+ 	if (veth_is_xdp_frame(ptr))
+ 		xdp_return_frame(veth_ptr_to_xdp(ptr));
+ 	else
+-		kfree_skb(ptr);
++		kfree_skb(veth_ptr_to_skb(ptr));
+ }
+ 
+ static void __veth_xdp_flush(struct veth_rq *rq)
+@@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
+ 	}
+ }
+ 
+-static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
++static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do_bql,
++		       struct netdev_queue *txq)
+ {
+-	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
++	struct ptr_ring *ring = &rq->xdp_ring;
++
++	spin_lock(&ring->producer_lock);
++	if (unlikely(__ptr_ring_check_produce(ring))) {
++		spin_unlock(&ring->producer_lock);
+ 		return NETDEV_TX_BUSY; /* signal qdisc layer */
++	}
++
++	/* BQL charge before produce; consumer cannot see entry yet */
++	if (do_bql)
++		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
++
++	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
++	spin_unlock(&ring->producer_lock);
+ 
+ 	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
+ }
+ 
+ static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
+-			    struct veth_rq *rq, bool xdp)
++			    struct veth_rq *rq, bool xdp, bool do_bql,
++			    struct netdev_queue *txq)
+ {
+ 	return __dev_forward_skb(dev, skb) ?: xdp ?
+-		veth_xdp_rx(rq, skb) :
++		veth_xdp_rx(rq, skb, do_bql, txq) :
+ 		__netif_rx(skb);
+ }
+ 
+@@ -348,10 +381,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct veth_priv *rcv_priv, *priv = netdev_priv(dev);
+ 	struct veth_rq *rq = NULL;
+-	struct netdev_queue *txq;
++	struct netdev_queue *txq = NULL;
+ 	struct net_device *rcv;
+ 	int length = skb->len;
+ 	bool use_napi = false;
++	bool do_bql = false;
+ 	int ret, rxq;
+ 
+ 	rcu_read_lock();
+@@ -375,8 +409,12 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	}
+ 
+ 	skb_tx_timestamp(skb);
+-
+-	ret = veth_forward_skb(rcv, skb, rq, use_napi);
++	if (rxq < dev->real_num_tx_queues) {
++		txq = netdev_get_tx_queue(dev, rxq);
++		/* BQL charge happens inside veth_xdp_rx() under producer_lock */
++		do_bql = use_napi && !qdisc_txq_has_no_queue(txq);
++	}
++	ret = veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
+ 	switch (ret) {
+ 	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
+ 		if (!use_napi)
+@@ -412,6 +450,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
+ 				     __func__, dev->name, ret);
+ 	}
++
+ 	rcu_read_unlock();
+ 
+ 	return ret;
+@@ -900,7 +939,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 
+ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct veth_xdp_tx_bq *bq,
+-			struct veth_stats *stats)
++			struct veth_stats *stats,
++			struct netdev_queue *peer_txq)
+ {
+ 	int i, done = 0, n_xdpf = 0;
+ 	void *xdpf[VETH_XDP_BATCH];
+@@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			}
+ 		} else {
+ 			/* ndo_start_xmit */
+-			struct sk_buff *skb = ptr;
++			bool bql_charged = veth_ptr_is_bql(ptr);
++			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+ 
+ 			stats->xdp_bytes += skb->len;
++			if (peer_txq && bql_charged)
++				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
++
+ 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+ 			if (skb) {
+ 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+@@ -976,7 +1020,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
+ 		   netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+ 
+ 	xdp_set_return_frame_no_direct();
+-	done = veth_xdp_rcv(rq, budget, &bq, &stats);
++	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
+ 
+ 	if (stats.xdp_redirect > 0)
+ 		xdp_do_flush();
+@@ -1074,6 +1118,7 @@ static int __veth_napi_enable(struct net_device *dev)
+ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+ {
+ 	struct veth_priv *priv = netdev_priv(dev);
++	struct net_device *peer;
+ 	int i;
+ 
+ 	for (i = start; i < end; i++) {
+@@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+ 		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+ 	}
+ 
++	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
++	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
++	 * synchronize_net(), and NAPI can no longer clear it.
++	 * Only wake when the device is still up.
++	 */
++	peer = rtnl_dereference(priv->peer);
++	if (peer) {
++		int peer_end = min_t(int, end, peer->real_num_tx_queues);
++
++		for (i = start; i < peer_end; i++) {
++			struct netdev_queue *txq = netdev_get_tx_queue(peer, i);
++
++			netdev_tx_reset_queue(txq);
++			if (netif_running(dev))
++				netif_tx_wake_queue(txq);
++		}
++	}
++
+ 	for (i = start; i < end; i++) {
+ 		page_pool_destroy(priv->rq[i].page_pool);
+ 		priv->rq[i].page_pool = NULL;
+@@ -1741,6 +1804,7 @@ static void veth_setup(struct net_device *dev)
+ 	dev->priv_flags |= IFF_PHONY_HEADROOM;
+ 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
+ 	dev->lltx = true;
++	dev->bql = true;
+ 
+ 	dev->netdev_ops = &veth_netdev_ops;
+ 	dev->xdp_metadata_ops = &veth_xdp_metadata_ops;
+-- 
+2.43.0
 
