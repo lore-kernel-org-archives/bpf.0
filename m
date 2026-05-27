@@ -1,139 +1,161 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C118E3C09F1
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7F13C09F1;
+	Wed, 27 May 2026 07:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779867380; cv=none; b=izuldIQGAf65b2jDpsUdg/Cs+wP3I4dZmYT1g54frAg4lpzFajRRaPccYIw8y5tLQz1+vm+QNjFnz7nRVSczbyA5JA2MEuV/f5oBCHQe8Ml3xacVBNE0p3W22cY/WICQOWzmeFPViFRKX/MUXr67pUlGm5grBqF76mHu8nGCUwE=
+	t=1779867530; cv=none; b=kCCWwOSomABXIIjyevVljKC+mZINK2SnV0/tyFU8XkoEeT9B96L25oXvfHXx0b/0JZilFtzn65LfMVsPu12ooZ2loGH8mqpKFdQziAibis/LAAueKdjciBE0h0DQOUYNTHlUOpq08eJ6GlqHngspYE4ABKryX0Gh4qz3aUWPqhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779867380; c=relaxed/simple;
-	bh=/E6yxZN1iL1sEOvhzLQbCR2BoEGv7qUOen6dJLFQWqE=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YnQ6HSfxka5oLnPlYhNY7eASLM7tGhSgu79RncSRKvS4tSGeTJzbSPO4hP276M/wyoL38pTWkFsMdEOn2l+0hyhLmK0DlTTALflVG7KPuOPIxH+ew5LvZjslSRq0GvIkGscK5i9FEtQpsHMnrS5Vf0eA3lHfPrJPS7fX5/Fcn4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sqEpCbQr; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779867530; c=relaxed/simple;
+	bh=SBJb5xXkmlqTV62Zt96/uXBoot0tdI5KLSLDqbjGfHw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SGQv4UrxmiyaeKx5noiCrHTSLC8PRh6tYiAhc9lfd1PfR0sTguX8Jf8j+beONUJVWeSoFkwWBXXH5DmNK/yYk9o3eGEaa8Cqi0E1VCcTKBlQyTYaxJApHxMFV+/jB4k+o9V9D4bPPSyf9sxKixT2sqllonv1cqUz/45bYWePtP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4lRRXRH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sqEpCbQr"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-49048e043e5so37712165e9.1
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 00:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779867377; x=1780472177; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIF0+8LpPnndTQYvbVkGYrOCYND9z39MVrZ8YaX2YH8=;
-        b=sqEpCbQrVhifXuv2KslEqh/TFK/9wmy9SNu7q0tx3AWfuQD40BM01QwB2OPv9HaFTb
-         rooLMvBS0mjgSRCY5QAILom095FhIaEzESat2y+ekSOmsA0y4CAsF8egSo6KLmH8Haog
-         404bcoMo4u9Urrzat1IX6tEuza/uWfXLmq0qvH71UAaQIELT+cfcZmdlz2PK03+aDYh4
-         iOZj4LDJ7cNhA9xXwQGS2IymAgw+ZFXchQ2tx1tD70OBFkI5NLwPuz9VonvYA0SQbqrY
-         XVpbtI+DnW+lLJcRhpfhUUXwIxNTMrn1UEX8D2mK75UAdrzguWJeqGeTUKjBLMV6/yqw
-         ruNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779867377; x=1780472177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UIF0+8LpPnndTQYvbVkGYrOCYND9z39MVrZ8YaX2YH8=;
-        b=lkOhbjF0D2lRZfU2M4WOa3NSy5tEtp1/B2R1TbbHVG/I/1ItHWkJxmaXUccygc1+OO
-         tOohxVaJX+IYVdiWewGbO3rfied+uTQgobOCTiUqSy132a06Cq0iaokwIS3jHuAUcB+5
-         hPAUV62/53p0O4+dF1W/WRfK7RlnBm79zfBO+x24V8ydLV/0IJbo5GUciO1jREaCFbJW
-         ec2vun+w8XV+lKwycleoCR52Evq6fn2ZPCkyomWO/ol0aw3+doGkJoahDkMZPzDyH7Jj
-         QcV9jM4cGerpLhYn+u+TCfqDInZHRuT98SkUQpQbxrzdILcHoXtaWxRtpWebVFN23phf
-         Jegg==
-X-Forwarded-Encrypted: i=1; AFNElJ9l84GGgh9tvZK07Ih+BL2VyEfjgxPi9sFG8fPFpXCUYfQxO6shVcNmW9pQ/8TAzw+IPuk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwexmxIEm+obNdYf8eOYGfuHSvPjIt7XwwImPLKDl8t/Yp1znW
-	BzNfPsJleD9n9q9ElYcCZ+EZkyvN18NwfIJOuLk4t+G0IzXwL0I5OeQnvviFJA==
-X-Gm-Gg: Acq92OH9Cm4m7cLemZx6+d19t2RjLGzjfrMWgXoPiwc2WqTZ9A3+KTgMI34nN4kGF7/
-	wR/Sbtd+8xuh43vhtbWtfj8/YctlbZ7oyV/Kmj4x4wuZsFAfPsu7yxwv9wVR2bnM8TOd805xfwh
-	qnYWl5zzlglV3XV+4iTAldWsoodtrhe+wmHkquRWa62exh92owGSrHq3tE7XQ/DBDqCJNpiVtAt
-	rlsBeHLi8MQhB5TyOeVghXemv2RCAtyRowaMldLTZFmU4y2bBriqRcHUr9xZYjO+vcJ08MI/IN9
-	0KXiz7XvkAR+3YXnXwBHSzQ7BjTNouqJhNcdAxRfLzlQzT0Y7yIbNJN1Uxk0VYjL2RmdUNKEYu5
-	GbZr/5BB0s11z+HqL6LApcFteeqlmlxxv3qgjZO95zP1gX6Hsc5pwMAcR0zIogIrwMMVLAGw5Oj
-	k90tKcZ4X4dQDIFTs=
-X-Received: by 2002:a05:600c:8b84:b0:490:5466:8576 with SMTP id 5b1f17b1804b1-490546689a7mr333011325e9.1.1779867376895;
-        Wed, 27 May 2026 00:36:16 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4904526ca21sm369643295e9.3.2026.05.27.00.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 00:36:16 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 27 May 2026 09:36:14 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: Gyokhan Kochmarla <gyokhan@amazon.de>, bpf@vger.kernel.org,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [PATCH 6.12] x86/fgraph: Fix return_to_handler regs.rsp value
-Message-ID: <ahae7nkLYjXinDRZ@krava>
-References: <20260526192324.79459-1-gyokhan@amazon.de>
- <20260526195008.897721F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4lRRXRH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA511F000E9;
+	Wed, 27 May 2026 07:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779867529;
+	bh=moBN3GrtjHAhIVhdHLFUyecY8ypcxSI1iGvi0iaI0Vo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=G4lRRXRHg+FOCfpsKaxZaYJl+4GIlVy8ZlBx1CI1XIOb8RqUe5TkBKrROWAXXz4tH
+	 SBKclKS4BL6bq1KwtDTLyumC4F0RatlheWnO7HuljUVdI7CW/W0VStwxz+5H/+hQ63
+	 WB/aPFcKhINMcFnl+LhOmrYaWemFrNnOTNtwxE6X0833dLvD3mJPgbQNCRwYDFYaLO
+	 Q3XnBTWwOM8UJEAptyrp7AD3uJsCrln4ZVMWh1H7V2wAvR3vTEHxN8XFq2DiVmBTuk
+	 hQFJoorjhkV7/N2IS9SHpg3COV1p9YkI6D9WOGXFtC7LkZWEL/cJdfP4COfQ7L7u9o
+	 qpU5HAC6V+npw==
+Message-ID: <80dc574b-f2da-4f04-8bc8-1b0793b1f296@kernel.org>
+Date: Wed, 27 May 2026 09:38:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526195008.897721F000E9@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: Simon Schippers <simon@schippers-hamm.de>,
+ =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260508190626.4285fac0@kernel.org>
+ <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
+ <20260510085602.57c7a081@kernel.org>
+ <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
+ <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
+ <b78f002a-8cb9-4857-bf8f-0137e790f644@kernel.org>
+ <873511fa-4316-4411-a76b-ec4c5805abd3@schippers-hamm.de>
+ <18855e57-f050-411f-9958-d4babcc81ba3@kernel.org>
+ <14348957-d061-4124-9bac-45df9cf6686c@schippers-hamm.de>
+ <9a57bb41-114e-492b-9eaa-52237675bb7c@schippers-hamm.de>
+ <4ae9400a-8919-4ffc-8db3-0c334e2aa462@tu-berlin.de>
+ <8e8b877b-a7ce-4b2f-9567-64c8dbb48411@schippers-hamm.de>
+ <463e91cb-6c45-4d91-8737-39779fec5a49@tu-berlin.de>
+ <b1c2d2c1-a70a-4bf4-baff-d0ac2f878722@schippers-hamm.de>
+ <24d10b53-c545-4141-95a5-5c49c35c5d6c@tu-berlin.de>
+ <c5b3a7ef-8ec7-4361-80bb-cf06e910350c@schippers-hamm.de>
+ <d23fd8e0-a0d3-4197-a130-2340d1c28fe0@tu-berlin.de>
+ <e8be86b4-052f-4f4f-9cb9-2fb12d1e8922@schippers-hamm.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <e8be86b4-052f-4f4f-9cb9-2fb12d1e8922@schippers-hamm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 26, 2026 at 07:50:07PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] The `return_to_handler` assembly routine creates a `pt_regs` (or `ftrace_regs`) structure on the kernel stack but only initializes four registers (`rax`, `rdx`, `rbp`, `rsp`), leaving the rest of the structure uninitialized. This partially initialized structure is passed to BPF kretprobe programs, leading to an information leak of kernel stack memory.
-> --
-> 
-> commit ff6f1024b92860971d84c833c6dac53501145715
-> Author: Jiri Olsa <jolsa@kernel.org>
-> 
-> x86/fgraph: Fix return_to_handler regs.rsp value
-> 
-> This commit fixes the unwinding rsp register value in return_to_handler. It 
-> saves the original rsp before the FRAME_SIZE adjustment, replacing the 
-> previous incorrect value. This ensures fprobe and direct unwinders see the 
-> right stack pointer.
-> 
-> Link: https://lore.kernel.org/bpf/20260126211837.472802-2-jolsa@kernel.org
-> 
-> > diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-> > --- a/arch/x86/kernel/ftrace_64.S
-> > +++ b/arch/x86/kernel/ftrace_64.S
-> > @@ -364,6 +364,9 @@ SYM_CODE_START(return_to_handler)
-> >  	UNWIND_HINT_UNDEFINED
-> >  	ANNOTATE_NOENDBR
-> >  
-> > +	/* Store original rsp for pt_regs.sp value. */
-> > +	movq %rsp, %rdi
-> > +
-> >  	/* Restore return_to_handler value that got eaten by previous ret instruction. */
-> >  	subq $8, %rsp
-> >  	UNWIND_HINT_FUNC
-> > @@ -374,7 +377,7 @@ SYM_CODE_START(return_to_handler)
-> >  	movq %rax, RAX(%rsp)
-> >  	movq %rdx, RDX(%rsp)
-> >  	movq %rbp, RBP(%rsp)
-> > -	movq %rsp, RSP(%rsp)
-> > +	movq %rdi, RSP(%rsp)
-> 
-> [Severity: High]
-> This is a pre-existing issue, but could this code leak kernel stack memory
-> to BPF programs?
-> 
-> This assembly creates a pt_regs structure on the stack by allocating
-> FRAME_SIZE bytes, but only explicitly saves rax, rdx, rbp, and rsp. Later in
-> ftrace_return_to_handler and arch_ftrace_partial_regs, only a few additional
-> fields are populated.
-> 
-> The remaining fields (like rdi, rsi, rbx, and r12-r15) remain uninitialized.
-> 
-> Because this partially initialized pt_regs structure is passed to BPF
-> kprobe_multi return programs via kprobe_multi_link_exit_handler(), and the
-> BPF verifier allows reading any field of the pt_regs context, does this
-> allow BPF programs to extract residual kernel stack data?
 
-I think because kprobe/bpf is root only, it's not really an issue,
-cc-ing Steven and Masami
 
-jirka
+On 26/05/2026 17.07, Simon Schippers wrote:
+> On 5/26/26 16:55, Jonas Köppeler wrote:
+>> On 5/26/26 4:35 PM, Simon Schippers wrote:
+>>> On 5/26/26 11:54, Jonas Köppeler wrote:
+>>>> On 5/23/26 6:09 PM, Simon Schippers wrote:
+>>>>> On 5/22/26 18:26, Jonas Köppeler wrote:
+>>>>>> On 5/22/26 10:41, Simon Schippers wrote:
+>>>>>>> On 5/22/26 09:14, Jonas Köppeler wrote:
+>>>>>>>> On 5/19/26 10:51 PM, Simon Schippers wrote:
+>>>>>>>>> On 5/12/26 23:55, Simon Schippers wrote:
+>>>>>>>>>> On 5/12/26 15:54, Jesper Dangaard Brouer wrote:
+>>>>>>>>>>>>> Nope, I'm using a bpftrace program to keep track of the inflight/limit
+>>>>>>>>>>>>> in a BPF hashmap.  Reading from /sys will not be accurate.
+>>>>>>>>>>>> Ah nice.
+>>>>>>>>>>> Add the option --hist to have both NAPI and BQL histograms printed when
+>>>>>>>>>>> script ends.  This will give you an accurate pattern of how inflight and
+>>>>>>>>>>> limit evolves.
+>>>>>>>>>>>
+>>>>>>>>>>>>> I moved the selftests into a github repo [1] to allow us to collaborate
+>>>>>>>>>>>>> and evaluate the changes more easily.  I explicitly kept the new BPF
+>>>>>>>>>>>>> based BQL tracking as a commit[2] for your benefit.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>        [1] https://github.com/netoptimizer/veth-backpressure-performance-testing/tree/main/selftests
+
+[... cut ...]
+
+>>>
+>>> I will wait for your new measurements, but there is no argument
+>>> against a default tx-usecs of ~100us for now, right?
+>> Yes, I think 100us is perfectly fine. I guess most of it was
+>> just my curiosity why the latency values are as they are 🙂
+> Which is great, because I was wondering the same 🙂
+> 
+
+Thank you Jonas and Simon for testing this via[1] on your systems.
+
+One performance concern from my side is if/when BQL limit goes below 8
+packets. This will cause cache-line bouncing and many qdisc requeues
+between the two CPUs.  Notice that 8 packets for the ptr_ring is one
+cache-line. This is why I suggested defaulting BQL min_limit to be 8.
+This would work in combination with the tx-usecs coalesce tuning as a
+lower bound.
+
+
+>> But it feels like this will need some documentation, because
+>> as we have seen, some values are a little different
+>> from what you expect from bql. Inflight > veth_ring_size,
+>> tx-usecs not necessarily achieving the configured value,
+>> inflight can get stuck > 0. Wdyt?
+>> But I think it works nicely overall.
+>>
+> Exactly, we should get ready for a v6 soon.
+>
+
+I want to send out a V6 today (and I'm busy rest of week).
+I'm simply going to include Simon's patch[2]. Then we can iterate on
+that email thread, making it easier for people to reply inline to the
+code changes.
+
+[2] 
+https://lore.kernel.org/all/9a57bb41-114e-492b-9eaa-52237675bb7c@schippers-hamm.de/
+
+> And I think we should move the BQL logic into a seperate .h file
+> as a library. Then it is also usable for TUN/TAP in the future.
+> 
+
+I like the idea, but refactoring into a library seems out-of-scope for
+this patchset.  As a first step, let us see if this works for veth
+driver use-case.  I do encourage Simon to refactor when doing the work
+for TUN/TAP in the future.
+
+Alternatively netdev maintainers can choose to apply V5 patchset and we
+can iterate on finding the right ethtool coalesce parameters for veth
+and create a .h "library" file for this.
+
+
+> Let's amend the commits. Should we do this on Github?
+
+Kernel development for netdev [3] happens on the mailing list with 
+patches via email.
+
+--Jesper
+
+[3] https://kernel.org/doc/html/latest/process/maintainer-netdev.html
+
