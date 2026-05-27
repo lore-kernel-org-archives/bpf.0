@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBF93F0761;
-	Wed, 27 May 2026 11:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D413F0761;
+	Wed, 27 May 2026 11:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779882153; cv=none; b=GIVqYuXmkE5MUpU0+jTgcECH1u0ZwTq/gSNa3dJmbNgHfndPrQ6VepD4G/pl7p7xT+KCtnA9dtIy9d2ddGgD8YTdPM7MC5BHoYzrLLPJ8fk/XlGk5BnxRNhDmxLtxpzNjPmMzD0H+C1lQHDHHAJU60OFov+V495PnbOFK2WQ0gw=
+	t=1779882164; cv=none; b=AcpWeMNKJ+jvj5NApy0mdyvHBs7gVSOyN+ORV5TDvekDZ0B/vap/W6IGf4cSJvDPXtQYW30LO4gUYnnbXcgapEc5iQIS/SxwzHp6QyYBKCs35ww8tacck0+RXjA+YyPULNXLF4K8HCrAHmZY37O1f1FCDoQ0qdm0ipNCTIS9ORE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779882153; c=relaxed/simple;
-	bh=8EThdworY8pZNmeokJJjPqlExmja2MmTz9le5RRr4G0=;
+	s=arc-20240116; t=1779882164; c=relaxed/simple;
+	bh=yMLqmEXHC0sdDBPujGsSLTkyLRnXC1/zElMoTq6QvBE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KegdRZbN4mnu7+thC3SRkIOWEtmYnDdWbOSzUIpjHqIdTRyjyjp+mdQcghfBgSp5+m2Qjqq57OT09pT10BUozwZF/VSzcb42cTDKX9hj5/HJlSxCV4p0hEFmltlw33B9/UkXxbor622qv+NlfZRrjcEYdut9YlQnUh/i265U3ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d5kG2dOx; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=kwrocBXII8dckvVxtq8XCjElU4v4TVDv9vH+kP2idFxWf+24QKP4Zahxg8oODRwzR1IeRz2eZ8QRowtbZpFMofq+5pPs+qTk8PU7p3CYlmp6PbtLPmrX9anUikfU5tfX6LqX1HU/vQBewxW6pYIvIFzNYSdSB4MbELhH6368Mwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFFcSeIx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d5kG2dOx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687271F00A3A;
-	Wed, 27 May 2026 11:42:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFFcSeIx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A9D1F00A3A;
+	Wed, 27 May 2026 11:42:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779882150;
-	bh=GyPBhBrJDtBJH0uIIzXfsk8eBGPocOS2VQuaPZsdaCc=;
+	s=k20260515; t=1779882160;
+	bh=zTl5PLRkQaaDm0p8umWBg0nDf5hzuIcpdQTFkKyCGsU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=d5kG2dOx8Y0U+AKYztsGqwQWnoGlkHNOWKxAimnIe9+SEM0/qwCXYB6JDN9n8mAkB
-	 XGCqYBHx/OhkHqu0MALIL3cKWS/UiQ7pPgyCfyQlEL6DqN9Vq3tctcp2zDBQmngrHS
-	 gRG+6swbvI2rNb//gA+3EVS9T2Ok2zOBmwK/jm1/NsgV/KLS8DMZPZflvKZuWqulLR
-	 OgcCQe9Rcg6s9hkAnXydoX27CuGVSHFO1mEIS44s0EOZQ/nHa9Fv0WwjmYNtwRrypR
-	 VQ6ldrJnuwHqU0qb127eaUOey5VAqPRz9StMLBT83SCosmgKyr8QEtRweR/VZLtbBs
-	 mQyr0Mt4+r7eg==
+	b=IFFcSeIxHnVh9H5kYNrYp4LOjcKG7PxjALGVjQGFDSvmanZkhp/1IM5Uz0uwgHWPB
+	 eLER2yxzEGJsgDBO6NLIfay/xuZl3bEgDgohYHadw3Up1e59aDlJbcQd1shgvdtau4
+	 hOZBJsQ7tofNJDrj6HggSQRpw285C+mhUXpKufTbO6j3HxqVXNFdHeKEtT31aEXc3R
+	 CKICdTd10764tT7GhiXIQrjpsQe4W+uAnR8Rb5Y+H8nt6b+Ul0LVNWKEN8QFS+BUfc
+	 2W+Cy4GBsvhlyg1f3YtiJ4t7sUXHf8bPbp66ZantfZiJC/wcNY8h8JqOVQPbq0E0bR
+	 bt50pxmQSqj6A==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv6 bpf-next 14/29] bpf: Add support for tracing_multi link cookies
-Date: Wed, 27 May 2026 13:39:36 +0200
-Message-ID: <20260527113951.46265-15-jolsa@kernel.org>
+Subject: [PATCHv6 bpf-next 15/29] bpf: Add support for tracing_multi link session
+Date: Wed, 27 May 2026 13:39:37 +0200
+Message-ID: <20260527113951.46265-16-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260527113951.46265-1-jolsa@kernel.org>
 References: <20260527113951.46265-1-jolsa@kernel.org>
@@ -52,93 +52,306 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support to specify cookies for tracing_multi link.
+Adding support to use session attachment with tracing_multi link.
 
-Cookies are provided in array where each value is paired with provided
-BTF ID value with the same array index.
+Adding new BPF_TRACE_FSESSION_MULTI program attach type, that follows
+the BPF_TRACE_FSESSION behaviour but on the tracing_multi link.
 
-Such cookie can be retrieved by bpf program with bpf_get_attach_cookie
-helper call.
+Such program is called on entry and exit of the attached function
+and allows to pass cookie value from entry to exit execution.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h            |  1 +
+ include/linux/bpf.h            |  6 ++++-
  include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/trampoline.c        |  1 +
- kernel/trace/bpf_trace.c       | 18 ++++++++++++++++++
+ kernel/bpf/fixups.c            |  1 +
+ kernel/bpf/syscall.c           |  1 +
+ kernel/bpf/trampoline.c        | 44 +++++++++++++++++++++++++++-------
+ kernel/bpf/verifier.c          | 19 +++++++++++----
+ kernel/trace/bpf_trace.c       | 15 +++++++++++-
+ net/bpf/test_run.c             |  1 +
  tools/include/uapi/linux/bpf.h |  1 +
- 5 files changed, 22 insertions(+)
+ tools/lib/bpf/libbpf.c         |  1 +
+ 10 files changed, 75 insertions(+), 15 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 93a94669ca90..03d4ce0ef93e 100644
+index 03d4ce0ef93e..ec94ac687728 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1951,6 +1951,7 @@ struct bpf_tracing_multi_data {
- struct bpf_tracing_multi_link {
+@@ -1952,6 +1952,7 @@ struct bpf_tracing_multi_link {
  	struct bpf_link link;
  	struct bpf_tracing_multi_data data;
-+	u64 *cookies;
+ 	u64 *cookies;
++	struct bpf_tramp_node *fexits;
  	int nodes_cnt;
  	struct bpf_tracing_multi_node nodes[] __counted_by(nodes_cnt);
  };
+@@ -2139,7 +2140,8 @@ static inline void bpf_prog_put_recursion_context(struct bpf_prog *prog)
+ 
+ static inline bool is_tracing_multi(enum bpf_attach_type type)
+ {
+-	return type == BPF_TRACE_FENTRY_MULTI || type == BPF_TRACE_FEXIT_MULTI;
++	return type == BPF_TRACE_FENTRY_MULTI || type == BPF_TRACE_FEXIT_MULTI ||
++	       type == BPF_TRACE_FSESSION_MULTI;
+ }
+ 
+ #if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL)
+@@ -2266,6 +2268,8 @@ static inline int bpf_fsession_cnt(struct bpf_tramp_nodes *nodes)
+ 	for (int i = 0; i < nodes[BPF_TRAMP_FENTRY].nr_nodes; i++) {
+ 		if (fentries.nodes[i]->link->prog->expected_attach_type == BPF_TRACE_FSESSION)
+ 			cnt++;
++		if (fentries.nodes[i]->link->prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI)
++			cnt++;
+ 	}
+ 
+ 	return cnt;
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 951a0122baaf..39407a77133b 100644
+index 39407a77133b..b49bed575ce3 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -1874,6 +1874,7 @@ union bpf_attr {
- 			} cgroup;
- 			struct {
- 				__aligned_u64	ids;
-+				__aligned_u64	cookies;
- 				__u32		cnt;
- 			} tracing_multi;
- 		};
+@@ -1157,6 +1157,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FSESSION,
+ 	BPF_TRACE_FENTRY_MULTI,
+ 	BPF_TRACE_FEXIT_MULTI,
++	BPF_TRACE_FSESSION_MULTI,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 1d4ea0beb076..a6ff666dc7dc 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -2187,6 +2187,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			if (eatype == BPF_TRACE_FEXIT ||
+ 			    eatype == BPF_TRACE_FSESSION ||
+ 			    eatype == BPF_TRACE_FEXIT_MULTI ||
++			    eatype == BPF_TRACE_FSESSION_MULTI ||
+ 			    eatype == BPF_MODIFY_RETURN) {
+ 				/* Load nr_args from ctx - 8 */
+ 				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 8fcdcb3c4eab..7a1baa367e64 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4454,6 +4454,7 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 	case BPF_TRACE_FENTRY:
+ 	case BPF_TRACE_FEXIT:
+ 	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
+ 	case BPF_TRACE_FENTRY_MULTI:
+ 	case BPF_TRACE_FEXIT_MULTI:
+ 	case BPF_MODIFY_RETURN:
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 476b7db3a809..acccf52f6792 100644
+index acccf52f6792..400b826eb2e1 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -1613,6 +1613,7 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+@@ -183,7 +183,8 @@ bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
+ 	case BPF_PROG_TYPE_TRACING:
+ 		if (eatype == BPF_TRACE_FENTRY || eatype == BPF_TRACE_FEXIT ||
+ 		    eatype == BPF_MODIFY_RETURN || eatype == BPF_TRACE_FSESSION ||
+-		    eatype == BPF_TRACE_FENTRY_MULTI || eatype == BPF_TRACE_FEXIT_MULTI)
++		    eatype == BPF_TRACE_FENTRY_MULTI || eatype == BPF_TRACE_FEXIT_MULTI ||
++		    eatype == BPF_TRACE_FSESSION_MULTI)
+ 			return true;
+ 		return false;
+ 	case BPF_PROG_TYPE_LSM:
+@@ -790,6 +791,7 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+ 	case BPF_TRACE_FEXIT_MULTI:
+ 		return BPF_TRAMP_FEXIT;
+ 	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
+ 		return BPF_TRAMP_FSESSION;
+ 	case BPF_LSM_MAC:
+ 		if (!prog->aux->attach_func_proto->type)
+@@ -822,13 +824,30 @@ static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
+ 	return 0;
+ }
  
- 		mnode->trampoline = tr;
++static struct bpf_tramp_node *fsession_exit(struct bpf_tramp_node *node)
++{
++	if (node->link->type == BPF_LINK_TYPE_TRACING) {
++		struct bpf_tracing_link *link;
++
++		link = container_of(node->link, struct bpf_tracing_link, link.link);
++		return &link->fexit;
++	} else if (node->link->type == BPF_LINK_TYPE_TRACING_MULTI) {
++		struct bpf_tracing_multi_link *link;
++		struct bpf_tracing_multi_node *mnode;
++
++		link = container_of(node->link, struct bpf_tracing_multi_link, link);
++		mnode = container_of(node, struct bpf_tracing_multi_node, node);
++		return &link->fexits[mnode - link->nodes];
++	}
++	return NULL;
++}
++
+ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ 				   struct bpf_tramp_node *node,
+ 				   int cnt)
+ {
+-	struct bpf_tracing_link *tr_link = NULL;
+ 	enum bpf_tramp_prog_type kind;
+-	struct bpf_tramp_node *node_existing;
++	struct bpf_tramp_node *node_existing, *fexit;
+ 	struct hlist_head *prog_list;
+ 
+ 	kind = bpf_attach_type_to_tramp(node->link->prog);
+@@ -853,8 +872,10 @@ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ 	hlist_add_head(&node->tramp_hlist, prog_list);
+ 	if (kind == BPF_TRAMP_FSESSION) {
+ 		tr->progs_cnt[BPF_TRAMP_FENTRY]++;
+-		tr_link = container_of(node, struct bpf_tracing_link, link.node);
+-		hlist_add_head(&tr_link->fexit.tramp_hlist, &tr->progs_hlist[BPF_TRAMP_FEXIT]);
++		fexit = fsession_exit(node);
++		if (WARN_ON_ONCE(!fexit))
++			return -EINVAL;
++		hlist_add_head(&fexit->tramp_hlist, &tr->progs_hlist[BPF_TRAMP_FEXIT]);
+ 		tr->progs_cnt[BPF_TRAMP_FEXIT]++;
+ 	} else {
+ 		tr->progs_cnt[kind]++;
+@@ -865,13 +886,15 @@ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ static void bpf_trampoline_remove_prog(struct bpf_trampoline *tr,
+ 				       struct bpf_tramp_node *node)
+ {
+-	struct bpf_tracing_link *tr_link;
+ 	enum bpf_tramp_prog_type kind;
++	struct bpf_tramp_node *fexit;
+ 
+ 	kind = bpf_attach_type_to_tramp(node->link->prog);
+ 	if (kind == BPF_TRAMP_FSESSION) {
+-		tr_link = container_of(node, struct bpf_tracing_link, link.node);
+-		hlist_del_init(&tr_link->fexit.tramp_hlist);
++		fexit = fsession_exit(node);
++		if (WARN_ON_ONCE(!fexit))
++			return;
++		hlist_del_init(&fexit->tramp_hlist);
+ 		tr->progs_cnt[BPF_TRAMP_FEXIT]--;
+ 		kind = BPF_TRAMP_FENTRY;
+ 	}
+@@ -1615,6 +1638,11 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
  		mnode->node.link = &link->link;
-+		mnode->node.cookie = link->cookies ? link->cookies[i] : 0;
+ 		mnode->node.cookie = link->cookies ? link->cookies[i] : 0;
  
++		if (prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) {
++			link->fexits[i].link = &link->link;
++			link->fexits[i].cookie = link->cookies ? link->cookies[i] : 0;
++		}
++
  		cond_resched();
  	}
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index dca756034458..e2e34cc96133 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16458,6 +16458,7 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
+ 		case BPF_TRACE_FSESSION:
+ 		case BPF_TRACE_FENTRY_MULTI:
+ 		case BPF_TRACE_FEXIT_MULTI:
++		case BPF_TRACE_FSESSION_MULTI:
+ 			*range = retval_range(0, 0);
+ 			break;
+ 		case BPF_TRACE_RAW_TP:
+@@ -19017,7 +19018,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		     tgt_prog->expected_attach_type == BPF_TRACE_FEXIT ||
+ 		     tgt_prog->expected_attach_type == BPF_TRACE_FENTRY_MULTI ||
+ 		     tgt_prog->expected_attach_type == BPF_TRACE_FEXIT_MULTI ||
+-		     tgt_prog->expected_attach_type == BPF_TRACE_FSESSION)) {
++		     tgt_prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		     tgt_prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI)) {
+ 			/* Program extensions can extend all program types
+ 			 * except fentry/fexit. The reason is the following.
+ 			 * The fentry/fexit programs are used for performance
+@@ -19123,9 +19125,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 	case BPF_TRACE_FENTRY:
+ 	case BPF_TRACE_FEXIT:
+ 	case BPF_TRACE_FSESSION:
++	case BPF_TRACE_FSESSION_MULTI:
+ 	case BPF_TRACE_FENTRY_MULTI:
+ 	case BPF_TRACE_FEXIT_MULTI:
+-		if (prog->expected_attach_type == BPF_TRACE_FSESSION &&
++		if ((prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		    prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) &&
+ 		    !bpf_jit_supports_fsession()) {
+ 			bpf_log(log, "JIT does not support fsession\n");
+ 			return -EOPNOTSUPP;
+@@ -19364,6 +19368,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		return -EINVAL;
+ 	} else if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
+ 		   prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		   prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI ||
+ 		   prog->expected_attach_type == BPF_MODIFY_RETURN) &&
+ 		   btf_id_set_contains(&noreturn_deny, btf_id)) {
+ 		verbose(env, "Attaching fexit/fsession/fmod_ret to __noreturn function '%s' is rejected.\n",
+@@ -19403,7 +19408,8 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+ 		return -EINVAL;
+ 
+ 	/* Check noreturn attachment. */
+-	if (prog->expected_attach_type == BPF_TRACE_FEXIT_MULTI &&
++	if ((prog->expected_attach_type == BPF_TRACE_FEXIT_MULTI ||
++	     prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) &&
+ 	     btf_id_set_contains(&noreturn_deny, btf_id))
+ 		return -EINVAL;
+ 
+@@ -19683,7 +19689,9 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
+ 		*cnt = 1;
+ 	} else if (desc->func_id == special_kfunc_list[KF_bpf_session_is_return] &&
+-		   env->prog->expected_attach_type == BPF_TRACE_FSESSION) {
++		   (env->prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		    env->prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI)) {
++
+ 		/*
+ 		 * inline the bpf_session_is_return() for fsession:
+ 		 *   bool bpf_session_is_return(void *ctx)
+@@ -19696,7 +19704,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[2] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1);
+ 		*cnt = 3;
+ 	} else if (desc->func_id == special_kfunc_list[KF_bpf_session_cookie] &&
+-		   env->prog->expected_attach_type == BPF_TRACE_FSESSION) {
++		   (env->prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		    env->prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI)) {
+ 		/*
+ 		 * inline bpf_session_cookie() for fsession:
+ 		 *   __u64 *bpf_session_cookie(void *ctx)
 diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 7cf22d69a1e1..6639751fab08 100644
+index 6639751fab08..1a4d026d5d0c 100644
 --- a/kernel/trace/bpf_trace.c
 +++ b/kernel/trace/bpf_trace.c
-@@ -3659,6 +3659,7 @@ static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
+@@ -1334,7 +1334,8 @@ static inline bool is_uprobe_session(const struct bpf_prog *prog)
+ static inline bool is_trace_fsession(const struct bpf_prog *prog)
+ {
+ 	return prog->type == BPF_PROG_TYPE_TRACING &&
+-	       prog->expected_attach_type == BPF_TRACE_FSESSION;
++	       (prog->expected_attach_type == BPF_TRACE_FSESSION ||
++		prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI);
+ }
+ 
+ static const struct bpf_func_proto *
+@@ -3659,6 +3660,7 @@ static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
  	struct bpf_tracing_multi_link *tr_link =
  		container_of(link, struct bpf_tracing_multi_link, link);
  
-+	kvfree(tr_link->cookies);
++	kvfree(tr_link->fexits);
+ 	kvfree(tr_link->cookies);
  	kvfree(tr_link);
  }
- 
-@@ -3701,6 +3702,8 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+@@ -3700,6 +3702,7 @@ static int check_dup_ids(u32 *ids, u32 cnt)
+ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+ {
  	struct bpf_tracing_multi_link *link = NULL;
++	struct bpf_tramp_node *fexits = NULL;
  	struct bpf_link_primer link_primer;
  	u32 cnt, *ids = NULL;
-+	u64 __user *ucookies;
-+	u64 *cookies = NULL;
- 	u32 __user *uids;
- 	int err;
+ 	u64 __user *ucookies;
+@@ -3743,6 +3746,14 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+ 		}
+ 	}
  
-@@ -3727,6 +3730,19 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
- 	if (err)
- 		goto error;
- 
-+	ucookies = u64_to_user_ptr(attr->link_create.tracing_multi.cookies);
-+	if (ucookies) {
-+		cookies = kvmalloc_objs(*cookies, cnt);
-+		if (!cookies) {
++	if (prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI) {
++		fexits = kvmalloc_objs(*fexits, cnt);
++		if (!fexits) {
 +			err = -ENOMEM;
-+			goto error;
-+		}
-+		if (copy_from_user(cookies, ucookies, cnt * sizeof(*cookies))) {
-+			err = -EFAULT;
 +			goto error;
 +		}
 +	}
@@ -146,34 +359,58 @@ index 7cf22d69a1e1..6639751fab08 100644
  	link = kvzalloc_flex(*link, nodes, cnt);
  	if (!link) {
  		err = -ENOMEM;
-@@ -3741,6 +3757,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
- 		goto error;
+@@ -3758,6 +3769,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
  
  	link->nodes_cnt = cnt;
-+	link->cookies = cookies;
+ 	link->cookies = cookies;
++	link->fexits = fexits;
  
  	err = bpf_trampoline_multi_attach(prog, ids, link);
  	kvfree(ids);
-@@ -3751,6 +3768,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+@@ -3768,6 +3780,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
  	return bpf_link_settle(&link_primer);
  
  error:
-+	kvfree(cookies);
++	kvfree(fexits);
+ 	kvfree(cookies);
  	kvfree(ids);
  	kvfree(link);
- 	return err;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 67769c700cae..a831682ee982 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -705,6 +705,7 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 	case BPF_TRACE_FSESSION:
+ 	case BPF_TRACE_FENTRY_MULTI:
+ 	case BPF_TRACE_FEXIT_MULTI:
++	case BPF_TRACE_FSESSION_MULTI:
+ 		if (bpf_fentry_test1(1) != 2 ||
+ 		    bpf_fentry_test2(2, 3) != 5 ||
+ 		    bpf_fentry_test3(4, 5, 6) != 15 ||
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 951a0122baaf..39407a77133b 100644
+index 39407a77133b..b49bed575ce3 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -1874,6 +1874,7 @@ union bpf_attr {
- 			} cgroup;
- 			struct {
- 				__aligned_u64	ids;
-+				__aligned_u64	cookies;
- 				__u32		cnt;
- 			} tracing_multi;
- 		};
+@@ -1157,6 +1157,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FSESSION,
+ 	BPF_TRACE_FENTRY_MULTI,
+ 	BPF_TRACE_FEXIT_MULTI,
++	BPF_TRACE_FSESSION_MULTI,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7b99737590d1..2f5ac3e91d21 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -138,6 +138,7 @@ static const char * const attach_type_name[] = {
+ 	[BPF_TRACE_UPROBE_SESSION]	= "trace_uprobe_session",
+ 	[BPF_TRACE_FENTRY_MULTI]	= "trace_fentry_multi",
+ 	[BPF_TRACE_FEXIT_MULTI]		= "trace_fexit_multi",
++	[BPF_TRACE_FSESSION_MULTI]	= "trace_fsession_multi",
+ };
+ 
+ static const char * const link_type_name[] = {
 -- 
 2.54.0
 
