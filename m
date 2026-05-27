@@ -1,126 +1,119 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E722032FA2C
-	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779891442; cv=none; b=ko6JmyJKSjRD7Hlp8uNeF8mzlDtcPkHzJ/Dv/+Sg//DlhWH9NLq+pUFgmD17wg0MaBaRye1qLLYtIZicA5ZkS0ucMteFgEb5Yod4boZjQL7fRr2HFXk5ZdQNClLmkgURCiTWZr/w+xnqy6ue0axEFBg0kfOltcrCOpBrTsZd3A0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779891442; c=relaxed/simple;
-	bh=GqkBkA0ux+YD7JioYqk+V1T0qYPcj0feX93g4HGLcqs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hanNl0yABCcLErhwxVhASxqP/X/h3fdizAyszWifwpcEn9dWA5+rPuSw0OYBoB3KSvwETKJcQaFxW1U0OmTNey9wb16UQRdHcl93Fsl8bPfTMWKxg/BxqmJzYv3X8jul19t7AOqZDh/zgloXWD3S6SoLfD/I1sFzzlaX2Bzg+tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjSpN2H1; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA72329C7C
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779892074; cv=pass; b=Hyog5xyo4s66lNXy9iQ/C36zH2LUipnCZoj8jPLHSERbuVLRqGBrSH4kh/OsnF6kuzQAwvfq62BWtWFF3pK+KItLgevzTxhH8C81IbEPoBxtQdV0/QAeEgYFU9ZIuQ9hF83mnESi74GW8spSMkCCkESYJAQ83yEJv4KMmxE8/Z0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779892074; c=relaxed/simple;
+	bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WIa/6aF/vxw6HFruxB1ISpS+bPN5tI2/832enCxPXwuZ8EdEdsdOSMi4IyKFV/W9OtK1uR/LFPDHYxYU0U2o/HwYR7hC3wv2t+GiOxLfclkXuItJ1zGQN6VJZw/lQa6UXjSNTUfO4Q6qF1aM7qGSoNWraVMyoVrkuju3eSRALn4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uoK+JU+u; arc=pass smtp.client-ip=74.125.224.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjSpN2H1"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7de4be15125so11285453a34.0
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:17:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uoK+JU+u"
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-65c37eafcbeso12411728d50.1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:27:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779892072; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UFnCneTC7opsPORTaNEMR6cPHZZueapE2LSEyVi1WPioGSFDcuy4KSm3HwaCvuZ/fd
+         z/18xJvSuP+NmU+vpGfmvJ1qYrG+vZqoydGDHJA/YbuusVsFPWTZc1T05j+a8fAebl0M
+         edsnWj5AVxIM+MvH2oy6PhokCtyeJ4rvWtPBnqXhguzrrJBTYidwvhk4mEgn+ZiNy3dO
+         gZ8QTQL6J9ow3xkfubbNeY3rZavOC3uazSdMAEvZ10G6nB218IEXwMhKinKoiDHXR/61
+         rhmd0N2bXC56eYPRNcHaENrF1TguQsQW6OjKWTf2ovlOLQ6P1wn0UuvzW9Gi9EC0N0k+
+         ChrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=kU6dcguiKYgST0n992G7A+z4JNJJrso7rx4n+78HsrmaYHK+5Yu7Nk2mC4A3v7oVhL
+         PgiicoMAOVSGESE/UX+4RSGFNTkMhonw4RbRqOVlg0zDhuQrV7X+HVMcCpwky7EbTHHS
+         QBxzY+ZH/ll+GVs0m8ndzp7+2WSaY/df/dvxeIZa0wYBxiKEa4myaMPqsBGpekGLxU1f
+         jCz9/pV6k293wmAsTyO+IbH0PXdGnl4bQbV01wJEiixF0BVQqEHE9cBpQBVDWjiwQ8w6
+         /saFoElOQtgDoOkrTQAVlrg0hhSKxjH340zca2Y+3UlRh53oSvKRq7pLcSA4VDjyimuW
+         49Vw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779891440; x=1780496240; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1779892072; x=1780496872; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/jshKEkryiFgJPhBjTFxZ1Zd5Ycopkm0kpYznZELan4=;
-        b=VjSpN2H1vYnAC0Pgzom7GVsB3XVz28KFpb9juBqVY8H8SMiy9Og3a1KX0BtN4fvugK
-         C+BYhlkR1N4YghXdNTSSv4vBd3vVhc135+FDmthcczhfNSvsvymCWzqwkwSmpgBl8t51
-         UT+9lluGRrBGVJvHBXgHWlCeOyxoSvJsPnOuw7Bi8Sp2Sxm/d3k4rV2GpeGFGaH/YdvO
-         XKOniFD7vJcsjqf8y4sgz0BSswAMeDa6148D7qlqFnK3qGr32k2bn/XtQKTru5JIHWUJ
-         gJIGCyS713JO3zjaoJFg7s8h3VA5QKRgiH9mUPrG/eZGzFpWISOm8Ns5xZiuZ1ERhnLm
-         odTw==
+        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
+        b=uoK+JU+u98wD/2vfXB8KvWwRDVSvYpXoprUr2xCmN/vyogPWI+UnkR5aa5CLF/DFWr
+         A6Qnm/cwri5an+9UCnpQSX2qqWIHMvJYCg3ip9zevkVA1QgcW1/Ll+rzD6YsK/RVC/lB
+         WmJ8CzNvouxNMLPf+R7+4ki14V1dNIDsODU3mwAhLOWER2IpZUTiPtd579lvSIpANQor
+         nqo/EWvZH7lwnkETVWGdowcdCGPjwHrPCz2UUxBLU0AckCOjS/ezOBdPlMU/wqnn6O0N
+         wCAZhC1/zOndM/nwh2QnuPVbgbGctIWrBJ7QIB7ycjKd36ZI9ylwfi2EJizJ1h7QmrB7
+         JkCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779891440; x=1780496240;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/jshKEkryiFgJPhBjTFxZ1Zd5Ycopkm0kpYznZELan4=;
-        b=Yr9KjpZdcmpKmPsd1ybpxqsvgjUQ6Ijlil8bPOkG+ZO/MYlMGrRRJ6Jqg0CQBQcCwF
-         lD2tozR/uykEvcyF1cp47s7KgYqRRDRS7yLNh0+468dNArkjNp+nGO95o7CZIrzu37sV
-         1MZ6O81d2uDo6a7EujdKLL+9tEXlzLhEudj/vxVoynW7fE8XWlk6rEsGLz7mZC2LUQOT
-         31xcA15+blKudv4Xw6nAiDbmHpT/SP9NXil9wLVkCMTychKYIjXIaO46n01802gNF9D3
-         SS6O/V+1HpUvStDr6ftyeK4kVK8pLPc0v8YPM1Q6+/QM5Jq3QY7pWxobnDekAig5o+vf
-         pR8w==
-X-Gm-Message-State: AOJu0YxoJEjJaxYT0lT2IEPk8w9zks/7VDXy8hBTfBCiEC2bW+dsORXM
-	2MLy5+AAP+lTLiAa3mi2xJQ7/cwwemBCX/n9MH0o/Wf4reZoufrJXDzB
-X-Gm-Gg: Acq92OHHyhXuEeaCYwvvadjFRQUZmc08bWj0GkMrJh+qghJ+JcyI3LYT+6LtrRfLskF
-	TIN4qGmWYlgnpLtAHPR2IewEYtAmELzcixvwW7joDIgsJiYvf5bsvRg3rXrzCsGjCDUsNEBmfls
-	lsGzv2/PAE8tR7CB65CCDb243DhT3/4JeqdXbSGm6EpYrkwrct6fRc5KCVJVQitEUyBiknqwRr3
-	z1FO5jfP/Gp3fpXQ37QX/ik4Jn/LLr8Wx5xeMGpjkhA3vqwiRXET/di51aqVzqA0UUPglve9Sli
-	g7LSachX5rtmqDqRyz/MD10zw7l/vioKwqbsLl3v4GE7BMLxlDIYktAskRmJcjwv848ru2q6VDw
-	76PXYqSpXyxZyWhsUWE3cTfmjZsgwep0iXfrSYr739l5xlQAqYWwlbt5d45zcqixZ9v7oxc/8mi
-	AG+WZ5nL2H30a/Pu8bEvCl9MGz7XTV4nBXT0X1KDzlO17S0YxuhkHvMsHfpB14Ul+EoG79Rrn9w
-	YvsJ5UsICNDJyK9Tg==
-X-Received: by 2002:a05:6830:61c6:b0:7d7:f146:8738 with SMTP id 46e09a7af769-7e5fee5ec6cmr15466189a34.12.1779891439617;
-        Wed, 27 May 2026 07:17:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:72::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e60667af4csm11732221a34.27.2026.05.27.07.17.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2026 07:17:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779892072; x=1780496872;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ve1GxgwUJDqrHgI4wen/u+LK8bDh1//NcndXCcpRWVo=;
+        b=MgkrhgN5GtSoxjMQ//lhWMmk9F54qCgw2oE2szflsIt1BHcvOSm6/ZDhyYtwWzDtvc
+         FmwvOQXbGaUucYpgTFTuouQMZKSUBHsW9A0qS1NFpPqabpUtZCdN/2MWHddAzhkkPZ2h
+         /LWkBQb+R+QdUEzWZnWnnw+lGqVxXARZxVUVnzsvErhGuN2ZFfOEzvISUeY38PPR3JCB
+         QBilvY8SfFVLwMqXZ2l9XJXPtwjZZnMXwbC6DlbDe7UyAW1omZw75vxuPN2g7r2ErsvX
+         vqHpY30t02faiD0ZMu6o/YOWupUSliGaLKO5bJMcalFzAODh5KMwrfNK0SqzHJcrFk0t
+         HUGg==
+X-Gm-Message-State: AOJu0Yxue90xXYhTFxUvsdaseY7Auu5MgT1zvpVTQtnkZ3ilDtMnzYOu
+	+JeUCGRkooT82lLJLO+42fjTJQivC7e+NBcB93OU1fRznmzsWeZsjehUbSndvoH1Fsg7i81jCh7
+	j18nz1xwq3aJ2Jp9IScOkeoOVLFPPL3154YjEYX5jqjG9XTSLsQVylwvj
+X-Gm-Gg: Acq92OH5rLqiFYj6wXqkQQ40sUZEQUckeV/bLY95fgNUit1S0RArx58EW4lo1PkBwPI
+	A5llNC1ssMstdYqdl3X6KSgycQCFJkTSVXiDt0E/pM9Zsd8xfB3/Zh3rE1ZgbfQqiO3UQuL56iv
+	3ZxkbzBT0sNQax9aUjSrsJMutB/n2vHTI6YhlCj9t3H45GsOygVmwuQPN9hL1lce7mn1NXgN8Dc
+	46iTYVB0Xgv0o0EwsUoK9SMgX4qjnVF+GIE9AzHuWfdMRcf16fHogta0rlMqw7BLkogDeuRZDMj
+	70kfz0dMY8p3ocJG6727Nz7vx70Xar0I2gRTrqmX96c0GRU=
+X-Received: by 2002:a05:690e:44e3:b0:655:aceb:4062 with SMTP id
+ 956f58d0204a3-65ec98196a3mr18160634d50.28.1779892071374; Wed, 27 May 2026
+ 07:27:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
+ <20260527141042.B632E1F000E9@smtp.kernel.org>
+In-Reply-To: <20260527141042.B632E1F000E9@smtp.kernel.org>
+From: Sid Nayyar <sidnayyar@google.com>
+Date: Wed, 27 May 2026 15:27:39 +0100
+X-Gm-Features: AVHnY4LVyxM33KMk2U-BKoGICs3t9VlSWi0yECqbSJyqbPhrzB1u3fMTEGxO1d0
+Message-ID: <CA+OvW8Y4aRCtJR5_84VGPiySto_MvAZQkL1agXRk7j200vbZsw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] libbpf: plumb btf_vmlinux_value_type_id and btf_fd
+ in gen_loader
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 27 May 2026 07:17:17 -0700
-Message-Id: <DITIUUJ1PNU5.26Z6XGZ2GQG2R@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <gprocida@google.com>, <maennich@google.com>, <martin.lau@kernel.org>,
- <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH v4 1/3] libbpf: load vmlinux BTF in gen_loader mode for
- struct_ops
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <sidnayyar@google.com>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <martin.lau@linux.dev>, <memxor@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>
-X-Mailer: aerc
-References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com> <556048bab0cc9bda9a7dfe2d041308d35eed943c9295aeabd69d34414e2a9f4c@mail.kernel.org>
-In-Reply-To: <556048bab0cc9bda9a7dfe2d041308d35eed943c9295aeabd69d34414e2a9f4c@mail.kernel.org>
 
-On Wed May 27, 2026 at 6:39 AM PDT, bot+bpf-ci wrote:
->> commit 29cedaf6d7d80a7e880a2e639f40fbafcbaf2e65
->> Author: Siddharth Nayyar <sidnayyar@google.com>
->> Date:   Wed May 27 12:52:57 2026 +0000
->>
->>     libbpf: load vmlinux BTF in gen_loader mode for struct_ops
->>
->>     During light skeleton generation (`bpftool gen skeleton -L`), libbpf
->>     runs in gen_loader mode. Previously, `bpf_object__load_vmlinux_btf()=
-`
->>     completely bypassed loading the kernel vmlinux BTF (`obj->btf_vmlinu=
-x`)
->>     if `gen_loader` was active.
->>
->>     However, BPF `struct_ops` maps (such as `sched_ext_ops` maps) requir=
-e
->>     resolving the kernel-side struct type IDs and member sizes at
->>     compile/skeleton generation time. Without loading `btf_vmlinux`, lib=
-bpf
->>     cannot query the kernel BTF types, causing light skeleton generation=
- for
->>     `struct_ops` to fail or omit crucial type information.
->>
->>     Fix this by modifying the check to load `btf_vmlinux` even in
->>     `gen_loader` mode if the BPF object contains `struct_ops` maps.
->>
->>     Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+On Wed, May 27, 2026 at 3:10=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Alexei Starovoitov requested in v3 review that a selftest be added to
-> prove struct_ops light skeletons work end-to-end:
+> Thank you for your contribution! Sashiko AI review found 4 potential issu=
+e(s) to consider:
 >
->   "The selftest is mandatory to prove that."
->   https://lore.kernel.org/bpf/CAADnVQ+AA_fmRw7uRwdL2TMyMbpWeebOQKb=3D0wvp=
-KiQR6Ee5xQ@mail.gmail.com/
+> New issues:
+> - [High] The patch truncates the bpf_attr payload, dropping `value_type_b=
+tf_obj_fd`, which breaks module-backed STRUCT_OPS maps in gen_loader.
 >
-> This requirement has not been addressed in v4. Should a selftest be added
-> to demonstrate that struct_ops light skeletons work correctly with this
-> change?
+> Pre-existing issues:
+> - [Critical] Double-close of `inner_map_fd` in the gen_loader cleanup pat=
+h can hijack and close an unrelated file descriptor.
+> - [High] The condition to populate `btf_fd` incorrectly omits `btf_key_ty=
+pe_id`, causing map creation to fail if only a key BTF type is defined.
+> - [High] Memory leak of dynamic arrays `gen->relos`, `gen->ksyms`, and `g=
+en->core_relos` in the error path.
 
-thanks bot.
+There seems to be a lot of feedback to unpack here. I will address
+these concerns and refresh the patch series once I have reviewed them
+and incorporated the required changes.
 
-pw-bot: cr
+Thanks,
+Siddharth Nayyar
