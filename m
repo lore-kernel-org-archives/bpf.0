@@ -1,145 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F5A3E3144;
-	Wed, 27 May 2026 08:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4346036897F
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 09:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779871910; cv=none; b=OPOx11vl4n20Nqukz0DdLWJEHJaWDde8E9y4Q4KnobfxT/RKt8DnenwkkniH9rtjsz+2JMpVWTwaFKkpv7Nt8YC7ci+ixTf2i8jclDsluSP7UN5rDEY6ms2Sih00QlhJrbGBgU54SM35kltNA8CTvZ0zOzjl9WSCjKj80rEktQ4=
+	t=1779872570; cv=none; b=gyIr/Bm5TEojOWVjOpxwXB6DugXy1tHZoKuLIWu8cypbNFnqJCsuFpCEPO0G83bL5hb49x+TjKqOUfpic5kiPQ8h9VhVNMtZiaGgnylMkzB/upt09wHbKbrbuoXwqK1JXrNth5M0ITw+8o5eQsMEOsLKWWMg6ZD1PdIpU/jpASc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779871910; c=relaxed/simple;
-	bh=+hPcOcfHsa8a3ANFA1UCHnJst8TfVpFirCBR15QJVio=;
+	s=arc-20240116; t=1779872570; c=relaxed/simple;
+	bh=xYR8xUC4ltsK0Hbb7ylY58KBSpG5vgwr6CYvDlM0aEY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=snCrvFk/6PNMXyqtjawrfSAn2lQ8EUGRHJiehzK6zgvyHGr1QfxOxttUFjhhmf4wr9VHxRZCgYivo7mePBaDrddxR+dhnOnMO2FcuX2izlJoUjHwocdctYssCIIv6zgAnCcYCKAuJicKpE97jE0xkGlV5TVbu9kHRP7CVsAjmEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4bj/hmQ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=anugf53vxWn9JhEE8vM4PZod64RgTDtL7k9DAmOfwppAjQm6PZJq3Tun/CF73t21gP/4npdp7kCKOiKMoX7zfSFgCPHep+Nl8kidDKFd7l9EBJPXWJsj11cGi5ImgFZc76IbH4+6pTariFVG8FB9O2Xhchpp1d6AGaD5oo2zPRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rj08pxqc; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4bj/hmQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AD71F00A3D;
-	Wed, 27 May 2026 08:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779871908;
-	bh=cw6Hq3fwY9dORsY8hW5a014rXACoZ3Q9ELeTsBjnSJM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=A4bj/hmQa3H0KsSybQA679jZY8C2M2EBxCmGFd4kLjKqsNk3QWKHZjyPK5mXRkcfX
-	 VpWCAte43G/7b72JGRYwED2VJuyypr5CTDlz+B/TBjr+N205H33pNj87fbEH7GjTMD
-	 f4IzoJPCYeB66bnO4D2+DjO3keQikG9pILexzAijVpqCIMzJOir5m7RmSLWK4oBGUx
-	 HpxXjQHd9D1kqOUe/dWA+5FlGHtZur/fBmi1sPvyfdRgQVFYYfU4QdQGQhpaG5w5EU
-	 Y1D1Hds9rZPfYSD7ptH/l2KRCdPsgF384y4fFB2IicC6PJSaekfzn3Pg06DbJM/mVv
-	 ywTh7ch9dWuXw==
-Message-ID: <e4dcfbc8-2666-452c-90b2-25c4b2c50c9f@kernel.org>
-Date: Wed, 27 May 2026 10:51:42 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rj08pxqc"
+Message-ID: <68d25e1a-8c04-4344-afbd-8578e539a35c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779872556;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x+z9Je0o/BScThsTMbGA8H22c+5TSX4Tol/7A2GUp2s=;
+	b=rj08pxqc6zYUZumNtB4CDNkq1Skz2YqEdcnZ6qOrjLRzqT5svoxtF5jDZOhz+TumyZxayF
+	hiQTZTGbYN5RQAo5ZkoBo7U51q5iIocKLopqHmWmt8XVbbrkf5goD4bjNcAki7TVHnlVdZ
+	kFfEBfvkHtgavzOwBjKOuIQ7c/fXTzM=
+Date: Wed, 27 May 2026 17:01:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-To: Christoph Hellwig <hch@lst.de>, Vlastimil Babka <vbabka@kernel.org>,
- Harry Yoo <harry@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Matt Fleming <mfleming@cloudflare.com>,
- kernel-team <kernel-team@cloudflare.com>
-References: <20260527070239.2252948-1-hch@lst.de>
- <20260527070239.2252948-2-hch@lst.de>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
+Subject: Re: [PATCH bpf-next v1] bpf: Use hlist_nulls_replace_rcu() when
+ updating htab elements
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+ luoxuanqiang@kylinos.cn, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
+ <de6652ce9d1367daf217fcb5793419db9d967757b7b7857b00ae1c0c008f46ec@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: luoxuanqiang <xuanqiang.luo@linux.dev>
+In-Reply-To: <de6652ce9d1367daf217fcb5793419db9d967757b7b7857b00ae1c0c008f46ec@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-
-On 27/05/2026 09.02, Christoph Hellwig wrote:
-> The kmem_cache_alloc_bulk return value is weird.  It returns the number
-> of allocated objects, but that must always be 0 or the requested number
-> based on the implementations and the handling in the callers, but that
-> assumption is not actually documented anywhere, which confuses automated
-> review tools.
-> 
-
-I remember, this API behavior was requested by AKPM when I developed
-kmem_cache_alloc_bulk.  I trusted AKPM's decision, but I cannot explain
-why this choice was made.
-
-I kept the netdev code usage below. The current napi_skb_cache_get_bulk
-have a retry logic that assumes that a partial bulk number can be
-returned (which it cannot as Hellwig explains).  Cc Alex/Olek please
-review the changes below as you added this retry logic.
-
-
-> Fix this by returning a bool if the allocation succeeded and adding a
-> kerneldoc comment explaining the API.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+在 2026/5/27 16:06, bot+bpf-ci@kernel.org 写道:
+>>      bpf: Use hlist_nulls_replace_rcu() when updating htab elements
+>>
+>>      When updating an existing element, the current code does
+>>      hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu(), exposing
+>>      a transient state where both old and new elements are visible to
+>>      concurrent RCU traversals.
+>>
+>>      Use hlist_nulls_replace_rcu() to atomically replace the old element in
+>>      place, so RCU readers always see a consistent hash chain.
+>>
+>>      Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+> This looks like a bug fix that should include:
+>
+>    Fixes: 4fe8435909fd ("bpf: convert htab map to hlist_nulls")
+>
+> The bug was introduced by commit 4fe8435909fd which added the
+> hlist_nulls_add_head_rcu() followed by hlist_nulls_del_rcu() pattern,
+> exposing a transient state where both old and new elements are visible
+> to concurrent RCU traversals.
+>
+>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+>> index 3dd9b4924ae4..b20e82bd253d 100644
+>> --- a/kernel/bpf/hashtab.c
+>> +++ b/kernel/bpf/hashtab.c
+>> @@ -1246,18 +1246,16 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+>>   		goto err;
+>>   	}
+>>
+>> -	/* add new element to the head of the list, so that
+>> -	 * concurrent search will find it before old elem
+>> -	 */
+>> -	hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+>>   	if (l_old) {
+>> -		hlist_nulls_del_rcu(&l_old->hash_node);
+>> +		hlist_nulls_replace_rcu(&l_old->hash_node, &l_new->hash_node);
+>>
+>>   		/* l_old has already been stashed in htab->extra_elems, free
+>>   		 * its special fields before it is available for reuse.
+>>   		 */
+>>   		if (htab_is_prealloc(htab))
+>>   			check_and_free_fields(htab, l_old);
+>> +	} else {
+>> +		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+>>   	}
+> Does this atomic replacement approach actually solve the lookup problem?
+>
+> During review of Hou Tao's earlier v1 patch that used the same approach,
+> Alexei Starovoitov raised a fundamental concern:
+>
+>    "This atomic replacement doesn't really solve anything. lookup will see
+>     one element. That element could be deleted by another thread. bucket
+>     lock and either two step update or single step don't change anything
+>     from the pov of bpf prog doing lookup."
+>
+> Reference: https://lore.kernel.org/bpf/CAADnVQKD94q-G4N=w9PJU+k6gPhM8GmUYcyfj=33B_mKX6Qbjw@mail.gmail.com/
+>
+> Hou Tao acknowledged this limitation and abandoned this approach in v2,
+> instead implementing atomic updates only for htab of maps. This patch
+> appears to be a re-implementation of the abandoned v1 approach without
+> addressing the fundamental concerns raised during that review.
+>
+> Can you clarify how this approach addresses the concerns that led to
+> abandonment of the similar change in Hou Tao's earlier patch series?
+>
+> [ ... ]
+>
+>
 > ---
->   drivers/gpu/drm/msm/msm_iommu.c       |  6 +--
->   drivers/gpu/drm/panthor/panthor_mmu.c | 12 +++---
->   include/linux/slab.h                  |  6 ++-
->   io_uring/io_uring.c                   | 23 +++++------
->   lib/test_meminit.c                    | 19 +++++----
->   mm/kasan/kasan_test_c.c               |  5 +--
->   mm/kfence/kfence_test.c               |  9 +++--
->   mm/slub.c                             | 58 +++++++++++++++------------
->   net/bpf/test_run.c                    |  7 ++--
->   net/core/skbuff.c                     | 24 ++++++-----
->   tools/include/linux/slab.h            |  2 +-
->   tools/testing/shared/linux.c          | 19 ++++-----
->   12 files changed, 93 insertions(+), 97 deletions(-)
-> 
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26496972451
+I read the earlier discussion and realized I missed it, and I also missed
+Hou Tao's updated patch 2c304172e0319 ("bpf: Support atomic update for htab
+of maps") which already addressed this.
 
-[...]
+Sorry, My patch is outdated, please ignore it.
 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 44ac121cfccb..73045b688385 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -288,11 +288,11 @@ static inline struct sk_buff *napi_skb_cache_get(bool alloc)
->   
->   	local_lock_nested_bh(&napi_alloc_cache.bh_lock);
->   	if (unlikely(!nc->skb_count)) {
-> -		if (alloc)
-> -			nc->skb_count = kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> -						GFP_ATOMIC | __GFP_NOWARN,
-> -						NAPI_SKB_CACHE_BULK,
-> -						nc->skb_cache);
-> +		if (alloc && kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> +						   GFP_ATOMIC | __GFP_NOWARN,
-> +						   NAPI_SKB_CACHE_BULK,
-> +						   nc->skb_cache))
-> +			nc->skb_count = NAPI_SKB_CACHE_BULK;
->   		if (unlikely(!nc->skb_count)) {
->   			local_unlock_nested_bh(&napi_alloc_cache.bh_lock);
->   			return NULL;
-> @@ -353,16 +353,18 @@ u32 napi_skb_cache_get_bulk(void **skbs, u32 n)
->   
->   	/* No enough cached skbs. Try refilling the cache first */
->   	bulk = min(NAPI_SKB_CACHE_SIZE - nc->skb_count, NAPI_SKB_CACHE_BULK);
-> -	nc->skb_count += kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> -					       GFP_ATOMIC | __GFP_NOWARN, bulk,
-> -					       &nc->skb_cache[nc->skb_count]);
-> +	if (kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> +				  GFP_ATOMIC | __GFP_NOWARN, bulk,
-> +				  &nc->skb_cache[nc->skb_count]))
-> +		nc->skb_count += bulk;
->   	if (likely(nc->skb_count >= n))
->   		goto get;
->   
->   	/* Still not enough. Bulk-allocate the missing part directly, zeroed */
-> -	n -= kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> -				   GFP_ATOMIC | __GFP_ZERO | __GFP_NOWARN,
-> -				   n - nc->skb_count, &skbs[nc->skb_count]);
-> +	if (kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-> +				  GFP_ATOMIC | __GFP_ZERO | __GFP_NOWARN,
-> +				  n - nc->skb_count, &skbs[nc->skb_count]))
-> +		n = nc->skb_count;
->   	if (likely(nc->skb_count >= n))
->   		goto get;
->   
+Thanks.
