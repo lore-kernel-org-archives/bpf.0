@@ -1,198 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7029521D590;
-	Wed, 27 May 2026 14:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3B62459E5
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 14:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779890990; cv=none; b=jLO81F1w51gG+YdGb9DQtFJOGDOkxzcGIpO5x5KT/WHi+TMhz7tUxsu6RwwQXRTDArhsWFfl5erj0WRQxsFeysncJBbP0K3Y9wq90Zqc1H1HfDCPMLkLRHajz1vI48yR05di0WQ6/UoNeE1jmpwvCagXHg4YJX4vY5B9ZQwpA/Y=
+	t=1779891044; cv=none; b=Q3oMRR9ddVHySUi2O7johG307cnnqIKxA4pQJr4qi+pCapb9uNrqO7+H/36uAGelqoiBci33W5I/IZn7cedpa307KH0vLRMy5suzNwp/DNGcMlUHDU2obmgnes9Y2en5xWYCkxkXqKZVTuekgGLD/5enKGJ109y86gq5cLZy9IY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779890990; c=relaxed/simple;
-	bh=t3GCGLTtE1Q/9glAbzqgh8oazNh984uILkl3fXKHnwM=;
+	s=arc-20240116; t=1779891044; c=relaxed/simple;
+	bh=UyRTCRZ48neXRrSbpouwBubiwyAcivtvc4ZzzJqW6CY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y55ylNlnYSuQQ6HFQjBgJ+dhx9pqE7ShAZZtzJq7MI5pkTKXUwomIhYmfJRJjkkPpZp8yijMgRqH8s2oUkzg36bUp4pXu3g3dSvaWLjPjgVOAYzOf/fuU8cKvZNZgoblnuGdr2ubvfFOgZQR0DsOHPKoPJUtbPyLuK8aXWT44i4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZe08RKW; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DBqd/uR4yvnjQDoOtSVjjSp7t5iETAsD0jEUoH19KjCwNrjC73tmr9Fi7PQnPXFfFkLn2YtUrSif43TxGZvjBHDQxav8es3QFwXjn+l2XBxV+kHrOjczYJbGTC7hy0bEqAzZajxa4dawK8Xr76Go1SxUE0D4oJ0Y68FI077OvUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GunCRIdZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZe08RKW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D61C1F000E9;
-	Wed, 27 May 2026 14:09:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GunCRIdZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B632E1F000E9;
+	Wed, 27 May 2026 14:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779890989;
-	bh=+kCQabNR70NwHBc3LPpyv3HzITw+mLzNMCmdJgCbjRI=;
+	s=k20260515; t=1779891043;
+	bh=MOo/KfV7cqDWgWw8V6/Dka49eHXe2NH/b8KTlaAswLc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hZe08RKWlGUsFV1tC+ZrXvAcWt6CgUV+4kzxoonRmLJlqiPpmqkChpnrEZjGa3rto
-	 s1Bz23bXdbp3TEsSurtJK5Qd5JO6YuZ97J9rTGrG9jL2H3SqLGy239QwdDnoRojMjn
-	 Iaqf3GVwtixybZ+v07nv7q8rsgTbTjAr5bSFyLXFuT89WrrS+BSyQoovAOe1qc9MN/
-	 IkikaN3utqo6GGkAZ0grc8cCIL+s0yqOz4qnOqqJ6+0lZHWdkRw3RVhjelpecgfCed
-	 ZA1ZXaTSCUxxb8FTgRjJ5zcfNTTCxTV0LQVvvlNjd9LZmiFJKrw9eTMhsB6fdFDwzX
-	 11X1TqURBF62A==
+	b=GunCRIdZEQCAYWeu61gEh/xa5xHUBVTUxQHjiT8C2zOZemiWhBC9x/wwdBmOQkXWG
+	 qOL2+6w+gG3mKJW0ld/oXatnfRHFJqVsIzKPH3YoEYjdbmLI8waeR9Cc1nLAoWRHcY
+	 3WX88vQRTN8Grr2YZMJS5lVrsjjpyk9L1LwhUr7b8T2GjNnVAwBEe5k5NJwKrOECYe
+	 AOrJ2IB+X0sI4y177+nd7JhAz5tqTf8eEgvD5dVKgGwlwB2OL+RlCG3naZx1tMnQ2l
+	 5mvTkz9PdKfZcUqH0a9/AezBbKxNRg05V3BCj5nWrtGKnt9rIgoYcHhSZWuS4cZZu0
+	 GYUocZHh7azlQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 3/4] perf/arm64: Add BRBE support for
- bpf_get_branch_snapshot()
+Subject: Re: [PATCH v4 3/3] libbpf: plumb btf_vmlinux_value_type_id and
+ btf_fd in gen_loader
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260527121207.2312181-4-puranjay@kernel.org>
-References: <20260527121207.2312181-4-puranjay@kernel.org>
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
+References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-3-27daa15487a9@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 27 May 2026 14:09:47 +0000
-Message-Id: <20260527140948.3D61C1F000E9@smtp.kernel.org>
+Date: Wed, 27 May 2026 14:10:42 +0000
+Message-Id: <20260527141042.B632E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] TOCTOU race in `arm_brbe_snapshot_branch_stack` leads to hardware =
-state corruption.
-- [High] Unconditional calls to `brbe_invalidate()` destructively clear har=
-dware branch records, breaking concurrent perf events.
-- [High] `bpf_get_branch_snapshot()` unconditionally fails when invoked fro=
-m a PMU NMI handler.
+
+New issues:
+- [High] The patch truncates the bpf_attr payload, dropping `value_type_btf=
+_obj_fd`, which breaks module-backed STRUCT_OPS maps in gen_loader.
+
+Pre-existing issues:
+- [Critical] Double-close of `inner_map_fd` in the gen_loader cleanup path =
+can hijack and close an unrelated file descriptor.
+- [High] The condition to populate `btf_fd` incorrectly omits `btf_key_type=
+_id`, causing map creation to fail if only a key BTF type is defined.
+- [High] Memory leak of dynamic arrays `gen->relos`, `gen->ksyms`, and `gen=
+->core_relos` in the error path.
 --
 
-commit 4683208c7439e46b2ca26814f22b69f16e4ad0c2
-Author: Puranjay Mohan <puranjay@kernel.org>
+commit b58090bc2b448f8a5c71dbba37463b5a9e73fdd5
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+libbpf: plumb btf_vmlinux_value_type_id and btf_fd in gen_loader
 
-This commit enables bpf_get_branch_snapshot() on ARM64 by implementing the
-perf_snapshot_branch_stack static call for BRBE. It pauses BRBE, reads the
-records into a buffer, invalidates the buffer, and unpauses BRBE.
+This commit updates the BPF map creation generator to plumb the kernel-side
+structure value type ID (btf_vmlinux_value_type_id) into the map creation
+system call attributes. It also modifies the condition for copying the
+userspace BTF file descriptor so it populates btf_fd when either
+btf_value_type_id or btf_vmlinux_value_type_id is set.
 
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c4..aede95e277842 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-[ ... ]
-> @@ -774,32 +795,96 @@ void brbe_read_filtered_entries(struct perf_branch_=
-stack *branch_stack,
-[ ... ]
-> +/*
-> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> + * self-recording and return 0 if the snapshot state appears disturbed.
-> + */
-> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, un=
-signed int cnt)
-> +{
-> +	unsigned long flags;
-> +	int nr_hw, nr_copied =3D 0;
-> +	u64 brbfcr, brbcr;
-> +
-> +	if (!cnt)
-> +		return 0;
-> +
-> +	/* Guard against running on a CPU without BRBE (e.g. big.LITTLE). */
-> +	if (!cpu_has_brbe())
-> +		return 0;
-> +
-> +	/*
-> +	 * Pause BRBE first to avoid recording our own branches. The
-> +	 * sysreg read/write and ISB are branchless, so pausing before
-> +	 * checking BRBCR avoids polluting the buffer with our own
-> +	 * conditional branches.
-> +	 */
-> +	brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> +	brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> +	isb();
-> +
-> +	/* Bail out if BRBE is not enabled (BRBCR_EL1 =3D=3D 0). */
-> +	if (!brbcr) {
-> +		write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +		return 0;
-> +	}
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -525,13 +525,14 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+>  	attr.max_entries =3D tgt_endian(max_entries);
+>  	attr.btf_key_type_id =3D tgt_endian(map_attr->btf_key_type_id);
+>  	attr.btf_value_type_id =3D tgt_endian(map_attr->btf_value_type_id);
+> +	attr.btf_vmlinux_value_type_id =3D tgt_endian(map_attr->btf_vmlinux_val=
+ue_type_id);
 
 [Severity: High]
-Is this check incompatible with PMU NMI handlers?
+Does this code truncate the bpf_attr payload and drop value_type_btf_obj_fd?
 
-If a BPF program attaches to a perf event overflow, armv8pmu_handle_irq()
-calls armv8pmu_stop() before processing overflows, which calls brbe_disable=
+At the top of bpf_gen__map_create(), attr_size is calculated as
+offsetofend(union bpf_attr, map_extra). However, value_type_btf_obj_fd was
+introduced after map_extra in the union. By plumbing btf_vmlinux_value_type=
+_id
+here without expanding attr_size, the loader may send a truncated payload to
+the kernel.
+
+For module-backed struct_ops maps, libbpf sets the BPF_F_VTYPE_BTF_OBJ_FD f=
+lag,
+but the kernel would receive value_type_btf_obj_fd =3D 0 (stdin). Could this
+cause btf_get_by_fd(0) to fail and break map creation?
+
+> =20
+>  	map_create_attr =3D add_data(gen, &attr, attr_size);
+>  	pr_debug("gen: map_create: %s idx %d type %d value_type_id %d, attr: of=
+f %d size %d\n",
+>  		 map_name, map_idx, map_type, map_attr->btf_value_type_id,
+>  		 map_create_attr, attr_size);
+> =20
+> -	if (map_attr->btf_value_type_id)
+> +	if (map_attr->btf_value_type_id || map_attr->btf_vmlinux_value_type_id)
+
+[Severity: High]
+This is a pre-existing issue, but does this condition incorrectly omit
+btf_key_type_id?
+
+If a map defines only a BTF key type but no value type, btf_key_type_id wil=
+l be
+non-zero while btf_value_type_id remains zero.
+
+This means gen_loader would skip populating btf_fd in this case, sending
+btf_fd =3D 0 alongside the non-zero btf_key_type_id. Since the kernel stric=
+tly
+validates that btf_fd must be valid if any BTF type ID is set, will the ker=
+nel
+reject this with -EINVAL?
+
+>  		/* populate union bpf_attr with btf_fd saved in the stack earlier */
+>  		move_stack2blob(gen, attr_field(map_create_attr, btf_fd), 4,
+>  				stack_off(btf_fd));
+
+[Severity: Critical]
+This is a pre-existing issue, but can the inner map handling later in this
+function lead to a double-close regression in the cleanup path?
+
+When emit_sys_close_stack() is called for inner_map_fd, it issues the sys_c=
+lose
+BPF helper but doesn't zero out the memory slot containing the file descrip=
+tor
+on the loader stack.
+
+If a subsequent command in the loader program fails, the cleanup routine lo=
+ops
+over the loader stack and calls sys_close on any file descriptor greater th=
+an
+zero. Because the inner_map_fd slot was never cleared, it gets closed a sec=
+ond
+time. If another thread opened a new file or socket in the interim, could t=
+his
+hijack and close the unrelated resource?
+
+[Severity: High]
+This is a pre-existing issue, but is there a memory leak in the error path =
+for
+the dynamic arrays used during generation?
+
+The arrays gen->relos, gen->ksyms, and gen->core_relos are dynamically allo=
+cated
+using libbpf_reallocarray(). They are expected to be freed by cleanup_relos=
 ()
-and sets SYS_BRBCR_EL1 to 0.
+at the end of bpf_gen__prog_load().
 
-Would this cause bpf_get_branch_snapshot() to unconditionally fail and retu=
-rn
-0 when triggered from these PMU events?
-
-> +
-> +	/* Block local exception delivery while reading the buffer. */
-> +	flags =3D local_daif_save();
-
-[Severity: High]
-Is there a TOCTOU race window here that could corrupt hardware state?
-
-The function reads and caches SYS_BRBFCR_EL1 and SYS_BRBCR_EL1 before
-disabling local exceptions via local_daif_save().
-
-If an interrupt or NMI arrives in this window (such as a perf_event_disable
-IPI) and modifies the BRBE hardware configuration, the function later writes
-back the stale cached brbcr and brbfcr values at the end of the function,
-overwriting the PMU subsystem's intentional changes.
-
-Does the mitigation check below catch this?
-
-	if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
-
-It looks like it might fail to catch this because brbe_disable() leaves the
-PAUSED bit set, leading to the function silently re-enabling BRBE and
-corrupting the hardware state when restoring the cached registers.
-
-> +
-> +	/*
-> +	 * A PMU overflow before local_daif_save() could have re-enabled
-> +	 * BRBE, clearing the PAUSED bit. The overflow handler already
-> +	 * restored BRBE to its correct state, so just bail out.
-> +	 */
-> +	if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
-> +		local_daif_restore(flags);
-> +		return 0;
-> +	}
-> +
-> +	nr_hw =3D FIELD_GET(BRBIDR0_EL1_NUMREC_MASK,
-> +			  read_sysreg_s(SYS_BRBIDR0_EL1));
-> +
-> +	for_each_brbe_entry(i, nr_hw) {
-> +		if (nr_copied >=3D cnt)
-> +			break;
-> +
-> +		if (!perf_entry_from_brbe_regset(i, &entries[nr_copied], NULL))
-> +			break;
-> +
-> +		nr_copied++;
-> +	}
-> +
-> +	brbe_invalidate();
-
-[Severity: High]
-Does unconditionally clearing hardware branch records here break concurrent
-perf events?
-
-Since bpf_get_branch_snapshot() can be invoked asynchronously at any time
-(e.g., from a BPF kprobe or tracepoint program), if another perf event is
-actively profiling, would this snapshot silently wipe the hardware BRBE
-buffer?
-
-When the active perf event later overflows, it would read an empty or sever=
-ely
-truncated branch stack, potentially corrupting the profiling data. Should
-snapshots be read-only?
-
-> +
-> +	/* Restore BRBCR before unpausing via BRBFCR, matching brbe_enable(). */
-> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
-> +	isb();
-> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +	/* Ensure BRBE is unpaused before returning to the caller. */
-> +	isb();
-> +	local_daif_restore(flags);
-> +
-> +	return nr_copied;
-> +}
+If the loader encounters an error earlier in the process, the program aborts
+and bpf_gen__free() is called. However, bpf_gen__free() appears to fail to =
+free
+these arrays or call cleanup_relos(), causing a permanent memory leak. For
+long-running daemons parsing untrusted objects, could this be exploited to
+cause an out-of-memory crash?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527121207.2312=
-181-1-puranjay@kernel.org?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527-libbpf-loa=
+d-vmlinux-btf-in-gen_loader-mode-v4-0-27daa15487a9@google.com?part=3D3
