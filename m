@@ -1,161 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7F13C09F1;
-	Wed, 27 May 2026 07:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895B83BFE52
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 07:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779867530; cv=none; b=kCCWwOSomABXIIjyevVljKC+mZINK2SnV0/tyFU8XkoEeT9B96L25oXvfHXx0b/0JZilFtzn65LfMVsPu12ooZ2loGH8mqpKFdQziAibis/LAAueKdjciBE0h0DQOUYNTHlUOpq08eJ6GlqHngspYE4ABKryX0Gh4qz3aUWPqhk=
+	t=1779867628; cv=none; b=FA6IUMEC6AjHDqjAzdPdRBMhHvdBAwIlB/TAMsL+E32Y1PkpmqQsjXNt5fA9ZytDLqzzyPnJ4dLunxB5tKLtUV+mGRgQ5bwdfjV9G0B8Jc62lBGTaNt3/75vx8tavzAkhxSLZpDcDFSFfb0JZWhXIDF78BLUagDaDZE1RZ17Z5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779867530; c=relaxed/simple;
-	bh=SBJb5xXkmlqTV62Zt96/uXBoot0tdI5KLSLDqbjGfHw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SGQv4UrxmiyaeKx5noiCrHTSLC8PRh6tYiAhc9lfd1PfR0sTguX8Jf8j+beONUJVWeSoFkwWBXXH5DmNK/yYk9o3eGEaa8Cqi0E1VCcTKBlQyTYaxJApHxMFV+/jB4k+o9V9D4bPPSyf9sxKixT2sqllonv1cqUz/45bYWePtP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4lRRXRH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779867628; c=relaxed/simple;
+	bh=efensNxT45SQDbuVpwcoyfSMOxWOtLuQ0yNFZg/xil0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mRzIBtcao3QthFxRzAeQijJbuD5696/ZmfvralEwXo8GZpYF/IFe/glLAwWOJB84Zd31Qfmpk1ipfPOOTaUKY81ta1gJXMrMAVeeKeamsyI2PkmIt3P7rnflgXvM4hjAPU/s2B4dPFnFsQJmfzGF7ymHzK+WCTFOukZn7cdtCNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbdOdL2X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4lRRXRH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA511F000E9;
-	Wed, 27 May 2026 07:38:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbdOdL2X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282BF1F00A3A;
+	Wed, 27 May 2026 07:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779867529;
-	bh=moBN3GrtjHAhIVhdHLFUyecY8ypcxSI1iGvi0iaI0Vo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=G4lRRXRHg+FOCfpsKaxZaYJl+4GIlVy8ZlBx1CI1XIOb8RqUe5TkBKrROWAXXz4tH
-	 SBKclKS4BL6bq1KwtDTLyumC4F0RatlheWnO7HuljUVdI7CW/W0VStwxz+5H/+hQ63
-	 WB/aPFcKhINMcFnl+LhOmrYaWemFrNnOTNtwxE6X0833dLvD3mJPgbQNCRwYDFYaLO
-	 Q3XnBTWwOM8UJEAptyrp7AD3uJsCrln4ZVMWh1H7V2wAvR3vTEHxN8XFq2DiVmBTuk
-	 hQFJoorjhkV7/N2IS9SHpg3COV1p9YkI6D9WOGXFtC7LkZWEL/cJdfP4COfQ7L7u9o
-	 qpU5HAC6V+npw==
-Message-ID: <80dc574b-f2da-4f04-8bc8-1b0793b1f296@kernel.org>
-Date: Wed, 27 May 2026 09:38:44 +0200
+	s=k20260515; t=1779867627;
+	bh=3VaNjYW7Vq83ea4sn+s2BF0TeVjiFUkv3KK/OiEFWPU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VbdOdL2XEA8JGl9qjC3JKX5dQ6Seu+I3UfdocJGdHMfqQsFXSTgHUfRsyYlNk+w3o
+	 wzmEevYqI/smVYU5OE5GxbEtfW4uDHM5TyGOCcyO2oOoqfh7gbDkGeE8gojHKbdMr1
+	 vBMCqCpWsmukdqIvYeLpcl3ZpQIo7tYvocoY4L2txErFWlwT2E9XyQ3dofjufy9hEf
+	 s3ecKnv2+VX2kZo608Aux8H8sfZR7wAV8ypYGKUJalQE8aiG3HHqN5rBEeVqEe8+Ty
+	 u1BGCfCnfNyBQ0gFjg1nZ14QDy47tMtTUHjRafrCD2lxcb6rYDseZcDjrc4lFawQup
+	 HEqzPsrMI98NQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1] bpf: Use hlist_nulls_replace_rcu() when
+ updating htab elements
+Reply-To: sashiko-reviews@lists.linux.dev
+To: xuanqiang.luo@linux.dev
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
+References: <20260527070139.223386-1-xuanqiang.luo@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 27 May 2026 07:40:26 +0000
+Message-Id: <20260527074027.282BF1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Simon Schippers <simon@schippers-hamm.de>,
- =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260508190626.4285fac0@kernel.org>
- <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
- <20260510085602.57c7a081@kernel.org>
- <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
- <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
- <b78f002a-8cb9-4857-bf8f-0137e790f644@kernel.org>
- <873511fa-4316-4411-a76b-ec4c5805abd3@schippers-hamm.de>
- <18855e57-f050-411f-9958-d4babcc81ba3@kernel.org>
- <14348957-d061-4124-9bac-45df9cf6686c@schippers-hamm.de>
- <9a57bb41-114e-492b-9eaa-52237675bb7c@schippers-hamm.de>
- <4ae9400a-8919-4ffc-8db3-0c334e2aa462@tu-berlin.de>
- <8e8b877b-a7ce-4b2f-9567-64c8dbb48411@schippers-hamm.de>
- <463e91cb-6c45-4d91-8737-39779fec5a49@tu-berlin.de>
- <b1c2d2c1-a70a-4bf4-baff-d0ac2f878722@schippers-hamm.de>
- <24d10b53-c545-4141-95a5-5c49c35c5d6c@tu-berlin.de>
- <c5b3a7ef-8ec7-4361-80bb-cf06e910350c@schippers-hamm.de>
- <d23fd8e0-a0d3-4197-a130-2340d1c28fe0@tu-berlin.de>
- <e8be86b4-052f-4f4f-9cb9-2fb12d1e8922@schippers-hamm.de>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <e8be86b4-052f-4f4f-9cb9-2fb12d1e8922@schippers-hamm.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Using hlist_nulls_replace_rcu() violates the hlist_nulls invariant=
+ that reused elements must be inserted at the head, leading to spurious loo=
+kup failures in preallocated and LRU maps.
+--
 
+commit 152c68c8990ac2fd12423e6b3208030a31a5a41d
+Author: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 
-On 26/05/2026 17.07, Simon Schippers wrote:
-> On 5/26/26 16:55, Jonas Köppeler wrote:
->> On 5/26/26 4:35 PM, Simon Schippers wrote:
->>> On 5/26/26 11:54, Jonas Köppeler wrote:
->>>> On 5/23/26 6:09 PM, Simon Schippers wrote:
->>>>> On 5/22/26 18:26, Jonas Köppeler wrote:
->>>>>> On 5/22/26 10:41, Simon Schippers wrote:
->>>>>>> On 5/22/26 09:14, Jonas Köppeler wrote:
->>>>>>>> On 5/19/26 10:51 PM, Simon Schippers wrote:
->>>>>>>>> On 5/12/26 23:55, Simon Schippers wrote:
->>>>>>>>>> On 5/12/26 15:54, Jesper Dangaard Brouer wrote:
->>>>>>>>>>>>> Nope, I'm using a bpftrace program to keep track of the inflight/limit
->>>>>>>>>>>>> in a BPF hashmap.  Reading from /sys will not be accurate.
->>>>>>>>>>>> Ah nice.
->>>>>>>>>>> Add the option --hist to have both NAPI and BQL histograms printed when
->>>>>>>>>>> script ends.  This will give you an accurate pattern of how inflight and
->>>>>>>>>>> limit evolves.
->>>>>>>>>>>
->>>>>>>>>>>>> I moved the selftests into a github repo [1] to allow us to collaborate
->>>>>>>>>>>>> and evaluate the changes more easily.  I explicitly kept the new BPF
->>>>>>>>>>>>> based BQL tracking as a commit[2] for your benefit.
->>>>>>>>>>>>>
->>>>>>>>>>>>>        [1] https://github.com/netoptimizer/veth-backpressure-performance-testing/tree/main/selftests
+bpf: Use hlist_nulls_replace_rcu() when updating htab elements
 
-[... cut ...]
+This patch modifies the BPF hash map update logic to use
+hlist_nulls_replace_rcu() instead of adding the new element to the head
+and deleting the old one.
 
->>>
->>> I will wait for your new measurements, but there is no argument
->>> against a default tx-usecs of ~100us for now, right?
->> Yes, I think 100us is perfectly fine. I guess most of it was
->> just my curiosity why the latency values are as they are 🙂
-> Which is great, because I was wondering the same 🙂
-> 
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 3dd9b4924ae4f..b20e82bd253dc 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+[ ... ]
+> @@ -1246,18 +1246,16 @@ static long htab_map_update_elem(struct bpf_map *=
+map, void *key, void *value,
+>  		goto err;
+>  	}
+> =20
+> -	/* add new element to the head of the list, so that
+> -	 * concurrent search will find it before old elem
+> -	 */
+> -	hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+>  	if (l_old) {
+> -		hlist_nulls_del_rcu(&l_old->hash_node);
+> +		hlist_nulls_replace_rcu(&l_old->hash_node, &l_new->hash_node);
 
-Thank you Jonas and Simon for testing this via[1] on your systems.
+[Severity: High]
+Does using hlist_nulls_replace_rcu() here violate the hlist_nulls lockless
+traversal invariants for reused elements?
 
-One performance concern from my side is if/when BQL limit goes below 8
-packets. This will cause cache-line bouncing and many qdisc requeues
-between the two CPUs.  Notice that 8 packets for the ptr_ring is one
-cache-line. This is why I suggested defaulting BQL min_limit to be 8.
-This would work in combination with the tx-usecs coalesce tuning as a
-lower bound.
+For BPF preallocated and LRU hash maps, elements are recycled without an RCU
+grace period. The hlist_nulls algorithm relies on the invariant that such
+recycled elements must be inserted at the head of the list.
 
+If a lockless reader is preempted while holding a reference to an element
+that is subsequently deleted and then reused as l_new, replacing l_old in
+the middle of the chain means l_new->next will point to l_old->next.
 
->> But it feels like this will need some documentation, because
->> as we have seen, some values are a little different
->> from what you expect from bql. Inflight > veth_ring_size,
->> tx-usecs not necessarily achieving the configured value,
->> inflight can get stuck > 0. Wdyt?
->> But I think it works nicely overall.
->>
-> Exactly, we should get ready for a v6 soon.
->
+When the preempted reader resumes and follows the next pointer, could it
+skip all elements that were located before l_old in the bucket chain,
+potentially resulting in spurious lookup failures?
 
-I want to send out a V6 today (and I'm busy rest of week).
-I'm simply going to include Simon's patch[2]. Then we can iterate on
-that email thread, making it easier for people to reply inline to the
-code changes.
+[ ... ]
+> @@ -1319,13 +1317,11 @@ static long htab_lru_map_update_elem(struct bpf_m=
+ap *map, void *key, void *value
+>  	if (ret)
+>  		goto err;
+> =20
+> -	/* add new element to the head of the list, so that
+> -	 * concurrent search will find it before old elem
+> -	 */
+> -	hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+>  	if (l_old) {
+>  		bpf_lru_node_set_ref(&l_new->lru_node);
+> -		hlist_nulls_del_rcu(&l_old->hash_node);
+> +		hlist_nulls_replace_rcu(&l_old->hash_node, &l_new->hash_node);
 
-[2] 
-https://lore.kernel.org/all/9a57bb41-114e-492b-9eaa-52237675bb7c@schippers-hamm.de/
+[Severity: High]
+Would this suffer from the same lockless traversal issue mentioned above?
 
-> And I think we should move the BQL logic into a seperate .h file
-> as a library. Then it is also usable for TUN/TAP in the future.
-> 
+Since LRU maps heavily recycle elements without an RCU grace period,
+inserting a recycled element anywhere other than the head of the chain could
+cause concurrent readers to miss elements.
 
-I like the idea, but refactoring into a library seems out-of-scope for
-this patchset.  As a first step, let us see if this works for veth
-driver use-case.  I do encourage Simon to refactor when doing the work
-for TUN/TAP in the future.
-
-Alternatively netdev maintainers can choose to apply V5 patchset and we
-can iterate on finding the right ethtool coalesce parameters for veth
-and create a .h "library" file for this.
-
-
-> Let's amend the commits. Should we do this on Github?
-
-Kernel development for netdev [3] happens on the mailing list with 
-patches via email.
-
---Jesper
-
-[3] https://kernel.org/doc/html/latest/process/maintainer-netdev.html
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527070139.2233=
+86-1-xuanqiang.luo@linux.dev?part=3D1
