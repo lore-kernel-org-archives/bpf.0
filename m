@@ -1,153 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09FE8413D74;
-	Wed, 27 May 2026 13:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0406940FDA0
+	for <bpf@vger.kernel.org>; Wed, 27 May 2026 13:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779889191; cv=none; b=LPbAM5YymDE51rDwVvtGXzZEehf/2miLKI4il3h13KX9FOr/8j9ABCrk90m66HTYXVhP3sQ+LF7XxoObmSUPJquJSUDwIoWApQRJeP8ra2sGmURwAym5J0hvrK5Ukp+5VPI2//RIOItavIpBRkIRmia0KZ0KKmuhaRQmOd9ytS4=
+	t=1779889229; cv=none; b=P8+cpy7OhqTB2EilqmeInqF1jSNjc6piRtd0rmiiKjoN9AQinnnrwt9LXXGdu45QKJsBgHRFu1+/vgTCHpzqa7qfkTtXlT+L9Ar6AWZyltHUXjwOWqqkVLb0wd+lYw/AnOjLy+UXHqHYkA82mta/uAz5xhMR6h7ox6sgZHGnsTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779889191; c=relaxed/simple;
-	bh=re3Uyafgs2JXnAaAI9w3TxhDPwmAHaWyTxClyp5HBYU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=C5/+KUExFTh/lWJ2IpPn8173icxNt8kz09xYtY2C6hpVs3U/iaHh4A7b8u3cct1R/ltz/ULfAk4CRM6KkIMmfZwf+Tte9r96bDWPZnzTOmFSgvTdKodrv8m4j2kgED4I4kPky1r5EexmhmkeH/ofLyV+WS1hZkAJMjOhx/fu5OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6Wmqp2d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779889229; c=relaxed/simple;
+	bh=4y4QgCoRHl/XbNNHFWoUG6Jk1c4SrRJELRY6yMuoQto=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P7FRm77yh/8O6U1iswp32zKRADTS4muoClkcaZihfBNYFP6VAdh6TxOqjzxtWt75wltu28Zt1FGXYbH1SJdLV0/4xkl/wHe9qCRLeKrCIO+sV6LvjgitOyPTD1jydSqiMFRnNGpiYDg3u7peVQAOnjOB2NCpJzgIcqqVc4bRyIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xIDiVKTp; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6Wmqp2d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEC51F00A3F;
-	Wed, 27 May 2026 13:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779889186;
-	bh=XpAQYImOvjpxwVIP8irMkz0rSSBxBn7LwJqPTYODlQ4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=P6Wmqp2d2DLpL+JrBUavy/dnh6WZCI2fibUB17pytqxzeeCJOQk5EMB5arU+5ZZT0
-	 bVHxZvgrY2kJgFZywTBEzn622MKOfeWOJLclf8//dgOLDlvlb1AuW+Gnb70FTQnIMs
-	 5kPeWFxO0Ldk442OvnS7SiBia4bkBt+zU+8PFuU2UFUSONV2ef9griJ0l+12KuMDWt
-	 ts3ZteFNTe3D01L6IMEihjHKtm7SjlVqVkyQRH+ySFsRcFDUxXtMyVtuz28Pm7EbAC
-	 +apSxvX9ZmRalWcz3FjrK95qKo/pBJJGzIQKvDpLMygjWKB6BX05Xf7825EjCabnJ2
-	 aP3el6g2qRxng==
-Content-Type: multipart/mixed; boundary="===============2193829677159245353=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xIDiVKTp"
+Message-ID: <f28e47a3-11fd-4fc1-b248-4c1c8d0902e0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779889210;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o26FiG9LwWkhm40vFk2d8rsPg/9WBqQi2cx+mYZDvPw=;
+	b=xIDiVKTp/rs9VQy1u1zr5si/Adfcqb6XWxPzxizUP1kBjVP58zEISiLS1bxsOA/+b5mxyC
+	NbDxBSyaPHjVh0yFRhj9G+oTHQ7U7tdjwvPnV4Z0kRZdqdUp5F2pPsiXqJ8QTNlgWxnSH1
+	P6FxGLHgKs95u07VHbu/KJUc6Y3t29w=
+Date: Wed, 27 May 2026 21:40:00 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <556048bab0cc9bda9a7dfe2d041308d35eed943c9295aeabd69d34414e2a9f4c@mail.kernel.org>
-In-Reply-To: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com>
-References: <20260527-libbpf-load-vmlinux-btf-in-gen_loader-mode-v4-1-27daa15487a9@google.com>
-Subject: Re: [PATCH v4 1/3] libbpf: load vmlinux BTF in gen_loader mode for struct_ops
-From: bot+bpf-ci@kernel.org
-To: sidnayyar@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,gprocida@google.com,maennich@google.com,sidnayyar@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 27 May 2026 13:39:46 +0000 (UTC)
-
---===============2193829677159245353==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf 1/2] bpf: Update transport_header when encapsulating
+ UDP tunnel in lwt
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260525142650.2569-2-leon.hwang@linux.dev>
+ <20260525150010.CDEBA1F000E9@smtp.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260525150010.CDEBA1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> commit 29cedaf6d7d80a7e880a2e639f40fbafcbaf2e65
-> Author: Siddharth Nayyar <sidnayyar@google.com>
-> Date:   Wed May 27 12:52:57 2026 +0000
->
->     libbpf: load vmlinux BTF in gen_loader mode for struct_ops
->
->     During light skeleton generation (`bpftool gen skeleton -L`), libbpf
->     runs in gen_loader mode. Previously, `bpf_object__load_vmlinux_btf()`
->     completely bypassed loading the kernel vmlinux BTF (`obj->btf_vmlinux`)
->     if `gen_loader` was active.
->
->     However, BPF `struct_ops` maps (such as `sched_ext_ops` maps) require
->     resolving the kernel-side struct type IDs and member sizes at
->     compile/skeleton generation time. Without loading `btf_vmlinux`, libbpf
->     cannot query the kernel BTF types, causing light skeleton generation for
->     `struct_ops` to fail or omit crucial type information.
->
->     Fix this by modifying the check to load `btf_vmlinux` even in
->     `gen_loader` mode if the BPF object contains `struct_ops` maps.
->
->     Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+On 2026/5/25 23:00, sashiko-bot@kernel.org wrote:
+[...]
+>> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+>> index f71ef82a5f3d3..cbb2803367c6d 100644
+>> --- a/net/core/lwt_bpf.c
+>> +++ b/net/core/lwt_bpf.c
+>> @@ -637,6 +637,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>>  	if (ingress)
+>>  		skb_postpush_rcsum(skb, iph, len);
+>>  	skb_reset_network_header(skb);
+>> +	if (ipv4 && iph->protocol == IPPROTO_UDP /* UDP tunnel */)
+>> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+> 
+> [Severity: High]
+> Can a concurrent modification to the BPF-provided header cause an
+> out-of-bounds transport header offset?
+> 
+> The hdr pointer passed to bpf_lwt_push_ip_encap() can point to concurrently
+> mutable memory such as a BPF map value. Reading iph->protocol and iph->ihl
+> directly from hdr here, after length validation has already occurred,
+> appears to introduce a Time-of-Check to Time-of-Use race condition.
+> 
+> If a concurrent modification changes iph->ihl, the calculated transport
+> header could point well past the end of the pushed IP header. For small
+> SKBs, this could cause skb_transport_header to point out-of-bounds into
+> skb_shared_info.
+> 
+> Would it be safer to perform these reads after copying the header into the
+> SKB, using the copied, stable values instead?
+> 
 
-Alexei Starovoitov requested in v3 review that a selftest be added to
-prove struct_ops light skeletons work end-to-end:
+Agreed.
 
-  "The selftest is mandatory to prove that."
-  https://lore.kernel.org/bpf/CAADnVQ+AA_fmRw7uRwdL2TMyMbpWeebOQKb=0wvpKiQR6Ee5xQ@mail.gmail.com/
+Will move skb_set_transport_header() after memcpy().
 
-This requirement has not been addressed in v4. Should a selftest be added
-to demonstrate that struct_ops light skeletons work correctly with this
-change?
+> [Severity: Critical]
+> This is a pre-existing issue and was not introduced by the patch under
+> review, but is there a missing validation for the minimum IPv4 header
+> length before ip_fast_csum() is called?
+> 
+> Earlier in the function, the length validation checks:
+> 
+>     if (unlikely(len < iph->ihl * 4))
+>         return -EINVAL;
+> 
+> If a BPF program provides an IP header with ihl = 0, the check len < 0
+> evaluates to false because len is at least 20.
+> 
+> Later, ip_fast_csum() is called with ihl = 0. On architectures like MIPS,
+> the ip_fast_csum() implementation reads 16 bytes and then uses a loop:
+> 
+>     do { ... word++ } while (word != stop);
+> 
+> where stop = iph + ihl. If ihl = 0, stop is physically behind word,
+> causing the loop to endlessly increment through the address space until
+> it page faults.
+> 
+> Does this code need a check to ensure iph->ihl >= 5?
+> 
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index ab2071fdd3e8..420d37f215ea 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -3544,15 +3544,20 @@ static bool prog_needs_vmlinux_btf(struct bpf_program *prog)
->  	return false;
->  }
->
-> -static bool map_needs_vmlinux_btf(struct bpf_map *map)
-> +static bool obj_maps_need_vmlinux_btf(const struct bpf_object *obj)
->  {
-> -	return bpf_map__is_struct_ops(map);
-> +	struct bpf_map *map;
-> +
-> +	bpf_object__for_each_map(map, obj) {
-> +		if (bpf_map__is_struct_ops(map))
-> +			return true;
-> +	}
-> +	return false;
->  }
->
->  static bool obj_needs_vmlinux_btf(const struct bpf_object *obj)
->  {
->  	struct bpf_program *prog;
-> -	struct bpf_map *map;
->  	int i;
->
->  	/* CO-RE relocations need kernel BTF, only when btf_custom_path
-> @@ -3577,12 +3582,7 @@ static bool obj_needs_vmlinux_btf(const struct bpf_object *obj)
->  			return true;
->  	}
->
-> -	bpf_object__for_each_map(map, obj) {
-> -		if (map_needs_vmlinux_btf(map))
-> -			return true;
-> -	}
-> -
-> -	return false;
-> +	return obj_maps_need_vmlinux_btf(obj);
->  }
->
->  static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
-> @@ -3590,7 +3590,11 @@ static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
->  	int err;
->
->  	/* btf_vmlinux could be loaded earlier */
-> -	if (obj->btf_vmlinux || obj->gen_loader)
-> +	if (obj->btf_vmlinux)
-> +		return 0;
-> +
-> +	/* only struct_ops maps need btf_vmlinux in gen_loader */
-> +	if (obj->gen_loader && !obj_maps_need_vmlinux_btf(obj))
->  		return 0;
->
->  	if (!force && !obj_needs_vmlinux_btf(obj))
+I'm not sure about this case.
 
-This looks like a bug fix for gen_loader mode with struct_ops maps.
-Multiple CI reviews (v1 and v3) noted that this should include:
+But, can update "len < iph->ihl * 4" to
+"iph->ihl < 5 || len < iph->ihl * 4".
 
-  Fixes: 67234743736a ("libbpf: Generate loader program out of BPF ELF file.")
-  https://lore.kernel.org/bpf/b4b4ca51ae8e281a37707cbcd2ba8349dabc6c630e96461929be0872fd8ed0e6@mail.kernel.org/
+> [Severity: Medium]
+> Does this code verify that the packet length actually contains the full UDP
+> header?
+> 
+> This updates the transport header for UDP tunnels based solely on the IP
+> protocol, but it doesn't seem to validate that len actually encompasses
+> the full struct udphdr.
+> 
+> If an IP header is pushed with IPPROTO_UDP but a truncated length (like
+> len = 20), the transport header is set to the end of the IP header. A NIC
+> driver might then attempt to parse the subsequent memory as a UDP header,
+> which could lead to broken offloads or out-of-bounds reads.
+> 
 
-Should this tag be added to indicate it fixes a limitation in the original
-gen_loader implementation?
+Agreed.
 
+Will check len must include UDP header.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Thanks,
+Leon
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26512949106
---===============2193829677159245353==--
+>> +	else if (!ipv4 && ((struct ipv6hdr *)hdr)->nexthdr == NEXTHDR_UDP /* UDP tunnel */)
+>> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct ipv6hdr));
+>>  	memcpy(skb_network_header(skb), hdr, len);
+>>  	bpf_compute_data_pointers(skb);
+>>  	skb_clear_hash(skb);
+> 
+
