@@ -1,98 +1,79 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3EB2E738A
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 16:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E382F5468
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 16:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779984886; cv=none; b=nY29e5OgS5QcbejG7K+lqaJ9yhplkqlH2yHpSd0+glvJA7fXuBuHXh27s7Q7vbh6z5PmdYx+noU/1p1leGJ0mcWu0pXOGQJ4cSw8eyXzxeG5keZJnY21TaNRKg874Ga9yfSX+fzCqyIU7EfMS8ZpDIEwfyV2M/Pf5K4GRSu4yv4=
+	t=1779985086; cv=none; b=t2hqH8E46B2Uf5Ds3IScIBfKvXu0tlbt+ICCZ6nquZtaTiwELo5f/08rW9qDdAq2N47sZ+i00sKoOWQrA7Et5uugauWArpraDml3K6jiAO71rQFqK0mrP4G9/V3pen8Ol3M8NStssmNgzLmPP7M7Rzwb1bhgcEcixOJhB+V3K0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779984886; c=relaxed/simple;
-	bh=PHDLCXHLb6geoV+liXss4T/l8l490ju4aZ4ydPGildk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GxB+Al78Bzjpc+ympW2799qW146cdtFOxvuGdmWmUcVR9IoBvZjMJp9Dniy+LvWOQHd4fjo+hnNtMMSCVJrb/RDX9p3fiReYJ+6wh+3R3OOhoZj7VFykwd25FPNwQKuunoBYwwDw0DYDMjxAcrmz7kjyo61yP5b1mjxlOk3Q+7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4906869f0cbso49580575e9.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 09:14:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779984884; x=1780589684;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wfCiAYxwM6fSi2FMKc9LgQjerGAgaqnqOAwHUcR+LT8=;
-        b=ly+fqCvsy1bYIx/RbGjbvwuJcqdNP8ZmKe/WuxxSEGR77QaTQrSN5t7EYWkTkPecGn
-         tkeq+VvxwppGLGQQqLwaHwVFlvojiuXRax7Etb6t4fYLA9IJwGMpBZOsdgOFGc+1xkwm
-         5PeqxZ5e+6chjRSP2l67IRXU6u0UIDULiwDzugzMdzU5h6F6GpwbJPZAy0AB9Qu/PclR
-         DMxbLkPosxPqPEc29B1f2BQdFB/XluGYlhyM7UmOwvhQXlumJoNWPmkV3p3BEtwb5iXq
-         czjyi844tC5Xi+7Vf74GleRsRY2toXO2kUFU9oK+b8JimM80tJJR7CfKNaQG3kn8xC0U
-         1BZw==
-X-Forwarded-Encrypted: i=1; AFNElJ+WLhn+RNPw22NaUv6TaH8NEp1WR0ubKg5O68AvEFKWY3h/khXCPVNouAAOfxdHYpZeyY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxwe0MXwcWfvo2VDWBXo+JM6l5sBo+DqV/rN7bWRRycptbd0gYZ
-	QBdK16xgtfAoonqfJ1kpFENbicdR3ywWT4NS5bcYLzq1ZK2tcn2E7iGj
-X-Gm-Gg: Acq92OH/KV3QKxonGEbY21joJCT9BxkFI1VhRXVSa3zZW1x7CA5KWipX3oVwRyYa+vS
-	1AyQDozTDW/8Pm6oMi48xkmBdhVAJ/nApCRYhIZwV8A3AbiN2optr2hpgJojkhfRgjT40+Eqes+
-	5SeAplYyUM9Mq8sExm+fSXAh8SosPMtwYcaep0HMm0ZcxGs4NTCCGY5WNPL3HrNaV0UHmfcaV2n
-	B5ESJzJiQD0urUGG5779Mho/2MdbcrUDs1Ih18oiTDH/YtgDe3fwOuxHzN7Lwy4oP52hPXloQr3
-	+vyS/Zpz63x3aEneHZbE9zC5iHeRxHjJ1yiERbAQnsUtPBYekMkD52nubh4P6GR9/++5lD7A18D
-	YNLgat+l5ROBm/V4bKa9EWaF6quab2mQASKJtFjdBFayugc2rYjI7KSp8Ow3oI5I/emiIKuMjW9
-	UfU0o1KtC8wBtZC2+9/p6CwTJOUYXadz88YnTg
-X-Received: by 2002:a05:600c:c0d2:10b0:490:33b3:4be0 with SMTP id 5b1f17b1804b1-490426c1759mr350308945e9.20.1779984883857;
-        Thu, 28 May 2026 09:14:43 -0700 (PDT)
-Received: from gmail.com ([62.197.47.167])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909235d4c7sm45535105e9.3.2026.05.28.09.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 09:14:43 -0700 (PDT)
-Date: Thu, 28 May 2026 17:14:42 +0100
-From: Breno Leitao <leitao@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 0/4] bootconfig: embed kernel.* cmdline at build time
-Message-ID: <ahhpvNV91F6HUMeb@gmail.com>
-References: <20260527-bootconfig_using_tools-v1-0-b6906a86e7d5@debian.org>
- <20260529001519.14ca9dbe92fb2622249137c6@kernel.org>
+	s=arc-20240116; t=1779985086; c=relaxed/simple;
+	bh=SpX/qxjfuzpQX6JY1gjSWoALbWIspWNCIhmm/ATRtUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DXH+qu/cF6JMMAScG7xrk//H7GM64kFAnDGG/bizI0XKYhW+Npeym0uuQfPX1ugA8IyIBKpK7W+qIzJisb8KekQEDuviolZRFqxQwLCkPn02hjqjYse5OhAzAKo+wzhGeuohwxXxrPBVm5JpCas7ID6YsZt1OcSBa7xfobAr76E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzCiPbSI; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzCiPbSI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09C51F000E9;
+	Thu, 28 May 2026 16:18:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779985085;
+	bh=uBkuRsS+rErMRAlS6K+s/SZuTdHmBlHVgvNB3VgULIE=;
+	h=From:To:Cc:Subject:Date;
+	b=PzCiPbSI+wQAsHCg5hnpbNRPphANWT6Bot+H8muCKNrpMiNln5SRsgTl4+kIWIaMp
+	 sXa5IGzXc0UP9m/ddpaQS3g8tiIrQ6riAhllFoBVFqJC5dUQSzPpWxVBM7pnevLdFX
+	 7+EmzORjZQchfX6UiIx29w9UDII16yuU48mjJO9TLUu5Lhb+HkTjaak9rkiJHdp4Ib
+	 G/JKNkXeXzrulnGavxLwTwwKbESS1oMopGKL4ENiWCyfxTAje7pZgkwZN8A/inK8Qw
+	 MKW0aWVm5M4aQkitU8mGtXV7R6JfNkxIANWoqyCCvkneGMMZKTE/LM+Y4cyqIE0BXW
+	 QYADqjoIl01FQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org,
+	"Yonghong Song" <yonghong.song@linux.dev>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Xu Kuohai" <xukuohai@huaweicloud.com>,
+	"Catalin Marinas" <catalin.marinas@arm.com>,
+	"Will Deacon" <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH bpf-next 0/2] bpf, arm64: Stack argument fixes
+Date: Thu, 28 May 2026 09:17:46 -0700
+Message-ID: <20260528161750.1900674-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529001519.14ca9dbe92fb2622249137c6@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 29, 2026 at 12:15:19AM +0000, Masami Hiramatsu wrote:
-> On Wed, 27 May 2026 09:41:33 -0700
-> Breno Leitao <leitao@debian.org> wrote:
-> 
-> > The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
-> > already landed; this series wires the rendered cmdline into the kernel.
-> > 
-> > Motivation: today the embedded bootconfig is parsed at runtime, after
-> > parse_early_param() has already run, so early_param() handlers can't
-> > see embedded values. Folding the kernel.* subtree into the cmdline at
-> > build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
-> > users without forcing them to maintain two cmdline sources.
-> > 
-> > Behaviorally, the "kernel" subtree is rendered to a flat string at
-> > build time and stashed in .init.rodata. setup_arch() prepends it to
-> > boot_command_line before parse_early_param() runs. Overflow is a soft
-> > error: the helper logs and leaves boot_command_line untouched rather
-> > than panicking, so an oversized embedded bconf cannot brick a boot.
-> > 
-> 
-> Thanks Breno, yes, that is what I think about.
-> Let me check it. And could you also check Sashiko's comments?
-> 
-> https://sashiko.dev/#/patchset/20260527-bootconfig_using_tools-v1-0-b6906a86e7d5%40debian.org
+Patch 1 fixes a redundant MOV in the arm64 JIT's
+emit_stack_arg_store_imm() and clarifies the stack layout comments. This
+is not a bug fix but an improvement.
 
-Ack, I will have a look at them, thanks for confirming the direction is
-correct.
+Patch 2 bumps the stack argument tests from 6-8 args to at least 10 so
+they actually exercise the native stack on arm64, where x0-x7 cover the
+first 8 arguments.
 
---breno
+Puranjay Mohan (2):
+  bpf, arm64: Fix redundant MOV and clarify stack arg comments
+  selftests/bpf: Use at least 10 args in stack argument tests
+
+ arch/arm64/net/bpf_jit_comp.c                 | 12 +--
+ .../selftests/bpf/prog_tests/stack_arg.c      | 30 +++----
+ tools/testing/selftests/bpf/progs/stack_arg.c | 90 +++++++++++--------
+ .../selftests/bpf/progs/stack_arg_kfunc.c     | 24 ++---
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 25 ++++--
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        | 11 ++-
+ 6 files changed, 115 insertions(+), 77 deletions(-)
+
+
+base-commit: e42e53ae23b7d41df22ccd7788192bf578f24da2
+-- 
+2.53.0-Meta
+
