@@ -1,266 +1,167 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1F3E3D89
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 11:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B363EFFC8
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 12:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779968075; cv=none; b=BZBZVW1/TXn0oesP+VjbVVuTChTCcFnAsJyJqXnee4Cjn673D67LahcNJr8UWJvr+UwIqvRIvMgS6Uzw5OrzeEA2pvvZs6cg999FV+SGeqXhNyJd6dmZH9kDgxH+c7mygGRsK/Kex9EpsYPkBu7YCI8KktqGQg8zkew6Apxcw44=
+	t=1779972414; cv=none; b=iv+Ahd6q7Z6x2au5cUsOPL88Hjo+/iX2brxRFaZ+aJKbnArwjrPUeEUdSZ9Y/s78B579F7uYBAILb2zZsIlm0mKZsR1lxn8XkmWEzc/DusPTUYIPckBxy4af9zd9ynQVV/bJUa9rzSd5vLPg5fLA7vyycGncQUZB5a9WlX9l8cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779968075; c=relaxed/simple;
-	bh=+A01uPQTjtbw5Qb532W7D+Ubhg8qc/MlrRyq+hFFAoY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jneyW+QUmIdHeUOBt5/UQVCnYeuvfDwCx0HsY+/nnt9wPI4wtdXdUdAjTJ5XHJEDTPdOvLCU+lgbU0M6FfMMWyyXQZw7rA2QTIsCxXCFWP05+exlCLGELw10KS7a/nzXhhw2d1UGuhpB2sCg71fXn1zdcueqbT4d5vkVw64ouYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MyDrcKTO; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779972414; c=relaxed/simple;
+	bh=lsS0OCRkozaOJ36O09gOUY3x9RlHdxN3D+Ip/cp6Muw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ThaBLZFI7oollJoZndNky4Epmiis9/zSazAN4O4y3vkHpGp2NEL+GbjwgSpE1wgncbYd1ANVV3a5OY07DQsQU6isHTDTNwrmZCyqwe34+x6QCaKkiqcp1inV3Iwa10kBmarxcFEP9rE8lPf9VLe2teZxt0Ai0NnkJ9uXaq1W3tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=LsgEkMGy; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MyDrcKTO"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-36b8d414666so365792a91.3
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 04:34:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LsgEkMGy"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-68abd694c1fso1380994a12.2
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 05:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779968072; x=1780572872; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9+tx+XKYY03X8TxOQxdzemG5vYxJQIyQ9ZGtE4VotsQ=;
-        b=MyDrcKTOlROF2dzE/hsdbG2dsxt6o6a4ShWg34CZcfYptKdFQ83duMFELAE4ty4X9v
-         HJv7WhHf+nRsP/DbZL6PH+sTg3Ke5g3DeuT5rF3uHO+I2CPFXClKqjs9xk14LZfI3FTc
-         Zlob3DN0Wsjd79rwt2xtCCUNa8Vx1i3OVQSjb8wchESDAXzDt8rCuXI5dRMmGYlCYkHJ
-         0uRCWY1T0YTVHtVZeGAw4Ei53dJODWlGKUhvY7IUs8A6okxp7MIMMW+L8oWPsNcjr/X2
-         TkW+9XtH1xP+Tjjl53H7X8n9XnwWC6jpnT7w1OJIKAGUwiBJWExBcT/jrLIlNLUeZqmn
-         Y5Gw==
+        d=cloudflare.com; s=google09082023; t=1779972411; x=1780577211; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N3QWq3goEbku0FKpK3b3qT/SmuAifh1Xl7rPPp2Quj8=;
+        b=LsgEkMGyV/E+V2xGbOSSDgvXa2IctNGAIApuYSKlrMfRDzQt4Q/kNixjT7qYgHtsxA
+         LkIYO0h7LZPPN+sVJCJxa4lDWYACkseOjqQ4IULf6HQJrdBjUzbcuFEpxSdJEMjbj+Er
+         +34kliLu/AjiYRKvWg+UFZJrsJR/fW92EM/3F0qSbDqx7ey2jH610IQX7oM6kqovsGyu
+         9P4NjygtxSrhS6a03J+0jiN80K3Q8cfoEWeCsH88l4iAY4OYtzYyiGIbgQ2aPvFQrm3J
+         spYOisabCqp5sLFWXL94QcfytTZJkbkr053n2tokdwdu2pZ6YpKmtCUJYO0hlmBm2aqY
+         DvAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779968072; x=1780572872;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+tx+XKYY03X8TxOQxdzemG5vYxJQIyQ9ZGtE4VotsQ=;
-        b=A4gS7XErwMAFmhO7EP4H8WVUV2dsE2DZPvoRElJqM1U+VdAYpNM8pYm8yMM+FHPGPG
-         yBOGf74IxoLiy9II1eLOjssvJZfT4BsTgmz0ABoTIv+xIMeqLLMZly9PVXl38yXp7fov
-         oMIEpYjWqj1lzcSKVuL0f9ChFGKwZxLg4CNbF9qMv9eTjypu14VgZjUs9WYMPrhMIAN5
-         jJdAd+TCGkon4IGw8mR8foHWwDRNP+FmQREIKTl0fAvprako7ODvVKpHvj2AW1xzqeAy
-         VR0rpzNncbleJlohJiMQ9D/AHAxsk7vTv/+9AbE+d6h4YBgmtuHYMQIREqTGuHzby2Jd
-         XThw==
-X-Forwarded-Encrypted: i=1; AFNElJ/P3zpPbcMgIsAL9pVVCSjktXX2cDGQ/y41wHkuSh3Prfna4NMEMvAo8HOnELDOrqIrazY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7f5GZXJe52VmEethSa2nAImOucA1TRt5hYXeC/S+uRce2w9Ns
-	il2aQlUckf7826IBZOtyA7AGKQcSnCcA00Q2Fcz7+jkdW9bwg0vYGrKw
-X-Gm-Gg: Acq92OG9s2Qa9TEXx28PxKtWc17wsEoE0tkYnANdBloMumIaWSNLAYwVuHUso9jzGuR
-	SFYYvHW8ThKkqCCTKX2YEE24MDJe+eFSslr4UZ9JAUrNcbAJ0q4LkjO43p/nveVc5w0u2y9bDt0
-	/0t+TsgxZD9exNBfU2oZ4QRC+fKFTB7ypprEnlo9F1sPNc/aCGlFOhsB4qJz/vdbhkuG+TH5nOV
-	Kor0O07yLcV9EZk2qulCtiGEAGxJEwnkGkOfTlK2wv4KZO5VBVb3mdcxBzsVIxD/+2pMGP3eotd
-	21bC0fCLKlvMn39J8Zw9QtR2djv2EgMK6GyCmGQQQsIYjor+aEp5koHv93zO9CjD6B+cQK6RylN
-	JCIiJy9Ze6U3DttY80BCX+WAZmTlHUBxHOcKbRVJYHKB6KhdEXLF17o+lo83KijMgAP3JOTC63P
-	Ve7/p24QlFsQJKReLATiw7AMh/Ics1C59k9Ef7XQVwDI4DJ1CLKYrmIKRs2UnEfw==
-X-Received: by 2002:a17:90b:134f:b0:366:3ac:f725 with SMTP id 98e67ed59e1d1-36a6788d912mr27349345a91.25.1779968071978;
-        Thu, 28 May 2026 04:34:31 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36b90920c7esm1534027a91.9.2026.05.28.04.34.31
+        d=1e100.net; s=20251104; t=1779972411; x=1780577211;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N3QWq3goEbku0FKpK3b3qT/SmuAifh1Xl7rPPp2Quj8=;
+        b=e5uoAYTWAzFvAybn6ohLsoKc2KEBiafbf4CO7/mECFWDjmASrHc/aGqQb4rBK7FD0t
+         +fvqoQ7EL1ACbTZmWbtASdp8VdS5VB4J1Z+D/p4rtQhwrBK9Dv9J0M3Bt7FdgwSpt27/
+         lY06yS1BxxoPZWq/58+A1YC2mdmv9zKKABbvLKPlZIQvWpsNWY93e/euYINdUj9rAe9F
+         c0HK2rDDoqqy+vx5C1xJPGGck/iXXaXc5eWDn2WBSKpc2UYW29AINW4bC+Kcl5rjpKta
+         Ax0BYOF6J26GpuFCuPqbNH6TSMVxs3nYDm5AfaJ3X00MvjQBm9HmYVqFcYW3vlB5a8/H
+         fc5Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+Awy8W50THxTCLEMh1KmZNW44FgDcWTUM0nPtWAZ4AjNJd7Klxez5GENNMX/eT4hp5ONE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcFMN1Awq3vRozSVMxQNrvxGiii8wwIuTKmzIGSwx5xK3mNb2R
+	IDgEsyjv4FN5nPp/dUflwfQdroQlgdhhEBmmE8E9THkb7Tff4BOmnrvJ5EZf5Sxeo7o=
+X-Gm-Gg: Acq92OEC2fOMRTY4NWIj/EZ2tZw/M8ALEwcObrAP/dFrbYJTEkrMUD87FrW8vknlNkJ
+	dYyvA3MgPQWs9Jwdq1HiwzO/UkxV1i5RrT0K5njhiJK0d2Cw4/j3hml7jwn6XeXi4Rtw+Od7O7f
+	56h5ODs9hltff6H3fTYEuaN4E/PNZKrHTeYhX7Txp+spSFGteuzMXXG+BtDOqygJMjfbLRFam2H
+	KH5H32UZtnyAivhNulFK7bsA0DL7VxpNjvt9kD3cZxHgmtZ52hmwRyH5AsZ/YU7wBu8SXKI9J2/
+	vVwFs8KNLxyY8e6/eRuYBf8bmINM4Rqkpsxx74sBfeR1tqjRDE1zZm8KN8J3tMwwfDhN7GHNYwM
+	KP99yB+1ERismkjAg4KnTEgN6uYsXFwmaRGXL7Wyv7z5Z4X4LTJN6C5Kvoi5MkKxFnwaQAFGbDd
+	p8klj7grpJo+/atMmPeuQajkqBFJPZl6X+VTpo
+X-Received: by 2002:a05:6402:1f86:b0:689:971b:7439 with SMTP id 4fb4d7f45d1cf-689971b76c2mr9771553a12.12.1779972411025;
+        Thu, 28 May 2026 05:46:51 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68a6faad61esm1847899a12.2.2026.05.28.05.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 04:34:31 -0700 (PDT)
-Message-ID: <9d1dc36948ea9cfdf48f643f9b34ccaf51411847.camel@gmail.com>
-Subject: Re: bpf-next verifier regression on unsigned bound checking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: YiFei Zhu <zhuyifei@google.com>, bpf <bpf@vger.kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov
- <ast@kernel.org>
-Date: Thu, 28 May 2026 04:34:28 -0700
-In-Reply-To: <5bd0c7b135559943f3abccda6390705da5e493d5.camel@gmail.com>
-References: 
-	<CAA-VZPk5=sQMCkngpXBo34v6=Ut5YmxNiTKSLfS6-GiSvUZUEQ@mail.gmail.com>
-	 <5bd0c7b135559943f3abccda6390705da5e493d5.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-9 
+        Thu, 28 May 2026 05:46:50 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>,  Peter Zijlstra <peterz@infradead.org>,
+  Ingo Molnar <mingo@kernel.org>,  Masami Hiramatsu <mhiramat@kernel.org>,
+  Andrii Nakryiko <andrii@kernel.org>,  bpf@vger.kernel.org,
+  linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 12/13] selftests/bpf: Add tests for uprobe nop10 red
+ zone clobbering
+In-Reply-To: <20260526205840.173790-13-jolsa@kernel.org> (Jiri Olsa's message
+	of "Tue, 26 May 2026 22:58:39 +0200")
+References: <20260526205840.173790-1-jolsa@kernel.org>
+	<20260526205840.173790-13-jolsa@kernel.org>
+Date: Thu, 28 May 2026 14:46:48 +0200
+Message-ID: <87pl2f66rr.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 
-On Tue, 2026-05-26 at 19:32 -0700, eddyz87 wrote:
-> On Tue, 2026-05-26 at 17:51 -0700, YiFei Zhu wrote:
-> > I was looking at Kuniyuki's selftest for BPF autolowat [1], in
-> > particular why the verifier fails if these two conditions are swapped:
-> >=20
-> > =C2=A0 if (copy_len > RPC_DESC_SIZE)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto disable; /* always fals=
-e, only for verifier. */
-> > =C2=A0 if (copy_len =3D=3D 0)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto disable; /* FIN. */
-> >=20
-> > This is the register trace of the reversed version (which fails verifie=
-r):
-> >=20
-> > =C2=A0 33: (71) r1 =3D *(u8 *)(r9 +16)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 ;
-> > R1=3Dscalar(smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D255,var_o=
-ff=3D(0x0;
-> > 0xff)) R9=3Dmap_value(map=3Dtcp_autolowat_m,ks=3D4,vs=3D20)
-> >=20
-> > =C2=A0 107: (b7) r7 =3D 8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 ; R7=3D8
-> > =C2=A0 108: (1f) r7 -=3D r1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ;
-> > R1=3Dscalar(smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D255,var_o=
-ff=3D(0x0;
-> > 0xff)) R7=3Dscalar(smin=3Dsmin32=3D-247,smax=3Dsmax32=3D8)
-> >=20
-> > =C2=A0 117: (15) if r7 =3D=3D 0x0 goto pc+48=C2=A0=C2=A0=C2=A0=C2=A0 ;
-> > R7=3Dscalar(smin=3Dsmin32=3D-247,smax=3Dsmax32=3D8)
-> > =C2=A0 118: (25) if r7 > 0x8 goto pc+47=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ;
-> > R7=3Dscalar(smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D8,var_off=
-=3D(0x0; 0xf))
-> >=20
-> > =C2=A0 126: (bf) r4 =3D r7=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- ;
-> > R4=3Dscalar(id=3D888,smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D=
-8,var_off=3D(0x0;
-> > 0xf)) R7=3Dscalar(id=3D888,smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Duma=
-x32=3D8,var_off=3D(0x0;
-> > 0xf))
-> > =C2=A0 127: (85) call bpf_skb_load_bytes#26
-> > =C2=A0 R4 invalid zero-sized read: u64=3D[0,8]
-> >=20
-> > The oddity happens at this instruction:
-> >=20
-> > =C2=A0 117: (15) if r7 =3D=3D 0x0 goto pc+48=C2=A0=C2=A0=C2=A0=C2=A0 ;
-> > R7=3Dscalar(smin=3Dsmin32=3D-247,smax=3Dsmax32=3D8)
-> >=20
-> > The C logic constrains that the unsigned copy_len !=3D 0, and <=3D
-> > RPC_DESC_SIZE, i.e. the end state should be umin=3D1, umax=3D8. However
-> > instruction 117 does not record the umin constraint. If the checks are
-> > reversed to match the patch order, the verifier is sane; the
-> > possibility of overflow is eliminated, so the range becomes [0,8]
-> > after the first comparison, and then [1,8] after the second.
-> >=20
-> > I looked at the verifier changes and found this commit:
-> >=20
-> > =C2=A0 commit bbc631085503a7fde9617be18b0657cc9a83910a
-> > =C2=A0 Author: Eduard Zingerman <eddyz87@gmail.com>
-> > =C2=A0 Date:=C2=A0=C2=A0 Fri Apr 24 22:52:44 2026
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf: replace min/max fields with struct =
-cnum{32,64}
-> >=20
-> > This change means that the signed and unsigned ranges are no longer
-> > tracked separately, but rather in the same circular number.
-> > Unfortunately 0 falls within the circular range [-247, 8], and the
-> > cnum intersection returns the over-approximation result of the
-> > original R7 range (because the intersection happens on two disjoint
-> > arcs), thereby ignoring the introduced umin constraint.
-> >=20
-> > I'm not sure how this could be fixed without reverting the patch of
-> > using cnum to track ranges (which would re-introduce a lot of maths :/
-> > ), but I'm also not sure whether this is an acceptable regression.
-> > Some helpers, such as bpf_skb_load_bytes in the test, uses
-> > ARG_CONST_SIZE, which really does not like a zero lower bound.
-> > Therefore, if that argument results from a subtraction, the verifier
-> > now enforces checking the upper bound before the lower bound to
-> > eliminate underflows, even if the variable is unsigned and thus
-> > invokes no undefined behavior...
-> >=20
-> > YiFei Zhu
->=20
-> That's unfortunate. Thank you for the detailed report.
-> One option is to allow intersect operation to return two intervals,
-> then use both intervals and fork the verifier state to explore second hal=
-f.
-> Veristat impact to be measured.
+On Tue, May 26, 2026 at 10:58 PM +02, Jiri Olsa wrote:
+> From: Andrii Nakryiko <andrii@kernel.org>
+>
+> The uprobe nop5 optimization used to replace a 5-byte NOP with a 5-byte
+> CALL to a trampoline. The CALL pushes a return address onto the stack at
+> [rsp-8], clobbering whatever was stored there.
+>
+> On x86-64, the red zone is the 128 bytes below rsp that user code may use
+> for temporary storage without adjusting rsp. Compilers can place USDT
+> argument operands there, generating specs like "8@-8(%rbp)" when rbp ==
+> rsp. With the CALL-based optimization, the return address overwrites that
+> argument before the BPF-side USDT argument fetch runs.
+>
+> Add two tests for this case. The uprobe_syscall subtest stores known values
+> at -8(%rsp), -16(%rsp), and -24(%rsp), executes an optimized nop10 uprobe,
+> and verifies the red-zone data is still intact. The USDT subtest triggers a
+> probe in a function where the compiler places three USDT operands in the
+> red zone and verifies that all 10 optimized invocations deliver the expected
+> argument values to BPF.
+>
+> On an unfixed kernel, the first hit goes through the INT3 path and later
+> hits use the optimized CALL path, so the red-zone checks fail after
+> optimization.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> [ updates to use nop10 ]
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  .../selftests/bpf/prog_tests/uprobe_syscall.c | 75 +++++++++++++++++++
+>  tools/testing/selftests/bpf/prog_tests/usdt.c | 49 ++++++++++++
+>  tools/testing/selftests/bpf/progs/test_usdt.c | 25 +++++++
+>  tools/testing/selftests/bpf/usdt_2.c          | 13 ++++
+>  4 files changed, 162 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> index 969f4deba9fd..efff0c515184 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
 
-A few notes on the pattern first. Here is an excerpt from the test case:
+[...]
 
-	if (before(cb->rpc_desc_seq + RPC_DESC_SIZE, end_seq))
-		copy_len =3D RPC_DESC_SIZE - cb->rpc_desc_buff_len;
-	else
-		copy_len =3D end_seq - rpc_copied_seq;
+> @@ -855,6 +897,37 @@ static void test_uprobe_race(void)
+>  #define __NR_uprobe 336
+>  #endif
+>  
+> +static void test_uprobe_red_zone(void)
+> +{
+> +	struct uprobe_syscall_executed *skel;
+> +	struct bpf_link *link;
+> +	void *nop10_addr;
+> +	size_t offset;
+> +	int i;
+> +
+> +	nop10_addr = find_nop10(uprobe_red_zone_test);
+> +	if (!ASSERT_NEQ(nop10_addr, NULL, "find_nop10"))
 
-	/* Since LLVM commit 324e27e8bad83ca23a3cd276d7e2e729b1b0b8c7,
-	 * clang omits the "copy_len =3D=3D 0" check below, which is necessary
-	 * to satisfy the BPF verifier's range check for bpf_skb_load_bytes().
-	 */
-	barrier_var(copy_len);
+Nit: ASSERT_OK_PTR would have worked as well. Dealer's choice.
 
-	/* Do not swap the order of the two copy_len checks below.
-	 * The BPF verifier somehow does not properly track the minimum
-	 * value for 'copy_len =3D=3D 0'.
-	 *
-	 * 91: (15) if r7 =3D=3D 0x0 goto pc+40      ; R7=3Dscalar(smin=3Dsmin32=
-=3D-247,smax=3Dsmax32=3D8)
-	 * 92: (25) if r7 > 0x8 goto pc+39       ; R7=3Dscalar(smin=3Dsmin32=3D0,s=
-max=3Dumax=3Dsmax32=3Dumax32=3D8,var_off=3D(0x0; 0xf))
-	 *
-	 * This does not occur if copy_len is u32.
-	 */
-	if (copy_len > RPC_DESC_SIZE)
-		goto disable; /* always false, only for verifier. */
-	if (copy_len =3D=3D 0)
-		goto disable; /* FIN. */
+> +		return;
+> +
+> +	skel = uprobe_syscall_executed__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	offset = get_uprobe_offset(nop10_addr);
+> +	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
+> +			0, "/proc/self/exe", offset, NULL);
+> +	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
+> +		goto cleanup;
+> +
+> +	for (i = 0; i < 10; i++)
+> +		ASSERT_EQ(uprobe_red_zone_test(), 0, "red_zone_intact");
+> +
+> +	bpf_link__destroy(link);
+> +
+> +cleanup:
+> +	uprobe_syscall_executed__destroy(skel);
+> +}
+> +
+>  static void test_uprobe_error(void)
+>  {
+>  	long err = syscall(__NR_uprobe);
 
-Note that "do not swap" comment here is fragile, as clang is free to
-reorder these checks is at sees fit. It will pick the layout basing on
-branch probability assumptions, trying to maximize fallthrough.
+[...]
 
-The pattern in question looks as:
-
-  1: rX =3D ... some range crossing sign boundary ...
-  2: if rX =3D=3D 0 goto ...
-  3: if rX > 8  goto ... // unsigned compare
-  4: ... here rX is guaranteed to be [1, 8] but verifier can't infer that .=
-..
-
-The (1) part is important, if rX is non-negative the cnums logic would
-infer true bounds. In the test case the negative range for copy_len
-comes from the arithmetic at the beginning of the code sample.
-I don't think such situations occur often.
-
-The main difference from non-cnum verifier is that from `rX !=3D 0` it
-was always able to infer a umin bound of 1.
-
-With this in mind I did two experiments:
-- At each conditional jump, if cnumX_intersect in refine logic
-  produces multiple arcs, fork the verifier state to represent each
-  arc in it's own state ([1], horrible code quality but good enough
-  for the experiment).
-- At conditional jumps of form:
-  - rX =3D=3D 0 / rX !=3D 0
-  - or rX =3D=3D rY / rX !=3D rY where rY is known zero
-  - when rX is bounded and it's range crosses sign boundary
-  Fork the verifier state splitting rX range in negative and
-  non-negative parts ([2], patch is fine, tests need refinement).
-
-[1] https://github.com/eddyz87/bpf/tree/cnum-intersect-split
-[2] https://github.com/eddyz87/bpf/tree/cnum-split-at-zero
-
-Approach [1] has some nasty verification performance regressions,
-because effectively it introduces a fork at each comparison with a
-constant. These compound when there are several comparisons within a
-for loop body. E.g. blowing up verification budget consumed by
-selftest test_parse_tcp_hdr_opt.c.
-
-Approach [2] fixes the issue at hand and has almost no impact on
-verification performance when tested on a set of
-selftest/scx/meta/cilium programs.
-It is fine tuning for a specific pattern though, but one might argue
-that zero is special and this behavior matches the pre-cnum umin logic.
-
-I'm thinking about a somewhat more generic approach:
-- a data flow pass collecting symbolic constraints on registers
-  (e.g. rX !=3D 0 =E2=88=A7 rX <=3D 8 at instruction 4 in the pattern above=
-);
-- and using these constraints to:
-  - refine rX range during main verification pass
-  - deciding whether to call mark_chain_precision() on memory access
-    by inspecting constraints (e.g. if constraint guarantees that
-    rX <=3D 8 and memory access is safe when value is <=3D 8, there is no
-    need to do mark_chain_precision()).
-
-This might make sense if mark_chain_precision() part would result in
-measurable verification statistics improvements.
-
----
-
-Of-course there is still an option to revert cnums altogether.
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
