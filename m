@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E382F5468
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 16:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E6E3112A5
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 16:18:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779985086; cv=none; b=t2hqH8E46B2Uf5Ds3IScIBfKvXu0tlbt+ICCZ6nquZtaTiwELo5f/08rW9qDdAq2N47sZ+i00sKoOWQrA7Et5uugauWArpraDml3K6jiAO71rQFqK0mrP4G9/V3pen8Ol3M8NStssmNgzLmPP7M7Rzwb1bhgcEcixOJhB+V3K0E=
+	t=1779985092; cv=none; b=fBFdmhq5f4s0aTC7cYtL+SMyueEM/IKMKxEiB1+0mFmQAkf/qC8ORZL0vI+EK9yMrzvSxh2JhY7U0uXF6sQgo/Dk1SRz9QnGiSLrlD5mWKrvTAh5ehA14rjxYD3gckHJHtahiP++flCLt0XNTutNJwPDhoh55utaPeLvYJXs29I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779985086; c=relaxed/simple;
-	bh=SpX/qxjfuzpQX6JY1gjSWoALbWIspWNCIhmm/ATRtUQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DXH+qu/cF6JMMAScG7xrk//H7GM64kFAnDGG/bizI0XKYhW+Npeym0uuQfPX1ugA8IyIBKpK7W+qIzJisb8KekQEDuviolZRFqxQwLCkPn02hjqjYse5OhAzAKo+wzhGeuohwxXxrPBVm5JpCas7ID6YsZt1OcSBa7xfobAr76E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzCiPbSI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779985092; c=relaxed/simple;
+	bh=aa3qWvUPCmRh4pCzXnBNcE4eCfPH8a6fYvAoJhTFWHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F9vvYnbxiLrV7+7G5TsQ+GhFyXJECZ+d1T3NB2BQfsFxmTmgRrFDH/aJftYpX1hJvsHupOcfQmS2iU0bEkX884K27QLDDM0CRiiqVUrtOt5H0xF8ISfVDAW3qgL2IicLGbP4oKYkjFv5jhT8kTbbCdr+9lNaS+zEdB2YBrHYUyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpmASJun; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzCiPbSI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09C51F000E9;
-	Thu, 28 May 2026 16:18:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpmASJun"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4501F00A3C;
+	Thu, 28 May 2026 16:18:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779985085;
-	bh=uBkuRsS+rErMRAlS6K+s/SZuTdHmBlHVgvNB3VgULIE=;
-	h=From:To:Cc:Subject:Date;
-	b=PzCiPbSI+wQAsHCg5hnpbNRPphANWT6Bot+H8muCKNrpMiNln5SRsgTl4+kIWIaMp
-	 sXa5IGzXc0UP9m/ddpaQS3g8tiIrQ6riAhllFoBVFqJC5dUQSzPpWxVBM7pnevLdFX
-	 7+EmzORjZQchfX6UiIx29w9UDII16yuU48mjJO9TLUu5Lhb+HkTjaak9rkiJHdp4Ib
-	 G/JKNkXeXzrulnGavxLwTwwKbESS1oMopGKL4ENiWCyfxTAje7pZgkwZN8A/inK8Qw
-	 MKW0aWVm5M4aQkitU8mGtXV7R6JfNkxIANWoqyCCvkneGMMZKTE/LM+Y4cyqIE0BXW
-	 QYADqjoIl01FQ==
+	s=k20260515; t=1779985091;
+	bh=5tQgGnkdHxEM/wLQx5ec96DsLADSPZSksdytZbAN40g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=DpmASJunHqJOI6D0vRI3GOgtWzcW0Jzqx/Vogt5tE6kqRR8zPTOlr9s8+3yNaFZ+S
+	 zMLtDvS1ckG/ZoF6OvY8p6Dqmk3hfIX10poUQW5bEusEbqnOpBjbJvXJKXd9OAnCB/
+	 PsTqpa0VjkUQQm5x84AWXYJvs6oSO77xiDEDgKxxDZe/yV6ezDj/sl37YoDtUFTh3T
+	 ZHeTVnlDBNy7EH3q9ra9l8Lb+B97/2ISsgvHGSofdjdBLGXLU5EmxU+UP0CPRaYvWs
+	 golw9K1W3TZGT+MNmKGEYJQe7GhPRe1i12f8nGs8/6xWP62s+9AI0FkaIg+dtODGdj
+	 h7o3jwgLJHpTg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org,
 	"Yonghong Song" <yonghong.song@linux.dev>
@@ -40,10 +41,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Catalin Marinas" <catalin.marinas@arm.com>,
 	"Will Deacon" <will@kernel.org>,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH bpf-next 0/2] bpf, arm64: Stack argument fixes
-Date: Thu, 28 May 2026 09:17:46 -0700
-Message-ID: <20260528161750.1900674-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next 1/2] bpf, arm64: Fix redundant MOV and clarify stack arg comments
+Date: Thu, 28 May 2026 09:17:47 -0700
+Message-ID: <20260528161750.1900674-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260528161750.1900674-1-puranjay@kernel.org>
+References: <20260528161750.1900674-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,28 +55,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Patch 1 fixes a redundant MOV in the arm64 JIT's
-emit_stack_arg_store_imm() and clarifies the stack layout comments. This
-is not a bug fix but an improvement.
+emit_stack_arg_store_imm() materializes the immediate into tmp and
+then moves tmp to the target register (x5-x7).  Emit the immediate
+directly into the target register to avoid the redundant MOV.
 
-Patch 2 bumps the stack argument tests from 6-8 args to at least 10 so
-they actually exercise the native stack on arm64, where x0-x7 cover the
-first 8 arguments.
+While here, qualify the bare "FP" in the stack-layout ASCII art as
+"A64_FP" so it is not confused with BPF_FP, and note that incoming
+stack arguments sit above the FP/LR pair pushed by the callee
+prologue.
 
-Puranjay Mohan (2):
-  bpf, arm64: Fix redundant MOV and clarify stack arg comments
-  selftests/bpf: Use at least 10 args in stack argument tests
+Suggested-by: Will Deacon <will@kernel.org>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ arch/arm64/net/bpf_jit_comp.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
- arch/arm64/net/bpf_jit_comp.c                 | 12 +--
- .../selftests/bpf/prog_tests/stack_arg.c      | 30 +++----
- tools/testing/selftests/bpf/progs/stack_arg.c | 90 +++++++++++--------
- .../selftests/bpf/progs/stack_arg_kfunc.c     | 24 ++---
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 25 ++++--
- .../bpf/test_kmods/bpf_testmod_kfunc.h        | 11 ++-
- 6 files changed, 115 insertions(+), 77 deletions(-)
-
-
-base-commit: e42e53ae23b7d41df22ccd7788192bf578f24da2
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index e3bbeaa94590..b4abc3138f37 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -546,7 +546,8 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ 	 *                          low
+ 	 *
+ 	 * Stack args 6-8 are passed in x5-x7, args 9+ at [SP].
+-	 * Incoming args 9+ are at [FP + 16], [FP + 24], ...
++	 * Incoming args 9+ are at [A64_FP + 16], [A64_FP + 24], ...
++	 * (above the saved FP/LR pair pushed in the callee prologue).
+ 	 */
+ 
+ 	emit_kcfi(is_main_prog ? cfi_bpf_hash : cfi_bpf_subprog_hash, ctx);
+@@ -1235,11 +1236,12 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
+ {
+ 	int idx = -bpf_off / sizeof(u64) - 1;
+ 
+-	emit_a64_mov_i(1, tmp, imm, ctx);
+-	if (idx < NR_STACK_ARG_REGS)
+-		emit(A64_MOV(1, stack_arg_reg[idx], tmp), ctx);
+-	else
++	if (idx < NR_STACK_ARG_REGS) {
++		emit_a64_mov_i(1, stack_arg_reg[idx], imm, ctx);
++	} else {
++		emit_a64_mov_i(1, tmp, imm, ctx);
+ 		emit(A64_STR64I(tmp, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u64)), ctx);
++	}
+ }
+ 
+ /* JITs an eBPF instruction.
 -- 
 2.53.0-Meta
 
