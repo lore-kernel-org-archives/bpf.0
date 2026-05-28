@@ -1,217 +1,191 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1D536BCCA
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 08:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0809377EBA;
+	Thu, 28 May 2026 08:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956849; cv=none; b=ZpP2cSvnuB/A4KCaJs10VEd9y/ItFaOCzU+VmKVH+9b1oZyl5A5XPodXS0m2NpOOKWt61/QOWMtJhu2pqwxzbyolRKdD0vvN/DY0A1LBdaVsPrWcSTaNjJHswRPXmHGQ48e+f0HLVKdy/vrMe3t9VwIFx+ipk9G78qHPNJQjJRI=
+	t=1779958754; cv=none; b=netuq0PWdY3Kq5/z/hbyVscVm7iNBrcBRSA40Ry7sK0piCp4QBRAvo67KqVlIaSvV4ADzcTlNIwfJ9SkUwAT5K3K6FXx96o7eTBqZsmhOUwXXvy4xU0a9+TCh8LFECM0esIuvpMMX5zb5KACpPfnbFl/c101wxIVqD7g73ws/L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956849; c=relaxed/simple;
-	bh=R83Zk9MPwHlNVvAL1SqF6psKEEdQEoajydtBTiAfb5g=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=fWT63J97rBuX8bAjmNhtJQ3iTlH3f34vBYmbo33aku8p8VKX8wpW4VWr3V6kOY8n5uREdVnrfqisFgBD+gi6gA/E3NqCnHecCzNUtBD0lbS6qzUTl/hGgFQZ+2hyssz2deKUd4tjX/+YkEn/kPF9HXf/qOQd3w3BrqMeb6vNh8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ErYCF8Mx; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779958754; c=relaxed/simple;
+	bh=yITXz7miJoKkLJkFy0JeLjTGaWJ0V8x8RwQLEqHLRmQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iOMcckbopTyZ3OB+GllmxVS78eUTEB0S6mwcBmLyHgOHmf6ed4yOw35TFjXKYKT8Wj7lzatuFhKryT5Jx+BGZRf2afgdwVoHw3S07JTuFLaUz2OKyz61/wnHIgP8qsOU4/58DQOSIubkM6uSI+q5VqwinYqtnF4JLnH5bLghCJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZLjGjCS8; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ErYCF8Mx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZLjGjCS8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779958753; x=1811494753;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yITXz7miJoKkLJkFy0JeLjTGaWJ0V8x8RwQLEqHLRmQ=;
+  b=ZLjGjCS8wiNcOhv0UVujYSv2STmW4NEvvxaBjIu9pH9XcD2BjNXRc/2H
+   oWxLTYUwkIz3UHBLfP2zCHwbJNsQfyByIfGMlDLMqB7tQaUTzI4vHYoh4
+   U6Va9hk/d2cD+APLK7gF7FosLYlRPJaGygriTPPAC21ueXmdxaSZx3JCw
+   hIeEYXen3Zyildyrit+LBdg4lRQFEOH3NIZpni44JxG79R1vDGQrSK1f1
+   opFsJj4qAmAgCLK/7y3l3KK7luKcs+jyktGNF4NIE0HiWKJiSgqik7B/L
+   4Y8R/Oegzch6TSdrynPkAnN2f8/d9DvXSg9vPXEE9rhZa2AnNEsXEh1SC
+   w==;
+X-CSE-ConnectionGUID: iPULJdZQTyeeAyzrk2BHiw==
+X-CSE-MsgGUID: 8k8i7sWxTqWscFozEpUTOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="79946333"
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="79946333"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 01:59:12 -0700
+X-CSE-ConnectionGUID: OWoJ8s+vSmKaooVbl3p+sQ==
+X-CSE-MsgGUID: R+cGajzlR9ql9VHI5YnIIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="246523117"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 May 2026 01:59:07 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSWa0-000000005l0-1tso;
+	Thu, 28 May 2026 08:59:04 +0000
+Date: Thu, 28 May 2026 16:58:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christoph Hellwig <hch@lst.de>, Vlastimil Babka <vbabka@kernel.org>,
+	Harry Yoo <harry@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hao Li <hao.li@linux.dev>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org, kasan-dev@googlegroups.com,
+	bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+Message-ID: <202605281629.y8HhAihO-lkp@intel.com>
+References: <20260527070239.2252948-2-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779956842;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cE5vkgdKA1jGW+pTW446oAunyXUpwHm3Ex1DLaNXHJQ=;
-	b=ErYCF8MxdKKJgJ2bsChhRvd83CNLBlJQsWHOx+SWyZogRkcY9bH5Ny8445eDaQIhL/oUFl
-	8W8sKYUdESXAeK/TMvkxvlL5bS/4Tp66yE/RxcSSx2K35RuksXZ33YwXhFflH1sVFt+0sx
-	ngQJtc4bbMoa1pHEVEYyyAFAFjqk5YU=
-Date: Thu, 28 May 2026 08:27:16 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "teawater" <hui.zhu@linux.dev>
-Message-ID: <1b58d56976202f26818d31dbd0da2ecb2e2460f5@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH bpf-next v7 00/11] mm: BPF struct_ops for dynamic
- memory protection and async reclaim
-To: "Michal Hocko" <mhocko@suse.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Roman
- Gushchin" <roman.gushchin@linux.dev>, "Shakeel Butt"
- <shakeel.butt@linux.dev>, "Muchun Song" <muchun.song@linux.dev>, "JP
- Kobryn" <inwardvessel@gmail.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
- davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
- Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
- Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
- "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
- <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
- Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
- <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Jeff Xu"
- <jeffxu@chromium.org>, mkoutny@suse.com, "Jan Hendrik Farr"
- <kernel@jfarr.cc>, "Christian Brauner" <brauner@kernel.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Brian Gerst" <brgerst@gmail.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>, "Willem de Bruijn"
- <willemb@google.com>, "Jason Xing" <kerneljasonxing@gmail.com>, "Paul
- Chaignon" <paul.chaignon@gmail.com>, "Chen Ridong"
- <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
- "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- geliang@kernel.org, baohua@kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
-In-Reply-To: <ahavmbcdXDX5gNup@tiehlicka>
-References: <cover.1779760876.git.zhuhui@kylinos.cn>
- <ahavmbcdXDX5gNup@tiehlicka>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527070239.2252948-2-hch@lst.de>
 
->=20
->=20On Tue 26-05-26 10:20:00, Hui Zhu wrote:
->=20
+Hi Christoph,
 
-Hi=20Michal,
+kernel test robot noticed the following build errors:
 
-> >=20
->=20> From: Hui Zhu <zhuhui@kylinos.cn>
-> >=20=20
->=20>  Overview:
-> >  This series introduces BPF struct_ops support for the memory control=
-ler,
-> >  enabling userspace BPF programs to implement custom, dynamic memory
-> >  management policies per cgroup. The feature allows BPF programs to h=
-ook
-> >  into the core reclaim and charge paths without requiring kernel
-> >  modifications, providing a flexible alternative to static knobs such=
- as
-> >  memory.low and memory.min.
-> >=20=20
->=20>  The series enables two complementary use cases.
-> >=20=20
->=20>  Dynamic memory protection: static memory protection thresholds
-> >  (memory.low, memory.min) are poor fits for workloads whose actual me=
-mory
-> >  activity varies over time. A high-priority cgroup holding a large wo=
-rking
-> >  set but temporarily idle will still suppress reclaim on its siblings=
-,
-> >  wasting available memory. A BPF-driven approach can observe real wor=
-kload
-> >  activity -- page faults, charge/uncharge events -- and activate or
-> >  withdraw protection dynamically.
-> >=20
->=20Why the same cannot be achieved by dynamically changing protection?
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Dynamically adjusting memory.low or memory.min is indeed an
-option, but it has a practical drawback: in many production
-environments these values are managed and pushed down by a
-cluster-level orchestrator (e.g. a container runtime or resource
-manager). Modifying them from a separate BPF-based agent risks
-conflicts with the orchestrator's own control loop and makes the
-system harder to reason about.
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/mm-slab-improve-kmem_cache_alloc_bulk/20260527-150421
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260527070239.2252948-2-hch%40lst.de
+patch subject: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+config: parisc-randconfig-r071-20260528 (https://download.01.org/0day-ci/archive/20260528/202605281629.y8HhAihO-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 8.5.0
+smatch: v0.5.0-9185-gbcc58b9c
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281629.y8HhAihO-lkp@intel.com/reproduce)
 
-Beyond that, the intended use case requires rapid, short-lived
-adjustments -- reacting to bursts of page faults or PSI spikes
-and reverting just as quickly once the pressure subsides. Mutating
-the static knobs for that purpose feels like the wrong abstraction:
-the knobs express policy intent, while what we need is a transient
-override that sits on top of that policy.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281629.y8HhAihO-lkp@intel.com/
 
-The hooks are therefore not meant to replace the existing limits,
-but to complement them: the orchestrator continues to own
-memory.low / memory.min, while a BPF program makes small, brief
-corrections in response to observed runtime behavior.
+All errors (new ones prefixed by >>):
 
->=20
->=20>=20
->=20> The test results at the end of this
-> >  letter quantify the difference: in a scenario where the high-priorit=
-y
-> >  cgroup is idle, the BPF-controlled low-priority cgroup achieves roug=
-hly
-> >  37x higher throughput than with static memory.low.
-> >=20=20
->=20>  Asynchronous proactive reclaim: the memcg_charged and memcg_unchar=
-ged
-> >  hooks, combined with the BPF workqueue mechanism and the new
-> >  bpf_try_to_free_mem_cgroup_pages() kfunc, enable BPF programs to per=
-form
-> >  proactive background reclaim without blocking the charge path. The
-> >  pattern works as follows: the memcg_charged callback tracks accumula=
-ted
-> >  memory usage; when usage crosses a configurable threshold, it enqueu=
-es an
-> >  asynchronous work item via bpf_wq_start() and returns immediately wi=
-thout
-> >  throttling the charging task. The workqueue callback then invokes
-> >  bpf_try_to_free_mem_cgroup_pages() to reclaim pages from the target
-> >  cgroup; if usage remains elevated after reclaim, the callback re-enq=
-ueues
-> >  itself to continue. This allows a BPF program to keep a cgroup's
-> >  footprint below its hard limit (memory.max) entirely in the backgrou=
-nd,
-> >  avoiding the OOM killer or direct-reclaim stalls that would otherwis=
-e
-> >  occur.
-> >=20
->=20How do you account the overall work done to the specific memcg as the
-> large part of the reclaim is done from WQ context?
-
-One approach to attribute the reclaim work accurately to the target
-memcg would be to expose a kfunc that creates a kthread_worker and
-attaches it to a specific cgroup. Reclaim work enqueued to that
-worker would then run in a context already associated with the
-target memcg, so the accounting would naturally fall to the right
-cgroup without any extra bookkeeping.
-
-The tradeoff is additional complexity: creating a per-cgroup worker
-introduces resource overhead and lifecycle management concerns
-(e.g. when should the worker be torn down). Whether that cost is
-justified depends on how strictly the caller needs the reclaim to
-be attributed.
-
-That said, I am not certain this is the right direction yet and
-would welcome your thoughts on whether this is worth pursuing, or
-whether there is a simpler mechanism I am overlooking.
+   lib/test_meminit.c: In function 'do_kmem_cache_size':
+>> lib/test_meminit.c:239:29: error: 'ret' undeclared (first use in this function); did you mean 'net'?
+        kmem_cache_free_bulk(c, ret, bulk_array);
+                                ^~~
+                                net
+   lib/test_meminit.c:239:29: note: each undeclared identifier is reported only once for each function it appears in
 
 
-> Also when introducing a BPF hook please focus on describing why existin=
-g
-> interfaces fail to achieve what you need. For the async reclaim why it
-> is not practical or feasible to use userspace driven memory reclaim.
+vim +239 lib/test_meminit.c
 
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  209  
+5015a300a522c8f Alexander Potapenko 2019-07-16  210  /*
+5015a300a522c8f Alexander Potapenko 2019-07-16  211   * Test kmem_cache with given parameters:
+5015a300a522c8f Alexander Potapenko 2019-07-16  212   *  want_ctor - use a constructor;
+5015a300a522c8f Alexander Potapenko 2019-07-16  213   *  want_rcu - use SLAB_TYPESAFE_BY_RCU;
+5015a300a522c8f Alexander Potapenko 2019-07-16  214   *  want_zero - use __GFP_ZERO.
+5015a300a522c8f Alexander Potapenko 2019-07-16  215   */
+5015a300a522c8f Alexander Potapenko 2019-07-16  216  static int __init do_kmem_cache_size(size_t size, bool want_ctor,
+5015a300a522c8f Alexander Potapenko 2019-07-16  217  				     bool want_rcu, bool want_zero,
+5015a300a522c8f Alexander Potapenko 2019-07-16  218  				     int *total_failures)
+5015a300a522c8f Alexander Potapenko 2019-07-16  219  {
+5015a300a522c8f Alexander Potapenko 2019-07-16  220  	struct kmem_cache *c;
+5015a300a522c8f Alexander Potapenko 2019-07-16  221  	int iter;
+5015a300a522c8f Alexander Potapenko 2019-07-16  222  	bool fail = false;
+5015a300a522c8f Alexander Potapenko 2019-07-16  223  	gfp_t alloc_mask = GFP_KERNEL | (want_zero ? __GFP_ZERO : 0);
+5015a300a522c8f Alexander Potapenko 2019-07-16  224  	void *buf, *buf_copy;
+5015a300a522c8f Alexander Potapenko 2019-07-16  225  
+5015a300a522c8f Alexander Potapenko 2019-07-16  226  	c = kmem_cache_create("test_cache", size, 1,
+5015a300a522c8f Alexander Potapenko 2019-07-16  227  			      want_rcu ? SLAB_TYPESAFE_BY_RCU : 0,
+5015a300a522c8f Alexander Potapenko 2019-07-16  228  			      want_ctor ? test_ctor : NULL);
+5015a300a522c8f Alexander Potapenko 2019-07-16  229  	for (iter = 0; iter < 10; iter++) {
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  230  		/* Do a test of bulk allocations */
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  231  		if (!want_rcu && !want_ctor) {
+863d4ee245fb4d6 Christoph Hellwig   2026-05-27  232  			if (!kmem_cache_alloc_bulk(c, alloc_mask, BULK_SIZE,
+863d4ee245fb4d6 Christoph Hellwig   2026-05-27  233  					bulk_array)) {
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  234  				fail = true;
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  235  			} else {
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  236  				int i;
+863d4ee245fb4d6 Christoph Hellwig   2026-05-27  237  				for (i = 0; i < BULK_SIZE; i++)
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  238  					fail |= check_buf(bulk_array[i], size, want_ctor, want_rcu, want_zero);
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04 @239  				kmem_cache_free_bulk(c, ret, bulk_array);
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  240  			}
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  241  		}
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  242  
+5015a300a522c8f Alexander Potapenko 2019-07-16  243  		buf = kmem_cache_alloc(c, alloc_mask);
+5015a300a522c8f Alexander Potapenko 2019-07-16  244  		/* Check that buf is zeroed, if it must be. */
+dc5c5ad79f0cc2d Laura Abbott        2019-12-04  245  		fail |= check_buf(buf, size, want_ctor, want_rcu, want_zero);
+5015a300a522c8f Alexander Potapenko 2019-07-16  246  		fill_with_garbage_skip(buf, size, want_ctor ? CTOR_BYTES : 0);
+d3a811617ae629d Arnd Bergmann       2019-07-16  247  
+d3a811617ae629d Arnd Bergmann       2019-07-16  248  		if (!want_rcu) {
+d3a811617ae629d Arnd Bergmann       2019-07-16  249  			kmem_cache_free(c, buf);
+d3a811617ae629d Arnd Bergmann       2019-07-16  250  			continue;
+d3a811617ae629d Arnd Bergmann       2019-07-16  251  		}
+d3a811617ae629d Arnd Bergmann       2019-07-16  252  
+5015a300a522c8f Alexander Potapenko 2019-07-16  253  		/*
+5015a300a522c8f Alexander Potapenko 2019-07-16  254  		 * If this is an RCU cache, use a critical section to ensure we
+5015a300a522c8f Alexander Potapenko 2019-07-16  255  		 * can touch objects after they're freed.
+5015a300a522c8f Alexander Potapenko 2019-07-16  256  		 */
+5015a300a522c8f Alexander Potapenko 2019-07-16  257  		rcu_read_lock();
+5015a300a522c8f Alexander Potapenko 2019-07-16  258  		/*
+5015a300a522c8f Alexander Potapenko 2019-07-16  259  		 * Copy the buffer to check that it's not wiped on
+5015a300a522c8f Alexander Potapenko 2019-07-16  260  		 * free().
+5015a300a522c8f Alexander Potapenko 2019-07-16  261  		 */
+733d1d1a7745113 Alexander Potapenko 2019-08-02  262  		buf_copy = kmalloc(size, GFP_ATOMIC);
+5015a300a522c8f Alexander Potapenko 2019-07-16  263  		if (buf_copy)
+5015a300a522c8f Alexander Potapenko 2019-07-16  264  			memcpy(buf_copy, buf, size);
+d3a811617ae629d Arnd Bergmann       2019-07-16  265  
+4ab7ace465466d2 Alexander Potapenko 2019-07-16  266  		kmem_cache_free(c, buf);
+5015a300a522c8f Alexander Potapenko 2019-07-16  267  		/*
+5015a300a522c8f Alexander Potapenko 2019-07-16  268  		 * Check that |buf| is intact after kmem_cache_free().
+5015a300a522c8f Alexander Potapenko 2019-07-16  269  		 * |want_zero| is false, because we wrote garbage to
+5015a300a522c8f Alexander Potapenko 2019-07-16  270  		 * the buffer already.
+5015a300a522c8f Alexander Potapenko 2019-07-16  271  		 */
+5015a300a522c8f Alexander Potapenko 2019-07-16  272  		fail |= check_buf(buf, size, want_ctor, want_rcu,
+5015a300a522c8f Alexander Potapenko 2019-07-16  273  				  false);
+5015a300a522c8f Alexander Potapenko 2019-07-16  274  		if (buf_copy) {
+5015a300a522c8f Alexander Potapenko 2019-07-16  275  			fail |= (bool)memcmp(buf, buf_copy, size);
+5015a300a522c8f Alexander Potapenko 2019-07-16  276  			kfree(buf_copy);
+5015a300a522c8f Alexander Potapenko 2019-07-16  277  		}
+5015a300a522c8f Alexander Potapenko 2019-07-16  278  		rcu_read_unlock();
+5015a300a522c8f Alexander Potapenko 2019-07-16  279  	}
+5015a300a522c8f Alexander Potapenko 2019-07-16  280  	kmem_cache_destroy(c);
+5015a300a522c8f Alexander Potapenko 2019-07-16  281  
+5015a300a522c8f Alexander Potapenko 2019-07-16  282  	*total_failures += fail;
+5015a300a522c8f Alexander Potapenko 2019-07-16  283  	return 1;
+5015a300a522c8f Alexander Potapenko 2019-07-16  284  }
+5015a300a522c8f Alexander Potapenko 2019-07-16  285  
 
-Noted, and thank you for both points. In the next revision I will
-add a dedicated section to each hook's description covering:
-
-Why existing interfaces are insufficient. For the async reclaim
-case specifically, I will explain why userspace-driven reclaim
-(e.g. memory.reclaim, cgroup-aware madvise, or a dedicated
-reclaim daemon) is not practical: userspace cannot react at the
-granularity or latency required, and the round-trip through a
-syscall or procfs write introduces overhead that defeats the
-purpose of proactive reclaim.
-What gap the new hook fills that cannot be closed by tuning
-existing knobs.
-
-Best,
-Hui
-
-
-> --=20
->=20Michal Hocko
-> SUSE Labs
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
