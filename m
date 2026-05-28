@@ -1,74 +1,42 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC8C1891A9
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 22:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E353093D8
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 22:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780006819; cv=none; b=H/mo1ok2LeT3eRVHefdnwB6/vUAACIMNm5FOIZv1tfz3+DbbexqZIQoRD9mbxqdb8MQqgC5QbTkk7dmkj0H9rJ/LLvFzagx2o5WInnOQezAah/HCidA9G9GD6kRGceFuF3bu38pT0BFjEfSGevmw4jQOOZfTa5ZKuhS7HVuAt7I=
+	t=1780007796; cv=none; b=oHYFNIKfVb0kUACuJp7plA8O0/5hchIlb39VPZtZ0RMxHi3smNghDGhs6ZkKbdIdAuj9JWFakNYHzcYa5NOtP1doTaCB26deVZZzM30ldDZ6enofwd+cruvDGZSO5+UqfFsvDOhOZL3+HzWlEOeN3CVrAF4HH9bjkaEE6Wxsg1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780006819; c=relaxed/simple;
-	bh=E1xgUHxsoibtP9dmPmVVrWJfnFOxLK2gfRFkOZNxH9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jytSh8k+d+96isya1m1IlorrN58AMOVxAGBB9S9UQasdWvc/rElJnwi0BSmHh304OYrKdYntrbT7/F0cGIPYrRbaO5mjchNpX7dYpT3InnrdVlTMe38+KgkuHuVeN9t0C8gLbDDdvAJUFeyd8oD//rDFz0dDHVCBIZb2MUvouR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N9tw/Lmg; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780007796; c=relaxed/simple;
+	bh=7roPbiFnnXS3rQAEhCNAPmEQtfXaUaQsUnu5esIU9vc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ca8VX7ExDS8oeHKofA+mtS84kHWAyz1VtiSmKoLtLytcAaXUVMbruh3EeCL/xS/nAocgynJga5Mke+Uy0Qh0A9HFiUunaDnP6uOtZ8Z2zYqpFGv7m3Yr7QwTWv6rTEG4yvGWsC0qbTo4HAFGUPbZrd64eghrFQ+v7uQHSC/NsCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uq/tibKu; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9tw/Lmg"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2baca4df358so84986535ad.2
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 15:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780006817; x=1780611617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzY/wX1m+wTmdwzLRFfROd6PO1yLrCOxW0YfULxOR4E=;
-        b=N9tw/Lmg5FGBxVXIiYfTpUfquJK/FTYecpZg94gkQUOnWM3/95eBV1ETXKhLZAakyZ
-         sqYkGNX/27BhwQ+Wu/svItT4rFTnEIdcKfM/48hB5FHLCZFmuQqLv2o1RzPGftLySTzR
-         iAN8lev0ln97ljGNn6QOEAjkdTTjyUETYvAxwEuVfdY3etpodB1FK2VoloBLCj3Rh5z1
-         lggMgOduF2hGhF9U6SDmLUdXxwWKaU7t0f63plG2AmOd6YvuLOhIsSp/zPUgZzv+FecR
-         DjouAEsOa8L9UVj1uu+dXSByNSyQPdFXmULYar9chQwZUnrluuictZ+E7BZA1nj5fKtU
-         tqiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780006817; x=1780611617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lzY/wX1m+wTmdwzLRFfROd6PO1yLrCOxW0YfULxOR4E=;
-        b=M0TDf1i0xwh20Om6W0ntnbnO3B3Z6W914DyNoZf/qESyOL+o6RA+Y0fckpnE4TZFvC
-         3BbF32Ypbdd48+E05O3TAf6F2eNYu3ZgLLEJAj4k+STtzEnTIx0eN67+5ildJ1Aq4KsA
-         YEQHJ79QVh4+1pJessyv6k8pnzxacHue7aHveZ+mF+Z72vw8e/dQm1LxllCrgtdT7BUK
-         L9a5bX//wkkXBrz0cy6OR0A5CBxSdFrk761zwcZQxS0eaPh45mRsfXFzRtVkvcDnoSzl
-         jgk8Rnrc6TNwVHOqjit1o7eE9KkAT1tiwIWTB5/kvQViX0F+P310ERCn7sFTMZ8+2L+3
-         A7nw==
-X-Gm-Message-State: AOJu0Yxt0/TQrqDABYIyOkJTZHDw7biduYRCBFEV34jNgPTlsjMIbctd
-	c8gaGtTelC28ai9oiK0XbASeiNNP04Sms2Xb84TYz5CQ0VL+ZCwCVv9vfHnsjA==
-X-Gm-Gg: Acq92OG/hhCaGbEmvc2oNfNq+OlhReXCVCU7WEvsNqPKWYAAXKWQnbl7RSStk9cSIIM
-	zXIjSH2YKCUujhgKIESedqchPVm7WOsERt+Fymlv92dEWDha2dwgkaKmXo8u5bPOYw8X9VaYYl3
-	JO/x9DMvd0aaBqfTXASVa2kNj7brsFlUvgAZSAzJVF70mfHyHR+v8H/kDSmkweNbMfXQpz4eibX
-	Jg6uoeyEFepXSxPeYLq5hLMXWir6npVK3hQjS/f56E034C9XcvsDNnZ+IOim+VYxl5ldz9Q/Sp4
-	vFCOQbCAEI46lY+pzxqJoXsUlv1heBFUHScWL1vZzA35WzU8d4JSkv4tpQMEXpfzjeVzEhhD7rc
-	yhuPsKFW+hQy/ek1YWH94+fJ4pnb3y6SLyCrGSDSZat/p6W6/v1R5inejmaF/98z/tq01tML754
-	pdUef/aZd9BEoz6D/Nbr/RyVRT23KqB/P0Cn0ulh/L1a5+G9l49W83dZq71jHXP4GDeyoLVWHwr
-	gLnR0pyA/JJRjB7M+lFM9oLCH0V+4OzN4RE50uhQm4dvYgRvJmLAkrLMs1L6wm7hmsl5HbO
-X-Received: by 2002:a17:903:196b:b0:2b0:5ae9:ee4 with SMTP id d9443c01a7336-2bf204d9ea5mr3890855ad.5.1780006817097;
-        Thu, 28 May 2026 15:20:17 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf21d297fcsm359455ad.62.2026.05.28.15.20.16
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 28 May 2026 15:20:16 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com,
-	david@kernel.org,
-	tj@kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH bpf-next] bpf: Take mmap_lock in zap_pages()
-Date: Thu, 28 May 2026 15:20:14 -0700
-Message-ID: <20260528222014.38980-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uq/tibKu"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780007791;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uHk5KbbjVfZNvy/JdkHsDuPrfzh7M7BsJ3/z9XJfV3c=;
+	b=uq/tibKuJbIuFvrVCFVTFW0nVHdu4PoxvKdppLb76atqvYXRyCbHvObi9DpbEzCGkEf4we
+	bPLL/fk5sxINujxB0YTA/ELmH6UMdGBe5dyamS5Y8sn1FqBOCZ7hjyFWiaNBwwgmaK5hYR
+	5RsxAzuDNAcTV/F8nGQ09g2pjn9rcxE=
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	acme@kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	jose.marchesi@oracle.com,
+	David Faust <david.faust@oracle.com>,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PAHOLE Patch v2 1/2] dwarf_loader: Extract die__add_btf_type_tag() helper [NFC]
+Date: Thu, 28 May 2026 15:36:15 -0700
+Message-ID: <20260528223616.2035618-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,132 +44,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Alexei Starovoitov <ast@kernel.org>
+NFC change preparing for DW_TAG_GNU_annotation support.
+Extract the btf_type_tag annotation creation logic from into a helper
+die__add_btf_type_tag().
 
-zap_vma_range() requires the owning mm's mmap_lock to be held.
-
-Taking mmap_read_lock under arena->lock would AB-BA against
-arena_vm_close() and arena_map_mmap(), both of which run with
-mmap_write_lock held and then acquire arena->lock. Instead drop
-arena->lock, mmget_not_zero() the vma's mm, take mmap_read_lock, and
-re-resolve the vma via find_vma() since it may have been unmapped or
-replaced while waiting.
-
-Track processed vmls with a per-call generation in vml->zap_gen and
-serialize zap_pages() callers with a new arena->zap_mutex so
-concurrent callers on different uaddr ranges do not mark each other's
-vmls processed before the zap is done.
-
-Reported-by: David Hildenbrand <david@kernel.org>
-Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- kernel/bpf/arena.c | 61 +++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 57 insertions(+), 4 deletions(-)
+Changes since v1 [1]
+ - NFC reinstate some original comments
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 1727503b25d8..9b2dea229b38 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -60,6 +60,8 @@ struct bpf_arena {
- 	struct list_head vma_list;
- 	/* protects vma_list */
- 	struct mutex lock;
-+	u64 zap_gen;
-+	struct mutex zap_mutex;
- 	struct irq_work     free_irq;
- 	struct work_struct  free_work;
- 	struct llist_head   free_spans;
-@@ -289,6 +291,7 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 	if (err)
- 		goto err_free_scratch;
- 	mutex_init(&arena->lock);
-+	mutex_init(&arena->zap_mutex);
- 	raw_res_spin_lock_init(&arena->spinlock);
- 	err = populate_pgtable_except_pte(arena);
- 	if (err)
-@@ -391,6 +394,7 @@ struct vma_list {
- 	struct vm_area_struct *vma;
- 	struct list_head head;
- 	refcount_t mmap_count;
-+	u64 zap_gen;
- };
- 
- static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
-@@ -403,6 +407,7 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
- 	refcount_set(&vml->mmap_count, 1);
- 	vma->vm_private_data = vml;
- 	vml->vma = vma;
-+	vml->zap_gen = 0;
- 	list_add(&vml->head, &arena->vma_list);
- 	return 0;
+[1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
+---
+ dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 34 insertions(+), 24 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 16fb7becffee..8fc9a6794f2f 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1600,14 +1600,45 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+ 	return tag;
  }
-@@ -746,12 +751,60 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
-  */
- static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- {
-+	unsigned long size = (unsigned long)page_cnt << PAGE_SHIFT;
-+	struct vm_area_struct *vma;
-+	struct mm_struct *mm;
- 	struct vma_list *vml;
-+	unsigned long vm_start;
-+	u64 my_gen;
  
--	guard(mutex)(&arena->lock);
--	/* iterate link list under lock */
--	list_for_each_entry(vml, &arena->vma_list, head)
--		zap_vma_range(vml->vma, uaddr, PAGE_SIZE * page_cnt);
-+	/*
-+	 * Taking mmap_read_lock() under arena->lock would deadlock against
-+	 * arena_vm_close(), which runs with mmap_write_lock held and then
-+	 * acquires arena->lock. Drop arena->lock for mmap_read_lock().
-+	 *
-+	 * Use per-call my_gen, recorded in vml->zap_gen, to remember which
-+	 * vmls this invocation has already processed across the lock drop.
-+	 * Hold zap_mutex around the whole walk so concurrent zap_pages()
-+	 * callers cannot overwrite each other's marks on shared vmls --
-+	 * otherwise call B's mark would make call A skip a vml that A has
-+	 * not yet zapped for A's uaddr range.
-+	 */
-+	mutex_lock(&arena->zap_mutex);
-+	mutex_lock(&arena->lock);
-+	my_gen = ++arena->zap_gen;
-+	for (;;) {
-+		mm = NULL;
-+		list_for_each_entry(vml, &arena->vma_list, head) {
-+			if (vml->zap_gen >= my_gen)
-+				continue;
-+			vml->zap_gen = my_gen;
-+			if (!mmget_not_zero(vml->vma->vm_mm))
-+				continue;
-+			mm = vml->vma->vm_mm;
-+			vm_start = vml->vma->vm_start;
-+			break;
-+		}
-+		if (!mm)
-+			break;
-+		mutex_unlock(&arena->lock);
++static int die__add_btf_type_tag(struct btf_type_tag_ptr_type **tagp,
++				 Dwarf_Die *die, Dwarf_Die *adie,
++				 struct cu *cu, struct conf_load *conf)
++{
++	struct btf_type_tag_type *annot;
++	uint32_t id;
 +
-+		mmap_read_lock(mm);
-+		/*
-+		 * Re-resolve: while we waited the VMA could have been unmapped
-+		 * and a different mapping installed at the same address.
-+		 */
-+		vma = find_vma(mm, vm_start);
-+		if (vma && vma->vm_start == vm_start &&
-+		    vma->vm_file && vma->vm_file->private_data == &arena->map)
-+			zap_vma_range(vma, uaddr, size);
-+		mmap_read_unlock(mm);
-+		mmput(mm);
-+
-+		mutex_lock(&arena->lock);
++	if (*tagp == NULL) {
++		/* Create a btf_type_tag_ptr type. */
++		*tagp = die__create_new_btf_type_tag_ptr_type(die, cu);
++		if (!*tagp)
++			return -ENOMEM;
 +	}
-+	mutex_unlock(&arena->lock);
-+	mutex_unlock(&arena->zap_mutex);
- }
++
++	/* Create a btf_type_tag type for this annotation. */
++	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
++	if (annot == NULL)
++		return -ENOMEM;
++
++	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
++		return -ENOMEM;
++
++	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
++	dtag->small_id = id;
++	cu__hash(cu, &annot->tag);
++
++	/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
++	 * the tag->tags contains tag3 -> tag2 -> tag1.
++	 */
++	list_add(&annot->node, &(*tagp)->tags);
++	return 0;
++}
++
+ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 					       struct conf_load *conf)
+ {
+ 	struct btf_type_tag_ptr_type *tag = NULL;
+-	struct btf_type_tag_type *annot;
+ 	Dwarf_Die *cdie, child;
+ 	const char *name;
+-	uint32_t id;
  
- static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
+ 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+ 	 * and return
+@@ -1627,29 +1658,8 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 		if (strcmp(name, "btf_type_tag") != 0)
+ 			continue;
+ 
+-		if (tag == NULL) {
+-			/* Create a btf_type_tag_ptr type. */
+-			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+-			if (!tag)
+-				return NULL;
+-		}
+-
+-		/* Create a btf_type_tag type for this annotation. */
+-		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+-		if (annot == NULL)
++		if (die__add_btf_type_tag(&tag, die, cdie, cu, conf))
+ 			return NULL;
+-
+-		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+-			return NULL;
+-
+-		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+-		dtag->small_id = id;
+-		cu__hash(cu, &annot->tag);
+-
+-		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+-		 * the tag->tags contains tag3 -> tag2 -> tag1.
+-		 */
+-		list_add(&annot->node, &tag->tags);
+ 	} while (dwarf_siblingof(cdie, cdie) == 0);
+ 
+ 	return tag ? &tag->tag : tag__new(die, cu);
 -- 
-2.53.0-Meta
+2.54.0
 
