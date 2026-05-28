@@ -1,66 +1,66 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D30401A3C
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 17:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A5B3E1231
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 17:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779990481; cv=none; b=Ikn9pD3fyaOOM2AjlDegXdmpU7mXVO/yrYwRGkI3oQXCCGGGsc4FlmpkpBjd4IN3zGu22FzZe4myrklSqIPsEL4oh9Ewsv5Fg/lccdNkisa1GEET79xqSn/Fpxba9SigWg7GMjBKS8ReOPl1NSJRJozq+cl1KwXIfrIoYDzKftY=
+	t=1779990481; cv=none; b=qtxZEQ8v+2hChoGjtWFHKrLbpw6cQVHS0TpbJ2LEDk+Gqx6CwiZnT9hCxwedVrkJFCmnLcCAOZUa2Tax50dZGJSjzjSrgGGzUauEYikkUghB3Ut37raEob+ncX6KYOVZEFEkC+lZEj/oHMcs9K4pk+lvGzCHrIUEuNySrRXR8Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779990481; c=relaxed/simple;
-	bh=iig8ko5HkENrJoO1L8D3+M14FcaFKNnbZ8Qu1b/2v+4=;
+	bh=7juQfQfVjR9Y07yNtBIV2PKviwsbqCYjnXtLGRWmYVk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=vDz+l0j+0tDmaxx5cL5LhGJHjyPWcp/xBO/CpePyzHVBqePqh6u8CT8aUPH2fNmMR1QMLFltLgZJiRPB+1kLendzW1c4ZSUtL+N/cs34wvwLopx4vZzmP5ZT49bskwexzFN1oCoK+60IkTa7IwrmfIzaD255JfcxhoKJpwanVmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q9r91t1T; arc=none smtp.client-ip=209.85.128.49
+	 In-Reply-To:To:Cc; b=KOMq4yPZBBr0HlhXerlE/G80WeuQxeFbWemDxIZHQb+BQCfjUFa+r2dtgqZeY1S3QO+zLPeSnc2WDdRT15VNpIY18IrLvnlZAfRB+alt/oLMThxISJR4ocwNx4VtQDi3465gOCGBndNwGnVXTh9TesUPeOLcbnH8Iwc4qK/Z8Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pSDXpMXV; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q9r91t1T"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-49042aeeb75so85080695e9.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 10:47:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pSDXpMXV"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43fe62837baso7687298f8f.3
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 10:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779990472; x=1780595272; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779990468; x=1780595268; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WmHGZAwiM9J1pHRVFVqZaXa0IfjuRZ5vCsMaQ0gH/ZU=;
-        b=q9r91t1TPepISAFI7QfS497y4qZCwj3GOFmudwrd9pzJyUqxBfaLqqViQqINW+Zwf5
-         kqxYRKB395ZcwyrLWDlVohzrHxAaiL5c5KLsKcN5USb1fRxTo7QO5KobYTQ43fUgEeJG
-         511S75NxAjbAOgPAXDAg689VqzlmtBnZ6UX6/b6ZlKoXhmJoBp99TsRQINRkZqar9S7A
-         2OSzAHp2imMl+YrSkD3Rpsmp8XpaPoN3dS/7ziUTwY2UueNHqSGK5+U+x87hcmxczZhC
-         B0P30T0FujBxc8ESV5FY+okeb72UfmCkbcBeTxeTku+FkawdAzG1hmEG38V335zxwZLT
-         j0NA==
+        bh=ZYYdaMTWWXEwVcTgFOUZZfop63pu+qT3MethQQOAlFg=;
+        b=pSDXpMXV5KrvG/5QMflzZMuMJb57yq4XuiqeJp2H798cQtl6Os2AxhAeagwamTc0qm
+         RLPN0qIKu7VqcUZKEdXrd80T3CbDsCLYMC6e5KTbBifsQgbmJkmOueuPcdat6bu8sH2/
+         GRe4xjqejjHOMn1G0nFSPnwENzYsZb7ATNcCTeQXul16Rl4c7IjG2JjRR42Xfl+3dAL+
+         0+GmmFBFXjjHGNGUrSLSOK34Iu3zjbt1p0v2PgvjnF0mF+vkKt3jQVplEjzwIhicEWrs
+         a9q3C4KIZQdijHqpm0M1wu4NCJh+yViHhnQfm1isw6JtSw4cQ4IDOS5eiV3Nnyld0wmp
+         QWgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779990472; x=1780595272;
+        d=1e100.net; s=20251104; t=1779990468; x=1780595268;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=WmHGZAwiM9J1pHRVFVqZaXa0IfjuRZ5vCsMaQ0gH/ZU=;
-        b=bHjMUrELrCESOqtt1I3BAiFQQiLqNHuH/HGbvv4eBoWDVo6mdK1Dyg92BGH5XLFowZ
-         /9pGGmA16iTRmHAn/WMtQ4/YVLFt9i5AcG01ApIwDtdEwYyOhDtY7LaUi8HnuKxemZVF
-         y77xCEBKSvdXsdnroZ8O9mgMLnrwCk1g54AC3J9VsXeB9q/JXi7Oi8xK9/xcjzb63Ii0
-         6wiM/3lJAx55I4BisGgA3D2z1TOmJasujIbPDAw0mZJ4mA5CgaKlunnRRql+75lkcIB6
-         L3v6hOei0jazu4z0NiRP9IrSXt9wKyNpWcNKSXE4AeC0ZxyhiNHAI9qJxeg9SsebNr2z
-         iX5Q==
-X-Gm-Message-State: AOJu0Yzqtn7VCtzgKsLfOZ+EmUbavHtYHVK4TVXZ18DPc3gX0kL/0jqH
-	s3f50ihCokJRVrdE7IXdp/Lc4zYVQD7DU1COYnKD/r1VC9Sp4D4Eug1aBsVYKicZ
-X-Gm-Gg: Acq92OG4oMluvUrICip61bFybQxaxvJ6My3fk520lHd2dzWYWGmMwE6ur9Lr6T6UdNr
-	iJ4d/ETYuAL2UbiUsV0XxTObODfyAa8Xu5DenIVrq+Uec2NWAHYoMxhp43aqkd9MBwaRQyY+d1H
-	vtRIGiK51XI9SYQmcuy5vpkW2jNJ863C+TpDXLG8MWZoTcwoUlR2SlFJKMhhnprGhnRXnBGZeQN
-	oog0FiYZc4/einEJc0cTFhxeTui53mLb3pjEvWi8m86k1UOo+h3EO56Qz1N0lzqXV2zUhBVEdWw
-	tZFJeAZZmDAVXKwIHd33TJcBjv/yx4OX7wY1BHJlOeMHXC05zfcbux6YQTqkgjMSlnOtBnAHq1Y
-	ryvn4eJ/fvbgfbpqD+JdF03FKYnjPWei4qkOiPWkE+5VGIqiZcgtT9VK4pbcgcRwJciBzBs0V0C
-	ll3OvjO6cJ0SKgm4aSrJjEa3Y=
-X-Received: by 2002:a05:600d:6450:10b0:48a:7a10:4f17 with SMTP id 5b1f17b1804b1-4904249d125mr339821695e9.6.1779990472335;
-        Thu, 28 May 2026 10:47:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5b314dsm14097028f8f.30.2026.05.28.10.47.51
+        bh=ZYYdaMTWWXEwVcTgFOUZZfop63pu+qT3MethQQOAlFg=;
+        b=DJfBtyAQfGZYph2ZyxuW/Ls+I4Pqv1ScpxMXlZ3sPb6k1/ROefggk+ederCga+2ihl
+         eMmBcrgeW1FqoVca3T19swjXO/JuW8zaM7UErAcOKqesheeChug1DG20zK16WmW0Fo1v
+         SYU2V4DAwG3xEc7r/VzXTl2i6snI1hIoK8FiH1VCz8Q2Uj1L5bQ/FjSelY6xY2sRyXrP
+         RfUEUz8888D/Q1UK5eqxdcIoRANwi6HulqELCNpvJAlBBgNhosynsiZ3H9lxD9Nli2jM
+         QSQjLzW6iCmqbfjLFVtpCg3oDs5q44tprPu63C0eE4F1i/jlF6EkDC41w8U/FE1+KbL9
+         7LWA==
+X-Gm-Message-State: AOJu0Yzl42BTN7SfHNcyX0pGq8y2aqusVOez5Ozn+2vvmIooGB/dOgPt
+	n+BdFSHz2q9GHHEulMC/mykUB66gKt/t4LUQWyRRhOcnypkNeRBXnTgU
+X-Gm-Gg: Acq92OGOpGbXO4SLvvDxKU1Zv3tU1IFkk3DRqHzAeYa8XFKN0Ieyg9K5d84/aeHN6JX
+	lpFLbUk5+2X9WklJh/RuSLszJWYvsYcT2rNeGYLnW4UqgDGRA8lScSuLE/tXsHA1R2e4LQ4VOa7
+	eLFZGMPJEmATWorwZ77LNZb+a/vkC21Iz2EDzHPVKb0H8JJfapYLuRaDhaqW/vgUdvqoD6ar7Us
+	oB7BBgL0TmaIzVgi0RovNbDpq2Z0d2Hj80i1C7L7yHmHNS7EunL3T3p/pEWE3dBEvfKSEXCvjpk
+	vYbjsGjQmfDByAaqDaDbukc9Ma8D8uy3YP2Z4HndIIXeDH5UWvY7j16KEdIIsxiT/0w1cbs8c2M
+	0K2PxgLOuMYPGgwhuGsYD+xoduSyfwmNqeN6s4aQJe6X0eDMD2dywl+xOgyiROlKObxycrtMqdB
+	l9G3tFUhQ3BlMeYxUkQXnXF144
+X-Received: by 2002:a05:6000:400b:b0:45e:f073:d2fc with SMTP id ffacd0b85a97d-45ef073d325mr65502f8f.11.1779990468205;
+        Thu, 28 May 2026 10:47:48 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5b314dsm14096551f8f.30.2026.05.28.10.47.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 10:47:51 -0700 (PDT)
+        Thu, 28 May 2026 10:47:47 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 28 May 2026 10:47:22 -0700
-Subject: [PATCH bpf-next v5 11/11] selftests/bpf: Add resizable hashmap to
- benchmarks
+Date: Thu, 28 May 2026 10:47:19 -0700
+Subject: [PATCH bpf-next v5 08/11] selftests/bpf: Add basic tests for
+ resizable hash map
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260528-rhash-v5-11-7205191b6c57@meta.com>
+Message-Id: <20260528-rhash-v5-8-7205191b6c57@meta.com>
 References: <20260528-rhash-v5-0-7205191b6c57@meta.com>
 In-Reply-To: <20260528-rhash-v5-0-7205191b6c57@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,331 +77,406 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779990452; l=11024;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779990451; l=9128;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=VJWOsU9kMXt/rqSp1GhsKaoQ7I7rP6xHlQJHSUUxlFA=;
- b=Z3TR8ZDD5J22gWbBUOnLJtrAwdUnXPJsMZZyFFt7PanUdHkrM5C1AvOMGev5hNqSsyRBxHnbE
- SNMmGXar0VzDCRMc26Zo65JxIh3MxsFpDAKguOyCXjuxBHoaK2OhLO+
+ bh=dFzOBBxvWVN9XiN8zx8P4klFsM3fLUkiyGYSFR2OZe4=;
+ b=TG0PKvC5xe5RIuPEJfoclgP9FE/P8vk1GUKCPKnb26xF8B37sURjjbQd1jqgREGTrt0sojhiw
+ kaj6VEA/aYiCKglHlG/o2tLw1AHFgczDgOhxDT/U+SjWmueigJBtzB4
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Support resizable hashmap in BPF map benchmarks.
-
-1. LOOKUP  (single producer, M events/sec)
-
-  key | max | nr    |    htab |   rhtab | ratio | delta
-  ----+-----+-------+---------+---------+-------+-------
-    8 |  1K |   750 |   99.85 |   81.92 | 0.82x |  -18 %
-    8 |  1K |    1K |  100.71 |   80.19 | 0.80x |  -20 %
-    8 |  1M |  750K |   23.37 |   72.09 | 3.08x | +208 %
-    8 |  1M |    1M |   13.39 |   53.72 | 4.01x | +301 %
-   32 |  1K |   750 |   51.57 |   42.78 | 0.83x |  -17 %
-   32 |  1K |    1K |   50.81 |   45.83 | 0.90x |  -10 %
-   32 |  1M |  750K |   11.27 |   15.29 | 1.36x |  +36 %
-   32 |  1M |    1M |    7.32 |    8.75 | 1.19x |  +19 %
-  256 |  1K |   750 |    7.58 |    7.88 | 1.04x |   +4 %
-  256 |  1K |    1K |    7.43 |    7.81 | 1.05x |   +5 %
-  256 |  1M |  750K |    3.69 |    4.27 | 1.16x |  +16 %
-  256 |  1M |    1M |    2.60 |    3.12 | 1.20x |  +20 %
-
-Pattern:
-  * Small map (1K): htab wins for 8 / 32 byte keys by 10-20%
-  * Large map (1M): rhtab wins everywhere, up to 4x at high load
-    factor with 8 byte keys.
-  * Higher load factor amplifies rhtab's lead: rhtab grows the
-    bucket array; htab stays at user-declared max.
-
-2. FULL UPDATE  (M events/sec per producer)
-
-  htab  per-producer:
-    20.33   22.02   19.27   23.61   24.18   23.17   21.07
-    mean  21.94   range  19.27 - 24.18
-
-  rhtab per-producer:
-   133.51  129.47   74.52  129.29  102.26  129.98  107.64
-    mean 115.24   range  74.52 - 133.51
-
-  speedup (mean): 5.25x   (+425 %)
-
-In-place memcpy avoids the per-update alloc + RCU pointer swap
-that htab pays.
-
-3. MEMORY
-
-  value_size |  htab ops/s | rhtab ops/s | htab mem | rhtab mem
-  -----------+-------------+-------------+----------+----------
-       32 B  |  122.87 k/s |  133.04 k/s | 2.47 MiB | 2.49 MiB
-     4096 B  |   64.43 k/s |   65.38 k/s | 6.74 MiB | 6.44 MiB
-  rhtab/htab :  +8 % ops, +0.8 % mem   (32 B)
-                +1 % ops,  -4  % mem (4096 B)
-
-Throughput effectively tied
-
-SUMMARY
-
-  * Small / well-fitting map: htab is faster (cache-friendly
-    fixed bucket array), but only by ~10-20 %.
-  * Large / high-load-factor map: rhtab is dramatically faster
-    (1.2x to 4x) because rhashtable resizes to keep the load
-    factor sane while htab stays stuck at user-declared max.
-  * Update-heavy workloads: rhtab is ~5x faster per producer
-    via in-place memcpy.
-  * Memory benchmark: effectively on par.
+Test basic map operations (lookup, update, delete) for
+BPF_MAP_TYPE_RHASH including boundary conditions like duplicate
+key insertion and deletion of nonexistent keys.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/bench.c                |  6 ++++
- .../bpf/benchs/bench_bpf_hashmap_full_update.c     | 34 +++++++++++++++++++--
- .../bpf/benchs/bench_bpf_hashmap_lookup.c          | 31 +++++++++++++++++--
- .../testing/selftests/bpf/benchs/bench_htab_mem.c  | 35 ++++++++++++++++++++--
- 4 files changed, 100 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/rhash.c | 120 ++++++++++++
+ tools/testing/selftests/bpf/progs/rhash.c      | 248 +++++++++++++++++++++++++
+ 2 files changed, 368 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 6155ce455c27..3d9d2cd7764b 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -560,13 +560,16 @@ extern const struct bench bench_bpf_loop;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
- extern const struct bench bench_bpf_hashmap_full_update;
-+extern const struct bench bench_bpf_rhashmap_full_update;
- extern const struct bench bench_local_storage_cache_seq_get;
- extern const struct bench bench_local_storage_cache_interleaved_get;
- extern const struct bench bench_local_storage_cache_hashmap_control;
- extern const struct bench bench_local_storage_tasks_trace;
- extern const struct bench bench_bpf_hashmap_lookup;
-+extern const struct bench bench_bpf_rhashmap_lookup;
- extern const struct bench bench_local_storage_create;
- extern const struct bench bench_htab_mem;
-+extern const struct bench bench_rhtab_mem;
- extern const struct bench bench_crypto_encrypt;
- extern const struct bench bench_crypto_decrypt;
- extern const struct bench bench_sockmap;
-@@ -640,13 +643,16 @@ static const struct bench *benchs[] = {
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
- 	&bench_bpf_hashmap_full_update,
-+	&bench_bpf_rhashmap_full_update,
- 	&bench_local_storage_cache_seq_get,
- 	&bench_local_storage_cache_interleaved_get,
- 	&bench_local_storage_cache_hashmap_control,
- 	&bench_local_storage_tasks_trace,
- 	&bench_bpf_hashmap_lookup,
-+	&bench_bpf_rhashmap_lookup,
- 	&bench_local_storage_create,
- 	&bench_htab_mem,
-+	&bench_rhtab_mem,
- 	&bench_crypto_encrypt,
- 	&bench_crypto_decrypt,
- 	&bench_sockmap,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-index ee1dc12c5e5e..7278fa860397 100644
---- a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
-@@ -34,19 +34,29 @@ static void measure(struct bench_res *res)
- {
- }
- 
--static void setup(void)
-+static void hashmap_full_update_setup(enum bpf_map_type map_type)
- {
- 	struct bpf_link *link;
- 	int map_fd, i, max_entries;
- 
- 	setup_libbpf();
- 
--	ctx.skel = bpf_hashmap_full_update_bench__open_and_load();
-+	ctx.skel = bpf_hashmap_full_update_bench__open();
- 	if (!ctx.skel) {
- 		fprintf(stderr, "failed to open skeleton\n");
- 		exit(1);
- 	}
- 
-+	bpf_map__set_type(ctx.skel->maps.hash_map_bench, map_type);
-+	if (map_type == BPF_MAP_TYPE_RHASH)
-+		bpf_map__set_map_flags(ctx.skel->maps.hash_map_bench,
-+				       BPF_F_NO_PREALLOC);
+diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
+new file mode 100644
+index 000000000000..69686bf69ba5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
+@@ -0,0 +1,120 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <string.h>
++#include <stdio.h>
++#include "rhash.skel.h"
++#include <linux/bpf.h>
++#include <linux/perf_event.h>
++#include <sys/syscall.h>
 +
-+	if (bpf_hashmap_full_update_bench__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
++static void rhash_run(const char *prog_name)
++{
++	struct rhash *skel;
++	struct bpf_program *prog;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	skel = rhash__open();
++	if (!ASSERT_OK_PTR(skel, "rhash__open"))
++		return;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++	bpf_program__set_autoload(prog, true);
++
++	err = rhash__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	if (!ASSERT_OK(err, "prog run"))
++		goto cleanup;
++
++	if (!ASSERT_OK(opts.retval, "prog retval"))
++		goto cleanup;
++
++	if (!ASSERT_OK(skel->bss->err, "bss->err"))
++		goto cleanup;
++
++cleanup:
++	rhash__destroy(skel);
++}
++
++static int rhash_map_create(__u32 max_entries, __u64 map_extra)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_NO_PREALLOC,
++		    .map_extra = map_extra);
++
++	return bpf_map_create(BPF_MAP_TYPE_RHASH, "rhash_extra",
++			      sizeof(__u32), sizeof(__u64), max_entries, &opts);
++}
++
++static void rhash_map_extra_presize(void)
++{
++	const __u32 max_entries = 1024;
++	const __u32 nelem_hint = 256;
++	struct bpf_map_info info = {};
++	__u32 info_len = sizeof(info);
++	__u64 val = 0;
++	__u32 key;
++	int fd, i;
++
++	fd = rhash_map_create(max_entries, nelem_hint);
++	if (!ASSERT_GE(fd, 0, "rhash_map_create presize"))
++		return;
++
++	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "info"))
++		goto close;
++	ASSERT_EQ(info.map_extra, nelem_hint, "info.map_extra");
++
++	for (i = 0; i < (int)nelem_hint; i++) {
++		key = i;
++		if (!ASSERT_OK(bpf_map_update_elem(fd, &key, &val, BPF_NOEXIST),
++			       "update"))
++			goto close;
++	}
++close:
++	close(fd);
++}
++
++static void rhash_map_extra_too_big(void)
++{
++	int fd;
++
++	fd = rhash_map_create(1U << 20, 0x10000);
++	if (!ASSERT_LT(fd, 0, "rhash_map_create hint > U16_MAX"))
++		close(fd);
++}
++
++void test_rhash(void)
++{
++	if (test__start_subtest("test_rhash_lookup_update"))
++		rhash_run("test_rhash_lookup_update");
++
++	if (test__start_subtest("test_rhash_update_delete"))
++		rhash_run("test_rhash_update_delete");
++
++	if (test__start_subtest("test_rhash_update_elements"))
++		rhash_run("test_rhash_update_elements");
++
++	if (test__start_subtest("test_rhash_update_exist"))
++		rhash_run("test_rhash_update_exist");
++
++	if (test__start_subtest("test_rhash_update_any"))
++		rhash_run("test_rhash_update_any");
++
++	if (test__start_subtest("test_rhash_noexist_duplicate"))
++		rhash_run("test_rhash_noexist_duplicate");
++
++	if (test__start_subtest("test_rhash_delete_nonexistent"))
++		rhash_run("test_rhash_delete_nonexistent");
++
++	if (test__start_subtest("test_rhash_map_extra_presize"))
++		rhash_map_extra_presize();
++
++	if (test__start_subtest("test_rhash_map_extra_too_big"))
++		rhash_map_extra_too_big();
++}
+diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
+new file mode 100644
+index 000000000000..fc2dac3a719e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rhash.c
+@@ -0,0 +1,248 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <stdbool.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++#define ENOENT 2
++#define EEXIST 17
++
++char _license[] SEC("license") = "GPL";
++
++int err;
++
++struct elem {
++	char arr[128];
++	int val;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 128);
++	__type(key, int);
++	__type(value, struct elem);
++} rhmap SEC(".maps");
++
++SEC("syscall")
++int test_rhash_lookup_update(void *ctx)
++{
++	int key = 5;
++	struct elem empty = {.val = 3, .arr = {0}};
++	struct elem *e;
++
++	err = 1;
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (e)
++		return 1;
++
++	err = bpf_map_update_elem(&rhmap, &key, &empty, BPF_NOEXIST);
++	if (err)
++		return 1;
++
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (!e || e->val != empty.val) {
++		err = 2;
++		return 2;
 +	}
 +
- 	ctx.skel->bss->nr_loops = MAX_LOOP_NUM;
- 
- 	link = bpf_program__attach(ctx.skel->progs.benchmark);
-@@ -62,6 +72,16 @@ static void setup(void)
- 		bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
- }
- 
-+static void setup(void)
-+{
-+	hashmap_full_update_setup(BPF_MAP_TYPE_HASH);
++	err = 0;
++	return 0;
 +}
 +
-+static void rhash_setup(void)
++SEC("syscall")
++int test_rhash_update_delete(void *ctx)
 +{
-+	hashmap_full_update_setup(BPF_MAP_TYPE_RHASH);
-+}
++	int key = 6;
++	struct elem empty = {.val = 4, .arr = {0}};
++	struct elem *e;
 +
- static void hashmap_report_final(struct bench_res res[], int res_cnt)
- {
- 	unsigned int nr_cpus = bpf_num_possible_cpus();
-@@ -87,3 +107,13 @@ const struct bench bench_bpf_hashmap_full_update = {
- 	.report_progress = NULL,
- 	.report_final = hashmap_report_final,
- };
++	err = 1;
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (e)
++		return 1;
 +
-+const struct bench bench_bpf_rhashmap_full_update = {
-+	.name = "bpf-rhashmap-full-update",
-+	.validate = validate,
-+	.setup = rhash_setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = NULL,
-+	.report_final = hashmap_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_lookup.c b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_lookup.c
-index 279ff1b8b5b2..5264b7b20e39 100644
---- a/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_lookup.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_lookup.c
-@@ -148,9 +148,10 @@ static inline void patch_key(u32 i, u32 *key)
- 	/* the rest of key is random */
- }
- 
--static void setup(void)
-+static void hashmap_lookup_setup(enum bpf_map_type map_type)
- {
- 	struct bpf_link *link;
-+	__u32 map_flags;
- 	int map_fd;
- 	int ret;
- 	int i;
-@@ -163,10 +164,15 @@ static void setup(void)
- 		exit(1);
- 	}
- 
-+	map_flags = args.map_flags;
-+	if (map_type == BPF_MAP_TYPE_RHASH)
-+		map_flags |= BPF_F_NO_PREALLOC;
++	err = bpf_map_update_elem(&rhmap, &key, &empty, BPF_NOEXIST);
++	if (err)
++		return 2;
 +
-+	bpf_map__set_type(ctx.skel->maps.hash_map_bench, map_type);
- 	bpf_map__set_max_entries(ctx.skel->maps.hash_map_bench, args.max_entries);
- 	bpf_map__set_key_size(ctx.skel->maps.hash_map_bench, args.key_size);
- 	bpf_map__set_value_size(ctx.skel->maps.hash_map_bench, 8);
--	bpf_map__set_map_flags(ctx.skel->maps.hash_map_bench, args.map_flags);
-+	bpf_map__set_map_flags(ctx.skel->maps.hash_map_bench, map_flags);
- 
- 	ctx.skel->bss->nr_entries = args.nr_entries;
- 	ctx.skel->bss->nr_loops = args.nr_loops / args.nr_entries;
-@@ -197,6 +203,16 @@ static void setup(void)
- 	}
- }
- 
-+static void setup(void)
-+{
-+	hashmap_lookup_setup(BPF_MAP_TYPE_HASH);
-+}
++	err = bpf_map_delete_elem(&rhmap, &key);
++	if (err)
++		return 3;
 +
-+static void rhash_setup(void)
-+{
-+	hashmap_lookup_setup(BPF_MAP_TYPE_RHASH);
-+}
-+
- static inline double events_from_time(u64 time)
- {
- 	if (time)
-@@ -275,3 +291,14 @@ const struct bench bench_bpf_hashmap_lookup = {
- 	.report_progress = NULL,
- 	.report_final = hashmap_report_final,
- };
-+
-+const struct bench bench_bpf_rhashmap_lookup = {
-+	.name = "bpf-rhashmap-lookup",
-+	.argp = &bench_hashmap_lookup_argp,
-+	.validate = validate,
-+	.setup = rhash_setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = NULL,
-+	.report_final = hashmap_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-index 297e32390cd1..1ee217d97434 100644
---- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-@@ -152,7 +152,7 @@ static const struct htab_mem_use_case *htab_mem_find_use_case_or_exit(const char
- 	exit(1);
- }
- 
--static void htab_mem_setup(void)
-+static void htab_mem_setup_impl(enum bpf_map_type map_type)
- {
- 	struct bpf_map *map;
- 	const char **names;
-@@ -178,10 +178,11 @@ static void htab_mem_setup(void)
- 	}
- 
- 	map = ctx.skel->maps.htab;
-+	bpf_map__set_type(map, map_type);
- 	bpf_map__set_value_size(map, args.value_size);
- 	/* Ensure that different CPUs can operate on different subset */
- 	bpf_map__set_max_entries(map, MAX(8192, 64 * env.nr_cpus));
--	if (args.preallocated)
-+	if (map_type != BPF_MAP_TYPE_RHASH && args.preallocated)
- 		bpf_map__set_map_flags(map, bpf_map__map_flags(map) & ~BPF_F_NO_PREALLOC);
- 
- 	names = ctx.uc->progs;
-@@ -220,6 +221,16 @@ static void htab_mem_setup(void)
- 	exit(1);
- }
- 
-+static void htab_mem_setup(void)
-+{
-+	htab_mem_setup_impl(BPF_MAP_TYPE_HASH);
-+}
-+
-+static void rhtab_mem_setup(void)
-+{
-+	htab_mem_setup_impl(BPF_MAP_TYPE_RHASH);
-+}
-+
- static void htab_mem_add_fn(pthread_barrier_t *notify)
- {
- 	while (true) {
-@@ -338,6 +349,15 @@ static void htab_mem_report_final(struct bench_res res[], int res_cnt)
- 	cleanup_cgroup_environment();
- }
- 
-+static void rhtab_mem_validate(void)
-+{
-+	if (args.preallocated) {
-+		fprintf(stderr, "rhash map does not support preallocation\n");
-+		exit(1);
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (e) {
++		err = 4;
++		return 4;
 +	}
-+	htab_mem_validate();
++
++	err = 0;
++	return 0;
 +}
 +
- const struct bench bench_htab_mem = {
- 	.name = "htab-mem",
- 	.argp = &bench_htab_mem_argp,
-@@ -348,3 +368,14 @@ const struct bench bench_htab_mem = {
- 	.report_progress = htab_mem_report_progress,
- 	.report_final = htab_mem_report_final,
- };
++SEC("syscall")
++int test_rhash_update_elements(void *ctx)
++{
++	int key = 0;
++	struct elem empty = {.val = 4, .arr = {0}};
++	struct elem *e;
++	int i;
 +
-+const struct bench bench_rhtab_mem = {
-+	.name = "rhtab-mem",
-+	.argp = &bench_htab_mem_argp,
-+	.validate = rhtab_mem_validate,
-+	.setup = rhtab_mem_setup,
-+	.producer_thread = htab_mem_producer,
-+	.measure = htab_mem_measure,
-+	.report_progress = htab_mem_report_progress,
-+	.report_final = htab_mem_report_final,
-+};
++	err = 1;
++
++	for (i = 0; i < 128; ++i) {
++		key = i;
++		e = bpf_map_lookup_elem(&rhmap, &key);
++		if (e)
++			return 1;
++
++		empty.val = key;
++		err = bpf_map_update_elem(&rhmap, &key, &empty, BPF_NOEXIST);
++		if (err)
++			return 2;
++
++		e = bpf_map_lookup_elem(&rhmap, &key);
++		if (!e || e->val != key) {
++			err = 4;
++			return 4;
++		}
++	}
++
++	for (i = 0; i < 128; ++i) {
++		key = i;
++		err = bpf_map_delete_elem(&rhmap, &key);
++		if (err)
++			return 3;
++
++		e = bpf_map_lookup_elem(&rhmap, &key);
++		if (e) {
++			err = 5;
++			return 5;
++		}
++	}
++
++	err = 0;
++	return 0;
++}
++
++SEC("syscall")
++int test_rhash_update_exist(void *ctx)
++{
++	int key = 10;
++	struct elem val1 = {.val = 100, .arr = {0}};
++	struct elem val2 = {.val = 200, .arr = {0}};
++	struct elem *e;
++	int ret;
++
++	err = 1;
++
++	/* BPF_EXIST on non-existent key should fail with -ENOENT */
++	ret = bpf_map_update_elem(&rhmap, &key, &val1, BPF_EXIST);
++	if (ret != -ENOENT)
++		return 1;
++
++	/* Insert element first */
++	ret = bpf_map_update_elem(&rhmap, &key, &val1, BPF_NOEXIST);
++	if (ret)
++		return 2;
++
++	/* Verify initial value */
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (!e || e->val != 100)
++		return 3;
++
++	/* BPF_EXIST on existing key should succeed and update value */
++	ret = bpf_map_update_elem(&rhmap, &key, &val2, BPF_EXIST);
++	if (ret)
++		return 4;
++
++	/* Verify value was updated */
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (!e || e->val != 200)
++		return 5;
++
++	/* Cleanup */
++	bpf_map_delete_elem(&rhmap, &key);
++	err = 0;
++	return 0;
++}
++
++SEC("syscall")
++int test_rhash_update_any(void *ctx)
++{
++	int key = 11;
++	struct elem val1 = {.val = 111, .arr = {0}};
++	struct elem val2 = {.val = 222, .arr = {0}};
++	struct elem *e;
++	int ret;
++
++	err = 1;
++
++	/* BPF_ANY on non-existent key should insert */
++	ret = bpf_map_update_elem(&rhmap, &key, &val1, BPF_ANY);
++	if (ret)
++		return 1;
++
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (!e || e->val != 111)
++		return 2;
++
++	/* BPF_ANY on existing key should update */
++	ret = bpf_map_update_elem(&rhmap, &key, &val2, BPF_ANY);
++	if (ret)
++		return 3;
++
++	e = bpf_map_lookup_elem(&rhmap, &key);
++	if (!e || e->val != 222)
++		return 4;
++
++	/* Cleanup */
++	bpf_map_delete_elem(&rhmap, &key);
++	err = 0;
++	return 0;
++}
++
++SEC("syscall")
++int test_rhash_noexist_duplicate(void *ctx)
++{
++	int key = 12;
++	struct elem val = {.val = 600, .arr = {0}};
++	int ret;
++
++	err = 1;
++
++	/* Insert element */
++	ret = bpf_map_update_elem(&rhmap, &key, &val, BPF_NOEXIST);
++	if (ret)
++		return 1;
++
++	/* Try to insert again with BPF_NOEXIST - should fail with -EEXIST */
++	ret = bpf_map_update_elem(&rhmap, &key, &val, BPF_NOEXIST);
++	if (ret != -EEXIST)
++		return 2;
++
++	/* Cleanup */
++	bpf_map_delete_elem(&rhmap, &key);
++	err = 0;
++	return 0;
++}
++
++SEC("syscall")
++int test_rhash_delete_nonexistent(void *ctx)
++{
++	int key = 99999;
++	int ret;
++
++	err = 1;
++
++	/* Delete non-existent key should return -ENOENT */
++	ret = bpf_map_delete_elem(&rhmap, &key);
++	if (ret != -ENOENT)
++		return 1;
++
++	err = 0;
++	return 0;
++}
 
 -- 
 2.53.0-Meta
