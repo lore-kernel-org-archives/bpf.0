@@ -1,238 +1,304 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E30336C581
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 22:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780008942; cv=none; b=XEBHvFuvk4D2KDLGBcYbNNF0P5fYmUBklj96eHcxwLNfiP6TwFaQjBGFb458dzO5C+c7Nwvv6lqThhnLxx+RTwVSFt1Ujmb8jsHyV60p8gf2MHj6xUMXnO8UYMiLZqORIxCZI7Ji4hEosVPeITv0NR/uyahl+HtsWao967VHlOs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780008942; c=relaxed/simple;
-	bh=yF+t/MxA8C1202gDEuqnLcAowiuRvjX0RRxo5GBhxRk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bSw8xClp0MZZB8Eq19DjuFiTe+p9guljdBbrqvww8v976Hm+IKOFxfEhu/2E5jFjYG0i4oXRTI2y0yZq7CqqJqb8A+JY177iaPyjO+FM5txZoqNmXkSUz+2z+xEcVpNqX1otXH6iqhScu9GW77I2o6H/7G3PUyJ4/oUAdzLnaFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=y2KJP44t; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B7C319857
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 23:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780009284; cv=pass; b=FpRl/5nvPElusqRetj76qCQqLDWt450add36cMh0/XAtMwYj6Cciu1Ax2HrCMj/qd8ikiLHaS4c62scFLn9fOBUjY3sI5JCRjQmaMp4MpHAgUGk82VN7QUZ08I3koeTao55UN8vjpALTyrXOCrQYOzf5Avoi+1BEaVtGnc+nhHQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780009284; c=relaxed/simple;
+	bh=x8Eki9jvGfG5bldVMQTy06hu2GMjw7Q0FO0LBBMJZTE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hDc65fKl4ILfPapZTdnvc5b9Gu5jKe1hL5/UE4MG067mPE/TRbQsF/IxQtzmxsFT8qIXvkqWcqaL9NJdihs+BwNTTHeP0GqKGwa4PKOT+GE/QBmt9vaFtZDCctVTDajDR6RIsh7YFcEaMLQPYyToDZpPOHFJczJTRQzLIG6o+GE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=swY398oy; arc=pass smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="y2KJP44t"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-304dc707bfbso107580eec.2
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 15:55:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="swY398oy"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c8025aecc40so5992237a12.0
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 16:01:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780009282; cv=none;
+        d=google.com; s=arc-20240605;
+        b=P5W2oaU+ruTrgR39eZT6MeUY9/DHnwhQpmQuG20sMgeo6jDAfHkN8zh06B5sGMwuco
+         S/sSt3o888AdEtoaPGDpsT1tcv/SO1bKv6mzwH4I/Yuzd/A/7HtBpKgADSi3Vg7TfSZM
+         EgrSkBExobKbdonJtLcEzHk1lKzsJ9wzTn/6P7/lgiNXtvO3zloXL8US9jdHAXPPevP/
+         aaDWrsW6BdXhRgD14MCzMmoNHNA1t+YuO9HtLOhq3/x8Mguh/7SsfLyAU7xyhZ7mqyUX
+         LFxPn3iny424jLd1KEt0wXLO14ECS4KDyMqcg3gD1i1HBUydL+813yevJecCE78+eGGc
+         ifZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lVpJVCPjc6hUaUYGBwm8xx7FBsgckNuE/gAqE8RC6GM=;
+        fh=0o+Ar/ru5cFNtgNM8hmbffS+cibv0yjaOkzvWVra1IA=;
+        b=WeSdwqQu4TzqXKiAR5NrwvViHgM/1Bgl/DDBOGyt5GdmazMTMB9gfKNmmg+vpDUtya
+         mY6TtYeiI3kiTJHolgPHk4Xpr4tpevAZ7Q2uVKPxvzD07zeiSK8nq+96OT68eRs3krh+
+         ouHT1JKrMgkymVwyaiSYE/e1wcLcCiVP4ZfT6ZF+GNc/1jZAPZ+R07VkVXmFc4d71xgN
+         t0gHySRMM2tCyMtTx420CHTPFVV+mMlzYlb0oUk8rYeqzxJRcEf58se54xPIedZ1AaRn
+         SDSBfrtC9CKo4s/dMpgQnBIcyO4yMIbGHRf+x1Y9BFzKiuU72fFfoRzako6B5le1+S3G
+         vo8A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1780008940; x=1780613740; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hYbf4kzlnIJc0DIgLjb8FNPQMjUNGbaxH90ljGYoYU=;
-        b=y2KJP44t5bXoV+K2ct+ssYDNnzdqZK7cYWeHxpUhmS4VY9Di+M80zxjMoEe4TcArdy
-         BG9n3DVGj+Y0oEpWbpMp5KkReFqQkAiT4XbYkX0oo6pNK1fcoTrMHNSbOzLeTTWFA/A0
-         DlXkhDm/+fo0L8Ne3wXmFQxPYBvBgfD7S5HJ6MSyEqN7i2D2+DeJBCs4vCIoKKJt3ovA
-         MmYu0SkbT72u/tV39hUMywlg+EPpUU96JROSNjWjaLmiy4JYQoE261+f1YoQpL+eIbPO
-         QpRGAdJBQIHbVHHNMl2JxIisikxqkcLyNJdyrT6VF019vINDLR1S2axzH3DAuDEz9HmO
-         jgoA==
+        d=gmail.com; s=20251104; t=1780009282; x=1780614082; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lVpJVCPjc6hUaUYGBwm8xx7FBsgckNuE/gAqE8RC6GM=;
+        b=swY398oykfM+9t+OsRHwqfAxU5hoIlTaO6Y1v58OOT1uG0su47Whx3pkSscG3lDZ+o
+         h87BZ3+6lDwZvV9MPz3sMiBzMvu7LCVKtmFWK5bDCgZLYt7g7shrcAZo0+WgKJhCgUgM
+         /2RnIX8+qOnoS8vSE4P5NGj15ZFp7qbtdYjpk6daChuFl88b0PahV1oPJlDYfOKlym/3
+         /70pf6eq8HnZBlb7c8ZN7hbk9dvRgxDXV5G4E6grR2YBHGYTysueefj0dLyao7Mc1xYa
+         4lT3QhbrgxTlq9e2/DpEWvcJd0/w/0TDxagat6tcLsXYl4kwHKA+c+b7cyWhmvBzUsQH
+         5LLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780008940; x=1780613740;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9hYbf4kzlnIJc0DIgLjb8FNPQMjUNGbaxH90ljGYoYU=;
-        b=szyzI3QIURKCpH9rCy1DbaXbakLPZ2YApjr094KyzJ4kIJ1qKDf8VUCKHwOpD1aWp/
-         te+U6HBvU2wPHzWdpmchLvGvvPHtLJZKIrsiiKUXFdSGboX93eD3APbKYT7rP82ivdRW
-         RkT9ISHdifH/WBG5M2cLp80ZNMODbzUv6FWDuPduQA8nUibEtvzouEDRAP1sSSJHuJ2j
-         VKlkoy8vUTRfZOVYNAO3WAZAIPMudTXRVCIik2vzlv0DabdVtP4l6gR7aEVIF2Ccyrb0
-         vxgmvP/lkieusDlg5O1dkO7n8p/o955uqpv6juskgWjm4QvnTBlzs9iOVvj/gP5WOx5L
-         i9OQ==
-X-Gm-Message-State: AOJu0YzEAdDwo5eoh3gwNJ6ehOqugY0qaiuzczpRhLxHA6P+bxeSkmh4
-	wQVqJ4F2I9G/JLw2MlyY7/q4lrp9vt5nNNmCX9GSWdUCWRG1K6cQfKadVgBCrhJj4+o=
-X-Gm-Gg: Acq92OGYaz6CDhznQ5+80p7vOQQ3fpn8NHqPea+rGZ/ujUow2EVa1E30NPi5X/LwxgJ
-	Cwhz6kiWN69mZ7nGreaUnn599rGdaH4gmBmba755xHRggD+que9vdJeu5XWupBMmEbK9CgOvka2
-	/4QpxiJLrTFjwevsZId0+OmKH84BQ4RNGZgQb8L4WmDNAQI37X0gPzjQ1RlfzMeGGKYdiLlEGJt
-	9/4lN3eFzP+JKeGPUy2Sbo0CteV3gUbFQQprCA3E3r2lB9ADbOAk4I6LY5hBX4bZ98WpoFei0ME
-	Tt4xIjOQS8DtvYzGj3f2JleV1szY62mjZcKy3HXqMiaOBczdHKdSnmN5fB1lPMbxW2xDVyTfZPU
-	nY+YLMp1nRkt9s1ILogtpFNpTKmciWgydjU06Npw6IE+4/9uFAWIfQInJqC6t+vM2B9ER//G1z9
-	OHS+hNSVbTrVdnW0KSNgOCtYIk
-X-Received: by 2002:a05:7300:72c5:b0:304:e327:aef8 with SMTP id 5a478bee46e88-304eb0d0400mr88891eec.2.1780008939657;
-        Thu, 28 May 2026 15:55:39 -0700 (PDT)
-Received: from m2 ([83.171.251.12])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ebcc77f3sm237240eec.22.2026.05.28.15.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 15:55:39 -0700 (PDT)
-Date: Thu, 28 May 2026 15:55:37 -0700
-From: Jordan Rife <jordan@jrife.io>
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev, 
-	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH bpf-next v7 7/7] selftests/bpf: add bpf_icmp_send
- recursion test
-Message-ID: <3evosyl26zvnzhficgf73g4ecdgdrdlnabvt2423ku36qbovp7@ij6dxahqxlxt>
-References: <20260526153708.279717-1-mahe.tardy@gmail.com>
- <20260526153708.279717-8-mahe.tardy@gmail.com>
+        d=1e100.net; s=20251104; t=1780009282; x=1780614082;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lVpJVCPjc6hUaUYGBwm8xx7FBsgckNuE/gAqE8RC6GM=;
+        b=OB0nwJY3XvtQiB4Vtgp1Gi2SW/QnL4uhnqXCeBLQIfcXHBu4JeTjdy/52LUXosHep+
+         VtyZnk3umi6aAhukj80hZ/UiBcoj8u1/OLsXkOFBIOqcw3UzJL2l+nnF3ppH9fq2qpUI
+         k1VAR/lKx7ibCCOBZLwakBRI1gJCplyYbzUgWVlVb4Qmt8jNGR5lrJJaW6K8zBYuFhb5
+         OHVLgAEcVqNQLNV9BRqcHcCNYUMlm0xrSiGd+oSbk99E1vaDeuIxsRxC3W673utX6Fzx
+         hL5A5Zgti0P1l3kXn3xhSjwT2H0SMvSVoJ5kFKWfsMv4CGMe/qmDyqoT2Gi2OJQ3ixGT
+         hXEg==
+X-Forwarded-Encrypted: i=1; AFNElJ+hA1P4/+TGUjYljUlMcZnng/mmvM7qiKXJXnZXmcSn4Ltcg1UDM5i7FUKg0Ka0oOevM8Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw3oKnlonVJu9pzPhGsd92ipgyDph9PJjwtkH3zAYYvU1VN5fJ
+	142UuojcpYUeZDV6xZzBLEzGbdiBT7UWBUPl1k/4v4QRZbLqJ+VHo8fPQZxDPFobDPgEaX0gu9s
+	Q/V98Snph9kOhzwskafC1OnucOdDliLw=
+X-Gm-Gg: Acq92OHNvQ925DCwIvfdCyNWiplqyy0OMRWgHvGkqIbBBK7xqKa5W1hUlNUzTEJaP6s
+	Cbr2n4iRtlMHNKFEqwZdeZp9DFpGZEC+VDuo65aRuQ6bN8NyvmLJOdeC+/qmNzizeUbHA9J1Air
+	g6yA3iFHP0KEeMrl9Dx23amiV1qMYewJ5EkqubAPIguu/6Po/eYtLhmXRcDMjTFfTVNNR+AtEn4
+	auhKd3YCmhYfqV0t1xjhR56UBd/kuFc8BWBDJS3n7RYdbZOnpsU/9l4U1d6AjW0Z2LBjhquy1YV
+	rTmX/2AZiN7GoXIGTwePBh+0Gl7bfHWvnA==
+X-Received: by 2002:a05:6a21:6da7:b0:3b2:924a:36d9 with SMTP id
+ adf61e73a8af0-3b4101848e5mr301816637.11.1780009282179; Thu, 28 May 2026
+ 16:01:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526153708.279717-8-mahe.tardy@gmail.com>
+References: <20260528151023.00f5ec4e@gandalf.local.home>
+In-Reply-To: <20260528151023.00f5ec4e@gandalf.local.home>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 28 May 2026 16:01:06 -0700
+X-Gm-Features: AVHnY4IKIArU2u2cgzgUd57NiMK9BDVblvRKSS0W1yjsNpD-_4-LxeiQaAAznE0
+Message-ID: <CAEf4BzZh4qyPiMbpZPeVGx+HFNjBjAHTsNOx5wE7RWidM-iphA@mail.gmail.com>
+Subject: Re: [PATCH v2] unwind: Add sframe_(un)register() system calls
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, 
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Indu Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, 
+	Beau Belgrave <beaub@linux.microsoft.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Florian Weimer <fweimer@redhat.com>, 
+	Kees Cook <kees@kernel.org>, "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>, 
+	Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko <mhocko@suse.com>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 26, 2026 at 03:37:08PM +0000, Mahe Tardy wrote:
-> This test is similar to test_icmp_send_unreach_cgroup but checks that,
-> in case of recursion, meaning that the BPF program calling the kfunc was
-> re-triggered by the icmp_send done by the kfunc, the kfunc will stop
-> early and return -EBUSY.
-> 
-> The test attaches to the root cgroup to ensure the ICMP packet generated
-> by the kfunc re-triggers the BPF program. Since it's attached only for
-> this recursion test, it should not disrupt the whole network.
-> 
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+On Thu, May 28, 2026 at 12:09=E2=80=AFPM Steven Rostedt <rostedt@kernel.org=
+> wrote:
+>
+> From: Steven Rostedt <rostedt@goodmis.org>
+>
+> Add system calls to register and unregister sframes that can be used by
+> dynamic linkers to tell the kernel where the sframe section is in memory
+> for libraries it loads.
+>
+> Both system calls take a pointer to a new structure:
+>
+>   struct sframe_setup {
+>         __u64                   sframe_start;
+>         __u64                   sframe_size;
+>         __u64                   text_start;
+>         __u64                   text_size;
+>   };
+>
+> and a size of the passed in structure. If the system call needs to be
+> extended, then the structure could be changed and the size of that
+> structure will tell the kernel that it is the new version. If the kernel
+> does not recognize the structure size, it will return -EINVAL.
+>
+>   sframe_start - The virtual address of the sframe section
+>   sframe_size  - The length of the sframe section
+>   text_start   - the text section the sframe represents
+>   test_size    - the length of the section
+>
+> If other stack tracing functionality is added, it will require a new
+> system call.
+>
+> The unregister only needs the sframe_start and requires all the rest of
+> the fields to be 0. In the future, if more can be done, then user space
+> can update the other values and check the return code to see if the kerne=
+l
+> supports it.
+>
+> Also added a DEFINE_GUARD() for mmap_write_lock. There was one for
+> mmap_read_lock but not for mmap_write_lock.
+>
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 > ---
->  .../bpf/prog_tests/icmp_send_kfunc.c          | 42 +++++++++++++++++-
->  tools/testing/selftests/bpf/progs/icmp_send.c | 44 +++++++++++++++++++
->  2 files changed, 85 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> index 51f809ea6896..f48e1d41e3ed 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <test_progs.h>
->  #include <network_helpers.h>
-> +#include <cgroup_helpers.h>
->  #include <linux/errqueue.h>
->  #include <poll.h>
->  #include "icmp_send.skel.h"
-> @@ -10,6 +11,7 @@
->  #define ICMP_DEST_UNREACH 3
->  #define ICMPV6_DEST_UNREACH 1
-> 
-> +#define ICMP_HOST_UNREACH 1
->  #define ICMP_FRAG_NEEDED 4
->  #define NR_ICMP_UNREACH 15
->  #define ICMPV6_REJECT_ROUTE 6
-> @@ -193,7 +195,6 @@ void test_icmp_send_unreach_tc(void)
-> 
->  	if (test__start_subtest("ipv4"))
->  		run_icmp_test(skel, AF_INET, "127.0.0.1", NR_ICMP_UNREACH);
-> -
->  	if (test__start_subtest("ipv6"))
->  		run_icmp_test(skel, AF_INET6, "::1", ICMPV6_REJECT_ROUTE);
-> 
-> @@ -201,3 +202,42 @@ void test_icmp_send_unreach_tc(void)
->  	bpf_link__destroy(link);
->  	icmp_send__destroy(skel);
->  }
+>
+> Changes since v1: https://patch.msgid.link/20260521183532.7a145c8a@gandal=
+f.local.home
+>
+> - Use mmap_write_lock() instead of mmap_read_lock() for mutual
+>   exclusiveness. (Jens Remus)
+>
+> - Guard mtree_insert_range() with mmap_write_lock. (Jens Remus)
+>
+> - Added a guard for mmap_write_lock() similar to the one for mmap_read_lo=
+ck.
+>
+> - Have syscall prototype use structure pointer instead of void (Thomas We=
+i=C3=9Fschuh)
+>
+> - Use __u64 instead of unsigned long for struct members (Thomas Wei=C3=9F=
+schuh)
+>
+> - Use size_t instead of int for structure size in syscall argument.
+>  (Thomas Wei=C3=9Fschuh)
+>
+>  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
+>  arch/arm/tools/syscall.tbl                  |  2 +
+>  arch/arm64/tools/syscall_32.tbl             |  2 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
+>  arch/s390/kernel/syscalls/syscall.tbl       |  3 +
+>  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
+>  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
+>  include/linux/mmap_lock.h                   |  3 +
+>  include/linux/syscalls.h                    |  3 +
+>  include/uapi/asm-generic/unistd.h           |  7 ++-
+>  include/uapi/linux/sframe.h                 | 12 ++++
+>  kernel/sys_ni.c                             |  3 +
+>  kernel/unwind/sframe.c                      | 69 +++++++++++++++++++--
+>  scripts/syscall.tbl                         |  2 +
+>  23 files changed, 126 insertions(+), 6 deletions(-)
+>  create mode 100644 include/uapi/linux/sframe.h
+>
+
+[...]
+
+>   * Architecture-specific system calls
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic=
+/unistd.h
+> index a627acc8fb5f..17042d7e5e87 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -863,8 +863,13 @@ __SYSCALL(__NR_listns, sys_listns)
+>  #define __NR_rseq_slice_yield 471
+>  __SYSCALL(__NR_rseq_slice_yield, sys_rseq_slice_yield)
+>
+> +#define __NR_sframe_register 472
+> +__SYSCALL(__NR_sframe_register, sys_sframe_register)
+> +#define __NR_sframe_unregister 473
+> +__SYSCALL(__NR_sframe_unregister, sys_sframe_unregister)
 > +
-> +void test_icmp_send_unreach_recursion(void)
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 472
+> +#define __NR_syscalls 474
+>
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/include/uapi/linux/sframe.h b/include/uapi/linux/sframe.h
+> new file mode 100644
+> index 000000000000..d3c9f88b024b
+> --- /dev/null
+> +++ b/include/uapi/linux/sframe.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_SFRAME_H
+> +#define _UAPI_LINUX_SFRAME_H
+> +
+> +struct sframe_setup {
+
+I'd add `u64 flags;` field for easier and nicer extensibility. Check
+in the kernel that it is set to zero, future kernels will allow some
+of the bits to be set.
+
+And I still think that prctl() instead of a separate sframe-specific
+syscall is the way to go. I see no reason for sframe-specific set of
+syscalls just to set a bit of extra metadata for the entire process.
+That seems to be the job of prctl().
+
+> +       __u64                   sframe_start;
+> +       __u64                   sframe_size;
+> +       __u64                   text_start;
+> +       __u64                   text_size;
+> +};
+> +
+
+[...]
+
+> +
+> +/**
+> + * sys_sframe_register - register an address for user space stacktrace w=
+alking.
+> + * @data: Structure of sframe data used to register the sframe section
+> + * @size: The size of the given structure.
+> + *
+> + * This system call is used by dynamic library utilities to inform the k=
+ernel
+> + * of meta data that it loaded that can be used by the kernel to know ho=
+w
+> + * to stack walk the given text locations.
+> + *
+> + * Return: 0 if successful, otherwise a negative error.
+> + */
+> +SYSCALL_DEFINE2(sframe_register, struct sframe_setup __user *, data, siz=
+e_t, size)
 > +{
-> +	struct icmp_send *skel;
-> +	int cgroup_fd = -1;
+> +       struct sframe_setup sframe;
 > +
-> +	skel = icmp_send__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		goto cleanup;
-> +
-> +	if (setup_cgroup_environment()) {
-> +		fprintf(stderr, "Failed to setup cgroup environment\n");
-> +		goto cleanup;
-> +	}
-> +
-> +	cgroup_fd = get_root_cgroup();
-> +	if (!ASSERT_GE(cgroup_fd, 0, "get_root_cgroup"))
-> +		goto cleanup;
-> +
-> +	skel->links.recursion =
-> +		bpf_program__attach_cgroup(skel->progs.recursion, cgroup_fd);
-> +	if (!ASSERT_OK_PTR(skel->links.recursion, "prog_attach_cgroup"))
-> +		goto cleanup;
-> +
-> +	trigger_prog_read_icmp_errqueue(skel, ICMP_HOST_UNREACH, AF_INET,
-> +					"127.0.0.1");
-> +
-> +	/* Because there's recursion involved, the first call will return at
-> +	 * index 1 since it will return the second, and the second call will
-> +	 * return at index 0 since it will return the first.
-> +	 */
-> +	ASSERT_EQ(skel->data->rec_kfunc_rets[0], -EBUSY, "kfunc_rets[0]");
-> +	ASSERT_EQ(skel->data->rec_kfunc_rets[1], 0, "kfunc_rets[1]");
-> +
-> +cleanup:
-> +	cleanup_cgroup_environment();
-> +	icmp_send__destroy(skel);
-> +	close(cgroup_fd);
+> +       if (sizeof(sframe) !=3D size)
+> +               return -EINVAL;
 
-This will close(-1) if the first two `goto cleanup` branches are taken.
-Not the end of the world, but most tests I've seen try to avoid it by
-doing something like this:
+This seems overly aggressive. It seems like the pattern is to allow
+sizes both smaller and bigger:
+  - if user-provided size is smaller than what kernel knows about,
+treat missing fields as zeroes
+  - if user-provided size is bigger, then check that space after
+fields that kernel recognizes are all zeroes.
 
-if (cgroup_fd != -1)
-	close(cgroup_fd);
+This allows extensibility without having to change user space code all
+the time. Old code will provide smaller struct without new (presumably
+optional) fields, while newer code can use newer and larger struct
+size, but as long as it clears extra fields old kernel will be fine
+with that.
 
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testing/selftests/bpf/progs/icmp_send.c
-> index 5fa5467bdb70..c899fb7b28d2 100644
-> --- a/tools/testing/selftests/bpf/progs/icmp_send.c
-> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
-> @@ -14,6 +14,9 @@ int unreach_type = 0;
->  int unreach_code = 0;
->  int kfunc_ret = -1;
-> 
-> +unsigned int rec_count = 0;
-> +int rec_kfunc_rets[] = { -1, -1 };
 > +
->  SEC("cgroup_skb/egress")
->  int egress(struct __sk_buff *skb)
->  {
-> @@ -125,4 +128,45 @@ int tc_egress(struct __sk_buff *skb)
->  	return TCX_DROP;
->  }
-> 
-> +SEC("cgroup_skb/egress")
-> +int recursion(struct __sk_buff *skb)
-> +{
-> +	void *data = (void *)(long)skb->data;
-> +	void *data_end = (void *)(long)skb->data_end;
-> +	struct tcphdr *tcph;
-> +	struct iphdr *iph;
-> +	int ret;
+> +       if (copy_from_user(&sframe, data, size))
+> +               return -EFAULT;
 > +
-> +	iph = data;
-> +	if ((void *)(iph + 1) > data_end || iph->version != 4)
-> +		return SK_PASS;
-> +
-> +	if (iph->daddr != bpf_htonl(SERVER_IP))
-> +		return SK_PASS;
-> +
-> +	if (iph->protocol == IPPROTO_TCP) {
-> +		tcph = (void *)iph + iph->ihl * 4;
-> +		if ((void *)(tcph + 1) > data_end ||
-> +		    tcph->dest != bpf_htons(server_port))
-> +			return SK_PASS;
-> +	} else if (iph->protocol != IPPROTO_ICMP) {
-> +		return SK_PASS;
-> +	}
-> +
-> +	/* This call will provoke a recursion: the ICMP packet generated by the
-> +	 * kfunc will re-trigger this program since we are in the root cgroup in
-> +	 * which the kernel ICMP socket belongs. However when re-entering the
-> +	 * kfunc, it should return EBUSY.
-> +	 */
-> +	ret = bpf_icmp_send(skb, unreach_type, unreach_code);
-> +	rec_kfunc_rets[rec_count & 1] = ret;
-> +	__sync_fetch_and_add(&rec_count, 1);
-> +
-> +	/* Let the first ICMP error message pass */
-> +	if (iph->protocol == IPPROTO_ICMP)
-> +		return SK_PASS;
-> +
-> +	return SK_DROP;
+> +       return sframe_add_section(sframe.sframe_start,
+> +                                 sframe.sframe_start + sframe.sframe_siz=
+e,
+> +                                 sframe.text_start,
+> +                                 sframe.text_start + sframe.text_size);
 > +}
 > +
->  char LICENSE[] SEC("license") = "Dual BSD/GPL";
-> --
-> 2.34.1
-> 
+
+[...]
