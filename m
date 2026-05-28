@@ -1,190 +1,323 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF4930C170
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 06:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD4C22370A;
+	Thu, 28 May 2026 07:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779949339; cv=none; b=uVygWrQXu3Q7ROhoegDegHW8JpkpCV8OhahEy6F7wZaODkZLxGJ/P9wgqD+kUIA+EamrTrH9cQecgMf1nzsKHwtFamwVplFrNMeuUWjV8fclOVhihDjYdGOHqfsuLoDVXVHvBU/I6hcPSDqrx6er10nGdo5It/6MjijwlXqulok=
+	t=1779954354; cv=none; b=FMarG+LnDEsV1cYtGEtANUcLre/GRiCCkNFc4z00ZhkiQSvp5PEZ4eadkDzPNEW8I0+5FJGsklkFPfNNIoITYTFJ6Wc0AnYQuJ0l+WrYds/euxPng51F/ilrmX1uTGYaPKOJjFyyTRRqgnzI8/SQgrWiETxDZ8SbF2DVzulApz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779949339; c=relaxed/simple;
-	bh=ncZ8PO1GcrR9iQGi0K+uqcRTqlKCxKBfU6IngjaQfJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=duFGoOP/z6zh7XrDpIh/1IqtLjv4XVoqEDlHaDtDHdeIhTpceeesj25IxzZL9a4BWErxZ1WqUnw6Gg6o8Lcd18r+p6/aGpMTp1NI2GyxLuhi2plxeKWmoGtaegiX6GrtM9oVErYsYX5o0701u7431Q3RonA73YIwA6pKRqcV/QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fsk7+NkX; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779954354; c=relaxed/simple;
+	bh=slCNsTXoENdGjk7K6M0zhO2px2arOH0llOcDWgj8hU0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=T1NL/6jtyCQ/GAPXeTngBMOw9J+r1xCiIEbpYdHcA0OIE+pfwKLNMjJDPGMh3IgKObz4yy102nU+McuQ0TFFnYPQZxfrBB5c/QSFAyAJO3US6dvRPot0XrvONllDSesUm52NebqHSdpHFBWVj+Kki+8jd0tLuI83SLGinT0RMuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=m+k/iR5Y; arc=none smtp.client-ip=130.149.7.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fsk7+NkX"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c80203b9d7bso5134631a12.0
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 23:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779949338; x=1780554138; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s2xM/E7JCqF+aKvSO4PKrWVccq753Fk89T0nKpMlTyM=;
-        b=Fsk7+NkX58PRBotqsC9yirToVjiCcv0Ms4ekU8P2ztfjv2XrRsnMKwekKzXfediCwO
-         /NeHk/ORV7dMBaRt46MaxFWrjd25j2GoEBg4bZIe8tX68NpBXw6Kb9nsxGT89TqJqq3f
-         q4PVy29HTCoKnjIwmZEK0p0nE8Js9HY0F122eh8SnydQ8W351gORwU5a0nEsK7OwWQXJ
-         HMt0z6bVXr75Wev9b3q1LdDI/zPPH6Lq3TSBhNmr43oDM8jZb9bXunWYKRQypHfTkXkP
-         J5pVA+3UDDnRoVcPmP3hn0P62XlC730mzpGfDYaLxRs4Fq/bjBjLeUP1/aKG/c0omKZ6
-         9VxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779949338; x=1780554138;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=s2xM/E7JCqF+aKvSO4PKrWVccq753Fk89T0nKpMlTyM=;
-        b=tCg+5aSNvjav0vP/siZ79WVbboucK5HXsy3lT8KDzwUhxK4nt1jum+LemIXXTQXdQO
-         /2moZK2iHZw7YMGztQ4I/lE7WvSEuybdLwqoypDpL6jka/C9JwskVB2tfkFG/E9H4yIf
-         R0ak3tcXILn5Fno5pmyE6u5E67kNmHTaTv28xWptOGNhQiiSnbhmJbpfwutmlQPoGXvW
-         3WzVTgFqh6YumjT7u+4auIbnV82MgqQlbDLuEsq/nF3UFw21BqM6CnBXu1w+34OkxMuz
-         i3qFsv66KOsvKyCMa+wsWit8ATM+0f9Wbhbezw1rcFATIz3EKf8qoHD5KlGJYh4XL5XN
-         JhVg==
-X-Forwarded-Encrypted: i=1; AFNElJ/EiqD939amQUK+j6wpcETcGWi7ciN4XFGGq2oH9SGI+rniOIL+2yi92Ie0t/u7I6MvKlk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3TchCMhNQrU1mtUCafDSP5BY+myCTAh9qYHXmbjEXY//G809k
-	7ck0WIF6HjnPmgKBN4OT1NS4UxOl+wAAjbibuw23RO8+UyXg+9i5/Ys/
-X-Gm-Gg: Acq92OF3OHT2K1G1QZpm5/ghG1m9cRBbHw5deebJ4AUDZV1lSL3evmDdL7KrjEs8suh
-	QrA3gmJP9hGla2Er2qG27ZHSH4TncLyAts/YZaw2fltDu+lELaxs0zTVeV5xIJ5iZUGrDbDAB8C
-	QjlxBb8mhPIuG7s+LqWqcsy8JCMEUlMlkourBZJb/Sy8HJ8U4nbnyL7Sl7zuy/Uf5DC/clXwU6Y
-	TwvEEZabvtuzv2B3nW6fePSSploscz3PbWrsT3WdLOn/o42H3wzjzsF6YubPbRsuEgobVODMITL
-	XKfJQM0OIdmIVKYZHqbGm9dzQYuolkgRZJQLxjlehfZFJ4/4F3jjDA0vl3UbIqns2nLs0oRV8hs
-	DKgIosgHcWH2f7hv/98GKhM/8Pl6vBy9mZYnSDrBBe+65YLfCaU4AT0VAmcvsrjO+XYdLfQg4z7
-	slx3ryarL4iBgrXCiGYywDLrUfm92osvWkTzNMKZnUbar/vDHtLHHBIg==
-X-Received: by 2002:a05:6a00:7702:b0:841:dc7d:306a with SMTP id d2e1a72fcca58-841dc7d511cmr4529239b3a.25.1779949337883;
-        Wed, 27 May 2026 23:22:17 -0700 (PDT)
-Received: from foxirain.tailf10b76.ts.net ([220.83.29.221])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841ef4e9ec7sm964082b3a.24.2026.05.27.23.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 23:22:17 -0700 (PDT)
-From: Taegu Ha <hataegu0826@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Stanislav Fomichev <yatsenko@meta.com>,
-	Song Liu <song@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Emil Tantilov <emil@etsalapatis.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Taegu Ha <hataegu0826@gmail.com>
-Subject: [PATCH bpf-next v3] bpf: reject overlarge global subprog argument sizes
-Date: Thu, 28 May 2026 15:21:55 +0900
-Message-ID: <20260528062155.3988156-1-hataegu0826@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260528052533.3940181-1-hataegu0826@gmail.com>
-References: <20260528052533.3940181-1-hataegu0826@gmail.com>
+	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="m+k/iR5Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
+  d=tu-berlin.de; s=dkim-tub26; t=1779954350;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YwiqvMY2PKPAcCvJyw4rh5b90nzS+r5PdCbKYfempRE=;
+  b=m+k/iR5Yw1ER83g9DAapnjgmAb9SQy8XACI5xk9aNZHSR4E9wEaTlAye
+   Xl1JbRDswtBa5vyKpNnswI6lAhEKgfFnLefw9ZZzGUffziXdb2e6OTLqK
+   qqOkJUzchUBDYhPLN7PoFATebydIbXfRvj/cm3Z6s0uAzdJAwGgfd6iRs
+   Fp0w8YwWH3nh8FFVR/vD8lgs6vUn3cHSoRbK4YynMnaEHo+HcAZtQxX+p
+   t3rMD7GPVV/YyE72QNi2d34vcuem3eXznZff+e4CEfXRUChD125Ri9lI7
+   6OHoWGgq38EV/bI8wpOKY5XQ/zIgAihmibbXG1dYGUC0cz4FSe1Qlnlss
+   Q==;
+X-CSE-ConnectionGUID: Ndv9WsKrQuWiZF7d2D37pA==
+X-CSE-MsgGUID: lLqfKZzFSB2nsCaAP9mGow==
+X-IronPort-AV: E=Sophos;i="6.24,173,1774306800"; 
+   d="scan'208";a="47877387"
+Received: from mail.tu-berlin.de ([141.23.12.141])
+  by mailrelay.tu-berlin.de with ESMTP; 28 May 2026 09:45:41 +0200
+Message-ID: <7b75ef64-fd7d-4323-a323-e520947ffbfa@tu-berlin.de>
+Date: Thu, 28 May 2026 09:45:39 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 2/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: <hawk@kernel.org>, <netdev@vger.kernel.org>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-3-hawk@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+In-Reply-To: <20260527135418.1166665-3-hawk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Global subprogram argument checking derives generic pointer sizes from BTF
-and passes the resolved size to check_mem_reg() as a u32. The access-size
-validation path then uses a signed int, and stack pointers negate the value
-before calling check_helper_mem_access().
+On 5/27/26 3:54 PM, hawk@kernel.org wrote:
+> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>
+> Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
+> reduce TX drops") gave qdiscs control over veth by returning
+> NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
+> a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
+> a dark buffer, adding base latency because the qdisc has no visibility
+> into how many bytes are already queued there.
+>
+> Add BQL support so the qdisc gets feedback and can begin shaping traffic
+> before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
+> under UDP load from ~6.61ms to ~0.36ms (18x).
+>
+> Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
+> the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
+> has no link speed -- the ptr_ring drains at CPU speed and is
+> packet-indexed, not byte-indexed, so bytes are not the natural unit.
+> With byte-based charging, small packets sneak many more entries into
+> the ring before STACK_XOFF fires, deepening the dark buffer under
+> mixed-size workloads.  Testing with a concurrent min-size packet flood
+> shows 3.7x ping RTT degradation with skb->len charging versus no
+> change with fixed-unit charging.
+>
+> Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
+> confirming the ring is not full.  The charge must precede the produce
+> because the NAPI consumer can run on another CPU and complete the SKB
+> the instant it becomes visible in the ring.  Doing both under the same
+> lock avoids a pre-charge/undo pattern -- BQL is only charged when
+> produce is guaranteed to succeed.
+>
+> BQL is enabled only when a real qdisc is attached (guarded by
+> !qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
+> for TXQ modification like dql_queued(). For lltx devices, like veth,
+> this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
+> producer_lock provides additional serialization that would allow
+> BQL to work correctly even with noqueue, though that combination
+> is not currently enabled, as the netstack will drop and warn.
+>
+> Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
+> entry.  This is necessary because the qdisc can be replaced live while
+> SKBs are in-flight -- each SKB must carry the charge decision made at
+> enqueue time rather than re-checking the peer's qdisc at completion.
+>
+> Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
+> clears promptly when producer and consumer run on different CPUs.
+>
+> BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
+> alongside the existing DRV_XOFF (ring full).  Both must be clear for
+> the queue to transmit.  Reset BQL state in veth_napi_del_range() after
+> synchronize_net() to avoid racing with in-flight veth_poll() calls.
+> Clamp the reset loop to the peer's real_num_tx_queues, since the peer
+> may have fewer TX queues than the local device has RX queues (e.g. when
+> veth is enslaved to a bond with XDP attached).
+>
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
 
-This creates a wrap when BTF describes a pointee size larger than S32_MAX.
-For example, a global subprogram argument of type:
+Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
 
-  int (*p)[0x3fffffff]
-
-has a BTF-resolved pointee size of 0xfffffffc bytes. At a call site the
-caller can pass a pointer to a 4-byte stack slot at fp-4. The current
-PTR_TO_STACK path computes:
-
-  size = -(int)mem_size
-
-so 0xfffffffc becomes -4 as a signed int and the negation validates only
-a 4-byte stack range. That range is covered by the caller's stack slot,
-so the call is accepted.
-
-The callee is then verified independently with R1 as PTR_TO_MEM and
-mem_size 0xfffffffc. A small instruction such as:
-
-  r0 = *(u32 *)(r1 + 4)
-
-is accepted as being inside that BTF-described memory region. At run time,
-however, the actual argument value is still fp-4, so r1 + 4 addresses fp+0,
-outside the 4-byte object that the caller provided.
-
-Reject sizes that cannot be represented by the verifier's signed
-access-size API before the stack-specific negation. Add a verifier
-regression test for the oversized BTF argument.
-
-Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
-Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
----
-v3:
-- Fix bpf-next build by using reg_arg_name(env, argno) in
-  check_mem_reg(); v2 referenced a stale regno parameter name.
-- Keep the existing known-NULL fast path before the overlarge-size guard.
-- Send as a single bpf-next patch without a cover letter.
-
-v2:
-- Expanded the commit message with the BTF-derived size wrap details.
-- Kept the verifier fix to a mem_size > S32_MAX guard.
-
- kernel/bpf/verifier.c                           |  6 ++++++
- .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
- 2 files changed, 23 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c8d980fdd709..3a270bc485c2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6927,6 +6927,12 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
- 	if (bpf_register_is_null(reg))
- 		return 0;
- 
-+	if (mem_size > S32_MAX) {
-+		verbose(env, "%s memory size %u is too large\n",
-+			reg_arg_name(env, argno), mem_size);
-+		return -EACCES;
-+	}
-+
- 	/* Assuming that the register contains a value check if the memory
- 	 * access is safe. Temporarily save and restore the register's state as
- 	 * the conversion shouldn't be visible to a caller.
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index dc09d0e2d8ad..75a2e3f48d0f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -152,6 +152,23 @@ int anon_user_mem_valid(void *ctx)
- 	return subprog_user_anon_mem(&t);
- }
- 
-+__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
-+{
-+	return p ? (*p)[1] : 0;
-+}
-+
-+SEC("?tracepoint")
-+__failure __log_level(2)
-+__msg("R1 memory size 4294967292 is too large")
-+int anon_user_mem_huge_size_invalid(void *ctx)
-+{
-+	int (*p)[0x3fffffff];
-+	int tiny = 42;
-+
-+	p = (void *)&tiny;
-+	return subprog_user_anon_mem_huge(p) + tiny;
-+}
-+
- __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
- {
- 	return (*p1) * (*p2); /* good, no need for NULL checks */
--- 
-2.43.0
+> ---
+>   drivers/net/veth.c | 86 ++++++++++++++++++++++++++++++++++++++++------
+>   1 file changed, 75 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0cfb19b760dd..21ff78533943 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -34,9 +34,13 @@
+>   #define DRV_VERSION	"1.0"
+>   
+>   #define VETH_XDP_FLAG		BIT(0)
+> +#define VETH_BQL_FLAG		BIT(1)
+>   #define VETH_RING_SIZE		256
+>   #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
+>   
+> +/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
+> +#define VETH_BQL_UNIT		1
+> +
+>   #define VETH_XDP_TX_BULK_SIZE	16
+>   #define VETH_XDP_BATCH		16
+>   
+> @@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
+>   	return (unsigned long)ptr & VETH_XDP_FLAG;
+>   }
+>   
+> +static bool veth_ptr_is_bql(void *ptr)
+> +{
+> +	return (unsigned long)ptr & VETH_BQL_FLAG;
+> +}
+> +
+> +static struct sk_buff *veth_ptr_to_skb(void *ptr)
+> +{
+> +	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
+> +}
+> +
+> +static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
+> +{
+> +	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
+> +}
+> +
+>   static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
+>   {
+>   	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
+> @@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
+>   	if (veth_is_xdp_frame(ptr))
+>   		xdp_return_frame(veth_ptr_to_xdp(ptr));
+>   	else
+> -		kfree_skb(ptr);
+> +		kfree_skb(veth_ptr_to_skb(ptr));
+>   }
+>   
+>   static void __veth_xdp_flush(struct veth_rq *rq)
+> @@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
+>   	}
+>   }
+>   
+> -static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
+> +static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do_bql,
+> +		       struct netdev_queue *txq)
+>   {
+> -	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
+> +	struct ptr_ring *ring = &rq->xdp_ring;
+> +
+> +	spin_lock(&ring->producer_lock);
+> +	if (unlikely(__ptr_ring_check_produce(ring))) {
+> +		spin_unlock(&ring->producer_lock);
+>   		return NETDEV_TX_BUSY; /* signal qdisc layer */
+> +	}
+> +
+> +	/* BQL charge before produce; consumer cannot see entry yet */
+> +	if (do_bql)
+> +		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
+> +
+> +	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
+> +	spin_unlock(&ring->producer_lock);
+>   
+>   	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
+>   }
+>   
+>   static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
+> -			    struct veth_rq *rq, bool xdp)
+> +			    struct veth_rq *rq, bool xdp, bool do_bql,
+> +			    struct netdev_queue *txq)
+>   {
+>   	return __dev_forward_skb(dev, skb) ?: xdp ?
+> -		veth_xdp_rx(rq, skb) :
+> +		veth_xdp_rx(rq, skb, do_bql, txq) :
+>   		__netif_rx(skb);
+>   }
+>   
+> @@ -348,10 +381,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+>   {
+>   	struct veth_priv *rcv_priv, *priv = netdev_priv(dev);
+>   	struct veth_rq *rq = NULL;
+> -	struct netdev_queue *txq;
+> +	struct netdev_queue *txq = NULL;
+>   	struct net_device *rcv;
+>   	int length = skb->len;
+>   	bool use_napi = false;
+> +	bool do_bql = false;
+>   	int ret, rxq;
+>   
+>   	rcu_read_lock();
+> @@ -375,8 +409,12 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+>   	}
+>   
+>   	skb_tx_timestamp(skb);
+> -
+> -	ret = veth_forward_skb(rcv, skb, rq, use_napi);
+> +	if (rxq < dev->real_num_tx_queues) {
+> +		txq = netdev_get_tx_queue(dev, rxq);
+> +		/* BQL charge happens inside veth_xdp_rx() under producer_lock */
+> +		do_bql = use_napi && !qdisc_txq_has_no_queue(txq);
+> +	}
+> +	ret = veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
+>   	switch (ret) {
+>   	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
+>   		if (!use_napi)
+> @@ -412,6 +450,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+>   		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
+>   				     __func__, dev->name, ret);
+>   	}
+> +
+>   	rcu_read_unlock();
+>   
+>   	return ret;
+> @@ -900,7 +939,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>   
+>   static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>   			struct veth_xdp_tx_bq *bq,
+> -			struct veth_stats *stats)
+> +			struct veth_stats *stats,
+> +			struct netdev_queue *peer_txq)
+>   {
+>   	int i, done = 0, n_xdpf = 0;
+>   	void *xdpf[VETH_XDP_BATCH];
+> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>   			}
+>   		} else {
+>   			/* ndo_start_xmit */
+> -			struct sk_buff *skb = ptr;
+> +			bool bql_charged = veth_ptr_is_bql(ptr);
+> +			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+>   
+>   			stats->xdp_bytes += skb->len;
+> +			if (peer_txq && bql_charged)
+> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+> +
+>   			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+>   			if (skb) {
+>   				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+> @@ -976,7 +1020,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
+>   		   netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+>   
+>   	xdp_set_return_frame_no_direct();
+> -	done = veth_xdp_rcv(rq, budget, &bq, &stats);
+> +	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
+>   
+>   	if (stats.xdp_redirect > 0)
+>   		xdp_do_flush();
+> @@ -1074,6 +1118,7 @@ static int __veth_napi_enable(struct net_device *dev)
+>   static void veth_napi_del_range(struct net_device *dev, int start, int end)
+>   {
+>   	struct veth_priv *priv = netdev_priv(dev);
+> +	struct net_device *peer;
+>   	int i;
+>   
+>   	for (i = start; i < end; i++) {
+> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+>   		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+>   	}
+>   
+> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
+> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
+> +	 * synchronize_net(), and NAPI can no longer clear it.
+> +	 * Only wake when the device is still up.
+> +	 */
+> +	peer = rtnl_dereference(priv->peer);
+> +	if (peer) {
+> +		int peer_end = min_t(int, end, peer->real_num_tx_queues);
+> +
+> +		for (i = start; i < peer_end; i++) {
+> +			struct netdev_queue *txq = netdev_get_tx_queue(peer, i);
+> +
+> +			netdev_tx_reset_queue(txq);
+> +			if (netif_running(dev))
+> +				netif_tx_wake_queue(txq);
+> +		}
+> +	}
+> +
+>   	for (i = start; i < end; i++) {
+>   		page_pool_destroy(priv->rq[i].page_pool);
+>   		priv->rq[i].page_pool = NULL;
+> @@ -1741,6 +1804,7 @@ static void veth_setup(struct net_device *dev)
+>   	dev->priv_flags |= IFF_PHONY_HEADROOM;
+>   	dev->priv_flags |= IFF_DISABLE_NETPOLL;
+>   	dev->lltx = true;
+> +	dev->bql = true;
+>   
+>   	dev->netdev_ops = &veth_netdev_ops;
+>   	dev->xdp_metadata_ops = &veth_xdp_metadata_ops;
