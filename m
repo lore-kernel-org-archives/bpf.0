@@ -1,97 +1,77 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CEF3D0938;
-	Thu, 28 May 2026 10:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC733BCD0F
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 11:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779965619; cv=none; b=tNe46Am+a/QfOhHEIq6k2+cNeuEG1Rh7cH9Dnh30+Z4VIja0G+MycP4XW+gDrAH3t6GBY1ml3x20c6bxanHvnvFP045aOV0oYdpS2QISaQR6ZzXYErdChhcw4CWLbq9Stjig8LmbKAth2xE/hsgQf6q6FyrpXe5q1iFe3jifHFQ=
+	t=1779966652; cv=none; b=Qp/nP42aX5pvZ/T/Cvz0qI/CsUC13WsCNn98KTeEvjcj+TjUDj1HKduIHu/NROZ2dwebqftnKiA7/QuOplCuHI5kUVkr6ihxKmDtvcmW7DCjPTZsbMnN2kkzqYXhXaU2JIwYlV+HphVWyR4xSu50kjYzm9TJ4SOhZ16IPsVtZ/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779965619; c=relaxed/simple;
-	bh=sWeSNmVN+2nde1J+pCm611g/wKTC4MV5XvLgG0qca5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHUhTN6nHOHWctAQTejRpV3ld3A9ol4+Z+MFvJvwLtHKF9mjT9NxOZfUEPi+JXH89shy1/H3yzG/07Q022Asqv8Y2qHZOTatVC8SvkTyvsui+H4QAPMritSQHI6tpNe0THzA/laUpcvX0dp/Uru2ZQbf0D5ieUwwH/nRxgmKO/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XgDMFSWB; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1779966652; c=relaxed/simple;
+	bh=/KwnVJ2dbFKGYx9yHvg5KoYWWC4aW2SQGlKiGmzLvYU=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qlze/JitPZ4jNTJxcrxllBKMORvkwehtAVvqR7OAdSvn/b8GGhOu7lada3MEeq7LnJEpW2dh9WLs2qIueWxTTQWnQJpW5IK+YecVia9ZElQ6fu6pOcu3ELl/L9hDrGPpanLQ9xybD95DBeW4CR8bIWldGnnRAFT5TOOseV5VCM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R5htYmZ6; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XgDMFSWB"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vmJ0MIxHcu6GywVP98RSuXzH8R1cz6RzvzYzBTXLcWQ=; b=XgDMFSWBz53xKzj7s3tmaiRWSn
-	mPrtjimriTrPvI0aWo+sBjxAFnTomEt3sVBc7bhPhi8TaUji6RC3/M/AxkitFgJnujUjKpbpOsXuV
-	JeLszzwWLeJTtc3rBqy3//WSZ5GZpQi2vGKpLaRjERAf1BSxkH0cv9Hh6IIfLX1k6ecieoVESsrLu
-	3rHb47LamIi2dG8Jz8aPVjJANgIrZlV810yb0CCjJwUmknuK9JiahNzNf384/aO4/o5b7RU6raFPo
-	Nc4Nxu5gCpANnSiqIpxHIB2X4HC5U8XqNGcy/PsnJLgQDcW1vphnTMIvfk0MBZ+XNavEAxckssrQ5
-	l0N2225g==;
-Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wSYMf-0000000GDSi-2KFs;
-	Thu, 28 May 2026 10:53:32 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 556DB300673; Thu, 28 May 2026 12:53:25 +0200 (CEST)
-Date: Thu, 28 May 2026 12:53:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, Lyude Paul <lyude@redhat.com>,
-	Thomas Huth <thuth@redhat.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 12/12] s390/preempt: Enable
- HAS_SEPARATE_PREEMPT_RESCHED_BITS
-Message-ID: <20260528105325.GI343181@noisy.programming.kicks-ass.net>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260526152148.30514-13-boqun@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R5htYmZ6"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4893940bb5eso68329095e9.3
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 04:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779966649; x=1780571449; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsYRPtt8V39CegAnVfUYJmqEAedS3Hwf+vTU6He99LA=;
+        b=R5htYmZ6/ZWqlbYEDIgtBbk92Q5VKySdQYzMZjXZcgpMpzuPTpUvFpV6Gkg8krrtKI
+         7Rl2QLEo3T9P8g1gS88FowyZuW6HN+HO0Qrks+GQEcTkFkGrcdf/1YCStk0+PYHg1QFx
+         doC42Ubpaa0zs4wMNO9YEDeOK5SZsfdbtv8cPmz6AcJwB+gjjv3IQ2YoYXAZbQjGb4J2
+         1CwJm6NS0dUv2pXIkFUvX6U8L+pFHEgnrRGslQqBvFwz5W/pqp/ZdLnOxzGpBvuEjDrG
+         A0+IyPYdW8ODEobQc1pRiNaKI0aisGyt2Atk1GArWFvyE86VDEaI83d6IkvIYGwPw+W4
+         c6kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779966649; x=1780571449;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dsYRPtt8V39CegAnVfUYJmqEAedS3Hwf+vTU6He99LA=;
+        b=jv8ciWLKHQ2rpfL+XbI3s+TdumWgWF3/qAj/kUWZzzhQUYR0wooYHb5TXM8FZKNoI+
+         bcne3WAebN7KfY/ABC4oGZtUl56IWROn/xJSV8pL3tIgjvDN7se8wx3B/1r/YUT05nci
+         FP0nWzdksOHf4obOXtMpr4mScLrU2Cm7ZGUmiwrMUp4IGejHynNmBzsgKzbtdGWyePeS
+         +BXf/VFBqASBoKvB0oC8hHU4PkJ5FX47I+Dmwu0WQiW67i7aKpYb2yP6C1CuIpmp/3NA
+         l8v/Js4ujg2bBuKTKy6NRuxH0RlbOLhynCFsVWODWEmNsMyBCWY4JyBAWju1SOsJP2Gs
+         rRwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ84JmaMjlsRvUUJ5h95ROe3lTQl2toFIWocItysLvl1DM1RA2VdKxF3yuzlR+T8LwFlZXE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVDOxLXl/YelsSrsKkfB+gs4R9fhRh3e1Sk2AuPuj7v42o1D50
+	nWNbg/zoNFn/bjipvtgVlqimEG6B8hUi3fKiE3GAS4b0Rf8eAYxnY4Cd
+X-Gm-Gg: Acq92OH7X4ioe9wjwyouEeS/mHpiB3+OY+q4kUdY2BlPMMYvLIjxLxPCixPZcJoOjoi
+	DZiOai6gIlC07bE/6iLlAGVrfgnrupp3ttvlZay9NkHEYaT2UT+uplRWop4M1C3pjLQDysCI+EH
+	3OINiRsCMNY1lC2AofUUsOzmmjtg+CNNXRnUcFOlnaD8boPlb0UuQxnSZgIJdhmxySI0WL2u5Ho
+	ny0T+qOpCnckFBOKOM9JrNzs8agz2Ppi5cCPJOHP4h4ghd26xOhOr/rZOLZ3dWklosI3A5g8nN6
+	17kcCsNq3x/uKrliKZPUU9E2QETpCyIB4zcupPVDRDf5hyRTgNHL8nzWFCrTLKzXQjv7L01UbzH
+	YtEo4eZWZyq5fWUZ9v0EOt2MbCHuXjgzrBVkGSgrAti0vyHg4oar4Mh3qDkRs50eUyhqOOq1WB5
+	+FNzahh/n+BJA+qXisAyzc0DmRzA==
+X-Received: by 2002:a05:600c:4688:b0:48f:e230:80a3 with SMTP id 5b1f17b1804b1-49042ae99afmr436971075e9.33.1779966649100;
+        Thu, 28 May 2026 04:10:49 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb5b314dsm11971146f8f.30.2026.05.28.04.10.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 04:10:48 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 28 May 2026 13:10:46 +0200
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 11/13] selftests/bpf: Add reattach tests for uprobe
+ syscall
+Message-ID: <ahgitmxJekXn_4Cs@krava>
+References: <20260526205840.173790-1-jolsa@kernel.org>
+ <20260526205840.173790-12-jolsa@kernel.org>
+ <87tsrt5bq7.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,53 +80,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-13-boqun@kernel.org>
+In-Reply-To: <87tsrt5bq7.fsf@cloudflare.com>
 
-On Tue, May 26, 2026 at 08:21:48AM -0700, Boqun Feng wrote:
-> From: Heiko Carstens <hca@linux.ibm.com>
+On Wed, May 27, 2026 at 01:32:48PM +0200, Jakub Sitnicki wrote:
+> On Tue, May 26, 2026 at 10:58 PM +02, Jiri Olsa wrote:
+> > Adding reattach tests for uprobe syscall tests to make sure
+> > we can re-attach and optimize same uprobe multiple times.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 114 ++++++++++++++++--
+> >  1 file changed, 104 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > index 0868fb9793e0..969f4deba9fd 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > @@ -430,23 +430,28 @@ static void *check_attach(struct uprobe_syscall_executed *skel, trigger_t trigge
+> >  	return tramp;
+> >  }
+> >  
+> > -static void check_detach(void *addr, void *tramp)
+> > +static bool check_detach(void *addr, void *tramp)
+> >  {
+> >  	static const char nop10_prefix[] = { 0x66, 0x2e, 0x0f, 0x1f, 0x84 };
+> > +	bool ok = true;
+> >  
+> >  	/* [uprobes_trampoline] stays after detach */
+> > -	ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
+> > -	ASSERT_OK(memcmp(addr, nop10_prefix, 5), "nop10_prefix");
+> > +	if (!ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline"))
+> > +		ok = false;
+> > +	if (!ASSERT_OK(memcmp(addr, nop10_prefix, 5), "nop10_prefix"))
+> > +		ok = false;
+> > +	return ok;
+> >  }
 > 
-> Convert s390's preempt_count to 64 bit, and change the preempt
-> primitives accordingly.
+> Nit: Maybe apply the same pattern you used in
+> progs/get_func_args_test.c?
 > 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Boqun Feng <boqun@kernel.org>
-> Link: https://patch.msgid.link/20260509181249.16281C67-hca@linux.ibm.com
-> ---
->  arch/s390/Kconfig               |  1 +
->  arch/s390/include/asm/lowcore.h | 13 +++++++----
->  arch/s390/include/asm/preempt.h | 41 +++++++++++++++------------------
->  3 files changed, 29 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index ecbcbb781e40..cbbca82f8443 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -276,6 +276,7 @@ config S390
->  	select PCI_MSI			if PCI
->  	select PCI_MSI_ARCH_FALLBACKS	if PCI_MSI
->  	select PCI_QUIRKS		if PCI
-> +	select HAS_SEPARATE_PREEMPT_RESCHED_BITS
->  	select SPARSE_IRQ
->  	select SWIOTLB
->  	select SYSCTL_EXCEPTION_TRACE
-> diff --git a/arch/s390/include/asm/lowcore.h b/arch/s390/include/asm/lowcore.h
-> index 50ffe75adeb4..0974ab278169 100644
-> --- a/arch/s390/include/asm/lowcore.h
-> +++ b/arch/s390/include/asm/lowcore.h
-> @@ -160,10 +160,15 @@ struct lowcore {
->  	/* SMP info area */
->  	__u32	cpu_nr;				/* 0x03a0 */
->  	__u32	softirq_pending;		/* 0x03a4 */
-> -	__s32	preempt_count;			/* 0x03a8 */
-> -	__u32	spinlock_lockval;		/* 0x03ac */
-> -	__u32	spinlock_index;			/* 0x03b0 */
-> -	__u8	pad_0x03b4[0x03b8-0x03b4];	/* 0x03b4 */
-> +	union {
-> +		struct {
-> +			__u32	need_resched;	/* 0x03a8 */
-> +			__u32	count;		/* 0x03ac */
-> +		} preempt;
-> +		__u64	preempt_count;		/* 0x03a8 */
-> +	};
+> ok &= ASSERT_OK(...)
+> ok &= ASSERT_OK(...)
 
-I'm a little confused by this union; afaict it isn't actually used.
+ok, safes space ;-)
+
+> 
+> >  
+> > -static void check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
+> > -		  trigger_t trigger, void *addr, int executed)
+> > +static void *check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
+> > +		   trigger_t trigger, void *addr, int executed)
+> 
+> Nit: Kinda wish that was called check_attach_detach().
+
+would need to check the existing code.. let's keep it
+
+> 
+> >  {
+> >  	void *tramp;
+> >  
+> >  	tramp = check_attach(skel, trigger, addr, executed);
+> >  	bpf_link__destroy(link);
+> >  	check_detach(addr, tramp);
+> > +	return tramp;
+> >  }
+> >  
+> >  static void test_uprobe_legacy(void)
+> > @@ -457,6 +462,7 @@ static void test_uprobe_legacy(void)
+> >  	);
+> >  	struct bpf_link *link;
+> >  	unsigned long offset;
+> > +	void *tramp;
+> >  
+> >  	offset = get_uprobe_offset(&uprobe_test);
+> >  	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
+> > @@ -474,7 +480,28 @@ static void test_uprobe_legacy(void)
+> >  	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
+> >  		goto cleanup;
+> >  
+> > -	check(skel, link, uprobe_test, uprobe_test, 2);
+> > +	tramp = check(skel, link, uprobe_test, uprobe_test, 2);
+> > +
+> > +	/* reattach and detach without triggering optimization */
+> > +	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
+> > +					       0, "/proc/self/exe", offset, NULL);
+> > +	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
+> > +		goto cleanup;
+> > +
+> 
+> In theory we're missing a check here that an unoptimized uprobe was
+> installed. If nothing happened at all between the last check() and
+> check_destroy() below, the test would still pass.
+> 
+> Applies to the three similar changes after that one as well.
+
+right, we can add extra check that there's int3 in here (and below)
+
+thanks,
+jirka
