@@ -1,64 +1,66 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723033FB7F2
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 17:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B699B3FAE08
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 17:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779990458; cv=none; b=HoUEltHz0+eidyivShDWLn7qWeeS0Amnt8BP+3EqEqbm3FkCG417nffcVo0QqNWlmXEnFPH8RSJBY6Kqpe37ayT/6zrFT7bF9L+Ip8RlOIRyfvmwmVZw09WpkIgjgWCgpjUxV5I6HNK5g2bhRbglNJGqSu+1R+36MJBetArhzRU=
+	t=1779990460; cv=none; b=pSfdSgIVCmvZBVlWGC/XSLlEPWXifb71mZSXxjk5F9EEsSQmCkP3m7Rk8Dp4+t1rrO0hDe7s9r843tDEfF81OT7sQTj5hbCX6t9vDC04Xo2sfEfKHcPv2RViAdIBQK561VCAtkhohshH7B7Y0BgUvzLw9qOKOk2kXB68SSkVssY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779990458; c=relaxed/simple;
-	bh=yLh3rpFJAbhh1ftPRvyoeyaJ7jaXPHQmvF8hI4ABUP8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AZQVQyKVeMMSztIeOVOfVoIyxUrt0/crMeDWzTVAYaWXbNknhV38jX+/1nP6KRv6HeG9DwadFYpwDhaOit0Ea6VBwt+u9dErCgBqak2B5LFzdyRWEWooKg/7mr59fZ4a6hUxGRyFVClYKmyyqujuO4gDhvnypL1o5NnO0RoNMz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z3DKaih+; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1779990460; c=relaxed/simple;
+	bh=TxIb32XQNb5FgO9TJlTRoIFeRTceI8dsajMDerxt1HA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=a0sHLkFoKVA/RtPnVT8wrVyblwyF6m7/+wJSxJOc+fZPZMUyFcsMdS9BkHmsxdAwr1BNMrciFBDkXtUMNE98MOYEoXMJypyJNZ6qcyHyCzHdLh5R3gHMkDqdoK4fmrPgyMznTL7hZdkirHXm+SAlYwnbHXOp7EGdG20tdTK6tfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pSDUE0Qt; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z3DKaih+"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-459bf19e87bso7913926f8f.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 10:47:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pSDUE0Qt"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4904127c32cso43303645e9.2
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 10:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779990454; x=1780595254; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OnRr7riLExSZ74kp2ZUaTUR26kF5a5k7ZE4N5g+Sobk=;
-        b=Z3DKaih+1LccvIhsYTCnNqMST3VvIkzz6QPqURW6SrKY2FRQzadOcCNLE6M2e/1xT/
-         OpoWomDpDyGhdLJrczvDtAE1NwfzHnFeqN4BOvXyEM/ocd/SQPwUuADWI/FZdzoR4cgM
-         VJvTxIohUKI0/qFA7Tj7f7dSSaVwUgDluM0U2LFli3kz9oG89fDkiuX1L6YG7+DKeBBE
-         kHvfD5ucHcYWd0HnT+DOmsrZObHo/nwetq1z3X6ENeKeWKJ9HzYJSMX5mkDmE3NU4N/9
-         Sqq/eLO6f8YN2iVmb6uGqUxhMpLEZYk2mvP9Q3BzNVPGfKLzpLEt6ScKYl07rAvBO3yT
-         DPpQ==
+        d=gmail.com; s=20251104; t=1779990455; x=1780595255; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KUV/KGZhBIQWTjs4PRB2d5yHpLxXi26s9TyJym1BZzM=;
+        b=pSDUE0QtUYOe2KjTWhtgNIRo2S5eBeuhM2CfScD+ezANJ4WSvNBQ5JNvun+z82JaNK
+         itauwD7w5hj8zMBYULeLqRKHk2EpRc2VlX4b3jZwNds23hCEj0kGOw7b8sp3oHBChvL4
+         zG+kCV6ADuhxiYBF8xRva0cCFsWHKfIAcMu2gvyMN8j3YEp91uzZLUekl/9vxzzUHZru
+         RagH2pCawoOQg3SLRw/UKq0oBEs9Kc+f4o276+grdtuyPXmz7/9sTKP+FzdxLcW+HdMf
+         6jw3WhWA5/tBrWY6vvq2DVRGguRJ+2AjIGhJ8bbx0wdreRfuIH+k+awj0PKCqI9vdLtb
+         nTFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779990454; x=1780595254;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OnRr7riLExSZ74kp2ZUaTUR26kF5a5k7ZE4N5g+Sobk=;
-        b=Sv6bsvQYK7Qdrk9BYtx3UdCTL1NmtcC5rBJh3fk4kAbbb3n8pAslhfS/Bkta8mYwmN
-         4BZJhnNlOGEkUJBonzUEeiOiLVz7mLK2Z6Mc+2aKlU8RQAnmQtvcJznkPsEsJZhcgKgu
-         E1NtdZNcVBgee+zhM0xAhNJD0tHvcIh3WVs03r8hrnaBGIpJ7Wpi1oJv7CHDRu5gVALL
-         +eVVzFsay+A7B28XsJbrNOLkB+RgMWW5rCrqIk9jAJau34bwQhBfiqBTyWnZOTqbopBc
-         sW7ZftyXOEBU13iymVKAONg36NSe5pu3gF9pgaMh2wjGtZULNr+vxaDMy5WhMqcTgj3h
-         iNtQ==
-X-Gm-Message-State: AOJu0Yz7S292i8+GHYU5d5cjUpY2MP7wo6p6rIB08ha3UKwXTkoUGXii
-	y9qHCQLS2xcNC/ZS42Yvw6s00Bds3O2Ca57rs52h09MiMU9IjF7RuVTB
-X-Gm-Gg: Acq92OG1fYuM9e31vS3YDbz1oHKGiN09pICJJs2XDYtDP5ZviHBXTO0wmne8AY/DhCJ
-	OBr3pEohAP54ZOpZ9gr5uneBu5O7En41nfIrnplBmu/869PAQHfTGoLJG0tVwre4KPeD/mK13rq
-	tBxThDqtiV96fFwGRkMc6Edb9umyxvhgrtRreEVAWMTWqzz/jzj0hJHos/LK0rhHQ2f08gVGN0n
-	QpVP/ZZVe9T8PjTojAaU5tJHbaKppjnTyclzUZn7eq6EP3tKyu6ggdzhHe4bpm4ophRLoqlM685
-	B1RGTWwpbwQ9RpRj/w2PeJkvcOj/SzRqcxEwll1qrfRwRHsURjxKnieC97SOU9nVTohHvFmLjVc
-	+zVZJw3mr6q/Xli5RN2bNlQ4mEf/n/uAAJlQKZjO6VkPGfNcOJ6m5ykmC+bTw7oXYjnM21UPm0/
-	3wlXywwa9nGcgKAeBglGQxeMU=
-X-Received: by 2002:a5d:4e10:0:b0:45e:ee50:d066 with SMTP id ffacd0b85a97d-45ef02917d4mr214072f8f.6.1779990453473;
-        Thu, 28 May 2026 10:47:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45edb549addsm14668805f8f.5.2026.05.28.10.47.32
+        d=1e100.net; s=20251104; t=1779990455; x=1780595255;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KUV/KGZhBIQWTjs4PRB2d5yHpLxXi26s9TyJym1BZzM=;
+        b=SreDCxEsdozTf0huVCWnI+V2Q6/sRh2Ldw66cfVyCM6Lj0Mn6jA6p3HaZk/BDg2jM3
+         yjnRZxtBL88OekbhEuwp4MCz/Y9GG+Q+mUvi9TRdTVjx1ORn+AYHOH5Dp7nP0xV8EeEd
+         VAmSaxGzNtC330frRnOsU3PDoX4u0ThvXL1BVOQWZKOwop5Xhkl5j8xRzKXC4HRglsqX
+         WybDvvD6BW0RXMjM69uzakz0BIWY+kOCcz3J8PxKR7qbAwvuT7p9IDPs50C37stZnQif
+         hPrq3smKn17iMekWrcv5gkE2ThoITiU1c2W5fJzeoksxrp3Fh+bwDOqmtasEzup5aSGi
+         kO4Q==
+X-Gm-Message-State: AOJu0Yz7hCCxtQPXG13r+V/Xztjm1rbGTZ2/jyRkyeEUH34PKAMwsg6w
+	VvkINK4c1topLablxURlOViBrxpnPmXjzo1OrhrpjYd3Lv/vMH8p3XNs
+X-Gm-Gg: Acq92OGsQm9YFi9W4YWoiHLWRrlMegUiltTQWvo0XmVPRSc7/0B2OzkW2RvkEJ/3eaw
+	cdO5WxcSMhlkIXpij8+W7ugu7hltj32xavE1t350GjnmnRZ6PukrCCJrt1cNA1WjIJIaUPwTa9y
+	og01UeZ+M1sq9XFdZLPKvwE2czdnNUKY3AcpjuXiNB6S167+5/AUodf4arOIk9TKvDH1rCZW2Nd
+	qir3HNU5ZZCVhOZvLowFO47TFjfx6MzMmsilt5ltIy9m8R9cX7Wfbl7lKTATR56ktR35GPhb/qx
+	up4XdyuSzefmru/Jxb26W9YlTu0G+nPBvCzUhA5MhceEweUSmDjCVdkNQuT+W92ch3Sa9inOwwD
+	SBz5FqJmLne+/XOY3CR77/6i5nrMtvXbWYCzigNI2Hxt73+g0b37SBSImiFRkmOoy6s4Yfa0vqJ
+	Leo8aAKb6Vku/GMULtuzMSKemMowODCnYNy0w=
+X-Received: by 2002:a05:600c:37c8:b0:48f:e518:d110 with SMTP id 5b1f17b1804b1-49042ae09eemr479480725e9.32.1779990454913;
+        Thu, 28 May 2026 10:47:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:46::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909295a467sm50437485e9.13.2026.05.28.10.47.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 10:47:33 -0700 (PDT)
+        Thu, 28 May 2026 10:47:34 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v5 00/11] bpf: Introduce resizable hash map
-Date: Thu, 28 May 2026 10:47:11 -0700
-Message-Id: <20260528-rhash-v5-0-7205191b6c57@meta.com>
+Date: Thu, 28 May 2026 10:47:12 -0700
+Subject: [PATCH bpf-next v5 01/11] rhashtable: Add rhashtable_next_key()
+ API
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,261 +69,152 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKB/GGoC/13PzaqDMBCG4VsJszaHyeTH6qr3UbrIn8csqpJIa
- Cne+6FypKXr4Xk/5gkl5hQL9OwJOdZU0jxBz3TDwI92+o08BegZEJIWAiXPoy0jb12LaLqOZDh
- Bw2DJcUj3vXMBtwx8ivcVrg2DMZV1zo99oIr9TkgGCfV/qwqOXGIIJhjplaHzLa72x8+3PVDpj
- RSeDkQv5KRpdbBiMPELyQ9E6kCSIw84WPRRybZzX0i9kRbHq1W9UJBBK+G9w0+0bdsfODb9jUI
- BAAA=
-X-Change-ID: 20251103-rhash-7b70069923d8
+Message-Id: <20260528-rhash-v5-1-7205191b6c57@meta.com>
+References: <20260528-rhash-v5-0-7205191b6c57@meta.com>
+In-Reply-To: <20260528-rhash-v5-0-7205191b6c57@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779990451; l=11423;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779990451; l=4829;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=yLh3rpFJAbhh1ftPRvyoeyaJ7jaXPHQmvF8hI4ABUP8=;
- b=LNiflFvoYez+Zqe7xsaFxHXAflJF+vbV0yqPRGWIzGQgV3Wsk6YYYtKvplxDbZFjxQCVXu417
- JTQ/1HjWp2ZDAwIXc5bMw9KaadxVb+JFA5XKhuIwt1BJ3lK3T1922Tj
+ bh=KCGHtfOZObTQbWUZsLWO8eZL8wK8Rafw33dg+TPu6OY=;
+ b=rKGqVfA661xYAnunnh3YilqRJ6zii2oBMtdiduj0egCm52a5yVJTHLnZihSOi5fwI5bSkbVpN
+ BA2VF7G5V+QB5AaFLahGqBR1127AwA7D0ugl/ITK8hiGH3T/E+OT3CR
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-This patch series introduces BPF_MAP_TYPE_RHASH, a new hash map type that
-leverages the kernel's rhashtable to provide resizable hash map for BPF.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-The existing BPF_MAP_TYPE_HASH uses a fixed number of buckets determined at
-map creation time. While this works well for many use cases, it presents
-challenges when:
+Introduce a simpler iteration mechanism for rhashtable that lets
+the caller continue from an arbitrary position by supplying the
+previous key, without the per-iterator state of the
+rhashtable_walk_* API.
 
-1. The number of elements is unknown at creation time
-2. The element count varies significantly during runtime
-3. Memory efficiency is important (over-provisioning wastes memory,
- under-provisioning hurts performance)
+  void *rhashtable_next_key(struct rhashtable *ht,
+                            const void *prev_key,
+                            const struct rhashtable_params params);
 
-BPF_MAP_TYPE_RHASH addresses these issues by using rhashtable, which
-automatically grows and shrinks based on load factor.
+Caller holds RCU; passes NULL prev_key for the first element or
+the previously returned key to advance. Walks tbl->future_tbl
+chain so in-flight rehashes are observed.
 
-The implementation wraps the kernel's rhashtable with BPF map operations:
-
-- Uses bpf_mem_alloc for RCU-safe memory management
-- Supports all standard map operations (lookup, update, delete, get_next_key)
-- Supports batch operations (lookup_batch, lookup_and_delete_batch)
-- Supports BPF iterators for traversal
-- Supports BPF_F_LOCK for spin locks in values
-- Requires BPF_F_NO_PREALLOC flag (elements allocated on demand)
-- In-place updates for improved performance.
-- max_entries serves as a hard limit, not bucket count
-- Uses bit_spin_lock() + local_irq_save() for bucket locking,
-similar to existing BPF hashmap's raw_spin_lock_irqsave(), insertions and
-deletes may fail.
-- Iterations are best-effort, if resize, insertions, deletions take place
-concurrently, iterations may visit same elements multiple times or skip
-elements.
-- Lock out insertions, when running special fields destructor to guarantee
-its completion.
-
-The series includes comprehensive tests:
-- Basic operations in test_maps (lookup, update, delete, get_next_key)
-- BPF program tests for lookup/update/delete semantics
-- Seq file tests
+Best-effort semantics: an element being migrated may transiently
+appear in both source and destination tables and be observed
+twice. Concurrent inserts and shrinks may be skipped. Termination
+of a full iteration is not guaranteed under continuous adversarial
+rehash; callers must bound their loop externally. If prev_key is
+not present in any in-flight table, returns ERR_PTR(-ENOENT).
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Update implementation
----------------------
-Current implementation of the BPF_MAP_TYPE_RHASH does not provide
-the same strong guarantees on the values consistency under concurrent
-reads/writes as BPF_MAP_TYPE_HASH.
-BPF_MAP_TYPE_HASH allocates a new element and atomically swaps the
-pointer. BPF_MAP_TYPE_RHASH does memcpy in place with no lock held.
-rhash trades consistency for speed, concurrent readers can observe
-partially updated data. Two concurrent writers to the same key can
-also interleave, producing mixed values. This is similar to arraymap
-update implementation, including handling of the special fields.
-As a solution, user may use BPF_F_LOCK to guarantee consistent reads
-and write serialization.
+ include/linux/rhashtable.h | 91 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-Summary of the read consistency guarantees:
+diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
+index ef5230cece36..d6eb3ba476ea 100644
+--- a/include/linux/rhashtable.h
++++ b/include/linux/rhashtable.h
+@@ -650,6 +650,97 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
+ 	return NULL;
+ }
+ 
++/* Internal: scan one element forward from prev_key's position.
++ * Returns first rhash_head whose bucket >= prev_key's bucket and
++ * (if within prev_key's bucket) appears after prev_key in chain.
++ * Returns first element if prev_key is NULL or ERR_PTR(-ENOENT) if prev_key
++ * is not found.
++ */
++static __always_inline struct rhash_head *__rhashtable_next_in_table(
++	struct rhashtable *ht, struct bucket_table *tbl,
++	const void *prev_key, const struct rhashtable_params params)
++	__must_hold_shared(RCU)
++{
++	struct rhashtable_compare_arg arg = { .ht = ht, .key = prev_key };
++	struct rhash_head *he;
++	unsigned int b = 0;
++	bool found = false;
++
++	if (prev_key) {
++		b = rht_key_hashfn(ht, tbl, prev_key, params);
++		rht_for_each_rcu(he, tbl, b) {
++			if (found)
++				return he;
++			if (params.obj_cmpfn ?
++			    !params.obj_cmpfn(&arg, rht_obj(ht, he)) :
++			    !rhashtable_compare(&arg, rht_obj(ht, he)))
++				found = true;
++		}
++		if (!found)
++			return ERR_PTR(-ENOENT);
++		b++;
++	}
++
++	for (; b < tbl->size; b++)
++		rht_for_each_rcu(he, tbl, b)
++			return he;
++	return NULL;
++}
++
++/**
++ * rhashtable_next_key - return next element after a given key
++ * @ht:		hash table
++ * @prev_key:	pointer to previous key, or NULL for the first element
++ * @params:	hash table parameters
++ *
++ * WARNING: this walk is highly unstable. Unlike rhashtable_walk_*(),
++ * it cannot detect a concurrent resize or rehash, so a full iteration
++ * is NOT guaranteed to terminate under adversarial or sustained
++ * rehashing. Callers MUST tolerate skipped and duplicated elements and
++ * SHOULD bound their loop externally.
++ *
++ * Returns the next element in best-effort iteration order, walking the
++ * @tbl chain (including any future_tbl in flight). Caller must hold RCU.
++ *
++ * Pass @prev_key == NULL to obtain the first element. To iterate, set
++ * @prev_key to the key of the previously returned element on each call,
++ * and stop when NULL is returned.
++ *
++ * Best-effort semantics:
++ *   - Across the tbl->future_tbl chain, an element being migrated may
++ *     transiently appear in both tables and be observed twice.
++ *   - Concurrent inserts may or may not be observed.
++ *   - Termination of a full iteration loop is NOT guaranteed under
++ *     adversarial continuous rehash; callers MUST tolerate skips and
++ *     repeats and SHOULD bound their loop externally.
++ *   - If prev_key was concurrently deleted and is not present in any
++ *     in-flight table, returns ERR_PTR(-ENOENT).
++ *
++ * Returns entry of the next element, or NULL when iteration is exhausted
++ * or ERR_PTR(-ENOENT) if prev_key is not found.
++ */
++static inline void *rhashtable_next_key(
++	struct rhashtable *ht, const void *prev_key,
++	const struct rhashtable_params params)
++	__must_hold_shared(RCU)
++{
++	struct bucket_table *tbl;
++	struct rhash_head *he;
++
++	tbl = rht_dereference_rcu(ht->tbl, ht);
++	do {
++		he = __rhashtable_next_in_table(ht, tbl, prev_key, params);
++		if (!IS_ERR_OR_NULL(he))
++			return rht_obj(ht, he);
++		if (!he)
++			prev_key = NULL;
++		/* Ensure we see any new future_tbl attached during a rehash. */
++		smp_rmb();
++		tbl = rht_dereference_rcu(tbl->future_tbl, ht);
++	} while (tbl);
++	return he; /* NULL or -ENOENT */
++}
++
+ /**
+  * rhashtable_lookup - search hash table
+  * @ht:		hash table
 
-  map type     |  write mechanism |  read consistency
-  -------------+------------------+--------------------------
-  htab         |  alloc, swap ptr |  always consistent (RCU)
-  htab  F_LOCK |  in-place + lock |  consistent if reader locks
-  -------------+------------------+--------------------------
-  rhtab        |  in-place memcpy |  torn reads
-  rhtab F_LOCK |  in-place + lock |  consistent if reader locks
-
-Benchmarks
-----------
-1. LOOKUP  (single producer, M events/sec)
-  key | max | nr    |    htab |   rhtab | ratio | delta
-  ----+-----+-------+---------+---------+-------+-------
-    8 |  1K |   750 |   99.85 |   81.92 | 0.82x |  -18 %
-    8 |  1K |    1K |  100.71 |   80.19 | 0.80x |  -20 %
-    8 |  1M |  750K |   23.37 |   72.09 | 3.08x | +208 %
-    8 |  1M |    1M |   13.39 |   53.72 | 4.01x | +301 %
-   32 |  1K |   750 |   51.57 |   42.78 | 0.83x |  -17 %
-   32 |  1K |    1K |   50.81 |   45.83 | 0.90x |  -10 %
-   32 |  1M |  750K |   11.27 |   15.29 | 1.36x |  +36 %
-   32 |  1M |    1M |    7.32 |    8.75 | 1.19x |  +19 %
-  256 |  1K |   750 |    7.58 |    7.88 | 1.04x |   +4 %
-  256 |  1K |    1K |    7.43 |    7.81 | 1.05x |   +5 %
-  256 |  1M |  750K |    3.69 |    4.27 | 1.16x |  +16 %
-  256 |  1M |    1M |    2.60 |    3.12 | 1.20x |  +20 %
-
-Pattern:
-  * Small map (1K): htab wins for 8 / 32 byte keys by 10-20 %
-    because the preallocated bucket array fits in L1.  Equalises
-    at 256 byte keys.
-  * Large map (1M): rhtab wins everywhere, up to 4x at high load
-    factor with 8 byte keys.
-  * Higher load factor amplifies rhtab's lead: rhtab grows the
-    bucket array; htab stays at user-declared max.
-
-2. FULL UPDATE  (M events/sec per producer, -p 7)
-
-  htab  per-producer:
-    20.33   22.02   19.27   23.61   24.18   23.17   21.07
-    mean  21.94   range  19.27 - 24.18
-
-  rhtab per-producer:
-   133.51  129.47   74.52  129.29  102.26  129.98  107.64
-    mean 115.24   range  74.52 - 133.51
-
-  speedup (mean): 5.25x   (+425 %)
-
-In-place memcpy avoids the per-update alloc + RCU pointer swap
-that htab pays.
-
-3. MEMORY  (overwrite, -p 8, no --preallocated)
-
-  value_size |  htab ops/s | rhtab ops/s | htab mem | rhtab mem
-  -----------+-------------+-------------+----------+----------
-       32 B  |  122.87 k/s |  133.04 k/s | 2.47 MiB | 2.49 MiB
-     4096 B  |   64.43 k/s |   65.38 k/s | 6.74 MiB | 6.44 MiB
-  rhtab/htab :  +8 % ops, +0.8 % mem   (32 B)
-                +1 % ops,  -4  % mem (4096 B)
-
-SUMMARY
-
-  * Small / well-fitting map: htab is faster (cache-friendly
-    fixed bucket array), but only by ~10-20 %.
-  * Large / high-load-factor map: rhtab is dramatically faster
-    (1.2x to 4x) because rhashtable resizes to keep the load
-    factor sane while htab stays stuck at user-declared max.
-  * Update-heavy workloads: rhtab is ~5x faster per producer
-    via in-place memcpy.
-  * Memory benchmark: effectively on par
-
----
-Changes in v5:
-- rhashtable_next_key: add kdoc WARNING to highlight lack of rehash
-  detection and unbounded iteration (Herbert).
-- rhashtable: selftest now checks IS_ERR() before PTR_ERR comparison
-  on the missing-key path (bot+bpf-ci).
-- hashtab: drop dead stub bodies and unused map_ops registrations
-  from the basic commit; iteration commit adds bodies, structs, and
-  registrations together. .map_get_next_key keeps a stub registration
-  in the basic commit because the syscall dispatcher does not
-  NULL-check it; iteration commit replaces the stub body with the
-  real implementation (bot+bpf-ci).
-- hashtab: fix batch cursor advancement. v4 stashed the lookahead
-  element key but then resumed via next_key(cursor), skipping that
-  element across batch boundaries and orphaning it on
-  lookup_and_delete_batch. v5 stashes the lookahead key and looks
-  it up directly on the next batch entry (bot+bpf-ci, sashiko v3).
-- hashtab: document torn-read race in rhtab_map_update_existing,
-  matching arraymap semantics (bot+bpf-ci).
-- Link to v4: https://patch.msgid.link/20260513-rhash-v4-0-dd3d541ccb0b@meta.com
-
-Changes in v4:
-- rhashtable: introduce rhashtable_next_key(), drop walker-based
-  iteration for BPF (also drops earlier rhashtable_walk_enter_from()
-  proposal).
-- map_extra: presize hint via lower 32 bits (nelem_hint), capped at
-  U16_MAX.
-- Automatic shrinking enabled (was missing despite being advertised).
-- Reject key_size > U16_MAX (rhashtable_params.key_len is u16).
-- Replace irqs_disabled() guard with bpf_disable_instrumentation around
-  bucket-lock paths: closes same-CPU NMI tracing recursion without
-  rejecting legitimate IRQ-context callers.
-- lookup_and_delete reordered: unlink before copy to avoid populating
-  user buffer on concurrent-unlink -ENOENT.
-- update_existing reordered: copy then free_fields, matching arraymap.
-- Word-sized key fast path (sizeof(long) bytes), inlined hashfn/cmpfn
-  via static-const rhashtable_params; works on both 32-bit and 64-bit.
-- check_and_init_map_value() on insert (zero special-field bytes from
-  recycled bpf_mem_alloc memory; previously bpf_spin_lock could read
-  garbage and qspinlock would deadlock).
-- BPF_SPIN_LOCK / BPF_RES_SPIN_LOCK allowlist moved to the special-
-  fields commit so each commit is bisect-safe.
-- Link to v3: https://patch.msgid.link/20260424-rhash-v3-0-d0fa0ce4379b@meta.com
-
-Changes in v3:
-- Squash all commits implementing basic functions into one (Alexei)
-- Remove selftests that were not necessary (Alexei)
-- Resize detection for kernel full iterations, error out on resize (Alexei)
-- Remove second lookup in get_next_key() (Emil)
-- __acquires(RCU)/__releases(RCU) on seq_start/seq_stop (Emil)
-- Use bpf_map_check_op_flags() where it makes sense (Leon)
-- Benchmarks refresh, experiment with alternative hash functions
-- Rely on iterator invalidation during rehash to handle table resizes:
-fail on resize where we fully iterate on table inside kernel, dont fail on
-resize where iteration goes through userspace. Exception -
-rhtab_map_free_internal_structs() should be just safe to iterate fully
-in kernel, no risk of infinite loop, because no user holding reference.
-- Handle special fields during in-place updates (Emil, sashiko)
-- Link to v2: https://lore.kernel.org/all/20260408-rhash-v2-0-3b3675da1f6e@meta.com/
-
-Changes in v2:
-- Added benchmarks
-- Reworked all functions that walk the rhashtable, use walk API, instead
-of directly accessing tbl and future_tbl
-- Added rhashtable_walk_enter_from() into rhashtable to support O(1)
-iteration continuations
-- Link to v1: https://lore.kernel.org/r/20260205-rhash-v1-0-30dd6d63c462@meta.com
-
----
-Mykyta Yatsenko (11):
-      rhashtable: Add rhashtable_next_key() API
-      rhashtable: Add selftest for rhashtable_next_key()
-      bpf: Implement resizable hashmap basic functions
-      bpf: Implement iteration ops for resizable hashtab
-      bpf: Allow special fields in resizable hashtab
-      bpf: Optimize word-sized keys for resizable hashtable
-      libbpf: Support resizable hashtable
-      selftests/bpf: Add basic tests for resizable hash map
-      selftests/bpf: Add BPF iterator tests for resizable hash map
-      bpftool: Add rhash map documentation
-      selftests/bpf: Add resizable hashmap to benchmarks
-
- include/linux/bpf_types.h                          |   1 +
- include/linux/rhashtable.h                         |  91 +++
- include/uapi/linux/bpf.h                           |   6 +
- kernel/bpf/hashtab.c                               | 814 ++++++++++++++++++++-
- kernel/bpf/map_iter.c                              |   3 +-
- kernel/bpf/syscall.c                               |   5 +
- kernel/bpf/verifier.c                              |   1 +
- lib/test_rhashtable.c                              |  73 ++
- tools/bpf/bpftool/Documentation/bpftool-map.rst    |   2 +-
- tools/bpf/bpftool/map.c                            |   2 +-
- tools/include/uapi/linux/bpf.h                     |   6 +
- tools/lib/bpf/libbpf.c                             |   1 +
- tools/lib/bpf/libbpf_probes.c                      |   3 +
- tools/testing/selftests/bpf/bench.c                |   6 +
- .../bpf/benchs/bench_bpf_hashmap_full_update.c     |  34 +-
- .../bpf/benchs/bench_bpf_hashmap_lookup.c          |  31 +-
- .../testing/selftests/bpf/benchs/bench_htab_mem.c  |  35 +-
- tools/testing/selftests/bpf/prog_tests/rhash.c     | 183 +++++
- .../selftests/bpf/progs/bpf_iter_bpf_rhash_map.c   |  34 +
- tools/testing/selftests/bpf/progs/rhash.c          | 248 +++++++
- 20 files changed, 1561 insertions(+), 18 deletions(-)
----
-base-commit: d34771f2f3db4ea0dd532cdd579002fc95dc483a
-change-id: 20251103-rhash-7b70069923d8
-
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.53.0-Meta
 
