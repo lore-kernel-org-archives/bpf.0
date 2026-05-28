@@ -1,97 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7519369204
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 23:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F022EFD9B;
+	Thu, 28 May 2026 23:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780011660; cv=none; b=DiDGlthavfDdcqUubPMQX39AJL3eRkULyNTjVqmL4cVHEx3whB65oNNga5+1a87AC0WJ9zQlBug3A8TdHO4Zc5BWJEg95VzxVkwq8mYQMOHDp9wMhY2Bxrmdw8IcmcaflrRh5lTGuAbZbwFQQjUbLJWvo5eL0/rfGldDn/dnBTI=
+	t=1780012055; cv=none; b=brlHVqDHX3nouzpwCXr96z5CLHS8P2futPtgFqRUTu/IgWeswYPj6/mvZ+NUN0bdStacGBnJyqa+shlIvXefiXKkSlAUm3s61uHVfCzxNEgOGBX8oWAAyMJImCSjsPmxHIsTpukToK7yc+0GwXq873e+ahxbmdWi0vuXm9nxhJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780011660; c=relaxed/simple;
-	bh=VaZsjhqwnSOOUQl7jpV10TGAIO+cDi02Fym450YJxvc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XoPs6y0qrz8w9elMZAZ5D2w0uCbHKGQ5ueWAfRrJI4UKPVsO14qde5XTyX6tzDkV0AAkbYAyauEYl8RSBq8FRyu+UyXTlixTc0udTcwf8fRS6yGaHiJqwuFe+DPYjvFmC7CJ6XwsjEaT5P1JAkom6qRmJakIFoAb62mbnge9U78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2dFcqr1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780012055; c=relaxed/simple;
+	bh=A6Ea2s0Nl0DjlhqASqS0+2K8Na9DvmEWVzJOKF1+nCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L957v4ingD4xTd2qErv8VjkyhtTcL4P/WyWbS4Sz0MQtfFEaGMsNrjqGH6BfTzE0zAunLsLN8wWYsrOi9xlCOW0PRLi8X2Ve/esq/I4GQH1hMw/hUjcDDeGefnhTtxcLBYuBhPQkJ59XqWcNBNpfOpQeunlziQW5khkjPO+VHMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQFy//Ys; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2dFcqr1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BC91F000E9;
-	Thu, 28 May 2026 23:40:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQFy//Ys"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7373E1F000E9;
+	Thu, 28 May 2026 23:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780011659;
-	bh=MDGzaKBNdRrJQfY+/ER6XVylMg+nxqgvxlm7zGkNUOU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=P2dFcqr12EbrfnfPlaJ8IIiF6ejywbMlfFRr3IWclPs33apOgatYH41RwMklyoxEd
-	 6wG+ma51PbNEyxK3XK4hDexvuPCu9x3CB/bxbKBQBGohE5pYIRfymgr9OLoCdPW59y
-	 5We2RfjaqxzsysMuSYPdIbBSM9RO7zRG20Df7CInMUMhJqbDUIqmP6tnbe1gX53XIM
-	 Sd011dIljbGi3NzmNHIADKNaWqilLjWBkG3la5Uep5KRpzeKr/lV28cawt4u2Fr5kR
-	 fIP7Fg+1Lo2WZUNjF5IiwVjRLLsv4/QpAZraNaAmgaVsYMIuckn+d4QDGV1h5tNYVU
-	 MIeLUfK48oqEg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 3/6] selftest/bpf: Fixing powerpc JIT disassembly
- failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: adubey@linux.ibm.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529015855.364704-4-adubey@linux.ibm.com>
-References: <20260529015855.364704-4-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 28 May 2026 23:40:58 +0000
-Message-Id: <20260528234059.06BC91F000E9@smtp.kernel.org>
+	s=k20260515; t=1780012054;
+	bh=noZp9qsoZp8RybKy58s89H/97RxvwSavZV3ULdPkyE8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=kQFy//YsFECVAYYInXm6tf3zYom1yx9TA64tLkprEwe7ml6WnqdP6K1eVlRtWUTvy
+	 6Z6nd56VJfI9xlBxLwzhkmA08Lrxju2lsjfAoM/dxGwcTstmhylrCgXRyMiH+63SyA
+	 ZrUj1jE/xYCyMXRpQOmPGO8ELk3Q1K4jB14Op5rR2264tuU8LAgQaxv0xF6vNKKWlp
+	 s5eStSPELVRIPFCsxN1lxRygovXQm8yB3ekMzh8GSJSED4+S3kHqHY+uFx8+qOd+dn
+	 16LHG07UYiMn+XNCeCkBfk8qSaJ3/7g4M7sBkh9uCOEG8GHKXpnW6LQBZkfVlg1Cvs
+	 XaMt8q28XYYSA==
+Date: Thu, 28 May 2026 16:47:32 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Christopher Lusk
+ <clusk@northecho.dev>, Sabrina Dubroca <sd@queasysnail.net>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH net v3] net: tls: use sync AEAD for sk_msg BPF sockets
+Message-ID: <20260528164732.5e5cff2b@kernel.org>
+In-Reply-To: <ahdAboFpUAZ8aaWm@john-p8>
+References: <20260526025154.60607-1-clusk@northecho.dev>
+	<d92bc603-e345-4dee-9ae9-6ad45e4e6642@linux.dev>
+	<20260526161101.691d4cb7@kernel.org>
+	<4626d285-57ab-46c9-b75b-d56efe7417fc@linux.dev>
+	<ahdAboFpUAZ8aaWm@john-p8>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The use of kernel macros `IS_ENABLED` and `CONFIG_PPC64` in a users=
-pace BPF selftest causes either a fatal compilation error or incorrect logi=
-c.
---
+On Wed, 27 May 2026 12:16:02 -0700 John Fastabend wrote:
+> One option we start rejecting these helpers? That would resolve most
+> the pain I suspect. The original thought was we do have use cases
+> now for userspace proxy where we insert headers.
 
-commit 86263e6d76dea14a94abb1054bf8be122467a648
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+Rejecting the helpers would solve all the recent security issues, IIRC.
+I couldn't think of a clean way to do that, are you thinking adding
+a bit into the skmsg like "from ktls" or "fixed stream" (kinda like 
+we have at_ingress)?
 
-selftest/bpf: Fixing powerpc JIT disassembly failure
+> >>Yes, we asked John F off-list to get his attention and I think there's
+> >>only a vague plan to start using kTLS + sockmap, no current user
+> >>(sorry if I misread / misremembered).  
+> 
+> I'm not against a cleaner solution here.
+> 
+> Another idea: We just add a simple sockops BPF hook with the sk_buff?
+> No updating sg lists, manipulating data packet sizes and so on.
 
-This commit truncates the last 4 or 8 bytes from JITed buffers on powerpc
-to prevent the disassembler from processing the dummy trampoline address.
-This avoids disassembly errors caused by reading these dummy addresses as
-instructions.
-
-> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/tes=
-ting/selftests/bpf/jit_disasm_helpers.c
-> index 364c557c51158..21e3e3e68c147 100644
-> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-[ ... ]
-> @@ -216,9 +218,28 @@ int get_jited_program_text(int fd, char *text, size_=
-t text_sz)
-[ ... ]
-> +	triple =3D LLVMGetDefaultTargetTriple();
-> +	if (triple) {
-> +		if (strstr(triple, "powerpc")) {
-> +			if (IS_ENABLED(CONFIG_PPC64))
-
-[Severity: Low]
-Will this cause a compilation error? This file is a userspace program built
-for the host system to run BPF selftests, so it does not have access to the
-kernel's IS_ENABLED macro or Kconfig options like CONFIG_PPC64.
-
-Because include/linux/kconfig.h is not available in this context, the
-compiler may treat IS_ENABLED as an implicit function declaration and
-CONFIG_PPC64 as an undeclared identifier.
-
-> +				trunc_len =3D 8;
-> +			else
-> +				trunc_len =3D 4;
-> +		}
-> +		LLVMDisposeMessage(triple);
-> +	}
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529015855.3647=
-04-1-adubey@linux.ibm.com?part=3D3
+TBH I don't think the existing solution is particularly unclean.
+It's just complex enough that it'd benefit from getting removed and
+re-added, cause the re-add would undergo the modern LLM reviewer
+bashing that should hopefully shake out most of the bugs.
+Trying to do this surgery now, as urgent fixes is quite constraining.
