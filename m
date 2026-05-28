@@ -1,117 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5794028FB
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 18:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1FF40245F
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 18:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779992723; cv=none; b=uc/92IwKiA3MM2ayky1JyUrsxofJHolvT+HUwM4SixZ6WYnJrA31G9ZeZlbw17Bkw+8euIKuOufRbBSsPXKNfch5/rlJs5hCB8WM28A8PL6D0CD6aXKCUtYCDsyISpEz7Jck9hcy/vghJamz7SNYM6Y5CzIE321VbFRW8MUDh8A=
+	t=1779992781; cv=none; b=WqkNlL1+kObCL72MzKgKg3pysvVtA8Tp3FYJemeERSr8YcQ2aXoFyO2jfqwIYF83c3Am3GXXChAmzjlcrBFR4KK/9X7Zs0tAcjfuOBTBtvZv7Zfkij9BDVl3ziIrtfcSj9NOy8ASQbdwNgvWF79ekWpdAY/eKhbbH1OWKs9ICNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779992723; c=relaxed/simple;
-	bh=atHZiVIqpOj6ZK49l97klIBL+5nx0aHnMcjFtTn6sD0=;
+	s=arc-20240116; t=1779992781; c=relaxed/simple;
+	bh=QnZNGKivAqotYnG9nRwbcte6zZ0REN+coluNKavMuFA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ol3tEMFxpzuLQl2NhrSWLYz+xsBY9peaGZhKVln7mohg5ViGblWxzecZCpulMPLfCcEQLS2vcFSjUJxYGeq8XgcyRf4ByBtUiJCtI+ehr9xhy/m0rYIluz9Rbr05YpPcifFvkaoX/0tC4wMg0BAAGXFDFxg4nwNdOjYyeklY4uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhM6v3M5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=rG/R9v7dB9w9PHe2NM6+cduGR79Zqf8jpAcNFBwkSjD2kWNDrHGrMXPj+yvm9gAGmLvP7SY21bNe9ADIV7qPzybHt8+ztosJA3UvNBNxdwqPmdkFTxVHTuBolK0RQH83Er3hi9O0uWCr0Nu+HqX3vqsRr/1I10pjUaYaW9hgVvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mzBGSXaR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhM6v3M5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D121F00A3C;
-	Thu, 28 May 2026 18:25:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzBGSXaR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65DED1F000E9;
+	Thu, 28 May 2026 18:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779992722;
-	bh=g9m83s0B7Lxn1ZGsU57UlM1v2ErwozbLyYCRbgzGeaI=;
+	s=k20260515; t=1779992776;
+	bh=LMoAWzVvKmSOH8AtD2Ld8HBpR9soRo7JHdGxQZkym0A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OhM6v3M5ZrFHBZjmOsXPcyd3fyWXWDJJM7jnsdIFHIx1INGlnOSJPywazks/H1zfg
-	 /ONY1V1lbL+aRj/sVg7bVnHRTtYmHuscEbN/PZVYT8ww4hpGvV37q/9ntB4DwXjRnf
-	 rCbqTRHZiBxMAbUSXuw5RTMJGIz76W0dbbJeqeP1jbFdrrFuUQuLCRRz61EqQhCksw
-	 X7RRtUEh0tM9DzY54YshjYjEHAbwzCwBQ5vWxbhyQhHw/S646ayTCcTop3aqeW4R+q
-	 vC6HgOI3vb9qb6iu24vLa6TzztU+jhziGL547S5ouznBegcUaE9zX6alx+uiCrQdBw
-	 OI1e8PaLaYkyw==
+	b=mzBGSXaRQvzEseImwnCAj+ishbKv1yL6tuqBYZTjr9I87jM2q/cOrI+WFBHOF8Nzt
+	 ncojfKn19vIKG4cGUgmqd9VYKFYVY6+64uOFZjCD9nujbcVH+2zU+09mwFxzkcv1FV
+	 EJc9LhfO0/Cy9ucKpEgDmYCxwAHDtdnfe1IwXZQQYr6EnZfePTF/wdTLxS3+wdSO7/
+	 nI4uR801FpbGaSu+wX9iEbTljg3P3mn2LFpM+Nz0N85LcIQrgUdskixRbeAc7C7g9Q
+	 f6c6tdI3AoOwQNqyGg/FvkEHxob+5yJCkHuOEaWp6gwIBitfwp6fcpbpjJ9PV3dkC6
+	 J/OvhVvdEIvsw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 06/11] bpf: Optimize word-sized keys for
- resizable hashtable
+Subject: Re: [PATCH bpf-next v5 02/11] rhashtable: Add selftest for
+ rhashtable_next_key()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260528-rhash-v5-6-7205191b6c57@meta.com>
-References: <20260528-rhash-v5-6-7205191b6c57@meta.com>
+In-Reply-To: <20260528-rhash-v5-2-7205191b6c57@meta.com>
+References: <20260528-rhash-v5-2-7205191b6c57@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 28 May 2026 18:25:21 +0000
-Message-Id: <20260528182522.23D121F00A3C@smtp.kernel.org>
+Date: Thu, 28 May 2026 18:26:16 +0000
+Message-Id: <20260528182616.65DED1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Trivial hash collisions in `rhtab_hashfn_long` defeat rhashtable's=
- DoS mitigation, leading to infinite rehashing and 100% CPU livelock.
-- [High] Direct dereferencing of potentially unaligned map key pointers in =
-the optimized hash and compare functions will cause kernel panics on strict=
--alignment architectures.
+- [Medium] The selftest strictly enforces that exactly 'n' elements are vis=
+ited, which violates the rhashtable_next_key() API contract and leads to sp=
+urious test failures if concurrent rehashing occurs.
 --
 
-commit 40f8c726140c6268e5f797c092818cebd3cfc282
+commit 764349a8abc231043942a78a0c94a8a3422ff178
 Author: Mykyta Yatsenko <yatsenko@meta.com>
 
-bpf: Optimize word-sized keys for resizable hashtable
+rhashtable: Add selftest for rhashtable_next_key()
 
-This commit specializes the lookup, update, and delete paths for word-sized
-keys in resizable hashtables. It introduces a custom XOR-fold hash function
-and single-word equality comparison to bypass the indirect jhash dispatch.
+This commit adds a selftest for rhashtable_next_key() to verify that walking
+with a NULL prev_key visits all elements, and that providing a non-existing
+prev_key returns ERR_PTR(-ENOENT).
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
+> diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
+> index 0b33559a910b0..c7a0817b0be59 100644
+> --- a/lib/test_rhashtable.c
+> +++ b/lib/test_rhashtable.c
+[ ... ]
+> @@ -679,6 +679,76 @@ static int threadfunc(void *data)
+>  	return err;
+>  }
+> =20
+> +static int __init test_rhashtable_next_key(void)
+> +{
+> +	struct rhashtable_params params =3D test_rht_params;
+> +	struct test_obj_val key_missing =3D { .id =3D 99999, .tid =3D 0 };
+> +	struct test_obj_val *prev_key =3D NULL;
+> +	struct rhashtable ht;
+> +	struct test_obj *objs, *cur;
+> +	int i, count =3D 0, err;
+> +	int visited_keys[8] =3D { 0 };
+> +	const int n =3D ARRAY_SIZE(visited_keys);
+> +
+> +	err =3D rhashtable_init(&ht, &params);
+> +	if (err)
+> +		return err;
+> +
+> +	objs =3D kcalloc(n, sizeof(*objs), GFP_KERNEL);
+> +	if (!objs) {
+> +		rhashtable_destroy(&ht);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (i =3D 0; i < n; i++) {
+> +		objs[i].value.id =3D i;
+> +		err =3D rhashtable_insert_fast(&ht, &objs[i].node, params);
+> +		if (err)
+> +			goto out;
+> +	}
+> +
+> +	rcu_read_lock();
+> +
+> +	/* NULL prev_key: walk from the beginning, expect all n elements. */
+> +	while ((cur =3D rhashtable_next_key(&ht, prev_key, params))) {
+> +		if (IS_ERR(cur)) {
+> +			err =3D -EINVAL;
+> +			goto unlock;
+> +		}
+> +		count++;
+> +		prev_key =3D &cur->value;
+> +		visited_keys[cur->value.id] =3D 1;
+> +		if (count > n)
+> +			break;
+> +	}
+> +
+> +	if (count !=3D n) {
+> +		err =3D -EINVAL;
+> +		goto unlock;
+> +	}
+> +
+> +	for (i =3D 0; i < n; i++) {
+> +		if (!visited_keys[i]) {
+> +			err =3D -EINVAL;
+> +			goto unlock;
+> +		}
+> +	}
+
+[Severity: Medium]
+Will this strict check cause spurious test failures during concurrent rehas=
+hing?
+
+The rhashtable_next_key() API documentation explicitly warns that its walk =
+is
+highly unstable during concurrent rehashing, stating that callers must
+tolerate skipped and duplicated elements.
+
+This test uses test_rht_params, which inherits its nelem_hint from the
+user-provided size module parameter. If the test is executed with a small
+initial size (e.g., size=3D4), inserting 8 elements will cross the 75%
+threshold and trigger a background rehash by scheduling ht->run_work.
+
+Because the test iterates over the keys immediately without waiting for this
+background work to finish (e.g., via flush_work(&ht.run_work) or by locally
+overriding nelem_hint to avoid resizing), the traversal can run concurrently
+with the rehash. This could cause rhashtable_next_key() to legitimately
+return duplicates or skip elements, causing the test to spuriously fail.
 
 [ ... ]
 
-> +/* Specialize hash function and objcmp for long sized key */
-> +static __always_inline int rhtab_key_cmp_long(struct rhashtable_compare_=
-arg *arg,
-> +					      const void *ptr)
-> +{
-> +	const unsigned long key1 =3D *(const unsigned long *)arg->key;
-
-[Severity: High]
-Could dereferencing this pointer directly cause alignment faults on
-architectures that require strict alignment? Since BPF programs can pass
-unaligned pointers (such as from packet data in skb->data) directly to map
-helpers, using get_unaligned() might be necessary here to prevent kernel
-panics.
-
-> +	const struct rhtab_elem *key2 =3D ptr;
-> +
-> +	return key1 !=3D *(const unsigned long *)key2->data;
-> +}
-> +
-> +static __always_inline u32 rhtab_hashfn_long(const void *data, u32 len, =
-u32 seed)
-> +{
-> +	u64 k =3D *(const unsigned long *)data;
-> +
-> +	return (u32)(k ^ (k >> 32)) ^ seed;
-
-[Severity: High]
-Does applying the seed after folding the key make hash collisions entirely
-independent of the seed?
-
-If a BPF program or an attacker inserts keys constructed as:
-k =3D (Y << 32) | (X ^ Y)
-
-These keys will all fold to exactly X before the XOR with the seed,
-meaning f(key1) ^ seed =3D=3D f(key2) ^ seed for any random seed.
-
-If rhashtable detects a long bucket chain and triggers a background rehash
-with a new seed, won't all these colliding keys move together to the same
-new bucket? This might trap the rhashtable worker in an infinite loop of
-rehashing, leading to a 100% CPU livelock.
-
-> +}
-> +
-
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260528-rhash-v5-0=
--7205191b6c57@meta.com?part=3D6
+-7205191b6c57@meta.com?part=3D2
