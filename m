@@ -1,167 +1,121 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B363EFFC8
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 12:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D62D3EFFDA
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 12:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779972414; cv=none; b=iv+Ahd6q7Z6x2au5cUsOPL88Hjo+/iX2brxRFaZ+aJKbnArwjrPUeEUdSZ9Y/s78B579F7uYBAILb2zZsIlm0mKZsR1lxn8XkmWEzc/DusPTUYIPckBxy4af9zd9ynQVV/bJUa9rzSd5vLPg5fLA7vyycGncQUZB5a9WlX9l8cw=
+	t=1779972861; cv=none; b=lZzrrsYNnonA7oYV22CSbm7OCF1nxPalUGy4DxGUtnGGZ7sDC0Q71Qc+cR5ft1W9aEe8BJ2M/5bSlg7nVWZ1SHvHAqBXYxLsNg6FD/6DIQ1qBF6ZfBpGoJ2yauFKOz3M4bQICVQvfn/WVL086wxSkPLfgdlmDkVmtxVcyCIdhL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779972414; c=relaxed/simple;
-	bh=lsS0OCRkozaOJ36O09gOUY3x9RlHdxN3D+Ip/cp6Muw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ThaBLZFI7oollJoZndNky4Epmiis9/zSazAN4O4y3vkHpGp2NEL+GbjwgSpE1wgncbYd1ANVV3a5OY07DQsQU6isHTDTNwrmZCyqwe34+x6QCaKkiqcp1inV3Iwa10kBmarxcFEP9rE8lPf9VLe2teZxt0Ai0NnkJ9uXaq1W3tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=LsgEkMGy; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1779972861; c=relaxed/simple;
+	bh=nelb3JHUd2bRmym29uyM7SUdtaaEBlKEVO4UvhR95Sc=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=HsxPv61A8ZJxA5TOZAyjqVnZn2y8KWXR/PcqPI/fI0N8rWOJstcxLz8RrjR2RhHbfucLD+xz4bX3T3xJ1jNkheJj5wqjS8V+GSh7BprXPJ+K1A+1macORwsP6I7vfW6NoXhhWoaDHtOpNY+RTgkR7Hg/UxZkW6iqPwSs7myT/vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH2NjL9F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LsgEkMGy"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-68abd694c1fso1380994a12.2
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 05:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1779972411; x=1780577211; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N3QWq3goEbku0FKpK3b3qT/SmuAifh1Xl7rPPp2Quj8=;
-        b=LsgEkMGyV/E+V2xGbOSSDgvXa2IctNGAIApuYSKlrMfRDzQt4Q/kNixjT7qYgHtsxA
-         LkIYO0h7LZPPN+sVJCJxa4lDWYACkseOjqQ4IULf6HQJrdBjUzbcuFEpxSdJEMjbj+Er
-         +34kliLu/AjiYRKvWg+UFZJrsJR/fW92EM/3F0qSbDqx7ey2jH610IQX7oM6kqovsGyu
-         9P4NjygtxSrhS6a03J+0jiN80K3Q8cfoEWeCsH88l4iAY4OYtzYyiGIbgQ2aPvFQrm3J
-         spYOisabCqp5sLFWXL94QcfytTZJkbkr053n2tokdwdu2pZ6YpKmtCUJYO0hlmBm2aqY
-         DvAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779972411; x=1780577211;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N3QWq3goEbku0FKpK3b3qT/SmuAifh1Xl7rPPp2Quj8=;
-        b=e5uoAYTWAzFvAybn6ohLsoKc2KEBiafbf4CO7/mECFWDjmASrHc/aGqQb4rBK7FD0t
-         +fvqoQ7EL1ACbTZmWbtASdp8VdS5VB4J1Z+D/p4rtQhwrBK9Dv9J0M3Bt7FdgwSpt27/
-         lY06yS1BxxoPZWq/58+A1YC2mdmv9zKKABbvLKPlZIQvWpsNWY93e/euYINdUj9rAe9F
-         c0HK2rDDoqqy+vx5C1xJPGGck/iXXaXc5eWDn2WBSKpc2UYW29AINW4bC+Kcl5rjpKta
-         Ax0BYOF6J26GpuFCuPqbNH6TSMVxs3nYDm5AfaJ3X00MvjQBm9HmYVqFcYW3vlB5a8/H
-         fc5Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+Awy8W50THxTCLEMh1KmZNW44FgDcWTUM0nPtWAZ4AjNJd7Klxez5GENNMX/eT4hp5ONE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcFMN1Awq3vRozSVMxQNrvxGiii8wwIuTKmzIGSwx5xK3mNb2R
-	IDgEsyjv4FN5nPp/dUflwfQdroQlgdhhEBmmE8E9THkb7Tff4BOmnrvJ5EZf5Sxeo7o=
-X-Gm-Gg: Acq92OEC2fOMRTY4NWIj/EZ2tZw/M8ALEwcObrAP/dFrbYJTEkrMUD87FrW8vknlNkJ
-	dYyvA3MgPQWs9Jwdq1HiwzO/UkxV1i5RrT0K5njhiJK0d2Cw4/j3hml7jwn6XeXi4Rtw+Od7O7f
-	56h5ODs9hltff6H3fTYEuaN4E/PNZKrHTeYhX7Txp+spSFGteuzMXXG+BtDOqygJMjfbLRFam2H
-	KH5H32UZtnyAivhNulFK7bsA0DL7VxpNjvt9kD3cZxHgmtZ52hmwRyH5AsZ/YU7wBu8SXKI9J2/
-	vVwFs8KNLxyY8e6/eRuYBf8bmINM4Rqkpsxx74sBfeR1tqjRDE1zZm8KN8J3tMwwfDhN7GHNYwM
-	KP99yB+1ERismkjAg4KnTEgN6uYsXFwmaRGXL7Wyv7z5Z4X4LTJN6C5Kvoi5MkKxFnwaQAFGbDd
-	p8klj7grpJo+/atMmPeuQajkqBFJPZl6X+VTpo
-X-Received: by 2002:a05:6402:1f86:b0:689:971b:7439 with SMTP id 4fb4d7f45d1cf-689971b76c2mr9771553a12.12.1779972411025;
-        Thu, 28 May 2026 05:46:51 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68a6faad61esm1847899a12.2.2026.05.28.05.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 05:46:50 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>,  Peter Zijlstra <peterz@infradead.org>,
-  Ingo Molnar <mingo@kernel.org>,  Masami Hiramatsu <mhiramat@kernel.org>,
-  Andrii Nakryiko <andrii@kernel.org>,  bpf@vger.kernel.org,
-  linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 12/13] selftests/bpf: Add tests for uprobe nop10 red
- zone clobbering
-In-Reply-To: <20260526205840.173790-13-jolsa@kernel.org> (Jiri Olsa's message
-	of "Tue, 26 May 2026 22:58:39 +0200")
-References: <20260526205840.173790-1-jolsa@kernel.org>
-	<20260526205840.173790-13-jolsa@kernel.org>
-Date: Thu, 28 May 2026 14:46:48 +0200
-Message-ID: <87pl2f66rr.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH2NjL9F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807A91F000E9;
+	Thu, 28 May 2026 12:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779972859;
+	bh=apgN5tVwLSkhI2Rb4wcdSBtUQ+3pkMQ/1+xrFga40y4=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=ZH2NjL9Fcr597DukI11PV0Fm7jRWb3A+XrZ1JAiePbYAF9AFDC4ZK1BLr7SWjf69J
+	 B8G7Xa+3Cj97qVCXroT/vhbhl5f4co0Y5PrMgRXJ14piaOnfFWvHOb2blbsxUdH9C+
+	 a5fFLe8t//EW8KQULFawO4UQACiwYS1k470RIoljXdsKK6QJBCG/Wi62QypcjTWP/b
+	 T9bzddwe11pWQ5zfC0C58IxaSNJo/6v/vMmWOPOml7PcoMCmr1RiH/5eHbulrLNXkp
+	 QwbJGhvK9wpeLAtzzU0jZYd6yoYxwva3HvLjtv9WJaZDIKDFzAHYIYJVHfU7/LI/m7
+	 MNocp+P9sJweQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add simple xattr support to bpffs
+From: Christian Brauner <brauner@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>, bpf@vger.kernel.org, 
+ kpsingh@kernel.org, john.fastabend@gmail.com
+In-Reply-To: <576b6350-6635-4544-9a06-f4777e3a0e65@iogearbox.net>
+References: <20260522135626.120732-1-daniel@iogearbox.net>
+ <20260527-irrtum-holztisch-risiken-690a7fb93843@brauner>
+ <576b6350-6635-4544-9a06-f4777e3a0e65@iogearbox.net>
+Date: Thu, 28 May 2026 14:54:16 +0200
+Message-Id: <20260528-verraten-innig-sprechen-fa8bea6696f7@brauner>
+X-Mailer: b4 0.16-dev-fffa9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2845; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=nelb3JHUd2bRmym29uyM7SUdtaaEBlKEVO4UvhR95Sc=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRJWP2Sv3cj9bDqfr7Pfy/GvblWvmKpuKvXbdk8g6Oi+
+ 1YG1V3n7ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjI+15Ghp2mM/LbPb7ecGm7
+ GrBaLPde2pY1td0ejK9VzrX8SmCR7WZkeF2T+/DrFdbAnrMfH+T0mZwW+2C1s3D1yYv/chjvmCV
+ wMwMA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Tue, May 26, 2026 at 10:58 PM +02, Jiri Olsa wrote:
-> From: Andrii Nakryiko <andrii@kernel.org>
->
-> The uprobe nop5 optimization used to replace a 5-byte NOP with a 5-byte
-> CALL to a trampoline. The CALL pushes a return address onto the stack at
-> [rsp-8], clobbering whatever was stored there.
->
-> On x86-64, the red zone is the 128 bytes below rsp that user code may use
-> for temporary storage without adjusting rsp. Compilers can place USDT
-> argument operands there, generating specs like "8@-8(%rbp)" when rbp ==
-> rsp. With the CALL-based optimization, the return address overwrites that
-> argument before the BPF-side USDT argument fetch runs.
->
-> Add two tests for this case. The uprobe_syscall subtest stores known values
-> at -8(%rsp), -16(%rsp), and -24(%rsp), executes an optimized nop10 uprobe,
-> and verifies the red-zone data is still intact. The USDT subtest triggers a
-> probe in a function where the compiler places three USDT operands in the
-> red zone and verifies that all 10 optimized invocations deliver the expected
-> argument values to BPF.
->
-> On an unfixed kernel, the first hit goes through the INT3 path and later
-> hits use the optimized CALL path, so the red-zone checks fail after
-> optimization.
->
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> [ updates to use nop10 ]
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  .../selftests/bpf/prog_tests/uprobe_syscall.c | 75 +++++++++++++++++++
->  tools/testing/selftests/bpf/prog_tests/usdt.c | 49 ++++++++++++
->  tools/testing/selftests/bpf/progs/test_usdt.c | 25 +++++++
->  tools/testing/selftests/bpf/usdt_2.c          | 13 ++++
->  4 files changed, 162 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> index 969f4deba9fd..efff0c515184 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+On 2026-05-27 14:36 +0200, Daniel Borkmann wrote:
+> On 5/27/26 2:19 PM, Christian Brauner wrote:
+> > On Fri, May 22, 2026 at 03:56:24PM +0200, Daniel Borkmann wrote:
+> >> Add support for extended attributes on bpffs inodes so that user space
+> >> and BPF LSM programs can attach metadata, for example, a content hash
+> >> or a security label - to a pinned object or directory. BPF LSM or user
+> >> space tooling can then uniformly look at this (e.g. security.bpf.*) in
+> >> similar way to other fs'es. The store is in-memory and non-persistent:
+> >> it lives only for the lifetime of the mount, like everything else in
+> >> bpffs. The modelling is similar to tmpfs.
+> >>
+> >> bpf_fill_super() is open-coded instead of using simple_fill_super(),
+> >> because the root inode must now be allocated through bpf_fs_alloc_inode()
+> >> i.e. carry the bpf_fs_inode wrapper and come from the right cache -
+> >> which requires s_op (and s_xattr) to be installed before the first
+> >> inode is created.
+> >>
+> >> bpf_fs_listxattr() is only reachable through the filesystem via
+> >> i_op->listxattr, so the BPF token inode is left untouched. Name-based
+> >> fsetxattr()/fgetxattr() on a token fd still work since the get/set
+> >> handlers are installed at the superblock.
+> >>
+> >> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> >> Cc: Christian Brauner <brauner@kernel.org>
+> >> ---
+> >>   kernel/bpf/inode.c | 254 ++++++++++++++++++++++++++++++++++++++++++---
+> >>   1 file changed, 237 insertions(+), 17 deletions(-)
+> >>
+> >> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> >> index 25c06a011825..638aa996cbaf 100644
+> >> --- a/kernel/bpf/inode.c
+> >> +++ b/kernel/bpf/inode.c
+> >> @@ -21,6 +21,9 @@
+> >>   #include <linux/bpf.h>
+> >>   #include <linux/bpf_trace.h>
+> >>   #include <linux/kstrtox.h>
+> >> +#include <linux/xattr.h>
+> >> +#include <linux/security.h>
+> >> +
+> >>   #include "preload/bpf_preload.h"
+> >>   
+> >>   enum bpf_type {
+> >> @@ -30,6 +33,22 @@ enum bpf_type {
+> >>   	BPF_TYPE_LINK,
+> >>   };
+> >>   
+> >> +struct bpf_fs_inode {
+> >> +	struct simple_xattrs	*xattrs;
+> >> +	struct inode		vfs_inode;
+> >> +};
+> > 
+> > Note that we are in the process of making this a lot more elegant and
+> > the interface changes significantly because of this.. The patches for
+> > this are currently in vfs-7.2.misc. I can shove them onto vfs-7.2.xattr
+> > and keep that branch stable so you can build it on top of it. You can
+> > merge that branch into -next. I won't touch it again. Just tell me if
+> > you want to do that.
+> 
+> Good to know, thanks! We could probably pull that particular branch into
+> bpf-next once you push it out, and then I can rework & resubmit the patches
+> on top of it.
 
-[...]
+Nice, thanks. I've pushed vfs-7.2.xattr and marked it as shared now.
 
-> @@ -855,6 +897,37 @@ static void test_uprobe_race(void)
->  #define __NR_uprobe 336
->  #endif
->  
-> +static void test_uprobe_red_zone(void)
-> +{
-> +	struct uprobe_syscall_executed *skel;
-> +	struct bpf_link *link;
-> +	void *nop10_addr;
-> +	size_t offset;
-> +	int i;
-> +
-> +	nop10_addr = find_nop10(uprobe_red_zone_test);
-> +	if (!ASSERT_NEQ(nop10_addr, NULL, "find_nop10"))
-
-Nit: ASSERT_OK_PTR would have worked as well. Dealer's choice.
-
-> +		return;
-> +
-> +	skel = uprobe_syscall_executed__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	offset = get_uprobe_offset(nop10_addr);
-> +	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-> +			0, "/proc/self/exe", offset, NULL);
-> +	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-> +		goto cleanup;
-> +
-> +	for (i = 0; i < 10; i++)
-> +		ASSERT_EQ(uprobe_red_zone_test(), 0, "red_zone_intact");
-> +
-> +	bpf_link__destroy(link);
-> +
-> +cleanup:
-> +	uprobe_syscall_executed__destroy(skel);
-> +}
-> +
->  static void test_uprobe_error(void)
->  {
->  	long err = syscall(__NR_uprobe);
-
-[...]
-
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
