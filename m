@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31DA341ADF;
-	Thu, 28 May 2026 19:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6C83264C7;
+	Thu, 28 May 2026 19:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779995392; cv=none; b=o9CW1PdemicEWogwy05aszt0cBMDMDeUb3OZNVDHThFNTQnnuFcPow9MgFET9zkuwHCA6WrZtEFcDqDTf34sGTMMBmnmxgDDCWAdzt0Zk5Uv/ZFvJ4NcUFuqkfgmk7kgVqV1OFK3zm0HNcXn0uTOueSqzg086tuji8WrLmUtKLw=
+	t=1779995754; cv=none; b=EozAkD/dLA7EjlNjBW+xvIsDgLvbGEyKbz652T4MypPwsCEeSqHbwPzFPPnNkLlf2aEBA8tYPj1fSC8Lt71vh6rm8iKG9hL/pbgKhbSA8LXobslB+9rQFlasr/rL9aTAQmTROHerNgSH+UkQ59Pxo9e8QtwcJwdl/wJHpiyBsDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779995392; c=relaxed/simple;
-	bh=Jh7Exf/C0iOc8dbbv6N2HwHbXlwOeaGDkjdSEWhM2oI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=POoQnSdsnhyfv9qvnEo/3OoPwthLgku9fevOKiJWqvwLpOAGc35MHQstM9kg33key0syfbH5j3Asncufyt/bSgbseNTlKefVAGJWYWR/P0CqvB3+aD4JLyjePllpyKXRohehus5NNR9ustu9Xub5G1b/NV+c3GtDol/Z10Vk5h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFi3fDDB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779995754; c=relaxed/simple;
+	bh=NLPnLrO/IC1awmKVWQagnSjbb7Jy2da+dkucEkF8i34=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KqEsJLVgGKxlIe/AK3BjbRxnsEMG5P8NHIwftuBBvgplGcd/LwjWGJinZg6H7mcm3eGvNwvp7Ri+SFh7oM3j94Xab6DakPwHwyDWDIdikjCqltzJiOhMIlrLEhcEzuSM9/1ChXt2UzIswLlHN9Ky0M8/En791K1I9au1qLRenJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJ7Slyvz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFi3fDDB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA931F000E9;
-	Thu, 28 May 2026 19:09:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJ7Slyvz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C36F71F000E9;
+	Thu, 28 May 2026 19:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779995390;
-	bh=nAyyUVPs5gwE9zyHnhyLwM6SKdXZHNk8fW1+lvhH1fA=;
+	s=k20260515; t=1779995753;
+	bh=Fr7nSz+aMp6yRnLa5d8RVpaBRc6sa5uAVAIA3owfSfo=;
 	h=Date:From:To:Cc:Subject;
-	b=TFi3fDDB6+VbZpbAo5zY1uIC0RlaHoORrRda504Z5j0om9IR9omTzMkBp1nT9i+f2
-	 0GyievNoYrlMJQTpau2v/58g0BTypLMZQYtNco0a2l4dMW+E2PezMd62R3hHzm0oRb
-	 y4gbPlJaHS+z0A8iKVJ9QXJl+uP7g4uDJKAyfnJXcTdXVYNmJAteHKfIKufJ8q8qyT
-	 e7SdhJLBkZAp+xuUjKz8SIOvcp5trEWeIB0D4U1pGlq8S4dawku39MECY+QnkeHa8X
-	 J3d8P6+Xuum7IHAbS6xPTU+xZdXD4dkREuAQ4QQUGGvB6XFuVH7E+AbSWJRUW1mxYt
-	 vIB5eVG8D3M3A==
-Date: Thu, 28 May 2026 15:10:23 -0400
+	b=iJ7Slyvzm5jR69t4C22azkmq9GVCOzsljBEa/7BFkKIjDAWtxZKaUuKW0cA8POS0z
+	 UF7MnVgqkbpha004BR6r0pyppYSf6/YTvN37h5uVNqRPn9Xq8LvM0+joGf7j3U4wg9
+	 j3TihmnQPSWIFJ+tEka3PFHoTH9qXJO4G90HpNCy40/BFShWsgR8ZPowAayxQoVlc1
+	 P004GA493kiOjmKhLC+HknXo5aDFuaSe6G3CvAZlT9yj6QR1ekvP8zJSxXFycQIIZS
+	 o9+LRddgaEc2JI1sLtjbbj8GtR4hhGn/zTli+/qZI7n1p2S7ITICY1R4FUXDvhe0mR
+	 W0Kuv71mNc2PQ==
+Date: Thu, 28 May 2026 15:16:26 -0400
 From: Steven Rostedt <rostedt@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel 
  <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org
@@ -35,7 +35,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
  Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Arnaldo 
  Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
  Thomas Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>,
- Indu Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
+ Indu Bhagat <ibhagatgnu@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
  Beau Belgrave <beaub@linux.microsoft.com>, Linus Torvalds 
  <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
  Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, "Carlos 
@@ -48,8 +48,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
  <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens 
  <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Thomas
  =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>
-Subject: [PATCH v2] unwind: Add sframe_(un)register() system calls
-Message-ID: <20260528151023.00f5ec4e@gandalf.local.home>
+Subject: [RESEND][PATCH v2] unwind: Add sframe_(un)register() system calls
+Message-ID: <20260528151626.4573592d@gandalf.local.home>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -98,6 +98,8 @@ mmap_read_lock but not for mmap_write_lock.
 
 Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 ---
+
+[ Resend with Indu's current email address. ]
 
 Changes since v1: https://patch.msgid.link/20260521183532.7a145c8a@gandalf.=
 local.home
