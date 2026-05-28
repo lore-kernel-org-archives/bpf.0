@@ -1,94 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656ED27FB37;
-	Thu, 28 May 2026 23:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7519369204
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 23:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780011606; cv=none; b=BQGFV8doq1hjau1p9nzIDVzAUwRAxRpRqV1D/1GWPmam0VPACG+WavSSxqkFEI2+hO7PNXsoNRy854UrbqauPyAA5tsIV/7AHk0yAYLy8Szu9Zv32bwcmxk0H77WHEnyZPW14V0WCSIRDV4k8b0xYejkCzcFIqTbAHd6qf1AnSs=
+	t=1780011660; cv=none; b=DiDGlthavfDdcqUubPMQX39AJL3eRkULyNTjVqmL4cVHEx3whB65oNNga5+1a87AC0WJ9zQlBug3A8TdHO4Zc5BWJEg95VzxVkwq8mYQMOHDp9wMhY2Bxrmdw8IcmcaflrRh5lTGuAbZbwFQQjUbLJWvo5eL0/rfGldDn/dnBTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780011606; c=relaxed/simple;
-	bh=in6VrdZBtwLirRhauWW/WIzQfgBg+9Z1mK9TuB8HtnM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VzQBpzp1K3yBCS/EOMYP/dWGJGSpItskAesJjOki+jflEhTdNKOl6nrykdJdNNRxpLT4Hniw1Fmm56zsf/sMRvvbdRyvqPCxa9Yh6NBpb9wKuDSf8KczAfQhYaYbBL9R5O7BeIb2rocQyA3wvwO3PYJIE8x3LLqOoo4M71ie6+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHcs60g1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780011660; c=relaxed/simple;
+	bh=VaZsjhqwnSOOUQl7jpV10TGAIO+cDi02Fym450YJxvc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=XoPs6y0qrz8w9elMZAZ5D2w0uCbHKGQ5ueWAfRrJI4UKPVsO14qde5XTyX6tzDkV0AAkbYAyauEYl8RSBq8FRyu+UyXTlixTc0udTcwf8fRS6yGaHiJqwuFe+DPYjvFmC7CJ6XwsjEaT5P1JAkom6qRmJakIFoAb62mbnge9U78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2dFcqr1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHcs60g1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22F81F000E9;
-	Thu, 28 May 2026 23:40:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2dFcqr1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BC91F000E9;
+	Thu, 28 May 2026 23:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780011605;
-	bh=ccA9JNuVea+oGFW5GHOnVHXDZ35mVAr5HSPbvMi+HqI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=KHcs60g1UGpGNdC9riKi9wdpWYEtzHcMkgMKnrJbtr2AWVnM95SKtUyLTUk0cDAfh
-	 jADa9/htHxWUbyL7Y1MqpYPad+Xhv5b9l9J1LumAVE5a5INNJWha4mNa5atJbCQDuI
-	 t40/aj7B0jZ3kSQ1RZChLrFXVePVgTB651cV08Qxg/Hm/GAgapM9t79ORBeM2ybama
-	 imVSzSDolFOL6UAi83GiB+eAqZxZUWk/glTccTJZMnZt1QYXFNZxdmd/kWMDQLBjUR
-	 qf1WYA0CHpNa7jquz8w+kwTEhx3E61GDlwZX12cwZRrFACT8P6JiYCMTbNUHRYDYab
-	 kRlcyD/4DMu9w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56F1D3811979;
-	Thu, 28 May 2026 23:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780011659;
+	bh=MDGzaKBNdRrJQfY+/ER6XVylMg+nxqgvxlm7zGkNUOU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=P2dFcqr12EbrfnfPlaJ8IIiF6ejywbMlfFRr3IWclPs33apOgatYH41RwMklyoxEd
+	 6wG+ma51PbNEyxK3XK4hDexvuPCu9x3CB/bxbKBQBGohE5pYIRfymgr9OLoCdPW59y
+	 5We2RfjaqxzsysMuSYPdIbBSM9RO7zRG20Df7CInMUMhJqbDUIqmP6tnbe1gX53XIM
+	 Sd011dIljbGi3NzmNHIADKNaWqilLjWBkG3la5Uep5KRpzeKr/lV28cawt4u2Fr5kR
+	 fIP7Fg+1Lo2WZUNjF5IiwVjRLLsv4/QpAZraNaAmgaVsYMIuckn+d4QDGV1h5tNYVU
+	 MIeLUfK48oqEg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v6 3/6] selftest/bpf: Fixing powerpc JIT disassembly
+ failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: adubey@linux.ibm.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260529015855.364704-4-adubey@linux.ibm.com>
+References: <20260529015855.364704-4-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 28 May 2026 23:40:58 +0000
+Message-Id: <20260528234059.06BC91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] net: mana: Fix NULL dereferences during
- teardown
- after attach failure
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178001160914.1558963.14730809157167535263.git-patchwork-notify@kernel.org>
-Date: Thu, 28 May 2026 23:40:09 +0000
-References: <20260525081129.1230035-1-dipayanroy@linux.microsoft.com>
-In-Reply-To: <20260525081129.1230035-1-dipayanroy@linux.microsoft.com>
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
- longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
- shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
- ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
- linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- stephen@networkplumber.org, jacob.e.keller@intel.com,
- dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
- john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com,
- pavan.chebbi@broadcom.com
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The use of kernel macros `IS_ENABLED` and `CONFIG_PPC64` in a users=
+pace BPF selftest causes either a fatal compilation error or incorrect logi=
+c.
+--
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+commit 86263e6d76dea14a94abb1054bf8be122467a648
+Author: Abhishek Dubey <adubey@linux.ibm.com>
 
-On Mon, 25 May 2026 01:08:23 -0700 you wrote:
-> When mana_attach() fails (e.g. during queue allocation), the error
-> cleanup frees apc->tx_qp and apc->rxqs and sets them to NULL. Multiple
-> subsequent teardown paths can then dereference these NULL pointers,
-> causing kernel panics.
-> 
-> Patch 1 adds NULL guards in the low-level teardown functions
-> (mana_fence_rqs, mana_destroy_vport, mana_dealloc_queues) so they are
-> safe to call regardless of queue initialization state. This covers all
-> callers: mana_remove(), mana_change_mtu() recovery, and internal error
-> paths in mana_alloc_queues().
-> 
-> [...]
+selftest/bpf: Fixing powerpc JIT disassembly failure
 
-Here is the summary with links:
-  - [net,v3,1/2] net: mana: Add NULL guards in teardown path to prevent panic on attach failure
-    https://git.kernel.org/netdev/net/c/17bfe0a8c014
-  - [net,v3,2/2] net: mana: Skip redundant detach on already-detached port
-    https://git.kernel.org/netdev/net/c/5b05aa36ee24
+This commit truncates the last 4 or 8 bytes from JITed buffers on powerpc
+to prevent the disassembler from processing the dummy trampoline address.
+This avoids disassembly errors caused by reading these dummy addresses as
+instructions.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/tes=
+ting/selftests/bpf/jit_disasm_helpers.c
+> index 364c557c51158..21e3e3e68c147 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+[ ... ]
+> @@ -216,9 +218,28 @@ int get_jited_program_text(int fd, char *text, size_=
+t text_sz)
+[ ... ]
+> +	triple =3D LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc")) {
+> +			if (IS_ENABLED(CONFIG_PPC64))
 
+[Severity: Low]
+Will this cause a compilation error? This file is a userspace program built
+for the host system to run BPF selftests, so it does not have access to the
+kernel's IS_ENABLED macro or Kconfig options like CONFIG_PPC64.
 
+Because include/linux/kconfig.h is not available in this context, the
+compiler may treat IS_ENABLED as an implicit function declaration and
+CONFIG_PPC64 as an undeclared identifier.
+
+> +				trunc_len =3D 8;
+> +			else
+> +				trunc_len =3D 4;
+> +		}
+> +		LLVMDisposeMessage(triple);
+> +	}
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529015855.3647=
+04-1-adubey@linux.ibm.com?part=3D3
