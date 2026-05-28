@@ -1,264 +1,162 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DBC4207A
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 00:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F60B194A6C
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 00:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779929413; cv=pass; b=p9FTrbuG0Fehk2KGRPidRdtIeGSWhSJIM6ev55aYPTY9kAJfom853FDGAEK8F0+17nE37slC5VsUcFsg+DXF4cEKRR2ONXV+zFgphT97b5geSVNgwho1J8eEDGsN/3T3URiT4LGREcnmgcRRLomxVhDmgRXTe5vmhgjTq5nGD60=
+	t=1779929457; cv=pass; b=dFijQ22rInlLy6p+PUh0x9YWeC2dpDnzkhXGPM2ItatsNCU7XBS/iGtAYlYqIYIiHGltzBnaGCo/4ieonHrpwRA1Rnnkna8STdp8lcKDUKpZig9A1caKFIqXiVxWfKug215RM3Uh0yzRVPlKh/DiivkBBzZGizQEO0RdwiYy16I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779929413; c=relaxed/simple;
-	bh=xYhARfwZEM66RbtIZaWA9wEg+I6VTgAPes922/8IbTQ=;
+	s=arc-20240116; t=1779929457; c=relaxed/simple;
+	bh=giW7cE2Ul2827hcqIcTdpNfD7jsVV5kq3POoqaLjUfo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TeJB8Kc+LtpvNBzZ43uXZn5APxuMK9ktYBN5H6+IquD46U5kTdMZqyyAdI80I1zPw2sHKLkKPrhBh7A8ZSzT0wmqMtDUnMf11YgNy0OdY/g7b7WzEuluLSY9IuYxPcRCLibwM4ydvu6vRvxAwqK3KYYVqyUF7AK1k0VnKUo1LD0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRew8Bns; arc=pass smtp.client-ip=209.85.167.44
+	 To:Cc:Content-Type; b=Vo0GQ6vjYuD5eOkQX1tzGaQ1NQzBaagBXhAkL/N+MxPkGmSYI7LrwwHCU6JwwnK7+RrAG6Fq4NnfJRzAe0sScr8qIN6oIuhcOEGWYpGhMeXQGyppdKU4WCuhXsKFOat/PxOp5oLYKhyK80hWQOCBh3r9d0QZ9XXP0UqKVLcp3Fs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NnRUg0lW; arc=pass smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRew8Bns"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5aa2d5a1d51so5324744e87.3
-        for <bpf@vger.kernel.org>; Wed, 27 May 2026 17:50:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779929406; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NnRUg0lW"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5aa2691db86so12616990e87.3
+        for <bpf@vger.kernel.org>; Wed, 27 May 2026 17:50:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779929454; cv=none;
         d=google.com; s=arc-20240605;
-        b=EB/QzI+Oor88WDuP+yqmK2vRFQU1dI6qYaEzyxvmcmJOcSESAoQ5Ycrtysj5F2YMD7
-         ZgNfKxQ7WjXOYm18BRG9UjsB5wacbp9hHqY1uqSPcGuT5cnWFx4DFE+Pgvtm8Y6cGvAz
-         UnqaaA/8JQX/uEfGBsf3oX5PEgniSfR2d0QdeoJCv5p57yaCUudfG6Xh718fbAAOdxX3
-         dTcZ86/uIG7xS1CBer1lVt/i8t5UT0rFfG2ewhPz5MWPD8Fjc5N+G6jla5f+QwbXUS4b
-         bIf773WXMTw4yPyTmtDYU5zsvuXK46YHfb/MRqnUwB2LgqNsQ6LkAqUSVFKENwuTp8Xi
-         yNXA==
+        b=E2UV3IijawNlCkt0B3iOm9f80GXGPEd6KKNiXdEAyfO1W7U5cFXsvmDdciX7fPyctb
+         68rCFejK57BQKCcTi7tF/s1eDhFdWkwJWwpxB0zYDljbznJ3XMPlBQvGpMZd/qZ3lIRV
+         sB161lFkPzCceDO+KZbEPMid/XeGAK526uekoMzGQyuWqvbiJg0IF1jAn6eAcocIbNvl
+         p5+/RGGzCM0dtOIUv4dk3qUM4sZAH05o33I7PnJAFiydXlklIcUXL9rxBnub8UK7nxDf
+         a3gA2cso4+l5mdCh7cmUYxFdjLbiAVT+eRQ4TfpPQ/2ITm7tj9CopNJfzLgOHs5feB0V
+         NcPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+RruAHf3R1iczwm3Zy1aUkt69+/qOGV8X/zp2I0JUps=;
-        fh=ZIvvg3514Y/1hqVQgbTKOP+DQm5TC491cAhAUqCU54g=;
-        b=KCxzsyAc6M4Ecm5jMR1AnJB11c9EaLESbxS6fUo3f3yECDISHJIJACr/AM+gAIOL32
-         wS1DjSEqgtyYIm4shCoUJRBbxzFr/EYgb9aIfbpsEXuY7haGiPhyGKdP7+QZNifP0OGR
-         um+b76IF0q1CaJ2OSNW+C86PK2uUObfVYUQudT3DUEdnCiIMhZoXVGZ+vQASCD7PYH2w
-         AI8jzE/9pSofQkD3UqEOKGxjCOzKexbym7cbcF556unFvmcvLsZr/J8e91Zkh1bNrXZn
-         MWLd/WfwhgG9EsswxaVfD180sjgK/FFtx6Bvqe0omGOXPFrkY5s6gPFBJaVYZUaq+OAI
-         fAqg==;
+        bh=BlHi7pwvmhTqmHOFUpaKkZe0PG2OdoCLfoe4VT5AXRo=;
+        fh=eeywhRgfquiovFkuqSP6OTj/yUabA2Nslu7Z21E0bRM=;
+        b=WXi4wdbs70HmZeS3tT0rvT0JueZwKxjeIrLlf9C4L7Y4jjwQ1t5tdMp1T9sj9fVv9q
+         cuJz7UqMxWveWJGhH/gBlnP8vxVFT+zf5ZKNFerdESfDT5f/LEYGjkNUauhjI29+v0Cz
+         L3BdbYSNi9tnyxWC6wbON3QiH66KlRIuvoS9QlmFX+M8x+Qdci70aCSlL5Bs6gY7gEQy
+         cIHH8VwAetNR32AtvpehzVjq++UfSpupPpFh4Q/1RXh5vbV6D4tDwSXPS0XnXrrLwLag
+         32ZR72yzdiaaGQ0VcdMPAonSBZFaf38mdYGs/Mz2QAiguPxcMOsYZldTXsgUTmXXx/Gy
+         fF3Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779929406; x=1780534206; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779929454; x=1780534254; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+RruAHf3R1iczwm3Zy1aUkt69+/qOGV8X/zp2I0JUps=;
-        b=mRew8BnswQhCUpUV1sSdAqFT9+jlSQkkCJckkfRsQBKKHCrJ2+BqbqXR4TImd1+eYG
-         IRLNEU9LeQJP/TpcCW+ekXdpe6CsH/I5KYhXkuw0LZd61jrWBXTZV6pE1N7y0gfA9GMI
-         0zjZRgEM+nfmW62JpnandErG90whxOTS/fHh/besVXCezeedikWJy2l7F9Rm0Aslk9QV
-         YM6gMZj9eJAgOxKA6LM099mphzCeqCUX75aMheE76gaimQiQcUfSptX/RdU6K5opfV75
-         KAbVAkDEz3fTn6vla/7WHFc5WWWj0zBbtF6EjM6ZpxkPMIA/UwbuO/lQvF/Ab+kRphPP
-         4okg==
+        bh=BlHi7pwvmhTqmHOFUpaKkZe0PG2OdoCLfoe4VT5AXRo=;
+        b=NnRUg0lWgvcmeDKtcUNIPH6r3mE6H+tpcHzMq4S2zJOTXQzvotaAP64KbUMF9jwCp6
+         XCvNrJ3kFBs0umwwGx4xQVz4fxPYVcuuxztA3vY3jTy7vdz9ph1F6hPmYwdpfkqjdwCa
+         xpPdxnFa+K9X/7oG6nNA/sMNqx24x540MqZm371sE+Qpg2y4NT/uPDtdqMRvQth/x1t2
+         8RPK5NedmNMjARr4VzRkmEYUK4sTSd1lwyiDsUWMAqsWobIn+jXZo4j9TStkfJDme8vR
+         SqPFQHpUWFsp84tn2Cm+geC5bBiHU50ysiKUGwYneKHIQ2fNXhcyrHTZRk8maLcDtiXg
+         yCsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779929406; x=1780534206;
+        d=1e100.net; s=20251104; t=1779929454; x=1780534254;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+RruAHf3R1iczwm3Zy1aUkt69+/qOGV8X/zp2I0JUps=;
-        b=kU+8Xy9NVzZwN2Rx0scx9i9yjULQg79LRYHNYfEZSxlQ0eVdGmzZl/nRx1m6Qd8uX9
-         EV90q8WKxq5G7thsvZTY9k6FUEgt0n+ZJ9cqTquyEhXbEbKbi7nU2ijzoglny8sJ1hA6
-         I3H+l/e8iDSP9+PBI6F+EIuyoTHT7dHr0+2om1vdodeJhCAcAGyUalQsaqfJND2RnWEM
-         SO2JXL8faGNn4hogvZ0V+0Ej11Tg+/1lNvSLM0Wjn9mp0eV1SkPeOKkSBDC075SDut+g
-         mc4/JRtu+LSKAcWij0vryLPnfzYlEscPggQMR5MKcL1/J3hZyopRhTv5Ny2/8fEtgYMp
-         plqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ90I6YnGyNi0guoQTDgxRvWHJJXklFZqnMNuQYoxszvIasFpQrQ4bbT3Y86BXWyEbCF3YY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxY27O2V3KomP+Uga81kMYuL8wNEWMJz+NFbR9PESl90CpLNsa
-	NVsmFumYggYXD+LS+2W3OEHzrTsr7qVRcVYSgPGpYzZejeQab0SvbqsNZJ5p/ZR6J0O54+9RklS
-	bPkkIISiaeiDZBnJnv19bEFx426HML3w=
-X-Gm-Gg: Acq92OFwpGp2/gHZjgX7EVVBHbt8xHUEur0sme4EXROU4sO5BBakXClu54MHiiaSn4H
-	jqzAwcv01G0NLSnzlxC/jANUwpiJ6+S4nXRAMwmxqdXgqB6BKNlgx+ckNjDfA7QebuXgKhsM2dE
-	xfP5/nPbLoDfNpfmmlLCBTltopA18MrZsqrDB0hUWR3Px3xvKNvLkhLRx2Aq6s0mXCnQ4Zp3I4v
-	JJrzk+S3OAHODL8VPdsmsyI0c1TpCqpolYx+qxCHLUQTlRv1B6L5JlvBqsxci74/UE3JiHQ38G5
-	nVydd91hY7YW6LCo8HOz9QK02jhkHA3sI6SEPZ4ndNdywKBh6w==
-X-Received: by 2002:a05:6512:38c5:b0:5a8:fb56:e322 with SMTP id
- 2adb3069b0e04-5aa323cd973mr5362329e87.36.1779929405522; Wed, 27 May 2026
- 17:50:05 -0700 (PDT)
+        bh=BlHi7pwvmhTqmHOFUpaKkZe0PG2OdoCLfoe4VT5AXRo=;
+        b=OuDCRfzyPE0BF+d1mQjDC+RwYdHdgNzzh21+/GS8Cymz+sKYSvU5mlQamUveIPfbtN
+         bvJuzvzvqEFsN4KBv58JbAPdYBneEQ14Mt7Ej2E9AZqYTnD0AO+9k6c03xnrtnNhs9Fi
+         OAq4DsrI/DorgNHdV0OMEkVLKbOPWvj2yX4Y7adc/nT2aT6K1S2HNrbEYZvPoBmTwlo5
+         5kXZAjG4Ur32BTFqFM50G/LJCAiqCjEdjEuvdpRDCXQgXlSc3dP29WcNHLHt3Uy6y1aJ
+         Wek2t52rIebjeqDaiOoIxN6LAAeG6xoaO+Pc0r2uvfYgP4HMntGzTh2GH4UOwgwyuvGz
+         J6Rg==
+X-Forwarded-Encrypted: i=1; AFNElJ/GPvbLKWQnXQUtSFqGetn/nLz5K56h402tonAwJpo8+e354TqM99wDaLJEO/dzS1mClOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtCuZiPefD9qciADPxGVs2CPJQTrVs4iQH5oGnYF731z+An7hL
+	2vz9C1iC4iyPqs0GICEZ1HZLNv/sXaJkVYApAicS7rKODmiqQycq29dujNwwyvKLufHM2z4r88a
+	XFIFHmfh4QLFs7hNGiJsZtaZdrlB1ziE=
+X-Gm-Gg: Acq92OFp86g6zV2Id6+C+OoyooH1WMnDXMxo1HZYg/KJhSAnD7OK9T6tV4iBZr91IQh
+	23Ws6vyXs7f3RPktrJl98WrwmbNkyw3Clb6J/Hz1Lb97dGxSxjYiCq6SKmrR7TXL9nGu1h5ySoQ
+	j7QKky6ulY4IaxmMyNyOS0ykXjHR4m4YUbW0VLUELFp/cgh8dqI3a/+QXnzFvzFGvcI6SL6Od4I
+	p24jJxlinCtPmiXPaVWgDKseZ3AKpz93zOYL3a2sXyaEkV2b7BhdJJsHAcYs871VDLaWlHM5l6r
+	ydVEx0UmM3LEXjNhJc1zM+LWNDIZYIeLABQw710BbQHgwId+2tz6APRR+Zyf
+X-Received: by 2002:a05:6512:38c5:b0:5a8:9b6a:5749 with SMTP id
+ 2adb3069b0e04-5aa323a9f51mr4812397e87.28.1779929454248; Wed, 27 May 2026
+ 17:50:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260523083001.2911931-1-kuniyu@google.com> <20260523083001.2911931-4-kuniyu@google.com>
- <202652620632.prOx.martin.lau@linux.dev> <CAAVpQUA0UNhR8AWfd0WC-krYJeXb0ebNs-V4u9kgweyNw_XHtg@mail.gmail.com>
- <2026526214538.Vhly.martin.lau@linux.dev> <CAL+tcoCSU9KFZsV33LE2R89iUzb5b3Xm+h6QObs5GOuRYR3sMQ@mail.gmail.com>
- <2026527192229.olv9.martin.lau@linux.dev>
-In-Reply-To: <2026527192229.olv9.martin.lau@linux.dev>
+References: <20260521135244.40869-1-kerneljasonxing@gmail.com>
+ <20260521135244.40869-6-kerneljasonxing@gmail.com> <CAAVpQUD8gsYPyZS4Dbyo0DMEjEczBTJRZ3OW51CPZhnLw22YGQ@mail.gmail.com>
+In-Reply-To: <CAAVpQUD8gsYPyZS4Dbyo0DMEjEczBTJRZ3OW51CPZhnLw22YGQ@mail.gmail.com>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 28 May 2026 08:49:27 +0800
-X-Gm-Features: AVHnY4Lm6VOcSFNccR8V2egxgBLwuwM8XRk3VQR9XX6AG1Yyaz6z1iyik6SXvJc
-Message-ID: <CAL+tcoChM9j1ehCeNsiFNoEk0t2TPr6ENt+hfif585hYo=mXcw@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 03/11] bpf: tcp: Support bpf_skb_load_bytes()
- for BPF_SOCK_OPS_RCVQ_CB.
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
+Date: Thu, 28 May 2026 08:50:13 +0800
+X-Gm-Features: AVHnY4JtxR6v6tEHKgUcEj2YPTM0SwOnxyZSTt214CNsHr2ghH9-fOy5Tz9QpJE
+Message-ID: <CAL+tcoDmc5eOTPT1BWqagS6tcTZn-pfJuwrsPJ5dvq3ZJd=eGg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 5/6] bpf: enable bpf timestamping rx in TCP layer
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, willemb@google.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 28, 2026 at 3:47=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
+On Sat, May 23, 2026 at 11:45=E2=80=AFAM Kuniyuki Iwashima <kuniyu@google.c=
+om> wrote:
 >
-> On Wed, May 27, 2026 at 12:01:11PM +0800, Jason Xing wrote:
-> > On Wed, May 27, 2026 at 6:19=E2=80=AFAM Martin KaFai Lau <martin.lau@li=
-nux.dev> wrote:
-> > >
-> > > On Tue, May 26, 2026 at 02:21:56PM -0700, Kuniyuki Iwashima wrote:
-> > > > On Tue, May 26, 2026 at 1:34=E2=80=AFPM Martin KaFai Lau <martin.la=
-u@linux.dev> wrote:
-> > > > >
-> > > > > On Sat, May 23, 2026 at 08:29:32AM +0000, Kuniyuki Iwashima wrote=
-:
-> > > > > > When a TCP skb is queued to sk->sk_receive_queue, BPF SOCK_OPS
-> > > > > > prog can be called with BPF_SOCK_OPS_RCVQ_CB.
-> > > > > >
-> > > > > > In this hook, we want to parse the RPC descriptor in the skb
-> > > > > > and adjust sk->sk_rcvlowat based on the RPC frame size.
-> > > > > >
-> > > > > > However, we cannot access payload via bpf_sock_ops.data on
-> > > > > > modern NICs with TCP header/data split on as the payload is
-> > > > > > not placed in the linear area.
-> > > > > >
-> > > > > > Let's support bpf_skb_load_bytes() for BPF_SOCK_OPS_RCVQ_CB.
-> > > > > >
-> > > > > > Three notes:
-> > > > > >
-> > > > > >   1) bpf_sock_ops_kern.skb will be NULL when the BPF prog is
-> > > > > >       invoked from recvmsg().
-> > > > > >
-> > > > > >   2) Access to bpf_sock_ops.data will be disabled by passing
-> > > > > >       0 end_offset to bpf_skops_init_skb().
-> > > > > >
-> > > > > >   3) ____bpf_skb_load_bytes() is called directly instead of
-> > > > > >      __bpf_skb_load_bytes() to allow compilers to inline it
-> > > > > >      instead of generating a tail-call.
-> > > > >
-> > > > > Some observations below.
-> > > > >
-> > > > > >
-> > > > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > > > > > ---
-> > > > > > v2: Explain why using ____ version instead of __
-> > > > > > ---
-> > > > > >  net/core/filter.c | 34 ++++++++++++++++++++++++++++++++++
-> > > > > >  1 file changed, 34 insertions(+)
-> > > > > >
-> > > > > > diff --git a/net/core/filter.c b/net/core/filter.c
-> > > > > > index 4a50fe2cd863..fa8a7c7d86eb 100644
-> > > > > > --- a/net/core/filter.c
-> > > > > > +++ b/net/core/filter.c
-> > > > > > @@ -7760,6 +7760,38 @@ static const struct bpf_func_proto bpf_s=
-k_assign_proto =3D {
-> > > > > >       .arg3_type      =3D ARG_ANYTHING,
-> > > > > >  };
-> > > > > >
-> > > > > > +BPF_CALL_4(bpf_sock_ops_skb_load_bytes, struct bpf_sock_ops_ke=
-rn *, bpf_sock,
-> > > > > > +        u32, offset, void *, to, u32, len)
-> > > > > > +{
-> > > > > > +     int err;
-> > > > > > +
-> > > > > > +     if (bpf_sock->op !=3D BPF_SOCK_OPS_RCVQ_CB) {
-> > > > >
-> > > > > bpf_dynptr_from_skb() and bpf_dynptr_slice() kfunc could also be =
-considered.
-> > > > > One less bpf_sock->op check in filter.c to maintain and could als=
-o avoid
-> > > > > a data copy. There is a bpf_cast_to_kern_ctx() to get to a truste=
-d
-> > > > > skops_kern pointer but this will need changes in verifier.c to ge=
-t to
-> > > > > skops_kern->skb (e.g. in type_is_trusted_or_null) and this is the=
- tradeoff.
-> > > >
-> > > > Maybe a dumb question, but does it add extra cost (extra dynptr
-> > > > function call?) if data overlaps two frags, or can dynptr handle it
-> > > > seamlessly with a single bpf_dynptr_slice() ?
-> > >
-> > > Right, there is an extra bpf_dynptr_from_skb(). I don't think we have
-> > > benchmarked it.
-> > >
-> > > If I read it correctly, unlike bpf_xdp_pointer, the skb_header_pointe=
-r
-> > > will still copy even if the data is in one frag. It works well if the=
- data
-> > > is in the headlen and the worst case is to copy, which is the same as
-> > > load_bytes.
-> > >
-> > > It is a readonly use case. Maybe the bpf prog can directly read the f=
-rag.
-> > > Regardless, it is useful to have a kfunc/helper to read it.
-> > >
-> > > >
-> > > > In our case, the data copy is ~16 bytes, so the cost will not be
-> > > > a big problem I think.
-> > > >
-> > > >
-> > > > >
-> > > > > If this new rcvq callback is added to the 'bpf_tcp_ops' proposal =
-[1],
-> > > > > all this will go away. 'struct sk_buff *skb' can be directly pass=
-ed to an
-> > > > > ops of the 'bpf_tcp_ops'. Supporting '*skb' in a struct_ops has a=
-lready
-> > > > > been done in the bpf_qdisc.
-> > > > >
-> > > > > [1]: https://lore.kernel.org/bpf/20260519215841.2984970-11-martin=
-.lau@linux.dev/
-> > > >
-> > > > Oh I missed the series, the struct_ops conversion looks nice !
-> > > > Since this work isn't urgent, I can wait for your series if mine
-> > > > churns it.
-> > > >
-> > > > Jason's series is adding a new op, and I guess this can be
-> > > > integrated too ?
-> > > > https://lore.kernel.org/bpf/20260521135244.40869-5-kerneljasonxing@=
-gmail.com/
-> > >
-> > > imo, a new sock_ops cb should be added as an ops in struct_ops. For e=
-xample,
-> > > in patch 4 of that series, bpf_skops_rx_timestamping assigns u64 to '=
-u32
-> > > args[4]', which is adding tech debt to the current sock_ops interface=
-.
-> > > For the timestamping case, it could be a separate ops for the
-> > > 'struct sock' instead of 'struct tcp_sock' because it should
-> > > at least work for both TCP and UDP.
+> On Thu, May 21, 2026 at 6:53=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
+.com> wrote:
 > >
-> > Sorry, I don't get it. What is the tech debt in this? And
-> > bpf_skops_rx_timestamping() only outputs the timestamps, which has
-> > nothing to do with either 'sock' or 'tcp_sock'.
->
-> Did I say the tech debt is in bpf_skops_rx_timestamping?
-> I said the tech debt of the bpf_sock_ops[_kern] interface.
-> Besides always memzero the whole &sockops, the way that the bpf prog
-> needs to get a u64 timestamp from u32 is not thrilling in 2026.
-> args[4] is also not reliable when the earlier cgroup bpf prog
-> writes to replylong. We had already hit some of these in our rx net
-> timestamping discussion a few years ago. I suggest you go back
-> and revisit.
-
-Actually I revisited some historical threads and didn't notice
-something like this probably because of too much information there.
-Anyway, thanks for your information.
-
->
+> > From: Jason Xing <kernelxing@tencent.com>
 > >
-> > Could you show me what to do next? Thanks in advance. It sounds like
-> > the tx side of bpf timestamping should be adjusted accordingly?
+> > Add two if statements to accurately isolate bpf timestamping and so
+> > timestamping. They can work respectively.
+> >
+> > As to so_timestamping, only add a loose condition via report flags
+> > to avoid duplicate strict checks that is done in tcp_recv_timestamp()
+> > and performance impact. If the loose condition is hit,
+> > tcp_recv_timestamp() is able to handle the exact case and doesn't
+> > hamper the existing timestamping feature.
+> >
+> > Make it work in TCP protocol.
+> >
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >  net/ipv4/tcp.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 21ece4c71612..7ad3561dc8cd 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -2353,6 +2353,16 @@ void tcp_recv_timestamp(struct msghdr *msg, cons=
+t struct sock *sk,
 >
-> imo, the bpf_tcp_ops can land first. and then add net timestamping
-> ops (existing tx and the new rx) in bpf_sock_ops.
+> Simply drop const from here rather than casting to
+> non-const for bpf_skops_rx_timestamping().
+>
+> sk in all callers of tcp_recv_timestamp() is not const.
 
-I'll rework after your series gets landed.
+Will do that. Thanks.
 
-Thanks,
-Jason
+>
+>
+> >         int new_tstamp =3D sock_flag(sk, SOCK_TSTAMP_NEW);
+> >         u32 tsflags =3D READ_ONCE(sk->sk_tsflags);
+> >
+> > +       if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
+> > +           SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TIMESTAMPING))
+> > +               bpf_skops_rx_timestamping((struct sock *)sk, tss,
+> > +                                         BPF_SOCK_OPS_TSTAMP_RCV_CB);
+> > +
+> > +       if (!sock_flag(sk, SOCK_RCVTSTAMP) &&
+> > +           !(tsflags & SOF_TIMESTAMPING_SOFTWARE) &&
+> > +           !(tsflags & SOF_TIMESTAMPING_RAW_HARDWARE))
+> > +               return;
+> > +
+> >         if (tss->ts[0]) {
+> >                 if (sock_flag(sk, SOCK_RCVTSTAMP)) {
+> >                         struct timespec64 tv =3D ktime_to_timespec64(ts=
+s->ts[0]);
+> > --
+> > 2.43.7
+> >
