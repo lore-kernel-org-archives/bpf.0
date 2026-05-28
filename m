@@ -1,92 +1,94 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022B63B6359
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 14:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F61F3009E2
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 14:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779978229; cv=pass; b=B6ZkxuRYOfA6cmT2Ze5/LMVMSGG0sHJZAs/JOqym+P0H8VXRGSMV+xIDB+ISmz+bHZfTQKczMvLR0YJh6pLunD7BpZ9rgh/BMwXOtTs5o1xV+HmJ+kKagVYF1sslPSkTG5GwWDf2KtY7Mihb4XnLUwMgqAF7yeyIHkL2acythXU=
+	t=1779978562; cv=pass; b=gapaUei7Tch0aKMG43yh5bC5kvZAR81KBuYdqBl5MKFI81BJuEnY10ttr1CpLyHZR4QiJm1vRaRzK13u0a5VQ+1W8wicRsdZ2TUqJofVOVnrAM5jQgquABhL0udQxcyVBVFHrRoZLZtrlpbOlMyPbVVILp9sc5C4TcmwTptnVDc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779978229; c=relaxed/simple;
-	bh=8mRoMx2Oc3B+Yugix5ihq/IYgz2XGH4JFKPNJ8/T5n8=;
+	s=arc-20240116; t=1779978562; c=relaxed/simple;
+	bh=Q+z/eJ2IYvUrWsTAriwyxkZpEKtlU9VSpOyUWHPTVfY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LCnpV0uUBIkNmm/yTqiFIE5xyd5Sd4Gp22a9w8XGJhQzRne5aBeKZVqgLavzs5MRWy5gp8b4sbR5vZK1l0Btt/R1qLQEf7uZ/6s05fLXCm9KHJLgAkgy0oy7VXhqdMoEeOqKSZaaBNH8a7Zo9yYy5uS3HY1chdCe/SALf0GuYHk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JOi3KCOu; arc=pass smtp.client-ip=209.85.208.54
+	 To:Cc:Content-Type; b=Wk5zn7X44HXaalFTOQDSyEUAebiPIGUhzhRlpuz2+KbQT5KTU+ogtW9bedDi2wL7fubR2dQ8E9v0ln4X3NTJj+UhTvKvAo+HoOVRrEUO05uA0IUj0QHCqLWpEmdIjLyx8HMMMAUeFKiZZOLDaf+XW43L22E0b47AoIph2NyJovc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyEWElJ9; arc=pass smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JOi3KCOu"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-68ae265815aso1506650a12.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 07:23:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779978226; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyEWElJ9"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-68abd694c1fso1548542a12.2
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 07:29:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779978560; cv=none;
         d=google.com; s=arc-20240605;
-        b=HyqsW9C5j/7HGLzL9t2CituJAcM5PxmFGEhG8bUMIRspjhLlkOFccY7FOjs8eWl9UR
-         d/FADap0ucreM7z23b4ZPw162GiW3ZW+gsKwpol0d/RgyN564iE/SzWUrumYwy147fWN
-         N+3Qtyy2XTu/0fmgMon6PLzgRk64GoA7nYzZwqARGRrHGQWqeWACQAfTJ59JUwVpV2/s
-         KFmJo5Rm+lvNd47ETrJObtHiBzFQZf5vVdecFKyrfUjLmBZyf5+YYC1r5OdFL/Hkkzrw
-         +OQMh1sLBoQuZNOCeA1VevLG8nBIHIjdhP59njyK+EbayY5xvVtuv992tL7V2cbbbEUc
-         qTSw==
+        b=d11+dkrELd3LkBRMzjNQ+xhP9Yzl86xwZ0sfV9COBugQvkMlJlyQQGGvE4ixcv0GBl
+         94BZ4kW3gxLLb/5B/9LOPDoSY/CznaFmnCEY8tKPkGTa33qHmWo0TCvz1qwAjTYRvK3X
+         ZX0BUJDqef8ww4qf9h0NXPo2Jjgleb0T9Q+tg+wZEaY030lFLxBfR5RWFeaTEuGB/fYq
+         GMSFQK30uNh/uFMcYGnJbBqrjjpX3Qc0ntlDgTZoSw7OxxM+/HgAKmpajwaw6FaJV4vU
+         vs3vALoCvDAE9h2D2cKwUGtcU30uN0xOCJoarRWnHRJPGUO4Wsyy9Iqe+fs0fV9fYVui
+         zcNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=123Sb8xW7IFMcJuJcw7GfUYEiZQJLjxktTy++FJHDN8=;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tcS4djirQ7jCuPbZgRdCiKvbNxNqGGa9ynUDWxizWQY=;
         fh=ImV7wcOWCAIiSwmXuLCYiZW79zWvfoaz2vqrD/XVaNI=;
-        b=T9c0mxxU4yQj1AXcQasulWXDJMWn111EVxnuiLiyu5X4MLL+cZJEGglrduI0g4UvsN
-         VhcxnN+eBQLXwl3U3k0Qy0XiFb3wXOjfo/mcDYApy4TKoSk+mVDhw1/DgAhc0vfCBFIZ
-         FpYLrl3hbv9fYFtq4Tlt5pc9vBFk5Mg0mwswRKBcoXb8vmsKw9wFWD8AatMqejh54iEZ
-         eBLcvC26kIYMlB4c7deCwST7639zMVRfmq2zI87iLlO/8KG+/EA8+vb4eS00lO3VdyHk
-         ITQbfY8Jnnlo05YiVnre6fUtn2unrYA5KFr8y0UMhmPYckrbYXWMaYswUDSukMhB+xpM
-         Y79A==;
+        b=ebBLUC3/yxwMzbEahrW2WTfg6a5Lwgxn5nRac+FSG9d/Ds3XD8m76TadfRQkRtVqHv
+         DUCA30GEfyZw0BUX+63CR1JeKRnbp3QdWdFyumioauPm7+XKULxyg1vZxV9dfRtajny6
+         UTFTyPbM0Md+922OY01+zIdEHLHEAtMk2T3u24TmXEd2ENeDUnC6utV52RiI00QwVL+q
+         3Dvjmwh0oAT3wQc8XMjVbfrD930tOgo5i9B15fKnpG42zWrT5T3SEL6XdQV0WWpsGajH
+         pd/2aK+qobQol/HAQrCfhB+x4yTt8TglAao9luP11QJ+MoavtRi8BWp9xJF3dL/h2NUy
+         G3Zg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779978226; x=1780583026; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=123Sb8xW7IFMcJuJcw7GfUYEiZQJLjxktTy++FJHDN8=;
-        b=JOi3KCOut0hZV+p9m8yCA6sGwuXia3v899aC8Rb35rG4SuZYPdn2AoNklZkIH+FzQ2
-         MRDKVwf8l3Pxz5cf4ugPPqISmpGEBg124zCZQiY/6GxZgcSJH89qd/s4YwOuT8pMyXjE
-         oBrZLsew/gdzIklYv62EAoXhx30ST0koXeSfqypsH5t3lg3eWWfq9c9efAJNZCrhG5We
-         tlyXqkKTOMpWydBIyOxpQITcY1GiyL4gq7t/7656c0+UnWGJ+OlNxtBmid97DuhuyrAp
-         qt+N/PoXuilRR03CUMOB1aZjDOPDOlAzLHddTuTr7VPv8BLfuzcUs7rSce00r5POSAy4
-         48YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779978226; x=1780583026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779978560; x=1780583360; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=123Sb8xW7IFMcJuJcw7GfUYEiZQJLjxktTy++FJHDN8=;
-        b=Ou2YshTN85XI3tunJfi5vENhAAsQnjbJVotUQMVmUpC7qusYtfocPbLDnY4J2UR8v2
-         WA+FZondoRlz27w9/A0POCyF+eHYKXjka3YtQrSpbvuAyW3LUc8Ert2m444Zk8sQr606
-         Ud9PmJ8WgRCxw3ptpVDOw9xjXRX86FelFW5JUUwS58FbaXZ+l1opoOKaxhJaO49b4eil
-         mPyJZRA6WOjoPFOzRNsNTlbv9hJzmlICTrCAgwMEiAKCzKYCt6zFAS8RzSqcGbY3fBsG
-         FErpPKGPNH+R9QywAeMKITrJlxWGGr7mldn7ox7mfIK0D2vkUIlfe0uFvAsUcYrpySX+
-         q/9w==
-X-Gm-Message-State: AOJu0YytUHmtTEO7bnpuz4417qzasKglKdHSBtxbtj8jFMW5UcpzGZi1
-	PJxadLIJccGdl6jMkCo3bWJUIBIaj7QTXkNZXWF/LchppivsXNKZSgvZ5vD61DVb86r2PvZYI8z
-	/dSqYySA3jJn5NZFNnmvdLk8Wdy7bUrg=
-X-Gm-Gg: Acq92OFTQZjO1ljP03tlrIdAkH0LgYnr6GKfigsL2ldotWv0bzGkxbZFI6B3MMtpGPR
-	EXRnze1/Mgswk6GsMjlwQV+2kFEay82A6TIMiGcG9mh8b5yTANugrSjpqM904gLTsafM6P8lRqD
-	pQFeAiKeBFy50kEN0fkjZFfQkRolqZCsdhvpJW2NAK2UaopLV247spg92l57AfRTTELfeZb7xov
-	AT01u/jAyMCq1mBN4xgFMY9S8LggSFMW255DF5J9oOsSquwetgG6PoBnVc3M9dyG33aGstO0pgE
-	d22/7nOI3oh8Qk2dZm/FjNP9s/i60WIWQGk32qkGdWc4
-X-Received: by 2002:a05:6402:320f:b0:688:1697:ab72 with SMTP id
- 4fb4d7f45d1cf-6889cc66198mr15216309a12.26.1779978226023; Thu, 28 May 2026
- 07:23:46 -0700 (PDT)
+        bh=tcS4djirQ7jCuPbZgRdCiKvbNxNqGGa9ynUDWxizWQY=;
+        b=IyEWElJ958KntkwGGrwAGy838vfnVPTwWwST5iEWV6uY5BujP7nlRLYGR8jDRKGE3a
+         Ge02iGFmUC/FwNzzSxZ9W6zouDlEHpPCGaNHha5+Cu83xZ4KiV+LPR8ldnD2GnIoVPb1
+         UILCQJdQtbaSSsBYq+MTVAYziqVtVzJTFEGPCS7k6BbgGcSvNjYN5jSs3th1TWPnfE6o
+         D8s2yRdY973uaGnNBYbAKHB7M201dBcTbiRPUwLmBzeOtKgfx+B5ISn0oCy7RtwHTNSZ
+         cgX8l9qVL74h18IxNbjnv862Az/+YwkdZ1wM5BjHQRNMEmcrkW65fCxalloqJ4LK5kb4
+         /7fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779978560; x=1780583360;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tcS4djirQ7jCuPbZgRdCiKvbNxNqGGa9ynUDWxizWQY=;
+        b=jbmfRcNYHvKFxqdqCO3UfePcDDvIindIf9MiLtKI1cPXBzFVmE9ABUiRdGcZ9DAW2B
+         dnyKonk0b5jd+tHkexbh6cF8RvPGOIAPe8ZNjlCXuWiqeI3G8hMXC2o+Cc8Y32IykWdG
+         4JPtMyK9jnPhbRLzZIBwhZjUN9ko7bEyVzp0ce39WxJTG1nHKSV7fFuv1cF3/rxz0R2g
+         ouSbbF6sS5by2ZyepdondIWF+aL8grs0Wy6OnuDfr3tzSmuTFur/cSwgWIW+wasAtPhg
+         pEAkoQuRJIGyGTNhfHNVJd0ussJZa3EuJUH1DYl4jMhjGiCXLd5kc3nFBivxi9O21pj7
+         wX0w==
+X-Gm-Message-State: AOJu0YzMg3s6mR4cV29Em/VpwoC1GHuKjjjXfIdqgkGUSbFwdbUJE6Qc
+	n97dSG0lJbsodA3/vPjFl5egNFGAXXgWNk+mhhIr/58i5OkAZz4ndE7YmJTSiCYPXuJd+qH2opF
+	4T2zqZG+3agW7ZxXNIRFu8XJK3PL34uk=
+X-Gm-Gg: Acq92OEPZVg3+c6mCB7kror1+QDD3jBj6zFrWYQAVKMUNcHk2zB0GJY/pkTCvnn9ce1
+	bF++seIGBICY8OZIQ56KAUvBkSLks94OldllVEFN9f3GiRD6gen/SEt01XK0rL+qWff4MB/C3Z4
+	hOGzf3zOT/f7C80Yi8NkXc4dERM5soXC3JzQnRMVJLGGFFT6Y9WzhzmFCUoHVkt5V1QEsOhu7Nn
+	Eq8U9FOOY7U5C+5SlMKsxTxc6RmESmuYnmiekVz0bg1/tgZ14nn8JmLgHChRetI6keYab2Jd9N8
+	WtysikCpBQLKIeTNEiivwNyGyeNv6QHb0Q==
+X-Received: by 2002:a05:6402:5245:b0:683:5589:4317 with SMTP id
+ 4fb4d7f45d1cf-6889c43f438mr16097714a12.11.1779978559466; Thu, 28 May 2026
+ 07:29:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427234801.2104511-1-puranjay@kernel.org> <20260427234801.2104511-3-puranjay@kernel.org>
- <ahhGbFY_4Dai1NjR@willie-the-truck>
-In-Reply-To: <ahhGbFY_4Dai1NjR@willie-the-truck>
+References: <20260427234801.2104511-1-puranjay@kernel.org> <20260427234801.2104511-4-puranjay@kernel.org>
+ <ahhGVf3RSWuMk0ph@willie-the-truck>
+In-Reply-To: <ahhGVf3RSWuMk0ph@willie-the-truck>
 From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Thu, 28 May 2026 15:23:32 +0100
-X-Gm-Features: AVHnY4LMDXcfZ1LqI3sJaif56UHbwagykFTXGHoWIwt3IHTuM31YvK58EmfPoYk
-Message-ID: <CANk7y0j6JecSuJVZg1phn2tSHrcHPDqqmoaDBy1LdnMo-1qsFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf, arm64: Add JIT support for stack arguments
+Date: Thu, 28 May 2026 15:29:06 +0100
+X-Gm-Features: AVHnY4IxAMzVUf7Klr6RFJQ7T-EB9G9CeanOxKaT9tIv-dLEfZRdJbL6TplpLhw
+Message-ID: <CANk7y0hMXmGuu9SrgXTaTHt5c460d6_PMxOLf_K=k90_9yU0ew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Enable stack argument
+ tests for arm64
 To: Will Deacon <will@kernel.org>
 Cc: bpf@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -95,168 +97,34 @@ Cc: bpf@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>,
 	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
 	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Will,
-
-Thanks for your review.
-These patches have already landed in bpf-next tree as a part of this
-series: https://lore.kernel.org/all/20260513044949.2382019-1-yonghong.song@linux.dev/
-
-I will take all your feedback and send fixes for all the required changes.
-
-> How does that work with kfuncs? I think the PCS means that they will
-> expect to pick the stack arguments starting at [SP+0]. Or are you
-> saying that SP == FP+16 on entry to the callee? It's hard to reconcile
-> that with the ASCII art in build_prologue() because neither "current
-> A64_FP" nor "BPF_FP" point below A64_SP and it's not clear which of them
-> you're referring to when you refer to "FP" on its own.
-
-At entry to kfunc the arguments are starting at [SP+0] like a normal C
-callee function would expect.
-
-The line "callee reads them from [FP+16], [FP+24]" is for a BPF callee
-which always emits a frame record.
-So the caller puts the arguments at SP+0, SP+8, .. and then the callee
-creates the frame record in the prologue which means the first
-argument is at FP+16, ....
-This is just an implementation detail about how the JITed BPF callee
-programs can read stack arguments from FP+16, ... easily.
-
+On Thu, May 28, 2026 at 2:42=E2=80=AFPM Will Deacon <will@kernel.org> wrote=
+:
 >
-> > BPF convention uses fixed offsets from BPF_REG_PARAMS (r11): off=-8 is
-> > always arg 6, off=-16 arg 7, etc. The verifier invalidates all outgoing
-> > stack arg slots after each call, so the compiler must re-store before
-> > every call. This means x5-x7 don't need to be saved on stack.
+> On Mon, Apr 27, 2026 at 04:48:00PM -0700, Puranjay Mohan wrote:
+> > Now that arm64 supports stack arguments, enable the existing stack_arg,
+> > stack_arg_kfunc and verifier_stack_arg tests for __TARGET_ARCH_arm64.
 > >
 > > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 > > ---
-> >  arch/arm64/net/bpf_jit_comp.c | 87 ++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 86 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> > index 085e650662e3..cd8279880795 100644
-> > --- a/arch/arm64/net/bpf_jit_comp.c
-> > +++ b/arch/arm64/net/bpf_jit_comp.c
-> > @@ -86,6 +86,7 @@ struct jit_ctx {
-> >       __le32 *image;
-> >       __le32 *ro_image;
-> >       u32 stack_size;
-> > +     u16 stack_arg_size;
-> >       u64 user_vm_start;
-> >       u64 arena_vm_start;
-> >       bool fp_used;
-> > @@ -533,13 +534,19 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
-> >        *                        |     |
-> >        *                        +-----+ <= (BPF_FP - prog->aux->stack_depth)
-> >        *                        |RSVD | padding
-> > -      * current A64_SP =>      +-----+ <= (BPF_FP - ctx->stack_size)
-> > +      *                        +-----+ <= (BPF_FP - ctx->stack_size)
-> > +      *                        |     |
-> > +      *                        | ... | outgoing stack args (9+, if any)
-> > +      *                        |     |
-> > +      * current A64_SP =>      +-----+
-> >        *                        |     |
-> >        *                        | ... | Function call stack
-> >        *                        |     |
-> >        *                        +-----+
-> >        *                          low
-> >        *
-> > +      * Stack args 6-8 are passed in x5-x7, args 9+ at [SP].
-> > +      * Incoming args 9+ are at [FP + 16], [FP + 24], ...
-> >        */
+> >  tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c | 3 ++-
+> >  tools/testing/selftests/bpf/progs/stack_arg.c                | 3 ++-
+> >  tools/testing/selftests/bpf/progs/stack_arg_kfunc.c          | 3 ++-
+> >  tools/testing/selftests/bpf/progs/stack_arg_precision.c      | 3 ++-
+> >  tools/testing/selftests/bpf/progs/verifier_stack_arg.c       | 3 ++-
+> >  5 files changed, 10 insertions(+), 5 deletions(-)
 >
-> I assume the arguments being passed are all <= 64-bit scalar types? If
-> we ever want to pass anything with > 64-bit alignment or to a varargs
-> function, then the rules for allocation get a little hairy.
+> Do any of these tests pass more than eight parameters? If not, then
+> they're not touching any of the stack stuff you added for arm64.
 
-Yes, right now only 64-bit scalars are supported.
+The test "test_two_callees" has ret +=3D foo2(a, b, c, d, e, a + 5, a +
+6, a + 7, a + 8, a + 9);
+so, 10 arguments are tested.
 
->
-> >       emit_kcfi(is_main_prog ? cfi_bpf_hash : cfi_bpf_subprog_hash, ctx);
-> > @@ -613,6 +620,9 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
-> >       if (ctx->stack_size && !ctx->priv_sp_used)
-> >               emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
-> >
-> > +     if (ctx->stack_arg_size)
-> > +             emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
->
-> How do you ensure that the stack pointer is always 16-byte aligned? We
-> run with SP alignment checking enabled, so you need to take care of that.
+But you are right, I will send a patch to increase all these tests to
+pass 10 arguments so it increases test coverage on arm64.
 
-Down below as you have already found, stack_arg_size is always aligned.
-
->
-> > @@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_insn *insn,
-> >       return 0;
-> >  }
-> >
-> > +static const u8 stack_arg_reg[] = { A64_R(5), A64_R(6), A64_R(7) };
-> > +
-> > +#define NR_STACK_ARG_REGS    ARRAY_SIZE(stack_arg_reg)
-> > +
-> > +static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx)
-> > +{
-> > +     int idx = bpf_off / sizeof(u64) - 1;
-> > +
-> > +     if (idx < NR_STACK_ARG_REGS)
-> > +             emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
-> > +     else
-> > +             emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) + 16), ctx);
-> > +}
->
-> Is it worth asserting that bpf_off >= 8 here or can we rely on that? I
-> struggled to find any details about how bpf passes arguments on the
-> stack (beyond what you describe in the commit message) and grepping for
-> BPF_REG_PARAMS didn't help either.
-
-This and other patches in this set has more information about this:
-https://lore.kernel.org/all/20260513045015.2385013-1-yonghong.song@linux.dev/
-
->
-> > +static void emit_stack_arg_store(u8 src_a64, s16 bpf_off, struct jit_ctx *ctx)
-> > +{
-> > +     int idx = -bpf_off / sizeof(u64) - 1;
-> > +
-> > +     if (idx < NR_STACK_ARG_REGS)
-> > +             emit(A64_MOV(1, stack_arg_reg[idx], src_a64), ctx);
-> > +     else
-> > +             emit(A64_STR64I(src_a64, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u64)), ctx);
-> > +}
-> > +
-> > +static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct jit_ctx *ctx)
-> > +{
-> > +     int idx = -bpf_off / sizeof(u64) - 1;
-> > +
-> > +     emit_a64_mov_i(1, tmp, imm, ctx);
-> > +     if (idx < NR_STACK_ARG_REGS)
-> > +             emit(A64_MOV(1, stack_arg_reg[idx], tmp), ctx);
->
-> nit: You seem to have redundant MOVs here.
-
-Ack, will fix this.
-
->
-> > @@ -2065,6 +2137,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
-> >       ctx.user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
-> >       ctx.arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
-> >
-> > +     if (prog->aux->stack_arg_depth > prog->aux->incoming_stack_arg_depth) {
-> > +             u16 outgoing = prog->aux->stack_arg_depth - prog->aux->incoming_stack_arg_depth;
-> > +             int nr_on_stack = outgoing / sizeof(u64) - NR_STACK_ARG_REGS;
-> > +
-> > +             if (nr_on_stack > 0)
-> > +                     ctx.stack_arg_size = round_up(nr_on_stack * sizeof(u64), 16);
-> > +     }
->
-> ah, that's presumably where you handle the SP alignment. I think a
-> comment would really help folks here... In fact, how does this interact
-> with the same sort of SP adjustment that already exists in build_prologue()?
-> Can we avoid the pointless re-alignment?
-
-Yeah, you are right, if ctx->stack_size + ctx-> stack_arg_size is
-aligned then we don't need to separately align these two, I can move
-this from here and consolidate it in the build_prologue() function and
-also add a comment there.
-
-> Will
+Thanks,
+Puranjay
