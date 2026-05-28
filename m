@@ -1,131 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F4F1891A9;
-	Thu, 28 May 2026 22:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB9E369D44
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 22:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780008016; cv=none; b=cszhA6S0WLJa/nLx1lwEBNYygGKGfGQTPUUyD3oXmf8EjKPVVgjsV/OGTFy+lt2+qLOeZSWAOz5EHKIM8qWz4UWXrynMsYOy+AjqOel2DKRnf3i3gK1TZfQdbsLkhFnm00gYCqpbvEMRiMoam4I1xlwjZK+Wn+ttRCUoJ27cBk8=
+	t=1780008890; cv=none; b=GdsYTwSkdXGDaHOQjhM1z1q4Acl/7ymWDGyvL68DpOtAq02hyjCXTjUx9mcgvtYuIVBT0BtNmgd1BKyKARDokoj7/5++stfjNCjz2t6FYbSAiXcE8Jf6LdlymXKNDFWfztJWOVcAp9LicLP4KVawVg6pfxEP2/VdCzLrgkqbH60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780008016; c=relaxed/simple;
-	bh=XwRyi1PU7um7q9nAfHX11Yt9Lb0ZBSjKdzhoPwM+xeE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=OWmh51P/1uVBZQI+uSQxWb1ISy33IWuUQPqcv3QMr2xj3HZJ+mz/kUhF6N/aUJbaON7oXCpnkgf8ZBexRdM7G9E9mRalB1G7MxUmAsT6hVc9G7CgB8oL34PrRsIbPofv26JRb2nMIccpNuTCdioOs6E0T29UEJFGWLhIYsUo/Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TomYBcye; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780008890; c=relaxed/simple;
+	bh=CkIgU+9p9BfiCkr8KKIac0MYY7FTP/DUbBoGj0dhHrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dy1QH0+d8MmiCEIAfhuVmcpFUy+RwGPaImuY/3E7LCvDn0qlvM9oYgqW/XaHm8sVDQLc2xjJkf7/+ZjoqpByKdG90y/Ssv+ASEYGdOVIA+T37vexstf+yPCMy1fQbdw5lwUFEA/6QX7Lv5YJZLsV4u/bwkxF46eiXIj5usrSnfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=T07ZFvxo; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TomYBcye"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 573D71F000E9;
-	Thu, 28 May 2026 22:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780008015;
-	bh=ZYoIC7tgDvTnn72N4qZ6BOaf6goJiUEBgxODpeKiPNc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TomYBcyexq04Y5cnuhvyWbfq++IQqybsVivOkfApAiWeUFFpmNVZGjPoI0C+3zsAe
-	 YcC4/BMQQmBVRo6eG065tXr8WhBQs3d0hEa8j4dlMH7MpJ8dvO5a2Zge53EeK+/SHM
-	 Sn0gkIAJdWWnRJuLGadnS7wUF3RgE+o6SGr9Qi6A7V5KLGjaamr15XspU0pH9AWcHc
-	 Z2wfc62CWBEbD7MNhBtWrQgccFjR/eDwDs5wBol4eoHm2cgrJQO2+00O6pj8HXYA2Z
-	 b62Qyt9d4wYYHBchJ8g1kBCbCH/jl2WACvshBHUM0sVprS3gmU3QDI1SLXvJQOSmVP
-	 2RZGOCKRIlKFA==
-Content-Type: multipart/mixed; boundary="===============2740736122395765729=="
+	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="T07ZFvxo"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-304da3b4508so104588eec.2
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 15:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1780008889; x=1780613689; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5eVZ4DejMwq9y5/TGGt0Qr2Xm4AzQr3mA1ghIFaC058=;
+        b=T07ZFvxoSRswgnTAKD7m62ZuUCYnDuQvlJx0JfoN+Y9nMCscibM4usYiq8YgqJYne0
+         JbM1DJrmdRzBle7DVEQnwcIdi4alvQyXftpuHvkPumMO4kNkNpjgDACMwe0elhxgWABp
+         jGndyO6MMXvrk0UoPxefZEEg2NRHiKwWZVGKZgNQmMeEZ5GZhFMBYg4EMGHkGEWqBm5R
+         1TC4SRmAFjEMH0yLP0COWZWg1mN33XKrEtp/EvjfH61Pb39ZOinL+BqrLrH0VDVyQP5d
+         nF0OlzgFvawV3JHzqm2LgSp3Ei4wkEf0WBVQo9UFblsX0ki6bKY4Jt73X5lYGbfWNRSJ
+         47hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780008889; x=1780613689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5eVZ4DejMwq9y5/TGGt0Qr2Xm4AzQr3mA1ghIFaC058=;
+        b=gjBqZBBW/aXSw3J8ks0Pd7dk3qP/quIEp2EIZE4EZzgcDDhH3q7KHRpwToRs7uDl+Q
+         tGXNksENJx2ZLpkCDukDtBzhfX2cX/+8bP4KdzJ9lPIA8ta/4O2OADis3o6v4cUApT1L
+         Jk4UGGIGqe/0osgGDkt8cqC7dwY2Dmn86sJfYYzrexFnnz5sML6Dol1f8j/HBBSlsh9w
+         eRFDq/Q/XKgTKbKO152ikI4+gizobDdJHPxkDWLbKnToimR+AwE7mXfrPzRa+nIV4629
+         UbdH6Tae5IvoafWBvB1QiMxNCeT4tQaVmjheRla1jpZnQqoJGbwgaI+bGzld79nHz/p7
+         2KUA==
+X-Gm-Message-State: AOJu0YxMZAQn8KROqGqGURv7Ti8W8QE4GMsLC575Q51nsKBx7JYpPeS7
+	OQUqh818Xs/QuhJSvX8Jmdaf8cbjtmEphwSFSYEXpObSWzzDYuTezcSy0RMIvqUR/u0=
+X-Gm-Gg: Acq92OHF7E+Xim7ZoXAyh1MqcKyAu+H+0tzAlLgZn0OWJujpuYNKBojRCZZI8WeTqY0
+	p35YKr4yfiXdtIGre7qL/9ZqU9bUZdguV82nBUqu3ane/CSjzFiYSatyOJDobQBOsFBVc0xLV5D
+	CdES5RYU9Hw2kxjPA3ciUir6x3ZvcE7DLadpZu7azLXOhAUOe6G9BLhpqW+dr1AJzdddRezOgGn
+	IURbnLZw5oYUecLw6cLtZHWFv7MQ8xZwFf6792VtMrQ3jGJMbdh2Yayh4HyWrJtTesbKIZsqgjp
+	moOfXfHI9vs7eOtkWdTHQ62fNxruIq6CoWqaJkgk2WhJxlYhv43L2KNGcfMnp2aEgnGzXB/uOUY
+	St6BLnSjC/Q/w2LMvT8YbuJrQqYi9QkXqtTSgGCR8vnP5Nap6DNh5SoEuJp85yBK/XYx/LnD8bw
+	/6Yn5vpjxnCaG147bQwCC34xTvMpzbXVvQwro=
+X-Received: by 2002:a05:7301:4186:b0:2ea:5057:a320 with SMTP id 5a478bee46e88-304eb0f1c17mr99701eec.2.1780008888653;
+        Thu, 28 May 2026 15:54:48 -0700 (PDT)
+Received: from m2 ([83.171.251.12])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304eb9975b7sm181947eec.6.2026.05.28.15.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 15:54:48 -0700 (PDT)
+Date: Thu, 28 May 2026 15:54:46 -0700
+From: Jordan Rife <jordan@jrife.io>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev, 
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH bpf-next v7 1/7] net: move netfilter
+ nf_reject_fill_skb_dst to core ipv4
+Message-ID: <46rav7qeseaysu5tlzvkst2ukbqgzj5nyk5joar4pnlokj5e6o@4fh4loahchyi>
+References: <20260526153708.279717-1-mahe.tardy@gmail.com>
+ <20260526153708.279717-2-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cb81617c5327a5e1373d31f249ed8eeb9d5755e4c81d1e07464d2a0a08288e44@mail.kernel.org>
-In-Reply-To: <20260529015855.364704-4-adubey@linux.ibm.com>
-References: <20260529015855.364704-4-adubey@linux.ibm.com>
-Subject: Re: [PATCH v6 3/6] selftest/bpf: Fixing powerpc JIT disassembly failure
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 28 May 2026 22:40:15 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260526153708.279717-2-mahe.tardy@gmail.com>
 
---===============2740736122395765729==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> index 364c557c5115..21e3e3e68c14 100644
-> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-
-[ ... ]
-
-> @@ -216,9 +218,28 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
->  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
->  		goto out;
->
-> +	/*
-> +	 * last 8 bytes contains dummy_trampoline address in JIT
-> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
-> +	 * which can't disassemble to a valid instruction.
-> +	 */
-> +	triple = LLVMGetDefaultTargetTriple();
-> +	if (triple) {
-> +		if (strstr(triple, "powerpc")) {
-> +			if (IS_ENABLED(CONFIG_PPC64))
-> +				trunc_len = 8;
-> +			else
-> +				trunc_len = 4;
-> +		}
-> +		LLVMDisposeMessage(triple);
-> +	}
-
-Can IS_ENABLED(CONFIG_PPC64) ever be true in this file?
-
-This is a userspace selftest (tools/testing/selftests/bpf/jit_disasm_helpers.c).
-IS_ENABLED here resolves to tools/include/linux/kconfig.h:
-
-  #define IS_ENABLED(option) __or(IS_BUILTIN(option), IS_MODULE(option))
-
-which ultimately tests __is_defined(CONFIG_PPC64), i.e. whether CONFIG_PPC64
-is a defined preprocessor macro.
-
-The kernel proper makes CONFIG_* macros visible by force-including
-include/generated/autoconf.h via the build flags. The selftests/bpf build
-does not do that: tools/testing/selftests/bpf/Makefile only adds an include
-search path and -DHAVE_GENHDR, with no -include autoconf.h, and the include
-chain for this file never pulls in generated/autoconf.h.
-
-So CONFIG_PPC64 is undefined and IS_ENABLED(CONFIG_PPC64) is 0 on every
-build, including ppc64/ppc64le. trunc_len then always becomes 4.
-
-On 64-bit powerpc the JITed stub appends an 8-byte dummy trampoline address,
-but only 4 bytes get truncated. The remaining 4 bytes are still handed to the
-disassembler, which can decode them into a seemingly valid instruction, which
-is the failure this change is meant to fix. Would a runtime check on the
-triple, for example strstr(triple, "powerpc64"), be needed to distinguish
-64-bit from 32-bit here, since the 8-vs-4 selection is otherwise compile-time?
-
+On Tue, May 26, 2026 at 03:37:02PM +0000, Mahe Tardy wrote:
+> Move and rename nf_reject_fill_skb_dst from
+> ipv4/netfilter/nf_reject_ipv4 to ip_route_reply_fill_dst in ipv4/route.c
+> so that it can be reused in the following patches by BPF kfuncs.
+> 
+> Netfilter uses nf_ip_route that is almost a transparent wrapper around
+> ip_route_output_key so this patch inlines it.
+> 
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> ---
+>  include/net/route.h                 |  1 +
+>  net/ipv4/netfilter/nf_reject_ipv4.c | 19 ++-----------------
+>  net/ipv4/route.c                    | 15 +++++++++++++++
+>  3 files changed, 18 insertions(+), 17 deletions(-)
+> 
+> diff --git a/include/net/route.h b/include/net/route.h
+> index f90106f383c5..300d292cd9a1 100644
+> --- a/include/net/route.h
+> +++ b/include/net/route.h
+> @@ -173,6 +173,7 @@ struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+>  				    const struct sock *sk);
+>  struct dst_entry *ipv4_blackhole_route(struct net *net,
+>  				       struct dst_entry *dst_orig);
+> +int ip_route_reply_fill_dst(struct sk_buff *skb);
+> 
+>  static inline struct rtable *ip_route_output_key(struct net *net, struct flowi4 *flp)
+>  {
+> diff --git a/net/ipv4/netfilter/nf_reject_ipv4.c b/net/ipv4/netfilter/nf_reject_ipv4.c
+> index fecf6621f679..c1c0724e4d4d 100644
+> --- a/net/ipv4/netfilter/nf_reject_ipv4.c
+> +++ b/net/ipv4/netfilter/nf_reject_ipv4.c
+> @@ -252,21 +252,6 @@ static void nf_reject_ip_tcphdr_put(struct sk_buff *nskb, const struct sk_buff *
+>  	nskb->csum_offset = offsetof(struct tcphdr, check);
+>  }
+> 
+> -static int nf_reject_fill_skb_dst(struct sk_buff *skb_in)
+> -{
+> -	struct dst_entry *dst = NULL;
+> -	struct flowi fl;
+> -
+> -	memset(&fl, 0, sizeof(struct flowi));
+> -	fl.u.ip4.daddr = ip_hdr(skb_in)->saddr;
+> -	nf_ip_route(dev_net(skb_in->dev), &dst, &fl, false);
+> -	if (!dst)
+> -		return -1;
+> -
+> -	skb_dst_set(skb_in, dst);
+> -	return 0;
+> -}
+> -
+>  /* Send RST reply */
+>  void nf_send_reset(struct net *net, struct sock *sk, struct sk_buff *oldskb,
+>  		   int hook)
+> @@ -279,7 +264,7 @@ void nf_send_reset(struct net *net, struct sock *sk, struct sk_buff *oldskb,
+>  	if (!oth)
+>  		return;
+> 
+> -	if (!skb_dst(oldskb) && nf_reject_fill_skb_dst(oldskb) < 0)
+> +	if (!skb_dst(oldskb) && ip_route_reply_fill_dst(oldskb) < 0)
+>  		return;
+> 
+>  	if (skb_rtable(oldskb)->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
+> @@ -352,7 +337,7 @@ void nf_send_unreach(struct sk_buff *skb_in, int code, int hook)
+>  	if (iph->frag_off & htons(IP_OFFSET))
+>  		return;
+> 
+> -	if (!skb_dst(skb_in) && nf_reject_fill_skb_dst(skb_in) < 0)
+> +	if (!skb_dst(skb_in) && ip_route_reply_fill_dst(skb_in) < 0)
+>  		return;
+> 
+>  	if (skb_csum_unnecessary(skb_in) ||
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index bc1296f0ea69..1f031c5ef554 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+> @@ -2945,6 +2945,21 @@ struct rtable *ip_route_output_flow(struct net *net, struct flowi4 *flp4,
+>  }
+>  EXPORT_SYMBOL_GPL(ip_route_output_flow);
+> 
+> +int ip_route_reply_fill_dst(struct sk_buff *skb)
+> +{
+> +	struct rtable *rt;
+> +	struct flowi4 fl4 = {
+> +		.daddr = ip_hdr(skb)->saddr
+> +	};
 > +
->  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
->  		fprintf(text_out, "func #%d:\n", i);
-> -		disasm_one_func(text_out, image + pc, func_lens[i]);
-> +		/* Disabled JIT have zero func_lens, hence underflow */
-> +		__u32 disasm_len = func_lens[i] > trunc_len ?
-> +					func_lens[i] - trunc_len : 0;
-> +		disasm_one_func(text_out, image + pc, disasm_len);
->  		fprintf(text_out, "\n");
->  		pc += func_lens[i];
->  	}
+> +	rt = ip_route_output_key(dev_net(skb->dev), &fl4);
+> +	if (IS_ERR(rt))
+> +		return PTR_ERR(rt);
+> +	skb_dst_set(skb, &rt->dst);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(ip_route_reply_fill_dst);
+> +
+>  /* called with rcu_read_lock held */
+>  static int rt_fill_info(struct net *net, __be32 dst, __be32 src,
+>  			struct rtable *rt, u32 table_id, dscp_t dscp,
+> --
+> 2.34.1
+> 
 
-The commit message describes fixing a powerpc JIT disassembly failure caused
-by the dummy trampoline address emitted at the tail of the long_branch stub.
-That trailing field was introduced by commit d243b62b7bd3 ("powerpc64/bpf:
-Add support for bpf trampolines"). The two sibling commits in this series
-both carry that Fixes: tag, but this selftest-side commit does not.
-
-Should this include:
-
-  Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26605473656
---===============2740736122395765729==--
+Reviewed-by: Jordan Rife <jordan@jrife.io>
