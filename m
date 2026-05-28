@@ -1,302 +1,217 @@
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8DF2F7F1B;
-	Thu, 28 May 2026 07:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1D536BCCA
+	for <bpf@vger.kernel.org>; Thu, 28 May 2026 08:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779954366; cv=none; b=dLAXyv0lPlotqcOXtyhlKbPjJDygDT6AYd8sgu1Q1GC7oHylI3LsgvP0K+Y46BivwD84GuA+avTYWvWyEZX38DWVr3tdOYVEjXE/VlxVPk9Lpv9Jl5NCa7MHR0Ot3IxbygrcVPDfy7n+jiE6S5bCnUhpYlQ1UvifuhBqu1TcP5k=
+	t=1779956849; cv=none; b=ZpP2cSvnuB/A4KCaJs10VEd9y/ItFaOCzU+VmKVH+9b1oZyl5A5XPodXS0m2NpOOKWt61/QOWMtJhu2pqwxzbyolRKdD0vvN/DY0A1LBdaVsPrWcSTaNjJHswRPXmHGQ48e+f0HLVKdy/vrMe3t9VwIFx+ipk9G78qHPNJQjJRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779954366; c=relaxed/simple;
-	bh=N5L6aKv4wJWYgCkWMn+fFVo8QHXS7vN4X3b+VYl5r90=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=WT8j56Lk4QOtSgVgqloakujGf0jlJR3X6gwOuxicPXFHEBDQB87zm3zS78XO0PU78qmTB0wlwErDdqSKCtunDwCzk5WTAzYn8scCRfGvLPtrfqAGuXvMRWf32ksaNK5DRtDRwGD+8W0XO8oQIQDWrMXixC7IzG5X8BSXwPOjQ7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=R6kE6glJ; arc=none smtp.client-ip=130.149.7.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
+	s=arc-20240116; t=1779956849; c=relaxed/simple;
+	bh=R83Zk9MPwHlNVvAL1SqF6psKEEdQEoajydtBTiAfb5g=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=fWT63J97rBuX8bAjmNhtJQ3iTlH3f34vBYmbo33aku8p8VKX8wpW4VWr3V6kOY8n5uREdVnrfqisFgBD+gi6gA/E3NqCnHecCzNUtBD0lbS6qzUTl/hGgFQZ+2hyssz2deKUd4tjX/+YkEn/kPF9HXf/qOQd3w3BrqMeb6vNh8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ErYCF8Mx; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="R6kE6glJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-  d=tu-berlin.de; s=dkim-tub26; t=1779954364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZfyNY1uucZrB283irdiTXLHbacl0PzjBJDzZ20ZxAfk=;
-  b=R6kE6glJNT/MeaOE+E+IeyTZbJ52c7t9BsYu5glXlllUwXANRb6tfPXv
-   LlR225G3x+9Boz9TR8O9El+gx9e1nr+sifhvWsjXxMbzrUTRuanjog3GL
-   6u/IsMFdzLsWU94/UVzqar3My4i0vdrIlfvj5WbeEEWwpFFsdde/jVvLr
-   t07tdeFp4uhVkWaebWzDQnEo0Xmlh+MbLGKYYOz4NvXiuLZfJhrdnPlXs
-   p9yTWrECl32VvMtsPx6tPw/8LPLvrEHGVOYT5lkhbh84e6/AS/27wkxfX
-   6hJQ0yQEOd5nTsWuwR4oAa5tF3SrRiTVHvGRhvILpOlV7/ZDmY+uxDaV0
-   g==;
-X-CSE-ConnectionGUID: MutkEjNRQ1axxcVgohNjBQ==
-X-CSE-MsgGUID: PigEJOYiQAWj7LA1tc1Oog==
-X-IronPort-AV: E=Sophos;i="6.24,173,1774306800"; 
-   d="scan'208";a="47877427"
-Received: from mail.tu-berlin.de ([141.23.12.141])
-  by mailrelay.tu-berlin.de with ESMTP; 28 May 2026 09:46:01 +0200
-Message-ID: <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
-Date: Thu, 28 May 2026 09:46:00 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ErYCF8Mx"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: <hawk@kernel.org>, <netdev@vger.kernel.org>
-CC: Simon Schippers <simon.schippers@tu-dortmund.de>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-In-Reply-To: <20260527135418.1166665-6-hawk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779956842;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cE5vkgdKA1jGW+pTW446oAunyXUpwHm3Ex1DLaNXHJQ=;
+	b=ErYCF8MxdKKJgJ2bsChhRvd83CNLBlJQsWHOx+SWyZogRkcY9bH5Ny8445eDaQIhL/oUFl
+	8W8sKYUdESXAeK/TMvkxvlL5bS/4Tp66yE/RxcSSx2K35RuksXZ33YwXhFflH1sVFt+0sx
+	ngQJtc4bbMoa1pHEVEYyyAFAFjqk5YU=
+Date: Thu, 28 May 2026 08:27:16 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "teawater" <hui.zhu@linux.dev>
+Message-ID: <1b58d56976202f26818d31dbd0da2ecb2e2460f5@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC PATCH bpf-next v7 00/11] mm: BPF struct_ops for dynamic
+ memory protection and async reclaim
+To: "Michal Hocko" <mhocko@suse.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Roman
+ Gushchin" <roman.gushchin@linux.dev>, "Shakeel Butt"
+ <shakeel.butt@linux.dev>, "Muchun Song" <muchun.song@linux.dev>, "JP
+ Kobryn" <inwardvessel@gmail.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
+ davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
+ Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
+ Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
+ "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
+ <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
+ Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
+ <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Jeff Xu"
+ <jeffxu@chromium.org>, mkoutny@suse.com, "Jan Hendrik Farr"
+ <kernel@jfarr.cc>, "Christian Brauner" <brauner@kernel.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Brian Gerst" <brgerst@gmail.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>, "Willem de Bruijn"
+ <willemb@google.com>, "Jason Xing" <kerneljasonxing@gmail.com>, "Paul
+ Chaignon" <paul.chaignon@gmail.com>, "Chen Ridong"
+ <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
+ "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ geliang@kernel.org, baohua@kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
+In-Reply-To: <ahavmbcdXDX5gNup@tiehlicka>
+References: <cover.1779760876.git.zhuhui@kylinos.cn>
+ <ahavmbcdXDX5gNup@tiehlicka>
+X-Migadu-Flow: FLOW_OUT
 
-On 5/27/26 3:54 PM, hawk@kernel.org wrote:
-> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->
-> Per-packet BQL completion forces DQL to converge on limit=2, causing
-> excessive NAPI scheduling overhead and qdisc requeues.
->
-> Accumulate BQL completions and flush them when a configurable time
-> threshold is exceeded, letting DQL discover a limit that bounds actual
-> queuing delay to the configured interval. Coalescing state persists
-> across NAPI polls in struct veth_rq so completions can accumulate
-> beyond a single budget=64 cycle.
->
-> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
-> setting tx-usecs to 0 disables coalescing and falls back to per-packet
-> completion.
->
->    ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->    ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->
-> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
-> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
-> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+>=20
+>=20On Tue 26-05-26 10:20:00, Hui Zhu wrote:
+>=20
 
-Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
+Hi=20Michal,
 
-> ---
->   drivers/net/veth.c | 100 ++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 98 insertions(+), 2 deletions(-)
+> >=20
+>=20> From: Hui Zhu <zhuhui@kylinos.cn>
+> >=20=20
+>=20>  Overview:
+> >  This series introduces BPF struct_ops support for the memory control=
+ler,
+> >  enabling userspace BPF programs to implement custom, dynamic memory
+> >  management policies per cgroup. The feature allows BPF programs to h=
+ook
+> >  into the core reclaim and charge paths without requiring kernel
+> >  modifications, providing a flexible alternative to static knobs such=
+ as
+> >  memory.low and memory.min.
+> >=20=20
+>=20>  The series enables two complementary use cases.
+> >=20=20
+>=20>  Dynamic memory protection: static memory protection thresholds
+> >  (memory.low, memory.min) are poor fits for workloads whose actual me=
+mory
+> >  activity varies over time. A high-priority cgroup holding a large wo=
+rking
+> >  set but temporarily idle will still suppress reclaim on its siblings=
+,
+> >  wasting available memory. A BPF-driven approach can observe real wor=
+kload
+> >  activity -- page faults, charge/uncharge events -- and activate or
+> >  withdraw protection dynamically.
+> >=20
+>=20Why the same cannot be achieved by dynamically changing protection?
+
+Dynamically adjusting memory.low or memory.min is indeed an
+option, but it has a practical drawback: in many production
+environments these values are managed and pushed down by a
+cluster-level orchestrator (e.g. a container runtime or resource
+manager). Modifying them from a separate BPF-based agent risks
+conflicts with the orchestrator's own control loop and makes the
+system harder to reason about.
+
+Beyond that, the intended use case requires rapid, short-lived
+adjustments -- reacting to bursts of page faults or PSI spikes
+and reverting just as quickly once the pressure subsides. Mutating
+the static knobs for that purpose feels like the wrong abstraction:
+the knobs express policy intent, while what we need is a transient
+override that sits on top of that policy.
+
+The hooks are therefore not meant to replace the existing limits,
+but to complement them: the orchestrator continues to own
+memory.low / memory.min, while a BPF program makes small, brief
+corrections in response to observed runtime behavior.
+
+>=20
+>=20>=20
+>=20> The test results at the end of this
+> >  letter quantify the difference: in a scenario where the high-priorit=
+y
+> >  cgroup is idle, the BPF-controlled low-priority cgroup achieves roug=
+hly
+> >  37x higher throughput than with static memory.low.
+> >=20=20
+>=20>  Asynchronous proactive reclaim: the memcg_charged and memcg_unchar=
+ged
+> >  hooks, combined with the BPF workqueue mechanism and the new
+> >  bpf_try_to_free_mem_cgroup_pages() kfunc, enable BPF programs to per=
+form
+> >  proactive background reclaim without blocking the charge path. The
+> >  pattern works as follows: the memcg_charged callback tracks accumula=
+ted
+> >  memory usage; when usage crosses a configurable threshold, it enqueu=
+es an
+> >  asynchronous work item via bpf_wq_start() and returns immediately wi=
+thout
+> >  throttling the charging task. The workqueue callback then invokes
+> >  bpf_try_to_free_mem_cgroup_pages() to reclaim pages from the target
+> >  cgroup; if usage remains elevated after reclaim, the callback re-enq=
+ueues
+> >  itself to continue. This allows a BPF program to keep a cgroup's
+> >  footprint below its hard limit (memory.max) entirely in the backgrou=
+nd,
+> >  avoiding the OOM killer or direct-reclaim stalls that would otherwis=
+e
+> >  occur.
+> >=20
+>=20How do you account the overall work done to the specific memcg as the
+> large part of the reclaim is done from WQ context?
+
+One approach to attribute the reclaim work accurately to the target
+memcg would be to expose a kfunc that creates a kthread_worker and
+attaches it to a specific cgroup. Reclaim work enqueued to that
+worker would then run in a context already associated with the
+target memcg, so the accounting would naturally fall to the right
+cgroup without any extra bookkeeping.
+
+The tradeoff is additional complexity: creating a per-cgroup worker
+introduces resource overhead and lifecycle management concerns
+(e.g. when should the worker be torn down). Whether that cost is
+justified depends on how strictly the caller needs the reclaim to
+be attributed.
+
+That said, I am not certain this is the right direction yet and
+would welcome your thoughts on whether this is worth pursuing, or
+whether there is a simpler mechanism I am overlooking.
+
+
+> Also when introducing a BPF hook please focus on describing why existin=
+g
+> interfaces fail to achieve what you need. For the async reclaim why it
+> is not practical or feasible to use userspace driven memory reclaim.
+
+
+Noted, and thank you for both points. In the next revision I will
+add a dedicated section to each hook's description covering:
+
+Why existing interfaces are insufficient. For the async reclaim
+case specifically, I will explain why userspace-driven reclaim
+(e.g. memory.reclaim, cgroup-aware madvise, or a dedicated
+reclaim daemon) is not practical: userspace cannot react at the
+granularity or latency required, and the round-trip through a
+syscall or procfs write introduces overhead that defeats the
+purpose of proactive reclaim.
+What gap the new hook fills that cannot be closed by tuning
+existing knobs.
+
+Best,
+Hui
+
+
+> --=20
+>=20Michal Hocko
+> SUSE Labs
 >
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index d5675d9d5236..743d17b37223 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -28,6 +28,7 @@
->   #include <linux/bpf_trace.h>
->   #include <linux/net_tstamp.h>
->   #include <linux/skbuff_ref.h>
-> +#include <linux/sched/clock.h>
->   #include <net/page_pool/helpers.h>
->   
->   #define DRV_NAME	"veth"
-> @@ -44,6 +45,8 @@
->   #define VETH_XDP_TX_BULK_SIZE	16
->   #define VETH_XDP_BATCH		16
->   
-> +#define VETH_BQL_COAL_TX_USECS	100 /* default tx-usecs for BQL batching */
-> +
->   struct veth_stats {
->   	u64	rx_drops;
->   	/* xdp */
-> @@ -62,6 +65,11 @@ struct veth_rq_stats {
->   	struct u64_stats_sync	syncp;
->   };
->   
-> +struct veth_bql_state {
-> +	u64	time;	/* sched_clock() when current coalescing window started */
-> +	int	n_bql;	/* BQL completions batched in the current window */
-> +};
-> +
->   struct veth_rq {
->   	struct napi_struct	xdp_napi;
->   	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
-> @@ -69,6 +77,7 @@ struct veth_rq {
->   	struct bpf_prog __rcu	*xdp_prog;
->   	struct xdp_mem_info	xdp_mem;
->   	struct veth_rq_stats	stats;
-> +	struct veth_bql_state	bql_state;
->   	bool			rx_notify_masked;
->   	struct ptr_ring		xdp_ring;
->   	struct xdp_rxq_info	xdp_rxq;
-> @@ -81,6 +90,7 @@ struct veth_priv {
->   	struct bpf_prog		*_xdp_prog;
->   	struct veth_rq		*rq;
->   	unsigned int		requested_headroom;
-> +	unsigned int		tx_coal_usecs;	/* BQL completion coalescing */
->   };
->   
->   struct veth_xdp_tx_bq {
-> @@ -265,7 +275,30 @@ static void veth_get_channels(struct net_device *dev,
->   static int veth_set_channels(struct net_device *dev,
->   			     struct ethtool_channels *ch);
->   
-> +static int veth_get_coalesce(struct net_device *dev,
-> +			     struct ethtool_coalesce *ec,
-> +			     struct kernel_ethtool_coalesce *kernel_coal,
-> +			     struct netlink_ext_ack *extack)
-> +{
-> +	struct veth_priv *priv = netdev_priv(dev);
-> +
-> +	ec->tx_coalesce_usecs = priv->tx_coal_usecs;
-> +	return 0;
-> +}
-> +
-> +static int veth_set_coalesce(struct net_device *dev,
-> +			     struct ethtool_coalesce *ec,
-> +			     struct kernel_ethtool_coalesce *kernel_coal,
-> +			     struct netlink_ext_ack *extack)
-> +{
-> +	struct veth_priv *priv = netdev_priv(dev);
-> +
-> +	priv->tx_coal_usecs = ec->tx_coalesce_usecs;
-> +	return 0;
-> +}
-> +
->   static const struct ethtool_ops veth_ethtool_ops = {
-> +	.supported_coalesce_params = ETHTOOL_COALESCE_TX_USECS,
->   	.get_drvinfo		= veth_get_drvinfo,
->   	.get_link		= ethtool_op_get_link,
->   	.get_strings		= veth_get_strings,
-> @@ -275,6 +308,8 @@ static const struct ethtool_ops veth_ethtool_ops = {
->   	.get_ts_info		= ethtool_op_get_ts_info,
->   	.get_channels		= veth_get_channels,
->   	.set_channels		= veth_set_channels,
-> +	.get_coalesce		= veth_get_coalesce,
-> +	.set_coalesce		= veth_set_coalesce,
->   };
->   
->   /* general routines */
-> @@ -937,13 +972,45 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->   	return NULL;
->   }
->   
-> +static void veth_bql_complete(struct veth_bql_state *state,
-> +			      struct netdev_queue *peer_txq)
-> +{
-> +	netdev_tx_completed_queue(peer_txq, state->n_bql,
-> +				  state->n_bql * VETH_BQL_UNIT);
-> +	state->n_bql = 0;
-> +	state->time = sched_clock();
-> +}
-> +
-> +static void veth_bql_maybe_complete(struct veth_bql_state *state,
-> +				    struct netdev_queue *peer_txq,
-> +				    u64 coalescing_ns)
-> +{
-> +	if (state->n_bql && sched_clock() >= state->time + coalescing_ns)
-> +		veth_bql_complete(state, peer_txq);
-> +}
-> +
->   static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->   			struct veth_xdp_tx_bq *bq,
->   			struct veth_stats *stats,
->   			struct netdev_queue *peer_txq)
->   {
-> +	struct veth_bql_state *state = &rq->bql_state;
->   	int i, done = 0, n_xdpf = 0;
->   	void *xdpf[VETH_XDP_BATCH];
-> +	struct veth_priv *priv;
-> +	u64 bql_flush_ns;
-> +
-> +	priv = netdev_priv(rq->dev);
-> +	bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
-> +
-> +	/* Clamp stored timestamp in case we migrated to a CPU with a behind
-> +	 * sched_clock(); prevents the deadline from never firing.
-> +	 */
-> +	state->time = min(state->time, sched_clock());
-> +
-> +	/* Flush completions that timed out since the previous NAPI poll. */
-> +	if (peer_txq && bql_flush_ns)
-> +		veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
->   
->   	for (i = 0; i < budget; i++) {
->   		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
-> @@ -972,8 +1039,16 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->   			struct sk_buff *skb = veth_ptr_to_skb(ptr);
->   
->   			stats->xdp_bytes += skb->len;
-> -			if (peer_txq && bql_charged)
-> -				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
-> +			if (peer_txq && bql_charged) {
-> +				if (!bql_flush_ns) {
-> +					netdev_tx_completed_queue(peer_txq, 1,
-> +								  VETH_BQL_UNIT);
-> +				} else {
-> +					state->n_bql++;
-> +					veth_bql_maybe_complete(state, peer_txq,
-> +								bql_flush_ns);
-> +				}
-> +			}
->   
->   			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
->   			if (skb) {
-> @@ -989,6 +1064,18 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->   	if (n_xdpf)
->   		veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf, bq, stats);
->   
-> +	/* If the ring is now empty and the peer TX queue is stalled by DQL
-> +	 * backpressure, release completions immediately to unblock it.
-> +	 */
-> +	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
-> +		/* Pairs with smp_wmb() in __ptr_ring_produce(); ensure ring
-> +		 * emptiness is observed before reading peer_txq->state.
-> +		 */
-> +		smp_rmb();
-> +		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
-> +			veth_bql_complete(state, peer_txq);
-> +	}
-> +
->   	u64_stats_update_begin(&rq->stats.syncp);
->   	rq->stats.vs.xdp_redirect += stats->xdp_redirect;
->   	rq->stats.vs.xdp_bytes += stats->xdp_bytes;
-> @@ -1093,6 +1180,9 @@ static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
->   
->   		napi_enable(&rq->xdp_napi);
->   		rcu_assign_pointer(priv->rq[i].napi, &priv->rq[i].xdp_napi);
-> +
-> +		rq->bql_state.time = sched_clock();
-> +		rq->bql_state.n_bql = 0;
->   	}
->   
->   	return 0;
-> @@ -1134,6 +1224,8 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
->   		struct veth_rq *rq = &priv->rq[i];
->   
->   		rq->rx_notify_masked = false;
-> +		rq->bql_state.n_bql = 0;
-> +		rq->bql_state.time = 0;
->   		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
->   	}
->   
-> @@ -1813,6 +1905,8 @@ static const struct xdp_metadata_ops veth_xdp_metadata_ops = {
->   
->   static void veth_setup(struct net_device *dev)
->   {
-> +	struct veth_priv *priv = netdev_priv(dev);
-> +
->   	ether_setup(dev);
->   
->   	dev->priv_flags &= ~IFF_TX_SKB_SHARING;
-> @@ -1838,6 +1932,8 @@ static void veth_setup(struct net_device *dev)
->   	dev->max_mtu = ETH_MAX_MTU;
->   	dev->watchdog_timeo = msecs_to_jiffies(16000);
->   
-> +	priv->tx_coal_usecs = VETH_BQL_COAL_TX_USECS;
-> +
->   	dev->hw_features = VETH_FEATURES;
->   	dev->hw_enc_features = VETH_FEATURES;
->   	dev->mpls_features = NETIF_F_HW_CSUM | NETIF_F_GSO_SOFTWARE;
