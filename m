@@ -1,50 +1,42 @@
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A0735F5E5;
-	Fri, 29 May 2026 03:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB7F367F5F;
+	Fri, 29 May 2026 03:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780024591; cv=none; b=bwyghUIkFJ+/s09d3hNHpvk98cV9KFN1jEZKhR5Wv0/BrchANHHuDGrcCEoKtCt0UUHKd7FCjqUaWbDgSW38pHeHylBCl9MYMPoUKemfIPx9uuu4uwleIWz17GcdhQ5FVB0d3OFpSTJ5Wr4LmpmTKI8gZgXLot8IM2DbzlbqG5w=
+	t=1780024659; cv=none; b=dF6MBwP+VN8j1SDI1U9rDyvc/7/F5HuKAwnr1UeVaM+Gjcu2LZQoyacjAhiw5BcKs+dUKEGVEUXF/EZ6voq0LmLUzUSBbmOcRHkh9JxM1OD/YIdFu9+qYTrtfD4IVHcsm1ihoCskD3Bd89GR2xbyeGTbvzPuARTT2p2gqkpVuY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780024591; c=relaxed/simple;
-	bh=yU+ab5X7M+Ppyb0GFmtgBCV9j8tOHNkEuYHDYaMjSOs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g6Q5fMichJyeNQFL32hHACU7dVtLxQMNX1ar10P9cCg3mINm0tJmfZI+JjGGYIGSzDlWQIbr2wAJCoBBMZs9TBctUKBd9g9rrVLaxlQr+hWcvQ4iBhwz9d2K69QFzWlCoaZAhBZbkAw+ukypCpkNJ63wqF1ayUxNLJvLG/IU3Yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=P4sKsToa; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1780024659; c=relaxed/simple;
+	bh=xQ2OkSs8riTHwHt2or05rVMp1SXSKQg2BtIKfLkEWWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s7ixPvuzmIsITnu0Kp1HAWZyk8T+anWC9iTYAIBECI7GkgUI+CxtRM5E1VNtSOOdE/mWfLVNmipC3c0uS0jLkKnaaEujvFTqxNo+aZUtBDJQ22o6i6D3vQrnw5M75VvFaRcYd9pEHBcb2Kd1tgYDT6067Rb9uAn+aQeW5FVYwNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pNH33B5v; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="P4sKsToa"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 40433aa4a;
-	Fri, 29 May 2026 11:10:57 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: martin.lau@linux.dev
-Cc: emil@etsalapatis.com,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pNH33B5v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=pB
+	UYS5/1hD1njZ+SRg/h+C/eOlx8ep4fSlGa9e+pEQA=; b=pNH33B5vVmXFFWLeIE
+	wvWUlh41w4t8Y1IlRGhw8ZSRzyBmFt4kk6r5TFkW+lSRV7NflHvlAdWxX7Yj0xku
+	0j/F2cH6Ml9MT/yf34aIrLoM2DxIOfLips8mWBnTgfHUk/nUJo++dWkisDzyyiZt
+	qOtmzIe/13tn3WXDnvibO3gkM=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3vwD_BBlq5RfOAA--.34835S2;
+	Fri, 29 May 2026 11:16:15 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	joel.granados@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	Dawei Feng <dawei.feng@seu.edu.cn>,
-	stable@vger.kernel.org,
-	Zilin Guan <zilin@seu.edu.cn>
-Subject: [PATCH v2 3/3] bpf: cgroup: restore sysctl new-value replacement
-Date: Fri, 29 May 2026 11:10:26 +0800
-Message-Id: <20260529031026.2716641-4-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260529031026.2716641-1-dawei.feng@seu.edu.cn>
-References: <20260529031026.2716641-1-dawei.feng@seu.edu.cn>
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH] selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
+Date: Fri, 29 May 2026 11:16:04 +0800
+Message-ID: <20260529031604.888137-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,56 +44,171 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e71b6aad503a2kunm60a0b1e7a4157
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkZHkgYVktIHh0ZH0tISRpIHlYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktJSE
-	5DQ1VKS0tVS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=P4sKsToaMiC0Rd6eLwWFUeIFIrUBtznbo2mkJXf/nq2zpfXdF6OhDjpc5wm+lHLGJxbljHd4hU/J4d3bcHs1e9P3S52tAVezNM0eh2A4zteamiKRKQaw6EcKXbh/Yh95XIhpqtv2HYgND2kUUAv2PAFk3XThX7sM9uovgSQEtcc=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=Q8ygCLpd4HOGNVC/mOD+BveGduwQFjiEob+c3aUyCPs=;
-	h=date:mime-version:subject:message-id:from;
+X-CM-TRANSID:_____wD3vwD_BBlq5RfOAA--.34835S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Ar4rJFWxtF43ur4rJFWxXrb_yoWxWr4Upr
+	1vga9rtw1UJFWUJr40qay7ur9YkF4jyF1UKFnIvw1UZFsFvrs5tF1qv34vywnIqrW5Gr9I
+	v3WY9rn7ZFyruF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrkucUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQAi32oZBQC6VAAA3k
 
-Commit 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
-helpers") changed the success return value to 0, but failed to update the
-corresponding check in __cgroup_bpf_run_filter_sysctl(). Since
-bpf_prog_run_array_cg() now returns 0 on success, the legacy ret == 1
-condition is never satisfied. As a result, the modified value is ignored,
-and bpf_sysctl_set_new_value() fails to replace the write buffer.
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Fix this by checking for a return value of 0 instead, so cgroup/sysctl
-programs can correctly replace the pending sysctl buffer.
+The bpf_object__prepare() function internally calls bpf_object__probe_loading(),
+which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify the BPF
+environment. Without these permissions in the token, the probe fails and causes
+the tests to fail.
 
-This bug was discovered during a manual code review. Tested via a
-cgroup/sysctl BPF reproducer overriding writes to a target sysctl.
-Pre-fix, bpf_sysctl_set_new_value("foo") was silently ignored: the write
-returned 8192 and the value remained "600". Post-fix, the BPF replacement
-buffer properly propagates: the write returns 3 and the value updates to
-"foo".
+Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permissions:
+- obj_priv_map
+- obj_priv_prog
+- obj_priv_freplace_prog
+- obj_priv_freplace_prog_fail
+- obj_priv_btf_fail
+- obj_priv_btf_success
+- obj_priv_implicit_token
+- obj_priv_implicit_token_envvar
+- obj_priv_prog_kallsyms
 
-Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
-Cc: stable@vger.kernel.org
-
-Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
- kernel/bpf/cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/bpf/prog_tests/token.c  | 68 ++++++++++++++-----
+ 1 file changed, 51 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index a0b5f8cd8b10..3f06e2270f5c 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1935,7 +1935,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+index f2f5d36ae00a..25a76e09a3c9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -1168,8 +1168,13 @@ void serial_test_token(void)
+ 	}
+ 	if (test__start_subtest("obj_priv_map")) {
+ 		struct bpffs_opts opts = {
+-			.cmds = bit(BPF_MAP_CREATE),
++			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
++			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+ 			.maps = bit(BPF_MAP_TYPE_QUEUE),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
++			.attachs = ~0ULL,
+ 		};
  
- 	kfree(ctx.cur_val);
+ 		subtest_userns(&opts, userns_obj_priv_map);
+@@ -1177,7 +1182,10 @@ void serial_test_token(void)
+ 	if (test__start_subtest("obj_priv_prog")) {
+ 		struct bpffs_opts opts = {
+ 			.cmds = bit(BPF_PROG_LOAD),
+-			.progs = bit(BPF_PROG_TYPE_XDP),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_XDP) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
  
--	if (ret == 1 && ctx.new_updated) {
-+	if (!ret && ctx.new_updated) {
- 		kvfree(*buf);
- 		*buf = ctx.new_val;
- 		*pcount = ctx.new_len;
+@@ -1185,16 +1193,24 @@ void serial_test_token(void)
+ 	}
+ 	if (test__start_subtest("obj_priv_freplace_prog")) {
+ 		struct bpffs_opts opts = {
+-			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
+-			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
++					bit(BPF_BTF_GET_FD_BY_ID),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 		subtest_userns(&opts, userns_obj_priv_freplace_prog);
+ 	}
+ 	if (test__start_subtest("obj_priv_freplace_prog_fail")) {
+ 		struct bpffs_opts opts = {
+-			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
+-			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
++					bit(BPF_BTF_GET_FD_BY_ID),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 		subtest_userns(&opts, userns_obj_priv_freplace_prog_fail);
+@@ -1204,7 +1220,10 @@ void serial_test_token(void)
+ 			/* disallow BTF loading */
+ 			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+ 			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
+-			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 
+@@ -1213,9 +1232,13 @@ void serial_test_token(void)
+ 	if (test__start_subtest("obj_priv_btf_success")) {
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+-			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
+-			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
++					bit(BPF_PROG_LOAD),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 
+@@ -1224,9 +1247,13 @@ void serial_test_token(void)
+ 	if (test__start_subtest("obj_priv_implicit_token")) {
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+-			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
+-			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
++					bit(BPF_PROG_LOAD),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 
+@@ -1235,9 +1262,13 @@ void serial_test_token(void)
+ 	if (test__start_subtest("obj_priv_implicit_token_envvar")) {
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+-			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
+-			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
++					bit(BPF_PROG_LOAD),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 
+@@ -1257,7 +1288,10 @@ void serial_test_token(void)
+ 		char kptr_restrict_orig[32] = {};
+ 		struct bpffs_opts opts = {
+ 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
+-			.progs = bit(BPF_PROG_TYPE_XDP),
++			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
++			.progs = bit(BPF_PROG_TYPE_XDP) |
++					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
++					 bit(BPF_PROG_TYPE_TRACEPOINT),
+ 			.attachs = ~0ULL,
+ 		};
+ 
 -- 
-2.34.1
+2.54.0
 
