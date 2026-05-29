@@ -1,237 +1,271 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE4717745
-	for <bpf@vger.kernel.org>; Thu, 28 May 2026 21:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780005480; cv=pass; b=CgXYFN6UXKdZPxVbBgPatRaUltRBstZoPG7cYaEVP2tLNccHy7Qk4KibFcTA/hKLob5MinO12se7tgU73zD6WoM2n5zYabAevRPKnN9WgNrTeLS28jrd+B79GuSJJgRW4Wdjq6Te9QahkNZu+3Iy7Wv21awUinguQqTWrzxSwU4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780005480; c=relaxed/simple;
-	bh=cMnxzNRc/nYnU8pjDnCYUPvvm8NodtdVC/kYrBNsTzg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GxP6WSDh8PAicTgdUB3LrfibKs31gtcBND3s73BQJ8BABNi7j0y+3tz0fBANnE7BabpGSUK1sHYB/cnDXsxVqv1WlYM/S69xP+UkUGVgHItXJzdwTL3xaxbJdaGW7bAdTV/kO5FzUyM7qqKEW4RtcOc7q0dSviOZtm5DSz5JLMc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lV42txrE; arc=pass smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE80F34041D;
+	Thu, 28 May 2026 21:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780005554; cv=none; b=gy0G8CoFYX4BqlJHEPeLQy3Vz/xMMZvqXCgsMmXfIUNdyoEsfi8FY0JPPgxRJYTP/eh3he+5MHucl5PWboQvFP1LZz47Yr3LKPpFh0B0JY7zl05uUfgbWjznMtcYVeaWMteYXwtenExygaGV1kpw741GOEmMDUpzHEdSzKc1G50=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780005554; c=relaxed/simple;
+	bh=iU7HsMv5w0HkCtbDvRoPpikmB7Zo8/Pa2M/JD+wh4yM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lv5v9gJ79NynXi3j6VfBy4yXM8YyGmDMEfjRR9YdHDaMmA80lwLZQ6vK1/JEdksUANmih4O/QOYdBOuETb+xmtPcA2NpQpCXHf02ZorgFj9IboWlgd/FwWn8pcfiY7HLbrA8aFrXoty5eKKOXGs+eDRb+gZbMzA4GeckNMd8b2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=muN09fzu; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lV42txrE"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36ab8816a35so3118855a91.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 14:57:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780005478; cv=none;
-        d=google.com; s=arc-20240605;
-        b=boZKpezpi35EbM8Npwc/1MBsGCpP0sBgOVEalIH34pMR4o9VTHO8xDygOf9KQNC9Qa
-         IE0O330NH6MkjoM5GB+F9bFs1dfWweb65freD8y0E3NYLI6L2TY4FbnBaDa/t0+3fkSL
-         aIhcD2nkXc/rbsBXLfTg/ouGSlFA/h7GetgzaFpoFrmGa/YFNq5w9y2UTAlkIdkaMKJC
-         7ydRySmpsfgxrih3sYFfxFcyBYpQW9vunRHRH/LnIG2E2rboHmXYk4n/MQRoSd3Vavc4
-         8zrI980Hre0i0iGrqkHv1hjmkGzLNt30zMMVPtgwoSG63Vae4E+tNzxtM4TFPgy0fqW3
-         IMUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FQ7atUyzA4JmqwVlklkZp5CptN+KhgqM9R0scGmVrtk=;
-        fh=v5EywopDK2SLANr5ntZ12Q7SycREVsb1aUH7sVe3NZ4=;
-        b=C83Gz3A5rCfjISwQ/Fab27bCJeq7w4YiaXly0tO82+pHZtMLwzDE2o6cSDPp2uAfnR
-         UNuE9k6GJq2aEb8rVW90OGszSs5OMV9c6pfFpGNrk705AeOGd7uaSsN3GWKHZEBQOYDV
-         /0KbvLxQqhC6CX/wIYzurEeaWHO4eZCCy5IqEOD0gKDh4rsQGpyPnrP/B9jk3oDTZz/t
-         nj301JFnTThJV6ReelZw8fgeyb3wiYC67QtfMmzkANyznCmggdOqoPiWSHPB/hgXHo/V
-         yrzSYSCpBEeGIq36JUX9vDs5A1NojJwbCaIfQugSlmWM68DYu+9XKJNu5CfU8ziupga8
-         8bdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780005478; x=1780610278; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQ7atUyzA4JmqwVlklkZp5CptN+KhgqM9R0scGmVrtk=;
-        b=lV42txrEXTGQdhKc9NW1ul1AYKKFgiXpFFn/Q+K1joC0eauXJ3HxAPqURoapDGeqNg
-         3Fshxy65pVbPreVurpK9NkexwTam8Dxn98w6ctblNJrXDiyEHn5r2WmensEgAffsr8A8
-         u/5z4j/fF7l4tHCH4c/qvTcGafllnv5Wmc2eQL+3VbNorl44xXW/VeO20/z8O4Fvrh2u
-         B5lC+3naTqvhhn1NvElL9pSCP3fMM70nOx3JYp9DtX/wnE83xiwqow15GHfeWxdhcD/a
-         pAOoT4Rz8vxF5ZhanaRCH1WotRKBZjZZh8GAkxbIdazGI5TTSiPMe1UjpFA7at1ahZOe
-         uoLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780005478; x=1780610278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FQ7atUyzA4JmqwVlklkZp5CptN+KhgqM9R0scGmVrtk=;
-        b=ZqUrtmOgAPUjE83RsbygR7QLqX6ybys6haUK0Y9B6+HYZ0r73e0HTyfw2KpTbKO61Z
-         m+QdwxA1YToAWN2w7o8cAmko3aEhvpZTcBO49X0AhgEgwbzGj5RYLwLMg4eYiOVR4NPO
-         AEJhalSic5X7aE8xdwn+8FfERAOsBmr5xtbsPiBfP5csdVZDcxfeWAeHUfknP63pgB3k
-         MkEvrpM9SU6fC3pJq1NH2zUegWwhmiNExJ0lb2jPDsXedC/3gW2nK7uto3PJAulLnjNI
-         auHBIJjsiGb5EcHDCSae8lRp1uowNRmJYd7rQd1W9S+AqM1UTKZaoaaewnrxMFXPW6k5
-         Trqw==
-X-Forwarded-Encrypted: i=1; AFNElJ+mFbm2PJ5/p29qhHWr1yrRY/ww0f1tDdSJafnEeRHEBOtYzMmoQJ21UCP7+ureshBJwck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzFj2J0GRJw3yRpAaaILgkom3pCjRBO/MXR+v4J4cmrsV5zeVR
-	GOdhuv7/KGvjePU6lyZDi/5VReOcIBD99i68TS//ovzzuIk/IIj8map9azlSwaqwoXFDH1UC6sn
-	jaEbS8umlqb4vK/h+Gzo+xjoXEbmUvMA=
-X-Gm-Gg: Acq92OHYT8PA1DW3o0sMSeb0RoMtt3JFvSZrj+k5YrTyayksk6WPijEi3lQNEXszCtQ
-	A69lPHwEmY2S/Js2t30bf8goPr/oMsqHFSIYB5PnsLJojlpzCJdxW0camw2nTvd93+aQepi9tky
-	Da/Iolll27WdUrz7j2BwDpfBqq34sxiSOOclHS9+7l+w5ne74/L1xObGRf5xxhAibLw4ZQ6tZkm
-	ypAZe/D+ACJzQpKffm5EqUlScnFWGN9ZuhIRHKs8y9oqEntH0uG13fm1QYkPTkt3j9LcjM7g+si
-	ORJc2HXp+7+F3ZucGnfl8AiBSWQ+BXwFpw==
-X-Received: by 2002:a17:90b:3b92:b0:368:147b:536a with SMTP id
- 98e67ed59e1d1-36bbcd9183fmr374825a91.14.1780005478146; Thu, 28 May 2026
- 14:57:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="muN09fzu"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SLlhdl1467773;
+	Thu, 28 May 2026 21:58:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=++q3RGzINx8HDkdQ2Ng7HiyqLXX4BENt/miRVWBiY
+	ZU=; b=muN09fzuM8a80pAOenPCgkPhEOmAucOL4yvfAiJcyvedMvfY7bV/NxNjT
+	XsGa1He2M2x4aAYlzaN/nnKgYJ2E9g0YOuOHjEW73/sMsMZ4rVDK1OdxPCqDRxya
+	kQwK3k++DiCvELug/MOX6VQTU0EpqWweHfCYKWSImPDXZR92iQOnJLC0n38D117k
+	jFk+0mltp22q9SADwHN7KZ+LkS6ZVpvU8qv0VxQxBrwti8X/r/ON52GrAFkLFe/h
+	wB7rs9gGt3fT1/8BDBmTXaogEdkyGdfYYavNXpHDBFgnUn/NE5HZXaRYlhvPyDhd
+	aF5MjNtyrctErLE2gSe4R8hXS3Dsw==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ee886dej5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 May 2026 21:58:52 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64SLs67o019591;
+	Thu, 28 May 2026 21:58:51 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4edjrbt8t5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 May 2026 21:58:51 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64SLwlXb35914148
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 May 2026 21:58:47 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9FC0820043;
+	Thu, 28 May 2026 21:58:47 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8999C20040;
+	Thu, 28 May 2026 21:58:45 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 28 May 2026 21:58:45 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v6 0/6] powerpc/bpf: Add support for verifier selftest
+Date: Thu, 28 May 2026 21:58:49 -0400
+Message-ID: <20260529015855.364704-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260525223948.1920986-1-ihor.solodrai@linux.dev> <20260525223948.1920986-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20260525223948.1920986-4-ihor.solodrai@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 28 May 2026 14:57:40 -0700
-X-Gm-Features: AVHnY4JdWon6ARMGEhbhpJVtHz7xBKVSWDd3ly_ygj6xRfa0ix4yhS0InvmqA-M
-Message-ID: <CAEf4BzZXJFr=1iiVx937ht=4PYQkQHg=eFk810zhMDzXQG3ihw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 3/3] bpf: Cache build IDs in sleepable
- stackmap path
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YOL9jodwEsy1aUcfQkc7YIeBxGPATuT4
+X-Authority-Analysis: v=2.4 cv=Z8Dc2nRA c=1 sm=1 tr=0 ts=6a18ba9d cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=D-oU5X2WxZXJlpUmpAoA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI4MDIxOCBTYWx0ZWRfX4u1Zf2L3Hs4b
+ MnO2UiNduKLEV7VRAHX6K7ozmI+EUSqRHxtBiUK6bF/raeLM8X0vvtHZMKnaX2p+/JeGt27YZ62
+ BccZ5iY9/NQljDrCH7LmiORQ9AaJsexrQvjxOIKqrB4GLqwTWRfkCGYZ9q/UU8tU9sCHsnoA8EZ
+ /yDKLXXPcr3d8Xej7JYoQpf/ZXq7yoyinhto8gJsj5bjTGZyVlRAhAIB+HwwAEtRoYs5rTYvyPH
+ JxC72I8W337rar+9nEXayJ4IUEcLbXl71KYfilljdgae3ynjsdLWau1s8c2iIrSX7+1qHhh5Gzc
+ UnX/Edb1qEBg6r8IaBJudR9UYrM0ByBhkwZUIkhXGjouHLuDk92Yr6Zyh4IKpE4CbXmrOIW5kHK
+ XujbGCjuh4hrGo7RRB/vLO0fQ+5GE1yg0sgQETUekcdbSqWYJvAcHCSK0GPSWU1RnWJemomsajC
+ mvFDoskESv/ymEa/r6g==
+X-Proofpoint-ORIG-GUID: YOL9jodwEsy1aUcfQkc7YIeBxGPATuT4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-28_04,2026-05-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605280218
 
-On Mon, May 25, 2026 at 3:40=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
-dev> wrote:
->
-> Stack traces often contain adjacent IPs from the same VMA or from
-> different VMAs backed by the same ELF file. Cache the last successfully
-> parsed build id together with the resolved VMA range and backing file
-> so the sleepable build id path can avoid repeated VMA locking and file
-> parsing in common cases.
->
-> Suggested-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  kernel/bpf/stackmap.c | 61 ++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 55 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index c53cfd9a67cf..77ba03216c09 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -246,6 +246,14 @@ static void stack_map_get_build_id_offset_sleepable(=
-struct bpf_stack_build_id *i
->  {
->         struct mm_struct *mm =3D current->mm;
->         struct stack_map_vma_lock lock =3D { .mm =3D mm };
-> +       struct {
-> +               struct file *file;
-> +               const unsigned char *build_id;
-> +               unsigned long vm_start;
-> +               unsigned long vm_end;
-> +               unsigned long vm_pgoff;
-> +       } cache =3D {};
-> +       unsigned long vm_pgoff, vm_start, vm_end;
->         struct vm_area_struct *vma;
->         struct file *file;
->         u64 offset;
-> @@ -254,6 +262,17 @@ static void stack_map_get_build_id_offset_sleepable(=
-struct bpf_stack_build_id *i
->         for (u32 i =3D 0; i < trace_nr; i++) {
->                 ip =3D READ_ONCE(id_offs[i].ip);
->
-> +               /*
-> +                * Range cache fast path: if ip falls within the previous=
-ly
-> +                * resolved VMA range, reuse the cache build_id without
-> +                * re-acquiring the VMA lock.
-> +                */
-> +               if (cache.build_id && ip >=3D cache.vm_start && ip < cach=
-e.vm_end) {
-> +                       offset =3D stack_map_build_id_offset(cache.vm_pgo=
-ff, cache.vm_start, ip);
-> +                       stack_map_build_id_set_valid(&id_offs[i], offset,=
- cache.build_id);
-> +                       continue;
-> +               }
-> +
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Same issue as with patch #1, this is a lost opportunity to avoid
-unnecessary work if VMA has no matching build ID. We should do
-negative caching (i.e., have build_id set to NULL, but use
-vm_start/vm_end for subsequent ip matches) and avoid unnecessary vma
-lookups. Let's treat it as optimization and address this in a follow
-up patch.
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
 
->                 vma =3D stack_map_lock_vma(&lock, ip);
->                 if (!vma) {
->                         stack_map_build_id_set_ip(&id_offs[i]);
-> @@ -265,17 +284,47 @@ static void stack_map_get_build_id_offset_sleepable=
-(struct bpf_stack_build_id *i
->                         continue;
->                 }
->
-> -               file =3D get_file(vma->vm_file);
-> -               offset =3D stack_map_build_id_offset(vma->vm_pgoff, vma->=
-vm_start, ip);
-> +               file =3D vma->vm_file;
-> +               vm_pgoff =3D vma->vm_pgoff;
-> +               vm_start =3D vma->vm_start;
-> +               vm_end =3D vma->vm_end;
-> +               offset =3D stack_map_build_id_offset(vm_pgoff, vm_start, =
-ip);
-> +
-> +               /*
-> +                * Same backing file as previous (e.g. different VMAs
-> +                * of the same ELF binary). Reuse the cache build_id.
-> +                */
-> +               if (file =3D=3D cache.file) {
-> +                       stack_map_unlock_vma(&lock);
-> +                       stack_map_build_id_set_valid(&id_offs[i], offset,=
- cache.build_id);
-> +                       cache.vm_start =3D vm_start;
-> +                       cache.vm_end =3D vm_end;
-> +                       cache.vm_pgoff =3D vm_pgoff;
-> +                       continue;
-> +               }
-> +
-> +               file =3D get_file(file);
->                 stack_map_unlock_vma(&lock);
->
->                 /* build_id_parse_file() may block on filesystem reads */
-> -               if (build_id_parse_file(file, id_offs[i].build_id, NULL))
-> +               if (build_id_parse_file(file, id_offs[i].build_id, NULL))=
- {
->                         stack_map_build_id_set_ip(&id_offs[i]);
-> -               else
-> -                       stack_map_build_id_set_valid(&id_offs[i], offset,=
- id_offs[i].build_id);
-> -               fput(file);
-> +                       fput(file);
+The first patch in series is fix patch, correcting memory alignment with
+8-byte boundary for long branch address field. The subsequent patches
+enables verifier selftests on powerpc. The last but one patch in
+the series fixes incorrect comparator usage for comparing tailcall info
+with tailcall threshold.
 
-we should probably negative-cache this lack of build ID and update
-vm_start/vm_end here, in a follow up
+Issue Details:
+--------------
 
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
 
-> +                       continue;
-> +               }
-> +
-> +               stack_map_build_id_set_valid(&id_offs[i], offset, id_offs=
-[i].build_id);
-> +               if (cache.file)
-> +                       fput(cache.file);
-> +               cache.file =3D file;
-> +               cache.build_id =3D id_offs[i].build_id;
-> +               cache.vm_start =3D vm_start;
-> +               cache.vm_end =3D vm_end;
-> +               cache.vm_pgoff =3D vm_pgoff;
->         }
-> +
-> +       if (cache.file)
-> +               fput(cache.file);
->  }
->
->  /*
-> --
-> 2.54.0
->
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
+
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ...
+
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
+
+    Observation:
+    Can't disasm instruction at offset 76 as this address has
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
+
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
+
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
+
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
+
+    Update the dummy_tramp_addr field offset calculation from the end
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
+
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
+
+v5->v6:
+  Changed alignment NOP emittion dependency on fimage layout
+  Adjust tail truncate length for 32-bit ppc
+  Addressed few minor bot comments
+
+v4->v5:
+  Handled alignment NOP emit logic and corresponding stub offsets
+  Handled image buffer overflow problem in last pass
+  Above changes took care of other bot reviews
+  Included LLVMDisposeMessage() for graceful freeing
+  Adjusted parameters in bpf_jit_build_fentry_stubs for ppc32
+  Adjusted expected JIT inst. in tailcall test for
+CONFIG_PPC_KERNEL_PCREL config
+  Added fix patch at last for inaccurate use of cmplwi inst. 
+
+v3->v4:
+  Changed logic for emitting alignment NOP
+
+v2->v3:
+  Removed fixed NOP from bottom of long branch stub
+  Rebased on top of bpf-next
+
+v1->v2:
+  Added fix-patch to correct memory alignment in-place
+  Moved the optional alignmnet NOP before OOL stub
+
+[v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
+[v3]: https://lore.kernel.org/bpf/20260411221413.44304-1-adubey@linux.ibm.com
+[v4]: https://lore.kernel.org/bpf/20260517214043.12975-1-adubey@linux.ibm.com
+[v5]: https://lore.kernel.org/bpf/20260519233812.18787-1-adubey@linux.ibm.com
+
+Abhishek Dubey (6):
+  powerpc/bpf: fix alignment of long branch trampoline address
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  powerpc64/bpf: fix compare instruction emitted for tailcall
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+
+ arch/powerpc/net/bpf_jit.h                    |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c               | 63 ++++++++++++-----
+ arch/powerpc/net/bpf_jit_comp32.c             |  4 +-
+ arch/powerpc/net/bpf_jit_comp64.c             | 12 ++--
+ .../selftests/bpf/jit_disasm_helpers.c        | 23 ++++++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 8 files changed, 154 insertions(+), 27 deletions(-)
+
+-- 
+2.52.0
+
