@@ -1,145 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A707A23AB81
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 03:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D331D35E1B6;
+	Fri, 29 May 2026 03:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780025960; cv=none; b=QfhvrRGaBFQxtIACYrhdnLUSDN6XSv1HMVNwmux/w/yae4/QlyuU/idQiwrKS2+A3T89VDjPMb3LSq1CxCIBmA/jBWPUnbRfPxzMQTS9EIcAInTPIuirl88z7j0VgT9rLWT3zvzFG5IgtGyeqE0ep/fHda02yNvgLGtP33KAgKA=
+	t=1780026985; cv=none; b=omWhzFpAbFJlqeN24YN0dCheVtCUz+k85THJ2bctxrdYEqcA7xzP2VC0xaEuf4dMiguGDA9cKjk8XZVcyqiPGGrGps+n5qW6ZTIkHSWShEzXIgkdUBhyUYzofP4NHqRQh/2tI0EoCtAMb8VHBGwrJR55Jr0PVHMCLy9m48i8csI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780025960; c=relaxed/simple;
-	bh=EsU7D5gJlfNLArD5V4XdMdViURutUCyLIiaZLd+kpxc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=E+3xXN+mbnT4+GCeaoJETC1BHNJolZdyJkXpIqy+NeVBVB33fl43tKMqqO6QAk6DHsgUpY1gwgiY8FsBoFIILeEDh0SzwAqFO5IOrejHN7WHgEQKjQqUfuSvg55leeE5JndJW0oLP+F46y8tYu5rmnue2t7fkY7iPfyDTq6R6vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+zMib8S; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780026985; c=relaxed/simple;
+	bh=qVsQ2/9n08ZFnCiznCbBpYcH3eItdKp575vi7vIDvA0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=XJrjnzEuGWVtn4TfszVYuPSctO8n3MGXMzAC3OaaCL9VRoy5S0uiZHgjxdsCY4lHS7uP545xI681+LLmer6wBzwcWOtoOGJs/wdMfuecv0A+qvoyzjh9eNQ8wkjo/NyAtb+6vQYcjoSYpD7wLWFeIz+F7yBNbL9esE8fSA1w0FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKCPywUs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+zMib8S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9B41F000E9;
-	Fri, 29 May 2026 03:39:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKCPywUs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555281F00893;
+	Fri, 29 May 2026 03:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780025959;
-	bh=G2G5rSiG91DoSTJjv2yf8+4rsrNgJqLe6zMEYwtzsdY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C+zMib8SeKRhWAM6K1FuFnhF8KZmmzV/Ay3aQAVQZW1qRQKawWJGT6qeZaD/keTDr
-	 8h8/BzoSvUN9wjU8PSL5UNDUynGydkGPpZ9OLnMSxjy6RuKSiLdlZ0EyPh4e3VKsCY
-	 wnQYX7yW0a/T/x1EMee0urL/RyUboNYOTzfGH2Uwp0Lb8tmq6gl9fBkwJPLzr78n4G
-	 1bGG690CeuPFlZVKduttYybiYbOh0CkWBFDPBjmU+Le6W6LEgdXO1nKTdhxi18cNog
-	 foUpjHEyOBqxJwJTyVc9im6DGhouaJJECHu5biPRBhFEwFtWpaP3np4ZYmOgASz6qf
-	 yEn+PELnRfBKQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] selftests/bpf: fix token tests for
- bpf_object__prepare() probe_loading
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529031604.888137-1-chenyuan_fl@163.com>
-References: <20260529031604.888137-1-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 03:39:18 +0000
-Message-Id: <20260529033919.2E9B41F000E9@smtp.kernel.org>
+	s=k20260515; t=1780026984;
+	bh=7kTXNQtQzKALPD1svYOBsVyZcmIFmBt7hjhAaAEt0T8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gKCPywUstP45ezFpQq1o8f7AOtP/HgTUCU17YsPKR9siKklH5kVBqC9/N3ALX9zqB
+	 rBsb60bjeBAfW9arSDgk7X8iuTD/Be9mLazBc5+iDjXH62JRSs+7hGt8ObQ5sJkEtc
+	 8Krfg3c58MH7AHxeipaA/ZaXLkV8Rgnfq5QkrQOIbmLRkYN1kGuZlQ237N0DWZ2MNN
+	 CKktUNge1+xzPdX0yfyaplLgVDJoWOL9yWgxiX4rqgFvmc9mbOhrdNu+8Ndg88LQ6X
+	 JvYMWy2kHSP8guqoJZlhvLvVLtfmdwT2y3NE57BB/MSVGVFxsabf/jdMcR+1D1EMGN
+	 RF4Gq9OuMYp+Q==
+Content-Type: multipart/mixed; boundary="===============8176134022569863166=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <12a9251e9f1a616fc86f4a2b6a87e547d75f820ce517895cdbf87bae81c970f1@mail.kernel.org>
+In-Reply-To: <20260529031026.2716641-3-dawei.feng@seu.edu.cn>
+References: <20260529031026.2716641-3-dawei.feng@seu.edu.cn>
+Subject: Re: [PATCH v2 2/3] bpf: cgroup: NUL-terminate replaced sysctl value
+From: bot+bpf-ci@kernel.org
+To: dawei.feng@seu.edu.cn,martin.lau@linux.dev
+Cc: emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kees@kernel.org,joel.granados@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,jianhao.xu@seu.edu.cn,dawei.feng@seu.edu.cn,zilin@seu.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 29 May 2026 03:56:24 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The patch masks a libbpf bug by inappropriately expanding token =
-privileges in tests, defeating the purpose of testing fine-grained token de=
-legation.
-- [Medium] The patch silently adds BPF_MAP_TYPE_ARRAY and BPF_PROG_LOAD per=
-missions to test options without documenting them in the commit message.
---
+--===============8176134022569863166==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit f600b2d49f35c6ad7110d3da0ab207e0df841447
-Author: Yuan Chen <chenyuan@kylinos.cn>
+> When writing to sysctls, proc_sys_call_handler() guarantees that the
+> buffer passed to proc handlers is NUL-terminated. If
+> bpf_sysctl_set_new_value() replaces the pending sysctl value, it can
+> hand a replacement buffer directly to proc handlers. However, the
+> helper currently copies only buf_len
+> bytes into that buffer without appending a NUL terminator, leaving
+> downstream parsers vulnerable to out-of-bounds access.
+>
+> Fix this by appending a '\0' after the replaced value to restore the
+> expected sysctl semantics. Since the helper already rejects buf_len
+> greater than PAGE_SIZE - 1, there is always room for the extra byte.
+>
+> Reproduced in a QEMU x86_64 guest booted with KASAN while exercising
+> the sysctl replacement path with a cgroup/sysctl BPF program.
+>
+> [ ... KASAN report snipped ... ]
+>
+> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
 
-selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
+This fixes an out-of-bounds read in bpf_sysctl_set_new_value().  The
+missing NUL terminator after the memcpy() of the replacement value looks
+like it was introduced by the commit that added the helper.  Should this
+carry:
 
-This patch modifies BPF token selftests to add SOCKET_FILTER, TRACEPOINT,
-and ARRAY map permissions to various subtests. This is intended to fix test
-failures caused by libbpf's internal environment probe loading.
+  Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
 
-> The bpf_object__prepare() function internally calls bpf_object__probe_loa=
-ding(),
-> which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify th=
-e BPF
-> environment. Without these permissions in the token, the probe fails and =
-causes
-> the tests to fail.
->=20
-> Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permi=
-ssions:
 
-[Severity: Medium]
-The commit message explicitly mentions adding SOCKET_FILTER and TRACEPOINT
-permissions. However, the patch also adds BPF_PROG_LOAD to the obj_priv_map
-test, and BPF_MAP_TYPE_ARRAY to several other tests.=20
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Could the commit message be updated to reflect all the changes being made,
-or should these undocumented changes be removed?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-> index f2f5d36ae00a4..25a76e09a3c96 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/token.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
-> @@ -1168,8 +1168,13 @@ void serial_test_token(void)
->  	}
->  	if (test__start_subtest("obj_priv_map")) {
->  		struct bpffs_opts opts =3D {
-> -			.cmds =3D bit(BPF_MAP_CREATE),
-> +			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
-> +			.cmds =3D bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
->  			.maps =3D bit(BPF_MAP_TYPE_QUEUE),
-> +			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-> +			.progs =3D bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-> +					 bit(BPF_PROG_TYPE_TRACEPOINT),
-> +			.attachs =3D ~0ULL,
->  		};
-
-[Severity: Medium]
-By adding BPF_PROG_LOAD, SOCKET_FILTER, and TRACEPOINT here, does this
-defeat the purpose of the obj_priv_map test?=20
-
-This test appears specifically designed to verify that a token restricted to
-only BPF_MAP_CREATE can successfully authorize map-only operations.
-
-If bpf_object__probe_loading() causes the entire object load to abort with
--EPERM when a confined token is used, isn't this a functional bug in libbpf
-rather than a test issue?=20
-
-Should libbpf be fixed to handle probe -EPERM gracefully (or skip probes for
-objects without programs) instead of expanding the token privileges in the
-tests?
-
-[ ... ]
-
-> @@ -1213,9 +1232,13 @@ void serial_test_token(void)
->  	if (test__start_subtest("obj_priv_btf_success")) {
->  		struct bpffs_opts opts =3D {
->  			/* allow BTF loading */
-> -			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD=
-),
-> -			.maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
-> -			.progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
-> +			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-> +					bit(BPF_PROG_LOAD),
-> +			.maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-> +			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-> +			.progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS) |
-> +					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-> +					 bit(BPF_PROG_TYPE_TRACEPOINT),
->  			.attachs =3D ~0ULL,
->  		};
-
-[Severity: Medium]
-Is there a specific reason BPF_MAP_TYPE_ARRAY is being added to the
-maps allowance here? It seems unrelated to the probe loading fix described
-in the commit message.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529031604.8881=
-37-1-chenyuan_fl@163.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26616337824
+--===============8176134022569863166==--
