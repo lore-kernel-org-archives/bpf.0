@@ -1,208 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE68367B75;
-	Fri, 29 May 2026 02:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A35E369992;
+	Fri, 29 May 2026 02:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780022402; cv=none; b=Xj20bICcYte4983N2zvw04N0CAQzbhPFMb51Cs/WvJ8NMfswD0APFcyCVYuttAm98wL7zb5QncqSSSCBtLhkEONTURnhhuemOizOcDiZGwnTUYb1sqkfi8el2h89Aqpvb43oWXKVwgrkQQ3zb0uB3exz0fVmytC9VRjpzf8szvE=
+	t=1780023252; cv=none; b=cIo2sVsQqO3+CUAxJ4Lmyf6b3G3OZpkw92XbHsAeJJaYGqqwfuE6WZ6ePXyt0LymJJm/9YQYcVgSmomSw09u4eKb2ZAZNlJUJqtXVVAME86uYhJvfS9LkkolyiOZ4OACuEuptzdHekaT5pGE7LjXILNE/mnGCcFUfBYGYyNO63s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780022402; c=relaxed/simple;
-	bh=8LEk0v0HACXEhU3MY4KL/dva2clfr6Fj3/JhAJyuFfk=;
+	s=arc-20240116; t=1780023252; c=relaxed/simple;
+	bh=DeOayvENaGrZlpQp8+AzlAVpvswt44mcc9ie9Yegn6I=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HN8zN5KQfbtHM9GbmaS+Ay6J5UF2L+872jgQAyOEuQABEjuOmH5zkdke9hPLq1VHHJ4KBfHm6cEnNgKrj3gObJjF5mACC1tHItAL5g5706tE8JUZVMPaPM+nQ3CfXPhl4emNUuN3IAyCwFRq8cE1pxGx7uyicO6izFbdS2BjxP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mx/sfiyy; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=b0wLjzoVtebRPUxB1Y7fMIu1cG38tVsTYt6f3WJpymb9PohV3wRVHAR2tJqRuqxLtgEbP5cL/ku2lh2zOTKSNFs3a4Xs1kGWQL7xxGcLqqupzQaIfcWlPCYQ5DdefWhqIR717ApBxatuQL+mtYsLmZPWpoXvs0puwAMgW0klt7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fECajmFV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mx/sfiyy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C411F000E9;
-	Fri, 29 May 2026 02:40:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fECajmFV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7581F000E9;
+	Fri, 29 May 2026 02:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780022400;
-	bh=0ofPRN5jaHlvKYILC10N9ihpmmHQmWpmY4u24WxAcNE=;
+	s=k20260515; t=1780023251;
+	bh=+G/ejdU0UmBeIP2M+V+mZ4oV1UILZmdBxeVb98LEE5w=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mx/sfiyyeSARZceYqTUWalvsvZ39CauxtklBBytY6kZ4GmdXjdFBkkiPT3/9FfY25
-	 PAjo0QO9m5/GJF5CoS4BYF+38hJIKaY4j+RG4JhGiqcjNYzVfSlOu3AKZJtA+LyBOC
-	 ULztXF5hgBFQmCRRTYLPWx7b0svxFwEor2eUrjo5lGPtJDRqnUUvBxfYtkFejhSdF0
-	 YRE4epzcDjN34rg45r1/MEP2XEr7/lzjd4SMv8SepaNoectQxGRsFuWOD80s3xzb2K
-	 9CQHxM8NnVsLiJT72ubYNLdq6krFhzCIgdzzybeL5g2VFIkPK5HoTTFAFQLG7gmC7Y
-	 B2/3hjPAFXleg==
-Content-Type: multipart/mixed; boundary="===============0439834184810809479=="
+	b=fECajmFV22ElVtFNMpfb3OihvaNXb8wKb8Wj98fkfwzPVcYLZLB1CUmB2cRUnJf9E
+	 AkMfCvoucx66/UMue518PfleBPdTW8pl5xsDbpzN0XgtFpap+cqSBgW+mlPDrJWcO9
+	 VUE/pmi4UBbBc5PLLZrPylKFCgx6tNwegTx8+mqtK4QoPnrsS+OqGmb0ByNIMN9s0o
+	 3TnkJ73QgdI6EU0wSxOPc6cTObr0VcBTFMdLL1eDb039PCNVWmuGorHDAovJZ4If+Q
+	 1EZESSS03urWTY1fs17ZkPhk6ND1QrwT9RwBn+WIyzoMsCKpaqXpA70P34EDFA0vQR
+	 fwWLzE5+JBITw==
+Content-Type: multipart/mixed; boundary="===============0959023594176265244=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1b51b4c0718274dd2bb2df706459fc1581e6f99d6fe59db6a87b13bf7c805844@mail.kernel.org>
-In-Reply-To: <20260529014936.2811085-8-ameryhung@gmail.com>
-References: <20260529014936.2811085-8-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v6 07/13] bpf: Unify referenced object tracking in verifier
+Message-Id: <d9a11e226fc44fc78ecd22d856c392a58cac1c53ce994b48d24610834070dbf5@mail.kernel.org>
+In-Reply-To: <20260529014936.2811085-6-ameryhung@gmail.com>
+References: <20260529014936.2811085-6-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship tracking and fix dynptr UAF bug
 From: bot+bpf-ci@kernel.org
 To: ameryhung@gmail.com,bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,mykyta.yatsenko5@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 29 May 2026 02:40:00 +0000 (UTC)
+Date: Fri, 29 May 2026 02:54:10 +0000 (UTC)
 
---===============0439834184810809479==
+--===============0959023594176265244==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 75b287d8d92f..b0521ba7787a 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -1424,6 +1424,18 @@ struct bpf_dynptr_desc {
->  	u32 parent_id;
->  };
->
-> +/*
-> + * The last seen rereferenced object; Updated by update_ref_obj() when a register refers to a
-> + * referenced object. Used when the helper or kfunc is releasing a referenced object, casting
-> + * a referenced object, returning allocated memory derived from referenced object or creating
-> + * a dynptr with a referenced object as parent.
-> + */
-
-This isn't a bug, but there's a typo in the comment: 'rereferenced'
-should read 'referenced'.
-
-[ ... ]
-
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 3db0f1db475a..1a49e5194bb4 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -231,9 +231,28 @@ static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
->  			     (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
->  }
->
-> +static void update_ref_obj(struct ref_obj_desc *ref_obj, struct bpf_reg_state *reg)
-> +{
-> +	ref_obj->id = reg->id;
-> +	ref_obj->parent_id = reg->parent_id;
-> +	ref_obj->cnt++;
-> +}
-> +
-> +static int validate_ref_obj(struct bpf_verifier_env *env, struct ref_obj_desc *ref_obj)
-> +{
-> +	if (ref_obj->cnt > 1) {
-> +		verifier_bug(env, "function expects only one referenced object but got %d\n",
-> +			     ref_obj->cnt);
-> +		return -EFAULT;
-> +	}
-> +
-> +	return 0;
-> +}
-
-A review comment in lore raised a concern that verifier_bug() should
-not be used for user-triggered errors. Since ref_obj->cnt is determined
-by the number of referenced arguments provided by the BPF program, a
-user could intentionally trigger this warning by passing multiple
-referenced objects.
-
-Since verifier_bug() expands to BPF_WARN_ONCE(), triggering a warning
-via user-controlled input could be problematic if panic_on_warn is
-enabled.
-
-Would it be safer to gracefully reject the program using verbose() and
-returning -EINVAL, similar to how it is handled for release kfuncs
-earlier in this patch?
-
-Link: https://lore.kernel.org/bpf/20260506224833.71FC4C2BCB0@smtp.kernel.org/
 
 [ ... ]
 
-> @@ -8226,15 +8232,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->  		meta->release_regno = regno;
->  	}
->
-> -	if (reg_is_referenced(env, reg) && base_type(arg_type) != ARG_KPTR_XCHG_DEST) {
-> -		if (meta->id) {
-> -			verbose(env, "more than one arg with referenced id R%d %u %u",
-> -				regno, reg->id,
-> -				meta->id);
-> -			return -EACCES;
-> -		}
-> -		meta->id = reg->id;
-> -	}
-> +	if (reg_is_referenced(env, reg))
-> +		update_ref_obj(&meta->ref_obj, reg);
-
-Does removing the ARG_KPTR_XCHG_DEST guard introduce a regression for
-bpf_kptr_xchg?
-
-Looking at bpf_kptr_xchg's signature:
-
-void *bpf_kptr_xchg(void *dst, void *ptr__in_or_null)
-
-The dst argument (ARG_KPTR_XCHG_DEST) can be a field of a referenced
-allocated object. For example, consider bpf_kptr_xchg(&obj->kptr_field,
-NULL) where obj is a referenced object (id=X from bpf_obj_new).
-
-Argument processing order in check_helper_call is arg0 (dst, R1) then
-arg1 (ptr, R2):
- - dst (R1): reg_is_referenced true (id=X) -> update_ref_obj sets
-   meta.ref_obj.id = X
- - ptr (R2): NULL -> reg_is_referenced false -> no update;
-   arg_type_is_release sets release_regno = R2
-
-Final meta.ref_obj.id = X.
-
-In check_helper_call's release block, the code then executes:
-
-} else if (func_id == BPF_FUNC_kptr_xchg && meta.ref_obj.id) {
-	u32 id = meta.ref_obj.id;
-	...
-	err = release_reference_nomark(env->cur_state, id);
-	...
-	bpf_for_each_reg_in_vstate(...) {
-		if (reg->id == id)
-			mark_reg_invalid(env, reg);
-	}
-}
-
-This releases obj's reference (id X) and invalidates all registers
-holding obj, even though obj is still live and was never meant to be
-released.
-
-Under the old code, the ARG_KPTR_XCHG_DEST exclusion prevented this, so
-meta.id stayed 0. The release path then fell through to the
-bpf_register_is_null(&regs[meta.release_regno]) check (R2 is NULL) and
-returned 0 - the correct behavior.
-
-The retained comment on the kptr_xchg release path is now incorrect:
-
-> @@ -10407,17 +10407,15 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-> -		} else if (meta.id) {
-> -			err = release_reference(env, meta.id);
-> +		} else if (meta.ref_obj.id) {
-> +			err = release_reference(env, meta.ref_obj.id);
->  		} else if (bpf_register_is_null(&regs[meta.release_regno])) {
-> -			/* meta.id can only be 0 if register that is meant to be
-> +			/* meta.ref_obj.id can only be 0 if register that is meant to be
->  			 * released is NULL, which must be > R0.
->  			 */
-
-The comment states meta.ref_obj.id can only be 0 if the release
-register is NULL, but with the ARG_KPTR_XCHG_DEST guard removed,
-ref_obj.id can be taken from the dst argument (R1) which is a different
-register than the release register (R2). So ref_obj.id can be non-zero
-while the release register (R2) is NULL.
-
-This appears to corrupt reference-tracking state for valid BPF programs
-that clear a kptr field on a still-held allocated object. A later
-bpf_obj_drop(obj) would be incorrectly rejected since the reference was
-already consumed.
-
-This is corrected by commit 99727f36d6be ("bpf: Unify release handling
-for helpers and kfuncs") later in this series, which rewrites the
-release path to operate on the actual release register and
-short-circuits if that register is NULL.
+> @@ -8907,26 +8878,83 @@ static int release_reference_nomark(struct bpf_verifier_state *state, int ref_ob
 
 [ ... ]
+
+> +/* Release id and objects derived from it iteratively in a DFS manner */
+> +static int release_reference(struct bpf_verifier_env *env, int id)
+> +{
+
+[ ... ]
+
+> +	while ((id = idstack_pop(idstack))) {
+> +		/*
+> +		 * Child references are inaccessible after parent is released,
+> +		 * any child references that exist at this point are a leak.
+> +		 */
+> +		for (i = 0; i < vstate->acquired_refs; i++) {
+> +			if (vstate->refs[i].type != REF_TYPE_PTR)
+> +				continue;
+> +			if (vstate->refs[i].parent_id != id)
+> +				continue;
+> +			verbose(env, "Leaking reference id=%d alloc_insn=%d. Release it first.\n",
+> +				vstate->refs[i].id, vstate->refs[i].insn_idx);
+> +			return -EINVAL;
+> +		}
+
+Should this path invalidate the dangling child references and continue
+rather than returning -EINVAL immediately?
+
+Eduard Zingerman raised this in the v5 discussion:
+
+  Thinking some more about it, the mere presence of dangling objects
+  with the same lifetime is not an error.  The error would happen if
+  such objects are accessed.  Should the verifier invalidate such
+  dangling objects instead of signaling an error immediately?
+
+The current code returns -EINVAL as soon as it finds a child reference whose
+parent_id still points at the released parent.  Would invalidating those
+child references instead of rejecting allow programs that never access the
+dangling objects to verify?
+
+Reference: https://lore.kernel.org/bpf/02e6bb8e8b5e9e21e5b5f81adb9f440d556c83ed.camel@gmail.com/
+
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26613892466
---===============0439834184810809479==--
+--===============0959023594176265244==--
