@@ -1,214 +1,145 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB7F367F5F;
-	Fri, 29 May 2026 03:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A707A23AB81
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 03:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780024659; cv=none; b=dF6MBwP+VN8j1SDI1U9rDyvc/7/F5HuKAwnr1UeVaM+Gjcu2LZQoyacjAhiw5BcKs+dUKEGVEUXF/EZ6voq0LmLUzUSBbmOcRHkh9JxM1OD/YIdFu9+qYTrtfD4IVHcsm1ihoCskD3Bd89GR2xbyeGTbvzPuARTT2p2gqkpVuY8=
+	t=1780025960; cv=none; b=QfhvrRGaBFQxtIACYrhdnLUSDN6XSv1HMVNwmux/w/yae4/QlyuU/idQiwrKS2+A3T89VDjPMb3LSq1CxCIBmA/jBWPUnbRfPxzMQTS9EIcAInTPIuirl88z7j0VgT9rLWT3zvzFG5IgtGyeqE0ep/fHda02yNvgLGtP33KAgKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780024659; c=relaxed/simple;
-	bh=xQ2OkSs8riTHwHt2or05rVMp1SXSKQg2BtIKfLkEWWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s7ixPvuzmIsITnu0Kp1HAWZyk8T+anWC9iTYAIBECI7GkgUI+CxtRM5E1VNtSOOdE/mWfLVNmipC3c0uS0jLkKnaaEujvFTqxNo+aZUtBDJQ22o6i6D3vQrnw5M75VvFaRcYd9pEHBcb2Kd1tgYDT6067Rb9uAn+aQeW5FVYwNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pNH33B5v; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780025960; c=relaxed/simple;
+	bh=EsU7D5gJlfNLArD5V4XdMdViURutUCyLIiaZLd+kpxc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=E+3xXN+mbnT4+GCeaoJETC1BHNJolZdyJkXpIqy+NeVBVB33fl43tKMqqO6QAk6DHsgUpY1gwgiY8FsBoFIILeEDh0SzwAqFO5IOrejHN7WHgEQKjQqUfuSvg55leeE5JndJW0oLP+F46y8tYu5rmnue2t7fkY7iPfyDTq6R6vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+zMib8S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pNH33B5v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=pB
-	UYS5/1hD1njZ+SRg/h+C/eOlx8ep4fSlGa9e+pEQA=; b=pNH33B5vVmXFFWLeIE
-	wvWUlh41w4t8Y1IlRGhw8ZSRzyBmFt4kk6r5TFkW+lSRV7NflHvlAdWxX7Yj0xku
-	0j/F2cH6Ml9MT/yf34aIrLoM2DxIOfLips8mWBnTgfHUk/nUJo++dWkisDzyyiZt
-	qOtmzIe/13tn3WXDnvibO3gkM=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3vwD_BBlq5RfOAA--.34835S2;
-	Fri, 29 May 2026 11:16:15 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH] selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
-Date: Fri, 29 May 2026 11:16:04 +0800
-Message-ID: <20260529031604.888137-1-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+zMib8S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9B41F000E9;
+	Fri, 29 May 2026 03:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780025959;
+	bh=G2G5rSiG91DoSTJjv2yf8+4rsrNgJqLe6zMEYwtzsdY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=C+zMib8SeKRhWAM6K1FuFnhF8KZmmzV/Ay3aQAVQZW1qRQKawWJGT6qeZaD/keTDr
+	 8h8/BzoSvUN9wjU8PSL5UNDUynGydkGPpZ9OLnMSxjy6RuKSiLdlZ0EyPh4e3VKsCY
+	 wnQYX7yW0a/T/x1EMee0urL/RyUboNYOTzfGH2Uwp0Lb8tmq6gl9fBkwJPLzr78n4G
+	 1bGG690CeuPFlZVKduttYybiYbOh0CkWBFDPBjmU+Le6W6LEgdXO1nKTdhxi18cNog
+	 foUpjHEyOBqxJwJTyVc9im6DGhouaJJECHu5biPRBhFEwFtWpaP3np4ZYmOgASz6qf
+	 yEn+PELnRfBKQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] selftests/bpf: fix token tests for
+ bpf_object__prepare() probe_loading
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260529031604.888137-1-chenyuan_fl@163.com>
+References: <20260529031604.888137-1-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 29 May 2026 03:39:18 +0000
+Message-Id: <20260529033919.2E9B41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vwD_BBlq5RfOAA--.34835S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ar4rJFWxtF43ur4rJFWxXrb_yoWxWr4Upr
-	1vga9rtw1UJFWUJr40qay7ur9YkF4jyF1UKFnIvw1UZFsFvrs5tF1qv34vywnIqrW5Gr9I
-	v3WY9rn7ZFyruF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrkucUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQAi32oZBQC6VAAA3k
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The patch masks a libbpf bug by inappropriately expanding token =
+privileges in tests, defeating the purpose of testing fine-grained token de=
+legation.
+- [Medium] The patch silently adds BPF_MAP_TYPE_ARRAY and BPF_PROG_LOAD per=
+missions to test options without documenting them in the commit message.
+--
 
-The bpf_object__prepare() function internally calls bpf_object__probe_loading(),
-which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify the BPF
-environment. Without these permissions in the token, the probe fails and causes
-the tests to fail.
+commit f600b2d49f35c6ad7110d3da0ab207e0df841447
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permissions:
-- obj_priv_map
-- obj_priv_prog
-- obj_priv_freplace_prog
-- obj_priv_freplace_prog_fail
-- obj_priv_btf_fail
-- obj_priv_btf_success
-- obj_priv_implicit_token
-- obj_priv_implicit_token_envvar
-- obj_priv_prog_kallsyms
+selftests/bpf: fix token tests for bpf_object__prepare() probe_loading
 
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 68 ++++++++++++++-----
- 1 file changed, 51 insertions(+), 17 deletions(-)
+This patch modifies BPF token selftests to add SOCKET_FILTER, TRACEPOINT,
+and ARRAY map permissions to various subtests. This is intended to fix test
+failures caused by libbpf's internal environment probe loading.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
-index f2f5d36ae00a..25a76e09a3c9 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -1168,8 +1168,13 @@ void serial_test_token(void)
- 	}
- 	if (test__start_subtest("obj_priv_map")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_MAP_CREATE),
-+			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
-+			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
- 			.maps = bit(BPF_MAP_TYPE_QUEUE),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
-+			.attachs = ~0ULL,
- 		};
- 
- 		subtest_userns(&opts, userns_obj_priv_map);
-@@ -1177,7 +1182,10 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_prog")) {
- 		struct bpffs_opts opts = {
- 			.cmds = bit(BPF_PROG_LOAD),
--			.progs = bit(BPF_PROG_TYPE_XDP),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1185,16 +1193,24 @@ void serial_test_token(void)
- 	}
- 	if (test__start_subtest("obj_priv_freplace_prog")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
--			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
-+					bit(BPF_BTF_GET_FD_BY_ID),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 		subtest_userns(&opts, userns_obj_priv_freplace_prog);
- 	}
- 	if (test__start_subtest("obj_priv_freplace_prog_fail")) {
- 		struct bpffs_opts opts = {
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) | bit(BPF_BTF_GET_FD_BY_ID),
--			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD) |
-+					bit(BPF_BTF_GET_FD_BY_ID),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_EXT) | bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 		subtest_userns(&opts, userns_obj_priv_freplace_prog_fail);
-@@ -1204,7 +1220,10 @@ void serial_test_token(void)
- 			/* disallow BTF loading */
- 			.cmds = bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
- 			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1213,9 +1232,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_btf_success")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1224,9 +1247,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_implicit_token")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1235,9 +1262,13 @@ void serial_test_token(void)
- 	if (test__start_subtest("obj_priv_implicit_token_envvar")) {
- 		struct bpffs_opts opts = {
- 			/* allow BTF loading */
--			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
--			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
--			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
-+			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
-+					bit(BPF_PROG_LOAD),
-+			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
-@@ -1257,7 +1288,10 @@ void serial_test_token(void)
- 		char kptr_restrict_orig[32] = {};
- 		struct bpffs_opts opts = {
- 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
--			.progs = bit(BPF_PROG_TYPE_XDP),
-+			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
-+			.progs = bit(BPF_PROG_TYPE_XDP) |
-+					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
-+					 bit(BPF_PROG_TYPE_TRACEPOINT),
- 			.attachs = ~0ULL,
- 		};
- 
--- 
-2.54.0
+> The bpf_object__prepare() function internally calls bpf_object__probe_loa=
+ding(),
+> which attempts to load SOCKET_FILTER and TRACEPOINT programs to verify th=
+e BPF
+> environment. Without these permissions in the token, the probe fails and =
+causes
+> the tests to fail.
+>=20
+> Fix the following test cases by adding SOCKET_FILTER and TRACEPOINT permi=
+ssions:
 
+[Severity: Medium]
+The commit message explicitly mentions adding SOCKET_FILTER and TRACEPOINT
+permissions. However, the patch also adds BPF_PROG_LOAD to the obj_priv_map
+test, and BPF_MAP_TYPE_ARRAY to several other tests.=20
+
+Could the commit message be updated to reflect all the changes being made,
+or should these undocumented changes be removed?
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+> index f2f5d36ae00a4..25a76e09a3c96 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/token.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
+> @@ -1168,8 +1168,13 @@ void serial_test_token(void)
+>  	}
+>  	if (test__start_subtest("obj_priv_map")) {
+>  		struct bpffs_opts opts =3D {
+> -			.cmds =3D bit(BPF_MAP_CREATE),
+> +			/* BPF_PROG_LOAD is needed for bpf_object__probe_loading */
+> +			.cmds =3D bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+>  			.maps =3D bit(BPF_MAP_TYPE_QUEUE),
+> +			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
+> +			.progs =3D bit(BPF_PROG_TYPE_SOCKET_FILTER) |
+> +					 bit(BPF_PROG_TYPE_TRACEPOINT),
+> +			.attachs =3D ~0ULL,
+>  		};
+
+[Severity: Medium]
+By adding BPF_PROG_LOAD, SOCKET_FILTER, and TRACEPOINT here, does this
+defeat the purpose of the obj_priv_map test?=20
+
+This test appears specifically designed to verify that a token restricted to
+only BPF_MAP_CREATE can successfully authorize map-only operations.
+
+If bpf_object__probe_loading() causes the entire object load to abort with
+-EPERM when a confined token is used, isn't this a functional bug in libbpf
+rather than a test issue?=20
+
+Should libbpf be fixed to handle probe -EPERM gracefully (or skip probes for
+objects without programs) instead of expanding the token privileges in the
+tests?
+
+[ ... ]
+
+> @@ -1213,9 +1232,13 @@ void serial_test_token(void)
+>  	if (test__start_subtest("obj_priv_btf_success")) {
+>  		struct bpffs_opts opts =3D {
+>  			/* allow BTF loading */
+> -			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD=
+),
+> -			.maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
+> -			.progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
+> +			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) |
+> +					bit(BPF_PROG_LOAD),
+> +			.maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
+> +			/* Allow SOCKET_FILTER and TRACEPOINT for bpf_object__probe_loading */
+> +			.progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS) |
+> +					 bit(BPF_PROG_TYPE_SOCKET_FILTER) |
+> +					 bit(BPF_PROG_TYPE_TRACEPOINT),
+>  			.attachs =3D ~0ULL,
+>  		};
+
+[Severity: Medium]
+Is there a specific reason BPF_MAP_TYPE_ARRAY is being added to the
+maps allowance here? It seems unrelated to the probe loading fix described
+in the commit message.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529031604.8881=
+37-1-chenyuan_fl@163.com?part=3D1
