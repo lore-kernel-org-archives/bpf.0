@@ -1,101 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E20421A09;
-	Fri, 29 May 2026 18:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AB042EEA3
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 18:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780080249; cv=none; b=nvClOGO2ooKsba+ORq+QONTzMX/XYLBlvtf16YCks4psbNqsHexPod4DIjVm7ZlT5XIVcQzandGDXAg74YnjYWP3vT076T9TF0dH1CE08fHPSbd+Ei87n3GbGzgXWp978jQ28QR/pD+1MnFT4C78vJTSCaNwChySs9sfJGyi8Qw=
+	t=1780080286; cv=none; b=Y+MSYbBuUy+WxdSMieIhSysP61y4TtPZUdqneFex6LcRmw/WO6F5/PdcvSqEWQvVfpReFm+cEwO/eVZO5TkX1gh4HS3UDxMapnzVG337sYMBLIBR8TurlQ/ZeJ1EMTYpLeRcxLXqlbGKmHvqCCe+VDeptPdFvrfwHT+wtH4u7fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780080249; c=relaxed/simple;
-	bh=lB4UHwwKsjEktKbsiosmb+A5JY/1UUjZeTWNw5g5k8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PxE8ckovPzFbWbsMKo9ufDa+SSJbK52OyJAu9lN2uiQvb3ITNYUcjTlmr6WCCcqByjymqIsmeqRfopyTDtVChXdhzIGQIWrtTBOHCqWeB/qH3wfBWKlxAq8L3Ph/GwU/HJab62k0SF/kppKuDs80KsYVUcZkR76dC5AJGK8BfsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BO85kgeP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780080286; c=relaxed/simple;
+	bh=k9J37GNtOk5KY/uqraI4usFytMzq3028a3geGxyRND8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EZGqwDCFjRZvMVeRdAWwjzrOwXb6gIrud8NFVX1rwh32Vq/wCOnlFOa2T7yz8khXJFVyuAmzA2sVMQGso5zPjC6R9niJbeNXc6/FKqPSTlkVFC009nuHZJK5zZQSGPQIBCmI/s6xmNQZecy03GritqrnALDfuVj1Npef8YUuto0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OFkCKrKW; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BO85kgeP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842341F00893;
-	Fri, 29 May 2026 18:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780080246;
-	bh=ZwpO+pOOZTWBchQdW/Dv7jGhsKusDPQYZ/nVee/aPKo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BO85kgePRyguLqXdsSmYSPPbc2M9M1R9D7u7yNKftG8vO83z5DOcpC1hVIDZvumcT
-	 QWxKTrqcHbY4mwtZyZS6Ri4wQ8M2wE5vozWmFRthBrdQTSjixI1eNMVZe401kMXp9x
-	 VKQXxqMh1mY8BQveioCajwIz3qEgPD3Wz7WFV799FuuXrDcApB+DKzZxCKjOMBtPc8
-	 xHIQ50diUzeyAWDTfME/K/4V9hozcFX8TbJXdud7+hlk9p/n3YoI3H2L1udoyJNVo2
-	 5aUAa1AzYtzcKeTBeKIaIbwzo5WR4sOI3s9svJydmcCnk5t2Y6uhwHfkazwN33Ed9k
-	 vzcg2+4l1sZBA==
-Date: Fri, 29 May 2026 08:44:05 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
-	bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/8] bpf: Recover arena kernel faults with scratch page
-Message-ID: <ahnedQ33ZH8ogjbC@slm.duckdns.org>
-References: <20260522172219.1423324-1-tj@kernel.org>
- <20260522172219.1423324-3-tj@kernel.org>
- <7fd673df-22f3-4d70-a779-ea0b878188b3@kernel.org>
- <DIUMP21RASZI.2VNQV45RIL209@gmail.com>
- <3901fe0537edee9d7acdfd91695ead28@kernel.org>
- <CAADnVQJ+CqAszS2sSVu7gSfA_g4oaTR+SWmLNMX3_8c=OdR7NQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFkCKrKW"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304d0ac5e3cso1144975eec.0
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 11:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780080282; x=1780685082; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WGAWshjzxBvlYHwjvaREB7ZOR/iq635ZCqS9GRTgl4c=;
+        b=OFkCKrKWcmIvH86Q3H+q3K6TT7ekqU8BnXy5+O2aOoMI9le+dcTgxwKi+h9yM5GYKb
+         L2vw8vDpmQFG9yCJGwj112j0S+WC3Q0r6mQbViwCOrN64qJ2o/zkhaFSQCGr1mV16erP
+         KVV7iyHS/vdhzcnrF9VY9eZMrk8wl/ZklNafNi4ivwMeLftwZumDI/ZrOjrwlBnk24UC
+         qm8B61UpNStTBCh/d+wzuOHoCfY5u9PYijUEkbbhUK1S58JGNSflENa7Vk6rhxoVXlMk
+         0JpeIlRGDchDM623hCymuWPD7p7UUoEoKWKPMBYBiIBP3qRQFH0dP3lGNCv7k8PIAsmC
+         ewmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780080282; x=1780685082;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WGAWshjzxBvlYHwjvaREB7ZOR/iq635ZCqS9GRTgl4c=;
+        b=kJyuqwQ3gOHvd3j52AxRMfzoxx/KdFD0Ljiu39rHZek5ks/jAIKkZAJDDlbupVUBpd
+         ohfUhfcsH/Vm1gAe8D4lY2jyPx2SOUJj42S2hhiRAX5jaKf+O2Iufhfj689054GiwG7x
+         7DkZHSwLOpb+DvDHdlAAWucpKiVkBKUflnKH0uOKqiSVBtMUcCQvfLBE6LKP395weiLX
+         kGQAfe6lLybnHayaq2fXjk+pUUlAMCSND75vSf8R7FqSMYdd4wv0ujKRxctzaZwCn5Kt
+         JCzT2yvgVEZpERDnPGLlNxS0sKb6nM8rxT2evOgycgdKBWsYPbLhM8mD/TELXrPqi8MQ
+         j52Q==
+X-Gm-Message-State: AOJu0Yyaq0tYXP04xF4gpAugkNviGp3ovrEySTdp83YCtn9wQJqJbsoB
+	bm+yX0SrB61hgU22wR6WaXK1h/fnm4HzFA9zsFnOwATGBrFaOoQ2pcIhnujjc9zX
+X-Gm-Gg: Acq92OEgD8fR2EaXgOkf1z8B1PMZ/47Q9wAYaRkmBLWwD9UP/VK4w4BAOswruBH/MyL
+	C0QYngJ4c0/eUcMlJKn/dZ1Pe70TwEtvRdNrb8SNgVSka0aBkIJ8BRGsGNpVycNEYArWjiHeg/G
+	Q+zvQn3ibZeB1+3YWoI3T650OZDYqQv2GIfHjj/3tLD9tYZOASfvBixvvSrrcZZOpklSD4H7OWu
+	LTnpZMcIZy49Kqb38e3f88XOb5Xuqz5gRPujCxgcs6Wb2nNblpq6AG5RzBH+7cj65oT44hwYSx3
+	sky5ruRcT83Li4W/CIXO+VWUO2GlwaRBHJ059JJEdUo0IRQfmX6YXVi3lC107zq3XnhHWEGtNGc
+	hsBlxV8OoWFWUUM54Arwc2WR8k1L+UibXX8GGaaDSLb8DKJtEhbO7jiT7NTyevV0MH6xkawSbCL
+	l5W3isxJ2ZBIMG/QBYmHVx4oXzq5twzs3zYYJBN1axFCKyHqT6DqbDnKdm3DlARWuWWnvVHDed9
+	FYsh2bQ7A+WyBEfLxo=
+X-Received: by 2002:a05:7300:2313:b0:2da:4216:7ea3 with SMTP id 5a478bee46e88-304fa5c3061mr581673eec.14.1780080281751;
+        Fri, 29 May 2026 11:44:41 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cc2c:f0b5:a02d:c0fb? ([2620:10d:c090:500::2:a9e5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2c3121sm2091918eec.5.2026.05.29.11.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 11:44:41 -0700 (PDT)
+Message-ID: <17304ac9808245282aa2f03f26665cccd6fc185f.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v3 4/6] bpf: report hot simulated
+ callchains when 1M instructions limit is met
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+Date: Fri, 29 May 2026 11:44:39 -0700
+In-Reply-To: <ahlpI7sRJt1FQdYg@krava>
+References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
+	 <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
+	 <ahlpI7sRJt1FQdYg@krava>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQJ+CqAszS2sSVu7gSfA_g4oaTR+SWmLNMX3_8c=OdR7NQ@mail.gmail.com>
 
-Hello,
+On Fri, 2026-05-29 at 12:23 +0200, Jiri Olsa wrote:
+> On Wed, May 27, 2026 at 12:29:52AM -0700, Eduard Zingerman wrote:
+>=20
+> SNIP
+>=20
+> > +
+> >  static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_=
+state)
+> >  {
+> >  	int err;
+> > @@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *en=
+v)
+> >  		insn_aux =3D &env->insn_aux_data[env->insn_idx];
+> > =20
+> >  		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+> > +			print_hotspots(env);
+>=20
+> hi,
+> this is really cool feature, I've already used it to fix issues :)
 
-On Fri, May 29, 2026 at 11:38:21AM -0700, Alexei Starovoitov wrote:
-...
-> > 1. The racing write. set_pte_at() and the scratch installer's
-> > ptep_try_set() hit the same PTE with no common lock. On x86-64 and arm64
-> > set_pte_at() is a single atomic store, so it can't tear against the
-> > cmpxchg, but a plain store racing a cmpxchg isn't atomic in general.
-> > David, is that the worry - an arch where set_pte_at() is split and could
-> > tear - or something else?
-> >
-> > 2. The SEGV. It's a BPF program failure propagating out as a SEGV. Maybe
-> > not ideal, but as long as we surface the BPF error properly, it doesn't
-> > necessarily seem broken to me.
-> 
-> returning EBUSY because apply_range_set_cb() hit scratch page
-> is SEGV out of arena_vm_fault() and arguably ok-ish,
-> but bpf_arena_alloc_pages() returning NULL because scratch page
-> was in the range just sucks.
-> Earlier bpf prog passed the wrong arena addr to kfunc and triggered
-> that scratch page. It broke the contract and kept the pieces,
-> so ok-ish too, but overwriting scratch page with proper page
-> during bpf_arena_alloc_pages() is imo much better behavior.
-> That scratch page will cause all future bpf_arena_alloc_pages() fail as well.
-> Hence I prefer that check removed.
+Hi Jiri, thank you for the feedback!
+Anything you find lacking?
 
-Yeah, let's do that. David, would that be enough? Or are you still concerned
-about set_pte_at() competing with ptep_try_set()?
+After discussion with Alexei (who is somewhat skeptical of the whole idea),
+I plan to add:
+- samples for values residing in the diverging registers
+- walk back from iter_next call using jump history and
+  print 5-10 instructions modifying the register in question
+  (in a manner similar to backtracking done for mark chain precision).
 
-Thanks.
+> Would it be possible to make this configurable? like to be able
+> to get this output for program that passed and display more than
+> 3 hottest callchains?
 
--- 
-tejun
+For sure, there are several options for a way to toggle this print out:
+- unconditionally make it a part of v1 log;
+- add it as a bit in bpf_attr->log_level.
+
+I'd say that v1 log is a better option here.
+
+As for number of callchains printed, I'd like to avoid tweaking
+bpf_attr. So this leaves several options:
+- make it top 5-7-10, just hardcode a bigger number.
+- add a threshold value specifying how many times a callchain should
+  be visited to get printed. E.g. only print callchains visited more
+  than 1000 times, if such don't exist then put threshold to 100,
+  if such don't exist, print top 3.
+
+Wdyt?
