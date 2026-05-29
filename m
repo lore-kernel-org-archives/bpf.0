@@ -1,137 +1,169 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31683DCD8D;
-	Fri, 29 May 2026 22:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CE236CE19
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 22:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780093622; cv=none; b=k8jvvdJRDtKKm3CY49szc73AbK1VaUT3tgcAPwMPujw8AkC2PyXR+6Mj11PUoFpF5eDEXS1vBOr8T9SWGhdwUBKKKr0SPKLQXnzfi9ZZF8QiVWte9bpZLPfJURxDWdPQxgE2E9EWBREuLf+A1QtwNp85vjytwLJF5tOcc4Q7XxU=
+	t=1780094253; cv=none; b=SBD2Z+1mCWlm4+y3x+mNel+N/B9jYgVQS/n2xFKqvQ6oK2GZ1Omuf4MZXMPHHRu5YyEFisU7haImSF9uZMbghlS2xoBbSgMHXfi81aAtp+kvra5E/YIukjotoKAU93Af9+4imZxbxDSxJxkyXwM9HogbF4qxUhQu7o+VcMSyuKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780093622; c=relaxed/simple;
-	bh=lbA5YC5yOFxj3bcgB/maq+XCSX5+6miOTlltW5gG5/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zj3YtJe5Jd316rn/GaPjNptVQM2CMVzgQQbgiOt05N7tgFgoc+a2ttrfmT8rYz2UzwJF4xJsrqB6v+dDj05Jsd3avpCErfApjzKVxiaM49v3kEvabiNMFMU/KX8263S6pH7c73/d1J+BvhYl8P+euyZX/ltYrW8S80ikSD6oDHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=AJh1R6fo; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780094253; c=relaxed/simple;
+	bh=FginVhoNglPXigc//BEnYWTzVxWWHnXA48qMiUZpl3A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=YtXEQj0ApsinVxzwQOuSSktYpIEXhaqBnfmB07Mydg5lrEI1S6vYu3KBPIKd5iX3+pMRap2RkYLWMMRrJTnJCi+rnpbn01eMkLRHR7onJOhUJFGXQf1Raxx8hTZAOKllT4Nn/OTcaZmTEjUNUyRPs4bHxenWDKIpKqO4sVXCO7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEKSqcnS; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="AJh1R6fo"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=GLrXvbMHd7TNno/doPoiBUTMyoBqa/73MXB6bmYSAzw=; b=AJh1R6foDwB82LKfLTumpb8kwf
-	4pUZSLbifF/5OIDF2wDDizuAisCsButMn95GQGAvUIkQjU4cJVxU9hz4Ti21NHG5TuYHGT4uiG7pH
-	2tf0k1RDv0EtBXL51tu8Kx8L/UDeBCVxYy7GBaKANl24zk50iCrA5x5+KqEL1TrkdVLoB2TfKu/t4
-	xV9mAPHJ5myzmCIMTjvLvhBjXzKVjxP4Zfzr3UYUxv4moF6Ef/9UZIPHcAPnNnU6I9CRuRSDx/Yx2
-	fwyBPj1MVW/vPFLA0wb/8LkMj9kqsAguL9Jwz1aiiLLNTWnkovu9ochFTbkt6I+wkl6OTfteN7hs1
-	IjXLRCIw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wT5fO-0007a4-1s;
-	Sat, 30 May 2026 00:26:58 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wT5fN-000EOn-0y;
-	Sat, 30 May 2026 00:26:58 +0200
-Message-ID: <31ae748a-8682-4f74-aca6-686e8dbf692e@iogearbox.net>
-Date: Sat, 30 May 2026 00:26:57 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEKSqcnS"
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-69de4000a57so1994857eaf.0
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 15:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780094251; x=1780699051; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X4KBaLHtpd4tBbBBMqaBEm/aPrD0ixQqzF08JWKnme4=;
+        b=cEKSqcnSrD07a8UTMfvl8Dw4U8UIiEArFF4HeKPcflKZNSEIRe5CcKj3cmcrZcX3DI
+         YvrLcf9hAxA78p92zJuBG6Rkq4ROuQJwHZkISwZ6u+l7Re5g+5dTWHNMUBrA3u+s037M
+         nZfGRo1qrTwi1Fhg2LkM+dWvFTGmMQxyS6fjhKHFLimiGamxUMgHlflvZEREfttUuNJT
+         KNh8NlHQASJjx7Fp2+C5pPZ8iFWVvogmH2X/UOB44G0+10xzni3D2wBMTmkmH21BWvBd
+         xUyzXeOXwQdIMV6BQCiLJu5mKsqNv1+6GsiXrFfkl43LMtHNSaBxgeaZYVjG2ysOGD7p
+         rHQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780094251; x=1780699051;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X4KBaLHtpd4tBbBBMqaBEm/aPrD0ixQqzF08JWKnme4=;
+        b=sd5FP5lDk/blFuXrdl016nzK3VNM0g9lHAMvF40LHWCQt24NHs+D5qcY/sRwUo8g8y
+         Jl/0BzilS3HDz0BXNobIM6rD2J5CUxXisBLs1oeac4ImxBVpSjbHolouTB51eLZC0x5P
+         ii+JYl0789JkNIj4S7t2tS3aDIeV8n4REYlCJWRiRxOMFCbRzulsKLYJYeZqiwbPLNqr
+         26Z7ud4GIRAGPC/qif+//X3kIrjIPY9bakFiMMbO+OJFpOZgYPXKWxT9qfj8WbCe5iIR
+         GYm0qnAYbrhbfayTLpqiQ13sdQM4GEFWWEGxB1+ovrPFcdCSzVq1q1RsTMvwf07FWFt+
+         Leig==
+X-Gm-Message-State: AOJu0YzEgHkT1t0flPp/IFD44tyeiRXSzc5nS+4Cfa7NjxxVfEcRdpav
+	SLScbD5ZbEU+y0qwhdl1fmIH0oYKCE0NBcxA6LrvzadOaaR3xg+ZCPsF+RG5fw==
+X-Gm-Gg: Acq92OE+qyEswldryR2Rzbz2e62t0xMoUnVUXU7+JekXiEZP4hVl8n0bg17dJ4/1bHj
+	k8GC+fsdp6pyMWZUpjpg/v6xtczmW6t2e+1u907Z3kQFHlFkPALWM+N4/VV+WU5b1KxMQSSXg2E
+	6Npusv/c7E6PLlnmvNZKG5KSmYeIk3UEH/I4MWnkXPLVsGu9aySs6INas1Piz7grG8WLWyNKxFX
+	XSMZ4yeNF7KooqgwC3roZrCn2k7NhivzRelxgcK1jniXfSh3fNuRsfpDIzvEcQIX5o9JOI9uc2+
+	65mzbMpxTY0KM8GYWrwQ6Y2ASVTHuEFT54ZbkyytQ1frXo5h4UfvjQ3lEthEYlBo67x8Auku3C4
+	Td5VchHQF1nc1OOPivTsulsv3MhpPk2Ch8p1Hm8JzUwaPCCQH5ieVoCYghBnXjNC6g/Au3G12o6
+	UTkAw7mGzuLBvoucEIrENZU8ezra5VlXI46Ese3nkRzjAlgKiy90uCm+WG25hpVmPuaksBfRDsX
+	NS9RReNWum2gnbza7niT2Io
+X-Received: by 2002:a05:6820:2d0b:b0:696:7f3d:a75d with SMTP id 006d021491bc7-69e0ff718femr609756eaf.27.1780094251002;
+        Fri, 29 May 2026 15:37:31 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69e067e911csm1753298eaf.5.2026.05.29.15.37.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2026 15:37:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: MAINTAINERS: Update bpf maintainers
-To: Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
- 'Andrii Nakryiko ' <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- netdev@vger.kernel.org
-References: <20260529203909.1222164-1-martin.lau@linux.dev>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260529203909.1222164-1-martin.lau@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28015/Fri May 29 08:24:51 2026)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 29 May 2026 15:37:29 -0700
+Message-Id: <DIVIQWQ6F4JO.2R4XIOS9DDDS@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/4] slab: Introduce kmem_cache_alloc_nolock()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>
+X-Mailer: aerc
+References: <20260529202438.16408-2-alexei.starovoitov@gmail.com>
+ <20260529212021.380AC1F00893@smtp.kernel.org>
+In-Reply-To: <20260529212021.380AC1F00893@smtp.kernel.org>
 
-On 5/29/26 10:39 PM, Martin KaFai Lau wrote:
-> From: Martin KaFai Lau <martin.lau@kernel.org>
-> 
-> I am making a life change and will take a long break
-> from my current work, so I will step down from the "M:" responsibility.
-> 
-> I am currently a "R:" in "BPF [GENERAL]", this part stays unchanged.
-> I am folding most of the parts into "BPF [GENERAL]".
-> 
-> For "BPF [BTF]", it is long overdue as I am no longer involved.
-> It is folded into the "BPF [GENERAL]".
-> 
-> The "BPF [STORAGE & CGROUPS]" will also be covered by "BPF [GENERAL]".
-> 
-> For struct_ops, its usage is no longer limited to networking,
-> so this naturally should move back to "BPF [GENERAL]".
-> 
-> For the reuseport, it will continue to be maintained together
-> by "BPF [GENERAL]" and the "NETWORKING [SOCKETS]".
-> 
-> For other "BPF [NETWORKING]...", I am moving myself to "R:".
-> 
-> Thanks!
-> 
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+On Fri May 29, 2026 at 2:20 PM PDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Critical] Deadlock in NMI context due to synchronous freeing on memcg =
+charging failure
+> --
+>
+> commit 831b8a379d6dfbde2570286ba8453174bc236695
+> Author: Alexei Starovoitov <ast@kernel.org>
+>
+> slab: Introduce kmem_cache_alloc_nolock()
+>
+> This commit introduces kmem_cache_alloc_nolock_noprof() and its wrapper=
+=20
+> kmem_cache_alloc_nolock(). It is designed to allocate an object from a
+> specific cache and aims to be safe to call from any context, including NM=
+I
+> and IRQ-off environments.
+>
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index a2bf3756ca7d0..601986aaebdfc 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+> [ ... ]
+>> @@ -5402,6 +5402,45 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gf=
+p_flags, int node)
+>>  }
+>>  EXPORT_SYMBOL_GPL(kmalloc_nolock_noprof);
+>> =20
+>> +/**
+>> + * kmem_cache_alloc_nolock - Allocate one object from a specific cache,
+>> + * safe from any context (including NMI/IRQ-off), like kmalloc_nolock()=
+.
+>> + *
+>> + * Returns NULL on failure (including the trylock paths that may transi=
+ently
+>> + * fail under contention).
+>> + */
+>> +void *kmem_cache_alloc_nolock_noprof(struct kmem_cache *s, gfp_t gfp_fl=
+ags,
+>> +				     int node)
+>> +{
+>> +	gfp_t alloc_gfp =3D __GFP_NOWARN | __GFP_NOMEMALLOC | gfp_flags;
+>> +	void *ret;
+>> +
+>> +	VM_WARN_ON_ONCE(gfp_flags & ~(__GFP_ACCOUNT | __GFP_ZERO |
+>> +				      __GFP_NO_OBJ_EXT));
+> [ ... ]
+>> +	maybe_wipe_obj_freeptr(s, ret);
+>> +	slab_post_alloc_hook(s, NULL, alloc_gfp, 1, &ret,
+>> +			     slab_want_init_on_alloc(alloc_gfp, s),
+>> +			     s->object_size);
+>
+> [Severity: Critical]
+> Does this sequence risk a hard deadlock if called from NMI context?
+>
+> The function permits __GFP_ACCOUNT, but if memory cgroup charging fails
+> inside memcg_slab_post_alloc_hook(), it synchronously aborts the allocati=
+on:
+>
+> mm/slub.c:memcg_slab_post_alloc_hook() {
+>     ...
+>     if (memcg_alloc_charge_slab(s, alloc_gfp, lru, p, size)) {
+>         for (i =3D 0; i < size; i++)
+>             memcg_alloc_abort_single(s, p[i]);
+>     ...
+> }
+>
+> This calls memcg_alloc_abort_single(), which immediately attempts to free
+> the object:
+>
+> mm/slub.c:memcg_alloc_abort_single() {
+>     ...
+>     if (likely(slab_free_hook(s, object, slab_want_init_on_free(s), false=
+)))
+>         __slab_free(s, slab, object, object, 1, _RET_IP_);
+>     ...
+> }
+>
+> Both slab_free_hook() (via kmemleak and kfence hooks) and __slab_free()
+> will attempt to acquire non-NMI-safe spinlocks like n->list_lock. If the
+> interrupted context was holding these locks, wouldn't this synchronous fr=
+ee
+> cause a deadlock, breaking the "safe from any context" guarantee?
 
-Thanks a ton for all the hard work over the years, Martin! We
-hope to see you around, enjoy the break! :-)
+sashiko should have said that it's a pre-existing issue,
+since kmalloc_nolock() follows exact same pattern.
+Also patch 3 switches __slab_free() to use trylock.
+So not really an issue.
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
