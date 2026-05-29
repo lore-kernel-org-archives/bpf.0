@@ -1,152 +1,271 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA328390989
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 17:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4633038F62F
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 17:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780076567; cv=none; b=u8b9sytycq05MwYB6flLd7yZXOqH4ajlNKFx3Prs6V7LH4rwiC4TrcD6p+mQyRJIhzMuFU9Xb8Bp+Kdu1Plm8NdtmuN0xpUDqROGddJhmPmJvWU1ElBtulMtyMJa7Z2wFZyWZgI/tDaOXxiTVX2YdqWOdG2Gs4jzSWcqcVX3zaU=
+	t=1780077201; cv=none; b=gS7MS0lhnR5qn4cQmZxKU5T0f1JBnVK3Deb6qB+eskE/tMQpuaSBDq2N9yYrUPK4Rb1B5lAIo2Ll4GJgeqPQgAmw7z3hRp7nUnMrl+tezUTNSE9yleTag+B49y3UgPVII5Q1usKTUQREs1NTfGoAPc1YhbuET/V3+kEcyKnqHHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780076567; c=relaxed/simple;
-	bh=LNYMZSCC/cAzhF+LBgIl6sgAGyIlLiiPJxEGjkswYyA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lkeEaj60/Odhzeh8Frz6OXj54FHnI3FIPpOKdj1Z2Yr1d4AIez41V3S0vkcIy/65hZqhCXIevzSJa35EInwiMh798XkhmCNnuzCFxyznDYV2bTdOZDC9dLHabXJA0CGdoeRQtaiA18EObU5ucMiBB9gV7LUVyErM8IZt/swNXLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwEflVMQ; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1780077201; c=relaxed/simple;
+	bh=4eX2IheEfKEGXzQj5ef3fBL4UR13GXoPaLn+BRITsTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kNQYiawshf+tsJEZje04SxlGh1SmFVatKz9aSlTs2sAECR/RYI7hW4Z1fEZZinwUGadHSSavj8lOFNgNzGKD/8HYzRUA9QZegsQZJhSkKtP/VD4R2y+ADznE6l3/us1sO4bulaMUj0ihRJr64zYfqb3An4n19NL2q4kPdi3EFmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyV86T5j; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwEflVMQ"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4903d5c67bfso46940335e9.1
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 10:42:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyV86T5j"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-45eedc94d37so938013f8f.3
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 10:53:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780076564; x=1780681364; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HADlY/OIlF0hpDL5/ae4J9awZWb2JktfXMYyTtRGzk=;
-        b=AwEflVMQ7pQsx30LNG6PgR0iFIpAY5RV+RyTI2t3AG1c9g0JG4fsUTcYdSAA2XkAN6
-         f9PYchNMEQ6gr4NTdSnL4oAFXWX2GLayxWdF7U/9J/2ma+tMhHk+qISuavKfJCC0xag4
-         lOYg3VKcOn7KizN+7BLsPzZ0WMrwdo+isQUgaYgZDfNdYGrQo4ZmewEYzzd1y+XnAJ7m
-         TOb35uzrLRuAw8fw6EpUOOQfXOprg2+gd0TaVBP7iEqc5R4Nd9vEwBZZf2f3G7mQ3qdb
-         QzqPLIx94DaWcIhngqZLWw6zwxRP1MsIoOdg2siaEkV+nfckEu+KgwbKLy5eItTwOl5O
-         SRPQ==
+        d=gmail.com; s=20251104; t=1780077199; x=1780681999; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zao36TtWYxh/e80MWBb+whUA2eRiMTH3Yxx7v4i0ShY=;
+        b=RyV86T5jiomDC14hpVbeuvvVoag1/MmqYX71D9RIGmmYYNqqglxVVcnBE5cMSIIYYD
+         qe7299GLa8BjE3mdMTSu/UquNnSR3wQnh/ew4iTiSBMLeqrnnx38IvfNM36xZX3QHRAZ
+         uuEH3Dp2xl06ZMmqX+C3d2Qnwke/HnEAS+ULq0pmd2oJfSikRyB0sW7qPvXgfSWvbT+e
+         v/amavpxPaPSODTTkzeXQbiwTXYXoMpcv0aXUb02+vkPoMIiGvNcEWM/VsL0iSgN3HJQ
+         kWxUaVDTVxEwjmPxlLYy7Oo7fJP/8FvHkHMqXFYGTbcHbNG57RA2jpIH9QVx5VEPL3cp
+         GbjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780076564; x=1780681364;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+HADlY/OIlF0hpDL5/ae4J9awZWb2JktfXMYyTtRGzk=;
-        b=e35avXVoJ67eSiYsXO5nIAA0nEi61UFTSZEcgN+/WAugmLmMSNJTN/k5GHZuo0kfbA
-         RzXjIlbjtf96/1M3o4uicFOn0fq7REpEB0+yk7dk0NEWoatj6m0VBRE9O4zBYHqxVdmh
-         R6nn8V/10Faki4dBTCrpjwJnmR18JGDMNLw1JVyYnaI15wzauFmoiSAkl+FtzdliRJXA
-         ezBTfadIWCluV81ILKed+TRCvS3i5iLenj7FusyBzzhMMaOZXd7AFQDKKjZpALED4lLE
-         4y4+4faHo8R6jIDy6jep+VxNPppH4mmWaf5YkM/uxqHZ/aWmeJfyWWYwuZpoSgXarEI5
-         FwoQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9G3pksrGUqqc5ypjOdXTZmJS7gT0//Vsi2kiGpX/vOlKydMXgb1AFJm8G3B2xNFO4DocI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf4XFcueEtwOS6IwxB7ErcqCU1XWTrrJrOgol352eQB1zdi35V
-	cPogD/PXfJb8apmXccLLsV/zFwMw1AoPShCXg2KKK7bDB1inoyXGowNV
-X-Gm-Gg: Acq92OF2M/SDFxXvb6jHn/J1FtBtUC2Ts4U3XnK6jz8Pjy+eSSKVtDtdQARdX0P0jwu
-	I3JSplMH7ddyLkBIR1kt8XvmK6DOnMjeekpXDvkZETMjUE5IMYi24JwzmKyLvgsuhbRrxJnSeE9
-	fPhVtIyBepGnwjYxiBd8qxFIwKQhU928tBlNSaUYUSF4BJbQRSgi9ULAG3vld14w3GQ7r6632Fo
-	1JHaKamME3IY+x6holyQa5S9eNCv1+lIgJ9H4PCNun0gfBSibQZm8feiE/+4GLXhxndjxmtDkgh
-	FORNknedyAbe2/TjJAWTjrYSh+rvRtAIc9367dcxrQ8oxGJ4RweHTiF1UouAs3GxUuDYIGzSsPv
-	UPCjKINE9f56689e0bjzacT//R36PLV9gAlLYR4DMeaTc4yKFLbmbnMH3DI7hUmvjmGxXM6RxR5
-	1wzKxOooEptuha0FccOkVch0kIBA==
-X-Received: by 2002:a05:600c:a00c:b0:489:1f04:96c3 with SMTP id 5b1f17b1804b1-490a2904aa4mr12256725e9.2.1780076564142;
-        Fri, 29 May 2026 10:42:44 -0700 (PDT)
-Received: from localhost ([2a03:2880:32ff:7::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909c13d018sm25065735e9.8.2026.05.29.10.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 10:42:41 -0700 (PDT)
-From: Vlad Poenaru <vlad.wing@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH bpf] bpf, lpm_trie: Allow lookups from sleepable BPF programs
-Date: Fri, 29 May 2026 10:42:33 -0700
-Message-ID: <20260529174233.2954240-1-vlad.wing@gmail.com>
-X-Mailer: git-send-email 2.52.0
+        d=1e100.net; s=20251104; t=1780077199; x=1780681999;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zao36TtWYxh/e80MWBb+whUA2eRiMTH3Yxx7v4i0ShY=;
+        b=SIT58rx3pDyMkmLe7UnikiJx9fpby6VQp1ve84Kctas3HeryJxrinmXtcFgGLsX4zF
+         jNA3iEaZo0vZfAyaNMhH1VEC7F3ioyvK+8gf9TqUZaRjHT4iFiUf+24pafFA3bPoRz4y
+         QH5l98+A/Kpk9LD9v6PYGbljQ15RGJjseeZAjbMqnOZlBDknWQhua+apj1teSAQV4Lcw
+         1PvoHSQIlVjzInYqZ0roCo8SNT/T5ECIZwwYvSfCehXACXmVGsLrh5UE0ttYPwDcpthj
+         aDOH//G8rhwie5scWeATNwgFnpChSTSoVh4bdSGWyaJaPeKGAVULJ2Rph014WwrPkw91
+         kmgg==
+X-Gm-Message-State: AOJu0YzwRekhAAdPfe4x+ZI8a7GJSG9T58x4Imx6a++5YH4z9Q+7++wu
+	xNLHe4j/5rvoWQaMwk/CotBO3Bi9k19He3p/Le7G8zbM3zmUQme/2P09
+X-Gm-Gg: Acq92OF7GM1mZHEEBDLCPLcgnuPrDgZXAmmCoy6G+erkQLtNBxq7N5WYEJAjuwjkr7k
+	L5jikBrzdQYSpAfUkHWFm6XvEzJpW6vR44LcVY8o13BmbwWKV4FbQp7zoAk8T+/HAQx7E2TOfa0
+	d61YQfKY25Qwj4PxtJ/Cb6qTd4cOiJDRo+5JY/R2k4EvGlXvL2GDa8GnJduRLH0L2nrAo8NAspr
+	jRUYrYwqAKFfVna6zidy2rS441yg6ym5vabb3uiRwVzyx9dmdGpJeQ0xRmb3A3QcFPjqMMCoswe
+	vweoNMwl3tFrZERTd9Z3RO1fzzk/fhFGDIUkeFiPdx111aS0Tdo2Nc3UkX77SPkR4FRnPz9PU8i
+	x0huCpePf355OUgqXqZCM+wTyvb3MHaatcDKJc0ovuLHzkNzpS0zbNwvI32mGsl1UtHTQpIURSi
+	ztyM7x2m51s73B+ODXNJzqM4aSl1sbsfNWbiCWEDksA05a2Ef/iyGmIpjAB2jl6rO0B30fqPMG0
+	gcN/KLIq7B0eY0gHosX7J0myq7rIA0w
+X-Received: by 2002:adf:f2cf:0:b0:45e:f672:40fb with SMTP id ffacd0b85a97d-45ef6b4f72bmr1207924f8f.22.1780077198422;
+        Fri, 29 May 2026 10:53:18 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef358c07bsm5227305f8f.36.2026.05.29.10.53.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2026 10:53:18 -0700 (PDT)
+Message-ID: <c8acb23e-ac1f-48d3-8e33-64c40bba16eb@gmail.com>
+Date: Fri, 29 May 2026 18:53:17 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 04/11] bpf: Implement iteration ops for
+ resizable hashtab
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260528-rhash-v5-4-7205191b6c57@meta.com>
+ <20260528182814.AD3771F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260528182814.AD3771F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-trie_lookup_elem() annotates its rcu_dereference_check() walks with
-only rcu_read_lock_bh_held(). Because rcu_dereference_check(p, c)
-resolves to "c || rcu_read_lock_held()", this passes for XDP/NAPI and
-classic RCU readers but fails for sleepable BPF programs, which enter
-via __bpf_prog_enter_sleepable() and hold only rcu_read_lock_trace().
 
-A sleepable LSM hook that ends up doing bpf_map_lookup_elem() on an LPM
-trie therefore triggers lockdep on debug kernels:
 
-  =============================
-  WARNING: suspicious RCU usage
-  7.1.0-... Tainted: G            E
-  -----------------------------
-  kernel/bpf/lpm_trie.c:249 suspicious rcu_dereference_check() usage!
-  1 lock held by net_tests/540:
-   #0: (rcu_tasks_trace_srcu_struct){....}-{0:0},
-       at: __bpf_prog_enter_sleepable+0x26/0x280
-  Call Trace:
-   dump_stack_lvl
-   lockdep_rcu_suspicious
-   trie_lookup_elem
-   bpf_prog_..._enforce_security_socket_connect
-   bpf_trampoline_...
-   security_socket_connect
-   __sys_connect
-   do_syscall_64
+On 5/28/26 7:28 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Critical] Missing error pointer check in `rhtab_map_get_next_key` leads to unhandled error pointer dereferences and kernel panics.
+> - [High] `bpf_each_rhash_elem` illegally calls `cond_resched()` and drops `rcu_read_lock()` from within a BPF map iterator callback, which will trigger kernel panics in atomic contexts.
+> - [High] Batch lookup and `seq_file` iterators prematurely terminate when encountering concurrent deletions, breaking BPF map iteration guarantees and causing silent data omission.
+> --
+> 
+> commit afc331365f30658242015d82e7bdd35a014f432d
+> Author: Mykyta Yatsenko <yatsenko@meta.com>
+> 
+> bpf: Implement iteration ops for resizable hashtab
+> 
+> Implement rhtab_map_get_next_key(), batch lookup/lookup-and-delete,
+> and the seq_file BPF iterator for BPF_MAP_TYPE_RHASH.
+> 
+>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+>> index 8944c9f070ca8..a03fa5fa6545b 100644
+>> --- a/kernel/bpf/hashtab.c
+>> +++ b/kernel/bpf/hashtab.c
+>> @@ -3021,10 +3021,363 @@ static void rhtab_map_free_internal_structs(struct bpf_map *map)
+>>  }
+>>  
+>>  static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+>> +	__must_hold_shared(RCU)
+>>  {
+>> -	return -EOPNOTSUPP;
+>> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
+>> +	struct rhtab_elem *elem;
+>> +
+>> +	elem = rhashtable_next_key(&rhtab->ht, key, rhtab_params);
+>> +
+>> +	/* if not found, return the first key */
+>> +	if (PTR_ERR(elem) == -ENOENT)
+>> +		elem = rhashtable_next_key(&rhtab->ht, NULL, rhtab_params);
+>> +
+>> +	if (!elem)
+>> +		return -ENOENT;
+>> +
+>> +	memcpy(next_key, elem->data, map->key_size);
+> 
+> [Severity: Critical]
+> Could this dereference an error pointer if rhashtable_next_key() returns
+> ERR_PTR(-EAGAIN)? 
+> 
+> The first check only handles -ENOENT. If we get -EAGAIN (which can happen
+> during concurrent resizing), it bypasses the PTR_ERR check, passes the
+> !elem check since it isn't NULL, and then passes the error pointer directly
+> into memcpy().
+> 
 
-This is lockdep-only -- no UAF, since Tasks Trace RCU does serialize
-against the trie's reclaim path -- but it spams the console once per
-distinct callsite on every debug kernel running a sleepable BPF LSM
-that does map lookups on an LPM trie, which is increasingly common.
+-EAGAIN is never returned from rhashtable_next_key(), but the error check
+can be made more reliable. I'll address this for the v6
 
-Other map types already use the bpf_rcu_lock_held() helper, which
-accepts all three contexts (classic, BH, Tasks Trace). Use it here as
-well, matching the established convention.
+>> +	return 0;
+>> +}
+> 
+> [ ... ]
+> 
+>> +static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
+>> +				void *callback_ctx, u64 flags)
+>> +{
+>> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
+>> +	void *prev_key = NULL;
+> 
+> [ ... ]
+> 
+>> +	rcu_read_lock();
+>> +	/*
+>> +	 * Best-effort iteration: if rhashtable is concurrently resized or
+>> +	 * elements are deleted/inserted, there may be missed or duplicate
+>> +	 * elements visited.
+>> +	 */
+>> +	while ((elem = rhashtable_next_key(&rhtab->ht, prev_key, rhtab_params))) {
+>> +		if (IS_ERR(elem))
+>> +			break;
+>> +		num_elems++;
+>> +		ret = callback_fn((u64)(long)map,
+>> +				  (u64)(long)elem->data,
+>> +				  (u64)(long)rhtab_elem_value(elem, map->key_size),
+>> +				  (u64)(long)callback_ctx, 0);
+>> +		if (ret)
+>> +			break;
+>> +
+>> +		prev_key = elem->data;	/* valid while RCU held */
+>> +
+>> +		if (need_resched()) {
+>> +			memcpy(key_buf, elem->data, map->key_size);
+>> +			rcu_read_unlock();
+>> +			cond_resched();
+> 
+> [Severity: High]
+> Can this cond_resched() trigger "BUG: scheduling while atomic" panics?
+> 
+> BPF programs using the bpf_for_each_map_elem helper often run in
+> non-sleepable contexts (like XDP, TC, or tracing) under an outer RCU read
+> lock or with preemption disabled. 
+> 
+> While this drops the inner RCU lock, it doesn't exit the outer atomic
+> context, so sleeping here might violate those constraints and cause system
+> instability.
+> 
 
-Fixes: 694cea395fde ("bpf: Allow RCU-protected lookups to happen from bh context")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vlad Poenaru <vlad.wing@gmail.com>
----
- kernel/bpf/lpm_trie.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+yes, I'll remove cond_resched() from here. Dropping and re-acquiring rcu lock,
+though may still be needed.
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 0f57608b385d..ac36063cb7e6 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -246,7 +246,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 
- 	/* Start walking the trie from the root node ... */
- 
--	for (node = rcu_dereference_check(trie->root, rcu_read_lock_bh_held());
-+	for (node = rcu_dereference_check(trie->root, bpf_rcu_lock_held());
- 	     node;) {
- 		unsigned int next_bit;
- 		size_t matchlen;
-@@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 		 */
- 		next_bit = extract_bit(key->data, node->prefixlen);
- 		node = rcu_dereference_check(node->child[next_bit],
--					     rcu_read_lock_bh_held());
-+					     bpf_rcu_lock_held());
- 	}
- 
- 	if (!found)
--- 
-2.53.0-Meta
+>> +			rcu_read_lock();
+>> +			prev_key = key_buf;
+>> +		}
+>> +	}
+>> +	rcu_read_unlock();
+> 
+> [ ... ]
+> 
+>> +static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+>> +					       const union bpf_attr *attr,
+>> +					       union bpf_attr __user *uattr,
+>> +					       bool do_delete)
+>> +{
+> 
+> [ ... ]
+> 
+>> +	rcu_read_lock();
+>> +
+>> +	/*
+>> +	 * Cursor stores the key of the next-to-process element (stashed by
+>> +	 * the previous batch). Look it up directly so the element is included
+>> +	 * here rather than skipped by next_key(). If the cursor was deleted
+>> +	 * concurrently (or by the previous do_delete batch), lookup returns
+>> +	 * NULL and userspace must restart from a NULL cursor.
+>> +	 */
+>> +	if (ubatch)
+>> +		elem = rhtab_lookup_elem(map, cursor);
+>> +	else
+>> +		elem = rhashtable_next_key(&rhtab->ht, NULL, rhtab_params);
+>> +
+>> +	while (elem && !IS_ERR(elem) && total < max_count) {
+> 
+> [Severity: High]
+> Will this prematurely terminate the batch iteration if a concurrent deletion
+> occurs? 
+> 
+> If the cursor element was concurrently deleted, rhashtable_next_key() returns
+> ERR_PTR(-ENOENT). This loop checks !IS_ERR(elem) and will break out early.
+> 
+> This results in the function returning -ENOENT to userspace. Under BPF UAPI
+> semantics, userspace interprets -ENOENT as the end of the map, which might
+> cause silent data omission instead of safely recovering or continuing.
+
+Maybe return -EAGAIN in case of cursor deletion, so that userspace will retry.
+
+> 
+>> +		memcpy(dst_key, elem->data, key_size);
+>> +		rhtab_read_elem_value(map, dst_val, elem, elem_map_flags);
+>> +		check_and_init_map_value(map, dst_val);
+> 
+> [ ... ]
+> 
+>> +static void *bpf_rhash_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+>> +{
+>> +	struct bpf_iter_seq_rhash_map_info *info = seq->private;
+>> +	struct rhtab_elem *elem = v;
+>> +	void *next;
+>> +
+>> +	memcpy(info->last_key, elem->data, info->map->key_size);
+>> +	info->last_key_valid = true;
+>> +	++*pos;
+>> +
+>> +	next = rhashtable_next_key(&info->rhtab->ht, info->last_key,
+>> +				   rhtab_params);
+>> +	if (IS_ERR(next))
+>> +		return NULL;
+> 
+> [Severity: High]
+> Does this also prematurely terminate the seq_file iteration on concurrent
+> deletions? 
+> 
+> Similar to the batch logic above, returning NULL when next is
+> ERR_PTR(-ENOENT) signals the end of the sequence to the iterator, which could
+> silently truncate the iteration results.
+
+Yes, in case cursor is deleted, the iteration finishes early.
+
+> 
+>> +	return next;
+>> +}
+> 
 
