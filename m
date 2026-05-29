@@ -1,243 +1,193 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB02026738C
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 03:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780023693; cv=pass; b=E7m6zJqPd+YDCoVyzaq1+/hXkBK3+nYWpJP2sSEDsmeMBKkRz7+9HU4v+/uh58cKbdwqsDBoZFlL/Udq+1zKAKLs91cIdTefBeHALJDYFQTJLZoEHyNFGNoKN73Jq6ITDwfiBmlz7e5Bt2W3noX9NApQEWoYf53oW80BDIkR2j0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780023693; c=relaxed/simple;
-	bh=TaASV/eXbLVsyWAVTsVPoCx0LARSNxuOUJWkzAi40/s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X6KuLLbeTZqKix1L05hfG12wEJxzb/Ue74beVvWXR/uHHSr50/DbByz8A0i6RjjyN2x1JgsiWrFgH83CnsZoiKM9eckTU1dsiVjuOb21MZgglxpb5u5x6j2sEcxFzSQXQ9AxeicNCp3uPMoeN6TnM7tMG8kzGx+aIzWrsODslEs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPrKJ7KB; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABCD34D910
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 03:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780023825; cv=none; b=ckG7M9j17nWHlgsW4XTkOrLCooJu10C0tVbhw89SkSyjlO29LM58wtWcDMbuzHlFQjQ04/RHyiyQWH0ZRbZPXgPdx03ZnUtZpb9AdfgUlVsyzTlnCAJ70AB+Eygzywh3z2Qk5HweTx25Fe8bgKjUsHdtrtBRwLJGWW/uVc75Adg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780023825; c=relaxed/simple;
+	bh=z72FZk3KboM5L2QhGMV/3pBoPr5ggILxlVNu2Kq6OVE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LE450F3nc4QKdKQx7WP0UwdDWpaUV/FSSSCyYfk7nETZSg74puqYgJZu6Kxncu/axUiaHbKD4x8x4Wlv7+lPuyc2KKEBzbo6c+Emm9kboL6/tyFDaan5EwXgY59j9AnKyDP65p0q+KRIxxji69/0P69AJG/iZPzuc9SFKeDM60U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHM4A3pF; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPrKJ7KB"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-45ef1629ff4so101626f8f.0
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 20:01:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780023690; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FMziEIxMxVutgg1G4Vz9MiTOMBTrOh4B0SQIZ97HTL28yeGBXpTxW7vdwSlHit+tSd
-         TmgwnpHKCwUsNuQQb7q1EcfYnrN9FB1EEHUpzwRd9GcxAQmiL63sDK+d9qwU/ajzwdq8
-         IIKCJrEu1txmHPS9ov4oKvBu6plQQXC+MjCYhMeq2VledawExP+aizFOGp4FW5ZYPbqS
-         GMWeYuVaf3Sty9OG+d72N9SMLEdHCU/hRdzfjAbLf267ZKuLRURrt1MTuHue5ikArM7O
-         y/7l+pRKpFOmAW3SC/TEvyCHdiWbs+PiecPwXxCWJMKSXDXACMhUN4GGCCnrgW+SKN1Y
-         8onA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1zB4y/bbUhvUAzHR+8e/gENPCf2O6I5QEtF8WJcA+4U=;
-        fh=WFwyd+W8IUNXZoeHl/78aQU6jQ/YsRl1E12Jr1mZv6M=;
-        b=cqQSISRWoLdNZFGDBHiI2XbAHEgUnnVt5QhCR3iOnPco+3JovjzgDGgELdqPvyBxUU
-         UcPeSzRaqWTfIWI9mrvBamn5tFVO1P86eFYETkRWjidBGjxZyvhQzNo/KEtZDTX+rhSG
-         tM2IxFUORLvheyqqYiZ+Wk7lfKqk+mdjkORMVmEiLMc8i+OWKSHbxbIAvdwsjZ6w7rqg
-         mUSiKbyetPc+beVrcWt+kLsKpak4b0fRRDy3TGGpKk1a00bokaF+r9SVj6stwW6vNSP2
-         b8gwK9QdnN5uucJIvFdudf0ooC2DbDZpHA0sZFsFlIbf/kiq2UaxZveitHsq5RE78V+H
-         nc8Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHM4A3pF"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2bd2c147abaso82284215ad.3
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 20:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780023690; x=1780628490; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1zB4y/bbUhvUAzHR+8e/gENPCf2O6I5QEtF8WJcA+4U=;
-        b=BPrKJ7KBFJmB5Zhq5x6z6Ft2qSHnaVzCPy6glcVs0YvnoSAUZV5KbHSkv1+ydH6tCm
-         pLAsA6ccEo73G77fdSA+YXJeJeFnKwLhso5lorY/xF+Stkkua633OeLV7wwPzpUdi8HW
-         ZvubYzE00upQFChzHnfv5jmcAkUEt5VFchH+qmSm3bi3iWui3K2pfs07aqtqfLZPvXBB
-         bx4OnGcidR8luyg+254UIcu//sjWMmut9/aVZeeydDBRcIrFe5dKuYGU6eS1oaIlPxco
-         bb1RMegFNUSTKMJNfOggfF2iZ8vsS3u6iMq7xrAe8iT4ioiJXfwbfAEIRtP2+94qvHi/
-         CYVw==
+        d=gmail.com; s=20251104; t=1780023823; x=1780628623; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nlntuG2EFVeWGzrVr8XIJV7GDY44HYI/mrkXLhNBYxs=;
+        b=OHM4A3pFOgYY+lm3nrN22PT4ue8hZyzg1SJ1YSbt1sFlt/cmN7h/AiAGQ+MwiW4C54
+         zKiTHo7jZf1txvm9Hw5sGy7S0t+lFBH3XV9UvjzowyZwcRH0k99JT0L7/r/3BZndXnHc
+         56ZcRkFZ+0f3yUdshQ5KyMuoyxvniP3j0CyCLXRGmuTiR/UJcfEvYiQ/kReLHb9TNcHY
+         peCDWsKHjt+rDOeLV1zgbl5OwprPhTwGRg99UGMyBb3Xc9fEnyQhJ7BnVDRJQIc3bvK5
+         k3nqCAUiFbYxkIsa46cpIT+YUMfV0oTvh69O3oYIVTvH/y4SJkNoxEIBcwDxuri2NtBe
+         ARaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780023690; x=1780628490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1zB4y/bbUhvUAzHR+8e/gENPCf2O6I5QEtF8WJcA+4U=;
-        b=KG7B9NQDmuKJxZv8axcBc/8Kip/EzbcVRIxZp14TAuqHQ+oKaEMtqbdM1XILRTxaOy
-         a5ApDEUlRvFLuzUE3D2xpsnfxpBii5MWpUOUjUo74SyKr0lkyyvHa8FTROO6yzDacl/X
-         uV5irmNr44WF34jacrXmwgPmD4kBR+gKwJpPFVsUaHnklZtFUKUvWDLUef8YB0Lxf6n+
-         B9mD8p0TRvqT4DIgIyEjWiB+TCz8U5r8oigRjykSQtX3RTCBSiLvM2zUk3snxBmqmdak
-         9YnEd/AjdY+e8REbaW5YAvEQo8c83SxQx1V2seg6rcM2AhnC7GJVZUYAdKgQfqXvrYKs
-         NEtQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/QLCe03cXYOKYlWIVi6cvQmnDG5DS6ERrmJpoKmg67aWINX2WavLh5eJJmqvL4o5gpBUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzhso4q0eVA4s4zaMp6qjL0t/JSRnFHzYsIX6IlUVYk27jIrZoj
-	l8W6NLtDBmCieuK0SaKy/Li81uXG22Chfmpyo5vdPzkwTk7ni/LS3Qo6mBtTAakuCkILs9FrqVE
-	z/dlgUa0AViAR2lbnWlPtdwpVBE2t+vQ=
-X-Gm-Gg: Acq92OHzxCwtQUegSMGUfQi6mg5QdnYgcgIvbG7OTJiKBj34jg88eOzupnXvUwkXeq3
-	OxUdKOXmEc8stV+FcTYu+u3Zog7RoqK8phP7AUehHcS0HajumcsckR0hrcmwfqO+xB8/EBsWWSm
-	BgTnsRjr5Ki7vOmDYWD2Tnp3BA4NwAAFP0OBcWzcSl2EPLoJBZUEtTZZEo6m2DI6/qMrHxadZlt
-	KV1T/GCyvp+ix3pIdTsJ5EnnwKRmSE1ueKMSWnl9tQ+9Cj14auGBRv0iPhMsuYAcZSR2e/ppCmJ
-	NTKdyo7/rpArcd/YM/bN78TgMWXj9Lh0iQ+Pu6iWa94BNv5Bc1MCR9tCvLrKDi0XdkM4NpZzTYu
-	6O17BbDkjPTvc83qlkOyLPbeh4Qq2/MatJlsF
-X-Received: by 2002:a05:600c:1f93:b0:48f:e230:8cad with SMTP id
- 5b1f17b1804b1-4909ca8958dmr12309145e9.33.1780023689961; Thu, 28 May 2026
- 20:01:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780023823; x=1780628623;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nlntuG2EFVeWGzrVr8XIJV7GDY44HYI/mrkXLhNBYxs=;
+        b=EI9K8AKKwu7NI4nh0GzVtMLuq/nMV0Vq6Lj8is36Oikn2DSrJj4GVpt+kvW3bVeHHo
+         OSg4DnaSPfGudofOy5lU3wL1x6CARFIlDZwHJ+JOcCmO7alSWRmm+xXUzVYlTIrK+03I
+         f49IxGhjnWkF9wqyy0sJYHjsJjko9zIDfwr9L6TsRhojvfmjix5cm3764FS/YYHUB9Ye
+         A83FG2OaOsot2wIJpGOCYQCXCQJ929OYyH2jfvbn+oOCDSCCjok8IREh4kPEPOyPW5Mk
+         4wPQWFZu70atKhnweJjE+ud2zTjEZXtZ6bhLuIviKIvJ5NY53JMozzaBHzBMGUs1zZam
+         tILw==
+X-Forwarded-Encrypted: i=1; AFNElJ/OuGgZvqFhbfweO6r3XcIA2N1pjnzMzqC6dmS115Y0MGqoceTPV2sQOVNpORCdL5eDklY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE5YJat/WqJVA4PPcKvSn++N2QtAv+1iJff5B9CnlrLmaaitzg
+	PjWp+3cwXZcgcDbYiC5wFSljp72bVlLGwGPKVw1Tc3rvmg8rDf3/GsdG
+X-Gm-Gg: Acq92OEyIaXp+drxLbRwOlrr9PUFp2UhnxpmOIZDVxmwKB0E8+3ePT/ssRepobyu7rr
+	iXDVaNEA9ueqDR/8AL8OvzNQXqe3Vr4UraMjIVIwxx0zbGH9jKHvIVvemtEnlHJqa9W9O/JSj3Q
+	ownMPm81YviphGKIeI/bgWr0zyp9RbMZauHxnw5PFaZ0K5PQBtvtP0jLIpAg6s93nv2udYZYDrx
+	h9wTGtVxABLN67dMPkowdua5QdKhiPzRpFVROeUstpgwlu/fUuGgL2z2+uzAhfjr6C7JSPBNZu3
+	ANnGd64iwhf24uAIfhX+m79NObMvChhpi716C2LrJ7I9oAm4DJroXmq5KdrR+3PpIrclUWrQBug
+	s7nU2da+WeWC5oeIabXdKJFrFlUnwGNLsnkJ1BZUONo7+8NbKnID63bl4q/7DZ2MG4P7jyQUoSU
+	TWX1pJ38gLgPWAwpIKTL6UX6vAgNeLCuK+LvkveoKlGPb6LjpigEN9VW9vFXZFxt8=
+X-Received: by 2002:a17:903:9ce:b0:2bd:a5e:4c66 with SMTP id d9443c01a7336-2bf2064efb1mr14331975ad.14.1780023822969;
+        Thu, 28 May 2026 20:03:42 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23b018b6sm1963565ad.43.2026.05.28.20.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 20:03:42 -0700 (PDT)
+Message-ID: <43d76deec1c5aa8a2029f907ad9c119d83b9966e.camel@gmail.com>
+Subject: Re: bpf-next verifier regression on unsigned bound checking
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: YiFei Zhu <zhuyifei@google.com>, bpf <bpf@vger.kernel.org>, Kuniyuki
+ Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>
+Date: Thu, 28 May 2026 20:03:40 -0700
+In-Reply-To: <CAADnVQKfjaro6PMyd=2qaU9UeecLmTbzfj-f5ULUpfobhsbUgQ@mail.gmail.com>
+References: 
+	<CAA-VZPk5=sQMCkngpXBo34v6=Ut5YmxNiTKSLfS6-GiSvUZUEQ@mail.gmail.com>
+	 <5bd0c7b135559943f3abccda6390705da5e493d5.camel@gmail.com>
+	 <9d1dc36948ea9cfdf48f643f9b34ccaf51411847.camel@gmail.com>
+	 <CAADnVQKfjaro6PMyd=2qaU9UeecLmTbzfj-f5ULUpfobhsbUgQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260524082944.10625-1-chensong_2000@126.com> <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
-In-Reply-To: <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 28 May 2026 20:01:18 -0700
-X-Gm-Features: AVHnY4KDNPX8j40VI8j2KdICWSeUhVeIKHxj9KOxvBn_tP2rpWL55Qhj2zLPO0Y
-Message-ID: <CAADnVQKWjqmEw6rZNQ5O8SBFs2tfK4q_UX78ZV2pH2fgdq_c2g@mail.gmail.com>
-Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: Song Chen <chensong_2000@126.com>, bpf <bpf@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 25, 2026 at 2:20=E2=80=AFAM Kaitao Cheng <kaitao.cheng@linux.de=
-v> wrote:
->
-> =E5=9C=A8 2026/5/24 16:29, Song Chen =E5=86=99=E9=81=93:
-> > I had an ebpf program which calls a kfunc defined and
-> > implemented in one of my kernel modules, it was working
-> > fine in 6.16, but was rejected to run by libbpf in 6.19,
-> > the error message was:
-> >
-> > libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
-> > incompatible with vmlinux [94389]
-> >
-> > The reason is there is a new added kfunc in kernel 6.19
-> > which happens to be the same name with my kfunc. However the
-> > error message is not obvious enough to address problem
-> > immediately.
-> >
-> > Therefore, this patches searches duplicated kfunc in
-> > both btf_vmlinux and btf_modules list before a kernel module
-> > attempts to register kfuncs through register_btf_kfunc_id_set,
-> > it prints clear error message and returns error code if same name
-> > kfunc has already implemented and registered, then developer
-> > knows at the first place.
-> >
-> > Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
-> > Signed-off-by: Song Chen <chensong_2000@126.com>
-> >
-> > ---
-> > changelog:
-> > v1 --- v2:
-> > libbpf has already specified which module this kfunc belongs to as
-> > ebpf code onwer's expectation, then verifier uses
-> > find_kallsyms_symbol_value to search kfunc's addr.
-> >
-> > v2 --- v3:
-> > After v2, I tried a new idea of introducing a namespace in libbpf
-> > to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
-> > please see [1]. Alex suggested to go back to report an error during
-> > kmod load on conflicting kfunc name for now. What's more, v2 only
-> > searched bpf_vmlinux, v3 also traverses btf_modules list.
-> >
-> > [1]:https://lore.kernel.org/all/CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSp=
-wCEXAFHpRVJQ@mail.gmail.com/
-> > ---
-> >  kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 43 insertions(+), 1 deletion(-)
-> >
->
-> btf: reject to register duplicated kfunc
->
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 4872d2a6c42d..a14ad3720872 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf *btf=
-, const char *func_name,
-> >       return 0;
-> >  }
-> >
-> > +static int btf_check_kfunc_name(struct btf *btf, const char *func_name=
-, u32 kind)
-> > +{
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +     struct btf_module *btf_mod, *tmp;
-> > +#endif
-> > +     s32 id;
-> > +     int ret =3D 0;
->
-> This ret variable may be unnecessary.
->
-> > +
-> > +     if (!btf_is_module(btf))
-> > +             goto out;
-> > +
-> > +     id =3D btf_find_by_name_kind(bpf_get_btf_vmlinux(),
-> > +                                     func_name, kind);
->
-> It seems unnecessary to split this call across multiple lines. Also,
-> some of the continuation-line indentation elsewhere does not appear
-> to follow the kernel coding style.
->
-> > +     if (id >=3D 0) {
-> > +             pr_err("kfunc %s (id: %d) is already present in vmlinux.\=
-n",
-> > +                                     func_name, id);
-> > +             ret =3D -EINVAL;
-> > +             goto out;
->
-> return -EINVAL;
->
-> > +     }
-> > +
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +     mutex_lock(&btf_module_mutex);
-> > +     list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> > +             if (btf_mod->btf =3D=3D btf)
-> > +                     continue;
-> > +             id =3D btf_find_by_name_kind(btf_mod->btf,
-> > +                                     func_name, kind);
-> > +             if (id >=3D 0) {
-> > +                     pr_err("kfunc %s (id: %d) is already present in m=
-odule %s.\n",
-> > +                                     func_name, id, btf_mod->module->n=
-ame);
->
-> follow the kernel coding style
->
-> > +                     ret =3D -EINVAL;
-> > +                     break;
->
-> mutex_unlock(&btf_module_mutex);
-> return -EINVAL;
->
-> > +             }
-> > +     }
-> > +     mutex_unlock(&btf_module_mutex);
-> > +#endif
-> > +
-> > +out:
-> > +     return ret;
-> > +}
-> > +
-> >  static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 fu=
-nc_flags)
-> >  {
-> >       const struct btf_type *func;
-> > @@ -8631,7 +8672,8 @@ static int btf_check_kfunc_protos(struct btf *btf=
-, u32 func_id, u32 func_flags)
-> >
-> >       /* sanity check kfunc name */
-> >       func_name =3D btf_name_by_offset(btf, func->name_off);
-> > -     if (!func_name || !func_name[0])
-> > +     if (!func_name || !func_name[0]
-> > +                     || btf_check_kfunc_name(btf, func_name, BTF_INFO_=
-KIND(func->info)))
->
-> follow the kernel coding style
+On Thu, 2026-05-28 at 18:05 -0700, Alexei Starovoitov wrote:
+> On Thu, May 28, 2026 at 4:34=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > [2] https://github.com/eddyz87/bpf/tree/cnum-split-at-zero
+> >=20
+> > Approach [2] fixes the issue at hand and has almost no impact on
+> > verification performance when tested on a set of
+> > selftest/scx/meta/cilium programs.
+>=20
+> pls quantify "almost not impact" and send that patch.
+> Looks small enough.
 
-yeah. formatting is way off.
-pls respin.
+Here are the stats comparing current master to this patch.
+Results are filtered by programs taking >=3D 10K instructions to verify.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D selftests: master vs experiment2 =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+-rw-r--r-- 1 ezingerman users 504K May 28 03:21 selftests.master.veristat.c=
+sv
+-rw-r--r-- 1 ezingerman users 504K May 28 03:07 selftests.experiment2.veris=
+tat.csv
+File  Program  Insns (A)  Insns (B)  Insns (DIFF)
+----  -------  ---------  ---------  ------------
+
+Total progs: 4707
+Old success: 2952
+New success: 2955
+total_insns diff min:    0.00%
+total_insns diff max:   32.41%
+0 -> value: 0
+value -> 0: 0
+total_insns abs max old: 837,487
+total_insns abs max new: 837,487
+   0 .. 5    %: 4702
+  20 .. 30   %: 3
+  30 .. 35   %: 2
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D scx: master vs experiment2 =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+
+-rw-r--r-- 1 ezingerman users 38K May 28 03:22 scx.master.veristat.csv
+-rw-r--r-- 1 ezingerman users 38K May 28 03:07 scx.experiment2.veristat.csv
+File  Program  Insns (A)  Insns (B)  Insns (DIFF)
+----  -------  ---------  ---------  ------------
+
+Total progs: 376
+Old success: 351
+New success: 351
+total_insns diff min:    0.00%
+total_insns diff max:    0.00%
+0 -> value: 0
+value -> 0: 0
+total_insns abs max old: 233,696
+total_insns abs max new: 233,696
+   0 .. 5    %: 376
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D meta: master vs experiment2 =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+
+-rw-r--r-- 1 ezingerman users 234K May 28 03:28 meta.master.veristat.csv
+-rw-r--r-- 1 ezingerman users 234K May 28 03:14 meta.experiment2.veristat.c=
+sv
+File  Program  Insns (A)  Insns (B)  Insns (DIFF)
+----  -------  ---------  ---------  ------------
+
+Total progs: 1540
+Old success: 1448
+New success: 1448
+total_insns diff min:    0.00%
+total_insns diff max:    2.08%
+0 -> value: 0
+value -> 0: 0
+total_insns abs max old: 666,036
+total_insns abs max new: 666,036
+   0 .. 5    %: 1540
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D cilium: master vs experiment2 =3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+
+-rw-r--r-- 1 ezingerman users 16K May 28 03:28 cilium.master.veristat.csv
+-rw-r--r-- 1 ezingerman users 16K May 28 03:14 cilium.experiment2.veristat.=
+csv
+File             Program                            Insns (A)  Insns (B)  I=
+nsns  (DIFF)
+---------------  ---------------------------------  ---------  ---------  -=
+------------
+bpf_host.o       tail_nodeport_nat_ingress_ipv4         19858      20170  +=
+312 (+1.57%)
+bpf_lxc.o        tail_nodeport_nat_ingress_ipv4         10510      11457  +=
+947 (+9.01%)
+bpf_overlay.o    tail_handle_inter_cluster_revsnat      10857      11437  +=
+580 (+5.34%)
+bpf_overlay.o    tail_nodeport_nat_ingress_ipv4         11768      12729  +=
+961 (+8.17%)
+bpf_wireguard.o  tail_nodeport_nat_ingress_ipv4         11811      12769  +=
+958 (+8.11%)
+
+Total progs: 134
+Old success: 134
+New success: 134
+total_insns diff min:    0.00%
+total_insns diff max:    9.01%
+0 -> value: 0
+value -> 0: 0
+total_insns abs max old: 152,012
+total_insns abs max new: 152,012
+   0 .. 5    %: 130
+   5 .. 10   %: 4
