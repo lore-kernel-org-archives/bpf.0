@@ -1,175 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4593A26ED59
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 22:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B6933FE36
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 23:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780095126; cv=none; b=Mv1h9V0Y+fUXwan23jkBl+wMJvtsaOzeIaMuVixOLQLU5D9aoMW5dNfzS0pFPRUAYcNiwWCEAjTnEyW5HpsLWqao4shbxItmCckg4xDxQwN16+1sLQiklRK2a358a4/wxEpC1qW45msmlxUWUIj/BJ5HfxtyipU/yEZxRBqLIhw=
+	t=1780095752; cv=none; b=k3NPf9P20kErGku0y6MLx+HODQEk2+B4hwFQr2hi+AeLJ1cvxfFkEYNmJkNAwzRRtvo1on1/0V2gfqYF8AbGngjNG4BMhp2lKN7IL5VdtVz+53TkMKhMMjCE0mhtu5L8DVrInLEccCPooLn9P/4KPiOlSxO3/4cmiS+YqznITrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780095126; c=relaxed/simple;
-	bh=m/Kpl7kMFbaD6IS9F0wm6VyRgIkEPPV+/ES7Lpp8z50=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BUiwFejTfw/7kXZGMdqMj07xpcFM6yyTAK1qGXViye0bUm9D334F5q4e1HU3vrXqZERuovLBWB1Y0D3v248K1KNvNsiFOumr/+Q31P8o41B+eYadkwglM8eOyFTJrfHjUnrT439GntbujkezsUFcxVD0BqzIUBw7NhTq/6rokvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWZ92oTV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780095752; c=relaxed/simple;
+	bh=LJ/sqwiQRmj2s1zgWM3ctUiE9Id7p18jzYMi57IuI6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GnODWkJFGlGVHTVIBYlcefyrzW79/iostkAktehnZXnNzoRd/HkX3s9POBZ2+Pjdo2EfVM4eyb8nSW/Ewb1JbBjfTHLcauyQBPD+MrWb4ynU5JQHEAqLwzG9b8ozk8HSE17UoHVKu+OQL7GPf8MvXyydYutLYDMhkFZ88yh/a2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ag92OM27; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWZ92oTV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBAE1F00893;
-	Fri, 29 May 2026 22:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780095124;
-	bh=WWpmU1h+aPE63X0ipL8iv5R2Wi7uc/eCAxl/br/5olk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hWZ92oTV5pM/qv75SmkGuAOeWqUY+6UdABRMcVpsbzJznBdwYAzpfOXRAFXtnlQd4
-	 51keDdsUNQuj81I5HYS99+9U73eSHNfDNo5IPkTL9W20tGVrwt9pKBW5RYUFOB0Q6b
-	 ZzhhsQZpMOyJulbTiPKjw8Lq6ZcCT5O0km49lxeeNlqIiulFEAoI+5xFmCuVgDeZwf
-	 kzHSerrKyJQJ2qWLot4ZDCbfacSNuXGn28Yrx0V7VXMQbxaX3qNjCU7sf5XWtLcZFY
-	 hjewrVAFyHH9NvxBKw6u9AR8Em624XcvLdeswrMk58IhPGA2kp6sYzA+GlVpX0rPoc
-	 ojJ7OHDovmd1A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH vfs-7.2.xattr v2] bpf: Add simple xattr support to bpffs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529221234.324174-1-daniel@iogearbox.net>
-References: <20260529221234.324174-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 22:52:04 +0000
-Message-Id: <20260529225204.ADBAE1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ag92OM27"
+Message-ID: <5c8e69ea-df49-4604-8431-56e1b478402c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780095748;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lcY+Et1qa6/TZq9VEEZcD722TLcFj+2jg8TXVdHGtIg=;
+	b=Ag92OM278yoLVS6rC/GgFrpsnLVCRv43rsTI9ZWoZ565Gw55zChONa+wEsiBKazwujMg9o
+	+DJzd6iSlyn5BtyOqAJ2meZqqT+gJGEr2Vd7F2NnWiOe31UQYWOyjyvIZZrV3VcvFKfQY0
+	tMbekYnOW+OudwuUUUqurfcylcjONK0=
+Date: Fri, 29 May 2026 16:02:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf 0/2] bpf: fork state when comparing sign crossing
+ ranges with zero
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ kernel-team@fb.com, yonghong.song@linux.dev, zhuyifei@google.com
+References: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
+ <14c9e9e95a07b6de94a142394c69b81d6587998b.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <14c9e9e95a07b6de94a142394c69b81d6587998b.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On 5/29/26 3:44 PM, Eduard Zingerman wrote:
+> On Fri, 2026-05-29 at 01:13 -0700, Eduard Zingerman wrote:
+>> YiFei Zhu reported [1] the verifier regression after switch to cnum
+>> based scalars representation. When the following sequence of
+>> instructions is processed:
+>>
+>>     1: ... rX setup with [negative, positive] bounds ...
+>>     2: if rX == 0 goto ...
+>>     3: if rX > C  goto ...
+>>     4: ... code relying on rX being in range [1, C] ...
+>>
+>> The cnum-based implementation only infers that rX range is [0, C]
+>> at instruction (4). The pre-cnum signed/unsigned ranges based
+>> representation could always deduct from 'rX != 0' that
+>> umin bound is 1.
+>>
+>> This patch introduces a workaround forking the verifier state when a
+>> register with sign-crossing range is compared to zero.
+>>
+>> [1] https://lore.kernel.org/bpf/96c4a1aa4333d10b882a9b5093d2d982f9f106e3.camel@gmail.com/T/
+>>
+>> ---
+>> Eduard Zingerman (2):
+>>       bpf: fork state when comparing sign crossing ranges with zero
+>>       selftests/bpf: test fork on zero comparison with wrapping ranges
+>>
+>>  kernel/bpf/verifier.c                              | 71 ++++++++++++++++++++++
+>>  .../testing/selftests/bpf/progs/verifier_bounds.c  | 68 +++++++++++++++++++++
+>>  2 files changed, 139 insertions(+)
+>> ---
+>> base-commit: e42e53ae23b7d41df22ccd7788192bf578f24da2
+>> change-id: 20260529-cnum-split-at-zero-3c03db9234d3
+> 
+> I don't know why CI misses it:
+> 
+> https://github.com/kernel-patches/bpf/pull/12235
+> 
+> But I see two libarena tests failures with this series locally:
+> 
+> File                 Program                    Verdict  Duration (us)   Insns  States  Program size  Jited size
+> -------------------  -------------------------  -------  -------------  ------  ------  ------------  ----------
+> ...
+> libarena_asan.bpf.o  asan_test_buddy_oob        failure         879905  209739    4158          3931           0
+> ...
+> libarena_asan.bpf.o  test_buddy_alloc_multiple  failure         269851  110341    2774          3897           0
+> ...
+> -------------------  -------------------------  -------  -------------  ------  ------  ------------  ----------
+> 
+> Investigating.
 
-New issues:
-- [Critical] The patch relies on an out-of-tree or obsolete version of the =
-VFS simple_xattr API, leading to hard compilation failures and potential me=
-mory corruption.
-- [High] The per-inode xattr quota limits can be underflowed by removing in=
-itial security xattrs, allowing unprivileged users to bypass the `SIMPLE_XA=
-TTR_MAX_SIZE` and `SIMPLE_XATTR_MAX_NR` limits.
+Hi everyone,
 
-Pre-existing issues:
-- [High] `bpf_symlink` allocates symlink target strings without memcg accou=
-nting, allowing an unprivileged user to bypass memory limits and exhaust ke=
-rnel memory.
---
+Apparently libarena_asan tests are currently skipped on BPF CI,
+because they require clang 22 [1], which is not yet enabled there.
 
-commit 5eef577d514964df263d306b47c480c2c453a101
-Author: Daniel Borkmann <daniel@iogearbox.net>
+I'll work on adding clang 22 to CI, but in the meanwhile please make
+sure to test libarena locally with clang 22 if your changes are relevant.
 
-bpf: Add simple xattr support to bpffs
+[1] https://lore.kernel.org/bpf/20260426190338.4615-6-emil@etsalapatis.com/
 
-This commit adds extended attribute support to bpffs inodes. It allows user
-space and BPF LSM programs to attach metadata like security labels to pinned
-objects or directories. The trusted and security namespaces are supported
-using in-memory simple_xattr infrastructure.
+cc: Emil
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-[ ... ]
-> @@ -1918,6 +1919,8 @@ struct bpf_mount_opts {
->  	u64 delegate_maps;
->  	u64 delegate_progs;
->  	u64 delegate_attachs;
-> +
-> +	struct simple_xattr_cache xa_cache;
->  };
-
-[Severity: Critical]
-Does this rely on an out-of-tree version of the VFS simple_xattr API?
-The struct simple_xattr_cache does not exist in the mainline tree, which
-causes a compilation failure here.
-
-> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> --- a/kernel/bpf/inode.c
-> +++ b/kernel/bpf/inode.c
-[ ... ]
-> +struct bpf_fs_inode {
-> +	struct list_head		xattrs;
-> +	struct simple_xattr_limits	xlimits;
-> +	struct inode			vfs_inode;
-> +};
-
-[Severity: Critical]
-Could this cause memory corruption due to a struct layout mismatch?
-The mainline simple_xattr API requires struct simple_xattrs (which embeds
-an rhashtable) rather than a list_head.
-
-[ ... ]
->  static int bpf_symlink(struct mnt_idmap *idmap, struct inode *dir,
->  		       struct dentry *dentry, const char *target)
->  {
-> -	char *link =3D kstrdup(target, GFP_USER | __GFP_NOWARN);
->  	struct inode *inode;
-> +	char *link;
-> +	int ret;
-> =20
-> +	link =3D kstrdup(target, GFP_USER | __GFP_NOWARN);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this code bypass memory
-cgroup accounting?=20
-
-The string allocation in bpf_symlink() lacks __GFP_ACCOUNT. Because bpffs
-is an in-memory filesystem with no maximum limits, an unprivileged user
-inside a container with write access could repeatedly create symlinks with
-large targets and exhaust host kernel memory without triggering their
-memory limits.
-
-[ ... ]
-> +static int bpf_fs_xattr_set(const struct xattr_handler *handler,
-> +			    struct mnt_idmap *idmap, struct dentry *unused,
-> +			    struct inode *inode, const char *name,
-> +			    const void *value, size_t size, int flags)
-> +{
-[ ... ]
-> +	if (handler->flags =3D=3D BPF_FS_XATTR_SECURITY) {
-> +		err =3D simple_xattr_set_limited(&opts->xa_cache, &bi->xattrs,
-> +					       &bi->xlimits, name, value, size,
-> +					       flags);
-
-[Severity: Critical]
-Is the argument count correct for simple_xattr_set_limited()? The current
-upstream API expects 6 arguments, but this code passes 7 (including the
-obsolete xa_cache).
-
-[Severity: High]
-Can this lead to an atomic underflow of the xattr quota limits?=20
-
-Since bpffs is FS_USERNS_MOUNT, an unprivileged user in a user namespace
-can modify security.* xattrs. If they remove or replace an initially seeded
-xattr, simple_xattr_set_limited() will decrement the limits. Because those
-limits were never incremented during initialization, this causes an
-underflow. The counters would wrap to negative values, effectively
-disabling the SIMPLE_XATTR_MAX_SIZE limit and allowing unbounded memory
-allocation.
-
-[ ... ]
-> +static int bpf_fs_initxattrs(struct inode *inode,
-> +			     const struct xattr *xattr_array, void *fs_info)
-> +{
-[ ... ]
-> +	for (xattr =3D xattr_array; xattr->name !=3D NULL; xattr++) {
-> +		CLASS(simple_xattr, new_xattr)(xattr->value, xattr->value_len);
-[ ... ]
-> +		if (simple_xattr_add(&opts->xa_cache, &bi->xattrs, new_xattr))
-> +			break;
-
-[Severity: High]
-Does this code bypass the quota limits increment?
-
-Initial LSM security xattrs added directly via simple_xattr_add() in
-bpf_fs_initxattrs() do not increment the quota counters in bi->xlimits.
-This sets up the underflow condition mentioned in bpf_fs_xattr_set() when
-an unprivileged user later replaces or removes these xattrs.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529221234.3241=
-74-1-daniel@iogearbox.net?part=3D1
