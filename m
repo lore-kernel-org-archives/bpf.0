@@ -1,87 +1,74 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D133C3C12
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 09:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F0B1BD9D0
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 10:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780047686; cv=none; b=mqi9QzlyEaCwWn8GzDpJAOoOkpgutBJo/SELtOYag/9EpkIwKM2a4IbGNpo3SVSwG9y+dYVuZh/DSc3+/k/a1zQZId5xSEY6l03EPHvan+hzn0yY6otJ6jDrIlvvlwqCPFsIHfw4Aa336wuEB+l54YH34ybD7KZENhuIcFPun20=
+	t=1780050006; cv=none; b=udPBxtGW33v8ZyqUIdj4Q57vseIKTGuNIChTMKOF/RtcRQ8LQjdcAflbjJXYU2uVWVuC7A+vmXBnHG77IPofqoZTvJCz/o+ptgGlFXkt/9v6C/DEKIp2DXSbj+LC3o5sI+oOp9h0IviM5qn7UVtF638wvAthlnVryFBT9MB6MH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780047686; c=relaxed/simple;
-	bh=f5FCkTh7N3CoNp6+BwZO6X7QGCTWaghA6+J3PsnbEY4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l/qipdr89V6QHpbHoThkPtgzSvk9O9iosVGa5t6wuCRD6wV9FcaFMOgZVAHfYFrjX2c9s117NpHokyQCGElCjQwPtG86w2EmlKiSCNk2JUCHFsCm6PLvHzIfjl/02OnerUjnFfqekRmR14TqdWqk3VtH1qf3vf+eopGZrH9xPCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=a2lnqLCq; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780050006; c=relaxed/simple;
+	bh=T16OEqhUQcbXNgiccH8Z3tE4Yz9Sgeozl7tYVw51dxQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WdlT51DV66E8kidOvu+m/21NKywlw4mC69vW7w6p9yaYUEowb3qO+rqbGl3ad/VLVvl4sfRuQ7uiiAndwn3AxPzKC+nvzaG/iS6ahLg5e75VLiQgM/dKNvfHnuoWg3RdH5FclVKA7q0iIQPn30ZepahKwzbJ+5dYfN+BoDv1EQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EYhPyiId; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="a2lnqLCq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=oGAyy0JuFEIGg3zEUEy7aox1powyiXUG5D5FE2CONM4=; b=a2lnqLCqdKbcrvsX9/l8Y01yD9
-	xBVEO1WSP74llyJpG5hLtcAypUEBlSNpINb5Zd1wx4dC513aDDL48/QQERGeZVoS1tRwkD0//cGQP
-	a2WasTAI124pLSJKLmUz1XYFD63mCQdqY9/k6rH/Ihy/g+nkasEvJQQDPtGOa5hGnWDo3wYUzv0ey
-	/Ccz0iiWLTBm6ETxytKH3vuVOIhMiKbyWwdVf9X9k9erX+k8oj9OB9terbjPCP9kqfTcOSwH6Axxx
-	pyaFcXMY0VTYh5O0o2gNJmp4cogvI7DqYYY/zlKJHfWGmRb2CQXClbsXXzjS9djOnbeCYAwAmeHn/
-	SKkzizqA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wStiS-000LAb-33;
-	Fri, 29 May 2026 11:41:21 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: kpsingh@kernel.org
-Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] libbpf: Also reset {insn,data}_cur on realloc failure
-Date: Fri, 29 May 2026 11:41:18 +0200
-Message-ID: <20260529094119.307264-3-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260529094119.307264-1-daniel@iogearbox.net>
-References: <20260529094119.307264-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EYhPyiId"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE3E1F00893;
+	Fri, 29 May 2026 10:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780050005;
+	bh=vNWQfIT4VlJz6Li4T9/W4/ZFZLNPEHU6h5AajwH/PLQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EYhPyiIdK9wp0GlBGNC9jhGTQWKzNTreOYhc1dSAdub0c1XV2GvfWHtk3X2mvIOE4
+	 GU7D5Ja6DfMbwbSzBFJ8A8Hs6FgED0YQhdjv1qgLhzdtwKqPVZ785sW0N1wrJaepoM
+	 I7QFliolnpBHNYvmIY8CG8ExZ2kIIb45+SMNHY5edkxQNRiF3ecUIB/JfsWYLSBqgE
+	 C0/ynZ2EPnJBjsSCVic5QVIlCxLYIRHUuOOrnR0oUMmY/lQ/BDEVi3lNVXVBw7+LJM
+	 yNj2c3ANlYQdstrn/7mrOvoDnTD9HUJW8OW47SjYW5Bd0PeNk90rXe7xPsiHw24FKR
+	 joLD+z672hNxw==
+Content-Type: multipart/mixed; boundary="===============8873764150233708925=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28015/Fri May 29 08:24:51 2026)
+Message-Id: <8c91178b95448fccb992b1430bf09c7852a06dd28dbeb322cc69a7a1d8868c93@mail.kernel.org>
+In-Reply-To: <20260529094119.307264-3-daniel@iogearbox.net>
+References: <20260529094119.307264-3-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 3/3] libbpf: Also reset {insn,data}_cur on realloc failure
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,kpsingh@kernel.org
+Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 29 May 2026 10:20:05 +0000 (UTC)
 
-realloc_insn_buf() as well as realloc_data_buf() free and NULL
-gen->insn_start / gen->data_start on -ENOMEM but leave gen->insn_cur /
-gen->data_cur pointing into the old, freed buffer. Just reset the
-cursors to NULL alongside the base pointers so the freed state is
-coherent.
+--===============8873764150233708925==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>     libbpf: Also reset {insn,data}_cur on realloc failure
+>
+>     realloc_insn_buf() as well as realloc_data_buf() free and NULL
+>     gen->insn_start / gen->data_start on -ENOMEM but leave gen->insn_cur /
+>     gen->data_cur pointing into the old, freed buffer. Just reset the
+>     cursors to NULL alongside the base pointers so the freed state is
+>     coherent.
+>
+>     Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+
+This looks like a fix for a real bug where gen->insn_cur and
+gen->data_cur are left pointing into a freed buffer on -ENOMEM.  Should
+it carry a Fixes: tag pointing at the commit that introduced the
+free()+NULL handling in realloc_insn_buf() and realloc_data_buf()?
+
+The exact SHA could not be determined here, so it would need to be
+looked up from a full bpf-next/torvalds tree.
+
+
 ---
- tools/lib/bpf/gen_loader.c | 2 ++
- 1 file changed, 2 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 3a6e1d53f287..492360ca07ea 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -63,6 +63,7 @@ static int realloc_insn_buf(struct bpf_gen *gen, __u32 size)
- 		gen->error = -ENOMEM;
- 		free(gen->insn_start);
- 		gen->insn_start = NULL;
-+		gen->insn_cur = NULL;
- 		return -ENOMEM;
- 	}
- 	gen->insn_start = insn_start;
-@@ -86,6 +87,7 @@ static int realloc_data_buf(struct bpf_gen *gen, __u32 size)
- 		gen->error = -ENOMEM;
- 		free(gen->data_start);
- 		gen->data_start = NULL;
-+		gen->data_cur = NULL;
- 		return -ENOMEM;
- 	}
- 	gen->data_start = data_start;
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26630703706
+--===============8873764150233708925==--
