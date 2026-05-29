@@ -1,99 +1,185 @@
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751153CE49E;
-	Fri, 29 May 2026 11:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B613C3BF3;
+	Fri, 29 May 2026 11:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780054991; cv=none; b=R91DrYfBEAxEIdwE6u6z5hFmxZhbPWfSIlyBm7OZ35t0rcMNufXxH4dru55eqH8mkVW2mpE2xFRvAFW7YxnopMCXrM1c80kc6r4KktV70hp9jxetzWYeCqeQlFiaqyn86qk23wBVJYzQkAAZs6Z71fL7iUh/bke9sF25lkYtNVg=
+	t=1780055695; cv=none; b=RCHQAIG80pyoqi0oWQmB1fd4Nzb6sjBjcQnES6onov1gmepc2zopST4xwrDl7M9LVokaI8AFfQfmqImTC6P8sVzyKxaFtzxiM4oD9TuOSdGourwEfZ/53GJyXTxlsGnL0opGBQbzth/fZO6E9rconb3PDQF0EaSsUb8mKWfpdHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780054991; c=relaxed/simple;
-	bh=HqntRulfDkB9lBfarMevJrdDNDH2T/4VZCs+f9kMUYQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RWgun4rRVAhI/eorBf4ivAEO6LlukD5A6oYdit/22vSuUTod0YUfjev1Iwlos/HC49PZtkc0A4JxZTW3UAUYN6jgJibNTOoL6G6izyjuLcnZbMmf/k7qkIoY2W42wY/6ceOYr3t0IRLRuELTfJaRzGl6Y81nwCAM2aWSyxXuYSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=FhMTH2ib; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1780055695; c=relaxed/simple;
+	bh=CploV4r1XHi0hyyHrOSw/drP95odjiL6JuuR/nNDCpc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FAku3iLN1Z4Y4uHRBqm8sIZJNZyi9YYm0r0Vdod70qKhvgVNn//U+a+x5FgdrhTI59B8u3rSDAbJt2k1uQJY6WhxpfucJvH+ZNRiaf4V5nNW3yXJcx/mcqNCG8zd4ccVVxW+pxnE6AQCsBUJj/WYwmk2lcEKymmyd3qCmYZz4Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8VZz9V7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="FhMTH2ib"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [58.241.16.34])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 4055cc19b;
-	Fri, 29 May 2026 19:37:52 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: jiayuan.chen@linux.dev
-Cc: emil@etsalapatis.com,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	joel.granados@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn
-Subject: Re: [PATCH v2 0/3] bpf: cgroup: fix sysctl new-value handling in __cgroup_bpf_run_filter_sysctl
-Date: Fri, 29 May 2026 19:37:52 +0800
-Message-Id: <20260529113752.2863465-1-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <0f50af7f-03c5-46d5-9d68-553dc6995df0@linux.dev>
-References: <0f50af7f-03c5-46d5-9d68-553dc6995df0@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8VZz9V7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298511F00893;
+	Fri, 29 May 2026 11:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780055693;
+	bh=wDOsRW9HSX03yxtZDtOoclJqvTh9mPV1pfPcH0+q2no=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=L8VZz9V7K1eN2jdYePACCXZ60MYUhFC1fOihSN+0H+7dhVQgUxdGJ9EQdJmCDTbwW
+	 G+lY0xHDWzx6pTWX1lLWl/0EpNCsU5b9yHlXtO5sbBEMs7G5VmlF0dXcZ9v/DGu76f
+	 /viJGQXlwamh7rHUkI0iAX99Shho8pimXeoM0y7KNHlU+cpwDo6MSIljUf43lop+B4
+	 Y/IKFYrX4MCpwS9OMGK+k+HTotpqSCbAaZXWldCVwdTAjK0G+boxDWKQ2C5xXoy/Dg
+	 Frr8k2GRRRiGohLe6GdGc+rFcv3VqLP0ZveFBiJjWHREuNVs5EyBZwfujpGuPitREW
+	 03hx7I5WrTEiQ==
+Message-ID: <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+Date: Fri, 29 May 2026 13:54:48 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e7386c53d03a2kunmed7060e8bcc45
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDH0oaVkpNGRhOQ04eGBpITFYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0
-	NVSktLVUtZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=FhMTH2ib4DDHyxC6hrq4kbMP4uWe0Yh4Vn1AyhGGCMsFhhJfiqZtErWbOcgWplTTrQSLQhTCMBdxB62q/OetrhM3Q/NBu72yXqIVrp9bkYpR9KQLf6gk5MFfTE1a8XKTplqINoLRTP8wyJWefhC2ubVLcI4Ss1oa3mGkd7PgW5E=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=actQUhFOnELrLDgapotCvt+xe42q9RDDP4m8sKTf2jY=;
-	h=date:mime-version:subject:message-id:from;
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+Content-Language: en-US
+To: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>
+Cc: Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260528093437.2519248-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 29, 2026 at 12:44 PM, Jiayuan Chen wrote:
->I think patch 1 and patch 3 should be adjacent in the series.
->
->Why is patch 2 placed between them?
+On 5/28/26 11:34, Christoph Hellwig wrote:
+> The kmem_cache_alloc_bulk return value is weird.  It returns the number
+> of allocated objects, but that must always be 0 or the requested number
+> based on the implementations and the handling in the callers, but that
+> assumption is not actually documented anywhere, which confuses automated
+> review tools.
+> 
+> Fix this by returning a bool if the allocation succeeded and adding a
+> kerneldoc comment explaining the API.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com> # skbuff
+> ---
+>  drivers/gpu/drm/msm/msm_iommu.c       |  6 +--
+>  drivers/gpu/drm/panthor/panthor_mmu.c | 13 +++---
+>  include/linux/slab.h                  |  6 ++-
+>  io_uring/io_uring.c                   | 23 ++++-------
+>  lib/test_meminit.c                    | 23 +++++------
+>  mm/kasan/kasan_test_c.c               |  5 +--
+>  mm/kfence/kfence_test.c               |  9 ++--
+>  mm/slub.c                             | 59 +++++++++++++++------------
+>  net/bpf/test_run.c                    |  7 ++--
+>  net/core/skbuff.c                     | 24 ++++++-----
+>  tools/include/linux/slab.h            |  2 +-
+>  tools/testing/shared/linux.c          | 19 ++++-----
+>  12 files changed, 97 insertions(+), 99 deletions(-)
 
-Hi Jiayuan,
+Thanks, I applied it to slab/for-7.2/alloc_bulk and merged to slab/for-next
+(it's still yankable in case of issues)
 
-Thanks for the review.
+Did some fixups below (the comment was stale prior to the patch; restored
+unlikely(), simplified one line).
 
-Patch 1 and Patch 2 are actually parallel to each other. They both address
-pre-existing issues that would be exposed and triggered once the changes
-in Patch 3 are applied.
+A test merge into yesterday's -next found a conflict in drivers/gpu/drm/
+panthor/panthor_mmu.c. Commit 1013bf53650e ("drm/panthor: Split
+panthor_vm_prepare_map_op_ctx() to prepare for reclaim") moved the changed
+codeto a new function panthor_vm_op_ctx_prealloc_pts().
+But it's solvable so no need for a complicated coordination I think.
 
-In a previous iteration, a test bot and another maintainer pointed out
-that activating the code path without fixing the underlying issues first
-could trigger a kernel panic.
+diff --git a/mm/slub.c b/mm/slub.c
+index 6caf6f3ceeed..711df528c9a6 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -7372,10 +7372,7 @@ bool kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags,
+        }
+ 
+ out:
+-       /*
+-        * memcg and kmem_cache debug support and memory initialization.
+-        * Done outside of the IRQ disabled fastpath loop.
+-        */
++       /* memcg and kmem_cache debug support and memory initialization */
+        return likely(slab_post_alloc_hook(s, NULL, flags, size, p,
+                        slab_want_init_on_alloc(flags, s), s->object_size));
+ }
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 99ab9ddb05e3..dbf0d8eae8d8 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -246,8 +246,8 @@ static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
+        int i;
+        LIST_HEAD(list);
+ 
+-       if (!kmem_cache_alloc_bulk(net_hotdata.skbuff_cache, gfp, nframes,
+-                                  (void **)skbs)) {
++       if (unlikely(!kmem_cache_alloc_bulk(net_hotdata.skbuff_cache, gfp,
++                                           nframes, (void **)skbs))) {
+                for (i = 0; i < nframes; i++)
+                        xdp_return_frame(frames[i]);
+                return -ENOMEM;
+diff --git a/tools/testing/shared/linux.c b/tools/testing/shared/linux.c
+index e9c3bc9b3272..e0a0693df08f 100644
+--- a/tools/testing/shared/linux.c
++++ b/tools/testing/shared/linux.c
+@@ -301,7 +301,7 @@ int kmem_cache_refill_sheaf(struct kmem_cache *s, gfp_t gfp,
+        if (!kmem_cache_alloc_bulk(s, gfp, size - sheaf->size,
+                        &sheaf->objects[sheaf->size]))
+                return -ENOMEM;
+-       sheaf->size += (size - sheaf->size);
++       sheaf->size = size;
+        return 0;
+ }
 
-I placed both prerequisite fixes (Patch 1 and Patch 2) before Patch 3.
-This ensures that the fixes are already in place before the code path is
-activated.
 
-If you prefer a different order, please let me know and I will be happy to
-adjust it.
 
-> Change is fine but fixes tag is wrong like the bot said.
 
-Noted. I will correct the Fixes tag in v3.
 
-> I saw a reviewed-by tag given by Emil in previous thread. Pls carry it 
-> when sending new verson.
 
-Thanks for catching this. I will make sure to collect and carry Emil's
-Reviewed-by tag in the upcoming v3.
 
-Best regards,
-Dawei
