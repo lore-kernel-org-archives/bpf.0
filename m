@@ -1,96 +1,94 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F7536607D;
-	Fri, 29 May 2026 16:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED34C3469F6
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780071330; cv=none; b=Sa3gVAYJmoxRaJx1L4rTn1HzZ6oLbY9PHtOX1ZzFaswwACXo0aI0LT2Cya8XU+3mrX7PE0H9Lz/FgSoCzFFFj4saeWcoZNsjboVzmhIfD0sxLPJNOI65GPwcX4zj9mb7RsUqUr7GiwDfbcPqMHQqh6jLtUvaWvmax11oGuF3HcM=
+	t=1780072115; cv=none; b=XdrOLcPzhrOT/Uu4U7U7YFeHWLccxj+dRHFzsa65QaLd7kd0bKIqTMGeRcOtAiPdPiO7QaxdKbSdpLF3MMp5vN4w/dmuyDnHL8jce/GdVPcJR0yjsrsyhR2d7l1qxpTke710GhFlB4QgstqCzB55GnhNdCJqj4l1pmpPGlOHoK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780071330; c=relaxed/simple;
-	bh=uL/G0eLfOk3tPLysZ/3wSHOxP3/9s1fHmc95jIWh9Fk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iHbIdwpbVUuoX6zRbz+Or6rR1AV2p5BRc5YbFeT4wY2lExzYTTcBCtC00d7Q7687RcjXE0eH4tqHqTbwwkN2PSSqGigYco5EhRyfDgkADpYuv8GuwXMj1h5Y4r3E3Tyz+Z5O9Fvm7mvk7C15Z1bLeCxW0leWcxTCV0ePY61U0dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=tFKhuz7u; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	s=arc-20240116; t=1780072115; c=relaxed/simple;
+	bh=FrjDvBNdChIyyZFjgYOZ/V64Zy60YUEvAyAmitm45ZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rTKaKns+sLXnlBn1FqjZeh7dEG3tFNF32LBM+fytRYu+tXtPuJYH4E47shPrS2g2U8uPBYEGTM0rp4VPxpfMQLl0S1gOg2JXv5U1sbIpx7GEUm5gV/SwxJjRjIzkk+UUnN1zfo14yaguE9bjtMXaY0cDYjobqHoU6tO8dIV31sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=BmDDkT+f; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="tFKhuz7u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1780066303;
-	bh=uL/G0eLfOk3tPLysZ/3wSHOxP3/9s1fHmc95jIWh9Fk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=tFKhuz7u2kk9/OBJF7dXUwCKT5j3ebFa90CpfFcs/ZRH+a9xo0FWeV3Or6WzbqGQv
-	 DzCESRaHuRWtcbpSc2JaXdg0U2Kpi+ZPVsuNZAfIW1EViO8DYBQIFHukyhsYm16J3j
-	 gtQZj/UwCJHnFiG9k/YsEi07l5mCG1QdyyjW4Sww=
-Received: from [129.217.186.252] ([129.217.186.252])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 64TEpf6Q021874
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 29 May 2026 16:51:41 +0200 (CEST)
-Message-ID: <c8650d3a-e488-4279-b28f-549d766c23a1@tu-dortmund.de>
-Date: Fri, 29 May 2026 16:51:41 +0200
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BmDDkT+f"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=gvQYM3CHMr4331PQJMo+eNKO5dQe81m7KRlGiOringc=; b=BmDDkT+fqShYgq/qS3PezhuC6/
+	lh4bJ9RprPu3pi2TIaGgpaoa+CdqIvRAOsHwXtBEw3NtOPuwO+qFJVYDFAzx+Jhnj+ci2Y22C1KUD
+	UdcUs+2TYU0wIJfF/81a3yxnPXeLof/xYIGk9fkp7gPVuJ18mDH7rB/jf+yF9EIhqLESADlFcMhfH
+	hwevzKPzbi43lGVX7pkvy+cKf+xoSq35VROMKr5YyU0F8c0xj4BbucwhNsNp1orRsGzB/16jHdIYE
+	LgyMZWHfQFIy1W3dgw+2AYlk5gxytPv68Hp4IuIAugROsffooTshyW7jOAdKc/2jqcEsPK1F0RDij
+	F3d9gt6g==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wT04U-000I2V-1M;
+	Fri, 29 May 2026 18:28:30 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: sashiko <sashiko@sashiko.dev>
+Subject: [PATCH bpf-next] libbpf: Skip endianness swap when loader generation failed
+Date: Fri, 29 May 2026 18:28:29 +0200
+Message-ID: <20260529162829.315921-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: hawk@kernel.org, netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller"
- <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
-Content-Language: en-US
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <20260527135418.1166665-6-hawk@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28015/Fri May 29 08:24:51 2026)
 
-On 5/27/26 15:54, hawk@kernel.org wrote:
-> From: Simon Schippers <simon.schippers@tu-dortmund.de>
-> +	/* If the ring is now empty and the peer TX queue is stalled by DQL
-> +	 * backpressure, release completions immediately to unblock it.
-> +	 */
-> +	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
-> +		/* Pairs with smp_wmb() in __ptr_ring_produce(); ensure ring
-> +		 * emptiness is observed before reading peer_txq->state.
-> +		 */
-> +		smp_rmb();
-> +		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
-> +			veth_bql_complete(state, peer_txq);
-> +	}
+bpf_gen__prog_load() byte-swaps the program insns and the {func,line}_info
+and CO-RE relo blobs in place for cross-endian targets. The blob offsets
+come from add_data(), which returns 0 on failure: realloc_data_buf() either
+frees and NULLs gen->data_start (realloc OOM) or returns early on an
+already-latched gen->error, leaving a stale, possibly too-small buffer.
 
-"Does this leave coalesced BQL completions pending indefinitely if the
-receive ring is empty but the peer TX queue isn't stalled by DQL? [...]"
+Neither bswap site checked for this. With gen->swapped_endian set and a
+failed generation, "gen->data_start + off" becomes NULL + 0. Guard the
+same way via !gen->error so they are skipped once generation has failed.
 
-Regarding this by [1]: Yes, this is desired behavior IMO.
+Fixes: 8ca3323dce43 ("libbpf: Support creating light skeleton of either endianness")
+Reported-by: sashiko <sashiko@sashiko.dev>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ [ Addressing https://lore.kernel.org/bpf/030307d2-f065-4434-b746-4ef5349f6190@iogearbox.net/ ]
 
-From my understanding there should not be a BQL stall caused by
-this (needs to be tested though).
+ tools/lib/bpf/gen_loader.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-A minor nit is that the observation of the minimum amount of
-slack found over several iterations of the completion processing
-(saved in dql->lowest_slack) is inaccurate and therefore the limit
-might be set to a too low value once (at the next completion call).
-I think it does not matter though.
-
-
-Overall The AI reviews [1] [2] have some valid points.
-
-Apart from that I would consider joining patch 2 and 5.
-
-[1] Link: https://sashiko.dev/#/patchset/20260527135418.1166665-1-hawk%40kernel.org
-[2] Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260527135418.1166665-1-hawk%40kernel.org
-
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index bcea21c3b7bb..fb4425cbffa3 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -1054,7 +1054,7 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 		 prog_idx, prog_type, insns_off, insn_cnt, license_off);
+ 
+ 	/* convert blob insns to target endianness */
+-	if (gen->swapped_endian) {
++	if (gen->swapped_endian && !gen->error) {
+ 		struct bpf_insn *insn = gen->data_start + insns_off;
+ 		int i;
+ 
+@@ -1092,7 +1092,7 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+ 		 sizeof(struct bpf_core_relo));
+ 
+ 	/* convert all info blobs to target endianness */
+-	if (gen->swapped_endian)
++	if (gen->swapped_endian && !gen->error)
+ 		info_blob_bswap(gen, func_info, line_info, core_relos, load_attr);
+ 
+ 	libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
+-- 
+2.43.0
 
