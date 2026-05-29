@@ -1,62 +1,62 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A8333262F
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 08:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8356348C62
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 08:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780042416; cv=none; b=ik0zUspg4+YCSjCBQstmyK0tua5VHOb72HaGYdBc07Fdf323MKBE8qbXGnteJ85M9kr/sNLdlxnJr+NDkhjE70iRv5/+zCzPfiAkV9rNUZEkrtmPHwOup4FO/P9Ce91hC8Bucw9d95v6jZZRdy2j9CCh4tgA+yuT5EcQ1rKhkaU=
+	t=1780042416; cv=none; b=GcPLaPD8C7AA46ptmJXF7Y2nkWU5UPJcokk3dusN45/OdFyp+CnQDcTpbNxmTXnAResj+6CyTpc9wxdG9aSHC5/ERsD+sZ0sa40lQsOfmOrRTTu2lUOiB5DkyUAkRp31QY8GN3u1i0qe2c6D6LFvzE5K0dKN0MKSknA4sSam72c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780042416; c=relaxed/simple;
-	bh=MGr1x5OqCs2UldfenVxbXMTSNwkTIbJIB0X5IHXr+U4=;
+	bh=kMF94CUgUYHVk9impyTBCXE/rFXGtliI6hQ1g7bEBZw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JIsOJv4SChhxOe+aaEZhiyDFG9Oopvrktj/0v6NAd+tk1YJSq1m18+Eq8vRJB9icqbwrqy2r6dnjHJkGWCJl/ux/iK6t+J98XamqejK1qv2yBpsowhsHz+Y9Mm1sZuL52JCL7Th0BMZXOeYF5UJCeUJXYaMumWIHwoq3JNb+3uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iIV3Z7AD; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version:Content-Type; b=PDpzo0nEBPVIAOcmp7wP1UKsSw9DrbYAEYAdTK5GoX4LAvdInxqHyWbsVUcFKBhXbUHd5IeGRKP4JDwrQCWPIK6iXZyjaLWK0wCqvaXxobi4vFSPsXGdGx6zPNZ1o7X8b+OQEuDEPUOjMLjW1yHtSOQWg9uI1N895K59run0hVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OryXTdP/; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iIV3Z7AD"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2be1dd4af34so122804285ad.1
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:13:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OryXTdP/"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bcd730e090so108731355ad.2
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780042414; x=1780647214; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780042415; x=1780647215; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l/BNBfIehe0OfmIYJrKDlQlIbzA5NDFu7hJ/cJ0o/Y8=;
-        b=iIV3Z7ADBtyhqn4hff9Wv5P9HbWKO+B5cod61SAnvKVYdQyENwi3PndSCeEtqeTOvN
-         zwSRLZftZwA84f/U/Jed+yyomySE1l59Z5PCgagN1Nujb9ilXy4Lr+RupUMMXU3hHLYh
-         Q4Mp1/CWRdSbPzZwOqlufHUnL1FsGm5W+twkmw+0MMDsbP1J+a/4rEB77EiUWvGkP9H7
-         Mi9jI06DaYzikt7/hifozAlPXhKGk0aUz+y728rjNtLgY4hRhxyGEInpT/KvJMiAYQvB
-         rf0zwMZ6e9QDWZqch+POvv60rRz2++mXXqBh6nGnJ97WsEzbu7QzZcAy/I2dyux2ZHzI
-         4RrQ==
+        bh=CmP8JKl+zVd5853ibk/0JajPLoRoKKYEp6uEqLbvTWM=;
+        b=OryXTdP/Y23rLhmA7C/aHX8GwHfXBgzcQ8lhCHsa60qQ6V+PFMNBduv36jI0TrZ89R
+         rdLz5PMX0KSkFJq0nl7DgKlhuXLG5J93nWwy7lkKO2ifiZM6/b5DFuEjvzBf9DKDO/2G
+         N9zpzWz4taVbachZLL+QLmJ5+2OgSt56y8AewmEWx9bibJWifoj/y2fxOkTNPMtUg8FI
+         SckFnCa6/Ce3z9xIlsMeTeI42VtHFkXmjoH30mpZDKhDKlF2sFSB/VskdYPrsf0cevsF
+         xHbxYaUaFdofjHdO2hlXE5pIBM/ajFkp+4YvU5unfTeVLFSK9WVGlVYJLbuhgR76vmVd
+         G1yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780042414; x=1780647214;
+        d=1e100.net; s=20251104; t=1780042415; x=1780647215;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=l/BNBfIehe0OfmIYJrKDlQlIbzA5NDFu7hJ/cJ0o/Y8=;
-        b=EHjY8nm5ZFz2sG7dro7EA+g/nXCzFeoRlb5DhjnrB5bZv4/d5EOT5cxpsGjM6s6tIn
-         ZCWBrcWU6RUGWLkKIrI/GdwbBnTwVGytRATkDr67Iqud+4rUrNk3BbK1e4m/PLU+ocvu
-         Np+qlD6ezXNWkqiZfPGPcm/5H/yL55WobEeZjS0rn7vLtfYPxy7ocOQrlmGDVqVPq/RC
-         HM31i55wt8w+cjzE464BXq9G6B4AskjjEglZLaQA2cG87tq39txAiPA63TT3MsjaEHH5
-         f8foMa0d/qIuBDq2rgWBWD7FEp9OHvzRTcPViY+J6kr+oWNDLAyVI40+HVMwZGlotyBb
-         ilgQ==
-X-Gm-Message-State: AOJu0YypB34raFQDJePkZzv5HJw5rivI3/4/myg5vQXYapecpVDg2e5n
-	heDS3LGazdsj8SqSiRLQIt2ABqB1SvvPOOr+nQrbPJ1tzcmaUsAl7KOUITyrBAnM
-X-Gm-Gg: Acq92OFKRxxMfqVNhADKcPelXUVJHyt5UlesdAbAVqU8AP8Ms4F32YEzbVVdTuuYeE1
-	uy6JAlHtkn5XQwGcEtzzM+h/7s78m+iktyEsb1xgcBqcV2tNFHj4l7rd/2ia6oHN6t2rpvQrnae
-	czdYm7uhuWwIbohMIqEQ0iDfzrR/5b1vnY+IYkb3v8J0RXuOnhg5M9sl/ets5cCf7yptOr46ute
-	eDwZnj747Jh9bsV8XH8qgOQM24YPboao7Oe5BL9san3wjc5tdv0lEUJCFCv0foQ4rHZ1ZbvW/Oo
-	e2nSur29aWYjgpLChNambcVJyQg7nRDaX0BkrlQqG0DE+VloC5c+u4fMYKUx1S2wMVwAsUIFDnO
-	n6RQJb0k+uBQRUpn0/iKQRzfiwWxlNLqpsBsq/UYjeQMDFT02Qn5Dt/EuzKGn7+sMCdbVkCcxO4
-	3NrgHYu1SyyXxzxBCOlTVvu2TdgguImGdpe2t0Zi74fBByXrRymlw=
-X-Received: by 2002:a17:902:d50a:b0:2bc:db02:d1ed with SMTP id d9443c01a7336-2bf20ce46f5mr25789235ad.38.1780042414167;
+        bh=CmP8JKl+zVd5853ibk/0JajPLoRoKKYEp6uEqLbvTWM=;
+        b=mMQCl/u0tGJwzSavZUqyBOx2JatWZUAFXJYYjNxMoizlGpOx4arzMaoyywLQlPSIru
+         ZkkBNO0jZw2aNsJcd0iBzqi81kc1K6FPJV2/gbiR7CVUB3rqoCQr5he7z1RurbkgjhML
+         16BrZwL2mbVrTUAfFCd28iF8Xy6acron7OpBhzokiuF+zBchp1YJ0Crl+REA1Bt2Ac8y
+         GZUMPmnAecqQh+fd3a1yu/MLbXQSreRQaKXN9f2e+GI3QYW6Xo4O2sGZu4SazA7PvxMv
+         UOFlm/wtFJYUk3zWVwhI5r3bGIPWpSQZa5EWlXsXtTEEWlVOk7v0EI7ip/7DqHNfDECY
+         0ZfA==
+X-Gm-Message-State: AOJu0YwwkW1VO5/EIeN2ceRtKhWJc1zKyCo24ooy0ZJ1/mNWr30i8UAP
+	Yq6HIlNe0+7xybiO/EcLYB33+k6olOweZr1Rv3AKgjdCBn6DpZnIPHrM2IpL1UQv
+X-Gm-Gg: Acq92OFRvxqUDvL6h9euaI9NijJiDg57fpcvMNfJ1SIaZZNqC2SuJxNJsD3g8ALxoD2
+	R7EFqxbebz1yTWJmgb3vygsGWA9UEGR1o8sG6M1y/Zyjemyo6uHhkwz1O8Y6NHdZ0sr0xf9L9Ld
+	LjDnVfIk0ziemP3c/jl9QB/fpCpKDqCPdaxsd417lomam1jjNaTPPCxxoJg0OohKNE3XiAlikOP
+	hIZUb/rmoy3gb845feVZMnzJgUbCJyHMGnTXH66iL2Y3JQq2IilAuufmlmKAKnEeTpvIEFbDBmj
+	jW9KOO/eleyoFNwu8Hh+Vj288yR6QEhMqsw7MGFngsufVads/yBmghoTx2Q3hmNBtXiExTAliDY
+	3qqHC0CiYfzBHdrs2SG7YTl4GFnkD0L36EvoTFw/hqY6L4ml9mENtZ2bYas0YRp8NedijgUu4St
+	yK66iYDvtrdjAkZ1GdmlhsPwaqRkbQc9dfFltbEZBDMPPjfq23saQ=
+X-Received: by 2002:a17:902:fc43:b0:2bd:8db9:cc0c with SMTP id d9443c01a7336-2bf2050c287mr25687915ad.6.1780042414939;
         Fri, 29 May 2026 01:13:34 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239e6f57sm10806715ad.13.2026.05.29.01.13.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239e6f57sm10806715ad.13.2026.05.29.01.13.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 01:13:33 -0700 (PDT)
+        Fri, 29 May 2026 01:13:34 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	yonghong.song@linux.dev,
 	zhuyifei@google.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf 1/2] bpf: fork state when comparing sign crossing ranges with zero
-Date: Fri, 29 May 2026 01:13:19 -0700
-Message-ID: <20260529-cnum-split-at-zero-v1-1-986c03752226@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: test fork on zero comparison with wrapping ranges
+Date: Fri, 29 May 2026 01:13:20 -0700
+Message-ID: <20260529-cnum-split-at-zero-v1-2-986c03752226@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
 References: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
@@ -82,127 +82,96 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-YiFei Zhu reported the verifier regression after switch to cnum based
-scalar representation. When the following sequence of instructions is
-processed:
+Add tests verifying that the verifier correctly narrows a
+sign-boundary-crossing range after comparing with zero.
+- fork_on_zero_cmp_k - BPF_K conditional instruction;
+- fork_on_zero_cmp_x -
+  BPF_X conditional instruction with src being zero.
+- fork_on_zero_cmp_x_swapped -
+  BPF_X conditional instruction with dst being zero.
 
-    1: ... rX setup with [negative, positive] bounds ...
-    2: if rX == 0 goto ...
-    3: if rX > C  goto ...
-    4: ... code relying on rX being in range [1, C] ...
-
-The comparison at (2) is processed by cnum{32,64}_intersect(), which
-can't punch a hole in [negative, positive] range and over approximates
-by leaving rX range unchanged, leading to a deduction of range [0, C]
-at (4). The pre-cnum signed/unsigned ranges based representation could
-always deduct from 'rX != 0' that umin bound is 1.
-
-This patch introduces a workaround: when'if rX ==/!= 0 goto ...' is
-processed and rX has [negative, positive] range, fork the verifier
-state and use current and forked states to split rX representation
-in negative and non-negative parts.
-
-The fork is placed before the branch is evaluated, so that the forked
-state re-enters check_cond_jmp_op() and gets mark_ptr_or_null_regs(),
-sync_linked_regs(), precision tracking processing w/o additional code
-changes.
-
-Reported-by: YiFei Zhu <zhuyifei@google.com>
-Closes: https://lore.kernel.org/bpf/96c4a1aa4333d10b882a9b5093d2d982f9f106e3.camel@gmail.com/T/
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 71 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ .../testing/selftests/bpf/progs/verifier_bounds.c  | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c8d980fdd709..7998e8da5e55 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15965,6 +15965,73 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index bc038ac2df98..f97b0e109326 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -2294,4 +2294,72 @@ __naked void range_within_cnum_cross_both_boundaries(void)
+ 	: __clobber_all);
  }
  
-+/*
-+ * This is a workaround for a specific pattern:
-+ *
-+ *   1: ... rX setup with [negative, positive] bounds ...
-+ *   2: if rX == 0 goto ...
-+ *   3: if rX > C  goto ...
-+ *   4: ... code relying on rX being in range [1, C] ...
-+ *
-+ * The comparison at (2) is processed by cnum{32,64}_intersect(),
-+ * which can't punch a hole in [negative, positive] range and
-+ * over approximates by leaving rX range unchanged,
-+ * leading to a deduction of range [0, C] at (4).
-+ *
-+ * The workaround is to fork verifier state when:
-+ * - 'if rX ==/!= 0 goto ...' is processed
-+ * - rX has [negative, positive] range
-+ * The current and forked states are used to split rX representation
-+ * in negative and non-negative parts.
-+ */
-+static int maybe_fork_cmp_with_zero(struct bpf_verifier_env *env,
-+				    struct bpf_insn *insn,
-+				    struct bpf_reg_state *src_reg,
-+				    struct bpf_reg_state *dst_reg)
++SEC("socket")
++__success
++__naked void fork_on_zero_cmp_k(void)
 +{
-+	struct bpf_verifier_state *fork, *cur = env->cur_state;
-+	struct bpf_reg_state *fork_dst_reg;
-+	bool is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
-+	u8 opcode = BPF_OP(insn->code);
-+	bool swapped = false;
-+	u32 fork_dst_regno;
-+
-+	if (opcode != BPF_JEQ && opcode != BPF_JNE)
-+		return 0;
-+
-+	if (!is_reg_const(src_reg, is_jmp32)) {
-+		swap(src_reg, dst_reg);
-+		swapped = true;
-+	}
-+
-+	if (!is_reg_const(src_reg, is_jmp32) || reg_const_value(src_reg, is_jmp32) != 0)
-+		return 0;
-+
-+	bool cross_sign32 = is_jmp32 &&
-+		dst_reg->r32.size < S32_MAX &&
-+		cnum32_smin(dst_reg->r32) < 0 && cnum32_smax(dst_reg->r32) > 0;
-+	bool cross_sign64 = !is_jmp32 &&
-+		dst_reg->r64.size < S64_MAX &&
-+		cnum64_smin(dst_reg->r64) < 0 && cnum64_smax(dst_reg->r64) > 0;
-+	if (!cross_sign32 && !cross_sign64)
-+		return 0;
-+
-+	fork = push_stack(env, env->insn_idx, env->insn_idx, cur->speculative);
-+	if (!fork)
-+		return -ENOMEM;
-+
-+	fork_dst_regno = swapped ? insn->src_reg : insn->dst_reg;
-+	fork_dst_reg = &fork->frame[fork->curframe]->regs[fork_dst_regno];
-+	if (is_jmp32) {
-+		cnum32_intersect_with_srange(&dst_reg->r32, S32_MIN, -1);
-+		cnum32_intersect_with_srange(&fork_dst_reg->r32, 0, S32_MAX);
-+	} else {
-+		cnum64_intersect_with_srange(&dst_reg->r64, S64_MIN, -1);
-+		cnum64_intersect_with_srange(&fork_dst_reg->r64, 0, S64_MAX);
-+	}
-+	return 0;
++	asm volatile ("							\
++	call %[bpf_get_prandom_u32];					\
++	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
++	r1 = 8;								\
++	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
++	if r1 == 0 goto 1f;						\
++	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
++	if r1 < 1 goto 2f;		/* must be dead */		\
++	if r1 > 8 goto 2f;		/* must be dead */		\
++	goto 1f;							\
++2:	r0 /= 0;			/* unreachable */		\
++1:	r0 = 0;								\
++	exit;								\
++	"
++	:: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
 +}
 +
- static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			     struct bpf_insn *insn, int *insn_idx)
- {
-@@ -16038,6 +16105,10 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			insn_flags |= INSN_F_DST_REG_STACK;
- 	}
- 
-+	err = maybe_fork_cmp_with_zero(env, insn, src_reg, dst_reg);
-+	if (err)
-+		return err;
++SEC("socket")
++__success
++__naked void fork_on_zero_cmp_x(void)
++{
++	asm volatile ("							\
++	call %[bpf_get_prandom_u32];					\
++	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
++	r1 = 8;								\
++	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
++	r2 = 0;								\
++	if r1 == r2 goto 1f;						\
++	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
++	if r1 < 1 goto 2f;		/* must be dead */		\
++	if r1 > 8 goto 2f;		/* must be dead */		\
++	goto 1f;							\
++2:	r0 /= 0;			/* unreachable */		\
++1:	r0 = 0;								\
++	exit;								\
++	"
++	:: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- 	if (insn_flags) {
- 		err = bpf_push_jmp_history(env, this_branch, insn_flags, 0, 0, 0);
- 		if (err)
++SEC("socket")
++__success
++__naked void fork_on_zero_cmp_x_swapped(void)
++{
++	asm volatile ("							\
++	call %[bpf_get_prandom_u32];					\
++	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
++	r1 = 8;								\
++	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
++	r2 = 0;								\
++	if r2 == r1 goto 1f;						\
++	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
++	if r1 < 1 goto 2f;		/* must be dead */		\
++	if r1 > 8 goto 2f;		/* must be dead */		\
++	goto 1f;							\
++2:	r0 /= 0;			/* unreachable */		\
++1:	r0 = 0;								\
++	exit;								\
++	"
++	:: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.53.0
