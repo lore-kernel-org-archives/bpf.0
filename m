@@ -1,130 +1,101 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC5C376BD1
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC1F3A7849
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780073155; cv=none; b=fE5/LuQzaU5hQ4GztvlZjFhDF/Eprx7uML/uRCUwi9LhtCmZMpx2w8qFc20y5NpnSsCzEF4w73PmFWROfAiFC0K1zu0R8DY2SIbO2hkdXoltE+tGafPULTQFua/2MsNZhdWDkqZ8p69cQ0nPH3dasN1WhCOG0pwvGL7qCNz9kEo=
+	t=1780073317; cv=none; b=W09S/38/0QfoHzcJ1oUuI589eyrXRGDKJgHWOscYD0RjnblfQ+6P1c19VcikyZRWnPfnMjIdEWG5CZxc25u4LlOczEz33hqzscpWd6Tm2TWcWZlBlK/HlRQZvY0IveXJi24cuJ4ibWUsi5aOflqo7Ai8BAqYv0xrAajiHcb8iAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780073155; c=relaxed/simple;
-	bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=AFu9fP/h/9PLZDRq3DawmzY3DI0hK4K5isa4p87gFZBVHueCUwrQkL7vjxGwxBIG3r9kmmO86cUH0ak21sODcWpEEdZdnA1QGT2/mAjlgQy7hqvhD5gUCysPpLBrJZvYp0LFKrdPwwHdyuEtOF3uJYJyY7TOwL26kJrJaRqEQD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=U6YU6Qgy; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780073317; c=relaxed/simple;
+	bh=LAbTzmQ3sbqweXzQHOMOMYVyE8Qlir2z4hhSj71QCR0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=EyB8av2NioNirPEh3TatzNhBcQtLnTgsotjiXaRQHPFT6GtPU6DaXfipFvjDXdWejdbTnfbb8hgXwTF7BrWrw6vDggh5AhRkh+cpsXX9WgoD+0pOJ6xACXWAnTB2MURSib3JmAKJ/2ijmxnPikrVWPDfh/Nf2sMrIlKjzCT/GW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aexeUxNd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="U6YU6Qgy"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba856db1c0so102330595ad.3
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 09:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780073149; x=1780677949; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
-        b=U6YU6QgykwPA7soFByIMVg2vbXSf59v0zB9T82Pl5qEorozbfJvZKAlGI0zVP87zEO
-         PyB74ETcPxMSukAmfp5cIQ3SdDvbp7bTDloQb2+VY7F/Gr5qHYiePCBvvx1I3ALVJLFd
-         WknBmMA/H9QPmkOPAWyKHRRmVMvziPyQXmrXy2Dyk67UX1jBvkwEFAnr1QfXxjap/rtM
-         XppvEPHy/pqFcyDgPQksoaM4rXhb/gZIhCryYwYUEJWCT+toO0MH4ex5qA9kBGdtKOGl
-         rhFXfu67mnePh6eXQWmuZvM7pberkMaZMtaMtG0GpEsZ3s/rKHX1/RzuuydJqD3CneCh
-         RIfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780073149; x=1780677949;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
-        b=KMHrDyHbJi7kmeuVbuCKUINUVZaNcANHgwyYNGEXGg3ws+G843fNfoKpeqsGwhbJ8v
-         OMRJF2GGmSONEM3IPIxS7p1DkyshlQ8TvyD8YRyKM8INWycHOJOfypO/e8C+MGcXenjy
-         80K33u0+0c17reV6o6LMeMvA5jkr1DuSphHCrcIux2cb8Dy6BPdm3v6da2JWeBWjM7Mi
-         nYu9rMjIoxAZi9krDooAgbHpiDYC6QwnvqHQ8bx2XHSCFAXGASGXow9zigRJxQZPhbRT
-         /TyR4C6E8XbJUmh/O4kWmh3Za6hWtLt0CfgheoOnBJZSzAm6j9MKe77nKc3DYGM3uLbw
-         EjDw==
-X-Forwarded-Encrypted: i=1; AFNElJ9gcECoxRveWSrwn+3dKNboWJbgeAPZTAf9vKn1I89bfdw68elEP+VQWOzBU7PhCbdL8lw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTmDeCO5Nq9kzr1NOPzROx0VmqkcUjYS9B9jOho910417MKRd+
-	bCFa3vc62uYaZzNEHlfSccj/6LbfASEews71VOe41VEv64/8OxhD2KdITpy3SKXLHcM=
-X-Gm-Gg: Acq92OF/1V2BmzID5cpEGSrVGwvoYn/7cHIMY9gXgjndtS2jurcn3roq6U93yN6KlDF
-	8JFU5fqbpOrs5hJ7+Id5bMv8sbnxeULZUVUco7XaA3C6jS38yhMjo8tDEieHQODgFofDdITQaPJ
-	Mkti7hLiNvikmqOTw8lx91dGP3T132UBSUGSMasCZr3K0CvEe02evuA3x8y8A4k/dCerGI4i5dO
-	InEsWCcNv43XZsH5sQ9tpWlabuWReEPkrCSFtZDM0px3B59tqEC4QeS5SY6LZvpSp2qyMwm8lT9
-	3cynzTespEm0bkp5+pOYHce+IHL0Dx2D/kLBG2bL0GYekqF3nmtmHnokVWmBKDC0EqVZW4cOl6E
-	RilAoNxjQvRcbCyoCmftqshrWT1+jS60ybj9n6Fh1DOGZgHOA1SgaqW0Y2SScBO5zjhF56gR5Ey
-	h86/HJIaccnqpmdO/j2GmnHwMT9BHUjM82YPM=
-X-Received: by 2002:a17:902:d583:b0:2b4:5931:bc4c with SMTP id d9443c01a7336-2bf367cbf43mr8005005ad.15.1780073148788;
-        Fri, 29 May 2026 09:45:48 -0700 (PDT)
-Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23c26b3bsm25060415ad.64.2026.05.29.09.45.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 09:45:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aexeUxNd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23B61F00893;
+	Fri, 29 May 2026 16:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780073315;
+	bh=L1u+wV3ZxObPw82wSlHGH2OxzO/uUzE++PykMmjLJoc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aexeUxNd9JK4n3hKOAbmX0squnF63hYrqMkuQAEUX4caHQoAoMQxqWbhhGN8eyDRT
+	 p+9d77a5ttir94zgYODM8nRCh4WFfnWm7Cls/MHXRyj6AV4+ADxic4UbQv7KRx3Yt8
+	 1ndYfjhTBy5A5d5Yd2ipWRpLCvbgSPlrzaQCbRPWsIeeMO6nt0MrckQ4TTcY3iFRl9
+	 9/D3jQ+XcB2ys1eQ+TvSvhxF5x8Ez8DFTTUCk9sPGfN06Nf/xbzzymkk1T8b+RKYM9
+	 1gd0z0p8QDRcmsyzAeUj8/OuggSk9cRG2darJZoRLCddK1EX71fvuQYbc9PsDhBUvN
+	 3OWhbnZthi/tw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 4/4] selftests/bpf: Add tests to verify the fix
+ of encapsulating VxLAN in lwt
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260529151351.69911-5-leon.hwang@linux.dev>
+References: <20260529151351.69911-5-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 29 May 2026 16:48:35 +0000
+Message-Id: <20260529164835.A23B61F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 29 May 2026 12:45:47 -0400
-Message-Id: <DIVB9MNT5JG1.SRSKMZRPB4G1@etsalapatis.com>
-Cc: <emil@etsalapatis.com>, <martin.lau@linux.dev>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <kees@kernel.org>, <joel.granados@kernel.org>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <jianhao.xu@seu.edu.cn>
-Subject: Re: [PATCH v2 0/3] bpf: cgroup: fix sysctl new-value handling in
- __cgroup_bpf_run_filter_sysctl
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Dawei Feng" <dawei.feng@seu.edu.cn>, <jiayuan.chen@linux.dev>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <0f50af7f-03c5-46d5-9d68-553dc6995df0@linux.dev>
- <20260529113752.2863465-1-dawei.feng@seu.edu.cn>
-In-Reply-To: <20260529113752.2863465-1-dawei.feng@seu.edu.cn>
 
-On Fri May 29, 2026 at 7:37 AM EDT, Dawei Feng wrote:
-> On Fri, May 29, 2026 at 12:44 PM, Jiayuan Chen wrote:
->>I think patch 1 and patch 3 should be adjacent in the series.
->>
->>Why is patch 2 placed between them?
->
-> Hi Jiayuan,
->
-> Thanks for the review.
->
-> Patch 1 and Patch 2 are actually parallel to each other. They both addres=
-s
-> pre-existing issues that would be exposed and triggered once the changes
-> in Patch 3 are applied.
->
-> In a previous iteration, a test bot and another maintainer pointed out
-> that activating the code path without fixing the underlying issues first
-> could trigger a kernel panic.
->
-> I placed both prerequisite fixes (Patch 1 and Patch 2) before Patch 3.
-> This ensures that the fixes are already in place before the code path is
-> activated.
->
-> If you prefer a different order, please let me know and I will be happy t=
-o
-> adjust it.
->
->> Change is fine but fixes tag is wrong like the bot said.
->
-> Noted. I will correct the Fixes tag in v3.
->
->> I saw a reviewed-by tag given by Emil in previous thread. Pls carry it=
-=20
->> when sending new verson.
->
-> Thanks for catching this. I will make sure to collect and carry Emil's
-> Reviewed-by tag in the upcoming v3.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The fexit program `fexit_lwt_push_ip_encap` is a global hook wit=
+hout filtering, causing test flakiness when tests run concurrently.
+--
 
-Seconding what Jiayuan said in terms of the Fixes: tag. Also feel free
-to add my Reviewed-by: on patch 2/3 that IIRC was not present on v1.
+commit 1b1d75b61046d2f71544d30d5afec12a9644a6b0
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-> Best regards,
-> Dawei
+selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in lwt
 
+This commit adds two new selftests (IPv4 and IPv6) to verify that the
+transport header of an skb is correctly set when encapsulating VxLAN using
+the bpf_lwt_push_encap() helper.
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c b/=
+tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
+> new file mode 100644
+> index 0000000000000..e9043fe654eb7
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
+> @@ -0,0 +1,36 @@
+[ ... ]
+> +SEC("fexit/bpf_lwt_push_ip_encap")
+> +int BPF_PROG(fexit_lwt_push_ip_encap, struct sk_buff *skb, void *hdr, u3=
+2 len, bool ingress,
+> +	     int retval)
+> +{
+> +	if (retval || fexit_triggered)
+> +		return 0;
+> +
+> +	fexit_triggered =3D true;
+> +	transport_hdr =3D BPF_CORE_READ(skb, transport_header);
+
+[Severity: Medium]
+Will this fexit program cause test flakiness when tests run concurrently?
+
+Since test_progs executes test functions concurrently across multiple worke=
+rs
+by default, this global fexit program might intercept the
+bpf_lwt_push_ip_encap call from a different test running simultaneously
+(like the existing GRE test).
+
+Because it only captures the first successful execution and has no filtering
+for a specific test or network namespace, could it record offsets for the
+wrong packet type and lead to random failures in the transport_hdr offset
+assertion?
+
+> +	network_hdr   =3D BPF_CORE_READ(skb, network_header);
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529151351.6991=
+1-1-leon.hwang@linux.dev?part=3D4
