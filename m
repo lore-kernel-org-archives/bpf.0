@@ -1,127 +1,125 @@
-Received: from mail-oo1-f78.google.com (mail-oo1-f78.google.com [209.85.161.78])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55D3421F00
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 20:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C493F9F25
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 20:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780084946; cv=none; b=NLFWhHxwKu61gfIJTuC3S9Uqg2Se99WtvWzQcwfVNRL7a0B+k2BRPimbUgPAhvtf+t8pFIRK5OtlsDI7m2GEnVUzv6UNKcMpaCjYXbky7UjL9LUc8xAOi2deR5riJObNYrZC6JXF0tCiS+9oML4QUqu89fm2BphxKlefqiPhJ8Q=
+	t=1780086284; cv=none; b=VkqGFu67hYs/9Y2zBX66rftm63I9Ox5qsu6I6RK2A0UB8hoxcGuVf5ArdLHXiBU7iJRyPNTGDcDmyVEeSslUaKquswrsJNfopKVuPBiIfply+2lIASgY/1Av2B9kf6NBIpNtTzswdEoMoMEzsAbsHBx9+Y6CC++JO53e9Jnieno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780084946; c=relaxed/simple;
-	bh=36pvJI2EdJhkTQBy4qCd3lBM+ogk4wlWt5gfbl9NROo=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=k92BPgAYytDl56K8tj7IkleQ0PdnZR20jIJkRgxNjMH2/UMunvFIrRMStN7f7wIOHrL+4oNws0z8bbJtUgnMOwucqumc3k4aWZiFG47ke/wJWA2hbgiHFBabgiJ/IBbqzjvph3pVUsbFUlMwtSKhL60YOtbFp/icYoyHja06LY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f78.google.com with SMTP id 006d021491bc7-69da2d033c9so4698846eaf.0
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 13:02:22 -0700 (PDT)
+	s=arc-20240116; t=1780086284; c=relaxed/simple;
+	bh=9n8i7MZ7o78TUE0nTxAtS8E8K61nzZThye2K8tr5gVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EvjAbiHQpxMrHd1rJ9IGgFjGsMSMLASFOFhXxh8yLugXU47RisECQ7RSYKD2lpX+x2uRkzQRMPu+01jLiuDZbupMfRo0mMPpB7ZldZt9+cNSY65UmefRUzw4y8jMWQTNbqDg6L/jJWWeyDypoYHCpypG3lZSVBZJGBKWI2+Z0PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YAtbP0NP; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YAtbP0NP"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ba4a1a0325so96461215ad.0
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 13:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780086281; x=1780691081; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTfhntOxmFkuBVIN+P1OGqxgUDuhd3I9XKbqS4UoT2I=;
+        b=YAtbP0NP9+1zhR4XFIgJzPUsvi0h/5+Glbtg8R0hxFZ19MoDHnhwGzY/QLFbclU044
+         QCK0vZNTxFTqbTwDsQWvg6hi0xT/y7nOVB0ljymR+DWHD81U1OCoLcONfSMksShAeW4h
+         IfePMI+awVNHqRNygy/q7dRVlOdVyJvA84YZJ4X8hCk3mBxF6Q0keW3CfYs/oEULv9nk
+         ps6RU8pvEpKmfiImKCFXLt/23P6jCh7B8bWnR3ppX6SUL2E03Fa9E6q5LKl5C56ekvhC
+         E2RZxJy6B2B6kEwQazY+nQX2Zf9t6+oXcG3QRlwAA0REDMvfRfkEUY67E3gF0SwkBTO3
+         nYYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780084941; x=1780689741;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Re8Ao6xRktM8Jt8hhQFwSTQo2GqEds4059tntsAG90=;
-        b=VFGJZwUo1InPtwnztImUFVm/JsCkhOnKg/4VqI6vBblEolz5zRhMyrlTQ6Id6G/Iw8
-         XwGr38jV/uVTPvlid+6z7mJWrgGwveTBLwRSbvC/0/0q7kLqx5BEBEDNCdsC/rYFlB6u
-         ziAg1dgDJz495eGa9yjvxtpU9lsMB6ynrjO99E+TkDgXPepjI2kipprb+dNRp8zu5Q2E
-         y1+8L5wjBFHiw8ERSfloBxExrLsIOqOHTTy80gH52ol1XX5wQ7f4SXn88ndciSeE074s
-         rzcb2sXfIzuTZxnELaQ5bplPO01sBLv/Nl5geM344ev4Vf/asomKPWcedqTLTmqrcDf0
-         d6pQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8fRw2mG5qRbWDsqB5+LYNYXYAQZqv5rqxYSP9CY4qGw5pvJo96sNROMmA2dRyScOtm/Oo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDjNt752xRfxQ21ZHA0PkT7lqQJYZ3fwGA/FXpPS0dZQo1rhqO
-	tKu0nvOLck4PcWlFvLsN6NZiVZOWQrPxiBJFKI0zqu3LcBYxdZqM4yPR5+VVKUXqejIgq0sUcde
-	IAmL78a0NYk63qeQszNQ6vlnPGKHrC6WrX6py4oJO4DioMPcXP4ffHulvqBo=
+        d=1e100.net; s=20251104; t=1780086281; x=1780691081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mTfhntOxmFkuBVIN+P1OGqxgUDuhd3I9XKbqS4UoT2I=;
+        b=AQ/0PP6mWfZeqs4D99cLg5Y54G+71IGmxmW4TalPTta/wTH1GWDQ9+LWm/gTt1dF1m
+         +1syIHUIZDgb+DlpBXvSwGvmSyoTsJ/G9qLoafgbVyTLK4Du4LBmuVON5b4dbuBaUQDj
+         Z46SEWLUZbcT33TGLAEui6wRgl+knXJMZC/PW8gZwTo7L62yCx0d4qsQgBWaf1kCjZin
+         Evd1e8iXEI6NSaXP65gY1J+yoCJk7/DqlGpkSej6V9dh+qr6SaBqBF/tSl1CiIQyhYe6
+         5za0e4P8H3oQ48TU/S7BjzASUOHMwPexAMVe7JScDFWT/NbwRxJa7Qm5AmiENuBF99/y
+         Rb+w==
+X-Gm-Message-State: AOJu0YzzXCtcVuzvJAzb+5KdJBo+XKvn5Q/duCEr9FSfQXys9O9UQcRF
+	EazaxEOFQIJWO/ojnluoRZ/fQu/fHuLoNh9ws0N2Ib9YIWcrCjlBrFFgB57pvg==
+X-Gm-Gg: Acq92OHuYlZCKP2kv8d5EiTb/W/ef5JesRdPUScJpqus8PgYz0tAYBpV3fKPHO4mksu
+	bTgdPH8BQShPEgXcPQOIdA498RzxfemUoX12eSswOuU70OuTcVGqcGTRgpAcluIiX3rSv0Zh2cw
+	lF+AXCdC3CA36PtE/PFFgAYRT8pkYdgrEQukncpuOitn2NtxAni68XUBc9MO4esG2AO594mvm/F
+	Q+g+6+Ycxp2X+cjQiHKj0Sgl5QtFp5LLYhW5GZeqFEkHGv25kjpeceKl5zSgzw06OjieoaRju8c
+	gpbm4bhXv85GBWBj7ktXGh0vjjJ0CGU8ZryyXr4Ru9vYTy5NZ/FxxpVF8mMG08p4g/zObbXyAMX
+	2BpDqquiJLibsd3vcRrBgHw3DazAS9WidEE18gl29RKEDm7o0qxAo1iLxn0Fy/gU+uDBXDetRtQ
+	7giY1TTHGMuo3IosQ/ZqcjW00BBC7mda7/wQvSz5WQJwGg7VVQbY8kx5K+JTdJxTEPm7tcioat9
+	lcXRQGT+RMukRBNg6PYTrVOYhtgwx55fLvie4x+Ar5oIo0HraR2Nnap5ysnu9mMHoYHEQ5b
+X-Received: by 2002:a17:902:e74d:b0:2bf:28e3:a5e7 with SMTP id d9443c01a7336-2bf36793522mr15387015ad.6.1780086281172;
+        Fri, 29 May 2026 13:24:41 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239e6fe9sm27740905ad.2.2026.05.29.13.24.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 29 May 2026 13:24:40 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com,
+	vbabka@suse.cz,
+	harry.yoo@oracle.com,
+	david@kernel.org,
+	tj@kernel.org,
+	roman.gushchin@linux.dev,
+	peterz@infradead.org,
+	linux-mm@kvack.org
+Subject: [PATCH bpf-next 0/4] bpf,slab: Introduce bpf_arena_alloc() kfuncs
+Date: Fri, 29 May 2026 13:24:33 -0700
+Message-ID: <20260529202438.16408-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1792:b0:69b:5f97:de79 with SMTP id
- 006d021491bc7-69e102e7ccdmr450510eaf.19.1780084941593; Fri, 29 May 2026
- 13:02:21 -0700 (PDT)
-Date: Fri, 29 May 2026 13:02:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a19f0cd.5099cdd9.8e407.0002.GAE@google.com>
-Subject: [syzbot] [bpf?] KMSAN: uninit-value in __arg_track_join
-From: syzbot <syzbot+0098eed2cc898cdd672f@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Alexei Starovoitov <ast@kernel.org>
 
-syzbot found the following issue on:
+Let BPF programs and kernel allocate objects in bpf arena via
+kvmalloc-style API: bpf_arena_alloc() kfunc.
 
-HEAD commit:    d60ec36cab33 Merge tag 'mm-hotfixes-stable-2026-05-25-16-2..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=116ac6ec580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=334b75e012487335
-dashboard link: https://syzkaller.appspot.com/bug?extid=0098eed2cc898cdd672f
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-userspace arch: i386
+Currently sched-ext BPF programs implement various allocators
+as BPF programs on top of bpf_arena_alloc_pages() kfunc. 
+This is inefficient.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Recently sched-ext kernel core introduced scx_arena_alloc() backed
+by gen_pool_alloc() to allocate arena memory too.
+This is also inefficient and gen_pool_alloc() is not fast enough.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7e228ea8db12/disk-d60ec36c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/83407360a5fe/vmlinux-d60ec36c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9e10d0866b6f/bzImage-d60ec36c.xz
+Hence adopt sheaves and slub as allocator.
+See patch 3 for algorithm details.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0098eed2cc898cdd672f@syzkaller.appspotmail.com
+Alexei Starovoitov (4):
+  slab: Introduce kmem_cache_alloc_nolock()
+  slub: Pass kmem_cache to alloc_slab_page()
+  bpf,slab: Add slub-backed allocator for bpf_arena
+  selftests/bpf: Add tests for arena slub-backed allocator
 
-=====================================================
-BUG: KMSAN: uninit-value in __arg_track_join+0x15a/0x810 kernel/bpf/liveness.c:743
- __arg_track_join+0x15a/0x810 kernel/bpf/liveness.c:743
- arg_track_join+0x186/0x870 kernel/bpf/liveness.c:784
- compute_subprog_args kernel/bpf/liveness.c:1623 [inline]
- analyze_subprog+0x3eb0/0xff30 kernel/bpf/liveness.c:1799
- bpf_compute_subprog_arg_access+0x3ee/0x2370 kernel/bpf/liveness.c:1937
- bpf_compute_live_registers+0xfdb/0x3090 kernel/bpf/liveness.c:2149
- bpf_check+0x5bcb/0x9360 kernel/bpf/verifier.c:20065
- bpf_prog_load+0x28d2/0x2d00 kernel/bpf/syscall.c:3082
- __sys_bpf+0x8e0/0xee0 kernel/bpf/syscall.c:6274
- __do_sys_bpf kernel/bpf/syscall.c:6387 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6385 [inline]
- __ia32_sys_bpf+0xa4/0xf0 kernel/bpf/syscall.c:6385
- ia32_sys_call+0x33e7/0x4360 arch/x86/include/generated/asm/syscalls_32.h:358
- do_syscall_32_irqs_on arch/x86/entry/syscall_32.c:83 [inline]
- __do_fast_syscall_32+0x195/0x470 arch/x86/entry/syscall_32.c:307
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/syscall_32.c:332
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/syscall_32.c:370
- entry_SYSENTER_compat_after_hwframe+0x84/0x8e
+ include/linux/bpf_defs.h                      |  13 +
+ include/linux/slab.h                          |  27 ++
+ kernel/bpf/Kconfig                            |   3 +
+ kernel/bpf/arena.c                            | 366 +++++++++++++++++-
+ mm/slab.h                                     |   6 +-
+ mm/slab_common.c                              |   2 +-
+ mm/slub.c                                     | 201 +++++++++-
+ .../selftests/bpf/prog_tests/arena_slab.c     |  59 +++
+ .../prog_tests/arena_slab_freeptr_stale_pcs.c |  28 ++
+ .../testing/selftests/bpf/progs/arena_slab.c  | 179 +++++++++
+ .../bpf/progs/arena_slab_freeptr_stale_pcs.c  | 120 ++++++
+ 11 files changed, 977 insertions(+), 27 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_slab.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_slab_freeptr_stale_pcs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_slab.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_pcs.c
 
-Local variable old created at:
- arg_track_join+0x86/0x870 kernel/bpf/liveness.c:783
- compute_subprog_args kernel/bpf/liveness.c:1623 [inline]
- analyze_subprog+0x3eb0/0xff30 kernel/bpf/liveness.c:1799
+-- 
+2.53.0-Meta
 
-CPU: 0 UID: 0 PID: 18676 Comm: syz.0.5880 Tainted: G        W           syzkaller #0 PREEMPT(lazy) 
-Tainted: [W]=WARN
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
