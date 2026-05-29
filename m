@@ -1,86 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699F833AD99;
-	Fri, 29 May 2026 13:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD72320A00
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 13:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780061477; cv=none; b=giCExDP+yRmJgsQ7RfNVK0ua1hw4GdFNKPdeBtySSPD82Sf+pJRTZa0SpizlyK/aNdsD2n2e3fj3Mhrujd27dejf9FYyTHa5aCdHxFVnjQcX0FUAGcnvBJFrEPl6Q8MLJq1hH3kN5OOVTdWwpJneEoNkNiPXq8grQGsYFThwpSo=
+	t=1780061780; cv=none; b=M66+wZml5er2I2rTOrjl4HZ85MWVUICD9ikEw0WS5UZ+O/qF1tgVaTgrfGziYmu7nzf7rndpg0y3taymEGRPQsTRdScUTP1WdKx2ok6711+4/tv/qSaoOfJM7ghII7WLyP4uIo6yDkAu1k5e6QoRFHrPH8lsSkZ91HUeVLewQPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780061477; c=relaxed/simple;
-	bh=mtZZ7D04Xz85pjxEpJWMZ+12/fuY8FJUl+abWbE25o4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JVX7bQowEDvNrtdpoT51k+shXoZ7uDUS7pKvmbnZkde+KzQfP9i++fyssuL/HCD6b4iKwp2AHnpedqbpDdPqSOvtBz+L9qgn+IYnZezqb19eM5qSY73NFacvyf1XszLrclVz5fUrAmAcBo/it8d/M6tExv/nU0sQdoOibbXd+3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mC7pAgxK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780061780; c=relaxed/simple;
+	bh=avjedhz6tkBLvlvxpSR3BxPacf3+mELG40N9gZ1G09Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=glBKMvx4qS8rCeXsENpZSJRb4OLI2GGyjuzeTPh05b3+ciY9HuUqDX/qhl/g7QRpGi2tc9XzxGc7MVSfCa2k8+6GkOdnyYly9iGQHT4C0FPtdDRiKwuSa4hYu8A1oAMmaorr+QedLP0y4PGRvmqeeQ7b48GqffeiiGZOCMAGQFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ei/P//Bd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mC7pAgxK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FE81F00893;
-	Fri, 29 May 2026 13:31:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ei/P//Bd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8503D1F00893;
+	Fri, 29 May 2026 13:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780061476;
-	bh=kJIk5IgVmpZCa7NB+AjYuCCJBVbazDoFrgQwRh6eA0c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=mC7pAgxKjArQ/0r27X/2mkUYu1fMpo3Zn0jIrve7axUO0+X1ZXVt+A7etNUkFRyA3
-	 A0sh7hfobfSmPeCJh6mE0ty5WSCVZtL8hxd5Pb5odVuoWgsRQxwV4Xh7ZQxS1sne8k
-	 llFIDTiZrJro4DRhOoCacosCVm5UllKTVLy7tBFx6jKxPw8i0Gf8gjLWyiEDv7Cwlr
-	 MYj1FjpjNelJUJaMZ74pRnIVzgMOiO7eCMBkQ0Ak1jh4rLPxmggqdnLzrNFitBfWzY
-	 /+7HZ/twun8TecA7/g+03+kYvRCv1w8giFUqDgXRkMddJD65+b9ocxi6Gcg+ZdBk5t
-	 aDXViOFJurYkw==
-Date: Fri, 29 May 2026 09:31:10 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>, Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>, Beau Belgrave
- <beaub@linux.microsoft.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
- Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, "Carlos
- O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>, Dylan Hatch
- <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, "H.
- Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, Vasily Gorbik
- <gor@linux.ibm.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>
-Subject: Re: [PATCH v2] unwind: Add sframe_(un)register() system calls
-Message-ID: <20260529093110.6f3ed243@fedora>
-In-Reply-To: <20260529082840.26496A2c-hca@linux.ibm.com>
-References: <20260528151023.00f5ec4e@gandalf.local.home>
-	<20260529082840.26496A2c-hca@linux.ibm.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=k20260515; t=1780061779;
+	bh=tkl4sR7vzufgWkjQ1saXN08wf7PWrUa9x52UIeb6DXo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Ei/P//Bdo7LQH9SHf4hMwHCjs5/09N0sRrmYWFaUJmPLiYB/r2Ox3F+KotJwIopVY
+	 tGzsfEs0PMxKRaMp/EK3dSintQMjamBdnhUchtjYb04yBqJQLTbm4XmmqBXQmkfPTP
+	 r/1LedetR72P+I+dkeNIOb4J/guQMcE7PWHbS1S7ztVO+Pb+LJ4wgqouHmq/x8mXCu
+	 hCpuPY6pCZOotBU90aqu3prcEBG9/XS5fRevVh3Ab41OkqzInJP5R3WMDoFZUtUVPW
+	 3bH4I/ph6hpGGZWw5PM0qr3NO7r28ielMUBjIghzKvuYLwwpt8/LXaro+TwHpW0KXG
+	 UHJfbSmDJOSEg==
+Date: Fri, 29 May 2026 14:36:13 +0100
+From: Will Deacon <will@kernel.org>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH bpf-next v2 2/3] bpf, arm64: Add JIT support for stack
+ arguments
+Message-ID: <ahmWTbYokwcp1Lel@willie-the-truck>
+References: <20260427234801.2104511-1-puranjay@kernel.org>
+ <20260427234801.2104511-3-puranjay@kernel.org>
+ <ahhGbFY_4Dai1NjR@willie-the-truck>
+ <CANk7y0j6JecSuJVZg1phn2tSHrcHPDqqmoaDBy1LdnMo-1qsFg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANk7y0j6JecSuJVZg1phn2tSHrcHPDqqmoaDBy1LdnMo-1qsFg@mail.gmail.com>
 
-On Fri, 29 May 2026 10:28:40 +0200
-Heiko Carstens <hca@linux.ibm.com> wrote:
-
-> > diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> > index 09a7ef04d979..52519e2acdc8 100644
-> > --- a/arch/s390/kernel/syscalls/syscall.tbl
-> > +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> > @@ -398,3 +398,6 @@
-> >  469	common	file_setattr			sys_file_setattr
-> >  470	common	listns				sys_listns
-> >  471	common	rseq_slice_yield		sys_rseq_slice_yield
-> > +472	common	stacktrace_setup		sys_stacktrace_setup
-> > +472	common	sframe_register			sys_sframe_register
-> > +473	common	sframe_unregister		sys_sframe_unregister  
+On Thu, May 28, 2026 at 03:23:32PM +0100, Puranjay Mohan wrote:
+> Thanks for your review.
+> These patches have already landed in bpf-next tree as a part of this
+> series: https://lore.kernel.org/all/20260513044949.2382019-1-yonghong.song@linux.dev/
 > 
-> What is stacktrace_setup? And why only for s390? Looks like a leftover.
+> I will take all your feedback and send fixes for all the required changes.
 
-Oops! Yes it's a left over. Thanks for noticing.
+Thanks. My review backlog is huge, but I still try to look at stuff even
+after it's been merged.
 
--- Steve
+> > How does that work with kfuncs? I think the PCS means that they will
+> > expect to pick the stack arguments starting at [SP+0]. Or are you
+> > saying that SP == FP+16 on entry to the callee? It's hard to reconcile
+> > that with the ASCII art in build_prologue() because neither "current
+> > A64_FP" nor "BPF_FP" point below A64_SP and it's not clear which of them
+> > you're referring to when you refer to "FP" on its own.
+> 
+> At entry to kfunc the arguments are starting at [SP+0] like a normal C
+> callee function would expect.
+> 
+> The line "callee reads them from [FP+16], [FP+24]" is for a BPF callee
+> which always emits a frame record.
+> So the caller puts the arguments at SP+0, SP+8, .. and then the callee
+> creates the frame record in the prologue which means the first
+> argument is at FP+16, ....
+> This is just an implementation detail about how the JITed BPF callee
+> programs can read stack arguments from FP+16, ... easily.
+
+That makes sense, but if you're able to rejig the diagram in
+build_prologue() to mirror that then it would really help us to remember
+it in future.
+
+> > > @@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_insn *insn,
+> > >       return 0;
+> > >  }
+> > >
+> > > +static const u8 stack_arg_reg[] = { A64_R(5), A64_R(6), A64_R(7) };
+> > > +
+> > > +#define NR_STACK_ARG_REGS    ARRAY_SIZE(stack_arg_reg)
+> > > +
+> > > +static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx)
+> > > +{
+> > > +     int idx = bpf_off / sizeof(u64) - 1;
+> > > +
+> > > +     if (idx < NR_STACK_ARG_REGS)
+> > > +             emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
+> > > +     else
+> > > +             emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) + 16), ctx);
+> > > +}
+> >
+> > Is it worth asserting that bpf_off >= 8 here or can we rely on that? I
+> > struggled to find any details about how bpf passes arguments on the
+> > stack (beyond what you describe in the commit message) and grepping for
+> > BPF_REG_PARAMS didn't help either.
+> 
+> This and other patches in this set has more information about this:
+> https://lore.kernel.org/all/20260513045015.2385013-1-yonghong.song@linux.dev/
+
+Thanks, that matches what I'd managed to figure out.
+
+Will
