@@ -1,173 +1,191 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037FB3346BE
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 07:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780040379; cv=none; b=Y0L21A4DbOjSfAi6taltnmnRS+IixvZJkEWBSnAt4DBzu3Szsgqzuq2ArM26JpNBynJtuuo9YHrWDyogXq0L0R9dFmu9TDrspFnZUTQwK95HpdRF8iPbUSHFsFp2k9IiZwLIYkiEdlXTihMpgwVDeVw9Je3aJgvPNlA3vhIdxIs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780040379; c=relaxed/simple;
-	bh=73036+Nf/FaBbujgMKjPHUDS6X66wjc6LgBWcMBCgVo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dP282EyRfz0NhnTMNu/G+xTLnKLdliAWkkaRvJq/tEJfAOnB7/qEMZKORtRaCIYHmhOloD+QWG/VY0wEqqDJ8f/jxPy8IKDiwXuPv6AV8FXx3NJWW4zN9ePE1t69lD9BOIWNXb+hQqR0C1RbFmCoQLToC3Gi+NCWxtNSL77jeGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RrYVfpV9; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9542C17D6
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 08:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780041704; cv=pass; b=qYtxed8W0rUGfJionPLUy3bFYQIFkyMrTBmbf0ogVqf6+kkw+GbJZ1Nwf2YRqknQQfQ+MnxecSYVRuFmeaswHRNmEPyHWc1cZru+3j6gQWJj1TvCdv/Cf1Au+sB2Qtzje0R+NqTQRmxKu6L0Zt5vavVhlSp31z3Xx/wEvU0ZPl0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780041704; c=relaxed/simple;
+	bh=BnSxB7MNKfuACgGegp9vQcxDloM1Xn3kSs5NA/LfGys=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=mXaAHxJxqOVR1qRtnPCGERblGT3Q2Fr9cX0j1xsMGibwrtvCD1mQsB8lsxI7sZpZciIY8IO6eui9oMlQhYND/crheX0h9iM79Oy6MEopkMIuVtDt6ziMCK6GxMGzpeXrOHLlSYHWqUMCYIVbgl6ok2dvpyS66h4BWwuZyPjicvA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ClH2unIb; arc=pass smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RrYVfpV9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Azy+axFr08Q52wAYVVFbbjePe5cxDL+s8eJ033wqhL0=; b=RrYVfpV9y1rOdu87hYYsKKm56l
-	agPdm6mue1wjbrV0PEzahoGDWkq4Kgruo3srxQ+2eeTEA+SDnzoFHFdUXaWUGsuMwWI5hvmzlx3PR
-	reqk0gnsAfdvkL213hB4VHzFAH7ZsmdVAIxrlzycCfLLAw00Wl/fGuI0dlpiFLML6TjKu50Aw3Q6C
-	H4JmLwqNW95z+3HhVOKzD987gh7vFYlM+4OPSPgCq7VsP2VOMOEJtEFUY84b5W0X/95QtshDTuUrt
-	XMgfWtvzRZlpR3pR/rCc0CZ3AsPc9l6TxgNkrSze6zziLC81EL5F83RkWqhRXGjZLvr0BiIkfMHHI
-	ztEk4BTw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wSroc-0005s2-0E;
-	Fri, 29 May 2026 09:39:34 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wSroa-0002bj-2A;
-	Fri, 29 May 2026 09:39:33 +0200
-Message-ID: <a3b92c03-ff06-4ec2-a903-9f879acd0fc5@iogearbox.net>
-Date: Fri, 29 May 2026 09:39:32 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ClH2unIb"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-bd6460b0d11so2360845266b.1
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:01:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780041702; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SjMuuADGR1nOqwHDPeDgM2vRIjxk5PuNcCRipI9mN4EaeewUoz/IPNjrjjtRBn33zX
+         UxJcrkPHxZWagn4fjQfBC9LScDa/wOIWGRLVJyu+TvWI5yVAR38baaqxwdz9/xpor1aa
+         Tjg9H8q6xpRlfO8LdXJkmljz1Dt0Jh3TheBzt4r2VPyxSeeToUmygTYC9Bek+tDXNeJl
+         gJd9bXL9GRoav3rIbmSLhSlf7jVd0aBnGsu7lShPByH59lcbU/UVWpbxd9IPKfohfL78
+         7euzJMzD9k/oTE5axf2O6wgldpIGRpAuXr+Cmwe+MhFFzApFq69W8hIcpQAV7ekcLxtc
+         DaUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=p/7hRCDFxLMueRxm6cxWJtgPYfIyfdwPUvmOsgwP1QU=;
+        fh=wHql9FK0lR9j+J1Tr70gAh7XWBJLqC+vzAahHYLqcNI=;
+        b=evG4Mmvz8zZUp/G60fpsqTNLOX+w0gvhsuI5pgQ3X2z1r/FzKMu7t6S+4gpYZdStah
+         H/eeK0yly5Out0ALi/tbw4w0nTLBUjBpPEgVQPpM6ci69lZkQCgi8eENrxbBAZv+t7am
+         23B5NF2zMnX5AqAKTVRDhGpPpzWAkPFtGXv+pQ7VYQ94hCy5YzBzdxk+id5FrmWZ270A
+         mLRQ+DS56fLWMX9NCw7mC5GrNMxRGVIe59nimkQ0hmWXAQ3uyHzEsupqh8uEueZAIU2Z
+         zna4qRbChyG/v7fq/DkFf6jtSQszEDj51ya/Gpvnof9r59BTF2KTRhtLYpwQONEfPx8z
+         vINg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780041702; x=1780646502; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=p/7hRCDFxLMueRxm6cxWJtgPYfIyfdwPUvmOsgwP1QU=;
+        b=ClH2unIbPJTEo1SNnZsS2e2NT6FZPN5C+fAEbewY3xh8a2FTsALKSz8eJbUomkISqI
+         0sc6IKrjfTJf/rLhEYAdV85uHdPYVMHyorPLkgiV8NCh7JpA9k061756DpdvNPt9LDvh
+         o/jTuaOjo+SOlBzBDdvu5DW0UE7Ou23Ue61KSzbXkAZzyhDDauO4BPTrMIm/GX3kaALf
+         rA0LbGMrAWeBbJv5NUYEpHuqvqZb3ZATcl6/7ZpJ4lhogC0fz+UKOnHxIomhJfKvskJA
+         H3WvFOEH9gE3r5daAInymZrUA46JrFAvm5YIkxxNg6IwDKPtR1Su6isoYuVNDpgxhtRc
+         dMPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780041702; x=1780646502;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/7hRCDFxLMueRxm6cxWJtgPYfIyfdwPUvmOsgwP1QU=;
+        b=Y4tNcNiqVVy+UFRtvHq5jCOCM7cSgqz6FmvCe9rz+LMRhM+lGYnm1ftoWSnqGodBy1
+         dj0KKomgg++vpGpjewrKZUMUsckxRnYFF4C7S8duERQqh0QP8X8kYWevWEhRBfxiWov2
+         5plNCOXCWErrvecQA5ettsavSM40+x26B5cofw2Dvja9tTUyw99PbQgaYI5nO4ftUFcq
+         lXd2cDj+Xp/H+zA8Blngp3Feh/DadclPQAKDoBs62ARTV9tVCt9WCHQ/Bm+1rr8qcIR9
+         UguDpperOGSl/AYmgN29VeZ0YWYgG3yHz6NGZdxCpgkHEfAkiFfo0Lj3EwGH1q0eA/uT
+         In/A==
+X-Gm-Message-State: AOJu0YwpTf8J85c6uQt9d3g4XG2MEuIzJIhYAnDBI8r3j5VPBDPBbKNV
+	I7DuE9vgBS3D7fK8rrDH0TFSvjHvfYxYi1xjP4WzpdVI1ZslgY7trChm3HiEfNoSyNVMDO1rTxz
+	X9jPCdUoTt2OHjssCPO3lyH9LJ+aGB9qxY48K3Ts=
+X-Gm-Gg: Acq92OHCGL5lfy9tMWneBusPFO1IzP+pXuwrIDA0v1i2iLN3QN2r6ABXmqaGZmcGiDY
+	Iv37M50ID3zUVlvS5SIhtY/1rk5Oh4ia94v0teKnchr/WPqf8WazPJUG3TZ16dnXWQblvRs52Kn
+	zfTtipDdls1KqRHgtyVusW+T6cwhr9HgfrXsb1BNcv2H3/WvVFWEdUrtjaZJMRyqauOE+TuWZcA
+	YDZPfsNf45g8yFJzJhDGGO3osVecJeLJVMTXOv3Oe0/G+PzfdbaqTEdjgz6XdIGg44w+j0iclVu
+	0NwCElb1vKMGhdyiIVUBmS+a8rLmZksmd9qzpRKzLB5YhZra4A==
+X-Received: by 2002:a17:907:7b91:b0:bd4:7bed:512a with SMTP id
+ a640c23a62f3a-be9ccd77561mr82061066b.30.1780041701586; Fri, 29 May 2026
+ 01:01:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/3] bpf: Add simple xattr support to bpffs
-To: Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, kpsingh@kernel.org, john.fastabend@gmail.com
-References: <20260522135626.120732-1-daniel@iogearbox.net>
- <20260527-irrtum-holztisch-risiken-690a7fb93843@brauner>
- <576b6350-6635-4544-9a06-f4777e3a0e65@iogearbox.net>
- <20260528-verraten-innig-sprechen-fa8bea6696f7@brauner>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260528-verraten-innig-sprechen-fa8bea6696f7@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28014/Thu May 28 08:24:59 2026)
+From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+Date: Fri, 29 May 2026 17:01:02 +0900
+X-Gm-Features: AVHnY4JQvv523fz0OjYrhufApmA8nMXikUDlTLVeTqDx-h6qgEpNtI_ZkFuyy10
+Message-ID: <CAOrxSK5_7e4114VyfEU9htGi+UneuNt88fGVKOAa3_ZenPOFkA@mail.gmail.com>
+Subject: [PATCH v2] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, puranjay@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 5/28/26 2:54 PM, Christian Brauner wrote:
-> On 2026-05-27 14:36 +0200, Daniel Borkmann wrote:
->> On 5/27/26 2:19 PM, Christian Brauner wrote:
->>> On Fri, May 22, 2026 at 03:56:24PM +0200, Daniel Borkmann wrote:
->>>> Add support for extended attributes on bpffs inodes so that user space
->>>> and BPF LSM programs can attach metadata, for example, a content hash
->>>> or a security label - to a pinned object or directory. BPF LSM or user
->>>> space tooling can then uniformly look at this (e.g. security.bpf.*) in
->>>> similar way to other fs'es. The store is in-memory and non-persistent:
->>>> it lives only for the lifetime of the mount, like everything else in
->>>> bpffs. The modelling is similar to tmpfs.
->>>>
->>>> bpf_fill_super() is open-coded instead of using simple_fill_super(),
->>>> because the root inode must now be allocated through bpf_fs_alloc_inode()
->>>> i.e. carry the bpf_fs_inode wrapper and come from the right cache -
->>>> which requires s_op (and s_xattr) to be installed before the first
->>>> inode is created.
->>>>
->>>> bpf_fs_listxattr() is only reachable through the filesystem via
->>>> i_op->listxattr, so the BPF token inode is left untouched. Name-based
->>>> fsetxattr()/fgetxattr() on a token fd still work since the get/set
->>>> handlers are installed at the superblock.
->>>>
->>>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->>>> Cc: Christian Brauner <brauner@kernel.org>
->>>> ---
->>>>    kernel/bpf/inode.c | 254 ++++++++++++++++++++++++++++++++++++++++++---
->>>>    1 file changed, 237 insertions(+), 17 deletions(-)
->>>>
->>>> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
->>>> index 25c06a011825..638aa996cbaf 100644
->>>> --- a/kernel/bpf/inode.c
->>>> +++ b/kernel/bpf/inode.c
->>>> @@ -21,6 +21,9 @@
->>>>    #include <linux/bpf.h>
->>>>    #include <linux/bpf_trace.h>
->>>>    #include <linux/kstrtox.h>
->>>> +#include <linux/xattr.h>
->>>> +#include <linux/security.h>
->>>> +
->>>>    #include "preload/bpf_preload.h"
->>>>    
->>>>    enum bpf_type {
->>>> @@ -30,6 +33,22 @@ enum bpf_type {
->>>>    	BPF_TYPE_LINK,
->>>>    };
->>>>    
->>>> +struct bpf_fs_inode {
->>>> +	struct simple_xattrs	*xattrs;
->>>> +	struct inode		vfs_inode;
->>>> +};
->>>
->>> Note that we are in the process of making this a lot more elegant and
->>> the interface changes significantly because of this.. The patches for
->>> this are currently in vfs-7.2.misc. I can shove them onto vfs-7.2.xattr
->>> and keep that branch stable so you can build it on top of it. You can
->>> merge that branch into -next. I won't touch it again. Just tell me if
->>> you want to do that.
->>
->> Good to know, thanks! We could probably pull that particular branch into
->> bpf-next once you push it out, and then I can rework & resubmit the patches
->> on top of it.
-> 
-> Nice, thanks. I've pushed vfs-7.2.xattr and marked it as shared now.
+bpf_find_vma() reads task->mm without holding task_lock() or taking an
+mm reference via mmget()/mmget_not_zero(). When called on a foreign task
+obtained via bpf_task_from_pid(), a concurrent exit_mm() can free the
+mm_struct between the raw pointer read and mmap_read_trylock(mm),
+resulting in a use-after-free on the mm's mmap_lock.
 
-Awesome, thanks!
+This is the same bug class fixed by commit d8e27d2d22b6 ("bpf: fix mm
+lifecycle in open-coded task_vma iterator") for the open-coded task_vma
+iterator, but bpf_find_vma() in the same file was missed by that fix.
+
+For the current task, task->mm is stable and needs no extra reference.
+For a foreign task, use get_task_mm() which acquires task_lock(), checks
+task->mm, and calls mmget() atomically, preventing the race with
+exit_mm(). The reference is dropped via mmput() after the mmap lock is
+released.
+
+Race:
+  CPU0 (BPF program)                  CPU1 (exiting task)
+  ============================        ==========================
+  bpf_find_vma(foreign_task):
+    mm = task->mm
+    // raw read, no reference
+                                      exit_mm():
+                                        task->mm = NULL
+                                        mmput(mm) -> frees mm_struct
+    mmap_read_trylock(mm)
+    // UAF: mm is freed
+
+Reproduction:
+
+  1. Build kernel >= 5.17 with CONFIG_KASAN=y, CONFIG_BPF_SYSCALL=y
+  2. Boot in a VM (QEMU works fine)
+  3. Compile the reproducer below:
+       gcc -O2 -o repro -static repro.c -lbpf -lelf -lz
+  4. Run as root: ./repro
+  5. Check dmesg for: BUG: KASAN: slab-use-after-free in down_read_trylock
+
+  The reproducer attaches a BPF program that calls bpf_find_vma() on a
+  foreign task obtained via bpf_task_from_pid(). A racing thread
+  repeatedly fork+exit's that task, creating a window where mm is freed.
+
+KASAN report (reproduced on 6.12.91, CONFIG_PREEMPT + KASAN):
+
+  BUG: KASAN: slab-use-after-free in down_read_trylock+0x380/0x3f0
+  Read of size 8 at addr ffff888003cd2fd0 by task repro/164451
+
+  Call Trace:
+   down_read_trylock+0x380/0x3f0
+   bpf_find_vma+0xdd/0x360
+   bpf_prog_708df9c9a3e172a7_main_f+0x8b/0x9e
+   bpf_trampoline_6442513469+0x43/0xa3
+
+  Freed by task 164453:
+   kmem_cache_free+0x15d/0x4b0
+   finish_task_switch.isra.0+0x4ab/0x810
+
+Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
+Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+---
+v2: Rebased onto bpf-next to fix merge conflict (no code changes).
+
+ kernel/bpf/task_iter.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index e791ae065c..015399e62b 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -757,6 +757,7 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
+task, u64, start,
+  struct vm_area_struct *vma;
+  bool irq_work_busy = false;
+  struct mm_struct *mm;
++ bool foreign = task != current;
+  int ret = -ENOENT;
+
+  if (flags)
+@@ -765,7 +766,12 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
+task, u64, start,
+  if (!task)
+  return -ENOENT;
+
+- mm = task->mm;
++ if (foreign) {
++ mm = get_task_mm(task);
++ } else {
++ mm = task->mm;
++ }
++
+  if (!mm)
+  return -ENOENT;
+
+@@ -782,6 +788,8 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
+task, u64, start,
+  ret = 0;
+  }
+  bpf_mmap_unlock_mm(work, mm);
++ if (foreign)
++ mmput(mm);
+  return ret;
+ }
+
+-- 
+2.48.1
