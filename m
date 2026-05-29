@@ -1,131 +1,129 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097C93F7A82
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 20:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27F93C2D
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 21:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780087211; cv=none; b=CKP97/XoH9JkiJnqKmfEAi2mJsoNhsYUAZCw0EkOoF6Y3C3/41QzB4bwGuWd2B/CBIFLJeN7o92L5eGQQXqnH37bfugoJSEafScR7auenXslVw9Jpqhe1IoaKNgp4h1joLbb9qdcObVtK2W5lQ8P1Z+3+rTFVFzaiVDIyXwNsBw=
+	t=1780089622; cv=none; b=S1yzenYBYwYqo/x2pq137noG3vCsp1X2VycRIAaknMkI9KPZa1kw9CpTUshiJmsFRNvxsLN/R3TLs9k8NmParh1WykTmtHt928QLpxVzXTeRx9k4AZ7n9hikq8Qbo6x+rrLOqd0nh+uGd4HRHgwLfeEVdBdoLu0rwY3LXPu7SU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780087211; c=relaxed/simple;
-	bh=99Awv4p/YpHh8uIlL20PuCOZqFAaXfStCugn2/mTAzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XxrUuxbxiqJ7WGxrC1sUOaiD/d2MjLtgPRykv39P09ur25PDwOSwqX/q7CwiAGXZFtOtY3vFL4wmuCeJXRx0nN9igDu3m1enm3NRtaSB6wiMl6bx+Iz+vP4jJzqhB8cG2+RpD+AN/z15k8NEoJeloxALbUNVbuaCsIJEXO1Dy4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PWQpvtEB; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780089622; c=relaxed/simple;
+	bh=AxXz5wceC6vw2SVs6+ribR6+QL/65iRE9LGh0YXjOso=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DI+OtYVfSqVqFSQTUfXfM+LE+uq4ldqvhEYPDXE85L2ZUzoGafE4bYF/Pw1Dyic6qyYGA0kZivJzyEC3OmxyGW6giiMY5fMVPkpBuP5cZIL/lRR4vYkx9S7wQT59W86uE7zjlSzvNPO7AeeCCoush3BsLImNQ1lPSJ96oLJEWgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kTS/WIDY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PWQpvtEB"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780087198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XFVOIICd/CtvKQr1GYXFlIipfXLzMt6AZz01mWTQiLo=;
-	b=PWQpvtEByBDge4lKFQt/y6bA9QTcCQ9zsPrtJERPIFdIrBmNMlQTJNyRqRr5gOjvf929Qf
-	qQOOr3prPOMcmBEpOP/AkotZDHY9H3LnTduMpf8dt0DKgH8GZK/CIuZX8XcvijtiB37009
-	6MAr+TyrAg3zDmdfhWc02BLmyFLhA8E=
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: bpf@vger.kernel.org
-Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
-	'Andrii Nakryiko ' <andrii@kernel.org>,
-	'Daniel Borkmann ' <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next] bpf: MAINTAINERS: Update bpf maintainers
-Date: Fri, 29 May 2026 13:39:09 -0700
-Message-ID: <20260529203909.1222164-1-martin.lau@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kTS/WIDY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 380AC1F00893;
+	Fri, 29 May 2026 21:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780089621;
+	bh=jMA69CsCA/4wLT0nz3m/KEByAQGLjsEm8J/w+KgFti8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kTS/WIDY8LFUjB4ywVfr9PaRrdpU34KvZzvfGVU0fCnKF0RizPoA+HO4aW5bzaz+q
+	 KER9Y4Qv/fadF46oqQVuQLWNjZnNStCdFrxOLJcjkNCpkq8dwqh28tpYypWUKq9GaU
+	 2/eVqRLHdFsCKJZraRg1vO4R15+FP0LpxdaMamDqoO2llrE1+/CwQfXtEwZB7IgSdg
+	 JAtDhwrfMOIC/zctABO/p10Q2DqPdo4GLdPVauOhyTciJOdY/k98ZI9e2ADVD4871x
+	 48P9p0pDSoTY1E6QiRfocWUPn1i0XRYlRYwhlfxH3MICU4peGTiNWX6qgvp4rGLZC/
+	 Lf5sA6Uwmkq9w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/4] slab: Introduce kmem_cache_alloc_nolock()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260529202438.16408-2-alexei.starovoitov@gmail.com>
+References: <20260529202438.16408-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 29 May 2026 21:20:20 +0000
+Message-Id: <20260529212021.380AC1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] Deadlock in NMI context due to synchronous freeing on memcg ch=
+arging failure
+--
 
-I am making a life change and will take a long break
-from my current work, so I will step down from the "M:" responsibility.
+commit 831b8a379d6dfbde2570286ba8453174bc236695
+Author: Alexei Starovoitov <ast@kernel.org>
 
-I am currently a "R:" in "BPF [GENERAL]", this part stays unchanged.
-I am folding most of the parts into "BPF [GENERAL]".
+slab: Introduce kmem_cache_alloc_nolock()
 
-For "BPF [BTF]", it is long overdue as I am no longer involved.
-It is folded into the "BPF [GENERAL]".
+This commit introduces kmem_cache_alloc_nolock_noprof() and its wrapper=20
+kmem_cache_alloc_nolock(). It is designed to allocate an object from a
+specific cache and aims to be safe to call from any context, including NMI
+and IRQ-off environments.
 
-The "BPF [STORAGE & CGROUPS]" will also be covered by "BPF [GENERAL]".
+> diff --git a/mm/slub.c b/mm/slub.c
+> index a2bf3756ca7d0..601986aaebdfc 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+[ ... ]
+> @@ -5402,6 +5402,45 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp=
+_flags, int node)
+>  }
+>  EXPORT_SYMBOL_GPL(kmalloc_nolock_noprof);
+> =20
+> +/**
+> + * kmem_cache_alloc_nolock - Allocate one object from a specific cache,
+> + * safe from any context (including NMI/IRQ-off), like kmalloc_nolock().
+> + *
+> + * Returns NULL on failure (including the trylock paths that may transie=
+ntly
+> + * fail under contention).
+> + */
+> +void *kmem_cache_alloc_nolock_noprof(struct kmem_cache *s, gfp_t gfp_fla=
+gs,
+> +				     int node)
+> +{
+> +	gfp_t alloc_gfp =3D __GFP_NOWARN | __GFP_NOMEMALLOC | gfp_flags;
+> +	void *ret;
+> +
+> +	VM_WARN_ON_ONCE(gfp_flags & ~(__GFP_ACCOUNT | __GFP_ZERO |
+> +				      __GFP_NO_OBJ_EXT));
+[ ... ]
+> +	maybe_wipe_obj_freeptr(s, ret);
+> +	slab_post_alloc_hook(s, NULL, alloc_gfp, 1, &ret,
+> +			     slab_want_init_on_alloc(alloc_gfp, s),
+> +			     s->object_size);
 
-For struct_ops, its usage is no longer limited to networking,
-so this naturally should move back to "BPF [GENERAL]".
+[Severity: Critical]
+Does this sequence risk a hard deadlock if called from NMI context?
 
-For the reuseport, it will continue to be maintained together
-by "BPF [GENERAL]" and the "NETWORKING [SOCKETS]".
+The function permits __GFP_ACCOUNT, but if memory cgroup charging fails
+inside memcg_slab_post_alloc_hook(), it synchronously aborts the allocation:
 
-For other "BPF [NETWORKING]...", I am moving myself to "R:".
+mm/slub.c:memcg_slab_post_alloc_hook() {
+    ...
+    if (memcg_alloc_charge_slab(s, alloc_gfp, lru, p, size)) {
+        for (i =3D 0; i < size; i++)
+            memcg_alloc_abort_single(s, p[i]);
+    ...
+}
 
-Thanks!
+This calls memcg_alloc_abort_single(), which immediately attempts to free
+the object:
 
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- MAINTAINERS | 24 +-----------------------
- 1 file changed, 1 insertion(+), 23 deletions(-)
+mm/slub.c:memcg_alloc_abort_single() {
+    ...
+    if (likely(slab_free_hook(s, object, slab_want_init_on_free(s), false)))
+        __slab_free(s, slab, object, object, 1, _RET_IP_);
+    ...
+}
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dfc621ff629d..d9caa2d980f1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4766,13 +4766,6 @@ S:	Supported
- F:	arch/x86/net/
- X:	arch/x86/net/bpf_jit_comp32.c
- 
--BPF [BTF]
--M:	Martin KaFai Lau <martin.lau@linux.dev>
--L:	bpf@vger.kernel.org
--S:	Maintained
--F:	include/linux/btf*
--F:	kernel/bpf/btf.c
--
- BPF [CORE]
- M:	Alexei Starovoitov <ast@kernel.org>
- M:	Daniel Borkmann <daniel@iogearbox.net>
-@@ -4905,18 +4898,11 @@ F:	tools/testing/selftests/bpf/prog_tests/tc_netkit.c
- F:	tools/testing/selftests/drivers/net/hw/nk_qlease.py
- F:	tools/testing/selftests/net/nk_qlease.py
- 
--BPF [NETWORKING] (struct_ops, reuseport)
--M:	Martin KaFai Lau <martin.lau@linux.dev>
--L:	bpf@vger.kernel.org
--L:	netdev@vger.kernel.org
--S:	Maintained
--F:	kernel/bpf/bpf_struct*
--
- BPF [NETWORKING] (tcx & tc BPF, sock_addr)
--M:	Martin KaFai Lau <martin.lau@linux.dev>
- M:	Daniel Borkmann <daniel@iogearbox.net>
- R:	John Fastabend <john.fastabend@gmail.com>
- R:	Stanislav Fomichev <sdf@fomichev.me>
-+R:	Martin KaFai Lau <martin.lau@linux.dev>
- L:	bpf@vger.kernel.org
- L:	netdev@vger.kernel.org
- S:	Maintained
-@@ -4951,14 +4937,6 @@ L:	bpf@vger.kernel.org
- S:	Maintained
- F:	tools/testing/selftests/bpf/
- 
--BPF [STORAGE & CGROUPS]
--M:	Martin KaFai Lau <martin.lau@linux.dev>
--L:	bpf@vger.kernel.org
--S:	Maintained
--F:	kernel/bpf/*storage.c
--F:	kernel/bpf/bpf_lru*
--F:	kernel/bpf/cgroup.c
--
- BPF [TOOLING] (bpftool)
- M:	Quentin Monnet <qmo@kernel.org>
- L:	bpf@vger.kernel.org
--- 
-2.53.0-Meta
+Both slab_free_hook() (via kmemleak and kfence hooks) and __slab_free()
+will attempt to acquire non-NMI-safe spinlocks like n->list_lock. If the
+interrupted context was holding these locks, wouldn't this synchronous free
+cause a deadlock, breaking the "safe from any context" guarantee?
 
+> +	return kasan_kmalloc(s, ret, s->object_size, alloc_gfp);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529202438.1640=
+8-1-alexei.starovoitov@gmail.com?part=3D1
