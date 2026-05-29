@@ -1,235 +1,130 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D363F4112
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC5C376BD1
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780073034; cv=none; b=sBbH5imFZd1QsIihA4nGRTJhMcHRZoGDKzRVD1jt1uuPWOAX8qgjrYSj/6zqDFy1ZPSMjyBimXPkkhU629IHal0xqWe39VMVBewh6HmFqh66kjdxSGRJfVY7yALTg+4IOBrqXa19ls1AgSM2UWgPfjGl0lm8QLerGG2G7HfHOxA=
+	t=1780073155; cv=none; b=fE5/LuQzaU5hQ4GztvlZjFhDF/Eprx7uML/uRCUwi9LhtCmZMpx2w8qFc20y5NpnSsCzEF4w73PmFWROfAiFC0K1zu0R8DY2SIbO2hkdXoltE+tGafPULTQFua/2MsNZhdWDkqZ8p69cQ0nPH3dasN1WhCOG0pwvGL7qCNz9kEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780073034; c=relaxed/simple;
-	bh=G71hOzCHg19EkCBkLBm5auxYB6zOLQZ1IM/l3FBIBlM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NM26qS03uXGdRXY8lExaCCnYsliERmyf++jqVMwF89DbzsOqBsGQJumnM5J0C5aV4Ikc6jzZ7ClXKWH11zxvs6Dl+434lHRZLIgVVyv5ea5DAbTxPReOPRqvIzQqKxmd+D7MlDZXVYy6nU0eik3+HDJfdmOKW08Uqmd1o0u+R7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMkKHzom; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780073155; c=relaxed/simple;
+	bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AFu9fP/h/9PLZDRq3DawmzY3DI0hK4K5isa4p87gFZBVHueCUwrQkL7vjxGwxBIG3r9kmmO86cUH0ak21sODcWpEEdZdnA1QGT2/mAjlgQy7hqvhD5gUCysPpLBrJZvYp0LFKrdPwwHdyuEtOF3uJYJyY7TOwL26kJrJaRqEQD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=U6YU6Qgy; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMkKHzom"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4903f7a90d1so70162845e9.2
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 09:43:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="U6YU6Qgy"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba856db1c0so102330595ad.3
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 09:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780073029; x=1780677829; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FB/T/vmqw22V2Krdl0obT8vEaBinQE8eUYWt08eC/CA=;
-        b=XMkKHzomHlHLvvl/B6uS617IcJU7OL3vsLwS0m6ZcONeNePJ75V6X39VJjJOKSQNyA
-         dcLWry2m7HQZBA/DCJJyOb2LPG0hUg+9mYICptZio3eIGk6RaNmRMoZeWHrKoXdSbADs
-         xw26YcZ/M745JA/3rVHG1J0zzcDYpnq/KEXE+oi9Q/59H6+su2xbM5zopjDLIfrf9p5O
-         n4aA4/6lfcphtB6RKZYCJEcCmrpCc/xz5NzWeaOb3y9Jzo0Q9YGptlvjCr2BBNCvUsxO
-         /wDP09J5K2qmueVymybJVQGY8e9RDPW4VbEr0sWQOmxtmhcciKrXKfp8KXPRlAsu+ciq
-         Kb2A==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780073149; x=1780677949; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
+        b=U6YU6QgykwPA7soFByIMVg2vbXSf59v0zB9T82Pl5qEorozbfJvZKAlGI0zVP87zEO
+         PyB74ETcPxMSukAmfp5cIQ3SdDvbp7bTDloQb2+VY7F/Gr5qHYiePCBvvx1I3ALVJLFd
+         WknBmMA/H9QPmkOPAWyKHRRmVMvziPyQXmrXy2Dyk67UX1jBvkwEFAnr1QfXxjap/rtM
+         XppvEPHy/pqFcyDgPQksoaM4rXhb/gZIhCryYwYUEJWCT+toO0MH4ex5qA9kBGdtKOGl
+         rhFXfu67mnePh6eXQWmuZvM7pberkMaZMtaMtG0GpEsZ3s/rKHX1/RzuuydJqD3CneCh
+         RIfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780073029; x=1780677829;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FB/T/vmqw22V2Krdl0obT8vEaBinQE8eUYWt08eC/CA=;
-        b=bSlo+9w4JKZ9qTS9Xo+Zm/DDaFUQov4ishZI1YFovBpRNCj8doejfyHsQAVpdr81HZ
-         l8kw3KjjMLNJh8zRYm+8jk0KvSB9YOq6w+El5DTrQCqFY87hTiLqZSOq08j/dChyyjOm
-         siK5bA/3NgrytzU81mpoPQLevJIk9uymFBUU2QF8bMyj1yBxluviQNGyqLaRr/7cXlD7
-         u6cTN2xGFmt0uXKEznIrirU6s1Pzp73RKoITd/9Oxk2uGHv2yzXwXJOMZ6PXUifZHRbV
-         untl/9OHtEaMUjrL+UZMCI0rZZoZ+y4sGJAfRb2siMoFKBZ8Y4RjB2sm9apY23OXiiIt
-         F3pw==
-X-Gm-Message-State: AOJu0Yy4nAgFwrjJSXrn4OPv01MLnoY17+YQxNJn5xD6Ymf/XIDnyP6O
-	bAxIODXG0PwJNslB3+fkn9P3N9BWKoK9GccU1bDt36+SdplL8R0AkRGnj1BLWqJt
-X-Gm-Gg: Acq92OEEsgWUXu9G28GJEMUCoKwiNmB3O1UY2+HSUwnIgHiLQap68tpGqnn93gVgPx6
-	LJ3gp7SCV9JmhndSqfcFn2G1YzogJ02zqSvGGWIXLk7rPisOCIme0GeLsYM6tBAIELDMu2oZveX
-	gLiXBAbtK0QyX/Yvhp4mugUSJYFpCZvOlkRKQHuy4VxZDjyc3bpo73XdmM/XQZSA4nShbFQGK59
-	ytvwdjL+rCxQvtBRgj/CzBb2pSkYLrz/V+ue7n654+xpPYguf3zAe8oezSduTHxNPwPsdrJV55o
-	o5ETbt+u2PGPtYgFyVCFw9UmfkReZ/Frd2Vl3mamX7U8QmVjbQ+yYzc/De5GLojyYy3RtK9jA8B
-	DwTLb81xexM20Zx6Qzpo16E/wRj+qxUoQnhMtQ+sQWSrzRkCIIt3LruBOXULmFu7g2QsRVl3tc4
-	sbx//5ZCWH2gG5yvZUM9A6M1zWrvMSnEVGmib412quSU/2cndaRvtR6AvUsHUTb6DVSzgFpdT8V
-	p/UT1Bl4IxLKKhirwVhxg==
-X-Received: by 2002:a7b:c001:0:b0:48f:e230:1d12 with SMTP id 5b1f17b1804b1-490a294ba0emr4632645e9.31.1780073029041;
-        Fri, 29 May 2026 09:43:49 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909cab0e79sm104723165e9.13.2026.05.29.09.43.48
+        d=1e100.net; s=20251104; t=1780073149; x=1780677949;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aCI6e/l7Dth2yzzxP11p44pWFmgqpTitIRCmWKW+Zeo=;
+        b=KMHrDyHbJi7kmeuVbuCKUINUVZaNcANHgwyYNGEXGg3ws+G843fNfoKpeqsGwhbJ8v
+         OMRJF2GGmSONEM3IPIxS7p1DkyshlQ8TvyD8YRyKM8INWycHOJOfypO/e8C+MGcXenjy
+         80K33u0+0c17reV6o6LMeMvA5jkr1DuSphHCrcIux2cb8Dy6BPdm3v6da2JWeBWjM7Mi
+         nYu9rMjIoxAZi9krDooAgbHpiDYC6QwnvqHQ8bx2XHSCFAXGASGXow9zigRJxQZPhbRT
+         /TyR4C6E8XbJUmh/O4kWmh3Za6hWtLt0CfgheoOnBJZSzAm6j9MKe77nKc3DYGM3uLbw
+         EjDw==
+X-Forwarded-Encrypted: i=1; AFNElJ9gcECoxRveWSrwn+3dKNboWJbgeAPZTAf9vKn1I89bfdw68elEP+VQWOzBU7PhCbdL8lw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTmDeCO5Nq9kzr1NOPzROx0VmqkcUjYS9B9jOho910417MKRd+
+	bCFa3vc62uYaZzNEHlfSccj/6LbfASEews71VOe41VEv64/8OxhD2KdITpy3SKXLHcM=
+X-Gm-Gg: Acq92OF/1V2BmzID5cpEGSrVGwvoYn/7cHIMY9gXgjndtS2jurcn3roq6U93yN6KlDF
+	8JFU5fqbpOrs5hJ7+Id5bMv8sbnxeULZUVUco7XaA3C6jS38yhMjo8tDEieHQODgFofDdITQaPJ
+	Mkti7hLiNvikmqOTw8lx91dGP3T132UBSUGSMasCZr3K0CvEe02evuA3x8y8A4k/dCerGI4i5dO
+	InEsWCcNv43XZsH5sQ9tpWlabuWReEPkrCSFtZDM0px3B59tqEC4QeS5SY6LZvpSp2qyMwm8lT9
+	3cynzTespEm0bkp5+pOYHce+IHL0Dx2D/kLBG2bL0GYekqF3nmtmHnokVWmBKDC0EqVZW4cOl6E
+	RilAoNxjQvRcbCyoCmftqshrWT1+jS60ybj9n6Fh1DOGZgHOA1SgaqW0Y2SScBO5zjhF56gR5Ey
+	h86/HJIaccnqpmdO/j2GmnHwMT9BHUjM82YPM=
+X-Received: by 2002:a17:902:d583:b0:2b4:5931:bc4c with SMTP id d9443c01a7336-2bf367cbf43mr8005005ad.15.1780073148788;
+        Fri, 29 May 2026 09:45:48 -0700 (PDT)
+Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23c26b3bsm25060415ad.64.2026.05.29.09.45.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 09:43:48 -0700 (PDT)
-Message-ID: <c717a1be-5e41-4f83-bb62-36ec3fc1bdf8@gmail.com>
-Date: Fri, 29 May 2026 17:43:48 +0100
+        Fri, 29 May 2026 09:45:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 01/11] rhashtable: Add rhashtable_next_key()
- API
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260528-rhash-v5-1-7205191b6c57@meta.com>
- <20260528181644.360F61F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260528181644.360F61F000E9@smtp.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Fri, 29 May 2026 12:45:47 -0400
+Message-Id: <DIVB9MNT5JG1.SRSKMZRPB4G1@etsalapatis.com>
+Cc: <emil@etsalapatis.com>, <martin.lau@linux.dev>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <kees@kernel.org>, <joel.granados@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <jianhao.xu@seu.edu.cn>
+Subject: Re: [PATCH v2 0/3] bpf: cgroup: fix sysctl new-value handling in
+ __cgroup_bpf_run_filter_sysctl
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Dawei Feng" <dawei.feng@seu.edu.cn>, <jiayuan.chen@linux.dev>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <0f50af7f-03c5-46d5-9d68-553dc6995df0@linux.dev>
+ <20260529113752.2863465-1-dawei.feng@seu.edu.cn>
+In-Reply-To: <20260529113752.2863465-1-dawei.feng@seu.edu.cn>
 
-On 5/28/26 7:16 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> - [Critical] rhashtable_next_key completely skips unmigrated elements if prev_key has already been migrated during a concurrent rehash.
-> - [High] rhashtable_next_key enters an infinite loop if the hash table contains duplicate keys.
-> - [High] Concurrent deletion of the prev_key element aborts the iteration prematurely and returns a dangerous ERR_PTR(-ENOENT) pointer.
-> - [High] rhashtable_next_key silently ignores all duplicate elements when used on rhlist-enabled tables.
-> --
-> 
-> commit 2aba1f7c85d79ee4c37a0c5013226a79bf52f189
-> Author: Mykyta Yatsenko <yatsenko@meta.com>
-> Subject: rhashtable: Add rhashtable_next_key() API
-> 
-> Introduce a simpler iteration mechanism for rhashtable that lets
-> the caller continue from an arbitrary position by supplying the
-> previous key, without the per-iterator state of the
-> rhashtable_walk_* API.
-> 
->> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
->> index ef5230cece364..d6eb3ba476ea2 100644
->> --- a/include/linux/rhashtable.h
->> +++ b/include/linux/rhashtable.h
->> @@ -650,6 +650,97 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
->>  	return NULL;
->>  }
->>  
->> +/* Internal: scan one element forward from prev_key's position.
->> + * Returns first rhash_head whose bucket >= prev_key's bucket and
->> + * (if within prev_key's bucket) appears after prev_key in chain.
->> + * Returns first element if prev_key is NULL or ERR_PTR(-ENOENT) if prev_key
->> + * is not found.
->> + */
->> +static __always_inline struct rhash_head *__rhashtable_next_in_table(
->> +	struct rhashtable *ht, struct bucket_table *tbl,
->> +	const void *prev_key, const struct rhashtable_params params)
->> +	__must_hold_shared(RCU)
->> +{
->> +	struct rhashtable_compare_arg arg = { .ht = ht, .key = prev_key };
->> +	struct rhash_head *he;
->> +	unsigned int b = 0;
->> +	bool found = false;
->> +
->> +	if (prev_key) {
->> +		b = rht_key_hashfn(ht, tbl, prev_key, params);
->> +		rht_for_each_rcu(he, tbl, b) {
-> 
-> [Severity: High]
-> Does this silently skip duplicate elements when the table is configured with
-> rhlist = true?
-> 
-> For rhlist-enabled tables (like rhltable), the primary hash chain only connects
-> the first element of each unique key group, while duplicates are stored in
-> secondary linked lists via the rhlist_head structure.
-> 
-> Since this iteration relies exclusively on rht_for_each_rcu() and doesn't
-> traverse those secondary lists, it seems it will only yield the most recently
-> inserted element for each unique key.
-> 
+On Fri May 29, 2026 at 7:37 AM EDT, Dawei Feng wrote:
+> On Fri, May 29, 2026 at 12:44 PM, Jiayuan Chen wrote:
+>>I think patch 1 and patch 3 should be adjacent in the series.
+>>
+>>Why is patch 2 placed between them?
+>
+> Hi Jiayuan,
+>
+> Thanks for the review.
+>
+> Patch 1 and Patch 2 are actually parallel to each other. They both addres=
+s
+> pre-existing issues that would be exposed and triggered once the changes
+> in Patch 3 are applied.
+>
+> In a previous iteration, a test bot and another maintainer pointed out
+> that activating the code path without fixing the underlying issues first
+> could trigger a kernel panic.
+>
+> I placed both prerequisite fixes (Patch 1 and Patch 2) before Patch 3.
+> This ensures that the fixes are already in place before the code path is
+> activated.
+>
+> If you prefer a different order, please let me know and I will be happy t=
+o
+> adjust it.
+>
+>> Change is fine but fixes tag is wrong like the bot said.
+>
+> Noted. I will correct the Fixes tag in v3.
+>
+>> I saw a reviewed-by tag given by Emil in previous thread. Pls carry it=
+=20
+>> when sending new verson.
+>
+> Thanks for catching this. I will make sure to collect and carry Emil's
+> Reviewed-by tag in the upcoming v3.
+>
 
-rhltable is not supported, I can return -EOPNOTSUPP for it:
-if (unlikely(ht->rhlist))
-    return ERR_PTR(-EOPNOTSUPP);
+Seconding what Jiayuan said in terms of the Fixes: tag. Also feel free
+to add my Reviewed-by: on patch 2/3 that IIRC was not present on v1.
 
->> +			if (found)
->> +				return he;
->> +			if (params.obj_cmpfn ?
->> +			    !params.obj_cmpfn(&arg, rht_obj(ht, he)) :
->> +			    !rhashtable_compare(&arg, rht_obj(ht, he)))
->> +				found = true;
-> 
-> [Severity: High]
-> Can this lead to an infinite loop and RCU stall if the hash table contains
-> duplicate keys?
-> 
-> Since standard rhashtables permit duplicate keys, rhashtable_compare() will
-> match the first occurrence of prev_key in the chain and then yield the
-> immediate next element.
-> 
-> If the next element is also a duplicate of prev_key, when the caller resumes
-> iteration with it, the search restarts from the bucket head, matches the
-> first occurrence again, and repeatedly yields the same second duplicate
-> without making forward progress.
-> 
-
-good point, This code can be modified to skip duplicate keys. For BPF
-codepaths duplicate keys are not possible, though.
-
->> +		}
->> +		if (!found)
->> +			return ERR_PTR(-ENOENT);
-> 
-> [Severity: High]
-> Is it safe to return ERR_PTR(-ENOENT) if prev_key is concurrently deleted?
-> 
-> Unlike standard rhashtable iterators, this abruptly aborts the iteration if the
-> element is removed, missing the remainder of the map.
-> 
-> Additionally, generic callers utilizing standard loop termination checks
-> (e.g., while (obj)) could inadvertently dereference this error pointer and
-> cause a kernel panic.
-
-users should use IS_ERR_OR_NULL() instead of just checking for NULL.
-
-> 
->> +		b++;
->> +	}
->> +
->> +	for (; b < tbl->size; b++)
->> +		rht_for_each_rcu(he, tbl, b)
->> +			return he;
->> +	return NULL;
->> +}
-> 
-> [ ... ]
-> 
->> +static inline void *rhashtable_next_key(
->> +	struct rhashtable *ht, const void *prev_key,
->> +	const struct rhashtable_params params)
->> +	__must_hold_shared(RCU)
->> +{
->> +	struct bucket_table *tbl;
->> +	struct rhash_head *he;
->> +
->> +	tbl = rht_dereference_rcu(ht->tbl, ht);
->> +	do {
->> +		he = __rhashtable_next_in_table(ht, tbl, prev_key, params);
->> +		if (!IS_ERR_OR_NULL(he))
->> +			return rht_obj(ht, he);
->> +		if (!he)
->> +			prev_key = NULL;
->> +		/* Ensure we see any new future_tbl attached during a rehash. */
->> +		smp_rmb();
->> +		tbl = rht_dereference_rcu(tbl->future_tbl, ht);
-> 
-> [Severity: Critical]
-> Does this logic completely skip unmigrated elements if prev_key has already been
-> migrated during a concurrent rehash?
-> 
-> If prev_key was migrated, __rhashtable_next_in_table() will fail to find it in
-> the old table and return ERR_PTR(-ENOENT).
-> 
-> The code then falls back to searching future_tbl where it finds the key and
-> continues. However, by jumping to future_tbl, the iterator permanently abandons
-> the old table (ht->tbl) and will never visit its remaining unmigrated buckets,
-> causing significant data omission.
-> 
-
-Yes, this is a limitation we have to deal with when using rhashtable.
-
->> +	} while (tbl);
->> +	return he; /* NULL or -ENOENT */
->> +}
-> 
+> Best regards,
+> Dawei
 
