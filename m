@@ -1,155 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1706D3B47D6
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 08:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9045033F8AA
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 09:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780045175; cv=none; b=uTC8tFpSCxt0JT/UJurIgugV6krAD0jWwbXGFocxczmCLJk5WLOQ3/DmPbWcNjW0kTZFk48dWuRt0mpWVsa15SuRrHlOvJXHZfzX5YvKyHJ/yDGOl3se32cjezYtdsFiltxSFzwsPLQbTLLuY50aEvYYlTrdSOBnSR2lQBYy2+k=
+	t=1780045377; cv=none; b=Fmgz2RU4iUZDAuCYvTreRWl66p9IqKPqdQ2IMv7/MMCPgcv5K0426T9dfUAjlWg3eX4taYfsbpJGtaWoVCpbuY9IBjVesKoJMsVgr5DCEeTuk2M+JfdpDxTe/nCx65WS07wxcsSIGx7aVaFnAieiG3bF9nyeXVMYyw71EWlqoBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780045175; c=relaxed/simple;
-	bh=LQ384OTRpp5hGIIIMVjSY1ltmB0vquK45EwYMLyVoDE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RtfG8oFv/6YOSdloun559tp15Kiuibs9oJ2vPWBWjxORSoPiTTlpns8Km+kSEEJ5xPEFBzONpl6JOtWCKwXF7PyzDb1dA6+EJrpnDXnZiKGEsY0f+8H9YUEq/SX9XsqXI6jFqDR8vhnkp6+I8s6U6zNE1vZ4cbsOdWxX3hXFiH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T7OTZMdI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780045377; c=relaxed/simple;
+	bh=yYAsUywyR27qE6vul78x3gmb+ziWG12hAXlyRaI1uXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JYMpx16By/1b9Z8C79nlThilQugOi/HpKKAk+DBlcqnlw73wnsvLwStWE75CdTpA8R01gEsY9onvis+qW7eGDxKaL3xBe3imybyBVpBxxhKRRj+wVihsNBcTFFjBv+1rfuO8ya7sgG3HR/hXnWQk3EPgIIp6Zmm1lh64MiYpq2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kq5vIbAO; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T7OTZMdI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B101F00893;
-	Fri, 29 May 2026 08:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780045173;
-	bh=Y0S3MGeS1vewhtIyMw4x2YxFPhfKHXqpiHtZ1udIdX4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T7OTZMdIZ5x+3rnzR2XFSvJI8Y6Xk0mkqjlpCsS4jLi+whkm8MPpd2oHH7rSKFXs5
-	 5W1y0FxKi6vd0t2D9CSuLNedF6k7dzXoF75uUDdojYD3HPEkNuDZbAy0WNhzYVkhPU
-	 oGCTWgzldL6PJpsPiClP5Ai6bKCSXdcbV3z7dMI3NIkEi0okwAUgZPRDZ7bxhi7NEe
-	 BYs/NBNDaxTZHwNiuilMf1oNq45ht8Oe7kL6Hqj3Z5vkLmXhElVFjBnN/9dsmHK7iz
-	 vbm//Ay4XP2SXxg6U0hk9AA69KF8iruMLbc+ptc2Dk+M3VR2h4uqmIVJoG3yUGwmMC
-	 yvq34wjejr8+A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf: fork state when comparing sign crossing
- ranges with zero
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529-cnum-split-at-zero-v1-1-986c03752226@gmail.com>
-References: <20260529-cnum-split-at-zero-v1-1-986c03752226@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 08:59:33 +0000
-Message-Id: <20260529085933.A3B101F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kq5vIbAO"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49048e043e5so58928855e9.1
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 02:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780045375; x=1780650175; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hgXlCsm5faN5BZz1S/HGhbOsFnx36ZERe35q1tpIjtU=;
+        b=Kq5vIbAOUpLhDomSF/Ua9MOsvqV+3RV7U8CQjBkiWgQohi5iSbXbbO90hQTqEZ4UyV
+         /knsowfZKl6qmh7zQurhjPTzvNTpU9XtB6rA9ESPsocG3mV+dYXHcLHeAD9ftEdTkQCL
+         /0y8vIckS/8z5q5EJOI2fRrltUFU4M0djEl1T36R5iHV+NYYw36GEcE38np4w2pzMo7K
+         ZTrBEBwcWgebIqcFTS+TCkpUnVrWKcUap9v4l6/Uebl6lNU1wyIdPNJtpLZAlnQwmcy3
+         VrQV2fzxV9nwbqbbh8sPtrZeaqVmDwG8PbDYsZmQDkuD7MHpL03b2g40mHxozm22MO5K
+         edPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780045375; x=1780650175;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hgXlCsm5faN5BZz1S/HGhbOsFnx36ZERe35q1tpIjtU=;
+        b=RYdPJ8dloO69L1YCCmKk0lXjUP+GXyuSYQsZvdH3GeJpFaaCrEW1ClAFuQoKiot2Wc
+         jbJ4ELGvFPOgCqRfM0ZycnY9GKHgsoXcGDKRCViWYl8BBjYoCuG+/YQ96VfblJ28deF2
+         LnzN0Ux8IabYCxFHeyFwbU2+HZu6egeJPetqxIfODd7SJhqWPN1LaY68XANu3vyxnWY5
+         D4RfJ/jYMlqmFw00rH0o8sqydC/2XrpgBMntKocdzr+ixT+ROC+CooYwYQmfU9zufX9B
+         XgOiwr7ptvRboW2653L7TJGrHvclEViLoULHbxmCTUXR6yYad8e4x0p18O8P9CehzVqI
+         rGgw==
+X-Gm-Message-State: AOJu0YyYuRV97vRLJ0B6XBo6wj8x1eyI8IpU5cbv1hcw6SCrRMl7M8Yb
+	lC8zc7pzFOxjhJiKFLr6INi3XbL4KCt2CKT4bmyGFVX33hAixkSd4bfV
+X-Gm-Gg: Acq92OHTrD37UJIbmrwx9OVEOId4KPZFOler6ogGhifRvPl/vn6VqboDE/JfcGtqDtL
+	ZZqLG+ipVOXnuf3RmQs2zAicD9Sg9o6IG30ef1Hhc3INfD94NXFFViFS/5weBbO+/e7gIZx/xUM
+	OalPayizsQ2hOaSpE1hp6IGx3jC1ZUq9CNtS3uyZBy0zm5JiZZFKzbsgSucpnu/qvR6f+eP73uw
+	auZ6NNyzrtYnrKwmkQTPRioEzLsoJNaPd37QeOP4mvNyGN855qxhTIj28SGCDG6x49XSqLo+hWU
+	Wq8E/3O2RRopP2WRxSxsqQNjFFywjWcDqv4L2PUpSdD06or+1u/T1nUafWox8oU/u5t/HjoriWv
+	P6tVGvDEf86FuVzWrAReZwFgPF6PIXASp7fC6KVCHXyyZ6rse/MnxUjzl3BC24KA7bj17anhV8t
+	bSZ2Rk3kcVcZWfrpM9qlqvrAHqvMJlXDGDo4BH/D/LV6tFPPbncmPn2vGJ2BcXREmiiwFe3Wgf1
+	C0u
+X-Received: by 2002:a05:600c:4f53:b0:48f:e26a:1744 with SMTP id 5b1f17b1804b1-4909c07e7d7mr35184845e9.9.1780045374624;
+        Fri, 29 May 2026 02:02:54 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909d6f35f8sm21915255e9.13.2026.05.29.02.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 02:02:54 -0700 (PDT)
+Date: Fri, 29 May 2026 11:02:52 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Jordan Rife <jordan@jrife.io>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
+	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+	yonghong.song@linux.dev, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH bpf-next v7 3/7] bpf: add bpf_icmp_send kfunc
+Message-ID: <ahlWPCJCXa6DMSwQ@gmail.com>
+References: <20260526153708.279717-1-mahe.tardy@gmail.com>
+ <20260526153708.279717-4-mahe.tardy@gmail.com>
+ <d65aepu3gg5mzqy6umxvhwyvwq7gvpezle3f4u6dla7sorndt3@nirsf36ozbii>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d65aepu3gg5mzqy6umxvhwyvwq7gvpezle3f4u6dla7sorndt3@nirsf36ozbii>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Inconsistent verifier state and bypassed linked register synchro=
-nization.
-- [Medium] Missing scalar type check applies zero-comparison workaround to =
-pointer offsets.
---
+On Thu, May 28, 2026 at 03:55:21PM -0700, Jordan Rife wrote:
+> On Tue, May 26, 2026 at 03:37:04PM +0000, Mahe Tardy wrote:
+> > [...]
+> > +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+> > +{
+> > +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> > +	struct sk_buff *nskb;
+> > +	struct sock *sk;
+> > +
+> > +	sk = skb_to_full_sk(skb);
+> > +	if (sk && sk->sk_kern_sock &&
+> 
+> Won't this prevent the kfunc from working for traffic emitted from
+> kernel sockets like those used by NFS/SMB mounts? I can imagine there
+> being a legitimate use case where you'd want those kind of connections
+> to fail fast as well by emitting ICMP*_DEST_UNREACH.
 
-commit dc22ab232b73a45e1aacc8d291fb5640c3a0d950
-Author: Eduard Zingerman <eddyz87@gmail.com>
+I don't know much about NFS/SMB but I'd expect them to use UDP or TCP
+for their transport protocol, so the second half of the condition check:
 
-bpf: fork state when comparing sign crossing ranges with zero
+> > +	    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
+> > +		return -EBUSY;
 
-This commit introduces a workaround for the verifier when evaluating a
-comparison of a sign-crossing scalar against zero. It forks the verifier st=
-ate
-to process negative and non-negative branches separately, restoring precisi=
-on
-lost in the cnum-based scalar representation.
+should fail. Meaning that this should be suitable for it.
 
-Link: https://lore.kernel.org/bpf/96c4a1aa4333d10b882a9b5093d2d982f9f106e3.=
-camel@gmail.com/T/
+The goal here was to identify the ICMP kernel sockets, I think this way
+should be precise enough and does not require new code. The other more
+precise ways we thought about initially were more invasive:
+- exposing ipv4_icmp_sk out of net/ipv4/icmp.c to compare the pointer:
+  not clean as other part of the code could reuse those sockets.
+- expose a helper like is_kernel_icmp_socket from net/ipv4/icmp.c to be
+  used in net/core/filter.c: new exported functions.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index c8d980fdd7099..7998e8da5e554 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -15965,6 +15965,73 @@ static void sync_linked_regs(struct bpf_verifier=
-_env *env, struct bpf_verifier_s
-> +static int maybe_fork_cmp_with_zero(struct bpf_verifier_env *env,
-> +				    struct bpf_insn *insn,
-> +				    struct bpf_reg_state *src_reg,
-> +				    struct bpf_reg_state *dst_reg)
-> +{
-[ ... ]
-> +	if (!is_reg_const(src_reg, is_jmp32) || reg_const_value(src_reg, is_jmp=
-32) !=3D 0)
-> +		return 0;
-> +
-
-[Severity: Medium]
-Does this code apply the scalar workaround to pointer types?
-
-It appears that dst_reg is not checked for SCALAR_VALUE. If dst_reg is a=20
-valid pointer with a variable offset (e.g., PTR_TO_MAP_VALUE) that happens=
-=20
-to cross zero, and the program compares it against zero (if (ptr =3D=3D 0))=
-,=20
-the verifier might artificially restrict the pointer's offset and fork the =
-state.
-
-Since valid pointers are not zero, both forks will follow the fall-through=
-=20
-path, meaning this doesn't create a safety vulnerability but could lead to=
-=20
-unnecessary state exploration and semantically incorrect behavior. Should w=
-e=20
-verify dst_reg->type =3D=3D SCALAR_VALUE here?
-
-> +	bool cross_sign32 =3D is_jmp32 &&
-> +		dst_reg->r32.size < S32_MAX &&
-> +		cnum32_smin(dst_reg->r32) < 0 && cnum32_smax(dst_reg->r32) > 0;
-> +	bool cross_sign64 =3D !is_jmp32 &&
-> +		dst_reg->r64.size < S64_MAX &&
-> +		cnum64_smin(dst_reg->r64) < 0 && cnum64_smax(dst_reg->r64) > 0;
-> +	if (!cross_sign32 && !cross_sign64)
-> +		return 0;
-> +
-> +	fork =3D push_stack(env, env->insn_idx, env->insn_idx, cur->speculative=
-);
-> +	if (!fork)
-> +		return -ENOMEM;
-> +
-> +	fork_dst_regno =3D swapped ? insn->src_reg : insn->dst_reg;
-> +	fork_dst_reg =3D &fork->frame[fork->curframe]->regs[fork_dst_regno];
-> +	if (is_jmp32) {
-> +		cnum32_intersect_with_srange(&dst_reg->r32, S32_MIN, -1);
-> +		cnum32_intersect_with_srange(&fork_dst_reg->r32, 0, S32_MAX);
-> +	} else {
-> +		cnum64_intersect_with_srange(&dst_reg->r64, S64_MIN, -1);
-> +		cnum64_intersect_with_srange(&fork_dst_reg->r64, 0, S64_MAX);
-> +	}
-
-[Severity: Medium]
-Are we leaving dst_reg and fork_dst_reg in an inconsistent state by not
-calling reg_bounds_sync()?
-
-Because dst_reg->r32 or r64 are modified directly here without syncing,=20
-the bounds are narrowed but var_off and the other bounds remain wide.
-
-Additionally, because the dst_reg bounds are forced to be strictly negative=
-=20
-here, is_branch_taken() later in check_cond_jmp_op() might evaluate=20
-the branch statically (pred =3D=3D 0). If it does, check_cond_jmp_op() will=
-=20
-return early and completely bypass sync_linked_regs() for the current branc=
-h.
-
-While this makes the verifier strictly more conservative for the linked
-registers (since wider bounds fail faster), it could cause linked registers
-to lose precision and lead to potential spurious rejections.
-
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529-cnum-split=
--at-zero-v1-0-986c03752226@gmail.com?part=3D1
+> > +
+> > [...]
