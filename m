@@ -1,162 +1,109 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDAC17B50A
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780016619; cv=none; b=lPQO2LNdma8lwguVBJ93kxzvamWohIxhHUKAHbeKJSjDbQzFz3pytuiL9+avtq+OIDiGW7plRbnEyJqmiuvGf88sXgOnfSBP+3Aumx4OjF/AQXVQyOVvNPQFxpzqDfV1s7zRjllNJZGO92RbB9cJzNyerRfgBXumtIT/zUw8+GI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780016619; c=relaxed/simple;
-	bh=/KkzOjBdfKQy2PKOpjoFKv4ZMutKIw6NJW/W8FCK7cU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=hJPzU/94Fi+WqZ/RFKxudZ7QtnkQac+vzSBs2WhMFzfYC/HzPR/ESAv1okL94OeNHLgxlMSSI+KSMQcSZF9bWQrZ5rAxpOJz3pZyK/fKnEQoWwDx4qUfcyBP8aGesL9s7KnKmBm8ALedMhLdhdCGl9MTkdsC76hit/sdhpVVwoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsOJLqQ4; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731E935295C
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780016752; cv=pass; b=IbVfU7hiETkVTmlh6h086+FASRFfNW6jfQR+n0TZs9Xxz3yEbHKcMix46p52UMQrdDzougjCkT/eEbpD7d1y78NcHlsb62WwV24y4OiWggqvzIIPRjQGYhf5oH1bS00UbF3Zl/iDyAhZ1KvHt1ZlmAEsjltWY+JTECTLDnYwTa8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780016752; c=relaxed/simple;
+	bh=ILRzw3ymgSJBjX0vTHNQsa/d76Xbo5gLzSf+w3GDhIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vf+Eu0rDpxireugbP6nr62Jo9IGwv9Gbn5IF6H0WXuDi765Ysfc+WbYDYB5wW+Ln2mMYBpdNuP8GNjx1Ltp/5wtn6wRKiR5UGuWrtVtimhHCtb0UAkFtqzB0LAqJC5/jBpxsXDmVM1fO/2Dsqp+tETBGB1nWklUy8Dv4QClFLuU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLSUj6ky; arc=pass smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsOJLqQ4"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-479d593a0c3so10964476b6e.0
-        for <bpf@vger.kernel.org>; Thu, 28 May 2026 18:03:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLSUj6ky"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-45ef189aa1cso93369f8f.0
+        for <bpf@vger.kernel.org>; Thu, 28 May 2026 18:05:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780016749; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QeuJsQ3YP0/Zf5cCfYNx879Buzb84JMKglvxsUlaIKjg5GyJAb0TTC1ZXGvkEhYxex
+         y8mcTFCxX1VWaDhdvEA3Lr+/tse0t5SY7xr1VdGNqWW2ApxC7gyc5GZE46z5GOJR6hiW
+         PuERx6N+0f2+4FvENbJhNKKMqBKquuNTNmYvKoH4DBVXaErghzYA0wEzQ5Z4ZFmVXwbp
+         bpsj8bK+XFgeZ1I+NWuvdZmnA+6xYXlBEAbrhBTYd2IAy4tOUGYiza9P5dNw54kWL3mL
+         kdni3OFxRlqNJ6WAyEZ5QXApzA9LgkHmtiJG3XHc1LWMgy5vMYX8UOHzoivEME48T0WX
+         fEkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ILRzw3ymgSJBjX0vTHNQsa/d76Xbo5gLzSf+w3GDhIU=;
+        fh=G5/vNH6V/KcvXEO3UvVBCw3LqedrAoxSqs7bYK9QuIM=;
+        b=H+Li+Av+l60UM4lJtkbkXsBO8PZ0D3+beFo5yKsmt9vGMmxYguj0Lxf9204t2IC49n
+         a+vMUfOvopa0UOBmFx3VDy5HUGAifcz/MX0aBkZUZnyeTNvZDbpNlU9K77LLCF+fAp6N
+         vgpd49W9oAPVrw+AyLoW7SSnNkKqY9OF+rkd4kZ4bkm0limfq4cN33Q/zTJxovWjNq/k
+         q8fLQpV7XQ49r0tIV8sPhill11sPE7GVUhnE07IMIXNhMiQTOcMTz8+ZnVTyG70OObJ0
+         Z6AOrMtwkJhCTqYP4hb6e4xIOGQh5YEsmuSU5Rbk/optXQpvDgGiSGYd7FIuRwGwmQCq
+         frHQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780016617; x=1780621417; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780016749; x=1780621549; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ylWRg4bGcwe7ZEke+FfWeW8Bfa4iTQbilHYuBByUGKs=;
-        b=HsOJLqQ45GjDHlhXoEXmst8zrRZeU2ZTqniHc3c2ngQNcJ7661n3+wjEkVw6K90y7a
-         zct/b1ZiQwOjdG1MwI/K672tn+EQdS9kD8ej/DSgfdictJ7GToSIF7P9HTKb5sYsSdDK
-         +5UqDMblJj2b6IIDEaD61ILs/lgzRuDLJ7UlC+m+qdg4LtpzdsEAWz2+3BOcQHfEE1R7
-         RyFphW0QZWL+/lAkgd/VLJk8LFo0oMU7wMuze8fwpVdXp+lFabvCjcrfblNDH/YVA/1x
-         yFMKRGmvgozifFOfvH+A7EavKVFyWqGmtOdP6Y7mmzvlyis7H6qQqdKnpkke+lP2vjQN
-         aNAw==
+        bh=ILRzw3ymgSJBjX0vTHNQsa/d76Xbo5gLzSf+w3GDhIU=;
+        b=dLSUj6kyw5l1aAZhP0Drs1miCIN0fHaGtYKaWT30KTYeEqCtgBFFJ4R7DO3acK7ikD
+         bh7/PzRBrtMUjRAGUOT+mBu9NAnZ9IsPIOJhFEP9sy3p1iewyluQy2dxQv6nHQ8bk9bS
+         y9syWgxw5OY1JARtJdR9yEhIIhN6E7DxgeQJoheX69xAmUHUwyd3yUX7ridragSNdDGL
+         iuBFwzAF8FJV+8gfC7IMbRt8LQKz7tEOLOxJzcsyXYhd/8G538xsJktmzU5V8LTTj2aP
+         wi3gDjy4w1ejbconOpIH3AaBEAspOnKfY1v797GnhyTca4hx6St15DG0NPnh9Ep5mqRe
+         EqaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780016617; x=1780621417;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ylWRg4bGcwe7ZEke+FfWeW8Bfa4iTQbilHYuBByUGKs=;
-        b=JW50zaH59ajZuDaLHjJipg/n+r76uFGp3YcWTXZdm4olHQBybnKNTVRUL7d8+UAjF2
-         XsfaYBBjN5hstxsF8V7HrkOfCNBCKGGWu0A61XDAzfXuEWK69sztaBuaF1is/M32DY39
-         Rpq7JX5fGOU4FQONXA70q3tQ5EaiFo7zagwNzUawszBEyipFJsX+QQLEzadTeGhKbyuk
-         50MzJR+Dq+qV4mQpST45mczXNhAJmvTKhxe7P94JXt3Ju3vLfiFmu5dIrc3r3QPYw0M7
-         QoIm9RxePI/nRjBIJO8peJRPUibjHn7q5+/ZTzSUrETW5sgJfIdZPnhy9vRKUr/fd2SK
-         dTEQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8kKExbr3HegApNHdl3E4zKLEyMhPntdqO09RM8BhOB6r8xnWl0SNDRFfJqGxJDBPrIcSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhmQKlK3CN/P/o1780McZkH8DrmwAeTmfIyHldgMvX4vEJGb4Y
-	OBmF6tcYxzNMM4U41xNyI5jNzLnrigxrpVjr4M8j9N5Vn9mnsrX7PEA9
-X-Gm-Gg: Acq92OG/zYvK/XtVTfLiWqa9rgBHc+jgdHhqewzPmA9gkNHBoPZj2mRVktROAXefXze
-	W2vnJICJ7aaHR6boxYRqtY9tPukgACiHzGLUHtLXixdaXbdmopPU1VXbElpmjMN8OMxHpMgoyMc
-	JA+/hbVwqIfNxBizIlDxhhrifBue5PQ7lc0rQjzlxp292U4X98rY9PS5iGxxa63WgdsVTtJ0rwr
-	0SYn3119p2JhswNhVNd2B8u+B1Ihg4lMbKHr9tE1/6v2S5jllmxXj3afJhVwBlf7V0aV4RCP72G
-	Vn3sW8XEcy/hXW54vdJvLf2mqWCsOxrEWoTBInJTueb5q/w+aVDq8UIXSMIEDy04q9wxYgQEuwX
-	PUvX54gbNhcvTJdxqlTD8+W8Fn/wgGscuWknTyoC7dDAyD3SWxW82sWaALxt3u0TUPexF1a/w14
-	f+uvZgSDBHqwrJZnfZ1bHqOIJYs764O/qsVQORrRta5AP1W+QAqjvYgFcxSXnFgBxACW4COqx8U
-	XvJjILB3fmxBVGd2fSHGf7Cf7yZ
-X-Received: by 2002:a05:6808:1a1d:b0:485:4c7f:8f51 with SMTP id 5614622812f47-485e73f86bemr368030b6e.25.1780016617320;
-        Thu, 28 May 2026 18:03:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:72::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e695d17b1asm338219a34.17.2026.05.28.18.03.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 May 2026 18:03:36 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780016749; x=1780621549;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ILRzw3ymgSJBjX0vTHNQsa/d76Xbo5gLzSf+w3GDhIU=;
+        b=UbM7g4qx080gLGcZupski+a82KNQhdMbVZDJooT5Pac3FpulGwVCBHs+tYbQP+9AMS
+         jeMGArs4eLXYdKDK4nurZNBevw0OhjQnlCyK35qGRcoh3o+smANLzApyYTZNSQisTzIU
+         XWGVZjyE1IxuwCp/FiT/HI409ml0Zhld1zW0dns2tvWO2XklmMy2tPZO4olYhHIf/ECS
+         LdsZQhoXECEni8cj0FPjE23ZLJza9eOZHJTxfV2e58kNZzWNHDy/9lPGqexHmHEI2GuM
+         UOIhKuerg1Ga0hCx1SoqaDR0I+82gpSd0kxYDmadlrcjLodXDFRYjJE4UAlkyAn03eBm
+         68RA==
+X-Forwarded-Encrypted: i=1; AFNElJ/0cVStEm2WhAfLHro+KJyAfRiOE0+wMxVWkROx0bYG3zerQClKRSS1DUTFgXDYwcLjL6Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjVxjP9R6BapJr4BWzmJzjnADeeBnX67DHZKSenD3u8ZUUQ4PQ
+	2ZxkaHrrU0ZqeihdyOBp/Alq5rBZdQ+szRm2Xjg7dyz1+tH30wleQkuXUhvvif8qI+RN8nUtcQO
+	5FvW2EwBB+SB1Hl3zOsqSg0rZVERZMqQ=
+X-Gm-Gg: Acq92OGnZlQ8H++/9cbaRu270i65HHH/nrXkhDcVAydFytI3bTXpn0lEO7ugp2haf4a
+	eijndVa7CSlAW3WiMurXTMhAzK3na+Kr+G6QL6e/2bUmNUgt2GueDeo2Fpd6wX2+Ubl6YINRcwC
+	CQ/ueyqBTYSevPPx3+VHtZZtgflOTXZ0E6e43JCmFbuWTcVFu5bObVbQvvt1dysjVOHmaBoN9ox
+	VTuasp1uQ6r6TQIKCApkYxrIJVzI98/85RgZPqOE908xmBjxocVJkzirQEC92JZzMGHPulAZWUh
+	1I1ZFlzOYSR7D4UnyazA1t0kXkg18rc7jw1C9XQiopoOG4Qt4dvbJrPaoE3CQsjLUc70EspCghg
+	JlkLDHVtnjcjnkEIBN4zEfrdW8sCERI4P//Yj
+X-Received: by 2002:a5d:44c2:0:b0:45a:e3dd:586b with SMTP id
+ ffacd0b85a97d-45ef142b340mr882702f8f.18.1780016748489; Thu, 28 May 2026
+ 18:05:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <CAA-VZPk5=sQMCkngpXBo34v6=Ut5YmxNiTKSLfS6-GiSvUZUEQ@mail.gmail.com>
+ <5bd0c7b135559943f3abccda6390705da5e493d5.camel@gmail.com> <9d1dc36948ea9cfdf48f643f9b34ccaf51411847.camel@gmail.com>
+In-Reply-To: <9d1dc36948ea9cfdf48f643f9b34ccaf51411847.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 28 May 2026 18:05:37 -0700
+X-Gm-Features: AVHnY4KCKL-CgFeW8HmVyzlyJR98KMdlWnkSAfMeRZuwb8i4CC5I80qtXdP1ZIc
+Message-ID: <CAADnVQKfjaro6PMyd=2qaU9UeecLmTbzfj-f5ULUpfobhsbUgQ@mail.gmail.com>
+Subject: Re: bpf-next verifier regression on unsigned bound checking
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: YiFei Zhu <zhuyifei@google.com>, bpf <bpf@vger.kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 28 May 2026 18:03:34 -0700
-Message-Id: <DIUR88219HWQ.26T4D7ZX8CNTC@gmail.com>
-To: "Yuyang Huang" <yuyanghuang@google.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, <bot+bpf-ci@kernel.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard"
- <eddyz87@gmail.com>, "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski"
- <kuba@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Nikolay Aleksandrov"
- <razor@blackwall.org>, "Paolo Abeni" <pabeni@redhat.com>, "Shuah Khan"
- <shuah@kernel.org>, "Simon Horman" <horms@kernel.org>, "Song Liu"
- <song@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Yonghong Song"
- <yonghong.song@linux.dev>, "bpf" <bpf@vger.kernel.org>, "LKML"
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, "Network Development"
- <netdev@vger.kernel.org>, =?utf-8?q?Maciej_=C5=BBenczykowski?=
- <maze@google.com>, "Lorenzo Colitti" <lorenzo@google.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>, "Chris Mason" <clm@meta.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
- caller-declared size
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260515071504.2054786-2-yuyanghuang@google.com>
- <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org> <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com> <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com> <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
-In-Reply-To: <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
 
-On Mon May 25, 2026 at 12:21 AM PDT, Yuyang Huang wrote:
+On Thu, May 28, 2026 at 4:34=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> For this example, the regression lies in legacy CGROUP queries:
-> 1. BPF_PROG_QUERY for cgroups is not a new feature; it has been in the
-> kernel since 2017.
-> 2. There are existing legacy userspace applications and language
-> wrappers (like our android net-tests) written years ago with older
-> structure layouts (passing size =3D 40, ending at
-> query.prog_attach_flags) that query cgroups.
-> 3. In June 2025, Commit 120933984460 backported "revision" support to
-> cgroup queries, introducing an unconditional writeback in
-> `__cgroup_bpf_query()` at offset 56:
-> ```c
-> // In __cgroup_bpf_query() (kernel/bpf/cgroup.c) - Introduced in 12093398=
-4460:
-> if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
->         return -EFAULT;
-> ```
-
-Ok. This is fair. 120933984460 is indeed problematic.
-
-> Now lets talk about BPF_TCX_EGRESS:
+> [2] https://github.com/eddyz87/bpf/tree/cnum-split-at-zero
 >
->> bpf_mprog_query() and tcx_prog_query() were only introduced there.
->> How come your userspace passes shorter uatter to query newer
->> BPF_TCX_EGRESS attachment?
->
-> I understand your point, but two common cases exist where userspace
-> will legitimately query BPF_TCX_EGRESS with a 40-byte structure:
->
-> First, a generic BPF querying tool (assume it called `./bpf-query`)
-> compiled in 2020 (when the query buffer size was 40 bytes) might
-> accept the attach type dynamically from the command line:
->   ./bpf-query --type 47 --fd 3  # 47 is BPF_TCX_EGRESS
+> Approach [2] fixes the issue at hand and has almost no impact on
+> verification performance when tested on a set of
+> selftest/scx/meta/cilium programs.
 
-Don't buy this at all. This one is clearly a user space bug.
-
-> Add gating to the TCX path, will not be able to fix the legacy cgroup
-> query path. As shown above, the cgroup query path has the exact same
-> OOB writeback regression affecting legacy userspace. Since we must
-> plumb uattr_size to cgroup.c to resolve the cgroup regression safely,
-> applying the same consistent size-gating in bpf_mprog_query() seemed
-> like the most consistent and robust architectural path.
-
-Not really. Your patch adds checks to what looks like "random" copy_to_user=
-()
-places. This thread is clear indication that it's not a "robust architectur=
-al path".
-
-True robust path would be to wrap every copy_to_user() into another helper
-that takes uattr start pointer and size, does extra check, and
-returns something like ENOSPC (and not EFAULT),
-but that would be a significant churn.
-
-So I prefer a minimal patch that add single check in bpf_prog_query()
-that checks that user space supplied buffer is large enough for attr->query=
-.
-If not -> EFAULT. That would be better than overwritting.
-One can argue that partial copy_to_user() in __cgroup_bpf_query()
-should still be allowed, but I'm against partial and
-inconsistent queries.
-query.revision might seem benign, but if we do it for all copy_to_user()
-we better return ENOSPC to differentiate vs EFAULT to tell user space
-to fix itself.
-
+pls quantify "almost not impact" and send that patch.
+Looks small enough.
