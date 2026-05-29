@@ -1,122 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1AE73451B5
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 22:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D852BDC05
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 22:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780094349; cv=none; b=L5SeTUrFvgMR/4vcbcJWjEdjq6Rqzcq3sBu79ghH2vepI8tmYcqgzSh4ZvtZRW9ffy3UIB9zI5dY2vwKEudCrM3mXj6zXfpJO3ueiyooSeLH8dFerp5K6/Le/LjSwugzlUipFMbVFib4R95MVnhsBhqUgX/Dn5qOYraXCwIMQlM=
+	t=1780094676; cv=none; b=cwDx9NsR1j8TrTGOXTctyKPPzr3gslAIm5TJG1XREH8+rzLDqxBWxLmJv99KUrWdDKvB35oUBQ1T7MGN1Vccn0VZNSQfLj8E99TITeCLdrcl7lOCK49FzEgqxKGG1lVnkOHhGF1/3/8PdfjscxnZ4Wbz/KsiuUcCmrH/2YpMvIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780094349; c=relaxed/simple;
-	bh=pZc4fqzAPoKP7Kb3oOEY9mjTGEdT2ApiEX/Ma6DobTg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D4wDHw5kudoWmceYvpkrSyjyLUNb2JUUPlUxG1CEu6lMO9URzeMWqyDOSDxmmdYXSN+3Dz6AR2zAi9Oga/O7uOSLEw5pblnIIyK+Te+eWFt72rku52eSt5ElE4qXPagjGWG44rUlhRySpc46Cu+jrrWggchhjHQjBsnDaZkljOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixEp7HVc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780094676; c=relaxed/simple;
+	bh=Il2/pK6FRRwWyjbfAqVJcaRqdFcws2iLssIgd3rlNaA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=afCgG+yqwdwjBkep+fF0hWqxWiIr5R+ac/44xPaw9ETnPe7CXGz+O7CN85QagNMUYpNQQlQCKvTjdY55bHr5eaDCpDImdQNHoN4io8O4bz4aYI/pbwUaZ26DGpuTx8ZXW/+HCKz1YgYU5TYqFh7TCEPs2FxEnrKamjmYiydCDsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=owsh96CG; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixEp7HVc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25251F00893;
-	Fri, 29 May 2026 22:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780094347;
-	bh=yrpZkE8Zvz3+4yxGjDD0u8hlJeQKnb++pAkvnGlIX4o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ixEp7HVcfuS4RiE+ApgfE/6Kp49QmD7JIIqTtxv+eN6XKcFejbNy06eRzzWL5WjeK
-	 7nBIAzzWS8s6PdetZuvfCWSfHy4TIMycwf35o9+5IA1EwVluRVO3avlhME2M9+5LQD
-	 AfH6UR7N9f/7OAb6I1sKcUoueRISSGbdmaOJR9kRK++1+Mht8a6LoV+Z8H7ASOTIHw
-	 RabwGCLDs/IZonkIMD/IaSPAOMCgw1eFCY9YDJ+bELIZSWmkFsvMsK2OCgvIOZ9ipR
-	 23CmBJ2229IvWCypCuXSYe75ZHpJwrioE043SU9m09RKLxn1ghTcdlv66n8i5if+l6
-	 v+Tps8XA446vw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Add tests for arena
- slub-backed allocator
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529202438.16408-5-alexei.starovoitov@gmail.com>
-References: <20260529202438.16408-5-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="owsh96CG"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-304ddfcf72cso2284737eec.0
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 15:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780094675; x=1780699475; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OUIaCGwXRmuxCVmeuVVGcVKMjpVrKy95vt+M/Iwvbak=;
+        b=owsh96CGGHL1JVEwAJT7WoSiI6a99M3OgimAlb+F1D17/wCyqXts0VeFxKk36NkN3H
+         ggct8Ak8/8RwMStn2LAzR6OraaU9b7ibQ9ri6knlJ6wnSJ4/zvgZpcnuv7sGG06Kxd5h
+         zVODJ67Iifq1N1A6zTZD7zxmDBr6pr+5hCf3beRvbxPcG47v1uxVSDBZP6dYB3H02eE6
+         NoS1DuN306S1uc4aFM1CtTw+GnzfiB9Yz0GdtxN/DzQIEM+Kvl96VryuS+KanD8ruLeO
+         AuGo8zoXW9LNRfxl2Sxzlmz6DRIpTt+gr0NaZqf42KiJTBua/aYmthu7Xh1IL7KHufXn
+         ID5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780094675; x=1780699475;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUIaCGwXRmuxCVmeuVVGcVKMjpVrKy95vt+M/Iwvbak=;
+        b=B2SsSCNOfUCGZMLGokDsgXPyHFFSaBcBRUy/VH3ofqoYttgCkRQ47efpxKGMxetJ0e
+         fqpzffNdaSztmu7XMdRJLXQfVACYHcH0l5FPjTnfWDKCXsYHnLrg/LIFj9mpkRHYI3b2
+         hJA+NgdqNEifVkpdhDyNoD7sG95cjM1KJPRcnmUBIXZoJNC7IqkyBL35LMXrxBMDTrl6
+         +TEdHsl/9TPsrqBaqe9PAoygPCJ2cTbwCOOIJpzH0ga1/FUim/fYsf8f8yu8yHrRbzCB
+         WyqUsx6GmlyBqp0HOc+TrnbFOaeMsSiJqmDQnDpbGwxpXGcpwuhlXBtyxLhE+BrPXjeG
+         5Rpg==
+X-Gm-Message-State: AOJu0YzV+YrI2uH/bgYh9bQPM0vkbZneV6UaQ4gsa/+U+Bke96lRDIxg
+	C9zpKRvp9BbtR5OaW9P7VkwTznz2G3Yxk3UsPYrqYoQHpIwny9ZDTduZLjiTIZ79
+X-Gm-Gg: Acq92OFcY7FsKsPm4Iac33qI/nZW564tVzi0zE5cdi6qoqATn+Vw/4+bsHg2sDwVLZm
+	Pd4BxkPUYhMj5ipMn6V4CVgBLOV1K7yuW9L86Qofy866thk0fieoBMPeCVAq84ZrReTndadC3gx
+	5D4XK/Ba6llpHABdp+Hm1+4NfQ5piXxLRr3oNj1fQrd6+ZR3+hOmZAepaVzh8+ReXS9Oyg99JOO
+	M6ryOKyN1oYRg5zPSr4+M+2jtZBuCAdEbkXrXdAnH7rZPQ4s4PRzy999e03I+CBDJEUQYApSfJs
+	+lOm5IcSTu5MLeulAaI1LkYDw2oAh+srcfZB6Cu59YEoTJFymebLjfQR1Nk5MK1j+eBW2AXCXHc
+	Qlf9p1IbN6uak8atI5Jn23pB7aa4tqUwpV5dKur53kPWe/9ehuGSSSi+ZmIOEkWgrHY6pG4THuj
+	wK0y1vHmOIcXgzQ7oxew3rICpPAG29hf6SvXZ2elKgTazSLTdKH3XcwJuiiYW3ITIuVm0SkkNhp
+	Ev4CmZww4c5Ac+A
+X-Received: by 2002:a05:7300:5714:b0:304:e7c9:b528 with SMTP id 5a478bee46e88-304fa693516mr901422eec.30.1780094674656;
+        Fri, 29 May 2026 15:44:34 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:290a:537d:fffd:9353? ([2620:10d:c090:500::5f51])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5f6426sm2441193eec.31.2026.05.29.15.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2026 15:44:34 -0700 (PDT)
+Message-ID: <14c9e9e95a07b6de94a142394c69b81d6587998b.camel@gmail.com>
+Subject: Re: [PATCH bpf 0/2] bpf: fork state when comparing sign crossing
+ ranges with zero
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org, ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev, zhuyifei@google.com
+Date: Fri, 29 May 2026 15:44:32 -0700
+In-Reply-To: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
+References: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 22:39:07 +0000
-Message-Id: <20260529223907.B25251F00893@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The `arena_slab_freeptr_stale_pcs` selftest will reliably fail o=
-n architectures with a page size larger than 4K (e.g., ARM64 with 64K pages=
-) due to hardcoded assumptions about SLUB slab page capacities.
---
+On Fri, 2026-05-29 at 01:13 -0700, Eduard Zingerman wrote:
+> YiFei Zhu reported [1] the verifier regression after switch to cnum
+> based scalars representation. When the following sequence of
+> instructions is processed:
+>=20
+>     1: ... rX setup with [negative, positive] bounds ...
+>     2: if rX =3D=3D 0 goto ...
+>     3: if rX > C  goto ...
+>     4: ... code relying on rX being in range [1, C] ...
+>=20
+> The cnum-based implementation only infers that rX range is [0, C]
+> at instruction (4). The pre-cnum signed/unsigned ranges based
+> representation could always deduct from 'rX !=3D 0' that
+> umin bound is 1.
+>=20
+> This patch introduces a workaround forking the verifier state when a
+> register with sign-crossing range is compared to zero.
+>=20
+> [1] https://lore.kernel.org/bpf/96c4a1aa4333d10b882a9b5093d2d982f9f106e3.=
+camel@gmail.com/T/
+>=20
+> ---
+> Eduard Zingerman (2):
+>       bpf: fork state when comparing sign crossing ranges with zero
+>       selftests/bpf: test fork on zero comparison with wrapping ranges
+>=20
+>  kernel/bpf/verifier.c                              | 71 ++++++++++++++++=
+++++++
+>  .../testing/selftests/bpf/progs/verifier_bounds.c  | 68 ++++++++++++++++=
++++++
+>  2 files changed, 139 insertions(+)
+> ---
+> base-commit: e42e53ae23b7d41df22ccd7788192bf578f24da2
+> change-id: 20260529-cnum-split-at-zero-3c03db9234d3
 
-commit 307042b1f4f8cca55cad67f2c12869bf67a9f7c2
-Author: Alexei Starovoitov <ast@kernel.org>
+I don't know why CI misses it:
 
-selftests/bpf: Add tests for arena slub-backed allocator
+https://github.com/kernel-patches/bpf/pull/12235
 
-This commit adds end-to-end selftests covering the SLAB_BPF_ARENA path.
-It includes smoke tests for basic alloc/free kfuncs and exercises corrupted
-in-object freepointers to validate get_freepointer() clamping.
+But I see two libarena tests failures with this series locally:
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_p=
-cs.c b/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_pcs.c
-> new file mode 100644
-> index 0000000000000..4d23d75419d61
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_pcs.c
+File                 Program                    Verdict  Duration (us)   In=
+sns  States  Program size  Jited size
+-------------------  -------------------------  -------  -------------  ---=
+---  ------  ------------  ----------
+...
+libarena_asan.bpf.o  asan_test_buddy_oob        failure         879905  209=
+739    4158          3931           0
+...
+libarena_asan.bpf.o  test_buddy_alloc_multiple  failure         269851  110=
+341    2774          3897           0
+...
+-------------------  -------------------------  -------  -------------  ---=
+---  ------  ------------  ----------
 
-[ ... ]
-
-> +	victim =3D objs[TARGET_IDX];
-> +
-> +	/*
-> +	 * The 4096-byte bucket has one object per slab and a 4-object sheaf.
-> +	 * Free @victim while the sheaf is full, then turn its encoded NULL
-> +	 * freepointer into any non-NULL decoded value. The arena clamp keeps
-> +	 * non-NULL decoded values in the same slab and object-aligned, so this
-> +	 * becomes a freelist self-cycle back to @victim.
-> +	 */
-
-[Severity: Medium]
-Is this assumption valid on architectures with page sizes larger than 4K?
-
-On a system with 64KB pages, a 4096-byte bucket would hold multiple objects
-per slab page instead of just one.
-
-[ ... ]
-
-> +	/*
-> +	 * The sheaf is full of duplicate victim pointers now. Free the four
-> +	 * filler objects plus one extra object directly to SLUB, leaving enough
-> +	 * partial slabs that the next target-slab zero-inuse transition discar=
-ds
-> +	 * the target page instead of keeping it on the partial list.
-> +	 */
-> +	for (i =3D 0; i < SHEAF_FILL; i++)
-> +		bpf_arena_free(&arena, objs[i]);
-> +	bpf_arena_free(&arena, objs[EXTRA_IDX]);
-> +
-> +	bpf_arena_free(&arena, victim);
-> +
-> +	p =3D bpf_arena_alloc(&arena, OBJ_SIZE);
-> +	if (!p)
-> +		stale_alloc_null =3D 1;
-
-[Severity: Medium]
-Will this logic successfully discard the target page on architectures like
-arm64 configured with 64K pages?
-
-Since 64KB pages can hold multiple 4096-byte objects, all these allocations
-might be placed into the exact same order-0 slab page. Freeing the filler
-objects would merely drop the inuse count of that single slab page rather
-than creating multiple empty slab pages to fill the partial list.
-
-When the victim object is freed, wouldn't SLUB retain the page instead of
-returning it to the OS, causing the final allocation to succeed and
-stale_alloc_null to remain 0, thus failing the test?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529202438.1640=
-8-1-alexei.starovoitov@gmail.com?part=3D4
+Investigating.
