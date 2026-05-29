@@ -1,177 +1,145 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8356348C62
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 08:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633033AB5DA;
+	Fri, 29 May 2026 08:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780042416; cv=none; b=GcPLaPD8C7AA46ptmJXF7Y2nkWU5UPJcokk3dusN45/OdFyp+CnQDcTpbNxmTXnAResj+6CyTpc9wxdG9aSHC5/ERsD+sZ0sa40lQsOfmOrRTTu2lUOiB5DkyUAkRp31QY8GN3u1i0qe2c6D6LFvzE5K0dKN0MKSknA4sSam72c=
+	t=1780043387; cv=none; b=ZYL09GOzqelcw6URcD7rNndaKHHwLDS3P5detrdoi9i6bZDtF13bYgO+pgYFPbT8bBasWwpto6NIqj9OUo3HlmCZBSHM3Q56dFudvQwZ/WUub+w5pHyem81/1Fuz9n6cyyJebxG9AUbsCb6UTHpUDz4FSCJJJ859pgQyLJ/5GYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780042416; c=relaxed/simple;
-	bh=kMF94CUgUYHVk9impyTBCXE/rFXGtliI6hQ1g7bEBZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PDpzo0nEBPVIAOcmp7wP1UKsSw9DrbYAEYAdTK5GoX4LAvdInxqHyWbsVUcFKBhXbUHd5IeGRKP4JDwrQCWPIK6iXZyjaLWK0wCqvaXxobi4vFSPsXGdGx6zPNZ1o7X8b+OQEuDEPUOjMLjW1yHtSOQWg9uI1N895K59run0hVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OryXTdP/; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780043387; c=relaxed/simple;
+	bh=lQ0zbcLil0/HCJ3909LMaKt2HLfj1P9vlCrDawJ0TiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WzGjodxTesL5SE/p/P/7Xpv1hzVebONCruyWh039D+4IDfoupqqgf74071p2A52xg58szzpwGnfEwun8Zec2UCywTLP7msLypQi1Wbuz8Rwcqs0kUtH9Xd1oebP7028jZZBDhCQrNqqQ5rqp2FvsbUaTLeOVtBw3h8qihmIZbvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RPxHOxrD; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OryXTdP/"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bcd730e090so108731355ad.2
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 01:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780042415; x=1780647215; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmP8JKl+zVd5853ibk/0JajPLoRoKKYEp6uEqLbvTWM=;
-        b=OryXTdP/Y23rLhmA7C/aHX8GwHfXBgzcQ8lhCHsa60qQ6V+PFMNBduv36jI0TrZ89R
-         rdLz5PMX0KSkFJq0nl7DgKlhuXLG5J93nWwy7lkKO2ifiZM6/b5DFuEjvzBf9DKDO/2G
-         N9zpzWz4taVbachZLL+QLmJ5+2OgSt56y8AewmEWx9bibJWifoj/y2fxOkTNPMtUg8FI
-         SckFnCa6/Ce3z9xIlsMeTeI42VtHFkXmjoH30mpZDKhDKlF2sFSB/VskdYPrsf0cevsF
-         xHbxYaUaFdofjHdO2hlXE5pIBM/ajFkp+4YvU5unfTeVLFSK9WVGlVYJLbuhgR76vmVd
-         G1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780042415; x=1780647215;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CmP8JKl+zVd5853ibk/0JajPLoRoKKYEp6uEqLbvTWM=;
-        b=mMQCl/u0tGJwzSavZUqyBOx2JatWZUAFXJYYjNxMoizlGpOx4arzMaoyywLQlPSIru
-         ZkkBNO0jZw2aNsJcd0iBzqi81kc1K6FPJV2/gbiR7CVUB3rqoCQr5he7z1RurbkgjhML
-         16BrZwL2mbVrTUAfFCd28iF8Xy6acron7OpBhzokiuF+zBchp1YJ0Crl+REA1Bt2Ac8y
-         GZUMPmnAecqQh+fd3a1yu/MLbXQSreRQaKXN9f2e+GI3QYW6Xo4O2sGZu4SazA7PvxMv
-         UOFlm/wtFJYUk3zWVwhI5r3bGIPWpSQZa5EWlXsXtTEEWlVOk7v0EI7ip/7DqHNfDECY
-         0ZfA==
-X-Gm-Message-State: AOJu0YwwkW1VO5/EIeN2ceRtKhWJc1zKyCo24ooy0ZJ1/mNWr30i8UAP
-	Yq6HIlNe0+7xybiO/EcLYB33+k6olOweZr1Rv3AKgjdCBn6DpZnIPHrM2IpL1UQv
-X-Gm-Gg: Acq92OFRvxqUDvL6h9euaI9NijJiDg57fpcvMNfJ1SIaZZNqC2SuJxNJsD3g8ALxoD2
-	R7EFqxbebz1yTWJmgb3vygsGWA9UEGR1o8sG6M1y/Zyjemyo6uHhkwz1O8Y6NHdZ0sr0xf9L9Ld
-	LjDnVfIk0ziemP3c/jl9QB/fpCpKDqCPdaxsd417lomam1jjNaTPPCxxoJg0OohKNE3XiAlikOP
-	hIZUb/rmoy3gb845feVZMnzJgUbCJyHMGnTXH66iL2Y3JQq2IilAuufmlmKAKnEeTpvIEFbDBmj
-	jW9KOO/eleyoFNwu8Hh+Vj288yR6QEhMqsw7MGFngsufVads/yBmghoTx2Q3hmNBtXiExTAliDY
-	3qqHC0CiYfzBHdrs2SG7YTl4GFnkD0L36EvoTFw/hqY6L4ml9mENtZ2bYas0YRp8NedijgUu4St
-	yK66iYDvtrdjAkZ1GdmlhsPwaqRkbQc9dfFltbEZBDMPPjfq23saQ=
-X-Received: by 2002:a17:902:fc43:b0:2bd:8db9:cc0c with SMTP id d9443c01a7336-2bf2050c287mr25687915ad.6.1780042414939;
-        Fri, 29 May 2026 01:13:34 -0700 (PDT)
-Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239e6f57sm10806715ad.13.2026.05.29.01.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 01:13:34 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	zhuyifei@google.com,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: test fork on zero comparison with wrapping ranges
-Date: Fri, 29 May 2026 01:13:20 -0700
-Message-ID: <20260529-cnum-split-at-zero-v1-2-986c03752226@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
-References: <20260529-cnum-split-at-zero-v1-0-986c03752226@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RPxHOxrD"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SLllLd2418247;
+	Fri, 29 May 2026 08:28:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=ZmCU8JjyW1xv8XSh7pfJC++iM36fsD
+	Sne5TVGz99TSo=; b=RPxHOxrDDOKdhImhAgptuWp5UafW7nh6T8LpvzP+xLcWce
+	BISoGufG+1TFMzmrmNwRn5HgrlMBtRPPZqGI+vax1IlO5Z2e03VR9J4QLUUvZGqB
+	5MT0QoHqzsM2ftNCe2/brGOUMw44UNHvxhFNUq0QWTGRP3Mot/aAWBfvbaBvvCZ1
+	T6xbfDQpwRdIe+21CVX8eG5xFlBDSgZR1vmAZcZI4GkxY60q6swdQKNI82HvMrmr
+	1K58URXwMVCxZ2f99hzKRviNU3zJNiaPz9KzZzXovOBRrnwcce7DAz4onYJw9Yzg
+	c8Ytk0PjZQocAn+ztZQHiJGVY4s1EJcKgKSn7GVw==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ee884qjcm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 May 2026 08:28:48 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64T8OBnO032654;
+	Fri, 29 May 2026 08:28:47 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4edjrbcjw9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 May 2026 08:28:47 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64T8ShFO37683514
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 29 May 2026 08:28:43 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 783E12004B;
+	Fri, 29 May 2026 08:28:43 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 47C0920049;
+	Fri, 29 May 2026 08:28:42 +0000 (GMT)
+Received: from osiris (unknown [9.111.13.205])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 29 May 2026 08:28:42 +0000 (GMT)
+Date: Fri, 29 May 2026 10:28:40 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Jens Remus <jremus@linux.ibm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Vasily Gorbik <gor@linux.ibm.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Subject: Re: [PATCH v2] unwind: Add sframe_(un)register() system calls
+Message-ID: <20260529082840.26496A2c-hca@linux.ibm.com>
+References: <20260528151023.00f5ec4e@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260528151023.00f5ec4e@gandalf.local.home>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=L4MtheT8 c=1 sm=1 tr=0 ts=6a194e41 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=kj9zAlcOel0A:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=meVymXHHAAAA:8
+ a=JHi4FkbiIRko9ia7NpwA:9 a=CjuIK1q_8ugA:10 a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-ORIG-GUID: bKpieZLL6prBYOtPU8OUCX4n4xg7100e
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDA3OCBTYWx0ZWRfX8FSLPHD4t+RR
+ mMX3xIpIFspAD6pvmEH64fxuxOFaZebMHBKxC1/NEba/SK4W2tMIvVkUwEMByTwaF5oaO+4Na8t
+ LMJzp4vAiADBiov4C4DNfYp5/Y0BBDYPflih8CQzU1xpBDrbeU9ZD4XCJWRYSkvkSan1fL4sN1e
+ dfVlMp9Il/c3tulCeQ4ZKoxMKGzshh2GFxFIuxKAG+LBrZPG3Ck4ClldIL9H86+3vSx3Am47KUO
+ 7xuukOZ6AEvZ9RnFnOdZrFUj4CZkp1hkegxH2XfzDKdem3rrPvdOWoT8Q8Slp0VZGLPAT3dImmt
+ /ncvgrRZRWC5l4YOvJRwd+dDp/fw71q8wF967DeC7XsqiyDn9EcPKMAZIl+aJ77SdOIoWDzbJyy
+ fkhcM7MEdjpaazm3PokQmLxWwTzI6fNDDrTGJENn/LC7NLP0c4QjwRY4rIf2UuA8xHmpRHyDFPv
+ +hxwHP/CLAPMFMvnbtw==
+X-Proofpoint-GUID: X9uleG4BCnUStnmV7cUzFy92hiRdtqkl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-29_02,2026-05-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1011 malwarescore=0
+ bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605290078
 
-Add tests verifying that the verifier correctly narrows a
-sign-boundary-crossing range after comparing with zero.
-- fork_on_zero_cmp_k - BPF_K conditional instruction;
-- fork_on_zero_cmp_x -
-  BPF_X conditional instruction with src being zero.
-- fork_on_zero_cmp_x_swapped -
-  BPF_X conditional instruction with dst being zero.
+On Thu, May 28, 2026 at 03:10:23PM -0400, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> Add system calls to register and unregister sframes that can be used by
+> dynamic linkers to tell the kernel where the sframe section is in memory
+> for libraries it loads.
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../testing/selftests/bpf/progs/verifier_bounds.c  | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+...
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index bc038ac2df98..f97b0e109326 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2294,4 +2294,72 @@ __naked void range_within_cnum_cross_both_boundaries(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__success
-+__naked void fork_on_zero_cmp_k(void)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
-+	r1 = 8;								\
-+	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
-+	if r1 == 0 goto 1f;						\
-+	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
-+	if r1 < 1 goto 2f;		/* must be dead */		\
-+	if r1 > 8 goto 2f;		/* must be dead */		\
-+	goto 1f;							\
-+2:	r0 /= 0;			/* unreachable */		\
-+1:	r0 = 0;								\
-+	exit;								\
-+	"
-+	:: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success
-+__naked void fork_on_zero_cmp_x(void)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
-+	r1 = 8;								\
-+	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
-+	r2 = 0;								\
-+	if r1 == r2 goto 1f;						\
-+	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
-+	if r1 < 1 goto 2f;		/* must be dead */		\
-+	if r1 > 8 goto 2f;		/* must be dead */		\
-+	goto 1f;							\
-+2:	r0 /= 0;			/* unreachable */		\
-+1:	r0 = 0;								\
-+	exit;								\
-+	"
-+	:: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success
-+__naked void fork_on_zero_cmp_x_swapped(void)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r0 &= 0xff;			/* r0 ∈ [0, 255] */		\
-+	r1 = 8;								\
-+	r1 -= r0;			/* r1 ∈ [-247, 8] */		\
-+	r2 = 0;								\
-+	if r2 == r1 goto 1f;						\
-+	if r1 > 8 goto 1f;		/* r1 ∈ [1, 8] */		\
-+	if r1 < 1 goto 2f;		/* must be dead */		\
-+	if r1 > 8 goto 2f;		/* must be dead */		\
-+	goto 1f;							\
-+2:	r0 /= 0;			/* unreachable */		\
-+1:	r0 = 0;								\
-+	exit;								\
-+	"
-+	:: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+> index 09a7ef04d979..52519e2acdc8 100644
+> --- a/arch/s390/kernel/syscalls/syscall.tbl
+> +++ b/arch/s390/kernel/syscalls/syscall.tbl
+> @@ -398,3 +398,6 @@
+>  469	common	file_setattr			sys_file_setattr
+>  470	common	listns				sys_listns
+>  471	common	rseq_slice_yield		sys_rseq_slice_yield
+> +472	common	stacktrace_setup		sys_stacktrace_setup
+> +472	common	sframe_register			sys_sframe_register
+> +473	common	sframe_unregister		sys_sframe_unregister
 
--- 
-2.53.0
+What is stacktrace_setup? And why only for s390? Looks like a leftover.
