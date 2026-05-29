@@ -1,32 +1,30 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CE03321C2
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 15:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BED2E03EA
+	for <bpf@vger.kernel.org>; Fri, 29 May 2026 15:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780067693; cv=none; b=GNIX8NBCkrHSnF57A4W6n+OMKuxpiMQn6UxLeQQS1NXp9gCBwd2dQUsW8fyemzQGZaQb0HfOCUyE5XrVE3GzAg627Wq6KaP3NWyJaMX+NiBVGyHlPCMs/318YwHtt6Owqv1Hx7MQqHUe/X9RzmN2T2E6fyuQMu7oEvMCfo/QEIc=
+	t=1780067695; cv=none; b=JP2z5T+dzIeSnkBmZ4/CNF5VJbz8HN8E3kMqrLg0e1vRKnjoB+QiRk5jm4WDHSiiMFXrNc6fd+rQB4/Z0ikF9csaqSVHqW3itibRpro/bSBZp2pO6i9sn7kPp/n4Zig/UPNoksa2xM0S1OsAOTXVfMz11VQpzubjnJ4KvHE5SjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780067693; c=relaxed/simple;
-	bh=XSCO5CSVCnzEfuZMtOvLgrM/19YC/n7GmkNMoqE9KlA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nGYJXMh5jYgyKouK0yyU6JrqZNxTrNKujmGP+GDDYAp62HL+3tHHW/qQkMH4yrQtmMDSbr90QKBhGUI4982ZlciM1uD0iS/R1Qv1tGdvBLjS1TWUQ5zReDqN/S/CvtjLo79QP4hEK9ylACNVdVdFXrV+b/67tnGmiQKrE3iaFSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VTHlJIA7; arc=none smtp.client-ip=95.215.58.176
+	s=arc-20240116; t=1780067695; c=relaxed/simple;
+	bh=1Gxg4/H4M4EI8CJui4aTaBaLUod8+6zRAPKNyr1ay7s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mMhhwe3sgE62w/mwgLJGiSjLayRzsUGVCrLWyN5EQWWa0C4zxYVCT9sH2yKTIuvw1/ypZnwm5i5CcrdZhJo5yA2ui/TiSPsE/k/4hF9wTTmQDaG1/hNNstZP8ugC8bPmX6OTxvbi7fbzLcZR6LZ60scvM0mijENq87xo28mLzqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IKs5bOuy; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VTHlJIA7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IKs5bOuy"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780067689;
+	t=1780067681;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QOd4RhJzsfLP0kB2sEsBt46YxR8Ub6JYiYOL9mjFn8M=;
-	b=VTHlJIA7y2WLB3S+aHCKwgmOPsRftcpaWhLdgola1SXKsAl8YWC5Pd7e6NtuZ6RjbN72l+
-	y0smBbjxQid+H9wDKtT+m+0bkdtOzPD2hlaqUc2ukzPI8645nXAHZiQEF8ia5Fqtz0Logm
-	P1baahfKfWKu3ozjRLZosLg2Sfhy4aw=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZKX3haN61Wnik8To+l56QjAR+mrY0s0xumH2LohYHes=;
+	b=IKs5bOuyL9kBLbK9wnNTf6GSl/4BvYEaOtheeBpPzuXzfg3TMajccTJmRk7sU8bjEgr3uA
+	BE/BIs7ttYSmHl7DEeJwPLY3bk6OyuvAXNWbJuzaAPpoz72xpk/oY9j87umXxzcVVLptXs
+	JKc2Q8s1JRqZabeMyANFHH6hnsamuGM=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -53,11 +51,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf v2 1/4] bpf: Fix TOCTOU issue in lwt
-Date: Fri, 29 May 2026 23:13:48 +0800
-Message-ID: <20260529151351.69911-2-leon.hwang@linux.dev>
-In-Reply-To: <20260529151351.69911-1-leon.hwang@linux.dev>
-References: <20260529151351.69911-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf v2 0/4] bpf: Update transport_header when encapsulating UDP tunnel in lwt
+Date: Fri, 29 May 2026 23:13:47 +0800
+Message-ID: <20260529151351.69911-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,56 +63,41 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Sashiko pointed out [1]:
-The hdr pointer passed to bpf_lwt_push_ip_encap() can point to concurrently
-mutable memory such as a BPF map value.
+Currently, bpf_lwt_push_ip_encap() does not update skb->transport_header.
+When a driver, e.g. ice, reuses the stale skb->transport_header to
+offload checksum computation to NIC hardware, VxLAN packets encapsulated
+by bpf_lwt_push_encap() helper may be dropped due to incorrect checksum.
 
-So, the memory of hdr pointer can be updated after skb_postpush_rcsum().
+Update skb->transport_header in bpf_lwt_push_ip_encap() whenever the
+encapsulated packet uses UDP, so checksum offload works correctly.
 
-To fix it, memcpy() the hdr to a local buffer, which will be used for the
-following checks and updates.
+Fix these two issues reported by sashiko:
 
-[1] https://lore.kernel.org/bpf/20260525150010.CDEBA1F000E9@smtp.kernel.org/
+1. memcpy() hdr to a local buffer to avoid TOCTOU issue.
+1. "iph->ihl < 5" was missing to avoid infinite-loop in MIPS driver.
 
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- net/core/lwt_bpf.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Changes:
+v1 -> v2:
+* Address sashiko's reviews:
+  * Fix TOCTOU issue in lwt to avoid changing hdr after checks.
+  * Add check iph->ihl < 5 in lwt to avoid infinite-loop in MIPS driver.
+  * Update comment style in selftests with BPF comment style.
+* v1: https://lore.kernel.org/bpf/20260525142650.2569-1-leon.hwang@linux.dev/
 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index f71ef82a5f3d..8009e427851f 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -599,6 +599,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool ipv4, int encap_len)
- 
- int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
- {
-+	u8 buff[LWT_BPF_MAX_HEADROOM];
- 	struct iphdr *iph;
- 	bool ipv4;
- 	int err;
-@@ -606,8 +607,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
- 	if (unlikely(len < sizeof(struct iphdr) || len > LWT_BPF_MAX_HEADROOM))
- 		return -EINVAL;
- 
-+	memcpy(buff, hdr, len);
-+
- 	/* validate protocol and length */
--	iph = (struct iphdr *)hdr;
-+	iph = (struct iphdr *)buff;
- 	if (iph->version == 4) {
- 		ipv4 = true;
- 		if (unlikely(len < iph->ihl * 4))
-@@ -637,7 +640,7 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
- 	if (ingress)
- 		skb_postpush_rcsum(skb, iph, len);
- 	skb_reset_network_header(skb);
--	memcpy(skb_network_header(skb), hdr, len);
-+	memcpy(skb_network_header(skb), buff, len);
- 	bpf_compute_data_pointers(skb);
- 	skb_clear_hash(skb);
- 
+Leon Hwang (4):
+  bpf: Fix TOCTOU issue in lwt
+  bpf: Add check iph->ihl < 5 in lwt
+  bpf: Update transport_header when encapsulating UDP tunnel in lwt
+  selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in
+    lwt
+
+ net/core/lwt_bpf.c                            |  20 ++-
+ .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 158 ++++++++++++++++++
+ .../selftests/bpf/progs/test_lwt_ip_encap.c   | 112 +++++++++++++
+ .../bpf/progs/test_lwt_ip_encap_fix.c         |  36 ++++
+ 4 files changed, 323 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
+
 -- 
 2.54.0
 
