@@ -1,136 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881D236AB47
-	for <bpf@vger.kernel.org>; Fri, 29 May 2026 16:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F7536607D;
+	Fri, 29 May 2026 16:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780070772; cv=none; b=Yd1aS8sbwVkR26fomxUVyHo1yXfobrDzFiz5WERvvUH9zucFJvhp8zeWa9KX9SxNgvBuTSGEemuetcWGTGzbsVFcbFOhx0K5QHq18wF7FkvUwlAUJcsmQ93dBV5uyIPZJyznHsqLuFCe/XuIu4Y211llOHAwS7Pf1JyrQrwH/Vo=
+	t=1780071330; cv=none; b=Sa3gVAYJmoxRaJx1L4rTn1HzZ6oLbY9PHtOX1ZzFaswwACXo0aI0LT2Cya8XU+3mrX7PE0H9Lz/FgSoCzFFFj4saeWcoZNsjboVzmhIfD0sxLPJNOI65GPwcX4zj9mb7RsUqUr7GiwDfbcPqMHQqh6jLtUvaWvmax11oGuF3HcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780070772; c=relaxed/simple;
-	bh=hFYAk/q0DhQWpscGa8iRn6/IDDXCD5Mtv61fypvOzzI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mqIWpI5X68gGJM2wc1M+25jzBDjYmW36E60XfnyZZkCKvm/sT4sAuTF5cfHa0PW1lp1b0gJwXRkBV6GCxgxwMcHOh6E44pjd9jzLFK6jlOrEgup7C5/oAUHVO+6tkLDXTNRjrMvrZXbROtIoj4xiVnunPJfvSeE6GqasCfejGh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pyg52LWf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780071330; c=relaxed/simple;
+	bh=uL/G0eLfOk3tPLysZ/3wSHOxP3/9s1fHmc95jIWh9Fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iHbIdwpbVUuoX6zRbz+Or6rR1AV2p5BRc5YbFeT4wY2lExzYTTcBCtC00d7Q7687RcjXE0eH4tqHqTbwwkN2PSSqGigYco5EhRyfDgkADpYuv8GuwXMj1h5Y4r3E3Tyz+Z5O9Fvm7mvk7C15Z1bLeCxW0leWcxTCV0ePY61U0dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=tFKhuz7u; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pyg52LWf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DDD1F00893;
-	Fri, 29 May 2026 16:06:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780070771;
-	bh=mqZ2Z4poqM3uAKVXX0FcqYLV7l5Btbfxe/6SLkVraIw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Pyg52LWfCII8j8Gev/wyBHU8pAxtWx5NMYslM2QtifV91BgiwzO8IWn58zLTGb0bD
-	 zLNvwHwYNlaT+YZxVQyhv/U8CrkdKRtdK1bRMZU27A+KHxIkJSq3+SlMbHl7jjnnBB
-	 Bv6OZspdPTKjVDUy7cPgt3Y69gLOHxjqmwHBOTiPLyVMXitlxE3GJNH9GmnqbBpMBP
-	 eJiVPWBBhPBYKLW159/5kL6RtQlQdq88stGf0hA2BErD2G5YT9+gcpYO2HPZNxrcA+
-	 LWvNrS0CB9S0h6zdgSTejUiB1FezYQLzH2pyv7IGXpak1WVO2T4Ih/+bIu3bqE31Qe
-	 //Gof/MQLPdng==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 2/4] bpf: Add check iph->ihl < 5 in lwt
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260529151351.69911-3-leon.hwang@linux.dev>
-References: <20260529151351.69911-3-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 16:06:10 +0000
-Message-Id: <20260529160610.E9DDD1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="tFKhuz7u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
+	s=unimail; t=1780066303;
+	bh=uL/G0eLfOk3tPLysZ/3wSHOxP3/9s1fHmc95jIWh9Fk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=tFKhuz7u2kk9/OBJF7dXUwCKT5j3ebFa90CpfFcs/ZRH+a9xo0FWeV3Or6WzbqGQv
+	 DzCESRaHuRWtcbpSc2JaXdg0U2Kpi+ZPVsuNZAfIW1EViO8DYBQIFHukyhsYm16J3j
+	 gtQZj/UwCJHnFiG9k/YsEi07l5mCG1QdyyjW4Sww=
+Received: from [129.217.186.252] ([129.217.186.252])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 64TEpf6Q021874
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 29 May 2026 16:51:41 +0200 (CEST)
+Message-ID: <c8650d3a-e488-4279-b28f-549d766c23a1@tu-dortmund.de>
+Date: Fri, 29 May 2026 16:51:41 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: hawk@kernel.org, netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-6-hawk@kernel.org>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <20260527135418.1166665-6-hawk@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 5/27/26 15:54, hawk@kernel.org wrote:
+> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+> +	/* If the ring is now empty and the peer TX queue is stalled by DQL
+> +	 * backpressure, release completions immediately to unblock it.
+> +	 */
+> +	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
+> +		/* Pairs with smp_wmb() in __ptr_ring_produce(); ensure ring
+> +		 * emptiness is observed before reading peer_txq->state.
+> +		 */
+> +		smp_rmb();
+> +		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
+> +			veth_bql_complete(state, peer_txq);
+> +	}
 
-Pre-existing issues:
-- [High] bpf_lwt_push_ip_encap updates skb->csum incorrectly for CHECKSUM_C=
-OMPLETE packets by calling skb_postpush_rcsum() before calculating the IP h=
-eader checksum.
-- [High] handle_gso_encap() hardcodes the inner IPv4 header length to 20 by=
-tes, ignoring IP options, which leads to reading garbage data as transport =
-headers.
---
+"Does this leave coalesced BQL completions pending indefinitely if the
+receive ring is empty but the peer TX queue isn't stalled by DQL? [...]"
 
-commit f2ce106c7be32fdcff1b6d3eb89a4fe4496a86d1
-Author: Leon Hwang <leon.hwang@linux.dev>
-Subject: bpf: Add check iph->ihl < 5 in lwt
+Regarding this by [1]: Yes, this is desired behavior IMO.
 
-This commit adds a validation check for the IP header length (ihl) in the B=
-PF
-lightweight tunnel IP encapsulation path. It ensures that the header length=
- is
-at least 5 (20 bytes) to prevent an infinite loop in ip_fast_csum() on cert=
-ain
-architectures like MIPS.
+From my understanding there should not be a BQL stall caused by
+this (needs to be tested though).
 
-Link: https://lore.kernel.org/bpf/20260525150010.CDEBA1F000E9@smtp.kernel.o=
-rg/
+A minor nit is that the observation of the minimum amount of
+slack found over several iterations of the completion processing
+(saved in dql->lowest_slack) is inaccurate and therefore the limit
+might be set to a too low value once (at the next completion call).
+I think it does not matter though.
 
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index 8009e427851f1..c306120e11d29 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -613,7 +613,7 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *=
-hdr, u32 len, bool ingress)
->  	iph =3D (struct iphdr *)buff;
->  	if (iph->version =3D=3D 4) {
->  		ipv4 =3D true;
-> -		if (unlikely(len < iph->ihl * 4))
-> +		if (unlikely(iph->ihl < 5 || len < iph->ihl * 4))
 
-[Severity: High]
-This isn't a bug introduced by this patch, but since we are validating the =
-IP
-header here, could this lead to an incorrect skb->csum for CHECKSUM_COMPLETE
-packets later in this function?
+Overall The AI reviews [1] [2] have some valid points.
 
-When a BPF program leaves iph->check =3D 0, skb_postpush_rcsum() is called:
+Apart from that I would consider joining patch 2 and 5.
 
-    if (ingress)
-        skb_postpush_rcsum(skb, iph, len);
+[1] Link: https://sashiko.dev/#/patchset/20260527135418.1166665-1-hawk%40kernel.org
+[2] Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260527135418.1166665-1-hawk%40kernel.org
 
-This calculates the partial checksum of the IP header and adds it to
-skb->csum. Later, the correct checksum is calculated and overwrites
-iph->check:
 
-    if (!iph->check)
-        iph->check =3D ip_fast_csum((unsigned char *)iph, iph->ihl);
-
-However, skb->csum is not updated to reflect this modification. Because a
-valid IP header's checksum zeroes out its 16-bit one's complement sum, does
-the addition in skb_postpush_rcsum() incorrectly add the header's
-unchecksummed sum to skb->csum, causing packets to fail CHECKSUM_COMPLETE
-validation and drop?
-
-[Severity: High]
-This is a pre-existing issue, but since this patch explicitly permits IP
-headers with options (where iph->ihl > 5), does handle_gso_encap() handle
-them correctly at the end of this function?
-
-If the packet requires GSO, handle_gso_encap() hardcodes the IPv4 header
-length to 20 bytes:
-
-net/core/lwt_bpf.c:handle_gso_encap() {
-    ...
-    next_hdr_offset =3D sizeof(struct iphdr);
-    ...
-}
-
-If IP options are present, won't handle_gso_encap() mistakenly read the IP
-options as the transport header's protocol flags (e.g., GRE flags or UDP
-checksum)?=20
-
-Will this misconfigure GSO and result in corrupted segmented packets or
-hardware drops?
-
->  			return -EINVAL;
->  	} else if (iph->version =3D=3D 6) {
->  		ipv4 =3D false;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529151351.6991=
-1-1-leon.hwang@linux.dev?part=3D2
