@@ -1,121 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458312D24B7
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACD91F3D56
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101908; cv=none; b=AbX3lMWRGISkHRJVNKXG3HTaANXNinYHHTndQT5E5dybHI0cvkRY/j34Kax1tAZaz6/nzF7If3xYZfD0gmcittrM6wAZ4NpAPDWJvbyNhQvIXJ4fFpxVDYn10ExaPonLtUTgB4q+CgxdHsDEiNn9vysKcr1IuJgI96Kk2/YLV9w=
+	t=1780101928; cv=none; b=i8ef4yqaesjhfC7p2++cC0osjrXP1qs19dCryVpy0If8fvGIB9dibllyjP73Njl7xwOlqx/70/HIt/wMYBbV5Zatf8i/qEp+bLfB0cbJ6S8UE6dSZLIbZtYqjw0jr5PpjRQnFLONARAQhR5XEf2xW6eIyimSeqZom7aVBiL9Z2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101908; c=relaxed/simple;
-	bh=ouCkd4vSStTlVeJpurTsNwhFolxO2rqJ1z3Zunq+xwk=;
+	s=arc-20240116; t=1780101928; c=relaxed/simple;
+	bh=ug/KDapPo6mc6xH7wK278E9ChkGQuPCqAXYgN5ZnOy8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=o2G9CjGsftOYlQlzLtAli/eD72QfnujlevzWB7gwfdMKscGOTN19h/dWUbuband3rd1T/7pPvNRtXKaktbiUBgkEo3NPHc6KTVJhVbDW1j2uJsrRDwq1wIEt4eIud3TY/fe+YWmTIO63AmLqBq8M1bIpyhfE2/rqJKBZ5nBlGd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvhb5x93; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=R9eNIbO2MvlxBhu6Ww3sfue51kOWCIHNAWn7D39r7PQmGMKUz0rXLFZIuv8kxuPjh0ybOh9sn99mtRTs6MXDSWIAhs7L9nkUoTfvjrQC6FyFxQQok/57FOToR2K7PkzfOTgJa2iyGoAh5dprO7d/TcxjGLoMx1j/DTvW8Xsxlx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AfNCA4wE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvhb5x93"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EEF1F00898;
-	Sat, 30 May 2026 00:45:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AfNCA4wE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4FC1F00893;
+	Sat, 30 May 2026 00:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101907;
-	bh=PoTiPX+FDOetdEm00FRpfOoMNineKnLjfglFY0NKq5s=;
+	s=k20260515; t=1780101926;
+	bh=8gR2R8v/2iCbPgGfn4cX3n4A7FjJA8m1DC/Irn/sipY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gvhb5x93xF94b5qemJ/91OqNPB+NaDYqVNlw/ctbfG4kSDIuyu9Xw8Co0mKqs/Tn2
-	 AWkWCNKau1fqPHWHYWfbn1bF5hSK05KTPGJhSSVvLBnyJxljXkFhWLMgsGpxHUz8+I
-	 X5zvf3NYFtgfJgfYn1SrDsWAza0wqApVF1+NNXB/4U92i1VvVL+/CPuSXKBx08f5LJ
-	 qZg7ELecexO2/8cGQgie8z37OBxkr6rvQEaATTMdT+JiRyNqnNR3SChLQrGFALRoZq
-	 p5Jy1Z5JL1YgRmuweFAIPW4St3ejuHvDO/lVcjHcFsMPAXzcQ9YaOH3OXxO17ynmUZ
-	 g9AuOO+i+pl1A==
+	b=AfNCA4wE2H52EI+pKJM5y758/LuYpuv3Gl2hbR+bYHU2n/FlzVAPg3uHHBU2FUVFI
+	 XMYsQhQdPNYfOrBt7kiVt4ov80QLZ/P7T4BQcQV+Lx0QtXwqTn/c0bdZBJfLlPd8sM
+	 h+Yw80ua3ui0NL3Pfe1VB2zTx9ppTl54pt5yTwlP1wxPgMDSwxHJXThVbJgNPsr+HG
+	 D2c7cEUnmck5IvACViyTu4wBP9oYunTuOSfmFKoZmB1hkRab/0n6kAQMhodRfkd33b
+	 s0HzCXHcz6rEe4ty2CxMqoUjtER3jHdFGyz7XrnOMbu8Xdg38I92AV2kEIzd271Na2
+	 3DM8k7HoNC+wA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 2/6] atm: convert to getsockopt_iter
+Subject: Re: [PATCH net v2 2/2] selftests: net: add kTLS async split record
+ regression
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Breno Leitao" <leitao@debian.org>
+To: "Christopher Lusk" <clusk@northecho.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520-getsock_four-v3-2-b8c0b16b7780@debian.org>
-References: <20260520-getsock_four-v3-2-b8c0b16b7780@debian.org>
+In-Reply-To: <20260521025840.976378-3-clusk@northecho.dev>
+References: <20260521025840.976378-3-clusk@northecho.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:45:06 +0000
-Message-Id: <20260530004506.D9EEF1F00898@smtp.kernel.org>
+Date: Sat, 30 May 2026 00:45:26 +0000
+Message-Id: <20260530004526.6E4FC1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] In `vcc_setsockopt()`, for the `SO_SETCLP` option, the kernel read=
-s `sizeof(unsigned long)` bytes from user space instead of the expected `si=
-zeof(int)` bytes, leading to an out-of-bounds read and logic error on 64-bi=
-t systems.
+- [Medium] Memory and file descriptor leak of `struct bpf_object` on error =
+paths inside `attach_bpf()`.
+- [Low] Including libbpf source headers directly instead of installed/expor=
+ted headers in Makefile.
 --
 
-commit 930f98204692e2b9c158cfe678aa997c3aaa716a
-Author: Breno Leitao <leitao@debian.org>
+commit 4256015d1c1b459bffc8e935d002cdb7f0465799
+Author: Christopher Lusk <clusk@northecho.dev>
 
-atm: convert to getsockopt_iter
-   =20
-This commit converts the ATM SVC and PVC sockets, along with the shared
-vcc_getsockopt() helper, to use the new getsockopt_iter callback. It replac=
-es
-user pointers with sockopt_t and utilizes copy_to_iter() for transferring
-data to user space.
+selftests: net: add kTLS async split record regression
 
-> diff --git a/net/atm/common.c b/net/atm/common.c
-> index fe77f51f6ce18..60132de4eebe1 100644
-> --- a/net/atm/common.c
-> +++ b/net/atm/common.c
+Add a kTLS TX regression test for the BPF sk_msg apply_bytes split-record
+path. The test sends four 4096-byte writes through a sockmap verdict program
+that applies 512-byte verdict windows, then verifies that the peer receives
+the full TLS-protected stream.
+
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
+ts/net/Makefile
+> index f3da38c54d276..0435327e93a72 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
 [ ... ]
-> @@ -812,11 +813,13 @@ int vcc_getsockopt(struct socket *sock, int level, =
-int optname,
->  	case SO_ATMQOS:
->  		if (!test_bit(ATM_VF_HASQOS, &vcc->flags))
->  			return -EINVAL;
-> -		return copy_to_user(optval, &vcc->qos, sizeof(vcc->qos))
-> +		return copy_to_iter(&vcc->qos, sizeof(vcc->qos),
-> +				    &opt->iter_out) !=3D sizeof(vcc->qos)
->  			? -EFAULT : 0;
->  	case SO_SETCLP:
-> -		return put_user(vcc->atm_options & ATM_ATMOPT_CLP ? 1 : 0,
-> -				(unsigned long __user *)optval) ? -EFAULT : 0;
-> +		val =3D vcc->atm_options & ATM_ATMOPT_CLP ? 1 : 0;
-> +		return copy_to_iter(&val, sizeof(val), &opt->iter_out) !=3D
-> +		       sizeof(val) ? -EFAULT : 0;
+> @@ -236,3 +237,7 @@ $(OUTPUT)/bind_bhash: LDLIBS +=3D -lpthread
+>  $(OUTPUT)/io_uring_zerocopy_tx: CFLAGS +=3D -I../../../include/
+> =20
+>  include bpf.mk
+> +
+> +$(OUTPUT)/ktls_async_split: CFLAGS +=3D -I../../../lib
 
-[Severity: High]
-This is a pre-existing issue, but since you are correctly fixing the size
-mismatch here in vcc_getsockopt(), should we also fix vcc_setsockopt() where
-it attempts to read an unsigned long?
+[Severity: Low]
+Is this include path correct? By pointing directly to lib instead of the
+exported headers like ../../../include/, could we bypass the proper libbpf
+build and export step and rely on raw source headers instead?
 
-For SO_SETCLP, the kernel validates that the user-provided optlen is exactly
-4 bytes via len !=3D __SO_SIZE(optname). However, vcc_setsockopt() uses an
-unsigned long:
+> diff --git a/tools/testing/selftests/net/ktls_async_split.c b/tools/testi=
+ng/selftests/net/ktls_async_split.c
+> new file mode 100644
+> index 0000000000000..5601ce4b5f688
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ktls_async_split.c
+[ ... ]
+> +static int attach_bpf(const char *obj_path, int sock_fd, struct bpf_obje=
+ct **obj_out)
+> +{
+> +	struct bpf_object *obj;
+> +	struct bpf_program *prog;
+> +	int map_fd, prog_fd;
+> +	__u32 key =3D 0;
+> +
+> +	obj =3D bpf_object__open_file(obj_path, NULL);
+> +	if (libbpf_get_error(obj))
+> +		return -EINVAL;
+> +	if (bpf_object__load(obj))
+> +		return -EINVAL;
 
-net/atm/common.c:vcc_setsockopt() {
-    ...
-    unsigned long value;
-    ...
-    case SO_SETCLP:
-        if (copy_from_sockptr(&value, optval, sizeof(value)))
-            return -EFAULT;
-        if (value)
-            vcc->atm_options |=3D ATM_ATMOPT_CLP;
-    ...
-}
+[Severity: Medium]
+Does this leak the bpf_object structure and associated resources on error
+paths?
 
-On 64-bit architectures, this attempts to read 8 bytes from the 4-byte user
-buffer, reading 4 bytes of uninitialized adjacent memory.
+Since *obj_out is only assigned at the end of the function upon success, if
+bpf_object__load() or any subsequent operations fail, the caller receives a
+NULL pointer and cannot clean up the leaked object via bpf_object__close().
 
-Due to little-endian packing, if the user explicitly passes 0 to disable the
-option, non-zero garbage in the upper 4 bytes will result in value being
-non-zero, wrongly enabling the ATM_ATMOPT_CLP flag.
-
-Could this also trigger a spurious -EFAULT if the user's 4-byte buffer is at
-the end of a mapped memory page?
+> +
+> +	prog =3D bpf_object__find_program_by_name(obj, "apply_bytes_verdict");
+> +	if (!prog)
+> +		return -ENOENT;
+> +	prog_fd =3D bpf_program__fd(prog);
+> +	if (prog_fd < 0)
+> +		return prog_fd;
+> +
+> +	map_fd =3D bpf_object__find_map_fd_by_name(obj, "sock_map");
+> +	if (map_fd < 0)
+> +		return -ENOENT;
+> +
+> +	if (bpf_prog_attach(prog_fd, map_fd, BPF_SK_MSG_VERDICT, 0))
+> +		return -errno;
+> +	if (bpf_map_update_elem(map_fd, &key, &sock_fd, BPF_ANY))
+> +		return -errno;
+> +
+> +	*obj_out =3D obj;
+> +	return 0;
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520-getsock_fo=
-ur-v3-0-b8c0b16b7780@debian.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521025840.9763=
+78-1-clusk@northecho.dev?part=3D2
