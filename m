@@ -1,111 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B9B1D54FA
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326912DF13F
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101965; cv=none; b=YE1oGvUF72OKGenZJEJzWa49QYdNNnTCTI9kxJuVOei6eCpqMbHAKE1JHeKk4MIDmDda+frJ90yUtvmcSgcSfoSp763sGnDbnasL8GV5Sh1jltmH9lKtrCCJxhcz1cZdpkUrUE/Q5muPRtxTSN++AfVb5VMml4ZBZ5TJ4EmoU4g=
+	t=1780101966; cv=none; b=bbYMSMmXKTE/rNiioUQu33JA/3tC/EOlPECiR5bFqFk3Q5ELU/7CyrhiNl4oAcm42WC/39GrnTeoLoXXdOKpLaPVdRELQZSUKfzRU7DIf++pV8FJTIYV6jR5zTtFkO2zQc9nQZKuq0etu5dBzOZ819xyV0o7CSk7P1WKS2xiUvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101965; c=relaxed/simple;
-	bh=wDhDdg8yM39HEHNQOlaSiiKgLBjaRiGsK1yd2Afs6Dc=;
+	s=arc-20240116; t=1780101966; c=relaxed/simple;
+	bh=P/oZVmt/F+eXkvgokIA4KEIKyt5zPIbYRNNkNeWuEc4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gMBwFZdsLBbLNwsX45x/lOwk/iSCDJjg6BIFtnUoI2z6D5SYKp/Pj1Iv2qAGXQYnP8j+zIOfCo3L2HAK8R5gO+TCQj5w/A7RigidEdWVSNimeOENxLniY+9ekghUNWoANtnETMQUj0fP8mpGNYs56bd9BaYSn9xNQLlRr8iKKT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqXeJppu; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lYdv/MC68KwfH6ADZjuIxOkOP64Ni3/jDF+P5BJGxczzO6PgHjVCnwGhTuJtAr9m9oRNOOsh5bXqMFHPBOYsf/H8LFi7QXPC4upIFw7cBNwyYCoNFZVhk6m5wu6+T+fqtMgVE32o3Fup4pL8puMOIGk5IOJcSVEJ5VKALyZZp8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAnncy8L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqXeJppu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1951F0089A;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAnncy8L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31E61F0089B;
 	Sat, 30 May 2026 00:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101962;
-	bh=zrg5cYKz5DjKD30ZopTLs7tZubBv6nGDtWb0RydFiUE=;
+	s=k20260515; t=1780101963;
+	bh=Cxfnfv29xMJ+28ckWyrFfgYLwL7zJU6mzd+cwbddgE8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nqXeJppuntJPUAf4Agh9E3BaXa6qQ1L8BysdRw4/vB+IhwMYPGIqRRBCPCxRrwVZ/
-	 Ly/xRaunVoQUOBpAY9EpLmAKBv+8WX3NBEMFexEas+64g0GTqw+PIbQAUj8kk2+plo
-	 A+s4s8j9uNdqQCfT3n3naGCw4WE9c8zw9T57j4oC7vrzBB/i3XHlTo73eSJIbYkhnb
-	 pCn8jH7jJ9eHOoDqPLv69B78GJLj0c8K/ltueFjB2LAJb7c7OsOuitdqFH3gUv22Mx
-	 vXbp7KKVjYu+P/9KvegXxtJbzHmgp4jJYGq0py2CiqDvMGmqH6q9Ljao7Y7Ydl2y8w
-	 oQMxGRKmEn+aA==
+	b=AAnncy8LeD9Zcfv9xyJvd5xYHEzy1P4xOySJJjwVgqvSR3t3IU9qsDCCs8VLZnwA9
+	 dt4SHsZeaDUfm3BCkBUdjI2eY+q68hKVAW7PA+q9HRAwAGbmJDrzllxqLGtmzbIK7A
+	 mkGZpAGod10KeR341NyLV7DRVfwgKtK7rXTuYjjBs5CY8DkR60Cv2i9KVEoWbSVFML
+	 ZHzhO8pYcfYXaC3AyTg6IvUHX83eLkMn/b7YuXA9K52KUdmj6QGssJFebcBlxY4kjV
+	 WRDuMJW/tkhT+YjKEOJOY6VaWZTevYtLccqF4+BLFB/8kZQAUUkQx/FpcDeGD3RYh0
+	 FA0wpOzUOKutg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: export sock_disable_timestamp()
- declaration
+Subject: Re: [PATCH net-next v2 3/6] bpf: support bpf_setsockopt for bpf
+ timestamping rx feature
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521135244.40869-3-kerneljasonxing@gmail.com>
-References: <20260521135244.40869-3-kerneljasonxing@gmail.com>
+In-Reply-To: <20260521135244.40869-4-kerneljasonxing@gmail.com>
+References: <20260521135244.40869-4-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:46:01 +0000
-Message-Id: <20260530004602.5C1951F0089A@smtp.kernel.org>
+Date: Sat, 30 May 2026 00:46:02 +0000
+Message-Id: <20260530004602.E31E61F0089B@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] Lockless modification of `sk->sk_flags` from a BPF context wil=
-l race with user context socket modifications, corrupting critical socket f=
-lags.
-- [High] Concurrent lockless calls to `sock_disable_timestamp` result in a =
-Time-of-Check to Time-of-Use (TOCTOU) race that unbalances the global times=
-tamp reference counter.
+- [High] Lockless invocation of `sk_bpf_set_get_cb_flags` causes `sk_flags`=
+ corruption and global netstamp refcount leaks via `sock_enable_timestamp()=
+` / `sock_disable_timestamp()`.
 --
 
-commit 070236e8d76283be57936f36bb4d9ae98296d6e1
+commit 3f400ad3640a19655fbde51eedae40506ebf95a8
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-net: export sock_disable_timestamp() declaration
+bpf: support bpf_setsockopt for bpf timestamping rx feature
 
-This commit removes the static label from sock_disable_timestamp() and
-exports its declaration. This change allows the BPF timestamping RX feature
-to dynamically turn off the global time record function.
+Add SK_BPF_CB_RX_TIMESTAMPING callback flag to enable RX timestamping via
+bpf_setsockopt. It updates sk_flags centrally to manage the global network
+timestamp static keys.
 
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index f362e3ce1efb6..f3d78da3aeba3 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -474,7 +474,7 @@ static bool sock_needs_netstamp(const struct sock *sk)
->  	}
->  }
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9590877b0714f..08ad102f204e0 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5304,6 +5304,14 @@ static int sk_bpf_set_get_cb_flags(struct sock *sk=
+, char *optval, bool getopt)
+>  	if (sk_bpf_cb_flags & ~SK_BPF_CB_MASK)
+>  		return -EINVAL;
 > =20
-> -static void sock_disable_timestamp(struct sock *sk, unsigned long flags)
-> +void sock_disable_timestamp(struct sock *sk, unsigned long flags)
->  {
->  	if (sk->sk_flags & flags) {
->  		sk->sk_flags &=3D ~flags;
-
-[Severity: Critical]
-Since this function is being exported for use by the BPF timestamping rx
-feature, will it be called from a lockless context?
-
-If the BPF_SOCK_OPS_TSTAMP_RCV_CB hook calls this outside the socket lock
-(for instance, after tcp_recvmsg() drops lock_sock(sk)), this non-atomic
-read-modify-write of sk->sk_flags could race with user context socket
-modifications like setsockopt().
-
-Could this concurrent access cause torn reads and writes, permanently
-corrupting sk_flags and potentially leading to use-after-free issues if
-lifecycle flags like SOCK_DEAD are lost?
+> +	if ((sk_bpf_cb_flags ^ sk->sk_bpf_cb_flags) & SK_BPF_CB_RX_TIMESTAMPING=
+) {
+> +		if (sk_bpf_cb_flags & SK_BPF_CB_RX_TIMESTAMPING)
+> +			sock_enable_timestamp(sk, SOCK_BPF_TIMESTAMPING_RX);
+> +		else
+> +			sock_disable_timestamp(sk,
+> +					       (1UL << SOCK_BPF_TIMESTAMPING_RX));
+> +	}
 
 [Severity: High]
-Could exporting this for lockless BPF contexts also result in a Time-of-Che=
-ck
-to Time-of-Use race that unbalances the global network timestamping referen=
-ce
-count?
+Could this lead to socket flags corruption if called locklessly?
 
-If multiple threads execute recvmsg() on the same socket concurrently witho=
-ut
-the socket lock, they might both evaluate "if (sk->sk_flags & flags)" as tr=
-ue,
-clear the flags, and then subsequently call net_disable_timestamp().
+sk_bpf_set_get_cb_flags() can be reached without the socket lock held, such
+as through the following call chain:
 
-Would this double-decrement unbalance the global counter and prematurely
-disable network timestamping for all sockets on the system?
+bpf_unlocked_sk_setsockopt()
+  __bpf_setsockopt()
+    sk_bpf_set_get_cb_flags()
+
+Since sock_enable_timestamp() and sock_disable_timestamp() use non-atomic
+bitwise operations to modify sk->sk_flags, concurrent execution might race
+and accidentally drop critical flags like SOCK_DEAD or SOCK_DONE.
+
+Additionally, because the checks against previous_flags in these functions
+are not atomic with the bitwise updates, could a race here lead to unbalanc=
+ed
+net_enable_timestamp() or net_disable_timestamp() calls, permanently skewing
+the global netstamp static key refcount?
+
+> +
+>  	sk->sk_bpf_cb_flags =3D sk_bpf_cb_flags;
+> =20
+>  	return 0;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521135244.4086=
-9-1-kerneljasonxing@gmail.com?part=3D2
+9-1-kerneljasonxing@gmail.com?part=3D3
