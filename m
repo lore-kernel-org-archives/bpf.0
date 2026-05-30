@@ -1,113 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0772874F8
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458312D24B7
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101907; cv=none; b=sJVvCaEhI0k0FzudcVDPM5+4W8jmgGlm4Gullp/PczjbWS02k4Ub86ge5yuSuBai4C+PIl1SDdb5uYjmWld/e80lQHC+dWigsmnuZOQHto4vVfy+K8FEOCZveZnUpFQk0yFoF6yEZeTIpUVZ90kAg/5MgoK9A62dexuGnZaWk7Y=
+	t=1780101908; cv=none; b=AbX3lMWRGISkHRJVNKXG3HTaANXNinYHHTndQT5E5dybHI0cvkRY/j34Kax1tAZaz6/nzF7If3xYZfD0gmcittrM6wAZ4NpAPDWJvbyNhQvIXJ4fFpxVDYn10ExaPonLtUTgB4q+CgxdHsDEiNn9vysKcr1IuJgI96Kk2/YLV9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101907; c=relaxed/simple;
-	bh=Ud8TUl2f4+CSnlYHFTozYNtJQ1ITQ43Bo//P/60rsVo=;
+	s=arc-20240116; t=1780101908; c=relaxed/simple;
+	bh=ouCkd4vSStTlVeJpurTsNwhFolxO2rqJ1z3Zunq+xwk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Oe8YqKA5m8eI7p56yoMbhkA0iUhrmd3WxMc7qg3UQiuRbK2lP52Zz+cagYe+vWbA2zZeblbXKScX6ThB4I3gtCS9K8yl98KX++lkxFJzqvsuMrY01y20AUlTqu76dESXUKZc3mDXsCvqHCWypA8kEOW40biQAHF6JyBsMOMT/Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8Ddgr53; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=o2G9CjGsftOYlQlzLtAli/eD72QfnujlevzWB7gwfdMKscGOTN19h/dWUbuband3rd1T/7pPvNRtXKaktbiUBgkEo3NPHc6KTVJhVbDW1j2uJsrRDwq1wIEt4eIud3TY/fe+YWmTIO63AmLqBq8M1bIpyhfE2/rqJKBZ5nBlGd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvhb5x93; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8Ddgr53"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563371F00893;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvhb5x93"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EEF1F00898;
 	Sat, 30 May 2026 00:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101906;
-	bh=48CV2JUMNMt3kmGJhBZRem2shyEv+B/NpH3l79eGs44=;
+	s=k20260515; t=1780101907;
+	bh=PoTiPX+FDOetdEm00FRpfOoMNineKnLjfglFY0NKq5s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=b8Ddgr53jDoqTjuWLIh9nj5yO9x3s8FDefJn0qayNi16LwRDORsEw3/Dp9AeqMlSj
-	 zolYYgTYkLKg8CKF5iq+ot9eOoWCtVmVG4rB1aK+GKtDiFXpWbDAuBiy4UkCoo4zIC
-	 qraOmK4rmDggTwENBeFxc6b1ZTAVAMdm6jZU4PA+4Q1bbnJ/UhLgjJ3dBBu9GfAE4G
-	 F2XJmlanWFCy28Q7pQCixnvt1RTr3PRRuOOozKIFmJkuRuuu8anC2Om+Jo+VnClhOn
-	 kFVnwiomVYDcN90iliqzHqVi2gxy0RhG93k9CRrwkZ9eyGAECwaDxsEUcvMwzIc/jd
-	 w76OVuMQqjq6g==
+	b=gvhb5x93xF94b5qemJ/91OqNPB+NaDYqVNlw/ctbfG4kSDIuyu9Xw8Co0mKqs/Tn2
+	 AWkWCNKau1fqPHWHYWfbn1bF5hSK05KTPGJhSSVvLBnyJxljXkFhWLMgsGpxHUz8+I
+	 X5zvf3NYFtgfJgfYn1SrDsWAza0wqApVF1+NNXB/4U92i1VvVL+/CPuSXKBx08f5LJ
+	 qZg7ELecexO2/8cGQgie8z37OBxkr6rvQEaATTMdT+JiRyNqnNR3SChLQrGFALRoZq
+	 p5Jy1Z5JL1YgRmuweFAIPW4St3ejuHvDO/lVcjHcFsMPAXzcQ9YaOH3OXxO17ynmUZ
+	 g9AuOO+i+pl1A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 1/6] af_iucv: convert to getsockopt_iter
+Subject: Re: [PATCH net-next v3 2/6] atm: convert to getsockopt_iter
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Breno Leitao" <leitao@debian.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520-getsock_four-v3-1-b8c0b16b7780@debian.org>
-References: <20260520-getsock_four-v3-1-b8c0b16b7780@debian.org>
+In-Reply-To: <20260520-getsock_four-v3-2-b8c0b16b7780@debian.org>
+References: <20260520-getsock_four-v3-2-b8c0b16b7780@debian.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 30 May 2026 00:45:06 +0000
-Message-Id: <20260530004506.563371F00893@smtp.kernel.org>
+Message-Id: <20260530004506.D9EEF1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The `SO_MSGSIZE` case accesses `sk->sk_state` and `iucv->hs_dev` l=
-ocklessly, creating a TOCTOU race condition that can lead to a Use-After-Fr=
-ee or NULL pointer dereference.
-- [High] Concurrent freeing of `iucv->path` in softirq context causes a Use=
--After-Free or NULL pointer dereference in `SO_MSGLIMIT` getsockopt.
+- [High] In `vcc_setsockopt()`, for the `SO_SETCLP` option, the kernel read=
+s `sizeof(unsigned long)` bytes from user space instead of the expected `si=
+zeof(int)` bytes, leading to an out-of-bounds read and logic error on 64-bi=
+t systems.
 --
 
-commit d750d707b0b3fe311f910c753df00e12fdb56b85
+commit 930f98204692e2b9c158cfe678aa997c3aaa716a
 Author: Breno Leitao <leitao@debian.org>
 
-af_iucv: convert to getsockopt_iter
+atm: convert to getsockopt_iter
+   =20
+This commit converts the ATM SVC and PVC sockets, along with the shared
+vcc_getsockopt() helper, to use the new getsockopt_iter callback. It replac=
+es
+user pointers with sockopt_t and utilizes copy_to_iter() for transferring
+data to user space.
 
-Convert IUCV socket's getsockopt implementation to use the new
-getsockopt_iter callback with sockopt_t.
-
-> diff --git a/net/iucv/af_iucv.c b/net/iucv/af_iucv.c
-> index 72dfccd4e3d58..7a5ce93a83d9c 100644
-> --- a/net/iucv/af_iucv.c
-> +++ b/net/iucv/af_iucv.c
+> diff --git a/net/atm/common.c b/net/atm/common.c
+> index fe77f51f6ce18..60132de4eebe1 100644
+> --- a/net/atm/common.c
+> +++ b/net/atm/common.c
 [ ... ]
-> @@ -1535,7 +1536,7 @@ static int iucv_sock_setsockopt(struct socket *sock=
-, int level, int optname,
->  }
-> =20
->  static int iucv_sock_getsockopt(struct socket *sock, int level, int optn=
-ame,
-> -				char __user *optval, int __user *optlen)
-> +				sockopt_t *opt)
->  {
+> @@ -812,11 +813,13 @@ int vcc_getsockopt(struct socket *sock, int level, =
+int optname,
+>  	case SO_ATMQOS:
+>  		if (!test_bit(ATM_VF_HASQOS, &vcc->flags))
+>  			return -EINVAL;
+> -		return copy_to_user(optval, &vcc->qos, sizeof(vcc->qos))
+> +		return copy_to_iter(&vcc->qos, sizeof(vcc->qos),
+> +				    &opt->iter_out) !=3D sizeof(vcc->qos)
+>  			? -EFAULT : 0;
+>  	case SO_SETCLP:
+> -		return put_user(vcc->atm_options & ATM_ATMOPT_CLP ? 1 : 0,
+> -				(unsigned long __user *)optval) ? -EFAULT : 0;
+> +		val =3D vcc->atm_options & ATM_ATMOPT_CLP ? 1 : 0;
+> +		return copy_to_iter(&val, sizeof(val), &opt->iter_out) !=3D
+> +		       sizeof(val) ? -EFAULT : 0;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does the SO_MSGSIZE case
-access sk->sk_state and iucv->hs_dev locklessly?
+This is a pre-existing issue, but since you are correctly fixing the size
+mismatch here in vcc_getsockopt(), should we also fix vcc_setsockopt() where
+it attempts to read an unsigned long?
 
-If another thread concurrently closes the socket, iucv_sock_close(sk) takes
-lock_sock(sk), drops the device reference with dev_put(iucv->hs_dev), and
-clears iucv->hs_dev.
+For SO_SETCLP, the kernel validates that the user-provided optlen is exactly
+4 bytes via len !=3D __SO_SIZE(optname). However, vcc_setsockopt() uses an
+unsigned long:
 
-If the getsockopt thread checks iucv->hs_dev !=3D NULL but gets preempted
-before dereferencing iucv->hs_dev->mtu, could this lead to a NULL pointer
-dereference or use-after-free when the other thread executes
-iucv_sock_close(sk)?
+net/atm/common.c:vcc_setsockopt() {
+    ...
+    unsigned long value;
+    ...
+    case SO_SETCLP:
+        if (copy_from_sockptr(&value, optval, sizeof(value)))
+            return -EFAULT;
+        if (value)
+            vcc->atm_options |=3D ATM_ATMOPT_CLP;
+    ...
+}
 
-[Severity: High]
-This is a pre-existing issue, but could there be a use-after-free or
-NULL pointer dereference when accessing iucv->path in the SO_MSGLIMIT case?
+On 64-bit architectures, this attempts to read 8 bytes from the 4-byte user
+buffer, reading 4 bytes of uninitialized adjacent memory.
 
-While getsockopt() holds lock_sock(sk), which sets sk->sk_lock.owned =3D 1
-and re-enables softirqs, an IUCV path severed interrupt could fire and run
-iucv_callback_connrej() in softirq context.
+Due to little-endian packing, if the user explicitly passes 0 to disable the
+option, non-zero garbage in the upper 4 bytes will result in value being
+non-zero, wrongly enabling the ATM_ATMOPT_CLP flag.
 
-If iucv_callback_connrej() calls bh_lock_sock(sk) and directly calls
-iucv_sever_path(sk, 1) without checking sock_owned_by_user(sk), it will
-free the path structure.
-
-When the softirq returns and getsockopt() resumes, could it dereference the
-freed iucv->path->msglim pointer?
-
->  	struct sock *sk =3D sock->sk;
->  	struct iucv_sock *iucv =3D iucv_sk(sk);
+Could this also trigger a spurious -EFAULT if the user's 4-byte buffer is at
+the end of a mapped memory page?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520-getsock_fo=
-ur-v3-0-b8c0b16b7780@debian.org?part=3D1
+ur-v3-0-b8c0b16b7780@debian.org?part=3D2
