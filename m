@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC9A2EB5A6
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8465D29D27D;
+	Sat, 30 May 2026 00:46:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101969; cv=none; b=n2Ja9DdjA+K3TjV80qYhzQzgTqxkqyJI5Zg8Xuqtvgj+LiM65Sfg+Ni4gkTGfWXjM5RF/gitTFMnHXRhwkH7M4ilYoZpA2RFETsQENvreocCjzV+PTZ/urAjsev/3tZDphI3sS+Y2f7kelW1De2i/UxzPhuq+VH4sA8ZH/vuOX0=
+	t=1780102013; cv=none; b=mf3ijmT4m2FP1iSKlfc/ogfEIdnYmpDWeY74KfpvaND31Hq7ycBoDMxOfTgcla+gkrAnY1qpCxBFCbz6m10KmRHsdUih2xEEUjSpuqJFcHVYg8z5kBFMplUrvV0MGtSyszjaoqw9KmLjoPdqqCRgV3aYaGK79E+4AECapwaqFeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101969; c=relaxed/simple;
-	bh=XSJOjzrTG5HnQKC7L12QMalJ3nCRFox/qHo8cXYA6bE=;
+	s=arc-20240116; t=1780102013; c=relaxed/simple;
+	bh=nrtHY8bTzppKIagw49KWprbaZZYC8MjlyJkDW5cxa3Q=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pJoiemHESl91qKifkVSmgDw1Bp3SF3IzCTn9ZLdoBaPpyr+vOYW61BV6bHAQ9KkTM9Wcb/UyB3GU0iTUlaWbExN2ueTmKfiXvhSGFyQzN0e4Vww7KATpZMFzg4NVSjb5hHRmX3WtOlkJS2t8WTAyGLAWcx8rvWInpuT9h0a9VOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wl1yFUmu; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kgdZLkf7rlBSuFGcWezvmUQjvy6FP3hQ3b8+ho/gaLsOiVHJQm2FxHpW34aNOv3P5uuH32QkJZvUVZBDAn3BgbsfZSe6ywCIP1ts5TWFw9UfLsN/6LL8K+vzaQnvHebmTc5udIKT4COyIqfrueLAcdyIpqwyNHXRTG3Z2dGvepo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NKa7mNQJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wl1yFUmu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E47471F0089C;
-	Sat, 30 May 2026 00:46:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NKa7mNQJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8281F00893;
+	Sat, 30 May 2026 00:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101964;
-	bh=G+tEhqRYm6ZNr45pAwPqwJhDJclVTqWvQsvAWUDxmpI=;
+	s=k20260515; t=1780102012;
+	bh=jtj/UeoVVsiy0f+lzoYFOjyjLdeKD++mqQAoqHJZGfE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Wl1yFUmuNa7Y+4uVVIXlzpH4Ufnxq0rlXfT1ILHqfumUoxArKsO+3F0GMSMXTifyB
-	 oO5ag4Z6+gMzLeyiVYWv0PZbKomgOWuttq7LEd8lBaI+Rn2QeMIAXMwLlv0NxFUGmc
-	 N5HZlSbfDE0dGpRwDNzz/J0ymWHOPVSdMa9vgX1r5zp4Xq6Bwbf7UxQ8/LYUJitBNj
-	 GZxb9jXOU2KwGBdFG/qlPI44N5dVlW/z33ft2eUyn6Xacta3XeJ0In+Ws8TBRS4SjG
-	 lrbQjsH0yTPi/SnTbu0PzZ7qz92GYirEjuMTVtQjCHuZRTwFypeB93ZNPEXuwVDYp5
-	 R5Idch33DUlpg==
+	b=NKa7mNQJxVIpK0FmbLero9TsswmhTUk58Tmct0BNpaufSy30HxOsXn7CpIf4nbUhe
+	 D9TG4v189odwpCsLY7DXX4j4jROTyEULisiasppHJYKpZ3+pOJOl7q9jXHzc2Y1Nkb
+	 +e2/IUTZZUFdEvp91wfVpw0zvIRwOHM2bWP8QG0+4xIc6q5AWhkWCHl3bTC3IWdkbh
+	 gwhmBCQYVci4W8BqItOrxzgwj2Cxv25xxVlSTEqk/Es7uZ/6oKzpPx/ReDMuOGGjpz
+	 cgBTy6AfBy4WyNmGSqBs512QpcCMGJqydSUmaSTpzUpne5oIgXor13ChX7xgWyWVkG
+	 uF4m2RdCvFKmg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 6/6] selftests/bpf: Add RX latency tests for
- bpf timestamping
+Subject: Re: [PATCH net v2 1/2] net: mana: Add NULL guards in teardown path
+ to prevent panic on attach failure
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jason Xing" <kerneljasonxing@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521135244.40869-7-kerneljasonxing@gmail.com>
-References: <20260521135244.40869-7-kerneljasonxing@gmail.com>
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
+References: <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:46:03 +0000
-Message-Id: <20260530004603.E47471F0089C@smtp.kernel.org>
+Date: Sat, 30 May 2026 00:46:51 +0000
+Message-Id: <20260530004652.4E8281F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,90 +46,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Using a fixed 10ms sleep to synchronize with a kernel workqueue =
-introduces a race condition that can lead to flaky tests.
-- [Low] Unescaped newline in string literal causes compilation failure.
+
+Pre-existing issues:
+- [High] State Machine Violation / NULL Pointer Dereference on interface op=
+en after a failed MTU change.
+- [High] Uninitialized Resource Teardown / Invalid Hardware Request during =
+TX queue creation failure.
 --
 
-commit fd07aa65d96b1e91b17cb391aadbc4cf4af4b414
-Author: Jason Xing <kerneljasonxing@gmail.com>
+commit effecc83d343cb89cadf93984f0a62ac828d0166
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-selftests/bpf: Add RX latency tests for bpf timestamping
+net: mana: Add NULL guards in teardown path to prevent panic on attach fail=
+ure
 
-This patch extends the test_tcp() functionality to cover the new BPF RX
-timestamping path. It adds new assertions, workqueue synchronization, and m=
-ixed
-timestamping modes to verify SO_TIMESTAMPING and BPF RX can function togeth=
-er
-without conflict.
+When queue allocation fails partway through, the error cleanup frees
+and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
+mana_remove(), mana_change_mtu() recovery, and internal error handling
+in mana_alloc_queues() can subsequently call into functions that
+dereference these pointers without NULL checks.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c b/=
-tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> index dbfd87499b6b5..e3fe850e4cc70 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-
-[ ... ]
-
-> @@ -143,11 +143,47 @@ static void test_socket_timestamping(int fd)
->  	SK_TS_ACK =3D 0;
->  }
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index 9afc786b297a8..9e7e4bf526bf6 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -1727,6 +1727,9 @@ static void mana_fence_rqs(struct mana_port_context=
+ *apc)
+>  	struct mana_rxq *rxq;
+>  	int err;
 > =20
-> +static bool recv_verify_rx_timestamp(int fd, char *buf, int len)
-> +{
+> +	if (!apc->rxqs)
+> +		return;
+> +
+
+[Severity: High]
+This isn't a bug introduced by this patch, but if mana_change_mtu() fails,
+does it leave the device in a state where a subsequent mana_open() will cra=
+sh?
+
+When mana_change_mtu() calls mana_detach(ndev, false), the device is detach=
+ed
+and mana_cleanup_port_context() is explicitly called, freeing apc->rxqs and
+setting it to NULL.
+
+It then calls mana_attach(). If mana_attach() fails internally (e.g., inside
+its call to mana_alloc_queues()), its error path calls
+mana_cleanup_port_context() again, which frees apc->rxqs and sets it to NUL=
+L.
+
+mana_change_mtu() then returns the error.
+
+The interface is now in the DOWN state (apc->port_is_up =3D=3D false) with
+apc->rxqs =3D=3D NULL.
+
+If the user subsequently attempts to bring the interface up (ip link set up=
+),
+mana_open() is executed. mana_open() calls mana_alloc_queues() but does not
+call mana_init_port() to reallocate apc->rxqs.
+
+Inside mana_alloc_queues(), mana_add_rx_queues() unconditionally dereferenc=
+es
+apc->rxqs:
+
+    apc->rxqs[i] =3D rxq;
+
+Could this result in a kernel panic?
 
 [ ... ]
 
-> +	if (!ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present") ||
-> +	    !ASSERT_TRUE(tss->ts[0].tv_sec || tss->ts[0].tv_nsec, "rx sw
-> +			 timestamp non-zero"))
+> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device =
+*ndev)
+>  	 * number of queues.
+>  	 */
+> =20
+> -	for (i =3D 0; i < apc->num_queues; i++) {
+> -		txq =3D &apc->tx_qp[i].txq;
+> -		tsleep =3D 1000;
+> -		while (atomic_read(&txq->pending_sends) > 0 &&
+> -		       time_before(jiffies, timeout)) {
+> -			usleep_range(tsleep, tsleep + 1000);
+> -			tsleep <<=3D 1;
+> -		}
+> -		if (atomic_read(&txq->pending_sends)) {
+> -			err =3D pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> -			if (err) {
+> -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> -					   err, atomic_read(&txq->pending_sends),
+> -					   txq->gdma_txq_id);
+> +	if (apc->tx_qp) {
+> +		for (i =3D 0; i < apc->num_queues; i++) {
+> +			txq =3D &apc->tx_qp[i].txq;
+> +			tsleep =3D 1000;
+> +			while (atomic_read(&txq->pending_sends) > 0 &&
+> +			       time_before(jiffies, timeout)) {
+> +				usleep_range(tsleep, tsleep + 1000);
+> +				tsleep <<=3D 1;
+> +			}
 
-[Severity: Low]
-Does this unescaped newline in the string literal cause a compilation failu=
-re?
+[Severity: High]
+This is a pre-existing issue, but does mana_destroy_txq() send invalid hand=
+les
+to the hardware when TX queue creation fails?
 
-The error message string is split across lines without a trailing backslash=
- or
-string concatenation, which results in invalid syntax in C.
+In mana_create_txq(), the apc->tx_qp array is allocated via kzalloc_objs(),
+meaning all elements (including tx_object) are initialized to 0.
 
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
->  static void test_tcp(int family, bool enable_socket_timestamping)
->  {
+The function then loops over num_queues. For the current queue i, it sets
+apc->tx_qp[i].tx_object =3D INVALID_MANA_HANDLE; before attempting to creat=
+e the
+hardware object via mana_create_wq_obj().
 
-[ ... ]
+If creation fails, it jumps to the out label and calls mana_destroy_txq(apc=
+).
+mana_destroy_txq() unconditionally loops over all num_queues and calls:
 
-> +	afd =3D accept(sfd, NULL, NULL);
-> +	if (!ASSERT_OK_FD(afd, "accept"))
-> +		goto out;
-> +
-> +	/* net_enable_timestamp() defers the static key update via
-> +	 * schedule_work() when CONFIG_JUMP_LABEL is set. Give the
-> +	 * workqueue a chance to run so that netstamp_needed_key is
-> +	 * active and skb->tstamp gets populated in the receive path.
-> +	 */
-> +	usleep(10000);
+    mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
 
-[Severity: Medium]
-Will this hardcoded 10ms sleep cause the test to become flaky?
+Unlike mana_destroy_rxq(), which checks if (rxq->rxobj !=3D INVALID_MANA_HA=
+NDLE),
+mana_destroy_txq() passes the handle directly to mana_destroy_wq_obj().
 
-Using fixed delays to synchronize with asynchronous kernel workqueues can l=
-ead
-to race conditions. In slow VMs or heavily loaded CI systems, the workqueue
-might take longer than 10ms to run, leaving skb->tstamp unpopulated and
-causing the test to fail intermittently.
+For the failed queue, the handle is INVALID_MANA_HANDLE. For all unreached
+queues (j > i), the handle is 0.
 
-Could a polling mechanism with a reasonable timeout be used here instead?
-
-> +
->  	if (enable_socket_timestamping) {
-> +		unsigned int rx_opt;
-
-[ ... ]
+Could this cause mana_destroy_wq_obj() to send invalid handles (including 0,
+which might be a valid handle for an unrelated object) to the hardware?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521135244.4086=
-9-1-kerneljasonxing@gmail.com?part=3D6
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522233555.1099=
+342-1-dipayanroy@linux.microsoft.com?part=3D1
