@@ -1,183 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97AF25B0BC
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2724C26ED59
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780102168; cv=none; b=rgH3P3fyixioUDUmr7idO9zwzdXE3PRUkoN3C6Ag54lVWIcQPy/rheJpgFhbkXaijALNzSGvZ10OXOMfGTmrdcuhwwiclgQVtvsAcYPwE+IU1QLCKC0gEXa1nxG/t3JH21bPQOUSz3VriauJXJbJmUBCIVw/XV/rWWAfbJhjdMk=
+	t=1780102212; cv=none; b=D3yLtcR5FioqPpyfkSUw6nTsF7PE6sLL0QE/6rMLsy6UAmCGuEo7QYQ0qGo1GskRQOXl3zQKiq+6BT65LAGg5t7nNRlbTXSqvCEvhyrmY4k4KModPzaRa160n3I8H5Is6B9Y0awgGCUSjeDKf8kxjmcltVmeXxGElnugF70M9RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780102168; c=relaxed/simple;
-	bh=+rdTtWdFXQ9KMu/JF0Y0thBqgRjRKieZuXov9YnpNWI=;
+	s=arc-20240116; t=1780102212; c=relaxed/simple;
+	bh=jok2ZPmuMp7TkKh4v5WcJ/wdzftl8VNVixqT+nEL4r0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=F6k2atNkPVspvaAYlkyMJg60PF62exv3UNw6Jgtc6LekLlrN6Yh6ijr/DHplq5HS11dzy+lxYnLVEcqJouoG9t9GVAbL2hPEv3FnyENSdFSmzaIIWZ9DNgueHOoJA2MkVEmtqK6aOHdUINqxYky/MQlfgs2n7IJIJF6hxz7w2xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdiOJ/GB; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=pTQvZYLFohwpsiLhBdtVVF51SNCyrw9TUPe5tpL6oeGldU85VI4Lf3ODAaL8RRYjFh4GYQAUUlbd1dCkhbHqrPmWMkPaCeREVemgE5IFkdqzXQk1vzfm5t5829FslNzXXqgl42LbQjjHP53dCFiNJVa2dkuGCx9vg9esVtzMrK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7k52wUZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdiOJ/GB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4211F00898;
-	Sat, 30 May 2026 00:49:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7k52wUZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19571F00898;
+	Sat, 30 May 2026 00:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780102167;
-	bh=jenHuXcaZAT4qvDkovDVzDfAFJNuFpAlR6GEHkclCKE=;
+	s=k20260515; t=1780102210;
+	bh=xosbV0QfhICO0Y9XxO2KSlVGAy8adc2xeK1JwqsJigM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BdiOJ/GBa5IaPAn0RaJ82hTFoYyi7JnOdSFvR5ktXawDEsBuPnZMi1w7QiS6w9IUV
-	 f70HfVL+7YKR/BXvu3w6AeSZXgi1b6x6V/iCCmhYvpLife6LaTlPbBMUkuY1SB8uas
-	 gdGKyPpu5qYZG1yhLcP1eXkwjOlMP33stQtyssv8jNM53vD+gRCEdcAMQIHibC2Xu9
-	 kdwqlaMB1bATLLWudDK8FfBQSjNSmD82xIR6NbMLZW/nPW88d0DKIA4NhdopQ1KhS6
-	 VmnXtXl2nfSXWa+IOwmuq/YIok8qV2OR3G/jU/DyZqVpsez1yrM9oiBoCi4W7QlAsT
-	 wfhlimLo6mRTQ==
+	b=e7k52wUZQmqEWvG4FmV2HuTKY5XytEZmzArQUbcRL+0j3u58v8OZVfxkTHiY+SyUR
+	 Rcktg76UcC3LGSCjNrba5KdZjXddv6l2q1caGiuE5eyNkGG6nxXlr0KTnTI12WPoRc
+	 +xixZFVC9WItl4ZSuRAbiNKUhn23iPh45smV+RAPopOW1KYJmHWM915dLZhOHdllNc
+	 Ey9ZjsCYXzWj4mrQkemnQoZqIZnalPRtElt78qsABTT838/hNgOQpwLsmFVuenl6vD
+	 uX5n9I2J3EeFktyYYFebjPTsxLVfY9mHoxrnB+3u+IUFcxDoCi88xBiiFJqk45bqPK
+	 8Qxf/VggZsuGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 1/1] bpf: sockmap: fix tail fragment offset in
- bpf_msg_push_data
+Subject: Re: [PATCH net-next v6 2/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ren Wei" <n05ec@lzu.edu.cn>
+To: hawk@kernel.org
 Cc: bpf@vger.kernel.org
-In-Reply-To: <8b129d10566aa3eb43f61a8f9757bcf51707d324.1779636774.git.xuyq21@lenovo.com>
-References: <8b129d10566aa3eb43f61a8f9757bcf51707d324.1779636774.git.xuyq21@lenovo.com>
+In-Reply-To: <20260527135418.1166665-3-hawk@kernel.org>
+References: <20260527135418.1166665-3-hawk@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:49:27 +0000
-Message-Id: <20260530004927.7C4211F00898@smtp.kernel.org>
+Date: Sat, 30 May 2026 00:50:10 +0000
+Message-Id: <20260530005010.A19571F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Critical] bpf_msg_push_data allocates memory for new message data withou=
-t the __GFP_ZERO flag, leaving the newly inserted bytes uninitialized and e=
-xposing kernel heap memory.
-- [High] When appending data to a full or nearly full sk_msg, bpf_msg_push_=
-data incorrectly reads the length from the inactive msg->sg.end index, bypa=
-ssing the coalescing logic and causing a ring buffer wrap-around, out-of-bo=
-unds access, or information leak.
-- [High] Calling bpf_msg_push_data on an empty sk_msg causes the scatterlis=
-t iteration loop to traverse inactive ring buffer slots, leading to ring bu=
-ffer corruption.
-- [High] Shifting scatterlist elements in bpf_msg_push_data and bpf_msg_pop=
-_data does not properly shift the msg->sg.copy bitmap, breaking the Copy-On=
--Write mechanism.
-- [High] The len parameter in bpf_msg_push_data is not bounds-checked, allo=
-wing a maliciously large len to cause an integer overflow, resulting in a s=
-mall allocation followed by a massive heap out-of-bounds write.
+- [High] Flawed queue wakeup logic in veth_napi_del_range() causes permanen=
+t TX stalls on the peer device by failing to schedule STACK_XOFF clearances.
+- [High] BQL state permanently leaks for deactivated TX queues, causing a p=
+ermanent stall if they are later reactivated.
 --
 
-commit fefea84ac268cf25e699730bfbde310ae44b83f8
-Author: Yuqi Xu <xuyq21@lenovo.com>
+commit 01e0529ce363cdc7993646292c97c9feb7c956f9
+Author: Jesper Dangaard Brouer <hawk@kernel.org>
 
-bpf: sockmap: fix tail fragment offset in bpf_msg_push_data
+veth: implement Byte Queue Limits (BQL) for latency reduction
 
-When bpf_msg_push_data() inserts data in the middle of a scatterlist
-entry, it splits the original entry into a left fragment and a right
-fragment. The right fragment offset is advanced with the message-global
-insertion point, which over-advances the offset. This commit advances
-the offset by the fragment-local delta instead.
+This commit implements Byte Queue Limits (BQL) support for veth to provide
+backpressure and reduce queuing latency. It introduces a fixed unit charge
+per packet under the ptr_ring producer_lock and tracks per-SKB BQL state to
+safely complete it on the RX side.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9590877b0714f..80439767e0eea 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2869,7 +2869,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0cfb19b760dd5..21ff785339431 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
 
-[Severity: High]
-This isn't a bug introduced by this patch, but when appending data to a full
-or nearly full sk_msg, does bpf_msg_push_data incorrectly read the length
-from the inactive msg->sg.end index?
+[ ... ]
 
-If a BPF program appends data to the end of a message, the search loop
-terminates with i =3D=3D msg->sg.end. If the ring buffer is full (space =3D=
-=3D 0),
-copy =3D msg->sg.data[i].length reads from the inactive slot.
-
-If the stale length is 0, the if (copy) block is skipped. The function then
-calls sk_msg_iter_next(msg, end) on a full ring buffer, wrapping msg->sg.end
-to equal msg->sg.start, logically emptying the message and leaking all
-original pages.
-
-If the stale length is non-zero, it sizes the new allocation incorrectly. If
-the previous element's length exceeds the size of the allocation order for
-copy + len, the subsequent memcpy will overflow the allocated heap buffer.
-
-[Severity: High]
-This is a pre-existing issue, but can calling bpf_msg_push_data on an empty
-sk_msg cause the scatterlist iteration loop to traverse inactive ring buffer
-slots?
-
-If the message is completely empty (e.g., drained via bpf_msg_pop_data),
-msg->sg.start =3D=3D msg->sg.end.
-
-The do { ... } while (i !=3D msg->sg.end) loop executes at least once becau=
-se
-of the do-while construct. It traverses uninitialized or stale elements,
-accumulating stale length values into offset.
-
-If the loop condition start < offset + l fails to break, it iterates through
-the entire ring buffer, leaving offset heavily corrupted. This leads to
-front =3D start - offset becoming a large negative number, causing a massive
-out-of-bounds memcpy that will reliably panic the kernel.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but could shifting scatterlist
-elements in bpf_msg_push_data and bpf_msg_pop_data fail to properly shift
-the msg->sg.copy bitmap, breaking the Copy-On-Write mechanism?
-
-msg->sg.copy is a bitmap used to track which scatterlist elements are shared
-(e.g., from TCP zerocopy) and require a private copy before modification.
-
-When elements are shifted in the ring buffer during bpf_msg_push_data
-(shifted right) or bpf_msg_pop_data (shifted left), their corresponding
-msg->sg.copy bits are not shifted.
-
-This desynchronization clears the copy protection for elements that moved.
-A BPF program calling bpf_msg_pull_data on these elements will be granted
-direct write access instead of triggering a copy, allowing it to corrupt
-shared memory or page-cache data.
-
-[Severity: Critical]
-This is a pre-existing issue, but is bpf_msg_push_data allocating memory
-for new message data without the __GFP_ZERO flag?
-
-bpf_msg_push_data allocates new pages via alloc_pages(__GFP_NOWARN |
-GFP_ATOMIC | __GFP_COMP, ...). The kernel inserts len bytes into the page
-but never initializes this specific region.
-
-A BPF program can request this memory expansion without writing any data to
-it. If the sk_msg is subsequently transmitted over a network socket, the
-uninitialized kernel heap memory will be sent across the network, leading
-to a significant information leak.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but is the len parameter in
-bpf_msg_push_data missing a bounds check?
-
-The len parameter is a u32 value passed from the BPF program, with no
-verifier bounds check (ARG_ANYTHING). An excessively large len
-(e.g., 0xFFFFFFFF) causes the 32-bit addition copy + len to overflow to a
-small value.
-
-alloc_pages successfully allocates a small buffer. During the fallback copy
-logic, the pointer arithmetic to =3D raw + front + len expands the 32-bit l=
-en
-to a 64-bit unsigned offset, advancing the destination pointer by ~4GB.
-
-The subsequent memcpy(to, from, back) performs an out-of-bounds write on
-the heap, allowing a verified BPF program to corrupt kernel memory and cause
-a kernel panic.
-
+> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budg=
+et,
+>  			}
+>  		} else {
+>  			/* ndo_start_xmit */
+> -			struct sk_buff *skb =3D ptr;
+> +			bool bql_charged =3D veth_ptr_is_bql(ptr);
+> +			struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
 > =20
->  		psge->length =3D start - offset;
->  		rsge.length -=3D psge->length;
-> -		rsge.offset +=3D start;
-> +		rsge.offset +=3D start - offset;
+>  			stats->xdp_bytes +=3D skb->len;
+> +			if (peer_txq && bql_charged)
+> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+
+[Severity: High]
+If the user decreases peer->real_num_tx_queues, veth_poll() will set peer_t=
+xq
+to NULL for queues that are now deactivated. Will this skip completions for
+in-flight packets that originated from those deactivated queues?
+
+If the completions are permanently leaked, won't the BQL state remain corru=
+pt
+and immediately halt the queue if it is later reactivated?
+
+> +
+>  			skb =3D veth_xdp_rcv_skb(rq, skb, bq, stats);
+>  			if (skb) {
+>  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+
+[ ... ]
+
+> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device =
+*dev, int start, int end)
+>  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+>  	}
 > =20
->  		sk_msg_iter_var_next(i);
->  		sg_unmark_end(psge);
+> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
+> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
+> +	 * synchronize_net(), and NAPI can no longer clear it.
+> +	 * Only wake when the device is still up.
+> +	 */
+> +	peer =3D rtnl_dereference(priv->peer);
+> +	if (peer) {
+> +		int peer_end =3D min_t(int, end, peer->real_num_tx_queues);
+
+[Severity: High]
+Similar to the issue in veth_xdp_rcv(), bounding this loop to
+peer->real_num_tx_queues skips resetting the BQL state for deactivated queu=
+es.
+Could this leave the state permanently corrupted if those queues are later
+reactivated?
+
+> +
+> +		for (i =3D start; i < peer_end; i++) {
+> +			struct netdev_queue *txq =3D netdev_get_tx_queue(peer, i);
+> +
+> +			netdev_tx_reset_queue(txq);
+> +			if (netif_running(dev))
+> +				netif_tx_wake_queue(txq);
+
+[Severity: High]
+Does this sequence cause a permanent TX stall if the queue was stopped
+purely by BQL?
+
+netdev_tx_reset_queue() clears the __QUEUE_STATE_STACK_XOFF bit. However,
+netif_tx_wake_queue() only schedules the Qdisc if __QUEUE_STATE_DRV_XOFF
+was set. If the queue was only stopped by BQL, the Qdisc won't be scheduled,
+leaving it asleep with no stop bits set.
+
+Also, if the device is being brought down, netif_running(dev) evaluates to
+false, skipping the wake. Could this leave __QUEUE_STATE_DRV_XOFF set on the
+peer, resulting in a 16-second watchdog timeout when the device is later
+brought back up?
+
+> +		}
+> +	}
+> +
+>  	for (i =3D start; i < end; i++) {
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/8b129d10566aa3eb43f=
-61a8f9757bcf51707d324.1779636774.git.xuyq21@lenovo.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527135418.1166=
+665-1-hawk@kernel.org?part=3D2
