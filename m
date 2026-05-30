@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8465D29D27D;
-	Sat, 30 May 2026 00:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72B91D54FA;
+	Sat, 30 May 2026 00:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780102013; cv=none; b=mf3ijmT4m2FP1iSKlfc/ogfEIdnYmpDWeY74KfpvaND31Hq7ycBoDMxOfTgcla+gkrAnY1qpCxBFCbz6m10KmRHsdUih2xEEUjSpuqJFcHVYg8z5kBFMplUrvV0MGtSyszjaoqw9KmLjoPdqqCRgV3aYaGK79E+4AECapwaqFeo=
+	t=1780102061; cv=none; b=Dx0Lf0rpVwaF4TbgopV6g2EoQkPw3QEfh4XF/WeOBEBhzyaTJwCmSUNnTks8nWTpuTW5+PS6x5yv28OlGFxQTW4dz0aCsHz+M5tiwh+mghVONguKm8TAHPUivQDM5KO93yLnAS3nEBVJvJViX26NkLr4K7cG94qvemIEahBtVhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780102013; c=relaxed/simple;
-	bh=nrtHY8bTzppKIagw49KWprbaZZYC8MjlyJkDW5cxa3Q=;
+	s=arc-20240116; t=1780102061; c=relaxed/simple;
+	bh=GIUA1ZJcerl9EtPkjTk4vWZw5c5jI3IWktjzJxZgVWY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kgdZLkf7rlBSuFGcWezvmUQjvy6FP3hQ3b8+ho/gaLsOiVHJQm2FxHpW34aNOv3P5uuH32QkJZvUVZBDAn3BgbsfZSe6ywCIP1ts5TWFw9UfLsN/6LL8K+vzaQnvHebmTc5udIKT4COyIqfrueLAcdyIpqwyNHXRTG3Z2dGvepo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NKa7mNQJ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=X5JeRK2cBVUrVbXFhqqEx03268S4w41Ysp5+R6pHkK43GTblbFiidNVp7XRw7j1n/+Z5TtLGZQSPnkCO6aibjY8mPeXLMBxt6260Ljr5dUWBj0wfUHDsmDY6e7PIXylZWuw0Fl0RVitd6a1ZvcAK4lr3TO0FZRtCdcHy4dWTS7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T1OaMLOB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NKa7mNQJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8281F00893;
-	Sat, 30 May 2026 00:46:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1OaMLOB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BAF1F00893;
+	Sat, 30 May 2026 00:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780102012;
-	bh=jtj/UeoVVsiy0f+lzoYFOjyjLdeKD++mqQAoqHJZGfE=;
+	s=k20260515; t=1780102060;
+	bh=1uBYplieCwbqrYFRWgZNoc7fVVv82PXPE5XdR8AY8wc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NKa7mNQJxVIpK0FmbLero9TsswmhTUk58Tmct0BNpaufSy30HxOsXn7CpIf4nbUhe
-	 D9TG4v189odwpCsLY7DXX4j4jROTyEULisiasppHJYKpZ3+pOJOl7q9jXHzc2Y1Nkb
-	 +e2/IUTZZUFdEvp91wfVpw0zvIRwOHM2bWP8QG0+4xIc6q5AWhkWCHl3bTC3IWdkbh
-	 gwhmBCQYVci4W8BqItOrxzgwj2Cxv25xxVlSTEqk/Es7uZ/6oKzpPx/ReDMuOGGjpz
-	 cgBTy6AfBy4WyNmGSqBs512QpcCMGJqydSUmaSTpzUpne5oIgXor13ChX7xgWyWVkG
-	 uF4m2RdCvFKmg==
+	b=T1OaMLOBDRV9ku0c8FedViOKid0RXwfXL2nwy8W1WN+hDSydgdKdM2AtoHR/VTsYh
+	 MQFsSIFmS9UrKKrdQWtCsod+KJr57aF7+Fn7589Njaw8NVHxg3zmYcSwS0WBZR/m4K
+	 iPpv4nhp4Agv4Pozb92dC78bVkpoQsbN7gj9RdIc0pKt5Laxchp59UdTSNz1kaqSCw
+	 6zI1Fnq1/8kY/uiis/xw14wfIa8k9Q2thXPUH14HM6QV2XVxBFrckA24YHkgNPG0ij
+	 evDpX757py62+FM4ySrE7ymOs582XyTWFvzjm8E5Xxso5ryAu6FRf0c2jxsIUBCn/x
+	 KnIhewwA+hMTw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2 1/2] net: mana: Add NULL guards in teardown path
+Subject: Re: [PATCH net v3 1/2] net: mana: Add NULL guards in teardown path
  to prevent panic on attach failure
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
-References: <20260522233555.1099342-2-dipayanroy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org, linux-hyperv@vger.kernel.org
+In-Reply-To: <20260525081129.1230035-2-dipayanroy@linux.microsoft.com>
+References: <20260525081129.1230035-2-dipayanroy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 00:46:51 +0000
-Message-Id: <20260530004652.4E8281F00893@smtp.kernel.org>
+Date: Sat, 30 May 2026 00:47:40 +0000
+Message-Id: <20260530004740.B2BAF1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,131 +48,101 @@ Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] State Machine Violation / NULL Pointer Dereference on interface op=
-en after a failed MTU change.
-- [High] Uninitialized Resource Teardown / Invalid Hardware Request during =
-TX queue creation failure.
+- [High] mana_add_rx_queues() writes to a freed apc->rxqs pointer on succes=
+s path after an error.
+- [Medium] mana_destroy_txq() attempts to destroy uninitialized WQ objects.
 --
 
-commit effecc83d343cb89cadf93984f0a62ac828d0166
+commit f9a2821b4cd7ff0d58042e4bdeeb3d484c4946cf
 Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
 net: mana: Add NULL guards in teardown path to prevent panic on attach fail=
 ure
 
-When queue allocation fails partway through, the error cleanup frees
-and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
-mana_remove(), mana_change_mtu() recovery, and internal error handling
-in mana_alloc_queues() can subsequently call into functions that
-dereference these pointers without NULL checks.
+This patch adds NULL guards for apc->rxqs and apc->tx_qp in multiple teardo=
+wn
+paths, such as mana_fence_rqs(), mana_destroy_vport(), and
+mana_dealloc_queues(), to prevent NULL pointer dereference panics when queue
+allocation fails.
+
+> When queue allocation fails partway through, the error cleanup frees
+> and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
+> mana_remove(), mana_change_mtu() recovery, and internal error handling
+> in mana_alloc_queues() can subsequently call into functions that
+> dereference these pointers without NULL checks:
+
+[Severity: High]
+This is a pre-existing issue, but could a subsequent interface bring-up
+cause a panic due to the NULL apc->rxqs pointer?
+
+If mana_attach() fails (e.g., during mana_change_mtu() recovery), the error
+path calls mana_cleanup_port_context(apc), which frees apc->rxqs and sets it
+to NULL, leaving the interface in a down state.
+
+If the interface is subsequently brought back up, mana_open() is invoked.
+mana_open() calls mana_alloc_queues() directly, skipping
+mana_init_port_context() where apc->rxqs is normally allocated.
+
+When mana_alloc_queues() reaches mana_add_rx_queues(), it executes:
+
+mana_add_rx_queues()
+    apc->rxqs[i] =3D rxq;
+
+Would this write to the freed apc->rxqs pointer and cause a kernel panic?
 
 > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
 ethernet/microsoft/mana/mana_en.c
 > index 9afc786b297a8..9e7e4bf526bf6 100644
 > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
 > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -1727,6 +1727,9 @@ static void mana_fence_rqs(struct mana_port_context=
- *apc)
->  	struct mana_rxq *rxq;
->  	int err;
-> =20
-> +	if (!apc->rxqs)
-> +		return;
-> +
-
-[Severity: High]
-This isn't a bug introduced by this patch, but if mana_change_mtu() fails,
-does it leave the device in a state where a subsequent mana_open() will cra=
-sh?
-
-When mana_change_mtu() calls mana_detach(ndev, false), the device is detach=
-ed
-and mana_cleanup_port_context() is explicitly called, freeing apc->rxqs and
-setting it to NULL.
-
-It then calls mana_attach(). If mana_attach() fails internally (e.g., inside
-its call to mana_alloc_queues()), its error path calls
-mana_cleanup_port_context() again, which frees apc->rxqs and sets it to NUL=
-L.
-
-mana_change_mtu() then returns the error.
-
-The interface is now in the DOWN state (apc->port_is_up =3D=3D false) with
-apc->rxqs =3D=3D NULL.
-
-If the user subsequently attempts to bring the interface up (ip link set up=
-),
-mana_open() is executed. mana_open() calls mana_alloc_queues() but does not
-call mana_init_port() to reallocate apc->rxqs.
-
-Inside mana_alloc_queues(), mana_add_rx_queues() unconditionally dereferenc=
-es
-apc->rxqs:
-
-    apc->rxqs[i] =3D rxq;
-
-Could this result in a kernel panic?
 
 [ ... ]
 
-> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device =
-*ndev)
->  	 * number of queues.
->  	 */
+> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_c=
+ontext *apc)
+>  	struct mana_rxq *rxq;
+>  	u32 rxq_idx;
 > =20
-> -	for (i =3D 0; i < apc->num_queues; i++) {
-> -		txq =3D &apc->tx_qp[i].txq;
-> -		tsleep =3D 1000;
-> -		while (atomic_read(&txq->pending_sends) > 0 &&
-> -		       time_before(jiffies, timeout)) {
-> -			usleep_range(tsleep, tsleep + 1000);
-> -			tsleep <<=3D 1;
-> -		}
-> -		if (atomic_read(&txq->pending_sends)) {
-> -			err =3D pcie_flr(to_pci_dev(gd->gdma_context->dev));
-> -			if (err) {
-> -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
-> -					   err, atomic_read(&txq->pending_sends),
-> -					   txq->gdma_txq_id);
-> +	if (apc->tx_qp) {
-> +		for (i =3D 0; i < apc->num_queues; i++) {
-> +			txq =3D &apc->tx_qp[i].txq;
-> +			tsleep =3D 1000;
-> +			while (atomic_read(&txq->pending_sends) > 0 &&
-> +			       time_before(jiffies, timeout)) {
-> +				usleep_range(tsleep, tsleep + 1000);
-> +				tsleep <<=3D 1;
-> +			}
+> -	for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> -		rxq =3D apc->rxqs[rxq_idx];
+> -		if (!rxq)
+> -			continue;
+> +	if (apc->rxqs) {
+> =20
+> -		mana_destroy_rxq(apc, rxq, true);
+> -		apc->rxqs[rxq_idx] =3D NULL;
+> +		for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> +			rxq =3D apc->rxqs[rxq_idx];
+> +			if (!rxq)
+> +				continue;
+> +
+> +			mana_destroy_rxq(apc, rxq, true);
+> +			apc->rxqs[rxq_idx] =3D NULL;
+> +		}
+>  	}
+> =20
+>  	mana_destroy_txq(apc);
 
-[Severity: High]
-This is a pre-existing issue, but does mana_destroy_txq() send invalid hand=
-les
-to the hardware when TX queue creation fails?
+[Severity: Medium]
+This is a pre-existing issue, but does mana_destroy_txq() send invalid
+teardown requests to the hardware if mana_create_txq() failed partway
+through?
 
-In mana_create_txq(), the apc->tx_qp array is allocated via kzalloc_objs(),
-meaning all elements (including tx_object) are initialized to 0.
+Unlike mana_destroy_rxq(), which explicitly checks if rxq->rxobj is valid
+(rxq->rxobj !=3D INVALID_MANA_HANDLE) before destroying it, mana_destroy_tx=
+q()
+unconditionally loops over all num_queues and calls:
 
-The function then loops over num_queues. For the current queue i, it sets
-apc->tx_qp[i].tx_object =3D INVALID_MANA_HANDLE; before attempting to creat=
-e the
-hardware object via mana_create_wq_obj().
-
-If creation fails, it jumps to the out label and calls mana_destroy_txq(apc=
-).
-mana_destroy_txq() unconditionally loops over all num_queues and calls:
-
+mana_destroy_txq()
     mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
 
-Unlike mana_destroy_rxq(), which checks if (rxq->rxobj !=3D INVALID_MANA_HA=
-NDLE),
-mana_destroy_txq() passes the handle directly to mana_destroy_wq_obj().
+For queues that were not initialized, the tx_object handle is 0 because the
+memory was zeroed by allocation, rather than being set to
+INVALID_MANA_HANDLE.
 
-For the failed queue, the handle is INVALID_MANA_HANDLE. For all unreached
-queues (j > i), the handle is 0.
-
-Could this cause mana_destroy_wq_obj() to send invalid handles (including 0,
-which might be a valid handle for an unrelated object) to the hardware?
+Does this result in blindly sending a MANA_DESTROY_WQ_OBJ hardware request
+with wq_obj_handle =3D 0 for the uninitialized queues?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522233555.1099=
-342-1-dipayanroy@linux.microsoft.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260525081129.1230=
+035-1-dipayanroy@linux.microsoft.com?part=3D1
