@@ -1,108 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3EE3D76;
-	Sat, 30 May 2026 00:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1266B3D3B3
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780099664; cv=none; b=lYwVC08UhtNOMBc6K8MwaQkHPIP+563Mk1z+4Qr5LETuddllnVsQHeyTlk41Y7SoIK+eJ/aOFv0uoGe5iE95MSAhXxUTY0EDBuCds/Z1niIp5Zi1MaM6WX3YQz2srpl8ZXDyeSs0Wh0RmoHSz8JKbLhFXy8oVMFdQeRQ9nptH4o=
+	t=1780099986; cv=none; b=qnbOAIvTVI+hTJNROqlE4k3NxBUTTOX8balmzOd/3o2HeBxHtEqnNzehMiegSRtuYIbogHF4fD+IY8EmHHiDdUDUJkv3/9b2ARp6jL1F6VPNIuiqR5Ri67zDwRxwdhsdJyxA6J30FWVDFgBTEFvFQz2S5hHhZVKg8nptbuzZFuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780099664; c=relaxed/simple;
-	bh=Umdk9r2IMwHE4FQTiKFbwajkMjAYbDKDNZvKvzSO3Gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A9CWYbyuv1f1o52dLIEtxAOPS0w8NZRtubBQGN2l8twMVugpGNNvQCOkifvRwWzR3OCTFNERGj93rSU5u7yvzd6Z/AOLBzmAGvUa9pFyfjEnaQSDEi8ZIibYBDo37iowwtaRW5OiXKEUdZhWTXb8Hm1yQyYCNP6niaDHqjynnPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9nOUbNX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780099986; c=relaxed/simple;
+	bh=XAUz9a0Ev13ANpCwyiM/41BpLX2Hzwcg0J37u/ESs0c=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=fyF4MLfVOw3obln+DQyWeaZmNc1ym46zw7bM99PzWDzWFAUBIKBffPtwGVXEeYRI2er0VONFHVCPyLFk9hoZmicLaIqQb41EtOS/rjpyj25Q9dDw4KoncSGFN2YVms10xrpYP/24vMNLSUeKHAnsk4cEtwbJVuwILHlfxvYQIko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIpXO/B7; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9nOUbNX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53FB01F00893;
-	Sat, 30 May 2026 00:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780099663;
-	bh=mJGI6HLh+yBdHlkNKIk1Z7EMEvjqYx2VHkukbIfxzKU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=d9nOUbNXr0jOIM7Cde0bqVomJnF20EGT3P6X0kOFoQhz+cxeDEGfY/SZ/cZC37PSl
-	 BgJ7I2zHWktyj4e8IhGveGkIgCJjIJ77yDx1t1YBnaBQDxTZcj8QX2+IAcxbYlDPSd
-	 7qfWPD+xyWEaIZUYqukKM+tjVdnz77d0d/5OIf6KFBERvUw4j1HrywLfGI2VbIfB5y
-	 K3O9FOUhrvR6ZE2dhF876UFuieZNK96K8UQGk3SiYDOoqpORzBj8hmn2LU3QTVwcsj
-	 Xrd0Y1vCxySSycEKRnW+dJZ57R5k6YtNh8XJ0mq0EbpIT+x1gIevJPYTwKvCkbZRY4
-	 iAgoMxFfx7AKA==
-Date: Fri, 29 May 2026 21:07:39 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Suchit Karunakaran <suchitkarunakaran@gmail.com>,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] perf build: compile BPF skeletons with -mcpu=v3
-Message-ID: <ahoqS-hZDkAluO5a@x1>
-References: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
- <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
- <agAqESWvLdIJBErN@google.com>
- <agZgPBrlKZ655KdO@x1>
- <agq3PCt_FhxIYgQ8@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIpXO/B7"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-43bf5f4ee8dso2267403fac.3
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 17:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780099984; x=1780704784; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uZEFV3xqmXJ7mDew0+WqBqGT5npYefXJtsev5wJWkXs=;
+        b=FIpXO/B7sN+YxOh1nseNrjbNZyVD9ZtvM8qSp5bNXuMLOFhlNcUdV6gjjfomnZ4hby
+         HcutyBXjhQymGxEwS+vM+6Spi3XuWjkkCEXaBJLhCxeZcRqmYehb2wvTD67l7A4+PS8E
+         h2gdRdYfmhWimsUdb+2EZCZq7PvCodSigF+xuEIkhKwH81cE7NNszJ89vkHZpCIjx5O0
+         ME7W2Fa9MY7QO+IABzi8aNaBRVMT7GY1zyccZCrs3j5ZxH2llpnwgDRToff6yQBXlTwL
+         rMTaqQ0WfGCGmZcU7PcnaMAzkMoWQIJJ9VG3sJNCfH4N7owJnRoeqbRjbAfmIXgiwRhD
+         N81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780099984; x=1780704784;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uZEFV3xqmXJ7mDew0+WqBqGT5npYefXJtsev5wJWkXs=;
+        b=nSq3nhLu09g49NdAWMYmyrxCfGL6/8qHtTKVzdkW/R+nkOlav8VltzSO/RnbkXzeVd
+         DghZmtSDfnDnUv6FD8jSEdHoKsTvlbD2QPSr0xQPrGfVkO/cvg3jMBLzTOjCMQxQ8iW6
+         DqkwZSZzW64XfOB5NaoQ+V8Bq1LIMIczAXmOEKXG1QFJdYLyCo7yPrli1LjdP+YTLdiQ
+         uKYs5FoL5twl0+xxtZNPMdMj2lkWRl7rEYpxezzjLBxhGTA2YHecLkykJ66Ec+GEOpW9
+         amQYkjPZ2SPD0Ibcwwc1mYsVnCGKXhzLbskkeYSsbY32Izf/rdZr+wEVVjEM3I1YXhT5
+         WseA==
+X-Gm-Message-State: AOJu0YxN5e3Iw/4T+6SD1T9HAMeD73TqFJoF32ntoUxqID6iIKOXu2mu
+	H9yj+GhQGlMajLALe5yH7OYIbhaHNOVtByFFfTp8c7ks5pXrTys/Pf0T
+X-Gm-Gg: Acq92OFDSvSBiHPmkP7pm2V5KKH79r2GAe5SgfKWEiorr3tXUdjWSjtjxj1cMM82E0P
+	fqq6XUmJhj+d8KmUON4r7FTOxMUiHHxcb4MlbR8U/pHxFBY3AisCTGO/rr+hFCr7WfuZJPdtsXl
+	IlyXghTjP7G55nVGol6r2svUnQXvJW+rjsxKgiQaWCf61RnM7LW84lUcPz0FTvMf5j2CUBuIdD2
+	cAB69heOawsnYrCpSqRQdWGrATuUF/DKLaJvOtLT4rWOoUVwqDaLWsVKBNSatPm48HMFEduRXda
+	nei3g6y9Cya7dM075LdBiiknKuM5SHrcS15hW/dD8iXEhnA7ovR4LtLAOZJbhAFT3j91WVPb8vU
+	X7aIdsU+sdMD+N76g8nw6zgvsmvGSQcMvSwN/sL2cEvGTwBSjzXZQWvst8flm9L1Ee+JFEpvyoE
+	/9AM7Ot0DTT+3evLiGGFwL63jRwfmvLxRmPSiV5AD7KKEJHNwxmimhmhKcW16M4+BnztLFYa4Y7
+	++6qt1iY+PkUOhBVhBhKrIeN+2p
+X-Received: by 2002:a05:6820:f03:b0:69d:9153:56ed with SMTP id 006d021491bc7-69e102a87d7mr847884eaf.3.1780099983883;
+        Fri, 29 May 2026 17:13:03 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:51::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69e067f30fcsm2098238eaf.6.2026.05.29.17.13.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2026 17:13:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agq3PCt_FhxIYgQ8@google.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 29 May 2026 17:13:01 -0700
+Message-Id: <DIVKS1X4Q76A.1Z3XA1HE3MI7F@gmail.com>
+Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Add tests for arena
+ slub-backed allocator
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>
+Cc: <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260529202438.16408-5-alexei.starovoitov@gmail.com>
+ <20260529223907.B25251F00893@smtp.kernel.org>
+In-Reply-To: <20260529223907.B25251F00893@smtp.kernel.org>
 
-On Sun, May 17, 2026 at 11:52:44PM -0700, Namhyung Kim wrote:
-> On Thu, May 14, 2026 at 08:52:28PM -0300, Arnaldo Carvalho de Melo wrote:
-> > On Sat, May 09, 2026 at 11:47:45PM -0700, Namhyung Kim wrote:
-> > > Hi Arnaldo,
-> > > 
-> > > On Thu, May 07, 2026 at 11:49:59PM +0000, sashiko-bot@kernel.org wrote:
-> > > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> > > > - [High] Adding `-mcpu=v3` to `CLANG_OPTIONS` forces all BPF skeletons to use the BPF v3 ISA, breaking backward compatibility for perf tools designed to run on older kernels.
-> > > > --
-> > > > 
-> > > > commit 2e8791aeccf694e1ae9ed9fda46e3a6f73332838
-> > > > Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-> > > > 
-> > > > perf build: compile BPF skeletons with -mcpu=v3
-> > > > 
-> > > > This commit adds -mcpu=v3 to CLANG_OPTIONS to support the atomic
-> > > > cmpxchg instruction required by the lock_contention BPF program.
-> > > > This forces Clang to emit BPF ISA v3 instructions during skeleton
-> > > > compilation.
-> > > > 
-> > > > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > > > > index cee19c923c060..a9a8c84b6b006 100644
-> > > > > --- a/tools/perf/Makefile.perf
-> > > > > +++ b/tools/perf/Makefile.perf
-> > > > 
-> > > > [ ... ]
-> > > > 
-> > > > > @@ -1195,7 +1195,7 @@ ifneq ($(CROSS_COMPILE),)
-> > > > >  CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-> > > > >  endif
-> > > > >  
-> > > > > -CLANG_OPTIONS = -Wall
-> > > > > +CLANG_OPTIONS = -Wall -mcpu=v3
-> > > > 
-> > > > Does this change break backward compatibility for other perf tools running
-> > > > on older kernels?
-> > > > 
-> > > > Since CLANG_OPTIONS is used in the pattern rule for compiling all BPF
-> > > > skeletons, this forces every BPF program in perf (such as
-> > > > augmented_raw_syscalls.bpf.c and off_cpu.bpf.c) to target the BPF ISA v3.
-> > > > 
-> > > > Kernels older than 5.1 do not support v3 instructions and will reject
-> > > > these programs during the verifier load phase.
-> > > 
-> > > I think it's old enough and we can move on to ensure v3 instructions.
-> > 
-> > Can I take this as an Reviewed-by or Acked-by?
-> 
-> Yep,
-> 
-> Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+On Fri May 29, 2026 at 3:39 PM PDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] The `arena_slab_freeptr_stale_pcs` selftest will reliably fail=
+ on architectures with a page size larger than 4K (e.g., ARM64 with 64K pag=
+es) due to hardcoded assumptions about SLUB slab page capacities.
+> --
+>
+> commit 307042b1f4f8cca55cad67f2c12869bf67a9f7c2
+> Author: Alexei Starovoitov <ast@kernel.org>
+>
+> selftests/bpf: Add tests for arena slub-backed allocator
+>
+> This commit adds end-to-end selftests covering the SLAB_BPF_ARENA path.
+> It includes smoke tests for basic alloc/free kfuncs and exercises corrupt=
+ed
+> in-object freepointers to validate get_freepointer() clamping.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_=
+pcs.c b/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_pcs.c
+>> new file mode 100644
+>> index 0000000000000..4d23d75419d61
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/arena_slab_freeptr_stale_pcs.c
+>
+> [ ... ]
+>
+>> +	victim =3D objs[TARGET_IDX];
+>> +
+>> +	/*
+>> +	 * The 4096-byte bucket has one object per slab and a 4-object sheaf.
+>> +	 * Free @victim while the sheaf is full, then turn its encoded NULL
+>> +	 * freepointer into any non-NULL decoded value. The arena clamp keeps
+>> +	 * non-NULL decoded values in the same slab and object-aligned, so thi=
+s
+>> +	 * becomes a freelist self-cycle back to @victim.
+>> +	 */
+>
+> [Severity: Medium]
+> Is this assumption valid on architectures with page sizes larger than 4K?
+>
+> On a system with 64KB pages, a 4096-byte bucket would hold multiple objec=
+ts
+> per slab page instead of just one.
 
-So this got refactored, Suchit, can you take a look at perf-tools-next
-to see what is needed to have this in place after Ian's changes?
-
-Thanks in advance,
-
-- Arnaldo
+It's fine. It's a stress test for the algorithm. It's gotta work
+on at least one arch in CI.
+But I'll switch to __PAGE_SIZE to avoid sashiko complains in v2.
