@@ -1,145 +1,131 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1CD2571A9
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 01:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0F626B777;
+	Sat, 30 May 2026 01:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780104211; cv=none; b=larfTBq/1H+xMfVED7XjP24/X+h+c4oQ4jZ//4V/VeZO8qJBAknJiDT2Yxf3E0SczDeivySevy5tG/o8ZtUmMX2p4vxH+xVO4GANt4zwFYnarRZIqgcwlGUu4XxXVXyokq8V/pt5p8zp2Sx/l1LtkfbdkHffb2KGJLeZLtUjS/w=
+	t=1780104674; cv=none; b=Y7oAB+y9zbiGASWxzhU3gEx7RTFnUdOo+Bz6K600krIsi6NytN6WjnqV5gDK/dd7WU2zCnHEOzp60hwoLvyi5HqObl13hyPoBlQj+hpWosIrD2tkPC9HsINoH6ZshsJE14KkROnSG7SJHguoxWcuSQtNOAPOH1W8FvMZaLkthB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780104211; c=relaxed/simple;
-	bh=BtaYKpTPJilCTGNFssblfegA2Q/llZ2Ei2qTZMpuJQ8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=IDDZFtqIRLCgPZQhq2kzi8a2By8zVxtYEscSt3iRoOi0ik6bxqKT3TTPqFxKoImnnSaATtj7Og1dD53znPRUiZcs65/YYzyW2pOHPeu+NIJWh65tL5FFYl+GJReczetWl5eqOXrFU/JsHyuwAInnxDQACY4d939LlOCWowyOuZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g5b6N6hy; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780104674; c=relaxed/simple;
+	bh=fVfTqHZ2WHbogx2nZBr70UNIHILr0wIdELp33WCeHes=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TWS1igkm7zbdVU2E0Uy602ONyTW1wr2CIlTiN4Sa6nHJHj7qzrqEDi7xa/djqn4S7iDlOW0zMPs2Y22tLb7F7jyOTseE5RBmNo9Hbkdi1bh37bKaR2IpcgKKMdGGjSjQyjExzPeg1+/OXWqQdReIujYydqJblPrlcU7Qxck49RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Xv+Nnv8k; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g5b6N6hy"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-69df6127fc6so1624131eaf.3
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 18:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780104209; x=1780709009; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tfTiRoOM8MzpyQ3L15jEBMe4g863/IvoH5IPT22XTg0=;
-        b=g5b6N6hyOXYuFMjhD6fZWBOiORGJf3Yg7DPvBAStagCuCBp9RqB/RXy0PPLFwlE5IK
-         Rb0k1giFoafrOPvQwaJDkzyTYH6rqzBILvGWYaVdo7+q55oocgna5e9VnCnLIK8wcJyU
-         wtnkXcg6Xvt9YJfa/6//eAyCIv3ksnTW/U2tjgz31oce8ekIudgZLUGzZ+tfufMGIYFG
-         FT1Ye5ttp2PCardBqolnEq1Xr/rIVaLgnINY2IH5pKDqwWI5ZZ7UUqcbHsbFoVd7Vjzc
-         qi+UCsD3h0j6uaB0heEVP2KPnhpBQhBJVrb4hFChWXFOFArYpdpOx9O3LuLjVLQHRLrO
-         KGhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780104209; x=1780709009;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfTiRoOM8MzpyQ3L15jEBMe4g863/IvoH5IPT22XTg0=;
-        b=gdzHwWAEXn8IpN0Wk3ZxKM0cHwBHDR11Ew+GU8pu4pRKc19TK1S7dlLJV3mxJ9NwSW
-         GX1kNX14UAiVLeTokVeRk6+aKpECJWQx9oHySN+fYPvWxtMhgxsiEQSckWaPhvpIwogC
-         ygk9X/Ns7vbQ/kHd7zXs7pBdRvaJugqHFvgXEqFaopikEoeOKakTjYh8CSwPgQluZ4bq
-         V+Nu+Uk3Fy71qTCDidK4AS/36D7OLJ9iMpbHjA5nrOoQg/kHDxZFsDUyRmQM34Bd09RC
-         onF1pX130/LscWpWEXzwohIP8ayg6dqfKADctAttlqaFmLBFZ+h/hs1bbGjA8x7mLQRd
-         PtDw==
-X-Gm-Message-State: AOJu0Yzil1nzrV6+Eip+7bEf+Txu4lLB9DtX2T0wQc1uVuN8sWmDdEvv
-	tXbHqvLNoUVUSmNk7GZduFoGSQNG/Y17IRhCcNItKxHWWpsx+LiIRxYn
-X-Gm-Gg: Acq92OH+OscqgdMR1OhFMl8YQpyotxEw8BHhS8qakygzUugUn/2CebdLACJA848Afcm
-	P+PgjJI+C3dNKQjPOw5j1mCgLqYvwvNFJZlaYG0mrnXbMnY1ypAa5y0Gt+GBGqh87KfkKZ7jGsu
-	o2gKX4vAvPOTrWGVfHoGPlKgkS2szc3g958pc2Sge9j46XFCSoKvHcQA8V4LorcqWmGzpAW/T8S
-	WnUYKF69zkBJaj5cvo7v/btKngKFfQf4t9tCVdEyIxUVJa3Uhos7dXRgnaamzlfgsN04LGVRc/Y
-	x490vuCHfDD5n6rdQc+q8eHCznD998nUeSq+7r7Y4GhLnIYX1ptF3cKKLzMBrMh/Ajp0vcGTF1W
-	O1h7TN8R1nwn/urDpDFrQ6ReOYdP2Nku2ufBeKcq9MeSlvxO+k99Qy162FurBezxm8JNSiiYky/
-	HRZvXOJm4Z6l3ho2imDDevE9BX40cERaCXmLunnLVZQabAMQM2tbZq6QY/J2QMOM7OpmdWWwG5M
-	xVa94gGLLOt04yYVp20dSquOvo=
-X-Received: by 2002:a05:6820:4df9:b0:69d:eccd:f54a with SMTP id 006d021491bc7-69e10308376mr832561eaf.23.1780104209345;
-        Fri, 29 May 2026 18:23:29 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:9::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69e0677268dsm2056831eaf.1.2026.05.29.18.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 18:23:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Xv+Nnv8k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780104651;
+	bh=r/sU9JlbH1OG3HMPjg289VM23WNc0borWAhxLH5SNOc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Xv+Nnv8kH166O+i8+RZ5sVqR6vvRtvmBBBXtwHXfa0Lr6qkOAiwGhLibQ9wCYB/Np
+	 WlEKMbjzgcbMMAEdgkHKCS6GIPuu+TC4iPNfjZ2lCT00FH8dcHKvZ9II5zcLXSNIiA
+	 erG1PWLDkdPBXk/UpohQ8VTarUmVCfDYSvfMUJs8=
+X-QQ-mid: esmtpgz15t1780104635t2418dc9f
+X-QQ-Originating-IP: TdDOzGIOTRzwJSKNiRfrszmOjb3t9cW8a0G8N4w1F3c=
+Received: from PEN202512010006 ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sat, 30 May 2026 09:30:30 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8794944139201534320
+EX-QQ-RecipientCnt: 14
+From: hongao <hongao@uniontech.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	kafai.wan@linux.dev,
+	linux-kernel@vger.kernel.org,
+	hongao <hongao@uniontech.com>,
+	syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
+Subject: [PATCH] bpf: defer bpffs symlink inode freeing until RCU grace period
+Date: Sat, 30 May 2026 09:30:22 +0800
+Message-ID: <B36A1A9E983EE6EC+20260530013022.1692378-1-hongao@uniontech.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 29 May 2026 18:23:26 -0700
-Message-Id: <DIVM9YXYJV5N.2TEM951JWKD95@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Song Liu"
- <song@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>
-Subject: Re: [PATCH RFC] bpf: add DAG fast-path in verifier to skip
- redundant state pruning
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Seunghyeon Lee" <hyeon3125@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>
-X-Mailer: aerc
-References: <178004391665.3522.4865582628003357086@gmail.com>
-In-Reply-To: <178004391665.3522.4865582628003357086@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MgG/Zwx1chQMlPibVLxxIVYRZkr/T5xmi5N+bT9D4qgBf++lRiAA1Vu5
+	NvqA/ExXUf4R4kfl//mzrbcWDVlXxPlh2iN5F3as7mwOI1J0X6YdHsBl9j0JCJjCaCw8jO5
+	Yx7Xl5QIndZDOP5z1nkvSlzDEZAht81SLaWTHAlW9ax6rXqUSipB4Jc/AIzWimIjRG6YHoB
+	FYCAcR+85lsQxs4wGF+5WM2dT6e6GQCduH09X16V7PX4us2eA5Scns64zGBNg4zUxRtp+7J
+	egPEHmmUj8vlvHLpW9eav+/g+R8uza0x6e56l4uaDgr4hvXSgVvluiy3LyKkNeoN4aDYDLk
+	oWibhmLARmBflWTH3K0XMX7FQmXIyQZF6xrjiV264/6GU31lP/aZ19QdWqjpau51IjngHnG
+	FNtberebY+FEqC2/e9+rjwukX7/XppswlG6Dg3EBhDpyek+YxJFJ+Tg+DaElrsCbntwuMqV
+	MGw6GoGrHZqRklZZtWpp4miFC7IoaICQfA8pKElHDjjzXJsC6hSB3TQ/FrMUJCXi4Vfm1JZ
+	dABsdqbQax7LLdxA3FD73WTYRjcgU6L2WJaX1KB66CkUjO+3vnEquKMF0vEwh4pr3eUPNqn
+	8rjIY89ZtsqxX8ApjmvrZ/XV3hSLg0a4zOcj2OPEbwE3jYLf8tjZenuK0wQnYw0p6LKFh3v
+	MQ+ctZmMYc9GiDyAHg7kgeZPBZTKjpmwcpkfvBV2VxRG18iCQI2tM6bbT+bYa6jNWIOK+yi
+	WsKiiAp8IX8d62BAXkee4W6sHA9nvj1ZVK3cEF5EbVfJFofa6r//StX4XD+bpuu6O6xaRSS
+	0QYYvmUVVmRChKk1kRenQWFQwNR6Nl2PMX7792Dn3yMDvHwRL/jreCIqPOmrTp67iSwMq/f
+	QgCdLK0x6+oa54SWaUWleneWCdjsJ+V5LrnGD06wsDIexO9629hWcF+kONu24hHro/iqc29
+	729gFB8+dWU4NuM+rwIkeydbYpoGck3Ai3kg5VV8kw9+VSI5YuiPSdJ4KaEHITDks5tvH+F
+	isqmEPxHgx1iPVciCVib5KmrKPi/J2Tprmy82hA+4YmGo5jMTCalUQER9rrcVQ0nOQIIgGi
+	SuXBqwD057DvuQdBNOOkj3J2idF1NomzZ/KQJ3e9iutr70u00IsUCIBKR1p8aXNSA==
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-RECHKSPAM: 0
 
-On Fri May 29, 2026 at 1:38 AM PDT, Seunghyeon Lee wrote:
-> bpf: add DAG fast-path in verifier to skip redundant state pruning
->
-> The BPF verifier's state-equivalence loop (is_state_visited /
-> states_equal) dominates load time for programs with acyclic control
-> flow graphs (DAGs). In a DAG, every instruction is reached via exactly
-> one path: no state is ever revisited, making state-pruning comparisons
-> mathematically vacuous.
->
-> This RFC proposes three components:
->
-> 1. compute_dag_topo() -- replaces a simple is_acyclic_dag() bool.
->    Uses Kahn's algorithm (O(V+E), O(V) space, no recursion) to detect
->    back-edges AND preserve the topological visit order for use in (2).
->    Handles BPF_JMP32, BPF_LD_IMM64 wide instructions, and falls back
->    conservatively on BPF-to-BPF subprogram calls.
->
-> 2. do_check_dag() -- fast-path verifier for confirmed-DAG programs.
->    Critical correctness property: maintains a per-instruction state
->    table (states[insn_cnt]) and, at every join point (in_degree > 1),
->    calls merge_verifier_state() to conservatively merge all incoming
->    paths BEFORE processing the instruction. This ensures the verifier
->    never sees a register as initialized when any predecessor path left
->    it NOT_INIT.
->
->    Skips is_state_visited() / states_equal() entirely; provably safe
->    because topological order guarantees each instruction is processed
->    exactly once.
->
-> 3. Full fallback: if compute_dag_topo() returns NULL (cyclic program,
->    subprog, or allocation failure), or if do_check_dag() returns an
->    error, the unmodified do_check() runs unchanged.
->
-> Register-state correctness at join points
-> -----------------------------------------
-> When paths A and B converge at instruction N, the verifier must hold
-> the least precise state that is safe for both paths.
->
->   Path A arrives at insn N: R2 =3D scalar [0, 5]
->   Path B arrives at insn N: R2 =3D NOT_INIT
->   merge_verifier_state() result: R2 =3D NOT_INIT
->   -> verifier correctly rejects any use of R2 at N
->
-> Without this merge (a flaw in naive linear-scan approaches), the
-> verifier would see only the state from whichever path was processed
-> last in memory order, potentially accepting a program that
-> dereferences an uninitialized register at runtime.
->
-> RFC design question:
-> --------------------
-> do_check_dag()'s inner per-instruction verification step requires
-> calling into do_check()'s inner loop logic, which is not currently
-> factored as a callable sub-function. We propose two integration
-> options and request maintainer guidance:
->
->   Option A: Extract a verify_one_insn() helper from do_check()'s
->             inner loop; do_check_dag() calls it per topological step.
+bpffs currently frees inodes directly from ->destroy_inode(). This can
+race with RCU path walk following a bpffs symlink: a lookup reader may
+still hold an unstable inode pointer while unlink frees the inode
+memory, leading to a KASAN use-after-free in
+security_inode_follow_link().
 
-Specializing the verifier for DAG only case is not interesting.
-Almost all programs now contain loops.
-But the approach to use do_check_insn() as a transfer function
-in the data flow analysis is totally viable.
-I've been prototyping such transfer + join verifier for some time.
-Will share soon. What merge_verifier_state() does is a key.
+Keep BPF object reference dropping in ->destroy_inode(), where sleeping
+cleanup is allowed, but move symlink target and inode memory freeing to
+->free_inode() so VFS releases them after an RCU grace period.
+
+Fixes: 4f375ade6aa9 ("bpf: Avoid RCU context warning when unpinning htab with internal structs")
+Reported-by: syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=0962e3a1af6d5e26a52c
+Tested-by: syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
+Signed-off-by: hongao <hongao@uniontech.com>
+---
+ kernel/bpf/inode.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 25c06a011825..a1e9660f9237 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -766,10 +766,14 @@ static void bpf_destroy_inode(struct inode *inode)
+ {
+ 	enum bpf_type type;
+ 
+-	if (S_ISLNK(inode->i_mode))
+-		kfree(inode->i_link);
+ 	if (!bpf_inode_type(inode, &type))
+ 		bpf_any_put(inode->i_private, type);
++}
++
++static void bpf_free_inode(struct inode *inode)
++{
++	if (S_ISLNK(inode->i_mode))
++		kfree(inode->i_link);
+ 	free_inode_nonrcu(inode);
+ }
+ 
+@@ -778,6 +782,7 @@ const struct super_operations bpf_super_ops = {
+ 	.drop_inode	= inode_just_drop,
+ 	.show_options	= bpf_show_options,
+ 	.destroy_inode	= bpf_destroy_inode,
++	.free_inode	= bpf_free_inode,
+ };
+ 
+ enum {
+-- 
+2.51.0
