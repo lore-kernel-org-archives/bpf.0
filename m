@@ -1,65 +1,65 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3012E2D1F40
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 02:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBFA2D8393
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 02:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780106677; cv=none; b=akoxDUdBcla7rpcPyLhm1FiQ0VuCC51CAwnY/Jibt+JRJevaUse0BupkFZBDIAyNFAFFAjDFhLKn312/7W8qWsmbS7Hw9Pz9pQ1Te0jZXOq9R9FyFNvUxbPLJb6yp/TpwroTSFMnO2Slx20PIwGAgrDqyMntoIR1adyMRYKd3kE=
+	t=1780106683; cv=none; b=fB2AoniiRqK0kKx3itDHwDEJ0y7VuGt/Xpo+hERTx4YN7S3TS61WsUS9yAAr3rjESTJPrT9MmGHzdEEJlQhRgyuHfgtubhkeRrJWgt8rc+lCnAGKrvWxYOzYyNgRVkPxjQan5zK6cLgUemoTpOinJFtn9kiJ83hVZVjm8KJLIEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780106677; c=relaxed/simple;
-	bh=Y/uAtYU0hGHBj2ZxgA+qT2r6bUkE3/pceK4oBwgGrCw=;
+	s=arc-20240116; t=1780106683; c=relaxed/simple;
+	bh=7x3g2yKZzahEp9eVu9h6doQtC5pNf0FT1K9qUyLtQIw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OrXSHhdbwLiglMfd+72MFbM8zJMxAsiZZIs4e8qHHZ2kGqIbfdoGwZ1NRf7bIi9Gdn2VDRDLgi4jP/0oS1UkYjt9WQHpDvgpJqEK8vAPUbx6xALgZP97EFGrjR6c4laZhM2HBb06ZRj3M6byH40BJX3lOMTbU8Y0OYoScSo2SOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=iShJyuRF; arc=none smtp.client-ip=209.85.219.51
+	 In-Reply-To:Content-Type; b=VZNZYfYXbVCHaH2O+un3xV9F+cybbCKEA2BkqurHNwT4Mu2GMmDdipaZ4wW+6uz1WNrSsy7aD6CgCv43GCbzFLWz7+0O3bA8mVSAFNMZZojG39PhfElvetYCJLm++xwsO5mZY3Fuk7eAAMMYyrDi0XgN9gjPOLX9pxPbzPYzFSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=Qow31pQW; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="iShJyuRF"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8b5232009a6so198517266d6.1
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 19:04:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="Qow31pQW"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8ccd86df7d4so30335736d6.0
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 19:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1780106675; x=1780711475; darn=vger.kernel.org;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1780106679; x=1780711479; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Eg7o6FQ/jNrjMIrB2Cy8BBpIF+AjjaCmovvjHcE87cQ=;
-        b=iShJyuRFP0q3sTs+oSQikMfNHylsPBKKuGkZLixirQUPpZhUFfEYrcokx5OhrLZWSP
-         fBRaWmYI0tfSLM19Ny+OJANf3pdtUMrsMWWUwHQOhA8oOx1NIsTr3rIESs8ae86FsUPa
-         mFiCfgkfr+rec1S33RCvMSWMd7lMe1bNqHAFfxEfdRzso7C/rTOoyTPX67k9dmN7qoqs
-         7A52vSCESq3Vh16oMGF8rcyEBU3Qm0io+ZWsoA0DfJDbiTfFXz4medemI9NvzPVv2s32
-         0NVbpv6ybZTK2FEGbZx9I72VM2yfVjvv8ypXZEW3lw2tvsGfCXcNgOtwXeG7UV5bSQ8k
-         5eNQ==
+        bh=jAfLH0/JyU6jSxnsmUzgYT+Ykc2SX6vKy6PcvKQo0OU=;
+        b=Qow31pQW56Y4BY+5bxRU7YOehEo/BZpN01swV+01FFGe7u8NlkzltT+Uq7Q5LYIRjL
+         /gBNa1zQdgAe7CJrLxyx0doZTt7zE+mGbKa/Sf8czMFd7ZKxWIN+dfV6PMu3gp30RpkI
+         AQL/zAo8BnM8WjBM/IAlESw9RKLP+mExbuQwZK9/OU/CcRTooLzb8wgtLgTVk1GLrm1K
+         Ggwv7DS/edn3W8qjt7XWs/NJKGXa+FXXN1bLoWcYLcK83/dA39SwGVZJywCx9D9JEDtU
+         7SlxelNMFARUQwA2e2koSgI/0WVhCMsHLfWqm/ncQSVGY0aIwoIS90Yg//xNsPpBe9eS
+         vvqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780106675; x=1780711475;
+        d=1e100.net; s=20251104; t=1780106679; x=1780711479;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Eg7o6FQ/jNrjMIrB2Cy8BBpIF+AjjaCmovvjHcE87cQ=;
-        b=TT0+2mdAsh6wSWsoWX86c1yvy6r69vBlYyFbcl+M+gaTuRuWelwe5hHqmZu+TAUK8u
-         Kgn75T1dkvrgaCY0zqjhZL9EjL5VOIRyJJneHy8CNQRdHRB++PO2XB2AOctWhY3adbjR
-         Jw0NLJlbMDBrMp82kY7mzVbzx5hqoUeAwLengv74RiOWW+ueIzqmTDAF8QIppBMWys/z
-         2z253djI+GanM3qePp1tqbZLKqfIGHhMNwOfQuJIAGnWIDqITlRqrEx8qaKchDY4/5VA
-         D908BSADOy0CbHvNSYHjMNMN7B3l0ajsmYYor8nzAL0aPfDRAL2AGC9gbbTeRkeC1mR1
-         hRTA==
-X-Gm-Message-State: AOJu0YwOiMyAClMcEDtk3e7Y2t7wWaQwRrnQ2dw/IcjIQQ3DuhNETJoj
-	fgSm2nf8Vk8uXtCWbbvJsbJ7sXXKjRTipnhb8TVKfZ7FtlOYiEC+AMBab3LmHwLLWVE=
-X-Gm-Gg: Acq92OGBbA862wFjTIn/jUGqF4zr0hXM+2WF5y7k8XJBPUMkWuv1+zyOfbMuS372FlS
-	VUpQAO+PQLt7ZW24siSWX6teUX++B2kMIxp3Q4VW1b5WrthjJhSdT+iU8ATS7u2HwCgho8ahcQ8
-	QaaCvnMD8l4zsrw0SxSKm+80xQwftQLfxoGsCBeZfu+noswLaR8yOdtjcRpRmJAyNyH6K3ticYH
-	CFsb/Zo3OULLESDygsOxu8FCpx9DGUdPr3QQIj0xTl0WzUXtf5C7YN+pQh8rJ6/01jgrJgv+//+
-	0SMxT9GndhbiyefVyQdXEkIe9N+9Q+cFQVDgCdU/5S9riR3aHnjww24Ea7k2oAQiuwew/f23QH1
-	4A31Oi/UCEynGSosPDkyvpd40oGbj3ume1TWbUUuhCaGZWnOdKJdvph+4cqxH3yQuZ63A4V2Y2t
-	kN82mLVXOimIc7EMTlm1ezCXL1ntoRSiIzlg==
-X-Received: by 2002:a05:6214:540f:b0:8cc:d744:3251 with SMTP id 6a1803df08f44-8ccefb35c5dmr43536076d6.7.1780106675215;
-        Fri, 29 May 2026 19:04:35 -0700 (PDT)
+        bh=jAfLH0/JyU6jSxnsmUzgYT+Ykc2SX6vKy6PcvKQo0OU=;
+        b=FGZVWTmqH2I7Fb9ZKkNdvZkzec85K290gpNmy2a7kLuSAZxOdxtDSmp0H6KHSg8D0B
+         KP6NWqTD+GXu8cMYzRQLW7nd1LC+xNFvJ60+3CGmG/w/GTB/Rr4GGTHu1N6AaQQ/Zw6M
+         AHe6WjiKRGAP+im9MBbyW3xfdfxCqzO8T8lgB9OmT05qXoJtGXGuUH31EUE7aQKZnxqx
+         Bkr72ZYZNYYigM/GSZgnzshscbxkwc2SYYcPtVqOR1o+R2AajPjywlzt0e7qBfTHwwvK
+         lJuIztmP33ZXE/QNarkJ89gMljrG1GU3PTSvS7FBoaU4GLixwxBMiLe2sY6ERYu2TR6M
+         mJIA==
+X-Gm-Message-State: AOJu0Yzz0lBx78xQD4blmOOrdMrfHnTWFRsjAaUyMgzRH/1IBs8J7WxX
+	Z41MuwDM6uBzM3m99TZanMDT6uuSgTDKtqTbOFN8URPP71JiGIg9R3M+6/LfSWqL5ek=
+X-Gm-Gg: Acq92OHUp7sGQfGXmcKwpE+dlT3/+FV4D2OG0mM8h+ZMs5QQ8r5lFv4vQYjZ5PY7y/h
+	zKykSI3NQAqGdr6rVW4kVT8KO0baacV8nhvxg4cd+tlJ8M4QOua+AbdWXMzELkqWJCFo7i0Bvof
+	X9LdKEjeuKlHOp4ndvSYZd77Op1kO5hpm/ujGRkfqNx/zn1/YY2/bniEcgxT/l+vMZUPXAlCYR0
+	jnBLKzjaja10+cLlxp6aV7hUPKU4HsKMzwCwlaJ7gLaYk9aAT69g4JgX07y219X7wUG7Da81IBq
+	BbUwoIF4aP5sKNbZ906hifbXbqDuZQEkYv208fGMOS+CnHUMkyYUwXKK2txcGhIrga68ljDg86I
+	HohpQet1YGujVBPfYt7dAC1tYHLGmDaOBckftZBrS9Jqh4jeMBu0vZi7TYxCSMD4CRSCi6ZZDml
+	5nr4YWJWH+eB0Vgc1YKoF6KD/VZTyCqgAWyA==
+X-Received: by 2002:a05:622a:406:b0:517:383d:11f with SMTP id d75a77b69052e-5173a6dc42fmr31153931cf.24.1780106679593;
+        Fri, 29 May 2026 19:04:39 -0700 (PDT)
 Received: from [172.22.22.28] ([73.62.185.64])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ccea06d4casm32658206d6.16.2026.05.29.19.04.34
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ccea06d4casm32658206d6.16.2026.05.29.19.04.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2026 19:04:34 -0700 (PDT)
-Message-ID: <1606fde8-7b42-4e43-a1c4-20fbe23956e6@riscstar.com>
-Date: Fri, 29 May 2026 21:04:34 -0500
+        Fri, 29 May 2026 19:04:38 -0700 (PDT)
+Message-ID: <1ec59b99-318b-4403-8b8e-fbcf3eb393d1@riscstar.com>
+Date: Fri, 29 May 2026 21:04:38 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,57 +67,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 07/12] net: stmmac: dwxgmac2: export symbols for
- XGMAC 3.01a DMA
+Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
+ add TC956x Ethernet bridge
 To: sashiko@lists.linux.dev
 Cc: bpf@vger.kernel.org, Daniel Thompson <daniel@riscstar.com>
-References: <20260501155421.3329862-8-elder@riscstar.com>
- <20260502155614.E4E41C2BCC4@smtp.kernel.org>
+References: <20260501155421.3329862-9-elder@riscstar.com>
+ <20260502155615.AF378C19425@smtp.kernel.org>
 Content-Language: en-US
 From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <20260502155614.E4E41C2BCC4@smtp.kernel.org>
+In-Reply-To: <20260502155615.AF378C19425@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/2/26 10:56 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Bypassing standard DMA address translation via custom op-table overrides.
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] The binding adds GPIO provider capabilities but omits `gpio-controller` and `#gpio-cells` from the `required` list.
+> - [Medium] The Ethernet endpoint is incorrectly modeled as a PCI bridge, applying bus properties to an endpoint.
 > --
 > 
-> commit 6c8a6ba67e29de7e71f5090bcca63c458ee9639d
+> commit c5a5d0d7a89f5ad66c878c805902efc5e0bd117a
 > Author: Daniel Thompson <daniel@riscstar.com>
 > 
-> net: stmmac: dwxgmac2: export symbols for XGMAC 3.01a DMA
+> dt-bindings: net: toshiba,tc965x-dwmac: add TC956x Ethernet bridge
 > 
-> This patch exports several DMA operations and descriptor tables from the
-> dwxgmac2 core to allow platform-specific code to override them. This
-> override allows the platform code to perform manual DMA address translations
-> required by the chip's internal AXI bus mappings.
+> This commit adds devicetree bindings for the Toshiba TC956x family of
+> Ethernet-AVB/TSN bridges.
 > 
->> One consequence of the SoC-like design is that the internal AXI bus
->> (used by the XGMAC for DMA) maps the PCI DMA space with a non-zero base
->> address. This requires a translation step (happily just simple addition)
->> to convert the PCI DMA address to the hardware DMA address.
->>
->> This is pretty funky so rather than push that translation logic into
->> the core driver we intend to keep that logic inside the TC956x
->> platform code. In order to do that we need to export a few symbols
->> to allow us to override some of the DMA and descriptor op tables.
+>> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+>> new file mode 100644
+>> index 000000000000..d95d22a3761d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+>> @@ -0,0 +1,111 @@
 > 
-> This isn't a bug, but does this approach bypass the standard Linux DMA API?
+> [ ... ]
 > 
-> The standard DMA API natively handles device-specific address offsets, such
-> as through dma_range_map on the struct device.
+>> +allOf:
+>> +  - $ref: /schemas/pci/pci-bus-common.yaml#
 > 
-> Could this address translation be handled using the standard DMA abstractions
-> instead of open-coding it via op-table overrides and exporting these internal
-> symbols?
+> Is it correct to reference pci-bus-common.yaml# here? Since the tc956x_emac0
+> node is a PCI endpoint (an Ethernet controller attached to an internal PCIe
+> switch) rather than a PCI bus or bridge, applying bridge-specific properties
+> could be semantically invalid.
 
-I'm answering this on Daniel's behalf.  He tried setting up
-the DMA range mapping but it did not have the desired effect.
-He suspects that the involvement of an IOMMU affects what the
-range map can do for peripherals.
+As Rob pointed reinforced, this is not correct.  It will not be
+present in the next version of this patch.
 
-Guidance on how to do this better is welcome.
+> 
+>> +  - $ref: /schemas/pci/pci-device.yaml#
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+>> +
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +
+>> +  gpio-controller: true
+> 
+> [ ... ]
+> 
+>> +required:
+>> +  - compatible
+>> +  - reg
+> 
+> Should gpio-controller and #gpio-cells be explicitly included in this
+> required list?
+> 
+> The binding defines gpio-controller and #gpio-cells above, indicating the
+> hardware acts as a GPIO provider. Omitting them from the required list could
+> allow incomplete device tree nodes to silently pass schema validation.
+
+The GPIO controller was meant to be implemented only by PCIe
+function 0 (only--not function 1).  It was furthermore intended
+to be optional (depending on whether the platform used these
+GPIOs for something, like reset control).
+
+However we plan to change how the GPIO controller is modeled
+after version 2 of the series, and I don't want to try to
+explain how things will look until that work is done.
+
+>> +examples:
+>> +  - |
+>> +    pcie {
+>> +      #address-cells = <3>;
+>> +      #size-cells = <2>;
+>> +
+>> +      tc956x_emac0: pci@0,0 {
+>> +        compatible = "pci1179,0220";
+>> +        reg = <0x50000 0x0 0x0 0x0 0x0>;
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        device_type = "pci";
+>> +        ranges;
+> 
+> Does this endpoint node need bridge properties like device_type = "pci",
+> #address-cells = <3>, #size-cells = <2>, and ranges?
+
+No, it doesn't.  Using the PCI bridge binding definitions was
+a mistake.  We'll try to improve this in version 2 of the series
+but again, revising how we model the chip will have an affect on
+how the binding looks.
 
 					-Alex
+
+> The child of this node is an mdio bus, which does not use PCI addresses and
+> does not require PCI bridge translation. Using device_type = "pci" on an
+> endpoint might confuse OS PCI enumeration logic, which expects nodes with
+> this device_type to be actual PCI-to-PCI bridges.
+> 
+> [ ... ]
+> 
+
