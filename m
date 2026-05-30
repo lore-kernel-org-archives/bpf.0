@@ -1,28 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2DA303A07;
-	Sat, 30 May 2026 06:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E682EA173;
+	Sat, 30 May 2026 06:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780121931; cv=none; b=Ym/6xMvhPCqiSOpsKRnsnaIcszytZcYKWvObdi0mOltbSdxE33PIoTmOw1pQ0X5wxMaYpRUXzjjC/Y7tIawIrQlHo9+PwBF2bB5toOztFxf2Drx/mTL5CZbgodJmwxKpTe9Z9lvlXDCPNj8WN0lm/+sexbDSJyClGGSySgcR7tg=
+	t=1780121931; cv=none; b=rb7x9A8HJCZa285LppHpwh8M/Q+Urs+iVSUqRF3ekhJjEvxvIu3KdBuXLDWrsIgXdyV1vMMWktbrLNs2VIOVJ7aCjZTwSCIKC8gJsrymKoRBHgU3uuG/wL79j8ICD9BvTHsrXgn3Txro90+YlIFWFHPxIUg3zm8dTZtqzqvn0jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780121931; c=relaxed/simple;
-	bh=/Vk4rr1Vwwr9RA0LvbkzxGntrQW9C8p9yq6BjrGt89c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hJhc77y//aTvxAWgy3koht2ZUG+H/T8v+g1jaFKkk99+pfDyeIQCSsnv8z9JYDrclvTfxfP8l9nPbliVG2TZS5Vc+2pOEw+9vOXTO5MupFvgMM34skgkaS4FOe3atAqsvUHlikusDXWEXlnhyYa+fQXWsZC8p3ks8ea2nPe2XQQ=
+	bh=UpSPt6Bi16HD8cafM0SI0polEBfu0O8m12tvC5Pp4nk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vEc0NG/UZP7Bq59nX+PTWEAVMyj6yWGZ6sVJUgZgQny0Z7XO2Amv8ysP3nhUo3Xab+U1id+I6/Gs3uYRyNor+8HF3pZL+9gF8f1mFab+5uN1YhFjAOthg89UjGLbT6DDzpPqd2u357CVgRdlgP3f6sioAT31menadZAECQBrS6A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gS94h00mHzYQtrj;
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gS94g64PHzYQtp6;
 	Sat, 30 May 2026 14:17:39 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 03C7A4058F;
-	Sat, 30 May 2026 14:18:41 +0800 (CST)
-Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP4 (Coremail) with SMTP id gCh0CgDnr1s8gRpqNcqdEA--.3341S4;
+	by mail.maildlp.com (Postfix) with ESMTP id D2C4540561;
 	Sat, 30 May 2026 14:18:40 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP4 (Coremail) with SMTP id gCh0CgDnr1s8gRpqNcqdEA--.3341S2;
+	Sat, 30 May 2026 14:18:38 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -37,12 +36,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	YiFei Zhu <zhuyifei@google.com>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	Quan Sun <2022090917019@std.uestc.edu.cn>
-Subject: [PATCH bpf v2 2/3] selftests/bpf: Fix cgroup bpf tests broken by bpf_set_retval validation
-Date: Sat, 30 May 2026 05:55:56 +0000
-Message-ID: <20260530055557.549474-3-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf v2 0/3] Add validation for bpf_set_retval helper
+Date: Sat, 30 May 2026 05:55:54 +0000
+Message-ID: <20260530055557.549474-1-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260530055557.549474-1-xukuohai@huaweicloud.com>
-References: <20260530055557.549474-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,79 +47,65 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnr1s8gRpqNcqdEA--.3341S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxKFWDuF1DZry5uFWruFg_yoW8CFWfp3
-	Z7AFyqy3s3CF17Ja18GrsF9a1fKwsYqryYyw18XF1UZ3W3J3srXr4xKF45try3trZ3Zwsx
-	uayag3s3ZF48Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
-	WUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UCZXrU
-	UUUU=
+X-CM-TRANSID:gCh0CgDnr1s8gRpqNcqdEA--.3341S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfWFyrZFykKFy8Kw17Jrb_yoW8WFy5pa
+	93Gr98tas29F47GF4fGayq9F4rCa1vgr45urn3Xw13AanxJryUJw1Igr4agr9xtF9rZryY
+	v3Wa9F93Ca4UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUF1v3UUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Add explicit return value checks for cgroup bpf progs rejected by the
-bpf_set_retval validation.
+The bpf_set_retval() helper is used by cgroup BPF programs to set the
+return value of the kernel hook. The argument type for this helper is
+ARG_ANYTHING. This allows setting a positive value, which no cgroup
+hook expects and can cause issues, such as the kernel panic reported
+in [1].
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- .../selftests/bpf/progs/cgroup_getset_retval_hooks.c        | 6 +++++-
- tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c      | 2 ++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+This series adds validation for the argument of the bpf_set_retval()
+helper.
 
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.c b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.c
-index 13dfb4bbfd28..c0bfa2d12dc7 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.c
-@@ -2,12 +2,16 @@
- 
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include <errno.h>
-+#include "err.h"
- 
- #define BPF_RETVAL_HOOK(name, section, ctx, expected_err) \
- 	__attribute__((__section__("?" section))) \
- 	int name(struct ctx *_ctx) \
- 	{ \
--		bpf_set_retval(bpf_get_retval()); \
-+		int val = bpf_get_retval(); \
-+		set_if_not_errno_or_zero(val, -EFAULT); \
-+		bpf_set_retval(val); \
- 		return 1; \
- 	}
- 
-diff --git a/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-index 09a00d11ffcc..bae5283fca6b 100644
---- a/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-+++ b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <errno.h>
-+#include "err.h"
- 
- extern int tcp_memory_per_cpu_fw_alloc __ksym;
- extern int udp_memory_per_cpu_fw_alloc __ksym;
-@@ -97,6 +98,7 @@ int sock_create(struct bpf_sock *ctx)
- 	return 1;
- 
- err:
-+	set_if_not_errno_or_zero(err, -EFAULT);
- 	bpf_set_retval(err);
- 	return 0;
- }
+For BPF_LSM_CGROUP, the same validation as BPF_LSM_MAC is enforced,
+i.e. validate the argument against the LSM hook specific range, which
+is returned by bpf_lsm_get_retval_range().
+
+For all other cgroup program types, restrict the argument to
+[-MAX_ERRNO, 0], which matches the kernel convention of 0 for success
+and negative errno for error.
+
+[1] https://lore.kernel.org/all/567d3206-74a5-44e5-99c6-779c425f399e@std.uestc.edu.cn
+
+v2:
+- Extend validation from LSM cgroup BPF type to all cgroup BPF types
+
+v1: https://lore.kernel.org/bpf/20260523085806.417723-1-xukuohai@huaweicloud.com/
+
+Xu Kuohai (3):
+  bpf: Add validation for bpf_set_retval argument
+  selftests/bpf: Fix cgroup bpf tests broken by bpf_set_retval
+    validation
+  selftests/bpf: Add tests for bpf_set_retval validation
+
+ kernel/bpf/verifier.c                         | 21 +++++
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/cgroup_getset_retval_hooks.c    |  6 +-
+ .../selftests/bpf/progs/sk_bypass_prot_mem.c  |  2 +
+ .../selftests/bpf/progs/verifier_cgroup.c     | 87 +++++++++++++++++++
+ 5 files changed, 117 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_cgroup.c
+
 -- 
 2.43.0
 
