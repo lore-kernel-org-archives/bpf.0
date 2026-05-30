@@ -1,149 +1,165 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CD739D6CA
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 09:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBE3384CDA;
+	Sat, 30 May 2026 09:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780133683; cv=none; b=loNXYKMfRabKGPjAO34b1O7iq7LYtXF/OtPLBIdLLK230cHFof4EskEjRCcQnj84fGA0joOXtcWB6+Q3NPDklCvDxOOxC7J53BrNac/UEDhleK+0aQZXTWQ2ISZxp6Cl8OyR3tnUAS0X/qcGosY+45kGVI7Ao1HnV3yvrLbCEv8=
+	t=1780133809; cv=none; b=fICkHhuEPLSK+DSAUC2b/a0k6qBFgFXSiGkFtE2m2gXX99+CaY+mCdbKjACmlBxbJslbouEv0X5/Kb1UVfTE8vfi3wooUi9BHkV0/eiY5MSHqpU8n9+U7YETwD4lNMVVDCtdWT+eu1fQHj5RLHpSHQP16PsIveyR/Uda64BZ8Rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780133683; c=relaxed/simple;
-	bh=+n1hq0x6+klD0p5GgDcO2qOfFMcoNj5XNIwZbETbod8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gr2ye9ZzBM9RwVGG41XKPo7HnhqHYAKyl94ktWpZqKxqarkU5K6UN3GJiXBNj7loo5+TJj+ujHtMWmXDkwheFpXvkSzTtLjQYPqgppwc16xTJZ8RUn9OU7IKgiphhBQzMrMdztmu7SrRV1DrJgBWJMSO1d2CckFo5LJdxT9upys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rEAtze+0; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEAtze+0"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-45eee266c6cso1560194f8f.1
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 02:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780133679; x=1780738479; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IihLrlGVkYHUkHDD/9dWzS/POFj3zmhX0InkDFhzTtI=;
-        b=rEAtze+0sc1hhSUe5vW6/3OEcLr66RD9HPjPRCSSKqu8WKYSEktHZkXVJ1b9k46a9E
-         fG93dqpIjg5jqegw2QnGtWMwQ/wgzhz8GL4+7bEPa5TjO5ufelD9m57ygjpwBhhDm9q+
-         LjayypEuAz+TL8MXIRL5PtUCxeXrObpW9+y8fAo1PHbTnWNDa+7MywV/Gvd3FC55LtpQ
-         iC0nR3Mc/MWm6P7oZX9igzp2jWdJYO9mkDSgLF1xE2+1I8cHpZkIEkwvd88zoRdKgVR1
-         t+M6UdDOtt8LBJOlEFUbWCZR4qQQ59R0acpI6PRmed3RGV+IMeN5CClVt0ZbFMIo3sF3
-         Hitg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780133679; x=1780738479;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IihLrlGVkYHUkHDD/9dWzS/POFj3zmhX0InkDFhzTtI=;
-        b=Ly6u/UDJgfMnQalkNxsx1O7CpX5HA+3EWa6+5XzZOnKU9X+zfw/nNoefjXX/FJJthy
-         AOqe39x85xCmPyfB+MKPXUDFOU5eboOCLuuITurs4mHhcSlLUhe2UbKXvuI+rIuVNvxt
-         7LKAXKrw2qiXJvFnoUd1Hl3az3thPd/1yCfmX4InfHeY3/DGZY3rCbYOrSNuVl5g4I3Q
-         SPm8Yymit1h2NpNILIUfVKJK3YcRd7LPEALMvdffMniG5BHTtEIs8QIXc67DwdPMC8Ly
-         /h39mIJd76S0/BLaeRmDl8biVuHl35CZy7XWTHFhZXx9DPfgeP6zav40i4Gk+00Y1yrU
-         mZLA==
-X-Forwarded-Encrypted: i=1; AFNElJ+voUYFSVJyQEGim3ltAVJd3znamKov4W2Nt+eEAUOUrNmatI0UgBResSiKVjP7SSHPM+U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7nucqVaelY6ttF+pa9EnryVkph2HwWr81UuLtDHOzU2dKhWtU
-	4K7U7TiaB0xN7Dz9AOqL/Gs2RsxdtRzyQfuL7Vg/nTzROrEnK8LRWFxdwbkurw==
-X-Gm-Gg: Acq92OF9vhNroPuECXA/G3Rv474RHEV4C/wFvI8nYwd7OQAc4wjvE5ZBECiWvJiajAm
-	YBbxA1msMqDeddiGGGy6qSiwZAjJXiGX7sspdHpOkYe+TmVH3g220xLnsLSOlMrWzrtlBGlA326
-	yGKGJsZ7DSL4U7tfDdEvLvfNhdp0xmSy3cbNuurQKFSi98Ucn321GS5Jga3JO4H6xYVIPSkOLEl
-	YPOBTM7YcFwUepXuJ90VJ+cO2eTaOPZ2EaVBONe3T8mgyfdPFeR13b4a8Ts+rBNq3rhTwL/xJIs
-	gBW5UDobcEA0bBg4mxjHiuPIVCB5seoHJUxYFi2H2V2w8EXc85rH38mb3n2ZPyQ8WRBm1DT+uBO
-	F6iGBG3i6GON6JdppypA3Mboc9JSCNrIA9fK82yc4Dr13Gica1leF2iTAkSnKi+yjc3AMHIQVM0
-	sqX6Pc2SZZmnBvhlB7rjtbX7VUHg==
-X-Received: by 2002:a5d:59ca:0:b0:45e:739b:3e43 with SMTP id ffacd0b85a97d-45ef6a90517mr5169087f8f.0.1780133679364;
-        Sat, 30 May 2026 02:34:39 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34a0403sm9960159f8f.6.2026.05.30.02.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 May 2026 02:34:38 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 30 May 2026 11:34:36 +0200
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
-	andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-	kernel-team@fb.com, yonghong.song@linux.dev
-Subject: Re: [PATCH RFC bpf-next v3 4/6] bpf: report hot simulated callchains
- when 1M instructions limit is met
-Message-ID: <ahqvLKBAA88GWHgP@krava>
-References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
- <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
- <ahlpI7sRJt1FQdYg@krava>
- <17304ac9808245282aa2f03f26665cccd6fc185f.camel@gmail.com>
+	s=arc-20240116; t=1780133809; c=relaxed/simple;
+	bh=DvzHfBi8bSzdJXZCzXX+Arf4jqGvTMfWhGUiSFuvYdA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q4KlXdhOTaBTp0Gem4qKIJbQRoVlYmYYMTrUH1T96DpyTe5PPu4X7qalD+WQ/urtNAxg5Wvq1DTLTe0p0a5BJ6fFjUcpf//fWsnv3GvDroeCwGOhHzXzyC8Vf580OA25rcc799pIMclO62s/G4HDqPKzv5GLRv8a3aAhVH6lRQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gSFTB18F1zYQtlp;
+	Sat, 30 May 2026 17:35:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 648F44056F;
+	Sat, 30 May 2026 17:36:43 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with SMTP id Syh0CgAHbfunrxpqhJ6HEA--.7421S2;
+	Sat, 30 May 2026 17:36:41 +0800 (CST)
+Message-ID: <1c581fa6-c957-4581-98ee-19c8fd54a84d@huaweicloud.com>
+Date: Sat, 30 May 2026 17:36:39 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17304ac9808245282aa2f03f26665cccd6fc185f.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 1/3] bpf: Add validation for bpf_set_retval
+ argument
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ yonghong.song@linux.dev, sdf@fomichev.me, zhuyifei@google.com,
+ mattbobrowski@google.com, 2022090917019@std.uestc.edu.cn,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260530055557.549474-2-xukuohai@huaweicloud.com>
+ <0bd66ee75b8124e031cda23490dea118871cf1517c42f8e6d99ab8369d0e8411@mail.kernel.org>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <0bd66ee75b8124e031cda23490dea118871cf1517c42f8e6d99ab8369d0e8411@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgAHbfunrxpqhJ6HEA--.7421S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr1DXFWfuw1UXrykCFWrGrg_yoW5AFy3pr
+	4xGrWYyrs0qF43W3Z7t3WkAFyYya42v3y3CF9rJas0yan5Wrn7Ka48Wr4akr9IvFy8Cw4S
+	yr1Uu3sF9rWUAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Fri, May 29, 2026 at 11:44:39AM -0700, Eduard Zingerman wrote:
-> On Fri, 2026-05-29 at 12:23 +0200, Jiri Olsa wrote:
-> > On Wed, May 27, 2026 at 12:29:52AM -0700, Eduard Zingerman wrote:
-> > 
-> > SNIP
-> > 
-> > > +
-> > >  static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
-> > >  {
-> > >  	int err;
-> > > @@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *env)
-> > >  		insn_aux = &env->insn_aux_data[env->insn_idx];
-> > >  
-> > >  		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
-> > > +			print_hotspots(env);
-> > 
-> > hi,
-> > this is really cool feature, I've already used it to fix issues :)
+On 5/30/2026 3:04 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 7fb88e1cd7c4..e82dedf871e8 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10460,6 +10460,19 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>>   		}
+>>   		break;
+>>   	case BPF_FUNC_set_retval:
+>> +	{
+>> +		struct bpf_retval_range range = {
+>> +			.minval = -MAX_ERRNO,
+>> +			.maxval = 0,
+>> +			.return_32bit = true
+>> +		};
+>> +		struct bpf_reg_state *r1 = &regs[BPF_REG_1];
+>> +
+>> +		if (r1->type != SCALAR_VALUE) {
+>> +			verbose(env, "R1 is not a scalar\n");
+>> +			return -EINVAL;
+>> +		}
+>> +
+>>   		if (prog_type == BPF_PROG_TYPE_LSM &&
+>>   		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
+>>   			if (!env->prog->aux->attach_func_proto->type) {
+>> @@ -10469,8 +10482,16 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>>   				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
+>>   				return -EINVAL;
+>>   			}
+>> +			bpf_lsm_get_retval_range(env->prog, &range);
+>>   		}
+>> +
+>> +		if (!retval_range_within(range, r1)) {
+>> +			verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
+>> +			return -EINVAL;
+>> +		}
+>> +
 > 
-> Hi Jiri, thank you for the feedback!
-> Anything you find lacking?
-
-so in my case the first 2 stacktraces identified data copy deep in
-the code, which was wrongly done with standard loop instead of bpf_iter,
-so it led me directly to the problem
-
-In another run I got the 'Most varying ...' output and it wasn't
-that obvious for me how helpful that could be, but I did not check
-on that in detail yet
-
+> Because bpf_set_retval() takes ARG_ANYTHING, does this bounds check need
+> a call to mark_chain_precision(env, BPF_REG_1) to prevent a state pruning
+> regression?
 > 
-> After discussion with Alexei (who is somewhat skeptical of the whole idea),
-> I plan to add:
-> - samples for values residing in the diverging registers
-> - walk back from iter_next call using jump history and
->   print 5-10 instructions modifying the register in question
->   (in a manner similar to backtracking done for mark chain precision).
+> Since ARG_ANYTHING doesn't automatically mark the register as precise in
+> check_func_arg(), it looks like the verifier's state pruning logic in
+> regsafe() might treat this register as equivalent to any other scalar
+> value if it remains imprecise.
 > 
-> > Would it be possible to make this configurable? like to be able
-> > to get this output for program that passed and display more than
-> > 3 hottest callchains?
+> Could this allow a program with two branches to bypass this bounds check?
+> If a safe branch (e.g., passing 0) is explored first and saved with an
+> imprecise R1, the verifier might prune an unsafe branch (e.g., passing 1)
+> because it matches the imprecise scalar state.
 > 
-> For sure, there are several options for a way to toggle this print out:
-> - unconditionally make it a part of v1 log;
-> - add it as a bit in bpf_attr->log_level.
+> This would skip the bounds check on the unsafe branch and potentially
+> allow the exact bypass issue this patch is trying to fix.
 > 
-> I'd say that v1 log is a better option here.
+> Reference: https://lore.kernel.org/bpf/20260530063315.7C5D41F00893@smtp.kernel.org/
+>
 
-sounds good, I think it's negligible compared to the rest of the log
+Confirmed with the following PoC:
 
+SEC("scgroup/sock_create")
+__naked int sock_create_prog(void *ctx)
+{
+	asm volatile(
+		"call %[bpf_get_prandom_u32];"
+		"if r0 != 0 goto 1f;"
+		"r0 = r0;"
+		"r0 = r0;"
+		"r0 = r0;"
+		"r0 = r0;"
+		"r0 = r0;"
+		"goto 2f;"
+	"1:"
+		"call %[bpf_get_prandom_u32];"
+	"2:"
+		"r1 = r0;"
+		"call %[bpf_set_retval];"
+		"r0 = 1;"
+		"exit;"
+		: : __imm(bpf_get_prandom_u32), __imm(bpf_set_retval)
+	);
+}
+
+Will fix it and add the PoC to the test in the next version.
+
+>>   		break;
+>> +	}
 > 
-> As for number of callchains printed, I'd like to avoid tweaking
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26677028117
 
-I guess it's better to have it hardcoded, no need to configure that
-
-> bpf_attr. So this leaves several options:
-> - make it top 5-7-10, just hardcode a bigger number.
-> - add a threshold value specifying how many times a callchain should
->   be visited to get printed. E.g. only print callchains visited more
->   than 1000 times, if such don't exist then put threshold to 100,
->   if such don't exist, print top 3.
-
-+1 to just print top X stacks
-
-thanks,
-jirka
