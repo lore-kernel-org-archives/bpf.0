@@ -1,61 +1,61 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173562D0C82
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 19:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211EB2D7D2E
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 19:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780170763; cv=none; b=RX/Q68OTMzzK7cVEElkHr1VKXaC3frH2TIzYY3OVhFCTPFHPkkO6vR0auQhka9fNpFzgQhU+OQLXscSxiCMVY6k8v9LmZRtPBS9U61BXAEWic5iKuASIY72RIrDmrbx3MM8QIerm2N0XAFYwskJuxf4Ahz2FjEP2dDICEanQbps=
+	t=1780170929; cv=none; b=Ij2xPrckvLz1EBbZ9Niu7RlZX6zcadHX1hNViyeRwOgg++jsLvk6gfQUstkd8xAKQvjG6o2sowSL6kUGSxp61KKuJEDMKb8l8i47bynyjyYDPoduY6vocWK7iVK3Ifzgy3Ng6sYyXju+E7kFXMqj0Dqv0v6AAxlGpR4m1Xx1D/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780170763; c=relaxed/simple;
-	bh=rvq5LDbnJDIRErmZhFttXSQwgqS/gTbMhyWFrdYdZx8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZMUOLwGx3PqnsKV37+k7kLQUiUe65T0+1W1mYcmwRI2K1Ng2LxRpr0Z/UM9wd1iSRaZVmGyMnaTEmbrpcggXswZUbbbmXl9TmfRn/vFqPevjUela9D/r6tNn9j/7Ze9tru/foU3ktD6TYCcBAfuoN8Jefuqct2J1prvASb/awXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OyTyOKOQ; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1780170929; c=relaxed/simple;
+	bh=TBa3sRrVaMH48tnP8EWiWrMR/ZSgogjl84sEm6HnC8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jiJF5R1smh/89TUAJd1UTDgt2gufBcQKo9uO+p/S5wWck03KsFhIhAsdYXu+FeDMOUBEP0/7BKRbtxptQIDUVqKTSpGf6sv3PHjETidiUbfFKPvTHvoBaQHdg3dL0Cy9qLK7RTuIMCtkH53/1SjI/gSy9PRILDcaGeAt6FetVHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MPRlhPFc; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OyTyOKOQ"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2c0c379e8ffso627475ad.3
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 12:52:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MPRlhPFc"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2c0c32f6ce1so725685ad.2
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 12:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780170761; x=1780775561; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780170927; x=1780775727; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yRI8S7rO7BEyLKlLy7cyQrxqSvUTXdcDj9hT1MZ8+U=;
-        b=OyTyOKOQ9kJooeKDowc/luTNWBvqmSKqZ19rd7U1NoUPrCUGysGcKnRbsPCnpSGELa
-         ihnNw385ztwyMlEyeDAV9We3lkqsVMRPkMqJDAStjhPb32yrRnOITKgh8mvVwY3JBLaB
-         DnZoyPfGQxJ9RqtDwXp+I5yqe6kynYp4ITOQWGZ1wVrqL7x8TFlZigFatDqlVWae46FG
-         MS9wSKGURjZd8WZIxn6cFUTBSnSYouo5Oi9iJCJzeoWFya2wBy92eDWhA8qQVsgHfhLe
-         7bfX3kIYHXWl6MwRoa7luByv1Q23sc1dcxL7DsQp4mv8TRuR6Ll0lf20qAheEV77IAA3
-         4CVw==
+        bh=w0UeJUJcVQbZfzNj+MXjc9tXVaSkrDc9lM0pPOG0N5k=;
+        b=MPRlhPFcgCtacB9XEH3adbHqKNWHMPka1uTO3ReYBhnHxC0D/3csnGJEN6Jq69Eq3S
+         +dhBzHmEVbMxpJordNfJ/jsU1dp/tKAoPrXtx+ypM21YPkM83tfaRuPlWJsrsGKCERMh
+         iyRexzn1R78Ol4lXIUVyCvdHqeY+TwMq8UH/ijk/MFeGvATuCY7eD2IHcZcrw0wGAgf8
+         T3kinjRVbJJUloh+uiBTgoJhP42ZIF4I2Ls0J9sUT3cGPkNSv/CqqJY/b4DS7G1kORWh
+         +ebjsurdult6vFyesW7sA/QqdmKZLBUGvQdH+Fvw/s1b+TbX2AbUHJJ2GCFDV7a9i9dA
+         syfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780170761; x=1780775561;
+        d=1e100.net; s=20251104; t=1780170927; x=1780775727;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9yRI8S7rO7BEyLKlLy7cyQrxqSvUTXdcDj9hT1MZ8+U=;
-        b=gFqUQUkWPasBh6R1TClrw+VftcoQBOiUymmJAJcGX80b/S5gwNrThoq8oHE6sUPUBS
-         1RlQhST6POxvsFLmxnYCz2Vb6diWslQb7+vowXmV6mnPztKweR0ohx03ym5bsp/gswlT
-         YQ5rYGZLKZKPRwc/MT0/v/LdzHoa/bIfxhOqBfc1EpiCIstCPJLY7TLcGmqsQxYZjPKw
-         HiT3okp9R1BvFOk8PcShhIHPjRhnid1GHn77BqaF1DcuMh4tBh5dZTVMHLFYPODqQUDE
-         w1bhgVC0ik+uD2j7Av5pUn0JcZQMl+VmNpEgJ4IS6aGH8elwRLKpEmW5RELoi+lX/Tt/
-         QJkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Y0TfOQLUFWhGSwEgPgl0cVxoP6D7HSgl5aFejX4HU6b/XbbTEmpbxrSBy+rtDu1f29mI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOV/VEfbQ3XJrCpG07fCpJM795ixK/KUPQG1PhxJ25LKCXbtdX
-	eNiqptFKHXRNnL5xn0dZoLSMVnOR3X+7jDPF/eencMqWq9RtiUyk/BTu
-X-Gm-Gg: Acq92OG8xajHu3GbcTJo8gcOIOW8G4gyldZ+JsoBEypMSShuix96dsAB0++Q5pzOguA
-	zycokjOMwEidhWH1qDy4xqN4e25aNLpJZwgoeyjUQOZ+St8A5Bd8dsfpbzCjjJaXiivv0Cuqe/e
-	w6AeFa655kfLjpvH+cTrpS80hKPD+RDhq3ZJtr2HV5PlzFy0a8IS5K73Os+X8ZeQiQkY6JYmo1L
-	pHXV+Re5ODrWBaZ1qOVvwtvUuI5FyeAhDOICeTjDTjL8fG1t8jd1MqPGbY+hXWjYYWjTr4QaISf
-	JNVkn6wM+aRxnt0yRJWyjO1fbCx3o7ySXupYaCTNYIoq8uasNF0up7ii+SJqv8iRc+iREBZ9RWY
-	JXLFqNAg+CGTOQk+gRhBNnyKfDsU8G/R9BJzgsrsezDKxPsV468x+p0pXHQXBazM5P2c3Dcxlvx
-	jBaVeCh6C5iBloBf54F7L/JVKn0yDZ645kslltaEzH7Jg=
-X-Received: by 2002:a17:903:2409:b0:2bc:a52c:c8fa with SMTP id d9443c01a7336-2bf3685a533mr64533095ad.26.1780170761238;
-        Sat, 30 May 2026 12:52:41 -0700 (PDT)
+        bh=w0UeJUJcVQbZfzNj+MXjc9tXVaSkrDc9lM0pPOG0N5k=;
+        b=jCcWB8EGi8JkSpEDeInzIebohUOH9PVDSK+3iGX2DP2OXv3SNdz4C0ma66lLcV0It2
+         r0yL/jqAMceF5J+oN7mO9DZDZKy/yHpT88OfcPVgvwBs4Nfg3AVt2JLqVWR5lnS18VtT
+         uwGKAYbK6vWRGSMeA4kOlUWc6FVVuLLNynhFEKUKwUKXyN1ljDu3ETNJDvbW0DPUkjGd
+         vD7Maj3nneB1BqCfrmmdUpgr5u/SxzzTj6W26GcP67Mn+JAz6L+/HV14DUov3f+5zcX3
+         SZ+jk3cDCxB8iBeAb5B9s3uUCHEd2D9wSGtdjRxI71t5iR6PDCIFLcoAR+lM4Z+NaIQK
+         HSRw==
+X-Forwarded-Encrypted: i=1; AFNElJ+He3wtCigRS/w6OvLqfbMwrJPL0G8LIKVrYnBw+nPpvBXXcK0Sp+/MZhWdj3DUVt9uWn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUDWeeMQWQnZUTrJdkXTx0tKN5u1MLmi07ROVWOboLMcX7Ab0I
+	Bff4w9JZIuWw3ZoZieyFU+ngRTCi9UMBOSMzkl8TGSEXwwIfymPvah/6
+X-Gm-Gg: Acq92OEuMuy88rji8snmsS3cipr4WvePAtwRFPPlaVmUzGyfLvjfDQEewEApXjPQoP/
+	6f3xN3ijJp1HCHyvQYJoqx0aZbkAlFs07b/F/6X7fyDY65+HlrbTrin0k5hdkIyhZcaQBhuwzqm
+	jooRz7uIcaHGjj9oUguaUeMp+nGshzsFlTt0ioRDo7K1ebkNfZ2nLi6spYezYkIjM2GddpMfRVs
+	bypDkhqIkfV7xJ5EA82RJ1krhvbc+YbLdL4ib3AF9DDxdtl1vF3ur21bbYfo5ABtIo6tKmpfNVj
+	n6D6JQ3/rEIAFJnfdLpa1W26RtCnbW6n3+JOEBaoryHYHBgIR6N/piZKJr1fYOYlN7Nd3HTGEua
+	k75mJ1bylXUb8ZzWivZfzybB2gclCN8K0ScvLlOiGEDBocNuA+DzWpa1jXdiigWKTgqqJvdLOZD
+	G+ofetyAcO4kB1xBQa6NIOFxtu8CpX8ftuhQzayLKMryc=
+X-Received: by 2002:a05:6a21:3a47:b0:39f:1f92:28e with SMTP id adf61e73a8af0-3b42823a98bmr5703739637.27.1780170927280;
+        Sat, 30 May 2026 12:55:27 -0700 (PDT)
 Received: from archlinux ([205.254.163.119])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23c4dd4csm58343345ad.78.2026.05.30.12.52.35
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84214ce54b8sm5304674b3a.48.2026.05.30.12.55.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 May 2026 12:52:40 -0700 (PDT)
+        Sat, 30 May 2026 12:55:26 -0700 (PDT)
 From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 To: peterz@infradead.org,
 	mingo@redhat.com,
@@ -71,9 +71,9 @@ Cc: linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Subject: [PATCH 1/2] perf/lock: Fix non-atomic max/time and min_time updates in contention_data
-Date: Sun, 31 May 2026 01:22:30 +0530
-Message-ID: <20260530195230.69382-1-suchitkarunakaran@gmail.com>
+Subject: [PATCH v2 2/2] perf build: compile BPF skeletons with -mcpu=v3
+Date: Sun, 31 May 2026 01:25:10 +0530
+Message-ID: <20260530195511.71452-1-suchitkarunakaran@gmail.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -83,97 +83,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The update_contention_data() had a FIXME noting that max_time and
-min_time updates lacked atomicity. Two CPUs could simultaneously
-read a stale value, pass the comparison check and race on the
-write-back, with the smaller value potentially overwriting the
-larger one and silently corrupting the statistics.
+The lock_contention BPF program uses __sync_val_compare_and_swap()
+to atomically update the max_time and min_time fields in
+contention_data. This builtin lowers to the BPF_CMPXCHG instruction,
+which is only available in BPF ISA v3. Without an explicit -mcpu flag,
+Clang targets BPF v1/v2 by default on older toolchains (Clang < 18),
+causing build errors when v3 instructions are emitted.
 
-Fix this by replacing the bare conditional assignments with a
-bpf_loop()-based CAS retry loop. Each field tracks its own
-convergence independently via max_done/min_done flags in cas_ctx,
-so a successful CAS on one field is never retried even if the
-other field needs more attempts.
+Add -mcpu=v3 to CLANG_OPTIONS, which is used exclusively in the BPF
+skeleton compilation rule.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
----
- .../perf/util/bpf_skel/lock_contention.bpf.c  | 50 +++++++++++++++++--
- 1 file changed, 45 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index 96e7d853b9ed..5c8431be674a 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -175,6 +175,13 @@ struct mm_struct___new {
- 	struct rw_semaphore mmap_lock;
- } __attribute__((preserve_access_index));
+Changes since v1:
+- Moved the -mcpu=v3 addition from tools/perf/Makefile.perf to
+  tools/perf/bpf_skel.mak, following the refactoring of BPF skeleton
+  build logic into that file.
+---
+ tools/perf/bpf_skel.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/perf/bpf_skel.mak b/tools/perf/bpf_skel.mak
+index 7704e7e635d8..f2559de39f96 100644
+--- a/tools/perf/bpf_skel.mak
++++ b/tools/perf/bpf_skel.mak
+@@ -29,7 +29,7 @@ ifneq ($(CROSS_COMPILE),)
+ CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
+ endif
  
-+struct cas_ctx {
-+	struct contention_data *data;
-+	u64 duration;
-+	int max_done;
-+	int min_done;
-+};
-+
- extern struct kmem_cache *bpf_get_kmem_cache(u64 addr) __ksym __weak;
- 
- /* control flags */
-@@ -486,16 +493,49 @@ static inline s32 get_owner_stack_id(u64 *stacktrace)
- 	return -1;
- }
- 
-+static long cas_min_max_cb(u64 idx, void *arg)
-+{
-+	struct cas_ctx *ctx = arg;
-+
-+	if (!ctx->max_done) {
-+		u64 old_max = ctx->data->max_time;
-+		if (old_max >= ctx->duration) {
-+			ctx->max_done = 1;
-+		} else {
-+			u64 r = __sync_val_compare_and_swap(
-+				&ctx->data->max_time, old_max, ctx->duration);
-+			if (r == old_max)
-+				ctx->max_done = 1;
-+		}
-+	}
-+
-+	if (!ctx->min_done) {
-+		u64 old_min = ctx->data->min_time;
-+		if (old_min <= ctx->duration) {
-+			ctx->min_done = 1;
-+		} else {
-+			u64 r = __sync_val_compare_and_swap(
-+				&ctx->data->min_time, old_min, ctx->duration);
-+			if (r == old_min)
-+				ctx->min_done = 1;
-+		}
-+	}
-+
-+	return (ctx->max_done && ctx->min_done) ? 1 : 0;
-+}
-+
- static inline void update_contention_data(struct contention_data *data, u64 duration, u32 count)
- {
- 	__sync_fetch_and_add(&data->total_time, duration);
- 	__sync_fetch_and_add(&data->count, count);
- 
--	/* FIXME: need atomic operations */
--	if (data->max_time < duration)
--		data->max_time = duration;
--	if (data->min_time > duration)
--		data->min_time = duration;
-+	struct cas_ctx ctx = {
-+		.data     = data,
-+		.duration = duration,
-+		.max_done = 0,
-+		.min_done = 0,
-+	};
-+	bpf_loop(64, cas_min_max_cb, &ctx, 0);
- }
- 
- static inline void update_owner_stat(u32 id, u64 duration, u32 flags)
+-CLANG_OPTIONS = -Wall
++CLANG_OPTIONS = -Wall -mcpu=v3
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+ LIBBPF_INCLUDE := $(abspath $(or $(OUTPUT),.))/libbpf/include
+ BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(SKEL_TOOL_OUT) -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES)
 -- 
 2.54.0
 
