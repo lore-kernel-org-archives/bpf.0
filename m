@@ -1,131 +1,161 @@
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0F626B777;
-	Sat, 30 May 2026 01:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41491A08A3
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 01:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780104674; cv=none; b=Y7oAB+y9zbiGASWxzhU3gEx7RTFnUdOo+Bz6K600krIsi6NytN6WjnqV5gDK/dd7WU2zCnHEOzp60hwoLvyi5HqObl13hyPoBlQj+hpWosIrD2tkPC9HsINoH6ZshsJE14KkROnSG7SJHguoxWcuSQtNOAPOH1W8FvMZaLkthB0=
+	t=1780104684; cv=none; b=gKXwFPldkm/8FIQsaC8YHozMRtT9TmUnM5z3ZVAr53zUDaIoZEv3G3KH5tJuEKbGkL8RWGQ6Sa7V0d56hb6mRpccXmfk4bh53u2nusqlf0A4SCdzlWddOF/3oAolEBF9qRxpffPcWyeYJNj8wDoz7aFAm+xKoVheU3JqNcB2ngE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780104674; c=relaxed/simple;
-	bh=fVfTqHZ2WHbogx2nZBr70UNIHILr0wIdELp33WCeHes=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TWS1igkm7zbdVU2E0Uy602ONyTW1wr2CIlTiN4Sa6nHJHj7qzrqEDi7xa/djqn4S7iDlOW0zMPs2Y22tLb7F7jyOTseE5RBmNo9Hbkdi1bh37bKaR2IpcgKKMdGGjSjQyjExzPeg1+/OXWqQdReIujYydqJblPrlcU7Qxck49RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Xv+Nnv8k; arc=none smtp.client-ip=54.204.34.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780104684; c=relaxed/simple;
+	bh=P9/zA6W/1qq90V9pGmd1lTXgpbs/FReaY88kd1Zdyoo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=A0ChbBJg8lw1qos0C54AV934vroPnSD5zL5DCcxe4ybMGWju5eNVAjjb61ZhtDGTHO3Vj9+i3AHPmwPaakQy+q2Sa3x9uLjW+yy8tr6LU1Bt+jUrenXioXcNR38bgfzE21n/7Cs+j4aPtzsn/v1c1rZW1ITiND/zRjKF6RKSpQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZRsqAACs; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Xv+Nnv8k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780104651;
-	bh=r/sU9JlbH1OG3HMPjg289VM23WNc0borWAhxLH5SNOc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Xv+Nnv8kH166O+i8+RZ5sVqR6vvRtvmBBBXtwHXfa0Lr6qkOAiwGhLibQ9wCYB/Np
-	 WlEKMbjzgcbMMAEdgkHKCS6GIPuu+TC4iPNfjZ2lCT00FH8dcHKvZ9II5zcLXSNIiA
-	 erG1PWLDkdPBXk/UpohQ8VTarUmVCfDYSvfMUJs8=
-X-QQ-mid: esmtpgz15t1780104635t2418dc9f
-X-QQ-Originating-IP: TdDOzGIOTRzwJSKNiRfrszmOjb3t9cW8a0G8N4w1F3c=
-Received: from PEN202512010006 ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sat, 30 May 2026 09:30:30 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8794944139201534320
-EX-QQ-RecipientCnt: 14
-From: hongao <hongao@uniontech.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kafai.wan@linux.dev,
-	linux-kernel@vger.kernel.org,
-	hongao <hongao@uniontech.com>,
-	syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
-Subject: [PATCH] bpf: defer bpffs symlink inode freeing until RCU grace period
-Date: Sat, 30 May 2026 09:30:22 +0800
-Message-ID: <B36A1A9E983EE6EC+20260530013022.1692378-1-hongao@uniontech.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZRsqAACs"
+Message-ID: <767b89e4-baba-459d-80d2-2b6dd0c01a1b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780104679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7SmJJUrMunxKqPLHQAkFQDZXKDNgg5kmEcOvfW8xdbU=;
+	b=ZRsqAACslmL1f3NXOIHEfgP38DE6VLl6K2AJdlh+Nt7hNKOu77bDn5Ooo7X+KpHlY5NlsT
+	NnyUCu5v/tmFiJOtBlVg8YCkUluNMfaHvU2vb33IIev6OdFtSst+I9SXpIkRzBuzj/nOU1
+	01PzNLbblRfkagTYtc3T8uWjCzEZBAY=
+Date: Fri, 29 May 2026 18:31:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PAHOLE Patch v2 2/2] Add support for DW_TAG_GNU_annotation
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260528223616.2035618-1-vineet.gupta@linux.dev>
+ <20260528223616.2035618-2-vineet.gupta@linux.dev>
+ <81094fe9-c77e-4f84-9449-e7c9bb29fad6@oracle.com>
+ <7497e2f5-024b-41ff-8d9b-6e26bd46d954@linux.dev>
+Content-Language: en-US
+In-Reply-To: <7497e2f5-024b-41ff-8d9b-6e26bd46d954@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: MgG/Zwx1chQMlPibVLxxIVYRZkr/T5xmi5N+bT9D4qgBf++lRiAA1Vu5
-	NvqA/ExXUf4R4kfl//mzrbcWDVlXxPlh2iN5F3as7mwOI1J0X6YdHsBl9j0JCJjCaCw8jO5
-	Yx7Xl5QIndZDOP5z1nkvSlzDEZAht81SLaWTHAlW9ax6rXqUSipB4Jc/AIzWimIjRG6YHoB
-	FYCAcR+85lsQxs4wGF+5WM2dT6e6GQCduH09X16V7PX4us2eA5Scns64zGBNg4zUxRtp+7J
-	egPEHmmUj8vlvHLpW9eav+/g+R8uza0x6e56l4uaDgr4hvXSgVvluiy3LyKkNeoN4aDYDLk
-	oWibhmLARmBflWTH3K0XMX7FQmXIyQZF6xrjiV264/6GU31lP/aZ19QdWqjpau51IjngHnG
-	FNtberebY+FEqC2/e9+rjwukX7/XppswlG6Dg3EBhDpyek+YxJFJ+Tg+DaElrsCbntwuMqV
-	MGw6GoGrHZqRklZZtWpp4miFC7IoaICQfA8pKElHDjjzXJsC6hSB3TQ/FrMUJCXi4Vfm1JZ
-	dABsdqbQax7LLdxA3FD73WTYRjcgU6L2WJaX1KB66CkUjO+3vnEquKMF0vEwh4pr3eUPNqn
-	8rjIY89ZtsqxX8ApjmvrZ/XV3hSLg0a4zOcj2OPEbwE3jYLf8tjZenuK0wQnYw0p6LKFh3v
-	MQ+ctZmMYc9GiDyAHg7kgeZPBZTKjpmwcpkfvBV2VxRG18iCQI2tM6bbT+bYa6jNWIOK+yi
-	WsKiiAp8IX8d62BAXkee4W6sHA9nvj1ZVK3cEF5EbVfJFofa6r//StX4XD+bpuu6O6xaRSS
-	0QYYvmUVVmRChKk1kRenQWFQwNR6Nl2PMX7792Dn3yMDvHwRL/jreCIqPOmrTp67iSwMq/f
-	QgCdLK0x6+oa54SWaUWleneWCdjsJ+V5LrnGD06wsDIexO9629hWcF+kONu24hHro/iqc29
-	729gFB8+dWU4NuM+rwIkeydbYpoGck3Ai3kg5VV8kw9+VSI5YuiPSdJ4KaEHITDks5tvH+F
-	isqmEPxHgx1iPVciCVib5KmrKPi/J2Tprmy82hA+4YmGo5jMTCalUQER9rrcVQ0nOQIIgGi
-	SuXBqwD057DvuQdBNOOkj3J2idF1NomzZ/KQJ3e9iutr70u00IsUCIBKR1p8aXNSA==
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-QQ-RECHKSPAM: 0
+X-Migadu-Flow: FLOW_OUT
 
-bpffs currently frees inodes directly from ->destroy_inode(). This can
-race with RCU path walk following a bpffs symlink: a lookup reader may
-still hold an unstable inode pointer while unlink frees the inode
-memory, leading to a KASAN use-after-free in
-security_inode_follow_link().
+On 5/29/26 16:32, Vineet Gupta wrote:
+> On 5/29/26 06:37, Alan Maguire wrote:
+>> thanks for this Vineet! I'm building gcc-16 to manually test now but 
+>> I have a few
+>> suggestions below in the meantime. Changes look good in CI [1]
+>>
+>> [1] https://github.com/alan-maguire/dwarves/actions/runs/26632028538
+>
+> Cool.
+>>> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
+>>> +                    struct conf_load *conf, struct list_head *head)
+>>> +{
+>>> +    Dwarf_Attribute attr;
+>>> +    Dwarf_Die annot_die;
+>>> +
+>>> +    if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
+>>> +        dwarf_formref_die(&attr, &annot_die) == NULL)
+>>> +        return 0;
+>>> +
+>>> +    for (;;) {
+>>> +        if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
+>>> +            break;
+>>> +
+>>> +        int ret = add_llvm_annotation(&annot_die, component_idx, 
+>>> conf, head);
+>>> +        if (ret)
+>>> +            return ret;
+>>> +
+>>> +        if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == 
+>>> NULL ||
+>>> +            dwarf_formref_die(&attr, &annot_die) == NULL)
+>>> +            break;
+>>> +    }
+>> the pointer tag handling below uses bookkeeping to track visited 
+>> dies; is there a need
+>> for that here too? maybe a bit paranoid but perhaps we could haul the 
+>> loop detection
+>> logic out and reuse in both places?
+>
+> Looking back now, the loop detection seems excessive. It was from the 
+> initial attempt to triage what seemed like an infinite loop in pahole 
+> but just turned out to be excessive match failures and bails and 
+> retries due to the gcc bug [1] which was generating variants of same 
+> core struct, causing failures pretty much everywhere due to the core 
+> struct being embedded all over. If we want to add loop detection that 
+> should be addon as it unconditional additional processing. I agree 
+> that even with that out of picture this function and the opencoded 
+> check_gnu_attr code seem to share a lot of structure - but they have 
+> their own *thing* to do and it would be unwieldy and awkward to factor 
+> out into a shared loop body with a call back or an additional arg to 
+> call add_llvm_annotation or die__add_btf_type_tag for either of those 
+> cases.
+>
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125421 
+> <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125421>
+>
+>>> +check_gnu_attr:
+>>> +    /* Check for GCC-style DW_AT_GNU_annotation attribute */
+>>> +    if (tag != NULL ||
+>>> +        dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
+>>> +        dwarf_formref_die(&attr, &annot_die) == NULL)
+>>> +        goto out;
+>>> +
+>>> +    Dwarf_Off visited[256];
+>>> +    int nr_visited = 0;
+>>> +
+>>> +    for (;;) {
+>>> +        Dwarf_Off off = dwarf_dieoffset(&annot_die);
+>>> +        bool cycle = false;
+>>> +        int i;
+>>> +
+>>> +        for (i = 0; i < nr_visited; i++) {
+>>> +            if (visited[i] == off) {
+>>> +                cycle = true;
+>>> +                break;
+>>> +            }
+>>> +        }
+>>> +        if (cycle || nr_visited >= (int)ARRAY_SIZE(visited))
+>>> +            break;
+>>> +        visited[nr_visited++] = off;
+>
+> I'm thinking of ripping this all out. Rest of dwarf machinery feels 
+> robust enough.
+>
+>>> +
+>>> +        if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
+>>> +            break;
+>>> +
+>>> +        name = attr_string(&annot_die, DW_AT_name, conf);
+>>> +        if (strcmp(name, "btf_type_tag") != 0)
+>>> +            break;
+>> should we "continue;" here instead; if we encounter a non-type tag 
+>> annotation
+>> might we miss subsequent btf type tag annotations? might not be an 
+>> issue today
+>> but might be more future-proof to continue here maybe?
+>
+> Good point. Will do.
 
-Keep BPF object reference dropping in ->destroy_inode(), where sleeping
-cleanup is allowed, but move symlink target and inode memory freeing to
-->free_inode() so VFS releases them after an RCU grace period.
+Claude suggests break is the right thing to do for precisely the reason 
+you mention.
+This code only handles DW_TAG_pointer_type DIEs which currently don't 
+expect non-type tag, and this pertains to a single chain it could point 
+to a potential issue as of now.
+But up to you what you feel is better.
 
-Fixes: 4f375ade6aa9 ("bpf: Avoid RCU context warning when unpinning htab with internal structs")
-Reported-by: syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=0962e3a1af6d5e26a52c
-Tested-by: syzbot+0962e3a1af6d5e26a52c@syzkaller.appspotmail.com
-Signed-off-by: hongao <hongao@uniontech.com>
----
- kernel/bpf/inode.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 25c06a011825..a1e9660f9237 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -766,10 +766,14 @@ static void bpf_destroy_inode(struct inode *inode)
- {
- 	enum bpf_type type;
- 
--	if (S_ISLNK(inode->i_mode))
--		kfree(inode->i_link);
- 	if (!bpf_inode_type(inode, &type))
- 		bpf_any_put(inode->i_private, type);
-+}
-+
-+static void bpf_free_inode(struct inode *inode)
-+{
-+	if (S_ISLNK(inode->i_mode))
-+		kfree(inode->i_link);
- 	free_inode_nonrcu(inode);
- }
- 
-@@ -778,6 +782,7 @@ const struct super_operations bpf_super_ops = {
- 	.drop_inode	= inode_just_drop,
- 	.show_options	= bpf_show_options,
- 	.destroy_inode	= bpf_destroy_inode,
-+	.free_inode	= bpf_free_inode,
- };
- 
- enum {
--- 
-2.51.0
+Thx,
+-Vineet
