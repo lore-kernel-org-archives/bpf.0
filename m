@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E631AA1F4
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B78D23C50A
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780101857; cv=none; b=VjEYr4TPzZcBYcOOGep64OAY157QEPbQT68xLkZ6BhA4WuJZXxOSjG3ns3d+XBffm4t3u2sJRBGqRYAOTHyX2i8neCHRKScjV8rxBpKBtMvUQWW8zYXTJ5Pq3hYsxCoSFJju9TeM2pT7R9ectBAUb3OULaAp7455YXQDU+omUJA=
+	t=1780101858; cv=none; b=NduaiBSorMtqWz0u2abMqU/eQL3AYsWAPJQSygqoC2L7Ab+ZvdPJhXCz50HD7DMZr4wNNnbIh1u8UvpECaQgcLrq7vX9iFC/+yB7zN9YT1M4vrqhmctWVkkgXs0SE4pO5x0Hgk/NcDU/KxLZld6H8p8r73P81EToeZWA0G0lWx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780101857; c=relaxed/simple;
-	bh=nBWqLtQZ4OeBuRHKodylnr4htrKy7L6WwAOVmjOBGyI=;
+	s=arc-20240116; t=1780101858; c=relaxed/simple;
+	bh=FjcpK6tmezoOt6b7LyiOrXeT3Hxfj/tlqctt4oWlc20=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=l4YA3mfo3YMnSntVpjbmpSNH72Hj5V51VTrfm6CHmlcLV6w9JORbuTpdTkI7YP/Cu4t16veXD52QH+hCT9Xih6obJTb8t1K6ErY8HmnD2Qr1ahl/Qflw6B/Ulo21UmkNDggNh4hKZAAEZ+ADkHLCW2QBTI+ErKcR8y0LWGEmR78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZA+X0V6B; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=XAjztTG1z3AhGIcL8nBen+gf+IEgtaSRTvNiRlFpf5fvoPv60TQsU/3Z6BZorNXHyeqOYU/tUgA65dGjAXhG35igej6YedyMkl3IJvVGKyFIiQ4wugyrTefhAdYf7Qyc60uyxku0zEwW2RQQHtr7J3gpvocW4IwQDywnj4y9MXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atqptJyO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZA+X0V6B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702751F00893;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atqptJyO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDC11F00898;
 	Sat, 30 May 2026 00:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780101856;
-	bh=4sqDsq5cS8CI9/1F1qM6PSZn2RXJE/mOT4eoDbO91i0=;
+	s=k20260515; t=1780101857;
+	bh=cK62szyRydz+xagPUjmMWlQD0rninCF8/FCuy03dHJU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZA+X0V6Bz6ii70OxbE7RP4TTPb/2OMN/jv9xXEKTeC+os5q3EmB/okbY3z/wYWUkl
-	 15KvpTwKR7Ojk8AeHaaXuyUaY1zzq/cqbkWwDf7R+oGwMvw3Pzhes9zfLG002OfiZd
-	 tLbRRkTTPLCGkSInPKDp++r3KaUKreF3o+3o/qvkV2MruE2BEZi9mM9/jsQPglIYnJ
-	 5dRlBPMtnvqQCDTBw7brO8GXNS54BsDZDxhtmcQs2CTLww0ap8fEa9LtuDr0JzTwoy
-	 Jtn8WumFLQqkPx0ZmHjGMT24fT4T5Rrxj1MuSy53bfmeYAdrIXMJ4a7W6imY3nUurz
-	 5qX8LMm9ZM2NQ==
+	b=atqptJyOoZXaY3I44/Ihf1Lp4K6JNagFMYNYJLD0uWXURhijI3vqrlxBPjzJXekjf
+	 h+pliyr26rmraXhCVAfXMowBN+bK6CrttsplajLFN17zO7Liwv/+xkEEihQy7aEno+
+	 SVnsTlouaVrXzxqGxZZtqLkYKpse+TPdyRSD109TaB9fYuquaTUYOH2h2ejvxd+Sez
+	 Y0dNlFwAo39snD2NWl16Rpf2Bb4RCjCKKknLRlK4yXnaHceWGF1EkPU5zGf4yQ5zFe
+	 tQzt9XhJTuLoW0cdGzLjt0cc/tVqe6XsIkXbIthTFlFG1nGDJrI412LPRc4BN1VvqY
+	 89p9BHUZ+ytYw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v4 1/5] xsk: cache csum_start/csum_offset to fix
- TOCTOU in xsk_skb_metadata()
+Subject: Re: [PATCH net v4 3/5] xsk: drain continuation descs after overflow
+ in xsk_build_skb()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520004244.55663-2-kerneljasonxing@gmail.com>
-References: <20260520004244.55663-2-kerneljasonxing@gmail.com>
+In-Reply-To: <20260520004244.55663-4-kerneljasonxing@gmail.com>
+References: <20260520004244.55663-4-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 30 May 2026 00:44:16 +0000
-Message-Id: <20260530004416.702751F00893@smtp.kernel.org>
+Message-Id: <20260530004416.EFDC11F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,70 +46,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Truncation of `hr + csum_start` to a 16-bit unsigned integer on sy=
-stems with large pages (e.g., 64KB) leads to a negative checksum offset, ca=
-using out-of-bounds memory accesses and potential hardware DMA faults.
+- [High] Invalid TX descriptors cause `drain_cont` state desynchronization,=
+ leading to dropped or corrupted packets.
 --
 
-commit 7a5d0ad0065df9dde9ff7b2ebb8561268805c4e9
+commit 964153358c7221b02aafc63e0caa53629df56557
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
-   =20
-This commit fixes a TOCTOU vulnerability in XSK TX metadata processing. It
-reads csum_start and csum_offset from shared memory into local variables
-once, then uses the local copies for both validation and assignment.
-   =20
-Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.=
+xsk: drain continuation descs after overflow in xsk_build_skb()
+
+This commit fixes a bug where leftover continuation descriptors remain
+in the TX ring after an -EOVERFLOW drop in xsk_build_skb(). It introduces
+a drain_cont flag to process and drop the remaining fragments of an
+oversized multi-buffer packet, preventing corruption of the packet stream.
+
+Closes: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.=
 org/
+Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
+
+[ ... ]
 
 > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 5e5786cd9af55..f8c8a8c9dfba5 100644
+> index 0a6203c425766..f4add7be8c935 100644
 > --- a/net/xdp/xsk.c
 > +++ b/net/xdp/xsk.c
-> @@ -802,6 +802,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, void=
- *buffer,
-[ ... ]
->  	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
-> -		if (unlikely(meta->request.csum_start +
-> -			     meta->request.csum_offset +
-> +		csum_start =3D READ_ONCE(meta->request.csum_start);
-> +		csum_offset =3D READ_ONCE(meta->request.csum_offset);
-> +
-> +		if (unlikely(csum_start + csum_offset +
->  			     sizeof(__sum16) > desc->len))
->  			return -EINVAL;
+> @@ -1062,11 +1062,30 @@ static int __xsk_generic_xmit(struct sock *sk)
+>  			goto out;
+>  		}
 > =20
-> -		skb->csum_start =3D hr + meta->request.csum_start;
-> -		skb->csum_offset =3D meta->request.csum_offset;
-> +		skb->csum_start =3D hr + csum_start;
+> +		if (unlikely(xs->drain_cont)) {
+> +			unsigned long flags;
+> +			u32 idx;
+> +
+> +			spin_lock_irqsave(&xs->pool->cq_prod_lock, flags);
+> +			idx =3D xskq_get_prod(xs->pool->cq);
+> +			xskq_prod_write_addr(xs->pool->cq, idx, desc.addr);
+> +			xskq_prod_submit_n(xs->pool->cq, 1);
+> +			spin_unlock_irqrestore(&xs->pool->cq_prod_lock, flags);
+> +
+> +			xs->tx->invalid_descs++;
+> +			xskq_cons_release(xs->tx);
+> +			if (!xp_mb_desc(&desc))
+> +				xs->drain_cont =3D false;
+> +			continue;
+> +		}
+> +
+>  		skb =3D xsk_build_skb(xs, &desc);
+>  		if (IS_ERR(skb)) {
+>  			err =3D PTR_ERR(skb);
+>  			if (err !=3D -EOVERFLOW)
+>  				goto out;
+> +			if (xp_mb_desc(&desc))
+> +				xs->drain_cont =3D true;
+>  			err =3D 0;
+>  			continue;
+>  		}
 
 [Severity: High]
-This is a pre-existing issue, but does this addition risk overflowing the
-16-bit skb->csum_start on systems with large pages?
+Could this leave xs->drain_cont set to true if an invalid descriptor is
+encountered?
 
-If the AF_XDP chunk size and desc->len are large (e.g. up to 65536 on syste=
-ms
-with 64KB pages), csum_start can be near 65535. When headroom (hr) is added,
-the result could overflow the 16-bit skb->csum_start and be truncated.
+When xskq_cons_peek_desc() encounters an invalid TX descriptor (like an
+out-of-bounds address), it returns false and terminates the while loop
+early.
 
-If this truncates to a smaller value, skb_checksum_start_offset(skb) could
-subtract the headroom and produce a negative offset. In skb_checksum_help(),
-this negative offset would be implicitly cast to an unsigned integer,
-evaluating to true in the offset >=3D skb_headlen(skb) check and triggering=
- a
-WARN_ONCE while dropping the packet.
+The invalid descriptor is then consumed by xskq_cons_release() outside the
+loop:
 
-Additionally, if hardware checksum offload is used, drivers might pass this
-wrapped negative offset to the hardware, instructing it to perform DMA
-accesses massively out-of-bounds from the packet buffer. Could this result
-in IOMMU faults or memory corruption?
+net/xdp/xsk.c:__xsk_generic_xmit() {
+    ...
+    while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
+        ...
+    }
 
-> +		skb->csum_offset =3D csum_offset;
->  		skb->ip_summed =3D CHECKSUM_PARTIAL;
+    if (xskq_has_descs(xs->tx)) {
+        if (xs->skb)
+            xsk_drop_skb(xs->skb);
+        xskq_cons_release(xs->tx);
+    }
+    ...
+}
+
+If xs->drain_cont was true, and this invalid descriptor happens to be the
+last fragment of the overflowed packet, the loop exits before evaluating
+the XDP_PKT_CONTD flag or clearing xs->drain_cont.
+
+Will this cause a regression where the next valid packet transmitted by the
+application is erroneously treated as a drained fragment and dropped because
+xs->drain_cont remained true?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520004244.5566=
-3-1-kerneljasonxing@gmail.com?part=3D1
+3-1-kerneljasonxing@gmail.com?part=3D3
