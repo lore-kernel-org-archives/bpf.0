@@ -1,65 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B311B808;
-	Sat, 30 May 2026 09:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CD739D6CA
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 09:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780132432; cv=none; b=hfNc8Cnww3G+zFNLOFTSEDnnN65MmeFvDH5d3lgqtph+cyIZyElRLq8IXx9TG+o6PlOV2SnSp1I6ATA1js7BmO+rS22vPd41KubB8p74VNTcPlD1uDJBqjUWT7SIGyNVlFI8x5hu1MfMkk6lqfRbsYaPTlpcAtaPvsRh2Aorh0E=
+	t=1780133683; cv=none; b=loNXYKMfRabKGPjAO34b1O7iq7LYtXF/OtPLBIdLLK230cHFof4EskEjRCcQnj84fGA0joOXtcWB6+Q3NPDklCvDxOOxC7J53BrNac/UEDhleK+0aQZXTWQ2ISZxp6Cl8OyR3tnUAS0X/qcGosY+45kGVI7Ao1HnV3yvrLbCEv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780132432; c=relaxed/simple;
-	bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5SXsXXMSgap2JAQorn4TIjNqcM7rMZyVCsd6LgdbDiWvm0ZAx5GAkDyf//xV3ePMiQH30TEh+kZg2u7Low5eQN4h3Z+8HyRHcDIuykGpwHTxYyF/HIWQ7wZWAhY/WW7DnJZmVt7I3mw1x2NWTLv3PIgo1WNGlcSIX6MYkPpTAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCs4gOiE; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780133683; c=relaxed/simple;
+	bh=+n1hq0x6+klD0p5GgDcO2qOfFMcoNj5XNIwZbETbod8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gr2ye9ZzBM9RwVGG41XKPo7HnhqHYAKyl94ktWpZqKxqarkU5K6UN3GJiXBNj7loo5+TJj+ujHtMWmXDkwheFpXvkSzTtLjQYPqgppwc16xTJZ8RUn9OU7IKgiphhBQzMrMdztmu7SrRV1DrJgBWJMSO1d2CckFo5LJdxT9upys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rEAtze+0; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCs4gOiE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780132431; x=1811668431;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
-  b=fCs4gOiEebh1evuXFgL9v/wuh8s1Uc5Ih2dCKAvvgb4PQSBuemwOtt2x
-   lCJUNc/wgQ6CmLtaoVttRYGa/auyVgHvzD3oBOeFnEADkklKFsbeZFCVh
-   1syyu0QlMAYZ8OpLSoS/UcTKHcP3NteogfbOa1itF1fJKJqo13ePxYH8D
-   wnIX5ZVwSHNCW8KN4wpg0aSjPnCCa9a+WsCCGSvbGzuQKfccaU/7l6r1f
-   p+3ZmMCDpgWmfXv4husiM8iciS6bQFen51q26vnzZWbPQaMBBEOXMYWoZ
-   /cxjmmDpknLkdJWnRk3nwpMSgmL2M6qPG2RRHeGyfFFrqOqCvdgdFVfn7
-   g==;
-X-CSE-ConnectionGUID: A/CFJ1XRTkqinKi613nK+Q==
-X-CSE-MsgGUID: T5KaacTqSwi/QtefxhQkew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="80112665"
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="80112665"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 02:13:51 -0700
-X-CSE-ConnectionGUID: mDD6+TLDRNeHEF6Qv2iPgw==
-X-CSE-MsgGUID: UrfCGkIIQG23p/OWwKiWPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="240528979"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 30 May 2026 02:13:47 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wTFlJ-00000000169-0kTS;
-	Sat, 30 May 2026 09:13:45 +0000
-Date: Sat, 30 May 2026 11:13:18 +0200
-From: kernel test robot <lkp@intel.com>
-To: Neil Spring <ntspring@meta.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
-	davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ntspring@meta.com,
-	bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
-Subject: Re: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash
- test
-Message-ID: <202605301121.q28WSYib-lkp@intel.com>
-References: <20260529160136.1010064-3-ntspring@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEAtze+0"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-45eee266c6cso1560194f8f.1
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 02:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780133679; x=1780738479; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IihLrlGVkYHUkHDD/9dWzS/POFj3zmhX0InkDFhzTtI=;
+        b=rEAtze+0sc1hhSUe5vW6/3OEcLr66RD9HPjPRCSSKqu8WKYSEktHZkXVJ1b9k46a9E
+         fG93dqpIjg5jqegw2QnGtWMwQ/wgzhz8GL4+7bEPa5TjO5ufelD9m57ygjpwBhhDm9q+
+         LjayypEuAz+TL8MXIRL5PtUCxeXrObpW9+y8fAo1PHbTnWNDa+7MywV/Gvd3FC55LtpQ
+         iC0nR3Mc/MWm6P7oZX9igzp2jWdJYO9mkDSgLF1xE2+1I8cHpZkIEkwvd88zoRdKgVR1
+         t+M6UdDOtt8LBJOlEFUbWCZR4qQQ59R0acpI6PRmed3RGV+IMeN5CClVt0ZbFMIo3sF3
+         Hitg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780133679; x=1780738479;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IihLrlGVkYHUkHDD/9dWzS/POFj3zmhX0InkDFhzTtI=;
+        b=Ly6u/UDJgfMnQalkNxsx1O7CpX5HA+3EWa6+5XzZOnKU9X+zfw/nNoefjXX/FJJthy
+         AOqe39x85xCmPyfB+MKPXUDFOU5eboOCLuuITurs4mHhcSlLUhe2UbKXvuI+rIuVNvxt
+         7LKAXKrw2qiXJvFnoUd1Hl3az3thPd/1yCfmX4InfHeY3/DGZY3rCbYOrSNuVl5g4I3Q
+         SPm8Yymit1h2NpNILIUfVKJK3YcRd7LPEALMvdffMniG5BHTtEIs8QIXc67DwdPMC8Ly
+         /h39mIJd76S0/BLaeRmDl8biVuHl35CZy7XWTHFhZXx9DPfgeP6zav40i4Gk+00Y1yrU
+         mZLA==
+X-Forwarded-Encrypted: i=1; AFNElJ+voUYFSVJyQEGim3ltAVJd3znamKov4W2Nt+eEAUOUrNmatI0UgBResSiKVjP7SSHPM+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7nucqVaelY6ttF+pa9EnryVkph2HwWr81UuLtDHOzU2dKhWtU
+	4K7U7TiaB0xN7Dz9AOqL/Gs2RsxdtRzyQfuL7Vg/nTzROrEnK8LRWFxdwbkurw==
+X-Gm-Gg: Acq92OF9vhNroPuECXA/G3Rv474RHEV4C/wFvI8nYwd7OQAc4wjvE5ZBECiWvJiajAm
+	YBbxA1msMqDeddiGGGy6qSiwZAjJXiGX7sspdHpOkYe+TmVH3g220xLnsLSOlMrWzrtlBGlA326
+	yGKGJsZ7DSL4U7tfDdEvLvfNhdp0xmSy3cbNuurQKFSi98Ucn321GS5Jga3JO4H6xYVIPSkOLEl
+	YPOBTM7YcFwUepXuJ90VJ+cO2eTaOPZ2EaVBONe3T8mgyfdPFeR13b4a8Ts+rBNq3rhTwL/xJIs
+	gBW5UDobcEA0bBg4mxjHiuPIVCB5seoHJUxYFi2H2V2w8EXc85rH38mb3n2ZPyQ8WRBm1DT+uBO
+	F6iGBG3i6GON6JdppypA3Mboc9JSCNrIA9fK82yc4Dr13Gica1leF2iTAkSnKi+yjc3AMHIQVM0
+	sqX6Pc2SZZmnBvhlB7rjtbX7VUHg==
+X-Received: by 2002:a5d:59ca:0:b0:45e:739b:3e43 with SMTP id ffacd0b85a97d-45ef6a90517mr5169087f8f.0.1780133679364;
+        Sat, 30 May 2026 02:34:39 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef34a0403sm9960159f8f.6.2026.05.30.02.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 May 2026 02:34:38 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sat, 30 May 2026 11:34:36 +0200
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
+	andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+	kernel-team@fb.com, yonghong.song@linux.dev
+Subject: Re: [PATCH RFC bpf-next v3 4/6] bpf: report hot simulated callchains
+ when 1M instructions limit is met
+Message-ID: <ahqvLKBAA88GWHgP@krava>
+References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
+ <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
+ <ahlpI7sRJt1FQdYg@krava>
+ <17304ac9808245282aa2f03f26665cccd6fc185f.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,58 +79,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260529160136.1010064-3-ntspring@meta.com>
+In-Reply-To: <17304ac9808245282aa2f03f26665cccd6fc185f.camel@gmail.com>
 
-Hi Neil,
+On Fri, May 29, 2026 at 11:44:39AM -0700, Eduard Zingerman wrote:
+> On Fri, 2026-05-29 at 12:23 +0200, Jiri Olsa wrote:
+> > On Wed, May 27, 2026 at 12:29:52AM -0700, Eduard Zingerman wrote:
+> > 
+> > SNIP
+> > 
+> > > +
+> > >  static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+> > >  {
+> > >  	int err;
+> > > @@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *env)
+> > >  		insn_aux = &env->insn_aux_data[env->insn_idx];
+> > >  
+> > >  		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+> > > +			print_hotspots(env);
+> > 
+> > hi,
+> > this is really cool feature, I've already used it to fix issues :)
+> 
+> Hi Jiri, thank you for the feedback!
+> Anything you find lacking?
 
-kernel test robot noticed the following build errors:
+so in my case the first 2 stacktraces identified data copy deep in
+the code, which was wrongly done with standard loop instead of bpf_iter,
+so it led me directly to the problem
 
-[auto build test ERROR on net-next/main]
+In another run I got the 'Most varying ...' output and it wasn't
+that obvious for me how helpful that could be, but I did not check
+on that in detail yet
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Neil-Spring/tcp-rehash-onto-different-local-ECMP-path-on-retransmit-timeout/20260530-005334
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260529160136.1010064-3-ntspring%40meta.com
-patch subject: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash test
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/reproduce)
+> 
+> After discussion with Alexei (who is somewhat skeptical of the whole idea),
+> I plan to add:
+> - samples for values residing in the diverging registers
+> - walk back from iter_next call using jump history and
+>   print 5-10 instructions modifying the register in question
+>   (in a manner similar to backtracking done for mark chain precision).
+> 
+> > Would it be possible to make this configurable? like to be able
+> > to get this output for program that passed and display more than
+> > 3 hottest callchains?
+> 
+> For sure, there are several options for a way to toggle this print out:
+> - unconditionally make it a part of v1 log;
+> - add it as a bit in bpf_attr->log_level.
+> 
+> I'd say that v1 log is a better option here.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605301121.q28WSYib-lkp@intel.com/
+sounds good, I think it's negligible compared to the rest of the log
 
-All errors (new ones prefixed by >>):
+> 
+> As for number of callchains printed, I'd like to avoid tweaking
 
-   In file included from drivers/net/slip/slhc.c:74:
->> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2557 |         tcp_synq_overflow(sk);
-         |         ^
-   1 error generated.
---
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:48:
->> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2557 |         tcp_synq_overflow(sk);
-         |         ^
-   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:15197:26: warning: shift count >= width of type [-Wshift-count-overflow]
-    15197 |         bp->cyclecounter.mask = CYCLECOUNTER_MASK(64);
-          |                                 ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
-      14 | #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
-         |                                                           ^ ~~~~~~
-   1 warning and 1 error generated.
+I guess it's better to have it hardcoded, no need to configure that
 
+> bpf_attr. So this leaves several options:
+> - make it top 5-7-10, just hardcode a bigger number.
+> - add a threshold value specifying how many times a callchain should
+>   be visited to get printed. E.g. only print callchains visited more
+>   than 1000 times, if such don't exist then put threshold to 100,
+>   if such don't exist, print top 3.
 
-vim +/tcp_synq_overflow +2557 include/net/tcp.h
++1 to just print top X stacks
 
-  2554	
-  2555	static inline void cookie_record_sent(const struct sock *sk)
-  2556	{
-> 2557		tcp_synq_overflow(sk);
-  2558		__NET_INC_STATS(sock_net(sk), LINUX_MIB_SYNCOOKIESSENT);
-  2559	}
-  2560	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks,
+jirka
