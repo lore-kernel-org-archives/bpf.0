@@ -1,63 +1,63 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661E21F3B87
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A953C2D
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780100590; cv=none; b=fDOVE8ky646IunjXFdHv63GRX3B/YWXPDzBPcP1CZRt7JBbD6i0d1xsIFVkgbk896m/8O2C857mXNybDBTRpaWgPZmdcD4fcQCbOmXdZSVc9KjE357+76zEzePSNvBrkrWxabVHuPkvJxKhOyUqS5kcUq3DT3Ww5KydnzFKBfcE=
+	t=1780100593; cv=none; b=CWNsBmiNMQ+oEt5DApSAnDsGvEnx68IPCz1wzeiGyLy1t2qDiDUEjEiTXNzSJpHfMCXwW/1atVvrBBB2aKIwHod1JSul9NEgwnmqA4z0vMyJhh+k8uX0vaO0/OyIMLSr2h6chZR+dSb4zsU5YigYsNrd8rz1JS330mAZZSnbBmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780100590; c=relaxed/simple;
-	bh=Lx4c9V5/QvYf/N2reFs933ZtfUWinQFdNJ/WSKGCf7k=;
+	s=arc-20240116; t=1780100593; c=relaxed/simple;
+	bh=xTxUuGOW34iZxNq+Q2spM+WwD6875m9PcyTaGIfTv2s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P7AykMR0sgHRAOPDEUxRqPUtcD68hwxYzqQ2qYgwJVxPqmxk7ZT0GqV09xRpoBJgxoLV1UnJ/zYYvc8nwppHoNR/Kf18hf3oP4i+rAyQtup+k94EPAW304IBPWSui8wZsPj6OZxJkVpV1FEETAo98dawnodgnrbkHW5x+x87g7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=eeZ2qum4; arc=none smtp.client-ip=74.125.82.41
+	 MIME-Version; b=TW/zyNXFpBZdV3ehBue/1cdiPf/vzCYhYWDPVYwlCyZgVte80zejy3c+YqDGZqdO9QSmdNebIxl7CUEbibBMQK8Rn2132q2cvw0AZ3vXj0D5a7wV+kX4drvTD5LfsgT+eyn/RfA641CBkrI2r9lez2yGAMQwPMmufGyvLrcAu5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=DgrRUNYZ; arc=none smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="eeZ2qum4"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-132830d8281so3336049c88.1
-        for <bpf@vger.kernel.org>; Fri, 29 May 2026 17:23:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="DgrRUNYZ"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-137c928ec7bso2317897c88.1
+        for <bpf@vger.kernel.org>; Fri, 29 May 2026 17:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780100588; x=1780705388; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780100591; x=1780705391; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vm4vR0bSmWs0T1cZkadLVTgEEdKxDPIOmjQ7Aijkq3E=;
-        b=eeZ2qum4bwtFMVS5eQjRBvgWhz2BbzZiEelkb1jM8pnSevWpHnf3iwoNMVKwKLHKE4
-         ayFd5QgXC4SQEftN9ClIfkKpt4Bn2tdYPzdDjJLv2wiIXKFaxT1/4JQvQ8Jwkpod0GPX
-         xC8Uxd4ZioGNfOY8aJYpdMg3Bg0cDOuDWFrow9jr/UFAlI5yDmt9GvoHKz0BvZ8jm8D6
-         Od7G44xISDHiUaLR0Ol1zp6zeWrK8XkyxPKcrJOoIpx4wPO8XTv93yZMIq9nrkKSbE6t
-         Ra8mhlWhYs1p9z6E8Li9I1yspRDzhrSvA+aLgoCZcI5iSD5JNv9thCyjHPPVOFvwIIhD
-         PoXg==
+        bh=WdC753mwRfDP3WBreP0c/F74I9jkwTFmAuqP081M2BY=;
+        b=DgrRUNYZzJUEz6tAFf4XGuUnw+0CDe8fyM8XwMNhTB6PRmfunn6wk263FYUojC5nJY
+         NqzDRlKcINxCqLEbrZpK9HHREYEbHzHaWR77Rm5ihpmoEXd75gWgutbYqbvclrvqVtK+
+         9pPM/pwujFR8/+NNr2dcIE5nf4MAh0wJCpTDLw8Ji8oDsOYwz9DDZDT+d0GzI3z5Y4lU
+         DjAdbBsttL56K2ofVd3WayhDY4u3hMZYE9J/gftKisWU8Q2RkeT3yJSueNj83zqmyHeS
+         8YNAexEqrcLQvDWOP4uiTJ9okOl17Wteqv8HukCP0J0ZWOhgRVu4vDMslWSaYLcMk+4P
+         2YEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780100588; x=1780705388;
+        d=1e100.net; s=20251104; t=1780100591; x=1780705391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Vm4vR0bSmWs0T1cZkadLVTgEEdKxDPIOmjQ7Aijkq3E=;
-        b=nbfDDgJsgLbxyidtUUGMvbAN5ZxNq79vWuQORexr1+KDQ8m03iHbtcWD771uyrPrkr
-         Ntwfq8+VonmVmNaiiDLOjAnZYWVVvGwt5tJSmTDsjeN9fyEvlmMrLM73zK8FncSfFU4w
-         MS/EigC0yq8+xiEnaeGZ3x/1/MFpxJYxm/BzNZB5cBVwHV+Nxrwvmx1B+zwUW5NvzbFd
-         GnWlmUIwEoRZT8fTmiC87llLxXYhpGQPZ011cdfTlqz/Kff6MtD3tzq2VECs3+0q60dR
-         000nowtuaWA9zBmnUeXYoaUJrnzldIu2rZ7L/B+qmsfTgO82CKpo5oaNvc1Eb7PlB5ra
-         0N9Q==
-X-Gm-Message-State: AOJu0YyMzKWDQeZzMKJUSsGdvsDBNunRRo0LTpMpRjmMKDyg5a8F4rb1
-	F5Fj7SSwgQM4TgpQdQXCGzP5h5sS7xcdbjvGL906DgE7b+GJpLHuMb9mD+eyGwJiWtc4+xpRtYg
-	DJ8TJ3gmO30lS
-X-Gm-Gg: Acq92OHGm0Ws9vWAIgaivxvhu3RjvWmkY6a7ztDS5eHzWjv5h4T8v6a1aRqZlfP8kp1
-	WzKgPQJ9TdhJYBBxBQaB8rIoGvIdqo+l9kIOBXgoIoE/3RQjtBm31Ghh7iXD7pQBQ+3g2g2MPUF
-	8pdgbSFWyjATMhhDyHutDL1m31WY50AuKxuL5MCMf6X10PlIZ3ym2pIcLLr9RjS2GnkosjqV690
-	q9RtTZmlXSL5kLdP7wyzEK3rAmOK3vVvLZcu9BIFyRs8GoDixxMqnAa6CZtIfDRXdQZeicGVqX1
-	lfQgueootZYdoBsRrwtXuZoAPm7NzamINzVybANJfDz2FExgq+0Ximo8yp1lVkQoz8PhCdLMqoN
-	utUfT1AlGLlelDmv2nsnkFTxfUdM8na7o2FW3jh3auMf9iLHFndcjlfoqgvU+IoGVzoRiILYiLh
-	haW2BemSLcMSY4/UexOYn7yxnHnzHahg==
-X-Received: by 2002:a05:7022:527:b0:135:dc82:85f7 with SMTP id a92af1059eb24-137d3f1860fmr842978c88.4.1780100588407;
-        Fri, 29 May 2026 17:23:08 -0700 (PDT)
+        bh=WdC753mwRfDP3WBreP0c/F74I9jkwTFmAuqP081M2BY=;
+        b=E8b6Xr/wxNjfFPoYQxBquzu+b9m0XA467ugYK3iJrxy9BS/aem53WDjES8qi9PdocC
+         AEmgzmdgDZno2biZiaY0EyAfNFTZHuogAitP1G7r5uGGlbh3m7tdc8sKkXXR1XAkaPwA
+         rFPFr2rPPdawMwjs9jif4UfP6j4rRMDFla9dBt09lWb9SmzSu8f2pjeMO6E5d20j5v6s
+         xtg5QCV2Hn7JHD0KDg4vTMyENUs1RIm5Rez+18JmSJKmussBV/H6FMg59cX35UP1Yeh6
+         7fRz3r0+wXoeXzXrDwvMHjTG7T/brLm1RgNPrNzvQEw3JbBZHqUlm8CbfDZsskYjeCSi
+         OEAA==
+X-Gm-Message-State: AOJu0YxLSOnE1B/nS/cMpIb6NzzosBEErIK4IFrk8D20L0pDsEA3vGlM
+	5SJiE6h2bYn754TiecSAZ/Wne3DGZFdbbWgRmMxApffaDvSeXP1MtoNap9zoxOb67TjMfZCEG4r
+	PTKe2hy1FFGYi
+X-Gm-Gg: Acq92OHsJJ/rfzeyKmUD7geV4kB1DJzl+yBvguvuQVgVGv9IRN7HvZmwF6zqTQl6XZ+
+	dv/h2z3GKjFdmsaFaR46BUslJjl3jI/cVvFWp2Gh9VI1x7GyzbkXyuq/4AMWjp9UVudLlAqu2Dy
+	nMwo7gpKScQ5iL2Yk3Ko9nWKhmsA9nLK4s3+B7DnwUCiuwEq4Oxit0GhZHxVIQ0jxw4S0fvSUQ6
+	Wsg+kFk8v0BKIX4c0hrDetNv6MYk81ULIXe7rgicQQC7RUYBSoAX3cynGiDhEfCvvhzeyQgDVUg
+	qnEN8fCiMcVJmKuar0z0436+lcz5Sh3OOS4weHfWOP4eIo7W0BZMxJjWOiyAanXnvEVo1jz4PYL
+	Fnuaz8GqclObmR2VtIv9HdtcMJzutPbHy4Ut5czvshtUN30aiqiNZfiAhBJllFKIL42rjrgGx4v
+	HT1sD2wiPDl1kJVGdJGXUbega6WIiCBD7QKPoX8CGn
+X-Received: by 2002:a05:7022:619f:b0:137:6781:7dd7 with SMTP id a92af1059eb24-137d4271679mr717440c88.20.1780100590921;
+        Fri, 29 May 2026 17:23:10 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::9529])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b35a5f44sm2070540c88.1.2026.05.29.17.23.06
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b35a5f44sm2070540c88.1.2026.05.29.17.23.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 17:23:07 -0700 (PDT)
+        Fri, 29 May 2026 17:23:10 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 2/5] verifier: parse BTF type tags for function arguments
-Date: Fri, 29 May 2026 20:22:56 -0400
-Message-ID: <20260530002259.4505-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 3/5] bpf: Allow subprogs to return arena pointers
+Date: Fri, 29 May 2026 20:22:57 -0400
+Message-ID: <20260530002259.4505-4-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260530002259.4505-1-emil@etsalapatis.com>
 References: <20260530002259.4505-1-emil@etsalapatis.com>
@@ -82,161 +82,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BTF parsing logic for function arguments goes through
-the arguments' decl tags, but does not go into their type
-tags. Add type tag parsing for function arguments.
+BPF subprogs currently only return void or scalar values. However,
+it is also safe to return arena pointers between subprogs in the same
+BPF program: Arena pointers are guaranteed to be safe for both programs
+at any point. Expand the verifier to permit returning an arena pointer
+to the caller.
+
+The main subprog is still not allowed to return an arena pointer because
+arena pointers are internal to the BPF program, and the return values
+permitted for each main subprog depend on the program type anyway.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/btf.c | 120 +++++++++++++++++++++++++++++++++--------------
- 1 file changed, 85 insertions(+), 35 deletions(-)
+ kernel/bpf/btf.c      | 50 +++++++++++++++++++++++++++++++++----------
+ kernel/bpf/verifier.c |  6 +++++-
+ 2 files changed, 44 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 17d4ab0a8206..c6a930aca67e 100644
+index c6a930aca67e..7a8101879f84 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -7802,6 +7802,84 @@ enum btf_arg_tag {
- 	ARG_TAG_ARENA	  = BIT_ULL(5),
- };
+@@ -7880,6 +7880,36 @@ static int btf_scan_type_tags(struct bpf_verifier_env *env,
+ 	return 0;
+ }
  
-+static int btf_scan_decl_tags(struct bpf_verifier_env *env,
-+			      const struct btf *btf,
-+			      const struct btf_type *fn_t,
-+			      u32 arg_idx, bool is_global, u32 *tags)
++/* Check whether the type is a valid return type. */
++static int btf_validate_return_type(struct bpf_verifier_env *env, struct btf *btf,
++		const struct btf_type *t, int subprog)
 +{
-+	int id = btf_named_start_id(btf, false) - 1;
++	u32 tags = 0;
++	int err;
++
++	err = btf_scan_type_tags(env, btf, t->type, &tags);
++	if (err)
++		return err;
++	t = btf_type_by_id(btf, t->type);
++
++	while (btf_type_is_modifier(t))
++		t = btf_type_by_id(btf, t->type);
 +
 +	/*
-+	 * The 'arg:<tag>' decl_tag takes precedence over the derivation
-+	 * of the register type from the BTF type itself.
++	 * We allow all subprogs except for the main one to return any kind of arena pointer.
++	 * General arena variables are not allowed, since it makes no sense to return by value
++	 * a variable that's on the heap in the first place.
 +	 */
-+	while ((id = btf_find_next_decl_tag(btf, fn_t, arg_idx, "arg:", id)) > 0) {
-+		const struct btf_type *tag_t = btf_type_by_id(btf, id);
-+		const char *tag = __btf_name_by_offset(btf, tag_t->name_off) + 4;
-+
-+		/* disallow arg tags in static subprogs */
-+		if (!is_global) {
-+			bpf_log(&env->log,
-+				"arg#%d type tag is not supported in static functions\n",
-+				arg_idx);
-+			return -EOPNOTSUPP;
-+		}
-+
-+		if (strcmp(tag, "ctx") == 0) {
-+			*tags |= ARG_TAG_CTX;
-+		} else if (strcmp(tag, "trusted") == 0) {
-+			*tags |= ARG_TAG_TRUSTED;
-+		} else if (strcmp(tag, "untrusted") == 0) {
-+			*tags |= ARG_TAG_UNTRUSTED;
-+		} else if (strcmp(tag, "nonnull") == 0) {
-+			*tags |= ARG_TAG_NONNULL;
-+		} else if (strcmp(tag, "nullable") == 0) {
-+			*tags |= ARG_TAG_NULLABLE;
-+		} else if (strcmp(tag, "arena") == 0) {
-+			*tags |= ARG_TAG_ARENA;
-+		} else {
-+			bpf_log(&env->log, "arg#%d has unsupported set of tags\n", arg_idx);
-+			return -EOPNOTSUPP;
-+		}
-+	}
-+	if (id != -ENOENT) {
-+		bpf_log(&env->log, "arg#%d type tag fetching failure: %d\n", arg_idx, id);
-+		return id;
-+	}
-+
-+	return 0;
-+}
-+
-+static int btf_scan_type_tags(struct bpf_verifier_env *env,
-+			      const struct btf *btf, u32 type_id,
-+			      u32 *tags)
-+{
-+	const struct btf_type *t;
-+
-+	/* Find the first pointer type in the chain. */
-+	t = btf_type_skip_modifiers(btf, type_id, NULL);
-+	if (!t || !btf_type_is_ptr(t))
++	if (subprog && (tags & ARG_TAG_ARENA) && btf_type_is_ptr(t))
 +		return 0;
 +
-+	/* We got a pointer, get all associated type tags. */
-+	t = btf_type_by_id(btf, t->type);
-+	while (t && btf_type_is_type_tag(t)) {
-+		const char *tag = __btf_name_by_offset(btf, t->name_off);
++	/* We always accept void or scalars. */
++	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t))
++		return 0;
 +
-+		if (strcmp(tag, "arena") == 0) {
-+			*tags |= ARG_TAG_ARENA;
-+		} else {
-+			bpf_log(&env->log, "function signature member has unsupported type tag '%s'\n",
-+				tag);
-+			return -EOPNOTSUPP;
-+		}
-+
-+		t = btf_type_by_id(btf, t->type);
-+	}
-+
-+	return 0;
++	return -EOPNOTSUPP;
 +}
 +
  /* Process BTF of a function to produce high-level expectation of function
   * arguments (like ARG_PTR_TO_CTX, or ARG_PTR_TO_MEM, etc). This information
   * is cached in subprog info for reuse.
-@@ -7820,6 +7898,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 	struct btf *btf = prog->aux->btf;
- 	const struct btf_param *args;
- 	const struct btf_type *t, *ref_t, *fn_t;
-+	int err;
- 	u32 i, nargs, btf_id;
- 	const char *tname;
+@@ -7963,17 +7993,15 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+ 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+ 		return -EINVAL;
+ 	}
+-	/* check that function is void or returns int, exception cb also requires this */
+-	t = btf_type_by_id(btf, t->type);
+-	while (btf_type_is_modifier(t))
+-		t = btf_type_by_id(btf, t->type);
+-	if (!btf_type_is_void(t) && !btf_type_is_int(t) && !btf_is_any_enum(t)) {
+-		if (!is_global)
+-			return -EINVAL;
+-		bpf_log(log,
+-			"Global function %s() return value not void or scalar. "
+-			"Only those are supported.\n",
+-			tname);
++
++	err = btf_validate_return_type(env, btf, t, subprog);
++	if (err) {
++		if (is_global) {
++			bpf_log(log,
++				"Global function %s() return value not void or scalar. "
++				"Only those are supported.\n",
++				tname);
++		}
+ 		return -EINVAL;
+ 	}
  
-@@ -7903,42 +7982,13 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 	 */
- 	for (i = 0; i < nargs; i++) {
- 		u32 tags = 0;
--		int id = btf_named_start_id(btf, false) - 1;
--
--		/* 'arg:<tag>' decl_tag takes precedence over derivation of
--		 * register type from BTF type itself
--		 */
--		while ((id = btf_find_next_decl_tag(btf, fn_t, i, "arg:", id)) > 0) {
--			const struct btf_type *tag_t = btf_type_by_id(btf, id);
--			const char *tag = __btf_name_by_offset(btf, tag_t->name_off) + 4;
--
--			/* disallow arg tags in static subprogs */
--			if (!is_global) {
--				bpf_log(log, "arg#%d type tag is not supported in static functions\n", i);
--				return -EOPNOTSUPP;
--			}
-+		err = btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
-+		if (err)
-+			return err;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c8d980fdd709..64d7954e93ea 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9375,7 +9375,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		clear_caller_saved_regs(env, caller->regs);
+ 		invalidate_outgoing_stack_args(env, cur_func(env));
  
--			if (strcmp(tag, "ctx") == 0) {
--				tags |= ARG_TAG_CTX;
--			} else if (strcmp(tag, "trusted") == 0) {
--				tags |= ARG_TAG_TRUSTED;
--			} else if (strcmp(tag, "untrusted") == 0) {
--				tags |= ARG_TAG_UNTRUSTED;
--			} else if (strcmp(tag, "nonnull") == 0) {
--				tags |= ARG_TAG_NONNULL;
--			} else if (strcmp(tag, "nullable") == 0) {
--				tags |= ARG_TAG_NULLABLE;
--			} else if (strcmp(tag, "arena") == 0) {
--				tags |= ARG_TAG_ARENA;
--			} else {
--				bpf_log(log, "arg#%d has unsupported set of tags\n", i);
--				return -EOPNOTSUPP;
--			}
--		}
--		if (id != -ENOENT) {
--			bpf_log(log, "arg#%d type tag fetching failure: %d\n", i, id);
--			return id;
--		}
-+		err = btf_scan_type_tags(env, btf, args[i].type, &tags);
-+		if (err)
-+			return err;
+-		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
++		/* All non-void global functions return a 64-bit SCALAR_VALUE or PTR_TO_ARENA. */
+ 		if (!subprog_returns_void(env, subprog)) {
+ 			mark_reg_unknown(env, caller->regs, BPF_REG_0);
+ 			caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
+@@ -16645,6 +16645,10 @@ static int check_global_subprog_return_code(struct bpf_verifier_env *env)
+ 	if (err)
+ 		return err;
  
- 		t = btf_type_by_id(btf, args[i].type);
- 		while (btf_type_is_modifier(t))
++	/* Pointers to arena are safe to pass between subprograms. */
++	if (is_arena_reg(env, BPF_REG_0))
++		return 0;
++
+ 	if (is_pointer_value(env, BPF_REG_0)) {
+ 		verbose(env, "R%d leaks addr as return value\n", BPF_REG_0);
+ 		return -EACCES;
 -- 
 2.54.0
 
