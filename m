@@ -1,87 +1,111 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDC8332EDE
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 04:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922DD2594B9
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 05:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780117076; cv=none; b=txhbTW4e2zFJUIN16W+qT81BqYk7eJIDOsjIyUt2OICJz/zDvE+OV1QswrMj7wyvyR6VaYEU6K3vL8dP16hrrzSA/Zg7rwy+dVLR6aKASdWmBtmqXBygX8LVY3fmSHCHRuKpKTpI3uho0W3bVJlwUqxcFCwquXL88a3VYRJBzgw=
+	t=1780117391; cv=none; b=WoVK+zm9l6AUOQTOWb7LYB+VGTvftMhpJ/++rA6+A/tR43CANJFusdTCA4QBz1lPRVHAUuXZncZKCHxYGXl0NGVn4Zrph5UbO91bq6xqdxtcq7LwvaSxQvUY2k0+G+WNoOEYbQH1dXggM1OebvqeLYsG7LpWLJ+Pl3pMuiKnxzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780117076; c=relaxed/simple;
-	bh=ye7kpK2zWmIcTnbG26joWR7AQj3PWyaMFUw2iAtZX7c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sT5+Gn83QQg9/h2/fnrbFCt949LjJjsi84wOesYlTGR4KwSq5VpjrHuShcickv/jP0nfzQSB1O64Sla4d2zrQJ1/w55cWMyvkxmof+rDDOO9QZADcLIYWw04ZCczhSoALiheCQmKkAxHPPrcG6ItmG7wbHSnz9SGwUEFte05ack=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xETSL/CI; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780117391; c=relaxed/simple;
+	bh=uz9c7ylirGy4XfegKOYgNgYn3IPTJoqmQFZ8beEKl2M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=HgQ//84HcbdRWY25vdz1FNg7229jCQL3I/YMYiw+CFpZ0RaGJzFPMFLVIAdg5AhHhrPAtKWnhqhyvnXRDY1N1KRhoCfHFWrzsjWSK81HjJhKI1NkVZrb8xjbC4pvHbswbuQJDmbCmFD33EBJIn+ojrKFvyqSyRoAr3QXeFalRNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hD2Hm+Dn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xETSL/CI"
-Message-ID: <67ad3005-f515-4ac6-840d-ded8c2e765b5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780117072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WftpDmkUseUPqI6KNYiMSpF6LyvvnhSZDSRyHeruLWA=;
-	b=xETSL/CIVF5Tu8garZw1ou0tgbk4IQaSJmVYTpg8VgIa1kwULyTUefrp68cPQb/s6wmsoo
-	jqqoLgvEAwfLeRNJ4kggAc0USIJazjiNY3GvGriV8Dre9X1XogbiagyXL07IOLYN78J9q7
-	OGT6CFGI+p5vsLLN39DZyVU/OGrXFzM=
-Date: Sat, 30 May 2026 12:57:42 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hD2Hm+Dn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113761F00893;
+	Sat, 30 May 2026 05:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780117390;
+	bh=Xdj0tdH659B+zDcoPkCS/csjFxy/B6Kk0UGxxFMRZf4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hD2Hm+DnS5J9sIiPqrXKqZtZ/9vCmBdTd9Ls/wMWoGVmD57jcpWAHTmkmPD63yfvI
+	 92CaowhNr11U1hg6Kw/YUo4yhoiKr9tbDeFApcV0iln9HnGP41fGlKmU4PW8ct+65c
+	 WkYiu36zipXuINNVKj5hOBGobUcFaWimOf3xVdwzphbu/ZCRNl+02P2MSWarDtQy4E
+	 fwXOim4I482WXvkDuYAs7bcLU6lYXI/TzUU5jGDLSRLqlBGdk95Yxg1ySElXTCJMOJ
+	 xlM6UpdF6vGHdTH01xXLSlT7Cv36ghPIrplrUpazT6w+ox5G48AB+fjbbJ16Gif+Mb
+	 i1qMrkWr9c4eg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 4/5] selftests/bpf: Remove __arg_arena from
+ the codebase
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260530002259.4505-5-emil@etsalapatis.com>
+References: <20260530002259.4505-5-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 30 May 2026 05:03:09 +0000
+Message-Id: <20260530050310.113761F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpf: MAINTAINERS: Update bpf maintainers
-To: Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
- 'Andrii Nakryiko ' <andrii@kernel.org>,
- 'Daniel Borkmann ' <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, netdev@vger.kernel.org
-References: <20260529203909.1222164-1-martin.lau@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260529203909.1222164-1-martin.lau@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Incomplete removal of `__arg_arena` annotation
+--
 
-On 5/30/26 4:39 AM, Martin KaFai Lau wrote:
-> From: Martin KaFai Lau<martin.lau@kernel.org>
->
-> I am making a life change and will take a long break
-> from my current work, so I will step down from the "M:" responsibility.
->
-> I am currently a "R:" in "BPF [GENERAL]", this part stays unchanged.
-> I am folding most of the parts into "BPF [GENERAL]".
->
-> For "BPF [BTF]", it is long overdue as I am no longer involved.
-> It is folded into the "BPF [GENERAL]".
->
-> The "BPF [STORAGE & CGROUPS]" will also be covered by "BPF [GENERAL]".
->
-> For struct_ops, its usage is no longer limited to networking,
-> so this naturally should move back to "BPF [GENERAL]".
->
-> For the reuseport, it will continue to be maintained together
-> by "BPF [GENERAL]" and the "NETWORKING [SOCKETS]".
->
-> For other "BPF [NETWORKING]...", I am moving myself to "R:".
->
-> Thanks!
+commit 936642e9509313ae2959c6a3c4255651cca7040f
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
+selftests/bpf: Remove __arg_arena from the codebase
 
-Thank you Martin, and best wishes for your long break.
+This commit removes the __arg_arena annotation from the codebase because
+it has been subsumed by the __arena BTF type tag. The typedefs previously
+used to minimize __arena annotations are removed, and the pointer types
+are directly annotated when declaring variables instead.
 
-I really appreciate all your guidance and help over the years.
+> diff --git a/tools/testing/selftests/bpf/bpf_arena_htab.h b/tools/testing=
+/selftests/bpf/bpf_arena_htab.h
+> index acc01a876668e..eb80d67c38708 100644
+> --- a/tools/testing/selftests/bpf/bpf_arena_htab.h
+> +++ b/tools/testing/selftests/bpf/bpf_arena_htab.h
 
-My first kernel commit was guided by you, and I am still very grateful 
-for that.
+[ ... ]
 
-Thanks again, and take care!
+> @@ -53,7 +52,7 @@ static int htab_hash(int key)
+>  	return key;
+>  }
+> =20
+> -__weak int htab_lookup_elem(htab_t *htab __arg_arena, int key)
+> +__weak int htab_lookup_elem(struct htab __arena *htab __arg_arena, int k=
+ey)
 
+[Severity: Low]
+Is the __arg_arena annotation incorrectly retained here? The commit
+message mentions removing __arg_arena from the codebase, but it seems to
+still be present in the signature of htab_lookup_elem().
 
+Additionally, is it possible that an empty macro definition for __arg_arena
+still remains in the userspace section of bpf_arena_common.h?
+
+>  {
+>  	hashtab_elem_t *l_old;
+>  	arena_list_head_t *head;
+
+[ ... ]
+
+> @@ -66,7 +65,7 @@ __weak int htab_lookup_elem(htab_t *htab __arg_arena, i=
+nt key)
+>  	return 0;
+>  }
+> =20
+> -__weak int htab_update_elem(htab_t *htab __arg_arena, int key, int value)
+> +__weak int htab_update_elem(struct htab __arena *htab __arg_arena, int k=
+ey, int value)
+
+[Severity: Low]
+Was __arg_arena intended to be removed from the signature of
+htab_update_elem() here as well?
+
+>  {
+>  	hashtab_elem_t *l_new =3D NULL, *l_old;
+>  	arena_list_head_t *head;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260530002259.4505=
+-1-emil@etsalapatis.com?part=3D4
