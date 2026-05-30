@@ -1,117 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E75386439;
-	Sat, 30 May 2026 07:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B311B808;
+	Sat, 30 May 2026 09:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780124663; cv=none; b=UE9B3x8iPaIlyya61VTHlcTt9UwLlh1XSvVbYHtHMz3ylsnlYPKYBRqK5anRVLgUsM2nuZF/PruUrJdhIYOmdBJfy1pBGwPVwyuenKNqRUKd4pEy7wP3seH+Bg/jRnA1hBFC44oNcpOc1GigSohBe/PdKlPkTFclERAeoGqavkA=
+	t=1780132432; cv=none; b=hfNc8Cnww3G+zFNLOFTSEDnnN65MmeFvDH5d3lgqtph+cyIZyElRLq8IXx9TG+o6PlOV2SnSp1I6ATA1js7BmO+rS22vPd41KubB8p74VNTcPlD1uDJBqjUWT7SIGyNVlFI8x5hu1MfMkk6lqfRbsYaPTlpcAtaPvsRh2Aorh0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780124663; c=relaxed/simple;
-	bh=D5XT32fPFEyOqx9xMhcOmqM0r2KWSZGxO6eWNcYClTc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rGPK0W2ARkZL4gwprOtnGAaE5ocIIqVlXGcJHBgKaGk/zKD1zEm5WpNgUbTvL+EZTGuZkNMFqjFDe9Mc4P85n6yQwBT1/pWIQSFOow4pYUNbHStrSndtt9HE1c4NkjcGXPB3frsU4aMMTI52eYqGIp4+jVTEuf5fA2V1RxHaN50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eL1qVJ6k; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780132432; c=relaxed/simple;
+	bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E5SXsXXMSgap2JAQorn4TIjNqcM7rMZyVCsd6LgdbDiWvm0ZAx5GAkDyf//xV3ePMiQH30TEh+kZg2u7Low5eQN4h3Z+8HyRHcDIuykGpwHTxYyF/HIWQ7wZWAhY/WW7DnJZmVt7I3mw1x2NWTLv3PIgo1WNGlcSIX6MYkPpTAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCs4gOiE; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eL1qVJ6k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6C11F00898;
-	Sat, 30 May 2026 07:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780124662;
-	bh=fjUzEXiUg6EIzL4w+wGjH90Z7b2O+W9lYz0+uzRvG1Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eL1qVJ6k5pP2WVg/zILwSVXXI7mJiC/CsA2DLGQZegREtN0zVJy7NhclCiQZn2rk5
-	 9shQY+senFfybPSBSCjIn+8oTnBnaeLeHdCEcRLN6EzzavfPUigs9o1peljTQ+pkjL
-	 Lq20r3gcudHtgD0H69SCmkI71Y+BoXCzTz78iW0wuTKK5wbZoDW8plf5AyZeBOgV+J
-	 sBaMD8H8iTOpTHjYlMA9cIRxqEQobwJiYtVPxHZCBfgcGzEFVElA5F6gsMemhR6FDc
-	 tw5UkxfQWNZkzR6V+1MSaBcYTgKJ4D6ztAwerfNoSPgzYuhoN7nsIW9SMEl4NBMyQT
-	 l+v9dF0An6O0g==
-Content-Type: multipart/mixed; boundary="===============9129813254684474192=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCs4gOiE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780132431; x=1811668431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
+  b=fCs4gOiEebh1evuXFgL9v/wuh8s1Uc5Ih2dCKAvvgb4PQSBuemwOtt2x
+   lCJUNc/wgQ6CmLtaoVttRYGa/auyVgHvzD3oBOeFnEADkklKFsbeZFCVh
+   1syyu0QlMAYZ8OpLSoS/UcTKHcP3NteogfbOa1itF1fJKJqo13ePxYH8D
+   wnIX5ZVwSHNCW8KN4wpg0aSjPnCCa9a+WsCCGSvbGzuQKfccaU/7l6r1f
+   p+3ZmMCDpgWmfXv4husiM8iciS6bQFen51q26vnzZWbPQaMBBEOXMYWoZ
+   /cxjmmDpknLkdJWnRk3nwpMSgmL2M6qPG2RRHeGyfFFrqOqCvdgdFVfn7
+   g==;
+X-CSE-ConnectionGUID: A/CFJ1XRTkqinKi613nK+Q==
+X-CSE-MsgGUID: T5KaacTqSwi/QtefxhQkew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="80112665"
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="80112665"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 02:13:51 -0700
+X-CSE-ConnectionGUID: mDD6+TLDRNeHEF6Qv2iPgw==
+X-CSE-MsgGUID: UrfCGkIIQG23p/OWwKiWPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
+   d="scan'208";a="240528979"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 30 May 2026 02:13:47 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wTFlJ-00000000169-0kTS;
+	Sat, 30 May 2026 09:13:45 +0000
+Date: Sat, 30 May 2026 11:13:18 +0200
+From: kernel test robot <lkp@intel.com>
+To: Neil Spring <ntspring@meta.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+	davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, ntspring@meta.com,
+	bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
+Subject: Re: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash
+ test
+Message-ID: <202605301121.q28WSYib-lkp@intel.com>
+References: <20260529160136.1010064-3-ntspring@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0bd66ee75b8124e031cda23490dea118871cf1517c42f8e6d99ab8369d0e8411@mail.kernel.org>
-In-Reply-To: <20260530055557.549474-2-xukuohai@huaweicloud.com>
-References: <20260530055557.549474-2-xukuohai@huaweicloud.com>
-Subject: Re: [PATCH bpf v2 1/3] bpf: Add validation for bpf_set_retval argument
-From: bot+bpf-ci@kernel.org
-To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,sdf@fomichev.me,zhuyifei@google.com,mattbobrowski@google.com,2022090917019@std.uestc.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 30 May 2026 07:04:21 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260529160136.1010064-3-ntspring@meta.com>
 
---===============9129813254684474192==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Neil,
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4..e82dedf871e8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10460,6 +10460,19 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  		}
->  		break;
->  	case BPF_FUNC_set_retval:
-> +	{
-> +		struct bpf_retval_range range = {
-> +			.minval = -MAX_ERRNO,
-> +			.maxval = 0,
-> +			.return_32bit = true
-> +		};
-> +		struct bpf_reg_state *r1 = &regs[BPF_REG_1];
-> +
-> +		if (r1->type != SCALAR_VALUE) {
-> +			verbose(env, "R1 is not a scalar\n");
-> +			return -EINVAL;
-> +		}
-> +
->  		if (prog_type == BPF_PROG_TYPE_LSM &&
->  		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
->  			if (!env->prog->aux->attach_func_proto->type) {
-> @@ -10469,8 +10482,16 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
->  				return -EINVAL;
->  			}
-> +			bpf_lsm_get_retval_range(env->prog, &range);
->  		}
-> +
-> +		if (!retval_range_within(range, r1)) {
-> +			verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
-> +			return -EINVAL;
-> +		}
-> +
+kernel test robot noticed the following build errors:
 
-Because bpf_set_retval() takes ARG_ANYTHING, does this bounds check need
-a call to mark_chain_precision(env, BPF_REG_1) to prevent a state pruning
-regression?
+[auto build test ERROR on net-next/main]
 
-Since ARG_ANYTHING doesn't automatically mark the register as precise in
-check_func_arg(), it looks like the verifier's state pruning logic in
-regsafe() might treat this register as equivalent to any other scalar
-value if it remains imprecise.
+url:    https://github.com/intel-lab-lkp/linux/commits/Neil-Spring/tcp-rehash-onto-different-local-ECMP-path-on-retransmit-timeout/20260530-005334
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260529160136.1010064-3-ntspring%40meta.com
+patch subject: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash test
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/reproduce)
 
-Could this allow a program with two branches to bypass this bounds check?
-If a safe branch (e.g., passing 0) is explored first and saved with an
-imprecise R1, the verifier might prune an unsafe branch (e.g., passing 1)
-because it matches the imprecise scalar state.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605301121.q28WSYib-lkp@intel.com/
 
-This would skip the bounds check on the unsafe branch and potentially
-allow the exact bypass issue this patch is trying to fix.
+All errors (new ones prefixed by >>):
 
-Reference: https://lore.kernel.org/bpf/20260530063315.7C5D41F00893@smtp.kernel.org/
-
->  		break;
-> +	}
-
-[ ... ]
+   In file included from drivers/net/slip/slhc.c:74:
+>> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2557 |         tcp_synq_overflow(sk);
+         |         ^
+   1 error generated.
+--
+   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:48:
+>> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2557 |         tcp_synq_overflow(sk);
+         |         ^
+   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:15197:26: warning: shift count >= width of type [-Wshift-count-overflow]
+    15197 |         bp->cyclecounter.mask = CYCLECOUNTER_MASK(64);
+          |                                 ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
+      14 | #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
+         |                                                           ^ ~~~~~~
+   1 warning and 1 error generated.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +/tcp_synq_overflow +2557 include/net/tcp.h
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26677028117
---===============9129813254684474192==--
+  2554	
+  2555	static inline void cookie_record_sent(const struct sock *sk)
+  2556	{
+> 2557		tcp_synq_overflow(sk);
+  2558		__NET_INC_STATS(sock_net(sk), LINUX_MIB_SYNCOOKIESSENT);
+  2559	}
+  2560	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
