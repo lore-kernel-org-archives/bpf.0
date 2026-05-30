@@ -1,152 +1,190 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2724C26ED59
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD072E738D
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 00:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780102212; cv=none; b=D3yLtcR5FioqPpyfkSUw6nTsF7PE6sLL0QE/6rMLsy6UAmCGuEo7QYQ0qGo1GskRQOXl3zQKiq+6BT65LAGg5t7nNRlbTXSqvCEvhyrmY4k4KModPzaRa160n3I8H5Is6B9Y0awgGCUSjeDKf8kxjmcltVmeXxGElnugF70M9RY=
+	t=1780102212; cv=none; b=XZj2OdxeON2tk7mb7Eny7bbBhDYUNfoQz3wrOguC7bx+4wbn6XJN36bs++535vvdzzqZurLNnscrjd8BIbs/El6Z5aO9GGK3NSCjbwUx9v6g3pWJJD2cZLYmP4vur4lF4N0iX06MpbxS1UiAkH3LFTHXbdUFuoINR8JwZV4Yoxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780102212; c=relaxed/simple;
-	bh=jok2ZPmuMp7TkKh4v5WcJ/wdzftl8VNVixqT+nEL4r0=;
+	bh=zjkEWyctfF9lWvUtfPnaoMGL98fWF0naFmj8URKbkT0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pTQvZYLFohwpsiLhBdtVVF51SNCyrw9TUPe5tpL6oeGldU85VI4Lf3ODAaL8RRYjFh4GYQAUUlbd1dCkhbHqrPmWMkPaCeREVemgE5IFkdqzXQk1vzfm5t5829FslNzXXqgl42LbQjjHP53dCFiNJVa2dkuGCx9vg9esVtzMrK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7k52wUZ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lkQIF7qg22geww/J6kMSIbsUwAfYWt/RqGDY6d/yQw4OqGA6Z+FNxaZ/eRi273R1rRdB/imb8kYb1RXGvdnIyoOfBQ0m4I+AHbIrrU+NvZDEMXFDyuOo4rA82/xjle1lH1ox6siTxPGh/43ooTKuPEao/CjzxZZoWm1jsTodyPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OwNK2uZ7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7k52wUZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19571F00898;
-	Sat, 30 May 2026 00:50:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OwNK2uZ7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4E51F00899;
+	Sat, 30 May 2026 00:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780102210;
-	bh=xosbV0QfhICO0Y9XxO2KSlVGAy8adc2xeK1JwqsJigM=;
+	s=k20260515; t=1780102211;
+	bh=ogf+grTNuwk9LfDROG+RJdG53S4GhWvXYOaLgzGDOXg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=e7k52wUZQmqEWvG4FmV2HuTKY5XytEZmzArQUbcRL+0j3u58v8OZVfxkTHiY+SyUR
-	 Rcktg76UcC3LGSCjNrba5KdZjXddv6l2q1caGiuE5eyNkGG6nxXlr0KTnTI12WPoRc
-	 +xixZFVC9WItl4ZSuRAbiNKUhn23iPh45smV+RAPopOW1KYJmHWM915dLZhOHdllNc
-	 Ey9ZjsCYXzWj4mrQkemnQoZqIZnalPRtElt78qsABTT838/hNgOQpwLsmFVuenl6vD
-	 uX5n9I2J3EeFktyYYFebjPTsxLVfY9mHoxrnB+3u+IUFcxDoCi88xBiiFJqk45bqPK
-	 8Qxf/VggZsuGg==
+	b=OwNK2uZ7sVZVcE5lddSJmW0MPvvAh9ZWd2buovOrRV43ORFYs3FQpqRKnGRBMmb25
+	 QqTJmOUxzifDOKM+GxODHgHEUDHeE/tXEkcU8aJDDXJKr4SN3oBJUk+nR9jZianQih
+	 MITe+ktsoGA+0Fjiq/NseCSamNFStVVCeiq2xLEdawPP08MrUYxGi6T0z3HB1DnbNy
+	 UbOaqCwx/yRHX/uZtgqDwl27cKVnLtb0X5emjRRvIZ1wB0ss+djOZ4wii9B0L577uT
+	 1EYR4zxgcVektG7oV3Ms+F8KNc69KbIsJPdRLL9TCpehdY13VQmV6yi7hZw7HRTurj
+	 sDAxSbXWwtR4w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v6 2/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: hawk@kernel.org
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260527135418.1166665-3-hawk@kernel.org>
-References: <20260527135418.1166665-3-hawk@kernel.org>
+In-Reply-To: <20260527135418.1166665-6-hawk@kernel.org>
+References: <20260527135418.1166665-6-hawk@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 30 May 2026 00:50:10 +0000
-Message-Id: <20260530005010.A19571F00898@smtp.kernel.org>
+Message-Id: <20260530005011.3F4E51F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Flawed queue wakeup logic in veth_napi_del_range() causes permanen=
-t TX stalls on the peer device by failing to schedule STACK_XOFF clearances.
-- [High] BQL state permanently leaks for deactivated TX queues, causing a p=
-ermanent stall if they are later reactivated.
+- [High] Coalesced BQL completions are left pending indefinitely when the r=
+eceive ring is empty and NAPI yields, corrupting DQL timing.
+- [Medium] Disabling BQL coalescing at runtime (tx-usecs =3D 0) orphans pre=
+viously accumulated completions, permanently skewing DQL state.
+- [Low] Data race on `priv->tx_coal_usecs` between ethtool configuration an=
+d the NAPI poll data path.
 --
 
-commit 01e0529ce363cdc7993646292c97c9feb7c956f9
-Author: Jesper Dangaard Brouer <hawk@kernel.org>
+commit d710fd75a7c5d61400890032084a8df84bc9498d
+Author: Simon Schippers <simon.schippers@tu-dortmund.de>
 
-veth: implement Byte Queue Limits (BQL) for latency reduction
+    veth: time-based BQL completion coalescing via ethtool tx-usecs
 
-This commit implements Byte Queue Limits (BQL) support for veth to provide
-backpressure and reduce queuing latency. It introduces a fixed unit charge
-per packet under the ptr_ring producer_lock and tracks per-SKB BQL state to
-safely complete it on the RX side.
+This patch implements time-based batching of BQL completions for the veth
+driver to reduce NAPI scheduling overhead. It accumulates BQL completions
+and flushes them when a configurable time threshold is exceeded, letting
+DQL discover a limit that bounds actual queuing delay to the configured
+interval.
 
 > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 0cfb19b760dd5..21ff785339431 100644
+> index d5675d9d52361..743d17b37223e 100644
 > --- a/drivers/net/veth.c
 > +++ b/drivers/net/veth.c
 
 [ ... ]
 
-> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budg=
-et,
->  			}
->  		} else {
->  			/* ndo_start_xmit */
-> -			struct sk_buff *skb =3D ptr;
-> +			bool bql_charged =3D veth_ptr_is_bql(ptr);
-> +			struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
+> @@ -265,7 +275,30 @@ static void veth_get_channels(struct net_device *dev,
+>  static int veth_set_channels(struct net_device *dev,
+>  			     struct ethtool_channels *ch);
 > =20
->  			stats->xdp_bytes +=3D skb->len;
-> +			if (peer_txq && bql_charged)
-> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
-
-[Severity: High]
-If the user decreases peer->real_num_tx_queues, veth_poll() will set peer_t=
-xq
-to NULL for queues that are now deactivated. Will this skip completions for
-in-flight packets that originated from those deactivated queues?
-
-If the completions are permanently leaked, won't the BQL state remain corru=
-pt
-and immediately halt the queue if it is later reactivated?
-
+> +static int veth_get_coalesce(struct net_device *dev,
+> +			     struct ethtool_coalesce *ec,
+> +			     struct kernel_ethtool_coalesce *kernel_coal,
+> +			     struct netlink_ext_ack *extack)
+> +{
+> +	struct veth_priv *priv =3D netdev_priv(dev);
 > +
->  			skb =3D veth_xdp_rcv_skb(rq, skb, bq, stats);
->  			if (skb) {
->  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+> +	ec->tx_coalesce_usecs =3D priv->tx_coal_usecs;
+> +	return 0;
+> +}
+> +
+> +static int veth_set_coalesce(struct net_device *dev,
+> +			     struct ethtool_coalesce *ec,
+> +			     struct kernel_ethtool_coalesce *kernel_coal,
+> +			     struct netlink_ext_ack *extack)
+> +{
+> +	struct veth_priv *priv =3D netdev_priv(dev);
+> +
+> +	priv->tx_coal_usecs =3D ec->tx_coalesce_usecs;
+
+[Severity: Low]
+Are we missing a WRITE_ONCE() here? priv->tx_coal_usecs is modified under
+the RTNL lock but read by veth_xdp_rcv() in softirq context during NAPI
+polling without any synchronization. Using WRITE_ONCE() and READ_ONCE()
+would prevent compiler reordering and load tearing.
+
+> +	return 0;
+> +}
 
 [ ... ]
 
-> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device =
-*dev, int start, int end)
->  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
->  	}
-> =20
-> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
-> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
-> +	 * synchronize_net(), and NAPI can no longer clear it.
-> +	 * Only wake when the device is still up.
+>  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct veth_xdp_tx_bq *bq,
+>  			struct veth_stats *stats,
+>  			struct netdev_queue *peer_txq)
+>  {
+> +	struct veth_bql_state *state =3D &rq->bql_state;
+>  	int i, done =3D 0, n_xdpf =3D 0;
+>  	void *xdpf[VETH_XDP_BATCH];
+> +	struct veth_priv *priv;
+> +	u64 bql_flush_ns;
+> +
+> +	priv =3D netdev_priv(rq->dev);
+> +	bql_flush_ns =3D (u64)priv->tx_coal_usecs * 1000;
+> +
+> +	/* Clamp stored timestamp in case we migrated to a CPU with a behind
+> +	 * sched_clock(); prevents the deadline from never firing.
 > +	 */
-> +	peer =3D rtnl_dereference(priv->peer);
-> +	if (peer) {
-> +		int peer_end =3D min_t(int, end, peer->real_num_tx_queues);
-
-[Severity: High]
-Similar to the issue in veth_xdp_rcv(), bounding this loop to
-peer->real_num_tx_queues skips resetting the BQL state for deactivated queu=
-es.
-Could this leave the state permanently corrupted if those queues are later
-reactivated?
-
+> +	state->time =3D min(state->time, sched_clock());
 > +
-> +		for (i =3D start; i < peer_end; i++) {
-> +			struct netdev_queue *txq =3D netdev_get_tx_queue(peer, i);
-> +
-> +			netdev_tx_reset_queue(txq);
-> +			if (netif_running(dev))
-> +				netif_tx_wake_queue(txq);
+> +	/* Flush completions that timed out since the previous NAPI poll. */
+> +	if (peer_txq && bql_flush_ns)
+> +		veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
 
-[Severity: High]
-Does this sequence cause a permanent TX stall if the queue was stopped
-purely by BQL?
+[Severity: Medium]
+What happens if the user disables coalescing by setting tx-usecs to 0 while
+there are accumulated completions?
 
-netdev_tx_reset_queue() clears the __QUEUE_STATE_STACK_XOFF bit. However,
-netif_tx_wake_queue() only schedules the Qdisc if __QUEUE_STATE_DRV_XOFF
-was set. If the queue was only stopped by BQL, the Qdisc won't be scheduled,
-leaving it asleep with no stop bits set.
+Because bql_flush_ns becomes 0, this pre-loop time-based flush check will
+evaluate to false, skipping the flush of previously batched completions.
+Inside the loop, new packets are completed individually, ignoring the old
+state->n_bql count.
 
-Also, if the device is being brought down, netif_running(dev) evaluates to
-false, skipping the wake. Could this leave __QUEUE_STATE_DRV_XOFF set on the
-peer, resulting in a 16-second watchdog timeout when the device is later
-brought back up?
+If those pending completions remain stranded indefinitely, won't the
+in-flight byte count tracked by DQL become permanently inflated,
+artificially reducing the available queue capacity?
 
-> +		}
+>  	for (i =3D 0; i < budget; i++) {
+>  		void *ptr =3D __ptr_ring_consume(&rq->xdp_ring);
+
+[ ... ]
+
+> @@ -989,6 +1064,18 @@ static int veth_xdp_rcv(struct veth_rq *rq, int bud=
+get,
+>  	if (n_xdpf)
+>  		veth_xdp_rcv_bulk_skb(rq, xdpf, n_xdpf, bq, stats);
+> =20
+> +	/* If the ring is now empty and the peer TX queue is stalled by DQL
+> +	 * backpressure, release completions immediately to unblock it.
+> +	 */
+> +	if (peer_txq && state->n_bql && __ptr_ring_empty(&rq->xdp_ring)) {
+> +		/* Pairs with smp_wmb() in __ptr_ring_produce(); ensure ring
+> +		 * emptiness is observed before reading peer_txq->state.
+> +		 */
+> +		smp_rmb();
+> +		if (test_bit(__QUEUE_STATE_STACK_XOFF, &peer_txq->state))
+> +			veth_bql_complete(state, peer_txq);
 > +	}
+
+[Severity: High]
+Does this leave coalesced BQL completions pending indefinitely if the
+receive ring is empty but the peer TX queue isn't stalled by DQL?
+
+When the NAPI budget loop finishes and the RX ring is empty, the device may
+go idle and NAPI polling stops. The batched completions (state->n_bql) are
+only flushed if the TX queue is currently stalled by DQL.
+
+If the queue is not stalled, these completions are left pending indefinitely
+without a timer to flush them. Since DQL measures the time between enqueue
+and completion, wouldn't this arbitrary delay (until the next packet
+arrives) be perceived by DQL as a massive transmission delay?
+
+This could cause it to incorrectly shrink the dynamic limit to its minimum
+and severely throttle transmission performance.
+
 > +
->  	for (i =3D start; i < end; i++) {
+>  	u64_stats_update_begin(&rq->stats.syncp);
+>  	rq->stats.vs.xdp_redirect +=3D stats->xdp_redirect;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260527135418.1166=
-665-1-hawk@kernel.org?part=3D2
+665-1-hawk@kernel.org?part=3D5
