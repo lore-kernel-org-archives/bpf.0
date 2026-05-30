@@ -1,112 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6293C1E5B68
-	for <bpf@vger.kernel.org>; Sat, 30 May 2026 04:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43EC27874F
+	for <bpf@vger.kernel.org>; Sat, 30 May 2026 04:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780116466; cv=none; b=tvlzKN0K2A/y93P9uHk+88aFoM9gtLWEsxxtbmvG1LBJDtZzFHaGCJK+Jm7pxtTeG+tlFCqBb2slNhZSAtKDPWxYqzWm43tgL9LfEfSvKtCb2GJFjQAvYCQMMaDukB6MZ45mCWKutigOybr8Kz9x/V2FzXnRhb1Cgq7lFlNlcbQ=
+	t=1780116879; cv=none; b=Hw/3HTpIzeq4Dgl8im9GaBaq6uvOyPl9vQf/yxlkLIOUrKVOdJRVqM6az12BaWFwU964E0EydL9cvCSps1Q1O0m/bBiQ+RqXP2W34kjnp6gewYLH4Kepxci7jCpq5hpGWgU92zL1Tt+vId2MNdhWKrPPp4wcqZsLjgMSnyrv5YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780116466; c=relaxed/simple;
-	bh=u3LvGopUMg/fuKzQtrDKR6ERXgJOpJALyKo4reECHaU=;
+	s=arc-20240116; t=1780116879; c=relaxed/simple;
+	bh=Y/cM7rhLDatCPfcrqu7ffYqVIU6sGkoZQ1uogsUdF/w=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=apHytbw/OkW5DQGcs0Iea1p369VPaGV6vX5k7mFa+VLw0MHt4uFNoKmAgeN+cFeR688ngGLc1SQE49MCKLZ79cLnM15c6jq5YE089QA4L19J/nZQEAjFfYnSsyKyjweOXU9beOKpRsX+1jz69ZPofVtJBStlzH+HbDC0E8xShqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZe0fEYU; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=oIM5x3XgatNyQ3HabcqAze08faDWJ+EebaOlf+LmFmySHXODlsE7qxt7Ny74z50UiOQzZ7YP8qQT1lnKOHTb1DMzBlxSeGJJ81FW9C1cOrqYK3DQXOx1AmHioD+i6wDN6Lj7L8nr3R0PBhWjrV63+t10FwsX78RVyiYfWa+fqFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyX2fgXM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZe0fEYU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A67C1F00893;
-	Sat, 30 May 2026 04:47:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyX2fgXM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD9F1F00893;
+	Sat, 30 May 2026 04:54:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780116465;
-	bh=Z7fYhp7lkQ+3twsyb91JH+bczxktRxAi5CmDdWjW6HI=;
+	s=k20260515; t=1780116878;
+	bh=2E1N6ewzNJ2y1pftwg816at/Vgo9g2qvWGOz/1b2tcY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nZe0fEYUCyZDcV+hOsZp/U31Wevm0/ZTXCqlgTsusrXrtotpqaPG8nGb5hR3kY0vh
-	 qdZf8Cg/7JtyTUqnwPpcCLMjq1+vymyGmP/9VSvSGN65Vgc5beg765+h6ExKlXOETD
-	 YOdHk1WlJ1Y4OYRpMZwMyQbdxhyn/vXI+0kK/mAtBztzfZDYPzSs5/mVYY0RyGmp33
-	 ls/tf5iZiHh6YSJ8KHTu+sGCm5gNsgprYg851jERmGNbNvflr12Q0/lLJL3kkrkTdA
-	 WdgkPSKyX8Rg96D5441ztg9rRgu8Md4zSFDEpyKpK1F+IzwKI0b9lOW5MLW6sUY4Eq
-	 x8kQkKJIiG8BQ==
+	b=SyX2fgXMtaLvoi6WAmErl+s+xjv0tGfBmoyOk+CuFpy7KNYh9GZuGdm6Ez+KXFShS
+	 iw6ebizvuhPOQTN6mBITuYQ1h7Ogg1FUGrjbejT1qJCfLAADk8rnqDoaXHVoqUWqrR
+	 q/T7OjZW307dwic3r+MpcjxVXAVPoKCCKh43w6EM5YoT/LERYZ1RWQgKmRcsyvsKG9
+	 ynmbM4JQd8RSfV51bhvPbpwOBvgvu9s0BODqaRgAADW/urUBYzmmHBlzApeAwwkB2H
+	 /2V45EQowATi/UxLLzBgbLJxNdCANS4BJLXXhK0GknD+nsPnRJXkg2PnmB+StveJf4
+	 kr8gWuXOkppoQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 4/4] selftests/bpf: Add tests for arena
- slub-backed allocator
+Subject: Re: [PATCH bpf-next v2 3/5] bpf: Allow subprogs to return arena
+ pointers
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260530011345.99342-5-alexei.starovoitov@gmail.com>
-References: <20260530011345.99342-5-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260530002259.4505-4-emil@etsalapatis.com>
+References: <20260530002259.4505-4-emil@etsalapatis.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 30 May 2026 04:47:44 +0000
-Message-Id: <20260530044745.0A67C1F00893@smtp.kernel.org>
+Date: Sat, 30 May 2026 04:54:37 +0000
+Message-Id: <20260530045438.5CD9F1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] Missing verification loop for sentinel values in arena_slab_allo=
-c.
+- [High] Global subprograms returning arena pointers have their return valu=
+e unconditionally marked as a scalar at the call site.
+- [Medium] The verifier bypasses BTF type enforcement for global subprogram=
+ return values.
+- [Low] The error message logged when a global function has an invalid retu=
+rn type is outdated and confusing.
 --
 
-commit 37191f82932baa8c7a355ab2dc782678851699f6
-Author: Alexei Starovoitov <ast@kernel.org>
+commit 0192bc82392a7d1bde4b6ab66bef8ece2f90c7cf
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-selftests/bpf: Add tests for arena slub-backed allocator
+bpf: Allow subprogs to return arena pointers
 
-This commit adds end-to-end tests for the SLAB_BPF_ARENA path. It includes
-smoke tests for the bpf_arena_alloc and bpf_arena_free kfuncs, as well as
-tests exercising corrupted in-object freepointers to validate clamping.
+This patch expands the verifier to permit returning an arena pointer to the
+caller from a subprogram. The main subprog is still not allowed to return
+an arena pointer.
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_slab.c b/tools/testi=
-ng/selftests/bpf/progs/arena_slab.c
-> new file mode 100644
-> index 0000000000000..738a48c45da33
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_slab.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index c6a930aca67ec..7a8101879f84d 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
 [ ... ]
-> +SEC("syscall")
-> +int arena_slab_alloc(void *ctx)
-> +{
-> +#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-> +	int i;
+
+> @@ -7963,17 +7993,15 @@ int btf_prepare_func_args(struct bpf_verifier_env=
+ *env, int subprog)
+[ ... ]
+> -	if (!btf_type_is_void(t) && !btf_type_is_int(t) && !btf_is_any_enum(t))=
+ {
+> -		if (!is_global)
+> -			return -EINVAL;
+> -		bpf_log(log,
+> -			"Global function %s() return value not void or scalar. "
+> -			"Only those are supported.\n",
+> -			tname);
 > +
-> +	for (i =3D 0; i < N; i++) {
-> +		__u32 size =3D 8U << (i & 7); /* 8, 16, 32, ... 1024 */
-> +		__u8 __arena *p =3D bpf_arena_alloc(&arena, size);
-> +
-> +		if (!p) {
-> +			alloc_failed =3D i + 1;
-> +			return 0;
+> +	err =3D btf_validate_return_type(env, btf, t, subprog);
+> +	if (err) {
+> +		if (is_global) {
+> +			bpf_log(log,
+> +				"Global function %s() return value not void or scalar. "
+> +				"Only those are supported.\n",
+> +				tname);
 > +		}
-> +		/*
-> +		 * Write a sentinel that depends on the slot =E2=80=94 proves the obje=
-ct
-> +		 * is real arena memory and not aliased with another slot.
-> +		 */
-> +		p[0] =3D (__u8)(i + 1);
-> +		p[size - 1] =3D (__u8)(i + 1);
-> +		objs[i] =3D p;
+>  		return -EINVAL;
+>  	}
+
+[Severity: Low]
+Since arena pointers are now supported, should this error message be
+updated to avoid confusing users? It still states that only void or
+scalars are supported.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c8d980fdd7099..64d7954e93ea7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9375,7 +9375,7 @@ static int check_func_call(struct bpf_verifier_env =
+*env, struct bpf_insn *insn,
+>  		clear_caller_saved_regs(env, caller->regs);
+>  		invalidate_outgoing_stack_args(env, cur_func(env));
+> =20
+> -		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
+> +		/* All non-void global functions return a 64-bit SCALAR_VALUE or PTR_T=
+O_ARENA. */
+>  		if (!subprog_returns_void(env, subprog)) {
+>  			mark_reg_unknown(env, caller->regs, BPF_REG_0);
+>  			caller->regs[BPF_REG_0].subreg_def =3D DEF_NOT_SUBREG;
+>  		}
+
+[Severity: High]
+Does this unconditionally mark the caller's R0 register as a SCALAR_VALUE?
+
+When returning from a global subprogram, mark_reg_unknown() clears the
+register state. If the subprogram actually returned an arena pointer,
+it seems the caller will receive an untracked scalar instead. Any attempt
+by the caller to dereference it would then fail verification.
+
+Should we inspect the subprogram's BTF return type here to dynamically
+set caller->regs[BPF_REG_0].type =3D PTR_TO_ARENA when appropriate?
+
+> @@ -16645,6 +16645,10 @@ static int check_global_subprog_return_code(stru=
+ct bpf_verifier_env *env)
+>  	if (err)
+>  		return err;
+> =20
+> +	/* Pointers to arena are safe to pass between subprograms. */
+> +	if (is_arena_reg(env, BPF_REG_0))
+> +		return 0;
+> +
+>  	if (is_pointer_value(env, BPF_REG_0)) {
+>  		verbose(env, "R%d leaks addr as return value\n", BPF_REG_0);
+>  		return -EACCES;
 
 [Severity: Medium]
-Does this code actually verify the non-aliasing property it mentions?
+Does this bypass BTF type enforcement for the return value?
 
-The loop writes sentinels to p[0] and p[size - 1] to prove the memory is re=
-al
-and not aliased, but it appears there is no subsequent loop to read these
-values back. If bpf_arena_alloc() were to incorrectly return aliased memory,
-the sentinels would be overwritten by subsequent allocations but the test
-would still pass.
+By just checking if R0 is an arena register and returning 0, a global
+subprogram declared in BTF as returning an int could successfully return
+a PTR_TO_ARENA. Conversely, a subprogram declared as returning an arena
+pointer could successfully return a SCALAR_VALUE, since the fallback scalar
+check later in the function would allow it.
 
-Should there be a verification pass to check these values before returning =
-or
-freeing the memory?
-
-> +	}
-> +
-[ ... ]
+Should we verify that the actual register type matches the subprogram's
+BTF return type signature?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260530011345.9934=
-2-1-alexei.starovoitov@gmail.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260530002259.4505=
+-1-emil@etsalapatis.com?part=3D3
