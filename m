@@ -1,165 +1,110 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F5125B0AC
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9BE4A35
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780188512; cv=none; b=diGRf9KSbPop5TvH8alxO1AAgkiPTyMQFPMXjbtCkIvjXxvlcn9UrKG5CAN5A2/0bbM8KGNNLX7DdK+8mGs5uhrQ9CYufctoMUa/YI57198//f7pyBD1xxA4JVH8bJmRjraH1XCP5/ebFI1z4ajeZVOcN/ZCSekPHiK0QIFfwrM=
+	t=1780189173; cv=none; b=tKfFjCu9cK/BfhfKIRL3o7oozR3XVV4QqJhitVtvN1IcEvdJarhbaPNm8ogZDpkEZatxHYmVw1BmVZ5y5Kf86xQWIkKCNr1dLAg0HnEGrt6TYAxvfUim8Nd+BkXdc5oQ9HU2Y/JXiIoZfI/NtanbjbVENyJeOX1z/wXUHfLemiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780188512; c=relaxed/simple;
-	bh=nf7H52BiE00pfcsnE0so3Yy+4Kqlaf5sOzNGyBYj+pk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UFNWyNhW8TnfigBr/j7IfV8x5p/4n/n7Uu1xPBkZyXLoLthBcQB6wrKMBj/FFXd0oZiCeJrntueKPkeor6CMDjItgA03w420Gq+jyIS1V+Soexln3ArNY8sIRddXxscuFZ0HMyjd+qxYfyb9oc0ugJX/KXMPzEQUxYBt0HZk22E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RuUCsCgj; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
+	s=arc-20240116; t=1780189173; c=relaxed/simple;
+	bh=0GWWatQvPRQp+TwC5XFF7JbSe00DO/uAwMMOKwzL/Cc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ktryr9uGEVRrCAMQg0F+oTsZBGU+LgMlacvUp7uJ2Odgzf3zzQgvkltxIyuCT6nOc6tXHOcsmVHonOGkf1oqnKMHqvXOBV/VTyYEqyhYFmIxlP5otmNXjNUlNUwcStOUf3UFNQVErzSWpuhP1AgHvR8jVwK5TbQN6MDB8aMn/1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kwBrtmsN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RuUCsCgj"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8422875c676so597096b3a.0
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780188510; x=1780793310; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZwO/OlrIC4X5IlWqO2MUG4z3bwcShqiYLdiaVgWhfIU=;
-        b=RuUCsCgjZI2MaJzgYolIOa2oKIy5birycm8UCXcV80iIx1DNiW3T4ZRV5ogAefFMhx
-         tNOd/qgTap9viC0WTBoVZtT8tGYX2Wz1q5aFL+biDB4qEWbROi4vOUX8a9XU02P6nNhU
-         SV1NKP5UeP1Pv9OpIPm5eekS+2R2rPVGjvEakB1h5zACwUI0V49AhhyGyosi7EAoO+Br
-         mGjMvuQaQPmVo71z+okS8qMBv/+f0ePBNYmhlgooM2MibG4Jp0uPpiJ3nemDfytIo6hc
-         3TAQCZjghjp4pNhdv9aCCz19ykrh2Tf2kzRdP7mgIvIZqtgWyZDRTGnH6X4mENhymD2O
-         ZE2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780188510; x=1780793310;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZwO/OlrIC4X5IlWqO2MUG4z3bwcShqiYLdiaVgWhfIU=;
-        b=HsrCOEsFg57ORyyTmZxltOfAGIyqd5MEOFFkkt3806qRw+lt1hCfTzJOokW0ao/sYY
-         Pg6lEiARrHAZJmdfPGLGD2x8M0j5IFEN3he8WQ/tKrlYoND+I71O3keinOsWjSsbJR/4
-         wa0+fK0lNcMbYANEW/tU/NwgusZomkmoVMN0p+TZNsrbGTZJID+03Y6HQ/SsLy/ERhrn
-         n3gnHuIsOHA8GHM2REO5gxUxdagOvwDQtJBGUx4IiaQIMMmq2CxrJ6gS4MHqBlv5t9/M
-         MyS4w2bL3ffx7w55WEKcbIirR+ILWsNZTZo1UKJmoCenPRd3mErW35OOLdz2RTl9e+DG
-         QQsg==
-X-Forwarded-Encrypted: i=1; AFNElJ+Jt489x/ydsNcpfnQn4hlFNbWSVh5V9m2b3NgDhBDezDYVKuU4DfaAnI0TVWd0uzk/p4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yza2WzRFGZ+KZ+m+5H40CGfXZQLAWQrsI4eJI9vJfyi5FAixQH2
-	hAzWmxfP2p0hGxvC8Pa1KJw6XXbu2RbfQfnGFEB+TYHEEC5Vq3gNKWFwghTsHsFrEOB1qa1oBf+
-	OeKXl1E0HIyhqHa1/XISjxGLUBA==
-X-Received: from pfbgr7.prod.google.com ([2002:a05:6a00:4d07:b0:83f:2ce7:48ce])
- (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:3988:b0:835:3861:812c with SMTP id d2e1a72fcca58-84210c545c2mr7093486b3a.23.1780188509512;
- Sat, 30 May 2026 17:48:29 -0700 (PDT)
-Date: Sun, 31 May 2026 08:47:48 +0800
-In-Reply-To: <20260531004748.3567875-1-yuyanghuang@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kwBrtmsN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F201F00893;
+	Sun, 31 May 2026 00:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780189172;
+	bh=eJiSiggoopalM3ypSY9MQzdsL9E1tn3fqcXjXfMe9bA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kwBrtmsNOAjGp8oJDmkE+/4gKRITadHWqiMvOE/sxfanssZ35SECvLxfj9LDbU43w
+	 4PH2KFxi2okEo1aqFJhTjOMVJZG9IpzVfXHxyQmghu+oR6u7rfVGKIY28YIMT6vh49
+	 //gT8V6xY4a3V/W9OXQ42KMIPfpZAZuuU1bdjQaRWHFXR5NutlNsqXUvhL/26Eoq2/
+	 rAJ8kqZtWkfBVsU0Ww5V5MhVj3BL8ywUWkYaU0XPxnXh5hC8LpR/THwzoNKDR0uNxY
+	 XrEbx+7rO3V20D/F9rbiFf+FC6Grksplo1198Sz95R4x4rONVQ6Jhijb24XUAHhbWA
+	 XBuXiElQlzB6A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject BPF_PROG_QUERY with short
+ uattr size
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yuyang Huang" <yuyanghuang@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260531004748.3567875-2-yuyanghuang@google.com>
+References: <20260531004748.3567875-2-yuyanghuang@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 31 May 2026 00:59:31 +0000
+Message-Id: <20260531005931.D4F201F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260531004748.3567875-1-yuyanghuang@google.com>
-X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260531004748.3567875-3-yuyanghuang@google.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for
- BPF_PROG_QUERY attr size boundaries
-From: Yuyang Huang <yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Add a new selftest to verify that the BPF syscall (specifically
-BPF_PROG_QUERY) correctly rejects queries with a user-declared size below
-the mandatory minimum (which now covers query.revision) with -EFAULT, and
-succeeds when given the full size.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] The patch unconditionally rejects BPF_PROG_QUERY requests with=
+ a smaller attribute size, breaking backward compatibility for older usersp=
+ace applications.
+- [Low] Returning -EFAULT for a structure size mismatch is semantically inc=
+orrect.
+--
 
-Cc: Maciej =C5=BBenczykowski <maze@google.com>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
----
- .../selftests/bpf/prog_tests/bpf_attr_size.c  | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+commit 205b70f382d21dfafc18f8275384ff0f06e59f6e
+Author: Yuyang Huang <yuyanghuang@google.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools=
-/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-new file mode 100644
-index 000000000000..4fbe56cb29d4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Google LLC */
-+#include <linux/bpf.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "cgroup_skb_direct_packet_access.skel.h"
-+
-+#define OLD_QUERY_SIZE		offsetofend(union bpf_attr, query.prog_cnt)
-+#define FULL_QUERY_SIZE		offsetofend(union bpf_attr, query.revision)
-+
-+static void test_query_size_boundaries(void)
-+{
-+	struct cgroup_skb_direct_packet_access *skel;
-+	struct bpf_link *link =3D NULL;
-+	union bpf_attr attr;
-+	int cg_fd =3D -1;
-+	int err;
-+
-+	skel =3D cgroup_skb_direct_packet_access__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		return;
-+
-+	cg_fd =3D test__join_cgroup("/attr_size_cg");
-+	if (!ASSERT_GE(cg_fd, 0, "join_cgroup"))
-+		goto cleanup;
-+
-+	link =3D bpf_program__attach_cgroup(skel->progs.direct_packet_access,
-+					  cg_fd);
-+	if (!ASSERT_OK_PTR(link, "cg_attach"))
-+		goto cleanup;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.query.target_fd =3D cg_fd;
-+	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
-+
-+	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
-+	ASSERT_EQ(err, -1, "query_old_size_fails");
-+	ASSERT_EQ(errno, EFAULT, "query_old_size_efault");
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.query.target_fd =3D cg_fd;
-+	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
-+
-+	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, FULL_QUERY_SIZE);
-+	if (!ASSERT_OK(err, "query_full_size"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written");
-+	ASSERT_GT(attr.query.revision, 0, "revision_written");
-+
-+cleanup:
-+	if (link)
-+		bpf_link__destroy(link);
-+	if (cg_fd >=3D 0)
-+		close(cg_fd);
-+	cgroup_skb_direct_packet_access__destroy(skel);
-+}
-+
-+void test_bpf_attr_size(void)
-+{
-+	if (test__start_subtest("query_size_boundaries"))
-+		test_query_size_boundaries();
-+}
+bpf: reject BPF_PROG_QUERY with short uattr size
+
+This commit modifies bpf_prog_query() to return an error if the user-provid=
+ed
+attribute size is smaller than the offset of the query.revision field. This
+aims to prevent an out-of-bounds write to userspace.
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 9e91fb2fb492c..4dbf53e81a38c 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4719,8 +4719,10 @@ static int bpf_prog_detach(const union bpf_attr *a=
+ttr)
+>  #define BPF_PROG_QUERY_LAST_FIELD query.revision
+> =20
+>  static int bpf_prog_query(const union bpf_attr *attr,
+> -			  union bpf_attr __user *uattr)
+> +			  union bpf_attr __user *uattr, u32 uattr_size)
+>  {
+> +	if (uattr_size < offsetofend(union bpf_attr, query.revision))
+
+[Severity: Critical]
+Does this unconditionally reject older userspace applications that pass a
+smaller uattr_size? The BPF syscall generally maintains backward
+compatibility by allowing older binaries to pass smaller structures.
+
+By rejecting the call entirely at the top-level dispatcher, wouldn't this
+break ABI for all attachment types (like BPF_FLOW_DISSECTOR), even if those
+specific handlers never attempt to write to query.revision?
+
+Could we instead pass uattr_size down to the lower-level query handlers and
+conditionally skip writing the revision field to user space when the provid=
+ed
+buffer size is insufficient?
+
+> +		return -EFAULT;
+
+[Severity: Low]
+Is -EFAULT the correct error code for a structure size mismatch?
+
+Standard practice usually returns -EINVAL (or -E2BIG) for mismatched or
+inadequate sizes. -EFAULT typically indicates an invalid memory address
+during a copy operation, which might mislead userspace developers trying to
+debug their applications.
+
+>  	if (!bpf_net_capable())
+>  		return -EPERM;
+>  	if (CHECK_ATTR(BPF_PROG_QUERY))
+
 --=20
-2.54.0.823.g6e5bcc1fc9-goog
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260531004748.3567=
+875-1-yuyanghuang@google.com?part=3D1
