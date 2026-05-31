@@ -1,119 +1,211 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562F91D54FA;
-	Sun, 31 May 2026 04:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780203181; cv=none; b=J3++kTsL9MoY6iPE/Zs+A1b4gseljGlwFszWBXPPFoRNY76mAMxKTe1RjCoVbckTrJ6ItkpJVyQbk+an0hTi3o18ef6fDVqKTZpu0SIadJlYs1BCAdINDW/RkzOaTsVc8wXHBYSfx5FPdPuDWC8/rwoSlc6KT65Kg9446rMdQH8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780203181; c=relaxed/simple;
-	bh=BEgUppDCDRw8PP3X5I+8jBTlt1jboC3EEPYd8erBziQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yef5lY8QirE6PcjmJhmnonjXizHKoMLW+k6Ft1B4vYr0xKLRIGmw9Tc8EH7P/d95eDmwzw8+u7piYjNy6PWEmtlvwm8JrD5ZLe+wSi7afYBDcOJoU4c6epnNs6WkGvVMmOK2BayZSGQGTIkrMrcjTAPuDcOLQTtaxyChJXhiInc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn; spf=pass smtp.mailfrom=lzu.edu.cn; arc=none smtp.client-ip=52.229.168.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lzu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lzu.edu.cn
-Received: from enjou-Legion-Y7000P-2019.coin-barley.ts.net (unknown [172.23.56.36])
-	by app2 (Coremail) with SMTP id zQmowAA3zwaBvhtqIKkVAA--.20948S3;
-	Sun, 31 May 2026 12:52:22 +0800 (CST)
-From: Ren Wei <n05ec@lzu.edu.cn>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	toke@redhat.com,
-	yuantan098@gmail.com,
-	zcliangcn@gmail.com,
-	bird@lzu.edu.cn,
-	zzhan461@ucr.edu,
-	n05ec@lzu.edu.cn
-Subject: [PATCH bpf 1/1] bpf: devmap: reject cloning fragmented xdp frames
-Date: Sun, 31 May 2026 12:52:13 +0800
-Message-ID: <4b596825bccc64d03e0c2e0db4dceb12c7f5cf47.1780176829.git.zzhan461@ucr.edu>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1780176829.git.zzhan461@ucr.edu>
-References: <cover.1780176829.git.zzhan461@ucr.edu>
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863461DE4EF
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 05:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780203680; cv=pass; b=Y2fLohlaGRlnOy0gqnjViku8hkiBOUrRrmxt3ti91A7UReFvMuNkUcHxViqjp7nwfXrlkuKBZwYl9JV00G7rK++Sf0BaCkpi50GS992F9MRYcMw1BUgiXf9hq5DLht3eULe2IPSQCKMi2pmLT+WsA0V/j2NNfdD3mI28O3mwgNE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780203680; c=relaxed/simple;
+	bh=uDqPR19CBC2h8AzQ/4XtSluc0ZTH7/6e2TiZJ2kK5hk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m0N+BLxbfWeL0MWyDqWFeEtHCB+JrQnANwBUNyAkMrlW6YxwB9ZSIiaHcWOMgePIaPdSGCSHyFtdqBygmErY9+CypwoUWEvWgKQugLJPauA5h/aqlx2u6LINIoHtFjrszE8F7W+mtd+vj/gc5GrLuQz9gQapoKv4QYaMm7DyLEg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXQNiSJ8; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXQNiSJ8"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5aa653221d1so785546e87.0
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 22:01:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780203677; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dIaZcULyayELBt1mhKuJ0bzEE5cCbCrtUeaB+3XeB+c25XavzfhLY3cP4qLhHW8Fwc
+         3+qZTCOJ+MzcjY7cE4z7DqHgDpGp58QBJm0uzbpQYdLPooIKgAcp32QJq3eo8L/VC0cA
+         os7umvufToaqEvRSTc/pmw96AjQqGtEMhnRRslEe4cCrOSezCmfLMA5hkqKZcMlbpDfk
+         PjKfE6GxRyYckjshv3ELAAfdyvxsYuJx3aj0FLQyvD8BsQU9/JHy6C/YNVLY4m0Yr5xA
+         oXFwGMkCfiEZ15eCCDLdoLppGCx1wp/m7B7Mp1Q/T97hLLi1EXfcT0SCDGCkOZd+O3gr
+         D+CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nqgOgNRdeGO3Yt8rRsoJuC9RkIgPZyiihaZvjuvwF3w=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=ivilXdZWQWbnlhZ9CyAzZJRPaU8oF4tdSfvMWNfXyBqCVznaVEbPl2zjWBPV4cXVBV
+         Ff/VZPmfs4g79PP0l8SwezUtnNQ7+iZCi2KPx5MJ1MFP5an3ECX14Y0AzgWrSLjiSkfP
+         +3qTQVgAoxqZrmV6son1U6/55R8Fk9HKhcce277sBw5F62Q6olQlminCfz4jxTmI0Xrb
+         fYfquZnr0g5iIqLud7kW9nsJ46J/ymFF0c3oaydDTD2GwAJtvDQweRSirU8+f0SvbYPB
+         2mCu/RbRS5dtbd14Z4Oml4914Pm3oVhdnAFz5CYf5c5xVF5IfR6L+WOGTZStJl+T+9Oi
+         GySw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780203677; x=1780808477; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nqgOgNRdeGO3Yt8rRsoJuC9RkIgPZyiihaZvjuvwF3w=;
+        b=LXQNiSJ86kR81WV6oyKULiljtIGsc7IeXvyZsl14FsKTwYCA+J7IS1UcbMUZYx03Oj
+         ZmYQmg6tv4d/xkaHoOvxXBSA+KLgEPCTHwmPu3/5G/DdP9Uer3AxZ5O7LmxkqFvLJ/xR
+         mxthuBXkKU/S9VXVixjR3duSYAmmKHWtgJt41ojSFGZlPg2Ht1nQBfSeWzmovPAdgeNH
+         vlLFtg7hdm0fiSCrQpkk6Pu0Ye4Up7pZkwLggoTRKRDm1QAh76xf5WAuXztusXWTK9++
+         nTIYGT0ZMW8UXlzXSbEpN6waxHYPVwd5Qqb8IxwmbLnpTVXAgEPPiD6SsQ8A6iW0EkKt
+         qTww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780203677; x=1780808477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nqgOgNRdeGO3Yt8rRsoJuC9RkIgPZyiihaZvjuvwF3w=;
+        b=Zpnzw3Qt6vetfSbFa9IqjzyFRxu8w6txJocQ5dNMPtJiTs/lNGdzC2igDTLVbs10OQ
+         29RAhtPZozxujtxHsJgp+CBmsPv9t+DFst7n8I2n2pSqpzOybAU28AePuA7ZMjVNQMt2
+         KWBlsM97Snoa0cAzWxtVWSHAdmsdhPj0p47sWUDizWljOE8FFaLhDAGwz7WQixLR2vFk
+         iOxNB3talRS+ZLfX0F5su55Cq0MzJGPHgXLFFWZuAkQJtxE665FWLIBCyQcVEEZqxp0y
+         hcGUSMYvvBz5Ig3JspAu2Sepf9vZQeTgRvd4xW/iksFZJHeufD/yNg4ZS9PUAG8DKyoF
+         /gRQ==
+X-Gm-Message-State: AOJu0Yy7UlgS1bvSi37QWfoJxCUDYvg7jxIbuVHjbBc/OD4RZZb3rs84
+	CqYGc3OJ/pY3aLqqoQA1WAxPGO7/mWVRVgrIzSkDbLTwde5aMbjAX/fey8iv2q/HJeR4Al39zkF
+	PiZeRty6Cq24l15wvz4MEWVFwi/BiqJtzSZrBTYYhnA==
+X-Gm-Gg: Acq92OFhVKJFfgHe5Zs9PWgWJThjpkUD+cJBKESNgH9FHtnzz3UdwSKFj/yYrbDaJMx
+	0vDx2MLtXzzi0n986xJhIFbR8MJdh0uhSk+GxV1LqWV72sncZzcstn+uLx3oc0CMrNu2RbLqbmo
+	byBEfmCsWoc1uWL/LxBpGTeH5p2XXBizzgHbwr1JqiRs+laAJj4n8jJhnVcBZRMjhG24pEAKwuA
+	zz2mE+5WgKkf7tGa3QLiW12SLCTZHvXojaaqqL+nXUf7/KeMAb70bKCJ7gpM7KNTb8Bc6FT9GYQ
+	CNG+rjW1meX9pHdHZ42vkGCLdCQaur5VOOYkBadZ1Ee3nuN6Fg==
+X-Received: by 2002:a05:6512:1413:b0:5aa:62df:cd0f with SMTP id
+ 2adb3069b0e04-5aa62dfd973mr728016e87.2.1780203676357; Sat, 30 May 2026
+ 22:01:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQmowAA3zwaBvhtqIKkVAA--.20948S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1UCrWUArW8ArW5Zr1kXwb_yoW8Ar47pa
-	yDXFyDGFWrtr47Ca4jyF4I9rW5Kr4kWay7Kan0gry3Zw1qgF9rW3yagFy3XryYyrWFka1r
-	tF12q3yDG34DX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-	IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
-	87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-	8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-	Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_GFv_Wrylc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
-	0_Gr4l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRMXdjDUUUU
-X-CM-SenderInfo: zqqvvuo6o23hxhgxhubq/1tbiAQEECWoanc8JJwAAsB
+References: <20260530042630.80626-1-kerneljasonxing@gmail.com> <20260531042721.DBD4B1F00893@smtp.kernel.org>
+In-Reply-To: <20260531042721.DBD4B1F00893@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sun, 31 May 2026 13:00:38 +0800
+X-Gm-Features: AVHnY4LqahcWtg1FhRj5ewX96RmJQ76PvHXyzLtz7MffAph-ztRPjQzAQCAHMGw
+Message-ID: <CAL+tcoCgXG5MdPVzXavwMwk=jmPXgcB5aKpLK+TNXMVrsGmS9w@mail.gmail.com>
+Subject: Re: [PATCH net v5] xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Zhao Zhang <zzhan461@ucr.edu>
+On Sun, May 31, 2026 at 12:27=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] The `struct xsk_tx_metadata` UAPI structure has an inconsistent =
+memory layout between 32-bit and 64-bit architectures, breaking compat mode=
+ due to implicit padding.
+> - [High] Silent 16-bit integer overflow when calculating `skb->csum_start=
+` leads to a negative checksum offset and out-of-bounds hardware DMA faults=
+.
+> --
+>
+> commit 8339ac65115fadb8d99c0e54d06d57fab30b5e84
+> Author: Jason Xing <kerneljasonxing@gmail.com>
+> Subject: xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metad=
+ata()
+>
+> This commit addresses a TOCTOU vulnerability where userspace could modify
+> csum_start and csum_offset between bounds validation and assignment. It f=
+ixes
+> this by using READ_ONCE() to cache the values into local variables, ensur=
+ing
+> that the same validated values are used for SKB assignment.
+>
+> Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kerne=
+l.org/
+> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload suppo=
+rt")
+>
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 5e5786cd9af55..f8c8a8c9dfba5 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -811,13 +812,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, =
+void *buffer,
+> >               return -EINVAL;
+> >
+> >       if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+> > -             if (unlikely(meta->request.csum_start +
+> > -                          meta->request.csum_offset +
+> > +             csum_start =3D READ_ONCE(meta->request.csum_start);
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but can the UAPI layout for
+> xsk_tx_metadata cause issues for 32-bit userspace?
+>
+> include/uapi/linux/if_xdp.h:
+> struct xsk_tx_metadata {
+>         __u64 flags;
+>
+>         union {
+>                 struct {
+>                         /* XDP_TXMD_FLAGS_CHECKSUM */
+>
+>                         /* Offset from desc->addr where checksumming shou=
+ld start. */
+>                         __u16 csum_start;
+>                         /* Offset from csum_start where checksum should b=
+e stored. */
+>                         __u16 csum_offset;
+>
+>                         /* XDP_TXMD_FLAGS_LAUNCH_TIME */
+>                         /* Launch time in nanosecond against the PTP HW C=
+lock */
+>                         __u64 launch_time;
+>                 } request;
+>
+> Because launch_time is an 8-byte type following two 2-byte types, on 64-b=
+it
+> architectures there will be 4 bytes of implicit padding inserted after
+> csum_offset. On 32-bit architectures like x86, __u64 only requires 4-byte
+> alignment, so there is no padding.
+>
+> Does this mean a 32-bit compat userspace will write launch_time to an off=
+set
+> 4 bytes earlier than where a 64-bit kernel will read it?
+>
+> > +             csum_offset =3D READ_ONCE(meta->request.csum_offset);
+> > +
+> > +             if (unlikely(csum_start + csum_offset +
+> >                            sizeof(__sum16) > desc->len))
+> >                       return -EINVAL;
+> >
+> > -             skb->csum_start =3D hr + meta->request.csum_start;
+> > -             skb->csum_offset =3D meta->request.csum_offset;
+> > +             skb->csum_start =3D hr + csum_start;
+> > +             skb->csum_offset =3D csum_offset;
+>
+> [Severity: High]
+> This is a pre-existing issue, but is it possible for skb->csum_start to s=
+ilently
+> overflow here?
+>
+> If desc->len is large (e.g. in unaligned_chunks mode or on platforms with
+> >=3D 64KB PAGE_SIZE) and csum_start is near 65535, could hr + csum_start =
+exceed
+> the 16-bit skb->csum_start field?
+>
+> For example, if hr is 256 and csum_start is 65500, hr + csum_start is 657=
+56
+> which truncates to 220. Later, skb_checksum_start_offset(skb) calculates
+> skb->csum_start - skb_headroom(skb) (e.g. 220 - 256 =3D -36).
+>
+> When hardware checksum offload is used, NIC drivers might use this negati=
+ve
+> offset to compute header lengths and shift it into the TX descriptor,
+> potentially causing hardware DMA faults or PCIe completion timeouts.
 
-Devmap broadcast redirects clone xdp_frame instances for all but the
-last destination. That clone path only copies the linear frame data,
-while fragmented XDP frames store skb_shared_info in tailroom outside
-the linear area.
+They were brought up a few times before... The second one will be
+fixed shortly after this patch, I said.
 
-As a result, broadcasting a fragmented xdp_frame leaves the clone with
-XDP_FLAGS_HAS_FRAGS set but without valid frag metadata. The later free
-path then treats uninitialized tail data as skb_shared_info, leading to
-an out-of-bounds access during frame return.
-
-Reject fragmented frames in dev_map_enqueue_clone(). Devmap already uses
--EOPNOTSUPP for unsupported XDP frag forwarding cases, and the current
-xdp_frame clone model cannot safely represent a cloned fragmented
-frame.
-
-Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
-Cc: stable@kernel.org
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Reported-by: Zhengchuan Liang <zcliangcn@gmail.com>
-Reported-by: Xin Liu <bird@lzu.edu.cn>
-Assisted-by: Codex:GPT-5.4
-Signed-off-by: Zhao Zhang <zzhan461@ucr.edu>
-Signed-off-by: Ren Wei <n05ec@lzu.edu.cn>
----
- kernel/bpf/devmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index cc0a43ebab6b..2bfebded5329 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -581,6 +581,10 @@ static int dev_map_enqueue_clone(struct bpf_dtab_netdev *obj,
- {
- 	struct xdp_frame *nxdpf;
- 
-+	/* Frags live outside the linear frame and cannot be cloned safely. */
-+	if (unlikely(xdp_frame_has_frags(xdpf)))
-+		return -EOPNOTSUPP;
-+
- 	nxdpf = xdpf_clone(xdpf);
- 	if (!nxdpf)
- 		return -ENOMEM;
--- 
-2.47.3
-
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260530042630.80=
+626-1-kerneljasonxing@gmail.com?part=3D1
