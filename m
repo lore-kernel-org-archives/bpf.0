@@ -1,154 +1,93 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84D63594A
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A84723D281
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780186492; cv=none; b=mnqlZw9pwyGlWqYNlgxrWHB8+YnmSlq1xdTVaqlN1KBJnqjY2vtriEypHv18HANGWZQjp2f0RuKwolPzrm6KQ+5Zu5X4F7wxV2DsJ4lX9hALtSFWT9M9DpPwFsC19CUOff6AeL22NRhngJvMdfNLfT2pAXosITd4iH8aXB/qQqs=
+	t=1780188506; cv=none; b=H5W0PWjXTT99WXaPzD7r3JGhRfpxtcQ5bddJTfEjHpEifRnQxONOH1x9mR9OQtW/35XkrmNjooeb5NrlxAIl7KxQTg4KPQTd0yGVmpu+W8noPnc4qY9PyKzyoNJXR2Eo4sxGfeRw3I2kt0+WK8ZpcHrhOetaJGOUrj3uL/NK+co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780186492; c=relaxed/simple;
-	bh=3Lniljo4umQFyHf4Oydjd3iBsVbqqEjUbFIyY4I5ij0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=XosNKsadO0Gd/TRv/eQ+3UwVtWQQzQ49eEZvAeO5/8SqlpEPBdh3wSM9N6hEb6Kk1lTHgyRNRK8ykyAWudE8UGWUMXmwwuVE/6xmIgV6koSJn6V7vMUulvmWM6VkB3S6wZK4iWaJV7mcsBjw/UuDgEk0aNAfPuMp4HWKwR0ZqVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s6R0oolu; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780188506; c=relaxed/simple;
+	bh=JE+XeIKTsotTh/xcFii2dHnI072msL/Mkm3HQLAo1nM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Qf1LC3/9cjtjqA/Hw/N5RSapkJF2RkQl3p2vSsn2o/f2SsQ04hGI25aVFKbLFX8MsjayJ1/CS/P13qQUIsvz20LvejHeCzpC28IL95df0kyjzfDH6YV+RBf3k7fznsWGfk+JgnNiXcUbqf0ygw7IMlSEUwLcTxkNY5a/wcqKCho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XkWmnJwp; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s6R0oolu"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-69d8f70cb0cso5273458eaf.0
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:14:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XkWmnJwp"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c0c1e112dfso1905885ad.0
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780186490; x=1780791290; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z6WHUv35EmdQ4QWk4JR3Y1fgG/+v8aK/cHw1Gj0rc90=;
-        b=s6R0ooluIo1rFLvZcBx58pKndbOk0oPrpbFdoXgb4VEJGR75AEpICwtdUwS7o9LSHt
-         rRayx1iB+wivCAoEtEfWHymB3r+9SMueogckl+clyXeN3iJXsVEC4CiAQljqnlgXttN3
-         29ZDQOQPc4sNFxvBam9i/oXe6/Z1W9cSxaN4YuxbwDD4TKMnyhYhPrkSW3wwVo+Dwib4
-         Y6dRFAE77VNPdGyo2Gx36x1JM2s2txqNALhPz050YrF/hABzSt5Ux2hE3DGA/Z7x4PYB
-         ckCom+A/GKAR92QazjD9ORQeEeFwIwmTdgIzpXZ2fJAmaJIrBxTni5rGp+0F8LTpkZ3z
-         pDyw==
+        d=google.com; s=20251104; t=1780188503; x=1780793303; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m9llWaUyY0QX+uCte5zZE9wTjpV+Ud2qZ4TJwZ1Uj1c=;
+        b=XkWmnJwpXTNOLwm9uo6m+wyaANURz/Xi6Za9LQqmxzDCuuXpsDp20nNbmMld6I5Jre
+         6jI7WjcRQVbnAJV3CGUsUIICYq2RIh+ciMM2M+F5Fu48eGS4ZiHZP44lB1lizBAydBBO
+         Jj9H3Wdz2/i33KNtFrSmRGa/kWL6EVVu0FHhQ76NII+9O3hzLxfEiASERtGbUDjKRzSe
+         hWjTur64W/gKyJyCpbXknLHtI9t82UyLY7pl/m+U/tnzeNcGdOoM6iHfGQ/1UZdsKNnN
+         /JVwisH9wSUwq4yYe8nA6meCvhyFBngBw2N9D978bb840hDIHstzoJI2+cGG0PamoqgP
+         Fx/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780186490; x=1780791290;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+        d=1e100.net; s=20251104; t=1780188503; x=1780793303;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=z6WHUv35EmdQ4QWk4JR3Y1fgG/+v8aK/cHw1Gj0rc90=;
-        b=QufWZAErp+zkIgN5D6c/AwJ/YwteOGdcopt1sH9uJTV0DzpcaI+I4G1mEuLctHLj3d
-         A5sRHxgtYCk15B8oevk2wUtqJ0Mq01tm3/ADguTZxTi+Cmyoq0MaVBjkM9Z0DwxKA5l6
-         5jMI50Gh3ZWoYWOf06vK5gowTlnwGdvplmbcIPlJBhM4kGvXYU29t5Q4s/jQDz8urVy1
-         mgmfY79euI+4O6d91+1bsb7409DidhAC1/51pNhuKTnP9T9aO5yZ/3+b4NgxRn6oMfnK
-         Pqf25QWSF4ME3NBS0DhqmMDiF556v17KDePadBo3PUeZZ8vaBRn6kPPpd82/tIPw/FmC
-         vShg==
-X-Forwarded-Encrypted: i=1; AFNElJ9Jwp119pS+P/CvEs9QTthX0aIGtrQa5G8jUwoXU+NA6p3mmr2ZfzncUtXCSg+PqsEVVZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVIZnB719gRIR45aHvpIniepcDENSrOQwt3E3MI4z6oNMwXOdC
-	B5mhpVG1bsDpS8K7GUOlb2hGkqMyLSi4AGLnDFRjCTdr23KacCnskeZJ
-X-Gm-Gg: Acq92OFswvqMw4rq9bbFMxx/k8stlv25lyIK9BQaImwqter2Xn05Lmot7Rr7wqGChEP
-	6rKe07KbmQ6rMom2UGsw2efDj+4X7+ovM+7NGWAheLVm8ClcjI/kD8JxuP/jOME4IQxp2dijNfY
-	QDAbe+xE/4Zd+OLn1TDIRNZFfIs6iwkTtH4aUSKDcW7pxBPjR24qAR82fl943BEt9DkiN4vfWdH
-	f/1CMqmM2YzrgHlGxpRUHZ+IYAFxYp8BdKNqDTEUQr2pjOHAqYFSmnglDQn0YBWopGW2vmEaQHu
-	hRZtc23ON9sDPDzdyBimgKPaBeaJjxp92OywlN0hxYTp9ND47q87pwRubn45Z5STPSkP2RHnz4d
-	8pcp7V5IJL6XLeM4iYXjuoxgG/9dWKxTTfxTjVfWTPNGacCHwKRCYYWHh8Y1jxifL9Y5lH5tASZ
-	dykftK+cRa/2DDCqrR3xZA6YqfCWpYE+rrMrE804MEEj3Mtei/aIcaY+7Xffby7FE1UevwM7eDU
-	GmWuPML/BvYp0XNIOcXyv1Q4LKk
-X-Received: by 2002:a05:6820:1c8c:b0:69d:7a88:9cdf with SMTP id 006d021491bc7-69e10469737mr2718415eaf.15.1780186489512;
-        Sat, 30 May 2026 17:14:49 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:42::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69e069b55ddsm3918373eaf.13.2026.05.30.17.14.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 May 2026 17:14:47 -0700 (PDT)
+        bh=m9llWaUyY0QX+uCte5zZE9wTjpV+Ud2qZ4TJwZ1Uj1c=;
+        b=m09e3rmChqEbvDoI675mzr4FnIpQ5MTcQHeG8MP2B1p9dlsvKdeYsuSgLr280+N3k/
+         NNCbMR8QgDQAhPZDr3MCmKsKmrZ5LnNV7s+7c9cUO/aZlXj0QYZyv35ZcQySJzV+dhxN
+         JomUQNk4Dtssqk40mFtt8+nq5KFanIMwYGKluO2fBodZsDY3QgzbWxHEuYEOUqD+YcTX
+         BeaCErbAbJJc53Qod0vyYfmfTsC0+7NI/DWrb/U/kVybfmMZ2i/5TbcYeRABOpuZUb0m
+         ZPxlOJvWQf60c/gmmyxl8PfO38nptfypngVMrFeCxpGgVHCabL9WMXbuxnjQyVCLzjMh
+         CTbg==
+X-Forwarded-Encrypted: i=1; AFNElJ9FQRLoQMV6Gf6sEfreKgeA10Zc+M4QNhMJlO4Jz886iBQEXjiZqPZMFRyM+nyGj8qD80E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK3LCzyJFpd+NtGM0sVztXF2OPaHTmUzXbkm6SERuM5KNxpxAE
+	YDy5Zg5USgu2WS2iRUWfdVoJIrFjMtxKgGJXa9Bwu02IPzjHZPMZqJN9D5pDstFU6WkpRlMfnB0
+	geY3v+yzDn+aswBG7Z1/LNMMupg==
+X-Received: from plav20.prod.google.com ([2002:a17:902:f0d4:b0:2bf:1a98:5111])
+ (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:c40d:b0:2bf:1778:88c4 with SMTP id d9443c01a7336-2bf368287bemr64886895ad.21.1780188502634;
+ Sat, 30 May 2026 17:48:22 -0700 (PDT)
+Date: Sun, 31 May 2026 08:47:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 30 May 2026 17:14:45 -0700
-Message-Id: <DIWFFX9PVY0Q.2CKQ7GZGFW0TK@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
- <eddyz87@gmail.com>, <david@kernel.org>, <tj@kernel.org>,
- <roman.gushchin@linux.dev>, <peterz@infradead.org>, <linux-mm@kvack.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, "Hao Li" <hao.li@linux.dev>
-Subject: Re: [PATCH v2 bpf-next 0/4] bpf,slab: Introduce bpf_arena_alloc()
- kfuncs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Harry Yoo" <harry@kernel.org>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260530011345.99342-1-alexei.starovoitov@gmail.com>
- <7f62762d-fd91-4c07-9917-7d977441e17e@kernel.org>
-In-Reply-To: <7f62762d-fd91-4c07-9917-7d977441e17e@kernel.org>
+X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
+Message-ID: <20260531004748.3567875-1-yuyanghuang@google.com>
+Subject: [PATCH bpf-next v2 0/2] bpf: Align syscall writeback behavior with
+ user-declared size
+From: Yuyang Huang <yuyanghuang@google.com>
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri May 29, 2026 at 9:12 PM PDT, Harry Yoo wrote:
-> [Replacing Vlastimil's and my old emails with new ones, and Cc'ing
->    Hao Li, who's a new reviewer in the slab subsystem]
->
-> A bit of background for MM folks who may not be familiar with BPF stuff=
-=20
-> (including myself!). Please correct me if I'm misunderstanding.
+This series addresses an out-of-bounds write regression in BPF_PROG_QUERY.
+Based on upstream feedback, we simplified the fix by checking the size only
+in the front-gate bpf_prog_query() function and returning -EFAULT.
 
-Thanks for great summary.
+Changes since v1:
+- Simplify the kernel fix to checking the size only in bpf_prog_query().
+- Revert all other subsystem query plumbing changes.
+- Update BPF selftest to target BPF_CGROUP_INET_INGRESS cgroup query, and
+  add verification for attr size boundaries.
 
-> BPF arena [1] is a 4GiB area shared between userspace and BPF programs.=
-=20
-> The BPF arena can be sparsely populated, and therefore the kernel cannot=
-=20
-> assume it can reliably access it. (There is a patchset from Tejun that=20
-> addresses this [3]).
+Yuyang Huang (2):
+  bpf: reject BPF_PROG_QUERY with short uattr size
+  selftests/bpf: add verification for BPF_PROG_QUERY attr size
+    boundaries
 
-yep
+ kernel/bpf/syscall.c                          |  6 +-
+ .../selftests/bpf/prog_tests/bpf_attr_size.c  | 65 +++++++++++++++++++
+ 2 files changed, 69 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 
-> Since BPF programs interact with the kernel through kfuncs and=20
-> struct_ops callbacks, ideally the kernel wants to share kernel objects=20
-> with BPF programs; however, you can't put kernel pointers directly in=20
-> the arena, as the verifier won't allow directly accessing them [2].
+-- 
+2.54.0.823.g6e5bcc1fc9-goog
 
-Right. Technically bpf prog can write kernel pointers into arena,
-but they immediately become untrusted scalars.
-So no access can be done through them.
-
-> So=20
-> the kernel instead wants to allocate objects from the BPF arena and lets=
-=20
-> BPF programs access them directly instead of current workarounds=20
-> mentioned in [2] and [3].
->
-> sched-ext is going to use a gen_pool based allocator [3] to achieve=20
-> that. It works, but we need a more efficient allocator for BPF arenas=20
-> without re-writing the slab allocator from scratch.
-
-yep.
-
-> This patchset achieves that by enabling SLUB to allocate objects from=20
-> pages that are mapped to the BPF arena. Since the kernel cannot access=20
-> the BPF arena directly (at least for now), SLUB always accesses objects=
-=20
-> via the direct map while BPF programs access them via the vmalloc=20
-> address space (kern_vm_start).
-
-Right. This design: slub via direct map, bpf prog via kern_vm_start
-is done for performance reasons, so that bpf_arena_alloc/free
-can do page_to_virt() and virt_to_slab().
-In my earlier design I used kern_vm_start based addresses
-for both (slub and bpf progs), but it meant that bpf_arena_alloc/free()
-needed to do expensive vmalloc_to_page() translation.
-
-> Given that BPF programs can access slab pages in the BPF arena=20
-> (userspace programs can't, see arena_vm_fault()), one interesting aspect=
-=20
-
-yes. had to disallow mapping arena-slab pages to vma.
-
-> would be to make sure the kernel avoids panicking and falls back=20
-> gracefully in case of errors in the slab page (while maintaining=20
-> reasonable performance, of course).
-
-exactly. that's what patch 3 achieves.
-slab needed very few changes to make the whole thing work.
-
-Don't confuse this slab-arena with orthogonal work to
-introduce call_rcu_nolock() and typesafe_by_rcu_tasks_trace
-to remove bpf_mem_alloc. These are two different things.
