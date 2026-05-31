@@ -1,81 +1,35 @@
-Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF5D233722
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 13:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128E125F7A5;
+	Sun, 31 May 2026 16:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780235563; cv=none; b=tyKXEC1zZDXOpq3VeuOdQnnJVVnJAOtIg1KUXUbd3HiKBPiIa8+PV+v7+KNhgHydLQUUa+yTzEUsKtyvGiVYQ7ShZNYhjZUUV+i5mc9yE6EkcMgFZj2hA8R7E4F7pYDuvhr57mOQMiFdr74CNSNXvc1omUO2fjRdr0zH0iEZK0g=
+	t=1780244412; cv=none; b=WeBTtzvDTpSQuFrA+pY8LoMd4j60nPvu6WRWiVe7kMXjegovcryugRF8hPGwS9uyo447IbsgLvgC4L4KRbMflwH4kun3UZIrwPWQJoYGbcCWcdPWoYdEOFQqMtdFwKJ2tjF6Xu5C58mSzn45LEhT5MXdL0Ns4c3IpdRFw8ENmi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780235563; c=relaxed/simple;
-	bh=zUJOmTvUfrfnyR4xJIXA8bz3JqbLEgsuYvxscT6jdvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XRw9Ujf0Fb9t0zXyYp/HqdT+2azflqUOapGPh4AUHajP6VfV4yLLJu5kEAv2LopBg4CbELqZ9pomZZmnncHA3ZPi/nqtUvDaXTJzzpLfxD6eBgZTI5gJesNZLmsOeWdqekHg1mGyyv1C1Lp/nPf7Hvr2kcR9M3aG/zV7r3jDDbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MM1fSipm; arc=none smtp.client-ip=209.85.214.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780244412; c=relaxed/simple;
+	bh=d7Ks5AfGzNPtzFQrMSc5GGnGCbasmw+Xk5mJNMjvT3M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=N5vT1u+WDfHTQCTH9ahVZ2Jt368Mmi2pxqQ7A0DXDgOd8JCtDTSsKxtz/s2IPQPyNduIZEg/7EyHZ5uXGa/Szw+hJqC1l9aZVmyeTPll3Zk5TJznmi6B9YhFImPECBhbDTvdYjUFquen5r1vuAseL3awFgNHH7OT4IFxlnMddyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bewiwCgM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MM1fSipm"
-Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-2bf2e8ccca1so10914105ad.0
-        for <bpf@vger.kernel.org>; Sun, 31 May 2026 06:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780235560; x=1780840360; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g5m0c+tBqsdkoPGavcwU4mvnSNAG+RuBjE1F5U5kFX8=;
-        b=MM1fSipmfSYsHXCe4ltitD8Qe579TAFrMtfTmrrsRWngakfaISBh9X7eSSK37WNtHA
-         0mCaoegj/mUvwWYWs6y6/XH+q8myvO6oNyIKMuJbci2NwaUZMMwLnNFsUJvaDe8zKNNY
-         nQCOuGUkulzytQTrU42HcNaRaM6L4b1WmqfGZalWnJp545mhbbBte48OcbjxdLr0xJL+
-         FKZAAzh+A8zFDHXNrCSGp6YQz6iR0ADiuHwfslAXrxHrorH6vUlgfVvFecbyZXronuKz
-         +YA3yRM6vHHJ+HgwmiVPBTtmAANx7taDUw6X5fP31HImFDd0Jnhbq6U+y3G2efufDUUZ
-         iJ1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780235560; x=1780840360;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g5m0c+tBqsdkoPGavcwU4mvnSNAG+RuBjE1F5U5kFX8=;
-        b=B92qmnoFwtHjm6M/KdfUTY9uYvHKaAco0VK16XHsXSaTMGw6nxqI6PCLM3jm4H6zrc
-         k9QOT5iLWAtgPcl5XAq64/hMvxegs3Swdlg58b3uLHTKDrV0+Qg1oOsWLRQHmXnD4dXP
-         LjdAfcd59rtJRfzyT98oC/nXVbcn8ouqujf24Vb2s4QoHbzr/A/UZuRuX6C951qRRS9Q
-         2M7iuufZLdSpztmioQi+lLbFR1X3EZfbsw1A/f+4g4OiuFfulnHjlEPMiDotPdUUy8pL
-         f6p32JhHBj0/6GwfTX3lqSkATOoau23DWkcOspndfTBlMceoS27RPHmEcYWTgeQqyZa/
-         DrHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9+yiwke+g6Xq96aGn/Mex8hMLPN6Y+5Nba8nQHVHOHlOntyPZUXOhx1Bo3+RtQRGPuOpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw65/Pe89asEXiuw2p1wakHPiA9JSHelG7E/wnDo2ycIo97NzT8
-	hvYMOi8253or1P61h0Xu7EvbEBLGcStGWfZszi3AlpGH5N+e1ZZxZJIj
-X-Gm-Gg: Acq92OFldxpSGXcXreiJvc505Y6pl4KCBRgiQgjVK8SaMBdaS9ELRm36zExf7fD6sZY
-	8R1kkr2Ubexp4vGizQwnXrAkzTm2Y+XrmcCqcvZ9mXsypy4Ps5jLm2JEFl/mcKsjBaQmUEJIsxZ
-	7EyiL7tqth0IB/+V7frLfWQzJLIsEccJ+B+1KKBNwoZHINLPl5WWkZlsPlcGL8+aTNn3cljmC9g
-	8nepqQ4lW+sB4oCeUHOrJDFOGuvJMHIbEePJq1U6cxkLY7TZM7cm7vkUlPxXVpQR/9Cn2o+Kt1s
-	+Cw8qtCva+kgIFt3R+jUF+z9vBMZP3DVHwNSQ8t0k6Gj3wPgmqvzlFbIfepr4p3CGcpgJ+17rhK
-	FeX1OeXYCt47iDG+Za2XDa6OtwTOkhYfFDrlWmMhaES+0SNhjeKjUZORF7OD3EGqGkcXkZ82b+l
-	23wvN/VmH/MNT+lsYzdyqQ5tGw7M0=
-X-Received: by 2002:a17:902:f786:b0:2c0:b5c1:8e21 with SMTP id d9443c01a7336-2c0b5c1934amr43378855ad.16.1780235560490;
-        Sun, 31 May 2026 06:52:40 -0700 (PDT)
-Received: from laptop ([1.247.84.178])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c857729930esm7136137a12.16.2026.05.31.06.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2026 06:52:40 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	emil@etsalapatis.com,
-	puranjay@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Woojin Ji <random6.xyz@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Add arena invalid node id test
-Date: Sun, 31 May 2026 22:52:34 +0900
-Message-ID: <20260531135234.233421-1-random6.xyz@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bewiwCgM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B196C1F00893;
+	Sun, 31 May 2026 16:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780244410;
+	bh=hnv6GbhPuz3vGa0HA6tRNZSKBlVN7uvJdLKnMl11kW4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=bewiwCgMXWiHz6oct8cXk8H4WsBzYlog+FRAqk+rEoId/1Y7NfEFmOzqM9kv1kL2h
+	 5s7WqcKCSIr6TrOg4mco66vL9GUKmeVGdNYkseor7gLSaisiDwLeoYJzD0L5Gr0OLJ
+	 8k84pCstvmvQ5/DdJCe5zdTEZnGw9+fwEEZxMlAljAR4QUtC1IBkFw25RhVwKZuAcb
+	 P85UxyX9JJ2wTJ0pjug7zDx0v5rF+JMm5MaTmkHEfF7dNnS6PFc2h+79jAUO5fa1l8
+	 /OgfmVABPAaiJWHnL+pAEN+klPd0AcwPYE+USa7ySAN+QJjoz60AqgaGJxvZ6bKmY9
+	 WldqHoZD95JnQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0C8C39302EC;
+	Sun, 31 May 2026 16:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,56 +37,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/2] bpf: Align syscall writeback behavior
+ with
+ user-declared size
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178024441364.2925449.1504432439651064028.git-patchwork-notify@kernel.org>
+Date: Sun, 31 May 2026 16:20:13 +0000
+References: <20260531075600.4058207-1-yuyanghuang@google.com>
+In-Reply-To: <20260531075600.4058207-1-yuyanghuang@google.com>
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, jolsa@kernel.org, john.fastabend@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, shuah@kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, leon.hwang@linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Commit 2845989f2eba ("bpf: Validate node_id in arena_alloc_pages()")
-added validation for invalid or offline NUMA node ids in
-arena_alloc_pages(), but there is no selftest covering invalid node id
-allocation failure.
+Hello:
 
-Add a verifier_arena test that calls bpf_arena_alloc_pages() with an
-invalid node id and checks that allocation fails.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Tested with:
-  ./test_progs -t verifier_arena/alloc_pages_invalid_node
+On Sun, 31 May 2026 15:55:58 +0800 you wrote:
+> This series fixes an out-of-bounds write vulnerability in BPF_PROG_QUERY
+> while maintaining backward compatibility for older userspace applications.
+> 
+> BPF_PROG_QUERY unconditionally writes back the 'query.revision' field
+> to userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
+> bytes, which was the cgroup query layout before 'query.revision' was
+> added), the kernel performs an out-of-bounds write.
+> 
+> [...]
 
-Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
----
- .../testing/selftests/bpf/progs/verifier_arena.c  | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Here is the summary with links:
+  - [bpf-next,v3,1/2] bpf: fix BPF_PROG_QUERY OOB write and cgroup backward compat
+    https://git.kernel.org/bpf/bpf-next/c/21c4b99b27f3
+  - [bpf-next,v3,2/2] selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
+    https://git.kernel.org/bpf/bpf-next/c/5add3a4ad1a3
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 62e282f4448a..91aa0941ded2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -11,6 +11,7 @@
- #include "bpf_arena_common.h"
- 
- #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
-+#define INVALID_NODE_ID 0x7fffffff
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARENA);
-@@ -199,6 +200,20 @@ int basic_alloc3(void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+__success __retval(0)
-+int alloc_pages_invalid_node(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	void __arena *page;
-+
-+	page = bpf_arena_alloc_pages(&arena, NULL, 1, INVALID_NODE_ID, 0);
-+	if (page)
-+		return 1;
-+#endif
-+	return 0;
-+}
-+
- SEC("socket")
- __success __retval(0)
- int basic_reserve1_nosleep(void *ctx)
+You are awesome, thank you!
 -- 
-2.54.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
