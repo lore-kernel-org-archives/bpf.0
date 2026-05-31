@@ -1,56 +1,56 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F0273D8D
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F5125B0AC
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780188508; cv=none; b=e5Bw6YZzCWNXW7BEm+7jzsNB34JBnLntxkRV1KjYDHYrY5MN25cCCTIFXG7KxKxf+Q9awQOc05BRIgRrPeLrOEN+IjkKhZ0htXl1WatQjyb7ruE66nd5OCHottfXtqe0a1aYgU910MruVendhtGEtd5leTbvJNn8XPlzpoPJh6w=
+	t=1780188512; cv=none; b=diGRf9KSbPop5TvH8alxO1AAgkiPTyMQFPMXjbtCkIvjXxvlcn9UrKG5CAN5A2/0bbM8KGNNLX7DdK+8mGs5uhrQ9CYufctoMUa/YI57198//f7pyBD1xxA4JVH8bJmRjraH1XCP5/ebFI1z4ajeZVOcN/ZCSekPHiK0QIFfwrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780188508; c=relaxed/simple;
-	bh=rZKT3WfpcAM0Di6SKFP/V+72/2OaBqpDTNVwYt9MKvI=;
+	s=arc-20240116; t=1780188512; c=relaxed/simple;
+	bh=nf7H52BiE00pfcsnE0so3Yy+4Kqlaf5sOzNGyBYj+pk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=g6NMpTZHo55sOLgJb6w1s2mfgVO7YFYWRek3fYE0Ex0Hwm9T6o2c3LjA43TCDaXP+cFmOqRlrNKOlnOfCZtHuUIaB4leEfCD1+P7XBS/9qId2Xhn+1hxn3bkpF+nROWjd3hKcK4H3DhxEYQHt4q/DqYAxCZVLcuUdUX9t9RYKEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r0QAk2mx; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=UFNWyNhW8TnfigBr/j7IfV8x5p/4n/n7Uu1xPBkZyXLoLthBcQB6wrKMBj/FFXd0oZiCeJrntueKPkeor6CMDjItgA03w420Gq+jyIS1V+Soexln3ArNY8sIRddXxscuFZ0HMyjd+qxYfyb9oc0ugJX/KXMPzEQUxYBt0HZk22E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RuUCsCgj; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r0QAk2mx"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-36bc380fbf9so1776507a91.3
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RuUCsCgj"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8422875c676so597096b3a.0
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780188507; x=1780793307; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780188510; x=1780793310; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SVPwV2ysloi40QFLeoMaNeuGhaFgrYtYqToJPyLkcEI=;
-        b=r0QAk2mx9/Sxq+H6IGtRcEuNP+OVGwdB7/KXJboVtSOSpzxvlRnBB54zxc4CoHwEkA
-         PmrRelVBPO45yBiWgZmcf08u15xDkVwtyZ5yxWzsmG7BkwwzGIbf0pb7mefGhRdQIJcN
-         5ityawrBnzkeHVBE67InH9d3oEswj0UEniDYlgLt7Vnoafdt9f96sDh6k69G+PUPxx4A
-         Be70SxLs7V7Jx3Pzf6klX4CE9m98XLtl/2VcLBXMULo+kBg9xcSy72dhbhUDLrehuM0a
-         PeAguxBkDlxqlIk2N8vms1N33WzpSiDFO8eLUPs/hZSr2qCdfcC8bZjbEqGa5un5q6jD
-         4SuQ==
+        bh=ZwO/OlrIC4X5IlWqO2MUG4z3bwcShqiYLdiaVgWhfIU=;
+        b=RuUCsCgjZI2MaJzgYolIOa2oKIy5birycm8UCXcV80iIx1DNiW3T4ZRV5ogAefFMhx
+         tNOd/qgTap9viC0WTBoVZtT8tGYX2Wz1q5aFL+biDB4qEWbROi4vOUX8a9XU02P6nNhU
+         SV1NKP5UeP1Pv9OpIPm5eekS+2R2rPVGjvEakB1h5zACwUI0V49AhhyGyosi7EAoO+Br
+         mGjMvuQaQPmVo71z+okS8qMBv/+f0ePBNYmhlgooM2MibG4Jp0uPpiJ3nemDfytIo6hc
+         3TAQCZjghjp4pNhdv9aCCz19ykrh2Tf2kzRdP7mgIvIZqtgWyZDRTGnH6X4mENhymD2O
+         ZE2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780188507; x=1780793307;
+        d=1e100.net; s=20251104; t=1780188510; x=1780793310;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=SVPwV2ysloi40QFLeoMaNeuGhaFgrYtYqToJPyLkcEI=;
-        b=aqAagkss4Re6Kn+4YZMrLOuwCFVCkNwPq06u5q0r8tKKC9hvAyjFRa0rzxx57WtFwc
-         XXEeULQQvz4YdjHNs3vBM4Udy4KgvCtNtTMTWfVEzGPBaRIvAjPlw0pe4kacqz7R8Dd8
-         MZMMQlRIWFdsxztauzjG8RQAPqWSuvvcfh+lR5mECKd7Y/lzrKU/mL46GDwN5VSKdHI8
-         HDyq6nGxZjrjapK4YVk7gsd/ppj/+lzVGx1rTsQ1yNczH5Eg8OWWFUES7zkLaMouMNYQ
-         wG8u77yjPcJg4i9cb4aT6KcjAA4NbScsiVZ/yei6VaEOUne+nkFtMz5uX8jZVgW18BdU
-         L7aQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/pyOadO2BzIv8iBitFLvvV6V2XX2MeHB4/7lWgbibB5Ul/pNU84vpeW3fF1zBe9FAPF3E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvcSrbYmCJOrDXQBvFUiUFpLbrgUI2iGLbYvFiE0XraSU+iA37
-	i8ccS7akzb2upRBNjJBElxp/DjLdvo+FSk5kYcpdfMNpSMnaTaWeKXfonqsdsdfV5q0uCzL1kks
-	cL7Qr7rWjFi5rfXddjpCAnHwUbQ==
-X-Received: from pgvc19.prod.google.com ([2002:a65:6193:0:b0:c85:9c9a:ab5c])
+        bh=ZwO/OlrIC4X5IlWqO2MUG4z3bwcShqiYLdiaVgWhfIU=;
+        b=HsrCOEsFg57ORyyTmZxltOfAGIyqd5MEOFFkkt3806qRw+lt1hCfTzJOokW0ao/sYY
+         Pg6lEiARrHAZJmdfPGLGD2x8M0j5IFEN3he8WQ/tKrlYoND+I71O3keinOsWjSsbJR/4
+         wa0+fK0lNcMbYANEW/tU/NwgusZomkmoVMN0p+TZNsrbGTZJID+03Y6HQ/SsLy/ERhrn
+         n3gnHuIsOHA8GHM2REO5gxUxdagOvwDQtJBGUx4IiaQIMMmq2CxrJ6gS4MHqBlv5t9/M
+         MyS4w2bL3ffx7w55WEKcbIirR+ILWsNZTZo1UKJmoCenPRd3mErW35OOLdz2RTl9e+DG
+         QQsg==
+X-Forwarded-Encrypted: i=1; AFNElJ+Jt489x/ydsNcpfnQn4hlFNbWSVh5V9m2b3NgDhBDezDYVKuU4DfaAnI0TVWd0uzk/p4s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza2WzRFGZ+KZ+m+5H40CGfXZQLAWQrsI4eJI9vJfyi5FAixQH2
+	hAzWmxfP2p0hGxvC8Pa1KJw6XXbu2RbfQfnGFEB+TYHEEC5Vq3gNKWFwghTsHsFrEOB1qa1oBf+
+	OeKXl1E0HIyhqHa1/XISjxGLUBA==
+X-Received: from pfbgr7.prod.google.com ([2002:a05:6a00:4d07:b0:83f:2ce7:48ce])
  (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3e8a:b0:36d:64c1:8b5f with SMTP id 98e67ed59e1d1-36d64c18c3bmr3679839a91.27.1780188506522;
- Sat, 30 May 2026 17:48:26 -0700 (PDT)
-Date: Sun, 31 May 2026 08:47:47 +0800
+ 2002:a05:6a00:3988:b0:835:3861:812c with SMTP id d2e1a72fcca58-84210c545c2mr7093486b3a.23.1780188509512;
+ Sat, 30 May 2026 17:48:29 -0700 (PDT)
+Date: Sun, 31 May 2026 08:47:48 +0800
 In-Reply-To: <20260531004748.3567875-1-yuyanghuang@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,8 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260531004748.3567875-1-yuyanghuang@google.com>
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260531004748.3567875-2-yuyanghuang@google.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: reject BPF_PROG_QUERY with short uattr size
+Message-ID: <20260531004748.3567875-3-yuyanghuang@google.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for
+ BPF_PROG_QUERY attr size boundaries
 From: Yuyang Huang <yuyanghuang@google.com>
 To: Yuyang Huang <yuyanghuang@google.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -74,50 +75,91 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-BPF_PROG_QUERY writes back the 'query.revision' field unconditionally to
-userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
-bytes, which was the layout before the addition of 'query.revision'),
-the kernel performs an out-of-bounds write.
+Add a new selftest to verify that the BPF syscall (specifically
+BPF_PROG_QUERY) correctly rejects queries with a user-declared size below
+the mandatory minimum (which now covers query.revision) with -EFAULT, and
+succeeds when given the full size.
 
-Fix this by returning -EFAULT in bpf_prog_query() if the user-provided
-attribute size is smaller than the offset of the 'query.revision' field.
-
-Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup pr=
-ogs")
 Cc: Maciej =C5=BBenczykowski <maze@google.com>
 Cc: Lorenzo Colitti <lorenzo@google.com>
 Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
 ---
- kernel/bpf/syscall.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_attr_size.c  | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a3c0214ca934..c9a5415ad437 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4654,8 +4654,10 @@ static int bpf_prog_detach(const union bpf_attr *att=
-r)
- #define BPF_PROG_QUERY_LAST_FIELD query.revision
-=20
- static int bpf_prog_query(const union bpf_attr *attr,
--			  union bpf_attr __user *uattr)
-+			  union bpf_attr __user *uattr, u32 uattr_size)
- {
-+	if (uattr_size < offsetofend(union bpf_attr, query.revision))
-+		return -EFAULT;
- 	if (!bpf_net_capable())
- 		return -EPERM;
- 	if (CHECK_ATTR(BPF_PROG_QUERY))
-@@ -6260,7 +6262,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr=
-, unsigned int size)
- 		err =3D bpf_prog_detach(&attr);
- 		break;
- 	case BPF_PROG_QUERY:
--		err =3D bpf_prog_query(&attr, uattr.user);
-+		err =3D bpf_prog_query(&attr, uattr.user, size);
- 		break;
- 	case BPF_PROG_TEST_RUN:
- 		err =3D bpf_prog_test_run(&attr, uattr.user);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools=
+/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+new file mode 100644
+index 000000000000..4fbe56cb29d4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Google LLC */
++#include <linux/bpf.h>
++#include <unistd.h>
++#include <sys/syscall.h>
++#include <test_progs.h>
++#include <cgroup_helpers.h>
++#include "cgroup_skb_direct_packet_access.skel.h"
++
++#define OLD_QUERY_SIZE		offsetofend(union bpf_attr, query.prog_cnt)
++#define FULL_QUERY_SIZE		offsetofend(union bpf_attr, query.revision)
++
++static void test_query_size_boundaries(void)
++{
++	struct cgroup_skb_direct_packet_access *skel;
++	struct bpf_link *link =3D NULL;
++	union bpf_attr attr;
++	int cg_fd =3D -1;
++	int err;
++
++	skel =3D cgroup_skb_direct_packet_access__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		return;
++
++	cg_fd =3D test__join_cgroup("/attr_size_cg");
++	if (!ASSERT_GE(cg_fd, 0, "join_cgroup"))
++		goto cleanup;
++
++	link =3D bpf_program__attach_cgroup(skel->progs.direct_packet_access,
++					  cg_fd);
++	if (!ASSERT_OK_PTR(link, "cg_attach"))
++		goto cleanup;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.query.target_fd =3D cg_fd;
++	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
++
++	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
++	ASSERT_EQ(err, -1, "query_old_size_fails");
++	ASSERT_EQ(errno, EFAULT, "query_old_size_efault");
++
++	memset(&attr, 0, sizeof(attr));
++	attr.query.target_fd =3D cg_fd;
++	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
++
++	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, FULL_QUERY_SIZE);
++	if (!ASSERT_OK(err, "query_full_size"))
++		goto cleanup;
++
++	ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written");
++	ASSERT_GT(attr.query.revision, 0, "revision_written");
++
++cleanup:
++	if (link)
++		bpf_link__destroy(link);
++	if (cg_fd >=3D 0)
++		close(cg_fd);
++	cgroup_skb_direct_packet_access__destroy(skel);
++}
++
++void test_bpf_attr_size(void)
++{
++	if (test__start_subtest("query_size_boundaries"))
++		test_query_size_boundaries();
++}
 --=20
 2.54.0.823.g6e5bcc1fc9-goog
 
