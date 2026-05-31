@@ -1,168 +1,161 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29BB211A28
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 01:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B61E3603DD
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 01:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780191485; cv=pass; b=ArKCzUj8C8d8WJKlSkUf/VIs1hgiLJV4dsOvBOLKtA8zpt8skfOWqY9rl+E89gXeGVVHFVFfAz3GxjfxQst4iBaxci7cK/Hm1aO6SppyDUCgRD5Mn2fMgntRedlirG446I1pl5UvJ1lMhK9gcySMP0Sa1g5Gg4r2kaaMTQwzQBg=
+	t=1780191885; cv=pass; b=XhMbPRuvFmxop+xZZQQXIZNL2pn4gHOIt/idRi230BoCMYnsTdFNO5bg/5++J1rVbUbnYgURNpEU4X89CyPsNaQ1ZjMd4WXVYRuiTWUBnz3wWuVpeTG4kOxs4W9SOLEe6x8jgum86C+5KHKFa9T5wNYLUJhnw2B9JUvja71uOdQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780191485; c=relaxed/simple;
-	bh=y3gLTJcDJCDzE/sfnkF6XTrsBFtj5BVc/GJwrhbKPok=;
+	s=arc-20240116; t=1780191885; c=relaxed/simple;
+	bh=JY17uG+peAbC3rGOIzWPUWF2GW6zXnCaUG0CsOCyQgk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uvo+RQHXuezQytvR1ex/gbrSQIVCwIygYGWTkdUntqnDGzQc4mBy5zShJsWpgPfFkha6UmV4lRqUyJZYKhmdw4qQrE+S+a1tLIuKXI3YdUDQFkBXCnBb3OMJk5C79jZ60u+juZVM8Z7kIgNWxQQYBqdAoIajl09Cs854/riT8I4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gSxq/TDa; arc=pass smtp.client-ip=209.85.160.182
+	 To:Cc:Content-Type; b=SH17UnYCXm9ZLXFPqFioFflN4UFXXifxk1dgkm57QRCBdmVD7r6z2GW6m4kxaWflvaTgZiNDUYGDiLxbnRts0CaHTCcNjAXcDJer/iRiUdeGU4ujowfvBSvvKT1Zd63oGdQGCfD/IolTTPvlCvji0uoMF4mYpzPdsF6lCE6eAGQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=luxtQQ3+; arc=pass smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gSxq/TDa"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-516d6009380so31cf.0
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 18:38:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780191483; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="luxtQQ3+"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-516d78ba1adso1231cf.1
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 18:44:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780191883; cv=none;
         d=google.com; s=arc-20240605;
-        b=WsCIY73EFHOJH+omq6KDJiFYNMahstXOjDauJY/ZWeh/pAQSXhuezMF30LZRjLltb9
-         rUrsAJfrN37QnY1N6rTLjATlm6AtLIgSVzWceVgtGuaV/SugYFOpZcMdc33XVP2ldJKj
-         oWjsDuAYGQRkUF/ehK0A6yTL618D/9zKSgh08f+psfyirJSHEqNl0+XElrwsWVtQFXXF
-         OuqU5LUaxVWjhIHJfL2xtRTnZO9Kg8UyNiJEnX2zr2IqmiazGp9ZenDfH4rQ2R+9ossH
-         eZu8mJ3pKQOf2AuxZZGCDbZ6D+DlG6MIctl2DKbQO3SP0Uh2gB20tqw3KxbEnl4nbQ1/
-         2AtQ==
+        b=U+V25p/3JiEmSWJ9nk0PhulSVPsHrbQSMRb1xEgh9fFRfctPi3tHtctIoCzlIOFu7r
+         emSn1qqeZBPoC4/heC9uTt5bETPgwDzc736JPPHXXvhOoWr4q6lUuB5L0CewRE84RTyb
+         1j7sKCaCJd8FlXxS/9hMN5023dFrQbZfl/kFsnnIByE+SgXwW6bmpja/W9z+XgChHDLC
+         11oBuWdoPIH14a6HS5xss4q7YwQqxp1muMiE4gQ1j5pNJt/iCuUMoG1SzrwUK5tREpgJ
+         +5aCypDmFETXST+47oWKcrLKLpkQWu9Um2DYvSA7WTE8T2+XOpHFzIdj6Z37SMEa98vP
+         Ao0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7KEWFe5PI5fZtcQJyeW/bUVH7eGb4JFji1z5+4lcemo=;
+        bh=ilFSrviVs31RIfLP4HkhrNfgU+I8AsONLzeZnzt4ues=;
         fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=kZfJfdXE63SU5qINOAc2Lf53PO4RFQ1Pxd1j1uJMzxeYd82jHqcYhbQolc7hewLGvU
-         1VUI1sNdWaV+/LAA0zoxPdeh/+DHq1l/SyE2SAHQkDCwE0LVooHhBm88QG/+ohir7iX2
-         9RR0FiRByAadmi7ttYauf7c/DPMS0CCtus9EDqr89Bf+OTMWiQGsvVIT++7IlqL4wQP9
-         mB5tkxgJf7K+sQznyCLCswOFHUvQaEFGXSTv07mF16S4PSH4/Ihep1uCdftJlLfd3fck
-         /1RdUogYiNpM6vw7QZrnFDCvZnpw7d4jIaAkA0dVkrB/WKidoG/RYgLGrgvpTzk99IIr
-         macQ==;
+        b=hMdEVDY8IfseFXwIA3ZRtik4DwRSo89lqpBL0FsylDgIbb6RPxV4m7uJ8pUUquVFnk
+         arPiPvz6rP/UGtlrYExc4quM2vZA3zfRhdM4tY+wu/w0T+QCR/tHotImGEHtBSRu8QIc
+         aLfCJuBdqfPap2u9wCryWeaSIkR8xqykBTy78EbpmuUDwNmspWx85scX7+YTqVgsRLh/
+         y7olUmt5wukPXorRyXY49aHY6Vst4MtCyHvwjyfq/idXtpzqbb5UfLEdyPr1OkRDsTe+
+         Ir+qAy8i17unyId0RH0s3/N2OCRvgtCtqn8metXBhAlnNXeCzszAPpg+310pQlMs19M+
+         cRrw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780191483; x=1780796283; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780191883; x=1780796683; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7KEWFe5PI5fZtcQJyeW/bUVH7eGb4JFji1z5+4lcemo=;
-        b=gSxq/TDamRysYhsrifv0pVItipmxOM/PnRDYCffDHGy4OBiqA6+/N9awfJ3yyGBaCg
-         6+ntiOhOP5W/PB1dE321nFtHCklrcQ0ORlnimcrhEFxaryakkMI2jfIrUsvzS9hqAcbf
-         uUZXrnTGUHRO27MUfW/4yWhT08S/euxztXL3nD7cRmJzh1ZMjEdp/PuQI+IEOUOif9DK
-         ZP5B0BggZni9SEI7iMbnrKhn8qlg9pxwfTvWEuVas7rVo3A3sh7TD1BGyDh1mrQ1klhp
-         eHqQwwNN6Ihnm+jLMPpEppftyTsTCuEqsIHDWMPAW45Sr/EqCWZpYHTP2JCCI3VKzcru
-         g8lQ==
+        bh=ilFSrviVs31RIfLP4HkhrNfgU+I8AsONLzeZnzt4ues=;
+        b=luxtQQ3+qE4eNyLa/xkhvPf9UtjLUOcpgG3zwjqFd1AH8PgnXrZWsVBYdPebIEhLUW
+         Qw5JC7BFPA+3tmThzmgZkh4WqgUqp39ZUx4eRkQKy5MzamGTe3oK/BL/sgGZtCFoxH6K
+         yzKmK7cX2JD4DCVE0EcurDayg8IcCSnKtYbXLtVRhjjrUzCScQBuQ9euvQ7xyv02CjFM
+         Vz8wjDzENW0yIXMvxbafhBQNvH7j1tUVJ1VUA9B8QvvE9S9XGJssNVFwlKWf1siESu9O
+         qTm3NPhE0H6sE4R3PfoGSuHUzHoLfVNwy8toLq4/iwmNoerCRrXHKbFNNX1dy8W99bHu
+         JUDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780191483; x=1780796283;
+        d=1e100.net; s=20251104; t=1780191883; x=1780796683;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7KEWFe5PI5fZtcQJyeW/bUVH7eGb4JFji1z5+4lcemo=;
-        b=V4gpW0b1ZQzg1SNlsr4GE605Jp1t58fMiMPdPTtQBIqf0ioGBFLsvqIvk99L1F+2kx
-         dI/xN5J5/d9CI/32HF/VNHIxOYaliZ2+8/eBDy++jEs5gNxFMP6P1nbX4v/vuhBa2KIf
-         LgBh1nIvGdwcvtfw9FMjHz6CriLltgIJwtQwLt3sDTfEpkfY6P4R/vybx4ef+r9k2NbT
-         sX7n0/A7u3CRDIW/wewIt+Tguc+HpFzRKz0AvvbLuZj047uJ8jNIPWyj11YJILjRnsWO
-         EKTzoY/xf+DIQOiYaWob+FwyzgPbiaEfv9F2ZlgawIZq3c4r+yW7GOhKbZwb3qX7CxeM
-         w46A==
-X-Gm-Message-State: AOJu0YzfZxX9cki3BXa0TmtQ5ZOyQ5ypcEXIuEDkuzkhXJ8c5Gp0/yeb
-	6sKPx3tStN1g5y1tAfeH2rmNBQf5De7IQg90jOTPRB2b6VvVl0fTy3pcP53FeWNb8w6o/QwItUe
-	lm3NN7BNMOHupuPXXeps+W+/MgcYjsCb+x/FkOjhf
-X-Gm-Gg: Acq92OEnGHfr2aedGdvyslmt9/IdKSpPJnUgSSCE8UfgtPZQ7ZPmFRpetCOGExNVvUv
-	zqOkJSyrlgxVNkpQ0WFiiKyiYv+76f6BMoegdyBXPuVqi++gVQ/hZpEC0fDNG6BCEET28vQDAZ2
-	877Kr2gBPsDcKN55aPDpRoGfTWOLH1xGD58RBuBEo85zShVX7Nftr8aG7hLDLqmNyQfHiR0MNZ7
-	0JCL8W9aJEXvdORy5cFikaxN14M1b0A9rdysZrzmrlzcwbSBNP1C3nNcqhPctz03Talliy9VudL
-	ta+RQ+UFlFyAsGG1fOrZZTpqBVqvoshmE0PdvrKu5jHY6rF8jk/5TsSMmvutfxKd
+        bh=ilFSrviVs31RIfLP4HkhrNfgU+I8AsONLzeZnzt4ues=;
+        b=rbg4lLCG6DSe1tFTD6iQVCah8YrqGw2zExVBIdcxHbVB1HRkAGm1k+FJ5DY2EHwBnO
+         ACUJfk0joNe4U40ZsNwSvvOyEd401wNEYGaVfBdukM+qmRTcQisUPH9l9fEXODtORdoQ
+         7A410NfZcXy1L+BgA6jFzhwsIW4pJaH3a11NAR7zpaaoiOvVcu5Orswp1QjYZoQuu+87
+         NgLNlt/uefLZZHu1Xrp3qoYDTDIsG9TZHpM2JUry82Amrlc7TIFwr7Sy8VNsEykcSIzZ
+         Czdc60tfYyRjwobitCD7xE4YXx0jcZ34eVACTtHKCUtlHUboLm1adlvEunB98nOMiIkM
+         tiIA==
+X-Gm-Message-State: AOJu0YylCYTcP1aEU7rq1JYwktqoJOrzckgiuQE4bEjqj6UZoE5xAhj/
+	wOH/s3btAsrdmYifdNdrZ82lP0ie+ub5KhMIqCvdziYsSDt2OxM7P648Q5Vngs+HYBQckFSJINx
+	UNqY8ozMZzjQn/zqlL16ME9XCt0HIa9cJh33a+O2laORVKjGUDDJ0y8Pfz3Y0qg==
+X-Gm-Gg: Acq92OF7CIzIN9oo+xqys7V2+8r6barJy+JC4eyc9KZOAdtsyQMWxtnvaG9wwEbm0aa
+	6PBeoMOGAuEC/deUwmLN2Zu/T6Q+jjDbB4W8NIqDcik9fO5USRPf8YJQISlKvI7WZbM9pM3PSQf
+	XwaI9x5pIUBGpAm0vaw8Txz7Vz8uNiVr0n/p7JLphaHU02AIn6sANBloJfdYkmV8Ev3vOxY6fzm
+	Q5Bfe8guC9yZjIzRnwg8sp23ofoJaAhysNnkjgXDJ5W0UujeVKPF0ybuA9DyQ3gqS/AMMsA7GJD
+	dBQiXtGmiwX5PspCZ91VKq71t9q0zoJa+r00ZcjuJJwmwjhYX4+xn23yPVc8nJfz
 X-Received: by 2002:ac8:7f0c:0:b0:514:b17e:86f3 with SMTP id
- d75a77b69052e-5173b68d02cmr4503831cf.12.1780191482331; Sat, 30 May 2026
- 18:38:02 -0700 (PDT)
+ d75a77b69052e-5173b68d02cmr4528551cf.12.1780191882675; Sat, 30 May 2026
+ 18:44:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260531004748.3567875-2-yuyanghuang@google.com> <20260531005931.D4F201F00893@smtp.kernel.org>
-In-Reply-To: <20260531005931.D4F201F00893@smtp.kernel.org>
+References: <20260531004748.3567875-3-yuyanghuang@google.com> <20260531011110.F22BA1F00893@smtp.kernel.org>
+In-Reply-To: <20260531011110.F22BA1F00893@smtp.kernel.org>
 From: Yuyang Huang <yuyanghuang@google.com>
-Date: Sun, 31 May 2026 09:37:26 +0800
-X-Gm-Features: AVHnY4JDaxYAfAHgGuWboGsrmqGbem2Csl5gpoCfrsX978gnKjtiiq7igFiEZ7I
-Message-ID: <CADXeF1HwVBz3crJtAuKw_20cK4wXmoCQM73A_tZc+pc97veLjQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject BPF_PROG_QUERY with short
- uattr size
+Date: Sun, 31 May 2026 09:44:06 +0800
+X-Gm-Features: AVHnY4IzCADml3zKoYSyRSrNWNuSsrTy9RPkMx5SVD7WrajH2eDmneCa7VMWDJQ
+Message-ID: <CADXeF1HQCjVXqaqFEGLOicNOC6Nc-ki59Eyu2iaMhf+A6QFiMg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for
+ BPF_PROG_QUERY attr size boundaries
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 31, 2026 at 8:59=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+On Sun, May 31, 2026 at 9:11=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [Critical] The patch unconditionally rejects BPF_PROG_QUERY requests wi=
-th a smaller attribute size, breaking backward compatibility for older user=
-space applications.
-> - [Low] Returning -EFAULT for a structure size mismatch is semantically i=
-ncorrect.
+> - [Critical] The selftest validates and enshrines an ABI-breaking kernel =
+behavior where BPF_PROG_QUERY rejects valid queries from older user-space b=
+inaries with -EFAULT.
 > --
 >
-> commit 205b70f382d21dfafc18f8275384ff0f06e59f6e
+> commit a51bd156081fb623564c01426a789df272b5e924
 > Author: Yuyang Huang <yuyanghuang@google.com>
 >
-> bpf: reject BPF_PROG_QUERY with short uattr size
+> selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
 >
-> This commit modifies bpf_prog_query() to return an error if the user-prov=
-ided
-> attribute size is smaller than the offset of the query.revision field. Th=
-is
-> aims to prevent an out-of-bounds write to userspace.
+> This commit adds a selftest to verify that BPF_PROG_QUERY rejects queries
+> with a user-declared size below the size covering query.revision with
+> -EFAULT. It also ensures the query succeeds when given the full size.
 >
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 9e91fb2fb492c..4dbf53e81a38c 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -4719,8 +4719,10 @@ static int bpf_prog_detach(const union bpf_attr =
-*attr)
-> >  #define BPF_PROG_QUERY_LAST_FIELD query.revision
-> >
-> >  static int bpf_prog_query(const union bpf_attr *attr,
-> > -                       union bpf_attr __user *uattr)
-> > +                       union bpf_attr __user *uattr, u32 uattr_size)
-> >  {
-> > +     if (uattr_size < offsetofend(union bpf_attr, query.revision))
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/t=
+ools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+> > new file mode 100644
+> > index 0000000000000..4fbe56cb29d4a
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+> > @@ -0,0 +1,65 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright (c) 2026 Google LLC */
+> > +#include <linux/bpf.h>
+>
+> [ ... ]
+>
+> > +#define OLD_QUERY_SIZE               offsetofend(union bpf_attr, query=
+.prog_cnt)
+> > +#define FULL_QUERY_SIZE              offsetofend(union bpf_attr, query=
+.revision)
+> > +
+> > +static void test_query_size_boundaries(void)
+> > +{
+>
+> [ ... ]
+>
+> > +     memset(&attr, 0, sizeof(attr));
+> > +     attr.query.target_fd =3D cg_fd;
+> > +     attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
+> > +
+> > +     err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
+> > +     ASSERT_EQ(err, -1, "query_old_size_fails");
+> > +     ASSERT_EQ(errno, EFAULT, "query_old_size_efault");
 >
 > [Severity: Critical]
-> Does this unconditionally reject older userspace applications that pass a
-> smaller uattr_size? The BPF syscall generally maintains backward
-> compatibility by allowing older binaries to pass smaller structures.
+> Does this selftest validate an ABI-breaking kernel behavior where
+> BPF_PROG_QUERY rejects valid queries from older user-space binaries with
+> -EFAULT?
 >
-> By rejecting the call entirely at the top-level dispatcher, wouldn't this
-> break ABI for all attachment types (like BPF_FLOW_DISSECTOR), even if tho=
-se
-> specific handlers never attempt to write to query.revision?
+> Older user-space applications (like an older bpftool) compiled with older
+> headers will supply a smaller bpf_attr size up to query.prog_cnt.
+> Previously, the kernel would accept this size, but this test now enforces
+> that the kernel rejects these historically valid queries unconditionally.
 >
-> Could we instead pass uattr_size down to the lower-level query handlers a=
-nd
-> conditionally skip writing the revision field to user space when the prov=
-ided
-> buffer size is insufficient?
+> Should the kernel conditionally copy to query.revision only if the
+> user-provided size is large enough, rather than breaking backwards
+> compatibility for existing binaries?
 >
-> > +             return -EFAULT;
->
-> [Severity: Low]
-> Is -EFAULT the correct error code for a structure size mismatch?
->
-> Standard practice usually returns -EINVAL (or -E2BIG) for mismatched or
-> inadequate sizes. -EFAULT typically indicates an invalid memory address
-> during a copy operation, which might mislead userspace developers trying =
-to
-> debug their applications.
->
-> >       if (!bpf_net_capable())
-> >               return -EPERM;
-> >       if (CHECK_ATTR(BPF_PROG_QUERY))
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260531004748.35=
-67875-1-yuyanghuang@google.com?part=3D1
 
 The proposal in the patch is implemented based on the suggestion from
 the previous review thread:
