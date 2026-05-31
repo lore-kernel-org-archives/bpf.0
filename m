@@ -1,56 +1,56 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC58E37A4BC
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 07:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6DA379EF5
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 07:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780214169; cv=none; b=SaolXDsFJgd3p8Za1W4TC0J5zIh7VuISO6Bx7rJYqdObBuLZ3k+AbiWyOitNBt1AoDa3z4c8jluIDxxiMkl4i6xfAPo81m+qWBCBAECt0Ri1dVhwEbbqEEjvJI6Pnsa1aoN1xe/hJRg7aMrzVc8KJR/t+4gVVgNpjFY1ejsJoEE=
+	t=1780214173; cv=none; b=FLilK0teRLCwiww4pfipR1MUggsX+JUuGZLYnrQjZ6a+mEkqO/QlUs85mHjc89PoA96/oisRxFf1pXP+6168JMdtUfieIotjO+O7IUd3qPlDISjA6GCsOD9agBmHecfxr4k1BRmJd4nSzdVfyi0uPTF8kZwnrrtKHlX7STrmMDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780214169; c=relaxed/simple;
-	bh=vc8uI7fre2knoMD29lzdG+t4n+4hmgPxv/UuJ0IxiIg=;
+	s=arc-20240116; t=1780214173; c=relaxed/simple;
+	bh=PPRznl2dpFeNjyRO/a5rvUOlyREw9cxIxjFhfsgxg60=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DMzAeaNsocihTlCDNJGOgzVGPY0/erbxnrbk4dyi9MZil7fmIGfnQvtuzsFV1sRjjfDz45M7dItLJVV/9P+35Q1xvAxFNZyDhc7NINaIlY9orHn6lPxIx8DMU+4PHdzxsSuL10+jKIZPqQhRr/HrsMOm2MzOyuT0KV6MAdYbXRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uQ+EY/cA; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=hk4xqaUjMqhGxrraSPa4kJQWx0BqZLffkLFeuffcCb9x53EZle2eJ3NAQPMondXDIlEb/Khbeog/uWhjBmUjEhCfd9E6AFpLOKgWB1/meaYSzZoIpNAq4C9qXDkOm0l1SrFVc5axtRMaFMIESYF96HNaMcFlUqiWLOc3nxzBuiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fYm2jU2A; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uQ+EY/cA"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2c0c1e08848so3824985ad.0
-        for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:56:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fYm2jU2A"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8422a0eee68so1321440b3a.0
+        for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780214167; x=1780818967; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780214170; x=1780818970; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7hm6Ja/EoBGgEc/73Iq1ADAFuOLcm1TTBVWrOlqOfnI=;
-        b=uQ+EY/cAaztK4OhIdVXG5+zGffY0ZEoUb6IKGVJzwgfv/ptyewHL9+Zr9AZ0zyhASD
-         +dGSgmeVRXGitrNgqom7p8W+Xm8oWS46dKkkKYadPVFFOgY6qoVwpnxXa7hZQJgZ2MIb
-         DToprtKXmDGxJOVNG8fhBoSkoccZZYLpqlju/ryDQgL7oViyOjqTMExr0lt6zf0yEKbD
-         ozlF2zOTjMib2dq0ITWoZUwxfxGmkIGeSiHNJ60VL0UTeNShf5ziHIbVVkL7cbrpMG04
-         93xjSm5KOutGxxBEXKJtCZWxleLm6oIgo9ofYz81mDQmCtXv+j1OIbHXTZX+tloTWue4
-         Yk+w==
+        bh=1JCdlP2eNOvU6T2+PiO1cqwMwUfX++ZHI347m1q/7ZY=;
+        b=fYm2jU2AZ+16VyUdd81w3EJfSxi2+oUAlBbvsuLnroQ0yC2sDDAE/S7e3bQpQp9J2s
+         VKEa4ASwZZ59YiouKBP2rP8UqZx0viYeDCwUK+azFqwaBRhzo1BVnnc+TR/YJQ3ETG4w
+         2LNPCgIuNEckd9pI/s7LkftSxNMdwegWGLVi267FVpZJ3ZXhpwZoJznzPtrG9j8ZIe60
+         xb1aYeGraxzOvtpUnNOOIBrMdrdYZ9UCBMv+v1r/BFY/eWEnvpzl9YVeZoAydFlCudEo
+         G6uyAPVXWe6nFCCzloC9UhqoYzFBOXZGDnZjeJq5AYazvm3vfV0+9czmdwSdYPrMEnzE
+         Y2zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780214167; x=1780818967;
+        d=1e100.net; s=20251104; t=1780214170; x=1780818970;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=7hm6Ja/EoBGgEc/73Iq1ADAFuOLcm1TTBVWrOlqOfnI=;
-        b=mSbY6O34PidbRVgwc9u8vXSFirVRxI73Xs5MY0W4GIARp4L9hCqGKGnPEOa80cnMwW
-         MSKbOUPbXMjbo4rguKHq5c//KKyoDrnlQuxCw2F1uGvxKqW+hAQSLeSpSulv63lhUqry
-         XbsOlb89IKZXaD6N36yUk8E8EAIvlDQhVRRgJkTjOjAGg9Xju09mUg9SS9UXmGV9Rs/e
-         v27ZD3ChDHOpKnG0zSICPMeB0lbI1+QTHlH5sHnyWlwyAn7PV1rk3pdSpFarC08NRnsj
-         KN8LCZpU31fxg6i+Nii+eSwRZ6Iz8bwRUR+kFLKbvJ3q/R9KXlx+v858WV8ey96tZZkr
-         mv8A==
-X-Forwarded-Encrypted: i=1; AFNElJ9KwYZdo5sxmBcVthDVHqlz3lgo48t3j0iqSdRf+Cf4xN3u7c+8gjNiFOKo8NxAakU18aw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4pQG9b5Ys6eKM9ODmf4MLQXZ1MItjivvZFeWNouYpqd85F0hh
-	eDwhU+c//iFFxsbO4INAnxDPlIAFr/wl/TrkHvaf+W7pgKSixXRjL06VXKIt1YIIekdlrq3Ml7e
-	3FT9hEk+2fmrPytRyG/WpHD2g+Q==
-X-Received: from plpl1.prod.google.com ([2002:a17:903:3dc1:b0:2c0:a516:2c2])
+        bh=1JCdlP2eNOvU6T2+PiO1cqwMwUfX++ZHI347m1q/7ZY=;
+        b=ivtpi/Yl6QMIC2vLXGyR+pE+a6bIAe5NqQfGI2sWED1a8BU4E3yYRMOpDZOTuIwZdh
+         zD/4+Gfnyx/5zqfqyK2dURKwmpLhtLomRqvTO8fKrI0t9C9f4p0OUFoTdIqxMktIWp8R
+         A645xqzIIYPMLwvqqF5FyRWtTL9PqXpdSmaWt1/m4EQMhhv2vzwACF6e43wdyv3/P+xV
+         nh/hbbz5ZxnuWIVi5rk6jVuLKItLnzzkH5SyNbvIh2pTjTpQUvS8qwBtyYm2oYupr5Ur
+         ZD3PAdhIB4FRi6HSbs8MqnXbgrT15rLSQ+7vDqEC9RNqF4Hhts7VH/+P11YcX7LsD6CC
+         ZdxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+xaZQoAVKcZbJ/Qo7gL4rMAXHmgb4Mb+GAjVH1Iiz/3EWJPVLTl+t++gxYiksrSYGdgCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1YYbM219SuLS2Z5inkmk9pzTBXTU+grhsupb0oGo8pNnYNxpd
+	V/MHtE7L6OGrCBGYW6a+esUgntO8Pqmqs7szcZQsbHQJRrVhXCXMObDi+19iZCPHzkFRweuSdZ2
+	0lKN/9WViK5GcqodWClQ1REU0kg==
+X-Received: from pfib24.prod.google.com ([2002:aa7:8118:0:b0:842:284b:75b9])
  (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:94e:b0:2bf:2d0:887b with SMTP id d9443c01a7336-2bf367bd713mr69747635ad.9.1780214167090;
- Sun, 31 May 2026 00:56:07 -0700 (PDT)
-Date: Sun, 31 May 2026 15:55:59 +0800
+ 2002:a05:6a00:1896:b0:82f:1b42:11d0 with SMTP id d2e1a72fcca58-84225782a9bmr6278842b3a.15.1780214170264;
+ Sun, 31 May 2026 00:56:10 -0700 (PDT)
+Date: Sun, 31 May 2026 15:56:00 +0800
 In-Reply-To: <20260531075600.4058207-1-yuyanghuang@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,9 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260531075600.4058207-1-yuyanghuang@google.com>
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260531075600.4058207-2-yuyanghuang@google.com>
-Subject: [PATCH bpf-next v3 1/2] bpf: fix BPF_PROG_QUERY OOB write and cgroup
- backward compat
+Message-ID: <20260531075600.4058207-3-yuyanghuang@google.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: add verification for
+ BPF_PROG_QUERY attr size boundaries
 From: Yuyang Huang <yuyanghuang@google.com>
 To: Yuyang Huang <yuyanghuang@google.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -75,37 +75,15 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-BPF_PROG_QUERY writes back the 'query.revision' field unconditionally to
-userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
-bytes, which was the layout before the addition of 'query.revision'),
-the kernel performs an out-of-bounds write.
+Add a new selftest to verify that the BPF syscall (specifically
+BPF_PROG_QUERY) correctly handles different user-declared attribute sizes.
 
-Fix this by propagating the user-provided attribute size 'uattr_size'
-down to the cgroup query handlers, and conditionally skipping writing
-the revision field to userspace when the provided buffer size is
-insufficient.
-
-query.revision in bpf_mprog_query is structurally identical to the
-cgroup case: a late tail field, written unconditionally.
-
-But the backward-compat hazard is not the same.
-
-The min-historical-size test is per command, and bpf_mprog_query only
-serves attach types that were born with revision in the struct:
-
-- tcx_prog_query -> BPF_TCX_INGRESS/EGRESS
-- netkit_prog_query -> BPF_NETKIT_PRIMARY/PEER
-
-tcx, netkit, the revision field, and bpf_mprog_query itself all landed in
-the same v6.6 merge window (053c8e1f235d added the mprog query API +
-revision; tcx in e420bed02507, netkit in 35dfaad7188c). There has never
-been a tcx/netkit BPF_PROG_QUERY userspace that doesn't know about
-revision. So for these commands the minimum legitimate struct already
-covers offset 56-64 =E2=80=94 no old binary can be broken here.
-
-Contrast with cgroup: BPF_PROG_QUERY on cgroup attach types shipped in
-2017; revision write-back was bolted on years later (120933984460). That
-path has a real population of pre-revision callers.
+Specifically, verify that:
+- For cgroup queries, a query with a size that covers 'prog_cnt' but is
+  smaller than 'revision' (OLD_QUERY_SIZE) succeeds, but does not write
+  to 'revision' (verifying backward compatibility).
+- A query with full size (FULL_QUERY_SIZE) succeeds and writes both
+  'prog_cnt' and 'revision'.
 
 Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup pr=
 ogs")
@@ -113,133 +91,86 @@ Cc: Maciej =C5=BBenczykowski <maze@google.com>
 Cc: Lorenzo Colitti <lorenzo@google.com>
 Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
 ---
- include/linux/bpf-cgroup.h |  5 +++--
- kernel/bpf/cgroup.c        | 13 +++++++------
- kernel/bpf/syscall.c       |  6 +++---
- 3 files changed, 13 insertions(+), 11 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_attr_size.c  | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index b2e79c2b41d5..4d0cc65976a1 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -421,7 +421,7 @@ int cgroup_bpf_prog_detach(const union bpf_attr *attr,
- 			   enum bpf_prog_type ptype);
- int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og);
- int cgroup_bpf_prog_query(const union bpf_attr *attr,
--			  union bpf_attr __user *uattr);
-+			  union bpf_attr __user *uattr, u32 uattr_size);
-=20
- const struct bpf_func_proto *
- cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *=
-prog);
-@@ -452,7 +452,8 @@ static inline int cgroup_bpf_link_attach(const union bp=
-f_attr *attr,
- }
-=20
- static inline int cgroup_bpf_prog_query(const union bpf_attr *attr,
--					union bpf_attr __user *uattr)
-+					union bpf_attr __user *uattr,
-+					u32 uattr_size)
- {
- 	return -EINVAL;
- }
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 876f6a81a9b6..2c2bdaa86aa7 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1208,7 +1208,7 @@ static int cgroup_bpf_detach(struct cgroup *cgrp, str=
-uct bpf_prog *prog,
-=20
- /* Must be called with cgroup_mutex held to avoid races. */
- static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *a=
-ttr,
--			      union bpf_attr __user *uattr)
-+			      union bpf_attr __user *uattr, u32 uattr_size)
- {
- 	__u32 __user *prog_attach_flags =3D u64_to_user_ptr(attr->query.prog_atta=
-ch_flags);
- 	bool effective_query =3D attr->query.query_flags & BPF_F_QUERY_EFFECTIVE;
-@@ -1259,7 +1259,8 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, co=
-nst union bpf_attr *attr,
- 		return -EFAULT;
- 	if (!effective_query && from_atype =3D=3D to_atype)
- 		revision =3D cgrp->bpf.revisions[from_atype];
--	if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
-+	if (uattr_size >=3D offsetofend(union bpf_attr, query.revision) &&
-+	    copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
- 		return -EFAULT;
- 	if (attr->query.prog_cnt =3D=3D 0 || !prog_ids || !total_cnt)
- 		/* return early if user requested only program count + flags */
-@@ -1312,12 +1313,12 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
-const union bpf_attr *attr,
- }
-=20
- static int cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *att=
-r,
--			    union bpf_attr __user *uattr)
-+			    union bpf_attr __user *uattr, u32 uattr_size)
- {
- 	int ret;
-=20
- 	cgroup_lock();
--	ret =3D __cgroup_bpf_query(cgrp, attr, uattr);
-+	ret =3D __cgroup_bpf_query(cgrp, attr, uattr, uattr_size);
- 	cgroup_unlock();
- 	return ret;
- }
-@@ -1520,7 +1521,7 @@ int cgroup_bpf_link_attach(const union bpf_attr *attr=
-, struct bpf_prog *prog)
- }
-=20
- int cgroup_bpf_prog_query(const union bpf_attr *attr,
--			  union bpf_attr __user *uattr)
-+			  union bpf_attr __user *uattr, u32 uattr_size)
- {
- 	struct cgroup *cgrp;
- 	int ret;
-@@ -1529,7 +1530,7 @@ int cgroup_bpf_prog_query(const union bpf_attr *attr,
- 	if (IS_ERR(cgrp))
- 		return PTR_ERR(cgrp);
-=20
--	ret =3D cgroup_bpf_query(cgrp, attr, uattr);
-+	ret =3D cgroup_bpf_query(cgrp, attr, uattr, uattr_size);
-=20
- 	cgroup_put(cgrp);
- 	return ret;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a3c0214ca934..edd6b0dad0d3 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4654,7 +4654,7 @@ static int bpf_prog_detach(const union bpf_attr *attr=
-)
- #define BPF_PROG_QUERY_LAST_FIELD query.revision
-=20
- static int bpf_prog_query(const union bpf_attr *attr,
--			  union bpf_attr __user *uattr)
-+			  union bpf_attr __user *uattr, u32 uattr_size)
- {
- 	if (!bpf_net_capable())
- 		return -EPERM;
-@@ -4693,7 +4693,7 @@ static int bpf_prog_query(const union bpf_attr *attr,
- 	case BPF_CGROUP_GETSOCKOPT:
- 	case BPF_CGROUP_SETSOCKOPT:
- 	case BPF_LSM_CGROUP:
--		return cgroup_bpf_prog_query(attr, uattr);
-+		return cgroup_bpf_prog_query(attr, uattr, uattr_size);
- 	case BPF_LIRC_MODE2:
- 		return lirc_prog_query(attr, uattr);
- 	case BPF_FLOW_DISSECTOR:
-@@ -6260,7 +6260,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr=
-, unsigned int size)
- 		err =3D bpf_prog_detach(&attr);
- 		break;
- 	case BPF_PROG_QUERY:
--		err =3D bpf_prog_query(&attr, uattr.user);
-+		err =3D bpf_prog_query(&attr, uattr.user, size);
- 		break;
- 	case BPF_PROG_TEST_RUN:
- 		err =3D bpf_prog_test_run(&attr, uattr.user);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools=
+/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+new file mode 100644
+index 000000000000..32159dc64da8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Google LLC */
++#include <linux/bpf.h>
++#include <unistd.h>
++#include <sys/syscall.h>
++#include <test_progs.h>
++#include <cgroup_helpers.h>
++#include "cgroup_skb_direct_packet_access.skel.h"
++
++#define OLD_QUERY_SIZE		offsetofend(union bpf_attr, query.prog_cnt)
++#define FULL_QUERY_SIZE		offsetofend(union bpf_attr, query.revision)
++
++static void test_query_size_boundaries(void)
++{
++	struct cgroup_skb_direct_packet_access *skel;
++	struct bpf_link *link =3D NULL;
++	union bpf_attr attr;
++	int cg_fd =3D -1;
++	int err;
++
++	skel =3D cgroup_skb_direct_packet_access__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		return;
++
++	cg_fd =3D test__join_cgroup("/attr_size_cg");
++	if (!ASSERT_GE(cg_fd, 0, "join_cgroup"))
++		goto cleanup;
++
++	link =3D bpf_program__attach_cgroup(skel->progs.direct_packet_access,
++					  cg_fd);
++	if (!ASSERT_OK_PTR(link, "cg_attach"))
++		goto cleanup;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.query.target_fd =3D cg_fd;
++	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
++	attr.query.revision =3D 0xdeadbeefdeadbeefULL;
++
++	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
++	if (ASSERT_OK(err, "query_old_size")) {
++		ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written_old");
++		ASSERT_EQ(attr.query.revision, 0xdeadbeefdeadbeefULL,
++			  "revision_not_written_old");
++	}
++
++	memset(&attr, 0, sizeof(attr));
++	attr.query.target_fd =3D cg_fd;
++	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
++
++	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, FULL_QUERY_SIZE);
++	if (!ASSERT_OK(err, "query_full_size"))
++		goto cleanup;
++
++	ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written");
++	ASSERT_GT(attr.query.revision, 0, "revision_written");
++
++cleanup:
++	if (link)
++		bpf_link__destroy(link);
++	if (cg_fd >=3D 0)
++		close(cg_fd);
++	cgroup_skb_direct_packet_access__destroy(skel);
++}
++
++void test_bpf_attr_size(void)
++{
++	if (test__start_subtest("query_size_boundaries"))
++		test_query_size_boundaries();
++}
 --=20
 2.54.0.823.g6e5bcc1fc9-goog
 
