@@ -1,63 +1,67 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A84723D281
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F0273D8D
+	for <bpf@vger.kernel.org>; Sun, 31 May 2026 00:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780188506; cv=none; b=H5W0PWjXTT99WXaPzD7r3JGhRfpxtcQ5bddJTfEjHpEifRnQxONOH1x9mR9OQtW/35XkrmNjooeb5NrlxAIl7KxQTg4KPQTd0yGVmpu+W8noPnc4qY9PyKzyoNJXR2Eo4sxGfeRw3I2kt0+WK8ZpcHrhOetaJGOUrj3uL/NK+co=
+	t=1780188508; cv=none; b=e5Bw6YZzCWNXW7BEm+7jzsNB34JBnLntxkRV1KjYDHYrY5MN25cCCTIFXG7KxKxf+Q9awQOc05BRIgRrPeLrOEN+IjkKhZ0htXl1WatQjyb7ruE66nd5OCHottfXtqe0a1aYgU910MruVendhtGEtd5leTbvJNn8XPlzpoPJh6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780188506; c=relaxed/simple;
-	bh=JE+XeIKTsotTh/xcFii2dHnI072msL/Mkm3HQLAo1nM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Qf1LC3/9cjtjqA/Hw/N5RSapkJF2RkQl3p2vSsn2o/f2SsQ04hGI25aVFKbLFX8MsjayJ1/CS/P13qQUIsvz20LvejHeCzpC28IL95df0kyjzfDH6YV+RBf3k7fznsWGfk+JgnNiXcUbqf0ygw7IMlSEUwLcTxkNY5a/wcqKCho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XkWmnJwp; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1780188508; c=relaxed/simple;
+	bh=rZKT3WfpcAM0Di6SKFP/V+72/2OaBqpDTNVwYt9MKvI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=g6NMpTZHo55sOLgJb6w1s2mfgVO7YFYWRek3fYE0Ex0Hwm9T6o2c3LjA43TCDaXP+cFmOqRlrNKOlnOfCZtHuUIaB4leEfCD1+P7XBS/9qId2Xhn+1hxn3bkpF+nROWjd3hKcK4H3DhxEYQHt4q/DqYAxCZVLcuUdUX9t9RYKEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r0QAk2mx; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XkWmnJwp"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c0c1e112dfso1905885ad.0
-        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r0QAk2mx"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-36bc380fbf9so1776507a91.3
+        for <bpf@vger.kernel.org>; Sat, 30 May 2026 17:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780188503; x=1780793303; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=m9llWaUyY0QX+uCte5zZE9wTjpV+Ud2qZ4TJwZ1Uj1c=;
-        b=XkWmnJwpXTNOLwm9uo6m+wyaANURz/Xi6Za9LQqmxzDCuuXpsDp20nNbmMld6I5Jre
-         6jI7WjcRQVbnAJV3CGUsUIICYq2RIh+ciMM2M+F5Fu48eGS4ZiHZP44lB1lizBAydBBO
-         Jj9H3Wdz2/i33KNtFrSmRGa/kWL6EVVu0FHhQ76NII+9O3hzLxfEiASERtGbUDjKRzSe
-         hWjTur64W/gKyJyCpbXknLHtI9t82UyLY7pl/m+U/tnzeNcGdOoM6iHfGQ/1UZdsKNnN
-         /JVwisH9wSUwq4yYe8nA6meCvhyFBngBw2N9D978bb840hDIHstzoJI2+cGG0PamoqgP
-         Fx/A==
+        d=google.com; s=20251104; t=1780188507; x=1780793307; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SVPwV2ysloi40QFLeoMaNeuGhaFgrYtYqToJPyLkcEI=;
+        b=r0QAk2mx9/Sxq+H6IGtRcEuNP+OVGwdB7/KXJboVtSOSpzxvlRnBB54zxc4CoHwEkA
+         PmrRelVBPO45yBiWgZmcf08u15xDkVwtyZ5yxWzsmG7BkwwzGIbf0pb7mefGhRdQIJcN
+         5ityawrBnzkeHVBE67InH9d3oEswj0UEniDYlgLt7Vnoafdt9f96sDh6k69G+PUPxx4A
+         Be70SxLs7V7Jx3Pzf6klX4CE9m98XLtl/2VcLBXMULo+kBg9xcSy72dhbhUDLrehuM0a
+         PeAguxBkDlxqlIk2N8vms1N33WzpSiDFO8eLUPs/hZSr2qCdfcC8bZjbEqGa5un5q6jD
+         4SuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780188503; x=1780793303;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m9llWaUyY0QX+uCte5zZE9wTjpV+Ud2qZ4TJwZ1Uj1c=;
-        b=m09e3rmChqEbvDoI675mzr4FnIpQ5MTcQHeG8MP2B1p9dlsvKdeYsuSgLr280+N3k/
-         NNCbMR8QgDQAhPZDr3MCmKsKmrZ5LnNV7s+7c9cUO/aZlXj0QYZyv35ZcQySJzV+dhxN
-         JomUQNk4Dtssqk40mFtt8+nq5KFanIMwYGKluO2fBodZsDY3QgzbWxHEuYEOUqD+YcTX
-         BeaCErbAbJJc53Qod0vyYfmfTsC0+7NI/DWrb/U/kVybfmMZ2i/5TbcYeRABOpuZUb0m
-         ZPxlOJvWQf60c/gmmyxl8PfO38nptfypngVMrFeCxpGgVHCabL9WMXbuxnjQyVCLzjMh
-         CTbg==
-X-Forwarded-Encrypted: i=1; AFNElJ9FQRLoQMV6Gf6sEfreKgeA10Zc+M4QNhMJlO4Jz886iBQEXjiZqPZMFRyM+nyGj8qD80E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK3LCzyJFpd+NtGM0sVztXF2OPaHTmUzXbkm6SERuM5KNxpxAE
-	YDy5Zg5USgu2WS2iRUWfdVoJIrFjMtxKgGJXa9Bwu02IPzjHZPMZqJN9D5pDstFU6WkpRlMfnB0
-	geY3v+yzDn+aswBG7Z1/LNMMupg==
-X-Received: from plav20.prod.google.com ([2002:a17:902:f0d4:b0:2bf:1a98:5111])
+        d=1e100.net; s=20251104; t=1780188507; x=1780793307;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SVPwV2ysloi40QFLeoMaNeuGhaFgrYtYqToJPyLkcEI=;
+        b=aqAagkss4Re6Kn+4YZMrLOuwCFVCkNwPq06u5q0r8tKKC9hvAyjFRa0rzxx57WtFwc
+         XXEeULQQvz4YdjHNs3vBM4Udy4KgvCtNtTMTWfVEzGPBaRIvAjPlw0pe4kacqz7R8Dd8
+         MZMMQlRIWFdsxztauzjG8RQAPqWSuvvcfh+lR5mECKd7Y/lzrKU/mL46GDwN5VSKdHI8
+         HDyq6nGxZjrjapK4YVk7gsd/ppj/+lzVGx1rTsQ1yNczH5Eg8OWWFUES7zkLaMouMNYQ
+         wG8u77yjPcJg4i9cb4aT6KcjAA4NbScsiVZ/yei6VaEOUne+nkFtMz5uX8jZVgW18BdU
+         L7aQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/pyOadO2BzIv8iBitFLvvV6V2XX2MeHB4/7lWgbibB5Ul/pNU84vpeW3fF1zBe9FAPF3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvcSrbYmCJOrDXQBvFUiUFpLbrgUI2iGLbYvFiE0XraSU+iA37
+	i8ccS7akzb2upRBNjJBElxp/DjLdvo+FSk5kYcpdfMNpSMnaTaWeKXfonqsdsdfV5q0uCzL1kks
+	cL7Qr7rWjFi5rfXddjpCAnHwUbQ==
+X-Received: from pgvc19.prod.google.com ([2002:a65:6193:0:b0:c85:9c9a:ab5c])
  (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:c40d:b0:2bf:1778:88c4 with SMTP id d9443c01a7336-2bf368287bemr64886895ad.21.1780188502634;
- Sat, 30 May 2026 17:48:22 -0700 (PDT)
-Date: Sun, 31 May 2026 08:47:46 +0800
+ 2002:a17:90b:3e8a:b0:36d:64c1:8b5f with SMTP id 98e67ed59e1d1-36d64c18c3bmr3679839a91.27.1780188506522;
+ Sat, 30 May 2026 17:48:26 -0700 (PDT)
+Date: Sun, 31 May 2026 08:47:47 +0800
+In-Reply-To: <20260531004748.3567875-1-yuyanghuang@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260531004748.3567875-1-yuyanghuang@google.com>
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260531004748.3567875-1-yuyanghuang@google.com>
-Subject: [PATCH bpf-next v2 0/2] bpf: Align syscall writeback behavior with
- user-declared size
+Message-ID: <20260531004748.3567875-2-yuyanghuang@google.com>
+Subject: [PATCH bpf-next v2 1/2] bpf: reject BPF_PROG_QUERY with short uattr size
 From: Yuyang Huang <yuyanghuang@google.com>
 To: Yuyang Huang <yuyanghuang@google.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -65,29 +69,55 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This series addresses an out-of-bounds write regression in BPF_PROG_QUERY.
-Based on upstream feedback, we simplified the fix by checking the size only
-in the front-gate bpf_prog_query() function and returning -EFAULT.
+BPF_PROG_QUERY writes back the 'query.revision' field unconditionally to
+userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
+bytes, which was the layout before the addition of 'query.revision'),
+the kernel performs an out-of-bounds write.
 
-Changes since v1:
-- Simplify the kernel fix to checking the size only in bpf_prog_query().
-- Revert all other subsystem query plumbing changes.
-- Update BPF selftest to target BPF_CGROUP_INET_INGRESS cgroup query, and
-  add verification for attr size boundaries.
+Fix this by returning -EFAULT in bpf_prog_query() if the user-provided
+attribute size is smaller than the offset of the 'query.revision' field.
 
-Yuyang Huang (2):
-  bpf: reject BPF_PROG_QUERY with short uattr size
-  selftests/bpf: add verification for BPF_PROG_QUERY attr size
-    boundaries
+Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup pr=
+ogs")
+Cc: Maciej =C5=BBenczykowski <maze@google.com>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+---
+ kernel/bpf/syscall.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- kernel/bpf/syscall.c                          |  6 +-
- .../selftests/bpf/prog_tests/bpf_attr_size.c  | 65 +++++++++++++++++++
- 2 files changed, 69 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-
--- 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a3c0214ca934..c9a5415ad437 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4654,8 +4654,10 @@ static int bpf_prog_detach(const union bpf_attr *att=
+r)
+ #define BPF_PROG_QUERY_LAST_FIELD query.revision
+=20
+ static int bpf_prog_query(const union bpf_attr *attr,
+-			  union bpf_attr __user *uattr)
++			  union bpf_attr __user *uattr, u32 uattr_size)
+ {
++	if (uattr_size < offsetofend(union bpf_attr, query.revision))
++		return -EFAULT;
+ 	if (!bpf_net_capable())
+ 		return -EPERM;
+ 	if (CHECK_ATTR(BPF_PROG_QUERY))
+@@ -6260,7 +6262,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr=
+, unsigned int size)
+ 		err =3D bpf_prog_detach(&attr);
+ 		break;
+ 	case BPF_PROG_QUERY:
+-		err =3D bpf_prog_query(&attr, uattr.user);
++		err =3D bpf_prog_query(&attr, uattr.user, size);
+ 		break;
+ 	case BPF_PROG_TEST_RUN:
+ 		err =3D bpf_prog_test_run(&attr, uattr.user);
+--=20
 2.54.0.823.g6e5bcc1fc9-goog
 
