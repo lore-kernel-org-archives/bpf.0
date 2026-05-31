@@ -1,35 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128E125F7A5;
-	Sun, 31 May 2026 16:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D75C62809;
+	Sun, 31 May 2026 16:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780244412; cv=none; b=WeBTtzvDTpSQuFrA+pY8LoMd4j60nPvu6WRWiVe7kMXjegovcryugRF8hPGwS9uyo447IbsgLvgC4L4KRbMflwH4kun3UZIrwPWQJoYGbcCWcdPWoYdEOFQqMtdFwKJ2tjF6Xu5C58mSzn45LEhT5MXdL0Ns4c3IpdRFw8ENmi0=
+	t=1780246734; cv=none; b=WvUx4IkY1FfXVFVgKaIxsmbB/s6R6q5A2fitBcc+blouptdLELKQvU4kILCfswXzmCHT0gK46+E/ZZNF/oqH9sg2BkIA/DEjWut9RhdizkPWMYwXoJl24P3Ki4Dp6vorATgikxSeT3euPVn57jyvfOdXjPpq+SdtOjq/hQuB0Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780244412; c=relaxed/simple;
-	bh=d7Ks5AfGzNPtzFQrMSc5GGnGCbasmw+Xk5mJNMjvT3M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=N5vT1u+WDfHTQCTH9ahVZ2Jt368Mmi2pxqQ7A0DXDgOd8JCtDTSsKxtz/s2IPQPyNduIZEg/7EyHZ5uXGa/Szw+hJqC1l9aZVmyeTPll3Zk5TJznmi6B9YhFImPECBhbDTvdYjUFquen5r1vuAseL3awFgNHH7OT4IFxlnMddyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bewiwCgM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780246734; c=relaxed/simple;
+	bh=1Ou7HJkO3L14grfGDZqMSEBhaKT6ODVQdK2XDogdUV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G9J4hIuCSnue8coZcpKcn10ob8ddBhaRqkXQRupRw4gfAoy2Uo7wVYmbDbkeUd/mX/fx/38ZzKP9dXdd0TLo5wn3+xcgRg4yOTIRQSRaJYlDwKSWtioYu9wAb02PfDD7gIbL72d2J5b6yinKU3DfwNJK7F+ouxr+NQKv3hhyJDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSN+OMvp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bewiwCgM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B196C1F00893;
-	Sun, 31 May 2026 16:20:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSN+OMvp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CCF1F00893;
+	Sun, 31 May 2026 16:58:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780244410;
-	bh=hnv6GbhPuz3vGa0HA6tRNZSKBlVN7uvJdLKnMl11kW4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=bewiwCgMXWiHz6oct8cXk8H4WsBzYlog+FRAqk+rEoId/1Y7NfEFmOzqM9kv1kL2h
-	 5s7WqcKCSIr6TrOg4mco66vL9GUKmeVGdNYkseor7gLSaisiDwLeoYJzD0L5Gr0OLJ
-	 8k84pCstvmvQ5/DdJCe5zdTEZnGw9+fwEEZxMlAljAR4QUtC1IBkFw25RhVwKZuAcb
-	 P85UxyX9JJ2wTJ0pjug7zDx0v5rF+JMm5MaTmkHEfF7dNnS6PFc2h+79jAUO5fa1l8
-	 /OgfmVABPAaiJWHnL+pAEN+klPd0AcwPYE+USa7ySAN+QJjoz60AqgaGJxvZ6bKmY9
-	 WldqHoZD95JnQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0C8C39302EC;
-	Sun, 31 May 2026 16:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780246733;
+	bh=4XCt6KVwLzptQOI3wbHQqErOB18s5I0OOfXV/KA+Rts=;
+	h=From:To:Cc:Subject:Date;
+	b=aSN+OMvpJNWqfqcHCr3+rxFW6fn52kxKo091Ma3hITkd5j4S+WCVEGoecvFilaS1S
+	 +Y2q4SpBBrK2I/cjUs9X4SaKpTQP8nEGxJ4ao4OFdolkwWfWGEwFJQlWPAzibxIvFU
+	 6LoQptQYW7Oq6y2SY2TlONhz13QiO3AIf81H4siVcKGj2+yolg/40T4GrHpuKq11Tg
+	 nwuSDj9PFhkcPDoR6BN25dYwPJmGYVFBvTligqcw5VcNxhSkZepy3TqgPMnK6jxPdZ
+	 WZeE4p62xz7OmyHAej7Re/BXLyedapj8eK+HKugUtvIUg59gJxEuPdPdp4r7YTmP3T
+	 XYGJHq1PMTeNw==
+From: Tejun Heo <tj@kernel.org>
+To: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev
+Cc: memxor@gmail.com,
+	david@kernel.org,
+	emil@etsalapatis.com,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Overwrite scratch PTE when allocating arena pages
+Date: Sun, 31 May 2026 06:58:52 -1000
+Message-ID: <20260531165852.555930-1-tj@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,47 +47,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/2] bpf: Align syscall writeback behavior
- with
- user-declared size
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178024441364.2925449.1504432439651064028.git-patchwork-notify@kernel.org>
-Date: Sun, 31 May 2026 16:20:13 +0000
-References: <20260531075600.4058207-1-yuyanghuang@google.com>
-In-Reply-To: <20260531075600.4058207-1-yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, jolsa@kernel.org, john.fastabend@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, shuah@kernel.org, song@kernel.org,
- yonghong.song@linux.dev, leon.hwang@linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+apply_range_set_cb() maps the pages for a new arena allocation. It returned
+-EBUSY when the target PTE was already populated.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Kernel-fault recovery can leave the per-arena scratch page in an otherwise
+unallocated arena PTE: a BPF program that touched an unallocated address
+gets the scratch page installed there. A later bpf_arena_alloc_pages()
+covering that page then finds the PTE populated, returns -EBUSY, and leaves
+the scratch page in place. Every subsequent allocation of that page fails
+the same way.
 
-On Sun, 31 May 2026 15:55:58 +0800 you wrote:
-> This series fixes an out-of-bounds write vulnerability in BPF_PROG_QUERY
-> while maintaining backward compatibility for older userspace applications.
-> 
-> BPF_PROG_QUERY unconditionally writes back the 'query.revision' field
-> to userspace. If userspace passes a smaller 'bpf_attr' structure (e.g. 40
-> bytes, which was the cgroup query layout before 'query.revision' was
-> added), the kernel performs an out-of-bounds write.
-> 
-> [...]
+Drop the must-be-empty check so set_pte_at() installs the real page
+unconditionally, overwriting a scratch (or empty) PTE.
 
-Here is the summary with links:
-  - [bpf-next,v3,1/2] bpf: fix BPF_PROG_QUERY OOB write and cgroup backward compat
-    https://git.kernel.org/bpf/bpf-next/c/21c4b99b27f3
-  - [bpf-next,v3,2/2] selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
-    https://git.kernel.org/bpf/bpf-next/c/5add3a4ad1a3
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>
+---
+ kernel/bpf/arena.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -131,15 +131,13 @@ static int apply_range_set_cb(pte_t *pte
+ 
+ 	if (!data)
+ 		return 0;
+-	/* sanity check */
+-	if (unlikely(!pte_none(ptep_get(pte))))
+-		return -EBUSY;
+ 
+ 	page = d->pages[d->i];
+ 	/* paranoia, similar to vmap_pages_pte_range() */
+ 	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
+ 		return -EINVAL;
+ 
++	/* May be none or the scratch page, overwrite either way */
+ 	set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
+ 	d->i++;
+ 	return 0;
