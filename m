@@ -1,108 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869C728642B
-	for <bpf@vger.kernel.org>; Sun, 31 May 2026 01:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E0E3438A7;
+	Sun, 31 May 2026 01:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780189872; cv=none; b=hZ/yaI+j7WCEcG5Y/8PTyUXlkQsD1JjM8llq+ohyBIedUVjdiLx3hY+8fTPPRTPrrd+vYWBxfMlD8ZCRVu9ZxhLs2O9+4LGxmGI8i52OVIHKKwTSW8swO2fGwPFPaKH4sRU0zzoG2p7E8s87sajpcXDYVOHjxByTswf8KRJWpyM=
+	t=1780190928; cv=none; b=M58gCweXIEFSCw3K5nSwqnbtlHE4LNgijZ04BTSrdXkDATDuAD2XRie/FEFK/1LTn9Sn3EJi4oWnEjmUwRHvwUIWEV8lEsY8p3ycOHaqStDOd7UiX+6fgaGNoU84h6cIw0VfAv4m1evsDW9+BaGsxcOb3aF8pZ/a+Ja5ypxg5QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780189872; c=relaxed/simple;
-	bh=ru7St3GPLCSDrIPYQsh6BjQXE1pyTY/hDLrmHEZOZQ0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mYPeRxwyz8RJmdERlSDClGWqsGqcGH2TOfjnihHQPUVDGxPTWUEIZAOvg7c5dBhleqL6f24zKSuuaJuKJ9UvxOKBs88Z8KG5Q7kKyiuLx3EPLFwm2LhZ5s4ehJtBukonMrm25yfc4l/0SnQnzME5HJ4rgOV/qhm3k2bySJSNWYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4Zp9Zuk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780190928; c=relaxed/simple;
+	bh=OAzN3seHohf2BTo65MsaHTpFXdEGGsanaTwCTvt08o0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=KHhZqbBcOUpqljeZ30q3d/tDe/y5FJErbg/3dZmFYTd3eEG6/+d5pnCcYliwschXOzGz9HFRZs4oQF5h+F4oc+N0NCjjry4e7fDHhK+N8oxuDuphTm2C8iwq95GVPi0VmhHOA3MDRuAscPXbWotHKbwPmgjudHipHyox4oLyWus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n55PjfID; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4Zp9Zuk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22BA1F00893;
-	Sun, 31 May 2026 01:11:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n55PjfID"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 574001F00893;
+	Sun, 31 May 2026 01:28:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780189871;
-	bh=ZbM24VlKTo2VMZ6oHDFvS1K5PiKv/L1UH1Tm63jGwMc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X4Zp9Zukn/4vlSIUmGGcB8rZuVmBdSa3ihDW2o/P/86qsfnfBjzS8zIFP/NzjK+vn
-	 7ICXmX2CZfWM8yCfVSdcssR8Jd8Nu56j3oSvRCv7qmmZnTMX1ADepi//isEOlrxUOr
-	 XT+P60OQSUwXPwpKS/8woNk5COu8RzfKEQqEyOdL+Qht4QgMueUQgjppEQ8BoZF2Zi
-	 jq45ijCEdBgis6cF2kr7KHzeoNadZBQBabLK42zujGd4pwqFHYJKQ3jWTRyllrchNp
-	 wAe+/mnM0fwhVIq6QN0evIbRxN7vzNBj7v2kX+sKnLtyZX0l7Dt9dDHzGVtMvR2R+z
-	 qTIcbuxbZOa/A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for
- BPF_PROG_QUERY attr size boundaries
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yuyang Huang" <yuyanghuang@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260531004748.3567875-3-yuyanghuang@google.com>
-References: <20260531004748.3567875-3-yuyanghuang@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 31 May 2026 01:11:10 +0000
-Message-Id: <20260531011110.F22BA1F00893@smtp.kernel.org>
+	s=k20260515; t=1780190926;
+	bh=X+BaGJHz8uZETrQTdbTxbXnOm7f0ecn7Si9q2XGqq1o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=n55PjfIDrn90/cbu7xhUBXTfql035EL1zqn6tswCuuKWr0uelCpTDuitSZvEMeK//
+	 qV1WAfjnzzog7xhY05GuBcCs++xivczObXyAkehNI2NoF7bKjGAB0tsQeelvBElcCZ
+	 bXE78tjO706Rf/zWY1ERSMeob+tofmS/gcZBDYZjNoq8TWbU3bmvjkYqhqEJpSEoBW
+	 PpAVHrw6cyiER9gypwWNQnmMDJbUIJDpgGR4gRiZ9MwZrdmPtGCGvyOeoM1qOX96bv
+	 SRrynnLq1Gnd7KVBSSoc3Kaw1H67Vvv+dnqe0QdfOy5dIGcuW6VTlRUuQIWG0tS8bx
+	 nq8sPoxzkz5ow==
+Content-Type: multipart/mixed; boundary="===============2073181152847420204=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <2024c87ec926ea4a4c7c5c811d649d0c9c23f0f40144fe33ca38e90a3b2c86b9@mail.kernel.org>
+In-Reply-To: <20260531004748.3567875-3-yuyanghuang@google.com>
+References: <20260531004748.3567875-3-yuyanghuang@google.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
+From: bot+bpf-ci@kernel.org
+To: yuyanghuang@google.com,yuyanghuang@google.com
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,john.fastabend@gmail.com,memxor@gmail.com,martin.lau@linux.dev,shuah@kernel.org,song@kernel.org,yonghong.song@linux.dev,leon.hwang@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,maze@google.com,lorenzo@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 31 May 2026 01:28:46 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] The selftest validates and enshrines an ABI-breaking kernel be=
-havior where BPF_PROG_QUERY rejects valid queries from older user-space bin=
-aries with -EFAULT.
---
+--===============2073181152847420204==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit a51bd156081fb623564c01426a789df272b5e924
-Author: Yuyang Huang <yuyanghuang@google.com>
-
-selftests/bpf: add verification for BPF_PROG_QUERY attr size boundaries
-
-This commit adds a selftest to verify that BPF_PROG_QUERY rejects queries
-with a user-declared size below the size covering query.revision with
--EFAULT. It also ensures the query succeeds when given the full size.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/too=
-ls/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 > new file mode 100644
-> index 0000000000000..4fbe56cb29d4a
+> index 000000000000..4fbe56cb29d4
 > --- /dev/null
 > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
 > @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Google LLC */
-> +#include <linux/bpf.h>
 
 [ ... ]
 
-> +#define OLD_QUERY_SIZE		offsetofend(union bpf_attr, query.prog_cnt)
-> +#define FULL_QUERY_SIZE		offsetofend(union bpf_attr, query.revision)
-> +
-> +static void test_query_size_boundaries(void)
-> +{
-
-[ ... ]
-
-> +	memset(&attr, 0, sizeof(attr));
-> +	attr.query.target_fd =3D cg_fd;
-> +	attr.query.attach_type =3D BPF_CGROUP_INET_INGRESS;
-> +
-> +	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
+> +	err = syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
 > +	ASSERT_EQ(err, -1, "query_old_size_fails");
 > +	ASSERT_EQ(errno, EFAULT, "query_old_size_efault");
 
-[Severity: Critical]
-Does this selftest validate an ABI-breaking kernel behavior where
-BPF_PROG_QUERY rejects valid queries from older user-space binaries with
--EFAULT?
+This test asserts errno == EFAULT for a short query size. A v2 review
+comment on the companion kernel patch (bpf: reject BPF_PROG_QUERY with
+short uattr size) questioned whether -EFAULT is the right error code for
+a structure size mismatch, noting that -EINVAL or -E2BIG is the more
+conventional return code and that -EFAULT usually indicates an invalid
+memory address during a copy.
 
-Older user-space applications (like an older bpftool) compiled with older
-headers will supply a smaller bpf_attr size up to query.prog_cnt.
-Previously, the kernel would accept this size, but this test now enforces
-that the kernel rejects these historically valid queries unconditionally.
+That comment was not answered on the v2 thread. If the kernel patch's
+error code changes to -EINVAL or -E2BIG, would this assertion need to
+change too?
 
-Should the kernel conditionally copy to query.revision only if the
-user-provided size is large enough, rather than breaking backwards
-compatibility for existing binaries?
+  https://lore.kernel.org/all/20260531004748.3567875-2-yuyanghuang@google.com/
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260531004748.3567=
-875-1-yuyanghuang@google.com?part=3D2
+[ ... ]
+
+This selftest verifies the fix for an out-of-bounds write to userspace in
+BPF_PROG_QUERY, where __cgroup_bpf_query() unconditionally wrote
+uattr->query.revision even when userspace passed a smaller bpf_attr. The
+companion kernel fix carries a Fixes: tag, but this selftest commit does
+not.
+
+Should this include:
+
+  Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup progs")
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26699503418
+--===============2073181152847420204==--
