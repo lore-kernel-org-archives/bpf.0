@@ -1,78 +1,77 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3993E2DE70D
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 08:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC92D2E7657
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 08:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780302697; cv=none; b=U7iLD0tMW6/jkVuCuKDMy2e6bZ//HJjWYuYuVI55PpbKFjp72HIvjPP91ntQ1RWPwOr+yYV4d1VHgfx4BJ6ZUazU3aklEgcSuhyqxCyCvcCWadUsKkKgldW562owq78DGuK9OxAyr48widRYydP1K610IlPdV12Kqf0IdnMeOo4=
+	t=1780302704; cv=none; b=oTz5qBTD4Ys4d1vAm8Cdlz/doTJoPsVOqOmocfAIGLuSmlVFgsKCLnUEKjVDRJj0QhYMvZ+C1PrIMOFIVdwAPELKiPwcG9QUaWjnbRT89gPbYaFvgUlElIMpYi/G99sD6UWSKhhQbviH6ZcEJeaEz5lUlEdemZLpVfC3YP29eMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780302697; c=relaxed/simple;
-	bh=iNvpJG7E1ziR3C7zfQSDCsofJj39lDOjSN2/S5E5GPE=;
+	s=arc-20240116; t=1780302704; c=relaxed/simple;
+	bh=d5tS/VYQvy11KKQdbITdO/cb5iPgnZacDSb2hI1SQqQ=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wf3DaPKmWatiBdoky87UjH1G+WDInPFTKGj8DTk7q8t99OeEF3BIGtNuSOOLO6pId4h9qwOSuS/h8ELn3gjQ/bQEdJhZnQxxBr3n74bLF1qU3ZoTMq6tLx6xCoOBJXEBV/9UCFzy6n4V3CBleMdJ5jr1dcXZPKiAvRMfIxE5CCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KK920SHO; arc=none smtp.client-ip=209.85.128.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=RE0SJuLBfemRjH6MNOHAYlTumKWTrnbNi8vhBzZfy+tyyXpgbrgoU9T4hqPTIG3gaZK9BElgpmU6Z3Jc9z3cbKc+KevEpTdE8E9fac6zn96w89epFjzvSiB7oGb5wKdsqO0hNXS3Pg5BctjCU/uS/Zc3D7ZyziCrsdE/UKYhU2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3n9ziM5; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KK920SHO"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490686877a1so55805955e9.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 01:31:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3n9ziM5"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4906869f0cbso88826735e9.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 01:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780302694; x=1780907494; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780302701; x=1780907501; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5zmSSlKo4hZN0RfddmedFqEkVnWBhlYoh9eeXOlFwE=;
-        b=KK920SHOxOIKLPnvaoz/gS5OMtbmr0B6wF9I3krENh+5CXvxyMvBOpyvUcASJOuzu1
-         Jtw6bziz4EQ3Bc4b/C8MZdULtT5IBzgTml5Ycj1WDDFlx47jsETA9tmciKOYIgtUoP8H
-         khuyUr1ksWQmwSac8PDn/6TkG1sdKZ04x+bR5gBfOp2ozPQ8F4LR+X21sPpVarGn9jFW
-         YBCSrXmcoXTuhUeoTS5vMyHrKuTrW7MS0MVTZoHhxSwckZjdXcyyQc4FewzlFMFeYk3F
-         qi0y0p4BEYl3fhDLz2Jwh1hOraxW9h+alA7Ltjuixp8JciIz2J+atdacc8fc17j+1ok4
-         v0lQ==
+        bh=xAW5Os4pfjenGgpPUMRcNNYStYiDsva7wTl5T8rnAg4=;
+        b=e3n9ziM5q5lYUTkuy/hA3RlCALxNikIWvqDE3QUaJXe3tk/p12rM+cwTQmuH+N966B
+         fitQ7pfkbYaRmYSpHhIf3klMBkdon8RguTOgj7CAMBjsy3kn7zwr1ShVCVuYqPL1cuDm
+         n3B3Ab6uayfZ0z26kQGOfvOBPWV+jwqWZwLfQey8waeSd9GvHF2VpDj0v/VCqEUDIJQh
+         TG+yVL2zJVt4MIzOtKiQfzt7BKOh75kzIIoqgBZIHl21ylCv3JrxxGRAF+Gy+PwgZmAd
+         uQjgm+3L8rus1bceNdunvAzBbr2q93BLLAJj2d2G7RD8fkTTSg3WsGScKZAqtQrulvOb
+         aIrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780302694; x=1780907494;
+        d=1e100.net; s=20251104; t=1780302701; x=1780907501;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i5zmSSlKo4hZN0RfddmedFqEkVnWBhlYoh9eeXOlFwE=;
-        b=EqPnyszt9W7M/rA6HqO3o5TfJVncQvnPWWySfh2YsjjOcW0YZHeAIlBMQ3BkFR962C
-         afCdGRvLg5EVAlmQe/3DI9+3SnYBs+ULQTEoVYiev1/WpB3etqieZdsbnqSqW5gphDd+
-         3QxPCBv2tez61E5tMmpj1eqXAFkm0JGmcBv+usvdaE2thvMlPHGbIF1rHkltGy2YfXuJ
-         XXdX4tw0Hq81rT7khZQ0+ce3zsaC8axRt0qJBF1I59ixOets5yJw2vSaH6Y8V/xLijIN
-         Hpkjnpdu65PcHOIfcVX8mc90kAJX+VmQJdqou4rTHAXqTNuV+T7tjJEJ+72I/+an0U0a
-         brTg==
-X-Forwarded-Encrypted: i=1; AFNElJ8loVtv64Pvo1Bp5LZa9H5Yu6giDLWFN1veG5mZRO3h1CqGStyK1EYZ2YrwiOxJgsY2lgc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlQsSALw5/MDedPI/mrjMioCTHKgtujE0fuTDZfrMfLqZ9LtAU
-	KhPTFWU8AF3RRSg2GRzVsHyYnPMpLn5BnHwFg5nCwP4WtXJP/7ofLvDw
-X-Gm-Gg: Acq92OHWAbT6jSryPwVP1dAyg3ugYbE+mjYMMRo8KJyPByJ3FC/OIhTXo8hah0fkqjf
-	AmDC9mjiFRVmQmyYM0tB06sQftfCoWmkgXEQoNwZxaGBAn8pQkROXV1CTnEjZVwdMuHAQnDtx2Z
-	oMzyUt0vHOaSPfmwwdu8+2OXE+/UMm6XCGxALFi8P0XKGU5ewRCLQm1qtNB5jw9tHjsQFKViMra
-	jJBtq3obCgq+wrbLIKy7t82fiRXBxxYdii2UiPYOPWpaZ6oHEBkx3szjgfPWo5MIZUtTO3OQt7Q
-	933ApDTZfSDFOwNu9APJssVQphA0T3LdN4uzkbCaRRl0ZWxVmmxbSXwElqp4Vm7j8BHaX3m5MgX
-	+9MNLWPNZc0Uukx9Dzgi857b9weQIpChSfEZupIAPnsOkv1sZLkIx05o8KyVeBE2D8l9j8u0r/S
-	/hJWu9eOu3cyvC0HF2bAeVUMcKRg==
-X-Received: by 2002:a05:600c:45c9:b0:490:8b0b:d3b1 with SMTP id 5b1f17b1804b1-490a2a4bac0mr139388825e9.12.1780302694364;
-        Mon, 01 Jun 2026 01:31:34 -0700 (PDT)
+        bh=xAW5Os4pfjenGgpPUMRcNNYStYiDsva7wTl5T8rnAg4=;
+        b=WmToCs+vkXNbduJKUpRiPtBYybrBe3+JCVux981PLl6a1mR0eBkm7bTdorkcxOaYnG
+         v9tOJoZZnqFhu7z5aHmd+ly52rEXO0laNjY36LvSoUS88dJnnf5CUYyzS+kpGFvAw7Zs
+         26AZw59Gt9qTEQR4jlRtw9AO+gITfMbjkiUZOMHCWw+yzeo1cVe/9NSiohQl0Bcr8a2F
+         EQ/tGYD8g7V7C/NlZfvOcRjtslluFVIzHy61aAx+yDbzf9Kda7q52ugeOJXTBxCMbcY1
+         O9UI1v1kZnD552fu66Cgto1uIxDszqSyBDCQ1/N63XfUCT+VXVSLcrSE6UwLJOPBDmM4
+         uTLw==
+X-Forwarded-Encrypted: i=1; AFNElJ+sXXs443es49ka2AcFBNtqqtQiD+CnVwyHbc4LdjLaA63sgUyL7fM/6OqairTtthhglkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+LNs9KjxPZLcZ7jFu8hX5tR6AE117c7qwkySaCsBUrdqIEtZx
+	+r5RR6T6ZtRJszDCFNj7eNf79VA3UQPrVEXc+Q0gZEoSfubfgg6ksvF4
+X-Gm-Gg: Acq92OH13lsYHJ4I/v1lmPGyV7aa4HO7oUMt379R4HbeAay/BG6cPcxAELbMg26wGqs
+	Z9MJcFlMDjVQLOKwNVWTtGIhRUp/P4em7PjjE12sVp6FYZ2qNF3zn8fB74Dk82keCUfqL8y/9GD
+	q+Y+I+aHLIcBkbOsMbPP84ygYNtZZ36DzrU5xEwrBIureHTykANpvGs51GumZ30BtJl0cGB/+rV
+	hw3dsIL0v0z8i7siAM0HLE9eNY1wQJMukfCmBKgx/w1RTTyuw6aoxsJvduYzc4iI5IPZrOvYpNK
+	gOm/kEFQV8WA44Q3TGskkf7GDGgYl1/J2PQUcO5tvZ5mHKT+Us92/cSnbCDcvKFGpo3Ewvat99A
+	GoIIHe0U12Bzs6ZzgeQxjOSxk4fi+KGIGPyFPRzh7icc5r5DUsLEM5gWLKD2hyS/PrgmMQEVjI/
+	6RDof57W+L78dk6pVi889hbXv/HA==
+X-Received: by 2002:a05:600c:450b:b0:490:6e11:c303 with SMTP id 5b1f17b1804b1-490a29213bamr196953175e9.13.1780302700991;
+        Mon, 01 Jun 2026 01:31:40 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ae24427asm6345985e9.6.2026.06.01.01.31.32
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4909d696f25sm349567065e9.5.2026.06.01.01.31.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 01:31:33 -0700 (PDT)
+        Mon, 01 Jun 2026 01:31:40 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 1 Jun 2026 10:31:31 +0200
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bot+bpf-ci@kernel.org, oleg@redhat.com, peterz@infradead.org,
-	mingo@kernel.org, mhiramat@kernel.org, andrii@kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
-	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCHv4 02/13] uprobes/x86: Remove struct uprobe_trampoline
- object
-Message-ID: <ah1DY06p3QN2nHlm@krava>
-References: <20260526205840.173790-3-jolsa@kernel.org>
- <22e6111c3aa950ec8eaa29c776670e6f834f82249190a652b2afa9a9cb551d76@mail.kernel.org>
- <ahbAXMH-R9Sk5N_3@krava>
+Date: Mon, 1 Jun 2026 10:31:39 +0200
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 13/13] selftests/bpf: Add tests for forked/cloned
+ optimized uprobes
+Message-ID: <ah1Da9KoU3wjjBV4@krava>
+References: <20260526205840.173790-1-jolsa@kernel.org>
+ <20260526205840.173790-14-jolsa@kernel.org>
+ <87ldd3665m.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,42 +80,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ahbAXMH-R9Sk5N_3@krava>
+In-Reply-To: <87ldd3665m.fsf@cloudflare.com>
 
-On Wed, May 27, 2026 at 11:58:52AM +0200, Jiri Olsa wrote:
+On Thu, May 28, 2026 at 03:00:05PM +0200, Jakub Sitnicki wrote:
+> On Tue, May 26, 2026 at 10:58 PM +02, Jiri Olsa wrote:
+> > Adding tests for forked/cloned optimized uprobes and make
+> > sure the child can properly execute optimized probe for
+> > both fork (dups mm) and clone with CLONE_VM.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../selftests/bpf/prog_tests/uprobe_syscall.c | 88 +++++++++++++++++++
+> >  1 file changed, 88 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > index efff0c515184..033d32b4cc27 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > @@ -4,6 +4,8 @@
+> >  
+> >  #ifdef __x86_64__
+> >  
+> > +#define _GNU_SOURCE
+> > +#include <sched.h>
+> >  #include <unistd.h>
+> >  #include <asm/ptrace.h>
+> >  #include <linux/compiler.h>
+> > @@ -936,6 +938,88 @@ static void test_uprobe_error(void)
+> >  	ASSERT_EQ(errno, EPROTO, "errno");
+> >  }
+> >  
+> > +__attribute__((aligned(16)))
+> > +__nocf_check __weak __naked void uprobe_fork_test(void)
+> > +{
+> > +	asm volatile (
+> > +		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10 */
+> > +		"ret\n"
+> > +	);
+> > +}
+> > +
+> > +static int child_func(void *arg)
+> 
+> Nit: Could annotate with noreturn:
+> 
+> #include <stdnoreturn.h>
+> 
+> /* ... */
+> 
+> static noreturn int child_func(void *arg)
 
-SNIP
-
-> > Although the old destroy_uprobe_trampoline only freed the struct (not the
-> > underlying VMA), the new code appears to introduce a VMA leak: the freshly
-> > mapped PAGE_SIZE special mapping in the user's address space stays mapped
-> > even though optimization failed. arch_uprobe_optimize() then sets
-> > ARCH_UPROBE_FLAG_OPTIMIZE_FAIL so subsequent calls won't retry, leaving the
-> > orphan trampoline mapping in the address space until exit_mmap() reaps it at
-> > process teardown.
-> > 
-> > The commit message mentions: "Note the original code called
-> > destroy_uprobe_trampoline if the optimiation failed, but it only freed the
-> > struct uprobe_trampoline object, not the vma. The new vma leak is fixed in
-> > following change."
-> > 
-> > Is the VMA leak addressed in the subsequent commit in this series?
-> 
-> yes, in:
-> 
->       [1] uprobes/x86: Unmap trampoline vma object in case it's unused
-> 
-> > 
-> > A secondary behaviour change is that 'return WARN_ON_ONCE(swbp_optimize(...))'
-> > now returns the boolean truth value of the error (0 or 1) instead of the
-> > original errno. While the current caller (arch_uprobe_optimize) only treats
-> > the value as boolean, could this surprise a future caller that propagates the
-> > return code?
-> 
-> ah ok, this is actualy 'fixed' in [1] above, but yea we should
-> fix that directly in this change, will do
-
-nah, it's ok, the caller does not care about the exact error
-value, just 0 or 1 is fine
+yep, will change, thanks
 
 jirka
+
+> 
+> > +{
+> > +	struct uprobe_syscall_executed *skel = arg;
+> > +
+> > +	/* Make sure the child's probe is still there and optimized.. */
+> > +	if (memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)))
+> > +		_exit(1);
+> > +
+> > +	skel->bss->pid = getpid();
+> > +
+> > +	/* .. and it executes properly. */
+> > +	uprobe_fork_test();
+> > +
+> > +	if (skel->bss->executed != 3)
+> > +		_exit(2);
+> > +
+> > +	_exit(0);
+> > +}
+> 
+> [...]
+> 
+> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
