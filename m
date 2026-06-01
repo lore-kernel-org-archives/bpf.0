@@ -1,142 +1,131 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99D932ED40
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 06:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780293865; cv=pass; b=taeT3RE+a6NyTsu6RGF7b/H/l8b6n/ltlmV4Pw5U4i0yBDDRsCISWVCrUPKQuzaRj8vbFs/+XUMHc0gbxvOUrX76Vk0Sy0/0LEvbAaHqyyAmaxV5lsXSyJcEpOnn0DVeelNBNdYqWRw4CLY/tslInXrRE6+d6Ds44i9uWKe6PF4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780293865; c=relaxed/simple;
-	bh=loicyaSIKacT3UFMUJ19/QYRzlY6aMDV2pQS+mvBMAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lqkBZiwyED3MKDSXDjJYfUreB+dYM37FlEndJUW+uEKQzSYkP1a+UqChNXdvCUi4nD2a6M7GvwyPvEZl2VrBml6hX1yk3KcO1+PtHXSTg4ml1SEsEqRXGgK3mkCbA6NGtYVBNeX9FICKqJCvV3sOvp/He8KMQZeWQLbxi0Su+NU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pnikqe7Q; arc=pass smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB9634FF41
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 06:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780294505; cv=none; b=Ufp5qgkQeKiwxm8X/cleYMnF62P/eV+lmBOqZAXXENHVMeb9CDO7XE5S75C17B2cxWnTe88KpRp2cEro/ehtpwYAj2XicjuUZGy0z7ssZ3+QrjHXG2/7gY9KqrO4Pof1LXwp+53V3knilezHDJqd2yi2R5BXQnzPtOJKvt1AZ0Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780294505; c=relaxed/simple;
+	bh=cllRYrtnr+Bm1jPSnk2qFgiIa6ciTLoO9Dhvv/e8lRs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kH8NK+qPO/OZmdAmZ+5sPQOhz103v+WcBEciK/JuTjAdhZG+h/xZDk1Pp7LCRivPdBpj9XjF+narWPxRnALtctqjjyrm0KLqzO3WfsW+XZ/9FCctf+gLjVqpaVLSAzTxgYfj7TNI3DlPTNS/LbYgrnmUkajAA1jf+unWKWyOSiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkBqDU2q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pnikqe7Q"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-68d233bf083so1421428a12.1
-        for <bpf@vger.kernel.org>; Sun, 31 May 2026 23:04:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780293863; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BdrrE73mzwlIbrqDoND/ZOB7GV4JPpiSxQHdtM05IIegiM1Gml8MwihL4vf+JZ/7/6
-         jX83naVOlJGVKoI5Hz4jr6NPoWz7+748v63bugetUU/87jxWYYyJWHZJNsEqV7wyseVm
-         Ctq3W8RZD98TufUwPp0jAe2+u6dZX/ofu6jkcsqiK4LOPNm/DcW4NvqAndAoJs3fZpgk
-         7v5LfrFtKLvRMPuAK8OAd7/GflfxJdXydwhRljrDpo0eXwuvfPDruSbI6oYMIGAvrKib
-         2vGXki3oiy/ykNHrVvegLJXahrQdne28Wx7cLClVLRMaoNz0uor1q/DpVD8svwXyqycK
-         x2mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        fh=5unDkGLaZI/i0EiRVomuHngjm1I2nKaYbKd+h8AhTL0=;
-        b=bDU+zBtfPoK85P4X2vVkDXC/d2f3ZTmLGL9YzhJCk2B+R1s5a6ebup/Ai5JnTuTMIT
-         Ir8bWbgJ9ypF+gpcLt/o8y9o9gS8yxK1h8xXAfJl3UoyZwq+Qo/CSkyHaTy+cKWBTc2O
-         iC2rGqOmzPGKcbPEPnW0E3T+QQq2zdNZ/atD74GU1nOeRreIeRTOxMdtt6WMn5REPLsq
-         HR1s6yFW3lOJbktEQuXQFRx3FtZnlVzqd06ohxslt0sxpU95guA6U6h275CWcxL09nWB
-         ACLj1xwWBhjDk+mgRwWU0olMsRgnPrbGgkBQ9Fv1y6fmVoOk/c5DcohqCUTQ/4G6x+Zp
-         pzcg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780293863; x=1780898663; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        b=pnikqe7Qq91TAn4cU9343o72h7PtT9Atxd73kFP8xjC3Ck9tZqtIrxux0NsiqQ2n9w
-         45+RGhG7vyf0yQ5mBXpZNCFPlyOtKZBBBxQTz+P6jdNYWDjMgmpUNG8OJt6HVeCC9IT4
-         RhstF/lC2D6tmw3qKZE6XyU/CWu71Z/0sZZvtfedz1PMWfT6OtDbQAqZp6+x9seWPqJ/
-         bKJreUMSp8TZ3tMUF/T5bO6Y1zpx8nDSLIgRHUUa0HQP8DpPN3zHiOj2eaQPsj4OZRs5
-         JyXLbSiT3s5RsIddCNQmrbhFcgVvbyjmvySG4zCKVRwio2mBYk7saHnY0NNnZ4xfITzQ
-         3QPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780293863; x=1780898663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=k5U4blnuS29gnJMSouEBsqgnyTt51NshtQjYFcOoY6o=;
-        b=lz7JYVex6MZVmaDtivl8+KeXhp4BZMh7MtM21wUd+Ht0LpHqD7rh+9hFKLCPIBL6yr
-         Ed7gxEDGLjqswdfBhLW+NZboqqEOBhVuhn59pArO49+HobxPPDp/qvw9hc5IskCN+CUZ
-         vvxLFfIOaB1/3JOj51sVTH5jKMN2Vxrl75RW8YOUbJcehEShstmpfBsNqx9pAzNyS4b8
-         rp6ux7TzjRsDyaYb48gYqFla9gaxAvcE87SN2vmBrvNXR+0FJs//x7lYntUNOOPGtwIG
-         fnsYZSD3TgqL+SxJF6x4QnKeAY3jPE7WpFXsEFooJeHlv19I7DWyQ/bvGnk24zZTkRIO
-         LklA==
-X-Forwarded-Encrypted: i=1; AFNElJ+gXNK+hwgyVyoFjQr8wYuAzhJ6i25KOV8l7iYWuuRZTG/4cWz0+LKjZC6jgWNTWnUD/mk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyduCIk4hxC37ShAGXp2YfrQcpVVcSPEBVjDfSIzP9yvDxRE85U
-	Tvn4pkx84v9dZiK2X7zWPuWhHM8ZXN2RHc60tPMOr5SxR98TKhdfNpHu+UyCVowq3V1UW/Y6nBk
-	FMjJn39FUIcaCC0XbdmF1VcOyWKF69gA=
-X-Gm-Gg: Acq92OGpRQmitjHWZsRPsvdkcq08MfoQPj6rrYaUlGwGbPcfApzW2lW8CpDpmTHWtDG
-	2PjzE2e6+asUOOB451npHo+c+YZ4jJIyXE/eenjzZdHgljc0YlF3yHuqD30mQuM6pxFkYXFSuww
-	xofq0r0kZOlBq49oXTV23cBHkmsK8YUEx8VG7kwh9DPLJXa6L278p7d3lDbX4gtlVJStJWb1MH9
-	mCId0vvDgo0mdsp3I5WuvSaZaTL6PJ20lwdszuL3CYAilHLy/dw4pAlqQVtuc9Ck7E/PFUoIam5
-	HMLRWdIDsZSQpow5i+c=
-X-Received: by 2002:a05:6402:4510:b0:687:74de:985b with SMTP id
- 4fb4d7f45d1cf-68c8c561c0fmr4537725a12.14.1780293863001; Sun, 31 May 2026
- 23:04:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkBqDU2q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD881F00898;
+	Mon,  1 Jun 2026 06:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780294504;
+	bh=hIrK3Vdz98VrWrXKZaA2uPlWNsOaXYcmNkwTO7lNUgU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MkBqDU2q/OJ7ke0/hQN0XoFsSAwTlFgi31Yub3qkjG5pbOzJJxPAyCIuvEFzW8A9v
+	 u7xvD8v2iYVgCMPIKk6THdqIr995FcKx/+cmKdxTXPZQQaYFPwaB+rykvZN/pIfR6O
+	 xjjElObyi/05/3TjDgrCFiSrs1jLuGzRRMzTuumthPBWohonslLZZe2c3VC60zcXqH
+	 2dDhl5/miJUr8dOcd8+TvoZnDjQ3qBGtYnmtYxCVEtX7hzNQQAyrIxGEf6V99nkHbQ
+	 cg47LAlZloyugmPLIBFvWN+6OkwH0nC7A3Jc2GdnYuq6dHQ6c8AUbpORhGzCWKUcHi
+	 bTMnf1oFIKV0w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: Clear rb node linkage when freeing bpf_rb_root
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kaitao Cheng" <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260601055859.13888-1-kaitao.cheng@linux.dev>
+References: <20260601055859.13888-1-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 06:15:03 +0000
+Message-Id: <20260601061503.EFD881F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260528062155.3988156-1-hataegu0826@gmail.com> <178027560516.3443781.11705215616764330591.git-patchwork-notify@kernel.org>
-In-Reply-To: <178027560516.3443781.11705215616764330591.git-patchwork-notify@kernel.org>
-From: =?UTF-8?B?7ZWY7YOc6rWs?= <hataegu0826@gmail.com>
-Date: Mon, 1 Jun 2026 15:04:09 +0900
-X-Gm-Features: AVHnY4LCt-nmaivQzYgUXJGt-M1rknYJfRCxdAzPDptWZgfPUztbYR3IA_6FPwE
-Message-ID: <CAPa51z=boV2KH3Xkh8y0jrcENA+ZeS+5HsO=Pxdb7V2HFCVbeA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: reject overlarge global subprog argument sizes
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	yonghong.song@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	shuah@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org, 
-	yatsenko@meta.com, song@kernel.org, puranjay@kernel.org, emil@etsalapatis.com, 
-	martin.lau@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Thanks Pavan, that answers my question.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-I will drop this as a security issue and will not pursue the defensive
-data-path checks for bnxt_en.
-Thanks for clarifying the HW completion contract.
+New issues:
+- [High] Unbounded O(N) red-black tree traversal inside an IRQ-disabled spi=
+nlock critical section introduces latency spikes, potential soft/hard locku=
+ps, and deadlocks.
 
-Regards,
-Taegu
+Pre-existing issues:
+- [High] Nodes added to a deleted map element's rbtree after `bpf_obj_free_=
+fields` are permanently leaked.
+--
 
-2026=EB=85=84 6=EC=9B=94 1=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 10:00, <=
-patchwork-bot+netdevbpf@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hello:
->
-> This patch was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
->
-> On Thu, 28 May 2026 15:21:55 +0900 you wrote:
-> > Global subprogram argument checking derives generic pointer sizes from =
-BTF
-> > and passes the resolved size to check_mem_reg() as a u32. The access-si=
-ze
-> > validation path then uses a signed int, and stack pointers negate the v=
-alue
-> > before calling check_helper_mem_access().
-> >
-> > This creates a wrap when BTF describes a pointee size larger than S32_M=
-AX.
-> > For example, a global subprogram argument of type:
-> >
-> > [...]
->
-> Here is the summary with links:
->   - [bpf-next,v3] bpf: reject overlarge global subprog argument sizes
->     https://git.kernel.org/bpf/bpf-next/c/de36adca6346
->
-> You are awesome, thank you!
-> --
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
->
->
+commit 867fefb5dd2755c5bd12c9f3bd37d5367c6793f3
+Author: Kaitao Cheng <chengkaitao@kylinos.cn>
+
+bpf: Clear rb node linkage when freeing bpf_rb_root
+
+This commit modifies bpf_rb_root_free to clear red-black node linkage when
+freeing a root. It mirrors list draining behavior by marking nodes as busy
+while detaching the root, clearing the linkage, and releasing the owner
+before dropping the containing object.
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b5314c9fed3cf..c7f26336984f0 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2296,22 +2296,30 @@ void bpf_rb_root_free(const struct btf_field *fie=
+ld, void *rb_root,
+>  {
+>  	struct rb_root_cached orig_root, *root =3D rb_root;
+>  	struct rb_node *pos, *n;
+> -	void *obj;
+> =20
+>  	BUILD_BUG_ON(sizeof(struct rb_root_cached) > sizeof(struct bpf_rb_root)=
+);
+>  	BUILD_BUG_ON(__alignof__(struct rb_root_cached) > __alignof__(struct bp=
+f_rb_root));
+> =20
+>  	__bpf_spin_lock_irqsave(spin_lock);
+>  	orig_root =3D *root;
+> +	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
+> +		struct bpf_rb_node_kern *node;
+> +
+> +		node =3D rb_entry(pos, struct bpf_rb_node_kern, rb_node);
+> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
+> +	}
+
+[Severity: High]
+Since there is no verifier-enforced limit on the number of nodes in a BPF
+rbtree, could this O(N) post-order traversal trigger latency spikes, RCU
+stalls, or NMI watchdog lockups?
+
+This loop runs inside the __bpf_spin_lock_irqsave() critical section, which
+disables local interrupts.
+
+Additionally, since rb_first_postorder() and rb_next_postorder() are
+exported and traceable, if an fentry/fexit BPF program is attached to them
+and attempts to acquire the same bpf_spin_lock, will it cause a hard deadlo=
+ck?
+
+>  	*root =3D RB_ROOT_CACHED;
+>  	__bpf_spin_unlock_irqrestore(spin_lock);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this pattern permanently
+leak memory if a concurrent BPF program adds a node after the tree is empti=
+ed?
+
+When a map element is replaced or deleted, bpf_obj_free_fields() detaches
+the tree here and sets *root =3D RB_ROOT_CACHED. However, a concurrent BPF
+program running inside an RCU critical section might still hold a pointer
+to the map element.
+
+If that program takes the spinlock and calls bpf_rbtree_add(), it will
+successfully add a new node to the now-emptied tree.
+
+After the RCU grace period ends, bpf_mem_free_rcu() frees the map element,
+but bpf_obj_free_fields() is never called again. Will the newly added node
+be left behind and leaked?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601055859.1388=
+8-1-kaitao.cheng@linux.dev?part=3D1
