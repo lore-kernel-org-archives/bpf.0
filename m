@@ -1,107 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87A33DB62B
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9303E1C5F13
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 16:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780329518; cv=none; b=bJ5GPZbhuA1f8AgBNWORfbU8oJsX/2ZNM6CHVvyo0LETLP1yU5rKH/D+bEWr6YthXwBw//1Le7mDo9PzQSLS3jbsAFewVTzd6qHg4SyDoXUBercl6M86BvYDBWTjeq8VBe4h2Bd/TR5+Oh7Z/ovAnLpyvSg4TbqcgTtOrBFtWXI=
+	t=1780329669; cv=none; b=h1U16j61ekwDBk6r7smcSq8DfittiCNSD6PoaGOXWbiBKwliCKlnwdm6rlsBtfX3Gm0OhCduJ6bsQ6L3CyDrR2+FrbIe2jyqSkdB6POGGzAHkYx9fNtORTPifJCkqY0vml1h6mE/cG4CMWDBAU07jUXoOk6NuiBt0vm78+B0cWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780329518; c=relaxed/simple;
-	bh=qIcgFkKMx9QeSgr8ty91gm/JXMlrtZXaVkZ4yJ8YMgI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uuyd8sVY80gSlGotsE4qSLI0VyXftS3K5HkFFJ9MTDIJCiT1HoIcVynZeTd0jaLqQTXhvrHhqRaMnLLAh6dsbaGLyIzeLBvHSkdjpyj3FyDyCMzI7iqY3M6dm1kVzytwERFUyQlyQ9aHGkbtM1vhJBt9umK7ccuuKDfLruY5yiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jD+6qBht; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780329669; c=relaxed/simple;
+	bh=Do74d+8XBL9lpsb6lEODd043vgrF5jDPLHMNv7Y/a78=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dqU8/aa8AiIqGesVRt9t1XsgqeEkLiKMFNT7vWNYj0OTEXi5+WERoMkqdS06CgGSEJ9Avjbr13czX/UDTI8ueUnpMyxkVDqcL/fkdrbweTny1+43h4sn02yjZF+dOgvcYx30ERSPbl0knr6Ey7OEGzgKGXpbyGCUsajWOu03Jm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d94JY1LC; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jD+6qBht"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D8C1F00893;
-	Mon,  1 Jun 2026 15:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780329515;
-	bh=Joao1te7hTrLmAyeGbs0h9HXnqi8zOjupjLbQLoDXfo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jD+6qBht9DvR8ZPSe7OjmkHGRbYYwuVRNvCzZJZRSXYxob8rZBp65u+mlBSWXi/Z8
-	 CxcOHEOQ0bqO1tX5GPuJAkgSLHLww0ixq5JesfAFhw8pfT+wp1o7tj4Yy/cTCoKabf
-	 ix0TEMHanciL5DU5DUftvr8k0fdFzup+Msw155jJLOwPRYUuIXAC7R3O+mbjxC2mMr
-	 lvL5otAjke56ch3Z5ov/NJOlFhIB463WjQJIRHWknfFLI1E6L3uCcvHc8rc+gETYcq
-	 gltm6qZrMOo9R2LXOLTGh93wqHhl3tebeocpqrOn7clxIAbzOjC2CHLggQ6QkBHYEX
-	 KZ1MySvuuaKpg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 4/7] libbpf: Skip initial_value override on
- signed loaders
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260601150248.394863-5-daniel@iogearbox.net>
-References: <20260601150248.394863-5-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 15:58:34 +0000
-Message-Id: <20260601155835.53D8C1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d94JY1LC"
+Message-ID: <36f7fc7f-5fbc-4f60-b5b0-76300d78b15c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780329650;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=txVl3s2cy1CA6Q/ph71iN6AxLc0+78y4QVoXa/72WbM=;
+	b=d94JY1LCAzRt68ouZuqp5RUJCu0chX6+/N7POXzWgcj1HNEywa/FuFrr9CdcBYQuaeRxkW
+	nE2jLGMOz5yXOuqgRWIjK6yv3Q4QmwRxSwMjfcxKYAx3V4pqouryGZNnN51wiSMbLd4z0f
+	bx9J4zgVVSri9k01UbbIc80eDbxYAxc=
+Date: Mon, 1 Jun 2026 09:00:37 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH] bpf: Tighten cgroup storage cookie checks for prog arrays
+Content-Language: en-GB
+To: Lin Ma <malin89@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>,
+ linux-kernel@vger.kernel.org
+References: <20260601095158.1186318-1-malin89@huawei.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260601095158.1186318-1-malin89@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [High] Integer overflow in `add_data()`'s `roundup(size, 8)` can cause a =
-massive out-of-bounds `memcpy()`, leading to a heap buffer overflow.
---
 
-commit aaabe67208a39bc461c4602ad17bdd3b78f93227
-Author: Daniel Borkmann <daniel@iogearbox.net>
+On 6/1/26 2:51 AM, Lin Ma wrote:
+> The recent KCTF-reported cgroup local storage issue assigned
+> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+> in cgroup local storage"). That fix addressed the direct mismatch case
+> in tail-call chains.
+>
+> However, the previous fix is still incomplete. The current prog-array
+> compatibility check treats a program with no cgroup storage as
+> compatible with any stored storage cookie. This allows a storage-less
+> program to bridge a tail-call chain between an entry program and a
+> storage-using callee even though runtime cgroup local storage still
+> follows the caller context.
+>
+> Require exact per-type storage_cookie equality when checking prog-array
+> compatibility. This blocks zero-storage bridge programs from joining a
+> prog-array owned by a storage-using program and closes the residual
+> A -> B(no storage) -> C(storage) path without relying on partial
+> BPF_PROG_TEST_RUN special cases.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+> Signed-off-by: Lin Ma <malin89@huawei.com>
 
-    libbpf: Skip initial_value override on signed loaders
+The patch looks okay to me. But can you add a selftest for this?
 
-    bpf_gen__map_update_elem() emits code that, when the host-supplied
-    loader ctx provides a non-NULL map_desc[idx].initial_value, overwrites
-    the blob value with bytes read from the host (bpf_copy_from_user /
-    bpf_probe_read_kernel) before the BPF_MAP_UPDATE_ELEM that populates
-    the program's .data/.rodata/.bss maps. This override runs after
-    emit_signature_match() has validated map->sha[], which lets an untrusted
-    host substitute global-variable contents. This patch skips emitting the
-    override for signed loaders.
+> ---
+>   kernel/bpf/core.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 8b018ff48875..dccd47c92992 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2459,8 +2459,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>   				break;
+>   			cookie = aux->cgroup_storage[i] ?
+>   				 aux->cgroup_storage[i]->cookie : 0;
+> -			ret = map->owner->storage_cookie[i] == cookie ||
+> -			      !cookie;
+> +			/*
+> +			 * Tail calls keep using the caller cgroup storage
+> +			 * context, so prog-array members must use the same
+> +			 * storage cookie.
+> +			 */
+> +			ret = map->owner->storage_cookie[i] == cookie;
+>   		}
+>   		if (ret &&
+>   		    map->owner->attach_func_proto != aux->attach_func_proto) {
 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index 66a02039da8ce..a5d9c7a5261b0 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-> @@ -1187,27 +1187,36 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen=
-, int map_idx, void *pvalue,
->  	value =3D add_data(gen, pvalue, value_size);
->  	key =3D add_data(gen, &zero, sizeof(zero));
-
-[Severity: High]
-This isn't a bug introduced by this patch, but could this call to add_data()
-lead to a heap buffer overflow if value_size is extremely large?
-
-Looking at tools/lib/bpf/gen_loader.c:add_data():
-
-static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
-{
-	__u32 size8 =3D roundup(size, 8);
-...
-	if (realloc_data_buf(gen, size8))
-		return 0;
-	prev =3D gen->data_cur;
-	if (data) {
-		memcpy(gen->data_cur, data, size);
-
-If a large size is passed (for example, 0xFFFFFFFC), the roundup(size, 8)
-macro would evaluate to size + 7, overflowing the 32-bit unsigned integer
-and wrapping around to 0.
-
-This would cause realloc_data_buf() to successfully resize based on the
-wrapped size, followed by memcpy() attempting to copy nearly 4GB of data
-out of bounds.
-
-Can a maliciously crafted BPF ELF file trigger this integer overflow during
-skeleton generation?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150248.3948=
-63-1-daniel@iogearbox.net?part=3D4
