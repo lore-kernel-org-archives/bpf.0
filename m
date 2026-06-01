@@ -1,97 +1,90 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C29C37F744;
-	Mon,  1 Jun 2026 06:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863E634753F
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 07:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780296434; cv=none; b=YBqwoOTqI8H5Qi2s7w1bPh1K4nsmCNIEy+TmieOwBa3isCiMDdeJS4yBUiHPW0oAbTIzsD+xfPN9vXHsdAth1PbXUfnSqxa0C7WxzY6F7y+VzSAvWVbWX9TS16aP52vnEnCsPpM0fIYqH/rGw5/GijttGm+YAy+gcnxfnCryWZI=
+	t=1780297688; cv=none; b=U5DMfVcA3nYJM2fyYBgclzhH3T4/CRCWUyJV2MSo2er5pdxiT0oAebclVhgTvTjfOxKR8daVkV5Eqpu3HdbwcmI2kI1SiYnd7WVL3rEayNWppJgRQMjWscu6mtT6yaxURkhkg6pSnfGhtJ6k3T8y9e9VYPLr+jVf8x36UdwkzEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780296434; c=relaxed/simple;
-	bh=gLr+ClZ3A5b2vH7EvnMG2NEhGarSI3BDjLmxVJtWzic=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u72TRj9bWk3rkIcCjeYEV5VSio8qNdst8SybMOK6x5f3B8go9FyTgzgLUwgLqIoBGRCqfOY9rBgU/mMrmaLsTD6uKr3cRrJqzzs1qNMhR5bmywStEWhAxXAlTP0KfMruAOMYvBCkp+8lsbWcs/HluFeOpwMyDudKl7nPQ4p2jIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iYeNzJAV; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780297688; c=relaxed/simple;
+	bh=28WlBr73GRSuhvfIaXBlq/gytQfOpEjXmGv75NSVEQw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=R2yDSgVyEz+C71bWNkUylzucGhA+1bpHYcAnV5vw4TsKBWfsfJTzwbp/cR1RVAMuAOvdoWm+5lTFMfUhlWYuvmy9Y/syquPA9PsqA6/Mvi8MMGsQ6NN1OWzxDZG60j3h5+S9lgmrvz2iCxcDuEQ8qauPH8Ex+6Z7Mv1wR3fh21E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3khH0rT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iYeNzJAV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=Ob//Qxk6+Hxjpn1gRrvIAEZC9CyQs/NQBB29gjaxROQ=;
-	b=iYeNzJAVBJVTV7rzRyC3YIKeqZCiWZ8qawwgEVNtBdUGP6zT2JVZrCHT39XRqF
-	sZyPYefjDa3iN6jafqJ21jLpTXFhKUo4E3OC9uIHSOzTxWxSFBBrYq0gNHD7L9lU
-	kL/0LDb7uBVGHtb/K32tNZbsUj66GJZVY3abDlkE6aw2s=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCH9OC9Kh1qSBTSAg--.66S2;
-	Mon, 01 Jun 2026 14:46:24 +0800 (CST)
-From: chenyuan_fl@163.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3khH0rT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB321F00893;
+	Mon,  1 Jun 2026 07:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780297687;
+	bh=wlehJoFM0jT999X3DRQNvBr+8Rzn7Ow3rtveiO6Hxw8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=h3khH0rT3hWsk/i55FdyxxOXKUl8fkBGBArIpZ0V5eqOcu7arh0R06ksktKjxsA8s
+	 LNaOTWQbkQ1yJZnemR7HAHUKIJNlYA1jRhLBJs0P78kZM0t1csXJFPVyl7c7Lukfps
+	 qmDD1xMBmVtwf5gHq81f4y10rS4B8fFd5cqAn2v06x1nsKV6s/lIbrlBIczZUilnKK
+	 DnzgxhspKmnSE0soIXAM375WA4wtek3AG3EJwwOTpPPnFe0iKhqdmpmU7q7r3vM8Mg
+	 XlCpta/OJ8RdaVF75D9gF9qW4HIyRWFrtyXNzVUpwIJVlUzdmUFoO7b8YEEJOYf29k
+	 XS5ZZemHwjfWA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add regression test for kfunc
+ implicit arg injection with stale register
+Reply-To: sashiko-reviews@lists.linux.dev
 To: chenyuan_fl@163.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	chenyuan@kylinos.cn,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH bpf v2 0/2] bpf: Fix kfunc implicit arg injection and add selftest
-Date: Mon,  1 Jun 2026 14:46:09 +0800
-Message-ID: <20260601064611.807637-1-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260407080900.551797-1-chenyuan_fl@163.com>
-References: <20260407080900.551797-1-chenyuan_fl@163.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260601064611.807637-3-chenyuan_fl@163.com>
+References: <20260601064611.807637-3-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 07:08:06 +0000
+Message-Id: <20260601070807.0FB321F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCH9OC9Kh1qSBTSAg--.66S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1xZry5uFy3KFy8ZF4Dtwb_yoW8Gw4fpF
-	W8Xw4Ykrs7AF42qF1fZr4xZryrtws7Jw45JF13G3yFywn0qry0qFykKa15Z398trZ5XFW7
-	Z3Z2vFZ5CayjvFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pizpB3UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5gCcWmodKsADSwAA31
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The newly added multi-line comment documenting the aux injection te=
+st violates the BPF subsystem comment style guidelines by placing text on t=
+he same line as the opening `/*`.
+--
 
-v1: https://lore.kernel.org/bpf/20260407080900.551797-1-chenyuan_fl@163.com/
+commit 1ef24f7e0744d3c963c7f542a86739e51e7b0b41
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-v1 took the approach of making btf_types_are_same() cross-BTF aware by
-comparing kind, size and name.  This was correctly rejected by reviewers
-(Alan Maguire, sashiko) because:
-  - Two different structs can have the same name and size but different
-    members, making this too permissive
-  - The real root cause is that pahole 1.30 generated BTF that broke
-    the distilled base deduplication for modules, causing the module to
-    retain its own copy of struct bpf_prog_aux instead of resolving to
-    the vmlinux definition
+selftests/bpf: Add regression test for kfunc implicit arg injection with st=
+ale register
 
-v2 takes a different approach: instead of weakening btf_types_are_same(),
-it introduces a two-layer detection in the verifier's check_kfunc_args()
-that cleanly handles the mismatch case.  A selftest is added (patch 2) as
-requested by Leon and Alan.
+This commit adds a selftest to verify that the BPF verifier correctly injec=
+ts
+the implicit bpf_prog_aux pointer for KF_IMPLICIT_ARGS kfuncs. It explicitly
+contaminates the register mapping to the second argument with a magic value
+to ensure the kernel overwrites it with the real pointer.
 
-Yuan Chen (2):
-  bpf: Fix kfunc implicit arg inject type detection to prevent invalid
-    pointer deref
-  selftests/bpf: Add regression test for kfunc implicit arg injection
-    with stale register
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c b/tools=
+/testing/selftests/bpf/progs/struct_ops_assoc.c
+> index 68842e3f936b9..dd322d43ff5e4 100644
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+> @@ -103,3 +103,43 @@ SEC(".struct_ops.link")
+>  struct bpf_testmod_multi_st_ops st_ops_map_b =3D {
+>  	.test_1 =3D (void *)test_1_b,
+>  };
+> +
+> +/* Test for aux injection with stale register contamination.
+> + *
+> + * This test reproduces the scenario where the BPF verifier fails to
 
- kernel/bpf/verifier.c                         | 48 ++++++++++++++++++-
- .../bpf/prog_tests/test_struct_ops_assoc.c    |  5 ++
- .../selftests/bpf/progs/struct_ops_assoc.c    | 40 ++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  9 ++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
- 5 files changed, 101 insertions(+), 2 deletions(-)
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred BPF
+subsystem comment style? The guidelines require multi-line comments to have
+the opening /* on its own line, rather than having text on the same line as
+the opening marker.
 
--- 
-2.54.0
+[ ... ]
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601064611.8076=
+37-1-chenyuan_fl@163.com?part=3D2
