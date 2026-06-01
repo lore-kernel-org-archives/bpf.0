@@ -1,75 +1,78 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DE1368D43
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E24311977
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780339071; cv=none; b=QJd8huaVe9xq1aaB9Rs+VU6nbclY6VXXE/QHkmyq1cZQhS+9Szur4pEiBuPiEOwdXAS2+tjOjksIiDoIKWMk6lIhUuAuDtIu8ScAOSD2ZF0I57Y3bipuuFbQdy0RXXvP0Xv7hs4GRvpCGXCkKS9FyW4IQqITPlhA2HM4EZkafaY=
+	t=1780339293; cv=none; b=NuYjVGE8njncq4xJ6SaSzdMC/978cH6+5gskMUy5a99jPuvaXqymJG2BiWkfZM5MMFkOfTVqrlWKdep2QeGM7Kdi530rTfunOGy+bjMkxoqKamCgV9fpiOLDTLcu5tnWgNNDayrRRq5mbsNoVPiUUeC9O2/aeahQDZxWitwfees=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780339071; c=relaxed/simple;
-	bh=Xn2YDKU/hALnKdyfZj0NMS9tS31HLEpKBLr4PPS0afs=;
+	s=arc-20240116; t=1780339293; c=relaxed/simple;
+	bh=KcYkINV1ZlG0Qamg5wYbsjaqYLLA239Zyfa4DeSP4mo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nkhc42qUjmB4P+PoO/Op+5zE5IsODz2DG84c0FEKlxtZbo5iXuvcPNcq+q9w7/L3CYIEHmDfR8ka/bFXZYFMhZdIcxUR3ibfP1TLKCgaHK/SvbqxPkRM6NgRgvy11UhqS6tjXQ2e6PakOhqdPWPmiwNEEP237/AzefYLkjKTPK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ktIzA/uM; arc=none smtp.client-ip=74.125.82.175
+	 Content-Type:MIME-Version; b=nYfrmaTp8XN6U1QKeASnWMOXASnRPhLC4BkRlf9hUl4IA5KUVStQL+w1eCSF3W0T5G6QbxEtslBTCqSTPQGksZhx5zqr9Rn18/X5JAMLjqWqSKz+JUN8g23DRghsYh4HHFlpJ+xEZljIdkYbGGdvF4xZ5oAaeGCRwaBZddTx5+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oELoZ0VS; arc=none smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktIzA/uM"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304e6c6464dso7832839eec.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:37:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oELoZ0VS"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-304fb780deaso2662623eec.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780339069; x=1780943869; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780339285; x=1780944085; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=fZ+gRlqjaQ/zBejoK6W2WPa2MoYW6LDOokjfwYSSxvg=;
-        b=ktIzA/uMZ3uq0PMd9r5P7dERohVxPYhZh5Qjxfpg+uMoQ+IbwFWyDrJWX7wdGJNAmN
-         6AfkLBSyx6v+HhY185V8XwnuvyYKlQEeh33qhriDsfGhGAvFlSFAShsUdlNJFAiuZXHZ
-         whfb0ab3gF1apVj90cfDToU39i7JyIn3UxqyPzhSCfxamVg2+HziWq1R2B9e6b7RQ4Mv
-         t4upMCKgOlg0CoBYvT+Rj3pfTXBqf5WQpb3OXp0T1ZVjeWj2whGJ7ve7rVV9h7P5vdIf
-         T8aujVB/6zhKUfiLmGBEyo/Ci9BrAs61rav5l6azdBF51wOir9kUwnuQu0C4jQ5wga8c
-         w9vg==
+        bh=T+WC2ug9yq79gIgrEeKHfSxVivYnKgk7AcPEO9gSSXc=;
+        b=oELoZ0VSzCm5NMQpByzXUYPn7eTHlbrhv0DLdYXhAaXU8+5c6FXfRhzjXt8iNFxrgI
+         DwowpYZee1Davg1lSbiGIHFwl01A2AAhZ5mOk30iIOKEL2TmkE0slyZL7nMwnibVsbtn
+         QRz2ZkjLJHE/pTSGnusZJ4wClr51Reixzz0MlNe5HRGSwcUtZS8SZcHFJPVtlRMCTjuQ
+         1vHZeF0MnTuH9kpBwyGPzWvUFeKejEXZB8Kurj/ihKDFm0V1OrWjpAKkeWyaFArLnYcd
+         eweRcivQDy9SN5ZVq/QVm7+EZdTxBfcai56FUYY3tVjeeBDATX9wJJwXgZj8URaamwge
+         q3/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780339069; x=1780943869;
+        d=1e100.net; s=20251104; t=1780339285; x=1780944085;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fZ+gRlqjaQ/zBejoK6W2WPa2MoYW6LDOokjfwYSSxvg=;
-        b=dRPetELDvD2ICuN0MxHE979NL9TWVgjTV284wzkphdUa73QSUSs3ypd9pJQj4y2Aa5
-         zDLRu86aQaVsN8oUlJhjMi4KRZUH4zTN3Ybn1BcYoCsd1wF+b91UJlJWsNlDy8I4ONI+
-         ChzUolP1ztp83O6yc4KeocqcOac5UDP94/k/LOHSUuoK34rcwM8hIh144R4N0v1aoorH
-         AMXv+PHNWMpDj1kPheNnbaK7Y1JDKL9/BKkT/41kDCKUcoZdJeloEi5jvkHej3G0PUKf
-         Dni0QRjpL7m4b0Ewd7L4Ov2PdQgEC8fG44XBkHgtHNxHa4PMQUxk4VFGfO5dS8ALnWcv
-         1Nig==
-X-Forwarded-Encrypted: i=1; AFNElJ/MoOC28y7Y6CVX5HJCEq6VuipcVh+FLp4k13qPV49Gl6IdYXPsyg+UGYwc4fRsldXqOpg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtF2dFl6KkHgXWxYH9gvrw+DJU+5m2Jhl4o8AnF/wKyVbsxbE2
-	rxB87/ZXdllk6R3/IkGWMpdIDpYO2DTmyFGoxN19t7ZwUlAYvNWs5naBWjbWDfp4
-X-Gm-Gg: Acq92OFMmvcdZ6wn4OJxZS8YoOWlAzHdKpzBpnCl/aK3jBbJ4JCYyJnix4Phf+YZp+c
-	iOfdmRQXykNawmaXjCyAGvXX4hBvmt0a5xWqODJbI7s1EWM9iY7DcoID59gyaX4ycx/4UYlvFpI
-	WfTkVAEkoUogLeYByOKSpXZNIO5J+83EP/1uoxtVyyAMrr9QrMUGgUzF2PoOfT/cAPyQajxW0MC
-	xwK6m1RlJKSVgAVhenfJUuaGKj10RKlLjtj5E8O/DeGAmhn2lHr/bu4Pq5cr8CNtJgo/4LtQkRs
-	KzJLb+HiXZ4n1/cjok2Y65aRH2PhJOu5PXPHXOyupcU0rs3xStoUvE3d3+OMDDAWZHyBw3TGYuq
-	FfdBhVVti/HFwH9Fyd24neDkhWuZqctKFh2vug6to6QVm1oqv/e6raLcbXGEMc6Jy4zdOpS7JQX
-	u4vdcEfmM1PA4krlqB1S8FdqVyZbG4jcAylG3ClaeNYrJ6TCSJdvcVmxmAQhT2XxYnFvPz1Eblp
-	e4kBpesCWVsY556gp/7SQej
-X-Received: by 2002:a05:7300:6145:b0:2dd:6937:79b8 with SMTP id 5a478bee46e88-304fa523a44mr6597503eec.5.1780339069253;
-        Mon, 01 Jun 2026 11:37:49 -0700 (PDT)
+        bh=T+WC2ug9yq79gIgrEeKHfSxVivYnKgk7AcPEO9gSSXc=;
+        b=EcKrYUvzvCK5JwlyiaoIvJ3YDM/6LCwIJ+SA8rCp+uCa2vRDsby6m7pQ5HFQlz3mz1
+         B0amgsoWLzolZoa4XmGCysmr/cWHESMDuxug7k2bMJ+Upuqrpvu2ZiaY9ArW1BkBEmSM
+         JD4ekVIsf24P4T+n3VigQtw/9ixirDcK2bu1ohNCqL6MRt776kRtPZgfCNIs4FBR+bZa
+         Kp4CwZZmRO+4PwL/X2GtPwNL4wg0BTu7OpcpenMrwqwHzgShxhobzvrmP+H1Sbss4iW8
+         /1lq13H00QNC+1IMWD1yTRIy+kYS+gBfQtZT/RDUHeDt6TkKwKxJBgM04RS3uI5DFGVJ
+         7j8g==
+X-Gm-Message-State: AOJu0YwWbv7W9LQeM6/YvmVGQbxcysLlX2zP6wlu4b2hvY3qsmeMv88g
+	0FBe3ZiIwnq5123qclhBDzmNrT1b6SE8ZZvML7wstwd6CKHkQieV6z5D
+X-Gm-Gg: Acq92OH4a9p77VrtQLYnN91uaA7OAC3f6U/iu6VKR+C3l6BvLK3Qh2G3Yxx6sOKt1Vq
+	W4iHmNYiRFGnTV7vU9pwJ9IMDVqAK/hJ9J2QmEwTS4WAFI0Ej0WJ2JD9Z2ln/YTXpbw0PX7EykA
+	C8esybJae3k4DAJ5nwrPfZ4ko0aljXBCvD6F0tmeOAtcpRIK5avHMD7yoPTpQuZcUiN/fXcYypM
+	2G3NeDvPbPHVoZVNgaNqseSrFD6bRl3F0qtKvmGuwNqqvXfCEkgtzjap2oyU1UJM+bAiBPsaRfd
+	D5S0sDCyQ34jbiuL/vXIhLjtPHQOKppPpc4nZ/BZ89Cz9ScXJb+YcxTtUBZR06cl1AsRpnybjYY
+	3BoS7lpRsGjtQgbj0cCbd0iCKhBNBQa5Ler5QwMRpTZYx+bq4klPzZ5U/tq8FXO821RVw5V/3Y0
+	Vz/vCHYVd+MuMYTIP2RveisxtVzEeLALVGiiK47Il2f4xHz5C2LuV+EfgJZ7pXKkvCN7xjN6SBE
+	MMzgJzQfRPlbg==
+X-Received: by 2002:a05:693c:2c86:b0:2ea:b85c:153d with SMTP id 5a478bee46e88-304fa67b6afmr5705576eec.27.1780339285358;
+        Mon, 01 Jun 2026 11:41:25 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:af92:b4b2:3f30:fe90? ([2620:10d:c090:500::96])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5a0b7dsm9844592eec.22.2026.06.01.11.37.48
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2f2904sm9588225eec.9.2026.06.01.11.41.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 11:37:48 -0700 (PDT)
-Message-ID: <e1a40461fa792dc7687b0029f3ede546eeeacbc9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] verifier: parse BTF type tags for
- function arguments
+        Mon, 01 Jun 2026 11:41:25 -0700 (PDT)
+Message-ID: <37d229e482df3367436d9475d6e9d6d69c7366a5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
- daniel@iogearbox.net, 	song@kernel.org, mattbobrowski@google.com
-Date: Mon, 01 Jun 2026 11:37:47 -0700
-In-Reply-To: <20260530002259.4505-3-emil@etsalapatis.com>
-References: <20260530002259.4505-1-emil@etsalapatis.com>
-	 <20260530002259.4505-3-emil@etsalapatis.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ alexei.starovoitov@gmail.com, 	andrii@kernel.org, daniel@iogearbox.net,
+ memxor@gmail.com, martin.lau@kernel.org, 	mykyta.yatsenko5@gmail.com,
+ kernel-team@meta.com
+Date: Mon, 01 Jun 2026 11:41:23 -0700
+In-Reply-To: <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com>
+References: <20260529014936.2811085-1-ameryhung@gmail.com>
+	 <20260529014936.2811085-6-ameryhung@gmail.com>
+	 <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
+	 <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -80,52 +83,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2026-05-29 at 20:22 -0400, Emil Tsalapatis wrote:
-> The BTF parsing logic for function arguments goes through
-> the arguments' decl tags, but does not go into their type
-> tags. Add type tag parsing for function arguments.
+On Mon, 2026-06-01 at 11:36 -0700, Amery Hung wrote:
+> On Mon, Jun 1, 2026 at 11:00=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
+> >=20
+> > I think refsafe() needs an update.
+> >=20
+> > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> >=20
+> > [...]
+> >=20
+> > > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> > > index 877338136009..5945956a7573 100644
+> > > --- a/kernel/bpf/states.c
+> > > +++ b/kernel/bpf/states.c
+> >=20
+> > I think refsafe() needs an update as well.
+> > Something like:
+> >=20
+> >     --- a/kernel/bpf/states.c
+> >     +++ b/kernel/bpf/states.c
+> >     @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_state *=
+old, struct bpf_verifier_state *c
+> >=20
+> >             for (i =3D 0; i < old->acquired_refs; i++) {
+> >                     if (!check_ids(old->refs[i].id, cur->refs[i].id, id=
+map) ||
+> >     +                   !check_ids(old->refs[i].parent_id, cur->refs[i]=
+.parent_id, idmap) ||
+> >                         old->refs[i].type !=3D cur->refs[i].type)
+> >                             return false;
+> >                     switch (old->refs[i].type) {
+> >=20
+> > Wdyt?
 >=20
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
+> You are right. It needs to compare parent_id, but maybe only for
+> REF_TYPE_PTR like below.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+check_ids() should handle the case when parent_id is zero correctly,
+so I think both variants are fine.
 
-[...]
-
-> +static int btf_scan_type_tags(struct bpf_verifier_env *env,
-> +			      const struct btf *btf, u32 type_id,
-> +			      u32 *tags)
-> +{
-> +	const struct btf_type *t;
-> +
-> +	/* Find the first pointer type in the chain. */
-> +	t =3D btf_type_skip_modifiers(btf, type_id, NULL);
-> +	if (!t || !btf_type_is_ptr(t))
-> +		return 0;
-
-Nit: do we want to report -EOPNOTSUPP if type tag is attached to a non-poin=
-ter type?
-
-> +
-> +	/* We got a pointer, get all associated type tags. */
-> +	t =3D btf_type_by_id(btf, t->type);
-> +	while (t && btf_type_is_type_tag(t)) {
-> +		const char *tag =3D __btf_name_by_offset(btf, t->name_off);
-> +
-> +		if (strcmp(tag, "arena") =3D=3D 0) {
-> +			*tags |=3D ARG_TAG_ARENA;
-> +		} else {
-> +			bpf_log(&env->log, "function signature member has unsupported type ta=
-g '%s'\n",
-> +				tag);
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		t =3D btf_type_by_id(btf, t->type);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
+>         for (i =3D 0; i < old->acquired_refs; i++) {
+>                 if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap) |=
+|
+>                     old->refs[i].type !=3D cur->refs[i].type)
+>                         return false;
+>                 switch (old->refs[i].type) {
+> -               case REF_TYPE_PTR:
+>                 case REF_TYPE_IRQ:
+>                         break;
+> +               case REF_TYPE_PTR:
+> +                       if (old->refs[i].parent_id !=3D cur->refs[i].pare=
+nt_id)
+> +                               return false;
+> +                       break;
+>=20
+>=20
+> >=20
+> > [...]
