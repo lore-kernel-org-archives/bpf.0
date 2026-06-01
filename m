@@ -1,173 +1,133 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CE13D8104;
-	Mon,  1 Jun 2026 15:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E4B3D79E9;
+	Mon,  1 Jun 2026 15:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780328442; cv=none; b=tDLR9J9RnQEvF1+WdyPkpHJt5Scs1AEgjPtUE2Dbd0ovbK7g7vJkJUz/yhxAlk7UIPqHs8c56siaZL4hU8m5ejwmAVEZBB/EALce3Id4FKTYtG0RHwigWP/a5W3IwfZBIXlkRta4LzG0ElyVU8sxUo5WyhLePe9f1ELG8v4WOCU=
+	t=1780328723; cv=none; b=qxMKU4MZCIYmrT9vOivVojdUKIBasxIXefLhsFbugBLD8EhUWIePI6L3KcAZb/6mM0H2yWTZk03mkTxm+7OZqd4pfU+bs+eDBBgWqryb1toBj8Hd2yakrOlyv06Rki5ChR8tw37TVzNMeGMy4ZqGBJFgl+MnrvX5EbLAVHQlEKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780328442; c=relaxed/simple;
-	bh=sFeSBd+2tcSY/5ecnolgNPPVx9cbP0gwu5NN0Z4kLTI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sdMNDbcEKkPAZCmhEhqnQ5NP0eXVz3N+nunWVkRpavS75LqdrjiYALsjhJpHPnRWaG8WFCV3y+RfI528GGp2dNZ72UuYxW3AVxG7qqGr1Yr+x0Ae6jlnTvjTP4RQdKyHTeTy+5bX+u73YBZqaMjUbi5RAKOC6vLIcriiRXXWipg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Jm0VRL3Q; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780328723; c=relaxed/simple;
+	bh=9Hd/f3NDhS9GTcpcignrH/XonRnFYnKeJnhXj1hGR3Q=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=X/JJB+YmQUUtM1T0ramDVNHIaHpW0oS4fhp/S2UauE1q3ejW2UiYtYHsrIL1yyTLkSvbW8pJYly6jgxIzULLwHWcszz0JGgUcdD8G1RonYuBL9oA+sSmiQrRq9TndSnngqZu/eKmgoBuMdwCvF1Uj23XIDvGJqACq7UhXAhMcNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2A2KVos; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Jm0VRL3Q"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=xkiuLr25uRi9mFS/F6dn81CJeFleUDTKvFBkRzexncQ=; b=Jm0VRL3QIcpa7lHk1p1NkbyT6i
-	bzBdxcsMiJGbvjmEYYemUq+jYCw8hdp36d6hjX4AeCAoz3wZ9TSWnfpEpmcXqDmwboR169bP1er16
-	iFJoTFf2ncMo0GHJeypZxI9TvyTzkx+YKqLvGAs16g3NqiY2Qcj7+FOUSlqzxZfikdnbWCu/5qFxl
-	0yqjrjg7UCoNy1B/O6j7mKFWxmrDeCmEZePku6YSmnR7vvYfFBc3TwDNqyc6quAs8MLsFzw/6IXpT
-	DmQhF2JRccMEiQ/2RaXR4W9U0zKmp0VBoulzH2gT47lzNbV66JXIEBmaJEhOnU/jlsdOZuOQZaiTs
-	LEFuU8rw==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU4kn-000M2t-04;
-	Mon, 01 Jun 2026 17:40:37 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU4km-000Oqd-0s;
-	Mon, 01 Jun 2026 17:40:36 +0200
-Message-ID: <cb5bbdce-d043-4b97-a894-5793cc6caf3b@iogearbox.net>
-Date: Mon, 1 Jun 2026 17:40:36 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2A2KVos"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938341F00893;
+	Mon,  1 Jun 2026 15:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780328722;
+	bh=Lz/16V3dOQhlXcQLZ6Es8Qww3hvkhECsC9jqFOP8fXA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=L2A2KVoshZxF5leOTgNPquL1+cYqI/DCeU1YOvTEJAaojkyPlSAahGxr7deTGhmVF
+	 n/Usx8GcnfAXG7Dlzvhy2bXtxzcACBapbGrTo5EmpIiI1qKIrDhYi2TxrRs0UkX5LH
+	 a33/zv2blzyBntP91/nhFjG7x8HtxhRCgGoWyvWR2ZIuQ9sJLb3HmC6hDCBLm+iuwa
+	 dFgyC6vGQx8ZUb2b2xHc+Cvhd5DLXZyx/TKg6HnTYRzzKNlKcy2Is1j8Dea7ATZg1K
+	 /h8G1Ye82OqR41YZonzv1FY7V0nhQV9I9UUQRbrQSVjk7seaJQvKTPpnXzTnOAh1Ia
+	 hsUtZRCHZ9L0w==
+Content-Type: multipart/mixed; boundary="===============3137123153509642700=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/7] bpf: Reject exclusive maps as inner maps
- in map-in-map
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260601150248.394863-2-daniel@iogearbox.net>
- <20260601151810.68BCF1F00893@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260601151810.68BCF1F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <fc2876ad051bb26bc57a39acfa8dc625eb601f389c8db103c8960474816307c5@mail.kernel.org>
+In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
+References: <20260601150203.20352-2-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when encapsulating UDP tunnel in lwt
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,gnault@redhat.com,leon.hwang@linux.dev,idosch@nvidia.com,fmancera@suse.de,posk@google.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,leon.huangfu@shopee.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  1 Jun 2026 15:45:21 +0000 (UTC)
+
+--===============3137123153509642700==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-On 6/1/26 5:18 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [Critical] BPF iterators bypass map exclusivity (`excl_prog_sha`) and map freezing (`map->frozen`) protections, allowing arbitrary modification of secure maps.
-> --
-> 
-> commit 94f0db1114c682145008741a58e7ea931a088e25
-> Author: Daniel Borkmann <daniel@iogearbox.net>
-> 
-> bpf: Reject exclusive maps as inner maps in map-in-map
-> 
-> This commit prevents an exclusive map from being inserted into a
-> map-of-maps. This addresses an issue where unrelated programs could
-> bypass exclusivity guarantees by accessing the map at runtime.
-> 
->> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
->> index 645bd30bc9a9d..d2cbab4bdf644 100644
->> --- a/kernel/bpf/map_in_map.c
->> +++ b/kernel/bpf/map_in_map.c
->> @@ -20,7 +20,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
->>   	/* Does not support >1 level map-in-map */
->>   	if (inner_map->inner_map_meta)
->>   		return ERR_PTR(-EINVAL);
->> -
->> +	if (inner_map->excl_prog_sha)
->> +		return ERR_PTR(-ENOTSUPP);
-> 
-> [Severity: Critical]
-> This is a pre-existing issue, but while this patch closes the map-in-map
-> bypass for exclusive maps, does a similar bypass still exist through BPF
-> iterators?
-> 
-> Looking at bpf_iter_attach_map() in kernel/bpf/map_iter.c, when a BPF map
-> iterator is attached via BPF_LINK_CREATE:
-> 
-> 	map = bpf_map_get_with_uref(linfo->map.map_fd);
-> 	if (IS_ERR(map))
-> 		return PTR_ERR(map);
-> 
-> // [...]
-> 
-> 	if (key_acc_size > key_size || value_acc_size > value_size) {
-> 		err = -EACCES;
-> 		goto put_map;
-> 	}
-> 
-> This function retrieves the target map but appears to lack checks against
-> map->excl_prog_sha, map->frozen, and BPF_F_RDONLY_PROG.
-> 
-> Furthermore, the iterator context defined in bpf_map_elem_reg_info() sets
-> up the value argument without the MEM_RDONLY flag:
-> 
-> 		{ offsetof(struct bpf_iter__bpf_map_elem, value),
-> 		  PTR_TO_BUF | PTR_MAYBE_NULL },
-> 
-> Because MEM_RDONLY is omitted, the verifier permits BPF programs to perform
-> direct memory writes to ctx->value.
-> 
-> Could this allow a program to locate the FD of an exclusive, frozen map via
-> its ID, attach a custom BPF map iterator, and arbitrarily overwrite the
-> contents of the protected map?
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index f71ef82a5f3d..65d1dfbf3312 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>  		ipv4 = true;
+>  		if (unlikely(len < iph->ihl * 4))
+>  			return -EINVAL;
+
+Since len is a u32, if iph->ihl is 0 then iph->ihl * 4 is 0 and the
+"len < iph->ihl * 4" check is never true, so it passes without
+returning -EINVAL.
+
+Later ip_fast_csum() is called with iph->ihl, and on some architectures
+(PowerPC, MIPS) that implementation assumes ihl >= 5 and decrements the
+loop counter, which underflows when ihl is 0.
+
+Should there be an explicit iph->ihl >= 5 check here, for example:
+
+	if (unlikely(iph->ihl < 5 || len < iph->ihl * 4))
+		return -EINVAL;
+
+This was raised in review of v1 and v2 added the guard, but v3 appears
+to have dropped it again.  The earlier discussion is here:
+
+  https://lore.kernel.org/bpf/20260601151707.C51601F00893@smtp.kernel.org
+
+> +		is_udp_tunnel = iph->protocol == IPPROTO_UDP;
+> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphdr)))
+> +			return -EINVAL;
+>  	} else if (iph->version == 6) {
+>  		ipv4 = false;
+>  		if (unlikely(len < sizeof(struct ipv6hdr)))
+>  			return -EINVAL;
+> +		is_udp_tunnel = ((struct ipv6hdr *)iph)->nexthdr == NEXTHDR_UDP;
+> +		if (unlikely(is_udp_tunnel && len < sizeof(struct ipv6hdr) + sizeof(struct udphdr)))
+> +			return -EINVAL;
+>  	} else {
+>  		return -EINVAL;
+>  	}
+
+[ ... ]
+
+> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>  	if (ingress)
+>  		skb_postpush_rcsum(skb, iph, len);
+>  	skb_reset_network_header(skb);
+> +	if (ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+> +	else if (!ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct ipv6hdr));
+>  	memcpy(skb_network_header(skb), hdr, len);
+
+Can iph->ihl change between the initial length validation and this call?
+
+The hdr pointer (and therefore iph) refers to a buffer provided by the
+BPF program, which can be concurrently modified by userspace through a
+shared BPF map.  Because skb_cow_head() acts as a compiler barrier, the
+compiler reloads iph->ihl from that untrusted memory here.
+
+This read also happens before the memcpy() into the skb:
+
+	skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+	memcpy(skb_network_header(skb), hdr, len);
+
+If iph->ihl is concurrently changed to a larger value (such as 15) after
+the initial validation, can the transport header offset be set beyond
+skb->tail, leading to out-of-bounds writes when drivers later dereference
+the transport header for checksum updates?
+
+In the v1 discussion the suggestion was to move
+skb_set_transport_header() after the memcpy() so it reads from the
+copied-in header, but the current code still reads iph->ihl before the
+memcpy().  See:
+
+  https://lore.kernel.org/bpf/20260601151707.C51601F00893@smtp.kernel.org
 
 
-Hm, oh well, more things to look into.. if sashiko/others don't find anything
-specific with this series, then I'll send patches on top given these are all
-independent issues, otherwise I'd fold them into v3.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26763883406
+--===============3137123153509642700==--
