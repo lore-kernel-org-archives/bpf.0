@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C29F385D78;
-	Mon,  1 Jun 2026 08:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EA1306764;
+	Mon,  1 Jun 2026 08:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780301797; cv=none; b=QU1q6BK3LL8J1OBSub1qBODjWfdLNRDMfAIbMIjEc/4eoOkhkWi40M8BG4zYXZfNd44N7QDB6C7qHa7ht/ECeFbmc4Bq9wb9G/EB9f74t9+OnmcRNk/5RiwRYSc/IW+5YbWWOJPH1lMvAwGI6Skr/Usii7bNz1WZf9FbDir/rS8=
+	t=1780302008; cv=none; b=ihaAXwxqV+PUP6b/iavc+UN2YjLEcaTUAGnzZ0qmXQwyuhIGI0vGdDtVBHNkky7jzzTifW4vJ5EdP5JgwueWK02pg7Gpf5jniewgRhODvIrEYObgTVWahEL1tke+0dSw94fiAhjjeBmZDbgJskWaoorrWreY6ME5UHQONltlyAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780301797; c=relaxed/simple;
-	bh=5Iw1lR61ssv5Isf7sRcLJH2Y715/4pxNJP8l8VISprI=;
+	s=arc-20240116; t=1780302008; c=relaxed/simple;
+	bh=JWLDWTAqcmXVyaJF49S/tmgyy/nWL5FkVeSks4aAO9w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RmTh/jCDNQH3jWt85gqCwGyh5dG7vYkZ4m9IOFb5oI0a5M3r95NQj+jUKX1SgvTKvveYpts7nWrsNn5YgvLwuYGUkM8HcAxBG7/33fLo+hX+cmhAal84H7Q1koz5qJkqI8aLIujf/2DmkjLFxeBPEpTO4Goyo+tfCGtU+x9TY5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BapgHXqm; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=HQ5tdAP4MjZ+nPEi24uPDjDRPXxvjc6bwv/JlhhUpy+AyncOkz3pPUtq7Nzz6SvEiY6ThwYZkRz7/PoMWjDhqBA2cCgg4nrWDu7vXYA7aM5MTLpeijsxfCQOmoTjtPqh+Na2Y/4NYcaN6yob/U+8wbrHmGTfVkL/Lbjo7xwecZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqQfXDIl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BapgHXqm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A2A1F00893;
-	Mon,  1 Jun 2026 08:16:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqQfXDIl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A2D1F00893;
+	Mon,  1 Jun 2026 08:20:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780301796;
-	bh=7jvZqi8VkeRODB5KZOUNHa6HlOqHzuN+bUrucImc84I=;
+	s=k20260515; t=1780302007;
+	bh=O3SBerDy7gLkJyDryJeqMmv1YGRLwNIx1Y17wjdBz40=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=BapgHXqmzEjlmgIoOeYSUlyeZ51lqH/ZOhNVuDeecVA6Z2r+IiW/BU4ZCKwAlXtgO
-	 DHxzBeLpOvsdHOAmSXVtET9xfot7Tefb/TJDvKr1ooDumPMiEbfuSLJTJ8wbsDGLCg
-	 MC1yp+/WAl6sEnceRcUzLtBPKj85SOfRCBtHzq76r5dnmEca8i4cLaN5PyrYUL0qmP
-	 9dLAtNC/cJ5sCQP9BIyz0mfSIxAALpYHIYYnJZ2G+NBfLN8HSuaZUXKwTVlax/x0JR
-	 dBYR6a8d2a/nXD3M0+hcCj/ZsKcUHXZyEjsF6Q1DeY10FKa//I0x9xqYF7z/6FTzMi
-	 HjcK3n+tskndA==
-Message-ID: <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
-Date: Mon, 1 Jun 2026 10:16:30 +0200
+	b=oqQfXDIlzg0gxBm+klYjURdclxoa2cUxwmLBK7CVEFAY+K+N6psZMsUhEH3/KR+RT
+	 BY691nZhoxDAj5jrDGFeCzUOz3xEb3EHQhxaNk8UYuNh9R4of1EZisrxa5kjiFrkTu
+	 esSvKduFfqnTBXXStRzM0i295WW/c7qiDb3P7QjtpzibxEblkV6/eouWef3e+lhb9e
+	 BAuBVjDGgqEOK1yZ9p08K3Ru79innm+Yh7Bh5LMddp10ShYhwTfeabsTXiCaN/Wlc9
+	 h1q7cfKkAnx2heAnlJnDxxlRN/cQLvJiI4SCD5KhWYfriT5uwddNtI1+YF8zSz3/vl
+	 tWhdS8Amr9Cvg==
+Message-ID: <1a9884b6-df23-42d9-bb68-1d6c774c0657@kernel.org>
+Date: Mon, 1 Jun 2026 09:20:01 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,107 +35,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-Content-Language: en-US
-To: Harry Yoo <harry@kernel.org>, Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
- <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
- <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+Subject: Re: [PATCH v1] bpftool build: Restrict feature tests during bootstrap
+ compilation
+To: Ian Rogers <irogers@google.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-perf-users@vger.kernel.org, James Clark <james.clark@linaro.org>
+References: <20260531010750.525160-1-irogers@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260531010750.525160-1-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/1/26 08:39, Harry Yoo wrote:
+2026-05-30 18:07 UTC-0700 ~ Ian Rogers <irogers@google.com>
+> When the perf build executes 'make -C ../bpf/bpftool bootstrap', bpftool's
+> Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
+> and disassembler libraries because the bootstrap target was not exempted.
 > 
+> Since the bootstrap bpftool strictly compiles minimal AST parsing and C
+> code generation logic without linking LLVM or disassembler libraries, these
+> feature check sub-makes are completely redundant.
 > 
-> On 5/29/26 10:50 PM, Christoph Hellwig wrote:
->> On Fri, May 29, 2026 at 01:54:48PM +0200, Vlastimil Babka (SUSE) wrote:
->>> Thanks, I applied it to slab/for-7.2/alloc_bulk and merged to slab/for-next
->>> (it's still yankable in case of issues)
->>>
->>> Did some fixups below (the comment was stale prior to the patch; restored
->>> unlikely(), simplified one line).
->>>
->>> A test merge into yesterday's -next found a conflict in drivers/gpu/drm/
->>> panthor/panthor_mmu.c. Commit 1013bf53650e ("drm/panthor: Split
->>> panthor_vm_prepare_map_op_ctx() to prepare for reclaim") moved the changed
->>> codeto a new function panthor_vm_op_ctx_prealloc_pts().
->>> But it's solvable so no need for a complicated coordination I think.
->> 
->> Ok, thanks.  The two Sashiko complains also look like they had merrits,
->> but I won't get to looking into them until Monday.
-> The review:
-> https://sashiko.dev/#/patchset/20260528093437.2519248-2-hch%40lst.de
+> Exempt the bootstrap target from non-essential feature tests to eliminate
+> unneeded sub-make fork overhead during Kbuild startup.
 > 
-> So there is a user who might call kmem_cache_alloc_bulk() with size = 0
+> Tested-by: James Clark <james.clark@linaro.org>
+> Assisted-by: Gemini:gemini-3.1-pro-preview
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-I don't know if it can really happen there, but maybe DRM folks can tell us.
 
-> (although the comment says @size must be larger than 0!) and
+Makes sense, thank you Ian!
 
-The comment is however new, the caller existed when there was no comment and
-the return value 0 when asked for 0 was working there.
-
-> kmem_cache_alloc_bulk() returning 0 was considered a success in that case.
-> 
-> Either fixing kmem_cache_alloc_bulk() (and the comment) or fixing the
-> user sounds fine to me.
-
-Would it be wrong if we just returned true for size of 0? Would something
-else break?
-
-> And yeah freeing an object via kfree() allocated via kvmalloc is a bug...
-
-Yep.
+Acked-by: Quentin Monnet <qmo@kernel.org>
