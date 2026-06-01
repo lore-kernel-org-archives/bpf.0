@@ -1,169 +1,154 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7B92E62B7
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 16:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A5328C854;
+	Mon,  1 Jun 2026 16:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780330206; cv=none; b=TvkqoCgJtJTkdm6JpS6MT0b08HpetmN6z2lm4s5UXcNyl4tp1cT6IGHLKnE2fJyjFCb+P9O5ZxSRVJyouFhbk1/vuHPyeu7PPjcZ5PIFCScKSWPqEnTv/8RiU3GlrS5I2iUj++V+CVYFSfquEiRNd508VUdPqrm/xiVaTgzcGec=
+	t=1780330621; cv=none; b=fOTw0dt0ObwvY/oe8bD9Wh21kTkykUYTY2nj+5MJHKygh4u+5lA4/n3uEFW+cR09Dvs4/iua3xO+//TDOpuZQzKe/nwQtouldUaobKUbuhiZlPDa/JhNWKpdillb18XNowIJj+vSJikY14xlqYqSLVEgerxxuEZBqtsQAqmY7zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780330206; c=relaxed/simple;
-	bh=WZj1yk6CtqUlavxiFy2sXCCovmFIG7BtSz3peZL7Bn8=;
+	s=arc-20240116; t=1780330621; c=relaxed/simple;
+	bh=qnX9OBr2YzgB1Y9Syidryj2KKo59v8mKgbHhyAeSTRs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IVg7LbUC9V4434E+1XAPt4gXik0Ry873HHWR0CKSdCpI+rbWOnZ4TEF69vT8N8BSDsukakmK5D46RSUnphz/fN8Qbq8cDAxvjThLkAJxdOU0yFHkwOmybHKOIp+hLrqFPx9zo348bZKQDY3xpXe/IaPwo8kT8XVjaldUkwz4IBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZqrfenLm; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=RGg9lysO0TaxG9uxIEi2ZOINTU2iyWHeCgcscNqhNOxNUDZHWrHkwEQKKSzYnwLudUHvDSIbvedy9oN4781+IOM3Kxqz8Wv8nX0dssIUm8X/5EBRMC2hFQz1TyvLhUWbVXOoebsmIAiyWQCITbxAjlLf4+GdrBZ1ksUwyUPGI1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=Lj5S6Tii; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZqrfenLm"
-Message-ID: <3e1cf732-bb65-415e-afc0-3b54a2fb1aee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780330201;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oYWYkMnfhkoHtz+I3UjSnQIiQRAbnq8mEu/3Atwoyc4=;
-	b=ZqrfenLm4REeOjvomJJf9yM1vQmJti+wYzoCArFsk6fGpgfy5yIrI3CO4VmvHrsMH7nT6e
-	v2UipYljqaqgPhpubkLQzTZdbfVdEcuCyVP5xxWboaAbXYxI98mfNJTqVOfJt2nreEZUy9
-	7GaQiO6B7dof08onIXNqfNRHFQGUMxA=
-Date: Mon, 1 Jun 2026 09:09:47 -0700
+	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="Lj5S6Tii"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
+	s=unimail; t=1780330595;
+	bh=qnX9OBr2YzgB1Y9Syidryj2KKo59v8mKgbHhyAeSTRs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Lj5S6TiiI99IOcAVRA9upjIAwWX6QWdF36QmgI7MtuPPOAD48NH5gaQCN/m/1oSaA
+	 Y7YyWoAQ7FsS6bS0923vTOGRPpIwoiklKxlQzobgG0+9fQF6sKP+6rFOnhqHSkkdAq
+	 7pU95xJFsPP0Dt2IH03wM9pX0Mwp/PL1/YdHE+i8=
+Received: from [129.217.186.133] ([129.217.186.133])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 651GGY3o021703
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 1 Jun 2026 18:16:34 +0200 (CEST)
+Message-ID: <55b23925-9676-4005-8c13-ea7001190abb@tu-dortmund.de>
+Date: Mon, 1 Jun 2026 18:16:34 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
-Content-Language: en-GB
-To: Song Chen <chensong_2000@126.com>, Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
- alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260524082944.10625-1-chensong_2000@126.com>
- <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
- <83a466d3-d715-4208-b7c8-1cdcd6d99575@126.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <83a466d3-d715-4208-b7c8-1cdcd6d99575@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        hawk@kernel.org, netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-6-hawk@kernel.org>
+ <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
+ <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
+ <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+
+On 6/1/26 16:03, Jonas Köppeler wrote:
+> On 6/1/26 2:00 PM, Simon Schippers wrote:
+>> On 5/28/26 09:46, Jonas Köppeler wrote:
+>>> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
+>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>>>
+>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
+>>>> excessive NAPI scheduling overhead and qdisc requeues.
+>>>>
+>>>> Accumulate BQL completions and flush them when a configurable time
+>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
+>>>> queuing delay to the configured interval. Coalescing state persists
+>>>> across NAPI polls in struct veth_rq so completions can accumulate
+>>>> beyond a single budget=64 cycle.
+>>>>
+>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+>>>> completion.
+>>>>
+>>>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>>>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+>>>>
+>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>> Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
+>>>
+>> Thanks for your testing!
+>>
+>> However, I have issues reproducing.
+>> I run bare metal (without virtme) with v6 + your pktgen patch
+>> and I am on the branch pktgen-and-benchmark, commit
+>> "results: add veth-bql measurements":
+>>
+>> 1. ping fails with 100% packet loss ~20% of the times with --pktgen.
+>>     When this happens the avg ping of this run is mistakenly set
+>>     to 0.0 ms, which distorts the results.
+>>     I fixed it locally by rerunning when this happens.
+>>
+>> 2. pktgen runs with > 3 Mpps even with --nrules 10000, see log below.
+>>     I see that this is because of qdisc drops.
+>>     I also tried pfifo and sfq but with the same result.
+>>     I spent quite some time on it but I do not know a fix.
+>>
+>> Do you have an idea?
+>> Thanks!
+> 
+> Hi,
+> yes there are some changes missing in the test script.
+> I have pushed it now, sorry. This should fix 1.
+
+I pulled it and ran...
+
+sudo ./veth_bql_sweep.sh --runs 1 --pktgen --duration 20 --qdisc fq_codel --no-bpftrace
+
+... but still 8/32=1/4 of the pings are zero, I do not see
+a pattern.
 
 
+I grabbed the logs from /tmp and this is what a failing
+ping looks like:
 
-On 6/1/26 2:39 AM, Song Chen wrote:
-> Hi Kaitao,
->
-> 在 2026/5/25 17:18, Kaitao Cheng 写道:
->> 在 2026/5/24 16:29, Song Chen 写道:
->>> I had an ebpf program which calls a kfunc defined and
->>> implemented in one of my kernel modules, it was working
->>> fine in 6.16, but was rejected to run by libbpf in 6.19,
->>> the error message was:
->>>
->>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
->>> incompatible with vmlinux [94389]
->>>
->>> The reason is there is a new added kfunc in kernel 6.19
->>> which happens to be the same name with my kfunc. However the
->>> error message is not obvious enough to address problem
->>> immediately.
->>>
->>> Therefore, this patches searches duplicated kfunc in
->>> both btf_vmlinux and btf_modules list before a kernel module
->>> attempts to register kfuncs through register_btf_kfunc_id_set,
->>> it prints clear error message and returns error code if same name
->>> kfunc has already implemented and registered, then developer
->>> knows at the first place.
->>>
->>> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->>> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
->>> Signed-off-by: Song Chen <chensong_2000@126.com>
->>>
->>> ---
->>> changelog:
->>> v1 --- v2:
->>> libbpf has already specified which module this kfunc belongs to as
->>> ebpf code onwer's expectation, then verifier uses
->>> find_kallsyms_symbol_value to search kfunc's addr.
->>>
->>> v2 --- v3:
->>> After v2, I tried a new idea of introducing a namespace in libbpf
->>> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
->>> please see [1]. Alex suggested to go back to report an error during
->>> kmod load on conflicting kfunc name for now. What's more, v2 only
->>> searched bpf_vmlinux, v3 also traverses btf_modules list.
->>>
->>> [1]:https://lore.kernel.org/all/CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com/ 
->>>
->>> ---
->>>   kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
->>>   1 file changed, 43 insertions(+), 1 deletion(-)
->>>
->>
->> btf: reject to register duplicated kfunc
->>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>> index 4872d2a6c42d..a14ad3720872 100644
->>> --- a/kernel/bpf/btf.c
->>> +++ b/kernel/bpf/btf.c
->>> @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf 
->>> *btf, const char *func_name,
->>>       return 0;
->>>   }
->>>   +static int btf_check_kfunc_name(struct btf *btf, const char 
->>> *func_name, u32 kind)
->>> +{
->>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->>> +    struct btf_module *btf_mod, *tmp;
->>> +#endif
->>> +    s32 id;
->>> +    int ret = 0;
->>
->> This ret variable may be unnecessary.
->>
->>> +
->>> +    if (!btf_is_module(btf))
->>> +        goto out;
->>> +
->>> +    id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
->>> +                    func_name, kind);
->>
->> It seems unnecessary to split this call across multiple lines. Also,
->> some of the continuation-line indentation elsewhere does not appear
->> to follow the kernel coding style.
->>
->>> +    if (id >= 0) {
->>> +        pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
->>> +                    func_name, id);
->>> +        ret = -EINVAL;
->>> +        goto out;
->>
->> return -EINVAL;
->>
->>> +    }
->>> +
->>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->>> +    mutex_lock(&btf_module_mutex);
->>> +    list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
->>> +        if (btf_mod->btf == btf)
->>> +            continue;
->>> +        id = btf_find_by_name_kind(btf_mod->btf,
->>> +                    func_name, kind);
->>> +        if (id >= 0) {
->>> +            pr_err("kfunc %s (id: %d) is already present in module 
->>> %s.\n",
->>> +                    func_name, id, btf_mod->module->name);
->>
->> follow the kernel coding style
->
-> I understood the rest part of your comments, but this one "follow the 
-> kernel coding style", is it an indentation problem? checkpatch didn't 
-> say anything about it.
+PING 10.99.0.2 (10.99.0.2) 56(84) bytes of data.
 
-See Documentation/process/coding-style.rst.
+--- 10.99.0.2 ping statistics ---
+97 packets transmitted, 0 received, 100% packet loss, time 19967ms
 
-[...]
+
+Feels like a race or something..
+Can you reproduce with the exact command?
+I think you need --runs 1, else it just averages over multiple
+runs.
+
+> Regarding 2.: do not look at the pktgen output, in the
+> new version you will see something like "goodput",
+> which is the number you should look for.
+> Pktgen will report at what speed it enqueued packets in
+> the qdisc.
+
+Exactly. Now it works. Had a single outlier but apart from that
+everything is fine.
+
+Thanks,
+Simon
+
+> 
+> Let me know if it worked.
+> Best,
+> Jonas
+> 
 
