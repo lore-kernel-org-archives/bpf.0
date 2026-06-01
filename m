@@ -1,200 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDEA334C05;
-	Mon,  1 Jun 2026 08:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B73344D8C;
+	Mon,  1 Jun 2026 09:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780303808; cv=none; b=AWBFK9kqMlbmGULY9ypdaQLrp63ozwPnASGwcezjYvtIrQ9vsao+EbabUtyf/+i/cR5FU8PF7E/CNMLGJ9XSsaT/DFC7wcO8NkcHww22Zgc8NWR8Ek4kG92M9lictokloRtBgpHTvJgxtguKlo3hVOFu/gUNuEdPe2dEGK+pGDI=
+	t=1780305870; cv=none; b=CjKEg6GHi+py/yz5BhMu6CFOwhCFUnP8HIxM4MgSbbS/PAFc0IFJiWMQ1Jp4XyVjNVzxF72thMdlipdRWU/kzam9gQg3erKmuyOFv/XOwkLkVXv0lQATfN/Xxglx8ji41EeKSmoYAECw5g1J/+lQBmv2RW9Sa/IQUJgtUcZdLoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780303808; c=relaxed/simple;
-	bh=wJewuAA0yHOMFk005BDaHEpaoQdFvaB9GW87xyazg2Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=psuJ5kg5tq/9V2zKFGb7li4kzWytVoWeGkr+rpnMxYwZbYClfBAolgScfdpdCIKUTC9wkf6cJZSuixt8sJX1BTgKFr1HRHyb26vfoSWIIIQkU0reTpElIBjS/qcxcCYZCPehGH9TE2n3JHmhT9GbjhbBnwuKj2O640ODlL8H6rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fM3xh1R7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780305870; c=relaxed/simple;
+	bh=IW5cfo/bC26+LgC0z/aL2YXuQi6OOqMSgcNFJWcxSoM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eGxk78F5C91zhe3TtVQ/qFDMj11vRDZsnpAgQ2wJyzlf1W04vShRKxeFhemEzLCZhGjXo6fOoTHGtiat3Z2INPN4L2KtPNijjRg7cW1LHBiDSZ77zi8eDY1T7dVuh/YyRsGN5BvGzKFPFa/m4cRPMzPALZam0kzXq0+FFz1Nn10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=DgJKZXdp; arc=none smtp.client-ip=220.197.31.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fM3xh1R7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F18B1F00893;
-	Mon,  1 Jun 2026 08:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780303806;
-	bh=n1qeLdos2mO/Zv6Z2EbKt8HWwgO9dImP+jeHsNaMsr8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fM3xh1R7RsF81+mrdxb9Gcpco4PZ6A+W0O3kp/Bwp/WKVVwXM1fLxGXa/1/xuNCKV
-	 BBdPF99oEKxtBD5JMwHT4nNVNRsAFQ2SNwuFNloCrYoWFuLAB3xE7sV0tk3lYlyR44
-	 +VLyMWzLq68BJRhywVYDhK6945MNescYCPbWhEZeZ9q8FW0S5IvGezlYNsgARVsMRv
-	 49B/g73c9pGT26HMRLx6oDZUg98kGhrDwrFvwFa0NuDyiRxYkxy3jqaz3bm3t8IWM3
-	 zFK2L81QlhT0AxPEta5jNo3dFzdkBO7ELLlAZ41+6bWAdGwGm/2dWD5DkoBSpC9IR5
-	 /dE8xUdsds34Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [linux-6.12.y 2/4] HID: pass the buffer size to
- hid_report_raw_event
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lee Jones" <lee@kernel.org>
-Cc: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260601083642.908433-2-lee@kernel.org>
-References: <20260601083642.908433-2-lee@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 08:50:06 +0000
-Message-Id: <20260601085006.6F18B1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="DgJKZXdp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=e/+rvHoW/ia7sXFiB0Wxz22rzbKfAYctmMx0aF8/tsc=;
+	b=DgJKZXdpqyKuBiRqmd3cR7C+n6UwllJ59ArmSNZHBuO3ZJNBnBPKFuMQ4J5qun
+	5/5vtZ98Fa9wsbpaQcByjYEZ6TmmtW+SK8zY6t1sokPxgTabb9PtsTIHn2SqUMqK
+	tTJFdZDJO6xrtsmY5+44tOrBXm7NvAsQCThUga3fq4nHE=
+Received: from [10.41.105.18] (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wBXH5MYTx1qevPZAg--.52898S2;
+	Mon, 01 Jun 2026 17:21:29 +0800 (CST)
+Message-ID: <9d2609fb-6658-4a47-bdbd-b72538b35ae7@126.com>
+Date: Mon, 1 Jun 2026 17:21:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org
+References: <20260524082944.10625-1-chensong_2000@126.com>
+ <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
+Content-Language: en-US
+From: Song Chen <chensong_2000@126.com>
+In-Reply-To: <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXH5MYTx1qevPZAg--.52898S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGry3ZrWDur48Zr1DWw1kGrg_yoWrCrWDpF
+	W5JFZ8uF4Iqw17Xa42qFn8ury3Jw18GF4jyF9xtFW3Gr4qqrsrtr1j9F4Y93sakryUCa4I
+	vF4UWFZF93yjyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jaa0PUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpRq7O2odTxq36gAA3A
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+Hi,
 
-New issues:
-- [High] The patch fails to resolve the short-report regression for standar=
-d transport drivers because APIs do not propagate the real buffer size, byp=
-assing the newly introduced padding logic.
-- [Low] Format string mismatch for `size_t` variable.
+在 2026/5/25 17:18, Kaitao Cheng 写道:
+> 在 2026/5/24 16:29, Song Chen 写道:
+>> I had an ebpf program which calls a kfunc defined and
+>> implemented in one of my kernel modules, it was working
+>> fine in 6.16, but was rejected to run by libbpf in 6.19,
+>> the error message was:
+>>
+>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+>> incompatible with vmlinux [94389]
+>>
+>> The reason is there is a new added kfunc in kernel 6.19
+>> which happens to be the same name with my kfunc. However the
+>> error message is not obvious enough to address problem
+>> immediately.
+>>
+>> Therefore, this patches searches duplicated kfunc in
+>> both btf_vmlinux and btf_modules list before a kernel module
+>> attempts to register kfuncs through register_btf_kfunc_id_set,
+>> it prints clear error message and returns error code if same name
+>> kfunc has already implemented and registered, then developer
+>> knows at the first place.
+>>
+>> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
+>> Signed-off-by: Song Chen <chensong_2000@126.com>
+>>
+>> ---
+>> changelog:
+>> v1 --- v2:
+>> libbpf has already specified which module this kfunc belongs to as
+>> ebpf code onwer's expectation, then verifier uses
+>> find_kallsyms_symbol_value to search kfunc's addr.
+>>
+>> v2 --- v3:
+>> After v2, I tried a new idea of introducing a namespace in libbpf
+>> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
+>> please see [1]. Alex suggested to go back to report an error during
+>> kmod load on conflicting kfunc name for now. What's more, v2 only
+>> searched bpf_vmlinux, v3 also traverses btf_modules list.
+>>
+>> [1]:https://lore.kernel.org/all/CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com/
+>> ---
+>>   kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 43 insertions(+), 1 deletion(-)
+>>
+> 
+> btf: reject to register duplicated kfunc
+>   
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index 4872d2a6c42d..a14ad3720872 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+>>   	return 0;
+>>   }
+>>   
+>> +static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
+>> +{
+>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>> +	struct btf_module *btf_mod, *tmp;
+>> +#endif
+>> +	s32 id;
+>> +	int ret = 0;
+> 
+> This ret variable may be unnecessary.
+> 
+>> +
+>> +	if (!btf_is_module(btf))
+>> +		goto out;
+>> +
+>> +	id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
+>> +					func_name, kind);
+> 
+> It seems unnecessary to split this call across multiple lines. Also,
+> some of the continuation-line indentation elsewhere does not appear
+> to follow the kernel coding style.
+> 
+>> +	if (id >= 0) {
+>> +		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
+>> +					func_name, id);
+>> +		ret = -EINVAL;
+>> +		goto out;
+> 
+> return -EINVAL;
+> 
+>> +	}
+>> +
+>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>> +	mutex_lock(&btf_module_mutex);
+>> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+>> +		if (btf_mod->btf == btf)
+>> +			continue;
+>> +		id = btf_find_by_name_kind(btf_mod->btf,
+>> +					func_name, kind);
+>> +		if (id >= 0) {
+>> +			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
+>> +					func_name, id, btf_mod->module->name);
+> 
+> follow the kernel coding style
+> 
+>> +			ret = -EINVAL;
+>> +			break;
+> 
+> mutex_unlock(&btf_module_mutex);
+> return -EINVAL;
+> 
+>> +		}
+>> +	}
+>> +	mutex_unlock(&btf_module_mutex);
+>> +#endif
+>> +
+>> +out:
+>> +	return ret;
+>> +}
+>> +
+>>   static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+>>   {
+>>   	const struct btf_type *func;
+>> @@ -8631,7 +8672,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+>>   
+>>   	/* sanity check kfunc name */
+>>   	func_name = btf_name_by_offset(btf, func->name_off);
+>> -	if (!func_name || !func_name[0])
+>> +	if (!func_name || !func_name[0]
+>> +			|| btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
+> 
+> follow the kernel coding style
+> 
+>>   		return -EINVAL;
+>>   
+>>   	func = btf_type_by_id(btf, func->type);
+> 
 
-Pre-existing issues:
-- [Critical] Heap buffer overflow in `dispatch_hid_bpf_device_event` when p=
-rocessing incoming events.
-- [High] A BPF program calling the `bpf_hid_input_report` helper causes unh=
-andled re-entrancy that silently corrupts the shared per-device BPF data bu=
-ffer.
---
+will do, thanks so much.
 
-commit e46292c21905a8e10fe2c446a47f211679b0d355
-Author: Benjamin Tissoires <bentiss@kernel.org>
+Song
 
-HID: pass the buffer size to hid_report_raw_event
-
-This commit attempts to fix an OOB mitigation by passing both the buffer
-capacity and the actual data size to hid_report_raw_event(). The goal is
-to allow safe zero-padding of short reports if the backing buffer is large
-enough, rather than unconditionally rejecting them.
-
-[ Upstream commit 2c85c61d1332e1e16f020d76951baf167dcb6f7a ]
-[Lee: Backported to linux-6.12.y and beyond]
-
-> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf=
-_dispatch.c
-> index 284861c166d9c..b711d83dfde1d 100644
-> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
-> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-> @@ -24,7 +24,8 @@ EXPORT_SYMBOL(hid_ops);
-> =20
->  u8 *
->  dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_t=
-ype type, u8 *data,
-> -			      u32 *size, int interrupt, u64 source, bool from_bpf)
-> +			      size_t *buf_size, u32 *size, int interrupt, u64 source,
-> +			      bool from_bpf)
->  {
-
-[Severity: Critical]
-This is a pre-existing issue, but does dispatch_hid_bpf_device_event() lack
-bounds checking on the event size?
-
-When a HID event arrives, the function unconditionally copies the data into=
- the
-BPF context buffer:
-
-    memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
-    memcpy(ctx_kern.data, data, *size);
-
-If a malicious or compromised HID device (or userspace via uhid) sends an
-event where *size is larger than hdev->bpf.allocated_data, could this cause=
- a
-heap buffer overflow?
-
-[Severity: High]
-This is also a pre-existing issue, but does this code suffer from unhandled
-re-entrancy corrupting shared state?
-
-If a BPF program injects an input report by calling the bpf_hid_input_repor=
-t()
-helper, execution re-enters dispatch_hid_bpf_device_event(). The inner call
-will unconditionally execute the memset() and memcpy() block shown above on
-the exact same shared hdev->bpf.device_data buffer.
-
-If the injected report uses ctx->data as its buffer, the memset wipes the d=
-ata
-before it can be copied. Will this silently corrupt the execution state of =
-the
-outer BPF program upon return?
-
-[ ... ]
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 294a25330ed03..ceff91722c3c8 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-[ ... ]
-> @@ -2028,9 +2036,15 @@ int hid_report_raw_event(struct hid_device *hid, e=
-num hid_report_type type, u8 *
->  	else if (rsize > max_buffer_size)
->  		rsize =3D max_buffer_size;
-> =20
-> +	if (bsize < rsize) {
-> +		hid_warn_ratelimited(hid, "Event data for report %d was too short (%d =
-vs %ld)\n",
-> +				     report->id, rsize, bsize);
-
-[Severity: Low]
-Can we use the %zu format specifier instead of %ld for bsize?
-
-bsize is a size_t, which might trigger a compiler warning on 32-bit platfor=
-ms
-where size_t is unsigned int.
-
-> +		return -EINVAL;
-> +	}
-> +
-[ ... ]
-> @@ -2135,7 +2150,7 @@ static int __hid_input_report(struct hid_device *hi=
-d, enum hid_report_type type,
->  int hid_input_report(struct hid_device *hid, enum hid_report_type type, =
-u8 *data, u32 size,
->  		     int interrupt)
->  {
-> -	return __hid_input_report(hid, type, data, size, interrupt, 0,
-> +	return __hid_input_report(hid, type, data, size, size, interrupt, 0,
-
-[Severity: High]
-Does this leave the short-report regression unfixed for standard transport
-drivers?
-
-By blindly passing the received data size as both the size and bufsize capa=
-city
-arguments to __hid_input_report(), bsize will always equal size.
-
-If the report is short (size < rsize), the new bsize < rsize condition in
-hid_report_raw_event() evaluates to true and the event is dropped, bypassing
-the padding logic completely.
-
->  				  false, /* from_bpf */
->  				  false /* lock_already_taken */);
->  }
-[ ... ]
-> diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-> index 1b1112772777c..ffcf65dcf7134 100644
-> --- a/drivers/hid/wacom_sys.c
-> +++ b/drivers/hid/wacom_sys.c
-> @@ -74,7 +74,7 @@ static void wacom_wac_queue_flush(struct hid_device *hd=
-ev,
->  		int err;
-> =20
->  		size =3D kfifo_out(fifo, buf, sizeof(buf));
-> -		err =3D hid_report_raw_event(hdev, HID_INPUT_REPORT, buf, size, false);
-> +		err =3D hid_report_raw_event(hdev, HID_INPUT_REPORT, buf, size, size, =
-false);
-
-[Severity: High]
-Does passing size instead of sizeof(buf) for the buffer capacity prevent sa=
-fe
-padding for wacom devices?
-
-Similar to the issue above, because bsize becomes equal to size, any short
-report will fail the bsize < rsize check in hid_report_raw_event() and be
-rejected instead of zeroes being safely padded to the end of the buffer.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601083642.9084=
-33-2-lee@kernel.org?part=3D1
