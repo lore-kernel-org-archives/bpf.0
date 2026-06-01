@@ -1,245 +1,168 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D3E372ED6
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 19:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDD535C1BD
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 19:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780342149; cv=none; b=LmRacNWr6sxHNT9dhSsUBqv5I4DMitEDw4eJr4QsZFhW9aUKMv6qJWyx1gBsu/7ybFbP6UeK2U6iW//XigQWj0ByaOcGSk4Reu8gruTQY+vtLxU/5HDYMS6yOsC8aHGoLPiYntn3Qu59aA2rU0W7xz3OR1skIEREsFjAWaDJ/Gg=
+	t=1780342369; cv=none; b=gHpwZKQQ2+mfWFKDa+1EM4U31cn/oJ6v0pkKMNNflGo0ECi0XChV9xP4QI9nS0QgSwLU4YAE59bVNl0apTE+9mL2ClLfzVr5iJjHR5haOpY4ZdIeSezjrUl2hBvWwcmC3n3IX5FZ1R8oL12OUbFTlwXwHtod1AzJjswBsupEK/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780342149; c=relaxed/simple;
-	bh=ms4DBDnzqu8NoI6UgvL9mvpvNAvtOxbY/F2mv9oGSlg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=MACGfSKol6Xtt9I8hDZ8Y/2T8N2IGrQ0VMnwfDwMU6qz9zyVF9dcD3vXdAIM8fXH1J0UZptInXlZe67aP7geh+/v0KejkdUoLzJ5u71NtaZ5nPrIpW4cPGrhK0buwtxieSRzywOQtTYjIh7/9MCmxrq/BxCt8CGyTcIc0XPkYEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=X+tbKUqy; arc=none smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780342369; c=relaxed/simple;
+	bh=uI9DbOztookQPi1QWPJTS5KmX6M4fBE1cxesgsindMU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YLc6bDmBLoTztEBdwEH0JFD6xnjcwvZle8UQCQH0a2Mlg82F4Sjyu1G+4oXOql25eD7Ty5Y9cL7pFyzFY/E/OGUFeYz0CMxKb7M+V/utyfpIe4iqNWaNuG9geSpbbnCcB0B09P2MN9uKkKqkGUoOlFl2kCfaupJtsX9s+Jt9Ra0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1dlb21V; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="X+tbKUqy"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1370417c01cso10067138c88.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 12:29:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1dlb21V"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-137dd523634so2588551c88.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 12:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780342147; x=1780946947; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C+IgbqWeUOwO1kuGX+W1xOBsghftk6n7fxQwZY4InEY=;
-        b=X+tbKUqyit06th/BSXOHlLtkD7uXgFaJRDtctLB1TEertYE4LWQ8+2RCELgXYfZQB9
-         yQd2bz/9210vrT2uEepFzpSsJ86WRQ6B39o/PNUtZ2RxZ3cWIY8GULYpAfJWXUt6S1q1
-         yW6L02sE8VY/ETAj+MDe01ByWktZ6JPn5eNM0iLelvn0q990QE+RQP9PybIAWUO/EwK9
-         lY7ozHuNvUIm4fnekoh6971chdOXp01dCC1OiOBopjcBTSe5HOb/c2Js7tgFmzqMU3k/
-         c1+/Hp+OFm+GbOmoGSIE0d96XL8O1kShjHCMxBwVWBdA1FURnxZFUtCn7li6HIeZ9W25
-         3lmA==
+        d=gmail.com; s=20251104; t=1780342367; x=1780947167; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FmqPrAiaAyI+otBp62Udjj0SCzt/zY61VVnyRHk6LmQ=;
+        b=L1dlb21VHLzaM96Gn9tmOCSJ5IGasLVKXuzutzOsZTQQe8706CTVgt4K5zaeKreIIZ
+         WtKI7BXgXHUb3CiyacFG45FK8ckyFolEZzYqEwQYxwc8ODf4qu9LTUm48McNbV6ZmnPM
+         5VarzM0cLyGM+NbL/0YttI/eZpnkuqB0GAUQ5qJOtFODOcHU+bNSAEKHJFkfK3CWHMT+
+         H35AdnPruPZKbwuiXkoRvAVep44Pc/qh5/+JEC7AJjcWR4cxd+hPbIIR6eAkCdR5q3lr
+         TiHKZEnwyhuG+D12+ht1XIep9gJHNtr3ctdUxXGrEQuu+k5k1cKKZULMDiX6JWyvgxaO
+         ZvWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780342147; x=1780946947;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+IgbqWeUOwO1kuGX+W1xOBsghftk6n7fxQwZY4InEY=;
-        b=JU6HwTZGuX4e//bwy2NcsYDu8ruIaPhg3JJb/u49KtHG+b/X4oxBM765qU7WcL/PNf
-         6FdGTqZDWi+JAQsOiSzISQQcH/NaziuLKqOBkcL9TJ05Gb0c/xAdTa8QVWaLiCHksKyn
-         XwD5nXXdQeqgmrxOL/+gIMJj4oDDf0GfvXLr66qvaf796T4YfylcVd0zCK6a+AOQyggx
-         O2QN1db6MeFndScKiZNwMY3HKcvFMA0PY7x16iPl/JsnfBqQVEQgVQqfw0rdgnAkoUm7
-         g8Fij7yuw6xp9sQEogh2Zsx6ZLKFTS3KnPiPap50M7SEd2Dob51LLg/+w2+stM4gkwUR
-         a5Cw==
-X-Forwarded-Encrypted: i=1; AFNElJ9MO8V0Hzfv8pA9SnHFmjeGIQBuM98YNWzaO1mcoMYdGkhxW75SlvMKw0Foz1Nbj5yw6As=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg2g6P9sWFpsbI3JFhBvGDZOzRL49hUmjquHW+FxKNhiEQeSzZ
-	aCVxTSWlFpJmb+jBkGcfK4kIA93Ctc5+BxlcE2t3UO6XtAV8ZjkJawAPUMpOLNB82SI=
-X-Gm-Gg: Acq92OHHfEJZ85RyNXadug59x8etd971QdAllaGr+C78P12gUw8os6zKLWwNAEcG6Pw
-	t6iHnwiUcIcHm6rjhEakf+becIUT34qQqVFnBvdC896GBm9iP+3Qwn7sJrk1ytjVemhIoInVkDH
-	NCLFVXEElholHZBcMFiZjiW6cZeQNbBYE1G7n3oLAlLOOHBcFk6TkJvlycFhA9BmSe+Av3r5TMl
-	NN+KXAvX3CYHW3cO66a9bJb+VdmwOs0sln0dpuZ8g/jU33G0g2C/i/3EMM3tNjK+ittde1Bdz8p
-	nsy5w8+//E9+Or7WDlUVG1PTYUkr2Wc16gohvTlToX0g9daPgLtLlvDGz0Pk76MMVB1lP8+3Cy1
-	uL1yE1JOSiia9btErS4ewl/Lbq4fdCOZ8gWoVyLZ+mPgU3KjfGrug46g4I2+jyynnujlbrKlKbV
-	u9h9QL5Fet/+mAgwQ=
-X-Received: by 2002:a05:7022:6192:b0:132:956b:3a3 with SMTP id a92af1059eb24-137d401b909mr5140739c88.10.1780342146911;
-        Mon, 01 Jun 2026 12:29:06 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::ceef])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137eda36ddbsm598965c88.12.2026.06.01.12.29.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 12:29:06 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780342367; x=1780947167;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FmqPrAiaAyI+otBp62Udjj0SCzt/zY61VVnyRHk6LmQ=;
+        b=DbnAQicCI92vFf6CMV5qpNW9yyrdugAF1MGkf8jO3/G55uUUMfAzVKAo7pEO4yq3FN
+         do9so31iVnci9Qvsg8DRHLbYVlEsJj6LmmkWxfpqH4ZHbNI4Hb9ynwRg/fDZQ6NkaOcv
+         Dhd+mIvbhMYh+NqlCwIbRBfpXWLV6lKnj+uSXVk3BQJilNMhfvVD0d0Yj/QtdIRMhcWV
+         SCvw3Gy38kcsLz3nO/t3wsewnR/V5+hAQeEeQ/mQ1fezFzd51QPDVmBkkOR+Wq1Ho8qJ
+         i4DVkSvVtaFG83apddNbTDLpqNzcf6K4uIFihx4DAJ6ExPVh7pgiuGGSTqwdxUPyxXwC
+         PyYA==
+X-Forwarded-Encrypted: i=1; AFNElJ82JIYORv3MlO/uKqmxI5cZ6HE3ba5WEURYuM2J8B9Af1vZgGYEu9PE2ZzqGuKWqJQRA1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYDV659meJHzyc0lpzTkLORQT5l/IKiEmNGYekAAq9TllpnXAA
+	JAIoojJDWgQKqW2vxqyjIng6RO6XqhtSerF2W1ZQL23FCbyQfnh9Aa81
+X-Gm-Gg: Acq92OEor8smkTlNAbf++kqZKUZnjlLscdV0v9cdZolFRIcyLQ5wavPXoqFvhaQoLTs
+	QLczCuB7uMSPBup1ZIAm/jSBhdX6UhHIkkM5Mqp20ioZHfX264jN8gYrmKdP9t4uNDtCdsOdsD5
+	GQwECiv8JnZiX7CeZWs+GrC9KgwOxiF3iw1bhkMXbSlHfLH9Ri8q9DqoQFgcAxuPxtkJQo//6+W
+	qtdD5ZvdIo6WDt2W7gIO0LlJi95KCDWDNf+4O5x8+my62Y4vFkvrAGWxaX1xHkv4yhHwSg91Bka
+	BiiTvXJtzy2s9bjuEqMxEjoCqFPL9FwUVcf2Z0QUdaqcg8GtF91/rvgznEoO67n3PGSyEqFRo4Z
+	n7cNDaAUsj0bVvolGJz8RdCA1elTNnRYDpF2CqcmQBofhibfNpUTpACgFRO2dTPhTD7d9yndeNm
+	hTf2IIOGDDrOiS17CTeGPzM+K+1RMVLRsovBW4560MFSlRxLVsUApPmWZm2iYi3B2ls0AzZRU3+
+	K5venu1Ilgx/A==
+X-Received: by 2002:a05:7022:e03:b0:137:6781:7dd4 with SMTP id a92af1059eb24-137d3bf3c9emr5514136c88.8.1780342366978;
+        Mon, 01 Jun 2026 12:32:46 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:af92:b4b2:3f30:fe90? ([2620:10d:c090:500::96])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b37cd5basm7662619c88.8.2026.06.01.12.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 12:32:46 -0700 (PDT)
+Message-ID: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix kfunc implicit arg inject type
+ detection to prevent invalid pointer deref
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bot+bpf-ci@kernel.org, chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ chenyuan@kylinos.cn, 	daniel@iogearbox.net, jolsa@kernel.org,
+ linux-kernel@vger.kernel.org, 	martin.lau@linux.dev, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, 	martin.lau@kernel.org,
+ clm@meta.com, ihor.solodrai@linux.dev
+Date: Mon, 01 Jun 2026 12:32:44 -0700
+In-Reply-To: <a6d10d44ee132d70b2b2633790663289af944fd8d3889440dfc55fea04c5a2e5@mail.kernel.org>
+References: <20260601064611.807637-2-chenyuan_fl@163.com>
+	 <a6d10d44ee132d70b2b2633790663289af944fd8d3889440dfc55fea04c5a2e5@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Jun 2026 15:29:03 -0400
-Message-Id: <DIXYM9UVP38G.11UV88Z4GBY8B@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <bpf@vger.kernel.org>, <ast@kernel.org>
-Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
- <kernel-team@fb.com>, <yonghong.song@linux.dev>
-Subject: Re: [PATCH RFC bpf-next v3 2/6] bpf: compute loops hierarchy
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
- <20260527-better-1m-reporting-v3-2-b3ede0588a75@gmail.com>
- <DIXY9HEXZK4K.3NF0E685YW1X1@etsalapatis.com>
- <42088bbac8371ae7f66f6744dd8aaa07f8f384b0.camel@gmail.com>
-In-Reply-To: <42088bbac8371ae7f66f6744dd8aaa07f8f384b0.camel@gmail.com>
+MIME-Version: 1.0
 
-On Mon Jun 1, 2026 at 3:22 PM EDT, Eduard Zingerman wrote:
-> On Mon, 2026-06-01 at 15:12 -0400, Emil Tsalapatis wrote:
->
-> [...]
->
->> > +static int mark_header(struct bpf_verifier_env *env, int h)
->>=20
->> Maybe a more descriptive name? Not sure what we are marking the header
->> as.
->
-> The idea is to mark instruction at index 'h' as a header, hence mark_head=
-er().
-> Can change to 'mark_as_header()', open to other suggestions.
-> I'll add a comment on how this is different from assign_header()
-> (which restores hierarchy, as far as I remember).
->
+On Mon, 2026-06-01 at 07:42 +0000, bot+bpf-ci@kernel.org wrote:
+> > bpf: Fix kfunc implicit arg inject type detection to prevent invalid po=
+inter deref
+> >=20
+> > When a module kfunc declares an implicit struct bpf_prog_aux * argument=
+,
+> > the verifier must identify it so the kernel injects env->prog->aux into
+> > the correct register at runtime.  The original check used
+> > is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
+> > module BTF type against vmlinux.
+> >=20
+> > Root Cause
+> > ----------
+> >=20
+> > This issue was triggered by pahole 1.30 generating module BTF with
+> > incorrect type information, which caused the kernel's distilled base
+> > BTF deduplication for modules to fail.  As a result, the module retaine=
+d
+> > its own copy of struct bpf_prog_aux with a different BTF ID than
+> > vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue=
+,
+> > the kernel must be robust against such inconsistencies: a BTF mismatch
+> > should result in a clean rejection, not a kernel crash or information
+> > disclosure.
+> >=20
+> > When the distilled base dedup fails and btf_types_are_same() cannot
+> > match the module's bpf_prog_aux type against vmlinux's,
+> > is_kfunc_arg_prog_aux() returned false and the code fell through
+> > silently without setting arg_prog.  The kfunc then received whatever
+> > value was in the argument register and dereferenced it as a
+> > bpf_prog_aux pointer, leading to:
+> >=20
+> > =C2=A0=C2=A0BUG: kernel invalid pointer dereference, address: 000000000=
+00009e2
+> > =C2=A0=C2=A0RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
+> > =C2=A0=C2=A0RDI: 0x000000000000046d (stale register value)
+> >=20
+> > In the observed crash the stale value was the process PID, causing a
+> > dereference within the unmapped NULL page.  However, an attacker able
+> > to control the register value -- for example by writing a BPF program
+> > that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
+> > could redirect the dereference to arbitrary kernel memory, turning
+> > this into an information disclosure.  The fix ensures the verifier
+> > either validates and injects the correct bpf_prog_aux pointer, or
+> > rejects the program outright -- no silent fallthrough that could
+> > be exploited.
+>=20
+> This looks like a fix for a real bug, but it does not carry a Fixes:
+> tag.  Should it point at the change that introduced the implicit
+> prog_aux argument handling, is_kfunc_arg_prog_aux() and KF_ARG_PROG_AUX_I=
+D?
+>=20
+> That code appears to come from "bpf: Support __magic prog_aux arguments
+> for kfuncs" (Ihor Solodrai, lore message-id
+> 20251029190113.3323406-5-ihor.solodrai@linux.dev).
+>=20
+> The merged SHA could not be resolved from this repository, so the tag
+> would need to be filled in by hand, for example:
+>=20
+> =C2=A0=C2=A0Fixes: <sha> ("bpf: Support __magic prog_aux arguments for kf=
+uncs")
+>=20
+>=20
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>=20
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/267401=
+41551
 
-mark_as_header() sounds much better, thanks.
+The robot (and b4 utility as well) is confused by the following
+formatting quirk:
 
->> > +{
->> > +	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
->> > +
->> > +	if (!aux[h].loop) {
->> > +		aux[h].loop =3D kvzalloc_obj(struct bpf_loop, GFP_KERNEL_ACCOUNT);
->> > +		if (!aux[h].loop)
->> > +			return -ENOMEM;
->> > +	}
->> > +	return 0;
->> > +}
->> > +
->> > +static int assign_header(struct bpf_verifier_env *env, struct loops_d=
-fs *dfs, int n, int h)
->> > +{
->> > +	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
->> > +	int *dfs_pos =3D dfs->dfs_pos;
->> > +	int err, nh;
->> > +
->> > +	err =3D mark_header(env, h);
->> > +	if (err)
->> > +		return err;
->> > +
->> > +	/* Don't encode self-loops, otherwise can't reflect loops nesting st=
-ructure. */
->> > +	if (n =3D=3D h)
->> > +		return 0;
->> > +
->> > +	/* Make sure that loop headers up the chain are sorted by dfs_pos. *=
-/
->> > +	while (aux[n].loop_header !=3D -1) {
->> > +		nh =3D aux[n].loop_header;
->> > +		if (nh =3D=3D h)
->> > +			return 0;
->> > +		if (dfs_pos[nh] < dfs_pos[h]) {
->> > +			aux[n].loop_header =3D h;
->> > +			n =3D h;
->> > +			h =3D nh;
->> > +		} else {
->> > +			n =3D nh;
->> > +		}
->> > +	}
->> > +	aux[n].loop_header =3D h;
->> > +	return 0;
->> > +}
->> > +
->> > +/*
->> > + * As described in "A New Algorithm for Identifying Loops in Decompil=
-ation" by Wei et al,
->> > + * adapted to be non-recursive.
->> > + */
->> > +static int compute_loops_in_subprog(struct bpf_verifier_env *env, str=
-uct loops_dfs *dfs,
->> > +				    int subprog_idx)
->> > +{
->> > +	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
->> > +	struct dfs_state *state =3D dfs->state;
->> > +	int start =3D env->subprog_info[subprog_idx].start;
->> > +	int *dfs_pos =3D dfs->dfs_pos;
->> > +	int *stack =3D dfs->stack;
->> > +	int i, s, h, err, cur, stack_sz;
->> > +	struct bpf_iarray *succ;
->> > +
->> > +	stack[0] =3D start;
->> > +	state[start].traversed =3D true;
->> > +	state[start].next_succ =3D 0;
->> > +	dfs_pos[start] =3D 1;
->> > +	stack_sz =3D 1;
->> > +	i =3D 0;
->> > +	do {
->> > +		/*
->> > +		 * The algorithm should be very fast in practice,
->> > +		 * guard against pathological inputs, just in case.
->> > +		 */
->> > +		if (i++ =3D=3D 1024) {
->> > +			i =3D 0;
->> Nit: Maybe=20
->>=20
->> if (!(++i % 1024))
->>=20
->> ?
->
-> Ack.
->
->> > +			if (signal_pending(current))
->> > +				return -EAGAIN;
->> > +			cond_resched();
->> > +		}
->> > +
->> > +		cur =3D stack[stack_sz - 1];
->> > +		succ =3D bpf_insn_successors(env, cur);
->> > +		if (state[cur].next_succ =3D=3D succ->cnt) {
->> > +			dfs_pos[cur] =3D 0;
->> > +			stack_sz--;
->> > +			continue;
->> > +		}
->> > +		s =3D succ->items[state[cur].next_succ];
->> > +		if (!state[s].traversed) {
->> > +			/* Case A:  start -> ... -> cur -> s [unxplored] */
->> Typo: unxplored -> unexplored
->
-> Ack.
->
->> > +			state[s].traversed =3D true;
->> > +			state[s].next_succ =3D 0;
->> > +			stack[stack_sz] =3D s;
->> > +			dfs_pos[s] =3D stack_sz + 1;
->> > +			stack_sz++;
->> > +			continue;
->> > +		}
->> > +		/* 's' is fully explored at this point */
->> > +		if (dfs_pos[s]) {
->> > +			/*
->> > +			 * start -> ... -> s -> cur --.
->> > +			 *                 ^          |
->> > +			 *                 '----------'
->> > +			 * Case B: 's' is in the current DFS path.
->> > +			 */
->> > +			err =3D assign_header(env, dfs, cur, s);
->> > +			if (err)
->> > +				return err;
->> > +		} else if (aux[s].loop_header =3D=3D -1) {
->> > +			/*
->> > +			 * start -> ... -> ... -> s -> ... -> end
->> > +			 *           |            ^
->> > +			 *           '---> cur ---'
->> > +			 * Case C: 's' is explored, not in the current DFS path,
->> > +			 * and not a part of any loop.
->> > +			 */
->> > +		} else if (dfs_pos[aux[s].loop_header]) {
->> > +			/*
->> > +			 *                 .----------------------.
->> > +			 *                 v                      |
->> > +			 * start -> ... -> h -> ... -> ... -> s --'
->> > +			 *                       |            ^
->> > +			 *	                 '---> cur ---'
->> > +			 * Case D: 's' is explored, not in current DFS path,
->> > +			 * but it's innermost loop header is.
->> Typo: it's -> its
->
-> Ack.
->
-> [...]
+> ...
+> Fix
+> ---
+> ...
 
+The triple dash marks the start of the diff section of the patch.
+Hence, when I apply this series the commit message is truncated after
+this point.
