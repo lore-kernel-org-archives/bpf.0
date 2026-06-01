@@ -1,120 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CC8374725
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 11:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A736348C66;
+	Mon,  1 Jun 2026 12:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780314887; cv=none; b=BrsLclxRTbQuic3hUNGnurIhu2DaJou+W68CF2u2T2TdyzxM/Rp7EFl7Jr1v+NZyMv4i6AdmAnMaKcI1r+87YDeaGJvyLJf4motUoyMN8CdEXJnpJvn/ZePPQoGi4tVjDW6Q/5016KOkCDrTV1Bm0Eddqq1TFuCodByyxWLR7EY=
+	t=1780315249; cv=none; b=DdPKamJF6OT6/Zf88mvqxGjCZwWCZxa8v2kxHBQbFtVTa6zV6TDV8UDbK05HVgxgnLHkb7Z4vJPwDQZC24X1huD7yInQFMMa/+biuehNPLqCe4VJ8q8RfpYTKAn+YWrZAuaLFGUa0nu6ueu5nRokPhlfYSLqLnzXCW1xE4JbkDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780314887; c=relaxed/simple;
-	bh=TJInaTL+I8/+pMcbQ2Obw4yz8CAEc78+I6SrvyhWFeM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ipQWyUxLuTD1bnEN2c7lRgf+MnuVbsuW40knFYNxcRbiBx55Fo2ao+mQbRHlHoBoc7kBH1ttz1evrQBrUlwLUuVb09zll1uJk5LD+9XmtZ69HyuTFK99Bk9kuMD8wEwQd3CZ4f8tab1LuzbClqUy9CoYahPRxiST010q1apXOk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dwUhhrTg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dwUhhrTg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780314885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9iMi5OP8IuxpDw3nqLpnBbtHMB9Wyt0z2yi1muFCLEY=;
-	b=dwUhhrTgdiw/mf8612fPYy+7mohVcSnIga2gyVEUTYaWNNWL3ip1bMNjiJ8HIDr1xDikIM
-	QrsLOhl9eeA3La+O3iPTVgNMNqbo5MEN47d3lYMIQ60LKFBR/oab+zxFXMwInC5brQMEsb
-	JfmK1zTNSoFDloAQdiLzfozziAoGJ5Q=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-QYzQeQ1SPGq-54Z67sA7cQ-1; Mon,
- 01 Jun 2026 07:54:40 -0400
-X-MC-Unique: QYzQeQ1SPGq-54Z67sA7cQ-1
-X-Mimecast-MFC-AGG-ID: QYzQeQ1SPGq-54Z67sA7cQ_1780314876
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E55541956080;
-	Mon,  1 Jun 2026 11:54:34 +0000 (UTC)
-Received: from oldenburg3.str.redhat.com (unknown [10.44.49.199])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E13C1956095;
-	Mon,  1 Jun 2026 11:54:24 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,  Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>,  bpf@vger.kernel.org,  Masami
- Hiramatsu <mhiramat@kernel.org>,  Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>,  Jens Remus <jremus@linux.ibm.com>,
-  Josh Poimboeuf <jpoimboe@kernel.org>,  Peter Zijlstra
- <peterz@infradead.org>,  Ingo Molnar <mingo@kernel.org>,  Jiri Olsa
- <jolsa@kernel.org>,  Arnaldo Carvalho de Melo <acme@kernel.org>,  Namhyung
- Kim <namhyung@kernel.org>,  Thomas Gleixner <tglx@linutronix.de>,  Andrii
- Nakryiko <andrii@kernel.org>,  Indu Bhagat <ibhagatgnu@gmail.com>,  "Jose
- E. Marchesi" <jemarch@gnu.org>,  Beau Belgrave
- <beaub@linux.microsoft.com>,  Linus Torvalds
- <torvalds@linux-foundation.org>,  Andrew Morton
- <akpm@linux-foundation.org>,  Kees Cook <kees@kernel.org>,  "Carlos
- O'Donell" <codonell@redhat.com>,  Sam James <sam@gentoo.org>,  Dylan Hatch
- <dylanbhatch@google.com>,  Borislav Petkov <bp@alien8.de>,  Dave Hansen
- <dave.hansen@linux.intel.com>,  David Hildenbrand <david@redhat.com>,  "H.
- Peter Anvin" <hpa@zytor.com>,  "Liam R. Howlett"
- <Liam.Howlett@oracle.com>,  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-  Michal Hocko <mhocko@suse.com>,  Mike Rapoport <rppt@kernel.org>,  Suren
- Baghdasaryan <surenb@google.com>,  Vlastimil Babka <vbabka@suse.cz>,
-  Heiko Carstens <hca@linux.ibm.com>,  Vasily Gorbik <gor@linux.ibm.com>,
-  Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Subject: Re: [RESEND][PATCH v2] unwind: Add sframe_(un)register() system calls
-In-Reply-To: <20260528151626.4573592d@gandalf.local.home> (Steven Rostedt's
-	message of "Thu, 28 May 2026 15:16:26 -0400")
-References: <20260528151626.4573592d@gandalf.local.home>
-Date: Mon, 01 Jun 2026 13:54:22 +0200
-Message-ID: <877boio4r5.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1780315249; c=relaxed/simple;
+	bh=s//3fKl0E7I5s8qjeLdZk2A8Doabxg/plPyKTj/66G0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tWDiSK+tkFfBmhVacwYWA9ewNJqfkbKxcpR6fS1HN2zUb6bKdw03J8g4WDTt8LC9irJNeKQegaky+1pMTMzlVbv5eS28zDNxOxIdQ7ibGMzBUc9Um5vGbnInAsEGHaiU5TVNnHUNqe5Ydpi31Gy40v30OHt/ipQOOP1dUxUoyZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+Received: from [129.217.186.245] ([129.217.186.245])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 651C0IPl003115
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 1 Jun 2026 14:00:18 +0200 (CEST)
+Message-ID: <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
+Date: Mon, 1 Jun 2026 14:00:18 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        hawk@kernel.org, netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-6-hawk@kernel.org>
+ <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-* Steven Rostedt:
+On 5/28/26 09:46, Jonas Köppeler wrote:
+> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
+>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>
+>> Per-packet BQL completion forces DQL to converge on limit=2, causing
+>> excessive NAPI scheduling overhead and qdisc requeues.
+>>
+>> Accumulate BQL completions and flush them when a configurable time
+>> threshold is exceeded, letting DQL discover a limit that bounds actual
+>> queuing delay to the configured interval. Coalescing state persists
+>> across NAPI polls in struct veth_rq so completions can accumulate
+>> beyond a single budget=64 cycle.
+>>
+>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+>> completion.
+>>
+>>    ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>>    ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+>>
+>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+> 
+> Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
+> 
 
-> From: Steven Rostedt <rostedt@goodmis.org>
->
-> Add system calls to register and unregister sframes that can be used by
-> dynamic linkers to tell the kernel where the sframe section is in memory
-> for libraries it loads.
->
-> Both system calls take a pointer to a new structure:
->
->   struct sframe_setup {
-> 	__u64			sframe_start;
-> 	__u64			sframe_size;
-> 	__u64			text_start;
-> 	__u64			text_size;
->   };
->
-> and a size of the passed in structure. If the system call needs to be
-> extended, then the structure could be changed and the size of that
-> structure will tell the kernel that it is the new version. If the kernel
-> does not recognize the structure size, it will return -EINVAL.
->
->   sframe_start - The virtual address of the sframe section
->   sframe_size  - The length of the sframe section
->   text_start   - the text section the sframe represents
->   test_size    - the length of the section
->
-> If other stack tracing functionality is added, it will require a new
-> system call.
+Thanks for your testing!
 
-Would it make sense to have a more general mechanism to attach metadata
-to code memory?  For example, a JIT generator might want to provide a
-hint how to obtain debuginfo for the code.
+However, I have issues reproducing.
+I run bare metal (without virtme) with v6 + your pktgen patch
+and I am on the branch pktgen-and-benchmark, commit
+"results: add veth-bql measurements":
 
-Thanks,
-Florian
+1. ping fails with 100% packet loss ~20% of the times with --pktgen.
+   When this happens the avg ping of this run is mistakenly set
+   to 0.0 ms, which distorts the results.
+   I fixed it locally by rerunning when this happens.
+
+2. pktgen runs with > 3 Mpps even with --nrules 10000, see log below.
+   I see that this is because of qdisc drops.
+   I also tried pfifo and sfq but with the same result.
+   I spent quite some time on it but I do not know a fix.
+
+Do you have an idea?
+Thanks!
+
+
+The raw log:
+
+sudo ./veth_bql_test.sh --pktgen --duration 2 --qdisc fq_codel --no-bpftrace --tx-usecs 100 --nrules 10000
+INFO: Setting up veth pair with GRO                                                                                                             
+INFO: Threaded NAPI enabled       
+INFO: Installing qdisc: fq_codel  
+INFO: Loaded 10000 iptables rules in consumer NS
+INFO: kernel: 7.1.0-rc4-patched-20260307+
+INFO: BQL sysfs found: /sys/class/net/veth_bql0/queues/tx-0/byte_queue_limits
+INFO: ethtool tx-usecs set to 100 on veth_bql1 (rx side)   
+INFO: Starting ping to 10.99.0.2 (5/s) to measure latency under load
+INFO: Starting pktgen queue_xmit on veth_bql0 (threads=1 pkt_size=64)
+  [5s] BQL inflight=1 limit=17 watchdog=0
+  [5s] qdisc fq_codel pkts=27417 drops=6591520 requeues=14115 backlog=0 qlen=0 overlimits=0
+  [5s] softnet: processed=27960 time_squeeze=0 multi-CPU(6): cpu0(+5) cpu1(+121) cpu2(+33) cpu3(+116) cpu4(+27641) cpu5(+44)
+INFO: Ping loss: 0% packet loss
+INFO: Ping summary: rtt min/avg/max/mdev = 0.127/1.818/2.703/0.761 ms
+INFO: pktgen results (thread 0):
+Params: count 0  min_pkt_size: 64  max_pkt_size: 64
+     frags: 0  delay: 0  clone_skb: 0  ifname: veth_bql0@0
+     flows: 0 flowlen: 0
+     queue_map_min: 0  queue_map_max: 0
+     dst_min: 10.99.0.2  dst_max: 
+     src_min:   src_max: 
+     src_mac: 0e:aa:4e:05:95:89 dst_mac: c2:e5:a3:4c:2a:7f
+     udp_src_min: 9  udp_src_max: 9  udp_dst_min: 9999  udp_dst_max: 9999
+     src_mac_count: 0  dst_mac_count: 0
+     xmit_mode: xmit_queue
+     Flags: NO_TIMESTAMP  QUEUE_MAP_CPU  SHARED  
+Current:
+     pkts-sofar: 6516031  errors: 102854
+     started: 12246566004us  stopped: 12248535234us idle: 0us
+     seq_num: 6516032  cur_dst_mac_offset: 0  cur_src_mac_offset: 0
+     cur_saddr: 10.99.0.1  cur_daddr: 10.99.0.2
+     cur_udp_dst: 9999  cur_udp_src: 9
+     cur_queue_map: 0
+     flows: 0
+Result: OK: 1969229(c1969229+d0) usec, 6516031 (64byte,0frags)
+  3308924pps 1694Mb/sec (1694169088bps) errors: 102854
+TEST: veth_bql                                                      [ OK ]
+INFO: Results: /home/simon/repos/veth-backpressure-performance-testing/results/selftests/2026-06-01T13-24-51
 
