@@ -1,540 +1,153 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB361370D56
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7264B3112BC
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780338289; cv=none; b=sWRivIyhtGvAfKGoltSHkXvxvx2y6Y/BDs9ghyDtcwzXsMa9BiQDX8/nZCmqPnkxWRQJ5oLRr4HGxX9Dye2Dw8W/gpXw8IEvRnmYzz5QrMQYpm1gODLfUVzMtrWOWQ9YR1aVSZGmgqpIVpuJvMphlX4vtK5CtJ3ocMUXPO+1BIs=
+	t=1780338309; cv=none; b=dGUm9W7BBw3CzPeG1cJoUor349j2jcI4wr2hKpNaY0M17lhk6vdS3CMkAkqFR2gWed7Qr3CyNCF/tLFci9R0WKoBzZAkEq5mkVYk0l+hbc7yjTt5QEcHLQHgSAbWrqsuq8Uhf8Sqywq/NQjvWbGYzLNfL3ZuVOK4uP1vMRcfUvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780338289; c=relaxed/simple;
-	bh=hOILsP+0Eqs3JFb8e2Vfwd5JMTuh4PUjSveLorarlHc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=i/vAxUZhbqGsITt+MPXkSZAPSMKx9YyYQcbaZZTi0UrdGfHRKdVLRfo1dwh9fE6ib29T76T0Pp5MKxhEj3tjcTzvPw6eO6FHHWDh2KRviN2ir02gowP0+9iSCuOXZt+lUIwPmyuVQjaSSfzgUNsp8ZVU894U7W/qxJ5/eUsrEhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=dskOif/v; arc=none smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780338309; c=relaxed/simple;
+	bh=SFK5CMRpONDAKl3nwOzkXO548TE9OOA1Lf8g+KsuK2M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=NmIx1Mw2rkD5MrYIPUloXx3OH2bzbfYJk+ESHAGk2swRmiepqLWY7DY4SRvYY+Dl9OLzMQ6t8Md40sv9ViTJ6KuC65TM7+oe/c1EY2LAVKWvrEK5a4nNukuXa53fxP86xdXcHI+1/4I78J9kXhNwP4cHnfKMWhkQbEMpl58aH10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zw2b1yF6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="dskOif/v"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-304d7f31215so4326932eec.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780338287; x=1780943087; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W7IE3lrCAU2wICe64aFr6+14ggCx1eMiEJoUvGWrTOI=;
-        b=dskOif/vbVhzLyxoAG0RkeUJBgqZtAPxs2itYNLaCC05/o7EM9Yb5bH5CP729PhnKP
-         SY/1eIZxPsgdfsyEnQbNDIvXG8n3NO7K+JeND2KCtU7Fa4G/LP6REpwRXn4ILAOwAr+q
-         RXbktZfiAEeXofvjtV57VM/Lgb+CBZ3aLJIjxedvWI0g1lSVcO7o2YV2gOKAzhqSR6D4
-         SJlT+F1e/Sz+P0pS2FueLUVZxjO0uionQJ7oa000G2PFM7k/WHGCdBW/mrNPsBYlDgS+
-         BbHyzkDceIPPkHyPimb0UshvyLsaOWuA/wloGJKNppF+rHgS6mngzgoGN9Z6VKFgkoMU
-         W13w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780338287; x=1780943087;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W7IE3lrCAU2wICe64aFr6+14ggCx1eMiEJoUvGWrTOI=;
-        b=KpM52CXvKAI09gpJZG4dBKsDpNy4Mv0ZN7JMMZ1BKKtVRKXoedJ0zxW8gLZKrCSWus
-         UiUluLDSeFQKTAQyteXdFk5u3DYJgkHWGjqzWlTw57+mmEHZ9IgOysLngccS/ch3uWrQ
-         JwU8SWeIxLBTGzqqYcEISCBSODjPa763F9lRotdNI9Cs0XHMCvdYbx1Euu1VNz5i1/YN
-         2/HdOgyhP1VqnA4LBxne8QRXBJHArlOUffz5nxqLfPex94zJYym9nxmwHpDV3ovpYCTy
-         DURkf3Cz5vcCGHH43Qtw+Bc891XpdRQDls9nApN/5CtIKDxYc8fdvOh8Qd7GEsYGwoza
-         psXQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9A8f7gcikqcf8pFx6VRCGlUFaXOLyV8QwcMRcrgHHaDRp2qCKR2NVXK5CvLZNyJFGvn1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYneYy9Y90nhKfHgdNcEVuBNXbFl3IWPywFvFHrgKHvH94Ybi2
-	EO+SQ9LvRad1eet5aEeEeb6Q5wCRnq07DPtrEaNAumrZYK3x/u0hdKZePn+TOP6KFik=
-X-Gm-Gg: Acq92OH+JYrmAq+cao2ZXl5QV6kGZVG1tRoONzwQ2LX3nIRrJAHWt90teSgw3kS+AOT
-	jf3M1bvWTHNupPZ3oEtPVCe/TmmTClOsYv3u6eVjFKzLjBqLI1Nhfu1o62dAvMHzkY3mY5HMlx9
-	bCBAQSyWbdk8euPHWiwVXPIwsjPE0rRbfQV2zfTKWQU1ANIgOqLn5PScUy4F2h9GoU8GkrOqRTT
-	s22Dp7jM+5hwVmYiyxj7oXORP2cAYtHf00JfzZacasGciY0/MfW9iGon0MdWWB2lOS4v8l4Aydu
-	ePL0n37sAis2ZSX9ByFjOT4B6ODTalAbFWIlHcoatRT8ZzuJRnAjxVyudQEVkAoqArX7iRbn3qH
-	eEmBEiyfQ80SKJa7usdcmcGKeKCEWPW9vJoiJVUm4pw7ycLzH0HdHQ3mDayYvvytU0+sifUikGM
-	w4aReeRGul+YcS0vA=
-X-Received: by 2002:a05:7300:c87:b0:304:2e9b:8f57 with SMTP id 5a478bee46e88-304fa6ef8a1mr5591798eec.34.1780338286453;
-        Mon, 01 Jun 2026 11:24:46 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::a996])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ee0dd8e1sm12846684eec.21.2026.06.01.11.24.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 11:24:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zw2b1yF6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C811F00893;
+	Mon,  1 Jun 2026 18:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780338308;
+	bh=hXnDXOhxZ4G0Qht0uixBuJowPUWOEysu7CkfwdNLg10=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Zw2b1yF6/4nuoJnwXphxyqqJOdcJLskXzWxidVyGIhW2fLg842e7j4JFzjoGt3BfV
+	 7T9FGk+c736EDBrybHUbEDNVR6tuXYY+h3JVOQmgNcmlNvZbCQLVHiqiui7lItq5DC
+	 5McYLWGauO//wzf+r23xPMNhoQ4LbnnCAk8w4TgN1JKRa8e/pytapc1CjsG68CFw/U
+	 r/V0BIEV9SVX0o/c/1YsReC8cfxuVBAKDQbUrv7i4vTzZ7kPHbYgQX2zsFv8ElPCbV
+	 EF8kKipNXsQu6G9FlkEtn5zpgikNTc0uykUoiaV/9mrcnbtmS8nVfPXhxWgf4BHjWV
+	 2WD4W3mvYXsiQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH 6.1.y 1/2] bpf: drop knowledge-losing
+ __reg_combine_{32,64}_into_{64,32} logic
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhenzhong Wu" <jt26wzz@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260601180400.1381736-2-jt26wzz@gmail.com>
+References: <20260601180400.1381736-2-jt26wzz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 18:25:07 +0000
+Message-Id: <20260601182508.29C811F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Jun 2026 14:24:43 -0400
-Message-Id: <DIXX90BMJRXM.1XKUMNSDY9OO@etsalapatis.com>
-Cc: "David S . Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Guillaume Nault" <gnault@redhat.com>, "Ido Schimmel"
- <idosch@nvidia.com>, "Fernando Fernandez Mancera" <fmancera@suse.de>,
- "Peter Oskolkov" <posk@google.com>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>, "Leon Hwang" <leon.huangfu@shopee.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add tests to verify the fix
- of encapsulating VxLAN in lwt
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260601150203.20352-1-leon.hwang@linux.dev>
- <20260601150203.20352-3-leon.hwang@linux.dev>
-In-Reply-To: <20260601150203.20352-3-leon.hwang@linux.dev>
 
-On Mon Jun 1, 2026 at 11:02 AM EDT, Leon Hwang wrote:
-> Add two tests to verify the transport header of skb has been set when
-> encapsulate VxLAN using bpf_lwt_push_encap() helper.
->
-> 1. VxLAN over IPv4.
-> 2. VxLAN over IPv6.
->
-> Without the fix, the tests would fail:
->
->  lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr of=
-fset: actual 70 !=3D expected 20
->  #208     lwt_ip_encap_vxlan_ipv4:FAIL
->  lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr of=
-fset: actual 110 !=3D expected 40
->  #209     lwt_ip_encap_vxlan_ipv6:FAIL
->
-> Assisted-by: Claude:claude-sonnet-4-6
-> Cc: Leon Hwang <leon.huangfu@shopee.com>
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 164 ++++++++++++++++++
->  .../selftests/bpf/progs/test_lwt_ip_encap.c   | 112 ++++++++++++
->  .../bpf/progs/test_lwt_ip_encap_fix.c         |  44 +++++
->  3 files changed, 320 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_ip_encap_f=
-ix.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tool=
-s/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> index b6391af5f6f9..50104d847fde 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> @@ -1,8 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> +#include <linux/ip.h>
-> +#include <linux/ipv6.h>
->  #include <netinet/in.h>
-> =20
->  #include "network_helpers.h"
->  #include "test_progs.h"
-> +#include "test_lwt_ip_encap_fix.skel.h"
-> =20
->  #define BPF_FILE "test_lwt_ip_encap.bpf.o"
-> =20
-> @@ -35,6 +38,10 @@
->  #define IP6_ADDR_SRC IP6_ADDR_1
->  #define IP6_ADDR_DST IP6_ADDR_4
-> =20
-> +/* VxLAN tunnel endpoints, reachable via the bottom route (veth5/6/7/8).=
- */
-> +#define IP4_ADDR_VXLAN  "172.16.17.100"
-> +#define IP6_ADDR_VXLAN  "fb20::1"
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The removal of `__reg_combine_32_into_64()` and `__reg_combine_64_=
+into_32()` drops critical precision-preserving fast paths, causing the veri=
+fier to artificially widen bounds and incorrectly reject valid BPF programs.
 
-There's a whole series of existing IP definitions at the top of the file, w=
-e
-should put those new ones right below them. And fb20 -> fb11 to keep
-with the pattern imo.
+In upstream Linux, this patch was part of a major 'BPF register bounds logi=
+c rewrite' series, which completely overhauled `reg_bounds_sync()` to algeb=
+raically deduce 64-bit bounds from 32-bit bounds (and vice versa) without l=
+osing precision. However, in this isolated backport to 6.1.y, the rewritten=
+ `reg_bounds_sync()` infrastructure was not included. The 6.1.y `reg_bounds=
+_sync()` relies entirely on `var_off` (tnum) approximations.
 
-> +
->  /* Setup/topology:
->   *
->   *    NS1             NS2             NS3
-> @@ -538,3 +545,160 @@ void test_lwt_ip_encap_ipv4(void)
->  	if (test__start_subtest("ingress"))
->  		lwt_ip_encap(IPV4_ENCAP, INGRESS, "");
->  }
-> +
-> +/*
-> + * VxLAN Setup/topology:
-> + *
-> + * NS1 (IP*_ADDR_1)                NS2                  NS3 (IP*_ADDR_4)
-> + *       [ping src]
-> + *           |                          top route
-> + *         veth1 (LWT encap)  <<-- veth2        veth3  <<-- veth4 (ping =
-dst)
-> + *           |                                                ^
-> + *       (bottom route)                                       | (inner p=
-kt)
-> + *           v                        bottom route            |
-> + *         veth5              -->> veth6        veth7  -->> veth8 (vxlan=
- decap)
-> + *                                                          (IP*_ADDR_VX=
-LAN)
-> + *
-Not sure if this is rendering weird for me but NS2 could be tabbed over
-once more for clarity.
+Before this patch, `__reg_combine_32_into_64()` explicitly bypassed this tn=
+um approximation when the upper 32 bits of a register were known to be zero=
+, directly copying tight 32-bit bounds into the 64-bit bounds using `__reg_=
+assign_32_into_64()`. Similarly, `__reg_combine_64_into_32()` copied tight =
+64-bit bounds back to 32-bit bounds.
 
-> + * Add the VxLAN endpoint addresses to NS3's veth8, create standard
-> + * VxLAN decap devices bound to those addresses, and install routes so
-> + * NS1/NS2 can reach the endpoints via the bottom route.
-> + */
-> +static int setup_vxlan_routes(const char *ns3, const char *ns1, const ch=
-ar *ns2)
-> +{
-> +	struct nstoken *nstoken;
-> +
-> +	nstoken =3D open_netns(ns3);
-> +	if (!ASSERT_OK_PTR(nstoken, "open ns3 for vxlan"))
-> +		return -1;
-> +
-> +	SYS(fail_close, "ip    a add %s/32  dev veth8", IP4_ADDR_VXLAN);
-> +	SYS(fail_close, "ip -6 a add %s/128 dev veth8", IP6_ADDR_VXLAN);
-> +	/*
-> +	 * Standard VxLAN devices to decap the encapsulated packets.  The inner
-> +	 * Ethernet frame uses a broadcast dst MAC so the IP stack accepts it
-> +	 * without ARP or FDB configuration.
-> +	 */
-> +	SYS(fail_close, "ip link add vxlan4 type vxlan id 1 dstport 4789 local =
-%s dev veth8 nolearning noudpcsum",
-> +	    IP4_ADDR_VXLAN);
-> +	SYS(fail_close, "ip link set vxlan4 up");
-> +	SYS(fail_close, "ip link add vxlan6 type vxlan id 1 dstport 4789 local =
-%s dev veth8 nolearning udp6zerocsumrx",
-> +	    IP6_ADDR_VXLAN);
-> +	SYS(fail_close, "ip link set vxlan6 up");
-> +	close_netns(nstoken);
-> +
-> +	SYS(fail, "ip -n %s    route add %s/32  dev veth5 via %s",
-> +	    ns1, IP4_ADDR_VXLAN, IP4_ADDR_6);
-> +	SYS(fail, "ip -n %s    route add %s/32  dev veth7 via %s",
-> +	    ns2, IP4_ADDR_VXLAN, IP4_ADDR_8);
-> +	SYS(fail, "ip -n %s -6 route add %s/128 dev veth5 via %s",
-> +	    ns1, IP6_ADDR_VXLAN, IP6_ADDR_6);
-> +	SYS(fail, "ip -n %s -6 route add %s/128 dev veth7 via %s",
-> +	    ns2, IP6_ADDR_VXLAN, IP6_ADDR_8);
-> +	return 0;
-> +
-> +fail_close:
-> +	close_netns(nstoken);
-> +fail:
-> +	return -1;
-> +}
-> +
-> +/*
-> + * VxLAN encap tests (IPv4-outer and IPv6-outer variants).
-> + *
-> + * Test 1 - functional: the BPF LWT xmit program encapsulates the packet
-> + *   (protocol=3DUDP, port=3D4789) and re-routes it without dropping it.
-> + *   Verified by ping success.
-> + *
-> + * Test 2 - fix verification: after bpf_lwt_push_ip_encap() the
-> + *   skb->transport_header must point at the outer UDP header, i.e.
-> + *   transport_header - network_header =3D=3D sizeof(outer IP header).
-> + *   Without the fix the transport_header still points at the inner
-> + *   transport layer, giving a wrong (larger) offset.
-> + */
+By dropping these helpers and falling back to the 6.1.y `reg_bounds_sync()`=
+, a tight 32-bit bound like `[0, 5]` is converted to a tnum mask `7`, which=
+ then widens the 64-bit `umax_value` to `7`. Because the verifier relies on=
+ tight 64-bit bounds to enforce safe memory accesses, widening them artific=
+ially will cause the verifier to incorrectly reject safe programs.
+--
 
-The Test 2 bullet regurgitates the AI's context, can you rephrase it so
-that it's not framed as a fix but as a test?
+commit 276e00bfbaf18530ce686f7167a23c7b6257d77a
+Author: Zhenzhong Wu <jt26wzz@gmail.com>
 
-> +static void lwt_ip_encap_vxlan(bool ipv4_encap)
-> +{
-> +	char ns1[NETNS_NAME_SIZE] =3D NETNS_BASE "-1-";
-> +	char ns2[NETNS_NAME_SIZE] =3D NETNS_BASE "-2-";
-> +	char ns3[NETNS_NAME_SIZE] =3D NETNS_BASE "-3-";
-> +	const char *sec =3D ipv4_encap ? "encap_vxlan" : "encap_vxlan6";
-> +	int expected_offset =3D ipv4_encap ? (int)sizeof(struct iphdr)
-> +					 : (int)sizeof(struct ipv6hdr);
-> +	struct test_lwt_ip_encap_fix *skel =3D NULL;
-> +	int thdr_offset, err;
-> +
-> +	if (!ASSERT_OK(create_ns(ns1, NETNS_NAME_SIZE), "create ns1"))
-> +		goto out;
-> +	if (!ASSERT_OK(create_ns(ns2, NETNS_NAME_SIZE), "create ns2"))
-> +		goto out;
-> +	if (!ASSERT_OK(create_ns(ns3, NETNS_NAME_SIZE), "create ns3"))
-> +		goto out;
-> +
-> +	if (!ASSERT_OK(setup_network(ns1, ns2, ns3, ""), "setup network"))
-> +		goto out;
-> +
-> +	if (!ASSERT_OK(setup_vxlan_routes(ns3, ns1, ns2), "setup vxlan routes")=
-)
-> +		goto out;
-> +
-> +	/*
-> +	 * Attach fexit to bpf_lwt_push_ip_encap() before installing the
-> +	 * LWT route so we don't miss the first encap call.
-> +	 */
-> +	skel =3D test_lwt_ip_encap_fix__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_lwt_ip_encap_fix__open"))
-> +		goto out;
-> +
-> +	skel->rodata->tgt_ip_version =3D ipv4_encap ? 4 : 6;
-> +
-> +	err =3D test_lwt_ip_encap_fix__load(skel);
-> +	if (!ASSERT_OK(err, "test_lwt_ip_encap_fix__load"))
-> +		goto out;
-> +
-> +	err =3D test_lwt_ip_encap_fix__attach(skel);
-> +	if (!ASSERT_OK(err, "test_lwt_ip_encap_fix__attach"))
-> +		goto out;
-> +
-> +	/* Remove the direct NS2->DST route so packets must go via LWT encap. *=
-/
-> +	SYS(out, "ip -n %s    route del %s/32  dev veth3", ns2, IP4_ADDR_DST);
-> +	SYS(out, "ip -n %s -6 route del %s/128 dev veth3", ns2, IP6_ADDR_DST);
-> +
-> +	/* Install the VxLAN BPF LWT xmit route. */
-> +	if (ipv4_encap)
-> +		SYS(out, "ip -n %s route add %s encap bpf xmit obj %s sec %s dev veth1=
-",
-> +		    ns1, IP4_ADDR_DST, BPF_FILE, sec);
-> +	else
-> +		SYS(out, "ip -n %s -6 route add %s encap bpf xmit obj %s sec %s dev ve=
-th1",
-> +		    ns1, IP6_ADDR_DST, BPF_FILE, sec);
-> +
-> +	skel->bss->fexit_triggered =3D false;
-> +	if (ipv4_encap)
-> +		SYS(out, "ip netns exec %s ping  -c 1 -W1 %s", ns1, IP4_ADDR_DST);
-> +	else
-> +		SYS(out, "ip netns exec %s ping6 -c 1 -W1 %s", ns1, IP6_ADDR_DST);
-> +
-> +	/* Test 1: fexit triggered means bpf_lwt_push_ip_encap() succeeded. */
-> +	if (!ASSERT_TRUE(skel->bss->fexit_triggered, "fexit_triggered"))
-> +		goto out;
-> +
-> +	/*
-> +	 * Test 2: transport_header must sit immediately after the outer IP
-> +	 * header, pointing at the UDP header of the VxLAN encap.
-> +	 */
-> +	thdr_offset =3D (int)skel->bss->transport_hdr - (int)skel->bss->network=
-_hdr;
-> +	ASSERT_EQ(thdr_offset, expected_offset, "transport_hdr offset");
-> +
-> +out:
-> +	test_lwt_ip_encap_fix__destroy(skel);
-> +	SYS_NOFAIL("ip netns del %s", ns1);
-> +	SYS_NOFAIL("ip netns del %s", ns2);
-> +	SYS_NOFAIL("ip netns del %s", ns3);
-> +}
-> +
-> +void test_lwt_ip_encap_vxlan_ipv4(void)
-> +{
-> +	lwt_ip_encap_vxlan(IPV4_ENCAP);
-> +}
-> +
-> +void test_lwt_ip_encap_vxlan_ipv6(void)
-> +{
-> +	lwt_ip_encap_vxlan(IPV6_ENCAP);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c b/tool=
-s/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-> index d6cb986e7533..36f0fc682ffb 100644
-> --- a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-> +++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-> @@ -2,8 +2,10 @@
->  #include <stddef.h>
->  #include <string.h>
->  #include <linux/bpf.h>
-> +#include <linux/if_ether.h>
->  #include <linux/ip.h>
->  #include <linux/ipv6.h>
-> +#include <linux/udp.h>
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_endian.h>
-> =20
-> @@ -82,4 +84,114 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
->  	return BPF_LWT_REROUTE;
->  }
-> =20
-> +struct vxlanhdr {
-> +	__be32 vx_flags;  /* I flag =3D 0x08000000 (valid VNI) */
-> +	__be32 vx_vni;    /* VNI in top 24 bits */
-> +};
-> +
-> +#define VXLAN_PORT  4789
-> +#define VXLAN_FLAGS 0x08000000
-> +#define VXLAN_VNI   1
-> +
-> +static const __u8 bcast[ETH_ALEN] =3D {
-> +	0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-> +};
-> +
-q +static const __u8 srcmac[ETH_ALEN] =3D {
-> +	0x02, 0x00, 0x00, 0x00, 0x00, 0x01,
-> +};
-> +
-> +SEC("encap_vxlan")
-> +int bpf_lwt_encap_vxlan(struct __sk_buff *skb)
-> +{
-> +	struct encap_hdr {
-> +		struct iphdr    iph;
-> +		struct udphdr   udph;
-> +		struct vxlanhdr vxh;
-> +		struct ethhdr   eth;
-> +	} __attribute__((__packed__)) /* packed is required to avoid padding */=
- hdr;
+bpf: drop knowledge-losing __reg_combine_{32,64}_into_{64,32} logic
 
-Comment is unnecessary here.
+This commit removes __reg_combine_32_into_64() and __reg_combine_64_into_32=
+()
+and replaces them with reg_bounds_sync() calls. This was part of a larger
+upstream series rewriting register bounds logic.
 
-> +	int err;
-> +
-> +	memset(&hdr, 0, sizeof(hdr));
-> +
-> +	hdr.iph.ihl      =3D 5;
-> +	hdr.iph.version  =3D 4;
-> +	hdr.iph.ttl      =3D 0x40;
-> +	hdr.iph.protocol =3D 17; /* IPPROTO_UDP */
-> +	hdr.iph.tot_len  =3D bpf_htons(skb->len + sizeof(hdr));
-> +#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-> +	hdr.iph.saddr =3D 0x640510ac;  /* 172.16.5.100  */
-> +	hdr.iph.daddr =3D 0x641110ac;  /* 172.16.17.100 */
+Link: https://lore.kernel.org/r/20231102033759.2541186-10-andrii@kernel.org
 
-Ideally want to keep the addresses we are hardcoding here and the
-the addresses we're declaring in the userspace part in sync. Here
-we've hardcoded the addresses three multiple ways (be, le, and string
-in the userspace part).
-
-> +#elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-> +	hdr.iph.saddr =3D 0xac100564;  /* 172.16.5.100 */
-> +	hdr.iph.daddr =3D 0xac101164;  /* 172.16.17.100 */
-> +#else
-> +#error "Fix your compiler's __BYTE_ORDER__?!"
-> +#endif
-> +
-> +	hdr.udph.source =3D bpf_htons(VXLAN_PORT);
-> +	hdr.udph.dest   =3D bpf_htons(VXLAN_PORT);
-> +	hdr.udph.len    =3D bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.=
-vxh) +
-> +				    sizeof(hdr.eth));
-> +
-> +	hdr.vxh.vx_flags =3D bpf_htonl(VXLAN_FLAGS);
-> +	hdr.vxh.vx_vni   =3D bpf_htonl(VXLAN_VNI << 8);
-> +
-> +	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-> +	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-> +	hdr.eth.h_proto =3D bpf_htons(ETH_P_IP);
-> +
-> +	err =3D bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-> +	if (err)
-> +		return BPF_DROP;
-> +
-> +	return BPF_LWT_REROUTE;
-> +}
-> +
-> +SEC("encap_vxlan6")
-> +int bpf_lwt_encap_vxlan6(struct __sk_buff *skb)
-> +{
-> +	struct encap_hdr {
-> +		struct ipv6hdr  ip6hdr;
-> +		struct udphdr   udph;
-> +		struct vxlanhdr vxh;
-> +		struct ethhdr   eth;
-> +	} __attribute__((__packed__)) /* packed is required to avoid padding */=
- hdr;
-> +	int err;
-> +
-> +	memset(&hdr, 0, sizeof(hdr));
-> +
-> +	hdr.ip6hdr.version     =3D 6;
-> +	hdr.ip6hdr.nexthdr     =3D 17; /* IPPROTO_UDP */
-> +	hdr.ip6hdr.hop_limit   =3D 0x40;
-> +	hdr.ip6hdr.payload_len =3D bpf_htons(skb->len + sizeof(hdr.udph) + size=
-of(hdr.vxh) +
-> +					   sizeof(hdr.eth));
-> +	/* fb05::1 */
-> +	hdr.ip6hdr.saddr.s6_addr[0]  =3D 0xfb;
-> +	hdr.ip6hdr.saddr.s6_addr[1]  =3D 0x05;
-> +	hdr.ip6hdr.saddr.s6_addr[15] =3D 1;
-> +	/* fb20::1 */
-> +	hdr.ip6hdr.daddr.s6_addr[0]  =3D 0xfb;
-> +	hdr.ip6hdr.daddr.s6_addr[1]  =3D 0x20;
-> +	hdr.ip6hdr.daddr.s6_addr[15] =3D 1;
-> +
-> +	hdr.udph.source =3D bpf_htons(VXLAN_PORT);
-> +	hdr.udph.dest   =3D bpf_htons(VXLAN_PORT);
-> +	hdr.udph.len    =3D bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.=
-vxh) +
-> +				    sizeof(hdr.eth));
-> +
-> +	hdr.vxh.vx_flags =3D bpf_htonl(VXLAN_FLAGS);
-> +	hdr.vxh.vx_vni   =3D bpf_htonl(VXLAN_VNI << 8);
-> +
-> +	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-> +	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-> +	hdr.eth.h_proto =3D bpf_htons(ETH_P_IPV6);
-> +
-> +	err =3D bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-> +	if (err)
-> +		return BPF_DROP;
-> +
-> +	return BPF_LWT_REROUTE;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-> diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c b/=
-tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
-
-We definitely need to change the name here this is straight from the AI.
-
-> new file mode 100644
-> index 000000000000..6945f83b94f2
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
-> @@ -0,0 +1,44 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_core_read.h>
-> +
-> +#define NEXTHDR_UDP		17	/* UDP message. */
-
-Unnecessary, we hardcode 17 in the other test.
-
-> +
-> +volatile const int tgt_ip_version;
-> +
-> +__u16 transport_hdr =3D 0;
-> +__u16 network_hdr =3D 0;
-> +bool fexit_triggered =3D false;
-> +
-> +/*
-> + * bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool i=
-ngress)
-> + *
-> + * After a successful push the transport_header must point at the outer
-> + * transport header (UDP for VxLAN), i.e.
-> + *   transport_header - network_header =3D=3D sizeof(outer IP header)
-> + */
-> +SEC("fexit/bpf_lwt_push_ip_encap")
-> +int BPF_PROG(fexit_lwt_push_ip_encap, struct sk_buff *skb, void *hdr, u3=
-2 len, bool ingress,
-> +	     int retval)
-> +{
-> +	struct iphdr *iph;
-> +
-> +	if (retval || fexit_triggered)
-> +		return 0;
-> +
-> +	iph =3D (typeof(iph)) (skb->head + skb->network_header);
-> +	if (iph->version !=3D tgt_ip_version)
-> +		return 0;
-> +
-> +	if ((iph->version =3D=3D 4 && iph->protocol =3D=3D IPPROTO_UDP) ||
-> +	    (iph->version =3D=3D 6 && ((struct ipv6hdr *)iph)->nexthdr =3D=3D N=
-EXTHDR_UDP)) {
-> +		fexit_triggered =3D true;
-> +		transport_hdr   =3D BPF_CORE_READ(skb, transport_header);
-> +		network_hdr     =3D BPF_CORE_READ(skb, network_header);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 264b3dc714cc4..d9b027f3dd121 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -4443,9 +4398,10 @@ static void coerce_reg_to_size(struct bpf_reg_stat=
+e *reg, int size)
+>  	 * values are also truncated so we push 64-bit bounds into
+>  	 * 32-bit bounds. Above were truncated < 32-bits already.
+>  	 */
+> -	if (size >=3D 4)
+> -		return;
+> -	__reg_combine_64_into_32(reg);
+> +	if (size < 4) {
+> +		__mark_reg32_unbounded(reg);
+> +		reg_bounds_sync(reg);
 > +	}
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
+>  }
 
+[Severity: High]
+Does this replacement in coerce_reg_to_size() lose bounds precision on older
+kernels like 6.1.y?
+
+Before this patch, __reg_combine_64_into_32() explicitly copied tight 64-bit
+bounds directly into the 32-bit bounds.
+
+It looks like the 6.1.y version of reg_bounds_sync() relies entirely on
+var_off (tnum) approximations, because it doesn't include the algebraic
+deduction infrastructure that was added in the upstream rewrite series.
+
+Could this mean tight bounds like [0, 5] might be converted to a tnum mask
+of 7, artificially widening the bounds and potentially causing the verifier
+to incorrectly reject safe programs?
+
+[ ... ]
+> @@ -9885,13 +9841,13 @@ static void reg_set_min_max(struct bpf_reg_state =
+*true_reg,
+>  					     tnum_subreg(false_32off));
+>  		true_reg->var_off =3D tnum_or(tnum_clear_subreg(true_64off),
+>  					    tnum_subreg(true_32off));
+> -		__reg_combine_32_into_64(false_reg);
+> -		__reg_combine_32_into_64(true_reg);
+> +		reg_bounds_sync(false_reg);
+> +		reg_bounds_sync(true_reg);
+>  	} else {
+>  		false_reg->var_off =3D false_64off;
+>  		true_reg->var_off =3D true_64off;
+> -		__reg_combine_64_into_32(false_reg);
+> -		__reg_combine_64_into_32(true_reg);
+> +		reg_bounds_sync(false_reg);
+> +		reg_bounds_sync(true_reg);
+>  	}
+>  }
+
+[Severity: High]
+Will replacing __reg_combine_32_into_64() with reg_bounds_sync() here in
+reg_set_min_max() also suffer from the same precision loss?
+
+Previously, when the upper 32 bits were known to be zero,
+__reg_combine_32_into_64() used __reg_assign_32_into_64() to directly copy
+tight 32-bit bounds to 64-bit bounds, bypassing the tnum approximation.
+
+Without the upstream reg_bounds_sync() algebraic deduction logic, is it
+possible this causes bounds widening that breaks existing userspace BPF
+applications?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601180400.1381=
+736-1-jt26wzz@gmail.com?part=3D1
