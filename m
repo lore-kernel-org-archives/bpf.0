@@ -1,32 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6055D349CC3
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 22:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D06C349CC3
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 22:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780352338; cv=none; b=m662JjOT2qzhPwR7ntQOKb9kNXJFZu765Akg2HUi/ipRR6nZb/9yxqM+8WMI1txL6sece3r+ONqeq6+cPspF0RZyzIvwgnbo3kLZx+k1uWQb6FZCzJk89nC8Sdsp1NXeROoeTebeNFB+EIeSnz8EwLvuS9jpHaed9dR+wqxHA5Y=
+	t=1780352340; cv=none; b=bdBuhpR6YuWfvdcNm5vmcXszSfXBqw9RC522bYxL7IArVsaabArRx1DjW6Ah77MYK6AXMTi/uZd/dhaJAwhnZAcgJAXnPkIgXVmEaeQcDzf/sgzjyrRS2MxtVW1GI0U5XEyV6/5j99yBv69eWnxcQDrsWvOGJiRxsGIO0en9+U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780352338; c=relaxed/simple;
-	bh=4uaPADVujjpNomkmWtUpz8VlUCzRuobImMycNwf4glY=;
+	s=arc-20240116; t=1780352340; c=relaxed/simple;
+	bh=rn7XZkpOq9zhjq7GXEEWfmk3CO7iWL6VVEcO3FKmsh8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ffm2E/blVFEcbF9dx9D66wFpm/t88Tsk6Qij6eWwjL2zw7Dbj8QRIGrrbhkjS+9AIzaTi/5/zqCkm7UwCnNn8psVtwt7yvYKUWK8y41hGIMKx5B1Qv0jekzEDW1lNmRFZ8eKaMwRVp+6HWSVZq/DVmko07R0MPdYvXssYMBZ3xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Oa8YvuDV; arc=none smtp.client-ip=95.215.58.178
+	 MIME-Version; b=IO/rs0wAxTSGGUr/ciKExv2Qx6dlEgaPiCnwsSMSjqPcnj5cqJGcGCzdaVCYMYCQDOb/DfAR8R72ArFCov6N7squvW1mWvXvL7g6tfUzeojQ9gzCUixJid2C+B8PRUfq6ihgYCHnlgul2ro1Kb7HZO+Hg4YJRVGKvFnan9bX334=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=chnKYP+f; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Oa8YvuDV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="chnKYP+f"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780352333;
+	t=1780352337;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MAKnitm9pUqdvxpV5Sesk3Hd/JLr1Nfy63v+k9yPNg4=;
-	b=Oa8YvuDVMtBszLf4/FzMFXYZj1rBlrf52LtJhxp8ul6w2smI905Gx2DdAUSIB9zYtvBl8B
-	HwVj3tF7+hiXrorvb/qCJrhhL5/JLAg7cDbDKgnAGBIk3sS4fqlxxUEuTtUx4RZySTkNG/
-	XFEhyQjkf7xMRd+7madtnW0GqfsTDPI=
+	bh=qiTW/YU3nhI69fMhQ49e7dL522wCpyMaMskBOSirp64=;
+	b=chnKYP+fx2m7hlI7R8Ho4DnWJNLAeV9bhKP8KXl5R5vRFwY/YC6AcTF3p/uN65cBwtX0/+
+	A/EmX6GTNJI7jnj7NVzau2KXXfcNmNGX7pzr8nBIE2BPJAQjmY251OSqP+BX5oxtFAm0Of
+	mHpXPFsC9IWozeuht0cTQMFyKG5oM5g=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kbuild@vger.kernel.org
-Subject: [PATCH bpf-next v1 03/14] selftests/bpf: Fix resolve_btfids test reads of BTF ID sets in PIE builds
-Date: Mon,  1 Jun 2026 15:17:54 -0700
-Message-ID: <20260601221805.821394-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 04/14] selftests/bpf: Add kfunc set test to resolve_btfids
+Date: Mon,  1 Jun 2026 15:17:55 -0700
+Message-ID: <20260601221805.821394-5-ihor.solodrai@linux.dev>
 In-Reply-To: <20260601221805.821394-1-ihor.solodrai@linux.dev>
 References: <20260601221805.821394-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,118 +51,132 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-TL;DR
+Extend the resolve_btfids selftest to cover kfunc sets defined with
+BTF_KFUNCS_START/BTF_KFUNCS_END.
 
-On aarch64 with gcc toolchain, when test_progs is linked as a PIE,
-reads of BTF ID array by C name return garbage because the GNU
-assembler on aarch64 unconditionally folds .local symbol references
-into section+addend form, and GOT slots cannot carry an addend per the
-AArch64 ELF spec.
+The test verifies that resolve_btfids correctly processes BTF_ID_FLAGS,
+resolves function IDs, and checks the kfunc set is sorted.
 
-Fix by marking the test's BTF ID objects with hidden visibility, which
-makes gcc emit a direct access that bypasses the GOT entirely.
-
-Details below.
-
-The subsequent patches adding kfunc checks to resolve_btfids test may
-cause test failures on aarch64 / gcc-15:
-
-  test_resolve_btfids:FAIL:kfunc_set_flags  actual 13 != expected 1
-  test_resolve_btfids:FAIL:kfunc_set_cnt    actual 0  != expected 4
-
-The test defines its BTF ID sets with the same macros as the kernel
-and reads them back directly by C name (in the same way as the kernel
-code does).
-
-test_kfunc_set is a .local symbol emitted into .BTF_ids by inline asm
-and declared to the compiler as a plain default-visibility
-extern, that is:
-    extern struct btf_id_set8 test_kfunc_set;
-
-Depending on the build environment, test_progs may be linked as a
-position-independent executable (for example, gcc defaults to -fpie
-[1]). In a PIE, taking the address of a default-visibility extern is
-routed through the GOT (Global Offset Table) [2].
-
-The GNU assembler's adjust_reloc_syms() pass (gas/write.c [3])
-replaces references to local symbols with the corresponding section
-symbol, folding the symbol's offset into the relocation addend.  On
-aarch64 this conversion is unconditional: tc_fix_adjustable() is
-defined to 1 for all fixups (gas/config/tc-aarch64.h [4]), so even
-GOT-generating relocations are subject to it.  The resulting object
-file therefore contains:
-
-  R_AARCH64_ADR_GOT_PAGE      .BTF_ids + 0x54
-  R_AARCH64_LD64_GOT_LO12_NC  .BTF_ids + 0x54
-
-However, the AArch64 ELF specification mandates that GOT-generating
-relocations must have a zero addend [5].  The +0x54 is therefore not
-honored: the linker creates a GOT slot pointing at the .BTF_ids base,
-and every access through that slot reads offset 0 instead of 0x54.
-
-This is purely a read-side problem, specific to the PIE test binary on
-aarch64 with gcc toolchain. resolve_btfids patches the set header
-correctly and the .BTF_ids bytes in test_progs are correct. vmlinux is
-unaffected because it is built with -fno-PIE [6] and reaches .BTF_ids
-with direct, addend-preserving relocations rather than the GOT. clang
-is unaffected because LLVM's assembler retains the original symbol for
-GOT relocations instead of converting to section+addend [7].
-
-To mitigate this issue, mark the test's BTF ID objects hidden with a
-visibility pragma so that gcc treats them as non-interposable and
-emits a direct access instead of a GOT load. This keeps the natural
-by-name access, works in both PIE and non-PIE builds, and needs no
-change to the BTF_ID macros or resolve_btfids.
-
-[1] https://gcc.gnu.org/onlinedocs/gnat_ugn/Position-Independent-Executable-PIE-Enabled-by-Default-on-Linux.html
-[2] https://gcc.gnu.org/wiki/Visibility
-[3] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/write.c#l922
-[4] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/config/tc-aarch64.h#l279
-[5] https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst#5733relocation-operations
-[6] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?h=v7.1-rc6#n593
-[7] https://github.com/llvm/llvm-project/blob/4b3bc46d1d794b8ed78b75ccd35a6cc30235bf31/llvm/lib/MC/ELFObjectWriter.cpp#L1213-L1224
-
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
----
- .../selftests/bpf/prog_tests/resolve_btfids.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../selftests/bpf/prog_tests/resolve_btfids.c | 56 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/btf_data.c  | 10 ++++
+ 2 files changed, 66 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-index d742ecb2ca8e..d0e51979d455 100644
+index d0e51979d455..f6fd79b9dd23 100644
 --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
 +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -32,6 +32,23 @@ asm (
- ".balign 4, 0;                            \n"
- ".popsection;                             \n");
+@@ -10,6 +10,10 @@
+ #include <linux/btf_ids.h>
+ #include "test_progs.h"
  
-+/*
-+ * The BTF ID arrays below are .local symbols placed in .BTF_ids by
-+ * inline asm, and are read here directly by C name. To the compiler
-+ * they are plain, default-visibility extern objects.
-+ *
-+ * When test_progs is linked as a position-independent executable (PIE),
-+ * taking the address of such an extern is routed through the GOT. The
-+ * GNU assembler on aarch64 unconditionally converts references to
-+ * .local symbols into section + addend form (".BTF_ids + <offset>"),
-+ * but a GOT slot cannot carry an addend (the AArch64 ELF spec mandates
-+ * zero), so the linker resolves it to the .BTF_ids base.
-+ *
-+ * Mark these symbols hidden so the compiler treats them as
-+ * non-interposable and emits a direct, addend-preserving PC-relative
-+ * access instead of a GOT load, in both PIE and non-PIE builds.
-+ */
-+#pragma GCC visibility push(hidden)
- BTF_ID_LIST(test_list_local)
- BTF_ID_UNUSED
- BTF_ID(typedef, S)
-@@ -60,6 +77,7 @@ BTF_ID(union,   U)
++#ifndef KF_FASTCALL
++#define KF_FASTCALL (1 << 12)
++#endif
++
+ struct symbol {
+ 	const char	*name;
+ 	int		 type;
+@@ -26,6 +30,17 @@ struct symbol test_symbols[] = {
+ 	{ "func",    BTF_KIND_FUNC,    -1 },
+ };
+ 
++struct kfunc_symbol {
++	const char	*name;
++	s32		 id;
++	u32		 flags;
++};
++
++static struct kfunc_symbol kfunc_symbols[] = {
++	{ "kfunc_a", -1, 0 },
++	{ "kfunc_b", -1, KF_FASTCALL },
++};
++
+ /* Align the .BTF_ids section to 4 bytes */
+ asm (
+ ".pushsection " BTF_IDS_SECTION " ,\"a\"; \n"
+@@ -77,7 +92,13 @@ BTF_ID(union,   U)
  BTF_ID(func,    func)
  BTF_SET_END(test_set)
  
-+#pragma GCC visibility pop
++BTF_KFUNCS_START(test_kfunc_set)
++BTF_ID_FLAGS(func, kfunc_a)
++BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
++BTF_KFUNCS_END(test_kfunc_set)
++
+ #pragma GCC visibility pop
++
  static int
  __resolve_symbol(struct btf *btf, int type_id)
  {
+@@ -108,6 +129,18 @@ __resolve_symbol(struct btf *btf, int type_id)
+ 			test_symbols[i].id = type_id;
+ 	}
+ 
++	if (BTF_INFO_KIND(type->info) == BTF_KIND_FUNC) {
++		str = btf__name_by_offset(btf, type->name_off);
++		if (str) {
++			for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
++				if (kfunc_symbols[i].id >= 0)
++					continue;
++				if (!strcmp(str, kfunc_symbols[i].name))
++					kfunc_symbols[i].id = type_id;
++			}
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -162,6 +195,29 @@ void test_resolve_btfids(void)
+ 			ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check");
+ 	}
+ 
++	/* Check BTF_KFUNCS_START(test_kfunc_set) */
++	ASSERT_EQ(test_kfunc_set.flags, BTF_SET8_KFUNCS, "kfunc_set_flags");
++	ASSERT_EQ(test_kfunc_set.cnt, ARRAY_SIZE(kfunc_symbols), "kfunc_set_cnt");
++
++	for (i = 0; i < test_kfunc_set.cnt; i++) {
++		bool found = false;
++
++		for (j = 0; j < ARRAY_SIZE(kfunc_symbols); j++) {
++			if (kfunc_symbols[j].id != (s32)test_kfunc_set.pairs[i].id)
++				continue;
++			found = true;
++			ASSERT_EQ(test_kfunc_set.pairs[i].flags,
++				  kfunc_symbols[j].flags, "kfunc_flags_check");
++			break;
++		}
++
++		ASSERT_TRUE(found, "kfunc_id_found");
++
++		if (i > 0)
++			ASSERT_LE(test_kfunc_set.pairs[i - 1].id,
++				  test_kfunc_set.pairs[i].id, "kfunc_sort_check");
++	}
++
+ out:
+ 	btf__free(btf);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_data.c b/tools/testing/selftests/bpf/progs/btf_data.c
+index baa525275bde..8587658012c3 100644
+--- a/tools/testing/selftests/bpf/progs/btf_data.c
++++ b/tools/testing/selftests/bpf/progs/btf_data.c
+@@ -48,3 +48,13 @@ int func(struct root_struct *root)
+ {
+ 	return 0;
+ }
++
++int kfunc_a(struct root_struct *root)
++{
++	return 0;
++}
++
++int kfunc_b(struct root_struct *root)
++{
++	return 0;
++}
 -- 
 2.54.0
 
