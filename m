@@ -1,62 +1,62 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CF83E5572
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B870A3E5EF4
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780337267; cv=none; b=PduSnHRhKsNkss2H4a5fGZJsuvQl7u2EOxTLU4d4GkwavVCOK/xKy2JmWVw+QO1IQ3XIF8hlP8pnrK/j5DzWA4hyvF7yvXcS51nqVCxzfRggTM5AyoAY/z32j1rlHQCTMX3ZSbO68uIQgZO6z5eAMxJT9AMyruNCOcrPOG3b/0I=
+	t=1780337273; cv=none; b=Ce38f754OOG5BVWVzWTIGYoXNxF5GVYhBV3Y7YHxy17un5yqMviCdBYqiPDAo5C9X9E8ixcnaM/oNbxmPghHL42mEt1CF6GU5ncAduBDCIvGeh8DhM+XE1obun7oyZ5JN+QRWQY9EUIBcbNqLf6DZr9vmkOai6FTNK1SsNmkmUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780337267; c=relaxed/simple;
-	bh=VOiBXoBQlSg//vVKEz2y7OxY1/2p9gdtUZWvw/YqZPg=;
+	s=arc-20240116; t=1780337273; c=relaxed/simple;
+	bh=ka4I5LIiQBnHNvY/EZOZsTEKE+R6lb4aAN9hkXUw03g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kyvh5LALL927lBa5Tf9zRByUQprqHlyQeTiGRNdh8cWAhf9/LbG0rfVYfk0IuBzkcqhOZgbogDdQzzzq829Wu3aP0LCjj/3Zy4uXU0U8CUFFPTgFpsW7VSnwGY56cqYB5eM0KUlzrRp8oa4qciglMJSl8cmmS2bWuz3d/VhdCOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h59ozYOb; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=ly3dAjDlequdz/r39VEl28HaTvTx0AxiF2ZcA8IrnuFOCDUaSmulniZ/uLVE1AlIdSeXheM0zt5VFqQKRs7/lMalzsaGX+alba/mUu4+25JYuha2fiRfzxv9+85VwLp8G0yoIVpP3h6PdgwGTizGa2VN4PMoJJfC6Z887u+bRJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDByOU/r; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h59ozYOb"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84231305a80so1080778b3a.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:07:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDByOU/r"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84226d0f1d2so1521755b3a.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780337265; x=1780942065; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780337269; x=1780942069; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v6ImwceoKhc+jAOboR4IDZozN81GRjqesHGaUtrdZGI=;
-        b=h59ozYObRoBy1PbUCSJg4RtI5W1efa4NDpDuts4ihvyNzrdSul3kfRlltHNdWm44aq
-         kP28DqRymhIMGmWev1nY+po6o19ZvMjZ5Jb1Ictp8VK0nKtC+j+5jhcQSvLDPjMEKcjq
-         nZwl6QQ+NvvWr+POmKyu6n+XX0norKSCNMGXB5nSJM5myYBJKG35lJj+qCqGyAUvv8Tv
-         bsBdVr5P7wv+sElRM4T9prha9zMW//IE1IUV8P9CTCYIKPGxKfBN7eLWfvfKoNWM6hJk
-         MqzIQ51gugHReGoDKMTmcGgT41Wugeh/6YE7YFfODKPzjwxJL+SO/0LW+1CNXPVozv1X
-         EbWQ==
+        bh=4pSIam+Zmfc1zu7BLy+A4wZtk1mlnebSbErGhuWkvnc=;
+        b=PDByOU/r8eGvGbH+E6Nm4MH9GMamN3C5qRP0F+zRH5+quzM/uFAtVuDVRBeQ0Gjlkm
+         xHdgJUB07oZYKy3+uEz1rWis52jD8XYiS0t6XrmFTIMzSXx9f3Tz1I7A1UdOGgSNoN2i
+         NHZX2ump0LsTi+UM8YSvL0IuOiXijeV2CkIMSe4w6yMY7NVDEtODhlosfIS8iAdTTwAH
+         QfsUXijQ/GXkePY5pE/FsDFapjeJgCXVEhSgWxPZKNlC4t9U5/PteWC7WjwQ8R/zsUXf
+         7fF0aPC52SFZXpJm8vUV4TgUL61nmX5wfQpoIVYWg0tIw8inDU3JRVOR1amXGWg3ef6t
+         zykg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780337265; x=1780942065;
+        d=1e100.net; s=20251104; t=1780337269; x=1780942069;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v6ImwceoKhc+jAOboR4IDZozN81GRjqesHGaUtrdZGI=;
-        b=SxmoytpYAo9giD0zrV70d89vSzdgL55v2VaBWP551mAESavbxivqqbDXs6IRadyWiw
-         H1yli8ErTPA9R3c1m8jLKdCQUhFFd9QVFzEj3L1n0zocrMMTODseBntgyavKfj1Kj0nl
-         lt6CDS50TjQrTdIo5DUSHJTWlfatk0w8gXSeeyKyZUwxjd6QEEQRHEY1Zsr02bV2yh0g
-         R1ic6GAuuV+FhVN/smekwabIt21GFhNfClRZ1rjn01m+Ppg/aUfOsJGacovVjeKwSys8
-         CsrA6FhJV470orTWyQVWfGb9M7o0Vq9aIQRWjF9gU7VyrUq0AN6ENyjLNcY6gXRZgswZ
-         SUkg==
-X-Gm-Message-State: AOJu0YylXTcSR+96X9r06UlMf2zkSHMWCzyJ7kmj3RZ6yPMZCXFEFQ7+
-	77XdoM9CwUPX5v9m4PYAidyU9C0zclBqM2SB2cwSj33pULfKyG40rQ/FU16EzttiXCo=
-X-Gm-Gg: Acq92OG0U7rYYCN+j7soLRme3B+8dT/8ATs3+WYjM/DOSYQpxXN3d1cterajbJxP5Jx
-	SvGrKjfeOsedu2Sa0AQRLBJRmbHrd9tda82WeCJfxblJ0kIv8Juxuogxb9mL0NRdJ3Sh9Xe/qLM
-	i+bT9NBZRZPq+f++E/3Wbiz5M8pEGFfK+ar2mRliZl1aXqQXEtSNzY8hlgixJmxt6liUrgbHjzx
-	vfNVCYg8xZWxNmSlGEfyzRr1EAPURT2+VyuzQG4eEIs/uFxtixdBHeg4zmY/PHpk+o5m50zZ9hS
-	B+3BjGOAhWToQxFl2I8aKz4d+osIaszJ484NK1SLkgO+SC2i34/jrxldbHAh3UEhwivoFXvUwL4
-	QN1hk35oIwTBo5QFLARnc8i0Q4frTO2FfoTRG8HMMT3S6PQYy7hDY15JtK/QO2lpT0M6VzCbW4n
-	zMAXV6bdCoWIXyO/EadJpOleM5Kuu5x4jjGtBMUYK9uMk=
-X-Received: by 2002:a05:6a00:21d2:b0:842:5a8d:303a with SMTP id d2e1a72fcca58-8425a8d41a0mr3825753b3a.37.1780337265000;
-        Mon, 01 Jun 2026 11:07:45 -0700 (PDT)
+        bh=4pSIam+Zmfc1zu7BLy+A4wZtk1mlnebSbErGhuWkvnc=;
+        b=pMTM2sQtzYGw+oz5oQ6T4T6UqmIDVHTjviRrlpBxzU+FPHboQKrjrmvy1J+bQAcJR8
+         Gij7f+xfkyazmLvSTvc4uPhbjZccxwOrkJtqIuWTlCXFVxtRdRXj1LjFFf6TK48REJ6V
+         /tbHcwg4VqiLJ917Hgc03mhEI+E4CZAVbIZ8SvfnaMeFKQSj7umvHyCLeEYmNUGTij2K
+         KKUdivivQqrDW5Ox9tVMJ32NCBaIv8sJr2jx1vw2njkcCwvSjI7LFQPs2xFIHg++EY7N
+         MpqoyLiPLvT5JAddODKiV54M4F+1S2+QlyL6dI/Ly9R8tFbGetsIY/SbQIqi+IRSEXv/
+         fslg==
+X-Gm-Message-State: AOJu0YyEf7cO008WVzbc87x59/jdP0DECHRLYdSUKcxjTr2W6DrmPV47
+	gSdARX1vjs1N/iSP1FAYrwxL7kmbDGg0t4lpXbTM1YkvgqAFkcPQYRsRXGUIS5xBveY=
+X-Gm-Gg: Acq92OEkB+H3EmMddYQUFQDbVuxNQ/QifWHQnocA3Cu3gp/U6fpvZv8V1+tgo14FEk3
+	LLwC76KTJcJvoGxp/ybeIB+bK4lxBSSS5s3kEl2Eq2wKWO2zLNLF+aW6sINzQAKPv4DHv8r9mXU
+	edZMzUKm5rHfdpdLxWHt37GRofXIxwMqAgZYTbmXTvFNeLq4t6QRv14XnHiVDA/6FT8kbVjOVDo
+	9kcFhrhEzDaZsZgzw3bB2mfKxiqrkqghOa6+cKorWIByRklgl+0huciRM494yOyqGm084E80taM
+	NF2zmhateTzee0K93hdoR3ImGAuhEpgBrHJBr+pmUaR1dIUuc3Dyo3Fv6Y8O6CU4Qcutu5YA0iF
+	5C8+DSIK5KTuuffXMmzwNB+vaYIskGLYx5lrHX+QLiS/5twiogpQCtayvzCafBVE0+yRVQS73Tg
+	JlqtVGi7BJR5cunEmrTOVaNT/Xzcvr91WvVcvktXg3g2E=
+X-Received: by 2002:a05:6a00:928c:b0:82c:6683:b866 with SMTP id d2e1a72fcca58-8422572beddmr11155406b3a.4.1780337268885;
+        Mon, 01 Jun 2026 11:07:48 -0700 (PDT)
 Received: from localhost.localdomain ([212.107.31.84])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84237a41a3esm7389702b3a.22.2026.06.01.11.07.40
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84237a41a3esm7389702b3a.22.2026.06.01.11.07.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 11:07:43 -0700 (PDT)
+        Mon, 01 Jun 2026 11:07:48 -0700 (PDT)
 From: Zhenzhong Wu <jt26wzz@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -76,9 +76,9 @@ Cc: netdev@vger.kernel.org,
 	eddyz87@gmail.com,
 	shung-hsi.yu@suse.com,
 	tamird@kernel.org
-Subject: [RFC PATCH 6.1.y 1/2] bpf: drop knowledge-losing __reg_combine_{32,64}_into_{64,32} logic
-Date: Tue,  2 Jun 2026 02:03:59 +0800
-Message-ID: <20260601180400.1381736-2-jt26wzz@gmail.com>
+Subject: [RFC PATCH 6.1.y 2/2] bpf: make the verifier tracks the "not equal" for regs
+Date: Tue,  2 Jun 2026 02:04:00 +0800
+Message-ID: <20260601180400.1381736-3-jt26wzz@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260601180400.1381736-1-jt26wzz@gmail.com>
 References: <20260601180400.1381736-1-jt26wzz@gmail.com>
@@ -90,136 +90,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-[ Upstream commit 9e314f5d8682e1fe6ac214fb34580a238b6fd3c4 ]
+[ Upstream commit d028f87517d6775dccff4ddbca2740826f9e53f1 ]
 
-When performing 32-bit conditional operation operating on lower 32 bits
-of a full 64-bit register, register full value isn't changed. We just
-potentially gain new knowledge about that register's lower 32 bits.
+We can derive some new information for BPF_JNE in regs_refine_cond_op().
+Take following code for example:
 
-Unfortunately, __reg_combine_{32,64}_into_{64,32} logic that
-reg_set_min_max() performs as a last step, can lose information in some
-cases due to __mark_reg64_unbounded() and __reg_assign_32_into_64().
-That's bad and completely unnecessary. Especially __reg_assign_32_into_64()
-looks completely out of place here, because we are not performing
-zero-extending subregister assignment during conditional jump.
+  /* The type of "a" is u32 */
+  if (a > 0 && a < 100) {
+    /* the range of the register for a is [0, 99], not [1, 99],
+     * and will cause the following error:
+     *
+     *   invalid zero-sized read
+     *
+     * as a can be 0.
+     */
+    bpf_skb_store_bytes(skb, xx, xx, a, 0);
+  }
 
-So this patch replaced __reg_combine_* with just a normal
-reg_bounds_sync() which will do a proper job of deriving u64/s64 bounds
-from u32/s32, and vice versa (among all other combinations).
+In the code above, "a > 0" will be compiled to "jmp xxx if a == 0". In the
+TRUE branch, the dst_reg will be marked as known to 0. However, in the
+fallthrough(FALSE) branch, the dst_reg will not be handled, which makes
+the [min, max] for a is [0, 99], not [1, 99].
 
-__reg_combine_64_into_32() is also used in one more place,
-coerce_reg_to_size(), while handling 1- and 2-byte register loads.
-Looking into this, it seems like besides marking subregister as
-unbounded before performing reg_bounds_sync(), we were also performing
-deduction of smin32/smax32 and umin32/umax32 bounds from respective
-smin/smax and umin/umax bounds. It's now redundant as reg_bounds_sync()
-performs all the same logic more generically (e.g., without unnecessary
-assumption that upper 32 bits of full register should be zero).
+For BPF_JNE, we can reduce the range of the dst reg if the src reg is a
+const and is exactly the edge of the dst reg.
 
-Long story short, we remove __reg_combine_64_into_32() completely, and
-coerce_reg_to_size() now only does resetting subreg to unbounded and then
-performing reg_bounds_sync() to recover as much information as possible
-from 64-bit umin/umax and smin/smax bounds, set explicitly in
-coerce_reg_to_size() earlier.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Menglong Dong <menglong8.dong@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Link: https://lore.kernel.org/r/20231102033759.2541186-10-andrii@kernel.org
+Link: https://lore.kernel.org/r/20231219134800.1550388-2-menglong8.dong@gmail.com
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-[ zhenzhong: adapt to 6.1.y verifier.c layout ]
+[ zhenzhong: adapt to 6.1.y reg_set_min_max() layout. The upstream
+  change lives in regs_refine_cond_op(); 6.1.y still refines true/false
+  branch states in reg_set_min_max(), so apply the not-equal range
+  exclusion to BPF_JEQ's false_reg and BPF_JNE's true_reg there. ]
 Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
 ---
- kernel/bpf/verifier.c | 60 ++++++-------------------------------------
- 1 file changed, 8 insertions(+), 52 deletions(-)
+ kernel/bpf/verifier.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d8d3616..5e029d1 100644
+index 5e029d1..e51f44b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1577,51 +1577,6 @@ static void __reg_assign_32_into_64(struct bpf_reg_state *reg)
- 	}
- }
- 
--static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
--{
--	/* special case when 64-bit register has upper 32-bit register
--	 * zeroed. Typically happens after zext or <<32, >>32 sequence
--	 * allowing us to use 32-bit bounds directly,
--	 */
--	if (tnum_equals_const(tnum_clear_subreg(reg->var_off), 0)) {
--		__reg_assign_32_into_64(reg);
--	} else {
--		/* Otherwise the best we can do is push lower 32bit known and
--		 * unknown bits into register (var_off set from jmp logic)
--		 * then learn as much as possible from the 64-bit tnum
--		 * known and unknown bits. The previous smin/smax bounds are
--		 * invalid here because of jmp32 compare so mark them unknown
--		 * so they do not impact tnum bounds calculation.
--		 */
--		__mark_reg64_unbounded(reg);
--	}
--	reg_bounds_sync(reg);
--}
--
--static bool __reg64_bound_s32(s64 a)
--{
--	return a >= S32_MIN && a <= S32_MAX;
--}
--
--static bool __reg64_bound_u32(u64 a)
--{
--	return a >= U32_MIN && a <= U32_MAX;
--}
--
--static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
--{
--	__mark_reg32_unbounded(reg);
--	if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
--		reg->s32_min_value = (s32)reg->smin_value;
--		reg->s32_max_value = (s32)reg->smax_value;
--	}
--	if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
--		reg->u32_min_value = (u32)reg->umin_value;
--		reg->u32_max_value = (u32)reg->umax_value;
--	}
--	reg_bounds_sync(reg);
--}
--
- /* Mark a register as having a completely unknown (scalar) value. */
- static void __mark_reg_unknown(const struct bpf_verifier_env *env,
- 			       struct bpf_reg_state *reg)
-@@ -4660,9 +4615,10 @@ static void coerce_reg_to_size(struct bpf_reg_state *reg, int size)
- 	 * values are also truncated so we push 64-bit bounds into
- 	 * 32-bit bounds. Above were truncated < 32-bits already.
- 	 */
--	if (size >= 4)
--		return;
--	__reg_combine_64_into_32(reg);
-+	if (size < 4) {
-+		__mark_reg32_unbounded(reg);
-+		reg_bounds_sync(reg);
-+	}
- }
- 
- static bool bpf_map_is_rdonly(const struct bpf_map *map)
-@@ -10114,13 +10070,13 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
- 					     tnum_subreg(false_32off));
- 		true_reg->var_off = tnum_or(tnum_clear_subreg(true_64off),
- 					    tnum_subreg(true_32off));
--		__reg_combine_32_into_64(false_reg);
--		__reg_combine_32_into_64(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
- 	} else {
- 		false_reg->var_off = false_64off;
- 		true_reg->var_off = true_64off;
--		__reg_combine_64_into_32(false_reg);
--		__reg_combine_64_into_32(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
- 	}
- }
- 
+@@ -9954,18 +9954,50 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
+ 		if (is_jmp32) {
+ 			__mark_reg32_known(true_reg, val32);
+ 			true_32off = tnum_subreg(true_reg->var_off);
++			if (false_reg->u32_min_value == val32)
++				false_reg->u32_min_value++;
++			if (false_reg->u32_max_value == val32)
++				false_reg->u32_max_value--;
++			if (false_reg->s32_min_value == sval32)
++				false_reg->s32_min_value++;
++			if (false_reg->s32_max_value == sval32)
++				false_reg->s32_max_value--;
+ 		} else {
+ 			___mark_reg_known(true_reg, val);
+ 			true_64off = true_reg->var_off;
++			if (false_reg->umin_value == val)
++				false_reg->umin_value++;
++			if (false_reg->umax_value == val)
++				false_reg->umax_value--;
++			if (false_reg->smin_value == sval)
++				false_reg->smin_value++;
++			if (false_reg->smax_value == sval)
++				false_reg->smax_value--;
+ 		}
+ 		break;
+ 	case BPF_JNE:
+ 		if (is_jmp32) {
+ 			__mark_reg32_known(false_reg, val32);
+ 			false_32off = tnum_subreg(false_reg->var_off);
++			if (true_reg->u32_min_value == val32)
++				true_reg->u32_min_value++;
++			if (true_reg->u32_max_value == val32)
++				true_reg->u32_max_value--;
++			if (true_reg->s32_min_value == sval32)
++				true_reg->s32_min_value++;
++			if (true_reg->s32_max_value == sval32)
++				true_reg->s32_max_value--;
+ 		} else {
+ 			___mark_reg_known(false_reg, val);
+ 			false_64off = false_reg->var_off;
++			if (true_reg->umin_value == val)
++				true_reg->umin_value++;
++			if (true_reg->umax_value == val)
++				true_reg->umax_value--;
++			if (true_reg->smin_value == sval)
++				true_reg->smin_value++;
++			if (true_reg->smax_value == sval)
++				true_reg->smax_value--;
+ 		}
+ 		break;
+ 	case BPF_JSET:
 -- 
 2.43.0
