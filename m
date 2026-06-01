@@ -1,32 +1,30 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C913ED3BA
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED9E3ED3BF
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780338928; cv=none; b=UuHetJORJ8YjXhxEAxVpq3mACAm5HoizJURcgyFe8JuYkvOwxje99dNQR0xo4gtjvGNDLDfd+GI6pA2zturpyacX51gse4j3yLQEQXoAw/5M5u8TnV8Jf5HwygrdhUaVq6vRq9+dKBeUls+Y0SswajFvDIGkVOhs4cJHM94dGNg=
+	t=1780338935; cv=none; b=L/QkZb2VXFYyTgb/Y0jWi9SQUr9nA00siuUK5ISYGOyb6jYf3mZoG6Tb+U5jduIYMTYnVDSFdnQJXrjnOMMsskXXMXqofwdGAjUwUGXcYJRoJbbqhwUiA5ZNPDhR9Zqh3Di1e2j5wmVGTLR7UZtxSeOlWcnnsDRWOXp2G+piRr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780338928; c=relaxed/simple;
-	bh=HkxNqcDQ9DeO5RvXcUGNoxSjOWyyE4x5phW7cYppjVw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SC6s+sKguPEuUZlm1gtLB27VSVDCzpE7QBmqSWdHzB4gmh3z0zx3z5V0YI/O64BbIfaZqbwbmuv3BLoCJ74it5adCkQ7lH3Unolv3nAZAqvk0c4ggNbqDv/Z1PaqtRPavHNQvRIW3VKhKLf2flc1knwJWY8BpkhI1E/VoklwSs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C0qNuF7n; arc=none smtp.client-ip=91.218.175.185
+	s=arc-20240116; t=1780338935; c=relaxed/simple;
+	bh=rzNYfCVd4VyGmm+4pmOLHdgbgeONw++P6WQ8Wn8hnns=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qf3essu6BsyCGWwTxE9hMLia+5wbECJoUHCURzEew/LD9FqXuOze8f+83Le0X+vEyRWRsRrhtnu1mg/oTH9+fNYTHoStGjRwmHNNM2ajuCEjAnaJu3J7cheXAFhQU/pplopGuoRMc2322DoayTUiUWuVx2euAJA3PTXgYPl04W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pQZ1+yrx; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C0qNuF7n"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pQZ1+yrx"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780338925;
+	t=1780338920;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0OJn5WDZRQjVayA/FvT6USEr7S0+3KO0PtygXtvB7DY=;
-	b=C0qNuF7nhxdfLnvWU4TzF5/tsY+ziaCRhr2LGSIr6TtPXg8AGGKuO+iKbzUaEeg+Wvb8mI
-	QZrglN8QimDpZJb0Lo2pbUbBn4Tdhi6MO1k0G40W5lz9D1peTiBJdkG7AF6Ji9szn6y5p1
-	eKrcMUeKSZOzcffczaPd3nSPeohaua0=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G11kVTgeG4Bceb+ehzyecPZsVsSNBd8mkyLStQA5/T4=;
+	b=pQZ1+yrxMFaXAaZyYhnvJt7vXj8Os4W8m60Is3qW8rw6nQKXVfgPoAl1xA8Owwr60peQK7
+	USCnQAZWQ3xYdu1FeXPr4sxqsYvbJAtHsYcm5Jwt5coDW2Erq8xJqfIKbh8ddIYEcV8LTq
+	tjMiaNHTk7gLIQrA62E1T0WxXRe/3IY=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: dwarves@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -36,11 +34,9 @@ Cc: bpf@vger.kernel.org,
 	jose.marchesi@oracle.com,
 	David Faust <david.faust@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PAHOLE v3 3/3] tests: Support GCC in pfunct-btf-decl-tags test
-Date: Mon,  1 Jun 2026 11:35:11 -0700
-Message-ID: <20260601183511.594100-3-vineet.gupta@linux.dev>
-In-Reply-To: <20260601183511.594100-1-vineet.gupta@linux.dev>
-References: <20260601183511.594100-1-vineet.gupta@linux.dev>
+Subject: [PAHOLE v3 1/3] dwarf_loader: Extract die__add_btf_type_tag() helper
+Date: Mon,  1 Jun 2026 11:35:09 -0700
+Message-ID: <20260601183511.594100-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,124 +46,106 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation.
-Update the test to run with either of GCC (>= 16) and clang.
+NFC change preparing for DW_TAG_GNU_annotation support.
+Extract the btf_type_tag annotation creation logic from into a helper
+die__add_btf_type_tag().
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
- 1 file changed, 56 insertions(+), 16 deletions(-)
+Changes since v2 [2]
+ - die__add_btf_type_tag() returns pointer not error code.
 
-diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
-index 35884b4e8687..a46aa1f3df55 100755
---- a/tests/pfunct-btf-decl-tags.sh
-+++ b/tests/pfunct-btf-decl-tags.sh
-@@ -6,24 +6,36 @@
- source test_lib.sh
+Changes since v1 [1]
+ - NFC reinstate some original comments
+
+[2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
+[1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
+---
+ dwarf_loader.c | 57 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 33 insertions(+), 24 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 16fb7becffee..8b5b526299b5 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1600,14 +1600,43 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+ 	return tag;
+ }
  
- outdir=$(make_tmpdir)
--tmpobj=$(make_tmpobj)
- 
- # Comment this out to save test data.
- trap cleanup EXIT
- 
- title_log "Check that pfunct can print btf_decl_tags read from BTF."
- 
--# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
--# in upstream version 16.
--# UPTODO: add a check here for that.
-+# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac7027f180b).
- 
-+GCC=${GCC:-gcc}
- CLANG=${CLANG:-clang}
--if ! command -v $CLANG > /dev/null; then
--	error_log "Need clang for test $0"
++static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
++							    Dwarf_Die *die, Dwarf_Die *adie,
++							    struct cu *cu, struct conf_load *conf)
++{
++	struct btf_type_tag_type *annot;
++	uint32_t id;
 +
-+use_gcc=0
-+if command -v $GCC > /dev/null; then
-+	gcc_ver=$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
-+	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
-+		use_gcc=1
-+	fi
-+fi
++	if (tag == NULL) {
++		tag = die__create_new_btf_type_tag_ptr_type(die, cu);
++		if (!tag)
++			return NULL;
++	}
 +
-+use_clang=0
-+if command -v $CLANG > /dev/null; then
-+	use_clang=1
-+fi
++	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
++	if (annot == NULL)
++		return NULL;
 +
-+if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
-+	error_log "Need gcc >= 16 or clang for test $0"
- 	test_fail
- fi
- 
--(cat <<EOF
-+src=$(cat <<EOF
- #define __tag(x) __attribute__((btf_decl_tag(#x)))
- 
- __tag(a) __tag(b) __tag(c) void foo(void) {}
-@@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
- __tag(a)                   void buz(void) {}
- 
- EOF
--) | $CLANG --target=bpf -c -g -x c -o $tmpobj -
-+)
- 
- # tags order is not guaranteed
- sort_tags=$(cat <<EOF
-@@ -54,16 +66,44 @@ a void buz(void);
- EOF
- )
- 
--out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
--d=$(diff -u <(echo "$expected") <(echo "$out"))
-+run_test() {
-+	local compiler=$1
-+	local tmpobj=$2
++	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
++		return NULL;
 +
-+	info_log "Testing with $compiler"
-+	out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-+	d=$(diff -u <(echo "$expected") <(echo "$out"))
++	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
++	dtag->small_id = id;
++	cu__hash(cu, &annot->tag);
 +
-+	if [[ "$d" == "" ]]; then
-+		info_log "  passed"
-+		return 0
-+	else
-+		error_log "pfunct output does not match expected ($compiler):"
-+		info_log "$d"
-+		info_log
-+		info_log "Complete output:"
-+		info_log "$out"
-+		return 1
-+	fi
++	/* Prepends: for annotations tag1 -> tag2 -> tag3,
++	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
++	 */
++	list_add(&annot->node, &tag->tags);
++	return tag;
 +}
 +
-+failed=0
-+
-+if [ "$use_gcc" -eq 1 ]; then
-+	tmpobj=$(make_tmpobj)
-+	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
-+	pahole -J $tmpobj 2>/dev/null
-+	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=1
-+fi
-+
-+if [ "$use_clang" -eq 1 ]; then
-+	tmpobj=$(make_tmpobj)
-+	echo "$src" | $CLANG --target=bpf -c -g -x c -o $tmpobj -
-+	run_test "$CLANG" "$tmpobj" || failed=1
-+fi
+ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 					       struct conf_load *conf)
+ {
+ 	struct btf_type_tag_ptr_type *tag = NULL;
+-	struct btf_type_tag_type *annot;
+ 	Dwarf_Die *cdie, child;
+ 	const char *name;
+-	uint32_t id;
  
--if [[ "$d" == "" ]]; then
-+if [ "$failed" -eq 0 ]; then
- 	test_pass
- else
--	error_log "pfunct output does not match expected:"
--	info_log "$d"
--	info_log
--	info_log "Complete output:"
--	info_log "$out"
- 	test_fail
- fi
+ 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+ 	 * and return
+@@ -1627,29 +1656,9 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
+ 		if (strcmp(name, "btf_type_tag") != 0)
+ 			continue;
+ 
+-		if (tag == NULL) {
+-			/* Create a btf_type_tag_ptr type. */
+-			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
+-			if (!tag)
+-				return NULL;
+-		}
+-
+-		/* Create a btf_type_tag type for this annotation. */
+-		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
+-		if (annot == NULL)
+-			return NULL;
+-
+-		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
++		tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
++		if (tag == NULL)
+ 			return NULL;
+-
+-		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
+-		dtag->small_id = id;
+-		cu__hash(cu, &annot->tag);
+-
+-		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+-		 * the tag->tags contains tag3 -> tag2 -> tag1.
+-		 */
+-		list_add(&annot->node, &tag->tags);
+ 	} while (dwarf_siblingof(cdie, cdie) == 0);
+ 
+ 	return tag ? &tag->tag : tag__new(die, cu);
 -- 
 2.54.0
 
