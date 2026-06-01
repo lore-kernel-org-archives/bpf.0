@@ -1,65 +1,62 @@
 Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA90737268A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435FD313545
 	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 17:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780336482; cv=none; b=W2JmBThxb6H6OK8FdCJbd+BKUQnuNTq6P9Fm0BGspJWO4JA16dtcLeeQbtB8c4uE1Tw/JuFcKa2oDzmT9ziiWqDfKY+maQKWxIKmsy1QiCLmoDYqB6W524At86C92dcDkqFZhy1j7cSEj61z/7wF+quYUYQ6xZKa3+71k7KPJ2w=
+	t=1780336482; cv=none; b=OfZW0v6WAGCkl+D+zrH08jBvWPOxyG6a+HO4ahNNvUZvWxaA2glu5Ua4ykrQUziD2FiNrmldRiUOQqu6J4cg7MmHG1bbbxPu8FbaBIacpW3zZji28IT5JwFuffFz8pvJMGPcCobyEa2Ehu6e2g8GkXqk9Xp9Vgf3Rc4tQHcLRrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780336482; c=relaxed/simple;
-	bh=QuWfugOytXeO0b1wxF7bijlHGp2GMNN8F233BLpEMgg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=S6JYzGDZ+x/J017km7eU9BWc4kEDkb4pIMXgpGc+iqBpy6tQFPGrY4zEvIVqpU+m0HThEUgBA9V3yRnTHK0hGMXK1dMcYwkpmNBmNAAHihDVDNZ9n1C6Ibst4QobBi9bTbITCm9toYyQYpDM9rCUOloxc0JeTv/ej5qHUdOdJ0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P8F6f95b; arc=none smtp.client-ip=209.85.210.201
+	bh=frX3sXpRJ51vGJ1TZPRIiBeodbk5/mCzcr+R5H77Qe8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VXwcm6u/NXmOz9o2k01Jr4Lwcp6vqksX4FcqOm8IrMuIFo5IT/utWox+Hzfx/Zuu4O0fbdY5wfsoQI7MVMmJ6eVNdd3xvG7cgz+2OBHbv9SHtUlzEcd2BBIhoCkiLaN6MdNrK54+U3srdh3p1cbLTw9ACc6bGWr5CZNlmXGTy1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o+MI77sU; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P8F6f95b"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-84235f9b91fso1405473b3a.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o+MI77sU"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-84237a15547so1377945b3a.3
         for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 10:54:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780336480; x=1780941280; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tWseiq4uumqZ00yU9HO4tB0QQ4Oyj0zXYc8zVlVyTfE=;
-        b=P8F6f95b7KJdDMz7iffRimJstrr4lBRbF2McyRW3+7yQm+Mw9wmr3sjKng7fZmPFPi
-         M6sZBZgLzhhq6r3STjl3BABjdjIMn/VCfyqIgQUsI5QZu1peGEPbpNuZmIiNsSG/XmuI
-         +ROl6RPEQE70Hv3vHt/cyMZHk/eSrh0+Ik37q0Ff2M4gFrc37eMqjQeaYLycGflpG/6B
-         aOqhXQGZMjMKv8fyKMFNCbMqt1j2nEMiM5fBq8XvPXY64qZwEfIlKcEDTd1ZN17OlZyT
-         HmYHbSn+9WgZ5dlRxFvxjR3xSClbMnLx9ttTDxP33TQ1gmJ7lMRR4XzlQZ4qNkQFynBH
-         CaXw==
+        d=google.com; s=20251104; t=1780336479; x=1780941279; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BPmqxKMufLM8AJUzCbDlebgQ1FTtR8jbwS8Xa0SDPL4=;
+        b=o+MI77sUGGFSQ1X+U9wPIhSdjuXIY6/YxnWzAVd3QwYhcz7MTwv1pM5iC3iQ1HSham
+         WBNN3qwym1e1XmZNWYVVZVI7z3j3JXx76k1+gIQHn1gwoPUiCVq295aMHo2kyMcrST3e
+         Lw4BmI8KKSqK1nMJEmMBcpj7a1ME5qO+bzzAJPaml0cNx+38trM8Jp+PJ8t29ynMPDyw
+         S9RGIqXtWERwT7ICbQyuRDOqqWer9rzk9qOM60PTAD2Wmuk74p4DinxCQ1PYFiX+VL8q
+         VX8M/QMlCzNvNJwEe5TwhUUPVYKBH3uHkYG4f3rAHXh4A9CyMdUfGV0Swv6O871PZgZS
+         AcbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780336480; x=1780941280;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tWseiq4uumqZ00yU9HO4tB0QQ4Oyj0zXYc8zVlVyTfE=;
-        b=pXvf0ATZmUGPRwfSrpMfr3s/eyvftqJ1RFUS1ARyT67Naj6UL9z4Q8brbFwomnT2eD
-         tU//lRzNdSG099vxNshDP/ZwrgSmgoWzmCK+MwQxJYbrCk7qD8PxqDwBGDShmDL1VrON
-         c3/HUAD7XEVtUqCHXzIwQgVLEf47KgZPrc7aEyIYkibVKW0KuGrX11LgozPvUIuj6dyu
-         Kq9BRGYj+3254VOTyaiy1tPrfzumcuvCFdu1ddF4Qj5ilSBDnYeKO+9+gpV9HMHCHo8/
-         WzwN5avsFWBQPPdcYH0PgxfePt8JBrcLU4Cm+352SkuR/8bKHWMWYQHElsnvhkNaI70J
-         Iz7Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+EC4OKg0CVn7Vf97NLxlVbJKoUgW6CR5vpe1BYaQMiQ2ZxM1BbjQVNmXFDonSQc89yy2o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynL2JQ29HC8kePY+i0694dY2NQGs1hm67ITnMBZH177PnsxRy6
-	3XmxCjVhjv/DvArxmmASqaRFcZ85Dhj05aA2SK3TEWdHhGiBCmraRiQ9EmxDP97jKhX3dGdtyPk
-	Sq3ez96QWy+f3K3G6r+7SXiI7Dw==
-X-Received: from pfbfs2.prod.google.com ([2002:a05:6a00:8182:b0:82f:6e26:770b])
+        d=1e100.net; s=20251104; t=1780336479; x=1780941279;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BPmqxKMufLM8AJUzCbDlebgQ1FTtR8jbwS8Xa0SDPL4=;
+        b=ERaZ48OrCh05wXQQSthYavrcGE0woR1RU6XD+Ojmpjk705DlwiYilRA09NVayoek8S
+         OroCtE2ukVuOmftTaqtHQhZsYcCDM6dL+bAD7aPZaMG5W1fVZ2cIJHckoD92hebLO/3x
+         jHo2NVIzIx3NSnLcVtwasC6MyQldOsG4GFxQAtByCfD/i8lDtrMCGHK/xLyZHelq8rgQ
+         EmepILSOUostfKuTavTUP+BBSBNa0cmA8ZrPShDtmFHAm84OAUY3fkQqy6qe9aVC657B
+         ZfmqPnktKGk1d91zxmw589kfXH4hcdSk77jBUlL33nM79YHna/dgQ/fCjdM9WaydG2YY
+         pFSQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9TgUlst8vqEUt1kEgkXY5w63vdb3iiqngtBc/V3L/7FLhlin0sGp19ZXzCtAicUSxGwkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXtpDMHzt4ZsH/8S6zvkBfAuzdkeMACeNlsCbQsUg3x6w1y6yw
+	BpLC9f7aisycRbKuR6BV0ECNj7ZTSfWhrlBWXAskLMo/lqBzgWcSU5NTSddDaJLQ93g9ARd+kKW
+	wBRiK0yDji5SqjEqQcTXtdKIQlg==
+X-Received: from pfbim20.prod.google.com ([2002:a05:6a00:8d94:b0:83f:64bd:2fb0])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:1a90:b0:842:5719:455b with SMTP id d2e1a72fcca58-84257194b05mr4280757b3a.42.1780336480081;
- Mon, 01 Jun 2026 10:54:40 -0700 (PDT)
-Date: Mon,  1 Jun 2026 17:54:23 +0000
-In-Reply-To: <20260601175437.3767283-1-hramamurthy@google.com>
+ 2002:a05:6a00:889:b0:83a:b344:826a with SMTP id d2e1a72fcca58-842254368efmr11155454b3a.26.1780336479231;
+ Mon, 01 Jun 2026 10:54:39 -0700 (PDT)
+Date: Mon,  1 Jun 2026 17:54:22 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260601175437.3767283-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.54.0.1013.g208068f2d8-goog
-Message-ID: <20260601175437.3767283-2-hramamurthy@google.com>
-Subject: [PATCH net-next 01/15] gve: don't pass in unused parameter to gve_adminq_free
+Message-ID: <20260601175437.3767283-1-hramamurthy@google.com>
+Subject: [PATCH net-next 00/15] gve: AdminQ mode related refactors
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -70,64 +67,58 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Clean up gve_adminq_free to not take in an unused parameter.
+This series is preparing the driver for the addition of a new control
+plane mode(MailboxQ) by commonizing and reusing as much code as possible.
+MailboxQ is a new control plane infrastructure which uses mailbox queues.
+This is a new control plane to communicate with the device when the driver
+is running on bare-metal instances as well as newer versions of the device.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
----
- drivers/net/ethernet/google/gve/gve_adminq.c | 2 +-
- drivers/net/ethernet/google/gve/gve_adminq.h | 2 +-
- drivers/net/ethernet/google/gve/gve_main.c   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+This series contains 2 main changes to the gve driver's existing control
+plane(AdminQ):
+1) refactor some initialization/teardown path methods to make it work for
+   both control planes.
+2) add gve_ctrl_ops structure to the driver for various control plane
+   operations
 
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 0d5a67523cba..d8d47a0c19b4 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.c
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -385,7 +385,7 @@ void gve_adminq_release(struct gve_priv *priv)
- 	gve_clear_admin_queue_ok(priv);
- }
- 
--void gve_adminq_free(struct device *dev, struct gve_priv *priv)
-+void gve_adminq_free(struct gve_priv *priv)
- {
- 	if (!gve_get_admin_queue_ok(priv))
- 		return;
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index e6dcf6da9091..9fbea0cc6513 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.h
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -620,7 +620,7 @@ union gve_adminq_command {
- static_assert(sizeof(union gve_adminq_command) == 64);
- 
- int gve_adminq_alloc(struct device *dev, struct gve_priv *priv);
--void gve_adminq_free(struct device *dev, struct gve_priv *priv);
-+void gve_adminq_free(struct gve_priv *priv);
- void gve_adminq_release(struct gve_priv *priv);
- int gve_adminq_describe_device(struct gve_priv *priv);
- int gve_adminq_configure_device_resources(struct gve_priv *priv,
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index e4d78ae52daf..30bf6df4ebc5 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -2506,14 +2506,14 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
- 	bitmap_free(priv->xsk_pools);
- 	priv->xsk_pools = NULL;
- err:
--	gve_adminq_free(&priv->pdev->dev, priv);
-+	gve_adminq_free(priv);
- 	return err;
- }
- 
- static void gve_teardown_priv_resources(struct gve_priv *priv)
- {
- 	gve_teardown_device_resources(priv);
--	gve_adminq_free(&priv->pdev->dev, priv);
-+	gve_adminq_free(priv);
- 	bitmap_free(priv->xsk_pools);
- 	priv->xsk_pools = NULL;
- }
+The refactors are mainly around the init, reset and recover paths so that
+functionalities could be moved into the control ops like 'set_num_queues',
+'set_num_ntfy_blks' etc.
+
+This patch series only sets the control ops for AdminQ mode. This is
+intended as a preparation for adding MailboxQ mode in upcoming series
+which will add the new control plane infrastructure and then introduce
+the corresponding control ops for MailboxQ mode.
+
+The entire list of future patches can be found here for reference:
+https://github.com/hramamurthy12/linux/commits/gve-mailbox-queues/
+
+Harshitha Ramamurthy (9):
+  gve: don't pass in unused parameter to gve_adminq_free
+  gve: refactor initialization with helper functions
+  gve: introduce gve_adminq_get_device_properties()
+  gve: add a few helper functions to set device properties
+  gve: add struct gve_device_info to hold device properties
+  gve: introduce control plane operations structure
+  gve: introduce ctrl ops to set vectors and Qs
+  gve: refactor gve_init_priv for reset path
+  gve: add ctrl ops to for queue operations
+
+Joshua Washington (6):
+  gve: simplify reset logic
+  gve: add gve_ctrl_ops for gve initialization/teardown sequences
+  gve: split up notify block allocation and setup paths
+  gve: introduce new methods to handle IRQ doorbells
+  gve: setup and teardown management interrupts
+  gve: add link status/speed ctrl ops
+
+ drivers/net/ethernet/google/gve/gve.h         |  91 +-
+ drivers/net/ethernet/google/gve/gve_adminq.c  | 459 +++++++--
+ drivers/net/ethernet/google/gve/gve_adminq.h  |  25 +-
+ drivers/net/ethernet/google/gve/gve_dqo.h     |   2 +-
+ drivers/net/ethernet/google/gve/gve_ethtool.c |   5 +-
+ drivers/net/ethernet/google/gve/gve_main.c    | 876 +++++++++---------
+ 6 files changed, 913 insertions(+), 545 deletions(-)
+
 -- 
 2.54.0.669.g59709faab0-goog
 
