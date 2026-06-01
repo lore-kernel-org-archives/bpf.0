@@ -1,48 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566AB3D7D6F
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615FE3D79FB
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780326173; cv=none; b=L4tV5Bly3dS3ppYPuHvUyDy14h5CRZ5ui0yPGbmjTaaA1rynB0XbdhNSgOdopUQhz469OAq4tHS+JXbIm73+7fzsOrXH8N6CIZ+lcisafuLfZTOVXxC4XL1YJKJnmGvoUE4gHRzywzw56wNFBAtwMpMLqxHbIMtD+2INPEqoABk=
+	t=1780326173; cv=none; b=SqzxgOzJYSzLpc2oX1G6ldaRvVy4eqJanbVzBLCwNCEnxcjLcbJd8OtTktxveH8sB0doeiOWkglwLnytqZbiNaZVb3hvodpNSIIjSV6QBfsAxBKdCpxquLvMCsEx54d4oNtLTR7g/7IcjhKfKf8/dBAB6PQEY7oVOr9NjW+N32M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780326173; c=relaxed/simple;
-	bh=bUznUtsdqlGv3f289tTLOITdy2kKCgiWjbjPQz+tpXg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lk4y5SaKMpRm9vUNWePIGiLNp7C+Gjexo8p+QBMyo+sU22+1XuYaKTWoJPBrIx4UQXb2Je8Y0US5F7tu5JPnXbMLGLzEA0xxVwjR5TdAcCAtuFOV5fQ4GKAU8CzKCQ5LjzwimF9GBZTGtI74qmW357ithANwYyMgMqYFdpU/IZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MQfkNwP9; arc=none smtp.client-ip=213.133.104.62
+	bh=W6henyM4j+9UOI0xTaWstVhKK5BCXjWERrAlFcUQydI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S/wpgQhG36kggMtGfIl3Wb3iF9Ny6dWovZJDltRJwyW8WcIG9fhZs4oTeJO0rSjXpgh89wFD7kJlWhXgcjHubM6yA4+0P+PB/8XJEUkBBdQAP5Xr2oNPm+DbMt3Mf7cyKXuS4H2XBLhSXAA7NK82dlUgKrAUOax5s/7RDcKcbcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=drQIckHY; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MQfkNwP9"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="drQIckHY"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=STWODVaRioFdCVCW9aSassZEPHyloQo0UvCRxkiz93o=; b=MQfkNwP9PZfk2wwhD07q3OH3iQ
-	7dfcC6WfMafk8t+K+bOtWLouPumrBAIK3Rgb69v+TPEAHRjbIuzSqSYbIiKwOu3zrYY1bJ/2032WA
-	TNKSeDbq0L0oM9oXY6/zqGEwOsfeJW4nklXKj7fisKo5MiYSrFtPXnriez96yFueGcQmg1Dra7jwQ
-	WSeLiMg+HdjMTO+vIdFLaCZlGr5xZg7C2HHmS9Gq1pYqNzRqtu6AoocT9GTOuj15nx0/3onb68dAY
-	ZqPkQ/X+jfro9tVk24Sdo3aMvIObfQaB13eahFvolGROieOZ/glqtxJRLbm8LykYuK2h3Z9EL5kG/
-	EfS44bFg==;
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=cuO5M1wrH+SpcLBh59G9uCq+PoflrKwo5o26UmOD1w8=; b=drQIckHYShpPA+lDMh72UftNb2
+	RTymJcGNt5ES/32XblqN+kpt92QzNK6DVhkwpv751zmLNjRaRyQWic/LBnILdfgOf8r3qGxpQTSpO
+	fO0aoGdRzVgJqQ4by/CoxVSxVoK7PfVw5vm3ymhZX3P5qXWIMHkamRowHX0Fu9Jn5I9JBTj9ncy/6
+	N36FiR9Wmapz4KkW1rYnQiRqEn9PA5kY5+ynXyTn/XpJ82CSnw6SmSvAJbawA2JuZikSZp1Qdm2qw
+	Cqy2M1dMbu15D07ct5XoDJiy2xvH4jLn9T2GSbpF9IF+4swpFuy0seisez7NDeFfC+s/Jyz+byy7O
+	GDlMM6sw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wU4AE-000GWE-28;
-	Mon, 01 Jun 2026 17:02:50 +0200
+	id 1wU4AD-000GW5-0L;
+	Mon, 01 Jun 2026 17:02:49 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: bpf@vger.kernel.org,
 	kpsingh@kernel.org
-Subject: [PATCH bpf-next v2 2/7] bpf: Drop redundant hash_buf from map_get_hash operation
-Date: Mon,  1 Jun 2026 17:02:43 +0200
-Message-ID: <20260601150248.394863-3-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 0/7] More gen_loader fixes
+Date: Mon,  1 Jun 2026 17:02:41 +0200
+Message-ID: <20260601150248.394863-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260601150248.394863-1-daniel@iogearbox.net>
-References: <20260601150248.394863-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,81 +49,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-bpf_map_get_info_by_fd() is the only caller of the ->map_get_hash
-and always invokes it with hash_buf == map->sha and hash_buf_size
-of SHA256_DIGEST_SIZE. array_map_get_hash() in turn lets sha256()
-write the digest directly into that buffer (map->sha) and then
-performs a trailing memcpy(), which evaluates to memcpy(map->sha,
-map->sha, 32): a redundant self-copy. The hash_buf_size argument
-was never used at all. Simplify this a bit, no functional change.
+Follow-up fixes for the signed loader, includes also the recent
+sashiko findings.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/linux/bpf.h   | 2 +-
- kernel/bpf/arraymap.c | 6 ++----
- kernel/bpf/syscall.c  | 8 +++-----
- 3 files changed, 6 insertions(+), 10 deletions(-)
+v1->v2:
+  - Fixed up verifier_map_ptr selftest
+  - Added patch 1/2/6/7 with a new map-in-map fix and a
+    redundant hash_buf memcpy cleanup as well as selftests
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1c6863ce89e0..d69cba55f30f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -111,7 +111,7 @@ struct bpf_map_ops {
- 	long (*map_pop_elem)(struct bpf_map *map, void *value);
- 	long (*map_peek_elem)(struct bpf_map *map, void *value);
- 	void *(*map_lookup_percpu_elem)(struct bpf_map *map, void *key, u32 cpu);
--	int (*map_get_hash)(struct bpf_map *map, u32 hash_buf_size, void *hash_buf);
-+	int (*map_get_hash)(struct bpf_map *map);
- 
- 	/* funcs called by prog_array and perf_event_array map */
- 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index dfb2110ab733..e6271a2bf6d6 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -175,14 +175,12 @@ static void *array_map_lookup_elem(struct bpf_map *map, void *key)
- 	return array->value + (u64)array->elem_size * (index & array->index_mask);
- }
- 
--static int array_map_get_hash(struct bpf_map *map, u32 hash_buf_size,
--			       void *hash_buf)
-+static int array_map_get_hash(struct bpf_map *map)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 
- 	sha256(array->value, (u64)array->elem_size * array->map.max_entries,
--	       hash_buf);
--	memcpy(array->map.sha, hash_buf, sizeof(array->map.sha));
-+	       array->map.sha);
- 	return 0;
- }
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 2aafd2131983..a27fa2b9b405 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5434,18 +5434,16 @@ static int bpf_map_get_info_by_fd(struct file *file,
- 
- 		if (!map->ops->map_get_hash)
- 			return -EINVAL;
--
--		if (info.hash_size != SHA256_DIGEST_SIZE)
-+		if (info.hash_size != sizeof(map->sha))
- 			return -EINVAL;
--
- 		if (!READ_ONCE(map->frozen))
- 			return -EPERM;
- 
--		err = map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, map->sha);
-+		err = map->ops->map_get_hash(map);
- 		if (err != 0)
- 			return err;
- 
--		if (copy_to_user(uhash, map->sha, SHA256_DIGEST_SIZE) != 0)
-+		if (copy_to_user(uhash, map->sha, sizeof(map->sha)) != 0)
- 			return -EFAULT;
- 	} else if (info.hash_size) {
- 		return -EINVAL;
+Daniel Borkmann (5):
+  bpf: Reject exclusive maps as inner maps in map-in-map
+  bpf: Drop redundant hash_buf from map_get_hash operation
+  libbpf: Skip initial_value override on signed loaders
+  libbpf: Skip max_entries override on signed loaders
+  selftests/bpf: Test that exclusive maps are rejected in map-in-map
+
+KP Singh (2):
+  libbpf: Reject non-exclusive metadata maps in the signed loader
+  selftests/bpf: Adjust verifier_map_ptr for the map's excl field
+
+ include/linux/bpf.h                           |  3 +-
+ kernel/bpf/arraymap.c                         |  6 +-
+ kernel/bpf/map_in_map.c                       |  5 +-
+ kernel/bpf/syscall.c                          | 15 ++--
+ tools/lib/bpf/gen_loader.c                    | 69 ++++++++++++++-----
+ .../selftests/bpf/prog_tests/map_excl.c       | 46 +++++++++++++
+ .../selftests/bpf/progs/verifier_map_ptr.c    |  8 ++-
+ 7 files changed, 121 insertions(+), 31 deletions(-)
+
 -- 
 2.43.0
 
