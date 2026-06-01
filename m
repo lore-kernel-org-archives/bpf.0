@@ -1,120 +1,167 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B095B312819;
-	Mon,  1 Jun 2026 16:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220543DB99A
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 17:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780332306; cv=none; b=iOTA1j/vnnoOBukosGNBgcLYjHiDqB7BYH8D0i4OoKv4/oTdN/I55sMEZn6IN7v8PK7joGrC3StX+G2yCx082j+yMX/lOJzUgWRFLTw7BuKF+qtUWxUWZIpa0XWv+tyWgD02vYTMCIQq2X6FZ2BVDHcCfZqIKJ9O1B0X0FgB15c=
+	t=1780333440; cv=none; b=ulGfyBFFqgvbcxn+lzMXQd/yo0f5021xnqyll1il6KSXW5QdVuUToNS1/RLEE8UOuUwYJPP8fE/+LIohUqiBlB7fBO8czwuc8qcrHskTWWUkXJ1BH3XKWl+//iYrE+3sx1ertBHABbK9xRdYgbdP8MYK8H5avIeVgF4DBpKNYGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780332306; c=relaxed/simple;
-	bh=BLYV54VfR+7XEIquuz19ciuAfp/0e4fMd8cGl+3te1A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kdgh1FHqIDR/Vp3SQq3V0ksO7Uy7anpeM4QeLMRTn/Vi8wfzPoHPTt1AzUsfS+CttGUMJMsuKCDYB1qAPK/U4TDoejTUGqQUbjg3QDZS+mqx2xKXNI4Vq5IL39jOHTJFXuIQmdCGNWaUwK5FJS/kqvIT0T0mupMHV5a7/bYvq9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=it1xWeGQ; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780333440; c=relaxed/simple;
+	bh=CJv+ORdfM4d1gC+/h8eXW8d3TcRUhKDuN3NsrTLwwrY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=QEpZB8ixNawE436p8Nl39MH7m5IdauqRhq3nPXphIec3C69Z5QEO/iV4eq4B+YPZMbnYql3ThEHWz85ln8SSG5EmVM59YlP0GINuoIXtnq/am6Mv5xKDAjUo6tUDzrZWpsmAyGLExpg8gibejFo7+4ZHL6AQkTzE+rcT7eLOklo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=c8zku+oa; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="it1xWeGQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=v0LoDzCq0Ko/LjdM1TM6VO+eqcd/Inzg3mMmdGUhy8o=; b=it1xWeGQWvsuxyK9tbizEt1h83
-	CpSTTVptUAIYuW9RsUpf1pcgjRbV2d8nI3NW3JZJCSAGMPneByulLGTFA1BBRO+lwqD8xzR26QjNs
-	khRtYh2XAXT2ZkCVxTIXM6R85q0A4347Fz5OqW3dN/ZoqI00gbD/N49ivpoGGKthzuXjJAfeHUM5Y
-	evkjRZAqMVAJIuRZvwBHgc85H6bLnsFQ4B8hWk4DRLL5ABYku0dLDRoffM107s7h0eEBWHfuItdZD
-	eYFPHjsGytg5pMh9OHhdUVeZSvurZwX3SoV4sXCjpjweDIC832DA0UfqO8UozNgPiYideL1p6GlSp
-	uYMyoTJw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU5l8-0004GO-3C;
-	Mon, 01 Jun 2026 18:45:03 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU5l7-000Flg-31;
-	Mon, 01 Jun 2026 18:45:02 +0200
-Message-ID: <b5769b51-073e-4f91-8eb8-feb685e7e256@iogearbox.net>
-Date: Mon, 1 Jun 2026 18:45:02 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="c8zku+oa"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-304545f5206so14332366eec.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 10:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780333437; x=1780938237; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aDxjxajjjz+WXaa2HC01+77k69ejzz46zXU7TmxK8gU=;
+        b=c8zku+oaTIE4+vxpg+7KrmNNGHSop9C2WtVqZ0oNF05BPNaGvHUFnuI+zI6GzXfbwe
+         ikqnmpozZwPsBcNwcOMRiaiGeY+Uz/Ei7hVEf1GFRfspgu+JnJWGtvWUvwLzNNBxzmZV
+         C1Jl8n4oCCOf4D+8PkSlfit9DAhknGJU5mkSt4wST1Uakbpbh62lZ2mY8EVCgOVf/t5W
+         EapBjL4E3k85qK76XW5vZn4P8pBMK9m0p4UwoguxdeybgyWnuMfD1ct2hIW/KA5rvMyi
+         hmaw0U5n2Kc6SHQH+69W/JX9K1Ty6GamRqnYNR0jHm5TDEfoaU6EGInEEh1t5+Mzagtp
+         +f7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780333437; x=1780938237;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aDxjxajjjz+WXaa2HC01+77k69ejzz46zXU7TmxK8gU=;
+        b=AtXL3/yO3R11ThHrKGm6Ww3UfnSu/gmxHnxoAWztIQHzMErDBPXuhAxhS/6bLwDqXl
+         BoeA4EyfTf5FmE1kUG78ZyNc5D3urIHZ3QkqgWdQWzrQSxMN20SMNvbF9ABJ0Fq5XpRA
+         vaQrEzPyr2PU7GEpudn1yGNQnAxZ2nCk5ixxD68aaQVjgNeaLH+9Iv2tO/eNz/BSVX5u
+         ZXot6f4ZQTs/n9cRSMfHsifzTl2wqJrBMA6CtlDY3/MNY3cAV4gAwgGkR51Se9EBnFzE
+         ny02+AVBZ4Wlhle2z6BHu4zS6wXt847DUUmNlxBkyXFrmab3ZGJYDzjV8h/4m5sNqhHR
+         WIdQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/x0dCDLkaA4HvWKjIqPxV2/pbO9YhatIVIjEUKjSqAUROmYwCQ7LLjbZlaKCBOVQOxLKw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwN/mi+pU8qbdO6yfr1pRtajPuLBeWpmDrxv33hs6xHKgruUM+q
+	7K+pumNPBPGBljVyvLnje3bAM30A0oORCzvxJTi63HR1+fis9tseodlk10Arq/jbcBE=
+X-Gm-Gg: Acq92OER2R62QI4z2t2JY3db5qYNy3dCeefqhVaDcce8PSTieG3gUuTGHxw1N+FgMm4
+	LHxLiZ4AnCd1hYJfvNyl6u7LMMVas6M/6s6qljtVqU/t11XNGiANDstHWekDLZdr7i73BqcU2iX
+	GbhYNOOJPrWCWt9BsCs7IXzByrb1ENRhNHBN4jtv3ElNJHaN5GA60gwZTenui793OtB0m7X65TH
+	WxS2vZIY7o4MmfrgN6n9w3uk6N0yFjp9WqcvTexdqYdRU8YMFwzAB79T5X26RsGV1BYhNKColr/
+	HueAqJPWjeJzBb3h8rFM/9798CFtBk+vHzVFw6SKzgjcgMv7HtJWV1UAV07dOXALa+XoGlXMr6D
+	i97BNuqJL8O/FroTZNeJ0BHZ+A7U5MMkPTU0ATIxe9YZuwmI3O6v8vXW/UYy+DPS7K5BYdPELsC
+	7TRCly2ytERFAoUX4=
+X-Received: by 2002:a05:7301:1f0d:b0:2ed:e14:42e9 with SMTP id 5a478bee46e88-304fa693628mr6131496eec.34.1780333437177;
+        Mon, 01 Jun 2026 10:03:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::a996])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5a0b7dsm9613132eec.22.2026.06.01.10.03.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Jun 2026 10:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH vfs-7.2.xattr v2] bpf: Add simple xattr support to bpffs
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260529221234.324174-1-daniel@iogearbox.net>
- <20260529225204.ADBAE1F00893@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260529225204.ADBAE1F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 01 Jun 2026 13:03:52 -0400
+Message-Id: <DIXVJ45H90X3.3DOQOUXJB6DVN@etsalapatis.com>
+Cc: "David S . Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Guillaume Nault" <gnault@redhat.com>, "Ido Schimmel"
+ <idosch@nvidia.com>, "Fernando Fernandez Mancera" <fmancera@suse.de>,
+ "Peter Oskolkov" <posk@google.com>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>, "Leon Hwang" <leon.huangfu@shopee.com>
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260601150203.20352-1-leon.hwang@linux.dev>
+ <20260601150203.20352-2-leon.hwang@linux.dev>
+In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
 
-On 5/30/26 12:52 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> 
-> New issues:
-> - [Critical] The patch relies on an out-of-tree or obsolete version of the VFS simple_xattr API, leading to hard compilation failures and potential memory corruption.
+On Mon Jun 1, 2026 at 11:02 AM EDT, Leon Hwang wrote:
+> Currently, bpf_lwt_push_ip_encap() does not update skb->transport_header.
+> When a driver, e.g. ice, reuses the stale skb->transport_header to
+> offload checksum computation to NIC hardware, VxLAN packets encapsulated
+> by bpf_lwt_push_encap() helper may be dropped due to incorrect checksum.
+>
+> Update skb->transport_header in bpf_lwt_push_ip_encap() whenever the
+> encapsulated packet uses UDP, so checksum offload works correctly.
+>
+> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_pus=
+h_encap")
+> Cc: Leon Hwang <leon.huangfu@shopee.com>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  net/core/lwt_bpf.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index f71ef82a5f3d..65d1dfbf3312 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -599,6 +599,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool=
+ ipv4, int encap_len)
+> =20
+>  int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool =
+ingress)
+>  {
+> +	bool is_udp_tunnel;
+>  	struct iphdr *iph;
+>  	bool ipv4;
+>  	int err;
+> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void=
+ *hdr, u32 len, bool ingress)
+>  		ipv4 =3D true;
+>  		if (unlikely(len < iph->ihl * 4))
+>  			return -EINVAL;
+> +		is_udp_tunnel =3D iph->protocol =3D=3D IPPROTO_UDP;
+> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphd=
+r)))
+> +			return -EINVAL;
+>  	} else if (iph->version =3D=3D 6) {
+>  		ipv4 =3D false;
+>  		if (unlikely(len < sizeof(struct ipv6hdr)))
+>  			return -EINVAL;
+> +		is_udp_tunnel =3D ((struct ipv6hdr *)iph)->nexthdr =3D=3D NEXTHDR_UDP;
+> +		if (unlikely(is_udp_tunnel && len < sizeof(struct ipv6hdr) + sizeof(st=
+ruct udphdr)))
+> +			return -EINVAL;
+>  	} else {
+>  		return -EINVAL;
+>  	}
+> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
+*hdr, u32 len, bool ingress)
+>  	if (ingress)
+>  		skb_postpush_rcsum(skb, iph, len);
+>  	skb_reset_network_header(skb);
+> +	if (ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+> +	else if (!ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct =
+ipv6hdr));
 
-nope, vfs-7.2.xattr branch of vfs.git
+Minor nit: Could we do something like
 
-> - [High] The per-inode xattr quota limits can be underflowed by removing initial security xattrs, allowing unprivileged users to bypass the `SIMPLE_XATTR_MAX_SIZE` and `SIMPLE_XATTR_MAX_NR` limits.
+if (is_udp_tunnel) {
+	size_t hrdsz =3D ipv4 ? iph->ihl * 4 : sizeof(struct ipv6hdr);
+	skb_set_transport_header(skb9, skb_network_offset(skb)) + hdrsz;
+}
 
-I'll take a look.
+to make the logic clearer?
 
-> Pre-existing issues:
-> - [High] `bpf_symlink` allocates symlink target strings without memcg accounting, allowing an unprivileged user to bypass memory limits and exhaust kernel memory.
-Independent, but I'll also look into this one.
+>  	memcpy(skb_network_header(skb), hdr, len);
+>  	bpf_compute_data_pointers(skb);
+>  	skb_clear_hash(skb);
+
