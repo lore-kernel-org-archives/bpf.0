@@ -1,48 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481DE3921DD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482E1393DFB
 	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 10:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780308204; cv=none; b=M1OXL90yc/SZrWpYf+4vzNvNQMMbBzBJ5ra0IEqgcvG6rrUz1IEwp77MEtqYyLnMTuJ1ZwC7b4FSBGnOHP+KsEWzHG2dPFSvN2ZoCyvQ5MZHqFhB9S4tV9unmV0oXoWwxVCy4145UjjS5EFe99OBUWkO5UAYv7xQ4VvdbS9bjyg=
+	t=1780308205; cv=none; b=jzk9ycSiPnea9IplWNoARWRGN1t7YsbgS6zEpNfV9NPUnbmJTFfhNCrTGh64HNfvHb5kDN9R7npc5Eg11nE23Rp8o4Wk3TzEWRQgXAZoZVU13iZP2424H/45oowtDBnflf0NK9gyFj5fpIMg9kN/eZ2/onHqpn5uhPntG0kPlxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780308204; c=relaxed/simple;
-	bh=1ei57i8vfArgH8xX5VpQkCqfERv+OU7o14ealS5GoQM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i+3Cl4w5xN4QjxwqS/taE9sdOG4SzJPJEjhXW9qznO/bZgPYremH+TxfwIQo+QLodDwP153Fblr7jKfuezsVc8WM8VMUiEr+oEP8i1SmNseE8YivOAf7eqZDjmpylfH2S3gcZUA/pMEMAIiqOU0sBXlhGx9f187Mudy1EMK9bto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Or0POrG+; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1780308205; c=relaxed/simple;
+	bh=c0X9a2ucRvumTsUXJAsp10sAePwhlpsKOMZNA7Au/KY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YyRdml3/nTKh83HvPdNLpSIHLq1iPN3Y2NoB8kufVCjGC2EXxbLdDcpGtuamm1NVUba3sttSvQ7XrzERBqiLlyCxPdBS6wc176bUHUKHBHn561fXtQ18R92GIdkKp02r8x+SiuHtPqdYf7si9UfsTUQ6GVjDMky4tqrZ7I1YPFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LXWjqeMe; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Or0POrG+"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LXWjqeMe"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Uj1JB3vh+vpsOYTyHkpZ1dqay1CegIZ5z0aQjGUuVtM=; b=Or0POrG+JOIIAdSCHiPV2YLIJE
-	3VbIs6EWG0wMiahsmosvmBb9N5tjYAp47CTANFVWeyrdVtcx0W+4vl7jqwEjlx+FXRcxClO3wksot
-	avoyb4fC74YrCrIPLxhfhWsGBo3l9w3v3xcmCwZnQpm3p+SVdlTzx+QNG/ERHlw38v4Hyq9bqcwMF
-	48lBbsaT0yaylS7+ST5NcpDhHus/Tgo009z/QV9Hg4cgdTAWw7lKwMQyjhuXaO1S+c86vx8Cgpkeu
-	YfkhHNWjcMX2z+gxB4GF+/MCAey5jQn99/4f09h7UREANrwGJ7MGIL9HidqacCS+K41LF0huCchAx
-	Mdyg8krw==;
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=utDibeioTa4wn3FMXQK35uRrzLZM+BH9fyi1Y5woS80=; b=LXWjqeMezcNilZ+DkuFuf4wSLu
+	Re3VoDLj3H5Mx9Fdavx/n4n6bbStEon6dWPyyynKIhKZyCcfJc1z8nB5LKVlyx3/kRvf2LjBLJTHi
+	0clLPgN+MGRpYI80w/IK1MbVRIOwXP0tfsDSCRGNrwQAH6/aSj2oHaKVd0TqsuYaFb+upHdyAfmQZ
+	8p/6Xvh+nJo3qYhLz7C0hktLgbt3/oBW93kLDtzVBVITw6RlbBZWhiCmBswwHI4oYI3eZ7LTd1Az/
+	cvhP1Mkkd7pbPOLc71HlpIweO3HYEWFbSGTqlNVmuOc+V5jp5CJ6OBZyVoXYdrXmwRBcx91ts0Urv
+	fbuaNVZw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wTzUC-0003yV-1c;
-	Mon, 01 Jun 2026 12:03:08 +0200
+	id 1wTzUB-0003yP-2C;
+	Mon, 01 Jun 2026 12:03:07 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: bpf@vger.kernel.org,
 	kpsingh@kernel.org
-Subject: [PATCH bpf-next 2/3] libbpf: Skip initial_value override on signed loaders
-Date: Mon,  1 Jun 2026 12:03:05 +0200
-Message-ID: <20260601100307.386243-2-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 1/3] libbpf: Reject non-exclusive metadata maps in the signed loader
+Date: Mon,  1 Jun 2026 12:03:04 +0200
+Message-ID: <20260601100307.386243-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260601100307.386243-1-daniel@iogearbox.net>
-References: <20260601100307.386243-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,87 +49,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-bpf_gen__map_update_elem() emits code that, when the host-supplied
-loader ctx provides a non-NULL map_desc[idx].initial_value, overwrites
-the blob value with bytes read from the host (bpf_copy_from_user /
-bpf_probe_read_kernel) before the BPF_MAP_UPDATE_ELEM that populates
-the program's .data/.rodata/.bss maps.
+From: KP Singh <kpsingh@kernel.org>
 
-This override runs after emit_signature_match() has validated map->sha[],
-and initial_value is part of neither the signed loader instructions nor
-the hashed data blob. For a signed loader this lets an untrusted host
-substitute global-variable contents into a program whose code carries
-a valid signature, thus weakening what the signature attests to.
+The loader verifies map->sha against the metadata hash in its
+instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is
+called on the frozen map.
 
-The blob already contains the signer-provided value (added via add_data()
-and covered by the embedded, signed hash), so simply skip emitting the
-override for signed loaders (gen_hash). Runtime initialization stays
-available for the unsigned light-skeleton path as before. The jump
-offsets within the override block are internal to it, so guarding the
-whole block leaves them unchanged.
+While the map is frozen, the /signed loader/ must also ensure the map
+is exclusive, as, without exclusivity (which a hostile host could just
+omit when loading the loader), another BPF program with map access can
+mutate the contents afterwards, so the check passes on stale data.
 
-Fixes: ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+With the extra check as part of the signed loader, it now refuses to
+move on with map->sha validation if the host set it up wrongly.
+
+Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
+Signed-off-by: KP Singh <kpsingh@kernel.org>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/lib/bpf/gen_loader.c | 39 +++++++++++++++++++++++---------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+ include/linux/bpf.h        |  1 +
+ kernel/bpf/syscall.c       |  7 +++++++
+ tools/lib/bpf/gen_loader.c | 17 +++++++++++++++++
+ 3 files changed, 25 insertions(+)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1c6863ce89e0..6191c0c51fea 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -296,6 +296,7 @@ struct bpf_map_owner {
+ 
+ struct bpf_map {
+ 	u8 sha[SHA256_DIGEST_SIZE];
++	u32 excl;
+ 	const struct bpf_map_ops *ops;
+ 	struct bpf_map *inner_map_meta;
+ #ifdef CONFIG_SECURITY
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 2aafd2131983..0f53ec4bacc6 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1588,6 +1588,13 @@ static int map_create_alloc(union bpf_attr *attr, bpfptr_t uattr, struct bpf_ver
+ 			err = -EFAULT;
+ 			goto free_map;
+ 		}
++
++		/* See libbpf: emit_signature_match() */
++		BUILD_BUG_ON(offsetof(struct bpf_map, excl) != SHA256_DIGEST_SIZE);
++		BUILD_BUG_ON(!__same_type(map->excl, u32));
++		BUILD_BUG_ON(offsetof(struct bpf_map, sha)  != 0);
++		BUILD_BUG_ON(!__same_type(map->sha, u8[SHA256_DIGEST_SIZE]));
++		map->excl = 1;
+ 	} else if (attr->excl_prog_hash_size) {
+ 		bpf_log(log, "Invalid excl_prog_hash_size.\n");
+ 		err = -EINVAL;
 diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 66a02039da8c..a5d9c7a5261b 100644
+index 3702c5944bc0..66a02039da8c 100644
 --- a/tools/lib/bpf/gen_loader.c
 +++ b/tools/lib/bpf/gen_loader.c
-@@ -1187,27 +1187,36 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
- 	value = add_data(gen, pvalue, value_size);
- 	key = add_data(gen, &zero, sizeof(zero));
+@@ -586,6 +586,23 @@ static void emit_signature_match(struct bpf_gen *gen)
+ 	__s64 off;
+ 	int i;
  
--	/* if (map_desc[map_idx].initial_value) {
 +	/*
-+	 * if (map_desc[map_idx].initial_value) {
- 	 *    if (ctx->flags & BPF_SKEL_KERNEL)
- 	 *        bpf_probe_read_kernel(value, value_size, initial_value);
- 	 *    else
- 	 *        bpf_copy_from_user(value, value_size, initial_value);
- 	 * }
-+	 *
-+	 * The runtime initial_value comes from the host-supplied loader
-+	 * ctx and would overwrite the blob value after emit_signature_match()
-+	 * has already validated map->sha[]. For a signed loader (gen_hash)
-+	 * the attested blob value must be authoritative, so skip the override
-+	 * and leave the hashed value in place.
- 	 */
--	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
--			      sizeof(struct bpf_loader_ctx) +
--			      sizeof(struct bpf_map_desc) * map_idx +
--			      offsetof(struct bpf_map_desc, initial_value)));
--	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8));
--	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
--					 0, 0, 0, value));
--	emit(gen, BPF_MOV64_IMM(BPF_REG_2, value_size));
--	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6,
--			      offsetof(struct bpf_loader_ctx, flags)));
--	emit(gen, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, BPF_SKEL_KERNEL, 2));
--	emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
--	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
--	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
-+	if (!OPTS_GET(gen->opts, gen_hash, false)) {
-+		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
-+				      sizeof(struct bpf_loader_ctx) +
-+				      sizeof(struct bpf_map_desc) * map_idx +
-+				      offsetof(struct bpf_map_desc, initial_value)));
-+		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8));
-+		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-+						 0, 0, 0, value));
-+		emit(gen, BPF_MOV64_IMM(BPF_REG_2, value_size));
-+		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6,
-+				      offsetof(struct bpf_loader_ctx, flags)));
-+		emit(gen, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, BPF_SKEL_KERNEL, 2));
-+		emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
-+		emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
-+		emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
++	 * Reject if the metadata map is not exclusive. Without exclusivity
++	 * the cached map->sha[] verified above can be stale: another BPF
++	 * program with map access could have mutated the contents between
++	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
++	 */
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
++					 0, 0, 0, 0));
++	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, SHA256_DIGEST_LENGTH));
++	off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
++	if (is_simm16(off)) {
++		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
++		emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_2, 1, off));
++	} else {
++		gen->error = -ERANGE;
 +	}
- 
- 	map_update_attr = add_data(gen, &attr, attr_size);
- 	pr_debug("gen: map_update_elem: idx %d, value: off %d size %d, attr: off %d size %d\n",
++
+ 	for (i = 0; i < SHA256_DWORD_SIZE; i++) {
+ 		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
+ 						 0, 0, 0, 0));
 -- 
 2.43.0
 
