@@ -1,108 +1,183 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30223DBD4D
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780327146; cv=none; b=OMf/dxe0pD7/bEXV+KWUiHa1jfUJ90feW+/qGUbQf+zVhCKwoElRxbBttT9nadiNlTTNgYy2T8ZBm/dBpfssBjGjAS7mOAejXV+gAQ5zKEIWtaxOSM2t+BOAim4c5SC3i9ZkWajLKBlrBlY+Tddr9bYmxG92ByAcR6q7mEAvGQc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780327146; c=relaxed/simple;
-	bh=PQO0UZwXLLelrITKmhXhC6F0znNCjfRA0kOIy5ZvCNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrnQSgHl8prQUpxIyoiyQ8+BSgw/8Fb7cl2OZS95Z20avktyVAbpkA1tVNKxaYo66gu3g5WKdSrfkAq1o3MB+DJb+6muyqDP0TjNVS7MEcFOQIp2JMN04b/qABwkk9KL8hYzDPG0kk84JWekfIw2PVVVg8DJCa6lr7oYvcf63fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gr4tGw/Q; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4536E3D967A
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780327761; cv=pass; b=DH9i3Hk3i6k+XkJhi5jt9NOeS+3NSwyqBTzfAJNhSf7kmpqGGdAZzySPrYVlG1yoU6JPLhKF00NQ6GdkaeyD2HbILe4qZxEUgCxHPHyJeAEdqmNGRqgsPvGHMZI69kzNUlNPRjN6QiGyvWXFRS9vetNtkWXYMv5/jOox+FmOGUo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780327761; c=relaxed/simple;
+	bh=Wj2HjaCmvrNykd7/b89FdO2/xBGB5dAuIyTwzhwlNos=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c0TRunw1iED86ajR12PLV1TQlUdR+wrdsaHT7+sfu9zBvxARB+8aZJAPl6t8+LNISWkre9sxJfTIoYgGmqs6mbE1zx6Zv+GHXUjmeEImQd4FQaU3A8ardlndrwtm4C+onICR76OCc6Wged8FvLqp2ZbyoxaDQ3Mk2b+ibvEiNxo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZAAJYdYZ; arc=pass smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gr4tGw/Q"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2c0c2a68d01so9886235ad.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 08:18:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZAAJYdYZ"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8ce9d444173so16969326d6.2
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 08:29:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780327750; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TehqLzN5qdXwamHzlPz6Uq3XF8DB+b3dqswQdN8qdiFMCy2aRggbkCXqd8deoww+51
+         YsG4uZPRR1hmkH26A/pAD6C/iTAFW9GqPGHwQhuCgTIRyBdnlVHAbmtR4Nm7mPdaUWi9
+         CfK8hyyUAhKoN5WXkGgSGOrjwpsTN+0W09hKhR6SNYladcFrvJVhuH4Ko2BP6qCXeHtl
+         t61BSnS2xK4nFM/Xk5dDjhpCsDmg9dBN0kerLZsWpn+tRStDY39n6/eI6bkIE8cDBCzg
+         v8qScvf1YK1cvtgw3/48TipAw4HLPyY14M82ib9QYr4mBRk+YkiUTs8ieGrTzOOW3a3x
+         4fSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7EP5yWJP/oLaBrC33EafyKNZLj+nlCv8r++/P2IFxvE=;
+        fh=Ppwz4RUpJPJA6Jd2kTXI/EHd0RuQbqr7BnbEdTA1Qgw=;
+        b=cQWsJsXERkcyUSJ8n4J9q5nW9TwzcTgSyOhD0fZ9oeCZtkqXBZszk6xc1QbGEJTJ1i
+         vSZ7dR/QNk+U98PDrLK/S9n1qh4ryYR5jPQkrxBKUzwQYEdTIBFd5Ntip7iIt2z0/f9u
+         2lTxz4+1JXSeO1uShfPMXObLuiAXcAjaYjpWKNuLrM35xPyfSaw0GyaRzrBcIn21KuXp
+         Pjn7LwmWDOEUMSYAKtngQopYZVP1zgUhBLAcpODI2yOd376cpc3lodusoeJ4evAZvqZE
+         dk7YsvMBwz0ABk7YiEdF4yPtVQykRbPct+PzQ4oWy7ygBzwqPR+SrZKVvJzll9LPkIOd
+         wYDw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780327139; x=1780931939; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDR/0d6767AKXu4Gbp+1FbUsOAvR4r8bVucFSVBkYL8=;
-        b=gr4tGw/Q/FhooWcObcw2/szyDWZ8wkK15lcn36CakQOjov5TyO7oxkusGhs6mV28P2
-         aQF0CjvkygHGfktnoQHH1oXFfKN454R8r7FWVdv07qtQlPbVu3/BYzmHLg11AwElZeEh
-         /Fl45gYCucHNJFgwYHWvS1+tGN26C/6n/BGrihc7LCThEIFhA95T2e542MQg0nfDyQQ+
-         geWuEeu052TH5vZFxUdlUxlYO2OnqhvGINOpJYVBJ8SE6VNf23euGXSo560TRRQGfh3/
-         nbwFNu1JZEe+rI4yio0SVgxyJYkvSyIszcwV8yK2zuUFVn4fekcgjLT5sP3u1OLu9Lai
-         OEYg==
+        d=google.com; s=20251104; t=1780327750; x=1780932550; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7EP5yWJP/oLaBrC33EafyKNZLj+nlCv8r++/P2IFxvE=;
+        b=ZAAJYdYZV/KGWuFFI74dgcE5AjOOyyiRXII2VV93UrZNpHjLmPIDR3f//rcPmuDdAm
+         bZYMZK84P2WA51F/FCWoVDSe80hxKU+FT2kAsJvFTNE1IT3ljY0jkQ5U0vnb3hE249xl
+         oxnXysfShracuKeYpx/z49Xqw55KaDOQnm15831kQ33BbUmEYn+QhuIl95pQ06AaHBUc
+         PVPvmZcXv8T5//LvHnIXUHvVsBDCutUVpeYRhPY3vDaTIaFKZmTuKy9YZfVIeXWAGxYf
+         Ul2B2e9KhGG0XHp5MFmcDz0gPcTr5Oc9CSQObBvmofdPrkKPeCB0A9pw/Cbd08kI/mso
+         MJOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780327139; x=1780931939;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aDR/0d6767AKXu4Gbp+1FbUsOAvR4r8bVucFSVBkYL8=;
-        b=ZD3EgMMv5xbLVG0Kb2gAUyaxybBlnQis8CmydiFypXYzIsdjYPE0CdrTVUz4ivxB4X
-         9UnVaYMET4I1SsRAGLZP+NhFVIXcpVzgm84Gl50hshrJA/zYsxR8hlzB1BTEXU/s7eW4
-         oxPMs/+A7Qa0NwO0RkV3dMDrnVxAeSDwNi+Xpn/6PtCHBvZ+K/l/Q5JONcYm/UqqxtTC
-         vNSk7KAob5I2CnMFUZMUH8GVYAW9MsGyqdZ28K15u/xj+yDHoulXJly2bDEoOhC4sOM+
-         B33kHvhe5hfNdtW103bQaFGZtvNMvahGQlkn1+WmPxJ2ZufSk4bjyX21yVx7PGQAB4JT
-         nXgA==
-X-Forwarded-Encrypted: i=1; AFNElJ+vQQ1E5QFoT1mHFEu6APCOWU3+czye2kYOgZRGDhwMdJ3HoffvtLhiaVd+mhi8SHPTQJE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3GGC9Us2rg3R4lq/gXwmHvcwIgDlSegY3kNLZx54d5VAg+FNx
-	2LSJ5Fq3KdbWJsQazxU+ODxEg111f0+5COh96Iuna614lAS2kQ9jJ44t
-X-Gm-Gg: Acq92OGPjWYqKUj2CgYmf9YeSQdh3F9OCdN/6rwI0gTzq+nr8Po88h5ybWARxsoAM0I
-	7p5vaniaX1kCRPvexZBLSNzSx0HOjBDgeGSKKVaPwrZAYVqxzZK9J62Wu2aC494YCFo9hXye/ui
-	07pjmxQbxMxmk8XM9QxuoVuU9lr+MahQgWD74rwukn4+5HKoLwCRwFtVQbIPs3ByUZsWH/gK0d1
-	OKdT8qy2MKhl086+AAELUVhPdVGTok6yHlZoQeRg4KWjcxxZ32Jmu3I+BziRthbrU5pZ+HRsydc
-	s0SnJd6LcN5Py1kCSoDaogkf8lMkV+hVMskaz/MbFSxD3qllzi1zNNs0SErONjV4DxmOZP+eCMj
-	JmwcSJD2bQasH0CCq61dpHRoZ0oO8wfi1fnWFiyF/UhG5ETNnOEOu9WaRFPm19TTMP5hhkuFJNk
-	L/oFSEsYxJfZgpUsNeRMQA5HnYwLc=
-X-Received: by 2002:a17:902:e54c:b0:2bf:2b84:c207 with SMTP id d9443c01a7336-2bf3688e46emr142931175ad.35.1780327138899;
-        Mon, 01 Jun 2026 08:18:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:50::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23b01732sm113263525ad.54.2026.06.01.08.18.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 08:18:58 -0700 (PDT)
-Date: Mon, 1 Jun 2026 08:18:57 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
-	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net v5] xsk: cache csum_start/csum_offset to fix TOCTOU
- in xsk_skb_metadata()
-Message-ID: <ah2isNZZycGgMNOv@devvm7509.cco0.facebook.com>
-References: <20260530042630.80626-1-kerneljasonxing@gmail.com>
+        d=1e100.net; s=20251104; t=1780327750; x=1780932550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7EP5yWJP/oLaBrC33EafyKNZLj+nlCv8r++/P2IFxvE=;
+        b=GutVD0Ag/Cb1R8BIklIoyctIzazhtfRr9KNKmvfMgKkKcUTINrLdKpOFTCaAX7g6H+
+         Dd8jWg4hj9qfes2krqlwOpkaLsv6C3BIfcDe4NmJdSKlhVrMWPxPa+eaEw8iNVknyOaB
+         FPp8yhqY1ApoTXtvHS6L4lit5hLvAn1dxiqmhMsP8oXpNJrpvtpyCAWltzkP7jQxjEPl
+         p/A/ZN16OCcfARp5FZEi+reuhq3nVFX3Mh5zUTa4txf3acmaw0AmQiASuQkxAetUjPyS
+         OcgyT/9CpoMjkSOHZFE6YrrjWo7oMYADA6AgpiXolCdGpydDoG2ZbC5h0NwHM4+c/Qz/
+         B3uA==
+X-Gm-Message-State: AOJu0YwK71hJQ0dtrkMEftq1wMesEiZwRkUH87kYoeX+McTinkhe6WLu
+	FOFkaH+WduUTveeVnX1wpGAv6RlmzQyu24KCU1rX4HDSWCMm4aaQmx58WjhLXNQorpyGsv0VzvO
+	EiA7w7JvX5459riKTAoR9wys6xzwogztD4NODUnXS
+X-Gm-Gg: Acq92OF6bgtNlb0pH4WIZf/LfbrfZZRKnpE9sgBHyIHkXRgjCKjZXY5Rt+CZJU26Zvu
+	I9mELYKZL/ip2Rq9zu+U14SpKApbhHQ95QHBA04GxS8PAH19dGOPFGt3aPXBHWfoP91NVSMx2Ns
+	YBNafjc1GkBvIYpoduT+7Pr6jEKmnB538oT2UuZErdossUSqHGBOsn0DLXmSQHxNls9FZPP5l6t
+	0wBGKBPU/yAnXfEDxif9RXWLsKIk+FqRrZRsK3CjzmLqKzzLs4knL9I1/Zs82pJQc3DaXJzWQ7f
+	w7FppBXHbcfGh9cy3bhvcQROLXnFSXeoGt1G6Y/DHDCwzbBNWMbweYqPluFo3of4ehLZ8qnUmeF
+	9v56mX+jrz/CRMw0ATTj7sT1Pt+qc
+X-Received: by 2002:ac8:5fd4:0:b0:516:daff:7f7e with SMTP id
+ d75a77b69052e-5173a80ffb6mr163432151cf.48.1780327749316; Mon, 01 Jun 2026
+ 08:29:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260530042630.80626-1-kerneljasonxing@gmail.com>
+References: <20260601150203.20352-1-leon.hwang@linux.dev> <20260601150203.20352-2-leon.hwang@linux.dev>
+In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 1 Jun 2026 08:28:58 -0700
+X-Gm-Features: AVHnY4KtmX48lQbX-Wzhm_U2p70Q1h5Y6tSbTyXB_2Lu_Z88IMHeMo5GbIX4esw
+Message-ID: <CANn89iLJgBxx=NaZDHy4s1_U9LKp9dqUDd1v9LR3CQPNo7DxEQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Guillaume Nault <gnault@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
+	Fernando Fernandez Mancera <fmancera@suse.de>, Peter Oskolkov <posk@google.com>, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com, Leon Hwang <leon.huangfu@shopee.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05/30, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
-> 
-> The TX metadata area resides in the UMEM buffer which is memory-mapped
-> and concurrently writable by userspace. In xsk_skb_metadata(),
-> csum_start and csum_offset are read from shared memory for bounds
-> validation, then read again for skb assignment. A malicious userspace
-> application can race to overwrite these values between the two reads,
-> bypassing the bounds check and causing out-of-bounds memory access
-> during checksum computation in the transmit path.
-> 
-> Fix this by reading csum_start and csum_offset into local variables
-> once, then using the local copies for both validation and assignment.
-> 
-> Note that other metadata fields (flags, launch_time) and the cached
-> csum fields may be mutually inconsistent due to concurrent userspace
-> writes, but this is benign: the only security-critical invariant is
-> that each field's validated value is the same one used, which local
-> caching guarantees.
-> 
-> Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
-> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
-> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+On Mon, Jun 1, 2026 at 8:03=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
+>
+> Currently, bpf_lwt_push_ip_encap() does not update skb->transport_header.
+> When a driver, e.g. ice, reuses the stale skb->transport_header to
+> offload checksum computation to NIC hardware, VxLAN packets encapsulated
+> by bpf_lwt_push_encap() helper may be dropped due to incorrect checksum.
+>
+> Update skb->transport_header in bpf_lwt_push_ip_encap() whenever the
+> encapsulated packet uses UDP, so checksum offload works correctly.
+>
+> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_pus=
+h_encap")
+> Cc: Leon Hwang <leon.huangfu@shopee.com>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  net/core/lwt_bpf.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index f71ef82a5f3d..65d1dfbf3312 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -599,6 +599,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool=
+ ipv4, int encap_len)
+>
+>  int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool =
+ingress)
+>  {
+> +       bool is_udp_tunnel;
+>         struct iphdr *iph;
+>         bool ipv4;
+>         int err;
+> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void=
+ *hdr, u32 len, bool ingress)
+>                 ipv4 =3D true;
+>                 if (unlikely(len < iph->ihl * 4))
+>                         return -EINVAL;
+> +               is_udp_tunnel =3D iph->protocol =3D=3D IPPROTO_UDP;
+> +               if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof=
+(struct udphdr)))
+> +                       return -EINVAL;
+>         } else if (iph->version =3D=3D 6) {
+>                 ipv4 =3D false;
+>                 if (unlikely(len < sizeof(struct ipv6hdr)))
+>                         return -EINVAL;
+> +               is_udp_tunnel =3D ((struct ipv6hdr *)iph)->nexthdr =3D=3D=
+ NEXTHDR_UDP;
+> +               if (unlikely(is_udp_tunnel && len < sizeof(struct ipv6hdr=
+) + sizeof(struct udphdr)))
+> +                       return -EINVAL;
+>         } else {
+>                 return -EINVAL;
+>         }
+> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
+*hdr, u32 len, bool ingress)
+>         if (ingress)
+>                 skb_postpush_rcsum(skb, iph, len);
+>         skb_reset_network_header(skb);
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+iph might point to freed memory after skb_cow_head(), leading to UAF in iph=
+->ihl
+
+This issue is already there in the skb_postpush_rcsum(skb, iph, len) call a=
+bove.
+
+> +       if (ipv4 && is_udp_tunnel)
+> +               skb_set_transport_header(skb, skb_network_offset(skb) + i=
+ph->ihl * 4);
+> +       else if (!ipv4 && is_udp_tunnel)
+> +               skb_set_transport_header(skb, skb_network_offset(skb) + s=
+izeof(struct ipv6hdr));
+>         memcpy(skb_network_header(skb), hdr, len);
+>         bpf_compute_data_pointers(skb);
+>         skb_clear_hash(skb);
+> --
+> 2.54.0
+>
