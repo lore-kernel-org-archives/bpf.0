@@ -1,63 +1,64 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8502813D886
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 19:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD183672A1
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 19:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780343451; cv=none; b=CdoXuayQWyP5dPsEq/juvZEdt0u1Rm268w2RBVXRuUdzxffNTZq03GjHwuOvx4DlhnltDVu1a4nd91CMCQCc/c+XTxVt+aGKxz12f8JJoj7sSQIDAcYmXEX7g37d3FJt/mr+MaOtxcdyDuHrwJ8kTTzoxE++woJc7XtqEm9dkGE=
+	t=1780343751; cv=none; b=s93FywDiIpc3/5UqS3jF5RIqiuq8PzVrxMyT1WMamSYyVivJ2Vkh0quA9i8A5au42srhmi12/QZX7q9mByfJ/uF9niQj6MXpbw2b44lBmEl0WUur9DBdxY2EKBPcXfwoSbg+1LiJIBckql424ET32I7BKCfS1h1TzYly+ug39AQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780343451; c=relaxed/simple;
-	bh=f/ewhjMwm2hIao1KAEdzFH5LROA28ARwURFT+vsDrpY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=EMOGHu/YI1Hqk94xSXho51NOfZ22AAPlIqHvDOFQTJ2rjbwUDoUiGzfV6f6pR6dgo/qgaOBO5AtiCXCmxUMyysFcFL1qDvumG7f0uVpLZSkoUISsltGOX3Ta70eP/H1RAESkCjKfub9rm/O8lR0c41p+sOvMu/GCyhnsVc4yvtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=GVHhbOn5; arc=none smtp.client-ip=74.125.82.47
+	s=arc-20240116; t=1780343751; c=relaxed/simple;
+	bh=yy/FahWvVhxwoeV2vAmZivByfJ15h+f2J5IhLIs3LJ8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=AMPTDRNiv1FQfTNkxoxqVwQt0jc0HU2nKIfS2LHJAzGcjxquJNrqWugmDN6HmTIePABXx0j0BY5HKVo1D32J/vy8wrnA7Y2NiayXbBaz078EF7xwOeUkAdl0yCxPclnrc22bTsSTa23QiOGg+WTOIDi7b/ihBcxJL5BLi0d2YgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=eGazGPVt; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="GVHhbOn5"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-132d1b2519eso15666438c88.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 12:50:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="eGazGPVt"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304e58292d3so7533395eec.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 12:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780343449; x=1780948249; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780343749; x=1780948549; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h0LSFJgKtr452ZfbFSfm0cpbFppmQIZm1Kgul++1qzw=;
-        b=GVHhbOn5Zun8cjTTHV0DrWShHrHEtB5MCQGLeE5Sws8OLmNMEUHFSVmFwDxtvpCWyv
-         dWpWGFMnDIPm9T+0vHU2zVV9dPkiRjf5O7CW3FB30UxgIfUyscC0c+Nve/x5MpQB6xOL
-         xlrvxm+yQSAldOCmPbBCuFx2QRXs64aCWW5bjQWf5DrU4nxnte+CoPe1j+6aX+OXs0Ch
-         3OlziJXOYUwz/99/+MWwgJyQfCsPN5Uc7PS79V+Z2z4SwqWr0VfWnj6kG0VddvPUuqtB
-         LODKKPU+b8GUZNVm7UC7sbIRpTgXtPBLMTIfB5SraYQk19/C7blcFzRNzz7YB8mHKfW7
-         0MMg==
+        bh=clBY1kGXZXA2bHl4zt3mvE+AmGaC+Xd6DYPyFSWFDzM=;
+        b=eGazGPVt6DfnCfNtCb4PPsgZa0F9VGBpyrNIASXz8O/SGgYswiOEz1IeVG4wtpZTlP
+         YEngNxAhPv9cxzAc2blANGiYibdMylkp5z8WJtv/u5DazlWyXKFKR7wM85WT4xcfqCWs
+         fg40SVPNtEuZvhMduEwxYYQeO3smlVukvrghjtDsft7xUJ0MSvnkXnejTXq7EdnMKWzH
+         jRYHsYoLfH9Vn1UYsA1WEv5T5/PuEC2goEObwsK3DO4WxVZZm6eFeMO6F2mNhuovUUMt
+         4NqjEYjDSTILdEWyKLjHRJkr8iiIIOlNWrTuhU1QhvTwvCWKtedQEvf56HpyCO+4VYD4
+         ozPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780343449; x=1780948249;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1780343749; x=1780948549;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=h0LSFJgKtr452ZfbFSfm0cpbFppmQIZm1Kgul++1qzw=;
-        b=m5Qf4J17fasS6PDThwwnFYj5La2rJGlVS/cGCx15nq3CgGFKzHpgPzYTp3vLU0Orfn
-         MWlLCvl9WiLXj6tXrsKzi3J4u0+vYGqA8gvYOa0YEPqroFFDbJGhNY8crx5azHSU7Hnj
-         vgOz1hWAvJ9yjPZgF8fAVIFCGtUMe87T5Hyoqx+2chCDMtAgxiiwb6ojgsa0nS5C0cmI
-         FVDMC4a4rPzgFP8nCCrjS3ugGzCSn4+rZFVIVop9/MiK3ueSG3PmLRAFBajDYeZEpzIq
-         9ZpKaLoGPr7oe92weTidb3UZjaNi0OgAaYmVYmk9eCxwo8Gl6clJ/K05FLVGL68P9Q7c
-         is6w==
-X-Forwarded-Encrypted: i=1; AFNElJ/3iAbFZfnNA+XqzErx/jU/tdfp5eKTU50ZazKsv15I5IfkxW8j3eTbflsBkCTmNgSAQ1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRIH96eUnCcy03Ozb5IJ3lbKuoC4zm5jld5c1BvNQaeiZXKb8e
-	ZcOD8oUKvX3tGGCEZF7BVRAENG0UHx2kkUJVtQ1q7BKSHsuitehdEyHS5ZQLjMkss/Q=
-X-Gm-Gg: Acq92OE8Jm5wyBMDnseVfiTVmKbaY4VCCABJf6kplzMWTAKqQWCxdDyghXz+6Rq1UIV
-	4dD4fWczvyPcq7NH+nbZ8YUV1qrvuSyr6FOVEKJQwzPDhRWxpZCP5ncuwzqOcptqEpCkIOvACod
-	ift2pYg16qV6qKX66pH1SgjR3+D0ai1qQn9l+l8sr7emrv0nbxRoy68UOnSSLVydZNi3kO4HjFu
-	9vO8hM9cVjuK8MQL3ArxN+Xr/xrWGss6I04a7rLW0LUVjDrAh7kx9QUtuGDj5FDbTHoJafjpA9E
-	z8AXowiPiLKZECmSKes2rPmNu8eq8purylHrrKuajIs+HuLLsHAy0hy8hSA0ObZBwkjhokhKTBz
-	AF4FNwWDWOa/tQYrQNh5tHwTzlbs0Wr4w7L8lqMq5qsOMBya8LjBc6Lutdv9x7si8bpQXbP418K
-	1jXhwb7WULYtTyHKI=
-X-Received: by 2002:a05:7300:4312:b0:304:819f:502b with SMTP id 5a478bee46e88-304fa55d9acmr6416384eec.9.1780343448261;
-        Mon, 01 Jun 2026 12:50:48 -0700 (PDT)
+        bh=clBY1kGXZXA2bHl4zt3mvE+AmGaC+Xd6DYPyFSWFDzM=;
+        b=XvhjR6UzEMPkMR1OPn8+injgO4LFb0w7IJHWe9p0yF3Ufutothu1E/E+a03f9dUimh
+         tIvkJrL0d+e1Q49h2xYSuzbhuHWELVep11qA7ZHEgaoMqH3kziIExW2n6oUqmNQLm0JL
+         URf9VKleZ8tIzLPITHgGhJtodl2Eldheds6BUXEjyMoX8JXbdUcN66xhzyci63V/a5Y/
+         amxk+YRWaijNn0iWNh5X7ZZM7/dIcOmiEFNUUjBMcYo4oOauiEM/1I3ENw9wRlJ7MBJw
+         +BWvSyJ1vTctRLqUjOZEcOaMfguRoexucGwJyXL/ls7eXYayDsSWdRwPsb02Brh/7cDj
+         pEWA==
+X-Forwarded-Encrypted: i=1; AFNElJ8pJAvGxvXrx6fce+CtM5nxuOmQNVWXnvw8UmSff0smrg/MQ8D4vVXic0I/Zz3EBRXLgVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwItJooopmAop6j/be2gBs2fpPWZZHTDiULTSRcwvXXklnMt34B
+	7f0Ds03SImW+7G/LZiJ6hl+jMAN8Q8QAV7D2CZF9o8S1ccsbbzizAuP/G8i9gjJ0xDq+PMNGXNF
+	b3coChiqlvkSP
+X-Gm-Gg: Acq92OEeJj7VY+5G+t4gBXB+tJN6Qztju9EOZSWfq18tIsoA0eqXMOIGfRpaymIzsAe
+	LFxiFk06EfWOdcGa3nRUlwCLV9M6vtoAc1Ff14Oc4BoZwKRj+2QsDpJ7Vopk9xQvSxR3L4E92bV
+	wl2mE5+SbjXRyhwmJoFO8v21KiCBaiyCQFuh8lg0znG5fz3XtRZX6GnqJeHdo8UxtLXOAqybYc9
+	vRlKyOrh40nMLXq9bM9Y4w2fWSKTvgOBcyZysmJ32DGE979nI11TY770KwqIsATKocmNooK8Bq3
+	HWTDa2UeF6RyP9W3JKB7J+fhHpeLjWVztDH3QsybxNqSzZGg5McOU6wj9jDGRANb7X2pFOfn9ez
+	dwU3GHQl3furH50YI3AV4s1GXanBUWRP+r3KgoM6ehPb2d/C9jH1JYHFvxqDO9bN3y22WQHSfZE
+	3otmkgf/U0TJNWt5Y+HDeHMS2BmQ==
+X-Received: by 2002:a05:7300:6c84:b0:2d8:97d6:6abc with SMTP id 5a478bee46e88-304fa67401amr6648256eec.22.1780343749241;
+        Mon, 01 Jun 2026 12:55:49 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::ceef])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed53f002sm10022671eec.18.2026.06.01.12.50.46
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2c3121sm9848957eec.5.2026.06.01.12.55.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 12:50:47 -0700 (PDT)
+        Mon, 01 Jun 2026 12:55:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,313 +67,253 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Jun 2026 15:50:45 -0400
-Message-Id: <DIXZ2VPVZP94.ACM1OJMPGF4V@etsalapatis.com>
-Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
- <kernel-team@fb.com>, <yonghong.song@linux.dev>
-Subject: Re: [PATCH RFC bpf-next v3 4/6] bpf: report hot simulated
- callchains when 1M instructions limit is met
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
+Date: Mon, 01 Jun 2026 15:55:47 -0400
+Message-Id: <DIXZ6QFPCYP6.105GNJKB1H44U@etsalapatis.com>
 To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
  <ast@kernel.org>
+Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
+ <kernel-team@fb.com>, <yonghong.song@linux.dev>
+Subject: Re: [PATCH RFC bpf-next v3 6/6] selftests/bpf: test budget
+ exhaustion profiling report
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
- <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
-In-Reply-To: <20260527-better-1m-reporting-v3-4-b3ede0588a75@gmail.com>
+ <20260527-better-1m-reporting-v3-6-b3ede0588a75@gmail.com>
+In-Reply-To: <20260527-better-1m-reporting-v3-6-b3ede0588a75@gmail.com>
 
 On Wed May 27, 2026 at 3:29 AM EDT, Eduard Zingerman wrote:
-> When the verifier exceeds the 1M instruction budget, the current error
-> output shows a random execution trace that happens to be active when
-> the limit is hit, which is not very helpful for debugging.
->
-> To rectify this, employ a profiler-inspired technique:
-> collect and count "callchain" stack traces that the verifier visits
-> during program validation and report the top 3 hot traces. Sample
-> callchains at instructions marked as force checkpoints and loop header
-> entries.
->
-> When 1M instructions is met, print a report containing:
-> - callchains verifier visited most often;
-> - disassembly of the subprograms referenced from the printed
->   callchains.
->
-> Here is an example of the report:
->
->   budget_nested_call_loop():
->     ; asm volatile ("                                     \ @ verifier_bu=
-dget_report.c:44
->     0: (b7) r0 =3D 0
->     1: (85) call pc+1
->     2: (95) exit
->
->   budget_nested_call_loop__inner():
->     ; asm volatile ("                                     \ @ verifier_bu=
-dget_report.c:54
->     3: (b7) r0 =3D 0
->     4: (07) r0 +=3D 1
->     5: (05) goto pc-2
->
->   #1 most visited simulated stacktrace (visited 499999 times):
->     budget_nested_call_loop/1 (.../verifier_budget_report.c:44)
->     budget_nested_call_loop__inner/4 (.../verifier_budget_report.c:54)
+> Add verifier selftests that exhaust the 1M instruction budget and
+> verify that the new profiling report is produced:
+> - nested function calls with inner loop, check that stack trace is
+>   print correctly;
+> - two loops on the same level, check that both are reported;
+> - iterator-based loop with non-converging register, check that
+>   register is in the report;
+> - iterator-based loop with non-converging stack slot, check that stack
+>   slot is in the report.
 >
 > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Minor suggestion: Can we make the N of top-N a #define for clarity and=20
-to make it easy to change during hacking?
-
 > ---
->  include/linux/bpf_verifier.h |  14 ++++
->  kernel/bpf/verifier.c        | 155 +++++++++++++++++++++++++++++++++++++=
+>  tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+>  .../selftests/bpf/progs/verifier_budget_report.c   | 175 +++++++++++++++=
 ++++++
->  2 files changed, 169 insertions(+)
+>  2 files changed, 177 insertions(+)
 >
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index d0a1fb135cbf..347a155d8e21 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -9,6 +9,8 @@
->  #include <linux/filter.h> /* for MAX_BPF_STACK */
->  #include <linux/tnum.h>
->  #include <linux/cnum.h>
-> +#include <linux/hashtable.h>
-> +#include <linux/jhash.h>
-> =20
->  /* Maximum variable offset umax_value permitted when resolving memory ac=
-cesses.
->   * In practice this is far bigger than any realistic pointer offset; thi=
-s limit
-> @@ -660,6 +662,17 @@ struct bpf_loop {
->  	bool irreducible;
->  };
-> =20
-> +struct bpf_callchain {
-> +	u32 insn_idx[MAX_CALL_FRAMES];
-> +	u32 curframe;
-> +};
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+> index 35d92d176c1f..61a732a499b0 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+> @@ -14,6 +14,7 @@
+>  #include "verifier_basic_stack.skel.h"
+>  #include "verifier_bitfield_write.skel.h"
+>  #include "verifier_bounds.skel.h"
+> +#include "verifier_budget_report.skel.h"
+>  #include "verifier_bounds_deduction.skel.h"
+>  #include "verifier_bounds_deduction_non_const.skel.h"
+>  #include "verifier_bounds_mix_sign_unsign.skel.h"
+> @@ -169,6 +170,7 @@ void test_verifier_bounds(void)               { RUN(v=
+erifier_bounds); }
+>  void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_dedu=
+ction); }
+>  void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_b=
+ounds_deduction_non_const); }
+>  void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mi=
+x_sign_unsign); }
+> +void test_verifier_budget_report(void)        { RUN(verifier_budget_repo=
+rt); }
+>  void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_sta=
+ck); }
+>  void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); =
+}
+>  void test_verifier_bswap(void)                { RUN(verifier_bswap); }
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_budget_report.c b=
+/tools/testing/selftests/bpf/progs/verifier_budget_report.c
+> new file mode 100644
+> index 000000000000..7b87e53831c2
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_budget_report.c
+> @@ -0,0 +1,175 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 > +
-> +struct bpf_callchain_entry {
-> +	struct hlist_node node;
-> +	struct bpf_callchain cc;
-> +	u64 count;
-> +};
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
 > +
->  struct bpf_insn_aux_data {
->  	union {
->  		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
-> @@ -1043,6 +1056,7 @@ struct bpf_verifier_env {
->  	u32 scc_cnt;
->  	struct bpf_iarray *succ;
->  	struct bpf_iarray *gotox_tmp_buf;
-> +	DECLARE_HASHTABLE(callchain_htab, 8);
->  };
-> =20
->  static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_=
-env *env, int subprog)
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2b3584712ad2..54b7ad65b7fc 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17247,6 +17247,152 @@ static int check_indirect_jump(struct bpf_verif=
-ier_env *env, struct bpf_insn *in
->  	return INSN_IDX_UPDATED;
->  }
-> =20
-> +static void compute_callchain(struct bpf_verifier_state *st, struct bpf_=
-callchain *cc)
-> +{
-> +	int i;
-> +
-> +	cc->curframe =3D st->curframe;
-> +	for (i =3D 0; i <=3D st->curframe; i++)
-> +		cc->insn_idx[i] =3D bpf_frame_insn_idx(st, i);
-> +}
-> +
-> +static int update_callchain_profile(struct bpf_verifier_env *env, struct=
- bpf_verifier_state *st)
-> +{
-> +	struct bpf_callchain_entry *entry;
-> +	struct bpf_callchain cc =3D {};
-> +	u32 hash;
-> +
-> +	compute_callchain(st, &cc);
-> +	hash =3D jhash2(cc.insn_idx, cc.curframe + 1, cc.curframe + 1);
-> +	hash_for_each_possible(env->callchain_htab, entry, node, hash) {
-> +		if (entry->cc.curframe =3D=3D cc.curframe &&
-> +		    !memcmp(entry->cc.insn_idx, cc.insn_idx, (cc.curframe + 1) * sizeo=
-f(u32))) {
-> +			entry->count++;
-> +			return 0;
-> +		}
-> +	}
-> +	entry =3D kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
-> +	if (!entry)
-> +		return -ENOMEM;
-> +	entry->cc =3D cc;
-> +	entry->count =3D 1;
-> +	hash_add(env->callchain_htab, &entry->node, hash);
-> +	return 0;
-> +}
-> +
-> +static void free_callchain_profile(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_callchain_entry *entry;
-> +	struct hlist_node *tmp;
-> +	int bkt;
-> +
-> +	hash_for_each_safe(env->callchain_htab, bkt, tmp, entry, node) {
-> +		hash_del(&entry->node);
-> +		kfree(entry);
-> +	}
-> +}
-> +
-> +static void print_callchain_entry(struct bpf_verifier_env *env,
-> +				  struct bpf_callchain_entry *entry, int idx)
-> +{
-> +	struct bpf_callchain *cc =3D &entry->cc;
-> +	const struct bpf_line_info *linfo;
-> +	struct bpf_subprog_info *sub;
-> +	int i, insn_idx;
-> +
-> +	verbose(env, "#%d most visited simulated stacktrace (visited %llu times=
-):\n",
-> +		idx, entry->count);
-> +	for (i =3D 0; i <=3D cc->curframe; i++) {
-> +		insn_idx =3D cc->insn_idx[i];
-> +		sub =3D bpf_find_containing_subprog(env, insn_idx);
-> +		linfo =3D bpf_find_linfo(env->prog, insn_idx);
-> +		if (sub->name)
-> +			verbose(env, "  %s/%d", sub->name, insn_idx);
-> +		else
-> +			verbose(env, "  subprog#%td/%d", sub - env->subprog_info, insn_idx);
-> +		if (linfo)
-> +			verbose(env, " (%s:%u)",
-> +				btf_name_by_offset(env->prog->aux->btf, linfo->file_name_off),
-> +				BPF_LINE_INFO_LINE_NUM(linfo->line_col));
-> +		verbose(env, "\n");
-> +	}
-> +}
-> +
-> +static void disasm_subprog(struct bpf_verifier_env *env, struct bpf_subp=
-rog_info *sub)
-> +{
-> +	u32 i, end =3D (sub + 1)->start;
-> +
-> +	if (sub->name)
-> +		verbose(env, "%s():\n", sub->name);
-> +	else
-> +		verbose(env, "subprog#%td:\n", sub - env->subprog_info);
-> +	env->prev_linfo =3D NULL;
-> +	for (i =3D sub->start; i < end; i++) {
-> +		verbose_linfo(env, i, "  ; ");
-> +		verbose(env, "  %d: ", i);
-> +		bpf_verbose_insn(env, &env->prog->insnsi[i]);
-> +		if (bpf_is_ldimm64(&env->prog->insnsi[i]))
-> +			i++;
-> +	}
-> +}
-> +
-> +/*
-> + * Print several most visited simulated stack traces,
-> + * and a disasembly of related subprograms.
-> + */
-> +static void print_hotspots(struct bpf_verifier_env *env)
-> +{
-> +	DECLARE_BITMAP(printed_subs, BPF_MAX_SUBPROGS + 2) =3D {};
-> +	struct bpf_callchain_entry *top[3] =3D {};
-> +	struct bpf_callchain_entry *entry;
-> +	struct bpf_subprog_info *sub;
-> +	int i, j, bkt, nr_top =3D 0;
-> +
-> +	if (!(env->log.level & BPF_LOG_LEVEL))
-> +		return;
-> +
-> +	/* Collect the hottest callchains */
-> +	hash_for_each(env->callchain_htab, bkt, entry, node) {
-> +		for (i =3D 0; i < 3; i++) {
-> +			if (!top[i] || entry->count > top[i]->count) {
-> +				memmove(&top[i + 1], &top[i], (2 - i) * sizeof(top[0]));
-> +				top[i] =3D entry;
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	for (i =3D 0; i < 3 && top[i]; i++)
-> +		nr_top++;
-> +
-> +	if (!nr_top)
-> +		return;
-> +
-> +	if (!(env->log.level & BPF_LOG_LEVEL2))
-> +		bpf_vlog_reset(&env->log, 0);
-> +
-> +	/* Identify callchain subprograms and print disasm of those */
-> +	for (i =3D 0; i < nr_top; i++) {
-> +		struct bpf_callchain *cc =3D &top[i]->cc;
-> +
-> +		for (j =3D 0; j <=3D cc->curframe; j++) {
-> +			sub =3D bpf_find_containing_subprog(env, cc->insn_idx[j]);
-> +			__set_bit(sub - env->subprog_info, printed_subs);
-> +		}
-> +	}
-> +
-> +	for_each_set_bit(i, printed_subs, env->subprog_cnt) {
-> +		disasm_subprog(env, &env->subprog_info[i]);
-> +		verbose(env, "\n");
-> +	}
-> +
-> +	/* Print the hot callchains */
-> +	for (i =3D 0; i < nr_top; i++) {
-> +		print_callchain_entry(env, top[i], i + 1);
-> +		verbose(env, "\n");
-> +	}
-> +}
-> +
->  static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_st=
-ate)
->  {
->  	int err;
-> @@ -17381,6 +17527,7 @@ static int do_check(struct bpf_verifier_env *env)
->  		insn_aux =3D &env->insn_aux_data[env->insn_idx];
-> =20
->  		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
-> +			print_hotspots(env);
->  			verbose(env,
->  				"BPF program is too large. Processed %d insn\n",
->  				env->insn_processed);
-> @@ -17390,6 +17537,12 @@ static int do_check(struct bpf_verifier_env *env=
+> +SEC("tracepoint")
+> +__failure
+> +__log_level(1)
+> +__msg("two_level_calls():")
+> +__msg("  0: (85) call pc+1")
+> +__msg("  1: (95) exit")
+> +__msg("two_level_calls__l1():")
+> +__msg("  2: (85) call pc+1")
+> +__msg("  3: (95) exit")
+> +__msg("two_level_calls__l2():")
+> +__msg("  4: (b7) r0 =3D 0")
+> +__msg("  5: (07) r0 +=3D 1")
+> +__msg("  6: (05) goto pc-2")
+> +__msg("#1 most visited simulated stacktrace (visited 499999 times):")
+> +__msg("  two_level_calls/0 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})"=
 )
->  		state->last_insn_idx =3D env->prev_insn_idx;
->  		state->insn_idx =3D env->insn_idx;
-> =20
-> +		if (bpf_is_force_checkpoint(env, env->insn_idx) || insn_aux->loop) {
-> +			err =3D update_callchain_profile(env, state);
-> +			if (err)
-> +				return err;
-> +		}
+> +__msg("  two_level_calls__l1/2 ({{.*}}/verifier_budget_report.c:{{[0-9]+=
+}})")
+> +__msg("  two_level_calls__l2/5 ({{.*}}/verifier_budget_report.c:{{[0-9]+=
+}})")
+> +__msg("BPF program is too large. Processed 1000001 insn")
+> +__naked void two_level_calls(void)
+> +{
+> +	asm volatile ("					\
+> +	call two_level_calls__l1;		\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
 > +
->  		if (bpf_is_prune_point(env, env->insn_idx)) {
->  			err =3D bpf_is_state_visited(env, env->insn_idx);
->  			if (err < 0)
-> @@ -19673,6 +19826,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
-ttr *attr, bpfptr_t uattr,
->  		return -ENOMEM;
-> =20
->  	env->bt.env =3D env;
-> +	hash_init(env->callchain_htab);
-> =20
->  	len =3D (*prog)->len;
->  	env->insn_aux_data =3D
-> @@ -19945,6 +20099,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
-ttr *attr, bpfptr_t uattr,
->  	bpf_clear_insn_aux_data(env, 0, env->prog->len);
->  	vfree(env->insn_aux_data);
->  err_free_env:
-> +	free_callchain_profile(env);
->  	bpf_stack_liveness_free(env);
->  	kvfree(env->cfg.insn_postorder);
->  	kvfree(env->scc_info);
+> +__used
+> +static __naked void two_level_calls__l1(void)
+> +{
+> +	asm volatile ("					\
+> +	call two_level_calls__l2;		\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
+> +
+> +__used
+> +static __naked void two_level_calls__l2(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 =3D 0;						\
+> +1:	r0 +=3D 1;					\
+> +	goto 1b;					\
+> +"	::: __clobber_all);
+> +}
+> +
+> +SEC("tracepoint")
+> +__failure
+> +__log_level(1)
+> +__msg("two_loops():")
+> +__msg("  0: (b7) r6 =3D 250000")
+> +__msg("  1: (b7) r0 =3D 0")
+> +__msg("  2: (07) r0 +=3D 1")
+> +__msg("  3: (ad) if r0 < r6 goto pc-2")
+> +__msg("  4: (b7) r0 =3D 0")
+> +__msg("  5: (07) r0 +=3D 1")
+> +__msg("  6: (05) goto pc-2")
+> +__msg("#1 most visited simulated stacktrace (visited 250000 times):")
+> +__msg("  two_loops/2 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
+> +__msg("#2 most visited simulated stacktrace (visited 249999 times):")
+> +__msg("  two_loops/5 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
+> +__msg("BPF program is too large")
+> +__naked void two_loops(void)
+> +{
+> +	asm volatile ("					\
+> +	r6 =3D 250000;					\
+> +	r0 =3D 0;						\
+> +1:	r0 +=3D 1;					\
+> +	if r0 < r6 goto 1b;				\
+> +	r0 =3D 0;						\
+> +2:	r0 +=3D 1;					\
+> +	goto 2b;					\
+> +"	::: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__failure
+> +__log_level(1)
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__msg("iter_loop():")
+> +__msg("  8: (bf) r1 =3D r6")
+> +__msg("  9: (85) call bpf_iter_num_next")
+> +__msg("  10: (15) if r0 =3D=3D 0x0 goto pc+3")
+> +__msg("  11: (07) r7 +=3D 1")
+> +__msg("  12: (25) if r7 > 0xf4240 goto pc+1")
+> +__msg("  13: (05) goto pc-6")
+> +__msg("#1 most visited simulated stacktrace (visited 142856 times):")
+> +__msg("  iter_loop/8 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
+> +__msg("#2 most visited simulated stacktrace (visited 142856 times):")
+> +__msg("  iter_loop/9 ({{.*}}/verifier_budget_report.c:{{[0-9]+}})")
+> +__msg("    Most varying: R7 (frame 0)")
+> +__msg("BPF program is too large. Processed 1000001 insn")
+> +__naked void iter_loop(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 =3D r10;					\
+> +	r1 +=3D -16;					\
+> +	w2 =3D 0;						\
+> +	w3 =3D 1000000;					\
+> +	call %[bpf_iter_num_new];			\
+> +	r7 =3D 0;						\
+> +	r6 =3D r10;					\
+> +	r6 +=3D -16;					\
+> +1:	r1 =3D r6;					\
+> +	call %[bpf_iter_num_next];			\
+> +	if r0 =3D=3D 0 goto 2f;				\
+> +	r7 +=3D 1;					\
+> +	if r7 > 1000000 goto 2f;			\
+> +	goto 1b;					\
+> +2:	r1 =3D r6;					\
+> +	call %[bpf_iter_num_destroy];			\
+> +	r0 =3D r7;					\
+> +	exit;						\
+> +"	:
+> +	: __imm(bpf_iter_num_new),
+> +	  __imm(bpf_iter_num_next),
+> +	  __imm(bpf_iter_num_destroy)
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__failure
+> +__log_level(1)
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__msg("iter_stack_varying():")
+> +__msg("  10: (85) call bpf_iter_num_next")
+> +__msg("#1 most visited simulated stacktrace (visited 111110 times):")
+> +__msg("  iter_stack_varying/10 ({{.*}}/verifier_budget_report.c:{{[0-9]+=
+}})")
+> +__msg("    Most varying: fp-24 (frame 0)")
+> +__msg("BPF program is too large. Processed 1000001 insn")
+> +__naked void iter_stack_varying(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 =3D r10;					\
+> +	r1 +=3D -16;					\
+> +	w2 =3D 0;						\
+> +	w3 =3D 1000000;					\
+> +	call %[bpf_iter_num_new];			\
+> +	r8 =3D 0;						\
+> +	*(u64 *)(r10 - 24) =3D r8;			\
+> +	r6 =3D r10;					\
+> +	r6 +=3D -16;					\
+> +1:	r1 =3D r6;					\
+> +	call %[bpf_iter_num_next];			\
+> +	if r0 =3D=3D 0 goto 2f;				\
+> +	r8 =3D *(u64 *)(r10 - 24);			\
+> +	r8 +=3D 1;					\
+> +	*(u64 *)(r10 - 24) =3D r8;			\
+> +	if r8 > 1000000 goto 2f;			\
+> +	goto 1b;					\
+> +2:	r1 =3D r6;					\
+> +	call %[bpf_iter_num_destroy];			\
+> +	r0 =3D *(u64 *)(r10 - 24);			\
+> +	exit;						\
+> +"	:
+> +	: __imm(bpf_iter_num_new),
+> +	  __imm(bpf_iter_num_next),
+> +	  __imm(bpf_iter_num_destroy)
+> +	: __clobber_all);
+> +}
+> +
+> +void iter_num_btf_fixup(void)
+> +{
+> +	bpf_iter_num_new(0, 0, 0);
+> +	bpf_iter_num_next(0);
+> +	bpf_iter_num_destroy(0);
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
 
