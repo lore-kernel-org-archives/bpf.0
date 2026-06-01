@@ -1,150 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18BD33F8B1;
-	Mon,  1 Jun 2026 06:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B80A3769FE;
+	Mon,  1 Jun 2026 06:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780295956; cv=none; b=KbQPeWVnGW8LZl5xUNB3Ows8hF/msKSZ3vz5HIHNzVBkmQd7mkUYk3eePnAwE9XZRFLRpUg+1emhzUVzNjbD2dfRVTeU9ZOZ1eJqdlKzU+bRM7YX84U15W226AJNK74by3WJWs3GbR6+Z9RkR2FxkeSPhkAXD60msqYmj9t1izQ=
+	t=1780296280; cv=none; b=Ma9NbPMHN0bOukze9t7FqoZ8wYDVioC6IKODCEcVv9ijUEJJ/yhU89J8HNYygucUHHfjOJN4jxeVzFSSungPBX2ERL6bxHCjaMUnimRHV1gR+bbk6fWlj1Rs520oV/cplwcheRtk3dcW3YLUSYZcUHqp1CGQRuhrnu5hY7MF914=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780295956; c=relaxed/simple;
-	bh=vj0CG7FLtY3Gdw8dYwgFK/i+ZFxFt/ONhuN1JqJsDMM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e2ppWQ5oJyNbsUIrgHMel8dY6wT+pFztg0dRtJioqyyofAyuN1lhYH2btcAZ+LgUbqCL/SFnYKG9kI3Sxi6S2KPClkfIV+XaVr2ORucZM7EOQYlkteJ9nQq0TeKkOE1Wc0vB16Il68vtmGn64HZ1hcGywebh/voCOKeDEuSrJkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=deU2ejyR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780296280; c=relaxed/simple;
+	bh=ttQUf+905huvcZpWtMaS+slgotKVrs76Us+19mc7mlU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iMuYlMfHgabcwoB64unCC8gFO3X4Pp+7fEMRNwHU2hPP9RxjXN8aAEDvJlZsU4ahwWzPZJVSDWv3gfJU0ps8kjjgZ2NKYXA3LFZ36MBK/KBlE1CF2grtb68VSoPnX2csKCa1MAXQuobe6Zd/l841+B2A6fTzhN4BUbHCQge5FPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fl8KaTYS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="deU2ejyR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03E81F00893;
-	Mon,  1 Jun 2026 06:39:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fl8KaTYS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A397D1F00893;
+	Mon,  1 Jun 2026 06:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780295954;
-	bh=rKk6j/n9sj1IniX/7VKjNeDlTH/D2W3IN/BVvbihauI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=deU2ejyRoOMJVQywPOlLu1PqH70E+zWfsku4xW3ejYZB8yKEwCBukyd+rzzgKkdmf
-	 vGfMeLir+q2+YLlqYJ/AzObbKzdRw866F6HyGjCNfk4XHBFW0DBz7SfQREAKIrqTih
-	 eBi6cugoUG+CYfTUshTd0CccN+PQjgSzwSv7queVBc6p52Wolbj/6fOndd0MpYLxG2
-	 cWd4oZ+vbxMMcHUxBTZyTjrMsQm3x2s3VngOun20ayrnEQkV5sF8YIYLuI3Ny72DXa
-	 BZJwi4+K5b9H+0C3rpQ6FfqPHiUwR1FUO2dIJha1fHRhWnIHL6s3QX/hRpXpWMsXxA
-	 Afp4/cf9Y5iIg==
-Message-ID: <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
-Date: Mon, 1 Jun 2026 15:39:06 +0900
+	s=k20260515; t=1780296278;
+	bh=zfsGHuWuFTv1Cjd1l5nguThlUkiEd3QUifwDoadeDfw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Fl8KaTYSmsmiHMDvhhqROgmziV6pVWnmUAFN7nwzw6FuZ1ZAvqxDCvaX6Kp9BiSrw
+	 Tx4l9o/B8Rm3Ve6eX/tZXsc6ta+82pDSzJQK+FOPsSJL/hOfTceuC5cpvsnZysejpr
+	 iU89/n60E3z0LQ+Ww3qAzzpeG8nkiE6Z2iB9snwZD+nFt2xHCW/JJKJ+61PvCdrnJ5
+	 C0czBINHjaTfrTn4+lz9IKmrQLJwofpHNjy9enWVUof3DS6z/mSG5GhRAmV4K0eMBg
+	 6Dv2wlTFukrhp02AzXZk3xcNiVetc7TY+507Om3drSIZplqTPWfKjCQ/SOOtpodzNo
+	 0spuDbxO0oayA==
+Content-Type: multipart/mixed; boundary="===============5260575393648563333=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-To: Christoph Hellwig <hch@lst.de>, "Vlastimil Babka (SUSE)"
- <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
- <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <20260529135045.GA10647@lst.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------HMU1xMsen67VgPzLuGJEEdMK"
+Message-Id: <e0d90b33c6a5bd8323a919e4552862dd2b6b0cf99648b63c0ebf3ed37bb45774@mail.kernel.org>
+In-Reply-To: <20260601055859.13888-1-kaitao.cheng@linux.dev>
+References: <20260601055859.13888-1-kaitao.cheng@linux.dev>
+Subject: Re: [PATCH] bpf: Clear rb node linkage when freeing bpf_rb_root
+From: bot+bpf-ci@kernel.org
+To: kaitao.cheng@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
+Cc: davemarchevsky@fb.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  1 Jun 2026 06:44:38 +0000 (UTC)
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------HMU1xMsen67VgPzLuGJEEdMK
-Content-Type: multipart/mixed; boundary="------------ub6P4aBhniaWwf9dwX4fSUIh";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: Christoph Hellwig <hch@lst.de>, "Vlastimil Babka (SUSE)"
- <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
- <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-Message-ID: <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
-In-Reply-To: <20260529135045.GA10647@lst.de>
+--===============5260575393648563333==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---------------ub6P4aBhniaWwf9dwX4fSUIh
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 9ca195104667..46e8eada463b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2307,22 +2307,30 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+>  {
+>  	struct rb_root_cached orig_root, *root = rb_root;
+>  	struct rb_node *pos, *n;
+> -	void *obj;
+>
+>  	BUILD_BUG_ON(sizeof(struct rb_root_cached) > sizeof(struct bpf_rb_root));
+>  	BUILD_BUG_ON(__alignof__(struct rb_root_cached) > __alignof__(struct bpf_rb_root));
+>
+>  	__bpf_spin_lock_irqsave(spin_lock);
+>  	orig_root = *root;
+> +	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
+> +		struct bpf_rb_node_kern *node;
+> +
+> +		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
+> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
+> +	}
+>  	*root = RB_ROOT_CACHED;
+>  	__bpf_spin_unlock_irqrestore(spin_lock);
 
+Since there is no verifier-enforced limit on the number of nodes in a BPF
+rbtree, could this O(N) post-order traversal trigger latency spikes, RCU
+stalls, or NMI watchdog lockups?
 
+This loop runs inside the __bpf_spin_lock_irqsave() critical section, which
+disables local interrupts.
 
-On 5/29/26 10:50 PM, Christoph Hellwig wrote:
-> On Fri, May 29, 2026 at 01:54:48PM +0200, Vlastimil Babka (SUSE) wrote:=
+Additionally, since rb_first_postorder() and rb_next_postorder() are exported
+and traceable, if an fentry/fexit BPF program is attached to them and attempts
+to acquire the same bpf_spin_lock, will it cause a hard deadlock?
 
->> Thanks, I applied it to slab/for-7.2/alloc_bulk and merged to slab/for=
--next
->> (it's still yankable in case of issues)
->>
->> Did some fixups below (the comment was stale prior to the patch; resto=
-red
->> unlikely(), simplified one line).
->>
->> A test merge into yesterday's -next found a conflict in drivers/gpu/dr=
-m/
->> panthor/panthor_mmu.c. Commit 1013bf53650e ("drm/panthor: Split
->> panthor_vm_prepare_map_op_ctx() to prepare for reclaim") moved the cha=
-nged
->> codeto a new function panthor_vm_op_ctx_prealloc_pts().
->> But it's solvable so no need for a complicated coordination I think.
->=20
-> Ok, thanks.  The two Sashiko complains also look like they had merrits,=
+(from review discussion at
+https://lore.kernel.org/bpf/20260601061503.EFD881F00898@smtp.kernel.org/)
 
-> but I won't get to looking into them until Monday.
-The review:
-https://sashiko.dev/#/patchset/20260528093437.2519248-2-hch%40lst.de
-
-So there is a user who might call kmem_cache_alloc_bulk() with size =3D 0=
-
-(although the comment says @size must be larger than 0!) and
-kmem_cache_alloc_bulk() returning 0 was considered a success in that case=
-=2E
-
-Either fixing kmem_cache_alloc_bulk() (and the comment) or fixing the
-user sounds fine to me.
-
-And yeah freeing an object via kfree() allocated via kvmalloc is a bug...=
+[ ... ]
 
 
---=20
-Cheers,
-Harry / Hyeonggon
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-
---------------ub6P4aBhniaWwf9dwX4fSUIh--
-
---------------HMU1xMsen67VgPzLuGJEEdMK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCah0pCgAKCRCGXBN6rc5S
-1rmyAP4xYSWajEqm+MA0a6gB0YMw8PYGMERv/Liiv8qq9FfVwQEA0LaAVOUS0vOJ
-pFwKYpvxOLNGK+0ssT0N7hdbranbAAA=
-=ebwI
------END PGP SIGNATURE-----
-
---------------HMU1xMsen67VgPzLuGJEEdMK--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26738658508
+--===============5260575393648563333==--
