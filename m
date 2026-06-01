@@ -1,154 +1,128 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A5328C854;
-	Mon,  1 Jun 2026 16:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A65203710
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 16:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780330621; cv=none; b=fOTw0dt0ObwvY/oe8bD9Wh21kTkykUYTY2nj+5MJHKygh4u+5lA4/n3uEFW+cR09Dvs4/iua3xO+//TDOpuZQzKe/nwQtouldUaobKUbuhiZlPDa/JhNWKpdillb18XNowIJj+vSJikY14xlqYqSLVEgerxxuEZBqtsQAqmY7zA=
+	t=1780330807; cv=none; b=HFcU663oLAtF3Pug9csX7L2VNFPyIFd6uFqR3uhMEQMQpzuc9dbH/JgJqGBXFD4MwSaP9aHA4PhL81JJqHIDwP/MwsxzXBp6aOI3AlpgZSBCcHzw3FGFAYCIT9l7Ubpzjn1ZZQBAWzgwZnPGEjMbWcroe5p1eWxshJ0mkVAszpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780330621; c=relaxed/simple;
-	bh=qnX9OBr2YzgB1Y9Syidryj2KKo59v8mKgbHhyAeSTRs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RGg9lysO0TaxG9uxIEi2ZOINTU2iyWHeCgcscNqhNOxNUDZHWrHkwEQKKSzYnwLudUHvDSIbvedy9oN4781+IOM3Kxqz8Wv8nX0dssIUm8X/5EBRMC2hFQz1TyvLhUWbVXOoebsmIAiyWQCITbxAjlLf4+GdrBZ1ksUwyUPGI1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=Lj5S6Tii; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	s=arc-20240116; t=1780330807; c=relaxed/simple;
+	bh=qQsr+rwNzVt6OibBzMygkRa5tqLdQwfhrk5au0ve+BQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bj2czFfaJf318Psm3fDtX70hrgenpVYrM3Y34oNuc66k1sYCpD6tYdRw/mvNkaEx9iOyqXW0kh+rkyG34/W+EEPq4xvkSLoHxncz3iS0hiCMRLWtkrbk4jlTPickBjwh1El61UKHVgKJPr4DZrHs/c036ytPo39SxtWsoJMHil8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtdc2aTN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="Lj5S6Tii"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1780330595;
-	bh=qnX9OBr2YzgB1Y9Syidryj2KKo59v8mKgbHhyAeSTRs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Lj5S6TiiI99IOcAVRA9upjIAwWX6QWdF36QmgI7MtuPPOAD48NH5gaQCN/m/1oSaA
-	 Y7YyWoAQ7FsS6bS0923vTOGRPpIwoiklKxlQzobgG0+9fQF6sKP+6rFOnhqHSkkdAq
-	 7pU95xJFsPP0Dt2IH03wM9pX0Mwp/PL1/YdHE+i8=
-Received: from [129.217.186.133] ([129.217.186.133])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 651GGY3o021703
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 1 Jun 2026 18:16:34 +0200 (CEST)
-Message-ID: <55b23925-9676-4005-8c13-ea7001190abb@tu-dortmund.de>
-Date: Mon, 1 Jun 2026 18:16:34 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtdc2aTN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266061F00893;
+	Mon,  1 Jun 2026 16:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780330806;
+	bh=THPlblx7nsP42lVNX39onfc9h/Ct96a0EyjUkIk66T0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dtdc2aTNpoM1kWBpfsb7feB/z1/Ek1ui4BVJcI50KVwG+gBTAgfSR0NDAUdDmvG9D
+	 ZijXnfXeUCwYncIOdkeRBOMUqwHMdD3HAE8NEqaZA8fRIEHroDtYzX2HESctcTT+iD
+	 I25P+4hatrm5K/LsfOPD1c6XqknHcPqJJCn+HmvGmdllzBsLPp2titwxJnKOKovn72
+	 pTS3GE6LHtZYhMv3Iqc1iBhozdU+Pnu2ajC7QGYFg7spBnsrGgjTdPy3vEv6OMjOTt
+	 BJTOYur19mL4/qVmHvJpKzjb5AF3WCowOuMLyUmDXpGZR6Nt61DvZX6S1wxNp97hvX
+	 iFhDiICN6/3vg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 6/7] selftests/bpf: Adjust verifier_map_ptr
+ for the map's excl field
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260601150248.394863-7-daniel@iogearbox.net>
+References: <20260601150248.394863-7-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 16:20:05 +0000
+Message-Id: <20260601162006.266061F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        hawk@kernel.org, netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller"
- <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
- <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
- <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
-Content-Language: en-US
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 6/1/26 16:03, Jonas Köppeler wrote:
-> On 6/1/26 2:00 PM, Simon Schippers wrote:
->> On 5/28/26 09:46, Jonas Köppeler wrote:
->>> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
->>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>
->>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>>> excessive NAPI scheduling overhead and qdisc requeues.
->>>>
->>>> Accumulate BQL completions and flush them when a configurable time
->>>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>>> queuing delay to the configured interval. Coalescing state persists
->>>> across NAPI polls in struct veth_rq so completions can accumulate
->>>> beyond a single budget=64 cycle.
->>>>
->>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>>> completion.
->>>>
->>>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>>
->>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>> Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
->>>
->> Thanks for your testing!
->>
->> However, I have issues reproducing.
->> I run bare metal (without virtme) with v6 + your pktgen patch
->> and I am on the branch pktgen-and-benchmark, commit
->> "results: add veth-bql measurements":
->>
->> 1. ping fails with 100% packet loss ~20% of the times with --pktgen.
->>     When this happens the avg ping of this run is mistakenly set
->>     to 0.0 ms, which distorts the results.
->>     I fixed it locally by rerunning when this happens.
->>
->> 2. pktgen runs with > 3 Mpps even with --nrules 10000, see log below.
->>     I see that this is because of qdisc drops.
->>     I also tried pfifo and sfq but with the same result.
->>     I spent quite some time on it but I do not know a fix.
->>
->> Do you have an idea?
->> Thanks!
-> 
-> Hi,
-> yes there are some changes missing in the test script.
-> I have pushed it now, sorry. This should fix 1.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Incomplete and degrading adjustment of verifier_map_ptr tests af=
+ter struct bpf_map layout change.
+--
 
-I pulled it and ran...
+commit 5b67581177de15e6a8e536ecacc43112b6c44726
+Author: KP Singh <kpsingh@kernel.org>
 
-sudo ./veth_bql_sweep.sh --runs 1 --pktgen --duration 20 --qdisc fq_codel --no-bpftrace
+selftests/bpf: Adjust verifier_map_ptr for the map's excl field
 
-... but still 8/32=1/4 of the pings are zero, I do not see
-a pattern.
+Adding the u32 excl field at offset 32 of struct bpf_map right after the
+sha[SHA256_DIGEST_SIZE] hash shifts the ops pointer from offset 32 to 40.
+This commit attempts to fix up the test case by updating the expected error
+messages.
 
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools=
+/testing/selftests/bpf/progs/verifier_map_ptr.c
+> index e2767d27d8aaf..d8e822d1a8bab 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+> @@ -70,13 +70,15 @@ __naked void bpf_map_ptr_write_rejected(void)
+>  	: __clobber_all);
+>  }
+> =20
+> -/* The first element of struct bpf_map is a SHA256 hash of 32 bytes, acc=
+essing
+> - * into this array is valid. The opts field is now at offset 33.
+> +/*
+> + * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a rea=
+dable
+> + * byte array), followed by the u32 excl field at offset 32. Reading a u=
+32 at
+> + * offset 33 runs past the end of excl and is rejected.
+>   */
+>  SEC("socket")
+>  __description("bpf_map_ptr: read non-existent field rejected")
+>  __failure
+> -__msg("cannot access ptr member ops with moff 32 in struct bpf_map with =
+off 33 size 4")
+> +__msg("access beyond the end of member excl (mend:36) in struct bpf_map =
+with off 33 size 4")
+>  __failure_unpriv
+>  __msg_unpriv("access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
+>  __flag(BPF_F_ANY_ALIGNMENT)
 
-I grabbed the logs from /tmp and this is what a failing
-ping looks like:
+[Severity: Medium]
+Does this adjustment reduce the test suite's coverage?
 
-PING 10.99.0.2 (10.99.0.2) 56(84) bytes of data.
+By only changing the expected error message here,
+read_non_existent_field_rejected() now tests for a scalar out-of-bounds
+access rather than testing the verifier's rejection of partial pointer
+accesses.
 
---- 10.99.0.2 ping statistics ---
-97 packets transmitted, 0 received, 100% packet loss, time 19967ms
+Should the offset inside read_non_existent_field_rejected() be updated to 41
+instead, to continue testing partial access to the ops pointer (which shift=
+ed
+to offset 40)?
 
+tools/testing/selftests/bpf/progs/verifier_map_ptr.c:read_non_existent_fiel=
+d_rejected() {
+    ...
+    r6 =3D *(u32*)(r1 + 33);
+    ...
+}
 
-Feels like a race or something..
-Can you reproduce with the exact command?
-I think you need --runs 1, else it just averages over multiple
-runs.
+Additionally, ptr_read_ops_field_accepted() explicitly claims to read the
+ops field, but still reads from the sha array at offset 0:
 
-> Regarding 2.: do not look at the pktgen output, in the
-> new version you will see something like "goodput",
-> which is the number you should look for.
-> Pktgen will report at what speed it enqueued packets in
-> the qdisc.
+tools/testing/selftests/bpf/progs/verifier_map_ptr.c:ptr_read_ops_field_acc=
+epted() {
+    ...
+    r6 =3D *(u64*)(r1 + 0);
+    ...
+}
 
-Exactly. Now it works. Had a single outlier but apart from that
-everything is fine.
+Should this test also be updated to read from offset 40 to properly verify
+valid access to the ops pointer?
 
-Thanks,
-Simon
-
-> 
-> Let me know if it worked.
-> Best,
-> Jonas
-> 
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150248.3948=
+63-1-daniel@iogearbox.net?part=3D6
