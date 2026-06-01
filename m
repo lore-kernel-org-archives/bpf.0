@@ -1,464 +1,136 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD2D3D9053;
-	Mon,  1 Jun 2026 15:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955733DB32A
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780326194; cv=none; b=Y28kRWCQxJ/2oIVBjPXMfbzLZIfRf+xte0lAuixHzKCuyadynrvcx42dY7azo1IsK5fmklzO1MjWbonymP7eFGYN4BvAR65li/n99TECLpKhxzZo0oDQV14q1fFtjUqO2aJpANhGF6It9U3sRhtaaehXVDoWe9ibGZ3gB7WY6wE=
+	t=1780327031; cv=none; b=HJ3ifEF7sdAKJbGuPlMj260vsmcKHZvVannha3884V7a6rw2uD8Xar9lpNQCbQMfVZDLm97fw73UqT+wljxv4WdDg02bMaTHlNV4QCzoNE2vW86NzAxn0ySw+yjuHs8c3sLJUl0DV+6V5YWHSHv7tDbQtNtPO7ePJxXYCquETnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780326194; c=relaxed/simple;
-	bh=NFa25hf+cfiNDIRt8vG3D4QxfnwSbFbP3o0a8QnH5rs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RvRVXz7Pd5N5OGO5FVkLJJJ09btCQu/JbXt3J8I5MkNTopTftMREBACeVKJje8wLcaCruBS2GhcS7i/cnih7cijAkpcdrpJ3yHf4NqEPaj60UCMWyq83d1k1a+zloUpv3QVVPyZgD4INJ0YnK90lM0ufus6EqHk+U3hxujutRMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BR6yJSFf; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780327031; c=relaxed/simple;
+	bh=jHLS81rl/sS+VgJpeb10j25BNeO8RjKsK0URSHtjt7E=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Bmv5dUj4FshypZ0i2PPUrY+F+Y0RuLWjUpNVAFuBxjSYcwFzZ3Jt6hHD2sV+//ToRH2ZxR1O+FQKScOsa3Yf6D1xBG/dS5FanXK+dMuqiUd5IMIQHupYohNA2RpvDprMMHImuxVce3ZTw9sFHS7FNV53d9NPJz+7P5X1QZ6D3qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZsqMrOW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BR6yJSFf"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780326189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Oc6+bIB87L2iI3kasp2ohDtv0MFXKg+JvCI8aPC4hNc=;
-	b=BR6yJSFfKyBvrytCfIKMDBL9p/55IA6dDOiUpvv2VET6crN6qWDgdxMtwgAkMJD9rO+6IM
-	rp3XcC1nzU7CZJOAcKkXdYeFOqQUq2fAZCHqWoo7o2xM0er7y10tQVykHF4GyCb4XfZJsu
-	tbDh9BoZIxgCUB0RIVRJUFTbJg5VvmY=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Guillaume Nault <gnault@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Peter Oskolkov <posk@google.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com,
-	Leon Hwang <leon.huangfu@shopee.com>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add tests to verify the fix of encapsulating VxLAN in lwt
-Date: Mon,  1 Jun 2026 23:02:03 +0800
-Message-ID: <20260601150203.20352-3-leon.hwang@linux.dev>
-In-Reply-To: <20260601150203.20352-1-leon.hwang@linux.dev>
-References: <20260601150203.20352-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZsqMrOW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51601F00893;
+	Mon,  1 Jun 2026 15:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780327028;
+	bh=+pzhjFbS2YQY7uayiNTHp0wlMBi8+qw4VxFSL3S50i8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FZsqMrOWOoIxhKYYEMqQc3GUCQkAxTI9NQ4/7iF6qRj9CB4aVyX4GKXzge323aAaQ
+	 4vAplrHIBIDH/hs4UleBLwp8XCAEAi7GyQAZIeO11T32WyCsGeySMpC9Jf6vN9bgdv
+	 IDRH4H4miefm9gGOCV8amrkBgMfcNt0J7suXjuYfri7aYitIsZuHWMq9kBpo1rMgN9
+	 b9xI2q+6ftOmfDb+PAWMn3FinrWlZdbcNXkPWRh/nD3VeiekwE1nv+PmC6j/K8dz/x
+	 jw2SkXuQCV/v+Lo9otnlDxduBC1FUbpIxvy6ulJkn4kW8Da40w7YmBQjHj+OSBsaUt
+	 K0CY+keKVzziQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
+References: <20260601150203.20352-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 15:17:07 +0000
+Message-Id: <20260601151707.C51601F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Add two tests to verify the transport header of skb has been set when
-encapsulate VxLAN using bpf_lwt_push_encap() helper.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-1. VxLAN over IPv4.
-2. VxLAN over IPv6.
+New issues:
+- [High] Time-of-Check to Time-of-Use (TOCTOU) vulnerability in transport h=
+eader offset calculation leads to out-of-bounds write.
 
-Without the fix, the tests would fail:
+Pre-existing issues:
+- [Critical] Missing validation of `iph->ihl >=3D 5` allows unprivileged BP=
+F programs to trigger a kernel panic in `ip_fast_csum`.
+--
 
- lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr offset: actual 70 != expected 20
- #208     lwt_ip_encap_vxlan_ipv4:FAIL
- lwt_ip_encap_vxlan:FAIL:transport_hdr offset unexpected transport_hdr offset: actual 110 != expected 40
- #209     lwt_ip_encap_vxlan_ipv6:FAIL
+commit 0be2d8b388e17b2000afd2e38ff89f5f956084ae
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-Assisted-by: Claude:claude-sonnet-4-6
+bpf: Update transport_header when encapsulating UDP tunnel in lwt
+
+This commit updates bpf_lwt_push_ip_encap() to set the skb transport
+header whenever the encapsulated packet uses UDP. This ensures that
+drivers relying on the transport header for hardware checksum offload
+do not drop packets due to incorrect checksums.
+
 Cc: Leon Hwang <leon.huangfu@shopee.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 164 ++++++++++++++++++
- .../selftests/bpf/progs/test_lwt_ip_encap.c   | 112 ++++++++++++
- .../bpf/progs/test_lwt_ip_encap_fix.c         |  44 +++++
- 3 files changed, 320 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-index b6391af5f6f9..50104d847fde 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-@@ -1,8 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
- #include <netinet/in.h>
- 
- #include "network_helpers.h"
- #include "test_progs.h"
-+#include "test_lwt_ip_encap_fix.skel.h"
- 
- #define BPF_FILE "test_lwt_ip_encap.bpf.o"
- 
-@@ -35,6 +38,10 @@
- #define IP6_ADDR_SRC IP6_ADDR_1
- #define IP6_ADDR_DST IP6_ADDR_4
- 
-+/* VxLAN tunnel endpoints, reachable via the bottom route (veth5/6/7/8). */
-+#define IP4_ADDR_VXLAN  "172.16.17.100"
-+#define IP6_ADDR_VXLAN  "fb20::1"
-+
- /* Setup/topology:
-  *
-  *    NS1             NS2             NS3
-@@ -538,3 +545,160 @@ void test_lwt_ip_encap_ipv4(void)
- 	if (test__start_subtest("ingress"))
- 		lwt_ip_encap(IPV4_ENCAP, INGRESS, "");
- }
-+
-+/*
-+ * VxLAN Setup/topology:
-+ *
-+ * NS1 (IP*_ADDR_1)                NS2                  NS3 (IP*_ADDR_4)
-+ *       [ping src]
-+ *           |                          top route
-+ *         veth1 (LWT encap)  <<-- veth2        veth3  <<-- veth4 (ping dst)
-+ *           |                                                ^
-+ *       (bottom route)                                       | (inner pkt)
-+ *           v                        bottom route            |
-+ *         veth5              -->> veth6        veth7  -->> veth8 (vxlan decap)
-+ *                                                          (IP*_ADDR_VXLAN)
-+ *
-+ * Add the VxLAN endpoint addresses to NS3's veth8, create standard
-+ * VxLAN decap devices bound to those addresses, and install routes so
-+ * NS1/NS2 can reach the endpoints via the bottom route.
-+ */
-+static int setup_vxlan_routes(const char *ns3, const char *ns1, const char *ns2)
-+{
-+	struct nstoken *nstoken;
-+
-+	nstoken = open_netns(ns3);
-+	if (!ASSERT_OK_PTR(nstoken, "open ns3 for vxlan"))
-+		return -1;
-+
-+	SYS(fail_close, "ip    a add %s/32  dev veth8", IP4_ADDR_VXLAN);
-+	SYS(fail_close, "ip -6 a add %s/128 dev veth8", IP6_ADDR_VXLAN);
-+	/*
-+	 * Standard VxLAN devices to decap the encapsulated packets.  The inner
-+	 * Ethernet frame uses a broadcast dst MAC so the IP stack accepts it
-+	 * without ARP or FDB configuration.
-+	 */
-+	SYS(fail_close, "ip link add vxlan4 type vxlan id 1 dstport 4789 local %s dev veth8 nolearning noudpcsum",
-+	    IP4_ADDR_VXLAN);
-+	SYS(fail_close, "ip link set vxlan4 up");
-+	SYS(fail_close, "ip link add vxlan6 type vxlan id 1 dstport 4789 local %s dev veth8 nolearning udp6zerocsumrx",
-+	    IP6_ADDR_VXLAN);
-+	SYS(fail_close, "ip link set vxlan6 up");
-+	close_netns(nstoken);
-+
-+	SYS(fail, "ip -n %s    route add %s/32  dev veth5 via %s",
-+	    ns1, IP4_ADDR_VXLAN, IP4_ADDR_6);
-+	SYS(fail, "ip -n %s    route add %s/32  dev veth7 via %s",
-+	    ns2, IP4_ADDR_VXLAN, IP4_ADDR_8);
-+	SYS(fail, "ip -n %s -6 route add %s/128 dev veth5 via %s",
-+	    ns1, IP6_ADDR_VXLAN, IP6_ADDR_6);
-+	SYS(fail, "ip -n %s -6 route add %s/128 dev veth7 via %s",
-+	    ns2, IP6_ADDR_VXLAN, IP6_ADDR_8);
-+	return 0;
-+
-+fail_close:
-+	close_netns(nstoken);
-+fail:
-+	return -1;
-+}
-+
-+/*
-+ * VxLAN encap tests (IPv4-outer and IPv6-outer variants).
-+ *
-+ * Test 1 - functional: the BPF LWT xmit program encapsulates the packet
-+ *   (protocol=UDP, port=4789) and re-routes it without dropping it.
-+ *   Verified by ping success.
-+ *
-+ * Test 2 - fix verification: after bpf_lwt_push_ip_encap() the
-+ *   skb->transport_header must point at the outer UDP header, i.e.
-+ *   transport_header - network_header == sizeof(outer IP header).
-+ *   Without the fix the transport_header still points at the inner
-+ *   transport layer, giving a wrong (larger) offset.
-+ */
-+static void lwt_ip_encap_vxlan(bool ipv4_encap)
-+{
-+	char ns1[NETNS_NAME_SIZE] = NETNS_BASE "-1-";
-+	char ns2[NETNS_NAME_SIZE] = NETNS_BASE "-2-";
-+	char ns3[NETNS_NAME_SIZE] = NETNS_BASE "-3-";
-+	const char *sec = ipv4_encap ? "encap_vxlan" : "encap_vxlan6";
-+	int expected_offset = ipv4_encap ? (int)sizeof(struct iphdr)
-+					 : (int)sizeof(struct ipv6hdr);
-+	struct test_lwt_ip_encap_fix *skel = NULL;
-+	int thdr_offset, err;
-+
-+	if (!ASSERT_OK(create_ns(ns1, NETNS_NAME_SIZE), "create ns1"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns2, NETNS_NAME_SIZE), "create ns2"))
-+		goto out;
-+	if (!ASSERT_OK(create_ns(ns3, NETNS_NAME_SIZE), "create ns3"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_network(ns1, ns2, ns3, ""), "setup network"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_vxlan_routes(ns3, ns1, ns2), "setup vxlan routes"))
-+		goto out;
-+
-+	/*
-+	 * Attach fexit to bpf_lwt_push_ip_encap() before installing the
-+	 * LWT route so we don't miss the first encap call.
-+	 */
-+	skel = test_lwt_ip_encap_fix__open();
-+	if (!ASSERT_OK_PTR(skel, "test_lwt_ip_encap_fix__open"))
-+		goto out;
-+
-+	skel->rodata->tgt_ip_version = ipv4_encap ? 4 : 6;
-+
-+	err = test_lwt_ip_encap_fix__load(skel);
-+	if (!ASSERT_OK(err, "test_lwt_ip_encap_fix__load"))
-+		goto out;
-+
-+	err = test_lwt_ip_encap_fix__attach(skel);
-+	if (!ASSERT_OK(err, "test_lwt_ip_encap_fix__attach"))
-+		goto out;
-+
-+	/* Remove the direct NS2->DST route so packets must go via LWT encap. */
-+	SYS(out, "ip -n %s    route del %s/32  dev veth3", ns2, IP4_ADDR_DST);
-+	SYS(out, "ip -n %s -6 route del %s/128 dev veth3", ns2, IP6_ADDR_DST);
-+
-+	/* Install the VxLAN BPF LWT xmit route. */
-+	if (ipv4_encap)
-+		SYS(out, "ip -n %s route add %s encap bpf xmit obj %s sec %s dev veth1",
-+		    ns1, IP4_ADDR_DST, BPF_FILE, sec);
-+	else
-+		SYS(out, "ip -n %s -6 route add %s encap bpf xmit obj %s sec %s dev veth1",
-+		    ns1, IP6_ADDR_DST, BPF_FILE, sec);
-+
-+	skel->bss->fexit_triggered = false;
-+	if (ipv4_encap)
-+		SYS(out, "ip netns exec %s ping  -c 1 -W1 %s", ns1, IP4_ADDR_DST);
-+	else
-+		SYS(out, "ip netns exec %s ping6 -c 1 -W1 %s", ns1, IP6_ADDR_DST);
-+
-+	/* Test 1: fexit triggered means bpf_lwt_push_ip_encap() succeeded. */
-+	if (!ASSERT_TRUE(skel->bss->fexit_triggered, "fexit_triggered"))
-+		goto out;
-+
-+	/*
-+	 * Test 2: transport_header must sit immediately after the outer IP
-+	 * header, pointing at the UDP header of the VxLAN encap.
-+	 */
-+	thdr_offset = (int)skel->bss->transport_hdr - (int)skel->bss->network_hdr;
-+	ASSERT_EQ(thdr_offset, expected_offset, "transport_hdr offset");
-+
-+out:
-+	test_lwt_ip_encap_fix__destroy(skel);
-+	SYS_NOFAIL("ip netns del %s", ns1);
-+	SYS_NOFAIL("ip netns del %s", ns2);
-+	SYS_NOFAIL("ip netns del %s", ns3);
-+}
-+
-+void test_lwt_ip_encap_vxlan_ipv4(void)
-+{
-+	lwt_ip_encap_vxlan(IPV4_ENCAP);
-+}
-+
-+void test_lwt_ip_encap_vxlan_ipv6(void)
-+{
-+	lwt_ip_encap_vxlan(IPV6_ENCAP);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-index d6cb986e7533..36f0fc682ffb 100644
---- a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-@@ -2,8 +2,10 @@
- #include <stddef.h>
- #include <string.h>
- #include <linux/bpf.h>
-+#include <linux/if_ether.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-+#include <linux/udp.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
-@@ -82,4 +84,114 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
- 	return BPF_LWT_REROUTE;
- }
- 
-+struct vxlanhdr {
-+	__be32 vx_flags;  /* I flag = 0x08000000 (valid VNI) */
-+	__be32 vx_vni;    /* VNI in top 24 bits */
-+};
-+
-+#define VXLAN_PORT  4789
-+#define VXLAN_FLAGS 0x08000000
-+#define VXLAN_VNI   1
-+
-+static const __u8 bcast[ETH_ALEN] = {
-+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-+};
-+
-+static const __u8 srcmac[ETH_ALEN] = {
-+	0x02, 0x00, 0x00, 0x00, 0x00, 0x01,
-+};
-+
-+SEC("encap_vxlan")
-+int bpf_lwt_encap_vxlan(struct __sk_buff *skb)
-+{
-+	struct encap_hdr {
-+		struct iphdr    iph;
-+		struct udphdr   udph;
-+		struct vxlanhdr vxh;
-+		struct ethhdr   eth;
-+	} __attribute__((__packed__)) /* packed is required to avoid padding */ hdr;
-+	int err;
-+
-+	memset(&hdr, 0, sizeof(hdr));
-+
-+	hdr.iph.ihl      = 5;
-+	hdr.iph.version  = 4;
-+	hdr.iph.ttl      = 0x40;
-+	hdr.iph.protocol = 17; /* IPPROTO_UDP */
-+	hdr.iph.tot_len  = bpf_htons(skb->len + sizeof(hdr));
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	hdr.iph.saddr = 0x640510ac;  /* 172.16.5.100  */
-+	hdr.iph.daddr = 0x641110ac;  /* 172.16.17.100 */
-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+	hdr.iph.saddr = 0xac100564;  /* 172.16.5.100 */
-+	hdr.iph.daddr = 0xac101164;  /* 172.16.17.100 */
-+#else
-+#error "Fix your compiler's __BYTE_ORDER__?!"
-+#endif
-+
-+	hdr.udph.source = bpf_htons(VXLAN_PORT);
-+	hdr.udph.dest   = bpf_htons(VXLAN_PORT);
-+	hdr.udph.len    = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+				    sizeof(hdr.eth));
-+
-+	hdr.vxh.vx_flags = bpf_htonl(VXLAN_FLAGS);
-+	hdr.vxh.vx_vni   = bpf_htonl(VXLAN_VNI << 8);
-+
-+	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-+	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-+	hdr.eth.h_proto = bpf_htons(ETH_P_IP);
-+
-+	err = bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-+	if (err)
-+		return BPF_DROP;
-+
-+	return BPF_LWT_REROUTE;
-+}
-+
-+SEC("encap_vxlan6")
-+int bpf_lwt_encap_vxlan6(struct __sk_buff *skb)
-+{
-+	struct encap_hdr {
-+		struct ipv6hdr  ip6hdr;
-+		struct udphdr   udph;
-+		struct vxlanhdr vxh;
-+		struct ethhdr   eth;
-+	} __attribute__((__packed__)) /* packed is required to avoid padding */ hdr;
-+	int err;
-+
-+	memset(&hdr, 0, sizeof(hdr));
-+
-+	hdr.ip6hdr.version     = 6;
-+	hdr.ip6hdr.nexthdr     = 17; /* IPPROTO_UDP */
-+	hdr.ip6hdr.hop_limit   = 0x40;
-+	hdr.ip6hdr.payload_len = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+					   sizeof(hdr.eth));
-+	/* fb05::1 */
-+	hdr.ip6hdr.saddr.s6_addr[0]  = 0xfb;
-+	hdr.ip6hdr.saddr.s6_addr[1]  = 0x05;
-+	hdr.ip6hdr.saddr.s6_addr[15] = 1;
-+	/* fb20::1 */
-+	hdr.ip6hdr.daddr.s6_addr[0]  = 0xfb;
-+	hdr.ip6hdr.daddr.s6_addr[1]  = 0x20;
-+	hdr.ip6hdr.daddr.s6_addr[15] = 1;
-+
-+	hdr.udph.source = bpf_htons(VXLAN_PORT);
-+	hdr.udph.dest   = bpf_htons(VXLAN_PORT);
-+	hdr.udph.len    = bpf_htons(skb->len + sizeof(hdr.udph) + sizeof(hdr.vxh) +
-+				    sizeof(hdr.eth));
-+
-+	hdr.vxh.vx_flags = bpf_htonl(VXLAN_FLAGS);
-+	hdr.vxh.vx_vni   = bpf_htonl(VXLAN_VNI << 8);
-+
-+	__builtin_memcpy(hdr.eth.h_dest, bcast, ETH_ALEN);
-+	__builtin_memcpy(hdr.eth.h_source, srcmac, ETH_ALEN);
-+	hdr.eth.h_proto = bpf_htons(ETH_P_IPV6);
-+
-+	err = bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &hdr, sizeof(hdr));
-+	if (err)
-+		return BPF_DROP;
-+
-+	return BPF_LWT_REROUTE;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
-new file mode 100644
-index 000000000000..6945f83b94f2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap_fix.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+#define NEXTHDR_UDP		17	/* UDP message. */
-+
-+volatile const int tgt_ip_version;
-+
-+__u16 transport_hdr = 0;
-+__u16 network_hdr = 0;
-+bool fexit_triggered = false;
-+
-+/*
-+ * bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
-+ *
-+ * After a successful push the transport_header must point at the outer
-+ * transport header (UDP for VxLAN), i.e.
-+ *   transport_header - network_header == sizeof(outer IP header)
-+ */
-+SEC("fexit/bpf_lwt_push_ip_encap")
-+int BPF_PROG(fexit_lwt_push_ip_encap, struct sk_buff *skb, void *hdr, u32 len, bool ingress,
-+	     int retval)
-+{
-+	struct iphdr *iph;
-+
-+	if (retval || fexit_triggered)
-+		return 0;
-+
-+	iph = (typeof(iph)) (skb->head + skb->network_header);
-+	if (iph->version != tgt_ip_version)
-+		return 0;
-+
-+	if ((iph->version == 4 && iph->protocol == IPPROTO_UDP) ||
-+	    (iph->version == 6 && ((struct ipv6hdr *)iph)->nexthdr == NEXTHDR_UDP)) {
-+		fexit_triggered = true;
-+		transport_hdr   = BPF_CORE_READ(skb, transport_header);
-+		network_hdr     = BPF_CORE_READ(skb, network_header);
-+	}
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.54.0
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index f71ef82a5f3d3..65d1dfbf3312b 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void=
+ *hdr, u32 len, bool ingress)
+>  		ipv4 =3D true;
+>  		if (unlikely(len < iph->ihl * 4))
+>  			return -EINVAL;
 
+[Severity: Critical]
+This is a pre-existing issue, but does this code properly validate the
+minimum IPv4 header length?
+
+Because len is an unsigned u32, if a BPF program provides a buffer where
+iph->ihl is 0, iph->ihl * 4 will be 0. Since len < 0 is never true, the
+check trivially passes without returning -EINVAL.
+
+Later in the function, ip_fast_csum() is called with iph->ihl. On some
+architectures (like PowerPC and MIPS), the ip_fast_csum() implementation
+assumes ihl >=3D 5 and subtracts from it, causing an integer underflow in t=
+he
+loop counter that leads to a deterministic kernel panic.
+
+Should there be an explicit check that enforces iph->ihl >=3D 5 before the
+length calculation?
+
+> +		is_udp_tunnel =3D iph->protocol =3D=3D IPPROTO_UDP;
+> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphd=
+r)))
+> +			return -EINVAL;
+>  	} else if (iph->version =3D=3D 6) {
+
+[ ... ]
+
+> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
+*hdr, u32 len, bool ingress)
+>  	if (ingress)
+>  		skb_postpush_rcsum(skb, iph, len);
+>  	skb_reset_network_header(skb);
+> +	if (ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+
+[Severity: High]
+Can iph->ihl change between the initial length validation and this call?
+
+The hdr pointer (and thus iph) points to a buffer provided by the BPF
+program, which might be concurrently modified by userspace via a shared
+BPF map. Because skb_cow_head() acts as a compiler barrier, the compiler
+will reload iph->ihl from this untrusted memory here.
+
+If it is concurrently changed to a larger value (like 15) after the initial
+validation, the transport header offset could be set beyond the end of the
+SKB data (skb->tail).
+
+Could this lead to out-of-bounds memory writes when network drivers later
+dereference this transport header to update checksums?
+
+> +	else if (!ipv4 && is_udp_tunnel)
+> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct =
+ipv6hdr));
+>  	memcpy(skb_network_header(skb), hdr, len);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150203.2035=
+2-1-leon.hwang@linux.dev?part=3D1
