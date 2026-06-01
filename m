@@ -1,107 +1,150 @@
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C422930F7FB
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 06:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18BD33F8B1;
+	Mon,  1 Jun 2026 06:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780295752; cv=none; b=KJ4OuHgCmMWkbu/60Ml2JkmZsrFXMkFbB5Mrao9gw4hj2+GDFsQpP03vOpI3LwmQRj3Gy8yi65pM+zIRzBNoLtb9xqtPu5se2GJHZ/M1ALGHYufdAOeN3TZSEcT3sW5yJhWJhSuDpHV+eqDPfYg/2t6Lba+dEDtl6brc50L9Shc=
+	t=1780295956; cv=none; b=KbQPeWVnGW8LZl5xUNB3Ows8hF/msKSZ3vz5HIHNzVBkmQd7mkUYk3eePnAwE9XZRFLRpUg+1emhzUVzNjbD2dfRVTeU9ZOZ1eJqdlKzU+bRM7YX84U15W226AJNK74by3WJWs3GbR6+Z9RkR2FxkeSPhkAXD60msqYmj9t1izQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780295752; c=relaxed/simple;
-	bh=mSrf/R2wyHFDHEO472ySgeqp9iRKsHdlQgrj43CETto=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IuUZaJIdBPwOhxJ35n8LhvhgYJgv8c+F1JOglq/YC72kOjL34ECge0HI+XJmX5I7gK4ytyhPsKyeRLgKf22o3GIWu1eypyYVgDeD7I17apiP9I8D/338gNW1XRSUhXLdZodd5JR7ldNis0w7JOvN9NwPasYd3BDmeupPfC57XaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GNHNvhoM; arc=none smtp.client-ip=18.132.163.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1780295956; c=relaxed/simple;
+	bh=vj0CG7FLtY3Gdw8dYwgFK/i+ZFxFt/ONhuN1JqJsDMM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e2ppWQ5oJyNbsUIrgHMel8dY6wT+pFztg0dRtJioqyyofAyuN1lhYH2btcAZ+LgUbqCL/SFnYKG9kI3Sxi6S2KPClkfIV+XaVr2ORucZM7EOQYlkteJ9nQq0TeKkOE1Wc0vB16Il68vtmGn64HZ1hcGywebh/voCOKeDEuSrJkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=deU2ejyR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GNHNvhoM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1780295665;
-	bh=Pa6uM69zAhT8Ksi94xXsM/bpX6DRtWUW4iiySLcqwrQ=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=GNHNvhoMTwyT6OXOphS6g5SVtD3gE4A2AjYgRgvNdZpMaGU9VpnRaNmeu6XMf/nPo
-	 L226yPLytceKgTwSEBc6rwFqQLVeZQJto3d41MOhm7df0WKu6ZBcDV4Y//pTqzqzoP
-	 y2ZiLhGEm84USQgu8eGz514bavmpRn5gkj5era8k=
-X-QQ-mid: esmtpsz17t1780295650tb6ae4d84
-X-QQ-Originating-IP: /Er2uKdRF2ClQCcCIflW8DJzaoIWDrcea6D7ndD6tHM=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 01 Jun 2026 14:33:49 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5380624521232554661
-EX-QQ-RecipientCnt: 17
-From: Shijia Hu <hushijia1@uniontech.com>
-To: alexei.starovoitov@gmail.com
-Cc: 2022090917019@std.uestc.edu.cn,
-	M202472210@hust.edu.cn,
-	akpm@linux-foundation.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	david@kernel.org,
-	dddddd@hust.edu.cn,
-	hushijia1@uniontech.com,
-	kees@kernel.org,
-	kernel@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	paul@paul-moore.com
-Subject: Re: [PATCH] fork: Ensure copy_process() returns a valid error pointer on failure
-Date: Mon,  1 Jun 2026 14:33:49 +0800
-Message-Id: <20260601063349.2524658-1-hushijia1@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <CAADnVQ+=-UM-JC4eM=vqvgK2tLt6PwmDjOcrrDG9kz8BV6n49Q@mail.gmail.com>
-References: <CAADnVQ+=-UM-JC4eM=vqvgK2tLt6PwmDjOcrrDG9kz8BV6n49Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="deU2ejyR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03E81F00893;
+	Mon,  1 Jun 2026 06:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780295954;
+	bh=rKk6j/n9sj1IniX/7VKjNeDlTH/D2W3IN/BVvbihauI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=deU2ejyRoOMJVQywPOlLu1PqH70E+zWfsku4xW3ejYZB8yKEwCBukyd+rzzgKkdmf
+	 vGfMeLir+q2+YLlqYJ/AzObbKzdRw866F6HyGjCNfk4XHBFW0DBz7SfQREAKIrqTih
+	 eBi6cugoUG+CYfTUshTd0CccN+PQjgSzwSv7queVBc6p52Wolbj/6fOndd0MpYLxG2
+	 cWd4oZ+vbxMMcHUxBTZyTjrMsQm3x2s3VngOun20ayrnEQkV5sF8YIYLuI3Ny72DXa
+	 BZJwi4+K5b9H+0C3rpQ6FfqPHiUwR1FUO2dIJha1fHRhWnIHL6s3QX/hRpXpWMsXxA
+	 Afp4/cf9Y5iIg==
+Message-ID: <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+Date: Mon, 1 Jun 2026 15:39:06 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-1
-X-QQ-XMAILINFO: MFE5XDBetPujKvZRqxZlA6dg3H3txvekj7Fubp2pqoncPSfvH6pjRTZ5
-	TQTIvwh/kWrbcpeLPVD0mLzICL5QmjWTf81YaL90qCuuDtInJr3ripBwNApkFTqzyCkGsNd
-	H+AwbibK4QVPUZ1539ob+xVHPW3EjaBGeYm7QlFhYlO3/MdS0SQvihsQ7V0EvaQLiCkmpWZ
-	p8vEzJeY2N46tmyjl0zZLEPfQBayn69+pRBx/RARbNjS+E7r0/m3zFu8StHNzh2jEbaH4DW
-	3gsH86I+kRV0i+rEqoGmEg38a+jT68RdSuowe+VRhh6on/iwGT6iw+obsYEq7Qqvv40+elP
-	wJI9mdKi8Ps5Q9XrFmh4zeBL2HVkdOSMZEDX9cydMUDzu/fYsO9CF4Uwp/taozptmUHK93V
-	4XyRGQyuRU7xMcFHEV5Gx06oMQBuvlukWvNVEYGRqUsYhgP1A/86Ta3IEqdBDlxVjCfaWUQ
-	uUfwE7/ROFe0mLdyTL3mNicHZZ0RDxKr5oa+NOevuzxEP7W29GqqdKdSBpIxNDGtL9+fPeI
-	22ReihnPOIhHHgovE1CfGaKP4rS6zFP1urT1Hg77DpcgTh1Gtxbkz3GdUUv3SXtL5qORhYS
-	vcDgL9405qi0XGzVhw5veaH3OfvbW7aa/Kd8vFyPwQAWQ512+bWJQO0WISFTNv42+WfH3Nx
-	RhiZN5fM8eY7NJllnWeX+eMa2cCW4eIWVDggJorfcN/yGSSvsp8NbQ5819A8+W3Lfaj+i2I
-	WphJeVW4lmsJS/n/zSbfxvB7K8nNJ0A+Nj6ysEnuuPAmsYCSDS15fzB0r38OYNvz24GVMUk
-	40j7dDzSSzMEUdqBc1Ir+m0p1TF5dF96VaDG8NA6hzDrGTHmU1jXxZraA7e1ro0YLXuENwu
-	E5OTLmS+cq27GTlDKZlG/4BtcU7w7uspNCpKu51c0c74qyM2hz1jX2iBjCOzuvPZ8l4uyjg
-	2CO7d/vGeP16ResLlyTej4JFfZBTBQrogBOqr7YNGZeLColBsw0dlXz/4oJz4N7/1ewqQD9
-	CV5dnz7sEkds5K/x+HcIOEJI4BrmwHd1aJy3RvJz8Z0YYwfoD9EOMSK4Rws53ML4CGBX4vt
-	ZcTS8wFriwtVKRDiumH/EcCedlVTb+Jkw==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+To: Christoph Hellwig <hch@lst.de>, "Vlastimil Babka (SUSE)"
+ <vbabka@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
+ <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+ <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+ <20260529135045.GA10647@lst.de>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <20260529135045.GA10647@lst.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------HMU1xMsen67VgPzLuGJEEdMK"
 
-On Sun, 31 May 2026 20:58:49 -0700, Alexei Starovoitov wrote:
-> This was reported earlier and there is a fix in the works.
-> This approach is incorrect.
-> You have to fix the root cause, not the symptom.
->
-> pw-bot: cr
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------HMU1xMsen67VgPzLuGJEEdMK
+Content-Type: multipart/mixed; boundary="------------ub6P4aBhniaWwf9dwX4fSUIh";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: Christoph Hellwig <hch@lst.de>, "Vlastimil Babka (SUSE)"
+ <vbabka@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
+ <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+Message-ID: <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+ <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+ <20260529135045.GA10647@lst.de>
+In-Reply-To: <20260529135045.GA10647@lst.de>
 
-Thanks for taking a look.
+--------------ub6P4aBhniaWwf9dwX4fSUIh
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I'll drop this copy_process() approach for upstream.
- 
-Is the follow-up fix still being tracked in this thread?
 
-  https://lore.kernel.org/all/20260411163556.8567-1-yangfeng59949@163.com/
 
-If so, I can follow the progress there and help test the fix with the
-security_* fmod_ret reproducer once it is available.
+On 5/29/26 10:50 PM, Christoph Hellwig wrote:
+> On Fri, May 29, 2026 at 01:54:48PM +0200, Vlastimil Babka (SUSE) wrote:=
 
-Thanks,
-Shijia
+>> Thanks, I applied it to slab/for-7.2/alloc_bulk and merged to slab/for=
+-next
+>> (it's still yankable in case of issues)
+>>
+>> Did some fixups below (the comment was stale prior to the patch; resto=
+red
+>> unlikely(), simplified one line).
+>>
+>> A test merge into yesterday's -next found a conflict in drivers/gpu/dr=
+m/
+>> panthor/panthor_mmu.c. Commit 1013bf53650e ("drm/panthor: Split
+>> panthor_vm_prepare_map_op_ctx() to prepare for reclaim") moved the cha=
+nged
+>> codeto a new function panthor_vm_op_ctx_prealloc_pts().
+>> But it's solvable so no need for a complicated coordination I think.
+>=20
+> Ok, thanks.  The two Sashiko complains also look like they had merrits,=
+
+> but I won't get to looking into them until Monday.
+The review:
+https://sashiko.dev/#/patchset/20260528093437.2519248-2-hch%40lst.de
+
+So there is a user who might call kmem_cache_alloc_bulk() with size =3D 0=
+
+(although the comment says @size must be larger than 0!) and
+kmem_cache_alloc_bulk() returning 0 was considered a success in that case=
+=2E
+
+Either fixing kmem_cache_alloc_bulk() (and the comment) or fixing the
+user sounds fine to me.
+
+And yeah freeing an object via kfree() allocated via kvmalloc is a bug...=
+
+
+--=20
+Cheers,
+Harry / Hyeonggon
+
+
+--------------ub6P4aBhniaWwf9dwX4fSUIh--
+
+--------------HMU1xMsen67VgPzLuGJEEdMK
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCah0pCgAKCRCGXBN6rc5S
+1rmyAP4xYSWajEqm+MA0a6gB0YMw8PYGMERv/Liiv8qq9FfVwQEA0LaAVOUS0vOJ
+pFwKYpvxOLNGK+0ssT0N7hdbranbAAA=
+=ebwI
+-----END PGP SIGNATURE-----
+
+--------------HMU1xMsen67VgPzLuGJEEdMK--
