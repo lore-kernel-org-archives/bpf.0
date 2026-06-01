@@ -1,108 +1,97 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9303E1C5F13
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 16:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE532BE05A
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 16:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780329669; cv=none; b=h1U16j61ekwDBk6r7smcSq8DfittiCNSD6PoaGOXWbiBKwliCKlnwdm6rlsBtfX3Gm0OhCduJ6bsQ6L3CyDrR2+FrbIe2jyqSkdB6POGGzAHkYx9fNtORTPifJCkqY0vml1h6mE/cG4CMWDBAU07jUXoOk6NuiBt0vm78+B0cWM=
+	t=1780329829; cv=none; b=CCpnOJXHTBX4AFUX+s3Rhm7ZxH4NJ/tc6NMce2tipGvWlqLFHwB328Szbk8YVAcxIBquZhhQsD7LBi24EQK1o4PbHeTq3d4Vyvcpwv1FYJN6zr6s102BW/k4hrtivrKoONz9MeIhzCJYia1WCXIzSXwTYm+e2NzxB3i6wv32sCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780329669; c=relaxed/simple;
-	bh=Do74d+8XBL9lpsb6lEODd043vgrF5jDPLHMNv7Y/a78=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dqU8/aa8AiIqGesVRt9t1XsgqeEkLiKMFNT7vWNYj0OTEXi5+WERoMkqdS06CgGSEJ9Avjbr13czX/UDTI8ueUnpMyxkVDqcL/fkdrbweTny1+43h4sn02yjZF+dOgvcYx30ERSPbl0knr6Ey7OEGzgKGXpbyGCUsajWOu03Jm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d94JY1LC; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780329829; c=relaxed/simple;
+	bh=8rjsc0+wvNmXV0C+qkClTkZdO+y+paMlnwq0DacOlZg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=F4CmQrBCh5/TkxMdvnm9IO2SvirggenZgvrfuHTzjaqFXr1Y3VHdj5PKcL7vJ8YxidGuCMbLk2jEMmTDMTEAEbyxu8uQJtME2GgNyRpODa8lwEhrgolZ8wGtNb9H3nOScbsu2QfL8G5YSDRTBpQMbOM1JNpnxrTd+GUzYBW+6qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OcikclQh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d94JY1LC"
-Message-ID: <36f7fc7f-5fbc-4f60-b5b0-76300d78b15c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780329650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=txVl3s2cy1CA6Q/ph71iN6AxLc0+78y4QVoXa/72WbM=;
-	b=d94JY1LCAzRt68ouZuqp5RUJCu0chX6+/N7POXzWgcj1HNEywa/FuFrr9CdcBYQuaeRxkW
-	nE2jLGMOz5yXOuqgRWIjK6yv3Q4QmwRxSwMjfcxKYAx3V4pqouryGZNnN51wiSMbLd4z0f
-	bx9J4zgVVSri9k01UbbIc80eDbxYAxc=
-Date: Mon, 1 Jun 2026 09:00:37 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OcikclQh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C7F1F00893;
+	Mon,  1 Jun 2026 16:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780329828;
+	bh=aH2SRczzfqXhBWp4crh+a7e1CN6yF1FRzoxB8VqU+cE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OcikclQhsz0/ILD1oxf2NbiCRepnuBj/j5oweo9z2E9f0hSrg3LlkHtRKrNVJy9Hy
+	 MLBCh42aQ8yR7hXXJprLe5/Ty05zNZM6BwL8vCkXw9zzYkvgMImCQ6WiF68Kl4Zk9q
+	 hvzBj8+rzQ9YqzTJJgfs1QAzh1RpshUTxF9Gk68cJvBoLLbzi6vyRNbXedM0NTKhSP
+	 u8eaVjqpEcogHnLPK8wE0HuftLb2uw4v2yuatFmazjivFGcJK3+yDrine8jRodPv4Z
+	 2zCkaCZiDkNnSSNbVbGI9hN4zlCN/4Xer/gNoTPt+OlIp96Y2R0GcoEgJo50E5eleq
+	 z0Yw3qtzTDgMg==
+Content-Type: multipart/mixed; boundary="===============3738245916912872766=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: Tighten cgroup storage cookie checks for prog arrays
-Content-Language: en-GB
-To: Lin Ma <malin89@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, cenxianlong@huawei.com,
- chenzhe@huawei.com
-Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>,
- linux-kernel@vger.kernel.org
-References: <20260601095158.1186318-1-malin89@huawei.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260601095158.1186318-1-malin89@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <1ce6141cb12d34da5a5d19d44cc68a03cbc5cae2b75a6026183325b07a378cfb@mail.kernel.org>
+In-Reply-To: <20260601150248.394863-4-daniel@iogearbox.net>
+References: <20260601150248.394863-4-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 3/7] libbpf: Reject non-exclusive metadata maps in the signed loader
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,alexei.starovoitov@gmail.com
+Cc: bpf@vger.kernel.org,kpsingh@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  1 Jun 2026 16:03:48 +0000 (UTC)
 
+--===============3738245916912872766==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-
-On 6/1/26 2:51 AM, Lin Ma wrote:
-> The recent KCTF-reported cgroup local storage issue assigned
-> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
-> in cgroup local storage"). That fix addressed the direct mismatch case
-> in tail-call chains.
+>     libbpf: Reject non-exclusive metadata maps in the signed loader
 >
-> However, the previous fix is still incomplete. The current prog-array
-> compatibility check treats a program with no cgroup storage as
-> compatible with any stored storage cookie. This allows a storage-less
-> program to bridge a tail-call chain between an entry program and a
-> storage-using callee even though runtime cgroup local storage still
-> follows the caller context.
+>     The loader verifies map->sha against the metadata hash in its
+>     instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is
+>     called on the frozen map.
 >
-> Require exact per-type storage_cookie equality when checking prog-array
-> compatibility. This blocks zero-storage bridge programs from joining a
-> prog-array owned by a storage-using program and closes the residual
-> A -> B(no storage) -> C(storage) path without relying on partial
-> BPF_PROG_TEST_RUN special cases.
+>     While the map is frozen, the /signed loader/ must also ensure the map
+>     is exclusive, as, without exclusivity (which a hostile host could just
+>     omit when loading the loader), another BPF program with map access can
+>     mutate the contents afterwards, so the check passes on stale data.
 >
-> Cc: stable@vger.kernel.org
-> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
-> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
-> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
-> Signed-off-by: Lin Ma <malin89@huawei.com>
-
-The patch looks okay to me. But can you add a selftest for this?
-
-> ---
->   kernel/bpf/core.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
+>     With the extra check as part of the signed loader, it now refuses to
+>     move on with map->sha validation if the host set it up wrongly.
 >
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 8b018ff48875..dccd47c92992 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2459,8 +2459,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
->   				break;
->   			cookie = aux->cgroup_storage[i] ?
->   				 aux->cgroup_storage[i]->cookie : 0;
-> -			ret = map->owner->storage_cookie[i] == cookie ||
-> -			      !cookie;
-> +			/*
-> +			 * Tail calls keep using the caller cgroup storage
-> +			 * context, so prog-array members must use the same
-> +			 * storage cookie.
-> +			 */
-> +			ret = map->owner->storage_cookie[i] == cookie;
->   		}
->   		if (ret &&
->   		    map->owner->attach_func_proto != aux->attach_func_proto) {
+>     Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
+>     Signed-off-by: KP Singh <kpsingh@kernel.org>
+>     Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+>     Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 
+Is the Fixes: tag pointing at the right commit?
+
+The bug being fixed is in emit_signature_match() in
+tools/lib/bpf/gen_loader.c, which verifies map->sha without checking map
+exclusivity. That function and its map->sha verification loop were
+introduced by:
+
+  ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+
+The referenced commit fb2b0e290147 ("libbpf: Update light skeleton for
+signing") only touches tools/lib/bpf/skel_internal.h (the light-skeleton
+runtime path) and does not introduce the verification code being changed
+here.
+
+A sibling fix in the same area, 3c5e2f1a8584 ("libbpf: Skip hash
+computation when loader generation failed"), also touches gen_loader.c
+and attributes it to ea923080c145.
+
+Should the tag instead be:
+
+  Fixes: ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26764265302
+--===============3738245916912872766==--
