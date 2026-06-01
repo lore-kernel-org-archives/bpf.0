@@ -1,216 +1,133 @@
-Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE68E27BF79
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 17:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055243DF003;
+	Mon,  1 Jun 2026 17:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780334534; cv=none; b=MNdWBQpEjCATLQSA/owQAlRVyeA5+PgbfX3aVge0j7xd+G61G8J2T2WMnecJJr3faMRL7ufWCVsQwNaWQo9dTCc+seBy9USeaJaLDdwN+22+UVtthxHYXmIaQq6747MA5O4NsVxyYOr4ZUiyb2HqstShIwSU3hjRyp5ooSjYTeE=
+	t=1780335988; cv=none; b=dtFIRvb6nMLgINZuHxmlxAzqvaKZXYpQivYoCGLdGPct/da6MiL2egp3XO9450IX+8sdDI2LtOsHulVPvlDClDruIMBGfSJqv0E0mpDk6XbMxJCl1IoigLfrl/eOutFHhTBNGtWGQ4VObqyLcrEN6vXWwt+0kI9KQPcpgphfHdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780334534; c=relaxed/simple;
-	bh=kc8EIZaWxlOaP0fjIao/AaEk2YM8tok83Z2MCda/nis=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jlm/frhQYRBeWjb7R7l9/ACy013NWQtIqrtdlOcIIMehUfLMjP/RTdgOO1tNLkVrSaHYfjLHsCujzjE0sBbcUqGgtm/WTytUTOqiz9IE+42r53A7EmpgleFd0tN6ZlPNLYUTTAlhHkHoLKehigXGgaBuMPxZZPARhoj7fpoh6RQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZSMdMCxU; arc=none smtp.client-ip=74.125.82.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780335988; c=relaxed/simple;
+	bh=3sdy84BDOZZ9GCa+7G7a8euBbAkMRqixm061bLKdiIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dn2HQSVR6aZjhHRlsr/S+UoPQ25pRECJYVibMZqxxA4YW3GZEP2o6Y/3Q4yQ42QB6rbAFGO5Zf9zf+BTPoZ/19imOr7zuqteNwpdQXrgnidvIVMiz7rq2SoUJ6dLzAVARXBVHxVqcGaWOCp8e3w+5ShUAE1kEOXO95aQ3GxotBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=SwwlzFFb; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZSMdMCxU"
-Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-304fb780deaso2538476eec.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 10:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780334532; x=1780939332; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VbHw1s/hzOM7Hz5hE1SgdFXgocGRCLxeL+0RQCPiwMg=;
-        b=ZSMdMCxUFkcjEnXA2ccBliPgOfNorQjIUytyTNM0WvdjVvJXigOJnkCxrXf3I/lh5e
-         Vun/G46rq3O4fFfkO1YgHHaUbHJKbVU2YV4qjhSqMAmCSxVt1XSoQeKO1UHLNdiK2xOe
-         0lbxR2daEAu3n3Pbl0Uqny/OcGHS1iotaS/U5L7AGAVhA9eY5Nifb3Dt9ks1YW5ddD3o
-         qjWDfKT41+Qie7VwX6NiBvWgmVabtkME6haXZADmTLugb8pZRQKnYU9OFOBWILphFTvx
-         mBvl+BOunVfJtwyZxyopqpwx0cgvYpxYnLLbZxTCofSBMd/Qhy8wUR454NZX9jsLiGT9
-         0vWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780334532; x=1780939332;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VbHw1s/hzOM7Hz5hE1SgdFXgocGRCLxeL+0RQCPiwMg=;
-        b=tJhKCG8S/I7JGzUvzahmhRI2uRj2kjzyvE62g/XKvNPsPsJ2IqWrFjFbWXnhrkcAnm
-         zNCWa55vfyHqb+Rjai6crCU7hvgxPrQvjdlNJVvp1h08E1e+Yve3U1sacXlIienq23o9
-         8iMlMOvZ1SWGF6AranKRPDZHUecU0/Cze9ncw78VecbIpS3jmKwdXbV2tll4m55iFwKJ
-         na6OjXzNb68p4I0XtVL6jHBcyT98KCXzQH3gtM0AGTCi4J8crCDZNae5XfF3xK4wN8aw
-         vjRsiQuH+3Z93MqHe3AaEbBg/MueLMT3SY1en5xe9nCsv6do1L75gHYXaP1vktQ3VG6b
-         wgnw==
-X-Gm-Message-State: AOJu0YwdXjC6GyrK9lU62dcK/g5leVwzPzz45M5NryRUiOXY4/bRJ7C9
-	fFdgvHV6j24D5JxU/RoF9fB/oAh4g/rutwoUKOvvvVzQKhZcUQ3x8kjdwQKI1ZpsSPA=
-X-Gm-Gg: Acq92OG1B2eZP94D9waK/lPcH2/pEHFf6OwfoH8bplK8afOigRVTX+2XYo4XGc+ryqe
-	2Rb5/7Zx7xTVfC6LsMUk2BGMgtpobjKzk0sZeSs4qLkkuPvoEK+lOFNCIAoGOSZWro7IG1hor/J
-	7WXgg/i4p3rYNcQYHbc9jfl3qYpz7ypc54BYhv/uRcEj6ezIyIsGrQx/w/ck0lnjIWBToLUhY2V
-	7fvf7rhOzVUbuGPZ1vjMh7Zdyp87l6nfxZw1T30vtSjCyF7rppCIjp9rPNUC2CG3dapahr0oqQJ
-	Y2ETPOw4jg8kuuFXbFcFYho1zgMLyc3zhO2EomXISCNW9dxp84W0MP0FqTBC1kINxpLu/lNh7+a
-	kgwJWQAFFdDxOUj87sM2cXyAjqDCbbXGeko50kThStcT8IXZxCwu1frH5je6RA5dPw2uxOh/DGW
-	F2T8G9erWODIGgMHj1awtSJ84d7g==
-X-Received: by 2002:a05:7301:5781:b0:2ea:5057:a331 with SMTP id 5a478bee46e88-304fa62d359mr5553445eec.21.1780334531925;
-        Mon, 01 Jun 2026 10:22:11 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::a996])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ee0dd8e1sm12610638eec.21.2026.06.01.10.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2026 10:22:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="SwwlzFFb"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CSzNv37AwbZ34yeGtfqaKjZWoi1h80Uqe0YqIXBcuWU=; b=SwwlzFFbcOre8rlHOsbDi5F+nb
+	zIRBw7kp3BEa1hQNNNeC4o/CpdXF2n9AIrnBrhkep4TX9/JkM4GQuTayE6eYa5IIWDkUWlOMFWuiN
+	Gb8hB2gZA4hPIkHQcMZTv+cWxFJVmyCZodmqHsTv1a5wINPmMcL2NN8UH03sf0OUN6uVASp1j1uuu
+	C8UEv5WeoMQf1Nxm2SAPys0bDfBJrW++SuLTgMZlDmvgBS2V6clZq1vYif9nLahhQcBldtqVaLu7J
+	LkMtyqPDAake66LoMQKyDqSJbJRLqotJnBxSlzuRBBoZ1tFlAAh6nhTjmQyS9lb3edV1wFU1p2lgW
+	Ij3/nf2Q==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wU6iW-002LWr-2h;
+	Mon, 01 Jun 2026 17:46:25 +0000
+Date: Mon, 1 Jun 2026 10:46:21 -0700
+From: Breno Leitao <leitao@debian.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH 1/4] bootconfig: return 0 from xbc_snprint_cmdline() for
+ a leaf root
+Message-ID: <ah3FVZGQLc6MipYA@gmail.com>
+References: <20260527-bootconfig_using_tools-v1-1-b6906a86e7d5@debian.org>
+ <20260527170522.835641F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Jun 2026 13:22:09 -0400
-Message-Id: <DIXVX3TY4Z2F.1VO3VXXFK7QRJ@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v3 1/3] bpf: Add validation for bpf_set_retval
- argument
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260530101239.590395-2-xukuohai@huaweicloud.com>
- <20260530105334.8E8BA1F00893@smtp.kernel.org>
- <DIXH1O3E96VX.EYFDM9QIT6AD@etsalapatis.com>
- <d67ce3b4-ccd4-40e0-993d-9d134e86a058@huaweicloud.com>
-In-Reply-To: <d67ce3b4-ccd4-40e0-993d-9d134e86a058@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527170522.835641F000E9@smtp.kernel.org>
+X-Debian-User: leitao
 
-On Mon Jun 1, 2026 at 9:04 AM EDT, Xu Kuohai wrote:
-> On 6/1/2026 1:42 PM, Emil Tsalapatis wrote:
->> On Sat May 30, 2026 at 6:53 AM EDT, sashiko-bot wrote:
->>> Thank you for your contribution! Sashiko AI review found 2 potential is=
-sue(s) to consider:
->>> - [High] The strict bounds check added to `bpf_set_retval()` unconditio=
-nally rejects programs that pass unconstrained variables, such as the outpu=
-t of `bpf_get_retval()`, breaking backward compatibility for existing user =
-programs.
->>> - [High] Restricting `bpf_set_retval()` to `[-MAX_ERRNO, 0]` breaks `BP=
-F_CGROUP_GETSOCKOPT` programs that legitimately return positive values.
->>> --
->>>
->>> commit 822adc8377df563ad6f9bfabc65c87c7f98aaf52
->>> Author: Xu Kuohai <xukuohai@huawei.com>
->>>
->>> bpf: Add validation for bpf_set_retval argument
->>>
->>> This commit adds validation to the bpf_set_retval helper to prevent
->>> cgroup BPF programs from returning unexpected positive values, which ca=
-n
->>> cause wild pointer dereferences or bypass error checks. For BPF_LSM_CGR=
-OUP,
->>> it enforces LSM-specific ranges. For other cgroup types, it restricts t=
-he
->>> argument to [-MAX_ERRNO, 0].
->>>
->>> Link: https://lore.kernel.org/all/567d3206-74a5-44e5-99c6-779c425f399e@=
-std.uestc.edu.cn
->>>
->>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>> index 7fb88e1cd7c4d..4948bd4bf9e16 100644
->>>> --- a/kernel/bpf/verifier.c
->>>> +++ b/kernel/bpf/verifier.c
->>>> @@ -10460,6 +10460,19 @@ static int check_helper_call(struct bpf_verif=
-ier_env *env, struct bpf_insn *insn
->>>>   		}
->>>>   		break;
->>>>   	case BPF_FUNC_set_retval:
->>>> +	{
->>>> +		struct bpf_retval_range range =3D {
->>>> +			.minval =3D -MAX_ERRNO,
->>>> +			.maxval =3D 0,
->>>> +			.return_32bit =3D true
->>>> +		};
->>>
->>> [Severity: High]
->>> Does this blanket restriction to 0 break BPF_CGROUP_GETSOCKOPT programs=
-?
->>>
->>> Commit c4dcfdd406aa2167 ("bpf: Move getsockopt retval to struct
->>> bpf_cg_run_ctx") removed the restriction that getsockopt filters must
->>> return <=3D 0, noting that valid getsockopt handlers often return posit=
-ive
->>> values for the option length.
->>>
->>> Could this maxval =3D 0 limit prevent BPF_CGROUP_GETSOCKOPT programs fr=
-om
->>> legitimately returning positive lengths via bpf_set_retval?
->>>
->>=20
->> AFAICT the getsockopt manpage corroborates the issue, should be possible=
- to
->> account for this.
->>
->
-> Yeah, the return value of BPF_CGROUP_GETSOCKOPT is not checked or consume=
-d by
-> the kernel. It is returned to user directly as the return value of getsoc=
-kopt().
-> So I think there is no risk to leave it unrestricted.
->
->>>> +		struct bpf_reg_state *r1 =3D &regs[BPF_REG_1];
->>>> +
->>>> +		if (r1->type !=3D SCALAR_VALUE) {
->>>> +			verbose(env, "R1 is not a scalar\n");
->>>> +			return -EINVAL;
->>>> +		}
->>>> +
->>>
->>> [ ... ]
->>>
->>>> @@ -10469,8 +10482,20 @@ static int check_helper_call(struct bpf_verif=
-ier_env *env, struct bpf_insn *insn
->>>> +		err =3D mark_chain_precision(env, BPF_REG_1);
->>>> +		if (err)
->>>> +			return err;
->>>> +
->>>> +		if (!retval_range_within(range, r1)) {
->>>> +			verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
->>>> +			return -EINVAL;
->>>> +		}
->>>
->>> [Severity: High]
->>> Will this strict bounds check unconditionally reject programs that pass
->>> unconstrained variables, such as the output of bpf_get_retval?
->>>
->>> The helper bpf_get_retval returns an int which is tracked by the verifi=
-er
->>> as an unknown scalar. If this unconstrained scalar is passed directly t=
-o
->>> bpf_set_retval, it is checked against the newly hardcoded [-MAX_ERRNO, =
-0]
->>> range.
->>>
->>> Since the unknown bounds fall outside this narrow range, the verifier w=
-ill
->>> reject the program at load time.
->>>
->>> Could this break backward compatibility for existing user programs rely=
-ing
->>> on the bpf_set_retval(bpf_get_retval()) pattern?
->>=20
->> "Backward compatibility" is definitely the wrong way to put this
->> considering past behavior was buggy. The only alternative I can see is
->> checking the return value dynamically in the helper itself and returning
->> failure if the attempted value is illegal, and that is an even bigger
->> change in behavior. Programs can add bounds checking to get_retval to
->> handle this.
->
-> For cgroup bpf types other than BPF_CGROUP_GETSOCKOPT, the initial retval
-> is always set to 0. Since the retval can only be set by bpf_set_retval(),
-> and this patch restricts it to range [-MAX_ERRNO, 0], we can conclude tha=
-t
-> bpf_get_retval() always returns value in the same range for these bpf typ=
-es.
->
-> So I think it is OK to refine the return value of bpf_get_retval() to ran=
-ge
-> [-MAX_ERRNO, 0] for non-BPF_CGROUP_GETSOCKOPT types in the verifier.
+On Wed, May 27, 2026 at 05:05:21PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] The early return incorrectly assumes `xbc_node_is_leaf(root)` means there are no descendant key/value pairs, causing it to silently skip rendering valid subkeys if the root node has both a value and subkeys.
+> --
+> 
+> commit 7fe40e4bc583f53fe486de6d90af68f475369ee3
+> Author: Breno Leitao <leitao@debian.org>
+> 
+> bootconfig: return 0 from xbc_snprint_cmdline() for a leaf root
+> 
+> This commit changes xbc_snprint_cmdline() to return 0 instead of an error
+> when the root node is considered a leaf, preventing a build failure for
+> empty subtrees in the bootconfig tools.
+> 
+> > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> > index f445b7703fdd9..3a102c9122f71 100644
+> > --- a/lib/bootconfig.c
+> > +++ b/lib/bootconfig.c
+> > @@ -431,6 +431,16 @@ int __init xbc_snprint_cmdline(char *buf, size_t size, struct xbc_node *root)
+> >  	const char *val, *q;
+> >  	int ret;
+> >  
+> > +	/*
+> > +	 * A leaf @root (e.g. an empty "kernel {}" subtree, or a key whose
+> > +	 * only child is a value node) has no descendant key/value pairs to
+> > +	 * render. The leaf-finding iterator below would otherwise return
+> > +	 * @root itself, which xbc_node_compose_key_after() rejects with
+> > +	 * -EINVAL.
+> > +	 */
+> > +	if (root && xbc_node_is_leaf(root))
+> > +		return 0;
+> 
+> [Severity: High]
+> This is a pre-existing issue, but does this early return unintentionally
+> skip valid descendant subkeys?
+> 
+> Looking at include/linux/bootconfig.h, xbc_node_is_leaf() evaluates to true
+> if a node has no children or its first child is a value node:
+> 
+> static inline __init bool xbc_node_is_leaf(struct xbc_node *node)
+> {
+> 	return xbc_node_is_key(node) &&
+> 		(!node->child || xbc_node_is_value(xbc_node_get_child(node)));
+> }
+> 
+> If a bootconfig contains a root node with both a value and subkeys
+> (for example, "kernel = val" and "kernel.param = 1"), xbc_node_is_leaf()
+> will evaluate to true for the root node.
+> 
+> Since this patch changes the behavior to return 0 instead of propagating
+> the -EINVAL error, will it silently skip rendering these descendant subkeys
+> and cause missing kernel command line parameters?
+> 
+> Would it be safer to drop this early return and instead add a check like
+> "if (knode == root) continue;" inside the xbc_node_for_each_key_value() loop
+> to skip the root's value while continuing to process its subkeys?
 
-Sounds good. The above makes sense and the only other way I can think of
-we can affect the return value is through bpf_set_retval() which we are
-fixing in this patchset.
+
+Good catch, you're right. If @root carries both a value and child keys
+(e.g. "kernel = val" together with "kernel.foo = bar"),
+xbc_node_is_leaf(root) is true -- root's first child is a value node --
+so the early return drops kernel.foo=bar, which the pre-patch code did
+render.
+
+For v2 I'll drop the early return and skip @root itself inside the loop,
+as you suggest:
+
+	xbc_node_for_each_key_value(root, knode, val) {
+		/*
+			* An empty or value-only @root yields @root itself here;
+			* skip it so we still render any real descendant keys
+			* (and return 0 rather than -EINVAL for an empty subtree).
+			*/
+		if (knode == root)
+			continue;
+		...
+	}
