@@ -1,153 +1,225 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BD525B082
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780339031; cv=pass; b=ObDV5QH5gNepRVO/onlEYIAFSxqmwT6vA+gDlXiPrGcGcIe2elYVNDDmX9AAt1Xcs8P16QaW0Oj0UkXpGTjwC1Sei+WBtaZrNrWXnw4zhU7pghIHAiACX2BKyavwyR+583LlH0n5vuTKavTYgCgtzHDz5dAR5YR9R0yhb9d/MEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780339031; c=relaxed/simple;
-	bh=BcYRpq671NSY068+BbMd+Lz28HJcQwg2rs1w9g7BNTY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ancMRZUJJJB8pVGRK3BNycz2aYzOF7m11Ll9MDl4zPsMKvxDT1XL57bXmy1vKmeRo6n4byPhAqR9Cn0K7likM77wjAEv/qGFc2WE4RVMh2kWkBRnSaPFNNQBBeVnWnnQDD0w0YQlU44vQKxeJ2GAcfdI9VFzB2D+g5qYupUGnJA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K1yMLhS0; arc=pass smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EA93803C7;
+	Mon,  1 Jun 2026 18:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780339051; cv=none; b=CxZFpdEO8ZGo/3Sbggq0cjyyMobqFhYhfez6Pc22UGZN9E0Vwx2ghCMwjTs/F1hjxzaT7gJyKNb32CvsofcPWAOkHHaNt5yfHdYpkIv4DB3Gr3Bqs0AMpb5TR5IlTFRjFg47UB3Vv/fDT4XMRDA5IazAM7fae50CespjTwnk0r8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780339051; c=relaxed/simple;
+	bh=S/Vz7lEgeEnxGOMeVSybbZx7V+2Kb4zIFm/57RE48EU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X853d5Qe8wQXEFeWLi417Ue2zmn79hg/YAPia0KO6OV+2T1tP2+IvlHb7H5meUu78S0a7u61vhKqj7YVWzctTUIJ0xSyLIJDVE8ob3X3FkvmWHPOkX7iiIEt5wt6Dptygw6H8TsYaobFPwv0QHkFJn3fSkPwAMYO6nGSmzJoaE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AeGFnrrs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K1yMLhS0"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7dee6b76a73so31229517b3.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:37:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780339028; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CmfZLUFaH2Kn9/NfpYWzRssu+NmTCqUOB53iBoyF/dhiiq5bdEbV8DTj8NNb7bJ88T
-         hqr61rAeIZEf7VBs/dgN8yaknOi79T+ei6xQ7RYYaDDRQRqJhLFBV1UhKts4y3Ek6MMh
-         CWo+dxje9+JQckoDvmcqMS0/dlvYAuK/IkPXZXdDa2tBzZTei/EN81hEBNCK2ZXVCJHm
-         B9lEb2NXgXDcAW6x6xwUqYI5n6a1CHVvcWUu8Qco4FcpPprw6dQ9pDtccVfQs3C8OK6G
-         Jcqjnf7ZO0tU++OILAScj0sxActJJ2ZfAzny+mPI1Mvg0ZP/KjYYuwa1BzztxG2VJpbL
-         Dwsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
-        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
-        b=eYxHxujULp6te/pMKJC6NXWWt75H/EesUPVqr6Bj0RyWMd90J4OhFON0Wqd6oxxlXl
-         +5MA3GjfxfUgslYUc/PQ6Z2PbjoWn4B2RCXfNSj66fKM46xN1467Z8WvCJ73Ceqt76/0
-         jfXJuzmofzPmB6kY/gCV7V+P184TtKlhdwUIamsM7cyPNpgQG9sxbhllV404tPy+5LN/
-         TkLxTJ3Q8XBjRrtcVWVp7c85ztt3fA/FsMzpVQh499a2pfifKmIS7+NTiRNsnU8WatGs
-         oEgOy8Er5G0Rw3qHz2U1x5ZMNl2ajFws6vZS/kmHnaWmoTjJDXm37Zs4Uuv2qjBX/nQv
-         SN4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780339028; x=1780943828; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
-        b=K1yMLhS0fO/LbH2RA62jv63658f7Fr/NgpGcdq3kFJbP+BswnjR9E9FHBOZ4pdlUQX
-         Mox9//4US7PF0oxNr8BoJ3eFzzMcu8LdemAZ63PeHyMMOGkSbWNLBawofn3a9tYPrQtZ
-         dQfkMBKysB2MkZMvoSbSXjWnBTUKk6mfiH3ga11k3Kd9bHvj7bg/sl+x0dXcYeX2U0TE
-         WndcKXwsOZ0G0Y/m6VvpZ5les0lY6AImFDk9MB+2pCoQn7y19Bp5RURExnItBExdAvQL
-         6OUzYRjKVOGIV62CNwjfKECB9rHvLKREDiSuSlLPCpsNSSKC4M/YefhsvEpfiBTkogvR
-         qjWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780339028; x=1780943828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
-        b=cJv5UTnxUZKnfayjZIi4Yof2n+oysWU74L+ebE9dhD5qVLWzId0YLjcGC1U0YpRyki
-         uPPWXyJ92ovzRPeMcjwebvpp5c/nzCyi2VqWLVJefrVXnOIsC438wHRRVwB8FtfFR2rM
-         2kuJuBi9KD45sYpyQam1+B6YgTavIQznzpawlOoOnBFEndxi9gGmTMmddR6+Z48JzJ7Z
-         iimwRZelBk2eOrrlqEVda7F0VUuOM0F8amUIbuDyuB/JxXIDIeU8uNUBXMvw2VMpqP4t
-         rWtjlTS/BfC3JQ3zZzwkykvLw4979HnN/NeK05XHHdyAnJbSsVTZH6z5Ecl/W06/7Sya
-         vCwg==
-X-Gm-Message-State: AOJu0Yw7B12q8zFfWJpxkvzK2GxS+jN2PJavMADmty7FtBMnxfiyv3s6
-	a2qlIY8MYAzFWlnaxQXrGp9tY6zBxYFyQ75LByCNO/A0eQ/sj56ujhS3/6FngHw5vgU7DGeJImY
-	aeRUU0x/BD8gQLRnUD9xCy1Y3/n93Odo=
-X-Gm-Gg: Acq92OGRwsJeGEvcsVFyvPbmj6RPABt9563+cEju63I2/5hmuCHqgzk72lpBGb6Xrf8
-	I7V5OAgtgT2/VCK3zOAbUgzouYYBuVkVYwOqE4ZGHxGzQdYhaivRkuYgfJHAd3XStsyDo7c3LfL
-	sO2ZB0qXtg2Ul4d/p8+N67XA3wE20VhqUP8E+hIQzpKvO212y9rFHKi8zs4PmDxcNUK91zBTFxX
-	hCSR6ocTaYCMc+3hgBUxTxDY4x5gb9qN+C68MYh2PBwHL5jvnzza10UiFNIerHogZaryP3xYSDe
-	u8B4UqYAbaMr39RDo7Z0TFfFXrFAwFQHxw==
-X-Received: by 2002:a05:690c:b92:b0:7de:795e:e9d7 with SMTP id
- 00721157ae682-7e05d8d6a32mr116071367b3.39.1780339028165; Mon, 01 Jun 2026
- 11:37:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AeGFnrrs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F091C1F00893;
+	Mon,  1 Jun 2026 18:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780339050;
+	bh=453LPwlZ8/0XDh2NTel4qFyIHs7frDqHpyzC5sHiGyg=;
+	h=From:To:Cc:Subject:Date;
+	b=AeGFnrrsK0E5ty6ct0u3gW1VReUmbexgBW8yoXoczN3DxBHadkBk6Lt6cLL27yoji
+	 TD1au2oJ5rgsPB625hifuG8gVWIBPcbCDrzp1n8n35hCsjzKOaTyqRT0ItaNZwMlAY
+	 f/73X4KLIu4ok1+/RZGsXdm2QoT0qZ1jwuYRLF3o+3Wpdb+EV34DBTnALMJwS+qNyI
+	 cTCahpNQQz9nE6Yvd6nY5uBKHMvFkDjtmLAdrYfLYnJUSiI+40RGegaBz8hCYfPYl7
+	 u8DuXmy6UZwlxyhDHuYg+BXR8YRybd3v9alFTqrTU68jWbLzX9R+PwvzjFdY7RZCD2
+	 CzjYu29f8VVLA==
+From: Tejun Heo <tj@kernel.org>
+To: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	memxor@gmail.com
+Cc: peterz@infradead.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	rppt@kernel.org,
+	emil@etsalapatis.com,
+	sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next] bpf: Replace scratch PTE atomically when allocating arena pages
+Date: Mon,  1 Jun 2026 08:37:28 -1000
+Message-ID: <20260601183728.1800490-1-tj@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260529014936.2811085-1-ameryhung@gmail.com> <20260529014936.2811085-6-ameryhung@gmail.com>
- <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
-In-Reply-To: <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 1 Jun 2026 11:36:55 -0700
-X-Gm-Features: AVHnY4I9CBzKtblKLCUQevdJLh4pes8gAkfu0ieQIjxc5qQnQ3RAujzPIsyPi-s
-Message-ID: <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 1, 2026 at 11:00=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
->
-> I think refsafe() needs an update.
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->
-> [...]
->
-> > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> > index 877338136009..5945956a7573 100644
-> > --- a/kernel/bpf/states.c
-> > +++ b/kernel/bpf/states.c
->
-> I think refsafe() needs an update as well.
-> Something like:
->
->     --- a/kernel/bpf/states.c
->     +++ b/kernel/bpf/states.c
->     @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_state *ol=
-d, struct bpf_verifier_state *c
->
->             for (i =3D 0; i < old->acquired_refs; i++) {
->                     if (!check_ids(old->refs[i].id, cur->refs[i].id, idma=
-p) ||
->     +                   !check_ids(old->refs[i].parent_id, cur->refs[i].p=
-arent_id, idmap) ||
->                         old->refs[i].type !=3D cur->refs[i].type)
->                             return false;
->                     switch (old->refs[i].type) {
->
-> Wdyt?
+apply_range_set_cb() maps the pages for a new arena allocation and returned
+-EBUSY when the target PTE was already populated. Kernel-fault recovery
+leaves the per-arena scratch page in unallocated arena PTEs, so a later
+bpf_arena_alloc_pages() over such a page hits that -EBUSY, and every
+subsequent allocation of it fails the same way. Allocation must install the
+real page over scratch instead.
 
-You are right. It needs to compare parent_id, but maybe only for
-REF_TYPE_PTR like below.
+Overwriting the scratch PTE in place is a valid->valid change, which arm64
+forbids without break-before-make. Route through an invalid entry instead:
+ptep_try_set() fills only a none slot, so the PTE goes scratch->none->page.
+On finding scratch, clear it and flush_tlb_before_set() before retrying. The
+new flush_tlb_before_set() is a no-op except on arches like arm64 that need
+the break-before-make TLB invalidate. The loop also copes with a concurrent
+fault re-scratching the slot.
 
-        for (i =3D 0; i < old->acquired_refs; i++) {
-                if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap) ||
-                    old->refs[i].type !=3D cur->refs[i].type)
-                        return false;
-                switch (old->refs[i].type) {
--               case REF_TYPE_PTR:
-                case REF_TYPE_IRQ:
-                        break;
-+               case REF_TYPE_PTR:
-+                       if (old->refs[i].parent_id !=3D cur->refs[i].parent=
-_id)
-+                               return false;
-+                       break;
+Arches without ptep_try_set() never install the scratch page, so keep the
+must-be-empty check and set_pte_at() for them.
 
+Fixes: dc11a4dba246 ("bpf: Recover arena kernel faults with scratch page")
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>
+---
 
->
-> [...]
+ arch/arm64/include/asm/pgtable.h |   11 +++++++++++
+ include/linux/pgtable.h          |   18 ++++++++++++++++++
+ kernel/bpf/arena.c               |   38 +++++++++++++++++++++++++++++++++-----
+ 3 files changed, 62 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 984f050..3ce0f2a 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -1842,6 +1842,17 @@ static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
+ }
+ #define ptep_try_set ptep_try_set
+ 
++/*
++ * arm64 mandates break-before-make: a cleared kernel PTE must have its TLB
++ * invalidated before a different page is installed in its place. The broadcast
++ * TLBI is an instruction, not an IPI, so this is safe with interrupts disabled.
++ */
++static inline void flush_tlb_before_set(unsigned long addr)
++{
++	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++}
++#define flush_tlb_before_set flush_tlb_before_set
++
+ #define test_and_clear_young_ptes test_and_clear_young_ptes
+ static inline bool test_and_clear_young_ptes(struct vm_area_struct *vma,
+ 		unsigned long addr, pte_t *ptep, unsigned int nr)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index b5739bb..4c6c408 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1061,6 +1061,24 @@ static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
+ }
+ #endif
+ 
++#ifndef flush_tlb_before_set
++/**
++ * flush_tlb_before_set - invalidate a kernel PTE's TLB before re-setting it
++ * @addr: kernel virtual address whose PTE was just cleared
++ *
++ * Some architectures (e.g. arm64) do not allow a live page-table entry to be
++ * repointed at a different page in one step. The old entry must first be made
++ * invalid and its translation flushed from every TLB, and only then may the new
++ * entry be written.
++ *
++ * This is only for the lockless atomic kernel-PTE installers (ptep_try_set()).
++ * It must be callable with interrupts disabled.
++ */
++static inline void flush_tlb_before_set(unsigned long addr)
++{
++}
++#endif
++
+ #ifndef wrprotect_ptes
+ /**
+  * wrprotect_ptes - Write-protect PTEs that map consecutive pages of the same
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 1727503..b6ac5a9 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -142,6 +142,7 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
+ 
+ struct apply_range_data {
+ 	struct page **pages;
++	struct page *scratch_page;
+ 	int i;
+ };
+ 
+@@ -154,19 +155,44 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
+ {
+ 	struct apply_range_data *d = data;
+ 	struct page *page;
++	pte_t pteval;
+ 
+ 	if (!data)
+ 		return 0;
+-	/* sanity check */
+-	if (unlikely(!pte_none(ptep_get(pte))))
+-		return -EBUSY;
+ 
+ 	page = d->pages[d->i];
+ 	/* paranoia, similar to vmap_pages_pte_range() */
+ 	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
+ 		return -EINVAL;
+ 
+-	set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
++	pteval = mk_pte(page, PAGE_KERNEL);
++#ifdef ptep_try_set
++	/*
++	 * Kernel-fault recovery may have installed the scratch page here, and
++	 * some architectures (arm64) prohibit valid->valid PTE transitions.
++	 * Install atomically into a none slot. If scratch is present, clear it
++	 * and flush_tlb_before_set() (break-before-make) before retrying.
++	 */
++	while (!ptep_try_set(pte, pteval)) {
++		pte_t old = ptep_get(pte);
++
++		if (pte_none(old))
++			continue;
++		if (WARN_ON_ONCE(pte_page(old) != d->scratch_page))
++			return -EBUSY;
++		ptep_get_and_clear(&init_mm, addr, pte);
++		flush_tlb_before_set(addr);
++	}
++#else
++	/*
++	 * Without ptep_try_set() there is no atomic installer, but such arches
++	 * also do not wire up bpf_arena_handle_page_fault(), so no scratch page
++	 * is ever installed and the slot is always none here.
++	 */
++	if (unlikely(!pte_none(ptep_get(pte))))
++		return -EBUSY;
++	set_pte_at(&init_mm, addr, pte, pteval);
++#endif
+ 	d->i++;
+ 	return 0;
+ }
+@@ -475,7 +501,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	if (ret)
+ 		goto out_sigsegv_memcg;
+ 
+-	struct apply_range_data data = { .pages = &page, .i = 0 };
++	struct apply_range_data data = { .pages = &page, .i = 0,
++					 .scratch_page = arena->scratch_page };
+ 	/* Account into memcg of the process that created bpf_arena */
+ 	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
+ 	if (ret) {
+@@ -665,6 +692,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ 		return 0;
+ 	}
+ 	data.pages = pages;
++	data.scratch_page = arena->scratch_page;
+ 
+ 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+ 		goto out_free_pages;
