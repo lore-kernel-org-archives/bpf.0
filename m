@@ -1,197 +1,219 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6B43EDAA0
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780339353; cv=pass; b=NkSn+VDUcJ+eXKsVd9rjgwXi1r1+lBMGt/LXEdnjlsoHutua9DX6MZxkd7fmqTckYchmRJLcNKUHaNGH2FWIVrobl5UKqe1WWCEHZiSbYQjck6+c7CkBF9SBq/ueT1KDWdsxiFDvQ/CVamj6BebTA8q0AejgyE/XqOGWBWOF7zg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780339353; c=relaxed/simple;
-	bh=ceIUUz0QUk7dm/8ISeRpOOGqbccQMk4npZ+3ANrKM3g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OwG/zXs3R/nuG5Mn1G7M6d8D/ZFXtD6k8tJdMsi5CdnXO3VYZ7y77Qv4gW2cFSdobeqADBJV0KfGwPGlkWkhc5ehYFCKZX/kBTMN/XIfqV6397OeJh7NozzQJ5qSuW/h0HyBiAdPGcv+L51H/C6ZYwCgbx1OsNlLX28vfk7tiUk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwvftzJ3; arc=pass smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF3423393C;
+	Mon,  1 Jun 2026 18:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780340284; cv=none; b=qCbIkNSHlHJU9w41YRMDKIzwBJVKw9EMoj762zlFOU0/jND2RtvGLjbjV5CrzpWcEbQEna+I/jtBEydoADyvTsBQZTDF1HWGyY+urWu+8PEzPzmPhNWY4NwM5zhmDhNjgIJ0eZaeArNjefSEYMK3hopcqAWg1IRnuGG0y/BWjew=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780340284; c=relaxed/simple;
+	bh=yRMay8ztBq1oRZs/VDDM24K1p4t3B+LtKCuSuuTycEM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iL4t+v5tE7ahjfomsT5ohkTLBcF2F0FQ0RrIdQ+amyGpglGE1U6wOi/yO8oILn5lK5SBFBmKXCQmtk1rgvo9Gu5vUUUlHZL4qbWM8kxTfYmSA0bqyxHU8e4/Ef1slIs/NiMhQAQZgcZC12R5/fZ/nkkrPBxcFesZ/rORo+GOMiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MlEBJZjp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwvftzJ3"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7e16f05fd79so21473657b3.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:42:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780339350; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NoXVgJpcchqJSMwq2m9zUi+LZErWz8GNVfiFMU15qQz00i1rtMsg5NpipMnBKopeyT
-         f+U0qohZFHMXNaj+50PStC0z+RcTUE3xC/OShphMmDQMzfIwOCiAg2pIc9wJmdAwE2yJ
-         y5ga7CERLgdaQmnrjwawbxEh7wp9ZT98grRRqtDTSaoutcq3q+Xy++dkBYrhcWnjSED7
-         Z8QUORq1MBEe4n5GNEcrMoL17yeHOL03+l6KxiZJNxLa0TrliIWm00MzZPdgYFL0FaCe
-         Z6ZY6u6elkEmSjXdZG/3EO4en34OqVWoVIif5iyDlGwTOTmSKqUZrdYXfvjmEsUunSjj
-         /q8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UTE/QKE/3UTjUldWGrtLCLw9TUPITkTTkFp5FaHAxB0=;
-        fh=7x+PkoI5vDT7yAplLp+0dlbQd8Tn3BnmA3JaljVbDvI=;
-        b=FQ8ErQ421gAtwwNdK81qeYBDAwaXllb0fEKDN+FKwRMJVkYZIaYyAmvOu236hiYoir
-         UOs9Eh6AHr0LVYwR1yWl1FPi3tU1eYi0IdIW6bzHqu2fYtUhoRCMQ9p7hKvyhKWM3Hcb
-         C0EhvtOViIiDPi03fDeBJx4gw33iOF950aEKVcqtKKh7j+SIGdMDtNxhURhy8zQfGmoh
-         HQgc/btCt9BOdqX38FhDj/g86WVjxc018vonINpLtNBxfrDi0Bj2f0yNunZvGRiKGF5q
-         OUky7Q/ICIe+RHax7RRKFGHuIpGuYWI1gRj4rabuaZkBd3YRLfGpUEIX9dLvTSIC8aVE
-         8pTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780339350; x=1780944150; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UTE/QKE/3UTjUldWGrtLCLw9TUPITkTTkFp5FaHAxB0=;
-        b=AwvftzJ3sRAvQlcI4u6l+7Z81hqt+sqIS+YTWZysG8FIwrJAbirPdd28MZ++8ZffcJ
-         JVmATe9vLdEmIDaUfU1Ok7NHOFm+KEknpwy4XKCUPS+JORuDdh853DXZ45VkfGtEjue4
-         95HZRYoTqBbeDuVMGuSdxStHCLceyihb9cA/Og+mefaVU6Dq1t0Ro8EhxTJ9Mion0QoL
-         lz8Rd3a/2fZ3aYe7E4MIi+Jeip9aa2Q/gtF3DUaipNxUrikbYtDku+NUMxPphKe9JqN4
-         tOpqLnvj2QPrZs9+i6aO+9G7RF08WuIQPz37ddQPpIRyOm9eD6P9MCnNMlqCvBYFHAPe
-         4Y8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780339350; x=1780944150;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UTE/QKE/3UTjUldWGrtLCLw9TUPITkTTkFp5FaHAxB0=;
-        b=bt2IH7JtbVEnemep9BGhGzBhu+rOdTAiBGSh9l1gXSpusDUIDks9U6oZ9moW149c09
-         QRzme38YZtLP5QFQ+MuhkykkXp0x94SlSOFWgHQky7oRdUGILl7EYX5K6fpQ2iG05rUH
-         1JRSM93Uv7Q5CytD/0q6B9+RcGZkilYbCOUJWyXllPNgvXjXg7h3c4uXL7bmMi3H7mDu
-         pG9Pnxp1TY47U4vTyAARP8s5c1+yi85spHbRHT081X06HU0ZJ4o21N0Khiv7+jSGSf9e
-         5vqantUmAjTlENnCEeyBzywKgNr2gdPG2kBA0o/deUTmAdbUNl3IoWEOJ62rZm8jkj/7
-         hvvQ==
-X-Gm-Message-State: AOJu0Yzc8sIRjZc5yT1PHS4AV2xxX2pX7ny7oM6msNMUUG9BjalqBLrn
-	1WRVJCHOYt3J9MoTChcSJ1A3Kgadav6/0iVNYB63WNhKGSkMbYjnk7FuBpeSSc+p+LxkgTvFrdL
-	gIMJb6dN86UK/2SfgcYRnSbuvdPJywR8=
-X-Gm-Gg: Acq92OG9FemPQWAzY4isqUEZZwJYiglupUF+zcfCfAPtvsUOBb7y7tBswpFwb+Fu5hg
-	l4WpAxRdbYaYvEOv6QjGIQt03FWmU4z8Ov6nhXvn5T5//gAfg8KwObzBdJuoGlXJIPQAnigRIH1
-	lGlYM/zb9/EC0lGWDnD+3jABqO1dbV/I16iZ3a04lOkDixsCmLc1TSvyt0yl/tAILUuQiG6+kPa
-	uaZpmC27pYFGABCvkt4RNkzphKYGjL2zNd3eJU4IqrgAbyENKsxnhUAGBGF/Xid8fEatyaDfrdo
-	p6StJ/M3W2Bmjhwy3QJKc3OPIQqtw2PWGg==
-X-Received: by 2002:a05:690c:6202:b0:7bd:a4dc:c22a with SMTP id
- 00721157ae682-7e061bcfb82mr110330297b3.48.1780339349532; Mon, 01 Jun 2026
- 11:42:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MlEBJZjp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22171F00893;
+	Mon,  1 Jun 2026 18:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780340282;
+	bh=3N5P2gpKxerXP3VehMb0w4n+9h/Z0zVwrIMwJTm545U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MlEBJZjp777Ugtrbn2mMkQEOjHErM9H5DRvRIIBjDvDrIESyeIG3+nBsIudpDoSor
+	 9fbwtManuH9Hcj5VIF4CodOHT7Cpb5k9vennYsdjO1dJ81D8R7zagA0va1JAX+IdAo
+	 8EnVpDVjYWDPBmacfZ60kSQlA1uq6GGWFWL4REldfd0D33ggR5PUl++XafkT11YfCX
+	 Xt4yATn6mXLnmaq4UPNonej8ZotGQWACRXDeAo/3vHJIbmJWl0l86F8V8daBgCiEP/
+	 1TAOnzE6Fk+e7X59s50htOcX0SyvOxVIdf1v9iO2IZqwKREFS9j5D0bb/6xXtQVqnp
+	 E9fFi8m/UafJQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Replace scratch PTE atomically when
+ allocating arena pages
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tejun Heo" <tj@kernel.org>
+Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
+In-Reply-To: <20260601183728.1800490-1-tj@kernel.org>
+References: <20260601183728.1800490-1-tj@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 01 Jun 2026 18:58:02 +0000
+Message-Id: <20260601185802.B22171F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260529014936.2811085-1-ameryhung@gmail.com> <20260529014936.2811085-13-ameryhung@gmail.com>
- <29eaa2d6-784b-4a12-acb3-099052ba0933@gmail.com>
-In-Reply-To: <29eaa2d6-784b-4a12-acb3-099052ba0933@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 1 Jun 2026 11:42:16 -0700
-X-Gm-Features: AVHnY4J6STqccTyyKpq94c2tpQzdQmVj-nX3qCB_-eVaQzAEU1Tt8OiWPvMh6CE
-Message-ID: <CAMB2axOb0Bi9Xn5RS1J+n0_vdD2oFygAa1xCH6O3JR4JJfihyA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 12/13] selftests/bpf: Test using file dynptr
- after the reference on file is dropped
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 1, 2026 at 5:05=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> On 5/29/26 2:49 AM, Amery Hung wrote:
-> > File dynptr and slice should be invalidated when the parent file's
-> > reference is dropped in the program. Without the verifier tracking
-> > dyntpr's parent referenced object, the dynptr would continute to be
-> > incorrectly used even if the underlying file is being tear down or gone=
-.
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  .../selftests/bpf/progs/file_reader_fail.c    | 60 +++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/too=
-ls/testing/selftests/bpf/progs/file_reader_fail.c
-> > index 0739620dea8a..d5fae5e4cf9a 100644
-> > --- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
-> > +++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
-> > @@ -50,3 +50,63 @@ int xdp_no_dynptr_type(struct xdp_md *xdp)
-> >       bpf_dynptr_file_discard(&dynptr);
-> >       return 0;
-> >  }
-> > +
-> > +SEC("lsm/file_open")
-> > +__failure
-> > +__msg("Leaking reference id=3D{{[0-9]+}} alloc_insn=3D{{[0-9]+}}. Rele=
-ase it first.")
-> > +int use_file_dynptr_after_put_file(void *ctx)
-> > +{
-> > +     struct task_struct *task =3D bpf_get_current_task_btf();
-> > +     struct file *file =3D bpf_get_task_exe_file(task);
-> > +     struct bpf_dynptr dynptr;
-> > +     char buf[64];
-> > +
-> > +     if (!file)
-> > +             return 0;
-> > +
-> > +     if (bpf_dynptr_from_file(file, 0, &dynptr))
-> > +             goto out;
-> > +
-> > +     /* this should fail - file dynptr should be discarded first to pr=
-event resource leak */
-> > +     bpf_put_file(file);
-> > +
-> > +     bpf_dynptr_read(buf, sizeof(buf), &dynptr, 0, 0);
-> > +     return 0;
-> > +
-> > +out:
-> > +     bpf_dynptr_file_discard(&dynptr);
-> > +     bpf_put_file(file);
-> > +     return 0;
-> > +}
-> > +
-> > +SEC("lsm/file_open")
-> > +__failure
-> > +__msg("Leaking reference id=3D{{[0-9]+}} alloc_insn=3D{{[0-9]+}}. Rele=
-ase it first.")
-> > +int use_file_dynptr_slice_after_put_file(void *ctx)
-> > +{
-> > +     struct task_struct *task =3D bpf_get_current_task_btf();
-> > +     struct file *file =3D bpf_get_task_exe_file(task);
-> > +     struct bpf_dynptr dynptr;
-> > +     char *data;
-> > +
-> > +     if (!file)
-> > +             return 0;
-> > +
-> > +     if (bpf_dynptr_from_file(file, 0, &dynptr))
-> > +             goto out;
-> > +
-> > +     data =3D bpf_dynptr_data(&dynptr, 0, 1);
->
-> File dynptr is always read-only, so bpf_dynptr_data() always
-> returns NULL. Verifier does not know this (not sure if we should
-> address it). Maybe it makes sense to remove this call or substitute by
-> probe read, just to avoid confusing example.
->
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Thanks for taking a look at the selftests and pointing this out. Does
-replacing it with bpf_dynptr_slice() make sense to you?
+New issues:
+- [Critical] Replacing the populated scratch page PTE with a newly allocate=
+d page lacks a TLB flush on architectures where `flush_tlb_before_set()` is=
+ a no-op, causing silent data corruption.
+- [High] Calling `pte_page(old)` without checking `pte_present(old)` can ca=
+use an invalid pointer dereference or kernel panic.
 
-> > +     if (!data)
-> > +             goto out;
-> > +
-> > +     /* this should fail - file dynptr should be discarded first to pr=
-event resource leak */
-> > +     bpf_put_file(file);
-> > +
-> > +     *data =3D 'x';
-> > +     return 0;
-> > +
-> > +out:
-> > +     bpf_dynptr_file_discard(&dynptr);
-> > +     bpf_put_file(file);
-> > +     return 0;
-> > +}
->
+Pre-existing issues:
+- [High] Calling memory allocation and page table walking functions with in=
+terrupts disabled causes lock nesting violations and scheduling while atomi=
+c bugs.
+--
+
+commit b6f9fe34365955853d165d4a39abcf4bf12f7b70
+Author: Tejun Heo <tj@kernel.org>
+
+bpf: Replace scratch PTE atomically when allocating arena pages
+
+This commit modifies the BPF arena allocation to replace the shared scratch
+page with a newly allocated page. To support architectures like arm64, it
+uses ptep_try_set() to do a valid->invalid->valid transition, providing a
+new flush_tlb_before_set() hook for the break-before-make sequence. For
+architectures without ptep_try_set(), it falls back to checking pte_none()
+and setting the PTE directly.
+
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index b5739bb99fc15..4c6c4081ef715 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+
+[ ... ]
+
+> @@ -1061,6 +1061,24 @@ static inline bool ptep_try_set(pte_t *ptep, pte_t=
+ new_pte)
+>  }
+>  #endif
+> =20
+> +#ifndef flush_tlb_before_set
+> +/**
+> + * flush_tlb_before_set - invalidate a kernel PTE's TLB before re-settin=
+g it
+> + * @addr: kernel virtual address whose PTE was just cleared
+> + *
+> + * Some architectures (e.g. arm64) do not allow a live page-table entry =
+to be
+> + * repointed at a different page in one step. The old entry must first b=
+e made
+> + * invalid and its translation flushed from every TLB, and only then may=
+ the new
+> + * entry be written.
+> + *
+> + * This is only for the lockless atomic kernel-PTE installers (ptep_try_=
+set()).
+> + * It must be callable with interrupts disabled.
+> + */
+> +static inline void flush_tlb_before_set(unsigned long addr)
+> +{
+> +}
+
+[Severity: Critical]
+Since the generic implementation of flush_tlb_before_set() is an empty
+function, does this leave a stale TLB entry on architectures like x86?
+
+When the scratch page is replaced, ptep_get_and_clear() clears the PTE, and
+then ptep_try_set() installs the newly allocated page. If the architecture
+uses the generic fallback for flush_tlb_before_set(), there is no TLB flush
+before the new entry is written, and the allocation loop doesn't seem to
+perform a deferred flush either.
+
+Could this result in BPF programs continuing to read and write the shared
+scratch page instead of the new memory?
+
+> +#endif
+> +
+>  #ifndef wrprotect_ptes
+>  /**
+>   * wrprotect_ptes - Write-protect PTEs that map consecutive pages of the=
+ same
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index a641b19255aad..799fb49768e69 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+
+[ ... ]
+
+> @@ -154,19 +155,44 @@ static int apply_range_set_cb(pte_t *pte, unsigned =
+long addr, void *data)
+>  {
+>  	struct apply_range_data *d =3D data;
+>  	struct page *page;
+> +	pte_t pteval;
+> =20
+>  	if (!data)
+>  		return 0;
+> =20
+>  	page =3D d->pages[d->i];
+>  	/* paranoia, similar to vmap_pages_pte_range() */
+>  	if (WARN_ON_ONCE(!pfn_valid(page_to_pfn(page))))
+>  		return -EINVAL;
+> =20
+> -	set_pte_at(&init_mm, addr, pte, mk_pte(page, PAGE_KERNEL));
+> +	pteval =3D mk_pte(page, PAGE_KERNEL);
+> +#ifdef ptep_try_set
+> +	/*
+> +	 * Kernel-fault recovery may have installed the scratch page here, and
+> +	 * some architectures (arm64) prohibit valid->valid PTE transitions.
+> +	 * Install atomically into a none slot. If scratch is present, clear it
+> +	 * and flush_tlb_before_set() (break-before-make) before retrying.
+> +	 */
+> +	while (!ptep_try_set(pte, pteval)) {
+> +		pte_t old =3D ptep_get(pte);
+> +
+> +		if (pte_none(old))
+> +			continue;
+> +		if (WARN_ON_ONCE(pte_page(old) !=3D d->scratch_page))
+
+[Severity: High]
+Can calling pte_page(old) here without first checking pte_present(old)
+cause an invalid pointer dereference?
+
+The function pte_none() only guarantees the PTE is not completely empty, but
+it doesn't ensure it is present. If the PTE contains a non-present entry
+like a swap entry or a poison marker, pte_page() will interpret the swap
+metadata as a physical page frame number.
+
+Additionally, on architectures like x86 with CONFIG_DEBUG_VM enabled,
+pte_pfn() asserts pte_present(), which would trigger a kernel panic. Should
+this check pte_present(old) before extracting the page?
+
+> +			return -EBUSY;
+> +		ptep_get_and_clear(&init_mm, addr, pte);
+> +		flush_tlb_before_set(addr);
+> +	}
+
+[ ... ]
+
+> @@ -475,7 +501,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+>  	if (ret)
+>  		goto out_sigsegv_memcg;
+> =20
+> -	struct apply_range_data data =3D { .pages =3D &page, .i =3D 0 };
+> +	struct apply_range_data data =3D { .pages =3D &page, .i =3D 0,
+> +					 .scratch_page =3D arena->scratch_page };
+>  	/* Account into memcg of the process that created bpf_arena */
+>  	ret =3D bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
+
+[Severity: High]
+This is a pre-existing issue, but does calling bpf_map_alloc_pages() here
+with interrupts disabled cause lock nesting violations or scheduling while
+atomic bugs?
+
+Looking at arena_vm_fault(), raw_res_spin_lock_irqsave() is called earlier,
+disabling interrupts. Then bpf_map_alloc_pages() is called, followed by
+apply_to_page_range(). The apply_to_page_range() function can dynamically
+allocate page tables using GFP_KERNEL (which can sleep) and acquires the
+page table lock, which is a sleepable rt_mutex on PREEMPT_RT kernels.
+
+A similar pattern exists in arena_alloc_pages(), where
+raw_res_spin_lock_irqsave() is taken before the while loop that calls
+apply_to_page_range(). Is it safe to call these sleepable functions inside
+an IRQ-disabled critical section?
+
+>  	if (ret) {
+>  		range_tree_set(&arena->rt, vmf->pgoff, 1);
+>  		goto out_sigsegv_memcg;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601183728.1800=
+490-1-tj@kernel.org?part=3D1
