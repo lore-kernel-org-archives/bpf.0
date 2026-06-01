@@ -1,78 +1,77 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944F936655B
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 21:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCE36655B
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 21:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780349793; cv=none; b=DCZLPapMcV9sR8jbMDgwL3ZC8yp0ocsSTNcb+aMVcDh06Ao3tqvYe0qk21RaALIDN+DBUMRxDrgYh/Aiy4scC32MKUX95IBjnK8SLi2xM9qEReH+q/a8HYbM8hQgsGtnGXBFYG+MhHxFXSg4oxrPSXeGOndnMjfMsqa3x6FRHDk=
+	t=1780349893; cv=none; b=RxPJomDLUyygV5qkB/1PbkCc4RJg496NrYx7lGl+CQd94UoNgmHkA86WqG++j2a5742NzECdKkqeUkXGXYDxPVcuiYkVGwpkCtxZH14Udemr0Eo5s+XYpYkYl2KpwinIEEQdOPtUZ+bNWCUTG9xDnpOl35+eQ9+WAqGWjkeGujc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780349793; c=relaxed/simple;
-	bh=ohGvsnt5wGGrS8nCkxbknV7cYtW8Z1frw09epT2l/qE=;
+	s=arc-20240116; t=1780349893; c=relaxed/simple;
+	bh=J49thQU0tLDbC40LQbrf5dWPZTs/A+l7e9+LmY4skys=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Co8QHokp3uuo7A3PvwLUdcxON2byQjBt2RrQi37Uh/3yBPvxBIL4bL0bQIxYu0gwWmLLZL/KP9lSDXpGKjUGVfkRQ8NPQuKmmVj6gDIBxSQPbeWiN8fAJvXdauAbxMHUxG7T+K0m4wbmVe6CHl7btWd2jS411nQGtkCTxFfT6Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oUw6c95p; arc=none smtp.client-ip=74.125.82.181
+	 Content-Type:MIME-Version; b=KqtaxBp3IjJlwVT8Ca1/CPioeZJrXmegrtDi6NxCO3uwlO7HfIzaQ4b/5rUL4RHtGUw9mK6BVXxFvcstufxhi/HCdFNsoBnzxDjI4kgHuSbp3HlNoL+XSRneE+G6CqHf5YHXmfno0knGuId3AEpYJDhaU2YjsuIyR/s32vI85Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awZbAefU; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oUw6c95p"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-307263ad0cbso1538279eec.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 14:36:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awZbAefU"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304e83724bfso4819133eec.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 14:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780349792; x=1780954592; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780349891; x=1780954691; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=cbl2ijxMWZNunjPG65UITZHrQVdSUsTPik/smPG+J7A=;
-        b=oUw6c95p7Y4weuSbUMo43WXRCB4C4Y7mBfpqhuqZUXNKM7Hy0WUizh24zsI5skLp5U
-         RnZF8YRuoCcWyjRDdlxdL8LJwQEIqGixsiGyqCFItYPjeEHUvOVKepIuXvxqcp0WixGz
-         6tQwEL6m+6WMCcdRvLr4CyzodZ3+FegMBNYnU4zs02Q9R9EZzGqnzXLAqyqszruMRa5P
-         cW2WOGTX+ouMEYgLBoG3Jt5bagw7/4BshvY2ut5B1Ybn+87ziaTpRaHwHlSmEARLEVUT
-         jfAz30tNjHH3c0xgbamQaqLVceWbGSI61vBOrLijwj5kCWyzhs1NRueOFlP1ytO6kSQO
-         2YxQ==
+        bh=d53G/+V5LF96ITn7EZOA+3GNRQdfCETQfKocNPYPMs8=;
+        b=awZbAefU9YXQgdVaOJYE8Pioxj7TlyehUFF6pcAxNznRaEddr/k7DkrLUMqwRTQU+f
+         +3JnH5v7XB9lzYjYAc0WN1hMdkwI50dQu1G7jDTFEL18d2iyurBbjjyXRcwNE4mIc5er
+         YO52tiSZ3emyZcRKK+Bm4J88N0UBHBBMr/TAC3HZC0D1NMOcJ86SSLCHrGr9XKCImEDK
+         M9f+aF9o1QQeJzQaC/XSMspQbSnH9hq3cca1wiUq5sPLeMaNkbQdwYxreIJMP5SjZ94Y
+         q+wmxVm1g7BDhkeeQ0YycNcmDuhgfLEqQEKj+/b4vX0u5iZznFvyY9vJ/soQRcPxIj10
+         1NhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780349792; x=1780954592;
+        d=1e100.net; s=20251104; t=1780349891; x=1780954691;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbl2ijxMWZNunjPG65UITZHrQVdSUsTPik/smPG+J7A=;
-        b=LD1ERT0CwyekNNOSUndF3lLGW0YBH7EUYZDxrr3QAOf8YUJmJU5kXizMTzWPU5QtJ0
-         e3z4+N6iwLrv77Dp+ijB8SYFmSzCaD/IB1MCGYxu8FDXHygDZcYATMY6/C6F3vsuniu4
-         AMstYe+x/UBFAkn/IEsygA4i5EovBCkEgH3NyGT0peTA96tQFT1UDTwUhNI//aUtFQ9W
-         Kmqm8d+QGvaNYt08Aiq/PvKAVdurS/1ji4XZD9lTUk2XWpFyEb7iqa7m9rBysSw45i8b
-         8sGjf6AOcRwkWNKfyaaVvgU/hGa2EuZ1onMob+4nEr8/IfyadXN/MOlurhFrvu3tB2g6
-         ErKw==
-X-Forwarded-Encrypted: i=1; AFNElJ+IUoyA3Ez7UQixAM5DAE7ZE+iaZ4eRAgBfbGLROKsUYv4dB52YVmiTayqWooORxxBBkcc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1bQizZc/hXCy9hw8YGvSp1NMd6qZA4kDrFKAvciyZo+spS2VE
-	JDy6OaDNW1JUQpE4OBHw8Q/47UiyInXZmwHtyphL7KVrJIaEtEtsvnhIxrAEAXOh
-X-Gm-Gg: Acq92OECjzHbRtclDd08OXBt3SqITclt+pOrSQHT5d/QrLZ/xvN9gOt4w1g+AHoY5ax
-	lqnu2e0/o1RB3utH7IVFXLpISQSkJRFDCo5YwZscIO0CB/CiKKAeGH6BtErcwTfIG8IHJ108Ckp
-	YSYXNlXZ96mMiproJKd9XLvpPBGQXt5Bsac2TOjOwwJZp8a+wJTPiTkZ51xZkYE/7Y7C8hMEIdb
-	dh8JE2H09HQ5Ovx5ygDuRArOHnT4Cm6acAxTEh5KWZvYdEedK79l6QQeEkm3IqyMNEWVbTgVLx2
-	PUO0G0SGOQlIg+6Q3H3sDUxPi2IGG/bsWxhGya8AA5O/VMZlZNWQwXNuraSrPfMXjWIczTaDLxz
-	pWQ4qguh4pRgSmBSn2X8janiAR0h/Ztvqhj43TqGyLzvV0bYCyDeWFXNNPcJJ0hGcFyo9NA/iGq
-	r2fw4lYaw9Q7AKUc5ww181xeSxPmfRJSM2Sq/6TExrP+unn88n6lT+4KizssNCMAQaxczCXcnX7
-	bdXPSJeWOYaSAM6jhk=
-X-Received: by 2002:a05:7300:3b07:b0:304:e6fb:f2f0 with SMTP id 5a478bee46e88-304fa6a904dmr6476151eec.34.1780349791549;
-        Mon, 01 Jun 2026 14:36:31 -0700 (PDT)
+        bh=d53G/+V5LF96ITn7EZOA+3GNRQdfCETQfKocNPYPMs8=;
+        b=dIj0NAsE8uuaVbARmgvCZDLl76AU5DEiGHvqvFn5Pxegp9z97zT0LshS9kbjkJKT4D
+         jcpWWKU4WOqulYxXsPiLXBDmk4Iyfyn0s1hoyWGRfAVS7hUbfKUNd53bl88IRXRn411/
+         KaxCz+BO3i+ACXVSbwERC5UAv2sHSXnAepFv3zf5TptHhF/xc8dQge26NvPtANa6zvJH
+         /poj42U+qUyngtjBWdMglcLN3Bo9GIb5QmRoi0JovXDwXS8Y+GV7BddAIvOOAW7s+bSN
+         sUU+IL00VmsiyBtUuPfQi5mH/A2AEeuwCgdGHPdTfUe64khBLaQROB2Ek1VFO4ldlC8V
+         wiOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/QIGLL2QMHjeHm2YuSCXcse7WgdcL+ueyK12NUhEBd799k2Y3Z5bXlX9EWszEQ5EZrrXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl3SLSj7lQOvXPLsHnmzgQGWac9UORzk7VFKQGPEBwIwOwnF+4
+	QCPexQa+CRUY4KqUXUQUx13lLcOl1rOiCPEA413eWHyEb6113yhoRRMD
+X-Gm-Gg: Acq92OF54chefBePRll3QYfvohgHKGJsQRQutZrqIL5xOYFTvC8WLfsdE9p2xek4sP6
+	NO7mKq+FqO/Sh13wQKmFFWaHBygC6QUBXCMfCtUQEGbvC7yyfMwNe/GJyjAoxLFgSOnFEDTftZY
+	EOkbzPI7iph+HhTg90F9L8cusytYYzpr8O/mzD1aK3SF8nMV5ZXTVLYhHYP0EBfnwrOuZ/VcMVL
+	aU1qZ4sHURNI7YZo9mG8IMR/M9R/11CCNvMliYVcnED++wDsSBui5da3rNapUZGhWgEMjud4uzN
+	RDRlyU0tEM4Tt6/YNHRdgnultZnoXQO3fLtExo7/8Bq+1/U9QDgISKvMV3Aff8NOaIv7qn1Zukr
+	NOdPL0lKjYWu2bbsK20rAetaDBzHTPVcZRoo1BYyunyh2PTlkgy+UGZvSUV+x3x4YBX9FqUDlau
+	r4vU3ba5agRTBnbhok4wfZx1CFQs4ERr9J+j5Hxu8AdRxckqo/1lLi6g5t0Y0HOm58NhM7jaFTg
+	LR84xLmkv7n+xZs4fVxZLXFLB3/Hg==
+X-Received: by 2002:a05:7301:168a:b0:2d9:a799:3c4f with SMTP id 5a478bee46e88-304fa652e17mr5611430eec.24.1780349891096;
+        Mon, 01 Jun 2026 14:38:11 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:c3a5:3c8c:3e68:6e4d? ([2620:10d:c090:500::1:c0f8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2c312csm10231858eec.6.2026.06.01.14.36.30
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2eb24fsm9602685eec.7.2026.06.01.14.38.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 14:36:31 -0700 (PDT)
-Message-ID: <5168f215501c61b3b53e592f35569768e82f0cef.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
+        Mon, 01 Jun 2026 14:38:10 -0700 (PDT)
+Message-ID: <35632e031e85b81cca133da8d420a3a467db3f54.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next v3 5/6] bpf: report register diff summary
+ for hot callchains
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: chenyuan_fl@163.com
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- chenyuan@kylinos.cn, 	daniel@iogearbox.net, jolsa@kernel.org,
- linux-kernel@vger.kernel.org, 	martin.lau@linux.dev, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev
-Date: Mon, 01 Jun 2026 14:36:29 -0700
-In-Reply-To: <20260601064611.807637-2-chenyuan_fl@163.com>
-References: <20260407080900.551797-1-chenyuan_fl@163.com>
-	 <20260601064611.807637-1-chenyuan_fl@163.com>
-	 <20260601064611.807637-2-chenyuan_fl@163.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com, yonghong.song@linux.dev
+Date: Mon, 01 Jun 2026 14:38:09 -0700
+In-Reply-To: <DIY16FWK8YDS.1HLJ3UPVQ3LT7@etsalapatis.com>
+References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
+	 <20260527-better-1m-reporting-v3-5-b3ede0588a75@gmail.com>
+	 <DIY16FWK8YDS.1HLJ3UPVQ3LT7@etsalapatis.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -83,59 +82,31 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2026-06-01 at 14:46 +0800, chenyuan_fl@163.com wrote:
+On Mon, 2026-06-01 at 17:29 -0400, Emil Tsalapatis wrote:
 
 [...]
 
-> @@ -11899,8 +11932,17 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->  		u32 ref_id, type_size;
->  		bool is_ret_buf_sz =3D false;
->  		int kf_arg_type;
-> -
-> -		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
+> > @@ -720,8 +721,11 @@ static bool stacksafe(struct bpf_verifier_env *env=
+, struct bpf_func_state *old,
+> >  				old_type =3D STACK_INVALID;
+> >  			if (cur_type =3D=3D STACK_POISON)
+> >  				cur_type =3D STACK_INVALID;
+> > -			if (i >=3D cur->allocated_stack || old_type !=3D cur_type)
+> > +			if (i >=3D cur->allocated_stack || old_type !=3D cur_type) {
+>=20
+> This new logging of divergent stack slots is identical throughout stack s=
+afe. Can we factor
+> it out into an error label at the very end?
 
+Yes, makes sense.
 
-Thank you for figuring out this corner case.
-I don't think I like matching the type by name here, though.
-Wdyt about a somewhat more generic solution described below?
-bpf_fixup_kfunc_call() lists all the cases when verifier injects an
-implicit argument:
-- functions with KF_IMPLICIT_ARGS flag and a parameter of type bpf_prog_aux=
-.
-- functions with KF_IMPLICIT_ARGS allowed by is_bpf_list_push_kfunc() /
-  is_bpf_rbtree_add_kfunc().
- =20
-Meaning that current check_kfunc_arg() code can be changed as follows:
+> > +				diff->slot =3D spi;
+> > +				diff->kind =3D DIFF_STACK;
+> >  				return false;
+> > +			}
+> >  		}
+> > =20
+> >  		if (old->stack[spi].slot_type[i % BPF_REG_SIZE] =3D=3D STACK_INVALID=
+ ||
 
-       if (is_kfunc_arg_prog_aux(btf, &args[i])) {
-               ... unmodified ...
-               continue;
-       }
-       if (is_bpf_list_push_kfunc(...) || is_bpf_rbtree_add_kfunc(...)) {
-               ...
-               continue;
-       }
-       if (is_kfunc_arg_implicit(meta, i)) {
-               ... report error ...
-               return -EFAULT;
-       }
-
-Thus catching all the cases.
-
-> +		enum kfunc_inject_arg_type inject_type;
-> +
-> +		inject_type =3D get_kfunc_arg_inject_type(btf, &args[i]);
-> +		switch (inject_type) {
-> +		case KF_INJECT_ARG_PROG_AUX:
-> +			/* Validate the arg type against vmlinux's definition */
-> +			if (!is_kfunc_arg_prog_aux(btf, &args[i])) {
-> +				verbose(env, "arg#%d implicit argument type mismatch, "
-> +					"expected struct bpf_prog_aux *\n", i);
-> +				return -EINVAL;
-> +			}
->  			/* Reject repeated use bpf_prog_aux */
->  			if (meta->arg_prog) {
->  				verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
-
-[...]
+[...[
