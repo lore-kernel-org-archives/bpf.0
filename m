@@ -1,115 +1,109 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CCE347505;
-	Mon,  1 Jun 2026 11:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780311640; cv=none; b=Oi2AH2PAir5u1Qg33QEne/Uu29yBt5bqFUlFdgA/4OQNYDbW9/C9rVz4v0aU6LA+TCOyCTqP4weaDdH/xZSVH88n0yW9I4cG4h/JUByBp3tk4+zDfJ8yBdcQ1XP2263PalOaj7gRFJOpDWArozdqUvJNK+V0Er0fUJJufz6V5Y4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780311640; c=relaxed/simple;
-	bh=X1XcqtFrih2Zgl/Bw1ZS5hLgbstTkN1DA3NqJ3kpSKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dolwVHePUMkHqI0i5sRX+gpjkC2yOljpqdPCQ3q+98cbmCxx/F2XXO8ga5Z6/C9MaBoxJ5aJIC5UezmshT1F1M9pH0e3tvm1eKlU0iuAL02PL9wjrNrMl2fOD/z0oQmqXKUgrJHq7CwFGy3onXSITyiXzIaDFf8WzgttJdtp2GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=OGiXpizB; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E148434750D
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 11:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780313602; cv=pass; b=jmPwoB0Yekm0Pr/ezcyds8S4WS0Ndhu6erBsVoBIEQ4dIcsEEGmRJaiZXtnubbh417G3/LlaBq4QdcwYteKHw5sPXWl1hUaeslmh/FkIQs4vSO56r4Zg1QrmvrGrmxGLKhx6IGYi7U1EO00hI/pF+9zLWlQ83UBiT+6chxQX+aI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780313602; c=relaxed/simple;
+	bh=uVMhWSI3M7PqFpwkfEATZt8vBsIE3hJ1C0QZF5LG9t0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dCmogWgQ3LvQ/pmR82lWTWHwWdc2FbikibjFVedUVYOMya6Uu28ZW4wxKjbgBAeXlucEjCHsqNbdFz5/wY3zaWxr3rrAkYxYCrSt0Nxx82hMvZEdo6n7aCmak2DnyDsHhx6U8a+x1/UuElNIMyzjKqmMGUcE+XGAyLCT87qPR0A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=NxZq/K5P; arc=pass smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="OGiXpizB"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fA10LMv7v/7QX/vkv3tPqpIT8Ygu2ejvDq7oF4iHjk0=; b=OGiXpizBFVa7pyboJmf5A4fIhx
-	mlt1eRv8argaYI7kjABzQNxe/ufoVDs0eCGzEMANu2PKgvKdj3y7t9aT31EJw5zm7swnACPYjhFql
-	8rLRAZ/fCTP1tNQFEwZn3lwZMBqdtKrhD0Cry2BlboGcJ0veKE4mGH3voo1JBBF2UDNoVh0O0d09z
-	oDdaoqyUCoyT11HnU9Y6b84wrKBG68qfKO9CcB6bxZ8Zds2KP/1XAizLXBbnD7RUWqMyzr7Kytilh
-	7m/U3EKr9dJV8oHMEeBRFnsT0X9YLHM/+OeFEEUE2LmzK+o0/smjwlOo5P690WF3BRIucetwdwX4K
-	eEF4S/CA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU0No-000B5x-1N;
-	Mon, 01 Jun 2026 13:00:36 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wU0No-000AN1-0z;
-	Mon, 01 Jun 2026 13:00:36 +0200
-Message-ID: <dbb2c9f7-4e1a-42d5-80ad-ffff93249391@iogearbox.net>
-Date: Mon, 1 Jun 2026 13:00:35 +0200
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="NxZq/K5P"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c85b2139015so289915a12.2
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 04:33:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780313600; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VjlD8g+5x60GXNfrkoLlmogqF92WTsnn45lW6XW82viSGxapQ2bVsp7O2g3Yojlx/r
+         dec3csmMzSb+RG1BSllWoGxJ0wFcvRT8LFhz4ynQOhWqbcGCPtEE4Ai4B4lpeS+yP0F5
+         vPxwzVism68aoWIxS0Car1k+5tZ08J10kJU4LnU0QsHCF86urrLDaAaqL/dVX0WU3PlS
+         PjSIlyuhmJv/4xfyPaUa3dKhHjlyNrpCeEIAhGAaKfqMWeFfiUzthRCDYshez5xaahlE
+         Hhpa1dH52pj2OI9rL0RPj6xs0s9P8nMlV6KqUlLNIWhtmrKEGKpDzG2a1FprCbH57viO
+         axZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=uVMhWSI3M7PqFpwkfEATZt8vBsIE3hJ1C0QZF5LG9t0=;
+        fh=JHVvHxZBpyjcZFiYRAb8BLoZzkEwV0lBdO+3H7tssDg=;
+        b=DLuUoHz9Oi/X+iVpFWaqZgBIOuCc1sqwSae9cPTozPXSdAy/g6GM8vztB5ZB3oEb8+
+         9Y+4X3KLGeb5yVJznOvlHCOJ4A7uN5kUcWUpwqqAylZ7d3GAZAD15FvWCy/pzHcPczfB
+         dStrOuDPRZSzmreSUQM4FOaAlZT0w4YkuMDIPr5XSrXf3541rDNO7BN7Fbq+loU2z55x
+         /W37PB9Qjphl3HE8C0gG2a0ue+AeYBQlaOE0RB6c3lKQfZXxMGDnFNxWTs/cVWTXMlZZ
+         qm7FQtWNHdKvTlmr8k8Lf+OFoN1w3UAptT6z7aWl9SkvzSW94z4VtGepSSqMpkv45pYZ
+         fPhQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1780313600; x=1780918400; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uVMhWSI3M7PqFpwkfEATZt8vBsIE3hJ1C0QZF5LG9t0=;
+        b=NxZq/K5PUE0h0E5mGzSrCcr06uEotsZJnn5qP20NrM5IJBFexugyZDJon0nmo7VDjK
+         LAsOk5Kav4Jj2LBD7XkQV9KBDwQ0DJjBWBd2u5tdFg443tQC8c/v4YGU0fSgAeinMXtP
+         UILenMZXPIcO414OeOhdT3GDiKYB3rE/cdROQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780313600; x=1780918400;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVMhWSI3M7PqFpwkfEATZt8vBsIE3hJ1C0QZF5LG9t0=;
+        b=OuiRe+sUF4gSTfvjhKgIvUcdECImkB+iEQG/t5EIA5Ckps6Z81ooETESxg5b+TjfdR
+         igtF91JscKf9UoIq2elyKddCTOUbR5zQwwbrBlMubgTRr9ZT8agFuD8HjkmoTQXZW69y
+         tOCFlnAcUBsjKk9o41dgdO3lltEvjeIfhKooVFxuHvLIpdFApt23S4VC7Dj9pquQ6Gx+
+         4NafMYxtib3baxXHzWsaWHuw7WBJFjno5YEWC/3OyK/rt5kxmR3s5GAaBxChAasy2FOR
+         yMPUEPmYiJ4bD14od8iicfw1sKmxrQ6Rn/q8mHDuskyi+x8y75U3z6mwG5FQlkcWNJHq
+         gJSw==
+X-Forwarded-Encrypted: i=1; AFNElJ/+4m7O+6kLhrfj0zMLZi49usZGOvMYMfOctYt8e7XrFePGdjBkMo6NsI0OhBCf0GZXn68=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBf/WRhw9ra4ytXPiUuEHTZzxkqvpAX9+4bLwoR+HPziAchbiC
+	2iaspsLz5P2uXHrV4mtIeFnz8rFm84orilcMW2+bWRSKuiZt+ZxzSPswEFkdZtsb9erwGONWXqT
+	++UxnxdbmzYC6Lrrs+JkOoRsFq93OjKzMQx46TScE
+X-Gm-Gg: Acq92OGVISJ0bJ0bQFZ/0p5WGVc2QHd+lLBJKWGoXrLnU1glfdzsYvJm8wRS4dOvQSy
+	aQxyjpX7THWqtYANPs05cD0YL5AE0e0OKKmKwJaHpEhs0T9HbX4qVSjo4aEi45BVkoxXOK1AmcA
+	myhBfRVfyBfjEjyHoxg4+UGUWFA8z5PoRFWC7Y5bRan8wBAesVGZr3IUF4BWMqB4pwO70bgE+6m
+	1JBroAq7YuLL7irn9mbtwpPzn2a4sL4PY+1JelO4FLp2mUtuM4076sZsGtOF64tv7jWfdTDULUe
+	LJJcnw6HVMnx6lLHasgNWNxLqg==
+X-Received: by 2002:a05:6a21:7a96:b0:398:b433:87ed with SMTP id
+ adf61e73a8af0-3b427f5dee5mr11677802637.44.1780313600132; Mon, 01 Jun 2026
+ 04:33:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/3] libbpf: Reject non-exclusive metadata maps
- in the signed loader
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260601100307.386243-1-daniel@iogearbox.net>
- <20260601103206.23C691F00893@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260601103206.23C691F00893@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Mon, 1 Jun 2026 07:33:09 -0400
+X-Gm-Features: AVHnY4I4Oq7kfzkvATZfqv_I4dIxsQYBxFxWE5rf6WImcq-_O15EbAx7JO-P5HE
+Message-ID: <CAM0EoMkbu0Y-qhtdQ03Zn93JKOUHd6yZy-DJ2mtYDC6aehsR6g@mail.gmail.com>
+Subject: Call for participation: New Age Tooling BoF
+To: Linux Kernel Network Developers <netdev@vger.kernel.org>
+Cc: netfilter-devel@vger.kernel.org, 
+	linux-wireless <linux-wireless@vger.kernel.org>, netfilter@vger.kernel.org, 
+	lartc@vger.kernel.org, ovs-dev@openvswitch.org, bpf <bpf@vger.kernel.org>, 
+	people <people@netdevconf.info>, PJ Waskiewicz <pjwaskiewicz@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/1/26 12:32 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> 
-> New issues:
-> - [Critical] The BPF map exclusivity feature (`excl_prog_sha`) can be bypassed via `ARRAY_OF_MAPS`, allowing a malicious BPF program to mutate a frozen exclusive metadata map and defeating the signed loader's TOCTOU defense.
-> 
-> Pre-existing issues:
-> - [High] Concurrent bpf_map_get_info_by_fd() calls on a frozen array map trigger an unprotected data race and undefined behavior due to overlapping memcpy().
-Will take a look into the new findings.
+Apologies for the shotgun - I wasnt sure how to best reach out given
+the short notice.
+
+The recent AI tool bug onslaught (on the victim side for me) has
+highlighted the changing landscape on development tooling.
+As an initial skeptic I have to say the quality and accuracy of the AI
+analysis makes me feel like i have been in some deep slumber. I am
+still very clueless.
+And for these selfish reasons, I am helping organize a BoF at
+netdevconf 0x1A (week of July 13 in Rome.it) to discuss this new age
+of tooling.
+This BoF is a catch all for folks engaging AI in security (you will be
+in a friendly environment!), building tools, doing code reviews,
+generating patches and general automation. The intended focus is
+networking, but adjacent areas are also welcome.
+
+Come and discuss your tricks of the trade. The contribution can be in
+the form of a talk, tutorial or demo.
+
+cheers,
+jamal
