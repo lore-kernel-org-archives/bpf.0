@@ -1,45 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFA73D79E3
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453EA3D7D97
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780326174; cv=none; b=IPkkk+2dyE4OEe+RDB09lc/hytZzLsiRvJ/4PEw6MHlJNL0eQO90XMJenY0YDfBg5uas76WDQcSgumOAk/ciuqRtrH7lY64MUy8ajdl5r0BIXoYDAPrgAoIqhnFgkBVuHIQ6s4HWXbKDDD0eFugcgYi50/Vf3ZZqSe+BqPD+TRs=
+	t=1780326175; cv=none; b=LsYL/uQdTKwBGuEhH2bqykQj8INtHhYdjR+II6r60KkFeTMsXHosklLlxIZ9OQ2iqg0xOINF5wiCF9Dc88vpdy8Ax10zd3y7mOtxzcXW+fpQSHYb6P8PhiEMIILkYfSs5raR8Mydv1avEVNUxMCTwQOwAjiy3CShPi+6lYT0jNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780326174; c=relaxed/simple;
-	bh=0v2tdRKRgLo653EY+RkkzjtBUYnXDkVtFMzRRHTPI/g=;
+	s=arc-20240116; t=1780326175; c=relaxed/simple;
+	bh=s6Zc+PlD1zhEFSBYewZtQTHzCzhcSMbtHshsJ+eGL70=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GniS7Jh9pPMSMMcgsSIu8zwom9UN9ftDAcGxuKjIjdUTrWv96Yuv3j3j7blj5113JjrERUJDyImoSEsugTun7M4WVg9o8C4UULjko01Uwb4WIM6neyTuHl3Sf9MfkENLREauQ3wCfTg5MJcUF1HpnJiFnJYR3/nrGS53HsfkSVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FKtP/vbv; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=srMsJOSro4bPqdl5UUE7q39E35zvHzZ2qGIAIOgNWh2dcSKtr/UCjIGPu3c5xNpc371tk7aDsUFuE0owQeSx/Ayt2suouHfuGnZRMx0wa2kUlTygjiMC+zNQd3ongtQNFLHmt03K1ohZk5f3ocjOOLVD2/ZqbDemMMeWcm0wBoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=E9MqzmRL; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FKtP/vbv"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E9MqzmRL"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=d3QrtolEc1CGzVvjDkKLj/tuWTGk3XI8fea+Nba/CmY=; b=FKtP/vbvCx7f+3T3A+LK8FeQZ2
-	SQHIee4hC9J/8zxARjkXJC6l301zoEkzAvH1JBzv5s8A6Qx39zrSFuhb5N8aW42box0oGHeynTFMh
-	ithg5LysHcv0+ZkTM5k4uRdSCrJeiuCP3tD/0ThWnSGHyKU7Ar3/VG5fZgnDBBf5zySd5B+sPW4Dc
-	ybtXeBWDpj3PWxx2FH+BYO+ISkCeZ/QigMI1vXQWCC7uyS3BR3Gx8H0sOdPRadctTkbPIx9qanSy6
-	KMQiUTqFFFa7tg/AnIl0Kbpm4ld73jACK1AsKIeN/f0aoaUKJEgZc34aG/pcx4VtvjFxuelyXV0ys
-	z92v2spQ==;
+	bh=zib6FRNBx6yrUUMxfX10Ehk9cC0q1xfRn50VOSLynt8=; b=E9MqzmRLfvlDT7CjEZLkss/XQA
+	z4dMbPXKuQ4ci4F0xLotnqYhLqBbjs2iJ8P1Rx3M+MfeTx2igSsivO33lV6bq7qOwFyJXZd1XQogy
+	b5SjoGgAO6rkMIyE2EYz5OEsRDIHIJcuRxx6eU3+mK8VGKkb9j4zpwg8zCpA49NqheijldvA+/o+X
+	ex1JIcpFybWnlYtRl8Y7FaQQUof3XqO1Du5DYUYCAFoxqLQH0SLscV+WyoKt51KuPHEaY02OtuQUR
+	63xe7dB4LBbNl4tUQiW046RIX+lnaX2SyQEM1S36u2B6x+4pBpIwCtpjRjHT1Bk0U+BuFfIMzvTck
+	DPF1lv3g==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wU4AG-000GWl-0q;
+	id 1wU4AG-000GWr-2N;
 	Mon, 01 Jun 2026 17:02:52 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: bpf@vger.kernel.org,
 	kpsingh@kernel.org
-Subject: [PATCH bpf-next v2 5/7] libbpf: Skip max_entries override on signed loaders
-Date: Mon,  1 Jun 2026 17:02:46 +0200
-Message-ID: <20260601150248.394863-6-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 6/7] selftests/bpf: Adjust verifier_map_ptr for the map's excl field
+Date: Mon,  1 Jun 2026 17:02:47 +0200
+Message-ID: <20260601150248.394863-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260601150248.394863-1-daniel@iogearbox.net>
 References: <20260601150248.394863-1-daniel@iogearbox.net>
@@ -52,52 +52,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-bpf_gen__map_create() lets the host-supplied loader ctx override a
-map's max_entries at runtime (map_desc[idx].max_entries, when non-zero).
-This is how the light skeleton sizes maps to the target machine, but
-it happens after emit_signature_match() and is covered by neither the
-signed loader instructions nor the hashed blob.
+From: KP Singh <kpsingh@kernel.org>
 
-For a signed loader this means an untrusted host can re-dimension the
-program's maps, outside what the signature attests to. Gate the override
-on gen_hash so signed loaders use the signer-provided max_entries baked
-into the blob.
+Adding the u32 excl field at offset 32 of struct bpf_map right after the
+sha[SHA256_DIGEST_SIZE] hash shifts the ops pointer from offset 32 to 40.
+Therefore, fix up the test case.
 
-Fixes: ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_map_ptr
+  [...]
+  #637/1   verifier_map_ptr/bpf_map_ptr: read with negative offset rejected:OK
+  #637/2   verifier_map_ptr/bpf_map_ptr: read with negative offset rejected @unpriv:OK
+  #637/3   verifier_map_ptr/bpf_map_ptr: write rejected:OK
+  #637/4   verifier_map_ptr/bpf_map_ptr: write rejected @unpriv:OK
+  #637/5   verifier_map_ptr/bpf_map_ptr: read non-existent field rejected:OK
+  #637/6   verifier_map_ptr/bpf_map_ptr: read non-existent field rejected @unpriv:OK
+  #637/7   verifier_map_ptr/bpf_map_ptr: read ops field accepted:OK
+  #637/8   verifier_map_ptr/bpf_map_ptr: read ops field accepted @unpriv:OK
+  [...]
+  Summary: 2/18 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: KP Singh <kpsingh@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/lib/bpf/gen_loader.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_map_ptr.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index a5d9c7a5261b..66e13566bc31 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -546,13 +546,22 @@ void bpf_gen__map_create(struct bpf_gen *gen,
- 	default:
- 		break;
- 	}
--	/* conditionally update max_entries */
--	if (map_idx >= 0)
-+
-+	/*
-+	 * Conditionally update max_entries from the host-supplied loader
-+	 * ctx. This sizes the map at runtime, but for a signed loader
-+	 * (gen_hash) it would let an untrusted host re-dimension the
-+	 * program's maps after emit_signature_match(), outside what the
-+	 * signature attests to. Keep the signer-provided max_entries
-+	 * baked into the blob in that case.
-+	 */
-+	if (map_idx >= 0 && !OPTS_GET(gen->opts, gen_hash, false))
- 		move_ctx2blob(gen, attr_field(map_create_attr, max_entries), 4,
- 			      sizeof(struct bpf_loader_ctx) +
- 			      sizeof(struct bpf_map_desc) * map_idx +
- 			      offsetof(struct bpf_map_desc, max_entries),
- 			      true /* check that max_entries != 0 */);
-+
- 	/* emit MAP_CREATE command */
- 	emit_sys_bpf(gen, BPF_MAP_CREATE, map_create_attr, attr_size);
- 	debug_ret(gen, "map_create %s idx %d type %d value_size %d value_btf_id %d",
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+index e2767d27d8aa..d8e822d1a8ba 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+@@ -70,13 +70,15 @@ __naked void bpf_map_ptr_write_rejected(void)
+ 	: __clobber_all);
+ }
+ 
+-/* The first element of struct bpf_map is a SHA256 hash of 32 bytes, accessing
+- * into this array is valid. The opts field is now at offset 33.
++/*
++ * struct bpf_map starts with the SHA256 hash sha[32] at offset 0 (a readable
++ * byte array), followed by the u32 excl field at offset 32. Reading a u32 at
++ * offset 33 runs past the end of excl and is rejected.
+  */
+ SEC("socket")
+ __description("bpf_map_ptr: read non-existent field rejected")
+ __failure
+-__msg("cannot access ptr member ops with moff 32 in struct bpf_map with off 33 size 4")
++__msg("access beyond the end of member excl (mend:36) in struct bpf_map with off 33 size 4")
+ __failure_unpriv
+ __msg_unpriv("access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
+ __flag(BPF_F_ANY_ALIGNMENT)
 -- 
 2.43.0
 
