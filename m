@@ -1,45 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5333D7D7A
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CEF3D7A07
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780326174; cv=none; b=gTD6QvWIA0YLJlB05ySmVAa9sITZk7yf9ZVUVd4xKhW1ezyGZtYfO9VoF2qvSF/mJ95U/AESwcuT1Gs6+k71eFEeaB6EYm0HkaBqYBfAHI+eVWD0lEOcLy21Eh4NQnPHSy+wjEm4uzIexP28LdQDLfz20sUHr/A0NEqaFTse1nY=
+	t=1780326174; cv=none; b=JVfNNC5YdqJPDnKHrUE/t5f+UeZkxS6odKPYI5/dxNgaKos9btVH+XjqniSyhXQv1+kCNoL/5D7M9KlDwHSCEWiYwx/64Hov/ISE99ghctQ26asqq5WPrQ1Y0OMUPsp/qan4tBlInL/gdNvXCRQcXVXlS3OctCuaSycFjZ4HG/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780326174; c=relaxed/simple;
-	bh=3Fv0VTOTx4H+Wf1awyZUJBW0Q/9ONK7003OxLbsnEMA=;
+	bh=5VHEEODrO/8nP2k4XuusQrglSLeWtqfa9L/J9B/ngk8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cmV/vSamZf50RabHDoLIzVmhwGKVEc9geU+FZU9j1ltJGybzNFtFh8Ef0OP4WFyt4VzMoUswPirNAkBfuYppdNPg8/TTALxwXqiZJbPwkkcbktjMdYZzB9ZYeZAD20TUAqtnmo8AGKdWvA0YnmuHorDu84BNglL7KNAKTTf5oZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=FAVN6Bp0; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=sDF1TPcGyok7EQIZum/AHWqo7kDECBbQwliizOxVO3xqLBR1ZIeEBZNee1SI4GcOp0kug98QKY7xSbXmYSddyVPEtaHX6M0oH/AeCecpCbu37JkYuMG7UsteZ7B4r+arTx9ouaAuSR6GrJKeT+WJdnbV4TVlVv4T+zfNp8g7+qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=rH8Wa4BG; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FAVN6Bp0"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="rH8Wa4BG"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ORU4vw592fNUB0LVoKEq7zROJd9iXdtkectXsVv88V0=; b=FAVN6Bp0P1rE2gqtb3Yp6V4nLx
-	EmisNbnmlu9Jm5nzUPG9fEiDZ7fn3P2UQeFAXw0wlE6Il8M1mK0NevTchgLSfpTNn1dOVWq5ux+Qc
-	PcUFyunZcJELam9UeY37QTQUR2LlJPXkSVyOVRbPpd7Es2nY/aWnAN+PoE/4H0ZdjvbWUA/Gndzxw
-	3MoC8Jk11cpZijwh+gQ2KV5CSths5YbzOekRT9qd+E3bGdCIpcRSkY8/Yc3aFtmb/0iMi8w9BRag6
-	Uzy3ka9b7AOnAKlEkHFKkwRxLsN2+p+GJY1sH0foHZIfQCkT6GDiqsKup+8aI8cejmzwLmVxYGwC/
-	+RF026MQ==;
+	bh=03XMtBXPEhp9mny68PzjnjmoPVWrYgEjaxdaNF5aH/U=; b=rH8Wa4BGxqE0kko5W15aM23ozn
+	kKtbOJEvfpGPjYQwCJKJt0NnxO9MUm9vTclaunNCDsSMr4vU8fOR0HBd142fkQ5Ui4K3vbybaV5ET
+	c6MZwZUBoBgLvqA39DherzeOhp6CNd4Pu36jRg8+60xrvRmlXHz0+IHQzEyy++2h/zjDmAxDbMfjk
+	bCAf6U8gIRK7YZb4ku6sQS1II0p00Xu4/TonnQ08QRwdvDdrGn7FI4VsWYP+mpaFNASpeECeW/El1
+	2GWqGftpU/ySR4rvnJQ8X9NhF8NAWCjZ0bZPoXIpO53rA5tVRljYgroi/M8BAV1t0wpnNhNBREyMX
+	YvLJVVXg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wU4AF-000GWK-1E;
-	Mon, 01 Jun 2026 17:02:51 +0200
+	id 1wU4AD-000GWB-2Z;
+	Mon, 01 Jun 2026 17:02:49 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: bpf@vger.kernel.org,
-	kpsingh@kernel.org
-Subject: [PATCH bpf-next v2 3/7] libbpf: Reject non-exclusive metadata maps in the signed loader
-Date: Mon,  1 Jun 2026 17:02:44 +0200
-Message-ID: <20260601150248.394863-4-daniel@iogearbox.net>
+	kpsingh@kernel.org,
+	sashiko <sashiko@sashiko.dev>
+Subject: [PATCH bpf-next v2 1/7] bpf: Reject exclusive maps as inner maps in map-in-map
+Date: Mon,  1 Jun 2026 17:02:42 +0200
+Message-ID: <20260601150248.394863-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260601150248.394863-1-daniel@iogearbox.net>
 References: <20260601150248.394863-1-daniel@iogearbox.net>
@@ -52,88 +53,51 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-From: KP Singh <kpsingh@kernel.org>
+An exclusive map (created with excl_prog_hash) is bound to a single
+program by hash: check_map_prog_compatibility() refuses to load any
+program whose digest does not match map->excl_prog_sha. That check
+only runs for maps a program references directly, i.e. its used_maps.
+A map reached at runtime through a map-of-maps is never in used_maps,
+and bpf_map_meta_equal() does not consider excl_prog_sha, so an
+exclusive map can be inserted into a non-exclusive outer map and
+then looked up and mutated by an unrelated program, bypassing the
+exclusivity guarantee.
 
-The loader verifies map->sha against the metadata hash in its
-instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is
-called on the frozen map.
+For the signed loader this defeats the metadata map exclusivity check
+added in the signed loader: the cached map->sha[] is validated against
+the signed hash while another program on a hostile host rewrites the
+frozen map's contents through the outer map.
 
-While the map is frozen, the /signed loader/ must also ensure the map
-is exclusive, as, without exclusivity (which a hostile host could just
-omit when loading the loader), another BPF program with map access can
-mutate the contents afterwards, so the check passes on stale data.
-
-With the extra check as part of the signed loader, it now refuses to
-move on with map->sha validation if the host set it up wrongly.
-
-Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
-Signed-off-by: KP Singh <kpsingh@kernel.org>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: baefdbdf6812 ("bpf: Implement exclusive map creation")
+Reported-by: sashiko <sashiko@sashiko.dev>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/bpf.h        |  1 +
- kernel/bpf/syscall.c       |  7 +++++++
- tools/lib/bpf/gen_loader.c | 17 +++++++++++++++++
- 3 files changed, 25 insertions(+)
+ kernel/bpf/map_in_map.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d69cba55f30f..1b81bc9e8191 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -296,6 +296,7 @@ struct bpf_map_owner {
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 645bd30bc9a9..d2cbab4bdf64 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -20,7 +20,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 	/* Does not support >1 level map-in-map */
+ 	if (inner_map->inner_map_meta)
+ 		return ERR_PTR(-EINVAL);
+-
++	if (inner_map->excl_prog_sha)
++		return ERR_PTR(-ENOTSUPP);
+ 	if (!inner_map->ops->map_meta_equal)
+ 		return ERR_PTR(-ENOTSUPP);
  
- struct bpf_map {
- 	u8 sha[SHA256_DIGEST_SIZE];
-+	u32 excl;
- 	const struct bpf_map_ops *ops;
- 	struct bpf_map *inner_map_meta;
- #ifdef CONFIG_SECURITY
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a27fa2b9b405..625a4366fe6d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1588,6 +1588,13 @@ static int map_create_alloc(union bpf_attr *attr, bpfptr_t uattr, struct bpf_ver
- 			err = -EFAULT;
- 			goto free_map;
- 		}
-+
-+		/* See libbpf: emit_signature_match() */
-+		BUILD_BUG_ON(offsetof(struct bpf_map, excl) != SHA256_DIGEST_SIZE);
-+		BUILD_BUG_ON(!__same_type(map->excl, u32));
-+		BUILD_BUG_ON(offsetof(struct bpf_map, sha)  != 0);
-+		BUILD_BUG_ON(!__same_type(map->sha, u8[SHA256_DIGEST_SIZE]));
-+		map->excl = 1;
- 	} else if (attr->excl_prog_hash_size) {
- 		bpf_log(log, "Invalid excl_prog_hash_size.\n");
- 		err = -EINVAL;
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 3702c5944bc0..66a02039da8c 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -586,6 +586,23 @@ static void emit_signature_match(struct bpf_gen *gen)
- 	__s64 off;
- 	int i;
+@@ -101,6 +102,8 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
+ 	inner_map = __bpf_map_get(f);
+ 	if (IS_ERR(inner_map))
+ 		return inner_map;
++	if (inner_map->excl_prog_sha)
++		return ERR_PTR(-ENOTSUPP);
  
-+	/*
-+	 * Reject if the metadata map is not exclusive. Without exclusivity
-+	 * the cached map->sha[] verified above can be stale: another BPF
-+	 * program with map access could have mutated the contents between
-+	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
-+	 */
-+	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
-+					 0, 0, 0, 0));
-+	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, SHA256_DIGEST_LENGTH));
-+	off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
-+	if (is_simm16(off)) {
-+		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
-+		emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_2, 1, off));
-+	} else {
-+		gen->error = -ERANGE;
-+	}
-+
- 	for (i = 0; i < SHA256_DWORD_SIZE; i++) {
- 		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
- 						 0, 0, 0, 0));
+ 	inner_map_meta = map->inner_map_meta;
+ 	if (inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map))
 -- 
 2.43.0
 
