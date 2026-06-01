@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68079145355
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 00:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDFD1A6809;
+	Mon,  1 Jun 2026 00:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780275019; cv=none; b=FN7ffRohkYXLnxgZY55I9Kop3mNGFd2D0S7j4eDYnR7z0l53Q18XLTq70u2DOekU1397IpWAeIR0BGnaa49Yln0bRf/fjnH+dZrla2Eeyzlxp2Fi8VnKO67e4pIskQiM35Op5irC4r8bSrJcA7BEUDR4RRB8RxXcV8l4XLgB8xI=
+	t=1780275020; cv=none; b=MYG8Gsh4QrXWnH9YR2Z9y/QkGbbJycNkQvomG/AZIZkx2x5n9Xt3TijpPO3/WM1cYJj3qf4DEMcMtJP40UxBKtK89B++Ae7/2Dyu1n6wAHwuc4gVVhe9TmbZ2Rmeke5AKZMI5bNWjyFvkpDlH1y/dsdY/kTYOGdiOEUcwrtC5jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780275019; c=relaxed/simple;
-	bh=nFGDgUyY8d6OIt/c/Zb9NWbvhG736Ecz3LRf2xwSPeA=;
+	s=arc-20240116; t=1780275020; c=relaxed/simple;
+	bh=o3QZ7joHeCua4ARKd6coQkqkg6DV1TaJdjgtyuCsxi0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=u/eqApQAwpTApQr0JNoplQOecGiIERVXUlLPdV/HnOhnG++sge01spe97dYBbxMBLTL5zgnk7G1gOypLO+bs7gGPDoCzZCcLz2V5gUJeAfVpmueA88j4xsgkHwySK+9R70tQ1zB82UfPYfyk2gpnchb3kh+oeKtx+E7EKVFg1iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAXXV1KQ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ImUfgyPv6eutT7AgyLQ60s9UShxFCpIkye0estc6LQSIgVXuZWLwaYaLXkRxyjBSh1v4nl92jILPKycYPHiJN//9boDqSeKSVRH4yw2MP1ppBA40FD6xuSwZhykwR1D+2Nvct4+X+xvNj8jpiLHXrDkrkhHZ1eVvze5xglxU10w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6/YVLfU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAXXV1KQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2164F1F00893;
-	Mon,  1 Jun 2026 00:50:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6/YVLfU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE901F00893;
+	Mon,  1 Jun 2026 00:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780275018;
-	bh=HScCnBHI/7rzj/ffYVv1k3oCCWj9T3EgF1RjpLSmbYQ=;
+	s=k20260515; t=1780275019;
+	bh=XooSvW1kLwj27xK2ukkkhI5PXD2HrDc0SJ9SBlVJZyE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=nAXXV1KQaUSEN9C3dxSkIgft3bQzyf1NeRsQGHGwAVlpAVxnoNT3HnCukzMvBWjjR
-	 OCAoZmi3i2u6aES7z19V2U66JQaQX8Fp32COHbQl/2vytzcdof/GaVLtBr4bVPk4ki
-	 xqtqzaEBNgXTe6eUoRb+07LMPMUU7iAKXbipdjHjTkXFRsDjgxE9+uU8u/XTJS+5vk
-	 Q5ZbN7TWburQ/ETcdpiN/fIUg2x/8e+Bxn6xcOdytSyKeD7rPwoQYpnQu0RifFxLnR
-	 EIvjkgu3UMN4/bxbY+a6NsSVR/cXUHuXPjPzcUSzPCI9vwtQfgcObg+t5OQHScTWnY
-	 HKRPJA+Pv3+1w==
+	b=D6/YVLfUg/3sf+CELwWctiMu4GuquOhzhuDgPLoqnmW2ljpEcz78uFt1iKMD3bHC5
+	 AxOma0WVCt8SKZ4/sLfiUa7Yp/0GwbiJj8zp5EyzR0BY2rTsyPw2/C6XWHchBnEOHT
+	 QwpUYFLASD3mN8h4g3UhEatOGadPx/9HCdTLQ8sB6CsK9QWEG7cJPpEKmkU8cFVMf9
+	 Q3fByEJ6LBoNThszB9O14Tes7GpvODCzkZnYXDojkJv2poC7Wx623rGwQ8N9JrCdbI
+	 lbELur49fXqMX2pjeczNn8s9Wt518HOuksSnqpjxndfBYkIyvJaStvKcy1rmEl4sRD
+	 oVOsSeinXs44Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1988B39302FC;
-	Mon,  1 Jun 2026 00:50:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938FE39302FC;
+	Mon,  1 Jun 2026 00:50:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,40 +37,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/3] libbpf: Drop redundant self-loop in
- emit_check_err
+Subject: Re: [PATCH bpf-next] bpf: MAINTAINERS: Update bpf maintainers
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178027502064.3441607.11821331034609173538.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Jun 2026 00:50:20 +0000
-References: <20260529094119.307264-1-daniel@iogearbox.net>
-In-Reply-To: <20260529094119.307264-1-daniel@iogearbox.net>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: kpsingh@kernel.org, bpf@vger.kernel.org
+ <178027502214.3441607.8343308159469006100.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Jun 2026 00:50:22 +0000
+References: <20260529203909.1222164-1-martin.lau@linux.dev>
+In-Reply-To: <20260529203909.1222164-1-martin.lau@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ netdev@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 29 May 2026 11:41:16 +0200 you wrote:
-> When the cleanup-label jump offset does not fit in s16, emit_check_err()
-> sets gen->error = -ERANGE and then emits a BPF_JMP_IMM(BPF_JA, 0, 0, -1)
-> self-loop.
+On Fri, 29 May 2026 13:39:09 -0700 you wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
 > 
-> The latter emit() is dead: gen->error is assigned on the preceding line,
-> and emit() then bails out early in realloc_insn_buf() the moment gen->error
-> is set, so the jump is never written into the instruction stream.
+> I am making a life change and will take a long break
+> from my current work, so I will step down from the "M:" responsibility.
+> 
+> I am currently a "R:" in "BPF [GENERAL]", this part stays unchanged.
+> I am folding most of the parts into "BPF [GENERAL]".
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,1/3] libbpf: Drop redundant self-loop in emit_check_err
-    https://git.kernel.org/bpf/bpf-next/c/e2c88266147f
-  - [bpf-next,2/3] libbpf: Skip hash computation when loader generation failed
-    https://git.kernel.org/bpf/bpf-next/c/3c5e2f1a8584
-  - [bpf-next,3/3] libbpf: Also reset {insn,data}_cur on realloc failure
-    https://git.kernel.org/bpf/bpf-next/c/d2f7bd066ed4
+  - [bpf-next] bpf: MAINTAINERS: Update bpf maintainers
+    https://git.kernel.org/bpf/bpf-next/c/7c7c42d606ed
 
 You are awesome, thank you!
 -- 
