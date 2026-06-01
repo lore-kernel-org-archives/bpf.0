@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D830D37FF60;
-	Mon,  1 Jun 2026 06:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDB037F748;
+	Mon,  1 Jun 2026 06:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780296431; cv=none; b=iTDgtVUsFCusap7wCN8bhNKj/YmM59FU3nrzcAbgsVMFfpXWe/2tu+WqU+vZlkjusFprwJ6UYi5Ekf8KZulKvTV/snkm6PnJhwhAh7ldg1nZM7vz2DLX6xBjPh7st6qeVowiNbaWWDUjRseJao6Kf6meE0hmrmJ2up1cdzu6vc4=
+	t=1780296432; cv=none; b=GMTke/QLHIw4SaBvDoqGFq1VA6X42A//lrrmzluI7VQswVGa3yL9p6jAVO1ScGicXx1d2cLHMRabpHUlE4kmGSaCPHsNmRuj3NB8Dd1v0Rvqlv/o1mOgvJBU9/a6rXnZYgPdm/2GCOly83ORuSjR3NvAxVKLtOXkURDDKIZmXpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780296431; c=relaxed/simple;
-	bh=8hDqHQHW7RTyDzhSl7AcgYxsVpVM1AhHC5uDayTJk74=;
+	s=arc-20240116; t=1780296432; c=relaxed/simple;
+	bh=Q7/BQ3872zInrOdxs1nth1RndjLvvBdjL/gbVUm5dow=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WDG+0oIkZc8of8TiEeJL0HUBo4PLfZhCbMCZNgSHu02hUsgsoLd63CQ/TRlR58Dhb85fRaWQfvhLIsDm7P3s1VIi0midiVkIRe3WcWoLIdvqWL38A8ryBl8hAc6VVcYnxAPmclrTVRdJIFNHhi12USlOIsq8Hnku7EHc0MLddvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=GBRXLX+h; arc=none smtp.client-ip=220.197.31.5
+	 MIME-Version:Content-Type; b=sA/tsDlr3NDVpqv15FomTI8Bj2sanyDzbruJRYxmix3iuZuodfPhMbLB+Lc+jvME4z9k5rBTh3TpfNCcLeCidczQUxCMdl9+eKZGdLz6ac63YGSNfFR8UVSp1m9+HtSdXPNfPqg14/krKjlts0hmaJvlHXFp6p9zv9b73ELrA7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eQCkfOWS; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GBRXLX+h"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="eQCkfOWS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=9+
-	UveIozyi+h2uyXqRUBb0Gl/8V49uruTYOIF+N62ew=; b=GBRXLX+hLVqm15qybn
-	ZkU3a0h0fC7kJH5RQ5ja2gHThZ4jOfUl2VfTH6VodA1N1nvZZbM1T0Mmc1Pe+hOx
-	DnmaSjw30yfFrjYoPHeBtX2v03agGohXw3kQpkGLHhoTI9sJvPkn+2v4pRImmYDF
-	AD/jinapptHa4mX8UsxqzbpP0=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=mUigA8ApdskxAhG6c5VR1rC6DcAl+2q6GqReAv4/JM0=;
+	b=eQCkfOWSOvZDEPJ5lgnHpO5en/EtHebg6O+zVwDbH4+ENTVaT6Nzt7s3yj4plY
+	7fDcDD9U5Jn3Y9S4Ty9WMuzAEJCssmlMNxNcAiyjAsLsa+RRTVDYLB25h69fX3wl
+	w76CXtMUXtRc6fetguxP8Hi3UX2HpJeONwbdmtu1q5JUE=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCH9OC9Kh1qSBTSAg--.66S3;
-	Mon, 01 Jun 2026 14:46:27 +0800 (CST)
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCH9OC9Kh1qSBTSAg--.66S4;
+	Mon, 01 Jun 2026 14:46:30 +0800 (CST)
 From: chenyuan_fl@163.com
 To: chenyuan_fl@163.com
 Cc: andrii@kernel.org,
@@ -39,9 +39,9 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev
-Subject: [PATCH bpf v2 1/2] bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointer deref
-Date: Mon,  1 Jun 2026 14:46:10 +0800
-Message-ID: <20260601064611.807637-2-chenyuan_fl@163.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Add regression test for kfunc implicit arg injection with stale register
+Date: Mon,  1 Jun 2026 14:46:11 +0800
+Message-ID: <20260601064611.807637-3-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260601064611.807637-1-chenyuan_fl@163.com>
 References: <20260407080900.551797-1-chenyuan_fl@163.com>
@@ -52,172 +52,166 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCH9OC9Kh1qSBTSAg--.66S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW3XF47Aw4ftr15tFy7KFyfZwb_yoWxWrW3pF
-	Z8Xr9IkrWkGw4fWr4xAF45AryYkw4xAay7JFZ5G34FvF1kWw18tF4rKrySvF9IkrWrJF12
-	qr1qqrWqk34UCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_g4SDUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgSdW2odKsTgJgAA3f
+X-CM-TRANSID:_____wCH9OC9Kh1qSBTSAg--.66S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Wr43Kw1fWF1fGF1rKF1rZwb_yoW3GFyUpa
+	s7Xw1jkr1kJa15XF18JF47XFyrKrs3X3y8CFW8G34rZw4kXw10qF18KF4jvas0krWrur43
+	Z3sYgrZ8u3y8ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zE1xRDUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5QadW2odKsYBLgAA3R
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-the verifier must identify it so the kernel injects env->prog->aux into
-the correct register at runtime.  The original check used
-is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-module BTF type against vmlinux.
+The preceding patch fixes a bug where the BPF verifier failed to detect
+an implicit struct bpf_prog_aux * argument in a module kfunc, causing
+the kernel to dereference a stale register value as a pointer and crash.
 
-Root Cause
-----------
+Add a selftest that deliberately contaminates BPF R2 (the register slot
+for the 2nd kfunc argument, which maps to the implicit bpf_prog_aux *)
+with a known magic value 0xDEAD via inline assembly, then calls a
+KF_IMPLICIT_ARGS kfunc that validates whether injection occurred:
 
-This issue was triggered by pahole 1.30 generating module BTF with
-incorrect type information, which caused the kernel's distilled base
-BTF deduplication for modules to fail.  As a result, the module retained
-its own copy of struct bpf_prog_aux with a different BTF ID than
-vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
-the kernel must be robust against such inconsistencies: a BTF mismatch
-should result in a clean rejection, not a kernel crash or information
-disclosure.
+  - If the kernel correctly injects env->prog->aux into R2, the kfunc
+    receives a real bpf_prog_aux pointer (≠ 0xDEAD) and returns the
+    caller-supplied marker value.
 
-When the distilled base dedup fails and btf_types_are_same() cannot
-match the module's bpf_prog_aux type against vmlinux's,
-is_kfunc_arg_prog_aux() returned false and the code fell through
-silently without setting arg_prog.  The kfunc then received whatever
-value was in the argument register and dereferenced it as a
-bpf_prog_aux pointer, leading to:
+  - If injection is skipped (the original bug), the kfunc receives the
+    stale 0xDEAD value and returns -EINVAL, which the BPF program
+    detects as a test failure.
 
-  BUG: kernel invalid pointer dereference, address: 00000000000009e2
-  RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
-  RDI: 0x000000000000046d (stale register value)
+The magic value 0xDEAD is chosen with bit 31 clear to avoid BPF ALU64
+sign-extension when used as a 32-bit immediate, ensuring the comparison
+in the kfunc matches the actual register value.  The kfunc is associated
+with a struct_ops map to exercise the exact call path (struct_ops →
+kfunc with KF_IMPLICIT_ARGS → bpf_prog_aux dereference) that triggered
+the original crash.
 
-In the observed crash the stale value was the process PID, causing a
-dereference within the unmapped NULL page.  However, an attacker able
-to control the register value -- for example by writing a BPF program
-that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-could redirect the dereference to arbitrary kernel memory, turning
-this into an information disclosure.  The fix ensures the verifier
-either validates and injects the correct bpf_prog_aux pointer, or
-rejects the program outright -- no silent fallthrough that could
-be exploited.
-
-Crash Stack Trace
------------------
-
-  PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
-   #0 machine_kexec at ffffffff812f6e26
-   #1 __crash_kexec at ffffffff8145a788
-   #2 crash_kexec at ffffffff8145ac24
-   #3 oops_end at ffffffff812bb67c
-   #4 page_fault_oops at ffffffff813053a1
-   #5 exc_page_fault at ffffffff828e60a1
-   #6 asm_exc_page_fault at ffffffff810012a6
-      [exception RIP: bpf_prog_get_assoc_struct_ops+10]
-      RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
-      RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
-      RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
-   #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
-   #8 bpf_trace_run2 at ffffffff814f8332
-   #9 __traceiter_sys_enter at ffffffff81415f45
-  #10 trace_syscall_enter at ffffffff81416735
-  #11 do_syscall_64 at ffffffff828e06a1
-
-Fix
----
-
-Introduce a two-layer argument-injection detection:
-
-  1. get_kfunc_arg_inject_type() -- lightweight name-based classification
-     of injectable types (currently only KF_INJECT_ARG_PROG_AUX). This
-     ensures we recognize injection candidates regardless of BTF type IDs.
-
-  2. is_kfunc_arg_prog_aux() -- strict type validation within the inject
-     case; if validation fails the program is rejected with -EINVAL instead
-     of silently bypassing injection setup.
-
-This design ensures that BTF inconsistencies result in a clean verification
-failure instead of a crash or a potential information disclosure, and the
-approach is extensible for future injection types.
-
-Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
 Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
- kernel/bpf/verifier.c | 48 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_assoc.c    |  5 +++
+ .../selftests/bpf/progs/struct_ops_assoc.c    | 40 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  9 +++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
+ 4 files changed, 55 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8dd79b735a69..928b6c42a4bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10857,6 +10857,39 @@ static bool is_kfunc_arg_prog_aux(const struct btf *btf, const struct btf_param
- 	return __is_kfunc_ptr_arg_type(btf, arg, KF_ARG_PROG_AUX_ID);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+index 461ded722351..123bd2c7a292 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+@@ -35,6 +35,10 @@ static void test_st_ops_assoc(void)
+ 					    skel->maps.st_ops_map_b, NULL);
+ 	ASSERT_OK(err, "bpf_program__assoc_struct_ops(sys_enter_prog_b, st_ops_map_b)");
+ 
++	err = bpf_program__assoc_struct_ops(skel->progs.sys_enter_prog_test_aux_inject,
++					    skel->maps.st_ops_map_a, NULL);
++	ASSERT_OK(err, "bpf_program__assoc_struct_ops(sys_enter_prog_test_aux_inject, st_ops_map_a)");
++
+ 	/* sys_enter_prog_a already associated with map_a */
+ 	err = bpf_program__assoc_struct_ops(skel->progs.sys_enter_prog_a,
+ 					    skel->maps.st_ops_map_b, NULL);
+@@ -52,6 +56,7 @@ static void test_st_ops_assoc(void)
+ 
+ 	ASSERT_EQ(skel->bss->test_err_a, 0, "skel->bss->test_err_a");
+ 	ASSERT_EQ(skel->bss->test_err_b, 0, "skel->bss->test_err_b");
++	ASSERT_EQ(skel->bss->test_err_inject, 0, "skel->bss->test_err_inject");
+ 
+ 	/* run syscall_prog that calls .test_1 and checks return */
+ 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.syscall_prog_a), NULL);
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+index 68842e3f936b..dd322d43ff5e 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+@@ -103,3 +103,43 @@ SEC(".struct_ops.link")
+ struct bpf_testmod_multi_st_ops st_ops_map_b = {
+ 	.test_1 = (void *)test_1_b,
+ };
++
++/* Test for aux injection with stale register contamination.
++ *
++ * This test reproduces the scenario where the BPF verifier fails to
++ * inject the implicit bpf_prog_aux pointer for kfuncs with
++ * KF_IMPLICIT_ARGS.  The program uses inline assembly to explicitly
++ * set R2 (the register for the 2nd kfunc argument, which maps to
++ * the implicit bpf_prog_aux *) to a known magic value (0xDEAD,
++ * chosen with bit 31 clear to avoid BPF ALU64 sign-extension):
++ *
++ *   asm volatile("r2 = %[magic]" :: [magic] "ri"(0xDEAD) : "r2");
++ *
++ * Then bpf_kfunc_aux_inject_stale() is called.  The kernel verifier
++ * should inject the real bpf_prog_aux into R2, overriding the magic
++ * value.  The kfunc compares aux against 0xDEAD:
++ *
++ *   - aux == 0xDEAD  → kernel failed to inject aux → test fails
++ *   - aux != 0xDEAD  → kernel correctly injected aux → test passes
++ */
++int test_err_inject;
++
++SEC("tp_btf/sys_enter")
++int BPF_PROG(sys_enter_prog_test_aux_inject, struct pt_regs *regs, long id)
++{
++	struct task_struct *task;
++	int marker = 0x5A5A;
++	int ret;
++
++	task = bpf_get_current_task_btf();
++	if (!test_pid || task->pid != test_pid)
++		return 0;
++
++	asm volatile("r2 = %[magic]" :: [magic] "ri"(0xDEAD) : "r2");
++
++	ret = bpf_kfunc_aux_inject_stale(marker);
++	if (ret != marker)
++		test_err_inject++;
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 0be918fe3021..da95a6de3bbf 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1316,6 +1316,7 @@ __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, st
+ __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
+ __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
+ __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
++__bpf_kfunc int bpf_kfunc_aux_inject_stale(int marker, struct bpf_prog_aux *aux);
+ 
+ /* hook targets */
+ noinline void bpf_testmod_test_hardirq_fn(void) { barrier(); }
+@@ -1399,6 +1400,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
++BTF_ID_FLAGS(func, bpf_kfunc_aux_inject_stale, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
+ 
+@@ -1916,6 +1918,13 @@ int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux)
+ 	return bpf_kfunc_implicit_arg_legacy(a, b, aux);
  }
  
-+/*
-+ * Injectable argument types are implicit kfunc arguments whose value is
-+ * injected by the kernel at call time rather than received from the BPF
-+ * program.  Use name-based matching for initial detection to avoid false
-+ * negatives when a module's BTF references the type via a different BTF ID
-+ * than vmlinux's.  Actual type compatibility is still validated by the
-+ * caller with btf_types_are_same().
-+ */
-+enum kfunc_inject_arg_type {
-+	KF_INJECT_ARG_NONE = 0,
-+	KF_INJECT_ARG_PROG_AUX,
-+};
-+
-+static enum kfunc_inject_arg_type get_kfunc_arg_inject_type(
-+	const struct btf *btf, const struct btf_param *arg)
++int bpf_kfunc_aux_inject_stale(int marker, struct bpf_prog_aux *aux)
 +{
-+	const struct btf_type *t;
-+	u32 res_id;
-+
-+	t = btf_type_skip_modifiers(btf, arg->type, NULL);
-+	if (!t || !btf_type_is_ptr(t))
-+		return KF_INJECT_ARG_NONE;
-+
-+	t = btf_type_skip_modifiers(btf, t->type, &res_id);
-+	if (!t)
-+		return KF_INJECT_ARG_NONE;
-+
-+	if (strcmp(btf_type_name(btf, res_id), "bpf_prog_aux") == 0)
-+		return KF_INJECT_ARG_PROG_AUX;
-+
-+	return KF_INJECT_ARG_NONE;
++	if ((unsigned long)aux == 0xDEAD)
++		return -EINVAL;
++	return marker;
 +}
 +
- /*
-  * A kfunc with KF_IMPLICIT_ARGS has two prototypes in BTF:
-  *   - the _impl prototype with full arg list (meta->func_proto)
-@@ -11899,8 +11932,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		u32 ref_id, type_size;
- 		bool is_ret_buf_sz = false;
- 		int kf_arg_type;
--
--		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
-+		enum kfunc_inject_arg_type inject_type;
-+
-+		inject_type = get_kfunc_arg_inject_type(btf, &args[i]);
-+		switch (inject_type) {
-+		case KF_INJECT_ARG_PROG_AUX:
-+			/* Validate the arg type against vmlinux's definition */
-+			if (!is_kfunc_arg_prog_aux(btf, &args[i])) {
-+				verbose(env, "arg#%d implicit argument type mismatch, "
-+					"expected struct bpf_prog_aux *\n", i);
-+				return -EINVAL;
-+			}
- 			/* Reject repeated use bpf_prog_aux */
- 			if (meta->arg_prog) {
- 				verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
-@@ -11914,6 +11956,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			meta->arg_prog = true;
- 			cur_aux(env)->arg_prog = regno;
- 			continue;
-+		default:
-+			break;
- 		}
+ static int multi_st_ops_reg(void *kdata, struct bpf_link *link)
+ {
+ 	struct bpf_testmod_multi_st_ops *st_ops =
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 2edc36b66de9..c18791e96b21 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -192,6 +192,7 @@ int *bpf_kfunc_ret_rcu_test_nostruct(int rdonly_buf_size) __ksym;
+ #ifndef __KERNEL__
+ extern int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id) __weak __ksym;
+ extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak __ksym;
++extern int bpf_kfunc_aux_inject_stale(int marker) __weak __ksym;
+ #endif
  
- 		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
+ struct prog_test_member *bpf_kfunc_get_default_trusted_ptr_test(void) __ksym;
 -- 
 2.54.0
 
