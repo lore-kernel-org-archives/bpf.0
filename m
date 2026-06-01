@@ -1,112 +1,86 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCE36655B
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 21:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14EA2E0901
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 22:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780349893; cv=none; b=RxPJomDLUyygV5qkB/1PbkCc4RJg496NrYx7lGl+CQd94UoNgmHkA86WqG++j2a5742NzECdKkqeUkXGXYDxPVcuiYkVGwpkCtxZH14Udemr0Eo5s+XYpYkYl2KpwinIEEQdOPtUZ+bNWCUTG9xDnpOl35+eQ9+WAqGWjkeGujc=
+	t=1780351300; cv=none; b=KEtdu2gDYI+UK+hfAe18LxjkHwl2bPyg0bzrC8U2nJYw+BjDsR9Wp+yK/G2ZeM3NJwn6W0Vp1GccYzgkYMm1uAMuXQu7MPYQ3o4dXw+8f02vCultAzBFHG0UaWcqhHzyw1RYJmNY/AIvquCCYY1vqy3EfMWNUihDnITkBdW46SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780349893; c=relaxed/simple;
-	bh=J49thQU0tLDbC40LQbrf5dWPZTs/A+l7e9+LmY4skys=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KqtaxBp3IjJlwVT8Ca1/CPioeZJrXmegrtDi6NxCO3uwlO7HfIzaQ4b/5rUL4RHtGUw9mK6BVXxFvcstufxhi/HCdFNsoBnzxDjI4kgHuSbp3HlNoL+XSRneE+G6CqHf5YHXmfno0knGuId3AEpYJDhaU2YjsuIyR/s32vI85Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awZbAefU; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780351300; c=relaxed/simple;
+	bh=9EWVW/fMGsD0Vc4JuQyifWM+3sdYROeL6G7Y4FwA6Ps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U3xgTkak3ybSUywBY8SgnrCPBBhLk/U8TEQAt1dQnlO/6tVHeiyVrLlUzmzb/Y/uocN26kx6YqTgZaOHKNIJKi0hU/bk5coM22GrEGlUZYeNOuPMTowcBFon5Bl2Ng1QVq5GOAL/lvpt+Ej8ro5sNasFdGP68cm1fBXMoJ9XniU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aKuDtBJu; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awZbAefU"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304e83724bfso4819133eec.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 14:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780349891; x=1780954691; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=d53G/+V5LF96ITn7EZOA+3GNRQdfCETQfKocNPYPMs8=;
-        b=awZbAefU9YXQgdVaOJYE8Pioxj7TlyehUFF6pcAxNznRaEddr/k7DkrLUMqwRTQU+f
-         +3JnH5v7XB9lzYjYAc0WN1hMdkwI50dQu1G7jDTFEL18d2iyurBbjjyXRcwNE4mIc5er
-         YO52tiSZ3emyZcRKK+Bm4J88N0UBHBBMr/TAC3HZC0D1NMOcJ86SSLCHrGr9XKCImEDK
-         M9f+aF9o1QQeJzQaC/XSMspQbSnH9hq3cca1wiUq5sPLeMaNkbQdwYxreIJMP5SjZ94Y
-         q+wmxVm1g7BDhkeeQ0YycNcmDuhgfLEqQEKj+/b4vX0u5iZznFvyY9vJ/soQRcPxIj10
-         1NhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780349891; x=1780954691;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d53G/+V5LF96ITn7EZOA+3GNRQdfCETQfKocNPYPMs8=;
-        b=dIj0NAsE8uuaVbARmgvCZDLl76AU5DEiGHvqvFn5Pxegp9z97zT0LshS9kbjkJKT4D
-         jcpWWKU4WOqulYxXsPiLXBDmk4Iyfyn0s1hoyWGRfAVS7hUbfKUNd53bl88IRXRn411/
-         KaxCz+BO3i+ACXVSbwERC5UAv2sHSXnAepFv3zf5TptHhF/xc8dQge26NvPtANa6zvJH
-         /poj42U+qUyngtjBWdMglcLN3Bo9GIb5QmRoi0JovXDwXS8Y+GV7BddAIvOOAW7s+bSN
-         sUU+IL00VmsiyBtUuPfQi5mH/A2AEeuwCgdGHPdTfUe64khBLaQROB2Ek1VFO4ldlC8V
-         wiOQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/QIGLL2QMHjeHm2YuSCXcse7WgdcL+ueyK12NUhEBd799k2Y3Z5bXlX9EWszEQ5EZrrXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl3SLSj7lQOvXPLsHnmzgQGWac9UORzk7VFKQGPEBwIwOwnF+4
-	QCPexQa+CRUY4KqUXUQUx13lLcOl1rOiCPEA413eWHyEb6113yhoRRMD
-X-Gm-Gg: Acq92OF54chefBePRll3QYfvohgHKGJsQRQutZrqIL5xOYFTvC8WLfsdE9p2xek4sP6
-	NO7mKq+FqO/Sh13wQKmFFWaHBygC6QUBXCMfCtUQEGbvC7yyfMwNe/GJyjAoxLFgSOnFEDTftZY
-	EOkbzPI7iph+HhTg90F9L8cusytYYzpr8O/mzD1aK3SF8nMV5ZXTVLYhHYP0EBfnwrOuZ/VcMVL
-	aU1qZ4sHURNI7YZo9mG8IMR/M9R/11CCNvMliYVcnED++wDsSBui5da3rNapUZGhWgEMjud4uzN
-	RDRlyU0tEM4Tt6/YNHRdgnultZnoXQO3fLtExo7/8Bq+1/U9QDgISKvMV3Aff8NOaIv7qn1Zukr
-	NOdPL0lKjYWu2bbsK20rAetaDBzHTPVcZRoo1BYyunyh2PTlkgy+UGZvSUV+x3x4YBX9FqUDlau
-	r4vU3ba5agRTBnbhok4wfZx1CFQs4ERr9J+j5Hxu8AdRxckqo/1lLi6g5t0Y0HOm58NhM7jaFTg
-	LR84xLmkv7n+xZs4fVxZLXFLB3/Hg==
-X-Received: by 2002:a05:7301:168a:b0:2d9:a799:3c4f with SMTP id 5a478bee46e88-304fa652e17mr5611430eec.24.1780349891096;
-        Mon, 01 Jun 2026 14:38:11 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c3a5:3c8c:3e68:6e4d? ([2620:10d:c090:500::1:c0f8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed2eb24fsm9602685eec.7.2026.06.01.14.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 14:38:10 -0700 (PDT)
-Message-ID: <35632e031e85b81cca133da8d420a3a467db3f54.camel@gmail.com>
-Subject: Re: [PATCH RFC bpf-next v3 5/6] bpf: report register diff summary
- for hot callchains
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- ast@kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
-	kernel-team@fb.com, yonghong.song@linux.dev
-Date: Mon, 01 Jun 2026 14:38:09 -0700
-In-Reply-To: <DIY16FWK8YDS.1HLJ3UPVQ3LT7@etsalapatis.com>
-References: <20260527-better-1m-reporting-v3-0-b3ede0588a75@gmail.com>
-	 <20260527-better-1m-reporting-v3-5-b3ede0588a75@gmail.com>
-	 <DIY16FWK8YDS.1HLJ3UPVQ3LT7@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aKuDtBJu"
+Message-ID: <5c033c93-34c5-4c96-943d-9e188781862f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780351287;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i5UXeEpVRWk/7pp5peY2hPYH88DbZjlJJmxE7GKZAmQ=;
+	b=aKuDtBJu88GLWgQ1oatZkZdGubqwXBqAyCVf/+ygsoDfnfFKdbLwI9iorb8n7/1iTGBBV3
+	Bs2CX25I7RyqFOh0F+qcuED4R7/3IegFHdEx2tjqLchh+lwg8/IsZjONRggg/72RfK/UGT
+	QdbvsHkWwOke+D7kCJKx36F4GbGiroo=
+Date: Mon, 1 Jun 2026 15:01:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2 3/3] bpf: cgroup: restore sysctl new-value replacement
+Content-Language: en-GB
+To: Dawei Feng <dawei.feng@seu.edu.cn>, martin.lau@linux.dev
+Cc: emil@etsalapatis.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ jolsa@kernel.org, kees@kernel.org, joel.granados@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, jianhao.xu@seu.edu.cn,
+ stable@vger.kernel.org, Zilin Guan <zilin@seu.edu.cn>
+References: <20260529031026.2716641-1-dawei.feng@seu.edu.cn>
+ <20260529031026.2716641-4-dawei.feng@seu.edu.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260529031026.2716641-4-dawei.feng@seu.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 2026-06-01 at 17:29 -0400, Emil Tsalapatis wrote:
 
-[...]
 
-> > @@ -720,8 +721,11 @@ static bool stacksafe(struct bpf_verifier_env *env=
-, struct bpf_func_state *old,
-> >  				old_type =3D STACK_INVALID;
-> >  			if (cur_type =3D=3D STACK_POISON)
-> >  				cur_type =3D STACK_INVALID;
-> > -			if (i >=3D cur->allocated_stack || old_type !=3D cur_type)
-> > +			if (i >=3D cur->allocated_stack || old_type !=3D cur_type) {
->=20
-> This new logging of divergent stack slots is identical throughout stack s=
-afe. Can we factor
-> it out into an error label at the very end?
+On 5/28/26 8:10 PM, Dawei Feng wrote:
+> Commit 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
+> helpers") changed the success return value to 0, but failed to update the
+> corresponding check in __cgroup_bpf_run_filter_sysctl(). Since
+> bpf_prog_run_array_cg() now returns 0 on success, the legacy ret == 1
+> condition is never satisfied. As a result, the modified value is ignored,
+> and bpf_sysctl_set_new_value() fails to replace the write buffer.
+>
+> Fix this by checking for a return value of 0 instead, so cgroup/sysctl
+> programs can correctly replace the pending sysctl buffer.
+>
+> This bug was discovered during a manual code review. Tested via a
+> cgroup/sysctl BPF reproducer overriding writes to a target sysctl.
+> Pre-fix, bpf_sysctl_set_new_value("foo") was silently ignored: the write
+> returned 8192 and the value remained "600". Post-fix, the BPF replacement
+> buffer properly propagates: the write returns 3 and the value updates to
+> "foo".
+>
+> Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
 
-Yes, makes sense.
+Maybe to have the following commit as the fix tag:
+   f10d05966196 ("bpf: Make BPF_PROG_RUN_ARRAY return -err instead of allow boolean")
 
-> > +				diff->slot =3D spi;
-> > +				diff->kind =3D DIFF_STACK;
-> >  				return false;
-> > +			}
-> >  		}
-> > =20
-> >  		if (old->stack[spi].slot_type[i % BPF_REG_SIZE] =3D=3D STACK_INVALID=
- ||
+Also, for subject, please remove ': cgroup' (including the patch 1 and 2).
+The 'Restore sysctl new-value replacement' is not really clear.
+Maybe 'bpf: Restore sysctl new-value from 1 to 0'?
+Other than the above,
 
-[...[
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+
