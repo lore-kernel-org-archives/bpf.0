@@ -1,136 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955733DB32A
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6743DA7F8
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780327031; cv=none; b=HJ3ifEF7sdAKJbGuPlMj260vsmcKHZvVannha3884V7a6rw2uD8Xar9lpNQCbQMfVZDLm97fw73UqT+wljxv4WdDg02bMaTHlNV4QCzoNE2vW86NzAxn0ySw+yjuHs8c3sLJUl0DV+6V5YWHSHv7tDbQtNtPO7ePJxXYCquETnc=
+	t=1780327093; cv=none; b=lPNitCwaFUySx6RuqFrJECEp4spvh8V83FjNPOMCSW/fwncF6mp7dEbFbZvaGQ5l535G8LaELQChp2KHRHP9ZdVlaDCu8hlhYdXlC+EGac8QqqFOj1ag68O5UuRR9a7t8m5NXgfjKu6RqhOFBGkx8qOhu8Tc5O9cFcP1hc+vkT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780327031; c=relaxed/simple;
-	bh=jHLS81rl/sS+VgJpeb10j25BNeO8RjKsK0URSHtjt7E=;
+	s=arc-20240116; t=1780327093; c=relaxed/simple;
+	bh=cDh6l7Is6S329yS7GAHsLnYONeADZnUGckriUzKIPT4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Bmv5dUj4FshypZ0i2PPUrY+F+Y0RuLWjUpNVAFuBxjSYcwFzZ3Jt6hHD2sV+//ToRH2ZxR1O+FQKScOsa3Yf6D1xBG/dS5FanXK+dMuqiUd5IMIQHupYohNA2RpvDprMMHImuxVce3ZTw9sFHS7FNV53d9NPJz+7P5X1QZ6D3qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZsqMrOW; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=g01fOSgfzc3rqUxmmq3BMmwR191ePq4Hms1CeTTG3xDYG0zkG2FxVLcE+GsVU9pWRLCURiyV6XuWZrZQSfGLS1SFfdgMozBGTd1yRRaPzOTefzNgNhyeQe/lRgeAQH7gYoAi2Gti97D342kab2V3aK8Lp0ZeAVsvGXhIN9uxDng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emgk7B87; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZsqMrOW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51601F00893;
-	Mon,  1 Jun 2026 15:17:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emgk7B87"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BCF1F00893;
+	Mon,  1 Jun 2026 15:18:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780327028;
-	bh=+pzhjFbS2YQY7uayiNTHp0wlMBi8+qw4VxFSL3S50i8=;
+	s=k20260515; t=1780327090;
+	bh=KqHwW6W0G5k8593E/bHp92tAsgJ78bDjKHYF63+A0fA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FZsqMrOWOoIxhKYYEMqQc3GUCQkAxTI9NQ4/7iF6qRj9CB4aVyX4GKXzge323aAaQ
-	 4vAplrHIBIDH/hs4UleBLwp8XCAEAi7GyQAZIeO11T32WyCsGeySMpC9Jf6vN9bgdv
-	 IDRH4H4miefm9gGOCV8amrkBgMfcNt0J7suXjuYfri7aYitIsZuHWMq9kBpo1rMgN9
-	 b9xI2q+6ftOmfDb+PAWMn3FinrWlZdbcNXkPWRh/nD3VeiekwE1nv+PmC6j/K8dz/x
-	 jw2SkXuQCV/v+Lo9otnlDxduBC1FUbpIxvy6ulJkn4kW8Da40w7YmBQjHj+OSBsaUt
-	 K0CY+keKVzziQ==
+	b=emgk7B87zUGYiFzO8asfiE9i6nArbPfANCU3PLsvTRPJjryvgDY6JsOl5d240JBoC
+	 SqZQd4HEDBGDg1oSz+AM16QK1DYMaL7FoYYT0K75YbPoMqXS8WQdE6/5QcMhK8UjaK
+	 fAOxESyXk/VVu2CAg5H448ACkH6rqUrgcQbsW9yBkwDnR57IKhxoMIEcUCs/L00LqS
+	 CQj962uk73P4mipZfIwH+W5fLHTLHg53q6dSuw4fdoVRUMR3GhBRHF0HAOUPIfOa1K
+	 crOln7MSxpe8YAg7c631q4Xp+6Ws+wwR5aq2XeX0MJ5n7un2fWrrBtvyUCQmkr3+Fa
+	 EBRHV3tdJrZbQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
- encapsulating UDP tunnel in lwt
+Subject: Re: [PATCH bpf-next v2 1/7] bpf: Reject exclusive maps as inner
+ maps in map-in-map
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
+To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
-References: <20260601150203.20352-2-leon.hwang@linux.dev>
+In-Reply-To: <20260601150248.394863-2-daniel@iogearbox.net>
+References: <20260601150248.394863-2-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 15:17:07 +0000
-Message-Id: <20260601151707.C51601F00893@smtp.kernel.org>
+Date: Mon, 01 Jun 2026 15:18:09 +0000
+Message-Id: <20260601151810.68BCF1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [High] Time-of-Check to Time-of-Use (TOCTOU) vulnerability in transport h=
-eader offset calculation leads to out-of-bounds write.
-
 Pre-existing issues:
-- [Critical] Missing validation of `iph->ihl >=3D 5` allows unprivileged BP=
-F programs to trigger a kernel panic in `ip_fast_csum`.
+- [Critical] BPF iterators bypass map exclusivity (`excl_prog_sha`) and map=
+ freezing (`map->frozen`) protections, allowing arbitrary modification of s=
+ecure maps.
 --
 
-commit 0be2d8b388e17b2000afd2e38ff89f5f956084ae
-Author: Leon Hwang <leon.hwang@linux.dev>
+commit 94f0db1114c682145008741a58e7ea931a088e25
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-bpf: Update transport_header when encapsulating UDP tunnel in lwt
+bpf: Reject exclusive maps as inner maps in map-in-map
 
-This commit updates bpf_lwt_push_ip_encap() to set the skb transport
-header whenever the encapsulated packet uses UDP. This ensures that
-drivers relying on the transport header for hardware checksum offload
-do not drop packets due to incorrect checksums.
+This commit prevents an exclusive map from being inserted into a
+map-of-maps. This addresses an issue where unrelated programs could
+bypass exclusivity guarantees by accessing the map at runtime.
 
-Cc: Leon Hwang <leon.huangfu@shopee.com>
-
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index f71ef82a5f3d3..65d1dfbf3312b 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void=
- *hdr, u32 len, bool ingress)
->  		ipv4 =3D true;
->  		if (unlikely(len < iph->ihl * 4))
->  			return -EINVAL;
+> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+> index 645bd30bc9a9d..d2cbab4bdf644 100644
+> --- a/kernel/bpf/map_in_map.c
+> +++ b/kernel/bpf/map_in_map.c
+> @@ -20,7 +20,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+>  	/* Does not support >1 level map-in-map */
+>  	if (inner_map->inner_map_meta)
+>  		return ERR_PTR(-EINVAL);
+> -
+> +	if (inner_map->excl_prog_sha)
+> +		return ERR_PTR(-ENOTSUPP);
 
 [Severity: Critical]
-This is a pre-existing issue, but does this code properly validate the
-minimum IPv4 header length?
+This is a pre-existing issue, but while this patch closes the map-in-map
+bypass for exclusive maps, does a similar bypass still exist through BPF
+iterators?
 
-Because len is an unsigned u32, if a BPF program provides a buffer where
-iph->ihl is 0, iph->ihl * 4 will be 0. Since len < 0 is never true, the
-check trivially passes without returning -EINVAL.
+Looking at bpf_iter_attach_map() in kernel/bpf/map_iter.c, when a BPF map
+iterator is attached via BPF_LINK_CREATE:
 
-Later in the function, ip_fast_csum() is called with iph->ihl. On some
-architectures (like PowerPC and MIPS), the ip_fast_csum() implementation
-assumes ihl >=3D 5 and subtracts from it, causing an integer underflow in t=
-he
-loop counter that leads to a deterministic kernel panic.
+	map =3D bpf_map_get_with_uref(linfo->map.map_fd);
+	if (IS_ERR(map))
+		return PTR_ERR(map);
 
-Should there be an explicit check that enforces iph->ihl >=3D 5 before the
-length calculation?
+// [...]
 
-> +		is_udp_tunnel =3D iph->protocol =3D=3D IPPROTO_UDP;
-> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphd=
-r)))
-> +			return -EINVAL;
->  	} else if (iph->version =3D=3D 6) {
+	if (key_acc_size > key_size || value_acc_size > value_size) {
+		err =3D -EACCES;
+		goto put_map;
+	}
 
-[ ... ]
+This function retrieves the target map but appears to lack checks against
+map->excl_prog_sha, map->frozen, and BPF_F_RDONLY_PROG.
 
-> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
-*hdr, u32 len, bool ingress)
->  	if (ingress)
->  		skb_postpush_rcsum(skb, iph, len);
->  	skb_reset_network_header(skb);
-> +	if (ipv4 && is_udp_tunnel)
-> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+Furthermore, the iterator context defined in bpf_map_elem_reg_info() sets
+up the value argument without the MEM_RDONLY flag:
 
-[Severity: High]
-Can iph->ihl change between the initial length validation and this call?
+		{ offsetof(struct bpf_iter__bpf_map_elem, value),
+		  PTR_TO_BUF | PTR_MAYBE_NULL },
 
-The hdr pointer (and thus iph) points to a buffer provided by the BPF
-program, which might be concurrently modified by userspace via a shared
-BPF map. Because skb_cow_head() acts as a compiler barrier, the compiler
-will reload iph->ihl from this untrusted memory here.
+Because MEM_RDONLY is omitted, the verifier permits BPF programs to perform
+direct memory writes to ctx->value.
 
-If it is concurrently changed to a larger value (like 15) after the initial
-validation, the transport header offset could be set beyond the end of the
-SKB data (skb->tail).
-
-Could this lead to out-of-bounds memory writes when network drivers later
-dereference this transport header to update checksums?
-
-> +	else if (!ipv4 && is_udp_tunnel)
-> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct =
-ipv6hdr));
->  	memcpy(skb_network_header(skb), hdr, len);
+Could this allow a program to locate the FD of an exclusive, frozen map via
+its ID, attach a custom BPF map iterator, and arbitrarily overwrite the
+contents of the protected map?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150203.2035=
-2-1-leon.hwang@linux.dev?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150248.3948=
+63-1-daniel@iogearbox.net?part=3D1
