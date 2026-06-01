@@ -1,176 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813A981AA8;
-	Mon,  1 Jun 2026 11:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CC8374725
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 11:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780313990; cv=none; b=QfBZWe5q2HRkBEFSnMUbQV9x23UCUWJsCpmVrSxXTZWxyus2p/K1JXIzEcfx05GfDZK62RK6StctXM/ooxTYhadh8qmdrL5gWtzpOPZ5X63V/7CulR1gmap8fhRBCKOeR/9zphmdKZJTPR5KWEZI+tzdIomyFrywfJcyXJP14FI=
+	t=1780314887; cv=none; b=BrsLclxRTbQuic3hUNGnurIhu2DaJou+W68CF2u2T2TdyzxM/Rp7EFl7Jr1v+NZyMv4i6AdmAnMaKcI1r+87YDeaGJvyLJf4motUoyMN8CdEXJnpJvn/ZePPQoGi4tVjDW6Q/5016KOkCDrTV1Bm0Eddqq1TFuCodByyxWLR7EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780313990; c=relaxed/simple;
-	bh=5o271WQzEJ1Cggn1C0amqJkMDlDlgYGn7SPDBqhVqJU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uf3k+B5oHb/B3001cJi3VmqhV921yypTPNWf4T1whxpoxX3vPGX7t2C/3djeOAy0yAUUpBbmVXzInjr0qWCkGjOXozJh8Jr9RTx8/fe2hLJztuvL1/Dq70p7I3tJOeiBJrmpx2NCTfg1Nvps0S27xd9/SICXU1CLgSIXE26Pez0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhQbD7Wt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780314887; c=relaxed/simple;
+	bh=TJInaTL+I8/+pMcbQ2Obw4yz8CAEc78+I6SrvyhWFeM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ipQWyUxLuTD1bnEN2c7lRgf+MnuVbsuW40knFYNxcRbiBx55Fo2ao+mQbRHlHoBoc7kBH1ttz1evrQBrUlwLUuVb09zll1uJk5LD+9XmtZ69HyuTFK99Bk9kuMD8wEwQd3CZ4f8tab1LuzbClqUy9CoYahPRxiST010q1apXOk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dwUhhrTg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhQbD7Wt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E21B1F00893;
-	Mon,  1 Jun 2026 11:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780313989;
-	bh=5MMXZTkE9Ksy8r/e1+0LdFptK92/DrsLI/CT08d5UQ8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fhQbD7WtYmzfm3aO27P3MUdk1PYXtWtZRyjEbt1BF4stHyg0uRK+76axAKeOrgWDi
-	 +MDRJzoDAjER/TkerBiZ6pMsxnVf+EI5Sbm6Cq3INBW+ZBsyIzYpL3iBZYgt1lB4+u
-	 HjQ+nGLuY8hFZur08h5UjnV+3mEoTJiHhdlZSr6qVL4bZzZhLX1zKwlGyj5QD1jic0
-	 UkDzGkcO1Z5agDNQLNVSXMQoNuE17jqfJy33oa27Z1JSDerxJk1wpv48niFk3Df/7s
-	 W/FrJHStGRgZmeMdYp1ZcncnjGDoCc6TCD43KfzJKdGvUYNlcBcSVthzLF9qDJG5Va
-	 qQREa+iz/Gd9g==
-Message-ID: <aad27c5f-01a6-4a2a-a55c-c7e411c4dd05@kernel.org>
-Date: Mon, 1 Jun 2026 20:39:40 +0900
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dwUhhrTg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1780314885;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9iMi5OP8IuxpDw3nqLpnBbtHMB9Wyt0z2yi1muFCLEY=;
+	b=dwUhhrTgdiw/mf8612fPYy+7mohVcSnIga2gyVEUTYaWNNWL3ip1bMNjiJ8HIDr1xDikIM
+	QrsLOhl9eeA3La+O3iPTVgNMNqbo5MEN47d3lYMIQ60LKFBR/oab+zxFXMwInC5brQMEsb
+	JfmK1zTNSoFDloAQdiLzfozziAoGJ5Q=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-QYzQeQ1SPGq-54Z67sA7cQ-1; Mon,
+ 01 Jun 2026 07:54:40 -0400
+X-MC-Unique: QYzQeQ1SPGq-54Z67sA7cQ-1
+X-Mimecast-MFC-AGG-ID: QYzQeQ1SPGq-54Z67sA7cQ_1780314876
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E55541956080;
+	Mon,  1 Jun 2026 11:54:34 +0000 (UTC)
+Received: from oldenburg3.str.redhat.com (unknown [10.44.49.199])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E13C1956095;
+	Mon,  1 Jun 2026 11:54:24 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,  Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>,  bpf@vger.kernel.org,  Masami
+ Hiramatsu <mhiramat@kernel.org>,  Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>,  Jens Remus <jremus@linux.ibm.com>,
+  Josh Poimboeuf <jpoimboe@kernel.org>,  Peter Zijlstra
+ <peterz@infradead.org>,  Ingo Molnar <mingo@kernel.org>,  Jiri Olsa
+ <jolsa@kernel.org>,  Arnaldo Carvalho de Melo <acme@kernel.org>,  Namhyung
+ Kim <namhyung@kernel.org>,  Thomas Gleixner <tglx@linutronix.de>,  Andrii
+ Nakryiko <andrii@kernel.org>,  Indu Bhagat <ibhagatgnu@gmail.com>,  "Jose
+ E. Marchesi" <jemarch@gnu.org>,  Beau Belgrave
+ <beaub@linux.microsoft.com>,  Linus Torvalds
+ <torvalds@linux-foundation.org>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Kees Cook <kees@kernel.org>,  "Carlos
+ O'Donell" <codonell@redhat.com>,  Sam James <sam@gentoo.org>,  Dylan Hatch
+ <dylanbhatch@google.com>,  Borislav Petkov <bp@alien8.de>,  Dave Hansen
+ <dave.hansen@linux.intel.com>,  David Hildenbrand <david@redhat.com>,  "H.
+ Peter Anvin" <hpa@zytor.com>,  "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>,  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+  Michal Hocko <mhocko@suse.com>,  Mike Rapoport <rppt@kernel.org>,  Suren
+ Baghdasaryan <surenb@google.com>,  Vlastimil Babka <vbabka@suse.cz>,
+  Heiko Carstens <hca@linux.ibm.com>,  Vasily Gorbik <gor@linux.ibm.com>,
+  Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Subject: Re: [RESEND][PATCH v2] unwind: Add sframe_(un)register() system calls
+In-Reply-To: <20260528151626.4573592d@gandalf.local.home> (Steven Rostedt's
+	message of "Thu, 28 May 2026 15:16:26 -0400")
+References: <20260528151626.4573592d@gandalf.local.home>
+Date: Mon, 01 Jun 2026 13:54:22 +0200
+Message-ID: <877boio4r5.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
- <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
- <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
- <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------YwQVGEEKxGzkrAPA10HjJL0h"
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------YwQVGEEKxGzkrAPA10HjJL0h
-Content-Type: multipart/mixed; boundary="------------Fos0wBgvdCggrd0C0H32WobZ";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mark Brown
- <broonie@kernel.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-Message-ID: <aad27c5f-01a6-4a2a-a55c-c7e411c4dd05@kernel.org>
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
- <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
- <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
-In-Reply-To: <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
+* Steven Rostedt:
 
---------------Fos0wBgvdCggrd0C0H32WobZ
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+> From: Steven Rostedt <rostedt@goodmis.org>
+>
+> Add system calls to register and unregister sframes that can be used by
+> dynamic linkers to tell the kernel where the sframe section is in memory
+> for libraries it loads.
+>
+> Both system calls take a pointer to a new structure:
+>
+>   struct sframe_setup {
+> 	__u64			sframe_start;
+> 	__u64			sframe_size;
+> 	__u64			text_start;
+> 	__u64			text_size;
+>   };
+>
+> and a size of the passed in structure. If the system call needs to be
+> extended, then the structure could be changed and the size of that
+> structure will tell the kernel that it is the new version. If the kernel
+> does not recognize the structure size, it will return -EINVAL.
+>
+>   sframe_start - The virtual address of the sframe section
+>   sframe_size  - The length of the sframe section
+>   text_start   - the text section the sframe represents
+>   test_size    - the length of the section
+>
+> If other stack tracing functionality is added, it will require a new
+> system call.
 
+Would it make sense to have a more general mechanism to attach metadata
+to code memory?  For example, a JIT generator might want to provide a
+hint how to obtain debuginfo for the code.
 
+Thanks,
+Florian
 
-On 6/1/26 5:16 PM, Vlastimil Babka (SUSE) wrote:
-> On 6/1/26 08:39, Harry Yoo wrote:
->>
->>
->> On 5/29/26 10:50 PM, Christoph Hellwig wrote:
->>> On Fri, May 29, 2026 at 01:54:48PM +0200, Vlastimil Babka (SUSE) wrot=
-e:
->>>> Thanks, I applied it to slab/for-7.2/alloc_bulk and merged to slab/f=
-or-next
->>>> (it's still yankable in case of issues)
->>>>
->>>> Did some fixups below (the comment was stale prior to the patch; res=
-tored
->>>> unlikely(), simplified one line).
->>>>
->>>> A test merge into yesterday's -next found a conflict in drivers/gpu/=
-drm/
->>>> panthor/panthor_mmu.c. Commit 1013bf53650e ("drm/panthor: Split
->>>> panthor_vm_prepare_map_op_ctx() to prepare for reclaim") moved the c=
-hanged
->>>> codeto a new function panthor_vm_op_ctx_prealloc_pts().
->>>> But it's solvable so no need for a complicated coordination I think.=
-
->>>
->>> Ok, thanks.  The two Sashiko complains also look like they had merrit=
-s,
->>> but I won't get to looking into them until Monday.
->> The review:
->> https://sashiko.dev/#/patchset/20260528093437.2519248-2-hch%40lst.de
->>
->> So there is a user who might call kmem_cache_alloc_bulk() with size =3D=
- 0
->=20
-> I don't know if it can really happen there, but maybe DRM folks can tel=
-l us.
-
-Yeah beyond my area :)
-
->> (although the comment says @size must be larger than 0!) and
->=20
-> The comment is however new, the caller existed when there was no commen=
-t and
-> the return value 0 when asked for 0 was working there.
-
-Haha, you're right. Didn't notice that...
-
->> kmem_cache_alloc_bulk() returning 0 was considered a success in that c=
-ase.
->>
->> Either fixing kmem_cache_alloc_bulk() (and the comment) or fixing the
->> user sounds fine to me.
->=20
-> Would it be wrong if we just returned true for size of 0? Would somethi=
-ng
-> else break?
-
-I think it won't break as nobody should be accessing an array of size 0,
-and it matches the previous behavior.
-
---=20
-Cheers,
-Harry / Hyeonggon
-
-
---------------Fos0wBgvdCggrd0C0H32WobZ--
-
---------------YwQVGEEKxGzkrAPA10HjJL0h
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCah1vfAAKCRCGXBN6rc5S
-1n8cAQCqp4CsOu+ZPkt9JTKGMEjAbun8lhAPjYEe5ZxQbjlUnQD/Yqc0JkpGdJ3B
-cq4AV3Pw4qMLNMrm3+rVRHMdUu9OmQ0=
-=RNAw
------END PGP SIGNATURE-----
-
---------------YwQVGEEKxGzkrAPA10HjJL0h--
