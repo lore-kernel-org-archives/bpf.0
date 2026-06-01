@@ -1,151 +1,153 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED9E3ED3BF
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780338935; cv=none; b=L/QkZb2VXFYyTgb/Y0jWi9SQUr9nA00siuUK5ISYGOyb6jYf3mZoG6Tb+U5jduIYMTYnVDSFdnQJXrjnOMMsskXXMXqofwdGAjUwUGXcYJRoJbbqhwUiA5ZNPDhR9Zqh3Di1e2j5wmVGTLR7UZtxSeOlWcnnsDRWOXp2G+piRr4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780338935; c=relaxed/simple;
-	bh=rzNYfCVd4VyGmm+4pmOLHdgbgeONw++P6WQ8Wn8hnns=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qf3essu6BsyCGWwTxE9hMLia+5wbECJoUHCURzEew/LD9FqXuOze8f+83Le0X+vEyRWRsRrhtnu1mg/oTH9+fNYTHoStGjRwmHNNM2ajuCEjAnaJu3J7cheXAFhQU/pplopGuoRMc2322DoayTUiUWuVx2euAJA3PTXgYPl04W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pQZ1+yrx; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BD525B082
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780339031; cv=pass; b=ObDV5QH5gNepRVO/onlEYIAFSxqmwT6vA+gDlXiPrGcGcIe2elYVNDDmX9AAt1Xcs8P16QaW0Oj0UkXpGTjwC1Sei+WBtaZrNrWXnw4zhU7pghIHAiACX2BKyavwyR+583LlH0n5vuTKavTYgCgtzHDz5dAR5YR9R0yhb9d/MEI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780339031; c=relaxed/simple;
+	bh=BcYRpq671NSY068+BbMd+Lz28HJcQwg2rs1w9g7BNTY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ancMRZUJJJB8pVGRK3BNycz2aYzOF7m11Ll9MDl4zPsMKvxDT1XL57bXmy1vKmeRo6n4byPhAqR9Cn0K7likM77wjAEv/qGFc2WE4RVMh2kWkBRnSaPFNNQBBeVnWnnQDD0w0YQlU44vQKxeJ2GAcfdI9VFzB2D+g5qYupUGnJA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K1yMLhS0; arc=pass smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pQZ1+yrx"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780338920;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G11kVTgeG4Bceb+ehzyecPZsVsSNBd8mkyLStQA5/T4=;
-	b=pQZ1+yrxMFaXAaZyYhnvJt7vXj8Os4W8m60Is3qW8rw6nQKXVfgPoAl1xA8Owwr60peQK7
-	USCnQAZWQ3xYdu1FeXPr4sxqsYvbJAtHsYcm5Jwt5coDW2Erq8xJqfIKbh8ddIYEcV8LTq
-	tjMiaNHTk7gLIQrA62E1T0WxXRe/3IY=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	acme@kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	jose.marchesi@oracle.com,
-	David Faust <david.faust@oracle.com>,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PAHOLE v3 1/3] dwarf_loader: Extract die__add_btf_type_tag() helper
-Date: Mon,  1 Jun 2026 11:35:09 -0700
-Message-ID: <20260601183511.594100-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K1yMLhS0"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7dee6b76a73so31229517b3.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:37:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780339028; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CmfZLUFaH2Kn9/NfpYWzRssu+NmTCqUOB53iBoyF/dhiiq5bdEbV8DTj8NNb7bJ88T
+         hqr61rAeIZEf7VBs/dgN8yaknOi79T+ei6xQ7RYYaDDRQRqJhLFBV1UhKts4y3Ek6MMh
+         CWo+dxje9+JQckoDvmcqMS0/dlvYAuK/IkPXZXdDa2tBzZTei/EN81hEBNCK2ZXVCJHm
+         B9lEb2NXgXDcAW6x6xwUqYI5n6a1CHVvcWUu8Qco4FcpPprw6dQ9pDtccVfQs3C8OK6G
+         Jcqjnf7ZO0tU++OILAScj0sxActJJ2ZfAzny+mPI1Mvg0ZP/KjYYuwa1BzztxG2VJpbL
+         Dwsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
+        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
+        b=eYxHxujULp6te/pMKJC6NXWWt75H/EesUPVqr6Bj0RyWMd90J4OhFON0Wqd6oxxlXl
+         +5MA3GjfxfUgslYUc/PQ6Z2PbjoWn4B2RCXfNSj66fKM46xN1467Z8WvCJ73Ceqt76/0
+         jfXJuzmofzPmB6kY/gCV7V+P184TtKlhdwUIamsM7cyPNpgQG9sxbhllV404tPy+5LN/
+         TkLxTJ3Q8XBjRrtcVWVp7c85ztt3fA/FsMzpVQh499a2pfifKmIS7+NTiRNsnU8WatGs
+         oEgOy8Er5G0Rw3qHz2U1x5ZMNl2ajFws6vZS/kmHnaWmoTjJDXm37Zs4Uuv2qjBX/nQv
+         SN4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780339028; x=1780943828; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
+        b=K1yMLhS0fO/LbH2RA62jv63658f7Fr/NgpGcdq3kFJbP+BswnjR9E9FHBOZ4pdlUQX
+         Mox9//4US7PF0oxNr8BoJ3eFzzMcu8LdemAZ63PeHyMMOGkSbWNLBawofn3a9tYPrQtZ
+         dQfkMBKysB2MkZMvoSbSXjWnBTUKk6mfiH3ga11k3Kd9bHvj7bg/sl+x0dXcYeX2U0TE
+         WndcKXwsOZ0G0Y/m6VvpZ5les0lY6AImFDk9MB+2pCoQn7y19Bp5RURExnItBExdAvQL
+         6OUzYRjKVOGIV62CNwjfKECB9rHvLKREDiSuSlLPCpsNSSKC4M/YefhsvEpfiBTkogvR
+         qjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780339028; x=1780943828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GotfCq9kR7UkZKVQl6oMniUEgKCNQcaIoodJS7a89mg=;
+        b=cJv5UTnxUZKnfayjZIi4Yof2n+oysWU74L+ebE9dhD5qVLWzId0YLjcGC1U0YpRyki
+         uPPWXyJ92ovzRPeMcjwebvpp5c/nzCyi2VqWLVJefrVXnOIsC438wHRRVwB8FtfFR2rM
+         2kuJuBi9KD45sYpyQam1+B6YgTavIQznzpawlOoOnBFEndxi9gGmTMmddR6+Z48JzJ7Z
+         iimwRZelBk2eOrrlqEVda7F0VUuOM0F8amUIbuDyuB/JxXIDIeU8uNUBXMvw2VMpqP4t
+         rWtjlTS/BfC3JQ3zZzwkykvLw4979HnN/NeK05XHHdyAnJbSsVTZH6z5Ecl/W06/7Sya
+         vCwg==
+X-Gm-Message-State: AOJu0Yw7B12q8zFfWJpxkvzK2GxS+jN2PJavMADmty7FtBMnxfiyv3s6
+	a2qlIY8MYAzFWlnaxQXrGp9tY6zBxYFyQ75LByCNO/A0eQ/sj56ujhS3/6FngHw5vgU7DGeJImY
+	aeRUU0x/BD8gQLRnUD9xCy1Y3/n93Odo=
+X-Gm-Gg: Acq92OGRwsJeGEvcsVFyvPbmj6RPABt9563+cEju63I2/5hmuCHqgzk72lpBGb6Xrf8
+	I7V5OAgtgT2/VCK3zOAbUgzouYYBuVkVYwOqE4ZGHxGzQdYhaivRkuYgfJHAd3XStsyDo7c3LfL
+	sO2ZB0qXtg2Ul4d/p8+N67XA3wE20VhqUP8E+hIQzpKvO212y9rFHKi8zs4PmDxcNUK91zBTFxX
+	hCSR6ocTaYCMc+3hgBUxTxDY4x5gb9qN+C68MYh2PBwHL5jvnzza10UiFNIerHogZaryP3xYSDe
+	u8B4UqYAbaMr39RDo7Z0TFfFXrFAwFQHxw==
+X-Received: by 2002:a05:690c:b92:b0:7de:795e:e9d7 with SMTP id
+ 00721157ae682-7e05d8d6a32mr116071367b3.39.1780339028165; Mon, 01 Jun 2026
+ 11:37:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260529014936.2811085-1-ameryhung@gmail.com> <20260529014936.2811085-6-ameryhung@gmail.com>
+ <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
+In-Reply-To: <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Mon, 1 Jun 2026 11:36:55 -0700
+X-Gm-Features: AVHnY4I9CBzKtblKLCUQevdJLh4pes8gAkfu0ieQIjxc5qQnQ3RAujzPIsyPi-s
+Message-ID: <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
+	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-NFC change preparing for DW_TAG_GNU_annotation support.
-Extract the btf_type_tag annotation creation logic from into a helper
-die__add_btf_type_tag().
+On Mon, Jun 1, 2026 at 11:00=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
+>
+> I think refsafe() needs an update.
+>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>
+> [...]
+>
+> > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> > index 877338136009..5945956a7573 100644
+> > --- a/kernel/bpf/states.c
+> > +++ b/kernel/bpf/states.c
+>
+> I think refsafe() needs an update as well.
+> Something like:
+>
+>     --- a/kernel/bpf/states.c
+>     +++ b/kernel/bpf/states.c
+>     @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_state *ol=
+d, struct bpf_verifier_state *c
+>
+>             for (i =3D 0; i < old->acquired_refs; i++) {
+>                     if (!check_ids(old->refs[i].id, cur->refs[i].id, idma=
+p) ||
+>     +                   !check_ids(old->refs[i].parent_id, cur->refs[i].p=
+arent_id, idmap) ||
+>                         old->refs[i].type !=3D cur->refs[i].type)
+>                             return false;
+>                     switch (old->refs[i].type) {
+>
+> Wdyt?
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
-Changes since v2 [2]
- - die__add_btf_type_tag() returns pointer not error code.
+You are right. It needs to compare parent_id, but maybe only for
+REF_TYPE_PTR like below.
 
-Changes since v1 [1]
- - NFC reinstate some original comments
+        for (i =3D 0; i < old->acquired_refs; i++) {
+                if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap) ||
+                    old->refs[i].type !=3D cur->refs[i].type)
+                        return false;
+                switch (old->refs[i].type) {
+-               case REF_TYPE_PTR:
+                case REF_TYPE_IRQ:
+                        break;
++               case REF_TYPE_PTR:
++                       if (old->refs[i].parent_id !=3D cur->refs[i].parent=
+_id)
++                               return false;
++                       break;
 
-[2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
-[1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
----
- dwarf_loader.c | 57 +++++++++++++++++++++++++++++---------------------
- 1 file changed, 33 insertions(+), 24 deletions(-)
 
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 16fb7becffee..8b5b526299b5 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1600,14 +1600,43 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
- 	return tag;
- }
- 
-+static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
-+							    Dwarf_Die *die, Dwarf_Die *adie,
-+							    struct cu *cu, struct conf_load *conf)
-+{
-+	struct btf_type_tag_type *annot;
-+	uint32_t id;
-+
-+	if (tag == NULL) {
-+		tag = die__create_new_btf_type_tag_ptr_type(die, cu);
-+		if (!tag)
-+			return NULL;
-+	}
-+
-+	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
-+	if (annot == NULL)
-+		return NULL;
-+
-+	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-+		return NULL;
-+
-+	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
-+	dtag->small_id = id;
-+	cu__hash(cu, &annot->tag);
-+
-+	/* Prepends: for annotations tag1 -> tag2 -> tag3,
-+	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
-+	 */
-+	list_add(&annot->node, &tag->tags);
-+	return tag;
-+}
-+
- static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
- 					       struct conf_load *conf)
- {
- 	struct btf_type_tag_ptr_type *tag = NULL;
--	struct btf_type_tag_type *annot;
- 	Dwarf_Die *cdie, child;
- 	const char *name;
--	uint32_t id;
- 
- 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
- 	 * and return
-@@ -1627,29 +1656,9 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
- 		if (strcmp(name, "btf_type_tag") != 0)
- 			continue;
- 
--		if (tag == NULL) {
--			/* Create a btf_type_tag_ptr type. */
--			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
--			if (!tag)
--				return NULL;
--		}
--
--		/* Create a btf_type_tag type for this annotation. */
--		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
--		if (annot == NULL)
--			return NULL;
--
--		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-+		tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
-+		if (tag == NULL)
- 			return NULL;
--
--		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
--		dtag->small_id = id;
--		cu__hash(cu, &annot->tag);
--
--		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
--		 * the tag->tags contains tag3 -> tag2 -> tag1.
--		 */
--		list_add(&annot->node, &tag->tags);
- 	} while (dwarf_siblingof(cdie, cdie) == 0);
- 
- 	return tag ? &tag->tag : tag__new(die, cu);
--- 
-2.54.0
-
+>
+> [...]
