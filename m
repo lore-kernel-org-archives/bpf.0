@@ -1,155 +1,131 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D80D4369A
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 01:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780278173; cv=pass; b=K9ifx5dncZ1qhBRy3RjRF4NhlEHlSZ/D4g3GIAs4YSCwKeJ2ymDrwZ40IGSHvpxcclzJzykD+a53S8TYpSGP73W6cfLqLd5FhF3zWabQKvg+1ZEEy0mKqG81+KhlLqQktSDuGfc/NAvQBwQou9nJ42UjN/TLICFz6s2OCJUO3lE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780278173; c=relaxed/simple;
-	bh=1SQw3rHHmwJUM/B/fNJMq+S/nMdmh2BRJEnqOmPw2as=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WDK5/PtR2mYAUC+ps0XUQpE3YcXFDcxXRiHTnM5RDA9zaUq2JBrN9C2YDm6ZHoSAbAUGiM35OBsmHAQOf/pCfZfXH59YckE7abyAPmwqP0vB2io6k8uh1EdIqV+BsMhQlJp0hLQqj3m1IdV0Iur1nvWJpkWJXzxWrhH2fHwnGBA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdXvrHXG; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527351CD2C;
+	Mon,  1 Jun 2026 03:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780283313; cv=none; b=Y/qXcbwN6ondajFmJao833zYzzdQVdsfKDFrRAJY/ubNNbzlxK2LRcJQP4290Lo9M4jsj1e/s+GRpZ5B6cjkcCkdO4RPF2AgJokiZUxkmlVOc7s7uuO21gEQw7TWVECqNgOkSV+0StKaPfmY4rnNACi6OeqUWXUjYN77MJsR5a8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780283313; c=relaxed/simple;
+	bh=tMDfNkGQ+Wl5mAlRHZIVISbW6X21lwUZRzgzAXlvml4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A4gqOoxsQK8c5W/c+q9VbeJmgwJTbljia12StHaBHKt4fVS7cuZg3IBWqKbgGbtjBbwZ3rHQQaRkL4ETj8cCmd7WqF0LVHjpdEx95QkxrbtyP8VQFFB9+EGoYdDOimWgKvnXFFBH8xM5cGIw3q8JKuRf3VYqL21bBtrifBcUlng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=iOYhuolm; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdXvrHXG"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-45fd461e4a5so824092f8f.0
-        for <bpf@vger.kernel.org>; Sun, 31 May 2026 18:42:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780278170; cv=none;
-        d=google.com; s=arc-20240605;
-        b=H/d1NMFx+hG2wqo84RMax0IWeriEJGXuSbnG8N/aHvJuH9oV09z8i3hsKD8DX4+0mv
-         +9vbwAvFTvN4t64dzU13g0nrq8JJchi2kp2cy8qf1u3HypnDD8BjqshUCSpgRhBlnIeA
-         F1Mj/wuSRX4EVNaXI9KjOc8XKRqArFBL+i/ISCSZGw23azUUOJqI28Hi3X5yllwScQUf
-         LwOnJ7sLA0mV1+RX3DD9olksaZbJDvgnr/AL8BVfRm39RnINeR8Lm21B2/MhKfz34bvf
-         suCtX1ykbwQkKYGG3zxq4TjR85290kN5gxoT56Hv7veDWlWLLFjqGoNeMpupftm/4R3v
-         rM8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fI9AGBHWrCu/vWdIzq4GOSmcoyxsFLE6j/7qelnpJcI=;
-        fh=n+CFhUxPc2M2/wbvXX8s5niLFzTAK2LP9rvtwhlHEkQ=;
-        b=BfWD4x0PVeavNkvjBRgCqrXSNtETf6BnjiDcojn8xkaZeqClmYgoZ27R6b9Hcwn2mO
-         hvNOoRkjOC4qzJ9ixfpTzWqflIO5AZAqVNHiwue1vHLr+berIo1vYoL3EHozM9RlNHTs
-         Kv+wx3NaZjUg+q4fikh5TAwodu7Bp1tlZ+XON1/IO//DoW5smXvivsEs0nebWtpul4H8
-         2mF2UvZKf465kLPxAT4HTW9RTaRsz/VcSRtouy8G5dXHDfsJAgcsF1GevHNUPccIyvLE
-         N9Zzow4CmlI/9mhX+rsTiMxzxK3Fdgx0SWSg16/3XdloBj7PC+iZxRSBrrx23U90n161
-         t0Qg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780278170; x=1780882970; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fI9AGBHWrCu/vWdIzq4GOSmcoyxsFLE6j/7qelnpJcI=;
-        b=cdXvrHXG/GZjnDDOA9uUrJbSiKS/nq6dRpO7y+NnnE+xYbcu+GyoKlvGQp/dcG4VKb
-         Zd6QVc9VzkQ3bPQNqh7KQMckS677FGduTHjVsJ4lca12X2Df0qt9NdlZFB+xaDdE8Rrm
-         FKzltMp6wF+Yv+sB1Ghs3SwxLla+dDpSt7Ptldg6Y4/ZIC/GmaTMa2SscMrJYnlnDrjr
-         zCnIT7Fb+bT39xYS9cPC5vMItjdkkygbg3hZn4zN7NnO45g4p8t/Fd624xpsjbuudxzU
-         1ViwBzfPzUqx7U8xdYPouEsKp9IxepTmpDk2uqyaN/iXMbSMDTsyJtA5lsWkK674Fbmk
-         kWOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780278170; x=1780882970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fI9AGBHWrCu/vWdIzq4GOSmcoyxsFLE6j/7qelnpJcI=;
-        b=T0MxBidiFGWsc1+Rm79GjzyPAnuw1c4YA/eqq9wKnNd3SCnxomp1IUJXpFYkWCA3KD
-         PG+Qlskpn33di3SKiAWIycbJ9A6dpcbu7UWqMO8mgYBUsQ9ovm2HUpYu46Xje1o+j/7N
-         rShKxk7IXbO3UU/+yl2UDgVj/Fc99vt0MLj12miOUD5kwIX5TniAlR+a0jr/fgvonSfh
-         i9RleB8tgVH4CXNael3u3Jz0qnzX+o8QFbXa5ZQVzrHZmRB+RH/ZsP7RSCTWjilL+cUy
-         9Q4WO3UXlt6L6ppopuJi4VkpRdG6nYIglFNo3+2bksxMY9qYRph9rgape60GS2DmroCN
-         FKMQ==
-X-Gm-Message-State: AOJu0YyoHQdxHT/RXjgnwkMw2w1lg9ULp7awCH7Fxyt1cVj77mnnRK4u
-	eHYQX9U+QBsL6rEh0ju5FqoDorRUkwZBoqxi9fVCfHbWuHAweQUnMW/FfPvBmoKtvCng1jP0AgN
-	LJreVg9PjYE/3MxHyGZTIqYCSkNdwgx/oJg==
-X-Gm-Gg: Acq92OEK+bpzbqns556bVdh9Hs7DMbG4cAW2Shq94ZsRz6IaM/OHgPV0b6mmWycAmIE
-	2Vf9CzOCqK6TI99N0Gc49TxZF+L4P0o9PXe+rtyMLenML+aU8mYPdx9v4fu3nM2XjMYbXBcPn83
-	YSNK6wzUaA++xD0bq9Feuf5wgNmaqFio2BJoeIYGJC70CdWqjp4cRcGhS+lEDWHfnME8U85GwJW
-	NFyxqEZVYWBNBFtR1WBdSzJZ3w92hlRaCz7SEaZa6LvCDlH/5LBWUiGtUi5oMMZ/U6EPoZrBzSH
-	tEbKWRem7ZII9wdmbgkZrSRTF2Yd03DSg8ofxnA9cSRXMMRVk6grdcR7GSFH2Tpmxrrd2ADgirg
-	bY8nG
-X-Received: by 2002:a05:6000:5c3:b0:45e:fa4c:47c8 with SMTP id
- ffacd0b85a97d-45efa4c4bbbmr13291146f8f.27.1780278169823; Sun, 31 May 2026
- 18:42:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="iOYhuolm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1780283257;
+	bh=QO1KFyPL1+J1GrBWkpwiZMrb/LxQzYLbjd8amO7TedE=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=iOYhuolmDrpDMi8DESaZSPILqmUGv4xlmzuhj3fAKEihvM5S3pr4RlMZR2G9YIw80
+	 0Lqbk46CgfI7I0s3nIGWiHg/9VMR2WTnjUBg4aKmm9cX1TBITOKWrCWOudOJuz59FI
+	 zMdFQEqFy6cTdjhZBOcnkFT0WksaPi24GUIYiidU=
+X-QQ-mid: zesmtpgz3t1780283242t05aa13f7
+X-QQ-Originating-IP: YRCbA7bqRKH6wAc7eU+oyoXj0OqwQdNppr3PyW5KP6M=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 01 Jun 2026 11:07:04 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 17389882740423473155
+EX-QQ-RecipientCnt: 17
+From: Shijia Hu <hushijia1@uniontech.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	kees@kernel.org
+Cc: paul@paul-moore.com,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	kernel@uniontech.com,
+	Shijia Hu <hushijia1@uniontech.com>,
+	Quan Sun <2022090917019@std.uestc.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>
+Subject: [PATCH] fork: Ensure copy_process() returns a valid error pointer on failure
+Date: Mon,  1 Jun 2026 11:06:49 +0800
+Message-Id: <20260601030649.2513937-1-hushijia1@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260523160025.16363-2-paul@paul-moore.com> <CAHC9VhR6RSq1TUgAyvHmaF01h87Cazy=BNJhk654BP8yfeSwng@mail.gmail.com>
- <CAADnVQ+WTfgO636GqgxzJ6r=jENpG704kmNAsy-X8=WyjMOV+g@mail.gmail.com>
- <19e55c1c1f0.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com> <CAADnVQ+JDtc_GdxCv6tWAT03k85PTc0+zdcpCQ6NU-T8yJcu0A@mail.gmail.com>
-In-Reply-To: <CAADnVQ+JDtc_GdxCv6tWAT03k85PTc0+zdcpCQ6NU-T8yJcu0A@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 31 May 2026 18:42:38 -0700
-X-Gm-Features: AVHnY4KyQFn04X4dWlQGyHLkT-INPicXgTz14ihkeRdjdGaPQttUsvgaZ_6DhR0
-Message-ID: <CAADnVQKwxeunxW3iedoaquGAEvO+2jO5fpgbvxMGW_UvWzpdJw@mail.gmail.com>
-Subject: Re: [PATCH] lsm,bpf: fix security_bpf_prog_load() error handling
-To: Paul Moore <paul@paul-moore.com>
-Cc: bpf <bpf@vger.kernel.org>, LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-1
+X-QQ-XMAILINFO: Mutteg8H72qDCQX/Hl1ykzF6t2LTCtRZBPGXwJEdobHtvkNqUgyOXt0g
+	wEAO/c5hG5SAZgq49k+ndUo58+480+tGkFT5WLwqpVjwD1JichFtSmknyGsJU18T9FQjKSX
+	HOHTfCwln3+kJEIff1KUiMuVXeBW7Ksg66Uo7Kle9OC3OV3WmrEROPL5JKEEwVGeiCw7naD
+	kkiPoBZ+Lpsgbi1BjXrtVkba1Mrf8OQ9ASK6dgNltj8qST/IFpGfyVWOyd5/BmBRxk72XtF
+	r0OhshlLB6eZca7sIpqNqWR7LqSjDMcWNr7jhC9p8T56vfAltOwmg0cAYCXNgZTljbY04d0
+	yMTUNFf20YQJ9LGKN//k0z3qlDxNgTdu+EG0QemaU4sGyRbrYmCY0rYJ+8bEQXDo7TI0mi1
+	eqcDro50Z5Qs/1vn6ifd1AecLj2MIMBRGKbiZjgARYn3aOX2lKjkhbQMqG039dTti7ZN0Cf
+	Oz8B68NTJB1Ts4iUItuQzaggtyBeeNpku9rYPDWL2VHJrQyxjewYDBQb7IOMwUT86aGyG7B
+	lFNDT4esYr2BbvD1LcUg3kHW9hmg2gtbKIiYWHew6jus+57cjq+9i8tIb8LM4ItPzdNiTNL
+	PHmpO3FRt+onVEgfrS/ifL1F0Fbq9R/aU7MSQ7Ql//vAFFclei+Xjp8bcJmMvAYi/hFujrx
+	WhO1N6lXca4C2QgkcukJwHO/WEYPN3Xq/BmzyulhVkJIwhfOIpA89+j8loxmBjE8APdPOOu
+	0YjaH5A/mxg3gcMaK90m8sL9iEfr93uu6jz3CWer/b57dNSzJ6v7VAcj99fAoCweLCO55Um
+	QZZDBaLd+9W52k4smQ2+wt2vxvPDFthkg3b13A4wwbbI3Vh0ULDHUorDK2BU2ehiS38eTIN
+	V1Jz/gDy0PnBUAosjW5MLw3wEaE5D/emUu7XkYNEB9SmwlI6cV0acXmAQ7iV3fAjGRGQK5b
+	K06hyctPExH/qfdtladvZ/AF9TM383GP8EgV9eRftIf8iIunb9n5XQFvkmoAVEz9p3Tt8hk
+	m3F/71sGCjLCtVzZJh
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+X-QQ-RECHKSPAM: 0
 
-On Sat, May 23, 2026 at 10:19=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat, May 23, 2026 at 6:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> >
-> > On May 23, 2026 11:25:55 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > On Sat, May 23, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > >> On Sat, May 23, 2026 at 12:00=E2=80=AFPM Paul Moore <paul@paul-moore=
-.com> wrote:
-> > >>>
-> > >>> If security_bpf_prog_load() fails there is no need to call into
-> > >>> security_bpf_prog_free() as the LSM will handle the cleanup of any =
-partial
-> > >>> LSM state before returning to the caller with an error.  Thankfully=
- this
-> > >>> isn't an issue with any of the existing code as the LSMs which curr=
-ently
-> > >>> provide BPF hook callback implementations don't allocate any intern=
-al
-> > >>> state, but this is something we want to fix for potential future us=
-ers.
-> > >>>
-> > >>> Cc: bpf@vger.kernel.org
-> > >>> Cc: linux-security-module@vger.kernel.org
-> > >>> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> > >>> ---
-> > >>> kernel/bpf/syscall.c | 4 +---
-> > >>> 1 file changed, 1 insertion(+), 3 deletions(-)
-> > >>
-> > >> Alexei, I'm assuming you would prefer to take this via the BPF tree?
-> > >
-> > > Paul, I see that you're intentionally trying to piss me off.
-> > > It's not going to work :)
-> >
-> > I promise you that is not the case. I was looking at the sashiko result=
-s of
-> > the latest Hornet patch and it identified this potential issue in the e=
-rror
-> > handling code that is an issue independent of Hornet. I posted the quic=
-k
-> > little patch above to fix the issue, and since the diffstat is solely i=
-n
-> > kernel/bpf/syscall.c I figured you would want to merge it via the BPF t=
-ree;
-> > if that is not the case let me know.
->
-> It's in a queue. You can monitor it here:
-> https://patchwork.kernel.org/project/netdevbpf/list/?series=3D&submitter=
-=3D&state=3D&q=3D&archive=3D&delegate=3D121173
->
-> But please be advised that when submitters ignore issues
-> found by bots and maintainers agree with bot findings
-> we mark patches as changes requested.
+copy_process() returns ERR_PTR(retval) from its error path, so retval
+must be a negative errno in the range [-MAX_ERRNO, -1]. Values outside
+that range produce a pointer which is not caught by IS_ERR() in
+kernel_clone().
 
-Applied.
+This can be triggered by attaching a BPF_MODIFY_RETURN program to
+security_task_alloc() and returning an invalid value. copy_process()
+treats the non-zero return as a failure, but ERR_PTR(1) or
+ERR_PTR(-MAX_ERRNO - 1) does not produce an error pointer recognized by
+IS_ERR(). kernel_clone() may then dereference the returned pointer.
+
+Normalize unexpected values before returning ERR_PTR() from the
+copy_process() error path. This keeps the fix local to the fork error
+handling contract and does not change BPF_MODIFY_RETURN verifier behavior.
+
+Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/973a1b7b-8ee7-407a-890a-11455d9cc5bf@std.uestc.edu.cn/
+Link: https://lore.kernel.org/all/20260411163556.8567-1-yangfeng59949@163.com/
+Cc: stable@vger.kernel.org
+Signed-off-by: Shijia Hu <hushijia1@uniontech.com>
+---
+ kernel/fork.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 8ac38beae360..40bfbdfffbdc 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2599,6 +2599,13 @@ __latent_entropy struct task_struct *copy_process(
+ 	spin_lock_irq(&current->sighand->siglock);
+ 	hlist_del_init(&delayed.node);
+ 	spin_unlock_irq(&current->sighand->siglock);
++	/*
++	 * The error path returns ERR_PTR(retval), which requires retval to be a
++	 * negative errno in the range [-MAX_ERRNO, -1]. Normalize unexpected
++	 * values to avoid returning non-error pointers to callers.
++	 */
++	if (unlikely(retval >= 0 || retval < -MAX_ERRNO))
++		retval = -EINVAL;
+ 	return ERR_PTR(retval);
+ }
+ 
+-- 
+2.20.1
+
