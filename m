@@ -1,41 +1,33 @@
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69D02D7814;
-	Mon,  1 Jun 2026 14:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE5035CBCB
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 14:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780322616; cv=none; b=t4Z2UswsOnqpV2MwZC/5IkVoW1flzsvuRQJlxd9IltGntzvj3DB2XHd1TqpglgpPsDeaYrjd5dpChYJTXXqVQgnQ0kY7O3I8gFY6YC/TPUzweuHXADdML7H0H5/NZ2IB34L4FY3XekUHqBt5hxrn2m6D30CVTkbjeDPpBNtEhiA=
+	t=1780322786; cv=none; b=lQmC5KCbfIYheHbCuAcglXjZEZt5o7fMCO0WQ8LJ+w96hC0sxDQ5qhzisE0oN5vMpRlhkVT2TRYp6y6a/7iYbl/TuJyeDZy3ZKLWjdwvjGodH374d2QV/1bvEM3GqNE+meO/NVu2B4k5LI0loMAulreeYVNq2GISEUtXe5zb434=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780322616; c=relaxed/simple;
-	bh=pFJIqDeaWrMvahiHGdcqSxz6FkvVq/4GbXGe1GjxqeE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TqMzmPYTJu2ci4SHAi3iaSEaF+y5Cm1YiYGNiMvSPv22MaJbqcNE9giUn7oVntrUBM3eyaLVxoLOzqZ5j5gGC+sbLtSul07gpJrODjVgTtpdgTZTwvRZa/lNVv/vAIfDAyZIjVOQlCOXO7VOe2hW7JX83HhPiOWNYC97/iBMECI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=azJmNSlp; arc=none smtp.client-ip=130.149.7.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
+	s=arc-20240116; t=1780322786; c=relaxed/simple;
+	bh=87oLyZmLsiFjZF7jB9KLY/CJxCkU+nuAU8S9NOl8RiU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d5AagwQnooEBKBUutcMCDrCVvoBICuequrE38miqCWR9wo8mpfHA5myrM9Xtk26Mv51KsucIfOrE1tyTU6rK+ob7xxlb6WkpGhjxUD/9ztO6foNGHIr3K2R/lxAB6PHB+Wra6sA9vQBYrzO1Ae078CGrU+yTPJ4aEkKnz5kRHMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nire0FXl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="azJmNSlp"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-  d=tu-berlin.de; s=dkim-tub26; t=1780322613;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tDG4VykIhIHhOK+bN90wmmIsdIE+X8I2BhMgPnpIXxs=;
-  b=azJmNSlpRMCtoJ+20IqBeagLBuzlblRFeK16luomc502VSuX7g30ONRX
-   Kir2QWp7rWR5Zl4C2kapRNB3z5LtZH5KccxReCUp/u35Z8o1ows1htrv5
-   G8cFGuMFANiFAx2nBwPM0H06eMaoSizQI3AlxvwAB+rLGOTM/dUSyVbCh
-   kBi2+qCdiKsTbJi1u7ROXutoJTRCVBP9oTsdo/3MazJ/+kLBSh3YHMxE5
-   hcPXKvNgcHh3eEjbpQL1+TSKR29xdZhhd9Z3KrNdCofW5iuXZp5EMZHKW
-   FB/NHTYUX9XD8CDfENffCNI/n6WUJ5XmIp1x2SemQNudXSrq5vTlb1wA1
-   w==;
-X-CSE-ConnectionGUID: CipTNT3vR42Yltn3nkrzAQ==
-X-CSE-MsgGUID: nEG69EGvQ/m53QDp4My90A==
-X-IronPort-AV: E=Sophos;i="6.24,181,1774306800"; 
-   d="scan'208";a="48077604"
-Received: from postcard.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.142])
-  by mailrelay.tu-berlin.de with ESMTP; 01 Jun 2026 16:03:25 +0200
-Message-ID: <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
-Date: Mon, 1 Jun 2026 16:03:23 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nire0FXl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A6C1F00893;
+	Mon,  1 Jun 2026 14:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780322785;
+	bh=VECLDAnNXBn3TMxzCh3wlXNOOx2Q/MMjAm1p5f8BDnE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nire0FXluWDmsRssQ1pShJsTT/vILKjWSC3nj+JCpJN2hxcS0RI1pa5JnAsXln/5+
+	 msJouifi8yb8PCPXcOrBfA4nP51A+lxV6IRA+r8is9tpS7wVMj7RTaPUTYWVrVorYM
+	 UVD/dBuPb/3OOV65ln09oMLdR6tna5SzeszdIBPQBET6t9YlUZC5jEPLuZzVQOQibT
+	 oURpCMAfZXaB3G69L+Sl6ypcyN4/etIsp+/eo6ZpPIjOo0Fxrt7y9qXTVLKux4li0S
+	 NKvhssCoOwTMT8W6BvXyc0RltYQtcTTPZrJbxjuPOUY2wBucI078hGSW6Hycfqey2W
+	 m/3EqxNp1teig==
+Message-ID: <ca1bb6bf-f25e-44ba-87c5-e23e4939dbd5@kernel.org>
+Date: Mon, 1 Jun 2026 16:06:20 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,124 +35,81 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: Simon Schippers <simon.schippers@tu-dortmund.de>, <hawk@kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
- <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
+Subject: Re: [PATCH v2 bpf-next 3/4] bpf,slab: Add slub-backed allocator for
+ bpf_arena
 Content-Language: en-US
-From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-In-Reply-To: <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
+ eddyz87@gmail.com, vbabka@suse.cz, harry.yoo@oracle.com, david@kernel.org,
+ tj@kernel.org, roman.gushchin@linux.dev, peterz@infradead.org,
+ linux-mm@kvack.org
+References: <20260530011345.99342-1-alexei.starovoitov@gmail.com>
+ <20260530011345.99342-4-alexei.starovoitov@gmail.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260530011345.99342-4-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 6/1/26 2:00 PM, Simon Schippers wrote:
-> On 5/28/26 09:46, Jonas Köppeler wrote:
->> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
->>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>
->>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>> excessive NAPI scheduling overhead and qdisc requeues.
->>>
->>> Accumulate BQL completions and flush them when a configurable time
->>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>> queuing delay to the configured interval. Coalescing state persists
->>> across NAPI polls in struct veth_rq so completions can accumulate
->>> beyond a single budget=64 cycle.
->>>
->>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>> completion.
->>>
->>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>
->>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->> Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
->>
-> Thanks for your testing!
->
-> However, I have issues reproducing.
-> I run bare metal (without virtme) with v6 + your pktgen patch
-> and I am on the branch pktgen-and-benchmark, commit
-> "results: add veth-bql measurements":
->
-> 1. ping fails with 100% packet loss ~20% of the times with --pktgen.
->     When this happens the avg ping of this run is mistakenly set
->     to 0.0 ms, which distorts the results.
->     I fixed it locally by rerunning when this happens.
->
-> 2. pktgen runs with > 3 Mpps even with --nrules 10000, see log below.
->     I see that this is because of qdisc drops.
->     I also tried pfifo and sfq but with the same result.
->     I spent quite some time on it but I do not know a fix.
->
-> Do you have an idea?
-> Thanks!
+On 5/30/26 03:13, Alexei Starovoitov wrote:
+> slub side:
+> 
+>   - get_freepointer() clamps the decoded pointer to the same slab
+>     page via (object & ~slab_mask) | (decoded & slab_mask), NULL
+>     preserved. Worst case under BPF corruption: chain aliases within
+>     one arena page.
 
-Hi,
-yes there are some changes missing in the test script.
-I have pushed it now, sorry. This should fix 1.
-Regarding 2.: do not look at the pktgen output, in the
-new version you will see something like "goodput",
-which is the number you should look for.
-Pktgen will report at what speed it enqueued packets in
-the qdisc.
+Can't say I'm happy about this part. We potentially let BPF programs corrupt
+the metadata and hope we catch any issue that would become fatal?
 
-Let me know if it worked.
-Best,
-Jonas
+And IIRC from the LSF/MM discussion it's not just cases where the verifier
+would hypotethically have a bug, as the potentially UAF accesses are not
+validated by the verifier at all, hence the different address space and
+32bit arena size trick, right?
 
-> The raw log:
->
-> sudo ./veth_bql_test.sh --pktgen --duration 2 --qdisc fq_codel --no-bpftrace --tx-usecs 100 --nrules 10000
-> INFO: Setting up veth pair with GRO
-> INFO: Threaded NAPI enabled
-> INFO: Installing qdisc: fq_codel
-> INFO: Loaded 10000 iptables rules in consumer NS
-> INFO: kernel: 7.1.0-rc4-patched-20260307+
-> INFO: BQL sysfs found: /sys/class/net/veth_bql0/queues/tx-0/byte_queue_limits
-> INFO: ethtool tx-usecs set to 100 on veth_bql1 (rx side)
-> INFO: Starting ping to 10.99.0.2 (5/s) to measure latency under load
-> INFO: Starting pktgen queue_xmit on veth_bql0 (threads=1 pkt_size=64)
->    [5s] BQL inflight=1 limit=17 watchdog=0
->    [5s] qdisc fq_codel pkts=27417 drops=6591520 requeues=14115 backlog=0 qlen=0 overlimits=0
->    [5s] softnet: processed=27960 time_squeeze=0 multi-CPU(6): cpu0(+5) cpu1(+121) cpu2(+33) cpu3(+116) cpu4(+27641) cpu5(+44)
-> INFO: Ping loss: 0% packet loss
-> INFO: Ping summary: rtt min/avg/max/mdev = 0.127/1.818/2.703/0.761 ms
-> INFO: pktgen results (thread 0):
-> Params: count 0  min_pkt_size: 64  max_pkt_size: 64
->       frags: 0  delay: 0  clone_skb: 0  ifname: veth_bql0@0
->       flows: 0 flowlen: 0
->       queue_map_min: 0  queue_map_max: 0
->       dst_min: 10.99.0.2  dst_max:
->       src_min:   src_max:
->       src_mac: 0e:aa:4e:05:95:89 dst_mac: c2:e5:a3:4c:2a:7f
->       udp_src_min: 9  udp_src_max: 9  udp_dst_min: 9999  udp_dst_max: 9999
->       src_mac_count: 0  dst_mac_count: 0
->       xmit_mode: xmit_queue
->       Flags: NO_TIMESTAMP  QUEUE_MAP_CPU  SHARED
-> Current:
->       pkts-sofar: 6516031  errors: 102854
->       started: 12246566004us  stopped: 12248535234us idle: 0us
->       seq_num: 6516032  cur_dst_mac_offset: 0  cur_src_mac_offset: 0
->       cur_saddr: 10.99.0.1  cur_daddr: 10.99.0.2
->       cur_udp_dst: 9999  cur_udp_src: 9
->       cur_queue_map: 0
->       flows: 0
-> Result: OK: 1969229(c1969229+d0) usec, 6516031 (64byte,0frags)
->    3308924pps 1694Mb/sec (1694169088bps) errors: 102854
-> TEST: veth_bql                                                      [ OK ]
-> INFO: Results: /home/simon/repos/veth-backpressure-performance-testing/results/selftests/2026-06-01T13-24-51
->
+I'm far from sure the masking is enough to contain all the bad things that
+can happen as a result of a corrupted freelist. Even the hardened version
+wouldn't help much I think, if a malicious program can both read and write,
+it doesn't have to know the secret seed to craft valid freepointers.
+
+The "freelist is outside of the arena" approach we discussed made more sense
+to me, even if there's memory overhead. I don't think it has to be 16 bytes
+per object, could be just 8.
