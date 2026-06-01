@@ -1,297 +1,116 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3000A3E1231
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 17:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780336682; cv=pass; b=OCZRo5YVaI0ipyuRvmc1pnpcMU7PwhZRVXqrO8YxMTbv/EWr61MTjy0MI0jKmNKcMlX4X+T8XRyXRLaAgtBaodYrOAocycwwpisHHT8QoRwQf4HSEVU6UbhBl6VAbpiK+SGBl/u84m2d3JLAFADRt8ikra1xVVxSichIff0Pf+4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780336682; c=relaxed/simple;
-	bh=V0AyIuBAvJoYwSEB1n+sM0KY82YDtCldie3vhEDiiIw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ejhbipm1cWuOTHnmIemUBrtmEnerR7v9Inp36ZsnlBHe4SODZGSrCduw/6jhWkqqOfegTZpvd5m8Ks3qs8cCAh6e56+AP5wk1ih8/cXFWrQgD9XUgyRoH0Mjyh7eWceFqtj+x6Ksheb4DzK7IgXPBQzdThLxLEffEH1M2NBN9oU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SWqHT1s1; arc=pass smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28672D9EFB
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 18:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780336828; cv=none; b=jqdaJO+6fBE72NyjKTyAOmmEepbbITska6wkw2nkEt72FpAFavl2EFaSoXYK5HI8I/AM3bZpaxbKhL2BE2Usr4d4ZfFgeO4wDDHD/Cxta7SIo/yxuMcQLtHao7IeNqD8F/bHBCC3Cg8FWwUPP+jys9hXlaiLole3/mbLpSNUDO0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780336828; c=relaxed/simple;
+	bh=TEwcs9QV6IRkpLFCirJt9niMwetx10OpdmiVpveQtLE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OFAf0G+R/Z2ojLj3R2ywZpeewwCiRkfaP+2irDnIgWHOj1FhtvhFi59V41edKp/is63kwvJli5S/KGBaZwU7WIMt3BJAO8cCkb8jsXu8Tn82fNLpKV6ApykvnJtBKKoNIt5AZeINV5FL5Q4rvfhR/CighjQvgV+48ff/ljFBBhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QfOkREbR; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SWqHT1s1"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36bba9a1089so2019091a91.3
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 10:58:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780336680; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BbqQmxPS+5UeFjL/HqWpkMdkBN1YkMM2oKQto/GjqmrLT/XuPKGJKG9pUkWTjMhSUI
-         Awzac5a7IvYjkgSQ8ROZuMWRp3wXNbkXbiXBw0AftMJZIoMofNNtS43FndDKRmyJxOsF
-         W7i4zCZEOtDeFNSBM4dAEuoHLq1eH+dOED7brJEzZMCnLacWnV8Akfe54ZJEmBlYTjG0
-         3XPdc0ivg3A3OZ+5tKZdjeZGrUbEzqw3rwLuuzFmAWsK1GjdXUY+CONXQAGHonbx/8iE
-         /NzCWqE8yRWMYBuCAaMUIa/JRJ83qYf3yWksHlysu8rhabX+x3SX2857vocCH8s02u7v
-         Qm+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=p9cunrKbhPBEEg6xrZRc0ad56PnSPNo22kcqhPhkQOY=;
-        fh=qEKqbHGP5tiaxI9iFAUBKdCmMefB3HXVQADjrnWhCIo=;
-        b=JsmTST0/5+XZAKGT7GqMZxnUMJNF7tLQlw4sw1cMPKTbs3Q+4gXVaSaLJZUHqsccWn
-         IxFekIl4M7SZ59vQG4NLmuprKXy9r1yJVE1wdxaY/WUo2b5iDOeSsDZRpL1V4Qi14Tae
-         OHBfsYm4VROxbnqXO6hnCIfflIy/4cllYW3IEeiiWGORiyWOawxkTzZPJEIswvvOGtvV
-         Z8m6/0KtZ6wF2sNpI/suWyXgtU30BbC96FpFdmWpgOffvnPI74AsV/U2PsmmgPLaRpuw
-         sucVtIhf8ajwjHkU/0TFlLPkO2SPYukyQBmpcSiMkgmwZeJ+tsKuMvpc7uRBHUa+PPxT
-         +Wfw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QfOkREbR"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-13721dfd471so9678726c88.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 11:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780336680; x=1780941480; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p9cunrKbhPBEEg6xrZRc0ad56PnSPNo22kcqhPhkQOY=;
-        b=SWqHT1s1xG1I8rnYMZ9jGassWeVYA2354+MVVoellgAu4vXEopaXS1zU3nmb5P4Bns
-         4PhfXFmCWqb4mrd4yewHJxaZxwqO++fLi30hOeBgXJpjpf/XlC1dbE+bDVzF2tt3/qGb
-         qZFTnKcRcvJY3ddsS96an+8dZRJdPvrsJoLhmIL6EbFL0Nfh2cjuWEHK4a810b3q9PNj
-         NM60OTAnWGlau+aNd6ftxroI0oVbYz/BiYH2AzHCFMLkKKia9tM1VNDh6VwmYnLDEBAJ
-         CoDhyJ60pS4qCGs6WJ1nem9HjGPCfbXes6NKtW//8+qxj+p4e+Mandkm+ams/91Y/w8V
-         Bn5g==
+        d=gmail.com; s=20251104; t=1780336827; x=1780941627; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=63QzUSItxjqthVwyw4x4XOqLTeOM5ciWj6AEgFnXSaY=;
+        b=QfOkREbRRvj7gdvSSW73LCHtnfHqKN2pZElFZmegsNZgU7xzheP/pt84P5XaBw3zIZ
+         W7HU2HQ8jU+Bp7QGnBzgdNlb3DNHssKRKzVMM8Nha+1b4chOdCi+mFUDIQXuCGKmn24S
+         UBQ+bolbAgCbsWrwtbAh2UA1F6vghwQTkujxNXPpGF/b4JIHVjQA/mJIWULjb9g28S1r
+         XO6xZZM1+dcAfFagQ8HpHLxgWgZWKpscAnRp9iEGD238kXJ74F3CGLuI2jgkw92NXMO8
+         w57iBrBKmtT2v7SAbmD3SYurIc3GMX/uygd3M1zu2atN0hKMG6QlCfFijTnXUOxkpvAu
+         ziGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780336680; x=1780941480;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=p9cunrKbhPBEEg6xrZRc0ad56PnSPNo22kcqhPhkQOY=;
-        b=lRV8fTOTE97ZiegUGIRqT7IRewxsUlm9g7DZch2leoRufDnw60BIb/RVmupeXGecYo
-         6FsEDuf2gQwJWCQMi/NM+6UvQLVGWMJswGNBTwaui5QepS0PBtM6QlkdbkN/ng92aTrF
-         1JaODaG+sRV/o5Ln8P3vJ4kXHeK2q9gUoulVQVm53E1bQtYrxnklryIIrFtOlxvyROL0
-         MlZZPc1Idx2qHih/5PnIeafADrTx0qUQMXrQKkptJSs/w6TLYLq6X33ADHW+pdsmEsmo
-         5JIsYRd+21ls58F5vcB4PNYVDPElDtPt43FkyOafL5G5qWJOJ1Klu+D0PDdQhJPGcgs/
-         WiMQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/eTCltjmsFhlFkqRSQHhvg7eiCc7oNDH6SyZOHYc7pBaGPOI8SGU44OhrRk6uPHsfQp44=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7B39E+rAcz1m9dDhSVJlQ7NPJdeSjvG4caalnoKbkX57VC6ft
-	a2637lyi8IZtztovSdAvHUWlwVuhJhLy4iqpBkTBkLJ082768br0SllqJcNjMX/8IqUqFIdQi/J
-	IoE3UDKyUlBFkrP0H81JCyBYuy5kFy5c=
-X-Gm-Gg: Acq92OENtd73VFnUKd8k2TSTL8V/k5X0ozOBllhCAIuArsCgX4LfL2KVmH4Vs00MIpU
-	dRZqww7ezLjCzS2QYK28s0an5TT/P8AfxxqZmydJAGf8E+9K8rH3SzXeFQsE3JsisLhk9ZQ4kul
-	jtAj41vcWuKCbjdppP04MHTET9MuhZN2JnVslVHkChEWh8C5MO/5WDI2zxCpOr/F3hdtK2DToW6
-	MCgsEBb+UaZBJnjN3kSUrVmJPwObuyY8gxdGKWbN7XALJu9wgbBKKf1Aw2nD0GTQVnTQZMqH9mN
-	LR9xdKBsfk3scK5DgB5Um2a4/W3HruFcLQ==
-X-Received: by 2002:a17:90b:57e7:b0:36d:70c8:3a1 with SMTP id
- 98e67ed59e1d1-36d70c8067cmr10789372a91.13.1780336680330; Mon, 01 Jun 2026
- 10:58:00 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780336827; x=1780941627;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=63QzUSItxjqthVwyw4x4XOqLTeOM5ciWj6AEgFnXSaY=;
+        b=QBG3VibXJ9eP36bcLf3BcK8vciGBY1GJeFiOQGprWophfZr14ds35ad8vWuIkhZn9c
+         kPmgPJ+Wb9TMpceC+5OMhynRahQI5huMdhlCmNAuXOUBOrRnT+6PDVI/22bn5VMeJ/Hy
+         T/Z4X+IiarI6l6wHtr/BVsfwX3Pqfj9pKZfVldTjZp0drmRiuvmyBGONqZi9v6Ha5uvW
+         h/gqT11xNaZO0WVawtvJW/wlKxP7l258b2j9u0F7exnb3J1e6NnX7NvHxkQM65DCxYLn
+         x5RNobEMx7X6lrDndEBBvL+vwVleVvg/OOEcExNl0EqJVYss5OxRmZ+jPp3ziwDzwgDG
+         N3ug==
+X-Forwarded-Encrypted: i=1; AFNElJ89fTV0xnhgJpWjMCJnj9NQWYGK7z639ziErp3KjD98Fja5rI1I80+KvWALIpdd9GvpTYg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBJOjCD8VSwcE5aZ0m1ogQuhEY8ToNqgCuZBuCelTCkkbby8ml
+	xaky/Iv+8n+x0KqQ9CAEAL+dnM0B2TQssc6H644RBO4kN1Ta4rSY89sU
+X-Gm-Gg: Acq92OGoGY6+96kCqNLSe3y4X6ouGRS+gqSKnzjhlIn6QlysqMu4nY6Pv6NssSrp7i2
+	PehqplS3Klf9AqnfHCUqzC5RzQTA0hfgDQJ+3z+lXf5InWryHAbHSQ8FihRU0YcOxtnP5CGLut9
+	uo4C6094h0qkmuTcmxZpCuVuvDRsMQwc0cN+dak3EXmn8T0zbgPL9k1JFosXXUAcL5kxodC7IqX
+	32r9X7rLE2TqSB04rW1Hk298Ptb4ZHLfQ+UGWq+ZRXSqQMUe5lXmLAzIxdJ5rLNLW2i/EcZkhPb
+	rRcqBPg6M2N996rz5i7hlQ4K22ZHShZIIPcjTUotPw3qdeJyITTL3qyM1vmCIbNByxOVSACwjsG
+	CennX8JEdg+gF8Tf8hy29w9kLS1kRFEQdy+eTLvAyW2FRL8d8sYiOnwL3jMqlwMjj20j6s5Et2+
+	Z2xDbGWD11zBY9Ux7Bd6tm9U8Ibr/crZ1XtPLbJY0CIJyDRzd2jW5whe2JC3rNIMQdNnO64yn9z
+	9L8rhCJ8ARUIokJNNT5ocEpjEc=
+X-Received: by 2002:a05:7022:4b:b0:137:6781:7dc7 with SMTP id a92af1059eb24-137d423c272mr4699930c88.19.1780336826867;
+        Mon, 01 Jun 2026 11:00:26 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:34dc:a4cc:76e5:e597? ([2620:10d:c090:500::7acb])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137dc179940sm5050092c88.5.2026.06.01.11.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 11:00:26 -0700 (PDT)
+Message-ID: <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Date: Mon, 01 Jun 2026 11:00:24 -0700
+In-Reply-To: <20260529014936.2811085-6-ameryhung@gmail.com>
+References: <20260529014936.2811085-1-ameryhung@gmail.com>
+	 <20260529014936.2811085-6-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260528151023.00f5ec4e@gandalf.local.home> <CAEf4BzZh4qyPiMbpZPeVGx+HFNjBjAHTsNOx5wE7RWidM-iphA@mail.gmail.com>
- <20260528222051.60b38433@fedora>
-In-Reply-To: <20260528222051.60b38433@fedora>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 1 Jun 2026 10:57:46 -0700
-X-Gm-Features: AVHnY4IgzIUtaFJjFD6GEDfSr9bqs8NyIuJyZe8rVOr1umdD7w4Drge0QkU3Wlk
-Message-ID: <CAEf4BzYu+eRC9Q3msOOVPeqtoi++P_gCsPqVS6=aC+dvAW40Qw@mail.gmail.com>
-Subject: Re: [PATCH v2] unwind: Add sframe_(un)register() system calls
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
-	Indu Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, 
-	Beau Belgrave <beaub@linux.microsoft.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Florian Weimer <fweimer@redhat.com>, 
-	Kees Cook <kees@kernel.org>, "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>, 
-	Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko <mhocko@suse.com>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 28, 2026 at 7:20=E2=80=AFPM Steven Rostedt <rostedt@kernel.org>=
- wrote:
->
-> On Thu, 28 May 2026 16:01:06 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> >
-> > [...]
-> >
-> > >   * Architecture-specific system calls
-> > > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-gen=
-eric/unistd.h
-> > > index a627acc8fb5f..17042d7e5e87 100644
-> > > --- a/include/uapi/asm-generic/unistd.h
-> > > +++ b/include/uapi/asm-generic/unistd.h
-> > > @@ -863,8 +863,13 @@ __SYSCALL(__NR_listns, sys_listns)
-> > >  #define __NR_rseq_slice_yield 471
-> > >  __SYSCALL(__NR_rseq_slice_yield, sys_rseq_slice_yield)
-> > >
-> > > +#define __NR_sframe_register 472
-> > > +__SYSCALL(__NR_sframe_register, sys_sframe_register)
-> > > +#define __NR_sframe_unregister 473
-> > > +__SYSCALL(__NR_sframe_unregister, sys_sframe_unregister)
-> > > +
-> > >  #undef __NR_syscalls
-> > > -#define __NR_syscalls 472
-> > > +#define __NR_syscalls 474
-> > >
-> > >  /*
-> > >   * 32 bit systems traditionally used different
-> > > diff --git a/include/uapi/linux/sframe.h b/include/uapi/linux/sframe.=
-h
-> > > new file mode 100644
-> > > index 000000000000..d3c9f88b024b
-> > > --- /dev/null
-> > > +++ b/include/uapi/linux/sframe.h
-> > > @@ -0,0 +1,12 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> > > +#ifndef _UAPI_LINUX_SFRAME_H
-> > > +#define _UAPI_LINUX_SFRAME_H
-> > > +
-> > > +struct sframe_setup {
-> >
-> > I'd add `u64 flags;` field for easier and nicer extensibility. Check
-> > in the kernel that it is set to zero, future kernels will allow some
-> > of the bits to be set.
->
-> That sounds reasonable.
->
-> >
-> > And I still think that prctl() instead of a separate sframe-specific
-> > syscall is the way to go. I see no reason for sframe-specific set of
-> > syscalls just to set a bit of extra metadata for the entire process.
-> > That seems to be the job of prctl().
->
-> I personally do not have a preference. I've just heard a lot from
-> others where they want to avoid extending an ioctl() like system call
-> or even create a new multiplexer syscall.
->
-> If we can get a consensus of using prctl() or adding a separate system
-> call, I'll go with whatever that is.
+On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
 
-prctl() is an already existing multiplexing syscall used to provide
-some per-process (of per-thread sometimes, it seems) hints and
-options. Please consider sending prctl() extension, please CC me, and
-let's see what arguments do people have against extending an already
-existing syscall.
+I think refsafe() needs an update.
 
->
-> >
-> > > +       __u64                   sframe_start;
-> > > +       __u64                   sframe_size;
-> > > +       __u64                   text_start;
-> > > +       __u64                   text_size;
-> > > +};
-> > > +
-> >
-> > [...]
-> >
-> > > +
-> > > +/**
-> > > + * sys_sframe_register - register an address for user space stacktra=
-ce walking.
-> > > + * @data: Structure of sframe data used to register the sframe secti=
-on
-> > > + * @size: The size of the given structure.
-> > > + *
-> > > + * This system call is used by dynamic library utilities to inform t=
-he kernel
-> > > + * of meta data that it loaded that can be used by the kernel to kno=
-w how
-> > > + * to stack walk the given text locations.
-> > > + *
-> > > + * Return: 0 if successful, otherwise a negative error.
-> > > + */
-> > > +SYSCALL_DEFINE2(sframe_register, struct sframe_setup __user *, data,=
- size_t, size)
-> > > +{
-> > > +       struct sframe_setup sframe;
-> > > +
-> > > +       if (sizeof(sframe) !=3D size)
-> > > +               return -EINVAL;
-> >
-> > This seems overly aggressive. It seems like the pattern is to allow
-> > sizes both smaller and bigger:
-> >   - if user-provided size is smaller than what kernel knows about,
-> > treat missing fields as zeroes
->
-> Well, that could work with unregister, but for register that isn't
-> quite useful, as all fields should be filled (well, if we add flags,
-> that may not be 100% true).
->
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-This is a question of API design. If newly added fields are optional
-by default, this works great. And even if you are adding some fields
-that in the future will be mandatory (or it could be mandatory based
-on flags), then it's super easy to error out if they are not set.
-We've been doing this for years now in bpf() syscall and it works
-pretty well overall, while also keeping user-space (libbpf, for
-instance) side *much* simpler. I don't want to imagine bpf() syscall
-which in each kernel version enforces a different size of bpf_attr
-union...
+[...]
 
-> >   - if user-provided size is bigger, then check that space after
-> > fields that kernel recognizes are all zeroes.
->
-> That is dangerous. A zero with greater size could mean something. If
-> the size is greater than expected it should simply fail and let user
-> space call it again with the older version.
->
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index 877338136009..5945956a7573 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
 
-Could, but it shouldn't if we extend API reasonably. And if it so
-happens that zero will be meaningful, then you add a new flag that has
-to be set if that field is present. This is a solved problem.
-Requiring user space to use differently-sized structs for different
-kernel versions is much-much worse.
+I think refsafe() needs an update as well.
+Something like:
 
-> >
-> > This allows extensibility without having to change user space code all
-> > the time. Old code will provide smaller struct without new (presumably
-> > optional) fields, while newer code can use newer and larger struct
-> > size, but as long as it clears extra fields old kernel will be fine
-> > with that.
->
-> The old size will always work, thus old code will always continue to
-> work. If we extend the system call, then it must handle both the older
-> size as well as the newer size. User space would not need to change. It
-> would only change if it wanted to use a new feature, and if it wants to
-> work with older kernels it would need to try the bigger size first and
-> if that fails, it knows the kernel doesn't support that new feature and
-> then user space can figure out what to do. Either use the old system
-> call or abort.
+    --- a/kernel/bpf/states.c
+    +++ b/kernel/bpf/states.c
+    @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_state *old,=
+ struct bpf_verifier_state *c
+    =20
+            for (i =3D 0; i < old->acquired_refs; i++) {
+                    if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap)=
+ ||
+    +                   !check_ids(old->refs[i].parent_id, cur->refs[i].par=
+ent_id, idmap) ||
+                        old->refs[i].type !=3D cur->refs[i].type)
+                            return false;
+                    switch (old->refs[i].type) {
 
-See above, many added features are typically optional (e.g., imagine
-some extra bits of information that goes along with currently existing
-mandatory sframe data). And it's easy to code user space code that can
-automatically and gracefully "downgrade" by detecting that kernel
-doesn't support some feature and thus just not setting the field,
-leaving it zero. But you won't have to track what should be the right
-size of the struct which in your API headers is already larger because
-you compiled something on newer kernel headers.
+Wdyt?
 
-Believe me, this is the right way to go with this kind of extendable binary=
- API.
-
->
-> -- Steve
->
-> >
-> > > +
-> > > +       if (copy_from_user(&sframe, data, size))
-> > > +               return -EFAULT;
-> > > +
-> > > +       return sframe_add_section(sframe.sframe_start,
-> > > +                                 sframe.sframe_start + sframe.sframe=
-_size,
-> > > +                                 sframe.text_start,
-> > > +                                 sframe.text_start + sframe.text_siz=
-e);
-> > > +}
-> > > +
-> >
-> > [...]
->
+[...]
