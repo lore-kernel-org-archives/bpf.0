@@ -1,114 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6743DA7F8
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30223DBD4D
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780327093; cv=none; b=lPNitCwaFUySx6RuqFrJECEp4spvh8V83FjNPOMCSW/fwncF6mp7dEbFbZvaGQ5l535G8LaELQChp2KHRHP9ZdVlaDCu8hlhYdXlC+EGac8QqqFOj1ag68O5UuRR9a7t8m5NXgfjKu6RqhOFBGkx8qOhu8Tc5O9cFcP1hc+vkT8=
+	t=1780327146; cv=none; b=OMf/dxe0pD7/bEXV+KWUiHa1jfUJ90feW+/qGUbQf+zVhCKwoElRxbBttT9nadiNlTTNgYy2T8ZBm/dBpfssBjGjAS7mOAejXV+gAQ5zKEIWtaxOSM2t+BOAim4c5SC3i9ZkWajLKBlrBlY+Tddr9bYmxG92ByAcR6q7mEAvGQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780327093; c=relaxed/simple;
-	bh=cDh6l7Is6S329yS7GAHsLnYONeADZnUGckriUzKIPT4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=g01fOSgfzc3rqUxmmq3BMmwR191ePq4Hms1CeTTG3xDYG0zkG2FxVLcE+GsVU9pWRLCURiyV6XuWZrZQSfGLS1SFfdgMozBGTd1yRRaPzOTefzNgNhyeQe/lRgeAQH7gYoAi2Gti97D342kab2V3aK8Lp0ZeAVsvGXhIN9uxDng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emgk7B87; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780327146; c=relaxed/simple;
+	bh=PQO0UZwXLLelrITKmhXhC6F0znNCjfRA0kOIy5ZvCNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WrnQSgHl8prQUpxIyoiyQ8+BSgw/8Fb7cl2OZS95Z20avktyVAbpkA1tVNKxaYo66gu3g5WKdSrfkAq1o3MB+DJb+6muyqDP0TjNVS7MEcFOQIp2JMN04b/qABwkk9KL8hYzDPG0kk84JWekfIw2PVVVg8DJCa6lr7oYvcf63fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gr4tGw/Q; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emgk7B87"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BCF1F00893;
-	Mon,  1 Jun 2026 15:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780327090;
-	bh=KqHwW6W0G5k8593E/bHp92tAsgJ78bDjKHYF63+A0fA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=emgk7B87zUGYiFzO8asfiE9i6nArbPfANCU3PLsvTRPJjryvgDY6JsOl5d240JBoC
-	 SqZQd4HEDBGDg1oSz+AM16QK1DYMaL7FoYYT0K75YbPoMqXS8WQdE6/5QcMhK8UjaK
-	 fAOxESyXk/VVu2CAg5H448ACkH6rqUrgcQbsW9yBkwDnR57IKhxoMIEcUCs/L00LqS
-	 CQj962uk73P4mipZfIwH+W5fLHTLHg53q6dSuw4fdoVRUMR3GhBRHF0HAOUPIfOa1K
-	 crOln7MSxpe8YAg7c631q4Xp+6Ws+wwR5aq2XeX0MJ5n7un2fWrrBtvyUCQmkr3+Fa
-	 EBRHV3tdJrZbQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/7] bpf: Reject exclusive maps as inner
- maps in map-in-map
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260601150248.394863-2-daniel@iogearbox.net>
-References: <20260601150248.394863-2-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 01 Jun 2026 15:18:09 +0000
-Message-Id: <20260601151810.68BCF1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gr4tGw/Q"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2c0c2a68d01so9886235ad.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 08:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780327139; x=1780931939; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aDR/0d6767AKXu4Gbp+1FbUsOAvR4r8bVucFSVBkYL8=;
+        b=gr4tGw/Q/FhooWcObcw2/szyDWZ8wkK15lcn36CakQOjov5TyO7oxkusGhs6mV28P2
+         aQF0CjvkygHGfktnoQHH1oXFfKN454R8r7FWVdv07qtQlPbVu3/BYzmHLg11AwElZeEh
+         /Fl45gYCucHNJFgwYHWvS1+tGN26C/6n/BGrihc7LCThEIFhA95T2e542MQg0nfDyQQ+
+         geWuEeu052TH5vZFxUdlUxlYO2OnqhvGINOpJYVBJ8SE6VNf23euGXSo560TRRQGfh3/
+         nbwFNu1JZEe+rI4yio0SVgxyJYkvSyIszcwV8yK2zuUFVn4fekcgjLT5sP3u1OLu9Lai
+         OEYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780327139; x=1780931939;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aDR/0d6767AKXu4Gbp+1FbUsOAvR4r8bVucFSVBkYL8=;
+        b=ZD3EgMMv5xbLVG0Kb2gAUyaxybBlnQis8CmydiFypXYzIsdjYPE0CdrTVUz4ivxB4X
+         9UnVaYMET4I1SsRAGLZP+NhFVIXcpVzgm84Gl50hshrJA/zYsxR8hlzB1BTEXU/s7eW4
+         oxPMs/+A7Qa0NwO0RkV3dMDrnVxAeSDwNi+Xpn/6PtCHBvZ+K/l/Q5JONcYm/UqqxtTC
+         vNSk7KAob5I2CnMFUZMUH8GVYAW9MsGyqdZ28K15u/xj+yDHoulXJly2bDEoOhC4sOM+
+         B33kHvhe5hfNdtW103bQaFGZtvNMvahGQlkn1+WmPxJ2ZufSk4bjyX21yVx7PGQAB4JT
+         nXgA==
+X-Forwarded-Encrypted: i=1; AFNElJ+vQQ1E5QFoT1mHFEu6APCOWU3+czye2kYOgZRGDhwMdJ3HoffvtLhiaVd+mhi8SHPTQJE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3GGC9Us2rg3R4lq/gXwmHvcwIgDlSegY3kNLZx54d5VAg+FNx
+	2LSJ5Fq3KdbWJsQazxU+ODxEg111f0+5COh96Iuna614lAS2kQ9jJ44t
+X-Gm-Gg: Acq92OGPjWYqKUj2CgYmf9YeSQdh3F9OCdN/6rwI0gTzq+nr8Po88h5ybWARxsoAM0I
+	7p5vaniaX1kCRPvexZBLSNzSx0HOjBDgeGSKKVaPwrZAYVqxzZK9J62Wu2aC494YCFo9hXye/ui
+	07pjmxQbxMxmk8XM9QxuoVuU9lr+MahQgWD74rwukn4+5HKoLwCRwFtVQbIPs3ByUZsWH/gK0d1
+	OKdT8qy2MKhl086+AAELUVhPdVGTok6yHlZoQeRg4KWjcxxZ32Jmu3I+BziRthbrU5pZ+HRsydc
+	s0SnJd6LcN5Py1kCSoDaogkf8lMkV+hVMskaz/MbFSxD3qllzi1zNNs0SErONjV4DxmOZP+eCMj
+	JmwcSJD2bQasH0CCq61dpHRoZ0oO8wfi1fnWFiyF/UhG5ETNnOEOu9WaRFPm19TTMP5hhkuFJNk
+	L/oFSEsYxJfZgpUsNeRMQA5HnYwLc=
+X-Received: by 2002:a17:902:e54c:b0:2bf:2b84:c207 with SMTP id d9443c01a7336-2bf3688e46emr142931175ad.35.1780327138899;
+        Mon, 01 Jun 2026 08:18:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:50::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf23b01732sm113263525ad.54.2026.06.01.08.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 08:18:58 -0700 (PDT)
+Date: Mon, 1 Jun 2026 08:18:57 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
+	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net v5] xsk: cache csum_start/csum_offset to fix TOCTOU
+ in xsk_skb_metadata()
+Message-ID: <ah2isNZZycGgMNOv@devvm7509.cco0.facebook.com>
+References: <20260530042630.80626-1-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260530042630.80626-1-kerneljasonxing@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 05/30, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> The TX metadata area resides in the UMEM buffer which is memory-mapped
+> and concurrently writable by userspace. In xsk_skb_metadata(),
+> csum_start and csum_offset are read from shared memory for bounds
+> validation, then read again for skb assignment. A malicious userspace
+> application can race to overwrite these values between the two reads,
+> bypassing the bounds check and causing out-of-bounds memory access
+> during checksum computation in the transmit path.
+> 
+> Fix this by reading csum_start and csum_offset into local variables
+> once, then using the local copies for both validation and assignment.
+> 
+> Note that other metadata fields (flags, launch_time) and the cached
+> csum fields may be mutually inconsistent due to concurrent userspace
+> writes, but this is benign: the only security-critical invariant is
+> that each field's validated value is the same one used, which local
+> caching guarantees.
+> 
+> Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
+> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
+> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
 
-Pre-existing issues:
-- [Critical] BPF iterators bypass map exclusivity (`excl_prog_sha`) and map=
- freezing (`map->frozen`) protections, allowing arbitrary modification of s=
-ecure maps.
---
-
-commit 94f0db1114c682145008741a58e7ea931a088e25
-Author: Daniel Borkmann <daniel@iogearbox.net>
-
-bpf: Reject exclusive maps as inner maps in map-in-map
-
-This commit prevents an exclusive map from being inserted into a
-map-of-maps. This addresses an issue where unrelated programs could
-bypass exclusivity guarantees by accessing the map at runtime.
-
-> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-> index 645bd30bc9a9d..d2cbab4bdf644 100644
-> --- a/kernel/bpf/map_in_map.c
-> +++ b/kernel/bpf/map_in_map.c
-> @@ -20,7 +20,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
->  	/* Does not support >1 level map-in-map */
->  	if (inner_map->inner_map_meta)
->  		return ERR_PTR(-EINVAL);
-> -
-> +	if (inner_map->excl_prog_sha)
-> +		return ERR_PTR(-ENOTSUPP);
-
-[Severity: Critical]
-This is a pre-existing issue, but while this patch closes the map-in-map
-bypass for exclusive maps, does a similar bypass still exist through BPF
-iterators?
-
-Looking at bpf_iter_attach_map() in kernel/bpf/map_iter.c, when a BPF map
-iterator is attached via BPF_LINK_CREATE:
-
-	map =3D bpf_map_get_with_uref(linfo->map.map_fd);
-	if (IS_ERR(map))
-		return PTR_ERR(map);
-
-// [...]
-
-	if (key_acc_size > key_size || value_acc_size > value_size) {
-		err =3D -EACCES;
-		goto put_map;
-	}
-
-This function retrieves the target map but appears to lack checks against
-map->excl_prog_sha, map->frozen, and BPF_F_RDONLY_PROG.
-
-Furthermore, the iterator context defined in bpf_map_elem_reg_info() sets
-up the value argument without the MEM_RDONLY flag:
-
-		{ offsetof(struct bpf_iter__bpf_map_elem, value),
-		  PTR_TO_BUF | PTR_MAYBE_NULL },
-
-Because MEM_RDONLY is omitted, the verifier permits BPF programs to perform
-direct memory writes to ctx->value.
-
-Could this allow a program to locate the FD of an exclusive, frozen map via
-its ID, attach a custom BPF map iterator, and arbitrarily overwrite the
-contents of the protected map?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260601150248.3948=
-63-1-daniel@iogearbox.net?part=3D1
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
