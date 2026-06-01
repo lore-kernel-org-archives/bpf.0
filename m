@@ -1,182 +1,133 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BEA313283;
-	Mon,  1 Jun 2026 17:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA90737268A
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 17:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780336368; cv=none; b=giPFhsfde9oIHIoE4+zjTr/hiS7TJTbFgy5yPKBC/+gV2cpkt/AsANHuRGFMOnEqBItwArgV1fxjSv2vBh9e5wPi7uTOoj/KAYtq2qSZP0MKYxct6C3ajJTh+I1xDDPGzNaEaKNKRKzB1A9hGVKcz/Sgmi19FFjYqAuUixbTKIw=
+	t=1780336482; cv=none; b=W2JmBThxb6H6OK8FdCJbd+BKUQnuNTq6P9Fm0BGspJWO4JA16dtcLeeQbtB8c4uE1Tw/JuFcKa2oDzmT9ziiWqDfKY+maQKWxIKmsy1QiCLmoDYqB6W524At86C92dcDkqFZhy1j7cSEj61z/7wF+quYUYQ6xZKa3+71k7KPJ2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780336368; c=relaxed/simple;
-	bh=tkclujgvHkYLTuO23cI6OpVItwnSDjP748IA7FR1ERo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QW/4fSwNPOR2r51PtkBndgjewWHljpQAqkVrJFyCuPStc2VICutD4BshC7mtcFpu1xnBTyPDdBqliwyk4JGtLOiPbIQ6LJExvvaEy4x5AS0qSL2Y44ceixLBsNq4Gybzxck2mP55JTHmETV+WYxI3V72wj4JfvIy3yKtOoeg39o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=D0ocUtQl; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780336482; c=relaxed/simple;
+	bh=QuWfugOytXeO0b1wxF7bijlHGp2GMNN8F233BLpEMgg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=S6JYzGDZ+x/J017km7eU9BWc4kEDkb4pIMXgpGc+iqBpy6tQFPGrY4zEvIVqpU+m0HThEUgBA9V3yRnTHK0hGMXK1dMcYwkpmNBmNAAHihDVDNZ9n1C6Ibst4QobBi9bTbITCm9toYyQYpDM9rCUOloxc0JeTv/ej5qHUdOdJ0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P8F6f95b; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="D0ocUtQl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zgc4xwnN5oQSA/IeHBtgQm+WBaU/mDcm7IEsfaNf1r8=; b=D0ocUtQltt2fs79KCi4eeQv1rT
-	9XkjBRMCAHhgNqX1Bz7zq7/D5X4AOb6sbMA1Vq904svCjDZAbKUGchkOxdawP/F6eQWjIBuaUQAfR
-	zUToLDEvTlWbY5N1Ite1hhnzL76m5O/hZvZuRqEVTBiwdV1LBK5PWmt1OoiRrnPsj441iIj6bblnA
-	K/WFVA+R18pc7EQ4GMBtm2hYr0ScRkSZclrOXHR44RnEwVRz64OA+Gioyix4kxCQYr6xB9XK+Kpf0
-	cXUFB7txWAMy9mUGOlZq5q28IpfqGFT321nynm6NRugDawrRQEw+e85DFLPHbbT8Of62FMs6sWmNu
-	xU2448xA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wU6of-002LjO-0i;
-	Mon, 01 Jun 2026 17:52:45 +0000
-Date: Mon, 1 Jun 2026 10:52:41 -0700
-From: Breno Leitao <leitao@debian.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH 2/4] bootconfig: render embedded bootconfig as a kernel
- cmdline at build time
-Message-ID: <ah3Fzof8H3vAvLwQ@gmail.com>
-References: <20260527-bootconfig_using_tools-v1-2-b6906a86e7d5@debian.org>
- <20260527173037.5C9061F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P8F6f95b"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-84235f9b91fso1405473b3a.2
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 10:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780336480; x=1780941280; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tWseiq4uumqZ00yU9HO4tB0QQ4Oyj0zXYc8zVlVyTfE=;
+        b=P8F6f95b7KJdDMz7iffRimJstrr4lBRbF2McyRW3+7yQm+Mw9wmr3sjKng7fZmPFPi
+         M6sZBZgLzhhq6r3STjl3BABjdjIMn/VCfyqIgQUsI5QZu1peGEPbpNuZmIiNsSG/XmuI
+         +ROl6RPEQE70Hv3vHt/cyMZHk/eSrh0+Ik37q0Ff2M4gFrc37eMqjQeaYLycGflpG/6B
+         aOqhXQGZMjMKv8fyKMFNCbMqt1j2nEMiM5fBq8XvPXY64qZwEfIlKcEDTd1ZN17OlZyT
+         HmYHbSn+9WgZ5dlRxFvxjR3xSClbMnLx9ttTDxP33TQ1gmJ7lMRR4XzlQZ4qNkQFynBH
+         CaXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780336480; x=1780941280;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tWseiq4uumqZ00yU9HO4tB0QQ4Oyj0zXYc8zVlVyTfE=;
+        b=pXvf0ATZmUGPRwfSrpMfr3s/eyvftqJ1RFUS1ARyT67Naj6UL9z4Q8brbFwomnT2eD
+         tU//lRzNdSG099vxNshDP/ZwrgSmgoWzmCK+MwQxJYbrCk7qD8PxqDwBGDShmDL1VrON
+         c3/HUAD7XEVtUqCHXzIwQgVLEf47KgZPrc7aEyIYkibVKW0KuGrX11LgozPvUIuj6dyu
+         Kq9BRGYj+3254VOTyaiy1tPrfzumcuvCFdu1ddF4Qj5ilSBDnYeKO+9+gpV9HMHCHo8/
+         WzwN5avsFWBQPPdcYH0PgxfePt8JBrcLU4Cm+352SkuR/8bKHWMWYQHElsnvhkNaI70J
+         Iz7Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+EC4OKg0CVn7Vf97NLxlVbJKoUgW6CR5vpe1BYaQMiQ2ZxM1BbjQVNmXFDonSQc89yy2o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynL2JQ29HC8kePY+i0694dY2NQGs1hm67ITnMBZH177PnsxRy6
+	3XmxCjVhjv/DvArxmmASqaRFcZ85Dhj05aA2SK3TEWdHhGiBCmraRiQ9EmxDP97jKhX3dGdtyPk
+	Sq3ez96QWy+f3K3G6r+7SXiI7Dw==
+X-Received: from pfbfs2.prod.google.com ([2002:a05:6a00:8182:b0:82f:6e26:770b])
+ (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:1a90:b0:842:5719:455b with SMTP id d2e1a72fcca58-84257194b05mr4280757b3a.42.1780336480081;
+ Mon, 01 Jun 2026 10:54:40 -0700 (PDT)
+Date: Mon,  1 Jun 2026 17:54:23 +0000
+In-Reply-To: <20260601175437.3767283-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260527173037.5C9061F00A3D@smtp.kernel.org>
-X-Debian-User: leitao
+Mime-Version: 1.0
+References: <20260601175437.3767283-1-hramamurthy@google.com>
+X-Mailer: git-send-email 2.54.0.1013.g208068f2d8-goog
+Message-ID: <20260601175437.3767283-2-hramamurthy@google.com>
+Subject: [PATCH net-next 01/15] gve: don't pass in unused parameter to gve_adminq_free
+From: Harshitha Ramamurthy <hramamurthy@google.com>
+To: netdev@vger.kernel.org
+Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, willemb@google.com, 
+	jordanrhee@google.com, jfraker@google.com, nktgrg@google.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 27, 2026 at 05:30:36PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> 
-> New issues:
-> - [High] The `tools/bootconfig` executable is built using the target architecture's compiler instead of the host architecture's compiler, causing an `Exec format error` during cross-compilation.
-> - [Medium] The read-only data section `.init.rodata` is incorrectly marked as writable (`"aw"`).
-> - [Medium] Missing 'clean' target hook for tools/bootconfig in the top-level Makefile.
-> 
-> Pre-existing issues:
-> - [High] Pointer arithmetic on a NULL pointer and passing an invalid pointer to `snprintf()` in `xbc_snprint_cmdline()`.
-> --
-> 
-> commit d68de9beacfcd22ccb081a670940139845227254
-> Author: Breno Leitao <leitao@debian.org>
-> 
-> bootconfig: render embedded bootconfig as a kernel cmdline at build time
-> 
-> Add the build-time pipeline that renders the "kernel" subtree of
-> CONFIG_BOOT_CONFIG_EMBED_FILE into a flat cmdline string and stashes
-> it in .init.rodata as embedded_kernel_cmdline[].
-> 
-> > diff --git a/Makefile b/Makefile
-> > index d59f703f9797a..3ee259d00a9ae 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> [ ... ]
-> > @@ -1543,6 +1543,11 @@ prepare: tools/bpf/resolve_btfids
-> >  endif
-> >  endif
-> >  
-> > +# lib/Makefile invokes tools/bootconfig to render the embedded bconf to cmdline.
-> > +ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
-> > +prepare: tools/bootconfig
-> > +endif
-> 
-> [Severity: Medium]
-> Will this leave stale build artifacts behind? Since tools/bootconfig is
-> wired into the prepare phase, should there also be a corresponding cleanup
-> step added to the top-level clean target so that make clean removes the
-> compiled binary and object files?
+Clean up gve_adminq_free to not take in an unused parameter.
 
-Correct, and this is the important one. lib/Makefile runs the binary on
-the build host, so it must be built with the host compiler. Plain $(CC)
-is the target cross-compiler under an ARCH=... build, so the tool comes
-out as a target binary and fails to exec. I'll build it with $(HOSTCC),
-matching how tools/objtool and tools/bpf/resolve_btfids do it
-(HOST_OVERRIDES := CC="$(HOSTCC)" ...). This also fixes a standalone
-cross-build of the tool.
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
+---
+ drivers/net/ethernet/google/gve/gve_adminq.c | 2 +-
+ drivers/net/ethernet/google/gve/gve_adminq.h | 2 +-
+ drivers/net/ethernet/google/gve/gve_main.c   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index 6e72d2c1cce71..9de0ac7732a21 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> [ ... ]
-> > +quiet_cmd_render_cmdline = BCONF2C $@
-> > +      cmd_render_cmdline = \
-> > +	$(objtree)/tools/bootconfig/bootconfig -C $< > $@
-> > +
-> > +targets += embedded_cmdline.bin
-> > +$(obj)/embedded_cmdline.bin: $(obj)/default.bconf $(objtree)/tools/bootconfig/bootconfig FORCE
-> > +	$(call if_changed,render_cmdline)
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but running bootconfig -C at
-> build time exposes an issue in xbc_snprint_cmdline().
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
+index 0d5a67523cba..d8d47a0c19b4 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -385,7 +385,7 @@ void gve_adminq_release(struct gve_priv *priv)
+ 	gve_clear_admin_queue_ok(priv);
+ }
+ 
+-void gve_adminq_free(struct device *dev, struct gve_priv *priv)
++void gve_adminq_free(struct gve_priv *priv)
+ {
+ 	if (!gve_get_admin_queue_ok(priv))
+ 		return;
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
+index e6dcf6da9091..9fbea0cc6513 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.h
++++ b/drivers/net/ethernet/google/gve/gve_adminq.h
+@@ -620,7 +620,7 @@ union gve_adminq_command {
+ static_assert(sizeof(union gve_adminq_command) == 64);
+ 
+ int gve_adminq_alloc(struct device *dev, struct gve_priv *priv);
+-void gve_adminq_free(struct device *dev, struct gve_priv *priv);
++void gve_adminq_free(struct gve_priv *priv);
+ void gve_adminq_release(struct gve_priv *priv);
+ int gve_adminq_describe_device(struct gve_priv *priv);
+ int gve_adminq_configure_device_resources(struct gve_priv *priv,
+diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+index e4d78ae52daf..30bf6df4ebc5 100644
+--- a/drivers/net/ethernet/google/gve/gve_main.c
++++ b/drivers/net/ethernet/google/gve/gve_main.c
+@@ -2506,14 +2506,14 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
+ 	bitmap_free(priv->xsk_pools);
+ 	priv->xsk_pools = NULL;
+ err:
+-	gve_adminq_free(&priv->pdev->dev, priv);
++	gve_adminq_free(priv);
+ 	return err;
+ }
+ 
+ static void gve_teardown_priv_resources(struct gve_priv *priv)
+ {
+ 	gve_teardown_device_resources(priv);
+-	gve_adminq_free(&priv->pdev->dev, priv);
++	gve_adminq_free(priv);
+ 	bitmap_free(priv->xsk_pools);
+ 	priv->xsk_pools = NULL;
+ }
+-- 
+2.54.0.669.g59709faab0-goog
 
-I will fix it in a different patch.
-
-> 
-> When calculating the required buffer size, xbc_snprint_cmdline() is initially
-> called with buf = NULL and size = 0. The first snprintf(NULL, 0, ...)
-> returns the number of bytes that would be written, and the code then executes
-> buf += ret. Doing pointer arithmetic on a NULL pointer is undefined behavior.
-> 
-> In the next loop iteration, this invalid pointer is passed as the first
-> argument to snprintf(), which can trigger host UBSan failures or
-> FORTIFY_SOURCE aborts during the kernel build.
-> 
-> > diff --git a/lib/embedded-cmdline.S b/lib/embedded-cmdline.S
-> > new file mode 100644
-> > index 0000000000000..7e2e1d81af962
-> > --- /dev/null
-> > +++ b/lib/embedded-cmdline.S
-> > @@ -0,0 +1,16 @@
-> [ ... ]
-> > +	.section .init.rodata, "aw"
-> 
-> [Severity: Medium]
-> Does this mistakenly mark the read-only section as writable?
-> 
-> The "w" flag instructs the assembler and linker to make the section writable,
-> violating the expectation for .rodata and potentially bypassing memory
-> protections. Should this use "a" or the __INITRODATA macro instead?
-
-Agreed -- the "w" flag has no business on rodata. I'll drop it to "a"
-(read-only, allocatable) in lib/embedded-cmdline.S.
-
-> 
-> > diff --git a/tools/bootconfig/Makefile b/tools/bootconfig/Makefile
-> > index 90eb47c9d8de6..4e82fd9553cde 100644
-> > --- a/tools/bootconfig/Makefile
-> > +++ b/tools/bootconfig/Makefile
-> [ ... ]
-> > -all: $(ALL_PROGRAMS) test
-> > +all: $(ALL_PROGRAMS)
-> >  
-> >  $(OUTPUT)bootconfig: main.c include/linux/bootconfig.h $(LIBSRC)
-> >  	$(CC) $(filter %.c,$^) $(CFLAGS) $(LDFLAGS) -o $@
-> 
-> [Severity: High]
-> When cross-compiling the kernel, does this build bootconfig for the
-> target architecture instead of the host?
-
-> 
-> Kbuild exports CC as the target cross-compiler (e.g., aarch64-linux-gnu-gcc).
-> Because this uses $(CC) rather than a host override like $(HOSTCC) (which
-> objtool and resolve_btfids use), the tool is built for the target architecture.
-> 
-> Later, lib/Makefile attempts to execute this tool on the build host to render
-> the cmdline, which will fail with an Exec format error.
-
-Correct, and this is the important one. lib/Makefile runs the binary on
-the build host, so it must be built with the host compiler. Plain $(CC)
-is the target cross-compiler under an ARCH=... build, so the tool comes
-out as a target binary and fails to exec. I'll build it with $(HOSTCC),
-matching how tools/objtool and tools/bpf/resolve_btfids do it
-(HOST_OVERRIDES := CC="$(HOSTCC)" ...). This also fixes a standalone
-cross-build of the tool.
