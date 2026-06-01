@@ -1,152 +1,213 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1071D3126CA
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 22:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780353374; cv=pass; b=nRPIz87VOkHhA1p+djk0Pr8XY6dUNHfVHWV9vQWI75TwgrJNcB/K4diqMosxgRBlnsiB4YSjX3ZMGPpd+fr6xm+SNiyB6DdfEjOOia4OiqW9A9zeSORA9GGhwvS/cLhroNZi3Nvfp3+LXXkj8QHRQYVkwJQNTxA4KyDTP/7Ndxo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780353374; c=relaxed/simple;
-	bh=qShT15SiklauvTxBI3HDr3S2EIVD83CbuXS1PnSYHwU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AoAt3RIEryWwcjMBJPVKjnUVVAJvOpSp+GIC3iuDftAc3wi3HWCcNsaaUTrDc/palmu85WbdIew8fyGZAYVoATCPzk+24eHK+1vfTlYcNbGXV3OUl2NnIk6tTmEnBOTi9/uW6XVFWpu0zdxcO7fjO5AaVo9ZxtA9FL0ns8I1bcI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o4AAvY/l; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9DF224B15;
+	Mon,  1 Jun 2026 23:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780355014; cv=none; b=sHNKKrqrCFXW5GFKyJNvl4cT5jzlKpLrodh+gp/pAnKsloH1Zvs7aP1/IFV18r56BbRi/9KK2ELDAtOtpwB7XDtxrj/eUE/9+gwNO65B95VabenXxhrJ/uJMbUk5d0daSOWKALMUEazh3uF2m3xrGnDHqdTJzrZ6Xf838M0Vfac=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780355014; c=relaxed/simple;
+	bh=isQPI1zRDgd+mM+LG3mk2/Xm9FHUEkkt1Z4KpTE/Gu0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=umWm+EstUDrINfR7SfMm4JQTXzkH9/9kdg+nfqiDKO8SPe7QOpAZr1d1fmy1c3fnSvUZq/mLImN51v0MHJ7cH1Lm3oFaHH/vZe+Hbd32b9JEr0DT0O3a1BX/10PzzEvFkmWlmXVZZxpmRypjZt2+wnfsci2nn8QO5EbR0x60s1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyrS6jkn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o4AAvY/l"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490b1bbcf3aso787565e9.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 15:36:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780353370; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TR/r0BQJvy4JMDWUxPE/VDI3L7jvBCDYCHIIf3cOLBucXxcd7P3YB2pM27pGSuG3Vv
-         Qsc15UAyLqB4S3JT2dT+ZYFT/S+vEYHhTrt4FUCUGg0RqBv2a5Tkn6Zx5RNM6NUWl8DV
-         zAHDYQUXM+4H2FBFyXOn/UpnPk5jtEsgRVh0QpQtklTvLIkddp89FXf4v59Y54I/agSm
-         7Db+LD9Rfh1nirKqeio4d3Sy/xjFQSSufZ6DyEWwbfvXf0zT8dxBqbxSIvjRNeiQVEsZ
-         eL/4SNomv8uljVxvcDkQh8gJY6m4akOYHABiRbVvk3sC/LUGJyrJ+XJ00KhxtlWf8ZOv
-         qSsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HLFcaG3D1qUmnaU8KnhhzIi1V2WP+UuBdpZV2zlitg4=;
-        fh=EUZ2Iy4FC4BpBWQ8oLqano43TyLbHtCqZ0NHQdZDXxg=;
-        b=LlWChRtkb5S7pXsF+vYmTXo6hR6Z3VVK4QU8jdtjhKKJclbmhSXjolFPDDuUEYK6vu
-         njkN4MPv/sFTxE8t/twZEC1k12/z9YpUArSlDygxnNkqLFEVBGzOhEOqKaxgRCyfQh+i
-         xy1nCb8+iCRD1fcQqGQ6VdYkQlHen+RlIGXyUZw/7bVkxUa0U3/ZQGMsxuIRueq5oGpu
-         ARN+Wq8dBcLp1BvTgWWLkmo1bVFm1/A73TJBhsN/grC1WsioiIEfj1IWR2h4GWigBwDD
-         x82y1Nl1FiohDev1oMx0BQcf7BMHI5cqtvmXSqye4pGTpl169IfG83ht/W81oVlwzBxi
-         5yWg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780353370; x=1780958170; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HLFcaG3D1qUmnaU8KnhhzIi1V2WP+UuBdpZV2zlitg4=;
-        b=o4AAvY/lrmvnvbxme7HUDd35mlvBo9PaEd4M80L+JAv2k7g/ykn3kO9iATJGSxU35/
-         gxSly3+7f97WQIlcePGovKpjfhev51M5YX69mAvNxsu1sgA6bGgOpj0c77bWKtKrSkvX
-         hgjKsJ/NXzLbHJ/jEm6AR+C2NA8iuIgWhwhzIlW1RUOaIxGE+dQhXQvUzIEpc+QjSko4
-         +kpWfGmM3dQWopmsRUU2etOhYDZg5pjlvTeYuZgvUiwBbq89KwFEHasSjCMEY63ZIaQc
-         E6ykJV1dfBftylypTA43pHs4SFHbJPCZVW99U5AsM0NabSTon5fmpRPXwhvSSUeVFySI
-         BK6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780353370; x=1780958170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HLFcaG3D1qUmnaU8KnhhzIi1V2WP+UuBdpZV2zlitg4=;
-        b=SHRCc9rJSGkfOMaO077aya7lMlJSeQDg7pUULofz7u+1k+crANez+0g7bld+lT6woT
-         8EFIKBbeqZYuGfMrElQQI1eeEySlQAR+6wgkRqMBauTyOL16xYFVm2RqJcRCi9n31d+L
-         B7PVBANzyAp9h9KfcDrmjYzWOsjTgFoXvVFMJDdY062ibgEkSJXLLA/SzalZ7Dzrkk3g
-         +un+NjZvBaA6yAzL89ZFYsKxlBhl3XMBQfVlZ32HCnNUbi28Gg9pwN9yXZM8nGND4axY
-         H1UfNNOtG/XwyEYHHAPTNRx0WMNfKznm/LRsSum5+ZB1ZEuYAhKYV3bYhOkGKYFm0RcF
-         DCRw==
-X-Forwarded-Encrypted: i=1; AFNElJ+tBWd1clj7pv55MTsIUU52BHmnjpj9Hx+W9UOl/csly+Ei7KgTsXkDUaVbfkG311bp7B4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcfRZVROK450ss410TqNe6HI55M9Nt+13R1eLAoGjLezSqYnVQ
-	6f2J7y81D8kSS94ba9mJB7GGpWAC94dMMMw6gitFxQdG5OFqQWELGVpqZp9LijBqWMVvXEiBBJG
-	gI6Q9EoNBVd/Ph3JX6xou9nHvs1M7Gro=
-X-Gm-Gg: Acq92OEiKAk0IjV5s850AaQLb7WwD8Doh9qc9huFQNDF++gk3zL1rnTYm/WTI73hcE1
-	WdzyhLQ7CJ8kL58MOAm8vWNhZvKCjOmks5gA5O150V9GLZquHkYFjHuZNM5ml7d2lpVSNshnM4e
-	zvVG2t9kcSqMToGRKvMZL/CaKuXy2OGHY7sBodcID5XVKLRqYI4C0zfUHLi7MLXKlMMaS7XTeR8
-	84Ool/u92P8bz42vshts9malmdgjt/RG6txtepH6XuGOlA2yjQ0Y69cp0jn7eKkkmACCKL0OASI
-	iU3xjeMxtl/BUFAWi4dVnijh9jp9TLo/PxHHFX0ralhq40Y6bohBlZQGAzj7zj5g6dINRQgeIl5
-	ZgORsf81kak8j2cFNaZyyjQJq8ieyxrvoZrff
-X-Received: by 2002:a05:600d:8648:20b0:490:9d5c:a3e0 with SMTP id
- 5b1f17b1804b1-490a29215ebmr177131975e9.9.1780353370288; Mon, 01 Jun 2026
- 15:36:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyrS6jkn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E151F00893;
+	Mon,  1 Jun 2026 23:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780355013;
+	bh=9D4ES3ttROPEmcAx3NEIjqAzNpNeNiLF3KE5qJOXFx4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=MyrS6jknW604Bzbt+k3Dv3LfpyqR8dXPAuYIZRlY47bqhL0XdrvduftsK6XVCXbHd
+	 6HC4SY4bi37nQW+ELxfHRwxgApEWhV8GQwbWN7POqrLradU51e22gupEXKSlX0beyV
+	 p3kSLiGEGrn2vRz1deBFz6UOyer0DT15VlOqMD8vEeGadDb7Lxrc6h/S6UxA5a1mfa
+	 d7BN6vj+XcHOPKSr9D8bb/jB4ljo9Rx/vsvStARKnNzmqq6dApX5Z25k867d/haUv9
+	 QCFIDOiEa/tBbiEAYIZxiEuoXbqkoU+bXYmNiqQcaSMCwki9fcP9stRmGd9GcrB46E
+	 PJW/HIh+rtDfw==
+Content-Type: multipart/mixed; boundary="===============0400380545981152819=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260529014936.2811085-1-ameryhung@gmail.com> <20260529014936.2811085-6-ameryhung@gmail.com>
- <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
- <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com> <37d229e482df3367436d9475d6e9d6d69c7366a5.camel@gmail.com>
-In-Reply-To: <37d229e482df3367436d9475d6e9d6d69c7366a5.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 1 Jun 2026 15:35:58 -0700
-X-Gm-Features: AVHnY4KEYaxT8t9axx2zREthu8aAqw3RqhNq0eCCwFyCqA_jHNC70gOnb66EEkg
-Message-ID: <CAADnVQ+K_=xz6f3Czoj6f6AeO6Bh0eyq-ambF11+hYq7DZq15w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Amery Hung <ameryhung@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <7aeb342f9c732340060de5e50d2e8fbb2af70ed53eb8d6309a4f96e94c95912e@mail.kernel.org>
+In-Reply-To: <20260601221805.821394-6-ihor.solodrai@linux.dev>
+References: <20260601221805.821394-6-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v1 05/14] resolve_btfids: Index BTF ID symbols by address
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,jolsa@kernel.org,bpf@vger.kernel.org,linux-kbuild@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  1 Jun 2026 23:03:32 +0000 (UTC)
 
-On Mon, Jun 1, 2026 at 11:41=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+--===============0400380545981152819==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+> index f8a91fa7584f..43512af13148 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
+
+[ ... ]
+
+> @@ -480,6 +489,49 @@ static int elf_collect(struct object *obj)
+>  	return 0;
+>  }
 >
-> On Mon, 2026-06-01 at 11:36 -0700, Amery Hung wrote:
-> > On Mon, Jun 1, 2026 at 11:00=E2=80=AFAM Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
-> > >
-> > > On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
-> > >
-> > > I think refsafe() needs an update.
-> > >
-> > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> > >
-> > > [...]
-> > >
-> > > > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> > > > index 877338136009..5945956a7573 100644
-> > > > --- a/kernel/bpf/states.c
-> > > > +++ b/kernel/bpf/states.c
-> > >
-> > > I think refsafe() needs an update as well.
-> > > Something like:
-> > >
-> > >     --- a/kernel/bpf/states.c
-> > >     +++ b/kernel/bpf/states.c
-> > >     @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_state=
- *old, struct bpf_verifier_state *c
-> > >
-> > >             for (i =3D 0; i < old->acquired_refs; i++) {
-> > >                     if (!check_ids(old->refs[i].id, cur->refs[i].id, =
-idmap) ||
-> > >     +                   !check_ids(old->refs[i].parent_id, cur->refs[=
-i].parent_id, idmap) ||
-> > >                         old->refs[i].type !=3D cur->refs[i].type)
-> > >                             return false;
-> > >                     switch (old->refs[i].type) {
-> > >
-> > > Wdyt?
-> >
-> > You are right. It needs to compare parent_id, but maybe only for
-> > REF_TYPE_PTR like below.
+> +static int push_addr_sym(struct object *obj, Elf64_Addr addr, const char *name)
+> +{
+> +	struct addr_sym *arr = obj->addr_syms;
+> +	int cap = obj->max_addr_syms;
+> +
+> +	if (obj->nr_addr_syms + 1 > cap) {
+> +		cap = max(cap + 256, cap * 2);
+> +		arr = realloc(arr, sizeof(*arr) * cap);
+> +		if (!arr)
+> +			return -ENOMEM;
+> +		obj->max_addr_syms = cap;
+> +		obj->addr_syms = arr;
+> +	}
+> +
+> +	obj->addr_syms[obj->nr_addr_syms].addr = addr;
+> +	obj->addr_syms[obj->nr_addr_syms].name = name;
+> +	obj->nr_addr_syms++;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cmp_addr_sym(const void *a, const void *b)
+> +{
+> +	Elf64_Addr aa = ((const struct addr_sym *)a)->addr;
+> +	Elf64_Addr ab = ((const struct addr_sym *)b)->addr;
+> +
+> +	if (aa < ab)
+> +		return -1;
+> +	if (aa > ab)
+> +		return 1;
+> +	return 0;
+> +}
+> +
+> +static const char *find_name_by_addr(struct object *obj, Elf64_Addr addr)
+> +{
+> +	struct addr_sym key = { .addr = addr };
+> +	struct addr_sym *res;
+> +
+> +	res = bsearch(&key, obj->addr_syms, obj->nr_addr_syms,
+> +		      sizeof(*obj->addr_syms), cmp_addr_sym);
+
+If the ELF file lacks BTF ID symbols, obj->addr_syms remains NULL and
+obj->nr_addr_syms is 0. Calling bsearch with a NULL base pointer is
+Undefined Behavior under the C standard, which can cause issues with UBSan
+builds.
+
+> +	return res ? res->name : NULL;
+> +}
+> +
+>  static int symbols_collect(struct object *obj)
+>  {
+>  	Elf_Scn *scn = NULL;
+> @@ -573,8 +625,14 @@ static int symbols_collect(struct object *obj)
+>  			return -1;
+>  		}
+>  		id->addr[id->addr_cnt++] = sym.st_value;
+> +
+> +		if (push_addr_sym(obj, sym.st_value, id->name))
+> +			return -1;
+>  	}
 >
-> check_ids() should handle the case when parent_id is zero correctly,
-> so I think both variants are fine.
+> +	qsort(obj->addr_syms, obj->nr_addr_syms, sizeof(*obj->addr_syms),
+> +	      cmp_addr_sym);
 
-if that's the only thing, maybe let's do it in the follow up?
+Does this have the same NULL pointer issue as the bsearch call? If the
+array is empty and obj->addr_syms is NULL, calling qsort here triggers the
+same Undefined Behavior as described above.
 
-Eduard,
-are you Ack-ing the whole set?
+[ ... ]
+
+> @@ -946,43 +1004,41 @@ static int collect_decl_tags(struct btf2btf_context *ctx)
+>  }
+>
+>  /*
+> - * To find the kfunc flags having its struct btf_id (with ELF addresses)
+> - * we need to find the address that is in range of a set8.
+> - * If a set8 is found, then the flags are located at addr + 4 bytes.
+> + * To find kfunc flags, scan BTF_SET8_KFUNCS entries and use the entry
+> + * address to recover the corresponding BTF_ID symbol name.
+>   * Return 0 (no flags!) if not found.
+>   */
+>  static u32 find_kfunc_flags(struct object *obj, struct btf_id *kfunc_id)
+>  {
+>  	const u32 *elf_data_ptr = obj->efile.idlist->d_buf;
+> -	u64 set_lower_addr, set_upper_addr, addr;
+>  	struct btf_id *set_id;
+>  	struct rb_node *next;
+> -	u32 flags;
+> -	u64 idx;
+> +	u64 idx, set_addr;
+> +	u32 set_flags;
+>
+>  	for (next = rb_first(&obj->sets); next; next = rb_next(next)) {
+>  		set_id = rb_entry(next, struct btf_id, rb_node);
+>  		if (set_id->kind != BTF_ID_KIND_SET8 || set_id->addr_cnt != 1)
+>  			continue;
+>
+> -		set_lower_addr = set_id->addr[0];
+> -		set_upper_addr = set_lower_addr + set_id->cnt * sizeof(u64);
+> +		set_addr = set_id->addr[0];
+> +		idx = (set_addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+> +		set_flags = elf_data_ptr[idx];
+> +		if (!(set_flags & BTF_SET8_KFUNCS))
+> +			continue;
+>
+> -		for (u32 i = 0; i < kfunc_id->addr_cnt; i++) {
+> -			addr = kfunc_id->addr[i];
+> -			/*
+> -			 * Lower bound is exclusive to skip the 8-byte header of the set.
+> -			 * Upper bound is inclusive to capture the last entry at offset 8*cnt.
+> -			 */
+> -			if (set_lower_addr < addr && addr <= set_upper_addr) {
+> -				pr_debug("found kfunc %s in BTF_ID_FLAGS %s\n",
+> -					 kfunc_id->name, set_id->name);
+> -				idx = addr - obj->efile.idlist_addr;
+> -				idx = idx / sizeof(u32) + 1;
+> -				flags = elf_data_ptr[idx];
+> -
+> -				return flags;
+> -			}
+> +		for (u32 i = 0; i < set_id->cnt; i++) {
+
+When parsing SET8 symbols, the count is calculated as 'id->cnt =
+sym.st_size / sizeof(uint64_t) - 1'. If sym.st_size is less than 8,
+id->cnt (which is a signed int) becomes -1.
+
+Because the loop index 'i' is an unsigned 32-bit integer, the comparison
+promotes the signed -1 to 0xFFFFFFFF. Could this cause the tool to hang
+spinning through 4 billion iterations if it processes a corrupted or crafted
+ELF object?
+
+> +			Elf64_Addr addr = set_addr + sizeof(u64) * (i + 1);
+> +			const char *name = find_name_by_addr(obj, addr);
+> +
+> +			if (!name || strcmp(name, kfunc_id->name) != 0)
+> +				continue;
+> +
+> +			pr_debug("found kfunc %s in BTF_ID_FLAGS %s\n",
+> +				 kfunc_id->name, set_id->name);
+> +
+> +			idx = (addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+> +			return elf_data_ptr[idx];
+>  		}
+>  	}
+>
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26786221491
+--===============0400380545981152819==--
