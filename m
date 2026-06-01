@@ -1,133 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E4B3D79E9;
-	Mon,  1 Jun 2026 15:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A345212554
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 15:48:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780328723; cv=none; b=qxMKU4MZCIYmrT9vOivVojdUKIBasxIXefLhsFbugBLD8EhUWIePI6L3KcAZb/6mM0H2yWTZk03mkTxm+7OZqd4pfU+bs+eDBBgWqryb1toBj8Hd2yakrOlyv06Rki5ChR8tw37TVzNMeGMy4ZqGBJFgl+MnrvX5EbLAVHQlEKs=
+	t=1780328934; cv=none; b=obo7V0miomB/+KQCI63ONDCh/Ah9yECQrNGUST5a5M2ciWZTmx/WK53L7rD9OUShNLIChvNpY61seSMtlfhfWB470yCtyvt+URTFbj6xOV3IQjhbI+TRk6aGYvv/RxJAdtfqqWjqr1jMWTCJ6aYaluanqhsCAz6SVC+FKoeWkaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780328723; c=relaxed/simple;
-	bh=9Hd/f3NDhS9GTcpcignrH/XonRnFYnKeJnhXj1hGR3Q=;
+	s=arc-20240116; t=1780328934; c=relaxed/simple;
+	bh=0q8qi+BvzHsZTlhep1GlKwYfa6F2OrKA0CfnYpdGEqA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=X/JJB+YmQUUtM1T0ramDVNHIaHpW0oS4fhp/S2UauE1q3ejW2UiYtYHsrIL1yyTLkSvbW8pJYly6jgxIzULLwHWcszz0JGgUcdD8G1RonYuBL9oA+sSmiQrRq9TndSnngqZu/eKmgoBuMdwCvF1Uj23XIDvGJqACq7UhXAhMcNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2A2KVos; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=YFGjGt3NCTycSs9m7g4rOTnX2+ZoA2ofd6DDcx57MuWN0O6U+PcNqN0feaFhR5tMz6kMBrXmD6jfljSmzIToMQG1OE3+H0Owvm6DUHLddeUQszR0Y9T4tndwrcMzvCzMltnG9Li1a0xzTPVPOD6lVLGoS4maZmjTEhyvTXVEnu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBszFA/Y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2A2KVos"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938341F00893;
-	Mon,  1 Jun 2026 15:45:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBszFA/Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8DA1F00898;
+	Mon,  1 Jun 2026 15:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780328722;
-	bh=Lz/16V3dOQhlXcQLZ6Es8Qww3hvkhECsC9jqFOP8fXA=;
+	s=k20260515; t=1780328932;
+	bh=vOlHn5I0H9zcyXCbaE/FlBNe3JmVbFU92w8VF0m4Uho=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=L2A2KVoshZxF5leOTgNPquL1+cYqI/DCeU1YOvTEJAaojkyPlSAahGxr7deTGhmVF
-	 n/Usx8GcnfAXG7Dlzvhy2bXtxzcACBapbGrTo5EmpIiI1qKIrDhYi2TxrRs0UkX5LH
-	 a33/zv2blzyBntP91/nhFjG7x8HtxhRCgGoWyvWR2ZIuQ9sJLb3HmC6hDCBLm+iuwa
-	 dFgyC6vGQx8ZUb2b2xHc+Cvhd5DLXZyx/TKg6HnTYRzzKNlKcy2Is1j8Dea7ATZg1K
-	 /h8G1Ye82OqR41YZonzv1FY7V0nhQV9I9UUQRbrQSVjk7seaJQvKTPpnXzTnOAh1Ia
-	 hsUtZRCHZ9L0w==
-Content-Type: multipart/mixed; boundary="===============3137123153509642700=="
+	b=MBszFA/Y5pQHHoOMifJVPh5FaQ2QfK2Fan+fbXgcvIgz+yNqfNesVoyu6QsXgRRiy
+	 LHeLmdM7igDL2guSvOLDczTaL0iQIrzNfzmcNX7rHckK3AW4KxZaeuNs9Rdo4WHHJy
+	 rfH8jxmu7aYSw8ZZd/Jio/jXtHGQNyKV/Z2GC7nOySG6ZpkSqxxICNTiikEPtUKkLy
+	 5vMaa97XfjymkbCjRz2/sEMdahhINmbaj+t6fwHmb8oqHqriuh6K0eSRjlU64QeJlk
+	 glbsQ1gbglVIbLX9Q7brRDv7D4/0i6gpbbAwRWevDeCwAaPBUciKqGss5eajaRJiWO
+	 Umha/T7uMbX3Q==
+Content-Type: multipart/mixed; boundary="===============8964048924121261250=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fc2876ad051bb26bc57a39acfa8dc625eb601f389c8db103c8960474816307c5@mail.kernel.org>
-In-Reply-To: <20260601150203.20352-2-leon.hwang@linux.dev>
-References: <20260601150203.20352-2-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when encapsulating UDP tunnel in lwt
+Message-Id: <2037d4c2af418cb44e8e9bbab5c78914c78c1b29d80d3e66afec378495347e74@mail.kernel.org>
+In-Reply-To: <20260601150248.394863-5-daniel@iogearbox.net>
+References: <20260601150248.394863-5-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 4/7] libbpf: Skip initial_value override on signed loaders
 From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,gnault@redhat.com,leon.hwang@linux.dev,idosch@nvidia.com,fmancera@suse.de,posk@google.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,leon.huangfu@shopee.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  1 Jun 2026 15:45:21 +0000 (UTC)
+To: daniel@iogearbox.net,alexei.starovoitov@gmail.com
+Cc: bpf@vger.kernel.org,kpsingh@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  1 Jun 2026 15:48:52 +0000 (UTC)
 
---===============3137123153509642700==
+--===============8964048924121261250==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index f71ef82a5f3d..65d1dfbf3312 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
->  		ipv4 = true;
->  		if (unlikely(len < iph->ihl * 4))
->  			return -EINVAL;
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index 66a02039da8c..a5d9c7a5261b 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -1187,27 +1187,36 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
+>  	value = add_data(gen, pvalue, value_size);
+>  	key = add_data(gen, &zero, sizeof(zero));
+>
+> -	/* if (map_desc[map_idx].initial_value) {
+> +	/*
+> +	 * if (map_desc[map_idx].initial_value) {
+>  	 *    if (ctx->flags & BPF_SKEL_KERNEL)
+>  	 *        bpf_probe_read_kernel(value, value_size, initial_value);
+>  	 *    else
+>  	 *        bpf_copy_from_user(value, value_size, initial_value);
+>  	 * }
+> +	 *
+> +	 * The runtime initial_value comes from the host-supplied loader
+> +	 * ctx and would overwrite the blob value after emit_signature_match()
+> +	 * has already validated map->sha[]. For a signed loader (gen_hash)
+> +	 * the attested blob value must be authoritative, so skip the override
+> +	 * and leave the hashed value in place.
+>  	 */
+> -	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
+> -			      sizeof(struct bpf_loader_ctx) +
+> -			      sizeof(struct bpf_map_desc) * map_idx +
+> -			      offsetof(struct bpf_map_desc, initial_value)));
+> -	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8));
+> -	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+> -					 0, 0, 0, value));
+> -	emit(gen, BPF_MOV64_IMM(BPF_REG_2, value_size));
+> -	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6,
+> -			      offsetof(struct bpf_loader_ctx, flags)));
+> -	emit(gen, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, BPF_SKEL_KERNEL, 2));
+> -	emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
+> -	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
+> -	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+> +	if (!OPTS_GET(gen->opts, gen_hash, false)) {
+> +		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
+> +				      sizeof(struct bpf_loader_ctx) +
+> +				      sizeof(struct bpf_map_desc) * map_idx +
+> +				      offsetof(struct bpf_map_desc, initial_value)));
+> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8));
+> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+> +						 0, 0, 0, value));
+> +		emit(gen, BPF_MOV64_IMM(BPF_REG_2, value_size));
+> +		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6,
+> +				      offsetof(struct bpf_loader_ctx, flags)));
+> +		emit(gen, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, BPF_SKEL_KERNEL, 2));
+> +		emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
+> +		emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
+> +		emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+> +	}
+>
+>  	map_update_attr = add_data(gen, &attr, attr_size);
+>  	pr_debug("gen: map_update_elem: idx %d, value: off %d size %d, attr: off %d size %d\n",
 
-Since len is a u32, if iph->ihl is 0 then iph->ihl * 4 is 0 and the
-"len < iph->ihl * 4" check is never true, so it passes without
-returning -EINVAL.
+This is a pre-existing issue, but while this patch closes the
+map-in-map bypass for exclusive maps, does a similar bypass still
+exist through BPF iterators?
 
-Later ip_fast_csum() is called with iph->ihl, and on some architectures
-(PowerPC, MIPS) that implementation assumes ihl >= 5 and decrements the
-loop counter, which underflows when ihl is 0.
+Looking at bpf_iter_attach_map() in kernel/bpf/map_iter.c, when a BPF
+map iterator is attached via BPF_LINK_CREATE:
 
-Should there be an explicit iph->ihl >= 5 check here, for example:
+	map = bpf_map_get_with_uref(linfo->map.map_fd);
+	if (IS_ERR(map))
+		return PTR_ERR(map);
 
-	if (unlikely(iph->ihl < 5 || len < iph->ihl * 4))
-		return -EINVAL;
+	// [...]
 
-This was raised in review of v1 and v2 added the guard, but v3 appears
-to have dropped it again.  The earlier discussion is here:
+	if (key_acc_size > key_size || value_acc_size > value_size) {
+		err = -EACCES;
+		goto put_map;
+	}
 
-  https://lore.kernel.org/bpf/20260601151707.C51601F00893@smtp.kernel.org
+This function retrieves the target map but appears to lack checks
+against map->excl_prog_sha, map->frozen, and BPF_F_RDONLY_PROG.
 
-> +		is_udp_tunnel = iph->protocol == IPPROTO_UDP;
-> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphdr)))
-> +			return -EINVAL;
->  	} else if (iph->version == 6) {
->  		ipv4 = false;
->  		if (unlikely(len < sizeof(struct ipv6hdr)))
->  			return -EINVAL;
-> +		is_udp_tunnel = ((struct ipv6hdr *)iph)->nexthdr == NEXTHDR_UDP;
-> +		if (unlikely(is_udp_tunnel && len < sizeof(struct ipv6hdr) + sizeof(struct udphdr)))
-> +			return -EINVAL;
->  	} else {
->  		return -EINVAL;
->  	}
+Furthermore, the iterator context defined in bpf_map_elem_reg_info()
+sets up the value argument without the MEM_RDONLY flag:
 
-[ ... ]
+	{ offsetof(struct bpf_iter__bpf_map_elem, value),
+	  PTR_TO_BUF | PTR_MAYBE_NULL },
 
-> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
->  	if (ingress)
->  		skb_postpush_rcsum(skb, iph, len);
->  	skb_reset_network_header(skb);
-> +	if (ipv4 && is_udp_tunnel)
-> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
-> +	else if (!ipv4 && is_udp_tunnel)
-> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct ipv6hdr));
->  	memcpy(skb_network_header(skb), hdr, len);
+Because MEM_RDONLY is omitted, the verifier permits BPF programs to
+perform direct memory writes to ctx->value.
 
-Can iph->ihl change between the initial length validation and this call?
+Could this allow a program to locate the FD of an exclusive, frozen
+map via its ID, attach a custom BPF map iterator, and arbitrarily
+overwrite the contents of the protected map?
 
-The hdr pointer (and therefore iph) refers to a buffer provided by the
-BPF program, which can be concurrently modified by userspace through a
-shared BPF map.  Because skb_cow_head() acts as a compiler barrier, the
-compiler reloads iph->ihl from that untrusted memory here.
-
-This read also happens before the memcpy() into the skb:
-
-	skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
-	memcpy(skb_network_header(skb), hdr, len);
-
-If iph->ihl is concurrently changed to a larger value (such as 15) after
-the initial validation, can the transport header offset be set beyond
-skb->tail, leading to out-of-bounds writes when drivers later dereference
-the transport header for checksum updates?
-
-In the v1 discussion the suggestion was to move
-skb_set_transport_header() after the memcpy() so it reads from the
-copied-in header, but the current code still reads iph->ihl before the
-memcpy().  See:
-
-  https://lore.kernel.org/bpf/20260601151707.C51601F00893@smtp.kernel.org
+This concern was raised by sashiko-bot in v2 review comments at:
+https://lore.kernel.org/bpf/20260601151810.68BCF1F00893@smtp.kernel.org/
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26763883406
---===============3137123153509642700==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26764265302
+--===============8964048924121261250==--
