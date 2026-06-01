@@ -1,50 +1,48 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6EE38BF9C;
-	Mon,  1 Jun 2026 09:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8316F39E9CB
+	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 10:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780307540; cv=none; b=a5NzWHuCYuVeKmvHTetfVZx/2rBlIySd+aM1olaxiqxPWdpQVzA9+I4EJZODcDcLzuo4uCD038h+SdnorIiH8eBT5MPRR5FqDnESTiDMN8IsUzfR1/kRoyB6O0Z3m7YwceiUsFSzIm26wIVyF4BzNeVa+6CRv0DHvMdq4V+QK3c=
+	t=1780308203; cv=none; b=SyiIwdHxxCM5qu2HdamB55+1L4TmHV46FvVDGWoM2qlTchOlnG9rVp5u+fq0zUn2rZS4bEJsJOhEHrxmo7Kid8UsL4kz7Io6lU3TFIWiPMtxqbJeueAiriG2i66eU8e4TgQbY8di6ZJ1RyG75tqY1A8XV9HNkBERNpgR0VejRik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780307540; c=relaxed/simple;
-	bh=jGUTUjukPThDAm5UmqerKi4rHF2VN8WopSTiAZZ46kI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ExTCQlT8mVkIQ3torgMRg1v/GUrcCy0gTcXaO4xMley4Cdkw+F2GnjbtlpbCgwXJIWa96I6+LYMPXjfa3uK8tqLMl7ctT6thME05xOcS/VaU662PI/YzVRmuRc9+T6GK1FvJ4sRNLxeRAuDAUAOmqg4ECERwRCJyveMyT5d2pKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ZI/0jLxF; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780308203; c=relaxed/simple;
+	bh=0v2tdRKRgLo653EY+RkkzjtBUYnXDkVtFMzRRHTPI/g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ixmarnavUP1UPdhoKUo26U4XqcACbDS8esfos/YA5qr2l8oXhCgM2OngISyhSpQW2N7NnbPG5Gk0OgCdE1xTvkhYtIVvTQWFFeLNXkTVbTN5ck1u7ON9G+MIWMCFwhSZ7cW1NJE+f5L1iunxqkDn+RXWYxNQYG4b0ZanDWblggc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=I6PE7MM+; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ZI/0jLxF"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=om+loXuyzVMvM/RZ07hWwkahRUjsgZoZ8BdW3xtNh5Q=;
-	b=ZI/0jLxFLDmamOw4fYb4hpGxq8soq2oRdTYEDQ+WptgRT4YYN0H6Odni1U+ALIi7v6haVX5j2
-	7avXXleTaY1f5ZuqtVywaP24y8jddwU9OrsWEFv2bF9204oHJBCYEavHPIcnWmEwJ4RIbbNb3gy
-	iMPX8mWXFzOjkxcgPY+PCV8=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gTTZ13qc9z12LGX;
-	Mon,  1 Jun 2026 17:44:09 +0800 (CST)
-Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5DC4640569;
-	Mon,  1 Jun 2026 17:52:06 +0800 (CST)
-Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
- (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 1 Jun
- 2026 17:52:05 +0800
-From: Lin Ma <malin89@huawei.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
-CC: <bpf@vger.kernel.org>, John Fastabend <john.fastabend@gmail.com>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH] bpf: Tighten cgroup storage cookie checks for prog arrays
-Date: Mon, 1 Jun 2026 17:51:58 +0800
-Message-ID: <20260601095158.1186318-1-malin89@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="I6PE7MM+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=d3QrtolEc1CGzVvjDkKLj/tuWTGk3XI8fea+Nba/CmY=; b=I6PE7MM+Ae0Yi7Wq23RdNt8+Gi
+	IQdwJr3704Nt2zU3wSQWPKQ1fKf25WeNfqpIQP/l8FLtLCMpb6ArnkgRu/wSstxa4U0uC10ngXPg3
+	4Vf4DeMfl0mAcP8PDa0oHTR/TE5uLrHsQeQWxdhP2fzTYJk9Bk7sRgntJj26N1IgTiGBfUTyrLZ5/
+	nfEfaBV/M/lJwvjEBtbdii+17QlYyHd3yfl0ZM6ij81xH6KP14xlIKaYjaczUdR0AZBBiQSU0OHzg
+	pwVOe8OhY3IssoG2eFyNDadzWvBA+as4aP0HMVUuvDywkKAv3PffsVy1RsEAd2kBNzfArDasgnxDy
+	dLkUuW6A==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wTzUD-0003yZ-0M;
+	Mon, 01 Jun 2026 12:03:09 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: alexei.starovoitov@gmail.com
+Cc: bpf@vger.kernel.org,
+	kpsingh@kernel.org
+Subject: [PATCH bpf-next 3/3] libbpf: Skip max_entries override on signed loaders
+Date: Mon,  1 Jun 2026 12:03:06 +0200
+Message-ID: <20260601100307.386243-3-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260601100307.386243-1-daniel@iogearbox.net>
+References: <20260601100307.386243-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,55 +50,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemr200017.china.huawei.com (7.202.195.7)
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28018/Mon Jun  1 08:31:13 2026)
 
-The recent KCTF-reported cgroup local storage issue assigned
-CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
-in cgroup local storage"). That fix addressed the direct mismatch case
-in tail-call chains.
+bpf_gen__map_create() lets the host-supplied loader ctx override a
+map's max_entries at runtime (map_desc[idx].max_entries, when non-zero).
+This is how the light skeleton sizes maps to the target machine, but
+it happens after emit_signature_match() and is covered by neither the
+signed loader instructions nor the hashed blob.
 
-However, the previous fix is still incomplete. The current prog-array
-compatibility check treats a program with no cgroup storage as
-compatible with any stored storage cookie. This allows a storage-less
-program to bridge a tail-call chain between an entry program and a
-storage-using callee even though runtime cgroup local storage still
-follows the caller context.
+For a signed loader this means an untrusted host can re-dimension the
+program's maps, outside what the signature attests to. Gate the override
+on gen_hash so signed loaders use the signer-provided max_entries baked
+into the blob.
 
-Require exact per-type storage_cookie equality when checking prog-array
-compatibility. This blocks zero-storage bridge programs from joining a
-prog-array owned by a storage-using program and closes the residual
-A -> B(no storage) -> C(storage) path without relying on partial
-BPF_PROG_TEST_RUN special cases.
-
-Cc: stable@vger.kernel.org
-Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
-Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
-Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
-Signed-off-by: Lin Ma <malin89@huawei.com>
+Fixes: ea923080c145 ("libbpf: Embed and verify the metadata hash in the loader")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/lib/bpf/gen_loader.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 8b018ff48875..dccd47c92992 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2459,8 +2459,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
- 				break;
- 			cookie = aux->cgroup_storage[i] ?
- 				 aux->cgroup_storage[i]->cookie : 0;
--			ret = map->owner->storage_cookie[i] == cookie ||
--			      !cookie;
-+			/*
-+			 * Tail calls keep using the caller cgroup storage
-+			 * context, so prog-array members must use the same
-+			 * storage cookie.
-+			 */
-+			ret = map->owner->storage_cookie[i] == cookie;
- 		}
- 		if (ret &&
- 		    map->owner->attach_func_proto != aux->attach_func_proto) {
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index a5d9c7a5261b..66e13566bc31 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -546,13 +546,22 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+ 	default:
+ 		break;
+ 	}
+-	/* conditionally update max_entries */
+-	if (map_idx >= 0)
++
++	/*
++	 * Conditionally update max_entries from the host-supplied loader
++	 * ctx. This sizes the map at runtime, but for a signed loader
++	 * (gen_hash) it would let an untrusted host re-dimension the
++	 * program's maps after emit_signature_match(), outside what the
++	 * signature attests to. Keep the signer-provided max_entries
++	 * baked into the blob in that case.
++	 */
++	if (map_idx >= 0 && !OPTS_GET(gen->opts, gen_hash, false))
+ 		move_ctx2blob(gen, attr_field(map_create_attr, max_entries), 4,
+ 			      sizeof(struct bpf_loader_ctx) +
+ 			      sizeof(struct bpf_map_desc) * map_idx +
+ 			      offsetof(struct bpf_map_desc, max_entries),
+ 			      true /* check that max_entries != 0 */);
++
+ 	/* emit MAP_CREATE command */
+ 	emit_sys_bpf(gen, BPF_MAP_CREATE, map_create_attr, attr_size);
+ 	debug_ret(gen, "map_create %s idx %d type %d value_size %d value_btf_id %d",
 -- 
-2.53.0
+2.43.0
+
