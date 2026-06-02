@@ -1,140 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4A63CE4B2
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 15:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A4D3630B3;
+	Tue,  2 Jun 2026 15:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780413838; cv=none; b=CKqj7HdCDnJNT8Q7rNgcSYsuaLFPj1xBxtIJBUHFbiaQnTVMigKAi3YFWqmTDjRUeAbBsUfOksqrM8LMAK+J4MUpQZmlDZpexkmx27SUDSpmRzwwYypjsIkgz7bqqkzZ5e3o565lm4Npu9Y7ngUiB/hjKS4bBoFSXnluics3Ba8=
+	t=1780414380; cv=none; b=fBY02Z39uVofQ4bl2hSPg1L05e76MWCf/TL/7dfE+jX66J5oEdZ8tC94vTaz2qsNwfrSH83svXFvHW3VjLQr+aUOmgKAyLT8MSQQ/svxaVwjIdQEtTFM/WIBG9jbPVgAIav24URDnV9WBOUc2bObCadG9tQvTFqY9vtWC8OCvc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780413838; c=relaxed/simple;
-	bh=ITxvei3a+lBmIZMqHKJACznJHIsyapNzKtdqDOvUjrA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mMmCYW3+0gEBF/Y+c9rXPAEuO9kYDIKt9dLWmNWYvlibeHA0vvt463NsXQTFXq1UHbBWM0gdcUpVUEM7rnNejXwdE1nEREeMyKla6y5QoHpVxzpkAgGOpEiWVxjcEAPQmj2oFJA3jZqys4a1mav0nHiSGCy0bzfMybi/KbAHShY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVlYOr/7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780414380; c=relaxed/simple;
+	bh=qWZj9wDod35JKWdK64O6iEeh3krtCED0C0atC1Zavp8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=e1ML79/Nj30Ug6tGZKuxUOtIn54Flwbhls5zSiOvATnJCXyqW/+mpxrfM5+MRPe9d2JC9sPhNwbOXnDgHNX3dgeVwdLT/0SdocrMcLK8efMC0NIBA2Aha++lKCLZjTZlO0VK4XCEuivn87rkPb7AlzaGl31zdoLXruJLbk1rYfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjCpNF/t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVlYOr/7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87F11F00893;
-	Tue,  2 Jun 2026 15:23:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjCpNF/t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD94D1F00893;
+	Tue,  2 Jun 2026 15:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780413837;
-	bh=yA8yl3yez+gnnqtbym4KAizNa6bFJXaEthT4CA7Hijg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EVlYOr/79/qFv7SxVN6oEa5wB1rrHOmK5OkJj34Y0u5cndfEy0ISaNfheaMIBbv4m
-	 c6/Doy4vrbk+FPb8lvMuiKy6TfyKEVLGXyRV57mwnzsXhnojrqxb4fwA7VgBG3Pwc7
-	 mBnECz5cahHHVVXiZplWndge5f2LfIuBDDCRqO6RVAgWOQ/FaWy12l254CmZvg6zmr
-	 WvS4bXLTiD4PPrIjHb91x8Up3nTJkaljVyxgXbJR/WpbtNw/3M8pkt3aEU70ZkhWaO
-	 zo819NLcXZoj1M06tnhhslHDIHHJK8BAMW/NG/5+/mPZD+d99ddqWyRE7k7QfvU0Ft
-	 QpZ+tio4isWtQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Update transport_header when
- encapsulating UDP tunnel in lwt
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602150931.49629-2-leon.hwang@linux.dev>
-References: <20260602150931.49629-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 15:23:56 +0000
-Message-Id: <20260602152356.C87F11F00893@smtp.kernel.org>
+	s=k20260515; t=1780414379;
+	bh=M5lcGCjJXwd0FTgXhci5B8olrI0Uwv3Etr/S4xwUmpE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EjCpNF/t5SRuTSrsh6d7hC9UVIcLEgPkdc/Nsws7y1AORV+nFm1tkhtfWm/l8kqyK
+	 vTVNpxgSTEwDRJfytFe7G1qWK3wUlf202BwPdEujwIqJYA5qLXvPmgyIKdX8tFjPwl
+	 8zI6U92Zw+v+aHSpO2Go3IIcu8Rh639vZAwVLPbT5GhcMxL4fb2mX2WlQLeluq17sY
+	 /qorrBwFRL1MfvEjkWD/XoHkumrHu3AfXQbq2TGKRHjGbNa4RcDINpeqXSXHjtVoao
+	 uYbl+nVwpqlrKgjz83upkffAduyaIEOH8nSVuFxbWBMG4iSeJmZ5tiAZ4GugAS9tby
+	 AmEM+4tk+QZpQ==
+Content-Type: multipart/mixed; boundary="===============0092966957812357112=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <aa5043a681332c349ab2e76637ecf70d6317e2cfb30b29bc3c59cb2ab9785177@mail.kernel.org>
+In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-7-c76e5250ea1c@arm.com>
+References: <20260602-tools_build_fix_zero_init_bpf_only-v2-7-c76e5250ea1c@arm.com>
+Subject: Re: [PATCH bpf-next v2 7/8] selftests/bpf: Use common CFLAGS for urandom_read
+From: bot+bpf-ci@kernel.org
+To: leo.yan@arm.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,lmb@isovalent.com,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: acme@kernel.org,namhyung@kernel.org,irogers@google.com,james.clark@linaro.org,kees@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,leo.yan@arm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  2 Jun 2026 15:32:58 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+--===============0092966957812357112==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] Missing IPv4 header length (`ihl`) minimum bounds check in `bpf_lw=
-t_push_ip_encap` allows denial of service via `ip_fast_csum`.
-- [High] Time-of-Check to Time-of-Use (TOCTOU) vulnerability in `bpf_lwt_pu=
-sh_ip_encap` due to re-reading from eBPF map memory.
---
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index bc049620c774..1e47e29ba421 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -51,7 +51,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>
+> -CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
+> +COMMON_CFLAGS = -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
+>  	  -Wall -Werror -fno-omit-frame-pointer				\
+>  	  -Wno-unused-but-set-variable					\
+>  	  $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)			\
+> @@ -64,7 +64,7 @@ LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
+>  PCAP_CFLAGS	:= $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
+>  PCAP_LIBS	:= $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
+>  LDLIBS += $(PCAP_LIBS)
+> -CFLAGS += $(PCAP_CFLAGS)
+> +CFLAGS += $(COMMON_CFLAGS) $(PCAP_CFLAGS)
 
-commit 8004c2f9aa8d7cbb7b762ab79a4e3272c20af453
-Author: Leon Hwang <leon.hwang@linux.dev>
+Ian Rogers raised a concern in v4 that COMMON_CFLAGS is being assigned
+before 'include ../lib.mk' (which happens later around line 165).
 
-bpf: Update transport_header when encapsulating UDP tunnel in lwt
+The ../lib.mk include appends important flags to CFLAGS, such as
+-D_GNU_SOURCE=. Since COMMON_CFLAGS uses recursive assignment (=), these
+flags added by lib.mk should be available when COMMON_CFLAGS expands.
+However, COMMON_CFLAGS references $(GENFLAGS), $(SAN_CFLAGS), and
+$(LIBELF_CFLAGS) which are defined before lib.mk, but lib.mk may also
+modify CFLAGS directly with additional flags.
 
-This commit updates skb->transport_header in bpf_lwt_push_ip_encap() when
-encapsulating a packet that uses UDP. This ensures that checksum offloading
-works correctly when a driver reuses the transport header.
+Will urandom_read miss any flags that lib.mk adds to CFLAGS but that
+aren't captured in the variables referenced by COMMON_CFLAGS? Ian
+suggested moving these assignments below the include to ensure all
+lib.mk-added flags are captured.
 
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index f71ef82a5f3d3..bf588f508b79e 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -612,10 +613,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void=
- *hdr, u32 len, bool ingress)
->  		ipv4 =3D true;
->  		if (unlikely(len < iph->ihl * 4))
->  			return -EINVAL;
+Reference:
+https://lore.kernel.org/all/CAP-5=fXjd15e5YpCM9KMjEhpjLxvxc6qUk0g7BprCfkzcRZ5_g@mail.gmail.com/
 
-[Severity: High]
-This is a pre-existing issue, but does bpf_lwt_push_ip_encap() need to veri=
-fy
-that iph->ihl is at least 5?
-
-An eBPF program can pass an IPv4 header with ihl =3D 0 and len =3D 20. This
-bypasses the length validation because 20 < 0 is false. Later in the functi=
-on,
-this unvalidated ihl is passed to ip_fast_csum(iph, iph->ihl) with a length
-of 0. On architectures like MIPS and PowerPC, could this cause the
-ip_fast_csum implementation to blindly decrement or loop until reaching the
-end pointer, triggering an infinite loop or kernel panic?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but could this validation suffer
-from a Time-of-Check to Time-of-Use (TOCTOU) race?
-
-The hdr argument can point to mutable eBPF map memory. A concurrent
-modification by userspace or another CPU could alter iph->ihl between this
-validation and its later uses. For example, if iph->ihl is mutated to 0 aft=
-er
-this check, it bypasses validation and the subsequent memcpy() copies the
-mutated ihl to the SKB, leading to the same ip_fast_csum() kernel panic
-described above.
-
-Should the function copy the header into a local stack buffer or the SKB
-first, and then perform all validations on that immutable copy?
-
-> +		is_udp_tunnel =3D iph->protocol =3D=3D IPPROTO_UDP;
-> +		if (unlikely(is_udp_tunnel && len < iph->ihl * 4 + sizeof(struct udphd=
-r)))
-> +			return -EINVAL;
->  	} else if (iph->version =3D=3D 6) {
+>
+>  # Some utility functions use LLVM libraries
+>  jit_disasm_helpers.c-CFLAGS = $(LLVM_CFLAGS)
 
 [ ... ]
 
-> @@ -637,6 +644,11 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
-*hdr, u32 len, bool ingress)
->  	if (ingress)
->  		skb_postpush_rcsum(skb, iph, len);
->  	skb_reset_network_header(skb);
-> +	if (is_udp_tunnel) {
-> +		size_t iph_sz =3D ipv4 ? iph->ihl * 4 : sizeof(struct ipv6hdr);
-> +
-> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph_sz);
-> +	}
+> @@ -261,7 +261,7 @@ endif
+>  $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
+>  	$(call msg,LIB,,$@)
+>  	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+> -		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
+> +		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) \
+>  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+>  		     -Wno-unused-command-line-argument \
+>  		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
 
-[Severity: High]
-This is a pre-existing issue, but does this newly added code introduce an
-additional TOCTOU race by re-reading iph->ihl?
+[ ... ]
 
-Because iph->ihl is read again here from mutable eBPF map memory to calcula=
-te
-iph_sz, a concurrent modification could result in an incorrect size calcula=
-tion.
-Could this allow skb_set_transport_header() to be set to a malicious
-out-of-bounds offset?
+> @@ -271,7 +271,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
+>  $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+>  	$(call msg,BINARY,,$@)
+>  	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+> -		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+> +		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+>  		     -Wno-unused-command-line-argument \
+>  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
+>  		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
 
->  	memcpy(skb_network_header(skb), hdr, len);
->  	bpf_compute_data_pointers(skb);
->  	skb_clear_hash(skb);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602150931.4962=
-9-1-leon.hwang@linux.dev?part=3D1
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26828477669
+--===============0092966957812357112==--
