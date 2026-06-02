@@ -1,99 +1,112 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879603E5EF4
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 13:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC773E7159;
+	Tue,  2 Jun 2026 13:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780407264; cv=none; b=UXUQP342p+UHssIoulCcUemhpoL3gZo7PW79/A5EioX0ez+x46oo4U6vBufXCFZ/DFKndKkve/ESWYcixxP9cufqcHnupk6DeX2EeQnUKZV41+Unc/x9EG7WFHG0STfxNtYUy4dwMptAdDpy1n5qvj2bbWpd00spUR+S/fjW5L0=
+	t=1780407450; cv=none; b=pS8SWUEeK/GLMcyEUQ8qDCWqr3XJX6cokX9Tlr/nmLCbrrCFwYH+/OE5KnbEXljXPkMUtT3mzgq+ii0h9Odoldl1hP30ykBBH58GRFB7mS7+TqFGPsqu4vrPBcxFbzrWBdRKWgG0E5VnSuKANCon7YU15T36UuF8aMzGrrTrW4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780407264; c=relaxed/simple;
-	bh=kBnX/+0c7ITyMO0P3knR00sfYCRT+0BHh1YQn7jrn64=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=DgK2HFmBNe/KOqC37ahtjEfUWA7eg+1qNDszDgFlQttUWRsagPa2zD/EVylY+JE8sfdwRb3Xol/LxvYBJ/PekBykxiqmVjZHE0UGu7+fXcXJEjiUfYmsQIxp86S/jlxSp+caqudvajrdcAdTGIyJVIRefkIa1TyUzTRrn2au1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fY0WgkbR; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1780407450; c=relaxed/simple;
+	bh=I4hwqx3IbT/9IAGMUc4L+6mxyKZcWBzxiwdYN+qzRKg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=i3/4mz25+inR8NcHADGw6MYrnPVP9wOihQk/rGZnF6oA96/5lqO+r8cc4RE2RTTpkuuZ3RLLQWvqFzxpValyGHk/f3DSCW0t2s6B354p+ABgQcIQtvZwpqPZA9zGgmDkxOrpRVPhJJcnvmz2TZwVnN9FtZtMa4UTASwSMqDfasI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNDitYo3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fY0WgkbR"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49068493267so65810445e9.1
-        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 06:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780407262; x=1781012062; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
-        b=fY0WgkbR6mkHahbU5G1lBdwUcnuXXa+x22HRpQwKdZJ47LbSVw0FFARCi9F5PXuwQp
-         OEKdC/FvlXzcVjluIaaBlIJ2VW7jNjvMVdOCRHTy+vN4QWxQsLIeliUlV8xoq8ll1gqy
-         u0rGP1QzcPwUe+zsVHL6zfiz0WZ9vYUkh2pfzDMz/G4yg5tfO2yIy5A0QJfLnWs8GUre
-         FePhuo0S/yoFlLXtuhWLKd+E4u4FwpXvvjD/8xnYRO0ZY461EJZ+rf98RBE9K5Fq3NUU
-         zs7G5hQTzLe0RXBULuk9WXy7RNXQvXJIjSwHo5NPIGqDXDvEEOt4N3/iTI2tsnfhIBFQ
-         Scvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780407262; x=1781012062;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
-        b=A327OsxGbj1IUAQWK66ELDzzXL65GxhrZq9FXoZyUZ1AJgt3YiWke0yWK8HjB8tsh7
-         U29X67Qs5Fx+o8ZcCnzs7mHOHC7XgI57vFf6SyQjunnBOdsa5wCyRtUHSs0EszbNl8ZB
-         As+iRnklHGbgwYfsOECb+k9KF2PoEG9abTXVv/Lfwy/scp4rzEheAYWwIA9JcA/UG0yj
-         8ewhGdSUvxxkBUCJNnDh+zhEugZQLS0tZ+pBQC8K6icFaa6XBAFehSEm8YBLgd/IHC3l
-         tHV6vz5RJxrDSvnATXkf9xHnqELuD3X/iO0Xyn+0hpsIsXBwV+4GxVa6YJY/VZAfJjox
-         xaIQ==
-X-Gm-Message-State: AOJu0YwDVSum0mfrNQRpyRNqVIbmvMqdTJjK1VymTHf5dBDLZWAK4wDh
-	nW2WfjkhYrrHcMKO1f6kNmVCLfAxKkIqMe80Dv4p/x6GU8oYfO4pyr718quLBWvxGfs=
-X-Gm-Gg: Acq92OFUPXZ6c18I6UG3j9dG6GVm0VkXnkfHk+LpHTKwsXzrgLVP/lBzjVvXSHOxYqT
-	HkqBeMoWX9AcnjBrmip2M+UpkEaV2f9cDrqkL3lhrpvMlxFWQKiJuwm6dvgeOQJ4bFGLCZdpys8
-	OqA2IBpIKpIbHMpKRaxRIL5UGZAztVmidAX5u4HF5EGkRVe/4rtU04WwPXUe3FkbHPrz68+qXw0
-	UvqPBa88c2KcveeNlYhbej7uycruDA1eA5iKMdj8D8iniKKp4+o2MFbFzdBWHX0jkLG8eTfODkE
-	SVWH6iie0DLhFf9Xq5PnvVC5s5IzlIFYNL6vUAgD9tT1fzXoSM/YADnsQMTFg1x1/J7G2H3m9EW
-	keRBf6Ibuh9Tj7nCVSaoFf7vjf23lXhgQTbZDxZK184K+J3Uar4rtBsStsAZAZSOZxgZKl2TwVN
-	VzZThaNX3/GJHD2Y7byeGv
-X-Received: by 2002:a05:600d:640f:10b0:48f:f7cc:f6f5 with SMTP id 5b1f17b1804b1-490a2945b99mr208508155e9.31.1780407262005;
-        Tue, 02 Jun 2026 06:34:22 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:e15:2ecf:67ff:fe81:9da0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5a9d27sm11444232eec.25.2026.06.02.06.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 06:34:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNDitYo3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45BA1F00893;
+	Tue,  2 Jun 2026 13:37:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780407449;
+	bh=yroxFHa2N4kyQMkQLaNCA1DYAIhUp5e+shfNW8bg4lI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=MNDitYo30hK0v+q/WkK1xlUnA4fkHarwRNeZskhFdeihbg7qagIHMqMxtxxcG473D
+	 pFPXiTvJRKaFFBf0z60w6G2TDD8vE9Qvwvntuv1fUiKYbIgAAgsnTgFPRjJiyaqFrx
+	 0gY7nRIXHdxHBvJPEu+K07UoP3kJ+KIZAbA0OUc4SKRXu2j668hJy7MFfUI8/H0EVc
+	 lDYGhea3rx7o/ldBcIr/wIaKDZra2KUn5mG2/x54pIWvBkwmPRQnkXinle8gXhWnmK
+	 WSbd1TBPUTAKQpGkAJFBfJQ3/9UlJjYzpfrGzd9eMxQip2QvMtcTf/N0yJZhiplFes
+	 uYMGTeRJdBiew==
+Content-Type: multipart/mixed; boundary="===============7318987521802235669=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 02 Jun 2026 10:34:18 -0300
-Message-Id: <DIYLP74JLI7O.11GW15J2LC01Q@suse.com>
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
- <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Subject: Re: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate
- partial builds across kernel configs
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Alan Maguire"
- <alan.maguire@oracle.com>
-X-Mailer: aerc 0.21.0-146-g87073a0460e3
-References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
-In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+MIME-Version: 1.0
+Message-Id: <b4807b03f9d70c2749eab46289592c434c4d350d056646f2c493f642742b440c@mail.kernel.org>
+In-Reply-To: <20260602-selftests-bpf_misconfig-v12-2-27f898b3ba26@suse.com>
+References: <20260602-selftests-bpf_misconfig-v12-2-27f898b3ba26@suse.com>
+Subject: Re: [PATCH bpf-next RESEND v12 02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  2 Jun 2026 13:37:28 +0000 (UTC)
 
-On Tue Jun 2, 2026 at 10:02 AM -03, Ricardo B. Marli=C3=A8re wrote:
-> Changes in v12:
-> - Rebase from 11 to 8 commits: split the test_kmods KDIR patch into a
->   pure KDIR fix (no PERMISSIVE) and a separate tolerance patch; squash
->   the BPF_STRICT_BUILD toggle with its first PERMISSIVE user; squash
->   the four test_progs partial-build patches into one; move the install
->   fix to immediately follow the first PERMISSIVE user
+--===============7318987521802235669==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-And of course just as I sent I realized this was left behind by mistake.
-This was scrapped and the series is still v11 :(
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 75036c1b5c4f..e912526a65dd 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+> index 63c4d3f6a12f..031c7454ce65 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+> @@ -1,5 +1,16 @@
+>  TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+> -KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
+> +SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
+> +# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
+> +# directory (one containing Module.symvers); otherwise treat the value as a
+> +# selftests-only output directory and fall back to in-tree or distro headers.
+> +# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
+> +# invoking this sub-make so relative paths still anchor to the user's
+> +# invocation directory.
+> +KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
+> +KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
+> +KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+> +		/lib/modules/$(shell uname -r)/build))
+
+Multiple reviewers raised concerns about the automatic fallback to
+/lib/modules/$(uname -r)/build. bpf_testmod relies heavily on internal BPF
+structures, experimental macros, and kfuncs that change frequently between
+kernel releases.
+
+When compiling against host distro headers on a system where the running
+kernel does not match the upstream source tree being tested, will this cause
+confusing C compilation errors? If the host headers exist, the permissive
+skip check further down in the Makefile will pass since the directory
+exists. However, the compilation failure is not ignored by the parent
+bpf/Makefile, which could abort the entire BPF selftests build with
+confusing errors instead of silently skipping the unconfigured kernel tree.
+
+Should in-tree test modules avoid falling back to host distro headers to
+prevent these version mismatches?
+
+This concern was raised by multiple reviewers (sashiko-bot, bot+bpf-ci) in
+v9, v10, and v11. You acknowledged it in v10 and stated it's a deliberate
+design choice inspired by livepatch, but the concern was raised again in
+v11.
+
+Reference: https://lore.kernel.org/bpf/f07336b357836aa0d9b5017f4bdf56969d6cb4044b8df5fd9dc67baf593b761e@mail.kernel.org/
+
+>
+>  ifeq ($(V),1)
+>  Q =
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26821824931
+--===============7318987521802235669==--
