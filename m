@@ -1,63 +1,63 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95C8395D8E
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CE3392C32
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780433965; cv=none; b=uW4lxQs7dZnKrwF272L9+GDiMwlIQgef6xTW1ciLX7hNAJh4c4FkoHS9jPNZXyOLAf2vwHLN+yH/CgefnirFRA9CWKyjma/COK7UlDL9uWmnLxHjpU5l/ENYkhxLHZuCT7Rf8bLMR6mXPAvpT7gBMmcq3gWEm9NTS3BjjEJA4oE=
+	t=1780433976; cv=none; b=DAi6Fk4UGb897MdyF0M0nAYxIy2AhzOpGlfWr3raoA77Ofgkxi+DtBGNpKutGBNhXTi/bUtEj9Q9Ik39YLffs3coY+D6f6O8Bc67aX3FXmThoh2NQwq7JJ9GVL/T6AJXELkNvu0kNlbVfuNAdbbDyMLxVT4M2uj5dpoTc4gxRCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780433965; c=relaxed/simple;
-	bh=OIL4u1059wQePR4fBxdtuuk+4+q2KWiT2f5tiuzz13M=;
+	s=arc-20240116; t=1780433976; c=relaxed/simple;
+	bh=40YuMegnizHDre5rP/J67ecYybi5tbv7U9hYJ5stFqg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sHkpkTBjMUB7T0OzBVW89TPmERcGI0CcFEZTfSn+cY5J1u+q3QFDjil8gvgVB+4uLVhQajHA00ep4kkmbhwLPQy5ei59Y2eloIRuFvYUWhlDC2pkpwEOog42qX5+BLcw8mwxlH41ammMTfb8vmMnSXoEjroZZPfd/qI1A6rBjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3rnsinv; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=CIWxnoNGMByjc33X2q/jVlqN4NtVGPgiPLqKVRLy1Y1UVVTWeNDV5Lcne+t3ykeZ7u8vhaqF/28ztpPU7q8huPku/IgPIdkN/cp8rMS7VLCimf5x2cL8rArZg0GfFSMeW2/cLw4tyGyLeqSMqKgjAOtmvKVEmeb4o5LMhtGK/ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBajUGmu; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3rnsinv"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36b95eb4bb4so2730102a91.3
-        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 13:59:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBajUGmu"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c858b5de728so2315316a12.0
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 13:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780433963; x=1781038763; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780433974; x=1781038774; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ea3yw5dmVH/Wal3jfG05beYzbzDpKpyYIVD2MX/4oR4=;
-        b=X3rnsinvLeEIbf83NUNYYy7Bw6LQVHa4Gzuz18eiLNaRBPAOb0hxcZRtAxMmS82VoW
-         VNt5SI0rXyKiZ8TzkU26gzdKqQt9zNCuVuiE1ohrQiLz45y5M8J6ow2CIOnFnaag8NIv
-         idNygrWig9WQQQE8e+kJLtkXnjG6qTIvoq6kSzL3U1fan1UWimk5L8XlnD+9vUQurT75
-         LCrdFnZk8CDksdgOFEkYsmSdbJqowzHsWa7ZLzLQCwtDhCvUAV8aEwnmXmt3LkUhsUyP
-         Zj3q5FP1eRY7plChpcPolE56iUyDNYvDt7J8haU54C9rjAV23qywgk9/iBL2/vozY2pC
-         GN8w==
+        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
+        b=dBajUGmuXiduNnxYDigsK0NW+O8Y0gSoOAmVS3+WiUenfpr0m/M6EgXnWjAuEXMSze
+         wvhmLXm0EpuZoCaNUut9lxp/bEN/iuHNxDDOcktz/V+Z1GrJHToBDWrAXEQJgvtgLZ4v
+         R2liSxLhe0nXYad/K/tA2Sso0bBotJAE/AZIEbF9IKXxLCPjeDsLbmgIS1aFH+c7QbzV
+         zLFlxTjvsuJCiJ0L6h0mM7uwdUMoXt+0FU/LvCbahl01MXA/TrQlVaeP7Gbqw9ooN/1D
+         Xtw/ShTek/R/dcnrIumDF3X7BfakIIBsW/Tgxt7lmEhD/VkGWTsWv4Rvm1FAcGIs0OdV
+         vF0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780433963; x=1781038763;
+        d=1e100.net; s=20251104; t=1780433974; x=1781038774;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ea3yw5dmVH/Wal3jfG05beYzbzDpKpyYIVD2MX/4oR4=;
-        b=Ze3Y3je/FFtXdA4HABTpDCjZVtLjxGrOsmq2BcFsch1USDvLq4SST5KtGot5HUHyaF
-         UIxZJNrPLA62bnB9Ucn6Lubn9Z9NdO6zTneqC2xAUyHYI5/l/mUtR0efU1VumwzyPnDK
-         QyQmUqqqt24XWB3CG/8rKKupWo6IfhDbxi9gU4ATldywjfjTDsGiFaCd8/NkDHQXPfYF
-         O4F1I1d1FlAcijB70n++dWg+sLmqJMULsXSTK8lPFRzBI52HuANiByb52VjUycrl47AX
-         TQS7t1we0rj4u1xPbQx2+eeGDd2B6/sAp4O/gjhSaDHfiXoXvCUglbtGyebdGIHHcxFH
-         hFkQ==
-X-Gm-Message-State: AOJu0Yx9XnfgcOfDwAlat/XI10MfyoD1KVua+D8rYsVpqmh3TCgdrsbo
-	MRS+xyf/VgisuuXqtfgcs41+hqi1xmhb4cx0foEjrjLAWK+cIVmYs6+XNDgB4Das
-X-Gm-Gg: Acq92OGHN9VUPHmKs+rsaD5ydp4zDT3y7ucKpfSIwrQnUoq7zlr79kQk3CRsodVpdEX
-	aH5uP5/AO0nE/gbpuFI/8Kff9G94kgUgbMP3YIRFB/7cyh2/K5TKWLep/oi+J4nqLLtZDAEU0kF
-	koyzN6oaAg0F5tyokMIFqLkPzDULg/TrBV1/9p6zTcnp+OOfRQf0ebt5nQshXwa6AeDI/4YA9/V
-	UOi4UsaL/HQO5eIdShJEDuaJLebbkxgCiwwyrHO4g8cnhqehNQjp1monBxDmwdUvARHelKfojsD
-	X+Ao7VARUvXxoa5q07dIUd2SlhuKEc/Go0ZbMfZnxhabkNNAMucV/cuGI1KlqEIi7c2KiQ69XGM
-	b5Vy0AzrbSuy9mxd6NCzdpF80Ij2TYyYqiuXumPx+0Ts14axRXRcMhFvoXpS26830e7G9TltT4S
-	+BD8VaqEZrOR7LA9COAuPSISYYf7Ue8VwtUrbZwz0WSoDP+E7TTSjV4sTVrrQD7DH4E8VrtB9Lk
-	0kVuUyzCvRbQ5Tb
-X-Received: by 2002:a17:90a:b401:b0:36b:5b82:4834 with SMTP id 98e67ed59e1d1-36e30c213bfmr311928a91.7.1780433963026;
-        Tue, 02 Jun 2026 13:59:23 -0700 (PDT)
+        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
+        b=e10zuk705SFK0eiaWU4uopW5F+TaqVRQ1OFEFsaLdx+08JF893PUagmy0SqgOEy0dM
+         Cx5Uja9do7W0AOqOj26ti5ZurnpqMQq7BmT6dAOSazIe9QpzAQc2B1/F8KJPc0F0OES7
+         L+0U2qkUsIKMCjXRTPBSm9XxhbJ4jnKImHDi4SEXjb0coEGVSaspNKdH8nm609bRQ8aR
+         9iWLZz/70tk9q5SUMyU9/oO7+Qg9djgpop115A9nc8D6mRiQA4Jlbo1L3KOoyuD6+Dhd
+         3PudLh7vvVA6g9gXu1mIHY2QV6yu9YXoCVfUgt8qMW/Vhek8xLc2Hl6jlHYfS8R+wfLo
+         ELEQ==
+X-Gm-Message-State: AOJu0Yw6pFZWAhxviwS2Czu44wVgF6hdLbA8gzNBIF+uAuGW+M7ZzCt9
+	XWlXDyy6l27osmnjJ7boLFXL00Sy3R6GEy8ocIOJPwLfdLbDnj7kCBsgCzcVWrJf
+X-Gm-Gg: Acq92OH765wwPWMO7MAz/9871JX6eDcMPzj76vgEAL5fllImUS5KE6ix0f5eGPPsZcu
+	uFHhsd0AVtg7z4eLAxQWcwmRNAlR94dQIQs3N5JcME3CCg7jEQg3nwO8Zrh2GcyUvW1nYLReXe2
+	EftnhcHOb4321MzMjNGuHLP8gSuDiYbl9jWmorgMRxf7Y/0bmCXN+QWvUyDWj7yhCruDW56zabe
+	G8z8DLbxLGYFDykT7wRpkYuj6MVnZDuAPsfodmLbgRXDjiouz3JsLZ28Ghg6ZgFrhDW7j1puS3p
+	GCkMv9Au90ZXBrnqKsDgUDLu9QMEw30Pj8Z+xRZFLEsybH/88y5BLpf9a118P9M5KqbjfiErjcJ
+	uT+C7mYngHjHURbsAJefdaGvgJ85dcfO2xLmbCzZMgKkiyioZaHBsInNDZ0HMugI9fXGu3v7SIA
+	jrEDWpiSHcV5GJwQoZRJEYOTRzbnbcpFOTLoBeW1l+Y5xcunEpAHb2UvcYzUEMf3UAXV6DGODfs
+	pyjCQUWuFFu1y6P
+X-Received: by 2002:a05:6a20:b598:b0:39c:126c:93b4 with SMTP id adf61e73a8af0-3b497449d82mr542621637.9.1780433973930;
+        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:11cd::1c6:2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.59.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 13:59:22 -0700 (PDT)
+        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -81,9 +81,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next 1/2] selftests/bpf: use host CPU features in JIT disassembler
-Date: Wed,  3 Jun 2026 02:28:46 +0530
-Message-ID: <20260602205847.102825-2-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next 2/2] bpf, riscv: inline bpf_get_current_task() and bpf_get_current_task_btf()
+Date: Wed,  3 Jun 2026 02:28:47 +0530
+Message-ID: <20260602205847.102825-3-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260602205847.102825-1-varunrmallya@gmail.com>
 References: <20260602205847.102825-1-varunrmallya@gmail.com>
@@ -95,42 +95,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Pass the host CPU name and feature string to
-LLVMCreateDisasmCPUFeatures() instead of using LLVMCreateDisasm(), so
-the disassembler correctly decodes CPU-specific instructions and
-extensions such as RISC-V compressed and vector instructions.
+On RISC-V, the current task pointer is stored in the thread pointer
+register (tp). Emit a single `mv a5, tp` instead of a full helper
+call for BPF_FUNC_get_current_task and BPF_FUNC_get_current_task_btf.
+
+Register bpf_jit_inlines_helper_call() entries for both helpers so the
+verifier treats them as inlined, and add the expected `mv a5, tp`
+annotation to the riscv64 selftests.
+
+The following show changes before and after this patch.
+
+Before patch:
+
+      auipc  t1,0x817a    # load upper PC-relative address
+      jalr   -2004(t1)    # call bpf_get_current_task helper
+      mv     a5,a0        # move return value to BPF_REG_0
+
+After patch:
+
+      mv     a5,tp        # directly: a5 = current (tp = thread pointer)
+
+Benchmark (bpf_prog_test_run wrapping bpf_get_current_task in loop,
+batch=100, 10s, QEMU RISC-V):
+
+              | runs/sec  | helper-calls/sec | ns/call
+ -------------+-----------+------------------+---------
+ Before patch |   173,490 |       17,349,090 |      57
+ After patch  |   320,497 |       32,049,780 |      31
+ -------------+-----------+------------------+---------
+ Improvement  |   +84.7%  |          +84.7%  |  -45.6%
 
 Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 ---
- tools/testing/selftests/bpf/jit_disasm_helpers.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c                         | 9 +++++++++
+ tools/testing/selftests/bpf/progs/verifier_jit_inline.c | 2 ++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-index 364c557c5115..3558fe10e28c 100644
---- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-+++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-@@ -96,10 +96,19 @@ static int disasm_one_func(FILE *text_out, uint8_t *image, __u32 len)
- 	__u32 *label_pc, pc;
- 	int i, cnt, err = 0;
- 	char buf[64];
-+	char *cpu, *features;
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 2f1109dbf105..e2c70c70cca8 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1808,6 +1808,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			break;
+ 		}
  
- 	triple = LLVMGetDefaultTargetTriple();
--	ctx = LLVMCreateDisasm(triple, &labels, 0, NULL, lookup_symbol);
--	if (!ASSERT_OK_PTR(ctx, "LLVMCreateDisasm")) {
++		/* Implement helper call to bpf_get_current_task/_btf() inline */
++		if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
++					   insn->imm == BPF_FUNC_get_current_task_btf)) {
++			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_TP, ctx);
++			break;
++		}
 +
-+	cpu = LLVMGetHostCPUName();
-+	features = LLVMGetHostCPUFeatures();
-+
-+	ctx = LLVMCreateDisasmCPUFeatures(triple, cpu, features, &labels, 0, NULL, lookup_symbol);
-+
-+	LLVMDisposeMessage(cpu);
-+	LLVMDisposeMessage(features);
-+
-+	if (!ASSERT_OK_PTR(ctx, "LLVMCreateDisasmCPUFeatures")) {
- 		err = -EINVAL;
- 		goto out;
- 	}
+ 		mark_call(ctx);
+ 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
+ 					    &addr, &fixed_addr);
+@@ -2138,6 +2145,8 @@ bool bpf_jit_inlines_helper_call(s32 imm)
+ {
+ 	switch (imm) {
+ 	case BPF_FUNC_get_smp_processor_id:
++	case BPF_FUNC_get_current_task:
++	case BPF_FUNC_get_current_task_btf:
+ 		return true;
+ 	default:
+ 		return false;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
+index 885ff69a3a62..76d80605ec7f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
+@@ -10,6 +10,8 @@ __arch_x86_64
+ __jited("	addq	%gs:{{.*}}, %rax")
+ __arch_arm64
+ __jited("	mrs	x8, SP_EL0")
++__arch_riscv64
++__jited("	mv	a5, tp")
+ int inline_bpf_get_current_task(void)
+ {
+ 	bpf_get_current_task();
 -- 
 2.54.0
 
