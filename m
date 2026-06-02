@@ -1,141 +1,99 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6918F3E7BA3
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 13:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879603E5EF4
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 13:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780407064; cv=none; b=misIo6HKJTG9vqklypJG3uggyISaVasDZaHeOtWyyqZUlto5XHBKo4DfTCshei4IO3zxGQimXtt9i+ua1DYxrqKOD/SRPPcO/x/HH3MKDRPvd8/5gaRXqYtF9PSqfDWuU4Vyx+zFBOBGymW+0pybUh27KncAAEqbywUbOaT8eko=
+	t=1780407264; cv=none; b=UXUQP342p+UHssIoulCcUemhpoL3gZo7PW79/A5EioX0ez+x46oo4U6vBufXCFZ/DFKndKkve/ESWYcixxP9cufqcHnupk6DeX2EeQnUKZV41+Unc/x9EG7WFHG0STfxNtYUy4dwMptAdDpy1n5qvj2bbWpd00spUR+S/fjW5L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780407064; c=relaxed/simple;
-	bh=rzOs2ROVlRUYlWVAgFsC5/xCEtouzJrcNOa6V02gQSU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=msGxecLidEdw61ZRzArhgaE1PabRXCzchluAZLJw6+YqsC1RmkfDb/ynW1jku9EOzdOTls7Q90GsZ+uU95JDhKu9u2KIDLpzZQGiTvyyCefCeO64pzBOr4Igw+4PrP78WHdwe3cbaYcy1Q3xZrdCMNkVq2oBzZbO4Jw60m7Zito=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QbySsbcK; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780407264; c=relaxed/simple;
+	bh=kBnX/+0c7ITyMO0P3knR00sfYCRT+0BHh1YQn7jrn64=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=DgK2HFmBNe/KOqC37ahtjEfUWA7eg+1qNDszDgFlQttUWRsagPa2zD/EVylY+JE8sfdwRb3Xol/LxvYBJ/PekBykxiqmVjZHE0UGu7+fXcXJEjiUfYmsQIxp86S/jlxSp+caqudvajrdcAdTGIyJVIRefkIa1TyUzTRrn2au1ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fY0WgkbR; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QbySsbcK"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=oXvgaSWF0gngFmIrIHkKAjNaULsSYLEaqnPsIYwhTXw=; b=QbySsbcKtDOk0A8xp0oue4AHT5
-	kwEQ30s5hzyWgCw3ivXuZkadm4IWxSdKr2D18+n4Uo0JUcC877VNosOQJoffk3neuubHdDqGVB69z
-	r1Chaz7/2XA54XZxrsiPdFxw/wSZQLxuZ4HihEiHY/Kd6Btv6bDsZqFt48tmKqL+uIMzZAUNslRos
-	WePdkV8eawPdgcwMBak68IIa4ZASOvdia3B1hdA4uTUc2Z7mc+yLu1JwCi3b73lXo0z8EaWEzAznt
-	lgEs20qnlv5Iuip4GoAZqECqLGYa21N51N2RgK5zKn2Tqxw+xYTCnvuWgRii4c9X/rPGAP0AJkDpr
-	PECIVj1g==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wUPCp-0007Io-1k;
-	Tue, 02 Jun 2026 15:30:55 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: alexei.starovoitov@gmail.com
-Cc: bpf@vger.kernel.org,
-	kpsingh@kernel.org
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Test that exclusive maps are rejected as iter targets
-Date: Tue,  2 Jun 2026 15:30:52 +0200
-Message-ID: <20260602133052.423725-5-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260602133052.423725-1-daniel@iogearbox.net>
-References: <20260602133052.423725-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fY0WgkbR"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49068493267so65810445e9.1
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 06:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1780407262; x=1781012062; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
+        b=fY0WgkbR6mkHahbU5G1lBdwUcnuXXa+x22HRpQwKdZJ47LbSVw0FFARCi9F5PXuwQp
+         OEKdC/FvlXzcVjluIaaBlIJ2VW7jNjvMVdOCRHTy+vN4QWxQsLIeliUlV8xoq8ll1gqy
+         u0rGP1QzcPwUe+zsVHL6zfiz0WZ9vYUkh2pfzDMz/G4yg5tfO2yIy5A0QJfLnWs8GUre
+         FePhuo0S/yoFlLXtuhWLKd+E4u4FwpXvvjD/8xnYRO0ZY461EJZ+rf98RBE9K5Fq3NUU
+         zs7G5hQTzLe0RXBULuk9WXy7RNXQvXJIjSwHo5NPIGqDXDvEEOt4N3/iTI2tsnfhIBFQ
+         Scvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780407262; x=1781012062;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lM9eMUk/jCkJgL/kA3ALW8afdDw3W85juVsOkTKRsaM=;
+        b=A327OsxGbj1IUAQWK66ELDzzXL65GxhrZq9FXoZyUZ1AJgt3YiWke0yWK8HjB8tsh7
+         U29X67Qs5Fx+o8ZcCnzs7mHOHC7XgI57vFf6SyQjunnBOdsa5wCyRtUHSs0EszbNl8ZB
+         As+iRnklHGbgwYfsOECb+k9KF2PoEG9abTXVv/Lfwy/scp4rzEheAYWwIA9JcA/UG0yj
+         8ewhGdSUvxxkBUCJNnDh+zhEugZQLS0tZ+pBQC8K6icFaa6XBAFehSEm8YBLgd/IHC3l
+         tHV6vz5RJxrDSvnATXkf9xHnqELuD3X/iO0Xyn+0hpsIsXBwV+4GxVa6YJY/VZAfJjox
+         xaIQ==
+X-Gm-Message-State: AOJu0YwDVSum0mfrNQRpyRNqVIbmvMqdTJjK1VymTHf5dBDLZWAK4wDh
+	nW2WfjkhYrrHcMKO1f6kNmVCLfAxKkIqMe80Dv4p/x6GU8oYfO4pyr718quLBWvxGfs=
+X-Gm-Gg: Acq92OFUPXZ6c18I6UG3j9dG6GVm0VkXnkfHk+LpHTKwsXzrgLVP/lBzjVvXSHOxYqT
+	HkqBeMoWX9AcnjBrmip2M+UpkEaV2f9cDrqkL3lhrpvMlxFWQKiJuwm6dvgeOQJ4bFGLCZdpys8
+	OqA2IBpIKpIbHMpKRaxRIL5UGZAztVmidAX5u4HF5EGkRVe/4rtU04WwPXUe3FkbHPrz68+qXw0
+	UvqPBa88c2KcveeNlYhbej7uycruDA1eA5iKMdj8D8iniKKp4+o2MFbFzdBWHX0jkLG8eTfODkE
+	SVWH6iie0DLhFf9Xq5PnvVC5s5IzlIFYNL6vUAgD9tT1fzXoSM/YADnsQMTFg1x1/J7G2H3m9EW
+	keRBf6Ibuh9Tj7nCVSaoFf7vjf23lXhgQTbZDxZK184K+J3Uar4rtBsStsAZAZSOZxgZKl2TwVN
+	VzZThaNX3/GJHD2Y7byeGv
+X-Received: by 2002:a05:600d:640f:10b0:48f:f7cc:f6f5 with SMTP id 5b1f17b1804b1-490a2945b99mr208508155e9.31.1780407262005;
+        Tue, 02 Jun 2026 06:34:22 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:e15:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5a9d27sm11444232eec.25.2026.06.02.06.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jun 2026 06:34:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28019/Tue Jun  2 08:33:27 2026)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 02 Jun 2026 10:34:18 -0300
+Message-Id: <DIYLP74JLI7O.11GW15J2LC01Q@suse.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH bpf-next RESEND v12 00/11] selftests/bpf: Tolerate
+ partial builds across kernel configs
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Alan Maguire"
+ <alan.maguire@oracle.com>
+X-Mailer: aerc 0.21.0-146-g87073a0460e3
+References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
+In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
 
-Add a subtest to map_excl that creates an exclusive map and verifies a
-bpf_map_elem iterator cannot be attached to it, which would otherwise
-let an unrelated program read and overwrite the map's contents through
-the iterator's writable value buffer.
+On Tue Jun 2, 2026 at 10:02 AM -03, Ricardo B. Marli=C3=A8re wrote:
+> Changes in v12:
+> - Rebase from 11 to 8 commits: split the test_kmods KDIR patch into a
+>   pure KDIR fix (no PERMISSIVE) and a separate tolerance patch; squash
+>   the BPF_STRICT_BUILD toggle with its first PERMISSIVE user; squash
+>   the four test_progs partial-build patches into one; move the install
+>   fix to immediately follow the first PERMISSIVE user
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t map_excl
-  [...]
-  ./test_progs -t map_excl
-  [    1.704382] bpf_testmod: loading out-of-tree module taints kernel.
-  [    1.706068] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
-  #215/1   map_excl/map_excl_allowed:OK
-  #215/2   map_excl/map_excl_denied:OK
-  #215/3   map_excl/map_excl_no_map_in_map:OK
-  #215/4   map_excl/map_excl_no_map_iter:OK
-  #215     map_excl:OK
-  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- .../selftests/bpf/prog_tests/map_excl.c       | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_excl.c b/tools/testing/selftests/bpf/prog_tests/map_excl.c
-index a213dd559aae..3088668e2e45 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_excl.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_excl.c
-@@ -7,6 +7,7 @@
- #include <bpf/btf.h>
- 
- #include "map_excl.skel.h"
-+#include "bpf_iter_bpf_array_map.skel.h"
- 
- #ifndef SHA256_DIGEST_SIZE
- #define SHA256_DIGEST_SIZE	32
-@@ -89,6 +90,42 @@ static void test_map_excl_no_map_in_map(void)
- 	close(excl_fd);
- }
- 
-+static void test_map_excl_no_map_iter(void)
-+{
-+	__u8 hash[SHA256_DIGEST_SIZE] = {};
-+	LIBBPF_OPTS(bpf_map_create_opts, excl_opts,
-+		    .excl_prog_hash = hash,
-+		    .excl_prog_hash_size = sizeof(hash));
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct bpf_iter_bpf_array_map *skel = NULL;
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+	int excl_fd;
-+
-+	excl_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "excl_iter", 4, 8, 3, &excl_opts);
-+	if (!ASSERT_OK_FD(excl_fd, "create exclusive map"))
-+		return;
-+
-+	skel = bpf_iter_bpf_array_map__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_array_map__open_and_load"))
-+		goto out;
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.map.map_fd = excl_fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.dump_bpf_array_map, &opts);
-+	if (!ASSERT_ERR_PTR(link, "reject exclusive map as iter target")) {
-+		bpf_link__destroy(link);
-+		goto out;
-+	}
-+	ASSERT_EQ(libbpf_get_error(link), -EPERM, "iter attach errno");
-+out:
-+	bpf_iter_bpf_array_map__destroy(skel);
-+	close(excl_fd);
-+}
-+
- void test_map_excl(void)
- {
- 	if (test__start_subtest("map_excl_allowed"))
-@@ -97,4 +134,6 @@ void test_map_excl(void)
- 		test_map_excl_denied();
- 	if (test__start_subtest("map_excl_no_map_in_map"))
- 		test_map_excl_no_map_in_map();
-+	if (test__start_subtest("map_excl_no_map_iter"))
-+		test_map_excl_no_map_iter();
- }
--- 
-2.43.0
+And of course just as I sent I realized this was left behind by mistake.
+This was scrapped and the series is still v11 :(
 
