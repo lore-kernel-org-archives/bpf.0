@@ -1,63 +1,63 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21DB30C637
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 00:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945E630C159
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 00:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780360898; cv=none; b=XDAMwa9WfVl8MacyxgpA8ICbB5Nd1e8oyrYPW/UQGdoJJX3/mp7/7/bTo/z6Tz9eTuBsHW7qsQq4+6Ug43xkgllIVyK3LScypbRKYsXy2N2T0NYoxsF38e9OrwfCR2du4abuzLhcH6NuZ7U8zoLtXJcemxWUy/Rpnv3ZNBZ35nE=
+	t=1780360900; cv=none; b=F7kxmq0X8B2LbVGdWuWLHmmUYtVe+LudngTviDAys5dt3OhxXz2KfOpBP2xMS8BTIcwtkxRXZE/+dfifjoqGsngIzbk8Jwdz9nX4OWtOCyeD+wK09wf/XKfcwSe0TOCUxSWNKeoqV05ZxIBvUohCP8rU7hdfyLnEQ5/K/nttWxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780360898; c=relaxed/simple;
-	bh=sdCe9MxbLk9eDM5yR4uzUvv9RVBREfEwU6cFymJz1EE=;
+	s=arc-20240116; t=1780360900; c=relaxed/simple;
+	bh=5a1oVTUhDljv0ClgO3v7wSTQtgaZUS2tMy5HNEWTM4c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gllLt7QYaTbm9Mq+RTMSauU3xPzDOAZTxxXs4k14U2L70b2Dz6AmvPkvEkBWvzKiY0Nz+K+ja48p1aWRGDMTLo4GyuvNLdw9pfH1BVMeeRiYscsiq8EvNyyQtv/cmHEiuTskx1+XQWczM9fF9eRFg9jGDwwSKj9ychMvxumJ61E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=aWwP8pLP; arc=none smtp.client-ip=74.125.82.178
+	 MIME-Version; b=SYpettVfO5FAAumdC7W9mZRnOKkj9+BOtNenmzv0X3aqYMgDzdLzpxIQRSWvJTr7xSktnWX91rud9jPKIW9I3CgqiNkGxCRVZ55+3v+sM/OmLYk4PlvfgwhBDePqHCLNNnVMI/coYtyY2UoVkPaCaAmr6X57OxzPfETQzF8voXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=PFeOVzRO; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="aWwP8pLP"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-304545f5206so14842784eec.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 17:41:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="PFeOVzRO"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-304e83724bfso4973157eec.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 17:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780360896; x=1780965696; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780360898; x=1780965698; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YkE+DDtvKiradbMJHxOIKNN8/izZ/y0QI8WToXPVs1I=;
-        b=aWwP8pLPullGx6Q+07N1fUmy7T0mFoFSM3RdWq/j6prsyGNMYYXs6ly6g8z7M0JGi3
-         VlWMjk2IwIBE+IUM/WQiobjOPgnPvYNoKpbkbESL5m0hwGhZmncEyquGTGMFKE0kN/zd
-         NJ1BkKwvdMDN4olV2K38BeNcJYVicIyhANxR/ce/IEKOD/pvLrpVufXCrzX8nO4madm5
-         Jb7hcW5GGUdoHmgrZTsCotZwPmmgEDqpQmMg6dFWbB/bhzzg39ZDA+AHvLBhsLfYU2+b
-         F/3AFYhXsd3MChhfte3WfTEBDUqyKe88EnqY7CqUWsoq15cDNfeAbcCZu9LGuezV2WpB
-         PMhw==
+        bh=xy850NneD4r4zouvtuvarurekKw/+ZCNnUETv83CMOo=;
+        b=PFeOVzROxFX3eQ48M4VPDIMBXygKs/G4sPM+nsBzFC9t3kZ7lXlXllEx3qH+fILr/P
+         21tkCUV/Ndfe23dg+CowPCPM17nbX8GSVbYNS3uiC9MZhb5fpQ7CE10qgPv/f9bku22X
+         QS+q+b3jWoojTaYD0Yjj6+u1qR9hFX6oiPFYxmMXrjW0m3fcysFXnhWLl57ffLftZf3K
+         9gsyYTdYlm7vnFY0C60g3wbZDHr8axlqh7M7ZN0rNCjSjhVWUabL6RFq6qBuGaAuszbd
+         Ag4Ksp0DUB0y/JZc3l+RVtwTqMpL4fka1Vh5F2y6jKjw7Qs2y8XGMAdmTdQrYZ+7RZFF
+         ArjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780360896; x=1780965696;
+        d=1e100.net; s=20251104; t=1780360898; x=1780965698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YkE+DDtvKiradbMJHxOIKNN8/izZ/y0QI8WToXPVs1I=;
-        b=q4YdmSfdSR9n+Is0eCHLq7//C/8yB6Y8fLt4ThTsk0yosRO9wuyHiG+2wEMZ0nOOz8
-         OeBYrhUqjI8iYfGHibv1jPGrp2MeAPIMomWect3d8eVRdHzQhhIfYkVJliAjATmjEdHf
-         uVponDinfmuzozin4bSPSTnUZt+HkqtyPxULluAyyNZHioDUwFzz8FzxVHS3+W43G+MU
-         SbY3/rl47u31v6g2b3aQ9KtC5dQwYsEtdP03bGM1tnLLcVLFeuzSGRcKzqqm3KGfeCLi
-         ynAiC8ygfqxJCZIglslxLVe6GiEr+5VACRF8LqjBQwL9SDZC7YycdbXWQA1Esn1Y3C9J
-         covA==
-X-Gm-Message-State: AOJu0YzcDaIaoX3ofGvPHWc1qMiWaUTnRJ26pOnVbBfbQlf8t1Mogh+h
-	oGjEp1RC7yRzSX57HYlGfGfQnb5cJ/LtVT5S1PQ9WcRlLtSqUhTrcjufYLkaj026HpCHOAnSti5
-	o2qc9mo3WM29G
-X-Gm-Gg: Acq92OFwcEsfaZVsuQyLoo5HrNGWPZURuUo0f3HdXuHf307YGsyTxc56Xw0WjAj6BiQ
-	DSiOyAIhd8C/xKsmZD26a1wRT0qLNoWKlCx9LjMoxGRwwRktCkLCugV2QYIWAGltqbd8QWXgBlP
-	ZauOeOAFAcjVrlwkmeKEUT5CNv4o9zkrIqbve2lZ7Js3Y4C8C+GFeL+GE19W4ldVfAQck0H61nB
-	/3wEz+JnJU5cPIfTKLeB596Yr/nRcxT5jbBJVMZFnamUlaXrOiq2v1gprMRG8D1B1w5xtKX3fcg
-	ATw+4+loB6Reuyphiyf7LdHAG+VkDBmBL3a2TMBTteQ+2xQsoKG2ryNQ3hVDy9Iqa7Sv54wpeOp
-	92lNpRsOrE6Bzpa+Js5fXpqPXkItE5L8kcsLN0kq6ALnRqI7hYq7zDRAg1HYIQIKWMtWxphhlfm
-	KNcgeCeK1fZsS5QhqCG5jjCav8EBbJtA==
-X-Received: by 2002:a05:7300:ef83:b0:304:b14:ec53 with SMTP id 5a478bee46e88-304fa647e11mr5776594eec.27.1780360895937;
-        Mon, 01 Jun 2026 17:41:35 -0700 (PDT)
+        bh=xy850NneD4r4zouvtuvarurekKw/+ZCNnUETv83CMOo=;
+        b=GqVkahzZX/fq6MlUxQYJipgOGvtH+73bnBZDeq5ejYOkcB0jszm2ysaGdrABxasfD3
+         0z1odsxR6zxmzXCP1b/9S+6Qiiask2m0+OluVE+hBz6eSecaAuD8JatI8Bk3YYKqB+9N
+         LpLsWfnVYB0ZrHQ6ehZ70HWjO3D6Fx4QasL4Q470Oy2Tu0jQ9dtn3nOx+bPI9SzNeTZM
+         pk5ww5JzdOiq4cI3QWwCDfnKb/2NdqyBmm7zaDXLF0PRrgtr21iClR7eVhAHHvTR1qCu
+         w2cSBWhG933yLk+yLWrDkQZ9SZ5m5rdwCnaBpzxiP5RrHGABZvfD9cykvfi2dQLw7gmv
+         NH5w==
+X-Gm-Message-State: AOJu0YxKBV62gsI4bflixD+vNOO5ctiKSCl/qfY7lAJgPlgXaFfnFQKR
+	kOm1OLH55wdiKYijLx7rOVSi71Nzd2kwzH67VmQOxpLHAb4m12ZpQKAfasrY8SAFN7QLFrJgcnH
+	SzIXjiE+9UgWe
+X-Gm-Gg: Acq92OH5Sa4KrVTlWCB7AhA7UXmlulUAmUI5dj7ny+xiBWjpzQeqzxJ5AFwq0hMrc/4
+	OOiWO6IVbhYa26l9yl9X4mw3/JngNDe939aveehcILo9CSWHVpceyr3eYyqfJkL+NCcjPiokikh
+	vZEcy+wHru0l9/OpKf8fBZSGarPxbtNewkXEEe5VA4QiShXz+OLTMl4S074ZONkehX6snJwOVH+
+	h+LP46f1n5PpzGb665m6j2UDKYEiP2v/1W+UvTTGmktOp+ezNNs86Ozf5ZjjkdTSrxEHhsgVC8/
+	Od63AAyFnyTo50lB0alrZ/3eaV7tp8h4L5Mo6612qxPC2Ip5cUqi0bO955mp/0eRX3AD7j5DzY6
+	SaT8be1HRt5t2UJjceK0D6ZQh4GN0jYo5LN8hQAYIe/O1QMrQ6W6mNdvVpQNObKg90R8WC9CHzf
+	eLQOkMfd0XpE0Rj5+D+De0zlYpnKH1GA==
+X-Received: by 2002:a05:7300:6da3:b0:304:997c:d47a with SMTP id 5a478bee46e88-304fa4eded0mr5594184eec.10.1780360897643;
+        Mon, 01 Jun 2026 17:41:37 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::4f12])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5d5385sm10172018eec.28.2026.06.01.17.41.34
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5d5385sm10172018eec.28.2026.06.01.17.41.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 17:41:35 -0700 (PDT)
+        Mon, 01 Jun 2026 17:41:37 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 5/6] selftests/bpf: libarena: Directly return arena pointers from functions
-Date: Mon,  1 Jun 2026 20:41:19 -0400
-Message-ID: <20260602004120.17087-6-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Add tests for the new type-tag based __arena identifier
+Date: Mon,  1 Jun 2026 20:41:20 -0400
+Message-ID: <20260602004120.17087-7-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260602004120.17087-1-emil@etsalapatis.com>
 References: <20260602004120.17087-1-emil@etsalapatis.com>
@@ -82,127 +82,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that the __arena annotation includes a BTF type tag, and the
-verifier can identify arena pointers at BTF loading time, return
-arena pointers as their true type instead of casting to u64. Remove the
-preprocessor typecast wrappers used to hide this from the caller.
+Add selftests that combine the new type-based __arena identifier with
+the volatile qualifier both in functions' arguments and return values.
+This way we test both that they are recognized as arena arguments and
+that they are not sensitive to the position they are placed in the type
+compared to other qualifiers.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/buddy.h     |  3 +--
- .../bpf/libarena/include/libarena/common.h    |  3 +--
- .../selftests/bpf/libarena/src/buddy.bpf.c    | 20 +++++++++----------
- .../selftests/bpf/libarena/src/common.bpf.c   |  4 ++--
- 4 files changed, 14 insertions(+), 16 deletions(-)
+ .../selftests/bpf/progs/verifier_arena.c      | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-index 4d57fc1b5c26..528c69a1f38e 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-@@ -76,7 +76,6 @@ struct buddy {
- int buddy_init(struct buddy __arena *buddy);
- int buddy_destroy(struct buddy __arena *buddy);
- int buddy_free(struct buddy __arena *buddy, void __arena *free);
--u64 buddy_alloc_internal(struct buddy __arena *buddy, size_t size);
--#define buddy_alloc(alloc, size) ((void __arena *)buddy_alloc_internal((alloc), (size)))
-+void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index 89d72c8d756a..df0e22d1a29b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -607,4 +607,71 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
  
- #endif /* __BPF__  */
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-index ca1a6c1d6477..a3eb1641ac36 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-@@ -48,8 +48,7 @@ extern volatile u64 asan_violated;
+ #endif
  
- int arena_fls(__u64 word);
- 
--u64 arena_malloc_internal(size_t size);
--#define arena_malloc(size) ((void __arena *)arena_malloc_internal((size)))
-+void __arena *arena_malloc(size_t size);
- void arena_free(void __arena *ptr);
- 
- /*
-diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-index f4ed4c3abb4b..c674ee5cfcc1 100644
---- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-@@ -750,25 +750,25 @@ static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_
- 	return (u64)address;
- }
- __weak
--u64 buddy_alloc_internal(struct buddy __arena *buddy, size_t size)
-+void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
- {
--	u64 address = (u64)NULL;
-+	void __arena *address = NULL;
- 	struct buddy_chunk __arena *chunk;
- 	int order;
- 
- 	if (!buddy)
--		return (u64)NULL;
-+		return NULL;
- 
- 	order = size_to_order(size);
- 	if (order >= BUDDY_CHUNK_NUM_ORDERS || order < 0) {
- 		arena_stderr("invalid order %d (sz %lu)\n", order, size);
--		return (u64)NULL;
-+		return NULL;
- 	}
- 
- 	if (buddy_lock(buddy))
--		return (u64)NULL;
-+		return NULL;
- 
--	address = buddy_alloc_from_existing_chunks(buddy, order);
-+	address = (u8 __arena *)buddy_alloc_from_existing_chunks(buddy, order);
- 	buddy_unlock(buddy);
- 	if (address)
- 		goto done;
-@@ -776,12 +776,12 @@ u64 buddy_alloc_internal(struct buddy __arena *buddy, size_t size)
- 	/* Get a new chunk. */
- 	chunk = buddy_chunk_get(buddy);
- 	if (chunk)
--		address = buddy_alloc_from_new_chunk(buddy, chunk, order);
-+		address = (u8 __arena *)buddy_alloc_from_new_chunk(buddy, chunk, order);
- 
- done:
- 	/* If we failed to allocate memory, return NULL. */
- 	if (!address)
--		return (u64)NULL;
-+		return NULL;
- 
- 	/*
- 	 * Unpoison exactly the amount of bytes requested. If the
-@@ -789,10 +789,10 @@ u64 buddy_alloc_internal(struct buddy __arena *buddy, size_t size)
- 	 * unused bytes that were part of the header.
- 	 */
- 	if (size < BUDDY_HEADER_OFF + sizeof(struct buddy_header __arena))
--		asan_poison((u8 __arena *)address + BUDDY_HEADER_OFF, BUDDY_POISONED,
-+		asan_poison(address + BUDDY_HEADER_OFF, BUDDY_POISONED,
- 			    sizeof(struct buddy_header __arena));
- 
--	asan_unpoison((u8 __arena *)address, size);
-+	asan_unpoison(address, size);
- 
- 	return address;
- }
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index ec9de29e6f3e..50be57213dfb 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -38,9 +38,9 @@ __weak int arena_buddy_reset(void)
- 	return buddy_init(&buddy);
- }
- 
--__weak u64 arena_malloc_internal(size_t size)
-+__weak void __arena *arena_malloc(size_t size)
- {
--	return buddy_alloc_internal(&buddy, size);
-+	return buddy_alloc(&buddy, size);
- }
- 
- __weak void arena_free(void __arena *ptr)
++static __noinline
++u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
++{
++	volatile u32 val = *arg;
++
++	*arg = val + 1;
++
++	return arg;
++}
++
++__weak
++u32 __arena *check_arena_arg_global(u32 __arena *arg)
++{
++	volatile u32 val = *arg;
++
++	*arg = val + 1;
++
++	return arg;
++}
++
++__weak
++u32 volatile __arena *check_arena_arg_quals1(u32 volatile __arena *arg1, u32 __arena volatile *arg2)
++{
++	*arg1 = *arg1 + 1;
++	*arg2 = *arg1 + 1;
++
++	return arg2;
++}
++
++__weak
++u32 __arena volatile *check_arena_arg_quals2(u32 volatile __arena *arg1, u32 __arena volatile *arg2)
++{
++	*arg1 = *arg1 + 1;
++	*arg2 = *arg2 + 1;
++
++	return arg2;
++}
++
++SEC("syscall")
++__success __retval(0)
++int check_arena_arg_ret(void *ctx)
++{
++	u32 __arena *page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	u32 __arena *arg = page;
++	u32 __arena volatile *arg1;
++	u32 __arena volatile *ret1;
++	u32 volatile __arena *arg2;
++	u32 volatile __arena *ret2;
++
++	if (!arg)
++		return 1;
++
++	/* Make sure we use {arg, ret}{1, 2}. */
++
++	arg = check_arena_arg_nonglobal(page);
++	arg = check_arena_arg_global(arg);
++
++	arg1 = arg2 = page;
++	ret1 = check_arena_arg_quals1(arg1, arg2);
++	ret2 = check_arena_arg_quals2(arg1, arg2);
++
++	if (!(*ret1 ||*ret2))
++		return -EINVAL;
++
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.54.0
 
