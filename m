@@ -1,171 +1,111 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B140395AC7
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 05:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2F72EAD1B
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 06:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780379751; cv=none; b=UfzbFCyMC3UkSwjg42h/gNj9KztypT3szjWSiqFCkt/ZB/6w8g9MlHW3EDU6oXm866JSE7L4x5zJENOc0rj9PJl6y2ytED4iv4whc6RXQwN+DOYdaXMASoa7T5NVoFbFkU8EU1KFZGkIlgEdemvd2SNnmijo+RXXUi/zKmroQls=
+	t=1780382569; cv=none; b=E9GafBaLiyX4kKMDzC60KsRlxt73RblzdYnUQv8Je1Z+eZeqi7ugQ4fvxYR+1/Pp1bPWtuVjcfppXLiRENe96AuhYumEVaHlrXO4yzn9pVOptDXhhdZ5cYCREqhhDNmAQKs/OaQX9v3kDBssEnr4WRw5P55mcchzOpdyGW/wctY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780379751; c=relaxed/simple;
-	bh=rpJIl5WhBl3dFSkFytFFp47nwPvhNlNsH/AaOlT26MM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YAV1IEE1mWy4tv+kgs0e7iYBokV4KsoKQzShA1GdzXNxpsmWun6qVlydUq0PCfp6MevnAv2n8+ToOFiadBMojydhwhZxcxuGufKj0XVZ4i+0XgcRV9/xD1NxwNLqhqnYvT2i3lbskLhjXsHoYn7WQuOQIsS/qvsgOKWHZZ4Soy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dXUPS7iQ; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780382569; c=relaxed/simple;
+	bh=qE///xx7EQlY0uI+1+xH8GZBQ0wprBOgoD0QacK7mPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CHoN0K4yxxspOdA0gGFioT5ysHZ2u+taGRTngA4Femvfgl1kKLsuUCwWi8VkFWiw6yAtECVdERv5NfrsAgxi/p1At5EhreOUFffKQJC+8NTGFJxTtTKKsrVAYQjOCpfNIG0spWeWe90WE0m/K9u9juFazpar+nYy7GJ2w7hxrB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E5c3jx1K; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dXUPS7iQ"
-Message-ID: <a775c0b8-07f3-4265-8cfd-ec01ffd9efbf@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780379738;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bTx67N7FaBzchy3F7x9/VR7589t0h++mxIcV0ieEro4=;
-	b=dXUPS7iQn2YkCwA+7p/eWX29zI2IC4yIFprmBgQoYCz7/C21pxVCVNF1S8wMLQbFZ9xM7J
-	YJgQuuUGDOXtpjGyctFu9s9WT9WWFaRk1hyNvsUiNu7Hlh2kx5mTb4TTwki4AVVKlVAUFK
-	RYzNDkETTmJkro1TOe1sBGSZXHdm60c=
-Date: Mon, 1 Jun 2026 22:55:27 -0700
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E5c3jx1K"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-45eeba68948so3676110f8f.1
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 23:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1780382566; x=1780987366; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2N/m1TM4Ju0vSdiUK1Hy2gxsTSd/KSb52qvXdhc7mG0=;
+        b=E5c3jx1KDznGM/xQCCeuWsjY4ltjgWWwMQMR6WqY4ouqMxfYDFjIBa1nhXEhsWdeZD
+         9WsOws/fVK+/V+oj/2ix/11XjFR2rwCoTikBDid1RTcHiPH8h5cAS2ZMJ41sE4QCLNiL
+         RlueKdatJ9Qyz6Cz1xDSX4ATUq2KVPoj/Irc2ImVRNhqg9hzYk8Vl5zHbzDy3yREG+sL
+         f2S898wQ7xO4IffaDH7yDS/wyEpldPJ2Hapy8wF8kza/rdPzraY1e8HUZKvBMjgd1C6l
+         UHC0Ak3EDVz9mvvSxCKSecG6cBF43WhUSZuPMylTXTBO7Qiqtu/EyRjRyrmCcVvxuaNh
+         ePEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780382566; x=1780987366;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2N/m1TM4Ju0vSdiUK1Hy2gxsTSd/KSb52qvXdhc7mG0=;
+        b=X624UpT+QayxFxPlEJ0+/4RbxxQ3VIw5rhWYMpVXM9lZirEY2dx6nl5l/8EUhvVHbF
+         MYhCrPEB4xEszaonPWB0wGeoJq2Xx99mZfmDQr+urIjxFlQgm3dfFskaIA8b7UI0w4sm
+         eeCTrL+JL5XMgL7b9O4rxtC7s5wxkCSnt00bxRq+G4gIffSKqzAUzFvz3dHWCegLBf3T
+         XCgGk5vhkOn1ViljkXmTlGlqcPY/LX90cKvOgj5jwZUiz7OScVqTWTffsMOchFySZt52
+         43+X/SesglW4DMAayVlactx0DO1TsrDgYvcpUbwNv1OctWx7Q2ocL+mjC5/K+NUZt9g0
+         06tg==
+X-Forwarded-Encrypted: i=1; AFNElJ+6BK+6FmFpZmM9djX/VhulK8vK/gv8M/CQMBVOzsTeN7PsjAVUAxJj2UDuzAc5hNLh7Wk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfk87ClZIrqVHltV2wL5TLRboIB/FM2QHUBrMoA+2RIS88hp0q
+	ie9wQnzJsivdxroJuXGI8HnRiDVWHIP4562RknX8Q2Pqkp6JqaVNIAWs/rZabdUgFlo=
+X-Gm-Gg: Acq92OFBJj9bjwjyUNnLQCvJkoXYTqtik+QIJ0pteqQgLYFoFL+DTFhRslZIHqkHFJ/
+	794D/SU/bzZlZIpU2RMpf3ZzEtsComRIBc8ohg0nqPfnIdqsk8UcWb2z+amxzzlrPQpCPpD7cT0
+	GGmSdskEtwXEhnnhxqPKriUOJuHC7Zf6KNBSJVDM5Iu9iz4rmCIURlNyLtRxtkT6gYxaiK/wG/z
+	j0Z8t5bt2zoZJdJb0R7Mn2C0GnYT6CaAML6pBkH3FvQLtgaNlK6kJ6Lrr7VYMPUR1QI8oaJRrZq
+	I6IPwdV1DVFmQTwtH23TNEWW5bEVKh2cHcw1cJqSFi9YEcL+Vj9kqNAt+yVOemGi35Z33tfjmGA
+	hn59fDIiTEBdFYPe0tF9eEQXuktvdabF5gbqJksQRA1c+lus+SLk2FC7Vw0aaoyaPT30i+pooze
+	QaMd1RFFQoN78R4qE7xFZhv75tQozOAN1q9kkgKpFDLpgwd12AO7Dgc8jVKdtH905Y7Vckcrxx8
+	Fd7
+X-Received: by 2002:a05:600c:a55:b0:48f:e518:d110 with SMTP id 5b1f17b1804b1-490b0717e7dmr51100485e9.32.1780382566124;
+        Mon, 01 Jun 2026 23:42:46 -0700 (PDT)
+Received: from u94a (218-164-49-131.dynamic-ip.hinet.net. [218.164.49.131])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bf239fdf0asm121897245ad.26.2026.06.01.23.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 23:42:45 -0700 (PDT)
+Date: Tue, 2 Jun 2026 14:42:35 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Zhenzhong Wu <jt26wzz@gmail.com>
+Cc: stable@vger.kernel.org, Paul Chaignon <paul.chaignon@gmail.com>, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, 
+	tamird@kernel.org, eddyz87@gmail.com
+Subject: Re: [RFC PATCH 6.1.y 0/2] bpf: backport scalar not-equal tracking
+ fixes
+Message-ID: <ah56iBM2P_9hF3_L@u94a>
+References: <20260601180400.1381736-1-jt26wzz@gmail.com>
+ <ah5pf25fhVH9WuU-@u94a>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-Content-Language: en-GB
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, puranjay@kernel.org
-References: <CAOrxSK5_7e4114VyfEU9htGi+UneuNt88fGVKOAa3_ZenPOFkA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAOrxSK5_7e4114VyfEU9htGi+UneuNt88fGVKOAa3_ZenPOFkA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ah5pf25fhVH9WuU-@u94a>
 
+On Tue, Jun 02, 2026 at 01:47:01PM +0800, Shung-Hsi Yu wrote:
+...
+> On Tue, Jun 02, 2026 at 02:03:58AM +0800, Zhenzhong Wu wrote:
+> > Hi BPF maintainers,
+> > 
+> > This RFC backports two BPF verifier scalar range-tracking fixes to 6.1.y.
+> > The series is intended to fix a verifier state-pruning issue where an
+> > impossible scalar path can be kept while the real success path is pruned.
+> > 
+> > This is a verifier scalar range-tracking issue, not a helper-specific
+> > issue.
+> > The visible failure is that the verifier can prune the real success
+> > continuation, which should not be skipped, and keep only an impossible one.
+> ...
+> 
+> This sounds somewhat similar to the issue fixed in "backport of iterator
+> and callback handling fixes" for stable 6.6[1] by @Eduard. Could you try
+> to test on the latest stable 6.6.y as well at see if you can reproduce
+> the issue there?
+...
 
+My mistake, the reproducer you had doesn't use iterator or callback, so
+probably not fixed in stable 6.6. I'll take a better look at this later
+this week.
 
-On 5/29/26 1:01 AM, Sanghyun Park wrote:
-> bpf_find_vma() reads task->mm without holding task_lock() or taking an
-> mm reference via mmget()/mmget_not_zero(). When called on a foreign task
-> obtained via bpf_task_from_pid(), a concurrent exit_mm() can free the
-> mm_struct between the raw pointer read and mmap_read_trylock(mm),
-> resulting in a use-after-free on the mm's mmap_lock.
->
-> This is the same bug class fixed by commit d8e27d2d22b6 ("bpf: fix mm
-> lifecycle in open-coded task_vma iterator") for the open-coded task_vma
-> iterator, but bpf_find_vma() in the same file was missed by that fix.
->
-> For the current task, task->mm is stable and needs no extra reference.
-> For a foreign task, use get_task_mm() which acquires task_lock(), checks
-> task->mm, and calls mmget() atomically, preventing the race with
-> exit_mm(). The reference is dropped via mmput() after the mmap lock is
-> released.
->
-> Race:
->    CPU0 (BPF program)                  CPU1 (exiting task)
->    ============================        ==========================
->    bpf_find_vma(foreign_task):
->      mm = task->mm
->      // raw read, no reference
->                                        exit_mm():
->                                          task->mm = NULL
->                                          mmput(mm) -> frees mm_struct
->      mmap_read_trylock(mm)
->      // UAF: mm is freed
->
-> Reproduction:
->
->    1. Build kernel >= 5.17 with CONFIG_KASAN=y, CONFIG_BPF_SYSCALL=y
->    2. Boot in a VM (QEMU works fine)
->    3. Compile the reproducer below:
->         gcc -O2 -o repro -static repro.c -lbpf -lelf -lz
->    4. Run as root: ./repro
->    5. Check dmesg for: BUG: KASAN: slab-use-after-free in down_read_trylock
->
->    The reproducer attaches a BPF program that calls bpf_find_vma() on a
->    foreign task obtained via bpf_task_from_pid(). A racing thread
->    repeatedly fork+exit's that task, creating a window where mm is freed.
->
-> KASAN report (reproduced on 6.12.91, CONFIG_PREEMPT + KASAN):
->
->    BUG: KASAN: slab-use-after-free in down_read_trylock+0x380/0x3f0
->    Read of size 8 at addr ffff888003cd2fd0 by task repro/164451
->
->    Call Trace:
->     down_read_trylock+0x380/0x3f0
->     bpf_find_vma+0xdd/0x360
->     bpf_prog_708df9c9a3e172a7_main_f+0x8b/0x9e
->     bpf_trampoline_6442513469+0x43/0xa3
->
->    Freed by task 164453:
->     kmem_cache_free+0x15d/0x4b0
->     finish_task_switch.isra.0+0x4ab/0x810
->
-> Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> ---
-> v2: Rebased onto bpf-next to fix merge conflict (no code changes).
->
->   kernel/bpf/task_iter.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index e791ae065c..015399e62b 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@ -757,6 +757,7 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
-> task, u64, start,
->    struct vm_area_struct *vma;
->    bool irq_work_busy = false;
->    struct mm_struct *mm;
-> + bool foreign = task != current;
->    int ret = -ENOENT;
->
->    if (flags)
-> @@ -765,7 +766,12 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
-> task, u64, start,
->    if (!task)
->    return -ENOENT;
->
-> - mm = task->mm;
-> + if (foreign) {
-> + mm = get_task_mm(task);
-> + } else {
-> + mm = task->mm;
-> + }
-> +
->    if (!mm)
->    return -ENOENT;
->
-> @@ -782,6 +788,8 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *,
-> task, u64, start,
->    ret = 0;
->    }
->    bpf_mmap_unlock_mm(work, mm);
-> + if (foreign)
-> + mmput(mm);
-
-mmput may sleep. See the code:
-
-void mmput(struct mm_struct *mm)
-{
-         might_sleep();
-
-         if (atomic_dec_and_test(&mm->mm_users))
-                 __mmput(mm);
-}
-
-But bpf_find_vma may be in non-sleepable prog context (rcu context).
-So the fix does not work.
-
-Also, there is a format issue in the diff.
-
->    return ret;
->   }
->
-
+> 1: https://lore.kernel.org/stable/20240125001554.25287-1-eddyz87@gmail.com/
+> 2: https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
