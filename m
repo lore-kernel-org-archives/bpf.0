@@ -1,100 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBE93D3D03;
-	Tue,  2 Jun 2026 09:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FE93D6463
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 10:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780394310; cv=none; b=k23dwNUXhVzVS1r5r/jxup8U2wRbr+sUWMAQVRSW7QVaKt2hzlBZNdivJM09iz0XDge5kYqVDv8slj8P+EZroVfq3A8ivW9cixVIOjAAiIOy7ZqCovrpcAUU9qvh2r4ftWEMwiEMRCSZRPTHpdX8Xs9pGi1geqwKPnjp47zPRDE=
+	t=1780394779; cv=none; b=ENRVZolkglYLvKQY9wmYT2AkPFMYFpwJI+bXySKEK9xvhQQZH5B9kYSdtnMSObZREs2FxvdpAIbayVWxOFKSkFLKJOWpgbNU+CPiZncT0puW14CfYfh67vU43KL2h/IRbU5zIv3ZrzELZm2bLl6HK9zO5qbYVqUuZ6xZCrunhhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780394310; c=relaxed/simple;
-	bh=rj8exp7Amd9Ol8HJ44cvBYkEXAiW5cNwu7/fcWUYLW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NngY2FeFq2Owx+11alUF1YwNq6gdGlc3qS/X5zo5iGpPK9KlBM9WFkDiCORXP923jhOiSaom6Ho3dQ35VVRqJUfAgJsqW1jeuxqXwySkt0H/LKDUqxJTqVtmNtAQqKIiVtuwgZyddaXzCu4yhhYtQXSPvghObCThLiQwmi76YvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2WUXT9j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780394779; c=relaxed/simple;
+	bh=pINKjYoL6IMUywK8A4HglYR5ZxGdrPQv8OVjLpOkwIU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=geY8yPMmr3bA0iYFEYnrnKGBhXNMtf9f88Lw5IIvUHzNfjgmmVW541RT958CYSxgetc0M9v06/6SyQ5IjhAiDDYMZQ3boIGTAYJ8ibDHCOTZx/yNAJtoKaMHvO4XCHbs8tL+orvVseE/eoIc22aWtyGTSYFThGD2yOPnffKGGG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSyLauRd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2WUXT9j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C444E1F00898;
-	Tue,  2 Jun 2026 09:58:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSyLauRd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969041F00893;
+	Tue,  2 Jun 2026 10:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780394309;
-	bh=ATzXC1zmaZ/vfuDrUdct+l2gZdFTjFwyYzm+mZ+8ldE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=G2WUXT9juyCz3FhbTrS5sMLYCg+ZzFkZiN5Xfor4oN5EyxLpFUAyGxxjyYo2BT+7y
-	 6BRDFbckSxYfQr/vPI9hU0ffJtpookD4g020tFhwVt83RYEdwWoaDZ0mzLcffBO93S
-	 4SnZQXIwM998Abvzd3Rdbc4+v16+5ZkHvJHddENeF3bMWfHzSIinE/HDYU0La039Gg
-	 MkJj58fPoVKCBSaBzv/zxoxUBBV6TmQfAD/zAEdJB2HllsH48gNukHjnhXvPtEYAOY
-	 JnqVooRum7EUcmFL2jTwDBQFMGB62cFPz1TMQ8jrQuzNDn0oJIvd/yCmWAFZfaboWh
-	 oxN1yt01zYBGw==
-Message-ID: <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
-Date: Tue, 2 Jun 2026 11:58:25 +0200
+	s=k20260515; t=1780394777;
+	bh=FKMk7awqgqsU4JhAY3VxMKsaAmqP2aDtdiIWh75TSsM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=bSyLauRdm7yYUpeoAmhAZE2arIfvPylhntJUwU6iu6WfndtYxAzluXrGlAXGQL3XL
+	 zgnhovUXLOf399GCWa3ceQEm6QtfnjKQxKa9qv1P2Y60yNvlCffs4jNdlmWnSq11GB
+	 K0ikUNnIZ3FqqERRHN9XrBLWhVipTbhM1o9CUezgKog/CBWT4sNATQcSboIbYOJdOv
+	 R+aFPbcCRIbkiVdwKrSoyriwK4avBsJs0NxQn6+voKOgSaftUsosoPG6DcDIZapopH
+	 82lu9xEgD0J89Zo2/j59s5SamMh4OzWxUhMcZ9jXpmQx2LoZLoGGG33Tr7OcG46j9j
+	 GRknRYPdOlZmA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add regression test for kfunc
+ implicit arg injection
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260602093836.2632714-3-chenyuan_fl@163.com>
+References: <20260602093836.2632714-3-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 10:06:17 +0000
+Message-Id: <20260602100617.969041F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: configurable block error injection
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>
-References: <20260602054615.3788425-1-hch@lst.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-In-Reply-To: <20260602054615.3788425-1-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 02/06/2026 07.45, Christoph Hellwig wrote:
-> Hi all,
-> 
-> this series adds a new configurable block error injection facility.
-> We already have a few to inject block errors, but unfortunately most
-> of them are either not very useful or hard to use, or both:
-> 
->  - The fail_make_request failure injection point can't distinguish
->    different commands, different ranges in the file and can only injection
->    plain I/O errors.
->  - the should_fail_bio 'dynamic' failure injection has all the same issues
->    as fail_make_request
->  - dm-error can only fail all command in the table using BLK_STS_IOERR
->    and requires setting up a new block device
->  - dm-flakey and dm-dust allow all kinds of configurability, but still
->    don't have good error selection, no good support for non-read/write
->    commands and are limited to the dm table alignment requirements,
->    which for zoned devices enforces setting them up for an entire zone.
->    They also once again require setting up a stacked block device,
->    which is really annoying in harnesses like xfstests
-> 
-> This series adds a new debugfs-based block layer error injection
-> that allows to configure what operations and ranges the injection
-> applied to, and what status to return.  It also allows to configure a
-> failure ratio similar to the xfs errortag injection.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The multi-line comment in `struct_ops_assoc.c` violates the strict =
+BPF subsystem comment style guidelines.
+--
 
-I wonder if the block layer would be interested in moving block error
-injection off the should_fail() fault injection framework and extending
-the ALLOW_ERROR_INJECTION annotation instead and offloading all the
-debugfs configuration logic (block/error-injection.c) into eBPF?
+commit 0131da78b5d91ab9b0a63c8ffd845ab004048c55
+Author: Yuan Chen <chenyuan@kylinos.cn>
+selftests/bpf: Add regression test for kfunc implicit arg injection
 
-I talked about moderr [1] at LPC 2025. It's a simple error injection
-tool in eBPF for the module subsystem. The suggested direction there was
-to generalize the tool to ideally to no tool at all, and leverage
-bpftrace to describe the error injection conditions a given
-subsystem needs to be tested under. That would let blktests, for
-example, absorb that and simplify the configuration logic this series
-adds in the kernel for debugfs.
+This commit adds a positive regression test to verify that the injection
+path for KF_IMPLICIT_ARGS kfuncs works correctly. It uses inline assembly
+to contaminate BPF R2 before calling a kfunc associated with a struct_ops
+map.
 
-A previous attempt to add inline error injection [2] was rejected as too
-intrusive / source-polluting; the eBPF approach solves that, since the
-injection logic lives in a standalone tool/script rather than in the
-kernel sources.
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c b/tools=
+/testing/selftests/bpf/progs/struct_ops_assoc.c
+> index 68842e3f936b9..ed0084453d560 100644
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
+> @@ -103,3 +103,43 @@ SEC(".struct_ops.link")
+>  struct bpf_testmod_multi_st_ops st_ops_map_b =3D {
+>  	.test_1 =3D (void *)test_1_b,
+>  };
+> +
+> +/* Test for aux injection with stale register contamination.
+> + *
+> + * This test verifies that the kernel correctly injects the implicit
 
-What do you guys think?
+[Severity: Low]
+Could this comment be updated to follow the BPF subsystem style?
+Multi-line comments in this subsystem should have the opening /* on its own
+line, with the text starting on the following line.
 
-[1] https://lpc.events/event/19/contributions/2204/
-[2] https://lore.kernel.org/all/20210512064629.13899-1-mcgrof@kernel.org/
+> + * bpf_prog_aux pointer for kfuncs with KF_IMPLICIT_ARGS.  The program
+> + * uses inline assembly to contaminate R2 with a known magic value
+> + * before calling the kfunc:
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602093836.2632=
+714-1-chenyuan_fl@163.com?part=3D2
