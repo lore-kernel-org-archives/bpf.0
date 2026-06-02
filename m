@@ -1,140 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C37311977
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82A35202D
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780433838; cv=none; b=BRO34/UbYZ8GKKtX8wr4G18kdURffC1YWGIcTE6j8loFldl1TBeFDqecmFSzo/q+vRqPFkX7mQ+7EVF+kepzyhpwnVThod0yPf0cghqV3MWNw6TsoSSZc/VhyOE0YVfT5q2sVM51tfWBahZlqY1a776AXCANWZYFb7cPHLtVHLw=
+	t=1780433894; cv=none; b=kDt/lGSbDj6Zffy7PpWtpQ1X3+/97IS3Bry4gbjchAU85VawAXT4L96jB01rgUmLCF23Nk83BU7QdCQQdTdmmNx5pxiBzjQOx9UeEJOl2Jz1vWesedrleviEakxvF7HGLiILpqEV3TG73+b49vhnTz94ofHhjH+3KNg5umQVWOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780433838; c=relaxed/simple;
-	bh=Xhle6P63cdQ/bk9ZHlO9/401RHNDNYmm7hRUBCJZ4og=;
+	s=arc-20240116; t=1780433894; c=relaxed/simple;
+	bh=MoQb5/22q6OjA+n8JO/8BWcr0MKTaYGMiGT0zOgpfTE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MYNg76DeEEKwy8bx65wbDqQFBx6/lq7nrsDvXn9SwduBlQ8V0PfxiScrz/LkLsuMiWOcJz1jPJMLqIULSxsFo3z3OeonkEfV49Ee+nv0VhiZsZVk35JBqyUeIkYSHBqQPXK8XTwo5Hm/VtFMHo7P9jZZlYTFaULeRZaea2nad4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4oNpLG8; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qtKVofiEKBICEo+dGETzyFWbcD7UcooLB9MaHVayrR4BxzPD/Ea9Re2jCNK+KDn6rQ2CGQPT5p0l2I0VR0P47ae0JlaPxhn6/MvjeoeqztODoFCgIcBzx251XJiXF77fFnG2O+9R9bGulgoo6PKSAqVwzLeDyWPt5cK4ncB2168=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOC4gYV7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4oNpLG8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCDBE1F00893;
-	Tue,  2 Jun 2026 20:57:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOC4gYV7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C631F00893;
+	Tue,  2 Jun 2026 20:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780433837;
-	bh=w84YggQhrz020kqPFJLlUmPp43v7TsdTnbgRv3oCw9k=;
+	s=k20260515; t=1780433892;
+	bh=MTbLdJ26gkdzKsddjtNQ5uwXCxspwrwDVlPWAUjIqis=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L4oNpLG8VKbk3Ifmv71hk6YQnqRazgZl2LjEZc8jPLYxBMgZRq3XMLUrF4lYXa2Z+
-	 D9YYShENXjJNonDJmJOKzCtyK8tEmmyyT3CBgDZHkMJDBgTsge20CL1EGiIINY8TO/
-	 Frev1TUl6ued6kz413uRhHpFvYI++0Cwjbp9+d/t2hIMSgPMHdpR3mtdnh6h6qUErj
-	 iLo34IsCf2QD+gvBBZYKsgWpprIjjI8aOifK34+0ZYlzeP+3R+fQHy/uLMrzOlD+Sb
-	 88UbUhFE7mR/7cVsNaYJNLObTJ8LPE5FgU1jJhnutbLWP2EDGGZpjh3H4MxB/Lix2d
-	 svQT1Aj95GrsQ==
+	b=QOC4gYV7QE1SHvW9M/SmBogwa1MolcgKaMhugeNzDgMERPKS2kkrmPwenjNRIjnnY
+	 9dq2p4rBzcs8OrumNH909JNEUCWA4ixVAvG7+2kFqxvonfjR50mKxCU7jS3PYSHC2t
+	 oiDhflA63tH7aeQq6QgUZr0CQWY5q/3rviR4GGfkiv++ZhXzUXdRyWhU39YvvTHb/X
+	 Iwse7ra4mltOuiBs76xPpBqTqIY5lb40HTFT8GceEEPg9YZSQjGMl8/DEr/lc8Rfuq
+	 7pAExcLYtSzsBlMmrzgifuUH+oO39DWgUiOgs3GQJiAxylp899n9WxAtg0SqzBhJjz
+	 6yAEdJ/ZviCFA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 01/11] rhashtable: Add rhashtable_next_key()
- API
+Subject: Re: [PATCH bpf-next v6 06/11] bpf: Optimize word-sized keys for
+ resizable hashtable
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602-rhash-v6-1-1bfd35a4184f@meta.com>
-References: <20260602-rhash-v6-1-1bfd35a4184f@meta.com>
+In-Reply-To: <20260602-rhash-v6-6-1bfd35a4184f@meta.com>
+References: <20260602-rhash-v6-6-1bfd35a4184f@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 20:57:16 +0000
-Message-Id: <20260602205716.BCDBE1F00893@smtp.kernel.org>
+Date: Tue, 02 Jun 2026 20:58:12 +0000
+Message-Id: <20260602205812.84C631F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] rhashtable_next_key() enters an infinite loop if duplicate keys ar=
-e separated by a hash collision, leading to an RCU stall.
-- [Medium] The iterator silently skips adjacent duplicate keys, failing to =
-visit all elements and contradicting its own documentation.
+- [Critical] Direct pointer casts in the specialized hash and comparison fu=
+nctions will cause kernel panics due to unaligned memory accesses on strict=
+-alignment architectures.
+- [Critical] The specialized XOR-fold hash function `rhtab_hashfn_long` is =
+perfectly linear, destroying rhashtable's collision resistance and leading =
+to a HashDoS vulnerability via endless rehashing.
+- [High] Iterating over the rhash map with `bpf_for_each_map_elem` aborts p=
+rematurely if the callback function deletes the current element.
 --
 
-commit b366f42abdf91779a5e3f642f8f7f76f7fa5895b
+commit 4f63f265b25e82f3769f409dbd1d12850cbbefdc
 Author: Mykyta Yatsenko <yatsenko@meta.com>
 
-rhashtable: Add rhashtable_next_key() API
+bpf: Optimize word-sized keys for resizable hashtable
    =20
-Introduce a simpler iteration mechanism for rhashtable that lets
-the caller continue from an arbitrary position by supplying the
-previous key, without the per-iterator state of the
-rhashtable_walk_* API.
+Specialize the lookup/update/delete/get_next_key/for_each callback/
+batch paths for keys whose size matches sizeof(long) (4 bytes on
+32-bit, 8 bytes on 64-bit).
 
-> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-> index ef5230cece364..7bcc380ec192b 100644
-> --- a/include/linux/rhashtable.h
-> +++ b/include/linux/rhashtable.h
-> @@ -650,6 +650,110 @@ static __always_inline struct rhash_head *__rhashta=
-ble_lookup(
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 8686918dbc3e8..600128c3e3289 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
 
 [ ... ]
 
-> +static __always_inline struct rhash_head *__rhashtable_next_in_table(
-> +	struct rhashtable *ht, struct bucket_table *tbl,
-> +	const void *prev_key, const struct rhashtable_params params)
-> +	__must_hold_shared(RCU)
+> @@ -2763,6 +2763,31 @@ static inline void *rhtab_elem_value(struct rhtab_=
+elem *l, u32 key_size)
+>  	return l->data + round_up(key_size, 8);
+>  }
+> =20
+> +/* Specialize hash function and objcmp for long sized key */
+> +static __always_inline int rhtab_key_cmp_long(struct rhashtable_compare_=
+arg *arg,
+> +					      const void *ptr)
 > +{
-> +	struct rhashtable_compare_arg arg =3D { .ht =3D ht, .key =3D prev_key };
-> +	struct rhash_head *he;
-> +	unsigned int b =3D 0;
-> +	bool found =3D false;
+> +	const unsigned long key1 =3D *(const unsigned long *)arg->key;
+
+[Severity: Critical]
+Does this direct pointer cast and dereference cause unaligned memory access
+panics on strict-alignment architectures like ARM32 or SPARC?
+
+Since BPF map keys can be unaligned, such as when pointing directly into
+network packet payloads, shouldn't this use get_unaligned() to safely read
+the key?
+
+> +	const struct rhtab_elem *key2 =3D ptr;
 > +
-> +	if (prev_key) {
-> +		b =3D rht_key_hashfn(ht, tbl, prev_key, params);
-> +		rht_for_each_rcu(he, tbl, b) {
-> +			bool match =3D params.obj_cmpfn
-> +				     ? !params.obj_cmpfn(&arg, rht_obj(ht, he))
-> +				     : !rhashtable_compare(&arg, rht_obj(ht, he));
+> +	return key1 !=3D *(const unsigned long *)key2->data;
+> +}
+> +
+> +static __always_inline u32 rhtab_hashfn_long(const void *data, u32 len, =
+u32 seed)
+> +{
+> +	u64 k =3D *(const unsigned long *)data;
+> +
+> +	return (u32)(k ^ (k >> 32)) ^ seed;
+
+[Severity: Critical]
+Is this linear hash function vulnerable to HashDoS attacks?
+
+Because the key folding is perfectly linear with respect to XOR, the collis=
+ion
+property is independent of the random seed. For example, all 64-bit keys of
+the form k_i =3D ((u64)i << 32) | i will produce an intermediate zero, resu=
+lting
+in H(k_i, seed) =3D seed.
+
+If these fall into the exact same bucket, it will exceed the elasticity lim=
+it
+and trigger an rhashtable rehash, but they will still perfectly collide with
+the new seed. Could this trap the kernel's rhashtable worker in an infinite
+background rehashing loop?
+
+> +}
+> +
+> +static const struct rhashtable_params rhtab_params_long =3D {
+
+[ ... ]
+
+> @@ -3167,7 +3216,7 @@ static long bpf_each_rhash_elem(struct bpf_map *map=
+, bpf_callback_t callback_fn,
+>  	 * elements are deleted/inserted, there may be missed or duplicate
+>  	 * elements visited.
+>  	 */
+> -	while ((elem =3D rhashtable_next_key(&rhtab->ht, prev_key, rhtab_params=
+))) {
+> +	while ((elem =3D rhtab_next_key(rhtab, prev_key))) {
+>  		if (IS_ERR(elem))
+>  			break;
 
 [Severity: High]
-Can this iterator enter an infinite loop if duplicate keys are separated
-by a hash collision?
+Will this iteration silently abort if the callback function deletes the cur=
+rent
+element?
 
-Since rhashtable prepends new elements, a bucket could end up with
-interleaved keys like A2 -> B -> A1.
+Deleting the current element during iteration is a common BPF pattern for
+garbage collection. If the callback deletes the current element, rhtab_next=
+_key
+will try to locate the deleted prev_key in the hash table, fail, and return
+ERR_PTR(-ENOENT). The IS_ERR(elem) check would then immediately break the l=
+oop.
 
-If an iterator encounters this, wouldn't it result in an endless cycle?
-Passing prev_key =3D A finds A2 at the head and returns B.
-Passing prev_key =3D B finds B and returns A1.
-Passing prev_key =3D A again finds A2 at the head and returns B.
+This behavior appears to have been introduced in patch 4 of this series
+(bpf: Implement iteration ops for resizable hashtab) and is preserved here.
 
-Even if the structure enforces unique keys, could a concurrent deletion
-and insertion of key A create an RCU bucket chain of A_new -> B -> A_old
-and trap an iterator holding the RCU read lock?
-
-> +			if (found) {
-> +				/* Skip duplicate keys. */
-> +				if (match)
-> +					continue;
-
-[Severity: Medium]
-Does this skip adjacent duplicate keys instead of visiting them,
-contradicting the documentation?
-
-The rhashtable_next_key() function is documented to handle tables with
-duplicate keys, visiting each duplicate once.
-
-If a bucket contains adjacent duplicate keys sharing key A (for example,
-A2 -> A1 -> B), passing prev_key =3D A matches A2 and sets found =3D true.
-
-The loop then evaluates A1, sees it is a match, and hits the continue
-statement. This returns B and skips visiting A1 entirely, causing data
-omission during iteration.
-
-> +				return he;
-> +			}
-> +			if (match)
-> +				found =3D true;
-> +		}
-> +		if (!found)
-> +			return ERR_PTR(-ENOENT);
-> +		b++;
-> +	}
-
-[ ... ]
+>  		num_elems++;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602-rhash-v6-0=
--1bfd35a4184f@meta.com?part=3D1
+-1bfd35a4184f@meta.com?part=3D6
