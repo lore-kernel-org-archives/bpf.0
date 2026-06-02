@@ -1,93 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F08C3CF04F
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 15:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F313630B9
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 15:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780413096; cv=none; b=HyLCpvGNKQklDNW7Bik9bfB2MbWsDQ5AjbWbgtmXMlALpCRFuGeQzS8zgrc8+1bC9f7pu8GW91NE5T06lVQlLNCgI6qIlD7c+ubpOI4HLqqDZaAQZfR5RHXud6LnqHQbgktX8N3BdCKKhouLxB8KE0eYNTPEDjLgyE/nKur6Br0=
+	t=1780413324; cv=none; b=p+IWwWhkPMY1Wbt8fKxI5NoBAyjaAre8SJ7L2ctnDVjYRRvn3HvqHUphLSWJ+FuYudnOBQWle4yRzySyR/1LDYMhpF+gO5YPMlR3P/I8JHLLhmZQWNEHdb/8KuyLLAT4R2R/rYTSWqrS6JTNXwghKXI1TFOHYB59ZW+EJOd42nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780413096; c=relaxed/simple;
-	bh=yohIXd5LtS8z4RxwoQ4HVSWJ3U4EcjQHCumMEuHSg0k=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gnPIBQ20loRuNIxaoIy9aKTkgUSKFOIJ/i4xGvT61epJKKI87oOFKd/qnHx1cElHqMKhYjA6Y2hY8xfVcJtqaGv9CxQoakPszcHbGEqg+AQDaqzOdKZZbtHfSdd4n5M0driTEr4gA3tXRtKUxGnLvmNbHabugipMtZnHOg+W4JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxyq8R4H; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780413324; c=relaxed/simple;
+	bh=bpIG0DviQzocBMgRg42jS5U+ruDAK6mwOZOQQBeRaU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lx5JB9EUEQUQgniL0UgyLZlD9kxNf2WhwMq3IhH6NLDntCnbP+bCiYzOSh1qE0FCP4yzSRkOxkNzLx8bQBpxMGQPNpZfSC/WQz7NAp3F5z/UoE3kypoW/m93HGFnPMecJRoSutu8mjj+hXx2TyFzqRKVdJ7Gb2qutU5aZsBtrL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JgpbOM2j; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxyq8R4H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F3D1F00893;
-	Tue,  2 Jun 2026 15:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780413095;
-	bh=pUfQkOu0N/uc8iyFaycPu0WxYd0YOt/G5RiM0rPJXII=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lxyq8R4HS/0ok7jBv8qPL2Ehthv4y3/4nq7VWOPtzZXHhccGqbwpbM865mcUPmR71
-	 MKkJ5M4+uKZYrhqP4neO4oXm7n29CJs6M7rTemDkEuVPv2cfgx+OYmKnrPkgMeihPG
-	 Eo38+8Xtpt4q79DCKbCn0zSr+RYuxyC1qgb1TvFp2m4MdbaSMNpFCNqd/312aObzpp
-	 CL8Gxe/SByzOQdkjCgjolJF/vhv3SVOmhDsf6hBslEIIFni7w37n05P6c14TQ7Uw01
-	 z4TrNQK14G8uCW68ZpnlAf0QdwT1nrov2l91uEQSp0NqgbgD3WDNwc3to1qK5J6GtG
-	 Vxh/0Xnq2lVzQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 4/8] libbpf: Initialize CFLAGS before
- including Makefile.include
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leo Yan" <leo.yan@arm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-4-c76e5250ea1c@arm.com>
-References: <20260602-tools_build_fix_zero_init_bpf_only-v2-4-c76e5250ea1c@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 15:11:34 +0000
-Message-Id: <20260602151135.29F3D1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JgpbOM2j"
+Message-ID: <31927f33-9db0-4a39-b38a-72b33487979e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780413310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2rcXbFWZh1YISDu4YKt/p/Fc46FTcRHnUU3a2LRMUBY=;
+	b=JgpbOM2j1wvWzKR2GnvnAbT2ahufzSwYysuT7mqPtWaCYS9WfR0+WEabGL2tcVM0AXGOuH
+	WQ8ihJhhmKlrMo44Gyb9T17HXVwsgx4UalmznGpGSr/r2X0G8UE0ROGycmLjq/DJvObJSz
+	e5Vk/W9N1W9w9gMwXEBS0OkXpTXP3q0=
+Date: Tue, 2 Jun 2026 08:14:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH v2 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, malin89@huawei.com, ast@kernel.org,
+ daniel@iogearbox.net, bpf@vger.kernel.org
+Cc: andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, jolsa@kernel.org,
+ zhuyifei@google.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ameryhung@gmail.com, cuirongzhen@huawei.com,
+ tanjingguo@huawei.com, cenxianlong@huawei.com, chenzhe@huawei.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260602073539.1567846-1-malin89@huawei.com>
+ <4f4661e6d1d9eaa6b05b0e6499562ad10ff8fa3b7bc6d44ec4019119fb547bd9@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <4f4661e6d1d9eaa6b05b0e6499562ad10ff8fa3b7bc6d44ec4019119fb547bd9@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Removal of `override CFLAGS +=3D $(CLANG_CROSS_FLAGS)` breaks Cl=
-ang cross-compilation when `CFLAGS` is overridden on the command line.
---
 
-commit 6aa5adddfad905f5f29ccfe28312c5a00d2d1082
-Author: Leo Yan <leo.yan@arm.com>
 
-libbpf: Initialize CFLAGS before including Makefile.include
+On 6/2/26 1:15 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Tighten cgroup storage cookie checks for prog arrays
+>>
+>> The recent KCTF-reported cgroup local storage issue assigned
+>> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+>> in cgroup local storage").
+>>
+>> However, the previous fixes are still incomplete. The current prog-array
+>> compatibility check treats a program with no cgroup storage as
+>> compatible with any stored storage cookie. This allows a storage-less
+>> program to bridge a tail-call chain between an entry program and a
+>> storage-using callee even though runtime cgroup local storage still
+>> follows the caller context.
+>>
+>> Require exact per-type storage_cookie equality when checking prog-array
+>> compatibility. This blocks zero-storage bridge programs from joining a
+>> prog-array owned by a storage-using program and closes the residual
+>> A -> B(no storage) -> C(storage) path.
+>>
+>> This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+>> requiring storage use to match consistently across prog-array users.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+>> Tested-by: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Lin Ma <malin89@huawei.com>
+>> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+>> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+> Should the Fixes: tag point to abad3d0bad72 instead of 7d9c3427894f?
+>
+> The code this patch removes is the '|| !cookie' clause in
+> __bpf_prog_map_compatible():
+>
+>    ret = map->owner->storage_cookie[i] == cookie ||
+>          !cookie;
+>
+> That permissive '|| !cookie' clause, which treats a storage-less program
+> as compatible with any stored cookie, was introduced by abad3d0bad72
+> ("bpf: Fix oob access in cgroup local storage").
+>
+> The commit referenced by the current tag, 7d9c3427894f ("bpf: Make
+> cgroup storages shared between programs on the same cgroup"), only added
+> the shared cgroup-storage feature and does not touch
+> __bpf_prog_map_compatible() or add the storage_cookie[] check.
+>
+> Would this be more accurate?
+>
+>    Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
 
-This commit reorders CFLAGS initialization to happen before including
-Makefile.include so it is not affected by expanded EXTRA_CFLAGS. It also
-removes the appending of CLANG_CROSS_FLAGS, citing redundancy with the
-include file.
+Agree. The above fix tag seems better.
 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 168140f8e6461..eca584fb061e1 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
+>
+> This same question was raised on the v1 thread by the bpf-ci review bot
+> (https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/),
+> noting that the patch removes the '|| !cookie' logic introduced in
+> abad3d0bad72 rather than the original shared storage feature.  The reply
+> disagreed and kept the tag pointing at 7d9c3427894f in v2, but the
+> reviewer did not acknowledge that explanation, so it may be worth
+> settling before this is applied.
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26806034423
 
-[ ... ]
-
-> @@ -84,7 +85,7 @@ override CFLAGS +=3D -Werror -Wall
->  override CFLAGS +=3D $(INCLUDES)
->  override CFLAGS +=3D -fvisibility=3Dhidden
->  override CFLAGS +=3D -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64
-> -override CFLAGS +=3D $(CLANG_CROSS_FLAGS)
-> +override CFLAGS +=3D $(EXTRA_CFLAGS)
-
-[Severity: Medium]
-Does removing this override directive break Clang cross-compilation when
-CFLAGS is overridden on the command line?
-
-While tools/scripts/Makefile.include already appends $(CLANG_CROSS_FLAGS),
-it uses a standard assignment. According to GNU Make semantics, standard
-assignments are ignored if a variable is overridden via the command line
-(e.g., make CFLAGS=3D"-O3").
-
-By removing the override directive here, the build system might fail to
-unconditionally append cross-compilation flags (like --target=3D and
---sysroot=3D), causing Clang to fall back to compiling for the host
-architecture instead of the intended target.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602-tools_buil=
-d_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com?part=3D4
