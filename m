@@ -1,176 +1,196 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CE3392C32
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C06221DB6
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 21:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780433976; cv=none; b=DAi6Fk4UGb897MdyF0M0nAYxIy2AhzOpGlfWr3raoA77Ofgkxi+DtBGNpKutGBNhXTi/bUtEj9Q9Ik39YLffs3coY+D6f6O8Bc67aX3FXmThoh2NQwq7JJ9GVL/T6AJXELkNvu0kNlbVfuNAdbbDyMLxVT4M2uj5dpoTc4gxRCg=
+	t=1780434257; cv=none; b=BupqaA5MgcBnWgadPNA+DzuAV8WhikP0lzLgj8EEOZLRZG3MWhwjlprR/JJ5FWiIvyWdVE61Bxrff2GfNayvqQhNk1lgf4+wCmLBqtiCsVdsYe8aRMdtWLp2SNPm+Ji2cbZjDhUuaUL2PoILa6TwfN4JqU1O+3jiGT0D2BgapEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780433976; c=relaxed/simple;
-	bh=40YuMegnizHDre5rP/J67ecYybi5tbv7U9hYJ5stFqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CIWxnoNGMByjc33X2q/jVlqN4NtVGPgiPLqKVRLy1Y1UVVTWeNDV5Lcne+t3ykeZ7u8vhaqF/28ztpPU7q8huPku/IgPIdkN/cp8rMS7VLCimf5x2cL8rArZg0GfFSMeW2/cLw4tyGyLeqSMqKgjAOtmvKVEmeb4o5LMhtGK/ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBajUGmu; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780434257; c=relaxed/simple;
+	bh=6wkHlErnbpo14ySbNyDNLq4hSqh1yxoIWNLVcoUKRDI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=D0Rd7xE3nRGgHH9EfYI1nPObnzhz+nRIudM2SxJgjyN2jlSgYyqgnpmR1UZ1VNR0ig/lSrdiedc3duYMOCqK5ot1TjcTp1LL+uRhFj+j59wIdMwIBbAzll0FBwtVbIch9NoXbi/GAEvJDWMGPj5wlG6fQWYZXmdwOltTboHjOKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKeYXq0A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBajUGmu"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c858b5de728so2315316a12.0
-        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 13:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780433974; x=1781038774; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
-        b=dBajUGmuXiduNnxYDigsK0NW+O8Y0gSoOAmVS3+WiUenfpr0m/M6EgXnWjAuEXMSze
-         wvhmLXm0EpuZoCaNUut9lxp/bEN/iuHNxDDOcktz/V+Z1GrJHToBDWrAXEQJgvtgLZ4v
-         R2liSxLhe0nXYad/K/tA2Sso0bBotJAE/AZIEbF9IKXxLCPjeDsLbmgIS1aFH+c7QbzV
-         zLFlxTjvsuJCiJ0L6h0mM7uwdUMoXt+0FU/LvCbahl01MXA/TrQlVaeP7Gbqw9ooN/1D
-         Xtw/ShTek/R/dcnrIumDF3X7BfakIIBsW/Tgxt7lmEhD/VkGWTsWv4Rvm1FAcGIs0OdV
-         vF0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780433974; x=1781038774;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FtyaF8m6RLOpOeiX8WoJduU1Pm23yBD2PG4I02qCKQE=;
-        b=e10zuk705SFK0eiaWU4uopW5F+TaqVRQ1OFEFsaLdx+08JF893PUagmy0SqgOEy0dM
-         Cx5Uja9do7W0AOqOj26ti5ZurnpqMQq7BmT6dAOSazIe9QpzAQc2B1/F8KJPc0F0OES7
-         L+0U2qkUsIKMCjXRTPBSm9XxhbJ4jnKImHDi4SEXjb0coEGVSaspNKdH8nm609bRQ8aR
-         9iWLZz/70tk9q5SUMyU9/oO7+Qg9djgpop115A9nc8D6mRiQA4Jlbo1L3KOoyuD6+Dhd
-         3PudLh7vvVA6g9gXu1mIHY2QV6yu9YXoCVfUgt8qMW/Vhek8xLc2Hl6jlHYfS8R+wfLo
-         ELEQ==
-X-Gm-Message-State: AOJu0Yw6pFZWAhxviwS2Czu44wVgF6hdLbA8gzNBIF+uAuGW+M7ZzCt9
-	XWlXDyy6l27osmnjJ7boLFXL00Sy3R6GEy8ocIOJPwLfdLbDnj7kCBsgCzcVWrJf
-X-Gm-Gg: Acq92OH765wwPWMO7MAz/9871JX6eDcMPzj76vgEAL5fllImUS5KE6ix0f5eGPPsZcu
-	uFHhsd0AVtg7z4eLAxQWcwmRNAlR94dQIQs3N5JcME3CCg7jEQg3nwO8Zrh2GcyUvW1nYLReXe2
-	EftnhcHOb4321MzMjNGuHLP8gSuDiYbl9jWmorgMRxf7Y/0bmCXN+QWvUyDWj7yhCruDW56zabe
-	G8z8DLbxLGYFDykT7wRpkYuj6MVnZDuAPsfodmLbgRXDjiouz3JsLZ28Ghg6ZgFrhDW7j1puS3p
-	GCkMv9Au90ZXBrnqKsDgUDLu9QMEw30Pj8Z+xRZFLEsybH/88y5BLpf9a118P9M5KqbjfiErjcJ
-	uT+C7mYngHjHURbsAJefdaGvgJ85dcfO2xLmbCzZMgKkiyioZaHBsInNDZ0HMugI9fXGu3v7SIA
-	jrEDWpiSHcV5GJwQoZRJEYOTRzbnbcpFOTLoBeW1l+Y5xcunEpAHb2UvcYzUEMf3UAXV6DGODfs
-	pyjCQUWuFFu1y6P
-X-Received: by 2002:a05:6a20:b598:b0:39c:126c:93b4 with SMTP id adf61e73a8af0-3b497449d82mr542621637.9.1780433973930;
-        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:3b4a:11cd::1c6:2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043223sm157354a12.8.2026.06.02.13.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 13:59:33 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	puranjay@kernel.org,
-	menglong8.dong@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	pulehui@huawei.com,
-	alex@ghiti.fr,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf-next 2/2] bpf, riscv: inline bpf_get_current_task() and bpf_get_current_task_btf()
-Date: Wed,  3 Jun 2026 02:28:47 +0530
-Message-ID: <20260602205847.102825-3-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602205847.102825-1-varunrmallya@gmail.com>
-References: <20260602205847.102825-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKeYXq0A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0631F00893;
+	Tue,  2 Jun 2026 21:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780434256;
+	bh=7mBVMSHXJsFKQgOiF8ETSGnwgqoFTm734z24KNcoP4E=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=EKeYXq0A74x/SdL/PW6ymxqYz42GN1C74szz7urkpzWdQSA8OIFZzjU7wcZuDNB6x
+	 a8qwtRxetVrx3F42kte83fMebR/kdE5fIDh5n74ToD2PXHyUyAYg3MxysujcuhZige
+	 ALoWJ6F9YP9FvZUpJ0XMqA6Fz9Az+4/0yPvsNs1CO1MMIMBxQGcaWyDJW30aVHs6qh
+	 DJBOL8C9N33Y7AdXiqMl/xDp/i5yTFyZmTTq9lWNqG9q3gX8W9Se4Fqznbz2Gb0yDP
+	 oxXOrYRqge/0VXTWUAtAwFSN6jdKYoQtp2aDxgOd3j0kKaJa/EpXqfD8u6wPZ8oKhQ
+	 /iDQTCQnCzTUQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v6 04/11] bpf: Implement iteration ops for
+ resizable hashtab
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260602-rhash-v6-4-1bfd35a4184f@meta.com>
+References: <20260602-rhash-v6-4-1bfd35a4184f@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 21:04:15 +0000
+Message-Id: <20260602210416.2E0631F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-On RISC-V, the current task pointer is stored in the thread pointer
-register (tp). Emit a single `mv a5, tp` instead of a full helper
-call for BPF_FUNC_get_current_task and BPF_FUNC_get_current_task_btf.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Batch operations and for_each iteration prematurely abort when the=
+ iteration cursor is lost due to element deletion.
+- [High] `__rhtab_map_lookup_and_delete_batch` allows concurrent operations=
+ to duplicate elements, breaking exactly-once semantics.
+- [High] Unbounded loop in `bpf_each_rhash_elem` allows RCU stalls and soft=
+ lockups.
+- [High] Integer overflow in `copy_to_user` length calculation causes trunc=
+ated writes and exposes uninitialized memory.
+--
 
-Register bpf_jit_inlines_helper_call() entries for both helpers so the
-verifier treats them as inlined, and add the expected `mv a5, tp`
-annotation to the riscv64 selftests.
+commit eb56d8be7793a104d2c90482e4577a63fef630ae
+Author: Mykyta Yatsenko <yatsenko@meta.com>
 
-The following show changes before and after this patch.
+bpf: Implement iteration ops for resizable hashtab
+   =20
+This commit implements get_next_key, batch lookup/lookup-and-delete,
+for_each_map_elem callback, and the seq_file BPF iterator for
+BPF_MAP_TYPE_RHASH.
 
-Before patch:
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 10f3a058747b3..997f420d67e35 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+[ ... ]
+@@ -3034,6 +3105,275 @@ static u64 rhtab_map_mem_usage(const struct bpf_map=
+ *map)
+> +static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t call=
+back_fn,
+> +				void *callback_ctx, u64 flags)
+> +{
+[ ... ]
+> +	rcu_read_lock();
+> +	/*
+> +	 * Best-effort iteration: if rhashtable is concurrently resized or
+> +	 * elements are deleted/inserted, there may be missed or duplicate
+> +	 * elements visited.
+> +	 */
+> +	while ((elem =3D rhashtable_next_key(&rhtab->ht, prev_key, rhtab_params=
+))) {
 
-      auipc  t1,0x817a    # load upper PC-relative address
-      jalr   -2004(t1)    # call bpf_get_current_task helper
-      mv     a5,a0        # move return value to BPF_REG_0
+[Severity: High]
+The rhashtable_next_key documentation notes that a full iteration is not
+guaranteed to terminate under adversarial or sustained rehashing. Since this
+loop lacks an external bound and runs under rcu_read_lock with migration
+disabled, can continuous concurrent resizes cause an infinite loop, resulti=
+ng
+in a soft lockup or RCU stall?
 
-After patch:
+> +		if (IS_ERR(elem))
+> +			break;
 
-      mv     a5,tp        # directly: a5 = current (tp = thread pointer)
+[Severity: High]
+If prev_key is deleted concurrently or by the callback itself,
+rhashtable_next_key returns ERR_PTR(-ENOENT). Does breaking the loop here
+cause the iteration to immediately abort and skip the rest of the map?
 
-Benchmark (bpf_prog_test_run wrapping bpf_get_current_task in loop,
-batch=100, 10s, QEMU RISC-V):
+> +		num_elems++;
+> +		ret =3D callback_fn((u64)(long)map,
+> +				  (u64)(long)elem->data,
+> +				  (u64)(long)rhtab_elem_value(elem, map->key_size),
+> +				  (u64)(long)callback_ctx, 0);
+[ ... ]
+> +static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+> +					       const union bpf_attr *attr,
+> +					       union bpf_attr __user *uattr,
+> +					       bool do_delete)
+> +{
+[ ... ]
+> +	while (elem && !IS_ERR(elem) && total < max_count) {
 
-              | runs/sec  | helper-calls/sec | ns/call
- -------------+-----------+------------------+---------
- Before patch |   173,490 |       17,349,090 |      57
- After patch  |   320,497 |       32,049,780 |      31
- -------------+-----------+------------------+---------
- Improvement  |   +84.7%  |          +84.7%  |  -45.6%
+[Severity: High]
+Similar to the callback iteration, if a concurrent deletion occurs and elem
+receives -ENOENT, this loop breaks. If total is greater than 0 when this
+happens, doesn't this falsely signal to userspace that the map is fully
+iterated, leading to missed elements?
 
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
----
- arch/riscv/net/bpf_jit_comp64.c                         | 9 +++++++++
- tools/testing/selftests/bpf/progs/verifier_jit_inline.c | 2 ++
- 2 files changed, 11 insertions(+)
+> +		memcpy(dst_key, elem->data, key_size);
+> +		rhtab_read_elem_value(map, dst_val, elem, elem_map_flags);
+> +		check_and_init_map_value(map, dst_val);
+> +
+> +		if (do_delete)
+> +			del_elems[total] =3D elem;
+> +
+> +		elem =3D rhashtable_next_key(&rhtab->ht, dst_key, rhtab_params);
+> +		dst_key +=3D key_size;
+> +		dst_val +=3D value_size;
+> +		total++;
+> +
+> +		/* Bail to userspace to avoid stalls. */
+> +		if (need_resched())
+> +			break;
+> +	}
+> +
+> +	if (elem && !IS_ERR(elem)) {
+> +		/* Stash next-to-process key as cursor for the next batch. */
+> +		memcpy(cursor, elem->data, key_size);
+> +		has_next_cursor =3D true;
+> +	}
+> +
+> +	if (do_delete) {
+> +		for (i =3D 0; i < total; i++)
+> +			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
+> +	}
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 2f1109dbf105..e2c70c70cca8 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1808,6 +1808,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			break;
- 		}
- 
-+		/* Implement helper call to bpf_get_current_task/_btf() inline */
-+		if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
-+					   insn->imm == BPF_FUNC_get_current_task_btf)) {
-+			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_TP, ctx);
-+			break;
-+		}
-+
- 		mark_call(ctx);
- 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
- 					    &addr, &fixed_addr);
-@@ -2138,6 +2145,8 @@ bool bpf_jit_inlines_helper_call(s32 imm)
- {
- 	switch (imm) {
- 	case BPF_FUNC_get_smp_processor_id:
-+	case BPF_FUNC_get_current_task:
-+	case BPF_FUNC_get_current_task_btf:
- 		return true;
- 	default:
- 		return false;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-index 885ff69a3a62..76d80605ec7f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-@@ -10,6 +10,8 @@ __arch_x86_64
- __jited("	addq	%gs:{{.*}}, %rax")
- __arch_arm64
- __jited("	mrs	x8, SP_EL0")
-+__arch_riscv64
-+__jited("	mv	a5, tp")
- int inline_bpf_get_current_task(void)
- {
- 	bpf_get_current_task();
--- 
-2.54.0
+[Severity: High]
+Deferring the deletion until after the iteration leaves elements visible in
+the hash table while they are being copied into user buffers. Does this cre=
+ate
+a race window where concurrent batch operations can traverse, copy, and yie=
+ld
+the same elements to userspace, breaking the exactly-once consumption
+semantics expected for work queues?
 
+> +
+> +	rcu_read_unlock();
+> +
+> +	if (total =3D=3D 0) {
+> +		ret =3D -ENOENT;
+> +		goto free;
+> +	}
+> +
+> +	/* No more elements after this batch. */
+> +	if (!has_next_cursor)
+> +		ret =3D -ENOENT;
+> +
+> +	if (copy_to_user(ukeys, keys, total * key_size) ||
+> +	    copy_to_user(uvalues, values, total * value_size) ||
+
+[Severity: High]
+Both total and value_size are u32 variables. If a large batch size is used
+(for example, 1,048,576 elements multiplied by 4096 bytes), does the 32-bit
+multiplication overflow before being cast to unsigned long for copy_to_user?
+
+Could this lead to copying a truncated amount of data while passing the full
+total count back to userspace, causing userspace to process uninitialized
+memory in its buffer as valid kernel data?
+
+> +	    put_user(total, &uattr->batch.count) ||
+> +	    (has_next_cursor &&
+> +	     copy_to_user(u64_to_user_ptr(attr->batch.out_batch),
+> +			  cursor, key_size))) {
+> +		ret =3D -EFAULT;
+> +		goto free;
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602-rhash-v6-0=
+-1bfd35a4184f@meta.com?part=3D4
