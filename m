@@ -1,77 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62F13A48E2;
-	Tue,  2 Jun 2026 19:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405553A759D;
+	Tue,  2 Jun 2026 19:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780427404; cv=none; b=NKl5CORAA9kY7NGHqUTNJXVA1fL0XPIMUjEvLUGr8YFPaqcj3z4bjhoE1Z2mbNV4i0dZetCtmOZV4sy8zsMDHj03V6OMo/hrXgv2s+/EXt8p2O3MaA26xsJDNU/YO+MgVZ0mEhOcfjTlGB/a7ldPM8uou3XhROBrWmh7stHI2jE=
+	t=1780427794; cv=none; b=VXL5HIqA9upNOvY+yU3kMT/bHF/ACkN/PD+oZCf63XXLXvGxR3PMAeQiczCQmCQ4uM3qUTyS5Bq4A4yPwfmDLMnrUnOiSfMH4BFkTRC57wzFDbeS+IAq6bp3EbuoVmBMkHMYbDmi7Utw6Rek1KMT2GseQlazAonExXDr4+W4p9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780427404; c=relaxed/simple;
-	bh=be5AKohs9VfuCdFtEEcL5+RpBBDiAxbaXM4gzXF0PaI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=EXYGA8ggbeOtyIBEsXl26rGhyiNK7HnJw8NeMHTzKFBZ5eqXUgoi1oK9j1laLfeI6eD3lPg96G/xREbofpAZkil6bNmF2fwA0U1qQe3AXPQktQj8HOPPof8tmIpXjSctC4fW6J5mv7d7x1A7t4YzZNOwAJHgABfBGj0AGyLsnz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVvU3Vky; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780427794; c=relaxed/simple;
+	bh=RK4f6BtjDzKYLFDOPP5GGz38kUK7c2d/+K3M9nfEZmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U8gkB2h9zueMKVQ7k63cbiOK0HMv9EV2X7ZbBb2AVWAeLADjHwVgT+17y5MBtOABgDWTjiUqCJVvK2tayX8JPhJatfOHnpXm9p212/Ze7sY98KXfRxPrUac+rUD0KK4vF0hlkOadeZAXvO8lkalouoIEcCf3x4hEYfC8cAdguFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwTmjx4a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVvU3Vky"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842161F00893;
-	Tue,  2 Jun 2026 19:10:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwTmjx4a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BE01F00893;
+	Tue,  2 Jun 2026 19:16:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780427403;
-	bh=yXVsAin2aMEpAJMaB8RYDCVaVZtL4AZzPKvQvGUBlew=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=HVvU3VkyfQa7XeXwPTfgHZOK1CGHPsp4xEp/twYg2A+QiVLKnCt81T2W3VM93cNhH
-	 2wpAyzstkMRz4WTGuFZ2JoT7stisKj6OGZg2O7gpeKhP1rj8de7JHw9Q1ZeEOGDNNN
-	 bMtdsbX48zBgJ+JWqA85+aBihlP7sqMPFTNY11Yw5DTpeHFkxFy0tmCGNBIf2E5ARS
-	 zCN5b9bRsb0qpm+Gj2RUp4AITRD3pWnIF8l4GkqzHKxn89dXCAqe8NPccmYJnczGK5
-	 TqqHZOaBDQpa3oA7CK7cz73OURxUvgLT5f90fLumLjEum8dxuRtKSuFTwY9anzCYRU
-	 +ViW2OyA+M7yQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 997453811A6C;
-	Tue,  2 Jun 2026 19:10:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780427792;
+	bh=RK4f6BtjDzKYLFDOPP5GGz38kUK7c2d/+K3M9nfEZmI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FwTmjx4a7p0hG9bM7SRWuxMui/8/RECpaUiuNSLV1wcYg5PHmXm5LhEvlA5hmCzrH
+	 8joRF42jLONmi/PAD6VtcP3+IfQLtsuSDUUgjh630DJa9sz7KznKPLNDc8LzvNWBwi
+	 39AdFFJvxy2TVxYbuPvD/AL1i08CWFv1FeI8oTeB4VbD7oVO1XpzljdGtGsNeSVenY
+	 3XpsCUy0m7qVcgjxqB6K3602LJZK/AjSmgVSdKxcQpVrJSnt7ukK1VgSGQUxgrU+NZ
+	 ZL+JAGm2XikJuLsVxmM6ZuHQK1jcjbQm1gl2hYrqPH+EcF8y7CI27Om1uxXa9jB/MB
+	 78K15XxKUMhCQ==
+Date: Tue, 2 Jun 2026 20:16:28 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the security tree
+Message-ID: <9d34218f-abbf-4a23-8b35-b305873ffae3@sirena.org.uk>
+References: <ah8BzqSmZO40xYhS@sirena.org.uk>
+ <CAHC9VhRR4mmkOdWwUCLswmA+_KEjB8RCBBTJ2W4JGiLUWKzxyQ@mail.gmail.com>
+ <CAHC9VhRPbkVYAMec0KG55er6GOPdKqMXKdpC8rrHgiAodSv-sw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/1] bpf: Silence unused-but-set-variable warning
- in
- bpf_for_each_reg_in_vstate_mask
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178042740541.1010994.11013299870656363791.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Jun 2026 19:10:05 +0000
-References: <20260602175204.624401-1-ameryhung@gmail.com>
-In-Reply-To: <20260602175204.624401-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
- andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@kernel.org, kernel-team@meta.com
-
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue,  2 Jun 2026 10:52:04 -0700 you wrote:
-> The macro requires callers to pass a stack variable, but not all
-> callbacks use it. Add (void)__stack to suppress the clang W=1 warning.
-> 
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
->  include/linux/bpf_verifier.h | 1 +
->  1 file changed, 1 insertion(+)
-
-Here is the summary with links:
-  - [bpf-next,1/1] bpf: Silence unused-but-set-variable warning in bpf_for_each_reg_in_vstate_mask
-    https://git.kernel.org/bpf/bpf-next/c/c169a2a5fd9c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gJBBxMN1qR4w9eUu"
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRPbkVYAMec0KG55er6GOPdKqMXKdpC8rrHgiAodSv-sw@mail.gmail.com>
+X-Cookie: The wages of sin are unreported.
 
 
+--gJBBxMN1qR4w9eUu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jun 02, 2026 at 02:40:12PM -0400, Paul Moore wrote:
+> On Tue, Jun 2, 2026 at 12:31=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+
+> > Thanks Mark, we're taking a look at it now and should have a
+> > fix/answer later today.
+
+> Proposed update to Hornet, assuming this looks okay to Blaise I'll
+> merge it into the LSM tree (and either pull in Daniel's patch or base
+> off bpf-next so everything builds correctly).
+
+> https://lore.kernel.org/linux-security-module/20260602183658.161744-2-pau=
+l@paul-moore.com/
+
+Can you ping me when that goes in (or things are otherwise resolved)
+please so I know to drop the revert from -next?
+
+--gJBBxMN1qR4w9eUu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmofLAsACgkQJNaLcl1U
+h9CXcAf+KmrjLQrivnIBphNnwxv3wp2CKbU4uR0fVcfqzGVuft0nqrY5q608mv10
+4bfwx+FKHKuEG3gvaf+bE9TjbCKeazSo5poZGhX9EZ9d6UNhqrzJqK2bn1egi0Vs
+7wb4nQW54X12NfwNbDYY57liRU0mn2qx6k+KgmVaEqjDucqCUHPNx3XdmNb/sIn9
+Bvdw8kFlf24o0YOl+caL0zpNcg3B4rNPm7lUQ9Fgkq9qZOOX9qY8GWo3NtlfiM0V
+spi2hPz5YK4m+dVYayqwRAI+05LoId65K8qXwJ2d4ZbPHv3MppmpQCXgKsM4XiQw
+50YHcX4RdSHAsg0KVMyu0YNzNPqCrQ==
+=ZWeW
+-----END PGP SIGNATURE-----
+
+--gJBBxMN1qR4w9eUu--
