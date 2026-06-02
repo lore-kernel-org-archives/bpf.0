@@ -1,117 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FFF3D093F
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 09:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0681937CD20;
+	Tue,  2 Jun 2026 09:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780392725; cv=none; b=NTF906g/3K39kxwFHN32nWzZsVLFg5GqafRdmR+Re9B5tyzfSL9olHVvjpkRnZ8lx3nnRmOExtvc44TfmwjNT+Yp0Y1Pzi1M1fUvKsB1P9Prh0u/4IyOrP9wdBQ5NiA0BlN7bUeFL7fAHtNbdSGcH6aTDxL65rg0zBTqxpz9Da8=
+	t=1780393182; cv=none; b=cZgk3wqnyl1vRoC5nM93g1iwf30D01NiMvTCKj622nRtXH7xtzfnhvSs14V6Gzrhv8QDzVBbAEfn2K1g3Y4e1yCOM8Wv2zvR9N2HwbA+y9FxkwvZ46C5Aj49nfNNGyIbNo8RGQMDmq318shSzc8Zm9oM3+RFtcwsIVM3BPGBb0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780392725; c=relaxed/simple;
-	bh=4+/5yEFn9JFSxH6c5p5oPPracueX7dIOLIPHQldOR7M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nRIeWPPiMf+AJf13Ee3A+6UIiCU4Vr5rhPYrBPffCDY6BL4xN1uSYJUStpeFFnPXWYo3uJk0L061z2XKdHWTUBg0+S08LDeej2dBFL/V1lTowHIx47JpQM90WF+4h88U25m3OY+VvreuKsp8IB5rL+ycK0lkcUYZJoDFtOb0u1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxAml9tb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780393182; c=relaxed/simple;
+	bh=pSIQE64PaAlUMz0FCJdQHmaqw3JTtoHMl7pFjj3V9TE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Zy0h2BS0433saIRKOabyt/a30rxCeaS+i5TmJpWcSR3K/fkIjzxxMbquA590aeYXhx1OBrKzYQTTfVeMVj285bq2DQ9XASd7mBISQJ4V/6XOmy7A9WhC+Uco5YlQIbGXzMQV72Oh8vWyK5LfbXjSWFyxHWeA7FD4OZWIdWMNiTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aldm5Ocb; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxAml9tb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ED41F00893;
-	Tue,  2 Jun 2026 09:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780392719;
-	bh=wJ5qHrMSlM7Squ5pAM0LZbkBZoA9q0ejRF0V8bdek2o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AxAml9tbQt1hiL/vrDzVMyNXDxLRnszkEceQjNqab4dD6KW+PVShQ/X9C7hPs1N3X
-	 ej2IOrjaWIUUWff/DAa5NCBoA2XwLrs4lPSJxCMn2owyJltebMN38I+jwL6WIhzQp9
-	 /kgv9PMwtKBm2+gpY1gS3C79zB9bymEIoqV7QlPu+jE+yBgqafzE6QFvSbTw8n8vGu
-	 7ZO5FxSNU4a3b/TtzJnWfD5nf7uVAg/yNDruLw34RlVGlPik0ogrPbKQ8aYWA6rKY+
-	 IyxsuIV+UPEDAIRXZbA7eKo20WiffVL8otHrQmSjRJZ+O8LMscsheAMUsBo1+L6l0F
-	 Hswdzv3Qdx/mQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add regression test for kfunc
- implicit arg injection
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602085827.2562222-3-chenyuan_fl@163.com>
-References: <20260602085827.2562222-3-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 09:31:58 +0000
-Message-Id: <20260602093158.E4ED41F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aldm5Ocb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=bK
+	g6D6cn5GVwPBDQJrjPxDPzagJkxDLn235ihYxuUvg=; b=aldm5OcbA3izMq2xZY
+	I9PKSrJ41wrngPqMFuth6cXqb5MTXxfy1ZsurkdxVNehsheaofv+rOMOeIS/qF6X
+	Hv+FwgMU3jGOp4peAzzZv9umuO+Dd1cSw0Bf8dkNCrNCmrhQ6qXRi8T1ASWZlU93
+	9fSh+LLaj5ZxgvsMIvlthnAZQ=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgCnYo6mpB5qDzU6AA--.7425S2;
+	Tue, 02 Jun 2026 17:38:48 +0800 (CST)
+From: chenyuan_fl@163.com
+To: eddyz87@gmail.com,
+	yonghong.song@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bot+bpf-ci@kernel.org,
+	bpf@vger.kernel.org,
+	chenyuan@kylinos.cn,
+	chenyuan_fl@163.com,
+	clm@meta.com,
+	daniel@iogearbox.net,
+	ihor.solodrai@linux.dev,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	song@kernel.org
+Subject: [PATCH bpf v4 0/2] bpf: Fix kfunc implicit arg injection and add selftest
+Date: Tue,  2 Jun 2026 17:38:31 +0800
+Message-ID: <20260602093836.2632714-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
+References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgCnYo6mpB5qDzU6AA--.7425S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1xuFyUtFWDtF1rGr45KFg_yoW8Cw43pF
+	WrA3WYkr1kJ3WIgF93Zr1xuFyrtws5Xw45GF9xK34rAas8Zr1UXFyxKF15tas0yrZ5X3y2
+	vas2qFZ5C3WUAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziHGQDUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgh1M2oepKjcJgAA3O
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] Multi-line comment does not follow the BPF subsystem comment style.
-- [Low] Build failure in selftests due to accessing a non-existent BSS fiel=
-d in the reused struct_ops skeleton.
---
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-commit 70edd2df92a9670c07a307bbdf1081733e04e3dd
-Author: Yuan Chen <chenyuan@kylinos.cn>
+v1: https://lore.kernel.org/bpf/20260407080900.551797-1-chenyuan_fl@163.com/
 
-selftests/bpf: Add regression test for kfunc implicit arg injection
+v1 made btf_types_are_same() cross-BTF aware by comparing kind, size
+and name.  Alan Maguire pointed out that this would be too permissive
+since two different structs can share the same name and size.
 
-This commit adds a regression test to verify that the BPF verifier correctly
-injects the bpf_prog_aux pointer for KF_IMPLICIT_ARGS kfuncs. It uses inline
-assembly to contaminate R2 before calling a kfunc to ensure the kernel prop=
-erly
-overwrites it with the valid pointer.
+v2 used a name-based classifier (get_kfunc_arg_inject_type).
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc=
-.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-> index 461ded7223515..fb4d06dd6c4dc 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
+v3 splits the combined is_kfunc_arg_ignore || is_kfunc_arg_implicit
+check in check_kfunc_args(), so that an implicit argument reaching
+is_kfunc_arg_implicit() without any prior handler is rejected with
+-EFAULT instead of silently skipped (Eduard Zingerman).  This prevents
+the silent fallthrough that occurred when module BTF was inconsistent
+with vmlinux (e.g. pahole 1.30 breaking distilled base dedup).
 
-[ ... ]
+v4: fix a build error in the selftest (test_st_ops_assoc_reuse used
+the wrong skeleton for the new variable).
 
-> @@ -97,6 +103,7 @@ static void test_st_ops_assoc_reuse(void)
-> =20
->  	ASSERT_EQ(skel->bss->test_err_a, 0, "skel->bss->test_err_a");
->  	ASSERT_EQ(skel->bss->test_err_b, 0, "skel->bss->test_err_b");
-> +	ASSERT_EQ(skel->bss->test_err_inject, 0, "skel->bss->test_err_inject");
+Patch 2 adds a positive regression test for the injection path.
+Yonghong Song pointed out that with pahole 1.31 available in CI the
+test will always pass, so it cannot reproduce the original BTF mismatch
+scenario.  The test still serves as a useful regression guard for the
+injection mechanism itself, however, and would catch any accidental
+breakage in the future.
 
-[Severity: Low]
-Will this cause a build failure? It looks like test_err_inject is defined
-in struct_ops_assoc.c, but this function is testing the skeleton for
-struct_ops_assoc_reuse.c.
+Thanks to everyone who reviewed and provided feedback on this series.
 
-Since the variable isn't defined in the reused program's source, the
-generated struct_ops_assoc_reuse skeleton won't contain the test_err_inject
-BSS field, which would cause a compiler error when accessing
-skel->bss->test_err_inject here.
+Yuan Chen (2):
+  bpf: Fix kfunc implicit arg inject type detection to prevent invalid
+    pointer deref
+  selftests/bpf: Add regression test for kfunc implicit arg injection
 
-> =20
->  out:
->  	struct_ops_assoc_reuse__destroy(skel);
-> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c b/tools=
-/testing/selftests/bpf/progs/struct_ops_assoc.c
-> index 68842e3f936b9..ed0084453d560 100644
-> --- a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
-> +++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
-> @@ -103,3 +103,43 @@ SEC(".struct_ops.link")
->  struct bpf_testmod_multi_st_ops st_ops_map_b =3D {
->  	.test_1 =3D (void *)test_1_b,
->  };
-> +
-> +/* Test for aux injection with stale register contamination.
-> + *
+ kernel/bpf/verifier.c                              | 15 +++++++-
+ .../bpf/prog_tests/test_struct_ops_assoc.c         |  6 ++++
+ .../testing/selftests/bpf/progs/struct_ops_assoc.c | 40 ++++++++++++++++++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  9 +++++
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  1 +
+ 5 files changed, 70 insertions(+), 1 deletion(-)
 
-[Severity: Low]
-This isn't a bug, but does this violate the BPF subsystem multi-line
-comment style? The guidelines require the opening /* to be on its own
-line, rather than starting the text on the same line.
+-- 
+2.47.2
 
-> + * This test verifies that the kernel correctly injects the implicit
-> + * bpf_prog_aux pointer for kfuncs with KF_IMPLICIT_ARGS.  The program
-> + * uses inline assembly to contaminate R2 with a known magic value
-> + * before calling the kfunc:
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602085827.2562=
-222-1-chenyuan_fl@163.com?part=3D2
