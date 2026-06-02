@@ -1,54 +1,54 @@
 Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550563D3489
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 23:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6BE3D16F5
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 23:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780444750; cv=none; b=A992E3SCGwbNrYYrdtZUgChxis/87Xtmoli7NKs/ZFWiLmsFgMJwwjAMLy/UjGNv/PlarFcK2wMCFncssXcOWyC9QbJe0geA/UBCJJwF3Jp7q2vXqEeQ5VnwyMSXCjmO/xT2aeiwZa+MfeESlZ5uiimMequCIaMlzodqegWZ6DU=
+	t=1780444750; cv=none; b=VeSS9616+CJ3NprYzeQbjofXpNvcCJGrO0btr8I8G6YVrasrvU9pE8+fidqPD5wtKGIOyYXcsB/KVqKomhg7fjJ4M+8C8aTkks6Fj9+7xxhG+6cbjXJlwJ2JEZVxWlfj6A8c3CgPQBX5SwfmiibdyrjzmRP8CMezD9aTFMpbATc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780444750; c=relaxed/simple;
-	bh=FwGXS8e6HUgTVB3w+vwLfDxMVnGT2dm1xGoUpgeqMYo=;
+	bh=oaGu4c6TMG0LBwTuvcuW7siWdRMM5D/zv/v5c5v2dCw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KAcVAbSuOnAtz7qqanyJeis/3GbcfDhw1ktNfuP8YD8wRoOSJiZyIJQkbXMbXtqxFE0e656sxETpBCEiFnmAX1yFsb83lMoAH7Fj5GepoOQ639G2ZgN7G6jGJEL5xpzzTAaB8aXoQdIyNaOPtYeffiJOAHNx1zJierBF4sXzUP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AAV6YedE; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=HVAZ5l5H3EPe7EBCM8K5i7qzLhu4/KwssRVacrK/W5lGc3m/8TPTCd4zRTGMQpQ05APChrb9eef+F40C3BZR/6Leocx8a9Qr400ZhUeMa2Mq9zmTcn9+utGZq8oW49aomOM5f5O15OXoC9e3lXwr5G+YiZ9e2F0xRx353N7BclU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o3o/vI9H; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AAV6YedE"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c857ebbb0easo56618a12.1
-        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 16:59:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o3o/vI9H"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c850ff84ddfso15842870a12.2
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 16:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20251104; t=1780444747; x=1781049547; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIbPdnvitqMPA6Y12Vag7sROSmwPcIYAij/Y31wBos8=;
-        b=AAV6YedEMHMluSYNLpb2q5QtADdklMRbp7OEvqYWxA+cYJ0oNJRAPl3uviu2CI2Ks4
-         ukEPGfEB+OdzcYT2fz59L0MuNIzkQP990Z0YAxQIFCgRtTJlvKAMtvCkibN4HnhHmUBx
-         AF9pS4iF6gJ5NIRwA19JFvMmSm65H64H9y6cjaLixGcgBHllycjjwP3u7VODzVXwbbmC
-         NhYUxjgQe35sO3y01SqgiuhxaaCOz3rQe+VuuJbRhvm4bW6PVU2UO6ilcxyiZnZDVOP8
-         LInmHGBYO+9wZd67NT14ZwfCXoRKMOoKBCxourhVmR5cG9k7ZMlqQIHW/jbeGfoJrORL
-         KlAw==
+        bh=LXTbt64BHJpwXLJdQFfnxgCMmrTNVSzhhrY3v2EUYnI=;
+        b=o3o/vI9Hu98qHTD5Y8KVqvhVUspXvJA6GtbZ+6083qBopDo37r8h2zAucqLxnDwUvl
+         P//Teys5XNvZJMucaQGsKWTutDoh0ZYxJcAPrGovdx1K6YF+X4eWP94LvSUkn+BZ9INv
+         32wV1owp3EDTTfXCodkC5ghK4yVuUPN1jLUV7XNcdhA3cRaN4P50BLrRzvJvRz9/UMhB
+         Vtx6E/fkRAdFHxID7Fz9QF/c+l+RZenyI66NY4oWeCVH7n264KOwwu+oBGtdDlBlDG0u
+         9c/qrzW99lniLC4Z7yj2SUynzt/DOP77YYwpCql41vm/g60/RImvaXWq+/YrXZlAWG2s
+         xt1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1780444747; x=1781049547;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIbPdnvitqMPA6Y12Vag7sROSmwPcIYAij/Y31wBos8=;
-        b=g2VUyCAmBE79pdvJdUb3dMXzsAlOUJHQ0RwzEGCmYeYPaac0sYif40oBS1cP+k++yW
-         bIKS2q4Y6GIM5l3J5YICgVYKRJynzyqDRdfXKzAiPB0qIZ55HzY/rQRqriQ7mFK/Fkuj
-         UyCLfeABxOnsa0Toq8GrQJV01APAf+XWcxq80j5zWRigzz758l/s6peHjP83r0TEQC6y
-         nPy3Tziny9nFDexOKAoomOJQ35Zd2hlL/iSS4x6ox8vy+E26c7x+K3VuZ6oAvCBzxHdj
-         d8O3yAf9UU7pKlBvDEcf2UKRTQHGJo+ChaWIdxt0Hg04TlTIkyA7q1CjkVKyouUFYMJi
-         Hn+w==
-X-Forwarded-Encrypted: i=1; AFNElJ/pu1ODWDYyunlTzUQgdim8R9KjovjsjBbUDw/qD+/F8s7DKSj5pSkd6h/m4bAVXZfY0uo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUoh2q4UlcyzDBmOUmSUl5v0jK41glSce557oQKVljdxgSybcC
-	tfSjwEJjaU3/FEgnBzpFKbrp6E3fj3FfhMuTSIpZsU5YwrlxeLujqYCYk7REYVNq9V71xqRWs+J
-	BqYrkExCZx7hwD9Mna4u7bu2Swg==
-X-Received: from pggu23.prod.google.com ([2002:a63:df17:0:b0:c85:8297:df9b])
+        bh=LXTbt64BHJpwXLJdQFfnxgCMmrTNVSzhhrY3v2EUYnI=;
+        b=NSsYqner71S7WlIURZbLb/rl0x9LGFQJQEq9mj+1W8+zvjLn9G5bZhCgxmooMCoNAw
+         73aB0Gr64MwjHh1ESR9oZzMR+VOIx6+14DhWuIGZMnd7IWLR38U3O+SO1flD7oeZM4br
+         riv7Smz9BOLpapi6qsXHq8AfL/hDqcf7dapniwobAAVOMiMTp+OemqTJyJdFFns+cOOQ
+         WMdxOueEU0XW8+hAn7XECqS5nt19fqoNsbdtVoFQhA7gMxdnRv9kYLPdSA4bfJTIdtdg
+         b39XdxUctznUeSJpuoMFteK4LRdQ/I4KySu5weldffLe9NyRI+UFCc4qJ0FGA21+mF/f
+         ld4g==
+X-Forwarded-Encrypted: i=1; AFNElJ+jkVcCR+s15L6AzPbmNhKCf4m6M0c01Oq5pij3nPmcE4PmFerJzHCiMBPICVqPHnN9pug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcVaZKhxEKOG21A5Z5Gqi7SREg6syZKuc0jiUY+O7Z4cc0zJ/8
+	YKBsxt+IgiMjwhRBifEW/5gSyU39fjBXulqK96ylHgGKTavX7TRKriP1cuwJRCJnJpOndklnsQk
+	A2qLSF2XQnvu+xi6Yn2gmSF/0bA==
+X-Received: from pga15.prod.google.com ([2002:a05:6a02:4f8f:b0:c85:b584:3b1d])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:c996:b0:3b3:d656:b470 with SMTP id adf61e73a8af0-3b4989416bamr769252637.27.1780444747266;
- Tue, 02 Jun 2026 16:59:07 -0700 (PDT)
-Date: Tue,  2 Jun 2026 23:58:50 +0000
+ 2002:a05:6a21:6e03:b0:3b4:8ec9:514e with SMTP id adf61e73a8af0-3b4975aa628mr1097081637.4.1780444746391;
+ Tue, 02 Jun 2026 16:59:06 -0700 (PDT)
+Date: Tue,  2 Jun 2026 23:58:49 +0000
 In-Reply-To: <20260602235900.3050782-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260602235900.3050782-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.54.0.1013.g208068f2d8-goog
-Message-ID: <20260602235900.3050782-7-hramamurthy@google.com>
-Subject: [PATCH net-next v2 06/15] gve: introduce control plane operations structure
+Message-ID: <20260602235900.3050782-6-hramamurthy@google.com>
+Subject: [PATCH net-next v2 05/15] gve: add struct gve_device_info to hold
+ device properties
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -70,209 +71,513 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-To abstract out the difference in implementation of control
-plane operations between the existing Adminq ABI and the upcoming
-Mailbox ABI, introduce a new gve_ctrl_ops structure which will
-contain the basic operations. At probe, these ops will be set based
-on the ABI and the corresponding ops will be called in relevant
-places.
+In the current AdminQ mode, device properties are written into
+struct gve_device_descriptor that is allocated in shared memory
+between the driver and device. In the upcoming MailboxQ mode,
+these properties will be returned in the response of a mailbox
+message. Hence, add struct gve_device_info as the structure that
+holds all the properties that are negotiated with the device in
+either mode.
 
-As of this patch, only Adminq ops are set. In future patches,
-corresponding ops will be set for the new mailbox mode.
+Change the AdminQ mode method gve_adminq_describe_device()
+and the functions it calls to fill up device information
+into this newly introduced struct gve_device_info. Move a
+few helper functions and code that set device properties
+in the priv structure into gve_init_priv(). So now
+gve_init_priv() calls/does the following:
 
-Implement a ctrl op to map/unmap the doorbell bar. Since this
-functionality has moved to a control op, call this op after control
-ops are set for AdminQ mode.
+- gve_set_mtu()
+- gve_set_mac()
+- gve_set_queue_properties()
+- gve_set_buf_sizes()
+- set flow steering and RSS properties
+- set other priv properties
+
+When MailboxQ support is added, device information will be filled
+into the same structure and the same gve_init_priv() path would be
+used to set device properties to ensure common code reusage.
+
+These changes are refactors only, no functional change.
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
 Reviewed-by: Jordan Rhee <jordanrhee@google.com>
 Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
 ---
- drivers/net/ethernet/google/gve/gve.h        | 11 ++++++
- drivers/net/ethernet/google/gve/gve_adminq.c | 21 ++++++++++++
- drivers/net/ethernet/google/gve/gve_adminq.h |  2 ++
- drivers/net/ethernet/google/gve/gve_main.c   | 36 +++++++++++---------
- 4 files changed, 54 insertions(+), 16 deletions(-)
+ drivers/net/ethernet/google/gve/gve.h        |  29 +++++
+ drivers/net/ethernet/google/gve/gve_adminq.c | 113 +++++++++++--------
+ drivers/net/ethernet/google/gve/gve_adminq.h |   6 -
+ drivers/net/ethernet/google/gve/gve_main.c   | 101 ++++++++++++-----
+ 4 files changed, 169 insertions(+), 80 deletions(-)
 
 diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-index 086a315f42c1..c1e118241d2b 100644
+index 645175a5dfae..086a315f42c1 100644
 --- a/drivers/net/ethernet/google/gve/gve.h
 +++ b/drivers/net/ethernet/google/gve/gve.h
-@@ -824,6 +824,16 @@ struct gve_device_info {
- 	bool cache_rss_config;
+@@ -796,6 +796,34 @@ struct gve_ptp {
+ 	struct gve_priv *priv;
  };
  
-+/**
-+ * struct gve_ctrl_ops - Control plane operations structure
-+ * @map_db_bar: Maps the doorbell BAR for the device and store in @priv.
-+ * @unmap_db_bar: Unmaps the doorbell BAR previously mapped by @map_db_bar.
-+ */
-+struct gve_ctrl_ops {
-+	int (*map_db_bar)(struct gve_priv *priv);
-+	void (*unmap_db_bar)(struct gve_priv *priv);
++struct gve_device_info {
++	enum gve_queue_format queue_format;
++	u16 default_tx_queues;
++	u16 default_rx_queues;
++	u16 max_tx_queues;
++	u16 max_rx_queues;
++	u16 default_tx_ring_size;
++	u16 default_rx_ring_size;
++	u16 max_tx_ring_size;
++	u16 max_rx_ring_size;
++	u16 min_tx_ring_size;
++	u16 min_rx_ring_size;
++	u16 max_mtu;
++	u8 mac[ETH_ALEN];
++	u16 max_rx_buffer_size;
++	u16 header_buf_size;
++	u32 max_flow_rules;
++	u16 rss_key_size;
++	u16 rss_lut_size;
++	u16 tx_pages_per_qpl;
++	u16 num_event_counters;
++	u64 max_registered_pages;
++	bool default_min_ring_size;
++	bool nic_timestamp_supported;
++	bool modify_ring_size_enabled;
++	bool cache_rss_config;
 +};
 +
  struct gve_priv {
  	struct net_device *dev;
  	struct gve_tx_ring *tx; /* array of tx_cfg.num_queues */
-@@ -957,6 +967,7 @@ struct gve_priv {
+@@ -928,6 +956,7 @@ struct gve_priv {
+ 	struct gve_nic_ts_report *nic_ts_report;
  	dma_addr_t nic_ts_report_bus;
  	u64 last_sync_nic_counter; /* Clock counter from last NIC TS report */
- 	struct gve_device_info device_info;
-+	const struct gve_ctrl_ops *ctrl_ops;
++	struct gve_device_info device_info;
  };
  
  enum gve_service_task_flags_bit {
 diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 06db2ccd0b89..4617489d8714 100644
+index 77203184efbd..06db2ccd0b89 100644
 --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -1645,3 +1645,24 @@ int gve_adminq_query_rss_config(struct gve_priv *priv, struct ethtool_rxfh_param
- 	dma_pool_free(priv->adminq_pool, descriptor, descriptor_bus);
- 	return err;
+@@ -70,7 +70,7 @@ void gve_parse_device_option(struct gve_priv *priv,
+ 
+ 		dev_info(&priv->pdev->dev,
+ 			 "Gqi raw addressing device option enabled.\n");
+-		priv->queue_format = GVE_GQI_RDA_FORMAT;
++		priv->device_info.queue_format = GVE_GQI_RDA_FORMAT;
+ 		break;
+ 	case GVE_DEV_OPT_ID_GQI_RDA:
+ 		if (option_length < sizeof(**dev_op_gqi_rda) ||
+@@ -190,7 +190,7 @@ void gve_parse_device_option(struct gve_priv *priv,
+ 
+ 		/* device has not provided min ring size */
+ 		if (option_length == GVE_DEVICE_OPTION_NO_MIN_RING_SIZE)
+-			priv->default_min_ring_size = true;
++			priv->device_info.default_min_ring_size = true;
+ 		break;
+ 	case GVE_DEV_OPT_ID_FLOW_STEERING:
+ 		if (option_length < sizeof(**dev_op_flow_steering) ||
+@@ -922,10 +922,13 @@ int gve_adminq_destroy_rx_queues(struct gve_priv *priv, u32 num_queues)
+ 
+ static void gve_set_default_rss_sizes(struct gve_priv *priv)
+ {
+-	if (!gve_is_gqi(priv)) {
+-		priv->rss_key_size = GVE_RSS_KEY_SIZE;
+-		priv->rss_lut_size = GVE_RSS_INDIR_SIZE;
+-		priv->cache_rss_config = true;
++	struct gve_device_info *device_info = &priv->device_info;
++
++	if (device_info->queue_format == GVE_DQO_RDA_FORMAT ||
++	    device_info->queue_format == GVE_DQO_QPL_FORMAT) {
++		device_info->rss_key_size = GVE_RSS_KEY_SIZE;
++		device_info->rss_lut_size = GVE_RSS_INDIR_SIZE;
++		device_info->cache_rss_config = true;
+ 	}
  }
+ 
+@@ -946,77 +949,105 @@ static void gve_enable_supported_features(struct gve_priv *priv,
+ 					  const struct gve_device_option_modify_ring
+ 					  *dev_op_modify_ring)
+ {
++	struct gve_device_info *info = &priv->device_info;
 +
-+int gve_adminq_map_db_bar(struct gve_priv *priv)
-+{
-+	struct pci_dev *pdev = priv->pdev;
-+	void __iomem *db_bar;
-+
-+	db_bar = pci_iomap(pdev, GVE_DOORBELL_BAR, 0);
-+	if (!db_bar) {
-+		dev_err(&pdev->dev, "Failed to map doorbell bar!\n");
-+		return -ENOMEM;
-+	}
-+	priv->db_bar2 = db_bar;
-+	return 0;
+ 	/* Before control reaches this point, the page-size-capped max MTU from
+ 	 * the gve_device_descriptor field has already been stored in
+-	 * priv->dev->max_mtu. We overwrite it with the true max MTU below.
++	 * device_info->max_mtu. We overwrite it with the true max MTU below.
+ 	 */
+ 	if (dev_op_jumbo_frames &&
+ 	    (supported_features_mask & GVE_SUP_JUMBO_FRAMES_MASK)) {
+ 		dev_info(&priv->pdev->dev,
+ 			 "JUMBO FRAMES device option enabled.\n");
+-		priv->dev->max_mtu = be16_to_cpu(dev_op_jumbo_frames->max_mtu);
++		info->max_mtu = be16_to_cpu(dev_op_jumbo_frames->max_mtu);
+ 	}
+ 
+ 	if (dev_op_buffer_sizes &&
+ 	    (supported_features_mask & GVE_SUP_BUFFER_SIZES_MASK)) {
+-		priv->max_rx_buffer_size =
++		info->max_rx_buffer_size =
+ 			be16_to_cpu(dev_op_buffer_sizes->packet_buffer_size);
+-		priv->header_buf_size =
++		info->header_buf_size =
+ 			be16_to_cpu(dev_op_buffer_sizes->header_buffer_size);
+ 		dev_info(&priv->pdev->dev,
+ 			 "BUFFER SIZES device option enabled with max_rx_buffer_size of %u, header_buf_size of %u.\n",
+-			 priv->max_rx_buffer_size, priv->header_buf_size);
+-		if (gve_is_dqo(priv) &&
+-		    priv->max_rx_buffer_size > GVE_DEFAULT_RX_BUFFER_SIZE)
+-			priv->rx_cfg.packet_buffer_size =
+-				priv->max_rx_buffer_size;
++			 info->max_rx_buffer_size, info->header_buf_size);
+ 	}
+ 
+ 	/* Read and store ring size ranges given by device */
+ 	if (dev_op_modify_ring &&
+ 	    (supported_features_mask & GVE_SUP_MODIFY_RING_MASK)) {
+-		priv->modify_ring_size_enabled = true;
+-		priv->max_rx_desc_cnt =
++		info->modify_ring_size_enabled = true;
++		info->max_rx_ring_size =
+ 			be16_to_cpu(dev_op_modify_ring->max_rx_ring_size);
+-		priv->max_tx_desc_cnt =
++		info->max_tx_ring_size =
+ 			be16_to_cpu(dev_op_modify_ring->max_tx_ring_size);
+ 		if (priv->default_min_ring_size) {
+ 			/* If device hasn't provided minimums, use default minimums */
+-			priv->min_tx_desc_cnt = GVE_DEFAULT_MIN_TX_RING_SIZE;
+-			priv->min_rx_desc_cnt = GVE_DEFAULT_MIN_RX_RING_SIZE;
++			info->min_tx_ring_size = GVE_DEFAULT_MIN_TX_RING_SIZE;
++			info->min_rx_ring_size = GVE_DEFAULT_MIN_RX_RING_SIZE;
+ 		} else {
+-			priv->min_rx_desc_cnt = be16_to_cpu(dev_op_modify_ring->min_rx_ring_size);
+-			priv->min_tx_desc_cnt = be16_to_cpu(dev_op_modify_ring->min_tx_ring_size);
++			info->min_rx_ring_size =
++				be16_to_cpu(dev_op_modify_ring->min_rx_ring_size);
++			info->min_tx_ring_size =
++				be16_to_cpu(dev_op_modify_ring->min_tx_ring_size);
+ 		}
+ 	}
+ 
+ 	if (dev_op_flow_steering &&
+ 	    (supported_features_mask & GVE_SUP_FLOW_STEERING_MASK)) {
+ 		if (dev_op_flow_steering->max_flow_rules) {
+-			priv->max_flow_rules =
++			info->max_flow_rules =
+ 				be32_to_cpu(dev_op_flow_steering->max_flow_rules);
+-			priv->dev->hw_features |= NETIF_F_NTUPLE;
+ 			dev_info(&priv->pdev->dev,
+ 				 "FLOW STEERING device option enabled with max rule limit of %u.\n",
+-				 priv->max_flow_rules);
++				 info->max_flow_rules);
+ 		}
+ 	}
+ 
+ 	if (dev_op_rss_config &&
+ 	    (supported_features_mask & GVE_SUP_RSS_CONFIG_MASK)) {
+-		priv->rss_key_size =
++		info->rss_key_size =
+ 			be16_to_cpu(dev_op_rss_config->hash_key_size);
+-		priv->rss_lut_size =
++		info->rss_lut_size =
+ 			be16_to_cpu(dev_op_rss_config->hash_lut_size);
+-		priv->cache_rss_config = false;
++		info->cache_rss_config = false;
+ 		dev_dbg(&priv->pdev->dev,
+ 			"RSS device option enabled with key size of %u, lut size of %u.\n",
+-			priv->rss_key_size, priv->rss_lut_size);
++			info->rss_key_size, info->rss_lut_size);
+ 	}
+ 
+ 	if (dev_op_nic_timestamp &&
+ 	    (supported_features_mask & GVE_SUP_NIC_TIMESTAMP_MASK))
+-		priv->nic_timestamp_supported = true;
++		info->nic_timestamp_supported = true;
 +}
 +
-+void gve_adminq_unmap_db_bar(struct gve_priv *priv)
++static void gve_fill_device_info(struct gve_priv *priv,
++				 struct gve_device_descriptor *descriptor)
 +{
-+	struct pci_dev *pdev = priv->pdev;
++	struct gve_device_info *device_info = &priv->device_info;
++	u16 default_num_queues;
 +
-+	pci_iounmap(pdev, priv->db_bar2);
-+}
++	device_info->tx_pages_per_qpl =
++				be16_to_cpu(descriptor->tx_pages_per_qpl);
++	device_info->max_registered_pages =
++				be64_to_cpu(descriptor->max_registered_pages);
++	device_info->num_event_counters = be16_to_cpu(descriptor->counters);
++	ether_addr_copy(device_info->mac, descriptor->mac);
++	device_info->max_mtu =  be16_to_cpu(descriptor->mtu);
++
++	default_num_queues = be16_to_cpu(descriptor->default_num_queues);
++	device_info->default_tx_queues = default_num_queues;
++	device_info->default_rx_queues = default_num_queues;
++	device_info->default_tx_ring_size =
++				be16_to_cpu(descriptor->tx_queue_entries);
++	device_info->default_rx_ring_size =
++				be16_to_cpu(descriptor->rx_queue_entries);
++
++	/* set default ranges */
++	device_info->max_tx_ring_size = device_info->default_tx_ring_size;
++	device_info->max_rx_ring_size = device_info->default_rx_ring_size;
++	device_info->min_tx_ring_size = device_info->default_tx_ring_size;
++	device_info->min_rx_ring_size = device_info->default_rx_ring_size;
+ }
+ 
+ int gve_adminq_describe_device(struct gve_priv *priv)
+@@ -1027,6 +1058,7 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 	struct gve_device_option_jumbo_frames *dev_op_jumbo_frames = NULL;
+ 	struct gve_device_option_modify_ring *dev_op_modify_ring = NULL;
+ 	struct gve_device_option_rss_config *dev_op_rss_config = NULL;
++	struct gve_device_info *device_info = &priv->device_info;
+ 	struct gve_device_option_gqi_rda *dev_op_gqi_rda = NULL;
+ 	struct gve_device_option_gqi_qpl *dev_op_gqi_qpl = NULL;
+ 	struct gve_device_option_dqo_rda *dev_op_dqo_rda = NULL;
+@@ -1070,26 +1102,26 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 	 * DqoRda, DqoQpl, GqiRda, GqiQpl. Use GqiQpl as default.
+ 	 */
+ 	if (dev_op_dqo_rda) {
+-		priv->queue_format = GVE_DQO_RDA_FORMAT;
++		device_info->queue_format = GVE_DQO_RDA_FORMAT;
+ 		dev_info(&priv->pdev->dev,
+ 			 "Driver is running with DQO RDA queue format.\n");
+ 		supported_features_mask =
+ 			be32_to_cpu(dev_op_dqo_rda->supported_features_mask);
+ 	} else if (dev_op_dqo_qpl) {
+-		priv->queue_format = GVE_DQO_QPL_FORMAT;
++		device_info->queue_format = GVE_DQO_QPL_FORMAT;
+ 		supported_features_mask =
+ 			be32_to_cpu(dev_op_dqo_qpl->supported_features_mask);
+ 	}  else if (dev_op_gqi_rda) {
+-		priv->queue_format = GVE_GQI_RDA_FORMAT;
++		device_info->queue_format = GVE_GQI_RDA_FORMAT;
+ 		dev_info(&priv->pdev->dev,
+ 			 "Driver is running with GQI RDA queue format.\n");
+ 		supported_features_mask =
+ 			be32_to_cpu(dev_op_gqi_rda->supported_features_mask);
+-	} else if (priv->queue_format == GVE_GQI_RDA_FORMAT) {
++	} else if (device_info->queue_format == GVE_GQI_RDA_FORMAT) {
+ 		dev_info(&priv->pdev->dev,
+ 			 "Driver is running with GQI RDA queue format.\n");
+ 	} else {
+-		priv->queue_format = GVE_GQI_QPL_FORMAT;
++		device_info->queue_format = GVE_GQI_QPL_FORMAT;
+ 		if (dev_op_gqi_qpl)
+ 			supported_features_mask =
+ 				be32_to_cpu(dev_op_gqi_qpl->supported_features_mask);
+@@ -1097,18 +1129,9 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 			 "Driver is running with GQI QPL queue format.\n");
+ 	}
+ 
++	gve_fill_device_info(priv, descriptor);
+ 	gve_set_default_rss_sizes(priv);
+ 
+-	err = gve_set_mtu(priv, descriptor);
+-	if (err)
+-		goto free_device_descriptor;
+-
+-	priv->num_event_counters = be16_to_cpu(descriptor->counters);
+-
+-	gve_set_mac(priv, descriptor);
+-
+-	gve_set_queue_properties(priv, descriptor);
+-
+ 	gve_enable_supported_features(priv, supported_features_mask,
+ 				      dev_op_jumbo_frames, dev_op_dqo_qpl,
+ 				      dev_op_buffer_sizes, dev_op_flow_steering,
 diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index 831759d30f44..bc76976eb00f 100644
+index ed5cb052a52d..831759d30f44 100644
 --- a/drivers/net/ethernet/google/gve/gve_adminq.h
 +++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -655,5 +655,7 @@ int gve_adminq_report_nic_ts(struct gve_priv *priv,
+@@ -655,11 +655,5 @@ int gve_adminq_report_nic_ts(struct gve_priv *priv,
  struct gve_ptype_lut;
  int gve_adminq_get_ptype_map_dqo(struct gve_priv *priv,
  				 struct gve_ptype_lut *ptype_lut);
-+int gve_adminq_map_db_bar(struct gve_priv *priv);
-+void gve_adminq_unmap_db_bar(struct gve_priv *priv);
+-void gve_set_queue_properties(struct gve_priv *priv,
+-			      struct gve_device_descriptor *descriptor);
+-int gve_set_mtu(struct gve_priv *priv,
+-		struct gve_device_descriptor *descriptor);
+-void gve_set_mac(struct gve_priv *priv,
+-		 struct gve_device_descriptor *descriptor);
  
  #endif /* _GVE_ADMINQ_H */
 diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 1aeee916471f..51dd4f9b3022 100644
+index 338dc0b3249a..1aeee916471f 100644
 --- a/drivers/net/ethernet/google/gve/gve_main.c
 +++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -2464,6 +2464,11 @@ static void gve_set_buf_sizes(struct gve_priv *priv)
- 		priv->header_buf_size = device_info->header_buf_size;
+@@ -2380,6 +2380,8 @@ static int gve_set_num_ntfy_blks(struct gve_priv *priv)
+ 
+ static void gve_set_num_queues(struct gve_priv *priv)
+ {
++	struct gve_device_info *device_info = &priv->device_info;
++
+ 	priv->tx_cfg.max_queues =
+ 		min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks / 2);
+ 	priv->rx_cfg.max_queues =
+@@ -2387,12 +2389,14 @@ static void gve_set_num_queues(struct gve_priv *priv)
+ 
+ 	priv->tx_cfg.num_queues = priv->tx_cfg.max_queues;
+ 	priv->rx_cfg.num_queues = priv->rx_cfg.max_queues;
+-	if (priv->default_num_queues > 0) {
+-		priv->tx_cfg.num_queues = min_t(int, priv->default_num_queues,
++	if (device_info->default_tx_queues > 0)
++		priv->tx_cfg.num_queues = min_t(int,
++						device_info->default_tx_queues,
+ 						priv->tx_cfg.num_queues);
+-		priv->rx_cfg.num_queues = min_t(int, priv->default_num_queues,
++	if (device_info->default_rx_queues > 0)
++		priv->rx_cfg.num_queues = min_t(int,
++						device_info->default_rx_queues,
+ 						priv->rx_cfg.num_queues);
+-	}
+ 
+ 	dev_info(&priv->pdev->dev, "TX queues %d, RX queues %d\n",
+ 		 priv->tx_cfg.num_queues, priv->rx_cfg.num_queues);
+@@ -2400,54 +2404,69 @@ static void gve_set_num_queues(struct gve_priv *priv)
+ 		 priv->tx_cfg.max_queues, priv->rx_cfg.max_queues);
  }
  
-+static const struct gve_ctrl_ops gve_adminq_ops = {
-+	.map_db_bar	 = gve_adminq_map_db_bar,
-+	.unmap_db_bar	 = gve_adminq_unmap_db_bar,
-+};
+-static void gve_set_default_desc_cnt(struct gve_priv *priv,
+-				     const struct gve_device_descriptor *descriptor)
++static void gve_set_desc_cnt(struct gve_priv *priv)
+ {
+-	priv->tx_desc_cnt = be16_to_cpu(descriptor->tx_queue_entries);
+-	priv->rx_desc_cnt = be16_to_cpu(descriptor->rx_queue_entries);
++	struct gve_device_info *device_info = &priv->device_info;
+ 
+-	/* set default ranges */
+-	priv->max_tx_desc_cnt = priv->tx_desc_cnt;
+-	priv->max_rx_desc_cnt = priv->rx_desc_cnt;
+-	priv->min_tx_desc_cnt = priv->tx_desc_cnt;
+-	priv->min_rx_desc_cnt = priv->rx_desc_cnt;
++	priv->tx_desc_cnt = device_info->default_tx_ring_size;
++	priv->rx_desc_cnt = device_info->default_rx_ring_size;
++	priv->max_tx_desc_cnt = device_info->max_tx_ring_size;
++	priv->max_rx_desc_cnt = device_info->max_rx_ring_size;
++	priv->min_tx_desc_cnt = device_info->min_tx_ring_size;
++	priv->min_rx_desc_cnt = device_info->min_rx_ring_size;
+ }
+ 
+-void gve_set_queue_properties(struct gve_priv *priv,
+-			      struct gve_device_descriptor *descriptor)
++static void gve_set_queue_properties(struct gve_priv *priv)
+ {
+-	/* set default descriptor counts */
+-	gve_set_default_desc_cnt(priv, descriptor);
++	struct gve_device_info *device_info = &priv->device_info;
+ 
+-	priv->max_registered_pages = be64_to_cpu(descriptor->max_registered_pages);
+-	priv->tx_pages_per_qpl = be16_to_cpu(descriptor->tx_pages_per_qpl);
+-	priv->default_num_queues = be16_to_cpu(descriptor->default_num_queues);
++	gve_set_desc_cnt(priv);
++	priv->max_registered_pages = device_info->max_registered_pages;
++	priv->tx_pages_per_qpl = device_info->tx_pages_per_qpl;
+ }
+ 
+-int gve_set_mtu(struct gve_priv *priv,
+-		struct gve_device_descriptor *descriptor)
++static int gve_set_mtu(struct gve_priv *priv)
+ {
++	struct gve_device_info *device_info = &priv->device_info;
+ 	u16 mtu;
+ 
+-	mtu = be16_to_cpu(descriptor->mtu);
++	mtu = device_info->max_mtu;
+ 	if (mtu < ETH_MIN_MTU) {
+ 		dev_err(&priv->pdev->dev, "MTU %d below minimum MTU\n", mtu);
+ 		return -EINVAL;
+ 	}
+ 	priv->dev->max_mtu = mtu;
++	priv->dev->mtu = priv->dev->max_mtu;
+ 
+ 	return 0;
+ }
+ 
+-void gve_set_mac(struct gve_priv *priv,
+-		 struct gve_device_descriptor *descriptor)
++static void gve_set_mac(struct gve_priv *priv)
+ {
+-	eth_hw_addr_set(priv->dev, descriptor->mac);
+-	dev_info(&priv->pdev->dev, "MAC addr: %pM\n", descriptor->mac);
++	struct gve_device_info *device_info = &priv->device_info;
 +
++	eth_hw_addr_set(priv->dev, device_info->mac);
++	dev_info(&priv->pdev->dev, "MAC addr: %pM\n", device_info->mac);
++}
++
++static void gve_set_buf_sizes(struct gve_priv *priv)
++{
++	struct gve_device_info *device_info = &priv->device_info;
++
++	if (device_info->max_rx_buffer_size > priv->max_rx_buffer_size)
++		priv->max_rx_buffer_size = device_info->max_rx_buffer_size;
++
++	if (gve_is_dqo(priv) &&
++	    priv->max_rx_buffer_size > GVE_DEFAULT_RX_BUFFER_SIZE)
++		priv->rx_cfg.packet_buffer_size = priv->max_rx_buffer_size;
++
++	if (device_info->header_buf_size)
++		priv->header_buf_size = device_info->header_buf_size;
+ }
+ 
  static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
  {
- 	struct gve_device_info *device_info = &priv->device_info;
-@@ -2850,7 +2855,6 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
- 	int max_tx_queues, max_rx_queues;
- 	struct net_device *dev;
--	__be32 __iomem *db_bar;
- 	struct gve_registers __iomem *reg_bar;
- 	struct gve_priv *priv;
++	struct gve_device_info *device_info = &priv->device_info;
  	int err;
-@@ -2878,13 +2882,6 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		goto abort_with_pci_region;
- 	}
  
--	db_bar = pci_iomap(pdev, GVE_DOORBELL_BAR, 0);
--	if (!db_bar) {
--		dev_err(&pdev->dev, "Failed to map doorbell bar!\n");
--		err = -ENOMEM;
--		goto abort_with_reg_bar;
--	}
--
- 	gve_write_version(&reg_bar->driver_version);
- 	/* Get max queues to alloc etherdev */
- 	max_tx_queues = ioread32be(&reg_bar->max_tx_queues);
-@@ -2894,7 +2891,7 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (!dev) {
- 		dev_err(&pdev->dev, "could not allocate netdev\n");
- 		err = -ENOMEM;
--		goto abort_with_db_bar;
-+		goto abort_with_reg_bar;
- 	}
- 	SET_NETDEV_DEV(dev, &pdev->dev);
- 	pci_set_drvdata(pdev, dev);
-@@ -2926,19 +2923,27 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	priv->pdev = pdev;
- 	priv->msg_enable = DEFAULT_MSG_LEVEL;
- 	priv->reg_bar0 = reg_bar;
--	priv->db_bar2 = db_bar;
- 	priv->service_task_flags = 0x0;
- 	priv->state_flags = 0x0;
- 	priv->ethtool_flags = 0x0;
- 	priv->rx_cfg.packet_buffer_size = GVE_DEFAULT_RX_BUFFER_SIZE;
- 	priv->max_rx_buffer_size = GVE_DEFAULT_RX_BUFFER_SIZE;
+ 	/* Set up the adminq */
+@@ -2463,11 +2482,13 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
+ 	if (skip_describe_device)
+ 		goto setup_device;
  
-+	/* Set adminq ctrl ops */
-+	priv->ctrl_ops = &gve_adminq_ops;
+-	priv->queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
++	device_info->queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
+ 	err = gve_adminq_get_device_properties(priv);
+ 	if (err)
+ 		goto err;
+ 
++	priv->queue_format = priv->device_info.queue_format;
 +
-+	err = priv->ctrl_ops->map_db_bar(priv);
-+	if (err) {
-+		err = -ENOMEM;
-+		goto abort_with_netdev;
+ 	err = gve_set_num_ntfy_blks(priv);
+ 	if (err) {
+ 		dev_err(&priv->pdev->dev,
+@@ -2491,12 +2512,34 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
+ 		netif_set_tso_max_size(priv->dev, GVE_DQO_TX_MAX);
+ 	}
+ 
+-	priv->dev->mtu = priv->dev->max_mtu;
++	if (gve_set_mtu(priv)) {
++		err = -EINVAL;
++		goto err;
 +	}
 +
- 	gve_set_probe_in_progress(priv);
- 	priv->gve_wq = alloc_ordered_workqueue("gve", 0);
- 	if (!priv->gve_wq) {
- 		dev_err(&pdev->dev, "Could not allocate workqueue");
- 		err = -ENOMEM;
--		goto abort_with_netdev;
-+		goto abort_with_unmap_db_bar;
- 	}
- 	INIT_WORK(&priv->service_task, gve_service_task);
- 	INIT_WORK(&priv->stats_report_task, gve_stats_report_task);
-@@ -2968,12 +2973,12 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- abort_with_wq:
- 	destroy_workqueue(priv->gve_wq);
- 
-+abort_with_unmap_db_bar:
-+	priv->ctrl_ops->unmap_db_bar(priv);
++	priv->num_event_counters = device_info->num_event_counters;
 +
- abort_with_netdev:
- 	free_netdev(dev);
++	gve_set_mac(priv);
++
++	gve_set_queue_properties(priv);
++	priv->modify_ring_size_enabled = device_info->modify_ring_size_enabled;
++
++	gve_set_buf_sizes(priv);
++
++	priv->max_flow_rules = device_info->max_flow_rules;
++	if (priv->max_flow_rules)
++		priv->dev->hw_features |= NETIF_F_NTUPLE;
++
++	priv->rss_key_size = device_info->rss_key_size;
++	priv->rss_lut_size = device_info->rss_lut_size;
++	priv->cache_rss_config = device_info->cache_rss_config;
++
+ 	priv->numa_node = dev_to_node(&priv->pdev->dev);
+ 	priv->tx_cfg.num_xdp_queues = 0;
+ 	priv->rx_copybreak = GVE_DEFAULT_RX_COPYBREAK;
+ 	priv->ts_config.tx_type = HWTSTAMP_TX_OFF;
+ 	priv->ts_config.rx_filter = HWTSTAMP_FILTER_NONE;
++	priv->nic_timestamp_supported = device_info->nic_timestamp_supported;
  
--abort_with_db_bar:
--	pci_iounmap(pdev, db_bar);
--
- abort_with_reg_bar:
- 	pci_iounmap(pdev, reg_bar);
- 
-@@ -2989,14 +2994,13 @@ static void gve_remove(struct pci_dev *pdev)
- {
- 	struct net_device *netdev = pci_get_drvdata(pdev);
- 	struct gve_priv *priv = netdev_priv(netdev);
--	__be32 __iomem *db_bar = priv->db_bar2;
- 	void __iomem *reg_bar = priv->reg_bar0;
- 
- 	unregister_netdev(netdev);
- 	gve_teardown_priv_resources(priv);
- 	destroy_workqueue(priv->gve_wq);
-+	priv->ctrl_ops->unmap_db_bar(priv);
- 	free_netdev(netdev);
--	pci_iounmap(pdev, db_bar);
- 	pci_iounmap(pdev, reg_bar);
- 	pci_release_regions(pdev);
- 	pci_disable_device(pdev);
+ setup_device:
+ 	priv->xsk_pools = bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
 -- 
 2.54.0.1013.g208068f2d8-goog
 
