@@ -1,61 +1,63 @@
-Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1601E224FA
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 00:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64CB30C146
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 00:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780360887; cv=none; b=ZkDxAmNVQygKzszuj+0mq4R+5DlgIJJiuIVdSc4Iq0rwAv6Fc8pw40Rdregop0LKdMlF48M/9O0YwjLvGAysTLdAHbFnB3oSwPtSBuoNIgqNrV5HBSsiqBzG6shtnXOEG9Awgf4gjCKUHY8vPNnrGl9/01qqixnN5VRgZUEEOoQ=
+	t=1780360889; cv=none; b=qsf70qI0d9iXqJMGwfdUUcmdG5PFXrZk++AEDRPKl4w0tPq22N6D8yzG+jKGO23+EfXr/3D3tigFWe0yL9VxCp7eL1hy/7UWGu9iBZ+WC8A8lAvHCGFd7BYy3xt0WM9In9hTlHG7t8DsrYDI6nE4oXeN/os44pQ+ZMktLtNxa1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780360887; c=relaxed/simple;
-	bh=muWSf4o0IeqxPaNpjOjIgXABgnEE7IoB6iVQ/uUHVeQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ihcSfCTSjQL2ROUO3zYdVz8+P1REJrA75gQoHC3Glc6bWjUX9SXGR0MnDB40cAcgw+Nwaw5eqchljfqTlfOJv/3cVnBwEbzJeGU1bkD9f20rGehae7FyRwBS4dT+D5XBY43DjiK83eu33iCJhePtl6XAdtAmUs0gZq3RZP3oWAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=exOoKd1/; arc=none smtp.client-ip=74.125.82.193
+	s=arc-20240116; t=1780360889; c=relaxed/simple;
+	bh=amDGO6NwBQwUrSVSGm3wNBcPXIW/R9e5ucYSLCM+UDU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tRBaMU3YZk7NUkUnq/c2zRUw1OMam+YkrBVRNwnNUac0xkCiE6Cbu7nD8FeE541hYKeILAu59//LB9rqPgOOPIIh4goNw/WqdKjnMl+5Es1noabPFCK/g5/rRx4dVsvSHdpLRd0+5QeuQ1R4+tEZgANmrFPf6jguig9GybGBAU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ETO1HDR6; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="exOoKd1/"
-Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-304c520fe9aso11678565eec.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 17:41:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ETO1HDR6"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-304545f5206so14842659eec.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 17:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780360885; x=1780965685; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c7NjKiivuazeTqpV34hOkrg6hHFBlYDrtgsZ9D9CcI0=;
-        b=exOoKd1/ydlSZFVh4cRS8gZutTdaQ9Ugtda4MLtnUhmGTvBrs94wwT6Pz8S4jm33k2
-         jho2EwzJI7S5o05UxdmFD2WldhTcCB7OwKkuQYM0n7B8qR48CazeEqLHIL5tjluwEYQF
-         I0/kUthcTFsNW/c/pWgI4eS2WRdh9rji8894u7v9c0hwZiWDgpxgWygWi2MDfH3vXwxm
-         KMhz4O5sqBckAvtMuwD3LibdlK3JP9CyKo/HaDn8PWauOyRq8zPO/pguMcEFcoLslW1W
-         KCgDrfPHe8Zl5sabsBbB/2dy/Nv/ebTfl0OvXhAqc4s3Z4L339Sacj7XxjVxQe9+RDUT
-         489A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780360885; x=1780965685;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780360887; x=1780965687; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=c7NjKiivuazeTqpV34hOkrg6hHFBlYDrtgsZ9D9CcI0=;
-        b=H6/9+qtvB/ENA4sqxYyMV5QWXVnWizvGJXcUQ7+2mlCI9D4Igq2IoUB9g9VtiIYGmZ
-         tt7FvrM4oqTbUOcFUZRLqLeldXCTavjm7gAC+jNypw/QldPXCUeoDGE0KOTX8Ai8Te1Z
-         tH6qk4u77naKv50B/6VOjVrIkzNcX5Of+LEun67iK4YghII2u7aqYhOhFfwDVpnjkVs0
-         l23x6huQ7Tsgj5BtGWYm8y0Eq2YmT+sEWHjnydqS4iW1AvhoqQ8LBREb6XrhJttqjkBx
-         S8O1Ow3xwS7B70Urg3GECHOa+sg7IwGk6mhlCcxPXXExyHVlAfucqszhlyt2ZfcE2/q2
-         /QEQ==
-X-Gm-Message-State: AOJu0YyQOs8INGpGMeMHZe87EbYp+T4Br15/DFhra8ZS89DsbHOwTuj+
-	YSKQQtEREJ4h2HfzRSy5tiOulL1aDlOsj0RkXrCHowD6/2Eqbu50CW2yk4RVWZ2bv7JTiWnuHbX
-	UsaFE0uEun4dqc5I=
-X-Gm-Gg: Acq92OGGcDz3tkMKZW/B4oOzDESkJRpH3PiteGUd5lRkRdh29P5R2YkgCWQY8YjNg92
-	tdmA4Pt3lEggeEcQeyEUGkZLA366XaA/r440/031OSh6blBmIGazIuoikHa0XnHu+GiV+6ajK1M
-	qhRwopi8euITVwZv+NCXY1H2sMXen+Mgp/IiRPQCNIzdiQl3EzSc9DTDCYkFb6VvVqYNX6GySQ2
-	pwxWz3BVCGrQ6uLeFX8lM20pyvNVj3OmKLwLTTBsG49b+8lQGq1ZUanGVpn8/EwEHgN6PEDskPu
-	WvR1/Nazf+1ywt3hiobP8ifRX/p9pQgYjv2JFsIsUyducxYeR3htjt7w7idYSX8Sbnm1XJwXjdK
-	55KF/1yVPRtSul43u4i2TE2H/sFJMURjIFPdoElg+B0ouIoHO9s5iOHyEXamWLx4JhhEyUNl1cR
-	BGt7J5Gc6AhOm8hJ8AcXR7qwkVaMo5NzpZ4x+F7Gjr
-X-Received: by 2002:a05:7300:72cc:b0:304:9b48:53d0 with SMTP id 5a478bee46e88-304fa4c81ebmr6831262eec.12.1780360885065;
-        Mon, 01 Jun 2026 17:41:25 -0700 (PDT)
+        bh=hz6BtmoYYXtqDOrcjjpGC/v2MlsMtEJzxkYQRF+8tMU=;
+        b=ETO1HDR6dh6N/w6jaqySkn22zLOjfosFCGskT3vNP5IAOK4yPMP8aI/LgnS6bRiGG0
+         TnTeNbsY1nNU22fPynbGYO/xCNkEQkiiFF37WtEIn5kZ+/cU6/VnTOYasyXRu1opi+KV
+         GBR6BzigU79aNuIGSMLt7igMl56EK/Omz84Z48n0AraM7G9vHf6GvjHnaG0clWp0HVVh
+         8abdHHuR2a3/SarxdVpx3YVymsmoNtnBB4H7nQj9DO39/mnej3pJ+iVbMSDF6UIEJC2E
+         7JXYFHmbCQwyFtleFhG23sGJDYTd9tLW6hxiC8sBfWtZlPS0EuNuL/ZyHm5my+gv+KJE
+         THVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780360887; x=1780965687;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hz6BtmoYYXtqDOrcjjpGC/v2MlsMtEJzxkYQRF+8tMU=;
+        b=YVBXebY4dOg7HLUg207WUP6xHvYgg959B0Y/5MPHmLXZR/8ANdlvJenLVGvw4IKWIF
+         EKjIz/5uiV9C0Mun8wCDM+860KKztKBu1LBmFd65VbcSdQ8domnh3pOVAWwg/d/TWK30
+         XN4456ZHGLAUrwP4oShL86CK+xiUlGlel2O/utCi7TARP0RfMCQCKFAZKws7Xuevzn8s
+         LBiXCf9LOaB2tLpKJdBfHqJyVTNoiq9e6oERx6lCPJtsQ1d7ib+zcuaVNjfQGbK9MMR8
+         Aoh0YFmE5AJ1jC45UKa+dLHcBht+/XZbGEjzynrriz3KM+RurSIh7moMvJpKlqvTz94d
+         GBDQ==
+X-Gm-Message-State: AOJu0Yy8EKlzjzJbftdbb5ZyyunsqV1Ncri2yBSE575AMhIosKh1FSnS
+	XTs6uBeGlEe/a/0YeDAZiK4mQh2sQaJtmWixQNcXZEx5TQU/oOrVIRggTu3R5G07DsaNtkVTyKK
+	YvcCA/pSaYU7c
+X-Gm-Gg: Acq92OEQjqVhyk04LRZ8S5CH5dJv9VR9rreRoZOpJ2vWsgeTN/hWr8BdC8OQBtt6Dh8
+	a4JXxd8WQFTYToXs5PjDHn3v5icnC+ibeD/jui+1Ab0z3p5P1Ook+3FvLzdioNt9qZjodMEVqkF
+	rgN12y0Aat9oBQ96MsjCaJrRYbrCO4IwULH3dK6dsdbQxmIdTzUh6S3s8kMigliBgR9eJeg9bYc
+	eFeTJWUV6eJdxyTiobLaRjMVvVLy7Ot+xGoINqIoorsYDLf1/9+OlZobcvzLaO+Ul8+aPl45aZo
+	wC7C2yk7edp514litlmup/fFlPFTUH/uLH97CDm0Knl06q5EmUYdDAOIWgV8nQlbWVdSqJSU6BG
+	PeS6EnpQze4s+O80Wx0GCc5tNci6eUn5sFSCzOr0T+WRnDkw7wH1YpMUmSUC6/VBS+kSndQnCdH
+	poKZYSy9FX7tFfO8WJEcXTMK0oA+KVWWLyo/My10v8
+X-Received: by 2002:a05:7301:4883:b0:304:8364:e95c with SMTP id 5a478bee46e88-304fa4fcce5mr7057686eec.15.1780360886919;
+        Mon, 01 Jun 2026 17:41:26 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::4f12])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5d5385sm10172018eec.28.2026.06.01.17.41.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5d5385sm10172018eec.28.2026.06.01.17.41.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 17:41:24 -0700 (PDT)
+        Mon, 01 Jun 2026 17:41:26 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -66,10 +68,12 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 0/6] Minimize annotations for arena programs
-Date: Mon,  1 Jun 2026 20:41:14 -0400
-Message-ID: <20260602004120.17087-1-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 1/6] selftests/bpf: libarena: Add "arena" BTF type tag to __arena qualifier
+Date: Mon,  1 Jun 2026 20:41:15 -0400
+Message-ID: <20260602004120.17087-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260602004120.17087-1-emil@etsalapatis.com>
+References: <20260602004120.17087-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,81 +82,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF programs must currently include code to address two limitations
-of function signatures that include arena types. First, arena arguments
-must be annotated with __arg_arena in the function signature in addition
-to __arena. Second, it is currently not allowed to return an arena pointer
-from a subprog, even though it is safe to do so. These limitations require
-extra annotations and typecasts respectively, and have proven sources of
-confusion to programmers.
+The arena qualifier currently designates its associated type
+as belonging to address space 1. This property affects code
+generation, but is not reflected in the BTF information of
+the function.
 
-The patchset improves arena-related function signatures in two ways.
-First, it removes the need for __arg_arena in function signatures.
-Second, it allows subprogs to directly return arena pointers to their
-caller.
+This lack of information at the BTF level prevents us from
+returning arena pointers from global subprograms. Subprogs
+cannot return any data structure more complex than a scalar,
+so pointers to structs are rejected as a return type. We
+have no way of marking the return type as a pointer to an
+arena, which is safe provided the two subprogs have the same
+arena.
 
-To do this we add a new type tag to the existing __arena annotation.
-The annotation is currently an alias for __attribute__((address_space(1))),
-which is not discoverable from BTF alone and so cannot be used to
-determine whether a pointer variable is an arena pointer during
-verification. With the new type tag, we can determine whether
-either the arguments and or the return value of a function belong
-in an arena.
+Expand the __arena qualifier to also attach a BTF type tag
+to the type. This lets us determine whether a variable belongs
+to an arena from its type alone through BTF parsing.
 
-We test the new code by modifying libarena to take advantage of these
-relaxed limitations.
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-CHANGELOG
-=========
-
-v2 -> v3 (https://lore.kernel.org/bpf/20260530002259.4505-1-emil@etsalapatis.com/)
-
-- Added Acks by Eduard
-- Complete the __arg_arena removal by removing them from htab (Alexei)
-- Add a test in verifier_arena_globals1.c to confirm the new __arena attribute
-works as expected in function argument and return types
-- Reject type tags on non-pointer types, currently only possible in handcrafted
-  BTF (Eduard)
-- Undo inaccurate change on verifier comment (AI)
-- Fix error return value for invalid BTF return types during BTF parsing (Eduard)
-
-v1 -> v2 (lore.kernel.org/bpf/20260527071457.4598-1-emil@etsalapatis.com/)
-
-- Rebased to fix conflict
-- Removed the typedef foo * foo_t typedefs. Those were necessary to avoid
-annotating each instance of the type with __arena. The new version of the
-patch instead removes typedefs and uses __arena everywhere directly (see
-patch 4/5 for more details).
-- Reorganized the patchset to frontload all kernel-side changes and place
-the libarena changes at the end.
-
-Emil Tsalapatis (6):
-  selftests/bpf: libarena: Add "arena" BTF type tag to __arena qualifier
-  verifier: parse BTF type tags for function arguments
-  bpf: Allow subprogs to return arena pointers
-  selftests/bpf: Remove __arg_arena from the codebase
-  selftests/bpf: libarena: Directly return arena pointers from functions
-  selftests/bpf: Add tests for the new type-tag based __arena identifier
-
- kernel/bpf/btf.c                              | 178 +++++++++++++-----
- kernel/bpf/verifier.c                         |   4 +
- tools/testing/selftests/bpf/bpf_arena_htab.h  |  11 +-
- .../selftests/bpf/bpf_arena_strsearch.h       |   4 +-
- .../bpf/libarena/include/bpf_arena_common.h   |   5 +-
- .../libarena/include/bpf_arena_spin_lock.h    |   6 +-
- .../bpf/libarena/include/libarena/asan.h      |   6 +-
- .../bpf/libarena/include/libarena/buddy.h     |  23 +--
- .../bpf/libarena/include/libarena/common.h    |   3 +-
- .../libarena/selftests/st_asan_buddy.bpf.c    |   4 +-
- .../bpf/libarena/selftests/st_asan_common.h   |   2 +-
- .../bpf/libarena/selftests/st_buddy.bpf.c     |   2 +-
- .../selftests/bpf/libarena/src/asan.bpf.c     |  38 ++--
- .../selftests/bpf/libarena/src/buddy.bpf.c    |  96 +++++-----
- .../selftests/bpf/libarena/src/common.bpf.c   |  10 +-
- .../selftests/bpf/progs/arena_spin_lock.c     |   1 +
- .../selftests/bpf/progs/verifier_arena.c      |  67 +++++++
- 17 files changed, 298 insertions(+), 162 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+index 16f8ce832004..445be3c4edec 100644
+--- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
++++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+@@ -33,7 +33,7 @@
+ #endif
+ 
+ #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+-#define __arena __attribute__((address_space(1)))
++#define __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
+ #define __arena_global __attribute__((address_space(1)))
+ #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
+ #define cast_user(ptr) /* nop for bpf prog. emitted by LLVM */
 -- 
 2.54.0
 
