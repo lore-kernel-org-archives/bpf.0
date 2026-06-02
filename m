@@ -1,161 +1,107 @@
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D82534BA20;
-	Tue,  2 Jun 2026 07:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB5D3932EA;
+	Tue,  2 Jun 2026 07:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780385057; cv=none; b=jVQ4cBpELeuCetR/7IGKlkYjSsK6ecURhkIv+X2vBitI9n/dyiJYY2DSYp+HAyOw9exqraxZscurc/2raQ7jBY8j4sDeuaUULmiLuMDgtG+xG0DZM5CkovkX6un4Xq6FJ8txvMOZkKpZbejGEA3CBMR/t9B5A/rbuoRerht8sOU=
+	t=1780385390; cv=none; b=TxZiXb0RcirDAdH49tVjjG387st2uliYMZCE9EXJrI7RRTizL9MmDQTkaZmL1o2uqfK/dWWuUMUX4UfKAutlz8k3I24AIXIQZ7AKbIXdvLdn3Dgh1Pz0CcTpXA9m4S4aRpdcy+2AJYIVIWAGYgm6swyg0EIYNbj4ZV0DxLS7uWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780385057; c=relaxed/simple;
-	bh=oQna0RVvrecZnyebxJ9KjhtcwD+dEoj05VuZnEkj1SA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EWa5dT6ypRUPZKV/5HDnUAWni+cI75oP1unOZjOq56lACJUFtOKudYUL93JHra7yoot+u7CBd+hoZBJxUUOC5iMNei6mfNenOmBjKcZspXx124c1L+AWgSFBaOaXROOsnU5rUNr0enPdD1w0oow6EfQ8Y8GcfTMu0cD2pRlb4gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=fwOPFrj5; arc=none smtp.client-ip=130.149.7.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="fwOPFrj5"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-  d=tu-berlin.de; s=dkim-tub26; t=1780385053;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yQTb2FuY0vYWT4UGQMIuYs5KgW23Da4orzcpQOLj9tI=;
-  b=fwOPFrj5WdKr8GC6WH6Zkbn/eDE3X+BNImkUtKD29AzTp5PSw/RrlFOw
-   h5er9HkjMl2uVi2D0JFMRbGzDV0yzpmwJM6N9VUSCc0/Jz3zsIHjAlzoj
-   7UthdzSM331l1fXijiBQSMuyERjdyb2Ms681xQkWBYMB8Euwk3+dCyyqQ
-   qWvbmMxdfnmW1YfiD4YPQJRf0igPSROBHyO+Ldd14xCT2McNNLyXdXmLM
-   /KzKl46FGNHt70QHqsThZFDiQLnSd2ASOXJI7rdAHT1OxezZQQh2SSQA7
-   tYaLS77cteOx5j4/yviHNRQKPOD1rAdDFWg8d4U7qKRN7IEQPvlFNBgOu
-   g==;
-X-CSE-ConnectionGUID: 8KbqUswITqGrTCiFWhDfEA==
-X-CSE-MsgGUID: y3A5SAgZSoiIRvdisVC3Gw==
-X-IronPort-AV: E=Sophos;i="6.24,182,1774306800"; 
-   d="scan'208";a="62067161"
-Received: from postcard.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.142])
-  by mailrelay.tu-berlin.de with ESMTP; 02 Jun 2026 09:24:10 +0200
-Message-ID: <e3d28da7-0fe3-4970-865c-9f51346e01fd@tu-berlin.de>
-Date: Tue, 2 Jun 2026 09:24:08 +0200
+	s=arc-20240116; t=1780385390; c=relaxed/simple;
+	bh=tpE9iyO18dyU5LG49u/BjwWvRz1UhB72bCoYzFUlDjQ=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=iaO9QsfhTU9BtXiwomfRil7mWAED4dho9+0BjRWSIgnAmYh+YA92W9SB8gImCpqZSVI/jo9LQiD/jifdPjo4HKC+z47OA935Z/m+RMectV6nDvOWyzyAx+rE1nZKdrXNCRBrCnAeh81zt4dJdNoWc15aZfG8Mw01Ts2sVQFY+q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxvsBhhh5qs6UPAA--.19961S3;
+	Tue, 02 Jun 2026 15:29:37 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDx6+BVhh5qOg2ZAA--.29239S3;
+	Tue, 02 Jun 2026 15:29:27 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: bpf: Support kptr xchg inline
+To: Chenguang Zhao <zhaochenguang@kylinos.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260602021515.214560-1-zhaochenguang@kylinos.cn>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <80088e78-293c-268c-3539-4e9ce66c4fd3@loongson.cn>
+Date: Tue, 2 Jun 2026 15:29:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: Simon Schippers <simon.schippers@tu-dortmund.de>, <hawk@kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <2affe9f4-56a7-4482-931f-9d98cfdf09fd@tu-berlin.de>
- <db5b7f7e-135c-40f0-a740-057bc6623e6c@tu-dortmund.de>
- <865f31e5-4e90-4dc0-890f-b5796948b590@tu-berlin.de>
- <55b23925-9676-4005-8c13-ea7001190abb@tu-dortmund.de>
+In-Reply-To: <20260602021515.214560-1-zhaochenguang@kylinos.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-In-Reply-To: <55b23925-9676-4005-8c13-ea7001190abb@tu-dortmund.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDx6+BVhh5qOg2ZAA--.29239S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KrWUKF4DAw47JF1Utw17XFc_yoW8AF45pr
+	Zavr9xGr4DXFy0kw18Jw4fX3W3Aw45ArWYqryUC34qy3s8Zrn29F93K3409Fs8GFZIva42
+	va1Dt3y3ua1DCFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0mhrUUU
+	UU=
 
-On 6/1/26 6:16 PM, Simon Schippers wrote:
+On 2026/6/2 上午10:15, Chenguang Zhao wrote:
+> The BPF verifier can lower a bpf_kptr_xchg() call into a single BPF_XCHG
+> atomic instruction when the JIT advertises support through
+> bpf_jit_supports_ptr_xchg(). This drops the helper call overhead from the
+> kptr exchange fast path.
+> 
+> Such inlining is only safe when the JITed atomic exchange provides the
+> same full memory ordering as the bpf_kptr_xchg() helper. On LoongArch the
+> plain amswap.d instruction carries no barrier semantics, so emit the
+> ordered amswap_db.d variant for 64-bit BPF_XCHG instead. Add the
+> amswapdbw/amswapdbd instruction emit helpers it relies on, and implement
+> bpf_jit_supports_ptr_xchg() to turn the inlining on.
+> 
+> Extend the kptr_xchg_inline selftest to cover LoongArch64, and add a
+> kptr-xchg benchmark to compare the helper and inline paths.
 
-> On 6/1/26 16:03, Jonas Köppeler wrote:
->> On 6/1/26 2:00 PM, Simon Schippers wrote:
->>> On 5/28/26 09:46, Jonas Köppeler wrote:
->>>> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
->>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>
->>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>>>> excessive NAPI scheduling overhead and qdisc requeues.
->>>>>
->>>>> Accumulate BQL completions and flush them when a configurable time
->>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>>>> queuing delay to the configured interval. Coalescing state persists
->>>>> across NAPI polls in struct veth_rq so completions can accumulate
->>>>> beyond a single budget=64 cycle.
->>>>>
->>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>>>> completion.
->>>>>
->>>>>      ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>>>      ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>>>
->>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>> Tested-by: Jonas Köppeler<j.koeppeler@tu-berlin.de>
->>>>
->>> Thanks for your testing!
->>>
->>> However, I have issues reproducing.
->>> I run bare metal (without virtme) with v6 + your pktgen patch
->>> and I am on the branch pktgen-and-benchmark, commit
->>> "results: add veth-bql measurements":
->>>
->>> 1. ping fails with 100% packet loss ~20% of the times with --pktgen.
->>>      When this happens the avg ping of this run is mistakenly set
->>>      to 0.0 ms, which distorts the results.
->>>      I fixed it locally by rerunning when this happens.
->>>
->>> 2. pktgen runs with > 3 Mpps even with --nrules 10000, see log below.
->>>      I see that this is because of qdisc drops.
->>>      I also tried pfifo and sfq but with the same result.
->>>      I spent quite some time on it but I do not know a fix.
->>>
->>> Do you have an idea?
->>> Thanks!
->> Hi,
->> yes there are some changes missing in the test script.
->> I have pushed it now, sorry. This should fix 1.
-> I pulled it and ran...
->
-> sudo ./veth_bql_sweep.sh --runs 1 --pktgen --duration 20 --qdisc fq_codel --no-bpftrace
->
-> ... but still 8/32=1/4 of the pings are zero, I do not see
-> a pattern.
->
->
-> I grabbed the logs from /tmp and this is what a failing
-> ping looks like:
->
-> PING 10.99.0.2 (10.99.0.2) 56(84) bytes of data.
->
-> --- 10.99.0.2 ping statistics ---
-> 97 packets transmitted, 0 received, 100% packet loss, time 19967ms
->
->
-> Feels like a race or something..
-> Can you reproduce with the exact command?
-> I think you need --runs 1, else it just averages over multiple
-> runs.
+If I understand correctly, please split into two parts, one for JIT
+and one for selftest.
 
-Sorry, no I could not reproduce this. I used the exact same
-command as you did, and I am using net-next/main + v6 patches.
-I have 0% ping loss across all tests. Does the ping loss
-happen regardless of the qdisc?
+1. For the JIT part, there are two logical changes, it is better to
+split into two patches:
+(1) fix the current code.
+(2) add new feature.
 
->
->> Regarding 2.: do not look at the pktgen output, in the
->> new version you will see something like "goodput",
->> which is the number you should look for.
->> Pktgen will report at what speed it enqueued packets in
->> the qdisc.
-> Exactly. Now it works. Had a single outlier but apart from that
-> everything is fine.
->
-> Thanks,
-> Simon
->
->> Let me know if it worked.
->> Best,
->> Jonas
->>
+Regardless of whether bpf_jit_supports_ptr_xchg returns true or false,
+amswap_db.b/h/w/d must be used. The LKMM (Linux Kernel Memory Model)
+mandates that all value-returning atomic RMW instructions imply a full
+barrier. Consequently, decoupling the JIT instruction selection from
+the pointer-support state ensures that regular scalar atomic updates
+remain sequentially consistent across multi-core systems.
+
+2. For the selftest part, there are two logical changes, it is better
+to split into two patches:
+(1) enable the functional test "./test_progs -t kptr_xchg_inline".
+(2) add benchmark for kptr-xchg performance.
+
+Thanks,
+Tiezhu
+
