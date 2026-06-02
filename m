@@ -1,157 +1,123 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CDB2FFF8F
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 19:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780430147; cv=none; b=tCUQYVajxOv8+WoB0yDCRKYZ9u1ZdJkLb57WwthXFANLAdcywZlvhXEEyCe9CWNV5pZToxT3lFpXmMdIlwcbZnX+xEzgtl7+4LiedCKS+UJZEhG2JHJf7kP4tThoJPjpUAPwSLIVhVvH0sCxN3P9u6IiEAoxjSaHm8+mH9mf0AU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780430147; c=relaxed/simple;
-	bh=6q1Np5jlh0Jc0bnetxqqK2gcwnvN151nszlAPQu2TKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KJYVe4Dhq0VXOtDQFEYAG7x03+aJgw+redj+KVPCnKoVxErykevj6CSWsIoM8PjPO9M2r/0ZLpi3VBIVbtKY625LNyozKZhOVqvnROrKEAo2XiepuWok4UaT8ciKh2QYwIu1gO+Hjhmn8AqejyjQquVzBRxEj3GGlIECsf7UDwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q8zRilp7; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F7F3438BA
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 20:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780431214; cv=pass; b=Lzn63qQl2KwGAhvk6PgBfQYgGAIc64u6k+hBureSNGBc8wf+jvg3+JFms2Cl9Arx8/sYvnFSlgwci6rdMWHEWCLoLlfKu293Ak198JSRYUFkc9ryROJF8U4Asz7AaENWR6LyntBZkrxcUDEqK379ErFD/SjiipqcjdeQdpFytjc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780431214; c=relaxed/simple;
+	bh=pseZnC1BAHbaZcHMzdNx6tAqrCQgXMmpIht/MOPt0gA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bOxXYqhH5ReF6daFZbbNSmCz/LiWBOMN7MiQ4P/qRiUyefd32MG0NS53F4/CXL8FgOMXvF8MIycXRa5Xg69wzkNBXYSthuSNvlct9ToRj6zB5Wn+Nct2c8vVSBaG4GsFOsIgrDKbW9ns9sLPkW8N7kLclsScz3wZw+RxGKM04B4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fl3ZVujb; arc=pass smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q8zRilp7"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780430133;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QNY8TdXoK6J7mXsq0xMA0WPTJyrKtmnEC0KaYOq0gC8=;
-	b=Q8zRilp79qy/QQgLAHibGEMQl3Po4RGjtNPlgIDFseaNoifnmz03LPJzyWGD6Hlf4q23JM
-	5r7alfuyuRq9zTKWE4DJF/fQrS1ES0+nBlv7xcbklIyDtgVRqk6E889TRHx5VcbNpGxQNc
-	oax9HDwd4nQy5qLBzxU7zhGLHQV1R88=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	acme@kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	jose.marchesi@oracle.com,
-	David Faust <david.faust@oracle.com>,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PAHOLE v4 1/3] dwarf_loader: Extract die__add_btf_type_tag() helper [NFC]
-Date: Tue,  2 Jun 2026 12:55:10 -0700
-Message-ID: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fl3ZVujb"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2c0b944f6edso31146085ad.2
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 13:13:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780431212; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EoRu3UbrbbXqe2LkVk3ZlMZ5rJzzn/Ai9cPvw/n22PsUcOQsEDkC8oXPI4hp+aznsz
+         UcxZG1H+Ob+schhhkrZ4eflqXO7LmKy1emko+iE50DcVPm9N61ZTzKhOEZv8jM0GsqCY
+         twRVCx2xc4PuCfPjsPDAnqxErtq6RHlmK5ufirX5tU2MUmdSgBLLSvhbrbDbyui9B5+E
+         jA3C59+Mu3BDeEeJYvovyVx7GiQu7AEXfdt84oi4PJg4UIMaYMYXnZYS0eqgaH1GMo0Z
+         NhsVo+QrbMPO35tuXwBE1zES1xMpMU8RrbWH6ZlgaCjMhTz25JiPWbnO0ziw7TD+APiB
+         iXQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pseZnC1BAHbaZcHMzdNx6tAqrCQgXMmpIht/MOPt0gA=;
+        fh=cMRToTrjbcR7IQuSTftvy5FZ3OJr2Igkvk5BsogpTQc=;
+        b=J/bdSgHx1CALCYz2EKp/rmqJIwCO/nlFeJsENVSZDKnDFUFiyUyFUsW6peU0Yp4rx5
+         P6FKJ1OFP0eXFMo/uliWhav16d/RXBtMNmnHgC+Iqr3+x7SYtkS8JIU8M6zMTGd94t60
+         8AdaK4K14vnNwWvAmJ8WgEhO9NzzuXfVTHtHfBHvAWdfR6pKlLmpTGqx6Y7SJ93DIgfr
+         lVs+01dTzcabIbcxGhWa7NHliA8JjWaJGBJCPoRr1UtN7eGZzQ8tzeXYVOrXTvNTuKSm
+         dujSnIeOrBE78b3mD2HIVFnvEFuzAxb4h2MKXhqD6Y7AQskuIqYE+oFWwKfqJIjbDPV6
+         KwXQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1780431212; x=1781036012; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pseZnC1BAHbaZcHMzdNx6tAqrCQgXMmpIht/MOPt0gA=;
+        b=fl3ZVujb9HyNyZlscbOzAqgPIDbe03L42xZxJRK4g828hjkxr6tG40favXwn3F95yH
+         NroOjT4q8bioNJtcxiOP4kBFdwhRy87YJmLQVpRCdGVpgd7LTOnXhkmhSBg4u823+ybQ
+         erw/ABULTQ5kHSyjlCk+sT0GZw7iz67BFYr7h8N2/+NZiTa0k5yossWAMdPwLnl42HA2
+         dj2SK9IxQRsOmjadDicnPx7uGyqz/F3i91dLmvguWULWXxkatm8B7kxrmL2C3DbLPG8Z
+         7j0HY56CFEfD3Wq+ITZvnWFrmzQOtUo9PSHbiboAcM89pdcG6XSOLbYSZzm05/DW07VY
+         BNWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780431212; x=1781036012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pseZnC1BAHbaZcHMzdNx6tAqrCQgXMmpIht/MOPt0gA=;
+        b=q6tEdGVfuBke53isL8wRLcLP+9N30uFIJTxwhtB+f06s4e1pttn+REtqQtpYnj0oN2
+         BLT924RSX6Fa1Dv4KT/TpjCCMvFQM82hcyLxxmWvJ9SifepqJamA1xBuNq0zqHj64KbQ
+         Ba7NJHU9gbvtX8py5kt/1p/hA1KCP+DkH7VH8+8GUku02j4eUQBaI6cMWXLcCHECsWd/
+         d27fezdW/tjMiVr4WskX6Lkb/we1tUWu56Ri2/CMec4H6ArT1bcG7KEmS8DYO7wooPbK
+         1sbh7aiFwE9KE014nxIgnR5dW8xy3folVFEVaMPdgvUr6TQXgpVK8inUDXI3JT8WoQsK
+         OZAA==
+X-Forwarded-Encrypted: i=1; AFNElJ/HIW0T+XTz8RHETcxejuI2R4BvjZpn0U2Wthwz97j3g0FKB4DMeHPFxBQprb69HEwxDkI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxlkp2qQ9+9FDF6i3Ye2pNGD501d3QhuL7j+eFORkpXo3xwtyNx
+	mZ3n6h1bZ5VyZ/BL4uyAPBtnGd1BPLdYSJr2+R7ei2BNPvfEfIyogGouj7Dfufp9w9rRorBlCod
+	5I6Tyy31aHfB12axzbnU3BlWpj08YIpFkxJiJdNM0
+X-Gm-Gg: Acq92OF3hRy+kTnl/pmlRSFeAHORPdoLpoUOyxW9RvzH/t8Z1a0tuB8/oPvFjsOPUIn
+	7T/kk2DD+CraZlxSLaydh46m5V4VbN5D1VQfD3qsyM8ZPkHAxN5xJNzIyBWHI71L+hv9rpV3mN7
+	eVoUbj+9RghxHvdVj7sUWw+5hcgyvW9pU3OVNSVqvRbk7yMQgcV3NUeZ71uuXs8qWJxvxnz8TOz
+	MpzReD16SpL07hJCft87siOWVAGPLTrWCmtxZcHMVMeZnb3onD1Lu5iaX0clvk6eYVlyZ6XL8U7
+	/5azbY/lOV16FYgWTg==
+X-Received: by 2002:a17:902:f60b:b0:2bf:160f:7043 with SMTP id
+ d9443c01a7336-2c1644b2994mr2445575ad.34.1780431212343; Tue, 02 Jun 2026
+ 13:13:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <ah8BzqSmZO40xYhS@sirena.org.uk> <CAHC9VhRR4mmkOdWwUCLswmA+_KEjB8RCBBTJ2W4JGiLUWKzxyQ@mail.gmail.com>
+ <CAHC9VhRPbkVYAMec0KG55er6GOPdKqMXKdpC8rrHgiAodSv-sw@mail.gmail.com> <9d34218f-abbf-4a23-8b35-b305873ffae3@sirena.org.uk>
+In-Reply-To: <9d34218f-abbf-4a23-8b35-b305873ffae3@sirena.org.uk>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 2 Jun 2026 16:13:16 -0400
+X-Gm-Features: AVHnY4KpKpO9DYaOTu4rfr4g8D4KZLclWt7FiawOozC45PMKWNUodtnlnRl25IU
+Message-ID: <CAHC9VhRxeTVxCW+=1DR5qzopGyHBMOJuWmtBqT_T4r1LC1jfBA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the security tree
+To: Mark Brown <broonie@kernel.org>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-NFC change preparing for DW_TAG_GNU_annotation support.
-Extract the btf_type_tag annotation creation logic into helper
-die__add_btf_type_tag().
+On Tue, Jun 2, 2026 at 3:16=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+> On Tue, Jun 02, 2026 at 02:40:12PM -0400, Paul Moore wrote:
+> > On Tue, Jun 2, 2026 at 12:31=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+>
+> > > Thanks Mark, we're taking a look at it now and should have a
+> > > fix/answer later today.
+>
+> > Proposed update to Hornet, assuming this looks okay to Blaise I'll
+> > merge it into the LSM tree (and either pull in Daniel's patch or base
+> > off bpf-next so everything builds correctly).
+>
+> > https://lore.kernel.org/linux-security-module/20260602183658.161744-2-p=
+aul@paul-moore.com/
+>
+> Can you ping me when that goes in (or things are otherwise resolved)
+> please so I know to drop the revert from -next?
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
-Changes since v3 [3]
- - Fix comment to kernel style [Arnaldo]
+Of course, no problem.
 
-Changes since v2 [2]
- - die__add_btf_type_tag() returns pointer not error code [Alan]
-
-Changes since v1 [1]
- - NFC reinstate some original comments
-
-[3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linux.dev/
-[2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
-[1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
----
- dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
- 1 file changed, 34 insertions(+), 24 deletions(-)
-
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index 16fb7becffee..42a0f3f74ce3 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
- 	return tag;
- }
- 
-+static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_type_tag_ptr_type *tag,
-+							    Dwarf_Die *die, Dwarf_Die *adie,
-+							    struct cu *cu, struct conf_load *conf)
-+{
-+	struct btf_type_tag_type *annot;
-+	uint32_t id;
-+
-+	if (tag == NULL) {
-+		tag = die__create_new_btf_type_tag_ptr_type(die, cu);
-+		if (!tag)
-+			return NULL;
-+	}
-+
-+	annot = die__create_new_btf_type_tag_type(adie, cu, conf);
-+	if (annot == NULL)
-+		return NULL;
-+
-+	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-+		return NULL;
-+
-+	struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
-+	dtag->small_id = id;
-+	cu__hash(cu, &annot->tag);
-+
-+	/*
-+	 * Prepends: for annotations tag1 -> tag2 -> tag3,
-+	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
-+	 */
-+	list_add(&annot->node, &tag->tags);
-+	return tag;
-+}
-+
- static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
- 					       struct conf_load *conf)
- {
- 	struct btf_type_tag_ptr_type *tag = NULL;
--	struct btf_type_tag_type *annot;
- 	Dwarf_Die *cdie, child;
- 	const char *name;
--	uint32_t id;
- 
- 	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
- 	 * and return
-@@ -1627,29 +1657,9 @@ static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu *cu,
- 		if (strcmp(name, "btf_type_tag") != 0)
- 			continue;
- 
--		if (tag == NULL) {
--			/* Create a btf_type_tag_ptr type. */
--			tag = die__create_new_btf_type_tag_ptr_type(die, cu);
--			if (!tag)
--				return NULL;
--		}
--
--		/* Create a btf_type_tag type for this annotation. */
--		annot = die__create_new_btf_type_tag_type(cdie, cu, conf);
--		if (annot == NULL)
--			return NULL;
--
--		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-+		tag = die__add_btf_type_tag(tag, die, cdie, cu, conf);
-+		if (tag == NULL)
- 			return NULL;
--
--		struct dwarf_tag *dtag = tag__dwarf(&annot->tag);
--		dtag->small_id = id;
--		cu__hash(cu, &annot->tag);
--
--		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
--		 * the tag->tags contains tag3 -> tag2 -> tag1.
--		 */
--		list_add(&annot->node, &tag->tags);
- 	} while (dwarf_siblingof(cdie, cdie) == 0);
- 
- 	return tag ? &tag->tag : tag__new(die, cu);
--- 
-2.54.0
-
+--=20
+paul-moore.com
