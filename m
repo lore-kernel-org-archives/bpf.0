@@ -1,101 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8928732E6B8;
-	Tue,  2 Jun 2026 01:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5D72D1F44
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 01:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780364435; cv=none; b=uIci8ifszXSwW+21qiC69fy+pXy/4vO4SkoO7QUZ4RM+Ob5/76hrLvg0VWBz6+4NgxaGkMl1gNFsEHdT8OgX0Qr/U5PB3/vpwqMMaiivQKc7ORtUF9rkl6DUdSQ1B2oHi9HB3VUIh/4jYDK2fL+uQ02vqaLDgTEMqqv3KGlcIP8=
+	t=1780364735; cv=none; b=G+xxQA65vLSzBxXG+yJNwErrhv3RzeHadii1NeL9J1V7vzELPYsyVzV9jxEKWNIuq79Id4vihPwFYOrsp5fwHY5aBbCUhrwNjijiNV7qwMDW+FCDkZISTtmPENlvO3m8ORQDaQdi8ox8PT9ZeB1NTIC1A8lPg37pGDT+1RLxlXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780364435; c=relaxed/simple;
-	bh=eBXxR9fM1xEcxDJ//Rk2yLojWgRB7UoC8I57rqFmnzg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eYxMznkju4rQCkeFvgbf1NquPc5XmXNRpeIwOeATbCsL5cX2ufc7alWWrqlFODTTiSf3OsWxGpNM/r0MBTmwUhdV5liwdyjHOTzdwD+XhHZfQGk4KFGhwsCVXmAXqx29WLolRhdz1ZtbaEehpE07oS9bNB9DV3NrVwyEqTkwpK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpH/MER8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780364735; c=relaxed/simple;
+	bh=SshgiqvOdNjRXwrP2/JMXjlbyCAgX+IEQDBiaqtomW8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iXH2jWC00xgFn2KpHBbJe75jzqBbnK9VT2HgmHnVPs88lsz8a638E4dyE6ozwbw4dVArIDEGPRoNme+7JwGfsvfrFCuY84jd24UGCX6Y63G4UtcEktloooPWlAJqGx+7n6z+E6mpYUFsi7pjXGYChOnCLmbyK4jfxn27YHEi8BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpI3xsiR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpH/MER8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24ED21F00893;
-	Tue,  2 Jun 2026 01:40:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpI3xsiR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647AA1F00893;
+	Tue,  2 Jun 2026 01:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780364434;
-	bh=Z8N+MQLGjizdgSde7KO/MqpA1myZQEWQPyqTQrCvX00=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=lpH/MER8uiDm1+RVD59CcDYNYl4R6FC/izMgN9LOl9eFuBO3b0js3Ji7r8tf72QhZ
-	 gPl8/bD34R1/GS70SbJ12dN07eG9UjMKcbllYZBgIDv9pwmsMFJydTM7M1bSB9PVAu
-	 IfraGXDVwG1KQEpykacT07cmxaxUmcOK/WF9KH/jwlrDPfCq5A0fjXg6DVbyII8znL
-	 CzxE/1PRKnG7kMOxUh9vocNyvGGIb9e6pj6WAonQlVEjkwSO0loCfvlM1/b8u1vLbT
-	 bCx+eobgOy0SFD9PHRyezRZNeri2LeZUDhkGgFqFdEPsMVcoESjYdAMtcG4LQopvSb
-	 bPo2WtmS+KBxg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93EF038119F9;
-	Tue,  2 Jun 2026 01:40:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780364734;
+	bh=ZPhk7NsEPz+rk7UlVTfbxjc8K9Oxa13BzC2EO3R1Ov0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KpI3xsiR8rOBhQUxLTjrLjieU+pMaTptBhCJUWsAQC+aSSfoTeKDbKE1syYUQMGO2
+	 r0cx8R5SfJQiRrM/+bvRo263N9zJeU4uYLuBu7wnCuGz4hUfNFst5szUvgVEX+llPh
+	 Wpxz8KiuNPQSLerxGd9PflaXAKkMFCwK7DioKUqRQcVt83XgKzgI5lzqI+abAldkQ9
+	 f8a3ywzxZLg7sw+PjakKAeibKKb8eML9oiGkYNQi9Imm2h4NPqScLvCZOW16GbRd9g
+	 CWTjiIoiYH17l0D94899+uSs8AYBDMeHdVaRvWH/HeQFEPNaKys/FO8Lz0485kcd0o
+	 AmD1/LcmF0JLA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: libarena: Directly
+ return arena pointers from functions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260602004120.17087-6-emil@etsalapatis.com>
+References: <20260602004120.17087-6-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 01:45:33 +0000
+Message-Id: <20260602014534.647AA1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v6 00/13] Refactor verifier object relationship
- tracking
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178036443613.197970.8921687935908707515.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Jun 2026 01:40:36 +0000
-References: <20260529014936.2811085-1-ameryhung@gmail.com>
-In-Reply-To: <20260529014936.2811085-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
- andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Returning `void __arena *` natively from global subprograms causes=
+ verifier rejection due to the omission of the `addr_space_cast` instructio=
+n.
+--
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+commit cebc1ff5de4bdc037926c8cf353b253eb29e111c
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-On Thu, 28 May 2026 18:49:23 -0700 you wrote:
-> Hi all,
-> 
-> This patchset cleans up dynptr handling, refactors object relationship
-> tracking in the verifier by introducing parent_id and folding ref_obj_id
-> into id, and fixes dynptr use-after-free bugs where file/skb dynptrs
-> are not invalidated when the parent referenced object is freed.
-> 
-> [...]
+selftests/bpf: libarena: Directly return arena pointers from functions
 
-Here is the summary with links:
-  - [bpf-next,v6,01/13] bpf: Simplify mark_stack_slot_obj_read() and callers
-    https://git.kernel.org/bpf/bpf-next/c/bab08d1f7043
-  - [bpf-next,v6,02/13] bpf: Unify dynptr handling in the verifier
-    https://git.kernel.org/bpf/bpf-next/c/b5c0a07eb2c2
-  - [bpf-next,v6,03/13] bpf: Assign reg->id when getting referenced kptr from ctx
-    https://git.kernel.org/bpf/bpf-next/c/94ac7553361f
-  - [bpf-next,v6,04/13] bpf: Preserve reg->id of pointer objects after null-check
-    https://git.kernel.org/bpf/bpf-next/c/06d518a5583f
-  - [bpf-next,v6,05/13] bpf: Refactor object relationship tracking and fix dynptr UAF bug
-    https://git.kernel.org/bpf/bpf-next/c/308c7a0ae885
-  - [bpf-next,v6,06/13] bpf: Remove redundant dynptr arg check for helper
-    https://git.kernel.org/bpf/bpf-next/c/92d681b42746
-  - [bpf-next,v6,07/13] bpf: Unify referenced object tracking in verifier
-    https://git.kernel.org/bpf/bpf-next/c/b7dd2b388657
-  - [bpf-next,v6,08/13] bpf: Unify release handling for helpers and kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/bcfcb15fde94
-  - [bpf-next,v6,09/13] bpf: Fix dynptr ref counting to scan all call frames
-    https://git.kernel.org/bpf/bpf-next/c/2eee6fe8ac2c
-  - [bpf-next,v6,10/13] selftests/bpf: Test creating dynptr from dynptr data and slice
-    https://git.kernel.org/bpf/bpf-next/c/fbcc68af6047
-  - [bpf-next,v6,11/13] selftests/bpf: Test using slice after invalidating dynptr clone
-    https://git.kernel.org/bpf/bpf-next/c/925320666e06
-  - [bpf-next,v6,12/13] selftests/bpf: Test using file dynptr after the reference on file is dropped
-    https://git.kernel.org/bpf/bpf-next/c/3f75a757a3af
-  - [bpf-next,v6,13/13] selftests/bpf: Test using dynptr after freeing the underlying object
-    https://git.kernel.org/bpf/bpf-next/c/60c7c3b880c8
+This commit updates the libarena functions to directly return arena pointers
+instead of returning u64 and relying on preprocessor macros for type casting
+to hide the conversion from the caller.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.=
+h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+> index 4d57fc1b5c26f..528c69a1f38e0 100644
+> --- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+> @@ -76,7 +76,6 @@ struct buddy {
+>  int buddy_init(struct buddy __arena *buddy);
+>  int buddy_destroy(struct buddy __arena *buddy);
+>  int buddy_free(struct buddy __arena *buddy, void __arena *free);
+> -u64 buddy_alloc_internal(struct buddy __arena *buddy, size_t size);
+> -#define buddy_alloc(alloc, size) ((void __arena *)buddy_alloc_internal((=
+alloc), (size)))
+> +void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size);
 
+[Severity: High]
+Does changing the return type to void __arena * break the BPF verifier for
+programs calling these functions?
 
+Since this change removes the explicit C-style cast from a u64, Clang will
+no longer emit the BPF_ADDR_SPACE_CAST instruction because both sides of
+the assignment share the same address space.
+
+However, in kernel/bpf/verifier.c:check_func_call(), the verifier still
+forces the return register (R0) of all global subprograms to SCALAR_VALUE:
+
+    if (!subprog_returns_void(env, subprog)) {
+        mark_reg_unknown(env, caller->regs, BPF_REG_0);
+        caller->regs[BPF_REG_0].subreg_def =3D DEF_NOT_SUBREG;
+    }
+
+Without the addr_space_cast instruction to upgrade the SCALAR_VALUE back
+to a PTR_TO_ARENA, will subsequent memory accesses using this returned
+pointer be rejected by the verifier with an "invalid mem access 'scalar'"
+error?
+
+It appears check_func_call() might need to be updated to populate the calle=
+r's
+R0 state with PTR_TO_ARENA based on the BTF return type before this test can
+safely rely on native arena pointer returns.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602004120.1708=
+7-1-emil@etsalapatis.com?part=3D5
