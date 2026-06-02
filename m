@@ -1,87 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDB3348C66
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 02:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7AC348C66
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 02:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780365614; cv=none; b=PgDtuW/WCAA2PH7dq2fEITGwYxbta3bET/vnUiAUawQsmAgkWTBOCUENjFDSW1a9rrbucgqzpbQQ+Vub5OfzyOdeT5yIdBnkYJ70VHJEoOB5C6SegAhw+scmis0b4P42DYWEFJiQrzjrjBtYhqI2BkOIpjSliCCpvL/mKiiAtro=
+	t=1780366340; cv=none; b=EQtTin3ZvrolWMmEPkkNGaZ8q5TEF+greRmnnPGQRYipwy+Vb6Cqz9oCo8R2odp5Td0soX4vb93baMKuQe6FmwZAAVzzLjCUJKC4tTeOr6/mJeyeni3D3sdAt8msIKLXmzzxr3WdNVyJmTjihVlC/EHk5H1ryhhZsUiizd+Fj5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780365614; c=relaxed/simple;
-	bh=eaCGtQ5MYfPSHPSTSKtTziZ06Z/NcOjlkosfjkeSYn4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=dDaGyUO4clC34bSJ0fMzO0vMk7r+oWT8pYreG5513Xk84k70O6qr9SA7SLFYHSVt/ejgaEKTpt8ogD0rHBUpmGqNfWwBaIRoCIexnvYTYAakvUmSdrQ9jn8dR4jEULT8gJ7FKg/F/+AdR9jGqesm3F86cz4Tcamxy8Q10RPhB6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3c6Pl5L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780366340; c=relaxed/simple;
+	bh=UZe1VQbg/A8h5bszj/xcfUf8HHkK6UavcECVZEQck18=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cvAni7SQTpE3B17NuSj5v2Drw4KYZ5S7ntOyhAugCXoGW5nrJni703JSV3ZHf+ymNpSvgoP+wKTKF8fEIxtUCUOW09k+lvdbWLqwQ5Rp8iGYQDetCaQiYiCgXnGX6TwAscb8UuynJ9NDvq4jYy0zvHW+JT8DHX9buw27j9AJ/+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GIkV6OIl; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3c6Pl5L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1BB81F00893;
-	Tue,  2 Jun 2026 02:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780365612;
-	bh=+ZIsciBFg5YdKwl4GJCZR2dJK6D2I0u+DYYJodjz31E=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=m3c6Pl5L5APk6MTXdsLHnpvoFZt8ITXNiPiBaGWTx8yaUCosC7XJbDOW/oFhw0FrK
-	 S5WLbafUApoXSER+qPB4fFEobGiRsvf9D0ZD2uGwz5zOWkfcs9zyZ2GDBSFo0HmgAn
-	 zqGSOtv2Z+MGPHuBVfK651fJqmdULeRdtGcpp3ckhI6s+53GthsYL7AJxgr6MuLAFY
-	 2VHOPkwMVjNvECnDobkPIKnTfOMZnsGSQENCHCyq1UHFJv9RWYT8B14BjfX3SDS+Gr
-	 XiX9Egt0AHeZ2Fa1WqizMwRk2bwvyDBOuMW9yBIoAt6owrqNqaCPfYEucCSN17wqqf
-	 v/xGcoyR4TaHA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197F438119F9;
-	Tue,  2 Jun 2026 02:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GIkV6OIl"
+Message-ID: <021e215a-624f-483d-ba19-7c130122bfb5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780366326;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pqqEW4JqlqzJIsw8D3pVFU3QcwiKj674UK8QDudzFI8=;
+	b=GIkV6OIliUEDfFeuec4CXiKrfXyiNHKr0PUsJljCdpUm8oWDz51Vzuomc0rMshfzShlksM
+	IffJfsvzocAoCJUi834S47hnAaBzlGke3NbBEs/t2ayGpnT8O83kNqDqyWgen580enfTHh
+	jhAQQD/S2mWlin1VWAh9EsG2Yfa24DU=
+Date: Tue, 2 Jun 2026 10:11:49 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/6] Minimize annotations for arena programs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178036561463.203733.12496936017031738591.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Jun 2026 02:00:14 +0000
-References: <20260602004120.17087-1-emil@etsalapatis.com>
-In-Reply-To: <20260602004120.17087-1-emil@etsalapatis.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
- daniel@iogearbox.net, eddyz87@gmail.com, song@kernel.org,
- mattbobrowski@google.com
+Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
+ encapsulating UDP tunnel in lwt
+Content-Language: en-US
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Guillaume Nault <gnault@redhat.com>,
+ Ido Schimmel <idosch@nvidia.com>,
+ Fernando Fernandez Mancera <fmancera@suse.de>,
+ Peter Oskolkov <posk@google.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com, Leon Hwang <leon.huangfu@shopee.com>
+References: <20260601150203.20352-1-leon.hwang@linux.dev>
+ <20260601150203.20352-2-leon.hwang@linux.dev>
+ <DIXVJ45H90X3.3DOQOUXJB6DVN@etsalapatis.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DIXVJ45H90X3.3DOQOUXJB6DVN@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Mon,  1 Jun 2026 20:41:14 -0400 you wrote:
-> BPF programs must currently include code to address two limitations
-> of function signatures that include arena types. First, arena arguments
-> must be annotated with __arg_arena in the function signature in addition
-> to __arena. Second, it is currently not allowed to return an arena pointer
-> from a subprog, even though it is safe to do so. These limitations require
-> extra annotations and typecasts respectively, and have proven sources of
-> confusion to programmers.
+On 2/6/26 01:03, Emil Tsalapatis wrote:
+> On Mon Jun 1, 2026 at 11:02 AM EDT, Leon Hwang wrote:
+[...]
+>> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+>>  	if (ingress)
+>>  		skb_postpush_rcsum(skb, iph, len);
+>>  	skb_reset_network_header(skb);
+>> +	if (ipv4 && is_udp_tunnel)
+>> +		skb_set_transport_header(skb, skb_network_offset(skb) + iph->ihl * 4);
+>> +	else if (!ipv4 && is_udp_tunnel)
+>> +		skb_set_transport_header(skb, skb_network_offset(skb) + sizeof(struct ipv6hdr));
 > 
-> [...]
+> Minor nit: Could we do something like
+> 
+> if (is_udp_tunnel) {
+> 	size_t hrdsz = ipv4 ? iph->ihl * 4 : sizeof(struct ipv6hdr);
+> 	skb_set_transport_header(skb9, skb_network_offset(skb)) + hdrsz;
+> }
+> 
+> to make the logic clearer?
+> 
 
-Here is the summary with links:
-  - [bpf-next,v3,1/6] selftests/bpf: libarena: Add "arena" BTF type tag to __arena qualifier
-    https://git.kernel.org/bpf/bpf-next/c/a0fa68d8ce75
-  - [bpf-next,v3,2/6] verifier: parse BTF type tags for function arguments
-    https://git.kernel.org/bpf/bpf-next/c/5ab4bc67d818
-  - [bpf-next,v3,3/6] bpf: Allow subprogs to return arena pointers
-    https://git.kernel.org/bpf/bpf-next/c/3e924e9272c8
-  - [bpf-next,v3,4/6] selftests/bpf: Remove __arg_arena from the codebase
-    https://git.kernel.org/bpf/bpf-next/c/b9b23fe17611
-  - [bpf-next,v3,5/6] selftests/bpf: libarena: Directly return arena pointers from functions
-    https://git.kernel.org/bpf/bpf-next/c/367e6e4a8173
-  - [bpf-next,v3,6/6] selftests/bpf: Add tests for the new type-tag based __arena identifier
-    https://git.kernel.org/bpf/bpf-next/c/9fd5bf96ac4b
+Make sense.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Leon
 
+>>  	memcpy(skb_network_header(skb), hdr, len);
+>>  	bpf_compute_data_pointers(skb);
+>>  	skb_clear_hash(skb);
+> 
 
