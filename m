@@ -1,54 +1,54 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E633D5647
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 23:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9763D7D67
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 23:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780444752; cv=none; b=tGxoxOCUNK/IzXQXmV3bRy8+j2nfUTId7YnXry8Zw3HvIR90uKRGCrHuplLsUd+dyBwdtuAeffWmdruwr8dAzOEmcNk3IdUIL2p9tt9jA7oZTyCzCbQPQ6eS9PNZJ9WwdGDFf2+S0hArVsbUaIopooXVnCRHF3V5JlT4NNaf1ag=
+	t=1780444755; cv=none; b=TGgiXV3p4ZAuFu0pI0mpAp00beFoNX8Lt/Ggt/4cjf+PQG0m4t1e46cFK952ZcKnQ1M+R3CVGDwwu61Bwt7U2QiigNisNJt08V33gXjXPB11f38saGUg6gPsw893UIZOfXTMUJGPwEbygKVpTolqToS3ex47XxzZlNHGuxXOcgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780444752; c=relaxed/simple;
-	bh=Na0SeIfyOd7yAAbMXxs/OfScfNP6TSwBD6oC5sbAqiE=;
+	s=arc-20240116; t=1780444755; c=relaxed/simple;
+	bh=Qkkyon9gqvLq7BdyABeX5Tqb1Z7rXvGkYnNhI7MplIo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bAU9CUXLCUNuMeXkK3yjl33DRv+HF4bd8yi62gFga04YBdZSXza7gNc+p9A/qXMYpF5rPe/6OZP0RwF8ockeYEHtDVgB9f1MLoku9Csfup0JvnRjIX+6FWQPs6VgpsJQzzwq/Q1VGNgVSkSmv+6dYEcahRl80xPRkMdNPOIrXbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bZNMPxZD; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=d7YaD2ZumNg3ZThn9c8KcJQFWLvevNgOLBIUlHW5affTFYLzYBc339RPesXZWcTD2GB2DkbhOScOQacbFeiFO1TJrxg5uudaCNzITgUE8uM1p9ml/aHvsCdqb4AD+SpmKvs7oiRawaRS5Vc10h4o6N8bFRqaw7lEam/mrM/GNII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ExtfqPxt; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bZNMPxZD"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8531d89e59so76823a12.0
-        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 16:59:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ExtfqPxt"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-36bc380fbf9so4767162a91.3
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 16:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780444749; x=1781049549; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780444752; x=1781049552; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZyKin3epjmHjB+l3vFExCe2kv3656lDfwhSyk8bL+DU=;
-        b=bZNMPxZDX42vvV66Sr7flQLuN3w+h6ImxSmkZOzv8KcCfmLqACGWR81J33/P3jvhiI
-         xa6zglQwzSF/IfhqZezSf71mxoja5KIpUvIPdk/sDbKJ9JDtqy7vzrPJyGiMLjCT2bLo
-         UyXi/M+a5LStvUOEpS9RCVT216qQhxSYvrFxe1YYU8Zb01g+omiG/AljUQQ2HGArncpz
-         qZQQenwbVXQ6r8xhQ/dWtkfv0vLSwbkc5E6vSM9GMX/c3+zJvB6N5qtNYCBgScFlkW5I
-         bnH7NfoIhL0ZY49OvQtJJP1FnZ0iZjaUEsPBOMJ8M4GutScSsFTkr1BN9wM2h+MgBdB9
-         90hg==
+        bh=sv5XvrfKLhmarDTIjRJkZy4vPqS4o33dakzeK+6ZBfc=;
+        b=ExtfqPxt0qsSXKPkyNqN6VbC0wNP3GLYxABbAfHxyB7x+oLHZBRPIV14liNAX2A1bL
+         6QJ3R8gjJUYsTZuAI5me1ivxdaKcN5OMS/w5jZo29W8d+l4IohktdhycTVWCXHuQv7BL
+         8PzJxOcp9h9KC/vGOiKqrrcC6rW8vENOOu0Gm7A22YSttToDd5BfQz6dDg/DmncF/W9h
+         FhFbmjS13fRzmxXFgwM7kD++QjA4N8SNe9G/pebNOCW2negecVOw8LsqwZyHfvkPp6GF
+         96ivSLuVzIzrFxNrQ3SXbZx2WsR47AktuMnGOKhzijZHTsc6pkdlvp09HmtDNmdPFfDU
+         uARw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780444749; x=1781049549;
+        d=1e100.net; s=20251104; t=1780444752; x=1781049552;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZyKin3epjmHjB+l3vFExCe2kv3656lDfwhSyk8bL+DU=;
-        b=oBD/XnMkyjglaFyEXUoulHuUFBGtAEQ4wXhkp2JioL/nwLrrmx5tecj+AryLIYB8/5
-         7FTiqDeRf7hWFroCS01mpTOQamEt4Tr478LbGYmdc3ebNI52WB1takHyVdiWusLbHqz1
-         Fx3sG2mIF1aqDB8vOhlzuFMRPfwJto1TkWwBUZi2NgDlHdM/lyJ3nbzea63L08iQ7cGL
-         SaESjZNKApMT7maDzcwTjm/V8Thl7WQs1Gc/f4pN2kKVy9xm7MwRzmBvaLJkU0PRq9o3
-         OlYrZXvK3oUlFOF54nCQK/GGJE9YFKkVgv8fciPuE3U6j3P2tPRROhxxxiU7WdgJPXl7
-         Kx/Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/c1xfspADHiiwDXGQaGM+OdMXF7tVu7A+GZehltCPua7wGb6BNdhcC9XOgZvj00gJaWPw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5Lp5GtKOCTTeM51UeP5e7T9nABpHSOUI96/RqGCVzW7E1aUhY
-	zt+cpDR6GEXDX9ga2RMUEEU/9jmd+9C4s0TmgRwUOLX4lcXoAa6rCwBHO6cmbETNG+rZEI5k36W
-	mmBAuIkG3xvMI2j9GIEW62PkUjw==
-X-Received: from pgc4.prod.google.com ([2002:a05:6a02:2f84:b0:c74:497:507e])
+        bh=sv5XvrfKLhmarDTIjRJkZy4vPqS4o33dakzeK+6ZBfc=;
+        b=PrSt+Y1RV5/d3khXYquKRH3lOrIiS7VO8JEV4N2Qiv1CM1Bz5l/qewMYn59wnWgVR9
+         nxQzC0E8lmJb0anZkaN3u+gr/jW+lYb6DbIsauNcLt44ea917QgmpbCXgSzQ/ybduC0q
+         7qAGsvLksgXgTwYFqH3upvzYvKCh7EuHDOvmpfnRy8wvMsqS47HPYc4K88PLFxsZOoyU
+         KPncvC/M1/npV6LV3Nq+tH0ND6W467tDvzqCHvJ7Cvn+i+tNuVJC3+3+Voxigjs8jeWQ
+         w+3uzjEDphdNdGc6+YNmXo70iVjKpM616LpWuV4QqY884Q5Ml5aRFEMQa3u8KkURRZtI
+         tCVQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/BzJ+6Dd2X8CEeUQuIO+8BUmqzpZLr56HYCSJEAEKHbykmaYe3UWhtVWTHk8XdSQyy0dQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuBDqyvOPgIWwx5CTfHrreUCwLRpTxU6/fOvAnQaN0KOraQFn3
+	10jYmVPJy/tlohfgLZXvudo4UGhsXaWFBmH0w8JRL5wxW01fPzkX3ggpQK0STEs9b8qNNvNAIl8
+	jRKTGZkz26ju+hvVuU1dpE3v1hA==
+X-Received: from pjji4.prod.google.com ([2002:a17:90a:6504:b0:369:28c8:746f])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:d492:b0:3b4:613f:90b1 with SMTP id adf61e73a8af0-3b498903549mr726413637.16.1780444749011;
- Tue, 02 Jun 2026 16:59:09 -0700 (PDT)
-Date: Tue,  2 Jun 2026 23:58:52 +0000
+ 2002:a17:90a:c2c5:b0:35c:cba:3453 with SMTP id 98e67ed59e1d1-36e33105750mr950302a91.22.1780444751550;
+ Tue, 02 Jun 2026 16:59:11 -0700 (PDT)
+Date: Tue,  2 Jun 2026 23:58:55 +0000
 In-Reply-To: <20260602235900.3050782-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260602235900.3050782-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.54.0.1013.g208068f2d8-goog
-Message-ID: <20260602235900.3050782-9-hramamurthy@google.com>
-Subject: [PATCH net-next v2 08/15] gve: refactor gve_init_priv for reset path
+Message-ID: <20260602235900.3050782-12-hramamurthy@google.com>
+Subject: [PATCH net-next v2 11/15] gve: split up notify block allocation and
+ setup paths
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -70,339 +71,304 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The driver does not need to renegotiate all properties with
-the device on a reset since those should stay constant through
-a reset. Hence change gve_init_priv() into a method that only
-sets these properties into the priv structure and hence needs
-to be only called once during gve_probe().
+From: Joshua Washington <joshwash@google.com>
 
-To achieve this end state of gve_init_priv(), do the following:
-- introduce gve_adminq_init() which writes the driver version register
-  and allocates the AdminQ and call it in gve_probe()
-- move gve_adminq_get_device_properties() into gve_probe()
-- introduce gve_setup_device() which deals with device setup logic and
-  call it in gve_probe()
-- resetting no. of registered pages is moved into gve_register_qpls()
-  since that is a QPL specific property.
+Before this patch, notify block allocation and setup occurred in the same
+method. This all occurred before gve_adminq_configure_device_resources,
+which populates the irq_db_indicies array, a DMA region with BAR offsets
+for MSI-X vectors.
 
-With these changes, gve_adminq_get_device_properties() and
-gve_init_priv() are only called once during gve_probe.
-gve_reset_recovery() can now bypass full initialization and call these
-targeted setup functions directly.
+The coming mailbox mode will require notify blocks to be set up only
+after receiving the IRQ doorbell offsets, as the request does not work
+with a supplied DMA buffer in the way that admin queue mode does. The
+intended flow in that case would be:
 
-This prepares the driver to add mailbox mode's control plane
-initialization and device properties negotiation in the same place
-as is done in AdminQ mode in the upcoming patches when adding the
-mailbox ABI.
+1) allocate notify blocks
+2) request doorbell information
+3) set up MSI-X vectors based on doorbell info
 
-These changes are only code movement, no functional change.
+This ordering also works for admin queue mode, so it will be updated to
+match.
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
 Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+Signed-off-by: Joshua Washington <joshwash@google.com>
 Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
 ---
- drivers/net/ethernet/google/gve/gve.h        |   2 +
- drivers/net/ethernet/google/gve/gve_adminq.c |  12 +-
- drivers/net/ethernet/google/gve/gve_adminq.h |   2 +-
- drivers/net/ethernet/google/gve/gve_main.c   | 132 +++++++++++--------
- 4 files changed, 92 insertions(+), 56 deletions(-)
+ drivers/net/ethernet/google/gve/gve.h      |   2 +
+ drivers/net/ethernet/google/gve/gve_main.c | 158 ++++++++++++---------
+ 2 files changed, 89 insertions(+), 71 deletions(-)
 
 diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-index bd48c3d7a2b2..72588d201e5d 100644
+index 939b245ed562..e173c14bdc08 100644
 --- a/drivers/net/ethernet/google/gve/gve.h
 +++ b/drivers/net/ethernet/google/gve/gve.h
-@@ -1252,6 +1252,8 @@ static inline bool gve_is_clock_enabled(struct gve_priv *priv)
- 	return priv->nic_ts_report;
- }
+@@ -673,6 +673,7 @@ struct gve_notify_block {
+ 	struct gve_tx_ring *tx; /* tx rings on this block */
+ 	struct gve_rx_ring *rx; /* rx rings on this block */
+ 	u32 irq;
++	bool irq_requested;
+ };
  
-+void gve_adminq_write_version(u8 __iomem *driver_version_register);
-+
- /* gqi napi handler defined in gve_main.c */
- int gve_napi_poll(struct napi_struct *napi, int budget);
+ /* Tracks allowed and current rx queue settings */
+@@ -953,6 +954,7 @@ struct gve_priv {
+ 	u64 link_speed;
+ 	bool up_before_suspend; /* True if dev was up before suspend */
  
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 923a5c737258..e7956d2768b6 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.c
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -296,8 +296,10 @@ gve_process_device_options(struct gve_priv *priv,
- 	return 0;
- }
++	bool mgmt_irq_requested;
+ 	struct gve_ptype_lut *ptype_lut_dqo;
  
--int gve_adminq_alloc(struct device *dev, struct gve_priv *priv)
-+static int gve_adminq_alloc(struct gve_priv *priv)
- {
-+	struct device *dev = &priv->pdev->dev;
-+
- 	priv->adminq_pool = dma_pool_create("adminq_pool", dev,
- 					    GVE_ADMINQ_BUFFER_SIZE, 0, 0);
- 	if (unlikely(!priv->adminq_pool))
-@@ -353,6 +355,14 @@ int gve_adminq_alloc(struct device *dev, struct gve_priv *priv)
- 	return 0;
- }
- 
-+int gve_adminq_init(struct gve_priv *priv)
-+{
-+	struct gve_registers __iomem *reg_bar = priv->reg_bar0;
-+
-+	gve_adminq_write_version(&reg_bar->driver_version);
-+	return gve_adminq_alloc(priv);
-+}
-+
- void gve_adminq_release(struct gve_priv *priv)
- {
- 	int i = 0;
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index ac3ef9fd8d24..d07e9c6f279d 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.h
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -619,7 +619,7 @@ union gve_adminq_command {
- 
- static_assert(sizeof(union gve_adminq_command) == 64);
- 
--int gve_adminq_alloc(struct device *dev, struct gve_priv *priv);
-+int gve_adminq_init(struct gve_priv *priv);
- void gve_adminq_free(struct gve_priv *priv);
- void gve_adminq_release(struct gve_priv *priv);
- int gve_adminq_describe_device(struct gve_priv *priv);
+ 	/* Must be a power of two. */
 diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index d693caed7e3d..746ff69a28dd 100644
+index 06df6d8ad429..98970508ae54 100644
 --- a/drivers/net/ethernet/google/gve/gve_main.c
 +++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -797,6 +797,8 @@ static int gve_register_qpls(struct gve_priv *priv)
- 	int err;
- 	int i;
- 
-+	priv->num_registered_pages = 0;
-+
- 	num_tx_qpls = gve_num_tx_qpls(&priv->tx_cfg, gve_is_qpl(priv));
- 	num_rx_qpls = gve_num_rx_qpls(&priv->rx_cfg, gve_is_qpl(priv));
- 
-@@ -2414,6 +2416,33 @@ static void gve_set_buf_sizes(struct gve_priv *priv)
- 		priv->header_buf_size = device_info->header_buf_size;
+@@ -425,6 +425,24 @@ int gve_napi_poll_dqo(struct napi_struct *napi, int budget)
+ 	return work_done;
  }
  
-+static int gve_setup_device(struct gve_priv *priv)
++static void gve_free_notify_blocks(struct gve_priv *priv)
 +{
-+	int err;
-+
-+	priv->xsk_pools = bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
-+	if (!priv->xsk_pools) {
-+		err = -ENOMEM;
-+		goto err;
++	pci_disable_msix(priv->pdev);
++	if (priv->irq_db_indices) {
++		dma_free_coherent(&priv->pdev->dev,
++				  priv->num_ntfy_blks *
++				  sizeof(*priv->irq_db_indices),
++				  priv->irq_db_indices,
++				  priv->irq_db_indices_bus);
++		priv->irq_db_indices = NULL;
 +	}
 +
-+	gve_set_netdev_xdp_features(priv);
-+	if (!gve_is_gqi(priv))
-+		priv->dev->xdp_metadata_ops = &gve_xdp_metadata_ops;
++	kvfree(priv->ntfy_blocks);
++	priv->ntfy_blocks = NULL;
++	kvfree(priv->msix_vectors);
++	priv->msix_vectors = NULL;
++}
 +
-+	err = gve_setup_device_resources(priv);
-+	if (err)
-+		goto err_free_xsk_bitmap;
-+
+ static const struct cpumask *gve_get_node_mask(struct gve_priv *priv)
+ {
+ 	if (priv->numa_node == NUMA_NO_NODE)
+@@ -436,11 +454,9 @@ static const struct cpumask *gve_get_node_mask(struct gve_priv *priv)
+ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ {
+ 	int num_vecs_requested = priv->num_ntfy_blks + 1;
+-	const struct cpumask *node_mask;
+-	unsigned int cur_cpu;
+ 	int vecs_enabled;
+-	int i, j;
+ 	int err;
++	int i;
+ 
+ 	priv->msix_vectors = kvzalloc_objs(*priv->msix_vectors,
+ 					   num_vecs_requested);
+@@ -454,7 +470,7 @@ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ 		dev_err(&priv->pdev->dev, "Could not enable min msix %d/%d\n",
+ 			GVE_MIN_MSIX, vecs_enabled);
+ 		err = vecs_enabled;
+-		goto abort_with_msix_vectors;
++		goto abort;
+ 	}
+ 	if (vecs_enabled != num_vecs_requested) {
+ 		int new_num_ntfy_blks = (vecs_enabled - 1) & ~0x1;
+@@ -477,15 +493,6 @@ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ 			priv->rx_cfg.num_queues = priv->rx_cfg.max_queues;
+ 	}
+ 
+-	/* Setup Management Vector  - the last vector */
+-	snprintf(priv->mgmt_msix_name, sizeof(priv->mgmt_msix_name), "gve-mgmnt@pci:%s",
+-		 pci_name(priv->pdev));
+-	err = request_irq(priv->msix_vectors[priv->mgmt_msix_idx].vector,
+-			  gve_mgmnt_intr, 0, priv->mgmt_msix_name, priv);
+-	if (err) {
+-		dev_err(&priv->pdev->dev, "Did not receive management vector.\n");
+-		goto abort_with_msix_enabled;
+-	}
+ 	priv->irq_db_indices =
+ 		dma_alloc_coherent(&priv->pdev->dev,
+ 				   priv->num_ntfy_blks *
+@@ -493,15 +500,65 @@ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ 				   &priv->irq_db_indices_bus, GFP_KERNEL);
+ 	if (!priv->irq_db_indices) {
+ 		err = -ENOMEM;
+-		goto abort_with_mgmt_vector;
++		goto abort;
+ 	}
+ 
+ 	priv->ntfy_blocks = kvzalloc(priv->num_ntfy_blks *
+ 				     sizeof(*priv->ntfy_blocks), GFP_KERNEL);
+ 	if (!priv->ntfy_blocks) {
+ 		err = -ENOMEM;
+-		goto abort_with_irq_db_indices;
++		goto abort;
++	}
 +	return 0;
 +
-+err_free_xsk_bitmap:
-+	bitmap_free(priv->xsk_pools);
-+	priv->xsk_pools = NULL;
-+err:
++abort:
++	gve_free_notify_blocks(priv);
 +	return err;
 +}
 +
- static const struct gve_ctrl_ops gve_adminq_ops = {
- 	.map_db_bar		= gve_adminq_map_db_bar,
- 	.unmap_db_bar		= gve_adminq_unmap_db_bar,
-@@ -2421,36 +2450,18 @@ static const struct gve_ctrl_ops gve_adminq_ops = {
- 	.set_num_ntfy_blks	= gve_adminq_set_num_ntfy_blks,
- };
- 
--static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
-+static int gve_init_priv(struct gve_priv *priv)
- {
- 	struct gve_device_info *device_info = &priv->device_info;
- 	int err;
- 
--	/* Set up the adminq */
--	err = gve_adminq_alloc(&priv->pdev->dev, priv);
--	if (err) {
--		dev_err(&priv->pdev->dev,
--			"Failed to alloc admin queue: err=%d\n", err);
--		return err;
--	}
--
--	priv->num_registered_pages = 0;
--
--	if (skip_describe_device)
--		goto setup_device;
--
--	device_info->queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
--	err = gve_adminq_get_device_properties(priv);
--	if (err)
--		goto err;
--
- 	priv->queue_format = priv->device_info.queue_format;
- 
- 	err = priv->ctrl_ops->set_num_ntfy_blks(priv);
- 	if (err) {
- 		dev_err(&priv->pdev->dev,
- 			"Could not setup notify blocks: err=%d\n", err);
--		goto err;
-+		return err;
- 	}
- 
- 	priv->ctrl_ops->set_num_queues(priv);
-@@ -2473,10 +2484,8 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
- 		netif_set_tso_max_size(priv->dev, GVE_DQO_TX_MAX);
- 	}
- 
--	if (gve_set_mtu(priv)) {
--		err = -EINVAL;
--		goto err;
--	}
-+	if (gve_set_mtu(priv))
-+		return -EINVAL;
- 
- 	priv->num_event_counters = device_info->num_event_counters;
- 
-@@ -2501,30 +2510,7 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
- 	priv->ts_config.tx_type = HWTSTAMP_TX_OFF;
- 	priv->ts_config.rx_filter = HWTSTAMP_FILTER_NONE;
- 	priv->nic_timestamp_supported = device_info->nic_timestamp_supported;
--
--setup_device:
--	priv->xsk_pools = bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
--	if (!priv->xsk_pools) {
--		err = -ENOMEM;
--		goto err;
--	}
--
--	gve_set_netdev_xdp_features(priv);
--	if (!gve_is_gqi(priv))
--		priv->dev->xdp_metadata_ops = &gve_xdp_metadata_ops;
--
--	err = gve_setup_device_resources(priv);
--	if (err)
--		goto err_free_xsk_bitmap;
--
- 	return 0;
--
--err_free_xsk_bitmap:
--	bitmap_free(priv->xsk_pools);
--	priv->xsk_pools = NULL;
--err:
--	gve_adminq_free(priv);
--	return err;
- }
- 
- static void gve_teardown_priv_resources(struct gve_priv *priv)
-@@ -2554,15 +2540,29 @@ static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
- {
- 	int err;
- 
--	err = gve_init_priv(priv, true);
--	if (err)
-+	err = gve_adminq_init(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Failed to alloc admin queue: err=%d\n", err);
- 		goto err;
++static void gve_teardown_notify_blocks(struct gve_priv *priv)
++{
++	int i;
++
++	if (!priv->ntfy_blocks)
++		return;
++
++	for (i = 0; i < priv->num_ntfy_blks; i++) {
++		struct gve_notify_block *block = &priv->ntfy_blocks[i];
++
++		if (!block->irq_requested)
++			continue;
++
++		irq_set_affinity_hint(priv->msix_vectors[i].vector,
++				      NULL);
++		free_irq(priv->msix_vectors[i].vector, block);
++		block->irq = 0;
++		block->irq_requested = false;
 +	}
 +
-+	err = gve_setup_device(priv);
-+	if (err)
-+		goto err_free_adminq;
- 	if (was_up) {
- 		err = gve_open(priv->dev);
- 		if (err)
--			goto err;
-+			goto err_free_device;
++	if (priv->mgmt_irq_requested) {
++		free_irq(priv->msix_vectors[priv->mgmt_msix_idx].vector, priv);
++		priv->mgmt_irq_requested = false;
++	}
++}
++
++static int gve_setup_notify_blocks(struct gve_priv *priv)
++{
++	const struct cpumask *node_mask;
++	unsigned int cur_cpu;
++	int i;
++	int err;
++
++	/* Setup Management Vector  - the last vector */
++	snprintf(priv->mgmt_msix_name, sizeof(priv->mgmt_msix_name),
++		 "gve-mgmnt@pci:%s", pci_name(priv->pdev));
++	err = request_irq(priv->msix_vectors[priv->mgmt_msix_idx].vector,
++			  gve_mgmnt_intr, 0, priv->mgmt_msix_name, priv);
++	if (err) {
++		dev_err(&priv->pdev->dev, "Did not receive management vector.\n");
++		return err;
+ 	}
++	priv->mgmt_irq_requested = true;
+ 
+ 	/* Setup the other blocks - the first n-1 vectors */
+ 	node_mask = gve_get_node_mask(priv);
+@@ -519,9 +576,10 @@ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ 		if (err) {
+ 			dev_err(&priv->pdev->dev,
+ 				"Failed to receive msix vector %d\n", i);
+-			goto abort_with_some_ntfy_blocks;
++			goto abort;
+ 		}
+ 		block->irq = priv->msix_vectors[msix_idx].vector;
++		block->irq_requested = true;
+ 		irq_set_affinity_and_hint(block->irq,
+ 					  cpumask_of(cur_cpu));
+ 		block->irq_db_index = &priv->irq_db_indices[i].index;
+@@ -535,61 +593,12 @@ static int gve_alloc_notify_blocks(struct gve_priv *priv)
+ 			cur_cpu = cpumask_first(node_mask);
  	}
  	return 0;
-+
-+err_free_device:
-+	gve_teardown_device_resources(priv);
-+	bitmap_free(priv->xsk_pools);
-+	priv->xsk_pools = NULL;
-+err_free_adminq:
-+	gve_adminq_free(priv);
- err:
- 	dev_err(&priv->pdev->dev, "Reset failed! !!! DISABLING ALL QUEUES !!!\n");
- 	gve_turndown(priv);
-@@ -2605,7 +2605,7 @@ int gve_reset(struct gve_priv *priv, bool attempt_teardown)
+-abort_with_some_ntfy_blocks:
+-	for (j = 0; j < i; j++) {
+-		struct gve_notify_block *block = &priv->ntfy_blocks[j];
+-		int msix_idx = j;
+ 
+-		irq_set_affinity_hint(priv->msix_vectors[msix_idx].vector,
+-				      NULL);
+-		free_irq(priv->msix_vectors[msix_idx].vector, block);
+-		block->irq = 0;
+-	}
+-	kvfree(priv->ntfy_blocks);
+-	priv->ntfy_blocks = NULL;
+-abort_with_irq_db_indices:
+-	dma_free_coherent(&priv->pdev->dev, priv->num_ntfy_blks *
+-			  sizeof(*priv->irq_db_indices),
+-			  priv->irq_db_indices, priv->irq_db_indices_bus);
+-	priv->irq_db_indices = NULL;
+-abort_with_mgmt_vector:
+-	free_irq(priv->msix_vectors[priv->mgmt_msix_idx].vector, priv);
+-abort_with_msix_enabled:
+-	pci_disable_msix(priv->pdev);
+-abort_with_msix_vectors:
+-	kvfree(priv->msix_vectors);
+-	priv->msix_vectors = NULL;
++abort:
++	gve_teardown_notify_blocks(priv);
  	return err;
  }
  
--static void gve_write_version(u8 __iomem *driver_version_register)
-+void gve_adminq_write_version(u8 __iomem *driver_version_register)
+-static void gve_free_notify_blocks(struct gve_priv *priv)
+-{
+-	int i;
+-
+-	if (!priv->msix_vectors)
+-		return;
+-
+-	/* Free the irqs */
+-	for (i = 0; i < priv->num_ntfy_blks; i++) {
+-		struct gve_notify_block *block = &priv->ntfy_blocks[i];
+-		int msix_idx = i;
+-
+-		irq_set_affinity_hint(priv->msix_vectors[msix_idx].vector,
+-				      NULL);
+-		free_irq(priv->msix_vectors[msix_idx].vector, block);
+-		block->irq = 0;
+-	}
+-	free_irq(priv->msix_vectors[priv->mgmt_msix_idx].vector, priv);
+-	kvfree(priv->ntfy_blocks);
+-	priv->ntfy_blocks = NULL;
+-	dma_free_coherent(&priv->pdev->dev, priv->num_ntfy_blks *
+-			  sizeof(*priv->irq_db_indices),
+-			  priv->irq_db_indices, priv->irq_db_indices_bus);
+-	priv->irq_db_indices = NULL;
+-	pci_disable_msix(priv->pdev);
+-	kvfree(priv->msix_vectors);
+-	priv->msix_vectors = NULL;
+-}
+ 
+ static void gve_free_control_plane_resources(struct gve_priv *priv)
  {
- 	const char *c = gve_version_prefix;
+@@ -743,6 +752,7 @@ static void gve_teardown_control_plane_resources(struct gve_priv *priv)
  
-@@ -2838,7 +2838,6 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		goto abort_with_pci_region;
- 	}
+ static void gve_teardown_device(struct gve_priv *priv)
+ {
++	gve_teardown_notify_blocks(priv);
+ 	gve_teardown_control_plane_resources(priv);
+ 	gve_adminq_free(priv);
+ 	/*
+@@ -2463,13 +2473,16 @@ static int gve_setup_device(struct gve_priv *priv)
  
--	gve_write_version(&reg_bar->driver_version);
- 	/* Get max queues to alloc etherdev */
- 	max_tx_queues = ioread32be(&reg_bar->max_tx_queues);
- 	max_rx_queues = ioread32be(&reg_bar->max_rx_queues);
-@@ -2885,13 +2884,28 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	priv->rx_cfg.packet_buffer_size = GVE_DEFAULT_RX_BUFFER_SIZE;
- 	priv->max_rx_buffer_size = GVE_DEFAULT_RX_BUFFER_SIZE;
- 
-+	err = gve_adminq_init(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Failed to alloc admin queue: err=%d\n", err);
-+		goto abort_with_netdev;
-+	}
-+
-+	priv->device_info.queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
-+	err = gve_adminq_get_device_properties(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Could not get device information: err=%d\n", err);
-+		goto abort_with_adminq;
-+	}
-+
- 	/* Set adminq ctrl ops */
- 	priv->ctrl_ops = &gve_adminq_ops;
- 
- 	err = priv->ctrl_ops->map_db_bar(priv);
- 	if (err) {
- 		err = -ENOMEM;
--		goto abort_with_netdev;
-+		goto abort_with_adminq;
- 	}
- 
- 	gve_set_probe_in_progress(priv);
-@@ -2906,10 +2920,17 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	priv->tx_cfg.max_queues = max_tx_queues;
- 	priv->rx_cfg.max_queues = max_rx_queues;
- 
--	err = gve_init_priv(priv, false);
-+	err = gve_init_priv(priv);
+ 	err = gve_alloc_control_plane_resources(priv);
  	if (err)
- 		goto abort_with_wq;
- 
-+	err = gve_setup_device(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Could not setup device: err=%d\n", err);
-+		goto abort_with_wq;
-+	}
+-		goto err;
++		return err;
 +
- 	if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
- 		dev->netmem_tx = NETMEM_TX_DMA;
- 
-@@ -2932,6 +2953,9 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- abort_with_unmap_db_bar:
- 	priv->ctrl_ops->unmap_db_bar(priv);
- 
-+abort_with_adminq:
-+	gve_adminq_free(priv);
+ 	err = gve_setup_control_plane_resources(priv);
+ 	if (err)
+-		goto err;
++		return err;
 +
- abort_with_netdev:
- 	free_netdev(dev);
++	err = gve_setup_notify_blocks(priv);
++	if (err)
++		return err;
+ 	return 0;
+-err:
+-	return err;
+ }
  
+ static const struct gve_ctrl_ops gve_adminq_ops = {
+@@ -2591,6 +2604,9 @@ int gve_reset(struct gve_priv *priv, bool skip_queue_setup)
+ 		gve_unregister_qpls(priv);
+ 	}
+ 
++	gve_teardown_notify_blocks(priv);
++	gve_teardown_control_plane_resources(priv);
++
+ 	/* Reset the device by releasing the AQ. Rings and other resources
+ 	 * within the NIC are implicitly destroyed if commands fail.
+ 	 */
 -- 
 2.54.0.1013.g208068f2d8-goog
 
