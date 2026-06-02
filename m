@@ -1,101 +1,99 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4175A329373
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 05:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E176282F36;
+	Tue,  2 Jun 2026 05:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780378780; cv=none; b=EL5nYZ8rZpxXbAQS1lDQLaOinmRwp6rr1+nfRUPViSS6omMeykBzToBUMJC2QWNy1aNW+8v/rHBVEKo4vH3mnz7DC/SplrhqK/RD2Pef7zRXh6At5PqvGZk10wk44xnpKhRcGczELdW9WcZaZLoKAt+X0e7OnWYUaImeMctSiCE=
+	t=1780379184; cv=none; b=jXSxTJZnJh2nLhFAmoz2zhEn0GZfViHGGF3vI72aImfVqIYQKgfzi0tRwTnX7/Pn0bIMRZKNz1673Nhyg+xYAyIKMmOWXbueATyOfuxZDR+pfc+0naMyI6ZgRV7w6an5l/7PFqgjmbfP3ayjsNkTOfL4Vz9u2Kk9Zr0WCBPop1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780378780; c=relaxed/simple;
-	bh=+FElo7X9gQac48qz+OcS4RcKHsZ021R7wgrdRHvjKbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FkgPQrxcP8qp6V0FsofcTBWFEbniKKCpk+t3bzQ/Rtf6hryZgiihOHGaLrw/4Y+MIT+tNd3p10+EaBE4gE4j66Ul6pOj3BYP9cHyXkWuLNeWaBEdjoLUygk/OfEUvw5h6rADCRTVNhGL8vycpuU9ym26kj0pfCl/nuMJQW+aIrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OQYxl1j0; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780379184; c=relaxed/simple;
+	bh=5Zh4o8d9xZ3t5kB8qx2a4i/NDcV5Cun5GSzCROliQrE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L998W8qjJDDhrOnqhLhN4QP4igsIFnfKDDcbjQfoz5zRZrZvvJbM0m5NAjrLpacFIAm2qtTI70+Cq1+GCWARlvjQU6VnYmaBnsJMeJ9Puiir/rqhXqLI8+QBtcBiziZmCD50i7ARLi6iVlcKYQDPDgudWNz21WM6sm96UlxzmPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zdqLeg1J; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OQYxl1j0"
-Message-ID: <f0dde6aa-5e03-4f3d-8fb0-adfdd10cb173@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780378767;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bXk9VIGnTaHw+bzMRwdLOaFGSrYXgWsGbXFL2Z2hI60=;
-	b=OQYxl1j0kkGXsb4fcq2bEWrcwAPahnM9g002pPiQj2JBdN9GHBmEnRpW9R/e5QweUVEgo3
-	N2z2Xan0JKbpjTEpQ7ivdrMi67x/B1LOGlFFMbRZA4CCjwtu5Bh1sftIwXOTo6ABvOZfdm
-	sfn9R3vMcAm13gSarI+aliCm/S5PKI4=
-Date: Tue, 2 Jun 2026 13:38:58 +0800
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zdqLeg1J"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=E30adyqLn+IiJjt+Q1MzJ7u3OAK9PgtbqIogKbfv/qw=; b=zdqLeg1JjYJbjZHRpopVFLkycE
+	RYESlhgqom3wXjM7/T+wdXcYq0LgrAFdLXrmGI6+2pCHeQWKfixPgDnidYFF12ejDexuftdNXSlXH
+	cHIAADxFvmjOChBvgQELpsBAsg6WhTP/z6+1Q6dlC61LiOuzGxX92jxTUMQMxfnXiKmLTG5nYGVpi
+	h4k2uTgtKyVBEGIqsZwc6e2HyTPNOviswvFZhbq+m02dctiAE3PwIHQc9zuQZOamOfsJ1pnWGneee
+	iy/la7VEXjVd5jXDAlQEW9qUSWzGiymtT8RaVr/La5yk3J1/vA5pHS5Nuk0wnRh8/3fkdwC9CuqiO
+	WoDPWt+A==;
+Received: from 2a02-8389-2341-5b80-decc-1a96-daaa-a2cc.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:decc:1a96:daaa:a2cc] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wUHxD-0000000CL9M-3zc3;
+	Tue, 02 Jun 2026 05:46:20 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	linux-block@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: configurable block error injection
+Date: Tue,  2 Jun 2026 07:45:32 +0200
+Message-ID: <20260602054615.3788425-1-hch@lst.de>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 1/2] bpf: Update transport_header when
- encapsulating UDP tunnel in lwt
-Content-Language: en-US
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Guillaume Nault <gnault@redhat.com>,
- Ido Schimmel <idosch@nvidia.com>,
- Fernando Fernandez Mancera <fmancera@suse.de>,
- Peter Oskolkov <posk@google.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com, Leon Hwang <leon.huangfu@shopee.com>
-References: <20260601150203.20352-1-leon.hwang@linux.dev>
- <20260601150203.20352-2-leon.hwang@linux.dev>
- <0fecd90a-d218-48dc-86d1-860ab2e7f6d5@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <0fecd90a-d218-48dc-86d1-860ab2e7f6d5@linux.dev>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On 2/6/26 11:17, Jiayuan Chen wrote:
-> 
-> On 6/1/26 11:02 PM, Leon Hwang wrote:
-[...]
->> @@ -637,6 +644,10 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb,
->> void *hdr, u32 len, bool ingress)
->>       if (ingress)
->>           skb_postpush_rcsum(skb, iph, len);
->>       skb_reset_network_header(skb);
->> +    if (ipv4 && is_udp_tunnel)
->> +        skb_set_transport_header(skb, skb_network_offset(skb) + iph-
->> >ihl * 4);
->> +    else if (!ipv4 && is_udp_tunnel)
->> +        skb_set_transport_header(skb, skb_network_offset(skb) +
->> sizeof(struct ipv6hdr));
-> 
-> 
-> I think GRE is also affected, why not unconditionally set transport
-> header to network_offset + outer_ip_ihl regardless of outer protocol??
-> 
+Hi all,
 
-Probably, yes. But, I'm not sure about this.
+this series adds a new configurable block error injection facility.
+We already have a few to inject block errors, but unfortunately most
+of them are either not very useful or hard to use, or both:
 
-At Shopee, we encountered the issue that the VxLAN packets encapsulated
-with lwt-bpf were dropped on ice driver. And, it is to be fixed by this
-patch.
+ - The fail_make_request failure injection point can't distinguish
+   different commands, different ranges in the file and can only injection
+   plain I/O errors.
+ - the should_fail_bio 'dynamic' failure injection has all the same issues
+   as fail_make_request
+ - dm-error can only fail all command in the table using BLK_STS_IOERR
+   and requires setting up a new block device
+ - dm-flakey and dm-dust allow all kinds of configurability, but still
+   don't have good error selection, no good support for non-read/write
+   commands and are limited to the dm table alignment requirements,
+   which for zoned devices enforces setting them up for an entire zone.
+   They also once again require setting up a stacked block device,
+   which is really annoying in harnesses like xfstests
 
-IOW, if someone encounter the same issue for GRE packets, he can fix the
-issue by the same way.
+This series adds a new debugfs-based block layer error injection
+that allows to configure what operations and ranges the injection
+applied to, and what status to return.  It also allows to configure a
+failure ratio similar to the xfs errortag injection.
 
-Thanks,
-Leon
+As part of this the should_fail_bio is removed, as the should_fail_bio
+function really gets in the way in it's current form, and the injection
+of an errno which always gets turned into BLK_STS_IOERR doesn't make
+much sense.  This required adjusting the bpf test suite as it attached
+to this function as it assumed it to be present.
 
->>       memcpy(skb_network_header(skb), hdr, len);
->>       bpf_compute_data_pointers(skb);
->>       skb_clear_hash(skb);
-
+Diffstat:
+ Documentation/block/error-injection.rst                    |   59 ++
+ Documentation/block/index.rst                              |    1 
+ block/Kconfig                                              |    6 
+ block/Makefile                                             |    1 
+ block/blk-core.c                                           |  128 ++---
+ block/blk-merge.c                                          |    5 
+ block/blk-mq.c                                             |    3 
+ block/blk-sysfs.c                                          |    4 
+ block/blk.h                                                |   24 
+ block/error-injection.c                                    |  329 +++++++++++++
+ block/genhd.c                                              |    4 
+ include/linux/blk_types.h                                  |    2 
+ include/linux/blkdev.h                                     |    5 
+ lib/Kconfig.debug                                          |    6 
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c |    7 
+ 15 files changed, 507 insertions(+), 77 deletions(-)
