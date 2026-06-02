@@ -1,155 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5161A3890F9
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 17:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780421099; cv=none; b=VAsiak66Y4/p+QWlSLE0qc7x4iGByRaTtlejocHYMvqd7CKsrD9Tp3KdFCjmBnI6mkEmhca16cMlV1fqxxhBZVUglTezCgyqVjkCJum2d7pLmIXL4pVYQveK5kBilU7zq+/6NlK85e3wHONcyZsKPCtiARA6M4nUMZsPerqrTMA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780421099; c=relaxed/simple;
-	bh=M1MUTiIXMcMAyt50XxjPRANd06O/USaENbmGNSz9/uo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SUoT7OsaDqCeZMehL32Zrg3GJ8Yb+bpC7fNJrEE7+fjvr4/Y8swsSjnz3XCyBMHL4BSnZ7Sh6NPNC+WnKBDJFd67WsGbgus2eLL+11Os9vTo03/pAejZYIwKfBSBo39Fo0pyLr5BmQ79UgUMm22GOVGQEKnrlhL6acym3AEkV4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PyaWyU4I; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED873655DB
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 17:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780421131; cv=pass; b=hBQBrShIqx6uyMGnHBdQnABt4dAdX21273CfPz+fEvrZi3hLWRCLM+tchjadYi3ZUH65oUqO94Cns9Ehzy+hntKSx98GyUVLnzk8TghKDzBN/8miHUtyr7f04qhkb7gkbvf2LVVldXqa3fPc6pIY7LesRv29VQyn/TltYc3T03o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780421131; c=relaxed/simple;
+	bh=iPgtSJPnn2WLSAhBj9utiFu+5JnduVtlglZ5qvPeod0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WnQvt8wpH9aUTNahSKzjOLVu+5Z/HnHN8ST8U9zjrFr7QxFIxOIic+rUqegZdhjK8q+jOWJNOCDqAhmXfp1dqVOV9RBUr/Ju3N4JDOyc/HWDmd06QKimyzl4VdAeB336lg6lRpEcqGlfwx5+sZFQoUK7fxCUXrt/9a0nKb9G5So=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pm4nah5x; arc=pass smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PyaWyU4I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0541F1F00893;
-	Tue,  2 Jun 2026 17:24:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780421097;
-	bh=dEFldrIlXTT6ZRJzVSAi41rNaq6Vrj9PVbajd9AHQbQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=PyaWyU4IqbC67RAPVUNDCpkfd2oo2P1fvm1v15J3wUQOYRXBo9Mc9AkCFM+y0pLbV
-	 n+GpUks0COdsZaDYGiizczPYcRvXNZmoo0JrB1GsmxNxtd7KLdVyBf1i8rt1CoQygv
-	 p2G7M/VGEKy5LdKhZCf3hZT4G3gM3ZRs3hj7nJ27Yif24FfnnTrug/X99auquwHM7E
-	 ya7KuN3x3GkhLgzllYSkaejstEnJPs8EQ+iP3Emq7Nu7JYAPIkCQijc++cmSiIdIy2
-	 IymBpJ22C8twxkjGWF1HKlmpLTVR7GEC3ZPiFX0KkSaNTsXYM59oiSJ6OtZGwmVBm8
-	 fHiZHtwGOdpVQ==
-Message-ID: <004bd67f-01c4-4723-b1e0-1723ce51ac93@kernel.org>
-Date: Tue, 2 Jun 2026 19:24:53 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pm4nah5x"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490a7876f8cso27938485e9.3
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 10:25:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780421129; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CapDRvkDS1DOnmCA2q15rxP8YAi7WafXB/XdP/xb960w3Xp8kbBJcKhhrRWRFfzf8i
+         +aBAPqGpNMiARuZhNFS/bq4N1CyE/3917oyClNdKvKq9IQVkh/b5PMB0D0YUZoAONkHy
+         SZUzwEUEHOxr6V6oT9pG+o4GZRuY+Zbo1UjGGTf7dOmbhn72Sh8WfOODTnOeLCV0GE46
+         PxANQAouS8PU77MRk7UGsY2M63SF+8BG5AEsMuuUe3rg+//yqCJIfouS1sDrStDwLITf
+         lGvkAM+qiOCOIbNU/Yuoxw5AkOIv+13DwH9QrwXRpTTbGMPraismB7z3a9gnIjaGxfdb
+         PncQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=keziT7iw7tOqjOgD7A8G8bVoF7lb6QaFK2jdA0hJANU=;
+        fh=A+THm71yFhfbheGc1OlxUBCS4hxoHhZp8wE/qCKhRac=;
+        b=Lw/8D5SOoj+CSd0qfjFsYX4CREra7ZdwXIYeTlq4pecSKKwhlu4pRaY8mhJZvXdRSV
+         aOUacdZznGwbkpgp9oj2npKqNg+wDuDcKw+OoPRG4esKX7MsNG3YZ7feUsk0YSIxQbjG
+         iUIgji3tBTwfCVoznWi5hwvS4VVZCobqIi1y+YLtselWsdVt2p+OrSVqZoWNYP0Nbsyp
+         N/MNzeA1Z726Pg/C/RHr+IFT0K6sbop5wwE0/5ByKVXJaa/nJ7VLldbOBX+IRTB+uZMd
+         /s2h5PmQU9sEk8SVRM+4r1sBFdz4tUoX/Oq35X/Bol/R+hSD+qQ81cbazSUIzlUd20b2
+         c98g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780421129; x=1781025929; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=keziT7iw7tOqjOgD7A8G8bVoF7lb6QaFK2jdA0hJANU=;
+        b=Pm4nah5xpa3wkF6ZJXN93iQqTajfLaLnk17Wng584ZfLw6yW2f6VU85r0ZzVvoybuZ
+         2dJD4fh1H+b7lHO7w6te7uv3VKo+4FCfqg5bT8+82qF6qrUCEf8Ti4RZ+CMcghcbLJL5
+         BILyClz6yTr+8oG5EEWCO4J43ISN3WJv/FTqYT2ojC0rQCmTStcvzSasC8s9GY41NRAG
+         KqcIPjXkAmUvmMn1FP0v+FjoatKbdQld4fpVRy9AoIKgUqdFLBStTJXcEYU9wQtRK7sw
+         bKztzsF7zm8dy2R9DOg0a8bDQDg2INgwRUiv5rB8zU/F0fXu2zoEL5H5WBcYOgZ05ylf
+         HWiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780421129; x=1781025929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=keziT7iw7tOqjOgD7A8G8bVoF7lb6QaFK2jdA0hJANU=;
+        b=QKw463JRxO+7Pv4UyBMjim6QrAOyJGNq0K8o9soCLrOhDqrppY5W+Gq2u7z4xAeJWB
+         WrGR6sLRCE2JFJhoxY9/u6zRyBQdLzF4MJ/2UvXXD1DJ8ZLz97ou1ob39rVj7Dq4MCtN
+         teSKoz04E0eu/OdDxcLzIpZ3sgE+1H6JiokvLHoAB1Hp7QD4Ca1IgT6+jGe0xtRr7vPa
+         q+Pon8yF5MnqA3vhuAGttUWORKA7zuX2JeEZ/FhFEenj6/Au86bQ1Y0SrHM6/5jpQbes
+         7e6DSEDhkUB71OVtiIArz60YGz7Y4vjoT0du9SOppSDXq6G9c+x5/vU4v+qZvr3FpZRF
+         0vTw==
+X-Forwarded-Encrypted: i=1; AFNElJ88g0SC8rjq5bdqjfIoCTH4mlv8AHMII40LR88aHOzpIoqxukeK3RJPTCaR+Bu0zcjPnso=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1VFIWjovUW8rv0OBjObPJgdksJ/sQzPLuzuE6oeMlb1ijbYmo
+	3HVUeYYT1jXN3wgIThl3dWmv0i1vVvOjTVeFmchWrJYVtJjAhDl8gViCko74lif9E7OkE63qSJW
+	7DnUpQCNs+CyDxtBt3VACUN+LHed1hF0=
+X-Gm-Gg: Acq92OEQLHn+bKTMyStwthDfTGJsel9DCB4D3RcCoZbcsTpAKoRl/9SqMpFrIpK1JH1
+	G2FoWMhRfpfcDzkaScc/9bf2KV/S9ciC3UFbcyBkv5AJSs08D4UascwyZmclAy1sez1sSBU29sG
+	kZqr3meA59uZJJPPVsrwrNrsq48sdApJzSC8GhKaoeekAX0roQ3CubucWHXocY9Mc9rtITBIKZX
+	GZdvDv36bhlyHbk9XLldVVA8ry9bZ+rizx37uP+u9BO4Hxuvp8RM2ismlEq80IbdW4KF0XZd3Ac
+	08fnod06KKC6F1D3E8g=
+X-Received: by 2002:a05:600c:5394:b0:490:44eb:c1ea with SMTP id
+ 5b1f17b1804b1-490b50b524cmr11269395e9.24.1780421128348; Tue, 02 Jun 2026
+ 10:25:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: Take mmap_lock in zap_pages()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard <eddyz87@gmail.com>,
- Tejun Heo <tj@kernel.org>, linux-mm <linux-mm@kvack.org>
-References: <20260528222014.38980-1-alexei.starovoitov@gmail.com>
- <89920f87-3638-4182-aac8-23b06784be35@kernel.org>
- <CAADnVQ+Pv+-Eb1qRrf3r=3WTZzip72ScwugX3iMSp0q1v+=-5A@mail.gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <CAADnVQ+Pv+-Eb1qRrf3r=3WTZzip72ScwugX3iMSp0q1v+=-5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260601180400.1381736-1-jt26wzz@gmail.com> <ah5pf25fhVH9WuU-@u94a>
+ <ah56iBM2P_9hF3_L@u94a> <ah6dLESn8tHAtxS9@u94a>
+In-Reply-To: <ah6dLESn8tHAtxS9@u94a>
+From: Zhenzhong Wu <jt26wzz@gmail.com>
+Date: Wed, 3 Jun 2026 01:25:15 +0800
+X-Gm-Features: AVHnY4Jp20ELFLjNCl5evWNbTrIsnG4ugFKakTtRdkdRYG8va887rnwbiwM2mx4
+Message-ID: <CALgi0X=qjiB756FnrYowor26sybA4z2jNCPrjieGcAA52KJS1w@mail.gmail.com>
+Subject: Re: [RFC PATCH 6.1.y 0/2] bpf: backport scalar not-equal tracking fixes
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: stable@vger.kernel.org, Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, 
+	menglong8.dong@gmail.com, tamird@kernel.org, eddyz87@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/2/26 19:17, Alexei Starovoitov wrote:
-> On Mon, Jun 1, 2026 at 8:37 AM David Hildenbrand (Arm) <david@kernel.org> wrote:
->>
->>
->>>
->>> -     guard(mutex)(&arena->lock);
->>> -     /* iterate link list under lock */
->>> -     list_for_each_entry(vml, &arena->vma_list, head)
->>> -             zap_vma_range(vml->vma, uaddr, PAGE_SIZE * page_cnt);
->>> +     /*
->>> +      * Taking mmap_read_lock() under arena->lock would deadlock against
->>> +      * arena_vm_close(), which runs with mmap_write_lock held and then
->>> +      * acquires arena->lock. Drop arena->lock for mmap_read_lock().
->>> +      *
->>> +      * Use per-call my_gen, recorded in vml->zap_gen, to remember which
->>> +      * vmls this invocation has already processed across the lock drop.
->>> +      * Hold zap_mutex around the whole walk so concurrent zap_pages()
->>> +      * callers cannot overwrite each other's marks on shared vmls --
->>> +      * otherwise call B's mark would make call A skip a vml that A has
->>> +      * not yet zapped for A's uaddr range.
->>> +      */
->>> +     mutex_lock(&arena->zap_mutex);
->>> +     mutex_lock(&arena->lock);
->>> +     my_gen = ++arena->zap_gen;
->>
->> I was confused by that as well, good that we can get rid of it.
-> 
-> get rid of it? As I explained to Emil, zap_gen is needed.
+Hi Shung-Hsi,
 
-Oh, I misunderstood your reply.
+Thanks, that makes sense.
 
-> 
->>> +     for (;;) {
->>> +             mm = NULL;
->>> +             list_for_each_entry(vml, &arena->vma_list, head) {
->>> +                     if (vml->zap_gen >= my_gen)
->>> +                             continue;
->>> +                     vml->zap_gen = my_gen;
->>> +                     if (!mmget_not_zero(vml->vma->vm_mm))
->>> +                             continue;
->>
->> Given that we still have a VMA with a valid MM pointer, I'd assume an
->> unconditional mmget() should just be alright here.
->>
->> Or am I missing something?
-> 
-> exit_mmap() -> vma_close() -> arena_vm_close() will remove vml
-> after dropping mm_users to zero.
-> But parallel zap_pages could have accessed valid vma and mm pointers
-> from vml list, but vma->vm_mm->mm_users could be zero.
+I was mixing up two different things here: the BPF docs say not to add
+"Cc: stable@vger.kernel.org" to the patch description as a stable tag, and
+instead ask BPF maintainers to queue stable fixes. Cc'ing stable@ in the
+email headers for awareness is separate. Thanks for pointing this out.
 
-Ah yes, the usual mmget vs. mmgrab confusion on my side.
+Thanks also for pointing out the 6.6.y requirement. I'll make sure v2 takes
+the stable ordering requirement into account before targeting 6.1.y.
 
-Make sense then, thanks!
+I ran the suggested checks with the same reproducer, where BAD means the
+program ran and observed the unexpected error, and GOOD means no error was
+observed:
 
--- 
-Cheers,
+- latest 6.6.y, v6.6.142 (924b4a879cbb): BAD
+- bpf-next at b93c55b4932d: GOOD
+- bpf-next with the d028f87517d6 JNE refinement reverted: still GOOD
 
-David
+So the issue still reproduces on the latest 6.6.y, but d028f87517d6 alone
+does not explain why bpf-next passes. I'll do more narrowing and update the
+candidate backport set accordingly.
+
+I'm also happy to add a BPF selftest for this. I plan to send a v2 series
+later this week.
+
+BR,
+Zhenzhong
+
+Shung-Hsi Yu <shung-hsi.yu@suse.com>=E4=BA=8E2026=E5=B9=B46=E6=9C=882=E6=97=
+=A5 =E5=91=A8=E4=BA=8C17:18=E5=86=99=E9=81=93=EF=BC=9A
+
+
+On Tue, Jun 2, 2026 at 5:18=E2=80=AFPM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
+ wrote:
+>
+> On Tue, Jun 02, 2026 at 02:42:35PM +0800, Shung-Hsi Yu wrote:
+> > On Tue, Jun 02, 2026 at 01:47:01PM +0800, Shung-Hsi Yu wrote:
+> > ...
+> > > On Tue, Jun 02, 2026 at 02:03:58AM +0800, Zhenzhong Wu wrote:
+> > > > Hi BPF maintainers,
+> > > >
+> > > > This RFC backports two BPF verifier scalar range-tracking fixes to =
+6.1.y.
+> > > > The series is intended to fix a verifier state-pruning issue where =
+an
+> > > > impossible scalar path can be kept while the real success path is p=
+runed.
+> > > >
+> > > > This is a verifier scalar range-tracking issue, not a helper-specif=
+ic
+> > > > issue.
+> > > > The visible failure is that the verifier can prune the real success
+> > > > continuation, which should not be skipped, and keep only an impossi=
+ble one.
+> > > ...
+> > >
+> > > This sounds somewhat similar to the issue fixed in "backport of itera=
+tor
+> > > and callback handling fixes" for stable 6.6[1] by @Eduard. Could you =
+try
+> > > to test on the latest stable 6.6.y as well at see if you can reproduc=
+e
+> > > the issue there?
+> > ...
+> >
+> > My mistake, the reproducer you had doesn't use iterator or callback, so
+> > probably not fixed in stable 6.6. I'll take a better look at this later
+> > this week.
+>
+> Two more ideas beside testing on latest stable 6.6.
+>
+> 1. Can you try testing on bpf-next, but with commit d028f87517d6 'bpf:
+>    make the verifier tracks the "not equal" for regs' reverted? My
+>    concern is that it is possible that commit d028f87517d6 does not
+>    address the root cause of incorrect state pruning here.
+>
+>    If the reproducer _fails_ to reproduce the issue even with commit
+>    d028f87517d6 reverted, then it is possible that the root cause was
+>    fixed by another commit further down the line.
+>
+> 2. Have you consider adding your reproducer into BPF selftests? Would be
+>    very useful to have in stable (though it needs to first land in
+>    bpf-next first).
+>
+> > > 1: https://lore.kernel.org/stable/20240125001554.25287-1-eddyz87@gmai=
+l.com/
+> > > 2: https://www.kernel.org/doc/html/latest/process/stable-kernel-rules=
+.html
