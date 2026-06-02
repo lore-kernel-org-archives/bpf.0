@@ -1,229 +1,105 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958FF37881E;
-	Tue,  2 Jun 2026 08:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23753B6C1D
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 09:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780390792; cv=none; b=jUIzQYgV/Zxg6W1qCaZ2coOiKdEihAa/O8BivDWJSYDx1T7bEs5coNj5lPWBQtgrrIH93lyv5YXue5SVi+54FyuVFJIsWRAzf7ra2xC4YO3cr4kVrZb7Xr1jE+NYMtk0pYJ9X6r2ktVEeDdq+ULCIvvX5MRGiBl/RjK6v7p7W4Q=
+	t=1780391069; cv=none; b=K/np2MxwTpuESVfW02V8J5A9JlhiFrR//TDY/uwv3OibDclcL8kQqC4CvVhPNNuwWMRRWSZrcdDSnfBLjkHnmJU39aoP9pNb80BZwM+5ifcwxI97h1CusRYHHZLvlWoKClMFg17mesYZ7GYFMiGITy3+u420BlWzLzAevmEU9I4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780390792; c=relaxed/simple;
-	bh=mmMhsE4M6+oUqlYPEwlHaYqjTqCR01mL8atrN/ff76c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HXm9m0vAP3qjKS/CQqkwcZVPdvz0wWMsSIURspMXYu8HM14wV2UfNM+1B5wNTYQvRvsDe68tUmbujHnes0fl4sU88OS3N2hg/MgQgxNi3vj2VMhCtmBU+I6JjjHPVmGTWxLBCKN4tCfVnFY0KW9Rt+/sM7Zk/dqMNdKHg0sQ1RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XiZ9+gqA; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780391069; c=relaxed/simple;
+	bh=01pCEbFp+CrhwP1KLJGRR5UFmKYBa4f46fpjaUMk+2Q=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sL3BiHiQRtcTJKi5VXZBGjw2GmyX2uTIKG5rQ3BmOWKAdofEPuZTXatlvjILDdTlPiIfXSJjcG61g8LDrmgxdOsUI0k8SLDiEeirKxPlCsqh1F3hp06UzQn4LfmsMezPc2+u15Vr1n6xrgrlGw5oEyD+7NqKjdy5CYWrBzpfthY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/IDdV5t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XiZ9+gqA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=kQ7mG7by35XgffZ180OshP/Wi0e94fTpDlMjkzqtVdk=;
-	b=XiZ9+gqA6uUcfN1Ib9Uj5uObHizC6wtU12qhYLtwrL153qwMcPmfBT/fjk1Mwf
-	hsm5fFq7azMFiYYzDR5Qgaqz88rI/aB8OlnMi+PlKu8qxPqYknG97aDPtDJ538jO
-	ALCy1yYKXmwR5hnCiOcT82KZkFJJ0FI+WHnZ3oq/3389Y=
-Received: from nec8-i7 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCXKCA9mx5qOzE6AA--.5610S4;
-	Tue, 02 Jun 2026 16:58:43 +0800 (CST)
-From: chenyuan_fl@163.com
-To: eddyz87@gmail.com,
-	yonghong.song@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bot+bpf-ci@kernel.org,
-	bpf@vger.kernel.org,
-	chenyuan@kylinos.cn,
-	chenyuan_fl@163.com,
-	clm@meta.com,
-	daniel@iogearbox.net,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add regression test for kfunc implicit arg injection
-Date: Tue,  2 Jun 2026 16:58:26 +0800
-Message-ID: <20260602085827.2562222-3-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602085827.2562222-1-chenyuan_fl@163.com>
-References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
- <20260602085827.2562222-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/IDdV5t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1CC1F00898;
+	Tue,  2 Jun 2026 09:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780391068;
+	bh=+YcC4AxAWc26/iLcpXUoum8u6sWDQU5JK8/HLH8+myI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=J/IDdV5tveGbOKj5RQ9y7p63vhjm8wHKADBUvKxDU5wmZEWoUbXhPiXCamRf4wbZm
+	 E6CLkMXreztTBG21uJBPNCqiYz2ulBYhDdgy27SAlYycsnqF6o8+UNoq2oaW88pVuV
+	 pjeyUoloJ0T2Pc3/BoawtAcaMHAMRKHU4sFrGADe067P7TZsRUj+T6eEwmv8oBsrWe
+	 c3EZmOV3Dup7QbVBxGYeQo3D8K4S+dTeAJVc2GslwvL3WTLf8UzcZHE2uD8NprzkAT
+	 dkH/gqk7ErakYeBs1CLgaL4s8U1PiwKoAWqlEMdkVkm5qkpp2dm8ML1z4OFGCaIAs+
+	 /iDiXtleknMLA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: devmap: reject fragmented frames in
+ clone-based broadcasts
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ren Wei" <n05ec@lzu.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <21c2d153dd25603d359069a02bf06779b51f6423.1780385378.git.zzhan461@ucr.edu>
+References: <21c2d153dd25603d359069a02bf06779b51f6423.1780385378.git.zzhan461@ucr.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 09:04:28 +0000
+Message-Id: <20260602090428.8D1CC1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCXKCA9mx5qOzE6AA--.5610S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Wr43AF4xCrWkGF4kKFy8Zrb_yoW3Xw4Dpa
-	97Xr1jkrn7Ja13XF18JF42qF4rKrsIq345GFWrG34rZrsrZ34vqF1Igr4Utas0krWrur13
-	Z3y0gFZ8uw48ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUKsbUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5QMZ1moem0Ms0QAA34
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-The preceding patch fixes a silent fallthrough in check_kfunc_args()
-that could cause the verifier to skip bpf_prog_aux injection for
-KF_IMPLICIT_ARGS kfuncs when module BTF is inconsistent with vmlinux
-(e.g. pahole 1.30 breaking distilled base dedup).
+Pre-existing issues:
+- [High] Generic XDP devmap broadcast executes eBPF programs on cloned SKBs=
+ without unsharing the data buffer, causing silent data corruption across d=
+estinations.
+--
 
-Add a positive regression test that verifies the injection path works
-correctly under normal conditions (pahole 1.31+).  The test contaminates
-BPF R2 with a magic value 0xDEAD via inline assembly before calling a
-KF_IMPLICIT_ARGS kfunc associated with a struct_ops map.  The kfunc
-validates that the kernel overwrote R2 with the real bpf_prog_aux
-pointer rather than leaving the stale value.
+commit aa9501e9eb38c9d016ad75d6259b7ed07d668fb0
+Author: Zhao Zhang <zzhan461@ucr.edu>
+Subject: bpf: devmap: reject fragmented frames in clone-based broadcasts
 
-The specific pahole 1.30 BTF mismatch scenario cannot be tested with
-CI (which uses pahole 1.31), but this test ensures the injection
-mechanism remains correct and does not regress.
+This commit rejects fragmented native and generic XDP frames in clone-based=
+=20
+broadcasts. By adding checks in the generic and native clone paths, it=20
+prevents potential out-of-bounds access.
 
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- .../bpf/prog_tests/test_struct_ops_assoc.c    |  7 ++++
- .../selftests/bpf/progs/struct_ops_assoc.c    | 40 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  9 +++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
- 4 files changed, 57 insertions(+)
+> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> index cc0a43ebab6b9..5b9eac5342a90 100644
+> --- a/kernel/bpf/devmap.c
+> +++ b/kernel/bpf/devmap.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-index 461ded722351..fb4d06dd6c4d 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-@@ -35,6 +35,10 @@ static void test_st_ops_assoc(void)
- 					    skel->maps.st_ops_map_b, NULL);
- 	ASSERT_OK(err, "bpf_program__assoc_struct_ops(sys_enter_prog_b, st_ops_map_b)");
- 
-+	err = bpf_program__assoc_struct_ops(skel->progs.sys_enter_prog_test_aux_inject,
-+					skel->maps.st_ops_map_a, NULL);
-+	ASSERT_OK(err, "bpf_program__assoc_struct_ops(sys_enter_prog_test_aux_inject, st_ops_map_a)");
-+
- 	/* sys_enter_prog_a already associated with map_a */
- 	err = bpf_program__assoc_struct_ops(skel->progs.sys_enter_prog_a,
- 					    skel->maps.st_ops_map_b, NULL);
-@@ -52,6 +56,7 @@ static void test_st_ops_assoc(void)
- 
- 	ASSERT_EQ(skel->bss->test_err_a, 0, "skel->bss->test_err_a");
- 	ASSERT_EQ(skel->bss->test_err_b, 0, "skel->bss->test_err_b");
-+	ASSERT_EQ(skel->bss->test_err_inject, 0, "skel->bss->test_err_inject");
- 
- 	/* run syscall_prog that calls .test_1 and checks return */
- 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.syscall_prog_a), NULL);
-@@ -62,6 +67,7 @@ static void test_st_ops_assoc(void)
- 
- 	ASSERT_EQ(skel->bss->test_err_a, 0, "skel->bss->test_err_a");
- 	ASSERT_EQ(skel->bss->test_err_b, 0, "skel->bss->test_err_b");
-+	ASSERT_EQ(skel->bss->test_err_inject, 0, "skel->bss->test_err_inject");
- 
- out:
- 	struct_ops_assoc__destroy(skel);
-@@ -97,6 +103,7 @@ static void test_st_ops_assoc_reuse(void)
- 
- 	ASSERT_EQ(skel->bss->test_err_a, 0, "skel->bss->test_err_a");
- 	ASSERT_EQ(skel->bss->test_err_b, 0, "skel->bss->test_err_b");
-+	ASSERT_EQ(skel->bss->test_err_inject, 0, "skel->bss->test_err_inject");
- 
- out:
- 	struct_ops_assoc_reuse__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
-index 68842e3f936b..ed0084453d56 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_assoc.c
-@@ -103,3 +103,43 @@ SEC(".struct_ops.link")
- struct bpf_testmod_multi_st_ops st_ops_map_b = {
- 	.test_1 = (void *)test_1_b,
- };
-+
-+/* Test for aux injection with stale register contamination.
-+ *
-+ * This test verifies that the kernel correctly injects the implicit
-+ * bpf_prog_aux pointer for kfuncs with KF_IMPLICIT_ARGS.  The program
-+ * uses inline assembly to contaminate R2 with a known magic value
-+ * before calling the kfunc:
-+ *
-+ *   asm volatile("r2 = %[magic]" :: [magic] "ri"(0xDEAD) : "r2");
-+ *
-+ * The kernel must inject env->prog->aux into R2, overriding the magic
-+ * value.  The kfunc compares the received aux pointer against 0xDEAD:
-+ *
-+ *   - aux == 0xDEAD  → kernel failed to inject → kfunc returns -EINVAL
-+ *   - aux != 0xDEAD  → kernel correctly injected → kfunc returns marker
-+ *
-+ * 0xDEAD is chosen with bit 31 clear to avoid BPF ALU64 sign-extension
-+ * when used as a 32-bit immediate.
-+ */
-+int test_err_inject;
-+
-+SEC("tp_btf/sys_enter")
-+int BPF_PROG(sys_enter_prog_test_aux_inject, struct pt_regs *regs, long id)
-+{
-+	struct task_struct *task;
-+	int marker = 0x5A5A;
-+	int ret;
-+
-+	task = bpf_get_current_task_btf();
-+	if (!test_pid || task->pid != test_pid)
-+		return 0;
-+
-+	asm volatile("r2 = %[magic]" :: [magic] "ri"(0xDEAD) : "r2");
-+
-+	ret = bpf_kfunc_aux_inject_stale(marker);
-+	if (ret != marker)
-+		test_err_inject++;
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 0be918fe3021..8e979f0fa56d 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1315,6 +1315,7 @@ __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, st
- 
- __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
-+__bpf_kfunc int bpf_kfunc_aux_inject_stale(int marker, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
- 
- /* hook targets */
-@@ -1399,6 +1400,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
-+BTF_ID_FLAGS(func, bpf_kfunc_aux_inject_stale, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
- BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
- 
-@@ -1916,6 +1918,13 @@ int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux)
- 	return bpf_kfunc_implicit_arg_legacy(a, b, aux);
- }
- 
-+int bpf_kfunc_aux_inject_stale(int marker, struct bpf_prog_aux *aux)
-+{
-+	if ((unsigned long)aux == 0xDEAD)
-+		return -EINVAL;
-+	return marker;
-+}
-+
- static int multi_st_ops_reg(void *kdata, struct bpf_link *link)
- {
- 	struct bpf_testmod_multi_st_ops *st_ops =
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 2edc36b66de9..c18791e96b21 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -192,6 +192,7 @@ int *bpf_kfunc_ret_rcu_test_nostruct(int rdonly_buf_size) __ksym;
- #ifndef __KERNEL__
- extern int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id) __weak __ksym;
- extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak __ksym;
-+extern int bpf_kfunc_aux_inject_stale(int marker) __weak __ksym;
- #endif
- 
- struct prog_test_member *bpf_kfunc_get_default_trusted_ptr_test(void) __ksym;
--- 
-2.54.0
+[ ... ]
 
+> @@ -726,6 +730,9 @@ static int dev_map_redirect_clone(struct bpf_dtab_net=
+dev *dst,
+>  	struct sk_buff *nskb;
+>  	int err;
+> =20
+> +	if (unlikely(skb_is_nonlinear(skb)))
+> +		return -EOPNOTSUPP;
+> +
+>  	nskb =3D skb_clone(skb, GFP_ATOMIC);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but is it safe to use skb_clone=
+=20
+here without unsharing the buffer before executing the eBPF program?
+
+Since nskb is passed to dev_map_generic_redirect, which eventually calls=20
+dev_map_bpf_prog_run_skb to execute the destination's eBPF program:
+
+dev_map_bpf_prog_run_skb()
+    ...
+    act =3D bpf_prog_run_generic_xdp(skb, &xdp, dst->xdp_prog);
+
+Does this grant the XDP program direct write access to the cloned SKB=20
+payload? If the data buffer is shared and never unshared, could modificatio=
+ns=20
+made by the eBPF program for one destination silently corrupt the packet=20
+data for the original SKB and all other clones in the broadcast loop?
+
+>  	if (!nskb)
+>  		return -ENOMEM;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/21c2d153dd25603d359=
+069a02bf06779b51f6423.1780385378.git.zzhan461@ucr.edu?part=3D1
