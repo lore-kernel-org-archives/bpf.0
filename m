@@ -1,56 +1,46 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE4E3AFAEA;
-	Tue,  2 Jun 2026 07:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99FA25B0BD;
+	Tue,  2 Jun 2026 07:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780385754; cv=none; b=QlwG34Yk0zZDigqW6NZPMKv8WsxSHIKaa12c5E1y/MOLrdKVCWij2/bfQ43gt+9Y7wQyMGOo7ySYTkenTI7/ZEJUqPWOnipV58a6rMFU1REaGQVIA/FknLzM9VmXTzNNxsPKT9bLe984d5eEZOLEWlJnFLPeUSmzRTBTlUtG08w=
+	t=1780386019; cv=none; b=U8bFyGTNK872mGUOPyMyKosI79wbABlIdrFg9Mo6tREF9vmNElV/rHtp/Cqv3OVfE/58MgsyJ30FvkzCCOf0sNeFH2PFfKoGMG7OUBW0WG25WHlyTimpW/tT19axh49gkcgx5GIVq7gc06fKK3R0f2BZKTZnMyQRhBi98aGLy9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780385754; c=relaxed/simple;
-	bh=t7T33buFJMTAh2cAdsVW3rHGqlJvG9uco8gKZsPF61A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RhdXat/4BA0eKQQCiM9qQbeEm9V9kahohrSflmDM4Lgs6+pEcj23ueTDqR+RWFoRooKZJ8LQuWIrlNpR76iJVvM7wexDRi9fan5NokYMt1XInxommF8q7nk8ffjbhRRvb0gpT7r2FGFNAqVavrWg6mnC8KRRVqv2o1r2kVFyvVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OFgVet1A; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780386019; c=relaxed/simple;
+	bh=YCbUPMiCdkQOhxWiPJ0cSDxs0JA4FAtext8aw+hpwoQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZGE9+rk70DX5owXoNSwiVJ7u52f1A76Qz0gUYW760QnNB/97L/OC2Wu8fdORzC/EzdNE9XTgxLzoqSYMyhBYpJrrov+2NdPoxOSBdYSJ3BV0sJWhpFXG+M1SpJuy6lWI81H6O+T8pNKBAk5vNHXo68JOdnY3LRPXw/3pEuIIS+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bx/xorna; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OFgVet1A"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=8TvYpMVKoYuIv5WGmMhwH/nmmSXsKr2Cr/inCUFBoZA=;
-	b=OFgVet1AG10B4WUWcYc+GNCy7/sgayE+H1ImmCkU/XPplQQ5GE0LFxIVHsRdljYD69Ngo5LrS
-	/sdZIKSfNAL1SUGN7AfFXn0wBTmO59rk4/MRqg8k7cmgr4dxd4kW5nw2GzqWMBAmpb3nCjFITMn
-	H9KZp5MrdDs7oJLSUBDHBj4=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4gV2Tz0SHVz1T4Jf;
-	Tue,  2 Jun 2026 15:27:35 +0800 (CST)
-Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
-	by mail.maildlp.com (Postfix) with ESMTPS id 983F540537;
-	Tue,  2 Jun 2026 15:35:44 +0800 (CST)
-Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
- (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 2 Jun
- 2026 15:35:43 +0800
-From: Lin Ma <malin89@huawei.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, <bpf@vger.kernel.org>
-CC: Andrii Nakryiko <andrii@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>, Shuah Khan
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Amery Hung <ameryhung@gmail.com>, Lin Ma
-	<malin89@huawei.com>, Rongzhen Cui <cuirongzhen@huawei.com>, Jingguo Tan
-	<tanjingguo@huawei.com>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
-Subject: [PATCH v2 2/2] selftests/bpf: Cover tail-call cgroup storage prog-array checks
-Date: Tue, 2 Jun 2026 15:35:39 +0800
-Message-ID: <20260602073539.1567846-2-malin89@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260602073539.1567846-1-malin89@huawei.com>
-References: <20260602073539.1567846-1-malin89@huawei.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bx/xorna"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=7Ie//H15sQZD+VYJ+CBnX+VOOs4fJZkHOQUaAogI7oY=; b=bx/xornaOrsW9Mz1AXM12JKAxj
+	DyCX01wGxry4Mp3Xp4uvTZCZ8E/j+96/Ujl98Pu6lmiaCz+7YycA+PeoNO2Mvy7YJ7z2QKzFNlP4l
+	QPd30nbYsU+xQGb25Bx2sZvpQ2MLjKlOkHPO5Zhg7LDClKRSm2tDc6uT0HQ0DOxYOmQjJuo5yNgtX
+	6cvXRAr3ZsRvtUYNVJbE5w6mhXuXS1Rn2Whxqyb7a0yg8zCnAeT8Pp3k59mIQPnOpyjaZ3PQu20C3
+	UXdHNjlCByDH6ebrj6IqhOLz1JfXkKP+pBuPpiC110gGpw+iVa1QKO45sJ3TWlXLreM1hUbaIMvMx
+	xnzGQmfg==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wUJjR-00071u-0P;
+	Tue, 02 Jun 2026 09:40:13 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: brauner@kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: [PATCH vfs/vfs-7.2.xattr v3] bpf: Add simple xattr support to bpffs
+Date: Tue,  2 Jun 2026 09:40:12 +0200
+Message-ID: <20260602074012.416289-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,269 +48,538 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr200017.china.huawei.com (7.202.195.7)
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28019/Tue Jun  2 08:33:27 2026)
 
-Add tail-call selftests for prog-array ownership when cgroup storage is
-in use. Verify that loading succeeds when callers and callees reuse the
-owner's cgroup storage map, and that loading fails for a different
-storage map or for a storage-less bridge program.
+Add support for extended attributes on bpffs inodes so that user space
+and BPF LSM programs can attach metadata, for example, a content hash
+or a security label - to a pinned object or directory. BPF LSM or user
+space tooling can then uniformly look at this (e.g. security.bpf.*) in
+similar way to other fs'es. The store is in-memory and non-persistent:
+it lives only for the lifetime of the mount, like everything else in
+bpffs. The modelling is similar to tmpfs.
 
-Signed-off-by: Lin Ma <malin89@huawei.com>
-Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
-Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+bpffs serves the trusted.* and security.* namespaces; user.* is left
+unsupported. As bpffs is FS_USERNS_MOUNT, security.* is reachable by
+the unprivileged mounter in a user namespace, and thus we are using
+the simple_xattr_set_limited infra there (trusted.* needs global
+CAP_SYS_ADMIN).
+
+bpf_fill_super() is open-coded instead of using simple_fill_super(),
+because the root inode must now be allocated through bpf_fs_alloc_inode()
+i.e. carry the bpf_fs_inode wrapper and come from the right cache -
+which requires s_op (and s_xattr) to be installed before the first
+inode is created. While at it, also harden s_iflags with SB_I_NOEXEC
+and SB_I_NODEV.
+
+bpf_fs_listxattr() is only reachable through the filesystem via
+i_op->listxattr, so the BPF token inode is left untouched. Name-based
+fsetxattr()/fgetxattr() on a token fd still work since the get/set
+handlers are installed at the superblock.
+
+For security.* namespace, we use simple_xattr_set_limited() but
+there was no simple_xattr_add_limited() API yet which was needed
+in bpf_fs_initxattrs() to avoid underflows in the accounting. The
+symlink target is freed in bpf_free_inode() rather than in
+bpf_destroy_inode() so that it is released only after an RCU grace
+period, as an RCU path walk following the symlink may still
+dereference inode->i_link in security_inode_follow_link(). Lastly,
+the bpf_symlink() allocated the symlink target is switched to
+GFP_KERNEL_ACCOUNT, so the string is charged to the caller's memcg.
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      | 103 ++++++++++++++++++
- .../bpf/progs/tailcall_cgrp_storage.c         |  44 ++++++++
- .../progs/tailcall_cgrp_storage_no_storage.c  |  20 ++++
- .../bpf/progs/tailcall_cgrp_storage_owner.c   |  32 ++++++
- 4 files changed, 199 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
+ v2->v3:
+  - Add simple_xattr_add_limited and use it for
+    bpf_fs_initxattrs (sashiko)
+  - Use GFP_KERNEL_ACCOUNT for bpf_symlink (sashiko)
+ v1->v2:
+  - Rebase against vfs-7.2.xattr for routing via vfs given it
+    contains simple xattr rework (Christian, Alexei)
+  - Use simple_xattr_set_limited for security.* namespace (sashiko)
+  - Dropped user.* namespace (sashiko)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index 7d534fde0af9..c1403ab20eae 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -8,6 +8,9 @@
- #include "tailcall_freplace.skel.h"
- #include "tc_bpf2bpf.skel.h"
- #include "tailcall_fail.skel.h"
-+#include "tailcall_cgrp_storage_owner.skel.h"
-+#include "tailcall_cgrp_storage_no_storage.skel.h"
-+#include "tailcall_cgrp_storage.skel.h"
- #include "tailcall_sleepable.skel.h"
- 
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-@@ -1654,6 +1657,100 @@ static void test_tailcall_failure()
- 	RUN_TESTS(tailcall_fail);
+ fs/xattr.c            |  33 ++++++
+ include/linux/bpf.h   |   3 +
+ include/linux/xattr.h |   4 +
+ kernel/bpf/inode.c    | 256 ++++++++++++++++++++++++++++++++++++++----
+ 4 files changed, 277 insertions(+), 19 deletions(-)
+
+diff --git a/fs/xattr.c b/fs/xattr.c
+index af28029239ce..abe5457b6d0a 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -1675,6 +1675,39 @@ int simple_xattr_add(struct simple_xattr_cache *cache, struct list_head *xattrs,
+ 	return 0;
  }
  
-+static void test_tailcall_cgrp_storage(void)
++/**
++ * simple_xattr_add_limited - add an xattr object, charging per-inode limits
++ * @cache: anchor for the hash table
++ * @xattrs: the header of the xattr object
++ * @limits: per-inode limit counters
++ * @new_xattr: the xattr object to add
++ *
++ * Like simple_xattr_add(), but also accounts @new_xattr against @limits so
++ * that a later removal or replacement of it through simple_xattr_set_limited()
++ * decrements counters that were actually incremented, rather than underflowing
++ * them. Use this instead of simple_xattr_add() when seeding initial xattrs
++ * that share a namespace with the limited set/remove path.
++ *
++ * Return: On success zero is returned. On failure a negative error code is
++ * returned.
++ */
++int simple_xattr_add_limited(struct simple_xattr_cache *cache,
++			     struct list_head *xattrs,
++			     struct simple_xattr_limits *limits,
++			     struct simple_xattr *new_xattr)
 +{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage *skel = NULL;
-+	int err, key = 0, prog_array_fd, prog_fd, storage_map_fd;
++	int err;
 +
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
++	err = simple_xattr_limits_inc(limits, new_xattr->size);
++	if (err)
++		return err;
 +
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+	storage_map_fd = bpf_map__fd(owner_skel->maps.storage_map);
-+
-+	skel = tailcall_cgrp_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.storage_map, storage_map_fd);
-+	if (!ASSERT_OK(err, "reuse_storage_map"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	if (!ASSERT_OK(err, "tailcall_cgrp_storage__load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.callee_prog);
-+	err = bpf_map_update_elem(prog_array_fd, &key, &prog_fd, BPF_ANY);
-+	ASSERT_OK(err, "update_prog_array");
-+
-+out:
-+	tailcall_cgrp_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
++	err = simple_xattr_add(cache, xattrs, new_xattr);
++	if (err)
++		simple_xattr_limits_dec(limits, new_xattr->size);
++	return err;
 +}
 +
-+static void test_tailcall_cgrp_storage_diff_storage(void)
+ /**
+  * simple_xattrs_free - free xattrs
+  * @cache: anchor for the hash table
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index b4b703c90ca9..434ba91401c6 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -31,6 +31,7 @@
+ #include <linux/static_call.h>
+ #include <linux/memcontrol.h>
+ #include <linux/cfi.h>
++#include <linux/xattr.h>
+ #include <asm/rqspinlock.h>
+ 
+ struct bpf_verifier_env;
+@@ -1918,6 +1919,8 @@ struct bpf_mount_opts {
+ 	u64 delegate_maps;
+ 	u64 delegate_progs;
+ 	u64 delegate_attachs;
++
++	struct simple_xattr_cache xa_cache;
+ };
+ 
+ struct bpf_token {
+diff --git a/include/linux/xattr.h b/include/linux/xattr.h
+index 7aaaf4f8aff5..54ac3cbc133f 100644
+--- a/include/linux/xattr.h
++++ b/include/linux/xattr.h
+@@ -155,6 +155,10 @@ ssize_t simple_xattr_list(struct inode *inode, struct list_head *xattrs,
+ 			  char *buffer, size_t size);
+ int simple_xattr_add(struct simple_xattr_cache *cache, struct list_head *xattrs,
+ 		     struct simple_xattr *new_xattr);
++int simple_xattr_add_limited(struct simple_xattr_cache *cache,
++			     struct list_head *xattrs,
++			     struct simple_xattr_limits *limits,
++			     struct simple_xattr *new_xattr);
+ int xattr_list_one(char **buffer, ssize_t *remaining_size, const char *name);
+ 
+ void simple_xattr_cache_cleanup(struct simple_xattr_cache *cache);
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 25c06a011825..c3f79b5a2f8c 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -21,6 +21,9 @@
+ #include <linux/bpf.h>
+ #include <linux/bpf_trace.h>
+ #include <linux/kstrtox.h>
++#include <linux/xattr.h>
++#include <linux/security.h>
++
+ #include "preload/bpf_preload.h"
+ 
+ enum bpf_type {
+@@ -30,6 +33,23 @@ enum bpf_type {
+ 	BPF_TYPE_LINK,
+ };
+ 
++struct bpf_fs_inode {
++	struct list_head		xattrs;
++	struct simple_xattr_limits	xlimits;
++	struct inode			vfs_inode;
++};
++
++static inline struct bpf_fs_inode *BPF_FS_I(struct inode *inode)
 +{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage *skel = NULL;
-+	int err, prog_array_fd;
-+
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
-+
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+
-+	skel = tailcall_cgrp_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	ASSERT_ERR(err, "tailcall_cgrp_storage__load");
-+
-+out:
-+	tailcall_cgrp_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
++	return container_of(inode, struct bpf_fs_inode, vfs_inode);
 +}
 +
-+static void test_tailcall_cgrp_storage_no_storage(void)
-+{
-+	struct tailcall_cgrp_storage_owner *owner_skel = NULL;
-+	struct tailcall_cgrp_storage_no_storage *skel = NULL;
-+	int err, prog_array_fd;
++static struct kmem_cache *bpf_fs_inode_cachep __ro_after_init;
 +
-+	owner_skel = tailcall_cgrp_storage_owner__open_and_load();
-+	if (!ASSERT_OK_PTR(owner_skel, "owner_open_and_load"))
-+		return;
++static int bpf_fs_initxattrs(struct inode *inode,
++			     const struct xattr *xattr_array, void *fs_info);
++static ssize_t bpf_fs_listxattr(struct dentry *dentry, char *buf, size_t size);
 +
-+	prog_array_fd = bpf_map__fd(owner_skel->maps.prog_array);
-+
-+	skel = tailcall_cgrp_storage_no_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "tailcall_cgrp_storage_no_storage__open"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(skel->maps.prog_array, prog_array_fd);
-+	if (!ASSERT_OK(err, "reuse_prog_array"))
-+		goto out;
-+
-+	err = bpf_object__load(skel->obj);
-+	ASSERT_ERR(err, "tailcall_cgrp_storage_no_storage__load");
-+
-+out:
-+	tailcall_cgrp_storage_no_storage__destroy(skel);
-+	tailcall_cgrp_storage_owner__destroy(owner_skel);
-+}
-+
- noinline void uprobe_sleepable_trigger(void)
+ static void *bpf_any_get(void *raw, enum bpf_type type)
  {
- 	asm volatile ("");
-@@ -1777,6 +1874,12 @@ void test_tailcalls(void)
- 		test_tailcall_freplace();
- 	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
- 		test_tailcall_bpf2bpf_freplace();
-+	if (test__start_subtest("tailcall_cgrp_storage"))
-+		test_tailcall_cgrp_storage();
-+	if (test__start_subtest("tailcall_cgrp_storage_diff_storage"))
-+		test_tailcall_cgrp_storage_diff_storage();
-+	if (test__start_subtest("tailcall_cgrp_storage_no_storage"))
-+		test_tailcall_cgrp_storage_no_storage();
- 	if (test__start_subtest("tailcall_failure"))
- 		test_tailcall_failure();
- 	if (test__start_subtest("tailcall_sleepable"))
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
-new file mode 100644
-index 000000000000..4dd3a0033d75
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
+ 	switch (type) {
+@@ -94,10 +114,17 @@ static void *bpf_fd_probe_obj(u32 ufd, enum bpf_type *type)
+ }
+ 
+ static const struct inode_operations bpf_dir_iops;
++static const struct inode_operations bpf_symlink_iops;
+ 
+-static const struct inode_operations bpf_prog_iops = { };
+-static const struct inode_operations bpf_map_iops  = { };
+-static const struct inode_operations bpf_link_iops  = { };
++static const struct inode_operations bpf_prog_iops = {
++	.listxattr	= bpf_fs_listxattr,
++};
++static const struct inode_operations bpf_map_iops  = {
++	.listxattr	= bpf_fs_listxattr,
++};
++static const struct inode_operations bpf_link_iops  = {
++	.listxattr	= bpf_fs_listxattr,
++};
+ 
+ struct inode *bpf_get_inode(struct super_block *sb,
+ 			    const struct inode *dir,
+@@ -153,11 +180,19 @@ static struct dentry *bpf_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+ 				struct dentry *dentry, umode_t mode)
+ {
+ 	struct inode *inode;
++	int ret;
+ 
+ 	inode = bpf_get_inode(dir->i_sb, dir, mode | S_IFDIR);
+ 	if (IS_ERR(inode))
+ 		return ERR_CAST(inode);
+ 
++	ret = security_inode_init_security(inode, dir, &dentry->d_name,
++					   bpf_fs_initxattrs, NULL);
++	if (ret && ret != -EOPNOTSUPP) {
++		iput(inode);
++		return ERR_PTR(ret);
++	}
 +
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
+ 	inode->i_op = &bpf_dir_iops;
+ 	inode->i_fop = &simple_dir_operations;
+ 
+@@ -330,10 +365,20 @@ static int bpf_mkobj_ops(struct dentry *dentry, umode_t mode, void *raw,
+ 			 const struct file_operations *fops)
+ {
+ 	struct inode *dir = dentry->d_parent->d_inode;
+-	struct inode *inode = bpf_get_inode(dir->i_sb, dir, mode);
++	struct inode *inode;
++	int ret;
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u64);
-+} storage_map SEC(".maps");
++	inode = bpf_get_inode(dir->i_sb, dir, mode);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
++	ret = security_inode_init_security(inode, dir, &dentry->d_name,
++					   bpf_fs_initxattrs, NULL);
++	if (ret && ret != -EOPNOTSUPP) {
++		iput(inode);
++		return ret;
++	}
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
+ 	inode->i_op = iops;
+ 	inode->i_fop = fops;
+ 	inode->i_private = raw;
+@@ -382,9 +427,11 @@ bpf_lookup(struct inode *dir, struct dentry *dentry, unsigned flags)
+ static int bpf_symlink(struct mnt_idmap *idmap, struct inode *dir,
+ 		       struct dentry *dentry, const char *target)
+ {
+-	char *link = kstrdup(target, GFP_USER | __GFP_NOWARN);
+ 	struct inode *inode;
++	char *link;
++	int ret;
+ 
++	link = kstrdup(target, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+ 	if (!link)
+ 		return -ENOMEM;
+ 
+@@ -394,13 +441,25 @@ static int bpf_symlink(struct mnt_idmap *idmap, struct inode *dir,
+ 		return PTR_ERR(inode);
+ 	}
+ 
+-	inode->i_op = &simple_symlink_inode_operations;
++	inode->i_op = &bpf_symlink_iops;
+ 	inode->i_link = link;
+ 
++	ret = security_inode_init_security(inode, dir, &dentry->d_name,
++					   bpf_fs_initxattrs, NULL);
++	if (ret && ret != -EOPNOTSUPP) {
++		iput(inode);
++		return ret;
++	}
 +
-+SEC("cgroup_skb/egress")
-+int caller_prog(struct __sk_buff *skb)
+ 	bpf_dentry_finalize(dentry, inode, dir);
+ 	return 0;
+ }
+ 
++static const struct inode_operations bpf_symlink_iops = {
++	.get_link	= simple_get_link,
++	.listxattr	= bpf_fs_listxattr,
++};
++
+ static const struct inode_operations bpf_dir_iops = {
+ 	.lookup		= bpf_lookup,
+ 	.mkdir		= bpf_mkdir,
+@@ -409,6 +468,7 @@ static const struct inode_operations bpf_dir_iops = {
+ 	.rename		= simple_rename,
+ 	.link		= simple_link,
+ 	.unlink		= simple_unlink,
++	.listxattr	= bpf_fs_listxattr,
+ };
+ 
+ /* pin iterator link into bpffs */
+@@ -762,22 +822,147 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
+ 	return 0;
+ }
+ 
++static struct inode *bpf_fs_alloc_inode(struct super_block *sb)
 +{
-+	__u64 *storage;
++	struct bpf_fs_inode *bi;
 +
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
++	bi = alloc_inode_sb(sb, bpf_fs_inode_cachep, GFP_KERNEL);
++	if (!bi)
++		return NULL;
++	INIT_LIST_HEAD_RCU(&bi->xattrs);
++	simple_xattr_limits_init(&bi->xlimits);
++	return &bi->vfs_inode;
 +}
 +
-+SEC("cgroup_skb/egress")
-+int callee_prog(struct __sk_buff *skb)
-+{
-+	__u64 *storage;
-+
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	return 1;
+ static void bpf_destroy_inode(struct inode *inode)
+ {
++	struct bpf_mount_opts *opts = inode->i_sb->s_fs_info;
++	struct bpf_fs_inode *bi = BPF_FS_I(inode);
+ 	enum bpf_type type;
+ 
+-	if (S_ISLNK(inode->i_mode))
+-		kfree(inode->i_link);
+ 	if (!bpf_inode_type(inode, &type))
+ 		bpf_any_put(inode->i_private, type);
+-	free_inode_nonrcu(inode);
++	simple_xattrs_free(&opts->xa_cache, &bi->xattrs, NULL);
 +}
 +
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
-new file mode 100644
-index 000000000000..f95166dad7c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_no_storage.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int caller_prog(struct __sk_buff *skb)
++static void bpf_free_inode(struct inode *inode)
 +{
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
++	if (S_ISLNK(inode->i_mode))
++		kfree(inode->i_link);
++	kmem_cache_free(bpf_fs_inode_cachep, BPF_FS_I(inode));
 +}
 +
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
-new file mode 100644
-index 000000000000..d7e8ec9855c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_cgrp_storage_owner.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u64);
-+} storage_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} prog_array SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int prog_array_owner(struct __sk_buff *skb)
++static int bpf_fs_xattr_get(const struct xattr_handler *handler,
++			    struct dentry *unused, struct inode *inode,
++			    const char *name, void *value, size_t size)
 +{
-+	__u64 *storage;
++	struct bpf_mount_opts *opts = inode->i_sb->s_fs_info;
++	struct bpf_fs_inode *bi = BPF_FS_I(inode);
 +
-+	storage = bpf_get_local_storage(&storage_map, 0);
-+	if (storage)
-+		*storage = 1;
-+
-+	bpf_tail_call(skb, &prog_array, 0);
-+	return 1;
++	name = xattr_full_name(handler, name);
++	return simple_xattr_get(&opts->xa_cache, &bi->xattrs, name, value, size);
 +}
 +
-+char _license[] SEC("license") = "GPL";
++enum {
++	BPF_FS_XATTR_UNSPEC,
++	BPF_FS_XATTR_SECURITY,
++	BPF_FS_XATTR_TRUSTED,
++};
++
++static int bpf_fs_xattr_set(const struct xattr_handler *handler,
++			    struct mnt_idmap *idmap, struct dentry *unused,
++			    struct inode *inode, const char *name,
++			    const void *value, size_t size, int flags)
++{
++	struct bpf_mount_opts *opts = inode->i_sb->s_fs_info;
++	struct bpf_fs_inode *bi = BPF_FS_I(inode);
++	struct simple_xattr *old;
++	int err = -EINVAL;
++
++	name = xattr_full_name(handler, name);
++	switch (handler->flags) {
++	case BPF_FS_XATTR_SECURITY:
++		err = simple_xattr_set_limited(&opts->xa_cache, &bi->xattrs,
++					       &bi->xlimits, name, value, size,
++					       flags);
++		break;
++	case BPF_FS_XATTR_TRUSTED:
++		old = simple_xattr_set(&opts->xa_cache, &bi->xattrs, name,
++				       value, size, flags);
++		err = IS_ERR(old) ? PTR_ERR(old) : 0;
++		if (!err)
++			simple_xattr_free_rcu(old);
++		break;
++	}
++	if (err)
++		return err;
++	inode_set_ctime_current(inode);
++	return 0;
++}
++
++static const struct xattr_handler bpf_fs_trusted_xattr_handler = {
++	.prefix	= XATTR_TRUSTED_PREFIX,
++	.flags	= BPF_FS_XATTR_TRUSTED,
++	.get	= bpf_fs_xattr_get,
++	.set	= bpf_fs_xattr_set,
++};
++
++static const struct xattr_handler bpf_fs_security_xattr_handler = {
++	.prefix	= XATTR_SECURITY_PREFIX,
++	.flags	= BPF_FS_XATTR_SECURITY,
++	.get	= bpf_fs_xattr_get,
++	.set	= bpf_fs_xattr_set,
++};
++
++static const struct xattr_handler * const bpf_fs_xattr_handlers[] = {
++	&bpf_fs_trusted_xattr_handler,
++	&bpf_fs_security_xattr_handler,
++	NULL,
++};
++
++static ssize_t bpf_fs_listxattr(struct dentry *dentry, char *buf, size_t size)
++{
++	struct inode *inode = d_inode(dentry);
++
++	return simple_xattr_list(inode, &BPF_FS_I(inode)->xattrs, buf, size);
++}
++
++static int bpf_fs_initxattrs(struct inode *inode,
++			     const struct xattr *xattr_array, void *fs_info)
++{
++	struct bpf_mount_opts *opts = inode->i_sb->s_fs_info;
++	struct bpf_fs_inode *bi = BPF_FS_I(inode);
++	const struct xattr *xattr;
++	int err;
++
++	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
++		CLASS(simple_xattr, new_xattr)(xattr->value, xattr->value_len);
++		if (IS_ERR(new_xattr))
++			return PTR_ERR(new_xattr);
++
++		new_xattr->name = kasprintf(GFP_KERNEL_ACCOUNT,
++					    XATTR_SECURITY_PREFIX "%s",
++					    xattr->name);
++		if (!new_xattr->name)
++			return -ENOMEM;
++
++		err = simple_xattr_add_limited(&opts->xa_cache, &bi->xattrs,
++					       &bi->xlimits, new_xattr);
++		if (err)
++			return err;
++
++		retain_and_null_ptr(new_xattr);
++	}
++	return 0;
+ }
+ 
+ const struct super_operations bpf_super_ops = {
+ 	.statfs		= simple_statfs,
+ 	.drop_inode	= inode_just_drop,
+ 	.show_options	= bpf_show_options,
++	.alloc_inode	= bpf_fs_alloc_inode,
+ 	.destroy_inode	= bpf_destroy_inode,
++	.free_inode	= bpf_free_inode,
+ };
+ 
+ enum {
+@@ -996,25 +1181,38 @@ static int populate_bpffs(struct dentry *parent)
+ 
+ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+ {
+-	static const struct tree_descr bpf_rfiles[] = { { "" } };
+ 	struct bpf_mount_opts *opts = sb->s_fs_info;
+ 	struct inode *inode;
+-	int ret;
+ 
+ 	/* Mounting an instance of BPF FS requires privileges */
+ 	if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+-	ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
+-	if (ret)
+-		return ret;
+-
++	sb->s_blocksize = PAGE_SIZE;
++	sb->s_blocksize_bits = PAGE_SHIFT;
++	sb->s_magic = BPF_FS_MAGIC;
+ 	sb->s_op = &bpf_super_ops;
++	sb->s_xattr = bpf_fs_xattr_handlers;
++	sb->s_iflags |= SB_I_NOEXEC;
++	sb->s_iflags |= SB_I_NODEV;
++	sb->s_time_gran = 1;
++
++	inode = bpf_get_inode(sb, NULL, S_IFDIR | 0777);
++	if (IS_ERR(inode))
++		return PTR_ERR(inode);
++
++	inode->i_ino = 1;
++	inode->i_op = &bpf_dir_iops;
++	inode->i_fop = &simple_dir_operations;
++	set_nlink(inode, 2);
++
++	sb->s_root = d_make_root(inode);
++	if (!sb->s_root)
++		return -ENOMEM;
+ 
+-	inode = sb->s_root->d_inode;
++	inode = d_inode(sb->s_root);
+ 	inode->i_uid = opts->uid;
+ 	inode->i_gid = opts->gid;
+-	inode->i_op = &bpf_dir_iops;
+ 	inode->i_mode &= ~S_IALLUGO;
+ 	populate_bpffs(sb->s_root);
+ 	inode->i_mode |= S_ISVTX | opts->mode;
+@@ -1068,6 +1266,7 @@ static void bpf_kill_super(struct super_block *sb)
+ 	struct bpf_mount_opts *opts = sb->s_fs_info;
+ 
+ 	kill_anon_super(sb);
++	simple_xattr_cache_cleanup(&opts->xa_cache);
+ 	kfree(opts);
+ }
+ 
+@@ -1080,18 +1279,37 @@ static struct file_system_type bpf_fs_type = {
+ 	.fs_flags	= FS_USERNS_MOUNT,
+ };
+ 
++static void bpf_fs_inode_init_once(void *foo)
++{
++	struct bpf_fs_inode *bi = foo;
++
++	inode_init_once(&bi->vfs_inode);
++}
++
+ static int __init bpf_init(void)
+ {
+ 	int ret;
+ 
++	bpf_fs_inode_cachep = kmem_cache_create("bpf_fs_inode_cache",
++						sizeof(struct bpf_fs_inode),
++						0, SLAB_ACCOUNT,
++						bpf_fs_inode_init_once);
++	if (!bpf_fs_inode_cachep)
++		return -ENOMEM;
++
+ 	ret = sysfs_create_mount_point(fs_kobj, "bpf");
+ 	if (ret)
+-		return ret;
++		goto out_cache;
+ 
+ 	ret = register_filesystem(&bpf_fs_type);
+-	if (ret)
++	if (ret) {
+ 		sysfs_remove_mount_point(fs_kobj, "bpf");
++		goto out_cache;
++	}
+ 
++	return 0;
++out_cache:
++	kmem_cache_destroy(bpf_fs_inode_cachep);
+ 	return ret;
+ }
+ fs_initcall(bpf_init);
 -- 
-2.53.0
+2.43.0
+
