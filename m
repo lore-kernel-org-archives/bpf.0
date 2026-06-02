@@ -1,250 +1,104 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55956135A53
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 19:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21521DF73C
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 19:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780428235; cv=none; b=n1fzGPDtqgt7K4MFMIf/CC0OPnyYOpJHQD0BHCcw5+NkS+fZsBZLe81MAzs/URSXgfcP1jcLr6fYxUfy22S9JnteYuoaM2xi0kpRbI0zhHCX9gRIW4Qp3cH0WdpPSqV1OJ+ZdOYYk3s5vWJ86YrDI66W6+zDbr7cdv6ak/DwRPI=
+	t=1780429433; cv=none; b=Kdd0qcrx/aBLQBf9z9TYooblei8le/vnvKxdx9P2yoUTlZneCk3nPmC5xx4a1IwmdxFjMnznZWeTyqGLB9pTYbDuLObsBfqXR9oxAmFZ7TdhOop3n4VTQiw+D0gQlOvBNBHHdbFFJlAEFehXZBQvZknC+NIjxeNXtecGWhwrF8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780428235; c=relaxed/simple;
-	bh=OoJ/z3veT4ZIrbJH377j1oTUckRwJWOW10IOrPSRtfU=;
+	s=arc-20240116; t=1780429433; c=relaxed/simple;
+	bh=ETvbJBR9KyPKJ9m5/h0+VoD4ySzXGaqEsXb/F2ACrlM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O3WJkFNPZGsmRkniqCPt2a/81VWHR5/8n/c+X0EwfhJIajI/sIEMQ2462cZ4s3qN97Z5l9uMt12R1gtucri7sYRhwbOLvqKlMtgX69caLKyzE7036bDwPSaIjoQN+x9domS/bKKX6FJnOQTnhbBMKA23gyVmzzoQn8JqzV3ra3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VVVBtp2W; arc=none smtp.client-ip=95.215.58.171
+	 In-Reply-To:Content-Type; b=AZ5QYNHvXru2HuiKi2W4RmDSswWa3d4TfybKz7T8bqtGAHVj8ztl2MIkyfTVRfDKCujUZ/aR44cBxRFoQhm8jhrdIfEvh120LNQUB6/PVfD4ynLGbtBRYAmjJjwvHKDv9oybCiMj1VTKTVsLXzOaex6vUq5E7HXU7kKdDmpBuno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pNvv4ssP; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VVVBtp2W"
-Message-ID: <10970aec-9e78-4c0b-85d0-e04e863a0662@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pNvv4ssP"
+Message-ID: <18dda63b-79d0-47ad-b60b-82436ae0a017@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780428230;
+	t=1780429429;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CBrkwsUFXieCOUvxcufFnNgiZKGphLZwMZDX/XJNwpk=;
-	b=VVVBtp2WL1Xq+WC/kIYal8/a0ixh45FsSpfsnRgmsCpQdmJyL/pZ+vaZXoa5JE3bYC6zP2
-	GGYFimrnzG2VGDR+8Td1JxPfojRmsdK4URkmZsmShywhXtVBX/tZfmS63wsiT8vS+chJyA
-	u09kSPlLCVjRZhLDYqoEswveHOFhbW0=
-Date: Tue, 2 Jun 2026 12:23:45 -0700
+	bh=md3IbFJBgbDRnWeSfl2Qly7DbFAyfCuW+zKnCWhDxMY=;
+	b=pNvv4ssPO2t88n1MrbNpTN5iZBwo8jAHa3WZk3EdH1Pmqy0e6Ltq99Lk8g+EpaUSN9Fry7
+	yJbcHMcFpnNEnh8nbZufcdpzdlGbyttanpIrWipNTCEtDyrZPZH9kMMkXUqZrMauxNU9MA
+	OYGdyQZ7tGwzScWAmhOhaVfprfy4CIg=
+Date: Tue, 2 Jun 2026 12:43:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PAHOLE v3 2/3] dwarf_loader: Add support for
- DW_TAG_GNU_annotation
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org, bpf@vger.kernel.org,
- Andrii Nakryiko <andrii@kernel.org>, Alan Maguire <alan.maguire@oracle.com>,
- jose.marchesi@oracle.com, David Faust <david.faust@oracle.com>
-References: <20260601183511.594100-1-vineet.gupta@linux.dev>
- <20260601183511.594100-2-vineet.gupta@linux.dev> <ah8f-dkC9AQiIPxR@x1>
+Subject: Re: [PATCH bpf] bpftool: Use libbpf error code for flow dissector
+ query
+Content-Language: en-GB
+To: Woojin Ji <random6.xyz@gmail.com>, Quentin Monnet <qmo@kernel.org>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jakub Kicinski <kuba@kernel.org>,
+ linux-kernel@vger.kernel.org
+References: <20260602170350.261035-1-random6.xyz@gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <ah8f-dkC9AQiIPxR@x1>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260602170350.261035-1-random6.xyz@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 6/2/26 11:24 AM, Arnaldo Carvalho de Melo wrote:
-> On Mon, Jun 01, 2026 at 11:35:10AM -0700, Vineet Gupta wrote:
->> gcc 16 was first release to support DW_TAG_GNU_annotation and this patch
->> enables the same in pahole. Bulk of changes are in dwarf_loader but
->> btf_encoder also gains support with minimal changes.
->>
->> GCC encodes btf_type_tag and btf_decl_tag annotations differently from
->> LLVM. While LLVM uses DW_TAG_LLVM_annotation (0x6000) as child DIEs,
->> GCC uses DW_TAG_GNU_annotation (0x6001) as standalone sibling DIEs
->> referenced via DW_AT_GNU_annotation (0x2139) attributes, with chaining
->> through the same attribute on annotation DIEs themselves.
->>
->> Handle both encoding styles:
->>
->> For btf_type_tag (pointer annotations):
->> - Recognize DW_TAG_GNU_annotation alongside DW_TAG_LLVM_annotation in
->>    child annotation scanning.
->> - Follow DW_AT_GNU_annotation attribute chains on pointer types for
->>    GCC-style btf_type_tag resolution, with cycle detection.
->> - Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation in the
->>    internal representation so downstream code works unchanged.
->>
->> For btf_decl_tag (function/struct/member annotations):
->> - Add add_gnu_annotation_chain() to follow DW_AT_GNU_annotation
->>    attribute chains on function, struct, and member DIEs.
->> - GCC puts DW_AT_GNU_annotation on the function/struct DIE itself
->>    (not as child DIEs), referencing sibling annotation DIEs that chain
->>    via the same attribute.
->>
->> Also:
->> - Silently skip standalone DW_TAG_GNU_annotation DIEs at CU level.
->> - Update pfunct-btf-decl-tags.sh test to use GCC 16+ when available and
->>    now passes.
->>
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
->> ---
->> Changes since v2 [2]
->>   - Removed loop detection logic
->>   - Move test changes to different patch
->>
->> Changes since v1 [1]
->>   - NFC Reduce indentation with early exits (Alexei offlist)
->>
->> [2] https://lore.kernel.org/bpf/20260528223616.2035618-2-vineet.gupta@linux.dev/
->> [1] https://lore.kernel.org/bpf/20260526181818.4159927-2-vineet.gupta@linux.dev/
->> ---
->>
->>   btf_encoder.c     |   1 +
->>   dutil.h           |   8 ++++
->>   dwarf_loader.c    | 102 ++++++++++++++++++++++++++++++++++++++++++----
->>   dwarves.h         |   3 +-
->>   dwarves_fprintf.c |   8 +++-
->>   5 files changed, 110 insertions(+), 12 deletions(-)
->>
->> diff --git a/btf_encoder.c b/btf_encoder.c
->> index 633bc6162ce0..d5af706d7638 100644
->> --- a/btf_encoder.c
->> +++ b/btf_encoder.c
->> @@ -1831,6 +1831,7 @@ static int btf_encoder__encode_tag(struct btf_encoder *encoder, struct tag *tag,
->>   		name = namespace__name(tag__namespace(tag));
->>   		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPEDEF, ref_type_id, name, false);
->>   	case DW_TAG_LLVM_annotation:
->> +	case DW_TAG_GNU_annotation:
->>   		name = tag__btf_type_tag(tag)->value;
->>   		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPE_TAG, ref_type_id, name, false);
->>   	case DW_TAG_structure_type:
->> diff --git a/dutil.h b/dutil.h
->> index ff78aa6dfd10..abe0e62b412f 100644
->> --- a/dutil.h
->> +++ b/dutil.h
->> @@ -35,6 +35,14 @@
->>   #define DW_TAG_LLVM_annotation 0x6000
->>   #endif
->>   
->> +#ifndef DW_TAG_GNU_annotation
->> +#define DW_TAG_GNU_annotation 0x6001
->> +#endif
->> +
->> +#ifndef DW_AT_GNU_annotation
->> +#define DW_AT_GNU_annotation 0x2139
->> +#endif
->> +
->>   static inline __attribute__((const)) bool is_power_of_2(unsigned long n)
->>   {
->>           return (n != 0 && ((n & (n - 1)) == 0));
->> diff --git a/dwarf_loader.c b/dwarf_loader.c
->> index 8b5b526299b5..878565884f85 100644
->> --- a/dwarf_loader.c
->> +++ b/dwarf_loader.c
->> @@ -908,6 +908,12 @@ static int tag__recode_dwarf_bitfield(struct tag *tag, struct cu *cu, uint16_t b
->>   	return -ENOMEM;
->>   }
->>   
->> +static bool die__tag_is_annotation(Dwarf_Die *die)
->> +{
->> +	unsigned int tag = dwarf_tag(die);
->> +	return tag == DW_TAG_LLVM_annotation || tag == DW_TAG_GNU_annotation;
->> +}
->> +
->>   static int add_llvm_annotation(Dwarf_Die *die, int component_idx, struct conf_load *conf,
->>   			       struct list_head *head)
->>   {
->> @@ -943,7 +949,7 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
->>   
->>   	die = &child;
->>   	do {
->> -		if (dwarf_tag(die) == DW_TAG_LLVM_annotation) {
->> +		if (die__tag_is_annotation(die)) {
->>   			ret = add_llvm_annotation(die, component_idx, conf, head);
->>   			if (ret)
->>   				return ret;
->> @@ -953,6 +959,35 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
->>   	return 0;
->>   }
->>   
->> +/* Handle gcc sytle btf_decl_tag annotations for functions/struct/member tags
->> + * Pointers are handled seperately, inline in die__create_new_pointer_tag ()
->> + */
->> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
->> +				    struct conf_load *conf, struct list_head *head)
->> +{
->> +	Dwarf_Attribute attr;
->> +	Dwarf_Die annot_die;
->> +
->> +	if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
->> +	    dwarf_formref_die(&attr, &annot_die) == NULL)
->> +		return 0;
->> +
->> +	for (;;) {
->> +		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
->> +			break;
->> +
->> +		int ret = add_llvm_annotation(&annot_die, component_idx, conf, head);
->> +		if (ret)
->> +			return ret;
->> +
->> +		if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
->> +		    dwarf_formref_die(&attr, &annot_die) == NULL)
->> +			break;
-> Make this more compact, no need to have these two if blocks, one
-> suffices:
+
+
+On 6/2/26 10:03 AM, Woojin Ji wrote:
+> bpf_prog_query() returns a negative errno on failure. query_flow_dissector()
+> currently closes the namespace fd and then reads errno to decide whether
+> -EINVAL means that the running kernel does not support flow dissector queries.
 >
-> static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
-> 				    struct conf_load *conf, struct list_head *head)
+> That errno check controls behavior, not just diagnostics: -EINVAL is handled
+> as a non-fatal old-kernel case, while any other error makes bpftool net fail.
+> Reading errno after close() is fragile, because close() can overwrite errno
+> before the check. Use the libbpf-returned error code instead so the
+
+Do you have evidence that close() is fragile?
+
+> compatibility branch is based on the BPF_PROG_QUERY result itself.
 >
-> 	Dwarf_Attribute attr;
-> 	Dwarf_Die annot_die;
-> 	int ret = 0;
+> Keep the existing errno reset in the non-fatal path to preserve batch mode
+> behavior. The success path is unchanged.
 >
-> 	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) != NULL &&
-> 	       dwarf_formref_die(&attr, &annot_die) != NULL &&
-> 	       dwarf_tag(&annot_die) == DW_TAG_GNU_annotation) {
-> 		if ((ret = add_llvm_annotation(&annot_die, component_idx, conf, head)) != 0)
-> 			break;
-> 	}
+> Fixes: 7f0c57fec80f ("bpftool: show flow_dissector attachment status")
+> Assisted-by: ChatGPT:gpt-5.5
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
+>   tools/bpf/bpftool/net.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> 	return ret;
-> }
+> diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+> index 974189da8a91..dba28755d284 100644
+> --- a/tools/bpf/bpftool/net.c
+> +++ b/tools/bpf/bpftool/net.c
+> @@ -603,14 +603,14 @@ static int query_flow_dissector(struct bpf_attach_info *attach_info)
+>   			     &attach_flags, prog_ids, &prog_cnt);
+>   	close(fd);
+>   	if (err) {
+> -		if (errno == EINVAL) {
+> +		if (err == -EINVAL) {
+>   			/* Older kernel's don't support querying
+>   			 * flow dissector programs.
+>   			 */
+>   			errno = 0;
+>   			return 0;
+>   		}
+> -		p_err("can't query prog: %s", strerror(errno));
+> +		p_err("can't query prog: %s", strerror(-err));
+>   		return -1;
+>   	}
+>   
 
-OK.
-That duplication indeed was standing out, and while this seems denser to 
-read, it feels like an improvement.
-
-FWIW it does need an additional following line right before loop end 
-since they were different in the orig version.
-     die = &annot_die
-
-
-
->> +check_gnu_attr:
->> +	/* Check for GCC-style DW_AT_GNU_annotation attribute */
->> +	if (tag != NULL ||
->> +	    dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
->> +	    dwarf_formref_die(&attr, &annot_die) == NULL)
->> +		goto out;
->> +
->> +	for (;;) {
->> +		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
->> +			break;
->> +
->> +		name = attr_string(&annot_die, DW_AT_name, conf);
->> +		if (strcmp(name, "btf_type_tag") != 0)
->> +			break;
->> +
->> +		tag = die__add_btf_type_tag(tag, die, &annot_die, cu, conf);
->> +		if (tag == NULL)
->> +			return NULL;
->> +
->> +		if (dwarf_attr(&annot_die, DW_AT_GNU_annotation, &attr) == NULL ||
->> +		    dwarf_formref_die(&attr, &annot_die) == NULL)
->> +			break;
->> +	}
-> The loop above probably can get some simplification?
-
-Yep nice and similar to above, with same adjustment to @die.
-
-Thx for the review.
--Vineet
