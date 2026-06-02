@@ -1,81 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625993E7BA3;
-	Tue,  2 Jun 2026 13:37:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1393C3429
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 13:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780407452; cv=none; b=g7f5LFgNnCLYZKcPBmjV/24gyo7I+FBB0QJeEAUmCa3xs2AwT6+zLwaIF9WYXs7to5am+qhV4inEKArmclBIowTAMfqK/crgQYsuYNC1ljcDsRO03UHFOsB1bqmX1VOAXOwgtzTGUhNW/TPBt1zPWlBDb/mo8QAgHmvLU57c3bM=
+	t=1780408189; cv=none; b=DIqyzsVJyPaN/Wq8yiMVeIs+SYuM0PQuBSAGLX/ksCx6yldmN2POmJ5uTZXzQI4pqZnPAfKXD7SuEeeOgzXQ5lRVC6quOMl792wS5eZ8ArcixkEdEo4lvEcw5F/TXyaH/noDXwl/bAVi5jKSfz0ye9lrvir3gxeQdUlOO3oMNSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780407452; c=relaxed/simple;
-	bh=BiIuX3GEfgEGigGjIPCmgTUh2I4sZLbNCb4fapIoYwI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bM95nrqcpzVWl8mnzAXpl7jWNPw+6SP74a1XMtCZ6oEPGEk6z+GWjFI62ZIJsVHh0lADbb3MrCiOxd+GKdnKDW0wHlc5d+yNjvRo1diegPr359gAUW8AvwwL9CxjBVi74SZ1AAnYUCmHKbF8YEYUsbQ4vNrDMCLJ3oo6pp+Bb2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i02IHPEI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780408189; c=relaxed/simple;
+	bh=IZ+Gbe3Pav/PJsSZ8AA+ChCFTjI07dXHqamgwWS6wuk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=slPfAjyS0U0RDJo23KTAoahrXrgVWqMLhpBmrld9kaJC3clz2jSskpsz9rGQ22l7nTWuWy+zzIgSMM0y/kL7R6p0c5YDw3rHpBFMU2DQ/Nv6bNNWhSi5OREyLQx2umVkUh0wAyRWNN1DPi6sV2Fmlx9IpTYoyFXuh5DzJBcVR3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yoi676Qp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i02IHPEI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10BD1F00893;
-	Tue,  2 Jun 2026 13:37:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yoi676Qp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8EA1F00898;
+	Tue,  2 Jun 2026 13:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780407451;
-	bh=lSQqW/a82YaYohCGwQDojjq6a6IPnK86k/3oYt6lU0I=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=i02IHPEIyFDo1SPBnC5IssoPs9Vxkcslopr4JZqQ9gzoii0882OhmRUG/wAUMDmHx
-	 bKisDbK11Ag5DZTEURqOFxer6nTi3cvNgnrt3/DSlB/9PymDu0+EbsPSymvCvEEiys
-	 NcCzQXcGRdkys2mr6FCWoa9kwvENIlDLsLpKcdaVSF6ZUjmkth/hrtSaxrrOMsiJSi
-	 jz6ZfkVl3uva0TVOnLONXJU48ie2YOXyfjV2EEYKTyfN1yA9mXwYdGbe46S2H1ZGAL
-	 1kHLUiYqSWSnyLrLUbsXWNAGd6xUxczuFgb6MRQNndCceQLWyCL57VqdpfcLLSNYpm
-	 MiGg1td8xg/FA==
-Content-Type: multipart/mixed; boundary="===============4050644796597654082=="
+	s=k20260515; t=1780408188;
+	bh=MthUCxWRzLfbijfDbr8DnxzqDLpPXKkbXYp/UxnqWQE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Yoi676QpafMvqrSri+J3h0DyK8zzNTpdtDhGLX0qyutsdFQUgfSVxVnCZCFVS9ZBY
+	 JWMdb1b/y+I7GsJqgGkYTFBVRWUgD9yy4CLucnw5dBlu0WHS/PV4a1SzcxqvzN0+9W
+	 2iawoWWbXdlt7PkK24KMOweW892OqbdefV0oKOCm8Ls/TX8c86cuwAaFTdcOpVuLD+
+	 ENQ6IkmPihOIH1dQ77GTy4ieX6+BVpCbJvBhKKBvWzqmUY7dntPKUJhdwy5DanohlD
+	 BYdngJE6DZVgS3anPgKD/oTlZk2DsU+RtlWfb4+riMQmhC4Ns3+K0ioKAmIKJXtRNb
+	 L16F4/Qf8y7dw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/4] bpf: Reject exclusive maps for
+ bpf_map_elem iterators
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260602133052.423725-2-daniel@iogearbox.net>
+References: <20260602133052.423725-2-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 02 Jun 2026 13:49:47 +0000
+Message-Id: <20260602134948.3F8EA1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <d835c3a0f12681c96bb72764ba18db8ca1e0c511bf0c420f3918eab1559c83ae@mail.kernel.org>
-In-Reply-To: <20260602-selftests-bpf_misconfig-v12-5-27f898b3ba26@suse.com>
-References: <20260602-selftests-bpf_misconfig-v12-5-27f898b3ba26@suse.com>
-Subject: Re: [PATCH bpf-next RESEND v12 05/11] selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  2 Jun 2026 13:37:30 +0000 (UTC)
 
---===============4050644796597654082==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -726,11 +726,11 @@
->  $(TRUNNER_TEST_OBJS:.o=.d): $(TRUNNER_OUTPUT)/%.test.d:			\
->  			    $(TRUNNER_TESTS_DIR)/%.c			\
->  			    $(TRUNNER_EXTRA_HDRS)			\
-> +			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)		\
->  			    $(TRUNNER_BPF_SKELS)			\
->  			    $(TRUNNER_BPF_LSKELS)			\
->  			    $(TRUNNER_BPF_LSKELS_SIGNED)		\
-> -			    $(TRUNNER_BPF_SKELS_LINKED)			\
-> -			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)
-> +			    $(TRUNNER_BPF_SKELS_LINKED)
+Pre-existing issues:
+- [Critical] Generic BPF map iterators bypass BPF_F_RDONLY_PROG and map->fr=
+ozen protections.
+- [High] Incomplete fix for exclusive map security bypass via dynamic attac=
+h points
+--
 
-bot+bpf-ci@kernel.org suggested in v11 that this patch should include a
-Fixes: tag pointing to commit 81b7e7ba095f ("selftests/bpf: Tolerate BPF
-and skeleton generation failures"). This appears to be a legitimate
-request since this patch addresses issues introduced by that earlier
-commit. Should this include:
+commit 9a17d32567844f5c82567e8f969e7dc780b8275c
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-  Fixes: 81b7e7ba095f ("selftests/bpf: Tolerate BPF and skeleton generation failures")
+bpf: Reject exclusive maps for bpf_map_elem iterators
 
-Reference: https://lore.kernel.org/bpf/8bfb94f32bee29ef1204a13edb057cba1f61251eed39c5fa5fb86bf9e0cdb567@mail.kernel.org/
+Exclusive maps are meant to be reachable only from the single program whose
+hash matches. This patch adds a check in bpf_iter_attach_map() to reject
+exclusive maps when binding to a bpf_map_elem iterator.
 
+> diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+> index 261a03ea73d34..ae0741a09c6de 100644
+> --- a/kernel/bpf/map_iter.c
+> +++ b/kernel/bpf/map_iter.c
+> @@ -112,6 +112,10 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
+>  	map =3D bpf_map_get_with_uref(linfo->map.map_fd);
+>  	if (IS_ERR(map))
+>  		return PTR_ERR(map);
+> +	if (map->excl_prog_sha) {
+> +		err =3D -EPERM;
+> +		goto put_map;
+> +	}
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: High]
+This isn't a bug introduced by this patch, but while enforcing the
+excl_prog_sha restriction here, are there other dynamic attach points that
+still miss this check?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26821824931
---===============4050644796597654082==--
+For example, looking at bpf_iter_attach_map() in net/core/bpf_sk_storage.c,
+it binds a map to an sk_storage iterator without checking map->excl_prog_sh=
+a:
+
+net/core/bpf_sk_storage.c:bpf_iter_attach_map() {
+    ...
+	map =3D bpf_map_get_with_uref(linfo->map.map_fd);
+	if (IS_ERR(map))
+		return PTR_ERR(map);
+    ...
+}
+
+Similarly, sock_map_iter_attach_target(), sock_map_link_create(), and
+sock_map_get_from_fd() in net/core/sock_map.c dynamically attach BPF progra=
+ms
+or iterators to sockmaps but do not appear to check map->excl_prog_sha.
+
+Could these missing checks allow the attachment of an untrusted program or
+iterator to an exclusive sk_storage or sockmap, bypassing the exclusivity
+constraint?
+
+[Severity: Critical]
+This is also a pre-existing issue, but does this function properly enforce
+read-only constraints on maps?
+
+Later in this same function, the code checks if the iterator program's
+max_rdwr_access exceeds the map's value_size:
+
+kernel/bpf/map_iter.c:bpf_iter_attach_map() {
+    ...
+	key_acc_size =3D prog->aux->max_rdonly_access;
+	value_acc_size =3D prog->aux->max_rdwr_access;
+    ...
+	if (key_acc_size > key_size || value_acc_size > value_size) {
+		err =3D -EACCES;
+		goto put_map;
+	}
+    ...
+}
+
+However, it does not appear to check if the target map has the
+BPF_F_RDONLY_PROG flag or if map->frozen is set.
+
+Since the BPF verifier defines the bpf_map_elem iterator program argument
+ctx->value as PTR_TO_BUF (without MEM_RDONLY), it allows the iterator progr=
+am
+to write to the map element.
+
+If an iterator is attached to a read-only or frozen map (like a .rodata arr=
+ay
+map), can it bypass these protections and modify the contents dynamically?
+Because the verifier assumes these maps are immutable and optimizes bounds
+checks based on their contents, could this lead to out-of-bounds memory
+accesses in previously verified BPF programs?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602133052.4237=
+25-1-daniel@iogearbox.net?part=3D1
