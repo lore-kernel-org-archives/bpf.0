@@ -1,110 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1714635AC20
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 09:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBE93D3D03;
+	Tue,  2 Jun 2026 09:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780394304; cv=none; b=ANy5YPSLJVGg5sQrHEkdBtlC5KNpUgLkSx2bpe5AcvHVTNSwvIV5WzyBLtGXcsynUeqeEvRS8yJRv6FcGMYOaXemHWi5b3M8bAlgzulrADHdwzNBoKWDo+53W88YLT3rSFHJAHD/svZ+6YbViYFTVJ5S5/lZ3GbWrRUIQNtrppE=
+	t=1780394310; cv=none; b=k23dwNUXhVzVS1r5r/jxup8U2wRbr+sUWMAQVRSW7QVaKt2hzlBZNdivJM09iz0XDge5kYqVDv8slj8P+EZroVfq3A8ivW9cixVIOjAAiIOy7ZqCovrpcAUU9qvh2r4ftWEMwiEMRCSZRPTHpdX8Xs9pGi1geqwKPnjp47zPRDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780394304; c=relaxed/simple;
-	bh=hU0PNDV6StLho6FPlhjyViHIWCvhpp3d/psG1P/wdwQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FdwnDC0Totzejmya1NnL+SGFFuboquKhp8RO2ZhB2oy0tg6w4KepDEG7e37m878pplsuv3wRD7nEF1lgaKlpjmnp7517JXBLedqhONpdx45vIWUgMtx+WxR1DQ0r1QJ4IiCubWUBqNlTRnvjRHknAiDJPC7C+/q/ctbAfTefBmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGVseJQZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780394310; c=relaxed/simple;
+	bh=rj8exp7Amd9Ol8HJ44cvBYkEXAiW5cNwu7/fcWUYLW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NngY2FeFq2Owx+11alUF1YwNq6gdGlc3qS/X5zo5iGpPK9KlBM9WFkDiCORXP923jhOiSaom6Ho3dQ35VVRqJUfAgJsqW1jeuxqXwySkt0H/LKDUqxJTqVtmNtAQqKIiVtuwgZyddaXzCu4yhhYtQXSPvghObCThLiQwmi76YvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2WUXT9j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGVseJQZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C9A21F00898;
-	Tue,  2 Jun 2026 09:58:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2WUXT9j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C444E1F00898;
+	Tue,  2 Jun 2026 09:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780394302;
-	bh=O2BCxCP7cuCALjUZQcvpZDyEK6+PNhSnstDeOiCYyR8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XGVseJQZs+McxqBU9j+TCJNv7CQ44HsVK6krPFfF7ZmKmruhn6tpY6Br40Owg0FIl
-	 lQ8+vYaqetBhnXNQdjWiGERxwsV7QpgPkGns0aat76plMegSqr93mUNUkSvLviXDSQ
-	 GgNLdufoTndf/IjZnKHa4uDqg6zVkzqcgu+1SQiNOmvXLLnc5NlhkTZzm20OuplEJ/
-	 MB+Ng+31VgHPJbEwJ1r+BmQTRwwY9fgHL8EvCTchUmHR1qGYfSlJ55UIdP0Vuhb2Vw
-	 PiBq70lmAAxTmRDKzcJND/HlhwJAMfFwQkC0rd0T8DpMYP8YwLFvWtq6E1tq+rVkRQ
-	 ekrUaQ+FG9s/A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602093836.2632714-2-chenyuan_fl@163.com>
-References: <20260602093836.2632714-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 09:58:22 +0000
-Message-Id: <20260602095822.8C9A21F00898@smtp.kernel.org>
+	s=k20260515; t=1780394309;
+	bh=ATzXC1zmaZ/vfuDrUdct+l2gZdFTjFwyYzm+mZ+8ldE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=G2WUXT9juyCz3FhbTrS5sMLYCg+ZzFkZiN5Xfor4oN5EyxLpFUAyGxxjyYo2BT+7y
+	 6BRDFbckSxYfQr/vPI9hU0ffJtpookD4g020tFhwVt83RYEdwWoaDZ0mzLcffBO93S
+	 4SnZQXIwM998Abvzd3Rdbc4+v16+5ZkHvJHddENeF3bMWfHzSIinE/HDYU0La039Gg
+	 MkJj58fPoVKCBSaBzv/zxoxUBBV6TmQfAD/zAEdJB2HllsH48gNukHjnhXvPtEYAOY
+	 JnqVooRum7EUcmFL2jTwDBQFMGB62cFPz1TMQ8jrQuzNDn0oJIvd/yCmWAFZfaboWh
+	 oxN1yt01zYBGw==
+Message-ID: <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
+Date: Tue, 2 Jun 2026 11:58:25 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: configurable block error injection
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>
+References: <20260602054615.3788425-1-hch@lst.de>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+In-Reply-To: <20260602054615.3788425-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The patch introduces undeclared identifiers `argno` and `reg_arg_na=
-me`, resulting in a fatal compilation error.
---
+On 02/06/2026 07.45, Christoph Hellwig wrote:
+> Hi all,
+> 
+> this series adds a new configurable block error injection facility.
+> We already have a few to inject block errors, but unfortunately most
+> of them are either not very useful or hard to use, or both:
+> 
+>  - The fail_make_request failure injection point can't distinguish
+>    different commands, different ranges in the file and can only injection
+>    plain I/O errors.
+>  - the should_fail_bio 'dynamic' failure injection has all the same issues
+>    as fail_make_request
+>  - dm-error can only fail all command in the table using BLK_STS_IOERR
+>    and requires setting up a new block device
+>  - dm-flakey and dm-dust allow all kinds of configurability, but still
+>    don't have good error selection, no good support for non-read/write
+>    commands and are limited to the dm table alignment requirements,
+>    which for zoned devices enforces setting them up for an entire zone.
+>    They also once again require setting up a stacked block device,
+>    which is really annoying in harnesses like xfstests
+> 
+> This series adds a new debugfs-based block layer error injection
+> that allows to configure what operations and ranges the injection
+> applied to, and what status to return.  It also allows to configure a
+> failure ratio similar to the xfs errortag injection.
 
-commit af92ff0b79cc212b53a40ea48cae9a7de79d1a76
-Author: Yuan Chen <chenyuan@kylinos.cn>
+I wonder if the block layer would be interested in moving block error
+injection off the should_fail() fault injection framework and extending
+the ALLOW_ERROR_INJECTION annotation instead and offloading all the
+debugfs configuration logic (block/error-injection.c) into eBPF?
 
-bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointe=
-r deref
+I talked about moderr [1] at LPC 2025. It's a simple error injection
+tool in eBPF for the module subsystem. The suggested direction there was
+to generalize the tool to ideally to no tool at all, and leverage
+bpftrace to describe the error injection conditions a given
+subsystem needs to be tested under. That would let blktests, for
+example, absorb that and simplify the configuration logic this series
+adds in the kernel for debugfs.
 
-This commit fixes a verifier issue where unrecognized implicit kfunc argume=
-nts
-caused a silent fallthrough instead of being rejected. It updates the checks
-in check_kfunc_args() to explicitly return -EFAULT for unrecognized implicit
-arguments, preventing a potential invalid pointer dereference or information
-disclosure.
+A previous attempt to add inline error injection [2] was rejected as too
+intrusive / source-polluting; the eBPF approach solves that, since the
+injection logic lives in a standalone tool/script rather than in the
+kernel sources.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4d..57e5fdf9f7e06 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -12082,9 +12082,22 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
-> =20
-> -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, =
-i))
-> +		if (is_kfunc_arg_ignore(btf, &args[i]))
->  			continue;
-> =20
-> +		if (is_kfunc_arg_implicit(meta, i)) {
-> +			/* list_push / rbtree_add kfuncs have implicit args
-> +			 * (e.g. 'off' parameter) handled during verification
-> +			 * in bpf_fixup_kfunc_call().  Don't flag them.
-> +			 */
-> +			if (is_bpf_list_push_kfunc(meta->func_id) ||
-> +			    is_bpf_rbtree_add_kfunc(meta->func_id))
-> +				continue;
-> +			verbose(env, "%s unrecognized implicit argument, possible BTF mismatc=
-h\n",
-> +				reg_arg_name(env, argno));
+What do you guys think?
 
-[Severity: Low]
-Will this compile cleanly? In check_kfunc_args(), it looks like argno is=20
-undeclared in this scope, as the local loop index appears to be i.
+[1] https://lpc.events/event/19/contributions/2204/
+[2] https://lore.kernel.org/all/20210512064629.13899-1-mcgrof@kernel.org/
 
-Also, does reg_arg_name() exist? I am unable to locate a definition for it =
-in
-the tree. Could this result in an implicit function declaration error during
-the build?
-
-> +			return -EFAULT;
-> +		}
-> +
->  		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602093836.2632=
-714-1-chenyuan_fl@163.com?part=3D1
