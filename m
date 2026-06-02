@@ -1,142 +1,207 @@
 Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA6726CE39
-	for <bpf@vger.kernel.org>; Mon,  1 Jun 2026 23:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCF59463
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 00:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780357779; cv=none; b=f1Qzb2b6uJ/puLYVy1CwaJRq08N3CemAUE9k2hrAXI7qiqyZFd5q1CLFyooNj51B1C3h4O06t34Zq0WYwG+F2q9PPwy/ooAFsiRNSIxCrFaUXPRe9Zthgr6gTE7oYz25JFBGSy3dhNL2xHz5nMqQjCrgnXdjRuUuDZqO9hiaDkM=
+	t=1780358767; cv=none; b=gvpc7VWETtzAvngqv+NBRwd2J5yQMUhrzZFCMrbeovcxCUsWaFAiKNTJAP4bDwaZlxFZwM4O8UKSX4ZM0P14+izmsQXzh/QCHahsJiB1DrSsyS/HqeU7BqXSfdzm1Hil8ukBK8jw5xc7JPbqDc+Yyy3H7XRth0Hs63vr+VEi/rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780357779; c=relaxed/simple;
-	bh=LFJb4dUI2q670rL9vw2sGnQYlfcHgeUXGpkRSOp+BPA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BWP2G3iLVAFS6AiVu2nFWArP3Fmw+xb1Qr+/fN91KZqVAkOm94H2BfRMoLFeSUuWnwV4qv6hAqrx5FuA5dt8kjeEy66Hezd/GfUVtqTjGDtzlKTynctAX7Hcsj8Yldac4plciH86/cRNcLlwL0GmaDH/5P1o/yNsZsksb6XUmIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YJ8YZ5WL; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780358767; c=relaxed/simple;
+	bh=PweQGBIL1pYRzmfVucCxMwWekb4ZzoEYQDjetUU2SMg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ATjjllBopXBJmOVQFIqCTXP54WG6IXkFPoOswLjFQf9duXv6Vl7QsUObkZ6R83vpQby054TKIovJfSyBhlXHf3mGg3rWNPN1iSFd1QUyHqWVgwl5taIzTCNRQb/6v4y+oqACsWHeo4oBXYlAxuHH6ytemtytQyjvaw9dWYidlMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=EOJiyuUR; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YJ8YZ5WL"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-137bd9ed2b1so2855859c88.1
-        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 16:49:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="EOJiyuUR"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1363fe80fe8so12855843c88.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jun 2026 17:06:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780357776; x=1780962576; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0BnYnRb2vtofh/fDuwPVdMwfNTqYx7MoOXZN6LCoYYE=;
-        b=YJ8YZ5WL6wLvnPGV5Wz9l11oxY7Vxb6/oOMrSLDaf7EhSCGvtjpcMLary/0qX4rjm2
-         rFCk/pIZ8kEIsKYz6w6xdoQTQcBRTnrPaIW0ahuSAYFVJpLxyWPGzp1Dp3yt9Ru9WHtz
-         xYjD9e6GO5RMZFJUVP5RvLT2KIRaQkYEI8JODg1+ir8s+0aSsvKZqRMX8QlUgcBylJD2
-         nWy6XeYMrsyxvIdDwCl3bsSTysQDjHXsqtgDrRhJ822TRzf6d/z+Y7DH1tOpCKq2Bh7/
-         4Qz5GYg/mwwRQyHIqp480ExZxiT40KAHhuQ2EbpvvGkBN6hABvPJk2gYNCgkWZlDMD3r
-         RZqQ==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780358765; x=1780963565; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ci20U7/CwI1HlqFELtTDo4S/28rEdlOYWeys8HmbRS4=;
+        b=EOJiyuURkGgDhSADsUe9v4My4BRaODaX19GU52T62zC/YV3/kiv36cP2DwHCQ/jRkx
+         kjRpjyVeC4jUtLEYok3jlIHjNgh5KQir9DqycclxlhgzT9zJDh8XoDAW2qBP6XKKxwGf
+         pPjgjpPkuSOWs7Y04eiTRNgB6nsI13RUXbeUd9orxTDkaX/cH+FZArk+JI3iHq+W4Ptt
+         iYG+pKVxIsbHcc0O3NVlD5WyniYyaf80+6Xkc4wayr40tnuLq4bA3c0Tk/6Gc6qMVsGl
+         ES7evUBVP+drFTRHPyZ7RAevgDU8MaVnnMkQeCilxXXz8kmbSu73uEWlfy83Z226xgEe
+         2TTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780357776; x=1780962576;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0BnYnRb2vtofh/fDuwPVdMwfNTqYx7MoOXZN6LCoYYE=;
-        b=qzEGkSy2GTCWLGLC7wu63lsAFord2Qi/pu+TAJVOxdiPsknjMhvEufipKItjNQ6Tou
-         bDqnPfALKAAWDx8TQ2J2NSmGJKroHadeuNILgBAFR/ULW+k9NS0GpE7VVJ4c0HuVrgXh
-         59FQCwzyT+Z80fEh6vKGHLLqSqv4H4G8bEBP702x3eZf6vI3BcYE+oJXPWPo4n6NkeLE
-         S3kIlTwSGhy1J373bK+2u1ATDWNVPs5bdYYHYoLZjpMppC1TInCFEM7F28qFaHlYsug2
-         qBpDH3Y4KjLC2sTBjSReFujnC/cYlgyYeMieYWe1vIhhJVCkSyJQ3kULr3RrKcteUCiq
-         DBmw==
-X-Forwarded-Encrypted: i=1; AFNElJ+UQkK4mGTIS4R2pzxMq17snf8qWDQ1Z1sIYcA30iFySnAu4/Wi+DASO7nUCu9nXqHNe70=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+jSqALOwQzhk5qLQAxOUn2507QaZMic5OggW5iGwS2qkdRDpO
-	REELX6vk7qTitbtz/SmBIMRp+BrSiu0o7o/eWvTLO7KB+iPYw4inO8l5Pw8bH/zq
-X-Gm-Gg: Acq92OG/GhI1uM/45W6Au3HrAP/SDh9+wu1Cge6n/mttYWAr6psgOTlwLjgRmX5GxNV
-	90tTB5jSYKUioZ6hDuLWdfGNo+ETKy7fpGDTLIcYNg86AKupAptrfwuD59nHr841PNOZNQsYwfS
-	cHTrmBa9/Bx5AoYkcNPET5/JIG3SqqcgxsUVX65fNFSMOvGqighOV8q96ybCV9ZRUCGHzmrYBX9
-	girXJ5eXJeiRsr7vO817P7QMlNENXOYl69PVHoDr5RAnYErfe6uLYAONEl2zjdTwbZTKrfBEkoA
-	sTTg5g2/vorEkETPXh9Oy4gMq1zBqDmw4YOhO/etlrwFwuNzglNl+H7UuHsToo9hzWKPnNQAWVT
-	2qhQsfudS19XNSgbvgTJ6aLtFC3ZmcyrSJBs29G4abZnliedqBNmO/D77hs5OBn/xxkn3Ro6STv
-	/KFaE7pl5dmAVhckTvsClWZCzbPdd6SPo8yhu/gw04X5k1Wf76fCf+xPy+PuacMPG2d6QXm63mk
-	pcX7JxN00bsasrSnMo=
-X-Received: by 2002:a05:7300:2327:b0:304:b15:17d6 with SMTP id 5a478bee46e88-304fa49e2c3mr6375469eec.6.1780357776433;
-        Mon, 01 Jun 2026 16:49:36 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c6ab:2254:f011:38f4? ([2620:10d:c090:500::3:1ca7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304ed5d5385sm10073688eec.28.2026.06.01.16.49.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 16:49:36 -0700 (PDT)
-Message-ID: <50097b521bbcfe988db984df73b9336fb32ae6e0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v6 05/13] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Amery Hung <ameryhung@gmail.com>, bpf <bpf@vger.kernel.org>, Network
- Development <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann	 <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin KaFai Lau <martin.lau@kernel.org>, Mykyta
- Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team	 <kernel-team@meta.com>
-Date: Mon, 01 Jun 2026 16:49:34 -0700
-In-Reply-To: <CAADnVQ+K_=xz6f3Czoj6f6AeO6Bh0eyq-ambF11+hYq7DZq15w@mail.gmail.com>
-References: <20260529014936.2811085-1-ameryhung@gmail.com>
-	 <20260529014936.2811085-6-ameryhung@gmail.com>
-	 <1bf1a11fa5dcb38287384833dd77c748f3a766b7.camel@gmail.com>
-	 <CAMB2axNK9rf12YyLjfeUHWUpGEf=UrCtdHcgd2Tq6KcFY1ergA@mail.gmail.com>
-	 <37d229e482df3367436d9475d6e9d6d69c7366a5.camel@gmail.com>
-	 <CAADnVQ+K_=xz6f3Czoj6f6AeO6Bh0eyq-ambF11+hYq7DZq15w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1780358765; x=1780963565;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ci20U7/CwI1HlqFELtTDo4S/28rEdlOYWeys8HmbRS4=;
+        b=foc07RbmLZlHSggOes7TuMA1i1bkHXq811WnRoi/r4ovbuYeRo4ur7jvf2AFycksAB
+         ISGeiql0aZii2JcUtUyOY0aqd9ecGg5QGOLa7bdLQ4yyOntEQaXsuYXxeKSpqtMjTN+3
+         Qy+ha1NxzPAgB7+s6LftHO1CwF2FogRMixmF1r/9i3GeXj/tN5CwGY+mGRDagFTmmAtR
+         LzcwspRfeiWCFBmyxOknoNNk/lfC/vvOcAfVw61ln11MoeB/vBZoRZUIMB7kG+ldUzx9
+         BuAnyx4w+ozMus3VM79Uy6e4/RyVbbvhMjbEJQbbz0f1DdZAHSXXPx78QsFZU4FnJBVB
+         zwyg==
+X-Forwarded-Encrypted: i=1; AFNElJ9lfo4BoYiwLQ4HvEvtEBVm/Kij61W4m/y99/nqCClDocuZ9DBK7eKIDoi3onu1Yf5oGyk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTfwa5RIqrQnJmsGvJSk9cWHZP2djS50Qr9bPcqsKI47FlEIwL
+	z5YIkKpiBM6eFSAgbsgcZGaNBrOgKlScNCcwJ01Xvhrre1qt2ZQBAoS2CSNZZIumFnc=
+X-Gm-Gg: Acq92OFwLhKkO5nSxxiDbB6Ah14nd+DopOZQh/CrhvhJa5v9DWiJEIxgTu25SFyFAKW
+	ARwrdWQLg3OA4soRKYkpg8RXWrmyDv+GnzTrvH9o73kz82icsT2glfn3kAfHaPfj/TzLIw8AsoF
+	X1mjZISJWm/HetWPPswPGc17EoETtOuw9OCQsnEWIHs2cnAEGZAQdhLTIWTyVvObxyADaJcu5ga
+	ZHrftvBrirxdcn2qdotli26hPQqqu7Ot90S/xj/AV4uF49lGDF6xq2jffmlztDA27uCnScWD+0/
+	p0gPUa5RI9SuW8Vh321oSuIpml7KtP23+qWzP3gONBFdOmjchYErjjkuFYmYbvRvH/TNG9h6ul3
+	3kH77jmKxN69Iq7zCd6fHU0TetRLPnFVfRCjB3ot6+omW/1hFWHnd2qaoNYHeqQ0ZLLQiWDwyEo
+	x3OL3ZJKjOQmYJADF5sGtrfyqiCY5fNynyEw==
+X-Received: by 2002:a05:7022:68a0:b0:137:ea56:358 with SMTP id a92af1059eb24-137ea56089amr1610145c88.30.1780358764521;
+        Mon, 01 Jun 2026 17:06:04 -0700 (PDT)
+Received: from localhost ([163.114.132.129])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137b2d04287sm10279590c88.0.2026.06.01.17.06.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Jun 2026 17:06:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 01 Jun 2026 20:06:00 -0400
+Message-Id: <DIY4IBKVGHDL.2CV4GP5GI4UQD@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <song@kernel.org>, <mattbobrowski@google.com>
+Subject: Re: [PATCH bpf-next v2 3/5] bpf: Allow subprogs to return arena
+ pointers
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260530002259.4505-1-emil@etsalapatis.com>
+ <20260530002259.4505-4-emil@etsalapatis.com>
+ <cba7e9dcfca6fd091d831d24eff2cca66e5217e9.camel@gmail.com>
+In-Reply-To: <cba7e9dcfca6fd091d831d24eff2cca66e5217e9.camel@gmail.com>
 
-On Mon, 2026-06-01 at 15:35 -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 1, 2026 at 11:41=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Mon, 2026-06-01 at 11:36 -0700, Amery Hung wrote:
-> > > On Mon, Jun 1, 2026 at 11:00=E2=80=AFAM Eduard Zingerman <eddyz87@gma=
-il.com> wrote:
-> > > >=20
-> > > > On Thu, 2026-05-28 at 18:49 -0700, Amery Hung wrote:
-> > > >=20
-> > > > I think refsafe() needs an update.
-> > > >=20
-> > > > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > >=20
-> > > > [...]
-> > > >=20
-> > > > > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> > > > > index 877338136009..5945956a7573 100644
-> > > > > --- a/kernel/bpf/states.c
-> > > > > +++ b/kernel/bpf/states.c
-> > > >=20
-> > > > I think refsafe() needs an update as well.
-> > > > Something like:
-> > > >=20
-> > > >     --- a/kernel/bpf/states.c
-> > > >     +++ b/kernel/bpf/states.c
-> > > >     @@ -886,6 +886,7 @@ static bool refsafe(struct bpf_verifier_sta=
-te *old, struct bpf_verifier_state *c
-> > > >=20
-> > > >             for (i =3D 0; i < old->acquired_refs; i++) {
-> > > >                     if (!check_ids(old->refs[i].id, cur->refs[i].id=
-, idmap) ||
-> > > >     +                   !check_ids(old->refs[i].parent_id, cur->ref=
-s[i].parent_id, idmap) ||
-> > > >                         old->refs[i].type !=3D cur->refs[i].type)
-> > > >                             return false;
-> > > >                     switch (old->refs[i].type) {
-> > > >=20
-> > > > Wdyt?
-> > >=20
-> > > You are right. It needs to compare parent_id, but maybe only for
-> > > REF_TYPE_PTR like below.
-> >=20
-> > check_ids() should handle the case when parent_id is zero correctly,
-> > so I think both variants are fine.
->=20
-> if that's the only thing, maybe let's do it in the follow up?
->=20
-> Eduard,
-> are you Ack-ing the whole set?
+On Mon Jun 1, 2026 at 3:01 PM EDT, Eduard Zingerman wrote:
+> On Fri, 2026-05-29 at 20:22 -0400, Emil Tsalapatis wrote:
+>> BPF subprogs currently only return void or scalar values. However,
+>> it is also safe to return arena pointers between subprogs in the same
+>> BPF program: Arena pointers are guaranteed to be safe for both programs
+>> at any point. Expand the verifier to permit returning an arena pointer
+>> to the caller.
+>>=20
+>> The main subprog is still not allowed to return an arena pointer because
+>> arena pointers are internal to the BPF program, and the return values
+>> permitted for each main subprog depend on the program type anyway.
+>>=20
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>
+> [...]
+>
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index c6a930aca67e..7a8101879f84 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -7880,6 +7880,36 @@ static int btf_scan_type_tags(struct bpf_verifier=
+_env *env,
+>>  	return 0;
+>>  }
+>> =20
+>> +/* Check whether the type is a valid return type. */
+>> +static int btf_validate_return_type(struct bpf_verifier_env *env, struc=
+t btf *btf,
+>> +		const struct btf_type *t, int subprog)
+>> +{
+>> +	u32 tags =3D 0;
+>> +	int err;
+>> +
+>> +	err =3D btf_scan_type_tags(env, btf, t->type, &tags);
+>> +	if (err)
+>> +		return err;
+>> +	t =3D btf_type_by_id(btf, t->type);
+>> +
+>> +	while (btf_type_is_modifier(t))
+>> +		t =3D btf_type_by_id(btf, t->type);
+>
+> Nit: btf_type_skip_modifiers().
+>
+>> +
+>> +	/*
+>> +	 * We allow all subprogs except for the main one to return any kind of=
+ arena pointer.
+>> +	 * General arena variables are not allowed, since it makes no sense to=
+ return by value
+>> +	 * a variable that's on the heap in the first place.
+>> +	 */
+>> +	if (subprog && (tags & ARG_TAG_ARENA) && btf_type_is_ptr(t))
+>> +		return 0;
+>> +
+>> +	/* We always accept void or scalars. */
+>> +	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t))
+>> +		return 0;
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>>  /* Process BTF of a function to produce high-level expectation of funct=
+ion
+>>   * arguments (like ARG_PTR_TO_CTX, or ARG_PTR_TO_MEM, etc). This inform=
+ation
+>>   * is cached in subprog info for reuse.
+>> @@ -7963,17 +7993,15 @@ int btf_prepare_func_args(struct bpf_verifier_en=
+v *env, int subprog)
+>>  			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+>>  		return -EINVAL;
+>>  	}
+>> -	/* check that function is void or returns int, exception cb also requi=
+res this */
+>> -	t =3D btf_type_by_id(btf, t->type);
+>> -	while (btf_type_is_modifier(t))
+>> -		t =3D btf_type_by_id(btf, t->type);
+>> -	if (!btf_type_is_void(t) && !btf_type_is_int(t) && !btf_is_any_enum(t)=
+) {
+>> -		if (!is_global)
+>> -			return -EINVAL;
+>> -		bpf_log(log,
+>> -			"Global function %s() return value not void or scalar. "
+>> -			"Only those are supported.\n",
+>> -			tname);
+>> +
+>> +	err =3D btf_validate_return_type(env, btf, t, subprog);
+>> +	if (err) {
+>> +		if (is_global) {
+>
+> I understand that this is how it was implemented previously,
+> but do we report a sane error if non-global function returns
+> non-void/int/enum?
+>
 
-Yes, I think this set is safe to land.
-(Note that there was also a nit from Mykyta, can be a follow-up as well).
+TL;DR for non-statics we consider the signature buggy and stop using it,
+which seems to only matter for tracing/ext programs, and even there it
+doesn't always make them fail.
+
+I looked into this a bit, we are reporting -EOPNOTSUPP on all error paths t=
+hat ends
+up marking the subprog's BTF as unreliable. This prevents the function
+from being EXT'ed, and forces the JIT to spill more registers in the
+trampoline for fentry programs (while also loses all type info about
+them). I don't think we need to add anything more for the time being on
+the handling.
+
+
+>> +			bpf_log(log,
+>> +				"Global function %s() return value not void or scalar. "
+>> +				"Only those are supported.\n",
+>> +				tname);
+>> +		}
+>>  		return -EINVAL;
+>
+> Nit: 'return err'?
+>
+>>  	}
+>> =20
+>
+> [...]
+
