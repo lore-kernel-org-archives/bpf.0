@@ -1,107 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D229237180
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 01:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470E63233E8
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 01:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780363239; cv=none; b=IlUv6aHUdlixzQJDKQhxy4i0TCVagxamNrPQiYi6GVFxk9d5tntmVdplCXbXGAcvCple1aKOizFQ2/NFlmeQW04pGfKcb4y8CuvvjDbpk/ExVg7788D3Ag2ZtjIoieDT/0vd189vDerAGftEu2VHBAoKyhja5mfBeyBHCFLkzjw=
+	t=1780363588; cv=none; b=nZjoQW1N+R251vGLwQCLZ3XxkkPYUHqwYOctjhgYa29ObUauyNYdjTFxqmBT61SzLohCtwQPLEQ84HAaVXFRSbiCREruvbjrihWd6Yd33/IVDYaVXNPagMX921bDh50EkTABEPBp1uE7RFE5MMg2e8fMTVRIZ/5GOk7hl8YweCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780363239; c=relaxed/simple;
-	bh=4SLfNKxkVctUM2Zwnl2DsaaKML14uSD9MyUzb8btr1g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JhfV0gPw6H2LhEPdJO33WQzrtJtBDykZ+arhWdJa5Vt85R/j6FSAObRotJWruvP9qKHG1JrSlZOgWi1N62E/SeTRtSJG99f84L2yKP7rvyNs6dfh8lqI9jHOdUhF4MCkB593r2YynQtAYqKAD7LmBCzWBvriZEIdjtlM6x0GcNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0LSBHWL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780363588; c=relaxed/simple;
+	bh=OPzddBQSs7VXlDsTtRFQ4gUnDu5dSs9mjOjPxy/V5ss=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CuU9T2IaVTRg5wHc01gTon3QJ/Ims+SKBODE49qX1cJ637yz3w+l/zhJYOq5wQ8fKsFnPygg7SZ875+KJwV2YpNk/Mhszcr/4f29/DAqf8R5ALyOGxUDIHVChbNP/Uoe81a5bQjpztukcfe9464ZX8t2Dh7aW5Zfb3+mBlYNlAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1tkGaz7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0LSBHWL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D961F00893;
-	Tue,  2 Jun 2026 01:20:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1tkGaz7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65731F00893;
+	Tue,  2 Jun 2026 01:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780363238;
-	bh=0t+7sweas+GKzuXHGONSL/1zhl94XcaElgig03e9GCM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h0LSBHWL2jh29oZKQVf6Y74k4Os6SaJu9FNB7HvzWHPPUvr/rYlTsclLTMldM6tb6
-	 GmCApoBDT+LhOWpY6O7LGd/vOZFxW6eeYDR90Qb17ckX9RSkYh+KUReVL+JJXOmWOM
-	 fgRl1L06I1+ZrO/+uqVdl9Mt9FGQs/OOp1rZ+I0epPAtMouAagglNVjAwY1IMcBvTN
-	 FP6y3c5KLxiojXc0S7a5pYRsqfQiLTd4yGgYwYrggnNmskBqUDFwkRzDmwROJJfAuZ
-	 p03TiyM1UUdGOnRquCpvjMLXFXQ/nTNc59wfoAbKpWSutYHFXte5QW3kOL7wWRUDM7
-	 8c8737OWC74rg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Allow subprogs to return arena
- pointers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602004120.17087-4-emil@etsalapatis.com>
-References: <20260602004120.17087-4-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 01:20:37 +0000
-Message-Id: <20260602012037.E2D961F00893@smtp.kernel.org>
+	s=k20260515; t=1780363586;
+	bh=OlPj6pGfx3TXcyOXN0eNfmjTHOCMivBbj/utJQsukcE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Z1tkGaz7/EiqluOLj75f9h1TzGg74t5paqbj5Oq+w+3+r0wudHgKxWgjraupz4NMS
+	 i8YrqszaABgZihU/JnHW2yGAsck0KejYLkmtqAnJfIQbDMlzKKBqgRltwJn3shA0DW
+	 +03D5WW05ByLviWdgtXrmdBFphWqya3Rf6KeZxawEYHL2gpK/rZd3aJlQQs9a1+lSK
+	 9smJFjc8iY7ihswnnNi2iZv5PpZHXw6OH7iQbzzNv6GYfzvaMzjLHQzs7rwwzgohnl
+	 3j/ibnZhDMEU/gtXKEKrKn5CeutGJOPWcsH8WyYo0yYogVuSmuPHe0ItqUnXB0st1t
+	 v7vL/5OkurKEQ==
+Content-Type: multipart/mixed; boundary="===============8993611353815754036=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <de3626fcb38375f32f7dddbcffb90ff35cd61caf54a24f6188531af70b55f0a4@mail.kernel.org>
+In-Reply-To: <20260602004120.17087-3-emil@etsalapatis.com>
+References: <20260602004120.17087-3-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 2/6] verifier: parse BTF type tags for function arguments
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,song@kernel.org,mattbobrowski@google.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  2 Jun 2026 01:26:26 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The verifier incorrectly marks the return value of global subpro=
-grams returning arena pointers as `SCALAR_VALUE` in the caller's state, pre=
-venting native pointer use.
---
+--===============8993611353815754036==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 3756bfe1c313ae3bcfb27afcfb3650b07638ef91
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 17d4ab0a8206..c6a930aca67e 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
-bpf: Allow subprogs to return arena pointers
+[ ... ]
 
-This commit expands the verifier to permit returning an arena pointer to the
-caller from a subprogram. It updates btf_validate_return_type and
-check_global_subprog_return_code to allow subprograms to return PTR_TO_ARENA
-without failing their own verification.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 3a270bc485c20..9dac790905b63 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -16651,6 +16651,10 @@ static int check_global_subprog_return_code(stru=
-ct bpf_verifier_env *env)
->  	if (err)
->  		return err;
-> =20
-> +	/* Pointers to arena are safe to pass between subprograms. */
-> +	if (is_arena_reg(env, BPF_REG_0))
-> +		return 0;
+> +static int btf_scan_type_tags(struct bpf_verifier_env *env,
+> +			      const struct btf *btf, u32 type_id,
+> +			      u32 *tags)
+> +{
+> +	const struct btf_type *t;
 > +
+> +	/* Find the first pointer type in the chain. */
+> +	t = btf_type_skip_modifiers(btf, type_id, NULL);
+> +	if (!t || !btf_type_is_ptr(t))
+> +		return 0;
 
-[Severity: Medium]
-Will this change be sufficient for the caller to actually receive a
-PTR_TO_ARENA?
+Should this return -EOPNOTSUPP for non-pointer types with type tags? Eduard
+Zingerman suggested this in v2, and you agreed it would be appropriate for
+handcrafted BTF, but the current code still returns 0.
 
-Looking at the caller-side logic in check_func_call(), it appears BPF_REG_0
-is still unconditionally marked as a SCALAR_VALUE for all non-void global
-subprograms:
+Reference: https://lore.kernel.org/bpf/e1a40461fa792dc7687b0029f3ede546eeeacbc9.camel@gmail.com/
 
-kernel/bpf/verifier.c:check_func_call() {
-    ...
-		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
-		if (!subprog_returns_void(env, subprog)) {
-			mark_reg_unknown(env, caller->regs, BPF_REG_0);
-			caller->regs[BPF_REG_0].subreg_def =3D DEF_NOT_SUBREG;
-		}
-    ...
-}
+> +
+> +	/* We got a pointer, get all associated type tags. */
+> +	t = btf_type_by_id(btf, t->type);
+> +	while (t && btf_type_is_type_tag(t)) {
 
-Could this cause the caller to receive a scalar instead of the intended are=
-na
-pointer, leading the verifier to reject subsequent dereferences with an
-invalid mem access error?
+Does this loop handle type tags that are separated from the pointer by other
+modifiers like CONST, VOLATILE, or TYPEDEF?
 
->  	if (is_pointer_value(env, BPF_REG_0)) {
->  		verbose(env, "R%d leaks addr as return value\n", BPF_REG_0);
->  		return -EACCES;
+If the BTF chain is structured as:
+  PTR -> CONST -> TYPE_TAG("arena") -> INT
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602004120.1708=
-7-1-emil@etsalapatis.com?part=3D3
+the loop would evaluate btf_type_is_type_tag(t) at the CONST modifier, get
+false, and exit immediately. The arena type tag would never be collected and
+ARG_TAG_ARENA would not be set.
+
+This causes arena-qualified pointer arguments to be mis-classified, defeating
+the feature this patch series adds. The issue is confirmed by commit
+7e64879a17df ("bpf: Allow subprogs to return arena pointers") which rewrites
+this loop to iterate over btf_type_is_modifier(t) with a continue statement
+to skip non-type-tag modifiers.
+
+Reference: https://lore.kernel.org/bpf/20260530005922.90CEE1F00893@smtp.kernel.org/
+
+> +		const char *tag = __btf_name_by_offset(btf, t->name_off);
+> +
+> +		if (strcmp(tag, "arena") == 0) {
+> +			*tags |= ARG_TAG_ARENA;
+> +		} else {
+> +			bpf_log(&env->log, "function signature member has unsupported type tag '%s'\n",
+> +				tag);
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +		t = btf_type_by_id(btf, t->type);
+> +	}
+> +
+> +	return 0;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26791686730
+--===============8993611353815754036==--
