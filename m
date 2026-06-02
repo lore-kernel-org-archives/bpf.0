@@ -1,30 +1,30 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4891122D7B5;
-	Tue,  2 Jun 2026 08:59:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31F136F8E0;
+	Tue,  2 Jun 2026 08:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780390786; cv=none; b=BiEiCA1dWrUotmRYNQd0kB18NIA4x/Ni9yIKwRfq3jTNTP0WSW2ssfezyKRGtxlM4vE9cGvnbMaoTLaAA+Tu1lT9oOPpaEBQSfK8mAfSMTv6I9ks2mbXyH+YYmeBFv+XbJ3Dczxc6Wa9GNpsX6DOjzJXedTjATyV8Yeqo544nb4=
+	t=1780390787; cv=none; b=umEsIBV/1QWZ4pPtHvc5EoheeKeOModp8N1XBN2XmxIYknykREY4/Wz102F1uRyV2aKfJX3pyqvRnRVWKKnh8ZZcMlFjxfts7pEvtVaurwb6cs3Kd8QEzcdmbtB5vTLbgpcD3ZY3efdZ/W+UhaS9ZJIiMokambwp7EOACfykK1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780390786; c=relaxed/simple;
-	bh=pwOW5TW8vsikctmZCLn5YTy1sDBcakdOMZaBNU8qsnY=;
+	s=arc-20240116; t=1780390787; c=relaxed/simple;
+	bh=v+vH/QeLHTFb0oYjPuuXE+h+9OJsOPoxKNtRvJtYPOc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o+3LH4/NpRJPc6jIDTrPNT7MW6pIB5+L6+Ux8wA0P7gbBuDjmbgZiA+4Zf2MN8wNjrzQRY8RMkooPZ/nJQsH8DomL6aIba3povVnrbaRui7V6zXTUAZMyshaMqqR5eX9bZPeCy+yGWLRsD/RK3pQWsO0SS0i1JYV01LFXGT6rSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CVRMNoZI; arc=none smtp.client-ip=220.197.31.5
+	 MIME-Version; b=pVfJOiXse+U472vTp9cTw4FBkj5uiVCxUn0qjHNivm4qYDLr+h8KcKfaBPttpqvp2uU0piMJbBmbK01CSC+5jca1LiNavWemlmFNYw2UQiqqGHKNtcsmF29UZueVH/4o2Ob4a/BwPtR/icImT2S/TB1FaczljVwMqxHRtsAGLaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=K3/D/tor; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CVRMNoZI"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="K3/D/tor"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ZP
-	URPFg4yWj7LD+yXBjumibgjb/TDL6X0zxSW4SjaYc=; b=CVRMNoZIOLfF3Kf1H+
-	0SavHCnh17w+qosXd/z4mvcyCa9mXHmvdYBN/p+/2RJQ+hqTySwrR1qKDo6amnkI
-	fiwnEYdIS4zik5Rn/aavt6v1nXjQU3nlLNYlW3zbLZ4ZfqLHLT9YH3vcn+DoLIUu
-	RKd3Hb34z/BC6USuIer3/ybIg=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=lK
+	YvhLOsd9NnhXAV8Oi1iF6qA9uiviOdk6lkEEIcGiY=; b=K3/D/torssaCNcajNd
+	M/M0KTLWkvRBA9/Douip02GkFl5qxlhyiMQpNZvERgSOYFnE1PMahnWGBtkkYWag
+	Cub/kbByrG9TPZK38DFdaSscCjXOI6OwKDa24U6jv1UhOwNb9IY7cD7S0t3KjIZC
+	obYVQZHjWbDyZ96PMP+CNs7X4=
 Received: from nec8-i7 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCXKCA9mx5qOzE6AA--.5610S3;
-	Tue, 02 Jun 2026 16:58:41 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgCXKCA9mx5qOzE6AA--.5610S2;
+	Tue, 02 Jun 2026 16:58:38 +0800 (CST)
 From: chenyuan_fl@163.com
 To: eddyz87@gmail.com,
 	yonghong.song@linux.dev
@@ -43,13 +43,12 @@ Cc: andrii@kernel.org,
 	martin.lau@linux.dev,
 	memxor@gmail.com,
 	song@kernel.org
-Subject: [PATCH bpf v3 1/2] bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointer deref
-Date: Tue,  2 Jun 2026 16:58:25 +0800
-Message-ID: <20260602085827.2562222-2-chenyuan_fl@163.com>
+Subject: [PATCH bpf v3 0/2] bpf: Fix kfunc implicit arg injection and add selftest
+Date: Tue,  2 Jun 2026 16:58:24 +0800
+Message-ID: <20260602085827.2562222-1-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602085827.2562222-1-chenyuan_fl@163.com>
+In-Reply-To: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
 References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
- <20260602085827.2562222-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,119 +56,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCXKCA9mx5qOzE6AA--.5610S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWr1xAr4kAryDAr4xKryUZFb_yoWrtrW7pF
-	W5Xr1qkrWkGw4fG3Z2yF1rAry5Gw4rZa13JF4DC34Fva1DWw4ftrn5Krya9F90yr1rJF42
-	qr1qqrWvgryUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zieWlDUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5QEZ1moem0EsrgAA3H
+X-CM-TRANSID:QCgvCgCXKCA9mx5qOzE6AA--.5610S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1xuFyUtFWDtrWDJF43KFg_yoW8Cr4fpF
+	WFy3WYkr18J3WSgF93Zr4xuFyrtws5Xw45GFnxK348Aas8Ar18XFyxKF1rtas0yrs5X3ya
+	vas2qrZ5CF1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziBOJ5UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5h4Y1Woemz5A-AAA3Y
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-the verifier must identify it so the kernel injects env->prog->aux into
-the correct register at runtime.  The original check used
-is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-module BTF type against vmlinux.
+v1: https://lore.kernel.org/bpf/20260407080900.551797-1-chenyuan_fl@163.com/
 
-Root Cause
+v1 made btf_types_are_same() cross-BTF aware by comparing kind, size
+and name.  Alan Maguire pointed out that this would be too permissive
+since two different structs can share the same name and size.
 
-This issue was triggered by pahole 1.30 generating module BTF with
-incorrect type information, which caused the kernel's distilled base
-BTF deduplication for modules to fail.  As a result, the module retained
-its own copy of struct bpf_prog_aux with a different BTF ID than
-vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
-the kernel must be robust against such inconsistencies: a BTF mismatch
-should result in a clean rejection, not a kernel crash or information
-disclosure.
+v2 used a name-based classifier (get_kfunc_arg_inject_type).
 
-When the distilled base dedup fails and btf_types_are_same() cannot
-match the module's bpf_prog_aux type against vmlinux's,
-is_kfunc_arg_prog_aux() returned false and the code fell through
-silently without setting arg_prog.  The kfunc then received whatever
-value was in the argument register and dereferenced it as a
-bpf_prog_aux pointer, leading to:
+v3 (this revision) splits the combined is_kfunc_arg_ignore ||
+is_kfunc_arg_implicit check in check_kfunc_args(), so that an implicit
+argument reaching is_kfunc_arg_implicit() without any prior handler is
+rejected with -EFAULT instead of silently skipped (Eduard Zingerman).
+This prevents the silent fallthrough that occurred when module BTF was
+inconsistent with vmlinux (e.g. pahole 1.30 breaking distilled base
+dedup).
 
-  BUG: kernel invalid pointer dereference, address: 00000000000009e2
-  RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
-  RDI: 0x000000000000046d (stale register value)
+Patch 2 adds a positive regression test for the injection path.
+Yonghong Song pointed out that with pahole 1.31 available in CI the
+test will always pass, so it cannot reproduce the original BTF mismatch
+scenario.  The test still serves as a useful regression guard for the
+injection mechanism itself, however, and would catch any accidental
+breakage in the future.
 
-In the observed crash the stale value was the process PID, causing a
-dereference within the unmapped NULL page.  However, an attacker able
-to control the register value -- for example by writing a BPF program
-that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-could redirect the dereference to arbitrary kernel memory, turning
-this into an information disclosure.  The fix ensures the verifier
-either validates and injects the correct bpf_prog_aux pointer, or
-rejects the program outright -- no silent fallthrough that could
-be exploited.
+Thanks to everyone who reviewed and provided feedback on this series.
 
-Crash Stack Trace
+Yuan Chen (2):
+  bpf: Fix kfunc implicit arg inject type detection to prevent invalid
+    pointer deref
+  selftests/bpf: Add regression test for kfunc implicit arg injection
 
-  PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
-   #0 machine_kexec at ffffffff812f6e26
-   #1 __crash_kexec at ffffffff8145a788
-   #2 crash_kexec at ffffffff8145ac24
-   #3 oops_end at ffffffff812bb67c
-   #4 page_fault_oops at ffffffff813053a1
-   #5 exc_page_fault at ffffffff828e60a1
-   #6 asm_exc_page_fault at ffffffff810012a6
-      [exception RIP: bpf_prog_get_assoc_struct_ops+10]
-      RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
-      RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
-      RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
-   #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
-   #8 bpf_trace_run2 at ffffffff814f8332
-   #9 __traceiter_sys_enter at ffffffff81415f45
-  #10 trace_syscall_enter at ffffffff81416735
-  #11 do_syscall_64 at ffffffff828e06a1
+ kernel/bpf/verifier.c                              | 15 +++++++-
+ .../bpf/prog_tests/test_struct_ops_assoc.c         |  7 ++++
+ .../testing/selftests/bpf/progs/struct_ops_assoc.c | 40 ++++++++++++++++++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  9 +++++
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  1 +
+ 5 files changed, 71 insertions(+), 1 deletion(-)
 
-Fix
-
-Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
-check in check_kfunc_args() so that an implicit argument reaching
-is_kfunc_arg_implicit() without being handled by a prior handler is
-rejected with -EFAULT, instead of silently skipped.  Recognized cases:
-
-  - struct bpf_prog_aux *  : is_kfunc_arg_prog_aux()
-  - __ign suffix args      : is_kfunc_arg_ignore()
-  - list_push/rbtree_add   : is_bpf_list_push_kfunc() / is_bpf_rbtree_add_kfunc()
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/verifier.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8dd79b735a69..55c74d064e4e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11916,9 +11916,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			continue;
- 		}
- 
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-+		if (is_kfunc_arg_ignore(btf, &args[i]))
- 			continue;
- 
-+		if (is_kfunc_arg_implicit(meta, i)) {
-+			/* list_push / rbtree_add kfuncs have implicit args
-+			 * (e.g. 'off' parameter) handled during verification
-+			 * in bpf_fixup_kfunc_call().  Don't flag them.
-+			 */
-+			if (is_bpf_list_push_kfunc(meta->func_id) ||
-+			    is_bpf_rbtree_add_kfunc(meta->func_id))
-+				continue;
-+			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-+				reg_arg_name(env, argno));
-+			return -EFAULT;
-+		}
-+
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 
- 		if (btf_type_is_scalar(t)) {
 -- 
-2.54.0
+2.47.2
 
