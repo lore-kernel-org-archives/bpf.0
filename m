@@ -1,107 +1,118 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB5D3932EA;
-	Tue,  2 Jun 2026 07:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE84E3B3C19;
+	Tue,  2 Jun 2026 07:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780385390; cv=none; b=TxZiXb0RcirDAdH49tVjjG387st2uliYMZCE9EXJrI7RRTizL9MmDQTkaZmL1o2uqfK/dWWuUMUX4UfKAutlz8k3I24AIXIQZ7AKbIXdvLdn3Dgh1Pz0CcTpXA9m4S4aRpdcy+2AJYIVIWAGYgm6swyg0EIYNbj4ZV0DxLS7uWI=
+	t=1780385753; cv=none; b=SzvFS8ZwwO0ASdDvZ/QlRp8q8jax6wgyjh4irLgyoGBfittRqGU3UAuc3hWJikToCd0qCBIkif0fWH90xf1J+WEibRd5OLLg/GFFK+YPFB6hctIYhFLMZQnU4h2yxcNwxLpRZ8sywoxn0OE0hYMgtdXsByIWQl1eNVz8xlLq44A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780385390; c=relaxed/simple;
-	bh=tpE9iyO18dyU5LG49u/BjwWvRz1UhB72bCoYzFUlDjQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=iaO9QsfhTU9BtXiwomfRil7mWAED4dho9+0BjRWSIgnAmYh+YA92W9SB8gImCpqZSVI/jo9LQiD/jifdPjo4HKC+z47OA935Z/m+RMectV6nDvOWyzyAx+rE1nZKdrXNCRBrCnAeh81zt4dJdNoWc15aZfG8Mw01Ts2sVQFY+q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxvsBhhh5qs6UPAA--.19961S3;
-	Tue, 02 Jun 2026 15:29:37 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDx6+BVhh5qOg2ZAA--.29239S3;
-	Tue, 02 Jun 2026 15:29:27 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: bpf: Support kptr xchg inline
-To: Chenguang Zhao <zhaochenguang@kylinos.cn>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260602021515.214560-1-zhaochenguang@kylinos.cn>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <80088e78-293c-268c-3539-4e9ce66c4fd3@loongson.cn>
-Date: Tue, 2 Jun 2026 15:29:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1780385753; c=relaxed/simple;
+	bh=MoWPqv5MvyNJ5K/PbF8SKZvggtmx17L3oZ05xdXWScM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KCAKNZe4W/Ks+9DJxD/xyWRNYtmgdJir5+sPnZt+OcWCB0Gm9BVvUP+BEG4BmTeyoQIkT3NgcPXV6rcgvcQH+U4/X4Odg925GcdBL1RWdXVUeQuVLfZ/jRN4Q9bBAl8yuTi/YpNF1osD+7/eJNHUgWQ7z/ZYq8rBKBPT1M2fKuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OIhoTUl9; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OIhoTUl9"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=UEU8iCd7dQXJ/S7eftZ1QwjBouNQBhK6RZWqRz0cE+M=;
+	b=OIhoTUl9BwO9vQ8CYJGsBLYxYaGuB+k9Z5oJt2H8ogidNBSwoyUD1uHQLkVspgkHVYjcwJ+4E
+	iHa31Z8X3tZ87RQA4CMBwSLf/h5q+Pe6UUGMyTJV52KFV+yukfXHHjr3UPeZgZvJyNZvGyllLMu
+	+f9KHS96Y0EkE9hewu/9lkU=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4gV2VK2Rz8zmV7c;
+	Tue,  2 Jun 2026 15:27:53 +0800 (CST)
+Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
+	by mail.maildlp.com (Postfix) with ESMTPS id D2C084055B;
+	Tue,  2 Jun 2026 15:35:43 +0800 (CST)
+Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
+ (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 2 Jun
+ 2026 15:35:42 +0800
+From: Lin Ma <malin89@huawei.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, <bpf@vger.kernel.org>
+CC: Andrii Nakryiko <andrii@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>, Shuah Khan
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Amery Hung <ameryhung@gmail.com>, Lin Ma
+	<malin89@huawei.com>, Rongzhen Cui <cuirongzhen@huawei.com>, Jingguo Tan
+	<tanjingguo@huawei.com>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
+Subject: [PATCH v2 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
+Date: Tue, 2 Jun 2026 15:35:38 +0800
+Message-ID: <20260602073539.1567846-1-malin89@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260602021515.214560-1-zhaochenguang@kylinos.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDx6+BVhh5qOg2ZAA--.29239S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KrWUKF4DAw47JF1Utw17XFc_yoW8AF45pr
-	Zavr9xGr4DXFy0kw18Jw4fX3W3Aw45ArWYqryUC34qy3s8Zrn29F93K3409Fs8GFZIva42
-	va1Dt3y3ua1DCFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0mhrUUU
-	UU=
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemr200017.china.huawei.com (7.202.195.7)
 
-On 2026/6/2 上午10:15, Chenguang Zhao wrote:
-> The BPF verifier can lower a bpf_kptr_xchg() call into a single BPF_XCHG
-> atomic instruction when the JIT advertises support through
-> bpf_jit_supports_ptr_xchg(). This drops the helper call overhead from the
-> kptr exchange fast path.
-> 
-> Such inlining is only safe when the JITed atomic exchange provides the
-> same full memory ordering as the bpf_kptr_xchg() helper. On LoongArch the
-> plain amswap.d instruction carries no barrier semantics, so emit the
-> ordered amswap_db.d variant for 64-bit BPF_XCHG instead. Add the
-> amswapdbw/amswapdbd instruction emit helpers it relies on, and implement
-> bpf_jit_supports_ptr_xchg() to turn the inlining on.
-> 
-> Extend the kptr_xchg_inline selftest to cover LoongArch64, and add a
-> kptr-xchg benchmark to compare the helper and inline paths.
+The recent KCTF-reported cgroup local storage issue assigned
+CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+in cgroup local storage").
 
-If I understand correctly, please split into two parts, one for JIT
-and one for selftest.
+However, the previous fixes are still incomplete. The current prog-array
+compatibility check treats a program with no cgroup storage as
+compatible with any stored storage cookie. This allows a storage-less
+program to bridge a tail-call chain between an entry program and a
+storage-using callee even though runtime cgroup local storage still
+follows the caller context.
 
-1. For the JIT part, there are two logical changes, it is better to
-split into two patches:
-(1) fix the current code.
-(2) add new feature.
+Require exact per-type storage_cookie equality when checking prog-array
+compatibility. This blocks zero-storage bridge programs from joining a
+prog-array owned by a storage-using program and closes the residual
+A -> B(no storage) -> C(storage) path.
 
-Regardless of whether bpf_jit_supports_ptr_xchg returns true or false,
-amswap_db.b/h/w/d must be used. The LKMM (Linux Kernel Memory Model)
-mandates that all value-returning atomic RMW instructions imply a full
-barrier. Consequently, decoupling the JIT instruction selection from
-the pointer-support state ensures that regular scalar atomic updates
-remain sequentially consistent across multi-core systems.
+This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+requiring storage use to match consistently across prog-array users.
 
-2. For the selftest part, there are two logical changes, it is better
-to split into two patches:
-(1) enable the functional test "./test_progs -t kptr_xchg_inline".
-(2) add benchmark for kptr-xchg performance.
+Cc: stable@vger.kernel.org
+Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+Tested-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Lin Ma <malin89@huawei.com>
+Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+---
+v1: https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/
+v1 -> v2:
+ - refine the commit message and mention the relation to Amery Hung's
+   NULL-storage tail-call fix
+ - add patch 2/2 selftests for tail-call cgroup storage prog-array
+   checks
 
-Thanks,
-Tiezhu
+ kernel/bpf/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6aa2a8b24030..f0b61b10f30e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+ 				break;
+ 			cookie = aux->cgroup_storage[i] ?
+ 				 aux->cgroup_storage[i]->cookie : 0;
+-			ret = map->owner->storage_cookie[i] == cookie ||
+-			      !cookie;
++			/*
++			 * Tail calls keep using the caller cgroup storage
++			 * context, so prog-array members must use the same
++			 * storage cookie.
++			 */
++			ret = map->owner->storage_cookie[i] == cookie;
+ 		}
+ 		if (ret &&
+ 		    map->owner->attach_func_proto != aux->attach_func_proto) {
+-- 
+2.53.0
