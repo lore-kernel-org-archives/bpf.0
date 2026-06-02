@@ -1,175 +1,162 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1793D0BE4;
-	Tue,  2 Jun 2026 09:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3438A3D1AA0;
+	Tue,  2 Jun 2026 09:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780393218; cv=none; b=NR8+R3PsC5T/9/gAPcKPeCRL34HE1+B4+maH+kUAhk9MN1JdOlULZi5iA5e6xSGj5wd5g1KFLXR7MKkrGbGW9H//lst4iiNUj7i0WEfh9UxADrG/PlyL4Mdzc8r86AibZR3MI08y+0WignAvU8Cfu3hWk4V+1qKLB+aUg3APwMA=
+	t=1780393363; cv=none; b=EEipHemI2eg/LNfH240L6lczFiN0qG2hw2FZIKJrcyRbjZi5wGwPFQthfogJ+9iYGO0Lu0YePqaMQSK1wQy24G9n2BFPdNtihCj7/FvG17ekUFwvwTS5fVIzv2iTbmvqBQ8pDFuPOgJdH4NFPPTIWYcRFseBzYBso1ppEtVmtMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780393218; c=relaxed/simple;
-	bh=pwOW5TW8vsikctmZCLn5YTy1sDBcakdOMZaBNU8qsnY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H+kDyKDUUTE3vrD+NRm7B+tBsG2gNXTFjfEE12hxvzVw9ncCKdlwn0J04AO78uH4itqHzY7LW2poDXW9yX8RYnwhDR+H3WUxUYu6hccXLQ851c+QoOHfWG7IU8Lf/4jTV3+MtHg6DaSCkxNrK/rgumaNbjeo6R6kKGHdN/eR6m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Lh1MpHLY; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780393363; c=relaxed/simple;
+	bh=h2KZe2EmYRBf5jakX+ffYVY0B/63VVQcW+dzSu28EAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BeLr+3zrCzpz1z0lq/H9tKYvw2PfnC7kC0mMQuL6yN2LtxJUSwr4uHDmG4D10G1VWKPz2qCdOw++En6W6mCQeuHmoX68jH8OQJikj4HGmJO1T47VPxg1hWb+Ovl1aSS6oiFgp38827MA2q3nAWq5blZpyJNn2m5l7eSeIA3abI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVD+mg+C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Lh1MpHLY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ZP
-	URPFg4yWj7LD+yXBjumibgjb/TDL6X0zxSW4SjaYc=; b=Lh1MpHLY6YSmKfKgsS
-	nmlUAePNfZ9kHuWeP2H8xiKJ3NpkCkBs3Ly6xdU9zVLBDG1t1Aog2rgwifFr5NGk
-	ntudm8fmUDJw9fwwuuKCrLoWE4gy7J2Iha7l8DER6zPiSmFTvf9YM1cZxYOrnH5K
-	nv64ahMJA2TU7hTESRsusTCN8=
-Received: from nec8-i7 (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgCnYo6mpB5qDzU6AA--.7425S3;
-	Tue, 02 Jun 2026 17:38:51 +0800 (CST)
-From: chenyuan_fl@163.com
-To: eddyz87@gmail.com,
-	yonghong.song@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bot+bpf-ci@kernel.org,
-	bpf@vger.kernel.org,
-	chenyuan@kylinos.cn,
-	chenyuan_fl@163.com,
-	clm@meta.com,
-	daniel@iogearbox.net,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org
-Subject: [PATCH bpf v4 1/2] bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointer deref
-Date: Tue,  2 Jun 2026 17:38:32 +0800
-Message-ID: <20260602093836.2632714-2-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602093836.2632714-1-chenyuan_fl@163.com>
-References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
- <20260602093836.2632714-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVD+mg+C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616C71F00893;
+	Tue,  2 Jun 2026 09:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780393361;
+	bh=tQYJrVMLZWh9yIT7btTVUgpKt7qkNI8vd7jCerpn1yg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CVD+mg+CESoolImg1Imn7In3BgToyvXQdkwaN6Fc3LpVLmjodUVI51+Juv8gAghmo
+	 jjMIAIFLZc2M/BMqhcEbYAluSF0M96tWWJs2djlqnyX5M7/GkXr0/FaQNyF0DXD+bH
+	 A1HUD9XyNPGwLIRci+szwn4jZEZWT7/x9XzkLWiPFKLOpDL+CD2me2gaspMzBlgQu1
+	 ToJHfxh7NymTEH6PxGxCuezyRUzpG0sowq3GTP4ZSszHYohXe9VxspvORrfMfETw+T
+	 lUZakefMNzQ5pHR1FFjAWnr9qtV6G6j2IiQs1W6efOf0s2w2M8Om9D6KyzMlio4kTU
+	 em0JW45AkWgRQ==
+Date: Tue, 2 Jun 2026 10:42:35 +0100
+From: Keith Busch <kbusch@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+	linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 8/9] block: add configurable error injection
+Message-ID: <ah6li1JOGrpXor9W@kbusch-mbp>
+References: <20260602054615.3788425-1-hch@lst.de>
+ <20260602054615.3788425-9-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgCnYo6mpB5qDzU6AA--.7425S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWr1xAr4kAryDAr4xKryUZFb_yoWrtrW7pF
-	W5Xr1qkrWkGw4fG3Z2yF1rAry5Gw4rZa13JF4DC34Fva1DWw4ftrn5Krya9F90yr1rJF42
-	qr1qqrWvgryUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zir-BtUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgt1M2oepKvcWAAA3w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260602054615.3788425-9-hch@lst.de>
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+On Tue, Jun 03, 2026 at 07:45:40AM +0200, Christoph Hellwig wrote:
+> +static int error_inject_add(struct gendisk *disk, enum req_op op,
+> +		sector_t start, u64 nr_sectors, blk_status_t status,
+> +		unsigned int chance)
+> +{
+> +	struct blk_error_inject *inj;
+> +
+> +	if (op == REQ_OP_LAST)
+> +		return -EINVAL;
+> +	if (status == BLK_STS_OK)
+> +		return -EINVAL;
+> +	if (U64_MAX - nr_sectors < start)
+> +		return -EINVAL;
+> +
+> +	if (!nr_sectors)
+> +		nr_sectors = U64_MAX;
+> +
 
-When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-the verifier must identify it so the kernel injects env->prog->aux into
-the correct register at runtime.  The original check used
-is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-module BTF type against vmlinux.
+...
 
-Root Cause
+> +
+> +	inj->op = op;
+> +	inj->start = start;
+> +	inj->end = start + nr_sectors - 1;
 
-This issue was triggered by pahole 1.30 generating module BTF with
-incorrect type information, which caused the kernel's distilled base
-BTF deduplication for modules to fail.  As a result, the module retained
-its own copy of struct bpf_prog_aux with a different BTF ID than
-vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
-the kernel must be robust against such inconsistencies: a BTF mismatch
-should result in a clean rejection, not a kernel crash or information
-disclosure.
+When nr_sectors is 0, it is reset to U64_MAX so overflows if start > 1.
+I think you want to remove overriding nr_sectors to U64_MAX and do:
 
-When the distilled base dedup fails and btf_types_are_same() cannot
-match the module's bpf_prog_aux type against vmlinux's,
-is_kfunc_arg_prog_aux() returned false and the code fell through
-silently without setting arg_prog.  The kfunc then received whatever
-value was in the argument register and dereferenced it as a
-bpf_prog_aux pointer, leading to:
+	if (!nr_sectors)
+		inj->end = U64_MAX;
+	else if (U64_MAX - nr_sectors < start )
+		return -EINVAL;
+	else
+		inj->end = start + nr_sectors - 1;
 
-  BUG: kernel invalid pointer dereference, address: 00000000000009e2
-  RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
-  RDI: 0x000000000000046d (stale register value)
+> +	inj->status = status;
+> +	inj->chance = chance;
+> +
+> +	/*
+> +	 * Add to the front of the list so that newer entries can partially
+> +	 * override other entries.  This also intentional allows duplicate
+> +	 * entries as there is no real reason to reject them.
+> +	 */
+> +	mutex_lock(&disk->error_injection_lock);
+> +	if (!disk_live(disk)) {
+> +		mutex_unlock(&disk->error_injection_lock);
+> +		return -EINVAL;
 
-In the observed crash the stale value was the process PID, causing a
-dereference within the unmapped NULL page.  However, an attacker able
-to control the register value -- for example by writing a BPF program
-that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-could redirect the dereference to arbitrary kernel memory, turning
-this into an information disclosure.  The fix ensures the verifier
-either validates and injects the correct bpf_prog_aux pointer, or
-rejects the program outright -- no silent fallthrough that could
-be exploited.
+I think we've leaked 'inj' in this error case.
 
-Crash Stack Trace
+> +	}
+> +	list_add(&inj->entry, &disk->error_injection_list);
 
-  PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
-   #0 machine_kexec at ffffffff812f6e26
-   #1 __crash_kexec at ffffffff8145a788
-   #2 crash_kexec at ffffffff8145ac24
-   #3 oops_end at ffffffff812bb67c
-   #4 page_fault_oops at ffffffff813053a1
-   #5 exc_page_fault at ffffffff828e60a1
-   #6 asm_exc_page_fault at ffffffff810012a6
-      [exception RIP: bpf_prog_get_assoc_struct_ops+10]
-      RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
-      RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
-      RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
-   #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
-   #8 bpf_trace_run2 at ffffffff814f8332
-   #9 __traceiter_sys_enter at ffffffff81415f45
-  #10 trace_syscall_enter at ffffffff81416735
-  #11 do_syscall_64 at ffffffff828e06a1
+The __blk_error_inject interates this list with
+"list_for_each_entry_rcu", so shouldn't this be list_add_rcu to match?
 
-Fix
+> +	mutex_unlock(&disk->error_injection_lock);
+> +
+> +	bdev_set_flag(disk->part0, BD_MAKE_IT_FAIL);
+> +	return 0;
+> +}
 
-Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
-check in check_kfunc_args() so that an implicit argument reaching
-is_kfunc_arg_implicit() without being handled by a prior handler is
-rejected with -EFAULT, instead of silently skipped.  Recognized cases:
+<snip>
 
-  - struct bpf_prog_aux *  : is_kfunc_arg_prog_aux()
-  - __ign suffix args      : is_kfunc_arg_ignore()
-  - list_push/rbtree_add   : is_bpf_list_push_kfunc() / is_bpf_rbtree_add_kfunc()
+> +static const match_table_t opt_tokens = {
+> +	{ Opt_add,			"add",			},
+> +	{ Opt_removeall,		"removeall",		},
+> +	{ Opt_op,			"op=%s",		},
+> +	{ Opt_start,			"start=%u"		},
+> +	{ Opt_nr_sectors,		"nr_sectors=%u"		},
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/verifier.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Shouldn't start and nr_sectors use %llu?
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8dd79b735a69..55c74d064e4e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11916,9 +11916,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			continue;
- 		}
- 
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-+		if (is_kfunc_arg_ignore(btf, &args[i]))
- 			continue;
- 
-+		if (is_kfunc_arg_implicit(meta, i)) {
-+			/* list_push / rbtree_add kfuncs have implicit args
-+			 * (e.g. 'off' parameter) handled during verification
-+			 * in bpf_fixup_kfunc_call().  Don't flag them.
-+			 */
-+			if (is_bpf_list_push_kfunc(meta->func_id) ||
-+			    is_bpf_rbtree_add_kfunc(meta->func_id))
-+				continue;
-+			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-+				reg_arg_name(env, argno));
-+			return -EFAULT;
-+		}
-+
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 
- 		if (btf_type_is_scalar(t)) {
--- 
-2.54.0
+> +static ssize_t blk_error_injection_write(struct file *file,
+> +		const char __user *ubuf, size_t count, loff_t *pos)
+> +{
 
+...
+
+> +	options = memdup_user_nul(ubuf, count);
+> +	if (!options)
+> +		return -ENOMEM;
+> +
+
+On failure, memdup_user_nul returns an ERR_PTR rather than NULL.
+
+	if (IS_ERR(options))
+		return PTR_ERR(options);
+
+> +	case Removeall:
+> +		if (option_mask & ~Opt_removeall)
+> +			return -EINVAL;
+
+Leaking "options"? Should this be:
+
+		if (option_mask & ~Opt_removeall) {
+			ret = -EINVAL;
+			goto out_free_options;
+		}
+
+?
+
+> +		error_inject_removall(disk);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	if (!ret)
+> +		ret = count;
+> +out_free_options:
+> +	kfree(options);
+> +	return ret;
+> +}
