@@ -1,183 +1,198 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B409C33F59E
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 18:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EE239DBDB
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 18:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780426371; cv=none; b=hAsVxDswVVx7YpnzTqXsJwj7YC0AzwnNbY+V1uvZjjCQNwMk/HCv9i8Wsyq1hy6vgjidFH9BP6qm1O1ExrpShZZn4ghfB4BhGYHzuxQArtgfd/zPm2d79vq9XJX5klmXOpQ3Xs/kaB/3EFVPoK9Qpu1RJDtrMcHKkBcCYiZMDX4=
+	t=1780426484; cv=none; b=bfM1mOebFNZh0PoIhs1uO7DofXH5Eqc/By/kru9GVV/I52QivJc7ibEtgty5U1RMCyHZ8unJvVl1dIgaQ89yAtdO0gykSqbUmxRDyib7NVmzPbO8zgYlc2M7AZgMvUOKjKaBmTE0aTrRDMnB7b2wwCe2vsi9HHs2a0KEj3MNtIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780426371; c=relaxed/simple;
-	bh=V5GSsYl7LuZX1O2sGJUeZdEteKsZi3QSUFovKuCeBYs=;
+	s=arc-20240116; t=1780426484; c=relaxed/simple;
+	bh=cKPNcXHdC1j74KMh1wcdH6FjcKxiPPvCXPyV8TcXfo8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m/RTPS3gWUnk87+jaPoGoqJUsBJ8kRXUDjyVdAiclB/Rs+6fDL6DjU9BU61jC+RYsZJJkWXNz6qSYGJIb0pwT1kZ+c8mlmNwZc2SmH4NJrVJo5tghAXz6rox7LVFfdMsprCQ1pZ/n3iURZtcG2MvZj08j0k3yRex18RmZrpRdcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vc5UE61q; arc=none smtp.client-ip=95.215.58.178
+	 In-Reply-To:Content-Type; b=MFl8UFWG2Dq00K5/3lsQQ5FNpdb/V8/iQiIO6TmbL6G9xOOQfI8HczsJ9TiN0Yf7zuPiEOA9Wdmxrv8d4YM6mPlj3F4eVUPGzajONsWfJUOFJfVjNsvZHk/tJRFCmeHZJjnI4cIZtYV2JjE05cCMYOWaQStOD/oaUxRF4E3vdRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y9FvsLdd; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vc5UE61q"
-Message-ID: <8f2dd2e9-726c-4295-995c-3bdbcda56070@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y9FvsLdd"
+Message-ID: <edad0f67-07f6-44df-b6da-4e4c3660e937@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780426368;
+	t=1780426467;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XktaSwFKmZJRVa2O5ok0+clipt+j4kB9CAvol3Nk4z0=;
-	b=Vc5UE61qmbi0/jFyZoFbZdacgUCDg0k6pqBWZOQ6+xcN06znEoa9WfuZn9Y35x7ddhwt7C
-	t2WQjY2XQ1UySiDG8Zx/HXztY0dmZJzVudG/95yEaWzaDdsrVJV2yIBpKEKFhyiRdX2Jfn
-	Pol5viaEDwUVulD2HwLlTPlZ/yS5QHo=
-Date: Tue, 2 Jun 2026 11:52:39 -0700
+	bh=hp0qpPB48gWeC90+YVeXK/R2N/pxJbKSzL/GewP1mAc=;
+	b=Y9FvsLddDqYtEjb1dukP/i7ecNoPH3ZB9JI6tk3gk529Fom2vpook+A3B3hZS1iduDhpS+
+	qG5VbhHGXEU+vq/i6IuupLifg85HTytZ3yXBLuGly5oXpVo47mbdJYZkImWXLpSMG6fiLz
+	SAlIGfJYBmo6pn4sts5JWMIg+QVPfS0=
+Date: Tue, 2 Jun 2026 11:54:17 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
-To: chenyuan_fl@163.com, eddyz87@gmail.com, yonghong.song@linux.dev
-Cc: andrii@kernel.org, ast@kernel.org, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, chenyuan@kylinos.cn, clm@meta.com,
- daniel@iogearbox.net, jolsa@kernel.org, linux-kernel@vger.kernel.org,
- martin.lau@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
- song@kernel.org
-References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
- <20260602085827.2562222-1-chenyuan_fl@163.com>
- <20260602085827.2562222-2-chenyuan_fl@163.com>
-Content-Language: en-US
+Subject: Re: [PAHOLE v3 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+To: Emil Tsalapatis <emil@etsalapatis.com>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ jose.marchesi@oracle.com, David Faust <david.faust@oracle.com>
+References: <20260601183511.594100-1-vineet.gupta@linux.dev>
+ <20260601183511.594100-2-vineet.gupta@linux.dev>
+ <DIY5R0P9CJKJ.3S0RU6SR33V49@etsalapatis.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260602085827.2562222-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=UTF-8
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <DIY5R0P9CJKJ.3S0RU6SR33V49@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 6/2/26 1:58 AM, chenyuan_fl@163.com wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-> the verifier must identify it so the kernel injects env->prog->aux into
-> the correct register at runtime.  The original check used
-> is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-> module BTF type against vmlinux.
-> 
-> Root Cause
-> 
-> This issue was triggered by pahole 1.30 generating module BTF with
-> incorrect type information, which caused the kernel's distilled base
-> BTF deduplication for modules to fail.  As a result, the module retained
-> its own copy of struct bpf_prog_aux with a different BTF ID than
-> vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
+Hi Emil,
 
-Hi Yuan,
+On 6/1/26 6:04 PM, Emil Tsalapatis wrote:
+>>   }
+>>   
+>> +static bool die__tag_is_annotation(Dwarf_Die *die)
+>> +{
+>> +	unsigned int tag = dwarf_tag(die);
+>> +	return tag == DW_TAG_LLVM_annotation || tag == DW_TAG_GNU_annotation;
+> Can we also have a shorthand static inline for
+>
+> tag == DW_TAG_LLVM_annotation || tag == DW_TAG_GNU_annotation
+>
+> ? Would be nice in a bunch of places.
 
-Could you please elaborate on the "incorrect type information" generated
-by pahole 1.30?
+OK.
+>
+>> +}
+>> +
+>>   static int add_llvm_annotation(Dwarf_Die *die, int component_idx, struct conf_load *conf,
+>>   			       struct list_head *head)
 
-My understanding is, the symptom of the problem you're trying to fix is
-that module BTF with custom kfuncs with KF_IMPLICIT_ARGS ends up with a
-copy of an arg type, instead of referencing the BTF ID in kernel BTF.
+This one is used by both so I renamed it to add_tag_annotation.
 
-Do you know how this happens? Is it a bug in pahole or in resolve_btfids?
+>>   {
+>> @@ -943,7 +949,7 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
+> Since this is not just LLVM annotations can we rename it to
+> *_tag_annotations or something similar? Same for all other llvm-named
+> fucntions we are explicitly handling GCC tags in.
 
-I have a suspicion we might not need changes in the verifier to fix this.
-Might be wrong of course, would appreciate a bit more details.
+This is llvm specific, since the child style annotations are generated 
+by llvm only. So the current name makes sense.
 
-> the kernel must be robust against such inconsistencies: a BTF mismatch
-> should result in a clean rejection, not a kernel crash or information
-> disclosure.
-> 
-> When the distilled base dedup fails and btf_types_are_same() cannot
-> match the module's bpf_prog_aux type against vmlinux's,
+>>   	die = &child;
+>>   	do {
+>> -		if (dwarf_tag(die) == DW_TAG_LLVM_annotation) {
+>> +		if (die__tag_is_annotation(die)) {
+>>   			ret = add_llvm_annotation(die, component_idx, conf, head);
+>>   			if (ret)
+>>   				return ret;
+>> @@ -953,6 +959,35 @@ static int add_child_llvm_annotations(Dwarf_Die *die, int component_idx,
+>>   	return 0;
+>>   }
+>>   
+>> +/* Handle gcc sytle btf_decl_tag annotations for functions/struct/member tags
+> Typo: sytle -> style
 
-Dedup happens in pahole, but distill_base is done in resolve_btfids.
-I think distill_base is supposed to remove the (copy of) target type from
-module BTF. Can you confirm that it doesn't?
+Fixed.
 
-> is_kfunc_arg_prog_aux() returned false and the code fell through
-> silently without setting arg_prog.  The kfunc then received whatever
-> value was in the argument register and dereferenced it as a
-> bpf_prog_aux pointer, leading to:
-> 
->   BUG: kernel invalid pointer dereference, address: 00000000000009e2
->   RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
->   RDI: 0x000000000000046d (stale register value)
-> 
-> In the observed crash the stale value was the process PID, causing a
-> dereference within the unmapped NULL page.  However, an attacker able
-> to control the register value -- for example by writing a BPF program
-> that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-> could redirect the dereference to arbitrary kernel memory, turning
-> this into an information disclosure.  The fix ensures the verifier
-> either validates and injects the correct bpf_prog_aux pointer, or
-> rejects the program outright -- no silent fallthrough that could
-> be exploited.
-> 
-> Crash Stack Trace
-> 
->   PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
->    #0 machine_kexec at ffffffff812f6e26
->    #1 __crash_kexec at ffffffff8145a788
->    #2 crash_kexec at ffffffff8145ac24
->    #3 oops_end at ffffffff812bb67c
->    #4 page_fault_oops at ffffffff813053a1
->    #5 exc_page_fault at ffffffff828e60a1
->    #6 asm_exc_page_fault at ffffffff810012a6
->       [exception RIP: bpf_prog_get_assoc_struct_ops+10]
->       RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
->       RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
->       RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
->    #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
->    #8 bpf_trace_run2 at ffffffff814f8332
->    #9 __traceiter_sys_enter at ffffffff81415f45
->   #10 trace_syscall_enter at ffffffff81416735
->   #11 do_syscall_64 at ffffffff828e06a1
-> 
-> Fix
-> 
-> Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
-> check in check_kfunc_args() so that an implicit argument reaching
-> is_kfunc_arg_implicit() without being handled by a prior handler is
-> rejected with -EFAULT, instead of silently skipped.  Recognized cases:
-> 
->   - struct bpf_prog_aux *  : is_kfunc_arg_prog_aux()
->   - __ign suffix args      : is_kfunc_arg_ignore()
->   - list_push/rbtree_add   : is_bpf_list_push_kfunc() / is_bpf_rbtree_add_kfunc()
-> 
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8dd79b735a69..55c74d064e4e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11916,9 +11916,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
->  
-> -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-> +		if (is_kfunc_arg_ignore(btf, &args[i]))
->  			continue;
->  
-> +		if (is_kfunc_arg_implicit(meta, i)) {
-> +			/* list_push / rbtree_add kfuncs have implicit args
-> +			 * (e.g. 'off' parameter) handled during verification
-> +			 * in bpf_fixup_kfunc_call().  Don't flag them.
-> +			 */
-> +			if (is_bpf_list_push_kfunc(meta->func_id) ||
-> +			    is_bpf_rbtree_add_kfunc(meta->func_id))
-> +				continue;
-> +			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-> +				reg_arg_name(env, argno));
-> +			return -EFAULT;
-> +		}
-> +
->  		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
->  
->  		if (btf_type_is_scalar(t)) {
+>> + * Pointers are handled seperately, inline in die__create_new_pointer_tag ()
+> Typo: seperately -> separately, also maybe remove the space before the ()
 
+Fixed.
+
+>> + */
+>> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
+>> +				    struct conf_load *conf, struct list_head *head)
+>> +{
+>> +	Dwarf_Attribute attr;
+>> +	Dwarf_Die annot_die;
+>> +
+>> +	if (dwarf_attr(die, DW_AT_GNU_annotation, &attr) == NULL ||
+>> +	    dwarf_formref_die(&attr, &annot_die) == NULL)
+>> +		return 0;
+>> +
+>> +	for (;;) {
+>> +		if (dwarf_tag(&annot_die) != DW_TAG_GNU_annotation)
+>> +			break;
+>> +
+>> +		int ret = add_llvm_annotation(&annot_die, component_idx, conf, head);
+> E.g., here imo it makes sense to keep the llvm name since AFAICT this is
+> one of the places where we normalize the GCC tags.
+
+Normalization is just an internal detail, this is actually using the 
+common functionality which we already renamed above to the agnostic name 
+add_tag_annotation.
+
+>> -	/* If no child tags or skipping btf_type_tag encoding, just create a new tag
+>> -	 * and return
+>> -	 */
+>> -	if (!dwarf_haschildren(die) || dwarf_child(die, &child) != 0 ||
+>> -	    conf->skip_encoding_btf_type_tag)
+>> +	/* If skipping btf_type_tag encoding, just create a new tag, return */
+>> +	if (conf->skip_encoding_btf_type_tag)
+>>   		return tag__new(die, cu);
+>>   
+>> -	/* Otherwise, check DW_TAG_LLVM_annotation child tags */
+>> +	/* Handle LLVM style annotation tags if present */
+> Can we move this comment to right below the goto? It's slightly
+> confusing here.
+
+Yep makes sense. Also for consistency did the same for the GNU comment.
+
+> For that matter, why are we processing LLVM and GNU tags in succession?
+> Could we just turn check_gnu_attr into a separate function and instead
+> of a goto do
+>
+> return check_gnu_attr();
+>
+> ?
+>
+> Then again mixing the two types of tags seems theoretically possible
+> and the least surprising thing to do is handle both.
+
+Code to handle both needs to exist in some shape and form, we just do it 
+one after other, rather then in an if .. else.
+If LLVM style handling happens, @tag at the end of llvm loop will be non 
+null and it won't enter the gnu block, its clear enough from looking at 
+the code IMO.
+Carving out another function feels a bit excessive.
+
+>>   		}
+>> diff --git a/dwarves.h b/dwarves.h
+>> index 5ec16e750e83..42b8e39aa2dd 100644
+>> --- a/dwarves.h
+>> +++ b/dwarves.h
+>> @@ -670,7 +670,8 @@ static inline int tag__is_tag_type(const struct tag *tag)
+>>   	       tag->tag == DW_TAG_volatile_type ||
+>>   	       tag->tag == DW_TAG_atomic_type ||
+>>   	       tag->tag == DW_TAG_unspecified_type ||
+>> -	       tag->tag == DW_TAG_LLVM_annotation;
+>> +	       tag->tag == DW_TAG_LLVM_annotation ||
+>> +	       tag->tag == DW_TAG_GNU_annotation;
+> Another place where we can just have an "is annotation tag" predicate.
+
+Fixed.
+
+>
+>> @@ -731,7 +734,7 @@ static type_id_t skip_llvm_annotations(const struct cu *cu, type_id_t id)
+> Rename this function to not be llvm-specific anymore?
+
+OK.
+
+>
+>>   		if (id == 0)
+>>   			break;
+>>   		type = cu__type(cu, id);
+>> -		if (type == NULL || type->tag != DW_TAG_LLVM_annotation || type->type == id)
+>> +		if (type == NULL || (type->tag != DW_TAG_LLVM_annotation && type->tag != DW_TAG_GNU_annotation) || type->type == id)
+> Same as before wrt predicate
+
+OK.
+
+Thx for the good feedback.
+-Vineet
