@@ -1,34 +1,35 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EB73F1676;
-	Tue,  2 Jun 2026 14:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487363F2115;
+	Tue,  2 Jun 2026 14:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780411667; cv=none; b=i8zDeVCXEFDfTUNEG02N6a0R1iDNLOXn2hX5LE6i1v3DLzz8bquMLwx7JNL65jlSsdw/QoG0q+96sw+5X3WxqOXFshFLif10aqkITUUeChGUv78sv5N3ylpgiWmn5bUYqNbVYHOSt9BNSowoc4hYtsTde8q1CQSphSHCogpbI1k=
+	t=1780411672; cv=none; b=t8ffYfKOq01TwWkvTAZ42VkuQEjiJeviZBfyVU7xdkjBtZCl2Hsb1PIuyRPqggfkjAnWdHEXPJozSFE9tn3Cmqs8pb7mwUgoi73nbsejhWF090Clk74mxGSV50PCEzgnZytVv3ODwCKgrc1uJ9h+opIWxJiBb0GVKeclImAqr4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780411667; c=relaxed/simple;
-	bh=QVECXhBfSn3HTksxV9ctf7sdfgmuzFaQvCXjb24QcOs=;
+	s=arc-20240116; t=1780411672; c=relaxed/simple;
+	bh=GLUFbbIEHS0K9sAkY65AIMIBJlV7lJXIB46SducMo/c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SqeJnZ842wNRQZwmTAyt1pu2o+bQZbTa20VpNAH3H7jxQFytbsOxsIcCUgg+wO5sZoMYl8LJlCH9LaGo9UDNSlKaYJ2cDa0vFa2ziA9Q93bpFhRHZaenMNXSsCNoLdbU+3CpTcuP12C/uM5wg8j2x0Ei/dSr5JmWRCsRoMR06ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=TvVe6zyk; arc=none smtp.client-ip=217.140.110.172
+	 In-Reply-To:To:Cc; b=LN+VvlvX+9HhE0K/yw5nmDVKS1wCkp5q1PvP35QXvmZbL7SEZZmWSHaZKxcFPRpxXS0GOpsndNdxNYwx6/E2SjfoayRnc+FE3mSC5Czb75xZXR25pswoZHZCIO1KYODfJgt/ABfFIc8wl0o5wzIFxlBJD4pOVn14Jy/ycHC40JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=D02CeUF/; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="TvVe6zyk"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="D02CeUF/"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CA302B;
-	Tue,  2 Jun 2026 07:47:41 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA7E03560;
+	Tue,  2 Jun 2026 07:47:45 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA5EC3F632;
-	Tue,  2 Jun 2026 07:47:41 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7269A3F632;
+	Tue,  2 Jun 2026 07:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780411666; bh=QVECXhBfSn3HTksxV9ctf7sdfgmuzFaQvCXjb24QcOs=;
+	t=1780411670; bh=GLUFbbIEHS0K9sAkY65AIMIBJlV7lJXIB46SducMo/c=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=TvVe6zykEq2a46xyCn9ktAwfarF4GDmXwb+qFv9nlLzrMo70u5jPq+wXvWbMHTt+v
-	 /ETTIuRDmzNWUXCEfK0ebMCPcsLXIJV+QRRnel7nQpIzK0QWSl1zxlKwqb1I447dDm
-	 D6X609R8iO7OclJzPKeo5PkLvzP1oOu41hFNJ+GM=
+	b=D02CeUF/kZjFaBUr2nqAaink6RjHRSFLEhkOHVwT7nZmeYkPJCkEACzeMoV79AyU5
+	 4FMx2kamJbQDZkvaQfBoZC6OtNcfphmb3HlvT+GgcKG/CdtC1BD1FPITCXAZNvFeUo
+	 9VPXVKaMz/a8A4QGJLc28Auh0Ytr3HjlCmvlgJI4=
 From: Leo Yan <leo.yan@arm.com>
-Date: Tue, 02 Jun 2026 15:47:14 +0100
-Subject: [PATCH bpf-next v2 5/8] tools/bpf: build: Append extra cflags
+Date: Tue, 02 Jun 2026 15:47:15 +0100
+Subject: [PATCH bpf-next v2 6/8] selftests/bpf: Initialize operation name
+ before use
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260602-tools_build_fix_zero_init_bpf_only-v2-5-c76e5250ea1c@arm.com>
+Message-Id: <20260602-tools_build_fix_zero_init_bpf_only-v2-6-c76e5250ea1c@arm.com>
 References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
 In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -58,34 +59,36 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780411637; l=742;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780411637; l=1077;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=QVECXhBfSn3HTksxV9ctf7sdfgmuzFaQvCXjb24QcOs=;
- b=iMNmxLU7KuObiTWa6YHCONwQwKj+iQbXWIc5qUCcQ4QDokEUQ/rzrc9x8rgcW2wgS4TlVSvDB
- SLI8yxghZcyBhgqjSxEnsU96bGX3x5gro+hU0e1UxXsBZFQqzea9vUA
+ bh=GLUFbbIEHS0K9sAkY65AIMIBJlV7lJXIB46SducMo/c=;
+ b=63cu9sDDg2Uz0Wc5e/+QysEkWtM1JbgeG8xJVPiOdWZ8bRfEo1F7xW3cTb/FEeWG5oWNMfs19
+ qrfEQ+WzW7UBJwEEFH7HkCgTVsvwvacSMBbB0QJmlyodoAa9uj3JJ53
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-the compiler.
+ASAN reports stack-buffer-overflow due to the uninitialized op_name.
 
+Initialize it to fix the issue.
+
+Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/bpf/Makefile | 1 +
+ tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index fd2585af1252669c59228af3a77320e449e1a1ab..9c19e81f3c274767c3b9b94c907cbbe3ce9fe78c 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -11,6 +11,7 @@ INSTALL ?= install
- CFLAGS += -Wall -O2
- CFLAGS += -D__EXPORTED_HEADERS__ -I$(srctree)/tools/include/uapi \
- 	  -I$(srctree)/tools/include
-+CFLAGS += $(EXTRA_CFLAGS)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+index c01c0114af1b7476d27885ce380d90400a4bdc89..4542bb586d723b8fda2faf8261066f16102c60c0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+@@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
+ 	res = load_btf(&opts, true);
+ 	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
+ 	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
++	strscpy(op_name, "log_fixed", sizeof(op_name));
+ 	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
  
- # This will work when bpf is built in tools env. where srctree
- # isn't set and when invoked from selftests build, where srctree
+ 	/* validate rolling verifier log logic: try all variations of log buf
 
 -- 
 2.34.1
