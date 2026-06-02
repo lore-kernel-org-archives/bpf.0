@@ -1,117 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A453F8EB4
-	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 17:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780421161; cv=none; b=RdeDtlghxuXa8mjwq17nvG1DCAcldyCOx2OZsgn4HbUEow/Kn3hGnS2xcM8pRT//sOrtKJSFjESBPboYTw//4fDmtzyRwNyK5YYDG+d5bVCyno6PazAt0eJ/7hvv/sAfdwctsp4jK8nUZbZKTyWgMwoD8n78sdE7Y8vQic9E56E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780421161; c=relaxed/simple;
-	bh=IT6I/3Zno+NO3Cuj4K5LWdh9boWuPO9/GhL3kMZ4B/Q=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RKTz32tMYnelbcZ/f4LHrsaMZZ5lTOp3rePr70ypoRGjd2rX28514yzylP02EKpXA1L12R4t2Rdy5OLwN4Zojxy9dUX0oSCdEx/DDLm8NU9STXghjNtOcXAgkVJMVbCSJUMM7gzMg3o7viPRjq5fXvHJwYoEco7WkNR2PlTjOXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2kLduNR; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FEF3FA5FA
+	for <bpf@vger.kernel.org>; Tue,  2 Jun 2026 17:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780421190; cv=pass; b=OAz7uVQ6syzPvCve8444ovLGf7ie4mkW54pjgPWDL7akq/z4438sBmEk2lVfyTjKw7HZm3Sfj1uWIY9SYwtC7ARKW/kddWT5leJT/Lh9HIvFhO6mlso0q4mTK/nBp4irR4PN6VHMZEqTfYaqiiNKV0w+i2AXohZwfrTJDcPdyY0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780421190; c=relaxed/simple;
+	bh=N2zSfTpJNCY4t5qOyP0bEyizCSmSRAoY7KosRj4sPVQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lSAgz/WhFnfTGBwSb9j5OxCg/bRVmzCpx/0aci+fSqxTudJnFEVQwm75DQ4rX4VIkfuNserWp3f2gcxmlHbhHMnLy039wXmoZPR98pv3BhoBhX7jG2m5Y6JiqnnfUH/PpZdFjalt47o7Fbr5cDoJH4S0p1z7k00JRxN7tXWNf08=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CauyokWe; arc=pass smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2kLduNR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A1D1F00898;
-	Tue,  2 Jun 2026 17:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780421159;
-	bh=924y3xmxSTlfelh/p9f3kho8xXh8rAgumAP7TjYh6sA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R2kLduNRBy4/Qd7XyhLZSQWVdsSpCFIiCassm1nxUD1frjKtu1F3U76Ogi+zqwL5E
-	 SfbXgOrfhD3GvyfwtF1N6cEInddqrGTL0Wyclzj+x1MSbtaUbyh/Zi7fCO66UpfDxV
-	 yTY+U94z69AXSzLPexyUg+Le93Zt0FBJdAQQa7nbnMftp5uDlQqvYHXOkClhMdNLkh
-	 P2u7/PPMt8XFRkwLCFazHJxVE1Kf+masu4VWtAYAtuYwAraHX2HBJ/niTI0yez7AHB
-	 IjoUHQJbJkuS3vnvth1u0n/1jaF6y/3E8vG3Am+lXlJUBqxw8gTeO8Dyhjt7jMZnyG
-	 PzeixWIbH8Nsw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 7/8] selftests/bpf: Use common CFLAGS for
- urandom_read
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leo Yan" <leo.yan@arm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-7-c76e5250ea1c@arm.com>
-References: <20260602-tools_build_fix_zero_init_bpf_only-v2-7-c76e5250ea1c@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 02 Jun 2026 17:25:59 +0000
-Message-Id: <20260602172559.B3A1D1F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CauyokWe"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-68cc6c7df99so5080148a12.1
+        for <bpf@vger.kernel.org>; Tue, 02 Jun 2026 10:26:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780421187; cv=none;
+        d=google.com; s=arc-20240605;
+        b=We3yHowKGvKl3x0/pt4ntNyLRwPYkWK0N0lzz/ggwg+/BP4690p+kP2tFF+slh750z
+         TY8rRz1RHoIofGUJfK5jjwZ1q96ZDZbkGHiiUjNwY/WDLGGUfDM8inndKc4L8wWZec5o
+         hDRtLaRvKldJXvbnhUOjsDu+b6orRSo5We+68sSLksmOPLmIXBl82jTmvVAzKerkvg5I
+         +wvPpSBBEpvDJM93RIdCr6i6cV9IUYj5LB+l0nehaix7qHBMmby+lL3bHCTEeee6T41Q
+         /8NA5RT92w9FrwzlXazKTxA6/ieB1bWHwNJj723ns0j/UhBD0my5Qiw2GmabBwg1K4zB
+         0/YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ho8QkYK+Vpwcxs/VwgFPXZbnPKw5fMjoiOMIsH7CC04=;
+        fh=ZeqASTMB/bTwnEOG4xjt2A+os6KJfhTwWBeXtgbusG8=;
+        b=R2rHA/a0DoUhBWqEanPFeTzSG1KLwGSQUij8ODscBVlJdauqVClx1+DrzewaJba+SQ
+         Fj5ISQCZh5LNd90c83FcW3ebZgYTmqIVGXnWprD2nE3sSYozMXKXKyuz2546qNhIRSCy
+         FS3A+WHkiJrAaRWWoL+hQUue5rGj1vzZQMNbMqqpBdltmvWZrfH+F/F8PRnpDERVvQIC
+         ysMsPV8EZSI630YJ0qWRUProCI/zhrJ/37bGbbZXAZ8UaHkXwu1PillCVr8bEyLiv+rK
+         0IFQlAUT3nvsQNLtbtVEu3E3t8zw8wGHbvu/t0evkBQ7HMFtDRc3OnW49henR7BjgX2k
+         aiSg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1780421187; x=1781025987; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ho8QkYK+Vpwcxs/VwgFPXZbnPKw5fMjoiOMIsH7CC04=;
+        b=CauyokWezlvbzCwO9w7wAu7iXK2YIYUTDAr2NF0lnPw/x6nU4UCptjnj9xKMdyy4T+
+         n31Kl3rkOfRXAxSVe31eq48vHI08eiwVEfE7eS7Z2sn35xBxdzsFdz2xoRFS5ceaMcW5
+         A/TGb1Wu2thAugJ4HkXP2DEZ5NQgjreeyOu68HKWwWxqA8Ow4VAISobHmhY3h3Wv/QjZ
+         ggzf1v7iMicpV+OaSNnjW1B3ZcnB+uzDEDWkCQqNBCzCpJB9Q6d/T/D853mMsaVVtQgl
+         Bpos4l5cQDZ5NkPS/rKgFsTn6MXjhnd9nHU7cPk5/8tbmlvd0Hio1w5biVKDDr5RK974
+         LIyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780421187; x=1781025987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ho8QkYK+Vpwcxs/VwgFPXZbnPKw5fMjoiOMIsH7CC04=;
+        b=OHasziGOAF6tu0luNSJ5LA28atCUAJT32AkidQ5yzdajEhmwndVopbN72/jdjDpeal
+         c6ARL5Ey5/E7YvsWC6F2+88eKfTYZZJqXnupfJ/9TlQBWq69d525shCLT0mncSSLHCkv
+         6qnD7t0AEIltaKk7jAPymfYBVpngRQfRKHt9QbUCBik3B5jC7PqgKMa5eplJWQRw/I9h
+         nCwpUSMeZEy2JYTjw1IlCAXtaFkQBO3mdQWqBEuLNTAVHFnsVeWI4bnSr4YMBKlRDaKC
+         f4Mu78IQl+NO3g1eptxKzuoJFpegTZbGQhAFOtr3cHbQKEhUBr+m6TIv6Be+2ejvB0ce
+         c0yg==
+X-Forwarded-Encrypted: i=1; AFNElJ9QKLIWkg81ofBpBms/pND7+JEaaeHo6GjF1Kz+PWLWkz0vln4A3ypYPazEjIA6ChmFiaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQpVlOBod000WS6ONPfvwofkY0dxhKlZDBzC03ddLedIRidZN3
+	nThgU7YbLNSSJENLAD8oKzbc5aVDFw/dSKpqT/0WGb/9ctyjt+BWkOFlWry2vpx6TN5+OcqPjQr
+	IbQ+edybxnWI+/IfzpJCk2jQpjZzipUw5Y2hN60us
+X-Gm-Gg: Acq92OGwzOvL7RaQUu3ed3UPEBoNPVJSRQhZR2x46LIm2XXxObj3I4AnAUIYHuFoq/C
+	aZNK7Y0UZWw1MT4axZNnpe3o6HJZY/1z54lAMom8xpuJY9HeqNrTIoYebWotzmMENIsL++kBYbX
+	KGqo8nT300I2c+47hccrfADtb6TvQfMwHK9LDDwTYfv/Jppg2Dhc3cQIyp+DB380vgS32dljkAU
+	YTcn0/o9NHyg02gKNJVBbNkNUa1YESkhxiBgY6UgADuWwyLLKcBRpfr7kwMa8IlodyyyBHjPsf5
+	2UGP89Go+w6aKy28Rw==
+X-Received: by 2002:a05:6402:5417:b0:67f:99d8:868 with SMTP id
+ 4fb4d7f45d1cf-68e5d94b50amr370315a12.16.1780421187178; Tue, 02 Jun 2026
+ 10:26:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <ah8BzqSmZO40xYhS@sirena.org.uk> <CAHC9VhRR4mmkOdWwUCLswmA+_KEjB8RCBBTJ2W4JGiLUWKzxyQ@mail.gmail.com>
+ <f7892d83-64cb-460f-87c8-ebc7fb4476f4@iogearbox.net>
+In-Reply-To: <f7892d83-64cb-460f-87c8-ebc7fb4476f4@iogearbox.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 2 Jun 2026 13:26:12 -0400
+X-Gm-Features: AVHnY4KXJdTKb86IwXDncHxbtqVCvwUqkbs2YhZ2hnshZqTYs_erOE_rsX9CAPE
+Message-ID: <CAHC9VhQPc52RQpTN41NpipM6U+DBB2CWRjdwh-ykhDkfZACrLw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the security tree
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Mark Brown <broonie@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Replacing CFLAGS with COMMON_CFLAGS for urandom_read breaks cross-c=
-ompilation with Clang.
---
+On Tue, Jun 2, 2026 at 12:52=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+> On 6/2/26 6:31 PM, Paul Moore wrote:
+> > On Tue, Jun 2, 2026 at 12:16=E2=80=AFPM Mark Brown <broonie@kernel.org>=
+ wrote:
+> >>
+> >>
+> >> After merging the security tree, today's linux-next build (x86_64
+> >> allmodconfig) failed like this:
+> >>
+> >> /tmp/next/build/security/hornet/hornet_lsm.c:212:36: error: too many a=
+rguments to function call, expected 1, have 3
+> >>    212 |                         if (map->ops->map_get_hash(map, SHA25=
+6_DIGEST_SIZE, hash))
+> >>        |                             ~~~~~~~~~~~~~~~~~~~~~~      ^~~~~=
+~~~~~~~~~~~~~~~~~~~
+> >> /tmp/next/build/include/crypto/sha2.h:14:33: note: expanded from macro=
+ 'SHA256_DIGEST_SIZE'
+> >>     14 | #define SHA256_DIGEST_SIZE      32
+> >>        |                                 ^
+> >>
+> >>
+> >> Caused by commit
+> >>
+> >>    c62310df81899 (lsm: introduce the Hornet LSM)
+> >>
+> >> interacting with
+> >>
+> >>    c48c3a7e7d5be (bpf: Drop redundant hash_buf from map_get_hash opera=
+tion)
+> >>
+> >> from the bpf-next tree.  I have reverted the latter commit, the new LS=
+M
+> >> means that the assumption in the changelog that there is only one call=
+er
+> >> isn't true and it seems like the most straightforward approach.
+> >
+> > Thanks Mark, we're taking a look at it now and should have a
+> > fix/answer later today.
+>
+> Sigh, hornet should _not_ be merged to begin with for the many reasons st=
+ated.
+> Messing around with BPF internals is yet another one aside from a really =
+bad
+> user experience of having multiple approaches to BPF signing !
 
-commit 537d69efefb1121c195758d9362eba3f31c54f36
-Author: Leo Yan <leo.yan@arm.com>
-
-selftests/bpf: Use common CFLAGS for urandom_read
-
-This commit introduces a COMMON_CFLAGS variable to separate general flags
-from CC-specific ones that might be incompatible with CLANG when building
-urandom_read and its shared library.
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index bc049620c7745..1e47e29ba4214 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -51,7 +51,7 @@ srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
->  srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
->  endif
-> =20
-> -CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic -std=3Dgnu11				\
-> +COMMON_CFLAGS =3D -g $(OPT_FLAGS) -rdynamic -std=3Dgnu11				\
-
-[Severity: Low]
-Does this change break cross-compilation with Clang?
-
-By defining COMMON_CFLAGS from scratch without including the pre-existing
-CFLAGS, this drops any earlier contents from the urandom_read build.
-This strips CLANG_CROSS_FLAGS (which is appended to CFLAGS earlier by
-tools/scripts/Makefile.include), depriving Clang of essential
-cross-compilation arguments like --sysroot and --gcc-toolchain.
-
-Does this also inadvertently ignore any user-provided CFLAGS?
-
-[ ... ]
-
-> @@ -261,7 +261,7 @@ endif
->  $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c li=
-burandom_read.map
->  	$(call msg,LIB,,$@)
->  	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
-> -		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
-> +		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) \
-
-[Severity: Low]
-When replacing CFLAGS with COMMON_CFLAGS here for the shared library build,
-does this remove the required sysroot and toolchain cross-compilation flags?
-
-[ ... ]
-
-> @@ -271,7 +271,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c ura=
-ndom_read_lib2.c liburandom
->  $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/libu=
-random_read.so
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
-> -		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
-> +		     $(filter-out -static,$(COMMON_CFLAGS) $(LDFLAGS)) $(filter %.c,$^=
-) \
-
-[Severity: Low]
-Similarly, does the urandom_read build rule also lose these required
-cross-compilation flags when using COMMON_CFLAGS?
+Sigh, if the BPF devs had shown any interest in working with Blaise to
+arrive at a solution that met the security goals we described (and not
+necessarily what the BPF devs continue to mischaracterize) there would
+be no need for Hornet.  You are free to be upset about Hornet's
+existence, but you need to be realistic about the role the BPF dev
+community played in creating Hornet.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602-tools_buil=
-d_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com?part=3D7
+paul-moore.com
