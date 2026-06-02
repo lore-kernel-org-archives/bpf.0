@@ -1,35 +1,34 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287CB3EDADF;
-	Tue,  2 Jun 2026 14:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA6A3EF658;
+	Tue,  2 Jun 2026 14:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780411654; cv=none; b=Ie5ZAoQkDTUrzk8/RrecWObkVkCXIyQyVPHDadMfp48mDJWCi+u0sxgfIGP+dHbDwXJLlr4KEie9Ct1e4shL+orIYH92ULf/uESo4PDMpONR9LaMsyo3cnmMJNLSFBgotT1YACcFBnBNvmvawISXN/sEaxX+6TChfV1/445P12k=
+	t=1780411658; cv=none; b=LHkEnpNK0SSUus0dTYcbcRQxMPGzYr0+LCjv1N8jK8HkljTBDMcMKLPkf9fxpJEZ2X7/gqmuZxjwlbo8cwlv6/ihPLRG8O7uC0dgyCk8oaJ6Q+2EcDdKIwEvdSOskTz1AtCvkxNaDSGzOdmXgazVUTR2A6BE0mlMrNhhJ2e8UME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780411654; c=relaxed/simple;
-	bh=ftrGfPlCpSuFDSQHacVgFrG56NXWBlICsaIhKhYspOQ=;
+	s=arc-20240116; t=1780411658; c=relaxed/simple;
+	bh=x7cZMt2bdvciDxx6hGzYMUYeiKiePmRdhY+wP37FvBo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fQMtoHGzF9FfgrjDWrNdNxJylhH0UH3w/J5yuSkXdKZfbUroL24bR6dw7g1p1mOpSbEuFpe2WSCIMC17E7fBWoESNDsaH1rhmeUND9xj+zLh+SxbLWfbC7zBe/5bmG0UsPG0i0/4h/GUlLgpyTiKaOOhZ7JhOInr4Z+Nnn2hf7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kz7C7LPY; arc=none smtp.client-ip=217.140.110.172
+	 In-Reply-To:To:Cc; b=pSjdM1EshduqfEOX4ZL3mdJ+f6ihKDjeqAdkTLy61g/9RoDxqLnFxnbJeoFsCUa2HL7Mw5Pj7LbYDQrPE+u0jn/LS89LFB3geMXAoPqv6QDm4eBzRMVDBwGqUax0sDe9PFi7zG9l0NNQkMIB0RKXwoq2ioONtQWL2/mqWwrpCos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=bAWV5RQX; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="kz7C7LPY"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="bAWV5RQX"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABCDF3576;
-	Tue,  2 Jun 2026 07:47:26 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 899C02B;
+	Tue,  2 Jun 2026 07:47:31 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36AED3F632;
-	Tue,  2 Jun 2026 07:47:27 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F32463F632;
+	Tue,  2 Jun 2026 07:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780411651; bh=ftrGfPlCpSuFDSQHacVgFrG56NXWBlICsaIhKhYspOQ=;
+	t=1780411656; bh=x7cZMt2bdvciDxx6hGzYMUYeiKiePmRdhY+wP37FvBo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kz7C7LPYODIKIqfd5uOjRjmm0FSiTgiFxsD5SnXCq+NC1it0enSnZ9PsDlfY5C/8N
-	 5JOdu0idcRRgVsGvaPVEwbQ1cKoOLvy8sb2LvH4eaDu5q8OoqvMG8UIMN/FdngYmMU
-	 0orJR0UTs9pJei071XKoO5kF68kXPw5koHvpCvYM=
+	b=bAWV5RQXAxIvK4CZtbqhPng8ge68XfgTYs8SRPm8Dop3NkYMC9P5tt5puKEvK/AJN
+	 TX4E95jKFrpMa+pEYTb1Wwz58ipqocBxnjeXv8C8H5EkcQuAtMJbq3zrX9wXdH+yjU
+	 JXjEtlT2OfBK8zECm+8TYrxJNeVKjmboydgyF2wE=
 From: Leo Yan <leo.yan@arm.com>
-Date: Tue, 02 Jun 2026 15:47:11 +0100
-Subject: [PATCH bpf-next v2 2/8] bpftool: Avoid adding EXTRA_CFLAGS to
- HOST_CFLAGS
+Date: Tue, 02 Jun 2026 15:47:12 +0100
+Subject: [PATCH bpf-next v2 3/8] bpftool: Append extra host flags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260602-tools_build_fix_zero_init_bpf_only-v2-2-c76e5250ea1c@arm.com>
+Message-Id: <20260602-tools_build_fix_zero_init_bpf_only-v2-3-c76e5250ea1c@arm.com>
 References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
 In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -59,52 +58,35 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780411637; l=1462;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780411637; l=824;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=ftrGfPlCpSuFDSQHacVgFrG56NXWBlICsaIhKhYspOQ=;
- b=Ltv4m0kswXfh6oi4eVR3XrM95ptbINRZyDvGwqzaj/PJqOAH4qarP3lCKMgP/1QlhwTJhuFIG
- 5EiCMNrc6cYDHFCAVI7DyWAHbg07JYw6y20D+okGlWMb2jL8HSLjAjU
+ bh=x7cZMt2bdvciDxx6hGzYMUYeiKiePmRdhY+wP37FvBo=;
+ b=7LNfWhRMlyI7VhOkEtDSekJ3ixPBft1J6UrrC+T/O+LuO713EeVH9Z5m9SBp3vviYH2zg6utx
+ eP//X95OUEJDOQaTBV++DsA86oAhG8tHe3Wah3Liy4G1+BxCVqh5rbU
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Prepare for future changes where EXTRA_CFLAGS may include flags not
-applicable to the host compiler.
-
-Move the HOST_CFLAGS assignment before appending EXTRA_CFLAGS to
-CFLAGS so that HOST_CFLAGS does not inherit flags from EXTRA_CFLAGS.
+Append HOST_EXTRACFLAGS to HOST_CFLAGS so that additional flags can be
+applied to the host compiler.
 
 Acked-by: Quentin Monnet <qmo@kernel.org>
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/bpf/bpftool/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 1f033e578f90a2d6b93168ab41399de758bdf659..616c14247e4bb690e16ae4ff8c1992e6d4fc863e 100644
+index 616c14247e4bb690e16ae4ff8c1992e6d4fc863e..96be5647f0e1370247025d65e813db376b146e52 100644
 --- a/tools/bpf/bpftool/Makefile
 +++ b/tools/bpf/bpftool/Makefile
-@@ -82,6 +82,12 @@ CFLAGS += -DPACKAGE='"bpftool"' -D__EXPORTED_HEADERS__ \
- ifneq ($(BPFTOOL_VERSION),)
- CFLAGS += -DBPFTOOL_VERSION='"$(BPFTOOL_VERSION)"'
- endif
-+
-+# This must be done before appending EXTRA_CFLAGS to CFLAGS to avoid
-+# including flags that are not applicable to the host compiler.
-+HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
-+		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
-+
+@@ -87,6 +87,7 @@ endif
+ # including flags that are not applicable to the host compiler.
+ HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
+ 		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
++HOST_CFLAGS += $(HOST_EXTRACFLAGS)
+ 
  ifneq ($(EXTRA_CFLAGS),)
  CFLAGS += $(EXTRA_CFLAGS)
- endif
-@@ -89,8 +95,6 @@ ifneq ($(EXTRA_LDFLAGS),)
- LDFLAGS += $(EXTRA_LDFLAGS)
- endif
- 
--HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
--		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
- HOST_LDFLAGS := $(LDFLAGS)
- 
- # Remove warnings for libbpf bootstrap build
 
 -- 
 2.34.1
