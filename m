@@ -1,122 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3712357CEB;
-	Tue,  2 Jun 2026 10:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF2D390235;
+	Tue,  2 Jun 2026 11:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780396948; cv=none; b=pAuQsq2gCyxiSaiVT9l06wEJqLz2dwxSf5B6bDpaT0lVYRHv3PfMQHGbQE1/cM99GiQ1dXpQPlS/f7PuAiy9GvU18mIvRfjzvWWIHMe0xr/n7ZbB2HY8nhQga8aOFujq2At28DvOUKrAODnbuRy5YwbPge9C8s3BHxX29iIvdg8=
+	t=1780398153; cv=none; b=bnBLuEmLrQ/32yXtJbhvHXL9Gpp/EWf8ZJXYbjiuZ4I+aGr4WZopWe+N1QcYJGBMf49rYlR09VUbmyWTsOu+k+x8QfPPAul0kY7vT34H15kmok+h2m6tUE29JJo+uoZvNqKGOenAdszLVFHWoui84U9EFsojJ6kWYm+Lf60MSkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780396948; c=relaxed/simple;
-	bh=UpnKTFJwYYk2YyxzrPLPljtFJP9GPrW2eeHL6X4ORtM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aRNMktgONts4P3vIuyvqO00PMiQoWRdvBWeqEaVcRe8144WxtRdvXaIWp4GZQZF4FExdMKtszrAr/VVTpOGR/JUUvOTpOkOb19BBa5KnKez1E07T6WVP5efkmU6ylgj6aJKWfxgyrVbVM1M3OcF6sByTnLT0O4l+bxPi96s/N6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gi95sUhH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780398153; c=relaxed/simple;
+	bh=582LUVUt8lC3gbG1ilAnsN6j3vIIj4FGYt2FmOURhZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PcxY28yN8MnHGo6xQsUwLiWTgCzpseMF9p5OJ57tL4LIRVmtzCprZRURRjovbETVhFOHiHy1axPr3913H0DM078a5hMobb6DJE2zz0yCq+mbR3erRsf8bj7aqe6BJWLm0C5wHNZO+8BlICX1+l3XNNMi9SEG5WJljUn4akVX4pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=OVOIn1X+; arc=none smtp.client-ip=220.197.31.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gi95sUhH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442FF1F00893;
-	Tue,  2 Jun 2026 10:42:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780396946;
-	bh=mSoYaCAUmkuPRBUcUyfyJzmc/sxoH+48pweWEr5NtsA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gi95sUhHdtgZhymyvX4K6YmsPwqA62hBXigZ+jyXVy2gu0DSYhV51XTGU0OCi7tOU
-	 hRNoNxbbCqwk6uRAlOfb92q/8MAqgX+2Ize0M45HCAJcrOeB/dyI8ydn7blMYwfsVL
-	 WMpJ0M/d1/vA07NmRJgRRgNZ2YalGAP1yVQO+opPMUU36FOIGmng4p20MdMegIFlLj
-	 Eeh4S8aGy79TlWCGV+J1ELhicZZ1opc07NScI4sKfvkEETDEQ9NsSuvoR9G3qf34vJ
-	 Spa7jGmTeQDQ5Yed7bAC8mCKzXov5sl63l7yfT/SGCVj8QPMw96zuBNY2D1TC/2+Hu
-	 lceyXqBe8N80A==
-Content-Type: multipart/mixed; boundary="===============5238431668704563574=="
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="OVOIn1X+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=2KK59NOvHyhsuQjLMF981wH8r47WGI3iCe+P21MEBe0=;
+	b=OVOIn1X+7+/xIoZCwbu9I3ICKA20WBQm+v9r5E1KPlVFFierl0jP5PmUyVc0Ic
+	QpC2eGccx3odpnawkvUnDuyf6XSJi0StqIdX2hCxfcBeCkllHXW6EWFGbLXYvSd8
+	BmKPR/sLaw18ZYNTH8W+6lXCFzH64tCRmwmMFnIVNo864=
+Received: from [10.41.105.18] (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3F5T5tx5qRRMLAw--.14105S2;
+	Tue, 02 Jun 2026 19:01:14 +0800 (CST)
+Message-ID: <8049681c-d1d5-4fc0-8d3f-e7a98154ef3f@126.com>
+Date: Tue, 2 Jun 2026 19:01:13 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c18516ffb5e7280f6956b650ee3072bfc66fbef8807a0b96c8d370278aa189e9@mail.kernel.org>
-In-Reply-To: <20260602093836.2632714-2-chenyuan_fl@163.com>
-References: <20260602093836.2632714-2-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointer deref
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,eddyz87@gmail.com,yonghong.song@linux.dev
-Cc: andrii@kernel.org,ast@kernel.org,bot+bpf-ci@kernel.org,bpf@vger.kernel.org,chenyuan@kylinos.cn,chenyuan_fl@163.com,clm@meta.com,daniel@iogearbox.net,ihor.solodrai@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,martin.lau@kernel.org,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  2 Jun 2026 10:42:26 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] kernel/bpf/btf.c: reject to register duplicated kfunc
+To: Yonghong Song <yonghong.song@linux.dev>,
+ Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260524082944.10625-1-chensong_2000@126.com>
+ <757e24eb-45d3-4e05-9aa2-f077bec8fea9@linux.dev>
+ <83a466d3-d715-4208-b7c8-1cdcd6d99575@126.com>
+ <3e1cf732-bb65-415e-afc0-3b54a2fb1aee@linux.dev>
+Content-Language: en-US
+From: Song Chen <chensong_2000@126.com>
+In-Reply-To: <3e1cf732-bb65-415e-afc0-3b54a2fb1aee@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3F5T5tx5qRRMLAw--.14105S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW3trW5Xr1fJFWUGFWfXwb_yoWrWFykpF
+	WUJFs8CF48tr12yF12qa45ur9xtw18Kr47ZFnxtay3Xr1qqFnrtr1jyr15u3sayry8Ga40
+	qF4UWFW3u345ArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jVc_-UUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsxxPzmoet-xUOwAA3+
 
---===============5238431668704563574==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4..57e5fdf9f7e0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12082,9 +12082,22 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
->
-> -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-> +		if (is_kfunc_arg_ignore(btf, &args[i]))
->  			continue;
->
-> +		if (is_kfunc_arg_implicit(meta, i)) {
-> +			/* list_push / rbtree_add kfuncs have implicit args
-> +			 * (e.g. 'off' parameter) handled during verification
-> +			 * in bpf_fixup_kfunc_call().  Don't flag them.
-> +			 */
+在 2026/6/2 00:09, Yonghong Song 写道:
+> 
+> 
+> On 6/1/26 2:39 AM, Song Chen wrote:
+>> Hi Kaitao,
+>>
+>> 在 2026/5/25 17:18, Kaitao Cheng 写道:
+>>> 在 2026/5/24 16:29, Song Chen 写道:
+>>>> I had an ebpf program which calls a kfunc defined and
+>>>> implemented in one of my kernel modules, it was working
+>>>> fine in 6.16, but was rejected to run by libbpf in 6.19,
+>>>> the error message was:
+>>>>
+>>>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+>>>> incompatible with vmlinux [94389]
+>>>>
+>>>> The reason is there is a new added kfunc in kernel 6.19
+>>>> which happens to be the same name with my kfunc. However the
+>>>> error message is not obvious enough to address problem
+>>>> immediately.
+>>>>
+>>>> Therefore, this patches searches duplicated kfunc in
+>>>> both btf_vmlinux and btf_modules list before a kernel module
+>>>> attempts to register kfuncs through register_btf_kfunc_id_set,
+>>>> it prints clear error message and returns error code if same name
+>>>> kfunc has already implemented and registered, then developer
+>>>> knows at the first place.
+>>>>
+>>>> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>>>> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
+>>>> Signed-off-by: Song Chen <chensong_2000@126.com>
+>>>>
+>>>> ---
+>>>> changelog:
+>>>> v1 --- v2:
+>>>> libbpf has already specified which module this kfunc belongs to as
+>>>> ebpf code onwer's expectation, then verifier uses
+>>>> find_kallsyms_symbol_value to search kfunc's addr.
+>>>>
+>>>> v2 --- v3:
+>>>> After v2, I tried a new idea of introducing a namespace in libbpf
+>>>> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
+>>>> please see [1]. Alex suggested to go back to report an error during
+>>>> kmod load on conflicting kfunc name for now. What's more, v2 only
+>>>> searched bpf_vmlinux, v3 also traverses btf_modules list.
+>>>>
+>>>> [1]:https://lore.kernel.org/all/ 
+>>>> CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com/
+>>>> ---
+>>>>   kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+>>>>   1 file changed, 43 insertions(+), 1 deletion(-)
+>>>>
+>>>
+>>> btf: reject to register duplicated kfunc
+>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>>>> index 4872d2a6c42d..a14ad3720872 100644
+>>>> --- a/kernel/bpf/btf.c
+>>>> +++ b/kernel/bpf/btf.c
+>>>> @@ -8618,6 +8618,47 @@ static int btf_check_iter_kfuncs(struct btf 
+>>>> *btf, const char *func_name,
+>>>>       return 0;
+>>>>   }
+>>>>   +static int btf_check_kfunc_name(struct btf *btf, const char 
+>>>> *func_name, u32 kind)
+>>>> +{
+>>>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>>>> +    struct btf_module *btf_mod, *tmp;
+>>>> +#endif
+>>>> +    s32 id;
+>>>> +    int ret = 0;
+>>>
+>>> This ret variable may be unnecessary.
+>>>
+>>>> +
+>>>> +    if (!btf_is_module(btf))
+>>>> +        goto out;
+>>>> +
+>>>> +    id = btf_find_by_name_kind(bpf_get_btf_vmlinux(),
+>>>> +                    func_name, kind);
+>>>
+>>> It seems unnecessary to split this call across multiple lines. Also,
+>>> some of the continuation-line indentation elsewhere does not appear
+>>> to follow the kernel coding style.
+>>>
+>>>> +    if (id >= 0) {
+>>>> +        pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
+>>>> +                    func_name, id);
+>>>> +        ret = -EINVAL;
+>>>> +        goto out;
+>>>
+>>> return -EINVAL;
+>>>
+>>>> +    }
+>>>> +
+>>>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>>>> +    mutex_lock(&btf_module_mutex);
+>>>> +    list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+>>>> +        if (btf_mod->btf == btf)
+>>>> +            continue;
+>>>> +        id = btf_find_by_name_kind(btf_mod->btf,
+>>>> +                    func_name, kind);
+>>>> +        if (id >= 0) {
+>>>> +            pr_err("kfunc %s (id: %d) is already present in module 
+>>>> %s.\n",
+>>>> +                    func_name, id, btf_mod->module->name);
+>>>
+>>> follow the kernel coding style
+>>
+>> I understood the rest part of your comments, but this one "follow the 
+>> kernel coding style", is it an indentation problem? checkpatch didn't 
+>> say anything about it.
+> 
+> See Documentation/process/coding-style.rst.
+> 
+> [...]
+> 
 
-A small note here: the v2 review asked for a comment recording that this
-workaround exists because of the pahole 1.30 BTF mismatch, so the code can be
-removed once that toolchain issue is no longer relevant.  The comment block
-here only documents the list_push/rbtree_add exception and does not mention the
-pahole 1.30 rationale.  Should that be added?
+helpful, thanks.
 
-> +			if (is_bpf_list_push_kfunc(meta->func_id) ||
-> +			    is_bpf_rbtree_add_kfunc(meta->func_id))
-> +				continue;
-> +			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-> +				reg_arg_name(env, argno));
-                                ^^^^^^^^^^^^^^^^^^^^^^^
+/Song
 
-Will this compile?  I cannot find a declaration of argno or a definition of
-reg_arg_name() anywhere in the tree at this commit.
-
-The per-argument loop in check_kfunc_args() names its register index regno,
-not argno:
-
-kernel/bpf/verifier.c:check_kfunc_args() {
-    ...
-    for (i = 0; i < nargs; i++) {
-        ...
-        u32 regno = i + 1, ref_id, type_size;
-        ...
-    }
-}
-
-There is no argno in this function, and git grep for reg_arg_name at this
-commit returns only this call site, with no definition or declaration.  That
-would give "argno undeclared" and an implicit declaration of reg_arg_name(),
-which is an error under -Werror=implicit-function-declaration, so
-kernel/bpf/verifier.c (obj-y, always built) would fail to build.
-
-The rest of this function uses regno with an R%d format, for example "R%d is
-not a scalar".  Did you mean something like:
-
-	verbose(env, "R%d unrecognized implicit argument, possible BTF mismatch\n",
-		regno);
-
-The bpf-ci bot and sashiko-bot both raised this on v3 and v4, and it still
-reads reg_arg_name(env, argno) verbatim here:
-
-  https://lore.kernel.org/bpf/20260602085827.2562222-2-chenyuan_fl@163.com/
-
-> +			return -EFAULT;
-> +		}
-> +
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26812478701
---===============5238431668704563574==--
