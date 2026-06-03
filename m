@@ -1,95 +1,95 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C695844CAE0
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1511A40759D
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780530494; cv=pass; b=a9cBUp8HXuux88F3QfFXwDsmAQvRJfmy2qhodyoNMut6u85waF1x40Go7dEtbUc3ug9UXRCCIoYt6YlVOTZlzAAwcYcaOMjSiKoBks9ilzowEdaJlT0NARZqeHoYFxsmHF0WkxyVmL/XuXRzYfPJGXRuByd5v7OZypEs9v335QY=
+	t=1780530512; cv=pass; b=t+NR1mLUuZE4u5oPmwklD/HklHv3vJ7gIxaQzYlO18WdnKwxIJYiauOD/TK8pdjCuLoZ3zmuCOqkLzovBwoIqxsy4C1jw1JD3XSkwPzWIUgv+XnfGpOZR7nQgaDCwFABUuokrfIt5rW9VzPHt933Nb6nPu6Ylf1c08nB49oyzm0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780530494; c=relaxed/simple;
-	bh=6Z9vStdVoY+sm0vZkxTWbl1FRA0xSzco601c//yjuzY=;
+	s=arc-20240116; t=1780530512; c=relaxed/simple;
+	bh=QWkpgbb3Sv9J1u6cdXHz6Jljw2OMAo8XoiFg7eS8a2Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TBvXTnkH48cBrJotD3ljqz6jEoIMdNhv66drg4qH7ax3FNCByqPsszdllw7BgM8L2umqv5s1Hsv+IinikUFeKOpDMPjT1RYavIuPz+9Jre01rO+b/ih/9mKWyDFDStwmw8bIpHBqKfZfOume/a4We/KHF0hteYZ4kKH37DS/PLw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xir5PNzL; arc=pass smtp.client-ip=209.85.218.41
+	 To:Cc:Content-Type; b=Af9RjBSjHtVdF0xL4PwARXsmXEVnYpfq+3fdHpFOBjjLotuKcqj/CDfo4g2mt4X83CozrrYYCJGTuc6HXkjFaAOWaQ1AoVb/bV4QCeLNcow9iYvR1QCvR0RguEn64Rpq6XwtvOgJJvng8niiWZpkc5lsFXhSPWBG/8HW4Ygv9QM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=algRIbVA; arc=pass smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xir5PNzL"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-bed2195323cso11300266b.1
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 16:48:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780530491; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="algRIbVA"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-68d23430690so127036a12.3
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 16:48:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780530509; cv=none;
         d=google.com; s=arc-20240605;
-        b=i/2A/Pj0lriHSyY2hTgkjyyO1GK3dOCZPsFDT4QrUzQB8Ko97D9RqRNKdRcvoK757W
-         5e2WIPcbmnjUkAMa2xeXdJn85ppAmPTZlfga/pIvGfmwOfMZ/LUvIg9A5/lgQ0B0FZl3
-         gygz4beKcV8GEGLV6hveUBteVxILqDi/boGadLQB6KkUohJipFNdcHe27/TzM0tUmFbx
-         RWFbQDng4bdEUD+N3HWUUFCFl9mzMUDoai1HELqiLCVseyYPkKEbXgziqMjCz2oeYNEZ
-         J5nN4FXqZJ+KQ3IJdmwrOoHrJBwmo6+/eRHyYwUstDzmgioINtFiWALoukfB/V1l/Sll
-         l6+Q==
+        b=Y1DLu7x7BLwK7IMXCkZIGGn4FaaSCBNgMFkqWWcV2wxb5amOJgHWPWC5NrsBnTql0G
+         5DW/MmmMXSMyvkOXO43DoKxlHbRSHPrGC5gepXSKLQAac4NwYl0Xjg6gaweP13Qrgd1m
+         ai7QHP5u8w1w7dfD09wyTcO1ARZ9Z1MxMv6lRPKQ1hzyud/KURx5MjEWSWG8sRL0Uk16
+         Ry0CWR7oUjxZhN+B8JCxzRQoKOFq+ogeCuD6udrQrS+Tz/3rOOPAJqWCSsh8dLRLWULd
+         lN7PJmVPyMqXlqT/dPpCaX/62OZWgdHpfeEuT6jmqqfWJ7sB7aCdBAD1b/7G80sN+GwT
+         KMKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TUBXpiUq5JEecRy7kmi+oWzZmqqtKmb4nW09LCQY1iQ=;
-        fh=smiRmoxkrffsAxU2yNVtJW3gLs0fG45qsKiW0qmeN3A=;
-        b=KjeE/amjwzQwtoQqqfOx2qpMORB5dnS3VgF4Cg+fU3PnWJnrYiVajJI5kVT/IEe4Dn
-         UQjMfpQFZAw6CXRzVANbwP/VfRoaze+VgpsrWU4DOl2bQqS9EU/U76l0BpElTE7fMN9Y
-         bkk//TbpScReR7py63mE2jNQWcLITe7lfUBx0Mdv7bHjzUaioG0MGejteKHHkJqLbxz5
-         0sqMjh9XsC21O+2pKGclHtlaZjBW/ApxfGOdSgCuMXq1Nl0MWAluBis5dV44curgiJtH
-         VHykGXI3tZoWuk/hbcB+0FDZpIJoPj+Pb5MTR753mg1yJ5ZsKLTropbsoAs2HcJGiHnz
-         wOOg==;
+        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
+        fh=CtCjRi9LbqWSX4cLVKSwETE/pzxvWim/iGOjcP8/7wQ=;
+        b=SDrVeh0XirwiTwS87NzmOmBn735AyjOs0RZwQGDW9y6LsH8ucZDjROMJrHh4NOtWso
+         hqp50h60GIHEYZrv+yZooZIQc7DQ00VGCsWmOHvluP4JTqCaciLOtv4qT8F0sR1WYjN2
+         UHX8XygHdMcMbDOgDWm79CLsm7NmMk7oWBVDXQwbI4jUZIvZ5gFElfYPao/hp4jLL9lh
+         JLJoRajE5U7QAtX/6ARozmA9RUihOfnKQ2sdjr1eL+OF8tvWL6t3nQTEfsRVtHoh+sEM
+         mxHI9tk0sLG09XEr7MR0c/j6pDUUDXAk3tZTENc1vWBtvBEK98gJqv1lwCds+AgSvZx6
+         PLCA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780530491; x=1781135291; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780530509; x=1781135309; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TUBXpiUq5JEecRy7kmi+oWzZmqqtKmb4nW09LCQY1iQ=;
-        b=Xir5PNzL/W2qkce0U9Hvd8W/1a8MFGpExNIb4hwPRG3IBhPW/aTKFQbwGOyXeXy1J4
-         YRMTA7PE/u6HtD6qODk5nI/MfG72qv1NLW3DWBYLQy6GSOpGIEYxle6VPkXcKuiG8PeZ
-         wgiIs7ZRl5b7YS6Ok9tgVVHjdP1T9JSlQrWNOdpkPBjS4XEqFM2+D4UeTLf9czhAmfYK
-         XbVuNKFPHC+MavYzsFL+yAoDD1fgg6aVdQUkeR6/cJXwq8RYpsVezPxVrzEA69tQnofw
-         sr1FDsMmXJvNX/G1xnV5M4CIx5+MhwN0bMDkPklkgKk2c6QGP91cvkmIfqcRI6UqZ6Aq
-         sAGg==
+        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
+        b=algRIbVABR7io4W547Mg7Z0HhCc9Ed99mp7dIYLYuF0OOHMf4+g4e5I3LVAVP/Anpm
+         Kvn7tTpQQjjI7YRuVe9kf9dpKKl4dNsa2eHgPn589zen1QesEVjvUQ6dVFbWhClLfoLH
+         Ai3K+hOcgN/ttKqI1KMnt/90hrJnfxsTM1wFPIH6K2DokZeGiCVg/dvE8E0Me74Nh5iM
+         dbFGcdchIP8ofXTiJzMSjjyRUtytA6zKAfqrlYHowMEMaDu0Zl2DRDt7e8jNODHHpTNl
+         h4VBbBDAgn/z3Oh+HNgUdoFnVRIS7UoJILjffB67LUq0zm+R7oldfiGVKV9JSGGy++uO
+         Z2rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780530491; x=1781135291;
+        d=1e100.net; s=20251104; t=1780530509; x=1781135309;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TUBXpiUq5JEecRy7kmi+oWzZmqqtKmb4nW09LCQY1iQ=;
-        b=kCYSRMlphhDzBTMLvXvjItTvBCz6YdhWmyj5Q0PitbLAZcIbDv4fbWZlcy1zj9FjA8
-         tUxEAnLE9tsAU8B4RCGTnfoeJwXrKnTcqPgTAz8UTJ3PZYCxFWDV3X+V5wFTCHT4XaR4
-         sHFky6CeHbZV6SdsUqNhFsJoXM8sQXX32JAlpEchX0NknuHlPiazac7ClUQbMve/eW8E
-         tKrWoDFwDIhDy0dea/IW+0m91WYP16URmc75aozkRC2XW0GI96YmixLozWISVnEqhDG5
-         a+9K11GmFOsIvK09Cik/OScF2DbKMcQH8WiNrTnaXdJFT75afeUmP0w+cDHfuZ/3/GkJ
-         pIqw==
-X-Forwarded-Encrypted: i=1; AFNElJ+uhUuoMR7tkr1J3NLkx/HhRmYOJJXIUCSJtAmo8LsQiXbgdMgnvzStFk9QfdiN2eALoBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww4Pl/YO/IUg9+SU038p95hrAl6xQKfGaR1J/mtkr/oJHs27kk
-	LwqJ2da4N2wkR+keBMTTOtZ1cgQwIDI2lI/zCvgCSU2RzGOM8JzXQQD5K8neYgaQFOO8qS7ewDF
-	n/IsygZFJcnXL7wKdGpFfOGDmluSqUfA=
-X-Gm-Gg: Acq92OFX7kHciZAA/cR7ZxB7ICYkplCFJ1z/MQgf2IwyYdYD9vft6J7Sc6VJjDEPnDL
-	e/A/oBHwcOBIO/qxHLPHooE4Dw2tHlg5VWaM0Fqi9uDY2u4VrUSVPptZ6T4Jt1vmwOVSzIlKB8A
-	QrTxeZNB/5N5MSrL95k3lfECsiFhMbV6raNNFsLmWNgB8cG3pbnpMInthJVqGrYnVhD6NS3Z322
-	Go/1qA3Sl6WC9GBJdAt68ohJbDSHJq/Q7e553wYGgM07suqAN+jX5JOHLt7GARIJACXVOYzWwld
-	4EVzrtTUI4PgptQJss0UzCV5WtNaydLfpQw2C3jqwdpwws8uJQ1mPqD90sRVF5P0+xv0319D40o
+        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
+        b=TF5WSfGQa5ziXUPL/CFfkye3ILhzY8qudlzHLQa7OMw/+wLXaSMYKDl5UFVYOFUPxs
+         +cY8LuY8u74TAKzBp2XeL7u0IMTF231QYdV/tcySOCu1ztA4WRII7qFa1YUn8mV/DcT0
+         9W5981gOLwxDfQJWRZyqbxfuiFC68tpZx+lpMQ7K5pc/Jk01gwtF3E+MiHogY8C3a2Nf
+         cZ+jhXdhJgNl0tPOCDJhSSVIFkSbq3sJhkfMrQRE6f8EL5zPNW1X8Q0YVO0bi974d2vd
+         XgS1E+vwwnM0nYN4FR3A8IoqJpWmnVHbzzRGKaXNVDka97haWfMJEXf2o9hojtEGjF8/
+         Fkqg==
+X-Forwarded-Encrypted: i=1; AFNElJ8dhfXK4SrielBze0pyzyz6jLT15nw7zVfeRmxuzKiGW/goZdjC05Ae/YYZ2zmbey7Egto=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6ktjRgrKj5qHOBoJaoaJaWKSyEwSzQ34Q5w4JpUw61TgBVrTL
+	9qp+mMpEAiq/dfVWFJXCdae1X3dQhr2hOHsVGf3IGgi80M9fLA13Ad/gUTuO1EebrxwAK5xLZXm
+	93YZ/aBYPU3aPO7NTcGtyxvAO6zxNHcE=
+X-Gm-Gg: Acq92OE35O7uAyY6ywBvueZuYDGMeMMt7DdUPgKhEDYq0UnllFJ68T38T4xw4TmfFXI
+	z90fYE0dVvjH7ClfyfR11mRuMNvyKbidK970jyG/bN2aB4KD9Otv83kD4+CBfLD+541uDkBTN2U
+	+QUwjfJA25/yVZ4p+zBqjDcK+pjh30vXLxQJQ+6Os2hEnDh5GJfh+IMAoIbBGCrMuULXe73SdSP
+	EXoxVMYBeeWotbQ1K+osIkVQHvsaoMnoQJpCVXLTSfhzO96h7XIKSccKytqzZEBuJIJq7Rz7N0K
+	IGYqrLDMFUqeZDNIDcselZOvnZOZmbqv0/T4w1Jm1lUvLMXOrEeym/OCkt3EkvH+HU8tpqucr5Q
 	=
-X-Received: by 2002:a17:906:7955:b0:bec:d077:c4dd with SMTP id
- a640c23a62f3a-bf0ae9fb19fmr282699166b.32.1780530491132; Wed, 03 Jun 2026
- 16:48:11 -0700 (PDT)
+X-Received: by 2002:a17:907:689c:b0:bf0:2253:ad67 with SMTP id
+ a640c23a62f3a-bf0b3ca9707mr195111966b.46.1780530509262; Wed, 03 Jun 2026
+ 16:48:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260601221805.821394-1-ihor.solodrai@linux.dev> <20260601221805.821394-11-ihor.solodrai@linux.dev>
-In-Reply-To: <20260601221805.821394-11-ihor.solodrai@linux.dev>
+References: <20260601221805.821394-1-ihor.solodrai@linux.dev> <20260601221805.821394-12-ihor.solodrai@linux.dev>
+In-Reply-To: <20260601221805.821394-12-ihor.solodrai@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Jun 2026 16:47:54 -0700
-X-Gm-Features: AVHnY4JQct_cFDvrD2wM-9U7CrdDqWa-_ugyrfOX9dhEe2b_w71d_thBOQIEue8
-Message-ID: <CAEf4Bzb2=RvOv_geBt9T0fBvgT23V1NBEgqmG+L+v2nP-0cpYA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 10/14] selftests/bpf: Verify bpf_fastcall decl
- tags in resolve_btfids test
+Date: Wed, 3 Jun 2026 16:47:58 -0700
+X-Gm-Features: AVHnY4LrNMNdKc8g-Y1siuv0xrZhlenvEq2LHaMzMA9GySUdDudubnJqhAdGsIQ
+Message-ID: <CAEf4BzYeKAnQUb3nsxNZ1FEVtare4xrx6sBErCrxncCzKsi4-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 11/14] resolve_btfids: Process KF_ARENA_*
+ flags in resolve_btfids
 To: Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -101,39 +101,147 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 1, 2026 at 3:19=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.d=
 ev> wrote:
 >
-> Extend test_resolve_btfids() to assert that resolve_btfids emits a
-> BTF_KIND_DECL_TAG of name "bpf_fastcall" for each kfunc marked with
-> KF_FASTCALL flag.
+> For kfuncs flagged KF_ARENA_RET, KF_ARENA_ARG1 or KF_ARENA_ARG2,
+> address_space(1) attribute (type tag with kflag=3D1) needs to be emitted
+> to BTF for the return type or arg type respectively.
+>
+> So far this has been done by pahole [1].
+>
+> Implement the emission of the arena attributes in resolve_btfids: for
+> flagged kfuncs create a new function prototype with updated BTF types,
+> adding tags as necessary.
+>
+> Similar to decl tags emission, the transformation is idempotent: if
+> the types are already tagged with address_space(1), it's a noop.
+>
+> [1] https://lore.kernel.org/dwarves/20250228194654.1022535-1-ihor.solodra=
+i@linux.dev/
 >
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->  tools/testing/selftests/bpf/prog_tests/resolve_btfids.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  tools/bpf/resolve_btfids/main.c | 131 ++++++++++++++++++++++++++++++++
+>  1 file changed, 131 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/to=
-ols/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> index 7d9c3460cbed..eeda4e3b6a7f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> @@ -246,6 +246,13 @@ void test_resolve_btfids(void)
->                                              kfunc_symbols[i].id),
->                             kfunc_symbols[i].name);
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
+ain.c
+> index f276200b1a68..aafbcfec755b 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
+> @@ -162,6 +162,9 @@ struct object {
+>  };
 >
-> +       /* Check resolve_btfids emitted bpf_fastcall decl_tag for fastcal=
-l kfuncs */
-> +       for (i =3D 0; i < ARRAY_SIZE(kfunc_symbols); i++)
-> +               if (kfunc_symbols[i].flags & KF_FASTCALL)
-> +                       ASSERT_TRUE(btf_has_decl_tag(btf, "bpf_fastcall",
-> +                                                    kfunc_symbols[i].id)=
-,
-> +                                   kfunc_symbols[i].name);
+>  #define KF_FASTCALL (1 << 12)
+> +#define KF_ARENA_RET (1 << 13)
+> +#define KF_ARENA_ARG1 (1 << 14)
+> +#define KF_ARENA_ARG2 (1 << 15)
+>  #define KF_IMPLICIT_ARGS (1 << 16)
+>  #define KF_IMPL_SUFFIX "_impl"
+>
+> @@ -1294,6 +1297,128 @@ static int ensure_decl_tag(struct btf2btf_context=
+ *ctx, const char *tag_name,
+>         return push_decl_tag_id(ctx, new_id);
+>  }
+>
+> +static bool is_arena_type_attr(struct btf *btf, u32 id)
+> +{
+> +       const struct btf_type *t =3D btf__type_by_id(btf, id);
+> +       const char *name;
+> +
+> +       if (!t || !btf_is_type_tag(t) || !btf_kflag(t))
+
+!t can't (shouldn't) happen, let's not check for things that are not
+supposed to happen, because we'll start double-guessing what are the
+situations where this is valid and whether we deal with that
+correctly.
+
+It's kernel build, we can assume valid BTF.
+
+> +               return false;
+> +       name =3D btf__name_by_offset(btf, t->name_off);
+> +       return name && strcmp(name, "address_space(1)") =3D=3D 0;
+> +}
+> +
+> +static s32 ensure_arena_tagged_ptr(struct btf *btf, u32 ptr_id)
+> +{
+> +       const struct btf_type *ptr =3D btf__type_by_id(btf, ptr_id);
+> +       s32 tag_id;
+> +
+> +       if (!ptr || !btf_is_ptr(ptr))
+> +               return -EINVAL;
+> +
+> +       if (is_arena_type_attr(btf, ptr->type))
+> +               return ptr_id;
+> +
+> +       tag_id =3D btf__add_type_attr(btf, "address_space(1)", ptr->type)=
+;
+> +       if (tag_id < 0)
+> +               return tag_id;
+> +
+> +       return btf__add_ptr(btf, tag_id);
+> +}
+> +
+> +/*
+> + * Build a FUNC_PROTO for @kfunc with each arena-flagged return/paramete=
+r
+> + * pointer tagged with address_space(1). Pointers already tagged are kep=
+t as is.
+> + *
+> + * If nothing needs tagging, the original proto id is returned unchanged=
+.
+> + * Otherwise a new FUNC_PROTO is created and its id returned. The origin=
+al
+> + * proto may be shared with sibling FUNCs, so it must not be modified in=
+ place.
+> + */
+> +static s32 ensure_arena_tagged_proto(struct btf *btf, struct kfunc *kfun=
+c)
+> +{
+> +       const struct btf_type *func =3D btf__type_by_id(btf, kfunc->btf_i=
+d);
+> +       u32 proto_id =3D func->type;
+> +       const struct btf_type *proto =3D btf__type_by_id(btf, proto_id);
+> +       const struct btf_param *params =3D btf_params(proto);
+> +       u32 nr_params =3D btf_vlen(proto);
+> +       s32 arg0_type_id =3D nr_params > 0 ? (s32)params[0].type : -1;
+> +       s32 arg1_type_id =3D nr_params > 1 ? (s32)params[1].type : -1;
+> +       s32 ret_type_id =3D proto->type;
+> +       s32 new_proto_id, id;
+> +       bool changed =3D false;
+> +       int err;
+> +
+> +       if (kfunc->flags & KF_ARENA_RET) {
+> +               id =3D ensure_arena_tagged_ptr(btf, ret_type_id);
+> +               if (id < 0)
+> +                       return id;
+> +               changed |=3D id !=3D ret_type_id;
+> +               ret_type_id =3D id;
+> +       }
+> +
+> +       if (nr_params > 0 && (kfunc->flags & KF_ARENA_ARG1)) {
+> +               id =3D ensure_arena_tagged_ptr(btf, arg0_type_id);
+> +               if (id < 0)
+> +                       return id;
+> +               changed |=3D id !=3D arg0_type_id;
+> +               arg0_type_id =3D id;
+> +       }
+
+else scream loudly, this is not supposed to happen. we are being too
+lax about these violations here
+
+this is a good place to check and emit human-readable errors about
+invalid kfunc declarations, so let's do it
+
+and again, let's not do the ensure pattern, add unconditionally, don't
+check "changed" (it will), etc
+
+> +
+> +       if (nr_params > 1 && (kfunc->flags & KF_ARENA_ARG2)) {
+> +               id =3D ensure_arena_tagged_ptr(btf, arg1_type_id);
+> +               if (id < 0)
+> +                       return id;
+> +               changed |=3D id !=3D arg1_type_id;
+> +               arg1_type_id =3D id;
+> +       }
 > +
 
-{}
-
->  out:
->         btf__free(btf);
->  }
-> --
-> 2.54.0
->
+[...]
