@@ -1,95 +1,95 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1511A40759D
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A3D45348A
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780530512; cv=pass; b=t+NR1mLUuZE4u5oPmwklD/HklHv3vJ7gIxaQzYlO18WdnKwxIJYiauOD/TK8pdjCuLoZ3zmuCOqkLzovBwoIqxsy4C1jw1JD3XSkwPzWIUgv+XnfGpOZR7nQgaDCwFABUuokrfIt5rW9VzPHt933Nb6nPu6Ylf1c08nB49oyzm0=
+	t=1780530527; cv=pass; b=jJC6LILZ66kRKDNAGqyegeT7o+SXXb04Ss7eu3J0mGZfQg6WUOrogHHgZTR3S91ArCUrwoXORLzbdRev1Umv6MxFKzoH6XaUNe/gD1THpBadF4sgvWNGqes2RtpLmA8wcJxdhLtXJgiwPsZaOS1EjV+qKV09pXjPTaVVZn1JTKg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780530512; c=relaxed/simple;
-	bh=QWkpgbb3Sv9J1u6cdXHz6Jljw2OMAo8XoiFg7eS8a2Q=;
+	s=arc-20240116; t=1780530527; c=relaxed/simple;
+	bh=f6Hzh8wLZoswfxk2b8mpTTJKEEdA2RpquJ9Y4az24uM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Af9RjBSjHtVdF0xL4PwARXsmXEVnYpfq+3fdHpFOBjjLotuKcqj/CDfo4g2mt4X83CozrrYYCJGTuc6HXkjFaAOWaQ1AoVb/bV4QCeLNcow9iYvR1QCvR0RguEn64Rpq6XwtvOgJJvng8niiWZpkc5lsFXhSPWBG/8HW4Ygv9QM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=algRIbVA; arc=pass smtp.client-ip=209.85.208.49
+	 To:Cc:Content-Type; b=KAxMPiFHQdhYMkfLaRh9RoYS8Gkd3cVQCytIPOn8VzIj+9vpLp8OrfU7vetlF2ugQr7Z1FJZSWalJ+t9DfoBI4hFqX/uTEes3Jwt7zaQReu2kBJIvt+m6G91XNpSO8GPxZ6ZozwtRMeWWcLv2RdyNXAOC3FS44Hq++/5XOh46dY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YprLbVfg; arc=pass smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="algRIbVA"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-68d23430690so127036a12.3
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 16:48:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780530509; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YprLbVfg"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-bed2b9bfa02so11062366b.1
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 16:48:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780530523; cv=none;
         d=google.com; s=arc-20240605;
-        b=Y1DLu7x7BLwK7IMXCkZIGGn4FaaSCBNgMFkqWWcV2wxb5amOJgHWPWC5NrsBnTql0G
-         5DW/MmmMXSMyvkOXO43DoKxlHbRSHPrGC5gepXSKLQAac4NwYl0Xjg6gaweP13Qrgd1m
-         ai7QHP5u8w1w7dfD09wyTcO1ARZ9Z1MxMv6lRPKQ1hzyud/KURx5MjEWSWG8sRL0Uk16
-         Ry0CWR7oUjxZhN+B8JCxzRQoKOFq+ogeCuD6udrQrS+Tz/3rOOPAJqWCSsh8dLRLWULd
-         lN7PJmVPyMqXlqT/dPpCaX/62OZWgdHpfeEuT6jmqqfWJ7sB7aCdBAD1b/7G80sN+GwT
-         KMKQ==
+        b=djHtdjM9MDcNR8MLTa/4d0aRBH7E9AVVWhqIsA3vVBhSF/EthWyILUIaFpSyNp/4Kq
+         qkdX9VLTX+h3NR/VzB8bWmqnCBkfjGcfdrW28/iscUbHy+N5PAp9kZztVoDf0BTiasUK
+         sQ82reJb/146Bv6SofYId3xgH5ni5YGewIQlUjCMq0yhoJ/nbwWJI3iWlU5+ompxXIOC
+         3SQcbi2V0wjmbg+LlBAas5A1tKVsff0IOi6wCK7AOzlnFW+thTUkA8wspTvTgJ+tVdw1
+         F5J/DwM8bawmiThJlqTxzZauHadYM+F/fS8PHOGtgmG6R0fF2cXiUM69a15j3FO4tJC7
+         HxMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
-        fh=CtCjRi9LbqWSX4cLVKSwETE/pzxvWim/iGOjcP8/7wQ=;
-        b=SDrVeh0XirwiTwS87NzmOmBn735AyjOs0RZwQGDW9y6LsH8ucZDjROMJrHh4NOtWso
-         hqp50h60GIHEYZrv+yZooZIQc7DQ00VGCsWmOHvluP4JTqCaciLOtv4qT8F0sR1WYjN2
-         UHX8XygHdMcMbDOgDWm79CLsm7NmMk7oWBVDXQwbI4jUZIvZ5gFElfYPao/hp4jLL9lh
-         JLJoRajE5U7QAtX/6ARozmA9RUihOfnKQ2sdjr1eL+OF8tvWL6t3nQTEfsRVtHoh+sEM
-         mxHI9tk0sLG09XEr7MR0c/j6pDUUDXAk3tZTENc1vWBtvBEK98gJqv1lwCds+AgSvZx6
-         PLCA==;
+        bh=UrZvLJ0+QctbH+SbOVRfngHn4+RjcqJmVgAZ6B0SozY=;
+        fh=E7CD5xVHnx6rzK1AUkQxJwtXX7Bex0CXXADU6Lg89Vg=;
+        b=BbMnJUhOz2wvDd1r4qxxM56yhDmglYlNfUlbSxVHEr0tQbkB8TN9qGB7nSAe2v4ZBz
+         rDQXWfxFPSGu3YD7cO0qyio8oaSiqP8GFZmpTCFfNJvcFpPrzxJJNaBDLWoTuyQvZZZO
+         ETmCJxdQmfmC9enLpPhucHrmSGys7jBTohwoReoOZSiNVuwKs9wFHqTfK+/pGNsavvFO
+         j2RpqiZSCTzv5fFia4/cd1/4baaginl0KqZiYZ+9CvoM3OvOv0/ZEVz7p4Rv1ekCjD95
+         WTqTJJ08yAvBgSfwi2OtKMgQ4EkypIoVE4iVm2bIWDousit4GETovu9cBzDdf3gT2mcQ
+         dwcQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780530509; x=1781135309; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780530523; x=1781135323; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
-        b=algRIbVABR7io4W547Mg7Z0HhCc9Ed99mp7dIYLYuF0OOHMf4+g4e5I3LVAVP/Anpm
-         Kvn7tTpQQjjI7YRuVe9kf9dpKKl4dNsa2eHgPn589zen1QesEVjvUQ6dVFbWhClLfoLH
-         Ai3K+hOcgN/ttKqI1KMnt/90hrJnfxsTM1wFPIH6K2DokZeGiCVg/dvE8E0Me74Nh5iM
-         dbFGcdchIP8ofXTiJzMSjjyRUtytA6zKAfqrlYHowMEMaDu0Zl2DRDt7e8jNODHHpTNl
-         h4VBbBDAgn/z3Oh+HNgUdoFnVRIS7UoJILjffB67LUq0zm+R7oldfiGVKV9JSGGy++uO
-         Z2rg==
+        bh=UrZvLJ0+QctbH+SbOVRfngHn4+RjcqJmVgAZ6B0SozY=;
+        b=YprLbVfgdAD6Tfkc+W3A53M9nVysDkfrHJ9TL0MhOeHR52wMXq+eQ9sGxHee8wpxRl
+         sSXvxR30g35gFvbSO1wxrfNHMTI9OhsgXSE/x38H3EpHSBwbm+ICFOW8zAtDRP2RZ9pl
+         LpEChdRYDFyokUyD7jfTFx/8EUTIcE9NUyUMXIxZlPjkVsOVMA64Y3thSB9OFOQM6zkv
+         Irfnhf02F74upAJ2L3OMiZLlpyX4REgMzrJ6XQMF9Ov5yeEstrSgAez+4R8AixNxhowZ
+         NaEq7gTWbxQd1yPcX14oy7ISTK0GSwHFQOf17V6TEjAmSifUxtdJo0lLkBKRVHYiGyYL
+         kF9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780530509; x=1781135309;
+        d=1e100.net; s=20251104; t=1780530523; x=1781135323;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=T90oynylW7AQk2MgYZP57oghSUfaSB8gw/FQu/tdAng=;
-        b=TF5WSfGQa5ziXUPL/CFfkye3ILhzY8qudlzHLQa7OMw/+wLXaSMYKDl5UFVYOFUPxs
-         +cY8LuY8u74TAKzBp2XeL7u0IMTF231QYdV/tcySOCu1ztA4WRII7qFa1YUn8mV/DcT0
-         9W5981gOLwxDfQJWRZyqbxfuiFC68tpZx+lpMQ7K5pc/Jk01gwtF3E+MiHogY8C3a2Nf
-         cZ+jhXdhJgNl0tPOCDJhSSVIFkSbq3sJhkfMrQRE6f8EL5zPNW1X8Q0YVO0bi974d2vd
-         XgS1E+vwwnM0nYN4FR3A8IoqJpWmnVHbzzRGKaXNVDka97haWfMJEXf2o9hojtEGjF8/
-         Fkqg==
-X-Forwarded-Encrypted: i=1; AFNElJ8dhfXK4SrielBze0pyzyz6jLT15nw7zVfeRmxuzKiGW/goZdjC05Ae/YYZ2zmbey7Egto=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6ktjRgrKj5qHOBoJaoaJaWKSyEwSzQ34Q5w4JpUw61TgBVrTL
-	9qp+mMpEAiq/dfVWFJXCdae1X3dQhr2hOHsVGf3IGgi80M9fLA13Ad/gUTuO1EebrxwAK5xLZXm
-	93YZ/aBYPU3aPO7NTcGtyxvAO6zxNHcE=
-X-Gm-Gg: Acq92OE35O7uAyY6ywBvueZuYDGMeMMt7DdUPgKhEDYq0UnllFJ68T38T4xw4TmfFXI
-	z90fYE0dVvjH7ClfyfR11mRuMNvyKbidK970jyG/bN2aB4KD9Otv83kD4+CBfLD+541uDkBTN2U
-	+QUwjfJA25/yVZ4p+zBqjDcK+pjh30vXLxQJQ+6Os2hEnDh5GJfh+IMAoIbBGCrMuULXe73SdSP
-	EXoxVMYBeeWotbQ1K+osIkVQHvsaoMnoQJpCVXLTSfhzO96h7XIKSccKytqzZEBuJIJq7Rz7N0K
-	IGYqrLDMFUqeZDNIDcselZOvnZOZmbqv0/T4w1Jm1lUvLMXOrEeym/OCkt3EkvH+HU8tpqucr5Q
+        bh=UrZvLJ0+QctbH+SbOVRfngHn4+RjcqJmVgAZ6B0SozY=;
+        b=XOrVx0q4s27QQlLEzNDa0cHb04k2iYmIQQ0CBq7D8fYAcq5rrwPtDN+YQ2hURuT0zl
+         AsyjIt8j0PLhKsDgKPL9HwBmnBy8xiqKvaJro+uvkqMz9WtxhMXYNWbz7Jxv9eDAhbUL
+         W6BMn4QgsdB/siVDuulmqPf/zq0xKgufyrmXdoZ7iS3yzvPEv95X/uar5PTnNMitxAtl
+         Vi45gjrK5Q9PlbrhIXj9aZK3WLvMBiUluqNpU9FULNi7Zu9O30NBtMdxLCiLT0aesXqZ
+         o6VwfWDKIgM2tE3nsusLN/cYWl2BKSVnH0TI0hXIKGxBvlmK77gWPxb2rFEdhgibsZGI
+         IwsQ==
+X-Forwarded-Encrypted: i=1; AFNElJ83k0j6EwwrZI1xEXVSn2uVmGg8hJ0MPbGvumF7No18aqHFjbiDbYyI5kf43svB0yX9Okg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx/dB4L/vchavVUp2K8fapJYgrw7xwtd+GU4BAdk63vX9fl8MA
+	SwBwADnqEVXRekC7BZFeiC1w91yjSe1ZvpBulKsQpq+NRW5NNknk5P7MgkUh+GEyz+xJ4IAPMOx
+	LxcV/E/vDjfsPINE3GlZqxZ2BqrstdyE=
+X-Gm-Gg: Acq92OGyAcnyczX8KgefrFxZxuXcTdk5t/BuxCwOg1IsYrYHudu4lCuDshBHfMnWUwt
+	CwqaDid4LJxlgnNXePVP6R2KNjFAwicIibyVSgiUGefMLw3ujij+S+M5DaV8eEHZFGRjb9eDl/L
+	dU4q+ynxysp3PynqiGNmV+pTRNWFr13auYgF8/3Gd7mpESXAeMsoHFRaq12ig+oxCFKTk9EYndp
+	Fe7QDnzNdmPzDZB9u2Xyff3ocmK3DDVXGkHhFA/e2jgHDONaO+uRJ4cra0IxF/4uovRpjZEXiF2
+	XrRy+ni/CG15FBrV46th6d0rT6voJxAf8TjcCDEI8k6NVk3oRdtP4i/b4jJM0K5RoOps+QnJFO0
 	=
-X-Received: by 2002:a17:907:689c:b0:bf0:2253:ad67 with SMTP id
- a640c23a62f3a-bf0b3ca9707mr195111966b.46.1780530509262; Wed, 03 Jun 2026
- 16:48:29 -0700 (PDT)
+X-Received: by 2002:a17:907:7f9e:b0:bec:f0bb:66f5 with SMTP id
+ a640c23a62f3a-bf0b2bd07f8mr322742566b.30.1780530522749; Wed, 03 Jun 2026
+ 16:48:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260601221805.821394-1-ihor.solodrai@linux.dev> <20260601221805.821394-12-ihor.solodrai@linux.dev>
-In-Reply-To: <20260601221805.821394-12-ihor.solodrai@linux.dev>
+References: <20260601221805.821394-1-ihor.solodrai@linux.dev> <20260601221805.821394-14-ihor.solodrai@linux.dev>
+In-Reply-To: <20260601221805.821394-14-ihor.solodrai@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Jun 2026 16:47:58 -0700
-X-Gm-Features: AVHnY4LrNMNdKc8g-Y1siuv0xrZhlenvEq2LHaMzMA9GySUdDudubnJqhAdGsIQ
-Message-ID: <CAEf4BzYeKAnQUb3nsxNZ1FEVtare4xrx6sBErCrxncCzKsi4-Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 11/14] resolve_btfids: Process KF_ARENA_*
- flags in resolve_btfids
+Date: Wed, 3 Jun 2026 16:48:01 -0700
+X-Gm-Features: AVHnY4Iu0b0fxJL4EJQE7HKjF47Z2WnKGySX7L4rJ75qadJJeFQdPJkrrK014PE
+Message-ID: <CAEf4BzYBHWKiTRF-Mf8ghPVPdWrpN79MjG_eBQ0DybeH90i5_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 13/14] kbuild: Drop decl_tag_kfuncs and
+ attributes from pahole flags
 To: Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -101,147 +101,53 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jun 1, 2026 at 3:19=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.d=
 ev> wrote:
 >
-> For kfuncs flagged KF_ARENA_RET, KF_ARENA_ARG1 or KF_ARENA_ARG2,
-> address_space(1) attribute (type tag with kflag=3D1) needs to be emitted
-> to BTF for the return type or arg type respectively.
+> resolve_btfids now emits all kfunc-specific BTF annotations for the
+> kernel: the "bpf_kfunc" and "bpf_fastcall" decl tags and the
+> address_space(1) type attribute on arena kfunc return/arguments. These
+> were previously produced by pahole under the "decl_tag_kfuncs" and
+> "attributes" btf_features.
 >
-> So far this has been done by pahole [1].
+> Drop both from the pahole invocation.
 >
-> Implement the emission of the arena attributes in resolve_btfids: for
-> flagged kfuncs create a new function prototype with updated BTF types,
-> adding tags as necessary.
+> Note that "decl_tag" (generic source __attribute__((btf_decl_tag))
+> annotations) is a separate feature from "decl_tag_kfuncs" and must be kep=
+t.
 >
-> Similar to decl tags emission, the transformation is idempotent: if
-> the types are already tagged with address_space(1), it's a noop.
->
-> [1] https://lore.kernel.org/dwarves/20250228194654.1022535-1-ihor.solodra=
-i@linux.dev/
->
+
+logistically, this pahole flag drop should go in the same commit as
+resolve_btfids change that adds all of its functionality... which
+probably requires merging few patches, but given all my ranting about
+not doing "ensure" pattern, it's unavoidable, IMO
+
+
+
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->  tools/bpf/resolve_btfids/main.c | 131 ++++++++++++++++++++++++++++++++
->  1 file changed, 131 insertions(+)
+>  scripts/Makefile.btf | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
-ain.c
-> index f276200b1a68..aafbcfec755b 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -162,6 +162,9 @@ struct object {
->  };
+> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> index e66e13e79653..a1812985a61a 100644
+> --- a/scripts/Makefile.btf
+> +++ b/scripts/Makefile.btf
+> @@ -14,9 +14,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)      +=
+=3D --skip_encoding_btf_inconsis
+>  else
 >
->  #define KF_FASTCALL (1 << 12)
-> +#define KF_ARENA_RET (1 << 13)
-> +#define KF_ARENA_ARG1 (1 << 14)
-> +#define KF_ARENA_ARG2 (1 << 15)
->  #define KF_IMPLICIT_ARGS (1 << 16)
->  #define KF_IMPL_SUFFIX "_impl"
+>  # Switch to using --btf_features for v1.26 and later.
+> -pahole-flags-$(call test-ge, $(pahole-ver), 126)  =3D -j$(JOBS) --btf_fe=
+atures=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimized_func,con=
+sistent_func,decl_tag_kfuncs
+> -
+> -pahole-flags-$(call test-ge, $(pahole-ver), 130) +=3D --btf_features=3Da=
+ttributes
+> +pahole-flags-$(call test-ge, $(pahole-ver), 126)  =3D -j$(JOBS) --btf_fe=
+atures=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimized_func,con=
+sistent_func
 >
-> @@ -1294,6 +1297,128 @@ static int ensure_decl_tag(struct btf2btf_context=
- *ctx, const char *tag_name,
->         return push_decl_tag_id(ctx, new_id);
->  }
+>  pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_features=3Dl=
+ayout
 >
-> +static bool is_arena_type_attr(struct btf *btf, u32 id)
-> +{
-> +       const struct btf_type *t =3D btf__type_by_id(btf, id);
-> +       const char *name;
-> +
-> +       if (!t || !btf_is_type_tag(t) || !btf_kflag(t))
-
-!t can't (shouldn't) happen, let's not check for things that are not
-supposed to happen, because we'll start double-guessing what are the
-situations where this is valid and whether we deal with that
-correctly.
-
-It's kernel build, we can assume valid BTF.
-
-> +               return false;
-> +       name =3D btf__name_by_offset(btf, t->name_off);
-> +       return name && strcmp(name, "address_space(1)") =3D=3D 0;
-> +}
-> +
-> +static s32 ensure_arena_tagged_ptr(struct btf *btf, u32 ptr_id)
-> +{
-> +       const struct btf_type *ptr =3D btf__type_by_id(btf, ptr_id);
-> +       s32 tag_id;
-> +
-> +       if (!ptr || !btf_is_ptr(ptr))
-> +               return -EINVAL;
-> +
-> +       if (is_arena_type_attr(btf, ptr->type))
-> +               return ptr_id;
-> +
-> +       tag_id =3D btf__add_type_attr(btf, "address_space(1)", ptr->type)=
-;
-> +       if (tag_id < 0)
-> +               return tag_id;
-> +
-> +       return btf__add_ptr(btf, tag_id);
-> +}
-> +
-> +/*
-> + * Build a FUNC_PROTO for @kfunc with each arena-flagged return/paramete=
-r
-> + * pointer tagged with address_space(1). Pointers already tagged are kep=
-t as is.
-> + *
-> + * If nothing needs tagging, the original proto id is returned unchanged=
-.
-> + * Otherwise a new FUNC_PROTO is created and its id returned. The origin=
-al
-> + * proto may be shared with sibling FUNCs, so it must not be modified in=
- place.
-> + */
-> +static s32 ensure_arena_tagged_proto(struct btf *btf, struct kfunc *kfun=
-c)
-> +{
-> +       const struct btf_type *func =3D btf__type_by_id(btf, kfunc->btf_i=
-d);
-> +       u32 proto_id =3D func->type;
-> +       const struct btf_type *proto =3D btf__type_by_id(btf, proto_id);
-> +       const struct btf_param *params =3D btf_params(proto);
-> +       u32 nr_params =3D btf_vlen(proto);
-> +       s32 arg0_type_id =3D nr_params > 0 ? (s32)params[0].type : -1;
-> +       s32 arg1_type_id =3D nr_params > 1 ? (s32)params[1].type : -1;
-> +       s32 ret_type_id =3D proto->type;
-> +       s32 new_proto_id, id;
-> +       bool changed =3D false;
-> +       int err;
-> +
-> +       if (kfunc->flags & KF_ARENA_RET) {
-> +               id =3D ensure_arena_tagged_ptr(btf, ret_type_id);
-> +               if (id < 0)
-> +                       return id;
-> +               changed |=3D id !=3D ret_type_id;
-> +               ret_type_id =3D id;
-> +       }
-> +
-> +       if (nr_params > 0 && (kfunc->flags & KF_ARENA_ARG1)) {
-> +               id =3D ensure_arena_tagged_ptr(btf, arg0_type_id);
-> +               if (id < 0)
-> +                       return id;
-> +               changed |=3D id !=3D arg0_type_id;
-> +               arg0_type_id =3D id;
-> +       }
-
-else scream loudly, this is not supposed to happen. we are being too
-lax about these violations here
-
-this is a good place to check and emit human-readable errors about
-invalid kfunc declarations, so let's do it
-
-and again, let's not do the ensure pattern, add unconditionally, don't
-check "changed" (it will), etc
-
-> +
-> +       if (nr_params > 1 && (kfunc->flags & KF_ARENA_ARG2)) {
-> +               id =3D ensure_arena_tagged_ptr(btf, arg1_type_id);
-> +               if (id < 0)
-> +                       return id;
-> +               changed |=3D id !=3D arg1_type_id;
-> +               arg1_type_id =3D id;
-> +       }
-> +
-
-[...]
+> --
+> 2.54.0
+>
