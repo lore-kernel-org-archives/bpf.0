@@ -1,178 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f65.google.com (mail-dl1-f65.google.com [74.125.82.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4863CBE75
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 18:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FD137E310
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 18:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780510486; cv=none; b=LKqylj/iBlKjby6lSi0SStf7lE0VrZG1SxuHecbB40uqLTKTbslrfSU7G3/RtJ4c7YEBnvg0XNbeVk8NtwZSJn4iA3Wy1yDL+wWfCN67V5tbu90ZO9V53tQZSXt5Wro9jyo+iuhbbWi0SAcUPbAWDlAQAyamnJjTZXccfBPKr08=
+	t=1780511260; cv=none; b=pHZrS5LQSmPXOPxPECzMyiG/439QrkYxdayMC/ZKcNXaOa/coxnRgwn3zJta75RgCveqMdVkWmjvpskb8f/Y9r7EVMW27w6qAoeVcYYnFAP0sWAB7zazZ4fFdKH+fohiEiv5m1J6g0Lz8PYTkgZsRG0omrapP6nalr2iMmTYyms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780510486; c=relaxed/simple;
-	bh=7wyhagYve3qVDJkqFip1pCbXZPyGAuUuewROLUXIQ04=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b0DAqEnKgZ6DyDksN48YtnWxq8ZVcBiycxJTst1nKHcfbVpCdM8oetnVT9TV0Ai34bJFz6US9ZZ1XZAWf3msBkXXwd95/zATI5ImL1tx7TqrXkP5LqGl9qNkqIrEu1yjHPTuQs934P2Vex+sDfzzi4nnfbx8Oy9L2h8neZzpknY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLBHr1Nv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780511260; c=relaxed/simple;
+	bh=rGn/eo7rCF71sKqUSQC6YeO0v+VgtzuhafooVdQ1guo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lGxUPNXpsaAQgaveAD+3LT/MXLqCxn01P/x9kcUw+3Eeam+zMxKIjGVOawd8EK+MTO1GqAfJv5gt3Xm44tRnLt4HEx4mJJYn+gwxNwWyzhnVsaOw1qcCm1S4EPeswOeen+52taXvfsCMtKpgGkNcc4Lpj/WjPC53OhXFPXi3Pf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=D9x3oolk; arc=none smtp.client-ip=74.125.82.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLBHr1Nv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F11F00898;
-	Wed,  3 Jun 2026 18:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780510484;
-	bh=7qxXSrhY/QBKkt7H79In4b0ZNX2q101wbGL2/c6EQFI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JLBHr1NvPiNZ63kJYqXrZzCSFQOaX3/bfRnohJRBrHsg3Z+PlfVtG07KaBiJuF3bt
-	 3d/j9In7LmqFGvieOVaK6bxwftbLeLCaAbnptZ7YZUZH6dH+Ic/xuRstsFUz5kLwGY
-	 EJytYQuxQdeiVQDRwnVmb4q/gT7EOL2u85LAUHTbYNGRnv7fnlwWnWqt1VYte1ts2Z
-	 5LUle6VlOBCyifdF67ylwONR7eI8LB7P3LH7fPqZ5M9DUDkuCXYf0jOf5s7Dhf2t04
-	 Fx1TIa888rwcTG/oOJbXUawmDoEJ/dP22z96cCLraVTruvOCaYTJbxGCYyqtNegP2T
-	 n7pL5Ij0IGIeQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 1/2] tcp: rehash onto different local ECMP path on
- retransmit timeout
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Neil Spring" <ntspring@meta.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602181428.2318919-2-ntspring@meta.com>
-References: <20260602181428.2318919-2-ntspring@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 18:14:44 +0000
-Message-Id: <20260603181444.9C5F11F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="D9x3oolk"
+Received: by mail-dl1-f65.google.com with SMTP id a92af1059eb24-137ed2e66faso2350172c88.0
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 11:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780511257; x=1781116057; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l38JHjmsK0s9q3F7YTmWtCxLSCfus8KtE+aNbS4fBqM=;
+        b=D9x3oolkd+M3VRp9mc/S5nv2keR6Ogz5IMiHV/Naj5ANlWyAWq80JCWbqJnqh1395n
+         HklKNhht6hOE3XCII+CWkuDdH8ddQrvOJKYkK1qPzjZ0dPK9NzkXGA8X08V2lsWxL+Sv
+         QT2MstenU54FFRSMWwc8EDvEkcPs3AAqYG7qsl7gyiG3ohnEwx4e2TxhUH1s90pUKc0G
+         N/SipYY9uM6FkNd/UFvnEyXl0hW9sOTJZMr/cxYI2ABgI/2ZU/L0fPuN0ZyX43nwOzst
+         eoijOzvfCXscEOFsjWYeZ5OzBOHPtS1z73PkUJymbO/y7zHSu+vRCBHC3+YUwriX0mUT
+         QwLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780511257; x=1781116057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l38JHjmsK0s9q3F7YTmWtCxLSCfus8KtE+aNbS4fBqM=;
+        b=kBpz37Psm6XJ+0mEmkWUmNxXAnFnd5EbgzVNANg3wqw2yd/c0Ie40FmdDxkEmhh4LN
+         jyIKds97jgHaERFtwy80yK7qgC/aV1ePiVHuFHLoLBcfsnIxvlO98qloAwL69gsNS0PE
+         AnBPF/P3MSrARNy1nzj63YCyG+tR2T7nJDc8k9qnGwQJbjr3yuIxJ6CUZu8fkcqKWmF7
+         wQXR20ofPlwyHdGXxCqBUYMjEJXwbSaqJcEsZ/SnRz58U/X3UKl5wz7xp9b5Vsn2J+LF
+         l6kBJ6QlWr4KbGR0nJv+U3Xv1u6UQGycujX+Umq9mVT69QLxbbZhcxPVfSgSRCgtbCHI
+         WuSA==
+X-Gm-Message-State: AOJu0YyeUGzXWWuBgQCC/i9W5ZLdW1HTF6KxKCX/M/Mtfs06HgI4uN43
+	/q+cVqE7FEXfL8jog7s/XOUdZmerMZEdv0vhMnGgM8L9ow3lwjLJ3ZwQ9iE2AkKNbfWbmxsKCmh
+	aZzrfkWxIgrr4Slc=
+X-Gm-Gg: Acq92OEbyksrbcxiBzsiB7DpOg+ExrD7y9ltpBK/8OTuJXkkQihZ04G45A8JbZ2KPMz
+	j9d48mIQ6KSCs9njZ377T1XckmSNcXCd9l6bizpnxTmOFhqFM9DT34e8hxu11edXdGw8sxhVTEr
+	I6XqFaCdiQEG+4qOO4ZdDKIc0fy3DihiTWpxnDJaLqfE9f/7qR9K4RBkco/w3Jy3hZ3mhDpWtMy
+	IYuKsv6b50HoT/jAfcolliOmcPDEelh2KzP7oJbU1Pt2O9VmbKX4SBE9/9TiVBM+1EbXV67/X+G
+	52MLtoAAVLUp7uuhW0HRTMJijJ+t0u6SYvbB9Ygh6MwHbvBRmT2WDU58FB52FowHSflwl29/rGl
+	KbnIoNKNIccM4w9fHxVMHTDSoHo3Z3pvOsD3U/RinQ889oXr/6F5Knlz6VneG2A2ArKI9l7jRO3
+	iP4PIo6aVo+z0DfubBXJHSEVo/TUH4Sg==
+X-Received: by 2002:a05:7301:100b:b0:304:2eb0:2726 with SMTP id 5a478bee46e88-3074fbc1d68mr2033172eec.25.1780511257448;
+        Wed, 03 Jun 2026 11:27:37 -0700 (PDT)
+Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::ea8f])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074db560d7sm4137860eec.5.2026.06.03.11.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 11:27:36 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	mattbobrowski@google.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 0/3] selftests/bpf: libarena: Add initial data structures
+Date: Wed,  3 Jun 2026 14:27:24 -0400
+Message-ID: <20260603182727.3922-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+Add two new data structures to libarena. These data structures initially
+resided in the sched-ext repo (https://github.com/sched-ext/scx) and
+have been adapted to the internal libarena build system. The data
+structures are:
 
-New issues:
-- [High] Missing mp_hash initialization in tcp_v6_send_response() causes TC=
-P control packets (RST, TIME_WAIT ACKs) to use a different ECMP path than d=
-ata packets.
-- [High] Unconditional txhash randomization in BPF syncookies breaks symmet=
-ric ECMP routing for IPv6.
-- [Medium] IPv4-mapped IPv6 connections incorrectly apply IPv6-specific coo=
-kie txhash logic, biasing queue distribution.
+- Red black tree: Fundamental tree data structure that can also serve
+  as a base for more domain-specific data structures.
 
-Pre-existing issues:
-- [Critical] bpf_sk_assign_tcp_reqsk() partially initializes tcp_request_so=
-ck, leading to uninitialized slab memory usage and wild pointer dereference=
-s.
---
+- Lev-Chase deque: Queue data structure that allows efficient work
+  stealing, useful in scheduling scenarios.
 
-commit e48c642c65c933dd8659dee905bbd3b1d86dd5a3
-Author: Neil Spring <ntspring@meta.com>
+The data structures are accompanied by selftests that are automatically
+discovered by the existing libarena test_progs selftest and incorporated
+in the CI.
 
-tcp: rehash onto different local ECMP path on retransmit timeout
+CHANGELOG
+=========
 
-This patch updates TCP to select a different local ECMP path upon
-retransmit timeout, path MTU discovery, or spurious retransmissions by
-propagating the socket's txhash into the IPv6 multipath hash logic. It
-ensures the cached destination is invalidated so the next transmit triggers
-a fresh route lookup using the new hash. Syncookies are also updated to
-derive txhash from the cookie for IPv6 to maintain ECMP path consistency.
+v1 -> v2 (https://lore.kernel.org/bpf/20260511214100.9487-1-emil@etsalapatis.com/):
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12301,6 +12301,7 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __=
-sk_buff *s, struct sock *sk,
-> =20
->  	treq->req_usec_ts =3D !!attrs->usec_ts_ok;
->  	treq->ts_off =3D tsoff;
-> +	treq->txhash =3D net_tx_rndhash();
-> =20
+- Rename tests from st_ to test_ (Alexei)
+- Removed the freelist caches from the rbtrees, previously used to defer freeing (Alexei)
+- Moved the type and function definitions to use the __arena identifier
+- Removed the typecasts during function return and directly return __arena
+  pointers (Alexei)
+- Renamed queues to spmc queues to abstract away the algorithm (Alexei)
+- Adjusted the memory barriers in the spmc queue
+- Added multithreaded testing harness for libarena programs (Alexei)
+- Added parallel selftest for queues (Alexei)
+- Split least upper bound and exact find operations back into separate
+  functions to prevent RB_DUPLICATE-related bug (AI)
 
-[Severity: Critical]
-This is a pre-existing issue, but since inet_reqsk_alloc() allocates the
-request socket via a slab cache without zeroing memory, do the other fields
-of tcp_request_sock (such as used_tcp_ao and af_specific) remain
-uninitialized garbage?
+Emil Tsalapatis (3):
+  selftests/bpf: libarena: Add rbtree data structure
+  selftests/bpf: libarena: Add spmc queue data structure
+  selftests/bpf: libarena: parallel test harness and spmc parallel
+    selftest
 
-If so, when tcp_create_openreq_child() is called later and dereferences
-treq->af_specific->md5_lookup, could this result in a kernel panic from
-evaluating the uninitialized pointers?
+ .../bpf/libarena/include/libarena/rbtree.h    |   83 ++
+ .../bpf/libarena/include/libarena/spmc.h      |   27 +
+ .../bpf/libarena/include/libarena/userspace.h |    6 +
+ .../selftests/test_parallel_spmc.bpf.c        |  659 +++++++++++
+ .../bpf/libarena/selftests/test_rbtree.bpf.c  |  968 ++++++++++++++++
+ .../bpf/libarena/selftests/test_spmc.bpf.c    |  194 ++++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   | 1015 +++++++++++++++++
+ .../selftests/bpf/libarena/src/spmc.bpf.c     |  232 ++++
+ .../selftests/bpf/prog_tests/libarena.c       |  157 +++
+ 9 files changed, 3341 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/spmc.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/spmc.bpf.c
 
-[Severity: High]
-Does initializing txhash to a random value here break symmetric ECMP
-routing for IPv6 BPF syncookies?
+-- 
+2.54.0
 
-Since standard IPv6 syncookies set txhash to the cookie to maintain path
-symmetry with the SYN-ACK, would this random initialization cause data
-packets to route over a completely different ECMP path than the SYN/SYN-ACK
-exchange?
-
->  	skb_orphan(skb);
-
-[ ... ]
-
-> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-> --- a/net/ipv4/syncookies.c
-> +++ b/net/ipv4/syncookies.c
-> @@ -280,9 +280,18 @@ static int cookie_tcp_reqsk_init(struct sock *sk, st=
-ruct sk_buff *skb,
->  	treq->snt_synack =3D 0;
->  	treq->snt_tsval_first =3D 0;
->  	treq->tfo_listener =3D false;
-> -	treq->txhash =3D net_tx_rndhash();
->  	treq->rcv_isn =3D ntohl(th->seq) - 1;
->  	treq->snt_isn =3D ntohl(th->ack_seq) - 1;
-> +	if (sk->sk_family =3D=3D AF_INET6) {
-> +		/* Use the cookie as txhash so the ECMP path matches
-> +		 * the SYN-ACK, where txhash was also set to the
-> +		 * cookie.  The original request socket (and its
-> +		 * txhash) was freed after sending the SYN-ACK.
-> +		 */
-> +		treq->txhash =3D treq->snt_isn;
-> +	} else {
-> +		treq->txhash =3D net_tx_rndhash();
-> +	}
-
-[Severity: Medium]
-Can dual-stack listeners (IPv4-mapped IPv6) be negatively affected by this
-check?
-
-Since sk->sk_family is AF_INET6 for these listeners even when accepting IPv4
-connections, would IPv4 connections incorrectly execute
-treq->txhash =3D treq->snt_isn?
-
-As noted in the commit message, the IPv4 cookie contains mssind bits that
-could bias queue distribution if used as a hash.
-
->  	treq->syn_tos =3D TCP_SKB_CB(skb)->ip_dsfield;
-
-[ ... ]
-
-> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-> --- a/net/ipv6/tcp_ipv6.c
-> +++ b/net/ipv6/tcp_ipv6.c
-> @@ -275,6 +277,15 @@ static int tcp_v6_connect(struct sock *sk, struct so=
-ckaddr_unsized *uaddr,
-> =20
->  	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
-> =20
-> +	/* Non-zero mp_hash bypasses rt6_multipath_hash() in
-> +	 * fib6_select_path(), letting txhash control ECMP path
-> +	 * selection so that sk_rethink_txhash() rehashes onto a
-> +	 * different path.  Policies 1-3 derive a deterministic
-> +	 * hash from the flow keys and must not be overridden.
-> +	 */
-> +	if (ip6_multipath_hash_policy(net) =3D=3D 0 && sk->sk_txhash)
-> +		fl6->mp_hash =3D (sk->sk_txhash >> 1) ?: 1;
-> +
-
-[Severity: High]
-Does the missing mp_hash initialization in tcp_v6_send_response() cause TCP
-control packets (like RST and TIME_WAIT ACKs) to use a different ECMP path
-than data packets?
-
-If tcp_v6_send_response() doesn't set fl6.mp_hash, it seems
-fib6_select_path() will fall back to rt6_multipath_hash(). If the data path
-was rehashed to recover from a failure, wouldn't the RSTs stay on the
-broken default path and be dropped?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602181428.2318=
-919-1-ntspring@meta.com?part=3D1
