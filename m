@@ -1,133 +1,125 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4733D30C16B
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 13:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD5A32573F
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 13:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780493535; cv=none; b=CUubImD2t+NEW9aMLYb1WsP7uTkhXm6FH9svwwVaWg8UyCrSZijXPyuwsywVg7AcbCZ3D0LyuHAoZxQ9yFFvvt41pjhwdSd9Jdf5YHSerDFIreUuNTTJKfyBDSIRmdDoXyz4G6dSQ1g3d1RnUTd+eHhrXneF6mzl7oGf1vg23dg=
+	t=1780494061; cv=none; b=QdbZmLYgB/nomRTx5VPAKt8CSx0YTbZJKaahQLtdpeYm/MQTd8ylL+4SiSAZBxSJ/pDvbxv4JOeVZQc711rPMmm6Eb9/wF1FLsXj/Ys1SqW8Qexzcou4o8YZRp7H4BSHqiinvrKEP+RJUII+s/2JmzHICXwyGbi8GeD1eLd3iB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780493535; c=relaxed/simple;
-	bh=0XaLpw8wCWCVqO3HuR7IIwW8qzeoCTixBtIKErorbuM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TGxaMhtJUhvu815mzVElnwjNeIZLOJ9NBQzZt+iftpFslCdiLsOQ1hWZnjyAcHNAG4pNi8OIaCV0OfQuLW12RvHQt5PiVEnXylMZaHVRGdUD/HhjsLXM3QFlZ4K28eEU5CkY7i9WVY6gkNHPJZ8sKt8XNCSmfdInsJjRMlmDx0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K5Pkbg1v; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780494061; c=relaxed/simple;
+	bh=cO86uRMiUmt5TGTEwbu1Lbs1mm93/+uNvrjze3ldqMs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=koBa9pTRvrZoXlH48ybLzEmtbzBJIewD9Y2XB6Wbbp9U0AlOixlNMMDhbQJa1mTQcchFOIH/ulgOtoxoO9fK45rNT40G7ak33fSlO/bOh9ZpjPgWI6olCsiXWpfgl42uRTOKQmrKQew+S5JaS2o0yDtUO6dBhZQJT0CFDjcpDLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SM5GaNB2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K5Pkbg1v"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-490b7866869so8626885e9.2
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 06:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780493533; x=1781098333; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4TVbfpbXuT0Cc8+UmhjB+WjY3nKUaTcDDEiy2PFK/eY=;
-        b=K5Pkbg1veMtiMn3iRnrbfarln4Qey7dy+cZiKbAKWdXixIno80/sRg1GRpSETsRJ9a
-         UJZuJ0WcOX0IkHnFZHIxgVymDrTEYMAHqsqWio172F2jHdiOni0jzQoz6GlJeGLyU858
-         OeAmEhtPgDSfr2wnSqkM+l/i6qP5GUlMEhtisBEjCtyk+a2qrjamrLHjw7k/yJsQsnaK
-         96lUAQPcLtBNkgp99kccMvzvavbrvgtUdFPNvwXGfHwD76Z9W6zCOVLDG6M/CXpmiZ6D
-         bYdWZM5gP1uzA3H6ILWm1aJeSzN/FPUcew6RcW/PV3hc66srs7qevDprvZWIA3wd/+ey
-         cO/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780493533; x=1781098333;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4TVbfpbXuT0Cc8+UmhjB+WjY3nKUaTcDDEiy2PFK/eY=;
-        b=CiNfDrN1QvfMN1I8wR1JLbRus0St7xvFKDNl75VanHXFV1+sWk52H8H6ALkIGbuel8
-         efQf6ov2eOSBzIwBYiRIlNk32ELYgXhKCLDIWkpU7NM2BX3WgGxYVHS+hCFPozLvUn6S
-         gCsRRouCKY3LBwaVRMjQ3tiYI5gnuaVJHcIFBYLV3hXoGmGybiC0nrEirlA1+ObRIVUw
-         o1ChN6C7aRTZ6oxg2aT3ib5L2OtNzfxpPupHtU+hd68AQFtNDIlcou0GTBsCENIzRGx5
-         qd2zrCY+tj5zLI14aXDfwfqdQVWhzpKjWUT1GeaLtFJzr4iN/3U3CgRw2IdzTIxNPIFA
-         s8QQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9usLHhGafW84US0c76sr7GjndYef+a7rlI9kqU0HGK3wLDmqOjXp+kz/XpFHfN/JyNnNI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVqCBH23pIMUoOR2XX2QLeablKZylZc3wtwMo3moekPoWn6qZV
-	tfu+5TGX4pxwkBhoKdNDFIRQGgmXhMmMF1UfeIC+PA3VrcGJ3OEUTHkF
-X-Gm-Gg: Acq92OHZg5b5cCLQ23JhpfHI8vm6yBChcv84qheFHA0A/g7pMYP1jf5Ufmf5R1NVDUp
-	j7uvlFdXqqdICuazqYDWmASdgFV5ih/m7glOmL3Lg3aK8VNJjol4KyZTXAA3AhF0rsNWU3KzTLD
-	jyRsUB5a+wRgYCyQ0yBGErjNJX0OsWOFwZErWVZGKctleBhvlqdhBycyC1Z5pOPvIIA0F4VAWzF
-	krwGzuPVmePym+u4TFRLSxOUApL/DD5HQB4T5pHxAOMF2c0whhRc6arDudhhkNJ6TPG1YBbvrpw
-	Y7mvDAS4oq5BxGR7jW5fmimy7Re+3Zta5w9gXq2wqnZZNlJnXaJx+omPf/9cYhuNlXXXRT/cjSJ
-	HeV1G4FQ3OZTbDaYezWAB9BT6IiasSsC/vUfq7W+K0R9jAp90EFU0YsaU76k0t9xiW/Tkm1Xm9z
-	FPV6z+Pcpv3Mfs71lYlfMDtEh0y7zKRpXoUdEVRdIYo4kP400shtHW0XxF5pKkiLN3YM3e2J/pS
-	ZVaTsCus47Fc5NrfoyHxQ==
-X-Received: by 2002:a05:600c:c48e:b0:490:40f1:5314 with SMTP id 5b1f17b1804b1-490b5eb73aamr51371835e9.1.1780493532528;
-        Wed, 03 Jun 2026 06:32:12 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351d69sm12355413f8f.29.2026.06.03.06.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 06:32:11 -0700 (PDT)
-Message-ID: <755aaa06-9f6f-4f49-a3ac-5cf7f3574393@gmail.com>
-Date: Wed, 3 Jun 2026 14:32:11 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SM5GaNB2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D02E71F00893;
+	Wed,  3 Jun 2026 13:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780494060;
+	bh=muUlEMJmgGH/rQGcXOfVz1jKz4CF8oU8LRiXalgLanE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SM5GaNB2N/9enyFCUHJQiqpix4Rhmq6FRh0RmMel/lMr0os0/reNerDZa4PHXQFNg
+	 jYma42RxsahtqW/vstTHxOCgIPBdNQFuS6dlhIuwnzR++0XqHr8s4GnavjWGroyLeY
+	 S0uFU0t87Q7DvWKTLYmfIQEfegFjEqkjjPHOwlziSEIgVnHRKPHc0fbPKWF9+IEz+n
+	 qBnItlADv4ramJC0pb2mny+e6/INIx/JuBIloHMNy2rh79v1ZUamuJuRcVyymudga4
+	 YQAZqbXCI1oyRmikm/0ifHAJUHJ2Mj5/+fpn6ww10ckNIa6wmkv8NAtHho/SIHDlRs
+	 VdKP/B0Gyg2oQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv7 bpf-next 21/29] selftests/bpf: Add tracing multi
+ skel/pattern/ids attach tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260603110554.29590-22-jolsa@kernel.org>
+References: <20260603110554.29590-22-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 13:40:59 +0000
+Message-Id: <20260603134059.D02E71F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] bpf: Restore sysctl new-value from 1 to 0
-To: Dawei Feng <dawei.feng@seu.edu.cn>, martin.lau@linux.dev
-Cc: emil@etsalapatis.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, kees@kernel.org,
- joel.granados@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, jianhao.xu@seu.edu.cn,
- stable@vger.kernel.org, Zilin Guan <zilin@seu.edu.cn>
-References: <20260603105317.944304-1-dawei.feng@seu.edu.cn>
- <20260603105317.944304-4-dawei.feng@seu.edu.cn>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260603105317.944304-4-dawei.feng@seu.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 6/3/26 11:53 AM, Dawei Feng wrote:
-> Commit 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
-> helpers") changed the success return value to 0, but failed to update the
-> corresponding check in __cgroup_bpf_run_filter_sysctl(). Since
-> bpf_prog_run_array_cg() now returns 0 on success, the legacy ret == 1
-> condition is never satisfied. As a result, the modified value is ignored,
-> and bpf_sysctl_set_new_value() fails to replace the write buffer.
-> 
-> Fix this by checking for a return value of 0 instead, so cgroup/sysctl
-> programs can correctly replace the pending sysctl buffer.
-> 
-> This bug was discovered during a manual code review. Tested via a
-> cgroup/sysctl BPF reproducer overriding writes to a target sysctl.
-> Pre-fix, bpf_sysctl_set_new_value("foo") was silently ignored: the write
-> returned 8192 and the value remained "600". Post-fix, the BPF replacement
-> buffer properly propagates: the write returns 3 and the value updates to
-> "foo".
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The patch introduces tests using new libbpf APIs and section defini=
+tions (`bpf_program__attach_tracing_multi`, `struct bpf_tracing_multi_opts`=
+, `fentry.multi`) that are not present in the tree.
+--
 
-I wonder if we can make that reproducer into a selftest, clearly this
-codepath is not tested automatically at all, which is a problem.
+commit 51532d297dcd0ba4ad28dece86396b88a934e780
+Author: Jiri Olsa <jolsa@kernel.org>
+Subject: selftests/bpf: Add tracing multi skel/pattern/ids attach tests
 
-> 
-> Fixes: f10d05966196 ("bpf: Make BPF_PROG_RUN_ARRAY return -err instead of allow boolean")
-> Cc: stable@vger.kernel.org
-> 
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
-> ---
->  kernel/bpf/cgroup.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index a0b5f8cd8b10..3f06e2270f5c 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1935,7 +1935,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
->  
->  	kfree(ctx.cur_val);
->  
-> -	if (ret == 1 && ctx.new_updated) {
-> +	if (!ret && ctx.new_updated) {
->  		kvfree(*buf);
->  		*buf = ctx.new_val;
->  		*pcount = ctx.new_len;
+Adding tests for tracing_multi link attachment via all possible libbpf
+apis - skeleton, function pattern and btf ids.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/too=
+ls/testing/selftests/bpf/prog_tests/tracing_multi.c
+> new file mode 100644
+> index 0000000000000..f333b2514b345
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+
+[ ... ]
+
+> +static void test_link_api_pattern(void)
+> +{
+> +	struct tracing_multi *skel;
+> +
+> +	skel =3D tracing_multi__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "tracing_multi__open_and_load"))
+> +		return;
+> +
+> +	skel->bss->pid =3D getpid();
+> +
+> +	skel->links.test_fentry =3D bpf_program__attach_tracing_multi(skel->pro=
+gs.test_fentry,
+> +					"bpf_fentry_test*", NULL);
+
+[Severity: Low]
+Is the bpf_program__attach_tracing_multi() function implemented in the tree?
+I couldn't find its definition in the libbpf headers, which might cause a
+build failure when compiling the selftests.
+
+[ ... ]
+
+> +static void test_link_api_ids(void)
+> +{
+> +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+
+[Severity: Low]
+Does struct bpf_tracing_multi_opts exist in the current libbpf headers?
+This instantiation seems to rely on a structure that is missing from the tr=
+ee.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_attach.c b/t=
+ools/testing/selftests/bpf/progs/tracing_multi_attach.c
+> new file mode 100644
+> index 0000000000000..332d0a423a430
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/tracing_multi_attach.c
+
+[ ... ]
+
+> +__u64 test_result_fentry =3D 0;
+> +__u64 test_result_fexit =3D 0;
+> +
+> +SEC("fentry.multi/bpf_fentry_test*")
+> +int BPF_PROG(test_fentry)
+
+[Severity: Low]
+Is the fentry.multi section prefix supported by the current version of
+libbpf? Using an unrecognized section might cause libbpf to fail when loadi=
+ng
+the object.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603110554.2959=
+0-22-jolsa@kernel.org?part=3D1
