@@ -1,126 +1,166 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBBA4A2E03
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780530733; cv=pass; b=e3LphuhotJg9CmgP3BLVaa4h/jZwrZ7UukrF9UZTPrtP1V5MGbFcCnN3nzHUy4CjIVxJoPxK1MHDWBw/LECaHXWVN9qG3P1K/ROuxneBIGNA1sKL03mf9RQPaElgotjsYXUlM7Mpg0T4Ycc2IIIGrbObyEtKxAMNxRwdn2jIVg4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780530733; c=relaxed/simple;
-	bh=FfS/kIbVyXQ8oYH5XuhRQq9azxEmzRp4crNgtSWViUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UEmGwfussUIhsFzYYFKnOZcfKYDk0oXyRgrfAtDIGD+FFmtI0lkgNTTqDP/3AXP6ZVfDNy2j3JgeRi1auEroQvApRT6Qlx7HqFSgm4LR7pcxhnQFpJowTCsOlGqTlvmgSSvgWpbaSYgiZK8oC0XwFZ0iWgFunvUNRV+4IlQFfSE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QX9nc0Tz; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C06D426EB7
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:59:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780531169; cv=none; b=Urn7rOxerbg4+orBbyPQfdzjIDDzW2+PbM5BPhWl6mxB+/gTh58ggPep+fUylJiy/30eEUoib+N8KqbC6pJxSsaeRnraYoK/rvpb06g12c2UfYURABe6d0ij6Z9XqLzcIJoGWdZ8tEEH38Fjp9Vt2bCIKNDg4Pyx40W05injg8w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780531169; c=relaxed/simple;
+	bh=AWWHcsco4Ek8RWFitX+CvIOUdiznrVjYTnvna5YUvoQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=aTNQgEMTcSHfGFeNdcEfVpYmleX4HE3Nrbd2YBFDqLn6xRvg2uk9ZzN46H+Ww0J5ngTcYZMjoQ+OyHa6w2kVHTL2hFuk31QuLdRCuf6Oe1YcBbBaZUb+vsi8ayCFUj3XUXWAQEWYSwNJfkLt7aTS55+LVOh4ljxj8aQR4F+LbNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5ywNcGt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QX9nc0Tz"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-bec449cf976so9314666b.2
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 16:52:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780530730; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jwkW6g6NaKMPRr1WWiAbnPI5dqa5jwYtwHoxHPjY0I9Wbtn5HRVm72cnH9ulVGmCGJ
-         SHUjsdQFt46CylwKFXeaS0yi5i4bLj0G2XEeL/Q0eCT1hMwWj+UFRYNJz+PHhP4B7Uet
-         +EHJ9+LZWwLBrHId3A5GCPWEBz0aFPrPDakjFlWJ/CKpdlPbr7yMf8nTWWS6IryRdKvk
-         bUfy5S539tQIM9OQHCPl4ZOvLx8/A9VvfQpoPKR/GTEfdQeWNljv/J786T4mg0SvdxHk
-         IrprUar8j/DM5SZNCPucs5SP0TlNTQvfwnMbMATGnaRc4krnmWS6MXZX9k57KYV5pmrU
-         mlNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FfS/kIbVyXQ8oYH5XuhRQq9azxEmzRp4crNgtSWViUI=;
-        fh=CEwvDXYamy3Zi1vdZR2Mkiy8Q+0/0Cms/rsOhWVWOg4=;
-        b=Uu6Bn3zKmvGr+uXEKIiMYMydhm7cTZG4UTM7Mc1/qxTFIY/P4eqn1H5kRgvtb34dJD
-         O8bKFcu36x43hN8R6BHeIyDlHvaGwTljKPkjbNIt6ONR9pOc3tQv+6VkRuuxlkwq6/O1
-         lTPVnsxYMVKYoWD/Blc4qiQ/3uyCBielrba0Mrx341YCzU2HVI5sRWC7iIfb9UNUZxjZ
-         mHcid24amcLbafQJ1gwZoGiynheYBaktxeUAjrFQ/FspPyqpZKb1HYuC19XGETieN6At
-         7wlbkJbhg4Z3UkqIceY2wRFqwcrCtIF/yuejg9/qbL+KH2kwggIllxVGiFHglkLSz6e/
-         cFhQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780530730; x=1781135530; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FfS/kIbVyXQ8oYH5XuhRQq9azxEmzRp4crNgtSWViUI=;
-        b=QX9nc0TzLhgQ2/GbHvsfMf1kEykLjokLa9+pdEzqbCO/ZUWpkclTZQMMOXen7vgZeW
-         1jZ1M0Sn9LeMSExVTA1RSvPLWSZk67XA6iouD7BBduMY5Vp5rWquCKORi3KdB4DwlUST
-         t1KisgywuGA8tcUO3auJV3PAJJt5BuDZPVAKvszMLEoj36+Lil72me+Swx4B3dmkyKBo
-         +T2amXt2yf8bQQb6Y6wTRFInErhE/XvUFfZJHSpSO7rryjenDI4ioJRY7v+6gs+Katta
-         lBXl1x5nPvzNKExaMWZCnuHLjkuo1L96P5tPF54FeHEipiPbmx7yAdYDd/d49C/PSjMi
-         9KVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780530730; x=1781135530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FfS/kIbVyXQ8oYH5XuhRQq9azxEmzRp4crNgtSWViUI=;
-        b=fvSo/KwBeR7w/8LY3NQINXeF+yvZ8AW+UD1x8jdZisENTrjZaTGkWaxaNpHW0YPC6Y
-         IqF8mLrNv03avYaKzFwrFCjUB55quybFiW5fDLUeavxDMrm9tipccsinoE6KMKiOfhpv
-         u37CHUbp6jKuPmrYbQjqOme4VkPCitAA3t2HSraF3hWnUM3CCmHlTmvYOOThJNNn0NOY
-         MA2H5zdBAxDGOAWWJRSKJrBW/DyOenvzXD/0HWqDp/M19UExLNpddI5NqX22lH6tTqop
-         6pByAsdu+0ptYqBpOObjRjJwW0ZBLpyl9QcWkGbFTd06LNuarMWJhTjYjCRlGo7pP0fY
-         I7Pg==
-X-Forwarded-Encrypted: i=1; AFNElJ+WCxCLodd/vJsDqauFHA/tDfrirCv6SbRcyVpVazeXE1tleQE9aIo36AT8ThtVbpAmAuE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMm60l0jkf64NJKYDMJDgv2CY8UrzSnmWoB1mTVJX3AJ5X89XI
-	NrotoxNxgtAzIkxZIC54wSYMfejJ7iNzFioIqVdP1YuPCvHUMreewrKC4aDXtnrCeJM4C5TNe2x
-	uB3E4utQjWMBFcSnI/fBO4uz6Kf+F02s=
-X-Gm-Gg: Acq92OH4bzsV1ixS3euDysS99SmEh34PGtj3DXi+NEW4wtgD85hBORUWBNlZ/5m515v
-	3eh2+rzrJSW0/Tvvz2Jj/syEiVCf/KpX8zcOpgFyjobWrZS61xfLsAAqrZe1GGFHiiClsCPq1/4
-	YQ4rM2M2eHSXwApIYjGuiqDTGxTnPHwXv5YN4pW3fP9xi2LUapwL/ikH0ABTjYirVYMUBKULypu
-	0g1/DudTbNhGZXLzSop9Fch/yMhnCiRcdZobkuvGn2OlwvAfKM/ljsZuz376OqD9tnaDAfcfG0Q
-	3QDeyk9dHkZn9eWT5a8ERJc7YXVejunKesJp3LALBme0eXqId3gcDU39FCrXbT/bpem7dkpiSTg
-	=
-X-Received: by 2002:a17:907:c085:b0:bea:2fbc:4ef5 with SMTP id
- a640c23a62f3a-bf0ab710b5cmr316516966b.44.1780530730399; Wed, 03 Jun 2026
- 16:52:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5ywNcGt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9D81F00893;
+	Wed,  3 Jun 2026 23:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780531168;
+	bh=+6252RbZSRPQaNvkgHnulL2UIlDUSjXt0AV63Ngr2uE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=e5ywNcGtU+0XxRtJxknOb2bmQ3zssV74+51WdlWN8epcV2l0+380AGpQUd7l0v7/h
+	 mSy6zUSdMoJT+ZqqkB+iXsIKaIWk1bKE8lRSNTIa6+fr0dHCi6slMLOmu3ExoVvHNH
+	 sX3KoOOEU2V2siERe1EA9g7hIhK6irSb74HrDMlI5V0iTyDrA7UmpqHOBAzwIpL67p
+	 GV9ewCBLjo6IYG9lU1GP1tzMxvv3TxB04q+lgDQ7aghXa0lRce09W6D2A6gtvoT/ah
+	 PPcBWuHH5p3GFH9eKOTI+chPXkiCqiMz4+xwq9lwV8r5y0Go9cINNU1G+ajvrW5QQL
+	 qFdPsfcG1AHBQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 08/15] gve: refactor gve_init_priv for reset
+ path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Harshitha Ramamurthy" <hramamurthy@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260602235900.3050782-9-hramamurthy@google.com>
+References: <20260602235900.3050782-9-hramamurthy@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 23:59:27 +0000
+Message-Id: <20260603235928.0B9D81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260518-generic_tracepoint-v2-0-b755a5cf67bb@meta.com>
- <20260518-generic_tracepoint-v2-2-b755a5cf67bb@meta.com> <eed59d12-969f-4135-a84b-4965743692cd@gmail.com>
- <20260526215741.1e5b3e42@fedora> <CAEf4BzY5MTGJyys369qDS3b63-tKq3okCpFMqUdfzy0dXk7vLg@mail.gmail.com>
- <20260603185057.4a85d5df@fedora>
-In-Reply-To: <20260603185057.4a85d5df@fedora>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Jun 2026 16:51:54 -0700
-X-Gm-Features: AVHnY4IUVNJqtXV9AScDfxOf1g8eA90hmIpGHvsbaa7lCYBS-3jVxavexcFRfWI
-Message-ID: <CAEf4BzZFjsEv3aLktwdCZF6EXoCL+eefX+6xa3XGrhBmfO1SqA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] tracing: Expose tracepoint BTF ids via tracefs
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
-	Mykyta Yatsenko <yatsenko@meta.com>, linux-trace-kernel@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 3, 2026 at 3:51=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Wed, 3 Jun 2026 15:41:50 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > That's just to say that it would be great to have this in some form of
-> > shape, so please help getting this into acceptable form, thanks!
->
-> As I said, I'm not against it. I was hoping to find something to help
-> alleviate the memory usage.
->
-> I'll likely take these as is, but I'm currently on vacation and it will
-> have to wait until next week.
->
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Yeah, no worries, I was just going through my backlog and trying to
-think if we can avoid extending the tracepoint class struct. Besides
-the somewhat dirty kallsyms symbol lookup logic, I don't see any other
-way.
+New issues:
+- [High] gve_reset_recovery error path leaves device in a state where subse=
+quent ndo_open causes Use-After-Free and NULL pointer dereferences.
 
-Enjoy your vacation!
+Pre-existing issues:
+- [High] Device reset leaks XSK pool DMA mappings and silently breaks XDP s=
+ockets.
+--
 
-> -- Steve
->
+commit b96244d58e5385fb7dc71f1bd8136017d84f17d7
+Author: Harshitha Ramamurthy <hramamurthy@google.com>
+
+gve: refactor gve_init_priv for reset path
+
+This commit refactors gve_init_priv() into targeted setup functions to bypa=
+ss
+full initialization during the reset path. It moves admin queue allocation =
+and
+device properties negotiation into gve_probe(). This prepares the driver for
+adding mailbox mode control plane initialization in upcoming patches.
+
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
+ernet/google/gve/gve_main.c
+> index d693caed7e3d1..746ff69a28ddc 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -2414,6 +2416,33 @@ static void gve_set_buf_sizes(struct gve_priv *pri=
+v)
+>  		priv->header_buf_size =3D device_info->header_buf_size;
+>  }
+> =20
+> +static int gve_setup_device(struct gve_priv *priv)
+> +{
+> +	int err;
+> +
+> +	priv->xsk_pools =3D bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
+
+[Severity: High]
+This is a pre-existing issue, but does this allocation cause an XDP socket
+DMA mapping leak and silently break XDP sockets during a device reset?
+
+When a device reset occurs, such as from a transmit timeout, the teardown
+process frees the priv->xsk_pools bitmap without unmapping the active XDP
+socket DMA mappings.
+
+Then gve_reset_recovery() calls gve_setup_device() here, which allocates a
+fresh, zeroed xsk_pools bitmap. When the interface is brought back up, the
+driver reads the zeroed bitmap, forgetting which queues had active XSK pool=
+s.
+This causes XDP sockets to silently stop receiving traffic and permanently
+leaks the DMA mappings established by gve_xsk_pool_enable().
+
+> +	if (!priv->xsk_pools) {
+> +		err =3D -ENOMEM;
+> +		goto err;
+> +	}
+
+[ ... ]
+
+> @@ -2554,15 +2540,29 @@ static int gve_reset_recovery(struct gve_priv *pr=
+iv, bool was_up)
+>  {
+>  	int err;
+> =20
+> -	err =3D gve_init_priv(priv, true);
+> -	if (err)
+> +	err =3D gve_adminq_init(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Failed to alloc admin queue: err=3D%d\n", err);
+>  		goto err;
+> +	}
+> +
+> +	err =3D gve_setup_device(priv);
+> +	if (err)
+> +		goto err_free_adminq;
+>  	if (was_up) {
+>  		err =3D gve_open(priv->dev);
+>  		if (err)
+> -			goto err;
+> +			goto err_free_device;
+>  	}
+>  	return 0;
+> +
+> +err_free_device:
+> +	gve_teardown_device_resources(priv);
+> +	bitmap_free(priv->xsk_pools);
+> +	priv->xsk_pools =3D NULL;
+> +err_free_adminq:
+> +	gve_adminq_free(priv);
+
+[Severity: High]
+If gve_open() fails here, the error path tears down device resources (freei=
+ng
+priv->ntfy_blocks) and the admin queue DMA pool via gve_adminq_free().
+
+However, the net_device remains registered. If a user subsequently attempts=
+ to
+bring the interface up, gve_open() is invoked again. Because gve_open()
+currently does not check if resources are initialized, it proceeds to call
+gve_queues_start().
+
+Could this trigger a use-after-free in gve_adminq_issue_cmd() (dereferencing
+priv->adminq from the destroyed pool) and a null pointer dereference in
+gve_turnup() or gve_reg_xdp_info() (dereferencing priv->ntfy_blocks)?
+
+I notice this issue is fixed later in the series by commit d54cafae24e9
+("gve: simplify reset logic") which adds a gve_get_device_resources_ok()
+check at the start of gve_open().
+
+>  err:
+>  	dev_err(&priv->pdev->dev, "Reset failed! !!! DISABLING ALL QUEUES !!!\n=
+");
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602235900.3050=
+782-1-hramamurthy@google.com?part=3D8
