@@ -1,150 +1,200 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACBD43D4F6
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 08:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D137C90F;
+	Wed,  3 Jun 2026 09:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780476201; cv=none; b=hSD/lr3rvCnyouTpT4Dc9TnS/6aLLGKAJWDJAhhBWGd2x8U/R1j/fS52PavqQu1kx7DVJp+nOpwfyw/SV0DyL3mHazM5ty+9P5INAoF0jcIGgp1UDIri2dWhVaF+HT2ottSWhQKnWAQBE27YhG2D2h0xYjJMhINooUUXvcIbkXg=
+	t=1780477972; cv=none; b=h/SjciUIfJ1O4HCkvGyjjNyvSJMUmKRRQ19CuujDMyWoXlPmTzk8VmP5OmDBeFzGkl++PU2vpOoL6E5wfQtXLWXBg7EgVVfecTi641nT8ZbX0VeAlgC2VjWNWfTKQet/pSQb5HaJetr1KFkpIX7ERJcf141m2mfBXO3wU8Be/b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780476201; c=relaxed/simple;
-	bh=neRdMmqsu+xeIevkABFuVkJfsDh+Fvk+6xUxtHdyj7o=;
+	s=arc-20240116; t=1780477972; c=relaxed/simple;
+	bh=asDLIHKdW5SQkt+AvBPms8hBv1FMDVQtDhA1GC2RjOg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nv634kRN+jBlZTfIaSOQhY8LB3vmYO2IGYRR6fjHa0MCqgz3ixRx5AH2IyYMwxH4uqwd7V0c3Am4r9M5mN2FDPXinXxb+2cSEEBsdiX5WBr7aGHfX4l2OGDe7scvDiVmVwiDjeKB5+PgdvZqJiulnpulRoQ58Ema/WC1uL5zgEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oPhkfvP0; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=jtVg5CaXVRox4NzBT5vSeOjTKz9FrxrCTtVqKZmhk5jBSa8+2lCOr5kK2aWbpQxjP6ICr3nXQ9KVPG2+EJybjPfxN2dHo3FnWmiBAJGPNQk+pycrI7+0e7OYPwS9UXJ+Xk8TFg1rMpe/KLehOiPsaOObu08y4yE3MhKG2k+VQAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=dk6L+CXa; arc=none smtp.client-ip=220.197.31.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oPhkfvP0"
-Message-ID: <fc9077f5-ec68-43d9-a874-c110e38b2530@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780476197;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SmtTBGssJBnFw/NUoGfjkfUe7XkUJMyaR/OPnVmUDg0=;
-	b=oPhkfvP0N/Cxa9Rh4GvRJf401qh6UGMeuT57y2jlP5N7U4fqZwsGHqVzkGUxA5nTNkkEmr
-	V8llpMakmz5ojzIeScDuk2z4sUjO/q/CQ1D/cs0XRVsQDN4CqDdtnn9Ypzy+uqRNlTYzla
-	qQ0NJN11dCO8GxNzJQ3Ru0jNf23iDF0=
-Date: Wed, 3 Jun 2026 16:42:30 +0800
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="dk6L+CXa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=BRtjKeBZ4+8dkfdyf5TNW8mrUZqF45IyG/HSoWHSM1M=;
+	b=dk6L+CXav2r3Vh7oHctwwISdq6vjBKf3KCJqpgNZ86Sfmy4gcJJGYq+Afx+bso
+	ETSNvS1nj440RXH7FAxUKPBXWkO5QipT07DtKeIH4S2Sq+TIMW91oyrQRC6pexlY
+	tK4ZZsAB+y1BjwDpEQQEgmuy+gCigpmzuR4tWtcUdAIvY=
+Received: from [10.41.105.18] (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDn_6e97x9q7LHVAg--.13910S2;
+	Wed, 03 Jun 2026 17:11:26 +0800 (CST)
+Message-ID: <874ee728-51f2-46ac-93a5-7740abcb0a77@126.com>
+Date: Wed, 3 Jun 2026 17:11:25 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: Clear rb node linkage when freeing bpf_rb_root
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, davemarchevsky@fb.com, linux-kernel@vger.kernel.org,
- chengkaitao@kylinos.cn, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260601055859.13888-1-kaitao.cheng@linux.dev>
- <20260601061503.EFD881F00898@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <20260601061503.EFD881F00898@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] btf: reject to register duplicated kfunc
+To: Yonghong Song <yonghong.song@linux.dev>, martin.lau@linux.dev,
+ ast@kernel.org, alexei.starovoitov@gmail.com, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, kaitao.cheng@linux.dev
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260602110710.19642-1-chensong_2000@126.com>
+ <d4054d34-430c-4360-8392-a21f8ebacff4@linux.dev>
+Content-Language: en-US
+From: Song Chen <chensong_2000@126.com>
+In-Reply-To: <d4054d34-430c-4360-8392-a21f8ebacff4@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID:_____wDn_6e97x9q7LHVAg--.13910S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAr1fAF43Kw13ur1kGFWruFg_yoWrCw4UpF
+	W5JFZ8uF4xtw17X3W2qF98ury3Gw18Ga1jyF98KFy3Jr1qgrZ7tr1jkF4Y93sayryUCa10
+	yF4UWrZxu3yjkrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jaa0PUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpR+NDWof778pLwAA3Z
 
-在 2026/6/1 14:15, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+Hi,
+
+在 2026/6/3 01:13, Yonghong Song 写道:
 > 
-> New issues:
-> - [High] Unbounded O(N) red-black tree traversal inside an IRQ-disabled spinlock critical section introduces latency spikes, potential soft/hard lockups, and deadlocks.
 > 
-> Pre-existing issues:
-> - [High] Nodes added to a deleted map element's rbtree after `bpf_obj_free_fields` are permanently leaked.
-> --
+> On 6/2/26 4:07 AM, Song Chen wrote:
+>> I had an ebpf program which calls a kfunc defined and
+>> implemented in one of my kernel modules, it was working
+>> fine in 6.16, but was rejected to run by libbpf in 6.19,
+>> the error message was:
+>>
+>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+>> incompatible with vmlinux [94389]
+>>
+>> The reason is there is a new added kfunc in kernel 6.19
+>> which happens to be the same name with my kfunc. However the
+>> error message is not obvious enough to address problem
+>> immediately.
+>>
+>> Therefore, this patches searches duplicated kfunc in
+>> both btf_vmlinux and btf_modules list before a kernel module
+>> attempts to register kfuncs through register_btf_kfunc_id_set,
+>> it prints clear error message and returns error code if same name
+>> kfunc has already implemented and registered, then developer
+>> knows at the first place.
+>>
+>> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>> Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
+>> Reviewed-by: Yonghong Song <yonghong.song@linux.dev>
+>> Signed-off-by: Song Chen <chensong_2000@126.com>
 > 
-> commit 867fefb5dd2755c5bd12c9f3bd37d5367c6793f3
-> Author: Kaitao Cheng <chengkaitao@kylinos.cn>
+> The subject can be [PATCH bpf v4] bpf: Reject to register duplicated kfunc
 > 
-> bpf: Clear rb node linkage when freeing bpf_rb_root
+>>
+>> ---
+>> changelog:
+>> v1 --- v2:
+>> libbpf has already specified which module this kfunc belongs to as
+>> ebpf code onwer's expectation, then verifier uses
+>> find_kallsyms_symbol_value to search kfunc's addr.
+>>
+>> v2 --- v3:
+>> After v2, I tried a new idea of introducing a namespace in libbpf
+>> to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
+>> please see [1]. Alex suggested to go back to report an error during
+>> kmod load on conflicting kfunc name for now. What's more, v2 only
+>> searched bpf_vmlinux, v3 also traverses btf_modules list.
+>>
+>> v3 --- v4
+>> Fixed some coding style problems suggested from Kaitao Cheng.
+>> ---
+>>   kernel/bpf/btf.c | 38 +++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 37 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index 4872d2a6c42d..fe1612677a4a 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -8618,6 +8618,41 @@ static int btf_check_iter_kfuncs(struct btf 
+>> *btf, const char *func_name,
+>>       return 0;
+>>   }
+>> +static int btf_check_kfunc_name(struct btf *btf, const char 
+>> *func_name, u32 kind)
+>> +{
+>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>> +    struct btf_module *btf_mod, *tmp;
+>> +#endif
+>> +    s32 id;
 > 
-> This commit modifies bpf_rb_root_free to clear red-black node linkage when
-> freeing a root. It mirrors list draining behavior by marking nodes as busy
-> while detaching the root, clearing the linkage, and releasing the owner
-> before dropping the containing object.
+>      s32 err = 0, id;
 > 
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index b5314c9fed3cf..c7f26336984f0 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2296,22 +2296,30 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
->>  {
->>  	struct rb_root_cached orig_root, *root = rb_root;
->>  	struct rb_node *pos, *n;
->> -	void *obj;
->>  
->>  	BUILD_BUG_ON(sizeof(struct rb_root_cached) > sizeof(struct bpf_rb_root));
->>  	BUILD_BUG_ON(__alignof__(struct rb_root_cached) > __alignof__(struct bpf_rb_root));
->>  
->>  	__bpf_spin_lock_irqsave(spin_lock);
->>  	orig_root = *root;
->> +	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
->> +		struct bpf_rb_node_kern *node;
 >> +
->> +		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
->> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
->> +	}
+>> +    if (!btf_is_module(btf))
+>> +        return 0;
+>> +
+>> +    id = btf_find_by_name_kind(bpf_get_btf_vmlinux(), func_name, kind);
+>> +    if (id >= 0) {
+>> +        pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
+>> +                func_name, id);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>> +    mutex_lock(&btf_module_mutex);
+>> +    list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+>> +        if (btf_mod->btf == btf)
+>> +            continue;
+>> +        id = btf_find_by_name_kind(btf_mod->btf, func_name, kind);
+>> +        if (id >= 0) {
+>> +            pr_err("kfunc %s (id: %d) is already present in module 
+>> %s.\n",
+>> +                    func_name, id, btf_mod->module->name);
+>> +            mutex_unlock(&btf_module_mutex);
+>> +            return -EINVAL;
 > 
-> [Severity: High]
-> Since there is no verifier-enforced limit on the number of nodes in a BPF
-> rbtree, could this O(N) post-order traversal trigger latency spikes, RCU
-> stalls, or NMI watchdog lockups?
+> Let us avoid the above mutex_unlock and 'return -EINVAL', just do
+>      err = -EINVAL;
+>      break;
 > 
-> This loop runs inside the __bpf_spin_lock_irqsave() critical section, which
-> disables local interrupts.
-
-The critical sections protected by the bpf_spin_lock are very small.
-They only do simple pointer/value assignments and do not perform
-any expensive operation, so I do not think they should introduce
-noticeable latency by themselves.
-
-> Additionally, since rb_first_postorder() and rb_next_postorder() are
-> exported and traceable, if an fentry/fexit BPF program is attached to them
-> and attempts to acquire the same bpf_spin_lock, will it cause a hard deadlock?
-
-I am not entirely sure whether this needs to be changed. I would like
-to hear others' opinions on this. If we do want to avoid calling
-rb_first_postorder()/rb_next_postorder() here, the straightforward
-fix would be to duplicate these two helpers with exactly the same
-implementation but under different names, and use the renamed versions
-locally. That feels somewhat redundant to me, though.
-
->>  	*root = RB_ROOT_CACHED;
->>  	__bpf_spin_unlock_irqrestore(spin_lock);
+>> +        }
+>> +    }
+>> +    mutex_unlock(&btf_module_mutex);
+>> +#endif
+>> +    return 0;
 > 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does this pattern permanently
-> leak memory if a concurrent BPF program adds a node after the tree is emptied?
+>      return err;
 > 
-> When a map element is replaced or deleted, bpf_obj_free_fields() detaches
-> the tree here and sets *root = RB_ROOT_CACHED. However, a concurrent BPF
-> program running inside an RCU critical section might still hold a pointer
-> to the map element.
+
+I will go with guard(mutex), please review my next submit and let me 
+know if you're ok with it or not. Thanks.
+
+>> +}
+>> +
+>>   static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 
+>> func_flags)
+>>   {
+>>       const struct btf_type *func;
+>> @@ -8631,7 +8666,8 @@ static int btf_check_kfunc_protos(struct btf 
+>> *btf, u32 func_id, u32 func_flags)
+>>       /* sanity check kfunc name */
+>>       func_name = btf_name_by_offset(btf, func->name_off);
+>> -    if (!func_name || !func_name[0])
+>> +    if (!func_name || !func_name[0] ||
+>> +        btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
 > 
-> If that program takes the spinlock and calls bpf_rbtree_add(), it will
-> successfully add a new node to the now-emptied tree.
+> format issue:
+>      if (!func_name || !func_name[0] ||
+>          btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
+>      ...
 > 
-> After the RCU grace period ends, bpf_mem_free_rcu() frees the map element,
-> but bpf_obj_free_fields() is never called again. Will the newly added node
-> be left behind and leaked?
 
-This looks like a more general pre-existing issue. I am not sure whether
-we should fix it in this series, and would like to hear others' opinions.
+I will fix it with indentation plus space.
 
-If we do want to fix it here, maybe we need to distinguish map_free/delete
-from in-place map_update. For map_free/delete, a concurrent bpf_rbtree_add()
-after the tree is detached should fail and drop the node. For in-place
-map_update, the root should still be reset so that it remains usable.
+>>           return -EINVAL;
+>>       func = btf_type_by_id(btf, func->type);
+> 
 
--- 
-Thanks
-Kaitao Cheng
+
+many thanks.
+
+Song
 
