@@ -1,81 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21ECB46AEE5;
-	Wed,  3 Jun 2026 11:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6CA3D3D12
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 11:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780486618; cv=none; b=Icbth+7waE+5y04Cu9h/eNsqgZFr59L0vhYTWDNQMBtXVjfJp0mXNBl77DBmBCclZxRjC4HG+EKtW2DEcUJJrA1xRzRt8sMDtd9K+CIlwiy4cJE92TCtlzZ7ohqWUeyRSqBmd/OHQcCeIbUszhJ2nUxf1yy4Oi8ctfcqhqq50ks=
+	t=1780486675; cv=none; b=YW83nYBhfsMeoa3O9Lkb4wUlTL1yhSQ/kCFblU/EONsLzALXLsPak6OIehreLQm4hCUYQVGDQ/Thuej85qC6jtSAOWLUnq6Vy2JyDG1LvFRPpT8bdMCS9QvNuTW4nA9OjWvPGysQaLy4vtzES50im0FYMvvUkwLcXuZUI5EfipM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780486618; c=relaxed/simple;
-	bh=GXtemVvQe32JT57DRWEfRbfG3iQHNFXNIcdyeU1cKKs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uVYHho0o2nFlXUh+9fIpruZcDD1pX3o85rYAm6e9xWiWG2Oth98/4YoZNxPXApGi8QzWboJorke2Yio5g9fG9bFkPkeHDmA2plDUlgWWoZIOiVTyWMBJZjAkZ93pj6p4wRcPB7a+l9v+CR4iJPHYBe9obHaGERu+1V0FcP3Hc30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+l+YvhR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780486675; c=relaxed/simple;
+	bh=XxO27b28guJbWwAwI8FnyFr6yeWjLQyPNGuOG+NcQiw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=u4tVA95r1Z6Xe4qNcEyZsEzmX6GCXitqKIrD+vQSYPCKYfuiSPzIrcgiGu2lPBIvPdu2dQ/efNaZfHg1Uj/hjFFNeC3giCpDqkH85PITlgh0+rkWydkDfpR21zIL9wfztYR4nSBrvXVCK8G4wHSp9hL4pBTGlZ5b9V0LnCHfvZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXssKF30; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+l+YvhR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7631F1F00898;
-	Wed,  3 Jun 2026 11:36:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXssKF30"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4C51F00893;
+	Wed,  3 Jun 2026 11:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780486616;
-	bh=/4A0xCv5HhFvDirt4xZLIckm0i7h6JzjZugBoUcXNR8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=P+l+YvhRqoYRYIAnghXWuK9AxYaXE4i6xfGgRj1kReI1WPD713ebrzqioVUAB9pob
-	 ckNkTBKOuK16GgariWjKzTzEhDnZYa0gRtNsuiiiJJ0djwTF8baMi6SfHgeJiFwgOu
-	 w0LdbrHDdyNJKEQcanJq36RqcJhZnDM8Iyh4SZSozY80qY1N0oEQ45zrnfV3u2uz3d
-	 1yF/RvE0iJO7kg1qbt3PM1oJCxesQI74UWx2R0FohIU8SqYInPG+xAJoCsqFi1S2eA
-	 EGR8uW9/ljh4vTXT9VyNXTTIYZzAvpxVYtbxKoGsiBM/Rp1P0eLsxRqEoWms0pt1vp
-	 V2xcaWr+y78QA==
-Content-Type: multipart/mixed; boundary="===============3363437374747764375=="
+	s=k20260515; t=1780486672;
+	bh=Oir3/LsEYQDCtYBq/hH+5OtWyDgLXoHwuqAH5KxpJGE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aXssKF30oAmEnJH5tRGK9O6jt4at9yXhGPWG9Mq9ToujhtldtKEuYAafxOJV/efyv
+	 ttE2g5JCkjweFzvQ/ORYLO5Z1wJHoq9lnMyYuk+x17IbhM1LnFuAu7pMZKMz9rYgQF
+	 gyzzOj/72Uarr3c2mRDmp6fTdsR4YHjNOGThXOyMp4OgH7Z0FcPo0S7K7nlnWMIyO8
+	 QDT7H4y695qua0m+mr8m9aF5HQc56GiuCgArSJBOA5TLqLdAyL9dsDBZG2n5nNOfGb
+	 6899EWKNmzrsAc+Ht4RJvSoUgJhM4ELjFMV8p+n/1kOZcMUztg35n38M2VVW8rd5EN
+	 WiX82CQ6Q/b1Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv7 bpf-next 10/29] bpf: Add multi tracing attach types
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260603110554.29590-11-jolsa@kernel.org>
+References: <20260603110554.29590-11-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 11:37:51 +0000
+Message-Id: <20260603113751.DC4C51F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <01ff25bf2f60666db05099be88f1a67bea2dd97fe7114a9bbe7c190252eebe3a@mail.kernel.org>
-In-Reply-To: <20260603105317.944304-4-dawei.feng@seu.edu.cn>
-References: <20260603105317.944304-4-dawei.feng@seu.edu.cn>
-Subject: Re: [PATCH v3 3/3] bpf: Restore sysctl new-value from 1 to 0
-From: bot+bpf-ci@kernel.org
-To: dawei.feng@seu.edu.cn,martin.lau@linux.dev
-Cc: emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kees@kernel.org,joel.granados@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,jianhao.xu@seu.edu.cn,dawei.feng@seu.edu.cn,stable@vger.kernel.org,zilin@seu.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  3 Jun 2026 11:36:56 +0000 (UTC)
 
---===============3363437374747764375==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Missing `BPF_TRACE_FENTRY_MULTI` and `BPF_TRACE_FEXIT_MULTI` cases=
+ in `btf_validate_prog_ctx_type` causes valid `.multi` programs using `u64 =
+*ctx` to be rejected.
+--
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 4bf0ec94e719..35d1f1428ef3 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1936,7 +1936,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
->
->  	kfree(ctx.cur_val);
->
-> -	if (ret == 1 && ctx.new_updated) {
-> +	if (!ret && ctx.new_updated) {
+commit 0330f287f02c3a32c9ab8bf7f4f5a6ad6cf7366f
+Author: Jiri Olsa <jolsa@kernel.org>
 
-The success check now tests !ret, but the kerneldoc above
-__cgroup_bpf_run_filter_sysctl() still describes the old convention:
+bpf: Add multi tracing attach types
 
-kernel/bpf/cgroup.c:
- * This function will return %-EPERM if an attached program is found and
- * returned value != 1 during execution. In all other cases 0 is returned.
+This commit introduces new program attach types BPF_TRACE_FENTRY_MULTI and=
+=20
+BPF_TRACE_FEXIT_MULTI to support multi-tracing attachment. Base verifier=20
+support is added to recognize these types and accept them as sleepable=20
+programs, while deferring actual target validation to link creation.
 
-Since bpf_prog_run_array_cg() returns 0 on success rather than 1, should
-that line read "returned value != 0" to match the new check?
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8ed484cb1a8a4..521ec2a9051ed 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -16314,6 +16314,8 @@ static bool return_retval_range(struct bpf_verifi=
+er_env *env, struct bpf_retval_
+>  		case BPF_TRACE_FENTRY:
+>  		case BPF_TRACE_FEXIT:
+>  		case BPF_TRACE_FSESSION:
+> +		case BPF_TRACE_FENTRY_MULTI:
+> +		case BPF_TRACE_FEXIT_MULTI:
 
-This was raised by the bpf-ci reviewer on both v1 and v2
-(https://lore.kernel.org/all/45201482368d330f6301ea4d90e29fa1585bf985c12a191d9fcd975087eb0649@mail.kernel.org/)
-but the wording does not appear to have changed in v3.
+[Severity: High]
+Are we missing an update to btf_validate_prog_ctx_type() in kernel/bpf/btf.c
+to handle these new multi types?
 
+Currently, BPF_TRACE_FENTRY and BPF_TRACE_FEXIT are explicitly whitelisted
+there to allow u64 * as a context type:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+kernel/bpf/btf.c:btf_validate_prog_ctx_type() {
+    ...
+		case BPF_TRACE_FENTRY:
+		case BPF_TRACE_FEXIT:
+		case BPF_MODIFY_RETURN:
+		case BPF_TRACE_FSESSION:
+			/* allow u64* as ctx */
+			if (btf_is_int(t) && t->size =3D=3D 8)
+				return 0;
+			break;
+    ...
+}
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26881443787
---===============3363437374747764375==--
+Without adding the new multi types to this switch statement, the verifier
+will fall back to the default canonical type (void *) and will reject valid
+multi programs that use BPF_PROG and u64 *ctx.
+
+>  			*range =3D retval_range(0, 0);
+>  			break;
+>  		case BPF_TRACE_RAW_TP:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603110554.2959=
+0-11-jolsa@kernel.org?part=3D1
