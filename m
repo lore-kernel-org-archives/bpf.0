@@ -1,62 +1,62 @@
-Received: from mail-dl1-f67.google.com (mail-dl1-f67.google.com [74.125.82.67])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1492E3A5E6C
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D7837F73A
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780519359; cv=none; b=s1sxbq2skd+6KrQONofTPLWyBvvCEQIlbiIGLYl3yxXPqvTNuBGD0PTm/Ixfu1pt6SBjbiXB7ywAFIHqYbqztjjHdaCd2LTKyMxH1XdkVCJyTIvr6AVDARh1RsyDOqjAB+totlBJpGLGTT71shTFGkdpgDNlbSsBExtzvyZ0U40=
+	t=1780519469; cv=none; b=DQFRd0CPdH4NMrdsGJ7L1CpTj/cUhSpK7+Z06DBYH6eQAWUFpPI7sfddLSkZyTjEzU/6x4fLccGGn0W0QAKo/4U6d3vtrQ4AWIKiAMndIeRVE3/gkU3LpsdrMpHBsoigeFbKGM3LP8mnfe1abuz4jHEQCeJiJcbdIV9dPKXMHN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780519359; c=relaxed/simple;
-	bh=BsieX/ax1mNutVYDAh2Daj1QSKmPQlrh5nHtWvE8Ohw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=haPqjNZWX4fGYilu/hNtl8YdI5dJYET30cWOgSEFu+PlRIBlmL/95v5teXNYxtHkZhZRiqoHQZfNpbwk+GSr8Icy5iJH6DFaXjKKWS3uK57SfBHLx3EvwlhCr7yO4+66Ca3k0VDZp6Qf/tvAOYaXHEo9ufTyXnqsj27m/xSBm64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VZdWF8DV; arc=none smtp.client-ip=74.125.82.67
+	s=arc-20240116; t=1780519469; c=relaxed/simple;
+	bh=Xsxnu+t7r2JLJ+HvQNxgV/7N37onpmizU7YvE2O91Z8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Wjk7CTIK4Yw0Z9sJH6KqAv/UkrKb6PYqpRHfrzJxnR/3Hwl3bfJfIQuVvuepZ78K7yPmQsnyS4/xxZ7jOOVTL15q01BYuforR2LUxykn3BALYQslXLRFqjLwMw7+eFz3bR19J2xLEUqhU88qvAzpXk9v8IHjls7H9xU3G6ufPLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=wEguWJEb; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VZdWF8DV"
-Received: by mail-dl1-f67.google.com with SMTP id a92af1059eb24-137dd523634so6883730c88.1
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:42:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="wEguWJEb"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-137335bc3caso12147463c88.0
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780519356; x=1781124156; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780519466; x=1781124266; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RvT2+x4G9JpkaKmus1uX6Ef7BTSEX4iWTHvHXLMocXA=;
-        b=VZdWF8DVJ3uQE5tkRNBcBRXw+t3VLlGip/aQOBbkILNosElUZceeTj0JIuo230/Rio
-         NtOeUuzrgkIxJZSjF8FHjOMYLQp1zJCmPSv9K7BMsZh6HWjWfTpfW2aevEosJK8uqXTp
-         AEOgpKb8KAIqScsBsfpoHM6bMP+7W0R0Q/BcleK0ZOce3mYSD/CT2x7JWX+ZU+SCl44o
-         qBT2zpcX6MYrUAiGwDeufNkCmi5k0t5x9Gs4rNlkGW/AxOKis8MZ9SbYPkRAwebl+V8h
-         KuMpI7k9YBHMpsHxDYKnjl3lxvGVBKtMUu/gcuqTRbQR8ncNK4Uw1IY9q0MZ4fYflZmo
-         M/lA==
+        bh=49U9zuaCrRFc16K07IX5eMfLgjnW0VawFcMW+R70KvI=;
+        b=wEguWJEb3Xlwgz1EZWtcX6RPsuriKVQe9wgGalGoRrVCUXxmlsmg2SC3hr0jfSwDf5
+         AX4EKeDlKVmZoxqvsGunTsDGpSXGJlxG/KS+vQAFipZYBxRF4tRVEWalU1e0h6rJLKnj
+         b6zoch1dSLiCDH/r/kzaAalJRtZAPfo4Yhbcgz06DTZPuZP9wur6yCTC20ICPoPGA6UY
+         O5YMHZ8ybJESpooJoApQPAwDhKG4in7Y9tSdIhPER3qglVKEb+bbPzOQJexHjJVBKMWE
+         +MJjASbFx2GmCLyt/QZMbI3BCU+lpL+AEWFZh7d+gOf+BBHeNetadPoEFlv9V3ZSL0bX
+         PxHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780519356; x=1781124156;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1780519466; x=1781124266;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RvT2+x4G9JpkaKmus1uX6Ef7BTSEX4iWTHvHXLMocXA=;
-        b=JOSeS/R4WYcpCnWSGb33OS3eoynNUTOmuhZIO2r5VyBZdp4CCWOX0SLc+/S9AvzYCW
-         vFc0W5cQ3ZQ05lEhhXJ16oYWHOsgnrFz8UvZW21rKtRw/DBi3MaWpRLKWMtnuVTF5ltS
-         DIKaDX/k/FAISLCo+y3gK6ZIPmiQK4mew6YzBz3P6jCCIaWFdV2Wrpj4ziTkfmWkBs3E
-         mwcJQZPQAwiY2508Hi+xy/Vqzmj3G/A2bOZjIy55IqKqy1Tz4+cwHVz3wJPRVPQmJgCN
-         RgHy5/y2NRJt6HnErYnDou0k5awZZ3cvbCJWgFYyOArK8XajWZpUsva49uhtv/58j7qo
-         wgvw==
-X-Gm-Message-State: AOJu0Yx1gIw7YTLW8D5EgmFJtpjWJIkf0E9m4MUzo2a2z2MxXqQIm1mA
-	x2fTg13qDTecKs+Pa8ga81aB7dN1Ay22uxFPS9JhwlMu99bUGFr667HM4BgDffXFa7A=
-X-Gm-Gg: Acq92OEFjKwgqvBn+MMfn5Po83yQ+pajHHciuZw8MwV1TFXaTyiZzPMXJFcchzpoJZG
-	jT8YPrlEkj3zNFFtA5g+U4s+ykuSXq+EyHAX1qXKUX+7Rqosqa2ZLlEw+mGMR2/iI01ikvjTYQr
-	MKJsGn9a0AdYdm7CEMUGCcv71CmwZ5AjIr5yR9A6So9LI7cQIONw5/kB0aMZBRm19q1W/23FaW3
-	mMgh/zjHSR1oAIf8ZxS255fLVM8RVNqwQk4yNR91+p84wEO5SV1XZ7kam3IKs3ATlM7Iplo36IS
-	q/aOZaMJ4D/ei2Qow4c8/fERhvjMqaHw/mgc/FUEkvT66Jge0bAtdlkPfck2pht/Np0JEQvNyYW
-	bQOZHIl92ANae8DY5GSjOm74D+rG2rZuuQ7vCuKSDBfXcYtD89W1dl8DRlLkW5+IO/Rm3MprOFg
-	qFCy8hcv3vFz0w4Gk=
-X-Received: by 2002:a05:7300:dc85:b0:2ea:edc0:4fbe with SMTP id 5a478bee46e88-3074fa9f774mr2271452eec.14.1780519356030;
-        Wed, 03 Jun 2026 13:42:36 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::202f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df75ff6sm3369927eec.26.2026.06.03.13.42.34
+        bh=49U9zuaCrRFc16K07IX5eMfLgjnW0VawFcMW+R70KvI=;
+        b=rb+WGfZo9iTkVqo46zl/vXgwYJs35rNaAFk5+XUKOvpYKrFFcCBy/KywKaYuza9RL7
+         P2Mf87SbrHkPwh/IcC6OFG8iAB1ETLQ+aUl4Nu+7X2cQivq8Wh5svuHIwe3jESo6Y08v
+         8eXarclXYAkj4RMYz5uFJySWMpLqCpWyShQadvegEV2MKziX2xjX8I71IoaB3oVRUYyo
+         raR6YgpIURV1DkuV0qNQVrp/noiNrTZv0WTVvvG+B46W7GRukKlDEnajPETOcnmPwo4F
+         bP0WbCDrTKvSSyoDmuZKTulrXdT46BK8e+LPvwlK5KHB6Sz7shmI7sJ8gSkAjpC9E67J
+         1aiw==
+X-Gm-Message-State: AOJu0YwE3Q4xdnj+xk3Pd+4mJDeVGhq5agUbD4D7ynpP4sgYa+/GeJ/6
+	6jEyzjFQjyCXcV/wlR9qjQdrCZXY62s9V41T+g2xaslJkhfARZwXKeCx0/eHkw07+ko=
+X-Gm-Gg: Acq92OGuXXmGG7hcx6k2GCA67WqMOJ1CPmJQM0TwlIJgqJECcMIYOd8LBcoxg7YhbTR
+	HE7dL0U0GVYST/VexbU4s7Lf3Whh17OFh6XBFa6x4lO4mietJFBiSc9w7EPs+qhGqzoZoDcyEc3
+	lgPSlplhiWf4qNGz55tDcRKykrS3hWCBQGc3xI6kQqZdc1ZgT3ISv/+aiLveGMkb7ARFj7GPVoe
+	ixChNyGH9tVfc+2qs+HoQjEP88RbNvKo34G9z8tErW0XSAqZzXy4K/CzzazVoz64xHtvlk9ZuSo
+	+BQCWQzFAKyAKFXdWgHBbttLcP7sYdmsdcf8mwVk7C8vbVefhDWzf/PGCA2PpPH4QfM/r8BdHDb
+	lGaZ3W2Qc/dYniDKCfvW7vr2AKfgzbi1scEjYWYZnWITcSBSoSRbxAA4A6FsBhGIuAeObzEdFpY
+	Z7avXYs3m8Ia4AB2o=
+X-Received: by 2002:a05:7022:60d:b0:130:760b:77aa with SMTP id a92af1059eb24-137f6c25649mr2259484c88.41.1780519466200;
+        Wed, 03 Jun 2026 13:44:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::4ada])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f716017esm3108451c88.15.2026.06.03.13.44.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 13:42:35 -0700 (PDT)
+        Wed, 03 Jun 2026 13:44:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,436 +65,143 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Jun 2026 16:42:33 -0400
-Message-Id: <DIZPFN4T6C21.XQFZ3BP37AJD@etsalapatis.com>
-Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
- DW_TAG_GNU_annotation
+Date: Wed, 03 Jun 2026 16:44:23 -0400
+Message-Id: <DIZPH1MFO1TW.NPPNVHBBCMHT@etsalapatis.com>
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
 Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
  <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>, "Emil
  Tsalapatis" <emil@etsalapatis.com>, <jose.marchesi@oracle.com>, "David
  Faust" <david.faust@oracle.com>
+Subject: Re: [PAHOLE v4 3/3] tests: Support GCC in pfunct-btf-decl-tags test
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
- <20260602195512.1511013-2-vineet.gupta@linux.dev>
-In-Reply-To: <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <20260602195512.1511013-3-vineet.gupta@linux.dev>
+In-Reply-To: <20260602195512.1511013-3-vineet.gupta@linux.dev>
 
 On Tue Jun 2, 2026 at 3:55 PM EDT, Vineet Gupta wrote:
-> gcc 16 was the first release to support DW_TAG_GNU_annotations and this
-> patch enables the same in pahole. Bulk of changes are dwarf_loader but
-> btf_encoder also gains support with minimal changes.
->
-> GCC encodes btf_type_tag and btf_decl_tag annotations differently from
-> LLVM. While LLVM uses DW_TAG_LLVM_annotation (0x6000) as child DIEs,
-> GCC uses DW_TAG_GNU_annotation (0x6001) as standalone sibling DIEs
-> referenced via DW_AT_GNU_annotation (0x2139) attributes, with chaining
-> through the same attribute on annotation DIEs themselves.
->
-> Handle both encoding styles:
->
-> For btf_type_tag (pointer annotations):
-> - Recognize DW_TAG_GNU_annotation alongside DW_TAG_LLVM_annotation in
->   child annotation scanning.
-> - Follow DW_AT_GNU_annotation attribute chains on pointer types for
->   GCC-style btf_type_tag resolution.
-> - Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation in the
->   internal representation so downstream code works unchanged.
->
-> For btf_decl_tag (function/struct/member annotations):
-> - Add add_gnu_annotation_chain() to follow DW_AT_GNU_annotation
->   attribute chains on function, struct, and member DIEs.
-> - GCC puts DW_AT_GNU_annotation on the function/struct DIE itself
->   (not as child DIEs), referencing sibling annotation DIEs that chain
->   via the same attribute.
->
-> Also:
-> - Silently skip standalone DW_TAG_GNU_annotation DIEs at CU level.
-> - Add tag__is_annotation() helper macro for annotation tag checks.
-> - Rename add_llvm_annotation -> add_tag_annotation,
->   skip_llvm_annotations -> skip_tag_annotations since these now
->   handle both LLVM and GNU annotation formats.
+> GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation. Update the
+> test to run with both GCC (>=3D 16) and clang when available, instead
+> of requiring clang only.
 >
 > Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-One thing, we accept for both LLVM and GCC annotation tags being used as
-LLVM annotation tags because we check against tags__is_annotation().
-This is valid imo.
-
 > ---
-> Changes since v3 [3]
->  - Add helper tag__is_annotation [Emil]
->  - Rename some functions containing "llvm" as they are common to LLVM/GCC=
- tags [Emil]
->  - Deduplicate checks before loop and inside loop in add_gnu_annotation_c=
-hain() and check_gnu_attr [Arnaldo]
->  - Fix some typos and move some comments [Emi]
+>  tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
+>  1 file changed, 56 insertions(+), 16 deletions(-)
 >
-> Changes since v2 [2]
->  - Removed loop detection logic [Alan]
->  - Move test changes to different patch [Alan]
->
-> Changes since v1 [1]
->  - NFC Reduce indentation with early exits (Alexei offlist)
->
-> [3] https://lore.kernel.org/bpf/20260601183511.594100-2-vineet.gupta@linu=
-x.dev/
-> [2] https://lore.kernel.org/bpf/20260528223616.2035618-2-vineet.gupta@lin=
-ux.dev/
-> [1] https://lore.kernel.org/bpf/20260526181818.4159927-2-vineet.gupta@lin=
-ux.dev/
-> ---
->  btf_encoder.c     |   1 +
->  dutil.h           |  11 +++++
->  dwarf_loader.c    | 105 +++++++++++++++++++++++++++++++++++++++-------
->  dwarves.h         |   2 +-
->  dwarves_fprintf.c |  12 ++++--
->  5 files changed, 110 insertions(+), 21 deletions(-)
->
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 633bc6162ce0..d5af706d7638 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -1831,6 +1831,7 @@ static int btf_encoder__encode_tag(struct btf_encod=
-er *encoder, struct tag *tag,
->  		name =3D namespace__name(tag__namespace(tag));
->  		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPEDEF, ref_type_i=
-d, name, false);
->  	case DW_TAG_LLVM_annotation:
-> +	case DW_TAG_GNU_annotation:
->  		name =3D tag__btf_type_tag(tag)->value;
->  		return btf_encoder__add_ref_type(encoder, BTF_KIND_TYPE_TAG, ref_type_=
-id, name, false);
->  	case DW_TAG_structure_type:
-> diff --git a/dutil.h b/dutil.h
-> index ff78aa6dfd10..be02c68cf4a7 100644
-> --- a/dutil.h
-> +++ b/dutil.h
-> @@ -35,6 +35,17 @@
->  #define DW_TAG_LLVM_annotation 0x6000
->  #endif
+> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.s=
+h
+> index 35884b4e8687..a46aa1f3df55 100755
+> --- a/tests/pfunct-btf-decl-tags.sh
+> +++ b/tests/pfunct-btf-decl-tags.sh
+> @@ -6,24 +6,36 @@
+>  source test_lib.sh
 > =20
-> +#ifndef DW_TAG_GNU_annotation
-> +#define DW_TAG_GNU_annotation 0x6001
-> +#endif
-> +
-> +#ifndef DW_AT_GNU_annotation
-> +#define DW_AT_GNU_annotation 0x2139
-> +#endif
-> +
-> +#define tag__is_annotation(tag) \
-> +	((tag) =3D=3D DW_TAG_LLVM_annotation || (tag) =3D=3D DW_TAG_GNU_annotat=
-ion)
-> +
->  static inline __attribute__((const)) bool is_power_of_2(unsigned long n)
->  {
->          return (n !=3D 0 && ((n & (n - 1)) =3D=3D 0));
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 42a0f3f74ce3..14f71c9043aa 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -908,7 +908,12 @@ static int tag__recode_dwarf_bitfield(struct tag *ta=
-g, struct cu *cu, uint16_t b
->  	return -ENOMEM;
->  }
+>  outdir=3D$(make_tmpdir)
+> -tmpobj=3D$(make_tmpobj)
 > =20
-> -static int add_llvm_annotation(Dwarf_Die *die, int component_idx, struct=
- conf_load *conf,
-> +static bool die__tag_is_annotation(Dwarf_Die *die)
-> +{
-> +	return tag__is_annotation(dwarf_tag(die));
+>  # Comment this out to save test data.
+>  trap cleanup EXIT
+> =20
+>  title_log "Check that pfunct can print btf_decl_tags read from BTF."
+> =20
+> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
+> -# in upstream version 16.
+> -# UPTODO: add a check here for that.
+> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac702=
+7f180b).
+> =20
+> +GCC=3D${GCC:-gcc}
+>  CLANG=3D${CLANG:-clang}
+> -if ! command -v $CLANG > /dev/null; then
+> -	error_log "Need clang for test $0"
+> +
+> +use_gcc=3D0
+> +if command -v $GCC > /dev/null; then
+> +	gcc_ver=3D$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
+> +	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
+> +		use_gcc=3D1
+> +	fi
+> +fi
+> +
+> +use_clang=3D0
+> +if command -v $CLANG > /dev/null; then
+> +	use_clang=3D1
+> +fi
+> +
+> +if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
+> +	error_log "Need gcc >=3D 16 or clang for test $0"
+>  	test_fail
+>  fi
+> =20
+> -(cat <<EOF
+> +src=3D$(cat <<EOF
+>  #define __tag(x) __attribute__((btf_decl_tag(#x)))
+> =20
+>  __tag(a) __tag(b) __tag(c) void foo(void) {}
+> @@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
+>  __tag(a)                   void buz(void) {}
+> =20
+>  EOF
+> -) | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
+> +)
+> =20
+>  # tags order is not guaranteed
+>  sort_tags=3D$(cat <<EOF
+> @@ -54,16 +66,44 @@ a void buz(void);
+>  EOF
+>  )
+> =20
+> -out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
+> -d=3D$(diff -u <(echo "$expected") <(echo "$out"))
+> +run_test() {
+> +	local compiler=3D$1
+> +	local tmpobj=3D$2
+> +
+> +	info_log "Testing with $compiler"
+> +	out=3D$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
+> +	d=3D$(diff -u <(echo "$expected") <(echo "$out"))
+> +
+> +	if [[ "$d" =3D=3D "" ]]; then
+> +		info_log "  passed"
+> +		return 0
+> +	else
+> +		error_log "pfunct output does not match expected ($compiler):"
+> +		info_log "$d"
+> +		info_log
+> +		info_log "Complete output:"
+> +		info_log "$out"
+> +		return 1
+> +	fi
 > +}
 > +
-> +static int add_tag_annotation(Dwarf_Die *die, int component_idx, struct =
-conf_load *conf,
->  			       struct list_head *head)
->  {
->  	struct llvm_annotation *annot;
-> @@ -943,16 +948,40 @@ static int add_child_llvm_annotations(Dwarf_Die *di=
-e, int component_idx,
-> =20
->  	die =3D &child;
->  	do {
-> -		if (dwarf_tag(die) =3D=3D DW_TAG_LLVM_annotation) {
-> -			ret =3D add_llvm_annotation(die, component_idx, conf, head);
-> -			if (ret)
-> -				return ret;
-> -		}
-> +		if (!die__tag_is_annotation(die))
-> +			continue;
+> +failed=3D0
 > +
-> +		ret =3D add_tag_annotation(die, component_idx, conf, head);
-> +		if (ret)
-> +			return ret;
->  	} while (dwarf_siblingof(die, die) =3D=3D 0);
-> =20
->  	return 0;
->  }
-> =20
-> +/*
-> + * Handle gcc style btf_decl_tag annotations for functions/struct/member=
- tags.
-> + * Pointers are handled separately, inline in die__create_new_pointer_ta=
-g()
-> + */
-> +static int add_gnu_annotation_chain(Dwarf_Die *die, int component_idx,
-> +				    struct conf_load *conf, struct list_head *head)
-> +{
-> +	Dwarf_Attribute attr;
-> +	Dwarf_Die annot_die;
+> +if [ "$use_gcc" -eq 1 ]; then
+> +	tmpobj=3D$(make_tmpobj)
+> +	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
+> +	pahole -J $tmpobj 2>/dev/null
+> +	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=3D1
+> +fi
 > +
-> +	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) !=3D NULL &&
-> +	       dwarf_formref_die(&attr, &annot_die) !=3D NULL &&
-> +	       dwarf_tag(&annot_die) =3D=3D DW_TAG_GNU_annotation) {
-> +		int ret =3D add_tag_annotation(&annot_die, component_idx, conf, head);
-> +		if (ret)
-> +			return ret;
-> +
-> +		die =3D &annot_die;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  int class_member__dwarf_recode_bitfield(struct class_member *member,
->  					struct cu *cu)
->  {
-> @@ -1596,6 +1625,8 @@ static struct btf_type_tag_type *die__create_new_bt=
-f_type_tag_type(Dwarf_Die *di
->  		return NULL;
+> +if [ "$use_clang" -eq 1 ]; then
+> +	tmpobj=3D$(make_tmpobj)
+> +	echo "$src" | $CLANG --target=3Dbpf -c -g -x c -o $tmpobj -
+> +	run_test "$CLANG" "$tmpobj" || failed=3D1
+> +fi
 > =20
->  	tag__init(&tag->tag, cu, die);
-> +	/* Normalize DW_TAG_GNU_annotation to DW_TAG_LLVM_annotation internally=
- */
-> +	tag->tag.tag =3D DW_TAG_LLVM_annotation;
->  	tag->value =3D attr_string(die, DW_AT_const_value, conf);
->  	return tag;
->  }
-> @@ -1637,19 +1668,21 @@ static struct tag *die__create_new_pointer_tag(Dw=
-arf_Die *die, struct cu *cu,
->  {
->  	struct btf_type_tag_ptr_type *tag =3D NULL;
->  	Dwarf_Die *cdie, child;
-> +	Dwarf_Attribute attr;
-> +	Dwarf_Die annot_die;
->  	const char *name;
-> =20
-> -	/* If no child tags or skipping btf_type_tag encoding, just create a ne=
-w tag
-> -	 * and return
-> -	 */
-> -	if (!dwarf_haschildren(die) || dwarf_child(die, &child) !=3D 0 ||
-> -	    conf->skip_encoding_btf_type_tag)
-> +	/* If skipping btf_type_tag encoding, just create a new tag, return */
-> +	if (conf->skip_encoding_btf_type_tag)
->  		return tag__new(die, cu);
-> =20
-> -	/* Otherwise, check DW_TAG_LLVM_annotation child tags */
-> +	if (!dwarf_haschildren(die) || dwarf_child(die, &child) !=3D 0)
-> +		goto check_gnu_attr;
-> +
-> +	/* Handle LLVM style annotation tags if present */
->  	cdie =3D &child;
->  	do {
-> -		if (dwarf_tag(cdie) !=3D DW_TAG_LLVM_annotation)
-> +		if (!die__tag_is_annotation(cdie))
->  			continue;
-> =20
->  		/* Only check btf_type_tag annotations */
-> @@ -1662,6 +1695,26 @@ static struct tag *die__create_new_pointer_tag(Dwa=
-rf_Die *die, struct cu *cu,
->  			return NULL;
->  	} while (dwarf_siblingof(cdie, cdie) =3D=3D 0);
-> =20
-> +check_gnu_attr:
-> +	if (tag !=3D NULL)
-> +		goto out;
-> +
-> +	/* Handle GCC-style DW_AT_GNU_annotation attribute */
-> +	while (dwarf_attr(die, DW_AT_GNU_annotation, &attr) !=3D NULL &&
-> +	       dwarf_formref_die(&attr, &annot_die) !=3D NULL &&
-> +	       dwarf_tag(&annot_die) =3D=3D DW_TAG_GNU_annotation) {
-> +		name =3D attr_string(&annot_die, DW_AT_name, conf);
-> +		if (strcmp(name, "btf_type_tag") !=3D 0)
-> +			break;
-> +
-> +		tag =3D die__add_btf_type_tag(tag, die, &annot_die, cu, conf);
-> +		if (tag =3D=3D NULL)
-> +			return NULL;
-> +
-> +		die =3D &annot_die;
-> +	}
-> +
-> +out:
->  	return tag ? &tag->tag : tag__new(die, cu);
->  }
-> =20
-> @@ -1690,6 +1743,12 @@ static struct tag *die__create_new_class(Dwarf_Die=
- *die, struct cu *cu, struct c
->  		}
->  	}
-> =20
-> +	if (class !=3D NULL &&
-> +	    add_gnu_annotation_chain(die, -1, conf, &class->type.namespace.anno=
-ts) !=3D 0) {
-> +		class__delete(class, cu);
-> +		class =3D NULL;
-> +	}
-> +
->  	return class ? &class->type.namespace.tag : NULL;
->  }
-> =20
-> @@ -2051,11 +2110,14 @@ static int die__process_class(Dwarf_Die *die, str=
-uct type *class,
->  			cu__hash(cu, &member->tag);
->  			if (add_child_llvm_annotations(die, member_idx, conf, &class->namespa=
-ce.annots))
->  				return -ENOMEM;
-> +			if (add_gnu_annotation_chain(die, member_idx, conf, &class->namespace=
-.annots))
-> +				return -ENOMEM;
->  			member_idx++;
->  		}
->  			continue;
->  		case DW_TAG_LLVM_annotation:
-> -			if (add_llvm_annotation(die, -1, conf, &class->namespace.annots))
-> +		case DW_TAG_GNU_annotation:
-> +			if (add_tag_annotation(die, -1, conf, &class->namespace.annots))
->  				return -ENOMEM;
->  			continue;
->  		default: {
-> @@ -2360,7 +2422,8 @@ static int die__process_function(Dwarf_Die *die, st=
-ruct ftype *ftype,
->  				goto out_enomem;
->  			continue;
->  		case DW_TAG_LLVM_annotation:
-> -			if (add_llvm_annotation(die, -1, conf, &(tag__function(&ftype->tag)->=
-annots)))
-> +		case DW_TAG_GNU_annotation:
-> +			if (add_tag_annotation(die, -1, conf, &(tag__function(&ftype->tag)->a=
-nnots)))
->  				goto out_enomem;
->  			continue;
->  		default:
-> @@ -2408,6 +2471,12 @@ static struct tag *die__create_new_function(Dwarf_=
-Die *die, struct cu *cu, struc
->  		function =3D NULL;
->  	}
-> =20
-> +	if (function !=3D NULL &&
-> +	    add_gnu_annotation_chain(die, -1, conf, &function->annots) !=3D 0) =
-{
-> +		function__delete(function, cu);
-> +		function =3D NULL;
-> +	}
-> +
->  	return function ? &function->proto.tag : NULL;
->  }
-> =20
-> @@ -2469,6 +2538,9 @@ static struct tag *__die__process_tag(Dwarf_Die *di=
-e, struct cu *cu,
->  		 */
->  		tag =3D &unsupported_tag;
->  		break;
-> +	case DW_TAG_GNU_annotation:
-> +		tag =3D &unsupported_tag;
-> +		break;
->  	case DW_TAG_label:
->  		if (conf->ignore_labels)
->  			tag =3D &unsupported_tag; // callers will assume conf->ignore_labels =
-is true
-> @@ -2494,7 +2566,8 @@ static int die__process_unit(Dwarf_Die *die, struct=
- cu *cu, struct conf_load *co
->  			// XXX special case DW_TAG_dwarf_procedure, appears when looking at a=
- recent ~/bin/perf
->  			// Investigate later how to properly support this...
->  			if (dwarf_tag(die) !=3D DW_TAG_dwarf_procedure &&
-> -			    dwarf_tag(die) !=3D DW_TAG_label) // conf->ignore_labels =3D=3D t=
-rue, see die__process_tag()
-> +			    dwarf_tag(die) !=3D DW_TAG_label && // conf->ignore_labels =3D=3D=
- true, see die__process_tag()
-> +			    dwarf_tag(die) !=3D DW_TAG_GNU_annotation)
->  				tag__print_not_supported(die);
->  			continue;
->  		}
-> diff --git a/dwarves.h b/dwarves.h
-> index 5ec16e750e83..75c311a2f8ee 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -670,7 +670,7 @@ static inline int tag__is_tag_type(const struct tag *=
-tag)
->  	       tag->tag =3D=3D DW_TAG_volatile_type ||
->  	       tag->tag =3D=3D DW_TAG_atomic_type ||
->  	       tag->tag =3D=3D DW_TAG_unspecified_type ||
-> -	       tag->tag =3D=3D DW_TAG_LLVM_annotation;
-> +	       tag__is_annotation(tag->tag);
->  }
-> =20
->  static inline const char *tag__decl_file(const struct tag *tag,
-> diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-> index 1ec478c2a027..757e4992a1f7 100644
-> --- a/dwarves_fprintf.c
-> +++ b/dwarves_fprintf.c
-> @@ -140,6 +140,8 @@ const char *dwarf_tag_name(const uint32_t tag)
->  		return dwarf_gnu_tag_names[tag - DW_TAG_MIPS_loop];
->  	else if (tag =3D=3D DW_TAG_LLVM_annotation)
->  		return "LLVM_annotation";
-> +	else if (tag =3D=3D DW_TAG_GNU_annotation)
-> +		return "GNU_annotation";
->  	return "INVALID";
->  }
-> =20
-> @@ -658,6 +660,7 @@ static const char *__tag__name(const struct tag *tag,=
- const struct cu *cu,
->  		snprintf(bf, len, "%s", variable__name(tag__variable(tag)));
->  		break;
->  	case DW_TAG_LLVM_annotation:
-> +	case DW_TAG_GNU_annotation:
->  		type =3D cu__type(cu, tag->type);
->  		if (type =3D=3D NULL && tag->type !=3D 0)
->  			tag__id_not_found_snprintf(bf, len, tag->type);
-> @@ -723,7 +726,7 @@ static size_t type__fprintf_stats(struct type *type, =
-const struct cu *cu,
->  	return printed;
->  }
-> =20
-> -static type_id_t skip_llvm_annotations(const struct cu *cu, type_id_t id=
-)
-> +static type_id_t skip_tag_annotations(const struct cu *cu, type_id_t id)
->  {
->  	struct tag *type;
-> =20
-> @@ -731,7 +734,7 @@ static type_id_t skip_llvm_annotations(const struct c=
-u *cu, type_id_t id)
->  		if (id =3D=3D 0)
->  			break;
->  		type =3D cu__type(cu, id);
-> -		if (type =3D=3D NULL || type->tag !=3D DW_TAG_LLVM_annotation || type-=
->type =3D=3D id)
-> +		if (type =3D=3D NULL || !tag__is_annotation(type->tag) || type->type =
-=3D=3D id)
->  			break;
->  		id =3D type->type;
->  	}
-> @@ -838,7 +841,7 @@ inner_struct:
->  next_type:
->  	switch (type->tag) {
->  	case DW_TAG_pointer_type: {
-> -		type_id_t ptype_id =3D skip_llvm_annotations(cu, type->type);
-> +		type_id_t ptype_id =3D skip_tag_annotations(cu, type->type);
-> =20
->  		if (ptype_id !=3D 0) {
->  			int n;
-> @@ -936,7 +939,8 @@ print_modifier: {
->  		else
->  			printed +=3D enumeration__fprintf(type, &tconf, fp);
->  		break;
-> -	case DW_TAG_LLVM_annotation: {
-> +	case DW_TAG_LLVM_annotation:
-> +	case DW_TAG_GNU_annotation: {
->  		struct tag *ttype =3D cu__type(cu, type->type);
->  		if (ttype) {
->  			type =3D ttype;
+> -if [[ "$d" =3D=3D "" ]]; then
+> +if [ "$failed" -eq 0 ]; then
+>  	test_pass
+>  else
+> -	error_log "pfunct output does not match expected:"
+> -	info_log "$d"
+> -	info_log
+> -	info_log "Complete output:"
+> -	info_log "$out"
+>  	test_fail
+>  fi
 
