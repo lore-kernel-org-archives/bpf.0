@@ -1,96 +1,145 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40093F5BE2;
-	Wed,  3 Jun 2026 20:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51143E4C98;
+	Wed,  3 Jun 2026 20:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780517915; cv=none; b=VZOb3qz/oiB+pKPu46iI8gCip48d+hV9ENQxMcif/rA166/wAiNhTwa/TSTtM+Qle0QA+NNPbwpQ+OF4V/wqAJMIkOA54A+sbp7/Y1M4B9Apww72WkcyJBkWEOQobFKOyBQuGMTdqaGKU80IZj/zu8ucW9raOyiYHJCzTT6Pokg=
+	t=1780518528; cv=none; b=S7nNEL4wT2N9XM65Q45LLquc8uXP9POhs6wgBbaJ3JbPUZ2mKzndMzVfY6YEsg6e7M06kLbPQgagGFsoYmQg1N1qqpqVf+kgd1jxBgj7cXBg4e8F3olHuvAPBzswXjmwy9+t+kkerKGjeysOIm8e3KWrQjqvMO59/nkrj+VQxzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780517915; c=relaxed/simple;
-	bh=vd1UqlbeKxfktRs9ujmxbxVEV2FbtpqtvRC1AW7gllM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=erWuLkqCXPFTqDq5+1b+8WlUluyL14VCJYymDbDLLp2lr5d4DNXWKestS/VK8S0cZnQCVbpDO4NBbsfWxnq0aD+kvPwbVqHkt01jJAU+7j3N8gZdXG0v87uZk/xhYRt5MXhv3lZ6IBSAqQ/bB5DuNK7i3CM8uyOHfdfW4zE4V14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L0C4fieg; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780518528; c=relaxed/simple;
+	bh=ISjCl5c5Cx6ds0zGhdTFigzZgDuQY0AM3UQUCrhiB3s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=t9eHDNsxzxe9eLLkv5l/dVajIpsBKSfTQ5x01Fb9H3rZg7nvtO7EIGbSfQiddeoNS3IOKRmK1v0u7bNr4r6QQQRSDzZGZNYc3RjkY4jrvl4syC/4xvdawTiW5C+vrUVNzunu8s3YQ0SzuqMCoqniEXkXT+saCRRtowsaZqtivIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6fAziPK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L0C4fieg"
-Message-ID: <c894bf32-f632-40b6-8557-ba7c9afd5699@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780517910;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UaAE3yHIMeo4qc7AvLlIseYNafaeE9rUtAqS+DGbm+A=;
-	b=L0C4fiegBM6/8Od5sP/BZXFy8vVZdLvVxx5L1biNS71QAVe2gCw1+ILvlM3bF+OqrZwJAO
-	g+hK36W6HkcVlQbN6UeyMfYNCVnPqJHEg5B/w9LERwsHz6oxID2Gw22/v2iSm2Sdnsr0Mt
-	tkDE3VGDxku0FwiOv2dmrUbN3BYjQAk=
-Date: Wed, 3 Jun 2026 13:18:21 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6fAziPK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523F91F00893;
+	Wed,  3 Jun 2026 20:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780518527;
+	bh=FmDbDJFXJN7UzGQmOFzTUSdYjNQ1F/mppcHPImRrsCs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=l6fAziPKFozSHeljUpLHMNx6FN/CcSbR35SA9pn+njTLBJ2E57RODiq9NX8yM1J2V
+	 qqhmxUsxQyTl8fdTFRvYW/Dht6DF2I4fZ9LagvyO0/Bs0JrUiGzvuQMO0T0V3G9iSZ
+	 vjkFKEmSbg88WxIBpVHQoo/1jPxFPGmLsFhWzCFUdnQvsbzpWsHRBtKJUgYTZfRPos
+	 5NB+W+C81N/vvKZ6u1oEql/aE4Oc8YOz8zWXUjJaKDpzRKzQrNwc8RRieWnXXEAfBD
+	 x6mAcuLAKVt8uqSV8HrmxevwJTbee24d3TK6R+oafqF/hyrTOMK15Yx2AnOqfYOxjj
+	 Kt6Jdo9NSxPOA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v10 2/2] net: mana: force full-page RX buffers
+ via ethtool private flag
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
+References: <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 20:28:46 +0000
+Message-Id: <20260603202847.523F91F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PAHOLE v4 1/3] dwarf_loader: Extract die__add_btf_type_tag()
- helper [NFC]
-Content-Language: en-GB
-To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
- David Faust <david.faust@oracle.com>
-References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260602195512.1511013-1-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Forcing `apc->port_is_up =3D true` on the `mana_attach` error path=
+ causes a double-destroy of the hardware vport when the interface is later =
+brought down.
+- [Medium] Latent bug: Changes to future private flags will be silently ign=
+ored if MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF is not simultaneously toggled.
+--
 
+commit d7983f6668f209a0b7bfb427c64d5517b326c7b1
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-On 6/2/26 12:55 PM, Vineet Gupta wrote:
-> NFC change preparing for DW_TAG_GNU_annotation support.
-> Extract the btf_type_tag annotation creation logic into helper
-> die__add_btf_type_tag().
->
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+net: mana: force full-page RX buffers via ethtool private flag
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Adds an ethtool private flag full-page-rx to bypass page_pool fragment
+allocation and force one RX buffer per page. Includes logic in
+mana_set_priv_flags to dynamically reconfigure the port on flag change.
 
-> ---
-> Changes since v3 [3]
->   - Fix comment to kernel style [Arnaldo]
->
-> Changes since v2 [2]
->   - die__add_btf_type_tag() returns pointer not error code [Alan]
->
-> Changes since v1 [1]
->   - NFC reinstate some original comments
->
-> [3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linux.dev/
-> [2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
-> [1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
+/net/ethernet/microsoft/mana/mana_ethtool.c
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
 
-If there is a further revision, for a three patch series, I think it is worthwhile
-to have a cover letter so the above change log (and 2nd patch or more)
-can be all in cover letter.
+[ ... ]
 
-> ---
->   dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
->   1 file changed, 34 insertions(+), 24 deletions(-)
->
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 16fb7becffee..42a0f3f74ce3 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
->   	return tag;
->   }
->   
->
-[...]
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+> +	struct mana_port_context *apc =3D netdev_priv(ndev);
+> +	u32 changed =3D apc->priv_flags ^ priv_flags;
+> +	u32 old_priv_flags =3D apc->priv_flags;
+> +	bool schedule_port_reset =3D false;
+> +	int err =3D 0;
+> +
+> +	if (!changed)
+> +		return 0;
+> +
+> +	/* Reject unknown bits */
+> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> +		return -EINVAL;
+> +
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> +		apc->priv_flags =3D priv_flags;
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+[Severity: Medium]
+When additional private flags are added in the future, will changes to those
+new flags be silently ignored if MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF isn't
+also toggled?
+
+Since this assignment is nested inside the FULL_PAGE_RXBUF check, changing
+only a future new flag will bypass this assignment and the function will
+return success while discarding the new flag state.
+
+Should this assignment be moved outside the flag-specific conditional block?
+
+> +
+> +		if (!apc->port_is_up) {
+
+[ ... ]
+
+> +		err =3D mana_attach(ndev);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +			apc->priv_flags =3D old_priv_flags;
+> +
+> +			/* Restore 'port_is_up' so the reset work handler
+> +			 * can properly detach/attach. Without this,
+> +			 * the handler sees port_is_up=3Dfalse and skips
+> +			 * queue allocation, leaving the port dead.
+> +			 */
+> +			apc->port_is_up =3D true;
+                        ^^^^^^^^^^^^^^^^^^^^^^
+
+[Severity: High]
+Does forcing port_is_up to true here cause a double-destroy of the hardware
+vport when the interface is later brought down?
+
+If mana_attach fails, it cleans up any partial state by destroying the vpor=
+t.
+
+Leaving the port artificially marked as up means a subsequent interface down
+event or reset worker will see apc->port_is_up as true and call
+mana_detach with from_close set to true.
+
+This bypasses the netif_device_present check and triggers a second call to
+mana_destroy_vport, which could drop apc->vport_use_count below zero and
+send a duplicate deregister message to the firmware for the already-freed
+hw_vport_handle.
+
+> +			schedule_port_reset =3D true;
+> +		}
+> +	}
+> +
+> +out:
+> +	mana_pre_dealloc_rxbufs(apc);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602202801.1873=
+742-1-dipayanroy@linux.microsoft.com?part=3D2
