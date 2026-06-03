@@ -1,67 +1,67 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E483AE6E2
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 15:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFCB3B6BEC
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 15:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780499805; cv=none; b=D5OFMb/McWAP678TKL53E0e0rEY9DQRALpFvbVUxAzuywF6jEdDWpIXE8Ku8hLOEgGc5Kv3ZYr+YV0XPurezTzh+0ERYkIhnha1ECEnCO35BWx1Hi5zP5BqpYRm4a5gXmq+Dx/L42/DWjz7ebFYKLt6rbOHSVXfVK2c8lZqbKFg=
+	t=1780499859; cv=none; b=DJ0tzvXz7o+ofdpTTpTOgXDl3WilsEqU9XZU1x9T8d5rwQzsAcdcJe6erNx5s/tLkouQEoE6M6rsHHeZVRMB5JJwX4rW7P3ep/EwhCettPe3FsM/U7yQos/hQdrohlWoSEtOm0wu44irCgHxfJ+shWp44l3GcegXfcU79r0P3+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780499805; c=relaxed/simple;
-	bh=DQ8Y/4v5YdnUPcSKspvljjFWbGO8P2IvzlOPanwUzFI=;
+	s=arc-20240116; t=1780499859; c=relaxed/simple;
+	bh=yKBQM/dYhJDWNF+XWCSKcsh0LWE/TAYU2zGm7ql6dk8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TDAySmSB1EdL0Ok1XrUJxJo4CjvlO1/oP5+VK2oJNiuHHamBS7SV+k6onGvv2GKMYOZfy4GVMr2pbYeXnDjKyaBoDIbsfpEY+2qHlekl9NHZ6GT85Eo0MzOXXU3WMvcwaEELyO/m/AjvKts53VXrN6BL0QLNNb4J1pXT7duhlZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mXzeewM4; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:Content-Type; b=dlapEjsoL+N0njIQ+G6KfWaYhY8JjWUQvkI/cbnLE5uUgdi7ulxFmBBydT2fKiai4q/f0VPFFeZe/MBoe3jKu0ojwOzBxNLF0g0fxRcdJ5oHJYCzY8Vv216zebG3PZPcE8ogMGTYd7UU17NwYlOHGxNrEwqH3r6QBdfmQTT0t+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXVwvOeH; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mXzeewM4"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490b43e2b95so11226365e9.0
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 08:16:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXVwvOeH"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-45ee6d32402so3771747f8f.1
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 08:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780499802; x=1781104602; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780499857; x=1781104657; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MaF6lWKR8sLzmWJlJ6QvlML1zUSvU9tppAwiknuVLcA=;
-        b=mXzeewM4xtOJ/gda+ryVK+ko3W2upiC98RPQcZ1apTCi3Jefj7qsrABiGdy5VvNhbN
-         HrHRpIg/r/71ddsJKVJTSyyb4PSfMHNKfwdm4xx/nQvqNfe59cysg7pWB/VZXTzkyGb6
-         2fhgEZO0WFgIf0q6+moq0DbXvBRbG4IPlDYX+rTDw5kYlh3PPTXfMC3nZ/v/IlBKyr1i
-         KT3efVhrr3qPbvZz7ap2TeVBnyz4RyD9EBqUHRYtDjXIgJ2pC1SP2/TIEx/bkY7KhpHZ
-         3IG49jqTC/WPzpU8wXNq/gOUqc6/LxHElMGbpd0J+xQ3Ek3xYOcMr5qsDseeXtKUhoI/
-         JN+w==
+        bh=hnkH5xFEJ6g6oqedeDPHM9btk1uLc+DnFLjyYvq9sR4=;
+        b=PXVwvOeHCVsO8ZIndw/CBezw1mtKNimrhl3s9nxoxqr/czz2Nl116bwsGnoH+wLaTM
+         kQMQbyG0fFmwhz5i6NNfKarEQiXRd8x/YqIrT8t9vygU3C80KmED/VRttMn2E1NtV496
+         j06JToVoDde3yllo03QPh/9hYUGTVdC/UJ+QYD37x3OiplBtsPKduaTI9m2SHaFhsJrs
+         DuUlEAsf2gdlxZZl/yDhqD51aHmCyyb2IoP+CSuDGKBWPn7CWKVZwSlS1pTqNeNOxnXI
+         sgTuctBp0ASHD9KBfxOBSUdACFL6bIbwtOcFYjN+XIvW6JfpIW+7POBCSK2ZxXoqE1/j
+         r6pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780499802; x=1781104602;
+        d=1e100.net; s=20251104; t=1780499857; x=1781104657;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MaF6lWKR8sLzmWJlJ6QvlML1zUSvU9tppAwiknuVLcA=;
-        b=aPnB+zb4GvqsIFadmW4xIRiifoj3yBd+6V4KFoI7XBogRQepvjzkPaS/ZmGT57GkL2
-         cHBmT+JuH9ekYsZOgR4yHXfhnEA0KZf/MkrC6OTBc+z+fxYGBYhkNwIHJphDQPOSAPko
-         4cgm5jJLND9IHODe/CtlE2rIXj0h66iBExegM4pXDCNJOA3c87sLfRnEoQ61JfIxYHWz
-         4l5+a6Wyl6vJDU07Kv2OmF0IIhpUmhXrGChKaftJvCBs05xzeqwWMTCkmUtnuD0Ihzpk
-         AXmCvI3Dhem8J4OkLstvE1wipaOb0rXC+uCMJQy93cymcEpcAfzokJ402EtRVN7pCN3O
-         +gPQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+e173RRCL09NREn/ppVeIpqUt/HX/HVgVWjKHnjm8FbDG/VNav8T62+MGVPIm6ICj3BHU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2DDRN+QfhEb7KA/73/nBuTP9BStqYQta6rA+t+HS4GTqAPKod
-	orEbRaOq1e/cLhqTARJAhL1WiMG9LLeioOMjvT6oqR/jISjzsQw0U2zy
-X-Gm-Gg: Acq92OHt9ZDyBJbj7O4nlqaR2RUtCrO4WHrfWlqP+Fn3j409pazAPOHj0xy8P+Qcntj
-	YGxFHyv46hZ1YHym5qCshY7NNNLM5Kn6VvFYnp1Kf6gV+BbGXn93z1FlMJzTJSY3ZVC/dwACC3T
-	BVsTZS0sYSufd1+XpYQ6ELx2RQIYCh10jnMlim4Kjw5SxP6M75cFL5VClFbDWEA53djhVgXYewp
-	OuLHlTkhZQfioNqN1dFLIEHdVGQRtRo79Uale290XEf08eCJEzqp47VN7SkAe7zNv8gHC1eaLFn
-	Tv5bPPGgbyf/6MF3p+FUKwfmLvxycggzYAEP8Z/vcyHvWweA5MISg6/3YBoBxvG9ovVU6jH8tdS
-	Cjb5lkrkN8MkA3pW8Ld17O93NBcAhixdwaRpd7zOoc4yC83XIt4WLgCOWatcQn5uyW8L33Bzp77
-	IwDjQB3A6pWW6KfFTfhbSyvss4C4YzaGWeo0j4G05bsGKcHhoOjmMZJT0XbIeEDp7yi3q/DoHyz
-	6SRTv0gCZwZ7chTi6PLkw==
-X-Received: by 2002:a05:600c:8b48:b0:48f:d612:3c59 with SMTP id 5b1f17b1804b1-490b5ea6ddbmr67495725e9.9.1780499802292;
-        Wed, 03 Jun 2026 08:16:42 -0700 (PDT)
+        bh=hnkH5xFEJ6g6oqedeDPHM9btk1uLc+DnFLjyYvq9sR4=;
+        b=LeDp3QqF41L6Iify7tFdvQ8BinQrb1JLj2aKrZ9C8m554FXObxihRMGyQDYvIT+sZf
+         ELhRLCdIKTdEUktpvGdeykmck4X6Lb5X50kOzubmhmldjmj6P67B7/UajaEnMTZ4b7PX
+         qqVRRPOvs4xCa0WANxrJxYN81MWxgc+GCpzGQCkuSvjN8T4QO+5F9CJw5Hcr+P39eqvv
+         h9oTO9DN2cOS9rAjirsDGQ3JXYeb0YIbICVujKcceGy/7NqCuBg/wx6bwlmLrVjMi8A2
+         9nWLaw0uSrSK6JOZoWVLSgmSbRNEkSPE2gMe5i18tHXcx+zAyib/4638CzNYX/xP+DFo
+         3aoA==
+X-Forwarded-Encrypted: i=1; AFNElJ/PS8HrETUbgXsa9eZnuiATRJKehXobeWPyWdWd9dEVcjDc4fC1cRd3w2UF34g5pEPG3xs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzN0fr3o5G+linrSVCqxZbL4P1Y9NpdSWHl8yR6RN46WiPH3Yi
+	c/Bdi1OTUAmyvYJFcRH9lNrotMM8uFVO/cUSEpaJqZNK1fPS1xfWiNWN
+X-Gm-Gg: Acq92OHGcGgtst+uXMaO8+gcnfstOiS1Tb7dl9wHqWkQMi6tzbkM56mYcPVOkrBz4OR
+	P4XxceDHCW09kkE5T3hb279YHaybCrEHrXWWGpOwYNVCz6gRGv15+A7BQtWmBmmPFpYBG19kdnt
+	2xxTtVqbIBxxQwEeDAwrMTSTXSGH/XjKTDCbvdjak605uz3vyiX4d3Ju67PoUQH4Kp+yBltM1CF
+	AXj6/kLg4Hv/KKXXXeHHzu6OrYMDGdp9KCRAEc9pR8wavuw5gKPRds0Tj7G4kPO+qa+yZyUHKq6
+	AOH/H/quBhHlthjgijZ88Joi9FHikcj6SSbHWqPp1k7F0YM+5WaAg4LgCfWcmAqwBUl/NBHsA5o
+	qv0DnLWGj8t5OpLt7XuJLmU61NBhFFfr+mgV83Y+YhMLPS2eVPWJK1ZZuldKcdW7hEfzECnqgsf
+	Q06VmPPAeosDJufxKwNO7XVIilvCrPLNscqqJnKquZW5P7UWIPJTMSKYQszbqVdtXWZJBPrzVXl
+	WMQ/NqW+iE39UiyfIeiR2hpqB+0Wy+A
+X-Received: by 2002:a5d:5989:0:b0:45e:e44b:313e with SMTP id ffacd0b85a97d-4602181fac2mr5917728f8f.19.1780499856561;
+        Wed, 03 Jun 2026 08:17:36 -0700 (PDT)
 Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f344762sm9064550f8f.23.2026.06.03.08.16.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f0a43e9sm8398676f8f.0.2026.06.03.08.17.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 08:16:41 -0700 (PDT)
-Message-ID: <714fb4cc-2eb2-40be-9202-d82d405d82ae@gmail.com>
-Date: Wed, 3 Jun 2026 16:16:41 +0100
+        Wed, 03 Jun 2026 08:17:36 -0700 (PDT)
+Message-ID: <f1f18841-005c-4450-b289-2a052f5f3fb2@gmail.com>
+Date: Wed, 3 Jun 2026 16:17:35 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/3] bpf: Check tail zero of bpf_map_info
+Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
 To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>,
@@ -83,27 +83,28 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kernel-patches-bot@fb.com
 References: <20260603144518.67065-1-leon.hwang@linux.dev>
- <20260603144518.67065-2-leon.hwang@linux.dev>
+ <20260603144518.67065-3-leon.hwang@linux.dev>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260603144518.67065-2-leon.hwang@linux.dev>
+In-Reply-To: <20260603144518.67065-3-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
 On 6/3/26 3:45 PM, Leon Hwang wrote:
-> Since there're 4 bytes padding at the end of struct bpf_map_info, they
+> Since there're 4 bytes padding at the end of struct bpf_prog_info, they
 > won't be checked by bpf_check_uarg_tail_zero().
 > 
-> pahole -C bpf_map_info ./vmlinux
-> struct bpf_map_info {
+> pahole -C bpf_prog_info ./vmlinux
+> struct bpf_prog_info {
 > 	...
-> 	__u64                      hash __attribute__((__aligned__(8))); /*    88     8 */
-> 	__u32                      hash_size;            /*    96     4 */
+> 	__u32                      attach_btf_obj_id;    /*   220     4 */
+> 	__u32                      attach_btf_id;        /*   224     4 */
 > 
-> 	/* size: 104, cachelines: 2, members: 18 */
+> 	/* size: 232, cachelines: 4, members: 38 */
+> 	/* sum members: 224 */
+> 	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
 > 	/* padding: 4 */
-> 	/* forced alignments: 1 */
+> 	/* forced alignments: 9 */
 > 	/* last cacheline: 40 bytes */
 > } __attribute__((__aligned__(8)));
 > 
@@ -113,11 +114,11 @@ On 6/3/26 3:45 PM, Leon Hwang wrote:
 > backward compatibility. -- sashiko [1]
 > 
 > Fix it by changing sizeof(info) to
-> offsetofend(struct bpf_map_info, hash_size).
+> offsetofend(struct bpf_prog_info, attach_btf_id).
 > 
 > [1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
 > 
-> Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
+> Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
 
@@ -127,19 +128,19 @@ Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 >  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
 > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 625a4366fe6d..1007fb7c87e9 100644
+> index 1007fb7c87e9..0c86a70d31c1 100644
 > --- a/kernel/bpf/syscall.c
 > +++ b/kernel/bpf/syscall.c
-> @@ -5400,10 +5400,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
->  {
->  	struct bpf_map_info __user *uinfo = u64_to_user_ptr(attr->info.info);
->  	struct bpf_map_info info;
-> -	u32 info_len = attr->info.info_len;
-> +	u32 info_len = attr->info.info_len, len;
+> @@ -5115,10 +5115,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+>  	u32 info_len = attr->info.info_len;
+>  	struct bpf_prog_kstats stats;
+>  	char __user *uinsns;
+> -	u32 ulen;
+> +	u32 ulen, len;
 >  	int err;
 >  
 > -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
-> +	len = offsetofend(struct bpf_map_info, hash_size);
+> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
 > +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
 >  	if (err)
 >  		return err;
