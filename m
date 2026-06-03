@@ -1,145 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51143E4C98;
-	Wed,  3 Jun 2026 20:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2AD31E85E
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780518528; cv=none; b=S7nNEL4wT2N9XM65Q45LLquc8uXP9POhs6wgBbaJ3JbPUZ2mKzndMzVfY6YEsg6e7M06kLbPQgagGFsoYmQg1N1qqpqVf+kgd1jxBgj7cXBg4e8F3olHuvAPBzswXjmwy9+t+kkerKGjeysOIm8e3KWrQjqvMO59/nkrj+VQxzA=
+	t=1780519075; cv=none; b=t9aUaUeOF3s3AJq/TLn7qityfPht3t7mUPKcGPWSNAxfoqSAKnzaaAspJGzk+blUf/3VjU7ulIiMpqAd3hGkB0nS0OPrhWwk+vRE5Zd60EvNaiTOXfYUkY9iwg40IN4BNKwhXf68Ojfbz6VrZftFkJd89aXVqtpV+Jwpv2SBiBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780518528; c=relaxed/simple;
-	bh=ISjCl5c5Cx6ds0zGhdTFigzZgDuQY0AM3UQUCrhiB3s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=t9eHDNsxzxe9eLLkv5l/dVajIpsBKSfTQ5x01Fb9H3rZg7nvtO7EIGbSfQiddeoNS3IOKRmK1v0u7bNr4r6QQQRSDzZGZNYc3RjkY4jrvl4syC/4xvdawTiW5C+vrUVNzunu8s3YQ0SzuqMCoqniEXkXT+saCRRtowsaZqtivIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6fAziPK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780519075; c=relaxed/simple;
+	bh=v5MDkuzDjiBP7GOZmOstmq2GPLwNQ0dadL1/CNFKv7M=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=oKUjkdGijeKghDuOS8Z8afe18/up5LGrn083e8v1YbLf8V2Qz6dPfkOPVCn7YqqwK5FSVLUN8G5GlsWbYc5IFs1C2c4IDaeirD8C1b+5xinK08lYBewAg8PuzC2ZE6nOvMS9/fzCALxA8XHxh4m3VoH+ywLaapmu6+rYTiYOA/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=K3r5tEpJ; arc=none smtp.client-ip=74.125.82.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6fAziPK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523F91F00893;
-	Wed,  3 Jun 2026 20:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780518527;
-	bh=FmDbDJFXJN7UzGQmOFzTUSdYjNQ1F/mppcHPImRrsCs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=l6fAziPKFozSHeljUpLHMNx6FN/CcSbR35SA9pn+njTLBJ2E57RODiq9NX8yM1J2V
-	 qqhmxUsxQyTl8fdTFRvYW/Dht6DF2I4fZ9LagvyO0/Bs0JrUiGzvuQMO0T0V3G9iSZ
-	 vjkFKEmSbg88WxIBpVHQoo/1jPxFPGmLsFhWzCFUdnQvsbzpWsHRBtKJUgYTZfRPos
-	 5NB+W+C81N/vvKZ6u1oEql/aE4Oc8YOz8zWXUjJaKDpzRKzQrNwc8RRieWnXXEAfBD
-	 x6mAcuLAKVt8uqSV8HrmxevwJTbee24d3TK6R+oafqF/hyrTOMK15Yx2AnOqfYOxjj
-	 Kt6Jdo9NSxPOA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v10 2/2] net: mana: force full-page RX buffers
- via ethtool private flag
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
-References: <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 20:28:46 +0000
-Message-Id: <20260603202847.523F91F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="K3r5tEpJ"
+Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-304545f5206so17904445eec.0
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780519073; x=1781123873; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hlD1fps65r5GW3H1POgo0WmBfATnB47xWndgmOse2dc=;
+        b=K3r5tEpJCQ7gb5s6pWNGC7/ERdydsTH713ZY1Zh9aAsYP6pZbZ6lfA2JYHR7dBeuz9
+         uTw6Yk2fkUS4jJdjw23rCS1axXCoFm7YsJXzmPryuPd8xNQy0GZZE2ypJEZ4yknIpLpN
+         eiBU0MJAYqqzN5AariemSkKd+azLmyv28/HLexfaqzh0pgRWZij9yeFo1A/YDOaAuXHq
+         vCy7Bxm6jDjYnvJIlXLfZumGeqhZj/Kq2MnhVIaJEsV3MHgawM5K8QRZh9eDGhZc6u83
+         Wp9m/3FfNPDaHYBgdmNBoaDMBG4giGqLecypwqPZbWgGmTSsG4kx/kil+nOVbpDP9GTd
+         L7Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780519073; x=1781123873;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hlD1fps65r5GW3H1POgo0WmBfATnB47xWndgmOse2dc=;
+        b=mur0ABdHIbJyoj9r8QeyFEogzfcogCMBUMcSP+OxvHEghpcPt44ujl5fOdVa/1naNL
+         Z3S9etgrYzem8DC8UMRhSojaOpzKXOIfLAh3NZjZiWpcK0j8F5fuxFPSv1qEIO00pGXS
+         5PjoUsPa1KsdTfFv3xwkzuLJ/4BLkUjRHbcjpEI+3Bs2HEdMBYPsamXQXGIh8ek64Y3B
+         XZpK1kVYQ3F++gPftLRd5ca7AIdN8szxjmQsqmQEG1BgVQg9nLUaB6Ir0cFQEXXiiwoU
+         0hhInw4SP5nBX1Y45Sn9tUQxujKWUq0wIRR/AJdewD72ZWd3D+QehFn7+jgg98CoxFAE
+         6p5Q==
+X-Gm-Message-State: AOJu0Yzijvju6GBbW3n5J/ZkXYEjkn/tykYjPqgMhGCZM/U9liNGEEDu
+	Do+bsVkB7zbUApUbJvM365P9+nUbWuew0/MZYTOAPZoXFHV2x186X6SkKSm6D8I+BlQ=
+X-Gm-Gg: Acq92OFO6ZCCgfbaq+N0h5m7LpsoE1r9AXjtO47ewZrJh2wuRQhbmpHSwu8D018i9BS
+	MdfnDoJe9DOAQjeucgdusWN32pHA9cUFP8QuvufhC3Q2Tj49yU6aXIB7qeLCp+kkW7uX/uqrcW8
+	rwCPLFvvb74OoNHAzoETfrtRfGUZ6JPp9pNSStDdhrOrYjM0aKQ6WXHBqHpGrWBONKhmVYLJE5a
+	sewCQS5v6BsX4MttclpL5rt33PkvYYhKi4Z9FOGXkv9MsuOpWAAFYoFJYcu/mITA+/ecv9/t48X
+	gbSxi6+5G/6ftdQj0XlNquGOyqJhkb2hbvsardGQC5rGxS/yYiC3wAotTGmv22O60ou+dnVXfMh
+	qmjzSJsrDWucJtvr6zA3l75fxHPYXdn4W5W/DrsSkjzqkUtZMxFZbHCZ4MEZvDcNGiPWCeSRsGp
+	vLIUUDl2EF1mUWx4IdXp1eyQmCybpgaK8Rog==
+X-Received: by 2002:a05:7300:f190:b0:2ee:be86:7b90 with SMTP id 5a478bee46e88-3074fbefd7amr2487702eec.29.1780519072706;
+        Wed, 03 Jun 2026 13:37:52 -0700 (PDT)
+Received: from localhost ([163.114.132.129])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcad34esm4647412eec.11.2026.06.03.13.37.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2026 13:37:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 03 Jun 2026 16:37:50 -0400
+Message-Id: <DIZPC0U3DHUF.1L1GYMJQGUHGH@etsalapatis.com>
+To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <jose.marchesi@oracle.com>, "David
+ Faust" <david.faust@oracle.com>
+Subject: Re: [PAHOLE v4 1/3] dwarf_loader: Extract die__add_btf_type_tag()
+ helper [NFC]
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+In-Reply-To: <20260602195512.1511013-1-vineet.gupta@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Forcing `apc->port_is_up =3D true` on the `mana_attach` error path=
- causes a double-destroy of the hardware vport when the interface is later =
-brought down.
-- [Medium] Latent bug: Changes to future private flags will be silently ign=
-ored if MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF is not simultaneously toggled.
---
+On Tue Jun 2, 2026 at 3:55 PM EDT, Vineet Gupta wrote:
+> NFC change preparing for DW_TAG_GNU_annotation support.
+> Extract the btf_type_tag annotation creation logic into helper
+> die__add_btf_type_tag().
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-commit d7983f6668f209a0b7bfb427c64d5517b326c7b1
-Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-net: mana: force full-page RX buffers via ethtool private flag
-
-Adds an ethtool private flag full-page-rx to bypass page_pool fragment
-allocation and force one RX buffer per page. Includes logic in
-mana_set_priv_flags to dynamically reconfigure the port on flag change.
-
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
-/net/ethernet/microsoft/mana/mana_ethtool.c
-> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-
-[ ... ]
-
-> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> ---
+> Changes since v3 [3]
+>  - Fix comment to kernel style [Arnaldo]
+>
+> Changes since v2 [2]
+>  - die__add_btf_type_tag() returns pointer not error code [Alan]
+>
+> Changes since v1 [1]
+>  - NFC reinstate some original comments
+>
+> [3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linu=
+x.dev/
+> [2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@lin=
+ux.dev/
+> [1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@lin=
+ux.dev/
+> ---
+>  dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
+>  1 file changed, 34 insertions(+), 24 deletions(-)
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 16fb7becffee..42a0f3f74ce3 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_=
+btf_type_tag_type(Dwarf_Die *di
+>  	return tag;
+>  }
+> =20
+> +static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_ty=
+pe_tag_ptr_type *tag,
+> +							    Dwarf_Die *die, Dwarf_Die *adie,
+> +							    struct cu *cu, struct conf_load *conf)
 > +{
-> +	struct mana_port_context *apc =3D netdev_priv(ndev);
-> +	u32 changed =3D apc->priv_flags ^ priv_flags;
-> +	u32 old_priv_flags =3D apc->priv_flags;
-> +	bool schedule_port_reset =3D false;
-> +	int err =3D 0;
+> +	struct btf_type_tag_type *annot;
+> +	uint32_t id;
 > +
-> +	if (!changed)
-> +		return 0;
-> +
-> +	/* Reject unknown bits */
-> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-> +		return -EINVAL;
-> +
-> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-> +		apc->priv_flags =3D priv_flags;
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: Medium]
-When additional private flags are added in the future, will changes to those
-new flags be silently ignored if MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF isn't
-also toggled?
-
-Since this assignment is nested inside the FULL_PAGE_RXBUF check, changing
-only a future new flag will bypass this assignment and the function will
-return success while discarding the new flag state.
-
-Should this assignment be moved outside the flag-specific conditional block?
-
-> +
-> +		if (!apc->port_is_up) {
-
-[ ... ]
-
-> +		err =3D mana_attach(ndev);
-> +		if (err) {
-> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
-> +			apc->priv_flags =3D old_priv_flags;
-> +
-> +			/* Restore 'port_is_up' so the reset work handler
-> +			 * can properly detach/attach. Without this,
-> +			 * the handler sees port_is_up=3Dfalse and skips
-> +			 * queue allocation, leaving the port dead.
-> +			 */
-> +			apc->port_is_up =3D true;
-                        ^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: High]
-Does forcing port_is_up to true here cause a double-destroy of the hardware
-vport when the interface is later brought down?
-
-If mana_attach fails, it cleans up any partial state by destroying the vpor=
-t.
-
-Leaving the port artificially marked as up means a subsequent interface down
-event or reset worker will see apc->port_is_up as true and call
-mana_detach with from_close set to true.
-
-This bypasses the netif_device_present check and triggers a second call to
-mana_destroy_vport, which could drop apc->vport_use_count below zero and
-send a duplicate deregister message to the firmware for the already-freed
-hw_vport_handle.
-
-> +			schedule_port_reset =3D true;
-> +		}
+> +	if (tag =3D=3D NULL) {
+> +		tag =3D die__create_new_btf_type_tag_ptr_type(die, cu);
+> +		if (!tag)
+> +			return NULL;
 > +	}
 > +
-> +out:
-> +	mana_pre_dealloc_rxbufs(apc);
+> +	annot =3D die__create_new_btf_type_tag_type(adie, cu, conf);
+> +	if (annot =3D=3D NULL)
+> +		return NULL;
+> +
+> +	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+> +		return NULL;
+> +
+> +	struct dwarf_tag *dtag =3D tag__dwarf(&annot->tag);
+> +	dtag->small_id =3D id;
+> +	cu__hash(cu, &annot->tag);
+> +
+> +	/*
+> +	 * Prepends: for annotations tag1 -> tag2 -> tag3,
+> +	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
+> +	 */
+> +	list_add(&annot->node, &tag->tags);
+> +	return tag;
+> +}
+> +
+>  static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu=
+ *cu,
+>  					       struct conf_load *conf)
+>  {
+>  	struct btf_type_tag_ptr_type *tag =3D NULL;
+> -	struct btf_type_tag_type *annot;
+>  	Dwarf_Die *cdie, child;
+>  	const char *name;
+> -	uint32_t id;
+> =20
+>  	/* If no child tags or skipping btf_type_tag encoding, just create a ne=
+w tag
+>  	 * and return
+> @@ -1627,29 +1657,9 @@ static struct tag *die__create_new_pointer_tag(Dwa=
+rf_Die *die, struct cu *cu,
+>  		if (strcmp(name, "btf_type_tag") !=3D 0)
+>  			continue;
+> =20
+> -		if (tag =3D=3D NULL) {
+> -			/* Create a btf_type_tag_ptr type. */
+> -			tag =3D die__create_new_btf_type_tag_ptr_type(die, cu);
+> -			if (!tag)
+> -				return NULL;
+> -		}
+> -
+> -		/* Create a btf_type_tag type for this annotation. */
+> -		annot =3D die__create_new_btf_type_tag_type(cdie, cu, conf);
+> -		if (annot =3D=3D NULL)
+> -			return NULL;
+> -
+> -		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
+> +		tag =3D die__add_btf_type_tag(tag, die, cdie, cu, conf);
+> +		if (tag =3D=3D NULL)
+>  			return NULL;
+> -
+> -		struct dwarf_tag *dtag =3D tag__dwarf(&annot->tag);
+> -		dtag->small_id =3D id;
+> -		cu__hash(cu, &annot->tag);
+> -
+> -		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
+> -		 * the tag->tags contains tag3 -> tag2 -> tag1.
+> -		 */
+> -		list_add(&annot->node, &tag->tags);
+>  	} while (dwarf_siblingof(cdie, cdie) =3D=3D 0);
+> =20
+>  	return tag ? &tag->tag : tag__new(die, cu);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602202801.1873=
-742-1-dipayanroy@linux.microsoft.com?part=3D2
