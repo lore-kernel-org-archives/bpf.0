@@ -1,167 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0356239183B;
-	Wed,  3 Jun 2026 06:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB772874F5;
+	Wed,  3 Jun 2026 07:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780469291; cv=none; b=DjKYiXZNGu18+0YacgLmV+PGOJdfpNkl28THeWZwMN6lmII7ibGaTYzXEk4aeDioQojhMkPfG8LhzYVxLRQmSGwSu72JZc+a/AUyO4KSo7SfX7GulK3HrabmD3J1B6GCXK+qin27Ymg2QfKht7uOMAUcAE7U3mgBQRN/5t8eDAo=
+	t=1780470499; cv=none; b=p31CYMUQX7P8aZ7CMMI9pIvV3TKd0S7X9W5YO/t8R1KzqfUB0tnshWE0Kb0gtcp8HPD0MN72dB+jQT44/vLFcUF55B2BzQxDK5KyVOeKSKedYCEVoHprQA9gu+ZTSqtrPat30Zmvvqb2Iq6yJa/ZtOn/N+waMY0GW+O0ntdPOgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780469291; c=relaxed/simple;
-	bh=5paCheaSIkyb1fwEOeKz8a30e/gh8c4VLQGXNz/zPP0=;
+	s=arc-20240116; t=1780470499; c=relaxed/simple;
+	bh=vkcC9vRJUuChaYrJ6DMkr2GuUb6XvuiF5iJBMCBQmwA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XDaiCPeml1SpjVNsf1c2wuNEo7MoYFctejo9/GP1Bd5UW4H1qhovGi1LpF7xnAFgo604zfYmzr4Afq77Rwu1pPVx5vnsD2EUjEWmvXPSFfcO8kWO9ARwoLowLPlxCB+3hi34fhz9SF1DJpNS24vskvE8rrnHPf5vGhogORd2LhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lYndZ5hB; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 MIME-Version:Content-Type; b=C1AdUJxap3FFCf5KpifaCTTSXAAkavr3u/t/fgd1Q6aUuKdd0YmZRa1llt6boyXV7SGXzX8BadKCz2/1VRdArr33xrIiuw1gXXikHS/oa3RuqfZ8q+IVME0E/byOodtEn3Csmn3kH1X3XbA1cP3YVatS78YIh4kS0ArqoSB9JAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACH8JzZ6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lYndZ5hB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780469290; x=1812005290;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5paCheaSIkyb1fwEOeKz8a30e/gh8c4VLQGXNz/zPP0=;
-  b=lYndZ5hBocehYoxQjCkP01bGLX6dG8bZpTrF4QeRY5LbCAXd15CDKAU2
-   nmG4cCaxBktEqIq+jA9ML71ITGAydhauXQCjjgNf1B2p4U4rZk7SlBc2g
-   LxZymfJpMDCuk1zi18ZoVEOW04v4eXQ3UpfmfuI9jMt54HtYQAH5pnhqj
-   7JI1M2ry36YuaoB50sBvBgDZCwMoKNUgotFk7CaOtHVzFl+VGaOkZnUpW
-   dOee8HNMuyIJ0nyL1pYlazwTbWlHEnKPEBFxA+fDbkLd5R0Wy09RxYo2b
-   XoIKVWXCxuvusz7ykPWj6J9ZNv8ncYUw3NeMFjMcvKw0LNepRS7w01pQR
-   A==;
-X-CSE-ConnectionGUID: 2NeFLrjlTdOdGGzyUjRgcg==
-X-CSE-MsgGUID: WpFo4g5lRZeYf4AGM3a1pw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81449149"
-X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
-   d="scan'208";a="81449149"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 23:48:10 -0700
-X-CSE-ConnectionGUID: l4C7MOWzTqm35bI0ioW5/A==
-X-CSE-MsgGUID: fbnSrgLZR0CCW9far1B5+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
-   d="scan'208";a="237778944"
-Received: from brc05.iind.intel.com (HELO brc05..) ([10.190.162.156])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 23:48:06 -0700
-From: Tushar Vyavahare <tushar.vyavahare@intel.com>
-To: netdev@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	stfomichev@gmail.com,
-	kernelxing@tencent.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	tirthendu.sarkar@intel.com,
-	tushar.vyavahare@intel.com
-Cc: bpf@vger.kernel.org
-Subject: [PATCH net-next v2 4/4] selftests/xsk: Introduce mmap_size in umem struct
-Date: Wed,  3 Jun 2026 11:33:27 +0530
-Message-ID: <20260603060327.298389-5-tushar.vyavahare@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260603060327.298389-1-tushar.vyavahare@intel.com>
-References: <20260603060327.298389-1-tushar.vyavahare@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACH8JzZ6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72291F00898;
+	Wed,  3 Jun 2026 07:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780470498;
+	bh=bBGnyCj45mmA3dHmj04zoLAstEpprK0XeoS9GfBxm8o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ACH8JzZ6rBo/l6zHrUEM11zty9kBfF1ccNN2zwG2z4UzGkdc1QWxYPT+8VYirJYBK
+	 biSxKk732VPbaOn9v3dGZYLo4fxKOW1ca2lAFlpcBkhjzGzo3tk1mLp9zPjdTe2ifM
+	 hYGl/c4PcIxFu/S86KYwAATDAirlogUB+DBlL0Sk4lU/+fGyATtcww/YjeGwVgfsb9
+	 6qNFvLyQPg6w8l87JPG9EgXjr8aUSdF8WgDOtctcjaM5SqYuOiVENttbYB9WJHZgi9
+	 CoPP11qFTJb4zgrYSRmKq8Xevo8MskkcK56f29atJzximIFSfUAlhNWO0w6kKLjMoM
+	 FVqTQzp1N0lzw==
+From: Christian Brauner <brauner@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Christian Brauner <brauner@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH vfs/vfs-7.2.xattr v3] bpf: Add simple xattr support to bpffs
+Date: Wed,  3 Jun 2026 09:07:55 +0200
+Message-ID: <20260603-abwenden-plagiat-abtropfen-31bd59c3140b@brauner>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260602074012.416289-1-daniel@iogearbox.net>
+References: <20260602074012.416289-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1324; i=brauner@kernel.org; h=from:subject:message-id; bh=vkcC9vRJUuChaYrJ6DMkr2GuUb6XvuiF5iJBMCBQmwA=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTJX7pxKDloy3ru5OMB27nMpdclb09/17nWkk3/IO+sX BGRrXemdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzE/QHD/2jr14Ksawuat83m NK9qddhUfnPPctOPBzJ2JbFzSByeK8zwV2rF5PnT879Y8h5YsCz9V840tfeMH3/PK0qe+dZndcv vWTwA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-UMEM teardown currently recomputes the munmap() length from frame
-geometry, shared-UMEM adjustment, and hugepage rounding. This duplicates
-setup-time logic in cleanup and relies on re-deriving the mapping size
-instead of using the size originally established for the mapping.
+On Tue, 02 Jun 2026 09:40:12 +0200, Daniel Borkmann wrote:
+> Add support for extended attributes on bpffs inodes so that user space
+> and BPF LSM programs can attach metadata, for example, a content hash
+> or a security label - to a pinned object or directory. BPF LSM or user
+> space tooling can then uniformly look at this (e.g. security.bpf.*) in
+> similar way to other fs'es. The store is in-memory and non-persistent:
+> it lives only for the lifetime of the mount, like everything else in
+> bpffs. The modelling is similar to tmpfs.
+> 
+> [...]
 
-Store the final mapping length in xsk_umem_info as mmap_size when the
-UMEM mapping is created, and use that value during teardown.
+Applied to the vfs-7.2.xattr branch of the vfs/vfs.git tree.
+Patches in the vfs-7.2.xattr branch should appear in linux-next soon.
 
-Also join the RX worker thread before cleanup in the single-thread
-path. This establishes synchronization before reading umem->mmap_size
-in teardown and avoids a potential visibility race.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-This removes duplicated size arithmetic in cleanup and makes munmap()
-use the canonical mapping size recorded at setup time.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
----
- .../selftests/bpf/prog_tests/test_xsk.c       | 20 +++++++++----------
- .../selftests/bpf/prog_tests/test_xsk.h       |  1 +
- 2 files changed, 10 insertions(+), 11 deletions(-)
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index f1730466ffd9..e94c38a1faf4 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -1581,7 +1581,7 @@ static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	struct xsk_umem_info *umem = ifobject->xsk->umem;
- 	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
- 	int mmap_flags;
--	u64 umem_sz;
-+	u64 umem_sz, mmap_sz;
- 	void *bufs;
- 	int ret;
- 	u32 i;
-@@ -1595,10 +1595,15 @@ static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	if (ifobject->shared_umem)
- 		umem_sz *= 2;
- 
--	bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
-+	mmap_sz = umem->unaligned_mode ?
-+		ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE : umem_sz;
-+
-+	bufs = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
- 	if (bufs == MAP_FAILED)
- 		return -errno;
- 
-+	umem->mmap_size = mmap_sz;
-+
- 	ret = xsk_configure_umem(ifobject, umem, bufs, umem_sz);
- 	if (ret)
- 		return ret;
-@@ -1706,15 +1711,9 @@ void *worker_testapp_validate_rx(void *arg)
- static void testapp_clean_xsk_umem(struct ifobject *ifobj)
- {
- 	struct xsk_umem_info *umem = ifobj->xsk->umem;
--	u64 umem_sz = umem_size(umem);
--
--	if (ifobj->shared_umem)
--		umem_sz *= 2;
--
--	umem_sz = ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE;
- 
- 	xsk_umem__delete(umem->umem);
--	munmap(umem->buffer, umem_sz);
-+	munmap(umem->buffer, umem->mmap_size);
- }
- 
- static void handler(int signum)
-@@ -1857,8 +1856,7 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
- 
- 	if (!ifobj2)
- 		pthread_kill(t0, SIGUSR1);
--	else
--		pthread_join(t0, NULL);
-+	pthread_join(t0, NULL);
- 
- 	if (test->total_steps == test->current_step || test->fail) {
- 		clean_sockets(test, ifobj1);
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
-index 99003995d7c3..4313d0d87235 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.h
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
-@@ -103,6 +103,7 @@ struct xsk_umem_info {
- 	struct xsk_ring_cons cq;
- 	struct xsk_umem *umem;
- 	u64 next_buffer;
-+	u64 mmap_size;
- 	u32 num_frames;
- 	u32 frame_headroom;
- 	void *buffer;
--- 
-2.43.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.2.xattr
 
+[1/1] bpf: Add simple xattr support to bpffs
+      https://git.kernel.org/vfs/vfs/c/a146500e1144
