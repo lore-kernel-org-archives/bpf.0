@@ -1,1216 +1,612 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38434968F2
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 21:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6954F492533;
+	Wed,  3 Jun 2026 21:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780521436; cv=none; b=f/EfDlGEwD5HXk7bmtVu+WaEvU1VvswNShstJWjruC/BuxxNY0LbHc677fktAgtfF7nIIm6h/p1tN2+f7HhmWN9Rv+QdKQZzcGDWiY3a/1x1CtAiyFfXQDC9vIf7KUqYAJhGFZ4uUMvmEmoUoYNzY8elJwTUzdU+zMW5BfJ9mCc=
+	t=1780522236; cv=none; b=aDIIktJm3fbiZYLDk/5WydLtu0Q4VCoVYRHdCuNAdxqaerDH0N+gagMO7aX6xUoHSTGGOJuvZDSSTD7EvGc5r5AxxUTrg+8613/gyhDYjj5hV2PwTn32S2qvFo7WuolnE5y0C0SupM9Rb0H7egiPqNyEU9Qa/rKs2vDNJPXogJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780521436; c=relaxed/simple;
-	bh=TKxJsr0/TbdQkqaxNiv5EGmU1Fdx/0ili8jRX5nJ8Uw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DNnHqRlP464gH79RMNf04Nr7Ee+E2pobqOow9WXhcpdC79IVmX+LxGJXQBkQQXTXC8w04WSVnMd6qmOB9bbI8d/D+XHOg5wHrlvtuHUvHa4A9+Fhan/Df/wM2hO0RVIOyxHH7BUhf/ptsnEtJsRW4FQUrD52x9IRGyqhtF1bIuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XPdP7gF+; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1780522236; c=relaxed/simple;
+	bh=n5boqW3HvANONssfWkpvHsdym12bRJsYkFGekS8vni4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=thE6ThU80hoGYj16YzHb64XouT+yiXxycQrbxINfOHYMjFCLk/OgMS95ppYMOxCBoxU9a1DJu0uflMKS6uyTQN3kxWORGI8pfU+mJ3mZt4OwRixuf+e3nL4LsqnW/QpS2aHKOeUt0J19FpvnhemnhCwblQjgoC80QUVqckvICVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0mZIyOO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XPdP7gF+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XkWMSwa+4N2/qW6CzgzzlGZOBcdlfFsgPLMjTlbL1M4=; b=XPdP7gF+o5islvMmg+UM5SYzes
-	Q2m95ffgjV+Taz1Z5aJM+Y+0DkSl8n4vQvqptI3LPUP2VR3ot1B0ciCEcrzyTo6T33zlWIGLuIPBb
-	CH9Vci+arraqegFUnjoy+O4vilCuqbQCwj4uDBeu98c1Dk7Tm+CROnhnaiHQ/6XAmoVFXY70CXHK0
-	ziowMxF1A0QXAUHeC76Y01EfWJKj0npTJjYANKpyiG4Mb+z5We47HFp88UnSISB72F4jkNJeavBxD
-	W/IHvNZoZ+9aLtmoDGk9ZpZ/RLId+hGtaUrgXDb2ajGAImcYeKAbbhX2FZyUbJALndQIf0TitANfV
-	pcn7lMhA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wUsxP-000N2t-3C;
-	Wed, 03 Jun 2026 23:17:00 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: kpsingh@kernel.org,
-	ast@kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test signed loader error paths
-Date: Wed,  3 Jun 2026 23:16:58 +0200
-Message-ID: <20260603211658.471212-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260603211658.471212-1-daniel@iogearbox.net>
-References: <20260603211658.471212-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0mZIyOO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742431F00893;
+	Wed,  3 Jun 2026 21:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780522234;
+	bh=w5TvDZ3wJT/WYNVIei0fljDYlvUV9vlvQ7+MiO4iQPI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=a0mZIyOOYd5PEC6qxOJl6ikVpH2bOwuz10N7CCKDcmCqvoq2WHg0wSz+ILx8OSB+j
+	 ZLea2YIUlecUl810dLE5EypVUb8rICZkySEloVbf+JvM/ZK13X7y5bQiGNbIa+AFIA
+	 +EA51fW+9woE5qQH+VfiMrgyxwYHHf30ekdYguVXxc8sykfAtni/q/CGbXy6OkbAPs
+	 sEKZA264+jQnZyf0CdEngSntb2h9UEhnvMa6wJlKMHsYBJYKsmfjCYaqfmpy5qtrl4
+	 26cQHd9oMyAODm+9sfHhJnlxTt8LdAwMX7RZshLfWa5sM1aH/a+TTYDSuoOun68o+5
+	 71gN4iwRuHnGw==
+Message-ID: <f2b8227f-528e-4fbd-aa2a-d86986565f87@kernel.org>
+Date: Wed, 3 Jun 2026 22:30:28 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28020/Wed Jun  3 18:10:41 2026)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
+ dependency
+To: socketpair@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The positive path for signed BPF loaders is covered today by the
-signed lskels (fentry_test, fexit_test, atomics).
+2026-06-03 22:39 UTC+0500 ~ Korenberg Mark via B4 Relay
+<devnull+socketpair.gmail.com@kernel.org>
+> From: Korenberg Mark <socketpair@gmail.com>
+> 
+> Fixes https://github.com/libbpf/bpftool/issues/262
+> 
+> Signed-off-by: Korenberg Mark <socketpair@gmail.com>
 
-But the runtime metadata check the generated loader performs (libbpf
-gen_loader's emit_signature_match), the map content hash it relies
-on, the load-time signature, and the immutability invariants of its
-metadata map are not yet covered.
+Please move the sign-off and the link to the end of the commit
+description (where you specify the bpftool version you've been using).
+Please use "Link: " for the GitHub issue.
 
-Thus, add a new, extensive test suite which drives libbpf's gen_loader
-(bpf_object__gen_loader, gen_hash=true), the same machinery which
-bpftool uses for signed light skeletons, and exercise corner cases
-so that we can assert this in BPF CI:
+> ---
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t signed_loader
-  [...]
-  [    1.840842] clocksource: Switched to clocksource tsc
-  #405/1   signed_loader/metadata_check_shape:OK
-  #405/2   signed_loader/metadata_match:OK
-  #405/3   signed_loader/metadata_sha_mismatch:OK
-  #405/4   signed_loader/metadata_not_exclusive:OK
-  #405/5   signed_loader/metadata_hash_not_computed:OK
-  #405/6   signed_loader/signature_enforced:OK
-  #405/7   signed_loader/signature_too_large:OK
-  #405/8   signed_loader/signature_bad_keyring:OK
-  #405/9   signed_loader/metadata_ctx_max_entries_ignored:OK
-  #405/10  signed_loader/metadata_ctx_initial_value_ignored:OK
-  #405/11  signed_loader/signature_authenticates_insns:OK
-  #405/12  signed_loader/hash_requires_frozen:OK
-  #405/13  signed_loader/no_update_after_freeze:OK
-  #405/14  signed_loader/freeze_writable_mmap:OK
-  #405/15  signed_loader/no_writable_mmap_frozen:OK
-  #405/16  signed_loader/map_hash_matches_libbpf:OK
-  #405/17  signed_loader/map_hash_multi_element:OK
-  #405/18  signed_loader/map_hash_bad_size:OK
-  #405/19  signed_loader/map_hash_unsupported_type:OK
-  #405     signed_loader:OK
-  Summary: 1/19 PASSED, 0 SKIPPED, 0 FAILED
+And remove this separator, or the rest of your description won't make it
+to the commit log.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- v1->v2:
-  - Fix file descriptor leakage on successful test run (sashiko)
-  - Don't use mkstemp() under hard-coded /tmp (sashiko)
-  - Previous CI run was green, fyi:
-    https://github.com/kernel-patches/bpf/actions/runs/26909305720/job/79382712323?pr=12326
+> On Fedora 43, installing `bpftool` pulls in `llvm20-libs` (~140 MiB) as a hard
+> dependency, even though the bpftool binary itself is ~730 KiB:
+> 
+>     # dnf install bpftool
+>     Installing:
+>      bpftool            x86_64   7.6.0-1.fc43    fedora   731.4 KiB
+>     Installing dependencies:
+>      llvm20-filesystem  x86_64   20.1.8-2.fc43   fedora   0.0   B
+>      llvm20-libs        x86_64   20.1.8-2.fc43   fedora   139.7 MiB
+> 
+> The LLVM library is only used to disassemble JIT-compiled (native) programs,
+> i.e. `bpftool prog dump jited`. Every other use case  works
+> without LLVM. For scripting, automation, and CI, dragging in ~140 MB of LLVM
+> just to have a single optional command available is a heavy cost.
+> 
+> Load the LLVM disassembler lazily at runtime via `dlopen`/`dlsym` instead of
+> linking against it at build time. When `prog dump jited` is invoked and the
+> library is unavailable, fall back gracefully (libbfd, or an informative message).
+> This would remove the automatic ELF dependency on `libLLVM.so`, allowing distributions to make
+> LLVM a weak/optional dependency (e.g. RPM `Recommends`) rather than a hard one.
+> 
+> The `perf` tool is solving the exact same problem (libLLVM/libcapstone
+> bloating dependencies for users who never disassemble) by dlopen-ing these
+> libraries at runtime, so distributions can ship them as a separate, optional
+> package:
+> 
+> - Overview: https://lwn.net/Articles/1040879/
+> - https://lore.kernel.org/lkml/?q=Capstone%2Fllvm+dlopen
+> 
+> - Build with the libbfd disassembler instead of LLVM (smaller, but a build/
+>   packaging choice and subject to libbfd's unstable ABI).
+> - Build with no disassembler at all (loses `prog dump jited` entirely).
+> - Ship the disassembler in a separate binary (works, but less idiomatic for a
+>   single-binary tool; dlopen keeps the existing UX intact).
+> 
+> - bpftool 7.6.0-1.fc43 (Fedora 43), x86_64
 
- .../selftests/bpf/prog_tests/signed_loader.c  | 1013 +++++++++++++++++
- .../selftests/bpf/progs/test_signed_loader.c  |   18 +
- .../bpf/progs/test_signed_loader_data.c       |   20 +
- .../bpf/progs/test_signed_loader_map.c        |   28 +
- 4 files changed, 1079 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/signed_loader.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_signed_loader.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_signed_loader_data.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_signed_loader_map.c
+Thanks a lot for this work! I think it makes sense to separate the
+LLVM-based disassembler, other people have complained about the
+increased size in the past. My comment on your initial GitHub issue was
+that I wanted the libbfd-based disassembler untouched, and you left it
+built-in (when we pick the libbfd-disassembler), thank you.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-new file mode 100644
-index 000000000000..dcfdd2d96b05
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-@@ -0,0 +1,1013 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+
-+#include <test_progs.h>
-+#include <sys/syscall.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <linux/keyctl.h>
-+#include <linux/bpf.h>
-+
-+#include "bpf/libbpf_internal.h" /* for libbpf_sha256() */
-+#include "bpf/skel_internal.h"	 /* for loader ctx layout (bpf_loader_ctx etc) */
-+
-+#include "test_signed_loader.skel.h"
-+#include "test_signed_loader_map.skel.h"
-+#include "test_signed_loader_data.skel.h"
-+
-+#define SIG_MATCH_INSNS 33 /* excl (5) + 4 * sha-dword (7) */
-+
-+static int load_loader(const void *insns, __u32 insns_sz, int map_fd,
-+		       const void *sig, __u32 sig_sz, __s32 keyring_id)
-+{
-+	union bpf_attr attr;
-+	int fd;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.prog_type = BPF_PROG_TYPE_SYSCALL;
-+	attr.insns = ptr_to_u64(insns);
-+	attr.insn_cnt = insns_sz / sizeof(struct bpf_insn);
-+	attr.license = ptr_to_u64("Dual BSD/GPL");
-+	attr.prog_flags = BPF_F_SLEEPABLE;
-+	attr.fd_array = ptr_to_u64(&map_fd);
-+	if (sig) {
-+		attr.signature = ptr_to_u64(sig);
-+		attr.signature_size = sig_sz;
-+		attr.keyring_id = keyring_id;
-+	}
-+	memcpy(attr.prog_name, "__loader.prog", sizeof("__loader.prog"));
-+	fd = syscall(__NR_bpf, BPF_PROG_LOAD, &attr,
-+		     offsetofend(union bpf_attr, keyring_id));
-+	return fd < 0 ? -errno : fd;
-+}
-+
-+static int run_gen_loader(const void *insns, __u32 insns_sz,
-+			  const void *data, __u32 data_sz,
-+			  const void *excl, __u32 excl_sz,
-+			  const void *sig, __u32 sig_sz,
-+			  bool get_hash, void *ctx, __u32 ctx_sz, bool *loader_ran)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, mopts,
-+		    .excl_prog_hash = excl,
-+		    .excl_prog_hash_size = excl_sz);
-+	__u8 hbuf[SHA256_DIGEST_LENGTH];
-+	struct bpf_map_info info;
-+	__u32 ilen = sizeof(info), key = 0;
-+	union bpf_attr attr;
-+	int map_fd, prog_fd, ret;
-+
-+	*loader_ran = false;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "__loader.map",
-+				4, data_sz, 1, &mopts);
-+	if (map_fd < 0)
-+		return -errno;
-+	if (bpf_map_update_elem(map_fd, &key, data, 0)) {
-+		ret = -errno;
-+		goto out_map;
-+	}
-+	if (bpf_map_freeze(map_fd)) {
-+		ret = -errno;
-+		goto out_map;
-+	}
-+	if (get_hash) {
-+		memset(&info, 0, sizeof(info));
-+		info.hash = ptr_to_u64(hbuf);
-+		info.hash_size = sizeof(hbuf);
-+		if (bpf_map_get_info_by_fd(map_fd, &info, &ilen)) {
-+			ret = -errno;
-+			goto out_map;
-+		}
-+	}
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.prog_type = BPF_PROG_TYPE_SYSCALL;
-+	attr.insns = ptr_to_u64(insns);
-+	attr.insn_cnt = insns_sz / sizeof(struct bpf_insn);
-+	attr.license = ptr_to_u64("Dual BSD/GPL");
-+	attr.prog_flags = BPF_F_SLEEPABLE;
-+	attr.fd_array = ptr_to_u64(&map_fd);
-+	if (sig) {
-+		attr.signature = ptr_to_u64(sig);
-+		attr.signature_size = sig_sz;
-+		attr.keyring_id = KEY_SPEC_SESSION_KEYRING;
-+	}
-+	memcpy(attr.prog_name, "__loader.prog", sizeof("__loader.prog"));
-+	prog_fd = syscall(__NR_bpf, BPF_PROG_LOAD, &attr,
-+			  offsetofend(union bpf_attr, keyring_id));
-+	if (prog_fd < 0) {
-+		ret = -errno;
-+		goto out_map;
-+	}
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.test.prog_fd = prog_fd;
-+	attr.test.ctx_in = ptr_to_u64(ctx);
-+	attr.test.ctx_size_in = ctx_sz;
-+	if (syscall(__NR_bpf, BPF_PROG_RUN, &attr,
-+		    offsetofend(union bpf_attr, test)) < 0) {
-+		ret = -errno;
-+		goto out_prog;
-+	}
-+	*loader_ran = true;
-+	ret = (int)attr.test.retval;
-+out_prog:
-+	close(prog_fd);
-+out_map:
-+	close(map_fd);
-+	return ret;
-+}
-+
-+static void close_loader_ctx_fds(void *ctx, int nr_maps, int nr_progs)
-+{
-+	struct bpf_map_desc *md = (struct bpf_map_desc *)((char *)ctx +
-+				  sizeof(struct bpf_loader_ctx));
-+	struct bpf_prog_desc *pd = (struct bpf_prog_desc *)(md + nr_maps);
-+	int i;
-+
-+	for (i = 0; i < nr_maps; i++)
-+		if (md[i].map_fd > 0)
-+			close(md[i].map_fd);
-+	for (i = 0; i < nr_progs; i++)
-+		if (pd[i].prog_fd > 0)
-+			close(pd[i].prog_fd);
-+}
-+
-+static int run_setup(const char *cmd, const char *dir)
-+{
-+	int pid, status;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		return -errno;
-+	if (pid == 0) {
-+		execlp("./verify_sig_setup.sh", "./verify_sig_setup.sh",
-+		       cmd, dir, NULL);
-+		exit(1);
-+	}
-+	if (waitpid(pid, &status, 0) < 0)
-+		return -errno;
-+	return (WIFEXITED(status) &&
-+		WEXITSTATUS(status) == 0) ? 0 : -EINVAL;
-+}
-+
-+static int sign_buf(const char *dir, const void *buf, __u32 len,
-+		    void *sig, __u32 *sig_sz)
-+{
-+	char data_tmpl[PATH_MAX], key[PATH_MAX];
-+	char sigpath[PATH_MAX + sizeof(".p7s")];
-+	int fd, pid, status, ret;
-+	struct stat st;
-+
-+	ret = snprintf(data_tmpl, sizeof(data_tmpl), "%s/dataXXXXXX", dir);
-+	if (ret < 0 || ret >= (int)sizeof(data_tmpl))
-+		return -ENAMETOOLONG;
-+	ret = 0;
-+
-+	fd = mkstemp(data_tmpl);
-+	if (fd < 0)
-+		return -errno;
-+	if (write(fd, buf, len) != (ssize_t)len) {
-+		close(fd);
-+		ret = -EIO;
-+		goto out;
-+	}
-+	close(fd);
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		ret = -errno;
-+		goto out;
-+	}
-+	if (pid == 0) {
-+		snprintf(key, sizeof(key), "%s/signing_key.pem", dir);
-+		execlp("./sign-file", "./sign-file", "-d", "sha256",
-+		       key, key, data_tmpl, NULL);
-+		exit(1);
-+	}
-+	if (waitpid(pid, &status, 0) < 0 ||
-+	    !WIFEXITED(status) || WEXITSTATUS(status)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	snprintf(sigpath, sizeof(sigpath), "%s.p7s", data_tmpl);
-+	if (stat(sigpath, &st) < 0) {
-+		ret = -errno;
-+		goto out;
-+	}
-+	if (st.st_size > (off_t)*sig_sz) {
-+		ret = -E2BIG;
-+		goto out_sig;
-+	}
-+	fd = open(sigpath, O_RDONLY);
-+	if (fd < 0) {
-+		ret = -errno;
-+		goto out_sig;
-+	}
-+	if (read(fd, sig, st.st_size) != st.st_size) {
-+		close(fd);
-+		ret = -EIO;
-+		goto out_sig;
-+	}
-+	close(fd);
-+	*sig_sz = st.st_size;
-+out_sig:
-+	unlink(sigpath);
-+out:
-+	unlink(data_tmpl);
-+	return ret;
-+}
-+
-+static void check_sig_match_shape(const struct bpf_insn *in, int n)
-+{
-+	int a = -1, cleanup = -1, i, base, t, br[5], nb = 0;
-+
-+	/* BPF_PSEUDO_MAP_IDX (the struct bpf_map * form) is used only here. */
-+	for (i = 0; i + 1 < n; i++) {
-+		if (in[i].code == (BPF_LD | BPF_IMM | BPF_DW) &&
-+		    in[i].src_reg == BPF_PSEUDO_MAP_IDX) {
-+			a = i;
-+			break;
-+		}
-+	}
-+	if (!ASSERT_GE(a, 0, "emit_signature_match present"))
-+		return;
-+	if (!ASSERT_LE(a + SIG_MATCH_INSNS, n, "block fits in program"))
-+		return;
-+
-+	/* excl check: r2 = *(u32 *)(map + 32); if r2 != 1 goto cleanup */
-+	ASSERT_EQ(in[a + 2].code, (BPF_LDX | BPF_MEM | BPF_W), "excl load width");
-+	ASSERT_EQ(in[a + 2].off, SHA256_DIGEST_LENGTH, "excl field offset");
-+	ASSERT_EQ(in[a + 4].code, (BPF_JMP | BPF_JNE | BPF_K), "excl branch op");
-+	ASSERT_EQ(in[a + 4].imm, 1, "excl compared to 1");
-+	br[nb++] = a + 4;
-+
-+	/* 4 sha-dword checks: r2 = *(u64 *)(map + i*8); if r2 != r3 goto cleanup */
-+	for (i = 0; i < 4; i++) {
-+		base = a + 5 + i * 7;
-+		ASSERT_EQ(in[base + 2].code, (BPF_LDX | BPF_MEM | BPF_DW), "sha load width");
-+		ASSERT_EQ(in[base + 2].off, i * 8, "sha dword offset");
-+		ASSERT_EQ(in[base + 3].code, (BPF_LD | BPF_IMM | BPF_DW), "sha imm64 (H_meta)");
-+		ASSERT_EQ(in[base + 6].code, (BPF_JMP | BPF_JNE | BPF_X), "sha branch op");
-+		br[nb++] = base + 6;
-+	}
-+
-+	/*
-+	 * Locate the real cleanup label so we can pin the exact jump target,
-+	 * not just "some backward label". bpf_gen__init() emits the cleanup
-+	 * block as a prog-fd close loop whose first instruction is the label
-+	 * every error branch jumps to.
-+	 */
-+	for (i = 0; i + 2 < a; i++) {
-+		if (in[i].code == (BPF_LDX | BPF_MEM | BPF_W) &&
-+		    in[i].dst_reg == BPF_REG_1 && in[i].src_reg == BPF_REG_10 &&
-+		    in[i + 1].code == (BPF_JMP | BPF_JSLE | BPF_K) &&
-+		    in[i + 1].dst_reg == BPF_REG_1 && in[i + 1].imm == 0 &&
-+		    in[i + 1].off == 1 &&
-+		    in[i + 2].code == (BPF_JMP | BPF_CALL) &&
-+		    in[i + 2].imm == BPF_FUNC_sys_close) {
-+			cleanup = i;
-+			break;
-+		}
-+	}
-+	if (!ASSERT_GE(cleanup, 0, "cleanup label located"))
-+		return;
-+	for (i = 0; i < nb; i++) {
-+		t = br[i] + 1 + in[br[i]].off;
-+		ASSERT_EQ(t, cleanup, "sig-match lands on cleanup");
-+	}
-+	/*
-+	 * Same invariant for every other cleanup-bound jump in the program:
-+	 * emit_check_err() is the only source of "if (r7 < 0) goto cleanup",
-+	 * so each of those must also resolve exactly to cleanup.
-+	 */
-+	for (i = 0, t = 0; i < n; i++) {
-+		if (in[i].code != (BPF_JMP | BPF_JSLT | BPF_K) ||
-+		    in[i].dst_reg != BPF_REG_7 || in[i].imm != 0 || in[i].off >= 0)
-+			continue;
-+		ASSERT_EQ(i + 1 + in[i].off, cleanup, "err-check lands on cleanup");
-+		t++;
-+	}
-+	ASSERT_GT(t, 0, "found emit_check_err jumps");
-+}
-+
-+struct gen_loader_fixture {
-+	struct test_signed_loader *skel;
-+	struct gen_loader_opts gopts;
-+	unsigned char *blob;
-+	void *ctx;
-+	__u32 data_sz;
-+	__u32 ctx_sz;
-+	int nr_maps;
-+	int nr_progs;
-+	__u8 excl[SHA256_DIGEST_LENGTH];
-+};
-+
-+static int gen_loader_fixture_init(struct gen_loader_fixture *f)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
-+	int nr_maps = 0, nr_progs = 0;
-+	struct bpf_program *p;
-+	struct bpf_map *m;
-+
-+	memset(f, 0, sizeof(*f));
-+	f->skel = test_signed_loader__open();
-+	if (!ASSERT_OK_PTR(f->skel, "skel_open"))
-+		return -1;
-+	if (!ASSERT_OK(bpf_object__gen_loader(f->skel->obj, &gopts), "gen_loader"))
-+		return -1;
-+	if (!ASSERT_OK(bpf_object__load(f->skel->obj), "gen_load"))
-+		return -1;
-+	f->gopts = gopts;
-+
-+	bpf_object__for_each_program(p, f->skel->obj)
-+		nr_progs++;
-+	bpf_object__for_each_map(m, f->skel->obj)
-+		nr_maps++;
-+	f->nr_maps = nr_maps;
-+	f->nr_progs = nr_progs;
-+	f->ctx_sz = sizeof(struct bpf_loader_ctx) +
-+		    nr_maps * sizeof(struct bpf_map_desc) +
-+		    nr_progs * sizeof(struct bpf_prog_desc);
-+	f->ctx = calloc(1, f->ctx_sz);
-+	if (!ASSERT_OK_PTR(f->ctx, "ctx_alloc"))
-+		return -1;
-+	((struct bpf_loader_ctx *)f->ctx)->sz = f->ctx_sz;
-+
-+	f->data_sz = gopts.data_sz;
-+	f->blob = malloc(f->data_sz);
-+	if (!ASSERT_OK_PTR(f->blob, "blob_alloc"))
-+		return -1;
-+	memcpy(f->blob, gopts.data, f->data_sz);
-+
-+	/* excl_prog_hash = SHA256(loader insns) == the loader's prog->digest. */
-+	libbpf_sha256(gopts.insns, gopts.insns_sz, f->excl);
-+	return 0;
-+}
-+
-+static void gen_loader_fixture_fini(struct gen_loader_fixture *f)
-+{
-+	if (f->ctx)
-+		close_loader_ctx_fds(f->ctx, f->nr_maps, f->nr_progs);
-+	free(f->blob);
-+	free(f->ctx);
-+	test_signed_loader__destroy(f->skel);
-+}
-+
-+static void metadata_check_shape(void)
-+{
-+	struct gen_loader_fixture f;
-+
-+	if (gen_loader_fixture_init(&f) == 0)
-+		check_sig_match_shape((const struct bpf_insn *)f.gopts.insns,
-+				      f.gopts.insns_sz / sizeof(struct bpf_insn));
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void metadata_match(void)
-+{
-+	struct gen_loader_fixture f;
-+	bool ran;
-+	int r;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		r = run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
-+				   f.data_sz, f.excl, sizeof(f.excl), NULL, 0,
-+				   true, f.ctx, f.ctx_sz, &ran);
-+		ASSERT_TRUE(ran, "loader ran");
-+		ASSERT_EQ(r, 0, "honest loader retval");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void metadata_sha_mismatch(void)
-+{
-+	struct gen_loader_fixture f;
-+	bool ran;
-+	int r;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * blob[0] lives in the loader's fd_array scratch (first add_data in
-+		 * bpf_gen__init); a 0-map program never reads it, so flipping it
-+		 * changes only map->sha. The metadata check is the only thing that
-+		 * can notice -> isolates emit_signature_match.
-+		 */
-+		f.blob[0] ^= 0xff;
-+		r = run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
-+				   f.data_sz, f.excl, sizeof(f.excl), NULL, 0,
-+				   true, f.ctx, f.ctx_sz, &ran);
-+		ASSERT_TRUE(ran, "loader ran");
-+		ASSERT_EQ(r, -EINVAL, "tampered blob rejected by emit_signature_match");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void metadata_not_exclusive(void)
-+{
-+	struct gen_loader_fixture f;
-+	bool ran;
-+	int r;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * Correct blob but a non-exclusive metadata map: the verifier does
-+		 * not reject (excl_prog_sha unset), so the runtime map->excl == 1
-+		 * check in the loader must.
-+		 */
-+		r = run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
-+				   f.data_sz, NULL, 0, NULL, 0, true, f.ctx,
-+				   f.ctx_sz, &ran);
-+		ASSERT_TRUE(ran, "loader ran");
-+		ASSERT_EQ(r, -EINVAL, "non-exclusive metadata map rejected");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void metadata_hash_not_computed(void)
-+{
-+	struct gen_loader_fixture f;
-+	bool ran;
-+	int r;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * Correct, exclusive, frozen map, but its hash was never computed
-+		 * (no OBJ_GET_INFO_BY_FD), so map->sha stays zero. The loader must
-+		 * fail closed rather than treat an unset hash as a match.
-+		 */
-+		r = run_gen_loader(f.gopts.insns, f.gopts.insns_sz, f.blob,
-+				   f.data_sz, f.excl, sizeof(f.excl), NULL, 0,
-+				   false, f.ctx, f.ctx_sz, &ran);
-+		ASSERT_TRUE(ran, "loader ran");
-+		ASSERT_EQ(r, -EINVAL, "uncomputed metadata hash rejected");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void signature_enforced(void)
-+{
-+	static const __u8 junk[64] = { 0x30, 0x42, 0x13, 0x37, };
-+	struct gen_loader_fixture f;
-+	int fd;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * A present-but-invalid signature (the cert bytes are not a
-+		 * PKCS#7 signature) must be rejected at load: the signature
-+		 * path is honored, not ignored. (The valid path is covered by
-+		 * the signed lskels.)
-+		 */
-+		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
-+				 sizeof(junk), KEY_SPEC_SESSION_KEYRING);
-+		ASSERT_LT(fd, 0, "invalid signature rejected at load");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void signature_too_large(void)
-+{
-+	static const __u8 junk[64] = {};
-+	struct gen_loader_fixture f;
-+	int fd;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * signature_size beyond the kernel's bound (KMALLOC_MAX_CACHE_SIZE)
-+		 * is rejected before the buffer is read.
-+		 */
-+		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
-+				 64 << 20, KEY_SPEC_SESSION_KEYRING);
-+		ASSERT_EQ(fd, -EINVAL, "oversized signature rejected");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+static void signature_bad_keyring(void)
-+{
-+	static const __u8 junk[64] = {};
-+	struct gen_loader_fixture f;
-+	int fd;
-+
-+	if (gen_loader_fixture_init(&f) == 0) {
-+		/*
-+		 * A present signature with a keyring_id that resolves to no key is
-+		 * rejected up front: bpf_prog_verify_signature() fails the keyring
-+		 * lookup (-EINVAL) before it ever looks at the signature bytes. A
-+		 * large positive serial takes the user-keyring path and won't exist.
-+		 */
-+		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
-+				 sizeof(junk), INT_MAX);
-+		ASSERT_EQ(fd, -EINVAL, "signature with bad keyring_id rejected");
-+	}
-+	gen_loader_fixture_fini(&f);
-+}
-+
-+/*
-+ * A signed loader must ignore ctx-supplied map dimensions: the host cannot
-+ * resize a signed program's maps via the loader ctx. Drive a one-map program
-+ * through gen_loader, ask (via ctx) for every map to be resized to a bogus
-+ * value, and confirm the created maps keep their attested size.
-+ */
-+#define GATING_BOGUS_MAX 0x4000
-+
-+static void metadata_ctx_max_entries_ignored(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
-+	struct test_signed_loader_map *skel;
-+	__u8 excl[SHA256_DIGEST_LENGTH];
-+	int nr_maps = 0, nr_progs = 0, i, checked = 0, r;
-+	struct bpf_program *p;
-+	struct bpf_map *m;
-+	struct bpf_map_desc *md;
-+	unsigned char *blob;
-+	__u32 ctx_sz, data_sz;
-+	void *ctx;
-+	bool ran;
-+
-+	skel = test_signed_loader_map__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+	if (!ASSERT_OK(bpf_object__gen_loader(skel->obj, &gopts), "gen_loader"))
-+		goto destroy;
-+	if (!ASSERT_OK(bpf_object__load(skel->obj), "gen_load"))
-+		goto destroy;
-+
-+	bpf_object__for_each_program(p, skel->obj)
-+		nr_progs++;
-+	bpf_object__for_each_map(m, skel->obj)
-+		nr_maps++;
-+	ctx_sz = sizeof(struct bpf_loader_ctx) +
-+		 nr_maps * sizeof(struct bpf_map_desc) +
-+		 nr_progs * sizeof(struct bpf_prog_desc);
-+	ctx = calloc(1, ctx_sz);
-+	if (!ASSERT_OK_PTR(ctx, "ctx_alloc"))
-+		goto destroy;
-+	((struct bpf_loader_ctx *)ctx)->sz = ctx_sz;
-+
-+	md = (struct bpf_map_desc *)((char *)ctx + sizeof(struct bpf_loader_ctx));
-+	for (i = 0; i < nr_maps; i++)
-+		md[i].max_entries = GATING_BOGUS_MAX;
-+
-+	libbpf_sha256(gopts.insns, gopts.insns_sz, excl);
-+	data_sz = gopts.data_sz;
-+	blob = malloc(data_sz);
-+	if (!ASSERT_OK_PTR(blob, "blob_alloc"))
-+		goto free_ctx;
-+	memcpy(blob, gopts.data, data_sz);
-+
-+	r = run_gen_loader(gopts.insns, gopts.insns_sz, blob, data_sz,
-+			   excl, sizeof(excl), NULL, 0, true, ctx, ctx_sz, &ran);
-+	if (!ASSERT_TRUE(ran, "loader ran") ||
-+	    !ASSERT_EQ(r, 0, "loader retval"))
-+		goto free_blob;
-+
-+	for (i = 0; i < nr_maps; i++) {
-+		struct bpf_map_info info;
-+		__u32 ilen = sizeof(info);
-+		int fd = md[i].map_fd;
-+
-+		if (fd <= 0)
-+			continue;
-+		memset(&info, 0, sizeof(info));
-+		if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &ilen), "map_info")) {
-+			ASSERT_NEQ(info.max_entries, GATING_BOGUS_MAX,
-+				   "ctx max_entries ignored for signed loader");
-+			checked++;
-+		}
-+	}
-+	ASSERT_GT(checked, 0, "inspected a created map");
-+
-+free_blob:
-+	free(blob);
-+free_ctx:
-+	close_loader_ctx_fds(ctx, nr_maps, nr_progs);
-+	free(ctx);
-+destroy:
-+	test_signed_loader_map__destroy(skel);
-+}
-+
-+/*
-+ * A signed loader must also ignore ctx-supplied initial_value: the host cannot
-+ * re-seed a signed program's map contents through the loader ctx. Drive a
-+ * program with one initialized global (a .data map) through gen_loader, point
-+ * every map's ctx initial_value at an adversarial buffer, and confirm the
-+ * created map still holds the attested value, never the ctx bytes.
-+ */
-+#define DATA_MAGIC 0x5eed1234abad1deaULL
-+
-+static void metadata_ctx_initial_value_ignored(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
-+	struct test_signed_loader_data *skel;
-+	__u8 excl[SHA256_DIGEST_LENGTH], evil[64];
-+	int nr_maps = 0, nr_progs = 0, i, found = 0, r;
-+	struct bpf_program *p;
-+	struct bpf_map *m;
-+	struct bpf_map_desc *md;
-+	unsigned char *blob;
-+	__u32 ctx_sz, data_sz;
-+	void *ctx;
-+	bool ran;
-+
-+	skel = test_signed_loader_data__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+	if (!ASSERT_OK(bpf_object__gen_loader(skel->obj, &gopts), "gen_loader"))
-+		goto destroy;
-+	if (!ASSERT_OK(bpf_object__load(skel->obj), "gen_load"))
-+		goto destroy;
-+
-+	bpf_object__for_each_program(p, skel->obj)
-+		nr_progs++;
-+	bpf_object__for_each_map(m, skel->obj)
-+		nr_maps++;
-+	ctx_sz = sizeof(struct bpf_loader_ctx) +
-+		 nr_maps * sizeof(struct bpf_map_desc) +
-+		 nr_progs * sizeof(struct bpf_prog_desc);
-+	ctx = calloc(1, ctx_sz);
-+	if (!ASSERT_OK_PTR(ctx, "ctx_alloc"))
-+		goto destroy;
-+	((struct bpf_loader_ctx *)ctx)->sz = ctx_sz;
-+
-+	memset(evil, 0xAA, sizeof(evil));
-+	md = (struct bpf_map_desc *)((char *)ctx + sizeof(struct bpf_loader_ctx));
-+	for (i = 0; i < nr_maps; i++)
-+		md[i].initial_value = ptr_to_u64(evil);
-+
-+	libbpf_sha256(gopts.insns, gopts.insns_sz, excl);
-+	data_sz = gopts.data_sz;
-+	blob = malloc(data_sz);
-+	if (!ASSERT_OK_PTR(blob, "blob_alloc"))
-+		goto free_ctx;
-+	memcpy(blob, gopts.data, data_sz);
-+
-+	r = run_gen_loader(gopts.insns, gopts.insns_sz, blob, data_sz,
-+			   excl, sizeof(excl), NULL, 0, true, ctx, ctx_sz, &ran);
-+	if (!ASSERT_TRUE(ran, "loader ran") ||
-+	    !ASSERT_EQ(r, 0, "loader retval"))
-+		goto free_blob;
-+
-+	for (i = 0; i < nr_maps; i++) {
-+		struct bpf_map_info info;
-+		__u32 ilen = sizeof(info), key = 0;
-+		__u8 value[64] = {};
-+		__u64 got;
-+		int fd = md[i].map_fd;
-+
-+		if (fd <= 0)
-+			continue;
-+		memset(&info, 0, sizeof(info));
-+		if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &ilen), "map_info"))
-+			continue;
-+		if (info.value_size <= sizeof(value) &&
-+		    bpf_map_lookup_elem(fd, &key, value) == 0) {
-+			memcpy(&got, value, sizeof(got));
-+			/* attested .data survives; ctx bytes (0xAA..) ignored */
-+			if (got == DATA_MAGIC)
-+				found = 1;
-+			ASSERT_NEQ(got, 0xAAAAAAAAAAAAAAAAULL,
-+				   "ctx initial_value ignored for signed loader");
-+		}
-+	}
-+	ASSERT_EQ(found, 1, "attested .data value preserved");
-+
-+free_blob:
-+	free(blob);
-+free_ctx:
-+	close_loader_ctx_fds(ctx, nr_maps, nr_progs);
-+	free(ctx);
-+destroy:
-+	test_signed_loader_data__destroy(skel);
-+}
-+
-+/*
-+ * The load-time signature must authenticate the loader instructions: a valid
-+ * signature loads, and the very same signature over one-byte-tampered insns is
-+ * rejected. Uses ./verify_sig_setup.sh + ./sign-file at runtime, like
-+ * verify_pkcs7_sig, and verifies against the session keyring the key was added
-+ * to. (signature_enforced/_too_large only cover a malformed signature.)
-+ */
-+static void signature_authenticates_insns(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gopts, .gen_hash = true);
-+	char dir_tmpl[] = "/tmp/signed_loaderXXXXXX", *dir;
-+	struct test_signed_loader *skel = NULL;
-+	__u8 excl[SHA256_DIGEST_LENGTH], sig[8192];
-+	__u32 sig_sz = sizeof(sig), insns_sz, data_sz, ctx_sz;
-+	unsigned char *insns = NULL, *tampered = NULL, *blob = NULL;
-+	int nr_maps = 0, nr_progs = 0, r;
-+	struct bpf_program *p;
-+	struct bpf_map *m;
-+	void *ctx = NULL;
-+	bool ran;
-+
-+	syscall(__NR_request_key, "keyring", "_uid.0", NULL,
-+		KEY_SPEC_SESSION_KEYRING);
-+	dir = mkdtemp(dir_tmpl);
-+	if (!ASSERT_OK_PTR(dir, "mkdtemp"))
-+		return;
-+	if (!ASSERT_OK(run_setup("setup", dir), "verify_sig_setup")) {
-+		rmdir(dir);
-+		return;
-+	}
-+
-+	skel = test_signed_loader__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+	if (!ASSERT_OK(bpf_object__gen_loader(skel->obj, &gopts), "gen_loader"))
-+		goto cleanup;
-+	if (!ASSERT_OK(bpf_object__load(skel->obj), "gen_load"))
-+		goto cleanup;
-+
-+	bpf_object__for_each_program(p, skel->obj)
-+		nr_progs++;
-+	bpf_object__for_each_map(m, skel->obj)
-+		nr_maps++;
-+	ctx_sz = sizeof(struct bpf_loader_ctx) +
-+		 nr_maps * sizeof(struct bpf_map_desc) +
-+		 nr_progs * sizeof(struct bpf_prog_desc);
-+	insns_sz = gopts.insns_sz;
-+	data_sz = gopts.data_sz;
-+	ctx = calloc(1, ctx_sz);
-+	insns = malloc(insns_sz);
-+	tampered = malloc(insns_sz);
-+	blob = malloc(data_sz);
-+	if (!ASSERT_OK_PTR(ctx, "ctx") ||
-+	    !ASSERT_OK_PTR(insns, "insns") ||
-+	    !ASSERT_OK_PTR(tampered, "tampered") ||
-+	    !ASSERT_OK_PTR(blob, "blob"))
-+		goto cleanup;
-+	memcpy(insns, gopts.insns, insns_sz);
-+	memcpy(blob, gopts.data, data_sz);
-+	libbpf_sha256(insns, insns_sz, excl);
-+
-+	if (!ASSERT_OK(sign_buf(dir, insns, insns_sz, sig, &sig_sz), "sign-file"))
-+		goto cleanup;
-+
-+	memset(ctx, 0, ctx_sz);
-+	((struct bpf_loader_ctx *)ctx)->sz = ctx_sz;
-+	r = run_gen_loader(insns, insns_sz, blob, data_sz, excl, sizeof(excl),
-+			   sig, sig_sz, true, ctx, ctx_sz, &ran);
-+	ASSERT_TRUE(ran, "valid signature: loader loaded and ran");
-+	ASSERT_EQ(r, 0, "valid signature accepted");
-+	close_loader_ctx_fds(ctx, nr_maps, nr_progs);
-+
-+	memcpy(tampered, insns, insns_sz);
-+	tampered[insns_sz / 2] ^= 0xff;
-+	memset(ctx, 0, ctx_sz);
-+	((struct bpf_loader_ctx *)ctx)->sz = ctx_sz;
-+	r = run_gen_loader(tampered, insns_sz, blob, data_sz, excl, sizeof(excl),
-+			   sig, sig_sz, true, ctx, ctx_sz, &ran);
-+	ASSERT_FALSE(ran, "tampered loader rejected before run");
-+	ASSERT_EQ(r, -EKEYREJECTED, "signature is bound to the instructions");
-+cleanup:
-+	free(insns);
-+	free(tampered);
-+	free(blob);
-+	free(ctx);
-+	test_signed_loader__destroy(skel);
-+	run_setup("cleanup", dir);
-+}
-+
-+static int make_excl_map(__u32 flags, __u32 value_size)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	__u8 hash[SHA256_DIGEST_LENGTH] = { 1 };	/* any 32-byte value */
-+
-+	opts.excl_prog_hash = hash;
-+	opts.excl_prog_hash_size = sizeof(hash);
-+	opts.map_flags = flags;
-+	return bpf_map_create(BPF_MAP_TYPE_ARRAY, "md", 4, value_size, 1, &opts);
-+}
-+
-+static void hash_requires_frozen(void)
-+{
-+	__u8 hbuf[SHA256_DIGEST_LENGTH], val[64] = {};
-+	struct bpf_map_info info;
-+	__u32 ilen, key = 0;
-+	int fd;
-+
-+	fd = make_excl_map(0, sizeof(val));
-+	if (!ASSERT_OK_FD(fd, "excl_map"))
-+		return;
-+	ASSERT_OK(bpf_map_update_elem(fd, &key, val, 0), "update");
-+
-+	memset(&info, 0, sizeof(info));
-+	info.hash = ptr_to_u64(hbuf);
-+	info.hash_size = sizeof(hbuf);
-+	ilen = sizeof(info);
-+	ASSERT_EQ(bpf_map_get_info_by_fd(fd, &info, &ilen), -EPERM,
-+		  "hash of unfrozen map rejected");
-+	close(fd);
-+}
-+
-+static void no_update_after_freeze(void)
-+{
-+	__u8 val[64] = {};
-+	__u32 key = 0;
-+	int fd;
-+
-+	fd = make_excl_map(0, sizeof(val));
-+	if (!ASSERT_OK_FD(fd, "excl_map"))
-+		return;
-+	ASSERT_OK(bpf_map_update_elem(fd, &key, val, 0), "update");
-+	ASSERT_OK(bpf_map_freeze(fd), "freeze");
-+	ASSERT_EQ(bpf_map_update_elem(fd, &key, val, 0), -EPERM,
-+		  "update after freeze rejected");
-+	close(fd);
-+}
-+
-+static void freeze_writable_mmap(void)
-+{
-+	void *w;
-+	int fd;
-+
-+	fd = make_excl_map(BPF_F_MMAPABLE, 4096);
-+	if (!ASSERT_OK_FD(fd, "excl_mmapable_map"))
-+		return;
-+	w = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (ASSERT_OK_PTR(w, "writable_mmap")) {
-+		ASSERT_EQ(bpf_map_freeze(fd), -EBUSY,
-+			  "freeze rejected while writable mmap held");
-+		munmap(w, 4096);
-+	}
-+	close(fd);
-+}
-+
-+static void no_writable_mmap_frozen(void)
-+{
-+	void *w;
-+	int fd;
-+
-+	fd = make_excl_map(BPF_F_MMAPABLE, 4096);
-+	if (!ASSERT_OK_FD(fd, "excl_mmapable_map"))
-+		return;
-+	ASSERT_OK(bpf_map_freeze(fd), "freeze");
-+	w = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	ASSERT_EQ(w, MAP_FAILED, "writable mmap of frozen map rejected");
-+	if (w != MAP_FAILED)
-+		munmap(w, 4096);
-+	close(fd);
-+}
-+
-+static void map_hash_matches_libbpf(void)
-+{
-+	__u8 kbuf[SHA256_DIGEST_LENGTH], lbuf[SHA256_DIGEST_LENGTH], val[64] = {};
-+	struct bpf_map_info info;
-+	__u32 ilen, key = 0;
-+	int fd, i;
-+
-+	/*
-+	 * The signing scheme assumes the kernel's map hash equals what libbpf
-+	 * computes over the same bytes (gen_loader bakes libbpf_sha256(blob);
-+	 * the kernel recomputes via array_map_get_hash). Pin that they agree.
-+	 */
-+	for (i = 0; i < (int)sizeof(val); i++)
-+		val[i] = i * 7 + 1;
-+	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "h", 4, sizeof(val), 1, NULL);
-+	if (!ASSERT_OK_FD(fd, "array_map"))
-+		return;
-+	ASSERT_OK(bpf_map_update_elem(fd, &key, val, 0), "update");
-+	ASSERT_OK(bpf_map_freeze(fd), "freeze");
-+	memset(&info, 0, sizeof(info));
-+	info.hash = ptr_to_u64(kbuf);
-+	info.hash_size = sizeof(kbuf);
-+	ilen = sizeof(info);
-+	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &ilen), "get_hash")) {
-+		libbpf_sha256(val, sizeof(val), lbuf);
-+		ASSERT_EQ(memcmp(kbuf, lbuf, sizeof(kbuf)), 0,
-+			  "kernel map hash matches libbpf_sha256");
-+	}
-+	close(fd);
-+}
-+
-+static void map_hash_multi_element(void)
-+{
-+	const __u32 nr = 8, value_size = 64;
-+	__u8 kbuf[SHA256_DIGEST_LENGTH], lbuf[SHA256_DIGEST_LENGTH];
-+	struct bpf_map_info info;
-+	__u32 ilen, i, j;
-+	__u8 *full;
-+	int fd;
-+
-+	/*
-+	 * array_map_get_hash() hashes elem_size * max_entries (the whole value
-+	 * area), not just element 0. With an 8-aligned value_size elem_size has
-+	 * no padding, so pin that a >1-entry array's kernel hash equals
-+	 * libbpf_sha256() over the full, concatenated element contents.
-+	 */
-+	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "h", 4, value_size, nr, NULL);
-+	if (!ASSERT_OK_FD(fd, "array_map"))
-+		return;
-+	full = calloc(nr, value_size);
-+	if (!ASSERT_OK_PTR(full, "buf"))
-+		goto close_fd;
-+	for (i = 0; i < nr; i++) {
-+		__u8 *v = full + i * value_size;
-+
-+		for (j = 0; j < value_size; j++)
-+			v[j] = i * 31 + j * 7 + 1;
-+		ASSERT_OK(bpf_map_update_elem(fd, &i, v, 0), "update");
-+	}
-+	ASSERT_OK(bpf_map_freeze(fd), "freeze");
-+	memset(&info, 0, sizeof(info));
-+	info.hash = ptr_to_u64(kbuf);
-+	info.hash_size = sizeof(kbuf);
-+	ilen = sizeof(info);
-+	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &ilen), "get_hash")) {
-+		libbpf_sha256(full, (size_t)nr * value_size, lbuf);
-+		ASSERT_EQ(memcmp(kbuf, lbuf, sizeof(kbuf)), 0,
-+			  "kernel hash covers full multi-element value area");
-+	}
-+	free(full);
-+close_fd:
-+	close(fd);
-+}
-+
-+static void map_hash_bad_size(void)
-+{
-+	__u8 kbuf[SHA256_DIGEST_LENGTH], val[64] = {};
-+	struct bpf_map_info info;
-+	__u32 ilen, key = 0;
-+	int fd;
-+
-+	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "h", 4, sizeof(val), 1, NULL);
-+	if (!ASSERT_OK_FD(fd, "array_map"))
-+		return;
-+	ASSERT_OK(bpf_map_update_elem(fd, &key, val, 0), "update");
-+	ASSERT_OK(bpf_map_freeze(fd), "freeze");
-+	memset(&info, 0, sizeof(info));
-+	info.hash = ptr_to_u64(kbuf);
-+	info.hash_size = sizeof(kbuf) / 2;
-+	ilen = sizeof(info);
-+	ASSERT_EQ(bpf_map_get_info_by_fd(fd, &info, &ilen), -EINVAL,
-+		  "wrong hash_size rejected");
-+	close(fd);
-+}
-+
-+static void map_hash_unsupported_type(void)
-+{
-+	__u8 kbuf[SHA256_DIGEST_LENGTH];
-+	struct bpf_map_info info;
-+	__u32 ilen;
-+	int fd;
-+
-+	/* Only arrays implement map_get_hash; a hash map must be refused. */
-+	fd = bpf_map_create(BPF_MAP_TYPE_HASH, "h", 4, 8, 4, NULL);
-+	if (!ASSERT_OK_FD(fd, "hash_map"))
-+		return;
-+	memset(&info, 0, sizeof(info));
-+	info.hash = ptr_to_u64(kbuf);
-+	info.hash_size = sizeof(kbuf);
-+	ilen = sizeof(info);
-+	ASSERT_EQ(bpf_map_get_info_by_fd(fd, &info, &ilen), -EINVAL,
-+		  "hash unsupported for non-array map");
-+	close(fd);
-+}
-+
-+void test_signed_loader(void)
-+{
-+	if (test__start_subtest("metadata_check_shape"))
-+		metadata_check_shape();
-+	if (test__start_subtest("metadata_match"))
-+		metadata_match();
-+	if (test__start_subtest("metadata_sha_mismatch"))
-+		metadata_sha_mismatch();
-+	if (test__start_subtest("metadata_not_exclusive"))
-+		metadata_not_exclusive();
-+	if (test__start_subtest("metadata_hash_not_computed"))
-+		metadata_hash_not_computed();
-+	if (test__start_subtest("signature_enforced"))
-+		signature_enforced();
-+	if (test__start_subtest("signature_too_large"))
-+		signature_too_large();
-+	if (test__start_subtest("signature_bad_keyring"))
-+		signature_bad_keyring();
-+	if (test__start_subtest("metadata_ctx_max_entries_ignored"))
-+		metadata_ctx_max_entries_ignored();
-+	if (test__start_subtest("metadata_ctx_initial_value_ignored"))
-+		metadata_ctx_initial_value_ignored();
-+	if (test__start_subtest("signature_authenticates_insns"))
-+		signature_authenticates_insns();
-+	if (test__start_subtest("hash_requires_frozen"))
-+		hash_requires_frozen();
-+	if (test__start_subtest("no_update_after_freeze"))
-+		no_update_after_freeze();
-+	if (test__start_subtest("freeze_writable_mmap"))
-+		freeze_writable_mmap();
-+	if (test__start_subtest("no_writable_mmap_frozen"))
-+		no_writable_mmap_frozen();
-+	if (test__start_subtest("map_hash_matches_libbpf"))
-+		map_hash_matches_libbpf();
-+	if (test__start_subtest("map_hash_multi_element"))
-+		map_hash_multi_element();
-+	if (test__start_subtest("map_hash_bad_size"))
-+		map_hash_bad_size();
-+	if (test__start_subtest("map_hash_unsupported_type"))
-+		map_hash_unsupported_type();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_signed_loader.c b/tools/testing/selftests/bpf/progs/test_signed_loader.c
-new file mode 100644
-index 000000000000..d9a4b85f9391
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_signed_loader.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+/*
-+ * Minimal, map-less program. Driven through libbpf's gen_loader (gen_hash)
-+ * by prog_tests/signed_loader.c so the generated light-skeleton loader (with
-+ * the emit_signature_match metadata check) can be exercised against good
-+ * and tampered metadata. A socket filter needs no load-time attach resolution,
-+ * and having no maps keeps the generated loader's ctx trivial (0 maps, 1 prog).
-+ */
-+SEC("socket")
-+int probe(void *ctx)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_signed_loader_data.c b/tools/testing/selftests/bpf/progs/test_signed_loader_data.c
-new file mode 100644
-index 000000000000..43e2074d0042
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_signed_loader_data.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+/*
-+ * A single initialized global, so the generated loader has one internal
-+ * (.data) map that it seeds with an initial value while loading.
-+ * prog_tests/signed_loader.c uses this to check that a signed loader
-+ * keeps the attested contents and ignores a ctx-supplied initial_value:
-+ * the host cannot re-seed a signed program's maps through the loader ctx.
-+ */
-+__u64 magic = 0x5eed1234abad1deaULL;
-+
-+SEC("socket")
-+int probe(void *ctx)
-+{
-+	return (int)magic;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_signed_loader_map.c b/tools/testing/selftests/bpf/progs/test_signed_loader_map.c
-new file mode 100644
-index 000000000000..4478ce6f1fd9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_signed_loader_map.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+/*
-+ * One explicit array map and no global variables, so the generated loader
-+ * has exactly one map to create (no .rodata/.bss). prog_tests/signed_loader.c
-+ * uses this to check that a signed loader ignores ctx-supplied max_entries:
-+ * the map must keep its attested size (4), not whatever the host puts in
-+ * the loader ctx.
-+ */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} amap SEC(".maps");
-+
-+SEC("socket")
-+int probe(void *ctx)
-+{
-+	__u32 key = 0;
-+	__u64 *val = bpf_map_lookup_elem(&amap, &key);
-+
-+	return val ? (int)*val : 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+The plug-in seems to work correctly, although we need to install it at
+the path built in the binary before using the disassembler. It would be
+good to fall back on the current directory otherwise. I haven't tested
+the static build thoroughly yet (I tried the GitHub PR and it seems that
+the combination "LLVM_LINK_STATIC=1 EXTRA_LDFLAGS=-static" is broken
+there, I think because the feature detection in the GitHub repo needs to
+be adjusted).
+
+I do have some comments, please see inline below.
+
+> ---
+>  tools/bpf/bpftool/Makefile      |  63 ++++++++++++++++++----
+>  tools/bpf/bpftool/jit_disasm.c  | 112 +++++++++++++++++++++++-----------------
+>  tools/bpf/bpftool/llvm_disasm.c |  85 ++++++++++++++++++++++++++++++
+>  tools/bpf/bpftool/llvm_disasm.h |  38 ++++++++++++++
+>  4 files changed, 240 insertions(+), 58 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 0febf60e1..9887ac6fb 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -62,6 +62,7 @@ $(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
+>  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
+>  
+>  prefix ?= /usr/local
+> +libdir ?= $(prefix)/lib
+>  bash_compdir ?= /usr/share/bash-completion/completions
+>  
+>  CFLAGS += -O2
+> @@ -157,6 +158,8 @@ include $(wildcard $(OUTPUT)*.d)
+>  all: $(OUTPUT)bpftool
+>  
+>  SRCS := $(wildcard *.c)
+> +# llvm_disasm.c is compiled separately into the bpftool-llvm.so plugin.
+> +SRCS := $(filter-out llvm_disasm.c,$(SRCS))
+>  
+>  ifeq ($(feature-llvm),1)
+>  ifneq ($(SKIP_LLVM),1)
+> @@ -165,19 +168,36 @@ endif
+>  endif
+>  
+>  ifeq ($(HAS_LLVM),1)
+> +  # The libLLVM-based JIT disassembler is built as a separate plugin,
+> +  # bpftool-llvm.so, which is the only object that links against libLLVM.
+> +  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpftool
+
+I'd replace "lazily" with "only when calling the disassembler", to avoid
+confusion with the RTLD_LAZY flag for dlopen(), which you don't use.
+
+> +  # binary itself keeps no dependency on the large libLLVM shared object.
+>    CFLAGS  += -DHAVE_LLVM_SUPPORT
+> +  CFLAGS  += -DLLVM_PLUGIN_DIR='"$(libdir)/bpftool"'
+> +  # dlopen() lives in libc on modern glibc, but keep -ldl for portability.
+> +  LIBS    += -ldl
+> +
+> +  # Flags used to build the plugin itself (the only part that needs libLLVM).
+>    LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+> -  # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+> -  # (e.g. when bpftool build is called from selftests build as selftests
+> -  # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+> -  # compilation error due to redefinition. Let's filter it out here.
+> -  CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> -  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +  # llvm-config always adds -D_GNU_SOURCE, which llvm_disasm.c already defines;
+> +  # filter it out to avoid a redefinition warning.
+> +  LLVM_PLUGIN_CFLAGS := $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> +
+> +  # Embed libLLVM into the plugin statically when requested with
+> +  # LLVM_LINK_STATIC=1, or when this LLVM install only ships static libraries
+> +  # ("llvm-config --shared-mode" reports "static"). Otherwise link the shared
+> +  # libLLVM, which is the only runtime dependency of the plugin.
+>    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+> -    LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> -    LIBS += -lstdc++
+> +    LLVM_LINK_STATIC := 1
+> +  endif
+> +  ifeq ($(LLVM_LINK_STATIC),1)
+> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS += -lstdc++
+> +  else
+> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>    endif
+> -  LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+> +  LLVM_PLUGIN_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
+>  else
+>    ifneq ($(SKIP_LIBBFD),1)
+>    # Fall back on libbfd
+> @@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
+>  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
+>  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+>  
+> +ifeq ($(HAS_LLVM),1)
+> +all: $(OUTPUT)bpftool-llvm.so
+> +
+> +$(OUTPUT)llvm_disasm.o: llvm_disasm.c
+> +	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
+> +
+> +# The plugin is a shared object by definition, so drop a global -static (e.g.
+> +# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -shared.
+> +# Embedding libLLVM statically is controlled separately (see LLVM_LINK_STATIC).
+> +$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
+> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
+> +		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
+> +endif
+> +
+>  $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
+>  	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
+>  
+> @@ -288,17 +322,25 @@ feature-detect-clean:
+>  
+>  clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
+>  	$(call QUIET_CLEAN, bpftool)
+> -	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
+> +	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)bpftool-llvm.so $(OUTPUT)*.o $(OUTPUT)*.d
+>  	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+>  	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
+>  	$(call QUIET_CLEAN, core-gen)
+>  	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
+>  	$(Q)$(RM) -r -- $(OUTPUT)feature/
+>  
+> +ifeq ($(HAS_LLVM),1)
+> +install-bin: $(OUTPUT)bpftool-llvm.so
+> +endif
+>  install-bin: $(OUTPUT)bpftool
+>  	$(call QUIET_INSTALL, bpftool)
+>  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/sbin
+>  	$(Q)$(INSTALL) $(OUTPUT)bpftool $(DESTDIR)$(prefix)/sbin/bpftool
+> +ifeq ($(HAS_LLVM),1)
+> +	$(call QUIET_INSTALL, bpftool-llvm.so)
+> +	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(libdir)/bpftool
+
+If the user runs "make && make install libdir=/usr/lib64", we'll get a
+mismatch between the libdir path set at build time and the install path.
+Maybe we could try to catch this? In a separate commit we could print
+the plugin path as part of the "bpftool version" output and check
+whether it matches when we install (and warn if it doesn't)? I don't know.
+
+> +	$(Q)$(INSTALL) -m 0755 $(OUTPUT)bpftool-llvm.so $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
+> +endif
+>  
+>  install: install-bin
+>  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(bash_compdir)
+> @@ -307,6 +349,7 @@ install: install-bin
+>  uninstall:
+>  	$(call QUIET_UNINST, bpftool)
+>  	$(Q)$(RM) -- $(DESTDIR)$(prefix)/sbin/bpftool
+
+Please make it consistent with the install:
+
+    $(call QUIET_UNINST, bpftool-llvm.so)
+
+Also, we should probably remove $(DESTDIR)$(libdir)/bpftool entirely.
+
+> +	$(Q)$(RM) -- $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
+>  	$(Q)$(RM) -- $(DESTDIR)$(bash_compdir)/bpftool
+>  
+>  doc:
+> diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+> index 04541155e..e8cef2da2 100644
+> --- a/tools/bpf/bpftool/jit_disasm.c
+> +++ b/tools/bpf/bpftool/jit_disasm.c
+> @@ -25,10 +25,9 @@
+>  #include <bpf/libbpf.h>
+>  
+>  #ifdef HAVE_LLVM_SUPPORT
+> -#include <llvm-c/Core.h>
+> -#include <llvm-c/Disassembler.h>
+> -#include <llvm-c/Target.h>
+> -#include <llvm-c/TargetMachine.h>
+> +#include <dlfcn.h>
+> +
+> +#include "llvm_disasm.h"
+>  #endif
+>  
+>  #ifdef HAVE_LIBBFD_SUPPORT
+> @@ -45,7 +44,32 @@ static int oper_count;
+>  #ifdef HAVE_LLVM_SUPPORT
+>  #define DISASM_SPACER
+>  
+> -typedef LLVMDisasmContextRef disasm_ctx_t;
+> +/*
+> + * The libLLVM-based disassembler used for "bpftool prog dump jited" lives in a
+> + * separate plugin, bpftool-llvm.so, which is the only object linked against
+> + * libLLVM. This keeps the bpftool binary itself free of a hard dependency on
+> + * the (large) libLLVM shared object: the plugin is loaded lazily with dlopen()
+> + * the first time a JITed image actually needs to be disassembled, with its
+> + * entry points resolved by dlsym(). See llvm_disasm.c for the plugin.
+> + *
+> + * LLVM_PLUGIN_DIR is the install directory baked in at build time
+> + * ($(libdir)/bpftool). When set, the plugin is loaded from that absolute
+> + * location; otherwise only the bare file name is used, i.e. the plugin is
+> + * looked up via the dynamic linker search path (or the current directory).
+
+It doesn't appear to search the binary from the current directory, at
+least not in my case? But it probably should though, otherwise Sashiko
+is right, the feature is no longer available from a newly-built bpftool
+binary that has not been installed on the system.
+
+> + */
+> +#ifdef LLVM_PLUGIN_DIR
+> +#define LLVM_PLUGIN_PATH LLVM_PLUGIN_DIR "/bpftool-llvm.so"
+> +#else
+> +#define LLVM_PLUGIN_PATH "bpftool-llvm.so"
+> +#endif
+> +
+> +typedef void *disasm_ctx_t;
+> +
+> +static void *llvm_plugin_handle;
+> +static __typeof__(&bpftool_llvm_init) p_bpftool_llvm_init;
+> +static __typeof__(&bpftool_llvm_create_context) p_bpftool_llvm_create_context;
+> +static __typeof__(&bpftool_llvm_destroy_context) p_bpftool_llvm_destroy_context;
+> +static __typeof__(&bpftool_llvm_disassemble) p_bpftool_llvm_disassemble;
+>  
+>  static int printf_json(char *s)
+>  {
+> @@ -63,48 +87,13 @@ static int printf_json(char *s)
+>  	return 0;
+>  }
+>  
+> -/* This callback to set the ref_type is necessary to have the LLVM disassembler
+> - * print PC-relative addresses instead of byte offsets for branch instruction
+> - * targets.
+> - */
+> -static const char *
+> -symbol_lookup_callback(__maybe_unused void *disasm_info,
+> -		       __maybe_unused uint64_t ref_value,
+> -		       uint64_t *ref_type, __maybe_unused uint64_t ref_PC,
+> -		       __maybe_unused const char **ref_name)
+> -{
+> -	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+> -	return NULL;
+> -}
+> -
+>  static int
+>  init_context(disasm_ctx_t *ctx, const char *arch,
+>  	     __maybe_unused const char *disassembler_options,
+>  	     __maybe_unused unsigned char *image, __maybe_unused ssize_t len,
+>  	     __maybe_unused __u64 func_ksym)
+>  {
+> -	char *triple;
+> -
+> -	if (arch)
+> -		triple = LLVMNormalizeTargetTriple(arch);
+> -	else
+> -		triple = LLVMGetDefaultTargetTriple();
+> -	if (!triple) {
+> -		p_err("Failed to retrieve triple");
+> -		return -1;
+> -	}
+> -
+> -	/*
+> -	 * Enable all aarch64 ISA extensions so the disassembler can handle any
+> -	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
+> -	 */
+> -	if (!strncmp(triple, "aarch64", 7))
+> -		*ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL,
+> -						   symbol_lookup_callback);
+> -	else
+> -		*ctx = LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback);
+> -	LLVMDisposeMessage(triple);
+> -
+> +	*ctx = p_bpftool_llvm_create_context(arch);
+>  	if (!*ctx) {
+>  		p_err("Failed to create disassembler");
+>  		return -1;
+> @@ -115,7 +104,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
+>  
+>  static void destroy_context(disasm_ctx_t *ctx)
+>  {
+> -	LLVMDisposeMessage(*ctx);
+> +	p_bpftool_llvm_destroy_context(*ctx);
+>  }
+>  
+>  static int
+> @@ -125,8 +114,8 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
+>  	char buf[256];
+>  	int count;
+>  
+> -	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, func_ksym + pc,
+> -				      buf, sizeof(buf));
+> +	count = p_bpftool_llvm_disassemble(*ctx, image, len, pc, func_ksym,
+> +					   buf, sizeof(buf));
+>  	if (json_output)
+>  		printf_json(buf);
+>  	else
+> @@ -137,10 +126,37 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
+>  
+>  int disasm_init(void)
+>  {
+> -	LLVMInitializeAllTargetInfos();
+> -	LLVMInitializeAllTargetMCs();
+> -	LLVMInitializeAllDisassemblers();
+> -	return 0;
+> +	if (llvm_plugin_handle)
+> +		return p_bpftool_llvm_init();
+> +
+> +	/* Load the plugin by its absolute install path. */
+> +	llvm_plugin_handle = dlopen(LLVM_PLUGIN_PATH, RTLD_NOW | RTLD_LOCAL);
+> +	if (!llvm_plugin_handle) {
+> +		p_err("failed to load %s, install it to disassemble JITed programs: %s",
+> +		      LLVM_PLUGIN_PATH, dlerror());
+
+You may exceptionally have dlerror() returning NULL here, so we should
+make sure it's not the case before printing it (and print something like
+"unknown error" otherwise). (I've observed this on a machine with
+LD_PRELOAD set to something that might call dlopen() and wipe the error
+string.)
+
+> +		return -1;
+> +	}
+
+We'd need to check plugin availability when running "bpftool version"
+too, otherwise we may advertise that we support the "llvm" disassembler
+feature even when we don't.
+
+> +
+> +#define RESOLVE(name)							       \
+> +	do {								       \
+> +		p_##name = (__typeof__(p_##name))dlsym(llvm_plugin_handle,     \
+> +						       #name);		       \
+> +		if (!p_##name) {					       \
+> +			p_err("%s is missing symbol %s: %s",		       \
+> +			      LLVM_PLUGIN_PATH, #name, dlerror());	       \
+> +			dlclose(llvm_plugin_handle);			       \
+> +			llvm_plugin_handle = NULL;			       \
+> +			return -1;					       \
+> +		}							       \
+> +	} while (0)
+> +
+> +	RESOLVE(bpftool_llvm_init);
+> +	RESOLVE(bpftool_llvm_create_context);
+> +	RESOLVE(bpftool_llvm_destroy_context);
+> +	RESOLVE(bpftool_llvm_disassemble);
+
+If we ever change the ABI of the plug-in, and don't have the right
+plug-in installed, we'll get issues when using the loaded symbols. Not
+sure how this is usually addressed, maybe load some sort of version
+symbol from the plug-in to check that it's the one we expect?
+
+> +#undef RESOLVE
+> +
+> +	return p_bpftool_llvm_init();
+>  }
+>  #endif /* HAVE_LLVM_SUPPORT */
+>  
+> diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_disasm.c
+> new file mode 100644
+> index 000000000..b83216191
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/llvm_disasm.c
+> @@ -0,0 +1,85 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+
+Ack. The copyright header in jit_disasm.c only applies to the
+libbfd-based disassembler and does not need to be reported here, so
+we're good.
+
+> +/*
+> + * libLLVM-based BPF JIT disassembler plugin for bpftool.
+> + *
+> + * This translation unit is built into a standalone shared object
+> + * (bpftool-llvm.so) which is the only bpftool component that links against
+> + * libLLVM. bpftool loads it lazily with dlopen() (see jit_disasm.c) so that
+> + * the bpftool binary itself does not depend on the large libLLVM shared
+> + * object. Only the small, stable C ABI declared in llvm_disasm.h is exposed.
+> + */
+> +#ifndef _GNU_SOURCE
+> +#define _GNU_SOURCE
+> +#endif
+> +#include <stdint.h>
+> +#include <string.h>
+> +#include <sys/types.h>
+> +
+> +#include <llvm-c/Core.h>
+> +#include <llvm-c/Disassembler.h>
+> +#include <llvm-c/Target.h>
+> +#include <llvm-c/TargetMachine.h>
+> +
+> +#include "llvm_disasm.h"
+> +
+> +/* This callback to set the ref_type is necessary to have the LLVM disassembler
+> + * print PC-relative addresses instead of byte offsets for branch instruction
+> + * targets.
+> + */
+> +static const char *
+> +symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
+> +		       uint64_t *ref_type, uint64_t ref_PC,
+> +		       const char **ref_name)
+> +{
+> +	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+> +	return NULL;
+> +}
+> +
+> +int bpftool_llvm_init(void)
+> +{
+> +	LLVMInitializeAllTargetInfos();
+> +	LLVMInitializeAllTargetMCs();
+> +	LLVMInitializeAllDisassemblers();
+> +
+> +	return 0;
+> +}
+> +
+> +void *bpftool_llvm_create_context(const char *arch)
+> +{
+> +	LLVMDisasmContextRef ctx;
+> +	char *triple;
+> +
+> +	if (arch)
+> +		triple = LLVMNormalizeTargetTriple(arch);
+> +	else
+> +		triple = LLVMGetDefaultTargetTriple();
+> +	if (!triple)
+> +		return NULL;
+> +
+> +	/*
+> +	 * Enable all aarch64 ISA extensions so the disassembler can handle any
+> +	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
+> +	 */
+> +	if (!strncmp(triple, "aarch64", 7))
+> +		ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0,
+> +						  NULL, symbol_lookup_callback);
+> +	else
+> +		ctx = LLVMCreateDisasm(triple, NULL, 0, NULL,
+> +				       symbol_lookup_callback);
+> +	LLVMDisposeMessage(triple);
+> +
+> +	return ctx;
+> +}
+> +
+> +void bpftool_llvm_destroy_context(void *ctx)
+> +{
+> +	LLVMDisasmDispose(ctx);
+
+Please move the fix for the context destruction to a separate commit,
+and document it in the commit description.
+
+> +}
+> +
+> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
+> +			     int pc, uint64_t func_ksym, char *buf,
+> +			     size_t buf_sz)
+> +{
+> +	return LLVMDisasmInstruction(ctx, image + pc, len - pc, func_ksym + pc,
+> +				     buf, buf_sz);
+> +}
+> diff --git a/tools/bpf/bpftool/llvm_disasm.h b/tools/bpf/bpftool/llvm_disasm.h
+> new file mode 100644
+> index 000000000..cd9491ea3
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/llvm_disasm.h
+> @@ -0,0 +1,38 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +#ifndef __BPFTOOL_LLVM_DISASM_H
+> +#define __BPFTOOL_LLVM_DISASM_H
+> +
+> +#include <stddef.h>
+> +#include <stdint.h>
+> +#include <sys/types.h>
+> +
+> +/*
+> + * Stable C ABI between bpftool and its optional libLLVM-based JIT disassembler
+> + * plugin (bpftool-llvm.so). bpftool resolves these symbols with dlsym()
+> + * after dlopen()ing the plugin; the plugin is the only object that links
+> + * against libLLVM. See jit_disasm.c (loader) and llvm_disasm.c (plugin).
+> + */
+> +
+> +/* Initialize the libLLVM targets and disassemblers. Returns 0 on success. */
+> +int bpftool_llvm_init(void);
+> +
+> +/*
+> + * Create a disassembler context for @arch (NULL selects the host
+> + * architecture). Returns an opaque context pointer, or NULL on failure.
+> + */
+> +void *bpftool_llvm_create_context(const char *arch);
+> +
+> +/* Release a context previously returned by bpftool_llvm_create_context(). */
+> +void bpftool_llvm_destroy_context(void *ctx);
+> +
+> +/*
+> + * Disassemble the single instruction at @image[@pc] into @buf as a NUL
+> + * terminated string. @func_ksym is the kernel address of @image and is used to
+> + * render absolute branch targets. Returns the instruction length in bytes, or
+> + * 0 if the instruction could not be decoded.
+> + */
+> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
+> +			     int pc, uint64_t func_ksym, char *buf,
+> +			     size_t buf_sz);
+> +
+> +#endif /* __BPFTOOL_LLVM_DISASM_H */
+> 
+> ---
+> base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+> change-id: 20260603-bpftool-plugin-c994bc3e0643
+> 
+> Best regards,
 
