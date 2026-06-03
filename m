@@ -1,131 +1,126 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A353B3B19A5
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 14:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C433939A3
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 14:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780497474; cv=none; b=W3FnvBUCioM0rVP2oaAKluMqpzUyHUzjgJIb4R8c7xflix6Mdz1m+sVW1LYqyOUsUPn1FF19t9UePVP9DsELucSlo4NB8NIOuLj+mep1Jg1SUHXxK/xiOtx5cv58vrvZDJGx2utrL1wSCJwunoiQjti0QBBnaZ7TARdWWKANgrE=
+	t=1780497572; cv=none; b=MUZo7g+v1eYiQV/L5OpwglW6QnbDQH18DHvNPFAGYi2XymAbs0Yd6W1CAgw/4OBcLvZoRQ7sJy9sfhFta8HqS0ZFcSdNXhjlP6Ln44y2OqQa9b+LW3+GSzXkR+tQpPX8EMUey2TzlttTU2uxvu9mFIQujtC2HEQttQrOAytxe1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780497474; c=relaxed/simple;
-	bh=83/CcjA7R6FlA91QsIqzRpUpMxfqD4LBKq0WnzuPEgo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m7WqW/0abBOvCKQBzELE5oCbVUirzt9Rb6CQ0SnyUaILxMHL9TjxxeYi66gx+s1FMynfd8h615wGb3TCAEnIwlqi3PnjcftsVaDf6Q4gDARCFqZqnJaYgYtwedO0AVeMld1pAgYdzUkCLUX2S2sHgRpS+MrAZTGom7EYC4POj5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TKhLIJXM; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780497572; c=relaxed/simple;
+	bh=r5trWWADAEYgIZruXQS4j6vIghp/Au4M38USr/27Qhw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PTZZYa7ro19zYJZXgvU8xL+Fixho6MDjBSh+GSUleXwhezXNfB9is+5wc3drYJ7w985F3EUXaivmkIsyHqsAW9ciCmcdOVbbha6aVBat/4sx/2TP96qkkTBVJ3TjHSzEtGbYcoV/K8qZd9G0K3lR2tSEJYiDidVAv/ZIrBvQF4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MBApz54Z; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TKhLIJXM"
-Message-ID: <961fbada-5ca3-46c2-a5df-51bb006f9cb6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780497460;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BqNdllQBqgAnWlE1ZNMFWUVUiaoezQRXBATxxDjsNRY=;
-	b=TKhLIJXM6TWK6wMHejbD63m1HHx/rym3Gfwiew8hh+HqPckxVy1J+hxg7WDLbFqfenI5w2
-	6vX4UNfEzETLmluoxnAqqPdAzRB5npKfTzRbYunVpZkml3BsS8MG6uZ3Y0xJKqIuuU2qzG
-	neQ1geHWPhTxj6pbvnUqjlwpduaqjd4=
-Date: Wed, 3 Jun 2026 07:37:33 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MBApz54Z"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-45eee266c6cso5029870f8f.1
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 07:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780497569; x=1781102369; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rO597UOV/n14j0OJ0SwzD/CQ08P5uRBLHTvbS6GsC0Q=;
+        b=MBApz54ZSUHhHy1FeRMcS5TX0wRYJt51d16jo/p9uE5xYDy9wOX2AnCRSsQzf8LwHt
+         D5hElUVtbvCL9hkUnNhWNkOStpH24q60nPIIKM6K8JrqFGibYfKNwcFoM56JyhvgtlDC
+         yiVzS/vkzwtfj0yrf7AUv3ZfFEy5JK2hoE18TzvUF/Wshp7NHshvXR0l+J5+pZhykc/z
+         mtqBYIPbPN0b72ZkIrhXUfWyDPqW4sAFzYIRC3eIsPWtI44cnlq7c5rS6G3PZCie/qYF
+         U0VCm7lAj/358Ot268uHVrQz3ql1haUAsjzxcAlYI39TQOIar56fiETkdtWnHhTGTsrT
+         T1dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780497569; x=1781102369;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rO597UOV/n14j0OJ0SwzD/CQ08P5uRBLHTvbS6GsC0Q=;
+        b=WuW+tjUrLb0OjniNnZnWCEdEtIr7osNf/3j5WEEZJ7JjgKK5h0jzWtsNa0AL1k4Z6J
+         ADDjX0dlqPU7rfS9cTkVnTx3w0ORRzkkT2UoK8urKi2iJCl+DDWlJTYplAY3hkeIXIpb
+         lVFO/lANJhLEq+e9xocBuzp8E6eD0sWy3fzjsEQ/GXcg7tKgjYCccNP0hHh9kBwzn/eS
+         vX6nS926o15skSeRR+Un15IL0yfedQCWQmi4xP34kkLykFPLOHcb1M3v9B7XsNcseppi
+         53cxea4aMAztQTwvY10ie6YA3/PlWzyFMTVybDhevqA+WdcdLqvRFqoLY8JlYNCJEBPn
+         QqEg==
+X-Gm-Message-State: AOJu0YwLVIEWqiQIZ0THhNhwoSZ6LivL7d/WlTZD/bP9GM/61gW3sqTo
+	5b0KnvAPe0nJhmHfnssSXyV0nYm9Zsk11S4HuAWLSVQKtS4n0JToptsY
+X-Gm-Gg: Acq92OEGecWKQq8Rx41cQyn/ZiT6oIVY3+ohoTKIUpeaslqpgLP1OvHan6vOZjgPy0f
+	T9YxAMcuySiaA2ojgkHb6YRhvhP33uWdo8RsMX2kNaA6iy7YjVCLRvmOZIzwWPXNNt6JscRuGXT
+	9X1BgqtLPPsn+ZggqwMPVsZx2+UVmniBBTRONe5H9B9JouFRmD86UO+E8ZJLOuWbjB95y3PBDWz
+	3e6TAWv6rfr2EboH51KR/1Xe3wP+jqk++8p9c8wPC6/hP5tJh3YNuTEVkeYYf89zfHTsf+pCk4f
+	ze3fEWagrcxseCQb4mrsu7HjdIySLsGba8SC6YN9vzWHFCFFqdoYzVJZEGvGHbH9/rQtzZ4rAbx
+	2b/nOk5JFo18JCjRyq4Th/U+Ry0VoWF7WMTpKL86zH9E69bbfsyaoHDPON9UOe7fbpQkWgjALbk
+	Tr1n1AY8blsHhAAl3VjS4EjO0=
+X-Received: by 2002:a05:6000:2086:b0:460:e00:121b with SMTP id ffacd0b85a97d-460218f8df7mr5572776f8f.15.1780497569086;
+        Wed, 03 Jun 2026 07:39:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f344148sm8198965f8f.19.2026.06.03.07.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 07:39:28 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Date: Wed, 03 Jun 2026 07:39:15 -0700
+Subject: [PATCH] selftests/bpf: Fix flaky file_reader test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] bpf: NUL-terminate replaced sysctl value
-Content-Language: en-GB
-To: Dawei Feng <dawei.feng@seu.edu.cn>, martin.lau@linux.dev
-Cc: emil@etsalapatis.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- jolsa@kernel.org, kees@kernel.org, joel.granados@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, jianhao.xu@seu.edu.cn,
- Zilin Guan <zilin@seu.edu.cn>
-References: <20260603105317.944304-1-dawei.feng@seu.edu.cn>
- <20260603105317.944304-2-dawei.feng@seu.edu.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260603105317.944304-2-dawei.feng@seu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <20260603-file_reader_flake-v1-1-7f3f52d1e388@meta.com>
+X-B4-Tracking: v=1; b=H4sIAJI8IGoC/x3MUQqDMBAFwKss79tAGmmEXKUUSepLuyi2bEAE8
+ e4F5wBzoNGUDUkOGDdt+l2R5NYJXp+8vul0QhIEH6KPvndVF47GPNHGuuSZrlQ/3PvCWALRCX7
+ Gqvt1Pp7n+QeBXK3tYwAAAA==
+X-Change-ID: 20260603-file_reader_flake-bf0753be6b2e
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+ memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, 
+ Shung-Hsi Yu <shung-hsi.yu@suse.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780497567; l=1383;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=1DToXCvpEaXdEgMxHbdzprutpewrEBJy7uUNWLRs5og=;
+ b=4BbEZbaO8xXvOsdosi2v/Y1pwqdDOdYAoN94zQ9pA3vbvJWoi1HSJRWU+sxWFXIT9gAAavXrj
+ XiZT5wqSp22ArU5thO2shw6w0MlaHfKI/bvFbTwZU6//gcxl/dxBmsY
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
+file_reader/on_open_expect_fault test expects page fault
+when reading pages from the test harness executable.
+It is not guaranteed that those are paged out, even
+after madvise(MADV_PAGEOUT).
+Relax the condition in the test to succeed with both
+0 and -EFAULT returned.
 
-On 6/3/26 3:53 AM, Dawei Feng wrote:
-> When writing to sysctls, proc_sys_call_handler() guarantees that the
-> buffer passed to proc handlers is NUL-terminated. If
-> bpf_sysctl_set_new_value() replaces the pending sysctl value, it can
-> hand a replacement buffer directly to proc handlers. However, the
-> helper currently copies only buf_len bytes into that buffer without
-> appending a NUL terminator, leaving downstream parsers vulnerable to
-> out-of-bounds access.
->
-> Fix this by appending a '\0' after the replaced value to restore the
-> expected sysctl semantics. Since the helper already rejects buf_len
-> greater than PAGE_SIZE - 1, there is always room for the extra byte.
->
-> Reproduced in a QEMU x86_64 guest booted with KASAN while exercising
-> the sysctl replacement path with a cgroup/sysctl BPF program. The
-> reproducer targets `/proc/sys/net/core/flow_limit_cpu_bitmap`, fills
-> the original user write buffer with non-zero bytes, and overrides the
-> sysctl value so the replacement buffer lacks a terminating NUL. Under
-> that setup, the pre-fix kernel reported:
->
->    BUG: KASAN: slab-out-of-bounds in strnchrnul+0x72/0x90
->    Read of size 1 at addr ffff88800de57000 by task repro_patch3/66
->    CPU: 0 UID: 0 PID: 66 Comm: repro_patch3 Not tainted 7.1.0-rc3-00269-g8370ca1f87cc #6 PREEMPT(lazy)
->    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
->    Call Trace:
->     <TASK>
->     dump_stack_lvl+0x68/0xa0
->     print_report+0xcb/0x5e0
->     ? __virt_addr_valid+0x21d/0x3f0
->     ? strnchrnul+0x72/0x90
->     ? strnchrnul+0x72/0x90
->     kasan_report+0xca/0x100
->     ? strnchrnul+0x72/0x90
->     strnchrnul+0x72/0x90
->     bitmap_parse+0x37/0x2e0
->     flow_limit_cpu_sysctl+0xc6/0x840
->     ? __pfx_flow_limit_cpu_sysctl+0x10/0x10
->     ? __kvmalloc_node_noprof+0x5ba/0x870
->     proc_sys_call_handler+0x31d/0x480
->     ? __pfx_proc_sys_call_handler+0x10/0x10
->     ? selinux_file_permission+0x39f/0x500
->     ? lock_is_held_type+0x9e/0x120
->     vfs_write+0x98e/0x1000
->     ...
->     </TASK>
->    The buggy address is located 0 bytes to the right of
->    allocated 4096-byte region [ffff88800de56000, ffff88800de57000)
-> With this fix applied, rerunning the same sysctl-targeted path yields
-> no corresponding KASAN reports.
->
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
-> ---
->   kernel/bpf/cgroup.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b6..2c7f72d3fb11 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -2342,6 +2342,7 @@ BPF_CALL_3(bpf_sysctl_set_new_value, struct bpf_sysctl_kern *, ctx,
->   		return -E2BIG;
->   
->   	memcpy(ctx->new_val, buf, buf_len);
-> +	((char *)ctx->new_val)[buf_len] = '\0';
+Fixes: 784cdf931543 ("selftests/bpf: add file dynptr tests")
+Reported-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Closes: https://lore.kernel.org/all/ah6g7JSYOWGp2oAG@u94a/
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+ tools/testing/selftests/bpf/progs/file_reader.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In v2 (https://lore.kernel.org/bpf/bf25d653-d856-4ad7-a751-b97d38f38892@linux.dev/)
-I suggested
-     memcpy(ctx->new_val, buf, buf_len + 1);
-Does it work?
+diff --git a/tools/testing/selftests/bpf/progs/file_reader.c b/tools/testing/selftests/bpf/progs/file_reader.c
+index 462712ff3b8a..aa2c05cce2b3 100644
+--- a/tools/testing/selftests/bpf/progs/file_reader.c
++++ b/tools/testing/selftests/bpf/progs/file_reader.c
+@@ -50,7 +50,7 @@ int on_open_expect_fault(void *c)
+ 		goto out;
+ 
+ 	local_err = bpf_dynptr_read(tmp_buf, user_buf_sz, &dynptr, user_buf_sz, 0);
+-	if (local_err == -EFAULT) { /* Expect page fault */
++	if (local_err == -EFAULT || local_err == 0) { /* Expect page fault or success */
+ 		local_err = 0;
+ 		run_success = 1;
+ 	}
 
->   	ctx->new_len = buf_len;
->   	ctx->new_updated = 1;
->   
+---
+base-commit: 245da8192c073820390f7fa1cc1e834b32119bce
+change-id: 20260603-file_reader_flake-bf0753be6b2e
+
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
