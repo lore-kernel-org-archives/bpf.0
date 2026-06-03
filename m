@@ -1,97 +1,88 @@
-Received: from mail-m2411.xmail.ntesmail.com (mail-m2411.xmail.ntesmail.com [45.195.24.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCBC383985;
-	Wed,  3 Jun 2026 10:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.195.24.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6286D377EB8
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 10:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780482848; cv=none; b=EbnQuLDuh/lFI5v7vF4ppntgMx480p+rn4k8yKePqg9Na53Zn0uTLJuB9WyEf7ySA6BlZy/WsCQdNRfjkt9e2yPXqDiBHizSGPOmy3XDwgWQwKXn/nxyK8NFLgHoAvCKzdwY5rTI7j8JyXqjYkig2Gwhh8yZwc+IIGN2X+3p6rM=
+	t=1780483249; cv=none; b=GBb2WF2IJ5W6fQGlDrwIYT8ZWeglgqfsvzLBsejFztEo4ZG3nWhicwWNVJ5WiC0wT5eTmcK45poJOodPwhYRXQ3pQMlueznki4lrcI08s/SuM0OQjNJh/rhNY3G9xYM3ojprvZtYVPhtNWVQP+o2ahYTM2UuCxb5CJtH6+RP6KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780482848; c=relaxed/simple;
-	bh=FAsGlLDuXIjd03kTiyI5Qfa8qmiuNaTCHebWLKhY5Zk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iYTYhNrQYMcPX4C3SRvmS8V8DaFRV1RPsGfNq8/f+U78Su6Q+KKPpXu9gm1tAkk6+Q/JW+1o97cgs3TtVCNZuBkz6ENqBhyWBAGhnZtOsTh1sRwRcF97jz5c7dfbvM8xnzajzIQ5jcALPYf6E+opzJDWTG/Cj5YEPxsOxjsrPQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ln7UZ2wR; arc=none smtp.client-ip=45.195.24.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1780483249; c=relaxed/simple;
+	bh=BstLxWuGG+6g4CjFilhYfdIVRH2JbDHeXfNS0jfFcJI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=AdefhEpoz0V4239SJpRdwKP20pnmGsfcTbMN7QqLVo/+HHXJyooJgwKMFtNCyrEA2f3RJZoDqLBPhgP1n7fDULmQuIdK5ffIa/NutzbzA2YCmmI/EPesfLFPBLGzYU59yyuJCI/vh8liFzBXBi78iRNF58h0eg1GjYD6c3bmjec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WN+JQJ4G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ln7UZ2wR"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 40ea2c53f;
-	Wed, 3 Jun 2026 18:33:56 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: yonghong.song@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	dawei.feng@seu.edu.cn,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	jianhao.xu@seu.edu.cn,
-	joel.granados@kernel.org,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org,
-	zilin@seu.edu.cn
-Subject: Re: [PATCH v2 2/3] bpf: cgroup: NUL-terminate replaced sysctl value
-Date: Wed,  3 Jun 2026 18:33:58 +0800
-Message-Id: <20260603103358.938480-1-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <bf25d653-d856-4ad7-a751-b97d38f38892@linux.dev>
-References: <bf25d653-d856-4ad7-a751-b97d38f38892@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WN+JQJ4G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809111F00893;
+	Wed,  3 Jun 2026 10:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780483248;
+	bh=kIQKGp14/AiqPLR6UryCxKub8IDUgfGjeEcdO9rWOYY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=WN+JQJ4GL3ETGxdKOmEy9+Ty2/r/fI4pLBONra9gjzkJI2+ZtYagCSfAId9bEiKcq
+	 2v0pBNMj72Ha9qQxzFad2Cdxoo2wWEvEWX2LH3I31njQ9s26aEReduLyFzOoBGABHv
+	 dSDEZyiJV7wcrL5pTrWXtZy6+OgEgRobuhCJHwQObNDyr2RRaKYDBPYp60NAwcotLJ
+	 EK32wmKbmni481dmCwQwc25qfhW3rSjRzRNuNQgibcaVsTZmyi04S0y1t/FEH9uVyW
+	 xKJVo0r5ixpP5zVzeerdaW6r4PwR7YNFJoqMze/dZHi7C1WhnYnWYsN1oY90xtiLhN
+	 A7US7ya4MwQHQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 4/4] selftests/bpf: Add kptr-xchg benchmark
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Chenguang Zhao" <zhaochenguang@kylinos.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260603100438.2177817-5-zhaochenguang@kylinos.cn>
+References: <20260603100438.2177817-5-zhaochenguang@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 10:40:47 +0000
+Message-Id: <20260603104047.809111F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9e8d0c09a903a2kunm6d7b34da1ec68e
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaS05PVk9PGR9NShhITh9DTVYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktJSE
-	5DQ1VKS0tVS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=ln7UZ2wRLZCxyD5Q1F2DgoFgzuNzFO12tGBbbISBDaJWkw9oLLu32E6DN7Z2O8Saoy2R74+WXfw6UvWo5XCPHhTPDbHpbEZAFeiKkl6JuBlYLSxw4rIQpP0cv8O301x45vEsg3zHbMNomYFOiuNu+rPKibmwNNgaOUKEfZWwF5E=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
-	bh=QxJ3iMW7Ldgrry4/8NsVUJkmYGX1x+BwOPrSC6DrZt0=;
-	h=date:mime-version:subject:message-id:from;
 
-Hi Yonghong,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The multi-line comment in `kptr_xchg_bench.c` violates the mandator=
+y BPF subsystem comment style.
+--
 
-On Mon, 1 Jun 2026 14:22:07 -0700, Yonghong Song wrote:
->The above log can be simplied.
+commit 65ef658c1862e0b10ff0a6614c9d69939e4240fa
+Author: Chenguang Zhao <zhaochenguang@kylinos.cn>
 
-Thanks. I will simplify the KASAN log in v3.
+selftests/bpf: Add kptr-xchg benchmark
 
->>   	memcpy(ctx->new_val, buf, buf_len);
->> +	((char *)ctx->new_val)[buf_len] = '\0';
->
->Does memcpy(ctx->new_val, buf, buf_len + 1) work?
+Add a bpf selftest benchmark that exercises bpf_kptr_xchg() in a tight loop
+so helper vs inlined JIT paths can be compared on supported architectures.
 
-I do not think memcpy(ctx->new_val, buf, buf_len + 1) would be a good
-fit here.
+> diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c b/tools/=
+testing/selftests/bpf/progs/kptr_xchg_bench.c
+> new file mode 100644
+> index 0000000000000..ff146e4dcde7a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+[ ... ]
+> +	__sync_add_and_fetch(&hits, i);
+> +	return 0;
+> +}
+> +
+> +/* BTF FUNC records are not generated for kfuncs referenced only through
+> + * optimized paths. Keep bpf_obj_drop() visible to libbpf's kfunc linker.
+> + */
 
-The helper interface only guarantees that buf is valid for buf_len
-bytes, so reading one more byte would go past the declared input range.
-Even if some callers happen to have a trailing '\0' right after the
-payload, that is not part of the contract.
+[Severity: Low]
+This isn't a bug, but the multi-line comment here violates the BPF subsystem
+comment style, which strictly requires the opening /* to be on its own line.
 
-Appending the terminator on the destination side keeps the source read
-strictly within buf_len, while still restoring the NUL-terminated
-buffer semantics expected by downstream proc handlers. It is also safe
-for the destination, since the helper already rejects
-buf_len > PAGE_SIZE - 1.
+Could you move the opening /* to its own empty line?
 
-Therefore, I would prefer to keep it as:
+> +void __btf_root(void)
+> +{
+> +	bpf_obj_drop(NULL);
+> +}
 
-	memcpy(ctx->new_val, buf, buf_len);
-	((char *)ctx->new_val)[buf_len] = '\0';
-
-Best regards,
-Dawei
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603100438.2177=
+817-1-zhaochenguang@kylinos.cn?part=3D4
