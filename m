@@ -1,183 +1,81 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11DA38A717
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 21:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDFF38734D;
+	Wed,  3 Jun 2026 22:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780523571; cv=none; b=e6lzkicZppy5MiBSaoPS3NqkyXi6TeUxaOl/opowKSbILnC56RTn5hB6qtzaLeO/iG9rJ/PtQ/8iAAEoFiLGw2F043jM2TSmUNfdC0h+eKTgjBI4/bodbWS1RhAcmJ9y6ibjsiGrUB2AuvLTsjp9c4cEdS9jqw828I2WNTs+Qvw=
+	t=1780526405; cv=none; b=H5HaaTHStgifptsJUKrGdo2CkXLrH4+WnUscmjiMZmZFvwaZbfRUQWAnSopPXywk3rsw3Ex6+Q66ToC+qeR0jjps+invhUxqOQo4iZt1XvHrHtKWSbF1kqgOxtBs/TUvjdVv6KfFG5eOcJ0B2X++bALy53zbvbbFwGAvQGicNTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780523571; c=relaxed/simple;
-	bh=1FFA7jfzyC1KLjjPnHUe4vFQ6VOP3AZW5dyL4G/fhXA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JK0k0IUsVbNwZrhPSRb2hXup/yqiWs/KH7ZMerV1I8D/jMl1jTePTbaPqQL5fQnsx4FIX0XM+FeQir0UNYBCJnfwoMxe27WJIW6k4sJdHf6jU1MX/aMQ1mPQ55Y38ZuQJRsoxNPbkqtbVl9deguXo69RaOMQ8UiVyDOWavFERa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sDvlK58n; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780526405; c=relaxed/simple;
+	bh=nFU9EhmNQ8PaOD9cBPNinJjobmGCvJFdR+gJXpAuGsI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=CAZoYT48xNIOAUxgeAH33w9cnV/9oYx8yEHcyKRGSmFBo+lNeRw29HJiRWDN1ipoWGrRotAbVTPxneXkTH/Hl3hcIwloX57qvkt6ngP4sA4yo+Diu4Fsb9RtvXjGTLun2/gCDECYzwWr6LjwKUEBOxX/JFEgspgYkrbYc076JWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iq6j6R02; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sDvlK58n"
-Message-ID: <a3d49856-4d7d-4429-a287-28e70952a56f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780523566;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XV14Oh5b22FVMwPnSaRFvnAf0VNIpY/Bg4ibaOikVjQ=;
-	b=sDvlK58nA8sYNC1xgjmVe57lds3GU35Q+DPmZWxwNUmJfRMvSWYyvBvoNY1zc8nklZ/eGx
-	ntl9DOcZ0sqSyR0aFhRFkINj6E6KrSJJ8qwGmWvNxMfw9qZgxsnh5uNEzW4I+ViV3DW1bj
-	R8fgRA7n5L4PEs6MO4ufGugzz1jcV0o=
-Date: Wed, 3 Jun 2026 14:52:26 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iq6j6R02"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB3B1F00898;
+	Wed,  3 Jun 2026 22:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780526404;
+	bh=Myoc8QcvzlQe6lJFo+QWEPMjs9WZUygm9BGlI9+LJo8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=iq6j6R02YCERblWQvwQRU01twKTUSKm8L2sDZPDuedmaelhFNnhd4tC8bglRORUQN
+	 Ig4tQxbzcOhN4ICe7XUuYSYk9IovLb7N4DE8elqnOEtTmJxuAY4ibH0pkjhiiDDYGA
+	 0JblkaUloGiqrGRpiOue+WUUkJyUSJpA7WgiQIfNpOGXgTR0fNTT9CGSwdy+87fgmi
+	 SpjwUIZBYDHbsgm0jQw8yHnjlVHvRleTnfuVun0Xj1nGxhw/U8QRXuopBPxhKAMqcn
+	 hDAxDh5tfFWaZB8qbtwV51sKR0oTU0PpdNn0RjgigOmM+NvEKMxN8XRuxsuYWu/ons
+	 JMN/29c729ESw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BF99B39308DD;
+	Wed,  3 Jun 2026 22:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PAHOLE v4 3/3] tests: Support GCC in pfunct-btf-decl-tags test
-Content-Language: en-GB
-To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
- David Faust <david.faust@oracle.com>
-References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
- <20260602195512.1511013-3-vineet.gupta@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260602195512.1511013-3-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2] bpftool: Use libbpf error code for flow dissector
+ query
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178052640576.2032852.14873699170740166631.git-patchwork-notify@kernel.org>
+Date: Wed, 03 Jun 2026 22:40:05 +0000
+References: <20260603003339.33791-1-random6.xyz@gmail.com>
+In-Reply-To: <20260603003339.33791-1-random6.xyz@gmail.com>
+To: Woojin Ji <random6.xyz@gmail.com>
+Cc: yonghong.song@linux.dev, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+ jolsa@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, memxor@gmail.com, qmo@kernel.org, sdf@fomichev.me,
+ song@kernel.org
 
+Hello:
 
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-On 6/2/26 12:55 PM, Vineet Gupta wrote:
-> GCC 16+ supports btf_decl_tag via DW_TAG_GNU_annotation. Update the
-> test to run with both GCC (>= 16) and clang when available, instead
-> of requiring clang only.
->
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+On Wed,  3 Jun 2026 09:33:39 +0900 you wrote:
+> bpf_prog_query() returns a negative errno on failure.
+> query_flow_dissector() currently closes the namespace fd and then reads
+> errno to decide whether -EINVAL means that the running kernel does not
+> support flow dissector queries.
+> 
+> That errno check controls behavior, not just diagnostics: -EINVAL is
+> handled as a non-fatal old-kernel case, while any other error makes bpftool
+> net fail.
+> 
+> [...]
 
-LGTM but missing 'pahole -J' for clang test. See below.
+Here is the summary with links:
+  - [bpf,v2] bpftool: Use libbpf error code for flow dissector query
+    https://git.kernel.org/bpf/bpf-next/c/8a7f2bff2165
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> ---
->   tests/pfunct-btf-decl-tags.sh | 72 +++++++++++++++++++++++++++--------
->   1 file changed, 56 insertions(+), 16 deletions(-)
->
-> diff --git a/tests/pfunct-btf-decl-tags.sh b/tests/pfunct-btf-decl-tags.sh
-> index 35884b4e8687..a46aa1f3df55 100755
-> --- a/tests/pfunct-btf-decl-tags.sh
-> +++ b/tests/pfunct-btf-decl-tags.sh
-> @@ -6,24 +6,36 @@
->   source test_lib.sh
->   
->   outdir=$(make_tmpdir)
-> -tmpobj=$(make_tmpobj)
->   
->   # Comment this out to save test data.
->   trap cleanup EXIT
->   
->   title_log "Check that pfunct can print btf_decl_tags read from BTF."
->   
-> -# gcc now also supports decl tags as of gcc commit 43dcea48b8c,
-> -# in upstream version 16.
-> -# UPTODO: add a check here for that.
-> +# gcc 16+ supports decl tags via DW_TAG_GNU_annotation (gcc commit ac7027f180b).
->   
-> +GCC=${GCC:-gcc}
->   CLANG=${CLANG:-clang}
-> -if ! command -v $CLANG > /dev/null; then
-> -	error_log "Need clang for test $0"
-> +
-> +use_gcc=0
-> +if command -v $GCC > /dev/null; then
-> +	gcc_ver=$($GCC -dumpversion 2>/dev/null | cut -d. -f1)
-> +	if [ "$gcc_ver" -ge 16 ] 2>/dev/null; then
-> +		use_gcc=1
-> +	fi
-> +fi
-> +
-> +use_clang=0
-> +if command -v $CLANG > /dev/null; then
-> +	use_clang=1
-> +fi
-> +
-> +if [ "$use_gcc" -eq 0 ] && [ "$use_clang" -eq 0 ]; then
-> +	error_log "Need gcc >= 16 or clang for test $0"
->   	test_fail
->   fi
->   
-> -(cat <<EOF
-> +src=$(cat <<EOF
->   #define __tag(x) __attribute__((btf_decl_tag(#x)))
->   
->   __tag(a) __tag(b) __tag(c) void foo(void) {}
-> @@ -31,7 +43,7 @@ __tag(a) __tag(b)          void bar(void) {}
->   __tag(a)                   void buz(void) {}
->   
->   EOF
-> -) | $CLANG --target=bpf -c -g -x c -o $tmpobj -
-> +)
->   
->   # tags order is not guaranteed
->   sort_tags=$(cat <<EOF
-> @@ -54,16 +66,44 @@ a void buz(void);
->   EOF
->   )
->   
-> -out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> -d=$(diff -u <(echo "$expected") <(echo "$out"))
-> +run_test() {
-> +	local compiler=$1
-> +	local tmpobj=$2
-> +
-> +	info_log "Testing with $compiler"
-> +	out=$(pfunct -P -F btf $tmpobj | awk "$sort_tags" | sort)
-> +	d=$(diff -u <(echo "$expected") <(echo "$out"))
-> +
-> +	if [[ "$d" == "" ]]; then
-> +		info_log "  passed"
-> +		return 0
-> +	else
-> +		error_log "pfunct output does not match expected ($compiler):"
-> +		info_log "$d"
-> +		info_log
-> +		info_log "Complete output:"
-> +		info_log "$out"
-> +		return 1
-> +	fi
-> +}
-> +
-> +failed=0
-> +
-> +if [ "$use_gcc" -eq 1 ]; then
-> +	tmpobj=$(make_tmpobj)
-> +	echo "$src" | $GCC -c -g -x c -o $tmpobj - 2>/dev/null
-> +	pahole -J $tmpobj 2>/dev/null
-> +	run_test "$GCC (version $gcc_ver)" "$tmpobj" || failed=1
-> +fi
-> +
-> +if [ "$use_clang" -eq 1 ]; then
-> +	tmpobj=$(make_tmpobj)
-> +	echo "$src" | $CLANG --target=bpf -c -g -x c -o $tmpobj -
-
-missing 'pahole -J $tmpobj 2>/dev/null' here.
-
-> +	run_test "$CLANG" "$tmpobj" || failed=1
-> +fi
->   
-> -if [[ "$d" == "" ]]; then
-> +if [ "$failed" -eq 0 ]; then
->   	test_pass
->   else
-> -	error_log "pfunct output does not match expected:"
-> -	info_log "$d"
-> -	info_log
-> -	info_log "Complete output:"
-> -	info_log "$out"
->   	test_fail
->   fi
 
