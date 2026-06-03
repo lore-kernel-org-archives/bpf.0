@@ -1,160 +1,251 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DCD428841;
-	Wed,  3 Jun 2026 10:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601FD3B2FD1;
+	Wed,  3 Jun 2026 11:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780484350; cv=none; b=ocL0Rnl4AmA2s5IiO0U35EoQ8SnTpU/IQzZW0Zo0u6TX95IexfwyjkA6IjjDnEIvKSvpx2ogOXe0cc4OHVo+ipENYzXUyn/LZg98ghxg/dGIrI13vV7b1Xcblgb2gZBbgSsXsQ8u5FElDFuRgHLmFM+ZHs/DQQF3gDetsK1KYcg=
+	t=1780484761; cv=none; b=ZVxojbU3rgJGPx92buKVvDJyxW8mM40UcabyekHLbDiSUEGfomW5k4D316mhmJzAWLHe9B3h5ENt2lHB7pOzXYiuwuKVF7HcdVJUgKXFLR4Uvfk+KgJHF+l4vVxonXS+ltuuQ5XDeU+T3hsXB3YtX0ORjk05U60+zGvPQNCapro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780484350; c=relaxed/simple;
-	bh=t+cki3wXIG0nscmYAdmLLaMlAxKQc6RtuMI9PKrZleA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HkaBbw7W2eFnOklMpF/tTra+CX9YhHK03YMGVp4h0hclArjL6NwcKGgsqkn14yn1rGisn/mh7eg49F1FW++bmVYuJHv+pEvIAIkZSoVGdrE3p9VsD/+hwPwUNrc45JvPUtC0Ha7dvSF3+gmmnhLTUKL5wV1Xvf/Jc7zMBUFEuYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDgUhWjm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780484761; c=relaxed/simple;
+	bh=gdO3lTCd+2KW6m+99KtEnvQHdP1zen1YZfmDAH9bzTc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IgsTDk6/z7vnZLLqfTB8c4nOigWJD9vNOkBAC2rEPgYfstYVku5EgSRfDfgoHE0rnbATZ1vIwNJlRSA6KG4O8r9bfzPm/sR/DSba3Ayo7zCfoM4KXtjyJzKsD9tbg/BYNhJ0db5eCiY179j8mUcpp0J9AgvkCOg5SiksgfAGA+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdFG6KYG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDgUhWjm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6291F00893;
-	Wed,  3 Jun 2026 10:59:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdFG6KYG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97DE1F00893;
+	Wed,  3 Jun 2026 11:05:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780484349;
-	bh=IBHUlSohGwOSoD+kQjNRJAfO05UWKQegIZEd4SWaE4U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BDgUhWjmGy8lESU54FHetczAY5zD2a1lZ12KSi7XrnfqI5LjaO4rOH4lrX70mVsq4
-	 OYjCeemYDKaH0qhlW/LGzyov6Lg2O05mXoqt8D6AT9gkQT2LJJGxcLXsVjzybi+LVf
-	 DzRhfG7U3vnS4PSCfX9ju2aDAOfygdzPbmbb8GKibleMuTAVOMlMeDhqMd+bkUrSca
-	 PtOfoJMZ5ELr7TXQeKfJ3+Yz6G0YQj/xBqOR3Y8RQ3gPjgMQ2OEZVktsW6Nkoj1vZr
-	 GkqgsShGTFwhWxX9pkSG4KuazJ92MkslcQv7rIqQH9jhFrycfHoiCuZblLhRBcuWLT
-	 OkIUBEHDcWGtA==
-Content-Type: multipart/mixed; boundary="===============4628976069350686524=="
+	s=k20260515; t=1780484760;
+	bh=7cZ5xvGQYdMR4kVwqIwt5LGccyh3cXFOdjKBtAY07vQ=;
+	h=From:To:Cc:Subject:Date;
+	b=RdFG6KYGzB7ELPg1arclGzHuWy9HGKMgpka3CC/MGWZNOn/NmfwNjUtGnYFtcH2oY
+	 AsuPnPNblZWEJ2I2fzyvWRoKzJocNg6MYZJm1zElXvH3mRY6c0lEJYO6Y+NQ1eKYXr
+	 El0kvDYooGOLtwiUX7HVVB4rdRe4VJcM0aovISk0r56y2feNKZBM3D5iFNz3A7e1yO
+	 1w7Tgvw9vbY3UTqDqUjgjtAtYEi/RXwg/0y4sNStS+8VQjJ+8H1GMoR4RIxfVRUUPt
+	 0gwDAkIMae5CCKcAvLyhwnt7VnWVtZ00N64/SFyQvFgpXuhQAmZ194b5fP9gGhXtCZ
+	 pNuusjpY6jviA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: [PATCHv7 bpf-next 00/29] bpf: tracing_multi link
+Date: Wed,  3 Jun 2026 13:05:24 +0200
+Message-ID: <20260603110554.29590-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <af8f8f318aae78a9534bef53e3b753bcf9767bff15aaf92f59e69e847db6b65c@mail.kernel.org>
-In-Reply-To: <20260603100438.2177817-2-zhaochenguang@kylinos.cn>
-References: <20260603100438.2177817-2-zhaochenguang@kylinos.cn>
-Subject: Re: [PATCH v2 1/4] LoongArch: bpf: Use amswap_db for BPF atomic xchg
-From: bot+bpf-ci@kernel.org
-To: zhaochenguang@kylinos.cn,chenhuacai@kernel.org,kernel@xen0n.name,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yangtiezhu@loongson.cn
-Cc: zhaochenguang@kylinos.cn,hengqi.chen@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  3 Jun 2026 10:59:08 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============4628976069350686524==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+hi,
+adding tracing_multi link support that allows fast attachment
+of tracing program to many functions.
 
-> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-> index 76b723590023..636cfc524b02 100644
-> --- a/arch/loongarch/include/asm/inst.h
-> +++ b/arch/loongarch/include/asm/inst.h
-> @@ -783,6 +783,8 @@ DEF_EMIT_REG3_FORMAT(amswapb, amswapb_op)
->  DEF_EMIT_REG3_FORMAT(amswaph, amswaph_op)
->  DEF_EMIT_REG3_FORMAT(amswapw, amswapw_op)
->  DEF_EMIT_REG3_FORMAT(amswapd, amswapd_op)
-> +DEF_EMIT_REG3_FORMAT(amswapdbw, amswapdbw_op)
-> +DEF_EMIT_REG3_FORMAT(amswapdbd, amswapdbd_op)
->
->  #define DEF_EMIT_REG3SA2_FORMAT(NAME, OP)				\
->  static inline void emit_##NAME(union loongarch_instruction *insn,	\
+RFC: https://lore.kernel.org/bpf/20260203093819.2105105-1-jolsa@kernel.org/
+v1: https://lore.kernel.org/bpf/20260220100649.628307-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260304222141.497203-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260316075138.465430-1-jolsa@kernel.org/
+v4: https://lore.kernel.org/bpf/20260324081846.2334094-1-jolsa@kernel.org/
+v5: https://lore.kernel.org/bpf/20260417192502.194548-1-jolsa@kernel.org/
+v6: https://lore.kernel.org/bpf/20260527113951.46265-1-jolsa@kernel.org/
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 24913dc7f4e8..f071d913e054 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -482,11 +482,11 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
->  			emit_zext_32(ctx, src, true);
->  			break;
->  		case BPF_W:
-> -			emit_insn(ctx, amswapw, src, t1, t3);
-> +			emit_insn(ctx, amswapdbw, src, t1, t3);
->  			emit_zext_32(ctx, src, true);
->  			break;
->  		case BPF_DW:
-> -			emit_insn(ctx, amswapd, src, t1, t3);
-> +			emit_insn(ctx, amswapdbd, src, t1, t3);
->  			break;
->  		}
->  		break;
+v7 changes:
+- added ftrace_hash_count stub for !CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS cade [sashiko]
+- selftests fixes [sashiko]
+- use hash_ptr in select_trampoline_lock [sashiko]
+- changed the check duplicate logic in check_dup_ids [sashiko]
+- use sort_r_nonatomic in check_dup_ids [sashiko]
+- added BPF_TRACE_FSESSION_MULTI to can_be_sleepable,
+  plus added testcase for sleepable fsession
+- make bpf_tracing_multi_opts pointer fields as const
+- add ___migrate_enable to trace_blacklist
 
-The commit message states that value-returning atomic RMW instructions
-imply a full barrier per the LKMM.
+v6 changes:
+- move ftrace_hash_count declaration under CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS [sashiko]
+- fix ftrace_hash_remove check/deref [sashiko]
+- disable context access for multi programs by using stub function with no arguments 
+  for verification [sashiko]
+- add __used for bpf_multi_func, and removed arguments, we do not allow direct access [sashiko]
+- rebased on latest loongarch changes, fix ppc build
+- guard update_ftrace_direct_del with ftrace_hash_count on rollback [sashiko]
+- fix noreturn attachment condition in bpf_check_attach_btf_id_multi [sashiko]
+- fail early on multiple same IDs provided by user [sashiko]
+- fix selftests error paths [sashiko]
+- add MAX_RESOLVE_DEPTH check to btf_get_type_size [sashiko]
+- use btf__pointer_size [sashiko]
+- fixed compilation on powerpc [sashiko]
+- added verifier fails selftest
+- after discussing with Song, it was determined that cleaning up FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY_PEER
+  is not strictly necessary — keeping the trampoline in the ipmodify_enabled state is acceptable.
+  The race condition this introduces remains unlikely, so the concern raised in [1] will not be
+  addressed at this time.
+  [1] https://lore.kernel.org/bpf/aec7bAbGlnEo3R1g@krava/
 
-This change only updates the BPF_W and BPF_DW BPF_XCHG cases.  Should the
-other value-returning atomics in emit_atomic_rmw() get the same treatment?
+v5 changes:
+- add dedicated hashes used for detach, so there's no need to allocate
+  them on detach [sashiko]
+- safely release old trampoline images [sashiko]
+- add cond_resched() to couple of loops [sashiko]
+- validate attr->link_create.target_fd [sashiko]
+- allow only bpf_get_func_ret() for return value retrieval [sashiko]
+- do not allow attachment of fexit/fsession_multi for noreturn functions [sashiko]
+- fixed double free/close in libbpf btf cleanup, in separate patch [sashiko]
+- make btf_type_is_traceable_func closer to btf_distill_func_proto [sashiko]
+- add prog->attach_btf_obj_fd check to collect_func_ids_by_glob,
+  to check we don't load module programs for kernel [sashiko]
+- make sure program is loaded in bpf_program__attach_tracing_multi [sashiko]
+- several selftests fixes [sashiko]
+- add attach_type to fdinfo output [Leon Hwang]
+- selftests cleanup fixes [Leon Hwang]
 
-The BPF_*_FETCH cases still emit the plain amadd/amand/amor/amxor variants:
+v4 changes:
+- unlink rollback fix (added ftrace_hash_count) [bot]
+- use const for some bpf_link_create_opts tracing_multi members [bot]
+- adding missing comment for lockdep keys [bot]
+- selftest error path fixes (leaks) and other assorted test fixes [Leon Hwang]
+- several compile fixes wrt CONFIG_BPF_SYSCALL and CONFIG_BPF_JIT [kernel test robot]
+- make ftrace_hash_clear global, because it's needed in rollback
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_W:
-		emit_insn(ctx, amaddw, src, t1, t3);
-		emit_zext_32(ctx, src, true);
-		break;
-	case BPF_DW:
-		emit_insn(ctx, amaddd, src, t1, t3);
-		break;
-	...
-	case BPF_AND | BPF_FETCH:
-		if (isdw) {
-			emit_insn(ctx, amandd, src, t1, t3);
-		} else {
-			emit_insn(ctx, amandw, src, t1, t3);
-	...
-}
+v3 changes:
+- fix module parsing [Leon Hwang]
+- use function traceable check from libbpf [Leon Hwang]
+- use ptr_to_u64 and fix/updated few comments [ci]
+- display cookies as decimal numbers [ci]
+- added link_create.flags check [ci]
+- fix error path in bpf_trampoline_multi_detach [ci]
+- make fentry/fexit.multi not extendable [ci]
+- add missing OPTS_VALID to bpf_program__attach_tracing_multi [ci]
 
-The sub-word BPF_XCHG cases (BPF_B and BPF_H) still emit plain
-amswap.b/amswap.h:
+v2 changes:
+- allocate data.unreg in bpf_trampoline_multi_attach for rollback path [ci]
+  and fixed link count setup in rollback path [ci]
+- several small assorted fixes [ci]
+- added loongarch and powerpc changes for struct bpf_tramp_node change
+- added support to attach functions from modules
+- added tests for sleepable programs
+- added rollback tests
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_B:
-		...
-		emit_insn(ctx, amswapb, src, t1, t3);
-	...
-	case BPF_H:
-		...
-		emit_insn(ctx, amswaph, src, t1, t3);
-	...
-}
-
-And BPF_CMPXCHG uses an ll/sc loop with no dbar barrier:
-
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-	...
-	case BPF_CMPXCHG:
-		move_reg(ctx, t2, r0);
-		if (isdw) {
-			emit_insn(ctx, lld, r0, t1, 0);
-			emit_insn(ctx, bne, t2, r0, 4);
-			move_reg(ctx, t3, src);
-			emit_insn(ctx, scd, t3, t1, 0);
-			emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -4);
-		} else {
-	...
-}
-
-These are also value-returning atomics.  If the LKMM requires a full
-barrier for all of them, would these cases need updating too so that
-lockless BPF algorithms stay sequentially consistent?
-
-This was also raised by the Sashiko AI review on v2:
-https://lore.kernel.org/bpf/20260603101633.25FFA1F00893@smtp.kernel.org
-
-There is no Fixes: tag on this commit.
-
-The amswap.{w,d} BPF_XCHG path was introduced when the LoongArch BPF JIT
-first implemented BPF_XCHG.  Should this carry:
-
-  Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
+v1 changes:
+- added ftrace_hash_count as wrapper for hash_count [Steven]
+- added trampoline mutex pool [Andrii]
+- reworked 'struct bpf_tramp_node' separatoin [Andrii]
+  - the 'struct bpf_tramp_node' now holds pointer to bpf_link,
+    which is similar to what we do for uprobe_multi;
+    I understand it's not a fundamental change compared to previous
+    version which used bpf_prog pointer instead, but I don't see better
+    way of doing this.. I'm happy to discuss this further if there's
+    better idea
+- reworked 'struct bpf_fsession_link' based on bpf_tramp_node
+- made btf__find_by_glob_kind function internal helper [Andrii]
+- many small assorted fixes [Andrii,CI]
+- added session support [Leon Hwang]
+- added cookies support
+- added more tests
 
 
+Note I plan to send linkinfo support separately, the patchset is big enough.
+
+thanks,
+jirka
+
+
+Cc: Hengqi Chen <hengqi.chen@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Jiri Olsa (29):
+      ftrace: Add ftrace_hash_count function
+      ftrace: Add ftrace_hash_remove function
+      ftrace: Add add_ftrace_hash_entry function
+      bpf: Use mutex lock pool for bpf trampolines
+      bpf: Add struct bpf_trampoline_ops object
+      bpf: Move trampoline image setup into bpf_trampoline_ops callbacks
+      bpf: Add bpf_trampoline_add/remove_prog functions
+      bpf: Add struct bpf_tramp_node object
+      bpf: Factor fsession link to use struct bpf_tramp_node
+      bpf: Add multi tracing attach types
+      bpf: Move sleepable verification code to btf_id_allow_sleepable
+      bpf: Add bpf_trampoline_multi_attach/detach functions
+      bpf: Add support for tracing multi link
+      bpf: Add support for tracing_multi link cookies
+      bpf: Add support for tracing_multi link session
+      bpf: Add support for tracing_multi link fdinfo
+      libbpf: Add bpf_object_cleanup_btf function
+      libbpf: Add bpf_link_create support for tracing_multi link
+      libbpf: Add btf_type_is_traceable_func function
+      libbpf: Add support to create tracing multi link
+      selftests/bpf: Add tracing multi skel/pattern/ids attach tests
+      selftests/bpf: Add tracing multi skel/pattern/ids module attach tests
+      selftests/bpf: Add tracing multi intersect tests
+      selftests/bpf: Add tracing multi cookies test
+      selftests/bpf: Add tracing multi session test
+      selftests/bpf: Add tracing multi attach fails test
+      selftests/bpf: Add tracing multi verifier fails test
+      selftests/bpf: Add tracing multi attach benchmark test
+      selftests/bpf: Add tracing multi attach rollback tests
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26878707871
---===============4628976069350686524==--
+ arch/arm64/net/bpf_jit_comp.c                                      |  58 ++--
+ arch/loongarch/net/bpf_jit.c                                       |  52 ++--
+ arch/powerpc/net/bpf_jit_comp.c                                    |  54 ++--
+ arch/riscv/net/bpf_jit_comp64.c                                    |  52 ++--
+ arch/s390/net/bpf_jit_comp.c                                       |  44 +--
+ arch/x86/net/bpf_jit_comp.c                                        |  54 ++--
+ include/linux/bpf.h                                                | 117 ++++++--
+ include/linux/bpf_types.h                                          |   1 +
+ include/linux/bpf_verifier.h                                       |   4 +
+ include/linux/btf_ids.h                                            |   1 +
+ include/linux/ftrace.h                                             |   9 +
+ include/linux/trace_events.h                                       |   6 +
+ include/uapi/linux/bpf.h                                           |   9 +
+ kernel/bpf/bpf_struct_ops.c                                        |  27 +-
+ kernel/bpf/fixups.c                                                |   2 +
+ kernel/bpf/syscall.c                                               |  83 +++---
+ kernel/bpf/trampoline.c                                            | 670 +++++++++++++++++++++++++++++++++----------
+ kernel/bpf/verifier.c                                              | 183 ++++++++++--
+ kernel/trace/bpf_trace.c                                           | 204 +++++++++++++-
+ kernel/trace/ftrace.c                                              |  35 ++-
+ net/bpf/bpf_dummy_struct_ops.c                                     |  14 +-
+ net/bpf/test_run.c                                                 |   3 +
+ tools/include/uapi/linux/bpf.h                                     |  10 +
+ tools/lib/bpf/bpf.c                                                |   9 +
+ tools/lib/bpf/bpf.h                                                |   5 +
+ tools/lib/bpf/libbpf.c                                             | 375 ++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.h                                             |  15 +
+ tools/lib/bpf/libbpf.map                                           |   1 +
+ tools/lib/bpf/libbpf_internal.h                                    |   1 +
+ tools/testing/selftests/bpf/Makefile                               |   9 +-
+ tools/testing/selftests/bpf/prog_tests/tracing_multi.c             | 936 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tracing_multi_attach.c           |  39 +++
+ tools/testing/selftests/bpf/progs/tracing_multi_attach_module.c    |  25 ++
+ tools/testing/selftests/bpf/progs/tracing_multi_bench.c            |  12 +
+ tools/testing/selftests/bpf/progs/tracing_multi_check.c            | 214 ++++++++++++++
+ tools/testing/selftests/bpf/progs/tracing_multi_fail.c             |  18 ++
+ tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c |  41 +++
+ tools/testing/selftests/bpf/progs/tracing_multi_rollback.c         |  43 +++
+ tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c   |  65 +++++
+ tools/testing/selftests/bpf/progs/tracing_multi_verifier.c         |  31 ++
+ tools/testing/selftests/bpf/trace_helpers.c                        |   7 +-
+ tools/testing/selftests/bpf/trace_helpers.h                        |   1 +
+ 42 files changed, 3110 insertions(+), 429 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_check.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_rollback.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_verifier.c
