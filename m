@@ -1,110 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276A8385535;
-	Wed,  3 Jun 2026 09:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F09A385535;
+	Wed,  3 Jun 2026 09:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478526; cv=none; b=tyhP4/6T+KRMKp00GAV++i4P6t0VUb5IihizpDUxDLqB1RgrTgittgEyj8Cl0L6WonKkQA5ZXBFHyLQS3sPxymebNOf836Y2DhnPuvp+y67kXfi8LdPQUuKE4Sx/FA2wec4ILuHhHqAfVZzPACn1wUEQBVME0s5vv3tnxKIPX0Y=
+	t=1780478550; cv=none; b=La45C1XnSCeexH3RA6zurVShB3BcIoAlH1rHr9cr1OSVbLWUVtWZMskq1iv4YnbjHXb/5IhUTWM4c9GOY+TGl6BXp+Reat5S4lXYKmzKuGJiVyPOFqDAiflFUzknBPr5rR33fPUsr6OqJ8SThlTwFlJdC1sBDVUbkAoYFPqxY4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478526; c=relaxed/simple;
-	bh=LdQejOz1IAnEcJAOumKNKrxcqY2PK3y43OQ3sjX7IAo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiOhKLvKTwlCkhLPT6Pp9twzNAUEMW+KS/FwtxGgiEhXXaCG9ne+ucM9EzuP6edk4HReta2fbXyLZIle0UekA2JcaKcM0VrgVGPYbzXVjtXMyJXd4wUtHazp2TW/5udk6PIlpFqrDWyOzFkWDgSR4n+Itc/XVmm6aphHn4cXSC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MS7eDG/G; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780478550; c=relaxed/simple;
+	bh=mZJvDd8OL9KkdMs0WLfHiFk6IKJAtGhak5iGdltNtDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PBRWwLx+RxlCjPcn7+QEYiTq8D5p6DSV7Gd0PaPh/hIUHPQEZ7LurBT4LcC9ZCpg+qXPCcS4w5PPhKC9NER0NCPTQ8pXI7rZvC+GnF429m4PShAT+pskxAzKCKmjjg/eV1QvZx4lZjfv+BQiCsNie9kA+f6DjojGEFdyznMqR3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=H215RTZY; arc=none smtp.client-ip=117.135.210.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MS7eDG/G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6260E1F00893;
-	Wed,  3 Jun 2026 09:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780478523;
-	bh=9KPpHmif7uT13SYzZOScP8ZXHj+daUOWD5CJb4ZWcmg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=MS7eDG/GouIHIPQmW7/3M1HBKF/aNNJDtbfrd9i4qhasluoLq2Dp+W9bfux3IkQIl
-	 y+myZ+HGUtT391bfB0nWl/7ZzmDY6sd05KY7T6v3jZ3Me1W3/fTkUstxiIXqSNRI7j
-	 lxYUkNQJ1hWHKqbVPkBbHel3ogjxnu0zzq1XITJItbCI5RpCrtKrc2FL/Zg7LCWRaa
-	 JLDfxNFtfslLUD+WRb9eYrgTCmQJxYXtTPM8G7AE2/YIQOmFWygczVhjALYqggjusn
-	 v80J9YaCM7zAajSejmfLDRyqj8JCg1ZLOYBybe0mmvPYnCXA6VkfvtPiBM0V9DVkhR
-	 B0lCZivckwzQg==
-Message-ID: <2b72da46-bf83-406f-bf5b-022f8e0ac04f@kernel.org>
-Date: Wed, 3 Jun 2026 10:21:58 +0100
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="H215RTZY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=oH
+	IEakLb3lrfC2/YbLb1DBVnEzXFbIoIZ17gSk8Lftg=; b=H215RTZYw8EUBpMicJ
+	1FicOXNXVPyuxoNNv+dFcjitIltLIt9JE7R2aciKtJC9FwSoD1PivkKyYwTO1Gsu
+	6rU7vrWSH0kbdgL2ufuHOLsGNIiKlOHJx1EsOCAGL75YfTQqUSoph/UzmmueoYh+
+	3qCe6O3tlG9oOA+X+6Zp4fA2w=
+Received: from song-MS-7D48.. (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3vySQ8R9q7qJuAw--.20247S2;
+	Wed, 03 Jun 2026 17:19:13 +0800 (CST)
+From: Song Chen <chensong_2000@126.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	kaitao.cheng@linux.dev,
+	leon.hwang@linux.dev
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Chen <chensong_2000@126.com>
+Subject: [PATCH v5] btf: reject to register duplicated kfunc
+Date: Wed,  3 Jun 2026 17:19:10 +0800
+Message-ID: <20260603091910.7212-1-chensong_2000@126.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/8] bpftool: Pass host flags to bootstrap
- libbpf
-To: Leo Yan <leo.yan@arm.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
- <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3vySQ8R9q7qJuAw--.20247S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCFyxJw1xGFy7Gr1UXrykGrg_yoW5Kw1fpF
+	45Jr95uF4xtw13XayxtFyDWry3Gw18GF42yF9xGFW5Jr4qg3yDJr10kF1Yv3sIyry8Ca47
+	tF4ruFWUu3yjva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jUEfrUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpREDgmof8ZE8MQAA3t
 
-2026-06-02 15:47 UTC+0100 ~ Leo Yan <leo.yan@arm.com>
-> bpftool builds a bootstrap libbpf with HOSTCC, but the libbpf submake can
-> still inherit target build flags through CFLAGS. This can break cross
-> builds when host objects are compiled with target-only options.
-> 
-> Since HOST_CFLAGS contains warning options that are not suitable for
-> building libbpf, use LIBBPF_BOOTSTRAP_CFLAGS with the warning options
-> removed to build the bootstrap libbpf. Clear EXTRA_CFLAGS so target
-> extra flags are not mixed into the host bootstrap libbpf build.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/bpf/bpftool/Makefile | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 0febf60e1b64656035dfe93cd15cba090015587a..1f033e578f90a2d6b93168ab41399de758bdf659 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -47,7 +47,8 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
->  $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
->  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
->  		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) prefix= \
-> -		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" $@ install_headers
-> +		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-> +		CFLAGS="$(LIBBPF_BOOTSTRAP_CFLAGS)" EXTRA_CFLAGS= $@ install_headers
->  
->  $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
->  	$(call QUIET_INSTALL, $@)
-> @@ -92,6 +93,9 @@ HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->  		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->  HOST_LDFLAGS := $(LDFLAGS)
->  
-> +# Remove warnings for libbpf bootstrap build
+I had an ebpf program which calls a kfunc defined and
+implemented in one of my kernel modules, it was working
+fine in 6.16, but was rejected to run by libbpf in 6.19,
+the error message was:
 
-Nitpick: We could expand this comment to briefly explain why. Not sure
-it's worth a respin, though.
+libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+incompatible with vmlinux [94389]
 
-> +LIBBPF_BOOTSTRAP_CFLAGS := $(filter-out -W -Wall -Wextra -Wformat -Wformat-signedness,$(HOST_CFLAGS))
+The reason is there is a new added kfunc in kernel 6.19
+which happens to be the same name with my kfunc. However the
+error message is not obvious enough to address problem
+immediately.
 
-Do we need to remove all warnings, or would it be sufficient to take out
--Wformat and -Wformat-signedness? I don't mind removing them all if
-necessary, just asking.
+Therefore, this patches searches duplicated kfunc in
+both btf_vmlinux and btf_modules list before a kernel module
+attempts to register kfuncs through register_btf_kfunc_id_set,
+it prints clear error message and returns error code if same name
+kfunc has already implemented and registered, then developer
+knows at the first place.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+Reviewed-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Song Chen <chensong_2000@126.com>
 
-Thanks!
+---
+changelog:
+v1 --- v2:
+libbpf has already specified which module this kfunc belongs to as
+ebpf code onwer's expectation, then verifier uses
+find_kallsyms_symbol_value to search kfunc's addr.
+
+v2 --- v3:
+After v2, I tried a new idea of introducing a namespace in libbpf
+to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
+please see [1]. Alex suggested to go back to report an error during
+kmod load on conflicting kfunc name for now. What's more, v2 only
+searched bpf_vmlinux, v3 also traverses btf_modules list.
+
+v3 --- v4
+Fixed some coding style problems suggested from Kaitao Cheng.
+
+v4 --- v5
+Use indentation plus space in multiple lines suggested from Yonghong Song.
+Use guard(mutex) suggested from Leon Hwang.
+---
+ kernel/bpf/btf.c | 36 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4872d2a6c42d..f34a210e03c0 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8618,6 +8618,39 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+ 	return 0;
+ }
+ 
++static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
++{
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	struct btf_module *btf_mod, *tmp;
++#endif
++	s32 id;
++
++	if (!btf_is_module(btf))
++		return 0;
++
++	id = btf_find_by_name_kind(bpf_get_btf_vmlinux(), func_name, kind);
++	if (id >= 0) {
++		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
++		       func_name, id);
++		return -EINVAL;
++	}
++
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	guard(mutex)(&btf_module_mutex);
++	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
++		if (btf_mod->btf == btf)
++			continue;
++		id = btf_find_by_name_kind(btf_mod->btf, func_name, kind);
++		if (id >= 0) {
++			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
++			       func_name, id, btf_mod->module->name);
++			return -EINVAL;
++		}
++	}
++#endif
++	return 0;
++}
++
+ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+ {
+ 	const struct btf_type *func;
+@@ -8631,7 +8664,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+ 
+ 	/* sanity check kfunc name */
+ 	func_name = btf_name_by_offset(btf, func->name_off);
+-	if (!func_name || !func_name[0])
++	if (!func_name || !func_name[0] ||
++	    btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
+ 		return -EINVAL;
+ 
+ 	func = btf_type_by_id(btf, func->type);
+-- 
+2.43.0
+
