@@ -1,612 +1,396 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6954F492533;
-	Wed,  3 Jun 2026 21:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0F3407CFC
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 21:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780522236; cv=none; b=aDIIktJm3fbiZYLDk/5WydLtu0Q4VCoVYRHdCuNAdxqaerDH0N+gagMO7aX6xUoHSTGGOJuvZDSSTD7EvGc5r5AxxUTrg+8613/gyhDYjj5hV2PwTn32S2qvFo7WuolnE5y0C0SupM9Rb0H7egiPqNyEU9Qa/rKs2vDNJPXogJw=
+	t=1780522841; cv=none; b=FYGMhph400viidF2llX+0TIQMS5ugJq3gikcTvlGdZVDoUAEyrdxrzdx6gVTaAlfcjRn4Nd2Q7hxWhc99lRytm3BD6+t5nz/BjrbXDw1f1GsYg/6zeO7H0mYbacC0zTUDVivpVtXgGO6nVZVXdagMeHLb6znKoqu/9WhR7fUX8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780522236; c=relaxed/simple;
-	bh=n5boqW3HvANONssfWkpvHsdym12bRJsYkFGekS8vni4=;
+	s=arc-20240116; t=1780522841; c=relaxed/simple;
+	bh=+Pp4hUB/SVlj7OWiRtYRzUGb1BV3wYEUx3VjoAnuOx0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=thE6ThU80hoGYj16YzHb64XouT+yiXxycQrbxINfOHYMjFCLk/OgMS95ppYMOxCBoxU9a1DJu0uflMKS6uyTQN3kxWORGI8pfU+mJ3mZt4OwRixuf+e3nL4LsqnW/QpS2aHKOeUt0J19FpvnhemnhCwblQjgoC80QUVqckvICVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0mZIyOO; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=Cfc76U0herf6HdFiQ6+F2m97jWG4CKpjTGFmauOlGnrJaeOWQnjTTvZGuWr9YBvcYjeGSL+wBaySIH3JF3TiB1itq1ssu4BHiEyAUQJfs4QbbRE/0/lbH1KyEliNX9sI7CLe5q/ecUs9pfRob1qMzIFjWbgVLJEfXOpXP7Ke6wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VBEuk+Oz; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0mZIyOO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742431F00893;
-	Wed,  3 Jun 2026 21:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780522234;
-	bh=w5TvDZ3wJT/WYNVIei0fljDYlvUV9vlvQ7+MiO4iQPI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=a0mZIyOOYd5PEC6qxOJl6ikVpH2bOwuz10N7CCKDcmCqvoq2WHg0wSz+ILx8OSB+j
-	 ZLea2YIUlecUl810dLE5EypVUb8rICZkySEloVbf+JvM/ZK13X7y5bQiGNbIa+AFIA
-	 +EA51fW+9woE5qQH+VfiMrgyxwYHHf30ekdYguVXxc8sykfAtni/q/CGbXy6OkbAPs
-	 sEKZA264+jQnZyf0CdEngSntb2h9UEhnvMa6wJlKMHsYBJYKsmfjCYaqfmpy5qtrl4
-	 26cQHd9oMyAODm+9sfHhJnlxTt8LdAwMX7RZshLfWa5sM1aH/a+TTYDSuoOun68o+5
-	 71gN4iwRuHnGw==
-Message-ID: <f2b8227f-528e-4fbd-aa2a-d86986565f87@kernel.org>
-Date: Wed, 3 Jun 2026 22:30:28 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VBEuk+Oz"
+Message-ID: <6857c249-86ea-4402-9a91-27ea5a679e32@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780522836;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3rA91WuKfkvlPJwNgx7XY7khEbvLunqfNs1YyZTJLYY=;
+	b=VBEuk+Oz2kZYzXX70+n8NSQEtoac5Rm2l3tIrln/NZsZSE9ctEDFaVmhAZvQHegqvOtkih
+	EfnIkHlCR74aqKrlZRVmE/HYcx6AvyyJhAwyc4gO7/2ySoGzrcCRFCtEFR2dLGWP9BXo4d
+	FW5+aPlzsRvwsF2U9PaXK6v5jqo8+Zs=
+Date: Wed, 3 Jun 2026 14:40:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
- dependency
-To: socketpair@gmail.com, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
 Content-Language: en-GB
-In-Reply-To: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+ <27ee8637-a825-4f3f-b4ec-59dad215f4b4@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <27ee8637-a825-4f3f-b4ec-59dad215f4b4@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-2026-06-03 22:39 UTC+0500 ~ Korenberg Mark via B4 Relay
-<devnull+socketpair.gmail.com@kernel.org>
-> From: Korenberg Mark <socketpair@gmail.com>
-> 
-> Fixes https://github.com/libbpf/bpftool/issues/262
-> 
-> Signed-off-by: Korenberg Mark <socketpair@gmail.com>
 
-Please move the sign-off and the link to the end of the commit
-description (where you specify the bpftool version you've been using).
-Please use "Link: " for the GitHub issue.
 
-> ---
+On 6/3/26 1:54 PM, Vineet Gupta wrote:
+> Hi Yonghong,
+>
+> Thanks for reviewing the patches.
+>
+> On 6/3/26 1:08 PM, Yonghong Song wrote:
+>>> [3] 
+>>> https://lore.kernel.org/bpf/20260601183511.594100-2-vineet.gupta@linux.dev/
+>>> [2] 
+>>> https://lore.kernel.org/bpf/20260528223616.2035618-2-vineet.gupta@linux.dev/
+>>> [1] 
+>>> https://lore.kernel.org/bpf/20260526181818.4159927-2-vineet.gupta@linux.dev/
+>> I download and build gcc-16.1 which will be used for gcc compilation.
+>> I did some experiments with this patch set for both type tag and decl 
+>> tag.
+>> See below.
+>
+> FWIW, you definitely need a fix [1] on top of gcc 16.1.
+> The patch explains the reasoning and did cause some missing entries in 
+> type chain.
+> I haven't checked if this changes anything specific to issues you 
+> point below.
+>
+> [1] https://gcc.gnu.org/pipermail/bpf/2026-May/000147.html
 
-And remove this separator, or the rest of your description won't make it
-to the commit log.
+Thanks for the pointer. The fix is related to type tag. So I suspect
+typedef and struct decl_tag support is not done yet in gcc.
 
-> On Fedora 43, installing `bpftool` pulls in `llvm20-libs` (~140 MiB) as a hard
-> dependency, even though the bpftool binary itself is ~730 KiB:
-> 
->     # dnf install bpftool
->     Installing:
->      bpftool            x86_64   7.6.0-1.fc43    fedora   731.4 KiB
->     Installing dependencies:
->      llvm20-filesystem  x86_64   20.1.8-2.fc43   fedora   0.0   B
->      llvm20-libs        x86_64   20.1.8-2.fc43   fedora   139.7 MiB
-> 
-> The LLVM library is only used to disassemble JIT-compiled (native) programs,
-> i.e. `bpftool prog dump jited`. Every other use case  works
-> without LLVM. For scripting, automation, and CI, dragging in ~140 MB of LLVM
-> just to have a single optional command available is a heavy cost.
-> 
-> Load the LLVM disassembler lazily at runtime via `dlopen`/`dlsym` instead of
-> linking against it at build time. When `prog dump jited` is invoked and the
-> library is unavailable, fall back gracefully (libbfd, or an informative message).
-> This would remove the automatic ELF dependency on `libLLVM.so`, allowing distributions to make
-> LLVM a weak/optional dependency (e.g. RPM `Recommends`) rather than a hard one.
-> 
-> The `perf` tool is solving the exact same problem (libLLVM/libcapstone
-> bloating dependencies for users who never disassemble) by dlopen-ing these
-> libraries at runtime, so distributions can ship them as a separate, optional
-> package:
-> 
-> - Overview: https://lwn.net/Articles/1040879/
-> - https://lore.kernel.org/lkml/?q=Capstone%2Fllvm+dlopen
-> 
-> - Build with the libbfd disassembler instead of LLVM (smaller, but a build/
->   packaging choice and subject to libbfd's unstable ABI).
-> - Build with no disassembler at all (loses `prog dump jited` entirely).
-> - Ship the disassembler in a separate binary (works, but less idiomatic for a
->   single-binary tool; dlopen keeps the existing UX intact).
-> 
-> - bpftool 7.6.0-1.fc43 (Fedora 43), x86_64
+>
+>
+>>
+>> For type tag
+>> ============
+>>
+>> $ cat type_tag.c
+>> /* btf_type_tag test cases.
+>>    *
+>>    * btf_type_tag annotates a *type* and the tag becomes part of the 
+>> type
+>>    * chain in BTF (TYPE_TAG kind), e.g. used by the kernel for __user 
+>> / __rcu
+>>    * / __percpu style annotations.
+>>    *
+>>    * Placement matters: the tag is written *before* the '*' so it 
+>> annotates
+>>    * the pointee type.  This produces  PTR -> TYPE_TAG 'x' -> <pointee>.
+>>    *
+>>    * Build:  clang -O2 -g -target bpf -c type_tag.c -o type_tag.o
+>>    *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf 
+>> -g -c type_tag.c -o type_tag.o
+>>    * Dump:   bpftool btf dump file type_tag.o
+>>    */
+>>
+>> #define __type_tag(x) __attribute__((btf_type_tag(x)))
+>>
+>> /* a single type tag on a pointer's pointee */
+>> int __type_tag("user") *user_ptr_var;
+>>
+>> /* stacked type tags: the chain is preserved, outermost first */
+>> int __type_tag("tag1") __type_tag("tag2") *stacked_var;
+>>
+>> /* type tags inside struct members */
+>> struct bar {
+>>           char __type_tag("rcu") *name;
+>>           int  __type_tag("percpu") *counter;
+>> };
+>>
+>> /* type tag on a function parameter's pointee */
+>> int read_user(int __type_tag("user") *p)
+>> {
+>>           return *p;
+>> }
+>>
+>> /* keep things referenced */
+>> int use(struct bar *b)
+>> {
+>>           return read_user(user_ptr_var) + (stacked_var ? 
+>> *stacked_var : 0) +
+>>                  (b->counter ? *b->counter : 0);
+>> }
+>>
+>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c 
+>> type_tag.c -o type_tag.o
+>> $ bpftool btf dump file type_tag.o
+>> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+>> [2] PTR '(anon)' type_id=15
+>> [3] PTR '(anon)' type_id=17
+>> [4] STRUCT 'bar' size=16 vlen=2
+>>           'name' type_id=6 bits_offset=0
+>>           'counter' type_id=7 bits_offset=64
+>> [5] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+>> [6] PTR '(anon)' type_id=18
+>> [7] PTR '(anon)' type_id=19
+>> [8] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1
+>>           'b' type_id=9
+>> [9] PTR '(anon)' type_id=4
+>> [10] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1
+>>           'p' type_id=2
+>> [11] VAR 'stacked_var' type_id=3, linkage=global
+>> [12] VAR 'user_ptr_var' type_id=2, linkage=global
+>> [13] FUNC 'use' type_id=8 linkage=global
+>> [14] FUNC 'read_user' type_id=10 linkage=global
+>> [15] TYPE_TAG 'user' type_id=1
+>> [16] TYPE_TAG 'tag1' type_id=1
+>> [17] TYPE_TAG 'tag2' type_id=16
+>> [18] TYPE_TAG 'rcu' type_id=5
+>> [19] TYPE_TAG 'percpu' type_id=1
+>> [20] DATASEC '.bss' size=0 vlen=2
+>>           type_id=11 offset=0 size=8 (VAR 'stacked_var')
+>>           type_id=12 offset=0 size=8 (VAR 'user_ptr_var')
+>> $
+>>
+>> $ clang -O2 -g -target bpf -c type_tag.c -o type_tag.o
+>> $ bpftool btf dump file type_tag.o
+>> [1] TYPE_TAG 'user' type_id=3
+>> [2] PTR '(anon)' type_id=1
+>> [3] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+>> [4] FUNC_PROTO '(anon)' ret_type_id=3 vlen=1
+>>           'p' type_id=2
+>> [5] FUNC 'read_user' type_id=4 linkage=global
+>> [6] PTR '(anon)' type_id=7
+>> [7] STRUCT 'bar' size=16 vlen=2
+>>           'name' type_id=9 bits_offset=0
+>>           'counter' type_id=12 bits_offset=64
+>> [8] TYPE_TAG 'rcu' type_id=10
+>> [9] PTR '(anon)' type_id=8
+>> [10] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+>> [11] TYPE_TAG 'percpu' type_id=3
+>> [12] PTR '(anon)' type_id=11
+>> [13] FUNC_PROTO '(anon)' ret_type_id=3 vlen=1
+>>           'b' type_id=6
+>> [14] FUNC 'use' type_id=13 linkage=global
+>> [15] VAR 'user_ptr_var' type_id=2, linkage=global
+>> [16] TYPE_TAG 'tag1' type_id=3
+>> [17] TYPE_TAG 'tag2' type_id=16
+>> [18] PTR '(anon)' type_id=17
+>> [19] VAR 'stacked_var' type_id=18, linkage=global
+>> [20] DATASEC '.bss' size=0 vlen=2
+>>           type_id=15 offset=0 size=8 (VAR 'user_ptr_var')
+>>           type_id=19 offset=0 size=8 (VAR 'stacked_var')
+>> $
+>>
+>> So type tag matches between clang and gcc.
+>
+> Nice, thanks for cross-checking and confirming.
+>
+>
+>> For decl tag
+>> ============
+>>
+>> $ cat decl_tag.c
+>> /* btf_decl_tag test cases.
+>>    *
+>>    * btf_decl_tag can be attached to:
+>>    *   - global (incl. static) variables
+>>    *   - functions
+>>    *   - function parameters
+>>    *   - struct/union types and their members
+>>    *   - typedefs
+>>    *
+>>    * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>>    *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf 
+>> -g -c decl_tag.c -o decl_tag.o
+>>    * Dump:   bpftool btf dump file decl_tag.o
+>>    */
+>>
+>> #define __tag(x) __attribute__((btf_decl_tag(x)))
+>>
+>> /* tag on a global variable */
+>> int global_var __tag("global_var_tag");
+>>
+>> /* tag on a static variable */
+>> static int static_var __tag("static_var_tag");
+>>
+>> /* multiple tags on one declaration */
+>> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>>
+>> /* tag on struct type and its members */
+>> struct foo {
+>>           int a __tag("member_a_tag");
+>>           int b __tag("member_b_tag");
+>> } __tag("struct_foo_tag");
+>>
+>> /* tag on a typedef */
+>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>
+>> /* tag on a function and its parameters */
+>> __tag("func_add_tag")
+>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+>> {
+>>           return x + y;
+>> }
+>>
+>> /* keep the globals/types alive so they land in BTF */
+>> int use(foo_t1 *f, foo_t2 *g)
+>> {
+>>           return add(global_var + static_var + multi_tag_var, f->a + 
+>> g->foo2);
+>> }
+>>
+>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c 
+>> decl_tag.c -o decl_tag.o
+>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to 
+>> types [-Wattributes]
+>>      30 | } __tag("struct_foo_tag");
+>>         | ^
+>>
+>> $ bpftool btf dump file decl_tag.o
+>> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+>> [2] STRUCT 'foo' size=8 vlen=2
+>>           'a' type_id=1 bits_offset=0
+>>           'b' type_id=1 bits_offset=32
+>> [3] TYPEDEF 'foo_t1' type_id=2
+>> [4] STRUCT '(anon)' size=4 vlen=1
+>>           'foo2' type_id=1 bits_offset=0
+>> [5] TYPEDEF 'foo_t2' type_id=4
+>> [6] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>>           'f' type_id=7
+>>           'g' type_id=8
+>> [7] PTR '(anon)' type_id=3
+>> [8] PTR '(anon)' type_id=5
+>> [9] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>>           'x' type_id=1
+>>           'y' type_id=1
+>> [10] VAR 'multi_tag_var' type_id=1, linkage=global
+>> [11] VAR 'global_var' type_id=1, linkage=global
+>> [12] FUNC 'use' type_id=6 linkage=global
+>> [13] FUNC 'add' type_id=9 linkage=global
+>> [14] DECL_TAG 'global_var_tag' type_id=11 component_idx=-1
+>> [15] DECL_TAG 'static_var_tag' type_id=0 component_idx=-1
+>> [16] DECL_TAG 'tag_b' type_id=10 component_idx=-1
+>> [17] DECL_TAG 'tag_a' type_id=10 component_idx=-1
+>> [18] DECL_TAG 'member_a_tag' type_id=2 component_idx=0
+>> [19] DECL_TAG 'member_b_tag' type_id=2 component_idx=1
+>> [20] DECL_TAG 'param_x_tag' type_id=13 component_idx=0
+>> [21] DECL_TAG 'param_y_tag' type_id=13 component_idx=1
+>> [22] DECL_TAG 'func_add_tag' type_id=13 component_idx=-1
+>> [23] DATASEC '.bss' size=0 vlen=2
+>>           type_id=10 offset=0 size=4 (VAR 'multi_tag_var')
+>>           type_id=11 offset=0 size=4 (VAR 'global_var')
+>> $ bpftool btf dump file decl_tag.o | grep DECL_TAG
+>> [14] DECL_TAG 'global_var_tag' type_id=11 component_idx=-1
+>> [15] DECL_TAG 'static_var_tag' type_id=0 component_idx=-1
+>> [16] DECL_TAG 'tag_b' type_id=10 component_idx=-1
+>> [17] DECL_TAG 'tag_a' type_id=10 component_idx=-1
+>> [18] DECL_TAG 'member_a_tag' type_id=2 component_idx=0
+>> [19] DECL_TAG 'member_b_tag' type_id=2 component_idx=1
+>> [20] DECL_TAG 'param_x_tag' type_id=13 component_idx=0
+>> [21] DECL_TAG 'param_y_tag' type_id=13 component_idx=1
+>> [22] DECL_TAG 'func_add_tag' type_id=13 component_idx=-1
+>> $
+>>
+>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+>> are missing here:
+>
+> I'll double check, once I'm back from PTO.
+>
+>> struct foo {
+>>           int a __tag("member_a_tag");
+>>           int b __tag("member_b_tag");
+>> } __tag("struct_foo_tag");
+>>
+>> /* tag on a typedef */
+>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>
+>> $ clang -O2 -g -target bpf -c decl_tag.c -o decl_tag.o
+>> $ bpftool btf dump file decl_tag.o
+>> [1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+>> [2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>>           'x' type_id=1
+>>           'y' type_id=1
+>> [3] FUNC 'add' type_id=2 linkage=global
+>> [4] DECL_TAG 'param_x_tag' type_id=3 component_idx=0
+>> [5] DECL_TAG 'param_y_tag' type_id=3 component_idx=1
+>> [6] DECL_TAG 'func_add_tag' type_id=3 component_idx=-1
+>> [7] PTR '(anon)' type_id=8
+>> [8] TYPEDEF 'foo_t1' type_id=10
+>> [9] DECL_TAG 'typedef_foo_tag' type_id=8 component_idx=-1
+>> [10] STRUCT 'foo' size=8 vlen=2
+>>           'a' type_id=1 bits_offset=0
+>>           'b' type_id=1 bits_offset=32
+>> [11] DECL_TAG 'struct_foo_tag' type_id=10 component_idx=-1
+>> [12] DECL_TAG 'member_a_tag' type_id=10 component_idx=0
+>> [13] DECL_TAG 'member_b_tag' type_id=10 component_idx=1
+>> [14] PTR '(anon)' type_id=15
+>> [15] TYPEDEF 'foo_t2' type_id=17
+>> [16] DECL_TAG 'typedef_foo2_tag' type_id=15 component_idx=-1
+>> [17] STRUCT '(anon)' size=4 vlen=1
+>>           'foo2' type_id=1 bits_offset=0
+>> [18] FUNC_PROTO '(anon)' ret_type_id=1 vlen=2
+>>           'f' type_id=7
+>>           'g' type_id=14
+>> [19] FUNC 'use' type_id=18 linkage=global
+>> [20] VAR 'global_var' type_id=1, linkage=global
+>> [21] DECL_TAG 'global_var_tag' type_id=20 component_idx=-1
+>> [22] VAR 'multi_tag_var' type_id=1, linkage=global
+>> [23] DECL_TAG 'tag_a' type_id=22 component_idx=-1
+>> [24] DECL_TAG 'tag_b' type_id=22 component_idx=-1
+>> [25] DATASEC '.bss' size=0 vlen=2
+>>           type_id=20 offset=0 size=4 (VAR 'global_var')
+>>           type_id=22 offset=0 size=4 (VAR 'multi_tag_var')
+>> $ bpftool btf dump file decl_tag.o | grep DECL_TAG
+>> [4] DECL_TAG 'param_x_tag' type_id=3 component_idx=0
+>> [5] DECL_TAG 'param_y_tag' type_id=3 component_idx=1
+>> [6] DECL_TAG 'func_add_tag' type_id=3 component_idx=-1
+>> [9] DECL_TAG 'typedef_foo_tag' type_id=8 component_idx=-1
+>> [11] DECL_TAG 'struct_foo_tag' type_id=10 component_idx=-1
+>> [12] DECL_TAG 'member_a_tag' type_id=10 component_idx=0
+>> [13] DECL_TAG 'member_b_tag' type_id=10 component_idx=1
+>> [16] DECL_TAG 'typedef_foo2_tag' type_id=15 component_idx=-1
+>> [21] DECL_TAG 'global_var_tag' type_id=20 component_idx=-1
+>> [23] DECL_TAG 'tag_a' type_id=22 component_idx=-1
+>> [24] DECL_TAG 'tag_b' type_id=22 component_idx=-1
+>>
+>> DECL_TAG 'static_var_tag' type_id=0 component_idx=-1 is missing in llvm.
+>> This is execpted for llvm since 'static_var' is 'inlined' since it is
+>> value is 0 and the compiler optimization removed it in function use().
+>> In llvm Dwarf->BTF conversion is very late and we only emit survived
+>> globals.
+>>
+>> gcc emits 'static_var_tag' probably in frontend. Emitting
+>> 'static_var_tag' is okay, just not used.
+>>
+>> I think gcc should support
+>>    - declaration tag for typedef, and
+>>    - declaration tag for the whole struct (like above 'struct_foo_tag')
+>> to be compatible with llvm.
+>
+> OK we will look into this.
 
-Thanks a lot for this work! I think it makes sense to separate the
-LLVM-based disassembler, other people have complained about the
-increased size in the past. My comment on your initial GitHub issue was
-that I wanted the libbfd-based disassembler untouched, and you left it
-built-in (when we pick the libbfd-disassembler), thank you.
+Thanks!
 
-The plug-in seems to work correctly, although we need to install it at
-the path built in the binary before using the disassembler. It would be
-good to fall back on the current directory otherwise. I haven't tested
-the static build thoroughly yet (I tried the GitHub PR and it seems that
-the combination "LLVM_LINK_STATIC=1 EXTRA_LDFLAGS=-static" is broken
-there, I think because the feature detection in the GitHub repo needs to
-be adjusted).
-
-I do have some comments, please see inline below.
-
-> ---
->  tools/bpf/bpftool/Makefile      |  63 ++++++++++++++++++----
->  tools/bpf/bpftool/jit_disasm.c  | 112 +++++++++++++++++++++++-----------------
->  tools/bpf/bpftool/llvm_disasm.c |  85 ++++++++++++++++++++++++++++++
->  tools/bpf/bpftool/llvm_disasm.h |  38 ++++++++++++++
->  4 files changed, 240 insertions(+), 58 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 0febf60e1..9887ac6fb 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -62,6 +62,7 @@ $(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
->  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
->  
->  prefix ?= /usr/local
-> +libdir ?= $(prefix)/lib
->  bash_compdir ?= /usr/share/bash-completion/completions
->  
->  CFLAGS += -O2
-> @@ -157,6 +158,8 @@ include $(wildcard $(OUTPUT)*.d)
->  all: $(OUTPUT)bpftool
->  
->  SRCS := $(wildcard *.c)
-> +# llvm_disasm.c is compiled separately into the bpftool-llvm.so plugin.
-> +SRCS := $(filter-out llvm_disasm.c,$(SRCS))
->  
->  ifeq ($(feature-llvm),1)
->  ifneq ($(SKIP_LLVM),1)
-> @@ -165,19 +168,36 @@ endif
->  endif
->  
->  ifeq ($(HAS_LLVM),1)
-> +  # The libLLVM-based JIT disassembler is built as a separate plugin,
-> +  # bpftool-llvm.so, which is the only object that links against libLLVM.
-> +  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpftool
-
-I'd replace "lazily" with "only when calling the disassembler", to avoid
-confusion with the RTLD_LAZY flag for dlopen(), which you don't use.
-
-> +  # binary itself keeps no dependency on the large libLLVM shared object.
->    CFLAGS  += -DHAVE_LLVM_SUPPORT
-> +  CFLAGS  += -DLLVM_PLUGIN_DIR='"$(libdir)/bpftool"'
-> +  # dlopen() lives in libc on modern glibc, but keep -ldl for portability.
-> +  LIBS    += -ldl
-> +
-> +  # Flags used to build the plugin itself (the only part that needs libLLVM).
->    LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-> -  # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
-> -  # (e.g. when bpftool build is called from selftests build as selftests
-> -  # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
-> -  # compilation error due to redefinition. Let's filter it out here.
-> -  CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-> -  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +  # llvm-config always adds -D_GNU_SOURCE, which llvm_disasm.c already defines;
-> +  # filter it out to avoid a redefinition warning.
-> +  LLVM_PLUGIN_CFLAGS := $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-> +
-> +  # Embed libLLVM into the plugin statically when requested with
-> +  # LLVM_LINK_STATIC=1, or when this LLVM install only ships static libraries
-> +  # ("llvm-config --shared-mode" reports "static"). Otherwise link the shared
-> +  # libLLVM, which is the only runtime dependency of the plugin.
->    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-> -    LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> -    LIBS += -lstdc++
-> +    LLVM_LINK_STATIC := 1
-> +  endif
-> +  ifeq ($(LLVM_LINK_STATIC),1)
-> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_PLUGIN_LIBS += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_PLUGIN_LIBS += -lstdc++
-> +  else
-> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
->    endif
-> -  LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-> +  LLVM_PLUGIN_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
->  else
->    ifneq ($(SKIP_LIBBFD),1)
->    # Fall back on libbfd
-> @@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
->  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
->  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
->  
-> +ifeq ($(HAS_LLVM),1)
-> +all: $(OUTPUT)bpftool-llvm.so
-> +
-> +$(OUTPUT)llvm_disasm.o: llvm_disasm.c
-> +	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
-> +
-> +# The plugin is a shared object by definition, so drop a global -static (e.g.
-> +# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -shared.
-> +# Embedding libLLVM statically is controlled separately (see LLVM_LINK_STATIC).
-> +$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
-> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
-> +		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
-> +endif
-> +
->  $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
->  	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
->  
-> @@ -288,17 +322,25 @@ feature-detect-clean:
->  
->  clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
->  	$(call QUIET_CLEAN, bpftool)
-> -	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
-> +	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)bpftool-llvm.so $(OUTPUT)*.o $(OUTPUT)*.d
->  	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
->  	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
->  	$(call QUIET_CLEAN, core-gen)
->  	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
->  	$(Q)$(RM) -r -- $(OUTPUT)feature/
->  
-> +ifeq ($(HAS_LLVM),1)
-> +install-bin: $(OUTPUT)bpftool-llvm.so
-> +endif
->  install-bin: $(OUTPUT)bpftool
->  	$(call QUIET_INSTALL, bpftool)
->  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/sbin
->  	$(Q)$(INSTALL) $(OUTPUT)bpftool $(DESTDIR)$(prefix)/sbin/bpftool
-> +ifeq ($(HAS_LLVM),1)
-> +	$(call QUIET_INSTALL, bpftool-llvm.so)
-> +	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(libdir)/bpftool
-
-If the user runs "make && make install libdir=/usr/lib64", we'll get a
-mismatch between the libdir path set at build time and the install path.
-Maybe we could try to catch this? In a separate commit we could print
-the plugin path as part of the "bpftool version" output and check
-whether it matches when we install (and warn if it doesn't)? I don't know.
-
-> +	$(Q)$(INSTALL) -m 0755 $(OUTPUT)bpftool-llvm.so $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
-> +endif
->  
->  install: install-bin
->  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(bash_compdir)
-> @@ -307,6 +349,7 @@ install: install-bin
->  uninstall:
->  	$(call QUIET_UNINST, bpftool)
->  	$(Q)$(RM) -- $(DESTDIR)$(prefix)/sbin/bpftool
-
-Please make it consistent with the install:
-
-    $(call QUIET_UNINST, bpftool-llvm.so)
-
-Also, we should probably remove $(DESTDIR)$(libdir)/bpftool entirely.
-
-> +	$(Q)$(RM) -- $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
->  	$(Q)$(RM) -- $(DESTDIR)$(bash_compdir)/bpftool
->  
->  doc:
-> diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-> index 04541155e..e8cef2da2 100644
-> --- a/tools/bpf/bpftool/jit_disasm.c
-> +++ b/tools/bpf/bpftool/jit_disasm.c
-> @@ -25,10 +25,9 @@
->  #include <bpf/libbpf.h>
->  
->  #ifdef HAVE_LLVM_SUPPORT
-> -#include <llvm-c/Core.h>
-> -#include <llvm-c/Disassembler.h>
-> -#include <llvm-c/Target.h>
-> -#include <llvm-c/TargetMachine.h>
-> +#include <dlfcn.h>
-> +
-> +#include "llvm_disasm.h"
->  #endif
->  
->  #ifdef HAVE_LIBBFD_SUPPORT
-> @@ -45,7 +44,32 @@ static int oper_count;
->  #ifdef HAVE_LLVM_SUPPORT
->  #define DISASM_SPACER
->  
-> -typedef LLVMDisasmContextRef disasm_ctx_t;
-> +/*
-> + * The libLLVM-based disassembler used for "bpftool prog dump jited" lives in a
-> + * separate plugin, bpftool-llvm.so, which is the only object linked against
-> + * libLLVM. This keeps the bpftool binary itself free of a hard dependency on
-> + * the (large) libLLVM shared object: the plugin is loaded lazily with dlopen()
-> + * the first time a JITed image actually needs to be disassembled, with its
-> + * entry points resolved by dlsym(). See llvm_disasm.c for the plugin.
-> + *
-> + * LLVM_PLUGIN_DIR is the install directory baked in at build time
-> + * ($(libdir)/bpftool). When set, the plugin is loaded from that absolute
-> + * location; otherwise only the bare file name is used, i.e. the plugin is
-> + * looked up via the dynamic linker search path (or the current directory).
-
-It doesn't appear to search the binary from the current directory, at
-least not in my case? But it probably should though, otherwise Sashiko
-is right, the feature is no longer available from a newly-built bpftool
-binary that has not been installed on the system.
-
-> + */
-> +#ifdef LLVM_PLUGIN_DIR
-> +#define LLVM_PLUGIN_PATH LLVM_PLUGIN_DIR "/bpftool-llvm.so"
-> +#else
-> +#define LLVM_PLUGIN_PATH "bpftool-llvm.so"
-> +#endif
-> +
-> +typedef void *disasm_ctx_t;
-> +
-> +static void *llvm_plugin_handle;
-> +static __typeof__(&bpftool_llvm_init) p_bpftool_llvm_init;
-> +static __typeof__(&bpftool_llvm_create_context) p_bpftool_llvm_create_context;
-> +static __typeof__(&bpftool_llvm_destroy_context) p_bpftool_llvm_destroy_context;
-> +static __typeof__(&bpftool_llvm_disassemble) p_bpftool_llvm_disassemble;
->  
->  static int printf_json(char *s)
->  {
-> @@ -63,48 +87,13 @@ static int printf_json(char *s)
->  	return 0;
->  }
->  
-> -/* This callback to set the ref_type is necessary to have the LLVM disassembler
-> - * print PC-relative addresses instead of byte offsets for branch instruction
-> - * targets.
-> - */
-> -static const char *
-> -symbol_lookup_callback(__maybe_unused void *disasm_info,
-> -		       __maybe_unused uint64_t ref_value,
-> -		       uint64_t *ref_type, __maybe_unused uint64_t ref_PC,
-> -		       __maybe_unused const char **ref_name)
-> -{
-> -	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
-> -	return NULL;
-> -}
-> -
->  static int
->  init_context(disasm_ctx_t *ctx, const char *arch,
->  	     __maybe_unused const char *disassembler_options,
->  	     __maybe_unused unsigned char *image, __maybe_unused ssize_t len,
->  	     __maybe_unused __u64 func_ksym)
->  {
-> -	char *triple;
-> -
-> -	if (arch)
-> -		triple = LLVMNormalizeTargetTriple(arch);
-> -	else
-> -		triple = LLVMGetDefaultTargetTriple();
-> -	if (!triple) {
-> -		p_err("Failed to retrieve triple");
-> -		return -1;
-> -	}
-> -
-> -	/*
-> -	 * Enable all aarch64 ISA extensions so the disassembler can handle any
-> -	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
-> -	 */
-> -	if (!strncmp(triple, "aarch64", 7))
-> -		*ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL,
-> -						   symbol_lookup_callback);
-> -	else
-> -		*ctx = LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback);
-> -	LLVMDisposeMessage(triple);
-> -
-> +	*ctx = p_bpftool_llvm_create_context(arch);
->  	if (!*ctx) {
->  		p_err("Failed to create disassembler");
->  		return -1;
-> @@ -115,7 +104,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
->  
->  static void destroy_context(disasm_ctx_t *ctx)
->  {
-> -	LLVMDisposeMessage(*ctx);
-> +	p_bpftool_llvm_destroy_context(*ctx);
->  }
->  
->  static int
-> @@ -125,8 +114,8 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
->  	char buf[256];
->  	int count;
->  
-> -	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, func_ksym + pc,
-> -				      buf, sizeof(buf));
-> +	count = p_bpftool_llvm_disassemble(*ctx, image, len, pc, func_ksym,
-> +					   buf, sizeof(buf));
->  	if (json_output)
->  		printf_json(buf);
->  	else
-> @@ -137,10 +126,37 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
->  
->  int disasm_init(void)
->  {
-> -	LLVMInitializeAllTargetInfos();
-> -	LLVMInitializeAllTargetMCs();
-> -	LLVMInitializeAllDisassemblers();
-> -	return 0;
-> +	if (llvm_plugin_handle)
-> +		return p_bpftool_llvm_init();
-> +
-> +	/* Load the plugin by its absolute install path. */
-> +	llvm_plugin_handle = dlopen(LLVM_PLUGIN_PATH, RTLD_NOW | RTLD_LOCAL);
-> +	if (!llvm_plugin_handle) {
-> +		p_err("failed to load %s, install it to disassemble JITed programs: %s",
-> +		      LLVM_PLUGIN_PATH, dlerror());
-
-You may exceptionally have dlerror() returning NULL here, so we should
-make sure it's not the case before printing it (and print something like
-"unknown error" otherwise). (I've observed this on a machine with
-LD_PRELOAD set to something that might call dlopen() and wipe the error
-string.)
-
-> +		return -1;
-> +	}
-
-We'd need to check plugin availability when running "bpftool version"
-too, otherwise we may advertise that we support the "llvm" disassembler
-feature even when we don't.
-
-> +
-> +#define RESOLVE(name)							       \
-> +	do {								       \
-> +		p_##name = (__typeof__(p_##name))dlsym(llvm_plugin_handle,     \
-> +						       #name);		       \
-> +		if (!p_##name) {					       \
-> +			p_err("%s is missing symbol %s: %s",		       \
-> +			      LLVM_PLUGIN_PATH, #name, dlerror());	       \
-> +			dlclose(llvm_plugin_handle);			       \
-> +			llvm_plugin_handle = NULL;			       \
-> +			return -1;					       \
-> +		}							       \
-> +	} while (0)
-> +
-> +	RESOLVE(bpftool_llvm_init);
-> +	RESOLVE(bpftool_llvm_create_context);
-> +	RESOLVE(bpftool_llvm_destroy_context);
-> +	RESOLVE(bpftool_llvm_disassemble);
-
-If we ever change the ABI of the plug-in, and don't have the right
-plug-in installed, we'll get issues when using the loaded symbols. Not
-sure how this is usually addressed, maybe load some sort of version
-symbol from the plug-in to check that it's the one we expect?
-
-> +#undef RESOLVE
-> +
-> +	return p_bpftool_llvm_init();
->  }
->  #endif /* HAVE_LLVM_SUPPORT */
->  
-> diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_disasm.c
-> new file mode 100644
-> index 000000000..b83216191
-> --- /dev/null
-> +++ b/tools/bpf/bpftool/llvm_disasm.c
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-
-Ack. The copyright header in jit_disasm.c only applies to the
-libbfd-based disassembler and does not need to be reported here, so
-we're good.
-
-> +/*
-> + * libLLVM-based BPF JIT disassembler plugin for bpftool.
-> + *
-> + * This translation unit is built into a standalone shared object
-> + * (bpftool-llvm.so) which is the only bpftool component that links against
-> + * libLLVM. bpftool loads it lazily with dlopen() (see jit_disasm.c) so that
-> + * the bpftool binary itself does not depend on the large libLLVM shared
-> + * object. Only the small, stable C ABI declared in llvm_disasm.h is exposed.
-> + */
-> +#ifndef _GNU_SOURCE
-> +#define _GNU_SOURCE
-> +#endif
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <sys/types.h>
-> +
-> +#include <llvm-c/Core.h>
-> +#include <llvm-c/Disassembler.h>
-> +#include <llvm-c/Target.h>
-> +#include <llvm-c/TargetMachine.h>
-> +
-> +#include "llvm_disasm.h"
-> +
-> +/* This callback to set the ref_type is necessary to have the LLVM disassembler
-> + * print PC-relative addresses instead of byte offsets for branch instruction
-> + * targets.
-> + */
-> +static const char *
-> +symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
-> +		       uint64_t *ref_type, uint64_t ref_PC,
-> +		       const char **ref_name)
-> +{
-> +	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
-> +	return NULL;
-> +}
-> +
-> +int bpftool_llvm_init(void)
-> +{
-> +	LLVMInitializeAllTargetInfos();
-> +	LLVMInitializeAllTargetMCs();
-> +	LLVMInitializeAllDisassemblers();
-> +
-> +	return 0;
-> +}
-> +
-> +void *bpftool_llvm_create_context(const char *arch)
-> +{
-> +	LLVMDisasmContextRef ctx;
-> +	char *triple;
-> +
-> +	if (arch)
-> +		triple = LLVMNormalizeTargetTriple(arch);
-> +	else
-> +		triple = LLVMGetDefaultTargetTriple();
-> +	if (!triple)
-> +		return NULL;
-> +
-> +	/*
-> +	 * Enable all aarch64 ISA extensions so the disassembler can handle any
-> +	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
-> +	 */
-> +	if (!strncmp(triple, "aarch64", 7))
-> +		ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0,
-> +						  NULL, symbol_lookup_callback);
-> +	else
-> +		ctx = LLVMCreateDisasm(triple, NULL, 0, NULL,
-> +				       symbol_lookup_callback);
-> +	LLVMDisposeMessage(triple);
-> +
-> +	return ctx;
-> +}
-> +
-> +void bpftool_llvm_destroy_context(void *ctx)
-> +{
-> +	LLVMDisasmDispose(ctx);
-
-Please move the fix for the context destruction to a separate commit,
-and document it in the commit description.
-
-> +}
-> +
-> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-> +			     int pc, uint64_t func_ksym, char *buf,
-> +			     size_t buf_sz)
-> +{
-> +	return LLVMDisasmInstruction(ctx, image + pc, len - pc, func_ksym + pc,
-> +				     buf, buf_sz);
-> +}
-> diff --git a/tools/bpf/bpftool/llvm_disasm.h b/tools/bpf/bpftool/llvm_disasm.h
-> new file mode 100644
-> index 000000000..cd9491ea3
-> --- /dev/null
-> +++ b/tools/bpf/bpftool/llvm_disasm.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +#ifndef __BPFTOOL_LLVM_DISASM_H
-> +#define __BPFTOOL_LLVM_DISASM_H
-> +
-> +#include <stddef.h>
-> +#include <stdint.h>
-> +#include <sys/types.h>
-> +
-> +/*
-> + * Stable C ABI between bpftool and its optional libLLVM-based JIT disassembler
-> + * plugin (bpftool-llvm.so). bpftool resolves these symbols with dlsym()
-> + * after dlopen()ing the plugin; the plugin is the only object that links
-> + * against libLLVM. See jit_disasm.c (loader) and llvm_disasm.c (plugin).
-> + */
-> +
-> +/* Initialize the libLLVM targets and disassemblers. Returns 0 on success. */
-> +int bpftool_llvm_init(void);
-> +
-> +/*
-> + * Create a disassembler context for @arch (NULL selects the host
-> + * architecture). Returns an opaque context pointer, or NULL on failure.
-> + */
-> +void *bpftool_llvm_create_context(const char *arch);
-> +
-> +/* Release a context previously returned by bpftool_llvm_create_context(). */
-> +void bpftool_llvm_destroy_context(void *ctx);
-> +
-> +/*
-> + * Disassemble the single instruction at @image[@pc] into @buf as a NUL
-> + * terminated string. @func_ksym is the kernel address of @image and is used to
-> + * render absolute branch targets. Returns the instruction length in bytes, or
-> + * 0 if the instruction could not be decoded.
-> + */
-> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-> +			     int pc, uint64_t func_ksym, char *buf,
-> +			     size_t buf_sz);
-> +
-> +#endif /* __BPFTOOL_LLVM_DISASM_H */
-> 
-> ---
-> base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
-> change-id: 20260603-bpftool-plugin-c994bc3e0643
-> 
-> Best regards,
+>
+> Thx,
+> -Vineet
+>
 
