@@ -1,207 +1,169 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A6A4534A8;
-	Wed,  3 Jun 2026 11:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5720C43901A;
+	Wed,  3 Jun 2026 11:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780484845; cv=none; b=nVA7/v/HTXvGFSY7k0zqIlonAC5yxsagtTLgjlL2itsP35u30uumiOvsGdtR4zlUki1P6meE0mZKNaZPwnYRPNkFWkixnBArBCZ0M1Cr9PSi413/EDMJwwiUaZ6czWIADhiuVbSZdkRanixfpPXKTQK1SFy/OEvRI8uOf6eXk1k=
+	t=1780484850; cv=none; b=KxQEtuG9slEs/lfpuJ/CUhYIiHaPTaKg9sRyNiC2GoFKZ9GbEmO9lWGkMaq9PduzPmVV4v2xwXh010fPWoufH6cUwyj/ALJGdTxLXyTCo+SHiAUsKlXopX6dZ/dOiKY4AD3d2VSsI1kYKTYTStuddxxxgbAwS2KGYlet+EuQXog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780484845; c=relaxed/simple;
-	bh=QR21B1XieO1Gv/zvOXQd1clr0hyDmZzfZmqsZDRnmmM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=fqxAw65/p8rtNbdNxeWyvFyaEpPlcuK+0aqWeSJfz5o580fAmnfdiY/oii71Y+2iYV+3xHQet801x2NhdBZK3YWiZD5ZjbTXQ8TH5Sg/Qkz5zU30hHkGOfbaYdN53vvP8SDVr3QL2B12ZWBtx1ATU7QwyIPClyWRbrUS5y8mVyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MszdDAJk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780484850; c=relaxed/simple;
+	bh=CB5LexSusM8SXOxZyvUm9qLNZhoBHfpMtgl3yJM1qwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nVJO5Ve/t25pkpNvX3i0vpmTaekBoLgDHojJvvtu3SOZvmTKsAxtjzRjj+WOTptt2s2+YTJC28v04BNOt6bZOio7eWrzy1LJNOosF+5VXc7/bNV1rxQHfDR2jcBvKzjXihg9vzZYglns27+WsK7pNQSXZa74tqaL3YXoJiPjb0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyLqPeAy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MszdDAJk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BC61F0089A;
-	Wed,  3 Jun 2026 11:07:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyLqPeAy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393121F0089A;
+	Wed,  3 Jun 2026 11:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780484843;
-	bh=Ui/yXK7lZaXIcLfzck+vL1NDPgq7d4i58XIiuImd1TA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=MszdDAJkXZzyP3gNU6o+YgfTsHh54ExDatarqbsslYE5R2BJ/N7mm3N2gmnU81/tB
-	 Nv0+UcW5D6xL7cyCBofxdG9jfubI2JsjobJR0JIAfxlZN8ekQFixsC2YdEfO1ZbZ0s
-	 phCDPk2Ia65orjO0jKOAx2/ejmNiZh5HebjH8bBZoJxUFQqNsRIiOIsUcjzWgN1e9r
-	 ZrtiJb2Q5fRN68eZcpAaMF5lPYTazuzngxvLfuzZ+leaqlc0RyqZs8b0wAsNXl2HxJ
-	 VKXpYYSBGlyfHmPJk1Vr8O5+va18hNrX3O2XcmkdP+fm82BNSRXISIwbMflz7J68qQ
-	 clQY5L1kDM8Fg==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D12827BAE4D; Wed, 03 Jun 2026 13:07:20 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To: Jason Xing <kerneljasonxing@gmail.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, willemb@google.com,
- kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, Simon
- Sundberg <Simon.Sundberg@kau.se>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next 5/6] bpf: enable bpf timestamping rx in TCP layer
-In-Reply-To: <87lddfn2m1.fsf@toke.dk>
-References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
- <20260518082344.96647-6-kerneljasonxing@gmail.com>
- <f9606d4b-7ff7-479f-8e73-2e8cc77095fa@kernel.org>
- <CAL+tcoDRSpVsiCym+DYsGLBGrdEuim7AZqyBTHYzd-OSBki5-Q@mail.gmail.com>
- <2942dd24-3b6f-4e88-acb2-67d35ea8938b@kernel.org>
- <CAL+tcoCO7Op69K6w9fNX5BohHoafU3C1r62=J1djTMdc30nhFQ@mail.gmail.com>
- <CAL+tcoA_VBcXu_2zVXFvsWF7+U=-TZf7bCz0KzNpN=p=82tB=w@mail.gmail.com>
- <87lddfn2m1.fsf@toke.dk>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 03 Jun 2026 13:07:20 +0200
-Message-ID: <871pendgrb.fsf@toke.dk>
+	s=k20260515; t=1780484848;
+	bh=WjpdHVzb79AW2H2QggapHn/kKzO1JRuCk+c7rrv/cfk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=dyLqPeAy/3sVzy+RzbKRmaQRKFp8pEELzTZAX54QG6JlriMG33fMHYAAwZI2oggIi
+	 BOeHesUub2/x+9nAae1wJiM0WQBenUW369LFefVTEqbY3Usrr0DHYwsJNDNgCcBoMT
+	 0q9Z964voGrssb9srZ2bU+gmX7JFGjw0vZnRzmtjN/TLY4bSFOxKa5uS+AZ+kJTh4w
+	 nHa3WoDgno+hTkNWQ8C0k9coLjBYUmYsdNenxqUjYABhnWlgK5SwDh/2wi6qkxvlIP
+	 yx04tCAmIMV69j/Z1cXVycjYPHlts4XZ1sFbZQIqeNE4qbL2tbe9DOvM2/9rfAVtyP
+	 LF925bR+8+RiA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: [PATCHv7 bpf-next 09/29] bpf: Factor fsession link to use struct bpf_tramp_node
+Date: Wed,  3 Jun 2026 13:05:33 +0200
+Message-ID: <20260603110554.29590-10-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260603110554.29590-1-jolsa@kernel.org>
+References: <20260603110554.29590-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+Now that we split trampoline attachment object (bpf_tramp_node) from
+the link object (bpf_tramp_link) we can use bpf_tramp_node as fsession's
+fexit attachment object and get rid of the bpf_fsession_link object.
 
-> Jason Xing <kerneljasonxing@gmail.com> writes:
->
->> On Tue, May 19, 2026 at 7:16=E2=80=AFAM Jason Xing <kerneljasonxing@gmai=
-l.com> wrote:
->>>
->>> On Tue, May 19, 2026 at 12:40=E2=80=AFAM Jesper Dangaard Brouer <hawk@k=
-ernel.org> wrote:
->>> >
->>> >
->>> >
->>> > On 18/05/2026 15.53, Jason Xing wrote:
->>> > > On Mon, May 18, 2026 at 9:01=E2=80=AFPM Jesper Dangaard Brouer <haw=
-k@kernel.org> wrote:
->>> > >>
->>> > >>
->>> > >>
->>> > >> On 18/05/2026 10.23, Jason Xing wrote:
->>> > >>> From: Jason Xing <kernelxing@tencent.com>
->>> > >>>
->>> > >>> Add two if statements to accurately isolate bpf timestamping and =
-so
->>> > >>> timestamping. They can work respectively.
->>> > >>>
->>> > >>> As to so_timestamping, only add a loose condition via report flags
->>> > >>> to avoid duplicate strict checks that is done in tcp_recv_timesta=
-mp()
->>> > >>> and performance impact. If the loose condition is hit,
->>> > >>> tcp_recv_timestamp() is able to handle the exact case and doesn't
->>> > >>> hamper the existing timestamping feature.
->>> > >>>
->>> > >>> Make it work in TCP protocol.
->>> > >>>
->>> > >>> Signed-off-by: Jason Xing <kernelxing@tencent.com>
->>> > >>> ---
->>> > >>>    net/ipv4/tcp.c | 14 ++++++++++++--
->>> > >>>    1 file changed, 12 insertions(+), 2 deletions(-)
->>> > >>>
->>> > >>> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
->>> > >>> index 21ece4c71612..64c69bb3578a 100644
->>> > >>> --- a/net/ipv4/tcp.c
->>> > >>> +++ b/net/ipv4/tcp.c
->>> > >>> @@ -2949,8 +2949,18 @@ int tcp_recvmsg(struct sock *sk, struct ms=
-ghdr *msg, size_t len, int flags)
->>> > >>>        release_sock(sk);
->>> > >>>
->>> > >>>        if ((cmsg_flags | msg->msg_get_inq) && ret >=3D 0) {
->>> > >>> -             if (cmsg_flags & TCP_CMSG_TS)
->>> > >>> -                     tcp_recv_timestamp(msg, sk, &tss);
->>> > >>> +             if (cmsg_flags & TCP_CMSG_TS) {
->>> > >>> +                     u32 tsflags =3D READ_ONCE(sk->sk_tsflags);
->>> > >>> +
->>> > >>> +                     if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
->>> > >>> +                         SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TI=
-MESTAMPING))
->>> > >>> +                             bpf_skops_rx_timestamping(sk, &tss,
->>> > >>> +                                                       BPF_SOCK_=
-OPS_TSTAMP_RCV_CB);
->>> > >>
->>> > >> Does this mean I can enable timestamp reading per cgroup?
->>> > >
->>> > > Yes, I think so, but I didn't try. One of the natures of sockopt
->>> > > feature is supporting cgroup attach.
->>> > > cgroup_bpf_prog_attach()/cgroup_bpf_link_attach() is probably
->>> > > something that you're looking for.
->>> > >
->>> >
->>> > Sound good
->>> >
->>> > > IIUC, you can attach the prog onto the cgroup where all the sockets
->>> > > are set using the bpf timestamping function. So the current impl is
->>> > > cleaner and has better isolation (to filter out those unmatched
->>> > > flows).
->>> > >
->>> > >>
->>> > >> In Simon's netstacklat[1] tool we are forced process all RX timest=
-amp
->>> > >> (hooking fentry/tcp_recv_timestamp), and then we have a BPF filter=
-[2] on
->>> > >> the cgroup IDs that we are interested in (which is a significant
->>> > >> overhead, as this is deployed at Cloudflare production scale).
->>> > >
->>> > > I can feel the pain when filtering in this kind of relatively hot
->>> > > path, which is what I'm trying to avoid internally. What I've done =
-in
->>> > > production (to cover those old kernels) is to just let the kernel
->>> > > print the information, that's it, and there is an agent continuously
->>> > > gathering the data, doing the match and computing latency. But it's
->>> > > overall complicated.
->>> > >
->>> >
->>> > I hope you don't mean your internal/old approach was using printk and
->>> > then analyzing this data.
->>>
->>> Of course not :)
->>>
->>> The internal approach is to cover the old kernels but doesn't mean the
->>> approach is old :P
->>>
->>> Instead, the internal kernel module is super efficient and I'm trying
->>> to ship bpf with such an ability. The fact is we've already deployed
->>> in production: 7x24 running, zero sampling.
->>>
->>> Please see page 24 where there is a brief introduction on how to deal
->>> with the log part:
->>> https://lpc.events/event/19/contributions/2055/#preview:3846
->>> I believe this is the promising direction (ring buffer + lightweight
->>> kernel + heavy agent) we're taking.
->>>
->>> The headache part is that I need to provide an agent written in BPF to
->>> do the heavy process.
->>>
->>> >
->>> > > Many thanks here, I'm always interested in hearing more useful and
->>> > > real requirements and fancy ideas on how to monitor the latency :) =
-Now
->>> >
->>> > Simon Sundberg <Simon.Sundberg@kau.se> have many more fancy ideas on =
-how
->>> > to monitor the latency.
->>> > The netstacklat tool is part of Simon's PhD thesis:
->>> > - https://doi.org/10.59217/qklv6836
->>> >
->>> > And we even gotten a paper accepted on netstacklat:
->>> > -
->>> > https://kau.diva-portal.org/smash/record.jsf?pid=3Ddiva2%3A2034009&ds=
-wid=3D3032
->>>
->>> Sorry, I cannot access this link. Could you give me the title of this p=
-aper?
->>
->> Waiting at the Front Door - Continuous Monitoring of Latency in the
->> Host Network Stack
->>
->> Oh, I guess it hasn't been officially published right? This is the
->> reason why I have no way to know the content.
->
-> No, it's not published yet; I'll send you a copy off-list :)
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ include/linux/bpf.h     |  6 +-----
+ kernel/bpf/syscall.c    | 21 ++++++---------------
+ kernel/bpf/trampoline.c | 12 ++++++------
+ 3 files changed, 13 insertions(+), 26 deletions(-)
 
-In case anyone else is interested, the paper is now on Arxiv:
-https://arxiv.org/abs/2606.02057
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 27d13d6c14be..4764b4aa7081 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1908,15 +1908,11 @@ struct bpf_shim_tramp_link {
+ 
+ struct bpf_tracing_link {
+ 	struct bpf_tramp_link link;
++	struct bpf_tramp_node fexit;
+ 	struct bpf_trampoline *trampoline;
+ 	struct bpf_prog *tgt_prog;
+ };
+ 
+-struct bpf_fsession_link {
+-	struct bpf_tracing_link link;
+-	struct bpf_tramp_link fexit;
+-};
+-
+ struct bpf_raw_tp_link {
+ 	struct bpf_link link;
+ 	struct bpf_raw_event_map *btp;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7bb2271072e9..f308ebdab750 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3705,21 +3705,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 		key = bpf_trampoline_compute_key(tgt_prog, NULL, btf_id);
+ 	}
+ 
+-	if (prog->expected_attach_type == BPF_TRACE_FSESSION) {
+-		struct bpf_fsession_link *fslink;
+-
+-		fslink = kzalloc_obj(*fslink, GFP_USER);
+-		if (fslink) {
+-			bpf_tramp_link_init(&fslink->fexit, BPF_LINK_TYPE_TRACING,
+-					    &bpf_tracing_link_lops, prog, attach_type,
+-					    bpf_cookie);
+-			link = &fslink->link;
+-		} else {
+-			link = NULL;
+-		}
+-	} else {
+-		link = kzalloc_obj(*link, GFP_USER);
+-	}
++	link = kzalloc_obj(*link, GFP_USER);
+ 	if (!link) {
+ 		err = -ENOMEM;
+ 		goto out_put_prog;
+@@ -3727,6 +3713,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 	bpf_tramp_link_init(&link->link, BPF_LINK_TYPE_TRACING,
+ 			    &bpf_tracing_link_lops, prog, attach_type, bpf_cookie);
+ 
++	if (prog->expected_attach_type == BPF_TRACE_FSESSION) {
++		link->fexit.link = &link->link.link;
++		link->fexit.cookie = bpf_cookie;
++	}
++
+ 	mutex_lock(&prog->aux->dst_mutex);
+ 
+ 	/* There are a few possible cases here:
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 6a45c09fc0d8..5776d2b8e36e 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -823,7 +823,7 @@ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ 				   struct bpf_tramp_node *node,
+ 				   int cnt)
+ {
+-	struct bpf_fsession_link *fslink = NULL;
++	struct bpf_tracing_link *tr_link = NULL;
+ 	enum bpf_tramp_prog_type kind;
+ 	struct bpf_tramp_node *node_existing;
+ 	struct hlist_head *prog_list;
+@@ -850,8 +850,8 @@ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ 	hlist_add_head(&node->tramp_hlist, prog_list);
+ 	if (kind == BPF_TRAMP_FSESSION) {
+ 		tr->progs_cnt[BPF_TRAMP_FENTRY]++;
+-		fslink = container_of(node, struct bpf_fsession_link, link.link.node);
+-		hlist_add_head(&fslink->fexit.node.tramp_hlist, &tr->progs_hlist[BPF_TRAMP_FEXIT]);
++		tr_link = container_of(node, struct bpf_tracing_link, link.node);
++		hlist_add_head(&tr_link->fexit.tramp_hlist, &tr->progs_hlist[BPF_TRAMP_FEXIT]);
+ 		tr->progs_cnt[BPF_TRAMP_FEXIT]++;
+ 	} else {
+ 		tr->progs_cnt[kind]++;
+@@ -862,13 +862,13 @@ static int bpf_trampoline_add_prog(struct bpf_trampoline *tr,
+ static void bpf_trampoline_remove_prog(struct bpf_trampoline *tr,
+ 				       struct bpf_tramp_node *node)
+ {
+-	struct bpf_fsession_link *fslink;
++	struct bpf_tracing_link *tr_link;
+ 	enum bpf_tramp_prog_type kind;
+ 
+ 	kind = bpf_attach_type_to_tramp(node->link->prog);
+ 	if (kind == BPF_TRAMP_FSESSION) {
+-		fslink = container_of(node, struct bpf_fsession_link, link.link.node);
+-		hlist_del_init(&fslink->fexit.node.tramp_hlist);
++		tr_link = container_of(node, struct bpf_tracing_link, link.node);
++		hlist_del_init(&tr_link->fexit.tramp_hlist);
+ 		tr->progs_cnt[BPF_TRAMP_FEXIT]--;
+ 		kind = BPF_TRAMP_FENTRY;
+ 	}
+-- 
+2.54.0
 
--Toke
