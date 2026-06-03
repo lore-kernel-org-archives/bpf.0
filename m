@@ -1,132 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EB84657DA
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 11:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77CD23D8115;
+	Wed,  3 Jun 2026 11:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780486580; cv=none; b=Wun2J1owUK9cQ0j65BF4NreBCS12LyRDTZA4AdhHVX0AgvQCZXdO2ElMuV+i9OZRumB9rrPeat8jAK+bpCw3yhYHhpVADB72khp0dK9l4TBdgstDNkzDnhg6NiXRqqZCKlTgFVb6xdWaDFG0+6JOBS1mLkcoK185I5sO6/DIiZw=
+	t=1780486616; cv=none; b=MCqKUlZkpbY/tgIKu67mlGDeGMpq4Waw3VmT0oXkMrP4172iLrXMkgfObp6FMkvPTzitBYHt1EDxowGV0PhzrMa70YHjw/C29XgC/K74jhzvbWybOD6gb8rMfbdRbRyJO5E9o0uXGoQ8/pBtuc87e7aUhJl+5KZu4KYzzGj4I24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780486580; c=relaxed/simple;
-	bh=lO4gWdUfNSlgqj3M4Wbw1iVslN0N200DrBNdbVkJWv8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=g0Cm+unl8HH6P1S9/fwnUBxckxMgF+tKnzqCR2FkMfpeglun59b6ODywB2ZwYNA8PlaulWvK8QJi1cjXIipTnl+SZqLxjQBOwwFlozGRKaEA8mkRFI7OlOJ5JalpBnmtyjmEwT1O3ix8LGcztYGWwbwO+PuZAHxvEmRnaw4YP9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ96i+AH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780486616; c=relaxed/simple;
+	bh=YW8kkIJdYVeZe7qZ9DgM8Kkwybil4J2n+LDNMDCmHJM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lpmrBnqKX4NCq3iTliuX+MePB33EQFFiEbUcmJmMYL+yomXx2YvBI0Y4gK9cuDxlCHYye+Z0B4zhqkoVbaQzC5qEBbpBWVDmUcBvwLKkrHHPuZTgcoyYdXLvTg0cgDQkXUNIaJVtlyL4ettEzIbS+Rl+5MIuB8VQBpbamzOUGaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=czyAk7CS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZ96i+AH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49FA41F00893;
-	Wed,  3 Jun 2026 11:36:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="czyAk7CS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABBDF1F00893;
+	Wed,  3 Jun 2026 11:36:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780486577;
-	bh=Ugb7GZoRxRsSyguiKXw/+4dS8WfDpn6E1AoVgX2rEig=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PZ96i+AHSuARmcBBMTiYINuH0Lnfnwgn7CI+MafLFM/91cxf5SQHJwQq8d1Dg9seY
-	 +3vML3URgeep1hZAAUmObOILgxeF50lEuYkXtORnJiYKwMt8aITNstEYhsmDioHHOY
-	 88LYVqyoUjE4QDdogJ3zU4Aidd1gcz8KHuqdY9zpjsZSl+MKan+Mj6EGOsjguMYq4G
-	 tpEzUvaBt5jHfke6PjjpovvZx/vWs64RUeIYqUVexNddXShfL65hy57JNOILrx5mKf
-	 uk01qJTnR1hXn22Ve6A+eXBFYlgVWt37NYCV8j62nr+iDVseBbpRLbnFEDb5ZKK5oh
-	 C0CLpmyr+qi7w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv7 bpf-next 19/29] libbpf: Add btf_type_is_traceable_func
- function
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603110554.29590-20-jolsa@kernel.org>
-References: <20260603110554.29590-20-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 11:36:16 +0000
-Message-Id: <20260603113617.49FA41F00893@smtp.kernel.org>
+	s=k20260515; t=1780486615;
+	bh=ckAkhNJD2MZZQw23jIrGRMI0F7mneyfTDmFw0mOfiqg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=czyAk7CSGWhr2hJcDvGnYWYFTvWkDLNjD245yUysLBLv7jtPEnPdoQOuehXrxB+wD
+	 0TDxZBBa32aQnmjxHNxVzxvNbd4xcCUt8yqb0Dil3uFswDFy4OGuiZa7tsM4cXKHZd
+	 vlttOuddxgtI/lUhjp96vrgW8av9EBirtyjBZSmIsVoY11g0WqafIhy72c4AmZggZf
+	 xeovQlRAdcT0wlRgnKRA6eFg9vibn4QGU8evDDfqK4tv8mfZlj/zvc05fsq1K8WU8N
+	 TqdmZUBpFMA2PQOlstfxvC1t2M7GzN1SPCWm9/8cSqcanYgncDVeK4AYbDXgT5nHxU
+	 9Wg4Nmr3kvkcg==
+Content-Type: multipart/mixed; boundary="===============6897628447651191803=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <834bf41fbb40c56f79fc5442688b6aa410fa1d3f4a87af31f11c34b40cd14c21@mail.kernel.org>
+In-Reply-To: <20260603105317.944304-2-dawei.feng@seu.edu.cn>
+References: <20260603105317.944304-2-dawei.feng@seu.edu.cn>
+Subject: Re: [PATCH v3 1/3] bpf: NUL-terminate replaced sysctl value
+From: bot+bpf-ci@kernel.org
+To: dawei.feng@seu.edu.cn,martin.lau@linux.dev
+Cc: emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kees@kernel.org,joel.granados@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,jianhao.xu@seu.edu.cn,dawei.feng@seu.edu.cn,zilin@seu.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  3 Jun 2026 11:36:54 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] btf_get_type_size() fails to handle union types, leading to the =
-incorrect rejection of functions with valid union arguments.
---
+--===============6897628447651191803==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 3f5d4e8440eaf929ad94e8774deb7fce495d30c8
-Author: Jiri Olsa <jolsa@kernel.org>
+> When writing to sysctls, proc_sys_call_handler() guarantees that the
+> buffer passed to proc handlers is NUL-terminated. If
+> bpf_sysctl_set_new_value() replaces the pending sysctl value, it can
+> hand a replacement buffer directly to proc handlers. However, the
+> helper currently copies only buf_len bytes into that buffer without
+> appending a NUL terminator, leaving downstream parsers vulnerable to
+> out-of-bounds access.
+> Fix this by appending a '\0' after the replaced value to restore the
+> expected sysctl semantics. Since the helper already rejects buf_len
+> greater than PAGE_SIZE - 1, there is always room for the extra byte.
+> [ ... KASAN report snipped ... ]
+> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
 
-libbpf: Add btf_type_is_traceable_func function
+This looks like a fix for a bug introduced when the helper was first added.
+The pattern this corrects, the memcpy(ctx->new_val, buf, buf_len) without a
+trailing NUL together with the buf_len > PAGE_SIZE - 1 check the fix relies
+on, was added by commit 4e63acdff864 which introduced
+bpf_sysctl_set_new_value().
 
-This commit adds the btf_type_is_traceable_func function to libbpf to
-perform the same checks as the kernel's btf_distill_func_proto, preventing
-attachment on unsupported functions. It exports this function via
-libbpf_internal.h for use in benchmark tests.
+Should this carry:
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index ab2071fdd3e8b..c659865ec2def 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+  Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value helpers")
 
-[ ... ]
+The bpf CI review bot raised the same point during the v2 review:
 
-> +static int btf_get_type_size(const struct btf *btf, __u32 type_id,
-> +			     const struct btf_type **ret_type)
-> +{
-> +	const struct btf_type *t;
-> +	int i;
-> +
-> +	*ret_type =3D btf__type_by_id(btf, 0);
-> +	if (!type_id)
-> +		return 0;
-> +	t =3D btf__type_by_id(btf, type_id);
-> +	for (i =3D 0; i < MAX_RESOLVE_DEPTH && t && btf_type_is_modifier(t); i+=
-+)
-> +		t =3D btf__type_by_id(btf, t->type);
-> +	if (!t || i =3D=3D MAX_RESOLVE_DEPTH)
-> +		return -EINVAL;
-> +	*ret_type =3D t;
-> +	if (btf_is_ptr(t))
-> +		return btf__pointer_size(btf);
-> +	if (btf_is_int(t) || btf_is_any_enum(t) || btf_is_struct(t))
-> +		return t->size;
+  https://lore.kernel.org/all/12a9251e9f1a616fc86f4a2b6a87e547d75f820ce517895cdbf87bae81c970f1@mail.kernel.org/
 
-[Severity: Medium]
-Will this return -EINVAL for union types?
+  "This fixes an out-of-bounds read in bpf_sysctl_set_new_value(). The
+  missing NUL terminator after the memcpy() of the replacement value looks
+  like it was introduced by the commit that added the helper. Should this
+  carry: Fixes: 4e63acdff864 ("bpf: Introduce bpf_sysctl_{get,set}_new_value
+  helpers")"
 
-Unlike the kernel where btf_type_is_struct() covers both structs and unions,
-libbpf's btf_is_struct() strictly checks for BTF_KIND_STRUCT. Because
-btf_is_union(t) is missing from this condition, union types fall through and
-return -EINVAL.
+The v3 commit still has no Fixes: tag and that suggestion does not appear to
+have been answered. Without it the fix is unlikely to be picked up for stable
+backporting.
 
-> +	return -EINVAL;
-> +}
-> +
-> +bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_=
-type *t)
-> +{
 
-[ ... ]
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> +	for (i =3D 0; i < nargs; i++) {
-> +		/* No support for variable args. */
-> +		if (i =3D=3D nargs - 1 && args[i].type =3D=3D 0)
-> +			return false;
-> +		ret =3D btf_get_type_size(btf, args[i].type, &t);
-> +		/* No support of struct argument size greater than 16 bytes. */
-> +		if (ret < 0 || ret > 16)
-
-Because of the behavior above, will this regression incorrectly reject any
-valid union arguments up to 16 bytes since btf_get_type_size() will return a
-negative value? Should btf_get_type_size() check btf_is_union() to match the
-kernel's actual tracing attachment rules?
-
-> +			return false;
-> +		/* No support for void argument. */
-> +		if (ret =3D=3D 0)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603110554.2959=
-0-20-jolsa@kernel.org?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26881443787
+--===============6897628447651191803==--
