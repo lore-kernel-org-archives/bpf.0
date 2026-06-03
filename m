@@ -1,199 +1,139 @@
-Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2AD31E85E
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A79402B8E
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780519075; cv=none; b=t9aUaUeOF3s3AJq/TLn7qityfPht3t7mUPKcGPWSNAxfoqSAKnzaaAspJGzk+blUf/3VjU7ulIiMpqAd3hGkB0nS0OPrhWwk+vRE5Zd60EvNaiTOXfYUkY9iwg40IN4BNKwhXf68Ojfbz6VrZftFkJd89aXVqtpV+Jwpv2SBiBQ=
+	t=1780519349; cv=none; b=EUzruGR++tmc5XokGghzxYAQXFlUU88F2uJoAMZqtY9nXYi/7V7qwtb3svIJf/ex/j+JcViU1qYfqTo1qpw8fD7+q77vbjMyuiS9l6Brhn+6KZop7eCER30qgH3izGQNz8i07sCOMRIijo1GdLip+Zi1Hl7kOArm64EvcFI8G04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780519075; c=relaxed/simple;
-	bh=v5MDkuzDjiBP7GOZmOstmq2GPLwNQ0dadL1/CNFKv7M=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=oKUjkdGijeKghDuOS8Z8afe18/up5LGrn083e8v1YbLf8V2Qz6dPfkOPVCn7YqqwK5FSVLUN8G5GlsWbYc5IFs1C2c4IDaeirD8C1b+5xinK08lYBewAg8PuzC2ZE6nOvMS9/fzCALxA8XHxh4m3VoH+ywLaapmu6+rYTiYOA/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=K3r5tEpJ; arc=none smtp.client-ip=74.125.82.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780519349; c=relaxed/simple;
+	bh=S5gmSiVU0GTldz8MOGh/hxGorXwUtiyn6vDC1Djk7jE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XX2IlG9Qak0O8Ml2IGUx3AAW4b0wj6bctmmAsjuRH5Mw/EZofg5ELZ+FFBEgNUi8il5ZF4bKZT1dSrOq1N4wcWt0DyHb3oXlNQGjfqPSnMSlqPEFdoMN0pRiFapqr5HuutJCv/WN2fAdWbbSamYI0x6F6gjLFUqWvM+RLSwajYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C8SGbkUS; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="K3r5tEpJ"
-Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-304545f5206so17904445eec.0
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:37:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8SGbkUS"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2c0c20f0c0aso29862725ad.0
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780519073; x=1781123873; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hlD1fps65r5GW3H1POgo0WmBfATnB47xWndgmOse2dc=;
-        b=K3r5tEpJCQ7gb5s6pWNGC7/ERdydsTH713ZY1Zh9aAsYP6pZbZ6lfA2JYHR7dBeuz9
-         uTw6Yk2fkUS4jJdjw23rCS1axXCoFm7YsJXzmPryuPd8xNQy0GZZE2ypJEZ4yknIpLpN
-         eiBU0MJAYqqzN5AariemSkKd+azLmyv28/HLexfaqzh0pgRWZij9yeFo1A/YDOaAuXHq
-         vCy7Bxm6jDjYnvJIlXLfZumGeqhZj/Kq2MnhVIaJEsV3MHgawM5K8QRZh9eDGhZc6u83
-         Wp9m/3FfNPDaHYBgdmNBoaDMBG4giGqLecypwqPZbWgGmTSsG4kx/kil+nOVbpDP9GTd
-         L7Ww==
+        d=gmail.com; s=20251104; t=1780519347; x=1781124147; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLbT+MK2FeIs2ihHI8/87OobjBApaN8Trxtynzp8QvI=;
+        b=C8SGbkUScV8GC+VYvrHXC8c8aku8RZqMwm+PW8iA0GmYczAvxVd1REa05SVbnU0LLW
+         6BYUhppa7dKRbjjFm6LtSl5fuq+c9c1Zg9bg5R/b6xS21lnjgE/PkGuOe6jQl9VgBt+5
+         It2RBqmiBXrpXG3AldVFtnQlZ0BheIWHDtDlcMgpgSDFd31/RPy3yFHp7bKP7dTRdt0T
+         jjvDoaJ1LTNIiHJpHsUTZIr8KaoUr8aLu01Ys16jn8v7gXnNNtl/KMxsdxnqrWa9APMW
+         vXeo+wOHyPEJy2AnArQ4KwHcvc82yxreljT1lV5TqE2Sky7csiGSpWsXpPlnwboCl/lc
+         L43A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780519073; x=1781123873;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hlD1fps65r5GW3H1POgo0WmBfATnB47xWndgmOse2dc=;
-        b=mur0ABdHIbJyoj9r8QeyFEogzfcogCMBUMcSP+OxvHEghpcPt44ujl5fOdVa/1naNL
-         Z3S9etgrYzem8DC8UMRhSojaOpzKXOIfLAh3NZjZiWpcK0j8F5fuxFPSv1qEIO00pGXS
-         5PjoUsPa1KsdTfFv3xwkzuLJ/4BLkUjRHbcjpEI+3Bs2HEdMBYPsamXQXGIh8ek64Y3B
-         XZpK1kVYQ3F++gPftLRd5ca7AIdN8szxjmQsqmQEG1BgVQg9nLUaB6Ir0cFQEXXiiwoU
-         0hhInw4SP5nBX1Y45Sn9tUQxujKWUq0wIRR/AJdewD72ZWd3D+QehFn7+jgg98CoxFAE
-         6p5Q==
-X-Gm-Message-State: AOJu0Yzijvju6GBbW3n5J/ZkXYEjkn/tykYjPqgMhGCZM/U9liNGEEDu
-	Do+bsVkB7zbUApUbJvM365P9+nUbWuew0/MZYTOAPZoXFHV2x186X6SkKSm6D8I+BlQ=
-X-Gm-Gg: Acq92OFO6ZCCgfbaq+N0h5m7LpsoE1r9AXjtO47ewZrJh2wuRQhbmpHSwu8D018i9BS
-	MdfnDoJe9DOAQjeucgdusWN32pHA9cUFP8QuvufhC3Q2Tj49yU6aXIB7qeLCp+kkW7uX/uqrcW8
-	rwCPLFvvb74OoNHAzoETfrtRfGUZ6JPp9pNSStDdhrOrYjM0aKQ6WXHBqHpGrWBONKhmVYLJE5a
-	sewCQS5v6BsX4MttclpL5rt33PkvYYhKi4Z9FOGXkv9MsuOpWAAFYoFJYcu/mITA+/ecv9/t48X
-	gbSxi6+5G/6ftdQj0XlNquGOyqJhkb2hbvsardGQC5rGxS/yYiC3wAotTGmv22O60ou+dnVXfMh
-	qmjzSJsrDWucJtvr6zA3l75fxHPYXdn4W5W/DrsSkjzqkUtZMxFZbHCZ4MEZvDcNGiPWCeSRsGp
-	vLIUUDl2EF1mUWx4IdXp1eyQmCybpgaK8Rog==
-X-Received: by 2002:a05:7300:f190:b0:2ee:be86:7b90 with SMTP id 5a478bee46e88-3074fbefd7amr2487702eec.29.1780519072706;
-        Wed, 03 Jun 2026 13:37:52 -0700 (PDT)
-Received: from localhost ([163.114.132.129])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcad34esm4647412eec.11.2026.06.03.13.37.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 13:37:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780519347; x=1781124147;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wLbT+MK2FeIs2ihHI8/87OobjBApaN8Trxtynzp8QvI=;
+        b=dtg61remWIgLAeE3RjKsF80aA25wNGOwC1rxKsww4GDWpHdvxyFsbN9BgHV5lcAK1q
+         XlBdS4omQv5eFoB2ZVLlnFjqtCbKp4qnsJLFPs3d5e+sUSEb9UU6C6cOOh+uJ1gk91Iu
+         q4VAUVVpvkaCO8ZMOqeDok/LpRszVZh03c7lsgrazXfZoCFuGg/1wffBoInUzdVYyEZ4
+         XYmvVcJmnMrNMWJKNI9Ixe/D3vIWbQ/9Bx0aA0rDuZzEkl7pY1Fl1JTJfBqG3IqtZ6JE
+         MSXKSGhOoWWHzBTyZ5HPyjC8rMq64BUB2tekWX29xCzWOAFXJBfet+XQ7bjAYRP5uzUE
+         kWuQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9JyfVbIIJL/SZezkAbDIUsyf6Ckp5mjm7QMkQ+TtBKZPMo4P7AE9QkEql6sJSpaVIHWHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxoav5Ppg4k+E4VWDWDph0GXXKFSwurJRrcSyWRmGvX+mTijhH/
+	1iIeS0H3XKtUIHsXT3UOZMfh7DXIkoflbqibdDEPFkwF2+AHw2uhBktV
+X-Gm-Gg: Acq92OFjx4bulKjbRB6pJNf7j0rQsO8oS08dShwGOW4ticpYfZxyBw23Jr5ahgWvJp8
+	GAemL82ICpJ61GiqsTTdHqYevDqpMWW9fGZBRtAwa0kKdQtpTTcTcXDmUPWoVP8WpsISAMTvdJr
+	DLevo9r65UvLWMxZELLEh1LNeM8eSvNb4TXGosH3OWb5KwlH090hxJm0I4WrQwpxVQD67CRHCBM
+	IzHNbv+lEL3MS6TCSk/8hY9aWylZGynTJ4AfqeTDjsCQrO9w+qKKS98RBsEEQ307Tfbjp5CzGuc
+	JJcAjbQBMz+viXqgel0SxGID4ORZO/hGS96fKRhM1khp6cH1lDDnK242edso67HLu2e6eAbB25F
+	nUg3THal6WIrvdGQ2HCdxdtYGUNg+LkmjlfRZIR2PuV3mfAd07S6ySFC0kwrQTQC1TD8WCv9K83
+	SYIYujsAlVPdaoX2ZPqDUKFAhzphfLeosKH2hgk/6X6GUgRdC2/eguFuyyRZNwMF6c1K9A/jMZo
+	3xHh/6No+s=
+X-Received: by 2002:a17:903:1786:b0:2c0:c38d:9d51 with SMTP id d9443c01a7336-2c163d8c184mr51694615ad.21.1780519347310;
+        Wed, 03 Jun 2026 13:42:27 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad172sm34595245ad.83.2026.06.03.13.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 13:42:26 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Juntong Deng <juntong.deng@outlook.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] bpf: fix NULL pointer dereference in bpf_task_from_vpid()
+Date: Wed,  3 Jun 2026 20:42:04 +0000
+Message-ID: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Jun 2026 16:37:50 -0400
-Message-Id: <DIZPC0U3DHUF.1L1GYMJQGUHGH@etsalapatis.com>
-To: "Vineet Gupta" <vineet.gupta@linux.dev>, <dwarves@vger.kernel.org>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- <acme@kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, <jose.marchesi@oracle.com>, "David
- Faust" <david.faust@oracle.com>
-Subject: Re: [PAHOLE v4 1/3] dwarf_loader: Extract die__add_btf_type_tag()
- helper [NFC]
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
-In-Reply-To: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Jun 2, 2026 at 3:55 PM EDT, Vineet Gupta wrote:
-> NFC change preparing for DW_TAG_GNU_annotation support.
-> Extract the btf_type_tag annotation creation logic into helper
-> die__add_btf_type_tag().
->
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+bpf_task_from_vpid() looks up a task in the pid namespace of the
+current task, via find_task_by_vpid():
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+  find_task_by_vpid(vpid)
+    find_task_by_pid_ns(vpid, task_active_pid_ns(current))
+      find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
 
-> ---
-> Changes since v3 [3]
->  - Fix comment to kernel style [Arnaldo]
->
-> Changes since v2 [2]
->  - die__add_btf_type_tag() returns pointer not error code [Alan]
->
-> Changes since v1 [1]
->  - NFC reinstate some original comments
->
-> [3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linu=
-x.dev/
-> [2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@lin=
-ux.dev/
-> [1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@lin=
-ux.dev/
-> ---
->  dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
->  1 file changed, 34 insertions(+), 24 deletions(-)
->
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 16fb7becffee..42a0f3f74ce3 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_=
-btf_type_tag_type(Dwarf_Die *di
->  	return tag;
->  }
-> =20
-> +static struct btf_type_tag_ptr_type *die__add_btf_type_tag(struct btf_ty=
-pe_tag_ptr_type *tag,
-> +							    Dwarf_Die *die, Dwarf_Die *adie,
-> +							    struct cu *cu, struct conf_load *conf)
-> +{
-> +	struct btf_type_tag_type *annot;
-> +	uint32_t id;
-> +
-> +	if (tag =3D=3D NULL) {
-> +		tag =3D die__create_new_btf_type_tag_ptr_type(die, cu);
-> +		if (!tag)
-> +			return NULL;
-> +	}
-> +
-> +	annot =3D die__create_new_btf_type_tag_type(adie, cu, conf);
-> +	if (annot =3D=3D NULL)
-> +		return NULL;
-> +
-> +	if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-> +		return NULL;
-> +
-> +	struct dwarf_tag *dtag =3D tag__dwarf(&annot->tag);
-> +	dtag->small_id =3D id;
-> +	cu__hash(cu, &annot->tag);
-> +
-> +	/*
-> +	 * Prepends: for annotations tag1 -> tag2 -> tag3,
-> +	 * the tag->tags list ends up as tag3 -> tag2 -> tag1.
-> +	 */
-> +	list_add(&annot->node, &tag->tags);
-> +	return tag;
-> +}
-> +
->  static struct tag *die__create_new_pointer_tag(Dwarf_Die *die, struct cu=
- *cu,
->  					       struct conf_load *conf)
->  {
->  	struct btf_type_tag_ptr_type *tag =3D NULL;
-> -	struct btf_type_tag_type *annot;
->  	Dwarf_Die *cdie, child;
->  	const char *name;
-> -	uint32_t id;
-> =20
->  	/* If no child tags or skipping btf_type_tag encoding, just create a ne=
-w tag
->  	 * and return
-> @@ -1627,29 +1657,9 @@ static struct tag *die__create_new_pointer_tag(Dwa=
-rf_Die *die, struct cu *cu,
->  		if (strcmp(name, "btf_type_tag") !=3D 0)
->  			continue;
-> =20
-> -		if (tag =3D=3D NULL) {
-> -			/* Create a btf_type_tag_ptr type. */
-> -			tag =3D die__create_new_btf_type_tag_ptr_type(die, cu);
-> -			if (!tag)
-> -				return NULL;
-> -		}
-> -
-> -		/* Create a btf_type_tag type for this annotation. */
-> -		annot =3D die__create_new_btf_type_tag_type(cdie, cu, conf);
-> -		if (annot =3D=3D NULL)
-> -			return NULL;
-> -
-> -		if (cu__table_add_tag(cu, &annot->tag, &id) < 0)
-> +		tag =3D die__add_btf_type_tag(tag, die, cdie, cu, conf);
-> +		if (tag =3D=3D NULL)
->  			return NULL;
-> -
-> -		struct dwarf_tag *dtag =3D tag__dwarf(&annot->tag);
-> -		dtag->small_id =3D id;
-> -		cu__hash(cu, &annot->tag);
-> -
-> -		/* For a list of DW_TAG_LLVM_annotation like tag1 -> tag2 -> tag3,
-> -		 * the tag->tags contains tag3 -> tag2 -> tag1.
-> -		 */
-> -		list_add(&annot->node, &tag->tags);
->  	} while (dwarf_siblingof(cdie, cdie) =3D=3D 0);
-> =20
->  	return tag ? &tag->tag : tag__new(die, cu);
+cgroup_skb programs run in softirq, which may interrupt a task that is
+itself in do_exit(). Once that task has passed
+exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
+cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
+dereferences &NULL->idr:
+
+  BUG: kernel NULL pointer dereference, address: 0000000000000050
+  RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
+  Call Trace:
+   <IRQ>
+   find_pid_ns kernel/pid.c:370 [inline]
+   find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
+   bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
+   bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
+   __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
+   sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
+   tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
+   </IRQ>
+   <TASK>
+   do_exit+0xa63/0x1270 kernel/exit.c:1010
+   get_signal+0x141c/0x1530 kernel/signal.c:3037
+
+Bail out when current has no pid namespace.
+
+Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ kernel/bpf/helpers.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b5314c9fed3c..4646a915bf98 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2913,6 +2913,10 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(s32 vpid)
+ 	struct task_struct *p;
+ 
+ 	rcu_read_lock();
++	if (!task_active_pid_ns(current)) {
++		rcu_read_unlock();
++		return NULL;
++	}
+ 	p = find_task_by_vpid(vpid);
+ 	if (p)
+ 		p = bpf_task_acquire(p);
+-- 
+2.43.0
 
