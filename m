@@ -1,148 +1,292 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFCB3B6BEC
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 15:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780499859; cv=none; b=DJ0tzvXz7o+ofdpTTpTOgXDl3WilsEqU9XZU1x9T8d5rwQzsAcdcJe6erNx5s/tLkouQEoE6M6rsHHeZVRMB5JJwX4rW7P3ep/EwhCettPe3FsM/U7yQos/hQdrohlWoSEtOm0wu44irCgHxfJ+shWp44l3GcegXfcU79r0P3+g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780499859; c=relaxed/simple;
-	bh=yKBQM/dYhJDWNF+XWCSKcsh0LWE/TAYU2zGm7ql6dk8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dlapEjsoL+N0njIQ+G6KfWaYhY8JjWUQvkI/cbnLE5uUgdi7ulxFmBBydT2fKiai4q/f0VPFFeZe/MBoe3jKu0ojwOzBxNLF0g0fxRcdJ5oHJYCzY8Vv216zebG3PZPcE8ogMGTYd7UU17NwYlOHGxNrEwqH3r6QBdfmQTT0t+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXVwvOeH; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3F7385D64;
+	Wed,  3 Jun 2026 15:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780500875; cv=fail; b=pw+8bTzlZMuz0IkdnxrVRWS087mi6+PmMcWCnm/9Dei0bNQO23sT3C0nO1bo2eFj7UqqliuQKwxYmZHPf8bJYoAgwOmABa+4Zif0yZTwc+AgtWuFutDL+PSn8W1R5+WLT4+FPFEUJr9oaIBShh/4jCSO1Vj80ASTgxfGnm6O97I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780500875; c=relaxed/simple;
+	bh=QIY9FAu9POzq3hiNE7IpkEMnHqzskbEjqCW75NOgKgQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=p0rutVt3YvOumhQEuUT5L6/0x2YmLKoGX9w4ructa6DA1RMfGdmo+Mle6KMmI18R/aQml6B4sDYzSgLOM0WKZcMo8sKuoWXmuAmICpxzrw8it6fxUbTzG59gjprpedQELjyCTKi1wDl3ZYoW/s2Ou01TTdw8skSIk/WMWUdIRpg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nO66wJtk; arc=fail smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXVwvOeH"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-45ee6d32402so3771747f8f.1
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 08:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780499857; x=1781104657; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hnkH5xFEJ6g6oqedeDPHM9btk1uLc+DnFLjyYvq9sR4=;
-        b=PXVwvOeHCVsO8ZIndw/CBezw1mtKNimrhl3s9nxoxqr/czz2Nl116bwsGnoH+wLaTM
-         kQMQbyG0fFmwhz5i6NNfKarEQiXRd8x/YqIrT8t9vygU3C80KmED/VRttMn2E1NtV496
-         j06JToVoDde3yllo03QPh/9hYUGTVdC/UJ+QYD37x3OiplBtsPKduaTI9m2SHaFhsJrs
-         DuUlEAsf2gdlxZZl/yDhqD51aHmCyyb2IoP+CSuDGKBWPn7CWKVZwSlS1pTqNeNOxnXI
-         sgTuctBp0ASHD9KBfxOBSUdACFL6bIbwtOcFYjN+XIvW6JfpIW+7POBCSK2ZxXoqE1/j
-         r6pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780499857; x=1781104657;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hnkH5xFEJ6g6oqedeDPHM9btk1uLc+DnFLjyYvq9sR4=;
-        b=LeDp3QqF41L6Iify7tFdvQ8BinQrb1JLj2aKrZ9C8m554FXObxihRMGyQDYvIT+sZf
-         ELhRLCdIKTdEUktpvGdeykmck4X6Lb5X50kOzubmhmldjmj6P67B7/UajaEnMTZ4b7PX
-         qqVRRPOvs4xCa0WANxrJxYN81MWxgc+GCpzGQCkuSvjN8T4QO+5F9CJw5Hcr+P39eqvv
-         h9oTO9DN2cOS9rAjirsDGQ3JXYeb0YIbICVujKcceGy/7NqCuBg/wx6bwlmLrVjMi8A2
-         9nWLaw0uSrSK6JOZoWVLSgmSbRNEkSPE2gMe5i18tHXcx+zAyib/4638CzNYX/xP+DFo
-         3aoA==
-X-Forwarded-Encrypted: i=1; AFNElJ/PS8HrETUbgXsa9eZnuiATRJKehXobeWPyWdWd9dEVcjDc4fC1cRd3w2UF34g5pEPG3xs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzN0fr3o5G+linrSVCqxZbL4P1Y9NpdSWHl8yR6RN46WiPH3Yi
-	c/Bdi1OTUAmyvYJFcRH9lNrotMM8uFVO/cUSEpaJqZNK1fPS1xfWiNWN
-X-Gm-Gg: Acq92OHGcGgtst+uXMaO8+gcnfstOiS1Tb7dl9wHqWkQMi6tzbkM56mYcPVOkrBz4OR
-	P4XxceDHCW09kkE5T3hb279YHaybCrEHrXWWGpOwYNVCz6gRGv15+A7BQtWmBmmPFpYBG19kdnt
-	2xxTtVqbIBxxQwEeDAwrMTSTXSGH/XjKTDCbvdjak605uz3vyiX4d3Ju67PoUQH4Kp+yBltM1CF
-	AXj6/kLg4Hv/KKXXXeHHzu6OrYMDGdp9KCRAEc9pR8wavuw5gKPRds0Tj7G4kPO+qa+yZyUHKq6
-	AOH/H/quBhHlthjgijZ88Joi9FHikcj6SSbHWqPp1k7F0YM+5WaAg4LgCfWcmAqwBUl/NBHsA5o
-	qv0DnLWGj8t5OpLt7XuJLmU61NBhFFfr+mgV83Y+YhMLPS2eVPWJK1ZZuldKcdW7hEfzECnqgsf
-	Q06VmPPAeosDJufxKwNO7XVIilvCrPLNscqqJnKquZW5P7UWIPJTMSKYQszbqVdtXWZJBPrzVXl
-	WMQ/NqW+iE39UiyfIeiR2hpqB+0Wy+A
-X-Received: by 2002:a5d:5989:0:b0:45e:e44b:313e with SMTP id ffacd0b85a97d-4602181fac2mr5917728f8f.19.1780499856561;
-        Wed, 03 Jun 2026 08:17:36 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f0a43e9sm8398676f8f.0.2026.06.03.08.17.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jun 2026 08:17:36 -0700 (PDT)
-Message-ID: <f1f18841-005c-4450-b289-2a052f5f3fb2@gmail.com>
-Date: Wed, 3 Jun 2026 16:17:35 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nO66wJtk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780500873; x=1812036873;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=QIY9FAu9POzq3hiNE7IpkEMnHqzskbEjqCW75NOgKgQ=;
+  b=nO66wJtkFgKdvsxj0GHauM9fZ07RTSM60qUIsWQtcPGTAw4oNeCc4F4E
+   Xc8zRoinM4fFvIHUmI/xl88oY2zPSu4vhVpb5P6erCYadYpgn4OvEun2F
+   NFSsmrIbZOt4Wd5wkoLKZTr/miDYX8M4+yjH/QNfoq4q9XzUzOZx0e/hi
+   R51gT8DmJcYnw8LQz1hwetO+EjXAbrdBYI53/3VBdpIpJQe9Iie7MJ6bf
+   lt0an5VuR64a2YuQT4QfT97A9lYWsGk1CL6b+MYrU2WqyS6aLxroJWwmn
+   EuZ3GMovFuI2MMT96cHngRrCYV/iLE6xnLzASCkbllVTgNGGjg2CSfNVX
+   A==;
+X-CSE-ConnectionGUID: yW2Vw8wAQ3SrktjDXbxXaw==
+X-CSE-MsgGUID: LXbRNcOLSs+6QWEt9l6XkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91889389"
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="91889389"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 08:34:32 -0700
+X-CSE-ConnectionGUID: XCwEE9HVRI+Zmjf7+24rQQ==
+X-CSE-MsgGUID: ryu30I8JRySEvsjKDT5ibg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="249353519"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 08:34:32 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 08:34:31 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Wed, 3 Jun 2026 08:34:31 -0700
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.22)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 08:34:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lu4D7hP/Lij0IbzzqobOPFo9zs9gbsDYbu/t/J++x+qm83GYD0sGap1uSVHAhCQt0jIXzAg2uGQvbLfIUQXdnCu2BWvKfKM0kDCMWpIVZtttzFo/ThWa+FBu0eObtA3ZyQ4JeT6nivtIcWpplM93evR/jgq0gW9mOGg4Mg98rZDif3WphUdABVRwBofSFulvT0g3KZmb9hc4+4S9ur96CyI2gsQ+oNy3P+tQLopiBY/eJWv+KKQ0jiSrym/2xAY+2wXMHAN01mf0A2QYa4gnZzxKomC877ZYmrA3JykvxXNL8eKxsm9IqclruPyXC/sS5IpYvjU5vX9pt9aonTvf7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zm+MeU/xKdYUSKE/wC+ZwX7H673W8XXVBmAYBFICt70=;
+ b=vL/NQxCp3KmLm+y6O5K5UNKQO272XBA8uYSbnztAHd4GRpGYM/BfeUzg+o+wlDljuz7Tgfqt9EW9UBrCs9kG6MUlQ8U6/2oYGfukUXk8Vmagft33y9/je6tQhOh3+vBLyCgJvvRMlwJ7LrQdN1+hemD3y6SxHt6uxW894YRoc8UTftakU3d9IftOT0wCYMJmLCmQm4FfFwd0IKJLTCXLRVEXMBxib92BfgQOAywG2G8+TB+1xi1B3tqtb6nrX09kot0YEYqpJX+PMEf7kN7yrhPrSh3z2J080E7BmBt0AslHbiQwFjhb8hqkx5+AGRRulm4BdlpYLb99MToE/gPCUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ PH7PR11MB8124.namprd11.prod.outlook.com (2603:10b6:510:237::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.71.16; Wed, 3 Jun 2026 15:34:23 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%5]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
+ 15:34:23 +0000
+Date: Wed, 3 Jun 2026 17:34:16 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+CC: <netdev@vger.kernel.org>, <magnus.karlsson@intel.com>,
+	<stfomichev@gmail.com>, <kernelxing@tencent.com>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 3/4] selftests/xsk: Use umem_size() helper
+ consistently
+Message-ID: <aiBJeNRplaNRfb23@boxer>
+References: <20260603060327.298389-1-tushar.vyavahare@intel.com>
+ <20260603060327.298389-4-tushar.vyavahare@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260603060327.298389-4-tushar.vyavahare@intel.com>
+X-ClientProxiedBy: VI1PR04CA0065.eurprd04.prod.outlook.com
+ (2603:10a6:802:2::36) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Yuyang Huang <yuyanghuang@google.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260603144518.67065-1-leon.hwang@linux.dev>
- <20260603144518.67065-3-leon.hwang@linux.dev>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260603144518.67065-3-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|PH7PR11MB8124:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5ab713c-fede-4d2c-46a1-08dec1859695
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|18002099003|22082099003|4143699003|56012099006|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info: A0EfKMFrJgUY1II0u8Rot92cNa0D+uYDn1oAbvLAnixM6gxihXem5SeqQo4hgYWe0owY1DSEmca5k3tZLPTQKSGnHQytVIbYoP+gaRUoWSA1F7p9jsiXhNckVmEznOKrasasHbAp7RNkArkdgAaim6j1wv0JO7TggvvOtAKGsB123srRTe3M8GoJOUsF9A21OFf/CkFiBdWWHXIiCqzin/SvJ0trAcvQh26lH8ge5NNKL7l+5/HnY5olqFtH4vjvUf/bcdxwyu4i0yk3dLvlA7fk7E2pCye1pnFAexUeg/M+TxYI0IqC6fIKB3mKfb2qZO8c88nyfTRrgGUoeSuFLHAC2wl/gv5Adcyr1KK1bAn+pSb7FOEWwLtIB3eCksi5COn53u88TSKexUWuxiqOwfGgLRYWQnjCXfSJ18QN96zFPgW3tJCrxkY8CAFSssU6Ng7621jDGoYMIf0WsBMkp5ATuCPHkCUH0sFmac52SFv/kgSfiUqFiNtPwm65QkjTwyZ9zKi6VvyUuDAQ5lFFFsIC9Nd6SwTVBN5c6FbvYH0KIap6oqp6viD8dOiB1EVjSdH/TBPmSddKETX31hdaFzmv3I3qhqwnNLY45xfVcvu16bLCs/xSNOJuvfnfeqrFq//wUUeyAxckHXkjtzvTW2mjNI0nrlU3Y04ht3gFwYTyRCVc4HwmsqrdoPneHZDp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(18002099003)(22082099003)(4143699003)(56012099006)(11063799006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ScLHnavYaQu8a1elA6ezL01U+McGDqaQiwpAqCKQ9+Gd0kJUZtt7VgakQTNy?=
+ =?us-ascii?Q?rYfEFdXHz1h4sLWvh337JiJFlFjHv1N9mWFojcgBiG8A27lR8Qumjq5y0UOb?=
+ =?us-ascii?Q?7evGMGOp1bgv62SBlPR0mk4uYo22RECHbHy8VhesqvekVPk4TH8GvGyzqRri?=
+ =?us-ascii?Q?Hx54hCJjfzH4wPB2G6djLAhaFHy3oW2+qdFceIJIfSK9bVrCBOf5WHLYCBUj?=
+ =?us-ascii?Q?he2DRuHJImwRDNyaUKUeaqIN7j4N0Tcawv2yaKX+4zk8qYj+2FMEE46cvaoT?=
+ =?us-ascii?Q?6HXRT+WFdEh4wIpek2k99A2hM5M57WJrn0tUY8adHsNkcoD08MYDpY6vSbZX?=
+ =?us-ascii?Q?xViCk4q0kfH0wcQUs/klHE1tkYDpaZkP6r5mc+1bvkz+X125Ir91XeXMf8wR?=
+ =?us-ascii?Q?q23lV6Vnyt6/CP/D2kzveZxjwnpVUglCylu4YvgzvV4Sx+qBS/ViBGX9ipmq?=
+ =?us-ascii?Q?bQo4LVwduVeJ1jlhZYEk3vSFo7XpuUciH+g17PD1EnT0jXW5G/5OywOEPC0T?=
+ =?us-ascii?Q?VewqJrMKcw6VRhOnQ12DQZDHBMQBHGFvMn+EuSsk0Ta6bvvsQNy2l6qRM52J?=
+ =?us-ascii?Q?o2aO7Y79evKyL9MBBBJ6egDsUjVizkQ3QnCd8PynuZgpAdxLcOA+yTxL0zk2?=
+ =?us-ascii?Q?D0VCNmmgK4gLqw1cw2ZtK57w+s0+l6GO/kwhNCDULOcvcZRzr3mpCKiam9eA?=
+ =?us-ascii?Q?8eJapIKxsFJEWibJgg/NYgO/+3pwk71NtO/Oim2qrVXMI0xxbtjVe5ezn5RF?=
+ =?us-ascii?Q?Cj03FFzqnq3IaQA/qtvAoB1keQd61zL8MyglAeaA6uKOeiypvNacF73Sg6C+?=
+ =?us-ascii?Q?OFaLTzUsvani6LpVOwjcn+cjr2iDD4DoebxO861dsqsyzxuiJOOmuT/eMfW5?=
+ =?us-ascii?Q?MQM+aCz9TVsWV8fXSiO19Q6ZsLkKic2MOpO4qZShwcYMaPy05fTR33YWznrE?=
+ =?us-ascii?Q?NpJEc09j9FLL/29ng4IssOCtB1LyJi6gmyrSztItLYV8noC+drioxH8DKfll?=
+ =?us-ascii?Q?WdGxjUJd8cJWeBZPW2Z1wCOLLcG+65Gj8gK9BZAnWpg+V7WZ2epOzAj9PFoQ?=
+ =?us-ascii?Q?IuqdPS6itYxmW1UUeeQXDvRN7D37UIBG6oLntgimogH85ut6f85l75UNqsC8?=
+ =?us-ascii?Q?17sQcu710HwCX3oO3+wveDy/WjTSqeghoZLEHe2jdUDvjS9gTtUBZmN51me+?=
+ =?us-ascii?Q?tifcZV10IkDHVmPZeyu3J2lEDSB9rNWt3jv2QJ4q687xruRQVEzR0h4tcDST?=
+ =?us-ascii?Q?9FdbQt8ay3Qxw6dUwkf0YetCrRohoA/5XVsuB2292osvFZPBIp4XZDBa6Phh?=
+ =?us-ascii?Q?NbgEuGw838tV0Rv2XnQ3hoV5xD9LZ+cdMvm1q4zbyin2aLao0Oojdf8k36qd?=
+ =?us-ascii?Q?gpYCYBP2B4YdTOVrQdu3KY21WcGfYB/mlobbC4svkbQ2a5IxbU8ZKTcj88a3?=
+ =?us-ascii?Q?H/WcCoYH9k68e3skvhAKOOOBITiOCRr6RrtenUGU6XhwEAdtpPFdC9EnGWqG?=
+ =?us-ascii?Q?e2/UIMMTTWcPmnDX7vqf6SW/plUaOOSQJ+VrGpiXQoBh3JrP7rusitLdCPwp?=
+ =?us-ascii?Q?4VeVZXT8upJvWWUz1jDflwf4MuAd0ZhJhtvqHGDKthlRX0hX9ZT9eBirXhtr?=
+ =?us-ascii?Q?GXHgo8+ZpWam2pmZiSbDP6gzAZhSjRk+VcXn2MiNFxfOODgu3qgZ0KlobAuC?=
+ =?us-ascii?Q?tmCJSahbJNs9r3CrMzHD6cOOROGfNPSg9FPjmf7+XVks9hrunDy2j3bbDuKd?=
+ =?us-ascii?Q?esLEcnPg6SXXhabrUtbS0ZzhPbQqNcg=3D?=
+X-Exchange-RoutingPolicyChecked: CkAo4w0XzC22VQ0wu/P2w0YjmbzcQhlsGvOeZc4a8JS4D4mp6L+QXhQKN5+S81tQRWDMWGcVWAADkgOALboxYWqnKCy8C2mRR7LL0pWkVhCrrOoEq63u/e/IE2165LECaGx9hLzgGoW94wbgVV2I+gNA5HlojpEKYW+KLpZH2itLqU2K+9UmKZf/WdIAmIEmOsaggkn7fEodkhV+QnnvW2cbL2Vuy7dxT1F0TcByTVuwn0VCkIdv11fogebq5LnPUpDtMH/AtpNgD0xGcHjsoYeGmyFXu6lsM5G7jOMaBeZfyxUKGx3V7dLkLhGxyCE888cYMsGUhB8+zV35o6YoBg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5ab713c-fede-4d2c-46a1-08dec1859695
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 15:34:23.5721
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TzL2VzCixp/019MmuwQXPvTPMdYMwGBw/hVgoXBl0Qsja6beZdzAqdFtHpab+MGcFDqnU1SLxbFc3523Wv8vRQXet0L6e/fY462udcQ0Qw0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8124
+X-OriginatorOrg: intel.com
 
-On 6/3/26 3:45 PM, Leon Hwang wrote:
-> Since there're 4 bytes padding at the end of struct bpf_prog_info, they
-> won't be checked by bpf_check_uarg_tail_zero().
+On Wed, Jun 03, 2026 at 11:33:26AM +0530, Tushar Vyavahare wrote:
+> Replace remaining open-coded umem->num_frames * umem->frame_size
+> calculations in test_xsk.c with the existing umem_size() helper.
 > 
-> pahole -C bpf_prog_info ./vmlinux
-> struct bpf_prog_info {
-> 	...
-> 	__u32                      attach_btf_obj_id;    /*   220     4 */
-> 	__u32                      attach_btf_id;        /*   224     4 */
+> This keeps UMEM size computation centralized, avoids duplicated arithmetic,
+> and improves readability with no intended behavior change.
 > 
-> 	/* size: 232, cachelines: 4, members: 38 */
-> 	/* sum members: 224 */
-> 	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
-> 	/* padding: 4 */
-> 	/* forced alignments: 9 */
-> 	/* last cacheline: 40 bytes */
-> } __attribute__((__aligned__(8)));
-> 
-> If a future kernel extension adds a new 4-byte field, older userspace
-> programs allocating this structure on the stack might inadvertently pass
-> uninitialized stack garbage into the new field, permanently breaking
-> backward compatibility. -- sashiko [1]
-> 
-> Fix it by changing sizeof(info) to
-> offsetofend(struct bpf_prog_info, attach_btf_id).
-> 
-> [1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
-> 
-> Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+
 > ---
-
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-
->  kernel/bpf/syscall.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  .../selftests/bpf/prog_tests/test_xsk.c       | 36 +++++++++----------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
 > 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 1007fb7c87e9..0c86a70d31c1 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -5115,10 +5115,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
->  	u32 info_len = attr->info.info_len;
->  	struct bpf_prog_kstats stats;
->  	char __user *uinsns;
-> -	u32 ulen;
-> +	u32 ulen, len;
->  	int err;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> index 7e0d34111b2f..f1730466ffd9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> @@ -829,11 +829,11 @@ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 exp
+>  {
+>  	u32 seqnum, pkt_nb, *pkt_data, words_to_end, expected_seqnum;
+>  	void *data = xsk_umem__get_data(umem->buffer, addr);
+> +	u64 umem_sz = umem_size(umem);
 >  
-> -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
-> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
-> +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
->  	if (err)
->  		return err;
->  	info_len = min_t(u32, sizeof(info), info_len);
-
+>  	addr -= umem->base_addr;
+>  
+> -	if (addr >= umem->num_frames * umem->frame_size ||
+> -	    addr + len > umem->num_frames * umem->frame_size) {
+> +	if (addr >= umem_sz || addr + len > umem_sz) {
+>  		ksft_print_msg("Frag invalid addr: %llx len: %u\n",
+>  			       (unsigned long long)addr, len);
+>  		return false;
+> @@ -1586,7 +1586,7 @@ static int thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+>  	int ret;
+>  	u32 i;
+>  
+> -	umem_sz = umem->num_frames * umem->frame_size;
+> +	umem_sz = umem_size(umem);
+>  	mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
+>  
+>  	if (umem->unaligned_mode)
+> @@ -1706,12 +1706,13 @@ void *worker_testapp_validate_rx(void *arg)
+>  static void testapp_clean_xsk_umem(struct ifobject *ifobj)
+>  {
+>  	struct xsk_umem_info *umem = ifobj->xsk->umem;
+> -	u64 umem_sz = umem->num_frames * umem->frame_size;
+> +	u64 umem_sz = umem_size(umem);
+>  
+>  	if (ifobj->shared_umem)
+>  		umem_sz *= 2;
+>  
+>  	umem_sz = ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE;
+> +
+>  	xsk_umem__delete(umem->umem);
+>  	munmap(umem->buffer, umem_sz);
+>  }
+> @@ -2097,7 +2098,7 @@ int testapp_send_receive_mb(struct test_spec *test)
+>  int testapp_invalid_desc_mb(struct test_spec *test)
+>  {
+>  	struct xsk_umem_info *umem = test->ifobj_tx->xsk->umem;
+> -	u64 umem_size = umem->num_frames * umem->frame_size;
+> +	u64 umem_sz = umem_size(umem);
+>  	struct pkt pkts[] = {
+>  		/* Valid packet for synch to start with */
+>  		{0, MIN_PKT_SIZE, 0, true, 0},
+> @@ -2107,7 +2108,7 @@ int testapp_invalid_desc_mb(struct test_spec *test)
+>  		{0, 0, 0, false, 0},
+>  		/* Invalid address in the second frame */
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> -		{umem_size, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> +		{umem_sz, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+>  		/* Invalid len in the middle */
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+>  		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> @@ -2138,7 +2139,7 @@ int testapp_invalid_desc_mb(struct test_spec *test)
+>  int testapp_invalid_desc(struct test_spec *test)
+>  {
+>  	struct xsk_umem_info *umem = test->ifobj_tx->xsk->umem;
+> -	u64 umem_size = umem->num_frames * umem->frame_size;
+> +	u64 umem_sz = umem_size(umem);
+>  	struct pkt pkts[] = {
+>  		/* Zero packet address allowed */
+>  		{0, MIN_PKT_SIZE, 0, true},
+> @@ -2149,11 +2150,11 @@ int testapp_invalid_desc(struct test_spec *test)
+>  		/* Packet too large */
+>  		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false},
+>  		/* Up to end of umem allowed */
+> -		{umem_size - MIN_PKT_SIZE - 2 * umem->frame_size, MIN_PKT_SIZE, 0, true},
+> +		{umem_sz - MIN_PKT_SIZE - 2 * umem->frame_size, MIN_PKT_SIZE, 0, true},
+>  		/* After umem ends */
+> -		{umem_size, MIN_PKT_SIZE, 0, false},
+> +		{umem_sz, MIN_PKT_SIZE, 0, false},
+>  		/* Straddle the end of umem */
+> -		{umem_size - MIN_PKT_SIZE / 2, MIN_PKT_SIZE, 0, false},
+> +		{umem_sz - MIN_PKT_SIZE / 2, MIN_PKT_SIZE, 0, false},
+>  		/* Straddle a 4K boundary */
+>  		{0x1000 - MIN_PKT_SIZE / 2, MIN_PKT_SIZE, 0, false},
+>  		/* Straddle a 2K boundary */
+> @@ -2171,9 +2172,9 @@ int testapp_invalid_desc(struct test_spec *test)
+>  	}
+>  
+>  	if (test->ifobj_tx->shared_umem) {
+> -		pkts[4].offset += umem_size;
+> -		pkts[5].offset += umem_size;
+> -		pkts[6].offset += umem_size;
+> +		pkts[4].offset += umem_sz;
+> +		pkts[5].offset += umem_sz;
+> +		pkts[6].offset += umem_sz;
+>  	}
+>  
+>  	if (pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts)))
+> @@ -2406,7 +2407,7 @@ int testapp_unaligned_inv_desc(struct test_spec *test)
+>  
+>  int testapp_unaligned_inv_desc_4001_frame(struct test_spec *test)
+>  {
+> -	u64 page_size, umem_size;
+> +	u64 page_size, umem_sz;
+>  
+>  	/* Odd frame size so the UMEM doesn't end near a page boundary. */
+>  	test_spec_set_frame_size(test, 4001);
+> @@ -2415,10 +2416,9 @@ int testapp_unaligned_inv_desc_4001_frame(struct test_spec *test)
+>  	 * the UMEM but not a page.
+>  	 */
+>  	page_size = sysconf(_SC_PAGESIZE);
+> -	umem_size = test->ifobj_tx->xsk->umem->num_frames *
+> -		test->ifobj_tx->xsk->umem->frame_size;
+> -	assert(umem_size % page_size > MIN_PKT_SIZE);
+> -	assert(umem_size % page_size < page_size - MIN_PKT_SIZE);
+> +	umem_sz = umem_size(test->ifobj_tx->xsk->umem);
+> +	assert(umem_sz % page_size > MIN_PKT_SIZE);
+> +	assert(umem_sz % page_size < page_size - MIN_PKT_SIZE);
+>  
+>  	return testapp_invalid_desc(test);
+>  }
+> -- 
+> 2.43.0
+> 
