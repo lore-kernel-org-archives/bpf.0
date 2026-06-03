@@ -1,63 +1,63 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA3D19F12D
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 18:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA26519F12D
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 18:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780511264; cv=none; b=N8Jmfa75SM122gmKUoWEm4LFPRF0eDVNF7bEm6lUdMXVEtmp/Rd8WEd96QWAsTlFFpugl28nySxTRr25lgrJIJalUcnXsauzugW33BP4i/vM6mTFztWUjCHF8AtGcJ8QbyL3T807h9N/5h+5SHnV/jrGvXOr5iTdiAfOWzWnrBE=
+	t=1780511266; cv=none; b=hY6U4Di2Ah4QmyysuaeJ69NjhWpo8ucyGUhY9yuWKG93oVaBbkA0IumwgY5BTsFYGxPMi2EpKMF8kcgHUdeyIk5puomvuJES6XvBlTgdwRkCy/Xh/PPOIfPM9DnL6IVAimLF3JEWE4K0z/j8GovhUQrph3zXhcMjVHSqILZm4YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780511264; c=relaxed/simple;
-	bh=N5E7jZiJTCevN76mr/hP/+KvRZ/Gch3q3ITrRja/ZT0=;
+	s=arc-20240116; t=1780511266; c=relaxed/simple;
+	bh=9xUcpJn8j3H+Vx+9FydNtHAg7o1L/bHMVArndffPAKQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oXBQHRwm6d/NsPFQKbQsm0pLcodndrX/WWG0H4WY8TBjUXIwxO/DJ/5yHToJQ7lG6Z5qm2+DYpApyoWg4nwEcuV5uiyiM2WSDdj/Rrz5+Hl7qM8jBK/ltV9yTSpd2bXVcZyU1H1MxKcRm4DC5JkAz36OeogqdNtyJdlNMRMqDBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=SOM7Ib0l; arc=none smtp.client-ip=74.125.82.170
+	 MIME-Version; b=dNxvOzxbkqndwx3XEnOFInuSXnR8hoshPgM3tm1Pcx4jmmzjsgkCrLhEGkfpj5Xfuvm+eKw/M0ypfcNJe49xTMxyDhcN9vJOwM0rQnghGAQNXaPMRnrwgoYnm/Wf8RHUR12R1YwgtPaNtga+HKY208sFR9xYsIajC6Vp+AdU3Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Y4spxR1Y; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="SOM7Ib0l"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-304df7ff4c2so704153eec.0
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 11:27:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Y4spxR1Y"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-304d8362a58so750888eec.1
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 11:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780511261; x=1781116061; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780511264; x=1781116064; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PBz1DaXT5E1ZPxpsAOgdhjp7hLLrpZNc5QEBGrfAnBY=;
-        b=SOM7Ib0lKdBCEkaHL0JJscnkv5fmOzUqDl1yJ0UInWLrBLYD/zJn0N2RbNJIejWT3D
-         4/OskEkDUKWbLE5YU6VDzX7+LnwiNlr/LS+JlQuh09KQbc+mmAkxWLkMAX477nZEQ8Xy
-         LO1WBXhSDinyQfy6P9sD30YHE+26G2gjek55NZRxZO+gALSYjF/fosouBwC6TTKoyyMC
-         QTygsunoFr4BfvtTcGjeIzkNFM+2TDNUcbxkEx9R1oM82qf1niW0WH0rkDDJi0FsUdkS
-         2ofB9XfJKdVYTO22E8ujURd3C2TWIPBPzohCVQhdbIEnvqwD4yq24QZZE4EMOUvAntHi
-         yVpw==
+        bh=tAAYEXTuGitWm9L3+qs+TCsIU+W/VZSBDLwhZAEjBNs=;
+        b=Y4spxR1YNu3EDNTodZpuRTjflgZC8i3DM4Km/Qi8Je3IrYOX0cRedn2hGRtyrld5cq
+         Mf6hwA5YVT6Gvdywv/OMC7oQHoaYf8Cnque4G08nA/3ba76Vj4YE4kH1o5dZQIls5Q2X
+         d8c/O7aWpJ9FLqo3jr9bS6LRCvtW8ff4KVEObXdnfm+uomIh1LKuDMbWFgV9jz5hGbQL
+         WDlDiR91ZczPzfGfAMrYiPziJ5+cAZYSoKc9B96n8UIFqIGnWwvOmY3biNcs7fJfJmOk
+         Gjp5VrIA93o+bUx73b1ZVu3+poSTEiTH7AzxNB/QnmeJxCrzsTtdEyFXzDRoeX7X3Xzb
+         66YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780511261; x=1781116061;
+        d=1e100.net; s=20251104; t=1780511264; x=1781116064;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=PBz1DaXT5E1ZPxpsAOgdhjp7hLLrpZNc5QEBGrfAnBY=;
-        b=GTV2vfBoACyjH43almX0J0yCGKxWhFJhFG292FJGLnFgNNA8TZctHMlijtQRslBtqf
-         7TLabHM8AQgow2jZOI+vSMeH7QPqLCx7EyzYyQmIhTt3+q3WtzNHhpLYvHLbtumctBY1
-         86kOsOhSYNGw2tOC39Ow1IATm0IVwGQwaz00fJuKau4RAaJwHSqXLH6oUQPxoZUMthls
-         T8XaY8/4ffUzszm63Vyh6DkhVzhWUZxLY6dsJjTl0MeIJ94YCOwwwLIWdBM+Rk9yuDaH
-         bJDR7cu7couEE3109u2sP9WndJopRuodetPGAizoziSVrT46ML7a+2MvYp9v56GsX21U
-         x3OQ==
-X-Gm-Message-State: AOJu0YxT4xX1N6eyV9PptS4ml/DPLpyimGUNMSMiMUSJBm1D5Bh6hc4R
-	e3ZeSeyBourDHpcoX8geL0puBAVyGVKJKGTzVdEPH9mrZNHe88gwllzA4I3nJRq2HVKDTDwB+cG
-	fFO6ugCZxEzUi
-X-Gm-Gg: Acq92OH7gHAx8xe6Vjdx7Vmj/f1ekJOn6dMBr1BZTiuhUfRZ+rMA/Mpka5IDxteIPul
-	1UaZ8MTjZkWuUqpJ1K46lSyWTjt1IjLceoQIdPqPbX3epNafLlcm6TejZu/U6Zo1PL1CnwLz4HJ
-	ZO9k2oiSkLT5/SQC1MmbTeS+tGE/1e/LqffnwW1HLZDHFEAA0kAVkPcjoZfvncx8TQ530t/X9SF
-	2704EohRut454BVY1YBMD2fzj5PVm8lwtn1XQdV33+3vIcEeMSjVGipnFrsB5gjuI5OQrumAAJM
-	dQhmz5uMB9vpFJChX3px4xm57eYebMVv9WOSO+Hnr+ueKRN9sSPHbI026tt8UqpwHqV6qglmamv
-	VrPsWwG3mH11681HYKK3g9ddfh1tE5uOlaxChQXH7XvY+pvgQzc5PCkvye7BByuJecYkuXO0ufh
-	SL6xTRRP/j81aWgSvh3JrczzQyUiFFmw==
-X-Received: by 2002:a05:7300:2301:b0:302:b44b:b64a with SMTP id 5a478bee46e88-30761ea7a05mr283531eec.1.1780511261342;
-        Wed, 03 Jun 2026 11:27:41 -0700 (PDT)
+        bh=tAAYEXTuGitWm9L3+qs+TCsIU+W/VZSBDLwhZAEjBNs=;
+        b=Wyw9i+0I5solZ3GbjXAxg11TUKKG5ptOEHAXc8cltRnZ/vLxqeawwqMMHZLlgGuojs
+         zkcw31vurZnWbEQvceEEzSif4VT6kWNOOVTWvQhTqOY9M7nG+CArGL/QbWQGJAYpKoVV
+         R6SgR5pwBCdNGJbAmTvaSu0bH7Esx47xVus9wJUMd4sdWQxrUo/eSSP1nqZO4srDEXES
+         H+Wd9rg8ROsslS+TpQ2iFGZ6xDIXHQw5oSLjXouUQxYySwSmebo3ffcirdni3QnWVr5Y
+         3VxCtdjW9ifjpJTKT1iXmbsDXsKHv0YB5wEy8Ic/FdlpxZ3a5PAwVGdHb8+/GkBoYPSs
+         QxIg==
+X-Gm-Message-State: AOJu0YxfIH7FQzHIYpFXiVkQhNSOl2s50ftHC3LDjdTEs2ZfKUx7XW9K
+	86LJIrioS16qGUbR7Ezw9Js72f8WA9ldwd8Y5fyVTXol1UnvGyg03tKjaNDk1KFVyqmB1gdsyhb
+	u6BGGCG8WqsO6
+X-Gm-Gg: Acq92OFg3LZfYUVBgC3P/gwLO7mtFxtxNzKpF7ES9eRpzobweFTU3QY88XJfdcKI7bo
+	/Ljx2YhKxI/Lyt0l7H6k7QVyARptr3cQ2YXlgKGTcFdsupvZG14tnII4Pim5ZhLasM54DvROEK4
+	ijunm24rWfuDTWQ5rR3qhNSeHGa53xY1iH1Tk/jEAc2ieLYWoDUylGX93N/xDRg+KhZvWqUmya3
+	KxbPZ8yl38TcH+yLrv5JXdoD921t/rHRXT7rgXDdHDq5235gU0D+8nzXulVSgwfAxxGaY3LE/Zr
+	uLPEx/bw4d/g93qPS2Y6MiefotDtIm6hDxMZP831fmkh6jU7oOmBBPqxMEIEcYrIWnHNWHqhqNl
+	BauWVWExZ0P001O+TOfV0w/JnWv0AO2/DQgrtgCrcVbeA6JozOTcJCg+09pn90WhwIXYUtPr2gb
+	iW5bl3bDIJXvWDYe70f2STAkyhk9uPTQ==
+X-Received: by 2002:a05:693c:2d97:b0:304:cd0d:9ea5 with SMTP id 5a478bee46e88-30761f3c6d5mr256124eec.7.1780511263701;
+        Wed, 03 Jun 2026 11:27:43 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::ea8f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074db560d7sm4137860eec.5.2026.06.03.11.27.39
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074db560d7sm4137860eec.5.2026.06.03.11.27.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 11:27:40 -0700 (PDT)
+        Wed, 03 Jun 2026 11:27:43 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: libarena: Add spmc queue data structure
-Date: Wed,  3 Jun 2026 14:27:26 -0400
-Message-ID: <20260603182727.3922-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: libarena: parallel test harness and spmc parallel selftest
+Date: Wed,  3 Jun 2026 14:27:27 -0400
+Message-ID: <20260603182727.3922-4-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260603182727.3922-1-emil@etsalapatis.com>
 References: <20260603182727.3922-1-emil@etsalapatis.com>
@@ -82,276 +82,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Expand libarena with a single producer multiple consumer deque data
-structure. This is a single producer, multiple consumer lockless structure
-that permits efficient work stealing. The structure is a Lev-Chase queue,
-so it is lock-free and wait-free.
+Add a parallel test for the SPMC Lev-Chase workstealing queue. The queue
+is built to be wait-free even when there are multiple consumers, and
+the parallel selftest provides a signal on whether the queue behaves
+correctly when stress tested.
 
-The data structure exposes three main calls. two of them are available to
-the thread owning the queue and one available to all threads in the program:
-
-spmc_owner_push(): Push an item to the top of the queue.
-spmc_owner_pop(): Pop an item from the top of the queue.
-spmc_steal(): Steal a thread from the bottom of the queue from
-any thread.
-
-Note that the queue is not really FIFO for all consumers, since
-non-owners of the queue can only work steal from the bottom.
+To support the test, this patch includes a test harness for parallel
+selftests. The spmc selftest acts as an example of the naming and other
+conventions expected by the harness.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/spmc.h      |  27 ++
- .../bpf/libarena/selftests/test_spmc.bpf.c    | 194 +++++++++++++++
- .../selftests/bpf/libarena/src/spmc.bpf.c     | 232 ++++++++++++++++++
- 3 files changed, 453 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/spmc.h
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/spmc.bpf.c
+ .../bpf/libarena/include/libarena/userspace.h |   6 +
+ .../selftests/test_parallel_spmc.bpf.c        | 659 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/libarena.c       | 157 +++++
+ 3 files changed, 822 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/spmc.h b/tools/testing/selftests/bpf/libarena/include/libarena/spmc.h
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/userspace.h b/tools/testing/selftests/bpf/libarena/include/libarena/userspace.h
+index 88b68ac73cca..fc27a4bcf5d7 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/userspace.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/userspace.h
+@@ -32,6 +32,12 @@ static inline bool libarena_is_asan_test_prog(const char *name)
+ 	return strstr(name, "asan_test") == name;
+ }
+ 
++static inline bool libarena_is_parallel_test_prog(const char *name)
++{
++	return strstr(name, "parallel_test") == name;
++}
++
++
+ static inline int libarena_run_prog_args(int prog_fd, void *args, size_t argsize)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
 new file mode 100644
-index 000000000000..75611276ce13
+index 000000000000..21e40999f1e6
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/spmc.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause */
-+
-+#pragma once
-+
-+struct spmc_arr;
-+
-+#define SPMC_ARR_BASESZ 128
-+#define SPMC_ARR_ORDERS 10
-+
-+struct spmc_arr {
-+	u64 __arena *data;
-+	u64 order;
-+};
-+
-+struct spmc {
-+	volatile struct spmc_arr __arena *cur;
-+	volatile u64 top;
-+	volatile u64 bottom;
-+	struct spmc_arr arr[SPMC_ARR_ORDERS];
-+};
-+
-+int spmc_owned_add(struct spmc __arena *spmc, u64 val);
-+int spmc_owned_remove(struct spmc __arena *spmc, u64 *val);
-+int spmc_steal(struct spmc __arena *spmc, u64 *val);
-+
-+struct spmc __arena *spmc_create(void);
-+int spmc_destroy(struct spmc __arena *spmc);
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c
-new file mode 100644
-index 000000000000..e458dd330906
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c
-@@ -0,0 +1,194 @@
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+@@ -0,0 +1,659 @@
 +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+
-+#include <libarena/common.h>
-+
-+#include <libarena/asan.h>
-+#include <libarena/spmc.h>
-+
-+/*
-+ * NOTE: These selftests only test for the single-threaded use case, which for
-+ * Lev-Chase queues is obviously the simplest one. Still, it is important to
-+ * exercise the API to ensure it passes verification and basic checks.
-+ */
-+
-+SEC("syscall")
-+int test_spmc_remove_empty(void)
-+{
-+	u64 val;
-+	int ret;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	ret = spmc_owned_remove(spmc, &val);
-+	if (ret != -ENOENT)
-+		return 1;
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_spmc_steal_empty(void)
-+{
-+	u64 val;
-+	int ret;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	ret = spmc_steal(spmc, &val);
-+	if (ret != -ENOENT)
-+		return 1;
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_spmc_steal_one(void)
-+{
-+	u64 val, newval;
-+	int ret, i;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		val = i;
-+
-+		ret = spmc_owned_add(spmc, val);
-+		if (ret)
-+			return 1;
-+
-+		ret = spmc_steal(spmc, &newval);
-+		if (ret)
-+			return 2;
-+
-+		if (val != newval)
-+			return 3;
-+	}
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_spmc_remove_one(void)
-+{
-+	u64 val, newval;
-+	int ret, i;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		val = i;
-+
-+		ret = spmc_owned_add(spmc, val);
-+		if (ret)
-+			return 1;
-+
-+		ret = spmc_owned_remove(spmc, &newval);
-+		if (ret)
-+			return 2;
-+
-+		if (val != newval)
-+			return 3;
-+	}
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_spmc_remove_many(void)
-+{
-+	u64 val, newval;
-+	int ret, i;
-+	u64 expected;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	for (i = 0; i < 500 && can_loop; i++) {
-+		val = i;
-+
-+		ret = spmc_owned_add(spmc, val);
-+		if (ret) {
-+			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
-+			return 1;
-+		}
-+	}
-+
-+	for (i = 0; i < 500 && can_loop; i++) {
-+		ret = spmc_owned_remove(spmc, &newval);
-+		if (ret) {
-+			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
-+			return 1;
-+		}
-+
-+		expected = 500 - 1 - i;
-+		if (newval != expected) {
-+			arena_stderr("%s:%d expected %lu found %lu\n", __func__, __LINE__, expected, newval);
-+			return 1;
-+		}
-+	}
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int test_spmc_steal_many(void)
-+{
-+	u64 val, newval;
-+	int ret, i;
-+
-+	struct spmc __arena *spmc = spmc_create();
-+
-+	if (!spmc)
-+		return 1;
-+
-+	for (i = 0; i < 500 && can_loop; i++) {
-+		val = i;
-+
-+		ret = spmc_owned_add(spmc, val);
-+		if (ret) {
-+			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
-+			return 1;
-+		}
-+	}
-+
-+	for (i = 0; i < 500 && can_loop; i++) {
-+		ret = spmc_steal(spmc, &newval);
-+		if (ret) {
-+			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
-+			return 1;
-+		}
-+
-+		if (newval != i) {
-+			arena_stderr("%s:%d expected %lu found %lu\n", __func__, __LINE__, i, newval);
-+			return 1;
-+		}
-+	}
-+
-+	spmc_destroy(spmc);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/libarena/src/spmc.bpf.c b/tools/testing/selftests/bpf/libarena/src/spmc.bpf.c
-new file mode 100644
-index 000000000000..93773c371d03
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/spmc.bpf.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/*
-+ * Copyright (c) 2025-2026 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025-2026 Emil Tsalapatis <etsal@meta.com>
-+ */
 +
 +#include <bpf_atomic.h>
 +
@@ -360,225 +131,831 @@ index 000000000000..93773c371d03
 +#include <libarena/asan.h>
 +#include <libarena/spmc.h>
 +
-+static inline
-+u64 spmc_arr_size(volatile struct spmc_arr __arena *spmc_arr)
-+{
-+	return SPMC_ARR_BASESZ << READ_ONCE(spmc_arr->order);
-+}
++#define TEST_SPMC_THREADS 4
++#define TEST_SPMC_STEALERS (TEST_SPMC_THREADS - 1)
 +
-+static inline
-+u64 spmc_arr_get(volatile struct spmc_arr __arena *spmc_arr, u64 ind)
-+{
-+	u64 ret = READ_ONCE(spmc_arr->data[ind % spmc_arr_size(spmc_arr)]);
++/* 
++ * The test requires the stealers/owners to sometimes quiesce
++ * before continuing the benchmark. Normally we'd use something
++ * like a condition variable, but since the benchmark is short-lived
++ * and operations are wait-free we just spin around the quiescence
++ * point instead. If we time out, we just fail the benchmark.
++ */
++#define TEST_SPMC_SYNC_SPINS (1U << 18)
 +
-+	return ret;
-+}
++/*
++ * We track all the values we retrieve from the queue
++ * to get some guarantee we're, not corrupting data,
++ * e.g., accidentally reusing a past value from a slot.
++ */
++#define TEST_SPMC_MAX_VALUES (1024)
++static u64 __arena seen[TEST_SPMC_MAX_VALUES];
 +
-+static inline
-+void spmc_arr_put(volatile struct spmc_arr __arena *spmc_arr, u64 ind, u64 value)
-+{
-+	WRITE_ONCE(spmc_arr->data[ind % spmc_arr_size(spmc_arr)], value);
-+}
++/* The single spmc queue for the benchmark. */
++static struct spmc __arena *spmc;
 +
-+static inline
-+void spmc_arr_copy(volatile struct spmc_arr __arena *dst,
-+		   volatile struct spmc_arr __arena *src, u64 b, u64 t)
++/* Owner and stealer epochs. We define the , */
++static volatile u64 owner_epoch;
++static volatile u64 stealer_epoch;
++
++/* Map owner epochs to stealer epochs (simply scale by # of stealers). */
++#define STEALER_EPOCH(owner_epoch) ((owner_epoch) * TEST_SPMC_STEALERS)
++
++/* Global abort switch. If any thread fails, all others exit ASAP. */
++static volatile bool test_abort;
++
++/* 
++ * Counters useful for ensuring conservation of pushes/pops of unique values
++ * (we're not stealing/popping more/fewer items than were pushed).
++ */
++static volatile u64 expected_total;
++static volatile u64 total_seen;
++
++/* Measure how many pops and steals we've made (irrespective of retrieved value). */
++static volatile u64 pops;
++static volatile u64 steals;
++
++/* Used for the resize selftest, see below. */
++static volatile u64 stealers_started;
++
++/* Used for the mixed selftest, see below. */
++static volatile u64 round_steals;
++
++/*
++ * We have multiple stealers and a single owner. We sometimes want the owner
++ * to successfully outproduce the stealers, we add a busy loop in them.
++ */
++#define TEST_SPMC_WASTE_ROUNDS (1024)
++
++/*
++ * Scaffolding for each parallel test. Each test has setup/teardown,
++ * a single owner thread that owns the queue, and TEST_SPMC_STEALER
++ * threads that try to steal.
++ */
++#define DEFINE_PARALLEL_SPMC_TEST(prefix, expected_total)		\
++	SEC("syscall") int parallel_test_spmc_##prefix##__init(void)	\
++	{								\
++		return spmc_common_init(expected_total);		\
++	}								\
++	SEC("syscall") int parallel_test_spmc_##prefix##__fini(void)	\
++	{								\
++		return spmc_common_fini();				\
++	}								\
++	SEC("syscall") int parallel_test_spmc_##prefix##__0(void)	\
++	{								\
++		return spmc_##prefix##_owner();				\
++	}								\
++	SEC("syscall") int parallel_test_spmc_##prefix##__1(void)	\
++	{								\
++		return spmc_##prefix##_stealer();					\
++	}								\
++	SEC("syscall") int parallel_test_spmc_##prefix##__2(void)	\
++	{								\
++		return spmc_##prefix##_stealer();					\
++	}								\
++	SEC("syscall") int parallel_test_spmc_##prefix##__3(void)	\
++	{								\
++		return spmc_##prefix##_stealer();					\
++	}
++
++static int spmc_common_init(u64 total)
 +{
 +	u64 i;
 +
-+	for (i = t; i < b && can_loop; i++)
-+		spmc_arr_put(dst, i, spmc_arr_get(src, i));
-+}
-+
-+static inline
-+int spmc_order_init(struct spmc __arena *spmc, int order)
-+{
-+	volatile struct spmc_arr __arena *arr = &spmc->arr[order];
-+
-+	if (unlikely(!spmc))
-+		return -EINVAL;
-+
-+	if (order >= SPMC_ARR_ORDERS)
++	if (total > TEST_SPMC_MAX_VALUES)
 +		return -E2BIG;
 +
-+	/* Already allocated? */
-+	if (arr->data)
-+		return 0;
++	owner_epoch = 0;
++	stealer_epoch = 0;
++	test_abort = false;
++	expected_total = total;
++	total_seen = 0;
++	pops = 0;
++	steals = 0;
++	stealers_started = 0;
++	round_steals = 0;
 +
-+	arr->data = arena_malloc((SPMC_ARR_BASESZ << order) * sizeof(*arr->data));
-+	if (!arr->data)
++	for (i = zero; i < TEST_SPMC_MAX_VALUES && can_loop; i++)
++		seen[i] = 0;
++
++	spmc = spmc_create();
++	if (!spmc)
 +		return -ENOMEM;
 +
 +	return 0;
 +}
 +
-+__weak
-+int spmc_owned_add(struct spmc __arena *spmc, u64 val)
++static int spmc_common_fini(void)
 +{
-+	volatile struct spmc_arr __arena *newarr;
-+	volatile struct spmc_arr __arena *arr;
-+	ssize_t sz;
-+	u64 b, t;
 +	int ret;
 +
-+	if (unlikely(!spmc))
-+		return -EINVAL;
++	ret = spmc_destroy(spmc);
++	spmc = NULL;
 +
-+	/* 
-+	 * Bottom must always be read first, also
-+	 * see spmc_steal().
-+	 */
-+	b = smp_load_acquire(&spmc->bottom);
-+	t = smp_load_acquire(&spmc->top);
-+	arr = READ_ONCE(spmc->cur);
++	return ret;
++}
 +
-+	sz = b - t;
-+	if (sz >= spmc_arr_size(arr) - 1) {
-+		ret = spmc_order_init(spmc, arr->order + 1);
-+		if (ret)
-+			return ret;
++__weak
++int spmc_quiesce_on_owner(u64 epoch)
++{
++	u64 i;
 +
-+		newarr = &spmc->arr[arr->order + 1];
-+
-+		spmc_arr_copy(newarr, arr, b, t);
-+		smp_store_release(&spmc->cur, newarr);
++	bpf_for(i, 0, TEST_SPMC_SYNC_SPINS) {
++		if (test_abort)
++			return -EINTR;
++		if (smp_load_acquire(&owner_epoch) >= epoch)
++			return 0;
 +	}
 +
-+	spmc_arr_put(spmc->cur, b, val);
-+	smp_store_release(&spmc->bottom, b + 1);
++	test_abort = true;
++
++	return -ETIMEDOUT;
++}
++
++__weak
++int spmc_quiesce_on_stealer(u64 epoch)
++{
++	u64 target, cur;
++	unsigned int i;
++	int err = -ETIMEDOUT;
++
++	target = STEALER_EPOCH(epoch);
++	bpf_for(i, 0, TEST_SPMC_SYNC_SPINS) {
++
++		if (test_abort) {
++			err = -EINTR;
++			break;
++		}
++
++		cur = smp_load_acquire(&stealer_epoch);
++		if (cur > target) {
++			err = -EINVAL;
++			test_abort = true;
++			break;
++		}
++
++		if (cur == target)
++			return 0;
++	}
++
++	test_abort = true;
++
++	return err;
++}
++
++static int spmc_update_stats(u64 val, bool owner)
++{
++	u64 total;
++
++	total = expected_total;
++	if (val >= total || val >= TEST_SPMC_MAX_VALUES) {
++		test_abort = true;
++		return -EINVAL;
++	}
++
++	if (__sync_fetch_and_add(&seen[val], 1) != 0) {
++		test_abort = true;
++		return -EINVAL;
++	}
++
++	__sync_fetch_and_add(&total_seen, 1);
++	if (owner)
++		__sync_fetch_and_add(&pops, 1);
++	else
++		__sync_fetch_and_add(&steals, 1);
 +
 +	return 0;
 +}
 +
++static int spmc_validate_owner_empty(void)
++{
++	u64 val;
++	int ret;
++
++	ret = spmc_owned_remove(spmc, &val);
++	if (ret != -ENOENT) {
++		test_abort = true;
++		/* Change a 0 return value into -EINVAL. */
++		return ret ?: -EINVAL;
++	}
++
++	return 0;
++}
 +
 +__weak
-+int spmc_owned_remove(struct spmc __arena *spmc, u64 *val)
++int spmc_validate_all_seen(void)
 +{
-+	volatile struct spmc_arr __arena *arr;
-+	int ret = 0;
-+	ssize_t sz;
-+	u64 value;
-+	u64 b, t;
++	u64 i, total;
 +
-+	if (unlikely(!spmc || !val))
-+		return -EINVAL;
++	total = expected_total;
++	if (total_seen != total)
++		goto err;
 +
-+	b = smp_load_acquire(&spmc->bottom) - 1;
-+	t = smp_load_acquire(&spmc->top);
-+	arr = READ_ONCE(spmc->cur);
++	if (pops + steals != total)
++		goto err;
 +
-+	smp_store_release(&spmc->bottom, b);
-+
-+	sz = b - t;
-+	if (sz < 0) {
-+		smp_store_release(&spmc->bottom, t);
-+		return -ENOENT;
++	for (i = zero; i < total && can_loop; i++) {
++		if (seen[i % TEST_SPMC_MAX_VALUES] != 1)
++			goto err;
 +	}
 +
-+	value = spmc_arr_get(arr, b);
-+	if (sz > 0) {
-+		*val = value;
-+		return 0;
++	return 0;
++
++err:
++	test_abort = true;
++
++	return -EINVAL;
++}
++
++/*
++ * Single value benchmark. The owner adds an item then races with
++ * the stealers for it. This way directly race between owner and
++ * stealers on the same slot.
++ */
++
++
++#define TEST_SPMC_SINGLEVAL_ITERS (64)
++
++__weak
++int spmc_singleval_tryconsume(u64 expected, bool steal)
++{
++	u64 val;
++	int ret;
++
++	while (can_loop) {
++		if (steal)
++			ret = spmc_steal(spmc, &val);
++		else
++			ret = spmc_owned_remove(spmc, &val);
++
++		/* Success. Update and validate. */
++		if (!ret) {
++			if (val != expected)
++				return -EINVAL;
++
++			ret = spmc_update_stats(val, !steal);
++			if (ret)
++				return ret;
++
++			return 0;
++		}
++
++		/*
++		 * If we got -ENOENT, the queue is empty
++		 * and we're good to go.
++		 */
++		if (ret != -EAGAIN)
++			return (ret == -ENOENT) ? 0 : ret;
 +	}
 +
-+	if (cmpxchg(&spmc->top, t, t + 1) != t)
-+		ret = -EAGAIN;
++	/* Impossible. */
++	return -EINVAL;
++}
 +
-+	smp_store_release(&spmc->bottom, t + 1);
++static int spmc_singleval_owner(void)
++{
++	int ret;
++	u64 i;
 +
++	for (i = zero; i < TEST_SPMC_SINGLEVAL_ITERS && can_loop; i++) {
++		ret = spmc_quiesce_on_stealer(i);
++		if (ret)
++			goto err;
++
++		ret = spmc_owned_add(spmc, i);
++		if (ret)
++			goto err;
++
++		__sync_fetch_and_add(&owner_epoch, 1);
++
++		spmc_singleval_tryconsume(i, false);
++
++		ret = spmc_quiesce_on_stealer(i + 1);
++		if (ret)
++			goto err;
++	}
++
++	ret = spmc_validate_owner_empty();
 +	if (ret)
 +		return ret;
 +
-+	*val = value;
++	return spmc_validate_all_seen();
 +
-+	return 0;
++err:
++	test_abort = true;
++	return -EINVAL;
 +}
 +
-+__weak
-+int spmc_steal(struct spmc __arena *spmc, u64 *val)
++static int spmc_singleval_stealer(void)
 +{
-+	volatile struct spmc_arr __arena *arr;
-+	ssize_t sz;
-+	u64 value;
-+	u64 b, t;
++	int ret;
++	u64 i;
 +
-+	if (unlikely(!spmc || !val))
-+		return -EINVAL;
++	for (i = zero; i < TEST_SPMC_SINGLEVAL_ITERS && can_loop; i++) {
++		ret = spmc_quiesce_on_owner(i + 1);
++		if (ret)
++			goto err;
 +
-+	/*
-+	 * It is important that t is read before b for
-+	 * stealers to avoid racing with the owner.
-+	 * Races between stealers are dealt with using
-+	 * CAS to increment the top value below.
-+	 */
-+	t = smp_load_acquire(&spmc->top);
-+	b = smp_load_acquire(&spmc->bottom);
-+	arr = READ_ONCE(spmc->cur);
++		ret = spmc_singleval_tryconsume(i, true);
++		if (ret)
++			goto err;
 +
-+	sz = b - t;
-+	if (sz <= 0)
-+		return -ENOENT;
-+
-+	value = spmc_arr_get(arr, t);
-+
-+	if (cmpxchg(&spmc->top, t, t + 1) != t)
-+		return -EAGAIN;
-+
-+	*val = value;
-+
-+	return 0;
-+}
-+
-+
-+__weak
-+struct spmc __arena *spmc_create(void)
-+{
-+	/*
-+	 * Marked as volatile because otherwise the array
-+	 * reference in the internal loop gets demoted to
-+	 * scalar and the program fails verification.
-+	 */
-+	struct spmc __arena *volatile spmc;
-+	int ret, i;
-+
-+	spmc = arena_malloc(sizeof(*spmc));
-+	if (!spmc)
-+		return NULL;
-+
-+	spmc->bottom = 0;
-+	spmc->top = 0;
-+
-+	for (i = 0; i < SPMC_ARR_ORDERS && can_loop; i++) {
-+		spmc->arr[i].data = NULL;
-+		spmc->arr[i].order = i;
++		__sync_fetch_and_add(&stealer_epoch, 1);
 +	}
 +
-+	ret = spmc_order_init((struct spmc __arena *)spmc, 0);
-+	if (ret) {
-+		arena_free(spmc);
-+		return NULL;
++	return 0;
++
++err:
++	test_abort = true;
++	return -EINVAL;
++}
++
++DEFINE_PARALLEL_SPMC_TEST(singleval, TEST_SPMC_SINGLEVAL_ITERS)
++
++/*
++ * The resize test. Force a resize from the owner even while the stealers
++ * are trying to consume. Then make sure the queue is still consistent
++ * after the resize.
++ *
++ * The owner _doesn't_ consume from the queue. The test makes sure that
++ * switching the array from underneath the stealers works.
++ */
++
++/* Force 2 resizes (since the rate of resize is logarithmic). */
++#define TEST_SPMC_RESIZE_ORDER (2)
++#define TEST_SPMC_RESIZE_PREFILL ((SPMC_ARR_BASESZ << TEST_SPMC_RESIZE_ORDER) - 1)
++
++/* */
++#define TEST_SPMC_RESIZE_TAIL (SPMC_ARR_BASESZ << TEST_SPMC_RESIZE_ORDER)
++#define TEST_SPMC_RESIZE_TOTAL (TEST_SPMC_RESIZE_PREFILL + TEST_SPMC_RESIZE_TAIL)
++
++__weak
++int spmc_wait_for_stealers_to_start(u64 target)
++{
++	u64 i;
++
++	bpf_for(i, 0, TEST_SPMC_SYNC_SPINS) {
++		if (test_abort)
++			return -EINTR;
++		if (READ_ONCE(stealers_started) >= target)
++			return 0;
 +	}
 +
-+	smp_store_release(&spmc->cur, &spmc->arr[0]);
++	test_abort = true;
 +
-+	return (struct spmc __arena *)spmc;
++	return -ETIMEDOUT;
 +}
 +
 +__weak
-+int spmc_destroy(struct spmc __arena *spmc)
++void spmc_waste_time(void)
 +{
 +	int i;
++	int j;
 +
-+	if (unlikely(!spmc))
-+		return -EINVAL;
++	for (i = zero; i < TEST_SPMC_WASTE_ROUNDS && can_loop; i++) {
++		/* Random computation. */
++		WRITE_ONCE(j, i * 17 + 23);
++	}
++}
 +
-+	for (i = 0; i < SPMC_ARR_ORDERS && can_loop; i++)
-+		arena_free(spmc->arr[i].data);
++__weak
++int spmc_wait_for_steals(u64 target)
++{
++	u64 i;
 +
-+	arena_free(spmc);
++	bpf_for(i, 0, TEST_SPMC_SYNC_SPINS) {
++		if (test_abort)
++			return -EINTR;
++		if (READ_ONCE(steals) >= target)
++			return 0;
++	}
++
++	test_abort = true;
++
++	return -ETIMEDOUT;
++}
++
++static int spmc_resize_owner(void)
++{
++	bool resized = false;
++	u64 i;
++	int ret;
++
++	/* Get a head start vs the consumers. */
++	for (i = zero; i < TEST_SPMC_RESIZE_PREFILL && can_loop; i++) {
++		ret = spmc_owned_add(spmc, i);
++		if (ret) {
++			test_abort = true;
++			return ret;
++		}
++	}
++
++	__sync_fetch_and_add(&owner_epoch, 1);
++
++	/* Wait for stealers to start then start racing. */
++	ret = spmc_wait_for_stealers_to_start(TEST_SPMC_STEALERS);
++	if (ret)
++		return ret;
++
++	for (i = TEST_SPMC_RESIZE_PREFILL; i < TEST_SPMC_RESIZE_TOTAL && can_loop; i++) {
++		ret = spmc_owned_add(spmc, i);
++		if (ret) {
++			test_abort = true;
++			return ret;
++		}
++
++		if (spmc->cur->order > TEST_SPMC_RESIZE_ORDER)
++			resized = true;
++	}
++
++	/* Did we get to resize while racing/ */
++	if (!resized) {
++		test_abort = true;
++		return -153;
++	}
++
++	/* 
++	 * Wait for the stealers to drain and make sure
++	 * we didn't lose any items along the way.
++	 */
++	__sync_fetch_and_add(&owner_epoch, 1);
++
++	ret = spmc_quiesce_on_stealer(1);
++	if (ret)
++		return ret;
++
++	ret = spmc_validate_owner_empty();
++	if (ret)
++		return ret;
++
++	return spmc_validate_all_seen();
++}
++
++static int spmc_resize_stealer(void)
++{
++	u64 val;
++	int ret;
++
++	arena_subprog_init();
++
++	ret = spmc_quiesce_on_owner(1);
++	if (ret)
++		return ret;
++
++	__sync_fetch_and_add(&stealers_started, 1);
++
++	while (can_loop) {
++		spmc_waste_time();
++
++		ret = spmc_steal(spmc, &val);
++		if (!ret) {
++			ret = spmc_update_stats(val, false);
++			if (ret)
++				return ret;
++			continue;
++		}
++
++		if (ret == -EAGAIN)
++			continue;
++
++		/* Only break if this was the last resize. */
++		if (ret == -ENOENT) {
++			if (READ_ONCE(owner_epoch) >= 2)
++				break;
++			continue;
++		}
++
++		test_abort = true;
++		return ret;
++	}
++
++	__sync_fetch_and_add(&stealer_epoch, 1);
 +
 +	return 0;
 +}
++
++DEFINE_PARALLEL_SPMC_TEST(resize, TEST_SPMC_RESIZE_TOTAL)
++
++/*
++ * The burst benchmark. The owner generates data all at once,
++ * then waits for the stealers to steal half then starts removing 
++ * items until the queue empties. The owner also makes sure the
++ * item order is not jumbled.
++ */
++
++#define TEST_SPMC_BURST_ROUNDS (4)
++#define TEST_SPMC_BURST_BURST (64)
++#define TEST_SPMC_BURST_TOTAL (TEST_SPMC_BURST_ROUNDS * TEST_SPMC_BURST_BURST)
++#define TEST_SPMC_BURST_STEAL_TARGET (TEST_SPMC_BURST_BURST / 2)
++
++static int spmc_wait_for_round_steals(u64 target)
++{
++	u64 i;
++
++	arena_subprog_init();
++
++	bpf_for(i, 0, TEST_SPMC_SYNC_SPINS) {
++		if (test_abort)
++			return test_abort;
++		if (round_steals >= target)
++			return 0;
++	}
++
++	test_abort = true;
++
++	return -ETIMEDOUT;
++}
++
++__weak int
++spmc_burst_owner_round(u64 round)
++{
++	u64 i, base, stolen, expected, val;
++	int ret;
++
++	base = round * TEST_SPMC_BURST_BURST;
++	round_steals = 0;
++
++	for (i = zero; i < TEST_SPMC_BURST_BURST && can_loop; i++) {
++		ret = spmc_owned_add(spmc, base + i);
++		if (ret)
++			return ret;
++	}
++
++	__sync_fetch_and_add(&owner_epoch, 1);
++
++	ret = spmc_wait_for_round_steals(TEST_SPMC_BURST_STEAL_TARGET);
++	if (ret)
++		return ret;
++
++	__sync_fetch_and_add(&owner_epoch, 1);
++
++	ret = spmc_quiesce_on_stealer(round + 1);
++	if (ret)
++		return ret;
++
++	stolen = round_steals;
++	if (stolen > TEST_SPMC_BURST_BURST)
++		return -EINVAL;
++
++	for (i = zero; i < TEST_SPMC_BURST_BURST - stolen && can_loop; i++) {
++		ret = spmc_owned_remove(spmc, &val);
++		if (ret)
++			return ret;
++
++		expected = base + TEST_SPMC_BURST_BURST - 1 - i;
++		if (val != expected)
++			return -EINVAL;
++
++		ret = spmc_update_stats(val, true);
++		if (ret) {
++			test_abort = true;
++			return -EINVAL;
++		}
++	}
++
++	ret = spmc_validate_owner_empty();
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int spmc_burst_owner(void)
++{
++	u64 round;
++	int ret;
++
++	arena_subprog_init();
++
++	for (round = zero; round < TEST_SPMC_BURST_ROUNDS && can_loop; round++) {
++		ret = spmc_burst_owner_round(round);
++		if (ret)
++			goto err;
++	}
++
++	return spmc_validate_all_seen();
++
++err:
++	test_abort = true;
++	return -EINVAL;
++}
++
++static int spmc_burst_stealer(void)
++{
++	u64 round, val, active_epoch;
++	int ret;
++
++	arena_subprog_init();
++
++	for (round = zero; round < TEST_SPMC_BURST_ROUNDS && can_loop; round++) {
++		active_epoch = round * 2 + 1;
++
++		/* 
++		 * Wait till the owner prefills the queue then
++		 * start stealing.
++		 */
++		ret = spmc_quiesce_on_owner(active_epoch);
++		if (ret)
++			return ret;
++
++		while (owner_epoch == active_epoch && can_loop) {
++			ret = spmc_steal(spmc, &val);
++			if (!ret) {
++				ret = spmc_update_stats(val, false);
++				if (ret)
++					return ret;
++				__sync_fetch_and_add(&round_steals, 1);
++				continue;
++			}
++			if (ret == -EAGAIN || ret == -ENOENT)
++				continue;
++
++			test_abort = true;
++			return ret;
++		}
++
++		__sync_fetch_and_add(&stealer_epoch, 1);
++	}
++
++	return 0;
++}
++
++DEFINE_PARALLEL_SPMC_TEST(burst, TEST_SPMC_BURST_TOTAL)
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
+index 81bdb084c271..03348a95fb5c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+@@ -27,6 +27,147 @@ static void run_libarena_test(struct libarena *skel, struct bpf_program *prog,
+ 
+ }
+ 
++static void *run_libarena_parallel_prog(void *arg)
++{
++	struct bpf_program *prog = arg;
++
++	return (void *)(long)libarena_run_prog(bpf_program__fd(prog));
++}
++
++/* Max suffix is ceil((lg 2^32) / (lg 10)) + sizeof("__") = 10 + 2 = 12. */
++#define MAX_PARTEST_SUFFIX (12)
++#define MAX_PARTEST_NAME (1024)
++#define MAX_PARTEST_PREFIX (MAX_PARTEST_NAME - MAX_PARTEST_SUFFIX)
++
++static int run_libarena_parallel_fini(struct libarena *skel, const char *name,
++				      size_t prefixlen)
++{
++	char tdname[MAX_PARTEST_NAME];
++	struct bpf_program *fini_prog;
++	int ret;
++
++	ret = snprintf(tdname, sizeof(tdname), "%.*s__fini", (int)prefixlen, name);
++	if (!ASSERT_LT(ret, sizeof(tdname), "partest fini name"))
++		return -ENAMETOOLONG;
++
++	fini_prog = bpf_object__find_program_by_name(skel->obj, tdname);
++	if (!ASSERT_TRUE(fini_prog, "partest fini prog"))
++		return -ENOENT;
++
++	ret = libarena_run_prog(bpf_program__fd(fini_prog));
++	ASSERT_OK(ret, tdname);
++
++	return ret;
++}
++
++static int run_libarena_parallel_test_workers(struct libarena *skel,
++		const char *name, size_t prefixlen)
++{
++	pthread_t *threads = NULL, *tmp_threads;
++	char tdname[MAX_PARTEST_NAME];
++	struct bpf_program *tdprog;
++	uint32_t nthreads;
++	void *thread_ret;
++	int ret, err = 0;
++	int i;
++
++	for (nthreads = 0; nthreads < UINT_MAX; nthreads++) {
++		ret = snprintf(tdname, sizeof(tdname), "%.*s__%u", (int)prefixlen,
++			       name, nthreads);
++		if (!ASSERT_LT(ret, sizeof(tdname), "test worker name")) {
++			err = -ENAMETOOLONG;
++			break;
++		}
++
++		/* 
++		 * We enumerate the worker threads for a given test with __0, __1,
++		 * and so on. The suffixes always start from 0 and are contiguous,
++		 * so if we don't find a program with the requested name we have
++		 * discovered all available worker programs.
++		 */
++		tdprog = bpf_object__find_program_by_name(skel->obj, tdname);
++		if (!tdprog)
++			break;
++
++		/* Bump the alloc array to accommodate the new thread. */
++		tmp_threads = realloc(threads, (nthreads + 1) * sizeof(*threads));
++		if (!ASSERT_TRUE(tmp_threads, "realloc")) {
++			err = -ENOMEM;
++			break;
++		}
++		threads = tmp_threads;
++
++		ret = pthread_create(&threads[nthreads], NULL,
++				     run_libarena_parallel_prog,
++				     tdprog);
++		if (!ASSERT_OK(ret, "pthread_create")) {
++			err = ret;
++			break;
++		}
++	}
++
++
++	for (i = 0; i < nthreads; i++) {
++		ret = pthread_join(threads[i], &thread_ret);
++		if (!ASSERT_OK(ret, "pthread_join")) {
++			err = err ?: ret;
++			continue;
++		}
++
++		err = err ?: (long)thread_ret;
++	}
++
++	free(threads);
++
++	return err;
++}
++
++static void run_libarena_parallel_test(struct libarena *skel, struct bpf_program *prog,
++		const char *name)
++{
++	char testname[MAX_PARTEST_NAME];
++	size_t prefixlen;
++	const char *pos;
++	int ret;
++
++	/*
++	 * We annotate the initialization prog with __init. If the current prog does
++	 * not match, it is one of the parallel threads instead and is ignored.
++	 *
++	 * We assume the test writer knows what they are doing and do not add __init
++	 * randomly in the middle of a test name.
++	 */
++	pos = strstr(name, "__init");
++	if (!pos)
++		return;
++
++	prefixlen = pos - name;
++	if (!ASSERT_LT(prefixlen, MAX_PARTEST_PREFIX, "partest prefix too long"))
++		return;
++
++	/* The name of the test without the __init suffix. Looks nicer in the test log. */
++	ret = snprintf(testname, sizeof(testname), "%.*s", (int)prefixlen, name);
++	if (!ASSERT_LT(ret, sizeof(testname), "partest test name"))
++		return;
++
++	if (!test__start_subtest(testname))
++		return;
++
++	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_buddy_reset));
++	if (!ASSERT_OK(ret, "arena_buddy_reset"))
++		return;
++
++	ret = libarena_run_prog(bpf_program__fd(prog));
++	if (!ASSERT_OK(ret, testname))
++		return;
++
++	ret = run_libarena_parallel_test_workers(skel, name, prefixlen);
++
++	ASSERT_OK(ret, testname);
++
++	run_libarena_parallel_fini(skel, name, prefixlen);
++}
++
+ void test_libarena(void)
+ {
+ 	struct arena_alloc_reserve_args args;
+@@ -52,6 +193,22 @@ void test_libarena(void)
+ 	bpf_object__for_each_program(prog, skel->obj) {
+ 		const char *name = bpf_program__name(prog);
+ 
++		/*
++		 * Handle parallel test progs separately. For those
++		 * progs it's not a matter of test/skip, because each
++		 * parallel test prog includes an initialization prog
++		 * and a set of progs to be run in parallel. For the
++		 * latter we do not record them as skipped or run,
++		 * because we run them all at once when we come across
++		 * the initialization prog. For more details on how we
++		 * discover the progs see the comment on
++		 * run_libarena_parallel_test.
++		 */
++		if (libarena_is_parallel_test_prog(name)) {
++			run_libarena_parallel_test(skel, prog, name);
++			continue;
++		}
++
+ 		if (!libarena_is_test_prog(name))
+ 			continue;
+ 
 -- 
 2.54.0
 
