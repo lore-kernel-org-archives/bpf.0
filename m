@@ -1,552 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583002DA762;
-	Wed,  3 Jun 2026 17:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36303783C1
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 17:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780508398; cv=none; b=pAOWyAkHi5eVRpAEO+vlBp0Yn6oMm1xe8Hw5DNREbN1u6F+U3tt2LfarFlFU6BYFtjKpdy0+8w4zPw3cN9ZZZ6aVVGtMu8qXTOJ1dUbgFHNQkRyKxgcOhf3Pr0NzGZhB0BHIdfMxU9tt3gjmA64PGPdVf3PPg48xHutPOTrJ3KA=
+	t=1780508999; cv=none; b=iILXnp/NLCytF7EmfmumANePFGcnjlSQT7PSPmvPsohS146+TDn4kSev1mKAQWpuSpEah971EKEt/N33PVwN8QYEiFXkWLSKq4J/0ldZJm3QZMgprorXam2dXoUCg2i3ccpUgG1zqIw7Wwf9PnBuVOPWbnv5XHKTcXmnf9PoWa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780508398; c=relaxed/simple;
-	bh=oXUjRNRrzYzoJ/rcCx75NpPn0hq276MBq+cTP9tTxMU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kpJaEiwfQCHA2VvUL23HRVmX7duw7MqvXKRuEjPYvka/MvN+3ku4eERrgU8mbBDAIveYZEYX+1Du+aUdwHaK9BkbZ8BwWs8gPZiyutTcbatwHGkqTq5LD5LdUlBFYLvcm1oT0T1/5oJ7o45y0m1ih3Mjq1qHs1w6STTef+BctxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZetseQqK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1780508999; c=relaxed/simple;
+	bh=5zOwfEwDnaM4EL13r+AKL25SZeUeJKZeqkq/Qwtt8ho=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WQfRcjRVw+mGMaHkTkkvzdfjpf0ErOCGNGP4lBf1z3Ujk6hhKHcakmejpiariaP+4YpA3QLhGz5aeXzQSqsW7KFEP195wZWP7d5PtVpMXAiybxvl1KpgBWNBHFaGgOAnV2XJ5eWESqTkyTzl74C6YDKZCnwzKzoymimrLe31+Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkleZfjp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZetseQqK"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBC31C2BCB0;
-	Wed,  3 Jun 2026 17:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1780508397;
-	bh=oXUjRNRrzYzoJ/rcCx75NpPn0hq276MBq+cTP9tTxMU=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ZetseQqKRxwPSS/wL/Cw2zMDwZUA2Kpclu/MHzoqpwn7ZFMOqiDkfDmkYNjzZoQ/J
-	 Hg/kyYvcTdDqCYK7+1IJM7J2zH6SXpUxN7SJcWGMVVcDT0QzkxLLiZn+ahZc2Xxoqb
-	 sUpaaWUCr+Ip8m4aWvmccFr7vll8f1k5OhXzCg+EW9z/econvPw+Xq/Xgp9L5ieAWb
-	 eAWDdGJ44rhTrYcxQGRJA2PGzqUUBhsYrd8rZ2mO9FI4D1Ns/hi/gThuvYBVGB8o/q
-	 1Wroc+l9XTXsFFgRztubgXDSGIpzASCBh0cXt5a7lh1ATXIdaOV/Uw9cnBeSWz2/mf
-	 5sZ3Lh5KhqQ+Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFB53CD6E69;
-	Wed,  3 Jun 2026 17:39:57 +0000 (UTC)
-From: Korenberg Mark via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Date: Wed, 03 Jun 2026 22:39:53 +0500
-Subject: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkleZfjp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729DC1F00893;
+	Wed,  3 Jun 2026 17:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780508997;
+	bh=tWM3p+05VYUNPuWnHQY7V2Rg+lehOcL6Lpn/w2yeug8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AkleZfjpOHEsCO4AqFYx4Mw+v9irQQPwepZ8tB9hnDlLGDDta85VGc9xreVQd5jnV
+	 eNTur9mgoD7aN5iRHyC0Jsoj/Yw8GWZZcbLt3gdQBfWr+CByKfw5s+y2Fwi5Kltgdd
+	 KK8Gxcmb2dm73a/VJVTq11LFsHbX+0m2f6v1UQqIskPYmULT+6Qg/9tFFCBcrTSn3I
+	 WNo57F5u8PzV6HD1/TOcPs1fMkJbXEJHKy4+T2ec5gKp5D/jjVmyAtMpXZNPavI1XN
+	 HBRPbCMkNuVytR295QcNCZ3x6c0k/zdelYSSz2w/nI7YrTP6qd4xw7AK1yM23s3S70
+	 EXxy7fMzWJYCw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
  dependency
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Korenberg Mark via B4 Relay" <devnull+socketpair.gmail.com@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+References: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Jun 2026 17:49:57 +0000
+Message-Id: <20260603174957.729DC1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBMsQ7CrRIu00QZERSuC8O5Jy
- 7f4/4WCmbDA3L2Q8aZCMTQMfQfm2IJDRnszjHyUXHLBdLJnjJ4lfzkKzCg1aSOQy0lAi1JGS88
- /XNZaP9YWoPxgAAAA
-X-Change-ID: 20260603-bpftool-plugin-c994bc3e0643
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- Korenberg Mark <socketpair@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780508396; l=17763;
- i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=aP25w5DlRMlpRD13hPXrY+sdA/kazAuiqSIzsN6jCjo=;
- b=KO2gDX0W+nZYLgZElcrJXmy1YebBcl8lyEaNBrgdrldgnNmGQcB8fotxNzTDKTGXHmgwBtBgy
- wOYA2Fu/PB+AqbHme1fxuiUuJcm/Eb/FtP0IK03y7L+VJnJybh7yVAR
-X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
- pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
-X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
- auth_id=806
-X-Original-From: Korenberg Mark <socketpair@gmail.com>
-Reply-To: socketpair@gmail.com
 
-From: Korenberg Mark <socketpair@gmail.com>
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] The 'dump jited' functionality is completely broken for statically=
+ linked builds of bpftool.
+- [High] Linking static LLVM archives into a shared object plugin will caus=
+e relocation errors and build failures on many distributions.
+- [Medium] Hardcoding the absolute installation path for the LLVM plugin pr=
+events running bpftool locally from the build tree.
+- [Low] Multi-line comment does not follow the required BPF subsystem style.
+--
 
-Fixes https://github.com/libbpf/bpftool/issues/262
+commit c9ad3aff3b32fd9fdba7deb04f2d26819aac8786
+Author: Korenberg Mark <socketpair@gmail.com>
 
-Signed-off-by: Korenberg Mark <socketpair@gmail.com>
----
-On Fedora 43, installing `bpftool` pulls in `llvm20-libs` (~140 MiB) as a hard
-dependency, even though the bpftool binary itself is ~730 KiB:
+bpftool: Make the LLVM disassembler an optional runtime dependency
 
-    # dnf install bpftool
-    Installing:
-     bpftool            x86_64   7.6.0-1.fc43    fedora   731.4 KiB
-    Installing dependencies:
-     llvm20-filesystem  x86_64   20.1.8-2.fc43   fedora   0.0   B
-     llvm20-libs        x86_64   20.1.8-2.fc43   fedora   139.7 MiB
+This commit splits the libLLVM JIT disassembler into a separate shared
+plugin. It dynamically loads the plugin via dlopen() to remove the hard
+runtime dependency on the large libLLVM library from the main bpftool binar=
+y.
 
-The LLVM library is only used to disassemble JIT-compiled (native) programs,
-i.e. `bpftool prog dump jited`. Every other use case  works
-without LLVM. For scripting, automation, and CI, dragging in ~140 MB of LLVM
-just to have a single optional command available is a heavy cost.
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 0febf60e1b646..9887ac6fbae3e 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+[ ... ]
+> @@ -165,19 +168,36 @@ endif
+>  endif
+> =20
+>  ifeq ($(HAS_LLVM),1)
+> +  # The libLLVM-based JIT disassembler is built as a separate plugin,
+> +  # bpftool-llvm.so, which is the only object that links against libLLVM.
+> +  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpf=
+tool
+> +  # binary itself keeps no dependency on the large libLLVM shared object.
+>    CFLAGS  +=3D -DHAVE_LLVM_SUPPORT
+> +  CFLAGS  +=3D -DLLVM_PLUGIN_DIR=3D'"$(libdir)/bpftool"'
 
-Load the LLVM disassembler lazily at runtime via `dlopen`/`dlsym` instead of
-linking against it at build time. When `prog dump jited` is invoked and the
-library is unavailable, fall back gracefully (libbfd, or an informative message).
-This would remove the automatic ELF dependency on `libLLVM.so`, allowing distributions to make
-LLVM a weak/optional dependency (e.g. RPM `Recommends`) rather than a hard one.
+[Severity: Medium]
+By unconditionally baking the absolute installation path into the binary, d=
+oes
+this break running bpftool locally from the build tree?
 
-The `perf` tool is solving the exact same problem (libLLVM/libcapstone
-bloating dependencies for users who never disassemble) by dlopen-ing these
-libraries at runtime, so distributions can ship them as a separate, optional
-package:
+Standard developer workflows or selftests that execute a locally built bpft=
+ool
+from a scratch directory won't have the plugin installed in the system libr=
+ary
+directory. Since dlopen() is called with this absolute path exclusively, it
+will fail to load the plugin locally.
 
-- Overview: https://lwn.net/Articles/1040879/
-- https://lore.kernel.org/lkml/?q=Capstone%2Fllvm+dlopen
+[ ... ]
+> +  ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+> -    LIBS +=3D $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COM=
+PONENTS))
+> -    LIBS +=3D -lstdc++
+> +    LLVM_LINK_STATIC :=3D 1
+> +  endif
+> +  ifeq ($(LLVM_LINK_STATIC),1)
+> +    LLVM_PLUGIN_LIBS :=3D $(shell $(LLVM_CONFIG) --link-static --libs $(=
+LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS +=3D $(shell $(LLVM_CONFIG) --link-static --system-=
+libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS +=3D -lstdc++
+> +  else
+> +    LLVM_PLUGIN_LIBS :=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LI=
+B_COMPONENTS))
+>    endif
+[ ... ]
+> @@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOO=
+TSTRAP)
+>  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
+>  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+> =20
+> +ifeq ($(HAS_LLVM),1)
+> +all: $(OUTPUT)bpftool-llvm.so
+> +
+> +$(OUTPUT)llvm_disasm.o: llvm_disasm.c
+> +	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
+> +
+> +# The plugin is a shared object by definition, so drop a global -static =
+(e.g.
+> +# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -sh=
+ared.
+> +# Embedding libLLVM statically is controlled separately (see LLVM_LINK_S=
+TATIC).
+> +$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
+> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
+> +		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
 
-- Build with the libbfd disassembler instead of LLVM (smaller, but a build/
-  packaging choice and subject to libbfd's unstable ABI).
-- Build with no disassembler at all (loses `prog dump jited` entirely).
-- Ship the disassembler in a separate binary (works, but less idiomatic for a
-  single-binary tool; dlopen keeps the existing UX intact).
+[Severity: High]
+Will linking static LLVM archives into a shared object plugin cause relocat=
+ion
+errors and build failures on distributions like Debian and Ubuntu?
 
-- bpftool 7.6.0-1.fc43 (Fedora 43), x86_64
----
- tools/bpf/bpftool/Makefile      |  63 ++++++++++++++++++----
- tools/bpf/bpftool/jit_disasm.c  | 112 +++++++++++++++++++++++-----------------
- tools/bpf/bpftool/llvm_disasm.c |  85 ++++++++++++++++++++++++++++++
- tools/bpf/bpftool/llvm_disasm.h |  38 ++++++++++++++
- 4 files changed, 240 insertions(+), 58 deletions(-)
+Since static libraries are typically not compiled with position independent
+code, attempting to link them with the shared flag here often produces link=
+er
+relocation errors.
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1..9887ac6fb 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -62,6 +62,7 @@ $(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
- 
- prefix ?= /usr/local
-+libdir ?= $(prefix)/lib
- bash_compdir ?= /usr/share/bash-completion/completions
- 
- CFLAGS += -O2
-@@ -157,6 +158,8 @@ include $(wildcard $(OUTPUT)*.d)
- all: $(OUTPUT)bpftool
- 
- SRCS := $(wildcard *.c)
-+# llvm_disasm.c is compiled separately into the bpftool-llvm.so plugin.
-+SRCS := $(filter-out llvm_disasm.c,$(SRCS))
- 
- ifeq ($(feature-llvm),1)
- ifneq ($(SKIP_LLVM),1)
-@@ -165,19 +168,36 @@ endif
- endif
- 
- ifeq ($(HAS_LLVM),1)
-+  # The libLLVM-based JIT disassembler is built as a separate plugin,
-+  # bpftool-llvm.so, which is the only object that links against libLLVM.
-+  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpftool
-+  # binary itself keeps no dependency on the large libLLVM shared object.
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-+  CFLAGS  += -DLLVM_PLUGIN_DIR='"$(libdir)/bpftool"'
-+  # dlopen() lives in libc on modern glibc, but keep -ldl for portability.
-+  LIBS    += -ldl
-+
-+  # Flags used to build the plugin itself (the only part that needs libLLVM).
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
--  # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
--  # (e.g. when bpftool build is called from selftests build as selftests
--  # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
--  # compilation error due to redefinition. Let's filter it out here.
--  CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
--  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+  # llvm-config always adds -D_GNU_SOURCE, which llvm_disasm.c already defines;
-+  # filter it out to avoid a redefinition warning.
-+  LLVM_PLUGIN_CFLAGS := $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-+
-+  # Embed libLLVM into the plugin statically when requested with
-+  # LLVM_LINK_STATIC=1, or when this LLVM install only ships static libraries
-+  # ("llvm-config --shared-mode" reports "static"). Otherwise link the shared
-+  # libLLVM, which is the only runtime dependency of the plugin.
-   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
--    LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
--    LIBS += -lstdc++
-+    LLVM_LINK_STATIC := 1
-+  endif
-+  ifeq ($(LLVM_LINK_STATIC),1)
-+    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+    LLVM_PLUGIN_LIBS += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+    LLVM_PLUGIN_LIBS += -lstdc++
-+  else
-+    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-   endif
--  LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-+  LLVM_PLUGIN_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
- else
-   ifneq ($(SKIP_LIBBFD),1)
-   # Fall back on libbfd
-@@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
- $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
- 
-+ifeq ($(HAS_LLVM),1)
-+all: $(OUTPUT)bpftool-llvm.so
-+
-+$(OUTPUT)llvm_disasm.o: llvm_disasm.c
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
-+
-+# The plugin is a shared object by definition, so drop a global -static (e.g.
-+# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -shared.
-+# Embedding libLLVM statically is controlled separately (see LLVM_LINK_STATIC).
-+$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
-+	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
-+		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
-+endif
-+
- $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
- 	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
- 
-@@ -288,17 +322,25 @@ feature-detect-clean:
- 
- clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
- 	$(call QUIET_CLEAN, bpftool)
--	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
-+	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)bpftool-llvm.so $(OUTPUT)*.o $(OUTPUT)*.d
- 	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
- 	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
- 	$(call QUIET_CLEAN, core-gen)
- 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
- 	$(Q)$(RM) -r -- $(OUTPUT)feature/
- 
-+ifeq ($(HAS_LLVM),1)
-+install-bin: $(OUTPUT)bpftool-llvm.so
-+endif
- install-bin: $(OUTPUT)bpftool
- 	$(call QUIET_INSTALL, bpftool)
- 	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/sbin
- 	$(Q)$(INSTALL) $(OUTPUT)bpftool $(DESTDIR)$(prefix)/sbin/bpftool
-+ifeq ($(HAS_LLVM),1)
-+	$(call QUIET_INSTALL, bpftool-llvm.so)
-+	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(libdir)/bpftool
-+	$(Q)$(INSTALL) -m 0755 $(OUTPUT)bpftool-llvm.so $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
-+endif
- 
- install: install-bin
- 	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(bash_compdir)
-@@ -307,6 +349,7 @@ install: install-bin
- uninstall:
- 	$(call QUIET_UNINST, bpftool)
- 	$(Q)$(RM) -- $(DESTDIR)$(prefix)/sbin/bpftool
-+	$(Q)$(RM) -- $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
- 	$(Q)$(RM) -- $(DESTDIR)$(bash_compdir)/bpftool
- 
- doc:
-diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-index 04541155e..e8cef2da2 100644
---- a/tools/bpf/bpftool/jit_disasm.c
-+++ b/tools/bpf/bpftool/jit_disasm.c
-@@ -25,10 +25,9 @@
- #include <bpf/libbpf.h>
- 
- #ifdef HAVE_LLVM_SUPPORT
--#include <llvm-c/Core.h>
--#include <llvm-c/Disassembler.h>
--#include <llvm-c/Target.h>
--#include <llvm-c/TargetMachine.h>
-+#include <dlfcn.h>
-+
-+#include "llvm_disasm.h"
- #endif
- 
- #ifdef HAVE_LIBBFD_SUPPORT
-@@ -45,7 +44,32 @@ static int oper_count;
- #ifdef HAVE_LLVM_SUPPORT
- #define DISASM_SPACER
- 
--typedef LLVMDisasmContextRef disasm_ctx_t;
-+/*
-+ * The libLLVM-based disassembler used for "bpftool prog dump jited" lives in a
-+ * separate plugin, bpftool-llvm.so, which is the only object linked against
-+ * libLLVM. This keeps the bpftool binary itself free of a hard dependency on
-+ * the (large) libLLVM shared object: the plugin is loaded lazily with dlopen()
-+ * the first time a JITed image actually needs to be disassembled, with its
-+ * entry points resolved by dlsym(). See llvm_disasm.c for the plugin.
-+ *
-+ * LLVM_PLUGIN_DIR is the install directory baked in at build time
-+ * ($(libdir)/bpftool). When set, the plugin is loaded from that absolute
-+ * location; otherwise only the bare file name is used, i.e. the plugin is
-+ * looked up via the dynamic linker search path (or the current directory).
-+ */
-+#ifdef LLVM_PLUGIN_DIR
-+#define LLVM_PLUGIN_PATH LLVM_PLUGIN_DIR "/bpftool-llvm.so"
-+#else
-+#define LLVM_PLUGIN_PATH "bpftool-llvm.so"
-+#endif
-+
-+typedef void *disasm_ctx_t;
-+
-+static void *llvm_plugin_handle;
-+static __typeof__(&bpftool_llvm_init) p_bpftool_llvm_init;
-+static __typeof__(&bpftool_llvm_create_context) p_bpftool_llvm_create_context;
-+static __typeof__(&bpftool_llvm_destroy_context) p_bpftool_llvm_destroy_context;
-+static __typeof__(&bpftool_llvm_disassemble) p_bpftool_llvm_disassemble;
- 
- static int printf_json(char *s)
- {
-@@ -63,48 +87,13 @@ static int printf_json(char *s)
- 	return 0;
- }
- 
--/* This callback to set the ref_type is necessary to have the LLVM disassembler
-- * print PC-relative addresses instead of byte offsets for branch instruction
-- * targets.
-- */
--static const char *
--symbol_lookup_callback(__maybe_unused void *disasm_info,
--		       __maybe_unused uint64_t ref_value,
--		       uint64_t *ref_type, __maybe_unused uint64_t ref_PC,
--		       __maybe_unused const char **ref_name)
--{
--	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
--	return NULL;
--}
--
- static int
- init_context(disasm_ctx_t *ctx, const char *arch,
- 	     __maybe_unused const char *disassembler_options,
- 	     __maybe_unused unsigned char *image, __maybe_unused ssize_t len,
- 	     __maybe_unused __u64 func_ksym)
- {
--	char *triple;
--
--	if (arch)
--		triple = LLVMNormalizeTargetTriple(arch);
--	else
--		triple = LLVMGetDefaultTargetTriple();
--	if (!triple) {
--		p_err("Failed to retrieve triple");
--		return -1;
--	}
--
--	/*
--	 * Enable all aarch64 ISA extensions so the disassembler can handle any
--	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
--	 */
--	if (!strncmp(triple, "aarch64", 7))
--		*ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL,
--						   symbol_lookup_callback);
--	else
--		*ctx = LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback);
--	LLVMDisposeMessage(triple);
--
-+	*ctx = p_bpftool_llvm_create_context(arch);
- 	if (!*ctx) {
- 		p_err("Failed to create disassembler");
- 		return -1;
-@@ -115,7 +104,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
- 
- static void destroy_context(disasm_ctx_t *ctx)
- {
--	LLVMDisposeMessage(*ctx);
-+	p_bpftool_llvm_destroy_context(*ctx);
- }
- 
- static int
-@@ -125,8 +114,8 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
- 	char buf[256];
- 	int count;
- 
--	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, func_ksym + pc,
--				      buf, sizeof(buf));
-+	count = p_bpftool_llvm_disassemble(*ctx, image, len, pc, func_ksym,
-+					   buf, sizeof(buf));
- 	if (json_output)
- 		printf_json(buf);
- 	else
-@@ -137,10 +126,37 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
- 
- int disasm_init(void)
- {
--	LLVMInitializeAllTargetInfos();
--	LLVMInitializeAllTargetMCs();
--	LLVMInitializeAllDisassemblers();
--	return 0;
-+	if (llvm_plugin_handle)
-+		return p_bpftool_llvm_init();
-+
-+	/* Load the plugin by its absolute install path. */
-+	llvm_plugin_handle = dlopen(LLVM_PLUGIN_PATH, RTLD_NOW | RTLD_LOCAL);
-+	if (!llvm_plugin_handle) {
-+		p_err("failed to load %s, install it to disassemble JITed programs: %s",
-+		      LLVM_PLUGIN_PATH, dlerror());
-+		return -1;
-+	}
-+
-+#define RESOLVE(name)							       \
-+	do {								       \
-+		p_##name = (__typeof__(p_##name))dlsym(llvm_plugin_handle,     \
-+						       #name);		       \
-+		if (!p_##name) {					       \
-+			p_err("%s is missing symbol %s: %s",		       \
-+			      LLVM_PLUGIN_PATH, #name, dlerror());	       \
-+			dlclose(llvm_plugin_handle);			       \
-+			llvm_plugin_handle = NULL;			       \
-+			return -1;					       \
-+		}							       \
-+	} while (0)
-+
-+	RESOLVE(bpftool_llvm_init);
-+	RESOLVE(bpftool_llvm_create_context);
-+	RESOLVE(bpftool_llvm_destroy_context);
-+	RESOLVE(bpftool_llvm_disassemble);
-+#undef RESOLVE
-+
-+	return p_bpftool_llvm_init();
- }
- #endif /* HAVE_LLVM_SUPPORT */
- 
-diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_disasm.c
-new file mode 100644
-index 000000000..b83216191
---- /dev/null
-+++ b/tools/bpf/bpftool/llvm_disasm.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * libLLVM-based BPF JIT disassembler plugin for bpftool.
-+ *
-+ * This translation unit is built into a standalone shared object
-+ * (bpftool-llvm.so) which is the only bpftool component that links against
-+ * libLLVM. bpftool loads it lazily with dlopen() (see jit_disasm.c) so that
-+ * the bpftool binary itself does not depend on the large libLLVM shared
-+ * object. Only the small, stable C ABI declared in llvm_disasm.h is exposed.
-+ */
-+#ifndef _GNU_SOURCE
-+#define _GNU_SOURCE
-+#endif
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/types.h>
-+
-+#include <llvm-c/Core.h>
-+#include <llvm-c/Disassembler.h>
-+#include <llvm-c/Target.h>
-+#include <llvm-c/TargetMachine.h>
-+
-+#include "llvm_disasm.h"
-+
-+/* This callback to set the ref_type is necessary to have the LLVM disassembler
-+ * print PC-relative addresses instead of byte offsets for branch instruction
-+ * targets.
-+ */
-+static const char *
-+symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
-+		       uint64_t *ref_type, uint64_t ref_PC,
-+		       const char **ref_name)
-+{
-+	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
-+	return NULL;
-+}
-+
-+int bpftool_llvm_init(void)
-+{
-+	LLVMInitializeAllTargetInfos();
-+	LLVMInitializeAllTargetMCs();
-+	LLVMInitializeAllDisassemblers();
-+
-+	return 0;
-+}
-+
-+void *bpftool_llvm_create_context(const char *arch)
-+{
-+	LLVMDisasmContextRef ctx;
-+	char *triple;
-+
-+	if (arch)
-+		triple = LLVMNormalizeTargetTriple(arch);
-+	else
-+		triple = LLVMGetDefaultTargetTriple();
-+	if (!triple)
-+		return NULL;
-+
-+	/*
-+	 * Enable all aarch64 ISA extensions so the disassembler can handle any
-+	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
-+	 */
-+	if (!strncmp(triple, "aarch64", 7))
-+		ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0,
-+						  NULL, symbol_lookup_callback);
-+	else
-+		ctx = LLVMCreateDisasm(triple, NULL, 0, NULL,
-+				       symbol_lookup_callback);
-+	LLVMDisposeMessage(triple);
-+
-+	return ctx;
-+}
-+
-+void bpftool_llvm_destroy_context(void *ctx)
-+{
-+	LLVMDisasmDispose(ctx);
-+}
-+
-+int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-+			     int pc, uint64_t func_ksym, char *buf,
-+			     size_t buf_sz)
-+{
-+	return LLVMDisasmInstruction(ctx, image + pc, len - pc, func_ksym + pc,
-+				     buf, buf_sz);
-+}
-diff --git a/tools/bpf/bpftool/llvm_disasm.h b/tools/bpf/bpftool/llvm_disasm.h
-new file mode 100644
-index 000000000..cd9491ea3
---- /dev/null
-+++ b/tools/bpf/bpftool/llvm_disasm.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+#ifndef __BPFTOOL_LLVM_DISASM_H
-+#define __BPFTOOL_LLVM_DISASM_H
-+
-+#include <stddef.h>
-+#include <stdint.h>
-+#include <sys/types.h>
-+
-+/*
-+ * Stable C ABI between bpftool and its optional libLLVM-based JIT disassembler
-+ * plugin (bpftool-llvm.so). bpftool resolves these symbols with dlsym()
-+ * after dlopen()ing the plugin; the plugin is the only object that links
-+ * against libLLVM. See jit_disasm.c (loader) and llvm_disasm.c (plugin).
-+ */
-+
-+/* Initialize the libLLVM targets and disassemblers. Returns 0 on success. */
-+int bpftool_llvm_init(void);
-+
-+/*
-+ * Create a disassembler context for @arch (NULL selects the host
-+ * architecture). Returns an opaque context pointer, or NULL on failure.
-+ */
-+void *bpftool_llvm_create_context(const char *arch);
-+
-+/* Release a context previously returned by bpftool_llvm_create_context(). */
-+void bpftool_llvm_destroy_context(void *ctx);
-+
-+/*
-+ * Disassemble the single instruction at @image[@pc] into @buf as a NUL
-+ * terminated string. @func_ksym is the kernel address of @image and is used to
-+ * render absolute branch targets. Returns the instruction length in bytes, or
-+ * 0 if the instruction could not be decoded.
-+ */
-+int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-+			     int pc, uint64_t func_ksym, char *buf,
-+			     size_t buf_sz);
-+
-+#endif /* __BPFTOOL_LLVM_DISASM_H */
+[Severity: High]
+Does this completely break the disassemble functionality for statically lin=
+ked
+builds of bpftool?
 
----
-base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
-change-id: 20260603-bpftool-plugin-c994bc3e0643
+Statically linking bpftool produces a static binary, but this rule forces t=
+he
+LLVM disassembler to be built exclusively as a shared object. Since static
+binaries generally lack full dynamic loader capabilities for loading shared
+objects via dlopen(), standalone static builds of bpftool will no longer be
+able to disassemble JITed code.
 
-Best regards,
--- 
-Korenberg Mark <socketpair@gmail.com>
+> diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_dis=
+asm.c
+> new file mode 100644
+> index 0000000000000..b832161911ebb
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/llvm_disasm.c
+[ ... ]
+> +#include <llvm-c/TargetMachine.h>
+> +
+> +#include "llvm_disasm.h"
+> +
+> +/* This callback to set the ref_type is necessary to have the LLVM disas=
+sembler
+> + * print PC-relative addresses instead of byte offsets for branch instru=
+ction
+> + * targets.
+> + */
+> +static const char *
+> +symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
 
+[Severity: Low]
+This isn't a bug, but the multi-line comment does not follow the required B=
+PF
+subsystem style. The opening block comment indicator should be on its own
+line.
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603-bpftool-pl=
+ugin-v1-1-68c0ac91f5a3@gmail.com?part=3D1
