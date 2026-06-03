@@ -1,32 +1,33 @@
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.6])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B0E38333F;
-	Wed,  3 Jun 2026 09:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8318E1B4F1F;
+	Wed,  3 Jun 2026 09:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478257; cv=none; b=EDqXsP9BR5pjmNn8eNuwDVZrU8PTUkwc5U5cO4bK9UDURQBV+8wg3HIgRH3UppkPfHVvMXg9rdnUaqExGXN2EOYE0UR30k1eZBVo0lZtgit9zUVoHomgOxEifzDvmpvNGDlKd6eAXAQPzCR6t+ZClOeZG6PYoPNPkweKiByKavQ=
+	t=1780478271; cv=none; b=bzpJHoCSVyOQlDObniTeEE/npX3GiLR2UpJRT18HatqEnLe0TexNdhbNAVywx4IZrCYgFDMTo+Pwp9v1d5bs/+JBThszLbAsEyEHZYsQ2Q8WUgMKzvOWhBtHWU/1KyJWu754Yrct9quPz0paggX8JE8TNn76GtPeHbx5Ky/M+Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478257; c=relaxed/simple;
-	bh=aXFVWAph2IAGoRFAIHj9s8MoDQp+/Z51PWf1mfGBfq0=;
+	s=arc-20240116; t=1780478271; c=relaxed/simple;
+	bh=D9Yc2SINKmQ2h2akpVdRq5/TomrG4EGKZcHVrLMBdtU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kDm6/WG2RmIDFiTr6/DCGs+kGznCCSFcfJ4QQRNtSJJj71nD8nM2N9y2NPOI8OukQTkxgceN1uEEP9AwGTNdf6RZpk7igcKnvuWic3WUeMp1gfqTf1O3YjV0FsIJG6e8Vv5JpA2Tx2PI4nmkQxn6kKxpQp1anAJj2g1gaXa0k/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=TkPFAl26; arc=none smtp.client-ip=117.135.210.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	 In-Reply-To:Content-Type; b=XLuyz6wxQQV/LHNy8GpnIKajYgf0zxhQUhRlKvZVVIerkPaOttrorCED4GRI2pJ2lFQsDgyt/fi05FLc6gbgLzh74VTC5uf2q8dk7S4sVWG3/mQAEvtxpxQuH5c7M65junergJRW7DCnXDNX98HQjzbKBTM03kCgIqqaQY0Ff8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkYh6RYz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="TkPFAl26"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=P9sWvF/xqvCKAMYH4m9HhgjizdpyX9NLuf3nh0RUxg0=;
-	b=TkPFAl26YHoM+guUU7Pe/zgDvSxQmhlQ24n0Szz2kMTG1pfgdmhN+E4tciruxr
-	TOzu805aQH+LvIJOEP07B/9w0n3LZ1sMLUhg6dPEQDvyc65SERSLqoQronvmXVdG
-	KD9lB9Q2Zusz77Qup/GKP1XyPlgiAbsNoOU8iiTtqeLIo=
-Received: from [10.41.105.18] (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wAXvnrI8B9q6X_5Ag--.14449S2;
-	Wed, 03 Jun 2026 17:15:53 +0800 (CST)
-Message-ID: <1d2d1926-87fe-4437-ab67-4321749fbc83@126.com>
-Date: Wed, 3 Jun 2026 17:15:52 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkYh6RYz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 491851F00893;
+	Wed,  3 Jun 2026 09:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780478270;
+	bh=M0pUtaR4+MO5aeujygdu2I6w5ZAQoI82CxqwwUxfoiE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NkYh6RYztD/v9Cd5qUUF+73iEm/9P8Dxg515rIIt8cpNkQXn0uWsbSjzZ94uOOdJT
+	 8lr2VDF/pFtEj8vN8v2caT9WCT2G9Z4Rq6UiHuCW/5CM0K/fYFpJlmzxzzvELk0/uq
+	 BVOLqgNF9knDhwESnGP5ZFMste8UryYsCYqyJ7VFjS0OmKQkf1uy9VheypRjnl2pvZ
+	 xlHfC6AbaKXzeHOGbNyuhpkqOZUsbCol0WdydURkXHIocM5fXBl244JSyT3vk5npBp
+	 gRrddaqENxSHYNaMAO7aZvprpMklJyWR7Frr7S1uw1kJfHZkXs5zXbnpDTfZihHg04
+	 6J50JPcqEnSKA==
+Message-ID: <5e6948b3-d235-4b61-aed7-e8b4d0f5b452@kernel.org>
+Date: Wed, 3 Jun 2026 11:17:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,68 +35,150 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] btf: reject to register duplicated kfunc
-To: Leon Hwang <leon.hwang@linux.dev>, Yonghong Song
- <yonghong.song@linux.dev>, martin.lau@linux.dev, ast@kernel.org,
- alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- kaitao.cheng@linux.dev
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260602110710.19642-1-chensong_2000@126.com>
- <d4054d34-430c-4360-8392-a21f8ebacff4@linux.dev>
- <6f7bfa86-7f9c-4ac3-baff-88b541e6a48a@linux.dev>
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
 Content-Language: en-US
-From: Song Chen <chensong_2000@126.com>
-In-Reply-To: <6f7bfa86-7f9c-4ac3-baff-88b541e6a48a@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: rob.clark@oss.qualcomm.com
+Cc: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>,
+ Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+ <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+ <20260529135045.GA10647@lst.de>
+ <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+ <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
+ <20260601113831.GA25535@lst.de>
+ <d7b08296-7f6e-4d89-ab3b-04e43d04929e@kernel.org>
+ <CACSVV00k-fxW6+waHNqvmYcnVNDkRexoWWprFzfayZfqdyMuuA@mail.gmail.com>
+ <CACSVV00dNWgpNVU5rB=Hmg+3oWF18yTyfKNr_tWesjoP1jMxwg@mail.gmail.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <CACSVV00dNWgpNVU5rB=Hmg+3oWF18yTyfKNr_tWesjoP1jMxwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAXvnrI8B9q6X_5Ag--.14449S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrurWxCr1DCFyDCFyxAw13Jwb_yoWfZrg_ur
-	yUZa4fKF4DXa48ursxX34rWr17X3y8Cw13J3yDCFy5XwsxW3ZrJF17W3s2qF4xGr1UGrs2
-	9r1rC34fW3y8WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUesjjPUUUUU==
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpQrQUGof8Mo0QAAA3U
 
-Hi,
-
-在 2026/6/3 10:18, Leon Hwang 写道:
-> On 3/6/26 01:13, Yonghong Song wrote:
+On 6/1/26 16:39, Rob Clark wrote:
+> On Mon, Jun 1, 2026 at 6:32 AM Rob Clark <rob.clark@oss.qualcomm.com> wrote:
 >>
+>> On Mon, Jun 1, 2026 at 5:50 AM Vlastimil Babka (SUSE) <vbabka@kernel.org> wrote:
+>> >
+>> > On 6/1/26 13:38, Christoph Hellwig wrote:
+>> > > On Mon, Jun 01, 2026 at 10:16:30AM +0200, Vlastimil Babka (SUSE) wrote:
+>> > >> > kmem_cache_alloc_bulk() returning 0 was considered a success in that case.
+>> > >> >
+>> > >> > Either fixing kmem_cache_alloc_bulk() (and the comment) or fixing the
+>> > >> > user sounds fine to me.
+>> > >>
+>> > >> Would it be wrong if we just returned true for size of 0? Would something
+>> > >> else break?
+>> > >
+>> > > I don't think it is wrong per se, but it feels like the wrong kind of
+>> > > API.  I.e. I don't think the MSM caller actually wants this, as they'd
+>> > > also do a zero-sized kvmalloc.
+>> >
+>> > If p->count is 0 then indeed there's a zero-sized kvmalloc so p->pages ==
+>> > ZERO_SIZE_PTR but then nothing breaks because nothing tries to dereference it?
+>> >
+>> > msm_iommu_pagetable_prealloc_cleanup() has a "if (p->count > 0)" branch so
+>> > it seems it's considered possible. But then the rest of the functions also
+>> > seems working fine, i.e. kmem_cache_free_bulk() of zero size does nothing,
+>> > kvfree() of ZERO_SIZE_PTR does nothing.
+>> >
+>> > It seems to me kmem_cache_alloc_bulk() returning true for size == 0 fits
+>> > naturally in this world and is less likely to result in a gotcha?
 >>
->> On 6/2/26 4:07 AM, Song Chen wrote:
-> [...]
->>> +
->>> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->>> +    mutex_lock(&btf_module_mutex);
->>> +    list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
->>> +        if (btf_mod->btf == btf)
->>> +            continue;
->>> +        id = btf_find_by_name_kind(btf_mod->btf, func_name, kind);
->>> +        if (id >= 0) {
->>> +            pr_err("kfunc %s (id: %d) is already present in module
->>> %s.\n",
->>> +                    func_name, id, btf_mod->module->name);
->>> +            mutex_unlock(&btf_module_mutex);
->>> +            return -EINVAL;
+>> I think I was probably expecting kvmalloc(0) => NULL ... but it
+>> happened to work out before
 >>
->> Let us avoid the above mutex_unlock and 'return -EINVAL', just do
->>      err = -EINVAL;
->>      break;
->>
+>> Adding an "if (!p->count) return 0;" at the top of
+>> msm_iommu_pagetable_prealloc_allocate() seems like the thing to do..
+>> if you want, I can send that patch (but traveling this week... so
+>> let's see what I can do)
 > 
-> Better to use guard(mutex)(&btf_module_mutex)?
+> Aaaaaand.. sending patch from hotel wifi doesn't seem to be a thing
+> that works.. but I've tested the following w/ deqp-vk cts, and works
+> as expected
+
+Thanks, I will amend the commit in slab tree with this as the easiest way to
+go foward.
+Just a quick question though:
+
+> ----------------
 > 
-
-This is the first time i used guard and it's awesome. I have tested in 
-my code and will send a new patch later, many thanks.
-
-
-> Thanks,
-> Leon
+> diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
+> index 7d449e5202c5..ef744d154bbe 100644
+> --- a/drivers/gpu/drm/msm/msm_iommu.c
+> +++ b/drivers/gpu/drm/msm/msm_iommu.c
+> @@ -332,13 +332,16 @@ msm_iommu_pagetable_prealloc_allocate(struct
+> msm_mmu *mmu, struct msm_mmu_preall
+>         struct kmem_cache *pt_cache = get_pt_cache(mmu);
+>         int ret;
 > 
->>> [...]
+> +       if (!p->count)
+> +               return 0;
 
+We know p->pages is NULL in this case, right? Because it was allocated by
+vm_bind_job_create() using kzalloc().
+And the job can't be reused with a leftover value?
+(msm_iommu_pagetable_prealloc_cleanup doesn't set p->pages to zero).
+Or should we set p->pages to NULL here.
 
-Song
+> +
+>         p->pages = kvmalloc_objs(*p->pages, p->count);
+>         if (!p->pages)
+>                 return -ENOMEM;
+> 
+>         ret = kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, p->count, p->pages);
+>         if (ret != p->count) {
+> -               kfree(p->pages);
+> +               kvfree(p->pages);
+>                 p->pages = NULL;
+>                 p->count = ret;
+>                 return -ENOMEM;
 
