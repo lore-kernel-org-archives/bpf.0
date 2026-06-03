@@ -1,88 +1,103 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882ED3E3C47
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 03:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEFA39183B;
+	Wed,  3 Jun 2026 06:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780455691; cv=none; b=A8OYtPcLPnyQ1v8GYpaqmraoScC2h/hG5ElyfEORTpfJFDpA9hsRn2EP9nKu9WNz7y6IWOjXDvPoKvxyWbiXB7wzAotIrAogc1AAOdytQAxOA2Rx8amAV+Uk90qUawUDTSzdBPh1lwR+dxmIwuYo78G96fPLK5vRa3JHxwPk0fk=
+	t=1780469277; cv=none; b=II7ZNJ58oiPdEEtH4Rir8R+vytiZV69E935RZJg7KIKXEzuFGSPvDbZ/hWp5auUmfcR4cMKf3SSPOMHnyjz3ocHQ/KVxrpKo0o9SJ3rn2Nku5rfhncQe7SRuN8FumnFh+6XtGVBBOXWGsmsKbGN6fPkFBMnpLKzEunCOcLOSaH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780455691; c=relaxed/simple;
-	bh=OAC3EV25gu9JOlTRxwpQTujtC3M12PFsbYoGBxlVDZY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dYYtI7QKoP6QlawXfAmhgsabUlw0ONXocHO7bS49qU9RZrAvDAYonPxU2y5Nf+aoymADixyIw/IjbgVNGCYRMJ4YE2qBmPngd6a0uzMu4utdShdnb2ul4Ys/qA31bpjBVApiLRgHReNSMaw3Due4z9qCM6VxyJx/GIS40XE8AF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tU1kWuvb; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780469277; c=relaxed/simple;
+	bh=u54brfiqq1gqzyz2AZW4xQ1pVAWQ83450faF6+2WNQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OHll+FDzQfeJ5osA5SHUCzfnuJlrmNqkWwsLzBNN5rW/qL+JsNEvlPuDhclM/gDikJ1vGX2etmbHeRVFYic6MXHNbrIOrYgsWcuTRgmTGs7tg0WL2aQZiOCXz29IOPIbeMGrMIpLL58GIvhTYvx1KduUsYpIcn5J1siJbGF83uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FAMdC6uO; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tU1kWuvb"
-Message-ID: <8e3b5ae4-a399-412f-a161-fbb0121c6904@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780455676;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OAC3EV25gu9JOlTRxwpQTujtC3M12PFsbYoGBxlVDZY=;
-	b=tU1kWuvb/RpC5iLN/ZVRIHDN4s7QgbZBoDJv7aB7DPbKJ3tIf5vQbcCQbRKvoUBKnk8vOb
-	nkgfQVGZkWt/IS4GnEiTtWCrOYlR4QENWw/KyNAch2qHNPngEkI353d4EvYevWndzazlsz
-	ub63ouNlqlsO5rRqBKemVFjBEwUBlsU=
-Date: Tue, 2 Jun 2026 20:01:07 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FAMdC6uO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780469276; x=1812005276;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u54brfiqq1gqzyz2AZW4xQ1pVAWQ83450faF6+2WNQY=;
+  b=FAMdC6uOdopcmVYiWRnqgJ1iH41yX5GCvgbH1/sC/x/RCVQ/K/YUO40t
+   kbmSBN05V+cOCCYDOlT6IaylXmA0DS5eRwBPdG4zRnSO8Z0+F16PQfrdt
+   pSoWfVpk/ZH4FDjwbbq2fpjeRHpJwo8Jq9TynpTig11ORyvKNMudh1+vo
+   VuQksHZDRJslQ/3L3ZHOOviv71d1LkgPd7oRBIYS1pFuBq2fjc/DkQ81f
+   BAgwZNoCYt9mDWILG8fFWI9FN6COm86fAqBjVHI9pvpDnNebWuQXVSuZR
+   zpEGPmFmosZldkYASW+RR47i5hW5/3aqnLMwHvHtvyj5ZaQJnCuNgAVej
+   g==;
+X-CSE-ConnectionGUID: 9hqyub3QTgyFj4IzjGCjaA==
+X-CSE-MsgGUID: FGx69jTLSk2L8cFV82fMCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81449056"
+X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
+   d="scan'208";a="81449056"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 23:47:55 -0700
+X-CSE-ConnectionGUID: HHuW2PLBSZSu331ILmzPow==
+X-CSE-MsgGUID: FHkqr/mARwWdILVxzKBfgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
+   d="scan'208";a="237778922"
+Received: from brc05.iind.intel.com (HELO brc05..) ([10.190.162.156])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 23:47:51 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	stfomichev@gmail.com,
+	kernelxing@tencent.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Cc: bpf@vger.kernel.org
+Subject: [PATCH net-next v2 0/4] selftests/xsk: simplify UMEM setup
+Date: Wed,  3 Jun 2026 11:33:23 +0530
+Message-ID: <20260603060327.298389-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2] bpftool: Use libbpf error code for flow dissector
- query
-Content-Language: en-GB
-To: Woojin Ji <random6.xyz@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org, kuba@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com,
- qmo@kernel.org, sdf@fomichev.me, song@kernel.org
-References: <22ab9375-e7e6-4929-a80c-0ee9cc74a907@linux.dev>
- <20260603003339.33791-1-random6.xyz@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260603003339.33791-1-random6.xyz@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+This series simplifies UMEM handling in selftests/xsk.
 
+It centralizes UMEM property setup through helpers, moves UMEM ownership
+from ifobject to socket-owned state, and normalizes umem_size/mmap_size
+usage across the touched paths.
 
-On 6/2/26 5:33 PM, Woojin Ji wrote:
-> bpf_prog_query() returns a negative errno on failure.
-> query_flow_dissector() currently closes the namespace fd and then reads
-> errno to decide whether -EINVAL means that the running kernel does not
-> support flow dissector queries.
->
-> That errno check controls behavior, not just diagnostics: -EINVAL is
-> handled as a non-fatal old-kernel case, while any other error makes bpftool
-> net fail.
->
-> The namespace fd is opened read-only, so close() is not expected to
-> commonly fail in normal use. Still, the BPF_PROG_QUERY error is already
-> available in err, and reading errno after an intervening close() is
-> fragile. If close() does change errno, the compatibility branch may be
-> based on close()'s error instead of the BPF_PROG_QUERY result.
->
-> This was reproduced with an LD_PRELOAD fault injector that forced
-> BPF_PROG_QUERY for BPF_FLOW_DISSECTOR to fail with EINVAL and then
-> forced close() on the netns fd to fail with EIO. The unpatched bpftool
-> reported "can't query prog: Input/output error". With this change, the
-> same injected failure is handled as the intended non-fatal EINVAL
-> compatibility case.
->
-> Use the libbpf-returned error code instead. Keep the existing errno reset
-> in the non-fatal path to preserve batch mode behavior. The success path
-> is unchanged.
->
-> Fixes: 7f0c57fec80f ("bpftool: show flow_dissector attachment status")
-> Assisted-by: ChatGPT:gpt-5.5
-> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+v1 -> v2:
+- Applied helper usage consistently across the touched test paths.
+- Moved UMEM ownership to socket-owned state and switched to one
+  heap-backed umem_real object at xsk_arr[0] with explicit reset/cleanup.
+- Kept shared-UMEM TX behavior unchanged via TX-local UMEM state
+  copy/reset during TX configuration.
+- Folded pkt_generate() umem parameter removal into the ownership
+  refactor patch (no standalone cleanup patch). [Maciej]
+- Updated mmap_size teardown handling to join the RX worker thread in
+  single-thread mode before cleanup to synchronize UMEM mapping state.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+
+Tushar Vyavahare (4):
+  selftests/xsk: Introduce helpers for setting UMEM properties
+  selftests/xsk: Move UMEM state from ifobject to xsk_socket_info
+  selftests/xsk: Use umem_size() helper consistently
+  selftests/xsk: Introduce mmap_size in umem struct
+
+ .../selftests/bpf/prog_tests/test_xsk.c       | 203 ++++++++++--------
+ .../selftests/bpf/prog_tests/test_xsk.h       |   3 +-
+ 2 files changed, 117 insertions(+), 89 deletions(-)
+
+-- 
+2.43.0
 
