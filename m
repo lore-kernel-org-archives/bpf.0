@@ -1,138 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422CA3E959A;
-	Wed,  3 Jun 2026 16:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778CA3E317F
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 16:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780503767; cv=none; b=e5PBnanOok+eSiu6kHiMqSAdNsIJ0hIU/S5HUtS29CMHRkozIF/E7McRB1ael8Fm3j+23RL5D4H+otH7/WPaVYc++0QfqGJrLOfAlI8sGUtB1ETsaMbhzWpFjs7HPLjgIlVyzvLv0fX8gcWTrugS62AHqUVMBCjBMuJNEHa324Y=
+	t=1780504076; cv=none; b=VeF5a1v5ZPCRCy6PpLNTm93Catzrb8Ciw5idfr64X0QAEg3YI1p/iGTs2W6AVkbneX/KmHZvxk4KEd59nxWeRaxwBn9/lJe1OxKJGAWuSpZEuO9ahcNq3netqzRkoCrRsyb31MJH/RfZUXs1HXKmAkupCizEerUEtRU7CYiHJMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780503767; c=relaxed/simple;
-	bh=LeFet8aJxtSJyQ13LV6ERwETBJSY/W0pancMKGK78HA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WxvYWu+9BGQzF8Uebrxml828YaldnAfKhdGxULNfaJjLrF73xDRVu521zZ/Vek4cWB5hDhfRV/r4+2t1X+s75u/51fIl06sABHXY5SYSONLu/+KrUmxEf6KB3yaYE7Z7aGWpEgt4OcE0vjUcyC1w1KZnTs/fp0Sp+eKz+g9UUbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmKmrL6P; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780504076; c=relaxed/simple;
+	bh=bZWAhI/SNWesR7lukDoX5NGLCgeYv7Rk10k9NwhATLA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=czYxcDMr1Q8FTtDIRHQzUr64gLIJHmzUwoYMTJuasYAciLTDta8I7M9o0Iy+O0UIJXJeS5oiVxBL+8u7azq/Lw6JkwKVaKD9FRrwsDMLRpI2FuHlPedbAXCtRqM1E3WGOuUWnmOBR0cXAZIdtHkU2f1TIdBsXzm5dXAe2H29n+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lAoOHqiH; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmKmrL6P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024BF1F00893;
-	Wed,  3 Jun 2026 16:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780503765;
-	bh=CxPhfVSO1PMBoWPiKi9ZwlNxfl6TXOtrDKfoICaOCcw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KmKmrL6PswCLcYojvpvZX8QoCfztwKuJFaEFgpHaGxc3Vpz4WNJTGjNXUOdXgBMPG
-	 pfvWqWoQhPOk9xY3gH/FSWhOZBMAJNdcTVkuJHaEyWSr/cUJ25JOb/wA87+CGgvHXq
-	 8XHpMxjqKz57R+JVa29dzsNEtBi83+f6n5FGjxq9GGtG+zV1XSEVZ0JvFzn7ctkqvQ
-	 65peuRFmiA22Veq9kCRGtqCIkm4VxBh1KBgl3MiXlW5TUyQq5VtyopJIJTmDuMz5A9
-	 m6OudFzZkl4NQNqflq8rui6SMZo0KpZecbcFwKBdkVPTowovyF4pt6+gQEpKWBADT1
-	 yIzkRHuRwpS8g==
-Message-ID: <b6f6323e-6f5b-4928-b474-bd2743eac3f2@kernel.org>
-Date: Wed, 3 Jun 2026 18:22:38 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lAoOHqiH"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c85b2139015so1409395a12.2
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 09:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780504074; x=1781108874; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pd5YhtxLNp2KnXGrb45Y+o+N5pgMe2J5d5AaYwVVkHo=;
+        b=lAoOHqiHkGUQKO158ZG8BXYY7dp+xUKGtR0Uqd7YQ3hzvXx8cbmitf8nBbmDHGUO3X
+         WyCHEdkkzlYQ9bm4hhSJ2jgxQyMFzh4egE6wSU4BeeTtf0++tTZHjpjceEYm5nVXzEPq
+         8s5mh9hCc5fC/aqtto6ILqCCRK5A0Hw06w6cT9A5GZvdxVMDtRr3onb1WslsiwKGrLWS
+         SFH58u91/hd5ZmBxXAkOfeSZb9kT2qSxrG3u2f7zL/IueAtb12AJCucNLp5LoaT+0Yr3
+         AcvSJQPYP0upHmUbLwGjP6loiveY6Emstqzo9CEgm+aHFTxckrMN2xzHZBSO+NaalPBl
+         pChA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780504074; x=1781108874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pd5YhtxLNp2KnXGrb45Y+o+N5pgMe2J5d5AaYwVVkHo=;
+        b=H1bCRSh7PYn8TO+l64LNrTNataKk7Pc9KSCS726p/xll5x2iQ/lLYZLzljGjaqdWpN
+         V76V/rc2ll4m5AzvT1Ps3uAGvzYAJQPm/SViCaY40ktXZldTgdU1jGZsvZyqeI8mBOak
+         hPl5KBO2jNW9GdyTqwv+xnNgdHAjNsj13KPdwjvD9GExZLQjK+zCHBDUrPyPforp4wDs
+         Dindp+lMIG8AGuH8y4h2stnANvxEdOM4csGaEP2rY2yweRSCWoX9BOkavJfU9yW/e3ib
+         RDA7u/CxYlDnRrqsMxUaf7hmOGSmz9mV0VvylLpQfqPzZ0JqCZBeIVxGTFyrkn3LPlHq
+         dDng==
+X-Forwarded-Encrypted: i=1; AFNElJ+stjMEoTAocTEh5d2vig+h3Lkg52YJ7rH1A0s5W5tuQzP4K3y2buuFktvNZoG+ddpO2b0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkuZkH24HyVEwXzcPW2ABlCfZYx7GEqgzR4h0H1m7cNcfHxuZU
+	C90kRLBWnOyZD+9XAJNhKrVxNJ74TwTWDPSef8pQCN2ZUDuZ6LyLqHPi
+X-Gm-Gg: Acq92OGnlO8dvP+x9mtyymYbIBx/xqFir7T1oh7wOUTeYh+fd2rZjR24+SW5Wyo1xIV
+	h3YtOlKf0DwB7RuCvMwINDTP+xeD21ghrXFbMT+FktjkmE8j8FqNazRp2H+5VxNtiiEa53wvyNV
+	4Lyo5zcO/YOAurA+ZhmtYKznBm/EG7ekTcgZm+vJNwkAgzbQ3VlMVuOHew1JnP5hYO38g4mzeIy
+	0XzMd1lohh6jqWP5TjbJyenI6AmFtCJroxV1RpDsrm8SjfcI5fHZ2NOMo+CVcruDFmfvXu5OVA8
+	TKr8kCPGOEdIC5nmD39pvMtVBy2wT872eD8ODWpXi0vP04FGvqnFmpTgdf6dNmSO7sZ3jKmIhB5
+	x9ZGMSTAHyA/PaOKBKYOTmE+NRoxHxTfr08uZLxs8fGi+sT0q3KiY3UHzK4eyXRsVlqScvAGzFW
+	j3LcYrWt+nWU0WFcJ9FTtexoS9gBE8P0V09t3CkNYCP0GSHLO+9HyL8fmsQNu5vS7/Y/TnGZHnm
+	C8OBXX+CrQ=
+X-Received: by 2002:a05:6300:67ca:b0:3b4:813d:dae with SMTP id adf61e73a8af0-3b4978049femr4892709637.16.1780504073819;
+        Wed, 03 Jun 2026 09:27:53 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0a4e59sm2930976a12.16.2026.06.03.09.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 09:27:53 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: willemdebruijn.kernel@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: horms@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	aleksander.lobakin@intel.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH net v2] udp: clear skb->dev before running a sockmap verdict
+Date: Wed,  3 Jun 2026 16:27:33 +0000
+Message-ID: <20260603162737.697215-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-Content-Language: en-US
-To: rob.clark@oss.qualcomm.com
-Cc: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>,
- Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
- kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Boris Brezillon <boris.brezillon@collabora.com>
-References: <20260528093437.2519248-1-hch@lst.de>
- <20260528093437.2519248-2-hch@lst.de>
- <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
- <20260529135045.GA10647@lst.de>
- <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
- <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
- <20260601113831.GA25535@lst.de>
- <d7b08296-7f6e-4d89-ab3b-04e43d04929e@kernel.org>
- <CACSVV00k-fxW6+waHNqvmYcnVNDkRexoWWprFzfayZfqdyMuuA@mail.gmail.com>
- <CACSVV00dNWgpNVU5rB=Hmg+3oWF18yTyfKNr_tWesjoP1jMxwg@mail.gmail.com>
- <5e6948b3-d235-4b61-aed7-e8b4d0f5b452@kernel.org>
- <CACSVV02v0Fuc6=Rqyd89D-_tcSjEXuQmxz0+2-4aoRAEwJE4zg@mail.gmail.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSNWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBrZXJuZWwub3JnPsLBsAQTAQoAWhYhBKlA1DSZLC6OmRA9UCJPp+fM
- gqZkBQJqFFy6GxSAAAAAAAQADm1hbnUyLDIuNSsxLjEyLDIsMgIbAwUJGtCBUAULCQgHAwUV
- CgkICwUWAgMBAAIeBQIXgAAKCRAiT6fnzIKmZJIUEADFx/tREzUImHrEwVHeSvDFmA7tJysI
- UVrlvrM09E7GIuzphzv7jYmo8n3ANpCczLEVr4G0syYQdTigaZgv3+FQDIIzhKih1IHhu1Ei
- XHlywNWKnQxxQEUNi5Mwx43wQz5XVw9F1A7gtKBKNtfogO511hAbrzagrYajyQacEJ/+sfhZ
- 9Da8ltHIXD8pcYaHUfQgEusCgmEd9+KrUwrTbckFKmYq5chuE6yJ4J0EmWknL096jIE6CnzF
- FRslQ3B1UKDjxVsm1ZHfir5NeWszLkTvGFsddFaWTgh8UycESG6VQzKXjjewXu2pG7YQYRpj
- QKm1W5X2TkwWkXRBZTmfmbhxIUMh3+zf5wQ463rSmDN/8v81tdqBtAW6rH/kzg1GvkaTHXn0
- 507yEHFzBksk2viAuIxxr7km8+/KARYLIdGtx30EG8cKzAUZOK6WqxtNCsXUJNrVE8CWrCaD
- icoNu7Fs1c5hmPHdSTnU48ce67449DdnO4neLSNhRiGlMHJgfJUmgrxu/hcYeOZ3haWmEQ2w
- uW1Mh01OHi8QZHCEyAbABrPs9GUgccc/4eYXX9hIgxfSkYzn8f+8NuIFPWl/0uTvjgqU29FQ
- SbzOLxHq9439Ox40G5mS5eZXRGxITYR+6TXvRGI6P/264jvflnr/pDGUttaikU+0W+1uxgKH
- cmYbEc7ATQRbGTU1AQgAn0H6UrFiWcovkh6EXVcl+SeqyO6JHOPm+e9Wu0Vw+VIUvXZVUVVQ
- La1PQDUi6j00ChlcR66g9/V0sPIcSutacPKfdKYOBvzd4rlhL8rfrdEsQw5ApZxrA8kYZVMh
- FmBRKAa6wos25moTlMKpCWzTH84+WO5+ziCTsTUZASAToz3RdunTD+vQcHj0GqNTPAHK63sf
- bAB2I0BslZkXkY1RLb/YhuA6E7JyEd2pilZOrIuBGl/5q2qSakgnAVFWFBR/DO27JuAksYnq
- +aH8vI0xGvwn75KqSk4UzAkDzWSmO4ZHuahKtQgZNsMYV+PGayRBX9b9zbldzopoLBdqHc4n
- jQARAQABwsF8BBgBCgAmAhsMFiEEqUDUNJksLo6ZED1QIk+n58yCpmQFAmfIHFQFCRYU6J8A
- CgkQIk+n58yCpmS2PA//bqN1LfcotmArgElsa+0EGZSQlYgK48pm8WAeTXTngudP9IJ4SuKY
- HR5RNjHcBeqN+Me0zxRqYzRb8nGanHEkDyf4Im8DQM8d6vbyU+FcPmG4skud4kgS1zMHnlVd
- SXfSIwKC/hKgdHG8aBV7545Lz9X6Iohea+94wneD0aw/hqF+QWewGZhWJriWAZtvEkzNjQOi
- 4U9F/trLten/x7bpphDSnDMKJtITbtzATT1Dq7o7VpIUK1nCTQALMuMjKCdi8OdU/+V+R3O4
- 0PXWvX8qrvqYapVbZ+9KqT74FsuB0Ya9uXwgBF2Q6cRuETZk5vqaqKxzqoQZCO8AOz/58j6O
- 2RHNy/mZEN+7tJ5Tsq42zVJ4jxsT8b9YplavCMsnBgDeRWhcbYhCyttoL7nYISyWg4kQYZ/P
- wIV3OuNv2f8iKYsxNsRuClOAF82+gvqOy1/1pprFjy8uo2pkoOrb63aOP3vO5VHnRKgra6dq
- NcaZ+c6J4H+nEJGi2SkHAUJz5oBzuThvPudLvPA/SK8sKoM01IRxSihev/S/5WLazXB1PGem
- OCbvzC1IjWJJraxiDJ5IygokapUa2RP7+WBR22skQ3SSl6G107QgWKSyTOGWEaRmV53vxQLV
- jXuCmzSSasTL60zq5yGrT4/DYQVSNEUiUbG4pYekxJujNeEDkUlky0Y=
-In-Reply-To: <CACSVV02v0Fuc6=Rqyd89D-_tcSjEXuQmxz0+2-4aoRAEwJE4zg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 6/3/26 13:13, Rob Clark wrote:
-> On Wed, Jun 3, 2026 at 2:17 AM Vlastimil Babka (SUSE) <vbabka@kernel.org> wrote:
->>
->> We know p->pages is NULL in this case, right? Because it was allocated by
->> vm_bind_job_create() using kzalloc().
->> And the job can't be reused with a leftover value?
->> (msm_iommu_pagetable_prealloc_cleanup doesn't set p->pages to zero).
->> Or should we set p->pages to NULL here.
-> 
-> Correct, the job is not reused.  But I suppose setting p->pages to
-> NULL would make things more obvious, so no objection to that.
+On the UDP receive path skb->dev is repurposed as dev_scratch (the
+truesize/state cache set by udp_set_dev_scratch()), through the
+union { struct net_device *dev; unsigned long dev_scratch; } in sk_buff.
 
-OK, did that, just in case. Thanks.
+When a UDP socket is in a sockmap, sk_data_ready is
+sk_psock_verdict_data_ready(), which calls udp_read_skb() -> recv_actor()
+(sk_psock_verdict_recv) to run the attached SK_SKB verdict program in softirq.
+If that program calls a socket-lookup helper (bpf_sk_lookup_tcp/udp,
+bpf_skc_lookup_tcp), bpf_skc_lookup() does:
 
-> BR,
-> -R
-> 
->> > +
->> >         p->pages = kvmalloc_objs(*p->pages, p->count);
->> >         if (!p->pages)
->> >                 return -ENOMEM;
->> >
->> >         ret = kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, p->count, p->pages);
->> >         if (ret != p->count) {
->> > -               kfree(p->pages);
->> > +               kvfree(p->pages);
->> >                 p->pages = NULL;
->> >                 p->count = ret;
->> >                 return -ENOMEM;
->>
+	if (skb->dev)
+		caller_net = dev_net(skb->dev);
+
+skb->dev still holds the dev_scratch value (a non-NULL integer), so dev_net()
+dereferences it as a struct net_device * and the kernel takes a general
+protection fault on a non-canonical address in softirq:
+
+  Oops: general protection fault, probably for non-canonical address 0x1010000800004a0
+  CPU: 1 UID: 0 PID: 1406 Comm: syz.2.19 Not tainted 7.1.0-rc6 #1 PREEMPT(full)
+  RIP: 0010:bpf_skc_lookup net/core/filter.c:7033 [inline]
+  RIP: 0010:bpf_sk_lookup+0x45/0x160 net/core/filter.c:7047
+  Call Trace:
+   <IRQ>
+   bpf_prog_4675cb904b7071f8+0x12e/0x14e
+   bpf_prog_run_pin_on_cpu+0xc6/0x1f0
+   sk_psock_verdict_recv+0x1ba/0x350
+   udp_read_skb+0x31a/0x370
+   sk_psock_verdict_data_ready+0x2e3/0x600
+   __udp_enqueue_schedule_skb+0x4c8/0x650
+   udpv6_queue_rcv_one_skb+0x3ec/0x740
+   udp6_unicast_rcv_skb+0x11d/0x140
+   ip6_protocol_deliver_rcu+0x61e/0x950
+   ip6_input_finish+0xa9/0x150
+   NF_HOOK+0x286/0x2f0
+   ip6_input+0x117/0x220
+   NF_HOOK+0x286/0x2f0
+   __netif_receive_skb+0x85/0x200
+   process_backlog+0x374/0x9a0
+   __napi_poll+0x4f/0x1c0
+   net_rx_action+0x3b0/0x770
+   handle_softirqs+0x15a/0x460
+   do_softirq+0x57/0x80
+   </IRQ>
+
+The rmem charge that dev_scratch accounted for is released by skb_recv_udp() on
+dequeue, just above, so the scratch is dead by the time recv_actor() runs. Clear
+skb->dev so bpf_skc_lookup() falls back to sock_net(skb->sk), which
+skb_set_owner_sk_safe() set just above.
+
+Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+v2:
+ - add blank lines around the added codes (Olek)
+ - use generic block comment style (Olek)
+ - Cc: stable
+
+ net/ipv4/udp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 0ac2bf4f8759..70f6cbd4ef73 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2011,6 +2011,14 @@ int udp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
+ 	}
+ 
+ 	WARN_ON_ONCE(!skb_set_owner_sk_safe(skb, sk));
++
++	/*
++	 * skb->dev still aliases the UDP rx dev_scratch (its charge was freed
++	 * on dequeue above); a sockmap verdict program may deref it via
++	 * bpf_sk_lookup_*(), so clear it -> bpf_skc_lookup() uses skb->sk
++	 */
++	skb->dev = NULL;
++
+ 	return recv_actor(sk, skb);
+ }
+ 
+-- 
+2.43.0
 
