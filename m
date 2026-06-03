@@ -1,269 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561AA33BBB9;
-	Wed,  3 Jun 2026 14:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780498378; cv=fail; b=QqRDW1hJ2WLWIY7gOGHqFYWk1RXnZXn/r5gmIIj5K0F5jz0djlBfdKpo5jMo+vvJVNhW13n9NHTEpaAGAdCcIkq14bqP+sWo2uxVIPMxQF/h2HYp4Y9bsCWLBIsSUK54kcHPpdSuo857R2ISKQh5vUTViMvRZS+Zrzv29nwyX48=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780498378; c=relaxed/simple;
-	bh=5bXBrWnLucQfOEr1loG/OjnPWx28CIfbaTvCJxs+nxU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mBWIDBCldediM6G97W8Z6SVBW9qp2wj6FuJoGkYGsOhl86Nig95VfUEscQT0SycnxZCbNGLTbibeBVQOm9gaNPCfIoEaMTjR4JNPRcctHYmGKfxZPdJ3NYunTGdwpkNccEAGn7C0rBg8MItuO5MHatIRew0bVl73JgpLHCg23XE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DHeVSmir; arc=fail smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66D62D7817
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 14:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780498427; cv=none; b=omP9qiwhkMAPFvrrW242F7+AEHEfbNcbjnRMeud4Dp9AkjBk3FqljURr8JlixhVumzjDLmJN2dgrtx1QXIfJW5pn3W1kq2ZplZcrUMc9qKWZdypsbmwdmHcdPSCIw2gJIGPDxu4EwS8Vqs923Ck4Bb3zqP5uvH5hHMsqMWkl35c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780498427; c=relaxed/simple;
+	bh=oIUn0YlzZFSw1Rp+7/LMrTQzBtsZvxehwH1Dlpr1sHw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=E4j05pL5j+WpLLlOB2S/rcsM6KdE7m74ZAqAXumQohY5omU0i8DC6O6UXHnAiD7tHfx/KOjwBlrF+wqpPsfr0oGpZuP/QnDSLh0dCRcshL9wj8gFnMOMfZgOomwv5D9hLYdexyxqTSTWFFaQHeOJH5q72MLhK7Ei7rAyxqZ794k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBtxWzJ/; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DHeVSmir"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780498377; x=1812034377;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=5bXBrWnLucQfOEr1loG/OjnPWx28CIfbaTvCJxs+nxU=;
-  b=DHeVSmirlQ5OOaIM4fTQpjdeiE+pgKPgarqrMnxRLH68I2TlZozMHNIa
-   vxoO7v7rWMRU098yqCDvTGeaSZ/bNOiYnrJnsFIZyMFA6sqRX2fKfdHML
-   B8n+Z9j+P4+Ergh1rEtmEVkVwQopy3KBt99zyqpt67fbAAsUQnLJqAjGj
-   F4zl1aMANzPavGFmj+RKcn9FfcJyUZIpshSNw6bTS2Y7O0V1Q9Dc5k9Hr
-   zgZCS2GtOh+n2L9gs1q8PeYszabl4qWIAwbnNO1d8z+NUYad/b9CtYIEI
-   odAZBEHzN4DC63BoJKJHTrDuqrXC1b/sD5mSXR9S84zerjOr9ulKZ88xF
-   Q==;
-X-CSE-ConnectionGUID: dAKiWJozQvmR12qpf9YPVw==
-X-CSE-MsgGUID: xDY8144aQwOWTXlVcuRMLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91993208"
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="91993208"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:52:56 -0700
-X-CSE-ConnectionGUID: f9mJX/uyTNKmmzoF21dOmg==
-X-CSE-MsgGUID: 4lCTRQcNTAmHyQsjcQ+b6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="274500380"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:52:56 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Wed, 3 Jun 2026 07:52:56 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Wed, 3 Jun 2026 07:52:56 -0700
-Received: from BN8PR05CU002.outbound.protection.outlook.com (52.101.57.56) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Wed, 3 Jun 2026 07:52:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g/FDAnPJN89TH6MfrlVRDT9vEuW4hby5uLE27MkbPyyx7kvfQA5yadSv/v+yW4CrFSXaoBPwPc/6VhI34ImXzU/Z6lUi8OWfFaRBLqmArO0O12vSK96JjMjOv7UBTl7eRnRZhSXNXk31B+zdKd3SnbZQeo5q3QNS02EeWwt+Q96Gu9hbTTxy4FquYDv74pMMvYGZuw18vPy1/QNQYt0FQyWaHt6Mu0b65s3Z/MYLqfPqYC0Aa/PAEVuK+If5VKf2HP5XgsjvBepG5NQaQ7q7Ss4v9jb4dQz5KPPk/SBeh6xhxR9hL2RADM4zCIHzODWc30Ns+I2l+RPqfTZsXijZSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AuAVmbq38e7KovNNxAYscpw/LsPNzgtEUhhsGWQqj1Q=;
- b=B6f5icH+aerqOOPhbQ7HDXRIFy0sB+8T7aZ8AXXnDguqhOshq1w6+uWp42JEKaEbX6a0bZmZcGC2GsI1At5FG+dzXGh67NdJi0mNzPelaPwhJk+qaviaZkk/nmfjaUCyGMBLbeI+XkBTK8EnUohoh6NQ+BhdQbCH6XDCjyk0JkPJur/ThwSdpZzNFosFzFlQ90TgMpnEwWHahylbMlNwv45lupWNY5g6kBwMgEBBkSyr2y2nN+u2qSlJmPkSbqV5b9keiMCXyCa4dXETaG5iJxkL1RxXU1xViys1AarVdCXcIr5dKJHMrLI4iiRsPFU6zIhVRRy0SYUfhJ2pcmi0Iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA1PR11MB6991.namprd11.prod.outlook.com (2603:10b6:806:2b8::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
- 14:52:52 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%5]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
- 14:52:52 +0000
-Date: Wed, 3 Jun 2026 16:52:46 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>
-CC: <netdev@vger.kernel.org>, <magnus.karlsson@intel.com>,
-	<stfomichev@gmail.com>, <kernelxing@tencent.com>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 1/4] selftests/xsk: Introduce helpers for
- setting UMEM properties
-Message-ID: <aiA/vvEkP0Sp8kUQ@boxer>
-References: <20260603060327.298389-1-tushar.vyavahare@intel.com>
- <20260603060327.298389-2-tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260603060327.298389-2-tushar.vyavahare@intel.com>
-X-ClientProxiedBy: WA0P291CA0009.POLP291.PROD.OUTLOOK.COM (2603:10a6:1d0:1::9)
- To DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBtxWzJ/"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso117168135e9.2
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 07:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780498424; x=1781103224; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oIUn0YlzZFSw1Rp+7/LMrTQzBtsZvxehwH1Dlpr1sHw=;
+        b=HBtxWzJ/0zLX9xrDjRJOZ/z+jgpErfR+WPya6/DlLUBFgnJGQSZw5Zxz914S9kXDye
+         jX9byn2zLV314m3kXkYin9DiCuLQzEYoBywOKYKoU1Vc4iSjhAnw1pgd6x21NLdc9Cee
+         pKmzGXafzo3fOXuUa+bxhzzqpFuaBq3K9u1tha5gLJiGMnCuQJ7KBLhKpzrcI3lbHbPS
+         TJ3lHebeuEiY3eGXvBB40dTaRmCbP3/B2qNRZ9NCVbq2mBNT4RnJNLaJK72kOweCXe7i
+         Uc/x07BgNMa9E2bn6x2cv9rSGZFPdsXglhQQbV3wCzX4CrLNMSuy3GctHbyrmVjnd324
+         lHkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780498424; x=1781103224;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oIUn0YlzZFSw1Rp+7/LMrTQzBtsZvxehwH1Dlpr1sHw=;
+        b=C7sSHHZyTTn8PvjHUfOkZKP68KZ99Cy14Le+XlZ7gYdXB9YXt1DwYSL81F+pbR/I7H
+         HsVxr6InHqcwqUlxfLEwFe+x10+m3DDVu6hnWhrvTRn58DqIimEt0Tg3JBF35P9s9azi
+         36p/WpI5chtAj6y2SIHh5nPGidG8HnDK2+e+rWYipvDb1EXL2ImkrA4DLUnFO5dVcj1T
+         aHM9x/WSg5SIYKVwXtCzOlZXgCUcvRYxCnXdsaxKskOPBuH52LciFgS2WEs8D6cocO5g
+         Cm+MM/bKZVmn+l9d9FbnWz//yAtzzrgomGCHxIDPzZqRlk+O9GUNVDLX8sHroeM1rApi
+         TTqw==
+X-Gm-Message-State: AOJu0YzX+yfDgvYiOjVK1ErojlYcAyVdB0U1Xe9/a8DScaZJy2gDGI4U
+	w6l+szvGIx4+G00kCJMTICut4ir2Co6msR176xfXO4qOXOBW0eGIZcQdnnfVxBZ6
+X-Gm-Gg: Acq92OE8uH8LJevfdney7By5cNNDFUdCt0V+nKl2j5+3EpOUi9IeWheaWsFl96Df4dp
+	X1w9QJ5Tzeb9ZEvTqRfiBWcYA3L2rX2GWveUfjMvQcJng/Gy+aqzPLLJjWM673bHg3AZyWZ0+eq
+	/uWG7vzt1M0fvEFXOvh48+MWp9Pj2mY0gPjy0jCPY8RmNkDZLW5MzbioslFCaeJuT5YOISfgj+6
+	snJm+WRAuCBVv+4SGm3gPYPn75cgI8G7TMGewfrN5KGjxn7yvqHaWMjNi+vak7aaXuFSmLfApZl
+	IStOKyaiPUCe5GOX/QxqaVxBd5+zE4XcNbEBqU8hi3bTX6LBeVC9Irq/vHaIIhzqlAiqbX0y6QT
+	YePvLuz/u9eMiZNZI1PlRu0ybdroOy+WMF202vmyyo65I9IG+S9A2004a8/4M9CHHMoSqy/OM8l
+	CpjjQRQXYYHkV/0bR/l1TkgYbtJoVSp00STCplUQgBMl/fa2A/5SryYFQlLBM2Kb6pp2IrXCKGM
+	jlBtgdxQIbw+dcUTC6Sfg==
+X-Received: by 2002:a05:600c:8b2e:b0:490:50c5:8153 with SMTP id 5b1f17b1804b1-490b5e73ed4mr56452445e9.2.1780498424118;
+        Wed, 03 Jun 2026 07:53:44 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35fd33sm8781721f8f.35.2026.06.03.07.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2026 07:53:43 -0700 (PDT)
+Message-ID: <9a20906a-cd26-42a6-9902-674c55f6231e@gmail.com>
+Date: Wed, 3 Jun 2026 15:53:43 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB6991:EE_
-X-MS-Office365-Filtering-Correlation-Id: f153eb69-8d0e-4924-66c7-08dec17fc9ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|22082099003|18002099003|17002099007|6133799003|4143699003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info: O8rDGGF0uP3RJsNueJsHRflo56JVNpAgZ7PS1bVX0AKUCasa/V6itb8AtRjHTkLVp0YwhGd29F4ShfhZptUVZZO5XjTTblceBYnRB8rZKsBGGgkoBpMGC9jMHuccgHDh25O+CdX4ddumTyWTgcBT4qns0HoD0oLC0fMyRe0/og1FxSQou5DYrxtVh+LDy99rP19no+zMcaAn3rucHNksX+ri1tgxC0lpORWwZVkVvACGju/mFymErxlIelYlEXJPg0B/Oe9SfbgiOTDg6A2qA6x9l644npt8VXdEJCoNaDPPudUAe3oKWjPzCW9gUdaxNhg1XuMqf25Eud737zZGwGWAs0PAVER9HSSWgvwxmF0HwrP2d5/mTtOsk9llZH2mY2aEssvdxSRJ/JxwSSq3XTRh7BJfZpZf7mPfZxh1N2RuXLc/FDNrzLBCfOHYSYXGOP9IJ/6Om4tinLs3SoKk+IO+3Oo+ZkYhodR1CfmlGUOIXWQVZt+SKFuJT94jd2EtSZ2gr6445t3GQA+UTnTFG0rrzg62Xzz9E2WerrVFHosnftgZIiDJXtpKHkLgEqrdmeTONFYQQxwi3d69xuA6f63BiAAcViH8ly8jE/nnGrKQLSW1h+tB8S03RIpDsF5pEgm7QhZcw4gp+CLJ7gkq1B/MP9lCK3fc/nT4fuZ+/1eaHcQAhIinM9Pi9Fe8X4Ww
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(22082099003)(18002099003)(17002099007)(6133799003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mf+yLysV8iQ9CmxKryy+cgjTcpkOGBe2SQ8z2K/JZlucy2UCiZC/yYbIe3Vq?=
- =?us-ascii?Q?JNtkQa1lFQBe/5TtUlnfxROkFeokZgSHOk2C++w8nG4rstk5OvxioRrM8bdF?=
- =?us-ascii?Q?AGIHBPA9H6POBKhABdGfudfTQfZQ9w7fyGjKa4maP4QLifMqdrfr3CPRGXyO?=
- =?us-ascii?Q?ZT7Ty2ZvtQC/fgVyIoeIKmq/MYQSoQNdw7xsowXw7uHjRi2TC7jiM1gpQZvx?=
- =?us-ascii?Q?A6tN3gvJIdJvyH+EmgCre2FEJtvn5PvOhZprfYgzDfRTDN+JpiOtKOSQIs1t?=
- =?us-ascii?Q?Bxv3uG8DGNP5nfjwiaqPionAFn+6zKZ9QF0M4X7dF1ERvODDr36Llphd900M?=
- =?us-ascii?Q?ZNBYIuP+8UfvFjPG9ZerkQ0PpeDnT755kVm+hgfxC274QDZOzcUUdhAnv5uP?=
- =?us-ascii?Q?JOguZJenIApFWup5aFrk8lzeQmXG2mE7uES4D1jpIFlicchbPtAAmrFZTIj1?=
- =?us-ascii?Q?u/yjaN4Q8+gHVaCz0eochi0kpV8SaJZyrhtHdHyWkx0LyL8N/8AXREkZx5Sj?=
- =?us-ascii?Q?tQq3LWo0J0LR3dYKrFaRWd9MuSKk6LSw9QnE64XvjWPUh9Kyn7ZG9/rt346s?=
- =?us-ascii?Q?TE4CmRLrkbNQxR5fTgQsnklcy3uvM4EyydXD6EeDNWFcbD/X9aBgasXEpbj5?=
- =?us-ascii?Q?SYzQRcZ87w9L7HsIkRKsP5nUtRDOjmetLRehYa3dW0hg6Bim1C0wd4c3mxRc?=
- =?us-ascii?Q?TdK4kXVhIgn6KhG2BUv3PMXY0/GEXeQ8/Wgho8+kQgF9rydz7VO4URXYffzw?=
- =?us-ascii?Q?CYjyif2gqkYL1jLTk/R8gQkIQoHHKJ0nxigvAKkkvNpNnZkLMt2j//9zMiu5?=
- =?us-ascii?Q?iUsGKOW9j8fyw1E++fD3NRm+rA1u588qUpyrmCv+O6wfns/xyvqhoDjEMaZX?=
- =?us-ascii?Q?13SgDBQ/fGToI/ry2EKpHfA5IrpaPO5+4QYYx+0ONSLJHCpSKmTq9brGOk/e?=
- =?us-ascii?Q?ex0rWV3o8qkWsJZvpcR6Lkkv2UUpY2GnxbhQ0WHmLX2HUPledTkiABRCSUv2?=
- =?us-ascii?Q?XIPxxq4FiQMF1KaVP5+zSJs2aqZNQd/XROlDD7kkvBlKNPXaDXPgDXVkfFMD?=
- =?us-ascii?Q?9wnXzFcdUIuOA9XMCJ7BUQhnhZvgZMiOzsT4D+0hciysQ2x+J7BiyFzhvCiF?=
- =?us-ascii?Q?g9i133SewF7lPiGFw6yOLLdEWhImJMQqsTNrnv3WSoXkVABFKMabp/G9ID2i?=
- =?us-ascii?Q?QrraeDOScw2tAQUTHSf9KQ1DZsPdyycDMlF2Pkck2lgKP4Gj7SzFfIHMm51D?=
- =?us-ascii?Q?L1CorA5OyB7TT0FKYtgp1b0I/6BF5AP1Y2Qb/AAn/NRtspDwXCdY4oQYLrlw?=
- =?us-ascii?Q?RkYYup02ggOLR7/kGC9VsArQiCYSq1Jd7MKm7hnH5HDsh/YOETSv8GyyiyU6?=
- =?us-ascii?Q?KURNTvX+fdTSFVvQMMCibQhYhVqi+gTP6OtuHwJ/VdILmKRv4YTzWL7weCRT?=
- =?us-ascii?Q?d0BJGYIznYo1TwG2uKDP/c0v3Rls2YqRiysxJsBRdzEt2Gd0HazoRfsdFS2y?=
- =?us-ascii?Q?VWBX1nCktkm/OTM/MF5pV79ua4MqCLXpLqMLLIvHZiL08yQ5fAVOLELFKXX3?=
- =?us-ascii?Q?Mw5RV9W+CCdBStCp1D0rX19AYZIAvIv7LCxRqom01yBwLekr786DDHVHTvQU?=
- =?us-ascii?Q?d5aAywYMvrx/Gs40PIwt3kzRXgUzvnRvwBsr2Yo9HeFksVaRwOS8r1IOwo63?=
- =?us-ascii?Q?C1JVjORuGIdGw6LcPG6yH9twxub0TaSkUgs8B8H4vyPGjahqX5blOMmsGoHL?=
- =?us-ascii?Q?zp354sM5wtoQB4yt+t2Usk+VYlAqohI=3D?=
-X-Exchange-RoutingPolicyChecked: J5OKhVSdgbKskhQHZydMYIJIYoWMhIN2ot/z+c54AuLQn8Ajh3DzYeh6xO8Rb46awNhyE/zftR3JqG5IdouGGTxyv8/6nOqDjS6AS4pJhNjS4B7V2AXwneSU9mt7CGbgZ/UHtN9kUH+Yxp3frKpAF2EYi+keqV/KvKjLNoGTNWp9cJXNiv1z7UqutDxMk6anM1PVR/N8Q8PYJsuERHHH23wfL+gkZ2VlRDMshgKspaOa60ktM2G2t5PUnwzIxtFSxx+MBQgve/f3RVcF20sIxmjoqozv8ujvsnNKG/pGuh3psWSWnWl4whh5Q20j5OFg9r25ygdKleIgS2yJkYoqeg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: f153eb69-8d0e-4924-66c7-08dec17fc9ea
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 14:52:52.7089
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0mldOBzxyhESVl/Z67R+kUi1n27S97LJhPBvt0grfPgZTyK9sTs4ouS11SGNJm8mSKdTVLn9EjI3ysmrxLkc6q8AFOIcLTyA7iIq7m9X6Qk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6991
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: Fix flaky file_reader test
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
+ memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>
+References: <20260603-file_reader_flake-v1-1-7f3f52d1e388@meta.com>
+Content-Language: en-US
+In-Reply-To: <20260603-file_reader_flake-v1-1-7f3f52d1e388@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 03, 2026 at 11:33:24AM +0530, Tushar Vyavahare wrote:
-> UMEM properties are set via open-coded field assignments in multiple test
-> paths, which makes updates noisy and error-prone.
-> 
-> Introduce two helpers to set UMEM properties through a single interface.
-> This keeps setup logic consistent across tests and makes future refactoring
-> simpler.
-> 
-> No functional behavior change is intended.
-> 
-> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+I forgot to add bpf-next tag to the subject, apologies.
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-
-> ---
->  .../selftests/bpf/prog_tests/test_xsk.c       | 36 ++++++++++---------
->  1 file changed, 20 insertions(+), 16 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> index 7950c504ed28..3369450da974 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -303,6 +303,18 @@ static void test_spec_reset(struct test_spec *test)
->  	__test_spec_init(test, test->ifobj_tx, test->ifobj_rx);
->  }
->  
-> +static void test_spec_set_unaligned(struct test_spec *test)
-> +{
-> +	test->ifobj_tx->umem->unaligned_mode = true;
-> +	test->ifobj_rx->umem->unaligned_mode = true;
-> +}
-> +
-> +static void test_spec_set_frame_size(struct test_spec *test, u32 size)
-> +{
-> +	test->ifobj_tx->umem->frame_size = size;
-> +	test->ifobj_rx->umem->frame_size = size;
-> +}
-> +
->  static void test_spec_set_xdp_prog(struct test_spec *test, struct bpf_program *xdp_prog_rx,
->  				   struct bpf_program *xdp_prog_tx, struct bpf_map *xskmap_rx,
->  				   struct bpf_map *xskmap_tx)
-> @@ -2025,8 +2037,7 @@ int testapp_stats_fill_empty(struct test_spec *test)
->  
->  int testapp_send_receive_unaligned(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	/* Let half of the packets straddle a 4K buffer boundary */
->  	if (pkt_stream_replace_half(test, MIN_PKT_SIZE, -MIN_PKT_SIZE / 2))
->  		return TEST_FAILURE;
-> @@ -2037,8 +2048,7 @@ int testapp_send_receive_unaligned(struct test_spec *test)
->  int testapp_send_receive_unaligned_mb(struct test_spec *test)
->  {
->  	test->mtu = MAX_ETH_JUMBO_SIZE;
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	if (pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE))
->  		return TEST_FAILURE;
->  	return testapp_validate_traffic(test);
-> @@ -2337,8 +2347,7 @@ int testapp_send_receive(struct test_spec *test)
->  
->  int testapp_send_receive_2k_frame(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->frame_size = 2048;
-> -	test->ifobj_rx->umem->frame_size = 2048;
-> +	test_spec_set_frame_size(test, 2048);
->  	if (pkt_stream_replace(test, DEFAULT_PKT_CNT, MIN_PKT_SIZE))
->  		return TEST_FAILURE;
->  	return testapp_validate_traffic(test);
-> @@ -2363,15 +2372,13 @@ int testapp_aligned_inv_desc(struct test_spec *test)
->  
->  int testapp_aligned_inv_desc_2k_frame(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->frame_size = 2048;
-> -	test->ifobj_rx->umem->frame_size = 2048;
-> +	test_spec_set_frame_size(test, 2048);
->  	return testapp_invalid_desc(test);
->  }
->  
->  int testapp_unaligned_inv_desc(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	return testapp_invalid_desc(test);
->  }
->  
-> @@ -2380,10 +2387,8 @@ int testapp_unaligned_inv_desc_4001_frame(struct test_spec *test)
->  	u64 page_size, umem_size;
->  
->  	/* Odd frame size so the UMEM doesn't end near a page boundary. */
-> -	test->ifobj_tx->umem->frame_size = 4001;
-> -	test->ifobj_rx->umem->frame_size = 4001;
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_frame_size(test, 4001);
-> +	test_spec_set_unaligned(test);
->  	/* This test exists to test descriptors that staddle the end of
->  	 * the UMEM but not a page.
->  	 */
-> @@ -2402,8 +2407,7 @@ int testapp_aligned_inv_desc_mb(struct test_spec *test)
->  
->  int testapp_unaligned_inv_desc_mb(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	return testapp_invalid_desc_mb(test);
->  }
->  
-> -- 
-> 2.43.0
-> 
