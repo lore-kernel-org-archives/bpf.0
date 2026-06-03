@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36303783C1
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 17:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4863CBE75
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 18:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780508999; cv=none; b=iILXnp/NLCytF7EmfmumANePFGcnjlSQT7PSPmvPsohS146+TDn4kSev1mKAQWpuSpEah971EKEt/N33PVwN8QYEiFXkWLSKq4J/0ldZJm3QZMgprorXam2dXoUCg2i3ccpUgG1zqIw7Wwf9PnBuVOPWbnv5XHKTcXmnf9PoWa8=
+	t=1780510486; cv=none; b=LKqylj/iBlKjby6lSi0SStf7lE0VrZG1SxuHecbB40uqLTKTbslrfSU7G3/RtJ4c7YEBnvg0XNbeVk8NtwZSJn4iA3Wy1yDL+wWfCN67V5tbu90ZO9V53tQZSXt5Wro9jyo+iuhbbWi0SAcUPbAWDlAQAyamnJjTZXccfBPKr08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780508999; c=relaxed/simple;
-	bh=5zOwfEwDnaM4EL13r+AKL25SZeUeJKZeqkq/Qwtt8ho=;
+	s=arc-20240116; t=1780510486; c=relaxed/simple;
+	bh=7wyhagYve3qVDJkqFip1pCbXZPyGAuUuewROLUXIQ04=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WQfRcjRVw+mGMaHkTkkvzdfjpf0ErOCGNGP4lBf1z3Ujk6hhKHcakmejpiariaP+4YpA3QLhGz5aeXzQSqsW7KFEP195wZWP7d5PtVpMXAiybxvl1KpgBWNBHFaGgOAnV2XJ5eWESqTkyTzl74C6YDKZCnwzKzoymimrLe31+Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkleZfjp; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=b0DAqEnKgZ6DyDksN48YtnWxq8ZVcBiycxJTst1nKHcfbVpCdM8oetnVT9TV0Ai34bJFz6US9ZZ1XZAWf3msBkXXwd95/zATI5ImL1tx7TqrXkP5LqGl9qNkqIrEu1yjHPTuQs934P2Vex+sDfzzi4nnfbx8Oy9L2h8neZzpknY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLBHr1Nv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkleZfjp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729DC1F00893;
-	Wed,  3 Jun 2026 17:49:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLBHr1Nv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5F11F00898;
+	Wed,  3 Jun 2026 18:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780508997;
-	bh=tWM3p+05VYUNPuWnHQY7V2Rg+lehOcL6Lpn/w2yeug8=;
+	s=k20260515; t=1780510484;
+	bh=7qxXSrhY/QBKkt7H79In4b0ZNX2q101wbGL2/c6EQFI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AkleZfjpOHEsCO4AqFYx4Mw+v9irQQPwepZ8tB9hnDlLGDDta85VGc9xreVQd5jnV
-	 eNTur9mgoD7aN5iRHyC0Jsoj/Yw8GWZZcbLt3gdQBfWr+CByKfw5s+y2Fwi5Kltgdd
-	 KK8Gxcmb2dm73a/VJVTq11LFsHbX+0m2f6v1UQqIskPYmULT+6Qg/9tFFCBcrTSn3I
-	 WNo57F5u8PzV6HD1/TOcPs1fMkJbXEJHKy4+T2ec5gKp5D/jjVmyAtMpXZNPavI1XN
-	 HBRPbCMkNuVytR295QcNCZ3x6c0k/zdelYSSz2w/nI7YrTP6qd4xw7AK1yM23s3S70
-	 EXxy7fMzWJYCw==
+	b=JLBHr1NvPiNZ63kJYqXrZzCSFQOaX3/bfRnohJRBrHsg3Z+PlfVtG07KaBiJuF3bt
+	 3d/j9In7LmqFGvieOVaK6bxwftbLeLCaAbnptZ7YZUZH6dH+Ic/xuRstsFUz5kLwGY
+	 EJytYQuxQdeiVQDRwnVmb4q/gT7EOL2u85LAUHTbYNGRnv7fnlwWnWqt1VYte1ts2Z
+	 5LUle6VlOBCyifdF67ylwONR7eI8LB7P3LH7fPqZ5M9DUDkuCXYf0jOf5s7Dhf2t04
+	 Fx1TIa888rwcTG/oOJbXUawmDoEJ/dP22z96cCLraVTruvOCaYTJbxGCYyqtNegP2T
+	 n7pL5Ij0IGIeQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
- dependency
+Subject: Re: [PATCH v11 1/2] tcp: rehash onto different local ECMP path on
+ retransmit timeout
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Korenberg Mark via B4 Relay" <devnull+socketpair.gmail.com@kernel.org>
+To: "Neil Spring" <ntspring@meta.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
-References: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+In-Reply-To: <20260602181428.2318919-2-ntspring@meta.com>
+References: <20260602181428.2318919-2-ntspring@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 17:49:57 +0000
-Message-Id: <20260603174957.729DC1F00893@smtp.kernel.org>
+Date: Wed, 03 Jun 2026 18:14:44 +0000
+Message-Id: <20260603181444.9C5F11F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,141 +46,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] The 'dump jited' functionality is completely broken for statically=
- linked builds of bpftool.
-- [High] Linking static LLVM archives into a shared object plugin will caus=
-e relocation errors and build failures on many distributions.
-- [Medium] Hardcoding the absolute installation path for the LLVM plugin pr=
-events running bpftool locally from the build tree.
-- [Low] Multi-line comment does not follow the required BPF subsystem style.
+
+New issues:
+- [High] Missing mp_hash initialization in tcp_v6_send_response() causes TC=
+P control packets (RST, TIME_WAIT ACKs) to use a different ECMP path than d=
+ata packets.
+- [High] Unconditional txhash randomization in BPF syncookies breaks symmet=
+ric ECMP routing for IPv6.
+- [Medium] IPv4-mapped IPv6 connections incorrectly apply IPv6-specific coo=
+kie txhash logic, biasing queue distribution.
+
+Pre-existing issues:
+- [Critical] bpf_sk_assign_tcp_reqsk() partially initializes tcp_request_so=
+ck, leading to uninitialized slab memory usage and wild pointer dereference=
+s.
 --
 
-commit c9ad3aff3b32fd9fdba7deb04f2d26819aac8786
-Author: Korenberg Mark <socketpair@gmail.com>
+commit e48c642c65c933dd8659dee905bbd3b1d86dd5a3
+Author: Neil Spring <ntspring@meta.com>
 
-bpftool: Make the LLVM disassembler an optional runtime dependency
+tcp: rehash onto different local ECMP path on retransmit timeout
 
-This commit splits the libLLVM JIT disassembler into a separate shared
-plugin. It dynamically loads the plugin via dlopen() to remove the hard
-runtime dependency on the large libLLVM library from the main bpftool binar=
-y.
+This patch updates TCP to select a different local ECMP path upon
+retransmit timeout, path MTU discovery, or spurious retransmissions by
+propagating the socket's txhash into the IPv6 multipath hash logic. It
+ensures the cached destination is invalidated so the next transmit triggers
+a fresh route lookup using the new hash. Syncookies are also updated to
+derive txhash from the cookie for IPv6 to maintain ECMP path consistency.
 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 0febf60e1b646..9887ac6fbae3e 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-[ ... ]
-> @@ -165,19 +168,36 @@ endif
->  endif
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12301,6 +12301,7 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __=
+sk_buff *s, struct sock *sk,
 > =20
->  ifeq ($(HAS_LLVM),1)
-> +  # The libLLVM-based JIT disassembler is built as a separate plugin,
-> +  # bpftool-llvm.so, which is the only object that links against libLLVM.
-> +  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpf=
-tool
-> +  # binary itself keeps no dependency on the large libLLVM shared object.
->    CFLAGS  +=3D -DHAVE_LLVM_SUPPORT
-> +  CFLAGS  +=3D -DLLVM_PLUGIN_DIR=3D'"$(libdir)/bpftool"'
+>  	treq->req_usec_ts =3D !!attrs->usec_ts_ok;
+>  	treq->ts_off =3D tsoff;
+> +	treq->txhash =3D net_tx_rndhash();
+> =20
+
+[Severity: Critical]
+This is a pre-existing issue, but since inet_reqsk_alloc() allocates the
+request socket via a slab cache without zeroing memory, do the other fields
+of tcp_request_sock (such as used_tcp_ao and af_specific) remain
+uninitialized garbage?
+
+If so, when tcp_create_openreq_child() is called later and dereferences
+treq->af_specific->md5_lookup, could this result in a kernel panic from
+evaluating the uninitialized pointers?
+
+[Severity: High]
+Does initializing txhash to a random value here break symmetric ECMP
+routing for IPv6 BPF syncookies?
+
+Since standard IPv6 syncookies set txhash to the cookie to maintain path
+symmetry with the SYN-ACK, would this random initialization cause data
+packets to route over a completely different ECMP path than the SYN/SYN-ACK
+exchange?
+
+>  	skb_orphan(skb);
+
+[ ... ]
+
+> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+> --- a/net/ipv4/syncookies.c
+> +++ b/net/ipv4/syncookies.c
+> @@ -280,9 +280,18 @@ static int cookie_tcp_reqsk_init(struct sock *sk, st=
+ruct sk_buff *skb,
+>  	treq->snt_synack =3D 0;
+>  	treq->snt_tsval_first =3D 0;
+>  	treq->tfo_listener =3D false;
+> -	treq->txhash =3D net_tx_rndhash();
+>  	treq->rcv_isn =3D ntohl(th->seq) - 1;
+>  	treq->snt_isn =3D ntohl(th->ack_seq) - 1;
+> +	if (sk->sk_family =3D=3D AF_INET6) {
+> +		/* Use the cookie as txhash so the ECMP path matches
+> +		 * the SYN-ACK, where txhash was also set to the
+> +		 * cookie.  The original request socket (and its
+> +		 * txhash) was freed after sending the SYN-ACK.
+> +		 */
+> +		treq->txhash =3D treq->snt_isn;
+> +	} else {
+> +		treq->txhash =3D net_tx_rndhash();
+> +	}
 
 [Severity: Medium]
-By unconditionally baking the absolute installation path into the binary, d=
-oes
-this break running bpftool locally from the build tree?
+Can dual-stack listeners (IPv4-mapped IPv6) be negatively affected by this
+check?
 
-Standard developer workflows or selftests that execute a locally built bpft=
-ool
-from a scratch directory won't have the plugin installed in the system libr=
-ary
-directory. Since dlopen() is called with this absolute path exclusively, it
-will fail to load the plugin locally.
+Since sk->sk_family is AF_INET6 for these listeners even when accepting IPv4
+connections, would IPv4 connections incorrectly execute
+treq->txhash =3D treq->snt_isn?
+
+As noted in the commit message, the IPv4 cookie contains mssind bits that
+could bias queue distribution if used as a hash.
+
+>  	treq->syn_tos =3D TCP_SKB_CB(skb)->ip_dsfield;
 
 [ ... ]
-> +  ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-> -    LIBS +=3D $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COM=
-PONENTS))
-> -    LIBS +=3D -lstdc++
-> +    LLVM_LINK_STATIC :=3D 1
-> +  endif
-> +  ifeq ($(LLVM_LINK_STATIC),1)
-> +    LLVM_PLUGIN_LIBS :=3D $(shell $(LLVM_CONFIG) --link-static --libs $(=
-LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_PLUGIN_LIBS +=3D $(shell $(LLVM_CONFIG) --link-static --system-=
-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_PLUGIN_LIBS +=3D -lstdc++
-> +  else
-> +    LLVM_PLUGIN_LIBS :=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LI=
-B_COMPONENTS))
->    endif
-[ ... ]
-> @@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOO=
-TSTRAP)
->  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
->  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -275,6 +277,15 @@ static int tcp_v6_connect(struct sock *sk, struct so=
+ckaddr_unsized *uaddr,
 > =20
-> +ifeq ($(HAS_LLVM),1)
-> +all: $(OUTPUT)bpftool-llvm.so
+>  	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
+> =20
+> +	/* Non-zero mp_hash bypasses rt6_multipath_hash() in
+> +	 * fib6_select_path(), letting txhash control ECMP path
+> +	 * selection so that sk_rethink_txhash() rehashes onto a
+> +	 * different path.  Policies 1-3 derive a deterministic
+> +	 * hash from the flow keys and must not be overridden.
+> +	 */
+> +	if (ip6_multipath_hash_policy(net) =3D=3D 0 && sk->sk_txhash)
+> +		fl6->mp_hash =3D (sk->sk_txhash >> 1) ?: 1;
 > +
-> +$(OUTPUT)llvm_disasm.o: llvm_disasm.c
-> +	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
-> +
-> +# The plugin is a shared object by definition, so drop a global -static =
-(e.g.
-> +# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -sh=
-ared.
-> +# Embedding libLLVM statically is controlled separately (see LLVM_LINK_S=
-TATIC).
-> +$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
-> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
-> +		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
 
 [Severity: High]
-Will linking static LLVM archives into a shared object plugin cause relocat=
-ion
-errors and build failures on distributions like Debian and Ubuntu?
+Does the missing mp_hash initialization in tcp_v6_send_response() cause TCP
+control packets (like RST and TIME_WAIT ACKs) to use a different ECMP path
+than data packets?
 
-Since static libraries are typically not compiled with position independent
-code, attempting to link them with the shared flag here often produces link=
-er
-relocation errors.
-
-[Severity: High]
-Does this completely break the disassemble functionality for statically lin=
-ked
-builds of bpftool?
-
-Statically linking bpftool produces a static binary, but this rule forces t=
-he
-LLVM disassembler to be built exclusively as a shared object. Since static
-binaries generally lack full dynamic loader capabilities for loading shared
-objects via dlopen(), standalone static builds of bpftool will no longer be
-able to disassemble JITed code.
-
-> diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_dis=
-asm.c
-> new file mode 100644
-> index 0000000000000..b832161911ebb
-> --- /dev/null
-> +++ b/tools/bpf/bpftool/llvm_disasm.c
-[ ... ]
-> +#include <llvm-c/TargetMachine.h>
-> +
-> +#include "llvm_disasm.h"
-> +
-> +/* This callback to set the ref_type is necessary to have the LLVM disas=
-sembler
-> + * print PC-relative addresses instead of byte offsets for branch instru=
-ction
-> + * targets.
-> + */
-> +static const char *
-> +symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
-
-[Severity: Low]
-This isn't a bug, but the multi-line comment does not follow the required B=
-PF
-subsystem style. The opening block comment indicator should be on its own
-line.
+If tcp_v6_send_response() doesn't set fl6.mp_hash, it seems
+fib6_select_path() will fall back to rt6_multipath_hash(). If the data path
+was rehashed to recover from a failure, wouldn't the RSTs stay on the
+broken default path and be dropped?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603-bpftool-pl=
-ugin-v1-1-68c0ac91f5a3@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602181428.2318=
+919-1-ntspring@meta.com?part=3D1
