@@ -1,131 +1,247 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B763815FB;
-	Wed,  3 Jun 2026 14:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780498074; cv=none; b=ppEL9PxFH6Zgnm5K23MKUq+nDeMVfIzHUOSh2FkF98Cgx96bBZzUBrHOv6WQVdb1aZWVBwZqirIG02833kv5Vjpaxx3ovZ5vXeI2jVLLANPq7LcUAIedcWcp7pAB5rynukfyX3vDn2pxXDg0Q9vrfddzjFN0TrF1UsSS+wxsedU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780498074; c=relaxed/simple;
-	bh=7kOMdDhELVsnDjTcC/y7+iMfuPibj49wbC6iVYiZGNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tV/gP5G27xxGATA2BITqCxF4gcUHqQlUkrnHrq/J2miep5Dx6ZpC4JRATYK/jfuAQp6CcJqsNViyXJ0bf9vpoHKVNop9DgBCb2wmUI7S12OVUP6OWBCx7nu5d4syPoKKiuqCI1mkr4Tvxnxy5xZeS4jsRVrJJU7VccsWW2MBtgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tat/HxE7; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920712772D;
+	Wed,  3 Jun 2026 14:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780498344; cv=fail; b=LbF9IDEdKZnqh6OpO0ikOUdEQUQ3LUTUnNQ14yJSC99lhLGaxsy0UHc3kFsqcCrrHPeP5OQl13ynnBsYFGMUywJ1niQBkqy5Z47XgV7ebKKjuad3feyFIhcHrbVeBOq6dflIiTffTAU8ioaTtD10dZ6HEAjMeWWJXodf+4yLh1U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780498344; c=relaxed/simple;
+	bh=WTi2DSe4y0Vr/Bs+O4LiObBJzSVbLuDf8snVjRP3Fhk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bGNKEJcQoat6jn03LWMgKX0IpYnbjzkXo/yX0F18nk98zBE/yvjbyXi7qeVDvcM/03o7LFq/JGwgWqWcrZC+e45E8/Gsy+kSn6Hf68EXegLPbsKBs2iinfLofnnUfLp7XIaAzVtTT6SnAUO9EFoW2kTkt5aSnMtJQCNu1/B3iMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Urx/oWCf; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tat/HxE7"
-Message-ID: <555331d6-59e5-4925-a409-2bf4af273799@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780498061;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wv3ebTyk2pBaPVt0dLr3PlUA7SWe5wDGnlq/dmSVxwM=;
-	b=tat/HxE7wfDtc4xbi81DSVrfj6irpnGGDi2EtmyOZmbn/CKKIWhHgmgECy2WpSBBIgNtbL
-	iRQiNKMfXARCbblS1gwk/QXqgYEuOPfB3IdkavTjJuz/Aj+pk7CFHN7S7ARDbA0fA+r7hL
-	GtDbrNnIxyJJrg6o6uGfI1iLxUYD5Tw=
-Date: Wed, 3 Jun 2026 07:47:33 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Urx/oWCf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780498342; x=1812034342;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=WTi2DSe4y0Vr/Bs+O4LiObBJzSVbLuDf8snVjRP3Fhk=;
+  b=Urx/oWCfG+IsLraa9YVYcLzCO4YjBJdvZBtOb7UeC1wE4Jfp/Ira+9aI
+   HFvnT57xQjExmxmk5Y2nyZeYjoiKv5nA34nkeo6Zw5KFfW5D/4XzntPFZ
+   Cq5cQ8V9LdrZUzMhfwSy4s7hdOblOJDf39TiNt6/Q+BKwvMYRdJP0668G
+   99uve5V6hElDbTte1r8l54dGzBT0RF0D6SEQTgm5/vnKMks7U2nYWdp46
+   h45yDstw1kGxHzSV+eg6VnHdo18n6wEJZ98QgQESiysf3T9Ce6lHybNKF
+   K6Wp1XvthFL0mPxtg4JHC6jyr9BHGxx+HagQmNml+tjgLnpmU44fpTQ5V
+   w==;
+X-CSE-ConnectionGUID: jL339XUASyCeQAr8mKqK8Q==
+X-CSE-MsgGUID: Qq/kksD8SkqRlITg+T2phQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91993015"
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="91993015"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:52:22 -0700
+X-CSE-ConnectionGUID: /osqR/tpRKKvgDmVmwYPQQ==
+X-CSE-MsgGUID: w+QoN9I1TT6jw4XnZEr4vA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="244109359"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:52:22 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 07:52:20 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Wed, 3 Jun 2026 07:52:20 -0700
+Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.6) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 07:52:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KciOoLyjvjvM3XF+E6eiy1gTX3rMsYjsnpUuO4/W42VCnt4m7kHqOxOutzK3x1dsQncey6MxWS84QGgRx+m5qJErsReIUV6Zq/SQTQ1tj14uP/ufv/KGb4G7Lb2xz/11xjxH7fLNGaosXAOxbV7Inz4J/v4LvkQJD7SHkCQ0Kwg1MVF5BAzy/UY98lghFJo7SKB0PH0bjIbM9aV1lZs3WRn5/IO/LjngBFf5QSKNkFpS/Lu1vJ4/WbZo9tQipQch5cAMQ5qaJiFfXb6dma62bTJOzfM76uCDww50uagZnb+xbWWi6mIvEOoRFn4B4or8KahAua4KiIs3NlmG66Ycmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IJyxx69pjwOEgkhiNKs4OFQY/zg2/sWJKbisxZd5glw=;
+ b=jxT7l2R4gKna5Q35uZ+GEd7EyWchEoPZmFDJ6eSp11utK5J40vKUY9+Ck/hnvm+XI5unSOXUWD0c+sNdqAldHobBjgJ13NzM+fQ3Zdd//Bl4x17Z62Udy3eUNZ27B/dDaUHssgP6cYOfHPbRr7D8SfAF3gpg919JnDncdfZi/t85eFnGOxY3fpV9AWd8dQblSDVL7jxdkVsGfxO4HBHuOAc5mMo7U7G5E4n4MldvjKScAGEEj4X+QBUDS6l0wTjAzOfC7pqHsJHUmzdwIEzhZK98v+7+dADandkjG0up8Yfs8BPOnZePD4RF5FSgsfCHj29x8KsIrTlmj2/QLDGPZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SJ2PR11MB7428.namprd11.prod.outlook.com (2603:10b6:a03:4cf::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.92.7; Wed, 3 Jun 2026 14:52:16 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%5]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
+ 14:52:12 +0000
+Date: Wed, 3 Jun 2026 16:51:59 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+CC: <netdev@vger.kernel.org>, <magnus.karlsson@intel.com>,
+	<stfomichev@gmail.com>, <kernelxing@tencent.com>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 2/4] selftests/xsk: Move UMEM state from
+ ifobject to xsk_socket_info
+Message-ID: <aiA/j1EWpJgAGIwV@boxer>
+References: <20260603060327.298389-1-tushar.vyavahare@intel.com>
+ <20260603060327.298389-3-tushar.vyavahare@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260603060327.298389-3-tushar.vyavahare@intel.com>
+X-ClientProxiedBy: WA1PEPF00005B8A.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d8::63b) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] bpf: NUL-terminate replaced sysctl value
-Content-Language: en-GB
-To: Dawei Feng <dawei.feng@seu.edu.cn>, martin.lau@linux.dev
-Cc: emil@etsalapatis.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- jolsa@kernel.org, kees@kernel.org, joel.granados@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, jianhao.xu@seu.edu.cn,
- Zilin Guan <zilin@seu.edu.cn>
-References: <20260603105317.944304-1-dawei.feng@seu.edu.cn>
- <20260603105317.944304-2-dawei.feng@seu.edu.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260603105317.944304-2-dawei.feng@seu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SJ2PR11MB7428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9db9fdec-9d6c-4094-7f3f-08dec17fb226
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|6133799003|56012099006|11063799006|4143699003|3023799007|22082099003|17002099007|18002099003;
+X-Microsoft-Antispam-Message-Info: t+IHrKEfpHgbO1ewgrS9hh2jftsBpXjcNvzplxY3Yx1LgoZf/8VwBt7okqwjLoMX2vAjTmrBBCgeZXS80YAOzKGe8Ghk2JVCt05ab86+oCoEuMa/22SwEXcwaJ5jGaiP4Zgt8loVtgF5Qnd+jB2VnKN4yFEdfDx6+4YbJm/rR55cmSqGzF+ohE3Jzo8Nn/agFioctQDFqhC1bgzehplGXakH9sab/wIwAP+Q2kj/L/5WyhhG2VZLYVa6hi/r+DMVo4IWwhhOoXandz9CPK7m8g2S7B7V4pE52tJH2sOEM444yKtlmFVUOyBXYplwHOm+Jib2g57a9kgHm2yiolvvI6tRHnQ/T1YjB5/S0xeSZsg5G2OaWFyRfUxcnephOq2LCcp/Z+jafSORWJRgzOz8cMVe+mC/xz1Z2O0oMRvgpABHUYWuhC/rWdkEFligfc+h5AFI7fIce+d9zVaEw/2mPYTXtLs0ub2VBohr+YUl2MuHaiq+oFWKG8vot/F+YTM3Af7sVn0UwfAXoC7GSSFUN1H3Z4Zw1D6LuLPuE4Gq1943B8y/UJmNVZmGCF+MHF3Mlp/UUHc84GiqIfSuNIPqHhf9KNPkdYuQ+GYZecCMRilpGRZu7GD5r9b7HW0ufSg3RUjMCsr8cpdUiaysV8iv7Xs5GThWQ+OLfGuCqMES10zylRJqlaIlQM7gW6kLhvHt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(6133799003)(56012099006)(11063799006)(4143699003)(3023799007)(22082099003)(17002099007)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3HPE62Zhn1V/df6syyfllchQROUyourwN9y5OiaSaFurVA3RUFmCLzEZYZq3?=
+ =?us-ascii?Q?jQriEHMWfaOeGMhgaEAfeHaWaCqZHlEthf504bCiSjjQ47NaEVIAdtsRivoH?=
+ =?us-ascii?Q?g6n+afAEYRTzgDleDrPHh2pkRPw0A0an4U6IuiDRfFPaayHr16FrcCVerLF3?=
+ =?us-ascii?Q?lPJAe1G0iFu5EfdSXOxsip0DwBZwtpiboOcGZWJi0lB7pdotcfUNaK7y0krn?=
+ =?us-ascii?Q?mokLti06zIZ13yZYDfMuoZWpFn88esDuuM/Ol768I+v7/xIEj3p5DSu38gzi?=
+ =?us-ascii?Q?a6ioMICRdvo7A4w+6F8kDYd71Z4ei+ZVo225S3yyo0wgAZ6dhZKkDAI+WQEr?=
+ =?us-ascii?Q?AVIHpsF9d1cgMlF9huAQv6nDUuJMuHjT5lD7rVGJMVJsBaE9vfWeZriUTuXO?=
+ =?us-ascii?Q?1ZMh/h+kYHeDk+z+Z7vsrkUGXvrNNTFUbbrVvs/axU50/YQJS0kyQbHV0pUM?=
+ =?us-ascii?Q?K2vq2VPkToMyR2kadTch/52I9Km31rRBri6VP2SATHiNLq0wMmiYOfCH0RmH?=
+ =?us-ascii?Q?jJyoV7XuUgZCmBpRRFwoc9eJghGPQY8+lcTUawSKgB3RwSFcKhnFUCGSBqSw?=
+ =?us-ascii?Q?csmhW4zczSBXz5UmZn033OqCPR8MeSDrfSgKxDnCwbQLsmd5YzBmHGLFg/qn?=
+ =?us-ascii?Q?v4unj0i/WLtNpwkncZV0GklI16sxjmM1HhfzkfMbt/1ieCxNMsh+/5TEcYZo?=
+ =?us-ascii?Q?0NVb2ydbV8f7VfBkbgYrZ8ioJUt3KubKEeER9remm31dtmQ91PGkIIw+6tyn?=
+ =?us-ascii?Q?JMH5fxpQj54t2qY3Tb1RwtSNSlYgmPnPAiUF+GeYurRMStCkDHrI5F/Rbc1x?=
+ =?us-ascii?Q?BaSl3hA2jG+Kco3x+zNy9qkIhp/YPrA47RnczLpSAblSu2HWUuhwzY8Q2jqC?=
+ =?us-ascii?Q?c62CzqsVSG/PiOQC/1XXYvqgURo/FggXVuJqHeybGkykaVddTzd2Q4pjAwrv?=
+ =?us-ascii?Q?fxPh61cWw4CNeXk4/ZgT0LSCkMCEgvqoiGkIJC+RRznIfWfQ63GwmcsWoXcQ?=
+ =?us-ascii?Q?vFJ2V+MkexxjgEbbE+0r3Dgsw20hp5/qJ20dOQWbNP+nsM+Ocjni0YS62+BB?=
+ =?us-ascii?Q?i9ezJSTwyFozPOnqPfVSRjrw0+MrYLSt2Nxbt7UAne2cVU2ViTVNSqN4iz7A?=
+ =?us-ascii?Q?vOmIqxyk14Ub9WNZCvhZpmSmZqAV9C3ok/PQSEIfcH7Ydxtd9htnIcPRiMJk?=
+ =?us-ascii?Q?HfeZvb1xiRvky/D2xT1zEZBcSlUcaslgdXeNS0VRGpGmMqQWkAGNt8OpDm2A?=
+ =?us-ascii?Q?hOnkMnlJbhojKcTp6MHce4xq03eYx5Ac+T7q8vLCa1Ngfg6LtyK4P7p/3vHv?=
+ =?us-ascii?Q?HeIen2E5LxcTfeIDUv8xY2eZYrkvkRFG4smR5KPjoNygH512+7qOkGTm7kkY?=
+ =?us-ascii?Q?jxXJ/AuDUPyTNWfs3C2oM8fZ4ivAKl8Uc0vrWJ8RcDO+8+C8VracAFlLFK5h?=
+ =?us-ascii?Q?ZpF/umRn/xJEe7Qgrva4gHcLhAapNWbIrzV1DpDBpIpKv6PaeOlwgXKtofAw?=
+ =?us-ascii?Q?0njSSk6FXxmkVp1vgYg5EogLHPBga3FR924WPwt/rYIiYCtNeu2H/O0SXFHq?=
+ =?us-ascii?Q?sdtF/muLiAYZofCn8Xl89hfy8cDXIPgCl2NfJoMNF3qvrBgg1A5jqrP6VVKp?=
+ =?us-ascii?Q?Iywyb9QcTggNFm7Fn9g1JrujPxT3ywawwrIwbfNI15iSd7q+g9wHgwAqSgqP?=
+ =?us-ascii?Q?NYF0PZXJ8Rw/iVIqoI4MJK3IxqJy43myjvEcosSviEeUZlb60YDKkBw8/hiE?=
+ =?us-ascii?Q?WsNB7oHLyvn0/QGPhmAG0b8xR0ZAfBY=3D?=
+X-Exchange-RoutingPolicyChecked: FAkGtVPBGnsFHIW2VgK/zK+OXrYrDkcmaBAZQJ1Vxne9VWECHgeulZQRBhyacGzX5/WcBsjcCluLUzKRePhXSRzq5ZDG/Qes4FBGm9G+Lz+WF6KaNWTlCvyYW9V3BLxfvW75lRqt1hBI8osTGyztJF0hkgS6T448qnaoTckwkqsvidaoi/VO+WHYYbEw5QWrXlrgqf1Bj7sibuiLP2Wo/tdcONrLpDgUBODJX6XA2mWo6lW78oJbmWs9By9BJNJMgzBAglkbhDah26Le2KsaQF9P+okgW4qqtbAixjETd8f/9fbf2utKWRyId/IrBZ+OMPY7agvFcA5V22pdowk8Fw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9db9fdec-9d6c-4094-7f3f-08dec17fb226
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 14:52:12.8628
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Qk4o7IfcfydmyefwObmtUM8sX42WrU2NbSwhvFOSZ1McN1tuWH8RNQWC/5h1uPZ1ENnHtJL/u01MgNAdXIzIURTT8CXUe1q5TR5eEdBTJI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7428
+X-OriginatorOrg: intel.com
 
-
-
-On 6/3/26 3:53 AM, Dawei Feng wrote:
-> When writing to sysctls, proc_sys_call_handler() guarantees that the
-> buffer passed to proc handlers is NUL-terminated. If
-> bpf_sysctl_set_new_value() replaces the pending sysctl value, it can
-> hand a replacement buffer directly to proc handlers. However, the
-> helper currently copies only buf_len bytes into that buffer without
-> appending a NUL terminator, leaving downstream parsers vulnerable to
-> out-of-bounds access.
->
-> Fix this by appending a '\0' after the replaced value to restore the
-> expected sysctl semantics. Since the helper already rejects buf_len
-> greater than PAGE_SIZE - 1, there is always room for the extra byte.
->
-> Reproduced in a QEMU x86_64 guest booted with KASAN while exercising
-> the sysctl replacement path with a cgroup/sysctl BPF program. The
-> reproducer targets `/proc/sys/net/core/flow_limit_cpu_bitmap`, fills
-> the original user write buffer with non-zero bytes, and overrides the
-> sysctl value so the replacement buffer lacks a terminating NUL. Under
-> that setup, the pre-fix kernel reported:
->
->    BUG: KASAN: slab-out-of-bounds in strnchrnul+0x72/0x90
->    Read of size 1 at addr ffff88800de57000 by task repro_patch3/66
->    CPU: 0 UID: 0 PID: 66 Comm: repro_patch3 Not tainted 7.1.0-rc3-00269-g8370ca1f87cc #6 PREEMPT(lazy)
->    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
->    Call Trace:
->     <TASK>
->     dump_stack_lvl+0x68/0xa0
->     print_report+0xcb/0x5e0
->     ? __virt_addr_valid+0x21d/0x3f0
->     ? strnchrnul+0x72/0x90
->     ? strnchrnul+0x72/0x90
->     kasan_report+0xca/0x100
->     ? strnchrnul+0x72/0x90
->     strnchrnul+0x72/0x90
->     bitmap_parse+0x37/0x2e0
->     flow_limit_cpu_sysctl+0xc6/0x840
->     ? __pfx_flow_limit_cpu_sysctl+0x10/0x10
->     ? __kvmalloc_node_noprof+0x5ba/0x870
->     proc_sys_call_handler+0x31d/0x480
->     ? __pfx_proc_sys_call_handler+0x10/0x10
->     ? selinux_file_permission+0x39f/0x500
->     ? lock_is_held_type+0x9e/0x120
->     vfs_write+0x98e/0x1000
->     ...
->     </TASK>
->    The buggy address is located 0 bytes to the right of
->    allocated 4096-byte region [ffff88800de56000, ffff88800de57000)
-> With this fix applied, rerunning the same sysctl-targeted path yields
-> no corresponding KASAN reports.
->
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-> Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
+On Wed, Jun 03, 2026 at 11:33:25AM +0530, Tushar Vyavahare wrote:
+> Move UMEM ownership from ifobject to xsk_socket_info and access it
+> through xsk->umem.
+> 
+> Allocate one shared umem_real in ifobject_create() and let all
+> sockets reference it through xsk->umem, while keeping ownership in
+> xsk_arr[0]. Keep the existing goto-based error path in
+> ifobject_create() and free the allocation once in ifobject_delete().
+> 
+> Reset the existing umem_real in __test_spec_init() with memset()
+> instead of reallocating it.
+> 
+> Preserve shared-UMEM behavior by copying RX UMEM state into a TX-local
+> UMEM state in thread_common_ops_tx() and reset base_addr/next_buffer
+> before TX socket configuration.
+> 
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 > ---
->   kernel/bpf/cgroup.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b6..2c7f72d3fb11 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -2342,6 +2342,7 @@ BPF_CALL_3(bpf_sysctl_set_new_value, struct bpf_sysctl_kern *, ctx,
->   		return -E2BIG;
->   
->   	memcpy(ctx->new_val, buf, buf_len);
-> +	((char *)ctx->new_val)[buf_len] = '\0';
+>  .../selftests/bpf/prog_tests/test_xsk.c       | 133 +++++++++++-------
+>  .../selftests/bpf/prog_tests/test_xsk.h       |   2 +-
+>  2 files changed, 80 insertions(+), 55 deletions(-)
 
-Okay, I looked at your v2 comment and checked the bpf_sysctl_set_new_value again.
-You above implementation is correct.
+...
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> -static void pkt_generate(struct xsk_socket_info *xsk, struct xsk_umem_info *umem, u64 addr, u32 len,
+> -			 u32 pkt_nb, u32 bytes_written)
+> +static void pkt_generate(struct xsk_socket_info *xsk, u64 addr, u32 len, u32 pkt_nb,
+> +			 u32 bytes_written)
+>  {
+> -	void *data = xsk_umem__get_data(umem->buffer, addr);
+> +	void *data = xsk_umem__get_data(xsk->umem->buffer, addr);
+>  
+>  	if (len < MIN_PKT_SIZE)
+>  		return;
+> @@ -1003,7 +1010,7 @@ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+>  			return TEST_FAILURE;
+>  
+>  		if (!ret) {
+> -			if (!is_umem_valid(test->ifobj_tx))
+> +			if (!is_umem_valid(test->ifobj_tx->xsk))
+>  				return TEST_PASS;
+>  
+>  			ksft_print_msg("ERROR: [%s] Poll timed out\n", __func__);
+> @@ -1163,7 +1170,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
+>  {
+>  	u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
+>  	struct pkt_stream *pkt_stream = xsk->pkt_stream;
+> -	struct xsk_umem_info *umem = ifobject->umem;
+> +	struct xsk_umem_info *umem = xsk->umem;
+>  	bool use_poll = ifobject->use_poll;
+>  	struct pollfd fds = { };
+>  	int ret;
+> @@ -1222,7 +1229,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
+>  		while (nb_frags_left--) {
+>  			struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + i);
+>  
+> -			tx_desc->addr = pkt_get_addr(pkt, ifobject->umem);
+> +			tx_desc->addr = pkt_get_addr(pkt, umem);
+>  			if (pkt_stream->verbatim) {
+>  				tx_desc->len = pkt->len;
+>  				tx_desc->options = pkt->options;
+> @@ -1234,7 +1241,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
+>  				tx_desc->options = 0;
+>  			}
+>  			if (pkt->valid)
+> -				pkt_generate(xsk, umem, tx_desc->addr, tx_desc->len, pkt->pkt_nb,
+> +				pkt_generate(xsk, tx_desc->addr, tx_desc->len, pkt->pkt_nb,
 
->   	ctx->new_len = buf_len;
->   	ctx->new_updated = 1;
->   
+Nit: you have the umem pointer handy, what's the point to change
+pkt_generate() interface?
 
+>  					     bytes_written);
+>  			bytes_written += tx_desc->len;
+>  
+
+...
+
+> @@ -1856,9 +1875,11 @@ static int testapp_validate_traffic(struct test_spec *test)
+>  {
+>  	struct ifobject *ifobj_rx = test->ifobj_rx;
+>  	struct ifobject *ifobj_tx = test->ifobj_tx;
+> +	struct xsk_umem_info *umem_rx = ifobj_rx->xsk->umem;
+> +	struct xsk_umem_info *umem_tx = ifobj_tx->xsk->umem;
+>  
+> -	if ((ifobj_rx->umem->unaligned_mode && !ifobj_rx->unaligned_supp) ||
+> -	    (ifobj_tx->umem->unaligned_mode && !ifobj_tx->unaligned_supp)) {
+> +	if ((umem_rx->unaligned_mode && !ifobj_rx->unaligned_supp) ||
+> +	    (umem_tx->unaligned_mode && !ifobj_tx->unaligned_supp)) {
+>  		ksft_print_msg("No huge pages present.\n");
+>  		return TEST_SKIP;
+>  	}
+
+this hunk does not add any value IMHO.
