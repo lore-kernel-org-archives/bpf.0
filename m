@@ -1,160 +1,96 @@
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E5D38F942
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 20:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40093F5BE2;
+	Wed,  3 Jun 2026 20:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780517909; cv=none; b=iRrpMLS5xb9FneQzZhROFfSiyfQJ9oaePCTOQ8OhbTfq7+6BjF8oWhZu3LYqzP57jWe3h3B4ctBXaPi2qLSOYKMrmc4X7zqOvEwX4IOYMe2aSM86UxTZVxzomSVVa8lxH4eUFWeh2HZ3lFUgnVGYdGThWG2ckiGHfZmvjvxjVzw=
+	t=1780517915; cv=none; b=VZOb3qz/oiB+pKPu46iI8gCip48d+hV9ENQxMcif/rA166/wAiNhTwa/TSTtM+Qle0QA+NNPbwpQ+OF4V/wqAJMIkOA54A+sbp7/Y1M4B9Apww72WkcyJBkWEOQobFKOyBQuGMTdqaGKU80IZj/zu8ucW9raOyiYHJCzTT6Pokg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780517909; c=relaxed/simple;
-	bh=xgytlGXhusZGA3N7WTFBsuzdq7Xm4VDSRwDPt3Oydq8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ceTLy2BQxRovlBOkwYozFRfDkr2QD3f0dpDUVWPuuzHuW28V+6A6hFyKMxdr3cCq/8cWYg52UGa56rDtUY6tLVFSAjMtFjMA0x12ZtOlw4Ies55wpGaU4aT++lvOosSNSbzwY8d23tvjA8J2hKpU9QOm+9dNt4aUoxh8qX7MWbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EnS5rEES; arc=none smtp.client-ip=209.85.218.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com
+	s=arc-20240116; t=1780517915; c=relaxed/simple;
+	bh=vd1UqlbeKxfktRs9ujmxbxVEV2FbtpqtvRC1AW7gllM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=erWuLkqCXPFTqDq5+1b+8WlUluyL14VCJYymDbDLLp2lr5d4DNXWKestS/VK8S0cZnQCVbpDO4NBbsfWxnq0aD+kvPwbVqHkt01jJAU+7j3N8gZdXG0v87uZk/xhYRt5MXhv3lZ6IBSAqQ/bB5DuNK7i3CM8uyOHfdfW4zE4V14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L0C4fieg; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EnS5rEES"
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-bebacba844bso339643466b.1
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 13:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780517906; x=1781122706; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nfN7PD8iFeHxSeJMrIAzcOBS7mbEvDYz55+eWid8ZDo=;
-        b=EnS5rEESzuEFJH+lobaWMrqpfCftL+EvYNwT3Ty5K964BsKy42hFLKWhFMcM6FLXjh
-         O9VlxmQ8OmUMZXC6jzP+YIbUwt1RpknC7e/v1nfvCiRlSsIPh6w4oJDjK4J17rr2K1SZ
-         vtwX9eF89l5Shvhe+2sfRnr1cibNFi476QWbzjBcM9uJsr1qV2zJcbQ4IUM3yP1ziop8
-         ObkYzcS/EDmpR7JyLUHz1vceJ01RrEl8N9dctdWgsl18aNd1MZCDBdwZUvLMiI17egd4
-         wjE2A1Iorbo3+Pr04765hEn8xVHU49uIMwp/Hd4IY/AfJ3Tyi2ztcnOIDuqkIAmI+4Ra
-         euBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780517906; x=1781122706;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nfN7PD8iFeHxSeJMrIAzcOBS7mbEvDYz55+eWid8ZDo=;
-        b=bIjHgOaKtxk3ZFBZcPkM6WR/HwV/s5DIFKqQQdIXLKSvc1gGC95X0pXP6hVaDICh5G
-         mzOFJ4Dia5ReamCBacaGQ0PhCVAJrbC1fqAT2Yb3Vn1dXj6dGgT9btwtBzED59Li2V+m
-         VsW/OuTjv6LxAxcaMlIkrq6PB5qTolqqekGcA9JbVsr4xE5q03g6muPvGOQtSud2zOZl
-         Go8raxv6kIzoF4F90DbLyJkEAlS9vQZWmEKwD5V/neTPw6cQ0+gO/ROvolejnwAuxnfs
-         VijgUEwVzfKcN8V551O1I+odxIrR1v3dU5p/Lt9J7eNeCkA4lW3AESY/lv4PVdNcW9rZ
-         i50Q==
-X-Gm-Message-State: AOJu0YyOAOtnYXD0tKRzhFgrhxc+JS1I7P56z9Hvfjn2est9TJqeQbdk
-	bUFLg/jETuB5No5N8fhCvvg/26AvoxHh+cPQOQ6jSLbuXQnsZFJx9u/gg8nevZe/LTvDS0LHbHh
-	Fcd+Q3MQDETZCVRway1874fUeffagygiKuP42lXIgSZp/srAoP8ta1e5heBBlKSP4otDsrxaY75
-	hXkYG4KVwbJygmOXklfvYDRc9h84DuGVGVDEO7tqJbhPkKVIcWodphlpHsUOy9cr9GTSbPHg==
-X-Received: from ejbcb18.prod.google.com ([2002:a17:906:a452:b0:bcc:37d4:e0d2])
- (user=mattbobrowski job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:398c:b0:bf0:59a2:4ccc with SMTP id a640c23a62f3a-bf0ac40a9ddmr239323566b.3.1780517905806;
- Wed, 03 Jun 2026 13:18:25 -0700 (PDT)
-Date: Wed,  3 Jun 2026 20:18:22 +0000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L0C4fieg"
+Message-ID: <c894bf32-f632-40b6-8557-ba7c9afd5699@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780517910;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UaAE3yHIMeo4qc7AvLlIseYNafaeE9rUtAqS+DGbm+A=;
+	b=L0C4fiegBM6/8Od5sP/BZXFy8vVZdLvVxx5L1biNS71QAVe2gCw1+ILvlM3bF+OqrZwJAO
+	g+hK36W6HkcVlQbN6UeyMfYNCVnPqJHEg5B/w9LERwsHz6oxID2Gw22/v2iSm2Sdnsr0Mt
+	tkDE3VGDxku0FwiOv2dmrUbN3BYjQAk=
+Date: Wed, 3 Jun 2026 13:18:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.1032.g2f8565e1d1-goog
-Message-ID: <20260603201822.770596-1-mattbobrowski@google.com>
-Subject: [PATCH bpf-next] bpf: clean up btf_scan_decl_tags()
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Subject: Re: [PAHOLE v4 1/3] dwarf_loader: Extract die__add_btf_type_tag()
+ helper [NFC]
+Content-Language: en-GB
+To: Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com,
+ David Faust <david.faust@oracle.com>
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Refactor the newly introduced btf_scan_decl_tags() to improve
-readability and maintainability. The current implementation uses a
-manual if-else chain and a magic number offset to strip the "arg:"
-prefix from declaration tags.
 
-Replace the if-else logic with a table-driven approach using a static
-const array. This separates the tag data from the scanning logic, making
-the helper more extensible for future tags. Additionally, replace the
-magic number '4' with a sizeof-based calculation on the prefix string to
-ensure the offset remains synchronized with the search key.
 
-Finally, optimize the loop by moving the is_global check to the top of
-the block. This allows the verifier to fail-fast on static subprograms
-without performing unnecessary BTF string and type lookups.
+On 6/2/26 12:55 PM, Vineet Gupta wrote:
+> NFC change preparing for DW_TAG_GNU_annotation support.
+> Extract the btf_type_tag annotation creation logic into helper
+> die__add_btf_type_tag().
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
----
- kernel/bpf/btf.c | 46 ++++++++++++++++++++++++++++++----------------
- 1 file changed, 30 insertions(+), 16 deletions(-)
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 68921d9172b5..55aa3ba1b1e0 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7808,14 +7808,28 @@ static int btf_scan_decl_tags(struct bpf_verifier_env *env,
- 			      u32 arg_idx, bool is_global, u32 *tags)
- {
- 	int id = btf_named_start_id(btf, false) - 1;
-+	const char tag_key[] = "arg:";
-+	static const struct {
-+		const char *tag_value;
-+		enum btf_arg_tag arg_tag;
-+	} tag_values[] = {
-+		{ "ctx", ARG_TAG_CTX },
-+		{ "trusted", ARG_TAG_TRUSTED },
-+		{ "untrusted", ARG_TAG_UNTRUSTED },
-+		{ "nonnull", ARG_TAG_NONNULL },
-+		{ "nullable", ARG_TAG_NULLABLE },
-+		{ "arena", ARG_TAG_ARENA },
-+	};
- 
- 	/*
- 	 * The 'arg:<tag>' decl_tag takes precedence over the derivation
- 	 * of the register type from the BTF type itself.
- 	 */
--	while ((id = btf_find_next_decl_tag(btf, fn_t, arg_idx, "arg:", id)) > 0) {
--		const struct btf_type *tag_t = btf_type_by_id(btf, id);
--		const char *tag = __btf_name_by_offset(btf, tag_t->name_off) + 4;
-+	while ((id = btf_find_next_decl_tag(btf, fn_t, arg_idx, tag_key, id)) > 0) {
-+		const struct btf_type *tag_t;
-+		const char *tag;
-+		int i;
-+		bool found;
- 
- 		/* disallow arg tags in static subprogs */
- 		if (!is_global) {
-@@ -7825,19 +7839,19 @@ static int btf_scan_decl_tags(struct bpf_verifier_env *env,
- 			return -EOPNOTSUPP;
- 		}
- 
--		if (strcmp(tag, "ctx") == 0) {
--			*tags |= ARG_TAG_CTX;
--		} else if (strcmp(tag, "trusted") == 0) {
--			*tags |= ARG_TAG_TRUSTED;
--		} else if (strcmp(tag, "untrusted") == 0) {
--			*tags |= ARG_TAG_UNTRUSTED;
--		} else if (strcmp(tag, "nonnull") == 0) {
--			*tags |= ARG_TAG_NONNULL;
--		} else if (strcmp(tag, "nullable") == 0) {
--			*tags |= ARG_TAG_NULLABLE;
--		} else if (strcmp(tag, "arena") == 0) {
--			*tags |= ARG_TAG_ARENA;
--		} else {
-+		tag_t = btf_type_by_id(btf, id);
-+		tag = __btf_name_by_offset(btf, tag_t->name_off) + (sizeof(tag_key) - 1);
-+
-+		found = false;
-+		for (i = 0; i < ARRAY_SIZE(tag_values); ++i) {
-+			if (!strcmp(tag, tag_values[i].tag_value)) {
-+				*tags |= tag_values[i].arg_tag;
-+				found = true;
-+				break;
-+			}
-+		}
-+
-+		if (!found) {
- 			bpf_log(&env->log, "arg#%d has unsupported set of tags\n", arg_idx);
- 			return -EOPNOTSUPP;
- 		}
--- 
-2.54.0.1032.g2f8565e1d1-goog
+> ---
+> Changes since v3 [3]
+>   - Fix comment to kernel style [Arnaldo]
+>
+> Changes since v2 [2]
+>   - die__add_btf_type_tag() returns pointer not error code [Alan]
+>
+> Changes since v1 [1]
+>   - NFC reinstate some original comments
+>
+> [3] https://lore.kernel.org/bpf/20260601183511.594100-1-vineet.gupta@linux.dev/
+> [2] https://lore.kernel.org/bpf/20260528223616.2035618-1-vineet.gupta@linux.dev/
+> [1] https://lore.kernel.org/bpf/20260526181818.4159927-1-vineet.gupta@linux.dev/
+
+If there is a further revision, for a three patch series, I think it is worthwhile
+to have a cover letter so the above change log (and 2nd patch or more)
+can be all in cover letter.
+
+> ---
+>   dwarf_loader.c | 58 +++++++++++++++++++++++++++++---------------------
+>   1 file changed, 34 insertions(+), 24 deletions(-)
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 16fb7becffee..42a0f3f74ce3 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1600,14 +1600,44 @@ static struct btf_type_tag_type *die__create_new_btf_type_tag_type(Dwarf_Die *di
+>   	return tag;
+>   }
+>   
+>
+[...]
 
