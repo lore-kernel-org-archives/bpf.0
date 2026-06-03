@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0AE3CB2FC;
-	Wed,  3 Jun 2026 11:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C6C44B69C;
+	Wed,  3 Jun 2026 11:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780484780; cv=none; b=vE7nGXePM0Hp4PHv8sUatPlcHsxggeUlUIl0GtIC8BUICZfdXW75sF+gR+T92T+CYzSns9WWGslm7obhW/c0U/Ug8mSov0BZACFGPgF6Y/jaxhPQmcQ9iiLv9esNmdcXnc+3qL+bxLtnhtZGX6/Zl7aCDGTISSRs19mRQc2FXDM=
+	t=1780484790; cv=none; b=eXJvIRTHC70wuJomwpKRS+MVOL6wBBAAv8jnpAf2MVeNb6sBkp1kzJR67rZqUaGhLK5Ee3Mywi2tSly0pYLz9b471nyk+tY3eFMS77FRTjsY+K/TNsfATYdXqxhWfxXk2mBCEc5DkIS1u2epc8cqlZPlhcKQpA64MCj9iQG1kSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780484780; c=relaxed/simple;
-	bh=/P2aVMbllhpSCTKcJh4LAYY1a4fWv1WtEKnVEagpoRU=;
+	s=arc-20240116; t=1780484790; c=relaxed/simple;
+	bh=BGK7gFzy7xwI8p7S2QnK2CY5EM2lGeT9sPUZV94GV3s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EMYw3l6b8D3USPOoMh3DViWHJ9AsNWa9OjqN3Utm5f8m6KmqsDndOizyaigi2scwl4NIXZzP8uyt+eKNkf+DoDJfiVANPRpC40pn+Zaw9q4D5CSZur857nARloQ0whydm2z6IDCm1bo1tQGU31saRnWatcNXrEY1i5c3C1isIi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ip5+kpgj; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=L7aLHaDHP9rJqHLApSIY/Gfe9j/W0njJGQzY88zMrfe5LpTyPBZFqz1zrKY/PPE0Bh7Md1MZrt5dqzADxOu/z5sjkwSIOwqstqhdHsZi+39wRQ4OQHyXYGgQntp6A/tT0A92M4pFcYvIE75mBFrwwSeTjJKVqG6pDDs04dff2n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjEGwyYB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ip5+kpgj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82FC1F00893;
-	Wed,  3 Jun 2026 11:06:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjEGwyYB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826F51F00893;
+	Wed,  3 Jun 2026 11:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780484779;
-	bh=DUViLivnhr22tZzVIR0cUlh7NZY4GvFWtdOine1stqc=;
+	s=k20260515; t=1780484789;
+	bh=9C9iyyXicCikRUcZI625LZowoQI7FNr7EvEyd5b6+CE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ip5+kpgjToyeFomIIyWi/zsRH4Nt1Tufqksz06zM5oz7JarLrOEGwhK4dNA/bjJAs
-	 N1VrfEbAGwJApkJ//RS6XzbxQuxAaipJScocWN/WWIhX7x6j+4XK7f4eRTCKdxgnZn
-	 nyjH6w2LnURRWiIsTYPWLXzVwi+gmAG2Ai6WckoeU5Uvd2FXFW+pYjdA5gHqq+U2eN
-	 EtyRRbSa8ITTaqrs8Fb7yR+Jw9PKyMxmGWG+wpSSgPy4wrHwa4Etin2unfdejYzNU6
-	 LzYSvlTWkzm8mhi/PCwjzZEO/vxtnBlce5rIydvS0/k8qmYL/RgTnXR48w0/ChDDJg
-	 NtJEoU0kUQEQA==
+	b=HjEGwyYB8KFUr+iLaeSj2ygp9dsrB/aWLVrVZElEH9e9egsIGe06HMnQhXy5opq8g
+	 uF6UhY0zwnr2Zj9gv2t/PjWmbkYfWp7eyurnyaoMMM3uWedl2nDMEqEOBvW7dq2m2f
+	 QGN+XD6QUMp4LOsc3b+wCBTwuk9CQ+XMjqc+juLCe/aVY9m9RgENPtFvv8CTKeUII0
+	 AZupso/ZCFE+cZgUE34PCCDt5kTjP2XhKZBTWROhgHNAoxOlTeWD5001Ke1NoEkHjt
+	 tScMGfMi8Wablh5+Stua0pyY4YaOOZvlFnBrsdTILMoXIkVA0MV7TMH7Ghu+nWBXOM
+	 QRkYS7MO1nGtQ==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv7 bpf-next 02/29] ftrace: Add ftrace_hash_remove function
-Date: Wed,  3 Jun 2026 13:05:26 +0200
-Message-ID: <20260603110554.29590-3-jolsa@kernel.org>
+Subject: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry function
+Date: Wed,  3 Jun 2026 13:05:27 +0200
+Message-ID: <20260603110554.29590-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260603110554.29590-1-jolsa@kernel.org>
 References: <20260603110554.29590-1-jolsa@kernel.org>
@@ -52,60 +52,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding ftrace_hash_remove function that removes all entries
-from struct ftrace_hash object without freeing them.
-
-It will be used in following changes where entries are allocated
-as part of another structure and are free-ed separately.
+Renaming __add_hash_entry to add_ftrace_hash_entry and making it global,
+it will be used in following changes outside ftrace.c object.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/ftrace.h |  1 +
- kernel/trace/ftrace.c  | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+ include/linux/ftrace.h | 1 +
+ kernel/trace/ftrace.c  | 9 ++++-----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 02c24bf766ce..b55ec9b25bb3 100644
+index b55ec9b25bb3..02bc5027523a 100644
 --- a/include/linux/ftrace.h
 +++ b/include/linux/ftrace.h
 @@ -415,6 +415,7 @@ struct ftrace_hash *alloc_ftrace_hash(int size_bits);
  void free_ftrace_hash(struct ftrace_hash *hash);
  struct ftrace_func_entry *add_ftrace_hash_entry_direct(struct ftrace_hash *hash,
  						       unsigned long ip, unsigned long direct);
-+void ftrace_hash_remove(struct ftrace_hash *hash);
++void add_ftrace_hash_entry(struct ftrace_hash *hash, struct ftrace_func_entry *entry);
+ void ftrace_hash_remove(struct ftrace_hash *hash);
  
  /* The hash used to know what functions callbacks trace */
- struct ftrace_ops_hash {
 diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 57ab01fd00bd..45548b0200eb 100644
+index 45548b0200eb..f93e34dd2328 100644
 --- a/kernel/trace/ftrace.c
 +++ b/kernel/trace/ftrace.c
-@@ -1249,6 +1249,25 @@ remove_hash_entry(struct ftrace_hash *hash,
- 	hash->count--;
+@@ -1198,8 +1198,7 @@ ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)
+ 	return __ftrace_lookup_ip(hash, ip);
  }
  
-+void ftrace_hash_remove(struct ftrace_hash *hash)
-+{
-+	struct ftrace_func_entry *entry;
-+	struct hlist_head *hhd;
-+	struct hlist_node *tn;
-+	int size;
-+	int i;
-+
-+	if (!hash || !hash->count)
-+		return;
-+	size = 1 << hash->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hhd = &hash->buckets[i];
-+		hlist_for_each_entry_safe(entry, tn, hhd, hlist)
-+			remove_hash_entry(hash, entry);
-+	}
-+	FTRACE_WARN_ON(hash->count);
-+}
-+
- static void ftrace_hash_clear(struct ftrace_hash *hash)
+-static void __add_hash_entry(struct ftrace_hash *hash,
+-			     struct ftrace_func_entry *entry)
++void add_ftrace_hash_entry(struct ftrace_hash *hash, struct ftrace_func_entry *entry)
  {
  	struct hlist_head *hhd;
+ 	unsigned long key;
+@@ -1221,7 +1220,7 @@ add_ftrace_hash_entry_direct(struct ftrace_hash *hash, unsigned long ip, unsigne
+ 
+ 	entry->ip = ip;
+ 	entry->direct = direct;
+-	__add_hash_entry(hash, entry);
++	add_ftrace_hash_entry(hash, entry);
+ 
+ 	return entry;
+ }
+@@ -1477,7 +1476,7 @@ static struct ftrace_hash *__move_hash(struct ftrace_hash *src, int size)
+ 		hhd = &src->buckets[i];
+ 		hlist_for_each_entry_safe(entry, tn, hhd, hlist) {
+ 			remove_hash_entry(src, entry);
+-			__add_hash_entry(new_hash, entry);
++			add_ftrace_hash_entry(new_hash, entry);
+ 		}
+ 	}
+ 	return new_hash;
+@@ -5360,7 +5359,7 @@ int ftrace_func_mapper_add_ip(struct ftrace_func_mapper *mapper,
+ 	map->entry.ip = ip;
+ 	map->data = data;
+ 
+-	__add_hash_entry(&mapper->hash, &map->entry);
++	add_ftrace_hash_entry(&mapper->hash, &map->entry);
+ 
+ 	return 0;
+ }
 -- 
 2.54.0
 
