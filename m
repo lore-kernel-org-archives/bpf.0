@@ -1,127 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3968F38B12B
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 09:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633C140962A
+	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 09:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780479505; cv=none; b=BwTp7f0GaGCAkNGUuRMkADF7XR/GRtlTfElv/syLOTHBg0dqHoWOw745xkUtTF9sJrMO4NNO/tOlvLyPEx4xfEqnjc+MaHjaI+6HduXoYk46rJ9YNm9zzI8wEog9ta8F5VZdswB804ue3rqmzohnn6nn2lpaiPm3rMqIi6od6lU=
+	t=1780479876; cv=none; b=swRl3xlTbhTSE69VkgjJo595n+bTAPLJ4A6OL8vJurSfqU4rTFGWltDhL3IMJI1m4sVFk8+WCtEPFpCwgzwGDd3P7FU6FaVEtuPEljwC5HnFT+x75j8A0mTAq7INQ8hj3vpnJBcoXjkHJjkStgx2gEksqg2Uo1wWq3THr8Ypodg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780479505; c=relaxed/simple;
-	bh=1kEXHXFW8U2f6ClLkkxP4faL4+K4pFUgnt9nH9JH3cE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LOdbKJNVdszD+74dpz83kg25DuHfpjOnbbIikVytEUsSF+0jzkBlO9ePDboHtmSBfU2JgWuY/qId9xt0jmJMVrgRfUcDm95tbDe5qdwSBLEz0Br+3JR37OCdv8r7TWmetXdpcTAzn4NIkPa4eKJzxuFX2k+mIEJqWpq7lsUStAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixGrqEMT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780479876; c=relaxed/simple;
+	bh=RoX7XxjYXSu8G3YA+ItXU+wszRHFeBknMMYIYjavia0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VQNYF80itEJ9StGmGvDOXI7kMNK+wkpq4vufZO2JG8ZR4WvopQM5swfStvcslOvmwoeSW0JI92TU3o7UaOMXs0SDEVq4MP8jCaeCZLpV2uI4uLLglk5unjpyki5fGZOjemCy/rFVVTOgMA2Zh75btDVyT0IDMJ8FJWQuTPd8foE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WYArfYpr; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixGrqEMT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11CE1F00893;
-	Wed,  3 Jun 2026 09:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780479503;
-	bh=FT1W7pB/bpjeFMTYVg+WsMrXFUpPzLpaJXZrbHnU1sg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ixGrqEMTSaJMyeIPuV+udB33YSa3ZgvSdJa4vIuZYEw7mFPv9dlFbev9R9+1xHKD6
-	 yy/8sZYZcbSxTOEqPGt8P9Vhm6pnemC7EYG2UTtSFUQueg8BPeLbuhDX+x+WKEvj3T
-	 UN4kiaCPsl8DVc1q2zPJ0+U8pP5zB+3qzpJjcMQnAC8gx1jQvYVvpugtqETEaAtxdg
-	 tCSdSJ+56j7+bPZ5bwtFjjRR75+8JX0cCofbdQ8VWrq9fVwCuoRzFwbOtC7R4Ruyt6
-	 F1mcIxVXgvkv7mFYg6eTRbP3D6LMFmJg7FFDB+tGcGBnPEFMGFlsQESpAJf4wg70PX
-	 7dUFlxSdgO2NA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5] btf: reject to register duplicated kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Song Chen" <chensong_2000@126.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603091910.7212-1-chensong_2000@126.com>
-References: <20260603091910.7212-1-chensong_2000@126.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 09:38:23 +0000
-Message-Id: <20260603093823.B11CE1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WYArfYpr"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-45efb698ef2so2220761f8f.3
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 02:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780479870; x=1781084670; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HQvliPaluVt3hG4Df3aSiGvi4Xl7NzgZIMVV3aYBAsk=;
+        b=WYArfYprWm1MPCkYA6GpO96UR6LtcCMbWN5mkVpuHKSXfkI9gI8Zx5NtGPwjaCcYyl
+         DbzHGyr2S1MBGSdTjziE6+387tA0Aw8R5ylPwaJxZ8SjJqK4HlczdInIgSIkCiCrcMks
+         gvcPEugBP6EQO2uCLib6YQCjEPhN4e+ad8erd56E/yTfLrIOxCTEsY9D+zJ2xANmIzQf
+         N3y+2ivO+OyTGz4Ur0lKUUZaLrbNLNF3BZJ/nnz/PN4Tur39Hz5y5exZUiGpaBU/KX6p
+         4AnNNJDb6WFhbkyPEjeQt7bEFV9Q/+qAyZ9GbRwpiDy1SyBBv2fvNFIXCLMepW8DVDNT
+         t2AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780479870; x=1781084670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HQvliPaluVt3hG4Df3aSiGvi4Xl7NzgZIMVV3aYBAsk=;
+        b=QHNMScvAkJLifo+TSwjMLkwxL8FGkMbqXKKInEas4vBDqfZbuKsFHc31Qf/yG3/dDY
+         kNFvn1uv+TUyimRTAK20Gp++e3C9F856E7k80HRW9iuOqw8/RymNb7AjnexAOfIUTjZs
+         pJFfC/nIH/vv0O8NwzX/WvZCsLMVNA131JpZvW+sA7FxytNqVLfoBdueBy9AJYN2AIf8
+         tnOaxGpIe2SsSNFWh228CxfOBrGt4evazAvXE9+EqYemX5h75xtLH23YSW8rODgNLy7P
+         gUBagIKulMyTZQduFESgaGIi4uL9cVAwlrAywcGY/UbU4e0P/Ss/Xcq9zsUe8bMH6kDS
+         Nhzw==
+X-Gm-Message-State: AOJu0Yz0xSgxqnhu+JYu0+rONL1ilVYAx4tHPLNW8klwTALInxFLtlmj
+	IPnN1FS6RlsoquRBhqmBLU/V1KC7sGsydnGEPz8FG+lSPS70nicZ2PXfAL85n7VaoakPzw==
+X-Gm-Gg: Acq92OFre37KID/Nox/uJaPUp0GnbhTm9uAMVD11gW6znVjogvAByasSR6RDH+jww9U
+	pcXQ9XYMS3zW+yoOy25yBSqX90TSECMiq7oi4y/Rrh356zyw+5nHkr5gCGjGGre583GaAPrV6aC
+	m/UIGvRUQkyFdz7iwZ1/2UXnnssqrHerYJoREY2xEas5VSQEqE6piAJxe25nEHUOP7j9wkjwuU4
+	hxGacBfF83LuP1/t9zupQqQGOMOrTeH5Bc8TyiQRawH+uTTfPD0zUvSXXARmxg7RtJl1JnODejT
+	Sjwt8LNBzgoXYyZr9xHh9QwYVYHYvCe2VWtiV9hUhr+z73V1Pue3jCxSIpL01abUJc2nkkf9lnq
+	HuojmSCX51a3gTvWjCuCN5d85I3jPZQTbnmuN0QhiZ8z9Ulody27ZHonDTeZuT0eB7RF2KoqhAx
+	DH/uoLZ5vGTzu0DAkAFWs9cMCASmGFBOlEOfl1ycCK2g==
+X-Received: by 2002:a05:6000:180c:b0:452:c9f:4b91 with SMTP id ffacd0b85a97d-46021781e28mr2648257f8f.4.1780479870353;
+        Wed, 03 Jun 2026 02:44:30 -0700 (PDT)
+Received: from x1.tail0e71db.ts.net ([46.140.7.198])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351ac0sm9989650f8f.27.2026.06.03.02.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2026 02:44:30 -0700 (PDT)
+From: Ruslan Valiyev <linuxoid@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	memxor@gmail.com
+Cc: song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: add test for arena vma split and fork rejection
+Date: Wed,  3 Jun 2026 11:44:28 +0200
+Message-ID: <20260603094428.2597058-1-linuxoid@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Over-broad name matching and TOCTOU race in `btf_check_kfunc_name`=
- causes spurious kfunc registration failures.
---
+Verify that an arena map's mmap()ed VMA cannot be split with a partial
+munmap() or inherited across fork().
 
-commit f266b4f51a9ccb4dc2dda71022e37347dd375a67
-Author: Song Chen <chensong_2000@126.com>
-btf: reject to register duplicated kfunc
+Before commit 4fddde2a732d ("bpf: Fix use-after-free in arena_vm_close
+on fork") the arena VMA had no .may_split callback and was not marked
+VM_DONTCOPY, so a splitting munmap() and a fork() both succeeded.  The
+fork() case left the child with a VMA whose vml->vma still pointed at
+the parent, dangling after the parent unmapped and leading to a
+use-after-free if the child freed arena pages.
 
-This patch adds a check to prevent kernel modules from registering kfuncs
-that have the same name as existing kfuncs in vmlinux or other modules. It
-searches the BTF data for duplicate function names and returns an error if
-a match is found.
+The test creates an arena map, mmap()s it, and asserts that a splitting
+munmap() fails with -EINVAL and that the child of a fork() does not
+inherit the arena VMA.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index a62d785812076..d97956302fe7b 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-[ ... ]
-> @@ -8684,6 +8684,39 @@ static int btf_check_iter_kfuncs(struct btf *btf, =
-const char *func_name,
->  	return 0;
->  }
-> =20
-> +static int btf_check_kfunc_name(struct btf *btf, const char *func_name, =
-u32 kind)
-> +{
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +	struct btf_module *btf_mod, *tmp;
-> +#endif
-> +	s32 id;
-> +
-> +	if (!btf_is_module(btf))
-> +		return 0;
-> +
-> +	id =3D btf_find_by_name_kind(bpf_get_btf_vmlinux(), func_name, kind);
+Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
+---
+ .../selftests/bpf/prog_tests/arena_fork.c     | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
 
-[Severity: High]
-Does this check search the entire raw BTF data for vmlinux instead of just
-registered kfuncs?=20
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+new file mode 100644
+index 0000000000000..f3d5218c9e071
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+@@ -0,0 +1,58 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <errno.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
++
++/* Regression test for commit 4fddde2a732d ("bpf: Fix use-after-free in
++ * arena_vm_close on fork"): an arena VMA must reject a splitting munmap()
++ * (.may_split) and must not be inherited across fork() (VM_DONTCOPY). On
++ * an unfixed kernel both operations succeed.
++ */
++
++#define NR_PAGES 3
++
++void test_arena_fork(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
++	long ps = sysconf(_SC_PAGESIZE);
++	size_t sz = (size_t)NR_PAGES * ps;
++	int fd, ret, status, err;
++	void *area;
++	pid_t pid;
++
++	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_fork", 0, 0, NR_PAGES, &opts);
++	if (!ASSERT_OK_FD(fd, "arena map create"))
++		return;
++
++	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
++		goto close_fd;
++
++	/* A split of the arena VMA must be rejected (.may_split). */
++	ret = munmap((char *)area + ps, ps);
++	err = errno;
++	ASSERT_ERR(ret, "split munmap rejected");
++	ASSERT_EQ(err, EINVAL, "split munmap errno");
++
++	/* The child of a fork() must not inherit the arena VMA (VM_DONTCOPY);
++	 * mincore() returns ENOMEM for the unmapped range.
++	 */
++	pid = fork();
++	if (ASSERT_GE(pid, 0, "fork")) {
++		if (pid == 0) {
++			unsigned char vec;
++
++			_exit(mincore(area, ps, &vec) < 0 && errno == ENOMEM ? 0 : 1);
++		}
++		while ((ret = waitpid(pid, &status, 0)) < 0 && errno == EINTR)
++			;
++		if (ASSERT_EQ(ret, pid, "waitpid"))
++			ASSERT_TRUE(WIFEXITED(status) && WEXITSTATUS(status) == 0,
++				    "child must not inherit arena vma");
++	}
++
++	munmap(area, sz);
++close_fd:
++	close(fd);
++}
 
-Since btf_find_by_name_kind() looks for any BTF_KIND_FUNC, could this
-falsely reject a kfunc registration if its name matches any internal or
-static kernel function in vmlinux, rather than specifically matching another
-registered kfunc?
+base-commit: 174914ea551314c52a61713b9c4bde9e42d48073
+-- 
+2.43.0
 
-> +	if (id >=3D 0) {
-> +		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
-> +		       func_name, id);
-> +		return -EINVAL;
-> +	}
-> +
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +	guard(mutex)(&btf_module_mutex);
-> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> +		if (btf_mod->btf =3D=3D btf)
-> +			continue;
-> +		id =3D btf_find_by_name_kind(btf_mod->btf, func_name, kind);
-
-[Severity: High]
-Similar to the vmlinux check above, does this search expose the registration
-to false conflicts with internal functions within other loaded modules?
-
-Additionally, because a module's BTF is added to the btf_modules list during
-the MODULE_STATE_COMING phase (before its initialization and actual kfunc
-registration), could concurrent module loading cause spurious registration
-failures due to the raw BTF being exposed early?
-
-> +		if (id >=3D 0) {
-> +			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
-> +			       func_name, id, btf_mod->module->name);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +#endif
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603091910.7212=
--1-chensong_2000@126.com?part=3D1
