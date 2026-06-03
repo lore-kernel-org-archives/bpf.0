@@ -1,170 +1,95 @@
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F09A385535;
-	Wed,  3 Jun 2026 09:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2C03D171F;
+	Wed,  3 Jun 2026 09:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478550; cv=none; b=La45C1XnSCeexH3RA6zurVShB3BcIoAlH1rHr9cr1OSVbLWUVtWZMskq1iv4YnbjHXb/5IhUTWM4c9GOY+TGl6BXp+Reat5S4lXYKmzKuGJiVyPOFqDAiflFUzknBPr5rR33fPUsr6OqJ8SThlTwFlJdC1sBDVUbkAoYFPqxY4Q=
+	t=1780478932; cv=none; b=bkzBLoGPi20nFrbjCS/y8w1nzZSdtlubBVNaeemz7+moYMmto+ucCUz4RB2dO3KTwxam9a5NOQ3Ab+EACq4IhXGUOC+R7Nx/z3D2hgb6h5x6Rx1qo3+9EyOBOLh1H0qTvMmo1dVJPaPyKvBbE8JpRH95fDZo5h8S93BNfVbWmao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478550; c=relaxed/simple;
-	bh=mZJvDd8OL9KkdMs0WLfHiFk6IKJAtGhak5iGdltNtDA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PBRWwLx+RxlCjPcn7+QEYiTq8D5p6DSV7Gd0PaPh/hIUHPQEZ7LurBT4LcC9ZCpg+qXPCcS4w5PPhKC9NER0NCPTQ8pXI7rZvC+GnF429m4PShAT+pskxAzKCKmjjg/eV1QvZx4lZjfv+BQiCsNie9kA+f6DjojGEFdyznMqR3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=H215RTZY; arc=none smtp.client-ip=117.135.210.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1780478932; c=relaxed/simple;
+	bh=mDlNtNaMXKE7PWLAMYFOuGbqDy36V3zemjvwQy7wGtg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d4vaj0Sp3ARGArtmLNLWJbl9r61ofJDRS1rVK2wsVgsyHIOuVs4ef/7LyU/yC7SRUVYvs4Pv8VZlTRL9LNWu9dgewkC3iDPVgE0GfhOV5lr1pUpx2MRPOYWMqjy4uI9X25uuE5xLGgRHxdgIK2sAg0S2SO1KGCiBv4v/K88Ig0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3dPrH7H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="H215RTZY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=oH
-	IEakLb3lrfC2/YbLb1DBVnEzXFbIoIZ17gSk8Lftg=; b=H215RTZYw8EUBpMicJ
-	1FicOXNXVPyuxoNNv+dFcjitIltLIt9JE7R2aciKtJC9FwSoD1PivkKyYwTO1Gsu
-	6rU7vrWSH0kbdgL2ufuHOLsGNIiKlOHJx1EsOCAGL75YfTQqUSoph/UzmmueoYh+
-	3qCe6O3tlG9oOA+X+6Zp4fA2w=
-Received: from song-MS-7D48.. (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3vySQ8R9q7qJuAw--.20247S2;
-	Wed, 03 Jun 2026 17:19:13 +0800 (CST)
-From: Song Chen <chensong_2000@126.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	alexei.starovoitov@gmail.com,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	kaitao.cheng@linux.dev,
-	leon.hwang@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Chen <chensong_2000@126.com>
-Subject: [PATCH v5] btf: reject to register duplicated kfunc
-Date: Wed,  3 Jun 2026 17:19:10 +0800
-Message-ID: <20260603091910.7212-1-chensong_2000@126.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3dPrH7H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F711F00893;
+	Wed,  3 Jun 2026 09:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780478931;
+	bh=a22aX8G8jWpxFSejRD1ZSpMtP0LkraJxihcB9DHAKRA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=d3dPrH7H6Kafj/ERtMeoB5Y+0Bygp4c3SHuuewWf4g3I9qWwZ18JDSfsmEJRW6MRV
+	 WMtbAy0ldSUeaHpH/8j4ojDdp6MRs2wzv37hHEKttQqcfCZgrTwRMm+kqMGZsVgvaE
+	 ibIZ5Dd9vRexNmmLUu3qY2h3BynW6hnZgF+RApj6O2F8/GZAHFgu8s0D2ZKHAK9AbY
+	 TQPvNBQ8fboTNZ3XnbndmRisXpXczLNVfMmuG0Ki5C6lZvtw4vm6DCYu1bwccdkSdY
+	 oqkwCpBQSLDZAT7dIeEM/zs8EzaMgFBjycpzA/xo8yVZuvPNPk8zxGIP07uNTATE7+
+	 xN7fmFnkV4x+A==
+Message-ID: <59cac824-6900-4e79-887f-174352126932@kernel.org>
+Date: Wed, 3 Jun 2026 10:28:48 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vySQ8R9q7qJuAw--.20247S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCFyxJw1xGFy7Gr1UXrykGrg_yoW5Kw1fpF
-	45Jr95uF4xtw13XayxtFyDWry3Gw18GF42yF9xGFW5Jr4qg3yDJr10kF1Yv3sIyry8Ca47
-	tF4ruFWUu3yjva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jUEfrUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpREDgmof8ZE8MQAA3t
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2] bpftool: Use libbpf error code for flow dissector
+ query
+To: Yonghong Song <yonghong.song@linux.dev>, Woojin Ji <random6.xyz@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org, kuba@kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com,
+ sdf@fomichev.me, song@kernel.org
+References: <22ab9375-e7e6-4929-a80c-0ee9cc74a907@linux.dev>
+ <20260603003339.33791-1-random6.xyz@gmail.com>
+ <8e3b5ae4-a399-412f-a161-fbb0121c6904@linux.dev>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <8e3b5ae4-a399-412f-a161-fbb0121c6904@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I had an ebpf program which calls a kfunc defined and
-implemented in one of my kernel modules, it was working
-fine in 6.16, but was rejected to run by libbpf in 6.19,
-the error message was:
+2026-06-02 20:01 UTC-0700 ~ Yonghong Song <yonghong.song@linux.dev>
+> 
+> 
+> On 6/2/26 5:33 PM, Woojin Ji wrote:
+>> bpf_prog_query() returns a negative errno on failure.
+>> query_flow_dissector() currently closes the namespace fd and then reads
+>> errno to decide whether -EINVAL means that the running kernel does not
+>> support flow dissector queries.
+>>
+>> That errno check controls behavior, not just diagnostics: -EINVAL is
+>> handled as a non-fatal old-kernel case, while any other error makes
+>> bpftool
+>> net fail.
+>>
+>> The namespace fd is opened read-only, so close() is not expected to
+>> commonly fail in normal use. Still, the BPF_PROG_QUERY error is already
+>> available in err, and reading errno after an intervening close() is
+>> fragile. If close() does change errno, the compatibility branch may be
+>> based on close()'s error instead of the BPF_PROG_QUERY result.
+>>
+>> This was reproduced with an LD_PRELOAD fault injector that forced
+>> BPF_PROG_QUERY for BPF_FLOW_DISSECTOR to fail with EINVAL and then
+>> forced close() on the netns fd to fail with EIO. The unpatched bpftool
+>> reported "can't query prog: Input/output error". With this change, the
+>> same injected failure is handled as the intended non-fatal EINVAL
+>> compatibility case.
+>>
+>> Use the libbpf-returned error code instead. Keep the existing errno reset
+>> in the non-fatal path to preserve batch mode behavior. The success path
+>> is unchanged.
+>>
+>> Fixes: 7f0c57fec80f ("bpftool: show flow_dissector attachment status")
+>> Assisted-by: ChatGPT:gpt-5.5
+>> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> 
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> 
 
-libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
-incompatible with vmlinux [94389]
 
-The reason is there is a new added kfunc in kernel 6.19
-which happens to be the same name with my kfunc. However the
-error message is not obvious enough to address problem
-immediately.
+Acked-by: Quentin Monnet <qmo@kernel.org>
 
-Therefore, this patches searches duplicated kfunc in
-both btf_vmlinux and btf_modules list before a kernel module
-attempts to register kfuncs through register_btf_kfunc_id_set,
-it prints clear error message and returns error code if same name
-kfunc has already implemented and registered, then developer
-knows at the first place.
-
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Suggested-by: Kaitao Cheng <kaitao.cheng@linux.dev>
-Suggested-by: Leon Hwang <leon.hwang@linux.dev>
-Reviewed-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Song Chen <chensong_2000@126.com>
-
----
-changelog:
-v1 --- v2:
-libbpf has already specified which module this kfunc belongs to as
-ebpf code onwer's expectation, then verifier uses
-find_kallsyms_symbol_value to search kfunc's addr.
-
-v2 --- v3:
-After v2, I tried a new idea of introducing a namespace in libbpf
-to specify kfunc owner in an ebpf program suggested by Kaitao Cheng,
-please see [1]. Alex suggested to go back to report an error during
-kmod load on conflicting kfunc name for now. What's more, v2 only
-searched bpf_vmlinux, v3 also traverses btf_modules list.
-
-v3 --- v4
-Fixed some coding style problems suggested from Kaitao Cheng.
-
-v4 --- v5
-Use indentation plus space in multiple lines suggested from Yonghong Song.
-Use guard(mutex) suggested from Leon Hwang.
----
- kernel/bpf/btf.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 4872d2a6c42d..f34a210e03c0 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8618,6 +8618,39 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
- 	return 0;
- }
- 
-+static int btf_check_kfunc_name(struct btf *btf, const char *func_name, u32 kind)
-+{
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	struct btf_module *btf_mod, *tmp;
-+#endif
-+	s32 id;
-+
-+	if (!btf_is_module(btf))
-+		return 0;
-+
-+	id = btf_find_by_name_kind(bpf_get_btf_vmlinux(), func_name, kind);
-+	if (id >= 0) {
-+		pr_err("kfunc %s (id: %d) is already present in vmlinux.\n",
-+		       func_name, id);
-+		return -EINVAL;
-+	}
-+
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	guard(mutex)(&btf_module_mutex);
-+	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-+		if (btf_mod->btf == btf)
-+			continue;
-+		id = btf_find_by_name_kind(btf_mod->btf, func_name, kind);
-+		if (id >= 0) {
-+			pr_err("kfunc %s (id: %d) is already present in module %s.\n",
-+			       func_name, id, btf_mod->module->name);
-+			return -EINVAL;
-+		}
-+	}
-+#endif
-+	return 0;
-+}
-+
- static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
- {
- 	const struct btf_type *func;
-@@ -8631,7 +8664,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
- 
- 	/* sanity check kfunc name */
- 	func_name = btf_name_by_offset(btf, func->name_off);
--	if (!func_name || !func_name[0])
-+	if (!func_name || !func_name[0] ||
-+	    btf_check_kfunc_name(btf, func_name, BTF_INFO_KIND(func->info)))
- 		return -EINVAL;
- 
- 	func = btf_type_by_id(btf, func->type);
--- 
-2.43.0
-
+Thanks for the fix
