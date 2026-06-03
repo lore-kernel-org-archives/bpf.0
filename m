@@ -1,125 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m2411.xmail.ntesmail.com (mail-m2411.xmail.ntesmail.com [45.195.24.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628BA38886B
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 10:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCBC383985;
+	Wed,  3 Jun 2026 10:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.195.24.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780482441; cv=none; b=nMZUGI1n/Wo/W5Uece8WgEgpiGeeYmsw4/NWDMCJa1D06SfCIsp5TKhxA0vpF0CbdrVQ1YAfDByqZVWoDAE1XnFQ9+KBz7L9wI6WG0UNLNGYzcvU1Cobpxa6/sercpJ72te0Jp2lEgPukn2T9AfEqtDE8iwHhobFoRnqT1itP5k=
+	t=1780482848; cv=none; b=EbnQuLDuh/lFI5v7vF4ppntgMx480p+rn4k8yKePqg9Na53Zn0uTLJuB9WyEf7ySA6BlZy/WsCQdNRfjkt9e2yPXqDiBHizSGPOmy3XDwgWQwKXn/nxyK8NFLgHoAvCKzdwY5rTI7j8JyXqjYkig2Gwhh8yZwc+IIGN2X+3p6rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780482441; c=relaxed/simple;
-	bh=EiBZtFDnFapRUuEMtPoIW7nvTo0KII9kUCvJJy/ROHg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sNOpZbsI6NcC+1JAz3yOCzwi76c7zghKe4WiSYSNYyyrC1u66qDcgc853IlXdYSZhBlBtD/gBqK3vJKY33rFK0y7xPjCs4HAvG+b5LuvlSWxLOy5RZiyZUNQdXvedXX3StleMDK92di77DLU8URrDdOG6KvCiiky115kWhH7xew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VP+yW2iS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780482848; c=relaxed/simple;
+	bh=FAsGlLDuXIjd03kTiyI5Qfa8qmiuNaTCHebWLKhY5Zk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iYTYhNrQYMcPX4C3SRvmS8V8DaFRV1RPsGfNq8/f+U78Su6Q+KKPpXu9gm1tAkk6+Q/JW+1o97cgs3TtVCNZuBkz6ENqBhyWBAGhnZtOsTh1sRwRcF97jz5c7dfbvM8xnzajzIQ5jcALPYf6E+opzJDWTG/Cj5YEPxsOxjsrPQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ln7UZ2wR; arc=none smtp.client-ip=45.195.24.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VP+yW2iS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CEA1F00893;
-	Wed,  3 Jun 2026 10:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780482440;
-	bh=5L0yfsmKbNo6+Od+gNMCwu55TDf7F5QhEWGHBhbGjf4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VP+yW2iSjc9iOpbSfnsCV82fWg2F7bfPmgE977uIvHkcmjbt0/8EmhwK08YrYOOJb
-	 yixA1MeImEWHcnPPGRPVG5mpEvZhxUc63dJTF+Hb71Av9te/cyZWAZoRpAG9NWqI/G
-	 mg9ykByawpv/B3zkVxpvbITfrMVzoNDiqvqiE1CKbuXovV2E2aGYN0rCjwN9E0x1QP
-	 FKBTH34gSm+/Xb7ijf7GybSpaQ8qoUvi/neR62on93DPrmG6ud1DqSPhAOZqA/FHAZ
-	 fyeO55ZI+ijHU49OTPb3j2zjH0TJzo/QxVqbwynsjpKBDmLHtE7jsdLAhtPIplbOms
-	 5tKsZQvDWXY1Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/4] LoongArch: bpf: Advertise JIT support for kptr
- xchg inline
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Chenguang Zhao" <zhaochenguang@kylinos.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603100438.2177817-3-zhaochenguang@kylinos.cn>
-References: <20260603100438.2177817-3-zhaochenguang@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 10:27:19 +0000
-Message-Id: <20260603102720.20CEA1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ln7UZ2wR"
+Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 40ea2c53f;
+	Wed, 3 Jun 2026 18:33:56 +0800 (GMT+08:00)
+From: Dawei Feng <dawei.feng@seu.edu.cn>
+To: yonghong.song@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	dawei.feng@seu.edu.cn,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	jianhao.xu@seu.edu.cn,
+	joel.granados@kernel.org,
+	jolsa@kernel.org,
+	kees@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	song@kernel.org,
+	zilin@seu.edu.cn
+Subject: Re: [PATCH v2 2/3] bpf: cgroup: NUL-terminate replaced sysctl value
+Date: Wed,  3 Jun 2026 18:33:58 +0800
+Message-Id: <20260603103358.938480-1-dawei.feng@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <bf25d653-d856-4ad7-a751-b97d38f38892@linux.dev>
+References: <bf25d653-d856-4ad7-a751-b97d38f38892@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9e8d0c09a903a2kunm6d7b34da1ec68e
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaS05PVk9PGR9NShhITh9DTVYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktJSE
+	5DQ1VKS0tVS1kG
+DKIM-Signature: a=rsa-sha256;
+	b=ln7UZ2wRLZCxyD5Q1F2DgoFgzuNzFO12tGBbbISBDaJWkw9oLLu32E6DN7Z2O8Saoy2R74+WXfw6UvWo5XCPHhTPDbHpbEZAFeiKkl6JuBlYLSxw4rIQpP0cv8O301x45vEsg3zHbMNomYFOiuNu+rPKibmwNNgaOUKEfZWwF5E=; c=relaxed/relaxed; s=default; d=seu.edu.cn; v=1;
+	bh=QxJ3iMW7Ldgrry4/8NsVUJkmYGX1x+BwOPrSC6DrZt0=;
+	h=date:mime-version:subject:message-id:from;
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hi Yonghong,
 
-Pre-existing issues:
-- [High] LoongArch BPF JIT lacks required memory barriers for value-returni=
-ng atomic instructions (`BPF_CMPXCHG` and `BPF_FETCH` variants), violating =
-the Linux Kernel Memory Model.
---
+On Mon, 1 Jun 2026 14:22:07 -0700, Yonghong Song wrote:
+>The above log can be simplied.
 
-commit ae71c5cdb14e5f9c74cac323c884423ce8768951
-Author: Chenguang Zhao <zhaochenguang@kylinos.cn>
+Thanks. I will simplify the KASAN log in v3.
 
-LoongArch: bpf: Advertise JIT support for kptr xchg inline
-   =20
-The BPF verifier can lower bpf_kptr_xchg() to BPF_XCHG when the JIT
-advertises ptr xchg support. With ordered amswap_db.* emission from the
-previous patch, declare that LoongArch bpf JIT supports this inlining.
+>>   	memcpy(ctx->new_val, buf, buf_len);
+>> +	((char *)ctx->new_val)[buf_len] = '\0';
+>
+>Does memcpy(ctx->new_val, buf, buf_len + 1) work?
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index f071d913e0545..4f3aa53eda205 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -2362,6 +2362,11 @@ bool bpf_jit_supports_fsession(void)
->  	return true;
->  }
-> =20
-> +bool bpf_jit_supports_ptr_xchg(void)
-> +{
-> +	return true;
-> +}
-> +
+I do not think memcpy(ctx->new_val, buf, buf_len + 1) would be a good
+fit here.
 
-[Severity: High]
-This is a pre-existing issue, but while the previous patch updated BPF_XCHG
-to emit fully ordered amswap_db.* instructions, do the other value-returning
-BPF atomics (BPF_CMPXCHG and BPF_FETCH variants) also need to be updated to
-ensure sequential consistency?
+The helper interface only guarantees that buf is valid for buf_len
+bytes, so reading one more byte would go past the declared input range.
+Even if some callers happen to have a trailing '\0' right after the
+payload, that is not part of the contract.
 
-According to the Linux Kernel Memory Model, value-returning atomic RMW
-instructions must be fully ordered. In emit_atomic_rmw(), BPF_ADD | BPF_FET=
-CH
-and similar fetch variants emit weakly ordered instructions:
+Appending the terminator on the destination side keeps the source read
+strictly within buf_len, while still restoring the NUL-terminated
+buffer semantics expected by downstream proc handlers. It is also safe
+for the destination, since the helper already rejects
+buf_len > PAGE_SIZE - 1.
 
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-    /* src =3D atomic_fetch_<op>(dst + off, src) */
-    case BPF_ADD | BPF_FETCH:
-    ...
-    emit_insn(ctx, amaddd, src, t1, t3);
-    ...
-}
+Therefore, I would prefer to keep it as:
 
-Should these be using the fully ordered _db variants (e.g., amadd_db.d) or
-be wrapped with dbar 0?
+	memcpy(ctx->new_val, buf, buf_len);
+	((char *)ctx->new_val)[buf_len] = '\0';
 
-Similarly, BPF_CMPXCHG emits an ll/sc loop without memory barriers before
-or after the loop:
-
-arch/loongarch/net/bpf_jit.c:emit_atomic_rmw() {
-    /* r0 =3D atomic_cmpxchg(dst + off, r0, src); */
-    case BPF_CMPXCHG:
-        move_reg(ctx, t2, r0);
-        if (isdw) {
-            emit_insn(ctx, lld, r0, t1, 0);
-            emit_insn(ctx, bne, t2, r0, 4);
-            move_reg(ctx, t3, src);
-            emit_insn(ctx, scd, t3, t1, 0);
-            emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -4);
-        } ...
-}
-
-Could this leave BPF programs vulnerable to memory reordering bugs on
-LoongArch if dbar 0 is not emitted?
-
->  /* Indicate the JIT backend supports mixing bpf2bpf and tailcalls. */
->  bool bpf_jit_supports_subprog_tailcalls(void)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603100438.2177=
-817-1-zhaochenguang@kylinos.cn?part=3D2
+Best regards,
+Dawei
