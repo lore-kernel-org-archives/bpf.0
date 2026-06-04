@@ -1,237 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F2443C06A
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305A343636D
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780573557; cv=none; b=BssjNvWo4+bRIrYkr4Q5jIe/khoQjmyRd12bdHVl+Q2S0dE0x/O7xRZivFYxOGWDP6urvKR7l/p9Fm3v6bdR+oSImkfyvO082p+4LDd0xGXKSglYVWbYGI0fc1HjhvPv4W6kH9SZ1rUl6ZrSaG//jqRL8FH4SGbCecldkc0ShoM=
+	t=1780574941; cv=none; b=FrpG6UBiyQG+VdWi9L7XSTQA0+IovQMk/PZKnqyuOGjVvvLrz3Iz8as/f4zkf8KxxO8uaM2cjjujUmmQF7MKWGlWi0fethIV36hVH/3nPx2VHXXDTfMs/WHNSOWwfxFXZC2qnGzipJ3/Mdg5ItPOkMKyzVWTpczxXbmiqIShvR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780573557; c=relaxed/simple;
-	bh=kUuLQ1hXQZ/pEwwaJ2TL3iGxkHo2uA99Ce6sNQQixuA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kcBZ8qL/oxBTgOgQ1eefmzWJhLbMCCDksINfJeXdO7dbxqu0bJVISXRSTJCgOlX8lh/kT2z43i1ciSb3kUZkPkq1YMqZyMrOb8RxcqeOGawh3pxmHuoz3fcC0C2wJzPPSURLEL8kPJz+uOl0CkyH3rSU5LUbjiQAi53wLLFRT+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aM0hdBjL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780574941; c=relaxed/simple;
+	bh=jY3Pzqq530Cn72frYkgbtdMUeZZjNDuhAa03g5Uw7yo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=lPapXpQxnzZT/n8hZj6nv8cmOhtydKAD5QXwXSLKXPHRNE9Qhzfp2IlsPdIanaaYuKpDo+/wN5yH1GfWydgdLIa77Z3NjsaAGyObKrIzxz6vor9m/BX4gaJkRtZQUDwJNVrUkNHbl/Rwcle1STKaNYH0i0KPPFSLu3SthsGCS44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L4cfS0Ud; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aM0hdBjL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A650C1F00893;
-	Thu,  4 Jun 2026 11:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780573555;
-	bh=0X74QcJD4ZqS/QVW+GMGuezxBRe9IvPkuiZiCalJVpM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aM0hdBjLOfa2T2qiEv68hlqE2d1uVydQ5rrjj7NH3k7LmvgyxGXb724ON3mieXlZf
-	 GzSKE8xZHrHt0TLEbJ/OnWp0S0Dt9fugftj5m3nc45B45zH18nt7wDWUtE81bW/k21
-	 Xv3vH/qmIrNxJLR72xUXTq88RK/gabmeo3xbc8bnL0UHgjF05tGjas10qdIbCwjCT1
-	 9trkiQRASlWsnOjy+YKYcjs13ovT5pZsnAxC3hflbR71cQkgCb3XvDWx7FTFicr3Kd
-	 F369Sbo9ATkXW9bduTkZQBNTy5Os8DEwkaiAd5rixuYrStXGUJujLj4uB5SjA6wFlt
-	 K4IPjg7Ykt7ig==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] net: lan966x: restore XDP RXQ page pool on reload
- failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Guangshuo Li" <lgs201920130244@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260604112846.1420908-1-lgs201920130244@gmail.com>
-References: <20260604112846.1420908-1-lgs201920130244@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 11:45:55 +0000
-Message-Id: <20260604114555.A650C1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L4cfS0Ud"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 4164D1A05BC
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:08:52 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F0F955FEF7;
+	Thu,  4 Jun 2026 12:08:51 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2B0C5106A035A;
+	Thu,  4 Jun 2026 14:08:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1780574931; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=8JExlbsCTH+ccnzG/dkGRTjdMWB4w6e4ceeXGKPD6vk=;
+	b=L4cfS0UdZ7ltln4Odkyg5QmKC/Sn73ZeQQGf3R8wB4dJI3rxo9YrpH7W26r7wdG0RqUPiv
+	u1YW7A7ZUSIQuzL5kJdPWZJM4QzOoAUhePMVJSyZ7lubCql0Be8QQf08Fv4WKkuOHhQ8eQ
+	WSGSVp5D7l4c5bW71S9GGNXFo4bNwCdYJ/4cuGR33NE6OGvVdCKWUlpT3EJ8ocm96DJSlx
+	f92DAyTs4NYMk7CJuJJ1De1vTsYCahvzb4N07H2IJD/CfROaJFqnNCD/FXRMBqGDawl0CG
+	ZI7gRTfB9aXIeXcIZOxfmtphYhpQYli00+JTG7aHkKXoqyCITXaWp5MLos4ffQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 04 Jun 2026 14:08:48 +0200
+Message-Id: <DJ094TM6SLCC.2FU5ZV435P1UK@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing
+ program stack
+Cc: <bpf@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <sashiko@lists.linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-2-1a5831230821@bootlin.com>
+ <20260425050557.827F3C2BCB2@smtp.kernel.org>
+In-Reply-To: <20260425050557.827F3C2BCB2@smtp.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
+On Sat Apr 25, 2026 at 7:05 AM CEST, sashiko-bot wrote:
 
-New issues:
-- [High] The newly added XDP memory model rollback loop in `lan966x_fdma_re=
-load()` unconditionally unregisters and re-registers the mem model without =
-checking for memory allocation failures.
+[...]
 
-Pre-existing issues:
-- [Critical] Failure to restore `rx.page_order` and `rx.max_mtu` in the `la=
-n966x_fdma_reload()` error path leads to buffer overflows during XDP proces=
-sing.
-- [High] Ignored return value of `xdp_rxq_info_reg_mem_model()` in `lan966x=
-_fdma_rx_alloc_page_pool()` leads to corrupted page pool lifecycle.
-- [High] Ignored return value of `fdma_dcbs_init()` in `lan966x_fdma_rx_all=
-oc()` leads to partially initialized RX rings and kernel panics.
-- [High] Incorrect DMA address synced for CPU in `lan966x_fdma_rx_check_fra=
-me()` causes stale data reads.
---
+>>  #define LR_FRAMENO_BITS	3
+>>  #define LR_SPI_BITS	6
+> [ ... ]
+>> @@ -6493,6 +6498,8 @@ static int check_mem_access(struct bpf_verifier_en=
+v *env, int insn_idx, u32 regn
+>>  		else
+>>  			err =3D check_stack_write(env, regno, off, size,
+>>  						value_regno, insn_idx);
+>> +
+>> +		mark_insn_accesses_stack(env, insn_idx);
+>
+> Global subprograms are verified independently of their call sites, and po=
+inter
+> arguments are tracked as PTR_TO_MEM rather than PTR_TO_STACK. Inside the
+> subprogram, check_mem_access() evaluates loads and stores under the
+> PTR_TO_MEM branch, which does not invoke mark_insn_accesses_stack().
+>
+> If a BPF caller dynamically passes a pointer to its stack as an argument =
+to
+> the global subprogram, will the JIT-compiled global subprogram execute wi=
+th
+> KASAN checks enabled for those accesses?=20
+>
+> Does this erroneously monitor the BPF stack, bypassing the intended
+> suppression mechanism?
 
-commit 8b9f21e42e8db3d429f28a032ed49f4eb0966779
-Author: Guangshuo Li <lgs201920130244@gmail.com>
+After having thought about this one for quite some time, I see no
+simple way to correctly distinguish stack accesses hidden behing a
+PTR_TO_MEM passed to a global subprog, as those are verified separately.
 
-net: lan966x: restore XDP RXQ page pool on reload failure
-   =20
-lan966x_fdma_rx_alloc_page_pool() registers the newly allocated page pool
-with each port's XDP RXQ. During an FDMA reload, this registration is
-performed before fdma_alloc_coherent() is called.
+I can either:
+1. skip PTR_TO_MEM memory instrumentation when we are in global
+subprograms, at the risk of missing instrumentation on passed memory
+accesses that _need_ to be instrumented
+2. systematically instrument passed PTR_TO_MEM memory accesses in global
+subprog, at the risk of inserting unneeded instrumentation when the
+passed memory comes in fact from caller memory.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/driv=
-ers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> index f8ce735a7fc09..76654b44baf2b 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> @@ -855,6 +855,21 @@ static int lan966x_fdma_reload(struct lan966x *lan96=
-6x, int new_mtu)
->  restore:
->  	lan966x->rx.page_pool =3D page_pool;
->  	memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
-
-[Severity: Critical]
-This is a pre-existing issue, but rx.page_order and rx.max_mtu are not rest=
-ored
-in this error path.
-
-In lan966x_fdma_reload(), rx.page_order and rx.max_mtu are updated before
-calling lan966x_fdma_rx_alloc().
-
-If the allocation fails, the driver state remains corrupted. When packet
-reception resumes, lan966x_xdp_run() calls xdp_init_buff() using the corrup=
-ted
-rx.page_order:
-
-drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c:lan966x_xdp_run() {
-    xdp_init_buff(&xdp, PAGE_SIZE << lan966x->rx.page_order,
-                  &port->xdp_rxq);
-}
-
-This incorrectly tells the XDP subsystem that the buffer size is the new, l=
-arger
-size, while the backing pages are drawn from the old page_pool.
-
-Could a BPF program using bpf_xdp_adjust_tail legitimately expand the packet
-into unallocated memory, causing an out-of-bounds write?
-
-> +	/*
-> +	 * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
-> +	 * each port's XDP RXQ before the allocation failed. The new pool is
-> +	 * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool's
-> +	 * registration before restarting RX.
-> +	 */
-> +	for (int i =3D 0; i < lan966x->num_phys_ports; i++) {
-> +		if (!lan966x->ports[i])
-> +			continue;
-> +
-> +		xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq);
-> +		xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
-> +					   MEM_TYPE_PAGE_POOL, page_pool);
-
-[Severity: High]
-Does this code handle memory allocation failures safely?
-
-The newly added loop unconditionally calls xdp_rxq_info_reg_mem_model(), wh=
-ich
-allocates memory internally and can fail.
-
-The return value is ignored here. If it fails (which is highly likely if the
-rollback was triggered by an OOM condition), the port's XDP RX queue is left
-without a registered memory model (type =3D 0).
-
-Subsequently, when RX resumes, pages belonging to the page_pool will be
-incorrectly freed using page_frag_free() instead of being returned to the p=
-ool.
-
-Could this turn a safe error rollback path into memory corruption and page =
-pool
-leaks?
-
-> +	}
-> +
->  	lan966x_fdma_rx_start(&lan966x->rx);
-> =20
->  	lan966x_fdma_wakeup_netdev(lan966x);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does
-lan966x_fdma_rx_alloc_page_pool() leave the port in an inconsistent state if
-memory registration fails?
-
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_alloc=
-_page_pool() {
-    xdp_rxq_info_unreg_mem_model(&port->xdp_rxq);
-    xdp_rxq_info_reg_mem_model(&port->xdp_rxq, MEM_TYPE_PAGE_POOL,
-                               rx->page_pool);
-    ...
-    return PTR_ERR_OR_ZERO(rx->page_pool);
-}
-
-The return value of xdp_rxq_info_reg_mem_model() is ignored.
-
-If the registration fails due to an out-of-memory condition, the function s=
-till
-returns 0 because it relies on PTR_ERR_OR_ZERO(rx->page_pool).
-
-This leaves the port's XDP RX queue with a default or zeroed memory model t=
-ype.
-Any packets received and subsequently returned or dropped by XDP will be fr=
-eed
-via the wrong deallocation path (page_frag_free() instead of page pool
-recycling).
-
-Could this lead to severe memory corruption?
-
-[Severity: High]
-This is a pre-existing issue, but does lan966x_fdma_rx_alloc() ignore the
-initialization failure from fdma_dcbs_init()?
-
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_alloc=
-() {
-    ...
-    fdma_dcbs_init(fdma, FDMA_DCB_INFO_DATAL(fdma->db_size),
-                   FDMA_DCB_STATUS_INTR);
-
-    return 0;
-}
-
-If page allocation fails midway, fdma_dcbs_init() returns -ENOMEM. However,
-lan966x_fdma_rx_alloc() ignores this return value and unconditionally retur=
-ns 0.
-
-Consequently, the driver continues as if the ring is fully populated, but s=
-ome
-rx->page[dcb][db] entries will be NULL.
-
-Later, when cleaning up via lan966x_fdma_rx_free_pages(),
-page_pool_put_full_page() is called with these NULL pointers.
-
-Can this cause a kernel panic?
-
-[Severity: High]
-This is a pre-existing issue, but does lan966x_fdma_rx_check_frame() add
-XDP_PACKET_HEADROOM a second time when syncing the DMA buffer?
-
-In lan966x_fdma_rx_dataptr_cb(), the DMA pointer db->dataptr is initialized=
- to
-page_pool_get_dma_addr(page) + XDP_PACKET_HEADROOM.
-
-However, when syncing the buffer for the CPU:
-
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_check=
-_frame() {
-    dma_sync_single_for_cpu(lan966x->dev,
-                            (dma_addr_t)db->dataptr + XDP_PACKET_HEADROOM,
-                            FDMA_DCB_STATUS_BLOCKL(db->status),
-                            DMA_FROM_DEVICE);
-}
-
-The code calls dma_sync_single_for_cpu() with (dma_addr_t)db->dataptr +
-XDP_PACKET_HEADROOM, effectively adding the headroom twice.
-
-This means the sync starts 512 bytes into the buffer instead of 256.
-
-When the CPU subsequently reads the IFH header and packet data from
-page_address(page) + XDP_PACKET_HEADROOM, it accesses unsynchronized memory.
-
-Could this lead to stale reads and data corruption on non-coherent
-architectures?
+I then propose to be conservative and apply 2:  the only downside I can
+think of is that a few alwasy-passing kasan checks will be inserted, but
+we are at least sure not to miss any instrumentation.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604112846.1420=
-908-1-lgs201920130244@gmail.com?part=3D1
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
