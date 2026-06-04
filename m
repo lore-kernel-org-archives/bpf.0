@@ -1,126 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5D53C343B;
-	Thu,  4 Jun 2026 18:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C2336BCDE
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 19:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780598728; cv=none; b=uy3z9WORHlyC4beoBhrXd1DuwfkpxfhOgBr4qFHPtHLnQ0+gF3HFz7I4wgC67WuwFE6JEBqS4+hiQRfNGZO/Bw6WggMm7gB5Df1nY/izGGWrH7nhjqLu2xUqk8pABm/11DVnL54qJUKc/RzsUe/2JS8mMFDt5UZ/nUI1T/h1aTE=
+	t=1780600801; cv=none; b=UxDAJ0uhsQw/ihMWkLcwvDHq90MCPITMzyeIn3q5288CVdmEN6VBzGFxzpKzooiPK1xa3hPR50qx+3Ql3M9bCS8bzrEYtjXBQ4q1vhgZ/HUg+jibZhJJXZ+U3wIRZe9kz1qKQryjbJVJOa2MhuNi7IOV7eFt4hbg6UdZ3j06X2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780598728; c=relaxed/simple;
-	bh=bneck08iL0uAJUwehxAIYLer21vofFk57LMfT56Npas=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rnfF5NJrxNDMvYRmsyghagkwnvHSfSRbQfLghUWQGgSCfTFwdF3A6w+cqKfiqmH0BWKVZzjECRm9XR/NFtxcMkq5qK1eOSFW7h4p/HnmNTpF2BW5WiH6lvL42iLhNYFa0vzGU5DXUN1obkZKOUrNtw7b2p6uNhpWBb5QzhcvcAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhiXC83t; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780600801; c=relaxed/simple;
+	bh=aGdDMOfEB3tY2uuMgSx4NwFUI8B3nOglrfzQV9enUOc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rOLrw7Hw8lEYv0bn1h2iztELhxcRhbcPInFAmY1yhGigtoDL0BjS0vlDdR1lzXo26p/NGp1JVeW8Lr9cBw2KDeWHl+pmn0l9SlIRMLEztomNj+19Q69OB2Sf9lb5KM7eb4BnQYOJLWqPV6j2/+5Tdo3tbDKIta11js+jfwsjEL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FRZeilyE; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhiXC83t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3621F00893;
-	Thu,  4 Jun 2026 18:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780598727;
-	bh=JTu/rwe9drmxmdKjq/hupd33a1+QXWn0/gM7+SeFBHQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UhiXC83t7TYSe6tPaaNsnK6KNlbSWZBc2m0dXqMT9wJoMZ5fDHsKrAgeltItTZlFE
-	 R1vbzpR4RgbiKoYXF/z8XltFqFDI3gEjBtinYVfGEb9jzqL4SDqwsD2Df/FeVURtxb
-	 wHO8glsah0kP6t8M7ZqQOwMwCHz4RVUu6oHzOYHpZv8Z/X4S9vbakg4TJLp8usw9T9
-	 g85hW5cMngfdo4TvrAIVWzWCsnwBSdEA9nQ6lyuqxS2laVCgwRB8Sh/kGOA9aiK95p
-	 YjtJwwHlUc3zVrD5wccp4fZuXNGPR5U0a1O13acWT0fP4mQ3lWrZulYqMoCpyhtnuG
-	 QV3LRhizeldtg==
-Content-Type: multipart/mixed; boundary="===============7409798819395253037=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FRZeilyE"
+Message-ID: <c7d73755-cc38-4dc0-9d8a-058fc6243d2e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780600797;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6ojXthnYVqyvhhgqjzgmVTve1qVqzxJtwsyyQseDi44=;
+	b=FRZeilyEYNpWqbT5Tu5NQZW1L4RbGFL2WxRGMnRcNjQPCt9zm3s2SkFi4fiRRPuZFQEP/Q
+	E2eIBI8n7W6fpiumALoPEgiQfAmBbmQK3/b8HtSD1HmDUCTodcfGKJm1/pteQGuFp/EeRC
+	fKF315PqgQZ0sFxRxm7+LtnCmTXWnrU=
+Date: Thu, 4 Jun 2026 12:19:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1ad0c6577b2590ffd933f1dd8ccf031e7f53dea7d070e9a5b61be290702b4c2f@mail.kernel.org>
-In-Reply-To: <20260604180730.2518088-2-gnq25@mails.tsinghua.edu.cn>
-References: <20260604180730.2518088-2-gnq25@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, verifier: fold reg->var_off into PTR_TO_FLOW_KEYS bounds check
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: gnq25@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  4 Jun 2026 18:45:26 +0000 (UTC)
-
---===============7409798819395253037==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf v4 2/3] bpf: Add validation for bpf_set_retval
+ argument
+Content-Language: en-GB
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, YiFei Zhu <zhuyifei@google.com>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ Quan Sun <2022090917019@std.uestc.edu.cn>
+References: <20260604130458.617765-1-xukuohai@huaweicloud.com>
+ <20260604130458.617765-3-xukuohai@huaweicloud.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260604130458.617765-3-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8ed484cb1a8a..c04941636ef4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4728,9 +4728,22 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, struct b
->  	return err;
->  }
+
+
+On 6/4/26 6:04 AM, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
 >
-> -static int check_flow_keys_access(struct bpf_verifier_env *env, int off,
-> -				  int size)
-> +static int check_flow_keys_access(struct bpf_verifier_env *env, u32 regno,
-> +				  int off, int size)
->  {
-> +	struct bpf_reg_state *reg = reg_state(env, regno);
-> +
-> +	/* Only a constant offset is allowed here; fold it into off. */
-> +	if (!tnum_is_const(reg->var_off)) {
-> +		char tn_buf[48];
-> +
-> +		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
-> +		verbose(env, "R%d invalid variable offset to flow keys: off=%d, var_off=%s\n",
-> +			regno, off, tn_buf);
-> +		return -EACCES;
-> +	}
-> +	off += reg->var_off.value;
-> +
->  	if (size < 0 || off < 0 ||
->  	    (u64)off + size > sizeof(struct bpf_flow_keys)) {
->  		verbose(env, "invalid access to flow keys off=%d size=%d\n",
-> @@ -6239,7 +6252,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
->  			return -EACCES;
->  		}
+> The bpf_set_retval() helper is used by cgroup BPF programs to set the
+> return value of the target hook. The argument type for this helper is
+> ARG_ANYTHING. This allows setting a positive value, which no cgroup
+> hook expects and can cause issues, such as:
 >
-> -		err = check_flow_keys_access(env, off, size);
-> +		err = check_flow_keys_access(env, regno, off, size);
-                                                       ^^^^^
+> - BPF_LSM_CGROUP: a positive value from bpf_lsm_socket_create bypasses
+>    the err < 0 check in __sock_create(), leaving the socket object
+>    unallocated. The positive return value is then propagated to the
+>    syscall entry __sys_socket(), which also bypasses the IS_ERR() guard
+>    and ultimately causes a NULL pointer dereference.
+>
+> - BPF_CGROUP_DEVICE: a positive value can be returned through cgroup
+>    device bpf prog -> devcgroup_check_permission() -> bdev_permission()
+>    -> bdev_file_open_by_dev(), where ERR_PTR(positive) produces a pointer
+>    that IS_ERR() does not catch, leading to a wild pointer dereference.
+>
+> - BPF_CGROUP_SOCK: a positive value can be returned through cgroup sock
+>    bpf prog -> __cgroup_bpf_run_filter_sk() -> inet_create() ->
+>    __sock_create(), where inet_create() frees the newly allocated sk
+>    via sk_common_release() and sets sock->sk = NULL on the non-zero
+>    return, but __sock_create() only checks err < 0 for cleanup, so a
+>    positive retval bypasses cleanup and returns a socket with NULL sk
+>    to userspace, triggering a NULL pointer dereference on subsequent
+>    socket operations.
+>
+> - BPF_CGROUP_SYSCTL: a positive value can be returned through the cgroup
+>    bpf prog -> __cgroup_bpf_run_filter_sysctl() -> proc_sys_call_handler(),
+>    where a non-zero return bypasses the normal sysctl proc_handler and is
+>    returned directly to userspace as return value of read() or write()
+>    syscall.
 
-Does this code compile? Looking at check_mem_access(), the function signature
-is:
+FYI, the following patch:
+     https://lore.kernel.org/bpf/20260603105317.944304-4-dawei.feng@seu.edu.cn/
+will change return value for BPF_CGROUP_SYSCTL from 1 to 0.
 
-static int check_mem_access(struct bpf_verifier_env *env, int insn_idx,
-                           struct bpf_reg_state *reg, argno_t argno,
-                           int off, int bpf_size, enum bpf_access_type t,
-                           int value_regno, bool strict_alignment_once,
-                           bool is_ldsx)
+>
+> So add validation for the argument of the bpf_set_retval() helper.
+>
+> For BPF_LSM_CGROUP, enforce the LSM hook specific range returned by
+> bpf_lsm_get_retval_range().
+>
+> For all other cgroup program types, restrict the argument to
+> [-MAX_ERRNO, 0], which matches the kernel convention of 0 for success
+> and negative errno for error.
+>
+> BPF_CGROUP_GETSOCKOPT is an exception, since valid getsockopt
+> implementations may return positive values, as allowed by commit
+> c4dcfdd406aa ("bpf: Move getsockopt retval to struct bpf_cg_run_ctx").
+>
+> Also refine the return value range of bpf_get_retval() so that
+> values returned by bpf_get_retval() can be passed directly to
+> bpf_set_retval() without extra manual bounds checking.
+>
+> Fixes: b44123b4a3dc ("bpf: Add cgroup helpers bpf_{get,set}_retval to get/set syscall return value")
+> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> Closes: https://lore.kernel.org/all/567d3206-74a5-44e5-99c6-779c425f399e@std.uestc.edu.cn
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>   kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 54 insertions(+)
+>
+[...]
 
-There is no 'regno' parameter or local variable. The register information is
-passed as 'argno_t argno' and 'struct bpf_reg_state *reg'.
-
-The established pattern in this file for obtaining a register number from an
-argno_t is reg_from_argno(argno), used throughout verifier.c. For example:
-
-verifier.c:1791:
-    u32 regno = reg_from_argno(argno);
-
-verifier.c:6859:
-    regno = reg_from_argno(argno);
-
-The call should be:
-
-    err = check_flow_keys_access(env, reg_from_argno(argno), off, size);
-
-This matches check_flow_keys_access()'s new signature where it does
-reg_state(env, regno) to look up the register state, which should equal the
-'reg' parameter already held by check_mem_access.
-
->  		if (!err && t == BPF_READ && value_regno >= 0)
->  			mark_reg_unknown(env, regs, value_regno);
->  	} else if (type_is_sk_pointer(reg->type)) {
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26970818032
---===============7409798819395253037==--
