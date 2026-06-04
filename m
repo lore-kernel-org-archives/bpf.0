@@ -1,67 +1,33 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0383637BE7D
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 10:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01E525487C;
+	Thu,  4 Jun 2026 11:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780570071; cv=none; b=afmJr3K2s6nHs/ZNh4AeQa+Em4QT2vWUG6A53XN7nxaTmnrO1kHeyWgyG8sABdO70+4AfGQ47nnCne9JNmeLsAEaQigLqQ0lRwq7/E2mLvNbYMqwl/Ff4C230qYYsfrnGOFRdtmyxs5jLJJC0/Ax1S3vOP9OLneJf3vG0rTqzj8=
+	t=1780571179; cv=none; b=W0C2D6FC8FzoAYE1rSb8QsstXrjRJ3tpALoGQCx7NhZ+GtOPbEqLveCtA9ar/Nx5mTmKZ3Phf0iT3a0AkFrI/5Tje9nqBzMh7lWP6CLYmwjHXyV2r93lfd2I4SWnJeOPVA/tXFx80Wf0iuzpq6QghGrEcW+HZFCqXQJ7DhqaKNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780570071; c=relaxed/simple;
-	bh=hKJbxc8NsHsFUvDDH6xySveIIcdPNbn0KUG3fWPXg+8=;
+	s=arc-20240116; t=1780571179; c=relaxed/simple;
+	bh=dH+wiHkP8iEzh5gjrFU7ky8o47LBkOK8WqG8Ty8gAms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ewtottwwpkIoB+lAfMwUaMLpgt0Qdl0Jf7l1HwhqSHtjAdV8oVAqGCxgYbq4TYvBOPzSq/TAhH/w+vx1d0NuJQ9hRLu8p1jdtuwaBlvz2+QHhnfv6c1uNCr9jznkMzlEPGXyZJtRSuvjh+dhry3SnFUs+qpm0YJZvL7lAXf9w2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s7K23d4t; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=cpgxSahhTfrtzZSc+kvAuV70v1LFfhI+Lmsr6e1aPrZy0GpwRkCJSzxWrHVBgIsuDeGL89AgTGU71qPUEIDWuPqs6EJuISjG/YsfrGmhhZbHtrnt3+N/RKoJZ9FPFBaEYBPFqFZuLOExCAPa3Z3CX/ZDx6E3JFEbwbsWjb9sM90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej8KZlE7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s7K23d4t"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-68bac6e24fdso760248a12.1
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 03:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780570068; x=1781174868; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jwJB9cBfnfHdEwA/fwRLYD3Mdm/VM1ICLl5KQOk5Qu0=;
-        b=s7K23d4tZvUdj8REaaKKMf0cycohR56cuaf2+iS05GqZvPkAD58BYrzvC+t/ykoIGE
-         YRPk1a/HXk7AaczjaLbealrCU2XtYpHVynK13KO9b48X3nxmr9C9dewo/MchZVgwVXAO
-         +/Y9z+dEZlFIAAhyye3qPsIrYJKBiqw/HCskRE7xJLVnSTL5k7kboe2sOgoc/PzMBE5d
-         fnFk5qyAPlatRHsnM38tArB0x3eQW/GrYbVmtaCkdwll3SvzRMetwCD3ze1lmro4IeA3
-         rkZyHzdRWXFhlN15qYKTAoh3e0TvOqGQ/wwH9rmVRg8Lz+jlG5hawIPOWyzVHxGFfHFV
-         B83g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780570068; x=1781174868;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jwJB9cBfnfHdEwA/fwRLYD3Mdm/VM1ICLl5KQOk5Qu0=;
-        b=Ye9ElIkC3zvamnCH4EMGqN/1bqCYhHl+i3220NEuvrfPLs5d68jOdbpgX8Sr7hDw62
-         h8AwgQbiPryLc2i1+67adH08ey/mSCx2eWorD2ZjaUrQzU7SkTSXRcCru/jM9/ymZvBY
-         7LJpUKLsGMMrGIYaeaMvgED4UDQDOGMmNX6SKZMJ5umMaOvcI5PWqFiT2Q1pnA//ISGV
-         ooW2rrDHDqCbcMNSKAxNFMHNbfYbv50JFFAJyF9wCHbYY7AE962yHyedW93BpRDO3ssx
-         +zUkBiometlRVAZYMeuT3akN2PC/jWjwqhFqlU4df3uDRUtdpqOW7+3WrhoyHEzPyUSX
-         SRow==
-X-Forwarded-Encrypted: i=1; AFNElJ9OD6hAeq4n4iz44Mw21PPjFxGpILaKdN25z2T8yc3caKB8GSc7+OizVtjThaFQRwFZWBg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcnPB+98xegvTlfhW4/Ffg37jJ2n0YnHuQnHvelJvDGU+zVZSX
-	jo27EMM/Q6ypVEoLUAtHjrKzbdjfDuNnLOIbCHhGk8asUBt/g+uUFWFx
-X-Gm-Gg: Acq92OHvHmATSPIkwbtTtYs5BPhYT0JBCAY/cRrHP5lW95ojUQpKFAvFFBERDaBvIP+
-	DWCeA7+I3EvAce9uMbGrcqyuEvYlnpFH8vrqo8TO/yshrauEnw9qMwt4oq00Bko1rPKsBQzBqcC
-	sTP8wvMMOvmSoFsZWtfNc8PhmIzoIh+q0hpKJjL1yiYVhJtS3wpPjWRKDhqJdWYjKc1gZLDVNbf
-	EmB9csOwA9skUM9AfydRXe1tvRf1VCtnpIzfBQgwzcjY+FA3Zu/uSmH3Y2NJD/gUDl2CV8N1G6j
-	pMgppj+NqPqsvLW840J5sEkNWpJ7nl+av0cpZieAtpd0Pqrxfyp1ONhJ7sWbhX9IH+LGAYf/9Ch
-	zbfvCQr4OPtiw7RmDIP12ZeDG2+ih2qD9tgNt82lyFAHJ7uOZha2mbrFFZRGzkc51jFt6MunbeO
-	MoYc4UzQDOKVZHuziW1VXClcK9SThE5wnl49OZTWegjFqFK7CNQhpHIy/3TCCkW6qxbjytMYU/p
-	Htvlh8MjROpLcoLRL3kHA==
-X-Received: by 2002:a17:907:3c8e:b0:bec:157:a63a with SMTP id a640c23a62f3a-bf0ac20eb8emr362199666b.1.1780570067915;
-        Thu, 04 Jun 2026 03:47:47 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf055307aacsm289054766b.47.2026.06.04.03.47.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2026 03:47:47 -0700 (PDT)
-Message-ID: <a56c9f94-e694-44cf-85ac-c4bcc8d18f70@gmail.com>
-Date: Thu, 4 Jun 2026 11:47:44 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej8KZlE7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161461F00893;
+	Thu,  4 Jun 2026 11:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780571178;
+	bh=79aCtUFvNEq/48Dn+njy/SJ3Q9e631A8d0gXU4oyCMg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Ej8KZlE7ixNLHhWexR/7SMz1WYRbidIsd/ciNFKyVssHeMx1PvCR6YtbOf3ojXq61
+	 G6cqaJK4TdCE2st/1CInbVwy+xANj09bCZ5Zd3xaSBUmS9/FiH/CrgE0+LBbk1t50w
+	 B++d1O8j+hpsqCj04LEeRwITFMuyv9hKqai/CiDFDy29lXSK+5NIs+pMNm15KIkSaZ
+	 PPbtw7AIvHPoxyJd73isoN9LwjzhBBpaCwZ2QGdFyy8DPEP6xXua5c4kpKCh25cTkJ
+	 KwvBbfcQyYqROPZcPaae61Wgs7UdsFL2nalr4kKMWNUAXM/8ObwIdM06aBoya4WM/7
+	 jMIyWP5kAe22A==
+Message-ID: <d9a5b911-7692-4df2-b67c-c33bc80b61aa@kernel.org>
+Date: Thu, 4 Jun 2026 13:06:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,56 +35,125 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rhashtable: Use irq work for shrinking
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
- yatsenko@meta.com, martin.lau@kernel.org, yonghong.song@linux.dev,
- clm@meta.com, ihor.solodrai@linux.dev, Tejun Heo <tj@kernel.org>,
- Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-References: <20260602-rhash-v6-3-1bfd35a4184f@meta.com>
- <4d811506109736528d816b6a1f613becd9460079ee7bfc67c509e67e7d2f44af@mail.kernel.org>
- <3960ffc3-78f3-46da-baaf-ce72b6495698@gmail.com>
- <aiDgUPXZUi-jnTdo@gondor.apana.org.au>
+Subject: Re: configurable block error injection
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>,
+ Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+References: <20260602054615.3788425-1-hch@lst.de>
+ <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
+ <20260602150503.GA6887@lst.de>
 Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <aiDgUPXZUi-jnTdo@gondor.apana.org.au>
+From: Daniel Gomez <da.gomez@kernel.org>
+In-Reply-To: <20260602150503.GA6887@lst.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-On 6/4/26 3:17 AM, Herbert Xu wrote:
-> On Wed, Jun 03, 2026 at 02:08:25PM +0100, Mykyta Yatsenko wrote:
->>
->> For v7 I'm dropping automatic_shrinking, because it adds a risk of
->> calling schedule_work() on element deletion path (__rhashtable_remove_fast_one())
->> when hashtable size drops below 30% of the capacity.
+On 02/06/2026 17.05, Christoph Hellwig wrote:
+> On Tue, Jun 02, 2026 at 11:58:25AM +0200, Daniel Gomez wrote:
+>> I wonder if the block layer would be interested in moving block error
+>> injection off the should_fail() fault injection framework and extending
+>> the ALLOW_ERROR_INJECTION annotation instead and offloading all the
+>> debugfs configuration logic (block/error-injection.c) into eBPF?
 > 
-> Now that expansion uses irq work I think shrinking should switch
-> to that as well.
-> 
+> I've looked into plain ALLOW_ERROR_INJECTION-based injection and it
+> is not very useful.  I didn't even now eBPF could use it, 
 
-Makes sense, thanks, I'll include your patch below in this series then.
+For context: Josef Bacik introduced it first for BPF only
+(BPF_ALLOW_ERROR_INJECTION). Masami Hiramatsu then generalized it into
+the error injection framework, renaming it to ALLOW_ERROR_INJECTION
+and adding the fail_function debugfs interface (which calls
+should_fail()). So annotating a function with ALLOW_ERROR_INJECTION
+gives you both backends at once: debugfs (fail_function) and eBPF
+(bpf_override_return()).
 
-> ---8<---
-> Use irq work for automatic shrinking so that this may be called
-> in NMI context.
-> 
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-> index ef5230cece36..0693bce6f890 100644
-> --- a/include/linux/rhashtable.h
-> +++ b/include/linux/rhashtable.h
-> @@ -1117,7 +1117,7 @@ static __always_inline int __rhashtable_remove_fast_one(
->  		atomic_dec(&ht->nelems);
->  		if (unlikely(ht->p.automatic_shrinking &&
->  			     rht_shrink_below_30(ht, tbl)))
-> -			schedule_work(&ht->run_work);
-> +			irq_work_queue(&ht->run_irq_work);
->  		err = 0;
->  	}
->  
-> Cheers,
+> but I
+> looked into other eBPF injections and at least for my uses cases
+> it was a bit of a mess.  
 
+Agreed, and I had not looked closely enough at the series
+before proposing the wrong primitives. ALLOW_ERROR_INJECTION /
+bpf_override_return() are not sufficient here: bpf_override_return()
+cannot set bio->bi_status or call bio_endio(), which I think is the
+key operation here.
+
+IIU the series correctly, and oversimplifying: when
+injection is enabled and a bio matches, the block layer completes the
+bio inline with the chosen blk_status_t (the status= rule from debugfs)
+via bio_endio_status(). The submission path returns to the caller
+immediately, with the bio already in the error state. Nothing is ever
+sent to the device, but the completion path sees the injected error.
+
+submit_bio() -> submit_bio_noacct() -> submit_bio_noacct_nocheck()
+      +-- Path 1: no match -> continue normal IO submission
+      +-- Path 2: match (diskN) -> blk_error_inject()
+                     -> bio_endio_status(bio, inj->status)
+                          -> bio_endio()
+                     // error injected. bio completed
+
+So this is bio mutating + a bio_endio() call, not a return override.
+That can't be solved with ALLOW_ERROR_INJECTION. But we can use
+BPF_PROG_TYPE_STRUCT_OPS instead: the kernel keeps ownership of the
+bio_endio_status() call, and the eBPF program only drives the policy,
+ie. which blk_status_t to return for a given bio, based on whatever 
+heuristics it implements.
+
+> I'd have to allow access to certain bio
+
+With struct_ops the bio is passed to the ebpf side as read-only, bio 
+fields can be read to decide the policy but cannot write them. Is 
+read-only access to bio fields itself a concern?
+
+> fields and would have create a stable UAPI for commands and status
+> using the fake BTF struct access which really would not be a good
+> idea here as we need to be able to change internals.  
+
+That should not be a problem at all. With CO-RE (compile once, run
+everywhere) the program resolves the bio field offsets against the
+BTF of the kernel it loads on, so it adapts dynamically if the layout
+changes. The contract is just the struct_ops callback signature: a
+struct bio * argument and a blk_status_t return. And that doesn't imply
+any UAPI commitment AFAIK.
+
+> Additionally
+> having fully BTF-enabled toolchains in test VMs is not great either.
+
+Are you referring to the old BCC toolchain requirements [1]? This is
+solved in CO-RE [2]. The toolchain (Clang/LLVM, pahole) stays on the
+build host; the test VM only needs the prebuilt BPF object, libbpf at
+runtime, and the kernel's own BTF (CONFIG_DEBUG_INFO_BTF). No compiler
+or BTF toolchain is required inside the VM. Clang/LLVM 10+ is enough to
+build CO-RE libbpf tools [3].
+
+Link: https://ebpf.io/what-is-ebpf/#how-are-ebpf-programs-written [1]
+Link: https://nakryiko.com/posts/bpf-portability-and-co-re/ [2]
+Link: https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere [1]
+
+> 
+> I've also not actually found any good map type for range lookups,
+> which is kinda essential here.
+
+Are you referring to the bio sector range comparison in
+__blk_error_inject()? I don't think that needs to be delegated to a
+BPF map (Documentation/bpf/maps.rst). The ebpf side has direct access
+to the bio fields, so it can apply the same sector/op filtering
+__blk_error_inject() does today. That match is already a linear list
+walk, so the ebpf program just runs the same [start, end] condition
+check.
+
+In summary: what do you think of evolving this series
+into eBPF, but BPF_PROG_TYPE_STRUCT_OPS instead of
+ALLOW_ERROR_INJECTION/bpf_override_return()?. The configurable debugfs
+injection is a nice enhancement over what we had, but the matching is
+static (op/start/nr_sectors/status/chance) per gendisk. A struct_ops
+hook would expand the failure model to anything derivable from the bio
+(plus any state the program keeps), with the kernel still owning the
+bio_endio_status() mutation and only the policy moving out of the tree.
+The benefit is the flexibility to express the policy without hard-coding
+the model in the kernel.
+
+The open question is whether programmable injection is something we want
+to support in-tree, or whether more debugfs knobs suffice. Thoughts?
