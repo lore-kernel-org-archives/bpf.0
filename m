@@ -1,88 +1,139 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E51355F41;
-	Thu,  4 Jun 2026 02:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFD2352015;
+	Thu,  4 Jun 2026 02:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780539896; cv=none; b=dp+J2fj5yEGtP7FPsJ3SPAvFGtWJJjU/wkxHP/mvZJnSUYzpcTEOoSAxR4TAgLddfcAtvIXjzpIaRbPle9AV97tYSPjnWxWJc0wJl0flKmSwGk1GMR31d6x/Okp9Tler8FgrMja0Hb1fGH56kB1Kro3QMOC8uicvrIQYU3sKGfI=
+	t=1780539979; cv=none; b=eigMvfKpts/i5flnQbUxgSF8gwpRkWt98Q70uJtNCNWsxmetSovikIWA2OgiSatTUUwLIyZAJpz9V4oz45uAWqDf+WHbNyBqZNzOQLhXrx3tqFfntJyK5dYBmiIQTycHo0LomWg+TeUMmhrlngTe3vQ136umh1OUvdhgS+dlUjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780539896; c=relaxed/simple;
-	bh=RyFo8FVfiw4cD67y4iwFAZgG/PJUKXkWPV92F9XCv1w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ko1p31SLXcjMNoBgYjWIIL2jsWrb8BYU7AjG0w7OPD626hEAnZk6AYQQVaT02e0Z/TQV2zG/2pTej5cZNDWb7B7URx+quW+kJvPeziPy1NyUakpQRqqkako4bkE2gfxURsA9uB8sPitDt3YWTVXhNVlK8TKuziz+LvvWqXHpRIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=csW7CxN2; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="csW7CxN2"
-Message-ID: <9fb5840e-fb05-4c9c-b6d6-73455a30e244@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780539893;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=b3OgiHd02I6U6/2i2gVEQh386Qg32wCGlwxwgJcoS+8=;
-	b=csW7CxN2OS37uYJn4UgGEtQF0Vr6XCRDO3aKGKbBDjzA/XaBsPBFzkaJpzegLFIgaQX3BP
-	Z4NUuY5i+bAtKB3kgoxHx40zLZo8FwQzzCFiST58ikNufkXqPdM9eCT9ZXRgX6zIh2zG0p
-	qpdwn0H0veOwhITdfJlkB9nQgcmW9/E=
-Date: Thu, 4 Jun 2026 10:24:40 +0800
+	s=arc-20240116; t=1780539979; c=relaxed/simple;
+	bh=wcU/954Dh4loD6GGN68npueg8V2ijlwPY+BzYEVQs3U=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=WMhA2q99Ax5iVfWbOT2TevGYHKO79552USP7cw26SOu2ZXKRlqLp4UsivhnN5cYbJT5U56WMSjRd/LPyPZ8E1lkoqy+ivUO7FGn+unsqXUtKAL4Zcf4G9dTqH2MLkozdoCiOG5v0QX7RNwwY+CIlgO+KxIedDIGbAVIW3XY8QK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxZnhF4iBq4GIQAA--.20857S3;
+	Thu, 04 Jun 2026 10:26:13 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCxfcJD4iBqcEmbAA--.30321S3;
+	Thu, 04 Jun 2026 10:26:12 +0800 (CST)
+Subject: Re: [RFC PATCH 1/3] LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260428072021.7289-1-yangtiezhu@loongson.cn>
+ <20260428072021.7289-2-yangtiezhu@loongson.cn>
+ <CAAhV-H5tLpXtnMJOx=b5MCDY71jMNkQ5pv1YhgCf72FV=ewcxg@mail.gmail.com>
+ <0def4127-3850-1114-d576-42748456f400@loongson.cn>
+ <CAAhV-H51mJpbYjQJYo_a_8mWuG9CSbvbvQNHrpV1G3jmp0Vkaw@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <9fe9a1f4-bdd0-d6b4-6b76-269e4ffdbc7e@loongson.cn>
+Date: Thu, 4 Jun 2026 10:26:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
+In-Reply-To: <CAAhV-H51mJpbYjQJYo_a_8mWuG9CSbvbvQNHrpV1G3jmp0Vkaw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, shuah@kernel.org, yuyanghuang@google.com,
- kpsingh@kernel.org, sdf@fomichev.me, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260603144518.67065-3-leon.hwang@linux.dev>
- <d4a64c5dffb0ebedc7460a21a52f2d94af931fda6c21d039bd71327a4cf79fce@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <d4a64c5dffb0ebedc7460a21a52f2d94af931fda6c21d039bd71327a4cf79fce@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxfcJD4iBqcEmbAA--.30321S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXw18AFykAw13Ar45tw1DJwc_yoW5WF47pF
+	Z2kr4kGan8Gw1Iva18Kwsrur13X34DGw42ga4rGw4xAr4aqryDXFn7KrsrZry0va10qayI
+	qFWSg3s2ga1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-
+	e5UUUUU==
 
-On 3/6/26 23:37, bot+bpf-ci@kernel.org wrote:
->> Fix it by changing sizeof(info) to
->> offsetofend(struct bpf_prog_info, attach_btf_id).
->>
->> Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP")
-> 
-> Is this the right commit for the Fixes: tag?
-> 
-> The change avoids the trailing padding that exists because struct
-> bpf_prog_info has 4 bytes of padding at its end, so sizeof(info) (232)
-> differs from offsetofend(struct bpf_prog_info, attach_btf_id) (228).
-> 
-> That trailing padding first appeared when __u32 verified_insns was
-> appended after the last __u64 member (recursion_misses).  Before that,
-> the struct ended on an 8-byte-aligned member and had no trailing
-> padding.
-> 
-> b79c9fc9551b only appended two further __u32 fields (attach_btf_obj_id,
-> attach_btf_id), while the 4-byte trailing padding already existed and
-> was unchanged.
-> 
-> Would this be more accurate?
-> 
->   Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
-> 
-> 
-Agreed.
+On 2026/6/3 下午10:24, Huacai Chen wrote:
+> On Wed, Jun 3, 2026 at 10:30 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 
-Will update the Fixes tag in the next revision.
+...
+
+>> For static structures like init_task, any uninitialized fields are
+>> automatically zeroed out by the compiler according to the C standard.
+>> Stripping away dozens of lines of ".field = 0" complies with modern
+>> Linux kernel code-cleaning standards. It makes the macro much shorter
+>> and highlights the only field that actually requires a special
+>> runtime value (the kernel stack top in .reg03).
+> I know it is the same for compilers, I mean the current way gives more
+> information for humans.
+> 
+> In addition, without reg02, this piece completely has no relationship
+> with CONFIG_THREAD_INFO_IN_TASK, so please drop it.
+
+Do you mean keep the original INIT_THREAD as is? No any changes for it?
+".reg03 = (unsigned long)&init_stack + sizeof(init_stack)," is not
+necessary?
+
+That is to say, do not modify arch/loongarch/include/asm/processor.h?
+
+>> For reference, please see how INIT_THREAD is defined in other major
+>> architectures, where they only initialize what is strictly necessary:
+
+...
+
+> None of these commits remove current_pt_regs. Some of them has no
+> current_pt_regs before THREAD_INFO_IN_TASK, and ARM32 still has its
+> own implementations in arch/arm/include/asm/ptrace.h now which is
+> nearly the same as LoongArch.
+
+If you think it should keep current_pt_regs() as is, I am OK, will do
+it in the next version.
+
+That is to say, do not modify arch/loongarch/include/asm/ptrace.h?
+
+>>>>    /* Helpers for working with the user stack pointer */
+
+...
+
+> set_current() is a very good friend of get_current(). Though "$tp" is
+> enough for get_current(), from the x86 implementation we know that it
+> can also get from the per-cpu array (but suboptimal).
+> 
+> Move set_current() to current.h also don't need to include
+> <linux/percpu.h> and <linux/sched.h>, it only need to forwarding
+> declare "task_struct" and include <asm/percpu.h>, which is exactly
+> done in the x86 implementation.
+> 
+> And you needn't worry about the compiling, I have tested before I comment.
+
+If you think this is proper, I am OK.
+
+Replace __entry_task with current_task (x86) or cpu_tasks (uml)?
+Replace entry_task_switch() with set_current()? or something else?
+It seems a little strange for the following code in smp.c:
+
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index 4b74409a98a3..3afdeca7bc2a 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -665,7 +665,7 @@ asmlinkage void start_secondary(void)
+         set_my_cpu_offset(per_cpu_offset(cpu));
+
+         cpu_probe();
+-       entry_task_switch(current);
++       set_current(current);
+         constant_clockevent_init();
+         loongson_init_secondary();
 
 Thanks,
-Leon
+Tiezhu
 
