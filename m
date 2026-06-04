@@ -1,82 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B41B3C060E;
-	Thu,  4 Jun 2026 18:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5D53C343B;
+	Thu,  4 Jun 2026 18:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780598726; cv=none; b=G4S+zC3mpj29LzyPZ/fAg3cELacV9RFeBa+jkNbh/Gbj95tGqeXhSYkXx/VwVL8S5s3NDqvkifhz6Wcl7hBc/3lUMI7Y/kM9gq9P29K+2QP43PgkIyMqOMzwiDlNCwURM7f2Am6fRuodz+NakjUp7r8Lawx6v0BvYBWr8S7TzMY=
+	t=1780598728; cv=none; b=uy3z9WORHlyC4beoBhrXd1DuwfkpxfhOgBr4qFHPtHLnQ0+gF3HFz7I4wgC67WuwFE6JEBqS4+hiQRfNGZO/Bw6WggMm7gB5Df1nY/izGGWrH7nhjqLu2xUqk8pABm/11DVnL54qJUKc/RzsUe/2JS8mMFDt5UZ/nUI1T/h1aTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780598726; c=relaxed/simple;
-	bh=2ds79YEit2vUJCVmdQJzL81RQBBAOfGi+oe7wahfRP4=;
+	s=arc-20240116; t=1780598728; c=relaxed/simple;
+	bh=bneck08iL0uAJUwehxAIYLer21vofFk57LMfT56Npas=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hGRD24w63OXRZ04nuQOZSfTH/Bugds4KwBa1JRH5wWBHWaWpGCG+cG0RYuZkYkZavAqGhpDthxWZwX9nbnK0dd9M+qBFIRnm2Mk6k3pvF37hDQJq4BxFEyCNhJ8t+CSSXI9+aQePcQlQRr+xwOV4L0U4MxkR1PjLHM2vIezxv1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOF5ELDf; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=rnfF5NJrxNDMvYRmsyghagkwnvHSfSRbQfLghUWQGgSCfTFwdF3A6w+cqKfiqmH0BWKVZzjECRm9XR/NFtxcMkq5qK1eOSFW7h4p/HnmNTpF2BW5WiH6lvL42iLhNYFa0vzGU5DXUN1obkZKOUrNtw7b2p6uNhpWBb5QzhcvcAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhiXC83t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOF5ELDf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDED1F00893;
-	Thu,  4 Jun 2026 18:45:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhiXC83t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3621F00893;
+	Thu,  4 Jun 2026 18:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780598725;
-	bh=s6UFE8zgUTto7o+HPCxPadggpF3obHhn/34Pfv8hwYA=;
+	s=k20260515; t=1780598727;
+	bh=JTu/rwe9drmxmdKjq/hupd33a1+QXWn0/gM7+SeFBHQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fOF5ELDfEHeL3SnkkLmi54tRZDKMJqEA/fcO0yLjJUETLb3ioq4suOOGdebUwdBKv
-	 OmXFw09q/Gq8XpJ3eEcGx57Y3SbQEkdeu7rre9Y6oeuRCJ1ppvCzb+5pIBhyGFWH4e
-	 pwoL1c/JWVq3xZj1qRehpPUHajB/XKnBaYozlNWbFhxhhSFoQKoqkjEayB95jrtajo
-	 sNU0niokDrJAWpAnkB3DugHXkMdpDb5E+xHUY0dUNuRB0ynZ+Jrp3cUI27ZPOxkuYX
-	 lD634xf5l5RHGYOz+D3nGNts4VyI4XH2ycbtfqdIZMZl1/gLzMDVM646mo+4kHkvo1
-	 i+L/TgR8nRlZQ==
-Content-Type: multipart/mixed; boundary="===============5913587305999243382=="
+	b=UhiXC83t7TYSe6tPaaNsnK6KNlbSWZBc2m0dXqMT9wJoMZ5fDHsKrAgeltItTZlFE
+	 R1vbzpR4RgbiKoYXF/z8XltFqFDI3gEjBtinYVfGEb9jzqL4SDqwsD2Df/FeVURtxb
+	 wHO8glsah0kP6t8M7ZqQOwMwCHz4RVUu6oHzOYHpZv8Z/X4S9vbakg4TJLp8usw9T9
+	 g85hW5cMngfdo4TvrAIVWzWCsnwBSdEA9nQ6lyuqxS2laVCgwRB8Sh/kGOA9aiK95p
+	 YjtJwwHlUc3zVrD5wccp4fZuXNGPR5U0a1O13acWT0fP4mQ3lWrZulYqMoCpyhtnuG
+	 QV3LRhizeldtg==
+Content-Type: multipart/mixed; boundary="===============7409798819395253037=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <135018da09cfb3917b44375504f8030257b0aa8aeb649f57c96ae2b8e81885db@mail.kernel.org>
-In-Reply-To: <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
-References: <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
+Message-Id: <1ad0c6577b2590ffd933f1dd8ccf031e7f53dea7d070e9a5b61be290702b4c2f@mail.kernel.org>
+In-Reply-To: <20260604180730.2518088-2-gnq25@mails.tsinghua.edu.cn>
+References: <20260604180730.2518088-2-gnq25@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, verifier: fold reg->var_off into PTR_TO_FLOW_KEYS bounds check
 From: bot+bpf-ci@kernel.org
 To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: gnq25@mails.tsinghua.edu.cn,eddyz87@gmail.com,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,shenghaoyuan0928@163.com,tangyazhou518@outlook.com,mattbobrowski@google.com,emil@etsalapatis.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  4 Jun 2026 18:45:24 +0000 (UTC)
+Cc: gnq25@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 18:45:26 +0000 (UTC)
 
---===============5913587305999243382==
+--===============7409798819395253037==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
->     selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8ed484cb1a8a..c04941636ef4 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4728,9 +4728,22 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, struct b
+>  	return err;
+>  }
 >
->     Add verifier tests covering constant pointer arithmetic on a
->     PTR_TO_FLOW_KEYS register, which regressed with commit 022ac0750883
->     ("bpf: use reg->var_off instead of reg->off for pointers"): an
->     out-of-bounds offset introduced as flow_keys += K and then dereferenced
->     at insn->off 0 was accepted, while the equivalent flow_keys + K direct
->     offset was rejected.
+> -static int check_flow_keys_access(struct bpf_verifier_env *env, int off,
+> -				  int size)
+> +static int check_flow_keys_access(struct bpf_verifier_env *env, u32 regno,
+> +				  int off, int size)
+>  {
+> +	struct bpf_reg_state *reg = reg_state(env, regno);
+> +
+> +	/* Only a constant offset is allowed here; fold it into off. */
+> +	if (!tnum_is_const(reg->var_off)) {
+> +		char tn_buf[48];
+> +
+> +		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+> +		verbose(env, "R%d invalid variable offset to flow keys: off=%d, var_off=%s\n",
+> +			regno, off, tn_buf);
+> +		return -EACCES;
+> +	}
+> +	off += reg->var_off.value;
+> +
+>  	if (size < 0 || off < 0 ||
+>  	    (u64)off + size > sizeof(struct bpf_flow_keys)) {
+>  		verbose(env, "invalid access to flow keys off=%d size=%d\n",
+> @@ -6239,7 +6252,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+>  			return -EACCES;
+>  		}
 >
->     The tests check that:
->      - in-bounds constant arithmetic on the keys pointer is still accepted,
->      - an out-of-bounds offset introduced via constant arithmetic is rejected
->        for both read and write, with the same diagnostic as the direct
->        insn->off form.
->
->     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> -		err = check_flow_keys_access(env, off, size);
+> +		err = check_flow_keys_access(env, regno, off, size);
+                                                       ^^^^^
 
-The commit message names the commit that introduced the out-of-bounds
-behaviour these tests reproduce, but there is no Fixes: tag.
+Does this code compile? Looking at check_mem_access(), the function signature
+is:
 
-Should this carry a Fixes: tag so it is backported alongside the
-functional fix?
+static int check_mem_access(struct bpf_verifier_env *env, int insn_idx,
+                           struct bpf_reg_state *reg, argno_t argno,
+                           int off, int bpf_size, enum bpf_access_type t,
+                           int value_regno, bool strict_alignment_once,
+                           bool is_ldsx)
 
-  Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+There is no 'regno' parameter or local variable. The register information is
+passed as 'argno_t argno' and 'struct bpf_reg_state *reg'.
 
-The accompanying fix commit (89ea48e0ec4c) already carries the same tag.
+The established pattern in this file for obtaining a register number from an
+argno_t is reg_from_argno(argno), used throughout verifier.c. For example:
+
+verifier.c:1791:
+    u32 regno = reg_from_argno(argno);
+
+verifier.c:6859:
+    regno = reg_from_argno(argno);
+
+The call should be:
+
+    err = check_flow_keys_access(env, reg_from_argno(argno), off, size);
+
+This matches check_flow_keys_access()'s new signature where it does
+reg_state(env, regno) to look up the register state, which should equal the
+'reg' parameter already held by check_mem_access.
+
+>  		if (!err && t == BPF_READ && value_regno >= 0)
+>  			mark_reg_unknown(env, regs, value_regno);
+>  	} else if (type_is_sk_pointer(reg->type)) {
+
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26970818032
---===============5913587305999243382==--
+--===============7409798819395253037==--
