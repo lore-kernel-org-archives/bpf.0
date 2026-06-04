@@ -1,186 +1,170 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1EE39A4B9
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 15:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780588770; cv=none; b=UjgwH/rb5iIoFGdmh1+oMkOEk8xpcJwDU7igUD2WkgkjShxQk91mveBRm8aL9hsrKsmDGFVxaeQPDo9k8DiFD7zGKtegC/M66/Ee2Avv57ZpLcOX2a5ZqTVJUo9QxCZOVByIrGV9zyNLj1QmnSJPVe4VyijJLjWXJ6ka3JS+yw0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780588770; c=relaxed/simple;
-	bh=gaeaHjJrge4LKzIxhoFtatJPq0B811tpxJbmbSzUzv0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=taqahGTjdlBkXou43ZdF6qtuTyYuo40KsmiaTwKeLGY9IDTvU90djAEZfFTsdDDH1vhn9QQaHOt5XS+myMoWwHVYup133WtcytYGqMfeOWsHcSbHC2SkSlYzFKwIIvP//14IwdL8iuCzNn7ypFZ7P6qCskq5YSJiCpDGujuratk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=YSa1F56x; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4680C3ABD99
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 16:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780588819; cv=pass; b=ZfTeLrk319dAm42Pu7MtdYmCROM7gRgvPyFS07araPHZEJYs68+PWR0V3e1x+Z/lOFsdY72JMjQw9GXLBqNv6Pb9/HxLwHU+WWZS8hH9OzanI8OzMU4u6Kuy8iQFaHarx7sFJ/5NbuAofKFtVoJWoHyJvp9nVEdXHXV7mlK1n8Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780588819; c=relaxed/simple;
+	bh=bLe1Y9Of8HNmICgPAiQwdq9YGoPx+pI+2J6qjn08Evs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PU56knB+4BS9Ln4pm/gKI9EuQrIcE458KjI4wiIJhP98u+Ux6gZslXCwpqz7yJctP+N07dBLQzaDCILhmGWIhPpP0thyu8Ods2AiwcscAiQvvVCFZHG65PB322ClCdJ68KNYTI8vh8YwXBCo7O/18+6kmdUbQXgbvpyUduTk4Hk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZUdrVTEs; arc=pass smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="YSa1F56x"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8423b08b293so442757b3a.3
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 08:59:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZUdrVTEs"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8cceaacd07bso8589956d6.3
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 09:00:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780588817; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Egb/2WJQ78onGycKu1OUkJh+2Uch/ZQ6HQCG7KY+MWjEsBcRGZy2UrNQPgsLaSxFMX
+         ki5drrRUuMphXSkTI0NvXEvjeeQwa5YTJ1WvSECYT9kKtmiHkslJoL3Bjb3GT3uRDoce
+         QV/JGVJR2iNhCSJCiWAvCEukB5i6QGtzv3cbMJ77eVw7t3Lcy7h2sZOx8yHoETrx8ADF
+         WmgBepewdaDALYlErBgF0q1oLf4KWT4iDrjOISYkKVrqw1wdcZx8jTqydOFTkc1Y6OZg
+         Yl5pIGiReXroNNu7fRycOxucD3kcBXeIpoV0ntkNATq0ndUgas3SSeqW1HWct2Flsd6m
+         /Sow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
+        fh=75f2A28W9VcM7NHPBVVYIk+5JD7pHrzYxxfTKKi+ct0=;
+        b=a7qtnpr9t2Ed0LltmAnW3wdWChWbcQOqrRWq0Z6Z+mTPiEW7/mbPeWqLmyZjFbgVlx
+         8k47EDu4jW1jSPMzTp7xQR6PGf7Lv7F9G5J8xSEepHDb27dJ3nfJTLN0NPpI8n2gQFs9
+         FI5kCFD+F+tXNY+Q+Z98Ee5Db7AOWrJKMRghw/hfZlLIpPUe9B6Ve2sQSrpFG1Mtu/CK
+         qibYt0cOO4xKX6CmqABRITX+J6uQI4oxWrz/wX8uthKc0+Lbtp8nNAvHYEW+sQMLxkb/
+         07n7CQwzWzXn9ulU16VhS+d6rmuNki4QwkfeuCNHTnfci54tfZ7K788QPav/6KTPbFYo
+         RQIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780588768; x=1781193568; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1780588817; x=1781193617; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9dcr160ztftDL6aQ6BmVMYcIb6LF1JPSaLmdRHjZV18=;
-        b=YSa1F56x140kSdZ5/wqG/SmGl+FG+mA0+yz1kiFbKM2uZ2AFkGx1HVZW8kWBQzgIsf
-         Q+ppnUh84TYjfXA1YboTTg3qQiXLj9lvI3uVzmexzrw0FB4PWwRbfmLmdjr+O8hfM0XW
-         dOrV1nzvdNFwx20mZ2K9RBASTXMNTQDzbtAHOO0KG4uEBe63OTSMUdSRe1lAt8MJXQ52
-         jAw/EXaQu7I9qlza4mmWYnZsP9KKwTydgIrz0kvIE9jaNCvieALXK/4EvIjyHl2A9GyY
-         cYIdzWCnWnOXdN9tSG4JfJJoaxKEpZow1mmTwvNWQ+OKrhzh/jLNKD70ZeqOYep8mbUK
-         V9Gg==
+        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
+        b=ZUdrVTEsopIF2xCG1HzWlcWIBKbS9DCFIlYws9LCWlK4utQH5+8hfNN9s3QYItnklm
+         Cm7wy9BXaf/vdf27lWf9fstb8GRELagqwzQD97fnqfzIR4hrlQq1r3AB90yomVXQ7Uvr
+         xoNisG+j7buROc40OA/nlGaKpTWRe+WvkmDyL4OtsI2woLWYZ6fHiZyZjznBHRSbYRFM
+         p9VqFb3h5o5GQtIiCKPmtnST4Xkze+oSPzSXc1e7EdkdPqY3sY/0InxJkLHRHw3KMk6r
+         tC3XDXWRE4w2fEFAihknzjFqRlReVXF9TjU087p5WnvYzpfFweYKP0B0xMilxGSu3Jjd
+         uqHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780588768; x=1781193568;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9dcr160ztftDL6aQ6BmVMYcIb6LF1JPSaLmdRHjZV18=;
-        b=VfUgvkgbnO6aU9TYMl7RNwGhi86OFY+3UWhcx/H+cw7c8l2Y1LkHG1/Ag7wEcZ7U6p
-         Owx09fzYwK4cGsEyZQ1M15/i/eqYUGMxSbqNaJbDSG5NHkgMfpl8QVCxTJ+SlCYH3f2b
-         FUySYVm1bMxblaiBOpdTKF3baXb+VKj/FlwHIep1+Rq4U64YbRuDi642fVsbieGO3BiW
-         GuOyg8PVFBNuf4T2cqrwCNyVu0G2k6CMvjvBGUErYFc8FVrE5MAiH/TPNDdZVrjYDell
-         yJsaoE4qutUTpRx0StgTqQlQU6kaKm57JBTDrDyyxNFiwPyZOP+Hs2Ye4VNMIxEAiLHA
-         EcNg==
-X-Forwarded-Encrypted: i=1; AFNElJ+ftWGIij4WPbnFj+Q3T2sKgeiKdsgj1ao5GG5pYDuAq30gDeQMW0oR8EzHSL6019dAluY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6BuIx54f2Kjxh1JUKCArcVLsIgm2yZR+1hrhzpow0s92cycYv
-	q8t6eOucLfysj4eyV9p3FDg8Utlv8jx4WM8DuflsfKAR7Nrq9GFTJR8g4uYHGDqmdyU=
-X-Gm-Gg: Acq92OEgl5QS+hRE9S8OxSnDUZs3Db3TLd2jGxXhHdZzXx3HifCc9KJh13uqLnmdoxm
-	ztJb1Jz/CyeSDZpeSeYeMKHc9/hwkniNzSqDG++lrJWypKaRuGwHQ8D3noEu3q5ET5fqcfEOQX+
-	sFL+FghBdBkqShfnTVmhK0uyqtJ6foAg1UPQqtscGXsB5pYTLwP1XYR315sGmLXbv9iwoX26abi
-	ZsTkwtabO4cCs8hl2w5QrgWU9eN62LbNkc8HjxHEaFbViPoVMtfWyKXUJ+jTsFCMougBiofCilf
-	Yh5WeaWRHpb9Rw1JusLkMv0inoVnhc9deHT0rUZ9CXGoKmxl/gauAGZaXALXmlqs+UITy5I0ulg
-	2l2kc60nPK//V7FRilXfjhSOKc+NAnQHKMZAfstmwjSO/ahzsCZ5Wd0sFOy2QpB9H+HHPMCeYa9
-	kPUxli3mgq+fsnNFQdU+JRCU4Xvx4ys9Zql/YRUV/toeUabA==
-X-Received: by 2002:a05:6a00:4213:b0:842:4387:34b6 with SMTP id d2e1a72fcca58-84284f34197mr7686550b3a.35.1780588767651;
-        Thu, 04 Jun 2026 08:59:27 -0700 (PDT)
-Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428325d9a3sm6507929b3a.34.2026.06.04.08.59.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2026 08:59:27 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780588817; x=1781193617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
+        b=sMEthUkd5sA36ArHfBt30KsNGWa6cLnL9cMAX8k4DkIoC/ScgQI1KQSdHmnLcnTauD
+         dIHaHbTDELpI9sKerIeLVWcRz38vG6lWs8B08564bCfl1fIQbSGBiStXhrO0rX68+hgT
+         2whzLZjMl2e2dsXeutpmHa6obxyexkpxxRKvmCa31I5RFoInsyfiHJab2kAidUx7ehh+
+         +BEyOYUdHygi/aMI+mJ1xLXIXwY6KLJG7OBnt2PDsxNkyh74VokNqENcX5skcTAPvQqr
+         Myhy9oLUNrdU51JbnoD4pShcjPcbRFPik8346QpUWaM+en1JoERGZ/cgFJ06oAARSDsO
+         FK+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+J39LmHkhR2wfAwAJhZw/5eyN5FInqktuGYI22d2wAThoP9j4JEPHsLtezQ4/50O8c558=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziDGwvMaTHGCjZLWcPxm+a70IdB/1cDAmP0XzQwX6oq9OMgkcy
+	HCQ4YTSwF967Y+hoBPmv26hS5HStj09orcRh0DfImCFRStGcOyQl5QIw3GTy/+wyty3DapYgLXv
+	b91HlZoROyfQUunoifoJP2DsAwdMESR+KKn3vEzmu
+X-Gm-Gg: Acq92OGn06fQX3XjsfebXmmn2zpgFDyl2uN4da893as/TgbN8/vjRnqqMum7UvUTd4W
+	/3zqZObYxa9pSv3YG/t//JPuVcKvF73hHJDWSpxFWBt4N7gfJH7aAZGymtpGx1TzK5EHFG9w5Z8
+	NBgUTybPDv3Y6NLYDh+eWvdMjS/SDlIhL6S8zjIHcCrgLWV+l/Gy9b8FuD2G7ClYtUC2Z6TwLN/
+	VCHdiCyWYT0GMsFTelGPMBCrFJD/LKWbAZ3DLTEr/vMG4Ir6jEeElqiY67gwcnorC4c7eEIOh3Y
+	+8Cp+q78oaQyVPsdvcE2mqyD7frlKCdu3reJwg+9HgNStrv9ZDAbLChzCRTFRI++clBUHkVrBKw
+	iaD0/vGEOCvqM4eH23ZfcOoo2DFWy3g==
+X-Received: by 2002:a05:6214:3c9f:b0:8ce:a005:3e93 with SMTP id
+ 6a1803df08f44-8cece02dadamr121809056d6.35.1780588815554; Thu, 04 Jun 2026
+ 09:00:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260603162737.697215-1-rhkrqnwk98@gmail.com> <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
+In-Reply-To: <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 4 Jun 2026 09:00:04 -0700
+X-Gm-Features: AVHnY4KFeB_7dmL9P1vPP7kjQ_Xqs-Cnp4utG2D6VMV7WmTclo4knkrnYzYYWMU
+Message-ID: <CANn89iLhibjsgf-nk5U9be5kRpg3k4FXchKszmerkMbaaK6z6w@mail.gmail.com>
+Subject: Re: [PATCH net v2] udp: clear skb->dev before running a sockmap verdict
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Sechang Lim <rhkrqnwk98@gmail.com>, willemdebruijn.kernel@gmail.com, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, jakub@cloudflare.com, 
+	aleksander.lobakin@intel.com, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 04 Jun 2026 11:59:26 -0400
-Message-Id: <DJ0E1ER599F1.36FPRHEE3YZAP@etsalapatis.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next] bpf: clean up btf_scan_decl_tags()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Matt Bobrowski" <mattbobrowski@google.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260603201822.770596-1-mattbobrowski@google.com>
-In-Reply-To: <20260603201822.770596-1-mattbobrowski@google.com>
 
-On Wed Jun 3, 2026 at 4:18 PM EDT, Matt Bobrowski wrote:
-> Refactor the newly introduced btf_scan_decl_tags() to improve
-> readability and maintainability. The current implementation uses a
-> manual if-else chain and a magic number offset to strip the "arg:"
-> prefix from declaration tags.
+On Wed, Jun 3, 2026 at 6:49=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
 >
-> Replace the if-else logic with a table-driven approach using a static
-> const array. This separates the tag data from the scanning logic, making
-> the helper more extensible for future tags. Additionally, replace the
-> magic number '4' with a sizeof-based calculation on the prefix string to
-> ensure the offset remains synchronized with the search key.
 >
-> Finally, optimize the loop by moving the is_global check to the top of
-> the block. This allows the verifier to fail-fast on static subprograms
-> without performing unnecessary BTF string and type lookups.
+> On 6/4/26 12:27 AM, Sechang Lim wrote:
+> > On the UDP receive path skb->dev is repurposed as dev_scratch (the
+> > truesize/state cache set by udp_set_dev_scratch()), through the
+> > union { struct net_device *dev; unsigned long dev_scratch; } in sk_buff=
+.
+> >
+> > When a UDP socket is in a sockmap, sk_data_ready is
+> > sk_psock_verdict_data_ready(), which calls udp_read_skb() -> recv_actor=
+()
+> > (sk_psock_verdict_recv) to run the attached SK_SKB verdict program in s=
+oftirq.
+> > If that program calls a socket-lookup helper (bpf_sk_lookup_tcp/udp,
+> > bpf_skc_lookup_tcp), bpf_skc_lookup() does:
+> >
+> >       if (skb->dev)
+> >               caller_net =3D dev_net(skb->dev);
+> >
+> > skb->dev still holds the dev_scratch value (a non-NULL integer), so dev=
+_net()
+> > dereferences it as a struct net_device * and the kernel takes a general
+> > protection fault on a non-canonical address in softirq:
+> >
+> >    Oops: general protection fault, probably for non-canonical address 0=
+x1010000800004a0
+> >    CPU: 1 UID: 0 PID: 1406 Comm: syz.2.19 Not tainted 7.1.0-rc6 #1 PREE=
+MPT(full)
+> >    RIP: 0010:bpf_skc_lookup net/core/filter.c:7033 [inline]
+> >    RIP: 0010:bpf_sk_lookup+0x45/0x160 net/core/filter.c:7047
+> >    Call Trace:
+> >     <IRQ>
+> >     bpf_prog_4675cb904b7071f8+0x12e/0x14e
+> >     bpf_prog_run_pin_on_cpu+0xc6/0x1f0
+> >     sk_psock_verdict_recv+0x1ba/0x350
+> >     udp_read_skb+0x31a/0x370
+> >     sk_psock_verdict_data_ready+0x2e3/0x600
+> >     __udp_enqueue_schedule_skb+0x4c8/0x650
+> >     udpv6_queue_rcv_one_skb+0x3ec/0x740
+> >     udp6_unicast_rcv_skb+0x11d/0x140
+> >     ip6_protocol_deliver_rcu+0x61e/0x950
+> >     ip6_input_finish+0xa9/0x150
+> >     NF_HOOK+0x286/0x2f0
+> >     ip6_input+0x117/0x220
+> >     NF_HOOK+0x286/0x2f0
+> >     __netif_receive_skb+0x85/0x200
+> >     process_backlog+0x374/0x9a0
+> >     __napi_poll+0x4f/0x1c0
+> >     net_rx_action+0x3b0/0x770
+> >     handle_softirqs+0x15a/0x460
+> >     do_softirq+0x57/0x80
+> >     </IRQ>
+> >
+> > The rmem charge that dev_scratch accounted for is released by skb_recv_=
+udp() on
+> > dequeue, just above, so the scratch is dead by the time recv_actor() ru=
+ns. Clear
+> > skb->dev so bpf_skc_lookup() falls back to sock_net(skb->sk), which
+> > skb_set_owner_sk_safe() set just above.
+> >
+> > Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 >
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-We can also modify the new btf_scan_type_tags() to conform to the same
-pattern. It currently recognizes a single type tag, so if anything it
-would be more code, but we don't want it to slowly end up looking like
-the if-else chain we're replacing below.
-
-> ---
->  kernel/bpf/btf.c | 46 ++++++++++++++++++++++++++++++----------------
->  1 file changed, 30 insertions(+), 16 deletions(-)
 >
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 68921d9172b5..55aa3ba1b1e0 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7808,14 +7808,28 @@ static int btf_scan_decl_tags(struct bpf_verifier=
-_env *env,
->  			      u32 arg_idx, bool is_global, u32 *tags)
->  {
->  	int id =3D btf_named_start_id(btf, false) - 1;
-> +	const char tag_key[] =3D "arg:";
-> +	static const struct {
-> +		const char *tag_value;
-> +		enum btf_arg_tag arg_tag;
-> +	} tag_values[] =3D {
-> +		{ "ctx", ARG_TAG_CTX },
-> +		{ "trusted", ARG_TAG_TRUSTED },
-> +		{ "untrusted", ARG_TAG_UNTRUSTED },
-> +		{ "nonnull", ARG_TAG_NONNULL },
-> +		{ "nullable", ARG_TAG_NULLABLE },
-> +		{ "arena", ARG_TAG_ARENA },
-> +	};
-> =20
->  	/*
->  	 * The 'arg:<tag>' decl_tag takes precedence over the derivation
->  	 * of the register type from the BTF type itself.
->  	 */
-> -	while ((id =3D btf_find_next_decl_tag(btf, fn_t, arg_idx, "arg:", id)) =
-> 0) {
-> -		const struct btf_type *tag_t =3D btf_type_by_id(btf, id);
-> -		const char *tag =3D __btf_name_by_offset(btf, tag_t->name_off) + 4;
-> +	while ((id =3D btf_find_next_decl_tag(btf, fn_t, arg_idx, tag_key, id))=
- > 0) {
-> +		const struct btf_type *tag_t;
-> +		const char *tag;
-> +		int i;
-> +		bool found;
-> =20
->  		/* disallow arg tags in static subprogs */
->  		if (!is_global) {
-> @@ -7825,19 +7839,19 @@ static int btf_scan_decl_tags(struct bpf_verifier=
-_env *env,
->  			return -EOPNOTSUPP;
->  		}
-> =20
-> -		if (strcmp(tag, "ctx") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_CTX;
-> -		} else if (strcmp(tag, "trusted") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_TRUSTED;
-> -		} else if (strcmp(tag, "untrusted") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_UNTRUSTED;
-> -		} else if (strcmp(tag, "nonnull") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_NONNULL;
-> -		} else if (strcmp(tag, "nullable") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_NULLABLE;
-> -		} else if (strcmp(tag, "arena") =3D=3D 0) {
-> -			*tags |=3D ARG_TAG_ARENA;
-> -		} else {
-> +		tag_t =3D btf_type_by_id(btf, id);
-> +		tag =3D __btf_name_by_offset(btf, tag_t->name_off) + (sizeof(tag_key) =
-- 1);
-> +
-> +		found =3D false;
-> +		for (i =3D 0; i < ARRAY_SIZE(tag_values); ++i) {
-> +			if (!strcmp(tag, tag_values[i].tag_value)) {
-> +				*tags |=3D tag_values[i].arg_tag;
-> +				found =3D true;
-> +				break;
-> +			}
-> +		}
-> +
-> +		if (!found) {
->  			bpf_log(&env->log, "arg#%d has unsupported set of tags\n", arg_idx);
->  			return -EOPNOTSUPP;
->  		}
+> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
+Reviewed-by: Eric Dumazet <edumazet@google.com>
