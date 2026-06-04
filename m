@@ -1,89 +1,95 @@
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D123530FC23;
-	Thu,  4 Jun 2026 02:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934DA29D264
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 02:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780539500; cv=none; b=SRoR7ceE9mmBacB/lR2yxBfCeGCjuqlQGUbXg/sm2h12j4+kHOSqhCvdgzdcGktvXpv5ty+50VeJZE/JnYZ4aE3ROLtzp29RSnbJFGZgDJ5zmzUDafbrqlGPeeM8mMtDrpj/uhYk3e4roLzvMeKm3aqCyT3wnbfBFsGfvWhzB8A=
+	t=1780539818; cv=none; b=krxAoNlIhYG3qRrPSNUb4+WanaVAg9Zxqi7PxUJ00+E0lXtysPKvrJ2rrkijKH4DC++6l92zmWirtYRCpu3YWkGLyMCHNS0Ur7hGGjfC+T7Fb1t88LFFVDwsBhXGTbyS8TsTUr7cMJiy3I4aInbX/XXERIAhDNF0VcvhDsivGKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780539500; c=relaxed/simple;
-	bh=d/Z/3QyOfB3rrfshguzBQCzjtI1e8oZsg5+2nlyBXNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lnqXcd2ZpRhrrzNAr/lZgS+qijE6BwsuHRFlSN1zKgrR9KG5On21Sr9aih1S+ZN4UMlVbGmsagGxi9VgxQNuRl4uM5zMJwYDbnaWmUjpzKGL2FWmONMlnZD1pvkdLhNGCGQJX0sFp0NBHaj9nEBPM84T7VCZI1t3YJLx0eZQSA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=lc5M4rmt; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	s=arc-20240116; t=1780539818; c=relaxed/simple;
+	bh=QG7vPbkyoq7VlC1qwYsactQbnLDbsH5yklFMqCbrvIU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XKLYmWmzTEf5t+DpBEESTKLuYRky/ygJ/EtWfL3FCx22Pzt7M177fk2mBhWxIdjN2HaIbG/6tsSgDM0/jpu9UVclWYL2y8G0bCDcBYiUsXR4zjAiwP0w4UK1WhLQ8sRu0rLRMbNxNUT5YB+tdocGOg75otOHZ70Bohz210nNKfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iymTNiKZ; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="lc5M4rmt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=kq8HBaSr83eJu8MS5ar+t8j6rYNQ0hqiMPA0MyxowA4=; 
-	b=lc5M4rmtLmD6nHYesWKO0dIKub7eC9E9tYfsKepNpNpMGUxsIPZI7bi8CIwlkExPqKwNiDvqSbp
-	5vI8KJ/6QOSnmQEtkTSSr8gSGEiqHa3bE2IKlq9BEQk3/Dj1vQzhye5YMmY4WdnHfp7WK2R3NhVhS
-	311KK+IFHjTngc9HqsBWXi4iNx90vEaYAaLBUX4K2lvW+IZol16GW3T3LBRbJMpAvkqNCTPEV8pYk
-	V0NnU7fZUe6bK/UnXfm7HV1jyKuOEyOkVWI6RvelFhZRpQH0bIhxhUVqRjoVbPXo/gPHw/wSYTWnG
-	yfRtLx8PhphwwgozFQym4zsZ0Eha5qsWgM6Q==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1wUxea-002DdF-3A;
-	Thu, 04 Jun 2026 10:17:54 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 04 Jun 2026 10:17:52 +0800
-Date: Thu, 4 Jun 2026 10:17:52 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
-	andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
-	kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
-	yatsenko@meta.com, martin.lau@kernel.org, yonghong.song@linux.dev,
-	clm@meta.com, ihor.solodrai@linux.dev, Tejun Heo <tj@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [PATCH] rhashtable: Use irq work for shrinking
-Message-ID: <aiDgUPXZUi-jnTdo@gondor.apana.org.au>
-References: <20260602-rhash-v6-3-1bfd35a4184f@meta.com>
- <4d811506109736528d816b6a1f613becd9460079ee7bfc67c509e67e7d2f44af@mail.kernel.org>
- <3960ffc3-78f3-46da-baaf-ce72b6495698@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iymTNiKZ"
+Message-ID: <802f6e4f-8cf4-4437-8035-d9a5c02cac97@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780539814;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YoY78+x+SH2QoAJCHHmcdAiYEbylwJaqt/cNFDwcfKQ=;
+	b=iymTNiKZHtVy5+R952b7XmD8OqJAUo6ar9tqvtC6l8J+BkMeoFyR1zx0Au1XfuCIIf3e44
+	qJVNto+J3vxmsDNbO1Kn7JHjnQyxDXKH0drKkE1PeO+kWRTgTc5mOOlDn41EvAZe4UbI/f
+	uUFdu+zAj+A8N0d2h9QPBQfWLfekdPw=
+Date: Thu, 4 Jun 2026 10:23:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3960ffc3-78f3-46da-baaf-ce72b6495698@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Check tail zero of bpf_prog_info
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260603144518.67065-3-leon.hwang@linux.dev>
+ <20260603151405.6DB111F00893@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260603151405.6DB111F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jun 03, 2026 at 02:08:25PM +0100, Mykyta Yatsenko wrote:
->
-> For v7 I'm dropping automatic_shrinking, because it adds a risk of
-> calling schedule_work() on element deletion path (__rhashtable_remove_fast_one())
-> when hashtable size drops below 30% of the capacity.
+On 3/6/26 23:14, sashiko-bot@kernel.org wrote:
+[...]
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 1007fb7c87e91..0c86a70d31c17 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -5115,10 +5115,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+>>  	u32 info_len = attr->info.info_len;
+>>  	struct bpf_prog_kstats stats;
+>>  	char __user *uinsns;
+>> -	u32 ulen;
+>> +	u32 ulen, len;
+>>  	int err;
+>>  
+>> -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
+>> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
+>> +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
+> 
+> [Severity: Critical]
+> Does this change break the ABI for existing deployed binaries?
+> 
+> Previously, expected_size was 232 (sizeof(info)). If an existing binary
+> passes info_len = 232 with uninitialized stack garbage in the 4-byte
+> padding, bpf_check_uarg_tail_zero() would see actual_size <= expected_size
+> (232 <= 232) and immediately return 0.
+> 
+> By reducing expected_size to 228, actual_size > expected_size (232 > 228),
+> so bpf_check_uarg_tail_zero() will actively check the 4 padding bytes and
+> return -E2BIG if they contain garbage. This rejects previously working
+> applications.
+> 
+> Additionally, does this actually protect against the stated future issue?
+> 
+> If a future kernel adds a new 4-byte field, the struct size stays 232, and
+> the new kernel's expected_size will be 232. At that point, those old buggy
+> binaries passing info_len = 232 will once again hit the fast path
+> (actual_size <= expected_size), skipping the check and allowing the
+> uninitialized padding to be consumed as the new field.
+> 
+For this case, forward compatibility is more important than backward
+compatibility. Thereafter, those old buggy binaries should fix
+themselves instead.
 
-Now that expansion uses irq work I think shrinking should switch
-to that as well.
+Thanks,
+Leon
 
----8<---
-Use irq work for automatic shrinking so that this may be called
-in NMI context.
-
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-index ef5230cece36..0693bce6f890 100644
---- a/include/linux/rhashtable.h
-+++ b/include/linux/rhashtable.h
-@@ -1117,7 +1117,7 @@ static __always_inline int __rhashtable_remove_fast_one(
- 		atomic_dec(&ht->nelems);
- 		if (unlikely(ht->p.automatic_shrinking &&
- 			     rht_shrink_below_30(ht, tbl)))
--			schedule_work(&ht->run_work);
-+			irq_work_queue(&ht->run_irq_work);
- 		err = 0;
- 	}
- 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
