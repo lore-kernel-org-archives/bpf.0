@@ -1,109 +1,112 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305A343636D
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C633E3CD8D7
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780574941; cv=none; b=FrpG6UBiyQG+VdWi9L7XSTQA0+IovQMk/PZKnqyuOGjVvvLrz3Iz8as/f4zkf8KxxO8uaM2cjjujUmmQF7MKWGlWi0fethIV36hVH/3nPx2VHXXDTfMs/WHNSOWwfxFXZC2qnGzipJ3/Mdg5ItPOkMKyzVWTpczxXbmiqIShvR4=
+	t=1780576028; cv=none; b=taCGeoLzjHV2DTpGUfCYIeaCfU1bGrufugwO46CnsgDIuUSRamj571rS5PGB2XfzzcDrMh2urHLnJfN7h06OaAGj7cJxNk1Ff+MYQc1PYVpekkNfESfEDo7ubxWyzzoggsRAA6ovYJiIXOzbbrLNpJ3gnKbsWOCDpPWPlIbSMwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780574941; c=relaxed/simple;
-	bh=jY3Pzqq530Cn72frYkgbtdMUeZZjNDuhAa03g5Uw7yo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=lPapXpQxnzZT/n8hZj6nv8cmOhtydKAD5QXwXSLKXPHRNE9Qhzfp2IlsPdIanaaYuKpDo+/wN5yH1GfWydgdLIa77Z3NjsaAGyObKrIzxz6vor9m/BX4gaJkRtZQUDwJNVrUkNHbl/Rwcle1STKaNYH0i0KPPFSLu3SthsGCS44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L4cfS0Ud; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1780576028; c=relaxed/simple;
+	bh=RLF51gjJuYJsmmbkpvprDKPl5tsobv86JF9U6bHPFN4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iRLRddYj4IpgmUG2ENX0Im5oU1ejnxtgyR8vxUowwPnxaeqhF/S1sc0ZTaocgi/dTbjUnvaZKvuopoqd/1wS7H9c1H9R5v4xTH2OmFTRcLr/CzJd9rfFHU4STU2l6VEvkVF4w4C9pTT7cg3x0JiS7KRKz/WHZn0X5tqAzv8n4r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1BpiC1s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L4cfS0Ud"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 4164D1A05BC
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:08:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id F0F955FEF7;
-	Thu,  4 Jun 2026 12:08:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2B0C5106A035A;
-	Thu,  4 Jun 2026 14:08:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780574931; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=8JExlbsCTH+ccnzG/dkGRTjdMWB4w6e4ceeXGKPD6vk=;
-	b=L4cfS0UdZ7ltln4Odkyg5QmKC/Sn73ZeQQGf3R8wB4dJI3rxo9YrpH7W26r7wdG0RqUPiv
-	u1YW7A7ZUSIQuzL5kJdPWZJM4QzOoAUhePMVJSyZ7lubCql0Be8QQf08Fv4WKkuOHhQ8eQ
-	WSGSVp5D7l4c5bW71S9GGNXFo4bNwCdYJ/4cuGR33NE6OGvVdCKWUlpT3EJ8ocm96DJSlx
-	f92DAyTs4NYMk7CJuJJ1De1vTsYCahvzb4N07H2IJD/CfROaJFqnNCD/FXRMBqGDawl0CG
-	ZI7gRTfB9aXIeXcIZOxfmtphYhpQYli00+JTG7aHkKXoqyCITXaWp5MLos4ffQ==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1BpiC1s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882921F00893;
+	Thu,  4 Jun 2026 12:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780576027;
+	bh=EPy2kZidxQ518o6BLqExLUWq9HKhJSuM9s5ym7E/nZ0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=m1BpiC1sFKrXZyF/9PKDp7l9Snqt0DnQZpIjWeJtLJZGjpjkY2JtLx+SYTAltegh3
+	 PQYO03AWN7Ov3dJWmzSNW3n+6o6ffx9BoR3ow2C3ZRAeRiWNYUZhBhSbmRoC26XNMk
+	 f6p6CCCn0f6kdPxKRGNf2GngqFfTY63pGrqF4nvnCl68c7kDprqUQsj+8Q5tOgrPOK
+	 PXz+Kq1NLZT27vMmejCTfLjmXkXvBNd1OREhCp145Rn/kt4bmwzYIkx9DJUcLFwewr
+	 Je0+kXsDstBXM54ZsQEq5L/wqruh/6+2gjMmoKELdMYh+mZeeJ8XdOF5hBQrgMT7/6
+	 /3dUt1kD8f+FQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] udp: clear skb->dev before running a sockmap
+ verdict
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260603122639.615994-1-rhkrqnwk98@gmail.com>
+References: <20260603122639.615994-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 04 Jun 2026 12:27:07 +0000
+Message-Id: <20260604122707.882921F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 04 Jun 2026 14:08:48 +0200
-Message-Id: <DJ094TM6SLCC.2FU5ZV435P1UK@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing
- program stack
-Cc: <bpf@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <sashiko@lists.linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-2-1a5831230821@bootlin.com>
- <20260425050557.827F3C2BCB2@smtp.kernel.org>
-In-Reply-To: <20260425050557.827F3C2BCB2@smtp.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat Apr 25, 2026 at 7:05 AM CEST, sashiko-bot wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Unhandled failure of skb_set_owner_sk_safe() leads to a NULL point=
+er dereference. If skb_set_owner_sk_safe() returns false (e.g., due to sk_r=
+efcnt being 0 during concurrent socket destruction under RCU), execution co=
+ntinues without aborting. The patch explicitly sets skb->dev to NULL right =
+after. Subsequently, if the BPF verdict program invokes a socket lookup hel=
+per like bpf_skc_lookup(), the helper observes skb->dev as NULL and falls b=
+ack to evaluating sock_net(skb->sk). Because skb_set_owner_sk_safe() failed=
+, skb->sk was never initialized and remains NULL (as is typical for incomin=
+g packets), leading directly to a NULL pointer dereference.
+--
 
-[...]
+commit 7d38a119d5768d0ec63d1cfccd1fe2e8d8ea7398
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
->>  #define LR_FRAMENO_BITS	3
->>  #define LR_SPI_BITS	6
-> [ ... ]
->> @@ -6493,6 +6498,8 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
->>  		else
->>  			err =3D check_stack_write(env, regno, off, size,
->>  						value_regno, insn_idx);
->> +
->> +		mark_insn_accesses_stack(env, insn_idx);
->
-> Global subprograms are verified independently of their call sites, and po=
-inter
-> arguments are tracked as PTR_TO_MEM rather than PTR_TO_STACK. Inside the
-> subprogram, check_mem_access() evaluates loads and stores under the
-> PTR_TO_MEM branch, which does not invoke mark_insn_accesses_stack().
->
-> If a BPF caller dynamically passes a pointer to its stack as an argument =
-to
-> the global subprogram, will the JIT-compiled global subprogram execute wi=
-th
-> KASAN checks enabled for those accesses?=20
->
-> Does this erroneously monitor the BPF stack, bypassing the intended
-> suppression mechanism?
+udp: clear skb->dev before running a sockmap verdict
 
-After having thought about this one for quite some time, I see no
-simple way to correctly distinguish stack accesses hidden behing a
-PTR_TO_MEM passed to a global subprog, as those are verified separately.
+This commit clears skb->dev on the UDP receive path before running a
+sockmap verdict program. It prevents socket-lookup helpers from
+dereferencing the UDP dev_scratch value as a network device pointer,
+falling back to the socket's network namespace instead.
 
-I can either:
-1. skip PTR_TO_MEM memory instrumentation when we are in global
-subprograms, at the risk of missing instrumentation on passed memory
-accesses that _need_ to be instrumented
-2. systematically instrument passed PTR_TO_MEM memory accesses in global
-subprog, at the risk of inserting unneeded instrumentation when the
-passed memory comes in fact from caller memory.
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -2011,6 +2011,11 @@ int udp_read_skb(struct sock *sk, skb_read_actor_t=
+ recv_actor)
+>  	}
+> =20
+>  	WARN_ON_ONCE(!skb_set_owner_sk_safe(skb, sk));
+> +	/* skb->dev still aliases the UDP rx dev_scratch (its charge was freed
+> +	 * on dequeue above); a sockmap verdict program may deref it via
+> +	 * bpf_sk_lookup_*(), so clear it -> bpf_skc_lookup() uses skb->sk
+> +	 */
+> +	skb->dev =3D NULL;
 
-I then propose to be conservative and apply 2:  the only downside I can
-think of is that a few alwasy-passing kasan checks will be inserted, but
-we are at least sure not to miss any instrumentation.
+[Severity: High]
+If skb_set_owner_sk_safe() fails (for example, if the socket refcount drops
+to zero concurrently), it returns false and leaves skb->sk uninitialized.
+Because WARN_ON_ONCE() logs the warning but allows execution to continue,
+skb->dev is then explicitly cleared to NULL.
+
+If a BPF verdict program subsequently invokes a socket lookup helper, could
+this cause a NULL pointer dereference?
+
+Looking at bpf_skc_lookup() in net/core/filter.c:
+
+    if (skb->dev)
+        caller_net =3D dev_net(skb->dev);
+    else
+        caller_net =3D sock_net(skb->sk);
+
+Since skb->dev is NULL, it falls back to sock_net(skb->sk). Because
+skb_set_owner_sk_safe() failed earlier, skb->sk is also NULL, which seems
+like it will panic during the dereference.
+
+Should we abort and drop the skb if establishing safe socket ownership
+fails, rather than continuing with both skb->dev and skb->sk as NULL?
+
+>  	return recv_actor(sk, skb);
+>  }
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603122639.6159=
+94-1-rhkrqnwk98@gmail.com?part=3D1
