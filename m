@@ -1,60 +1,62 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4322D63F8
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC5B30D405
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780610949; cv=none; b=pmAIMgObagg8v4WPYAg2TJqCSEnrvcUZqBTNBXT99C/k+ND9b7MmrsLCY4KywjsFZ2Y1ZVjIjAo2J3hxFF3ia9aUd8t/PdyLDrN1HXm5LJ5LtU75Ev3mXvhzWzO7IrJwX+C5XshIiX4uI4udm4xCuls5tBeBSLSY20gbOaPP064=
+	t=1780610950; cv=none; b=eiirJ730N0/8kSwsnzJRvQjaxS/V7MxEWtSoZGvJGKStPGGXv1tKbpvDKoqj0E0QNB9uOE6DLAvHQtM7nqAtunzGg7WqgVxahkbw/Gb+bqP6mpdVvBsJfnOj3Fe9x3ZF2n/d2HoBpN12AB3kzCKjBB2+ePOdOdH74JXJXwyOkS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780610949; c=relaxed/simple;
-	bh=wl1EgPZ73oLh2FZKrzVhNcIqNN4ssianfunB+skD6i0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QWoVFfbbBvkWAV2KdY4GgbcnODWf3baSA6T0PMsNyrnoa3qVs64sbhMaKqHFrzZdI4w9kg0CBxRnfkNxEP6NMRzEjSMSSvSUx3FuMkbCne3VaFInMSbLUKglgFNDzsdqFFpLJ0pH3VBTwIyusFihr2ypAFTNpNar5Psqqy9w3eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dOtP1aR8; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1780610950; c=relaxed/simple;
+	bh=+X+9TfLYSycM2HPO1ZGliaygiNyuXO2Y5PqJSerkc/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ADWnqjDu3HDH9uNxI0inhkhSmdRQupQzJIhdLpyROxVJMlqV/ppZNUhsBuVzTnkeRhpw3AqIpr8xIEm0rxyTl2eexQ69tMJCV1CblhDmKItzE46rX8euVyGl8IxWTTipyLFG3Zc4oQRQ1yWmxeci6kYt+tRKUh2LtUh8miT+tYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pa8226pV; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dOtP1aR8"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84236f9b638so574085b3a.2
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 15:09:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pa8226pV"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf18c30bb2so8483255ad.0
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 15:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780610946; x=1781215746; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xe4pjIvCbIVOQdn6bIkFT1c3V4LzfoAMSIQAWXY6Goc=;
-        b=dOtP1aR8Bu/77/mCettqYp5d1dcU0M5IgKZyI8793+Mg9sIDzisA2ql/x/zNDpArAn
-         8xAt+Jn/+YJSAjQ/oUqy85JtA8cPDSa/gmdpNAm6lcXm5OOrtUH3jnBMBnJF18lV/9so
-         okihSpOxOpH92Ws51O3tofR8fxwdkUGXeznj5qRtW+em5o6Srbw9u/pCWrnITttygjNw
-         j2s1mpr8yIj9w4FRKzypiuGSP+cFm2/3PMGXlk06ef6x/2qf4G0gLIa1GcQ9zIpu+/9E
-         IF05NBTqSLspeGo58pLYTzs6clyplnEX2GWdGABaIcWXAKFl38KCkzygtdLwcYL7xkK6
-         7cHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780610946; x=1781215746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780610948; x=1781215748; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xe4pjIvCbIVOQdn6bIkFT1c3V4LzfoAMSIQAWXY6Goc=;
-        b=XksSIvezW+mHk70PRV8r+HsqAJcP0JYWw6fMhubgd+K1wzD2sw1syypgqIQHfXOcXC
-         UQ8d6GLNnFTDpR+2l0j1mStojD0+dOlRayQb8aWOtNSV5XHmJ5kXJF77QL8/0UtJcLg5
-         jEA75Gp0PsxaQvWJYgqmNFAtYFTAFh9yretsqhVW9t88vQHcKTxqBCSwno6U0/q47whj
-         dcKWNINGXkmLQJLhAbpJWZesVZKQK5APG2Kuvn/9qJ4VEs9k89tGQV/jERHIvyCImOY1
-         7D5uaseYapG6GOv7eNxs7WoWfI6OOHBsQNfHR0X19l1MxncG12mFqKc0WkHRmpsMbv7F
-         Ov2w==
-X-Gm-Message-State: AOJu0YybKi3K90sGzYnrPoFzecEpHV0mfbeTfDGEygRK4AsgZXZgCH92
-	X4Snj7mPMPVa7iXvcCcu7XDu9BEPfBLfMbqCENptZiL7Xu3vTV89uNWp4lUcGQ==
-X-Gm-Gg: Acq92OEm7DOzEkMe13agic8IHmzdjRbehGjNJ3GsmGWxG5CamvI9hCS4xgaDqCoAyyF
-	vvUekPjrtydNjlhtO8H9CogAkI4YOyKRgFhlKI9E/FJ2yzO1qW4quIe4juOMbcJi3aKi6zC7DoF
-	kzXwJ9hFMIebJ+7V0HgqR/Rcr4b/iN3rZXWk3QHQZcg5w3fQXxF0maPDPJAMYhtxYWnom2d3dIe
-	WCbPFf3q0jjOmk/gvbkHAT5znTpwN8yLf1mWPYa65LQ9FiMByM2rb+oMBIxA2gmP4Hqou2Fjics
-	jgk4l07dekVel5oNQZtWjV9wwRN9cAR0GAn2wGsGG56nqjgzWML/EF/CcN43IaTtVOlnMfNUxMm
-	jX6d4pRyH/FQhaZqKqh0L2Aa9jWsMjEs+1AmF0xa3EIhPnMjgz1P3t0ySKOu70B+ykh3u6RLBPx
-	Y+DIDdU0Etqt+jikvc+65p2JgNEyqICK+KEiw=
-X-Received: by 2002:a05:6a00:808f:b0:838:127d:a167 with SMTP id d2e1a72fcca58-842b0e6bb0bmr501247b3a.16.1780610946246;
-        Thu, 04 Jun 2026 15:09:06 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:72::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282221059sm6693426b3a.7.2026.06.04.15.09.05
+        bh=WH2Bii3TFDEbVaIm2aZbVbUnROsdfZJZdTJSpnjysKc=;
+        b=pa8226pVlwEb5CHS+a4dqA9otNVMvoFguVGYT1vZ+MgSJF2vS4OWaCdfouz06czKMt
+         4XMvfeo1sdLqZP+/5CO/MAVDt00yV85IsZi8XvrscYRwAv4hz42xXVvVLJglO76YYSOa
+         da/GhdPA8W3GyrGNV5SB5A2qasEGCiqsCzS/ZB9iitmf5RXIExZRBJKtAUbEzfkkkBqJ
+         B71tV5s/DTa51+V6FZsMx4jpJ0KmWJFqdeNXrAdH9OnQuQB/7W6Y7A66ZtmcDhN0K9FC
+         0j2FM+oaVKkCoNdC1EhCQI9iI57/j8bydS8UPE+KiYAjxTeHlUpNnXC3EuomOwdO1uy2
+         5wPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780610948; x=1781215748;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WH2Bii3TFDEbVaIm2aZbVbUnROsdfZJZdTJSpnjysKc=;
+        b=eVIT4JEl2Q7tVYK0nBZT0EAPnewAuTIM9yR6bSWtbug8UStQloa3kQAhvx8Os1cUW8
+         E94YjyvNOrnLHvC28Eu5KPRA4mIi1icPP1CaMO7yHZqsK4IFHY1/FIsiTt1Mu7LHLBrA
+         OFWLil7wTw2KVwle8Tp+C0Fq3nEfRK4ypmDpTLbWI7NaQhjkfPxssmadmph1P39L1RNK
+         VcS5DZOjB+iPxD6SD3wOpAHF68iuFW4nbygD+OuWk+w2mmk5rLDbFMYEAyrehNFg6OC3
+         4epF3qBM9gaqW1Xhbf6gW48SvnZIs5rGAAhijzZNPzBZ85fPQtgEn1vMUff0U/rOfSt7
+         SYEA==
+X-Gm-Message-State: AOJu0Yy1SiBUazUdjXB5wl3xgT3mTkymI45ZLPeLpKis+QeS7/6hk2wo
+	okZMlLsFvcwm/HyjChyfUK1i7i92WV8EViYFz1uIiLeq4UVPkacVieGpRewWsA==
+X-Gm-Gg: Acq92OFSYHmEFsQWgDeiGzrsI0qTLub19LqfRTbHgaqkdIpSMDBu0nxh3zy5duV0HP6
+	aYtVJ5XC2hlaVxKPQ3kaZErmKbrez+3v176nofly5OMIsPvgY4uiF550ua4rlkaGbnsV7rnhihn
+	Jqrvuwue5o2ABTDln3yPfJyG6OAdgJStUvWQDPOCwqB31Uj/da0ErCMbD41owl4A8FFJOF1b7wm
+	BPRAZ5oqYS4l62+qENNE/5Mk3/ZllO+8FaFRuqo7+D6CqinteXMzY4IGBpjPWCc3AZU1wWXXDKU
+	+U7Na2VOEeRdNqmgylhj+FOSG3Bs26XdsLtpy/dvYhmpuy6ubeUPl1ZCZQmBaG4Yiie1s7/4f/X
+	bnz1XtX1wYThT7m2pTnFdGQ4CPJQceA19M8GmVRx4DCGWwueFGCQkroTzcnPkZJG3yAEcdE8rPb
+	PoOaxpYr1UPE+xlS4eQefGGO8JodQzvMIVL1U=
+X-Received: by 2002:a17:903:4b28:b0:2b0:7d3d:756a with SMTP id d9443c01a7336-2c1e89579ccmr3625675ad.35.1780610948100;
+        Thu, 04 Jun 2026 15:09:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:41::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609ed97sm70195545ad.41.2026.06.04.15.09.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 15:09:05 -0700 (PDT)
+        Thu, 04 Jun 2026 15:09:07 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -67,10 +69,12 @@ Cc: netdev@vger.kernel.org,
 	mykyta.yatsenko5@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/3] Object relationship refactor followup
-Date: Thu,  4 Jun 2026 15:09:01 -0700
-Message-ID: <20260604220904.1032145-1-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 2/3] bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
+Date: Thu,  4 Jun 2026 15:09:03 -0700
+Message-ID: <20260604220904.1032145-3-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260604220904.1032145-1-ameryhung@gmail.com>
+References: <20260604220904.1032145-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,25 +83,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+refsafe() compared each reference's id and type but not its parent_id,
+so two states whose PTR references differ only in the parent object they
+were derived from could be wrongly treated as equivalent and pruned. Fix
+it by checking parent_id too.
 
-The main patchset refactoring object relationship tracking in the
-verifier has landed and this is a followup that addresses the remaining
-feedback in v6 [0].
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ kernel/bpf/states.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[0] https://lore.kernel.org/bpf/20260529014936.2811085-1-ameryhung@gmail.com/
-
-
-Amery Hung (3):
-  bpf: Fix dead error check on acquire_reference() in check_kfunc_call
-  bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
-  selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
-
- kernel/bpf/states.c                                  | 3 +++
- kernel/bpf/verifier.c                                | 3 ++-
- tools/testing/selftests/bpf/progs/file_reader_fail.c | 8 ++++----
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 5945956a7573..06d9ae24f006 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -890,6 +890,9 @@ static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *c
+ 			return false;
+ 		switch (old->refs[i].type) {
+ 		case REF_TYPE_PTR:
++			if (!check_ids(old->refs[i].parent_id, cur->refs[i].parent_id, idmap))
++				return false;
++			break;
+ 		case REF_TYPE_IRQ:
+ 			break;
+ 		case REF_TYPE_LOCK:
 -- 
 2.53.0-Meta
 
