@@ -1,90 +1,82 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E331C37204C
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 18:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B41B3C060E;
+	Thu,  4 Jun 2026 18:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780598704; cv=none; b=can5BNx3x9/DUAYI0C/yUgQm/w4yvDuYJ0X/QuIXsigLFnKtnS9aL/EyD1vut+lV3wOvaMlAclFf3UzZEaGE1LWLZlVOPXhj3xBJrudyziu/U56E+imyK02BMh+mGcl/NLFyn39vopE3fOEAPliEfVyXn902+DdSeOLH+aWjaKA=
+	t=1780598726; cv=none; b=G4S+zC3mpj29LzyPZ/fAg3cELacV9RFeBa+jkNbh/Gbj95tGqeXhSYkXx/VwVL8S5s3NDqvkifhz6Wcl7hBc/3lUMI7Y/kM9gq9P29K+2QP43PgkIyMqOMzwiDlNCwURM7f2Am6fRuodz+NakjUp7r8Lawx6v0BvYBWr8S7TzMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780598704; c=relaxed/simple;
-	bh=gDTjLkmb5w62N7AWqsRF/gUbSPcl9BQmkXqZRv4kvg8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=beITapyj71YlUV9OaemKRVenXAgsQ9cWCtEx2964HigMtja++RsiECKVFG11bW6Zl1A68PSx6s5OIvxl4NzImJS4Oe2M2/yM758bq26FSXmHcc4m+9XAAflTLJxO5aFqxAuL7+r5gmEky6L6rACxd1WjPigbOYFgOO0RpTClZeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZyRVk/p+; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780598726; c=relaxed/simple;
+	bh=2ds79YEit2vUJCVmdQJzL81RQBBAOfGi+oe7wahfRP4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hGRD24w63OXRZ04nuQOZSfTH/Bugds4KwBa1JRH5wWBHWaWpGCG+cG0RYuZkYkZavAqGhpDthxWZwX9nbnK0dd9M+qBFIRnm2Mk6k3pvF37hDQJq4BxFEyCNhJ8t+CSSXI9+aQePcQlQRr+xwOV4L0U4MxkR1PjLHM2vIezxv1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOF5ELDf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZyRVk/p+"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8421f0e9c5bso511659b3a.3
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 11:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780598703; x=1781203503; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gDTjLkmb5w62N7AWqsRF/gUbSPcl9BQmkXqZRv4kvg8=;
-        b=ZyRVk/p+ASo1GgExt/3M6ljWjv/ne4/nZfCKX/L5vUbiqmmNGyg2QhQAsFv0d2iNhP
-         ig6zp7UAWdTvoW8BEEBIUFjsHMnmDO5ZtSad+S76igpMa1f7sAlHTAXVpBPjJkdRAHtO
-         dhAOyfre35Hqw/fW9yAHkM3I7pFvJWyiRWh5XbBHkOcekuYB8D7DM7/TsTrbtHOu295n
-         8YIrOGUeNfKkZuNXxZQKvjEWpu65VgXPzOW0I1rgKfRYvFd0+kIz3TuzWw5xLgPMKwOL
-         1hXy3XakcIDe94mLsmO437JbqOaZQ3DSSv3vhIPvNfBHj7a0Sad7mIKx5PNx46ory+24
-         /aGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780598703; x=1781203503;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gDTjLkmb5w62N7AWqsRF/gUbSPcl9BQmkXqZRv4kvg8=;
-        b=J0ZYPzvxddeVPIo32+fPpTCMnArlvxmNRUAxUz1XLhMhPP8KT2Jd+4XNKDD+ppPXTW
-         GM2Zna7z8wbw7pDQ3UeTA7QEsvUztXucbgIWJVN3FaFlXi7mD8+YhuMvjS/UCtBy874/
-         sxn8ekRNVdoPYWUlovyo2SpZUEpOgxN6GpvVBZPRwK8LcA052U8UMUXGJP7Xx+7FGzW/
-         R8Wot2349nscGAGwa8Q+twqJyS11J8npqjQoTpEbyURolm1h8A+Ly4ZuJOhtdrTXr+Cp
-         EM7SMYOhDZx38ZVawZpUf0CV23RgOJ/+DkBkuFNtgz7WlRYK+70XIK1Y2wQ/VO87RatR
-         k5Uw==
-X-Forwarded-Encrypted: i=1; AFNElJ8bUaEBpqr4ICDbxmcEdrWRMRSUqQ85Tz2aOSODvUQa1Qf0iVAoCKgVRo0FBftWAvr4P5Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYUYkamfBj/VV6xIC0BVYUl/6ZHt1gUNDaGKr9Fi81F99lygN5
-	rzQykMkbBZzMZp2r9+n+LpDhRdNFA9jtwF3a3jIc96DBYzDFpPr84JeZ
-X-Gm-Gg: Acq92OE8NtTZ5kD1rJncJHqQQXBPyPjzPYLt+fTRYUzUdnho9lXYzIAxsGsiLDimEl9
-	XyzBxymrfnEBPpZgbReDZr76kciUBIhA3v2Yos53yJRMA1IpkRMY15r1LHdN3Z1gcUOA1lubpS3
-	VpbodrP6rchG2BOwFAdVOozyJJJU1ACsADoinR1N50QtGb7pD5pQgLLk3A3R78BkgHpy0aGdOh2
-	P5hA4agn4eTQrKoElYrWBd4bobGg5FpVNSPc77MXAEHXdqmkFtbQuesgs7yH02kxO0AdNsmz0c/
-	ac5IOulkCISoEOMM9BPMkSvTnPw9ovQm8/hkKrNgS/RGxm/nKBX7HoHEjKl6S8JiDeNHNZGOrqE
-	RRIa6hfwb7l1O5CELfywvC2EQzr3nWZwKKiFZWAIX1o4FmUrTelhbDKfnRV+sMtBdBpaXZpyqQf
-	sFvEQhxXLtnrfdMPskrA/ikp9BwM1WLRGbF6SkLIidXyLgTJ+mc5L3WDiRrwSW9lc=
-X-Received: by 2002:a05:6a00:10c6:b0:842:732c:5687 with SMTP id d2e1a72fcca58-84284eb0067mr8706446b3a.22.1780598703122;
-        Thu, 04 Jun 2026 11:45:03 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828fe634sm6947953b3a.52.2026.06.04.11.45.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 11:45:02 -0700 (PDT)
-Message-ID: <0ff70da688806c3ef7e1377962f9374c1a5b06b2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next] MAINTAINERS: BPF: Add self as reviewer and run
- parse_maintainers.pl
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com, daniel@iogearbox.net
-Date: Thu, 04 Jun 2026 11:44:59 -0700
-In-Reply-To: <20260604184252.9917-1-emil@etsalapatis.com>
-References: <20260604184252.9917-1-emil@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOF5ELDf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDED1F00893;
+	Thu,  4 Jun 2026 18:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780598725;
+	bh=s6UFE8zgUTto7o+HPCxPadggpF3obHhn/34Pfv8hwYA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fOF5ELDfEHeL3SnkkLmi54tRZDKMJqEA/fcO0yLjJUETLb3ioq4suOOGdebUwdBKv
+	 OmXFw09q/Gq8XpJ3eEcGx57Y3SbQEkdeu7rre9Y6oeuRCJ1ppvCzb+5pIBhyGFWH4e
+	 pwoL1c/JWVq3xZj1qRehpPUHajB/XKnBaYozlNWbFhxhhSFoQKoqkjEayB95jrtajo
+	 sNU0niokDrJAWpAnkB3DugHXkMdpDb5E+xHUY0dUNuRB0ynZ+Jrp3cUI27ZPOxkuYX
+	 lD634xf5l5RHGYOz+D3nGNts4VyI4XH2ycbtfqdIZMZl1/gLzMDVM646mo+4kHkvo1
+	 i+L/TgR8nRlZQ==
+Content-Type: multipart/mixed; boundary="===============5913587305999243382=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <135018da09cfb3917b44375504f8030257b0aa8aeb649f57c96ae2b8e81885db@mail.kernel.org>
+In-Reply-To: <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
+References: <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
+From: bot+bpf-ci@kernel.org
+To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: gnq25@mails.tsinghua.edu.cn,eddyz87@gmail.com,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,shenghaoyuan0928@163.com,tangyazhou518@outlook.com,mattbobrowski@google.com,emil@etsalapatis.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 18:45:24 +0000 (UTC)
 
-On Thu, 2026-06-04 at 14:42 -0400, Emil Tsalapatis wrote:
-> Add myself as a reviewer for the BPF subsystem. While at it, run
-> ./scripts/parse_maintainers.pl --order and reorder the BPF-related
-> entries in the file accordingly.
->=20
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
+--===============5913587305999243382==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>     selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
+>
+>     Add verifier tests covering constant pointer arithmetic on a
+>     PTR_TO_FLOW_KEYS register, which regressed with commit 022ac0750883
+>     ("bpf: use reg->var_off instead of reg->off for pointers"): an
+>     out-of-bounds offset introduced as flow_keys += K and then dereferenced
+>     at insn->off 0 was accepted, while the equivalent flow_keys + K direct
+>     offset was rejected.
+>
+>     The tests check that:
+>      - in-bounds constant arithmetic on the keys pointer is still accepted,
+>      - an out-of-bounds offset introduced via constant arithmetic is rejected
+>        for both read and write, with the same diagnostic as the direct
+>        insn->off form.
+>
+>     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-[...]
+The commit message names the commit that introduced the out-of-bounds
+behaviour these tests reproduce, but there is no Fixes: tag.
+
+Should this carry a Fixes: tag so it is backported alongside the
+functional fix?
+
+  Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+
+The accompanying fix commit (89ea48e0ec4c) already carries the same tag.
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26970818032
+--===============5913587305999243382==--
