@@ -1,145 +1,138 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CEE3B19B4
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780572656; cv=pass; b=oi/j0gyAMl9LeRmQ/jRuQ8MosSz01sUxQbrrebA5chf138whRFp4nCoWqw/Kvna9tgTUXTApOUvoQRonSvpsFdqmirl0lzSrDDiRrQCOrX76PS94evRyL2SRSVBnBEpwaMYGYGNz94V9u2ugSgy+lBipXEIusj0qOY8kHbVsJJg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780572656; c=relaxed/simple;
-	bh=IgaVd4/D/neWcGaYdf4+CIF4yFVYz7Eh1SsiQPIdiNg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uqjh+kRICyncOmS1/DIY/TTrQvhUYrinBmwk1TYgzrrY28H0o+4T4bmQBUghGupCe3sy0OBqK42uiIH7MUwwIvNEBhag8+tMiOs3YUPsCcS0SiBCMXErK2JVRwC/aqsVb92j/NFg6FUL+MxKs9wkJfOD6LGbvlcYGQal95OKMpU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezmqC2iN; arc=pass smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F421402442
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780572704; cv=none; b=MTBsFGMzrLU4gB7hZQowoVs4ZRgJND1QCCgkI1QEnmNdoqc9Rf/v6d9vxbEtEEi/Kzcud8c1qUhpJ6UdluifEm0cfTkuBdmfeSca87wP+zNlupq7qrOW/dUdKUkLI9f/UafKoVitvVOvKo1hW+P9CN7JizkIWYNw5I8LQcNkddE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780572704; c=relaxed/simple;
+	bh=LyyIlg3QPX1rQJHGpgzEqbAUkTXPZTiK+PQ73NyhaYc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OJobvaBZ2GulXm1uDLP6Yo1zt+8YaD9lUInfyRQ+lXSRfstBVL6u/6piHKMn/OGeZmst8KHg715edOzpc7CihkdMdosKdE1yyHfv1kqYLvpjqahfgzR8OezBXroommEVw505sXuJvBvdTGgdOtjESInyViRYQtH6mC2887ZKiFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pSR8395E; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezmqC2iN"
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-59ebcbfb2b0so162157e0c.2
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 04:30:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780572653; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JGUytkpS4M2kB65HhDpTW0oBL45fmJhDhkLTAsRhOCYU+blzTkPMv2HcHq2SlbgyMe
-         mQ5VE7Jzv/U+pJfMjCBk3RNzSidRXMGV2n4alVpLaCGvQLp1wmgnQSNAWLeRQtg96kNr
-         salE4DvTIcC0X39SJ5xn4gid3bb2a7kKCv6IBgWQmDeEErScZ0mKCs5OmxBBmyNlujBK
-         hd/Kd+dDydNBH8K5a8fO0v6ItOngeCltIzXNLcAd4Vdth616nxuxJE3sZYXKkH6tTTUS
-         lVVonmWH5v1b9w8yP2OHAp44TTrnugh+0Hu09iuuAE+Ssz3zQAu2CcJU2KrSzRr9Qo8G
-         alzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fpp7hpo+duJ5Snlj5PG+EfICta9eCWIZjou+VYQUVQ4=;
-        fh=0siHEw4ESdxrlySSrRuzRKrT0R4T472MILGEpeSO0fc=;
-        b=A5FDW2GuQ8PovWLQUXz55W6vdJ5m1VYhqhCfzIiS/p+9AE3wAOdbiccL/6shQMmUrs
-         kZqeotlidrF+5JTAdnOdDutOC0PmHI/r/5ZjUwsUj59vzKQhG5HpkNHChqnRdMjG9XBk
-         gZlzP+FLs9GaM36Ke23GS1pnC8aNGw6SqFrN7wIEK3c+EDqWF3jSBhRonGg24+YspmMR
-         m7GRY7/UHO+2GNOSFShMYqRUHJ9SAJSdlVou9XGsLWTHjxwrTdY7E5CVrFz58EXffD72
-         324wsxgu2UxTc+rDMyWGjM8rMTtfjdDxgIS8W1aPJeQWjXie3O7dNCUSa70W7X6kBWUV
-         l/2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pSR8395E"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c85a2c012e5so232840a12.1
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 04:31:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780572653; x=1781177453; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fpp7hpo+duJ5Snlj5PG+EfICta9eCWIZjou+VYQUVQ4=;
-        b=ezmqC2iNUUfJwgeZG5pY77k+XsOPGlvqQzmHybpNLf7TgfVbhGzWR/k7Etygx2EpSE
-         Z6JruUu6i+sXQ1MdiNIQhWdtKUBevMu8VDIVGDED/svPKd88sD3WWuf3fk9isG8+grfP
-         z7luiITciUECenfvw++v6qu+35n08EKbcfbTDepHUszlgloxnAYu4lxHmiJNISX9VVfi
-         ccRz1vwWyVrp1N09BchOhOSHIdePyMAbf61zuPrbhf4qJkOn3BCKIrle7JrKLAL1hMzD
-         A6UnlLA3ubDJiXX/X+bf+KGPz0FksE0UYBQZ2TTOcZ8zXrdCZo2ulqws8wYwRrqbdVcv
-         evpg==
+        d=gmail.com; s=20251104; t=1780572702; x=1781177502; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWJU4AISHJoKW2jVY+HLmgCpe1wG/GRzkKLWOkBA9NQ=;
+        b=pSR8395EYeg876uScrRj3WexBnuPB3+AmQJttzO2xqjXClIJWFxNcK5EDBg1mmy5K7
+         HxcqDZGkfbgPECLth7Y0RmlQhvoJM3LRJkS6piZOUU99xRikWKe/xfw/l4LmaKixw73R
+         9unVJ/uRhnbI5kLnaVwe2PNIvhHQKWvb+De+++RwLXAlxdllDbCYN4nMGcErDp+DcSEH
+         MNzyYS0YYRdA2NPPHmRxGNbuXTTqNtwg8X9KvIGQHWgCcEPIa7H9mLEZUCveiQZ24apR
+         QV69GuwFDgEkuwFCKZIEy5RzeHfZWw9oz+8xSnuX0Q+vq1P/SwteIrHXQDRY92pvPNRL
+         MA4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780572653; x=1781177453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fpp7hpo+duJ5Snlj5PG+EfICta9eCWIZjou+VYQUVQ4=;
-        b=Tlc0NV8Yn1BHbTdvcH5UfMGS+z6NRBc5Cgv2yfmkVhcvgU8yEWbLV2M3E6h0MHvC5/
-         YnAVtCJR8RySpwHxZUjjmFhSj4B1MqqGu5maZrTyHLwIxmE95l9HsNGRvVQ7znvbHIiI
-         yOBhpKrqj5i6c1IAJ7yMZia9sdDdnJaoL6re2xytKA+m209jnIcLGUU4vR2xxMk1jNDa
-         7NfdEiyjaIfeJnamttXp1sdgG4mtLaeWfz5ZD0ZJk7lxZ4pBSeBJlvhpNnG47uzj84eE
-         u4N8b2td+DdBW+p+K35k/79FGw79Q+rPPE5auowUY4LrL9iFetrFdfydjyXg8lvZmI0U
-         hEFQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9hZ08T+n5BRXZDDKp2T8w/rdUj8BCqGSq3M/W+wX6huX+nWpGxo5nzArYVwT0T84CDWD4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy1wFvKsmtcJ7N9juLb7aYf4JabvNSiSg17oWjqbrNEqIXymPa
-	ZQRIXTJZHicCXLjQKiaM5Odeegb2y7l4Nje33lhPw99Kfa+cz1B2BmXOhe5E8eMGnCYN6aNeLCE
-	/LaVQGIp45dVkLtxrBwEbB6Ogyvn4S2I=
-X-Gm-Gg: Acq92OF/c2fRdoDmqAdZFCttogan/DjRR4X+gBobk4EldA5DAwe6BiLU78tIaNnBzeZ
-	3ymryqc6GhCXCluyTX/VBACUn+UXwoxxYNTvvSKUMdJYP5wRj4Gj+yJjH4Zg1b14INrbVRXqdIz
-	iZ1OMaa0wvTO9TmCS76Dp6+SQ7NlOqdaoxgkg+1c3BvrealqPYw/o38oBbwgtB6jGELDj/jmSXY
-	D5RdPubUJQWdSZjZFuUPxwfi7CMq9D+Wff9kyjJ8JdAimiUKW4kQM7DwWCkiVXXB0ep1pIu5YyC
-	lQTJjlVE5hGl5Hri
-X-Received: by 2002:a05:6122:6e0f:b0:5a0:c38e:61a6 with SMTP id
- 71dfb90a1353d-5a6e64b8500mr3995715e0c.8.1780572653233; Thu, 04 Jun 2026
- 04:30:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780572702; x=1781177502;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWJU4AISHJoKW2jVY+HLmgCpe1wG/GRzkKLWOkBA9NQ=;
+        b=Iit8/G26Z9yf9opnQcqSaBsVWXQ5hINn721WlMtYIvqMj1mTv3kVo06GeWJk/E9OKn
+         SACF00hEb4g2HffGp3i0jJP3Rs87cQbSxZHaDyCebHw6vpnopvHLutt5S9s9q2jlTSm5
+         0bUUKoLfD593wLCBQxw8/GDRy/DxbSiroy1tRmXwxhaAPazI7hjN9zGLDCn7Bofm9bjp
+         SoepzyWruKYlSkhLBIjbKaOpz8bwMw3t/eLVlnRSQe/+heN8lbrnyw7ODYqiITZvF/97
+         mQ2ANpfwzBA7/P+oPe9Q+HUmG6gAsBG6RQoHOqOVekyHIAq7n6NABJMabAqgRdrYY2Lc
+         kKjQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/kkF3xh6ceCvO2Eq2S1sp7iZ9D+1RUsCyKXo9icoWAXVzVzRtmcEHijFa6tLMQeUl9XVA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyqKE5N07a0xyxl3gYT7Yxu3mInT03HCWO/9vG9gk6J5L/U0j7
+	QrJVlwb8yoVyEiPcYS1zQEBhIG1z2lc56elJYZPJBJG5UVEGElrOg4Um
+X-Gm-Gg: Acq92OHI91+ue0xkfxueDgmi0jUyOGTTyfOOhDYodi13lj6Ymk0oxPwMPvJTdLbEhS+
+	kMaRIobPeAL/rmmOyZlMFd6yN/nevQskKfz6NUJ5/CCpKKjw/Sx2k0YpZ1UeQ+6F2hjZ18+QGwg
+	PFRtvto5kzA3BViLLBlxDVg/76IdDA9bkfkgVi1fKFtnngSze63GCE5JsfxDrpDWDCQDZxsAR5y
+	5i0QoswyhLZqDNKOKKAKR2kY05SsER5oPvzE3OfZbZyg+6Vz8XkIz1IHlQyPoeI6LSelaXcvFWM
+	2ncJyOHoEqSPLgWQ9BD9OYHmtyXV9s2L5Lv078v+K+yJWbBpuGBhDCsQL+J3ztQ50QS/B7VRhZg
+	lEOFEaKGDJtY5IFMKcb2tyIUnTuysx7CdtBHcox+XU/Kw+Z5mYrUDHsiQDZ2xpgUZF3jAJhaYVh
+	8CVVzcDrt7/fpsnOOkN7OJ0gMtoAg=
+X-Received: by 2002:a05:6a21:2212:b0:3a2:f7bd:a9a5 with SMTP id adf61e73a8af0-3b4979e946fmr8507751637.38.1780572702468;
+        Thu, 04 Jun 2026 04:31:42 -0700 (PDT)
+Received: from lgs.. ([2001:250:5800:1000::f280])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428221c3e4sm6124968b3a.5.2026.06.04.04.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 04:31:42 -0700 (PDT)
+From: Guangshuo Li <lgs201920130244@gmail.com>
+To: Horatiu Vultur <horatiu.vultur@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	David Carlier <devnexen@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: Guangshuo Li <lgs201920130244@gmail.com>
+Subject: [PATCH] net: lan966x: restore XDP RXQ page pool on reload failure
+Date: Thu,  4 Jun 2026 19:28:46 +0800
+Message-ID: <20260604112846.1420908-1-lgs201920130244@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260602164635.62517-1-mail@tk154.de> <e80deefc-8467-4ec2-b61e-6cb064802473@intel.com>
-In-Reply-To: <e80deefc-8467-4ec2-b61e-6cb064802473@intel.com>
-From: Marcin Wojtas <marcin.s.wojtas@gmail.com>
-Date: Thu, 4 Jun 2026 13:30:42 +0200
-X-Gm-Features: AVVi8CcDjNH2_4RpELI_VLhIrfYWmPteT4vvqOayjCSlCrLru3IZfh7g7MR56sg
-Message-ID: <CAHzn2R2uvJiJM8UNw2+QEU7yqnqdJqcsDo1gBq8FKRBGs9DsDg@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/4] net: mvpp2: fix XDP RX buffer handling
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Til Kaiser <mail@tk154.de>, Russell King <linux@armlinux.org.uk>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Matteo Croce <mcroce@redhat.com>, 
-	Sven Auhagen <sven.auhagen@voleatech.de>, Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Tim,
+lan966x_fdma_rx_alloc_page_pool() registers the newly allocated page pool
+with each port's XDP RXQ. During an FDMA reload, this registration is
+performed before fdma_alloc_coherent() is called.
 
+If fdma_alloc_coherent() fails, lan966x_fdma_rx_alloc() destroys the new
+page pool and returns an error. The reload rollback path restores
+rx->page_pool and rx->fdma to their old values, but it does not restore
+the per-port XDP RXQ mem model registration. As a result, the XDP RXQ
+state can remain associated with the page pool from the failed allocation
+attempt while the RX state has been rolled back to the old page pool.
 
-=C5=9Br., 3 cze 2026 o 15:55 Alexander Lobakin
-<aleksander.lobakin@intel.com> napisa=C5=82(a):
->
-> From: Til Kaiser <mail@tk154.de>
-> Date: Tue,  2 Jun 2026 18:46:31 +0200
->
-> > This is v2 of the earlier XDP_PASS fix. The XDP_PASS change is retained=
-,
-> > and the series now also fixes related RX/XDP buffer handling issues fou=
-nd
-> > during review.
-> >
-> > ---
-> > v1: https://lore.kernel.org/all/20260524122334.1730451-1-mail@tk154.de/
-> >
-> > Changes in v2:
-> > - Fixed RX DMA sync range to account for RX headroom.
-> > - Limited XDP frame size to the actual RX buffer size.
-> > - Fixed refill error paths so retired buffers are not returned to BM.
-> >
-> > Til Kaiser (4):
-> >   net: mvpp2: sync RX data at the hardware packet offset
-> >   net: mvpp2: limit XDP frame size to the RX buffer
-> >   net: mvpp2: do not return retired RX buffers to BM
-> >   net: mvpp2: build skb from XDP-adjusted data on XDP_PASS
-> >
-> >  .../net/ethernet/marvell/mvpp2/mvpp2_main.c   | 38 ++++++++++++-------
-> >  1 file changed, 25 insertions(+), 13 deletions(-)
->
-> Series:
->
-> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->
+Restore the old page pool registration for each port's XDP RXQ in the
+reload rollback path before RX is started again, so the XDP RXQ state
+matches the restored RX state.
 
-Tha changes look good, thank you.
+Fixes: 59c3d55a946c ("net: lan966x: fix use-after-free and leak in lan966x_fdma_reload()")
+Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+---
+ .../net/ethernet/microchip/lan966x/lan966x_fdma.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Reviewed-by: Marcin Wojtas <marcin.s.wojtas@gmail.com>
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index f8ce735a7fc0..76654b44baf2 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -855,6 +855,21 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
+ restore:
+ 	lan966x->rx.page_pool = page_pool;
+ 	memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
++	/*
++	 * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
++	 * each port's XDP RXQ before the allocation failed. The new pool is
++	 * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool's
++	 * registration before restarting RX.
++	 */
++	for (int i = 0; i < lan966x->num_phys_ports; i++) {
++		if (!lan966x->ports[i])
++			continue;
++
++		xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq);
++		xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
++					   MEM_TYPE_PAGE_POOL, page_pool);
++	}
++
+ 	lan966x_fdma_rx_start(&lan966x->rx);
+ 
+ 	lan966x_fdma_wakeup_netdev(lan966x);
+-- 
+2.43.0
 
-Best regards,
-Marcin
