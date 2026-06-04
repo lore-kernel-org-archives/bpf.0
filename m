@@ -1,85 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A29D284B3B;
-	Thu,  4 Jun 2026 01:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FF02989B5;
+	Thu,  4 Jun 2026 01:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780537817; cv=none; b=OsgGRDVV0968B1mjDz/75SFN/kUYorSIu/vhoMenBYgsE6kj5Z0MZ7TuidJEkovVMWf6SdfsnVuYBxW/xA4QgokRQz1jBFazfxqfXkAYVxXuQI+QuMh4pMoyMi8rSlrKfNeYANfuVnnsEgktbU/qKZSonL4dq5uq896KX/sz45U=
+	t=1780537818; cv=none; b=kqFwtfDVlBQZPp/X0CO65I4qKFzdNccND1Jbjp70beRNYKHzQjVm6VL6xHkn5rP+dOJRy+a1htDGF5SQmBig5iXmgLYail+XnCx52d13ky8aDXVVSkW8MrvbC5axlqxZQNpCFdm3jkoEk5eMVaTrRTw2eww2/pBQghExY9JSg+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780537817; c=relaxed/simple;
-	bh=fSHhPc1nkyayHXR4UTLV7h8T6og+5aZrAoJqvYS6yOM=;
+	s=arc-20240116; t=1780537818; c=relaxed/simple;
+	bh=mQvo2PpSlc3yJtcSWSz3uvnASBkIOLRsjClD0Ql+Evw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DCxMG5QrIQdFrWk0aEd3bt+KB7e/H0HVCk7pSLOQkuPOoYfh2s5cbaKIPy8rk0qKmznwzMlRfanZcHEvH57r19s8z3ux7OICB2nNCiRk33FNxXqS4hK4UPSP5EnYIaWc1xevaEaJEtQUY8dPRyhKJegQzSA4tqU+d5XVxovrfR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lALy0QtK; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=YL8ynyWyVmNreAzBGN8WCK6xY0+y7XI9Y+7oeR0VvFTUFm+z6rEQKoOmR0K+txujG58mmaDsxxv3BpWhG+XXfbf3OsZucQ1qUbZJCkdiMHy9HUaVEoUBrzk9mXK/U7mcz7l4Y/93k/yuPtMa/+9dvFx7GWkCHEvxV0jToH4yv/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+zSS0Am; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lALy0QtK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB421F00893;
-	Thu,  4 Jun 2026 01:50:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+zSS0Am"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF311F00893;
+	Thu,  4 Jun 2026 01:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780537815;
-	bh=KUdq6UOSJnZpfKpTZ4ZN0nFQcjLimr2c1F9d/PXD35w=;
+	s=k20260515; t=1780537817;
+	bh=pfKyCNVco24/zBt8XvJvqAKyR5qloFcCh/cvmTpP81o=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=lALy0QtK2qLQhWc1C6QSpu7SLW/xGmMVhsQ8Q5zDFErmFCszuTV5lMFC8pmgxf/4D
-	 iMkmxQQiLpFuvRmlp4wf/njNMgKSXZ147yZvUPm9mus/GfGnf7VL14EexpMkT+ziT9
-	 aWBhjQ6SfU+rrjjrE+dH3n31+QtkUvK8YRbd1y7H8VvJLElMkZB59MHWvy86ms/gX7
-	 JJHx1rvcISPgGDjTDUHtY035SCvUBaMNDpXX3htILKA3Fof85bmFtjoVkAsqRgon4Z
-	 X4mFIQUfcbhgYt1o5i8pseG93lGVRu9qCp8GaiAoUoNu4YNwzTxEdHMh6jBrdCYjz7
-	 QixkmmfHrZwfw==
-Content-Type: multipart/mixed; boundary="===============9009006705736662526=="
+	b=H+zSS0AmnsDMy6Tz8fxAGU8NveVPXnF7cHyG9NnNRvJADXfleTHcT8+8dx1JVqcjz
+	 l3o9qlR/rOK8K4yD5BtL/o29WuagCWbc2VJvl3v+U5+EokDWXSFBXI6a0pi+u2cRFj
+	 djasM/AeGJPW1Kmpt9OeeER5mKFtPuQjIljf3gW0NVuVZ96zl1gDKDCm8dwXrmfBud
+	 kbS85ISaaLivKpu9CeIxv15AJOm+h5INSAdsw1tsr5CtwrNdf8ff2v4OJCFNxfBK7w
+	 t4BE7UE/BwXzyPCmsywZcbzbiD5u6PnvNsh4MYIEOE+A+G/cGbqfUvkrUpi+cmrEEj
+	 ddiJIJV1lyz4g==
+Content-Type: multipart/mixed; boundary="===============2769173019627471115=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org>
-In-Reply-To: <20260604005729.1992632-1-malin89@huawei.com>
-References: <20260604005729.1992632-1-malin89@huawei.com>
-Subject: Re: [PATCH v3 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
+Message-Id: <74147fc81dc525aa48190b5390b1fd7a1b64ff882402ca93eb4f1dadce6a3528@mail.kernel.org>
+In-Reply-To: <20260604005729.1992632-2-malin89@huawei.com>
+References: <20260604005729.1992632-2-malin89@huawei.com>
+Subject: Re: [PATCH v3 2/2] selftests/bpf: Cover tail-call cgroup storage prog-array checks
 From: bot+bpf-ci@kernel.org
 To: malin89@huawei.com,ast@kernel.org,daniel@iogearbox.net,bpf@vger.kernel.org
 Cc: andrii@kernel.org,john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,zhuyifei@google.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ameryhung@gmail.com,malin89@huawei.com,cuirongzhen@huawei.com,tanjingguo@huawei.com,cenxianlong@huawei.com,chenzhe@huawei.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  4 Jun 2026 01:50:15 +0000 (UTC)
+Date: Thu,  4 Jun 2026 01:50:17 +0000 (UTC)
 
---===============9009006705736662526==
+--===============2769173019627471115==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index a656a8572bdb..d85869544dc8 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2480,8 +2480,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
->  				break;
->  			cookie = aux->cgroup_storage[i] ?
->  				 aux->cgroup_storage[i]->cookie : 0;
-> -			ret = map->owner->storage_cookie[i] == cookie ||
-> -			      !cookie;
-> +			/*
-> +			 * Tail calls keep using the caller cgroup storage
-> +			 * context, so prog-array members must use the same
-> +			 * storage cookie.
-> +			 */
-> +			ret = map->owner->storage_cookie[i] == cookie;
->  		}
->  		if (ret &&
->  		    map->owner->attach_func_proto != aux->attach_func_proto) {
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> index 7d534fde0af9..f8c4b569da95 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
 
-Related to this patch series, Leon Hwang raised a concern about test
-placement in the selftest file (tools/testing/selftests/bpf/prog_tests/
-tailcalls.c). The new cgroup storage tail-call tests should be placed at
-the tail of test_tailcalls() rather than before tailcall_failure and
-tailcall_sleepable.
+[ ... ]
 
-Reference: https://lore.kernel.org/bpf/20260603150213.68746-1-leon.hwang@linux.dev/
+> @@ -1777,6 +1928,14 @@ void test_tailcalls(void)
+>  		test_tailcall_freplace();
+>  	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
+>  		test_tailcall_bpf2bpf_freplace();
+> +	if (test__start_subtest("tailcall_cgrp_storage"))
+> +		test_tailcall_cgrp_storage();
+> +	if (test__start_subtest("tailcall_cgrp_storage_diff_storage"))
+> +		test_tailcall_cgrp_storage_diff_storage();
+> +	if (test__start_subtest("tailcall_cgrp_storage_no_storage"))
+> +		test_tailcall_cgrp_storage_no_storage();
+> +	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
+> +		test_tailcall_cgrp_storage_no_storage_bridge();
+>  	if (test__start_subtest("tailcall_failure"))
+>  		test_tailcall_failure();
+>  	if (test__start_subtest("tailcall_sleepable"))
+>  		test_tailcall_sleepable();
 
-Leon's comment from v2: "These new ones should stay at the tail of
-test_tailcalls()."
+In the v2 review Leon Hwang asked that these new subtests be placed at the
+tail of test_tailcalls():
 
-Should the test ordering be adjusted in the selftest file to address this
-feedback?
+  https://lore.kernel.org/bpf/20260603150213.68746-1-leon.hwang@linux.dev/
+
+  "These new ones should stay at the tail of test_tailcalls()."
+
+Here they are still registered ahead of tailcall_failure and
+tailcall_sleepable rather than at the end.  Was the intent to move them
+after the existing subtests?
 
 
 ---
@@ -87,4 +88,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26923843925
---===============9009006705736662526==--
+--===============2769173019627471115==--
