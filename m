@@ -1,184 +1,128 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7265E47D959
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 13:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780580779; cv=pass; b=VuCH6DqCS4AlwfL7Fzzqkcdc+/dC+NqhQt4KjaD25eEzJzN4Zu2oI0jrQjEQLQROPyYrzGcLx0yhsjE4tkGUe7OmTHwjqSn3CJcsEzY/lyN4SPN+9yFLGYM9xKYLtRKU1+WoQg0aafxSaf8nwCuy05T25XTpxLhDpDPD97frVzs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780580779; c=relaxed/simple;
-	bh=iYme8jFzl2i6imnwPVJ/AP2qxrjAVPMc+7VBvNKbQsw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kaB9+vFEx1RlUXnz8kKerAbHhrGp9w1PzJZ8WNwgkSqOlhrSCOjVi9l+YYVnNwn5qB3jlKVYHodEAFkXL2O/lyCAVnz+4GXi7cuwclpte1iQUsosMLq4NDCsfr5x8HdB6bWrVod2TljMHS7WRCV/PQ14p3+BPS/YBgYRBlhKZDA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bAKq8rah; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755C647ECFA;
+	Thu,  4 Jun 2026 13:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780581152; cv=none; b=Z6EUO/849kEDZBV998HdLRJIpjgfMWgJrvIm6/KESETcJ1AX3l4bADI1Wz09zaPEc0H4T5qdk5PnkKDCBlAyLAlhAbjJoP6KTVXGmnv7D8qLb3FOadr4VDTfddHE18OGMXIzy8ndVItA1VnxhWIva4RJDbTqyVOqpK+TCVDMvzo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780581152; c=relaxed/simple;
+	bh=JyRQ5DLI2Tz054FHOxWURSvexWnX6Hctzr8B1ljtrE4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=V4TvLauWAhJAR9YcVJUiet+DYoVlyWUji4G390ZNN3neM+An1rqnslJNQd3ptDhcebDHP4zuGJdImoIEtOrFv1YvB3RgLLIRXqcYJOs3b+TplXz8EQyBzmxH4v0FvDtEtLhdC+c44Gdx7XHamfHodOB+YUhDD5aAab4HMzSvwqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKoD6sVL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bAKq8rah"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7defee656dcso5204527b3.0
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 06:46:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780580777; cv=none;
-        d=google.com; s=arc-20240605;
-        b=H2TAFZTw23hB0LMh1C2tCAhubeCYxjJBDlCvCE9CqPWU6ONhqv+2cFXrN1q6BfGm8n
-         B7L1ZSGqaHCbucUcdw5DpoprRqm99J9c1RlpzMTj3eAdtTT6P3WY2RKcyy07c2naf81k
-         0npEN0S9II1oxdjCKaDI0hTzoXDLWSxTn2JlE96MvKXq8t2l8BGP9c5k5YT1rKmEGSfY
-         MM1FAP0kh5qlNG/lDzQZvfw771FclXj+Zn5AR03HjjhqDZH3vanQAzI+3t2rHswKj1oA
-         uOqp+KzG8W7r1QoAXKhS0vbHcREdz6VlTFKzS40qilQL8UAH3jLUpxcj2q+qY6yN3GGh
-         gXZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TKmbEqQuIE7hhwfnG8ZqOT6v5fXQBR07PpEbjFiDPbQ=;
-        fh=wZXCnz/4a9EwUnXnB3Fgi5VOc3kn069C5YVy5BYARd4=;
-        b=dSy/Ap9V8TOHbROkuBWAzLQ3mM6PInvgFgTlQBfCJadflhyPkDguIGRpLMSfh+hODR
-         Wk3nXeJCIDeA3Ki1CmwxI+M3GIcV2VwA9KYXgUBNeTm7zTpzWTJSZ6VcPdojRi9Q0nD6
-         Wxnlt+KYxFim4fHRQc0tksm2QQ5GjayfCTU6xZBO01ByeuQdOpWde2rHEWFibmH/Epab
-         VD64Yf2ZDarLOWxi/+1e5C6HC/Dain1UjnUBLRWkpimetI8xo4QMCD4XVRtAudY8BG1e
-         tJLXzCQQI2+QgyeNWFnpzR1OgtgwhNMzMPhKPGMuNrpoBBMW4toYDXDhEf44MuuBvRpp
-         iiSA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780580777; x=1781185577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TKmbEqQuIE7hhwfnG8ZqOT6v5fXQBR07PpEbjFiDPbQ=;
-        b=bAKq8rahv0NGGP7euMuF0bI/PNS+umztxgcIhptNOcAhHT2peOB60hZ7AX1WTTqrrS
-         RA1z+QCcSRcJVj30oWPDW+Sem4i2Voy9eEIPUsVzIJncVOPE+QbcDZZXgevM1tD+omWL
-         iwdd3JpddHlW31nYSbmGHMH/3aNpKGYKmb6KbjINWmTqIi7B4Gz/OB1PKiHfdIkErf+T
-         XmEW2cgGNCiIeZ7R3G0KYAWhzNca9E5rQW6KkN7h1ZEEn48KFUz9DQdBXcrPSxiPsBic
-         xagh0P1H93NSwN6YUgZmgc9KecluL4xxU0qcqCi2TNW1rfPRIXO0CpZ2cYkJOt1ufVeU
-         8lew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780580777; x=1781185577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TKmbEqQuIE7hhwfnG8ZqOT6v5fXQBR07PpEbjFiDPbQ=;
-        b=onAecziSVK663c1cMXb//ZrBtsMagJwSg0gj/R63TkTl4PIi6OfK0+sfBqFPET8Hwi
-         HvNI8oYhbMqYBqk0MyrSdaJt3K98bbg99MMSl7LfybVr3Aq2OE7XbIxBrTg9mBxG2NpN
-         nN0F/O09Tf9+DC+7sFROQPrYC8k8NUh2GbU4ihdzb9ZRn1M4AbaQlALzKqyAkJOHpnlP
-         PgGZQyXAj9r4V8iYhF5R1oQc5v9rJS3dKT52r9Pn4HZzIGkASr8zTQJSFJJwXHKU6PCh
-         hSQgN+IAba8zXQH7JdS45GIW5tqZkDcuu5qX4a2lEDB2Zvv0oO6y9lOaAxS8k9eYkT7H
-         EDvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/u78o4GqXo7fp7qNVwwdomWNaSJoDLZG+VH9xSdyVPiwnK+LyQaFKrupMWjySx/tBHTpE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnRSUwAe/+znfd4uZAk7RAoptOxMV4WujWp7ASARtGRIiMyW1M
-	LqkRY6aTrwqcy2RPn5rRRz7/Fak4pnL2LUbvBSmVvqI1KlweodMxnxMhBPdw2lxgu9TLd/x2DOS
-	rGjqwWpampSVSgU+Vro/m5NkLMPnCCpg=
-X-Gm-Gg: Acq92OGDG2XTx+sA1rDT5IVGXIg1pBD5DkivarfP1niy2p80RAWTfj24Bx8hby7aCpL
-	hRUQHBe8XOJ6gPAVg5g0DhmmlkMsxlXDJ4RtO6rvlGiQtw9y6rMxAFECSMlEBn47v26iM/bsbxR
-	WItO/SwdKwYGTc6SwU2wLT9Qq5cdeXc5ZNljJc+rAZXYz2oO5r1ffxlBLE1MZ3MjahI4vIXWk7J
-	Gc9NUfuv/Pr6EgfTGqnrEFmdiv7H8P1yqw8y/wkxyA/ZYNR2sdm5Sy9iPucB5nAyXDAf4rSyCCM
-	NFIdgk0moKNURSYJmVUby+BcxSy0ZRx1AV1FydQH9GeX3KGQ
-X-Received: by 2002:a05:690c:6b8a:b0:7ba:eefe:9fb3 with SMTP id
- 00721157ae682-7ea47312561mr70100457b3.2.1780580777600; Thu, 04 Jun 2026
- 06:46:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKoD6sVL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A15E1F00893;
+	Thu,  4 Jun 2026 13:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780581151;
+	bh=nP5ANhfUr65vaUgZeofhcvtZviOVxszyWSYwKeR25yI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=PKoD6sVLfwWpY7uYD4J2riUIZ7n1ewh3EVIaR6rXZw3/lVyACghyer6gW9aWFZBYn
+	 oVVstZF4398SDA6d2kucmCt0CKQtHjCUpIlsztC7KvQKSXfBMncgq+LnlOGAO+9hUo
+	 fbHukQ8hWlGVTVQINWkZo8bBthlM90gAGnlz8iAv1gHw14B/FWKRH7xZ/W7aNFjcVS
+	 1+EHDGeOWKyR7IxIuNPvwxe69ahYVMWs8JHgu/8OJoXojsqHuK9Lw3IBKGdNBe/NHq
+	 wxRdBgjw5/oeH53yWo1hzJvxy76jlBjNTKkEZP/ao8OR5J/Rvlobp01+nIMzcnBPj2
+	 NPbAuNXm+BYUQ==
+Content-Type: multipart/mixed; boundary="===============5202350750330968314=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260604112846.1420908-1-lgs201920130244@gmail.com>
-In-Reply-To: <20260604112846.1420908-1-lgs201920130244@gmail.com>
-From: David CARLIER <devnexen@gmail.com>
-Date: Thu, 4 Jun 2026 14:46:06 +0100
-X-Gm-Features: AVHnY4I9Tv-80eeJdvyCpRZWqPhjjoeWHuRXarM4mq3EjV_ABbs5fEo5cIh_JVQ
-Message-ID: <CA+XhMqyzy9B_UFeSC80XG-1ZMh4ckhZiXHT9anNsVutmZdmk0Q@mail.gmail.com>
-Subject: Re: [PATCH] net: lan966x: restore XDP RXQ page pool on reload failure
-To: Guangshuo Li <lgs201920130244@gmail.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <a91c8225b90fc2330bdca6af51f72c7cb872c1127deb54ca6d89f6f3f34b9657@mail.kernel.org>
+In-Reply-To: <20260604130458.617765-3-xukuohai@huaweicloud.com>
+References: <20260604130458.617765-3-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH bpf v4 2/3] bpf: Add validation for bpf_set_retval argument
+From: bot+bpf-ci@kernel.org
+To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,sdf@fomichev.me,zhuyifei@google.com,mattbobrowski@google.com,2022090917019@std.uestc.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 13:52:31 +0000 (UTC)
 
-On Thu, 4 Jun 2026 at 12:31, Guangshuo Li <lgs201920130244@gmail.com> wrote=
-:
+--===============5202350750330968314==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7fb88e1cd7c4..1bf58685b655 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9952,6 +9952,7 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
+>  				  int func_id,
+>  				  struct bpf_call_arg_meta *meta)
+>  {
+> +	struct bpf_retval_range range;
+>  	struct bpf_reg_state *ret_reg = &regs[BPF_REG_0];
 >
-> lan966x_fdma_rx_alloc_page_pool() registers the newly allocated page pool
-> with each port's XDP RXQ. During an FDMA reload, this registration is
-> performed before fdma_alloc_coherent() is called.
->
-> If fdma_alloc_coherent() fails, lan966x_fdma_rx_alloc() destroys the new
-> page pool and returns an error. The reload rollback path restores
-> rx->page_pool and rx->fdma to their old values, but it does not restore
-> the per-port XDP RXQ mem model registration. As a result, the XDP RXQ
-> state can remain associated with the page pool from the failed allocation
-> attempt while the RX state has been rolled back to the old page pool.
->
-> Restore the old page pool registration for each port's XDP RXQ in the
-> reload rollback path before RX is started again, so the XDP RXQ state
-> matches the restored RX state.
->
-> Fixes: 59c3d55a946c ("net: lan966x: fix use-after-free and leak in lan966=
-x_fdma_reload()")
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
-> ---
->  .../net/ethernet/microchip/lan966x/lan966x_fdma.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/driv=
-ers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> index f8ce735a7fc0..76654b44baf2 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> @@ -855,6 +855,21 @@ static int lan966x_fdma_reload(struct lan966x *lan96=
-6x, int new_mtu)
->  restore:
->         lan966x->rx.page_pool =3D page_pool;
->         memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
-> +       /*
-> +        * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
-> +        * each port's XDP RXQ before the allocation failed. The new pool=
- is
-> +        * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool'=
-s
-> +        * registration before restarting RX.
-> +        */
-> +       for (int i =3D 0; i < lan966x->num_phys_ports; i++) {
-> +               if (!lan966x->ports[i])
-> +                       continue;
+>  	if (ret_type != RET_INTEGER)
+> @@ -9980,6 +9981,29 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
+>  		ret_reg->s32_min_value = 0;
+>  		reg_bounds_sync(ret_reg);
+>  		break;
+> +	case BPF_FUNC_get_retval:
+> +		/*
+> +		 * bpf_get_reval may see arbitrary value passed by bpf_prog_run_array_cg for
+> +		 * CGROUP_GETSOCKOPT type.
+> +		 */
+> +		if (env->prog->type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
+> +		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
+> +			break;
 > +
-> +               xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq)=
-;
-> +               xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
-> +                                          MEM_TYPE_PAGE_POOL, page_pool)=
-;
-> +       }
+> +		if (env->prog->type == BPF_PROG_TYPE_LSM &&
+> +		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
+> +			if (!env->prog->aux->attach_func_proto->type)
+> +				break;
+> +			bpf_lsm_get_retval_range(env->prog, &range);
+> +		} else {
+> +			range.minval = -MAX_ERRNO;
+> +			range.maxval = 0;
+> +		}
 > +
->         lan966x_fdma_rx_start(&lan966x->rx);
+> +		reg_set_srange64(ret_reg, range.minval, range.maxval);
+> +		reg_set_srange32(ret_reg, range.minval, range.maxval);
+                    ^^^^^^^^^^^^^^^
+
+Are reg_set_srange64() and reg_set_srange32() defined in this kernel? A
+search across the entire tree finds only these two call sites and no
+definition. The struct bpf_retval_range has minval/maxval fields but no
+associated reg_set_srange* helper exists in this codebase.
+
+Looking at the existing pattern in this same function (lines 9969-9970),
+the code directly assigns fields:
+
+    ret_reg->smin_value = -MAX_ERRNO;
+    ret_reg->s32_min_value = -MAX_ERRNO;
+
+The reg_set_srange* helpers appear to belong to a different verifier
+variant using reg->r64 = cnum64_from_srange(...) that isn't present here.
+
+Should this use the same pattern as the BPF_FUNC_get_stack case above it:
+
+    ret_reg->smin_value = range.minval;
+    ret_reg->smax_value = range.maxval;
+    ret_reg->s32_min_value = range.minval;
+    ret_reg->s32_max_value = range.maxval;
+    reg_bounds_sync(ret_reg);
+
+This would match the existing codebase and avoid undefined function
+references that will fail to compile.
+
+> +		reg_bounds_sync(ret_reg);
+> +		break;
+>  	}
 >
->         lan966x_fdma_wakeup_netdev(lan966x);
-> --
-> 2.43.0
->
+>  	return reg_bounds_sanity_check(env, ret_reg, "retval");
 
-Hi Guangshuo,
+[ ... ]
 
-Just one remark. The re-registration fix looks right, but the same
-restore path has a related gap.
 
-  Just above the failing alloc we set:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-  lan966x->rx.page_order =3D round_up(new_mtu, PAGE_SIZE) / PAGE_SIZE - 1;
-  lan966x->rx.max_mtu =3D new_mtu;
-
-  These aren't rolled back in restore:, so after a failed reload
-page_order/max_mtu are new while pages/fdma/page_pool are old.
-lan966x_xdp_run() then calls
-  xdp_init_buff() with PAGE_SIZE << page_order, advertising a
-too-large frame_sz =E2=80=94 for a jumbo MTU that bumps page_order,
-bpf_xdp_adjust_tail() could grow past the real
-  page.
-
-  Could you save and restore the old page_order/max_mtu too, so the
-restored RX state is fully consistent?
-
-Cheers.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26955107708
+--===============5202350750330968314==--
