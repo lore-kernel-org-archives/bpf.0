@@ -1,173 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9253A5E89;
-	Thu,  4 Jun 2026 12:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D793833F8A3;
+	Thu,  4 Jun 2026 12:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780576844; cv=none; b=Skes5YCuElk4Hyu/oNh/5sSalQDzPtpCD6u9XQMoyUffhgAFTH3ijAQutUcqdVAUlivGUVYjJlLQAvJ47ZQk+8/5oL9t64pWR75QvL9gtTRTYgRT71WTMde4ey6NGimEEYRmjL8IHNwzMyHfy5b+5PwcrUAzZPoFV1GfcLlykps=
+	t=1780577973; cv=none; b=dXl7bzIobFWLzyFryOH0XX8Aihf/pz9m+42JPizhRaJKQC8dANoP1vwo6JZADr6qWTS0R4GSeCBq7GduH88zrvZhfqFR4lNdQGne8aAi9Gq9n7a57O7hQCKYS5aYV5LvyEgZ3osvGzjvNNVuIiY+1q9N73pEGSx+eKmkiMJfvyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780576844; c=relaxed/simple;
-	bh=3motd/Kk9tEcEy98c5ncAGr3nNkb1fzwM1uTOGz4Qus=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KAVGqEsQqFBvIfHaD01KJdfq6MfSaMT+/yB+cloAYXLcZBEqebiSjsuWaaEhLJ7tXXkUliKxyugyGhdgWcZGc4OKCwMF1y1NaL+fFd0oHFvlbGwF6DIkX/7N5uwUxOHC4RVVNMuptmLU2GQjIXMPMdt0bpjxegBHJp8icG41uIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daq4p9mT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780577973; c=relaxed/simple;
+	bh=EgMRvBu5YzRiwRNtwLh6fB99d7xpTCuSwobg5a4x1T0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KZnJJP9FIlIGhKhwfOT/CVLZ3JSQZ4H9/eTNwOCq+yrVZ/RH3S2duUb7ws88d+FDbSIP+zkImwN3qTGy6uWHmkZxttrPQqKzkwzE54sSvvXVVfwsn0ekV3f+tft5cPyVGkxUfa+L5rNsIQiXE5aH95dvdkQAdOhUQA79LytWrKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iO/WIFOF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daq4p9mT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDC31F00899;
-	Thu,  4 Jun 2026 12:40:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iO/WIFOF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C981F00893;
+	Thu,  4 Jun 2026 12:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780576843;
-	bh=GnOm+v7F1LKSbVaBQReSZi8hz25Kzy0nepO4bxrUVcs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=daq4p9mTxZM6hg5qQa/qHACfQnQNHHJBfDXDZldcF2oHlB3rhT2K9WeXrV8DpICBQ
-	 ChETc4cbkLuTEfQQomffF4ZDXoOkbJlShcZp+gaRwsU03Ob6jh4vxRpGgmIybx7MiS
-	 0Q6kTXsQaMMkiRlLva0vqHO8zJAZ25fV2lo4Iwm7JCR2aKboyZBL5lVEITHft9qxX0
-	 GkQdYzIUJ5P8y31MMiUfphTTGDChzuxN8Hs86+X2QhDQOpjt8UdnXhaxci7Ao2eogs
-	 lUnPqgL3gvZxrYqDe7AeVTZYhdiIepM/Oxx/uFb99h7xH99KiZewhfCg5FOfUIFW0e
-	 /X2zv2MBvrBtg==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id F3A80F40084;
-	Thu,  4 Jun 2026 08:40:40 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Thu, 04 Jun 2026 08:40:41 -0400
-X-ME-Sender: <xms:SHIhakSnCrdg9gx5m4iHzTicKaK_DQbZUK11E3bhlG_5yYmLh4HVcA>
-    <xme:SHIhamrf8l8qqXn5spEz_3zIQSqGxPGzydYKiqYC1Ad9mQIGDEO2BI-tVRzQTjo8L
-    N8dPE-jHh3R_hm5kGq61j-lWA9098jHtcxIXHtK6lSOM5b04J8>
-X-ME-Received: <xmr:SHIhanvyg3DUTUpzz1Tr6mmNDYVvEMOWhgBEhBREpTYdxxCkkBVJjshxDdQ>
-X-ME-Proxy-Cause: dmFkZTF1BaCWatKURocL+NpcgGk8YfcgR1XBShgJesrvsvC2cG3vlDNwoRLKuuKWvI9wgr
-    KG4Un6Q8MLsUhJ7qUby0lAaArhUaGksZuyniOIcFRF3jBJfW9luEJSa356GyMvadHeAIUB
-    F7Fsk6uIaYS9/XUo/AHbvEW2iTXW7UQHwAiD96JBraglfj5eFgrMXQqkhBFZpo5fmGG/eI
-    AQb5l6O4b5u+PthGYCRYvuYPUJXdmWKqj7KOhX79C+va6qRUJSnqWA/slW9fvEtsxZflmn
-    cZYxt7SIfaZSY+71gr8mRZqSZhlvD3ofSHh//MmWZCDH7C7YuX5/Ca4yauFP5gCXu8R5e8
-    ATuCazD5w14RyGhUDf8kJ2nnJlgWRO3UwgsRWPcouZeOlihQh5D8nnxfIJXtuCyTTW3jlv
-    7TsEq+dkGy+hPVqy5gzBhzu74DPvX0twDJI7dlB6ID2+z1ZSG+J1UYSs61b9WIUb4ttyzS
-    TjZSEePWTPWlDNq9PoUQQWqdzHgd48jCUCsvE2SpVwPE7xmxBMRNl9jVOmXJglehoDpXd9
-    z7WWsk64xF+a6MwNoBsFE/yKMv6OSIpaAByuh/5HYUXC1C2pht/LVhYAvicEDOwXVeAMyN
-    6QHhq6XTEBwnqHjw+vWgmxJE8KWrktttFqSpXIHL+Ldl3JEWwh3FcBx1FKuw
-X-ME-Proxy: <xmx:SHIhaqeGCWvoTr6Zf4A7VuqQKHMJAl9R7ARuuX7SWO3hikB0EABGqw>
-    <xmx:SHIhajm2MNfjagJxh9VKB7kVOB1FHuJFe5pi_tBuhyOPef0APhlWJA>
-    <xmx:SHIhauE42o8acVl_EkD0i90rEiqekyJ5wDDuuU7N0Uc-cMcHHEKKFA>
-    <xmx:SHIhapIi0Aj_i8f5RMMHTUFMJs_gmylfCV5Mpk-2TVrJhlM3iZONJw>
-    <xmx:SHIhaktsp0bNSEQQ_zMYZ1h3aUBSoUkTxD9FkfVknP1rAqe0eaUb8bXA>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 Jun 2026 08:40:40 -0400 (EDT)
-Date: Thu, 4 Jun 2026 05:40:39 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
- Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+	s=k20260515; t=1780577970;
+	bh=obLgFgbfsTgxgYKjwNEFpJIxnlo2UXx+ip5/KtopYow=;
+	h=Date:From:To:Cc:Subject;
+	b=iO/WIFOF/9oAhcI20MLOKf3IawGhKBDhswAFykHuGex8EWzlJR7N+dWzbyXjC6ZNC
+	 YO2RUUwJr5srOliac/s+94K0XmJIX9wBRO9M2f5LiV04S2S1cAqKw3TTMLEWUHZ5up
+	 uJ8CNns26YPbpHHTqxvfYOocBFMnciQu2Yqkr9JigFKV6q6ZppjNuXMwJ853n+cDMy
+	 XFfdzb/lEZ4vQ6Jyw1LS+602CyhvhIv02K3Oklatvj+sBHlNqxdky1t2Ma4o5ZxcNf
+	 dde52kYOrkExUnFmfkEeC+o4YpZ18j9dq6k++A9EPeFK75tXFzhBW4oVfCE4l0GkJa
+	 KAKktEvJSwBng==
+Date: Thu, 4 Jun 2026 13:59:26 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
- Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
- Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
- Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 10/12] preempt: Introduce
- HAS_SEPARATE_PREEMPT_RESCHED_BITS
-Message-ID: <aiFyR-9rSGx38tWi@tardis-2.local>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260526152148.30514-11-boqun@kernel.org>
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the vfs-brauner
+ tree
+Message-ID: <aiF2rsdpUb5LuhmZ@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DM+wrrA3zhYr83Bt"
+Content-Disposition: inline
+
+
+--DM+wrrA3zhYr83Bt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-11-boqun@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 26, 2026 at 08:21:46AM -0700, Boqun Feng wrote:
-[...]
-> +#ifdef CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS
-> +static __always_inline void __preempt_count_nmi_enter(void)
-> +{
-> +	__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);
-> +}
-> +
-> +static __always_inline void __preempt_count_nmi_exit(void)
-> +{
-> +	__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);
-> +}
-> +#else
-> +DECLARE_PER_CPU(unsigned int, nmi_nesting);
-> +
-> +#define __preempt_count_nmi_enter()				\
-> +	do {							\
-> +		unsigned int _o = NMI_MASK + HARDIRQ_OFFSET;	\
-> +		/* Maximum NMI nesting is 15. */		\
-> +		BUG_ON(__this_cpu_read(nmi_nesting) >= 15);	\
-> +		__this_cpu_inc(nmi_nesting);			\
-> +		_o -= (preempt_count() & NMI_MASK);		\
-> +		__preempt_count_add(_o);			\
-> +	} while (0)
-> +
-> +#define __preempt_count_nmi_exit()				\
-> +	do {							\
-> +		unsigned int _o = HARDIRQ_OFFSET;		\
-> +		if (!__this_cpu_dec_return(nmi_nesting))	\
-> +			_o += NMI_MASK;				\
-> +		__preempt_count_sub(_o);			\
-> +	} while (0)
+Hi all,
 
-This needs to be:
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-#define __preempt_count_nmi_exit()				\
-	do {							\
-		__preempt_count_sub(HARDIRQ_OFFSET);		\
-		if (!__this_cpu_dec_return(nmi_nesting))	\
-			preempt_count_set(preempt_count() & ~NMI_MASK); \
-	} while (0)
+  kernel/bpf/inode.c
 
-otherwise we would have an underflow issue if an NMI happen between
-the "if" being true and __preempt_count_sub(_o);
+between commit:
 
-Regards,
-Boqun
+  a146500e11445 ("bpf: Add simple xattr support to bpffs")
 
-> +
-> +#endif
-> +
-> +
-[...]
+=66rom the vfs-brauner tree and commit:
+
+  b93c55b4932dd ("bpf: fix UAF by restoring RCU-delayed inode freeing in bp=
+ffs")
+
+=66rom the bpf-next tree.
+
+This merge resolution definitely needs a double check.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc kernel/bpf/inode.c
+index c3f79b5a2f8c0,188c774a469ca..0000000000000
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@@ -842,9 -768,12 +842,13 @@@ static void bpf_destroy_inode(struct in
+ =20
+  	if (!bpf_inode_type(inode, &type))
+  		bpf_any_put(inode->i_private, type);
+ +	simple_xattrs_free(&opts->xa_cache, &bi->xattrs, NULL);
+  }
+ =20
++ /*
++  * Called after RCU grace period - safe to free inode and anything
++  *  that might be accessed by RCU pathwalk (inode fields, i_link).
++  */
+  static void bpf_free_inode(struct inode *inode)
+  {
+  	if (S_ISLNK(inode->i_mode))
+
+--DM+wrrA3zhYr83Bt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmohdq0ACgkQJNaLcl1U
+h9C/xwf+Ou85YMQWM49bpHCIPdrcn1qpCkDTO7jthITlYfCXD5EYFKzsZmuvrHD0
+f1f9+vwESZUIqg0M+V+xofKyFp7tkslGhZhWaf82PQjNGjnePVTAwGDfkh05JIaf
+Pokq/B3I2v55oopFLxMcsMwjlWoclWcakMrGtKPavZ8t0TOzxYSiuu8+QBj/r1SJ
+0VGQFIkD3DHJHap3MlEhaquZ1RJwGQWALh44IyybqbEOfGeS6GStOSeXen+ykKkT
+HOawpmgONJ8dAInEwDRy07m2iGK0vcE0IxWPYZfhB5hF9V3zgrWsQowOC3/vjrl6
+K1M1Im4wy0R21v0Tu6+Y8384MxwiFg==
+=05SM
+-----END PGP SIGNATURE-----
+
+--DM+wrrA3zhYr83Bt--
