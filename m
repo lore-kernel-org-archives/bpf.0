@@ -1,138 +1,237 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F421402442
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F2443C06A
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780572704; cv=none; b=MTBsFGMzrLU4gB7hZQowoVs4ZRgJND1QCCgkI1QEnmNdoqc9Rf/v6d9vxbEtEEi/Kzcud8c1qUhpJ6UdluifEm0cfTkuBdmfeSca87wP+zNlupq7qrOW/dUdKUkLI9f/UafKoVitvVOvKo1hW+P9CN7JizkIWYNw5I8LQcNkddE=
+	t=1780573557; cv=none; b=BssjNvWo4+bRIrYkr4Q5jIe/khoQjmyRd12bdHVl+Q2S0dE0x/O7xRZivFYxOGWDP6urvKR7l/p9Fm3v6bdR+oSImkfyvO082p+4LDd0xGXKSglYVWbYGI0fc1HjhvPv4W6kH9SZ1rUl6ZrSaG//jqRL8FH4SGbCecldkc0ShoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780572704; c=relaxed/simple;
-	bh=LyyIlg3QPX1rQJHGpgzEqbAUkTXPZTiK+PQ73NyhaYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OJobvaBZ2GulXm1uDLP6Yo1zt+8YaD9lUInfyRQ+lXSRfstBVL6u/6piHKMn/OGeZmst8KHg715edOzpc7CihkdMdosKdE1yyHfv1kqYLvpjqahfgzR8OezBXroommEVw505sXuJvBvdTGgdOtjESInyViRYQtH6mC2887ZKiFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pSR8395E; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780573557; c=relaxed/simple;
+	bh=kUuLQ1hXQZ/pEwwaJ2TL3iGxkHo2uA99Ce6sNQQixuA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kcBZ8qL/oxBTgOgQ1eefmzWJhLbMCCDksINfJeXdO7dbxqu0bJVISXRSTJCgOlX8lh/kT2z43i1ciSb3kUZkPkq1YMqZyMrOb8RxcqeOGawh3pxmHuoz3fcC0C2wJzPPSURLEL8kPJz+uOl0CkyH3rSU5LUbjiQAi53wLLFRT+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aM0hdBjL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pSR8395E"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c85a2c012e5so232840a12.1
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 04:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780572702; x=1781177502; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWJU4AISHJoKW2jVY+HLmgCpe1wG/GRzkKLWOkBA9NQ=;
-        b=pSR8395EYeg876uScrRj3WexBnuPB3+AmQJttzO2xqjXClIJWFxNcK5EDBg1mmy5K7
-         HxcqDZGkfbgPECLth7Y0RmlQhvoJM3LRJkS6piZOUU99xRikWKe/xfw/l4LmaKixw73R
-         9unVJ/uRhnbI5kLnaVwe2PNIvhHQKWvb+De+++RwLXAlxdllDbCYN4nMGcErDp+DcSEH
-         MNzyYS0YYRdA2NPPHmRxGNbuXTTqNtwg8X9KvIGQHWgCcEPIa7H9mLEZUCveiQZ24apR
-         QV69GuwFDgEkuwFCKZIEy5RzeHfZWw9oz+8xSnuX0Q+vq1P/SwteIrHXQDRY92pvPNRL
-         MA4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780572702; x=1781177502;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aWJU4AISHJoKW2jVY+HLmgCpe1wG/GRzkKLWOkBA9NQ=;
-        b=Iit8/G26Z9yf9opnQcqSaBsVWXQ5hINn721WlMtYIvqMj1mTv3kVo06GeWJk/E9OKn
-         SACF00hEb4g2HffGp3i0jJP3Rs87cQbSxZHaDyCebHw6vpnopvHLutt5S9s9q2jlTSm5
-         0bUUKoLfD593wLCBQxw8/GDRy/DxbSiroy1tRmXwxhaAPazI7hjN9zGLDCn7Bofm9bjp
-         SoepzyWruKYlSkhLBIjbKaOpz8bwMw3t/eLVlnRSQe/+heN8lbrnyw7ODYqiITZvF/97
-         mQ2ANpfwzBA7/P+oPe9Q+HUmG6gAsBG6RQoHOqOVekyHIAq7n6NABJMabAqgRdrYY2Lc
-         kKjQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/kkF3xh6ceCvO2Eq2S1sp7iZ9D+1RUsCyKXo9icoWAXVzVzRtmcEHijFa6tLMQeUl9XVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyqKE5N07a0xyxl3gYT7Yxu3mInT03HCWO/9vG9gk6J5L/U0j7
-	QrJVlwb8yoVyEiPcYS1zQEBhIG1z2lc56elJYZPJBJG5UVEGElrOg4Um
-X-Gm-Gg: Acq92OHI91+ue0xkfxueDgmi0jUyOGTTyfOOhDYodi13lj6Ymk0oxPwMPvJTdLbEhS+
-	kMaRIobPeAL/rmmOyZlMFd6yN/nevQskKfz6NUJ5/CCpKKjw/Sx2k0YpZ1UeQ+6F2hjZ18+QGwg
-	PFRtvto5kzA3BViLLBlxDVg/76IdDA9bkfkgVi1fKFtnngSze63GCE5JsfxDrpDWDCQDZxsAR5y
-	5i0QoswyhLZqDNKOKKAKR2kY05SsER5oPvzE3OfZbZyg+6Vz8XkIz1IHlQyPoeI6LSelaXcvFWM
-	2ncJyOHoEqSPLgWQ9BD9OYHmtyXV9s2L5Lv078v+K+yJWbBpuGBhDCsQL+J3ztQ50QS/B7VRhZg
-	lEOFEaKGDJtY5IFMKcb2tyIUnTuysx7CdtBHcox+XU/Kw+Z5mYrUDHsiQDZ2xpgUZF3jAJhaYVh
-	8CVVzcDrt7/fpsnOOkN7OJ0gMtoAg=
-X-Received: by 2002:a05:6a21:2212:b0:3a2:f7bd:a9a5 with SMTP id adf61e73a8af0-3b4979e946fmr8507751637.38.1780572702468;
-        Thu, 04 Jun 2026 04:31:42 -0700 (PDT)
-Received: from lgs.. ([2001:250:5800:1000::f280])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428221c3e4sm6124968b3a.5.2026.06.04.04.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 04:31:42 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Horatiu Vultur <horatiu.vultur@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	David Carlier <devnexen@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: Guangshuo Li <lgs201920130244@gmail.com>
-Subject: [PATCH] net: lan966x: restore XDP RXQ page pool on reload failure
-Date: Thu,  4 Jun 2026 19:28:46 +0800
-Message-ID: <20260604112846.1420908-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aM0hdBjL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A650C1F00893;
+	Thu,  4 Jun 2026 11:45:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780573555;
+	bh=0X74QcJD4ZqS/QVW+GMGuezxBRe9IvPkuiZiCalJVpM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aM0hdBjLOfa2T2qiEv68hlqE2d1uVydQ5rrjj7NH3k7LmvgyxGXb724ON3mieXlZf
+	 GzSKE8xZHrHt0TLEbJ/OnWp0S0Dt9fugftj5m3nc45B45zH18nt7wDWUtE81bW/k21
+	 Xv3vH/qmIrNxJLR72xUXTq88RK/gabmeo3xbc8bnL0UHgjF05tGjas10qdIbCwjCT1
+	 9trkiQRASlWsnOjy+YKYcjs13ovT5pZsnAxC3hflbR71cQkgCb3XvDWx7FTFicr3Kd
+	 F369Sbo9ATkXW9bduTkZQBNTy5Os8DEwkaiAd5rixuYrStXGUJujLj4uB5SjA6wFlt
+	 K4IPjg7Ykt7ig==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] net: lan966x: restore XDP RXQ page pool on reload
+ failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Guangshuo Li" <lgs201920130244@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260604112846.1420908-1-lgs201920130244@gmail.com>
+References: <20260604112846.1420908-1-lgs201920130244@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 04 Jun 2026 11:45:55 +0000
+Message-Id: <20260604114555.A650C1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+
+New issues:
+- [High] The newly added XDP memory model rollback loop in `lan966x_fdma_re=
+load()` unconditionally unregisters and re-registers the mem model without =
+checking for memory allocation failures.
+
+Pre-existing issues:
+- [Critical] Failure to restore `rx.page_order` and `rx.max_mtu` in the `la=
+n966x_fdma_reload()` error path leads to buffer overflows during XDP proces=
+sing.
+- [High] Ignored return value of `xdp_rxq_info_reg_mem_model()` in `lan966x=
+_fdma_rx_alloc_page_pool()` leads to corrupted page pool lifecycle.
+- [High] Ignored return value of `fdma_dcbs_init()` in `lan966x_fdma_rx_all=
+oc()` leads to partially initialized RX rings and kernel panics.
+- [High] Incorrect DMA address synced for CPU in `lan966x_fdma_rx_check_fra=
+me()` causes stale data reads.
+--
+
+commit 8b9f21e42e8db3d429f28a032ed49f4eb0966779
+Author: Guangshuo Li <lgs201920130244@gmail.com>
+
+net: lan966x: restore XDP RXQ page pool on reload failure
+   =20
 lan966x_fdma_rx_alloc_page_pool() registers the newly allocated page pool
 with each port's XDP RXQ. During an FDMA reload, this registration is
 performed before fdma_alloc_coherent() is called.
 
-If fdma_alloc_coherent() fails, lan966x_fdma_rx_alloc() destroys the new
-page pool and returns an error. The reload rollback path restores
-rx->page_pool and rx->fdma to their old values, but it does not restore
-the per-port XDP RXQ mem model registration. As a result, the XDP RXQ
-state can remain associated with the page pool from the failed allocation
-attempt while the RX state has been rolled back to the old page pool.
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/driv=
+ers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> index f8ce735a7fc09..76654b44baf2b 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> @@ -855,6 +855,21 @@ static int lan966x_fdma_reload(struct lan966x *lan96=
+6x, int new_mtu)
+>  restore:
+>  	lan966x->rx.page_pool =3D page_pool;
+>  	memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
 
-Restore the old page pool registration for each port's XDP RXQ in the
-reload rollback path before RX is started again, so the XDP RXQ state
-matches the restored RX state.
+[Severity: Critical]
+This is a pre-existing issue, but rx.page_order and rx.max_mtu are not rest=
+ored
+in this error path.
 
-Fixes: 59c3d55a946c ("net: lan966x: fix use-after-free and leak in lan966x_fdma_reload()")
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
----
- .../net/ethernet/microchip/lan966x/lan966x_fdma.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+In lan966x_fdma_reload(), rx.page_order and rx.max_mtu are updated before
+calling lan966x_fdma_rx_alloc().
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index f8ce735a7fc0..76654b44baf2 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -855,6 +855,21 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
- restore:
- 	lan966x->rx.page_pool = page_pool;
- 	memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
-+	/*
-+	 * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
-+	 * each port's XDP RXQ before the allocation failed. The new pool is
-+	 * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool's
-+	 * registration before restarting RX.
-+	 */
-+	for (int i = 0; i < lan966x->num_phys_ports; i++) {
-+		if (!lan966x->ports[i])
-+			continue;
-+
-+		xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq);
-+		xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
-+					   MEM_TYPE_PAGE_POOL, page_pool);
-+	}
-+
- 	lan966x_fdma_rx_start(&lan966x->rx);
- 
- 	lan966x_fdma_wakeup_netdev(lan966x);
--- 
-2.43.0
+If the allocation fails, the driver state remains corrupted. When packet
+reception resumes, lan966x_xdp_run() calls xdp_init_buff() using the corrup=
+ted
+rx.page_order:
 
+drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c:lan966x_xdp_run() {
+    xdp_init_buff(&xdp, PAGE_SIZE << lan966x->rx.page_order,
+                  &port->xdp_rxq);
+}
+
+This incorrectly tells the XDP subsystem that the buffer size is the new, l=
+arger
+size, while the backing pages are drawn from the old page_pool.
+
+Could a BPF program using bpf_xdp_adjust_tail legitimately expand the packet
+into unallocated memory, causing an out-of-bounds write?
+
+> +	/*
+> +	 * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
+> +	 * each port's XDP RXQ before the allocation failed. The new pool is
+> +	 * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool's
+> +	 * registration before restarting RX.
+> +	 */
+> +	for (int i =3D 0; i < lan966x->num_phys_ports; i++) {
+> +		if (!lan966x->ports[i])
+> +			continue;
+> +
+> +		xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq);
+> +		xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
+> +					   MEM_TYPE_PAGE_POOL, page_pool);
+
+[Severity: High]
+Does this code handle memory allocation failures safely?
+
+The newly added loop unconditionally calls xdp_rxq_info_reg_mem_model(), wh=
+ich
+allocates memory internally and can fail.
+
+The return value is ignored here. If it fails (which is highly likely if the
+rollback was triggered by an OOM condition), the port's XDP RX queue is left
+without a registered memory model (type =3D 0).
+
+Subsequently, when RX resumes, pages belonging to the page_pool will be
+incorrectly freed using page_frag_free() instead of being returned to the p=
+ool.
+
+Could this turn a safe error rollback path into memory corruption and page =
+pool
+leaks?
+
+> +	}
+> +
+>  	lan966x_fdma_rx_start(&lan966x->rx);
+> =20
+>  	lan966x_fdma_wakeup_netdev(lan966x);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does
+lan966x_fdma_rx_alloc_page_pool() leave the port in an inconsistent state if
+memory registration fails?
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_alloc=
+_page_pool() {
+    xdp_rxq_info_unreg_mem_model(&port->xdp_rxq);
+    xdp_rxq_info_reg_mem_model(&port->xdp_rxq, MEM_TYPE_PAGE_POOL,
+                               rx->page_pool);
+    ...
+    return PTR_ERR_OR_ZERO(rx->page_pool);
+}
+
+The return value of xdp_rxq_info_reg_mem_model() is ignored.
+
+If the registration fails due to an out-of-memory condition, the function s=
+till
+returns 0 because it relies on PTR_ERR_OR_ZERO(rx->page_pool).
+
+This leaves the port's XDP RX queue with a default or zeroed memory model t=
+ype.
+Any packets received and subsequently returned or dropped by XDP will be fr=
+eed
+via the wrong deallocation path (page_frag_free() instead of page pool
+recycling).
+
+Could this lead to severe memory corruption?
+
+[Severity: High]
+This is a pre-existing issue, but does lan966x_fdma_rx_alloc() ignore the
+initialization failure from fdma_dcbs_init()?
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_alloc=
+() {
+    ...
+    fdma_dcbs_init(fdma, FDMA_DCB_INFO_DATAL(fdma->db_size),
+                   FDMA_DCB_STATUS_INTR);
+
+    return 0;
+}
+
+If page allocation fails midway, fdma_dcbs_init() returns -ENOMEM. However,
+lan966x_fdma_rx_alloc() ignores this return value and unconditionally retur=
+ns 0.
+
+Consequently, the driver continues as if the ring is fully populated, but s=
+ome
+rx->page[dcb][db] entries will be NULL.
+
+Later, when cleaning up via lan966x_fdma_rx_free_pages(),
+page_pool_put_full_page() is called with these NULL pointers.
+
+Can this cause a kernel panic?
+
+[Severity: High]
+This is a pre-existing issue, but does lan966x_fdma_rx_check_frame() add
+XDP_PACKET_HEADROOM a second time when syncing the DMA buffer?
+
+In lan966x_fdma_rx_dataptr_cb(), the DMA pointer db->dataptr is initialized=
+ to
+page_pool_get_dma_addr(page) + XDP_PACKET_HEADROOM.
+
+However, when syncing the buffer for the CPU:
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_check=
+_frame() {
+    dma_sync_single_for_cpu(lan966x->dev,
+                            (dma_addr_t)db->dataptr + XDP_PACKET_HEADROOM,
+                            FDMA_DCB_STATUS_BLOCKL(db->status),
+                            DMA_FROM_DEVICE);
+}
+
+The code calls dma_sync_single_for_cpu() with (dma_addr_t)db->dataptr +
+XDP_PACKET_HEADROOM, effectively adding the headroom twice.
+
+This means the sync starts 512 bytes into the buffer instead of 256.
+
+When the CPU subsequently reads the IFH header and packet data from
+page_address(page) + XDP_PACKET_HEADROOM, it accesses unsynchronized memory.
+
+Could this lead to stale reads and data corruption on non-coherent
+architectures?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604112846.1420=
+908-1-lgs201920130244@gmail.com?part=3D1
