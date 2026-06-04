@@ -1,131 +1,108 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09513164C3
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780610961; cv=none; b=qQXBij+lHiyNIdh1HpgguWyeIbMvC686Sl1rTdeHBXhFXRAh8FTfklVVHwjkqtMGmtTnTbc7LmBGp+EnJFUOHuO3KSchAM5XZqm7P11En/X5r2rkVDdfgTXfJot7IWCdiQviogd1AEf0dBkorGns6Daf7KJvXQdK7fbyRh33qn0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780610961; c=relaxed/simple;
-	bh=mEvyukhAhdQcXVildxDzfDWhPWDo3cluDvmrIumRn2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nrSRinF59nySiSsrqHjQWNxgYiKKt/+GQ/Y4dNC/K0y+MRPvepTrC8IFkt+6X6plT7uvXrKpguLRiWSi/4hLv3fO7nj4IPqZLxZ4GA4VUaNaK7HloWkJ+VSMlezdPgSYKCQ6Wu+bDCdTyQPruTDXhucO7JMLveGC6acfDRR9EtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mh+UK77U; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1EB30BBB8
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780611313; cv=pass; b=gjplkaxcwHGTnHcQskrH8qo5HOFFA60BwiU2+aWGD7Thyq3Ny3mxc89f0m/Hz0zxUvFBC41cttDaxz1TcOTKFdemLozjx9ZmLZcW8QwrISIekAgehGbbd10PK43aG+FPxoY6FH94DIuREWdl6la7DScyhwoXG1iS2xB3/NG9JEs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780611313; c=relaxed/simple;
+	bh=N+S6n/Znutpvljp2LyGehOTzm7sQwOqrmvx6wxqCpZQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RYfY6fQImii7Q10qvj2J1OzjO3uRr7DmyEyfQ0930boV43AG9A/mLtJ5foQuQlHPSatTcb6J4bhH14dxBsb33Pr+Ytmns4A+9eCpHD05s8z5eLy8RAqzdo5ZXe1g8BE4DqgcCaVXPIY1IpkNximDPWDYsSIxaE8nma7g/Fb9nj8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iEXUFXgs; arc=pass smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mh+UK77U"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2c0c32f6ce1so8566585ad.2
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 15:09:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iEXUFXgs"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-490b7866869so14526915e9.2
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 15:15:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780611310; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZvVtZ/8QiSOp86J27I58XNkkq8rS/DmImnSdFLmmcQ5L7jBj2UF6H2ytg6QdkeKgAg
+         lc6uOqS097jUagGI2NbSk7c6GlZSUsQkthCxuZAj6VyDhAdIx93k2t7DN+m5FRGjf1VS
+         Dj67tsSwFSl0Mgc6nS+zBZ3q3E5bAgpPzOrR6/hYsgAiNZin76OGXVnKYsE2XhBH2Fzi
+         LruGh3n4y8d4FA/PDSYPCmI9gUgcF3Zy7zpjjHWWxeYMcVp7mA+LRUZ5A0hHI9dXcaMn
+         Go3chTapMdhBez4N4PGIR9O5+tM2ZJlRy66tFFzaGTI+PVAwD6Qjm/AZj9WSoeervSNw
+         AvtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=N+S6n/Znutpvljp2LyGehOTzm7sQwOqrmvx6wxqCpZQ=;
+        fh=2WVsoe9GQizXMrjgQhVKA4Ta0Xz/nzv3fgA5u4oE8ls=;
+        b=T7AA/jlLHGazCIFLyzDBNbPrn8MOBPxqUnDdsZSb+tCXpy9FAhCUl2QIriAXBoJgBl
+         ncujzhRXHFF5ll5xPocRod6t2cuuIN+gOcrIeoB9cDCCoZ9ldGGeh14Hed2YNBfF57BU
+         5rly8eK6HUgVMSLdMy0rCxh1xTrLYgWMg0j3t5/vmMkT0ZSxcz2HBFTZihW9lX6UnC4h
+         1bHYWh4//nb0se11NRK6g4gLX68kXLh4bvcx1LLZyQVoJ/1ccKi4cqivsQWcqq1SvMDJ
+         Xd/zFSlL4jlHj3kRmf4LWjxAVp17PEw/LJoVxBhlTemEM3P2AeNqD/Ow88vO2e67D4hc
+         l/ZA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780610949; x=1781215749; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WskOQGo0lDwUWYHDxbKfENWvvFNug6jys3p8dhOE0vs=;
-        b=Mh+UK77UV2a/xlyjl9xhuM/3TYq9Gk4J8HY45nIGfsCx3Dss6e5TpDtXFgUUHuh3O0
-         jjNX6lWIvDXTUAEd5ln8+I+xTSlbUtv9GZLZRfam3CUIo/91SipSwYwyCXu4Yz/NkCrn
-         sNJbt2qu7RrZjK6vN2uFxAanbGt7L2i02LpHXtsuvKRz6BGUtfup4tS+ZrJVvWNG0qph
-         9q1wWTS0bJx7BNafUGUjbDTyLdFnlTDSJ0EVsdwmT7s7z1kPCRpfn5XrP9isEW1/DEL5
-         1vruvK18qngje3EvCpQBDDKGeXzUg1Do99RM4gfm5LU81ZRfCkKnF2HP2mSNKDmI7SJL
-         aO4Q==
+        d=gmail.com; s=20251104; t=1780611310; x=1781216110; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+S6n/Znutpvljp2LyGehOTzm7sQwOqrmvx6wxqCpZQ=;
+        b=iEXUFXgsNaotlG0sgZ+JlvIz2B3IEpkbi/YW95qSNxebMXaDvuDYK1FoctdNnitX3E
+         XGdnsqbtB4LbTLxsLSsWmKbvHMfxVLgVpONZJbuBXQv7W65yD0guZL3TfLImNeuKO6b5
+         SiyzRdmgjiAqJ8KCQwMeD3pDCyxQPbr1xBjuHpI7jB2pJxCTCzcq5rx+vfaeEqkIlWr7
+         U85Go+1mMusqson7jV7KnAUZWiWoflZ0kD/5TyKyPV9X8G4bqi9udpII6dEIHULzUT10
+         2B5foUb0eD7R/bFMQO/mqe4ZmqVo96L7uABjHvG3wiaKkX0g+T+1ky6auP+Tn9R572ZF
+         +sSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780610949; x=1781215749;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WskOQGo0lDwUWYHDxbKfENWvvFNug6jys3p8dhOE0vs=;
-        b=LSenCr2LqJek0xQX2PzNQD8ITQx20X+QkhcGCgFu0E3l41wFTY1OoSZA3BCxFpE4xx
-         jelw38GmwVp6lQ/HgnBJAJoB1tocEhkBTICuACAJ3SI2OKdI7eYut/4vySBwnur9PLJy
-         2JB3iKBdfmKHy0dUYZXE6JczSeIZ1Du78x04xvxoWM05LZDBqb0RQglwrV6fX/4h80/5
-         phpSblmUkHK6nLsas8ZkdQmHOeF20A7MSieTt8dFK8C8fXhbUmdxGbillTAuhnp3WoGJ
-         kkMtzfoR1bghISAIGNK3/W5iBwYI1a7lFkxSgJawIJwIJ6e/AGaV1pNbbwyHjQcVGZd8
-         yGQQ==
-X-Gm-Message-State: AOJu0Yxqgg03/sKhwl/2sr4yReJl5rSOyAzl2brE3FMIJt6K3Tll2Xgm
-	mL2BffJ15WY6PLGGIiwS6QIRcKTtnhcJffjUktCoJvYMa7uaG5gEfkhpJE69Uw==
-X-Gm-Gg: Acq92OGqZvo/Ccp7aF1MTAEaxSDW4K4KPnPoktc102bh9v1MAiQJLA4GkPuVX1lj+o4
-	xuGsHXl2BDYQFANRWFM2FBD8PamsQQ/xr2vG/+1IpFpgZ5LSOpx9OxLYxYEq3DyqDzpyOQI+YIv
-	OdhS9/eQwLZEENkJcr+Tdm1yMfmNJWFQp9yIPZ8b8KLd013fVNrTWyVscWNfCCqKQ3HCQ+rKVCI
-	m+XoQu980fz1wYTcNX801ihlIdvJN1hhEes6MMF8Wok+wosUdB2uJucyFcPvHRKwO0olAMPRgoy
-	R0OA9rKlxwR40syRNUARJcsDA2s9wrOnZ/p1qveaa5IyU9/t/gXQP39O9T7I4B3xWJTCpDNQZMH
-	i2fAOcy81h+MmkLJXNO0lID86EwcKY9EXX/Uro5BfNnGO2ypTQU2e6JdiIbuEJlQuzLieT/ypx7
-	Mx2yWIl5yhzrHDljkHUq57zMk=
-X-Received: by 2002:a17:902:c949:b0:2c0:cb90:1e08 with SMTP id d9443c01a7336-2c1e77754d7mr4997365ad.0.1780610949014;
-        Thu, 04 Jun 2026 15:09:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:6::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16629c08bsm70177595ad.61.2026.06.04.15.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 15:09:08 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@kernel.org,
-	mykyta.yatsenko5@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 3/3] selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
-Date: Thu,  4 Jun 2026 15:09:04 -0700
-Message-ID: <20260604220904.1032145-4-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260604220904.1032145-1-ameryhung@gmail.com>
-References: <20260604220904.1032145-1-ameryhung@gmail.com>
+        d=1e100.net; s=20251104; t=1780611310; x=1781216110;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N+S6n/Znutpvljp2LyGehOTzm7sQwOqrmvx6wxqCpZQ=;
+        b=Bt5JsuSimE7qKCb9c8/vu10xSeUoP52JtYpxFpJpDYfwXrjB9eQPoqLPT8Y0w2QuLH
+         Usyh45gV5GyD6qR6/DGCxNI//01YqYHpZk7V3DVQs3Q6vWFQzL6XM5p7u2ZeYrnJs6t0
+         KsALOKATA/2W+JTvEC+y9mY7ixzR3M6sH92asJQA6hHU12awxMV8SEBnsMYO/vGPL+bQ
+         DuEis0Gygspbm7BPCH2ugRrjV0uv/9Tmy6rUdfPtu8QiKQ1PnL0HgoKYLemxVMrvw8eN
+         5Lzs6a8/MjxybmmssW+kgmQ6o1CTpnOaWibo2SmMC2aEVwd5VRhKuNSA+RTERazCDPFQ
+         kVoA==
+X-Gm-Message-State: AOJu0YxBv8PkZQ94jdtyn3ZhlNDVgPBqiUlzoTo4TBdOcJqje3lGnP0C
+	GyzgbMz9zMkfal1ko2I5QFY1xZe+pc0xd1QoG3aZVpBEjNrL6SfiznR+rkmFllwmQ54ul21xiMS
+	Besdp52+TTCR2aanPq5PSs+0GTW7hyVM=
+X-Gm-Gg: Acq92OFJWH+0+gIjpqYQkf+sPpaWOtkc3h0+T89rZTZclDkR86SN3vBd9SR8GqDveso
+	Ab5WhWa9ybaCUxQs3FJyhaaMm5egRZHrQT6bA90ySVk4N0/bL1N6D5eYiKcRHWy/I52Nyr/8pov
+	o2lP55G9egc3Y5hrp2NBYlfPhj7x3WU6xzVYzkDDsnZ1urr/nxBkNeIHhjwOOglxoiUC+mEwHsR
+	gBx9WeW0lYIW9+VSeoNVGZxEgcaI3WTMrGKwfSzK/kUyD9h0OmLT+YhiNMDq5N6TsNpLd9W2MVv
+	TNP+9r8npFfjDcRoXaL9rH4wpy3tXvAk51COTpyuOvy8DAHg7UbZSbIkI+FtXevg5k5zjNOd1l1
+	PxaqmROxDp/zSTo3TSPOgAfLNdk1eY3xO5b7Aj4Tfm1zsckRZwr08/UTB7ydShNb12ouZWw==
+X-Received: by 2002:a05:600c:4fc9:b0:490:b8c0:d474 with SMTP id
+ 5b1f17b1804b1-490c25eee06mr6021975e9.14.1780611310133; Thu, 04 Jun 2026
+ 15:15:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260604220904.1032145-1-ameryhung@gmail.com>
+In-Reply-To: <20260604220904.1032145-1-ameryhung@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Fri, 5 Jun 2026 00:14:00 +0200
+X-Gm-Features: AVVi8CfnBYLIp-tlymFRZk0s_Hv9SPnYJxD2LptM1OA6yj_xom8IhP939m0OY98
+Message-ID: <CAP01T75pWAgXi4CRR4Ca75grBFwXBKHERdH94KVxW8hDQ3uqog@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/3] Object relationship refactor followup
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-use_file_dynptr_slice_after_put_file() reads the dynptr via
-bpf_dynptr_data(), which always returns NULL for a read-only file
-dynptr, making the example confusing. Switch to bpf_dynptr_slice(), the
-correct read API for file dynptrs, and read (rather than write) the slice
-since it is read-only. The test still fails as expected.
+On Fri, 5 Jun 2026 at 00:09, Amery Hung <ameryhung@gmail.com> wrote:
+>
+> Hi,
+>
+> The main patchset refactoring object relationship tracking in the
+> verifier has landed and this is a followup that addresses the remaining
+> feedback in v6 [0].
+>
+> [0] https://lore.kernel.org/bpf/20260529014936.2811085-1-ameryhung@gmail.com/
+>
+>
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- tools/testing/selftests/bpf/progs/file_reader_fail.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/tools/testing/selftests/bpf/progs/file_reader_fail.c
-index d5fae5e4cf9a..3bb9e2612f8f 100644
---- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
-+++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
-@@ -87,7 +87,8 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
- 	struct task_struct *task = bpf_get_current_task_btf();
- 	struct file *file = bpf_get_task_exe_file(task);
- 	struct bpf_dynptr dynptr;
--	char *data;
-+	char buf[1];
-+	const char *data;
- 
- 	if (!file)
- 		return 0;
-@@ -95,15 +96,14 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
- 	if (bpf_dynptr_from_file(file, 0, &dynptr))
- 		goto out;
- 
--	data = bpf_dynptr_data(&dynptr, 0, 1);
-+	data = bpf_dynptr_slice(&dynptr, 0, buf, sizeof(buf));
- 	if (!data)
- 		goto out;
- 
- 	/* this should fail - file dynptr should be discarded first to prevent resource leak */
- 	bpf_put_file(file);
- 
--	*data = 'x';
--	return 0;
-+	return data[0];
- 
- out:
- 	bpf_dynptr_file_discard(&dynptr);
--- 
-2.53.0-Meta
-
+bpf-next makes sense, but Fixes: tag looks missing?
