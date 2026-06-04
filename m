@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EAA47F2EE
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 16:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1C24949E4
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 16:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780591811; cv=none; b=rt/G1FYRWFCyGfO38CV3VOxjOe1F3984EGVW5WtXco0SchlBrY1s+Rd+y9/CU/3wNSy+eXPXXaEl5vYxMXl8nSCgxn8HXZCaGuRVoIK+bA6sWzRrpHNgP3xXEhkXwLO3r1WYqH8NOlhMxiVABX56d8NoHkHRjCOOFO/a4vcHUws=
+	t=1780591813; cv=none; b=MHY/f8kFPUFc+7/rj2DpCxUjm5o2oKerCsPSk5a4n059HUBLq6F/pHPGluEaeRuuFFDLAvCBLGtY8N7rvN8Vsv6uLIVryIc7sG3rXbyxz68wbj7ey6m6tKNVkcIUlzGMAz+Tq3gc/0qODOt5I2AY2ms2FozImXWmCAW2WmYuJic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780591811; c=relaxed/simple;
-	bh=8nfhJTY4uU1NcSgX+E21+nmtl36TKcw1FUY8LDlfOQ0=;
+	s=arc-20240116; t=1780591813; c=relaxed/simple;
+	bh=PTdtYg6YI9sWhtrMdVcWhO+QjGvwwmjpLSej8/8rxes=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=EIIEAJqn//Bh4tvyi8YyhLlbzJtq7Igo6tOVQ0kmAZxskhASmnWY4t6OMkz0IwgtO/LTmahcHpxSg4LjwOy2hiaT/TVpiCLN0NvVxgft4bgOKs9668mbjLQvZ3pDdGnq4mv2j5xi6VdZNQUs8ZovU4igrJYqWeJmF2uNEHwC4Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ipw7fexx; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=LqMU82YVnrQK6uYUi3zbkYZzrc8E6rS2uzhg+yA4rDWxTEOCkSioKPjmLrNxnB9Ql0tRxPTegVCiR4GPdLafuqtGAfjN1bruLqxUUm4S3KIaHf29Yn+Ivna68GkuBSBncsoTsQwQp+WLYpjbd4sZHYQ/W+E3LfA8i4mwNfUcI6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJAG3WSg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ipw7fexx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E2151F00893;
-	Thu,  4 Jun 2026 16:50:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJAG3WSg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91791F00893;
+	Thu,  4 Jun 2026 16:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780591810;
-	bh=wrwD8HQ7FggmrKBY9aVGcyIDD847Q/W7tScKISuX8SQ=;
+	s=k20260515; t=1780591811;
+	bh=jQM2oAwH9sOdxU7ZJ6Wbzc8gk7FiaryNTF5Gp9vtO2k=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ipw7fexx4PKQefjqAuqMzv7U05uH0ajuww++OpVQ8UUj0Exg7h2Jeqqe7vvvQ5OCP
-	 naQbZ6c+wu9K9Z+yVNyyvOWdG/fo7htzlTt7b91YmUQoJVfO8t4TKHeFf2oNQCu0xg
-	 uvZTips/2LAvc166RFxAjEEpXA3rQBpRKqnrTqdqcjBqP7XGDzsNCq4HPCIjuX56gi
-	 fPxzEvhIXlek4sglqDRpqEV6z5ijLRHrnazSRugNM0XNY1Lo7oeMs80HQfCWEtvJ7Z
-	 Jul1bVfM6nXt7uMA0URjenLCVARFtifQRMB+VYXn/P5Wrz4GnEmTU6b9kONYK5ceAC
-	 l4n+rsLPRK3rg==
+	b=aJAG3WSgvGrImZ5mo9o/LnFScifnNkL4CEKMr9GhNlTwR2MwGOsP/lxBKEPsVQvfp
+	 E5cftbTAzq7KUS3dqb1RM5EFJcpXnlc7I0JlQcktF3k/p64cWmdBtrmxE9ZjejP+AR
+	 p2fMI2vuMmrMZXWPak1G/CQ0Drs0Pou6XLT91HXDjUCeDKmJcRdU4x0gtVOunW1DOf
+	 N/caZGcmMFEG/HYtbMYjk3BNAK3cdZ099Oz66D7OmDwvuEZOkfG9FMHG4fPyFuMEg+
+	 W4aKUIe4YhGMPYxSay3P3aIzMVrlVlE7J+z2mCJSt8LW/U7Bytccwp7Np6IlljjXYv
+	 NfaYcXe0f3ftA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568A43930A0F;
-	Thu,  4 Jun 2026 16:50:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09C73930A0F;
+	Thu,  4 Jun 2026 16:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,37 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Cover exclusive map
- create-time validation
+Subject: Re: [PATCH bpf-next] bpf: Take mmap_lock in zap_pages()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178059181090.2942053.6498513168329398956.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Jun 2026 16:50:10 +0000
-References: <20260603211658.471212-1-daniel@iogearbox.net>
-In-Reply-To: <20260603211658.471212-1-daniel@iogearbox.net>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, kpsingh@kernel.org, ast@kernel.org
+ <178059181241.2942053.15264975706579133260.git-patchwork-notify@kernel.org>
+Date: Thu, 04 Jun 2026 16:50:12 +0000
+References: <20260528222014.38980-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260528222014.38980-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ memxor@gmail.com, eddyz87@gmail.com, david@kernel.org, tj@kernel.org,
+ linux-mm@kvack.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed,  3 Jun 2026 23:16:57 +0200 you wrote:
-> map_excl exercises exclusive-map binding (allowed/denied), map-in-map
-> and map iterator rejection. It does not cover the create-time validation
-> of excl_prog_hash: the kernel only accepts a SHA-256-sized hash and
-> requires the pointer and size to be consistent.
+On Thu, 28 May 2026 15:20:14 -0700 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> Add map_excl_create_validation to check the rejected combinations:
+> zap_vma_range() requires the owning mm's mmap_lock to be held.
+> 
+> Taking mmap_read_lock under arena->lock would AB-BA against
+> arena_vm_close() and arena_map_mmap(), both of which run with
+> mmap_write_lock held and then acquire arena->lock. Instead drop
+> arena->lock, mmget_not_zero() the vma's mm, take mmap_read_lock, and
+> re-resolve the vma via find_vma() since it may have been unmapped or
+> replaced while waiting.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/2] selftests/bpf: Cover exclusive map create-time validation
-    https://git.kernel.org/bpf/bpf-next/c/e87d898bc766
-  - [bpf-next,v2,2/2] selftests/bpf: Test signed loader error paths
-    https://git.kernel.org/bpf/bpf-next/c/5b88319e4775
+  - [bpf-next] bpf: Take mmap_lock in zap_pages()
+    https://git.kernel.org/bpf/bpf-next/c/80b89d0226a0
 
 You are awesome, thank you!
 -- 
