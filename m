@@ -1,75 +1,70 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699D30B53A
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 08:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A7B2FF67E
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 08:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780560029; cv=none; b=b1q8MaKWBy975Xl+ubLGZw9cTR4RQEiucjQ93Fuy2idRE/qIXDssxmvd+YPszs53u9WnHZ+kHUDkjpQLbZ7r8BgNriBG3Gn4XN6JDkX2noE1Mq4WOy49wYOLvKrxFx8k/EIlmxxw4z8rAxW5kkKN5qGCRNvfo3O5plUV8E+lRGE=
+	t=1780560036; cv=none; b=kUOtVGG3H6OTcGo9fOcoewITJbBBUjsWJheFQwLlw4qVnyGbaZGuCktv/Un+p4iYi/fNHfieMQR0cWIZ78XS57iDkTQZDeXjRFG4h860Fy4oCh2ZoRI/1+4y1AzyQ6F+xh6x2xSSmRP/BObN6xm5NzZXqG1Dz+dnu4RTF9BM+Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780560029; c=relaxed/simple;
-	bh=tLNBjb1LxGgsWGmcE25Qk72vSCilUGhydTgk7Zym6qg=;
+	s=arc-20240116; t=1780560036; c=relaxed/simple;
+	bh=SfESCifJlQC8gwG7XGfkvZA9ud2mCQVHiHUPsZbe7+A=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E3p6nU+fz+Po6IHkT8uJwfU1zP51b6x0SWHNFUbB/k7j8g7uzz4jO5pjw1/EjQ1NiUB0Jp+Fb14AyWDr7psaVh3/ZO7dRzg1a8lgdGeZnoenLZjqmyuVeYe52WrbgN4RGhXFb5Y/+jKKgG2O5KTtPq/n6PqVY6qvHPs1vo5P+eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YjvY75eA; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=jCPL6zKAj6S8lInv/aRbAIn9/0GCGKsEmNv3bfdm2DHcJ2tAjUxIT9i/+0Yl38YDQ3w9S1CKyEgGMFOHrrNKad94qyzG1zPUwCPIH8BnY+3pikpNC6cs//AD52fXRRmJoUquXk8mqdwJL6BMVUmMmrsjUvy8ga6SbH98D5vTYgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WlfCwG7A; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YjvY75eA"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490b3e03939so2913555e9.1
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 01:00:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WlfCwG7A"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-45eecb8bf67so285779f8f.2
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 01:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780560027; x=1781164827; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780560034; x=1781164834; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5S/ODxVsZ0F1Hysh5uuXFztTRTMytWGdM0vjEW7pXv0=;
-        b=YjvY75eADabUucunowoYWwHqVIXmxoS7hbodzR0L1O/gfSJ5DvEai8MqQqmms/QU04
-         kYr0O6bTFoeu7/Cyr/ZsD+axvHsuf7Pc1dqhceEkEEuAFfRFaEF7o+2n3odGlSXSUZ0g
-         m4sIorctztaxg399WRqgdqDckdK39aDf5zz0eN50n5ZmlYfHIr/T4y/AGs30IX8gn1Sk
-         nOWgNIYQRWQFFcfu3iogyVLN17TO0Ficrffpgu5bk9xMFRHVhBluMA8dqnZB8KrZhF6g
-         vE0yuWxST1vv6MXbSmrAxWewfH9YZhs+ymBra4UWJed58jDhvhK+rkHSzgC/y1iiIOot
-         WV0A==
+        bh=5fwggcNXE/qZG0R5u5GBwdY5Nt2S4QAlzMN0onVXeTE=;
+        b=WlfCwG7AEN6Zk0SM7HNFKuhBvpCtga4gzQ20cB7V/PLjBWrjiV5IB54k0VXJgSHqCF
+         3brpB/CE0/uDwcY4GvJ71hj/Cc1832cPEhRT0vxEl1QL0wobEP/ps3pWWG80ZYaU3ZGz
+         pRG1gPp1hjwGZjapy0nE573FHmZ48ZlTR65Iks5EKdJYe5KcfaJ6r6ENXa7gfjzkaBaa
+         Cz5AXpKVw7WmPWR4N+/k0Ch+ZjLgxoLF6oLBfqo+SOTqbkJw+HOmUl9/QrlWIjx+vezV
+         Fb9quk2uYhjNBqCHBG+0MytkniIdUqj6LRn0HlVJZqvSCss2dxxmIrNfBJdkYppZqOkJ
+         +5mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780560027; x=1781164827;
+        d=1e100.net; s=20251104; t=1780560034; x=1781164834;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5S/ODxVsZ0F1Hysh5uuXFztTRTMytWGdM0vjEW7pXv0=;
-        b=AZKqmPMGsiaCWuDO1jnS9Ej1mjJybALU6T2DRfHb/P63ssbqA8UHEfuKPcKLalG/t/
-         pVT213/ZZPweatEWs32Hqh40g1EeXtwIbpPCGae8g5aoCroUrBrPohaxSA99c+x6Laqu
-         Co4JKPgcvSGM9xWDiXR7ZCJzz5ASWwuL+loMSnSiAHKCeRKoCf9WxPY6T5BlooQeTMeX
-         xMufIRaQoWZCck8lExbEQ+yfTu+5yTI2t3Glp+ejWmx8cQaHX0zqW/UPeaawIKBLD03n
-         qq1bX2yg7urEi6ppCfO95HlGah/yPkMziDbWvnFrX9EzlReA03zlBT/oCZMwRNjvfntu
-         dRYA==
-X-Forwarded-Encrypted: i=1; AFNElJ92QHhH0e4fdz4tuca2G4AXWDOBpMkor9razvlwMfiwn4PicjxLskJ+5n5tQ4OvwQsYDV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU6zRncrIkINIAcbBG0AquG5SHMvP0b5vFUIusXIaCZxuc7UKP
-	twxNDHzmqD345xPvXbcE4cMzrWgWdstymYZI44WfKhbwD3pjkif56goh
-X-Gm-Gg: Acq92OEAcZmxsp+64UayQtOXL2SaI5PPgCBUwdJWKwedXpCcncDKgEyoZbHI9EJkF41
-	+WHvyMrsZswWc+3LOCOEGLtmrO5hTef2+jhO5akRLE9DM7dpXc3QCM+b9YI+gOk/llHHOvCM55G
-	/yE2fte9j6wSH0fact878aH5WUpKQgi3eAsb3uE64y9hhlH3nQP3JUTf4Q1kVJtDb0d0BBvzPDW
-	jf6k0QnH5rzJefnEEAXJlEtxmXOvbQE5jMd2nCOw1EhUMUOyRxOfusUajMRxc747FexyIRgDTas
-	+98vjxk/N0BM3ZD/yV7hDAVHqJFkCHg5c11SDF4nAAZnbO7bsCod1gTT3OAukAMj1fTu1AIuQWV
-	JNIxnavPBUzXIqWs6VKw4MqoAIahJBHhUc6GI8v7gw5N3Jeq4OJaQwM7AxgEsJbShhjY+G/PBt0
-	h4PscNBapzjTD+QqGHP620KWyYKA==
-X-Received: by 2002:a05:600c:6095:b0:490:bb60:68ca with SMTP id 5b1f17b1804b1-490bc4b54b4mr34914705e9.3.1780560026574;
-        Thu, 04 Jun 2026 01:00:26 -0700 (PDT)
+        bh=5fwggcNXE/qZG0R5u5GBwdY5Nt2S4QAlzMN0onVXeTE=;
+        b=chGdvIYs0IJI0LvymS+X6jxERhPT6z9dGRtbrkhg1tOTZDEPFlDN62o/6c+HJZxPlw
+         uuhcfAp3xkruY1UhDM6f6OLaKleDFby1qCxOH44tJD/fYHXYAO7Ea0Bh/Vy1/D0GNqnK
+         RIx/neuZRPV+YKQHVvrBJ76sAkBZgfZ2HSfykR6P5KECwVt/wwcl4SHfNHLnOi+LLvCV
+         wP5C2DtIt8Skp0mMnpawVWAfbRGu5uRbn8Gl8FGYQoHMnCvCsmic0Mm8p8pbbAxiar1h
+         WOWCrmRkcaQZP2o4p+QB5b/+XgmVw0q7WfqJZffaOxqfvwu8kDox9TnCr7OREWS9AJeT
+         sjJw==
+X-Gm-Message-State: AOJu0YxYh1HcPoEEpkWZ2gQhFiRvza6VdzeJK7p//AR5ylG8piK4Ax63
+	1RTobSoRfbbV8nXHco3R7Tnkk5RuUVZrwFtBEStApgeCC0vsVuiqtxhK99fuHw==
+X-Gm-Gg: Acq92OE3cc/usxW37hNrmC4ziUhoeC2td3K5TY3HGCUmbZLrG6+Y07nZ8r216U2GoOM
+	UDJgY2/nSKesvp6yBUETW6xlogGiakJp2DxPVFs3Eg2+0608xALUQlyx2WXzNSKrJSMU7vZ+Ww0
+	tN2bCnJeS3uY1KpcJ42/w4yK/kTLiRtDyCVuhMO4y0SB36wH6BJBCDFsjTlDOLS+mhUTzG7+NVw
+	EEs2YGYvbBi/DvrEDQDn33CV8Dpj3lM3F+g9SOx+oKaQiTKRq3+ntSXpRFZxn8mt2uoaA6WZnJw
+	9OJ45efCC3X2iqmYU+o7KgOX83BIbLxcd6XTOfNSqPymm1X1tmt534WAKg/ObqQPjB5lXmaPxy/
+	8tOcbAUS5c/HkPgFZ0m+RP7qQWpLG01Ny4jIdSagw/2MWgz3uAxwENjRjqKXJkGeAIW7ZLz0AVi
+	B6Q6KnZtXfd03maqUOyjMTU9HE/1lWEHjeOAJl
+X-Received: by 2002:a05:600c:458b:b0:490:b409:94f4 with SMTP id 5b1f17b1804b1-490b5fdcda1mr115062605e9.28.1780560033621;
+        Thu, 04 Jun 2026 01:00:33 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490b7e6c774sm67383595e9.1.2026.06.04.01.00.25
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4602cda363bsm1541050f8f.31.2026.06.04.01.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 01:00:26 -0700 (PDT)
+        Thu, 04 Jun 2026 01:00:33 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 4 Jun 2026 10:00:23 +0200
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
-	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCHv7 bpf-next 13/29] bpf: Add support for tracing multi link
-Message-ID: <aiEwl5axWo8_V7cR@krava>
-References: <20260603110554.29590-14-jolsa@kernel.org>
- <6e738b0697b9ee06e9cbaa325a3330f0447f4cd12ae54d6b2c82365d58c4c525@mail.kernel.org>
+Date: Thu, 4 Jun 2026 10:00:31 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv7 bpf-next 10/29] bpf: Add multi tracing attach types
+Message-ID: <aiEwnwBeP69ZUpCA@krava>
+References: <20260603110554.29590-11-jolsa@kernel.org>
+ <20260603113751.DC4C51F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,67 +73,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6e738b0697b9ee06e9cbaa325a3330f0447f4cd12ae54d6b2c82365d58c4c525@mail.kernel.org>
+In-Reply-To: <20260603113751.DC4C51F00893@smtp.kernel.org>
 
-On Wed, Jun 03, 2026 at 11:52:13AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index d853f97bd154..9e3cb547651e 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -42,6 +42,7 @@
-> >
-> >  #define MAX_UPROBE_MULTI_CNT (1U << 20)
-> >  #define MAX_KPROBE_MULTI_CNT (1U << 20)
-> > +#define MAX_TRACING_MULTI_CNT (1U << 20)
+On Wed, Jun 03, 2026 at 11:37:51AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Missing `BPF_TRACE_FENTRY_MULTI` and `BPF_TRACE_FEXIT_MULTI` cases in `btf_validate_prog_ctx_type` causes valid `.multi` programs using `u64 *ctx` to be rejected.
+> --
 > 
+> commit 0330f287f02c3a32c9ab8bf7f4f5a6ad6cf7366f
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> bpf: Add multi tracing attach types
+> 
+> This commit introduces new program attach types BPF_TRACE_FENTRY_MULTI and 
+> BPF_TRACE_FEXIT_MULTI to support multi-tracing attachment. Base verifier 
+> support is added to recognize these types and accept them as sleepable 
+> programs, while deferring actual target validation to link creation.
+> 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 8ed484cb1a8a4..521ec2a9051ed 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
 > [ ... ]
+> > @@ -16314,6 +16314,8 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
+> >  		case BPF_TRACE_FENTRY:
+> >  		case BPF_TRACE_FEXIT:
+> >  		case BPF_TRACE_FSESSION:
+> > +		case BPF_TRACE_FENTRY_MULTI:
+> > +		case BPF_TRACE_FEXIT_MULTI:
 > 
-> > @@ -3641,3 +3642,132 @@ __bpf_kfunc int bpf_copy_from_user_task_str_dynptr(const struct bpf_dynptr *dptr
+> [Severity: High]
+> Are we missing an update to btf_validate_prog_ctx_type() in kernel/bpf/btf.c
+> to handle these new multi types?
 > 
-> [ ... ]
+> Currently, BPF_TRACE_FENTRY and BPF_TRACE_FEXIT are explicitly whitelisted
+> there to allow u64 * as a context type:
 > 
-> > +static int check_dup_ids(u32 *ids, u32 cnt)
-> > +{
-> > +	int err = 0;
-> > +
-> > +	/*
-> > +	 * Sort ids array (together with cookies array if defined)
-> > +	 * and check it for duplicates. The ids and cookies arrays
-> > +	 * are left sorted.
-> > +	 */
-> > +	sort_r_nonatomic(ids, cnt, sizeof(ids[0]), ids_cmp_r, ids_swap_r, NULL);
+> kernel/bpf/btf.c:btf_validate_prog_ctx_type() {
+>     ...
+> 		case BPF_TRACE_FENTRY:
+> 		case BPF_TRACE_FEXIT:
+> 		case BPF_MODIFY_RETURN:
+> 		case BPF_TRACE_FSESSION:
+> 			/* allow u64* as ctx */
+> 			if (btf_is_int(t) && t->size == 8)
+> 				return 0;
+> 			break;
+>     ...
+> }
 > 
-> The sort here can run over up to MAX_TRACING_MULTI_CNT (1 << 20) elements
-> without ever yielding the CPU. Can this hold the CPU long enough to trip
-> RCU stalls or the soft lockup watchdog when cnt is large?
-> 
-> This was raised on an earlier posting of the series, with the suggestion
-> to add a cond_resched() somewhere in the path. The reply noted that in
-> practice the count is expected to be closer to 100k rather than the full
-> 1M limit, and that it was unclear where the cond_resched() should go, so
-> the code was left as is. Since MAX_TRACING_MULTI_CNT is still 1 << 20,
-> would it be worth revisiting whether a reschedule point is needed here?
+> Without adding the new multi types to this switch statement, the verifier
+> will fall back to the default canonical type (void *) and will reject valid
+> multi programs that use BPF_PROG and u64 *ctx.
 
-we now use sort_r_nonatomic which calls cond_resched,
-I don't think loop below needs the cond_resched call
+yes, we disabled direct ctx access for tracing multi programs 
 
 jirka
-
-> 
-> > +
-> > +	for (int i = 1; i < cnt; i++) {
-> > +		if (ids[i] == ids[i - 1]) {
-> > +			err = -EINVAL;
-> > +			break;
-> > +		}
-> > +	}
-> > +	return err;
-> > +}
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26881310426
-
