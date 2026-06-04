@@ -1,139 +1,120 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFD2352015;
-	Thu,  4 Jun 2026 02:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DB637E301;
+	Thu,  4 Jun 2026 03:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780539979; cv=none; b=eigMvfKpts/i5flnQbUxgSF8gwpRkWt98Q70uJtNCNWsxmetSovikIWA2OgiSatTUUwLIyZAJpz9V4oz45uAWqDf+WHbNyBqZNzOQLhXrx3tqFfntJyK5dYBmiIQTycHo0LomWg+TeUMmhrlngTe3vQ136umh1OUvdhgS+dlUjY=
+	t=1780542683; cv=none; b=Gt2+4lW0fYjqM7iDBFbTQlYUJX0shv3tCDM+gCV0isZoE+qmm5LZlvBWq4lcmDW+Gc9gJERNQjwuAPEsiCBHfhUXQPMG6EM112Txio+Tf4wlbC3f0Ug6v5plTi4KyaBXVW60FJaNWB5I7ap6+mU6PYKtnY/SzuFIByjhLKcjwoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780539979; c=relaxed/simple;
-	bh=wcU/954Dh4loD6GGN68npueg8V2ijlwPY+BzYEVQs3U=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=WMhA2q99Ax5iVfWbOT2TevGYHKO79552USP7cw26SOu2ZXKRlqLp4UsivhnN5cYbJT5U56WMSjRd/LPyPZ8E1lkoqy+ivUO7FGn+unsqXUtKAL4Zcf4G9dTqH2MLkozdoCiOG5v0QX7RNwwY+CIlgO+KxIedDIGbAVIW3XY8QK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxZnhF4iBq4GIQAA--.20857S3;
-	Thu, 04 Jun 2026 10:26:13 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxfcJD4iBqcEmbAA--.30321S3;
-	Thu, 04 Jun 2026 10:26:12 +0800 (CST)
-Subject: Re: [RFC PATCH 1/3] LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260428072021.7289-1-yangtiezhu@loongson.cn>
- <20260428072021.7289-2-yangtiezhu@loongson.cn>
- <CAAhV-H5tLpXtnMJOx=b5MCDY71jMNkQ5pv1YhgCf72FV=ewcxg@mail.gmail.com>
- <0def4127-3850-1114-d576-42748456f400@loongson.cn>
- <CAAhV-H51mJpbYjQJYo_a_8mWuG9CSbvbvQNHrpV1G3jmp0Vkaw@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <9fe9a1f4-bdd0-d6b4-6b76-269e4ffdbc7e@loongson.cn>
-Date: Thu, 4 Jun 2026 10:26:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1780542683; c=relaxed/simple;
+	bh=4u3P6eG5AlHDzcX5xWxnVzrjgKTxy3EUloB/JA8skOg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k7A8Zj7FBs/ZyezyT9+jGDmkUzhvcEkUlqRxLvM/8RlE3b/sYSbutz5XbXyM1qyWQvzSHsyXvlmPOEx5xvwSYKswS4xjP0BXJDx9xeLYz0/a8d3VQv20SyAYK1Qp+6sBWVpHEcXpaSatQFWsykPPGG4N8yErc5azwQGKtaC8g0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LVOZEvTl; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LVOZEvTl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=p9
+	uIKlC4kSMx3kAAe9donaGNQUBxl9Xks7NRFbdcZwA=; b=LVOZEvTlw4owN7zu+D
+	08bjsg4yc2GpGrTeShCgD/LAgcRnV5QDmhHTB9YDB+zRDjdHM0GTCqsdCFU711Ft
+	8p8fWpmgj2W893qM1xq72ViJjCWi7X15RpsfZcRJvD44tCSJV9ZiWm7RwoNtVCvl
+	zsrzvJddIVVafVj7psnzB+Mrg=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCnNjaz7CBq76U8BQ--.63531S2;
+	Thu, 04 Jun 2026 11:10:44 +0800 (CST)
+From: chenyuan_fl@163.com
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	chenyuan@kylinos.cn,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: [PATCH bpf-next v2 0/3] libbpf: fix implicit BPF token handling in loading and feature probes
+Date: Thu,  4 Jun 2026 11:10:30 +0800
+Message-ID: <20260604031033.806727-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260529031604.888137-1-chenyuan_fl@163.com>
+References: <20260529031604.888137-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H51mJpbYjQJYo_a_8mWuG9CSbvbvQNHrpV1G3jmp0Vkaw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxfcJD4iBqcEmbAA--.30321S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXw18AFykAw13Ar45tw1DJwc_yoW5WF47pF
-	Z2kr4kGan8Gw1Iva18Kwsrur13X34DGw42ga4rGw4xAr4aqryDXFn7KrsrZry0va10qayI
-	qFWSg3s2ga1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-
-	e5UUUUU==
+X-CM-TRANSID:_____wCnNjaz7CBq76U8BQ--.63531S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1kXr4Dur48Zw1UGry5twb_yoW5Gr18pa
+	93C34Yyr4DJFyIgws7XrW7u3yF9rn5Aa15GryYg347Aw4UKay7AF4fKa18ZFnxJrZYq3y5
+	X3yYqrZ8Cw4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pizBT8UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5RQLyGog7LTADQAA3t
 
-On 2026/6/3 下午10:24, Huacai Chen wrote:
-> On Wed, Jun 3, 2026 at 10:30 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-...
+When BPF programs reference global variables (e.g., struct_ops
+programs with global data), libbpf creates internal ARRAY maps to
+back them.  This depends on FEAT_GLOBAL_DATA, which is gated by
+feature probes that load test programs (SOCKET_FILTER, KPROBE, etc.)
+into the kernel.
 
->> For static structures like init_task, any uninitialized fields are
->> automatically zeroed out by the compiler according to the C standard.
->> Stripping away dozens of lines of ".field = 0" complies with modern
->> Linux kernel code-cleaning standards. It makes the macro much shorter
->> and highlights the only field that actually requires a special
->> runtime value (the kernel stack top in .reg03).
-> I know it is the same for compilers, I mean the current way gives more
-> information for humans.
-> 
-> In addition, without reg02, this piece completely has no relationship
-> with CONFIG_THREAD_INFO_IN_TASK, so please drop it.
+In a user namespace with an implicit BPF token, two problems arise:
 
-Do you mean keep the original INIT_THREAD as is? No any changes for it?
-".reg03 = (unsigned long)&init_stack + sizeof(init_stack)," is not
-necessary?
+ 1. bpf_object__probe_loading() passes the token fd to test program
+    loads.  When the token's allowed program type mask excludes the
+    probe types, the kernel drops the token reference, causing
+    subsequent struct_ops loads to fail because the token object
+    has been released.
 
-That is to say, do not modify arch/loongarch/include/asm/processor.h?
+ 2. The feature probe framework uses probe_fd() which returns 0 on
+    BPF syscall failure, and feat_supported() interprets ret==0 as
+    "feature absent".  The token rescue path only handles ret<0,
+    so the probe failure is incorrectly cached as a missing feature,
+    and internal maps for global data are never created.
 
->> For reference, please see how INIT_THREAD is defined in other major
->> architectures, where they only initialize what is strictly necessary:
+Together, these cause struct_ops programs referencing global data
+to fail verification with "fd X is not pointing to valid bpf_map".
 
-...
+This series fixes both issues:
 
-> None of these commits remove current_pt_regs. Some of them has no
-> current_pt_regs before THREAD_INFO_IN_TASK, and ARM32 still has its
-> own implementations in arch/arm/include/asm/ptrace.h now which is
-> nearly the same as LoongArch.
+  Patch 1: Skip bpf_object__probe_loading() entirely when a BPF
+           token is present.  Token creation itself proves the
+           kernel BPF subsystem works.
 
-If you think it should keep current_pt_regs() as is, I am OK, will do
-it in the next version.
+  Patch 2: Add BPF_MAP_TYPE_ARRAY to the token delegation mask for
+           struct_ops selftests so global data maps can be created.
 
-That is to say, do not modify arch/loongarch/include/asm/ptrace.h?
+  Patch 3: Fix probe_fd() to return the actual error code instead
+           of 0 on failure, and add a token-aware rescue path in
+           feat_supported() for ret<0 cases.
 
->>>>    /* Helpers for working with the user stack pointer */
+Reproducible by running the implicit token tests with struct_ops in a
+user namespace (tools/testing/selftests/bpf, test_progs -t token).
 
-...
+v2:
+- Replace the workaround of granting SOCKET_FILTER/KPROBE permissions
+  in the token with a proper fix at the feature probe level in libbpf.
+- probe_fd() now returns the actual error code on failure instead of
+  0, allowing feat_supported() to distinguish probe errors from
+  genuine feature absence.
+- Add token_fd rescue path in feat_supported() for ret<0 cases.
 
-> set_current() is a very good friend of get_current(). Though "$tp" is
-> enough for get_current(), from the x86 implementation we know that it
-> can also get from the per-cpu array (but suboptimal).
-> 
-> Move set_current() to current.h also don't need to include
-> <linux/percpu.h> and <linux/sched.h>, it only need to forwarding
-> declare "task_struct" and include <asm/percpu.h>, which is exactly
-> done in the x86 implementation.
-> 
-> And you needn't worry about the compiling, I have tested before I comment.
+Yuan Chen (3):
+  libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+  selftests/bpf: Add ARRAY map type to token tests that use struct_ops
+    global data
+  libbpf: fix feature probe failures for implicit BPF tokens
 
-If you think this is proper, I am OK.
+ tools/lib/bpf/features.c                      | 23 +++++++++++++++++--
+ tools/lib/bpf/libbpf.c                        | 10 +++-----
+ .../testing/selftests/bpf/prog_tests/token.c  |  6 ++---
+ 3 files changed, 27 insertions(+), 12 deletions(-)
 
-Replace __entry_task with current_task (x86) or cpu_tasks (uml)?
-Replace entry_task_switch() with set_current()? or something else?
-It seems a little strange for the following code in smp.c:
-
-diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-index 4b74409a98a3..3afdeca7bc2a 100644
---- a/arch/loongarch/kernel/smp.c
-+++ b/arch/loongarch/kernel/smp.c
-@@ -665,7 +665,7 @@ asmlinkage void start_secondary(void)
-         set_my_cpu_offset(per_cpu_offset(cpu));
-
-         cpu_probe();
--       entry_task_switch(current);
-+       set_current(current);
-         constant_clockevent_init();
-         loongson_init_secondary();
-
-Thanks,
-Tiezhu
+-- 
+2.54.0
 
