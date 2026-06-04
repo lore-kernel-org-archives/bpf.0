@@ -1,112 +1,296 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C633E3CD8D7
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 12:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E8D3E275F;
+	Thu,  4 Jun 2026 12:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780576028; cv=none; b=taCGeoLzjHV2DTpGUfCYIeaCfU1bGrufugwO46CnsgDIuUSRamj571rS5PGB2XfzzcDrMh2urHLnJfN7h06OaAGj7cJxNk1Ff+MYQc1PYVpekkNfESfEDo7ubxWyzzoggsRAA6ovYJiIXOzbbrLNpJ3gnKbsWOCDpPWPlIbSMwI=
+	t=1780576603; cv=none; b=CpnsbkKwnun9NiI2rrTHZkO8F8+bpZmKSQ81YvKPz8XoQjj1kqx8bXJ0+iUEjUw9wFNrvQYK/SMTEB2yYvERBPhXYykbRxqfIxWHqu6omHlU/WVe1g/Vtv7xvRi2Kyg/CGrhDVHWMjt4etE4Vy6PUzghEeqS+PEQ3vYy2C0Rg3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780576028; c=relaxed/simple;
-	bh=RLF51gjJuYJsmmbkpvprDKPl5tsobv86JF9U6bHPFN4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iRLRddYj4IpgmUG2ENX0Im5oU1ejnxtgyR8vxUowwPnxaeqhF/S1sc0ZTaocgi/dTbjUnvaZKvuopoqd/1wS7H9c1H9R5v4xTH2OmFTRcLr/CzJd9rfFHU4STU2l6VEvkVF4w4C9pTT7cg3x0JiS7KRKz/WHZn0X5tqAzv8n4r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m1BpiC1s; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780576603; c=relaxed/simple;
+	bh=fb/j4RhN61MLa1Qk9TfcPzZk/H+4QghW1asCur8EklE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PhAo+v2j5mrB/1Z8zbI71IalJcZHmc3nqICzfwslnSmLMPUPWo2UZGv2iQ9Zf1zAGRo2ulFS87i/TADP+nMzyNRsroNaX7jXicEyqFmz2OKPz1EL7Xv3/1FkpGljs4JbwhW39V7cWCl3UmpAGrS86wx68vk4CbjrhY2EmgXdvfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GauXLrMr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m1BpiC1s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882921F00893;
-	Thu,  4 Jun 2026 12:27:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GauXLrMr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0288D1F00899;
+	Thu,  4 Jun 2026 12:36:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780576027;
-	bh=EPy2kZidxQ518o6BLqExLUWq9HKhJSuM9s5ym7E/nZ0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=m1BpiC1sFKrXZyF/9PKDp7l9Snqt0DnQZpIjWeJtLJZGjpjkY2JtLx+SYTAltegh3
-	 PQYO03AWN7Ov3dJWmzSNW3n+6o6ffx9BoR3ow2C3ZRAeRiWNYUZhBhSbmRoC26XNMk
-	 f6p6CCCn0f6kdPxKRGNf2GngqFfTY63pGrqF4nvnCl68c7kDprqUQsj+8Q5tOgrPOK
-	 PXz+Kq1NLZT27vMmejCTfLjmXkXvBNd1OREhCp145Rn/kt4bmwzYIkx9DJUcLFwewr
-	 Je0+kXsDstBXM54ZsQEq5L/wqruh/6+2gjMmoKELdMYh+mZeeJ8XdOF5hBQrgMT7/6
-	 /3dUt1kD8f+FQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net] udp: clear skb->dev before running a sockmap
- verdict
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603122639.615994-1-rhkrqnwk98@gmail.com>
-References: <20260603122639.615994-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 12:27:07 +0000
-Message-Id: <20260604122707.882921F00893@smtp.kernel.org>
+	s=k20260515; t=1780576602;
+	bh=G2t4b9T7YKjL70px21BHpISBAJ1CJJ2CGRX8h/3pybQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=GauXLrMrz8RgvQ+nC/xGJSWPjlY+Jwu+ne+c0Ic1W9UqrACD+g8YVbd0LkZZEVoWg
+	 wQTGzzDe9wwz8ocJuKiqJ7u6D+QEDorj0tqYrXGYPKh/Ap6rDosele6Lo1oyA+Z9on
+	 aninjg6DfWgzwpfV43rpHcs+EcEMbGFcHyQ8dXp8rRp5SyzYUS/3wiJwITTbX+sfIO
+	 OSATRic4XDbFEAJAfG2LE9mWrAWthl2KhBU6+lKwUXtMLBvSClccm01cqeN58UEJyw
+	 ke81hZZ4fDzO8SfAqHO4FXIs+nx0+LMR29CGaEA4YLJp5aiCZErU0GgDvrF7TUaBW1
+	 /yH6ELHNR+dsQ==
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 09DD4F4007C;
+	Thu,  4 Jun 2026 08:36:39 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Thu, 04 Jun 2026 08:36:39 -0400
+X-ME-Sender: <xms:VnEhagZzao9gyXUu93RNckXpTAxkfVObN80Ho1taOPQdYigkCroIBQ>
+    <xme:VnEhavbXeglNrO6gWeheBztORlLIBm2SMURYwDXzzM_SL5eI0pk_CA2Gco4nlikhz
+    W0Xvo3cVnaMgIWfEKX7osPMd1CxMs1j__MLs3lNlZrg-zVvwuRc>
+X-ME-Received: <xmr:VnEhaqAuPs88Zher25i5NkFsA4Hi6Md1NcEbWxn1Llk4vHkGLNy8rw7mwnw>
+X-ME-Proxy-Cause: dmFkZTEQFwMtfD0LSxw/EWQ8kkWfNDbO1B39r8wgdzVN7edb5KWhufCaURpXW1jgf2CWrq
+    XBWW3gIZcyl0yhjmX9ikFd4Pe/uurQpbuBtyZuFc3PXRL2zv2UA2M3gGkc55jKgRT9qAep
+    WLiJtZPvNiYOsRfbJ/9+uNp4HhrZydvVwlIEGJiUspc/R12m8keG0+WcmEwV/bQBeVTM2r
+    liekhxajBnCWjhAzVNgbVvojIzxbYqXCK1IdigNF/VMcqZ5YAbhiRFFvYqEjsoEdZ+UuHz
+    ZgVQAr4ekHEvTUTFBwnby/fHqxidy/2fM0P9Wo0Gd0s6JapT6jXiJdVohmQHyTkiMdcWEi
+    eVv+Y58tefCJqOIOwT9NqYVRgh4gjhLf6m/a8LLzr51MIW2WMhP/1EHC5R5VCf8T/p1S9P
+    RmlE9um5TKSyWkyIfftuWVwigR6EuuNk6ekL/pl7XrJwXhJ53ljdQkqZh3N6+j+Qm72vyL
+    g+n6IrLdjLnIO13IARat26zoWiOdc/k8JSsseB9HJKBOlvLGqjWe94CgA6dBT8oWfVv/tH
+    8q9xwURjC9cGNy2sQX3Vr5GgYyd98cl+sKu19Ppr1eUcnZcsK4z8sqGwg4jESVuYZLE95g
+    g6Ng4Iu4pf9wCnl6aD5b0AVVsNRevDZ1RJWlttuWhEaM64BIkluVYxjdjY0w
+X-ME-Proxy: <xmx:VnEhasYQwHH8M6tRqmwkHnYMdgRjZziFsaIa09cda3HKlsvutRBK8Q>
+    <xmx:VnEhajgh0Is2Pfttoi2bSpCGxHnKrhRkm0t0QDqqiJA9lU4EHLxSKQ>
+    <xmx:VnEhasZTKobjv4pnrW4-aHoSRssGNMAqp_SWIZ-7-aLw6ae2OjppkQ>
+    <xmx:VnEhal58u1XFkuHD6Z3Ut19o05Fwf1u_t4YWKglkALSHjIA_SdioRQ>
+    <xmx:V3EhavVdLobtvhpiE4ac3NxE4XTOHF5WoOBYnFkGgjHSeF0bn8gH_Z5K>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 4 Jun 2026 08:36:37 -0400 (EDT)
+Date: Thu, 4 Jun 2026 05:36:36 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
+ Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Waiman Long <longman@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
+ Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
+ Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
+ Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Nikunj A Dadhania <nikunj@amd.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v2 01/12] preempt: Track NMI nesting to separate per-CPU
+ counter
+Message-ID: <aiFxVG3epMKAva76@tardis-2.local>
+References: <20260526152148.30514-1-boqun@kernel.org>
+ <20260526152148.30514-2-boqun@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260526152148.30514-2-boqun@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Unhandled failure of skb_set_owner_sk_safe() leads to a NULL point=
-er dereference. If skb_set_owner_sk_safe() returns false (e.g., due to sk_r=
-efcnt being 0 during concurrent socket destruction under RCU), execution co=
-ntinues without aborting. The patch explicitly sets skb->dev to NULL right =
-after. Subsequently, if the BPF verdict program invokes a socket lookup hel=
-per like bpf_skc_lookup(), the helper observes skb->dev as NULL and falls b=
-ack to evaluating sock_net(skb->sk). Because skb_set_owner_sk_safe() failed=
-, skb->sk was never initialized and remains NULL (as is typical for incomin=
-g packets), leading directly to a NULL pointer dereference.
---
+On Tue, May 26, 2026 at 08:21:37AM -0700, Boqun Feng wrote:
+> From: Joel Fernandes <joelagnelf@nvidia.com>
+> 
+> Move NMI nesting tracking from the preempt_count bits to a separate per-CPU
+> counter (nmi_nesting). This is to free up the NMI bits in the preempt_count,
+> allowing those bits to be repurposed for other uses.
+> 
+> Reduce NMI_BITS from 4 to 1, using it only to detect if we're in an NMI.
+> The per-CPU counter currently caps nesting at 15.
+> 
+> [boqun: Solve Steven Rostedt's comment on the BUG_ON() condition]
+> 
+> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Signed-off-by: Boqun Feng <boqun@kernel.org>
+> Link: https://patch.msgid.link/20260121223933.1568682-3-lyude@redhat.com
+> ---
+>  include/linux/hardirq.h                        | 17 +++++++++++++----
+>  include/linux/preempt.h                        |  9 +++++++--
+>  kernel/softirq.c                               |  2 ++
+>  tools/testing/selftests/bpf/bpf_experimental.h |  2 +-
+>  4 files changed, 23 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
+> index d57cab4d4c06..1a0360a1000f 100644
+> --- a/include/linux/hardirq.h
+> +++ b/include/linux/hardirq.h
+> @@ -10,6 +10,8 @@
+>  #include <linux/vtime.h>
+>  #include <asm/hardirq.h>
+>  
+> +DECLARE_PER_CPU(unsigned int, nmi_nesting);
+> +
+>  extern void synchronize_irq(unsigned int irq);
+>  extern bool synchronize_hardirq(unsigned int irq);
+>  
+> @@ -102,14 +104,17 @@ void irq_exit_rcu(void);
+>   */
+>  
+>  /*
+> - * nmi_enter() can nest up to 15 times; see NMI_BITS.
+> + * nmi_enter() can nest - nesting is tracked in a per-CPU counter.
+>   */
+>  #define __nmi_enter()						\
+>  	do {							\
+>  		lockdep_off();					\
+>  		arch_nmi_enter();				\
+> -		BUG_ON(in_nmi() == NMI_MASK);			\
+> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
+> +		/* Maximum NMI nesting is 15. */		\
+> +		BUG_ON(__this_cpu_read(nmi_nesting) >= 15);	\
+> +		__this_cpu_inc(nmi_nesting);			\
+> +		__preempt_count_add(HARDIRQ_OFFSET);		\
+> +		preempt_count_set(preempt_count() | NMI_MASK);	\
+>  	} while (0)
+>  
+>  #define nmi_enter()						\
+> @@ -124,8 +129,12 @@ void irq_exit_rcu(void);
+>  
+>  #define __nmi_exit()						\
+>  	do {							\
+> +		unsigned int nesting;				\
+>  		BUG_ON(!in_nmi());				\
+> -		__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);	\
+> +		__preempt_count_sub(HARDIRQ_OFFSET);		\
+> +		nesting = __this_cpu_dec_return(nmi_nesting);	\
+> +		if (!nesting)					\
+> +			__preempt_count_sub(NMI_OFFSET);	\
 
-commit 7d38a119d5768d0ec63d1cfccd1fe2e8d8ea7398
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+We have an issue here in the following case:
 
-udp: clear skb->dev before running a sockmap verdict
+  // nmi_nesting == 1
+  __nmi_exit():
+    ..
+    nesting = __this_cpu_dec_return(nmi_nesting); // <- nesting == 0
+    <another NMI comes>
+      __nmi_enter()
+      // nmi_nesting becomes 1
+      __nmi_exit():
+        nesting = __this_cpu_dec_return(nmi_nesting); // <- nesting == 0
+        if (!nesting)
+	  __preempt_count_sub(NMI_OFFSET);
+	// NMI_OFFSET bit is 0
+    if (!nesting)
+       __preempt_count_sub(NMI_OFFSET); // underflow!
 
-This commit clears skb->dev on the UDP receive path before running a
-sockmap verdict program. It prevents socket-lookup helpers from
-dereferencing the UDP dev_scratch value as a network device pointer,
-falling back to the socket's network namespace instead.
+I think we need to do:
+      
+#define __nmi_exit()						\
+	do {							\
+		unsigned int nesting;				\
+		BUG_ON(!in_nmi());				\
+		__preempt_count_sub(HARDIRQ_OFFSET);		\
+		nesting = __this_cpu_dec_return(nmi_nesting);	\
+		if (!nesting)					\
+			preempt_count_set(preempt_count() & ~NMI_MASK);	\
+		arch_nmi_exit();				\
+  		lockdep_on();					\
+	} while (0)
 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -2011,6 +2011,11 @@ int udp_read_skb(struct sock *sk, skb_read_actor_t=
- recv_actor)
->  	}
-> =20
->  	WARN_ON_ONCE(!skb_set_owner_sk_safe(skb, sk));
-> +	/* skb->dev still aliases the UDP rx dev_scratch (its charge was freed
-> +	 * on dequeue above); a sockmap verdict program may deref it via
-> +	 * bpf_sk_lookup_*(), so clear it -> bpf_skc_lookup() uses skb->sk
-> +	 */
-> +	skb->dev =3D NULL;
+@Joel, thoughts?
 
-[Severity: High]
-If skb_set_owner_sk_safe() fails (for example, if the socket refcount drops
-to zero concurrently), it returns false and leaves skb->sk uninitialized.
-Because WARN_ON_ONCE() logs the warning but allows execution to continue,
-skb->dev is then explicitly cleared to NULL.
+Similarly, we have this issue in patch #10 as well.
 
-If a BPF verdict program subsequently invokes a socket lookup helper, could
-this cause a NULL pointer dereference?
+Regards,
+Boqun
 
-Looking at bpf_skc_lookup() in net/core/filter.c:
-
-    if (skb->dev)
-        caller_net =3D dev_net(skb->dev);
-    else
-        caller_net =3D sock_net(skb->sk);
-
-Since skb->dev is NULL, it falls back to sock_net(skb->sk). Because
-skb_set_owner_sk_safe() failed earlier, skb->sk is also NULL, which seems
-like it will panic during the dereference.
-
-Should we abort and drop the skb if establishing safe socket ownership
-fails, rather than continuing with both skb->dev and skb->sk as NULL?
-
->  	return recv_actor(sk, skb);
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603122639.6159=
-94-1-rhkrqnwk98@gmail.com?part=3D1
+>  		arch_nmi_exit();				\
+>  		lockdep_on();					\
+>  	} while (0)
+> diff --git a/include/linux/preempt.h b/include/linux/preempt.h
+> index d964f965c8ff..586f96688325 100644
+> --- a/include/linux/preempt.h
+> +++ b/include/linux/preempt.h
+> @@ -17,6 +17,8 @@
+>   *
+>   * - bits 0-7 are the preemption count (max preemption depth: 256)
+>   * - bits 8-15 are the softirq count (max # of softirqs: 256)
+> + * - bits 16-19 are the hardirq count (max # of hardirqs: 16)
+> + * - bit 20 is the NMI flag (no nesting count, tracked separately)
+>   *
+>   * The hardirq count could in theory be the same as the number of
+>   * interrupts in the system, but we run all interrupt handlers with
+> @@ -24,16 +26,19 @@
+>   * there are a few palaeontologic drivers which reenable interrupts in
+>   * the handler, so we need more than one bit here.
+>   *
+> + * NMI nesting depth is tracked in a separate per-CPU variable
+> + * (nmi_nesting) to save bits in preempt_count.
+> + *
+>   *         PREEMPT_MASK:	0x000000ff
+>   *         SOFTIRQ_MASK:	0x0000ff00
+>   *         HARDIRQ_MASK:	0x000f0000
+> - *             NMI_MASK:	0x00f00000
+> + *             NMI_MASK:	0x00100000
+>   * PREEMPT_NEED_RESCHED:	0x80000000
+>   */
+>  #define PREEMPT_BITS	8
+>  #define SOFTIRQ_BITS	8
+>  #define HARDIRQ_BITS	4
+> -#define NMI_BITS	4
+> +#define NMI_BITS	1
+>  
+>  #define PREEMPT_SHIFT	0
+>  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 4425d8dce44b..10af5ed859e7 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -88,6 +88,8 @@ EXPORT_PER_CPU_SYMBOL_GPL(hardirqs_enabled);
+>  EXPORT_PER_CPU_SYMBOL_GPL(hardirq_context);
+>  #endif
+>  
+> +DEFINE_PER_CPU(unsigned int, nmi_nesting);
+> +
+>  /*
+>   * SOFTIRQ_OFFSET usage:
+>   *
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 2234bd6bc9d3..2d4256ff471f 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -449,7 +449,7 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
+>  #define PREEMPT_BITS	8
+>  #define SOFTIRQ_BITS	8
+>  #define HARDIRQ_BITS	4
+> -#define NMI_BITS	4
+> +#define NMI_BITS	1
+>  
+>  #define PREEMPT_SHIFT	0
+>  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+> -- 
+> 2.50.1 (Apple Git-155)
+> 
