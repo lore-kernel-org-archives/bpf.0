@@ -1,33 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01E525487C;
-	Thu,  4 Jun 2026 11:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500F409108
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 11:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780571179; cv=none; b=W0C2D6FC8FzoAYE1rSb8QsstXrjRJ3tpALoGQCx7NhZ+GtOPbEqLveCtA9ar/Nx5mTmKZ3Phf0iT3a0AkFrI/5Tje9nqBzMh7lWP6CLYmwjHXyV2r93lfd2I4SWnJeOPVA/tXFx80Wf0iuzpq6QghGrEcW+HZFCqXQJ7DhqaKNM=
+	t=1780571813; cv=none; b=aIvEDrWh4Icxx45PGbRwifj8/j/ff1QxrrXhj9N0TDtfl8ZYxdKnOSppCxJ6FGZaizCeL9eZtSGTqlfsKW7o18pH4fOKIXyeN9/HPt5iXQuP0OkWopacsaZ6aB1jC/AJfjGJvqr2FFfJyt8y6yzdKYP2RvVkyEzCp7XK78o1gsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780571179; c=relaxed/simple;
-	bh=dH+wiHkP8iEzh5gjrFU7ky8o47LBkOK8WqG8Ty8gAms=;
+	s=arc-20240116; t=1780571813; c=relaxed/simple;
+	bh=nuw7kSkPbc7YF8N7R3oOAxNMWLVGF0sb+lqe5K6FZV0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cpgxSahhTfrtzZSc+kvAuV70v1LFfhI+Lmsr6e1aPrZy0GpwRkCJSzxWrHVBgIsuDeGL89AgTGU71qPUEIDWuPqs6EJuISjG/YsfrGmhhZbHtrnt3+N/RKoJZ9FPFBaEYBPFqFZuLOExCAPa3Z3CX/ZDx6E3JFEbwbsWjb9sM90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej8KZlE7; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=cUjZvHUfj5P1gtcY0tCRmcz51qREqi4EXji/bVZ5m79gAhwyJ+aOubfHrk5uUOxT7iQnMC3MGVOxo/EoJeXVeZ7dOkSX9lY9DKeDwJigmlwzHtql+UWJCCupNDvtczaxYBXv079/hjHS6xAgRwQ/uLyik/+QbkNrb/m1XEH+868=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ck4pVUx4; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej8KZlE7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161461F00893;
-	Thu,  4 Jun 2026 11:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780571178;
-	bh=79aCtUFvNEq/48Dn+njy/SJ3Q9e631A8d0gXU4oyCMg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Ej8KZlE7ixNLHhWexR/7SMz1WYRbidIsd/ciNFKyVssHeMx1PvCR6YtbOf3ojXq61
-	 G6cqaJK4TdCE2st/1CInbVwy+xANj09bCZ5Zd3xaSBUmS9/FiH/CrgE0+LBbk1t50w
-	 B++d1O8j+hpsqCj04LEeRwITFMuyv9hKqai/CiDFDy29lXSK+5NIs+pMNm15KIkSaZ
-	 PPbtw7AIvHPoxyJd73isoN9LwjzhBBpaCwZ2QGdFyy8DPEP6xXua5c4kpKCh25cTkJ
-	 KwvBbfcQyYqROPZcPaae61Wgs7UdsFL2nalr4kKMWNUAXM/8ObwIdM06aBoya4WM/7
-	 jMIyWP5kAe22A==
-Message-ID: <d9a5b911-7692-4df2-b67c-c33bc80b61aa@kernel.org>
-Date: Thu, 4 Jun 2026 13:06:13 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ck4pVUx4"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-bec49f7e35eso73798566b.2
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 04:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780571810; x=1781176610; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YdRymJxIkKDhIYy0E9qICIsitioN8lA6Xugqy+NL/ug=;
+        b=ck4pVUx4GU8c81r+2No3/6eIOeS2QM1I/s5fLhr8zfK6lwFGlyYqO72gKvmYgN+j1B
+         KGepuBQvMRVgSQ9vdJOGS3Eza1om90nMFE/D63574M30MHQvxYUf+wHG3KYwnHbm9FKj
+         fQyKrLmQmFPUH8ymbag/MLCJxeE3mI8vvb5ZvSqs68VxnKi9g4x3PLOaFM1vmd3SKIB1
+         kMBakAEWdbqbKN6YVQ8ldGqXX3YJ0u1sMw8ucHvHMYanT9peVcWUzVhAdrjpkHngxPJs
+         Bn2YnJRSQn4XHFVLQ5RCaclgPwI08BNZI8f3fZY+5LDeBvkfIYeTJZ2b+n2mwjdqiHWh
+         jo5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780571810; x=1781176610;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YdRymJxIkKDhIYy0E9qICIsitioN8lA6Xugqy+NL/ug=;
+        b=l+nzNbNqD8F+MJ9/DR+vgVAc2HeuRjy6Qyp2sU4+kRhF0WROBUN5RuGq0g7dAxb+xl
+         LAmy8Bw86s6Zfh5w/sJNgf/XNpUceYEQMX4UY/Sn11YDcVMTOxlS1TIh9udTcTK7/Q0U
+         qCw3JGzejIUQwMZCJlTSgT7+di69K5MI5/aRjp+0brocR6rFU40W8j/D0zmJ0GXiThi2
+         MIXuz+DzMtxLalLTYtf3+HjsZIhF5La0e7g9EJqciDIpkHzBx0sqDt99+wbX1YW8oQ7V
+         pCSiSMyXpBzgWxnLrL868jJ/a8NHOaEjd+VuxW671trP3bTkfryN7ksiSwAtyfbTFerR
+         uPog==
+X-Forwarded-Encrypted: i=1; AFNElJ86BHLf3rQEZ3Rsq1fMAGTJqGcg4tRQlUA2GBGH9NhuzLT6KMWIJcCnNfRbBx09vKBZOFI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygqI7d3tA4xS7irMQOPR/o/+mNilb38DkPzlNdez0fS4222/cP
+	gqr9zezk0meejXKwgBhimpAtOsbEwA1JDwglpyK5JzQdjF/6JPqbqyfP
+X-Gm-Gg: Acq92OHsPTXhHtd43F3oAFcc/+4hCipMdtl3+1sf4yRRVVG8qKZrrg/pHkq8GzGJkw2
+	8chNxKPQqIgii/zv8I0drQDWxHCuEL4NC78lzSwYnwz1bRJYajvLkrEnEjbrgGzmCH8V0CRWceF
+	GvgaPfu7uejnWUAuhY4rzJiqUv2zFubfDA+WxVei68MlO0z8FZ3D6uorokV/pa7otttSfoOk+Jf
+	G2puA0xFcjf4YP6MUp+R4NnVOB68Zg44T/trudMzm8wM6gfJhxRojqaqAv2ty5DB0o5vEgE6Zvy
+	t2iL3gLcQ3cDFSgf+L912Rjzxt6aoN+/OD31/HUAhKgAPdK4QVkJIycxtijn5kNZXmWQStHg4Nc
+	mYx2kHG+Vxil6J45w6n6T4UCraQ0garrIoVGOfVnQeI+IbH3AQRijPY7fYnXpO1JUBtTBDwc+gs
+	EYN3t/jx2t6tFjedDGmqr2esmhWdabyxbpfZ8vApIwuznTyipPmoQf+Dlxml8WLvPyZ9DsaVDGg
+	xZfocyZcHISJUoDIKG80A==
+X-Received: by 2002:a17:907:c23:b0:bd4:e53f:699 with SMTP id a640c23a62f3a-bf0aed0cb0amr379252766b.37.1780571809607;
+        Thu, 04 Jun 2026 04:16:49 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf055307aacsm292216666b.47.2026.06.04.04.16.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jun 2026 04:16:49 -0700 (PDT)
+Message-ID: <e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com>
+Date: Thu, 4 Jun 2026 12:16:48 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,125 +69,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: configurable block error injection
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-block@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Brendan Gregg <brendan.d.gregg@gmail.com>, GOST <gost.dev@samsung.com>,
- Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-References: <20260602054615.3788425-1-hch@lst.de>
- <e4c653ec-dfb4-4dce-a565-2a43520fc44f@kernel.org>
- <20260602150503.GA6887@lst.de>
+Subject: Re: [PATCH bpf-next v2 1/3] libbpf: Skip bpf_object__probe_loading()
+ when BPF token is in use
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ chenyuan@kylinos.cn, daniel@iogearbox.net, eddyz87@gmail.com,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
+References: <20260529031604.888137-1-chenyuan_fl@163.com>
+ <20260604031033.806727-1-chenyuan_fl@163.com>
+ <20260604031033.806727-2-chenyuan_fl@163.com>
 Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-In-Reply-To: <20260602150503.GA6887@lst.de>
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260604031033.806727-2-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/06/2026 17.05, Christoph Hellwig wrote:
-> On Tue, Jun 02, 2026 at 11:58:25AM +0200, Daniel Gomez wrote:
->> I wonder if the block layer would be interested in moving block error
->> injection off the should_fail() fault injection framework and extending
->> the ALLOW_ERROR_INJECTION annotation instead and offloading all the
->> debugfs configuration logic (block/error-injection.c) into eBPF?
+On 6/4/26 4:10 AM, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
 > 
-> I've looked into plain ALLOW_ERROR_INJECTION-based injection and it
-> is not very useful.  I didn't even now eBPF could use it, 
-
-For context: Josef Bacik introduced it first for BPF only
-(BPF_ALLOW_ERROR_INJECTION). Masami Hiramatsu then generalized it into
-the error injection framework, renaming it to ALLOW_ERROR_INJECTION
-and adding the fail_function debugfs interface (which calls
-should_fail()). So annotating a function with ALLOW_ERROR_INJECTION
-gives you both backends at once: debugfs (fail_function) and eBPF
-(bpf_override_return()).
-
-> but I
-> looked into other eBPF injections and at least for my uses cases
-> it was a bit of a mess.  
-
-Agreed, and I had not looked closely enough at the series
-before proposing the wrong primitives. ALLOW_ERROR_INJECTION /
-bpf_override_return() are not sufficient here: bpf_override_return()
-cannot set bio->bi_status or call bio_endio(), which I think is the
-key operation here.
-
-IIU the series correctly, and oversimplifying: when
-injection is enabled and a bio matches, the block layer completes the
-bio inline with the chosen blk_status_t (the status= rule from debugfs)
-via bio_endio_status(). The submission path returns to the caller
-immediately, with the bio already in the error state. Nothing is ever
-sent to the device, but the completion path sees the injected error.
-
-submit_bio() -> submit_bio_noacct() -> submit_bio_noacct_nocheck()
-      +-- Path 1: no match -> continue normal IO submission
-      +-- Path 2: match (diskN) -> blk_error_inject()
-                     -> bio_endio_status(bio, inj->status)
-                          -> bio_endio()
-                     // error injected. bio completed
-
-So this is bio mutating + a bio_endio() call, not a return override.
-That can't be solved with ALLOW_ERROR_INJECTION. But we can use
-BPF_PROG_TYPE_STRUCT_OPS instead: the kernel keeps ownership of the
-bio_endio_status() call, and the eBPF program only drives the policy,
-ie. which blk_status_t to return for a given bio, based on whatever 
-heuristics it implements.
-
-> I'd have to allow access to certain bio
-
-With struct_ops the bio is passed to the ebpf side as read-only, bio 
-fields can be read to decide the policy but cannot write them. Is 
-read-only access to bio fields itself a concern?
-
-> fields and would have create a stable UAPI for commands and status
-> using the fake BTF struct access which really would not be a good
-> idea here as we need to be able to change internals.  
-
-That should not be a problem at all. With CO-RE (compile once, run
-everywhere) the program resolves the bio field offsets against the
-BTF of the kernel it loads on, so it adapts dynamically if the layout
-changes. The contract is just the struct_ops callback signature: a
-struct bio * argument and a blk_status_t return. And that doesn't imply
-any UAPI commitment AFAIK.
-
-> Additionally
-> having fully BTF-enabled toolchains in test VMs is not great either.
-
-Are you referring to the old BCC toolchain requirements [1]? This is
-solved in CO-RE [2]. The toolchain (Clang/LLVM, pahole) stays on the
-build host; the test VM only needs the prebuilt BPF object, libbpf at
-runtime, and the kernel's own BTF (CONFIG_DEBUG_INFO_BTF). No compiler
-or BTF toolchain is required inside the VM. Clang/LLVM 10+ is enough to
-build CO-RE libbpf tools [3].
-
-Link: https://ebpf.io/what-is-ebpf/#how-are-ebpf-programs-written [1]
-Link: https://nakryiko.com/posts/bpf-portability-and-co-re/ [2]
-Link: https://github.com/libbpf/libbpf#bpf-co-re-compile-once--run-everywhere [1]
-
+> bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+> TRACEPOINT programs to verify the BPF environment works.  When a
+> BPF token is in use with restricted program type permissions, these
+> probe loads may fail because the token does not allow the specific
+> program types, even though BPF loading is perfectly functional.
 > 
-> I've also not actually found any good map type for range lookups,
-> which is kinda essential here.
+> Fix by skipping the probe when a token FD is present: BPF token
+> creation itself proves the kernel has a working BPF subsystem.
+> Real BPF issues will be caught during actual program and map loading.
+> 
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> ---
+>  tools/lib/bpf/libbpf.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index ab2071fdd3e8..7e21c5eb9533 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
+>  		BPF_EXIT_INSN(),
+>  	};
+>  	int ret, insn_cnt = ARRAY_SIZE(insns);
+> -	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+> -		.token_fd = obj->token_fd,
+> -		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+> -	);
+>  
+> -	if (obj->gen_loader)
+> +	if (obj->gen_loader || obj->token_fd)
 
-Are you referring to the bio sector range comparison in
-__blk_error_inject()? I don't think that needs to be delegated to a
-BPF map (Documentation/bpf/maps.rst). The ebpf side has direct access
-to the bio fields, so it can apply the same sector/op filtering
-__blk_error_inject() does today. That match is already a linear list
-walk, so the ebpf program just runs the same [start, end] condition
-check.
+This change makes sense, bpf_object__probe_loading() does very basic
+check that BPF works on a given kernel. In this case, when token is
+passed, this is ok to skip. An alternative, trying to make 
+bpf_object__probe_loading() correctly token aware is worse.
 
-In summary: what do you think of evolving this series
-into eBPF, but BPF_PROG_TYPE_STRUCT_OPS instead of
-ALLOW_ERROR_INJECTION/bpf_override_return()?. The configurable debugfs
-injection is a nice enhancement over what we had, but the matching is
-static (op/start/nr_sectors/status/chance) per gendisk. A struct_ops
-hook would expand the failure model to anything derivable from the bio
-(plus any state the program keeps), with the kernel still owning the
-bio_endio_status() mutation and only the policy moving out of the tree.
-The benefit is the flexibility to express the policy without hard-coding
-the model in the kernel.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-The open question is whether programmable injection is something we want
-to support in-tree, or whether more debugfs knobs suffice. Thoughts?
+>  		return 0;
+>  
+>  	ret = bump_rlimit_memlock();
+> @@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+>  			errstr(ret));
+>  
+>  	/* make sure basic loading works */
+> -	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
+> +	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
+>  	if (ret < 0)
+> -		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
+> +		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+>  	if (ret < 0) {
+>  		ret = errno;
+>  		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+
