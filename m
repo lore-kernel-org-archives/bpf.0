@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DB637E301;
-	Thu,  4 Jun 2026 03:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1658243964;
+	Thu,  4 Jun 2026 03:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780542683; cv=none; b=Gt2+4lW0fYjqM7iDBFbTQlYUJX0shv3tCDM+gCV0isZoE+qmm5LZlvBWq4lcmDW+Gc9gJERNQjwuAPEsiCBHfhUXQPMG6EM112Txio+Tf4wlbC3f0Ug6v5plTi4KyaBXVW60FJaNWB5I7ap6+mU6PYKtnY/SzuFIByjhLKcjwoY=
+	t=1780542684; cv=none; b=Kf56DXIxf5s0wh82k+h3cQwieouklKsda3X5vxQCqQrpZwLGrsG4PQGiWY87NXC7K+caUFT7CNxjDFARMGkD3H1zBraCci/4BMiVeJIzMz6X1nOOwHNuy7ZTVs3hcOROJel93MAzXcZhrN/7h3KnYA3WOuvQ5//9FpHfwzxy4v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780542683; c=relaxed/simple;
-	bh=4u3P6eG5AlHDzcX5xWxnVzrjgKTxy3EUloB/JA8skOg=;
+	s=arc-20240116; t=1780542684; c=relaxed/simple;
+	bh=IYa8P2RTOneK+QluhF/NhnLhNdsUiCCJb9BHqONYjCs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k7A8Zj7FBs/ZyezyT9+jGDmkUzhvcEkUlqRxLvM/8RlE3b/sYSbutz5XbXyM1qyWQvzSHsyXvlmPOEx5xvwSYKswS4xjP0BXJDx9xeLYz0/a8d3VQv20SyAYK1Qp+6sBWVpHEcXpaSatQFWsykPPGG4N8yErc5azwQGKtaC8g0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LVOZEvTl; arc=none smtp.client-ip=220.197.31.3
+	 MIME-Version; b=Y3U+Sx2ImEdPg/Nq14Bb4fur3b+snt0jwDmYIVigzEMd0RGRFuOuRUZjuUsN8M4J3e6f8bK+aRCPA49q9UjnjtLz5I2pxlI/n7GtiBZoJ2QGFKK6lUTUWiG3NuIGF4Fh/YDUd0YZHQSE3AqWkJT6/yzMe3UCJk/8HsRCxPF5AZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=j4GZ46x+; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LVOZEvTl"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="j4GZ46x+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=p9
-	uIKlC4kSMx3kAAe9donaGNQUBxl9Xks7NRFbdcZwA=; b=LVOZEvTlw4owN7zu+D
-	08bjsg4yc2GpGrTeShCgD/LAgcRnV5QDmhHTB9YDB+zRDjdHM0GTCqsdCFU711Ft
-	8p8fWpmgj2W893qM1xq72ViJjCWi7X15RpsfZcRJvD44tCSJV9ZiWm7RwoNtVCvl
-	zsrzvJddIVVafVj7psnzB+Mrg=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Im
+	VrToeM3zhho5qrpxk1WDsFugnd8GGgzTsb2nCyJx8=; b=j4GZ46x+UHxmRX70M1
+	gemyJIJhnIsuWRoekONN49tH7lDFhArPr3GK0AZ/8dJ2NlkZihDs+7DEw2WIrjNT
+	igJmNURVrLa+cupIRyrlrR21tAz7LA2wvFU4YljwZwT+7jhMBCUNv2S0O0wPd6Qi
+	dGbUb6+7LOUh8+5Ntz/HM9FHg=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCnNjaz7CBq76U8BQ--.63531S2;
-	Thu, 04 Jun 2026 11:10:44 +0800 (CST)
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCnNjaz7CBq76U8BQ--.63531S4;
+	Thu, 04 Jun 2026 11:10:51 +0800 (CST)
 From: chenyuan_fl@163.com
 To: chenyuan_fl@163.com
 Cc: andrii@kernel.org,
@@ -35,12 +35,13 @@ Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	linux-kselftest@vger.kernel.org,
 	shuah@kernel.org
-Subject: [PATCH bpf-next v2 0/3] libbpf: fix implicit BPF token handling in loading and feature probes
-Date: Thu,  4 Jun 2026 11:10:30 +0800
-Message-ID: <20260604031033.806727-1-chenyuan_fl@163.com>
+Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Add ARRAY map type to token tests that use struct_ops global data
+Date: Thu,  4 Jun 2026 11:10:32 +0800
+Message-ID: <20260604031033.806727-3-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529031604.888137-1-chenyuan_fl@163.com>
+In-Reply-To: <20260604031033.806727-1-chenyuan_fl@163.com>
 References: <20260529031604.888137-1-chenyuan_fl@163.com>
+ <20260604031033.806727-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,73 +49,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnNjaz7CBq76U8BQ--.63531S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1kXr4Dur48Zw1UGry5twb_yoW5Gr18pa
-	93C34Yyr4DJFyIgws7XrW7u3yF9rn5Aa15GryYg347Aw4UKay7AF4fKa18ZFnxJrZYq3y5
-	X3yYqrZ8Cw4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pizBT8UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5RQLyGog7LTADQAA3t
+X-CM-TRANSID:_____wCnNjaz7CBq76U8BQ--.63531S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryUZw1xtw43Gw18Wr4fGrg_yoW8tF17pw
+	1kWa9rt3W3XFWxtr4qqay7ur10kF1xZF15Cr4DZ347AFsFyrn7tF1j9a4vywnxWrW5u3sI
+	v3WY9rn3ua1kCF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zETa0JUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAhsMyWog7LtksgAA3X
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-When BPF programs reference global variables (e.g., struct_ops
-programs with global data), libbpf creates internal ARRAY maps to
-back them.  This depends on FEAT_GLOBAL_DATA, which is gated by
-feature probes that load test programs (SOCKET_FILTER, KPROBE, etc.)
-into the kernel.
+obj_priv_btf_success, obj_priv_implicit_token and
+obj_priv_implicit_token_envvar use the dummy_st_ops_success skeleton,
+whose struct_ops programs reference global variables backed by ARRAY
+maps.  Without BPF_MAP_TYPE_ARRAY in the token allowed map types,
+bpf_object__load() fails because the kernel rejects ARRAY map creation
+for global data.
 
-In a user namespace with an implicit BPF token, two problems arise:
+Add BPF_MAP_TYPE_ARRAY to the token permission mask for these three
+subtests so their skeletons can load successfully.
 
- 1. bpf_object__probe_loading() passes the token fd to test program
-    loads.  When the token's allowed program type mask excludes the
-    probe types, the kernel drops the token reference, causing
-    subsequent struct_ops loads to fail because the token object
-    has been released.
+This is distinct from the libbpf probe issue: the skeletons genuinely
+require ARRAY maps for their global data, not merely for probing.
 
- 2. The feature probe framework uses probe_fd() which returns 0 on
-    BPF syscall failure, and feat_supported() interprets ret==0 as
-    "feature absent".  The token rescue path only handles ret<0,
-    so the probe failure is incorrectly cached as a missing feature,
-    and internal maps for global data are never created.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/token.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Together, these cause struct_ops programs referencing global data
-to fail verification with "fd X is not pointing to valid bpf_map".
-
-This series fixes both issues:
-
-  Patch 1: Skip bpf_object__probe_loading() entirely when a BPF
-           token is present.  Token creation itself proves the
-           kernel BPF subsystem works.
-
-  Patch 2: Add BPF_MAP_TYPE_ARRAY to the token delegation mask for
-           struct_ops selftests so global data maps can be created.
-
-  Patch 3: Fix probe_fd() to return the actual error code instead
-           of 0 on failure, and add a token-aware rescue path in
-           feat_supported() for ret<0 cases.
-
-Reproducible by running the implicit token tests with struct_ops in a
-user namespace (tools/testing/selftests/bpf, test_progs -t token).
-
-v2:
-- Replace the workaround of granting SOCKET_FILTER/KPROBE permissions
-  in the token with a proper fix at the feature probe level in libbpf.
-- probe_fd() now returns the actual error code on failure instead of
-  0, allowing feat_supported() to distinguish probe errors from
-  genuine feature absence.
-- Add token_fd rescue path in feat_supported() for ret<0 cases.
-
-Yuan Chen (3):
-  libbpf: Skip bpf_object__probe_loading() when BPF token is in use
-  selftests/bpf: Add ARRAY map type to token tests that use struct_ops
-    global data
-  libbpf: fix feature probe failures for implicit BPF tokens
-
- tools/lib/bpf/features.c                      | 23 +++++++++++++++++--
- tools/lib/bpf/libbpf.c                        | 10 +++-----
- .../testing/selftests/bpf/prog_tests/token.c  |  6 ++---
- 3 files changed, 27 insertions(+), 12 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+index f2f5d36ae00a..1812de87bedb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -1214,7 +1214,7 @@ void serial_test_token(void)
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+ 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
+ 			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
+ 			.attachs = ~0ULL,
+ 		};
+@@ -1225,7 +1225,7 @@ void serial_test_token(void)
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+ 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
+ 			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
+ 			.attachs = ~0ULL,
+ 		};
+@@ -1236,7 +1236,7 @@ void serial_test_token(void)
+ 		struct bpffs_opts opts = {
+ 			/* allow BTF loading */
+ 			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE) | bit(BPF_PROG_LOAD),
+-			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS),
++			.maps = bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_MAP_TYPE_ARRAY),
+ 			.progs = bit(BPF_PROG_TYPE_STRUCT_OPS),
+ 			.attachs = ~0ULL,
+ 		};
 -- 
 2.54.0
 
