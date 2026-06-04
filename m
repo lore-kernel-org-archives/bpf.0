@@ -1,226 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954BC4DD6CE
-	for <bpf@vger.kernel.org>; Wed,  3 Jun 2026 23:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341042C181;
+	Thu,  4 Jun 2026 00:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780531173; cv=none; b=R2wQ0V6Ilv79iCqoT8N/ZCay+HjfX4tKmqbXoojtsH/zSxAQ3deHJSbVQ/OUvYDZhvr7vBrLLBvlvrGclJhl6POakz9aW78L62Git6JZDFSUP3pi0cUJPdebKkg7XpLAqG8/l/jiWTyr3RR3Lc8RG/3Zj6Fs6zZB63mvtUVB+pE=
+	t=1780534666; cv=none; b=YaF2CZG+G7fNdZolhtJORuRhpGhT8V5DV7YKPPtejnk3uRZTmWXK6AoHIrK34//mMndi0Qv0SO+3xQJ7TQmoxz9OZAHGxKWPtCQYXEjW1rrpjVJon7yn8nYBjxjzjxthpzx/EZ68pET6di6N+vIhcS1BixBPVviCotacaWE8WIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780531173; c=relaxed/simple;
-	bh=Meh8CpHVUc/+PXJ7AdlA9zGXRqW5qTvzZYkt7Gz1OJ4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kOJJ4zboHpfU6cohalCw3k8O71s07RMwE6nfxsxtADc3IScwszlhPGH7aTz8mVAFlew64GVxCtWBNFEBSDsUji9AF+PtNbxHOdADKLndkHO8F4YfmYJTSEjfN9Jqez6SSyKaz8DW6KfAQSpOLr3Lv9/MOjGCq8K8pX0LLDiLQ8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8MiXJQE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780534666; c=relaxed/simple;
+	bh=+IACfS+2wlKbLAvsypmZKqodktZb6F8Jt7rKaspfFqo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fOEKOM4bnNp4RdATaHhse9iWfqb3xuIq4qMPijmPPVf16SLKJFKsHEGMJuFuQBfo49aFqo5PczApVH7O4F8cu2geQdauP7YGv6kHa23moUZYCAbzYVTxU4CvPBKxr4Q45VeOZl65Qe/6Qcc92T4zFPlSeH9Wc2XvHsV9YduDx3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pME6Tp2+; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8MiXJQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569201F00898;
-	Wed,  3 Jun 2026 23:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780531172;
-	bh=hNmEag5vVdFozAfrxfGAFincI7TYd3UTJco8nsH52uU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Z8MiXJQEioO/lQ/EWFlqlKH4bBs/uaBbq78yr20SGjrlXkdQSG4EsvvI/COj8ZQRL
-	 VgO0wTxvNvWuFfnBlMiSwJ/zw+WRayT0t/dXGFuTmV7ogi093gi7JH38e90u5rYiQF
-	 VCbq2+JwKepkZ+Q79iDRntAI8ZERuC8Y1n06+vA4zRGXBqvqpalluuc39GvsIC9wj/
-	 Nn3ckAM6wR0bVLX+twnMnqJq9z2+rtZodwC2MPeBf+w8qME5LyJkq+qOZzx5hdcD6O
-	 Exx8X5TZExvGLcBVljHndfEtkTZ+yQOCP1tMjqqiIHde1TlwFUPVzaBip5hiG/krxt
-	 q7hrBweCTmSEw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 15/15] gve: add link status/speed ctrl ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Harshitha Ramamurthy" <hramamurthy@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260602235900.3050782-16-hramamurthy@google.com>
-References: <20260602235900.3050782-16-hramamurthy@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 03 Jun 2026 23:59:31 +0000
-Message-Id: <20260603235932.569201F00898@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pME6Tp2+"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=jHQsWoxkEzqYBmh62zZoGR3YsF3PNzTpHx8e8nlHBng=;
+	b=pME6Tp2+zzsQfLv64mYAUNWiUIFnlS5lNjoAMyqAe+jgXF+D+PgCdKt3NzcpHbCP8VI5pUhTN
+	JHeGQtPDB7g5WkebH7kQtZ2mFf8VhoGsRmENK2GSgiLTMOn+p82awFOIMuyDqmllWoJav8DM5C+
+	Jp74wjiLrLw1QvUaWZNK7yk=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gW5Yx69D5znTWD;
+	Thu,  4 Jun 2026 08:49:41 +0800 (CST)
+Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9733940572;
+	Thu,  4 Jun 2026 08:57:34 +0800 (CST)
+Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
+ (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 4 Jun
+ 2026 08:57:33 +0800
+From: Lin Ma <malin89@huawei.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, <bpf@vger.kernel.org>
+CC: Andrii Nakryiko <andrii@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>, Shuah Khan
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Amery Hung <ameryhung@gmail.com>, Lin Ma
+	<malin89@huawei.com>, Rongzhen Cui <cuirongzhen@huawei.com>, Jingguo Tan
+	<tanjingguo@huawei.com>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
+Subject: [PATCH v3 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
+Date: Thu, 4 Jun 2026 08:57:28 +0800
+Message-ID: <20260604005729.1992632-1-malin89@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemr200017.china.huawei.com (7.202.195.7)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+The recent KCTF-reported cgroup local storage issue assigned
+CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+in cgroup local storage").
 
-New issues:
-- [Medium] Data race and double-read TOCTOU on unprotected `priv->link_up` =
-boolean field.
+However, the previous fixes are still incomplete. The current prog-array
+compatibility check treats a program with no cgroup storage as
+compatible with any stored storage cookie. This allows a storage-less
+program to bridge a tail-call chain between an entry program and a
+storage-using callee even though runtime cgroup local storage still
+follows the caller context.
 
-Pre-existing issues:
-- [Critical] DMA memory corruption risk in AdminQ command timeout handling.
-- [Critical] Use-After-Free of `priv->adminq` when an ethtool command is is=
-sued after a failed device reset.
-- [High] The driver fails to cancel the `service_task` workqueue during dev=
-ice suspend, allowing it to run while the device is in D3hot, triggering AE=
-R crashes.
---
+Require exact per-type storage_cookie equality when checking prog-array
+compatibility. This blocks zero-storage bridge programs from joining a
+prog-array owned by a storage-using program and closes the residual
+A -> B(no storage) -> C(storage) path.
 
-commit ef66cc6af8d7947d84b4c6d611c745d03fb318bf
-Author: Joshua Washington <joshwash@google.com>
+This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+requiring storage use to match consistently across prog-array users.
 
-gve: add link status/speed ctrl ops
+Cc: stable@vger.kernel.org
+Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
+Tested-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Lin Ma <malin89@huawei.com>
+Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+---
+v1: https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/
+v1 -> v2:
+ - refine the commit message and mention the relation to Amery Hung's
+   NULL-storage tail-call fix
+ - add patch 2/2 selftests for tail-call cgroup storage prog-array
+   checks
+v2: https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
+v2 -> v3:
+ - use abad3d0bad72 as the Fixes tag
+---
+ kernel/bpf/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Refactor link status check to use a control plane op. Introduce
-new op for retrieving the link status in AQ mode. This op reads
-the link status from the device status register and stores the
-value in priv.
-
-Also add an op for retrieving link speed in AQ mode which calls into
-gve_adminq_report_link_speed.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/e=
-thernet/google/gve/gve_adminq.c
-> index 799381d24c71f..b33633555b710 100644
-> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
-> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-> @@ -1872,3 +1872,12 @@ int gve_adminq_create_queues(struct gve_priv *priv)
-> =20
->  	return err;
->  }
-> +
-> +int gve_adminq_report_link_status(struct gve_priv *priv)
-> +{
-> +	u32 status;
-> +
-> +	status =3D ioread32be(&priv->reg_bar0->device_status);
-> +	priv->link_up =3D !!(GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
-
-[Severity: Medium]
-Can this cause a data race? This function directly writes to priv->link_up
-without locks, while it is read concurrently in other contexts.
-
-> +	return 0;
-> +}
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/=
-ethernet/google/gve/gve_ethtool.c
-> index 54b623b678ce3..aaf5b8b1671b5 100644
-> --- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-> +++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-> @@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device=
- *netdev,
->  	int err =3D 0;
-> =20
->  	if (priv->link_speed =3D=3D 0)
-> -		err =3D gve_adminq_report_link_speed(priv);
-> +		err =3D priv->ctrl_ops->report_link_speed(priv);
-
-[Severity: Critical]
-This is a pre-existing issue, but I have a question about the timeout handl=
-ing
-inside gve_adminq_report_link_speed().=20
-
-If gve_adminq_execute_cmd() returns a timeout error, the function drops the
-error and immediately frees the DMA memory via dma_free_coherent(). However,
-since a host CPU timeout does not guarantee the NIC has aborted the DMA
-operation, could the hardware eventually execute a DMA write to the provided
-bus address after the memory has been reallocated, causing memory corruptio=
-n?
-
-[Severity: Critical]
-This is another pre-existing issue, but could this ethtool call trigger a
-use-after-free if a previous device reset failed?
-
-If a device reset fails, gve_adminq_free() destroys the adminq_pool and fre=
-es
-the DMA memory backing priv->adminq. If user-space subsequently issues an
-ethtool command like gve_get_link_ksettings, the driver invokes
-report_link_speed() and eventually gve_adminq_issue_cmd().=20
-
-If the device's tail counter was reset to 0, and the host's head counter is
-still 0, could gve_adminq_issue_cmd() write the command payload into the
-now-dangling priv->adminq buffer?
-
-> =20
->  	cmd->base.speed =3D priv->link_speed;
-> =20
->  	cmd->base.duplex =3D DUPLEX_FULL;
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index a103a6304b495..74778ee4d4d0e 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1475,15 +1475,15 @@ static int gve_close(struct net_device *dev)
->  	return err;
->  }
-> =20
-> -static void gve_handle_link_status(struct gve_priv *priv, bool link_stat=
-us)
-> +static void gve_handle_link_status(struct gve_priv *priv)
->  {
->  	if (!gve_get_napi_enabled(priv))
->  		return;
-> =20
-> -	if (link_status =3D=3D netif_carrier_ok(priv->dev))
-> +	if (priv->link_up =3D=3D netif_carrier_ok(priv->dev))
->  		return;
-> =20
-> -	if (link_status) {
-> +	if (priv->link_up) {
-
-[Severity: Medium]
-Is there a time-of-check to time-of-use race here?=20
-
-Because priv->link_up is read twice in quick succession without protection,=
-=20
-and could be modified concurrently by gve_adminq_report_link_status() runni=
-ng
-in the lockless service_task workqueue, can the value change between the two
-checks?
-
-Would using READ_ONCE() and saving the result to a local variable prevent
-unintended compiler optimizations and state changes?
-
->  		netdev_info(priv->dev, "Device link is up.\n");
->  		netif_carrier_on(priv->dev);
->  	} else {
-
-[ ... ]
-
-> @@ -2299,12 +2298,14 @@ static void gve_service_task(struct work_struct *=
-work)
->  {
->  	struct gve_priv *priv =3D container_of(work, struct gve_priv,
->  					     service_task);
-> +	const struct gve_ctrl_ops *ops =3D priv->ctrl_ops;
->  	u32 status =3D ioread32be(&priv->reg_bar0->device_status);
-> =20
->  	gve_handle_status(priv, status);
-> =20
->  	gve_handle_reset(priv);
-> -	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & statu=
-s);
-> +	ops->report_link_status(priv);
-> +	gve_handle_link_status(priv);
-
-[Severity: High]
-This is a pre-existing issue, but is the service_task safely stopped during
-system suspend?
-
-Looking at gve_suspend(), the function does not call cancel_work_sync() for
-the service_task. Because the priv->gve_wq workqueue is allocated without t=
-he
-WQ_FREEZABLE flag, it will not be frozen by the PM core.=20
-
-If this service_task runs while the device is in D3hot, could ioread32be()
-return all Fs (0xFFFFFFFF), causing the GVE_DEVICE_STATUS_RESET_MASK check =
-to
-pass? If so, would this trigger gve_reset() to write to MMIO registers of a
-suspended PCIe device, resulting in a PCIe Master Abort?
-
->  }
-> =20
->  static void gve_set_netdev_xdp_features(struct gve_priv *priv)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260602235900.3050=
-782-1-hramamurthy@google.com?part=3D15
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6aa2a8b24030..f0b61b10f30e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+ 				break;
+ 			cookie = aux->cgroup_storage[i] ?
+ 				 aux->cgroup_storage[i]->cookie : 0;
+-			ret = map->owner->storage_cookie[i] == cookie ||
+-			      !cookie;
++			/*
++			 * Tail calls keep using the caller cgroup storage
++			 * context, so prog-array members must use the same
++			 * storage cookie.
++			 */
++			ret = map->owner->storage_cookie[i] == cookie;
+ 		}
+ 		if (ret &&
+ 		    map->owner->attach_func_proto != aux->attach_func_proto) {
+-- 
+2.53.0
