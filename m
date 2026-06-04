@@ -1,109 +1,90 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968BC18BBAE
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 01:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A29D284B3B;
+	Thu,  4 Jun 2026 01:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780537787; cv=none; b=Ju0SlLgbqyklIcO0cYphSlm0gsoiDKdaV+ih2xVaDzB56Xh75BJJDryu/nf2/tKW0kFNVfFunPIKnaTHqal74ZsCykZqNn3523Xgb3cOyvLbsCZpCXgl4lfMzfRRp6n0Pog1s/H13ixNXH4X8I8gI07WM7htWwezf9U8mgLHt0c=
+	t=1780537817; cv=none; b=OsgGRDVV0968B1mjDz/75SFN/kUYorSIu/vhoMenBYgsE6kj5Z0MZ7TuidJEkovVMWf6SdfsnVuYBxW/xA4QgokRQz1jBFazfxqfXkAYVxXuQI+QuMh4pMoyMi8rSlrKfNeYANfuVnnsEgktbU/qKZSonL4dq5uq896KX/sz45U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780537787; c=relaxed/simple;
-	bh=OX4o3VwOCHAm8jFp1kQNUQIxFVl9dHNR7Zh2V2xqjOw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XR11T/zVbBxHjsTmIM8AVCWOoVB4DPDhkV+/5hs53z6apjj4n0RsFNtibkb9JvgqXsaQ0DgAVW634xl6SVtGYaqWflf2Qd5ghz+LrhynsEFii2GbpGUaLWmyHLtxpNlyPou+kXxdWvV5Iq7c47tvsY//Vk2q7BhhDtmpbxDLO8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Rwvn2McC; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780537817; c=relaxed/simple;
+	bh=fSHhPc1nkyayHXR4UTLV7h8T6og+5aZrAoJqvYS6yOM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=DCxMG5QrIQdFrWk0aEd3bt+KB7e/H0HVCk7pSLOQkuPOoYfh2s5cbaKIPy8rk0qKmznwzMlRfanZcHEvH57r19s8z3ux7OICB2nNCiRk33FNxXqS4hK4UPSP5EnYIaWc1xevaEaJEtQUY8dPRyhKJegQzSA4tqU+d5XVxovrfR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lALy0QtK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Rwvn2McC"
-Message-ID: <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780537783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+vqCvh2xw2aQFNQtW/09BhvWce5f0QABhvDIVT33PA8=;
-	b=Rwvn2McCO4NKxMfzFd7tpQBFtHMeAedHt/yS9QQNkmviLphWwQf0FGrREacTiTRHwqeLn6
-	uqCLAF3CY403FaSZShF2ysPWqIrVVqtIGUy1I2tSJWLL1vc5mgEeJdZ/RxQ/KBXWyqNq7n
-	CufzrTzb5nYHYM6oWEbWMMHXS0qsT0M=
-Date: Thu, 4 Jun 2026 09:49:21 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lALy0QtK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB421F00893;
+	Thu,  4 Jun 2026 01:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780537815;
+	bh=KUdq6UOSJnZpfKpTZ4ZN0nFQcjLimr2c1F9d/PXD35w=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lALy0QtK2qLQhWc1C6QSpu7SLW/xGmMVhsQ8Q5zDFErmFCszuTV5lMFC8pmgxf/4D
+	 iMkmxQQiLpFuvRmlp4wf/njNMgKSXZ147yZvUPm9mus/GfGnf7VL14EexpMkT+ziT9
+	 aWBhjQ6SfU+rrjjrE+dH3n31+QtkUvK8YRbd1y7H8VvJLElMkZB59MHWvy86ms/gX7
+	 JJHx1rvcISPgGDjTDUHtY035SCvUBaMNDpXX3htILKA3Fof85bmFtjoVkAsqRgon4Z
+	 X4mFIQUfcbhgYt1o5i8pseG93lGVRu9qCp8GaiAoUoNu4YNwzTxEdHMh6jBrdCYjz7
+	 QixkmmfHrZwfw==
+Content-Type: multipart/mixed; boundary="===============9009006705736662526=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net v2] udp: clear skb->dev before running a sockmap
- verdict
-To: Sechang Lim <rhkrqnwk98@gmail.com>, willemdebruijn.kernel@gmail.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc: horms@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- jakub@cloudflare.com, aleksander.lobakin@intel.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260603162737.697215-1-rhkrqnwk98@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260603162737.697215-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org>
+In-Reply-To: <20260604005729.1992632-1-malin89@huawei.com>
+References: <20260604005729.1992632-1-malin89@huawei.com>
+Subject: Re: [PATCH v3 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
+From: bot+bpf-ci@kernel.org
+To: malin89@huawei.com,ast@kernel.org,daniel@iogearbox.net,bpf@vger.kernel.org
+Cc: andrii@kernel.org,john.fastabend@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,zhuyifei@google.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ameryhung@gmail.com,malin89@huawei.com,cuirongzhen@huawei.com,tanjingguo@huawei.com,cenxianlong@huawei.com,chenzhe@huawei.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 01:50:15 +0000 (UTC)
+
+--===============9009006705736662526==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index a656a8572bdb..d85869544dc8 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2480,8 +2480,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>  				break;
+>  			cookie = aux->cgroup_storage[i] ?
+>  				 aux->cgroup_storage[i]->cookie : 0;
+> -			ret = map->owner->storage_cookie[i] == cookie ||
+> -			      !cookie;
+> +			/*
+> +			 * Tail calls keep using the caller cgroup storage
+> +			 * context, so prog-array members must use the same
+> +			 * storage cookie.
+> +			 */
+> +			ret = map->owner->storage_cookie[i] == cookie;
+>  		}
+>  		if (ret &&
+>  		    map->owner->attach_func_proto != aux->attach_func_proto) {
+
+Related to this patch series, Leon Hwang raised a concern about test
+placement in the selftest file (tools/testing/selftests/bpf/prog_tests/
+tailcalls.c). The new cgroup storage tail-call tests should be placed at
+the tail of test_tailcalls() rather than before tailcall_failure and
+tailcall_sleepable.
+
+Reference: https://lore.kernel.org/bpf/20260603150213.68746-1-leon.hwang@linux.dev/
+
+Leon's comment from v2: "These new ones should stay at the tail of
+test_tailcalls()."
+
+Should the test ordering be adjusted in the selftest file to address this
+feedback?
 
 
-On 6/4/26 12:27 AM, Sechang Lim wrote:
-> On the UDP receive path skb->dev is repurposed as dev_scratch (the
-> truesize/state cache set by udp_set_dev_scratch()), through the
-> union { struct net_device *dev; unsigned long dev_scratch; } in sk_buff.
->
-> When a UDP socket is in a sockmap, sk_data_ready is
-> sk_psock_verdict_data_ready(), which calls udp_read_skb() -> recv_actor()
-> (sk_psock_verdict_recv) to run the attached SK_SKB verdict program in softirq.
-> If that program calls a socket-lookup helper (bpf_sk_lookup_tcp/udp,
-> bpf_skc_lookup_tcp), bpf_skc_lookup() does:
->
-> 	if (skb->dev)
-> 		caller_net = dev_net(skb->dev);
->
-> skb->dev still holds the dev_scratch value (a non-NULL integer), so dev_net()
-> dereferences it as a struct net_device * and the kernel takes a general
-> protection fault on a non-canonical address in softirq:
->
->    Oops: general protection fault, probably for non-canonical address 0x1010000800004a0
->    CPU: 1 UID: 0 PID: 1406 Comm: syz.2.19 Not tainted 7.1.0-rc6 #1 PREEMPT(full)
->    RIP: 0010:bpf_skc_lookup net/core/filter.c:7033 [inline]
->    RIP: 0010:bpf_sk_lookup+0x45/0x160 net/core/filter.c:7047
->    Call Trace:
->     <IRQ>
->     bpf_prog_4675cb904b7071f8+0x12e/0x14e
->     bpf_prog_run_pin_on_cpu+0xc6/0x1f0
->     sk_psock_verdict_recv+0x1ba/0x350
->     udp_read_skb+0x31a/0x370
->     sk_psock_verdict_data_ready+0x2e3/0x600
->     __udp_enqueue_schedule_skb+0x4c8/0x650
->     udpv6_queue_rcv_one_skb+0x3ec/0x740
->     udp6_unicast_rcv_skb+0x11d/0x140
->     ip6_protocol_deliver_rcu+0x61e/0x950
->     ip6_input_finish+0xa9/0x150
->     NF_HOOK+0x286/0x2f0
->     ip6_input+0x117/0x220
->     NF_HOOK+0x286/0x2f0
->     __netif_receive_skb+0x85/0x200
->     process_backlog+0x374/0x9a0
->     __napi_poll+0x4f/0x1c0
->     net_rx_action+0x3b0/0x770
->     handle_softirqs+0x15a/0x460
->     do_softirq+0x57/0x80
->     </IRQ>
->
-> The rmem charge that dev_scratch accounted for is released by skb_recv_udp() on
-> dequeue, just above, so the scratch is dead by the time recv_actor() runs. Clear
-> skb->dev so bpf_skc_lookup() falls back to sock_net(skb->sk), which
-> skb_set_owner_sk_safe() set just above.
->
-> Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26923843925
+--===============9009006705736662526==--
