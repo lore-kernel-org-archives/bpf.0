@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F1C3A7F4B;
-	Thu,  4 Jun 2026 03:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC18033F5A7;
+	Thu,  4 Jun 2026 03:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780542686; cv=none; b=W/NpK+wMmXdfQfSCLupe6H/uBwLvLwAM/1WaJkEVLCNy77B02E+TKACRrAmlQtTQUQPK3OsyAP4MZsCnKr1vSUYXMJXdTf4BJZwxvaR0kOKwIgk+Non1TOsBaS2JvtG5+jb2i7AKDnnyPYJMr2w6f8kTiLKMyat3U0F3/ZrQVL4=
+	t=1780542693; cv=none; b=jwacXnUbOGqZdSVqNgUjnEO3bJdNer7e37ImNVTbhmLtskAaPrGk/RQLq+y+9hSxsU2JqO7t1lY5p0wl0GOx8nfVY1EwY8miH2xGZBb0jbDVdd6C89dTJmlXOQNzwo7GJy8WCZKmKe+oxBz3dCiUmSzRYhNCYgXByiq/1iirbas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780542686; c=relaxed/simple;
-	bh=cNMCsVmjpyoIcJwmYtdqjz5auyf3WVePYRZffBtEjIQ=;
+	s=arc-20240116; t=1780542693; c=relaxed/simple;
+	bh=edT8mFCaFwjVr/UxUOMemfdTwAy0NuT4bNupcI1yJMQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D7AqfOJGQqsLJuMIPAxlQx5GRXhdi749mozBUCl6WaEKhvd1WXkM89MyI82sb7S5oxxAe0+bjPtdzXdp1uozHzOvjTA8l6Gh6NtrHWlhF6LcBojLBVpSnbo6s/3ivcVNZ59pULCcWFTPMFba8lkKE8a6VsYbLgaJXXl1i7pfF+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gph3Nk3b; arc=none smtp.client-ip=220.197.31.3
+	 MIME-Version; b=CPpzTRADiRXDIngqtbKFzEPfDx2H+oybeI08ZpipfDK6cUlxCg8LdWgBE4fDqi3vJ0nRrlabIRBvRc+dDv7op/vhrHtY2Wlmbywz/zNErnbDkt/VUTfxd/24tVr95VbyfyizhG8BWbQ+OZWWmj5eYpgwovi5BOvlBsR/qcRLcng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=B5XAOV2C; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gph3Nk3b"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="B5XAOV2C"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=c5
-	0F5kPryHPBKKAhs6EjQOHtwcJTbFVsHxkqhql+Ro4=; b=gph3Nk3b5mpYJGncOQ
-	IjzD2Xo85fK3HxEI6PW8WNXllEyQ6aJnD45aEZeHSgvUwFCO6ERq9UfTd03ap5L2
-	TJIIUl9i5U5mrkxDCtSaubk4Y1EQTGv7T+/SeE8UxoLkRpkCm924vrMTQktJXjLt
-	vlra3EWqX0LKNR8AdcWGKLeGM=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6m
+	CbxHGoF+2AqkpPPiyT1MKl99g/hDY8B3EfUaDJNxc=; b=B5XAOV2CMmAYWs1rvT
+	D2vtvs7j2uwhOijk9z8JCIltzEJPOE2Zz5A6qxl9gytpIqaBnPQroz9OdUIjI6OC
+	tjFGgUWGRD+auFOOh1v5VMgnLF5/Xb3/DIuMDcHTr4AdFtXlVeY7IZnudEpSr/7/
+	GomWdgF96ySmD1CDK7ddwep24=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCnNjaz7CBq76U8BQ--.63531S3;
-	Thu, 04 Jun 2026 11:10:47 +0800 (CST)
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCnNjaz7CBq76U8BQ--.63531S5;
+	Thu, 04 Jun 2026 11:10:53 +0800 (CST)
 From: chenyuan_fl@163.com
 To: chenyuan_fl@163.com
 Cc: andrii@kernel.org,
@@ -35,9 +35,9 @@ Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	linux-kselftest@vger.kernel.org,
 	shuah@kernel.org
-Subject: [PATCH bpf-next v2 1/3] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
-Date: Thu,  4 Jun 2026 11:10:31 +0800
-Message-ID: <20260604031033.806727-2-chenyuan_fl@163.com>
+Subject: [PATCH bpf-next v2 3/3] libbpf: fix feature probe failures for implicit BPF tokens
+Date: Thu,  4 Jun 2026 11:10:33 +0800
+Message-ID: <20260604031033.806727-4-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260604031033.806727-1-chenyuan_fl@163.com>
 References: <20260529031604.888137-1-chenyuan_fl@163.com>
@@ -49,60 +49,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnNjaz7CBq76U8BQ--.63531S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7trWUJw1xWw4rtF13trWUJwb_yoW8ZFWxpF
-	n0yF92kFWUJw4rurWkJa10ka1rKa1Ig3ZxGFsxXrWavw4qqF4ktr1ayFsIyF1Yq395K3W3
-	Z3y3u3yDZr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEw0eDUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAhcLyGog7LdkXAAA3-
+X-CM-TRANSID:_____wCnNjaz7CBq76U8BQ--.63531S5
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZr15Xr48JF4DCrWrtFy5Arb_yoW5WrW3pa
+	93ur1YyFn5Xwn3CwsxJan2k3yFkFyfJa15Jry7C343Aws8Gry3AFWftFsYqrnrKr9YgFya
+	grs8tFs8ursrZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR-VyxUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5h0Nymog7L3F4wAA3B
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
-TRACEPOINT programs to verify the BPF environment works.  When a
-BPF token is in use with restricted program type permissions, these
-probe loads may fail because the token does not allow the specific
-program types, even though BPF loading is perfectly functional.
+probe_fd() converts BPF syscall failures to return value 0,
+which feat_supported() interprets as 'feature absent' (ret==0),
+even when the probe failed due to a BPF token's restricted
+program/map type mask.
 
-Fix by skipping the probe when a token FD is present: BPF token
-creation itself proves the kernel has a working BPF subsystem.
-Real BPF issues will be caught during actual program and map loading.
+In a user namespace with an implicit BPF token, the sequence is:
+  1. bpf_object_open() -> no feat_cache yet -> global cache used
+  2. bpf_object_prepare_token() -> creates token, sets feat_cache->token_fd
+  3. bpf_object__create_maps() -> feat_supported() runs probe
+     -> bpf_prog_load(SOCKET_FILTER) with token -> -EPERM
+     -> probe_fd(-EPERM) -> returns 0
+     -> feat_supported sees ret==0 -> FEAT_MISSING
+     -> internal maps (global data) skipped -> verifier EINVAL
+
+Fix by making probe_fd() return the negative error on failure
+instead of 0, so feat_supported() enters the ret<0 path.
+
+Additionally add a token_fd rescue in feat_supported() for the
+ret<0 case: when a BPF token is present, a failed feature probe
+is treated as 'feature supported' because token creation itself
+proves the kernel BPF subsystem works.  Real BPF issues will
+be caught during actual program/map loading.
 
 Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
- tools/lib/bpf/libbpf.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ tools/lib/bpf/features.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ab2071fdd3e8..7e21c5eb9533 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
- 		BPF_EXIT_INSN(),
- 	};
- 	int ret, insn_cnt = ARRAY_SIZE(insns);
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.token_fd = obj->token_fd,
--		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
--	);
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index b7e388f99d0b..f934452e52f0 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -16,7 +16,14 @@ int probe_fd(int fd)
+ {
+ 	if (fd >= 0)
+ 		close(fd);
+-	return fd >= 0;
++	/* Return 1 on success, negative error on failure, so
++	 * feat_supported() can distinguish probe errors from
++	 * genuine feature absence.  When a BPF token is present,
++	 * a negative return triggers the rescue path that marks
++	 * the feature as SUPPORTED (token creation itself proves
++	 * the kernel BPF subsystem works).
++	 */
++	return fd >= 0 ? 1 : fd;
+ }
  
--	if (obj->gen_loader)
-+	if (obj->gen_loader || obj->token_fd)
- 		return 0;
+ static int probe_kern_prog_name(int token_fd)
+@@ -725,9 +732,21 @@ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_
+ 		} else if (ret == 0) {
+ 			WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+ 		} else {
++			/*
++			 * A BPF token may restrict which program/map types
++			 * are permitted, causing the probe to fail even
++			 * though the kernel supports the feature.  When a
++			 * token is present the probe is best-effort: BPF
++			 * token creation itself proves the kernel has a
++			 * working BPF subsystem.  Real BPF issues will be
++			 * caught during actual program/map loading.
++			 */
++			if (cache->token_fd)
++				WRITE_ONCE(cache->res[feat_id], FEAT_SUPPORTED);
++			else
++				WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+ 			pr_warn("Detection of kernel %s support failed: %s\n",
+ 				feat->desc, errstr(ret));
+-			WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+ 		}
+ 	}
  
- 	ret = bump_rlimit_memlock();
-@@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
- 			errstr(ret));
- 
- 	/* make sure basic loading works */
--	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
-+	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
- 	if (ret < 0)
--		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
-+		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
- 	if (ret < 0) {
- 		ret = errno;
- 		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
 -- 
 2.54.0
 
