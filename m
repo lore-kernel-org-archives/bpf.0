@@ -1,83 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE5B238D54;
-	Thu,  4 Jun 2026 01:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968BC18BBAE
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 01:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780535660; cv=none; b=PDf49r5HojbgNGvdnvt+w77/BNup5YU6dd8GWazesm8urSmNDqH5c5Ot6NabwYIwXX46rdojnDCTkTQiXLqhzQvigp6PwvPJJ+EF1cHwiJwujhZfYvhVq+pONdwK6er+e+euT1U7vspwyaopJtF6SzgIlsGM1kG9be5jBY2X3lE=
+	t=1780537787; cv=none; b=Ju0SlLgbqyklIcO0cYphSlm0gsoiDKdaV+ih2xVaDzB56Xh75BJJDryu/nf2/tKW0kFNVfFunPIKnaTHqal74ZsCykZqNn3523Xgb3cOyvLbsCZpCXgl4lfMzfRRp6n0Pog1s/H13ixNXH4X8I8gI07WM7htWwezf9U8mgLHt0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780535660; c=relaxed/simple;
-	bh=AvQcOYV3R/7eO2B1DK5jCcSAQMNVBo/2CdInG88GKXg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IuIGLjDP8etCik/pihyefICsyCNMIS01xCZr/GymCN+0q7P0GpF/ejlr8ps2SYgNMkXwGkMO8O58Gpsbd5+KhXOr88MWenuCVINTreQsObaqkqvfoeLHCgVMg1g9V3J9+spmZDQ2BqOWHffFSxQe4u4sCSINWC7GimVQVDTPF9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JC+aiJkS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780537787; c=relaxed/simple;
+	bh=OX4o3VwOCHAm8jFp1kQNUQIxFVl9dHNR7Zh2V2xqjOw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XR11T/zVbBxHjsTmIM8AVCWOoVB4DPDhkV+/5hs53z6apjj4n0RsFNtibkb9JvgqXsaQ0DgAVW634xl6SVtGYaqWflf2Qd5ghz+LrhynsEFii2GbpGUaLWmyHLtxpNlyPou+kXxdWvV5Iq7c47tvsY//Vk2q7BhhDtmpbxDLO8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Rwvn2McC; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JC+aiJkS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3E91F00893;
-	Thu,  4 Jun 2026 01:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780535659;
-	bh=jiIcQ71vfVf+xwbx2q42NM3vgT8HX9pPFNgaMCQ8yjE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JC+aiJkSm4WknpDBIG88SMnq0gxDGi+frmllGC7q77KB1eIz6dmV4Wz8kESq37dAl
-	 nUpzuaImCJmZ1jztjpzDrWEjzMY2NQVLPYLTYFD7wLNzPGQuTPeILxXsGgFVyvXd0O
-	 y2FEom+v9Qr5Linp8F0uJBSiRB8SlFQS2JZm4ZRqzojGLZwzk/xxhwZ44cSXuNsNhV
-	 AV6yyXeFTB5K1DShfvZCC9gApjBN3JN0dgdA12EsgLZrdv/NnzEV/Q3HhGhU1Ea+RZ
-	 O50MngBYyCS97+wdPLTvlT1nQwSUzex/rZ275jjpsQyEijB7UgH/e5/n7//iUx3XHh
-	 0J8cTKtOyiArQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A5E39308DD;
-	Thu,  4 Jun 2026 01:14:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Rwvn2McC"
+Message-ID: <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780537783;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+vqCvh2xw2aQFNQtW/09BhvWce5f0QABhvDIVT33PA8=;
+	b=Rwvn2McCO4NKxMfzFd7tpQBFtHMeAedHt/yS9QQNkmviLphWwQf0FGrREacTiTRHwqeLn6
+	uqCLAF3CY403FaSZShF2ysPWqIrVVqtIGUy1I2tSJWLL1vc5mgEeJdZ/RxQ/KBXWyqNq7n
+	CufzrTzb5nYHYM6oWEbWMMHXS0qsT0M=
+Date: Thu, 4 Jun 2026 09:49:21 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v5] xsk: cache csum_start/csum_offset to fix TOCTOU in
- xsk_skb_metadata()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178053566039.2042071.1462371315566294486.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Jun 2026 01:14:20 +0000
-References: <20260530042630.80626-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20260530042630.80626-1-kerneljasonxing@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, horms@kernel.org, andrew+netdev@lunn.ch,
- bpf@vger.kernel.org, netdev@vger.kernel.org, kernelxing@tencent.com
+Subject: Re: [PATCH net v2] udp: clear skb->dev before running a sockmap
+ verdict
+To: Sechang Lim <rhkrqnwk98@gmail.com>, willemdebruijn.kernel@gmail.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc: horms@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ jakub@cloudflare.com, aleksander.lobakin@intel.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260603162737.697215-1-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260603162737.697215-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+On 6/4/26 12:27 AM, Sechang Lim wrote:
+> On the UDP receive path skb->dev is repurposed as dev_scratch (the
+> truesize/state cache set by udp_set_dev_scratch()), through the
+> union { struct net_device *dev; unsigned long dev_scratch; } in sk_buff.
+>
+> When a UDP socket is in a sockmap, sk_data_ready is
+> sk_psock_verdict_data_ready(), which calls udp_read_skb() -> recv_actor()
+> (sk_psock_verdict_recv) to run the attached SK_SKB verdict program in softirq.
+> If that program calls a socket-lookup helper (bpf_sk_lookup_tcp/udp,
+> bpf_skc_lookup_tcp), bpf_skc_lookup() does:
+>
+> 	if (skb->dev)
+> 		caller_net = dev_net(skb->dev);
+>
+> skb->dev still holds the dev_scratch value (a non-NULL integer), so dev_net()
+> dereferences it as a struct net_device * and the kernel takes a general
+> protection fault on a non-canonical address in softirq:
+>
+>    Oops: general protection fault, probably for non-canonical address 0x1010000800004a0
+>    CPU: 1 UID: 0 PID: 1406 Comm: syz.2.19 Not tainted 7.1.0-rc6 #1 PREEMPT(full)
+>    RIP: 0010:bpf_skc_lookup net/core/filter.c:7033 [inline]
+>    RIP: 0010:bpf_sk_lookup+0x45/0x160 net/core/filter.c:7047
+>    Call Trace:
+>     <IRQ>
+>     bpf_prog_4675cb904b7071f8+0x12e/0x14e
+>     bpf_prog_run_pin_on_cpu+0xc6/0x1f0
+>     sk_psock_verdict_recv+0x1ba/0x350
+>     udp_read_skb+0x31a/0x370
+>     sk_psock_verdict_data_ready+0x2e3/0x600
+>     __udp_enqueue_schedule_skb+0x4c8/0x650
+>     udpv6_queue_rcv_one_skb+0x3ec/0x740
+>     udp6_unicast_rcv_skb+0x11d/0x140
+>     ip6_protocol_deliver_rcu+0x61e/0x950
+>     ip6_input_finish+0xa9/0x150
+>     NF_HOOK+0x286/0x2f0
+>     ip6_input+0x117/0x220
+>     NF_HOOK+0x286/0x2f0
+>     __netif_receive_skb+0x85/0x200
+>     process_backlog+0x374/0x9a0
+>     __napi_poll+0x4f/0x1c0
+>     net_rx_action+0x3b0/0x770
+>     handle_softirqs+0x15a/0x460
+>     do_softirq+0x57/0x80
+>     </IRQ>
+>
+> The rmem charge that dev_scratch accounted for is released by skb_recv_udp() on
+> dequeue, just above, so the scratch is dead by the time recv_actor() runs. Clear
+> skb->dev so bpf_skc_lookup() falls back to sock_net(skb->sk), which
+> skb_set_owner_sk_safe() set just above.
+>
+> Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-On Sat, 30 May 2026 12:26:30 +0800 you wrote:
-> From: Jason Xing <kernelxing@tencent.com>
-> 
-> The TX metadata area resides in the UMEM buffer which is memory-mapped
-> and concurrently writable by userspace. In xsk_skb_metadata(),
-> csum_start and csum_offset are read from shared memory for bounds
-> validation, then read again for skb assignment. A malicious userspace
-> application can race to overwrite these values between the two reads,
-> bypassing the bounds check and causing out-of-bounds memory access
-> during checksum computation in the transmit path.
-> 
-> [...]
 
-Here is the summary with links:
-  - [net,v5] xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
-    https://git.kernel.org/netdev/net/c/22ba97ea9cc1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
