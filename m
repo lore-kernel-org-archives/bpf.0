@@ -1,152 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D35E3C09F8
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 06:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D963CBE80
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 06:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780554417; cv=none; b=i3whuNwIegn02GeikkssJ8MyQ5avfi4qJAQxEp8peWRw10W7Gk2ucrCL92gcR7tyluvcR0B6i0v0hwyDjqBHkT95wpjrPL8UZGi8LPGPTZQIL0jGzl4SM1pcuWUKdGyI+PQjcr0I7sZiStpRso3oxgGPrvjNfznqKk2rcD59ly4=
+	t=1780555498; cv=none; b=jK57rOv4+4kTAHrcaISQsOpi5f6UuUTNeUjHLF0zwzCcVVNPF/iZ90yFb1QFl3brzUSG8MGn4+UK7FuwfdHDSySLoO+5/y0iLI6FMgph8UOFQbCHnX7Mu34oNnr1/z/gyJKp8wv1r7Qgz1WxtTWDOZWvX/klswMPSWgeYKGy9dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780554417; c=relaxed/simple;
-	bh=TlvkZXdGbj7XL+TvZrTGldEikuGASraGH9+3eY7n/qI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kc4EaBvSK8EgvAvFY+5hsRpTdAyIr6Uii6wXpluw09DJNZqsP7rPy+u60+D3BcFnxVQhL8XteYduZ/PErg2g6BN1wB4QcSe6fTRILqEo5VdN0uncw4Mt344/8xbeptl99dDJ8bXMQX9FUdxgIE1sPXpRQeazO2Y9tSFEapxZxRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AH5OM0M0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780555498; c=relaxed/simple;
+	bh=eg1wO0x1ENq/IsXBJXt2gj46nNJYx81jKKCliiCgZLU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=n3OWZsk8OdbauC158SZj7DVgJwe3izbNyNZj58NqTrzgYnv7K8flwqMeNLdYQ8wx3wZ8WawX/SgOC3EqWhSJ2qWFwKOfhI7wEU5QxuYSJSDMniQL1/VZCU//U4Es8E2IbHs/ILvuQIVvz6H1kTWZJfbUkJepCkUmUGgSiVr47V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSINESaE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AH5OM0M0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E82F91F00898
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 06:26:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSINESaE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD531F00893;
+	Thu,  4 Jun 2026 06:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780554415;
-	bh=IVIfCPYFLkPnJSSr4b1JAXayttg+yDdWuao24uaOeic=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=AH5OM0M0+BjDmmU3rGE0aCH8BDZing8zkjlwovG5kevTth448ql0LBiY94nv5Tx/6
-	 vH2pAAZK6tzEgn59bgLJZoZprOVbXvEaBjMBE1sRfHNF2ZM9GWFjgXqG5TXPvm0JB7
-	 h5xklW3wn30YYk4/FRJ3Sf+FRZDMz1CSbGL3L+Br7fF7s38jiB/b/Bcd/CI9gMmSfH
-	 mQwZXHPCB4vqBC34TlhjPlKCWvuAXG+oHWoICF7SQ+1vAkc9LzIQX2c0cxwfNRnIoA
-	 C5DwhMVJkl0t5PeF1n1UgBM9z1zB4xGyiJlHFFIKB70gcRf9VChCBRirx+ce35YAYp
-	 76RZO6rGd02fQ==
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-bed4f2f0898so40788966b.3
-        for <bpf@vger.kernel.org>; Wed, 03 Jun 2026 23:26:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+qy5HTuDiEM3clMJ9EUvM4tNkce6Sdm9v4erJlecTWyxl6uDgDcf6cgED76WZZZ89GscA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyvfc2vZ3FncrAydwWexma3kKtUfFaRehjS1150rkiY5I6/HJ6C
-	sSQhs2iswy+C1xZnJrV2GLRzh3DNuDfX/zCUAF3CedE0dd/7Z3/W0uikE02A0toZzh3nuwcF3cv
-	9TzOf0EcMi/BGll7CSm6n9NLdWyztMj0=
-X-Received: by 2002:a17:907:2716:b0:bcb:8b03:9fc2 with SMTP id
- a640c23a62f3a-bf0b16d642bmr255594566b.15.1780554414604; Wed, 03 Jun 2026
- 23:26:54 -0700 (PDT)
+	s=k20260515; t=1780555495;
+	bh=eg1wO0x1ENq/IsXBJXt2gj46nNJYx81jKKCliiCgZLU=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=kSINESaEKV7JW5BpKKWTTJLN2/ROfMq1dt1OAHj8IfNMYKL2MLNJ66QCsHWkO0lXJ
+	 YtTchJHjUYP7utCwVMrFTJBZVlq6ZbMUl1Ly4Nefp7TxoWRxpx6S6U/pzwIHhjuKuw
+	 shrkgCZq3tVOokqWtM5bHelh8wbCpQJGuqcMDHt6AEg9xW2oveFYQfEI6aTsr6fXPg
+	 BcBWRyKlRe9n7nlgztHjCUBViF3rUstPFCK439VKoMRRsnCegTIY9AVtuQsJbdtbe1
+	 cjsnyWWxuLhZSjgBpgHpI59eO2mKuM6ykjZzApUhEpTILD+TPXQc/2du324kXUR92r
+	 TM2Hdamrbccug==
+Message-ID: <045f9e77-7264-48b9-81e3-c4995d84d026@kernel.org>
+Date: Thu, 4 Jun 2026 15:44:34 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260428072021.7289-1-yangtiezhu@loongson.cn> <20260428072021.7289-2-yangtiezhu@loongson.cn>
- <CAAhV-H5tLpXtnMJOx=b5MCDY71jMNkQ5pv1YhgCf72FV=ewcxg@mail.gmail.com>
- <0def4127-3850-1114-d576-42748456f400@loongson.cn> <CAAhV-H51mJpbYjQJYo_a_8mWuG9CSbvbvQNHrpV1G3jmp0Vkaw@mail.gmail.com>
- <9fe9a1f4-bdd0-d6b4-6b76-269e4ffdbc7e@loongson.cn>
-In-Reply-To: <9fe9a1f4-bdd0-d6b4-6b76-269e4ffdbc7e@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 4 Jun 2026 14:26:40 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H76bD-bsw_btJuxw7sciQn8o5AwXEuQ7+rT-jBX6dHZjA@mail.gmail.com>
-X-Gm-Features: AVHnY4Kz8XPnCkuAy8bb6qeD8yFUrGs9RADllEaDvBRnS_sBUnnSAXn54Mx2Tzc
-Message-ID: <CAAhV-H76bD-bsw_btJuxw7sciQn8o5AwXEuQ7+rT-jBX6dHZjA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 bpf-next 3/4] bpf,slab: Add slub-backed allocator for
+ bpf_arena
+From: Harry Yoo <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
+ eddyz87@gmail.com, vbabka@suse.cz, harry.yoo@oracle.com, david@kernel.org,
+ tj@kernel.org, roman.gushchin@linux.dev, peterz@infradead.org,
+ linux-mm@kvack.org, Hao Li <hao.li@linux.dev>
+References: <20260530011345.99342-1-alexei.starovoitov@gmail.com>
+ <20260530011345.99342-4-alexei.starovoitov@gmail.com>
+ <ca1bb6bf-f25e-44ba-87c5-e23e4939dbd5@kernel.org>
+ <acc86e41-21d7-4b1b-b5de-fdc02064a959@kernel.org>
+ <264ec41c-dd1f-4957-9032-943fe719dffe@kernel.org>
+Content-Language: en-US
+In-Reply-To: <264ec41c-dd1f-4957-9032-943fe719dffe@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0VNFm27eFE0tres1yP8QrSXf"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0VNFm27eFE0tres1yP8QrSXf
+Content-Type: multipart/mixed; boundary="------------JelRG0POZLUZAiAcIUC1l3PH";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
+ eddyz87@gmail.com, vbabka@suse.cz, harry.yoo@oracle.com, david@kernel.org,
+ tj@kernel.org, roman.gushchin@linux.dev, peterz@infradead.org,
+ linux-mm@kvack.org, Hao Li <hao.li@linux.dev>
+Message-ID: <045f9e77-7264-48b9-81e3-c4995d84d026@kernel.org>
+Subject: Re: [PATCH v2 bpf-next 3/4] bpf,slab: Add slub-backed allocator for
+ bpf_arena
+References: <20260530011345.99342-1-alexei.starovoitov@gmail.com>
+ <20260530011345.99342-4-alexei.starovoitov@gmail.com>
+ <ca1bb6bf-f25e-44ba-87c5-e23e4939dbd5@kernel.org>
+ <acc86e41-21d7-4b1b-b5de-fdc02064a959@kernel.org>
+ <264ec41c-dd1f-4957-9032-943fe719dffe@kernel.org>
+In-Reply-To: <264ec41c-dd1f-4957-9032-943fe719dffe@kernel.org>
+
+--------------JelRG0POZLUZAiAcIUC1l3PH
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 4, 2026 at 10:26=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> On 2026/6/3 =E4=B8=8B=E5=8D=8810:24, Huacai Chen wrote:
-> > On Wed, Jun 3, 2026 at 10:30=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongso=
-n.cn> wrote:
->
-> ...
->
-> >> For static structures like init_task, any uninitialized fields are
-> >> automatically zeroed out by the compiler according to the C standard.
-> >> Stripping away dozens of lines of ".field =3D 0" complies with modern
-> >> Linux kernel code-cleaning standards. It makes the macro much shorter
-> >> and highlights the only field that actually requires a special
-> >> runtime value (the kernel stack top in .reg03).
-> > I know it is the same for compilers, I mean the current way gives more
-> > information for humans.
-> >
-> > In addition, without reg02, this piece completely has no relationship
-> > with CONFIG_THREAD_INFO_IN_TASK, so please drop it.
->
-> Do you mean keep the original INIT_THREAD as is? No any changes for it?
-> ".reg03 =3D (unsigned long)&init_stack + sizeof(init_stack)," is not
-> necessary?
->
-> That is to say, do not modify arch/loongarch/include/asm/processor.h?
-Yes.
-
->
-> >> For reference, please see how INIT_THREAD is defined in other major
-> >> architectures, where they only initialize what is strictly necessary:
->
-> ...
->
-> > None of these commits remove current_pt_regs. Some of them has no
-> > current_pt_regs before THREAD_INFO_IN_TASK, and ARM32 still has its
-> > own implementations in arch/arm/include/asm/ptrace.h now which is
-> > nearly the same as LoongArch.
->
-> If you think it should keep current_pt_regs() as is, I am OK, will do
-> it in the next version.
->
-> That is to say, do not modify arch/loongarch/include/asm/ptrace.h?
-Yes.
-
->
-> >>>>    /* Helpers for working with the user stack pointer */
->
-> ...
->
-> > set_current() is a very good friend of get_current(). Though "$tp" is
-> > enough for get_current(), from the x86 implementation we know that it
-> > can also get from the per-cpu array (but suboptimal).
-> >
-> > Move set_current() to current.h also don't need to include
-> > <linux/percpu.h> and <linux/sched.h>, it only need to forwarding
-> > declare "task_struct" and include <asm/percpu.h>, which is exactly
-> > done in the x86 implementation.
-> >
-> > And you needn't worry about the compiling, I have tested before I comme=
-nt.
->
-> If you think this is proper, I am OK.
->
-> Replace __entry_task with current_task (x86) or cpu_tasks (uml)?
-> Replace entry_task_switch() with set_current()? or something else?
-It seems you want to avoid "current", then please use "cpu_tasks"
-rather than "current_task", but "set_current" is a friend of
-"get_current", just use it.
 
 
+On 6/1/26 11:53 PM, Harry Yoo wrote:
+> On 6/1/26 11:36 PM, Harry Yoo wrote:
+>> On 6/1/26 11:06 PM, Vlastimil Babka (SUSE) wrote:
+>>> On 5/30/26 03:13, Alexei Starovoitov wrote:
+>>> I'm far from sure the masking is enough to contain all the bad things=
+ that
+>>> can happen as a result of a corrupted freelist. Even the hardened ver=
+sion
+>>> wouldn't help much I think, if a malicious program can both read and =
+write,
+>>> it doesn't have to know the secret seed to craft valid freepointers.
+>>
+>> I hope "a malicious program" doesn't have CAP_BPF, or am I being too
+>> hopeful?
+>=20
+> AND (hopefully) distros that care about security don't allow
+> unprivileged BPF programs these days?
 
-Huacai
+I think we need some input from BPF folks about whether it's enough
+to perform best-effort, cheap sanity checks to avoid letting the kernel
+crash in most cases, or assume that a carefully written random,
+malicious BPF program might try to crash the kernel and try harder to
+prevent that.
 
-> It seems a little strange for the following code in smp.c:
->
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> index 4b74409a98a3..3afdeca7bc2a 100644
-> --- a/arch/loongarch/kernel/smp.c
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -665,7 +665,7 @@ asmlinkage void start_secondary(void)
->          set_my_cpu_offset(per_cpu_offset(cpu));
->
->          cpu_probe();
-> -       entry_task_switch(current);
-> +       set_current(current);
->          constant_clockevent_init();
->          loongson_init_secondary();
->
-> Thanks,
-> Tiezhu
->
+--=20
+Cheers,
+Harry / Hyeonggon
+
+--------------JelRG0POZLUZAiAcIUC1l3PH--
+
+--------------0VNFm27eFE0tres1yP8QrSXf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHQEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCaiEe0gAKCRCGXBN6rc5S
+1oJNAQDFXIYveJocYCTW+3lbDX/I0UmTYyRpXNoIdkCynpoz+wD3agpdnu0bi3Dm
+/Z8gZShtV431bsDrNIpS3P73bRvhAg==
+=XtUT
+-----END PGP SIGNATURE-----
+
+--------------0VNFm27eFE0tres1yP8QrSXf--
