@@ -1,170 +1,100 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4680C3ABD99
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 16:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780588819; cv=pass; b=ZfTeLrk319dAm42Pu7MtdYmCROM7gRgvPyFS07araPHZEJYs68+PWR0V3e1x+Z/lOFsdY72JMjQw9GXLBqNv6Pb9/HxLwHU+WWZS8hH9OzanI8OzMU4u6Kuy8iQFaHarx7sFJ/5NbuAofKFtVoJWoHyJvp9nVEdXHXV7mlK1n8Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780588819; c=relaxed/simple;
-	bh=bLe1Y9Of8HNmICgPAiQwdq9YGoPx+pI+2J6qjn08Evs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PU56knB+4BS9Ln4pm/gKI9EuQrIcE458KjI4wiIJhP98u+Ux6gZslXCwpqz7yJctP+N07dBLQzaDCILhmGWIhPpP0thyu8Ods2AiwcscAiQvvVCFZHG65PB322ClCdJ68KNYTI8vh8YwXBCo7O/18+6kmdUbQXgbvpyUduTk4Hk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZUdrVTEs; arc=pass smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC26847AF43;
+	Thu,  4 Jun 2026 16:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780589164; cv=none; b=gL2tSkU3mXFL4XQNto3lXEGkBoSmi3yfWt4xPnS8nLMDEStU9fHWFmsXEA39wJ0z2HGdPbx+hEqOnSbyOvgmHXMG4sypu/6onCmY6TtGuqWEnLiuhAQopuq7EPLuXURsUU3yeSEJV/jGq1M2RN8vZreqjo2SaVhT7+e6xjXr+Nk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780589164; c=relaxed/simple;
+	bh=0Gpso7Ih3X1MIAxILMhdqlbD7MJ/a0w844L5xxMVMgM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oUwBuBb3UI7rK1vjhGgsEwZT8gfVi+18W6UbcKNX6JIknn0x1hYPgdhGeqibYmfDVjHXXXrWcC7agklNc5JxmMjauZAjaF5r80NijFZ29T3Xc7hKi4oYGt/DrcHjDc+wyiA8Ji08v6ZvypCBGkua9t7zUZDRI6NgFi1C7s99S0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LG4rHRAS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZUdrVTEs"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8cceaacd07bso8589956d6.3
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 09:00:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780588817; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Egb/2WJQ78onGycKu1OUkJh+2Uch/ZQ6HQCG7KY+MWjEsBcRGZy2UrNQPgsLaSxFMX
-         ki5drrRUuMphXSkTI0NvXEvjeeQwa5YTJ1WvSECYT9kKtmiHkslJoL3Bjb3GT3uRDoce
-         QV/JGVJR2iNhCSJCiWAvCEukB5i6QGtzv3cbMJ77eVw7t3Lcy7h2sZOx8yHoETrx8ADF
-         WmgBepewdaDALYlErBgF0q1oLf4KWT4iDrjOISYkKVrqw1wdcZx8jTqydOFTkc1Y6OZg
-         Yl5pIGiReXroNNu7fRycOxucD3kcBXeIpoV0ntkNATq0ndUgas3SSeqW1HWct2Flsd6m
-         /Sow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
-        fh=75f2A28W9VcM7NHPBVVYIk+5JD7pHrzYxxfTKKi+ct0=;
-        b=a7qtnpr9t2Ed0LltmAnW3wdWChWbcQOqrRWq0Z6Z+mTPiEW7/mbPeWqLmyZjFbgVlx
-         8k47EDu4jW1jSPMzTp7xQR6PGf7Lv7F9G5J8xSEepHDb27dJ3nfJTLN0NPpI8n2gQFs9
-         FI5kCFD+F+tXNY+Q+Z98Ee5Db7AOWrJKMRghw/hfZlLIpPUe9B6Ve2sQSrpFG1Mtu/CK
-         qibYt0cOO4xKX6CmqABRITX+J6uQI4oxWrz/wX8uthKc0+Lbtp8nNAvHYEW+sQMLxkb/
-         07n7CQwzWzXn9ulU16VhS+d6rmuNki4QwkfeuCNHTnfci54tfZ7K788QPav/6KTPbFYo
-         RQIQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780588817; x=1781193617; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
-        b=ZUdrVTEsopIF2xCG1HzWlcWIBKbS9DCFIlYws9LCWlK4utQH5+8hfNN9s3QYItnklm
-         Cm7wy9BXaf/vdf27lWf9fstb8GRELagqwzQD97fnqfzIR4hrlQq1r3AB90yomVXQ7Uvr
-         xoNisG+j7buROc40OA/nlGaKpTWRe+WvkmDyL4OtsI2woLWYZ6fHiZyZjznBHRSbYRFM
-         p9VqFb3h5o5GQtIiCKPmtnST4Xkze+oSPzSXc1e7EdkdPqY3sY/0InxJkLHRHw3KMk6r
-         tC3XDXWRE4w2fEFAihknzjFqRlReVXF9TjU087p5WnvYzpfFweYKP0B0xMilxGSu3Jjd
-         uqHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780588817; x=1781193617;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cLg4KQvgwweGiSdYyzi1L3wlPRaBrfee+IZJmKuxAhM=;
-        b=sMEthUkd5sA36ArHfBt30KsNGWa6cLnL9cMAX8k4DkIoC/ScgQI1KQSdHmnLcnTauD
-         dIHaHbTDELpI9sKerIeLVWcRz38vG6lWs8B08564bCfl1fIQbSGBiStXhrO0rX68+hgT
-         2whzLZjMl2e2dsXeutpmHa6obxyexkpxxRKvmCa31I5RFoInsyfiHJab2kAidUx7ehh+
-         +BEyOYUdHygi/aMI+mJ1xLXIXwY6KLJG7OBnt2PDsxNkyh74VokNqENcX5skcTAPvQqr
-         Myhy9oLUNrdU51JbnoD4pShcjPcbRFPik8346QpUWaM+en1JoERGZ/cgFJ06oAARSDsO
-         FK+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+J39LmHkhR2wfAwAJhZw/5eyN5FInqktuGYI22d2wAThoP9j4JEPHsLtezQ4/50O8c558=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziDGwvMaTHGCjZLWcPxm+a70IdB/1cDAmP0XzQwX6oq9OMgkcy
-	HCQ4YTSwF967Y+hoBPmv26hS5HStj09orcRh0DfImCFRStGcOyQl5QIw3GTy/+wyty3DapYgLXv
-	b91HlZoROyfQUunoifoJP2DsAwdMESR+KKn3vEzmu
-X-Gm-Gg: Acq92OGn06fQX3XjsfebXmmn2zpgFDyl2uN4da893as/TgbN8/vjRnqqMum7UvUTd4W
-	/3zqZObYxa9pSv3YG/t//JPuVcKvF73hHJDWSpxFWBt4N7gfJH7aAZGymtpGx1TzK5EHFG9w5Z8
-	NBgUTybPDv3Y6NLYDh+eWvdMjS/SDlIhL6S8zjIHcCrgLWV+l/Gy9b8FuD2G7ClYtUC2Z6TwLN/
-	VCHdiCyWYT0GMsFTelGPMBCrFJD/LKWbAZ3DLTEr/vMG4Ir6jEeElqiY67gwcnorC4c7eEIOh3Y
-	+8Cp+q78oaQyVPsdvcE2mqyD7frlKCdu3reJwg+9HgNStrv9ZDAbLChzCRTFRI++clBUHkVrBKw
-	iaD0/vGEOCvqM4eH23ZfcOoo2DFWy3g==
-X-Received: by 2002:a05:6214:3c9f:b0:8ce:a005:3e93 with SMTP id
- 6a1803df08f44-8cece02dadamr121809056d6.35.1780588815554; Thu, 04 Jun 2026
- 09:00:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LG4rHRAS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70811F00893;
+	Thu,  4 Jun 2026 16:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780589162;
+	bh=tFI+vg21765H+Ng7GBsTiEh4IHM4SBeB/+qW8xf0hrc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LG4rHRAS1DRmDdZPwWHZLVHdEBzs9JSa9nBoOD4Lwj3xw7VmxejIvRya90L+v/7HB
+	 WuwZweVG1IhSQCtUrSjHxd10EUk1fYhIepDOX7CF0ZlF9JAVcmE7rfpvNO1653eHiD
+	 ajBr93iWThUsphn9SQ9O0bhw90D9v/tXkNbrIWdDZlE2CivVdViNMrNYw/0qqKB5DZ
+	 tuSwl+3KLylLlzXoZ7nkFo79R0fdmXavslnTemxYsvLOcpcLwSu37SPIHCqVh4j8dr
+	 y+9wEPBJAvifg8OXTF//hui2gEtz9gS6KIsfnijhG4RHphr0Tupwj2yt6LLv3AYplO
+	 +mogG2DZvirsA==
+Content-Type: multipart/mixed; boundary="===============7636103166405731731=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260603162737.697215-1-rhkrqnwk98@gmail.com> <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
-In-Reply-To: <b5d4d726-c32f-45e4-9ea7-28f7b6a1f8d7@linux.dev>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 4 Jun 2026 09:00:04 -0700
-X-Gm-Features: AVHnY4KFeB_7dmL9P1vPP7kjQ_Xqs-Cnp4utG2D6VMV7WmTclo4knkrnYzYYWMU
-Message-ID: <CANn89iLhibjsgf-nk5U9be5kRpg3k4FXchKszmerkMbaaK6z6w@mail.gmail.com>
-Subject: Re: [PATCH net v2] udp: clear skb->dev before running a sockmap verdict
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Sechang Lim <rhkrqnwk98@gmail.com>, willemdebruijn.kernel@gmail.com, 
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, jakub@cloudflare.com, 
-	aleksander.lobakin@intel.com, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <33bdc65e1275627edd897b94dd6a4a6ed33b24b2614950d9bf89a7c267da19c0@mail.kernel.org>
+In-Reply-To: <20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com>
+References: <20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add arena direct-value one-past-end reject test
+From: bot+bpf-ci@kernel.org
+To: random6.xyz@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,emil@etsalapatis.com,graypanda.inzag@gmail.com,random6.xyz@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  4 Jun 2026 16:06:01 +0000 (UTC)
 
-On Wed, Jun 3, 2026 at 6:49=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
->
-> On 6/4/26 12:27 AM, Sechang Lim wrote:
-> > On the UDP receive path skb->dev is repurposed as dev_scratch (the
-> > truesize/state cache set by udp_set_dev_scratch()), through the
-> > union { struct net_device *dev; unsigned long dev_scratch; } in sk_buff=
-.
-> >
-> > When a UDP socket is in a sockmap, sk_data_ready is
-> > sk_psock_verdict_data_ready(), which calls udp_read_skb() -> recv_actor=
-()
-> > (sk_psock_verdict_recv) to run the attached SK_SKB verdict program in s=
-oftirq.
-> > If that program calls a socket-lookup helper (bpf_sk_lookup_tcp/udp,
-> > bpf_skc_lookup_tcp), bpf_skc_lookup() does:
-> >
-> >       if (skb->dev)
-> >               caller_net =3D dev_net(skb->dev);
-> >
-> > skb->dev still holds the dev_scratch value (a non-NULL integer), so dev=
-_net()
-> > dereferences it as a struct net_device * and the kernel takes a general
-> > protection fault on a non-canonical address in softirq:
-> >
-> >    Oops: general protection fault, probably for non-canonical address 0=
-x1010000800004a0
-> >    CPU: 1 UID: 0 PID: 1406 Comm: syz.2.19 Not tainted 7.1.0-rc6 #1 PREE=
-MPT(full)
-> >    RIP: 0010:bpf_skc_lookup net/core/filter.c:7033 [inline]
-> >    RIP: 0010:bpf_sk_lookup+0x45/0x160 net/core/filter.c:7047
-> >    Call Trace:
-> >     <IRQ>
-> >     bpf_prog_4675cb904b7071f8+0x12e/0x14e
-> >     bpf_prog_run_pin_on_cpu+0xc6/0x1f0
-> >     sk_psock_verdict_recv+0x1ba/0x350
-> >     udp_read_skb+0x31a/0x370
-> >     sk_psock_verdict_data_ready+0x2e3/0x600
-> >     __udp_enqueue_schedule_skb+0x4c8/0x650
-> >     udpv6_queue_rcv_one_skb+0x3ec/0x740
-> >     udp6_unicast_rcv_skb+0x11d/0x140
-> >     ip6_protocol_deliver_rcu+0x61e/0x950
-> >     ip6_input_finish+0xa9/0x150
-> >     NF_HOOK+0x286/0x2f0
-> >     ip6_input+0x117/0x220
-> >     NF_HOOK+0x286/0x2f0
-> >     __netif_receive_skb+0x85/0x200
-> >     process_backlog+0x374/0x9a0
-> >     __napi_poll+0x4f/0x1c0
-> >     net_rx_action+0x3b0/0x770
-> >     handle_softirqs+0x15a/0x460
-> >     do_softirq+0x57/0x80
-> >     </IRQ>
-> >
-> > The rmem charge that dev_scratch accounted for is released by skb_recv_=
-udp() on
-> > dequeue, just above, so the scratch is dead by the time recv_actor() ru=
-ns. Clear
-> > skb->dev so bpf_skc_lookup() falls back to sock_net(skb->sk), which
-> > skb_set_owner_sk_safe() set just above.
-> >
-> > Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
->
->
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+--===============7636103166405731731==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> commit fe93bf61d92a97b713eb292a1ccbae1cef5b23f1
+> Author: Woojin Ji <random6.xyz@gmail.com>
+> Date:   Fri Jun 5 00:23:42 2026 +0900
+>
+>     selftests/bpf: Add arena direct-value one-past-end reject test
+>
+>     BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
+>     maps its map value_size is zero and the valid direct-value range is the
+>     arena mmap size, max_entries * PAGE_SIZE.
+>
+>     Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
+>     direct-value access") fixed arena_map_direct_value_addr() to reject an
+>     offset exactly at the end of the arena mapping. Add a regression test
+>     that loads a BPF_PSEUDO_MAP_VALUE with off == arena_size and verifies
+>     that the verifier rejects it with the expected offset in the log.
+>
+>     This is awkward to express as a verifier_arena.c failure program. For
+>     arena globals, libbpf handles the relocation as RELO_DATA and sets
+>     BPF_PSEUDO_MAP_VALUE from that relocation. The second ldimm64 slot is
+>     derived from the arena-relative symbol offset, so a C-level __arena
+>     global cannot make that immediate equal to arena_size without placing a
+>     global one past the end of the arena.
+>
+>     Use a userspace raw-instruction test instead, following the existing
+>     selftests pattern used for direct map-value pseudo loads, so insns[1].imm
+>     can be set to arena_size precisely.
+
+Emil Tsalapatis suggested using inline assembly in the BPF C file
+(verifier_arena.c) instead of creating a userspace raw-instruction test.
+The commit message explains why the userspace approach was chosen, but
+could inline assembly address the limitation with libbpf relocations?
+
+Reference: https://lore.kernel.org/bpf/DJ0DRM980L8V.3MR51HBLAVAEP@etsalapatis.com/
+"Can't we still use inline assembly in the BPF C file to do so? I don't
+see why not." - Emil Tsalapatis, Thu, 04 Jun 2026 11:46:39 -0400
+
+>
+>     Assisted-by: ChatGPT:gpt-5.5
+>     Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+>     Cc: Emil Tsalapatis <emil@etsalapatis.com>
+>     Cc: Junyoung Jang <graypanda.inzag@gmail.com>
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26962723906
+--===============7636103166405731731==--
