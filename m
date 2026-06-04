@@ -1,148 +1,237 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F8D330D43;
-	Thu,  4 Jun 2026 15:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AEB33EB06
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 15:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780585943; cv=none; b=OpPenVheoBjJhTRStZzTkIvx1dDCNbmKJ3ThYLs9Ak/4XBSprPzBWB5R8032w1crEL3h87uSGkKZZlias2LTj+fZRce4xcm28pllOzTPvNCc0ngsA47HvkORsUMksjsyYvF2aX5FhuiSIfT+SLoxsFxAOXBgAMOrfGVVNlBwat4=
+	t=1780586634; cv=none; b=QsPn7JcZy0gV5/jtzqQ4sXiygjNe8/GQ9PttNxUI8CzaUA9U6ZGg+4sI1Q2yOKrz6I5VevN4iHIbmu4vjLB7ppbeqH2DEnv8mIVvJE+37qIpjmhEKC2p5Xf/b7uhwEh6l9o/EBxSPb2htFtsjCeeDaqC0ILQvdkpKozG8tAhyW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780585943; c=relaxed/simple;
-	bh=HeX5k4pnGPPviIUMfkIjZGk3TsOAm8TvZMX1sxRcuMc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ELdz+fwKoRThyD8CyxQmuvBaxxJ9EUX1iG0qO6/aui8vB4l5TKaXU8q9EpFeNmekYV6OqmjffwVfPHImG0U78Zq2Z2FP3tf3VMUa8l3O6FVBDc2gVbKHepsmzji6JR7ykVpmMusTlurBDr5oeu5rYcTBJUw4yYqPzi/xdzjhsKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=h1IUetbA; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1780586634; c=relaxed/simple;
+	bh=95kni8HQazuDcL0ympluLEzhJLkWzdMKC9pwnpv7hSY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VTV5b8cWhXzxjie7WdUpsiWa/sW4yfHExMWjVCfuZ+Fd5Sboc/8GziVKhjvf5F+utV8fo+CMIBfJcEJgwZIk7DCSJFUSJSlkwDNJtuL6+4EC5Mph6u0ML0/nfYHzh1jf59Wf+iGzxkmxYgi++KhVxvj6WEv2s5SMzNfTCBh+mIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDZKzgpE; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="h1IUetbA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDZKzgpE"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2c0c2c7e0c5so6050585ad.1
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 08:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=JQMTdjRgDQqlF/lm6SBARFq5841IfBBAuL
-	WPUUDsrk0=; b=h1IUetbAK0MofjuE1IvgOf8nUFUKZIwpMBGyUNkN5l2aiHbnqd
-	ZnodWiyxc3LoEmBbeL2c0RMdUdulkAFIrEYzriZr6N3nIp9b2wZrRRhypNmlberd
-	MqOxCcGOdz6jziIzsBwburtoqaV4SlkL3gf/ln1wvW6XHSD4Th7gE6PoU=
-Received: from dumpling.. (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQDnnr65lSFqvf8mAg--.4748S4;
-	Thu, 04 Jun 2026 23:11:59 +0800 (CST)
-From: Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: dxu@dxuuu.xyz,
-	Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Ihor Solodrai <isolodrai@meta.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: Cover dynamic inner array lookup nullability
-Date: Thu,  4 Jun 2026 23:11:53 +0800
-Message-Id: <20260604151153.2488051-3-gnq25@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn>
-References: <20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn>
+        d=gmail.com; s=20251104; t=1780586632; x=1781191432; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Yc+URibwRi6dCLLpz9Jk7Op5vAlkYtzhW0j7vQLlJk=;
+        b=cDZKzgpEQ+V+bQ3jbewIOLdmY/nfYMCBZEWZHDYGvh7fuVsuYcq2UocPVuslF/Ilq1
+         BO0i/yTGV+zA1yXi4ninyTL05aZrbiBMpNkz2AiCj1eOL1yUISB7xSZStE+R3zHi0mMn
+         8U6SxMJUIw8xXT6yn874hqsetXd1WsDB22eOEvcgXJ88Q+qg2h0eSQmKfJEVG5/3loXp
+         VDd94DBMBfvA5VCsBleKp+FEVggM6OT8Ij53TpztUd09jkCAuPTPmuoHelzrRek1qiHv
+         UouGn7Ip8PwMgFK2AHM/98vVH6jHBhzGFs/eTzd8o/VmUFVwngg8zut1r1YMLkVO3bK7
+         g+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780586632; x=1781191432;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Yc+URibwRi6dCLLpz9Jk7Op5vAlkYtzhW0j7vQLlJk=;
+        b=G82EgKWQoiLcfa4n+CdmFMJND3zYIkz7DyZoSarvS66WzDiJ2BHmlPUcD3BZaG3ht0
+         Aup4eHuwDovfwnOAlb3SRcljjeiQnu9Ou7YN7FnAWV0Hq8XREjEsLVQynkg+KdefD6vK
+         drD9R+EHsZ12v86NARmWCDXTZK0xPBeMNxb8BE20zm94qdIM2XXeBsztkose7rmAOVwW
+         Zg8zUmkXByhEnls3Dva7ir18sCxtmdYse4M/tUya+yNuQn4ZdXiTHBZ8fd+60meS4bLH
+         ToW2tTKZITTpdCkcTP9MR0OnOzFcQPrA9OKSF5F54ji6RSgmB+nfWiUwGulyIja21R8C
+         cYkA==
+X-Forwarded-Encrypted: i=1; AFNElJ8OXeqdYmSxebI07NE/124ay0fsIvPjQeO/llHXMxa7TbzYUs1iMgcFxRvsJ06ejxP+LVQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyneES8YGdZ6Or5OJpFILXfih7tvr05IOoxySGaQZT+1UXucdUh
+	h/IQt0wD/EL3rVR9zjeqG5LxlZvdP9ZjGbM6ov/PjBreFTG4u5iXLT4M
+X-Gm-Gg: Acq92OHgG1XUv9h1c+06f1Mlyxh0U0DbZLXJb4ev8ILti9osGg+YFKwRVr5fN7KJSse
+	zzJT/i5VGnUfyDsd6FpRhNM0QakyP9uokQUVj+PY+G/rQqbZU4MdoVcW2ErWzcLXmcyZJEdszrt
+	ex7/91293wOC0o6rHAj2O9u+YstokCED2yNBqIJEX8STeokpREZyHKr9yZjiofmGarX23mzDFna
+	nDbnUnvssTYfAOKB2p8V3Qo3y5NZ2BFCOsEgFIwroA2e+C9cKyopNQy4vg5XD8Wnj33awkV+xU3
+	Nq1vNFBSHlBotViruOTFBg5/dQ69bVrnP8zd3nsCM/0rkUxWacHY2ofLkIjIrXHlwUEs+7YBQSu
+	t69AQQ6Cl2y75ZhiWKAm2Ow4pF9Vrl7IHrLimEZBu+UlY7HCmBP3DM28oYPm6yfIyJFCQkkCLcJ
+	piYVIebMEhno8ewwRJWPzh3EoUDJWexZ+4bWB6DSKH2THCNN2+U1c=
+X-Received: by 2002:a17:902:d592:b0:2bd:a529:4b5e with SMTP id d9443c01a7336-2c1644dc8f7mr86507235ad.41.1780586632120;
+        Thu, 04 Jun 2026 08:23:52 -0700 (PDT)
+Received: from [192.168.0.6] ([223.131.147.119])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16649fcdfsm81544985ad.78.2026.06.04.08.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 08:23:51 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+Date: Fri, 05 Jun 2026 00:23:42 +0900
+Subject: [PATCH bpf-next v2] selftests/bpf: Add arena direct-value
+ one-past-end reject test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zAQGZQDnnr65lSFqvf8mAg--.4748S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4DuFyxKryUXw45Gw1xZrb_yoW8uF1Upr
-	ykWa43CFW8ur12g34fJay8uF4akF1vgry5A3WFyw1YvFsrWryxXr4xuFW7tr1ayw18ArWF
-	vF17ta48Cay8JFDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xS
-	Y4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
-	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOq2MUUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgQIA2ohcoE9RAABsN
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOwQ6CMBBEf4Xs2TUFFNCT/2E4tGULa7CQFhoM4
+ d8t+AEmc5nMvtlZwZNj8nBPVnAU2PNgo8lOCehO2paQm+ghE1khCpGjdGQlNuxITxhkPxOGFMl
+ cGlNdS3WrFER2dGR4OXqfoEaDlpYJ6l/iZ/WK9F6733bsp8F9jgkhPYg/36JSLFWeai1kpaV+t
+ G/J/VkPb6i3bfsCi5eyjtYAAAA=
+X-Change-ID: 20260603-arena-direct-value-v1-ef4df857b98b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>, 
+ Junyoung Jang <graypanda.inzag@gmail.com>, 
+ Woojin Ji <random6.xyz@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4586; i=random6.xyz@gmail.com;
+ h=from:subject:message-id; bh=95kni8HQazuDcL0ympluLEzhJLkWzdMKC9pwnpv7hSY=;
+ b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqIZiEf99tri7zvOqby/mMpue3vHl1wINfzsbCI
+ YsSAfpToRmJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaiGYhAAKCRBDl0TDFa34
+ a0IpD/9ys2rncP0odXFe2D8VhkkV4OHfcV5ypPhwADvPEK6EnncWrX1febkEfRK70eK9Y5cCfOs
+ GJ3prW9ylNi9c4kdsdRHDSoPWe4MG2c15Mz8WYTFa5FKTZ1DMev8CViZ/xmqQcTT+zIV2y80Mzi
+ jyGWiRqDC78lKPZPTneCCPa7eK63LOJvuKVjexoerxhZAI2z11n1xz1z10YDRJfl9WjGN8rYysp
+ U0VOrSNKmtYj0wg6hb2yjZJuXX4NFdeKgFBY6tzyNqlr3wmM0fiJYFiia8uX2rJyGS4T015GOld
+ JLokrEP4k3b6Cdm0Fbcq1myIZnAh31z4NgGQ23P2EKlAMli0pFi0Rrho4X9eGDahWPeuh6koGA0
+ Z76+RsCkw2eyRrTuJVtK998eFcGp/l4Ii+cFbu+0F5zkcsnPPLvGN1JRsedKX+luuaepb1NnGFr
+ GgkoA+0n4MuB95vWXcM6TRUMlxbQ3xqamT5HortQ68ROe1Vo/8PqzwVM+Vo0du7tU4xFPeaEyZ8
+ FEg86TqJr5N0fBIeQ0RNaWEA9bpysjvm+VQklE/QuXqxmyzOOIso434MShU5vYODPAM0kQNARO+
+ XWFUaVowNd67yXCGHkWc3vkcnd7+Ff9Q5SzDQMcj8EqZI9bievsPW5RYZ5l6Fdmhg1B65/fgIHr
+ 3efXVNjmeobO/tQ==
+X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
+ fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
 
-Add a verifier regression test that looks up a constant key through a
-dynamic inner array template and dereferences the result without a NULL
-check.
+BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
+maps its map value_size is zero and the valid direct-value range is the
+arena mmap size, max_entries * PAGE_SIZE.
 
-The verifier must reject the program because BPF_F_INNER_MAP allows the
-concrete runtime array to have fewer entries than the template.
+Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
+direct-value access") fixed arena_map_direct_value_addr() to reject an
+offset exactly at the end of the arena mapping. Add a regression test
+that loads a BPF_PSEUDO_MAP_VALUE with off == arena_size and verifies
+that the verifier rejects it with the expected offset in the log.
 
-Signed-off-by: Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>
+This is awkward to express as a verifier_arena.c failure program. For
+arena globals, libbpf handles the relocation as RELO_DATA and sets
+BPF_PSEUDO_MAP_VALUE from that relocation. The second ldimm64 slot is
+derived from the arena-relative symbol offset, so a C-level __arena
+global cannot make that immediate equal to arena_size without placing a
+global one past the end of the arena.
+
+Use a userspace raw-instruction test instead, following the existing
+selftests pattern used for direct map-value pseudo loads, so insns[1].imm
+can be set to arena_size precisely.
+
+Assisted-by: ChatGPT:gpt-5.5
+Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Junyoung Jang <graypanda.inzag@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_map_in_map.c | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Changes in v2:
+- Explain why this uses a userspace raw-instruction test rather than a
+  verifier_arena.c failure program: the test must set the second
+  BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. For
+  arena globals, libbpf derives that immediate from the arena-relative
+  symbol offset, so the boundary value cannot be represented directly as
+  a verifier_arena.c C-level failure program.
+- Link to v1: https://patch.msgid.link/20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-index 16b761e510f0d..b606b5dca7340 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-@@ -18,6 +18,20 @@ struct {
- 	});
- } map_in_map SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(map_flags, BPF_F_INNER_MAP);
-+		__uint(max_entries, 8);
-+		__type(key, int);
-+		__type(value, long);
-+	});
-+} map_in_map_dyn SEC(".maps");
+Tested on x86_64 with tools/testing/selftests/bpf/vmtest.sh:
+  $ ./test_progs -t arena_direct_value
+  #2/1     arena_direct_value/one_past_end:OK
+  #2       arena_direct_value:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+---
+ .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+new file mode 100644
+index 000000000000..b7760b021670
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- SEC("socket")
- __description("map in map access")
- __success __success_unpriv __retval(0)
-@@ -45,6 +59,32 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("map in map dynamic inner array lookup is nullable")
-+__failure __msg("invalid mem access 'map_value_or_null'")
-+__naked void map_in_map_dynamic_inner_array_lookup_is_nullable(void)
++#include <test_progs.h>
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#define ARENA_PAGES 32
++
++static void test_arena_direct_value_one_past_end(void)
 +{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[map_in_map_dyn] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	*(u32*)(r10 - 8) = 4;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = r0;					\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 = *(u64 *)(r0 + 0);				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_in_map_dyn)
-+	: __clobber_all);
++	char log_buf[16384] = {}, expected[128];
++	__u32 arena_sz = ARENA_PAGES * getpagesize();
++	struct bpf_insn insns[] = {
++		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
++	void *arena = MAP_FAILED;
++	int map_fd, prog_fd;
++
++	map_opts.map_flags = BPF_F_MMAPABLE;
++	prog_opts.log_buf = log_buf;
++	prog_opts.log_size = sizeof(log_buf);
++	prog_opts.log_level = 1;
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
++				0, 0, ARENA_PAGES, &map_opts);
++	if (map_fd < 0) {
++		if (errno == EOPNOTSUPP || errno == EINVAL) {
++			test__skip();
++			return;
++		}
++		ASSERT_GE(map_fd, 0, "bpf_map_create");
++		return;
++	}
++
++	arena = mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
++		goto cleanup;
++
++	insns[0].imm = map_fd;
++	insns[1].imm = arena_sz;
++
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
++				"arena_direct_value", "GPL", insns,
++				ARRAY_SIZE(insns), &prog_opts);
++	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
++		if (prog_fd >= 0)
++			close(prog_fd);
++		prog_fd = -1;
++		goto cleanup;
++	}
++
++	snprintf(expected, sizeof(expected),
++		 "invalid access to map value pointer, value_size=0 off=%u",
++		 arena_sz);
++	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
++
++cleanup:
++	if (arena != MAP_FAILED)
++		munmap(arena, arena_sz);
++	close(map_fd);
 +}
 +
- SEC("xdp")
- __description("map in map state pruning")
- __success __msg("processed 15 insns")
--- 
-2.34.1
++void test_arena_direct_value(void)
++{
++	if (test__start_subtest("one_past_end"))
++		test_arena_direct_value_one_past_end();
++}
+
+---
+base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+change-id: 20260603-arena-direct-value-v1-ef4df857b98b
+
+Best regards,
+--  
+Woojin Ji <random6.xyz@gmail.com>
 
