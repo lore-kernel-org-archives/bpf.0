@@ -1,129 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008DF31F986
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 21:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58F5284B3B
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 21:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780607296; cv=none; b=rotxFS0VsGWb6BFg/lXI8dyqbslXHLAuSOLVn8oJvoW50YYnlcfCUBY5MkFMQsOfBZ0HjVlO/R1GVLYnh0hYVgg2gE7VUZS5WakMym+mNOxlwpSUGMdg7qudVlkQzcT+JKB6beKaDxDxKV+ZNWGsxLnRD2Wvsh3Gzb9qLJgLT6Y=
+	t=1780607590; cv=none; b=mllL74zgXtAiRSIVLo8Y3MC14S6y2JB9YM73h+8QKkDH/mVNZgc6Q6NDIWNgtt9M7PfeB1vrf7AMcpJ2HLNLKJsx08vkMp/sxSLcvblHXlfIKS2LR7V31qFG9ulHDxOQ9qMrs5fRwKZ5RlMx4ReVDuZi2K6MXQy15qfLFEuWs4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780607296; c=relaxed/simple;
-	bh=KYfcgyQwCJgI0fouX7IwFRGDY/twzQdE69SUqc7QLFo=;
-	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WUG/xTZXKMRe3af1xpSneUswh02C3trwXkabgXXm6BjKlFQMgWYUI/5s5fS3D7Te4Lq9y2g0gjWEutDMcU5U5vAQuxdjUtNqKVr7h0v+6znLsaAfmQEtCwrpOqVVMCi5jL+LPWgpawINK8jpxwXK3/e/+A0fmcmOzDCBdZhPaiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQnSko6C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780607590; c=relaxed/simple;
+	bh=XZ+eZfMd/SnAmbewnOLdKyCjJDAOtlJ9whQCdCnF9tE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L38liDAR/AioMiyQMWzrcInraB2VCfWd405uJ3YuGEtkkGEnD0V34kQbJecX2RuxRSeD3sKcQtt16hVKGS6Sj6jBcdibH8HRGXCOiZaiKNLZD+EK6ta8Y4jgzijRBg4bFt8igTsQveZyCuf2Yvm2IkKgrd55DTSy66plo4vTfJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tt7UnFG6; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQnSko6C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A9F1F00893
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 21:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780607295;
-	bh=TRfRsvcUNmcTJCC6fznUraASTOHjC7zu2YRnNUFNdk0=;
-	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=OQnSko6CcNC8yMb+cKmHauVseT+AQrTpds3bmbgkhndtc0h3xuud9bumLY7uH5ahY
-	 9m6M3EGyUcS2fZqldyeUXJjVmiqHUZ34BTubg4Lz//ufIahbn/yAArB5SO6dAsHuTL
-	 4588TxyulPdSJ2LeqAmmFt5gQY1EXSVIeohvnWGFI+V+rIdZ2DLpsKbWokspZcGap9
-	 sp7a5cw8GeDgnkle0txqEEHL31xK0qt/cNRX1PF3dj41iisrBi5u+TMQs/nW7NpWgq
-	 9C/c6uA/NnwfCNc6rLHIRK3GinAUj5ZMAR95OQ8HEdTo35e42sQFXJcWZZ4eXQ4b8S
-	 10tpVI+H/JzTQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 5/8] bpf, x86: emit KASAN checks into x86
- JITed programs
-Reply-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260604-kasan-v2-5-c066e627fda8@bootlin.com>
-References: <20260604-kasan-v2-5-c066e627fda8@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 21:08:14 +0000
-Message-Id: <20260604210815.78A9F1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tt7UnFG6"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-687e7edaafeso2359396a12.1
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 14:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780607587; x=1781212387; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EpmTXOSXfXdpm1jna+TOnmqAtRm7jGoWeJJF098zmuA=;
+        b=tt7UnFG6GCrTKCbliQKkdHAfsTQxnHvybIfLWBNwtu3amuIY9zRHKUVcNgiMq74O+N
+         9xZWra6e1VbL7lfDJUtkEtu3NjaIydoekjuYjYknvgGhpzR4mh/EGUtmmFxTFKlStiYJ
+         eFPx5lTo2wYkq6dEquTHllmd9tRe0C9EZ3kmtX74sQBBkfqFqXvu/KP4WYra+yQXy13l
+         hFdTalhYlINMHwJLkEwmUX4mIkdFPLNLy7D4UOM6aj5d4rGMlFlCpUyllRhmlvBwah39
+         Hg51hrOdwlU0eelpSwXXrxdDAgJfFjPj3sKUOIbOp/Qk8JA1G3iLNbwemRdRD8EB1WNp
+         UP6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780607587; x=1781212387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EpmTXOSXfXdpm1jna+TOnmqAtRm7jGoWeJJF098zmuA=;
+        b=EOgXM6d48I6xByfm90+Jkwr36dhhhVquBPrv3EmrTUeLkd1RyoA9/Mwytfuw/E8Bln
+         N6MIQHwa+9bvPAdGPKZUDNLFIDHu4dDrG5vBUEIlC7zZdSbkOnww+HBSE8/8/3n1CMW2
+         QgSwMX72FMa/vIxCu5SWpH5dHqUnpzzJp4Kn6I1XtUpV6UYlLQttIRoO9EHXx5Bmyxfo
+         +32w2q/Hg1Hc1KZC7dBkRuVGRjO853PhIyETsYhQMD1hBqIO3CayvLG2KRLWwu7ifGA5
+         uFgrcPKCGXY+sKYnMpgFpb+4a3p4gfWMZxDmo5SZcMRRmzvrFsIzqkIGca1nYIHCmAYU
+         xamw==
+X-Gm-Message-State: AOJu0Ywix3w4B2+fbkwwkd2aRWzy+x74JBwWXeseuJm2INjK3tI9uLih
+	bAB8gbEaldIEtgY4L34EqURSAl9N7mbyqpX9IdxphszX1+vc6Rfom3pN6EofaGtXqw==
+X-Gm-Gg: Acq92OEnYv9mFEQs0CrQoEBnYA7l4oNm5oNftBpFlivHMxigy7qpIJ2WTyAKAZa+gmp
+	x6ISKpvlgMjDBgeSdRgkJHjsz6YZg9UNkpOKjZMeMwaGnOjzmSfL2aq9nAMV4W5jhCGE9RfrStc
+	JpaXJn1tR/CLoSb/abiniR0Ue7wyYgs6qczmVoV7XBpM7GYC2dCDgyzHqNiBlRLbz5Qhvl5FyKV
+	Y0ry6l27H/s6rpizVc1WM/0oOqFXhzFquc1h0moOZLzzu78HVfWv/WJXgf2uQTzHJKy1A9wHe1c
+	aFXIkdkTxJ8xtwq1g7ZaDtIiMAlAGvKl9s9HMKWUGAIfMvVcVNZ/b+VeI7+ofpZ0BiO62pzMezd
+	2fgTqCdnko+31UxlgsQu0+T88mTD4+XRiMwlSvvB6+2GNQ/bvkfaB/SyihPe0TT9xEMGwTdiJxJ
+	jrzV0IwuMtkkF8UgNAOBSkyLIstnLD9gkNgYVYM+Oyd4ODft3KhCSA4GdxmCuamDZNA7KAGxFTs
+	Mjq
+X-Received: by 2002:a17:907:6d11:b0:bec:2d7f:fe03 with SMTP id a640c23a62f3a-bf370a65b91mr17838766b.17.1780607586468;
+        Thu, 04 Jun 2026 14:13:06 -0700 (PDT)
+Received: from google.com (201.31.90.34.bc.googleusercontent.com. [34.90.31.201])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf054e0280asm348461566b.33.2026.06.04.14.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2026 14:13:05 -0700 (PDT)
+Date: Thu, 4 Jun 2026 21:13:01 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: clean up btf_scan_decl_tags()
+Message-ID: <aiHqXT-0xUAbBQ0x@google.com>
+References: <20260603201822.770596-1-mattbobrowski@google.com>
+ <DJ0E1ER599F1.36FPRHEE3YZAP@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DJ0E1ER599F1.36FPRHEE3YZAP@etsalapatis.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] The `emit_kasan_check` function clobbers caller-saved register=
-s %r10 and %r11, leading to memory corruption and verifier bypass.
-- [Low] Variable declarations immediately follow a switch case label withou=
-t an enclosing block, causing a compilation error.
---
+On Thu, Jun 04, 2026 at 11:59:26AM -0400, Emil Tsalapatis wrote:
+> On Wed Jun 3, 2026 at 4:18 PM EDT, Matt Bobrowski wrote:
+> > Refactor the newly introduced btf_scan_decl_tags() to improve
+> > readability and maintainability. The current implementation uses a
+> > manual if-else chain and a magic number offset to strip the "arg:"
+> > prefix from declaration tags.
+> >
+> > Replace the if-else logic with a table-driven approach using a static
+> > const array. This separates the tag data from the scanning logic, making
+> > the helper more extensible for future tags. Additionally, replace the
+> > magic number '4' with a sizeof-based calculation on the prefix string to
+> > ensure the offset remains synchronized with the search key.
+> >
+> > Finally, optimize the loop by moving the is_global check to the top of
+> > the block. This allows the verifier to fail-fast on static subprograms
+> > without performing unnecessary BTF string and type lookups.
+> >
+> > Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> 
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> 
+> We can also modify the new btf_scan_type_tags() to conform to the same
+> pattern. It currently recognizes a single type tag, so if anything it
+> would be more code, but we don't want it to slowly end up looking like
+> the if-else chain we're replacing below.
 
-commit c55dfacae42be195cdf6611359a2142fdbe64733
-Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
+OK, I'll also take a look at btf_scan_type_tags() and if so adapt it
+and send a patch through.
 
-bpf, x86: emit KASAN checks into x86 JITed programs
-
-Insert KASAN shadow memory checks before memory load and store
-operations in JIT-compiled BPF programs.
-
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 943a0f315cf2b..cb3c03edc4bde 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -2592,13 +2622,13 @@ static int do_jit(struct bpf_verifier_env *env, s=
-truct bpf_prog *bpf_prog, int *
->  			fallthrough;
->  		case BPF_STX | BPF_ATOMIC | BPF_W:
->  		case BPF_STX | BPF_ATOMIC | BPF_DW:
-> +			bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
-> +			u32 real_src_reg =3D src_reg;
-> +			u32 real_dst_reg =3D dst_reg;
-> +			u8 *branch_target;
-
-[Severity: Low]
-Will this cause a build failure? The C standard does not allow variable
-declarations immediately following a case label without an enclosing block.
-
->  			if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
->  			    insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
->  			    insn->imm =3D=3D (BPF_XOR | BPF_FETCH)) {
-> -				bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
-> -				u32 real_src_reg =3D src_reg;
-> -				u32 real_dst_reg =3D dst_reg;
-> -				u8 *branch_target;
-> =20
->  				/*
->  				 * Can't be implemented with a single x86 insn.
-> @@ -2612,7 +2642,19 @@ static int do_jit(struct bpf_verifier_env *env, st=
-ruct bpf_prog *bpf_prog, int *
->  				if (dst_reg =3D=3D BPF_REG_0)
->  					real_dst_reg =3D BPF_REG_AX;
-> =20
-> +				ip +=3D 3;
-> +			}
-> +			if (!bpf_atomic_is_load_store(insn)) {
-> +				err =3D emit_kasan_check(&prog, real_dst_reg,
-> +						       insn, ip, false,
-> +						       accesses_stack_only);
-
-[Severity: Critical]
-Does emit_kasan_check() preserve all caller-saved registers it needs to?
-
-Looking at emit_kasan_check(), it emits pushes for rax, rcx, rdx, rsi, rdi,
-r8, and r9 before calling C functions like __asan_loadX, but it does not
-appear to save r10 (BPF_REG_AX) or r11 (AUX_REG).
-
-For complex atomic operations, do_jit() saves BPF_REG_0 into BPF_REG_AX
-just before this call:
-
-    /* Will need RAX as a CMPXCHG operand so save R0 */
-    emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
-
-If emit_kasan_check() calls a C function which clobbers r10, will this
-corrupt the value restored into BPF_REG_0 and potentially break verifier
-assumptions?
-
-> +				if (err)
-> +					return err;
->  				branch_target =3D prog;
-> +			}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604-kasan-v2-0=
--c066e627fda8@bootlin.com?part=3D5
+> > ---
+> >  kernel/bpf/btf.c | 46 ++++++++++++++++++++++++++++++----------------
+> >  1 file changed, 30 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 68921d9172b5..55aa3ba1b1e0 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -7808,14 +7808,28 @@ static int btf_scan_decl_tags(struct bpf_verifier_env *env,
+> >  			      u32 arg_idx, bool is_global, u32 *tags)
+> >  {
+> >  	int id = btf_named_start_id(btf, false) - 1;
+> > +	const char tag_key[] = "arg:";
+> > +	static const struct {
+> > +		const char *tag_value;
+> > +		enum btf_arg_tag arg_tag;
+> > +	} tag_values[] = {
+> > +		{ "ctx", ARG_TAG_CTX },
+> > +		{ "trusted", ARG_TAG_TRUSTED },
+> > +		{ "untrusted", ARG_TAG_UNTRUSTED },
+> > +		{ "nonnull", ARG_TAG_NONNULL },
+> > +		{ "nullable", ARG_TAG_NULLABLE },
+> > +		{ "arena", ARG_TAG_ARENA },
+> > +	};
+> >  
+> >  	/*
+> >  	 * The 'arg:<tag>' decl_tag takes precedence over the derivation
+> >  	 * of the register type from the BTF type itself.
+> >  	 */
+> > -	while ((id = btf_find_next_decl_tag(btf, fn_t, arg_idx, "arg:", id)) > 0) {
+> > -		const struct btf_type *tag_t = btf_type_by_id(btf, id);
+> > -		const char *tag = __btf_name_by_offset(btf, tag_t->name_off) + 4;
+> > +	while ((id = btf_find_next_decl_tag(btf, fn_t, arg_idx, tag_key, id)) > 0) {
+> > +		const struct btf_type *tag_t;
+> > +		const char *tag;
+> > +		int i;
+> > +		bool found;
+> >  
+> >  		/* disallow arg tags in static subprogs */
+> >  		if (!is_global) {
+> > @@ -7825,19 +7839,19 @@ static int btf_scan_decl_tags(struct bpf_verifier_env *env,
+> >  			return -EOPNOTSUPP;
+> >  		}
+> >  
+> > -		if (strcmp(tag, "ctx") == 0) {
+> > -			*tags |= ARG_TAG_CTX;
+> > -		} else if (strcmp(tag, "trusted") == 0) {
+> > -			*tags |= ARG_TAG_TRUSTED;
+> > -		} else if (strcmp(tag, "untrusted") == 0) {
+> > -			*tags |= ARG_TAG_UNTRUSTED;
+> > -		} else if (strcmp(tag, "nonnull") == 0) {
+> > -			*tags |= ARG_TAG_NONNULL;
+> > -		} else if (strcmp(tag, "nullable") == 0) {
+> > -			*tags |= ARG_TAG_NULLABLE;
+> > -		} else if (strcmp(tag, "arena") == 0) {
+> > -			*tags |= ARG_TAG_ARENA;
+> > -		} else {
+> > +		tag_t = btf_type_by_id(btf, id);
+> > +		tag = __btf_name_by_offset(btf, tag_t->name_off) + (sizeof(tag_key) - 1);
+> > +
+> > +		found = false;
+> > +		for (i = 0; i < ARRAY_SIZE(tag_values); ++i) {
+> > +			if (!strcmp(tag, tag_values[i].tag_value)) {
+> > +				*tags |= tag_values[i].arg_tag;
+> > +				found = true;
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> > +		if (!found) {
+> >  			bpf_log(&env->log, "arg#%d has unsupported set of tags\n", arg_idx);
+> >  			return -EOPNOTSUPP;
+> >  		}
+> 
