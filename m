@@ -1,210 +1,294 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79573353EE0
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 06:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780555695; cv=none; b=nvVhybNEhfpFj0523WXIc0nuHOGbh/HCzQoWQHXdOyJVfD3c/QGq7uhSlPjGNJ5W5QkcFQ4Ajl+CGJYYt5NyoACt8qbPU7V/UiLxZNGJT9mHjud3OEKVmVH0E98rOmu/ZMgHlNXffsUx4wKBDWsWD9pbSEs/dTeVyp0mL0xthKQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780555695; c=relaxed/simple;
-	bh=20EwMvNv1HLsog2J5vXSmEaqytURpureVSWsOYl/Zas=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IV2MSUU2jPkNI3oNcWVAlNgRXWlesOtaOKYgorGXEoQJ1odfJnl5B8cJBtYUdMPXRZRj10mUx1hFrD2tf3xtUXFDX9bUTJjotxgbymXW8TT/mFWWgpZbkCDMDxzoVvvagmheS+Z5xrwv/+Nyj/DfaHRZwWQqnvucTIpEUQBBWeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jGxxZT/S; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF37F3D902B;
+	Thu,  4 Jun 2026 06:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780555897; cv=fail; b=WRp7m2bTEoUU8JKzbJdLNQlG8droCZ26d3V+VSowiEa8z/Vr5lKs89mT2KhW0vt3fNwFHeQlAMUyD0kxn62zLbLNMnt92w+iDCyBJoxLTQA0A3FrrTuOXj5jmEEJpQ5p5dyPaPeVlcRFJKHTkP0F0VVaCrns427RqBmvP7QpX98=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780555897; c=relaxed/simple;
+	bh=HehsGbXtEYJvabybi2VYLTpICT8kyZDWU36Q39vpAGY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=sE5Ul12XrrkcoHVhSe5e3nlbQzlANvVf7X0rSqePLo3mxOL510XhLs7lhWprQm4mQF6ptcMHtGX2d21w039RgOwjUTjB20nnsVoQK99HdZkZbk+4YxjKsEvXLPTt3eu61AZWwwxLKnrXY9L5HvD5ePyAfHdJcqmu+ZbQHmoUtB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qcdwh2ke; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jGxxZT/S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E141F00893;
-	Thu,  4 Jun 2026 06:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780555694;
-	bh=uebIlTMAhFtxeQaWjGmcEQYw6ZYmIv8lLsaEGulYdQI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jGxxZT/SslRa4azhnIC+lwARuKuH0xA71doaN4/gg/Y+MsrNF9JZXv9yUFouFdxQJ
-	 PVgSqdUL7boQMZ1/hUfVhSBXJ5AdOUUx57une47i0sKn2FnI975MzS8p8uHy/Qh6QU
-	 5hg2d4sbfgP4fXEkP2qXyQy9yxUO92hyu/HBYd4Q0Itp2jUZsgDpJc2vsbL74vun7k
-	 43hh0rmsO06DpBMRsL9aLt7L629biErDuqCVkzX40Wd5TMlY1SCSjRtIQWv1/fTuwS
-	 Kfqrz4DnpTWJbIXBglSch2bmNxoQMwAG/XGKseLQfcVUffIwOfIboh3Q7jECzcnd/q
-	 /e+FobQneVnDQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 4/4] selftests/xsk: Introduce mmap_size in
- umem struct
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260603060327.298389-5-tushar.vyavahare@intel.com>
-References: <20260603060327.298389-5-tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qcdwh2ke"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780555896; x=1812091896;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HehsGbXtEYJvabybi2VYLTpICT8kyZDWU36Q39vpAGY=;
+  b=Qcdwh2kevxSNfCJ30jefeiPZRl3FTkKt4Hq6CulOrmkolLJfUYMU9dYz
+   dZcnLRRJD860CShgaaSClm5blIiSDlxGFv3l5EBaERTUbdOF30Mq2RyIV
+   K80aAiu4RCctb01rQbuk8V/yK450mayjMSWJ9Amx/0dN6apG1sAf58AHn
+   le7BSKNgx20ntFzCINptfKXEXW9qI6h9NeDFbwn/dROZk9WmodehzVayy
+   /bwXH+/bru8tpq/BkBz6PzKtwMrcxr/j8y6ensDNH4muP0s/B7x5nvAvI
+   zqAD6zasXTRACGHtcp7mS6OvcHw2g8qIB3Ffld79lzFp++JNiySC9c1Yy
+   Q==;
+X-CSE-ConnectionGUID: p9VyxsqNSDe+6s4VL7ZeDA==
+X-CSE-MsgGUID: 1kcsHCilTDKvQRKw5Uc15Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="92485680"
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="92485680"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 23:51:33 -0700
+X-CSE-ConnectionGUID: tGNxb03gThWeoJufne8vSA==
+X-CSE-MsgGUID: HRWlqbxQQYy+RGGWnT0xzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="241493860"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 23:51:07 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 23:51:05 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Wed, 3 Jun 2026 23:51:05 -0700
+Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.5) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 3 Jun 2026 23:51:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k5y7ZvpL9lNBJhyrUyg8gsajCRtGPb2AQAqkKAdruKzBSVncS4R7jttaEg4XOm6Eoa8E53W9a/RAKFHoxAxTdzq7Qtqf6EPX9qxkBGUsmQj4CKdvy7LaKkMRtqsTAmGlLBDD4F64hpv1O+4lOPipFledaTsuWMoZ/79ewnEpFcRgRUhgduZ3wE0dOIbtvU9w9JycufLAvLHbrZ3a1qH2TT43RtPoBTWpXO12vigOhrY03FJuLdJIt5QQKmlLZjvYILBTZBnzv1DEU3BM0pZ9mvwkEULgOX9qVAYTk7+fbnLBOBLS8U7sXZYEkhGTgZ6EIrxLUIwoT8FQ0KWS0ZsqVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bx8gtIFNL6SLFadGz1RqGIIHhM2K/xAFm1BDJddxn34=;
+ b=r5Zb1N67+E9AGD0Ngj4goLGfQxIf37u+QxFGNM6PMTJkccyZmRoTZLP6wm+LsjXafW+3dAFIXjAG2AyjrxbMVH0pR44+86JQkcYYHkxfWnx21/qvirSj6/KND/1OuKH/Mr3Tf6Ey+xz0N5a7f+AiQZA+RX3+UCOIGfIKrUSo4U/TzKZO/wr0yU3uKG5fEGVjtdqSoOPq+VX8po/ZkAPrpZqfc3uMjN3dl/aR9L1+OMePOjjXsr1n0LjNobME/h3uGtXEJ93qVDVhf8yF+gJV5SZt4sUPMNrUL07lxhENtNP5ZYtfW+Osxle9OBk9Ej8OCZ2FdbnbTytr9ps9VgUTPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA1PR11MB6514.namprd11.prod.outlook.com (2603:10b6:208:3a2::16)
+ by PH7PR11MB8503.namprd11.prod.outlook.com (2603:10b6:510:30d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Thu, 4 Jun 2026
+ 06:51:01 +0000
+Received: from IA1PR11MB6514.namprd11.prod.outlook.com
+ ([fe80::4c62:9ba6:df27:c731]) by IA1PR11MB6514.namprd11.prod.outlook.com
+ ([fe80::4c62:9ba6:df27:c731%3]) with mapi id 15.21.0092.006; Thu, 4 Jun 2026
+ 06:51:01 +0000
+From: "Vyavahare, Tushar" <tushar.vyavahare@intel.com>
+To: "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "Karlsson, Magnus"
+	<magnus.karlsson@intel.com>, "stfomichev@gmail.com" <stfomichev@gmail.com>,
+	"kernelxing@tencent.com" <kernelxing@tencent.com>, "davem@davemloft.net"
+	<davem@davemloft.net>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "Sarkar, Tirthendu"
+	<tirthendu.sarkar@intel.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH net-next v2 2/4] selftests/xsk: Move UMEM state from
+ ifobject to xsk_socket_info
+Thread-Topic: [PATCH net-next v2 2/4] selftests/xsk: Move UMEM state from
+ ifobject to xsk_socket_info
+Thread-Index: AQHc8yT5YMn7s8mzgE2i9rgevUDMZbYs6sWAgAEKYJA=
+Date: Thu, 4 Jun 2026 06:51:00 +0000
+Message-ID: <IA1PR11MB6514BE32ED3444C8D4A4C3228F102@IA1PR11MB6514.namprd11.prod.outlook.com>
+References: <20260603060327.298389-1-tushar.vyavahare@intel.com>
+ <20260603060327.298389-3-tushar.vyavahare@intel.com> <aiA/j1EWpJgAGIwV@boxer>
+In-Reply-To: <aiA/j1EWpJgAGIwV@boxer>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6514:EE_|PH7PR11MB8503:EE_
+x-ms-office365-filtering-correlation-id: c917e0c9-8219-4ef8-123f-08dec205a3b6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021|17002099007|22082099003|18002099003|6133799003|3023799007|56012099006|11063799006|4143699003;
+x-microsoft-antispam-message-info: Qpai2Y8B1sHuXhWpi3cDfBgHEE3HCxMf0RnkcdHwMRh/BaZuNOcSd4++wVXBGkcpvxm8B/Wks2htFhuZ517cYuDbKyUxwNi9olEOmrBtNUdtggvd1A9cKDhJPb+fXUs5PMTSiW/yaJk5fUPQg0AamPAk5yXmJhTtONlsbv1DSupROvCs8XIPBumbT4zvpjzMiVCMembX5u9wdrtHoHKlD2O1gNh1yWUsfPZFhE47iKESwigVuxnOCScyN7WkWEDn/W6NedlFMInxadl6GSgDj++Uek+17tRMXup2zrcIoPabm5+qLxVhFSt1zNpj8tHWzszRc16VxKVaMzfOFFCA5Ua6GkDoN8jCdTQTnqho7GwLah9tlWEjwgIJIJnVUigaf+sh76ZFgzlFVvd3VHS9Q2l08qmQzpOdP+2MmADiYpE6tng/2D8VfXMST/z9+ep0v1MG09vAHIuJfM4x39QX8Ef2EMrK7HoB9VENi0cMrXnhGR65RIXYoWqVpB4pNyNDObS6t7MsZQXXxVs7CdK89OKd7pjBZd+Atlc8ylki/jd//gpxE+vQE1BRQA9INdAzjYnUfo3oLXhB4YEVhpUTuhai9YvrcYXM247dgna/h8cFXuDlB4BrJV70eH2a/lU5EMb2MXh03ym5nMJjsoSAnaJxfR2aIHws7S7a1Phc2aNnNxq0GrR3xhUt18sVIbloQUpMYf+6R+j2r6C/wIIOzjCNiycWx+LEPZA4k8T4mKsoBTT1UW/pQVlsZBEERItV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6514.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021)(17002099007)(22082099003)(18002099003)(6133799003)(3023799007)(56012099006)(11063799006)(4143699003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wvNUKJjImc3XyONJL/95rPRdcQ/4CUsjH1jTKO6WcbhjTJbiEgznmhazU3Xn?=
+ =?us-ascii?Q?BLhCCuxEb/KB9XdLtJgR3ifYzPxgoaBcOZNRcNuWuTTUzKPsx9mDbjQJ6KYY?=
+ =?us-ascii?Q?7xunkeFPX0oAkN6jaeEiMOv+dggdQvAVCqvFZ1IQlvdDpx4OpcU9XBFqzoWa?=
+ =?us-ascii?Q?KuyIFOn1FpGr9JIMA3a+4v3dzzGxzEEaRfV7J0RPFnTPBqGoNcI8YA3klnMx?=
+ =?us-ascii?Q?vkJ3RbRUV8bZno2Q+j0YYTuGFZCFlPc92IbkiLL8sRfojA/zSsRxaR5VTy9P?=
+ =?us-ascii?Q?Q8kxDPYl2Pm8yOO5M/ez8J+JOIDcKqYoFbPVqOQJ5R34xFsVDxNwPlMeL9Y7?=
+ =?us-ascii?Q?CblpaxTp91ClE5VWZBXOVC33CeBobgRnNBcC/O0y+/bPdh5FRFnTGuhJotvt?=
+ =?us-ascii?Q?GWNeSAqFQ8OUzrn+npLP6pe6BgPs3VE1Mv5RYXcnLquDrjYAlEpoAHz4bbG2?=
+ =?us-ascii?Q?Ps/RLZJxWjjtrpCKa132lfplnVAKetg3FxIqj4cHZcHCAPNpyamCoRi8Y/oH?=
+ =?us-ascii?Q?4gltOo0B3V6yDmyDfJBh527FMo9jMwkpomE3ZClwP50vPW08mCc76ZkDq81t?=
+ =?us-ascii?Q?nqBHn/p1Kv/xyzrbD/rqcU5Qd/PIp6fWJNuO/CTbHtRwem7T+4gnq5XE/VmK?=
+ =?us-ascii?Q?VubJHmV0y/HA1HP4PeZL6ey2HMq/a5c6bJ5aHmZ13q4SdOadE/l3373j1xYt?=
+ =?us-ascii?Q?U0AuqZ2gDFyqHx0n33+80RidFT8YTpGxvHCIVtPbtFXABMnOYlm/qjLzB+s2?=
+ =?us-ascii?Q?b4NqfeP++WIIFyop2vde++8+q2DBwMSKrYBx1QjychgXCIiwfy+i/Qu8FVnj?=
+ =?us-ascii?Q?OaqNZD3VNtD4NBU1lnlQRYbk2wliN7R9DbYrnseAv+RQ/FztKUou31BN7ALx?=
+ =?us-ascii?Q?fY2NoXETQ+yLj8YV69axdfWPn1jddM/szcJIsPZNpX4bVewuZmGAGN4U1Zju?=
+ =?us-ascii?Q?PgvyPuhZAsrRerwIPTprL2EgVGVIaM6sj7cN4s1uKVG0/8u/D7Sge/gWiDUf?=
+ =?us-ascii?Q?K9dDEdD0UVj/wRhImMEQmHT0ANdzSbmH5Ll5tvGKNTFyeVne375gMxQu1i58?=
+ =?us-ascii?Q?wZUU+TA40mONGx8m7PkeJwhl4wXB73eojYfICN3elMfGssvAbPvUFIqaDgn6?=
+ =?us-ascii?Q?/znjkjFV5efuoKG+aW5UCIC/oMfdVC9JqvyP/eZY5S6lTc/MBnzabeBMhN8R?=
+ =?us-ascii?Q?inVFqhKMxujzetfTqiWlPqeeRXb3s3U7Q7OFm2CZL7vBQyiKximmAqLMDtve?=
+ =?us-ascii?Q?EY8LlvRAZ7otw+xFxI0nn+uryqIy6syFyrOeTOMBxBW66+bi3B9yuBsnuNh4?=
+ =?us-ascii?Q?76BhIx1ngxjf3LHB/PdBsNYMSMk+XB45wra5hfr6VSb1WKoYqQfHUk1YPLIE?=
+ =?us-ascii?Q?gkg7pkXz1FAYdZw8/3m5P6p/zaOqxEvqNo4l8EAs7zZXhFNH27iJ/OktugrY?=
+ =?us-ascii?Q?oupNXKZkLC24f71aLdcoaHDqDk91ygGQmaF8eHLzNP3IGaxsyoxGxMg2SRsb?=
+ =?us-ascii?Q?yff5nVwOm0WsgJa0M0yTfis0LUcN2iQc4P5uF/KeZJOGE4wRO04g1V3lOq0+?=
+ =?us-ascii?Q?CxBqyoleglGGtiMKtKgr7LujVLBxKEdmj2OhWvs9M0kkjheJEVVdEX1ojp5p?=
+ =?us-ascii?Q?XOgl6y0JgSW7qMUYyn2u63H6fb2irAJWj3wBU2e0vx3ovCAwR1ROwaJ02N5C?=
+ =?us-ascii?Q?M99co5Aqu/aqu1MJu/M8C4vhX9nLmURPdm8ur/GZcaQ9d6b3ATUFuNxW6Inl?=
+ =?us-ascii?Q?sihXonAJSg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 06:48:13 +0000
-Message-Id: <20260604064814.07E141F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked: goB48zWtAqNn1DpUa6M1LZRbYdH4a96dG55+sMwafIAfNx19AbKc4YdwFv4ZGCkaq7N5RI9UtFT907jSDX/juEJ3jFKY9AJ3otQKtshIsR4qUKTD/5j0GZPDEWrDgJY+dO+a6uTmd2jxNuG4JitFbu+GBVQObkWf+HgJGq0Y7evf7MI1jLg76O4iX2zbjTulbfd8NXBgjgTW7mIKhT/2LOVKRPXsDSu9XP+SHXPTrI5nUzGeoUcBovhk+ssZ5PaLmI8ucXRV9ieA2JOqMnsei29/2oAt4IomAJ8mjd4RlpfH6CaSNxVXS9EM4+GakWJGIKpO4mb4M2cS/dsT0gGL9A==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6514.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c917e0c9-8219-4ef8-123f-08dec205a3b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2026 06:51:01.0015
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WucQwAe1QFd4IBt7rqirZZUrSwW/VjidmG6ZcLswtYjCZ+n0P3O6gEnZiz+cXiXDBSIPfdbmZieIFI5LUqUi5/iUfXBJenVIygG6zvpzHqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8503
+X-OriginatorOrg: intel.com
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [High] Worker thread calls `pthread_barrier_wait` on an uninitialized bar=
-rier during single-thread tests.
-- [High] Async-signal-unsafe call to `pthread_exit()` in `SIGUSR1` handler =
-exposes the framework to deadlocks.
-- [High] Single-thread tests are instantly aborted and completely bypass th=
-eir testing logic.
-- [Medium] Missing `pthread_join()` on the `pthread_barrier_destroy()` erro=
-r path leads to a use-after-free race.
-- [Medium] Missing error check for `pthread_create` leads to undefined beha=
-vior.
-- [Low] Unmapped memory leak when `xsk_configure_umem` fails.
---
 
-commit 154c93204cd9eb3588c96c98454860ecbe0e819c
-Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Subject: selftests/xsk: Introduce mmap_size in umem struct
+> -----Original Message-----
+> From: Fijalkowski, Maciej <maciej.fijalkowski@intel.com>
+> Sent: Wednesday, June 3, 2026 8:22 PM
+> To: Vyavahare, Tushar <tushar.vyavahare@intel.com>
+> Cc: netdev@vger.kernel.org; Karlsson, Magnus
+> <magnus.karlsson@intel.com>; stfomichev@gmail.com;
+> kernelxing@tencent.com; davem@davemloft.net; kuba@kernel.org;
+> pabeni@redhat.com; ast@kernel.org; daniel@iogearbox.net; Sarkar,
+> Tirthendu <tirthendu.sarkar@intel.com>; bpf@vger.kernel.org
+> Subject: Re: [PATCH net-next v2 2/4] selftests/xsk: Move UMEM state from
+> ifobject to xsk_socket_info
+>=20
+> On Wed, Jun 03, 2026 at 11:33:25AM +0530, Tushar Vyavahare wrote:
+> > Move UMEM ownership from ifobject to xsk_socket_info and access it
+> > through xsk->umem.
+> >
+> > Allocate one shared umem_real in ifobject_create() and let all sockets
+> > reference it through xsk->umem, while keeping ownership in xsk_arr[0].
+> > Keep the existing goto-based error path in
+> > ifobject_create() and free the allocation once in ifobject_delete().
+> >
+> > Reset the existing umem_real in __test_spec_init() with memset()
+> > instead of reallocating it.
+> >
+> > Preserve shared-UMEM behavior by copying RX UMEM state into a TX-local
+> > UMEM state in thread_common_ops_tx() and reset base_addr/next_buffer
+> > before TX socket configuration.
+> >
+> > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> > Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/test_xsk.c       | 133 +++++++++++-------
+> >  .../selftests/bpf/prog_tests/test_xsk.h       |   2 +-
+> >  2 files changed, 80 insertions(+), 55 deletions(-)
+>=20
+> ...
+>=20
+> > -static void pkt_generate(struct xsk_socket_info *xsk, struct xsk_umem_=
+info
+> *umem, u64 addr, u32 len,
+> > -			 u32 pkt_nb, u32 bytes_written)
+> > +static void pkt_generate(struct xsk_socket_info *xsk, u64 addr, u32 le=
+n,
+> u32 pkt_nb,
+> > +			 u32 bytes_written)
+> >  {
+> > -	void *data =3D xsk_umem__get_data(umem->buffer, addr);
+> > +	void *data =3D xsk_umem__get_data(xsk->umem->buffer, addr);
+> >
+> >  	if (len < MIN_PKT_SIZE)
+> >  		return;
+> > @@ -1003,7 +1010,7 @@ static int __receive_pkts(struct test_spec *test,
+> struct xsk_socket_info *xsk)
+> >  			return TEST_FAILURE;
+> >
+> >  		if (!ret) {
+> > -			if (!is_umem_valid(test->ifobj_tx))
+> > +			if (!is_umem_valid(test->ifobj_tx->xsk))
+> >  				return TEST_PASS;
+> >
+> >  			ksft_print_msg("ERROR: [%s] Poll timed out\n",
+> __func__); @@
+> > -1163,7 +1170,7 @@ static int __send_pkts(struct ifobject *ifobject,
+> > struct xsk_socket_info *xsk, b  {
+> >  	u32 i, idx =3D 0, valid_pkts =3D 0, valid_frags =3D 0, buffer_len;
+> >  	struct pkt_stream *pkt_stream =3D xsk->pkt_stream;
+> > -	struct xsk_umem_info *umem =3D ifobject->umem;
+> > +	struct xsk_umem_info *umem =3D xsk->umem;
+> >  	bool use_poll =3D ifobject->use_poll;
+> >  	struct pollfd fds =3D { };
+> >  	int ret;
+> > @@ -1222,7 +1229,7 @@ static int __send_pkts(struct ifobject *ifobject,
+> struct xsk_socket_info *xsk, b
+> >  		while (nb_frags_left--) {
+> >  			struct xdp_desc *tx_desc =3D
+> xsk_ring_prod__tx_desc(&xsk->tx, idx +
+> > i);
+> >
+> > -			tx_desc->addr =3D pkt_get_addr(pkt, ifobject->umem);
+> > +			tx_desc->addr =3D pkt_get_addr(pkt, umem);
+> >  			if (pkt_stream->verbatim) {
+> >  				tx_desc->len =3D pkt->len;
+> >  				tx_desc->options =3D pkt->options;
+> > @@ -1234,7 +1241,7 @@ static int __send_pkts(struct ifobject *ifobject,
+> struct xsk_socket_info *xsk, b
+> >  				tx_desc->options =3D 0;
+> >  			}
+> >  			if (pkt->valid)
+> > -				pkt_generate(xsk, umem, tx_desc->addr,
+> tx_desc->len, pkt->pkt_nb,
+> > +				pkt_generate(xsk, tx_desc->addr, tx_desc-
+> >len, pkt->pkt_nb,
+>=20
+> Nit: you have the umem pointer handy, what's the point to change
+> pkt_generate() interface?
+>=20
 
-This patch stores the final mapping length in xsk_umem_info as mmap_size
-when the UMEM mapping is created. This value is then used during teardown,
-avoiding duplicated size arithmetic in cleanup. It also joins the RX worker
-thread before cleanup in the single-thread path.
+Thanks for the catch; I've reverted that part and kept pkt_generate() using=
+ a local
+ umem pointer to avoid unnecessary interface churn.
+-Tushar
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
-sting/selftests/bpf/prog_tests/test_xsk.c
-> index f1730466ffd9c..e94c38a1faf47 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -1595,10 +1595,15 @@ static int thread_common_ops(struct test_spec *te=
-st, struct ifobject *ifobject)
->  	if (ifobject->shared_umem)
->  		umem_sz *=3D 2;
-> =20
-> -	bufs =3D mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
-> +	mmap_sz =3D umem->unaligned_mode ?
-> +		ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE : umem_sz;
-> +
-> +	bufs =3D mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
->  	if (bufs =3D=3D MAP_FAILED)
->  		return -errno;
-> =20
-> +	umem->mmap_size =3D mmap_sz;
-> +
->  	ret =3D xsk_configure_umem(ifobject, umem, bufs, umem_sz);
->  	if (ret)
->  		return ret;
+> >  					     bytes_written);
+> >  			bytes_written +=3D tx_desc->len;
+> >
+>=20
+> ...
+>=20
+> > @@ -1856,9 +1875,11 @@ static int testapp_validate_traffic(struct
+> > test_spec *test)  {
+> >  	struct ifobject *ifobj_rx =3D test->ifobj_rx;
+> >  	struct ifobject *ifobj_tx =3D test->ifobj_tx;
+> > +	struct xsk_umem_info *umem_rx =3D ifobj_rx->xsk->umem;
+> > +	struct xsk_umem_info *umem_tx =3D ifobj_tx->xsk->umem;
+> >
+> > -	if ((ifobj_rx->umem->unaligned_mode && !ifobj_rx->unaligned_supp)
+> ||
+> > -	    (ifobj_tx->umem->unaligned_mode && !ifobj_tx->unaligned_supp))
+> {
+> > +	if ((umem_rx->unaligned_mode && !ifobj_rx->unaligned_supp) ||
+> > +	    (umem_tx->unaligned_mode && !ifobj_tx->unaligned_supp)) {
+> >  		ksft_print_msg("No huge pages present.\n");
+> >  		return TEST_SKIP;
+> >  	}
+>=20
+> this hunk does not add any value IMHO.
 
-[Severity: Low]
-This isn't a bug introduced by this patch, but does this leak the memory
-mapped into bufs if xsk_configure_umem() fails?
+Agreed, this was unnecessary indirection. I've removed umem_rx/umem_tx and
+now use direct ifobj_{rx,tx}->xsk->umem access. I'll send v3 with this fix.
+-Tushar
 
-If xsk_umem__create() fails inside xsk_configure_umem(), umem->buffer is
-never assigned. The teardown logic in testapp_clean_xsk_umem() will later
-call munmap(NULL, mmap_size) which fails with EINVAL, leaking the memory.
-
-While a test suite memory leak is minor, could repeated failures exhaust
-hugepages across test runs?
-
-[ ... ]
-
-> @@ -1706,15 +1711,9 @@ void *worker_testapp_validate_rx(void *arg)
->  static void testapp_clean_xsk_umem(struct ifobject *ifobj)
->  {
->  	struct xsk_umem_info *umem =3D ifobj->xsk->umem;
-> -	u64 umem_sz =3D umem_size(umem);
-> -
-> -	if (ifobj->shared_umem)
-> -		umem_sz *=3D 2;
-> -
-> -	umem_sz =3D ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE;
-> =20
->  	xsk_umem__delete(umem->umem);
-> -	munmap(umem->buffer, umem_sz);
-> +	munmap(umem->buffer, umem->mmap_size);
->  }
-> =20
->  static void handler(int signum)
-
-[Severity: High]
-This is a pre-existing issue, but does this async-signal-unsafe call to
-pthread_exit() in the SIGUSR1 handler expose the framework to deadlocks?
-
-pthread_exit() is explicitly documented by POSIX as async-signal-unsafe.
-The test suite uses SIGUSR1 to asynchronously kill worker threads. If a
-thread is interrupted while holding an internal libc lock (e.g., during
-malloc(), mmap(), or BPF map ops), the lock is abandoned.
-
-When the main thread subsequently runs clean_sockets() and calls free(),
-it could deadlock trying to acquire the same lock.
-
-[ ... ]
-
-> @@ -1857,8 +1856,7 @@ static int __testapp_validate_traffic(struct test_s=
-pec *test, struct ifobject *i
-> =20
->  	if (!ifobj2)
->  		pthread_kill(t0, SIGUSR1);
-> -	else
-> -		pthread_join(t0, NULL);
-> +	pthread_join(t0, NULL);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but are single-thread tests being
-instantly aborted and bypassing their testing logic?
-
-For single-interface scenarios (ifobj2 =3D=3D NULL), __testapp_validate_tra=
-ffic()
-spawns t0 and immediately executes pthread_kill(t0, SIGUSR1). The worker
-thread is terminated instantly before it can run its test logic (such as
-waiting for poll() to time out in testapp_poll_rxq_tmout).
-
-Since test->fail defaults to false, does this cause the test to return a fa=
-lse
-positive success, providing zero coverage?
-
-[Severity: High]
-This is also a pre-existing issue, but could worker threads call
-pthread_barrier_wait() on an uninitialized barrier during single-thread tes=
-ts?
-
-In __testapp_validate_traffic(), barr is only initialized if (ifobj2).
-However, single-thread tests (like testapp_poll_rxq_tmout) invoke
-worker_testapp_validate_rx() via t0, which unconditionally calls
-pthread_barrier_wait(&barr).
-
-Is waiting on an uninitialized barrier undefined behavior that could cause
-memory corruption or deadlocks?
-
-[Severity: Medium]
-Another pre-existing issue here: is there a use-after-free race on the
-pthread_barrier_destroy() error path higher up in
-__testapp_validate_traffic()?
-
-If pthread_barrier_destroy(&barr) fails, the RX thread (t0) is signaled via
-pthread_kill() but not joined before clean_sockets() and clean_umem() are
-invoked:
-
-	if (pthread_barrier_destroy(&barr)) {
-		pthread_kill(t0, SIGUSR1);
-		clean_sockets(test, ifobj1);
-		clean_umem(test, ifobj1, NULL);
-		return TEST_FAILURE;
-	}
-
-Could the worker thread still be running or executing its signal handler
-while its resources are torn down?
-
-[Severity: Medium]
-This is also a pre-existing issue, but does the framework call
-pthread_create() for t0 and t1 without checking the return value in
-__testapp_validate_traffic()?
-
-If thread creation fails (e.g., due to EAGAIN), the pthread_t variable is
-left uninitialized. The code subsequently passes this uninitialized ID to
-pthread_kill() and pthread_join().
-
-Could this invoke undefined behavior?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260603060327.2983=
-89-1-tushar.vyavahare@intel.com?part=3D4
