@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C323164C3
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662613BBFC1
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780611718; cv=none; b=h0rsWG3FB48LQOhFABlAX9+4krTb65ZMlrnyod3iSyRMFI98nsXVXP2yV0DmO5IGOT2U59tIF6o8+g7H2rRGT2LPyM5avCSaB1UtdmDe7OMCeNkRqQCVfynUOxNlEtROriiLS8Hezv62MHNWPj1IkYLBN2JNJeaUhISf1rxEex8=
+	t=1780611785; cv=none; b=VOVCHjiM7n5YuacCnH1szRHdAk5r+LF6sDuvEQQbB4sKCCmkNLCNt71sqqMZ1UO6G4mjuXgt+Mo8q5lpSCiUVZLsTI+V3lcKRYgct8QG1QcBSR7ldaTKo6B++IIl4AU68LOT9MSH9Tn6cAXOssA1+T8hhKu2KfVdgTm0Fbl0w88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780611718; c=relaxed/simple;
-	bh=M92VEL+kD9ZvkphJPUTwCJdAGwgX8oOg22MbXNNQ05w=;
+	s=arc-20240116; t=1780611785; c=relaxed/simple;
+	bh=6hx4DPiXn+spZ//lo8PiUXH18Xf/TY21t9uTOUwz8Ls=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ty27mcnoWHTzCMGkEmZDI0bb73A0aa/dtVh5vauNcx0Cr88uE1XIzRIQuNVEQ4yfynMD+xsjOIOxCc/4R4NTnjVg/bZq9KYv79lgoueTuj9rLlgaeXQaEDXUgGJi0r39cChrmKinz3KhQhTlV4R8Ql541jFZYm2TcxoFxOZ+UO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QEW1NC0z; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DfkW4iicRBUxSheWMemqPYP2rM7/U2DzJG981/0jz0qnOO0jqijQsqVW1h5Z6bQ8UjCHpC/Wrx4wZZ+dV/uyykkx2b/CYy1Cvy48ble255URjEreZn55j99Lhu02oFYaPns5zXn6a7uMk2S5Ztg4TX+Z3KD1X4FaouGD6f4dN8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAWBLpsS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QEW1NC0z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449C21F00898;
-	Thu,  4 Jun 2026 22:21:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAWBLpsS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4421F00893;
+	Thu,  4 Jun 2026 22:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780611717;
-	bh=fP0V+cFOGZqrPNh9RYwajpk+ZzS3wtExoXmtVt4e/UU=;
+	s=k20260515; t=1780611784;
+	bh=ImTwkn+Q3KO1Y1VcL/a7rWixmv23OLDNFn4kEb6B3/o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QEW1NC0zQgyKrhVBJez6KOEG1togSsOg7x800QaYi8NYkXXrMo55U0pb+yN0iw/dV
-	 BMGl/rQRh+5cZpT6kQrJT7zRc2wv0Sim5/M5/lbyGKGFhKlbKEZXFffZPfxhCPYCra
-	 dTL31wUlGBviDoWJx2JnIIQfHuoZy7OYS044MrweudALrBaQvRUdmfzn3uybfyOpCY
-	 jO1GVHCidER196L+W3MNvnXgAhv2GIk+pp6mBKbZjaE7h9jDlUjtd0uvhTSDOvrcYH
-	 KUxGNNXRpBtlDdHb+UGEqC+x4evS7ntbzmGXT7exTSHUDxCHns0GiFXVPvPx1gb8A7
-	 09PFcfBBiAw4w==
+	b=hAWBLpsSruiP4Rnmf5ICexo4xA/ulnfBnHQCRDgbGeYy2Gfc5/b8DLpV+1WrRQFrj
+	 R+HzPsAybZAXPMvth4jrug5t9/G2bxE0GR/6kpsjw3+VYU7ohbf0vivRtYDXJJNb+i
+	 spVJoG//mdzbBShNNfDosphIcecgCttWlBM6xqmCOhkkI9vGU8WxPdClHFPJO9MT4L
+	 dXvw2dN+o7u3mqDNaXw18s1yuvGtz/aDvxLyUkFoAJ28MiiSFocMMYdIp+Iyko3E57
+	 2WPwumVgSnHaDLmW5VG96C48ewYc4vMY7zZlS85QHQbzZNAdh+5rt+fea/gNTRoDrP
+	 RZoU5MChqu8hQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/3] selftests/bpf: Use bpf_dynptr_slice()
- to read file dynptr in leak test
+Subject: Re: [PATCH bpf-next v1 2/3] bpf: Compare parent_id in refsafe() for
+ REF_TYPE_PTR
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260604220904.1032145-4-ameryhung@gmail.com>
-References: <20260604220904.1032145-4-ameryhung@gmail.com>
+In-Reply-To: <20260604220904.1032145-3-ameryhung@gmail.com>
+References: <20260604220904.1032145-3-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 22:21:56 +0000
-Message-Id: <20260604222157.449C21F00898@smtp.kernel.org>
+Date: Thu, 04 Jun 2026 22:23:03 +0000
+Message-Id: <20260604222303.DE4421F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,62 +46,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The negative selftest uses an uninitialized stack buffer `buf`, =
-causing the verifier to reject the program early and bypass the intended re=
-ference leak check.
+
+Pre-existing issues:
+- [High] Triggering WARN_ON_ONCE(1) in check_ids() via BPF_ID_MAP_SIZE exha=
+ustion with leaked references.
 --
 
-commit 2c90a2c3822df01ad7da448a72985505048a4374
+commit 22d2263c4d3e606f05ac37e06afa0b46878b3f51
 Author: Amery Hung <ameryhung@gmail.com>
 
-selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
+bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
 
-This commit updates the use_file_dynptr_slice_after_put_file test to
-use bpf_dynptr_slice instead of bpf_dynptr_data, since bpf_dynptr_data
-always returns NULL for read-only file dynptrs. The slice is read
-rather than written to, while the test is still expected to fail.
+This patch updates refsafe() to compare the parent_id of each reference
+for REF_TYPE_PTR, fixing an issue where two states could be wrongly
+treated as equivalent if their PTR references only differed in the parent
+object they were derived from.
 
-> diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/tools=
-/testing/selftests/bpf/progs/file_reader_fail.c
-> index d5fae5e4cf9ad..3bb9e2612f8f3 100644
-> --- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
-> @@ -87,7 +87,8 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
->  	struct task_struct *task =3D bpf_get_current_task_btf();
->  	struct file *file =3D bpf_get_task_exe_file(task);
->  	struct bpf_dynptr dynptr;
-> -	char *data;
-> +	char buf[1];
-> +	const char *data;
-> =20
->  	if (!file)
->  		return 0;
-> @@ -95,15 +96,14 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
->  	if (bpf_dynptr_from_file(file, 0, &dynptr))
->  		goto out;
-> =20
-> -	data =3D bpf_dynptr_data(&dynptr, 0, 1);
-> +	data =3D bpf_dynptr_slice(&dynptr, 0, buf, sizeof(buf));
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+> @@ -890,6 +890,9 @@ static bool refsafe(struct bpf_verifier_state *old, s=
+truct bpf_verifier_state *c
+>  			return false;
+>  		switch (old->refs[i].type) {
+>  		case REF_TYPE_PTR:
+> +			if (!check_ids(old->refs[i].parent_id, cur->refs[i].parent_id, idmap))
+> +				return false;
 
-[Severity: Medium]
-Will the BPF verifier reject this program early due to the uninitialized
-stack buffer, masking the actual leak test?
+[Severity: High]
+This is a pre-existing issue, but does adding this extra check_ids() call
+make it easier to trigger the WARN_ON_ONCE() in check_ids() via idmap
+exhaustion?
 
-The verifier requires memory passed to helpers like bpf_dynptr_slice() to be
-initialized. Since buf is uninitialized, the verifier will likely fail with
-an invalid read from stack error here, bypassing the intended reference leak
-check.
+Because acquired_refs does not have an explicit limit, a BPF program
+could acquire many references (for example, via bpf_sk_lookup_tcp) and
+leak them before a branch merge point. When states_equal() invokes
+refsafe(), it calls check_ids() for each acquired reference.
 
-Would initializing the buffer (e.g., char buf[1] =3D {0};) allow the test to
-fail for the expected reason?
+The idmap has a fixed size based only on registers and stack slots:
 
->  	if (!data)
->  		goto out;
-> =20
->  	/* this should fail - file dynptr should be discarded first to prevent =
-resource leak */
->  	bpf_put_file(file);
+include/linux/bpf_verifier.h:
+#define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE + \
+			  MAX_STACK_ARG_SLOTS) * MAX_CALL_FRAMES)
+
+If a program accumulates enough leaked references, checking them all
+will run out of idmap slots and trigger the warning:
+
+kernel/bpf/states.c:check_ids() {
+	...
+	/* Reached the end of known mappings; haven't seen this id before */
+	if (idmap->cnt < BPF_ID_MAP_SIZE) {
+		...
+		return true;
+	}
+
+	/* We ran out of idmap slots, which should be impossible */
+	WARN_ON_ONCE(1);
+	return false;
+}
+
+Since this patch maps up to two IDs per reference (the reference id and
+now the parent_id), does this allow exhausting the BPF_ID_MAP_SIZE much
+faster? Could a user intentionally leak enough references to trigger this
+warning and potentially panic the kernel if panic_on_warn is set?
+
+> +			break;
+>  		case REF_TYPE_IRQ:
+>  			break;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604220904.1032=
-145-1-ameryhung@gmail.com?part=3D3
+145-1-ameryhung@gmail.com?part=3D2
