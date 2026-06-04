@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18C2449EA9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E969A478E2B;
 	Thu,  4 Jun 2026 13:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780579688; cv=none; b=b7SHMgzYdyq0H69kgqQ/M81sLiTGBFPCHBBPM4sEUE4GYQwjY5pTMq4WWmsdw0Nim8uuYB28L5mMZfH7uvw1Nigv4VzWkIQgxqvPH+6TayLMu6z5I433XDM8soL/NQwBBX8q4EyMZOqU6L1rYq53mrpFPffoE1iP0Fc/YWiF4TA=
+	t=1780579690; cv=none; b=QDBvqVCg0xQhnSuaGpDqY+9yfCoIdu/ijjzJiOpu9EyIthPZwOwnH9om3mjUtdat3FRQMRU70bx16z2T265KmjYwgcpLudC6soKQEV9LxfCgM7ROKsqtQm4Pm4x/6PMc2fNO647JPnQeA6PAefLElkZVEc64GfNylxdV4/QDUgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780579688; c=relaxed/simple;
-	bh=ZcJC5uxpg7KMHyly7HspNq36z7tc8iBE4Z6wTr+vLas=;
+	s=arc-20240116; t=1780579690; c=relaxed/simple;
+	bh=HGFWqzfX/8kHLdfVqAY+rikQ+O//j1v3bdQfjSLZOLo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IH5VUmjqQOufEBywaVB0YuSSgkgOWhYlpaU9B2/eDv1bwXtG3f0swhhBWP/jaBUaTh8ZIk9O2bE8rX3CWK7cPT3faLo8kyyZl4tXrOl6GKHuDBuGtJ9yz2GeVJXXyLTH+v8bkbYegdfv1L0Yf4CC7i7XlOHBhrGaW6dGF2rVbqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=GqHfpNJ5C8+FDHkOnc2mlZPyzC3fR59QK6LzXenVAQ+hYtC9GJIJ4CuyOQZFiSN+Nj1KXQld256nFUDNqm3JwEhXr6WOHGQRDzudZgZ6oGVazvOPQOk7C1NbqkRHgdGmDzpB6CEpiHKwPbUMan+J2CMtUzUAkb7Iac2zbzdDjrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gWQNh38LXzYQtyP;
-	Thu,  4 Jun 2026 21:27:48 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gWQNK1WyYzKHMZ2;
+	Thu,  4 Jun 2026 21:27:29 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id C988140562;
+	by mail.maildlp.com (Postfix) with ESMTP id BB4F44058C;
 	Thu,  4 Jun 2026 21:27:56 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP2 (Coremail) with SMTP id Syh0CgCH_oNZfSFqyEtmAg--.28555S5;
+	by APP2 (Coremail) with SMTP id Syh0CgCH_oNZfSFqyEtmAg--.28555S4;
 	Thu, 04 Jun 2026 21:27:56 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	YiFei Zhu <zhuyifei@google.com>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	Quan Sun <2022090917019@std.uestc.edu.cn>
-Subject: [PATCH bpf v4 3/3] selftests/bpf: Add tests for bpf_set_retval validation
-Date: Thu,  4 Jun 2026 13:04:58 +0000
-Message-ID: <20260604130458.617765-4-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf v4 2/3] bpf: Add validation for bpf_set_retval argument
+Date: Thu,  4 Jun 2026 13:04:57 +0000
+Message-ID: <20260604130458.617765-3-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260604130458.617765-1-xukuohai@huaweicloud.com>
 References: <20260604130458.617765-1-xukuohai@huaweicloud.com>
@@ -50,12 +50,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgCH_oNZfSFqyEtmAg--.28555S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4fGF4fZrW5AF4fuw13twb_yoW7JrW8p3
-	WkCF9rW3sayw43WFWxGF47ZF1rGF4vv3y5Zr97Xw1UCFs7Jr4DXr1IkF13JasxGFWDuw1Y
-	kr4a9FWfur1Ut3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+X-CM-TRANSID:Syh0CgCH_oNZfSFqyEtmAg--.28555S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar4UArWfZFWkur4xCFW3Wrg_yoW7ury3pF
+	4fGryqyr1DWr4Igw4ft3Z7ZF4Fyw40grWFkF97J3sFyw43Kw1fGr1jgw4agryayFykGw1I
+	ga1jvws8ua4UZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
 	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
@@ -65,157 +65,158 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGw4fGF4fZrW5AF4fuw13twb_yoW7JrW8p3
 	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
 	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
 	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU14x
-	RDUUUUU==
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFSdy
+	UUUUU
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Add verifier tests to validate bpf_set_retval argument for cgroup
-program types.
+The bpf_set_retval() helper is used by cgroup BPF programs to set the
+return value of the target hook. The argument type for this helper is
+ARG_ANYTHING. This allows setting a positive value, which no cgroup
+hook expects and can cause issues, such as:
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com> #v1
+- BPF_LSM_CGROUP: a positive value from bpf_lsm_socket_create bypasses
+  the err < 0 check in __sock_create(), leaving the socket object
+  unallocated. The positive return value is then propagated to the
+  syscall entry __sys_socket(), which also bypasses the IS_ERR() guard
+  and ultimately causes a NULL pointer dereference.
+
+- BPF_CGROUP_DEVICE: a positive value can be returned through cgroup
+  device bpf prog -> devcgroup_check_permission() -> bdev_permission()
+  -> bdev_file_open_by_dev(), where ERR_PTR(positive) produces a pointer
+  that IS_ERR() does not catch, leading to a wild pointer dereference.
+
+- BPF_CGROUP_SOCK: a positive value can be returned through cgroup sock
+  bpf prog -> __cgroup_bpf_run_filter_sk() -> inet_create() ->
+  __sock_create(), where inet_create() frees the newly allocated sk
+  via sk_common_release() and sets sock->sk = NULL on the non-zero
+  return, but __sock_create() only checks err < 0 for cleanup, so a
+  positive retval bypasses cleanup and returns a socket with NULL sk
+  to userspace, triggering a NULL pointer dereference on subsequent
+  socket operations.
+
+- BPF_CGROUP_SYSCTL: a positive value can be returned through the cgroup
+  bpf prog -> __cgroup_bpf_run_filter_sysctl() -> proc_sys_call_handler(),
+  where a non-zero return bypasses the normal sysctl proc_handler and is
+  returned directly to userspace as return value of read() or write()
+  syscall.
+
+So add validation for the argument of the bpf_set_retval() helper.
+
+For BPF_LSM_CGROUP, enforce the LSM hook specific range returned by
+bpf_lsm_get_retval_range().
+
+For all other cgroup program types, restrict the argument to
+[-MAX_ERRNO, 0], which matches the kernel convention of 0 for success
+and negative errno for error.
+
+BPF_CGROUP_GETSOCKOPT is an exception, since valid getsockopt
+implementations may return positive values, as allowed by commit
+c4dcfdd406aa ("bpf: Move getsockopt retval to struct bpf_cg_run_ctx").
+
+Also refine the return value range of bpf_get_retval() so that
+values returned by bpf_get_retval() can be passed directly to
+bpf_set_retval() without extra manual bounds checking.
+
+Fixes: b44123b4a3dc ("bpf: Add cgroup helpers bpf_{get,set}_retval to get/set syscall return value")
+Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+Closes: https://lore.kernel.org/all/567d3206-74a5-44e5-99c6-779c425f399e@std.uestc.edu.cn
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_set_retval.c | 107 ++++++++++++++++++
- 2 files changed, 109 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_set_retval.c
+ kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 219ff2969868..89779d897aba 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -117,6 +117,7 @@
- #include "verifier_xdp.skel.h"
- #include "verifier_xdp_direct_packet_access.skel.h"
- #include "verifier_bits_iter.skel.h"
-+#include "verifier_set_retval.skel.h"
- #include "verifier_lsm.skel.h"
- #include "verifier_jit_inline.skel.h"
- #include "irq.skel.h"
-@@ -266,6 +267,7 @@ void test_verifier_xadd(void)                 { RUN(verifier_xadd); }
- void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
- void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
- void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
-+void test_verifier_set_retval(void)            { RUN(verifier_set_retval); }
- void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
- void test_irq(void)			      { RUN(irq); }
- void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_set_retval.c b/tools/testing/selftests/bpf/progs/verifier_set_retval.c
-new file mode 100644
-index 000000000000..1415cd15cede
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_set_retval.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c8d980fdd709..32b4d88c5b32 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9790,6 +9790,7 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
+ 				  int func_id,
+ 				  struct bpf_call_arg_meta *meta)
+ {
++	struct bpf_retval_range range;
+ 	struct bpf_reg_state *ret_reg = &regs[BPF_REG_0];
+ 
+ 	if (ret_type != RET_INTEGER)
+@@ -9810,6 +9811,29 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
+ 		reg_set_urange32(ret_reg, 0, nr_cpu_ids - 1);
+ 		reg_bounds_sync(ret_reg);
+ 		break;
++	case BPF_FUNC_get_retval:
++		/*
++		 * bpf_get_reval may see arbitrary value passed by bpf_prog_run_array_cg for
++		 * CGROUP_GETSOCKOPT type.
++		 */
++		if (env->prog->type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
++		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
++			break;
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
++		if (env->prog->type == BPF_PROG_TYPE_LSM &&
++		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
++			if (!env->prog->aux->attach_func_proto->type)
++				break;
++			bpf_lsm_get_retval_range(env->prog, &range);
++		} else {
++			range.minval = -MAX_ERRNO;
++			range.maxval = 0;
++		}
 +
-+SEC("lsm_cgroup/socket_create")
-+__description("lsm_cgroup bpf_set_retval success")
-+__success
-+int BPF_PROG(lsm_cgroup_set_retval_zero_valid, int family, int type, int protocol, int kern)
-+{
-+	bpf_set_retval(0);
-+	return 0;
-+}
++		reg_set_srange64(ret_reg, range.minval, range.maxval);
++		reg_set_srange32(ret_reg, range.minval, range.maxval);
++		reg_bounds_sync(ret_reg);
++		break;
+ 	}
+ 
+ 	return reg_bounds_sanity_check(env, ret_reg, "retval");
+@@ -10290,6 +10314,24 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		}
+ 		break;
+ 	case BPF_FUNC_set_retval:
++	{
++		struct bpf_retval_range range = {
++			.minval = -MAX_ERRNO,
++			.maxval = 0,
++			.return_32bit = true
++		};
++		struct bpf_reg_state *r1 = &regs[BPF_REG_1];
 +
-+SEC("lsm_cgroup/socket_create")
-+__description("lsm_cgroup bpf_set_retval valid errno")
-+__success
-+int BPF_PROG(lsm_cgroup_set_retval_negative_valid, int family, int type, int protocol, int kern)
-+{
-+	bpf_set_retval(-12);
-+	return 0;
-+}
++		if (r1->type != SCALAR_VALUE) {
++			verbose(env, "R1 is not a scalar\n");
++			return -EINVAL;
++		}
 +
-+SEC("lsm_cgroup/socket_create")
-+__description("lsm_cgroup bpf_set_retval invalid negative value")
-+__failure __msg("should have been in [-4095, 0]")
-+int BPF_PROG(lsm_cgroup_set_retval_negative_invalid, int family, int type, int protocol, int kern)
-+{
-+	bpf_set_retval(-4096);
-+	return 0;
-+}
++		/* CGROUP_GETSOCKOPT is allowed to return arbitrary value */
++		if (env->prog->type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
++		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
++			break;
 +
-+SEC("lsm_cgroup/socket_create")
-+__description("lsm_cgroup bpf_set_retval invalid positive value")
-+__failure __msg("should have been in [-4095, 0]")
-+int BPF_PROG(lsm_cgroup_set_retval_positive_invalid, int family, int type, int protocol, int kern)
-+{
-+	bpf_set_retval(1);
-+	return 0;
-+}
+ 		if (prog_type == BPF_PROG_TYPE_LSM &&
+ 		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
+ 			if (!env->prog->aux->attach_func_proto->type) {
+@@ -10299,8 +10341,20 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
+ 				return -EINVAL;
+ 			}
++			bpf_lsm_get_retval_range(env->prog, &range);
++		}
 +
-+SEC("cgroup/dev")
-+__description("cgroup_device bpf_set_retval success")
-+__success
-+int cgroup_dev_set_retval_0(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	bpf_set_retval(0);
-+	return 1;
-+}
++		err = mark_chain_precision(env, BPF_REG_1);
++		if (err)
++			return err;
 +
-+SEC("cgroup/dev")
-+__description("cgroup_device bpf_set_retval valid errno")
-+__success
-+int cgroup_dev_set_retval_neg_maxerrno(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	bpf_set_retval(-4095);
-+	return 1;
-+}
++		if (!retval_range_within(range, r1)) {
++			verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
++			return -EINVAL;
+ 		}
 +
-+SEC("cgroup/dev")
-+__description("cgroup_device bpf_set_retval invalid positive value")
-+__failure __msg("should have been in [-4095, 0]")
-+int cgroup_dev_set_retval_1(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	bpf_set_retval(1);
-+	return 1;
-+}
-+
-+SEC("cgroup/dev")
-+__description("cgroup_device bpf_set_retval invalid negative value")
-+__failure __msg("should have been in [-4095, 0]")
-+int cgroup_dev_set_retval_neg_4096(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	bpf_set_retval(-4096);
-+	return 1;
-+}
-+
-+SEC("cgroup/dev")
-+__description("bpf_set_retval bounds check survives state pruning")
-+__failure __msg("should have been in [-4095, 0]")
-+__naked int cgroup_dev_set_retval_pruning_bypass(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 0 goto 1f;"
-+		"r0 = r0;"
-+		"r0 = r0;"
-+		"r0 = r0;"
-+		"r0 = r0;"
-+		"goto 2f;"
-+	"1:"
-+		"call %[bpf_get_prandom_u32];"
-+	"2:"
-+		"r1 = r0;"
-+		"call %[bpf_set_retval];"
-+		"r0 = 1;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm(bpf_set_retval)
-+		: __clobber_common
-+	);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 		break;
++	}
+ 	case BPF_FUNC_dynptr_data:
+ 	{
+ 		struct bpf_reg_state *reg;
 -- 
 2.47.3
 
