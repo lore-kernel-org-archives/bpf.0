@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662613BBFC1
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D93436A013
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 22:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780611785; cv=none; b=VOVCHjiM7n5YuacCnH1szRHdAk5r+LF6sDuvEQQbB4sKCCmkNLCNt71sqqMZ1UO6G4mjuXgt+Mo8q5lpSCiUVZLsTI+V3lcKRYgct8QG1QcBSR7ldaTKo6B++IIl4AU68LOT9MSH9Tn6cAXOssA1+T8hhKu2KfVdgTm0Fbl0w88=
+	t=1780612109; cv=none; b=b4WvImh+lVzrbcvCIn431sFzvjE1TqFP6fE8u8QFl9Pl9VcMOwgzOVQ+m2eLRK/Vi9CCTWwLU4nrWageyGzNVQGioRD70g3V2W1rEPw0ccd4rTDTd9lR/MTIIk7PCYeLNtfiCo2L8oUW0rbgExu+GmIh6El3Y5ifwCxS6XXxyig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780611785; c=relaxed/simple;
-	bh=6hx4DPiXn+spZ//lo8PiUXH18Xf/TY21t9uTOUwz8Ls=;
+	s=arc-20240116; t=1780612109; c=relaxed/simple;
+	bh=MzyGql4GHd0+RGCrF2pbBZpefHTbyT9IDPjrE3kxFM0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DfkW4iicRBUxSheWMemqPYP2rM7/U2DzJG981/0jz0qnOO0jqijQsqVW1h5Z6bQ8UjCHpC/Wrx4wZZ+dV/uyykkx2b/CYy1Cvy48ble255URjEreZn55j99Lhu02oFYaPns5zXn6a7uMk2S5Ztg4TX+Z3KD1X4FaouGD6f4dN8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAWBLpsS; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=A8md4GVIAEbApyTF5lalY4rc2fBGFAx99ZYbLtwiLXrgLSh97V/S+toKBuHKQ4O0+bYfZ0EZTgXiuYZdjInl5yDh2Y+vUQ+/ZcfMjvLDiMvR/7LbzMT8829whaWOVXN/nyArIV+UC/jW2Zs0/tzVWtOGQoQszr5BjymkUSBklrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PU7YvSUW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAWBLpsS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4421F00893;
-	Thu,  4 Jun 2026 22:23:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PU7YvSUW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4961F00893;
+	Thu,  4 Jun 2026 22:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780611784;
-	bh=ImTwkn+Q3KO1Y1VcL/a7rWixmv23OLDNFn4kEb6B3/o=;
+	s=k20260515; t=1780612104;
+	bh=iT4JvDWPz4Zr3pMI08QJSP/3J6bDWh5gu1HnZAFmAms=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hAWBLpsSruiP4Rnmf5ICexo4xA/ulnfBnHQCRDgbGeYy2Gfc5/b8DLpV+1WrRQFrj
-	 R+HzPsAybZAXPMvth4jrug5t9/G2bxE0GR/6kpsjw3+VYU7ohbf0vivRtYDXJJNb+i
-	 spVJoG//mdzbBShNNfDosphIcecgCttWlBM6xqmCOhkkI9vGU8WxPdClHFPJO9MT4L
-	 dXvw2dN+o7u3mqDNaXw18s1yuvGtz/aDvxLyUkFoAJ28MiiSFocMMYdIp+Iyko3E57
-	 2WPwumVgSnHaDLmW5VG96C48ewYc4vMY7zZlS85QHQbzZNAdh+5rt+fea/gNTRoDrP
-	 RZoU5MChqu8hQ==
+	b=PU7YvSUWx5pKhdtqmgAtDnf8ZTRlB9/X/bdwHc8LvAx4zXTTI9sESq7xe6EpYay+F
+	 0ZPj2I/MxPUpvZKl7+Nh4ow6DgvRfcmnprxdknlteYLm+eP2UXC0fjqpPNfA2Gdhf+
+	 /TvqyY2LftUuG9m7Mz92+Pmfb6QGVdn9o7YVYwPlr+02Zi9EuM9tV/JR1F/gQ+qljG
+	 bpekpnjZDHVDC6N/2dUm2bUfs0wDtKC4maSYjhHLGIy3u3RPTV3wcNqMAlEPihaPVf
+	 querbGX+IJXSUp561iSpy2jyEQT4gw53zT+J3RH3B3n9pCtembhIX/87NFaMs/n6km
+	 4uIdf5u9GIZuw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 2/3] bpf: Compare parent_id in refsafe() for
- REF_TYPE_PTR
+Subject: Re: [PATCH bpf-next v1 1/3] bpf: Fix dead error check on
+ acquire_reference() in check_kfunc_call
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260604220904.1032145-3-ameryhung@gmail.com>
-References: <20260604220904.1032145-3-ameryhung@gmail.com>
+In-Reply-To: <20260604220904.1032145-2-ameryhung@gmail.com>
+References: <20260604220904.1032145-2-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 22:23:03 +0000
-Message-Id: <20260604222303.DE4421F00893@smtp.kernel.org>
+Date: Thu, 04 Jun 2026 22:28:23 +0000
+Message-Id: <20260604222824.2D4961F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,72 +48,59 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Triggering WARN_ON_ONCE(1) in check_ids() via BPF_ID_MAP_SIZE exha=
-ustion with leaked references.
+- [High] Missing error check on `acquire_reference()` in `do_check_common` =
+allows BPF programs to bypass reference tracking and leak kernel resources.
 --
 
-commit 22d2263c4d3e606f05ac37e06afa0b46878b3f51
+commit 259ddea87c590cd0902d75313fa1c99925c708fb
 Author: Amery Hung <ameryhung@gmail.com>
 
-bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
+bpf: Fix dead error check on acquire_reference() in check_kfunc_call
 
-This patch updates refsafe() to compare the parent_id of each reference
-for REF_TYPE_PTR, fixing an issue where two states could be wrongly
-treated as equivalent if their PTR references only differed in the parent
-object they were derived from.
+This commit changes the type of the 'id' variable from a u32 to an int
+so that negative error codes returned from acquire_reference() are
+checked correctly instead of being treated as large positive integers.
 
-> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> --- a/kernel/bpf/states.c
-> +++ b/kernel/bpf/states.c
-> @@ -890,6 +890,9 @@ static bool refsafe(struct bpf_verifier_state *old, s=
-truct bpf_verifier_state *c
->  			return false;
->  		switch (old->refs[i].type) {
->  		case REF_TYPE_PTR:
-> +			if (!check_ids(old->refs[i].parent_id, cur->refs[i].parent_id, idmap))
-> +				return false;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8ed484cb1a8a4..6446db9628aed 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12817,9 +12817,10 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+>  	struct bpf_kfunc_call_arg_meta meta;
+>  	struct bpf_insn_aux_data *insn_aux;
+>  	int err, insn_idx =3D *insn_idx_p;
+> -	u32 i, nargs, ptr_type_id, id;
+>  	const struct btf_param *args;
+> +	u32 i, nargs, ptr_type_id;
+>  	struct btf *desc_btf;
+> +	int id;
 
 [Severity: High]
-This is a pre-existing issue, but does adding this extra check_ids() call
-make it easier to trigger the WARN_ON_ONCE() in check_ids() via idmap
-exhaustion?
+This isn't a bug introduced by this patch, but since we are fixing a missing
+error check on acquire_reference() here, could a similar issue exist in
+do_check_common() when initializing struct_ops program arguments?
 
-Because acquired_refs does not have an explicit limit, a BPF program
-could acquire many references (for example, via bpf_sk_lookup_tcp) and
-leak them before a branch merge point. When states_equal() invokes
-refsafe(), it calls check_ids() for each acquired reference.
+In kernel/bpf/verifier.c:do_check_common():
 
-The idmap has a fixed size based only on registers and stack slots:
+    /* Acquire references for struct_ops program arguments tagged with "__r=
+ef" */
+    if (!subprog && env->prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS) {
+        for (i =3D 0; i < aux->ctx_arg_info_size; i++)
+            aux->ctx_arg_info[i].ref_id =3D aux->ctx_arg_info[i].refcounted=
+ ?
+                              acquire_reference(env, 0, 0) : 0;
+    }
 
-include/linux/bpf_verifier.h:
-#define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE + \
-			  MAX_STACK_ARG_SLOTS) * MAX_CALL_FRAMES)
+Since acquire_reference() can return a negative error like -ENOMEM, assigni=
+ng
+it directly to aux->ctx_arg_info[i].ref_id (which is a u32) without checking
+for errors seems like it would swallow the error code.
 
-If a program accumulates enough leaked references, checking them all
-will run out of idmap slots and trigger the warning:
-
-kernel/bpf/states.c:check_ids() {
-	...
-	/* Reached the end of known mappings; haven't seen this id before */
-	if (idmap->cnt < BPF_ID_MAP_SIZE) {
-		...
-		return true;
-	}
-
-	/* We ran out of idmap slots, which should be impossible */
-	WARN_ON_ONCE(1);
-	return false;
-}
-
-Since this patch maps up to two IDs per reference (the reference id and
-now the parent_id), does this allow exhausting the BPF_ID_MAP_SIZE much
-faster? Could a user intentionally leak enough references to trigger this
-warning and potentially panic the kernel if panic_on_warn is set?
-
-> +			break;
->  		case REF_TYPE_IRQ:
->  			break;
+Does this allow the verifier to successfully accept a BPF program without
+tracking the reference, potentially leading to a kernel resource leak when
+the reference isn't released at runtime?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604220904.1032=
-145-1-ameryhung@gmail.com?part=3D2
+145-1-ameryhung@gmail.com?part=3D1
