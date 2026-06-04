@@ -1,124 +1,170 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EE13BFAD5;
-	Thu,  4 Jun 2026 07:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EDC3C3BE6;
+	Thu,  4 Jun 2026 07:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780556610; cv=none; b=Qq56liP6wDOB4v5vGV5gDtvFEZGnUGdqZcojhTLBOoeanpVKQ8sXu0oreuXXkSP94YRBX2nrOVH4WYKE5efWPbPwxPHciXLOXrDgCCxEzH1AbEwe93j1+QRFjOWp62tlFBWmWYS8Zm8TQEX13z1Cvo7oJQrarBI3te4RaYKu/SA=
+	t=1780557019; cv=none; b=Pts9MkGon0MgQn+7BOFcZhPureUILyufJjXR35AL0Pnq6QSAt2gIoeqL23ogw4PdKN026BDmvU7Zhbum9mzveNtaEVKWLYafCaxI4sVehRIXrl+3P308DQLVh+DlCqwGg9LPjA1EBLdpnmt/+PpLym8CW14GXRn9T86ezTtDNdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780556610; c=relaxed/simple;
-	bh=sYWnVOFNt27j2PfMKgAyGhP63WJeF4RfxV1Yaro8ILk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yz6HPe3w5al2IDcASY4zm80Hj3d5M/U/n0ATn54pGI1DyDqNWkGd1wHvmuUO0F4riYrP4PDfJnHsYKcbqCRFYuEoMFw0vCtmC9JkXTaJkSf3aRafu3xELNfwFMV/hBIHmXiWhPfGScXtuQao2quv3ewduJfbLOK/8UTv/KeBGNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ZXOQFSjt; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780557019; c=relaxed/simple;
+	bh=Ws4H9Q+8t06VACzdZSGsOKt9b28u1KPCCkBtrR11z9g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RhqPJVKO0Zi3Cfmdq5/SeJJaIvJcR/EaUFXuuovvWu1SSPDMTXgMB+rwiwfCyfGhvLcQjRj8hfiMrbTx9xLUMfH4S6SSA2A8+1lENfiz/bDHzVi+hd6COgjIGV+y7GRt3NnVRZ/KZpWgu1TO06BLsM8EzHmt2ErItKgw2QV2DhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mTlK76AL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ZXOQFSjt"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=CUl0lPjRe9Fv4cZlizX/U8cUnKzR2PLbrEU3Onsdhic=;
-	b=ZXOQFSjtQuwdvHuebbpPQdHg8lkZdsyMmksUn0jkGnVc7eMqHo6t9smvvE67alFANb9WonQG7
-	c/9MUg/lDs75wIvSJDzA6yahUQkEiwRBIy6gUq3fBcPcY/sDrA1sDMuDlrUj8X1K81cM+CyYHZX
-	rX3rVz6Zs/Xx11ESRSXVBK8=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gWFh23WZ4z1prL3;
-	Thu,  4 Jun 2026 14:55:30 +0800 (CST)
-Received: from kwepemr200017.china.huawei.com (unknown [7.202.195.7])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7BA454056D;
-	Thu,  4 Jun 2026 15:03:23 +0800 (CST)
-Received: from huawei.com (7.227.44.14) by kwepemr200017.china.huawei.com
- (7.202.195.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 4 Jun
- 2026 15:03:22 +0800
-From: Lin Ma <malin89@huawei.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, <bpf@vger.kernel.org>
-CC: Andrii Nakryiko <andrii@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, YiFei Zhu <zhuyifei@google.com>, Shuah Khan
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Amery Hung <ameryhung@gmail.com>, Lin Ma
-	<malin89@huawei.com>, Rongzhen Cui <cuirongzhen@huawei.com>, Jingguo Tan
-	<tanjingguo@huawei.com>, <cenxianlong@huawei.com>, <chenzhe@huawei.com>
-Subject: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog arrays
-Date: Thu, 4 Jun 2026 15:03:17 +0800
-Message-ID: <20260604070318.2869813-1-malin89@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mTlK76AL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724E31F00893;
+	Thu,  4 Jun 2026 07:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780557018;
+	bh=AhMxEQwcegOFcYLIZ9y5iV53bw04kwuyEtOBVhEDYMA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=mTlK76ALzPHk/Pz+6x8nTHyAjcgK/SS+Mku9+Qi7I3SNA0dfcHu6BhFEs+C19pRU6
+	 E5+OGsyWwtumgMG/WJ2Le0aae5LQxGXgowtVmcepxAXxMfqCWAilCKaYGk/5+kRVkP
+	 4cO9j+hmH6qM30B4Ytx/qU6yvKs9erS3UMZLX0LxVk1/5u7oTpy2ME5T1T/npLCOGU
+	 s4u+Pk89mJTbVKzFZ55WRg+drPIILWBGGd5p/DVxhd0Z2F7ICIpxvMp25Jq0zQa4Gy
+	 HAb3eZDLpekHG+5x0DW3wia0LnDWOcTfGSaDl10ol+7lmMFjJhA3KS0hZK1C8ogR+c
+	 F4m/GYKhfbnJQ==
+Message-ID: <f027078c-6a55-463b-8938-95ede02dca3b@kernel.org>
+Date: Thu, 4 Jun 2026 16:10:08 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemr200017.china.huawei.com (7.202.195.7)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, rob.clark@oss.qualcomm.com
+Cc: Christoph Hellwig <hch@lst.de>, Andrew Morton
+ <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>,
+ Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+ <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+ <20260529135045.GA10647@lst.de>
+ <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+ <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
+ <20260601113831.GA25535@lst.de>
+ <d7b08296-7f6e-4d89-ab3b-04e43d04929e@kernel.org>
+ <CACSVV00k-fxW6+waHNqvmYcnVNDkRexoWWprFzfayZfqdyMuuA@mail.gmail.com>
+ <CACSVV00dNWgpNVU5rB=Hmg+3oWF18yTyfKNr_tWesjoP1jMxwg@mail.gmail.com>
+ <5e6948b3-d235-4b61-aed7-e8b4d0f5b452@kernel.org>
+ <CACSVV02v0Fuc6=Rqyd89D-_tcSjEXuQmxz0+2-4aoRAEwJE4zg@mail.gmail.com>
+ <b6f6323e-6f5b-4928-b474-bd2743eac3f2@kernel.org>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <b6f6323e-6f5b-4928-b474-bd2743eac3f2@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------wiFRKWLl9yvmDjGQCVE2s47E"
 
-The recent KCTF-reported cgroup local storage issue assigned
-CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
-in cgroup local storage").
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------wiFRKWLl9yvmDjGQCVE2s47E
+Content-Type: multipart/mixed; boundary="------------wMYGC0PsvxX072tLl8xZovbN";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, rob.clark@oss.qualcomm.com
+Cc: Christoph Hellwig <hch@lst.de>, Andrew Morton
+ <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>,
+ Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, io-uring@vger.kernel.org,
+ kasan-dev@googlegroups.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>
+Message-ID: <f027078c-6a55-463b-8938-95ede02dca3b@kernel.org>
+Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
+References: <20260528093437.2519248-1-hch@lst.de>
+ <20260528093437.2519248-2-hch@lst.de>
+ <5f7f90d8-cb32-4ffb-8f1c-0722aafbe869@kernel.org>
+ <20260529135045.GA10647@lst.de>
+ <5f3ba603-a6ad-4cf2-9a54-aebc10273c59@kernel.org>
+ <58cc76e7-2348-443d-a989-2a06e61178af@kernel.org>
+ <20260601113831.GA25535@lst.de>
+ <d7b08296-7f6e-4d89-ab3b-04e43d04929e@kernel.org>
+ <CACSVV00k-fxW6+waHNqvmYcnVNDkRexoWWprFzfayZfqdyMuuA@mail.gmail.com>
+ <CACSVV00dNWgpNVU5rB=Hmg+3oWF18yTyfKNr_tWesjoP1jMxwg@mail.gmail.com>
+ <5e6948b3-d235-4b61-aed7-e8b4d0f5b452@kernel.org>
+ <CACSVV02v0Fuc6=Rqyd89D-_tcSjEXuQmxz0+2-4aoRAEwJE4zg@mail.gmail.com>
+ <b6f6323e-6f5b-4928-b474-bd2743eac3f2@kernel.org>
+In-Reply-To: <b6f6323e-6f5b-4928-b474-bd2743eac3f2@kernel.org>
 
-However, the previous fixes are still incomplete. The current prog-array
-compatibility check treats a program with no cgroup storage as
-compatible with any stored storage cookie. This allows a storage-less
-program to bridge a tail-call chain between an entry program and a
-storage-using callee even though runtime cgroup local storage still
-follows the caller context.
+--------------wMYGC0PsvxX072tLl8xZovbN
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Require exact per-type storage_cookie equality when checking prog-array
-compatibility. This blocks zero-storage bridge programs from joining a
-prog-array owned by a storage-using program and closes the residual
-A -> B(no storage) -> C(storage) path.
 
-This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
-requiring storage use to match consistently across prog-array users.
 
-Cc: stable@vger.kernel.org
-Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
-Tested-by: Amery Hung <ameryhung@gmail.com>
-Signed-off-by: Lin Ma <malin89@huawei.com>
-Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
-Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
----
-v1: https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/
-v1 -> v2:
- - refine the commit message and mention the relation to Amery Hung's
-   NULL-storage tail-call fix
- - add patch 2/2 selftests for tail-call cgroup storage prog-array
-   checks
-v2: https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
-v2 -> v3:
- - use abad3d0bad72 as the Fixes tag
-v3: https://lore.kernel.org/bpf/7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org/T/#t
-v3 -> v4:
- - no changes
----
- kernel/bpf/core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+On 6/4/26 1:22 AM, Vlastimil Babka (SUSE) wrote:
+> On 6/3/26 13:13, Rob Clark wrote:
+>> On Wed, Jun 3, 2026 at 2:17=E2=80=AFAM Vlastimil Babka (SUSE) <vbabka@=
+kernel.org> wrote:
+>>>
+>>> We know p->pages is NULL in this case, right? Because it was allocate=
+d by
+>>> vm_bind_job_create() using kzalloc().
+>>> And the job can't be reused with a leftover value?
+>>> (msm_iommu_pagetable_prealloc_cleanup doesn't set p->pages to zero).
+>>> Or should we set p->pages to NULL here.
+>>
+>> Correct, the job is not reused.  But I suppose setting p->pages to
+>> NULL would make things more obvious, so no objection to that.
+>=20
+> OK, did that, just in case. Thanks.
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 6aa2a8b24030..f0b61b10f30e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
- 				break;
- 			cookie = aux->cgroup_storage[i] ?
- 				 aux->cgroup_storage[i]->cookie : 0;
--			ret = map->owner->storage_cookie[i] == cookie ||
--			      !cookie;
-+			/*
-+			 * Tail calls keep using the caller cgroup storage
-+			 * context, so prog-array members must use the same
-+			 * storage cookie.
-+			 */
-+			ret = map->owner->storage_cookie[i] == cookie;
- 		}
- 		if (ret &&
- 		    map->owner->attach_func_proto != aux->attach_func_proto) {
--- 
-2.53.0
+The kvfree() -> kfree() part should probably be a separate patch
+with Fixes: 830d68f2cb8a ("drm/msm: Fix pgtable prealloc error
+path") and Cc: stable?
+
+=2E..as the commit landed v6.18.
+
+>> BR,
+>> -R
+>>
+>>>> +
+>>>>         p->pages =3D kvmalloc_objs(*p->pages, p->count);
+>>>>         if (!p->pages)
+>>>>                 return -ENOMEM;
+>>>>
+>>>>         ret =3D kmem_cache_alloc_bulk(pt_cache, GFP_KERNEL, p->count=
+, p->pages);
+>>>>         if (ret !=3D p->count) {
+>>>> -               kfree(p->pages);
+>>>> +               kvfree(p->pages);
+>>>>                 p->pages =3D NULL;
+>>>>                 p->count =3D ret;
+>>>>                 return -ENOMEM;
+
+--=20
+Cheers,
+Harry / Hyeonggon
+
+--------------wMYGC0PsvxX072tLl8xZovbN--
+
+--------------wiFRKWLl9yvmDjGQCVE2s47E
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCaiEk0AAKCRCGXBN6rc5S
+1v0/AQCTdSzVR1AlZpSbYogIVVB+443eCQzT7065V9OSIICLswD/e6Yg56WZBHlu
+kh1s01feILBrZKf2TcrQ69haUSsKKgk=
+=BoaG
+-----END PGP SIGNATURE-----
+
+--------------wiFRKWLl9yvmDjGQCVE2s47E--
