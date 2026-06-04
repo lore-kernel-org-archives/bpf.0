@@ -1,32 +1,32 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEA82F7EEE
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 15:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7530631A55E
+	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 15:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780585544; cv=none; b=LM2Q1wh0TQTg3eLASarRAo6nfBdA18Y1O4MKFxbpSIsNrAsh0XWbTVTgHrE3hwtg6Pgp6i2CIanr9AYwcp+qHQp1ia/825ZwQvzpjx81rX510P6RTFmj/ATC2fBOjvuu/DPiRKcqXFk7mqL7cXcctI2A+RoWWK2+jHKG+jc0JEM=
+	t=1780585551; cv=none; b=IvKaA2d2ekQ5F9J/H1pVU00LYGsqlIICfICTvHTbQRGIQlC2xGWwA0XIMk9N6q5cibtGWTmJ3i/0iMON3+DNoaNQ70yx1CpBGjDYgcgzRvEftDTYhsIA5QBR7Ul4A/zf8S006KZ1+E8RMmevcgJJyGAjwLfe4AgEwbaDJzydVDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780585544; c=relaxed/simple;
-	bh=cOu2Zf/scBr0msyOIEfMjOqnF2tQW/6bFHLnESgrAwc=;
+	s=arc-20240116; t=1780585551; c=relaxed/simple;
+	bh=wlQ5x8dSF1J8/MWUD61qF9vPDOGbwB90oG5UbESi4eU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ij3xoHqI5WCpeI2XZEJVaxC2h9lOtOwnUFtnhjn7ao+NAfh7ndi8CYzsFgJGIc9MTRCrgiSkafCdKO5ocbnjxCdwqfARl3gc5z74xbKMvA81c/SqW4wXYdDHpjllUMgpepVvDWVR41JsihJ7tjqPvdWiuIBFspbGbibehaGHb3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qjyu+Qlc; arc=none smtp.client-ip=91.218.175.179
+	 MIME-Version; b=YyTvxIjxlKsdj8s02QvCfGU2/8nOZVAhcB+3plnRGuSji0g7+cKy5BhKQBa/LDsOHGn42skGluo/yLZrAB/mKGNSW9NByAfsDSvfqq9YwGIbXHMmkQuUBNFQqNmRsjFziGz154PxRxtjrvnLtS7VBgC/b5ePFBvRCQ2mzDCKV8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qkIGHWuL; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qjyu+Qlc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qkIGHWuL"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780585539;
+	t=1780585548;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Rz2F6zrsu2suhD7OyTfzNyj4hxYQQ9GfxAsxAAQXUkM=;
-	b=Qjyu+QlcjNXdoYeRZ/fdbsRQF2dtRo2AFvkQHJ0S0kvZxb4w5m/XGAVkjM8eIRsLSRn3i2
-	6BkHQoUG2HXJg0jzaggTJYEfKlKi1CIWTYye3U6jRMdkPTWSR+9Gzasm7ARw1PdWt6uHFQ
-	xkkxXsycuJXbs0YipC/gMFt9hQlZz1k=
+	bh=JcExdXGWFg882mqgHkmP35ZC5fLdpc+f8+br0xZGCsI=;
+	b=qkIGHWuL2lNixjZMb8gNJpLuN1IgJ1EypHMce5HaQ6Bw3viYER+UYszWnrLE0jI6PakzNw
+	FS+bAg4AlZTZJ5ee1UU5/EXsM1LvtEBJOlaxcUvpXjYM1h+2OCNLkEts1qccdi6zvWKaWV
+	nn+9zdEQff/DbppHbBpAcVpnbkfewrs=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com,
 	Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v2 1/3] bpf: Check tail zero of bpf_map_info
-Date: Thu,  4 Jun 2026 23:05:03 +0800
-Message-ID: <20260604150505.99129-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 2/3] bpf: Check tail zero of bpf_prog_info
+Date: Thu,  4 Jun 2026 23:05:04 +0800
+Message-ID: <20260604150505.99129-3-leon.hwang@linux.dev>
 In-Reply-To: <20260604150505.99129-1-leon.hwang@linux.dev>
 References: <20260604150505.99129-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -63,18 +63,20 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Since there're 4 bytes padding at the end of struct bpf_map_info, they
+Since there're 4 bytes padding at the end of struct bpf_prog_info, they
 won't be checked by bpf_check_uarg_tail_zero().
 
-pahole -C bpf_map_info ./vmlinux
-struct bpf_map_info {
+pahole -C bpf_prog_info ./vmlinux
+struct bpf_prog_info {
 	...
-	__u64                      hash __attribute__((__aligned__(8))); /*    88     8 */
-	__u32                      hash_size;            /*    96     4 */
+	__u32                      attach_btf_obj_id;    /*   220     4 */
+	__u32                      attach_btf_id;        /*   224     4 */
 
-	/* size: 104, cachelines: 2, members: 18 */
+	/* size: 232, cachelines: 4, members: 38 */
+	/* sum members: 224 */
+	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
 	/* padding: 4 */
-	/* forced alignments: 1 */
+	/* forced alignments: 9 */
 	/* last cacheline: 40 bytes */
 } __attribute__((__aligned__(8)));
 
@@ -84,11 +86,11 @@ uninitialized stack garbage into the new field, permanently breaking
 backward compatibility. -- sashiko [1]
 
 Fix it by changing sizeof(info) to
-offsetofend(struct bpf_map_info, hash_size).
+offsetofend(struct bpf_prog_info, attach_btf_id).
 
 [1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
 
-Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
+Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
 Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
@@ -96,19 +98,19 @@ Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 625a4366fe6d..1007fb7c87e9 100644
+index 1007fb7c87e9..0c86a70d31c1 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -5400,10 +5400,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
- {
- 	struct bpf_map_info __user *uinfo = u64_to_user_ptr(attr->info.info);
- 	struct bpf_map_info info;
--	u32 info_len = attr->info.info_len;
-+	u32 info_len = attr->info.info_len, len;
+@@ -5115,10 +5115,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 	u32 info_len = attr->info.info_len;
+ 	struct bpf_prog_kstats stats;
+ 	char __user *uinsns;
+-	u32 ulen;
++	u32 ulen, len;
  	int err;
  
 -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
-+	len = offsetofend(struct bpf_map_info, hash_size);
++	len = offsetofend(struct bpf_prog_info, attach_btf_id);
 +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
  	if (err)
  		return err;
