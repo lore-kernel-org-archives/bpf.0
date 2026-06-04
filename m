@@ -1,90 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4380937B00F
-	for <bpf@vger.kernel.org>; Thu,  4 Jun 2026 15:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4377931ED93;
+	Thu,  4 Jun 2026 15:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780587909; cv=none; b=EoBDAYwl/IwB2odHp8PYq8Fm/ayzp7z3vwdPuGlYNIkAvndm1CWHphYN2il8lfnzLnSpS+biGkOMM+1j63Z3SpctoVrRsV7/+brxdUgil76BL/U3ZGOUF+BTNi9Ep3FLr7wiRNanVm0TgcuZPDT62RffniiiPWrjVzvKO/y9fCA=
+	t=1780587909; cv=none; b=q/HBC9ye3B2JUzSHkPyvBMSBaLP3XO78FI8a1QFFglVYKK8wgYoPBoo6gcVkRcYiTGJdDuJDeWUrlTDbCbfgILBjlnkBPIZqfCAWH0Kl0TZKb7wP6diq7kQbSDYvv3CMjFETpfbAiO34pMnVJGivrPxbfICpIvPhHMd4eHQPeUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780587909; c=relaxed/simple;
-	bh=801kMK/unUHIxO9Nt+pGdNiZSI/KDIiPptBLiYHw1vA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=E42jZjbDFMzg7l9yU77426YCVn3pjmh0kmxOetyP7lbeYMSSIMvp/gN3G4oMa6TUeURbL9F1Lj0cvpAbqyKh+I6Dii9CDep1DP/vzJcVrLEctFu71giy7z8GHEfxmYVt9gAaf36gOaiu7NSaB/mWYtKWsG4QgmHiD1H7yyZQ/m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsWafN2H; arc=none smtp.client-ip=100.103.45.18
+	bh=7Vjgou5oMsAUP+bV9bMz64D3Q2RmTauvoo9g8niLyIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IFVoFxTX3E4PDRpZXo2OsP4Xacam1mkKA5LFzvcT8Xo/gtTncgIG7T+KrRTJKMC1WzC0zX71vy4cnVDTZG6XbhJdFuZwapF4YSDv9IfIipracbjgCG2lVrtoR4D/V6y652caYEQqLBxwGMTlMtCma8PQpLQcEPJG04ISUtXoSlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uqp+2JVf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsWafN2H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CB51F00893;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uqp+2JVf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1BC1F00898;
 	Thu,  4 Jun 2026 15:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1780587907;
-	bh=mfVjFOpeUoPNZDl8LS2eMrKQIlxZOYFylpwcR4C5sxs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GsWafN2HFSyVPej3FKDeL861av7sQ3J8gfAnfoKZtjSiBJDNDERaRHi4ojjTgj8Vf
-	 IDJTExECgPOFWXkYIWI4IQdHaA9V/qnz+xtrBREbhW0EW/qOIc6x/Bve7KvZjR7zld
-	 pJl9rOROKNqf6kqUEkZ+YVjp0FVONVlRPkBb6tM+o2yWXZ/HjPFS7AhnveP7nCW+YA
-	 cbR8ZoU1toVfdO3seVpZ0vPD77SedZ/RJ+r7RV2r3exdgBkHshTMbc1g8+mlvcE/kB
-	 os4MvidzuT3g+URq50jH5sZHvJQWO0p8j6RJmZ7h1XJi/9K8qrMJYjxs4uaNo2yRGv
-	 9/AJj5DsOr3pQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS
- constant offset bounds
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuiqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260604150755.2487555-3-gnq25@mails.tsinghua.edu.cn>
-References: <20260604150755.2487555-3-gnq25@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 04 Jun 2026 15:45:07 +0000
-Message-Id: <20260604154507.B5CB51F00893@smtp.kernel.org>
+	bh=J6/Zc8Kntqruk++j6OsWXgT7GAK8IYpfolpCQp+mdPI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Uqp+2JVfNkgM4DYirxsvI8dPAPY20KbRBU2RAzPe4pXaeY5l1Ui68DWZUIfPO3hfx
+	 H2BfK9fBaLnouKZ85RXL4bSDV1nqG/yiZTXVZTYSz3PiJrGnLb6StT2pTf5PVNnAQY
+	 UebUeKlG5F+Ztj6vVrscC2VEtv/jzch/UFZow0rvntiNS+4+GVXrCG2LhQ+pZn6Nh7
+	 eIbyNd++z5R9TlaCOCG1RFnBc1tYm4IPX8MdXCasbq1kjaYuujIL7tZzMDsbj5wg5x
+	 GxwLb2oUz2tTaMh4gipcMKzDiCzayZD3OpuSuJIulbb6FbA1P4WmiSJUgPj7nk5e1c
+	 2gzVemjcOi/Yw==
+Date: Thu, 4 Jun 2026 08:45:06 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Til Kaiser <mail@tk154.de>
+Cc: Marcin Wojtas <marcin.s.wojtas@gmail.com>, Russell King
+ <linux@armlinux.org.uk>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Matteo Croce <mcroce@redhat.com>, Sven Auhagen
+ <sven.auhagen@voleatech.de>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 3/4] net: mvpp2: do not return retired RX buffers
+ to BM
+Message-ID: <20260604084506.274d0ead@kernel.org>
+In-Reply-To: <20260602164635.62517-4-mail@tk154.de>
+References: <20260602164635.62517-1-mail@tk154.de>
+	<20260602164635.62517-4-mail@tk154.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] BPF subsystem multi-line comment style violation.
---
+On Tue,  2 Jun 2026 18:46:34 +0200 Til Kaiser wrote:
+> The RX refill failure path jumps to err_drop_frame, which returns the
+> descriptor buffer to the hardware BM pool. That is only valid while the
+> driver still owns the buffer.
+> 
+> After a non-PASS XDP verdict, mvpp2_run_xdp() may already have recycled,
+> redirected, or queued the page for XDP_TX. After build_skb(), freeing the
+> skb on refill failure also retires the data buffer. Returning either of
+> those buffers to BM lets hardware DMA into memory that is no longer owned
+> by the RX ring.
+> 
+> Split the error handling so buffers are returned to BM only while still
+> owned by the driver. Once XDP or an skb owns the buffer, only account the
+> RX error. Mark page-pool skbs for recycle before they can be freed on the
+> refill failure path, and unmap non-page-pool buffers before freeing them.
 
-commit 86bbbe949c13579e90a39499cabd9dc701da0bef
-Author: Nuiqi Gui <gnq25@mails.tsinghua.edu.cn>
-
-selftests/bpf: add tests for PTR_TO_FLOW_KEYS constant offset bounds
-
-This commit adds verifier tests for constant pointer arithmetic on a
-PTR_TO_FLOW_KEYS register to ensure bounds checking works correctly.
-It verifies that in-bounds arithmetic is accepted and out-of-bounds
-is properly rejected.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_flow_keys.c b/too=
-ls/testing/selftests/bpf/progs/verifier_flow_keys.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-
-[ ... ]
-
-> +	: __imm_const(flow_keys, offsetof(struct __sk_buff, flow_keys))
-> +	: __clobber_all);
-> +}
-> +
-> +/* Equivalent OOB expressed directly in insn->off; this form was always
-> + * rejected and is kept to show both forms now share one diagnostic.
-> + */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? The guidelines specify that the opening /* should be
-on its own line, with the comment text starting on the next line.
-
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB via insn->off rejected")
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260604150755.2487=
-555-1-gnq25@mails.tsinghua.edu.cn?part=3D2
+As Gemini points out the driver seems to be following the "if I can't
+allocate a new buffer I'll drop the packet and give the current buffer
+back to the HW" flow. So after your change on allocation error we're
+permanently leaking a slot on in the buffer pool. Leaking as in it will
+never be filled, if it happens enough times the pool will be empty,
+and no Rx can happen.
+-- 
+pw-bot: cr
