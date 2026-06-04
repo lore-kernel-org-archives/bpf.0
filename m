@@ -1,139 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CC61F78E6;
-	Thu,  4 Jun 2026 21:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD633F54A4;
+	Thu,  4 Jun 2026 21:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780607598; cv=none; b=i8K/Puo/vp85o5kTwJtwYSP+GvEzQlnKaAmiD7e/SJmQ0IBfm+vnfm7HH+XQV+qhSN5yVMhZNuvxUrw+Gf5Je8IBaRS4HnwN9TmAXIgn3V6odLs/quC9GiPxp+FqmyAtbmO32aOqgjSE3676ewww4u3fbtCzq8LqaAac/fkAOF8=
+	t=1780607600; cv=none; b=bUK89OW6wLosa79ZjzWuI1B6v8WFX94Pm6+kZXMxVfSwgraZmSafq/bRcpGsMKK1UcGJF+uv7ZFvXv7b6YtUbBsC/WgqSfJICq7FjW1TKQpfrMUZC6ZPKCJmnGMI28m2d9UDmF4XL3POLWGJOp8iPP2ONw9sx+sxx9HLcqbMpxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780607598; c=relaxed/simple;
-	bh=MWme06rMbiwCEkN6np194nZoNOXuAPJwN6T7MIcFDEQ=;
+	s=arc-20240116; t=1780607600; c=relaxed/simple;
+	bh=WBenpf6jxRLzjoE4advBbHQ44nqsrEMLRUZQhaZgaxY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=U8XEv34qXwJGZX1zVHZ1auQGmfftQr54AvkbmwuwuCzLuMIlLviVfPSHyA4RreBqi6juxj17sXsyphwN1o4zcVVxiiXLwFWVbqRBvZqFgyXInZWgpmDDqnFPvc34Wz+3LPPKDXYk6LOVvloCSnRMvPZaAt48hzFNh/fOy24xtTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DiwgBurV; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=cVCfd2tT6LdiYhnWLk/LkwPrRSACF4lVZWq0ZUzYnB9sRqvZKs0uHFOJ5NYn4jeeZACpzdaHcfFTF8Qe7hlooZHH0isOFRXOf/b6iQ1oWTqXk2tpaGRFpFdJ6uXQG0sFr8fA43rXGERcOiPyhKlSSFaQIv7CtEIouVTU5kH/Tfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDcxOFIl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DiwgBurV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26711F00893;
-	Thu,  4 Jun 2026 21:13:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDcxOFIl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685231F00898;
+	Thu,  4 Jun 2026 21:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780607597;
-	bh=MpZ3QvNzyLq6MCDStBRoFi5pI56pBgPE12+T/xtOUmg=;
+	s=k20260515; t=1780607599;
+	bh=Bvq7vOl1c1mpIND7SGq8IUzzkQicWNmeIHBCULeRYCk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DiwgBurVitMzJUb2m1D70814eZtSeLV6fzWGh1T2qAO3fIHYGN7fF6kO/SrAKQjvX
-	 8KwBI4Slif3WPLWLLG+H0ocAbC5Bq1YGBsxs6YxCzrETQKxKe3rlGXXsTN/y3MXau+
-	 F9BwpD8Quj3la/DeROcj+6ufk01ZCIBIe73AK/sNC8YmGSt76noC5is2RVBvBg/s8U
-	 HZiKleQmM9wlj/qZeVAS0qg/RG32HNoU16vexEx2IEStUJnwoma57gmiVl+bLNTPib
-	 +VTcLHOBALlAYOiKOypCREXI/to5P1Lw4xGpsPCy5b5Fr5o9uzIeOPVRuX9afv3Dz0
-	 zydMNdGWcdnhA==
-Content-Type: multipart/mixed; boundary="===============4379291998619388122=="
+	b=MDcxOFIlJpDBkWx4G4Fyg+NRKBS8U/9nrpTIxW6hEAlPJieSOpscifAXinZHL8Pra
+	 ZLcvQyU2kS2+93H6siaH+q5lJv7j+LGzr0G5gATRIramDZR8hJmQB2jAL2NvItMOwa
+	 yuaA6IX9likH4SSia+VKj/6U5wccC4VyPhb5GYtrdsgtf5yx6sZ2TSBmSTmvz0A5a3
+	 lDVeTJAPGhBGQSMQxXc0h41xsI9JXJ1l0XS3K8yxFPAVq7Gr95j40husFaFtoPFhFk
+	 P3oAWBSjMGDNurtTa4DUHudhMuteXxxRhDtCCMKbPzSlhMjw2A2DlG56pJARAd9sxo
+	 eLmhA5dVCl8aQ==
+Content-Type: multipart/mixed; boundary="===============5364940318977030226=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0e5fcc7f26d096479c14eda3b51a238cecfdeff065ab6f33c50f71e54eee0ff0@mail.kernel.org>
-In-Reply-To: <20260604-kasan-v2-1-c066e627fda8@bootlin.com>
-References: <20260604-kasan-v2-1-c066e627fda8@bootlin.com>
-Subject: Re: [PATCH bpf-next v2 1/8] bpf: mark instructions accessing program stack
+Message-Id: <1e7ab52954b9ff584d6871c2ec234a7155b577f29128564d0d597809cafad826@mail.kernel.org>
+In-Reply-To: <20260604-kasan-v2-2-c066e627fda8@bootlin.com>
+References: <20260604-kasan-v2-2-c066e627fda8@bootlin.com>
+Subject: Re: [PATCH bpf-next v2 2/8] bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
 From: bot+bpf-ci@kernel.org
 To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,shuah@kernel.org,mcoquelin.stm32@gmail.com,alexandre.torgue@foss.st.com,ihor.solodrai@linux.dev
 Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-stm32@st-md-mailman.stormreply.com,linux-arm-kernel@lists.infradead.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  4 Jun 2026 21:13:16 +0000 (UTC)
+Date: Thu,  4 Jun 2026 21:13:18 +0000 (UTC)
 
---===============4379291998619388122==
+--===============5364940318977030226==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index a656a8572bdb..393d9eacd215 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index eb3de35734f0..a8e004f88b92 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
 
 [ ... ]
 
-> @@ -1583,6 +1583,22 @@ bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struc
->  	return env->insn_aux_data[insn_idx].indirect_target;
->  }
+> @@ -101,4 +105,9 @@ config BPF_LSM
 >
-> +bool bpf_insn_accesses_stack_only(const struct bpf_verifier_env *env,
-> +				  const struct bpf_prog *prog, int insn_idx)
-> +{
-> +	struct bpf_insn *insn;
-> +
-> +	/* cBPF: we have no verifier state, do a best-effort check based on
-> +	 * dst/src reg
-> +	 */
-> +	insn_idx += prog->aux->subprog_start;
-> +	insn = (struct bpf_insn *)prog->insnsi + insn_idx;
-> +	if (!env)
-> +		return insn->dst_reg == BPF_REG_FP ||
-> +		       insn->src_reg == BPF_REG_FP;
-> +	return !env->insn_aux_data[insn_idx].non_stack_access;
-> +}
-> +
-
-Sashiko bot raised a concern about this code in v2 review: When JIT
-compiling an eBPF subprogram, prog points to the subprogram and
-prog->insnsi only spans the subprogram's instructions.
-
-By adding prog->aux->subprog_start to insn_idx, doesn't this result in
-out-of-bounds pointer arithmetic for insn? Even though the pointer is not
-dereferenced here because of the if (!env) check, could this trigger UBSAN
-bounds-checking traps?
-
-Should the insn pointer calculation be deferred until inside the !env block
-where it is genuinely needed for cBPF?
-
-Reference: https://lore.kernel.org/bpf/20260604203644.81EF51F00893@smtp.kernel.org/
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 5aa3f7d99ac9..5228c910fbf5 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> @@ -185,16 +185,22 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->  	}
+>  	  If you are unsure how to answer this question, answer N.
 >
->  	/*
-> -	 * The indirect_target flag of the original instruction was moved to the last of the
-> -	 * new instructions by the above memmove and memset, but the indirect jump target is
-> -	 * actually the first instruction, so move it back. This also matches with the behavior
-> -	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to the first new
-> -	 * instruction.
-> +	 * The indirect_target and non_stack_access flags of the original
-> +	 * instruction were moved to the last of the new instructions by the
-> +	 * above memmove and memset, but those actually match the first
-> +	 * instruction, so move them back. This also matches with the behavior
-> +	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to
-> +	 * the first new instruction.
->  	 */
->  	if (data[off + cnt - 1].indirect_target) {
->  		data[off].indirect_target = 1;
->  		data[off + cnt - 1].indirect_target = 0;
->  	}
+> +config BPF_JIT_KASAN
+> +	bool
+> +	depends on HAVE_EBPF_JIT_KASAN
+> +	default y if BPF_JIT && KASAN_GENERIC && KASAN_VMALLOC && VMAP_STACK
 > +
-> +	if (data[off + cnt - 1].non_stack_access) {
-> +		data[off].non_stack_access = 1;
-> +		data[off + cnt - 1].non_stack_access = 0;
-> +	}
->  }
+>  endmenu # "BPF subsystem"
 
-Sashiko bot raised a concern about this logic in v2 review: When
-bpf_patch_insn_data() expands a single instruction into multiple
-instructions, this logic restricts the non_stack_access flag to only the
-first instruction of the patched sequence and clears it for the rest.
+This isn't a bug, but a design concern raised on an earlier posting of
+this work doesn't look fully resolved.
 
-Since the actual memory load or store in a patched sequence often occurs on
-subsequent instructions rather than the first, wouldn't they lose this flag
-and incorrectly bypass KASAN checks during JIT compilation?
+In the v1 (RFC) discussion, the suggestion was to not add a config knob
+at all and instead do the instrumentation inside the JIT whenever
+KASAN_GENERIC is set:
 
-Reference: https://lore.kernel.org/bpf/20260604203644.81EF51F00893@smtp.kernel.org/
+  "Let's not add more config knobs. Even this patch looks redundant.
+   Inside JIT do instrumentation when KASAN_GENERIC is set."
 
+  https://lore.kernel.org/bpf/CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com/
+
+The reasoning given for keeping the internal Kconfig was that it lets
+selftests adapt their behavior without sprinkling arch and KASAN
+conditionals, and another reviewer agreed that approach was reasonable.
+
+That "this patch looks redundant" objection was never explicitly
+retracted or re-acked, yet the BPF_JIT_KASAN config is retained here.
+
+Has this design point been settled?
 
 
 ---
@@ -141,4 +92,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26978380520
---===============4379291998619388122==--
+--===============5364940318977030226==--
