@@ -1,117 +1,148 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B28E3126B1;
-	Fri,  5 Jun 2026 16:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9EB37B02A;
+	Fri,  5 Jun 2026 16:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780675575; cv=none; b=YLZf4R1xVPK2r4M8xjfERhTE7Hg+UKLECFpVgDZeygQi8QxBGWCaxXpEiVXasRSvYaqL+8a1aXOjcE8/l/5idzLj1iu816JiFcbmyHvYonG1riNa+30malDbyIyizWPo9is/PYhmsYzNSyzhs3iXVyukR39zv5eojfn+FWT0wtg=
+	t=1780677392; cv=none; b=lLVTLm7lGvPlQkSiCLfr8j0+raY9ErXEQrcb998zi/lM6BnkYR2Up6qmTLpLgHWneFvrYWBZ+PTZarbQ1YgjTqfMnNuOwzaxWFNswV0DNGZe1fAeE1MccnOXReAhZD4YIu/0TzZINdmplK4pTny/NdvWOBLVkLn3N/T09mtA5vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780675575; c=relaxed/simple;
-	bh=lbQ0ZHWF0gkTF8f1YGmLlH6N5pd9CUfqcDjT2PzWmrM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F/vlczdGkKZwvt3w1zRdmPOMaMSQR1t8M49teDjM48l0vRnucrnRMWHMTspx/VcnukmEYXf503TVFV0n5CHOmq3TXzPUqO3DGNjYLEFC9zns74gklc8DwJzvmGEL5Jb/TKqdN5kbcfL6nHBuhnzaUqVUeA+P1DAXksQnDoq2oxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zvphM/Ca; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1780677392; c=relaxed/simple;
+	bh=v5ELkvGCZq1N3nX9mAXJeHVpZuf0ySnc+4V/iBCGN/k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ePIxHOdhQWteh/ZUvnE1FAe2mnfoIV2+0aNVpON/pv9zZQH/BYQzmjy1l2KB1Ngh1GBtVR4DcODapAY1abdHGzQnxl5doU7YVbqozM0ATHK3yE8NTPhZkCVD483/3vkCDQTBdct6qTEQmtxTUu48mTB0HIjKUFy+I+vLNCsjgbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/FCGBy5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zvphM/Ca"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 6F166C58478;
-	Fri,  5 Jun 2026 16:06:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9FF855FED1;
-	Fri,  5 Jun 2026 16:06:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 50A83106A2533;
-	Fri,  5 Jun 2026 18:05:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780675569; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=xk45BjVakQOeHi7wm8QKE6eINYQ/jNZGrkwgZV41tIw=;
-	b=zvphM/CawlI8lv+bypTyNGk5QI0aaFSd+ta/nOlof5HxsbAqYwrTcdlBWPnIuvZ2nkCCPu
-	hbcuN8XA2utGYiVw3vAMz/EUcccOZ6nAVIPhuIwnmU/ZvEKqcCf+mrXrS7xQPsGjH5VnyL
-	jfU+2CYStZaWkh9I/v2V82G2VXEFEMjU8prhXTzet2GaJQCHCWFcuFFJnXiVHMYzele/m8
-	M2jI6t+La0RoeTKiZzWM/fX9/gkeeAapQr2r4/psEj0S1ukX9nQtJ224jAudfxQR6QRZIR
-	I2AoympPGcN2+ig3zx84LnAejH56/NY9zf9b6R90qA0XuuKGwk4feZJ5SaU+tg==
-Message-ID: <c60d1819-18d7-4d4c-a997-586599323d7e@bootlin.com>
-Date: Fri, 5 Jun 2026 18:05:47 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/FCGBy5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E30131F00898;
+	Fri,  5 Jun 2026 16:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780677387;
+	bh=NhzGkTvTOsDPvtPajOB34RAWLOEB+uxckYz3rZNDzQo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=P/FCGBy54L7ZsandkeOpn1trMhH6fE3DgUFDFVgnAM+MYQNq+2cQHTlCLv0qN0sHI
+	 UyP0dKyjddXliOHQwMoFydE9IEb07GUpKpUi16Zc2AdN1NjumQbVVh1Nj44MD2Rf/P
+	 MGQ5E8uyB6ZeBXDR4vX7DwuqFH8l4NeB9kXriAVk4gk8DVN+O6VFHsAG4q68J6dSvf
+	 FQUUqiZXAPicjtEGlCFoKRdQpuADrOfHjTdYTJiYFaxXr9NYfYFbAEqDBbvsfvPEyr
+	 ceSgUbltF+jjubNKaaqNEC0enuIStWjzjF59UG0xFFtQ7N3aMAywY9BS4BJXw33DGH
+	 oBrJ8FpAk17Mg==
+Content-Type: multipart/mixed; boundary="===============3143658977373259747=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 13/14] net: stmmac: tc956x: add TC956x/QPS615
- support
-To: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, rmk+kernel@armlinux.org.uk, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org, arnd@arndb.de,
- gregkh@linuxfoundation.org
-Cc: Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
- a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
- inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
- livelycarpet87@gmail.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260605010022.968612-1-elder@riscstar.com>
- <20260605010022.968612-14-elder@riscstar.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20260605010022.968612-14-elder@riscstar.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <2d84292ee48c9b2d0e1bdedb591ce43af8cdfdc575bc6fb0ac326a34b8a3fcd9@mail.kernel.org>
+In-Reply-To: <20260605155249.20772-3-leon.hwang@linux.dev>
+References: <20260605155249.20772-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v3 2/3] bpf: Check tail zero of bpf_prog_info
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,yuyanghuang@google.com,leon.hwang@linux.dev,kpsingh@kernel.org,davemarchevsky@fb.com,sdf@fomichev.me,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 16:36:26 +0000 (UTC)
+
+--===============3143658977373259747==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Alex,
+> commit acd0d2042870d7613c0c27932c41262d1c41b4e1
+> Author: Leon Hwang <leon.hwang@linux.dev>
+> Commit: Kernel Patches Daemon <kernel-patches-bot@fb.com>
+>
+>     bpf: Check tail zero of bpf_prog_info
+>
+>     Since there're 4 bytes padding at the end of struct bpf_prog_info, they
+>     won't be checked by bpf_check_uarg_tail_zero().
+>
+>     pahole -C bpf_prog_info ./vmlinux
+>     struct bpf_prog_info {
+>             ...
+>             __u32                      attach_btf_obj_id;    /*   220     4 */
+>             __u32                      attach_btf_id;        /*   224     4 */
+>
+>             /* size: 232, cachelines: 4, members: 38 */
+>             /* sum members: 224 */
+>             /* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
+>             /* padding: 4 */
+>             /* forced alignments: 9 */
+>             /* last cacheline: 40 bytes */
+>     } __attribute__((__aligned__(8)));
+>
+>     If a future kernel extension adds a new 4-byte field, older userspace
+>     programs allocating this structure on the stack might inadvertently pass
+>     uninitialized stack garbage into the new field, permanently breaking
+>     backward compatibility. -- sashiko [1]
+>
+>     Fix it by changing sizeof(info) to
+>     offsetofend(struct bpf_prog_info, attach_btf_id).
+>
+>     And, add "__u32 :32" to the tail of struct bpf_prog_info.
+>
+>     [1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
+>
+>     Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
 
-On 6/5/26 03:00, Alex Elder wrote:
-> From: Daniel Thompson <daniel@riscstar.com>
-> 
-> Toshiba TC956x is an Ethernet AVB/TSN bridge and is essentially a
-> small and highly-specialized SoC. TC956x includes an "eMAC" subsystem
-> that can be accessed, along with several other peripherals, via two
-> PCIe endpoint functions. There is a main driver for the endpoint that
-> decomposes things and creates auxiliary bus devices to model the SoC.
-> 
-> The eMAC consists of a Designware XGMAC, XPCS and PMA. Each eMAC is
-> supported by an MSIGEN that bridges TC956x level interrupts to PCIe
-> MSIs.
-> 
-> Add a driver for the eMAC/MSIGEN combination.
-> 
-> Co-developed-by: Alex Elder <elder@riscstar.com>
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
-> ---
-[...]
+Is the Fixes: tag pointing to the right commit? The padding bug was
+actually introduced by commit b79c9fc9551b ("bpf: implement BPF_PROG_QUERY
+for BPF_LSM_CGROUP"), which added attach_btf_obj_id and attach_btf_id after
+verified_insns, creating the 4 bytes of padding at the end of the structure.
+Commit aba64c7da983 added verified_insns as the last field but did not
+create padding.
 
-> +static int tc956x_lookup_max_speed(phy_interface_t phy_interface)
-> +{
-> +	switch (phy_interface) {
-> +	case PHY_INTERFACE_MODE_SGMII:
+Suggested: Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for
+BPF_LSM_CGROUP")
 
-The SGMII definition we use in the kernel is the Cisco SGMII de-facto
-standard that only supports 10/100/1000M. Some vendors use flavours with
-names such as HS-SGMII and such, that's basically SGMII clocked at 2.5G
-with aneg disabled. It kinda becomes 2500BaseX then.
+>     Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+>     Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 
-So all in all, we don't support 2500M on SGMII.
+[ ... ]
 
-> +	case PHY_INTERFACE_MODE_2500BASEX:
-> +		return SPEED_2500;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 89f020a44fc9..c5d4ae957e87 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -5121,10 +5121,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+>  	u32 info_len = attr->info.info_len;
+>  	struct bpf_prog_kstats stats;
+>  	char __user *uinsns;
+> -	u32 ulen;
+> +	u32 ulen, len;
+>  	int err;
+>
+> -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
+> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
+> +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
+>  	if (err)
+>  		return err;
+>  	info_len = min_t(u32, sizeof(info), info_len);
 
-Maxime
+Does this change break the ABI for existing deployed binaries?
+
+Previously, expected_size was 232 (sizeof(info)). If an existing binary
+passes info_len = 232 with uninitialized stack garbage in the 4-byte
+padding, bpf_check_uarg_tail_zero() would see actual_size <= expected_size
+(232 <= 232) and immediately return 0.
+
+By reducing expected_size to 228, actual_size > expected_size (232 > 228),
+so bpf_check_uarg_tail_zero() will actively check the 4 padding bytes and
+return -E2BIG if they contain garbage. This rejects previously working
+applications.
+
+sashiko-bot and bot+bpf-ci raised this concern in v1 and v2:
+https://lore.kernel.org/bpf/20260603151405.6DB111F00893@smtp.kernel.org/
+
+While v3 adds '__u32 :32;' to prevent future field additions in the
+padding space (addressing forward compatibility), the backward
+compatibility concern about breaking existing binaries remains unresolved.
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27025811732
+--===============3143658977373259747==--
