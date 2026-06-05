@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9BD3A63FB
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315272BEC27
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639317; cv=none; b=AA8Bwi3VEgaLMe7dxcvXHWZ0mkvevoM9UVQIAYCLp1V6OVtLIammnK/xnatkdU326ZeqTvOyyHOhrMznbrnhg80N201lUcnG/MlSnBsqW7d6lGjm/JTS6fmlMbAKpxvB/6ASD+vNAs2JQLp7zGI5pl7Nyd3uDakAVSmLdCmm6R0=
+	t=1780639460; cv=none; b=nYl9Za9cgSBi4KP5IaUeIdOkUy8bFjigfY8/hHYTev80aWJ859hruefAb/w2rK2juPaF0VT63YjScZuaN1acMW5KzIrflEpIOW3kinwW9V+LtFzLFEXJCgCgJKjRN3XounP1FnuaRDt3hXS90THf+Tcbhq1uXBuhIfu9TUIqjBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639317; c=relaxed/simple;
-	bh=7WfBhLBSyB7BSnLIVfzJYK7rfADXt6lQbsVs+7NwthM=;
+	s=arc-20240116; t=1780639460; c=relaxed/simple;
+	bh=NTRr2HptOcHETTGWQTshKpSFJPOy4yrGMvQfhlXenKk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gCNnYiYrbRtrtwCqvyBZXLZINJTz+Uf/Z0frSuYP8H5OsnFADOAuXNyCf/wFKaOWIvf4sRQlJe/S2jFfJAtK5EH0cyP6QE5dd2tZg/v9nyjTf0QHwCbwEIj9qT7tJfMFqfDcynxUDQG/lLmxm8Wn1c/gdNafCFv8TUbvYErtoDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZIogFAbs; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=caB9+Tp3BGyuxpzEdRzx1SFTKXMXUzOeywKzvDqMNcjR7NxlwzT5ql0lsMLaDhnBYcYGfC/9nvPvHynctyu+D7Y7gzOaIpS8xsAitO/BqDGjRRYNPJ9R0hbnq+P+s8oLed2SzogRe+f+Oy22xnf+ns0hextfNjd7AaTsv3nbDRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGHYYMtq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZIogFAbs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D562C1F00893;
-	Fri,  5 Jun 2026 06:01:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGHYYMtq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F861F00893;
+	Fri,  5 Jun 2026 06:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780639316;
-	bh=94JmUxW974MMra4QsyUVLZreqBmKKD0Kp1tGDFZN/3o=;
+	s=k20260515; t=1780639458;
+	bh=ZrmvClUKtRSXZWgMp2N2mT/TOiiffArCNJgbehX1Gwo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZIogFAbseFM3a5wtJWhVd6cmDlpiMIn2deTjbl8ZrAvj6zdPktkcPdG3OgN3LAm/X
-	 2yoYId16XalZOPdNLwv88p1PLtI0c+Ux8LeoRQqCktuFGJEK74yUSasvU3/JDkj+Q4
-	 nmFDv7Cr3gB/MImjyCzFvTA0HJnavA/Y9AdRHqlQfBRS1iyuh3hHHd92SNka19WbOO
-	 zl44kROKjLXe5tQouINXANLbaJVFtiV+9+ZAIfFxKFRuwncMSpRXW9QLuzgYG8N08H
-	 q7R/t2ovU3ybxNbfqfUJaVf4OSiMi7tX4v2ZZcM4tIqx9Ian7Y6vnGVLE8YEoPo3Ze
-	 MdCw9gwBDcoLQ==
+	b=bGHYYMtqTlL39HvMdUprgAL2fRGofgxYhtqAkjcThuWyW+GjlvDDT3yDcTsnWSX/S
+	 SH29zsUP6+uhv7QFdX7yEpux/OyMZTdEf314iVEXxCNtndrT3RalBtGgpWcCk4OZRn
+	 ftu+sGQb+XggagKscI+4e2TAkaHEe7l39JO8dMHIVBGDSBLLeb5/HwM9IZZv8JdeDO
+	 o8qlPgFcLm0XDH4NYA4ZrrPK05Pev/oHbsyfuDnPliUELQ150Wjr/KlLrKhvqG9kXG
+	 RdhWMb64SljYc8ZIPdmVkC1LBCPom4ywTYFg29CaYy+V8SDckF1/vYvOKSy+JM8Uz4
+	 i4EQrf0Ox4tKg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 05/13] irq & spin_lock: Add counted interrupt
- disabling/enabling
+Subject: Re: [PATCH v3 13/13] irq: Optimize reschedule check in
+ local_interrupt_enable()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Boqun Feng" <boqun@kernel.org>
-Cc: bpf@vger.kernel.org, ojeda@kernel.org
-In-Reply-To: <20260605054128.5925-6-boqun@kernel.org>
-References: <20260605054128.5925-6-boqun@kernel.org>
+Cc: ojeda@kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260605054128.5925-14-boqun@kernel.org>
+References: <20260605054128.5925-14-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:01:55 +0000
-Message-Id: <20260605060155.D562C1F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:04:18 +0000
+Message-Id: <20260605060418.94F861F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,95 +46,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] local_interrupt_enable() fails to invoke deferred softirqs and re-=
-arm hrtimers, leading to indefinite stalls.
+- [High] Data race in `__preempt_count_add_return` causes lost wakeups on A=
+RM64
 --
 
-commit de449b5be29a59d42df6ee590a2de395da7bbacc
+commit c3bbe9e483f96a8dad6049a0192dc87491aed263
 Author: Boqun Feng <boqun@kernel.org>
 
-irq & spin_lock: Add counted interrupt disabling/enabling
+irq: Optimize reschedule check in local_interrupt_enable()
 
-This commit introduces a new set of interrupt disabling APIs:
-local_interrupt_disable() and local_interrupt_enable(). These save the
-interrupt state to a per-cpu variable and use a per-cpu counter to track
-nesting levels, preventing accidental enablement.
+This patch optimizes local_interrupt_enable() by avoiding a re-read of
+the preempt count. It modifies __preempt_count_{add,sub}_return() to
+return unsigned long, allowing it to capture and return the
+PREEMPT_NEED_RESCHED bit for reschedule checks.
 
-Link: https://patch.msgid.link/20260121223933.1568682-6-lyude@redhat.com
-
-> diff --git a/include/linux/interrupt_rc.h b/include/linux/interrupt_rc.h
-> new file mode 100644
-> index 0000000000000..dd4444c613307
-> --- /dev/null
-> +++ b/include/linux/interrupt_rc.h
+> diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/pr=
+eempt.h
+> index 0dd8221d1bef7..e9f597d874134 100644
+> --- a/arch/arm64/include/asm/preempt.h
+> +++ b/arch/arm64/include/asm/preempt.h
 
 [ ... ]
 
-> +static inline void local_interrupt_enable(void)
-> +{
-> +	int new_count;
-> +
-> +	new_count =3D hardirq_disable_exit();
-> +
-> +	if ((new_count & HARDIRQ_DISABLE_MASK) =3D=3D 0) {
-> +		unsigned long flags;
-> +
-> +		flags =3D raw_cpu_read(local_interrupt_disable_state.flags);
-> +		local_irq_restore(flags);
-> +		/*
-> +		 * TODO: re-read preempt count can be avoided, but it needs
-> +		 * should_resched() taking another parameter as the current
-> +		 * preempt count
-> +		 */
-> +#ifdef CONFIG_PREEMPTION
-> +		if (should_resched(0))
-> +			__preempt_schedule();
-> +#endif
-> +	}
-> +}
+> @@ -55,20 +55,20 @@ static inline void __preempt_count_sub(int val)
+>  	WRITE_ONCE(current_thread_info()->preempt.count, pc);
+>  }
+> =20
+> -static inline int __preempt_count_add_return(int val)
+> +static inline unsigned long __preempt_count_add_return(int val)
+>  {
+> -	u32 pc =3D READ_ONCE(current_thread_info()->preempt.count);
+> +	u64 pc =3D READ_ONCE(current_thread_info()->preempt_count);
+>  	pc +=3D val;
+> -	WRITE_ONCE(current_thread_info()->preempt.count, pc);
 
 [Severity: High]
-When the hardirq disable count drops to 0 here, does this miss checking for
-deferred softirqs?
+Does this code introduce a regression where the need_resched flag can be
+clobbered, resulting in a lost wakeup?
 
-Because __irq_exit_rcu() is updated later in this patch to skip invoking
-softirqs and re-arming hrtimers if hardirq_disable_count() is non-zero, the
-responsibility appears to shift to this function. Without a check for
-local_softirq_pending() when the count reaches 0, could softirqs and hrtime=
-rs
-deferred during the vulnerable window be indefinitely stalled until the next
-hardware interrupt fires?
+On ARM64, the 64-bit preempt_count union contains both the 32-bit count and
+the 32-bit need_resched flag. Changing this to a non-atomic 64-bit read and
+write seems like it might race with hardware interrupts.
 
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 10af5ed859e73..d1ab1799794ca 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
+For instance, when local_interrupt_disable() runs, it calls into
+__preempt_count_add_return() via hardirq_disable_enter() before actually
+disabling hardware interrupts:
+
+include/linux/interrupt_rc.h:local_interrupt_disable() {
+    ...
+    new_count =3D hardirq_disable_enter();
+    if (!new_count) {
+        ...
+        raw_local_irq_save(flags);
+}
+
+Because hardware interrupts are still fully enabled during this operation, =
+if
+an interrupt fires exactly between the 64-bit READ_ONCE() and WRITE_ONCE(),
+and the handler wakes up a task (updating need_resched), wouldn't this
+WRITE_ONCE() restore the stale need_resched value and lose the wakeup?
 
 [ ... ]
-
-> @@ -728,7 +731,16 @@ static inline void __irq_exit_rcu(void)
->  #endif
->  	account_hardirq_exit(current);
->  	preempt_count_sub(HARDIRQ_OFFSET);
-> -	if (!in_interrupt() && local_softirq_pending()) {
-> +	/*
-> +	 * Interrupts may happen between hardirq_disable_enter() and
-> +	 * local_irq_save() in local_interrupt_disable(), if irq_exit() invokes
-> +	 * softirq here, we may have a softirq handler calling
-> +	 * local_interrupt_disable() but it won't disable the irq because
-> +	 * hardirq disabling count is already 1, hence we need to prevent
-> +	 * invoking softirq when a local_interrupt_disable() is ongoing.
-> +	 */
-> +	if (!in_interrupt() && !hardirq_disable_count() &&
-> +	    local_softirq_pending()) {
->  		/*
->  		 * If we left hrtimers unarmed, make sure to arm them now,
->  		 * before enabling interrupts to run SoftIRQ.
->  		 */
-> +		hrtimer_rearm_deferred();
-> +		invoke_softirq();
-> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605054128.5925=
--1-boqun@kernel.org?part=3D5
+-1-boqun@kernel.org?part=3D13
