@@ -1,63 +1,63 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD8040B6E9
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D6940B6F1
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641264; cv=none; b=ZPBD901Bm1Kgkcx799WuodKc/6m8HxEf29X3gf4mSFncYd6IOXx6K0mttGd2j4hEw6o84VeboiA3Nhk8rHccb63EVNUuRH1xJ4FpAdfFUAKzcxX3zHjgMqZW0Rk8iigp9ivUt/PXGbBmtJqPSYDR+n/XwfGEmyLm1o/Zuj5bs+8=
+	t=1780641264; cv=none; b=hh6ItK5QVQ5kcA+iH2EceJwBI4fSzhb6Q3/EbrHMQky7rNzTT4DPJ0zTg0QERj3AQFFntGIOfyDcCliA1ggG3gNn8V+snvuNVE/6ZvVQwF1nH2ZCaxvA+9m6CPVFZxat29isQqqdFroyu6B5SL1UvhsrDtHVE3WDCsmPZuQjoaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780641264; c=relaxed/simple;
-	bh=0oGrY7jTTimVhb+eJfUgncyf8jPrkZNdCJuoG7LWJIU=;
+	bh=2DYoHIJkXgzAeLI6nin93ONDtEeHRGMNd6NefMAqzLg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JShwviarnZFJNAmVcwXrG0Kxq2EHwMYaR/TzxFVD1bUCYndfzSLivRx72bjAxiZ5nnu/kT8KkuoydYhQ3Zo1c2A3ujmCItKnO3SQdQEWkO0vdLyQwMwMrLSC2lkghajDrJiE5tRw1PKyEHo74hUwA5A+SZ4RW/WGAMsImptAngM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQTPolGn; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version; b=T5jt1xCtDuMVdqez7G4ZytpFlWsVfhYCVL/kvl/ABrFVd+qq5A7D3GVmbB8cUMfbckFAbYCKqpZ5E5BhXkvk6nhTHVZAYQgR5hh0OcmvoAhfaUm8cD4uZdpfwmcrzRGKTf0pIv0Nj1QzHevm+c7xzuwxY7uPh/qm0tmgNdlQg58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I2glXLhN; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQTPolGn"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b12270b3so9106595e9.1
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I2glXLhN"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490b3637b90so13040425e9.3
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780641259; x=1781246059; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780641260; x=1781246060; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UKOA1Ko+IZQ1+zC21FgziY0+TI0a5iMA/JoBEpo0OSs=;
-        b=ZQTPolGnIa8bSnOdKXg8hCC70EWRKO0p0hOxj0QV9gjJwtQGYz6JqBIM2MjGd5RCJj
-         g+T2RTo4TYEhJnuRQI7pRXAZkTTf/qIXs5FqOGLBGkeE5xRVrsup3du8gw0cBx7ZB9Xt
-         Yj1Jg99U+OA5SgWcIExpNqibk3GlMIne2nnSfQNNbRvoc0HNhZkWIeR8hHS/W+uEdlD9
-         SKIxaBVhxkthA8vi8DE7yDu3qN+vbsqa4WLmBv4wpsQ5z+A//04z8385n///6rWhy1Og
-         0wn6eANt8aXn0cHBMDveg578vXyjkj2FynSPThGweDEGvAUzfQ7PuU3puwihYSb1GTaY
-         vDBw==
+        bh=INyc47Eq2GksfFVNMEef/3R1eygdJqBAO6jNY/Qy/T0=;
+        b=I2glXLhNbwaZl94FU2cteugpTArrA63kYl5ctahXuSCH5JRkXhXtaqLl1hHhW2Ya4C
+         UqjeL8bW74QBdnrmqfxig3yrJBxI4X7NP3zgzGtz6I9b9/hpgWU8T5Ys+1hPn0B0vxo3
+         FLOakikS+haL/KIEM7PkvpwLAq5Zq5jKwyVuUd+8fWb2RqiJR2qLfrSqpO4f/LtBqDig
+         zknIS24sZvQfeNp4l9DbQHwB9b4v/VN8GAEY/VCzKYGrbXb2SlpX+1NvrEtjDxCxnQip
+         nli+D7k4pgO5ep59Fp9Szo09AVveieQiXKiu2t9graqtMPnnNVnJChKXSEMIpHgqZEgJ
+         7vRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780641259; x=1781246059;
+        d=1e100.net; s=20251104; t=1780641260; x=1781246060;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=UKOA1Ko+IZQ1+zC21FgziY0+TI0a5iMA/JoBEpo0OSs=;
-        b=VJlom4tI+SeHWVT3+hy3OtpcJY/kUGZLU9H6K4H8Dd+Ne9m4G5kHebrJVpmBqxEBBE
-         swyXY713vh4Hqhx6tQkg/ayyRV4gkfOvyiMx5GU0ZljJOp0zWgRxbOM5N6xjz1p8L+IS
-         NFzsQ3o3LrCydK0WEcuVcxNSRPt/2/+YigeWSBBeTRDb/EX5wpCSIr+oty5+oKdidalM
-         pt1lsmz7eF63PIigbCUg3Y6HHGwo6llHxZOjUCT7MbEpisFOLykma1ryR8+Byo6YLCKB
-         6UIttGhekBIK2iiOkpH3xAXaQAoNRGecmOqMq6vGjAH6rKCu4WDOIfsaRxJOfJrhJ5tA
-         ambQ==
-X-Gm-Message-State: AOJu0YyZLSkl0qHuNpKX59/cVeU/NfEcDwPUamVwDNLtbPTt7Rq7nnxu
-	J72w8JIRTTwzCUxSfXUgWlcU8iBgbFxne8cgg+7/gPKLjHJGSU1TKyBbqw3cEsZq
-X-Gm-Gg: Acq92OGJWG0a9xV58b9sjI2RSTCQOySBjcQpsbIIn5aY0YbaXVMXQrJV6iqYGYJSnOP
-	dooDe9HfIcmPpYxrcLTy5Tp6X7LbYPGEQZuoUZd2bylIOtgzRZZiU4UrSWeGNjU7ivImT352J3a
-	rl+3AQff45S4qYHqb1IYtrL0zERCqi0IyRYXIkZKT0AZs09taphNk+RaBwRHuwsfqESyfRRJION
-	37zZys7bdzQ2ZnSlMzjYPvxJ8g1ydmawZF43EmBJUn67ZJizte+lwypELRSIQQBVOZ/ZtMtwDj9
-	vecjCOY6VLjA1/CfwGOhIMNu/8aIA2EltESL/MgTdgwKy3rxE3IzfgexWPG1ODqECzO3ndjfL4B
-	qfC7Oh+rloEXt0Xw0pLcxmQx+WFEXOwaCBj4EToJvi0s/Kdxh7veA4G5sL3UUG1eDbLtJO/0wht
-	mfNFssQiwoANwS2jMd1WbZi9f0V+BcYTclV5+lkUA8xX6Ep8Yt6ks6oDNGHAOEHsxuJmY5iTskr
-	odq6Qig/dgxSX0m6tpm/dGh9HzMb6VgyNi5B/At4BpG3rycJy+38kiROnN4BjEWdeUai6LENEmM
-X-Received: by 2002:a05:600c:37c9:b0:490:adb6:7957 with SMTP id 5b1f17b1804b1-490c262dcb5mr28704535e9.33.1780641259205;
-        Thu, 04 Jun 2026 23:34:19 -0700 (PDT)
+        bh=INyc47Eq2GksfFVNMEef/3R1eygdJqBAO6jNY/Qy/T0=;
+        b=sSPWZ5S+tPFebcJ+/zUp/2s7fVE5FGXJJ1+6j0Jja/TlyQCdl2IukI//L6FIT0IbhJ
+         6kgyy++SfcHRa2BYECYxcySJHnHZJKTCff0YxxkUqhXFdfM8twc+ceM9TcgGKgyeTsoq
+         afFo3nIB4MED+hlda236aCJjGqHuoyEakk6NDT2hB6LEF7DKQb4j5YRHKjsA8ikQYh5I
+         PlXfLsG/cG3p3H4LOcwBsXu5BwkRqtdKzgBH4VNTlLq0fY/lUZr2RVsIu1D/M76oWFEV
+         2njQcUkUocUEY/+qBu6h9zR4y/+5yDxyiiqZSssmWKmEl9rdp3nD4B7fmI2sTwdYLm5p
+         CNrw==
+X-Gm-Message-State: AOJu0Yzw3O0ozCmyOO1mukiU9JYc+iL6PVBdgorelmTHshAr3kR2L1Nv
+	2M48Dfd9uNbAA1ZFswbTXEFO5Sy5C132MgItO3+C0WLc9us9po2UHtoOGluh9Mrv
+X-Gm-Gg: Acq92OFOQL+pm+Mql6fsD+cn4kjQpkP1aTSScojkVIDJMXlS4IF1F3iFXlmKVj+hbsE
+	s3webac4Tk1yxa3riy8yEKsHa1CykpYpIoBXswgN0VfvUNavp4r5d4S8HACE1SGHjRsjtOzDN5o
+	YvXKLu0xjED0Xm068skDcA9hBmZW7SOTmxQ3PVOkJfnzY/xMtiKeYZgMemFHktT8RVpvFuPJ1UK
+	Un7+M2kue9K1dKI+s1tPDpQYjgo2q2xtovSlkFMh8yPXtSUIAWNsjFPQEFJ4GtG+xBhao2M+11X
+	nXm3BGN68csgbJZcfZPegImkewZkHsjSvGCnqJVL6p3KB/T0RxsWw2cBUlwkViFVUr8Y4Q74yHs
+	UGyXNBG/StTFs6/8BwBcirEeG5jSL2d417yRDGb1ZKTRQadCfc6b3BoKw09WgWTE1mgcCl3rKGj
+	A/nh4u4tvhvDoCxa5EpCXPJlEsfC9Wq4conSt47NWT3SQx9Kyf+LaJMmNPVPGEQCrYOisKmRXdN
+	zwpJ+wuQCFJKEqGQK3iOpJug92NPAZv+brE4WTD3ygebf1GbqJTxXbpZ/0GdzJQKeHpm/r+hc0R
+X-Received: by 2002:a05:600c:4f0b:b0:48e:6db3:ff2e with SMTP id 5b1f17b1804b1-490c25c1e32mr27219415e9.15.1780641257252;
+        Thu, 04 Jun 2026 23:34:17 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3e59f5sm130638045e9.14.2026.06.04.23.34.18
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2c9ea37sm40091395e9.0.2026.06.04.23.34.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:18 -0700 (PDT)
+        Thu, 04 Jun 2026 23:34:16 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 06/17] bpf: Track verifier reference diagnostic history
-Date: Fri,  5 Jun 2026 08:33:56 +0200
-Message-ID: <20260605063412.974640-7-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 04/17] bpf: Track verifier branch diagnostic history
+Date: Fri,  5 Jun 2026 08:33:54 +0200
+Message-ID: <20260605063412.974640-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
 References: <20260605063412.974640-1-memxor@gmail.com>
@@ -79,212 +79,287 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6801; i=memxor@gmail.com; h=from:subject; bh=0oGrY7jTTimVhb+eJfUgncyf8jPrkZNdCJuoG7LWJIU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt6j9/NI9WZOMkhV/aP2+teXbiuWaAqd2Hz93v77rZ mMOS/7JjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExk+3ZGhvn5hQrXj3G9ntt+ fmvM3K9xPGrvK3NFkv7ZLTnXluR/tpHhn9mnqizTQ/Lrv62LdFXaNtVg+pITAfvzblbaMZ5bfX2 zGwcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8966; i=memxor@gmail.com; h=from:subject; bh=2DYoHIJkXgzAeLI6nin93ONDtEeHRGMNd6NefMAqzLg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt2gCw0z1wD1mJ+YsCeK7EFJk3ip/r3TmI71WzRm+W 76cEpXuKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwERSfjL8j/bw3ygRuiFzps70 Rbvza9juVN89rxPq4Xvjb5m7j1ltMcNfkXuHn56P+Tx15YInW+Y7Lq8WOB799az09/0G74+zmXm x8QIA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add reference acquire and release events to diagnostic history so Resource
-Lifetime Safety reports can show the lifetime of a specific reference id
-along the path.
+Add bounded diagnostic history to verifier states and copy/free it with
+normal verifier-state lifetime management. This history is separate from
+jump history because it is ordered for user-facing diagnostics instead of
+precision backtracking.
 
-Record acquisitions after the verifier assigns the reference id. Record
-releases only after release_reference_nomark() succeeds, including the
-kptr_xchg RCU conversion path that consumes an owning reference.
+Record conditional branch outcomes as true or false so later reports can
+show the path that reached a verifier error. If no visible events exist,
+print a generic fallback from the history renderer itself.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 57 ++++++++++++++++++++++++++++++++++++++--
- kernel/bpf/diagnostics.h | 11 ++++++++
- kernel/bpf/verifier.c    | 12 +++++++--
- 3 files changed, 76 insertions(+), 4 deletions(-)
+ include/linux/bpf_verifier.h |   5 ++
+ kernel/bpf/diagnostics.c     | 128 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.h     |  24 +++++++
+ kernel/bpf/verifier.c        |   7 ++
+ 4 files changed, 164 insertions(+)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c248ff41f42a..55921b8a5d5c 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -437,6 +437,8 @@ struct bpf_jmp_history_entry {
+ static_assert(MAX_CALL_FRAMES <= (1 << 3));
+ static_assert(MAX_BPF_STACK / 8 <= (1 << 6));
+ 
++struct bpf_diag_history_event;
++
+ /* Maximum number of bpf_reg_state objects that can exist at once */
+ #define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+ #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE + \
+@@ -521,6 +523,9 @@ struct bpf_verifier_state {
+ 	 */
+ 	struct bpf_jmp_history_entry *jmp_history;
+ 	u32 jmp_history_cnt;
++	struct bpf_diag_history_event *diag_history;
++	u32 diag_history_cnt;
++	u32 diag_history_omitted;
+ 	u32 dfs_depth;
+ 	u32 callback_unroll_depth;
+ 	u32 may_goto_depth;
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 1bdc7e69fbce..56c1236ffe7c 100644
+index 652d4627c2b0..50cc50a394ca 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -842,13 +842,38 @@ void bpf_diag_record_stack_arg(struct bpf_verifier_state *state, u32 insn_idx,
- 	bpf_diag_append_history(state, &event);
- }
+@@ -5,6 +5,7 @@
+ #include <linux/bpf_verifier.h>
+ #include <linux/btf.h>
+ #include <linux/kernel.h>
++#include <linux/slab.h>
+ #include <linux/stdarg.h>
+ #include <linux/string.h>
  
-+static void bpf_diag_record_ref(struct bpf_verifier_state *state, u32 insn_idx,
-+				u8 kind, u32 ref_id)
+@@ -518,3 +519,130 @@ void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
+ 							 label, msg);
+ 	}
+ }
++
++void bpf_diag_clear_history(struct bpf_verifier_state *state)
++{
++	kfree(state->diag_history);
++	state->diag_history = NULL;
++	state->diag_history_cnt = 0;
++	state->diag_history_omitted = 0;
++}
++
++void bpf_diag_copy_history(struct bpf_verifier_state *dst,
++			   const struct bpf_verifier_state *src)
++{
++	struct bpf_diag_history_event *history;
++
++	if (!src->diag_history_cnt) {
++		bpf_diag_clear_history(dst);
++		dst->diag_history_omitted = src->diag_history_omitted;
++		return;
++	}
++
++	history = krealloc_array(dst->diag_history, src->diag_history_cnt,
++				 sizeof(*history), GFP_KERNEL_ACCOUNT);
++	if (!history) {
++		kfree(dst->diag_history);
++		dst->diag_history = NULL;
++		dst->diag_history_cnt = 0;
++		dst->diag_history_omitted = src->diag_history_omitted +
++					    src->diag_history_cnt;
++		return;
++	}
++
++	dst->diag_history = history;
++	memcpy(dst->diag_history, src->diag_history,
++	       src->diag_history_cnt * sizeof(*dst->diag_history));
++	dst->diag_history_cnt = src->diag_history_cnt;
++	dst->diag_history_omitted = src->diag_history_omitted;
++}
++
++static void
++bpf_diag_drop_oldest_and_append_history(struct bpf_verifier_state *state,
++					const struct bpf_diag_history_event *event)
++{
++	if (!state->diag_history_cnt) {
++		state->diag_history_omitted++;
++		return;
++	}
++
++	memmove(state->diag_history, state->diag_history + 1,
++		(state->diag_history_cnt - 1) * sizeof(*state->diag_history));
++	state->diag_history[state->diag_history_cnt - 1] = *event;
++	state->diag_history_omitted++;
++}
++
++static void bpf_diag_append_history(struct bpf_verifier_state *state,
++				    const struct bpf_diag_history_event *event)
++{
++	struct bpf_diag_history_event *history;
++
++	if (!state)
++		return;
++
++	if (state->diag_history_cnt < BPF_DIAG_HISTORY_MAX) {
++		history = krealloc_array(state->diag_history,
++					 state->diag_history_cnt + 1,
++					 sizeof(*history), GFP_KERNEL_ACCOUNT);
++		if (!history) {
++			bpf_diag_drop_oldest_and_append_history(state, event);
++			return;
++		}
++
++		state->diag_history = history;
++		state->diag_history[state->diag_history_cnt++] = *event;
++		return;
++	}
++
++	bpf_diag_drop_oldest_and_append_history(state, event);
++}
++
++void bpf_diag_record_branch(struct bpf_verifier_state *state, u32 insn_idx,
++			    bool cond_true)
 +{
 +	struct bpf_diag_history_event event = {
 +		.insn_idx = insn_idx,
-+		.kind = kind,
-+		.ref.ref_id = ref_id,
++		.kind = BPF_DIAG_HISTORY_BRANCH,
++		.branch.cond_true = cond_true,
 +	};
 +
 +	bpf_diag_append_history(state, &event);
 +}
 +
-+void bpf_diag_record_ref_acquire(struct bpf_verifier_state *state, u32 insn_idx,
-+				 u32 ref_id)
++void bpf_diag_print_history(struct bpf_verifier_env *env)
 +{
-+	bpf_diag_record_ref(state, insn_idx, BPF_DIAG_HISTORY_REF_ACQUIRE,
-+			    ref_id);
-+}
++	const struct bpf_verifier_state *state = env->cur_state;
++	const struct bpf_diag_history_event *event;
++	bool printed = false;
++	u32 i;
 +
-+void bpf_diag_record_ref_release(struct bpf_verifier_state *state, u32 insn_idx,
-+				 u32 ref_id)
-+{
-+	bpf_diag_record_ref(state, insn_idx, BPF_DIAG_HISTORY_REF_RELEASE,
-+			    ref_id);
-+}
++	bpf_diag_report_section(env, "Causal path");
 +
- static int bpf_diag_history_start_idx(const struct bpf_verifier_state *state,
- 				      const struct bpf_diag_history_opts *opts)
- {
- 	int i;
- 
--	if (!opts || (opts->scope != BPF_DIAG_HISTORY_SCOPE_REG &&
--		      opts->scope != BPF_DIAG_HISTORY_SCOPE_STACK_ARG))
-+	if (!opts || opts->scope == BPF_DIAG_HISTORY_SCOPE_ALL)
- 		return 0;
- 
- 	for (i = state->diag_history_cnt; i > 0; i--) {
-@@ -864,6 +889,10 @@ static int bpf_diag_history_start_idx(const struct bpf_verifier_state *state,
- 		    event->stack_arg.slot == opts->stack_arg_slot &&
- 		    event->stack_arg.frameno == opts->frameno)
- 			return i - 1;
-+		if (opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
-+		    event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE &&
-+		    event->ref.ref_id == opts->ref_id)
-+			return i - 1;
- 	}
- 
- 	return 0;
-@@ -886,6 +915,10 @@ static bool bpf_diag_history_event_visible(const struct bpf_diag_history_event *
- 		return opts->scope == BPF_DIAG_HISTORY_SCOPE_STACK_ARG &&
- 		       event->stack_arg.slot == opts->stack_arg_slot &&
- 		       event->stack_arg.frameno == opts->frameno;
-+	case BPF_DIAG_HISTORY_REF_ACQUIRE:
-+	case BPF_DIAG_HISTORY_REF_RELEASE:
-+		return opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
-+		       event->ref.ref_id == opts->ref_id;
- 	default:
- 		return false;
- 	}
-@@ -1084,6 +1117,21 @@ static void bpf_diag_print_reg_mod(struct bpf_verifier_env *env,
- 			       event->reg.dst_reg, old_buf, new_buf);
- }
- 
-+static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
-+				     const struct bpf_diag_history_event *event)
-+{
-+	if (event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE) {
-+		bpf_diag_report_source(env, event->insn_idx, '+',
-+				       "owned resource (id=%u)",
-+				       event->ref.ref_id);
++	if (!state)
 +		return;
-+	}
 +
-+	bpf_diag_report_source(env, event->insn_idx, '-',
-+			       "owned resource (id=%u)",
-+			       event->ref.ref_id);
-+}
++	if (state->diag_history_omitted)
++		verbose(env, "  ... %u earlier diagnostic events omitted by display limit ...\n",
++			state->diag_history_omitted);
 +
- void bpf_diag_print_history(struct bpf_verifier_env *env,
- 			    const struct bpf_diag_history_opts *opts)
- {
-@@ -1122,6 +1170,11 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
- 			bpf_diag_print_reg_mod(env, event);
- 			printed = true;
- 			break;
-+		case BPF_DIAG_HISTORY_REF_ACQUIRE:
-+		case BPF_DIAG_HISTORY_REF_RELEASE:
-+			bpf_diag_print_ref_event(env, event);
++	for (i = 0; i < state->diag_history_cnt; i++) {
++		event = &state->diag_history[i];
++
++		switch (event->kind) {
++		case BPF_DIAG_HISTORY_BRANCH:
++			bpf_diag_report_source(env, event->insn_idx, '?',
++					       "explored as %s, goto %s",
++					       event->branch.cond_true ? "true" :
++					       "false",
++					       event->branch.cond_true ? "followed" :
++					       "not followed");
 +			printed = true;
 +			break;
- 		default:
- 			break;
- 		}
++		default:
++			break;
++		}
++	}
++
++	if (!printed && !state->diag_history_omitted)
++		verbose(env, "  no recorded diagnostic events on this path\n");
++}
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index b8dfe8103966..c6ace61547c6 100644
+index ba60cc3af548..1392ff5fb027 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -69,6 +69,9 @@ struct bpf_diag_history_event {
- 			u8 reason;
- 			struct bpf_diag_reg_snapshot old, new;
- 		} stack_arg;
+@@ -19,7 +19,24 @@ enum bpf_diag_category {
+ 	BPF_DIAG_CATEGORY_VERIFIER_INTERNAL_ERROR,
+ };
+ 
++struct bpf_diag_history_event {
++	u32 insn_idx;
++	u8 kind;
++	union {
 +		struct {
-+			u32 ref_id;
-+		} ref;
- 	};
- };
- 
-@@ -78,12 +81,15 @@ enum bpf_diag_history_kind {
- 	BPF_DIAG_HISTORY_BRANCH,
- 	BPF_DIAG_HISTORY_REG_MOD,
- 	BPF_DIAG_HISTORY_STACK_ARG,
-+	BPF_DIAG_HISTORY_REF_ACQUIRE,
-+	BPF_DIAG_HISTORY_REF_RELEASE,
- };
- 
- enum bpf_diag_history_scope {
- 	BPF_DIAG_HISTORY_SCOPE_ALL,
- 	BPF_DIAG_HISTORY_SCOPE_REG,
- 	BPF_DIAG_HISTORY_SCOPE_STACK_ARG,
-+	BPF_DIAG_HISTORY_SCOPE_REF,
- };
- 
- enum bpf_diag_stack_arg_reason {
-@@ -97,6 +103,7 @@ struct bpf_diag_history_opts {
- 	u32 frameno;
- 	int regno;
- 	int stack_arg_slot;
-+	u32 ref_id;
- };
- 
++			bool cond_true;
++		} branch;
++	};
++};
++
++#define BPF_DIAG_HISTORY_MAX 1024
++
++enum bpf_diag_history_kind {
++	BPF_DIAG_HISTORY_BRANCH,
++};
++
  struct bpf_verifier_env;
-@@ -134,6 +141,10 @@ void bpf_diag_record_stack_arg(struct bpf_verifier_state *state, u32 insn_idx,
- 			       enum bpf_diag_stack_arg_reason reason,
- 			       const struct bpf_reg_state *old_reg,
- 			       const struct bpf_reg_state *new_reg);
-+void bpf_diag_record_ref_acquire(struct bpf_verifier_state *state, u32 insn_idx,
-+				 u32 ref_id);
-+void bpf_diag_record_ref_release(struct bpf_verifier_state *state, u32 insn_idx,
-+				 u32 ref_id);
- void bpf_diag_print_history(struct bpf_verifier_env *env,
- 			    const struct bpf_diag_history_opts *opts);
++struct bpf_verifier_state;
  
+ void bpf_diag_report_header(struct bpf_verifier_env *env,
+ 			    enum bpf_diag_category category,
+@@ -33,4 +50,11 @@ void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
+ 			    char marker, const char *fmt, ...)
+ 	__printf(4, 5);
+ 
++void bpf_diag_clear_history(struct bpf_verifier_state *state);
++void bpf_diag_copy_history(struct bpf_verifier_state *dst,
++			   const struct bpf_verifier_state *src);
++void bpf_diag_record_branch(struct bpf_verifier_state *state, u32 insn_idx,
++			    bool cond_true);
++void bpf_diag_print_history(struct bpf_verifier_env *env);
++
+ #endif /* __BPF_DIAGNOSTICS_H */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 188201d48108..9b9ffa57b95a 100644
+index 8ed484cb1a8a..d60e1309957a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1434,6 +1434,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
- 	s->type = REF_TYPE_PTR;
- 	s->id = ++env->id_gen;
- 	s->parent_id = parent_id;
-+	bpf_diag_record_ref_acquire(env->cur_state, insn_idx, s->id);
- 	return s->id;
+@@ -32,6 +32,7 @@
+ #include <linux/trace_events.h>
+ #include <linux/kallsyms.h>
+ 
++#include "diagnostics.h"
+ #include "disasm.h"
+ 
+ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+@@ -1598,6 +1599,7 @@ void bpf_free_verifier_state(struct bpf_verifier_state *state,
+ 	}
+ 	kfree(state->refs);
+ 	bpf_clear_jmp_history(state);
++	bpf_diag_clear_history(state);
+ 	if (free_self)
+ 		kfree(state);
  }
+@@ -1624,6 +1626,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 	if (!dst_state->jmp_history)
+ 		return -ENOMEM;
+ 	dst_state->jmp_history_cnt = src->jmp_history_cnt;
++	bpf_diag_copy_history(dst_state, src);
  
-@@ -8998,8 +8999,12 @@ static int release_reference(struct bpf_verifier_env *env, int id)
- 	if (err)
- 		return err;
+ 	/* if dst has more stack frames then src frame, free them, this is also
+ 	 * necessary in case of exceptional exits using bpf_throw.
+@@ -15933,6 +15936,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 		}
+ 		if (env->log.level & BPF_LOG_LEVEL)
+ 			print_insn_state(env, this_branch, this_branch->curframe);
++		bpf_diag_record_branch(this_branch, *insn_idx, true);
+ 		*insn_idx += insn->off;
+ 		return 0;
+ 	} else if (pred == 0) {
+@@ -15948,6 +15952,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 		}
+ 		if (env->log.level & BPF_LOG_LEVEL)
+ 			print_insn_state(env, this_branch, this_branch->curframe);
++		bpf_diag_record_branch(this_branch, *insn_idx, false);
+ 		return 0;
+ 	}
  
--	if (find_reference_state(vstate, id))
--		WARN_ON_ONCE(release_reference_nomark(vstate, id));
-+	if (find_reference_state(vstate, id)) {
-+		err = release_reference_nomark(vstate, id);
-+		WARN_ON_ONCE(err);
-+		if (!err)
-+			bpf_diag_record_ref_release(vstate, env->insn_idx, id);
-+	}
+@@ -15980,6 +15985,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 	other_branch_regs[insn->dst_reg] = env->true_reg1;
+ 	if (BPF_SRC(insn->code) == BPF_X)
+ 		other_branch_regs[insn->src_reg] = env->true_reg2;
++	bpf_diag_record_branch(this_branch, *insn_idx, false);
++	bpf_diag_record_branch(other_branch, *insn_idx, true);
  
- 	while ((id = idstack_pop(idstack))) {
- 		/*
-@@ -9088,6 +9093,9 @@ static int ref_convert_alloc_rcu_protected(struct bpf_verifier_env *env, u32 id)
- 	int err;
- 
- 	err = release_reference_nomark(env->cur_state, id);
-+	if (err)
-+		return err;
-+	bpf_diag_record_ref_release(env->cur_state, env->insn_idx, id);
- 
- 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
- 		if (reg->id != id)
+ 	if (BPF_SRC(insn->code) == BPF_X &&
+ 	    src_reg->type == SCALAR_VALUE && src_reg->id &&
 -- 
 2.53.0
 
