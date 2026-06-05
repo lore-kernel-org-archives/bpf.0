@@ -1,272 +1,200 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C0628C854
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 23:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3122C11FA;
+	Fri,  5 Jun 2026 23:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780700484; cv=none; b=J3Rtp6cRmz3cU4dfQPJs//Pw+pPPbnausXQGY6FB0H7fdC/fB8RKtc4MYHcRoxf0FKCM2CklPoEtMpL5f13JFuc8srBG6E+cbmfjuQDTAngpWMQYKf/lBcz6sCWLFT7GHEMs6XnxjYYKs1OI3vMyYvI+1yprOah9RThiM7l3Mvs=
+	t=1780701389; cv=none; b=sWku8KR7lrBPb+YnHLyh7Xujoi4fnGrQqy6Z6boG8XlIN6HNKb6GYtsHJbLFqzfl7wTYFT5qFwhkkQC9DOBYc+DE+8dZaNLRf9n4voqvrhmv27cCAzy9WJ9YhGtL77RzBw34D5gic7vfFvsk7Cr/XApSgdE5lAgiUrJAqcPsp+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780700484; c=relaxed/simple;
-	bh=O8GdzxxXiZ3G7l1nv/53S34k1iKnVwkdcP6Nvg3W3iM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=PkosYa2GILeGXzUOKj1Q9DCzZ/ZAA6SZ/4+cWOE4frr8NxwpjR2qNAcQevekj5TcU+xLgL8F+uhu79Fpm9wxwcyQ2ZcS7GpelQIPWqll3UjLpAv3keDteCWIZ1GHrdbVg0anZLnBOgyHL/tWruat3tWLbSkLwFeMDuaXvUQfFsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=a8IZ1p4J; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780701389; c=relaxed/simple;
+	bh=gQGySES0/R9bwLqBmWPp5WtmF2QZNfMif19YoTUhDK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d0JROpUd5N9vAs80L/8mbJDHF2FzEh9sbkWDIiYcHmbF4hIRGnLU9hpyfqxqqhL42fWh4KaSUSYg2JRUduFnaXmPGsk9mfAZFiRps2YRP+fYIekYxGCBXxCN9ooZF9+LlYdX0K48eoKy1ne9ld/ovaJKTCRk4eIwnJDjheztxEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=U+1FsSiu; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="a8IZ1p4J"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-842848fd613so1972179b3a.3
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 16:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780700482; x=1781305282; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jMUU/6j6qQEoXyWYhsfpILaPga52Ykc268OSJ9blCEU=;
-        b=a8IZ1p4JRzwBSV2vVvvtrdo4BSGeKsrJke+mZlghR+XuyM9236tG1Bd1h/a2MJEx7L
-         f+xbkXGCz1dAfb9mVCo5fE2sokbXBbQcLqwl4UF75oziA1Boaqh/vPNdLm7W3+Um4EdK
-         OgHfOLro4VhqiMiWAYkRsRdtTr9/7tA4b3z/UdmMcmUPpcmwPcBNOFzBSHX2TFchNwSQ
-         2g/MM2BsF5yeCTlQd0FF9eCODEfPte9SQPUH5o6CNbphxtQFoFDSL/IaHp+MXCskw5pX
-         GrBD2YfKEPGlFnpJB/m0bqY9+15fMgTWEomuztV0yPJeSyhcG3vaiZlb00lc/J/H3Q+J
-         sn9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780700482; x=1781305282;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jMUU/6j6qQEoXyWYhsfpILaPga52Ykc268OSJ9blCEU=;
-        b=pu8b3O0c9o+HveBoOSFhMCft9kmTtEApaaUbALFvy7PmTK5T7KCSNwXRB2Pd298CN/
-         X1pmonqsKQkPdfwBwD9A3J7PCESeUxd8paiBlHC7fr0ReCpikDXXKmYklmSxZ4Vhxwyx
-         qeZeU9J0WYskJqqGD1FMMpIkKZ+9trEr+if6RatB6eCWoUH9SilsQOQq7n9OuDs1lwnp
-         9J0i6AHK5vbw4xCB7oYFawq/1Nyw2Fz+Zaw2opDnZ5cBPskMfJ51RIFW+HHx6dmtqAId
-         mKnAfuD/Fvm3I16v1Jo9+xc5EPIMcAvKpDqekro05o4YYSz4kYLOXuzGVgU3Poq0M64v
-         qnyQ==
-X-Gm-Message-State: AOJu0YzFFZS2JecMDgNepGoY3/jRBYbBRPYdIuHdr8VuQ/5LfV5zKAGL
-	KfyCu+Z8nwSBG1CXWJGrCuyaxnI3YX7EpnwDHvHSbdvgZ93MvGbvZoAw+wOt0vo46sOf7EbO0bE
-	Cjuth3G1jrP/o
-X-Gm-Gg: Acq92OEfnDfncqDSlVfjCU8X5uwAREf74ZomQiw8lK0/FSQu+1FyVlKEN0aYfyTkcCs
-	tjoPZ0ciJZ2Jao8m3lOt+v9h0fWPOkYJOi91PirpzloABuyxTD6a6J64mGGc0PqcoShEcgED21p
-	M7VRwvNK2oILk8R6zoLirgvJH6Bhh0S8dw6RN0yjo6MUOSeePTbVLpp3jzIYsO1eXNc8TvJSSmR
-	rSFuWn/wLrvTmd8BOh+seKqWET7sxeu3uKBbdOXiLmhwpSyt0AS3P6h4aouoK/4zP7WnP+5QW+b
-	L7/tnkAoWobdfPlpQsn3a8ec3eNKCdMkLsKOWltJNNTInwbI/2tedAhZzdEbpSucbpDXFQRuSr1
-	bWdSVtWKws1vjghjoHRw3SnblwEDHNx+4j1exhrJ0mXwhQESYoFnt7AEtUOQlB5Vld7XfiDLdvV
-	JUuX4+U7FVLwVkWwpzQEUWzequa2bmKVdEyNR4LKNsoiY49A==
-X-Received: by 2002:a05:6a00:338c:b0:842:48ae:1d56 with SMTP id d2e1a72fcca58-842b104d70dmr5980160b3a.35.1780700482310;
-        Fri, 05 Jun 2026 16:01:22 -0700 (PDT)
-Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282882751sm10488015b3a.39.2026.06.05.16.01.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 16:01:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="U+1FsSiu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=diHokLLXxZ0eJl/6IHV4bvHqGhVfhG1QOvKnVgiH0ns=; b=U+1FsSiu0oirvdztQUQfSvw1tS
+	n1mZbV7OMIVJuMfwaUCsPI2PN5HKMFOefgg94OTemyq4WMvupClDz/phjzyM3VlRvNUEPs6SaaNMS
+	xF2f1vY9KHt4YGUzeqaTNUA6UioHJCi9pcM/1M7TlIBobtj+lzLvfdn3pubtnSkAOV6uo3VWp1gnq
+	3b1cVFrbI2laQ8WUyo4kGPMVYa/zR1idKQ5SsC4E4CBA3PESBTSoEZynU13cmbnuv83/zQr2yAx3O
+	ChRpXO584sDawASmNxmbSxIJY9qtli7qLwiD8ksSeo01Ujb/XpxlL+5egvKqk6q/ebF1UwNf3JpnX
+	tOXvGTtw==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wVdly-000FbV-17;
+	Sat, 06 Jun 2026 01:16:18 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wVdlx-000NHy-2K;
+	Sat, 06 Jun 2026 01:16:17 +0200
+Message-ID: <86dac3e9-3af2-4bc6-93e5-d62aa70fb362@iogearbox.net>
+Date: Sat, 6 Jun 2026 01:16:16 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 05 Jun 2026 19:01:21 -0400
-Message-Id: <DJ1HN00TAYO9.3MAYZZJMB84PJ@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 1/3] selftests/bpf: libarena: Add rbtree
- data structure
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <sashiko-reviews@lists.linux.dev>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260605222020.5231-2-emil@etsalapatis.com>
- <20260605223052.D18201F00893@smtp.kernel.org>
-In-Reply-To: <20260605223052.D18201F00893@smtp.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+To: Yonghong Song <yonghong.song@linux.dev>, Lin Ma <malin89@huawei.com>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ YiFei Zhu <zhuyifei@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Amery Hung <ameryhung@gmail.com>, Rongzhen Cui <cuirongzhen@huawei.com>,
+ Jingguo Tan <tanjingguo@huawei.com>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+References: <20260604070318.2869813-1-malin89@huawei.com>
+ <a8342b94-9732-4878-b794-086106c93585@linux.dev>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <a8342b94-9732-4878-b794-086106c93585@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28022/Fri Jun  5 08:25:05 2026)
 
-On Fri Jun 5, 2026 at 6:30 PM EDT, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] Failure to check `can_loop` termination leads to severe tree cor=
-ruption, memory leaks, and NULL pointer dereferences.
-> --
->
-> commit 090a58da31563cb07c7562cdaaf67470a54e90c0
-> Author: Emil Tsalapatis <emil@etsalapatis.com>
->
-> selftests/bpf: libarena: Add rbtree data structure
->
-> This commit adds a native red-black tree data structure to libarena. It
-> supports multiple APIs for querying and modifying the tree, and uses the
-> libarena memory allocator to manage its data.
->
->> diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/too=
-ls/testing/selftests/bpf/libarena/src/rbtree.bpf.c
->> new file mode 100644
->> index 0000000000000..0e4aaec96b6fa
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
->
-> [ ... ]
->
->> +__weak
->> +int rb_destroy(struct rbtree __arena *rbtree)
->> +{
->> +	int ret =3D 0;
->> +
->> +	arena_subprog_init();
->> +
->> +	if (unlikely(!rbtree))
->> +		return -EINVAL;
->
-> [ ... ]
->
->> +	while (rbtree->root && can_loop) {
->> +		ret =3D rb_remove(rbtree, rbtree->root->key);
->> +		if (ret)
->> +			break;
->> +	}
->> +
->> +out:
->> +	arena_free(rbtree);
->
-> [Severity: High]
-> Does this code leak memory if the loop exits early due to the can_loop
-> limit being reached? If the loop aborts early, the rbtree container is fr=
-eed
-> even though the remaining nodes have not been removed.
->
->> +	return ret;
->> +}
->
-> [ ... ]
->
->> +static
->> +struct rbnode __arena *rbnode_least_upper_bound(struct rbnode __arena *=
-subtree, uint64_t key)
->> +{
->> +	struct rbnode __arena *node =3D subtree;
->> +	int dir;
->> +
->> +	if (!subtree)
->> +		return NULL;
->> +
->> +	while (can_loop) {
->> +		dir =3D (key <=3D node->key) ? 0 : 1;
->> +
->> +		if (!node->child[dir])
->> +			break;
->> +
->> +		node =3D node->child[dir];
->> +	}
->> +
->> +	return node;
->
-> [Severity: High]
-> If this loop terminates early because can_loop evaluates to false, will i=
-t
-> return an internal tree node rather than a leaf node?
->
->> +}
->
-> [ ... ]
->
->> +static
->> +int rb_node_insert(struct rbtree __arena *rbtree,
->> +		   struct rbnode __arena *node)
->> +{
->> +	struct rbnode __arena *grandparent, *parent =3D rbtree->root;
->> +	u64 key =3D node->key;
->> +	struct rbnode __arena *uncle;
->> +	int dir;
->> +	int ret;
->
-> [ ... ]
->
->> +	if (rbtree->insert !=3D RB_DUPLICATE)
->> +		parent =3D rbnode_find(parent, key);
->> +	else
->> +		parent =3D rbnode_least_upper_bound(parent, key);
->
-> [ ... ]
->
->> +	node->parent =3D parent;
->> +	/* Also works if key =3D=3D parent->key. */
->> +	if (key <=3D parent->key)
->> +		parent->left =3D node;
->
-> [Severity: High]
-> If rbnode_find() or rbnode_least_upper_bound() returns an internal node
-> due to a can_loop timeout, does unconditionally overwriting parent->left =
-or
-> parent->right here permanently detach and leak the existing subtree?
->
->> +	else
->> +		parent->right =3D node;
->
-> [ ... ]
->
->> +static
->> +int rb_node_remove(struct rbtree __arena *rbtree,
->> +		   struct rbnode __arena *node)
->> +{
->> +	struct rbnode __arena *parent, *sibling, *close_nephew, *distant_nephe=
-w;
->> +	bool free =3D (rbtree->alloc =3D=3D RB_ALLOC);
->> +	struct rbnode __arena *replace, *initial;
->
-> [ ... ]
->
->> +	while (can_loop) {
->> +
->> +		/* Balancing reached the root, there can be no imbalance. */
->> +		if (!parent)
->> +			return 0;
->
-> [ ... ]
->
->> +		sibling->is_red =3D true;
->> +		node =3D parent;
->> +		parent =3D node->parent;
->> +		dir =3D rbnode_dir(node);
->> +	}
->> +
->> +	if (node !=3D initial) {
->> +		dir =3D rbnode_dir(node);
->> +		parent =3D node->parent;
->> +		sibling =3D parent->child[1-dir];
->> +	}
->> +	/*
->> +	 * Almost there. We know between the parent, sibling,
->> +	 * and nephews only one or two of the nephews are red. If
->> +	 * it is the close one, rotate it to the sibling position,
->> +	 * paint it black, and paint the previous sibling red.
->> +	 */
->> +
->> +	close_nephew =3D sibling->child[dir];
->> +	distant_nephew =3D sibling->child[1 - dir];
->> +
->> +	/*
->> +	 * If the distant red nephew is not red, rotate
->> +	 * and repaint. We need the distant nephew
->> +	 * to be red. We know the close nephew is red
->> +	 * because at least one of them are, so the
->> +	 * distant one is black if it exists.
->> +	 */
->> +	if (!distant_nephew || !distant_nephew->is_red) {
->> +		rbnode_rotate(rbtree, sibling, 1 - dir);
->> +		sibling->is_red =3D true;
->> +		close_nephew->is_red =3D false;
->
-> [Severity: High]
-> Can this cause a NULL pointer dereference if the rebalancing loop above
-> exits early due to can_loop?
->
-> An early exit bypasses the guarantee that the sibling has red children,
-> which means both nephews, including close_nephew, might be NULL here.
+On 6/4/26 6:56 PM, Yonghong Song wrote:
+> On 6/4/26 12:03 AM, Lin Ma wrote:
+>> The recent KCTF-reported cgroup local storage issue assigned
+>> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+>> in cgroup local storage").
+>>
+>> However, the previous fixes are still incomplete. The current prog-array
+>> compatibility check treats a program with no cgroup storage as
+>> compatible with any stored storage cookie. This allows a storage-less
+>> program to bridge a tail-call chain between an entry program and a
+>> storage-using callee even though runtime cgroup local storage still
+>> follows the caller context.
+>>
+>> Require exact per-type storage_cookie equality when checking prog-array
+>> compatibility. This blocks zero-storage bridge programs from joining a
+>> prog-array owned by a storage-using program and closes the residual
+>> A -> B(no storage) -> C(storage) path.
+>>
+>> This also aligns with Amery Hung's earlier NULL-storage tail-call fix by
+>> requiring storage use to match consistently across prog-array users.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
+>> Tested-by: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Lin Ma <malin89@huawei.com>
+>> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+>> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+> 
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-No. We don't care what happens if can_loop triggers. Same for the rest
-of the bot feedback. The only outstanding actionable nit is imo the
-mismatch between the function names in the patch description and the
-actual code for spmc, for which I can send another version if necessary.
+Sorry for jumping in late, but I would have an alternative suggestion below:
 
->
->> +		distant_nephew =3D sibling;
->> +		sibling =3D close_nephew;
->> +	}
+>> v1: https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/
+>> v1 -> v2:
+>>   - refine the commit message and mention the relation to Amery Hung's
+>>     NULL-storage tail-call fix
+>>   - add patch 2/2 selftests for tail-call cgroup storage prog-array
+>>     checks
+>> v2: https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
+>> v2 -> v3:
+>>   - use abad3d0bad72 as the Fixes tag
+>> v3: https://lore.kernel.org/bpf/7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org/T/#t
+>> v3 -> v4:
+>>   - no changes
+>> ---
+>>   kernel/bpf/core.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 6aa2a8b24030..f0b61b10f30e 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>>                   break;
+>>               cookie = aux->cgroup_storage[i] ?
+>>                    aux->cgroup_storage[i]->cookie : 0;
+>> -            ret = map->owner->storage_cookie[i] == cookie ||
+>> -                  !cookie;
+>> +            /*
+>> +             * Tail calls keep using the caller cgroup storage
+>> +             * context, so prog-array members must use the same
+>> +             * storage cookie.
+>> +             */
+>> +            ret = map->owner->storage_cookie[i] == cookie;
+
+
+This would basically break if the leaf program does not use cgroup storage.. can
+you please try out the below diff ... rationale: this would allow A -> B(no storage)
+but reject the A -> B(no storage) -> C(storage) case:
+
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index a656a8572bdb..649cce41e13f 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2481,7 +2481,7 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+                         cookie = aux->cgroup_storage[i] ?
+                                  aux->cgroup_storage[i]->cookie : 0;
+                         ret = map->owner->storage_cookie[i] == cookie ||
+-                             !cookie;
++                             (!cookie && !aux->tail_call_reachable);
+                 }
+                 if (ret &&
+                     map->owner->attach_func_proto != aux->attach_func_proto) {
 
