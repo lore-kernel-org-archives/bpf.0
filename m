@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9223C3BBFD0
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9BD3A63FB
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639270; cv=none; b=G0C1V8uendVecDJO26XReM+lCV+y2Qp5A0OBEdRTn13E+47fCsvlX1CUXuLsrCsXsySzNt398XVzd2QrgEKWe7khZ889ya0XdkD18+T72ze4RpYCJ8YRJSVIJvImG7FBrgYKUzXmMuvxNKeJu2MiySSCwn61tZU9duog2QjZ0G4=
+	t=1780639317; cv=none; b=AA8Bwi3VEgaLMe7dxcvXHWZ0mkvevoM9UVQIAYCLp1V6OVtLIammnK/xnatkdU326ZeqTvOyyHOhrMznbrnhg80N201lUcnG/MlSnBsqW7d6lGjm/JTS6fmlMbAKpxvB/6ASD+vNAs2JQLp7zGI5pl7Nyd3uDakAVSmLdCmm6R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639270; c=relaxed/simple;
-	bh=4UPF+yynoFAX0CC69nDOBHvbvcJ3N3raIQWxwYxlSoc=;
+	s=arc-20240116; t=1780639317; c=relaxed/simple;
+	bh=7WfBhLBSyB7BSnLIVfzJYK7rfADXt6lQbsVs+7NwthM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SuZi9x96AWsU2BzkWpA9I21G15plE/k3Av1tY/4RLi431wzEnTjouGz4GY2FfEY+QDNHfrTakr70KtgBCREXx8XhkpelGIiGvKIREXhOIBSzSEvGCyEkHrbSWua4a49zzMfVM+ui4TiOGl1DcPeCaGHwmKkyNFADIw8Tc4Az644=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFAtoCBQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=gCNnYiYrbRtrtwCqvyBZXLZINJTz+Uf/Z0frSuYP8H5OsnFADOAuXNyCf/wFKaOWIvf4sRQlJe/S2jFfJAtK5EH0cyP6QE5dd2tZg/v9nyjTf0QHwCbwEIj9qT7tJfMFqfDcynxUDQG/lLmxm8Wn1c/gdNafCFv8TUbvYErtoDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZIogFAbs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFAtoCBQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8741F00893;
-	Fri,  5 Jun 2026 06:01:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZIogFAbs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D562C1F00893;
+	Fri,  5 Jun 2026 06:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780639269;
-	bh=gjVslxgtRhD4//xChXg5cSRPWOnohDqfCkn+xx4JwZw=;
+	s=k20260515; t=1780639316;
+	bh=94JmUxW974MMra4QsyUVLZreqBmKKD0Kp1tGDFZN/3o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XFAtoCBQt3xm6iYdk+l4E4ReaRX6U1BvRv4ti7dAYsKBtXtkvWyys/lqw0bAMM2Z0
-	 d/P01g5Ayfy+98+4w7g8LzpZo2F4fs0dQqHlELF82FBF8mxTq4FwUTCEIoYrj37Ag2
-	 BU9akkkyDFcUprieZKI71WHfsSyTcAXMKgA+LE7ymz/Pjv7goSsN4gz7JltZCZwWza
-	 zRPjMeGbR5jhY3Qb93eHGO+Aw8B/oqGAkPwDVMY74ZDVikZkmxg8QJ5GDLz/e9luBH
-	 wTjYtZsSaDjcgSj8R2kWtpRzROsjY79wcyEJLTet2YQco+Fz/1Nd1PflB9hrRev1jv
-	 SjAnxsxKxJMyA==
+	b=ZIogFAbseFM3a5wtJWhVd6cmDlpiMIn2deTjbl8ZrAvj6zdPktkcPdG3OgN3LAm/X
+	 2yoYId16XalZOPdNLwv88p1PLtI0c+Ux8LeoRQqCktuFGJEK74yUSasvU3/JDkj+Q4
+	 nmFDv7Cr3gB/MImjyCzFvTA0HJnavA/Y9AdRHqlQfBRS1iyuh3hHHd92SNka19WbOO
+	 zl44kROKjLXe5tQouINXANLbaJVFtiV+9+ZAIfFxKFRuwncMSpRXW9QLuzgYG8N08H
+	 q7R/t2ovU3ybxNbfqfUJaVf4OSiMi7tX4v2ZZcM4tIqx9Ian7Y6vnGVLE8YEoPo3Ze
+	 MdCw9gwBDcoLQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 02/13] preempt: Introduce HARDIRQ_DISABLE_BITS
+Subject: Re: [PATCH v3 05/13] irq & spin_lock: Add counted interrupt
+ disabling/enabling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Boqun Feng" <boqun@kernel.org>
-Cc: ojeda@kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260605054128.5925-3-boqun@kernel.org>
-References: <20260605054128.5925-3-boqun@kernel.org>
+Cc: bpf@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260605054128.5925-6-boqun@kernel.org>
+References: <20260605054128.5925-6-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:01:08 +0000
-Message-Id: <20260605060109.3B8741F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:01:55 +0000
+Message-Id: <20260605060155.D562C1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,80 +46,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] NMI nesting inside a hardirq causes `HARDIRQ` count to overflow in=
-to `NMI` bits, leading to permanent `preempt_count` corruption and a kernel=
- panic.
+- [High] local_interrupt_enable() fails to invoke deferred softirqs and re-=
+arm hrtimers, leading to indefinite stalls.
 --
 
-commit 81acab4bc4267e8b9061bcb43c1763c01ce614f2
+commit de449b5be29a59d42df6ee590a2de395da7bbacc
 Author: Boqun Feng <boqun@kernel.org>
 
-preempt: Introduce HARDIRQ_DISABLE_BITS
+irq & spin_lock: Add counted interrupt disabling/enabling
 
-This commit changes the preempt_count() layout to contain an 8-bit
-HARDIRQ_DISABLE count to track interrupt disabling nested levels. This
-supports preempt_disable()-like interrupt disabling.
+This commit introduces a new set of interrupt disabling APIs:
+local_interrupt_disable() and local_interrupt_enable(). These save the
+interrupt state to a per-cpu variable and use a per-cpu counter to track
+nesting levels, preventing accidental enablement.
 
-Link: https://patch.msgid.link/20260121223933.1568682-2-lyude@redhat.com
+Link: https://patch.msgid.link/20260121223933.1568682-6-lyude@redhat.com
 
-> diff --git a/include/linux/preempt.h b/include/linux/preempt.h
-> index 586f966883255..e2d3079d3f5f1 100644
-> --- a/include/linux/preempt.h
-> +++ b/include/linux/preempt.h
+> diff --git a/include/linux/interrupt_rc.h b/include/linux/interrupt_rc.h
+> new file mode 100644
+> index 0000000000000..dd4444c613307
+> --- /dev/null
+> +++ b/include/linux/interrupt_rc.h
 
 [ ... ]
 
-> @@ -31,29 +32,34 @@
->   *
->   *         PREEMPT_MASK:	0x000000ff
->   *         SOFTIRQ_MASK:	0x0000ff00
-> - *         HARDIRQ_MASK:	0x000f0000
-> - *             NMI_MASK:	0x00100000
-> + * HARDIRQ_DISABLE_MASK:	0x00ff0000
-> + *         HARDIRQ_MASK:	0x0f000000
-> + *             NMI_MASK:	0x10000000
->   * PREEMPT_NEED_RESCHED:	0x80000000
->   */
->  #define PREEMPT_BITS	8
->  #define SOFTIRQ_BITS	8
-> +#define HARDIRQ_DISABLE_BITS	8
->  #define HARDIRQ_BITS	4
+> +static inline void local_interrupt_enable(void)
+> +{
+> +	int new_count;
+> +
+> +	new_count =3D hardirq_disable_exit();
+> +
+> +	if ((new_count & HARDIRQ_DISABLE_MASK) =3D=3D 0) {
+> +		unsigned long flags;
+> +
+> +		flags =3D raw_cpu_read(local_interrupt_disable_state.flags);
+> +		local_irq_restore(flags);
+> +		/*
+> +		 * TODO: re-read preempt count can be avoided, but it needs
+> +		 * should_resched() taking another parameter as the current
+> +		 * preempt count
+> +		 */
+> +#ifdef CONFIG_PREEMPTION
+> +		if (should_resched(0))
+> +			__preempt_schedule();
+> +#endif
+> +	}
+> +}
 
 [Severity: High]
-This is a pre-existing issue, but does keeping HARDIRQ_BITS at 4 risk a
-structural overflow into the NMI bits during deep NMI nesting?
+When the hardirq disable count drops to 0 here, does this miss checking for
+deferred softirqs?
 
-Looking at __preempt_count_nmi_enter() in include/linux/hardirq.h, it adds
-HARDIRQ_OFFSET to preempt_count on every NMI, and explicitly permits up to
-15 nested NMIs:
+Because __irq_exit_rcu() is updated later in this patch to skip invoking
+softirqs and re-arming hrtimers if hardirq_disable_count() is non-zero, the
+responsibility appears to shift to this function. Without a check for
+local_softirq_pending() when the count reaches 0, could softirqs and hrtime=
+rs
+deferred during the vulnerable window be indefinitely stalled until the next
+hardware interrupt fires?
 
-include/linux/hardirq.h:__preempt_count_nmi_enter() {
-	__preempt_count_add(HARDIRQ_OFFSET);
-	/* Maximum NMI nesting is 15. */
-	BUG_ON(__this_cpu_read(nmi_nesting) >=3D 15);
-	...
-}
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index 10af5ed859e73..d1ab1799794ca 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
 
-If 15 NMIs nest while the CPU is already inside a hardirq (where the HARDIRQ
-count is 1), the total count reaches 16.
+[ ... ]
 
-Since HARDIRQ_BITS is 4, would a value of 16 overflow the 4-bit field into =
-the
-adjacent NMI field? It appears this could corrupt preempt_count and eventua=
-lly
-clear the NMI flags prematurely during exit, leading to a kernel panic.
-
->  #define NMI_BITS	1
-> =20
->  #define PREEMPT_SHIFT	0
->  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
-> -#define HARDIRQ_SHIFT	(SOFTIRQ_SHIFT + SOFTIRQ_BITS)
-> +#define HARDIRQ_DISABLE_SHIFT	(SOFTIRQ_SHIFT + SOFTIRQ_BITS)
-> +#define HARDIRQ_SHIFT	(HARDIRQ_DISABLE_SHIFT + HARDIRQ_DISABLE_BITS)
->  #define NMI_SHIFT	(HARDIRQ_SHIFT + HARDIRQ_BITS)
+> @@ -728,7 +731,16 @@ static inline void __irq_exit_rcu(void)
+>  #endif
+>  	account_hardirq_exit(current);
+>  	preempt_count_sub(HARDIRQ_OFFSET);
+> -	if (!in_interrupt() && local_softirq_pending()) {
+> +	/*
+> +	 * Interrupts may happen between hardirq_disable_enter() and
+> +	 * local_irq_save() in local_interrupt_disable(), if irq_exit() invokes
+> +	 * softirq here, we may have a softirq handler calling
+> +	 * local_interrupt_disable() but it won't disable the irq because
+> +	 * hardirq disabling count is already 1, hence we need to prevent
+> +	 * invoking softirq when a local_interrupt_disable() is ongoing.
+> +	 */
+> +	if (!in_interrupt() && !hardirq_disable_count() &&
+> +	    local_softirq_pending()) {
+>  		/*
+>  		 * If we left hrtimers unarmed, make sure to arm them now,
+>  		 * before enabling interrupts to run SoftIRQ.
+>  		 */
+> +		hrtimer_rearm_deferred();
+> +		invoke_softirq();
+> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605054128.5925=
--1-boqun@kernel.org?part=3D2
+-1-boqun@kernel.org?part=3D5
