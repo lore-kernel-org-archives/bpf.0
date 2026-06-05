@@ -1,156 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751E82EEE94
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C50347516
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642295; cv=none; b=oM5nGcodaK32JgTiyE+FC3cHMaql5hKyvaDMFx0uNrSZO+Y4oK2b46LYRMitQ8FLDtanC7EpmzWrIiuA8wsPSD8cLcL5Z0vmI2C279yAVNrsnSAOfpzJmmtNOt9+j+e1LTc3HChEsFLhbRatte65xZ9RwyIxGuJGl5SpgzipQCM=
+	t=1780642383; cv=none; b=NRHPE+pSjJiLZMH5JC9ImQDAZ7PHACCUQWAdt8u4m9vLlgnWBuUUmc7+0M5HTLC0nSRZSj3qgkenw2QLrV++Z6DJP9nOBdj9BS8cjSa4QnwMgpSYQBsodRR+7QtZsjP+qIA9PuiAJ3NsPkZU5TB8qDB6YYAwlW30op35mwpfNPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642295; c=relaxed/simple;
-	bh=YDoWJX8vttbQUOSP1FEzKoxi2LyJ7iF07itRCzVWO8o=;
+	s=arc-20240116; t=1780642383; c=relaxed/simple;
+	bh=mh58Ti/GrXIfvw4T7l/Aq66pfjzcwiQYnRSfdMDxLQQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PgP1Vy+mnnFeQkg0132liQtiTBDEAc32PepakvcSPzMLr3A3r2mgYk7KKmFEuNxd0cTjhsLfQqfMLB56d0G22JWa0FEa8Y/hoQdm9OMjZ2Znh/uK/wbTLT8yjb3dpN24zuVKW/IGR1pOW5ebg1Id1OuuzXHoDYbwZ9B+fb0fiOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPQ5fvgT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=jdXqkROxErFTyrqB4Oj7s5B+0hwo8bKCFpQmUULkjmIzDu7MTq8Sg82cRZzlqySEzSzaZEHt/0YaC65frlE4lXZk8zq+mtIeczenSdPxDAEiyux8NflG8Z3wJOwOp9+4im4eFzMwss1rzRLktPv4Aw58lgygtDrPMP08YOYhDW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFOpZL3S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPQ5fvgT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6CA1F00893;
-	Fri,  5 Jun 2026 06:51:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFOpZL3S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27671F00893;
+	Fri,  5 Jun 2026 06:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780642290;
-	bh=W92OzjYBKA86UozxWOmt5HG4X32IEKQLkvx1BWGkgjM=;
+	s=k20260515; t=1780642381;
+	bh=lL0ec0x49Lvv6obhb7MjkS7Z7yzV9KJXjFylvIZrOyI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DPQ5fvgTmJlJ5BcIL3ji+n2fKszwwIm7EwsMkKCL5qJ/Uhddj+8j4XjspZp+iY/yw
-	 C5/z9ZJWSnmwnVyjDFbbNpaxW0PV683gv4ABS0ABgZqT/ZVAURszkgyZwlN1x7grHX
-	 kgdX+heLP0SCMp6BocohOmjbiCoNjv5NX/mtcwr0kiW4UmGCNgSmY4PMeSgOTcT8wZ
-	 LZxmY7R238eQBt2ZJDHiIzt7wOe/yAUNz/ML91h/Ve1ZmQqexiDrtDzTMPcSmyinAW
-	 FW6sICWS/nXXDEPoGZRq38t3BSVbiBmzKpqN6SJ9eWBNYAtpkkplTVn9+yX9ip9RaG
-	 aW+aGujAprGJA==
+	b=lFOpZL3SXr2z7gf/lw0/aSfPvATSH4cEEi0alU800dn3LazRglV7BZfb/RJ1373kJ
+	 fHVIEetVq1CNwTfsuDJBNZgzb8a/vT1qqV0IihPkFRh9bodFa/JQRePKwMBXpfv/42
+	 2BoHFFbZkFOLcEa72LIznCi9Ucns8nCIpd26m7F8onsGblo2ucCKELkQ3XG2D8Pr0Q
+	 D+UfzpZHbbDACY5kNaBWNzIGgYM4LCeVUr5Jq5YfNmj5UkyX/XfyPviAdmz9jXeFTA
+	 24hmeMDzkSicZ6x9E6vWVVlS+qiII/GodXQVqoyxpLS5WLf6rgbOtutDmzezubtjgl
+	 RoV3O7KHHKe5Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 13/17] bpf: Report Program Structure CFG
- errors
+Subject: Re: [PATCH bpf-next v1 05/17] bpf: Track verifier register
+ diagnostic history
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605063412.974640-14-memxor@gmail.com>
-References: <20260605063412.974640-14-memxor@gmail.com>
+In-Reply-To: <20260605063412.974640-6-memxor@gmail.com>
+References: <20260605063412.974640-6-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:51:30 +0000
-Message-Id: <20260605065130.BB6CA1F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:53:01 +0000
+Message-Id: <20260605065301.A27671F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] The `reason` stack buffer in `check_subprogs()` is undersized an=
-d will truncate the diagnostic message for moderately sized BPF programs.
-- [Medium] The newly added diagnostic suggestion explicitly advises users t=
-o use `throw` to end subprograms, contradicting the verifier's actual enfor=
-cement logic.
+- [High] Excessive stack allocation in diagnostic formatting functions can =
+cause kernel stack overflows.
+- [Medium] Uninitialized stack memory read in check_stack_arg_write() due t=
+o uninitialized old_arg.
+- [Medium] Diagnostic history records incorrect frame numbers for registers=
+ invalidated in caller frames.
 --
 
-commit 18889a5137c9a55cdba7f071532572199ed7120c
+commit 9a17934339f89b801d41d6242f00c9032267ab0f
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Report Program Structure CFG errors
+bpf: Track verifier register diagnostic history
 
-This commit augments selected subprogram CFG validation failures with
-Program Structure reports. It covers jumps leaving the current subprogram
-and subprograms falling through into the next.
+Record material register and outgoing stack argument changes so diagnostics=
+ can
+explain how a value reached its current type, bounds, or unreadable state.
+Store old and new register types, scalar ranges, tnum value and mask, map a=
+nd
+BTF type identity, and basic operand metadata.
 
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 50cc50a394cae..1bdc7e69fbced 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+[ ... ]
+> +static void bpf_diag_record_reg_mod_reason(struct bpf_verifier_state *st=
+ate,
+> +					   u32 insn_idx, u8 dst_reg,
+> +					   bool src_valid, u8 src_reg,
+> +					   u8 opcode,
+> +					   enum bpf_diag_reg_mod_reason reason,
+> +					   const struct bpf_reg_state *old_reg,
+> +					   const struct bpf_reg_state *new_reg)
+> +{
+> +	struct bpf_diag_history_event event =3D {
+> +		.insn_idx =3D insn_idx,
+> +		.kind =3D BPF_DIAG_HISTORY_REG_MOD,
+> +		.reg.dst_reg =3D dst_reg,
+> +		.reg.src_reg =3D src_reg,
+> +		.reg.opcode =3D opcode,
+> +		.reg.src_valid =3D src_valid,
+> +	};
+> +
+> +	if (state && state->frame[state->curframe])
+> +		event.reg.frameno =3D state->frame[state->curframe]->frameno;
+
+[Severity: Medium]
+Will this record the wrong frame number for registers invalidated in caller
+frames?
+
+Functions like clear_all_pkt_pointers() and release_reference() iterate over
+all active frames to invalidate registers, but this assignment hardcodes the
+current executing frame number via state->curframe.
+
+Should bpf_diag_record_reg_mod_reason() accept the actual frame number of t=
+he
+register from the caller instead?
+
+[ ... ]
+> +static void bpf_diag_format_reg_snapshot(struct bpf_verifier_env *env, c=
+har *buf,
+> +					 size_t size,
+> +					 const struct bpf_diag_reg_snapshot *snapshot)
+> +{
+> +	const char *type_name =3D reg_type_str(env, snapshot->type);
+> +	char offset_desc[BPF_DIAG_REG_DESC_LEN];
+> +	char btf_type[BPF_DIAG_REG_DESC_LEN];
+
+[Severity: High]
+Could this cause a kernel stack overflow?
+
+BPF_DIAG_REG_DESC_LEN is 512 bytes. This function allocates 1KB on the stac=
+k,
+and is called by bpf_diag_print_reg_mod() which also allocates 1KB.
+
+Additionally, this function calls bpf_diag_format_var_offset() which
+allocates another 512 bytes. This >3KB stack usage chain might trigger
+CONFIG_FRAME_WARN build failures or cause panics on architectures with 8KB
+stacks.
+
+[ ... ]
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e30d79149cc7d..325c162e3df0d 100644
+> index d60e1309957a7..188201d48108c 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -2879,6 +2879,7 @@ static int check_subprogs(struct bpf_verifier_env *=
-env)
->  	int i, subprog_start, subprog_end, off, cur_subprog =3D 0;
->  	struct bpf_subprog_info *subprog =3D env->subprog_info;
->  	struct bpf_insn *insn =3D env->prog->insnsi;
-> +	char reason[160];
->  	int insn_cnt =3D env->prog->len;
+> @@ -4033,6 +4033,8 @@ static int check_stack_arg_write(struct bpf_verifie=
+r_env *env, struct bpf_func_s
+>  	struct bpf_subprog_info *subprog =3D &env->subprog_info[state->subprogn=
+o];
+>  	int spi =3D -off / BPF_REG_SIZE - 1;
+>  	struct bpf_reg_state *arg;
+> +	struct bpf_reg_state old_arg;
+> +	bool slot_exists;
+>  	int err;
 > =20
->  	/* now check that all jumps are within the same subprog */
-> @@ -2907,6 +2908,15 @@ static int check_subprogs(struct bpf_verifier_env =
-*env)
->  		off =3D i + bpf_jmp_offset(&insn[i]) + 1;
->  		if (off < subprog_start || off >=3D subprog_end) {
->  			verbose(env, "jump out of range from insn %d to %d\n", i, off);
-> +			scnprintf(reason, sizeof(reason),
-> +				  "Instruction %d jumps to instruction %d, but subprogram %d only co=
-ntains instructions %d through %d. A branch target must stay inside "
-> +				  "the same subprogram",
-> +				  i, off, cur_subprog, subprog_start,
-> +				  subprog_end - 1);
+>  	if (spi >=3D max_stack_arg_regs) {
+> @@ -4041,6 +4043,7 @@ static int check_stack_arg_write(struct bpf_verifie=
+r_env *env, struct bpf_func_s
+>  		return -EINVAL;
+>  	}
+> =20
+> +	slot_exists =3D spi < state->out_stack_arg_cnt;
+>  	err =3D grow_stack_arg_slots(env, state, spi + 1);
+>  	if (err)
+>  		return err;
+> @@ -4049,13 +4052,27 @@ static int check_stack_arg_write(struct bpf_verif=
+ier_env *env, struct bpf_func_s
+>  	if (spi + 1 > subprog->max_out_stack_arg_cnt)
+>  		subprog->max_out_stack_arg_cnt =3D spi + 1;
+> =20
+> +	arg =3D &state->stack_arg_regs[spi];
+> +	if (slot_exists)
+> +		old_arg =3D *arg;
+> +	else
+> +		bpf_mark_reg_not_init(env, &old_arg);
 
 [Severity: Medium]
-Does this code risk truncating the diagnostic message?
+Does this pass uninitialized stack memory to bpf_mark_reg_not_init()?
 
-The format string contains 142 characters of static text and accepts 5 inte=
-ger
-arguments. Because BPF programs can contain up to 1,000,000 instructions,
-instruction indices can take up to 7 digits.
-
-Formatting these integers can add up to 31 characters, resulting in a string
-length of around 173 bytes.
-
-Since the reason buffer is limited to 160 bytes, scnprintf() will silently
-truncate the output and the user will see a cut-off diagnostic message.
-
-> +			bpf_diag_report_program_structure(env, i,
-> +							  "jump out of range",
-> +							  reason,
-> +							  "Keep branch targets within the same subprogram, or use an expl=
-icit subprogram call.");
->  			return -EINVAL;
->  		}
->  next:
-> @@ -2919,6 +2929,13 @@ static int check_subprogs(struct bpf_verifier_env =
-*env)
->  			    code !=3D (BPF_JMP32 | BPF_JA) &&
->  			    code !=3D (BPF_JMP | BPF_JA)) {
->  				verbose(env, "last insn is not an exit or jmp\n");
-> +				scnprintf(reason, sizeof(reason),
-> +					  "Subprogram %d reaches its last instruction %d without an exit or=
- jump, so control could continue into the next subprogram",
-> +					  cur_subprog, i);
-> +				bpf_diag_report_program_structure(env, i,
-> +								  "subprogram can fall through",
-> +								  reason,
-> +								  "End each subprogram with exit, throw, or an explicit jump tha=
-t keeps control flow inside the subprogram.");
-
-[Severity: Medium]
-Will this suggestion mislead users trying to end their subprogram with a th=
-row?
-
-The newly added suggestion advises users to use throw to end subprograms.
-
-However, the immediately preceding logic in check_subprogs() verifies the f=
-inal
-instruction using:
-
-    if (code !=3D (BPF_JMP | BPF_EXIT) &&
-        code !=3D (BPF_JMP32 | BPF_JA) &&
-        code !=3D (BPF_JMP | BPF_JA)) {
-
-This condition does not account for bpf_throw(), which is a kfunc and evalu=
-ates
-as a BPF_JMP | BPF_CALL instruction.
-
-If a user writes assembly following the newly provided suggestion and place=
-s a
-bpf_throw call as the absolute end of their subprogram, won't the verifier
-still reject it and print this exact error?
-
->  				return -EINVAL;
->  			}
+When slot_exists is false, old_arg is declared without initialization.
+bpf_mark_reg_not_init() explicitly reads reg->subreg_def into a local
+variable before clearing the struct, which could trigger a KMSAN
+use-of-uninitialized-value warning.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605063412.9746=
-40-1-memxor@gmail.com?part=3D13
+40-1-memxor@gmail.com?part=3D5
