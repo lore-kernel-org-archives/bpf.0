@@ -1,63 +1,63 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E93409E0A
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0E340DFA0
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641266; cv=none; b=DziECPDJMHb+rBv6aSuS1N5n+uYLfYZ3lhcXLAp2IOE5+TeQ+dXQ3+GzITsk+6Snnnwp8eIT89KR8ucdcXV5XYvsr7TWV/J4zgFfT1JJI4Q6L5AUsEfkUFV6ZXgmCqt48FpZgCkFsmFU3V5q+H7vpRyU+WLLKNYadulGDnj9pbA=
+	t=1780641266; cv=none; b=n6PG0qegxI1/MA8ThImh169k3TdX6Di+VeEyh/x3AbkNfh4Prts59mhWkDbPODgkqZd8h6sQwcqpAUMDPtF7GTybcX/pLg7k3JfWkxqezjkKbKSm+2NvAEek65DVFrGApeNaRSXbVq9mHD3Yy8lh6m4JMK01KH0W8yD0cfm6ivM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780641266; c=relaxed/simple;
-	bh=aQXBB1pzfgXwNopsh1jiSt1X8bTXCyudiLSmnR3x8mM=;
+	bh=TMacBgAPchcWgkkUFQBISrxOa2IyM7jq3hrpRRpNNy8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X4Nkwliw59+e4r2IZWUJqsXwIUrf8RCwfAXt4n7/JuDhO8HM+DDIzYk44cmEeWLlrJKysQQQGBuYUo+bq9MZN6xh4x8j4Jyz+9zy4ZUT25f1FOsBiXx7REPBgIo9A4UuAQHqgt+iManoS0CYxhbaKBReSvi4H4kYO13fAQHY7T0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pv9dOY6J; arc=none smtp.client-ip=209.85.221.65
+	 MIME-Version; b=AtjJYxgEMe7xKYpaOzwL/xGiLdqr3J/Y+wwpGY4ctLKx8YsNVyBQl7kaTkFfLx8XwrvFUK+LLkIBsYoax6RdJXAu1PJqJJQjCmF+SwO3r97/vzbwsTRX9gGZf9+NhMtnVhcheinaO44jg/Z+8Rir+TX6Y3+e41fkP+FhqIuSdTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JmWbnoPR; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pv9dOY6J"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-45eec22fab7so780458f8f.3
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JmWbnoPR"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b2b037d2so13036565e9.3
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780641263; x=1781246063; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780641264; x=1781246064; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fEsJZ9ZNGv/o/P60cUhTdIkEPNdL3wmF+nLUpxGXSHs=;
-        b=pv9dOY6JZQQ2askhi47srzX/1FybzxGXjQfnuFFs+8HV1Gi8q4C9zGORHlHfUROcuP
-         r0yCdYTMuVp/AggGpqWYbErijOrUYL0RE7deoQ+GWQOXupLBjrYR061R/AdAcPJNNqhn
-         wg07NkOVEYMo03S5nu+HZAWvuIabS/YxHzLSDtKmeOxBEaL5zR7NnKyDFoEwF2VhXdot
-         42ZkMWy84MEKXQ++rd3p42QJm/ehIzDMIAINyXXPhsGig+2pT7E//7qe77SL11JZiGUG
-         if2b4h7IJB+JBKqbwMecORBErD0judyiftZZMQF53CsgFLWKK8/Fct0OD4DQwrH8JOA8
-         I6aQ==
+        bh=vARlD/T7FHfe+5ZmC6eJ2OUiyBUd4BbB4+ZfSQyoTsI=;
+        b=JmWbnoPRmiUJQW2P7reU696L/UkQkyg+/D7ZYdO8+WmeC1IJzy8Iur63tWq3WJ357W
+         CQX48wM9ul2/d3XFRHsYJHXUJmxsAKKAW1MCipr07kJn+vPQSj4McXENBzyPO5yETzR7
+         Rz7RO7rIIPFq0SurMf2au1d9o0HBaw6Ux6NG4nQcPIU+Rf4VKIeZ+0cbs96tW81zUvgD
+         P1F1ImsDamw7TpdzEbUp6bPNnwEXbZneGrEUG85Imy60lum9S5UXMb25I/vrwzZpSWCF
+         kTtJSBBC/YRVV3H+YcTvqmsLm+rKQ6lipICBjiWXs1AA/ehskhlqtGsdx9IZ5czxH+lA
+         8KcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780641263; x=1781246063;
+        d=1e100.net; s=20251104; t=1780641264; x=1781246064;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fEsJZ9ZNGv/o/P60cUhTdIkEPNdL3wmF+nLUpxGXSHs=;
-        b=E3sCRvKrfak1382f4JOtVtFqCfTosehO6eRpxXSve2D1WsJxlR9OtxdJi+SDbALH0i
-         lEeI1KW8VD8oMHIZe+9Vj+FMHydVU8gw2QW7UJj9ZLH5PPht8P8Pe1VrpfTiFE6oGLAq
-         0xvUEqeYTphzRvEAYvsGjaN6rC4SBpAN2O5y7UJa7NH8GBm3yYqdc7MoVUX0BNUZS1HY
-         x1wzhFVSMfSDLpPdX2Gh9LQWN8csveK1GFGQhLUUMhAepnrltlDjA7AYHxrYKdv96HIW
-         eTcMbW/TxDLC2kW52DOFFHh7BjjhUr45wYRAfbsEmkRF7Yz3zqvHh/2e0qMZdevNohds
-         HpEA==
-X-Gm-Message-State: AOJu0YwykUFXgsBedlDeub0iLGYYvOPLVkknMGEfJFN9p5vLNBsYmQTw
-	yjs5410tjK0lAIvNWAE3vAkSKlTb5qWQXE37UfAJQ1yZcjJbnKQZFcwmoWNXcE2u
-X-Gm-Gg: Acq92OFgxf93tesgouRSBiLbbXhdCaegBh9GhLmVrz78Ql6yPoNE2+gCYM/Xf6euthI
-	wWlrcRa1lIpyuAPonf87lqhKrjDtiF42cJLvUY3MJYUy5xxxO8X3vVGLYT3yW8pSyXQqTXhqrTr
-	F6wuz1cufdqMSD2dCnYyuUJdDrs/xMN0PYOqkI3oX/MuiQ6GgPp/qLWrMxShNJ+GFhWR48uWCuQ
-	AGp6cg9gmEqjrv0n05Y7ujugEi9mbrnKBhgBE2JE+jH9g1e5TKco/fGJWpuntg6+r7ZabjPSmXz
-	dRQVsg5XSRj8LEGLwvQAhVbn3i486iv+1GeExZCWoysfhxXS0/lTXaasNzJyqCea2gxw0M2NJqD
-	5418KvICgpzCpGiHMR6DYwbTDV8GKi06A2epebxfRUdIJlaNaxzn7h2qlbgjYTeLGa+VDgYpXbN
-	qr9JPK3G8G4Wg80XfjGh0K0UnWTLP31cATcHI7JkTZRYnqxkhVi7EwirDyRIPXfGo3oSoRQHE2N
-	WXaCz8VVg2YsorxB6bXUzW8AjPiyY6qiJyUcImu+m/+RDAY7iwJCtmsT1YRWvJAyxCCs0qVOj3J
-X-Received: by 2002:a05:600c:314e:b0:490:a29b:e72f with SMTP id 5b1f17b1804b1-490c25898d8mr30873045e9.4.1780641262166;
-        Thu, 04 Jun 2026 23:34:22 -0700 (PDT)
+        bh=vARlD/T7FHfe+5ZmC6eJ2OUiyBUd4BbB4+ZfSQyoTsI=;
+        b=Sq4sk4ODXdU0VVkLB7GlNvWUpRHYDh0KgrlVwkDajRzh/dFmZ9UoYaJGPGKDrxHDov
+         5Y+Ne0f2Fpol+w8gghSKIVIg1PIRaYOvM5ONM+dlC7CU5yKlYpJ4Mi5wbCC1jCOX3Th6
+         KNxFrk6LxUnwsS3ozyu2jzoZMC0PXylgG6WJ77yrXTZb5V2/97gXMvqc7sPRA5poGXJM
+         vj8BXYw3XWycbmMUIA0v/wwiCmhmc5QK+jS7bPFM/bfV2IAcpUmPEOc3NKWKKmMuJ1NS
+         JMtnlI+QOfY9nPPN5q5qgN7wTTe/s2PGW1Et1+IvnQR3rtV2TKiYchJdRVD1/k4Dp0VR
+         FWFA==
+X-Gm-Message-State: AOJu0YwR67eZboen1pqsuxKUZXIEjhc2p6l1O6R2XrMtFez6CnKIn7Jw
+	4tv6KtkxWB+OSV/m/cfldeaVHQSkD83GeN4kPD1zrAJkx1Dwzbbp00hHYZ7vxrfP
+X-Gm-Gg: Acq92OEHzIdxV3tEGyFhuZ2m6xggQVJefWg7N6JgDsDb9kUwuMop9SKtT0JM3mMWBGX
+	bFId84OBgkN4L77elVvDgc7ERPbuy9ciHHnZTRBiOCmQ+uQQ1dfZIHw6cLtcR8G02+8tgeAZCwW
+	NNPpMaVJxtnp0XONWCSKTveWsOpbH6iuh3fqtXiCuS6VEgF4COjTGR53ZFIfRzSOXln5eF2ssJt
+	LuPCD3ek/8ITpjLUTSRmzzGDQBumGWxXeMy/mqBdHoV8oIMd2Y0aCvWAr1Xqbs8sehsN/HfK+hM
+	K5GopfPdcYs0cgZgSKYwXDEOoQnqCvd8KW7qxQmMDo4cGvqldabVnc8ununiGHmCn8iBux7vVDt
+	JYFyaoMOQhKvwGT1uNgVy1qawKldtlk7w+TgZAJvrU3UKvm8c+sowo9DRe5bHIggVYPpQ+ByH9/
+	ueVCpFt2CmAuhXqhDxunXJT2gdWpTSmAgSIdR+p9XWeZTnCMlBSCFpc86REZXqoyJhvIpR5LzXc
+	XSUDSAMnWvSnDI5iDGlR62O5zOpnA15wU1xNbBpe0aoElm2rBA5Y4RcQgo+tNiddWwZ10fhAsJi
+X-Received: by 2002:a05:600c:4506:b0:490:b642:ce2a with SMTP id 5b1f17b1804b1-490c25c0d27mr29122305e9.9.1780641263516;
+        Thu, 04 Jun 2026 23:34:23 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d4891csm18250085e9.1.2026.06.04.23.34.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3e4b5asm132893845e9.13.2026.06.04.23.34.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:21 -0700 (PDT)
+        Thu, 04 Jun 2026 23:34:23 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 08/17] bpf: Report Register Type Safety errors
-Date: Fri,  5 Jun 2026 08:33:58 +0200
-Message-ID: <20260605063412.974640-9-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 09/17] bpf: Report Memory Safety bounds errors
+Date: Fri,  5 Jun 2026 08:33:59 +0200
+Message-ID: <20260605063412.974640-10-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
 References: <20260605063412.974640-1-memxor@gmail.com>
@@ -79,612 +79,337 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=23516; i=memxor@gmail.com; h=from:subject; bh=aQXBB1pzfgXwNopsh1jiSt1X8bTXCyudiLSmnR3x8mM=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt3jWYemdm254l3on/pc4q93DaBchVlsvrtNqabi6M 1JgQ15HKQuDGBeDrJgiS8n/fUzGJyp/B9ou44aZw8oEMoSBi1MAJtKkycjwU6L5eUdG9Oedwc8m 5XgcjXpbYXTlVeNczmNT/onNZfnxiZFhvx7rnucfz20Uk19t8WeV0s4N1Rc9mTSnGneXmPdyH5b lAgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12918; i=memxor@gmail.com; h=from:subject; bh=TMacBgAPchcWgkkUFQBISrxOa2IyM7jq3hrpRRpNNy8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt/jyU/1TJt8iOPP9Y74J7tyanrf5auF+jV7O8khPz chtzEwdpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmIjDY0aGh7lRVh92GjLlNxx5 594WVTO37/fhwKmxvUYhWwIPG8x9A1Tx+syeBUs/XlzD+p5tzbILV1e8DLtT68OzNi798r/6M2o 8AA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Augment selected register-state verifier failures with Register Type
-Safety reports. The existing verbose verifier messages remain in place;
-the new reports add reason, source context, causal path, and
-suggestions.
+Augment check_mem_region_access() range-proof failures with Memory Safety
+reports. The existing terse verifier messages remain in place for compatibility;
+the new report adds the failed proof, source context, causal path, and guidance.
 
-Cover invalid pointer dereferences, unreadable registers, and missing
-outgoing stack arguments for bpf2bpf calls. Use register-scoped history
-so reports start from the latest relevant value change and then show
-later branch outcomes.
+Cover negative signed minima, minimum offsets outside the object, unbounded
+upper offsets, and maximum offsets outside the object.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 254 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h |  22 ++++
- kernel/bpf/verifier.c    | 126 +++++++++++++++++--
- 3 files changed, 394 insertions(+), 8 deletions(-)
+ kernel/bpf/diagnostics.c | 113 +++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.h |  16 ++++++
+ kernel/bpf/verifier.c    |  77 ++++++++++++++++++++++++++
+ 3 files changed, 206 insertions(+)
 
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 7a122c5025c2..920ac17758c2 100644
+index 920ac17758c2..0abe1ab19d25 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -457,6 +457,16 @@ static const char *bpf_diag_context_name(enum bpf_diag_context_kind kind)
- 	}
+@@ -809,6 +809,119 @@ void bpf_diag_report_unreadable_reg(struct bpf_verifier_env *env,
+ 				   "Avoid using the register after it is invalidated, or reload and revalidate a fresh pointer before this instruction.");
  }
  
-+static u32 bpf_diag_current_frameno(const struct bpf_verifier_env *env)
++static void bpf_diag_format_access_offset(char *buf, size_t size, int off,
++					  const struct bpf_reg_state *reg)
 +{
-+	const struct bpf_verifier_state *state = env->cur_state;
++	char range[BPF_DIAG_REG_DESC_LEN];
 +
-+	if (!state || !state->frame[state->curframe])
-+		return 0;
++	if (tnum_is_const(reg->var_off)) {
++		scnprintf(buf, size, "constant %lld",
++			  (s64)off + reg->var_off.value);
++		return;
++	}
 +
-+	return state->frame[state->curframe]->frameno;
++	if (bpf_diag_var_off_unknown(reg->var_off.value, reg->var_off.mask) &&
++	    bpf_diag_range_unknown(reg_smin(reg), reg_smax(reg),
++				   reg_umin(reg), reg_umax(reg))) {
++		scnprintf(buf, size, "unknown");
++		return;
++	}
++
++	bpf_diag_format_scalar_range(range, sizeof(range), reg_smin(reg),
++				     reg_smax(reg), reg_umin(reg),
++				     reg_umax(reg));
++	if (off) {
++		scnprintf(buf, size,
++			  "variable: pointer known bits %#llx, unknown mask %#llx, plus %d from this access; %s",
++			  (u64)reg->var_off.value, reg->var_off.mask, off,
++			  range);
++		return;
++	}
++
++	scnprintf(buf, size,
++		  "variable: known bits %#llx, unknown mask %#llx, %s",
++		  (u64)reg->var_off.value, reg->var_off.mask,
++		  range);
 +}
 +
- void bpf_diag_report_header(struct bpf_verifier_env *env,
- 			    enum bpf_diag_category category,
- 			    const char *problem)
-@@ -648,6 +658,157 @@ void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
- 	}
- }
- 
-+void bpf_diag_report_register_type(struct bpf_verifier_env *env,
-+				   u32 insn_idx, int regno,
-+				   const char *problem, const char *reason,
-+				   const char *suggestion)
++void bpf_diag_report_memory(struct bpf_verifier_env *env, u32 insn_idx,
++			    const char *problem, const char *reason,
++			    const char *suggestion)
 +{
-+	struct bpf_diag_history_opts opts = {
-+		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
-+		.frameno = bpf_diag_current_frameno(env),
-+		.regno = regno,
-+	};
-+
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY,
++	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_MEMORY_SAFETY,
 +			       problem);
 +	bpf_diag_report_reason(env, "%s", reason);
 +
 +	bpf_diag_report_section(env, "At");
 +	bpf_diag_report_source(env, insn_idx, '!', "%s", problem);
 +
-+	if (regno >= 0)
-+		bpf_diag_print_history(env, &opts);
-+
 +	bpf_diag_report_suggestion(env, "%s", suggestion);
 +}
 +
-+static const char *bpf_diag_arg_ordinal(int argno)
-+{
-+	switch (argno) {
-+	case 1:
-+		return "first";
-+	case 2:
-+		return "second";
-+	case 3:
-+		return "third";
-+	case 4:
-+		return "fourth";
-+	case 5:
-+		return "fifth";
-+	case 6:
-+		return "sixth";
-+	case 7:
-+		return "seventh";
-+	case 8:
-+		return "eighth";
-+	case 9:
-+		return "ninth";
-+	case 10:
-+		return "tenth";
-+	case 11:
-+		return "eleventh";
-+	case 12:
-+		return "twelfth";
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx,
-+				   int regno, const char *reg_name,
-+				   const char *type_name,
-+				   enum bpf_diag_invalid_deref_kind kind,
-+				   s64 offset)
++void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_idx,
++				int regno, const char *reg_name,
++				const char *type_name,
++				enum bpf_diag_mem_bounds_kind kind,
++				int off, int size, u32 mem_size,
++				const struct bpf_reg_state *reg)
 +{
 +	struct bpf_diag_history_opts opts = {
 +		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
 +		.frameno = bpf_diag_current_frameno(env),
 +		.regno = regno,
 +	};
-+
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY,
-+			       "invalid dereference");
++	char offset_desc[256];
++	char proof[192];
++	u64 max_start, max_end;
 +
 +	switch (kind) {
-+	case BPF_DIAG_DEREF_SCALAR:
-+		bpf_diag_report_reason(env,
-+				       "%s is an integer scalar here, not a pointer to memory.",
-+				       reg_name);
++	case BPF_DIAG_MEM_NEGATIVE_MIN:
++		scnprintf(proof, sizeof(proof),
++			  "The smallest possible offset is %lld, below 0",
++			  reg_smin(reg) + off);
 +		break;
-+	case BPF_DIAG_DEREF_NULLABLE_PTR:
-+		bpf_diag_report_reason(env,
-+				       "%s may be NULL here (%s). The program could dereference NULL on this path, so the verifier cannot prove this access is safe.",
-+				       reg_name, type_name);
++	case BPF_DIAG_MEM_MIN_OUT_OF_RANGE:
++		scnprintf(proof, sizeof(proof),
++			  "The smallest possible access starts at %lld, outside an object of size %u",
++			  reg_smin(reg) + off, mem_size);
 +		break;
-+	case BPF_DIAG_DEREF_MODIFIED_PTR:
-+		bpf_diag_report_reason(env,
-+				       "%s has offset %lld here, but this pointer type must be dereferenced in its original form.",
-+				       reg_name, offset);
++	case BPF_DIAG_MEM_UNBOUNDED:
++		scnprintf(proof, sizeof(proof),
++			  "The access needs offset + size <= %u, but %s has no safe upper bound",
++			  mem_size, reg_name);
 +		break;
-+	case BPF_DIAG_DEREF_INVALID_PTR:
++	case BPF_DIAG_MEM_MAX_OUT_OF_RANGE:
 +	default:
-+		bpf_diag_report_reason(env,
-+				       "%s has type %s here, which is not valid for this memory access.",
-+				       reg_name, type_name);
++		if (off < 0 && reg_umax(reg) < (u64)-off)
++			max_start = 0;
++		else
++			max_start = reg_umax(reg) + off;
++		max_end = max_start + size;
++		scnprintf(proof, sizeof(proof),
++			  "The largest possible access ends at %llu, beyond an object of size %u",
++			  max_end, mem_size);
 +		break;
 +	}
 +
-+	bpf_diag_report_section(env, "At");
-+	if (kind == BPF_DIAG_DEREF_MODIFIED_PTR)
-+		bpf_diag_report_source(env, insn_idx, '!',
-+				       "dereference requires the original %s pointer",
-+				       type_name);
-+	else
-+		bpf_diag_report_source(env, insn_idx, '!',
-+				       "invalid dereference of %s (%s)",
-+				       reg_name, type_name);
++	bpf_diag_format_access_offset(offset_desc, sizeof(offset_desc), off, reg);
 +
-+	bpf_diag_print_history(env, &opts);
-+
-+	switch (kind) {
-+	case BPF_DIAG_DEREF_NULLABLE_PTR:
-+		bpf_diag_report_suggestion(env,
-+					   "Add a NULL check and dereference the pointer only on the non-NULL path.");
-+		break;
-+	case BPF_DIAG_DEREF_MODIFIED_PTR:
-+		bpf_diag_report_suggestion(env,
-+					   "Preserve the original pointer in another register, or use an allowed pointer offset before dereferencing it.");
-+		break;
-+	case BPF_DIAG_DEREF_SCALAR:
-+	case BPF_DIAG_DEREF_INVALID_PTR:
-+	default:
-+		bpf_diag_report_suggestion(env,
-+					   "Preserve a pointer-valued register where needed, or reload and revalidate the pointer after scalar arithmetic, helper calls, or "
-+					   "other operations that can invalidate it.");
-+		break;
-+	}
-+}
-+
-+void bpf_diag_report_unreadable_reg(struct bpf_verifier_env *env,
-+				    u32 insn_idx, int regno)
-+{
-+	struct bpf_diag_history_opts opts = {
-+		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
-+		.frameno = bpf_diag_current_frameno(env),
-+		.regno = regno,
-+	};
-+
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY,
-+			       "unreadable register");
++	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_MEMORY_SAFETY,
++			       "access outside bounds");
 +	bpf_diag_report_reason(env,
-+			       "R%d is not readable here. A previous operation may have invalidated this register, so the verifier cannot use it as an input.",
-+			       regno);
++			       "The verifier cannot prove that this access stays within the object: %s. %s is %s; offset is %s; access size %d; object size %u.",
++			       proof, reg_name, type_name, offset_desc, size,
++			       mem_size);
 +
 +	bpf_diag_report_section(env, "At");
 +	bpf_diag_report_source(env, insn_idx, '!',
-+			       "R%d is not readable", regno);
++			       "access may be outside object bounds");
 +
 +	bpf_diag_print_history(env, &opts);
 +
 +	bpf_diag_report_suggestion(env,
-+				   "Avoid using the register after it is invalidated, or reload and revalidate a fresh pointer before this instruction.");
++				   "Add or adjust a bounds check that proves offset + access size stays within the object.");
 +}
 +
  void bpf_diag_clear_history(struct bpf_verifier_state *state)
  {
  	kfree(state->diag_history);
-@@ -1165,6 +1326,95 @@ static void bpf_diag_print_reg_mod(struct bpf_verifier_env *env,
- 			       event->reg.dst_reg, old_buf, new_buf);
- }
- 
-+static void bpf_diag_format_stack_arg(char *buf, size_t size, u8 slot)
-+{
-+	int argno = MAX_BPF_FUNC_REG_ARGS + slot + 1;
-+	const char *ordinal = bpf_diag_arg_ordinal(argno);
-+
-+	if (ordinal)
-+		scnprintf(buf, size, "outgoing stack argument %u (%s argument)",
-+			  slot + 1, ordinal);
-+	else
-+		scnprintf(buf, size, "outgoing stack argument %u", slot + 1);
-+}
-+
-+static const char *
-+bpf_diag_stack_arg_reason(enum bpf_diag_stack_arg_reason reason)
-+{
-+	switch (reason) {
-+	case BPF_DIAG_STACK_ARG_REF_RELEASE:
-+		return "resource release invalidated the pointer";
-+	case BPF_DIAG_STACK_ARG_PKT_DATA_CHANGE:
-+		return "packet data may have moved";
-+	case BPF_DIAG_STACK_ARG_WRITE:
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static void bpf_diag_print_stack_arg_event(struct bpf_verifier_env *env,
-+					   const struct bpf_diag_history_event *event)
-+{
-+	char old_buf[192], new_buf[192], arg_buf[64];
-+	const char *reason;
-+
-+	bpf_diag_format_stack_arg(arg_buf, sizeof(arg_buf),
-+				  event->stack_arg.slot);
-+	bpf_diag_format_reg_snapshot(env, old_buf, sizeof(old_buf),
-+				     &event->stack_arg.old);
-+	bpf_diag_format_reg_snapshot(env, new_buf, sizeof(new_buf),
-+				     &event->stack_arg.new);
-+
-+	if (event->stack_arg.reason == BPF_DIAG_STACK_ARG_WRITE) {
-+		bpf_diag_report_source(env, event->insn_idx, '~',
-+				       "%s set to %s", arg_buf, new_buf);
-+		return;
-+	}
-+
-+	reason = bpf_diag_stack_arg_reason(event->stack_arg.reason);
-+	bpf_diag_report_source(env, event->insn_idx, 'x',
-+			       "%s: %s; previous value was %s",
-+			       arg_buf, reason ?: "the previous value is no longer valid",
-+			       old_buf);
-+}
-+
-+void bpf_diag_report_stack_arg_uninit(struct bpf_verifier_env *env,
-+				      u32 insn_idx, int nargs,
-+				      int stack_arg_slot,
-+				      const char *callee_name)
-+{
-+	struct bpf_diag_history_opts opts = {
-+		.scope = BPF_DIAG_HISTORY_SCOPE_STACK_ARG,
-+		.frameno = bpf_diag_current_frameno(env),
-+		.stack_arg_slot = stack_arg_slot,
-+	};
-+	char arg_buf[64];
-+
-+	bpf_diag_format_stack_arg(arg_buf, sizeof(arg_buf), stack_arg_slot);
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY,
-+			       "missing stack argument");
-+	if (callee_name)
-+		bpf_diag_report_reason(env,
-+				       "Function %s expects %d arguments, but %s is not initialized at this call. Store a value for this argument after any operation "
-+				       "that may invalidate it.",
-+				       callee_name, nargs, arg_buf);
-+	else
-+		bpf_diag_report_reason(env,
-+				       "The callee expects %d arguments, but %s is not initialized at this call. Store a value for this argument after any operation "
-+				       "that may invalidate it.",
-+				       nargs, arg_buf);
-+
-+	bpf_diag_report_section(env, "At");
-+	bpf_diag_report_source(env, insn_idx, '!',
-+			       "%s is not initialized", arg_buf);
-+
-+	bpf_diag_print_history(env, &opts);
-+
-+	bpf_diag_report_suggestion(env,
-+				   "Write the outgoing stack argument again after releasing a resource, changing packet data, or calling another function that can "
-+				   "invalidate stored pointer values.");
-+}
-+
- static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
- 				     const struct bpf_diag_history_event *event)
- {
-@@ -1228,6 +1478,10 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
- 			bpf_diag_print_reg_mod(env, event);
- 			printed = true;
- 			break;
-+		case BPF_DIAG_HISTORY_STACK_ARG:
-+			bpf_diag_print_stack_arg_event(env, event);
-+			printed = true;
-+			break;
- 		case BPF_DIAG_HISTORY_REF_ACQUIRE:
- 		case BPF_DIAG_HISTORY_REF_RELEASE:
- 			bpf_diag_print_ref_event(env, event);
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index ff6c55f9b5f7..b0d42cbdfd23 100644
+index b0d42cbdfd23..4f7617fdb700 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -113,6 +113,13 @@ enum bpf_diag_stack_arg_reason {
- 	BPF_DIAG_STACK_ARG_PKT_DATA_CHANGE,
+@@ -120,6 +120,13 @@ enum bpf_diag_invalid_deref_kind {
+ 	BPF_DIAG_DEREF_INVALID_PTR,
  };
  
-+enum bpf_diag_invalid_deref_kind {
-+	BPF_DIAG_DEREF_SCALAR,
-+	BPF_DIAG_DEREF_NULLABLE_PTR,
-+	BPF_DIAG_DEREF_MODIFIED_PTR,
-+	BPF_DIAG_DEREF_INVALID_PTR,
++enum bpf_diag_mem_bounds_kind {
++	BPF_DIAG_MEM_NEGATIVE_MIN,
++	BPF_DIAG_MEM_MIN_OUT_OF_RANGE,
++	BPF_DIAG_MEM_UNBOUNDED,
++	BPF_DIAG_MEM_MAX_OUT_OF_RANGE,
 +};
 +
  struct bpf_diag_history_opts {
  	enum bpf_diag_history_scope scope;
  	u32 frameno;
-@@ -137,6 +144,21 @@ void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, .
- void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
- 			    char marker, const char *fmt, ...)
- 	__printf(4, 5);
-+void bpf_diag_report_register_type(struct bpf_verifier_env *env,
-+				   u32 insn_idx, int regno,
-+				   const char *problem, const char *reason,
-+				   const char *suggestion);
-+void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx,
-+				   int regno, const char *reg_name,
-+				   const char *type_name,
-+				   enum bpf_diag_invalid_deref_kind kind,
-+				   s64 offset);
-+void bpf_diag_report_unreadable_reg(struct bpf_verifier_env *env,
-+				    u32 insn_idx, int regno);
-+void bpf_diag_report_stack_arg_uninit(struct bpf_verifier_env *env,
-+				      u32 insn_idx, int nargs,
-+				      int stack_arg_slot,
-+				      const char *callee_name);
+@@ -159,6 +166,15 @@ void bpf_diag_report_stack_arg_uninit(struct bpf_verifier_env *env,
+ 				      u32 insn_idx, int nargs,
+ 				      int stack_arg_slot,
+ 				      const char *callee_name);
++void bpf_diag_report_memory(struct bpf_verifier_env *env, u32 insn_idx,
++			    const char *problem, const char *reason,
++			    const char *suggestion);
++void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_idx,
++				int regno, const char *reg_name,
++				const char *type_name,
++				enum bpf_diag_mem_bounds_kind kind,
++				int off, int size, u32 mem_size,
++				const struct bpf_reg_state *reg);
  
  void bpf_diag_clear_history(struct bpf_verifier_state *state);
  void bpf_diag_copy_history(struct bpf_verifier_state *dst,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7bb2a81ee353..adf660ab9e7d 100644
+index adf660ab9e7d..e9c121892b7e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3123,6 +3123,8 @@ static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *r
- 		/* check whether register used as source operand can be read */
- 		if (reg->type == NOT_INIT) {
- 			verbose(env, "R%d !read_ok\n", regno);
-+			bpf_diag_report_unreadable_reg(env, env->insn_idx,
-+						       regno);
- 			return -EACCES;
- 		}
- 		/* We don't need to worry about FP liveness because it's read-only */
-@@ -4134,8 +4136,9 @@ static int mark_stack_arg_precision(struct bpf_verifier_env *env, int arg_idx)
- 	return mark_chain_precision_batch(env, env->cur_state);
+@@ -3481,7 +3481,17 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	    bpf_is_spilled_reg(&state->stack[spi]) &&
+ 	    !bpf_is_spilled_scalar_reg(&state->stack[spi]) &&
+ 	    size != BPF_REG_SIZE) {
++		char reason[256];
++
+ 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
++		scnprintf(reason, sizeof(reason),
++			  "This store writes %d bytes at stack offset %d into a stack slot that currently holds a spilled pointer. Partial writes to spilled "
++			  "pointers are rejected because they can corrupt pointer metadata and leak kernel pointers.",
++			  size, off);
++		bpf_diag_report_memory(env, insn_idx,
++				       "stack spill corruption",
++				       reason,
++				       "Write the full 8-byte spilled pointer slot, or use a separate stack slot for scalar data before overwriting only part of it.");
+ 		return -EACCES;
+ 	}
+ 
+@@ -3746,6 +3756,35 @@ static void mark_reg_stack_read(struct bpf_verifier_env *env,
+ 	}
  }
  
--static int check_outgoing_stack_args(struct bpf_verifier_env *env, struct bpf_func_state *caller,
--				     int nargs)
-+static int check_outgoing_stack_args(struct bpf_verifier_env *env,
-+				     struct bpf_func_state *caller, int nargs,
-+				     const char *callee_name)
- {
- 	int i, spi;
- 
-@@ -4145,6 +4148,9 @@ static int check_outgoing_stack_args(struct bpf_verifier_env *env, struct bpf_fu
- 		    caller->stack_arg_regs[spi].type == NOT_INIT) {
- 			verbose(env, "callee expects %d args, stack arg%d is not initialized\n",
- 				nargs, spi + 1);
-+			bpf_diag_report_stack_arg_uninit(env, env->insn_idx,
-+							 nargs, spi,
-+							 callee_name);
- 			return -EFAULT;
- 		}
- 	}
-@@ -4299,6 +4305,11 @@ static int __check_ptr_off_reg(struct bpf_verifier_env *env,
- 	if (!fixed_off_ok && reg->var_off.value != 0) {
- 		verbose(env, "dereference of modified %s ptr %s off=%lld disallowed\n",
- 			reg_type_str(env, reg->type), reg_arg_name(env, argno), reg->var_off.value);
-+		bpf_diag_report_invalid_deref(env, env->insn_idx, reg_from_argno(argno),
-+					      reg_arg_name(env, argno),
-+					      reg_type_str(env, reg->type),
-+					      BPF_DIAG_DEREF_MODIFIED_PTR,
-+					      reg->var_off.value);
- 		return -EACCES;
- 	}
- 
-@@ -6166,6 +6177,11 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- 		if (type_may_be_null(reg->type)) {
- 			verbose(env, "%s invalid mem access '%s'\n", reg_arg_name(env, argno),
- 				reg_type_str(env, reg->type));
-+			bpf_diag_report_invalid_deref(env, insn_idx, reg_from_argno(argno),
-+						      reg_arg_name(env, argno),
-+						      reg_type_str(env, reg->type),
-+						      BPF_DIAG_DEREF_NULLABLE_PTR,
-+						      0);
- 			return -EACCES;
- 		}
- 
-@@ -6321,8 +6337,17 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- 		if (t == BPF_READ && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
- 	} else {
-+		enum bpf_diag_invalid_deref_kind kind = BPF_DIAG_DEREF_INVALID_PTR;
-+
- 		verbose(env, "%s invalid mem access '%s'\n", reg_arg_name(env, argno),
- 			reg_type_str(env, reg->type));
-+		if (reg->type == SCALAR_VALUE)
-+			kind = BPF_DIAG_DEREF_SCALAR;
-+		else if (type_may_be_null(reg->type))
-+			kind = BPF_DIAG_DEREF_NULLABLE_PTR;
-+		bpf_diag_report_invalid_deref(env, insn_idx, reg_from_argno(argno),
-+					      reg_arg_name(env, argno),
-+					      reg_type_str(env, reg->type), kind, 0);
- 		return -EACCES;
- 	}
- 
-@@ -9216,14 +9241,17 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 	ret = btf_prepare_func_args(env, subprog);
- 	if (ret) {
- 		if (bpf_in_stack_arg_cnt(sub) > 0) {
--			err = check_outgoing_stack_args(env, caller, sub->arg_cnt);
-+			err = check_outgoing_stack_args(env, caller,
-+							sub->arg_cnt,
-+							subprog_name(env, subprog));
- 			if (err)
- 				return err;
- 		}
- 		return ret;
- 	}
- 
--	ret = check_outgoing_stack_args(env, caller, sub->arg_cnt);
-+	ret = check_outgoing_stack_args(env, caller, sub->arg_cnt,
-+					subprog_name(env, subprog));
- 	if (ret)
- 		return ret;
- 
-@@ -11966,7 +11994,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		return -ENOTSUPP;
- 	}
- 
--	ret = check_outgoing_stack_args(env, caller, nargs);
-+	ret = check_outgoing_stack_args(env, caller, nargs, func_name);
- 	if (ret)
- 		return ret;
- 
-@@ -13684,6 +13712,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	struct bpf_sanitize_info info = {};
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 dst = insn->dst_reg;
++static void bpf_diag_report_stack_read_failure(struct bpf_verifier_env *env,
++					       int off, int i, int size,
++					       bool poisoned)
++{
 +	char reason[256];
- 	int ret, bounds_ret;
- 
- 	dst_reg = &regs[dst];
-@@ -13707,12 +13736,28 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		verbose(env,
- 			"R%d 32-bit pointer arithmetic prohibited\n",
- 			dst);
++
++	if (poisoned) {
 +		scnprintf(reason, sizeof(reason),
-+			  "R%d holds %s. 32-bit ALU operations on pointers discard pointer provenance, so the verifier cannot keep the result as a safe "
-+			  "pointer.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "32-bit pointer arithmetic",
-+					      reason,
-+					      "Use 64-bit pointer arithmetic with an allowed, bounded scalar offset, or convert the value to a scalar only after pointer use "
-+					      "is complete.");
- 		return -EACCES;
- 	}
- 
- 	if (ptr_reg->type & PTR_MAYBE_NULL) {
- 		verbose(env, "R%d pointer arithmetic on %s prohibited, null-check it first\n",
- 			dst, reg_type_str(env, ptr_reg->type));
-+		scnprintf(reason, sizeof(reason),
-+			  "R%d may be NULL (%s). Pointer arithmetic is allowed only after the program proves the pointer is non-NULL on this path.",
-+			  dst, reg_type_str(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "pointer arithmetic before NULL check",
-+					      reason,
-+					      "Add a NULL check first, and do the pointer arithmetic only on the non-NULL branch.");
- 		return -EACCES;
- 	}
- 
-@@ -13749,6 +13794,13 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	default:
- 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
- 			dst, reg_type_str(env, ptr_reg->type));
-+		scnprintf(reason, sizeof(reason),
-+			  "R%d holds %s. This pointer kind does not allow arithmetic because changing its offset would lose the verifier's required provenance.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "pointer arithmetic is not allowed",
-+					      reason,
-+					      "Keep this pointer unchanged, or derive an allowed pointer type before applying a bounded offset.");
- 		return -EACCES;
- 	}
- 
-@@ -13758,9 +13810,26 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	dst_reg->type = ptr_reg->type;
- 	dst_reg->id = ptr_reg->id;
- 
--	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
--	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
-+	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type)) {
-+		scnprintf(reason, sizeof(reason),
-+			  "The scalar offset used with R%d has a range the verifier cannot safely add to %s.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "pointer offset is not safe",
-+					      reason,
-+					      "Clamp or bound-check the scalar offset before adding it to the pointer.");
-+		return -EINVAL;
++			  "This read uses %d bytes at stack offset %d, but byte %d in that range is poisoned because it was eliminated as dead code on this "
++			  "path.",
++			  size, off, i);
++		bpf_diag_report_memory(env, env->insn_idx,
++				       "poisoned stack read",
++				       reason,
++				       "Avoid reading stack bytes written only by code that the verifier proved unreachable, or initialize the stack range again on "
++				       "this path.");
++		return;
 +	}
-+	if (!check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type)) {
-+		scnprintf(reason, sizeof(reason),
-+			  "R%d already has an offset that is outside the verifier's safe pointer range for %s.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "pointer offset is not safe",
-+					      reason,
-+					      "Keep the base pointer within the verifier's allowed offset range before applying more arithmetic.");
- 		return -EINVAL;
-+	}
- 
- 	/* pointer types do not carry 32-bit bounds at the moment. */
- 	__mark_reg32_unbounded(dst_reg);
-@@ -13803,6 +13872,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 			/* scalar -= pointer.  Creates an unknown scalar */
- 			verbose(env, "R%d tried to subtract pointer from scalar\n",
- 				dst);
-+			scnprintf(reason, sizeof(reason),
-+				  "This operation subtracts a pointer from scalar register R%d. The verifier does not allow pointer provenance to flow through scalar "
-+				  "subtraction.",
-+				  dst);
-+			bpf_diag_report_register_type(env, env->insn_idx, dst,
-+						      "pointer subtracted from scalar",
-+						      reason,
-+						      "Keep pointer values in pointer registers, or use explicit scalar values that do not come from pointer arithmetic.");
++
++	scnprintf(reason, sizeof(reason),
++		  "This read uses %d bytes at stack offset %d, but byte %d in that range is uninitialized on this path.",
++		  size, off, i);
++	bpf_diag_report_memory(env, env->insn_idx,
++			       "uninitialized stack read",
++			       reason,
++			       "Initialize every byte in the stack range before reading it, or adjust the offset and size so the read covers only initialized "
++			       "bytes.");
++}
++
+ /* Read the stack at 'off' and put the results into the register indicated by
+  * 'dst_regno'. It handles reg filling if the addressed stack slot is a
+  * spilled reg.
+@@ -3831,9 +3870,13 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 					if (type == STACK_POISON) {
+ 						verbose(env, "reading from stack off %d+%d size %d, slot poisoned by dead code elimination\n",
+ 							off, i, size);
++						bpf_diag_report_stack_read_failure(env, off, i,
++										   size, true);
+ 					} else {
+ 						verbose(env, "invalid read from stack off %d+%d size %d\n",
+ 							off, i, size);
++						bpf_diag_report_stack_read_failure(env, off, i,
++										   size, false);
+ 					}
+ 					return -EACCES;
+ 				}
+@@ -3886,9 +3929,13 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 			if (type == STACK_POISON) {
+ 				verbose(env, "reading from stack off %d+%d size %d, slot poisoned by dead code elimination\n",
+ 					off, i, size);
++				bpf_diag_report_stack_read_failure(env, off, i,
++								   size, true);
+ 			} else {
+ 				verbose(env, "invalid read from stack off %d+%d size %d\n",
+ 					off, i, size);
++				bpf_diag_report_stack_read_failure(env, off, i,
++								   size, false);
+ 			}
  			return -EACCES;
  		}
- 		/* We don't allow subtraction from FP, because (according to
-@@ -13812,6 +13889,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		if (ptr_reg->type == PTR_TO_STACK) {
- 			verbose(env, "R%d subtraction from stack pointer prohibited\n",
- 				dst);
-+			scnprintf(reason, sizeof(reason),
-+				  "R%d is derived from the frame pointer. Subtracting from a stack pointer is not allowed because stack accesses must stay within the "
-+				  "verifier's tracked frame offsets.",
-+				  dst);
-+			bpf_diag_report_register_type(env, env->insn_idx, dst,
-+						      "subtraction from stack pointer",
-+						      reason,
-+						      "Use fixed negative stack offsets from R10, and avoid arithmetic that moves the frame pointer backward.");
- 			return -EACCES;
- 		}
- 		dst_reg->r64 = cnum64_add(ptr_reg->r64, cnum64_negate(off_reg->r64));
-@@ -13837,16 +13922,41 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		/* bitwise ops on pointers are troublesome, prohibit. */
- 		verbose(env, "R%d bitwise operator %s on pointer prohibited\n",
- 			dst, bpf_alu_string[opcode >> 4]);
+@@ -3976,10 +4023,20 @@ static int check_stack_read(struct bpf_verifier_env *env,
+ 	 */
+ 	if (dst_regno < 0 && var_off) {
+ 		char tn_buf[48];
++		char reason[256];
+ 
+ 		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+ 		verbose(env, "variable offset stack pointer cannot be passed into helper function; var_off=%s off=%d size=%d\n",
+ 			tn_buf, off, size);
 +		scnprintf(reason, sizeof(reason),
-+			  "R%d holds %s. Bitwise operator %s would destroy pointer provenance, so the verifier cannot track the result as a valid pointer.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type),
-+			  bpf_alu_string[opcode >> 4]);
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "bitwise operation on pointer",
-+					      reason,
-+					      "Do bitwise operations on scalar values, not on pointer-valued registers.");
- 		return -EACCES;
- 	default:
- 		/* other operators (e.g. MUL,LSH) produce non-pointer results */
- 		verbose(env, "R%d pointer arithmetic with %s operator prohibited\n",
- 			dst, bpf_alu_string[opcode >> 4]);
-+		scnprintf(reason, sizeof(reason),
-+			  "R%d holds %s. Operator %s is not one of the limited pointer arithmetic operations the verifier can track.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type),
-+			  bpf_alu_string[opcode >> 4]);
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "invalid pointer arithmetic operator",
-+					      reason,
-+					      "Use only verifier-supported addition or subtraction with a bounded scalar offset, or perform this operation on a scalar "
-+					      "value.");
++			  "The helper would access the stack through a variable offset %s plus fixed offset %d and size %d. Helper stack arguments need a "
++			  "precise stack range so the verifier can prove every byte is initialized and inside the stack.",
++			  tn_buf, off, size);
++		bpf_diag_report_memory(env, env->insn_idx,
++				       "variable stack access",
++				       reason,
++				       "Use a fixed stack offset for helper memory arguments, or add bounds checks and copy the needed bytes into a fixed stack slot "
++				       "first.");
  		return -EACCES;
  	}
+ 	/* Variable offset is prohibited for unprivileged mode for simplicity
+@@ -4249,6 +4306,11 @@ static int check_mem_region_access(struct bpf_verifier_env *env, struct bpf_reg_
+ 	      reg_smin(reg) + off < 0)) {
+ 		verbose(env, "%s min value is negative, either use unsigned index or do a if (index >=0) check.\n",
+ 			reg_arg_name(env, argno));
++		bpf_diag_report_mem_bounds(env, env->insn_idx, reg_from_argno(argno),
++					   reg_arg_name(env, argno),
++					   reg_type_str(env, reg->type),
++					   BPF_DIAG_MEM_NEGATIVE_MIN,
++					   off, size, mem_size, reg);
+ 		return -EACCES;
+ 	}
+ 	err = __check_mem_access(env, reg, argno, reg_smin(reg) + off, size,
+@@ -4256,6 +4318,11 @@ static int check_mem_region_access(struct bpf_verifier_env *env, struct bpf_reg_
+ 	if (err) {
+ 		verbose(env, "%s min value is outside of the allowed memory range\n",
+ 			reg_arg_name(env, argno));
++		bpf_diag_report_mem_bounds(env, env->insn_idx, reg_from_argno(argno),
++					   reg_arg_name(env, argno),
++					   reg_type_str(env, reg->type),
++					   BPF_DIAG_MEM_MIN_OUT_OF_RANGE,
++					   off, size, mem_size, reg);
+ 		return err;
+ 	}
  
--	if (!check_reg_sane_offset_ptr(env, dst_reg, ptr_reg->type))
-+	if (!check_reg_sane_offset_ptr(env, dst_reg, ptr_reg->type)) {
-+		scnprintf(reason, sizeof(reason),
-+			  "After this arithmetic, R%d would have an offset outside the verifier's safe range for %s.",
-+			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-+		bpf_diag_report_register_type(env, env->insn_idx, dst,
-+					      "pointer offset is not safe",
-+					      reason,
-+					      "Tighten the scalar bounds before the arithmetic so the resulting pointer remains within the allowed range.");
- 		return -EINVAL;
-+	}
- 	reg_bounds_sync(dst_reg);
- 	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
- 	if (bounds_ret == -EACCES)
+@@ -4266,6 +4333,11 @@ static int check_mem_region_access(struct bpf_verifier_env *env, struct bpf_reg_
+ 	if (reg_umax(reg) >= BPF_MAX_VAR_OFF) {
+ 		verbose(env, "%s unbounded memory access, make sure to bounds check any such access\n",
+ 			reg_arg_name(env, argno));
++		bpf_diag_report_mem_bounds(env, env->insn_idx, reg_from_argno(argno),
++					   reg_arg_name(env, argno),
++					   reg_type_str(env, reg->type),
++					   BPF_DIAG_MEM_UNBOUNDED,
++					   off, size, mem_size, reg);
+ 		return -EACCES;
+ 	}
+ 	err = __check_mem_access(env, reg, argno, reg_umax(reg) + off, size,
+@@ -4273,6 +4345,11 @@ static int check_mem_region_access(struct bpf_verifier_env *env, struct bpf_reg_
+ 	if (err) {
+ 		verbose(env, "%s max value is outside of the allowed memory range\n",
+ 			reg_arg_name(env, argno));
++		bpf_diag_report_mem_bounds(env, env->insn_idx, reg_from_argno(argno),
++					   reg_arg_name(env, argno),
++					   reg_type_str(env, reg->type),
++					   BPF_DIAG_MEM_MAX_OUT_OF_RANGE,
++					   off, size, mem_size, reg);
+ 		return err;
+ 	}
+ 
 -- 
 2.53.0
 
