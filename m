@@ -1,103 +1,94 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F9B405C49
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 19:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6173F075A;
+	Fri,  5 Jun 2026 19:08:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780686069; cv=none; b=rqlZTdlrpmk4XRTclDUcgSrMDggvylP+5p1IoEHTsJ4W1d/4d3fTc35Jk7n+fNlgUpC9TfCZ6HIHtpmj6V++Aw8UPCIhUestu5kNmaqmGDzmmYeOzwmkPEY3qHmFxKORJp85sWB2ebj40TKHC5vK5m5A7H68VKsprvFZ/tRh2OI=
+	t=1780686535; cv=none; b=KggaTwqrcT4QURjzWCgR5GfFQeDF5icS354ZaLxayQMtNhhRRuGloiftGZF98JlBDYPGKq8XOcN7RXKU9j9E5DvSSbtujcYy3RNvtQRz2vUUUVsZKq1fpxi2uaSEvJkG2rP8KmvWXusUPFHJLbGAzotn+TAa99wW27M/zFV9Hd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780686069; c=relaxed/simple;
-	bh=mlp8CSE6eIaCZluAtk44mGVn3id863qx4RzEygLECPs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tBeel4N8aRYxsTLV+B7NyEBHbeRm/jl3p41hFyb9flKG4M1X4quAZ5uYNjZxW13VUk00ZBaR4ckUeo0HN3YDT1BC4k82vyVnolE/a6uZsk/N2Xt4RLLVYQxlzv8S3Q5ks/DcDPTYaWWJybuiThbwUKfUGo9+rq60QxJLo3iCwZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kUr/xk6A; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780686535; c=relaxed/simple;
+	bh=3DL/LpvyUq4LonJwd/lyFJqbPQGAHBZMHDkJ7spP++o=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=JRlWBPq8mI4v5Xq5OuWBwR/LeVJGBszNmzDfHmgnf9Ix7MJoKR8+z51l/kFbxFeFuoKMz9LLuyEyI4FKxgXTBKHNv7MwvEyAhs09bkfdj7//LiNqLEAH6WKe7lhzfYAuLL5dJIGLN0YBSKy8v66MqwK6t/z/kfMWBPOUHDi7Yws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gx15zSB0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kUr/xk6A"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8423f52af13so1638476b3a.2
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 12:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780686064; x=1781290864; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=psZMQqevIRQdslkufaGl1+3b2/q5KJbu8mgWlUYpKrI=;
-        b=kUr/xk6AdW+sb5U28iaXmguLNamOTfx17wovXZqdSxqlTCGggIGPVzfdhlJOl8Eix1
-         bpCmdRgBoI74AIdNvQxi6CaafOie9rR0vPsEHQxnWTotLP5FcYu2Z7r3Rqb/Kr/l6lV5
-         keGV1it2iYNENs3aIPlWg6jPzi+EG3I8GZqmyr3dLGyu88fomaancNHzkBCP0BCQ0GpI
-         bAxXa5K3pZxIHgnTewvfNpddkWaKX1JHhVukQsrX44fXEY1LtCI15v81spjKgAdpnL64
-         ZsD02FGpArUW/OcGFgoZrY8J5OjJNk4l85yY99UnK3uM5JcXZUi1cfvGypLagTU3fj3z
-         +teQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780686064; x=1781290864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=psZMQqevIRQdslkufaGl1+3b2/q5KJbu8mgWlUYpKrI=;
-        b=s4xCMPuoAoaw19e6ZI9bLrz3CyU4QGyHcRFA/EEoTgv4safwShY+9/HmkLh4O2pyj7
-         HdaoceqaOk77XF7zRIppM+oATgQIn4ZXtXnjzP61yF7AVR98D8xnAoEn0F6Oc7gTfss3
-         31Oa6Qd1S2HftmMd1mQRtXbBe3kPCBcSDOIS1xJuQm8Sh8HSxYTkYJfTIrmZrA4r/DwE
-         a2bGuA3L/Jdp1IRlspmziSvkNycH1QkF/z8euU+RzzoKBFFTxHDnnC5BhX5WWO0rrm9H
-         ixVF24RgZC4/FDsxLLOxBW3sfyS7UgmQUG1TS3a5xOPdy8eKNLs5gcxZUm0P0FVLda/9
-         82EQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+lmhm+Yku6+bU+yIXmyJ9em2SGhwLdtKxsdfEmSrucxAW1hsGGH6CPjJrnjWGgZGzFrhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSAo22hFNxplVUuBDJ2/Waun/ShAtAIekQUKE5u6y1J4ILOhj8
-	Fbkup6/uTRwOqJt/ivrCLCwCg6VfIWF2Fn9CqdB43gdMgztRtDEUqG1JyoFcA2D1
-X-Gm-Gg: Acq92OGWv8L4GSWhzKGLpsbupAtDHClymCzNhVvPYUsJN48+rkQjILuG1Rwk23MJMym
-	cdgpVxQbQhmv3JDFt3L9yE9++nByyxQ7KtzbDPtnxgLqSK4Q+QCRbW6pzPaaugnohUAqEM6kS+J
-	A7USy4fIstfJEinu1DBLFtf0fc8jPIqueMfM9MVsDmWkycMgGLTOimM6ysADN53kVWWkp8jH6ZQ
-	Of073rbi0rjBBODRlOTYFv41QkUnH8GavZRxBEJr798BUu40zBc+AkhcX/Vp0mztPGR8Qz8x0Uz
-	nc6gZu4getT3r91xgJmOjONX8AjQwfPKfg5CQP2Qy9hTth+vpnX4FhCQEqhuqTY2tzPD0VwFOXa
-	AropmWdOl8am/IIqwzf0nYFWr+C/VF3l3W5/4nXAN6sR/bO27P5StysBNdnTxi7Ee6SbDp35PNh
-	5sZUzclbuIAl1i+qNnfDWODMoSZq+FJ5+IR3eb3tLGZzrB0mndMPty1ssRlitYsRGP/2ZNNXbYr
-	z9Xjndg
-X-Received: by 2002:a05:6a00:4c0a:b0:842:708f:39a6 with SMTP id d2e1a72fcca58-842b0e1e208mr4693931b3a.10.1780686063875;
-        Fri, 05 Jun 2026 12:01:03 -0700 (PDT)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428288002asm9906446b3a.31.2026.06.05.12.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 12:01:03 -0700 (PDT)
-Date: Fri, 5 Jun 2026 19:00:44 +0000
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Juntong Deng <juntong.deng@outlook.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: fix NULL pointer dereference in
- bpf_task_from_vpid()
-Message-ID: <2xszbykyotvf56kziukek2uocto6ddxu2tygy2ug24dskx375o@o3wdv3nrxacv>
-References: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
- <e3e1f8dd-e0f4-4f9c-85cd-22c58571eca7@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gx15zSB0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D821F00893;
+	Fri,  5 Jun 2026 19:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780686534;
+	bh=q6qqrSbjMEYTyY2+C+bT1l6eDfMipQNqFU3HH5CfK+s=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Gx15zSB07Kcd7e0URuPQrwrz2SGDJYPZNx9I0+bNLOC7Z4eAcYMNlU8+rvLG6GLys
+	 aoHitcJMgMx+uVU27yDkv+Kha+HsaoSR1fWvW5xcZ+Lt4pxgBdRaR5ms2+RTNlkJpn
+	 MPAl9cr0UNcTv90gO9ylX0pl5nAVnhUw4IH76JFwFEEycCumtV6YyjbF5AOdUawYW5
+	 yqoHPBo2Iikxpx6mWgP+fpI2sWdEAIH7DUbpxj73K0dIOS7xj6SoeiQOSKbGbMtKOb
+	 okdI4khZybTRyv+JAr5RCBtWVoo495PW2W6y6p989ndBy7z30dsO7gxD9J4xXQVaQI
+	 Jeb1lK591AHaw==
+Content-Type: multipart/mixed; boundary="===============7693173522675949626=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <e3e1f8dd-e0f4-4f9c-85cd-22c58571eca7@linux.dev>
+Message-Id: <7e270031a11c9c839dde64ca32cdedda701639a999fc824c9dd135433e8d12b6@mail.kernel.org>
+In-Reply-To: <20260605183551.969144-6-ameryhung@gmail.com>
+References: <20260605183551.969144-6-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,mykyta.yatsenko5@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 19:08:53 +0000 (UTC)
 
-On Fri, Jun 05, 2026 at 09:59:49AM -0700, Yonghong Song wrote:
->In softirq context, I think we should return NULL for this kfunc.
->Your above fix solves crash problem. But even not crash, the
->below task 'p' may not be user expected since the 'current' (and
->its namespace) is random.
+--===============7693173522675949626==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/tools/testing/selftests/bpf/progs/file_reader_fail.c
+> index d5fae5e4cf9a..3bb9e2612f8f 100644
+> --- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
+> @@ -87,7 +87,8 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
+>  	struct task_struct *task = bpf_get_current_task_btf();
+>  	struct file *file = bpf_get_task_exe_file(task);
+>  	struct bpf_dynptr dynptr;
+> -	char *data;
+> +	char buf[1];
+> +	const char *data;
 >
->Maybe we can do:
+>  	if (!file)
+>  		return 0;
+> @@ -95,15 +96,14 @@ int use_file_dynptr_slice_after_put_file(void *ctx)
+>  	if (bpf_dynptr_from_file(file, 0, &dynptr))
+>  		goto out;
 >
->+	if (in_interrupt())
->+		return NULL;
->+
->	rcu_read_lock();
->	...
->
+> -	data = bpf_dynptr_data(&dynptr, 0, 1);
+> +	data = bpf_dynptr_slice(&dynptr, 0, buf, sizeof(buf));
 
-Agreed. I'll send a v2 using this approach.
+A note from the earlier review on v1: an automated review bot suggested
+initializing the stack buffer here, e.g.
 
-Thanks for the review.
+	char buf[1] = {0};
 
-Sechang
+worrying that the uninitialized 'buf' passed to bpf_dynptr_slice() could
+make the verifier reject the program early with an invalid stack read,
+which would bypass the intended reference-leak check.
+
+This looks like a false positive, since the buf argument to
+bpf_dynptr_slice() is a destination the helper writes into, so
+uninitialized stack memory should be valid there, and the v1 patch
+already carried an Acked-by from Eduard Zingerman.
+
+Was this comment considered, and is the test still failing for the
+intended reference-leak reason rather than an early verifier rejection?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27034008594
+--===============7693173522675949626==--
