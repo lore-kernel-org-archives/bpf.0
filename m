@@ -1,234 +1,251 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A8840F8F6
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85135407571;
+	Fri,  5 Jun 2026 06:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641275; cv=none; b=gYeWuEmipny/kZXGss/099nUFiLziqIpkQJXNVUzyArMWPYA8C27KxR053MvCo0Nw3AGRLxe/gug8xdjuqtjHmlORiyms+Eu0JM5w9M5DRocWsFVAtW9/tG4RNbN3pU65jnuirqe7iN5URI9fp3+x1tgtYw5jSAKQJGLNEklDHM=
+	t=1780641607; cv=none; b=XYLjoFEHioD3a8bscVu5wEMBu8F1gaCuKHzM+1ld0xNnu+bjdyNC9C6WTzS42oNcvEDmHGU3MYm2bgUly+Kmvqg3gRvxie0GZBwRnQNpOp5wf0UF25yUhOnWq5zoWPz+OwXK1rDoMe93CahICBCB3Nq1STM0RLHU78eyEIvA+Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641275; c=relaxed/simple;
-	bh=K2K2rE5pXxubjQrMs130zleMtJqZKKTYvk5pm1ZVZrU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XrfXBjpAdWdpriAKO3v0LJgO0nKqt5L8C5q7igpvCfiTkEX6N5e4mxcwxLH0UL5cuu4+aHVHR7XHzQ0Q9eCCvZ0YLIPsCugr7FfuafB3Fci5yn2D9U/XUnhBRhHzsK8eCmz9n4QjRMTWd4x+qEUuMbts5GSteusKI2QFpyFHb2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rx1uY8Q6; arc=none smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780641607; c=relaxed/simple;
+	bh=Sqsktppb0Mid02mXFy7U5N2GOkZIVg+cj6qbUr9DEuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iT2aDKYVaxukbEx87bhTML+F7Ea9r8hncFHHengBrQJRFmnBRGj6+EiJHGm2lvoTO9jywf7KsqitX+2zVwjHjbyX+RegDYm0SJOXe2Rz1yybUEbIIQD2hUO/OEgxqaeR1MbImqNeWPlJCABoC/e5hyixA4hoyI6uY+zsVfBqX0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SCwpRhpl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rx1uY8Q6"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-4600ddc4017so1166715f8f.0
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780641273; x=1781246073; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b1XFCDgyisbKq2bSLcQdBNHZ+HkUNCw06nQ1l443S0g=;
-        b=rx1uY8Q6c090B/E41myMuIeIxgLA4itmSSzKb4dXFNkHeOp9Ong1r6t9xjWwGLNnG6
-         nGpUef3fjPeBaxJTHA2kWwqohu0x1MJ8BEyaIzJH68jTWzjbZ5pHln4JJX4xwDhtVmm2
-         Hm8DWDkZKREKTgBLEkuEltHRkOgwoWKCZc83bMAnyXUbPDve/72ATKleNiDSvo3+rcLU
-         OyFX/uGoruM9OhWrjGWKOOSRg+UJkRU7SLouFRTo3+7VrGH26fNpN5IWBmWtwx9eg6i4
-         op1lvMBE2U4DIdUznX4sttPjjqSSnX42h9tOy06PaYym9/CmLPUcYP6eWueJz+QfgEzr
-         5Dlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780641273; x=1781246073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=b1XFCDgyisbKq2bSLcQdBNHZ+HkUNCw06nQ1l443S0g=;
-        b=KUcXBgEGTlsafUVi/50bbmy/qjFaAYx25hjRKninptSFzMe49CaK5XyrFxcZfGIt10
-         MuFNZ6x9ccjBMtjss+Xsr0IeH1beFLQDUwqHzDxQEsG+RMviBwUaW2GjHpJqrXxeMUTS
-         6yMsHR8neQC1HrHXw2KFYhk89djkXPOSoGOF9/Y1wZUXqKBya7DHaBH1UkmRtNTDtRxW
-         yAj1nr5ZgeXRuzUwRp12JM6Dp87lUFBZ0VJIIiSRcOPoxFIcpwl4dEyyGxLOqmrCnXJU
-         yXHzCEO2TnEHdquHWUSl2v/xnrdcjDCr80GSSV9K+Q3eHZe9ScfbuP8t5vpeZGt4Msv9
-         jLqg==
-X-Gm-Message-State: AOJu0Ywe3i0ScNia8JaCAvqfXHV9nis6aKHnW551HCwLlv5UEQGxsnoF
-	aRlPwt5a8ukB7VYrOf/jMUICY1Zequ1E8k34LKuMCgQ9Ykf6DjeTrT4rdgLrrfxV
-X-Gm-Gg: Acq92OHI4vuVf1XPVCPrkn4/bz5zqcr/Rz/5DGr3aiLX07THPArHZEZYIswaFf6pGWO
-	ypRJPPjgkOodMgxActtM57CkwrvIj+TP3Upgvr7WJtIwQMgaqx7BQ/Cmm3zY3zP09Heoi8A9zgY
-	K7mrsk3H0ASrbL4I4eaMwoVrojYI0Q6v2g8n4XhDuCXrqEJliomaTlgMiPkcsMZq0PU+IYqd6Fn
-	kMlU6phK20TtCTIpr/5fcudXz1uZvHsWsKIGytIAJ7T2De1dMS92x2mQotTgmL3gYrKGd64airG
-	Jm4fs4GmcCJ5zB6SWJOPp28nQzcHWVRScH2/Ycqu8gls/4o325AMAkzEquiu+F2XJ7AISX5orJM
-	lsM6Beh4Mw2ZGSw+eUo2/r8/b5G0b5NEWDDzCMTLBERPqiKIvNkTELoqpCBswPasXuIzbFpnJKT
-	cY8C6/0C8IpzDha/l0WrsjCP/WJkkzXz6X+1dRiu5g8cNf1DxwCjmGAqtReloDB/J9Vl5JBe8Bl
-	SsitEUo6yM4iNC+MkFNiccssZ+idIqUY92jS8PHwugrAj3EJlg/loz+pwUtwZ+Whpbjag4gxF9i
-X-Received: by 2002:a5d:518b:0:b0:441:1e41:19c with SMTP id ffacd0b85a97d-4603050194dmr2214986f8f.20.1780641272872;
-        Thu, 04 Jun 2026 23:34:32 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4602cda3651sm10128437f8f.32.2026.06.04.23.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:32 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 17/17] bpf: Gate verifier diagnostics on log level
-Date: Fri,  5 Jun 2026 08:34:07 +0200
-Message-ID: <20260605063412.974640-18-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
-References: <20260605063412.974640-1-memxor@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SCwpRhpl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5F21F00899;
+	Fri,  5 Jun 2026 06:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780641606;
+	bh=DY5lQMmxnI3uPjy+HsvkNcAQVWz09l4bSQCGxX64lwQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=SCwpRhpllZT0DflijqLdXa7P0UzHVOcvFnhaubpEXRFqatgHZsLoRQoa6UxH9/7Gu
+	 A4WzWIytQBIgLL/mVxxHYeurTihmY3bXue2rtX1SH1qiQYqubxaisD8gf6kf9PciWv
+	 36vpij0sTcjLyUHPSsW5NP6QZcZ8X8SCqB6qSVh8nMLeVylOaO3RWxSc3rmgeZF/D1
+	 yFCo0bJKUI1L+SULclOJdgKelkKAjdmRROIlNiGTaNTnoeCoHBHWe4l7q1USgax3Nj
+	 52rHxOP4AIM/CqwoWll7HOtWPS1oU8Cv1EcW7GrJK7K1AGql1xbIOt0q5q+SObPjmJ
+	 FkacklmJRjzXQ==
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfauth.phl.internal (Postfix) with ESMTP id B70ACF4006E;
+	Fri,  5 Jun 2026 02:40:01 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Fri, 05 Jun 2026 02:40:01 -0400
+X-ME-Sender: <xms:QW8ial2TUUzWCAP6co1jWb7CI4x3g-5Pq9qQ4vuEp7Kwc9ZG8veMxA>
+    <xme:QW8iamfRUz2t9RKucbDpWrZaYjLiPUZ-GscI5nE9oQWkas_hye0rNGOl0pwzWNgOu
+    l9bdWbRFIHnZmF3fJP5okRghIOheZMuYov7Mfk0hHwHwKgk56tggg>
+X-ME-Received: <xmr:QW8iamruRw1zbvmPvqzV9_K6fZekyGN8AxGjTnQgk-qUFHMxb8km_Z5kybg>
+X-ME-Proxy-Cause: dmFkZTFLWWdWQ5yOtjyAoTSNdapbF5O9v5FYeP09oEn6GipmmCjtdlXjTTKTx73+TWqgNB
+    hwiGw8o0ugRfCGCDxQmnhTdVFJWduY/2eQrvWZWTBWilYm11fCIdENjkjGBcYlC42gMkJa
+    Ul38fP6hVwrZVZKF7vLXr1xSKtoSdJMHKAtCkY9OVF0RDdMMWjiQmlSvZMWy3Usn1OiL5I
+    3/WXi8wUNHyAzz1oSC4Cbsq2buM8fcqNt9OiPTSFj0mW6GYiLa8ZcCwN9tXicwVQ1BR8kI
+    gRdcfnleMO8dHQFRVCHs7DtVHFCRJmsbHqeoRG9M6nUCK/R/efMEvYDDKFTt9+8xvriaFO
+    isDgnP7yc93BZPEG/WDk+bvwFyqnW6qYvd3Cbm0YG9a37mTkpVqf7p/kaqQWM44PInd2yy
+    LWj4vD+1RxPdMlyAEpfNOjtsylpAFq9wWhNgPDroJlHU1q1RsiF/uH6A12ZBUWNc3qf5vF
+    ECxsWvtYgR4M9kUsE8LcPxBihBMJjgC9lIpNpeHGfVkdWkJj2bJXWsoNhipnbKVUMk0enV
+    gyoul5WryjKwF/cLIuHjwndZJMkDYbEmv1F8yysuSBUZaBYYYj5/mVrOZ21VldUf5woOI/
+    cr0j13cgqRGDBfIweTl8erPGSABDzKhcdpnHHYuip+Qai2KNMnJtyjg4DCnw
+X-ME-Proxy: <xmx:QW8iagXSJeiA0BpAOFMNNa_qhk3-kyfc5yFdU_disTgZJSRx5xGe-g>
+    <xmx:QW8iam3P0sldLLp_B5G68gif9eaRdOoDa1597cKkl96alRLVBt8xMw>
+    <xmx:QW8iaiCe_gKhV4eurA2AtcISGUX_4jIZEEo6IZdAPeN7rsP4SapfIg>
+    <xmx:QW8iasOBsi_D2XpdA3kLAVmylf2BVWrhgk-fCAJ4GbQIMPgLk12rEQ>
+    <xmx:QW8iargk-FdnGJ9uLyxfdgNMCTYL75Ao1DKpSAfM6hjeNFJFXWWKbyxv>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Jun 2026 02:40:00 -0400 (EDT)
+Date: Thu, 4 Jun 2026 23:40:00 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: bot+bpf-ci@kernel.org
+Cc: peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
+	jonas@southpole.se, stefan.kristiansson@saunalahti.fi,	shorne@gmail.com,
+ hca@linux.ibm.com, gor@linux.ibm.com,	agordeev@linux.ibm.com,
+ borntraeger@linux.ibm.com,	svens@linux.ibm.com, tglx@kernel.org,
+ mingo@redhat.com,	bp@alien8.de, dave.hansen@linux.intel.com,
+ x86@kernel.org,	hpa@zytor.com, arnd@arndb.de, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	vschneid@redhat.com, kprateek.nayak@amd.com, longman@redhat.com,
+	akpm@linux-foundation.org, andrii@kernel.org, eddyz87@gmail.com,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, shuah@kernel.org, ojeda@kernel.org,	gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org,	a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu,	dakr@kernel.org,
+ ruanjinjie@huawei.com, lyude@redhat.com,	thuth@redhat.com,
+ sohil.mehta@intel.com,	pawan.kumar.gupta@linux.intel.com,
+ seanjc@google.com,	nikunj@amd.com, xin@zytor.com, joelagnelf@nvidia.com,
+	andriy.shevchenko@linux.intel.com, rdunlap@infradead.org,
+	ynorov@nvidia.com, bigeasy@linutronix.de,	linux-kernel@vger.kernel.org,
+ linux-openrisc@vger.kernel.org,	linux-s390@vger.kernel.org,
+ linux-arch@vger.kernel.org,	bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,	rust-for-linux@vger.kernel.org,
+ boqun.feng@gmail.com,	martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+Subject: Re: [PATCH v3 05/13] irq & spin_lock: Add counted interrupt
+ disabling/enabling
+Message-ID: <aiJvQIiDiXvu5x01@tardis-2.local>
+References: <20260605054128.5925-6-boqun@kernel.org>
+ <cc4b5fb3f63b8b508334edd883765bf81c9ab1d2045f414a74c8712c6cc705e9@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4676; i=memxor@gmail.com; h=from:subject; bh=K2K2rE5pXxubjQrMs130zleMtJqZKKTYvk5pm1ZVZrU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt6y1qLCJJ+Jj6p8NpwOLVaak12+8ILnUd8nFxzk1D GKVt3d0lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIX9jEyNOZMUjdp4zwi/SrB 7t18/rl1FdcNdGVfrq/eGaBba9I2hZGhe0d0bWmpxNXNwYqLrb5s/mjOqXL7W+uTi94T1zVrlJg wAgA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc4b5fb3f63b8b508334edd883765bf81c9ab1d2045f414a74c8712c6cc705e9@mail.kernel.org>
 
-Verifier diagnostics collect per-path history and render richer reports for
-selected verifier failures. That work is useful only when the caller requests
-normal verifier log output.
+On Fri, Jun 05, 2026 at 06:30:16AM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/include/linux/interrupt_rc.h b/include/linux/interrupt_rc.h
+> > new file mode 100644
+> > index 000000000000..dd4444c61330
+> > --- /dev/null
+> > +++ b/include/linux/interrupt_rc.h
+> > @@ -0,0 +1,67 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * include/linux/interrupt_rc.h - refcounted local processor interrupt
+> > + * management.
+> > + *
+> > + * Since the implementation of this API currently depends on
+> > + * local_irq_save()/local_irq_restore(), we split this into it's own header to
+> > + * make it easier to include without hitting circular header dependencies.
+> > + */
+> > +
+> > +#ifndef __LINUX_INTERRUPT_RC_H
+> > +#define __LINUX_INTERRUPT_RC_H
+> > +
+> > +#include <linux/irqflags.h>
+> > +#include <asm/processor.h>
+> > +#ifdef CONFIG_SMP
+> > +#include <asm/smp.h>
+> > +#endif
+> > +
+> > +/* Per-cpu interrupt disabling state for local_interrupt_{disable,enable}() */
+> > +struct interrupt_disable_state {
+> > +	unsigned long flags;
+> > +};
+> > +
+> > +DECLARE_PER_CPU(struct interrupt_disable_state, local_interrupt_disable_state);
+> > +
+> > +static inline void local_interrupt_disable(void)
+> > +{
+> > +	unsigned long flags;
+> > +	int new_count;
+> > +
+> > +	WARN_ON_ONCE(in_nmi());
+> > +
+> > +	new_count = hardirq_disable_enter();
+> > +
+> > +	/* Interrupts can happen here, but it's OK, see __irq_exit_rcu(). */
+> > +
+> > +	if ((new_count & HARDIRQ_DISABLE_MASK) == HARDIRQ_DISABLE_OFFSET) {
+> > +		local_irq_save(flags);
+> > +		raw_cpu_write(local_interrupt_disable_state.flags, flags);
+> > +	}
+> > +}
+> > +
+> > +static inline void local_interrupt_enable(void)
+> > +{
+> > +	int new_count;
+> > +
+> > +	new_count = hardirq_disable_exit();
+> > +
+> > +	if ((new_count & HARDIRQ_DISABLE_MASK) == 0) {
+> > +		unsigned long flags;
+> > +
+> > +		flags = raw_cpu_read(local_interrupt_disable_state.flags);
+> > +		local_irq_restore(flags);
+> 
+> Could this lead to indefinite softirq starvation? When __irq_exit_rcu()
 
-Do not enable diagnostic collection or report rendering for BPF_LOG_STATS-only
-loads. Stats-only loads still need the verifier's summary counters, but not
-the extra path history used by diagnostic reports.
+Yes and no. There is no behavioral difference between here and
+local_irq_enable(), neither will trigger softirqs.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/diagnostics.c     | 33 +++++++++++++++++++++++++++++++--
- kernel/bpf/verifier.c        |  1 +
- 3 files changed, 33 insertions(+), 2 deletions(-)
+> skips invoke_softirq() due to hardirq_disable_count() > 0, any scheduled
+> softirqs (timers, RCU callbacks, networking) remain pending. When the
+> outermost critical section ends and local_interrupt_enable() restores
+> hardware interrupts, it doesn't check local_softirq_pending() to flush
+> these deferred softirqs.
+> 
+> Will these pending softirqs stall until another unrelated hardware
+> interrupt fires? In low-activity periods, this could potentially cause
+> RCU stalls or network hangs. This concern was raised by the sashiko bot in
+> both v2 and v3 but remains unaddressed:
+> 
+> https://lore.kernel.org/all/20260526175409.7CFCC1F000E9@smtp.kernel.org/
+> 
+> > +		/*
+> > +		 * TODO: re-read preempt count can be avoided, but it needs
+> > +		 * should_resched() taking another parameter as the current
+> > +		 * preempt count
+> > +		 */
+> > +#ifdef CONFIG_PREEMPTION
+> > +		if (should_resched(0))
+> > +			__preempt_schedule();
+> 
+> Peter Zijlstra suggested in v2 replacing should_resched(0) with a direct
+> check of new_count for preemption. His suggestion was "can't you simply
+> write: if (!new_count) __preempt_schedule();" The author acknowledged this
+> in discussion but hasn't implemented it in v3:
+> 
+> https://lore.kernel.org/all/20260528104322.GF343181@noisy.programming.kicks-ass.net/
+> 
+> Is there a reason to keep the more complex should_resched(0) approach, or
+> would the direct check be more appropriate here?
+> 
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 55921b8a5d5c..ca9a8620955a 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -526,6 +526,7 @@ struct bpf_verifier_state {
- 	struct bpf_diag_history_event *diag_history;
- 	u32 diag_history_cnt;
- 	u32 diag_history_omitted;
-+	bool diag_enabled;
- 	u32 dfs_depth;
- 	u32 callback_unroll_depth;
- 	u32 may_goto_depth;
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 62cfb0fc3ed0..8587279ccaa7 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -87,6 +87,11 @@ static void bpf_diag_print_wrapped_text(struct bpf_verifier_env *env,
- 					BPF_DIAG_TEXT_INDENT, text);
- }
- 
-+static bool bpf_diag_enabled(const struct bpf_verifier_env *env)
-+{
-+	return env && (env->log.level & BPF_LOG_LEVEL);
-+}
-+
- void bpf_diag_format_btf_type(char *buf, size_t size,
- 			      const struct btf_type *type,
- 			      const char *type_name)
-@@ -120,7 +125,7 @@ static void bpf_diag_vprint_indented(struct bpf_verifier_env *env,
- {
- 	char buf[1024];
- 
--	if (!bpf_verifier_log_needed(&env->log))
-+	if (!bpf_diag_enabled(env))
- 		return;
- 
- 	vscnprintf(buf, sizeof(buf), fmt, args);
-@@ -473,6 +478,9 @@ void bpf_diag_report_header(struct bpf_verifier_env *env,
- {
- 	char problem_buf[BPF_DIAG_MSG_LEN];
- 
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	strscpy(problem_buf, problem ?: "", sizeof(problem_buf));
- 	if (problem_buf[0] >= 'a' && problem_buf[0] <= 'z')
- 		problem_buf[0] += 'A' - 'a';
-@@ -485,6 +493,9 @@ void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
- {
- 	va_list args;
- 
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	bpf_diag_report_section(env, "Reason");
- 
- 	va_start(args, fmt);
-@@ -494,6 +505,9 @@ void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
- 
- void bpf_diag_report_section(struct bpf_verifier_env *env, const char *title)
- {
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	verbose(env, "\n%s:\n", title);
- }
- 
-@@ -501,6 +515,9 @@ void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, .
- {
- 	va_list args;
- 
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	bpf_diag_report_section(env, "Suggestion");
- 
- 	va_start(args, fmt);
-@@ -607,6 +624,9 @@ void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
- 	int insn_width, i;
- 	va_list args;
- 
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	va_start(args, fmt);
- 	vscnprintf(msg, sizeof(msg), fmt, args);
- 	va_end(args);
-@@ -1228,6 +1248,12 @@ void bpf_diag_copy_history(struct bpf_verifier_state *dst,
- {
- 	struct bpf_diag_history_event *history;
- 
-+	dst->diag_enabled = src->diag_enabled;
-+	if (!src->diag_enabled) {
-+		bpf_diag_clear_history(dst);
-+		return;
-+	}
-+
- 	if (!src->diag_history_cnt) {
- 		bpf_diag_clear_history(dst);
- 		dst->diag_history_omitted = src->diag_history_omitted;
-@@ -1272,7 +1298,7 @@ static void bpf_diag_append_history(struct bpf_verifier_state *state,
- {
- 	struct bpf_diag_history_event *history;
- 
--	if (!state)
-+	if (!state || !state->diag_enabled)
- 		return;
- 
- 	if (state->diag_history_cnt < BPF_DIAG_HISTORY_MAX) {
-@@ -1855,6 +1881,9 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
- 	int start_idx;
- 	u32 i;
- 
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
- 	bpf_diag_report_section(env, "Causal path");
- 
- 	if (!state)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3446ee9acaa1..359c4f4c0d42 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19238,6 +19238,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
- 	state->speculative = false;
- 	state->branches = 1;
- 	state->in_sleepable = env->prog->sleepable;
-+	state->diag_enabled = env->log.level & BPF_LOG_LEVEL;
- 	state->frame[0] = kzalloc_obj(struct bpf_func_state, GFP_KERNEL_ACCOUNT);
- 	if (!state->frame[0]) {
- 		kfree(state);
--- 
-2.53.0
+I have an optimization/cleanup patch in patch #13.
+
+Regards,
+Boqun
+
+> > +#endif
+> > +	}
+> > +}
+> > +
+> > +#endif /* !__LINUX_INTERRUPT_RC_H */
+> 
+> [ ... ]
+> 
+> > diff --git a/kernel/softirq.c b/kernel/softirq.c
+> > index 10af5ed859e7..d1ab1799794c 100644
+> > --- a/kernel/softirq.c
+> > +++ b/kernel/softirq.c
+> > @@ -88,6 +88,9 @@ EXPORT_PER_CPU_SYMBOL_GPL(hardirqs_enabled);
+> >  EXPORT_PER_CPU_SYMBOL_GPL(hardirq_context);
+> >  #endif
+> >
+> > +DEFINE_PER_CPU(struct interrupt_disable_state, local_interrupt_disable_state);
+> > +EXPORT_PER_CPU_SYMBOL_GPL(local_interrupt_disable_state);
+> > +
+> >  DEFINE_PER_CPU(unsigned int, nmi_nesting);
+> >
+> >  /*
+> > @@ -728,7 +731,16 @@ static inline void __irq_exit_rcu(void)
+> >  #endif
+> >  	account_hardirq_exit(current);
+> >  	preempt_count_sub(HARDIRQ_OFFSET);
+> > -	if (!in_interrupt() && local_softirq_pending()) {
+> > +	/*
+> > +	 * Interrupts may happen between hardirq_disable_enter() and
+> > +	 * local_irq_save() in local_interrupt_disable(), if irq_exit() invokes
+> > +	 * softirq here, we may have a softirq handler calling
+> > +	 * local_interrupt_disable() but it won't disable the irq because
+> > +	 * hardirq disabling count is already 1, hence we need to prevent
+> > +	 * invoking softirq when a local_interrupt_disable() is ongoing.
+> > +	 */
+> > +	if (!in_interrupt() && !hardirq_disable_count() &&
+> > +	    local_softirq_pending()) {
+> >  		/*
+> >  		 * If we left hrtimers unarmed, make sure to arm them now,
+> >  		 * before enabling interrupts to run SoftIRQ.
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26998319662
 
