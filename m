@@ -1,96 +1,105 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981D33321A1
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 18:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619703F9F23
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 18:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780683385; cv=none; b=PNoamvOgzrFLgjI0Hp5wSU8uDurBBXZN8p4GIGzF+TAaTws+fr9A4K7prLUoMxp1SMV9YExbHAw38NKwWBN+utWzoO2w5AdrCAnRZpaXDi1IIRnvJaG65zQPQrUVXeG8vmBkkIOAX27qSBIj+YNaOTUm/MeDvEHPRhF1MbyQDgs=
+	t=1780684554; cv=none; b=DjN9mWrv9vVX8pt0E4whdfwR/hCsHZ0pm361dVRyOUUBX5TKymlOMv/86wKX/NNEa6z3ik5AKFgI6RIHIgM9tNVXEfE1yR9z9mGOGVxS7BYEnHejPV9xB8hXeKXJmbKo+oJfBaJogkbYPJs6pOphUKVIlnkL9FO9VI3vlsBmfOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780683385; c=relaxed/simple;
-	bh=Nv3H5cCqNb9tntigeTYUiPA8EGy+gWRVf43Zlw0FNoM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fIhwdlnFw6sIgoiCeV01vdnxiZ2R++cSF3xnKjoc9/Jw35RALC3I1avTVB58sG+t8NRsF1OY9++pOoyufuKKM/tYxEFQ5xC9iL51B+2Yb+uY3gYa/XNizzF38dA7Gr2AFdyiqnSFDd4iuBEGN/MSr2wItcJ9FeP+eat7Kyn7iCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YrxqKDC8; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780684554; c=relaxed/simple;
+	bh=wnRAvTrjaOxj81+/1ME5NxHLKUPB4bRXifWPbuOO70I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zg/c0EJqxY1fgB/paYFSasf8b5pjlq8OJyY8u4NX1tl3OusKqcl9mLbmCin3unRCxCzoRl6AV5Kc48jiyGBFEPq/yK9vT2MFmcgjY/+s3oi/ICIsBBI9kBgbmXbKILiaSUKDB4TyIKmAIuK7k3pb67gECrAewHqSxR7L1bFPfiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnGh0KpA; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YrxqKDC8"
-Message-ID: <feeb60d5-8158-4d80-84cb-ed28c292a2fd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780683372;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PQVF+0DmAQAv7/ZYF2g7H3iWfGxmI6ESUHSW2GlDPB8=;
-	b=YrxqKDC8IwalN0pn7bzFNRG0Ao7Hh1/zZsnA+HLOsbNip4CiUG1JwCdcslAGLU14nBUlti
-	Z11JCOWK24CGnWyAu+H6ErqyKypnyguvY7HiCy46R1G0rHdk8EMRHcBcrJ5gU0bolIb+kq
-	G8lPsYfivmt2TtcC1kEESHMkPD32nfk=
-Date: Fri, 5 Jun 2026 11:15:54 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnGh0KpA"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c8589498839so1050967a12.2
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 11:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780684553; x=1781289353; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6NRQH/3Ow1XDrj5HT1DoF/ebJqBD1PjIhN5lXfVsE0s=;
+        b=WnGh0KpAMUe3f/NV+0xsJeNbhfWPwuQ2m9tw2xPGx33i8kgzvgE3NvWlo2AnfN8CsE
+         K+Jwm5fHFiKrXT4ec/kpntzHzQUJ8giSx+uFjj54kgstszjVpRmbgBjTpLTA+70H0MRq
+         5i6rltUTjNk+l/dg/5H631Fe1XIzwmjLPKchRKBzU1CXmFd0Ok+hPyvN/mXL19HtqsLz
+         gz70T7PkZZSsy/LIF8wDQckFJoZF4dUNzFzqmGpdXK9Y+cdH3sjgC3KXuP/4LCqf6RY1
+         JG+i4uLuk3mFjavCyl8OSG8PGcNNF3kZJvmQDxVo3jsxpSPle1I4b/7hs4ZuDoQjo8Es
+         y10Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780684553; x=1781289353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6NRQH/3Ow1XDrj5HT1DoF/ebJqBD1PjIhN5lXfVsE0s=;
+        b=F33doETq0ZB1l58JLa50MakhPcGXRdmky4QsDcQpa3RuFpcYJs4FHFPGPaReFX5lYq
+         ZPH+ZAVVbnicQmQQ8rHtdbnNJTzmItadBIzvBW2kGAJu7AYQApK+uOXvUAdPyyIXGqDb
+         e8zRvspJrX4wLXqgybQsD88q7ezDL/2cZkbRFRA/syBY/Dnrs6GZeZXngwdsHXee3alq
+         OVsMRdS+PfKF+Uj/xIyG/yB4JvQVudAW7lSE4+jwD+IM4f2QCURJdHWdmjb1xoX5kvOk
+         dbdzH50eLHWnRMdzSCQZuseDFuhtC+56+g27Kbj71cJAaKbBQjex2q0grSrtVPElkSd/
+         JMrA==
+X-Gm-Message-State: AOJu0YyYECS6e+a3v7RtigYJfR96XyAGexvfzTX1rp9zCFyN9eXzA6sM
+	DU7b+Tl8XNrYROx2BAOb+ha3V/7btw74unANVAMpEStJjneGk/UZdYYcJQ4jXA==
+X-Gm-Gg: Acq92OF0+6THbWVKpqPQXs5iJr8ff2BC/R6dOeNpbpfTrJq+qDoUBgVtYETKIvP+kDh
+	K8EH9p2KgvOk65FoftGlLWkO0AHdrL8bhg7pih0IS6QR2eAseIPd75svnOiCGl/JhhDJjqI942U
+	PwcInAq8iQYi2scFdeiY8x56PQGy9xCCVwX7gyhycqdKav13Zjrz1jBBqDpbY5u6XvZACXsP7H/
+	5xbxRJyScbOX/hQLKcwarOY5UQdEfGRsM0VqdlqzEd/rTSjWJhQ824/p7d/az1b/59du7vxXNQL
+	ery2C/GD7Lz4pEqeDT/FWf3qnJkYPmYwIijTbfD/MQr+W2mnPdFQtvSqT8r3LwOb78SLf7ggd3q
+	M5WLPkKAXW9YI9pCeSuB6RTP42a3IIUX9/J0hEL4ByBnRYCxKz8FdHjS9L3/EUeeBmQAVUGWszQ
+	jhWDEp1/dD+whUwC5QsLJ8OnHB
+X-Received: by 2002:a05:6a21:4cc3:b0:3b3:be1f:c89b with SMTP id adf61e73a8af0-3b4ccf8e5ecmr6270997637.22.1780684552651;
+        Fri, 05 Jun 2026 11:35:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:45::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0a624fsm8496978a12.18.2026.06.05.11.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 11:35:51 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/5] Object relationship tracking refactor followup
+Date: Fri,  5 Jun 2026 11:35:46 -0700
+Message-ID: <20260605183551.969144-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpf: reject sleepable BPF_LSM_CGROUP programs at
- load time
-Content-Language: en-GB
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org
-References: <20260605145707.608579-1-dwindsor@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260605145707.608579-1-dwindsor@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
+The main patchset refactoring object relationship tracking in the
+verifier has landed and this is a followup that addresses the remaining
+feedback in v6 [0].
 
-On 6/5/26 7:57 AM, David Windsor wrote:
-> The cgroup shim runs under rcu_read_lock_dont_migrate(), so we should
-> not attach any sleepable BPF programs there. Add support to the verifier
-> to explicitly reject attempts to load sleepable BPF programs destined
-> for LSM cgroup attachment.
->
-> Without this, we get the following splat from a BPF_LSM_CGROUP
-> program marked BPF_F_SLEEPABLE attached to file_open when it calls
-> bpf_get_dentry_xattr():
->
->    BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1567
->    in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 34317, name: load
->    preempt_count: 0, expected: 0
->    RCU nest depth: 2, expected: 0
->    Call Trace:
->     down_read+0x76/0x480
->     ext4_xattr_get+0x11f/0x700
->     __vfs_getxattr+0xf0/0x150
->     bpf_get_dentry_xattr+0xbb/0xf0
->     bpf_prog_e76a298dac9218c6_test_open+0x6a/0x85
->     __cgroup_bpf_run_lsm_current+0x326/0x840
->     bpf_trampoline_6442534646+0x62/0x14d
->     security_file_open+0x34/0x60
->     do_dentry_open+0x340/0x1260
->     vfs_open+0x7a/0x440
->     path_openat+0x1bac/0x30a0
->
-> libbpf provides a .s named section variant for every sleepable
-> program type except lsm_cgroup, reflecting that per-cgroup LSM programs
-> are intended to only run in a non-sleepable context.
->
-> The above splat was obtained by bypassing libbpf by using bpf(2)
-> directly.
->
-> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
+[0]
+https://lore.kernel.org/bpf/20260529014936.2811085-1-ameryhung@gmail.com/
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Amery Hung (5):
+  bpf: Fix dead error check on acquire_reference() in check_kfunc_call
+  bpf: Check acquire_reference() error for "__ref" struct_ops arguments
+  bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
+  bpf: Remove WARN_ON_ONCE in check_ids()
+  selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
+
+ kernel/bpf/states.c                               | 11 +++++++++--
+ kernel/bpf/verifier.c                             | 15 +++++++++++----
+ .../selftests/bpf/progs/file_reader_fail.c        |  8 ++++----
+ 3 files changed, 24 insertions(+), 10 deletions(-)
+
+-- 
+2.53.0-Meta
 
