@@ -1,127 +1,156 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0895A2BE03C
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 17:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261C43955C2
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 17:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780678818; cv=none; b=DSITk/3Dmm85BS/P/rW46VZ8Kj3OIJcQUOYrTO0zo0xXeDBVITDNhhPkhiQbm7EWdH6mUqmEXui6VfRJcGuc1y/hWWBEXEVfizlZljq/6cf1MPSt5AzYvreLG7aSh/C3wCIFjiWTLJx+cxUg1vs3Jw57edGi4DuW8wZDG4taD/E=
+	t=1780679556; cv=none; b=uSBj9jXLf91PmNV9EChYH3YuX0or812zXmARj8hmCKwhQKUK3cMD99QwRQ5K01F5rgeq1GHeiwe3RStwP/deHR1lEfXxWkVR/Mjd9stxd1ocrxQgMPBFistUcnBmqavBssGC67ZQkLZAs6DJNmoPB1aVFTY+rduxAh1NAG1DGtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780678818; c=relaxed/simple;
-	bh=0Y9DnF8DCVs+ioD7NcPTPeoVg18OUuK/6dYly9D/WG0=;
+	s=arc-20240116; t=1780679556; c=relaxed/simple;
+	bh=sCDEb1avU1aD3CbBYvmRE4P68YtLhqktPeNvIuGWuf0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZMHCb1r+oS850VeWTvj9+Q6tBas7flwcnJdQQyvWqvWMd8X1mlskysP4bKfdu5cYnauk8h3comtro374gyDAudxQIMNqOPaR8Z6dfkS8DwqspuBEhmGdm2Qs6pf0Lkg6FSrBWXOEpBRxK8cJiHD97ieKN5SfbRNqJ/nY51TuviM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l/4NuLNw; arc=none smtp.client-ip=91.218.175.188
+	 In-Reply-To:Content-Type; b=MD1tBe6NnLUpCVCgwiByCX4ZoD9Nf8ovfUE8INf2baGbKlXSREnm1i+ZCdnH7PqMRtcE498ESrb1jJhTciGe2yIe7JcqEhVwONsRe0uk83SwcFiVxq7bTyxJXDeIXr6TMtnM/DDP2qRQQHCQSP29Su2gufaUScHP3zrs0v8Pmq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dCtByikG; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l/4NuLNw"
-Message-ID: <e3e1f8dd-e0f4-4f9c-85cd-22c58571eca7@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dCtByikG"
+Message-ID: <a45e6e99-fcb8-4a7b-8012-8c7e88ea7598@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780678813;
+	t=1780679550;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4+F6dCr7Ekcj7JdRJunNsiqbCtUyFgwJwQx1YoPJlqU=;
-	b=l/4NuLNwt3gUNWHC7gQ2meNcKVu6H1AIA4TjaYHxNTH216dZp+KcsmLV4HTLZXAYpU9ZeB
-	VpBwIHzIMYX8aCZsaaG0C6pPt3hORH1xg/MXIsI8Jb7n08OCv7prdLLiSX/flKKkSW0Xiy
-	sV3+24/3uR2x8fi8SHKFGsGf8/GosOQ=
-Date: Fri, 5 Jun 2026 09:59:49 -0700
+	bh=fo8CAIvSkQ5YQSXF3PSHKRep1uY8aHbN5UsGrEEgs5I=;
+	b=dCtByikGv/+S4Y5FuWiFX7lWwnnctUREovpwFT9ossplx/qANYStE2CRm5XJMbfI5GcLZE
+	MLK2q1p2v7w3LXH6YYrcekABZq+VkZbmzYdjx6jOWkCxMWMwwQRl1juFedszxR+KK5b3lT
+	p/Kow6ls0Wxyw9EdqL0/1VoKOXwOoo0=
+Date: Fri, 5 Jun 2026 10:12:14 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf: fix NULL pointer dereference in
- bpf_task_from_vpid()
-Content-Language: en-GB
-To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Juntong Deng <juntong.deng@outlook.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
+Subject: Re: BPF CI for Stable
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>
+References: <aiJ2X7ut4lky47aV@u94a>
+Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aiJ2X7ut4lky47aV@u94a>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
+On 6/5/26 12:45 AM, Shung-Hsi Yu wrote:
+> Hi,
+> 
+> Following up on the LSF/MM/BPF 2026 session "BPF in Stable Kernels, an
+> Update"[1]. Since the event, 6.1 coverage has also been added[2] (thanks
+> to Paul). With a collaborator on my side, it seem like a good time to
+> ask:
+> 
+>   Is it possible to get BPF CI for stable in its own repository under a
+>   GitHub organization (e.g. libbpf/stable-bpf-ci)?
+
+Hi Shung-Hsi,
+
+I think a better home for the BPF CI targeting stable kernels is
+kernel-patches org [1] for a couple of reasons. First, repos in the
+kernel-patches org have access to hardware - generic runners provided
+by Meta and s390x runners provided by IBM. Second reason is that this
+org hosts source of truth repos for most of BPF CI code, even though a
+big chunk of it lives in libbpf/ci.
+
+Let me know if this makes sense, and I'll create a new repository and
+grant you write permissions there.
+
+> 
+> Currently it lives as a personal repo that is fork of libbpf/libbpf[3].
+> As someone (I think it was Andrii) pointed out during the session, the
+> vast files currently in my fork are not needed at all. The GitHub Action
+> workflow only needs the .github/, plus the supplement files under ci/.
+> 
+> Technically BPF CI for stable can also simply be merged back to
+> libbpf/libbpf
+
+No, that's a bad idea.
+
+>, but that felt less ideal because:
+> - kbuilder-debian container image currently doesn't work when testing
+>   stable kernels (I haven't look at reason of failure, might not be hard
+>   to fix)
+
+Technically, it's not a hard requirement to use the container.
+It makes the build jobs a little faster and a little more reliable, but
+it was crafted for bpf-next testing, which may not be ideal for stable.
+If necessary you could develop a separate "kbuilder-stable" container, but
+it's up to you to decide whether it's needed.
+
+> - actions that tests stable kernel will be mixed with actions targeting
+>   libbpf itself 
+> - BPF CI for stable will have to contain version-specific tweaks (e.g.
+>   [4])
+
+This is fine and expected. It is of course great to be able to reuse code,
+but practically speaking, I think in this case it may be more work to
+keep the common parts compatible with both stable and bpf-next workflows,
+than maintaining two diverged CI trees.
+
+The rule of thumb should be this: if you can use a libbpf/ci action, do
+it. If there is something very specific to the workflow, keep it in place.
+Don't be shy copy-pasting yaml fragments that work for you, it's fine.
+
+> 
+> None of the above are fatal flaws that prevent libbf/libbpf to host
+> files that run BPF selftests on stable kernel, so I'd say having a
+> standalone repository is more of a personal preference.
+
+I agree that a standalone repository is the way to go.
+
+> 
+> OTOH we can also try kernel-patches/bpf-like approach and have a
+> kernel-patches/stable, providing proper, fully-fledged BPF CI for stable
+> that tests incoming patchset to stable (not sure if Daniel was asking
+> about this during the session). But I find this to be much more work.
+
+We don't have to do this work right away (or ever).
+
+First let's set up the kernel-patches/stable (or whatever the name) with
+the implementation you already have.
+
+We can enhance and improve it when there are cycles and willingness to do
+so in the future, 
+
+> The current approach of applying queued patches from stable-queue[5],
+> while comes with quite some delay between the moment patch is proposed
+> to stable mailing vs the moment said patch gets tested, seem like a
+> workable compromise.
+
+This can be automated by the way.
+Check out linux-next sync on current BPF CI, it's straightforward [2].
+There is a job periodically syncing a branch, and the CI pipeline is
+triggered on push.
+
+[1] https://github.com/kernel-patches/
+[2] https://github.com/kernel-patches/vmtest/blob/master/.github/workflows/linux-next-sync.yml
 
 
-On 6/3/26 1:42 PM, Sechang Lim wrote:
-> bpf_task_from_vpid() looks up a task in the pid namespace of the
-> current task, via find_task_by_vpid():
->
->    find_task_by_vpid(vpid)
->      find_task_by_pid_ns(vpid, task_active_pid_ns(current))
->        find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
->
-> cgroup_skb programs run in softirq, which may interrupt a task that is
-> itself in do_exit(). Once that task has passed
-> exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
-> cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
-> dereferences &NULL->idr:
->
->    BUG: kernel NULL pointer dereference, address: 0000000000000050
->    RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
->    Call Trace:
->     <IRQ>
->     find_pid_ns kernel/pid.c:370 [inline]
->     find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
->     bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
->     bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
->     __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
->     sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
->     tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
->     </IRQ>
->     <TASK>
->     do_exit+0xa63/0x1270 kernel/exit.c:1010
->     get_signal+0x141c/0x1530 kernel/signal.c:3037
->
-> Bail out when current has no pid namespace.
->
-> Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
->   kernel/bpf/helpers.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index b5314c9fed3c..4646a915bf98 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2913,6 +2913,10 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(s32 vpid)
->   	struct task_struct *p;
->   
->   	rcu_read_lock();
-> +	if (!task_active_pid_ns(current)) {
-> +		rcu_read_unlock();
-> +		return NULL;
-> +	}
-
-In softirq context, I think we should return NULL for this kfunc.
-Your above fix solves crash problem. But even not crash, the
-below task 'p' may not be user expected since the 'current' (and
-its namespace) is random.
-
-Maybe we can do:
-
-+	if (in_interrupt())
-+		return NULL;
-+
-	rcu_read_lock();
-	...
-
-In bpf selftest task_kfunc_success.c, all programs are 'syscall'
-programs which garantees process context.
-
->   	p = find_task_by_vpid(vpid);
->   	if (p)
->   		p = bpf_task_acquire(p);
+> 
+> 
+> Thanks,
+> Shung-Hsi
+> 
+> 1: https://speakerdeck.com/shunghsiyu/bpf-in-stable-kernels-an-update
+> 2: https://github.com/shunghsiyu/libbpf/pull/5
+> 3: https://github.com/shunghsiyu/libbpf/
+> 4: https://github.com/shunghsiyu/libbpf/tree/master/ci/diffs/6.1
+> 5: https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/
 
