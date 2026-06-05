@@ -1,198 +1,165 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AA44921A0
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 08:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D147345BD5C
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 08:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780646819; cv=none; b=R5GuK6KVjEwScmeLGDmcZBlLq+DTouDLyBdS5Qd6WPjGPUpcWRbVpHXSZO3+QMtII0iTeR6oiYy+H/5Lmk3brUmmjLHMNR6jHZwiNw0tzoPfPCaK4k/yAfCFtYOChFeEHNx3YTFCDF4is4VUWV3SKebRjjbbnBWtiWHolMQiYeo=
+	t=1780649296; cv=none; b=NV17cXMn7KKEjbPYqz3L55vny2zLliTrlq0ep46yJPLw0So6DX9Z8VZs+wOqVe5K7EsDhP7p93oy1JBOHA4paF3YZ9g7Ous5Yje9sd+WUEvjYTfLga0vDaxO59A/94ret76aTz5ldedda3Y8zutaBPy8Z2EVefSltCchhpfthD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780646819; c=relaxed/simple;
-	bh=pFZR+8RvDEIv6tQTT7ySou4uiwJo7wmVoJOcfhhm2c8=;
+	s=arc-20240116; t=1780649296; c=relaxed/simple;
+	bh=KhHss1kt5SFpx8DD7NcvWnQU9TQ/ecDf+CNCbjvNQn4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NaU45saL+4IyoqX9/ec34PVVcvr6TAq37iQCq3eJLPP4TDfXq8jg0/r3MXHOAJloRdfds9spb2h1viPA0YlqFrL0a+6cJ1p462116ME99FNg2e//QUl12K+CYxMx4UotNd05iA+AThDMYiR1AtrdLsS9J86EJH0OURdCe3fWFqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfGAd4HS; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kUAy7yLdRBjCokENpnq4r/gVMZMyk8DvCOW28CQdUCCnKrHeKN2Zdcu/q7KRFAEc8+q42uU+QDM6+IcxjX7uZfFqtX/61CKpbQVzYpFFer1oxEYVYnF8e0mtBbtzOOU+lTYdAOR9yChJK4Rs6gIhav1M7CPoIq0eMimf82tPjEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/vdbs49; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfGAd4HS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCCC41F00893;
-	Fri,  5 Jun 2026 08:06:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/vdbs49"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729271F00899;
+	Fri,  5 Jun 2026 08:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780646818;
-	bh=gyLzvMgclJq9B4NioerT2cmfuv0+ZJzOkhJLn2F5DtQ=;
+	s=k20260515; t=1780649294;
+	bh=rxzjEIjg/WNw45Vbv3pNKDkeWR9jS/xOhICOyyJMM98=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UfGAd4HSYCSZt0cM3QX+XIGBKgzFwTq8IISlBbqgQTDBebdnUI9wfWQGlJOgg/yWn
-	 JcZh2Qu1dgZ+juZZuYsqhK5n/n9DXG4pwuBF+JQU6RmzoZ9a1jyPADtq3ir7lViD4z
-	 zddu9LJYUzZd/R0/S2b4krN6ednHkwNDh7MUZNn2t71YxyjbpyamnHcX+LhjWS9+Es
-	 XhEkrxrcq+MUsn5PW/bayFjZBTBL2wchZh83GL++AzcJzQNLwUfxTvJqiKXAQ7uhei
-	 ApOLhYWMS5sWzNb6AEu7Gsi9wKE6Ptp+5kXwizIlvOg+O8DMcPtiy0N0Ex1ZGZaIdQ
-	 KXiGwC8oQATtQ==
+	b=l/vdbs49W+a7OuDezYPdyql6YoWhA0bqjgpLfVnZwdadRjjIwdgThNuIfm11Pg3SG
+	 VjRSyJDZMaVEarDMsOhYfAOA5q0RxVyln/Zv/SWCQGdOsPOthcSG/iwDDIwEnM5QcG
+	 B/PDBR6TKc7wXz629hwHzkDuHaXzj5TtexxUnJKnoSBjtxlDS+/jF28fl5OfRr7yKN
+	 NJPYDHSSnRgmsP/u9bsfJsUkJy/aSnaGv75BaJLoOkY/gxoAUSfmJTxcuom8Tn8jyw
+	 JJWsS3skIXcaZm9vllvpDl0zsEQ8PRsYj4TdLdw3l9/8HbcQb7m/iNdFjBt7kxVab1
+	 0qiiNyr30zZCg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] net: stmmac: prevent kernel panic during XDP program
- and XSK pool transitions
+Subject: Re: [PATCH bpf-next v1 03/17] bpf: Add source and instruction
+ diagnostic context
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Carlos Fangmeier" <carlos.fangmeier@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605-main-v1-1-aed15b1cf1af@gmail.com>
-References: <20260605-main-v1-1-aed15b1cf1af@gmail.com>
+In-Reply-To: <20260605063412.974640-4-memxor@gmail.com>
+References: <20260605063412.974640-4-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 08:06:57 +0000
-Message-Id: <20260605080657.DCCC41F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 08:48:14 +0000
+Message-Id: <20260605084814.729271F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-New issues:
-- [High] Unconditional `netif_tx_wake_all_queues()` on error paths forces e=
-arly transmit, leading to NULL pointer dereferences.
-- [High] Global TX queue operations during single-queue XSK pool reconfigur=
-ation destroy flow control state for unaffected queues.
-- [Medium] The added synchronization logic in `stmmac_xdp_set_prog()` is in=
-effective, redundant, and based on a flawed premise.
-
-Pre-existing issues:
-- [High] Missing error handling for `stmmac_enable_tx_queue` and `stmmac_en=
-able_rx_queue` allocations leads to crashes during XSK pool setup.
+- [High] Missing array bounds check in `bpf_diag_func_name()` when resolvin=
+g hidden subprograms.
+- [Medium] Tight loop coupling silently drops BPF instructions when the dia=
+gnostic is triggered near the top of a file.
+- [Low] Potential loss of the visual alignment caret (`^-- `) due to `scnpr=
+intf` truncation if the source code is heavily indented.
 --
 
-commit 5f08fcd5650e1c25484ffcb83c996e73d9df4bd4
-Author: Carlos Fangmeier <carlos.fangmeier@gmail.com>
-Subject: net: stmmac: prevent kernel panic during XDP program and XSK pool =
-transitions
+commit e84e87b559a751018ace3ee43b2b61b8014f1c4e
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-This commit attempts to prevent races with pending TX work during XDP and
-XSK pool reconfigurations by wrapping the operations with netif_tx_disable()
-and netif_tx_wake_all_queues().
+bpf: Add source and instruction diagnostic context
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/n=
-et/ethernet/stmicro/stmmac/stmmac_xdp.c
-> index d7e4db7224b0c..a6611aee687fd 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> @@ -34,6 +34,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *p=
-riv,
->  	need_update =3D netif_running(priv->dev) && stmmac_xdp_is_enabled(priv);
-> =20
->  	if (need_update) {
-> +		netif_tx_disable(priv->dev);
->  		napi_disable(&ch->rx_napi);
->  		napi_disable(&ch->tx_napi);
->  		stmmac_disable_rx_queue(priv, queue);
-> @@ -46,6 +47,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *p=
-riv,
->  		stmmac_enable_rx_queue(priv, queue);
->  		stmmac_enable_tx_queue(priv, queue);
->  		napi_enable(&ch->rxtx_napi);
+This patch adds source line and nearby instruction annotations to the BPF
+verifier diagnostics. The renderer keeps source text in a fixed-width lane
+and prints instructions in a stable right-hand gutter.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does the lack of error retur=
-ns
-from stmmac_enable_tx_queue() and stmmac_enable_rx_queue() risk kernel pani=
-cs
-if descriptor allocations fail?
-
-Currently, if __alloc_dma_tx_desc_resources() fails inside
-stmmac_enable_tx_queue(), it prints an error and returns early without
-initializing the rings.
-
-Since the function returns void, stmmac_xdp_enable_pool() blindly proceeds
-to call napi_enable(), which could cause a crash when NAPI or the TX path
-dereferences uninitialized pointers.
-
-> +		netif_tx_wake_all_queues(priv->dev);
-
-[Severity: High]
-Does calling netif_tx_wake_all_queues() here unintentionally clear the flow
-control state for other unaffected transmit queues?
-
-Since stmmac_xdp_enable_pool() only reconfigures a single DMA queue, waking
-all queues will clear the off state for every queue on the netdev.
-
-If another queue was intentionally stopped due to actual backpressure becau=
-se
-its DMA ring was full during stmmac_xmit(), the network stack might
-erroneously resume transmitting on that full queue, leading to dropped pack=
-ets.
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index d9a103cf3a16e..652d4627c2b0f 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
 
 [ ... ]
 
-> @@ -72,6 +74,7 @@ static int stmmac_xdp_disable_pool(struct stmmac_priv *=
-priv, u16 queue)
->  	need_update =3D netif_running(priv->dev) && stmmac_xdp_is_enabled(priv);
-> =20
->  	if (need_update) {
-> +		netif_tx_disable(priv->dev);
->  		napi_disable(&ch->rxtx_napi);
->  		stmmac_disable_rx_queue(priv, queue);
->  		stmmac_disable_tx_queue(priv, queue);
-> @@ -87,6 +90,7 @@ static int stmmac_xdp_disable_pool(struct stmmac_priv *=
-priv, u16 queue)
->  		stmmac_enable_tx_queue(priv, queue);
->  		napi_enable(&ch->rx_napi);
->  		napi_enable(&ch->tx_napi);
-> +		netif_tx_wake_all_queues(priv->dev);
->  	}
+> +static const char *bpf_diag_func_name(struct bpf_verifier_env *env, u32 =
+insn_idx)
+> +{
+> +	const struct bpf_subprog_info *subprog;
+> +	const struct bpf_func_info *info;
+> +	const struct btf_type *type;
+> +	int subprogno;
+> +
+> +	if (!env->prog->aux->func_info || !env->prog->aux->btf)
+> +		return NULL;
+> +
+> +	subprog =3D bpf_find_containing_subprog(env, insn_idx);
+> +	if (!subprog)
+> +		return NULL;
+> +
+> +	subprogno =3D subprog - env->subprog_info;
+> +	info =3D &env->prog->aux->func_info[subprogno];
 
 [Severity: High]
-Does this also suffer from the same issue as stmmac_xdp_enable_pool(), where
-a global queue wake overrides the flow control state for all other unaffect=
-ed
-TX queues?
+If the verifier dynamically adds a hidden subprogram like the exception
+callback, env->subprog_cnt increments but env->prog->aux->func_info_cnt
+remains the same since it represents user-supplied BTF data. Can this code
+cause an out-of-bounds read on the func_info array if a diagnostic is
+triggered inside a hidden subprogram? Should this verify that subprogno is
+less than env->prog->aux->func_info_cnt before accessing the array?
+
+> +	type =3D btf_type_by_id(env->prog->aux->btf, info->type_id);
+> +	if (!type)
+> +		return NULL;
 
 [ ... ]
 
-> @@ -121,8 +125,10 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, st=
-ruct bpf_prog *prog,
->  		xdp_features_clear_redirect_target(dev);
-> =20
->  	need_update =3D !!priv->xdp_prog !=3D !!prog;
-> -	if (if_running && need_update)
-> +	if (if_running && need_update) {
-> +		netif_tx_disable(dev);
->  		stmmac_xdp_release(dev);
-> +	}
+> +static void bpf_diag_print_source_annotation(struct bpf_verifier_env *en=
+v,
+> +					     int line_width, int indent,
+> +					     const char *label,
+> +					     const char *msg)
+> +{
+> +	char first_prefix[128], next_prefix[128], text[BPF_DIAG_MSG_LEN];
+> +
+> +	scnprintf(first_prefix, sizeof(first_prefix), "  %*s | %*s^-- ",
+> +		  line_width + 4, "", indent, "");
+
+[Severity: Low]
+Since the indent comes from user-supplied BTF line info, what happens if the
+source code has heavy indentation (for example, over 110 spaces)? Will
+first_prefix truncate here and silently drop the "^-- " visual caret used
+for alignment?
+
+> +	scnprintf(next_prefix, sizeof(next_prefix), "  %*s | %*s    ",
+> +		  line_width + 4, "", indent, "");
+> +	scnprintf(text, sizeof(text), "%s: %s", label, msg);
+
+[ ... ]
+
+> +void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
+> +			    char marker, const char *fmt, ...)
+> +{
+
+[ ... ]
+
+> +	for (line_num =3D start_line; line_num <=3D end_line; line_num++) {
+> +		const char *line;
+> +		int row =3D line_num - src.line_num;
+> +
+> +		line =3D line_num =3D=3D src.line_num ?
+> +		       src.line :
+> +		       bpf_diag_find_source_line(env, src.file_name_off, line_num);
+> +
+> +		bpf_diag_print_source_insn_line(env,
+> +						line_num =3D=3D src.line_num ?
+> +						">>> " : "    ",
+> +						width, line_num, line,
+> +						&diag_insn[row + BPF_DIAG_INSN_CONTEXT],
 
 [Severity: Medium]
-Is this netif_tx_disable() redundant, and does it actually prevent the race
-during transitions?
+When a diagnostic is triggered near the top of a file, start_line is clamped
+to 1. Because the instruction layout is coupled to the source line loop
+using the line_num difference, doesn't this skip iterating over the earlier
+BPF instructions that were already correctly populated in the diag_insn
+buffer? Could this drop valid instructions from the verifier log output,
+making diagnostics harder to read?
 
-Looking at stmmac_xdp_release(), it already calls netif_tx_disable()
-internally.
-
-Furthermore, on the success path, stmmac_xdp_open() calls
-netif_tx_start_all_queues() before returning, meaning TX is re-enabled early
-regardless of the wrapper added here. It appears the perceived race window
-might remain identical.
-
->  	old_prog =3D xchg(&priv->xdp_prog, prog);
->  	if (old_prog)
-> @@ -131,8 +137,10 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, st=
-ruct bpf_prog *prog,
->  	/* Disable RX SPH for XDP operation */
->  	priv->sph_active =3D priv->sph_capable && !stmmac_xdp_is_enabled(priv);
-> =20
-> -	if (if_running && need_update)
-> +	if (if_running && need_update) {
->  		stmmac_xdp_open(dev);
-> +		netif_tx_wake_all_queues(dev);
+> +						insn_idx, insn_width);
+> +		if (line_num =3D=3D src.line_num)
+> +			bpf_diag_print_source_annotation(env, width, indent,
+> +							 label, msg);
 > +	}
-
-[Severity: High]
-Could this netif_tx_wake_all_queues() force an early transmit and lead to a
-panic if stmmac_xdp_open() fails?
-
-If stmmac_xdp_open() returns an error, for example due to DMA descriptor
-allocation failure, the DMA rings are not initialized.
-
-Because this code unconditionally wakes all TX queues regardless of success,
-the network stack will immediately resume transmission, and stmmac_xmit()
-may dereference freed or uninitialized rings.
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605-main-v1-1-=
-aed15b1cf1af@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605063412.9746=
+40-1-memxor@gmail.com?part=3D3
