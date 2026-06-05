@@ -1,93 +1,92 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90D63E9580
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 19:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C35478847
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 20:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780689584; cv=pass; b=dUCQm8UcNLEvXROhNJ7r+ty1uAXUOZDB3bhOzVa5FEDXI6EINvk4joHEMJF71icXivN2BYPH8ChAzdKL4hS3FX+hzzXjPkBhMCYkILmRand92pmRf7q+xaKf7hO7SRqXkqH8m1pVO6NO3GqfhiYQCzHAy1Q8indIRVKJswOasAU=
+	t=1780689648; cv=pass; b=kvKGtoazRzFB+gTOQW/7bjkuP7mQBtozyQVBkc9aIcgjxftfAhNBqQ4PjOh8erkIO7Gba6CRUJUficMXE7NWJiK/mlRF3yeAtpfZYzmP0Rl7rogYkph+uVDpoc2j9U4bmZ7EOiIckfajhii9mKXlrSTksYnT4PFX8mcRGITZY4M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780689584; c=relaxed/simple;
-	bh=1bbslR6O7pAnfgONfzpWzoKVocFLZxHaQJqgfgdo41c=;
+	s=arc-20240116; t=1780689648; c=relaxed/simple;
+	bh=ektH2c5D33OuR/izjHIh6IA7RnYCMEtUMQ662f1cwVo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oIz3+nK2lYqr1NarB+AsgsRDWSysw6KeOtDyW2pkMcobGvyPBgiXeX1Wc8wIXXlj2EpjMCEbxfBlaYTnvjBn97iUMmTwQpN33livdobhCaZbicIuqqS+aV8qomCGzEa4i/gJG4Fp/zXKXULJMmpIWhzJbTPOhcwVl6bq3I6IFnw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z6w6JMuK; arc=pass smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=BJbRf/XDSvcYPc2dVdWkHlPcKEuYE6e+RpKrlLFCsN+1NPJeq6rRuksf684soLcbFdKwpjeKSUav04xQsmxDZmhNKmhNMR/JbBYhNNjrzZfo9tjK3pR2ka/m1mU1Epl6Kt3PgYuNGas3/rVVoMnHjD4p9kG9E83kTriBZ6b5YBM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vimxz1A8; arc=pass smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z6w6JMuK"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7e0b3db3499so17833877b3.0
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 12:59:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780689582; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vimxz1A8"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7dfceeaf168so23170887b3.0
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 13:00:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780689647; cv=none;
         d=google.com; s=arc-20240605;
-        b=MrZw031trqwJr32KYHrAeYMdVNGHdWKGh3MzWUxMVPhfVuYslQqMHWTgwKzYkQsU4V
-         UY39qoMM+Vl9KGvAQFUK6BkSz/WCv4eYhRo62rRI1wRiM2t85nOaiIJ2bZsRvnSB2NQl
-         dT9ZWVJAafFVTABl+UEXvuq8gsJdN4SYDBqWwdt5v0RlJ5aSWwzhzLX5XrVUFEoDsXwH
-         0lOcR2s6i8odNBHmxMjN5VE3hQgkZstctzLdnM9XSDkfc5ejt2+LSUZIxTceIUMsgdRY
-         nMHjeAB8gzAO/UyQb4R9fWVvwZlXAoSXXlnL+j/0ezyx5L6G5RQHq9hfGputZl1To0Xo
-         1jtQ==
+        b=O4p2H6ZcbtLfS2TsnuD/aWrr/V3KDug6UDVr2uvYvMvYmjxW5J2XU+xXazKA/asPYq
+         4yySpJxAdbgJYgB/2AEXpatbzyYB1a1a09N5iZS3hkTr5Oliz5UMBq8SNTxuxZCtU7wO
+         wTMuayLovQ+sf0cCOqxi6ia7i6yNeuWAj4MUAeo6Z5XDks6WYjXa3OX/uk+wMBUIRtql
+         30BGluZoZ5j/Z/F+xDAvmlZl9KPE6ZVSdn1ErwG9FLt5g9Hr2B7pMGgQRfFUIVBAOzPD
+         DxiqYvbU6DV40cYahJ6ce6A2VJNhmjfsDTNGOM36UDk5IgFbNo0exLkdkulYxLbs6WQj
+         UjsQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ctdYFil8k1KSTdKhmfPPRD50Fe9swriPVxWQulSiEeE=;
+        bh=anKJ8pGmWaZxfuJHLMfCz6KAXzqmGVAH8Sm2THG/C5I=;
         fh=SS7tT0KC3jLZdfo/Ptau2hbovOS8lxj95BG5rgPZ6kI=;
-        b=ibfoYRZlWIPWrmvNbnwRccBb4Aw1WdMqfZCqs/ZBUnifsNBuyIJvBUUv9+qP3+NNQD
-         FalH7thafgfR5Oi+KAPs5Ubyn4g+qGnPf4R96ahrFaxoUrBGNawlnLxZR8KOaUccYy7X
-         nrgReX91GZzDG2Eo4OEih2QGzk3BqqYLaPOdKvJ4vmIk5AZLPxJrlY0o7h0ODu/iY3yD
-         E9hZOseeHZXk62bm3jM473q5gQm44KY87OSpbPf6+pxH2/pOY5aMRXsNVAk/wyDTF4CV
-         jOBS3JEMHPR+Nqzpr88MtB3uUaiiv+EfTofxm/CKPraC2pN+YK4drRugvo/jYecmRxjc
-         j0kg==;
+        b=NmbA2X+BumuSKSWXzSBP5WeoAvD8DOXy5KOia28qTKPL4sqyP+/IeTXBnJXFrAxbNb
+         QdkB8eXugbcnoozsWzdw8UHtAK9ADiyZBjxuFasCHSFkItJk58FwkPhxKhdtPZamnMIr
+         VKRo2IdlbqJJU/hVuROKzASfeJnbROQmhKjtby93HTxwR0H5NdGAtqegCbWqyjjcYljx
+         xpLpN+ml1RPbK2JkRrBx14f98hABvY/wUgoms/BO+EM/Yx1dgclZ9hsCjoh2nhb4Qty6
+         5mLmZxl7bBob6bY7n8AqNkwrqAld9jOu/phRz/MTknqomrSM9cgwnyeCEZhGqaFTfz7G
+         yfyA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780689582; x=1781294382; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780689647; x=1781294447; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ctdYFil8k1KSTdKhmfPPRD50Fe9swriPVxWQulSiEeE=;
-        b=Z6w6JMuKeg8X1C+mFugaS7MnhgVD401g44vC/MfvMhB5jvspHTuqv+zFPt7YQ9uGcQ
-         G1Zcg1Q8UVvtXBvf3ruefoINCAYipU050KcbUc0DSPdWH7j3zhh6S82SIzm0388so+xz
-         BC4gqze4qAqkWhpCB0pVmNFNObpXqyolUMfpifnigChTbr60CkuHoy9DD6RAoOhw/jSE
-         HTXD5R/3BeAfmaw44sj4CPhCJVeLELY1Bjb+CVyES/eOTHe90FpTcNymY+TXOwpm9tML
-         CFt10TH5wE6Fj4n1garGjN8bNoGCtcE2H/wM9/LWQh+/7LUyUGtvC49E1RHBmoBX2sRt
-         qiTw==
+        bh=anKJ8pGmWaZxfuJHLMfCz6KAXzqmGVAH8Sm2THG/C5I=;
+        b=Vimxz1A8w3BLGVA+d1BCEV4pcBDqwPcijrIx67kCCTSNVXjUoar//E0JZwVMt7pBIL
+         vAQafVKFCt+AGcB5joJLZ7P4VdPTmgh7DE5DofucSph56oVMo4QBsD7t4Bp7q70UvzvA
+         CgaJekO5MpYJJ5LPDibwsxluUE33fiWOAcEOemPVXL6Zsq2gdHuXsZqluWLQawJpbmbT
+         8M2qq0YtF/HQ0w39WsIcdlDGvwLvTw9Aw3/NXo9Dd4aZrpdtMVWfEKu+gw03xhFkxt0z
+         RciREOXz2ljs1jsY5jn9L9mjUFVxtbTG54Wl+An5hJRGXKJVz2+IvNDZxeE1W1tes6I0
+         geZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780689582; x=1781294382;
+        d=1e100.net; s=20251104; t=1780689647; x=1781294447;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ctdYFil8k1KSTdKhmfPPRD50Fe9swriPVxWQulSiEeE=;
-        b=VkBfIQv5sqKbURy2GjxN+aD7KPz8eNCjFeIn2MrB11QU6RZKPqZ8Fii2cHnEypMILM
-         4+TVNplD6RB31BCFKoCVMJJa5gmB6RjMdByPsu/1YWPKwdRxRUqXURpTdABqJ6uy9wyI
-         vrhG4/eInUzHk6LqBXNvtxiy7GfSgtqkKl87BNHLSJ3hfDUJQlZ0jO0ZrumV+7UveDOI
-         ipWru05OmAuzntO0ACy6pjMNliXxAGKxOwMkgFdyv4sEisFVJ5pv3N1bahOIIIn2jslf
-         p2wKAGnPCcmdVCVz46ugaRhvsZgSpPmmSmkuqVVD/IR+bb/lnfc+5QD/DBo/SbFIT0e0
-         zhyw==
-X-Gm-Message-State: AOJu0YxePzLMmV3UEa1hF3g5Bg8dD+Ajb8lCqjkjrgsw4kG/GZUZnfUW
-	K0/L7uE1E9Xg2JgZnVyGaLX8hV6jlx01b+n74qF28h7TDeUN0lIUwLpwun7C/rxAT7FREufHOY+
-	2qIS/+EfNbp+P2xr0vSEITGv4MLn+UqU=
-X-Gm-Gg: Acq92OHRAfKmGwVu9aMOnFhPk3SoB47VBRJaEUWA7bSmt/PmYeeRyxfLD0zbKPJdhYJ
-	CvDTUwT/scH6T/Op/xgVyDHZIH/FmMqO8+63Ey0KU7+96j6wiYddikKvhX+mFL9EwHlt++P7JV3
-	q+RRuGsG63tMBw8n+jqaJ36SK5wmsGODxuYM3QKNBMbNqfCnVZF/1TEAd5LhTCCQVLSzqEluZzy
-	emfSNpE7Ai0NfLMgOL4y8C2O4mgIGvNPl5lmDMgQD4GmWdboZPcenn498VbgrGuFWHcp7R1Q/i5
-	KUDLdLqWYHGCXoaRI2mcdmKT0PFCl9grQQ==
-X-Received: by 2002:a05:690c:4907:b0:7dc:aa85:5c67 with SMTP id
- 00721157ae682-7ed0a9d67dfmr55745037b3.11.1780689581972; Fri, 05 Jun 2026
- 12:59:41 -0700 (PDT)
+        bh=anKJ8pGmWaZxfuJHLMfCz6KAXzqmGVAH8Sm2THG/C5I=;
+        b=ojhJm9flLpoV7nMiOBdJ6BeUHL7MqUeDpfbsdklXUbEPvnsY3ClIkHjsLjzirUNWWY
+         QL/zp2w3yPMQPSFgC+Gl4VF0BsfUfa+JI2dmZqIBuWXznb1EtEZFJU4sPcjwFn3dvObd
+         DXawiKSZ6wNRy16S7owINtvZ5J7kjWBA2+X5Aw5edp4PZMLctw87Oq/frfnmEgNKaBdz
+         0rbLka1czPpgF1jODZKhr0o9c2qmjJvf6yXbQa7tT2Gt8qimBy51VPbHJkmkq5PxuXj+
+         Pm/pCnLMDgY0eP65iuqkU9+FJnRTfsAb9oJMSxJvf5Ipu5Ft2QwUYsU8WmBNykx7srA/
+         zrSw==
+X-Gm-Message-State: AOJu0YwH5R3FFiPz+4EaI6sdumglK5HIklo6pV2GG+BfRzGKyb7SaJtn
+	xA3Snq8u2eyBf9AJt74AkQdQG1hhHr52iM5U+/7JmbBWstKuDUxgq9tI5YSOluhG7jq9Wcb8FRG
+	ZCw+NyNwJe/1gEBZh2wx8f2mBR9rZ69I=
+X-Gm-Gg: Acq92OGhbYLwh7FhKJ09Zq650EnTt8Go5kG8zEcXAa5D9YTUPRsljEXgjXitjFIieRi
+	c79Px00jHD/ijYmf9GAvXH/JRAbkZrWz2ehjjqHX3YfL88ljm3GjyM+IkgsUJyywZEMBLrUVbED
+	LKWNXI+BrLgQ+kr1Rd6kgSS1YM3gO4hpJnl/sjDLSrQ7E95+DFWa3W58v93b9wYsgAIJfYIujr/
+	4xHfr0KKYrz7deta1+hjo5etkqmr+/gJxHcrObFck7hj9Ilss1AujNB2tjZu/5PMGeJMyPrMpqr
+	UFw7HCxi3XX3jCi2FEfLOduLihlHWELaKQ==
+X-Received: by 2002:a05:690c:260c:b0:7ec:592a:a75c with SMTP id
+ 00721157ae682-7ed11387deemr54155907b3.39.1780689646661; Fri, 05 Jun 2026
+ 13:00:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260605183551.969144-3-ameryhung@gmail.com> <e267e030d9e626dd07af109d4bb866bcd31e034c2041fcf324033591b582bb81@mail.kernel.org>
-In-Reply-To: <e267e030d9e626dd07af109d4bb866bcd31e034c2041fcf324033591b582bb81@mail.kernel.org>
+References: <20260605183551.969144-4-ameryhung@gmail.com> <5bc665c5db9a7007304ff3a428a05712c818dd9909feefa9cf72c1b30909ee66@mail.kernel.org>
+In-Reply-To: <5bc665c5db9a7007304ff3a428a05712c818dd9909feefa9cf72c1b30909ee66@mail.kernel.org>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 5 Jun 2026 12:59:29 -0700
-X-Gm-Features: AVHnY4LmfmkXkfCsZ32Q0qVybvOCxkFOL30jSEf-h-BGFSAM8mzBeTzfUW4ORQU
-Message-ID: <CAMB2axOZQjFEP3732DCfyBAyOQU0PaA55GdRZ54E430jzMhLNg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] bpf: Check acquire_reference() error for
- "__ref" struct_ops arguments
+Date: Fri, 5 Jun 2026 13:00:33 -0700
+X-Gm-Features: AVHnY4IPPBb1hFmWlzq8CwJBu7DDr9VcTmrkbL_hkArbssqCcYhMI20orHkNup4
+Message-ID: <CAMB2axPLjHetacZK+nTRGvoE17+bgasPyhv9m1HkOQzJUM2Okw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/5] bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
 	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
@@ -99,51 +98,65 @@ Content-Transfer-Encoding: quoted-printable
 
 On Fri, Jun 5, 2026 at 12:27=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index a741bf447931..5a69af569089 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -18363,9 +18363,15 @@ static int do_check_common(struct bpf_verifier=
-_env *env, int subprog)
-> >
-> >       /* Acquire references for struct_ops program arguments tagged wit=
-h "__ref" */
-> >       if (!subprog && env->prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS) =
-{
-> > -             for (i =3D 0; i < aux->ctx_arg_info_size; i++)
-> > -                     aux->ctx_arg_info[i].ref_id =3D aux->ctx_arg_info=
-[i].refcounted ?
-> > -                                                   acquire_reference(e=
-nv, 0, 0) : 0;
-> > +             for (i =3D 0; i < aux->ctx_arg_info_size; i++) {
-> > +                     int id;
-> > +
-> > +                     id =3D aux->ctx_arg_info[i].refcounted ? acquire_=
-reference(env, 0, 0) : 0;
-> > +                     if (id < 0)
-> > +                             return id;
+> > diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> > index 5945956a7573..06d9ae24f006 100644
+> > --- a/kernel/bpf/states.c
+> > +++ b/kernel/bpf/states.c
+> > @@ -890,6 +890,9 @@ static bool refsafe(struct bpf_verifier_state *old,=
+ struct bpf_verifier_state *c
+> >                       return false;
+> >               switch (old->refs[i].type) {
+> >               case REF_TYPE_PTR:
+> > +                     if (!check_ids(old->refs[i].parent_id, cur->refs[=
+i].parent_id, idmap))
+> > +                             return false;
+> > +                     break;
+> >               case REF_TYPE_IRQ:
+> >                       break;
+> >               case REF_TYPE_LOCK:
 >
-> Does this direct return bypass the cleanup path and leak env->cur_state?
+> This change now feeds parent_id values through check_ids() in addition to
+> register and stack slot ids.
 >
-> Earlier in do_check_common(), env->cur_state is allocated via kzalloc_obj=
-().
-> Other error paths in this function set the return variable and jump to th=
-e
-> out label to call free_states(env) for proper cleanup.
+> In the v1 discussion, Eduard Zingerman noted that since not all ids
+> correspond to register or stack slots anymore, the WARN_ON_ONCE(1) in
+> check_ids() on idmap exhaustion should be removed:
 >
-> Should this be updated to set ret =3D id and goto out instead of returnin=
-g
-> directly?
+> kernel/bpf/states.c:check_ids() {
+>         ...
+>         /* Reached the end of known mappings; haven't seen this id before=
+ */
+>         if (idmap->cnt < BPF_ID_MAP_SIZE) {
+>                 map[idmap->cnt].old =3D old_id;
+>                 map[idmap->cnt].cur =3D cur_id;
+>                 idmap->cnt++;
+>                 return true;
+>         }
 >
+>         /* We ran out of idmap slots, which should be impossible */
+>         WARN_ON_ONCE(1);
+>         return false;
+> }
+>
+> The concern raised by the CI and Sashiko bots was that a BPF program
+> leaking many references could exhaust BPF_ID_MAP_SIZE and trigger this
+> warning, which under panic_on_warn becomes a denial of service. Returning
+> false on exhaustion was agreed to be acceptable; only the warning was
+> questioned.
+>
+> The reply on the thread acknowledged this ("Ack. I will drop
+> WARN_ON_ONCE(1)."), but the WARN_ON_ONCE(1) is still present in this comm=
+it.
+>
+> Was the WARN_ON_ONCE(1) removal intended for a separate patch in the
+> series, or should it be folded in here?
 
-Yes. Will fix it and resend.
+This is dropped in patch 4
 
-> > +
-> > +                     aux->ctx_arg_info[i].ref_id =3D id;
-> > +             }
-> >       }
-> >
-> >       ret =3D do_check(env);
+>
+> Reference:
+> https://lore.kernel.org/bpf/6d86c2fae9be63eb110ebd5b3fc19bc4cf1de2dc.came=
+l@gmail.com/
 >
 >
 > ---
