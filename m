@@ -1,63 +1,64 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDA0145B11
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA01406287
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641270; cv=none; b=lWfH2ShogTU2ofUzEN48az8mt2fbv4ROI5NHA5kKkBnvctMppwnN3qE0LflGqHMWpUMrDKSIQevAeaLtQlT83edTGuQYv9Bjg/LDublF/XwQxCjeQm9SutEuw1ynVN4xtgH7/+GDpEHgg59bp9HtdcB21gFnbZhJ+jVttPb13SI=
+	t=1780641271; cv=none; b=Yq0PwuvYD1t8oJBseMNrID82HYt+z2KeLRPmM7L3xbf/HwDhgJD3WXu4teAC9h572RkdExG4wx+B3ufim8BiE526Nm8EFyXNZlYTqtlHZt5UcZPeUJksRr070qkFIdUKpFTaJUcrWcngYlpAQPqIXue756woIp8TDrIUjG9026A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641270; c=relaxed/simple;
-	bh=hqaJ1fHO85I3uqN25+LPGbXAEy2ZISjnwU1UiBwEiKU=;
+	s=arc-20240116; t=1780641271; c=relaxed/simple;
+	bh=eMkCCQrDZgDAIwp1isAdcv+2WReD2a3AQ9zyCYiM/Rs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sniAT6ThuRa7/xqj1LsRqaKovf2vwxMVWN5Zfy5Wq9o5eLCYxC95HQ896FUlPPjw0NWcZvcHfSF3KSbyW/AJE47NqNh/EXvkRc531VYYNxhKONFDHUeWFVE29aH8tJqcQwSh54+JiowPpEIMe3J1mF2uvZAZwnd/d819E1juauA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6+Mr5/Q; arc=none smtp.client-ip=209.85.221.65
+	 MIME-Version; b=kzP0L93OIzA/Hn/pwCY+c+KDhnHr2Zf+QXC4xVPr/u5QBD5tctAbUlobKLfRu5NBgDl8nGTpDuEf+/vWC0sXJ1fVamrYza17cfEZaexTk+G8naBcJmDDX+RtHJPsFd4cYFdS4Mir0Ne2D4WcJU7mtVzr4nKzu3r5T2pgzZ0aFSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DJerpx6U; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6+Mr5/Q"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-45eec22fab7so780480f8f.3
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJerpx6U"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b613a17bso14247805e9.3
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780641267; x=1781246067; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780641268; x=1781246068; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T5FaQx968hXaFTFCcPcbUzQGc9Jb3NNgdhxQyiffUbI=;
-        b=T6+Mr5/QZTxraHKL/Wb4APUkpsRqdKALcTGdzp8hWA1DuZPViwVOplspjDgEmYMnCS
-         02XTJz4w1QDbkL41Sxhl6Q85Ys2oypH4HA2UPeXKWW1mIzTE2NbvyfZActqQHz+3DBW5
-         Kc48tMdvXr4o9dAJ1czS4GHT7dtNX8jC3L2aZmS6EgLdCoeAISOzMx4mIbi+KttHwtZl
-         w0Mvo/BNgJKuYEFDt8794V80a7Myt4Ja11cgojfz3uyws3p4/+yJ4tgTXTZ9DHJsvraT
-         jF/Dla52KPXkIig2wiBw+xjFj8fSpSQxjhhtdLGOA4RbNxxjMA2IFnYesIebtCpmLdfE
-         GSWA==
+        bh=EG8y6/DotnQBATrVrcGAAgK6crmZ4Bw/NkoSAC90/kI=;
+        b=DJerpx6UyDayUI4HlUfhKzyS+rd13dAordPxcPZXNWW17m1trSIrviVK62d9dAo9ix
+         7lw/qHHHq2KAfawSUQSKCdzaNMVgpmAl1VHZf1PBkTfZa2wnm8Dtzb5Qx9gLomdrjEOZ
+         nx7fUFhXNpD+Ca1uQCfQ4HaTsh2HL9GbXuKjbhzCzRr6Y0OWE+VFZ/PHX0dv5oxbJ4Ow
+         2a6eiST7j0OfTO4VuPHorr4ILW5pVHLHMqp0WON8oTyEH4nhETKvVPvSh8jktJ7LswA3
+         7329FzhC/B1/XCtmt0x1cGeXi3jGk+l9V7iVNgycMjwLKft2qq377fG1SgZio+f7aCtM
+         XbvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780641267; x=1781246067;
+        d=1e100.net; s=20251104; t=1780641268; x=1781246068;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=T5FaQx968hXaFTFCcPcbUzQGc9Jb3NNgdhxQyiffUbI=;
-        b=SchE3BHZJaQ+wNQ0Mx48QEe8nvPYj/L5d1QtOvokyEt9I2D0FABJWZD+KTOYU6cUBl
-         f9c43rtS5oEWbX1qvzxd7OZkcJO5rYcIwEu78Eyvmbw/7yfiTmKGMiTtAn2YjBrgssqI
-         o1GGzCRHFqrtrdEvkVXcy6YWbMkGer02evvWyomaZ1wtwKiKdZp3Xg+Ts1lGE3R4qlFB
-         sarMJCJezsJcMSa0lDgE+jyKtDHY3NmYtwx9eTA/PzaeHaARew39Nk35oXm+DEvQStG1
-         vnubPqFYXY6Li7k4nAn4VsmnZ8ImPC1oqXRiwUeeHvJ54TnfKpTvcC/Zt5Oqvorz2ijw
-         eIbg==
-X-Gm-Message-State: AOJu0YzLQktGY6INYZjm2HRf8ySVeU/vppTU7WVpNc6m/At2X0wcSEzg
-	9fYRos5JCyNg1LtZFTBXby8LVXI7HNxsrulVg7xLZBhv/fLzROjqZr1jQb4+DeU4
-X-Gm-Gg: Acq92OGw10zvR2fXkTFcD90Y2VPBH76uYAf7jIXDSGZeH1LYs4YCCn0PfEl+a2QGpSa
-	uxJbu/1o7Mq60qv6xG2IecLsDWpG3rOxX3kVV99IF3QBKruDvHSahopHxeB+Q2Q5GSnHkBbQh6f
-	M/hWzPzWWvJYnNelQGGjzkM7wYL5TyRRgbnfKlKsYr5YZBhW1h4Bpgr522GASiXdIjSJOpJf/4X
-	mxpyiw1ATa3cfsk13wd8aVWPf6KDtdk9RJ22Z5J0BuPkm/COnB5So/zF5qCtD3sAC3wR27Q1ZFC
-	b71cLpY+KFMiXiZ7Drz4BC3p49I6BF54VibKbXZunv3o6lZcRzVg9VdEGCK812+nUrzNhCWEtW3
-	BDNn1XjwpSLM1B6WSs0LbCEbe9PUCy454fH1Wkp1vmJCyW8ArHpRXRzwU63WdZ54TevibRm6z1f
-	DPHxs/JYKTzbTZld4h3VDQs3JI+BITRg5ty0OJ49RlfpLkvAbY1ZodCKh80iyngkTBgJ7zs3m8b
-	aL+OpLjkqP2z+6sJOoGBZkHT+kizs1cyOa9xPSG7sa8SpxOQS/Xe6whtycCsS0IgV9D7qtADXVi
-X-Received: by 2002:a05:6000:4609:b0:460:3234:4472 with SMTP id ffacd0b85a97d-460323444d8mr2303544f8f.40.1780641266950;
-        Thu, 04 Jun 2026 23:34:26 -0700 (PDT)
+        bh=EG8y6/DotnQBATrVrcGAAgK6crmZ4Bw/NkoSAC90/kI=;
+        b=hjvrkA9dEhizJ4nJgVFhZOkpEJrFdx6qRp/Qt0SBPioYqFXJWkHIqS7AApgzBjshIn
+         qaXGRCtU5DKbnkr2QW99F84pAloAHy93sFma4uRrTt9ANVo8w/vpRcU6ASoQQODfh9Pu
+         eRIK/74B0NdV5iEyTpmVwLNf5yIM6HLknPTwVmJ04f04EzGLriuPTjtHXxMyzDyFqEGE
+         fnY8AMU8LpoESHX9AXnXxqu0rfEWVJHHJaFJYjIcg18o/8BCU6qox2epEAcZ8AzEAjtB
+         fCfIb3bItnjKjQ0UJhIXFysYOt7hW+orb06UHLvhLKF76HydACM2gcUsbn/wuQ4qQslj
+         Dufg==
+X-Gm-Message-State: AOJu0Ywy+BDoQRgcS2xZXy7qLQ1DiCU+76wuZap3WsCV5HcmsMi1EaTv
+	kFu0CNiT8j2FZj7biXeKD+fZkhaSyWtjHCCzS4Op+i+4Hvvl0PfiujyD7l9mzv6c
+X-Gm-Gg: Acq92OGf0QUuFM34cUTUgWYKheZqcL6ybRUvs4sHmZr6x+a4x3SGvFaLm97RWzC20SC
+	UZZo+RFZB8bec59qz4WeGcE3VfdlkMG6+4SRZX+x40ipdB2lkz03kn3KFR0zRrdjZajHEjfA3vU
+	8I1cwJQ9cBokZW6n6ikyH18M9X7uyiIPfrwjNaRRfnMZ9i4t0XMvgUptYmDa0MBYHdjAlrshSjX
+	c7iU0tRdj9h/0wT4sJkUWEX7Rcs4CdArPIVos3HkwdtlWg4ULRjEdPEh5PnmQQG7X8G8cL+uTaY
+	4NUeWZcIXdc42tSWOqTHvKPbfgw1Z8FibOOWH+c+Z6vJ7D/Tp3/4K7kJDc0LmF9k/Br3cpBDSee
+	JpSJzhvOqus0oNGr9+JozYCltVoDcB7aSmvrRpPMovtFZtxE5qKZqWNe9a4iUGMcOrght7gMUqW
+	/SUhooyUZ4ARW6C6lSxxBpOp8wdk7FAGMCllE4QvawEiUYlASYyEzbMOyL/yDIHwzB9cXTAs4oy
+	1ywHWTXzFbylSkUh6SeiB1vUmFVRPt7f8qXW35xUZow73SMvNMMB1ZxLop08kUUQsaO/oKMPSkr
+	AYSnkuFg8D8=
+X-Received: by 2002:a05:600c:468a:b0:490:c2a2:e91e with SMTP id 5b1f17b1804b1-490c2a2ea2fmr25276415e9.34.1780641267944;
+        Thu, 04 Jun 2026 23:34:27 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4602cda3651sm10127858f8f.32.2026.06.04.23.34.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2c9ebeesm20223545e9.0.2026.06.04.23.34.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:26 -0700 (PDT)
+        Thu, 04 Jun 2026 23:34:27 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 11/17] bpf: Report Call Type Safety argument errors
-Date: Fri,  5 Jun 2026 08:34:01 +0200
-Message-ID: <20260605063412.974640-12-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 12/17] bpf: Report Execution Context Safety errors
+Date: Fri,  5 Jun 2026 08:34:02 +0200
+Message-ID: <20260605063412.974640-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
 References: <20260605063412.974640-1-memxor@gmail.com>
@@ -79,564 +80,409 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=22666; i=memxor@gmail.com; h=from:subject; bh=hqaJ1fHO85I3uqN25+LPGbXAEy2ZISjnwU1UiBwEiKU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUsptyTSVWK68aYlC/ReyPG67zb/LPpZTc2d+41Ns++Sm 4Hf7Gw6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJFgZoZ/2o1L6srZBbfZbFqh E39u682KrEdX8nhPb3FOCV2uJBdYwMiwJ9J/gt981bTzMnVrEuY+dHp+aFpLsEg3w/MDJwXNdvz jBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16178; i=memxor@gmail.com; h=from:subject; bh=eMkCCQrDZgDAIwp1isAdcv+2WReD2a3AQ9zyCYiM/Rs=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt2T5oswdE2vvVSqbzlSpmd8w6+6vvYEyX1cZrF4Vt mZuQNiXjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExkwVJGhjOFF7b2y0y8c2vd jea3S+pL03cc/iBis6B5HsfGmTVtL7cx/GLS+TTTwc3g6qJLj2ued/36kVXlXRP4TWTBtG5FIZ0 wHS4A
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Augment selected helper and kfunc argument-contract failures with Call
-Type Safety reports. Keep the existing terse verifier messages and add
-reason, source context, causal register history, and targeted
-suggestions.
+Augment selected sleepability and critical-section failures with
+Execution Context Safety reports. Keep the existing verifier messages
+and add source context, path history, and suggestions tied to the
+active context.
 
-Cover helper register-type mismatch, helper non-NULL pointer
-requirements, kfunc trusted-pointer nullability, release kfunc
-referenced-pointer requirements, kfunc memory arguments, memory/length
-pairs, and kernel object pointer contracts.
+Use the context history recorded earlier to anchor causal paths to lock,
+IRQ, RCU, and preempt regions instead of unrelated register updates.
+
+Cover global calls while holding a lock, sleepable global function calls,
+sleepable helpers, sleepable kfunc calls from disallowed contexts,
+operations that exit while a context is still active, and unmatched
+context exits.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c |  37 +++++
- kernel/bpf/diagnostics.h |   4 +
- kernel/bpf/verifier.c    | 295 ++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 329 insertions(+), 7 deletions(-)
+ kernel/bpf/diagnostics.c | 153 +++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.h |  14 ++++
+ kernel/bpf/verifier.c    |  89 +++++++++++++++++++++++
+ 3 files changed, 256 insertions(+)
 
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 369b7813b5dc..169c1a2425c8 100644
+index 169c1a2425c8..2d8417f4efff 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -714,6 +714,43 @@ static const char *bpf_diag_arg_ordinal(int argno)
- 	}
+@@ -751,6 +751,159 @@ void bpf_diag_report_call_type(struct bpf_verifier_env *env, u32 insn_idx,
+ 	bpf_diag_report_suggestion(env, "%s", suggestion);
  }
  
-+void bpf_diag_report_call_type(struct bpf_verifier_env *env, u32 insn_idx,
-+			       int regno, const char *call_name,
-+			       const char *arg_name, const char *reason,
-+			       const char *suggestion)
++static const char *bpf_diag_context_constraint(enum bpf_diag_context_kind kind)
++{
++	switch (kind) {
++	case BPF_DIAG_CONTEXT_RCU:
++		return "RCU read-side critical sections cannot call operations that may sleep";
++	case BPF_DIAG_CONTEXT_PREEMPT:
++		return "preemption-disabled code cannot call operations that may sleep";
++	case BPF_DIAG_CONTEXT_IRQ:
++		return "IRQ-disabled code cannot call operations that may sleep";
++	case BPF_DIAG_CONTEXT_LOCK:
++		return "code holding a BPF spin lock cannot call operations that may sleep";
++	case BPF_DIAG_CONTEXT_NONE:
++	default:
++		return NULL;
++	}
++}
++
++static void bpf_diag_format_active_context(char *buf, size_t size, u32 depth,
++					   const char *context)
++{
++	if (depth == 1)
++		scnprintf(buf, size, "an active %s (depth 1)", context);
++	else
++		scnprintf(buf, size, "%u active %ss (depth %u)", depth,
++			  context, depth);
++}
++
++static u32 bpf_diag_context_depth(struct bpf_verifier_env *env,
++				  enum bpf_diag_context_kind kind)
++{
++	if (!env->cur_state)
++		return 0;
++
++	switch (kind) {
++	case BPF_DIAG_CONTEXT_RCU:
++		return env->cur_state->active_rcu_locks;
++	case BPF_DIAG_CONTEXT_PREEMPT:
++		return env->cur_state->active_preempt_locks;
++	case BPF_DIAG_CONTEXT_IRQ:
++		return env->cur_state->active_irq_id ? 1 : 0;
++	case BPF_DIAG_CONTEXT_LOCK:
++		return env->cur_state->active_locks;
++	case BPF_DIAG_CONTEXT_NONE:
++	default:
++		return 0;
++	}
++}
++
++void bpf_diag_report_execution_context(struct bpf_verifier_env *env,
++				       u32 insn_idx, const char *operation,
++				       enum bpf_diag_context_kind ctx_kind,
++				       const char *context,
++				       const char *suggestion)
 +{
 +	struct bpf_diag_history_opts opts = {
-+		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
-+		.frameno = bpf_diag_current_frameno(env),
-+		.regno = regno,
++		.scope = BPF_DIAG_HISTORY_SCOPE_CONTEXT,
++		.ctx_kind = ctx_kind,
 +	};
-+	const char *ordinal = bpf_diag_arg_ordinal(regno);
-+	char arg_desc[48];
++	u32 depth = bpf_diag_context_depth(env, ctx_kind);
++	char depth_buf[80];
 +
-+	if (ordinal && arg_name)
-+		scnprintf(arg_desc, sizeof(arg_desc), "%s argument (%s)",
-+			  ordinal, arg_name);
-+	else if (arg_name)
-+		scnprintf(arg_desc, sizeof(arg_desc), "argument %s", arg_name);
-+	else
-+		scnprintf(arg_desc, sizeof(arg_desc), "argument");
-+
-+	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_CALL_TYPE_SAFETY,
-+			       "invalid call argument");
-+	bpf_diag_report_reason(env,
-+			       "The %s to %s does not satisfy the verifier contract: %s.",
-+			       arg_desc, call_name, reason);
++	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_EXECUTION_CONTEXT_SAFETY,
++			       "operation is not allowed in this context");
++	if (bpf_diag_context_constraint(ctx_kind)) {
++		if (depth) {
++			bpf_diag_format_active_context(depth_buf,
++						       sizeof(depth_buf),
++						       depth, context);
++			bpf_diag_report_reason(env,
++					       "The operation %s cannot be used in %s because %s. This path is still inside %s.",
++					       operation, context,
++					       bpf_diag_context_constraint(ctx_kind),
++					       depth_buf);
++		} else {
++			bpf_diag_report_reason(env,
++					       "The operation %s cannot be used in %s because %s.",
++					       operation, context,
++					       bpf_diag_context_constraint(ctx_kind));
++		}
++	} else {
++		bpf_diag_report_reason(env,
++				       "The operation %s cannot be used in %s.",
++				       operation, context);
++	}
 +
 +	bpf_diag_report_section(env, "At");
 +	bpf_diag_report_source(env, insn_idx, '!',
-+			       "invalid %s for %s", arg_desc, call_name);
++			       "%s is not allowed in %s", operation, context);
 +
-+	if (regno >= 0)
++	if (ctx_kind != BPF_DIAG_CONTEXT_NONE)
 +		bpf_diag_print_history(env, &opts);
 +
 +	bpf_diag_report_suggestion(env, "%s", suggestion);
 +}
 +
++void bpf_diag_report_context_still_active(struct bpf_verifier_env *env,
++					  u32 insn_idx, const char *operation,
++					  enum bpf_diag_context_kind ctx_kind,
++					  const char *context,
++					  const char *suggestion)
++{
++	struct bpf_diag_history_opts opts = {
++		.scope = BPF_DIAG_HISTORY_SCOPE_CONTEXT,
++		.ctx_kind = ctx_kind,
++	};
++	u32 depth = bpf_diag_context_depth(env, ctx_kind);
++	char depth_buf[80];
++
++	bpf_diag_format_active_context(depth_buf, sizeof(depth_buf), depth,
++				       context);
++
++	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_EXECUTION_CONTEXT_SAFETY,
++			       "operation is not allowed in this context");
++	bpf_diag_report_reason(env,
++			       "The operation %s cannot be used while this path is still inside %s. Leave the region before this operation.",
++			       operation, depth_buf);
++
++	bpf_diag_report_section(env, "At");
++	bpf_diag_report_source(env, insn_idx, '!',
++			       "%s is not allowed before leaving %s",
++			       operation, context);
++
++	bpf_diag_print_history(env, &opts);
++
++	bpf_diag_report_suggestion(env, "%s", suggestion);
++}
++
++void bpf_diag_report_context_underflow(struct bpf_verifier_env *env,
++				       u32 insn_idx, const char *operation,
++				       enum bpf_diag_context_kind ctx_kind,
++				       const char *suggestion)
++{
++	struct bpf_diag_history_opts opts = {
++		.scope = BPF_DIAG_HISTORY_SCOPE_CONTEXT,
++		.ctx_kind = ctx_kind,
++	};
++	const char *context = bpf_diag_context_name(ctx_kind);
++
++	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_EXECUTION_CONTEXT_SAFETY,
++			       "unmatched context exit");
++	bpf_diag_report_reason(env,
++			       "The operation %s tries to leave %s, but this path has no active %s to leave. The current depth is 0.",
++			       operation, context, context);
++
++	bpf_diag_report_section(env, "At");
++	bpf_diag_report_source(env, insn_idx, '!',
++			       "%s has no matching enter on this path",
++			       operation);
++
++	bpf_diag_print_history(env, &opts);
++
++	bpf_diag_report_suggestion(env, "%s", suggestion);
++}
  void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx,
  				   int regno, const char *reg_name,
  				   const char *type_name,
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index 0bc5f3492c47..d8c433759dee 100644
+index d8c433759dee..e11abc30246d 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -181,6 +181,10 @@ void bpf_diag_report_resource_state(struct bpf_verifier_env *env,
- 				    const char *suggestion);
- void bpf_diag_report_ref_leak(struct bpf_verifier_env *env, u32 ref_id,
- 			      u32 alloc_insn, u32 fail_insn);
-+void bpf_diag_report_call_type(struct bpf_verifier_env *env, u32 insn_idx,
-+			       int regno, const char *call_name,
-+			       const char *arg_name, const char *reason,
-+			       const char *suggestion);
+@@ -185,6 +185,20 @@ void bpf_diag_report_call_type(struct bpf_verifier_env *env, u32 insn_idx,
+ 			       int regno, const char *call_name,
+ 			       const char *arg_name, const char *reason,
+ 			       const char *suggestion);
++void bpf_diag_report_execution_context(struct bpf_verifier_env *env,
++				       u32 insn_idx, const char *operation,
++				       enum bpf_diag_context_kind ctx_kind,
++				       const char *context,
++				       const char *suggestion);
++void bpf_diag_report_context_still_active(struct bpf_verifier_env *env,
++					  u32 insn_idx, const char *operation,
++					  enum bpf_diag_context_kind ctx_kind,
++					  const char *context,
++					  const char *suggestion);
++void bpf_diag_report_context_underflow(struct bpf_verifier_env *env,
++				       u32 insn_idx, const char *operation,
++				       enum bpf_diag_context_kind ctx_kind,
++				       const char *suggestion);
  
  void bpf_diag_clear_history(struct bpf_verifier_state *state);
  void bpf_diag_copy_history(struct bpf_verifier_state *dst,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c26614bec2b..d2a776d2059c 100644
+index d2a776d2059c..e30d79149cc7 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8039,6 +8039,39 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
- 	[ARG_PTR_TO_DYNPTR]		= &dynptr_types,
- };
+@@ -211,6 +211,9 @@ static int ref_set_non_owning(struct bpf_verifier_env *env,
+ static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bpf_reg_state *reg);
+ static inline bool in_sleepable_context(struct bpf_verifier_env *env);
+ static const char *non_sleepable_context_description(struct bpf_verifier_env *env);
++static enum bpf_diag_context_kind
++non_sleepable_context_kind(struct bpf_verifier_env *env);
++static const char *non_sleepable_context_diag_description(struct bpf_verifier_env *env);
+ static void scalar32_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
+ static void scalar_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
  
-+static const char *bpf_diag_reg_type_plain(struct bpf_verifier_env *env,
-+					   enum bpf_reg_type type)
+@@ -9698,16 +9701,31 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		return err;
+ 	if (bpf_subprog_is_global(env, subprog)) {
+ 		const char *sub_name = subprog_name(env, subprog);
++		char operation[96];
+ 
+ 		if (env->cur_state->active_locks) {
+ 			verbose(env, "global function calls are not allowed while holding a lock,\n"
+ 				     "use static function instead\n");
++			scnprintf(operation, sizeof(operation),
++				  "global function %s()", sub_name);
++			bpf_diag_report_execution_context(env, *insn_idx,
++							  operation,
++							  BPF_DIAG_CONTEXT_LOCK,
++							  "lock region",
++							  "Release the lock before calling the global function, or use a static function instead.");
+ 			return -EINVAL;
+ 		}
+ 
+ 		if (env->subprog_info[subprog].might_sleep && !in_sleepable_context(env)) {
+ 			verbose(env, "sleepable global function %s() called in %s\n",
+ 				sub_name, non_sleepable_context_description(env));
++			scnprintf(operation, sizeof(operation),
++				  "sleepable global function %s()", sub_name);
++			bpf_diag_report_execution_context(env, *insn_idx,
++							  operation,
++							  non_sleepable_context_kind(env),
++							  non_sleepable_context_diag_description(env),
++							  "Move the call outside the critical section, or use a non-sleepable function.");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -10285,6 +10303,10 @@ static int check_resource_leak(struct bpf_verifier_env *env, bool exception_exit
+ 
+ 	if (check_lock && env->cur_state->active_locks) {
+ 		verbose(env, "%s cannot be used inside bpf_spin_lock-ed region\n", prefix);
++		bpf_diag_report_context_still_active(env, env->insn_idx, prefix,
++						     BPF_DIAG_CONTEXT_LOCK,
++						     "lock region",
++						     "Release the BPF spin lock before this operation on every path.");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -10296,16 +10318,28 @@ static int check_resource_leak(struct bpf_verifier_env *env, bool exception_exit
+ 
+ 	if (check_lock && env->cur_state->active_irq_id) {
+ 		verbose(env, "%s cannot be used inside bpf_local_irq_save-ed region\n", prefix);
++		bpf_diag_report_context_still_active(env, env->insn_idx, prefix,
++						     BPF_DIAG_CONTEXT_IRQ,
++						     "IRQ-disabled region",
++						     "Restore the saved IRQ state before this operation on every path.");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (check_lock && env->cur_state->active_rcu_locks) {
+ 		verbose(env, "%s cannot be used inside bpf_rcu_read_lock-ed region\n", prefix);
++		bpf_diag_report_context_still_active(env, env->insn_idx, prefix,
++						     BPF_DIAG_CONTEXT_RCU,
++						     "RCU read lock region",
++						     "Call bpf_rcu_read_unlock() before this operation on every path.");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (check_lock && env->cur_state->active_preempt_locks) {
+ 		verbose(env, "%s cannot be used inside bpf_preempt_disable-ed region\n", prefix);
++		bpf_diag_report_context_still_active(env, env->insn_idx, prefix,
++						     BPF_DIAG_CONTEXT_PREEMPT,
++						     "non-preemptible region",
++						     "Call bpf_preempt_enable() before this operation on every path.");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -10456,6 +10490,37 @@ static const char *non_sleepable_context_description(struct bpf_verifier_env *en
+ 	return "non-sleepable prog";
+ }
+ 
++static enum bpf_diag_context_kind
++non_sleepable_context_kind(struct bpf_verifier_env *env)
 +{
-+	switch (base_type(type)) {
-+	case NOT_INIT:
-+		return "an uninitialized value";
-+	case SCALAR_VALUE:
-+		return "an integer scalar";
-+	case PTR_TO_CTX:
-+		return "a context pointer";
-+	case PTR_TO_STACK:
-+		return "a stack pointer";
-+	case PTR_TO_MAP_VALUE:
-+		if (type_may_be_null(type))
-+			return "a nullable map value pointer";
-+		return "a map value pointer";
-+	case PTR_TO_MEM:
-+		if (type_may_be_null(type))
-+			return "a nullable memory pointer";
-+		return "a memory pointer";
-+	case PTR_TO_BTF_ID:
-+		if (type_is_non_owning_ref(type))
-+			return "a borrowed allocated object pointer";
-+		if (type_is_ptr_alloc_obj(type))
-+			return "an owned allocated object pointer";
-+		if (type_flag(type) & PTR_UNTRUSTED)
-+			return "an untrusted kernel object pointer";
-+		return "a kernel object pointer";
++	if (env->cur_state->active_rcu_locks)
++		return BPF_DIAG_CONTEXT_RCU;
++	if (env->cur_state->active_preempt_locks)
++		return BPF_DIAG_CONTEXT_PREEMPT;
++	if (env->cur_state->active_irq_id)
++		return BPF_DIAG_CONTEXT_IRQ;
++	if (env->cur_state->active_locks)
++		return BPF_DIAG_CONTEXT_LOCK;
++	return BPF_DIAG_CONTEXT_NONE;
++}
++
++static const char *non_sleepable_context_diag_description(struct bpf_verifier_env *env)
++{
++	switch (non_sleepable_context_kind(env)) {
++	case BPF_DIAG_CONTEXT_RCU:
++		return "RCU read lock region";
++	case BPF_DIAG_CONTEXT_PREEMPT:
++		return "non-preemptible region";
++	case BPF_DIAG_CONTEXT_IRQ:
++		return "IRQ-disabled region";
++	case BPF_DIAG_CONTEXT_LOCK:
++		return "lock region";
++	case BPF_DIAG_CONTEXT_NONE:
 +	default:
-+		return reg_type_str(env, type);
++		return "non-sleepable program";
 +	}
 +}
 +
- static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *reg, argno_t argno,
- 			  enum bpf_arg_type arg_type,
- 			  const u32 *arg_btf_id,
-@@ -8092,6 +8125,27 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 	for (j = 0; j + 1 < i; j++)
- 		verbose(env, "%s, ", reg_type_str(env, compatible->types[j]));
- 	verbose(env, "%s\n", reg_type_str(env, compatible->types[j]));
-+	{
-+		char expected_buf[160], reason[256];
-+		int len = 0;
-+
-+		expected_buf[0] = '\0';
-+		for (j = 0; j < i; j++)
-+			len += scnprintf(expected_buf + len,
-+					 sizeof(expected_buf) - len,
-+					 "%s%s", j ? ", " : "",
-+					 reg_type_str(env, compatible->types[j]));
-+
-+		scnprintf(reason, sizeof(reason),
-+			  "it has type %s, but this helper argument accepts %s",
-+			  bpf_diag_reg_type_plain(env, reg->type),
-+			  expected_buf);
-+		bpf_diag_report_call_type(env, env->insn_idx,
-+					  reg_from_argno(argno),
-+					  func_id_name(meta->func_id),
-+					  reg_arg_name(env, argno), reason,
-+					  "Pass a value with one of the accepted pointer or scalar types for this helper.");
-+	}
- 	return -EACCES;
- 
- found:
-@@ -8128,6 +8182,12 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 		    (!type_may_be_null(arg_type) || arg_type_is_release(arg_type))) {
- 			verbose(env, "Possibly NULL pointer passed to helper %s\n",
- 				reg_arg_name(env, argno));
-+			bpf_diag_report_call_type(env, env->insn_idx,
-+						  reg_from_argno(argno),
-+						  func_id_name(meta->func_id),
-+						  reg_arg_name(env, argno),
-+						  "the pointer may be NULL, but this helper requires a non-NULL pointer",
-+						  "Add a NULL check and call the helper only on the non-NULL path.");
- 			return -EACCES;
- 		}
- 
-@@ -8476,6 +8536,12 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 	    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
- 		verbose(env, "release helper %s expects referenced PTR_TO_BTF_ID passed to %s\n",
- 			func_id_name(meta->func_id), reg_arg_name(env, argno));
-+			bpf_diag_report_call_type(env, insn_idx, regno,
-+						  func_id_name(meta->func_id),
-+						  reg_arg_name(env, argno),
-+						  "release helpers require a value that owns a live resource returned by a matching acquire helper",
-+						  "Pass the resource-owning pointer returned by the matching acquire helper, and avoid calling the release helper after ownership has "
-+						  "already been transferred or released.");
+ static int release_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		       bool convert_rcu, bool release_dynptr)
+ {
+@@ -10484,6 +10549,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	enum bpf_type_flag ret_flag;
+ 	struct bpf_reg_state *regs;
+ 	struct bpf_call_arg_meta meta;
++	char operation[96];
+ 	int insn_idx = *insn_idx_p;
+ 	bool changes_data;
+ 	int i, err, func_id;
+@@ -10532,6 +10598,12 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	if (fn->might_sleep && !in_sleepable_context(env)) {
+ 		verbose(env, "sleepable helper %s#%d in %s\n", func_id_name(func_id), func_id,
+ 			non_sleepable_context_description(env));
++		scnprintf(operation, sizeof(operation), "sleepable helper %s#%d",
++			  func_id_name(func_id), func_id);
++		bpf_diag_report_execution_context(env, insn_idx, operation,
++						  non_sleepable_context_kind(env),
++						  non_sleepable_context_diag_description(env),
++						  "Move the helper call outside the critical section, or use a non-sleepable helper.");
  		return -EINVAL;
  	}
  
-@@ -11560,9 +11626,22 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env, struct bpf_func_state *call
- 	 */
- 	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0) &&
- 	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
-+		char arg_name[32], expected_type[64], reason[256];
-+
-+		strscpy(arg_name, reg_arg_name(env, argno), sizeof(arg_name));
-+		bpf_diag_format_btf_type(expected_type, sizeof(expected_type),
-+					 ref_t, ref_tname);
- 		verbose(env, "%s pointer type %s %s must point to %sscalar, or struct with scalar\n",
--			reg_arg_name(env, argno),
-+			arg_name,
- 			btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
-+		scnprintf(reason, sizeof(reason),
-+			  "the kfunc expects a pointer to %s, but this argument is %s and cannot be used as that kernel object pointer",
-+			  expected_type,
-+			  bpf_diag_reg_type_plain(env, reg->type));
-+		bpf_diag_report_call_type(env, env->insn_idx,
-+					  reg_from_argno(argno),
-+					  meta->func_name, arg_name, reason,
-+					  "Pass a verifier-tracked pointer to the expected kernel object type, not a pointer to stack storage or another memory buffer.");
- 		return -EINVAL;
+@@ -13414,6 +13486,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	const struct btf_type *t, *ptr_type;
+ 	struct bpf_kfunc_call_arg_meta meta;
+ 	struct bpf_insn_aux_data *insn_aux;
++	char operation[96];
+ 	int err, insn_idx = *insn_idx_p;
+ 	u32 i, nargs, ptr_type_id, id;
+ 	const struct btf_param *args;
+@@ -13472,6 +13545,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	sleepable = bpf_is_kfunc_sleepable(&meta);
+ 	if (sleepable && !in_sleepable(env)) {
+ 		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
++		scnprintf(operation, sizeof(operation), "sleepable kfunc %s",
++			  func_name);
++		bpf_diag_report_execution_context(env, insn_idx, operation,
++						  BPF_DIAG_CONTEXT_NONE,
++						  "non-sleepable program",
++						  "Mark the program sleepable if the program type allows it, or use a non-sleepable kfunc.");
+ 		return -EACCES;
  	}
- 	return arg_mem_size ? KF_ARG_PTR_TO_MEM_SIZE : KF_ARG_PTR_TO_MEM;
-@@ -12209,7 +12288,18 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
  
- 		if (btf_type_is_scalar(t)) {
- 			if (reg->type != SCALAR_VALUE) {
-+				char reason[256];
-+
- 				verbose(env, "%s is not a scalar\n", reg_arg_name(env, argno));
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects an integer scalar, but %s is %s",
-+					  reg_arg_name(env, argno),
-+					  bpf_diag_reg_type_plain(env, reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
+@@ -13533,6 +13612,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	} else if (rcu_unlock) {
+ 		if (env->cur_state->active_rcu_locks == 0) {
+ 			verbose(env, "unmatched rcu read unlock (kernel function %s)\n", func_name);
++			bpf_diag_report_context_underflow(env, insn_idx,
 +							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass an integer scalar value for this argument, not a pointer or resource object.");
- 				return -EINVAL;
- 			}
- 
-@@ -12219,8 +12309,18 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					return -EFAULT;
- 				}
- 				if (!tnum_is_const(reg->var_off)) {
-+					char reason[256];
-+
- 					verbose(env, "%s must be a known constant\n",
- 						reg_arg_name(env, argno));
-+					scnprintf(reason, sizeof(reason),
-+						  "the kfunc requires this scalar argument to be a verifier-known constant, but %s is variable on this path",
-+						  reg_arg_name(env, argno));
-+					bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  reg_arg_name(env, argno),
-+								  reason,
-+								  "Pass a compile-time constant or a value the verifier can prove is constant at this call.");
- 					return -EINVAL;
- 				}
- 				if (regno >= 0)
-@@ -12245,8 +12345,18 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				}
- 
- 				if (!tnum_is_const(reg->var_off)) {
-+					char reason[256];
-+
- 					verbose(env, "%s is not a const\n",
- 						reg_arg_name(env, argno));
-+					scnprintf(reason, sizeof(reason),
-+						  "the kfunc uses this argument as a return-buffer size, but %s is variable on this path",
-+						  reg_arg_name(env, argno));
-+					bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  reg_arg_name(env, argno),
-+								  reason,
-+								  "Pass a verifier-known constant size for this kfunc buffer argument.");
- 					return -EINVAL;
- 				}
- 
-@@ -12267,26 +12377,53 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
++							  BPF_DIAG_CONTEXT_RCU,
++							  "Remove the extra bpf_rcu_read_unlock() call, or ensure this path first enters an RCU read lock region.");
  			return -EINVAL;
  		}
+ 		env->cur_state->active_rcu_locks--;
+@@ -13560,6 +13643,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (sleepable && !in_sleepable_context(env)) {
+ 		verbose(env, "kernel func %s is sleepable within %s\n",
+ 			func_name, non_sleepable_context_description(env));
++		scnprintf(operation, sizeof(operation), "sleepable kfunc %s",
++			  func_name);
++		bpf_diag_report_execution_context(env, insn_idx, operation,
++						  non_sleepable_context_kind(env),
++						  non_sleepable_context_diag_description(env),
++						  "Move the kfunc call outside the critical section, or use a non-sleepable kfunc.");
+ 		return -EACCES;
+ 	}
  
-+		ref_t = btf_type_skip_modifiers(btf, t->type, &ref_id);
-+		ref_tname = btf_name_by_offset(btf, ref_t->name_off);
-+
- 		if ((bpf_register_is_null(reg) || type_may_be_null(reg->type)) &&
- 		    !is_kfunc_arg_nullable(meta->btf, &args[i])) {
-+			char expected_type[64], reason[256];
-+
-+			bpf_diag_format_btf_type(expected_type,
-+						 sizeof(expected_type), ref_t,
-+						 ref_tname);
-+			scnprintf(reason, sizeof(reason),
-+				  "the pointer may be NULL, but this kfunc requires a non-NULL pointer to %s",
-+				  expected_type);
- 			verbose(env, "Possibly NULL pointer passed to trusted %s\n",
- 				reg_arg_name(env, argno));
-+			bpf_diag_report_call_type(env, insn_idx, regno,
-+						  func_name,
-+						  reg_arg_name(env, argno),
-+						  reason,
-+						  "Add a NULL check and call the kfunc only on the non-NULL path.");
- 			return -EACCES;
- 		}
- 
- 		if (regno == meta->release_regno && !is_kfunc_arg_dynptr(meta->btf, &args[i]) &&
- 		    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
-+			char expected_type[64], reason[256];
-+
-+			bpf_diag_format_btf_type(expected_type,
-+						 sizeof(expected_type), ref_t,
-+						 ref_tname);
-+			scnprintf(reason, sizeof(reason),
-+				  "release kfuncs require a resource-owning pointer to %s returned by a matching acquire kfunc",
-+				  expected_type);
- 			verbose(env, "release kfunc %s expects referenced PTR_TO_BTF_ID passed to %s\n",
- 				func_name, reg_arg_name(env, argno));
-+			bpf_diag_report_call_type(env, insn_idx, regno,
-+						  func_name,
-+						  reg_arg_name(env, argno),
-+						  reason,
-+						  "Pass the resource-owning pointer returned by the matching acquire kfunc, and avoid calling the release kfunc after ownership has "
-+						  "already been transferred or released.");
- 			return -EINVAL;
- 		}
- 
- 		if (reg_is_referenced(env, reg))
- 			update_ref_obj(&meta->ref_obj, reg);
- 
--		ref_t = btf_type_skip_modifiers(btf, t->type, &ref_id);
--		ref_tname = btf_name_by_offset(btf, ref_t->name_off);
--
- 		kf_arg_type = get_kfunc_ptr_arg_type(env, caller, regs, meta, t, ref_t, ref_tname,
- 						     args, i, nargs, argno, reg);
- 		if (kf_arg_type < 0)
-@@ -12336,13 +12473,44 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		case KF_ARG_PTR_TO_BTF_ID:
- 			if (!is_trusted_reg(env, reg)) {
- 				if (!is_kfunc_rcu(meta)) {
-+					char expected_type[64], reason[256];
-+
-+					bpf_diag_format_btf_type(expected_type,
-+								 sizeof(expected_type),
-+								 ref_t, ref_tname);
- 					verbose(env, "%s must be referenced or trusted\n",
- 						reg_arg_name(env, argno));
-+					scnprintf(reason, sizeof(reason),
-+						  "the kfunc requires a trusted or resource-owning pointer to %s, but %s is %s",
-+						  expected_type,
-+						  reg_arg_name(env, argno),
-+						  bpf_diag_reg_type_plain(env, reg->type));
-+					bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  reg_arg_name(env, argno),
-+								  reason,
-+								  "Pass a pointer acquired from a verifier-tracked source, or call this kfunc only inside the required protection if it accepts RCU "
-+								  "pointers.");
- 					return -EINVAL;
- 				}
- 				if (!is_rcu_reg(reg)) {
-+					char expected_type[64], reason[256];
-+
-+					bpf_diag_format_btf_type(expected_type,
-+								 sizeof(expected_type),
-+								 ref_t, ref_tname);
- 					verbose(env, "%s must be a rcu pointer\n",
- 						reg_arg_name(env, argno));
-+					scnprintf(reason, sizeof(reason),
-+						  "the kfunc requires an RCU-protected pointer to %s, but %s is %s",
-+						  expected_type,
-+						  reg_arg_name(env, argno),
-+						  bpf_diag_reg_type_plain(env, reg->type));
-+					bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  reg_arg_name(env, argno),
-+								  reason,
-+								  "Use this kfunc with a pointer that is valid in an RCU read lock region.");
- 					return -EINVAL;
- 				}
- 			}
-@@ -12383,8 +12551,19 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		switch (kf_arg_type) {
- 		case KF_ARG_PTR_TO_CTX:
- 			if (reg->type != PTR_TO_CTX) {
-+				char reason[256];
-+
- 				verbose(env, "%s expected pointer to ctx, but got %s\n",
- 					reg_arg_name(env, argno), reg_type_str(env, reg->type));
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects a context pointer, but %s is %s",
-+					  reg_arg_name(env, argno),
-+					  bpf_diag_reg_type_plain(env, reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  reg_arg_name(env, argno),
-+								  reason,
-+								  "Pass the original program context pointer or preserve it before modifying registers.");
- 				return -EINVAL;
- 			}
- 
-@@ -12409,12 +12588,33 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					return -EINVAL;
- 				}
- 			} else {
-+				char reason[256];
-+
- 				verbose(env, "%s expected pointer to allocated object\n",
- 					reg_arg_name(env, argno));
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects an allocated object pointer, but %s is %s",
-+					  reg_arg_name(env, argno),
-+					  bpf_diag_reg_type_plain(env, reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass a pointer returned by the matching BPF object allocation path.");
- 				return -EINVAL;
- 			}
- 			if (!reg_is_referenced(env, reg)) {
-+				char reason[256];
-+
- 				verbose(env, "allocated object must be referenced\n");
-+				scnprintf(reason, sizeof(reason),
-+					  "the allocated object pointer in %s must still carry verifier-tracked ownership, but this pointer no longer owns a live resource",
-+					  reg_arg_name(env, argno));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass the owned object pointer before it is released or transferred.");
- 				return -EINVAL;
- 			}
- 			if (meta->btf == btf_vmlinux) {
-@@ -12580,8 +12780,25 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				return -EINVAL;
- 			}
- 			ret = check_mem_reg(env, reg, argno, type_size);
--			if (ret < 0)
-+			if (ret < 0) {
-+				char arg_name[32], expected_type[64], reason[256];
-+
-+				strscpy(arg_name, reg_arg_name(env, argno),
-+					sizeof(arg_name));
-+				bpf_diag_format_btf_type(expected_type,
-+							 sizeof(expected_type),
-+							 ref_t, ref_tname);
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects %u bytes of memory for %s, but it is %s and not verifier-known memory",
-+					  type_size, expected_type,
-+					  bpf_diag_reg_type_plain(env,
-+								  reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name, arg_name,
-+							  reason,
-+							  "Pass stack, map, context, or other verifier-known memory of the expected type and size, not an integer cast to a pointer.");
- 				return ret;
-+			}
- 			break;
- 		case KF_ARG_PTR_TO_MEM_SIZE:
- 		{
-@@ -12595,9 +12812,27 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				ret = check_kfunc_mem_size_reg(env, buff_reg, size_reg,
- 							       argno, next_argno);
- 				if (ret < 0) {
--					verbose(env, "%s and ", reg_arg_name(env, argno));
-+					char mem_arg[32], size_arg[32];
-+					char reason[256];
-+
-+					strscpy(mem_arg, reg_arg_name(env, argno),
-+						sizeof(mem_arg));
-+					strscpy(size_arg, reg_arg_name(env, next_argno),
-+						sizeof(size_arg));
-+					verbose(env, "%s and ", mem_arg);
- 					verbose(env, "%s memory, len pair leads to invalid memory access\n",
--						reg_arg_name(env, next_argno));
-+						size_arg);
-+					scnprintf(reason, sizeof(reason),
-+						  "it is the memory pointer in a memory/length pair with %s, but it is %s and does not point to verifier-readable memory for the "
-+						  "requested length",
-+						  size_arg,
-+						  bpf_diag_reg_type_plain(env,
-+									  buff_reg->type));
-+					bpf_diag_report_call_type(env, insn_idx, regno,
-+								  func_name,
-+								  mem_arg,
-+								  reason,
-+								  "Pass a stack, map, context, or other verifier-known memory pointer, and keep the paired length within that object.");
- 					return ret;
- 				}
- 			}
-@@ -12608,8 +12843,19 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					return -EFAULT;
- 				}
- 				if (!tnum_is_const(size_reg->var_off)) {
-+					char reason[256];
-+
- 					verbose(env, "%s must be a known constant\n",
- 						reg_arg_name(env, next_argno));
-+					scnprintf(reason, sizeof(reason),
-+						  "the kfunc requires the paired memory size argument %s to be a verifier-known constant, but it is variable on this path",
-+						  reg_arg_name(env, next_argno));
-+					bpf_diag_report_call_type(env, insn_idx,
-+								  reg_from_argno(next_argno),
-+								  func_name,
-+								  reg_arg_name(env, next_argno),
-+								  reason,
-+								  "Pass a compile-time constant or verifier-known constant for this memory size argument.");
- 					return -EINVAL;
- 				}
- 				meta->arg_constant.found = true;
-@@ -12629,8 +12875,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			break;
- 		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
- 			if (!type_is_ptr_alloc_obj(reg->type)) {
-+				char expected_type[64], reason[256];
-+
-+				bpf_diag_format_btf_type(expected_type,
-+							 sizeof(expected_type),
-+							 ref_t, ref_tname);
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects a pointer to BPF-managed refcounted object type %s, but this argument is not such an object pointer",
-+					  expected_type);
- 				verbose(env, "%s is neither owning or non-owning ref\n",
- 					reg_arg_name(env, argno));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass a pointer returned by the matching BPF object allocation or lookup operation for this kfunc.");
- 				return -EINVAL;
- 			}
- 			if (!type_is_non_owning_ref(reg->type))
-@@ -12653,8 +12912,19 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			break;
- 		case KF_ARG_PTR_TO_CONST_STR:
- 			if (reg->type != PTR_TO_MAP_VALUE) {
-+				char reason[256];
-+
- 				verbose(env, "%s doesn't point to a const string\n",
- 					reg_arg_name(env, argno));
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects a pointer to a constant string stored in verifier-known memory, but %s is %s",
-+					  reg_arg_name(env, argno),
-+					  bpf_diag_reg_type_plain(env, reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass a constant string pointer that the verifier recognizes, such as a string stored in a read-only map value.");
- 				return -EINVAL;
- 			}
- 			ret = check_arg_const_str(env, reg, argno);
-@@ -12693,8 +12963,19 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			break;
- 		case KF_ARG_PTR_TO_IRQ_FLAG:
- 			if (reg->type != PTR_TO_STACK) {
-+				char reason[256];
-+
- 				verbose(env, "%s doesn't point to an irq flag on stack\n",
- 					reg_arg_name(env, argno));
-+				scnprintf(reason, sizeof(reason),
-+					  "the kfunc expects a stack pointer to an IRQ flag slot, but %s is %s",
-+					  reg_arg_name(env, argno),
-+					  bpf_diag_reg_type_plain(env, reg->type));
-+				bpf_diag_report_call_type(env, insn_idx, regno,
-+							  func_name,
-+							  reg_arg_name(env, argno),
-+							  reason,
-+							  "Pass the same stack slot used by bpf_local_irq_save() or bpf_res_spin_lock_irqsave().");
- 				return -EINVAL;
- 			}
- 			ret = process_irq_flag(env, reg, argno, meta);
 -- 
 2.53.0
 
