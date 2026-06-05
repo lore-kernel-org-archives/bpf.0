@@ -1,209 +1,117 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395E2260566
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 11:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4683F7ABE
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 12:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780660638; cv=none; b=XSGkNkhv42J34mq2HaoLM3bxMoDFImXcMY6V3kn/zSfGYarFpFaxoitEl9mJiNdkiflX60f3DaVOC8lbK2Rn8DjsX4XP0Buoqj9ssITrFJzn7P1hSxr7CcAN5MX2GTg3bIGvJotp5JH3DBE1P12fDRqf7lKEMld8kM8zgRNZjJk=
+	t=1780661005; cv=none; b=St/rVvRdVMmRscFq0wW1h1fVAdHDVxR4QuttU/Tndr5Qv4AMsdBNMk1Bh2lL6NBMBU+5qO8+wUBbkAQG0WP+hSmqqKFNb7O3aITK01ke/TLUmIgixbJU63yvU8Tcg8E8g4P/cZpx8UJ4P2NNUSXp1VxExwJxEvOxny7Zt2IwZuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780660638; c=relaxed/simple;
-	bh=Dbe77nWU58sMNDZjnL8Milx4inFgxmSITLkmETZcgUM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F8VanIJBQZDkdpEAa5M94SjpnTPFDYHk5RJooTL0MrC9rKEJVgmxJx2U44K7u4KJzKRAJvisRuhwdUI1+eIFIRUsW65c5k0oimt8jAfw0h6bDPF2yLAyrSazgECdlmZWxpPJ8T3HQiSq5fXozgMih1dIBet9CCdZTKZPYJTjwaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FwvMhzAt; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780661005; c=relaxed/simple;
+	bh=d4PwBW21g4Ve1O5g7jGKmONknIFdCBpqKFa8o5bREgs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=aqaLfxymfGaSodL1djbjNYYpRQ81wrS/qPqq9tMWsAlyyDAURjKGsWlZL8kuOFZ9QvfB7qPzRXtVsp6L+aLAVbiJxy9DO5rwPBIt0PLeMTgn/r9t3NTu7sW94XGhVRhNhwPb7Dr7VI2EgyNbJ5Pw0SArLgHQQ873Hje3kAu2wj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BeHcWj5o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FwvMhzAt"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490b613a17bso17901895e9.3
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 04:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780660636; x=1781265436; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f4TEd+4TYiE1Jj1gNATanEWxBTZIObCwIlDo0eo0tjQ=;
-        b=FwvMhzAtG2YKAk7urawA44Tq/92yIffNQcG+Z7gKNBcfm51u8NMxjFE/6H8tWE9dG6
-         d6kD37eUO7mQo/k3xYyxFJ3XC4QPxwe1tv7ndKhlvLVfLHtjYk/zZ7gtu9wK7v6LYbGW
-         SbZkpUzhmqkuf9Ii4UFA5mXD7qQNGsQxfM1g1d6OhlZ0sYNFb+FS6NFVPTGcpLTmbgKR
-         FCsHQB9y6eeZaBbrOS64bB9LndDySBZPE1adP9bggHRPeK7I63eF7JgC32rcMTBrMVSv
-         zbgt9bWfyE7BmGC58dBJARcr4qj4at1giBEnyu+dfRaxYklaNtPXTayA+qiNFWZd98jx
-         8WJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780660636; x=1781265436;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=f4TEd+4TYiE1Jj1gNATanEWxBTZIObCwIlDo0eo0tjQ=;
-        b=WPrGWYD4is1C8QCcpz1IGAt+VulltzwRfCJIz51tmB+r2L3edbpdA6C/4Oh/RFOuDI
-         xysXgL5mQwyR0UNDSp3KA0tQFDaoh6zaLnNnAsC4o5wmBqbNOiHxQW17Y/6CuoMgiNTE
-         pKdMPWiqru/eRtWgwsbgtsTy9VNhPID8TXOvwhdS4GUrGAn3iICEQeNIW9EFVFZcRHeZ
-         0cI5K+QHp8TXxQYOAuDHfnF+hNMyNpBVB4HM5yl3vUk2ypFiDoFDIOvgJDJs+x6e0V4j
-         WUiFFZ2wuno9fa1gVhSOdgBSpv//Gkzl/Ya4IbP5Z9aEsQFzG0J1nThsRLxLZ3ox5Zir
-         g5CQ==
-X-Gm-Message-State: AOJu0Yy3bxL4TZjfDyu9Iz3U3f4yNnoIycj9WlivOYpQLoQgDsW+0Iag
-	ZgkKLx9epiTCRRw+JlHMPJXpzspi6JwqkrR5Z+oPMzEJxG6E4/p2oxeZz5Yu3haz8Ex2vw==
-X-Gm-Gg: Acq92OHw3KI/R/Y9h7+fny7ECsKJOQyS/pbM+nC+qK+dxC3GRMMDgimp6eOkFsE8Fe6
-	lL5cnPcADbylFMVH6CH9E3kba3xT0SPKh2ykx3mfRtUKYlv7DlSTN/TLHqGJDMRwbPxCdS3W5jo
-	GW9KovkuIHad8JExYmX8/cYRDM3vJiXvwrz/jleo0ssoVEdrAs1Lyycx4XuXkmU4enZhzLEn1TB
-	6uONnQbICYdPEig2fzAHa/DF+P30+bVGHUwOAAZZ5nentZ58GoH0apnW9Zt5w/Obg52f+wfsbQg
-	HHcWpXH4S9ZOylmuL0jJqmthC8+1HjlyyecKZFTMWpYP7FlB7nrA9R0iRNCXtvVhR7DC/oyG9tE
-	lQAapkwY30U3Cb13Bo1pbx81YxwfmsTdkjGOH5MVigIIpnUgJ2BK+83xU0AtoyxA+/f9YfktQlY
-	N5TWH7FQnm8nc8KnuwPvA3WrR+ab4p7FvmHHXdTL55YIfpCETGGoWb
-X-Received: by 2002:a05:600c:6096:b0:490:b115:e03f with SMTP id 5b1f17b1804b1-490c25ba56cmr51175565e9.8.1780660635434;
-        Fri, 05 Jun 2026 04:57:15 -0700 (PDT)
-Received: from x1.tail0e71db.ts.net ([46.140.7.198])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46028a6dcbdsm15402201f8f.7.2026.06.05.04.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 04:57:15 -0700 (PDT)
-From: Ruslan Valiyev <linuxoid@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	memxor@gmail.com
-Cc: song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com
-Subject: [PATCH v2 bpf-next] selftests/bpf: add arena split and fork tests
-Date: Fri,  5 Jun 2026 13:57:13 +0200
-Message-ID: <20260605115713.3224051-1-linuxoid@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DJ0F0WFEP78A.1VV9Z7T71JJX5@etsalapatis.com>
-References: <DJ0F0WFEP78A.1VV9Z7T71JJX5@etsalapatis.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BeHcWj5o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE651F00893;
+	Fri,  5 Jun 2026 12:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780661004;
+	bh=I5uZzzI1hku2tP7ET9pUS0VXgKOx7ws46o0iwlasAt8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BeHcWj5oODPvHhDzfhv/wsX7GKas/g9SKEskZY/Ge+3862JEcmpsV4DxLXPSumMsJ
+	 zB3c8zwr2fkMTAAsz06OgyciT/rBiH6omkpVV4mP32XE1o0mVwRTq2Pwjke0s2meL+
+	 6VQPyKtxWBuRoqadcRdNH2qVHCFus7KcVBUyhr3uEr9L9Eb3jV6xzx3mbrYONBmofd
+	 sLrVmGsZWtvmkQbO/2DPCGh1nAroxccbSVa9VMA23kJ7+ycZzqGfKfIRjC5KxVB+Ro
+	 kGVfeff3U0BcgPQcIrg5owXXHmX+Su9BpMTViDXbKIeu7OHJhs2uuu72pMiW2zJH8P
+	 i5UUTSDcM3I8g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 12/12] selftests/bpf: Add resizable hashmap
+ to benchmarks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260605-rhash-v7-12-5b8e05f8630d@meta.com>
+References: <20260605-rhash-v7-12-5b8e05f8630d@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 05 Jun 2026 12:03:23 +0000
+Message-Id: <20260605120323.DBE651F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add two tests for an arena map's mmap()ed region: arena_split checks
-that a partial munmap() that would split the mapping fails with -EINVAL,
-and arena_fork checks that a forked child does not inherit the mapping
-(mincore() reports the range as unmapped).
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The bpf-rhashmap-full-update benchmark measures the -E2BIG error=
+ path instead of successful map updates, invalidating the commit message's =
+performance claims.
+--
 
-Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
----
-v2:
-- Drop the regression-test framing and per-callback details; use
-  short one-line comments.
-- Split into two separate tests, arena_split (partial unmap) and
-  arena_fork.
-- Unpack the mincore() child check into explicit statements.
+commit c016012bca8439800d9763b0e9dbdba68b4e1642
+Author: Mykyta Yatsenko <yatsenko@meta.com>
 
- .../selftests/bpf/prog_tests/arena_fork.c     | 53 +++++++++++++++++++
- .../selftests/bpf/prog_tests/arena_split.c    | 34 ++++++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_split.c
+selftests/bpf: Add resizable hashmap to benchmarks
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
-new file mode 100644
-index 0000000000000..bb134e9adb607
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <errno.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+
-+/* Make sure an arena mapping is not inherited across fork(). */
-+
-+#define NR_PAGES 3
-+
-+void test_arena_fork(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
-+	long ps = sysconf(_SC_PAGESIZE);
-+	size_t sz = (size_t)NR_PAGES * ps;
-+	void *area;
-+	int fd, ret, status;
-+	pid_t pid;
-+
-+	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_fork", 0, 0, NR_PAGES, &opts);
-+	if (!ASSERT_OK_FD(fd, "arena map create"))
-+		return;
-+
-+	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
-+		goto close_fd;
-+
-+	pid = fork();
-+	if (pid == 0) {
-+		unsigned char vec;
-+		int rc;
-+
-+		/* If the mapping was not inherited the range is unmapped in
-+		 * the child, so mincore() fails with ENOMEM. A success means
-+		 * the child wrongly inherited the mapping.
-+		 */
-+		rc = mincore(area, ps, &vec);
-+		if (rc == 0)
-+			_exit(1);
-+		_exit(errno == ENOMEM ? 0 : 2);
-+	}
-+	if (ASSERT_GE(pid, 0, "fork")) {
-+		while ((ret = waitpid(pid, &status, 0)) < 0 && errno == EINTR)
-+			;
-+		if (ASSERT_EQ(ret, pid, "waitpid"))
-+			ASSERT_TRUE(WIFEXITED(status) && WEXITSTATUS(status) == 0,
-+				    "child must not inherit arena mapping");
-+	}
-+
-+	munmap(area, sz);
-+close_fd:
-+	close(fd);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_split.c b/tools/testing/selftests/bpf/prog_tests/arena_split.c
-new file mode 100644
-index 0000000000000..8a59cfdb2ef89
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_split.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <errno.h>
-+#include <sys/mman.h>
-+
-+/* Make sure an arena mapping cannot be split by a partial munmap(). */
-+
-+#define NR_PAGES 3
-+
-+void test_arena_split(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
-+	long ps = sysconf(_SC_PAGESIZE);
-+	size_t sz = (size_t)NR_PAGES * ps;
-+	void *area;
-+	int fd, ret, err;
-+
-+	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_split", 0, 0, NR_PAGES, &opts);
-+	if (!ASSERT_OK_FD(fd, "arena map create"))
-+		return;
-+
-+	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
-+		goto close_fd;
-+
-+	ret = munmap((char *)area + ps, ps);
-+	err = errno;
-+	if (ASSERT_ERR(ret, "split munmap"))
-+		ASSERT_EQ(err, EINVAL, "split munmap errno");
-+
-+	munmap(area, sz);
-+close_fd:
-+	close(fd);
-+}
+This patch adds support for resizable hashmaps in BPF map benchmarks.
+It claims a 5.25x speedup for rhtab over htab during full updates.
 
-base-commit: 174914ea551314c52a61713b9c4bde9e42d48073
--- 
-2.43.0
+>     2. FULL UPDATE  (M events/sec per producer)
+>    =20
+>       htab  per-producer:
+>         20.33   22.02   19.27   23.61   24.18   23.17   21.07
+>         mean  21.94   range  19.27 - 24.18
+>    =20
+>       rhtab per-producer:
+>        133.51  129.47   74.52  129.29  102.26  129.98  107.64
+>         mean 115.24   range  74.52 - 133.51
+>    =20
+>       speedup (mean): 5.25x   (+425 %)
+>    =20
+>     In-place memcpy avoids the per-update alloc + RCU pointer swap
+>     that htab pays.
 
+[Severity: Medium]
+Are these benchmark results measuring successful updates, or just the speed=
+ of
+the -E2BIG error path?
+
+In tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c:hashm=
+ap_full_update_setup(),
+the userspace setup pre-fills the map to its maximum capacity:
+
+    /* fill hash_map */
+    map_fd =3D bpf_map__fd(ctx.skel->maps.hash_map_bench);
+    max_entries =3D bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
+    for (i =3D 0; i < max_entries; i++)
+        bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
+
+The BPF program then attempts to insert a new key that doesn't exist in the=
+ map
+in tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c:benchm=
+ark():
+
+    u32 cpu =3D bpf_get_smp_processor_id();
+    u32 key =3D cpu + MAX_ENTRIES;
+    ...
+    bpf_loop(nr_loops, loop_update_callback, &key, 0);
+
+Because the map is already full, does every update attempt immediately fail=
+ with
+-E2BIG without performing any updates or memcpy?
+
+For htab (which preallocates), returning -E2BIG requires a slow fallback
+traversal of all other CPUs' empty freelists. For rhtab (no prealloc), it is
+a fast atomic check against the element count.
+
+Does this regression mean the benchmark is comparing the speed of error pat=
+hs
+rather than successful map updates, which might invalidate the performance
+claims?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605-rhash-v7-0=
+-5b8e05f8630d@meta.com?part=3D12
