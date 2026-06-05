@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8AB3F4DD0
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C433F4DD0
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641941; cv=none; b=rit9TI+6KVqDLZxqz3TnKSJ6Ds651KW4HB+RKr45gxgSFph7ia/QeACEa+BcSsSNpR+LvBBpq5zGljUPqDI/pu7jBL6dP93E02XSJfe5zeZC9isOAI/Ct29YXVCETO3xKP4fxhPUNxBfMJp5eGJEkRlf1wSAz0p5XOkUemvMee8=
+	t=1780641956; cv=none; b=Y0mng7/dKFQeT3pBwU5tossek/ToHvgtuKgcrC8Qu7Go5bxdQ4CCEqty9RwafHqOURpaj80Ilvs4bqJ3YLbCiFOcmEXahRoNBrOm12p6XfJyHDv6B8/2vfOeWSc3WOulowhsXKgghtPr7TPEAVuBgWdVxuX81P5mddbKiO2BBOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641941; c=relaxed/simple;
-	bh=YWxjsoHIxax3hfzSBFpyrigcbibKtsdTb/2OwdZ3BTM=;
+	s=arc-20240116; t=1780641956; c=relaxed/simple;
+	bh=EW07pdor8tRDVVoEW86JaIKSo+iFvIoBguY1ofdNHtE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NKKs7FGR9/py8KceyfYhqtewAgEL/5FtYOgTRbfXzARE8uFnlpWPhJTPRIPTMrRAbEf86eNhNjNMeDRrOz1jatU8HdRJB3YTiZ1F0QTU/EoF9jVVgRFGIJGTJyXEz3+D5I74s4iyoNqor5uYH/y+CG/BpUKwzJ00segixqkpy04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/s1oRW4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Jcd8pIX4NLaEkSVD69oQXCU69Qv3wUCk9NzZJQStIYXt5L7AjHr2LoJfWQMIoDx8z2oM8tFZAQf7p6+4IbUPGKxJpIvJJl4kAGGIDVOPn5PLTyuTH1piN5ZS2Tcarsn7+ToDbVjpv9MUviAgNgH4H1zGunhh3z0XnMPRA38VofU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLQ4M15I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/s1oRW4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3F51F00893;
-	Fri,  5 Jun 2026 06:45:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLQ4M15I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467DA1F00893;
+	Fri,  5 Jun 2026 06:45:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780641937;
-	bh=qiTlsLc1uOKMzttCe0vei+03rg0Z57WJ7Nr4gHM4eM8=;
+	s=k20260515; t=1780641953;
+	bh=OBvKEBhd1KnqDSy4UCCV/LF/X+PtMY0+zmzypfxB8MU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G/s1oRW4SMkrgfGEYXqtwCM2eDlvcdTkzZ7ymgfy1gDE0DSMC0u6XfsMJUPQkgyhy
-	 /svg/D17ci2AbHjA00ic6yCC0lx/tTvQ/zwR6y94k3XaqEVNfkNFtcRd6N4FX8fujt
-	 UUtNsxnSD6Yw0jNGrPH/8ZC55HXZq9GsNfV6EgfGz1rFvo6mDf2U8Kn4ZF6Lh/iepy
-	 pOCtf4TmrgWY3WvtvRH3dB7OaHEvLegI2uzbh9mkcK9yZN/Q617WeX3DEvx33j8p3P
-	 zxp+QwzJ2+8uFFYGpsKG2zVMZfe3r8FAMmrdTvWJJMyQXaxvXYNv9Po2XmmZqpJvUa
-	 ZPk2tOPuO4npw==
+	b=GLQ4M15IJ75/sjPTotXP4+HZj/OUIFCaSgVBMHON4Hmeheu/YyAHuLvQA1b+FqDYe
+	 e+Jr91Tg+RiFuN4jKlW43NvluiOXv+9cJUyVt+SOhtfq2h2P8pZipafA6+mKXl2s5g
+	 Ut6N1DxncjzcEScQorQXMMEkeJ8kbQM13mLB9IxwZmgxTsPCdLfDu6i6miuAyiHl0/
+	 MWeeAdRq4FeDscMENxOaudlVEH2qnjjFjmAnMaMEMFbQ1uO2N+VgONdOShyd6m2q1X
+	 ZqfzgyfMnPuBVoeVpouLe/Igt+fM0OoVIVhWGBZ0Bcv3XGnCIInAtTlLSDRl9Q1htq
+	 LkD8/hcFVDIPQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 10/17] bpf: Report Resource Lifetime
- reference leaks
+Subject: Re: [PATCH bpf-next v1 09/17] bpf: Report Memory Safety bounds
+ errors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605063412.974640-11-memxor@gmail.com>
-References: <20260605063412.974640-11-memxor@gmail.com>
+In-Reply-To: <20260605063412.974640-10-memxor@gmail.com>
+References: <20260605063412.974640-10-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:45:36 +0000
-Message-Id: <20260605064536.DE3F51F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:45:52 +0000
+Message-Id: <20260605064553.467DA1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,67 +46,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Incorrect indentation of `bpf_diag_report_resource_state` calls ins=
-ide `process_irq_flag`.
+- [Medium] Diagnostic message for `BPF_DIAG_MEM_NEGATIVE_MIN` prints a larg=
+e positive number instead of a negative number when `reg_smin(reg)` is `S64=
+_MIN` and `off` is negative, due to signed 64-bit integer wrap-around.
 --
 
-commit 55651d7f9fb67183b2ac504e84a853783f31d0f3
+commit 176ba692cb9724623bf456ca5401c93a61c5ea8d
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Report Resource Lifetime reference leaks
+bpf: Report Memory Safety bounds errors
 
-This commit augments the verifier's reference leak detection by adding a
-Resource Lifetime Safety report when a reference is still live at program
-exit or throw time. It also adds detailed diagnostic reporting for invalid
-resource states involving dynptrs, IRQ flags, spin locks, and iterators.
+This commit augments check_mem_region_access() range-proof failures with Me=
+mory
+Safety reports. The existing terse verifier messages remain in place for
+compatibility while the new report adds the failed proof, source context,
+causal path, and guidance.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e9c121892b7e5..1c26614bec2b7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 920ac17758c20..0abe1ab19d252 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
 
 [ ... ]
 
-> @@ -11576,6 +11665,11 @@ static int process_irq_flag(struct bpf_verifier_=
-env *env, struct bpf_reg_state *
->  		if (!is_irq_flag_reg_valid_uninit(env, reg)) {
->  			verbose(env, "expected uninitialized irq flag as %s\n",
->  				reg_arg_name(env, argno));
-> +				bpf_diag_report_resource_state(env, env->insn_idx,
-> +							       "IRQ flag is already initialized",
-> +							       "Saving IRQ state requires an uninitialized stack slot for=
- the IRQ flag, but this slot already contains tracked IRQ flag "
-> +							       "state.",
-> +							       "Use a fresh stack slot for this save operation, or restor=
-e the existing IRQ flag before reusing the slot.");
+> +void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_i=
+dx,
+> +				int regno, const char *reg_name,
+> +				const char *type_name,
+> +				enum bpf_diag_mem_bounds_kind kind,
+> +				int off, int size, u32 mem_size,
+> +				const struct bpf_reg_state *reg)
+> +{
 
-[Severity: Low]
-This isn't a bug, but it looks like there's an extra level of indentation
-added to the bpf_diag_report_resource_state() call here. Should this be
-adjusted to align with the verbose() call above it?
+[ ... ]
 
->  			return -EINVAL;
->  		}
-> =20
-> @@ -11592,6 +11686,10 @@ static int process_irq_flag(struct bpf_verifier_=
-env *env, struct bpf_reg_state *
->  		if (err) {
->  			verbose(env, "expected an initialized irq flag as %s\n",
->  				reg_arg_name(env, argno));
-> +				bpf_diag_report_resource_state(env, env->insn_idx,
-> +							       "uninitialized IRQ flag restore",
-> +							       "Restoring IRQ state requires a stack slot that was initia=
-lized by a matching IRQ save operation on this path.",
-> +							       "Pass the same stack slot that was previously initialized =
-by the matching IRQ save kfunc.");
+> +	switch (kind) {
+> +	case BPF_DIAG_MEM_NEGATIVE_MIN:
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The smallest possible offset is %lld, below 0",
+> +			  reg_smin(reg) + off);
+> +		break;
 
-[Severity: Low]
-This isn't a bug, but this call also appears to have an extra level of
-indentation.
+[Severity: Medium]
+Will this print a contradictory positive number instead of a negative one w=
+hen
+reg_smin(reg) is S64_MIN and off is negative?
 
->  			return err;
->  		}
+Looking at the caller in check_mem_region_access(), it triggers the
+BPF_DIAG_MEM_NEGATIVE_MIN diagnostic if reg_smin(reg) =3D=3D S64_MIN:
+
+kernel/bpf/verifier.c:check_mem_region_access() {
+    if (reg_smin(reg) < 0 &&
+        (reg_smin(reg) =3D=3D S64_MIN ||
+         ...)) {
+        bpf_diag_report_mem_bounds(..., BPF_DIAG_MEM_NEGATIVE_MIN, ...);
+    }
+}
+
+If off is negative, reg_smin(reg) + off will underflow S64_MIN and wrap aro=
+und
+to a huge positive number like 9223372036854775807. The diagnostic output m=
+ight
+then read something confusing like:
+"The smallest possible offset is 9223372036854775807, below 0"
+
+Unlike the max bounds case which correctly handles wrapping, the min bounds
+case appears to evaluate this unconditionally.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605063412.9746=
-40-1-memxor@gmail.com?part=3D10
+40-1-memxor@gmail.com?part=3D9
