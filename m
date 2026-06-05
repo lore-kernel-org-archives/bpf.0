@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267A03D331A;
-	Fri,  5 Jun 2026 21:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1E23D3D1D;
+	Fri,  5 Jun 2026 21:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780694421; cv=none; b=mCVXnXX5MK7s6FNhfGhKteGsK8RQb80ZA24Wg2oDp3hTa2G8pQ2OdUEgfChcaHG2N15upUXjPCbhbadx7yPDb0oKBp2PaMQvdgrCOQAckoppCeK85DHiiaMJnEut3WC6q9poaKPp+EzpLT/i0xPKwIA4vhXbf7Gjf1RYg25VoiI=
+	t=1780694422; cv=none; b=qUFQP7MpUAhjM+ACDcBhCGGs4Xvs6KJGNiILskVQTdfozV52zeX80Vxy3nfeOhL+b5uTIt3ARmOVPDi/chkirwm0QP8hZaSYbvpAStDEctY4qCXHRUpqXmtXAbYs5ZnG4uglLqe417LOIhMKi2ZK4OUjfa+IJIdQa8r/LwxAtPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780694421; c=relaxed/simple;
-	bh=Cx+8qomZY5FQwAhNoiy9JrsEd1ll4hy79/vzsGtXG54=;
+	s=arc-20240116; t=1780694422; c=relaxed/simple;
+	bh=8EXjaaOHeXCMi7NlB9YH0TDZr4JLRlzxLAptFpFNV00=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fS5O2f846mnWgJ4zP3pRnBgbuPFY2vACMxV/JfHz78Gi7T8kf8xkIOUqg2mqddsXKtTDgW4OtI3iX/lKd00PdBEvvjJSH2WswlcWluZHpu0vh1U/AAaNfZvg7DhUvqTdpRdAEoe2UoWM8rzWUm5K43pVi6L6ILQP7BfUiXsMb/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oi1CngqI; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ROAmrcIOUTrXbCatol4pUDYljsoCzFsDYyZrq297pliJc/kBtVqENftpj9wInHDrAnR/BXWjydVRX2AUgKl3nimx+9nm2tJ4d8aIlyfB8Q/qsnXGNGUIxQOHdvs9iGDp+SzpljdQ7wbwGPSVWMr8exRcAOR7EyxEcwWAcmK5UY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ow8h1nt3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oi1CngqI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57A51F00893;
-	Fri,  5 Jun 2026 21:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780694419;
-	bh=D5IJ/BwlkmKjnnqEMKn+22YmB1KatBt00b8eCo4vmOk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Oi1CngqIPerXOPHZBRFVN6VpPiem2VLPwVRE4v+5P+5eSK48uaHycR+Q0tVloSgbL
-	 bxUITYi6v59JFG/cGOEHJ0nw/QmrGF6rrUBoMY6kmjMouYZxFGnwzeZwg23Z0zWeJg
-	 M9rvh/Yovva1Je2LSEhNI9wyHSCpqISx8DcaIh0XCus3dsvnghkp4tqGQg6XpkQ7xu
-	 23dgpibWq6TFYyHKGQQwuCjEy62KiPatxp9mD7Q/9ek8UjBjh0AB0qYb59N6KzXBPt
-	 I/R1q6RGOmVJmAvjeIqmECuLv9jUg7qUwoABVvuQLyAtU+1VjPXXlic9InQVBrCqDB
-	 0d0Ze9aDpjtig==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568323930BB9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ow8h1nt3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ECD41F00893;
 	Fri,  5 Jun 2026 21:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780694421;
+	bh=LJpoVFB+CuvYX0SXvlOWKASZl7v0I50VSEGhMK+Pmkg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Ow8h1nt3qhRLcXmj5/tVS8pvYmQQSYHs0hPZbenVplmVZ3HBORnoEygSUNoNHMz+K
+	 nT3eA62bFCLTC1u35tvVJQCwgTlhkGPB7aU+dc9rdvFh0MG8EotxBswJ/N3OxkNL+H
+	 ptVsaomW6bzk0VypeeC/gZta/vqxMn7pEAgugp+xGTEWQJLusOab7Pz9pE6FwKnIRJ
+	 b9/Fe8OWIPLJcWa0GUOqWPOXItpmerrHHAegcdjLLrbTHCnouyChrsQUn2Duw9MSgC
+	 5Yf04yyVB2IBWGWmRz/0oLDnbfn9bQ1Uxu+GtcLfCWMOO11haDqIJPndGFJbn+piuB
+	 ReSZeeXI4XsEA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0B653930BB9;
+	Fri,  5 Jun 2026 21:20:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,46 +37,42 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/5] Object relationship tracking refactor
- followup
+Subject: Re: [PATCH v1] bpftool build: Restrict feature tests during bootstrap
+ compilation
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178069441988.3922226.2367638176969669476.git-patchwork-notify@kernel.org>
-Date: Fri, 05 Jun 2026 21:20:19 +0000
-References: <20260605202056.1780352-1-ameryhung@gmail.com>
-In-Reply-To: <20260605202056.1780352-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
- andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+ <178069442140.3922226.7204524293752393062.git-patchwork-notify@kernel.org>
+Date: Fri, 05 Jun 2026 21:20:21 +0000
+References: <20260531010750.525160-1-irogers@google.com>
+In-Reply-To: <20260531010750.525160-1-irogers@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, terrelln@fb.com, dsterba@suse.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+ james.clark@linaro.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri,  5 Jun 2026 13:20:51 -0700 you wrote:
-> Hi,
+On Sat, 30 May 2026 18:07:50 -0700 you wrote:
+> When the perf build executes 'make -C ../bpf/bpftool bootstrap', bpftool's
+> Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
+> and disassembler libraries because the bootstrap target was not exempted.
 > 
-> The main patchset refactoring object relationship tracking in the
-> verifier has landed and this is a followup that addresses the remaining
-> feedback in v6 [0].
-> 
-> [0] https://lore.kernel.org/bpf/20260529014936.2811085-1-ameryhung@gmail.com/
+> Since the bootstrap bpftool strictly compiles minimal AST parsing and C
+> code generation logic without linking LLVM or disassembler libraries, these
+> feature check sub-makes are completely redundant.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3,1/5] bpf: Fix dead error check on acquire_reference() in check_kfunc_call
-    https://git.kernel.org/bpf/bpf-next/c/a3863aa4f55e
-  - [bpf-next,v3,2/5] bpf: Check acquire_reference() error for "__ref" struct_ops arguments
-    https://git.kernel.org/bpf/bpf-next/c/73d475dc6c13
-  - [bpf-next,v3,3/5] bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
-    https://git.kernel.org/bpf/bpf-next/c/41025f441fe6
-  - [bpf-next,v3,4/5] bpf: Remove WARN_ON_ONCE in check_ids()
-    https://git.kernel.org/bpf/bpf-next/c/ac7f6c9da6b6
-  - [bpf-next,v3,5/5] selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
-    https://git.kernel.org/bpf/bpf-next/c/d83d4f63cb8f
+  - [v1] bpftool build: Restrict feature tests during bootstrap compilation
+    https://git.kernel.org/bpf/bpf-next/c/231fc9bc27fd
 
 You are awesome, thank you!
 -- 
