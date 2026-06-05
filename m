@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DA8355F2A
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F4F2F6565
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639036; cv=none; b=p7l7RgDmX1hOmmwSo9TlyCviE/88drTuvrnCIamzGNucvWrubNs17+f/N78GYriV+XAlxrA302m6WMxim1mwjX6DZ5xVPdNfxewRm4fausc9UoQel6tz1Icn6WtUY2K6bPvG5NRlmmgl120hk9/tXRopPGdYGHnrnoCbk7/hL3o=
+	t=1780639159; cv=none; b=IakQsl2UXkuhC4yz+toM5F7pANXwrOSFtxEZwK2bY5kyjafWm8xnN1cPwq3zLAgWGjmLTJbGHVlXyhSra5dcdUBC35TLuNi9L2obYnJ0RntMhFB4WEOSf8hjHObJc4sHCagF6bHn/y1ILDFQqF/QNLMoIv9AlTQjJVcP5/khfHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639036; c=relaxed/simple;
-	bh=U6DkUbh+Kobb4CREKDAGc7PYBBWKkfEh0K3ohlvHNB4=;
+	s=arc-20240116; t=1780639159; c=relaxed/simple;
+	bh=8/ieZolUmgaC6ZhsErVKLHGjd/LV0no0+cdJBSX68Xw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FZ3LC08PCMLsUTg7REgtt5Ch2Idnq0KAEZf9GtX4JnXV80fsdVkqGi5E8JwlTrlNz0kPXkqBY3k1VjFImov6VI3dlWvZe2K3mnHAQaU2MVJYofb29/YTrbqJDH/n2xxldyF09KjmXOZGHzWuvoXcOmqi+2Ca21xCYyAjy6OeLRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3sNvlrr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=K/80htBHR7BmehDUXXA0O/M5uTLSYgBysPbCH4tXEoH47De5kT6FY+xzTHZqHcVDt+ijVdM/DTxpF2XOEPufaq2ZJ/+tK1La7s64FpltIkU8jlN4DdqlAmqmQfFeOlspDeKhZhkC6Al9dv75BOJhRMc+P+ezQYQQF0lGcgcHziA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxUPVIu1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3sNvlrr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF1A1F00893;
-	Fri,  5 Jun 2026 05:57:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxUPVIu1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 755661F00893;
+	Fri,  5 Jun 2026 05:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780639035;
-	bh=q71YTY4F/v9OIF3YUci9B3mHKs2ETxZ3w6ex2Z1HSL0=;
+	s=k20260515; t=1780639157;
+	bh=0JbV/RbmEDPwgwN4LNWapvf2AiXN3E+LeZ4DrI037Pk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=V3sNvlrrri4ExDED7F73iwwuqrK9837Ydc6+uCqImqRHR4/9Y1stLf7rxRg+SFmy7
-	 xTil3whm8fYo3m1RwmFGOEuOUqp9Vkv1BoagIBD1WqYLtBjQsdys5uY1OGFrxwwv42
-	 A/s0NatEMhet0EKfdq+rNR5G9+HcnCfVIv4OaXSMU/PWTx6lTe0geDvafxTqpyUeB0
-	 3nrAa+kGzoEk62R7MZZkHcQGpVNaUIAmi3hSoi7ZStJTC99TjKI5TltlLplXPL5sMn
-	 ASh1vJJC0b7/T5fFDHHHdqx1GxxZjV+UOEcPgWgnZAoLppB2+lC3UKx7nAggJFvLCQ
-	 mcyONuexx88jQ==
+	b=hxUPVIu1I0Rf1iuup+hSQtqc2l+xiSxbQE2RIgl0CbKrOwfExpBQeePdOSDKOQa73
+	 dKvhQo6r7nRcfdLuGWSYYCAfdQgbGlmbW8hpBf36f4hrcJPmE0S+FI/7geCgjeIFUw
+	 IFzqQmd+KKfnbSjEuFWcymIq16YG/e+SGHfVDGr3vHIZwA+jObVYljOET0l0SPcTY4
+	 U3UfAyxNAnhUakdl6/AoYUxH0Ry47TN+nos89C8XZxfuq/ZHYi5zBOTCQMQzrRWwRX
+	 vnn9htIzwvHlOBbe9Ux+PC+BS7ujl+taCjp85/Q/DAzGD3H8ado8y9ZnJS8JDhIzHj
+	 KogmfmzNSuyJA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 07/13] locking: Switch to _irq_{disable,enable}()
- variants in cleanup guards
+Subject: Re: [PATCH v3 01/13] preempt: Track NMI nesting to separate per-CPU
+ counter
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Boqun Feng" <boqun@kernel.org>
-Cc: ojeda@kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260605054128.5925-8-boqun@kernel.org>
-References: <20260605054128.5925-8-boqun@kernel.org>
+Cc: bpf@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260605054128.5925-2-boqun@kernel.org>
+References: <20260605054128.5925-2-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 05:57:14 +0000
-Message-Id: <20260605055714.BDF1A1F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 05:59:17 +0000
+Message-Id: <20260605055917.755661F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,85 +46,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Switching `guard(raw_spinlock_irqsave)` and `guard(spinlock_irqsav=
-e)` to use `_irq_disable()` variants breaks NMI-safety and will trigger WAR=
-N splats and potential `preempt_count` corruption when used in NMI context.
+- [High] Arithmetic overflow of `HARDIRQ_COUNT` carrying into `NMI_MASK` pe=
+rmanently corrupts `preempt_count` and causes a fatal kernel panic on neste=
+d NMI exit.
 --
 
-commit 545c01b2eb680702b0d892d04382c1e8bb27b35f
-Author: Boqun Feng <boqun@kernel.org>
+commit fea264f43839ad70d356b7c0bdb7708892c51c22
+Author: Joel Fernandes <joelagnelf@nvidia.com>
 
-locking: Switch to _irq_{disable,enable}() variants in cleanup guards
+preempt: Track NMI nesting to separate per-CPU counter
 
-This commit modifies various irq disabling guards to use the
-_irq_{disable,enable}() primitives instead of their previous variants.
+Move NMI nesting tracking from the preempt_count bits to a separate per-CPU
+counter (nmi_nesting). This frees up the NMI bits in the preempt_count,
+allowing those bits to be repurposed for other uses.
 
-Link: https://patch.msgid.link/20260121223933.1568682-17-lyude@redhat.com
+Link: https://patch.msgid.link/20260121223933.1568682-3-lyude@redhat.com
 
-> diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-> index 3d405cc4c1218..799a8f7d27418 100644
-> --- a/include/linux/spinlock.h
-> +++ b/include/linux/spinlock.h
+> diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
+> --- a/include/linux/hardirq.h
+> +++ b/include/linux/hardirq.h
+> @@ -102,14 +104,17 @@ void irq_exit_rcu(void);
+>   */
+> =20
+>  /*
+> - * nmi_enter() can nest up to 15 times; see NMI_BITS.
+> + * nmi_enter() can nest - nesting is tracked in a per-CPU counter.
+>   */
+>  #define __nmi_enter()						\
+>  	do {							\
+>  		lockdep_off();					\
+>  		arch_nmi_enter();				\
+> -		BUG_ON(in_nmi() =3D=3D NMI_MASK);			\
+> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
+> +		/* Maximum NMI nesting is 15. */		\
+> +		BUG_ON(__this_cpu_read(nmi_nesting) >=3D 15);	\
+> +		__this_cpu_inc(nmi_nesting);			\
+> +		__preempt_count_add(HARDIRQ_OFFSET);		\
+> +		preempt_count_set(preempt_count() | NMI_MASK);	\
+>  	} while (0)
 
 [ ... ]
 
-> @@ -592,14 +592,13 @@ DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_bh_try, __a=
-cquires(_T), __releases(*(raw
->  #define class_raw_spinlock_bh_try_constructor(_T) WITH_LOCK_GUARD_1_ATTR=
-S(raw_spinlock_bh_try, _T)
+>  #define nmi_enter()						\
+> @@ -124,8 +129,12 @@ void irq_exit_rcu(void);
 > =20
->  DEFINE_LOCK_GUARD_1(raw_spinlock_irqsave, raw_spinlock_t,
-> -		    raw_spin_lock_irqsave(_T->lock, _T->flags),
-> -		    raw_spin_unlock_irqrestore(_T->lock, _T->flags),
-> -		    unsigned long flags)
-> +		    raw_spin_lock_irq_disable(_T->lock),
-> +		    raw_spin_unlock_irq_enable(_T->lock))
+>  #define __nmi_exit()						\
+>  	do {							\
+> +		unsigned int nesting;				\
+>  		BUG_ON(!in_nmi());				\
+> -		__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);	\
+> +		__preempt_count_sub(HARDIRQ_OFFSET);		\
+> +		nesting =3D __this_cpu_dec_return(nmi_nesting);	\
+> +		if (!nesting)					\
+> +			preempt_count_set(preempt_count() & ~NMI_MASK);	\
+>  		arch_nmi_exit();				\
+>  		lockdep_on();					\
+>  	} while (0)
 
 [Severity: High]
-Does this change break NMI-safety for users of guard(raw_spinlock_irqsave)?
+Does this combination of __preempt_count_add() and bitwise OR in __nmi_ente=
+r()
+break arithmetic symmetry when NMIs nest deeply?
 
-The raw_spin_lock_irqsave primitive relies exclusively on CPU-local hardware
-flag saving, which makes it safe for use in any context, including NMIs.
+Because HARDIRQ_BITS is 4, it can hold a maximum value of 15. The patch
+explicitly allows NMI nesting up to 15 levels. If an NMI interrupts an acti=
+ve
+hardirq (where the hardirq count is already 1) and then nests 15 times, the
+total number of __preempt_count_add(HARDIRQ_OFFSET) operations reaches 16.
 
-By switching to raw_spin_lock_irq_disable, this completely bypasses local
-flags saving and relies on local_interrupt_disable() under the hood.
+This overflows the 4-bit HARDIRQ field and carries a 1 into the NMI_MASK bit
+(bit 20). The overflow mathematically clears bit 20 and sets bit 21. By then
+forcing bit 20 back to 1 with a bitwise OR, the state is corrupted.
 
-Because local_interrupt_disable() manipulates the task's preempt_count via
-hardirq_disable_enter(), it isn't safe in NMI context and will trigger a
-WARN_ON_ONCE(in_nmi()) splat and potential preempt_count corruption.
+When the innermost NMI exits, __preempt_count_sub(HARDIRQ_OFFSET) subtracts
+from this corrupted state, borrowing from bit 20 and clearing it. Because t=
+he
+inner NMI does not explicitly restore NMI_MASK on exit (as nesting is 14),
+it returns to the outer NMI with bit 20 cleared.
 
->  DECLARE_LOCK_GUARD_1_ATTRS(raw_spinlock_irqsave, __acquires(_T), __relea=
-ses(*(raw_spinlock_t **)_T))
->  #define class_raw_spinlock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATT=
-RS(raw_spinlock_irqsave, _T)
+When the outer NMI eventually exits, won't it fail the BUG_ON(!in_nmi()) in
+__nmi_exit() and trigger a kernel panic?
 
-[ ... ]
+Also, doesn't this permanently leak a carry bit into the higher fields of
+preempt_count (e.g., bit 21), which can accumulate and corrupt other states
+like PREEMPT_NEED_RESCHED?
 
-> @@ -640,14 +639,13 @@ DECLARE_LOCK_GUARD_1_ATTRS(spinlock_bh_try, __acqui=
-res(_T), __releases(*(spinloc
->  #define class_spinlock_bh_try_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(sp=
-inlock_bh_try, _T)
-> =20
->  DEFINE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
-> -		    spin_lock_irqsave(_T->lock, _T->flags),
-> -		    spin_unlock_irqrestore(_T->lock, _T->flags),
-> -		    unsigned long flags)
-> +		    spin_lock_irq_disable(_T->lock),
-> +		    spin_unlock_irq_enable(_T->lock))
-
-[Severity: High]
-Will this also cause preempt_count corruption and WARN splats in NMI context
-for guard(spinlock_irqsave)?
-
-Similar to the raw_spinlock_irqsave change above, moving away from the true
-irqsave mechanism violates the contract that irqsave constructs are entirely
-context-agnostic.
-
->  DECLARE_LOCK_GUARD_1_ATTRS(spinlock_irqsave, __acquires(_T), __releases(=
-*(spinlock_t **)_T))
->  #define class_spinlock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(s=
-pinlock_irqsave, _T)
+I note that a later patch in the series (commit "preempt: Introduce
+HAS_SEPARATE_PREEMPT_RESCHED_BITS") fixes this for 64-bit architectures by
+restoring the old algebraic logic, but 32-bit architectures without
+CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS appear to continue using this flaw=
+ed
+bitwise-OR logic and remain vulnerable.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605054128.5925=
--1-boqun@kernel.org?part=3D7
+-1-boqun@kernel.org?part=3D1
