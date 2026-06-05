@@ -1,185 +1,186 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9D68F7D;
-	Fri,  5 Jun 2026 04:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535243BB669;
+	Fri,  5 Jun 2026 05:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780634433; cv=none; b=BpzZGLiLb2GoGEwQ37Zqqrikq5CzEzOh0CvzdMcAsbdXxGriX835MFHmbw9HbnfErfrR4ocdDTyjAFsOQDAqqm8Dz6yTqA7f1ABBoo/CzX5VoP8rSYrS4kwGrDZt5IPfOSO97Q+a21uFTK6aI/4LAnd8RqYV9M1fhFm0hXkH6Eg=
+	t=1780638097; cv=none; b=ilrjtDK3vheQ7Mvgf2CWybmSE/yf12eSQhYeoOsjNYZWPy9CxvRHAakOE/4n7YX2wgOPXlcGlMNc/TE9BbeOr+3Lil8qQdWsXw0aTZD3i4S4NvFLjW1zDsX/7GiZIlHJEMn35S/0OXuVVUqZAgIyIobUhUlQ9Qcr7zXmsMuc70Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780634433; c=relaxed/simple;
-	bh=qbg995XpptxNNRNd+WQtyVCFI7iRYwfWZYghGuB1XCY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=s/hsqFIo2S4PqnUIgfbtGuAT1VPE/TdWq1sDX0lzaJCzq8wmezNJ1sq4eIQDy3XO81BE17/VD/wXZIGpMYhVKyye5udTDq5NHOe00H/QiFxBVGqNVXa1QSQSion+9PR8nv5qNG3YG9szAUxSwTPRDC202AK7RMHUFnGRuBW03Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Dum+VAra reason="signature verification failed"; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1780638097; c=relaxed/simple;
+	bh=Ls8jAn9uxSIuXUvxGwKTd0oyRzMQf9ICZGzwFlvvGEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TyOIEOZPmXtcF0EJ+u+4iPMXXXdP/8qnWs/UlRdqzwycX0zj/X1xEX5QPf4B7h+EM0Fk2iI4hYTvdv+qhwxUiSqvfOu/Hj6Z/iAN4ymBlrFf1x5AeEuxOLs1t1kPlcui0x+T3ZFr6afVfASOEBxkmGnqurv62OKQLdYj+hmiLYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MObfmUyE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Dum+VAra"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=eMuIw1NENQA8CNXkANORroU
-	3HDxlCLP/SoZA05I5Z2k=; b=Dum+VAraCeeKYVSrEWi4weL4e/mihq8dpT0Ul6d
-	SML2OxjJSDkDJOlEFDsbBMo6eaRxpZwMi8Vwsl0Ovgrr6ewtWqmhpK+RlLAA0i6v
-	GGPMqRoaNb+gSHg+7mINPEASDzBL1j2PquScerq2ocEsTu3VI8sCuT4o02bbOOsR
-	CjVQ=
-Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
- ajax-webmail-web5 (Coremail) ; Fri, 5 Jun 2026 12:39:56 +0800 (GMT+08:00)
-Date: Fri, 5 Jun 2026 12:39:56 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: gnq25@mails.tsinghua.edu.cn
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>,
-	"Shuah Khan" <shuah@kernel.org>,
-	"Shenghao Yuan" <shenghaoyuan0928@163.com>,
-	"Yazhou Tang" <tangyazhou518@outlook.com>,
-	"Matt Bobrowski" <mattbobrowski@google.com>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for
- PTR_TO_FLOW_KEYS constant offset bounds
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <3a45b9648a59651ce4206e839050d2f3d76325cd.camel@gmail.com>
-References: <20260604180730.2518088-1-gnq25@mails.tsinghua.edu.cn>
- <20260604180730.2518088-3-gnq25@mails.tsinghua.edu.cn>
- <3a45b9648a59651ce4206e839050d2f3d76325cd.camel@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MObfmUyE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DC91F00898;
+	Fri,  5 Jun 2026 05:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780638096;
+	bh=SPlBajyEY6daFB22p/LrTuA35kcRxPh5dhkRnYY+Ggo=;
+	h=From:To:Cc:Subject:Date;
+	b=MObfmUyEGI4gsHNOfRmcE5B8Djlg4lkrTjak7Rs1Zj6fqLyBs1fZayWXdKO/94FLh
+	 eooAeTUtNPcqchnhpY0yfIckQaBlZ76Msx9ff3F8LASsQQFduhFp9guhMYEbWgp3vq
+	 8YDEsuX7JPq9023+cb8AIqyA0BUJedImk9x3elmDrNMDx/eVYtSMm2QE4reZ3OFwx5
+	 EQ8zscZIjBFf/bxt/Cii844N/Sfx7iPyrFrACWrhoOqmuVnN21tbPBx0YtuiNouuGp
+	 nkaDjdWBtRWSca0QUcsrdxv7X78mAXHTXJsNoBREfILvFrrsM/Y1x8ouOjgYr9WMLe
+	 Jfhb220uBXmFA==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 0DF60F40075;
+	Fri,  5 Jun 2026 01:41:33 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 05 Jun 2026 01:41:33 -0400
+X-ME-Sender: <xms:jGEian6pbR-I090HCRq40lABCksHe_AMB-tMU-ksxzL_HbSyBS0yKA>
+    <xme:jGEiajvRRAC1Tj8t6DkGoYYfBIkyUIAYBaNwdNIhkk_6rNBN86RfumUO-7N67Bvz6
+    4KtuohlS_Q1UaG-wIO55zGGP5VZdbRsWDNnAG1bXmVMUqV261VZPQ>
+X-ME-Received: <xmr:jGEiavoLx40h6nXgPtksAw3ktngeKFB3savDUCnwY_dYiQs3Wjs0MHTX_Dg>
+X-ME-Proxy-Cause: dmFkZTFc+6I5dnayd2BYaWnu3DfmchaRspDny6hXOeQ0WXB+cUQ8+NyHSxw59pEB4HYxYa
+    hQ/jpd2pfuJ3tb8YfwNEy34LuyXTLFRcJbt/R3UZar0R7U6maQKv8Ka6NzqAWGME+IqBdu
+    RQdq5hY1TEX4Mkzh6yYHh+p5reirdqtNwaqftTDkO7sP45Jaff/WH/0OIgW/vJp50latAm
+    /rZjqCPZR5E6s9fBO3Fb5bdDNNFP7jhf5AaUB5cFypzcKqHlteCps9x6FxSEcbNaEgP8SO
+    zQY036UKu1kACwxOSXMerD2djNH46JMVmwsHENjblrU+CF4vthjwdTe26BiLxe3GIJfiJG
+    RjxR1yUIIVwSsXPKsrNdSCXGu6UprlEJkGbJ3B1VFu+tZg4rlXYG22BD0s8OrcXSQwm7NC
+    l4CbhELYEZuVNoKuLdDMRZr6C/IjJWC97a4XxBGAxUFbF8LpyT/BC/HsxqwBEQ/HRLMbAh
+    Dpp4/sZ1kF0bb4aiYj3m13E2PmMVn7cftH8o+dAQNxJdTp5fTb/EjC26ZGRBOA1Q80npOd
+    2Qex/+DWN7SgpELtlSBBcSbTL2nubPHJymTzywzvBJolNNEtkVlORFC1UwerW2cGz53Isx
+    M8QJPTjEsaTF7VLs8NWwd5o0BuRMm78L/vG+Z9c0aa9bn7IoCunGEhauKf3Q
+X-ME-Proxy: <xmx:jGEial4QER2MrYz0DiDUDJTLXRdmyy4sQPfOBLh--p6E8484ePvGKw>
+    <xmx:jWEiaicqOB0Nq2Wcw2UqV6QRBAqL9B5h-SAx_FgKDB17GXzl0BbAig>
+    <xmx:jWEiagiecPLdtMT_wqMPQ4ardSZLgJsKqWeVe8FvkR0wca5Uc-lpcw>
+    <xmx:jWEiat4IwbpUPMVrOQ3uAqNXnEsZDnDVf39rqZQ8w6mLTWaT0MoCLg>
+    <xmx:jWEiat_QeSJwiP0onTcKhoVUIw9TYHNqOUQ0_iNoX_CSNMiaNUGoFc-i>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Jun 2026 01:41:32 -0400 (EDT)
+From: Boqun Feng <boqun@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
+	Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,	Arnd Bergmann <arnd@arndb.de>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Nikunj A Dadhania <nikunj@amd.com>,	"Xin Li (Intel)" <xin@zytor.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kernel@vger.kernel.org,	linux-openrisc@vger.kernel.org,
+	linux-s390@vger.kernel.org,	linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v3 00/13] Refcounted interrupt disable and SpinLockIrq for rust (Part 1)
+Date: Thu,  4 Jun 2026 22:41:15 -0700
+Message-ID: <20260605054128.5925-1-boqun@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <35bdd1ba.79348.19e9614a63a.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:zAQGZQAnksEcUyJqlDwqAg--.23335W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgEJA2oh+5vCywA
-	Csp
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Transfer-Encoding: 8bit
 
-WWVzLCBJIHdpbGwgYWRkIGEgc2VsZnRlc3Qgd2l0aCBhIHRydWx5IHZhcnlpbmcgb2Zmc2V0LCAK
-YXMgc3VnZ2VzdGVkLiBJIHdpbGwgaW5jbHVkZSB0aGlzIGluIHRoZSBuZXh0IHZlcnNpb24uCgoK
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiRWR1YXJkIFppbmdlcm1hbiIg
-PGVkZHl6ODdAZ21haWwuY29tPgo+IFNlbmQgdGltZTpGcmlkYXksIDA1LzA2LzIwMjYgMTA6MjM6
-NDEKPiBUbzogIk51b3FpIEd1aSIgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4sIGFzdEBr
-ZXJuZWwub3JnLCBkYW5pZWxAaW9nZWFyYm94Lm5ldCwgYW5kcmlpQGtlcm5lbC5vcmcKPiBDYzog
-Ik1hcnRpbiBLYUZhaSBMYXUiIDxtYXJ0aW4ubGF1QGxpbnV4LmRldj4sICJLdW1hciBLYXJ0aWtl
-eWEgRHdpdmVkaSIgPG1lbXhvckBnbWFpbC5jb20+LCAiU29uZyBMaXUiIDxzb25nQGtlcm5lbC5v
-cmc+LCAiWW9uZ2hvbmcgU29uZyIgPHlvbmdob25nLnNvbmdAbGludXguZGV2PiwgIkppcmkgT2xz
-YSIgPGpvbHNhQGtlcm5lbC5vcmc+LCAiU2h1YWggS2hhbiIgPHNodWFoQGtlcm5lbC5vcmc+LCAi
-U2hlbmdoYW8gWXVhbiIgPHNoZW5naGFveXVhbjA5MjhAMTYzLmNvbT4sICJZYXpob3UgVGFuZyIg
-PHRhbmd5YXpob3U1MThAb3V0bG9vay5jb20+LCAiTWF0dCBCb2Jyb3dza2kiIDxtYXR0Ym9icm93
-c2tpQGdvb2dsZS5jb20+LCAiRW1pbCBUc2FsYXBhdGlzIiA8ZW1pbEBldHNhbGFwYXRpcy5jb20+
-LCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51
-eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4
-dCB2MiAyLzJdIHNlbGZ0ZXN0cy9icGY6IGFkZCB0ZXN0cyBmb3IgUFRSX1RPX0ZMT1dfS0VZUyBj
-b25zdGFudCBvZmZzZXQgYm91bmRzCj4gCj4gT24gRnJpLCAyMDI2LTA2LTA1IGF0IDAyOjA3ICsw
-ODAwLCBOdW9xaSBHdWkgd3JvdGU6Cj4gPiBBZGQgdmVyaWZpZXIgdGVzdHMgY292ZXJpbmcgY29u
-c3RhbnQgcG9pbnRlciBhcml0aG1ldGljIG9uIGEKPiA+IFBUUl9UT19GTE9XX0tFWVMgcmVnaXN0
-ZXIsIHdoaWNoIHJlZ3Jlc3NlZCB3aXRoIGNvbW1pdCAwMjJhYzA3NTA4ODMKPiA+ICgiYnBmOiB1
-c2UgcmVnLT52YXJfb2ZmIGluc3RlYWQgb2YgcmVnLT5vZmYgZm9yIHBvaW50ZXJzIik6IGFuCj4g
-PiBvdXQtb2YtYm91bmRzIG9mZnNldCBpbnRyb2R1Y2VkIGFzIGZsb3dfa2V5cyArPSBLIGFuZCB0
-aGVuIGRlcmVmZXJlbmNlZAo+ID4gYXQgaW5zbi0+b2ZmIDAgd2FzIGFjY2VwdGVkLCB3aGlsZSB0
-aGUgZXF1aXZhbGVudCBmbG93X2tleXMgKyBLIGRpcmVjdAo+ID4gb2Zmc2V0IHdhcyByZWplY3Rl
-ZC4KPiA+IAo+ID4gVGhlIHRlc3RzIGNoZWNrIHRoYXQ6Cj4gPiDCoC0gaW4tYm91bmRzIGNvbnN0
-YW50IGFyaXRobWV0aWMgb24gdGhlIGtleXMgcG9pbnRlciBpcyBzdGlsbCBhY2NlcHRlZCwKPiA+
-IMKgLSBhbiBvdXQtb2YtYm91bmRzIG9mZnNldCBpbnRyb2R1Y2VkIHZpYSBjb25zdGFudCBhcml0
-aG1ldGljIGlzIHJlamVjdGVkCj4gPiDCoMKgIGZvciBib3RoIHJlYWQgYW5kIHdyaXRlLCB3aXRo
-IHRoZSBzYW1lIGRpYWdub3N0aWMgYXMgdGhlIGRpcmVjdAo+ID4gwqDCoCBpbnNuLT5vZmYgZm9y
-bS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogTnVvcWkgR3VpIDxnbnEyNUBtYWlscy50c2luZ2h1
-YS5lZHUuY24+Cj4gPiAtLS0KPiA+IMKgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy92ZXJp
-Zmllci5jwqDCoMKgwqDCoMKgIHzCoCAyICsKPiA+IMKgLi4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3Mv
-dmVyaWZpZXJfZmxvd19rZXlzLmPCoCB8IDc3ICsrKysrKysrKysrKysrKysrKysKPiA+IMKgMiBm
-aWxlcyBjaGFuZ2VkLCA3OSBpbnNlcnRpb25zKCspCj4gPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0
-b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdmVyaWZpZXJfZmxvd19rZXlzLmMKPiA+
-IAo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3Rz
-L3ZlcmlmaWVyLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy92ZXJp
-Zmllci5jCj4gPiBpbmRleCAyMTlmZjI5Njk4NjguLmRhZTI2ZGRhMzc4MiAxMDA2NDQKPiA+IC0t
-LSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3ZlcmlmaWVyLmMKPiA+
-ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3ZlcmlmaWVyLmMK
-PiA+IEBAIC0zOCw2ICszOCw3IEBACj4gPiDCoCNpbmNsdWRlICJ2ZXJpZmllcl9kaXYwLnNrZWwu
-aCIKPiA+IMKgI2luY2x1ZGUgInZlcmlmaWVyX2Rpdl9tb2RfYm91bmRzLnNrZWwuaCIKPiA+IMKg
-I2luY2x1ZGUgInZlcmlmaWVyX2Rpdl9vdmVyZmxvdy5za2VsLmgiCj4gPiArI2luY2x1ZGUgInZl
-cmlmaWVyX2Zsb3dfa2V5cy5za2VsLmgiCj4gPiDCoCNpbmNsdWRlICJ2ZXJpZmllcl9nbG9iYWxf
-c3VicHJvZ3Muc2tlbC5oIgo+ID4gwqAjaW5jbHVkZSAidmVyaWZpZXJfZ2xvYmFsX3B0cl9hcmdz
-LnNrZWwuaCIKPiA+IMKgI2luY2x1ZGUgInZlcmlmaWVyX2dvdG9sLnNrZWwuaCIKPiA+IEBAIC0x
-ODksNiArMTkwLDcgQEAgdm9pZCB0ZXN0X3ZlcmlmaWVyX2RpcmVjdF9zdGFja19hY2Nlc3Nfd3Jh
-cGFyb3VuZCh2b2lkKSB7IFJVTih2ZXJpZmllcl9kaXJlY3Rfc3QKPiA+IMKgdm9pZCB0ZXN0X3Zl
-cmlmaWVyX2RpdjAodm9pZCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB7IFJVTih2
-ZXJpZmllcl9kaXYwKTsgfQo+ID4gwqB2b2lkIHRlc3RfdmVyaWZpZXJfZGl2X21vZF9ib3VuZHMo
-dm9pZCnCoMKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJfZGl2X21vZF9ib3VuZHMpOyB9Cj4gPiDC
-oHZvaWQgdGVzdF92ZXJpZmllcl9kaXZfb3ZlcmZsb3codm9pZCnCoMKgwqDCoMKgwqDCoMKgIHsg
-UlVOKHZlcmlmaWVyX2Rpdl9vdmVyZmxvdyk7IH0KPiA+ICt2b2lkIHRlc3RfdmVyaWZpZXJfZmxv
-d19rZXlzKHZvaWQpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB7IFJVTih2ZXJpZmllcl9mbG93X2tl
-eXMpOyB9Cj4gPiDCoHZvaWQgdGVzdF92ZXJpZmllcl9nbG9iYWxfc3VicHJvZ3Modm9pZCnCoMKg
-wqDCoMKgIHsgUlVOKHZlcmlmaWVyX2dsb2JhbF9zdWJwcm9ncyk7IH0KPiA+IMKgdm9pZCB0ZXN0
-X3ZlcmlmaWVyX2dsb2JhbF9wdHJfYXJncyh2b2lkKcKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJf
-Z2xvYmFsX3B0cl9hcmdzKTsgfQo+ID4gwqB2b2lkIHRlc3RfdmVyaWZpZXJfZ290b2wodm9pZCnC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgeyBSVU4odmVyaWZpZXJfZ290b2wpOyB9Cj4g
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X2Zsb3dfa2V5cy5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X2Zsb3dfa2V5cy5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAw
-MDAwLi41MTJlNWQxZDI2NjUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2JwZi9wcm9ncy92ZXJpZmllcl9mbG93X2tleXMuYwo+ID4gQEAgLTAsMCAr
-MSw3NyBAQAo+ID4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4gPiArLyog
-Q29uc3RhbnQtb2Zmc2V0IGJvdW5kcyBjaGVja3MgZm9yIFBUUl9UT19GTE9XX0tFWVMgcG9pbnRl
-ciBhcml0aG1ldGljLiAqLwo+ID4gKwo+ID4gKyNpbmNsdWRlICJ2bWxpbnV4LmgiCj4gPiArI2lu
-Y2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgo+ID4gKyNpbmNsdWRlICJicGZfbWlzYy5oIgo+ID4g
-Kwo+ID4gKy8qIHNpemVvZihzdHJ1Y3QgYnBmX2Zsb3dfa2V5cykgaXMgd2VsbCB1bmRlciA0MDk2
-LCBzbyArMHgxMDAwIGlzIE9PQi4gKi8KPiA+ICsKPiA+ICtTRUMoImZsb3dfZGlzc2VjdG9yIikK
-PiA+ICtfX2Rlc2NyaXB0aW9uKCJmbG93X2tleXM6IGluLWJvdW5kcyBjb25zdGFudCBwb2ludGVy
-IGFyaXRobWV0aWMgYWNjZXB0ZWQiKQo+ID4gK19fc3VjY2Vzcwo+ID4gK19fbmFrZWQgdm9pZCBm
-bG93X2tleXNfY29uc3RfaW5ib3VuZHModm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xhdGlsZSAo
-IgkJCQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwKPiA+ICsJ
-cjEgKz0gODsJCQkJCVwKPiA+ICsJcjAgPSAqKHU2NCAqKShyMSArIDApOwkJCQlcCj4gPiArCXIw
-ID0gMDsJCQkJCQlcCj4gPiArCWV4aXQ7CQkJCQkJXAo+ID4gKyIJOgo+ID4gKwk6IF9faW1tX2Nv
-bnN0KGZsb3dfa2V5cywgb2Zmc2V0b2Yoc3RydWN0IF9fc2tfYnVmZiwgZmxvd19rZXlzKSkKPiA+
-ICsJOiBfX2Nsb2JiZXJfYWxsKTsKPiA+ICt9Cj4gPiArCj4gPiArU0VDKCJmbG93X2Rpc3NlY3Rv
-ciIpCj4gPiArX19kZXNjcmlwdGlvbigiZmxvd19rZXlzOiBPT0IgdmlhIGNvbnN0YW50IHBvaW50
-ZXIgYXJpdGhtZXRpYyByZWplY3RlZCIpCj4gPiArX19mYWlsdXJlIF9fbXNnKCJpbnZhbGlkIGFj
-Y2VzcyB0byBmbG93IGtleXMgb2ZmPTQwOTYgc2l6ZT04IikKPiA+ICtfX25ha2VkIHZvaWQgZmxv
-d19rZXlzX2NvbnN0X29vYl9yZWFkKHZvaWQpCj4gPiArewo+ID4gKwlhc20gdm9sYXRpbGUgKCIJ
-CQkJCVwKPiA+ICsJcjEgPSAqKHU2NCAqKShyMSArICVbZmxvd19rZXlzXSk7CQlcCj4gPiArCXIx
-ICs9IDQwOTY7CQkJCQlcCj4gPiArCXIwID0gKih1NjQgKikocjEgKyAwKTsJCQkJXAo+ID4gKwly
-MCA9IDA7CQkJCQkJXAo+ID4gKwlleGl0OwkJCQkJCVwKPiA+ICsiCToKPiA+ICsJOiBfX2ltbV9j
-b25zdChmbG93X2tleXMsIG9mZnNldG9mKHN0cnVjdCBfX3NrX2J1ZmYsIGZsb3dfa2V5cykpCj4g
-PiArCTogX19jbG9iYmVyX2FsbCk7Cj4gPiArfQo+ID4gKwo+ID4gK1NFQygiZmxvd19kaXNzZWN0
-b3IiKQo+ID4gK19fZGVzY3JpcHRpb24oImZsb3dfa2V5czogT09CIHdyaXRlIHZpYSBjb25zdGFu
-dCBwb2ludGVyIGFyaXRobWV0aWMgcmVqZWN0ZWQiKQo+ID4gK19fZmFpbHVyZSBfX21zZygiaW52
-YWxpZCBhY2Nlc3MgdG8gZmxvdyBrZXlzIG9mZj00MDk2IHNpemU9OCIpCj4gPiArX19uYWtlZCB2
-b2lkIGZsb3dfa2V5c19jb25zdF9vb2Jfd3JpdGUodm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xh
-dGlsZSAoIgkJCQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwK
-PiA+ICsJcjEgKz0gNDA5NjsJCQkJCVwKPiA+ICsJcjIgPSAwOwkJCQkJCVwKPiA+ICsJKih1NjQg
-KikocjEgKyAwKSA9IHIyOwkJCQlcCj4gPiArCXIwID0gMDsJCQkJCQlcCj4gPiArCWV4aXQ7CQkJ
-CQkJXAo+ID4gKyIJOgo+ID4gKwk6IF9faW1tX2NvbnN0KGZsb3dfa2V5cywgb2Zmc2V0b2Yoc3Ry
-dWN0IF9fc2tfYnVmZiwgZmxvd19rZXlzKSkKPiA+ICsJOiBfX2Nsb2JiZXJfYWxsKTsKPiA+ICt9
-Cj4gPiArCj4gPiArLyogRXF1aXZhbGVudCBPT0IgZXhwcmVzc2VkIGRpcmVjdGx5IGluIGluc24t
-Pm9mZjsgdGhpcyBmb3JtIHdhcyBhbHdheXMKPiA+ICsgKiByZWplY3RlZCBhbmQgaXMga2VwdCB0
-byBzaG93IGJvdGggZm9ybXMgbm93IHNoYXJlIG9uZSBkaWFnbm9zdGljLgo+ID4gKyAqLwo+ID4g
-K1NFQygiZmxvd19kaXNzZWN0b3IiKQo+ID4gK19fZGVzY3JpcHRpb24oImZsb3dfa2V5czogT09C
-IHZpYSBpbnNuLT5vZmYgcmVqZWN0ZWQiKQo+ID4gK19fZmFpbHVyZSBfX21zZygiaW52YWxpZCBh
-Y2Nlc3MgdG8gZmxvdyBrZXlzIG9mZj00MDk2IHNpemU9OCIpCj4gPiArX19uYWtlZCB2b2lkIGZs
-b3dfa2V5c19pbnNuX29mZl9vb2Iodm9pZCkKPiA+ICt7Cj4gPiArCWFzbSB2b2xhdGlsZSAoIgkJ
-CQkJXAo+ID4gKwlyMSA9ICoodTY0ICopKHIxICsgJVtmbG93X2tleXNdKTsJCVwKPiA+ICsJcjAg
-PSAqKHU2NCAqKShyMSArIDQwOTYpOwkJCVwKPiA+ICsJcjAgPSAwOwkJCQkJCVwKPiA+ICsJZXhp
-dDsJCQkJCQlcCj4gPiArIgk6Cj4gPiArCTogX19pbW1fY29uc3QoZmxvd19rZXlzLCBvZmZzZXRv
-ZihzdHJ1Y3QgX19za19idWZmLCBmbG93X2tleXMpKQo+ID4gKwk6IF9fY2xvYmJlcl9hbGwpOwo+
-ID4gK30KPiA+ICsKPiA+ICtjaGFyIF9saWNlbnNlW10gU0VDKCJsaWNlbnNlIikgPSAiR1BMIjsK
-PiAKPiBDb3VsZCB5b3UgcGxlYXNlIGFsc28gYWRkIGEgdGVzdCB3aXRoIGEgdHJ1bHkgdmFyeWlu
-ZyBvZmZzZXQ/Cj4gTGlrZSBiZWxvdzoKPiAKPiBfX25ha2VkIHZvaWQgZmxvd19rZXlzX3Zhcl9y
-ZWFkKHZvaWQpCj4gewo+IAlhc20gdm9sYXRpbGUgKCIJCQkJCVwKPiAJcjYgPSByMTsJCQkJCVwK
-PiAJY2FsbCAlW2JwZl9nZXRfcHJhbmRvbV91MzJdOwkJCVwKPiAJcjAgJj0gMHhGRkZGOwkJCQkJ
-XAo+IAlyMSA9ICoodTY0ICopKHI2ICsgJVtmbG93X2tleXNdKTsJCVwKPiAJcjEgKz0gcjA7CQkJ
-CQlcCj4gCXIwID0gKih1NjQgKikocjEgKyAwKTsJCQkJXAo+IAlyMCA9IDA7CQkJCQkJXAo+IAll
-eGl0OwkJCQkJCVwKPiAiCToKPiAJOiBfX2ltbV9jb25zdChmbG93X2tleXMsIG9mZnNldG9mKHN0
-cnVjdCBfX3NrX2J1ZmYsIGZsb3dfa2V5cykpLAo+IAkgIF9faW1tKGJwZl9nZXRfcHJhbmRvbV91
-MzIpCj4gCTogX19jbG9iYmVyX2FsbCk7Cj4gfQo=
+Hi Peter,
+
+Please take a look at the v3 of refcounted interrupt disabling.
+
+Changes since v2:
+
+- Fix NMI_OFFSET underflow issue reported by sashiko. See patch #1
+  (__nmi_ext()) and #10 (__preempt_count_nmi_exit()) for details: we
+  have to replace preempt_count_sub() with preempt_count_set().
+- Add WARN_ON_ONCE(in_nmi()) in local_interrupt_disable() per Peter.
+- Remove the use of should_resched() in local_interrupt_enable(), see
+  patch #13.
+- Remove my gmail in SoB.
+
+
+v1: https://lore.kernel.org/rust-for-linux/20260508042111.24358-1-boqun@kernel.org/
+v2: 
+
+Boqun Feng (9):
+  preempt: Introduce HARDIRQ_DISABLE_BITS
+  preempt: Introduce __preempt_count_{sub, add}_return()
+  irq & spin_lock: Add counted interrupt disabling/enabling
+  locking: Switch to _irq_{disable,enable}() variants in cleanup guards
+  sched: Remove the unused preempt_offset parameter of __cant_sleep()
+  sched: Avoid signed comparison of preempt_count() in __cant_migrate()
+  preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS
+  arm64: sched/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+  irq: Optimize reschedule check in local_interrupt_enable()
+
+Heiko Carstens (1):
+  s390/preempt: Enable HAS_SEPARATE_PREEMPT_RESCHED_BITS
+
+Joel Fernandes (1):
+  preempt: Track NMI nesting to separate per-CPU counter
+
+Lyude Paul (2):
+  openrisc: Include <linux/cpumask.h> in smp.h
+  irq: Add KUnit test for refcounted interrupt enable/disable
+
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/preempt.h              |  18 +++
+ arch/openrisc/include/asm/smp.h               |   2 +
+ arch/s390/Kconfig                             |   1 +
+ arch/s390/include/asm/lowcore.h               |  13 ++-
+ arch/s390/include/asm/preempt.h               |  49 ++++----
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/include/asm/preempt.h                |  61 +++++++---
+ arch/x86/kernel/cpu/common.c                  |   2 +-
+ include/asm-generic/preempt.h                 |  14 +++
+ include/linux/hardirq.h                       |  41 ++++++-
+ include/linux/interrupt_rc.h                  |  76 ++++++++++++
+ include/linux/kernel.h                        |   4 +-
+ include/linux/preempt.h                       |  35 ++++--
+ include/linux/spinlock.h                      |  49 +++++---
+ include/linux/spinlock_api_smp.h              |  41 +++++++
+ include/linux/spinlock_api_up.h               |  16 +++
+ include/linux/spinlock_rt.h                   |  18 +++
+ kernel/Kconfig.preempt                        |   4 +
+ kernel/irq/Makefile                           |   1 +
+ kernel/irq/refcount_interrupt_test.c          | 109 ++++++++++++++++++
+ kernel/locking/spinlock.c                     |  29 +++++
+ kernel/sched/core.c                           |  18 ++-
+ kernel/softirq.c                              |  22 +++-
+ lib/locking-selftest.c                        |   2 +-
+ .../testing/selftests/bpf/bpf_experimental.h  |   7 +-
+ 26 files changed, 554 insertions(+), 80 deletions(-)
+ create mode 100644 include/linux/interrupt_rc.h
+ create mode 100644 kernel/irq/refcount_interrupt_test.c
+
+-- 
+2.51.0
+
