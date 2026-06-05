@@ -1,175 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C50347516
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8937A29AB05
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642383; cv=none; b=NRHPE+pSjJiLZMH5JC9ImQDAZ7PHACCUQWAdt8u4m9vLlgnWBuUUmc7+0M5HTLC0nSRZSj3qgkenw2QLrV++Z6DJP9nOBdj9BS8cjSa4QnwMgpSYQBsodRR+7QtZsjP+qIA9PuiAJ3NsPkZU5TB8qDB6YYAwlW30op35mwpfNPw=
+	t=1780642388; cv=none; b=n+gJ3ZCOmK7RCtT/4rxkrU08axkI16s7zfgKl2edlc+WidzgEueILhcvHusAHe6Pm5Dh5c4uDT8jWd0M5q5NB+4pXa98Au5sNIK49Wrap41oKCEfhsOGHiWmU8zo+Qewecr4WQFP4lxGFRC0t1F0jriWuFQjemyPO24fpfHexLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642383; c=relaxed/simple;
-	bh=mh58Ti/GrXIfvw4T7l/Aq66pfjzcwiQYnRSfdMDxLQQ=;
+	s=arc-20240116; t=1780642388; c=relaxed/simple;
+	bh=ejuXTdmVFp1WWQmeb0XpCgzTAUZNc5wrKAZYWoQyZys=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jdXqkROxErFTyrqB4Oj7s5B+0hwo8bKCFpQmUULkjmIzDu7MTq8Sg82cRZzlqySEzSzaZEHt/0YaC65frlE4lXZk8zq+mtIeczenSdPxDAEiyux8NflG8Z3wJOwOp9+4im4eFzMwss1rzRLktPv4Aw58lgygtDrPMP08YOYhDW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFOpZL3S; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=VlcivUxoQ6LfWdI7K2ADciglcBiHtzTaFb66Ge4ewF+2OLWBZmaAGHBgv9F/g75gDzFGObeqpfb5oTP/QG8v8Qwl2q+yyXhaGxeBr/dNrXtVhVvmSrQICuS+CupKwFT0hySNhaHqH2KHsbSkaulZ5eH5VE12+vUyEOXWiEjyhXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nw30LiCZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFOpZL3S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27671F00893;
-	Fri,  5 Jun 2026 06:53:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nw30LiCZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 339231F00893;
+	Fri,  5 Jun 2026 06:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780642381;
-	bh=lL0ec0x49Lvv6obhb7MjkS7Z7yzV9KJXjFylvIZrOyI=;
+	s=k20260515; t=1780642387;
+	bh=1qg0MHNTAnYJ9SlyVItHW2l3zghU5AWTLIPV1km+uQ0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lFOpZL3SXr2z7gf/lw0/aSfPvATSH4cEEi0alU800dn3LazRglV7BZfb/RJ1373kJ
-	 fHVIEetVq1CNwTfsuDJBNZgzb8a/vT1qqV0IihPkFRh9bodFa/JQRePKwMBXpfv/42
-	 2BoHFFbZkFOLcEa72LIznCi9Ucns8nCIpd26m7F8onsGblo2ucCKELkQ3XG2D8Pr0Q
-	 D+UfzpZHbbDACY5kNaBWNzIGgYM4LCeVUr5Jq5YfNmj5UkyX/XfyPviAdmz9jXeFTA
-	 24hmeMDzkSicZ6x9E6vWVVlS+qiII/GodXQVqoyxpLS5WLf6rgbOtutDmzezubtjgl
-	 RoV3O7KHHKe5Q==
+	b=nw30LiCZpJwSy8S/vlgUA0C6mYL/kJOvH4p+kJBR9dXr/uQ+SyiJdGj6anAtcmpye
+	 wXavI0cilF/A3wzLPdtGUkjNjVedBBbjanYMiYD5uf9JSTDhoHY4cHsVKlZF6oxAtF
+	 7bgaWMfCWYsz7XWrLb9KI8Khl/AcDwlT+VfFxoA1nh2w7cHjIMNvjik/GtvqCDDiwi
+	 5pTW1aOLWacEB1c4I16Pn0ib4PRY1Ud5d7OmRQ/PVAfu5qIoqtVe+zCasIk7KNPH78
+	 ckb6KLcIzw66WgwZ3vi9h9Fz6j5lwXSOWevTWIiWnv/wNKjXh86NCvJP1LTCMFOFwn
+	 YDsg49kptHT5Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 05/17] bpf: Track verifier register
- diagnostic history
+Subject: Re: [PATCH bpf-next v1 15/17] bpf: Report Verifier Limit errors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605063412.974640-6-memxor@gmail.com>
-References: <20260605063412.974640-6-memxor@gmail.com>
+In-Reply-To: <20260605063412.974640-16-memxor@gmail.com>
+References: <20260605063412.974640-16-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:53:01 +0000
-Message-Id: <20260605065301.A27671F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:53:06 +0000
+Message-Id: <20260605065307.339231F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Excessive stack allocation in diagnostic formatting functions can =
-cause kernel stack overflows.
-- [Medium] Uninitialized stack memory read in check_stack_arg_write() due t=
-o uninitialized old_arg.
-- [Medium] Diagnostic history records incorrect frame numbers for registers=
- invalidated in caller frames.
+- [Medium] Large local character arrays (`chain[256]` and `reason[512]`) ar=
+e allocated on the stack in verifier functions, risking kernel stack overfl=
+ow.
 --
 
-commit 9a17934339f89b801d41d6242f00c9032267ab0f
+commit 58bfdd96949c20f24a4355e1c77d8bbbd610ef4d
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Track verifier register diagnostic history
+bpf: Report Verifier Limit errors
 
-Record material register and outgoing stack argument changes so diagnostics=
- can
-explain how a value reached its current type, bounds, or unreadable state.
-Store old and new register types, scalar ranges, tnum value and mask, map a=
-nd
-BTF type identity, and basic operand metadata.
+This commit augments selected verifier limit failures with detailed reports.
+These reports focus on the limit that was exceeded and the observed value or
+condition across stack constraints, call frames, and instruction complexity.
 
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 50cc50a394cae..1bdc7e69fbced 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
-[ ... ]
-> +static void bpf_diag_record_reg_mod_reason(struct bpf_verifier_state *st=
-ate,
-> +					   u32 insn_idx, u8 dst_reg,
-> +					   bool src_valid, u8 src_reg,
-> +					   u8 opcode,
-> +					   enum bpf_diag_reg_mod_reason reason,
-> +					   const struct bpf_reg_state *old_reg,
-> +					   const struct bpf_reg_state *new_reg)
-> +{
-> +	struct bpf_diag_history_event event =3D {
-> +		.insn_idx =3D insn_idx,
-> +		.kind =3D BPF_DIAG_HISTORY_REG_MOD,
-> +		.reg.dst_reg =3D dst_reg,
-> +		.reg.src_reg =3D src_reg,
-> +		.reg.opcode =3D opcode,
-> +		.reg.src_valid =3D src_valid,
-> +	};
-> +
-> +	if (state && state->frame[state->curframe])
-> +		event.reg.frameno =3D state->frame[state->curframe]->frameno;
-
-[Severity: Medium]
-Will this record the wrong frame number for registers invalidated in caller
-frames?
-
-Functions like clear_all_pkt_pointers() and release_reference() iterate over
-all active frames to invalidate registers, but this assignment hardcodes the
-current executing frame number via state->curframe.
-
-Should bpf_diag_record_reg_mod_reason() accept the actual frame number of t=
-he
-register from the caller instead?
-
-[ ... ]
-> +static void bpf_diag_format_reg_snapshot(struct bpf_verifier_env *env, c=
-har *buf,
-> +					 size_t size,
-> +					 const struct bpf_diag_reg_snapshot *snapshot)
-> +{
-> +	const char *type_name =3D reg_type_str(env, snapshot->type);
-> +	char offset_desc[BPF_DIAG_REG_DESC_LEN];
-> +	char btf_type[BPF_DIAG_REG_DESC_LEN];
-
-[Severity: High]
-Could this cause a kernel stack overflow?
-
-BPF_DIAG_REG_DESC_LEN is 512 bytes. This function allocates 1KB on the stac=
-k,
-and is called by bpf_diag_print_reg_mod() which also allocates 1KB.
-
-Additionally, this function calls bpf_diag_format_var_offset() which
-allocates another 512 bytes. This >3KB stack usage chain might trigger
-CONFIG_FRAME_WARN build failures or cause panics on architectures with 8KB
-stacks.
-
-[ ... ]
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d60e1309957a7..188201d48108c 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -4033,6 +4033,8 @@ static int check_stack_arg_write(struct bpf_verifie=
-r_env *env, struct bpf_func_s
->  	struct bpf_subprog_info *subprog =3D &env->subprog_info[state->subprogn=
-o];
->  	int spi =3D -off / BPF_REG_SIZE - 1;
->  	struct bpf_reg_state *arg;
-> +	struct bpf_reg_state old_arg;
-> +	bool slot_exists;
->  	int err;
-> =20
->  	if (spi >=3D max_stack_arg_regs) {
-> @@ -4041,6 +4043,7 @@ static int check_stack_arg_write(struct bpf_verifie=
-r_env *env, struct bpf_func_s
->  		return -EINVAL;
->  	}
-> =20
-> +	slot_exists =3D spi < state->out_stack_arg_cnt;
->  	err =3D grow_stack_arg_slots(env, state, spi + 1);
->  	if (err)
->  		return err;
-> @@ -4049,13 +4052,27 @@ static int check_stack_arg_write(struct bpf_verif=
-ier_env *env, struct bpf_func_s
->  	if (spi + 1 > subprog->max_out_stack_arg_cnt)
->  		subprog->max_out_stack_arg_cnt =3D spi + 1;
-> =20
-> +	arg =3D &state->stack_arg_regs[spi];
-> +	if (slot_exists)
-> +		old_arg =3D *arg;
-> +	else
-> +		bpf_mark_reg_not_init(env, &old_arg);
+[ ... ]
+> @@ -5233,6 +5267,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  	bool tail_call_reachable =3D false;
+>  	int total;
+>  	int tmp;
+> +	char chain[256];
+> +	char reason[512];
 
 [Severity: Medium]
-Does this pass uninitialized stack memory to bpf_mark_reg_not_init()?
+Could this cause kernel stack overflows? Although these variables are only
+populated in slow error-reporting paths, C compilers typically allocate
+local variables in the function's prologue.
 
-When slot_exists is false, old_arg is declared without initialization.
-bpf_mark_reg_not_init() explicitly reads reg->subreg_def into a local
-variable before clearing the struct, which could trigger a KMSAN
-use-of-uninitialized-value warning.
+This adds 768 bytes to the stack frame. Since this is only used on failure
+paths, could these strings be dynamically allocated (e.g., using kasprintf)
+to avoid bloating the stack?
+
+[ ... ]
+> @@ -9443,11 +9557,22 @@ static int setup_func_entry(struct bpf_verifier_e=
+nv *env, int subprog, int calls
+>  			    struct bpf_verifier_state *state)
+>  {
+>  	struct bpf_func_state *caller, *callee;
+> +	char chain[256];
+> +	char reason[512];
+>  	int err;
+
+[Severity: Medium]
+Does this present a similar stack bloat risk? setup_func_entry() is invoked
+deep within the verifier's call stack, for example:
+
+do_check() -> do_check_insn() -> check_call() -> set_callee_state() ->
+setup_func_entry()
+
+Adding an additional ~800-byte frame size expansion here might trigger frame
+warnings or kernel stack exhaustion.
+
+>  	if (state->curframe + 1 >=3D MAX_CALL_FRAMES) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605063412.9746=
-40-1-memxor@gmail.com?part=3D5
+40-1-memxor@gmail.com?part=3D15
