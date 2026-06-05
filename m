@@ -1,127 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931BF2EEE6E
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6742EEE6E
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780644179; cv=none; b=Qx/EmE5kSx9n3zMY75cZcIyk9Viae1Y/LtcpP52gmFBtbRcG8ClcOUAEfUnwcH36EVl87XxdFXxanvvXfkOcak2V5SZbWKqB2kNApXI2e5VvkiACLRZ04WhFeVZYtHK99rhQh1u5GHxYCf6cL3DjDTNj4KRZ9ONxtHkNQPQz2rU=
+	t=1780644181; cv=none; b=q1yjOezNcTktall9kpWSg8aILuJJDWVQ+TqAsamgPAfXxVn8cSvFgiwIaG2jyaT9PWe82JJyBSoPSlKPFEC5xohVmx1ItTnCCP0VGh1ca5RlDiHGNa0d5Gsneb8lP7N7Qty0LGfo06pP+hZaU8Oyu3l4O8LAXpLI/qBpqHjOhjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780644179; c=relaxed/simple;
-	bh=blPO2dzFBMqOBwjA+0ZACNibMJ+FvnKglHTugSxnzds=;
+	s=arc-20240116; t=1780644181; c=relaxed/simple;
+	bh=vaC4b9uoqiEyL504VCePMzBVBmGPfzYi0emPWMfM/XY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=g26RloegDIPd5VdronOObx8B8ehqJMfy/nsQOBRdOujl/nuIhuh8AuCF6TVemLllMy+p2U8qAl6Sr6WSKCC7Ev7CvIVO8PiIfImo88D/0bgo/d3/Z1bEUgHjoszq/cfkvqekQW6Dzyb8sqk2/3/6Xbr19yp8j3QSPpCijHEZkMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4nJ90Aj; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=tTuCFVHm1D/4OeSobhieCUpq+KWvJmAJPqRAiP+zKsA9wma+wA4FL2s/fmQN07Bj1noaUYF8VBv+PFzhCUsOpx7JZ0ChpL6IfC/GiUGfUt2Ou9sH7Px1hL+QxOzCIcGu/akabW8e/6653TOEplv7KT7G+ZBm2HDI6J654SM16JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GwOAlYpt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4nJ90Aj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A1B1F00898;
-	Fri,  5 Jun 2026 07:22:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GwOAlYpt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25F01F00898;
+	Fri,  5 Jun 2026 07:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780644178;
-	bh=VKga1nnZ221YtrZTLnCH0Hmy+f86N++rlh4uwq7QKIQ=;
+	s=k20260515; t=1780644180;
+	bh=l01XVKBT18R2Nx44da7+FMdNS5Xz/Jg4iQeNpo9DnT0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=K4nJ90AjZywTGdhfNAFQ+P2tGQzWo/De5aWcMovREmW58SkT8oj64Pz0kbvGySWiU
-	 eoPg0QPaSDfqU0OiFAGbIPOpVKszkouYHEX9J9lyv5sSuI3+lwx17HNVpUjZAsEL01
-	 eib+yIJ0VeizJWSChmQ4Iuc8tqJRWYtAbeDt8dq/k8IPfXB0Vg4dwABIhh4750GKVT
-	 HVYw0zJZ5drNnlRhBf2TzSZnv54dbEYBsb7v0KkKLPBsOHQ8INXGSR2oOxginQ9kKf
-	 0SX1+gEI4gBS9OzZvQEinHZlwdv4gJ83G59hv9X2kxplmFKgDIioRDfmSMITma/EQ4
-	 +Fvp9i5pyLlIw==
-Content-Type: multipart/mixed; boundary="===============0677829864853650184=="
+	b=GwOAlYptX+99zZVCxbkwfwPGsIZSQNvFRL2Cyd26xJdbsPdGUxK29JulHa+zRFhhB
+	 ChVcRw1Ge13j7anpkBayPy1+T33fYeiEDSa3/g+dcAhfwoZ7XNeUoCeQ9Mw0ugQfXO
+	 29GORKjGJlan4QAjnNThhyozVgxiW1d0/oHQ2V/CgfTZkxmkTYz0B+NTmZl+Oj6jWw
+	 cAAxeBgsji7t0YENSxBk8Ac07rs4frNDJemog6emBOdnnfzPV1t8cIFRnLxA7K/NxQ
+	 7JPqRLYOmrMCDnjq9/BX0aCGscKao/Mwfb7h2nYMZlygnoK3K2IcrwK9ExEGv1jsaK
+	 +3izkqJoQmUog==
+Content-Type: multipart/mixed; boundary="===============8146091834707319650=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <eb354248514f9e95ee0a390a36761ebc121ad69dfa80d625bf9efc313b4c2954@mail.kernel.org>
-In-Reply-To: <20260605063412.974640-14-memxor@gmail.com>
-References: <20260605063412.974640-14-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 13/17] bpf: Report Program Structure CFG errors
+Message-Id: <c7c32452c6f920dbc76b700d48b5d54b1faa50dde2a98e45f67d00148b0e93f7@mail.kernel.org>
+In-Reply-To: <20260605063412.974640-8-memxor@gmail.com>
+References: <20260605063412.974640-8-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 07/17] bpf: Track verifier context diagnostic history
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  5 Jun 2026 07:22:57 +0000 (UTC)
+Date: Fri,  5 Jun 2026 07:22:59 +0000 (UTC)
 
---===============0677829864853650184==
+--===============8146091834707319650==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 2d8417f4efff..24096bb7ca87 100644
+> index 56c1236ffe7c..7a122c5025c2 100644
 > --- a/kernel/bpf/diagnostics.c
 > +++ b/kernel/bpf/diagnostics.c
 
 [ ... ]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e30d79149cc7..325c162e3df0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2879,6 +2879,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
->  	int i, subprog_start, subprog_end, off, cur_subprog = 0;
->  	struct bpf_subprog_info *subprog = env->subprog_info;
->  	struct bpf_insn *insn = env->prog->insnsi;
-> +	char reason[160];
-
-The format string contains 142 characters of static text and accepts 5
-integer arguments. Because BPF programs can contain up to 1,000,000
-instructions, instruction indices can take up to 7 digits. Formatting these
-integers can add up to 31 characters, resulting in a string length of around
-173 bytes. Since the reason buffer is limited to 160 bytes, scnprintf() will
-silently truncate the output and the user will see a cut-off diagnostic
-message.
-
-Reference: https://lore.kernel.org/bpf/20260605065130.BB6CA1F00893@smtp.kernel.org/
-
->  	int insn_cnt = env->prog->len;
+> @@ -893,8 +930,16 @@ static int bpf_diag_history_start_idx(const struct bpf_verifier_state *state,
+>  		    event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE &&
+>  		    event->ref.ref_id == opts->ref_id)
+>  			return i - 1;
+> +		if (opts->scope == BPF_DIAG_HISTORY_SCOPE_CONTEXT &&
+> +		    event->kind == BPF_DIAG_HISTORY_CONTEXT &&
+> +		    event->ctx.enter &&
+> +		    event->ctx.kind == opts->ctx_kind)
+> +			return i - 1;
+>  	}
 >
->  	/* now check that all jumps are within the same subprog */
-> @@ -2907,6 +2908,15 @@ static int check_subprogs(struct bpf_verifier_env *env)
->  		off = i + bpf_jmp_offset(&insn[i]) + 1;
->  		if (off < subprog_start || off >= subprog_end) {
->  			verbose(env, "jump out of range from insn %d to %d\n", i, off);
-> +			scnprintf(reason, sizeof(reason),
-> +				  "Instruction %d jumps to instruction %d, but subprogram %d only contains instructions %d through %d. A branch target must stay inside "
-> +				  "the same subprogram",
-> +				  i, off, cur_subprog, subprog_start,
-> +				  subprog_end - 1);
-> +			bpf_diag_report_program_structure(env, i,
-> +							  "jump out of range",
-> +							  reason,
-> +							  "Keep branch targets within the same subprogram, or use an explicit subprogram call.");
->  			return -EINVAL;
->  		}
->  next:
-> @@ -2919,6 +2929,13 @@ static int check_subprogs(struct bpf_verifier_env *env)
->  			    code != (BPF_JMP32 | BPF_JA) &&
->  			    code != (BPF_JMP | BPF_JA)) {
->  				verbose(env, "last insn is not an exit or jmp\n");
-> +				scnprintf(reason, sizeof(reason),
-> +					  "Subprogram %d reaches its last instruction %d without an exit or jump, so control could continue into the next subprogram",
-> +					  cur_subprog, i);
-> +				bpf_diag_report_program_structure(env, i,
-> +								  "subprogram can fall through",
-> +								  reason,
-> +								  "End each subprogram with exit, throw, or an explicit jump that keeps control flow inside the subprogram.");
 
-The newly added suggestion advises users to use throw to end subprograms.
-However, the immediately preceding logic in check_subprogs() verifies the
-final instruction using:
+When traversing backwards, this loop stops at the first enter event it
+encounters. For nested contexts, wouldn't this anchor the causal path at
+the innermost context entry instead of the outermost entry that actually
+initiated the restricted region?
 
-    if (code != (BPF_JMP | BPF_EXIT) &&
-        code != (BPF_JMP32 | BPF_JA) &&
-        code != (BPF_JMP | BPF_JA))
+Looking at nested lock regions as an example:
 
-This condition does not account for bpf_throw(), which is a kfunc and
-evaluates as a BPF_JMP | BPF_CALL instruction. If a user writes assembly
-following the newly provided suggestion and places a bpf_throw call as the
-absolute end of their subprogram, won't the verifier still reject it and
-print this exact error?
+  outer lock acquired (depth=1)     <- outermost context entry
+    inner lock acquired (depth=2)   <- innermost context entry
+      operation fails here
 
-Reference: https://lore.kernel.org/bpf/20260605065130.BB6CA1F00893@smtp.kernel.org/
+Traversing backwards from the failure point, the loop would stop at the
+inner lock acquisition (the first enter event with matching ctx.kind),
+not the outer lock that initiated the critical section.
 
-[ ... ]
+Is an event->ctx.depth == 1 check needed here to find the outermost
+context?
+
+> +	if (opts->scope == BPF_DIAG_HISTORY_SCOPE_CONTEXT)
+> +		return state->diag_history_cnt;
+> +
+
+If the original enter event has been pushed out of the fixed-size
+history buffer, returning state->diag_history_cnt skips the causal path
+rendering entirely.
+
+Looking at bpf_diag_print_history() in this file:
+
+  for (int i = start_idx; i < state->diag_history_cnt; i++) {
+      ...
+  }
+
+When start_idx equals state->diag_history_cnt, the loop executes zero
+times and no events are printed.
+
+Furthermore, the omitted event warning only triggers when start_idx is 0:
+
+  if (start_idx == 0 && state->diag_history_wrapped)
+      bpf_diag_report_omitted();
+
+So returning state->diag_history_cnt bypasses both the remaining event
+printing and the omitted warning.
+
+Should this fall through and return 0 instead of state->diag_history_cnt,
+so the remaining events are still printed and the omitted warning is
+triggered?
 
 
 ---
@@ -129,4 +119,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27000182395
---===============0677829864853650184==--
+--===============8146091834707319650==--
