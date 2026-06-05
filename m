@@ -1,134 +1,179 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-dl1-f66.google.com (mail-dl1-f66.google.com [74.125.82.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D682192FA
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 00:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD15DDDA9
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 00:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780620156; cv=none; b=ccU8ZDmgwQ3wYyXXybIc7IdmpTtaUx2JP/1HdeJ9kGasYMo2MAHPsssKpyDOX4l2L5RZb11q6dEHvaFplsVHI7L02gwnoUt9xvJjN1w0An+aaDST07y1i0BEqLUB2ajv0HUL/41orIbRnVOOh/bEkPTd0WQXool10Vnfuw0Q3K0=
+	t=1780620427; cv=none; b=XAHjZyj9PAsfxQP0/ppkf+yI6hd6Wlm3vz32Q3tUskVIPB8e96E6Kvyb4hWitX8pn9jritykSLhhSrbTbXasDDlBZBSSj+8nh6rUnHK9VPrOzWKSa9Tz0f4wcX4ByfpnkpHL860lU0ht0Flv5F5EtGd+4unCEkB6yjJerITYN54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780620156; c=relaxed/simple;
-	bh=OSY6rZG0/QO9sDv8kD3a3y5W/9FmXddazF0o22ynZtk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pp/dbYZwjUQBw+eLVXIEJ6n7DAOsQPNMnglM7Y96cO0BzclGj951vPxYuE0aQtbgxb3aV3pnZdVTgZO0FDpGTf9jfelRine/Pl4UTNy5c3FBXuIGoe0C3xUXeXIoAaAHOR+NqPEwMM2n2sruo3PtfoXQIwjCeHX8cVk7A2KJyhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AjEJeoJ7; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780620427; c=relaxed/simple;
+	bh=3BdVln+T3EDpyTq5L0Pq9ZIQxqQoASZdjBx6RbFf9nQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kaJ+sBdU1bdNFQJk5/igRVTD2IbVCTBksAmDc/pAgst4Jr/Ii25RSJ+zN59g8p1axmCDua8qANucxmXHf9x5LGyDiorXRYxi4hImkNmz0DZRUxoo1Ic+x2ifS3Mu8Xayj15QLO8TL07Aroz5QlwvI8C0xabDd1AEUdeiTFbFybE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=OMYSBrOH; arc=none smtp.client-ip=74.125.82.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjEJeoJ7"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-36da8439078so1253082a91.2
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 17:42:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="OMYSBrOH"
+Received: by mail-dl1-f66.google.com with SMTP id a92af1059eb24-137dd51129bso2627453c88.1
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 17:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780620155; x=1781224955; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=f3SpmDbYrWpyoKhUy5m/62qcXsMlb7jumSKeT/JkD5A=;
-        b=AjEJeoJ7PHEtWKAa7tBuF5/5my9QyWYQVhA+lJPVVINnumy7YWXV8ZIztnk/S1yFor
-         rOti9TekvP5xFwa19VOqyV2CvSPWpfL9DnwOf+JntGpmP+2iSV+9TOH7W8JE05Qx9a8w
-         aYY5qv7GExeVbasbqVhczigsuwtMbmqYYY0efnIllu8K67+gtde2LJ3jPvaO11/gXpsW
-         oSzNvAwSuARqUISz+5Rfz6M//NpsXkLSolHujlqydlr4wPUG+VOva3VQvAwd/xSU3QDF
-         Ux9h2CMj3qhVf53qunIv5MEQ3yPJCv3qTXELgkP16eaCtw+92ZJULQLt1C6g4OmpZiA7
-         18hQ==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780620425; x=1781225225; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B6Be14XMqwAYE4G+CQyuwu1qJ/P0hxNaVBkoYLzxPfQ=;
+        b=OMYSBrOHEtywSTK+NnR5rn8pLJCH2vOlTd2bofw4PMAsBJ60gIEEOcSpczvPEIYrVo
+         wCCFVmorLoj0SwPBph/9gKfiXRFnGHHvjL+PvQJu+KlJfF2sjN0GafYQ7McS+YV47HLs
+         sbgAD4lv7GKQlR119p9pXngjXv/5qOTvIBXEROqW1TzZ+VsBTKX8OC5NZYJy7Aw3LWWA
+         DZEaXrw9k3HpC7YrDUJXDMNFVe5OgdKZIiIqJz5flbp84CZFicEbLfyA8/18Zy4EtnEH
+         4KV5FbUTghwL/ya15u2A5yUuzqTI+X/bK/0BuRZKNjCPWD7F0fYC/jtCAX6wV3iVJs0D
+         UJyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780620155; x=1781224955;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f3SpmDbYrWpyoKhUy5m/62qcXsMlb7jumSKeT/JkD5A=;
-        b=cFDtwgfEq+AUYldMK+dF+P//x61ToITEb5hQfXirp3LNSAw5FmlELYh8RRfRfjNnec
-         gXY2qCuTq0wn1DcfC+v+HWL0UzfRmxAkOOPFTPMqDlLfKf7fmPDvoGvD5Ij7YmYvBBSg
-         mVFVXNhBfeDzbibBcu5iUtVNH2fqPEv1Gzg6dHv6DnnWEOpKXYSnnIKKubfC6u4Hh0kz
-         d9RqwtOLHJ/tF8vU1v9VYIJ/Cs2wJLDy85F6PUfyhaSDHiCetrm6bgmpDcEt/i5cXFrt
-         Ef++Du0kgmF7Ic+bhgwj+fcMXuI/SsB2U6HynH4s6wravO01bR5d+qM26glvUezV1q/u
-         P/Gw==
-X-Forwarded-Encrypted: i=1; AFNElJ8USzU+E/kKwpotrErZiW4PzpfFL9R51ZoJ45s0dfZAuZJD1LxzSFA10uhOAglpsPFm0V8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN5Hw0UZNSPLaku2j7ogIFyRWVfD4pj2L8t3OPOYYb3nobK77H
-	r2cr5GTw7aoh+ciWyQ6HkseDs6teXhWsTAw3n2N2h+2F8RCVaxrO0tvY
-X-Gm-Gg: Acq92OEboZ+UWPiJsRlFBjmjDd98Gqp5zGGd/MbGDODh7X+YE0Q6hf3fflPi0Q/2TGZ
-	EuHGMXcSzt+OAnUvWG7PGG0Xf/JeGSS7HtZpFZ1o0ikisRYWzYEhK+w7EBHou2xarB0tZk2kyXU
-	SrmZ8GOPr2h1JMkifs15sAZooZdwQYxfbEJRC5u9C5is7IYovYwPZkotH7EA9vQOh2UxhBHNC54
-	/k30ytegsb65zXVpc98yrND7icbI3r2lYFXlTMv6PIqFnSklNKDHUOTzQZ3tBPoX+KCTU1frup0
-	bGVgJUoeMSWZ8DxhNl8rKLqwVQr4hCbRyw4L8FQnBtALirzYJjPevVK19GkSmkC+Cz76YGy/Pdd
-	F1szP53ll6qMO1tOs+q68iF4ZuyssQhvlGaderuZgOQ+HQEKvrwCn5z5FpQ0oJxc/qYhdfTgMys
-	cjYrUgOPDzY2KSzP+KtdFjeM41qt+GAvCsq1nZ5XhS+vb65v2uECG6Pzi/E5cMFA==
-X-Received: by 2002:a17:90a:d884:b0:36d:b680:3041 with SMTP id 98e67ed59e1d1-370ee82fb58mr1027232a91.4.1780620154594;
-        Thu, 04 Jun 2026 17:42:34 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f70a285a1sm4645411a91.9.2026.06.04.17.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 17:42:34 -0700 (PDT)
-Message-ID: <e0567d183ee76725d276318c385f0eb568f2b1ab.camel@gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: chenyuan_fl@163.com, yonghong.song@linux.dev
-Cc: andrii@kernel.org, ast@kernel.org, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, 	chenyuan@kylinos.cn, clm@meta.com,
- daniel@iogearbox.net, ihor.solodrai@linux.dev, 	jolsa@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, 	martin.lau@linux.dev,
- memxor@gmail.com, song@kernel.org
-Date: Thu, 04 Jun 2026 17:42:31 -0700
-In-Reply-To: <20260602093836.2632714-2-chenyuan_fl@163.com>
-References: <535798105630b24033f33f532051b93dc853bc0d.camel@gmail.com>
-	 <20260602093836.2632714-1-chenyuan_fl@163.com>
-	 <20260602093836.2632714-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-9 
+        d=1e100.net; s=20251104; t=1780620425; x=1781225225;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B6Be14XMqwAYE4G+CQyuwu1qJ/P0hxNaVBkoYLzxPfQ=;
+        b=fe9yMMN+GY+lWIrCaPw1lW9ROR06bzHTY9SJnMzGwLsipBAoafUs746rot+13DKawL
+         r/s4ZO42iGHX433SfCVAHzcRoVNIN+O5CtMH07+bMCesP/qD1nZlP5P2DXhPizODq7R6
+         j4oY2J0X8Kao8oqZG3jxlV0b7o3dhbXL+8qhXZBROQaMRLKRwc6yLUDP7ERi+lrCdsiB
+         g2+WnJcOi9nx5q3vFmGHEJubnlD6Tt/TRNQox8uocmoqDlobSpswpKy1oefrG2wEqpiB
+         PvaqvS1OJjE5voIkXMYKGzmP3oO/AOLOAnV+EJXo2jckZDMix6bo6szyxS8NXjZsSqTa
+         0OgA==
+X-Forwarded-Encrypted: i=1; AFNElJ9ORR6DTIaWf611yq2hVQSrrmph17uZQDM2hl49kalKkkjC2vHTiY5CaCn+6/56LeCf/ws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfY2Hsz2gy3Iy6JpQma2FjN7+rrToTmgSNeq1T29acsHRzVJHG
+	XCKZi/l/VNsVAWWORfALowMBjbWxU3qqfGQ81jeY/5tQLorJkvlzhYb1KuKuJ3qOzFU=
+X-Gm-Gg: Acq92OHlLVcbA6LR2pH8ovtypDBj/n6hBBYrGyS7ITpkQRP4tOnvS1s4Y8Kr+mMeoTU
+	BFDZu+RM/UK72go6FhDEWkxj8Ga8pD4e5Nr99TB4nFhoGgoyD0GT5mJBQnUUYJ8ernjzpXP5NTX
+	itx2DvmYdki4H9lh+9bbil7prFOu0nSf9DBoOmqmgrtiLLVbFn+kF65+sBeGiXE5C9Tu6l7501k
+	thRe59P2+nKx/QMGrW4HScBoSJQe+az/U2S3rFU4K+770bgmgz/0mFvnHUaiBW24Aw4ryKjntZD
+	u0EYAGjuI2jNZXhaT/1PryM71W/G/J6KOnwjEpBYyR2zJW4LZc7pSVBDM+1ZCO7sjnkr0AfGztx
+	wXtXp3P2FL8VTAWlOX8naOYG07bpnvtUC6HjFfaWmaV2s2AihjR1KOEzxHXtm/48Ujjbs98QuXd
+	9emaRV46gDrSL9Y0DpXumGCmxkWA==
+X-Received: by 2002:a05:7022:1a83:b0:12d:d972:b96e with SMTP id a92af1059eb24-1380670f684mr619504c88.20.1780620424873;
+        Thu, 04 Jun 2026 17:47:04 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::39a8])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5489d17sm4671674c88.1.2026.06.04.17.47.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jun 2026 17:47:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 04 Jun 2026 20:47:02 -0400
+Message-Id: <DJ0P9DHVB5ZZ.2HEQNEZGMXUD8@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <martin.lau@kernel.org>,
+ <yonghong.song@linux.dev>, <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 1/3] selftests/bpf: libarena: Add rbtree
+ data structure
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260604235016.20856-2-emil@etsalapatis.com>
+ <0a64b83a809357ae1367cd92c06ba52a92fe472d00571fdee4b7313ffb309160@mail.kernel.org>
+In-Reply-To: <0a64b83a809357ae1367cd92c06ba52a92fe472d00571fdee4b7313ffb309160@mail.kernel.org>
 
-On Tue, 2026-06-02 at 17:38 +0800, chenyuan_fl@163.com wrote:
-
-[...]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8dd79b735a69..55c74d064e4e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11916,9 +11916,22 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
-> =C2=A0			continue;
-> =C2=A0		}
+On Thu Jun 4, 2026 at 8:38 PM EDT, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/too=
+ls/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+>> new file mode 100644
+>> index 000000000000..000000000000
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
 >
-> -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, =
-i))
-> +		if (is_kfunc_arg_ignore(btf, &args[i]))
-> =C2=A0			continue;
+> [ ... ]
 >
-> +		if (is_kfunc_arg_implicit(meta, i)) {
-> +			/* list_push / rbtree_add kfuncs have implicit args
-> +			 * (e.g. 'off' parameter) handled during verification
-> +			 * in bpf_fixup_kfunc_call().=C2=A0 Don't flag them.
-> +			 */
-> +			if (is_bpf_list_push_kfunc(meta->func_id) ||
-> +			=C2=A0=C2=A0=C2=A0 is_bpf_rbtree_add_kfunc(meta->func_id))
-
-I took a second look at the verifier.c:bpf_fixup_kfunc_call() and it
-appears it handles more functions with implicit args. The following
-predicates are used there:
-- is_bpf_obj_new_kfunc
-- is_bpf_percpu_obj_new_kfunc
-- is_bpf_obj_drop_kfunc
-- is_bpf_percpu_obj_drop_kfunc
-- is_bpf_refcount_acquire_kfunc
-- is_bpf_list_push_kfunc
-- is_bpf_rbtree_add_kfunc
-
-Could you please extend this check?
-
-> +				continue;
-> +			verbose(env, "%s unrecognized implicit argument, possible BTF mismatc=
-h\n",
-> +				reg_arg_name(env, argno));
-> +			return -EFAULT;
-> +		}
-> +
-> =C2=A0		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+>> +__weak
+>> +int rb_destroy(struct rbtree __arena *rbtree)
+>> +{
+>> +	int ret =3D 0;
+>> +
+>> +	arena_subprog_init();
+>> +
+>> +	if (rbtree->alloc =3D=3D RB_NOALLOC) {
 >
-> =C2=A0		if (btf_type_is_scalar(t)) {
+> Should this check rbtree for NULL before reading rbtree->alloc?  The
+> other exported entry points open with:
+>
+> 	if (unlikely(!rbtree))
+> 		return -EINVAL;
+>
+> so the missing guard here looks unintentional.  The same question
+> applies to rb_least() below.
+>
+> [ ... ]
+>
+>> +	while (rbtree->root && can_loop) {
+>> +		ret =3D rb_remove(rbtree, rbtree->root->key);
+>> +		if (ret)
+>> +			break;
+>> +	}
+>> +
+>> +out:
+>> +	arena_free(rbtree);
+>> +	return ret;
+>> +}
+>
+> When rb_remove() returns an error the loop breaks and falls through to
+> 'out:', where arena_free(rbtree) runs unconditionally and the non-zero
+> ret is returned to the caller.
+>
+> Can this leave the caller holding a freed rbtree?  The caller sees an
+> error suggesting the destroy did not finish, but the handle is already
+> freed, so any follow-up access (for example a retry of rb_destroy())
+> would be a use-after-free.  The nodes still in the tree are also leaked
+> on this path.
+>
+> Would freeing the handle only on the success path, or returning 0 once
+> the handle is freed, make the contract consistent?
+>
+> [ ... ]
+>
+>> +__weak int rb_least(struct rbtree __arena *rbtree, u64 *key, u64 *value=
+)
+>> +{
+>> +	struct rbnode __arena *least;
+>> +	if (!rbtree->root)
+>> +		return -ENOENT;
+>
+> Same NULL question as rb_destroy(): this reads rbtree->root without
+> first checking rbtree, unlike the other APIs.  Should rb_least() also
+> do:
+>
+> 	if (unlikely(!rbtree))
+> 		return -EINVAL;
+>
+> [ ... ]
+>
+>> +		if (rbtree->root) {
+>> +			arena_stderr("WARNING: Trying to destroy RB_NOALLOC tree "
+>> +					"without removing all nodes");
+>> +			return -EBUSY;
+>> +		}
+>
+> This isn't a bug, but in review of an earlier version it was suggested
+> not to split string literals across lines since it makes them harder to
+> grep for, and that going over 80 or 100 columns is fine.  Could this
+> warning string be kept on a single line?
+>
+
+Ack to the bot feedback (including the other two patches), the parallel
+selftest is also failing on s390.
+
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/269872=
+00618
+
