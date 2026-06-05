@@ -1,146 +1,339 @@
-Received: from smtp10.goneo.de (smtp10.goneo.de [85.220.189.106])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E853806C0;
-	Fri,  5 Jun 2026 15:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.220.189.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0983D344030
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 15:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780674329; cv=none; b=VoC8LN/ZxyxBbvzVDqf3Hdml2zN0zSdsiDXBY8c8Q3vch7u0TesZZ+s06lUvwYvykmuEhkRSzNCaVlKvSoC+gYfSRMTE4eAPdaZ7hBceS8+rvx/8ffNARWn9zUNTDjp3n0El8nNjmN9MPxJmDGLH/ytih+EzAqwZzK+POFXwTE8=
+	t=1780674467; cv=none; b=LIbQypLfoIQqStzEydpHiYjyOPUvFX09X4NYe7/oRlGK0odk4NRRwzux4yHLaiyin/jmiMNnzlXm8X80kjnkSFtftxafHPfKeb0wMyUSZtkOkyo4fzaEM9B9Cvyc3+z9V1tqFAOlUy3/kPT3clPRkwzh29NF29/AeSJS34VCCTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780674329; c=relaxed/simple;
-	bh=WKJ5UODfxYR+CfqWr+7OySQFtpSHPGfBPqs504KLb1k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AxoD51r8s22EpEgc/1BVNNykkMDS7dLk3uq2AK5q6W8KCe500XIFaMWJhHmfcstTOyoGB40pIXCq8eOPckG/fO9wIBJPk7+gTUVT2kyDxck/PkmyTeDWqTRxAEgxQo3d1+7lpBAeEfqzlt9uOwIpPNuJu4BCnaAZWImytjVuLTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de; spf=pass smtp.mailfrom=tk154.de; dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b=GE9EKmtM; arc=none smtp.client-ip=85.220.189.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tk154.de
+	s=arc-20240116; t=1780674467; c=relaxed/simple;
+	bh=hVTPV+E/TbbB0Flr/nLpqaet5wjIiYTZpAh1caTu8h4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g4Va8nkyHQrKcJWK8IqUqW7rpIJfq5fT4FmvdVYdOyFjNqveJhMJzCEUBI9cLyLV1DYkR2XOExdBKnbl5cVK87UyNDHPCXxen75K3wruJacwZteQYFNWyupH+Yvhcj89ho/hBfR4Xx2yjyl+v1LcPXXiqHj3KH4UJ9ZsUvLzV6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CU3lwnr7; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b="GE9EKmtM"
-Received: from hub1.goneo.de (hub1.goneo.de [85.220.129.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519)
-	(No client certificate requested)
-	by smtp10.goneo.de (Postfix) with ESMTPS id 1E8E6240535;
-	Fri, 05 Jun 2026 17:45:26 +0200 (CEST)
-Received: from hub1.goneo.de (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	by hub1.goneo.de (Postfix) with ESMTPS id 7B898240513;
-	Fri,  5 Jun 2026 17:45:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tk154.de; s=DKIM001;
-	t=1780674324;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CU3lwnr7"
+Message-ID: <13b87293-5237-43d3-9f91-33c13041cb43@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780674451;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tWkvo5U1ZaxF235Fa0aIZyeQWAjHdlwHnsDbK7czZ1w=;
-	b=GE9EKmtM0CuwCId9SiKpHvqjQAs/GVqw8RQYcAfOcLM3UcctW7UCtyf0Zan/4DwMcY9Dqs
-	yD24H80LFaKdTbHX39iqWyzkhXkIkqnwOGj9W/pNdaHrOPvxBMFh1kbxHFDx6fg3nxzrhq
-	l40Mdugzq1dEIPQdBFsFHTz+HYHT5QXxHnGimz7DK+rfazcV5AeHfXunBWY2TfutE+z9Wz
-	72l68K3zyI+fOSkOfOSsIQWKHQ6cEo8Yo55OA+ppqLUc/AbBSsnuZXbX4Fg0fBFE1sIh9i
-	yGsDdAws2nlvvmTwuegQ5DH3F9Rh/xG+8sSlYXESVwhk7WvqXWFT9C7pEsoHaA==
-Received: from Til-Notebook.meshlab (unknown [195.37.88.189])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hub1.goneo.de (Postfix) with ESMTPSA id 1F254240326;
-	Fri,  5 Jun 2026 17:45:22 +0200 (CEST)
-From: Til Kaiser <mail@tk154.de>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: marcin.s.wojtas@gmail.com,
-	linux@armlinux.org.uk,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	mcroce@redhat.com,
-	sven.auhagen@voleatech.de,
-	lorenzo@kernel.org,
-	Til Kaiser <mail@tk154.de>
-Subject: [PATCH net v4 4/4] net: mvpp2: build skb from XDP-adjusted data on XDP_PASS
-Date: Fri,  5 Jun 2026 17:44:57 +0200
-Message-ID: <20260605154457.163304-5-mail@tk154.de>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260605154457.163304-1-mail@tk154.de>
-References: <20260605154457.163304-1-mail@tk154.de>
+	bh=iZG4aMaH9HnROS+vLpUfnBWFNRF+eTigF60FCdnGxlg=;
+	b=CU3lwnr7dLF/lcnaKkaJnyuvAA8Nxo3qD4VS+Oc2hZ4JJFIEPLI567mvejISPJ/p18VGtg
+	Pne7bezX9KkPrqNIvoVD5gO3vtihOLj9Rk3FaLzyLWVLsLAlo0HCOMWRZcFfpweonp3GeT
+	UYGbz38W2W7kjrHxQLIZtxb6zUmHM/E=
+Date: Fri, 5 Jun 2026 08:47:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Content-Language: en-GB
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+References: <20260604-kasan-v2-0-c066e627fda8@bootlin.com>
+ <20260604-kasan-v2-8-c066e627fda8@bootlin.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260604-kasan-v2-8-c066e627fda8@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-UID: d8c8b9
-X-Rspamd-UID: 241b20
+X-Migadu-Flow: FLOW_OUT
 
-When an XDP program uses bpf_xdp_adjust_head() or bpf_xdp_adjust_tail()
-and then returns XDP_PASS, mvpp2 still builds the skb from fixed offsets
-derived from the original RX descriptor. Packet geometry changes made by
-the XDP program are therefore discarded before the skb reaches the stack.
 
-Update rx_offset and rx_bytes from xdp.data and xdp.data_end for
-XDP_PASS. This makes skb_reserve() and skb_put() reflect the packet seen
-by XDP, and makes RX byte accounting for XDP_PASS follow the length of the
-skb passed to the network stack.
 
-Non-PASS verdicts continue to account the descriptor length because no skb
-is passed up in those cases.
+On 6/4/26 1:22 PM, Alexis Lothoré (eBPF Foundation) wrote:
+> Add a basic KASAN test runner that loads and test-run programs that can
+> trigger memory management bugs. The test captures kernel logs and ensure
+> that the expected KASAN splat is emitted by searching for the
+> corresponding first lines in the report, hence validated that the needed
+> instrumentation has been inserted by the JIT compiler before the
+> relevant memory accesses.
+>
+> The runner covers different cases and settings: in the nominal case, it
+> validates kasan reports on basic instructions (on all supported accesses
+> sizes) but also when report _should not_ be emitted (eg: for accesses on
+> program stack). The runner also comes with a few specialized tests that
+> are then not executed for all sizes/locations. A few of those tests
+> depends on cpuv4 (load_acquire and store_release).
+>
+>    # ./test_progs -a kasan
+>    #164/1   kasan/st_1_not_on_stack:OK
+>    #164/2   kasan/st_1_on_stack:OK
+>    #164/3   kasan/st_2_not_on_stack:OK
+>    #164/4   kasan/st_2_on_stack:OK
+>    #164/5   kasan/st_4_not_on_stack:OK
+>    #164/6   kasan/st_4_on_stack:OK
+>    #164/7   kasan/st_8_not_on_stack:OK
+>    #164/8   kasan/st_8_on_stack:OK
+>    #164/9   kasan/stx_1_not_on_stack:OK
+>    #164/10  kasan/stx_1_on_stack:OK
+>    #164/11  kasan/stx_2_not_on_stack:OK
+>    #164/12  kasan/stx_2_on_stack:OK
+>    #164/13  kasan/stx_4_not_on_stack:OK
+>    #164/14  kasan/stx_4_on_stack:OK
+>    #164/15  kasan/stx_8_not_on_stack:OK
+>    #164/16  kasan/stx_8_on_stack:OK
+>    #164/17  kasan/ldx_1_not_on_stack:OK
+>    #164/18  kasan/ldx_1_on_stack:OK
+>    #164/19  kasan/ldx_2_not_on_stack:OK
+>    #164/20  kasan/ldx_2_on_stack:OK
+>    #164/21  kasan/ldx_4_not_on_stack:OK
+>    #164/22  kasan/ldx_4_on_stack:OK
+>    #164/23  kasan/ldx_8_not_on_stack:OK
+>    #164/24  kasan/ldx_8_on_stack:OK
+>    #164/25  kasan/simple_atomic_4_not_on_stack:OK
+>    #164/26  kasan/simple_atomic_4_on_stack:OK
+>    #164/27  kasan/simple_atomic_8_not_on_stack:OK
+>    #164/28  kasan/simple_atomic_8_on_stack:OK
+>    #164/29  kasan/load_acquire_1_not_on_stack:SKIP
+>    #164/30  kasan/load_acquire_1_on_stack:SKIP
+>    #164/31  kasan/load_acquire_2_not_on_stack:SKIP
+>    #164/32  kasan/load_acquire_2_on_stack:SKIP
+>    #164/33  kasan/load_acquire_4_not_on_stack:SKIP
+>    #164/34  kasan/load_acquire_4_on_stack:SKIP
+>    #164/35  kasan/load_acquire_8_not_on_stack:SKIP
+>    #164/36  kasan/load_acquire_8_on_stack:SKIP
+>    #164/37  kasan/store_release_1_not_on_stack:SKIP
+>    #164/38  kasan/store_release_1_on_stack:SKIP
+>    #164/39  kasan/store_release_2_not_on_stack:SKIP
+>    #164/40  kasan/store_release_2_on_stack:SKIP
+>    #164/41  kasan/store_release_4_not_on_stack:SKIP
+>    #164/42  kasan/store_release_4_on_stack:SKIP
+>    #164/43  kasan/store_release_8_not_on_stack:SKIP
+>    #164/44  kasan/store_release_8_on_stack:SKIP
+>    #164/45  kasan/ldx_patched:OK
+>    #164/46  kasan/stack_and_non_stack:OK
+>    #164     kasan:OK (SKIP: 16/46)
+>    Summary: 1/30 PASSED, 16 SKIPPED, 0 FAILED
 
-Fixes: 07dd0a7aae7f ("mvpp2: add basic XDP support")
-Signed-off-by: Til Kaiser <mail@tk154.de>
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On my qemu run, I got a bunch of failures like below:
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 481daafdc1cb..dd30674148aa 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -3920,7 +3920,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 		unsigned int frag_size;
- 		dma_addr_t dma_addr;
- 		phys_addr_t phys_addr;
--		int pool, rx_bytes, err, ret;
-+		int pool, rx_bytes, rx_offset, err, ret;
- 		struct page *page;
- 		void *data;
- 
-@@ -3933,6 +3933,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 		rx_status = mvpp2_rxdesc_status_get(port, rx_desc);
- 		rx_bytes = mvpp2_rxdesc_size_get(port, rx_desc);
- 		rx_bytes -= MVPP2_MH_SIZE;
-+		rx_offset = MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM;
- 		dma_addr = mvpp2_rxdesc_dma_addr_get(port, rx_desc);
- 
- 		pool = (rx_status & MVPP2_RXD_BM_POOL_ID_MASK) >>
-@@ -3999,6 +4000,10 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 				continue;
- 			}
- 
-+			/* Update offset and length to reflect any XDP adjustments. */
-+			rx_offset = xdp.data     - data;
-+			rx_bytes  = xdp.data_end - xdp.data;
-+
- 			metasize = xdp.data - xdp.data_meta;
- 		}
- 
-@@ -4041,7 +4046,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 		ps.rx_packets++;
- 		ps.rx_bytes += rx_bytes;
- 
--		skb_reserve(skb, MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM);
-+		skb_reserve(skb, rx_offset);
- 		skb_put(skb, rx_bytes);
- 		if (metasize)
- 			skb_metadata_set(skb, metasize);
--- 
-2.54.0
+[root@arch-fb-vm1 bpf]# ./test_progs -n 164
+test_kasan:PASS:alloc test ctx 0 nsec
+gzopen /boot/config-7.1.0-rc5-gec86c8156bd6: No such file or directory
+test_kasan:PASS:open prog 0 nsec
+test_kasan:PASS:find rnd_hi32 prog 0 nsec
+...
+All error logs:
+test_kasan:PASS:alloc test ctx 0 nsec
+gzopen /boot/config-7.1.0-rc5-gec86c8156bd6: No such file or directory
+test_kasan:PASS:open prog 0 nsec
+test_kasan:PASS:find rnd_hi32 prog 0 nsec
+test_kasan:PASS:load prog 0 nsec
+test_kasan:PASS:open kernel logs 0 nsec
+test_kasan:PASS:get map 0 nsec
+test_kasan:PASS:set map 0 nsec
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/1   kasan/st_1_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/3   kasan/st_2_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/5   kasan/st_4_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/7   kasan/st_8_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/9   kasan/stx_1_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/11  kasan/stx_2_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/13  kasan/stx_4_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/15  kasan/stx_8_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/17  kasan/ldx_1_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/19  kasan/ldx_2_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/21  kasan/ldx_4_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/23  kasan/ldx_8_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/25  kasan/simple_atomic_4_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/27  kasan/simple_atomic_8_not_on_stack:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/45  kasan/ldx_patched:FAIL
+run_subtest_with_size_and_location:PASS:find test prog 0 nsec
+run_subtest_with_size_and_location:PASS:fetch loaded program info 0 nsec
+run_subtest_with_size_and_location:PASS:run prog 0 nsec
+run_subtest_with_size_and_location:PASS:read kernel logs 0 nsec
+run_subtest_with_size_and_location:FAIL:report should be generated unexpected error: 1 (errno 11)
+#164/46  kasan/stack_and_non_stack:FAIL
+#164     kasan:FAIL
+
+I checked the subtest 164/1,
+
+For
+
+         ret = check_kasan_report_in_kernel_logs(klog_buffer, ctx,
+                                                 test->is_write, access_size);
+         if (on_stack || test->expect_no_report)
+                 ASSERT_NEQ(ret, 0, "no report should be generated");
+         else
+                 ASSERT_OK(ret, "report should be generated");
+
+the ret is equal to 1 as klog_buffer is empty. This caused the failure.
+
+>
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+> Changes in v2:
+> - simplify tests by just manually poisoning test areas with a dedicated
+>    kfunc
+> - introduce one prog per covered instruction family
+> - make sure that tests do not consume kernel logs (use /dev/kmgs rather
+>    than klogctl)
+> - add tests for stack accesses:
+>    - marking correctly set when there are diverging verifier states
+>      leading to different memory types
+>    - marking kept in sync with prog when it is patched
+> ---
+>   tools/testing/selftests/bpf/prog_tests/kasan.c     | 356 +++++++++++++++++++
+>   tools/testing/selftests/bpf/progs/kasan.c          | 382 +++++++++++++++++++++
+>   .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  22 ++
+>   3 files changed, 760 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testing/selftests/bpf/prog_tests/kasan.c
+> new file mode 100644
+> index 000000000000..adf61e230ec9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
+> @@ -0,0 +1,356 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+> +#include <bpf/bpf.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <linux/if_ether.h>
+> +#include <unistd.h>
+> +#include <test_progs.h>
+> +#include <unpriv_helpers.h>
+> +#include "kasan.skel.h"
+> +
+> +#define SUBTEST_NAME_MAX_LEN	128
+> +#define PROG_NAME_MAX_LEN	128
+> +
+> +#define MAX_LOG_SIZE		(8 * 1024)
+> +#define READ_CHUNK_SIZE		256
+> +
+> +#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free " \
+> +	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
+> +#define KASAN_PATTERN_REPORT "%s of size %d at addr"
+> +
+> +static char klog_buffer[MAX_LOG_SIZE];
+> +
+> +struct test_spec {
+> +	char *prog_type;
+> +	bool is_write;
+> +	bool only_32_or_64;
+> +	bool needs_load_acq_store_rel;
+> +	bool skip_multi_size_testing;
+> +	bool skip_on_stack_testing;
+> +	int run_size;
+> +	bool expect_no_report;
+
+expect_no_report is not set in the code. The only usage is in
+
+         if (on_stack || test->expect_no_report)
+                 ASSERT_NEQ(ret, 0, "no report should be generated");
+         else
+                 ASSERT_OK(ret, "report should be generated");
+
+> +	bool rnd_hi32;
+> +};
+> +
+> +struct kasan_write_val {
+> +	__u8 data_1;
+> +	__u16 data_2;
+> +	__u32 data_4;
+> +	__u64 data_8;
+> +};
+> +
+>
+[...]
 
