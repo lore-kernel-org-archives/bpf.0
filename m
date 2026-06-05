@@ -1,118 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C433F4DD0
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76353368A9
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641956; cv=none; b=Y0mng7/dKFQeT3pBwU5tossek/ToHvgtuKgcrC8Qu7Go5bxdQ4CCEqty9RwafHqOURpaj80Ilvs4bqJ3YLbCiFOcmEXahRoNBrOm12p6XfJyHDv6B8/2vfOeWSc3WOulowhsXKgghtPr7TPEAVuBgWdVxuX81P5mddbKiO2BBOY=
+	t=1780641995; cv=none; b=lMc4IeUL0tSqidG8ftWP7GaILu6elH4c3zUY2D5hHqCL7KhE46dpkgy0Jw5DoGTsVJ9gt7Tcrqb4ScyZ81BwsiyafvFp41oQEkGhhAfOj+KeN6XrT7QdN59aaALcfUAGYze2vkhteMJKoAJqkK5AobAcN32OYyLjcWl9a48WSnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641956; c=relaxed/simple;
-	bh=EW07pdor8tRDVVoEW86JaIKSo+iFvIoBguY1ofdNHtE=;
+	s=arc-20240116; t=1780641995; c=relaxed/simple;
+	bh=azi8JCK4j+mbUzEGBzE/9doUjkKeKjjPHbgvjHla9hM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Jcd8pIX4NLaEkSVD69oQXCU69Qv3wUCk9NzZJQStIYXt5L7AjHr2LoJfWQMIoDx8z2oM8tFZAQf7p6+4IbUPGKxJpIvJJl4kAGGIDVOPn5PLTyuTH1piN5ZS2Tcarsn7+ToDbVjpv9MUviAgNgH4H1zGunhh3z0XnMPRA38VofU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLQ4M15I; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ktJFKj9vUu/rTfA19OkzoGk9qJrb4y+PnKu51kB+xdvH+IQa2A/dZqU+SFUUbX1dkyJe5NZG1oDZFv8TZ+zowpJMjuMrYLYiuHTAFjVMYPWsYinTwH4ZL2CZq7GG0eiVud5vrDxzo+0VtrPVtH4rBgsjBFJx7qjAbzopDN6fzQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l85lvHJR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLQ4M15I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467DA1F00893;
-	Fri,  5 Jun 2026 06:45:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l85lvHJR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694221F00893;
+	Fri,  5 Jun 2026 06:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780641953;
-	bh=OBvKEBhd1KnqDSy4UCCV/LF/X+PtMY0+zmzypfxB8MU=;
+	s=k20260515; t=1780641994;
+	bh=qThYI9heny0MYFDkM4BtiAwPsFRjtq1MdQjwWPsl8AU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GLQ4M15IJ75/sjPTotXP4+HZj/OUIFCaSgVBMHON4Hmeheu/YyAHuLvQA1b+FqDYe
-	 e+Jr91Tg+RiFuN4jKlW43NvluiOXv+9cJUyVt+SOhtfq2h2P8pZipafA6+mKXl2s5g
-	 Ut6N1DxncjzcEScQorQXMMEkeJ8kbQM13mLB9IxwZmgxTsPCdLfDu6i6miuAyiHl0/
-	 MWeeAdRq4FeDscMENxOaudlVEH2qnjjFjmAnMaMEMFbQ1uO2N+VgONdOShyd6m2q1X
-	 ZqfzgyfMnPuBVoeVpouLe/Igt+fM0OoVIVhWGBZ0Bcv3XGnCIInAtTlLSDRl9Q1htq
-	 LkD8/hcFVDIPQ==
+	b=l85lvHJR2GT2eMo4w4Rf/Aod6h0mXJ6wYIH1Ef1xjxYqC2DiOF//8yUPE9tTxy9fC
+	 Dwcn9/nx/Z35Hn4lSWWPZcM0M744akFDFj2EA7hJHz8ngE0fIJetnbRfIy8piNT3Bb
+	 MW1DOog/tesgfxY7WlaYcdhZ0EZCn3xvoNFtH6gaDiYc3wqwmUjHw+kYKVyzA3rHLZ
+	 smmYJShuFQHhlkVGWRDQVvRRb/Ux0TkRxbzOZxjo/cMRfbK928gTZkwutfIrfpGtvV
+	 bwQyIGsdXkAjwKOMPhuwmCd2SOCOedPV08gxiYGNPPJAurtesupyXWDc3y1bp6nRWI
+	 WU4pu9liFSGXw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 09/17] bpf: Report Memory Safety bounds
- errors
+Subject: Re: [PATCH bpf-next v1 07/17] bpf: Track verifier context
+ diagnostic history
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605063412.974640-10-memxor@gmail.com>
-References: <20260605063412.974640-10-memxor@gmail.com>
+In-Reply-To: <20260605063412.974640-8-memxor@gmail.com>
+References: <20260605063412.974640-8-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 06:45:52 +0000
-Message-Id: <20260605064553.467DA1F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:46:34 +0000
+Message-Id: <20260605064634.694221F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Diagnostic message for `BPF_DIAG_MEM_NEGATIVE_MIN` prints a larg=
-e positive number instead of a negative number when `reg_smin(reg)` is `S64=
-_MIN` and `off` is negative, due to signed 64-bit integer wrap-around.
+- [Medium] bpf_diag_history_start_idx anchors context diagnostic history at=
+ the innermost `enter` for nested contexts.
+- [Medium] bpf_diag_history_start_idx completely suppresses context diagnos=
+tic history if the `enter` event is not found.
 --
 
-commit 176ba692cb9724623bf456ca5401c93a61c5ea8d
+commit 6cd5658b83e6758ee70970a31217f30967606ec4
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Report Memory Safety bounds errors
+bpf: Track verifier context diagnostic history
 
-This commit augments check_mem_region_access() range-proof failures with Me=
-mory
-Safety reports. The existing terse verifier messages remain in place for
-compatibility while the new report adds the failed proof, source context,
-causal path, and guidance.
+This commit records verifier context transitions in the diagnostic history.
+Later reports can then anchor causal paths to the critical section that made
+an operation invalid.
 
 > diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 920ac17758c20..0abe1ab19d252 100644
+> index 56c1236ffe7ca..7a122c5025c27 100644
 > --- a/kernel/bpf/diagnostics.c
 > +++ b/kernel/bpf/diagnostics.c
-
 [ ... ]
-
-> +void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_i=
-dx,
-> +				int regno, const char *reg_name,
-> +				const char *type_name,
-> +				enum bpf_diag_mem_bounds_kind kind,
-> +				int off, int size, u32 mem_size,
-> +				const struct bpf_reg_state *reg)
-> +{
-
-[ ... ]
-
-> +	switch (kind) {
-> +	case BPF_DIAG_MEM_NEGATIVE_MIN:
-> +		scnprintf(proof, sizeof(proof),
-> +			  "The smallest possible offset is %lld, below 0",
-> +			  reg_smin(reg) + off);
-> +		break;
+> @@ -893,8 +930,16 @@ static int bpf_diag_history_start_idx(const struct b=
+pf_verifier_state *state,
+>  		    event->kind =3D=3D BPF_DIAG_HISTORY_REF_ACQUIRE &&
+>  		    event->ref.ref_id =3D=3D opts->ref_id)
+>  			return i - 1;
+> +		if (opts->scope =3D=3D BPF_DIAG_HISTORY_SCOPE_CONTEXT &&
+> +		    event->kind =3D=3D BPF_DIAG_HISTORY_CONTEXT &&
+> +		    event->ctx.enter &&
+> +		    event->ctx.kind =3D=3D opts->ctx_kind)
+> +			return i - 1;
 
 [Severity: Medium]
-Will this print a contradictory positive number instead of a negative one w=
-hen
-reg_smin(reg) is S64_MIN and off is negative?
+When traversing backwards, this loop stops at the first enter event it
+encounters. For nested contexts, wouldn't this anchor the causal path at the
+innermost context entry instead of the outermost entry that actually initia=
+ted
+the restricted region? Is an event->ctx.depth =3D=3D 1 check needed here?
 
-Looking at the caller in check_mem_region_access(), it triggers the
-BPF_DIAG_MEM_NEGATIVE_MIN diagnostic if reg_smin(reg) =3D=3D S64_MIN:
+>  	}
+> =20
+> +	if (opts->scope =3D=3D BPF_DIAG_HISTORY_SCOPE_CONTEXT)
+> +		return state->diag_history_cnt;
+> +
 
-kernel/bpf/verifier.c:check_mem_region_access() {
-    if (reg_smin(reg) < 0 &&
-        (reg_smin(reg) =3D=3D S64_MIN ||
-         ...)) {
-        bpf_diag_report_mem_bounds(..., BPF_DIAG_MEM_NEGATIVE_MIN, ...);
-    }
-}
+[Severity: Medium]
+If the original enter event has been pushed out of the fixed-size history
+buffer, returning state->diag_history_cnt skips the causal path rendering
+entirely.
 
-If off is negative, reg_smin(reg) + off will underflow S64_MIN and wrap aro=
-und
-to a huge positive number like 9223372036854775807. The diagnostic output m=
-ight
-then read something confusing like:
-"The smallest possible offset is 9223372036854775807, below 0"
+Looking at bpf_diag_print_history(), it will see start_idx equal to
+state->diag_history_cnt and the loop will execute zero times. Furthermore,
+because start_idx is not 0, it will bypass the omitted event warning:
 
-Unlike the max bounds case which correctly handles wrapping, the min bounds
-case appears to evaluate this unconditionally.
+	start_idx =3D bpf_diag_history_start_idx(state, opts);
+	if (state->diag_history_omitted && start_idx =3D=3D 0)
+		verbose(env, "  ... %u earlier diagnostic events omitted ...
+
+Should this fall through and return 0 instead of state->diag_history_cnt, so
+the remaining events are still printed and the omitted warning is triggered?
+
+>  	return 0;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605063412.9746=
-40-1-memxor@gmail.com?part=3D9
+40-1-memxor@gmail.com?part=3D7
