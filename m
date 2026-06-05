@@ -1,118 +1,138 @@
-Received: from smtp9.goneo.de (smtp9.goneo.de [85.220.189.104])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869EA4DB56C;
-	Fri,  5 Jun 2026 12:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.220.189.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFC437E2EE
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 12:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780661697; cv=none; b=LS2anf4N0TLVs22GjqJSmIYRhpBZ3g1mKiIfpQbfdDjnP8VlH0/uXeXHNhAiIBKMGcFqChw9duRdKkly9+KZrzszyf63cZ/q7PClgX1vsBtfF/HBwQu60QNOoqaFYuypF+9rIX8HKfIbyNrUlB9L1tlPHUQe/j0u03xi+fIAuyQ=
+	t=1780662132; cv=none; b=jZyonRN/zeHYfqt3netRQL92rZp/LRpH09P+Rvq7sKFZzNEfD13YBFsmRLmwQPeg12H7NHDwnWSpnIESkEkJJz3nwbXsPfnpiN84ofzlnMU11l3R7J75Qjvm/TGWJIprWv+5d0KI4UJQspK6T9QzwEMUgUyvMDJWc8jv9ijacG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780661697; c=relaxed/simple;
-	bh=2no5ts4uR+BRFpbAeaMDuXoBtDm87qzy992Y6dadpc8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XIKqVOIZtHDT4OVRz2nw8bppk58HIck0mT8Jp/deWF497tBzLdrCvScfXn8HNVFS51ca4dLpSfGC/DN0gr8ZXsYb/nWnLDmFeKeWJDrtq1u3mLwmQL+xXcgbhQjwTKI1iE7fs9dyn9/kfFCzO9pqYsSUgzgsFJglKJFkY6k0ZzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de; spf=pass smtp.mailfrom=tk154.de; dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b=ItmxyC1o; arc=none smtp.client-ip=85.220.189.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tk154.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tk154.de
+	s=arc-20240116; t=1780662132; c=relaxed/simple;
+	bh=FkhXNTuRdMOWnGzKFAZXbJcvhCSfm+nl2opUkNJDGVw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EXhOW5mPfSl8oDw8f7pacwaSDffUzBShgND8sc1IkAwsACP7ZEYuJD5xIiXeoTS1Xhsec2orsdnO4v3jO3OMqaXkwPs+cGR4XFruXhUzFgyYHXQyK8GDuV3ZCOI737p781sylpImoNQ7giww9lnC4NF8tX4gv8dzoy55Ek/NYhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZlSpeGu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tk154.de header.i=@tk154.de header.b="ItmxyC1o"
-Received: from hub2.goneo.de (hub2.goneo.de [IPv6:2001:1640:5::8:53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519)
-	(No client certificate requested)
-	by smtp9.goneo.de (Postfix) with ESMTPS id D44662403E9;
-	Fri, 05 Jun 2026 14:14:47 +0200 (CEST)
-Received: from hub2.goneo.de (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	by hub2.goneo.de (Postfix) with ESMTPS id 3D946240511;
-	Fri,  5 Jun 2026 14:14:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tk154.de; s=DKIM001;
-	t=1780661686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C1Ioe8uKiJIxbIqpXcCQ8i5GRjn3ORGyOB/YwWZ/fog=;
-	b=ItmxyC1oPSLgLXvUw5IjRgR11LcQQJFnmDuEKng82XAxd+7v65sBc+HvcPkfMUcxxPPzA7
-	LaHmMQJDXobOCNJMIErw3wECu/hY1jxhJRpNS4pwZ40wMrkegjDtvzfbycDxXt9of884IR
-	o3XGJ9xS/rzezdTAVR46+DkiqASgl2A7wUzK1Wz7ACdmRchYI4WfxUgixbN9U7nuQnIDaJ
-	lJT7qG2wN9exT2We5MS+H5/bOrS3rQCMag4bCAVUJjROdeN5rST51U1XmUfR26z/Zflmsk
-	xIZa20FLpqD3ApszF9dpPeL6eSq4byVXKqp70dXpCmzWxGzR+OCeSaI0rxyqyQ==
-Received: from Til-Notebook.meshlab (unknown [195.37.88.189])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hub2.goneo.de (Postfix) with ESMTPSA id 1B72324035A;
-	Fri,  5 Jun 2026 14:14:44 +0200 (CEST)
-From: Til Kaiser <mail@tk154.de>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: marcin.s.wojtas@gmail.com,
-	linux@armlinux.org.uk,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	mcroce@redhat.com,
-	sven.auhagen@voleatech.de,
-	lorenzo@kernel.org,
-	Til Kaiser <mail@tk154.de>
-Subject: [PATCH net v3 2/4] net: mvpp2: limit XDP frame size to the RX buffer
-Date: Fri,  5 Jun 2026 14:13:30 +0200
-Message-ID: <20260605121332.147397-3-mail@tk154.de>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260605121332.147397-1-mail@tk154.de>
-References: <20260602164635.62517-1-mail@tk154.de>
- <20260605121332.147397-1-mail@tk154.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZlSpeGu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF46C1F00893;
+	Fri,  5 Jun 2026 12:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780662130;
+	bh=FdDMoNMGPQQ4E2Es54PvHiWabNTkCm6aTMPzj7SaZIw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kZlSpeGuH5saKGtZ+5xkCnZz8p3x6ZVlRON1p2r81uzgMTv3v2jcJNkf7GYJNU9SS
+	 OAlH0ZiBjC06jT3cbdBIrViyNgXLuzEiiXMBd/0P/Eof+FC6U2yveVtLhIo00hoTt2
+	 4Hh4+L0A4eRz3k8ri+gcnOzJ5Ty6S6MG2H1HXdVAY1tYMALinFD5luJMIWXJttTSUn
+	 fx9orBClCghXeSlK3XW2OSIVDfcUI88LsQwdidtG0VoJe/7NFsG4z/8RYeYMXxDYkv
+	 25WakuEul1BKUwu4ODEi5Cf0aqChrE4HOl2nRWbvZ6x0nU24t7LrXTa1MZ90VlEfJV
+	 E01rLzcfdRQKg==
+Content-Type: multipart/mixed; boundary="===============1327767064383600339=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-UID: cdc45f
-X-Rspamd-UID: 6158c8
+Message-Id: <22927163b097eb5fccb320750193dcdaccc1a0c31add85153903234b19b8b7a3@mail.kernel.org>
+In-Reply-To: <20260605-rhash-v7-7-5b8e05f8630d@meta.com>
+References: <20260605-rhash-v7-7-5b8e05f8630d@meta.com>
+Subject: Re: [PATCH bpf-next v7 07/12] bpf: Optimize word-sized keys for resizable hashtable
+From: bot+bpf-ci@kernel.org
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 12:22:09 +0000 (UTC)
 
-mvpp2 has short and long BM pools, and short pool buffers can be smaller
-than PAGE_SIZE. The XDP path nevertheless initializes every xdp_buff with
-PAGE_SIZE as frame size.
+--===============1327767064383600339==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-XDP helpers use frame_sz to validate tail growth and to derive the hard
-end of the data area. Advertising PAGE_SIZE for short buffers can let
-bpf_xdp_adjust_tail() grow a packet past the real allocation, corrupting
-memory or later tripping skb tailroom checks.
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 7b9408b8320c..b4366cad3cfa 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -2763,6 +2763,31 @@ static inline void *rhtab_elem_value(struct rhtab_elem *l, u32 key_size)
+>  	return l->data + round_up(key_size, 8);
+>  }
+>
+> +/* Specialize hash function and objcmp for long sized key */
+> +static __always_inline int rhtab_key_cmp_long(struct rhashtable_compare_arg *arg,
+> +					      const void *ptr)
+> +{
+> +	const unsigned long key1 = *(const unsigned long *)arg->key;
+> +	const struct rhtab_elem *key2 = ptr;
+> +
+> +	return key1 != *(const unsigned long *)key2->data;
 
-Initialize the XDP buffer with bm_pool->frag_size so XDP tailroom matches
-the actual buffer backing the packet.
+Could dereferencing these pointers directly cause alignment faults on
+architectures that require strict alignment?
 
-Fixes: 07dd0a7aae7f ("mvpp2: add basic XDP support")
-Signed-off-by: Til Kaiser <mail@tk154.de>
+Since BPF programs can pass unaligned pointers (such as from packet data
+in skb->data) directly to map helpers, using get_unaligned() might be
+necessary here to prevent kernel panics.
+
+Previous discussion: The author responded in v5 that "the same problem
+exists for the htab jhash2" but did not address the concern. This issue
+was raised by sashiko-bot in v5 and v6, and repeated by BPF CI bot in v6.
+
+Reference: https://lore.kernel.org/bpf/20260528182522.23D121F00A3C@smtp.kernel.org/
+
+> +}
+> +
+> +static __always_inline u32 rhtab_hashfn_long(const void *data, u32 len, u32 seed)
+> +{
+> +	u64 k = *(const unsigned long *)data;
+
+Same alignment issue here: direct dereferencing could fault on
+strict-alignment architectures like ARM32 or SPARC.
+
+> +
+> +	return (u32)(k ^ (k >> 32)) ^ seed;
+
+Does applying the seed after folding the key make hash collisions entirely
+independent of the seed?
+
+If a BPF program or an attacker inserts keys constructed as:
+
+    k = (Y << 32) | (X ^ Y)
+
+These keys will all fold to exactly X before the XOR with the seed, meaning
+the hash output for all such keys satisfies:
+
+    f(key1) ^ seed == f(key2) ^ seed
+
+for any random seed.
+
+If rhashtable detects a long bucket chain and triggers a background rehash
+with a new seed, won't all these colliding keys move together to the same
+new bucket?
+
+This might trap the rhashtable worker in an infinite loop of rehashing,
+leading to a 100% CPU livelock.
+
+Previous discussion: The author acknowledged in v5 that "the attack is
+possible in theory" but decided to "leave for performance" without
+addressing it. This issue was raised by sashiko-bot in v5 and v6, and
+repeated by BPF CI bot in v6.
+
+Reference: https://lore.kernel.org/bpf/20260528182522.23D121F00A3C@smtp.kernel.org/
+
+> +}
+> +
+> +static const struct rhashtable_params rhtab_params_long = {
+> +	.head_offset = offsetof(struct rhtab_elem, node),
+> +	.key_offset  = offsetof(struct rhtab_elem, data),
+> +	.key_len     = sizeof(long),
+> +	.hashfn      = rhtab_hashfn_long,
+> +	.obj_cmpfn   = rhtab_key_cmp_long,
+> +};
+
+[ ... ]
+
+
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 92a701f4fe3f..3372ed27cc8d 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -3979,7 +3979,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 			else
- 				xdp_rxq = &rxq->xdp_rxq_long;
- 
--			xdp_init_buff(&xdp, PAGE_SIZE, xdp_rxq);
-+			xdp_init_buff(&xdp, bm_pool->frag_size, xdp_rxq);
- 			xdp_prepare_buff(&xdp, data,
- 					 MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM,
- 					 rx_bytes, true);
--- 
-2.54.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27013077824
+--===============1327767064383600339==--
