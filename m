@@ -1,62 +1,62 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A93F3FBEC3
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 18:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F813FCB3E
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 18:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780684557; cv=none; b=EIOz8e5EfoQlE233AprNy6kkd+Z+yN8BQMAiK1mwKvid3mqUBZ3vASi/CPob97IOtp6U9oixZd7lLHzQwNzY/tAi/CUd0sxh4XSGpIJ9TS82q1LAMCXKILbH9fEKIEP4nRbvVqUApgK/9ov0ixjs9+uivOHd5pn7l8F8BlrYsmw=
+	t=1780684558; cv=none; b=S8dtNV1T78C/alTTBoPSe0uYetAxNZcU9ndIygYqZ/JvJu/qTDiOsyxsd3cT9Y30XfFTwbkrssto5U584n61DLzxX8+PfFyMC8vvGnphXu8tU3AsNGOuy+uoATiQynOR8maVDd+kMkh9KG8nWw4+AxsGXIA/sGjCqm8J2uyWxbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780684557; c=relaxed/simple;
-	bh=VVADNSV1X9wTkRBoKH71hQL9qSar8jZgE+dZ8EZnP3A=;
+	s=arc-20240116; t=1780684558; c=relaxed/simple;
+	bh=qV4hSRgYCAlZ/cX5eOLisIxPMgz7Jx59zHgWJ0fU8Go=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ei/fYC0r05E2AZdLwuEDT+iDuyl/uCxHgA2cjQSoCX98c6vlZi5fa5j+G8UXdFzQ5DAFdvwlQcuSLcFKP49pDXEwgUoWJpu0g3kxVANqeQrCMBNKxAOEiGU1UkIJzn0am4T3RsKdyu8a2CCqrnqKqHgxW/vN9UVmHAJm3+9e0k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BlboEMWO; arc=none smtp.client-ip=209.85.216.42
+	 MIME-Version; b=qN87ZuJbKTNCoCtx64ZKjWGL7Qz4Uc0yq6/PTp01XzaNl6LRo9TqmOvxAjiiH4M1ttvnjS7w52NnEN5749n+sEJ54NkHD9u4i/iEIAdABZmtj1U9B+tfSblOjSN6GbeSOtg6TQSVyvnDo45DVWsjjTtFPRyVpKO4PDuPy+HKGaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nWjgTfNA; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BlboEMWO"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-36d630c0e35so2287683a91.3
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 11:35:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nWjgTfNA"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2bf3781ca51so23492875ad.0
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 11:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780684555; x=1781289355; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780684556; x=1781289356; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uLIAaKlmgt4AiSXDWFcEgvbqEgZu5tWx4v+R7w02MlU=;
-        b=BlboEMWOWKmYDDGiMzxNk0pjbSJCeaXVg3A9oFzpsXNlcWLqRKc8yAcrLV1y6+VJxc
-         lEc2KNS5+vrMvWfLq5yve6doTy1lQL3gD/3F3XSUooQ+Xopc5N0iAOQjCVmmRZN0VZ8p
-         jyRM9PlPQa54a5F0Qp0ELsizlOLy5H9WXiDO+1MJuLgEMt4/QbWjVEz5b+OipUwiWYgS
-         LEx+PT/as8EA3iYBEqEnqzu5zgpEAxbl5mt+LSyYay2Iw5uTpK5YzJ+GtPzJSfCYxFOY
-         shdMvLEeQyffZZZ4Bg7BA5uMUnOKj/UcxvLPfHfpxLd9h6YrWaH3TTToIBP+XK8DYhUQ
-         e1qQ==
+        bh=Vd7mNB6n7oWwOEumxuPNE7buAh5DJvMLtPzxh9rFWLE=;
+        b=nWjgTfNAYOxBscmkX8lS3VvhPsTJfZVyKbOgVo+rIXN0NIOtNDYh9G4pBRjm4azDR9
+         zGGLmPfaJlS470uE1YFTy4IIBDxPNY6SHPwtFp00JEtQazDD8V2HqaKK1+Qd0Th0g5fs
+         2STNu9B18av6EyDY6/t/cv8PSzzKbxF7Rf0uMy4srintEOOZUU/fvdULES2JxbwO33OV
+         r1ftOaSl3P6ANb6eQZl5EMQaAfUkjoIuPGTZnXDYTCQge+e0KmVciFyhfFaK2rsHhCXZ
+         LmVT2wZhLGOFYMHxE5jmzdY6YV656t5c1Oua665DnN/VRnMXjQ8m60zqM+OQyII51a0a
+         qmLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780684555; x=1781289355;
+        d=1e100.net; s=20251104; t=1780684556; x=1781289356;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=uLIAaKlmgt4AiSXDWFcEgvbqEgZu5tWx4v+R7w02MlU=;
-        b=m/wZaTcviW4XxBuhezcKYZbIt4jAAEFoJJ13CAqJh4kmZIfTWRPv1fy2ZfboPMiDjo
-         nOIL89yCV5otO+8ICfsw97BrHh+wNPw9JDqWKGEGrojqDkMzqyJT+XxYpC9bGh3fGtFP
-         5ZTwjU+n1IhAYlryyP87fsubdWpHHdeIyijfFxTBOoZVp68qAq4itP4jmPW7fXF/iU15
-         HM7l4t9XyABWkLcep8tC3Uno9CSxsBp9bT9eNXwOsF3dO/2H7uKV9sGlJioqepG4BUeX
-         ELAq+s/SqIpYtr5tgr8eR5yDO1rSESrkbmvP8FYNYPPhXuI5+6w6w+C9Q8V39iXf8FdD
-         /Qfg==
-X-Gm-Message-State: AOJu0YxbXHgSFm73rj9RSvW1b9gMEgx/A4Pjy/vyTI717E7Fq5/QqjWn
-	gS+kySVYxcAySTwcApT6u8eTs34lhGVc+BzUn6pXX9baablNKAnzKD+Kwf01Bw==
-X-Gm-Gg: Acq92OEB6l3Z4Zb7D3Fy8hz+vPlIepDVLZeDTaldGXWB5SCIBMkQNVA3MHSXa2br4YP
-	GvcGR8UhjO4+rNLTPU8tTh3n5vy1tr+oAxQR5nYUS+q3ebTO7NUr9jfOlTUJLZ8Tusvs8KEQAPT
-	EvSozWu8XAabvIAgrYoWoqhn/NSShOjxEXPpdyigjcglyLTRSXWQV3W3hc2fxFLqQlwpQgb96aS
-	ORwaVPHYmxBeYtCMAxG1H0i01bZFcu9+tdvvBl4N6xUBt+Dvsz0y32EGZZ5LIpzmfIA8FWcZmFr
-	KZ3d5zITILrY/4iXJosbSttP25pVQ6PHzzGN+uuzyBYEiBXgq3WUGK8cq2Zb8op1Jl0KzVwd+zp
-	/5YlWsHi6Yz/5GoHbaU+SnKrMKXMyr+cJxDbc1VZnN57vGr9V+DUO5jv1y4uSyM6P3rLV5A/lFG
-	qwmsg2rLovcmNiMcg3wXKbByI=
-X-Received: by 2002:a17:90b:57c4:b0:36b:75:6387 with SMTP id 98e67ed59e1d1-370eea202f0mr5225778a91.8.1780684555542;
-        Fri, 05 Jun 2026 11:35:55 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:2::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6c668f9bsm7340861a91.7.2026.06.05.11.35.55
+        bh=Vd7mNB6n7oWwOEumxuPNE7buAh5DJvMLtPzxh9rFWLE=;
+        b=HDdM53LnmUl5a5hZcZmDzlZQLLQuRh07gF4nZlvyiIP+aPXP4K0XYwwOBUJjhRMmDe
+         y3TXxJbFhfwF52vOzPUDcnOhbmBZqM4fPmL9pUnIoCo4CNUnATVAsf2B83PNDMxzkIN9
+         ZM8GRGBLRElr/7vyYfeRKTGemWcYdP5eUhCILNcQjT0KSgPPBosMFNxucmX9crWDjLUv
+         JmbkWyUfw6BlPzJh6TD9BvLibhrnDy2746r9RkFIIv4sKurN+7aR/FFuEWVKkJ5N6E3A
+         zLbh3Is8sbhBrtFdXuns2KGEigmuwzy5owr7u3JO/WL4vdlMeyPqsm32tvwbZRQYCeQg
+         ioYA==
+X-Gm-Message-State: AOJu0YyidNQGbNRcDG0fMOj16HFWXcpiURnx5pIQgureu6+9Ja7cDIPe
+	B1ocA2GCVwLX1uFSepcKIM98V7GFOWOxGQdVQXnkg2CnP2ZMvWbO7hsRabDfsQ==
+X-Gm-Gg: Acq92OHrdfcla1Yj0bHG0hJla0qMEtyWthCA/Ln0CjibThXhYBrQK7gyCM7PSiMg/EV
+	0QQCgMJZ/+MyI3c+WMrInocdCJxwaUWaj3g7WlAUG46RCCvtdvnXdYHsHuXkTXol3dqWCvP9qeu
+	mBSUZyEhJKlIOyINv7RXW60uZduZj16I6pAk0gJxtm0GogFFBTzSXB8br417GrQi6ksLtICJZ64
+	ljp8u35nTrezoFFAkhzufheqm6wRUJj4buSW2sizFs+EYeFv65Mirr1Ux4oo55NwYT2nC1nO4Se
+	+N4/5HGNIyrswY5yhl5HdMww4bdiTQP5HZFjWR60YPbEsCqUtTUAflCYjj/9Q/uffWs9RKi78Kc
+	FLJd73jQisw2ruHr24kR2L+34FQqwgXr4rmYfWpF2t3WdCN5re5x+Lk6oMQ+tYxvnvx0+9VA1wB
+	x/ENdc3NG3qqFCsZO+vGciGdw=
+X-Received: by 2002:a17:902:ce8f:b0:2c1:f262:4962 with SMTP id d9443c01a7336-2c1f2624b85mr37613955ad.20.1780684556576;
+        Fri, 05 Jun 2026 11:35:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:6::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e2d7sm100260565ad.39.2026.06.05.11.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 11:35:55 -0700 (PDT)
+        Fri, 05 Jun 2026 11:35:56 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: netdev@vger.kernel.org,
 	mykyta.yatsenko5@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 3/5] bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
-Date: Fri,  5 Jun 2026 11:35:49 -0700
-Message-ID: <20260605183551.969144-4-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 4/5] bpf: Remove WARN_ON_ONCE in check_ids()
+Date: Fri,  5 Jun 2026 11:35:50 -0700
+Message-ID: <20260605183551.969144-5-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260605183551.969144-1-ameryhung@gmail.com>
 References: <20260605183551.969144-1-ameryhung@gmail.com>
@@ -83,31 +83,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-refsafe() compared each reference's id and type but not its parent_id,
-so two states whose PTR references differ only in the parent object they
-were derived from could be wrongly treated as equivalent and pruned. Fix
-it by checking parent_id too.
+check_ids() warned when it ran out of idmap slots, assuming this was
+impossible because the slots are bounded by the number of registers and
+stack slots. That assumption no longer holds: referenced dynptrs acquire
+an intermediate reference that lives in refs[] but is not backed by any
+register or stack slot [0], so a program can accumulate more reference
+ids than the idmap can hold and exhaust it.
 
-Fixes: 308c7a0ae885 ("bpf: Refactor object relationship tracking and fix dynptr UAF bug")
+Exhaustion is fine for verification correctness. check_ids() already
+returns false, which makes the states compare as not equivalent and
+prevents unsound pruning. The only effect of the WARN_ON_ONCE() is log
+noise, or a panic under panic_on_warn. Drop the warning and keep
+returning false.
+
+[0] 308c7a0ae885 ("bpf: Refactor object relationship tracking and fix dynptr UAF bug")
+
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/states.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/states.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 5945956a7573..06d9ae24f006 100644
+index 06d9ae24f006..32f346ce3ffc 100644
 --- a/kernel/bpf/states.c
 +++ b/kernel/bpf/states.c
-@@ -890,6 +890,9 @@ static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_state *c
- 			return false;
- 		switch (old->refs[i].type) {
- 		case REF_TYPE_PTR:
-+			if (!check_ids(old->refs[i].parent_id, cur->refs[i].parent_id, idmap))
-+				return false;
-+			break;
- 		case REF_TYPE_IRQ:
- 			break;
- 		case REF_TYPE_LOCK:
+@@ -343,8 +343,12 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 		return true;
+ 	}
+ 
+-	/* We ran out of idmap slots, which should be impossible */
+-	WARN_ON_ONCE(1);
++	/*
++	 * idmap slots are bounded by the number of registers and stack slots.
++	 * Since referenced dynptrs acquire intermediate references that do
++	 * not live in either, so the map can be exhausted. Since it is unlikely,
++	 * fail the verification by treating the states as not equivalent.
++	 */
+ 	return false;
+ }
+ 
 -- 
 2.53.0-Meta
 
