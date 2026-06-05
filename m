@@ -1,213 +1,213 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4555F3B8921
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 14:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2F4355F25;
+	Fri,  5 Jun 2026 14:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780669867; cv=none; b=HQl/oKVZ/ehOy8kv+T5DcOpl/TL+XNghGk5Sn5oB3rUQuatiZQNUyl5fAaFPrWDniAbfAmq7J84g6CWRrsJA05jKPolBZRiH20+IdZYmTrQRigxORVNN+TlK1mcmcod1Fgluw7vbWX9aBHRlfO4Thv9admq1c9ZKI8eSDwrWxWc=
+	t=1780670435; cv=none; b=jb6DC0kb7vSUnwNC5f6Xpb10M8veWkjkbslfGYvTU3vIeAgw+Sh+44nzaHD7fKuiWpu1LFr6oSrdAw3fTr37yVIyqY7CEh8b7BLxjt5G8inlR9UJ/P60q23S0WFA20WUz9XV12msUfVF1VPyK5Ovjh4EoVlW7FJxtpNlRUm3lDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780669867; c=relaxed/simple;
-	bh=jWHrHLUA0XAdQ6FrMHpGA0niKWdjG4eYNFrXMypc/bM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ui5ckw3XS3ujtomxGKtlPyQb3cV4XlXYqXJdfFkcludSN09CzYNlFie+DRpe8+c2ubTsNJpYG+SA/BenR0vWBvM8wicu7B5ZYTcoQTPaHo+PefmmqCSQXcUZlK+UQ1qEpBuuL7zWPHj/gJm8eaMGnQQ0wAYObk6XhFT3y0hD3S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B51IbvS5; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780670435; c=relaxed/simple;
+	bh=7E/NOmTNocC/WEyNgoJKQWTmU7zo2ab+uVA1ao4XvWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bedfgRXOJGRBMIvAditgLy+LFx9S0eJWWeA4kfr+V/iR/qa5KHhM0IdjSKJ901q0ml+oHMxl+3c2J6X7Ort98uB4f2uGoRv7eLfcewRQzXHbHtFUf5VxmbjPcFCeZt1qP8E6bj8fj0t0t3hyo/GMHmQIj2P058oOlFsv5lT6Ovw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAB+w2Kh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B51IbvS5"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-bec4639953dso338943466b.1
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 07:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780669865; x=1781274665; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PkRYOYq8QjeI8NvdQ6nqQjhp1Ulgc3imvtojJqTYeqQ=;
-        b=B51IbvS5MOxk+4ThjixrJMSiKyFnwsMVx8vyr8GxpJoiZCUpRUKTqFsXKX3s20ibOn
-         R1MLGnCF2AmD9YviudNgkGuO3i2gRUTHwlgQCLolkQOxg5uSeSO5eTkisAUYLpN53ELN
-         HmXL9gUnlu4tGXQ4cAKtx9ztw14+s3aREcnI5lCucgkRiyZjnCBSJFPev0oVqTitGSjl
-         OBeu9vjJMj8bhtEU3Nfjr7WBCQ+Raeo2urLMB/Vsu2dtGbBJmTRJVaDjHhmxBQzbDEtC
-         Vm0sldvrYOCH2GLQCOuWNCwKwqaDtKDPzLwerhfpCWjMaZJm+a1OfXCSfZ+yw7QnxYxu
-         Xk3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780669865; x=1781274665;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PkRYOYq8QjeI8NvdQ6nqQjhp1Ulgc3imvtojJqTYeqQ=;
-        b=ZctNNTd8iah5rs+v7biQjzzAfERuGxWRB0PMVwMs87p3vWIAbsXEzzeIRB6NV/Afgq
-         ORVfGpuLedJnA0WyFv3TokvvnVxovSzwtip03pMkjPAjtCEnHOcEmyK0EqVtPcXkB3Jr
-         VTnKbzOdlDCpmuJ7/7MhBmIrkj5ZPJl2I0GO+jyr9crvNq/azehV+Uw71Bid/UkQdGEG
-         U1BNh6zaXeuPFpJyiRerQXgimxe1+Usng8B7tcJPCZsmBWr/TW7jS/Fd6l0xmBY6Qm4G
-         g4XpBZkuvLfqP2NZbtSMZKyH0FdwGZWYPctRB+JUGjoeVgjhe0bW0YDqCYw6PEsVmUmP
-         0NNw==
-X-Forwarded-Encrypted: i=1; AFNElJ8sej4yPZQp65G9NoSXHLYF7nUYGWDHdEJ4tsV0hU5vvo4/3CaRoMxl9VNWYnDaLat1CQ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfdtqMC48IQWZ/+mjoiHD+V4gnzt4k2EI/m1UhC61UPFwF3dZf
-	WwhcIaCuPytASWNVPctUbN7KJuUTJ/meiZm67zUFmWxZKbEikbdf9l8b
-X-Gm-Gg: Acq92OH3DssTmlIPbTHorJgiG1cIxrX7b7kooo25qmOLEiifu8bmApYu4vxC+zFqm/R
-	NNWMMy33cnOeNhs7lW2Wt7xJrE1mJxbErUZfzT9lEvEu90KJWhnxyXY5xdvVBURVtkJsv7HzT8s
-	cBjjOYszgYo55FgBDiuEE2STvqeEZKRwjZX5qtLkRPvZq868MhcXYEW27dtTMN2zZ1K7hffc9Ih
-	QcLr+RtqKxdXDmCHj0hE3NwgDSHKD51GbS2H3ELQ0Nrx+a3+xCdWA9npaA1HPPqOkAKIy2NS5mA
-	1iEuXuGkdlkDk5JVwg3tEn8csn8v0k2soy7todZJ0SF7/lpXAfj7436aeKRE4APvbWPZtWoktTr
-	u+dPi/Te6vWWQMiwJSThyLdcsoavt7jxUTd17VDqJRp0XgecpMt25l0AAxQ0xtiK4ugI51PP+oO
-	iu3UvbXsYICZG/icS2/cClCcw8dm4tX01u/Mpvi0+IWf1mlTjHvgHiUrt4R/BVTdTNnNL7V5FOW
-	RXdWJ2YJt7Lg0gvjh4UCA==
-X-Received: by 2002:a17:907:970e:b0:bec:d5e1:5aee with SMTP id a640c23a62f3a-bf372446932mr236229466b.34.1780669864530;
-        Fri, 05 Jun 2026 07:31:04 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf0553fd86csm469474866b.46.2026.06.05.07.31.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 07:31:03 -0700 (PDT)
-Message-ID: <d12081a0-b933-44cd-8c46-5d7b83cf0347@gmail.com>
-Date: Fri, 5 Jun 2026 15:31:02 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAB+w2Kh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C291F00893;
+	Fri,  5 Jun 2026 14:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780670433;
+	bh=HBdEaxKJ/QaWxr/2mdJ3GwGXzFp8BgaoQqxpPy/Cpgc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HAB+w2Kho16GGymIhaGe5gcuYH/Kd65BNSM7PWtW/9HpWhab9RYvn2qg0mrGXTyRy
+	 rr9cURPmAh2E2CPwzX7JI76h9jDqwZ47+Njo+5WY7j01wCDdpzB6+BZPMeI0meBRUs
+	 CHCroh7yfhWYtIxPixkdavdjIV1kCU5b+DxiAbRCmtj1YmbbOyrFJNwhtmAmcoFv4p
+	 YChGrMdeB2HjIIeTIoPint6dghaOhpHGMlP0+p6Re5Yuqv9+R1Y6jd+/1AAyKyAgYQ
+	 2pEZqgE8IMbiwUkEmRy6E8V8ePnkT83CH+NLQX1tBELC9fdBzo9kei+2rE4LlvAuKl
+	 n53qncG7cbD+Q==
+Date: Fri, 5 Jun 2026 09:40:32 -0500
+From: Rob Herring <robh@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linusw@kernel.org, brgl@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, Daniel Thompson <daniel@riscstar.com>,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 10/14] dt-bindings: net:
+ toshiba,tc9654-dwmac: add TC9564 Ethernet bridge
+Message-ID: <20260605144032.GA3659201-robh@kernel.org>
+References: <20260605010022.968612-1-elder@riscstar.com>
+ <20260605010022.968612-11-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: add arena split and fork tests
-To: Ruslan Valiyev <linuxoid@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- martin.lau@linux.dev, memxor@gmail.com
-Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com
-References: <DJ0F0WFEP78A.1VV9Z7T71JJX5@etsalapatis.com>
- <20260605115713.3224051-1-linuxoid@gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260605115713.3224051-1-linuxoid@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260605010022.968612-11-elder@riscstar.com>
 
-On 6/5/26 12:57 PM, Ruslan Valiyev wrote:
-> Add two tests for an arena map's mmap()ed region: arena_split checks
-> that a partial munmap() that would split the mapping fails with -EINVAL,
-> and arena_fork checks that a forked child does not inherit the mapping
-> (mincore() reports the range as unmapped).
+On Thu, Jun 04, 2026 at 08:00:17PM -0500, Alex Elder wrote:
+> From: Daniel Thompson <daniel@riscstar.com>
 > 
-> Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
+> Add devicetree bindings for the Toshiba TC956x family of Ethernet-AVB/TSN
+> bridges.
+> 
+> The TC9564 contains a PCIe switch with one upstream and three downstream
+> PCIe ports.  The third PCIe downstream port has an attached embedded PCIe
+> endpoint, and that endpoint implements two PCIe functions.  Each internal
+> PCIe function has a Synopsys XGMAC Ethernet interface capable of 10 Gbps
+> operation.
+> 
+> The TC9564 also implements an embedded GPIO controller, which exposes
+> 10 lines externally.  Some platforms use these GPIO lines, so this
+> GPIO controller is managed by a separate driver.  Other embedded
+> peripherals (like a microcontroller, SRAM, and UART) are currently
+> unused.
+> 
+> The GPIO controller is managed by registers accessed via MMIO on an
+> internal PCIe function's registers.
+> 
+> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+> Signed-off-by: Alex Elder <elder@riscstar.com>
 > ---
-
-Two tests are quite small and share common setup. Does it make sense to
-put them into the same file, extract common function and turn them into 2 subtests. 
-You can check other BPF selftests to see how to implement subtests.
-
-> v2:
-> - Drop the regression-test framing and per-callback details; use
->   short one-line comments.
-> - Split into two separate tests, arena_split (partial unmap) and
->   arena_fork.
-> - Unpack the mincore() child check into explicit statements.
+>  .../bindings/net/toshiba,tc9564-dwmac.yaml    | 120 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
 > 
->  .../selftests/bpf/prog_tests/arena_fork.c     | 53 +++++++++++++++++++
->  .../selftests/bpf/prog_tests/arena_split.c    | 34 ++++++++++++
->  2 files changed, 87 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_split.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
 > new file mode 100644
-> index 0000000000000..bb134e9adb607
+> index 0000000000000..6e7a63dfcf86a
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
-> @@ -0,0 +1,53 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <errno.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
+> +++ b/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
+> @@ -0,0 +1,120 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/toshiba,tc9564-dwmac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +/* Make sure an arena mapping is not inherited across fork(). */
+> +title: Toshiba TC956x Ethernet-AVB/TSN Controller
 > +
-> +#define NR_PAGES 3
+> +maintainers:
+> +  - Alex Elder <elder@riscstar.com>
+> +  - Daniel Thompson <daniel@riscstar.com>
 > +
-> +void test_arena_fork(void)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
-> +	long ps = sysconf(_SC_PAGESIZE);
-> +	size_t sz = (size_t)NR_PAGES * ps;
-> +	void *area;
-> +	int fd, ret, status;
-> +	pid_t pid;
+> +description: |
+> +  The Toshiba TC9564 (and more generally, TC956x) incorporates a PCIe
+> +  gen 3 switch with one upstream and three downstream ports.  The first
+> +  two downstream ports are exposed externally, while the third is used
+> +  by an internal PCIe endpoint.  The PCIe endpoint implements two PCIe
+> +  functions, and attached to each of these is a 10 Gbps capable Synopsys
+> +  Ethernet controller.
 > +
-> +	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_fork", 0, 0, NR_PAGES, &opts);
-> +	if (!ASSERT_OK_FD(fd, "arena map create"))
-> +		return;
+> +  The TC956x additionally implements other internal IP blocks, and in
+> +  particular it implements a GPIO controller.  Ten of the 35 GPIO lines
+> +  implemented are exposed externally and are usable by the platform.
+> +  It is platform-dependent whether the GPIO function must be exposed,
+> +  and if it is, PCIe function 0 supplies it.
 > +
-> +	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
-> +		goto close_fd;
-> +
-> +	pid = fork();
-> +	if (pid == 0) {
-> +		unsigned char vec;
-> +		int rc;
-> +
-> +		/* If the mapping was not inherited the range is unmapped in
-> +		 * the child, so mincore() fails with ENOMEM. A success means
-> +		 * the child wrongly inherited the mapping.
-> +		 */
-> +		rc = mincore(area, ps, &vec);
-> +		if (rc == 0)
-> +			_exit(1);
-> +		_exit(errno == ENOMEM ? 0 : 2);
-> +	}
-> +	if (ASSERT_GE(pid, 0, "fork")) {
-> +		while ((ret = waitpid(pid, &status, 0)) < 0 && errno == EINTR)
-> +			;
-> +		if (ASSERT_EQ(ret, pid, "waitpid"))
-> +			ASSERT_TRUE(WIFEXITED(status) && WEXITSTATUS(status) == 0,
-> +				    "child must not inherit arena mapping");
-> +	}
-> +
-> +	munmap(area, sz);
-> +close_fd:
-> +	close(fd);
-> +}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_split.c b/tools/testing/selftests/bpf/prog_tests/arena_split.c
-> new file mode 100644
-> index 0000000000000..8a59cfdb2ef89
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_split.c
-> @@ -0,0 +1,34 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <errno.h>
-> +#include <sys/mman.h>
-> +
-> +/* Make sure an arena mapping cannot be split by a partial munmap(). */
-> +
-> +#define NR_PAGES 3
-> +
-> +void test_arena_split(void)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
-> +	long ps = sysconf(_SC_PAGESIZE);
-> +	size_t sz = (size_t)NR_PAGES * ps;
-> +	void *area;
-> +	int fd, ret, err;
-> +
-> +	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_split", 0, 0, NR_PAGES, &opts);
-> +	if (!ASSERT_OK_FD(fd, "arena map create"))
-> +		return;
-> +
-> +	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
-> +		goto close_fd;
-> +
-> +	ret = munmap((char *)area + ps, ps);
-> +	err = errno;
-> +	if (ASSERT_ERR(ret, "split munmap"))
-> +		ASSERT_EQ(err, EINVAL, "split munmap errno");
-> +
-> +	munmap(area, sz);
-> +close_fd:
-> +	close(fd);
-> +}
-> 
-> base-commit: 174914ea551314c52a61713b9c4bde9e42d48073
+> +              ----------------------------------
+> +              |              Host              |
+> +              ------+...+----------+........+---
+> +                    |i2c|          |  PCIe  |
+> +    ----------------+...+----------+........+------
+> +    | TC956x        |I2C|          |upstream|     |
+> +    |               -----        --+--------+---  |
+> +    |  -----  ------  -------    | PCIe switch |  |
+> +    |  |SPI|  |GPIO|  |reset|    |             |  |
+> +    |  -----  ------  |clock|    | DS3 DS2 DS1 |  |
+> +    |                 -------    ---++--++--++--  |
+> +    |  -----  ------     downstream//    \\  \\   |  downstream
+> +    |  |MCU|  |SRAM|    /==========/      \\  \===== PCIe port 1
+> +    |  -----  ------   //PCIe port 3       \\     |
+> +    |                  ||                   \======= downstream
+> +    |  ----+-----------++-----------+----         |  PCIe port 2
+> +    |  | M | internal PCIe endpoint | M |         |
+> +    |  | S |------------------------| S |  ------ |
+> +    |  | I |   PCIe   |  |   PCIe   | I |  |UART| |
+> +    |  | G |function 0|  |function 1| G |  ------ |
 
+I don't see nodes for these PCI functions. Boot this platform with 
+CONFIG_PCI_DYNAMIC_OF_NODES enabled and use the resulting DT node 
+structure. Anything else is wrong. This will give you the DTS:
+
+dtc -O dts /proc/device-tree
+
+The ethernet nodes should be just these PCI function nodes. You need to 
+make the DWMAC PCI driver (stmmac_pci.c) bind to those 2 PCI devices. 
+And really, a DT node for them should be completely optional (unless 
+there's some power on ctrl needed).
+
+Everything else like SPI, GPIO, UART, etc. should be under the PCIe 
+switch upstream node in a pci-ep-bus.
+
+
+> +    |  | E |----++----|  |----++----| E |         |
+> +    |  | N |  eMAC 0  |  |  eMAC 1  | N |         |
+> +    --------+.......+------+.....+-----------------
+> +            |USXGMII|      |SGMII|
+> +          --+.......+--  --+.....+--
+> +          |  ARQ113C  |  | QEP8121 |
+> +          |    PHY    |  |   PHY   |
+> +          -------------  -----------
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+> +
+> +  gpio:
+> +    type: object
+> +    description: Embedded GPIO controller
+> +    $ref: /schemas/gpio/gpio.yaml#
+
+gpio.yaml alone does not define a GPIO controller. How many #gpio-cells 
+needs to be defined.
+
+Is there no address associated with the controller? 
+
+> +
+> +  ethernet:
+> +    type: object
+> +    description: XGMAC Ethernet controller
+> +    $ref: /schemas/net/ethernet-controller.yaml#
+> +    properties:
+> +      mdio:
+> +        $ref: snps,dwmac.yaml#/properties/mdio
+
+Either all of snps,dwmac.yaml should apply or none of it. Generally, we 
+only reference whole schema files (OF graph being a notable exception).
+
+> +    required:
+> +      - mdio
+> +
+> +required:
+> +  - compatible
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-device.yaml#
+> +  - $ref: /schemas/pci/pci-bus-common.yaml#
+
+These 2 are just pci-pci-bridge.yaml.
+
+Rob
