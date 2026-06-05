@@ -1,170 +1,106 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB613D1CB5
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 21:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA94E3BA249
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 21:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780695434; cv=none; b=L8vCAj/v9OhV75eljQMdHYG1g7XSz63SrPpYisNBoVZKmyX+9VyS3b+GSCHzvo37d6sAfnNPLJ7HysxDMhh9Ks69OvgmCKD9vNZeU7aWUdGT6jDN8GsG2BqyDK23GrGmUICR0B/6MTq0AiYTHRIaQuAh49FAyn7rtzcm9s8lfnM=
+	t=1780695656; cv=none; b=gPRYydmzt/jqqxkF53DDzHtH8zTRmxBcDm0ezfU8kdTkQ4zyq3TwHBg0s8IPPtdDU0FgMr6EF0+YsqR9e2/Fooq1Otv1ih3M7vEeYT6m+dtAp3ZoY0epfWBfBRy+Nq4dl88RD3UxXlAOcRL7Vwq81LAQcOyxxdw5cc0S9aGZazM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780695434; c=relaxed/simple;
-	bh=O6NE0dQWkmUmTIO6UnYAozfUFrvDOgUvXEav4Qej7+c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=USqglvthvC7e8EPYgl7fu8s6UYafohHB54ZPPmiaoyH0kSp4SIac59jsb5A0FkR50R7q5DGg5TgPBdleLj/9hHvcortRyPER2AYv6NtTQz3LSVkBOEIT13nwje+x03waqsG9Ok2vqsGidA/HkCLPzzQ1U7Nitmfmu5cTN2rfSwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C1xXm7/W; arc=none smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780695656; c=relaxed/simple;
+	bh=UqsFkrBWma5r6ydJxqxQwHvXZ+luru7g9lNeZWG4SqA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P8eAuxP4vT9seypE2BKUzOrWmbRryWGk4WtEl3MnOySWjoeFuOOFjagBgED+k4PiAMH6Jc0B1vo6C9FK/BGca/n0Og8YSacEF93VpCy51T67mJG6cj7omRHIlOwiJh18MilcjqerUw+lM4gyzpgsINVA/iAldE7blaAAFqGrg+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6YX5w4f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C1xXm7/W"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-137dd5161feso5086916c88.1
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 14:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780695432; x=1781300232; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KEGBj4FpvWWj1rv/WQcKtR0ehnNj5xj17BAtDHOpU44=;
-        b=C1xXm7/WBeD3x3g0cMQmvYXy564wrmftmt4iM9J89ODd00upO1DvNKyt0LW7hazhIo
-         8+RRG5NDXOc/5vpt330JFGlK/ctCRgGMWKJOJMJWqSYkbfHzA1bc9T5gKtOdEum5fiON
-         nBeE3S1Q4fW0UgHNFsEkXdWgs3QkJRTdIvCaGCgXS28D1OT7PVoaup+aa4PLoNJsNkSb
-         eldxKcdvpNX/extvvTRK/QquZEJ7mcxA90Mbtvv+qjxcQN18PzNnVCB4W9iH7U594iOw
-         ONs1BGxXJaXeMO0EW2ei76SsZhu9hFLdcrN7Yr43CCmGPjvAe4sxaq7kq0BEdRR8q5xS
-         BCDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780695432; x=1781300232;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KEGBj4FpvWWj1rv/WQcKtR0ehnNj5xj17BAtDHOpU44=;
-        b=lr/yeIODl+XOqbDDx2qT8OuhMm9ti22SJgaah+f7GzOUBhIZ9tkw01ysAknosRWh3j
-         nhrQkSCVYI+G9Id+EP0n+rxijmtuv+6Rj7it5v/wDiB7OFUQOG+x0Bs02poj1STuHuc0
-         H0RpBGzjhoHqgnoq72U8Wse8KjsIxu6PgvzW8N6FDZKH97pdypscu52vHvwjXotmMMiv
-         i8KW5f/3GadaSvuu1ZeQcO1FhgjINecjg1dda0HK3kRvUIDtlUwhaWXRixe5B2rBjh3F
-         YcD040iQL2k22FThiKB9WMQvAWH70GFfzZaMZ9fAqi/pvSWcRWVu3LCtmf5MioWqD7AI
-         cE+A==
-X-Forwarded-Encrypted: i=1; AFNElJ9jDrKXMxEg4rYgJr+9WGZzvy5/1+QS804JmnQf+fKqZQDx1WAD9iD4fu1IJ3xkcSRqNX8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrVXMrosGH4TM6RjA56IHoFlE2H/Opc3AN+hjunwZH+8rGOtYB
-	FPpdDQr8X5eyZUeVwZCZaxq5j8lCltSuKvXvkl28UJ0/QmEMALDR8JhF
-X-Gm-Gg: Acq92OFbtaKTuljggEsyDJ3uiB5NfLQr7jlNQwvmqPGgeXNgKkHAUfmNWeMPdfVzpKt
-	WBE5h01qLIUsKVLG3q4Rr16KlJh6UgTFeBy1GrLKW4dh0jZBIqKahEFBwUZAFaUjGjKKT/83yh6
-	rcjBUo6pqbzYx+d59UNidJFZ0RBGmljkCe868ty3vGND20WYdbrhioqC+MMfhtfrJoATGdxGZ6l
-	c22dk32wFMItpYi7Ux+7Yr6PEgOSEWxCsFZ1oTkremttjdfosjI3Rs+sisvgZ4ksicDMuQncT0r
-	43fO7Yvi4nOlkv1GDWrXNC3PNChL2QI1J5atlr0yMxPLIfnG2wM7wvqJuYxKI7bZFQ8sxctszK5
-	O/jGJwueVCIQlJ+nNT3iX32muzW5mxyTaGMvYdx8WwMpnu/8H08KLCiRLIVVUNzTaI1G2ggquQj
-	xcFB/SQC5sXKcyEtllGPfhBVxxPL7qwIUbM0gyUA6luyaKaPxdMT0IUVQkIu3oj3S2S1VMtjQ0Q
-	1Y59MLLckb/H7Ps
-X-Received: by 2002:a05:7300:cc0c:b0:304:5a9c:6452 with SMTP id 5a478bee46e88-3077b1d710bmr3124030eec.17.1780695431906;
-        Fri, 05 Jun 2026 14:37:11 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:5171:6892:c6a6:f1b4? ([2620:10d:c090:500::8271])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dea8e8csm8868497eec.16.2026.06.05.14.37.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 14:37:11 -0700 (PDT)
-Message-ID: <f349704ed7986ac8ff35475988fcb9e98237df5d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 04/17] bpf: Track verifier branch diagnostic
- history
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Fri, 05 Jun 2026 14:37:09 -0700
-In-Reply-To: <20260605063412.974640-5-memxor@gmail.com>
-References: <20260605063412.974640-1-memxor@gmail.com>
-	 <20260605063412.974640-5-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6YX5w4f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952291F00899
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 21:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780695655;
+	bh=lC+RsC0RsBgJ8YinQMuT1AG3v5DHbJdy0fnuMw4n/wE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=X6YX5w4f/OFNKWudS8eHkWL7tuZTYBiTlKd5keO1MoXWaFcjlWuU4GQvVvPM8P36V
+	 riM5eJm/nH+u7WaDKxMsjUtTGh0HovXA5G4kgVNH7SlFvRzGml28FOBHGTvfGXtF7u
+	 RXUlMESg9mVrSYTz/RNKqt5z0+rFNUFfY8MEp+m6Kgc3ANuO8qPXZxSCPNSUQXViZg
+	 0wj5YDrLxWRjGhQyJYcRgmr8HTzaYgG1yxaD1aQgZoTTyW/shUykG7MafWSd94S+GY
+	 CxQ+gHApmauW/6dWZIkz8+LFGpEz8wYfy98+kNLj8T9yLrqWzdMH/DDT09rvT8M3jC
+	 S494/JazCZJsw==
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-91591f19c30so373408885a.1
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 14:40:55 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwNVZa60fvpWSEtluATbIznd/VQ4YBGDXj/O44XRDiAJgiqjE/j
+	4L6g2Bff0UYR9XkVjx3iGd9KqQqDhAkUnw6G4UrNGcT5fSkfXUe14e94t8Zg7bQsKmRqDqFW2F2
+	OIqiDmq/8IkHP96x1rna2krYMbAjdmeM=
+X-Received: by 2002:a05:620a:270d:b0:911:89d0:fb5e with SMTP id
+ af79cd13be357-915a9ceb953mr967872685a.27.1780695654942; Fri, 05 Jun 2026
+ 14:40:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260605145707.608579-1-dwindsor@gmail.com>
+In-Reply-To: <20260605145707.608579-1-dwindsor@gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 5 Jun 2026 14:40:43 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7jSxHF1sH2jMYf9Px0iuMadt0bX13ABF4D=og-hQuq_g@mail.gmail.com>
+X-Gm-Features: AVHnY4LpUysg1cS6mpjV48bBXchouYWjwrk7Xac1RLxwMzeDiEMqvUtn8rr2K5M
+Message-ID: <CAPhsuW7jSxHF1sH2jMYf9Px0iuMadt0bX13ABF4D=og-hQuq_g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: reject sleepable BPF_LSM_CGROUP programs at
+ load time
+To: David Windsor <dwindsor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-06-05 at 08:33 +0200, Kumar Kartikeya Dwivedi wrote:
+On Fri, Jun 5, 2026 at 7:57=E2=80=AFAM David Windsor <dwindsor@gmail.com> w=
+rote:
+>
+> The cgroup shim runs under rcu_read_lock_dont_migrate(), so we should
+> not attach any sleepable BPF programs there. Add support to the verifier
+> to explicitly reject attempts to load sleepable BPF programs destined
+> for LSM cgroup attachment.
+>
+> Without this, we get the following splat from a BPF_LSM_CGROUP
+> program marked BPF_F_SLEEPABLE attached to file_open when it calls
+> bpf_get_dentry_xattr():
+>
+>   BUG: sleeping function called from invalid context at kernel/locking/rw=
+sem.c:1567
+>   in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 34317, name: loa=
+d
+>   preempt_count: 0, expected: 0
+>   RCU nest depth: 2, expected: 0
+>   Call Trace:
+>    down_read+0x76/0x480
+>    ext4_xattr_get+0x11f/0x700
+>    __vfs_getxattr+0xf0/0x150
+>    bpf_get_dentry_xattr+0xbb/0xf0
+>    bpf_prog_e76a298dac9218c6_test_open+0x6a/0x85
+>    __cgroup_bpf_run_lsm_current+0x326/0x840
+>    bpf_trampoline_6442534646+0x62/0x14d
+>    security_file_open+0x34/0x60
+>    do_dentry_open+0x340/0x1260
+>    vfs_open+0x7a/0x440
+>    path_openat+0x1bac/0x30a0
+>
+> libbpf provides a .s named section variant for every sleepable
+> program type except lsm_cgroup, reflecting that per-cgroup LSM programs
+> are intended to only run in a non-sleepable context.
+>
+> The above splat was obtained by bypassing libbpf by using bpf(2)
+> directly.
+>
+> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+> Signed-off-by: David Windsor <dwindsor@gmail.com>
 
-[...]
+We should add a "__failure __msg(...)" selftest for the reject case.
 
-> +void bpf_diag_clear_history(struct bpf_verifier_state *state)
-> +{
-> +	kfree(state->diag_history);
-> +	state->diag_history =3D NULL;
-> +	state->diag_history_cnt =3D 0;
-> +	state->diag_history_omitted =3D 0;
+Other than this:
 
-Is diag_history_omitted all that useful?
-It is used to print this:
-
-        if (state->diag_history_omitted && start_idx =3D=3D 0)
-                verbose(env, "  ... %u earlier diagnostic events omitted by=
- display limit ...\n",
-                        state->diag_history_omitted);
-
-But this does not seem to provide an actionable feedback to the user.
-
-> +}
-
-[...]
-
-> +static void
-> +bpf_diag_drop_oldest_and_append_history(struct bpf_verifier_state *state=
-,
-> +					const struct bpf_diag_history_event *event)
-> +{
-> +	if (!state->diag_history_cnt) {
-> +		state->diag_history_omitted++;
-> +		return;
-> +	}
-> +
-> +	memmove(state->diag_history, state->diag_history + 1,
-> +		(state->diag_history_cnt - 1) * sizeof(*state->diag_history));
-> +	state->diag_history[state->diag_history_cnt - 1] =3D *event;
-> +	state->diag_history_omitted++;
-> +}
-> +
-> +static void bpf_diag_append_history(struct bpf_verifier_state *state,
-> +				    const struct bpf_diag_history_event *event)
-> +{
-
-Maybe make this a circular buffer?
-
-> +	struct bpf_diag_history_event *history;
-> +
-> +	if (!state)
-> +		return;
-> +
-> +	if (state->diag_history_cnt < BPF_DIAG_HISTORY_MAX) {
-> +		history =3D krealloc_array(state->diag_history,
-> +					 state->diag_history_cnt + 1,
-> +					 sizeof(*history), GFP_KERNEL_ACCOUNT);
-> +		if (!history) {
-> +			bpf_diag_drop_oldest_and_append_history(state, event);
-> +			return;
-> +		}
-> +
-> +		state->diag_history =3D history;
-> +		state->diag_history[state->diag_history_cnt++] =3D *event;
-> +		return;
-> +	}
-> +
-> +	bpf_diag_drop_oldest_and_append_history(state, event);
-> +}
-> +
-> +void bpf_diag_record_branch(struct bpf_verifier_state *state, u32 insn_i=
-dx,
-> +			    bool cond_true)
-> +{
-> +	struct bpf_diag_history_event event =3D {
-> +		.insn_idx =3D insn_idx,
-> +		.kind =3D BPF_DIAG_HISTORY_BRANCH,
-> +		.branch.cond_true =3D cond_true,
-> +	};
-
-This can be recovered from the regular jump history, but let me read
-till the end of the series.
-
-> +
-> +	bpf_diag_append_history(state, &event);
-> +}
-
-[...]
+Acked-by: Song Liu <song@kernel.org>
