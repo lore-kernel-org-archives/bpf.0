@@ -1,126 +1,117 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32B4388E71;
-	Fri,  5 Jun 2026 15:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57004192F2;
+	Fri,  5 Jun 2026 15:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780672477; cv=none; b=Ud/OyoWf+o4v92rxxznQctyqd0USdS2EgM9403IgT2qcPXHwptx2nLAMPGp7Y0sviJ0NjYVqxyrP9vzbhhjXH1w2FhSRyAkQ2JBASZ42WQGtyKNTbt2gDj4goWudff4CyVRCH3AZZRxwNiHqBF4yXumuI/I5WaRmiQOZpg2HDxM=
+	t=1780672792; cv=none; b=MCj+RiZvXbjFtphAqKhJ9QHY1I8BKwHLWUqX8fKz0c8tv5Yl+FO0RnYH4zePFi2AYV+yRsDTEZ0XUyzgwhXY8x68gEvNeFWcN4LL956yrq4I3HFtTgYA3MDtE8n9WLRqdibDNhVO0u9de6ujbQBkj7XT8N3DpmCioTXV+vJdqjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780672477; c=relaxed/simple;
-	bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AusVaqzSYmBo3moth0c78bLRCRt/oT1hkkfYTVH3FyC03igSKjsxHQuLagEJdeowt+bC3Q929gHCDvb8E1xgCwyP75caVl3wsv+sVZsWSL0aJWhvNm9DAsqZyxlb4skXpvEnEtf3v/VEL0qJaWadxAXnZSMpJXC7EDnoZ/p41LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=nsQqgNeT; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=F4yPuMJl; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1780672792; c=relaxed/simple;
+	bh=hkDuOPVOfoh9t1i8IKAvhiAN9N5N+4dcSxmLTgUxUFQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pqUl8HRWrF4GRLqPxn6rzhEf4FRkSA8BiHLaKZg3LFgzfgd5SZT2je3sVDd3QBTrBgipU0RlF4lenfOlYrJdQvv+sBmzOexRva5R3b38jlgg3iHmQq5+OTfx0fHxqBzgOPJBXAZ4aMklhE5Vlp/zC1UyJGpMIF1Q5CQp3c+lmq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TjblaRNX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="nsQqgNeT";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="F4yPuMJl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1780672468; bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nsQqgNeT4wTAFr+aVxwsUmHlJytWUwxwIGNAFV2wGyAscuzcALE4+wddUnU5NJA6D
-	 myYFMyoSFTEO2k95Qq5inFspaIabeiwVTIunVpqKkfOOtwGBNeuGLzr7qaeZvUrK6L
-	 3f02DSRk0nSlh1utxsmhmI6GofH/tmph0f+HGr1U51cMst4vdzjRnUKQtpoMAcc+Vc
-	 3YVBCNAxZQQ0YYwOGHEfrmcHfi07Gd8L4mxoZGXyrsChTX4r39CFyWncg8/X4EVaY4
-	 VW5BomhqnsicSwYI0Hu/cXAPxO880lUkoB8c5Vg1/nV/7hpXKrVhvFWl9ngjgjs/nz
-	 GI0ctaA+ScZJQ==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id 4C8B441AB7; Fri, 05 Jun 2026 16:14:28 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1780672467; bh=0wSyyP8FRVzf7/nN2rkijpLZ/QyF8u8izV48o+OfdU8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=F4yPuMJltgSemibAHXlgfScPQuJQ6vWGgtvcuKFa6VexTMnTY3kqWOh5+3Vvy5Ohi
-	 FhsYH/CgFy2C03Uy+N4XtbgJIFCMpdRQ7mBnRWyuI2Q38KlRRXjeQX+JzbB0a9T2Uw
-	 z1mqpnovKqL9/CYrhE/r0J0Qe2oMzplO//6rhMhJG950Szaa/lRiuRqGO84yATq32g
-	 4voCViaFz1Tgj8OQBG2w1Z2fS3uMyAX6L2GxGKvLC725xnKv+F8QX2fxu03tVTlvsn
-	 vOLQYX9PTpLJh2TLlmm4WfZCII2rxw+lC9CGH3NaEbLN9MCljPWS+5nWpOD2chU1Q6
-	 eM+uI598Ty/Yw==
-Received: from maru.local (unknown [62.232.99.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 7A2BA408E6;
-	Fri, 05 Jun 2026 16:14:26 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: Bastien Curutchet  <bastien.curutchet@bootlin.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sean Young <sean@mess.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix test_lirc test
-Date: Fri,  5 Jun 2026 16:14:16 +0100
-Message-ID: <20260605151417.777614-1-sean@mess.org>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TjblaRNX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E571F00893;
+	Fri,  5 Jun 2026 15:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780672787;
+	bh=yqSyRj6GmazNruGfJ4/EsvMjp9Kn+w4KTusG/joVL3A=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TjblaRNXB6X1CZfTE5lPehGTwDO5mLt6gmgDGmVhaAaappmp22fndZXk6No8TGdcu
+	 qMpdpnx8+G++EuWUU1GnTl3rq4KOWuXQGFv4UgbdJAQrS11a2XL/EAh5QGDRU8X/K5
+	 oE9cwcn4/r3HlcJcoRps7dKr8Gh6mqA96sdQtMdpMOsDX7EZU+s1Hq8+YFDvlu6RVf
+	 lHnxc/4zgZbF/i/0foZtfJ9PoE24XvH35AXzKGqwbHYVHA0D4u18e5dAYP9gCsFG6w
+	 JhgizyM2kH6lnwYbh3wvDGnRNkzrKVcdJdQfqdQzVgQpAJuvCAM5Bz2fgleS48gctp
+	 ibp8C1B93X9ow==
+Content-Type: multipart/mixed; boundary="===============0334693205050802382=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <8c3468a91bbfac22f819b0ac7f1307de0bb5bec062229b36387550e05807e485@mail.kernel.org>
+In-Reply-To: <20260605140243.664590-3-xukuohai@huaweicloud.com>
+References: <20260605140243.664590-3-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v5 2/3] bpf: Add validation for bpf_set_retval argument
+From: bot+bpf-ci@kernel.org
+To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,sdf@fomichev.me,zhuyifei@google.com,mattbobrowski@google.com,2022090917019@std.uestc.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 15:19:46 +0000 (UTC)
 
-Since commit 68a99f6a0ebf ("media: lirc: report ir receiver overflow"),
-the rc-loopback driver does not accept edges over 50ms, as these are
-never seen in real life ir protocols. Fix this.
+--===============0334693205050802382==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Sean Young <sean@mess.org>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8ed484cb1a8a..a50280bb0d45 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9790,6 +9792,29 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
+>  		reg_set_urange32(ret_reg, 0, nr_cpu_ids - 1);
+>  		reg_bounds_sync(ret_reg);
+>  		break;
+> +	case BPF_FUNC_get_retval:
+> +		/*
+> +		 * bpf_get_retval may see arbitrary value passed by bpf_prog_run_array_cg for
+> +		 * CGROUP_GETSOCKOPT type.
+> +		 */
+> +		if (prog_type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
+> +		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
+> +			break;
+> +
+> +		if (prog_type == BPF_PROG_TYPE_LSM &&
+> +		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
+> +			if (!env->prog->aux->attach_func_proto->type)
+> +				break;
+> +			bpf_lsm_get_retval_range(env->prog, &range);
+
+For a boolean LSM hook, bpf_lsm_get_retval_range() returns the range
+[0, 1], and this code refines the bpf_get_retval() return register to
+that range.
+
+Can that static range be violated at runtime when multiple programs are
+attached to the same cgroup hook with BPF_F_ALLOW_MULTI?
+
+In bpf_prog_run_array_cg(), if an earlier program returns 0 the retval
+is translated to an error:
+
+	if (!func_ret && !IS_ERR_VALUE((long)run_ctx.retval))
+		run_ctx.retval = -EPERM;
+
+A later program that calls bpf_get_retval() would then receive -EPERM
+(-1) at runtime, which is outside the [0, 1] range the verifier assumed
+here.
+
+Does this static-versus-runtime mismatch let the verifier reason about
+bounds that the value can actually fall outside of?
+
+This was raised on the v5 posting and does not appear to have a reply
+yet:
+
+  https://lore.kernel.org/bpf/20260605144232.95A141F00893@smtp.kernel.org/
+
+> +		} else {
+> +			range.minval = -MAX_ERRNO;
+> +			range.maxval = 0;
+> +		}
+> +
+> +		reg_set_srange64(ret_reg, range.minval, range.maxval);
+> +		reg_set_srange32(ret_reg, range.minval, range.maxval);
+> +		reg_bounds_sync(ret_reg);
+> +		break;
+>  	}
+>
+>  	return reg_bounds_sanity_check(env, ret_reg, "retval");
+
+
 ---
- tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c | 4 ++--
- tools/testing/selftests/bpf/test_lirc_mode2_user.c       | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c b/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-index 7a6620671a83..cbe4284c032f 100644
---- a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-@@ -13,9 +13,9 @@ int bpf_decoder(unsigned int *sample)
- 	if (LIRC_IS_PULSE(*sample)) {
- 		unsigned int duration = LIRC_VALUE(*sample);
- 
--		if (duration & 0x10000)
-+		if (duration & 0x1000)
- 			bpf_rc_keydown(sample, 0x40, duration & 0xffff, 0);
--		if (duration & 0x20000)
-+		if (duration & 0x2000)
- 			bpf_rc_pointer_rel(sample, (duration >> 8) & 0xff,
- 					   duration & 0xff);
- 	}
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-index 88e4aeab21b7..cd191da20d14 100644
---- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-@@ -50,8 +50,8 @@ int main(int argc, char **argv)
- {
- 	struct bpf_object *obj;
- 	int ret, lircfd, progfd, inputfd;
--	int testir1 = 0x1dead;
--	int testir2 = 0x20101;
-+	int testir1 = 0x1ead;
-+	int testir2 = 0x2101;
- 	u32 prog_ids[10], prog_flags[10], prog_cnt;
- 
- 	if (argc != 3) {
-@@ -125,7 +125,7 @@ int main(int argc, char **argv)
- 		}
- 
- 		if (event.type == EV_MSC && event.code == MSC_SCAN &&
--		    event.value == 0xdead) {
-+		    event.value == 0x1ead) {
- 			break;
- 		}
- 	}
--- 
-2.54.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27021279696
+--===============0334693205050802382==--
