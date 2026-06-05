@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BF3F6C48
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9223C3BBFD0
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639197; cv=none; b=K2f2uSQkKO/rWUPnRvk7rjrpRfY9b+I95E6LKp6y+AYwUXgFiGvHFq4KfNIiRT1T3pIyM+6Ksz6C+h39WuFCYUREdkmo6OKK9cHBQUBwTknhWvRau/kWuwgkRuMK4i511u65mgE5OBavVzobn/LuAmEYcxg0TQ4Xhr9GyiaOgkA=
+	t=1780639270; cv=none; b=G0C1V8uendVecDJO26XReM+lCV+y2Qp5A0OBEdRTn13E+47fCsvlX1CUXuLsrCsXsySzNt398XVzd2QrgEKWe7khZ889ya0XdkD18+T72ze4RpYCJ8YRJSVIJvImG7FBrgYKUzXmMuvxNKeJu2MiySSCwn61tZU9duog2QjZ0G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639197; c=relaxed/simple;
-	bh=lrr4g6FU+RivDyeUGkBU/v808emUDjF2Q1MbajPODLY=;
+	s=arc-20240116; t=1780639270; c=relaxed/simple;
+	bh=4UPF+yynoFAX0CC69nDOBHvbvcJ3N3raIQWxwYxlSoc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y1lVNHWVjBbo7rYZwDz78o+pf+iYh6oIOfWT5/uLqQHwgHdXBiXqt+tYUvlnKRZHqmLUiRJhSOEwwwS9GrFQt7UISV269u2LUeWq0sLCc1f+8hCwb0DAKX424gJoy9yLJrgU2wfvliMwTyIzJgFAIMxiMvig4NOeWiR4QtffP4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IuqCGwAA; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=SuZi9x96AWsU2BzkWpA9I21G15plE/k3Av1tY/4RLi431wzEnTjouGz4GY2FfEY+QDNHfrTakr70KtgBCREXx8XhkpelGIiGvKIREXhOIBSzSEvGCyEkHrbSWua4a49zzMfVM+ui4TiOGl1DcPeCaGHwmKkyNFADIw8Tc4Az644=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFAtoCBQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IuqCGwAA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EC81F00893;
-	Fri,  5 Jun 2026 05:59:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFAtoCBQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8741F00893;
+	Fri,  5 Jun 2026 06:01:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780639196;
-	bh=Eg6Rqnce/kslX2V1vvLr1FzAXgRIVnGAUwXFv/BJ/I8=;
+	s=k20260515; t=1780639269;
+	bh=gjVslxgtRhD4//xChXg5cSRPWOnohDqfCkn+xx4JwZw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IuqCGwAAojgRBxLiO9CiKlD3XEcxVOleI3mnoTIyzI34Y2cy/1AtHAp36667+hXRf
-	 Me4AFi0akZo4gEbNNLJOmH0OHLNayULvNv1tfHq81SwXCmqcWHfDIbl8uSQHj5mjRK
-	 CmkzwuYViBCB3cJ726bLxoEiLB2FENbgXTVcMKIWed3vDgyeFkDLBs9DBaC7SKI4Tf
-	 CJ3tR3J9Go/Rr1vV1bTEmurOyYqBRC7xK2OBFFSfYSzkVZU0gVJ79QdYaOTxp/cntf
-	 MviB1ieQ0EjWLTzRowpcfgD5i5qn2lTr7g0smEsisCwmM8kFZSffwWUaVddrExEZjU
-	 kUln5IYfRVOsg==
+	b=XFAtoCBQt3xm6iYdk+l4E4ReaRX6U1BvRv4ti7dAYsKBtXtkvWyys/lqw0bAMM2Z0
+	 d/P01g5Ayfy+98+4w7g8LzpZo2F4fs0dQqHlELF82FBF8mxTq4FwUTCEIoYrj37Ag2
+	 BU9akkkyDFcUprieZKI71WHfsSyTcAXMKgA+LE7ymz/Pjv7goSsN4gz7JltZCZwWza
+	 zRPjMeGbR5jhY3Qb93eHGO+Aw8B/oqGAkPwDVMY74ZDVikZkmxg8QJ5GDLz/e9luBH
+	 wTjYtZsSaDjcgSj8R2kWtpRzROsjY79wcyEJLTet2YQco+Fz/1Nd1PflB9hrRev1jv
+	 SjAnxsxKxJMyA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 10/13] preempt: Introduce
- HAS_SEPARATE_PREEMPT_RESCHED_BITS
+Subject: Re: [PATCH v3 02/13] preempt: Introduce HARDIRQ_DISABLE_BITS
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Boqun Feng" <boqun@kernel.org>
-Cc: bpf@vger.kernel.org, ojeda@kernel.org
-In-Reply-To: <20260605054128.5925-11-boqun@kernel.org>
-References: <20260605054128.5925-11-boqun@kernel.org>
+Cc: ojeda@kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260605054128.5925-3-boqun@kernel.org>
+References: <20260605054128.5925-3-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 05:59:55 +0000
-Message-Id: <20260605055956.46EC81F00893@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 06:01:08 +0000
+Message-Id: <20260605060109.3B8741F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,56 +45,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Unconditional select of `HAS_SEPARATE_PREEMPT_RESCHED_BITS` viol=
-ates Kconfig dependency on `PREEMPT_COUNT`.
+
+Pre-existing issues:
+- [High] NMI nesting inside a hardirq causes `HARDIRQ` count to overflow in=
+to `NMI` bits, leading to permanent `preempt_count` corruption and a kernel=
+ panic.
 --
 
-commit 0d37eeeba0d2e4fb4b795207e44eb2cab20db648
+commit 81acab4bc4267e8b9061bcb43c1763c01ce614f2
 Author: Boqun Feng <boqun@kernel.org>
 
-preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS
+preempt: Introduce HARDIRQ_DISABLE_BITS
 
-This commit introduces HAS_SEPARATE_PREEMPT_RESCHED_BITS to allow 64-bit=20
-architectures to maintain NMI nesting bits in the 32-bit preempt count,=20
-avoiding the need to maintain them outside the same cache line. It also=20
-enables this feature for x86_64.
+This commit changes the preempt_count() layout to contain an 8-bit
+HARDIRQ_DISABLE count to track interrupt disabling nested levels. This
+supports preempt_disable()-like interrupt disabling.
 
-Originally-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Boqun Feng <boqun@kernel.org>
+Link: https://patch.msgid.link/20260121223933.1568682-2-lyude@redhat.com
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index fdaef60b46d65..9a35c3a087573 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -329,6 +329,7 @@ config X86
->  	select USER_STACKTRACE_SUPPORT
->  	select HAVE_ARCH_KCSAN			if X86_64
->  	select PROC_PID_ARCH_STATUS		if PROC_FS
-> +	select HAS_SEPARATE_PREEMPT_RESCHED_BITS		if X86_64
-
-[Severity: Medium]
-Will selecting HAS_SEPARATE_PREEMPT_RESCHED_BITS unconditionally for X86_64=
-=20
-cause Kconfig unmet direct dependency warnings if PREEMPT_COUNT is disabled?
-
-Looking at the definition in kernel/Kconfig.preempt, the config symbol=20
-HAS_SEPARATE_PREEMPT_RESCHED_BITS explicitly depends on PREEMPT_COUNT:
-
-config HAS_SEPARATE_PREEMPT_RESCHED_BITS
-    bool
-    depends on PREEMPT_COUNT && 64BIT
-
-Because select bypasses depends on, configuring a kernel where PREEMPT_COUNT
-is disabled (e.g., PREEMPT_NONE=3Dy with no debug options) might force the=
-=20
-target symbol to y. Should this select be conditional on PREEMPT_COUNT?
-
->  	select HAVE_ARCH_NODE_DEV_GROUP		if X86_SGX
->  	select FUNCTION_ALIGNMENT_16B		if X86_64 || X86_ALIGNMENT_16
->  	select FUNCTION_ALIGNMENT_4B
+> diff --git a/include/linux/preempt.h b/include/linux/preempt.h
+> index 586f966883255..e2d3079d3f5f1 100644
+> --- a/include/linux/preempt.h
+> +++ b/include/linux/preempt.h
 
 [ ... ]
 
+> @@ -31,29 +32,34 @@
+>   *
+>   *         PREEMPT_MASK:	0x000000ff
+>   *         SOFTIRQ_MASK:	0x0000ff00
+> - *         HARDIRQ_MASK:	0x000f0000
+> - *             NMI_MASK:	0x00100000
+> + * HARDIRQ_DISABLE_MASK:	0x00ff0000
+> + *         HARDIRQ_MASK:	0x0f000000
+> + *             NMI_MASK:	0x10000000
+>   * PREEMPT_NEED_RESCHED:	0x80000000
+>   */
+>  #define PREEMPT_BITS	8
+>  #define SOFTIRQ_BITS	8
+> +#define HARDIRQ_DISABLE_BITS	8
+>  #define HARDIRQ_BITS	4
+
+[Severity: High]
+This is a pre-existing issue, but does keeping HARDIRQ_BITS at 4 risk a
+structural overflow into the NMI bits during deep NMI nesting?
+
+Looking at __preempt_count_nmi_enter() in include/linux/hardirq.h, it adds
+HARDIRQ_OFFSET to preempt_count on every NMI, and explicitly permits up to
+15 nested NMIs:
+
+include/linux/hardirq.h:__preempt_count_nmi_enter() {
+	__preempt_count_add(HARDIRQ_OFFSET);
+	/* Maximum NMI nesting is 15. */
+	BUG_ON(__this_cpu_read(nmi_nesting) >=3D 15);
+	...
+}
+
+If 15 NMIs nest while the CPU is already inside a hardirq (where the HARDIRQ
+count is 1), the total count reaches 16.
+
+Since HARDIRQ_BITS is 4, would a value of 16 overflow the 4-bit field into =
+the
+adjacent NMI field? It appears this could corrupt preempt_count and eventua=
+lly
+clear the NMI flags prematurely during exit, leading to a kernel panic.
+
+>  #define NMI_BITS	1
+> =20
+>  #define PREEMPT_SHIFT	0
+>  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+> -#define HARDIRQ_SHIFT	(SOFTIRQ_SHIFT + SOFTIRQ_BITS)
+> +#define HARDIRQ_DISABLE_SHIFT	(SOFTIRQ_SHIFT + SOFTIRQ_BITS)
+> +#define HARDIRQ_SHIFT	(HARDIRQ_DISABLE_SHIFT + HARDIRQ_DISABLE_BITS)
+>  #define NMI_SHIFT	(HARDIRQ_SHIFT + HARDIRQ_BITS)
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605054128.5925=
--1-boqun@kernel.org?part=3D10
+-1-boqun@kernel.org?part=3D2
