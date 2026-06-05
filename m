@@ -1,108 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444F23E7BA6
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 20:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD8D3542F8
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 20:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780690461; cv=none; b=cDBdyRNvvQgWs/FlgThFbpOURQs8tH9a3Yy20vhll98kwgqnImbxVKPJRxRzWBio9MVC8tegWpXirEtBKaHGYtfZsddfWxm4m+MfVMbjnKuDbVFYuQtqum4iysiPi5HF5NP0Pv4ByzQzi/62Qy3ygQeUukf4m8VQu9q1fEscBDs=
+	t=1780690859; cv=none; b=eGG4ZLHKbL8LNGM91xRSHlatD/P52W8eKLNw8V1fzmwSPWqtPbgYXLG/Pv2BO5gwG53HIyI3SEj5fzwvjqSH3s3UjwG2Knx+Btwp8agxTm3dNoyLbFCU9hAVwAmDulibK7kfzscvv0UGCHGAJoUtmCy7STPskeR7aWCCZ3+oIMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780690461; c=relaxed/simple;
-	bh=Nf9DUsSDVSU+v/gh4OEuI+yyHtVMaQXWZnGpgSPT0iU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OOBLaq1CGUEpKOYoxEJTomxAJPU5vlmAUpBO489RfOjqlnr5hPIo9tXgr2dzousROuo9W08d5eCmKe5YvFOXGRE8SRHacDfaqnxuMJKhI3vmP+3CK7s5RaWc4AoENLuUPHgpTUJ152LEm4Lj201nSSdeZTZ+J5G9Q7tPr/sqzFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFm1eMDS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780690859; c=relaxed/simple;
+	bh=IF3bLlVAYEJNXlOm/4+Rlrx92Z6NYnEGpeWPNJ04zhY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j5kHb6pcx0LIFuDQBAunUF4NdQG3H+nPawZci+y2VGniWRwlMEQPRXqCA/7VkMZYbzO0KE5wXUfS8y0uadeZr1NuHICGB1k6HBUSg4R87l2wsSwWefgEUthrW5aWIyg0JOjs5Jr1EGkXrfi4Baed71BJ3hs3zlkvq1ccIcMg0n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nn1OleIf; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFm1eMDS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66521F00893;
-	Fri,  5 Jun 2026 20:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780690459;
-	bh=IG1/Zt44c84hmUiu60tci4C5SDA7s4PtXPLjX9EsPss=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TFm1eMDSkrG4fxzGu3ox30RBTIs5dX06PXU3fzKU1drr9tRbwZKFpcpXYm9udA6bE
-	 0vy90ComitVLzK/6vufm5DFaV4WOyKcNkJqcyAPSys4PowPLX6Jj21e5sL3AoMJJXj
-	 k7ekLORTwdlfS6Q5vSjYuup6YErGEcNqrbTP6/GXwlNREqgSotiXfNFBwty1BHpoIw
-	 oR2TskxGfs5SYLgeOjtUam6wlhwPGjTeDhQAo9QfUjkDHIQUC5rA2dbB7whZlaOWha
-	 vpQdtDEAU9eYYGM4Ig7kjonaMGIhE1tGRx1vaiDjiNp1EmpmEt8ytYgSoKG5Fcx8L8
-	 K2Ulallrgu/ZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2] bpf: fix NULL pointer dereference in
- bpf_task_from_vpid()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605200501.1619406-1-rhkrqnwk98@gmail.com>
-References: <20260605200501.1619406-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 20:14:19 +0000
-Message-Id: <20260605201419.A66521F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nn1OleIf"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2bf2247e38eso24406915ad.3
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 13:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780690858; x=1781295658; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R1Y2tNa2HZ1zwUJNN0kQs2FqAhqUWf2d0UQ2wElOB1c=;
+        b=Nn1OleIf+dmbxSryGxG44NyiFO0nwxtB5zr386IYXNzByQHhB0LQzbtGZCglmE+odd
+         N+A3/qGtPs8BxglaimoGX+43hW0aJDDMSb2dlUamkbQA1WBiYB9Sw8EufQO6CP0ac269
+         FY+ZVMcrt4ZpT91x0DuRhd6elpWKoF/a2IaOzfobTx+zn0LIF2V3M9iBhMPaQC81vaM6
+         GQ44xQcb713zbelJQmeBAbZ5Q7mKzv/SGV0UgnujkxKhz60dCixvFSG01wOQGWAOgj66
+         aGVcZo0nBIeqA+ZxR7W9TEWhnurc8q8h/Pu/w0/eYfOCYgBf7KAhAbpbK8HNkU2DGXHo
+         KDzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780690858; x=1781295658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R1Y2tNa2HZ1zwUJNN0kQs2FqAhqUWf2d0UQ2wElOB1c=;
+        b=D0wK4XbBT/fizaZuDhf+15bhQVWHSv1GPDUcQn7tk5af+RHbHo7UOiANvhfeFgrm/5
+         rn7b/AGZi5yLff71864I9cNnMV2BIOYhW9CT1ur6ZfV6+HMmXRXCq4he/C6F12k6YlML
+         51+fj3S+NTcOIuSb7o5zw3Td1MRtQs+OsOWnKj2CcVJrArzjFAFhmwGvYj2FTY8cX2VQ
+         Glx+DZFMPKgdCkb0TDL/VkAmMg+hFiY7xRGdJH2ReZn8nPTILLsUhSTNZGnQXTRWYYFZ
+         ixdX4qgkmVG9aObsVmfjrhhEELra1q4HwdbB1Szo6ItKp7D/3AyZgdqJ5LkKT5GgpNV0
+         Qdbw==
+X-Gm-Message-State: AOJu0YwVdnc7J6mfyR2dBT8S5UkyXNYfQ5+L+6GLMTOHxt5zLY8JORmp
+	j3iL99F73NaLmwuhV5udPD4jPwJehlvjBBTg8D6D7QNeg7nMhVbYzFgAGXdkmw==
+X-Gm-Gg: Acq92OFKF/VbaZDZ+TTmEo9u8FSXmtkmJlwvGU+qH4IxeGzRZjvWcOXwZ/DfRBkDy6n
+	pxxjMve/g7FGJKYVGa57GLP/DUBLNjGEofAfkEzwyiyGzhhSRbQyrHwpVvQSMq+GvVuLl9FGeIo
+	qqPFNq296ibriD57qgEt9OH77NM2gxl8020uVCebUTM+LQfFmgAmZhhwUgjYE2+OLEOauA3EHf5
+	IMVcrkKrKOyHfaVc0XWWQwHCXLlUYT/Td6EjduOin+s1/mhYQ9GpsuwZ4lcxg29yJfwfVk9+arl
+	vYj51P7Zvu/NS0gqXeJPIfjSYZkBXNTOgUIa1VY1oQZ+1ydhVjD2S0sjI/fvdqyRkET4E+c/lOz
+	10WlbepH59S3ueQwAvM7I2v9EZuKd0bCd5LhDiGM27JXfFELoh1VwgVfc8mLnTNqu5J92vbsjjy
+	1+6g88gm8HoPZ2Nuv3Xn63JBM=
+X-Received: by 2002:a17:903:15c7:b0:2bf:dd0:c8b1 with SMTP id d9443c01a7336-2c1e78acf24mr58595315ad.0.1780690857586;
+        Fri, 05 Jun 2026 13:20:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:5::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664a67b0sm101155435ad.80.2026.06.05.13.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 13:20:57 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/5] Object relationship tracking refactor followup
+Date: Fri,  5 Jun 2026 13:20:51 -0700
+Message-ID: <20260605202056.1780352-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Incomplete fix and functional regression using deprecated API in `=
-bpf_task_from_vpid()`
---
+Hi,
 
-commit 0e07d8082fa185913ccf64e5ced29e9a7fa63669
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+The main patchset refactoring object relationship tracking in the
+verifier has landed and this is a followup that addresses the remaining
+feedback in v6 [0].
 
-bpf: fix NULL pointer dereference in bpf_task_from_vpid()
+[0] https://lore.kernel.org/bpf/20260529014936.2811085-1-ameryhung@gmail.com/
 
-This commit attempts to fix a NULL pointer dereference in
-bpf_task_from_vpid() when the current task is in the late stages of
-do_exit(). It adds an in_interrupt() check to return NULL before calling
-find_task_by_vpid() in order to prevent crashes from cgroup_skb programs.
+v2 -> v3
+  - Fix cleanup in patch 2 (AI bots)
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index b5314c9fed3cf..890202361b533 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2912,6 +2912,9 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(=
-s32 vpid)
->  {
->  	struct task_struct *p;
-> =20
-> +	if (in_interrupt())
-> +		return NULL;
+v1 -> v2
+  - Add patch 2 fixing silent failure when acquiring reference for
+    struct_ops argument
+  - Add patch 4 removing WARN_ON_ONCE in check_ids()
+  - Add fix tags
 
-[Severity: High]
-Does this check fully prevent the crash during task exit?
+Amery Hung (5):
+  bpf: Fix dead error check on acquire_reference() in check_kfunc_call
+  bpf: Check acquire_reference() error for "__ref" struct_ops arguments
+  bpf: Compare parent_id in refsafe() for REF_TYPE_PTR
+  bpf: Remove WARN_ON_ONCE in check_ids()
+  selftests/bpf: Use bpf_dynptr_slice() to read file dynptr in leak test
 
-While this prevents the crash when an interrupt preempts an exiting task,
-it appears it might not protect synchronous BPF tracing programs (like
-kprobes or sched_switch tracepoints) executing in task context during
-do_exit().=20
+ kernel/bpf/states.c                                 | 11 +++++++++--
+ kernel/bpf/verifier.c                               | 13 +++++++++----
+ .../testing/selftests/bpf/progs/file_reader_fail.c  |  8 ++++----
+ 3 files changed, 22 insertions(+), 10 deletions(-)
 
-Once __unhash_process() has cleared thread_pid, in_interrupt() is false
-in task context, but the namespace is still NULL. Wouldn't the crash=20
-still occur in find_task_by_vpid()?
+-- 
+2.53.0-Meta
 
-kernel/pid.c:find_task_by_vpid() {
-	return find_task_by_pid_ns(vnr, task_active_pid_ns(current));
-}
-
-Additionally, in_interrupt() is known to return true in normal task context
-whenever bottom-halves are disabled, such as inside a spin_lock_bh() region.
-
-Will this cause bpf_task_from_vpid() to unexpectedly fail for valid
-tracing programs attached to living tasks that just happen to be holding
-a BH-disabled lock?=20
-
-Could we verify the namespace directly instead to avoid these issues,
-perhaps by checking if task_active_pid_ns(current) is NULL?
-
-> +
->  	rcu_read_lock();
->  	p =3D find_task_by_vpid(vpid);
->  	if (p)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605200501.1619=
-406-1-rhkrqnwk98@gmail.com?part=3D1
