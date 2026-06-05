@@ -1,212 +1,115 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86111481255
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09823EA66
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780646246; cv=none; b=YUFHQI3S40FYoBinvy7PPnesHGlIUtb5BAuCHtpecq//b5WlDDEbtoeRP3yG5qdmSGPjrkJ1QTE2a719vX2zIsKEwu6jveICwM2Vak3kGuEgR6P/IbmsR0SUtucOpmQZgIt5lddt+ebESWXvbYwzx19wtMtya6Csu15mthSggP4=
+	t=1780646261; cv=none; b=FojJnoY5TiISbJ4fIAIm4n3W3KxbRAkTnCLbeonKsm0axYY2ymd7yV3EocENXuaY2ss94VUp+RITCzq0/KxjA1KH1zaT061qelOlot2SmaVYi6zVzRdOmQ9vPxmNEHGuSrFeKsVg+RZovnGbvwDkmuSxjbq9GvbysK9q9e8Rd+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780646246; c=relaxed/simple;
-	bh=FyoT6jElRNhZ/XR8me8pCu8SF+rmD4dgSDPDQvZXrZ8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TGxQ+kXSM2q5UBzigQAV75YLzlq6D/v2ZXzR5bc5i56WYjvJJV0eRh9lXTG0MIb3UlIM2get3DUZfYzlzcqBksHZ5oc2wdNH8XlXbw9ITInTi2e2aEUL7jpXpZGcfcndk4wsQo2Ls4MBVZZhBPP05Zz2PZ6Ze6pKYizsXyrTXXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LRoFk0pz; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780646261; c=relaxed/simple;
+	bh=iwo6Wmo7pxQx6rtK9VXb8wXgRhxsGDj53waPe5psmVs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YUcw/jMmv91FyVH/d/11DfEnwndTphNrV+KFLPUaSkVU0B8KhmNhnVChpUIrXwrNeN4B+x+vR5Xsy/9nkSpdJpAVbMmChFOXBHcxhwuvObo97xQPgv4H/3wev0e2VV/rjoZPIDvP7AdEQrhdWSt7DM7iosXFAucx6D5RkBmg3I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTIAf7/u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LRoFk0pz"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-36da8439078so1486039a91.2
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 00:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780646243; x=1781251043; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ypRXmfNw4AH7NGaRxQ71Nt3S+wAEO8XxXRpJWlgrK/o=;
-        b=LRoFk0pzEXlI9g+wQcOHkWJgIJz/lZ+546mIf56y3vR0op0BpXZ2K37D5dGWNj2SzJ
-         d3GzsLACru+w6jau1Nzo/VmfH3cDbyt+RMi3Kift9Tl0MN+6414a+DzCpYURezCuHQt+
-         72psawsisQ5YnBHMhhm5bYdknDAz4Oa3dplQeQe/+FC57402ZEFeOcOsq33CEuThRTGe
-         q7VJrxGIXM5oH0PG4IPENZ3kTSRQYyW4mHyvFMDzgzsx/anS7khK9AuFRvA5wVrBism5
-         IOn6CPM8jwouDQRoV7/2ui5ZKMtLJfGDGQgWrtlqUxW2NvP+G09ghB1UNGhl4T5i/Xpc
-         FrcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780646243; x=1781251043;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ypRXmfNw4AH7NGaRxQ71Nt3S+wAEO8XxXRpJWlgrK/o=;
-        b=g/Ui2W4XXTgUX0f7dFYmB9loo9xGxDJA5AuLbcELeDcqenGWXWpBuCYNMU4qvM1Syr
-         k/cuKNgxZ6tv8Tl8ltfxRM40TwG3qvsQ3t9ET+iPE7cCjkq7UwcDPgfYmG4weqjNCuoj
-         NDhrelvZqOU9khIggTR4MkMG2fCH86JqD0wCi+v79pA+SOXv8VKTzyXzUBAsgUHvGRHb
-         vECNLcRZ3qV0RxcZOPBWUk1X3EUQ4xqGMDS9x3u2Qk0PV9FLacRST76aqwvSwbiuJHht
-         TRBdkZD6Z50Egz+oRth4VPgJ183hUFeE2BDXPJwrznMFxpid8QkJTYdoZ8ZY90ltQPz+
-         9V+g==
-X-Forwarded-Encrypted: i=1; AFNElJ8vFd+ePsgHlmcYLJOzcdFWROj5JXuoj12yX3Ms3CGkeeGTjMYpjQN6mlY7ZjI4yYJkxs4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEgpyWYQPxzZhF3x+/4LiYNP++EPbCC0rPqm5cAGJ7W6TCye8b
-	32Atbq8sVP6VzB4aNwO3yY5BdOywmpfkxQz8AgHyhlpvAw4EeCKX/WZo
-X-Gm-Gg: Acq92OElq3zGhCYJ0gGMrjl0TEfHxsabf2/SnT/BdvQX1+buO8x5SLOHb7Q0IQBKpHj
-	dsK9wxQuUPugSX4TaSqoud/HccwuBT9pTrdTlcCYZ1WaaSv65LEOEyL6gghVdmi9uJurk7mexJk
-	ULR6S06VwbB8FClBX2CIbMGnk2/uPw3UI+7svnQyV0aVrERabSxn9DPfjubxDJH3Q4bwxVcAxxy
-	mA0/VEAJij9VNlkFaoDhN4d80zbSisFKcr6p/rQYA5PxKUVS5QnzsxFpMMTe7u4Ucr6X0dPbXQZ
-	LuTxuSQ5EpwRHaTi8PNtnYCIJFXIDc8ZxJA2mfSeKxzxcZSHjR7Khk/Eac/WepPQ3Zu/VjCkZTv
-	P6/A/amnq0d113tPjuBOFhmJK+VkLFi23MRHt1XxiVuonieBgiJmbTF0bz3uldhAdtHcHsemK71
-	Hu5AdMf0CU+gwoLe9JNCyf7XoW3WQbdZgopfaWT7z8XcIeZAV8ZwyxLEeu7vljJdVk4bhJA+DVJ
-	w==
-X-Received: by 2002:a17:90b:3512:b0:36d:b424:4f17 with SMTP id 98e67ed59e1d1-370ee82fa3cmr2367318a91.1.1780646242679;
-        Fri, 05 Jun 2026 00:57:22 -0700 (PDT)
-Received: from u9dbb0cac493f51.ant.amazon.com ([50.35.61.175])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37133082519sm897559a91.1.2026.06.05.00.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 00:57:22 -0700 (PDT)
-From: Carlos Fangmeier <carlos.fangmeier@gmail.com>
-Date: Fri, 05 Jun 2026 00:56:35 -0700
-Subject: [PATCH] net: stmmac: prevent kernel panic during XDP program and
- XSK pool transitions
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTIAf7/u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416071F00893;
+	Fri,  5 Jun 2026 07:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780646260;
+	bh=mdT3uD8vZJSh5a4/TA7eXavwx98iTvqqxHOIgAeeQn8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fTIAf7/u/WL0QQisHykCbddOytnIqJm3AIaHe58AgWPfKlaq+1FQTcLo0HDIHvZr4
+	 DoPG4BcXYgF2hoM5dmeI2rAPOjQuKWpdG9pIQT7lcw5IqUVLPsPsQ62OK1mvWkTuHv
+	 JQCWlkl8PFBHjinTTsGaU/Y2vZ3il0QBWLL+24L6ORRXT8a8Mc48QOQ+H7hUfbz17s
+	 5wIyalpRV6cEWNvScYdOHPMH7CFZR2RTv4uR8uFDqhKhlWq80WSQsuNtjMcI1F1VXT
+	 7qQrdeNDmFMgM0M6nk3iF6oXML+owleJzwjiuMNQR7EfUTrZi2ySCipc1PJAN3pOHF
+	 DwxkxSp+LmsBQ==
+Content-Type: multipart/mixed; boundary="===============8438757971695485045=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260605-main-v1-1-aed15b1cf1af@gmail.com>
-X-B4-Tracking: v=1; b=H4sIADKBImoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDMwMT3dzEzDzdNDPLNEtTM5NEc5MkJaDSgqLUtMwKsDHRsRB+cWlSVmp
- yCUivUm0tAMnGDJdoAAAA
-X-Change-ID: 20260604-main-f69f9564a74b
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Ong Boon Leong <boon.leong.ong@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Carlos Fangmeier <carlos.fangmeier@gmail.com>
-X-Mailer: b4 0.15.2
+Message-Id: <8ba3b7a5c4885bc1d282b77f7648e95aad62a0c17062c384be31dc22c6b03b03@mail.kernel.org>
+In-Reply-To: <20260605063412.974640-10-memxor@gmail.com>
+References: <20260605063412.974640-10-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 09/17] bpf: Report Memory Safety bounds errors
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 07:57:40 +0000 (UTC)
 
-stmmac_xdp_set_prog() tears down and rebuilds all DMA channels via
-stmmac_xdp_release()/stmmac_xdp_open() without pausing the netdev
-TX path. Similarly, stmmac_xdp_enable_pool() and
-stmmac_xdp_disable_pool() reconfigure individual queue DMA rings
-while TX remains active.
+--===============8438757971695485045==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-If the kernel transmits a frame during these windows — for example an
-MLD report queued by the IPv6 stack — stmmac_xmit() calls
-dwmac4_set_addr() against an MMIO register whose mapping has been
-torn down, triggering a level-3 translation fault:
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 920ac17758c2..0abe1ab19d25 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
 
-  Unable to handle kernel paging request at virtual address ffff8000840ec000
-  pc : dwmac4_set_addr+0x8/0x18
-  lr : stmmac_xmit+0x64c/0xb60
-  Call trace:
-   dwmac4_set_addr+0x8/0x18
-   dev_hard_start_xmit+0xb0/0x220
-   sch_direct_xmit+0x108/0x3f0
-   __dev_queue_xmit+0x844/0xd00
-   ip6_finish_output2+0x2d8/0x610
-   mld_sendpack+0x180/0x2e0
-   mld_ifc_work+0x1dc/0x480
+[ ... ]
 
-The existing netif_tx_disable() in stmmac_xdp_release() is not
-sufficient because stmmac_xdp_open() re-enables TX via
-netif_tx_start_all_queues() before the caller regains control, leaving
-a window where the freshly rebuilt rings can race with pending TX work.
+> @@ -809,6 +809,119 @@ void bpf_diag_report_unreadable_reg(struct bpf_verifier_env *env,
+>  				   "Avoid using the register after it is invalidated, or reload and revalidate a fresh pointer before this instruction.");
+>  }
+>
+> +void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_idx,
+> +				int regno, const char *reg_name,
+> +				const char *type_name,
+> +				enum bpf_diag_mem_bounds_kind kind,
+> +				int off, int size, u32 mem_size,
+> +				const struct bpf_reg_state *reg)
+> +{
 
-Fix this by wrapping each reconfiguration path with
-netif_tx_disable()/netif_tx_wake_all_queues():
+[ ... ]
 
- - stmmac_xdp_set_prog(): hold TX disabled across the full
-   stmmac_xdp_release() + stmmac_xdp_open() sequence, only waking
-   TX after stmmac_xdp_open() returns.
+> +	switch (kind) {
+> +	case BPF_DIAG_MEM_NEGATIVE_MIN:
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The smallest possible offset is %lld, below 0",
+> +			  reg_smin(reg) + off);
+> +		break;
 
- - stmmac_xdp_enable_pool(): disable TX before tearing down the
-   queue, re-enable after the queue is rebuilt and NAPI is active.
+When reg_smin(reg) is S64_MIN and off is negative, will this print a
+contradictory positive number instead of a negative one?
 
- - stmmac_xdp_disable_pool(): same pattern around the pool teardown
-   and queue rebuild.
+Looking at the caller in check_mem_region_access(), it triggers the
+BPF_DIAG_MEM_NEGATIVE_MIN diagnostic if reg_smin(reg) == S64_MIN:
 
-Tested on Cortex-A55 (stmmac/dwmac4, kernel 6.6.60) with AF_XDP
-zero-copy and IPv6 active — no panics observed across repeated
-XDP attach/detach and XSK pool setup/teardown cycles.
+kernel/bpf/verifier.c:check_mem_region_access() {
+    if (reg_smin(reg) < 0 &&
+        (reg_smin(reg) == S64_MIN ||
+         ...)) {
+        bpf_diag_report_mem_bounds(..., BPF_DIAG_MEM_NEGATIVE_MIN, ...);
+    }
+}
 
-Fixes: 132c32ee5bc0 ("net: stmmac: Add TX via XDP zero-copy socket")
-Signed-off-by: Carlos Fangmeier <carlos.fangmeier@gmail.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+If off is negative, reg_smin(reg) + off will underflow S64_MIN and wrap
+around to a huge positive number like 9223372036854775807. The diagnostic
+output might then read something confusing like:
+"The smallest possible offset is 9223372036854775807, below 0"
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-index d7e4db7224b0..a6611aee687f 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-@@ -34,6 +34,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
- 	need_update = netif_running(priv->dev) && stmmac_xdp_is_enabled(priv);
- 
- 	if (need_update) {
-+		netif_tx_disable(priv->dev);
- 		napi_disable(&ch->rx_napi);
- 		napi_disable(&ch->tx_napi);
- 		stmmac_disable_rx_queue(priv, queue);
-@@ -46,6 +47,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
- 		stmmac_enable_rx_queue(priv, queue);
- 		stmmac_enable_tx_queue(priv, queue);
- 		napi_enable(&ch->rxtx_napi);
-+		netif_tx_wake_all_queues(priv->dev);
- 
- 		err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
- 		if (err)
-@@ -72,6 +74,7 @@ static int stmmac_xdp_disable_pool(struct stmmac_priv *priv, u16 queue)
- 	need_update = netif_running(priv->dev) && stmmac_xdp_is_enabled(priv);
- 
- 	if (need_update) {
-+		netif_tx_disable(priv->dev);
- 		napi_disable(&ch->rxtx_napi);
- 		stmmac_disable_rx_queue(priv, queue);
- 		stmmac_disable_tx_queue(priv, queue);
-@@ -87,6 +90,7 @@ static int stmmac_xdp_disable_pool(struct stmmac_priv *priv, u16 queue)
- 		stmmac_enable_tx_queue(priv, queue);
- 		napi_enable(&ch->rx_napi);
- 		napi_enable(&ch->tx_napi);
-+		netif_tx_wake_all_queues(priv->dev);
- 	}
- 
- 	return 0;
-@@ -121,8 +125,10 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
- 		xdp_features_clear_redirect_target(dev);
- 
- 	need_update = !!priv->xdp_prog != !!prog;
--	if (if_running && need_update)
-+	if (if_running && need_update) {
-+		netif_tx_disable(dev);
- 		stmmac_xdp_release(dev);
-+	}
- 
- 	old_prog = xchg(&priv->xdp_prog, prog);
- 	if (old_prog)
-@@ -131,8 +137,10 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
- 	/* Disable RX SPH for XDP operation */
- 	priv->sph_active = priv->sph_capable && !stmmac_xdp_is_enabled(priv);
- 
--	if (if_running && need_update)
-+	if (if_running && need_update) {
- 		stmmac_xdp_open(dev);
-+		netif_tx_wake_all_queues(dev);
-+	}
- 
- 	if (prog)
- 		xdp_features_set_redirect_target(dev, false);
+Unlike the max bounds case which correctly handles wrapping, the min bounds
+case appears to evaluate this unconditionally:
+
+> +	case BPF_DIAG_MEM_MAX_OUT_OF_RANGE:
+> +	default:
+> +		if (off < 0 && reg_umax(reg) < (u64)-off)
+> +			max_start = 0;
+> +		else
+> +			max_start = reg_umax(reg) + off;
+
+[ ... ]
+
 
 ---
-base-commit: 4aacf509e537a711fa71bca9f234e5eb6968850e
-change-id: 20260604-main-f69f9564a74b
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Best regards,
---  
-Carlos Fangmeier <carlos.fangmeier@gmail.com>
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27000182395
+--===============8438757971695485045==--
