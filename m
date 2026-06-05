@@ -1,63 +1,64 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F068407CFF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D595E40B6DB
 	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641259; cv=none; b=lq+yANnPnd6HqOFznfmbCj3xgradvABc6MdO6WUNvfO5TeKifeuEPWkc+Re/I3Fkvm6TC1MsyrcU71KcsRR+yMZAdxotIcRQc6UvpBQeL4Gxj/1K4vDX+24uZfh5D+FKNjJUp1MJRwgDsbe31naUpUc4iP0zd+jUUkMByf2L5dg=
+	t=1780641261; cv=none; b=qflN5b6o3aqrhxwb9Uk8+XIBzCTwZkScXE7oAjagjoey2k7h31n1v1XBN6OcgG4LWMkttxpbrKj+1OkjWYBT7sF+0Xo7puPQq/LbQQvAYOGcT7xFjNeIaAplAQ/tyf9H0Giu2SD/ib9SCAGNqhzevYdN+WSP3Wn/GA0aXF2jQws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641259; c=relaxed/simple;
-	bh=TQ4Rgf5qd8xRNpGDkUWTndLmaxWA46Ns60JTPwI4W5Y=;
+	s=arc-20240116; t=1780641261; c=relaxed/simple;
+	bh=8mFIZ3HOqmMv/pHMm6keWKsMwAwnsh6mRAhnF/eJL1E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A7xKsyGuOz4112U/kJbeJLOesSsPZ8YVytn2FeFyfXu1LLdh8RExTJfv/8ZcV3ucmBaDf0OvCu3Gi/bCh66r9wcYxw/ct+zXVhpCe16GBPcwNjbQIqvnCepTYXA0IJczQ8Lt5m/nWx6ZygUAbwtrD9nPUwtpmGCqRkEcpbGFSks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QE/UTU6J; arc=none smtp.client-ip=209.85.221.67
+	 MIME-Version; b=eVy89SoVIH2UqjgFrJhtMWovGANVhNENfTyY71sz7X1zLEGpuyYjEDBqhNvUVc1a5P2NRYAH8Ubm8hayJqUFQS2PWFjtqf80VUbzMxUxMkQWm8yQ8jjX7i+Kl20DNpyhb6gsaH943QTwgiM+U2aJWhk7eFKZNKagF7AqEJ8gIxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=erQd6/Ci; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QE/UTU6J"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-45eedc94d37so765094f8f.3
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="erQd6/Ci"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490b7866869so17743155e9.2
         for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1780641255; x=1781246055; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1Nl2PQhH5a+7Pfo1XR+dLZkIvECajZ41TVuJEhJdnTI=;
-        b=QE/UTU6JTujJQTXreRFpedDORLgR/4vOujrizcNJazktwluvHLU7Gm6AdGfSCcTdPN
-         DPT0+ZivsIrET7MYwOLNx65Tm+aNmSnw2iTnNXkSgeDrjtQt18c9fgScYrIdngu35cvz
-         tDHVclVsIMhf44yWZ0VIj/EP65MODXVDpf7oynIUsQyHrVkVqNH7A76N0sPEksBMHsa7
-         hImdXM9EetiCYSZeVa3zS9ggZCQp9SoruTLZyX992SKXC3qRoIwjr56hA3sRnzyNF/SK
-         hPLIerzLkH0tFY21lvICmt9MJrhrTndBZQYz2h95i/onZ360lYNJ2Bx3NgciIeEpOcb/
-         xt5g==
+        bh=/nb401KMtNRHidGBJRlK7lutyU3Mg46uMACm5c9L64Q=;
+        b=erQd6/CioDQkOk0UnloHvJ0YggUqkBKYjkJrGPaVz26G52hSlJYOjI6BbA+dkWimOX
+         QR0EWbXYUXOc8xF6cNbdA7/mrt76ugVFd0mgdyiQg+mpcOgiQlzkIiscsXBDWxFX6NUS
+         pJOcsB8BDv79w2cz1Xh7zHmCWwnTFTrW+UM0lQcX6tuV+7LiFHgsEvtzDPM0NbvfJEu9
+         Pl50wnjWgAUU1VxYe7E+AiiJ2izayEGW+1uciQno/A3J3PEQqLMAOlYVM6lKwFmwM8Za
+         JxCoNpzos3rrbNa7Fcx2nnUn3ptKfrSxhdnwy1N+oc7OK33hmiMyrziJVnlp6eXkqrim
+         hohw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1780641255; x=1781246055;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1Nl2PQhH5a+7Pfo1XR+dLZkIvECajZ41TVuJEhJdnTI=;
-        b=ft9JObo6IvbbGX82GBp3AGJizG/7z2qkD2nVdesFdOKgYm5EtL4aHM/Z3S0lH92g0l
-         SbUyoMSUD2MtBuLfYw3+Q/O0wFriItfzc+TkpsFbFYV2rddqSuSK6bzNKnX5aZAve3lr
-         TrEnL3QMiw0rqddmdsFJjE6zZV4cg8+bmhrNTSQdm5Di4fc9rcgf24p+slLRvcu9ADIA
-         QHWIr9jDns2yOb/Y6iD3Fk25jXxW4FxfNQsvk0/xiQl3TYwEm4Qi0MsBq3CN62SE9Ov7
-         YuaHB4db27QT9WYeAntoGUJ9Q4zCojgD+nzNysByd/fcipqkYq3rFr30e3JaUv1GjzTY
-         ecPA==
-X-Gm-Message-State: AOJu0YyfcRCH2XEGxs8Z+NvQpM1SxoDYvUqQZQ1hd6ARRs2zQGdeFQ8P
-	hNBdSmAx1LR55lebGkHrcAao62x+v21o8SDIWlp5yq4vv6IqQDMxtuN8ryIAyBil
-X-Gm-Gg: Acq92OGCg5NETofc2VANH1epUgXQLIl7elDzxRqDGgvAOdp4GIIW9hEdFePqCXBtPS8
-	l8do8yrfLagwzCxJRnCFQG+0ZKHIiPriWdF7/Z71OgNMsR1BaKYZKe6RUgUMVoAiNQTDKNRLwD+
-	unapPbstCD+mIZyXX+Xl6qCbTtadj7mcVPkriYM2bSG2fSqQNG4Zs4cvPFcu0YECkDjnw1cPgqP
-	WtEMcLGTGpLGYiE2zM/n6Hp9FKRVePm8BIR2VIkXGljP0lBLc4iS2/Jp+wjSpU6RXZwTchGtCGF
-	3iFhroUkwyxcUT1yCbjh++URz+jU/VJuRcxH4JKrsZXF9xzu1SMBXaM1CB30iykpZmO7ljkqDHh
-	TrK8Cqm9qgdrgJeFgGkQUWkS4TDKShsAzUgBqiXNytuzeaiXTbgCN/yXQuPpus1STThoO2PaIIg
-	PCOwyD/Fxwics+tnoKdhIoh3kIMEVxP8NkQXpUYGWdR2TcXHs07l6j4JCW6z3JTqteRvBd9J3zE
-	lpjanzbXw4IIFbUo0H0mHst+3d/lcptLlPyp9Iu1Xz9uWZF0x+3QR67XwSx+t2uGuyJE6k6drcr
-X-Received: by 2002:a5d:5049:0:b0:45e:f765:ff9 with SMTP id ffacd0b85a97d-4603063d61bmr2609088f8f.24.1780641254367;
-        Thu, 04 Jun 2026 23:34:14 -0700 (PDT)
+        bh=/nb401KMtNRHidGBJRlK7lutyU3Mg46uMACm5c9L64Q=;
+        b=FqwzujNu8fEriy/TUulCV0yHc1LfSZFJsdPuN4pGTeuvAi8zkZDY3UZSP+wasyk46V
+         qB6FGEaeKqlnMuFL+nXT3b0Bfykfw9+jnwwMlNLMP3jWB3bJkXm+OsfsK4EBrUCNkzd6
+         VGNUaqxdeI6xBUODZolZVvYD3GMRXtgpnm4bCRzlaLFwI74gZwC1PSad+sKlNoU5/rud
+         6y7B/GTKD3ZBFaUsBjLUfNCd5WHgHwZBju9sLm7V3rOrTerfMrdv8HXOeX80o5yr/TWn
+         Ljq3245wAYq60WUKf3ShmZycBLAgF/de1ggkOPby/NworZw3NzaUjpqhaS4NkvQ+qLkQ
+         otZg==
+X-Gm-Message-State: AOJu0YzvNPoiHiTC3f7sudMFBWNxDYFYP0sNu1euYWSFAylX9NDq8ayJ
+	/G601AQv8VWFuro6PaCF+wE2ESgDMMyaDXUJwUO9rsWB+Cvn494HU4tMKWf4Lb4f
+X-Gm-Gg: Acq92OFkSS30tRlyvKoWbnjus1rF+znt8Vvl8SihKHCtn44dXOLr2UkLwv2ZDlSRNwz
+	1DvUtnXM3rFJryIp35V3j+DZP5M/FXgeFlk3ODH2nb8vXwiMKYnu5aD1xWIgPHmzSqP0SqsppNi
+	8fbKMxJpKhfs+2qUMf2KRPunXDtN5u/9UejGy1E0RSJ815guoVR0le3SSaFFP3gLKyzy5XSXCzQ
+	u71NJNMhhXoBG5k77F+u5UgjOdoIn0D5v9hf5whz+2Xm07hg0Y35dMKjeWMrYQXvP39Tcf30q21
+	rRlhJHV2Dp92c5K8I8YT0T0sPlfPSab3OIwbh/hKUk05+xyaGqDkNV2UJH8q9nx/b3UnkJetOv9
+	c9iWX0dOfrRJy/qzet9tXRIFUNh8uKjXAv5HcKEVHxxAf4i6+EmNdn97Mv+Gx7SZJOaqZZLYQpU
+	/qlOqVeXc3I1LWMtj+CjLaOth3Vmy+rpzWqo8XMb+wSMD9Vn4/BgBoji7zemSP2wjn9c4OwoT0l
+	9P4nCGMGfbErC0JdbpqEZDhBD/EhCuLHBuA0WwuxWrkXpf+I1e4Afg06WtcaueDfllptvMZRKp7
+	4lAHa869F+c=
+X-Received: by 2002:a05:600c:4ec6:b0:490:b780:13f7 with SMTP id 5b1f17b1804b1-490c2631c40mr28649985e9.23.1780641255281;
+        Thu, 04 Jun 2026 23:34:15 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcae2sm23942804f8f.6.2026.06.04.23.34.14
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35eae5sm23092494f8f.33.2026.06.04.23.34.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:14 -0700 (PDT)
+        Thu, 04 Jun 2026 23:34:15 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 01/17] bpf: Add verifier diagnostics report helpers
-Date: Fri,  5 Jun 2026 08:33:51 +0200
-Message-ID: <20260605063412.974640-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 02/17] bpf: Define verifier diagnostic categories
+Date: Fri,  5 Jun 2026 08:33:52 +0200
+Message-ID: <20260605063412.974640-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
 References: <20260605063412.974640-1-memxor@gmail.com>
@@ -79,183 +80,103 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5508; i=memxor@gmail.com; h=from:subject; bh=TQ4Rgf5qd8xRNpGDkUWTndLmaxWA46Ns60JTPwI4W5Y=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt/DuUuH5J2MmT774da2Y+KOP/4/9M9i5MLNYXO70I 6lXmcHVHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZhISCjDP+UVh7m5wsTXdVU/ mrhe+lz8Hb3H70K2599gNvgj5K754Twjw8Rj1h4fvy6MSavaJlDGFnXnS++TSzvW/Xm/N/TXCvP sNCYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3410; i=memxor@gmail.com; h=from:subject; bh=8mFIZ3HOqmMv/pHMm6keWKsMwAwnsh6mRAhnF/eJL1E=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt7Do1YEXnR8PfNbk8V0s9137sKad2u8MzkjH295vv 1V9MYrrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwET6+Rj+ChiKRVvynZV8V2rn ZPzIhvvdtqCph93vV/AdEqp+K/dCjOG/c7B9u4Gu1qnnCy7bWArdyOPKcnwUGW9q63k6WcTniQ8 HAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add a small diagnostics renderer for verifier reports and wire it into the
-BPF build. The initial helpers emit the common text structure: a failure
-header plus reusable report sections.
+Add a central enum for the verifier diagnostic categories used by structured
+reports. Keeping category names in one renderer helper makes later call
+sites choose a classification explicitly instead of formatting category
+strings locally.
 
-Wrap report prose at 120 columns so Reason and Suggestion text stays readable
-without changing source or instruction gutters.
-
-No verifier call sites use the helpers yet, so existing verifier output
-is unchanged.
+This adds no verifier call sites and keeps existing verifier output unchanged.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/Makefile      |   2 +-
- kernel/bpf/diagnostics.c | 110 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h |  19 +++++++
- 3 files changed, 130 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/diagnostics.c
- create mode 100644 kernel/bpf/diagnostics.h
+ kernel/bpf/diagnostics.c | 32 +++++++++++++++++++++++++++++---
+ kernel/bpf/diagnostics.h | 15 ++++++++++++++-
+ 2 files changed, 43 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 4dc41bf5780c..90255d80e5be 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
- 
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-new file mode 100644
-index 000000000000..a6684adc0c31
---- /dev/null
+index a6684adc0c31..d9a103cf3a16 100644
+--- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
-+
-+#include <linux/bpf_verifier.h>
-+#include <linux/stdarg.h>
-+#include <linux/string.h>
-+
-+#include "diagnostics.h"
-+
-+#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
-+#define BPF_DIAG_TEXT_WIDTH 120
-+#define BPF_DIAG_TEXT_INDENT "  "
-+#define BPF_DIAG_MSG_LEN 512
-+
-+static void bpf_diag_print_wrapped_prefixed(struct bpf_verifier_env *env,
-+					    const char *first_prefix,
-+					    const char *next_prefix,
-+					    const char *text)
+@@ -68,8 +68,34 @@ static void bpf_diag_vprint_indented(struct bpf_verifier_env *env,
+ 	bpf_diag_print_wrapped_text(env, buf);
+ }
+ 
++static const char *bpf_diag_category_name(enum bpf_diag_category category)
 +{
-+	const char *prefix = first_prefix;
-+
-+	while (*text) {
-+		const char *line = text;
-+		int prefix_len = strlen(prefix);
-+		int text_width = BPF_DIAG_TEXT_WIDTH - prefix_len;
-+		int len = 0, last_space = -1;
-+
-+		if (text_width < 1)
-+			text_width = 1;
-+
-+		while (line[len] && line[len] != '\n' && len < text_width) {
-+			if (line[len] == ' ')
-+				last_space = len;
-+			len++;
-+		}
-+
-+		if (line[len] && line[len] != '\n' && last_space > 0)
-+			len = last_space;
-+
-+		verbose(env, "%s%.*s\n", prefix, len, line);
-+
-+		text = line + len;
-+		while (*text == ' ')
-+			text++;
-+		if (*text == '\n')
-+			text++;
-+
-+		prefix = next_prefix;
++	switch (category) {
++	case BPF_DIAG_CATEGORY_MEMORY_SAFETY:
++		return "Memory Safety";
++	case BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY:
++		return "Register Type Safety";
++	case BPF_DIAG_CATEGORY_CALL_TYPE_SAFETY:
++		return "Call Type Safety";
++	case BPF_DIAG_CATEGORY_RESOURCE_LIFETIME_SAFETY:
++		return "Resource Lifetime Safety";
++	case BPF_DIAG_CATEGORY_EXECUTION_CONTEXT_SAFETY:
++		return "Execution Context Safety";
++	case BPF_DIAG_CATEGORY_PROGRAM_STRUCTURE:
++		return "Program Structure";
++	case BPF_DIAG_CATEGORY_POLICY:
++		return "Policy";
++	case BPF_DIAG_CATEGORY_VERIFIER_LIMIT:
++		return "Verifier Limit";
++	case BPF_DIAG_CATEGORY_VERIFIER_INTERNAL_ERROR:
++	default:
++		return "Verifier Internal Error";
 +	}
 +}
 +
-+static void bpf_diag_print_wrapped_text(struct bpf_verifier_env *env,
-+					const char *text)
-+{
-+	bpf_diag_print_wrapped_prefixed(env, BPF_DIAG_TEXT_INDENT,
-+					BPF_DIAG_TEXT_INDENT, text);
-+}
-+
-+static void bpf_diag_vprint_indented(struct bpf_verifier_env *env,
-+				     const char *fmt, va_list args)
-+{
-+	char buf[1024];
-+
-+	if (!bpf_verifier_log_needed(&env->log))
-+		return;
-+
-+	vscnprintf(buf, sizeof(buf), fmt, args);
-+	bpf_diag_print_wrapped_text(env, buf);
-+}
-+
-+void bpf_diag_report_header(struct bpf_verifier_env *env,
-+			    const char *category, const char *problem)
-+{
-+	char problem_buf[BPF_DIAG_MSG_LEN];
-+
-+	strscpy(problem_buf, problem ?: "", sizeof(problem_buf));
-+	if (problem_buf[0] >= 'a' && problem_buf[0] <= 'z')
-+		problem_buf[0] += 'A' - 'a';
-+
-+	verbose(env, "\nVerification failed: %s: %s\n", category,
-+		problem_buf);
-+}
-+
-+void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	bpf_diag_report_section(env, "Reason");
-+
-+	va_start(args, fmt);
-+	bpf_diag_vprint_indented(env, fmt, args);
-+	va_end(args);
-+}
-+
-+void bpf_diag_report_section(struct bpf_verifier_env *env, const char *title)
-+{
-+	verbose(env, "\n%s:\n", title);
-+}
-+
-+void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	bpf_diag_report_section(env, "Suggestion");
-+
-+	va_start(args, fmt);
-+	bpf_diag_vprint_indented(env, fmt, args);
-+	va_end(args);
-+	verbose(env, "\n");
-+}
+ void bpf_diag_report_header(struct bpf_verifier_env *env,
+-			    const char *category, const char *problem)
++			    enum bpf_diag_category category,
++			    const char *problem)
+ {
+ 	char problem_buf[BPF_DIAG_MSG_LEN];
+ 
+@@ -77,8 +103,8 @@ void bpf_diag_report_header(struct bpf_verifier_env *env,
+ 	if (problem_buf[0] >= 'a' && problem_buf[0] <= 'z')
+ 		problem_buf[0] += 'A' - 'a';
+ 
+-	verbose(env, "\nVerification failed: %s: %s\n", category,
+-		problem_buf);
++	verbose(env, "\nVerification failed: %s: %s\n",
++		bpf_diag_category_name(category), problem_buf);
+ }
+ 
+ void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-new file mode 100644
-index 000000000000..f13a939722bf
---- /dev/null
+index f13a939722bf..8bfc7104eeec 100644
+--- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
+@@ -6,10 +6,23 @@
+ 
+ #include <linux/compiler_attributes.h>
+ 
++enum bpf_diag_category {
++	BPF_DIAG_CATEGORY_MEMORY_SAFETY,
++	BPF_DIAG_CATEGORY_REGISTER_TYPE_SAFETY,
++	BPF_DIAG_CATEGORY_CALL_TYPE_SAFETY,
++	BPF_DIAG_CATEGORY_RESOURCE_LIFETIME_SAFETY,
++	BPF_DIAG_CATEGORY_EXECUTION_CONTEXT_SAFETY,
++	BPF_DIAG_CATEGORY_PROGRAM_STRUCTURE,
++	BPF_DIAG_CATEGORY_POLICY,
++	BPF_DIAG_CATEGORY_VERIFIER_LIMIT,
++	BPF_DIAG_CATEGORY_VERIFIER_INTERNAL_ERROR,
++};
 +
-+#ifndef __BPF_DIAGNOSTICS_H
-+#define __BPF_DIAGNOSTICS_H
-+
-+#include <linux/compiler_attributes.h>
-+
-+struct bpf_verifier_env;
-+
-+void bpf_diag_report_header(struct bpf_verifier_env *env,
-+			    const char *category, const char *problem);
-+void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
-+	__printf(2, 3);
-+void bpf_diag_report_section(struct bpf_verifier_env *env, const char *title);
-+void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
-+	__printf(2, 3);
-+
-+#endif /* __BPF_DIAGNOSTICS_H */
+ struct bpf_verifier_env;
+ 
+ void bpf_diag_report_header(struct bpf_verifier_env *env,
+-			    const char *category, const char *problem);
++			    enum bpf_diag_category category,
++			    const char *problem);
+ void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
+ 	__printf(2, 3);
+ void bpf_diag_report_section(struct bpf_verifier_env *env, const char *title);
 -- 
 2.53.0
 
