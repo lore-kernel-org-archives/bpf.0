@@ -1,224 +1,213 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807F93793D5;
-	Fri,  5 Jun 2026 14:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4555F3B8921
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 14:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780669554; cv=none; b=i+5CbjoO3T/ipPwGO2iJMM75ZxXUio7qFkQgeZ0HDXwmp/twdhCRjaOG35/KrqhGrTbl4oxJSyAoi2i4Jw8VTd6m252CA8BTdsTAzVCpPIttIQY/nWDdKHkWVCqo4nhehA0rEiALXgb2kjSfJutylOp2c6qia4uqBEvU2a26bTE=
+	t=1780669867; cv=none; b=HQl/oKVZ/ehOy8kv+T5DcOpl/TL+XNghGk5Sn5oB3rUQuatiZQNUyl5fAaFPrWDniAbfAmq7J84g6CWRrsJA05jKPolBZRiH20+IdZYmTrQRigxORVNN+TlK1mcmcod1Fgluw7vbWX9aBHRlfO4Thv9admq1c9ZKI8eSDwrWxWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780669554; c=relaxed/simple;
-	bh=AXDtAK3uTAYXd7k+0EPofQTnVkSYRRLlQsnFAeiy7qE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LKqczIy4mfiEclQKDorOlEirOqpMcd+9GMQjd+9NQhwq437M0fGh9Fcqh6mwjfPxk5y5Vb34Pa9+CdlrhoajEf+L+Niat1ea8n1yXv6+mHkRIGQnUoTcWHjVnERnZPI5useylC1kA9rT+t2lyDBkdhNFVezfL+SemkI4ZJrAVwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gX3cM3PTWzKHMZH;
-	Fri,  5 Jun 2026 22:25:07 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A875940577;
-	Fri,  5 Jun 2026 22:25:36 +0800 (CST)
-Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP1 (Coremail) with SMTP id cCh0CgBntjtd3CJqFYjiAg--.54292S4;
-	Fri, 05 Jun 2026 22:25:36 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	YiFei Zhu <zhuyifei@google.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Quan Sun <2022090917019@std.uestc.edu.cn>
-Subject: [PATCH bpf-next v5 2/3] bpf: Add validation for bpf_set_retval argument
-Date: Fri,  5 Jun 2026 14:02:42 +0000
-Message-ID: <20260605140243.664590-3-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260605140243.664590-1-xukuohai@huaweicloud.com>
-References: <20260605140243.664590-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1780669867; c=relaxed/simple;
+	bh=jWHrHLUA0XAdQ6FrMHpGA0niKWdjG4eYNFrXMypc/bM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ui5ckw3XS3ujtomxGKtlPyQb3cV4XlXYqXJdfFkcludSN09CzYNlFie+DRpe8+c2ubTsNJpYG+SA/BenR0vWBvM8wicu7B5ZYTcoQTPaHo+PefmmqCSQXcUZlK+UQ1qEpBuuL7zWPHj/gJm8eaMGnQQ0wAYObk6XhFT3y0hD3S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B51IbvS5; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B51IbvS5"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-bec4639953dso338943466b.1
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 07:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780669865; x=1781274665; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PkRYOYq8QjeI8NvdQ6nqQjhp1Ulgc3imvtojJqTYeqQ=;
+        b=B51IbvS5MOxk+4ThjixrJMSiKyFnwsMVx8vyr8GxpJoiZCUpRUKTqFsXKX3s20ibOn
+         R1MLGnCF2AmD9YviudNgkGuO3i2gRUTHwlgQCLolkQOxg5uSeSO5eTkisAUYLpN53ELN
+         HmXL9gUnlu4tGXQ4cAKtx9ztw14+s3aREcnI5lCucgkRiyZjnCBSJFPev0oVqTitGSjl
+         OBeu9vjJMj8bhtEU3Nfjr7WBCQ+Raeo2urLMB/Vsu2dtGbBJmTRJVaDjHhmxBQzbDEtC
+         Vm0sldvrYOCH2GLQCOuWNCwKwqaDtKDPzLwerhfpCWjMaZJm+a1OfXCSfZ+yw7QnxYxu
+         Xk3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780669865; x=1781274665;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PkRYOYq8QjeI8NvdQ6nqQjhp1Ulgc3imvtojJqTYeqQ=;
+        b=ZctNNTd8iah5rs+v7biQjzzAfERuGxWRB0PMVwMs87p3vWIAbsXEzzeIRB6NV/Afgq
+         ORVfGpuLedJnA0WyFv3TokvvnVxovSzwtip03pMkjPAjtCEnHOcEmyK0EqVtPcXkB3Jr
+         VTnKbzOdlDCpmuJ7/7MhBmIrkj5ZPJl2I0GO+jyr9crvNq/azehV+Uw71Bid/UkQdGEG
+         U1BNh6zaXeuPFpJyiRerQXgimxe1+Usng8B7tcJPCZsmBWr/TW7jS/Fd6l0xmBY6Qm4G
+         g4XpBZkuvLfqP2NZbtSMZKyH0FdwGZWYPctRB+JUGjoeVgjhe0bW0YDqCYw6PEsVmUmP
+         0NNw==
+X-Forwarded-Encrypted: i=1; AFNElJ8sej4yPZQp65G9NoSXHLYF7nUYGWDHdEJ4tsV0hU5vvo4/3CaRoMxl9VNWYnDaLat1CQ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfdtqMC48IQWZ/+mjoiHD+V4gnzt4k2EI/m1UhC61UPFwF3dZf
+	WwhcIaCuPytASWNVPctUbN7KJuUTJ/meiZm67zUFmWxZKbEikbdf9l8b
+X-Gm-Gg: Acq92OH3DssTmlIPbTHorJgiG1cIxrX7b7kooo25qmOLEiifu8bmApYu4vxC+zFqm/R
+	NNWMMy33cnOeNhs7lW2Wt7xJrE1mJxbErUZfzT9lEvEu90KJWhnxyXY5xdvVBURVtkJsv7HzT8s
+	cBjjOYszgYo55FgBDiuEE2STvqeEZKRwjZX5qtLkRPvZq868MhcXYEW27dtTMN2zZ1K7hffc9Ih
+	QcLr+RtqKxdXDmCHj0hE3NwgDSHKD51GbS2H3ELQ0Nrx+a3+xCdWA9npaA1HPPqOkAKIy2NS5mA
+	1iEuXuGkdlkDk5JVwg3tEn8csn8v0k2soy7todZJ0SF7/lpXAfj7436aeKRE4APvbWPZtWoktTr
+	u+dPi/Te6vWWQMiwJSThyLdcsoavt7jxUTd17VDqJRp0XgecpMt25l0AAxQ0xtiK4ugI51PP+oO
+	iu3UvbXsYICZG/icS2/cClCcw8dm4tX01u/Mpvi0+IWf1mlTjHvgHiUrt4R/BVTdTNnNL7V5FOW
+	RXdWJ2YJt7Lg0gvjh4UCA==
+X-Received: by 2002:a17:907:970e:b0:bec:d5e1:5aee with SMTP id a640c23a62f3a-bf372446932mr236229466b.34.1780669864530;
+        Fri, 05 Jun 2026 07:31:04 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f? ([2a02:8109:a307:d900:9c30:fc5f:5bdd:2e3f])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bf0553fd86csm469474866b.46.2026.06.05.07.31.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2026 07:31:03 -0700 (PDT)
+Message-ID: <d12081a0-b933-44cd-8c46-5d7b83cf0347@gmail.com>
+Date: Fri, 5 Jun 2026 15:31:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBntjtd3CJqFYjiAg--.54292S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar4UArWfZFWkur4xCFW3Wrg_yoW7uw4kpF
-	4fGryqyr1qqr4Ig3yft3Z7ZF1Fyr48WrWfCF97X3s2ya1agr1fGF1Yga1YgryayFykGw4I
-	ga1jv398ua4UZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFSdy
-	UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: add arena split and fork tests
+To: Ruslan Valiyev <linuxoid@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ martin.lau@linux.dev, memxor@gmail.com
+Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com
+References: <DJ0F0WFEP78A.1VV9Z7T71JJX5@etsalapatis.com>
+ <20260605115713.3224051-1-linuxoid@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260605115713.3224051-1-linuxoid@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On 6/5/26 12:57 PM, Ruslan Valiyev wrote:
+> Add two tests for an arena map's mmap()ed region: arena_split checks
+> that a partial munmap() that would split the mapping fails with -EINVAL,
+> and arena_fork checks that a forked child does not inherit the mapping
+> (mincore() reports the range as unmapped).
+> 
+> Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
+> ---
 
-The bpf_set_retval() helper is used by cgroup BPF programs to set the
-return value of the target hook. The argument type for this helper is
-ARG_ANYTHING. This allows setting a positive value, which no cgroup
-hook expects and can cause issues, such as:
+Two tests are quite small and share common setup. Does it make sense to
+put them into the same file, extract common function and turn them into 2 subtests. 
+You can check other BPF selftests to see how to implement subtests.
 
-- BPF_LSM_CGROUP: a positive value from bpf_lsm_socket_create bypasses
-  the err < 0 check in __sock_create(), leaving the socket object
-  unallocated. The positive return value is then propagated to the
-  syscall entry __sys_socket(), which also bypasses the IS_ERR() guard
-  and ultimately causes a NULL pointer dereference.
-
-- BPF_CGROUP_DEVICE: a positive value can be returned through cgroup
-  device bpf prog -> devcgroup_check_permission() -> bdev_permission()
-  -> bdev_file_open_by_dev(), where ERR_PTR(positive) produces a pointer
-  that IS_ERR() does not catch, leading to a wild pointer dereference.
-
-- BPF_CGROUP_SOCK: a positive value can be returned through cgroup sock
-  bpf prog -> __cgroup_bpf_run_filter_sk() -> inet_create() ->
-  __sock_create(), where inet_create() frees the newly allocated sk
-  via sk_common_release() and sets sock->sk = NULL on the non-zero
-  return, but __sock_create() only checks err < 0 for cleanup, so a
-  positive retval bypasses cleanup and returns a socket with NULL sk
-  to userspace, triggering a NULL pointer dereference on subsequent
-  socket operations.
-
-- BPF_CGROUP_SYSCTL: a positive value can be returned through the cgroup
-  bpf prog -> __cgroup_bpf_run_filter_sysctl() -> proc_sys_call_handler(),
-  where a non-zero return bypasses the normal sysctl proc_handler and is
-  returned directly to userspace as return value of read() or write()
-  syscall.
-
-So add validation for the argument of the bpf_set_retval() helper.
-
-For BPF_LSM_CGROUP, enforce the LSM hook specific range returned by
-bpf_lsm_get_retval_range().
-
-For all other cgroup program types, restrict the argument to
-[-MAX_ERRNO, 0], which matches the kernel convention of 0 for success
-and negative errno for error.
-
-BPF_CGROUP_GETSOCKOPT is an exception, since valid getsockopt
-implementations may return positive values, as allowed by commit
-c4dcfdd406aa ("bpf: Move getsockopt retval to struct bpf_cg_run_ctx").
-
-Also refine the return value range of bpf_get_retval() so that
-values returned by bpf_get_retval() can be passed directly to
-bpf_set_retval() without extra manual bounds checking.
-
-Fixes: b44123b4a3dc ("bpf: Add cgroup helpers bpf_{get,set}_retval to get/set syscall return value")
-Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-Closes: https://lore.kernel.org/all/567d3206-74a5-44e5-99c6-779c425f399e@std.uestc.edu.cn
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8ed484cb1a8a..a50280bb0d45 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9770,7 +9770,9 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
- 				  int func_id,
- 				  struct bpf_call_arg_meta *meta)
- {
-+	struct bpf_retval_range range;
- 	struct bpf_reg_state *ret_reg = &regs[BPF_REG_0];
-+	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 
- 	if (ret_type != RET_INTEGER)
- 		return 0;
-@@ -9790,6 +9792,29 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
- 		reg_set_urange32(ret_reg, 0, nr_cpu_ids - 1);
- 		reg_bounds_sync(ret_reg);
- 		break;
-+	case BPF_FUNC_get_retval:
-+		/*
-+		 * bpf_get_retval may see arbitrary value passed by bpf_prog_run_array_cg for
-+		 * CGROUP_GETSOCKOPT type.
-+		 */
-+		if (prog_type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
-+		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
-+			break;
-+
-+		if (prog_type == BPF_PROG_TYPE_LSM &&
-+		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
-+			if (!env->prog->aux->attach_func_proto->type)
-+				break;
-+			bpf_lsm_get_retval_range(env->prog, &range);
-+		} else {
-+			range.minval = -MAX_ERRNO;
-+			range.maxval = 0;
-+		}
-+
-+		reg_set_srange64(ret_reg, range.minval, range.maxval);
-+		reg_set_srange32(ret_reg, range.minval, range.maxval);
-+		reg_bounds_sync(ret_reg);
-+		break;
- 	}
- 
- 	return reg_bounds_sanity_check(env, ret_reg, "retval");
-@@ -10259,6 +10284,24 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		}
- 		break;
- 	case BPF_FUNC_set_retval:
-+	{
-+		struct bpf_retval_range range = {
-+			.minval = -MAX_ERRNO,
-+			.maxval = 0,
-+			.return_32bit = true
-+		};
-+		struct bpf_reg_state *r1 = &regs[BPF_REG_1];
-+
-+		if (r1->type != SCALAR_VALUE) {
-+			verbose(env, "R1 is not a scalar\n");
-+			return -EINVAL;
-+		}
-+
-+		/* CGROUP_GETSOCKOPT is allowed to return arbitrary value */
-+		if (prog_type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
-+		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
-+			break;
-+
- 		if (prog_type == BPF_PROG_TYPE_LSM &&
- 		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
- 			if (!env->prog->aux->attach_func_proto->type) {
-@@ -10268,8 +10311,20 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
- 				return -EINVAL;
- 			}
-+			bpf_lsm_get_retval_range(env->prog, &range);
- 		}
-+
-+		err = mark_chain_precision(env, BPF_REG_1);
-+		if (err)
-+			return err;
-+
-+		if (!retval_range_within(range, r1)) {
-+			verbose_invalid_scalar(env, r1, range, "At bpf_set_retval", "R1");
-+			return -EINVAL;
-+		}
-+
- 		break;
-+	}
- 	case BPF_FUNC_dynptr_write:
- 	{
- 		enum bpf_dynptr_type dynptr_type = meta.dynptr.type;
--- 
-2.47.3
+> v2:
+> - Drop the regression-test framing and per-callback details; use
+>   short one-line comments.
+> - Split into two separate tests, arena_split (partial unmap) and
+>   arena_fork.
+> - Unpack the mincore() child check into explicit statements.
+> 
+>  .../selftests/bpf/prog_tests/arena_fork.c     | 53 +++++++++++++++++++
+>  .../selftests/bpf/prog_tests/arena_split.c    | 34 ++++++++++++
+>  2 files changed, 87 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_split.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+> new file mode 100644
+> index 0000000000000..bb134e9adb607
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <errno.h>
+> +#include <sys/mman.h>
+> +#include <sys/wait.h>
+> +
+> +/* Make sure an arena mapping is not inherited across fork(). */
+> +
+> +#define NR_PAGES 3
+> +
+> +void test_arena_fork(void)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
+> +	long ps = sysconf(_SC_PAGESIZE);
+> +	size_t sz = (size_t)NR_PAGES * ps;
+> +	void *area;
+> +	int fd, ret, status;
+> +	pid_t pid;
+> +
+> +	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_fork", 0, 0, NR_PAGES, &opts);
+> +	if (!ASSERT_OK_FD(fd, "arena map create"))
+> +		return;
+> +
+> +	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> +	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
+> +		goto close_fd;
+> +
+> +	pid = fork();
+> +	if (pid == 0) {
+> +		unsigned char vec;
+> +		int rc;
+> +
+> +		/* If the mapping was not inherited the range is unmapped in
+> +		 * the child, so mincore() fails with ENOMEM. A success means
+> +		 * the child wrongly inherited the mapping.
+> +		 */
+> +		rc = mincore(area, ps, &vec);
+> +		if (rc == 0)
+> +			_exit(1);
+> +		_exit(errno == ENOMEM ? 0 : 2);
+> +	}
+> +	if (ASSERT_GE(pid, 0, "fork")) {
+> +		while ((ret = waitpid(pid, &status, 0)) < 0 && errno == EINTR)
+> +			;
+> +		if (ASSERT_EQ(ret, pid, "waitpid"))
+> +			ASSERT_TRUE(WIFEXITED(status) && WEXITSTATUS(status) == 0,
+> +				    "child must not inherit arena mapping");
+> +	}
+> +
+> +	munmap(area, sz);
+> +close_fd:
+> +	close(fd);
+> +}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_split.c b/tools/testing/selftests/bpf/prog_tests/arena_split.c
+> new file mode 100644
+> index 0000000000000..8a59cfdb2ef89
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_split.c
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <errno.h>
+> +#include <sys/mman.h>
+> +
+> +/* Make sure an arena mapping cannot be split by a partial munmap(). */
+> +
+> +#define NR_PAGES 3
+> +
+> +void test_arena_split(void)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
+> +	long ps = sysconf(_SC_PAGESIZE);
+> +	size_t sz = (size_t)NR_PAGES * ps;
+> +	void *area;
+> +	int fd, ret, err;
+> +
+> +	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_split", 0, 0, NR_PAGES, &opts);
+> +	if (!ASSERT_OK_FD(fd, "arena map create"))
+> +		return;
+> +
+> +	area = mmap(NULL, sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> +	if (!ASSERT_NEQ(area, MAP_FAILED, "mmap arena"))
+> +		goto close_fd;
+> +
+> +	ret = munmap((char *)area + ps, ps);
+> +	err = errno;
+> +	if (ASSERT_ERR(ret, "split munmap"))
+> +		ASSERT_EQ(err, EINVAL, "split munmap errno");
+> +
+> +	munmap(area, sz);
+> +close_fd:
+> +	close(fd);
+> +}
+> 
+> base-commit: 174914ea551314c52a61713b9c4bde9e42d48073
 
