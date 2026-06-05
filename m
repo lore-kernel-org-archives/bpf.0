@@ -1,145 +1,270 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F099E3D6CB1
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 14:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252363DF002
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 14:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780671191; cv=none; b=T57DXJZeYJt+bxkwtXYhINpm8tqONOaiBSMG0wwCdI9BMt7ZAFwcVMKB0tBAT6fWEsuM1c/DAwpqb3+pUXkoGFln3xtgHWOgxXazAp+cN2sp+baIG5JPjA3rBrAWI9HCiwb3roCDKtAU1rwFMomRAd0xS6CEh17gKISHN1w+tmo=
+	t=1780671270; cv=none; b=stPRTVVqVuC0P/VG5LStcU7pEf6p7um3XafJ2HeXZ8LybYCoiAFK5xYT28ez/hzmuSVfuBQMv7zSTpDXH/dOy7VLq5CYvRPme9LNaftKg5jGVO+GfLm8oSyl9ShSzGBqqtnbqGZHy0yoeYm7lZ32GKEkZx+pJO/9r/zgHcFI/SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780671191; c=relaxed/simple;
-	bh=Wg5H4kxszJhetdqAMcJTwCtiKVFs+xzbAv5W3PH85Gw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GAz+GaFguJJu4fW0EKVEiL1N4gQGnundtqibtjAbtFZTqeeU13FEwh66cX99Kqmy+f45m1P6d8MR3EzNsg/QPdIgYXb55vZkgOSbS6n3LjZYaaxEENC6JgQjStVKx5moaHziXz2nguiiYrNw4jn4Auwwp6n+9tETZHHYkmN3aV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jrI9fmqj; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780671270; c=relaxed/simple;
+	bh=i4E+VdlXcJIZoKH/3s2EkdAngxymKZfj6XnKsAc/jfU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F7lt7uv448/vkqP44CmDNXi4UoC0l3QUwxPSpqlrwPRYljbAS1qtKa4XldZxfqqaYb6PX0kgcivOGBpNc32sP0q/6ChTe3IDbjRLmF2Cpo7Z5vDSAQfjYuiE+q4khk2wYVYvz1EmZteaV8YDAiRW4mSZ0wvfcHO2w0694U30ZXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BxFUAK/A; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jrI9fmqj"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-490b4e1ade7so22058335e9.0
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 07:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780671188; x=1781275988; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQEYz+Hxtfq15tCqRrunz/Be0bmJ8CYHlt5C2sRVJQ8=;
-        b=jrI9fmqjRX4U6SIidTf0TLGV3SLMnV9tHiWFUSSV6K2gXFLBx0swxvycUn0FIjjpEB
-         C/GbQf0ORtnuiJdIh95jo9UOhyT/ePn+Tq7GPeuin12thBJAAz0RRxAILV8JZ75kfMIk
-         oofp1WGk1zAbfRZ8jrqnO/MWBVWKyGjpC8n0ttX6MY+gxq4+7ERyT2wWyAN45ldhNKTk
-         co/zrvMiO+1TahrX6YAuNURp+Kdc727fH09ws5Ncg/YpBDNVM6tpGD9RKpHTKx44VwrG
-         HRhOn6yDN4Z7JPtQvhUmc8X9NHYq3vpkp4eJ6rIE8xx0bLYBw7qcFbqmFFWTs0ZFZus4
-         QA2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780671188; x=1781275988;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AQEYz+Hxtfq15tCqRrunz/Be0bmJ8CYHlt5C2sRVJQ8=;
-        b=bVNSuPKtz/Wrv0ZdxUGlPSWwyYqXS2Aafshs68BzQ1G+qx8TkFpZ43qdstaLOHMNOz
-         tyCyv2QiGunIR6sRdNwH1RcrvvblnvQv8lu5b/Yamfj4PTADZvvGB2KLvGMOVprcfK9I
-         a/QoxFSGK41tkDWz5h5IsvknphUIVJ2gNFD/64ya9Cy+PKE+BMTcF0Xsf9LT7gkxc8DK
-         cRVmtXbM1QcyJUiAdApY7TBUwc6EUNvMQTpMxWROLU2820FPq52rysfBUWSPUQlJEcSg
-         KT0tuTKFAAV6jOJS7qiLEcYdGinQfeIDo3wVGMT/6m/VG3DXo8AZigiK9Vf7ZxCY2JHx
-         ijGw==
-X-Gm-Message-State: AOJu0YwN8IilMkUHaWNBRtxTIIomLzLJDHBFt7WrLqE0q0KhT3+2sW5D
-	NbRq4L6SayhsB+pe1SK0qg5T/1nKib/qki9qIH2g1CZXz73oWaC/2mWe
-X-Gm-Gg: Acq92OG9mn6LnGcAXKiBy/kCvIoQp9eF72UlOb8AU8wGZns+0mOXOkLrragNRet29jQ
-	9P8BGWT0L4OxZ3V4INa5ipa79W88T5EKo6qJEZet4c1+8oIQv+8tSOWQBfGus90aYBK36qp+fIV
-	KpIxd6YURP5MuNzf2tpGR7cLZkfWPBKTSmoJAnibsEdpNq9u6pywosQf/W64+XoMKZVLfhzoq+n
-	LB1KrY3Up4Bz7Ty3nZFdyPgJFcReyGSl3gJR+kcPD/VuHDht3qW4MfS8b/wJ5CZBsWGhY0l95uS
-	Vrvm9FxTDhMWsPXmSari1jTvzX9w2GdeJiM5tPTcyEC8tbVtxdYwoQvy2IxFKGOnFWqbtRwiHr1
-	/F9iqAqc5e5DrkUxIfczMn7lFzRl5KEQtKxX/CNiP0lAKh6R0IcywYQpUiAtj31FiaeV9KrkdCo
-	91RfWuPqRVTx1OxefQYDM6lHxy1o4=
-X-Received: by 2002:a05:600c:a009:b0:490:6869:ef13 with SMTP id 5b1f17b1804b1-490c25d4cd3mr71941105e9.14.1780671188225;
-        Fri, 05 Jun 2026 07:53:08 -0700 (PDT)
-Received: from krava ([2a00:102a:500c:91cf:1ba6:923d:a12b:976d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d2f22fsm26508075e9.1.2026.06.05.07.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 07:53:07 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 5 Jun 2026 16:53:04 +0200
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	memxor@gmail.com, daniel@iogearbox.net, eddyz87@gmail.com
-Subject: Re: [PATCH bpf-next] MAINTAINERS: BPF: Add self as reviewer and run
- parse_maintainers.pl
-Message-ID: <aiLi0CGUza3NLdnL@krava>
-References: <20260604184252.9917-1-emil@etsalapatis.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BxFUAK/A"
+Message-ID: <78009c06-4233-4e0a-88ec-33eba10ad8b3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780671264;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7T10tbTpcV2pUBQyWyrHxm7GXYtp6nDFJhaWs/Lxnh8=;
+	b=BxFUAK/AN0wgD8eGGuFvdxWnrnCkHUxSLZUNCUu//z2V+cA/zvbouPYpYAlPSkzosrFZU4
+	J/W40RsQpiE5xjC0yjYu9DCCYN3v6ILmOEpt/EJFIv4gFx4ius1bqklwFG5NlxcYMFStI9
+	OVRzcmh7CdTWQmTPodFF0Il4jS6egCY=
+Date: Fri, 5 Jun 2026 07:54:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260604184252.9917-1-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v2 5/8] bpf, x86: emit KASAN checks into x86
+ JITed programs
+Content-Language: en-GB
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+References: <20260604-kasan-v2-0-c066e627fda8@bootlin.com>
+ <20260604-kasan-v2-5-c066e627fda8@bootlin.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260604-kasan-v2-5-c066e627fda8@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jun 04, 2026 at 02:42:52PM -0400, Emil Tsalapatis wrote:
-> Add myself as a reviewer for the BPF subsystem. While at it, run
-> ./scripts/parse_maintainers.pl --order and reorder the BPF-related
-> entries in the file accordingly.
-> 
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-jirka
-
+On 6/4/26 1:22 PM, Alexis Lothoré (eBPF Foundation) wrote:
+> Insert KASAN shadow memory checks before memory load and store
+> operations in JIT-compiled BPF programs. This helps detect memory safety
+> bugs such as use-after-free and out-of-bounds accesses at runtime.
+>
+> The main instructions being targeted are BPF_ST, BPF_STX and BPF_LDX,
+> but not all of them are being instrumented:
+> - if the load/store instruction is in fact accessing the program stack,
+>    emit_kasan_check silently skips the instrumentation, as we already
+>    have page guards to monitor stack accesses.
+> - if the load/store instruction is a BPF_PROBE_MEM or a BPF_PROBE_ATOMIC
+>    instruction, we do not instrument it, as the passed address can fault
+>    (hence the custom fault management with BPF_PROBE_XXX instructions),
+>    and so the corresponding kasan check could fault as well.
+>
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 > ---
->  MAINTAINERS | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index afae76600fc6..87ac5cafb55b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4811,12 +4811,13 @@ BPF [GENERAL] (Safe Dynamic Programs and Tools)
->  M:	Alexei Starovoitov <ast@kernel.org>
->  M:	Daniel Borkmann <daniel@iogearbox.net>
->  M:	Andrii Nakryiko <andrii@kernel.org>
-> -R:	Martin KaFai Lau <martin.lau@linux.dev>
->  M:	Eduard Zingerman <eddyz87@gmail.com>
->  M:	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> +R:	Martin KaFai Lau <martin.lau@linux.dev>
->  R:	Song Liu <song@kernel.org>
->  R:	Yonghong Song <yonghong.song@linux.dev>
->  R:	Jiri Olsa <jolsa@kernel.org>
-> +R:	Emil Tsalapatis <emil@etsalapatis.com>
->  L:	bpf@vger.kernel.org
->  S:	Supported
->  W:	https://bpf.io/
-> @@ -4826,7 +4827,9 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
->  F:	Documentation/bpf/
->  F:	Documentation/networking/filter.rst
->  F:	Documentation/userspace-api/ebpf/
-> +F:	arch/*/include/asm/rqspinlock.h
->  F:	arch/*/net/*
-> +F:	include/asm-generic/rqspinlock.h
->  F:	include/linux/bpf*
->  F:	include/linux/btf*
->  F:	include/linux/buildid.h
-> @@ -4838,17 +4841,15 @@ F:	include/uapi/linux/filter.h
->  F:	kernel/bpf/
->  F:	kernel/trace/bpf_trace.c
->  F:	lib/buildid.c
-> -F:	arch/*/include/asm/rqspinlock.h
-> -F:	include/asm-generic/rqspinlock.h
->  F:	lib/test_bpf.c
->  F:	net/bpf/
->  F:	net/core/filter.c
->  F:	net/sched/act_bpf.c
->  F:	net/sched/cls_bpf.c
->  F:	samples/bpf/
-> +F:	scripts/Makefile.btf
->  F:	scripts/bpf_doc.py
->  F:	scripts/gen-btf.sh
-> -F:	scripts/Makefile.btf
->  F:	scripts/pahole-version.sh
->  F:	tools/bpf/
->  F:	tools/lib/bpf/
-> -- 
-> 2.54.0
-> 
-> 
+> Changes in v2:
+> - support BPF_ATOMICS
+> - support BPF_ST
+> - make sure to systematically pass correct instruction to kasan check
+> ---
+>   arch/x86/net/bpf_jit_comp.c | 63 ++++++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 53 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 943a0f315cf2..cb3c03edc4bd 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1516,17 +1516,30 @@ static int emit_atomic_rmw_index(u8 **pprog, u32 atomic_op, u32 size,
+>   	return 0;
+>   }
+>   
+> -static int emit_atomic_ld_st(u8 **pprog, u32 atomic_op, u32 dst_reg,
+> -			     u32 src_reg, s16 off, u8 bpf_size)
+> +static int emit_atomic_ld_st(u8 **pprog, struct bpf_insn *insn, u8 *ip,
+> +			     u32 dst_reg, u32 src_reg, bool accesses_stack_only)
+>   {
+> +	u32 atomic_op = insn->imm;
+> +	int err;
+> +
+>   	switch (atomic_op) {
+>   	case BPF_LOAD_ACQ:
+> +		err = emit_kasan_check(pprog, src_reg, insn, ip, false,
+> +				       accesses_stack_only);
+> +		if (err)
+> +			return err;
+>   		/* dst_reg = smp_load_acquire(src_reg + off16) */
+> -		emit_ldx(pprog, bpf_size, dst_reg, src_reg, off);
+> +		emit_ldx(pprog, BPF_SIZE(insn->code), dst_reg, src_reg,
+> +			 insn->off);
+>   		break;
+>   	case BPF_STORE_REL:
+> +		err = emit_kasan_check(pprog, dst_reg, insn, ip, true,
+> +				       accesses_stack_only);
+> +		if (err)
+> +			return err;
+>   		/* smp_store_release(dst_reg + off16, src_reg) */
+> -		emit_stx(pprog, bpf_size, dst_reg, src_reg, off);
+> +		emit_stx(pprog, BPF_SIZE(insn->code), dst_reg, src_reg,
+> +			 insn->off);
+>   		break;
+>   	default:
+>   		pr_err("bpf_jit: unknown atomic load/store opcode %02x\n",
+> @@ -1904,6 +1917,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   		const s32 imm32 = insn->imm;
+>   		u32 dst_reg = insn->dst_reg;
+>   		u32 src_reg = insn->src_reg;
+> +		bool accesses_stack_only;
+>   		u8 b2 = 0, b3 = 0;
+>   		u8 *start_of_ldx;
+>   		s64 jmp_offset;
+> @@ -1924,6 +1938,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   			EMIT_ENDBR();
+>   
+>   		ip = image + addrs[i - 1] + (prog - temp);
+> +		accesses_stack_only =
+> +			bpf_insn_accesses_stack_only(env, bpf_prog, i - 1);
+>   
+>   		switch (insn->code) {
+>   			/* ALU */
+> @@ -2304,6 +2320,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   		case BPF_ST | BPF_MEM | BPF_H:
+>   		case BPF_ST | BPF_MEM | BPF_W:
+>   		case BPF_ST | BPF_MEM | BPF_DW:
+> +			err = emit_kasan_check(&prog, dst_reg, insn, ip, true,
+> +					       accesses_stack_only);
+> +			if (err)
+> +				return err;
+>   			switch (BPF_SIZE(insn->code)) {
+>   			case BPF_B:
+>   				if (is_ereg(dst_reg))
+> @@ -2369,6 +2389,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
+>   				dst_reg = BPF_REG_FP;
+>   			}
+> +			err = emit_kasan_check(&prog, dst_reg, insn, ip, true,
+> +					       accesses_stack_only);
+> +			if (err)
+> +				return err;
+>   			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+>   			break;
+>   
+> @@ -2530,6 +2554,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   				/* populate jmp_offset for JAE above to jump to start_of_ldx */
+>   				start_of_ldx = prog;
+>   				end_of_jmp[-1] = start_of_ldx - end_of_jmp;
+> +			} else {
+> +				err = emit_kasan_check(&prog, src_reg, insn, ip,
+> +						       false,
+> +						       accesses_stack_only);
+> +				if (err)
+> +					return err;
+>   			}
+>   			if (BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
+>   			    BPF_MODE(insn->code) == BPF_MEMSX)
+> @@ -2592,13 +2622,13 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   			fallthrough;
+>   		case BPF_STX | BPF_ATOMIC | BPF_W:
+>   		case BPF_STX | BPF_ATOMIC | BPF_DW:
+> +			bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+> +			u32 real_src_reg = src_reg;
+> +			u32 real_dst_reg = dst_reg;
+
+With llvm23, I got the following build failure:
+
+     /home/yhs/work/bpf-next/arch/x86/net/bpf_jit_comp.c:2625:4: error:
+             label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
+      2625 |                         bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+           |                         ^
+     1 error generated.
+
+The below is a fix:
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index cb3c03edc4bd..61faf8d8f157 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2621,7 +2621,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+                         }
+                         fallthrough;
+                 case BPF_STX | BPF_ATOMIC | BPF_W:
+-               case BPF_STX | BPF_ATOMIC | BPF_DW:
++               case BPF_STX | BPF_ATOMIC | BPF_DW: {
+                         bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+                         u32 real_src_reg = src_reg;
+                         u32 real_dst_reg = dst_reg;
+@@ -2695,6 +2695,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+                         if (err)
+                                 return err;
+                         break;
++               }
+  
+                 case BPF_STX | BPF_PROBE_ATOMIC | BPF_B:
+                 case BPF_STX | BPF_PROBE_ATOMIC | BPF_H:
+
+> +			u8 *branch_target;
+>   			if (insn->imm == (BPF_AND | BPF_FETCH) ||
+>   			    insn->imm == (BPF_OR | BPF_FETCH) ||
+>   			    insn->imm == (BPF_XOR | BPF_FETCH)) {
+> -				bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+> -				u32 real_src_reg = src_reg;
+> -				u32 real_dst_reg = dst_reg;
+> -				u8 *branch_target;
+>   
+>   				/*
+>   				 * Can't be implemented with a single x86 insn.
+> @@ -2612,7 +2642,19 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   				if (dst_reg == BPF_REG_0)
+>   					real_dst_reg = BPF_REG_AX;
+>   
+> +				ip += 3;
+> +			}
+> +			if (!bpf_atomic_is_load_store(insn)) {
+> +				err = emit_kasan_check(&prog, real_dst_reg,
+> +						       insn, ip, false,
+> +						       accesses_stack_only);
+> +				if (err)
+> +					return err;
+>   				branch_target = prog;
+> +			}
+> +			if (insn->imm == (BPF_AND | BPF_FETCH) ||
+> +			    insn->imm == (BPF_OR | BPF_FETCH) ||
+> +			    insn->imm == (BPF_XOR | BPF_FETCH)) {
+>   				/* Load old value */
+>   				emit_ldx(&prog, BPF_SIZE(insn->code),
+>   					 BPF_REG_0, real_dst_reg, insn->off);
+> @@ -2644,8 +2686,9 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>   			}
+>   
+>   			if (bpf_atomic_is_load_store(insn))
+> -				err = emit_atomic_ld_st(&prog, insn->imm, dst_reg, src_reg,
+> -							insn->off, BPF_SIZE(insn->code));
+> +				err = emit_atomic_ld_st(&prog, insn, ip,
+> +							dst_reg, src_reg,
+> +							accesses_stack_only);
+>   			else
+>   				err = emit_atomic_rmw(&prog, insn->imm, dst_reg, src_reg,
+>   						      insn->off, BPF_SIZE(insn->code));
+>
+
