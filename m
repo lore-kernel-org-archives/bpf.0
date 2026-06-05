@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632F13B893B
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BF3F6C48
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780639175; cv=none; b=VN0iAzFVv/M9xC7TpmnSTbnb4rYuuBiL+3SF7QaM/AlpqaurYV73zXJTn8zxbP6HrtxpsY6N8DzM6RefwtAJduNE0lRSZq7hP437uYdykKQfMEyQSklB3GdQ8X88p1p9rsQ8KeaY4GDkubqPHiuiy+rYHTdhbfkMAisCn30xsZY=
+	t=1780639197; cv=none; b=K2f2uSQkKO/rWUPnRvk7rjrpRfY9b+I95E6LKp6y+AYwUXgFiGvHFq4KfNIiRT1T3pIyM+6Ksz6C+h39WuFCYUREdkmo6OKK9cHBQUBwTknhWvRau/kWuwgkRuMK4i511u65mgE5OBavVzobn/LuAmEYcxg0TQ4Xhr9GyiaOgkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780639175; c=relaxed/simple;
-	bh=8oFIKCDyTmUGffBRusxKyxwTlwmM4KQR3rq5Mr/CfgA=;
+	s=arc-20240116; t=1780639197; c=relaxed/simple;
+	bh=lrr4g6FU+RivDyeUGkBU/v808emUDjF2Q1MbajPODLY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NxrVMP0YiyT+6MGQ2mpG5tvBnORu9TGeuprZAAZmH45Tu2jOA+ZxgeIj3r+FYgJVj047hA1QcCMxIKazSA1qaxYHKsb+fzbQr2BkCUZbKM2IXTQF2KgwB+wzKt1F/EeqM9wLKkpKpLyJ6f1PHOtyCNB4VpeCk4wf6yE6hfwNCmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfZ9m5Eu; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Y1lVNHWVjBbo7rYZwDz78o+pf+iYh6oIOfWT5/uLqQHwgHdXBiXqt+tYUvlnKRZHqmLUiRJhSOEwwwS9GrFQt7UISV269u2LUeWq0sLCc1f+8hCwb0DAKX424gJoy9yLJrgU2wfvliMwTyIzJgFAIMxiMvig4NOeWiR4QtffP4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IuqCGwAA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfZ9m5Eu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF3D1F00898;
-	Fri,  5 Jun 2026 05:59:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IuqCGwAA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EC81F00893;
+	Fri,  5 Jun 2026 05:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780639174;
-	bh=sCy7e1W4vb2rlLBa5iuOwc6lPMyumNTcVGD4yBbpOuk=;
+	s=k20260515; t=1780639196;
+	bh=Eg6Rqnce/kslX2V1vvLr1FzAXgRIVnGAUwXFv/BJ/I8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jfZ9m5EuHO7Klvrt6GuvuMUUFerso2z8AYirLSnszgDxvrDu51/zCY+MSrhCSnVnk
-	 2u8bAhRPeyo3/LJojlWPsjs8jDbb8BxZEPD2oyddm+iDLmpRhkCLCwe58nqVhTver9
-	 ztW5aGpd3Kf6ZcUT/fKstj7lDyQVCDskHPdnV1JlWzJmS0oGySm1+oRZtJnXeE+nvd
-	 kloZ6SmLljpjoiEkMtkeL84/Zcq0kKrb0kadc5rKOaTeeAg4cIrHDOawaI+5Y3DKq7
-	 g1mH+C3A92y49uCO/xgGulQMlMEIPBtk3NgT48HvS2MTsCFLHiDbXnETF0jv2UQqSg
-	 zePJYsBAxwryQ==
+	b=IuqCGwAAojgRBxLiO9CiKlD3XEcxVOleI3mnoTIyzI34Y2cy/1AtHAp36667+hXRf
+	 Me4AFi0akZo4gEbNNLJOmH0OHLNayULvNv1tfHq81SwXCmqcWHfDIbl8uSQHj5mjRK
+	 CmkzwuYViBCB3cJ726bLxoEiLB2FENbgXTVcMKIWed3vDgyeFkDLBs9DBaC7SKI4Tf
+	 CJ3tR3J9Go/Rr1vV1bTEmurOyYqBRC7xK2OBFFSfYSzkVZU0gVJ79QdYaOTxp/cntf
+	 MviB1ieQ0EjWLTzRowpcfgD5i5qn2lTr7g0smEsisCwmM8kFZSffwWUaVddrExEZjU
+	 kUln5IYfRVOsg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 03/13] preempt: Introduce __preempt_count_{sub,
- add}_return()
+Subject: Re: [PATCH v3 10/13] preempt: Introduce
+ HAS_SEPARATE_PREEMPT_RESCHED_BITS
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Boqun Feng" <boqun@kernel.org>
-Cc: ojeda@kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260605054128.5925-4-boqun@kernel.org>
-References: <20260605054128.5925-4-boqun@kernel.org>
+Cc: bpf@vger.kernel.org, ojeda@kernel.org
+In-Reply-To: <20260605054128.5925-11-boqun@kernel.org>
+References: <20260605054128.5925-11-boqun@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 05 Jun 2026 05:59:33 +0000
-Message-Id: <20260605055933.EDF3D1F00898@smtp.kernel.org>
+Date: Fri, 05 Jun 2026 05:59:55 +0000
+Message-Id: <20260605055956.46EC81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,41 +46,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Operator precedence bug in the commit message usage example.
+- [Medium] Unconditional select of `HAS_SEPARATE_PREEMPT_RESCHED_BITS` viol=
+ates Kconfig dependency on `PREEMPT_COUNT`.
 --
 
-commit 7f1eb356534806694deb9a4e04de28fe3e6692ab
+commit 0d37eeeba0d2e4fb4b795207e44eb2cab20db648
 Author: Boqun Feng <boqun@kernel.org>
 
-preempt: Introduce __preempt_count_{sub, add}_return()
+preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS
 
-This commit introduces __preempt_count_add_return() and
-__preempt_count_sub_return() to track the interrupt disable nesting level
-while returning the new value of the preempt count. This helps avoid an
-additional read of preempt_count() on certain architectures.
+This commit introduces HAS_SEPARATE_PREEMPT_RESCHED_BITS to allow 64-bit=20
+architectures to maintain NMI nesting bits in the 32-bit preempt count,=20
+avoiding the need to maintain them outside the same cache line. It also=20
+enables this feature for x86_64.
 
-Link: https://patch.msgid.link/20260121223933.1568682-4-lyude@redhat.com
+Originally-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Boqun Feng <boqun@kernel.org>
 
->     // if it's the first-time increment, then disable the interrupt
->     // at hardware level.
->     if (new_count & HARDIRQ_DISABLE_MASK =3D=3D HARDIRQ_DISABLE_OFFSET) {
->             local_irq_save(flags);
->             raw_cpu_write(local_interrupt_disable_state.flags, flags);
->     }
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index fdaef60b46d65..9a35c3a087573 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -329,6 +329,7 @@ config X86
+>  	select USER_STACKTRACE_SUPPORT
+>  	select HAVE_ARCH_KCSAN			if X86_64
+>  	select PROC_PID_ARCH_STATUS		if PROC_FS
+> +	select HAS_SEPARATE_PREEMPT_RESCHED_BITS		if X86_64
 
-[Severity: Low]
-Is there an operator precedence issue in this usage example?
+[Severity: Medium]
+Will selecting HAS_SEPARATE_PREEMPT_RESCHED_BITS unconditionally for X86_64=
+=20
+cause Kconfig unmet direct dependency warnings if PREEMPT_COUNT is disabled?
 
-In C, the equality operator =3D=3D has higher precedence than the bitwise
-AND operator &. This means the expression evaluates as
-new_count & (HARDIRQ_DISABLE_MASK =3D=3D HARDIRQ_DISABLE_OFFSET). Since the
-mask does not equal the offset, the equality evaluates to 0, making the
-entire condition always false.
+Looking at the definition in kernel/Kconfig.preempt, the config symbol=20
+HAS_SEPARATE_PREEMPT_RESCHED_BITS explicitly depends on PREEMPT_COUNT:
 
-Should this be written with explicit parentheses like
-(new_count & HARDIRQ_DISABLE_MASK) =3D=3D HARDIRQ_DISABLE_OFFSET to prevent
-readers from copying flawed logic into downstream implementations?
+config HAS_SEPARATE_PREEMPT_RESCHED_BITS
+    bool
+    depends on PREEMPT_COUNT && 64BIT
+
+Because select bypasses depends on, configuring a kernel where PREEMPT_COUNT
+is disabled (e.g., PREEMPT_NONE=3Dy with no debug options) might force the=
+=20
+target symbol to y. Should this select be conditional on PREEMPT_COUNT?
+
+>  	select HAVE_ARCH_NODE_DEV_GROUP		if X86_SGX
+>  	select FUNCTION_ALIGNMENT_16B		if X86_64 || X86_ALIGNMENT_16
+>  	select FUNCTION_ALIGNMENT_4B
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605054128.5925=
--1-boqun@kernel.org?part=3D3
+-1-boqun@kernel.org?part=3D10
