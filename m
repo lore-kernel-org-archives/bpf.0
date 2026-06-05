@@ -1,119 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960503F86FA;
-	Fri,  5 Jun 2026 10:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DF431F9B3
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 11:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780655845; cv=none; b=qshdGv+8DqunsChf3YIJGaOIidDZsNnsqE9H8nIZ2YCaeZogZw/+eKcA4vvf0qF/3TeNf2lw8ku/RU7WLf+fBa21bVOjYASDqNX3qhBs/Lm+iEG0jjqULmxrTDnHmPlR1T1hAR+1WOqw7c5tDCfHcv/znHDF0vGk4BEeib6LY6M=
+	t=1780658216; cv=none; b=B1UyKfx07Qj1lBLLXZOTHK/5rM18HNywGQfRaBaoJA8J/+sTgATnXEvbMerRRajpAPyZ2FKmMgLof+fcUqy0MsZoGRiX+LDNnQOxjsgNw9y1dMP4oi1r45ZlpVDgbOXO7S+2j2BmLTNyadxHW5VUQDQYek116F0UGRorgRJq5G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780655845; c=relaxed/simple;
-	bh=XU2jyUc5aCCU8cfWxgl1WLxWPKlmKjA64WZt9lsWEyY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NLEOfjXYmX4rjbNqDxk4vS3C36J2YdP9B0NGpPcUrd0sRdCRsX6V+fAKHIhU1nF3yGUIynp95i9+Qqy+tqZncFYLwvLP6V8XoWqeXcr5y/voI8/G4Vl/oYNJ1dIEHxVFC/UYVW4d9ZNn6+h8IA3AIhrcgtn/JWSpQI+jahtiz2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEes5yBm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780658216; c=relaxed/simple;
+	bh=hY2dkKZdaw5KDnLwG6KL0YJAym/kj9aoWwirD08atPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OPpMUQXvi0PTm30UQu3qRn+IaxrIxGYSzbOj+VkHRS4aSw6TMPj2jMedLbYl98yHefdMMGyA8y0PKEclQw8s1kTwsl5034BwIRk3M2wXAfxVTmFECVjims0Xoi1xCt25cHmJTalFcbHfjYc/14zd4wDnfwGwC2qQs9VtvDC+UL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SVMH6nL9; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEes5yBm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A4611F00893;
-	Fri,  5 Jun 2026 10:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780655844;
-	bh=XeUnXPPs+LuxnA2/ffLqK6Odk4vhMTeREQch4KPR2TQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KEes5yBm6RL37O73BcZYFI6zHZAk7tx73te+hD0XzvRisEQOuOpsNoJ07yWjDxqLh
-	 gPrmKOoNJ9ZfEVWcvsJ03XqQJdq1vWnY6zZFfAFYhIghRSbKFiBivf3JG6bRO/31Mu
-	 athuDxSA2cmCSXfKsovhjUoGXc3R1KBpLO4hekiYpacwo/RRfQj5bbgIf5Wdj8ObyW
-	 fgglvvvGCAoeQzsjMb+vBTmCfMa3NwWEmPdS5oWjr0LtcRgwBzLJCHBt414B1A2jyS
-	 CZ4rzl/LzT5kaodCXp/LF6WP78jPhltW3k56NeS1460/zefLrDdN++CtBMyCJipx+Y
-	 VzHftM6Bghjjg==
-Content-Type: multipart/mixed; boundary="===============5583059474410768053=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SVMH6nL9"
+Message-ID: <b8f1b021-a255-4464-b1fa-559e8d961bb9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780658202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eRi6sWFcubB1ojJimFMtoX8Dt81siLGPz4iTPkPpfDo=;
+	b=SVMH6nL9j0dn8Y1fG51izBEhOyssE7us5u35W9iPZzvYVmsw53qGEhQkkHR4TUIMszMf+f
+	fFpDoBo8qImdJGFx51l53m6EDR7tgyKhaYfdgkG2AtVEx7EOoZYY0j/GUqoUSOwFHyRjga
+	ykxFIKDafnvJHPz25U4aOwMeCwaRhZY=
+Date: Fri, 5 Jun 2026 19:16:26 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e7684717afb20bc3ab9510a4d4e17e7e0bb17c5e4cdfda47b576f7e75e9ddafe@mail.kernel.org>
-In-Reply-To: <20260605094143.5509-1-kaitao.cheng@linux.dev>
-References: <20260605094143.5509-1-kaitao.cheng@linux.dev>
-Subject: Re: [PATCH bpf-next v2] bpf: Clear rb node linkage when freeing bpf_rb_root
-From: bot+bpf-ci@kernel.org
-To: kaitao.cheng@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org
-Cc: davemarchevsky@fb.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,kaitao.cheng@linux.dev,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  5 Jun 2026 10:37:24 +0000 (UTC)
-
---===============5583059474410768053==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH net] tcp: clear sock_ops cb flags before force-closing a
+ child socket
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Neal Cardwell <ncardwell@google.com>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Simon Horman <horms@kernel.org>,
+ Lawrence Brakmo <brakmo@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260605094954.1374489-1-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260605094954.1374489-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 03004e4451f5..8ba2b8965caf 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2306,6 +2306,7 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
->  		      struct bpf_spin_lock *spin_lock)
->  {
->  	struct rb_root_cached orig_root, *root = rb_root;
-> +	struct bpf_rb_node_kern *node;
->  	struct rb_node *pos, *n;
->  	void *obj;
+
+On 6/5/26 5:49 PM, Sechang Lim wrote:
+> A child socket inherits the listener's bpf_sock_ops_cb_flags via
+> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
+> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
+> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
+> without it.
 >
-> @@ -2314,14 +2315,20 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+> If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
+> calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
 >
->  	__bpf_spin_lock_irqsave(spin_lock);
->  	orig_root = *root;
-> +	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
-> +		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
-> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
-> +	}
-
-An earlier review of v1 raised a concern about this loop that does not
-appear to have been resolved in this version.
-
-This new bpf_rbtree_postorder_for_each_entry_safe() walk runs inside the
-__bpf_spin_lock_irqsave() critical section, which disables local
-interrupts. There is no verifier-enforced limit on the number of nodes
-in a bpf rbtree.
-
-Can this unbounded O(N) traversal cause latency spikes, RCU stalls, or
-NMI watchdog lockups for a large tree while interrupts are disabled?
-
-rb_first_postorder() and rb_next_postorder(), reached through
-bpf_rbtree_postorder_for_each_entry_safe(), are exported and traceable.
-If an fentry/fexit bpf program is attached to one of them and tries to
-acquire the same bpf_spin_lock, can that deadlock while this loop holds
-the lock?
-
-The original discussion is here:
-
-  https://lore.kernel.org/bpf/20260601061503.EFD881F00898@smtp.kernel.org/
-
-The reply on the thread noted the per-iteration work is small but left
-the deadlock question open. Would it help to move the owner poisoning
-out of the locked section, or otherwise bound the work done under the
-lock?
-
->  	*root = RB_ROOT_CACHED;
->  	__bpf_spin_unlock_irqrestore(spin_lock);
+>    WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
+>    RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
+>    Call Trace:
+>     <IRQ>
+>     tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
+>     tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
+>     tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
+>     tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
+>     </IRQ>
 >
->  	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
->  		obj = pos;
->  		obj -= field->graph_root.node_offset;
-> -
-> -
-> +		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
-> +		RB_CLEAR_NODE(pos);
-> +		/* Ensure __bpf_rbtree_add() sees the node as unlinked. */
-> +		smp_store_release(&node->owner, NULL);
->  		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
->  	}
->  }
+> The child is freed before it is ever established, so it should run no
+> sock_ops callback. Clear its cb flags before the forced close.
+>
+> Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>   include/net/tcp.h   | 7 +++++++
+>   net/ipv4/tcp_ipv4.c | 1 +
+>   net/ipv6/tcp_ipv6.c | 1 +
+>   3 files changed, 9 insertions(+)
+>
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 98848db62894..97eac5fa341c 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -2942,6 +2942,11 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
+>   	return tcp_call_bpf(sk, op, 3, args);
+>   }
+>   
+> +static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
+> +{
+> +	tcp_sk(sk)->bpf_sock_ops_cb_flags = 0;
+> +}
+> +
+>   #else
+>   static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
+>   {
+> @@ -2959,6 +2964,8 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
+>   	return -EPERM;
+>   }
+>   
+> +static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk) {}
+> +
+>   #endif
+>   
+>   static inline u32 tcp_timeout_init(struct sock *sk)
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index fdc81150ff6c..7748668dba82 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -1783,6 +1783,7 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
+>   	return NULL;
+>   put_and_exit:
+>   	newinet->inet_opt = NULL;
+> +	tcp_clear_sock_ops_cb_flags(newsk);
+>   	inet_csk_prepare_forced_close(newsk);
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+I prefer clearing the bit in inet_csk_prepare_forced_close(), since it 
+looks like inet_csk_prepare_forced_close()
+is already a TCP-specific function.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27008654905
---===============5583059474410768053==--
+Let's wait for the TCP maintainer's.
+
+
+>   	tcp_done(newsk);
+>   	goto exit;
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index 36d75fb50a70..493477b786db 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -1531,6 +1531,7 @@ static struct sock *tcp_v6_syn_recv_sock(const struct sock *sk, struct sk_buff *
+>   	tcp_listendrop(sk);
+>   	return NULL;
+>   put_and_exit:
+> +	tcp_clear_sock_ops_cb_flags(newsk);
+>   	inet_csk_prepare_forced_close(newsk);
+>   	tcp_done(newsk);
+>   	goto exit;
