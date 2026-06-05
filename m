@@ -1,216 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4470472782
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC13D472782
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 07:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780644185; cv=none; b=tFMh4hHXkmRNJGunGYjSGi9FEfWQzuElW5fcNJOE5bKUC6JrVfQZLUgswAE9duayaCZBXcPtDaKNGkYIumV7jqOlfMi2o3UopPIwwe3+3AnxUH3yKq/4V8qlEo8pLUjzQVSE02tvJ/cEvCvfk6+ZfEmtzpDPTVTHnoTThV2z1PU=
+	t=1780644186; cv=none; b=jZWPmggfzeAh/XI9CLsEjVAWX7zLU57YxJkuSZMtwSFGkU0vY7325ibGJf4SyMUidLbQqgzQcwa9iTgyWOG8AMpE/IvNVs7XybnK427PoZnPudLOMXDS/G/g21WfnWe3AA/VA66jjFbNYqbEtMAxoe6T6WdY8fsv9bSRWgKKvZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780644185; c=relaxed/simple;
-	bh=i1TF+n83m8fADeTFLTwvqM4OJHRC6Gn/x9vVoqIemqo=;
+	s=arc-20240116; t=1780644186; c=relaxed/simple;
+	bh=M7JZtJz43HVdcP9Se9l+lYMdEFeye4R8jhM74WtkC+g=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=d1yuB/FmlzHUsWlN5U4MQr/kBi+SBnpVgMblBrWhimvXhI96MM86lxNFsiqrx0rTp5/q69jzrG7XxZFn4I1LWuWWjgz0rmmYvThehkAoCXZRVjIevdU919rr++Nil8K8NCdfdHBnkYaurgOpoGIvLdWqRUC+ltmVPXPJ7Rnz7R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYrbIVtU; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=bZYPLLibBxADQ87LEOd3TE3166h87RYwe/85PafyD+Zzc6QTv2kEe69mF2sFtayTALAlESXOY+mglhWYUcYCMVat3FYV1ovi+XaftdzFLGhWA85TbjwGpWBLOdOkiYJuTxYOO0Y+wn8AmEGOjl/IIU2sCPy3BdC3VgsPnQy2C0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3rRCe2f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYrbIVtU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA1E1F00893;
-	Fri,  5 Jun 2026 07:23:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3rRCe2f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4865C1F00898;
+	Fri,  5 Jun 2026 07:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780644183;
-	bh=eivdkebv8qiBYuFhgjA7nuOBxAAnOehWtlNfHUAAwWY=;
+	s=k20260515; t=1780644185;
+	bh=qP0LTxQK7Cz3SRBnJDcdWoldeufqYnRPG1Pczp0VC+0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WYrbIVtUlv00UTSQfvb50+Yg7CeSQ8VB947TTIWTq2Nlq2qb7C9ToBkkn09A1+lLT
-	 EybQOdn+e4ewRgNz91WsPgKeEOvlf5Hm1+4HBRaSDjKvYdia/Ub/GStE+1h/TTb9yn
-	 bSSoo14UrLbDdSj07L7zTb9mIiH0jtvPDBJe3U6jnIfgOOCn7696Mn+gZgb8ewiFM4
-	 Jq5fmFJQkjw4IGnpuwiKQAwX7QIefZJtWctD74TvacNmP1+YNQHAR88jyEyCxZQoHO
-	 x7oRNcWbG/zEs18QtfZsKsZ9P7TxgjkLaBGHkAPKTnN645Tx/CVBJ3muOtgXOss59K
-	 5mCbH0Buk4TuA==
-Content-Type: multipart/mixed; boundary="===============5846836419116224857=="
+	b=C3rRCe2f0V6Oy80zLsKo89J4UWYlbVS24Ql8xeYJ0D26Ew9HhAMg1ii6GOpqwXca/
+	 ghcZ20EpvSBSlu5KzxyDQ9dyyzoExhP9/kry3DqhkQOtojYbS20O+b/iZKvLGx9ax2
+	 5fepauvxcUG9ol1U2kLjfo+ziYd8n6h457JPz+w4jBjHDZhPOqftGhmBrduMBEX3NJ
+	 oVRw/i/laA0m3nASABB4X7nA0PIWdJciSu6g4H+p7v3Burs0N3NN0CU8+RsYWta2yl
+	 r9sp+9OZM7GVQydNcbElQBfbMgdor994ORZMZm3HHnA41tfGmc8NAtwpvuMqnoeXz/
+	 VbxTYVoEv+25w==
+Content-Type: multipart/mixed; boundary="===============2845680261476517435=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7e5e90c1f3653f41b3d1774c476aaffdf2dd32d3d9f6ef9246208dcff8579656@mail.kernel.org>
-In-Reply-To: <20260605063412.974640-9-memxor@gmail.com>
-References: <20260605063412.974640-9-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 08/17] bpf: Report Register Type Safety errors
+Message-Id: <39011cf3f56398b67c3b787d866a7d9a60e8a30fccdc82fdf14b37e0e8c1d1b7@mail.kernel.org>
+In-Reply-To: <20260605063412.974640-12-memxor@gmail.com>
+References: <20260605063412.974640-12-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 11/17] bpf: Report Call Type Safety argument errors
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  5 Jun 2026 07:23:03 +0000 (UTC)
+Date: Fri,  5 Jun 2026 07:23:05 +0000 (UTC)
 
---===============5846836419116224857==
+--===============2845680261476517435==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 7a122c5025c2..920ac17758c2 100644
+> index 369b7813b5dc..169c1a2425c8 100644
 > --- a/kernel/bpf/diagnostics.c
 > +++ b/kernel/bpf/diagnostics.c
-
-[ ... ]
-
-> +void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx,
-> +				   int regno, const char *reg_name,
-> +				   const char *type_name,
-> +				   enum bpf_diag_invalid_deref_kind kind,
-> +				   s64 offset)
+> @@ -714,6 +714,43 @@ static const char *bpf_diag_arg_ordinal(int argno)
+>  	}
+>  }
+>
+> +void bpf_diag_report_call_type(struct bpf_verifier_env *env, u32 insn_idx,
+> +			       int regno, const char *call_name,
+> +			       const char *arg_name, const char *reason,
+> +			       const char *suggestion)
 > +{
 > +	struct bpf_diag_history_opts opts = {
 > +		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
 > +		.frameno = bpf_diag_current_frameno(env),
 > +		.regno = regno,
 > +	};
+> +	const char *ordinal = bpf_diag_arg_ordinal(regno);
+> +	char arg_desc[48];
+
+For arguments > 5, reg_from_argno() returns -1, which is passed here as
+regno. Calling bpf_diag_arg_ordinal(-1) returns NULL, even though it
+appears designed to handle up to 12 arguments.
+
+This drops the ordinal string for stack arguments. Looking at the code:
+
+	if (ordinal && arg_name)
+		scnprintf(arg_desc, sizeof(arg_desc), "%s argument (%s)",
+			  ordinal, arg_name);
+	else if (arg_name)
+		scnprintf(arg_desc, sizeof(arg_desc), "argument %s", arg_name);
+
+When ordinal is NULL, the message falls through to "argument %s", losing
+the position information.
+
+Additionally, this breaks causal history tracking for stack arguments
+since history is skipped when the regno >= 0 check fails:
+
+	if (regno >= 0)
+		bpf_diag_print_history(env, &opts);
+
+Should this function receive argno instead of regno, or at least pass
+argno directly to bpf_diag_arg_ordinal()?
+
+Reference:
+https://lore.kernel.org/bpf/20260605064700.A77A41F00893@smtp.kernel.org/
 
 [ ... ]
-
-> +	bpf_diag_print_history(env, &opts);
-
-This call to bpf_diag_print_history() in bpf_diag_report_invalid_deref()
-is unconditional, but bpf_diag_report_register_type() guards the same call
-with "if (regno >= 0)".
-
-The callers in verifier.c pass reg_from_argno(argno) as regno:
-
-	bpf_diag_report_invalid_deref(env, env->insn_idx, reg_from_argno(argno),
-				      ...);
-
-reg_from_argno() can return -1 for stack arguments. When regno is -1,
-bpf_diag_history_start_idx() finds no match (dst_reg is a u8) and returns
-index 0, and since bpf_diag_history_event_visible() returns true for all
-branch events, would this dump the entire branch history of the program
-into the verifier log?
-
-Should this guard the history print with regno >= 0, the same way
-bpf_diag_report_register_type() does?
-
-> +void bpf_diag_report_unreadable_reg(struct bpf_verifier_env *env,
-> +				    u32 insn_idx, int regno)
-> +{
-> +	struct bpf_diag_history_opts opts = {
-> +		.scope = BPF_DIAG_HISTORY_SCOPE_REG,
-> +		.frameno = bpf_diag_current_frameno(env),
-> +		.regno = regno,
-> +	};
-
-[ ... ]
-
-> +	bpf_diag_print_history(env, &opts);
-
-The same unconditional history print appears here in
-bpf_diag_report_unreadable_reg(). Does this have the same concern when
-regno is -1?
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7bb2a81ee353..adf660ab9e7d 100644
+> index 1c26614bec2b..d2a776d2059c 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -13684,6 +13712,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
->  	struct bpf_sanitize_info info = {};
->  	u8 opcode = BPF_OP(insn->code);
->  	u32 dst = insn->dst_reg;
-> +	char reason[256];
->  	int ret, bounds_ret;
+> @@ -8039,6 +8039,39 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+>  	[ARG_PTR_TO_DYNPTR]		= &dynptr_types,
+>  };
 >
->  	dst_reg = &regs[dst];
-> @@ -13707,12 +13736,28 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
->  		verbose(env,
->  			"R%d 32-bit pointer arithmetic prohibited\n",
->  			dst);
-> +		scnprintf(reason, sizeof(reason),
-> +			  "R%d holds %s. 32-bit ALU operations on pointers discard pointer provenance, so the verifier cannot keep the result as a safe "
-> +			  "pointer.",
-> +			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
-                              ^^^^^^^^^^^^^^^^^^^^^^^
+> +static const char *bpf_diag_reg_type_plain(struct bpf_verifier_env *env,
+> +					   enum bpf_reg_type type)
+> +{
+> +	switch (base_type(type)) {
+> +	case NOT_INIT:
+> +		return "an uninitialized value";
+> +	case SCALAR_VALUE:
+> +		return "an integer scalar";
+> +	case PTR_TO_CTX:
+> +		return "a context pointer";
+> +	case PTR_TO_STACK:
+> +		return "a stack pointer";
+> +	case PTR_TO_MAP_VALUE:
+> +		if (type_may_be_null(type))
+> +			return "a nullable map value pointer";
+> +		return "a map value pointer";
+> +	case PTR_TO_MEM:
+> +		if (type_may_be_null(type))
+> +			return "a nullable memory pointer";
+> +		return "a memory pointer";
+> +	case PTR_TO_BTF_ID:
+> +		if (type_is_non_owning_ref(type))
+> +			return "a borrowed allocated object pointer";
+> +		if (type_is_ptr_alloc_obj(type))
+> +			return "an owned allocated object pointer";
+> +		if (type_flag(type) & PTR_UNTRUSTED)
+> +			return "an untrusted kernel object pointer";
+> +		return "a kernel object pointer";
 
-Where is bpf_diag_reg_type_plain() defined?
+PTR_TO_MAP_VALUE and PTR_TO_MEM correctly identify nullable pointers
+above, but PTR_TO_BTF_ID omits the check.
 
-This patch adds seven calls to bpf_diag_reg_type_plain(env, ptr_reg->type)
-inside adjust_ptr_min_max_vals(), but the function does not appear to be
-defined or declared anywhere in the tree at this commit.
+When a nullable PTR_TO_BTF_ID is passed to a helper expecting a
+non-nullable pointer, it fails the type check in check_reg_type(), but
+the error message will drop the 'nullable' qualifier.
 
-A grep for the symbol returns only these seven call sites in verifier.c,
-with no declaration in kernel/bpf/diagnostics.h, kernel/bpf/diagnostics.c,
-any header under include/, and no matching #define. The other helper added
-in the same patch, bpf_diag_report_register_type(), is defined in
-diagnostics.c, so the omission looks specific to bpf_diag_reg_type_plain()
-(perhaps a renamed or forgotten helper relative to reg_type_str()).
+This causes the verifier to report 'it has type a kernel object pointer,
+but this helper argument accepts...', making the actual cause of the
+rejection (nullability) very confusing for users.
 
-Since a translation unit referencing an undeclared function fails to build
-under -Werror=implicit-function-declaration, does kernel/bpf/verifier.c
-still compile at this commit?
+Should this include:
 
-> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
-> +					      "32-bit pointer arithmetic",
-> +					      reason,
-> +					      "Use 64-bit pointer arithmetic with an allowed, bounded scalar offset, or convert the value to a scalar only after pointer use "
-> +					      "is complete.");
+	case PTR_TO_BTF_ID:
+		if (type_may_be_null(type))
+			return "a nullable kernel object pointer";
+		if (type_is_non_owning_ref(type))
+			return "a borrowed allocated object pointer";
+		...
 
-The dst argument passed here is insn->dst_reg.
-
-For commutative pointer arithmetic such as scalar += pointer, dst_reg held
-the scalar value before the instruction. Passing dst in that case would
-make bpf_diag_report_register_type() claim the scalar register held a
-pointer, and trace the scalar register's history rather than the pointer's
-provenance.
-
-The same dst is used for all of the bpf_diag_report_register_type() and
-off_reg/ptr_reg based reports in this function. Should these reports
-reference the register that actually held the pointer instead?
-
->  		return -EACCES;
->  	}
->
->  	if (ptr_reg->type & PTR_MAYBE_NULL) {
->  		verbose(env, "R%d pointer arithmetic on %s prohibited, null-check it first\n",
->  			dst, reg_type_str(env, ptr_reg->type));
-> +		scnprintf(reason, sizeof(reason),
-> +			  "R%d may be NULL (%s). Pointer arithmetic is allowed only after the program proves the pointer is non-NULL on this path.",
-> +			  dst, reg_type_str(env, ptr_reg->type));
-> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
-> +					      "pointer arithmetic before NULL check",
-> +					      reason,
-> +					      "Add a NULL check first, and do the pointer arithmetic only on the non-NULL branch.");
->  		return -EACCES;
->  	}
-
-[ ... ]
-
-There is one more observation that is not in this patch but is related to
-the register-scoped history this patch relies on.
-
-In clear_all_pkt_pointers() and release_reference(), invalidation history
-is only recorded when bpf_diag_func_regno() or bpf_diag_stack_arg_slot()
-returns >= 0:
-
-kernel/bpf/verifier.c:clear_all_pkt_pointers() {
-	...
-		int regno = bpf_diag_func_regno(state, reg);
-		int slot = bpf_diag_stack_arg_slot(state, reg);
-
-		mark_reg_invalid(env, reg);
-		if (regno >= 0)
-			bpf_diag_record_reg_invalidate(...);
-		if (slot >= 0)
-			bpf_diag_record_stack_arg(...);
-	...
-}
-
-Both helpers return -1 for ordinary stack spills, which live in
-STACK_SPILL slots and are in neither state->regs nor
-state->stack_arg_regs.
-
-So would a pointer spilled to the stack and later invalidated here record
-no history event? If the program restores and dereferences that pointer,
-would the new diagnostic trace stop at the stack fill instruction and never
-show when the pointer was invalidated?
+Reference:
+https://lore.kernel.org/bpf/20260605064700.A77A41F00893@smtp.kernel.org/
 
 
 ---
@@ -218,4 +163,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27000182395
---===============5846836419116224857==--
+--===============2845680261476517435==--
