@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD30D37472D;
-	Fri,  5 Jun 2026 14:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D7C384234;
+	Fri,  5 Jun 2026 14:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780669549; cv=none; b=T3fEyKwrgl/QCwlghX60qMNsOb7onbt1vbBxY/qqSi3g2KZu4e0xBg+jUp4ySWK1YZZRh6X/R9iSaH0ISOloff0IOwHxF/9nlg5xv/HfcclI9mUwoJefPw93ZGJwzafj9WHXSnnf8Obk7zH1gN0ZQVKnOehvr77NKCLddJwGEsE=
+	t=1780669553; cv=none; b=iNacpqKv34QD/jQ8KYCCuXPhCXsrtYF/Lwa7Nb0EBM1MYJdJsUxdDlbJGRIb6ZxApyi0CeUpTOf/xCOb0vrSadiS+FfWItwKKf729ZUvdIJ+mmEB01jWIULYcX9T46P0VK7V6ifP78AotNKr0y+7H1WZjOOvbA1tVr+n8ZLuiAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780669549; c=relaxed/simple;
-	bh=7ouYXT25vyVFspS+GXIj7bf/qIbvG+Mpt6N6ur7w1K0=;
+	s=arc-20240116; t=1780669553; c=relaxed/simple;
+	bh=ZcJC5uxpg7KMHyly7HspNq36z7tc8iBE4Z6wTr+vLas=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FPXPt+M+5k0Y8UBymRN1WY4ODZF+BjsSD569GqquRyZHd0UrN1G0QoMq4FL5D3HsY4gREvgytDS2CNsH8Cw8Od3kb4X3PtcOr8nJHDt0G+0af4fpeXyNj6AqERDel8zpmQSqjxicPb5oGuZV3PULLuafFiiZY48hn/RJ3njV2O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=gpQgnVJLvB07FrntmX4XszYRIawheSxGkUDJBdXUH21JHlmIlj8wCNb23crFOJbrgGqe5xBMCekQTBnplFwkfprxIEwLUaCWFM2GINb8giW/hJdZoa8gMKWQ3m/ZUKTmfKOxaVK2AFjZOuV5jYxZrv6sDnKOS+dIWTkfyyWNyWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gX3ck3GyRzYQtkl;
-	Fri,  5 Jun 2026 22:25:26 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gX3cM3f4TzKHMcy;
+	Fri,  5 Jun 2026 22:25:07 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 97E714056E;
+	by mail.maildlp.com (Postfix) with ESMTP id B38814056D;
 	Fri,  5 Jun 2026 22:25:36 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP1 (Coremail) with SMTP id cCh0CgBntjtd3CJqFYjiAg--.54292S3;
+	by APP1 (Coremail) with SMTP id cCh0CgBntjtd3CJqFYjiAg--.54292S5;
 	Fri, 05 Jun 2026 22:25:36 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	YiFei Zhu <zhuyifei@google.com>,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	Quan Sun <2022090917019@std.uestc.edu.cn>
-Subject: [PATCH bpf-next v5 1/3] selftests/bpf: Restrict bpf_set_retval argument in sk_bypass_prot_mem
-Date: Fri,  5 Jun 2026 14:02:41 +0000
-Message-ID: <20260605140243.664590-2-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v5 3/3] selftests/bpf: Add tests for bpf_set_retval validation
+Date: Fri,  5 Jun 2026 14:02:43 +0000
+Message-ID: <20260605140243.664590-4-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260605140243.664590-1-xukuohai@huaweicloud.com>
 References: <20260605140243.664590-1-xukuohai@huaweicloud.com>
@@ -50,13 +50,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBntjtd3CJqFYjiAg--.54292S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3KF4kAw1rZrWUCF4Durg_yoW8JF4kp3
-	Z7Aas09rZ5Cr17Ja1Sgr47t3WSgw4vvrWFkr1Fq3WUZ3W5K3s7Xr4xKF47Kw1YyrZIqw43
-	ua4Sgas3Zr48A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+X-CM-TRANSID:cCh0CgBntjtd3CJqFYjiAg--.54292S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4fGF4fZrW5AF4fuw13twb_yoW7JrW8p3
+	WkCF9rW3sayw43WFWxGF47ZF1rGF4vv3y5Zr97Xw1UCFs7Jr4DXr1IkF13JasxGFWDuw1Y
+	kr4a9FWfur1Ut3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
 	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
@@ -65,46 +65,157 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3KF4kAw1rZrWUCF4Durg_yoW8JF4kp3
 	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
 	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
 	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2HGQ
-	DUUUU
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
+	0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UA
+	CztUUUUU=
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Test sk_bypass_prot_mem passes an unchecked value as argument to helper
-bpf_set_retval(). The argument can be outside the valid range enforced
-by the strict retval validation added in the next patch.
+Add verifier tests to validate bpf_set_retval argument for cgroup
+program types.
 
-Restrict the argument to -EFAULT when it is outside the valid range, so
-the test will not be rejected by the verifier when retval validation
-is enforced.
-
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com> #v1
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_set_retval.c | 107 ++++++++++++++++++
+ 2 files changed, 109 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_set_retval.c
 
-diff --git a/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-index 09a00d11ffcc..bae5283fca6b 100644
---- a/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-+++ b/tools/testing/selftests/bpf/progs/sk_bypass_prot_mem.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <errno.h>
-+#include "err.h"
- 
- extern int tcp_memory_per_cpu_fw_alloc __ksym;
- extern int udp_memory_per_cpu_fw_alloc __ksym;
-@@ -97,6 +98,7 @@ int sock_create(struct bpf_sock *ctx)
- 	return 1;
- 
- err:
-+	set_if_not_errno_or_zero(err, -EFAULT);
- 	bpf_set_retval(err);
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 219ff2969868..89779d897aba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -117,6 +117,7 @@
+ #include "verifier_xdp.skel.h"
+ #include "verifier_xdp_direct_packet_access.skel.h"
+ #include "verifier_bits_iter.skel.h"
++#include "verifier_set_retval.skel.h"
+ #include "verifier_lsm.skel.h"
+ #include "verifier_jit_inline.skel.h"
+ #include "irq.skel.h"
+@@ -266,6 +267,7 @@ void test_verifier_xadd(void)                 { RUN(verifier_xadd); }
+ void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
+ void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
+ void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
++void test_verifier_set_retval(void)            { RUN(verifier_set_retval); }
+ void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
+ void test_irq(void)			      { RUN(irq); }
+ void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_set_retval.c b/tools/testing/selftests/bpf/progs/verifier_set_retval.c
+new file mode 100644
+index 000000000000..1415cd15cede
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_set_retval.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++SEC("lsm_cgroup/socket_create")
++__description("lsm_cgroup bpf_set_retval success")
++__success
++int BPF_PROG(lsm_cgroup_set_retval_zero_valid, int family, int type, int protocol, int kern)
++{
++	bpf_set_retval(0);
++	return 0;
++}
++
++SEC("lsm_cgroup/socket_create")
++__description("lsm_cgroup bpf_set_retval valid errno")
++__success
++int BPF_PROG(lsm_cgroup_set_retval_negative_valid, int family, int type, int protocol, int kern)
++{
++	bpf_set_retval(-12);
++	return 0;
++}
++
++SEC("lsm_cgroup/socket_create")
++__description("lsm_cgroup bpf_set_retval invalid negative value")
++__failure __msg("should have been in [-4095, 0]")
++int BPF_PROG(lsm_cgroup_set_retval_negative_invalid, int family, int type, int protocol, int kern)
++{
++	bpf_set_retval(-4096);
++	return 0;
++}
++
++SEC("lsm_cgroup/socket_create")
++__description("lsm_cgroup bpf_set_retval invalid positive value")
++__failure __msg("should have been in [-4095, 0]")
++int BPF_PROG(lsm_cgroup_set_retval_positive_invalid, int family, int type, int protocol, int kern)
++{
++	bpf_set_retval(1);
++	return 0;
++}
++
++SEC("cgroup/dev")
++__description("cgroup_device bpf_set_retval success")
++__success
++int cgroup_dev_set_retval_0(struct bpf_cgroup_dev_ctx *ctx)
++{
++	bpf_set_retval(0);
++	return 1;
++}
++
++SEC("cgroup/dev")
++__description("cgroup_device bpf_set_retval valid errno")
++__success
++int cgroup_dev_set_retval_neg_maxerrno(struct bpf_cgroup_dev_ctx *ctx)
++{
++	bpf_set_retval(-4095);
++	return 1;
++}
++
++SEC("cgroup/dev")
++__description("cgroup_device bpf_set_retval invalid positive value")
++__failure __msg("should have been in [-4095, 0]")
++int cgroup_dev_set_retval_1(struct bpf_cgroup_dev_ctx *ctx)
++{
++	bpf_set_retval(1);
++	return 1;
++}
++
++SEC("cgroup/dev")
++__description("cgroup_device bpf_set_retval invalid negative value")
++__failure __msg("should have been in [-4095, 0]")
++int cgroup_dev_set_retval_neg_4096(struct bpf_cgroup_dev_ctx *ctx)
++{
++	bpf_set_retval(-4096);
++	return 1;
++}
++
++SEC("cgroup/dev")
++__description("bpf_set_retval bounds check survives state pruning")
++__failure __msg("should have been in [-4095, 0]")
++__naked int cgroup_dev_set_retval_pruning_bypass(struct bpf_cgroup_dev_ctx *ctx)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"if r0 != 0 goto 1f;"
++		"r0 = r0;"
++		"r0 = r0;"
++		"r0 = r0;"
++		"r0 = r0;"
++		"goto 2f;"
++	"1:"
++		"call %[bpf_get_prandom_u32];"
++	"2:"
++		"r1 = r0;"
++		"call %[bpf_set_retval];"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32),
++		  __imm(bpf_set_retval)
++		: __clobber_common
++	);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.3
 
