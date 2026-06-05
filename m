@@ -1,148 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9EB37B02A;
-	Fri,  5 Jun 2026 16:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0895A2BE03C
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 17:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780677392; cv=none; b=lLVTLm7lGvPlQkSiCLfr8j0+raY9ErXEQrcb998zi/lM6BnkYR2Up6qmTLpLgHWneFvrYWBZ+PTZarbQ1YgjTqfMnNuOwzaxWFNswV0DNGZe1fAeE1MccnOXReAhZD4YIu/0TzZINdmplK4pTny/NdvWOBLVkLn3N/T09mtA5vw=
+	t=1780678818; cv=none; b=DSITk/3Dmm85BS/P/rW46VZ8Kj3OIJcQUOYrTO0zo0xXeDBVITDNhhPkhiQbm7EWdH6mUqmEXui6VfRJcGuc1y/hWWBEXEVfizlZljq/6cf1MPSt5AzYvreLG7aSh/C3wCIFjiWTLJx+cxUg1vs3Jw57edGi4DuW8wZDG4taD/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780677392; c=relaxed/simple;
-	bh=v5ELkvGCZq1N3nX9mAXJeHVpZuf0ySnc+4V/iBCGN/k=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ePIxHOdhQWteh/ZUvnE1FAe2mnfoIV2+0aNVpON/pv9zZQH/BYQzmjy1l2KB1Ngh1GBtVR4DcODapAY1abdHGzQnxl5doU7YVbqozM0ATHK3yE8NTPhZkCVD483/3vkCDQTBdct6qTEQmtxTUu48mTB0HIjKUFy+I+vLNCsjgbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/FCGBy5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780678818; c=relaxed/simple;
+	bh=0Y9DnF8DCVs+ioD7NcPTPeoVg18OUuK/6dYly9D/WG0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZMHCb1r+oS850VeWTvj9+Q6tBas7flwcnJdQQyvWqvWMd8X1mlskysP4bKfdu5cYnauk8h3comtro374gyDAudxQIMNqOPaR8Z6dfkS8DwqspuBEhmGdm2Qs6pf0Lkg6FSrBWXOEpBRxK8cJiHD97ieKN5SfbRNqJ/nY51TuviM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l/4NuLNw; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/FCGBy5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E30131F00898;
-	Fri,  5 Jun 2026 16:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780677387;
-	bh=NhzGkTvTOsDPvtPajOB34RAWLOEB+uxckYz3rZNDzQo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=P/FCGBy54L7ZsandkeOpn1trMhH6fE3DgUFDFVgnAM+MYQNq+2cQHTlCLv0qN0sHI
-	 UyP0dKyjddXliOHQwMoFydE9IEb07GUpKpUi16Zc2AdN1NjumQbVVh1Nj44MD2Rf/P
-	 MGQ5E8uyB6ZeBXDR4vX7DwuqFH8l4NeB9kXriAVk4gk8DVN+O6VFHsAG4q68J6dSvf
-	 FQUUqiZXAPicjtEGlCFoKRdQpuADrOfHjTdYTJiYFaxXr9NYfYFbAEqDBbvsfvPEyr
-	 ceSgUbltF+jjubNKaaqNEC0enuIStWjzjF59UG0xFFtQ7N3aMAywY9BS4BJXw33DGH
-	 oBrJ8FpAk17Mg==
-Content-Type: multipart/mixed; boundary="===============3143658977373259747=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l/4NuLNw"
+Message-ID: <e3e1f8dd-e0f4-4f9c-85cd-22c58571eca7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780678813;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4+F6dCr7Ekcj7JdRJunNsiqbCtUyFgwJwQx1YoPJlqU=;
+	b=l/4NuLNwt3gUNWHC7gQ2meNcKVu6H1AIA4TjaYHxNTH216dZp+KcsmLV4HTLZXAYpU9ZeB
+	VpBwIHzIMYX8aCZsaaG0C6pPt3hORH1xg/MXIsI8Jb7n08OCv7prdLLiSX/flKKkSW0Xiy
+	sV3+24/3uR2x8fi8SHKFGsGf8/GosOQ=
+Date: Fri, 5 Jun 2026 09:59:49 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2d84292ee48c9b2d0e1bdedb591ce43af8cdfdc575bc6fb0ac326a34b8a3fcd9@mail.kernel.org>
-In-Reply-To: <20260605155249.20772-3-leon.hwang@linux.dev>
-References: <20260605155249.20772-3-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf: Check tail zero of bpf_prog_info
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,yuyanghuang@google.com,leon.hwang@linux.dev,kpsingh@kernel.org,davemarchevsky@fb.com,sdf@fomichev.me,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  5 Jun 2026 16:36:26 +0000 (UTC)
-
---===============3143658977373259747==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf] bpf: fix NULL pointer dereference in
+ bpf_task_from_vpid()
+Content-Language: en-GB
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Juntong Deng <juntong.deng@outlook.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260603204206.773482-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> commit acd0d2042870d7613c0c27932c41262d1c41b4e1
-> Author: Leon Hwang <leon.hwang@linux.dev>
-> Commit: Kernel Patches Daemon <kernel-patches-bot@fb.com>
+
+
+On 6/3/26 1:42 PM, Sechang Lim wrote:
+> bpf_task_from_vpid() looks up a task in the pid namespace of the
+> current task, via find_task_by_vpid():
 >
->     bpf: Check tail zero of bpf_prog_info
+>    find_task_by_vpid(vpid)
+>      find_task_by_pid_ns(vpid, task_active_pid_ns(current))
+>        find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
 >
->     Since there're 4 bytes padding at the end of struct bpf_prog_info, they
->     won't be checked by bpf_check_uarg_tail_zero().
+> cgroup_skb programs run in softirq, which may interrupt a task that is
+> itself in do_exit(). Once that task has passed
+> exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
+> cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
+> dereferences &NULL->idr:
 >
->     pahole -C bpf_prog_info ./vmlinux
->     struct bpf_prog_info {
->             ...
->             __u32                      attach_btf_obj_id;    /*   220     4 */
->             __u32                      attach_btf_id;        /*   224     4 */
+>    BUG: kernel NULL pointer dereference, address: 0000000000000050
+>    RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
+>    Call Trace:
+>     <IRQ>
+>     find_pid_ns kernel/pid.c:370 [inline]
+>     find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
+>     bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
+>     bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
+>     __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
+>     sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
+>     tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
+>     </IRQ>
+>     <TASK>
+>     do_exit+0xa63/0x1270 kernel/exit.c:1010
+>     get_signal+0x141c/0x1530 kernel/signal.c:3037
 >
->             /* size: 232, cachelines: 4, members: 38 */
->             /* sum members: 224 */
->             /* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
->             /* padding: 4 */
->             /* forced alignments: 9 */
->             /* last cacheline: 40 bytes */
->     } __attribute__((__aligned__(8)));
+> Bail out when current has no pid namespace.
 >
->     If a future kernel extension adds a new 4-byte field, older userspace
->     programs allocating this structure on the stack might inadvertently pass
->     uninitialized stack garbage into the new field, permanently breaking
->     backward compatibility. -- sashiko [1]
+> Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>   kernel/bpf/helpers.c | 4 ++++
+>   1 file changed, 4 insertions(+)
 >
->     Fix it by changing sizeof(info) to
->     offsetofend(struct bpf_prog_info, attach_btf_id).
->
->     And, add "__u32 :32" to the tail of struct bpf_prog_info.
->
->     [1] https://lore.kernel.org/bpf/20260513224823.6494FC19425@smtp.kernel.org/
->
->     Fixes: aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and fdinfo")
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b5314c9fed3c..4646a915bf98 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2913,6 +2913,10 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(s32 vpid)
+>   	struct task_struct *p;
+>   
+>   	rcu_read_lock();
+> +	if (!task_active_pid_ns(current)) {
+> +		rcu_read_unlock();
+> +		return NULL;
+> +	}
 
-Is the Fixes: tag pointing to the right commit? The padding bug was
-actually introduced by commit b79c9fc9551b ("bpf: implement BPF_PROG_QUERY
-for BPF_LSM_CGROUP"), which added attach_btf_obj_id and attach_btf_id after
-verified_insns, creating the 4 bytes of padding at the end of the structure.
-Commit aba64c7da983 added verified_insns as the last field but did not
-create padding.
+In softirq context, I think we should return NULL for this kfunc.
+Your above fix solves crash problem. But even not crash, the
+below task 'p' may not be user expected since the 'current' (and
+its namespace) is random.
 
-Suggested: Fixes: b79c9fc9551b ("bpf: implement BPF_PROG_QUERY for
-BPF_LSM_CGROUP")
+Maybe we can do:
 
->     Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
->     Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
++	if (in_interrupt())
++		return NULL;
++
+	rcu_read_lock();
+	...
 
-[ ... ]
+In bpf selftest task_kfunc_success.c, all programs are 'syscall'
+programs which garantees process context.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 89f020a44fc9..c5d4ae957e87 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -5121,10 +5121,11 @@ static int bpf_prog_get_info_by_fd(struct file *file,
->  	u32 info_len = attr->info.info_len;
->  	struct bpf_prog_kstats stats;
->  	char __user *uinsns;
-> -	u32 ulen;
-> +	u32 ulen, len;
->  	int err;
->
-> -	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), sizeof(info), info_len);
-> +	len = offsetofend(struct bpf_prog_info, attach_btf_id);
-> +	err = bpf_check_uarg_tail_zero(USER_BPFPTR(uinfo), len, info_len);
->  	if (err)
->  		return err;
->  	info_len = min_t(u32, sizeof(info), info_len);
+>   	p = find_task_by_vpid(vpid);
+>   	if (p)
+>   		p = bpf_task_acquire(p);
 
-Does this change break the ABI for existing deployed binaries?
-
-Previously, expected_size was 232 (sizeof(info)). If an existing binary
-passes info_len = 232 with uninitialized stack garbage in the 4-byte
-padding, bpf_check_uarg_tail_zero() would see actual_size <= expected_size
-(232 <= 232) and immediately return 0.
-
-By reducing expected_size to 228, actual_size > expected_size (232 > 228),
-so bpf_check_uarg_tail_zero() will actively check the 4 padding bytes and
-return -E2BIG if they contain garbage. This rejects previously working
-applications.
-
-sashiko-bot and bot+bpf-ci raised this concern in v1 and v2:
-https://lore.kernel.org/bpf/20260603151405.6DB111F00893@smtp.kernel.org/
-
-While v3 adds '__u32 :32;' to prevent future field additions in the
-padding space (addressing forward compatibility), the backward
-compatibility concern about breaking existing binaries remains unresolved.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27025811732
---===============3143658977373259747==--
