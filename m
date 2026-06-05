@@ -1,108 +1,125 @@
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC304B8DEC
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 09:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6D53B71DA
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 09:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780650071; cv=none; b=NRdMzwabty3RcSZ4ufO5xdZHjHU5nN5eqUTMhNLVyjYBRoGTwqUKhT2db58ZIcbEJOStk3ar9sSXyslNcVoR8u0glwOzCoLmQ04wJsQ8+/x6lZbVrn2PYZ/R6wwpKoaDosLw/7jgPagFU7uKHu6hBKc3cp1AjDRbgeVuDY6igbA=
+	t=1780652576; cv=none; b=Ubc/qo6U0xlDXuJpOtFQ1oaXYlouLFONjgQQZCR4NEwo1GgacBgVOjLyUgYKVncaOoWk8rOjHqOf+gi2nbzpiHM33KpPd5bIZ+vScGieNfJ3/U+Oew56FRimw8fNIHHws70ZNAkNo7y0Q2p4V456+UcntfTWF2GwYHmP5IXKA/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780650071; c=relaxed/simple;
-	bh=o8BGdjq1Uu650RISG3GNTyGokpi2RqaLxlN7t9YSlPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NN5enxfRswr/xQx1fLBS4n6GC8pxTbd919XU44Z7VBViD5OYOfqajTOMoVScOBTBQxMIm27poZ9OMMoUSL8Uer5ejAdNmjnNDeNGZ365JK2vItowQ9J136PuTQctFwjkhBrBVGt1NoNGgRDrI+9A6u8P1rOF7lCUpHEYp9e6F2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BbJqsznC; arc=none smtp.client-ip=209.85.216.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780652576; c=relaxed/simple;
+	bh=fJ220f+Er87zRDfl8LDmOFgfo2otqq/56IiqC/NOZjw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ud/onToUwZLZfZWUi0WuVcGJE5rVN6ylIobhoxrv5G/8/sTPtjdT5s2ebnRZ/uz9W/Ke6zhVoUkxE91ZtmrNcvmwAe0p9GvkQ0PcaxhoBwQSGE0k53P3lP9q7LdLc92K0oxaVVAyKu2RoMfXZ3xhnmoI947aSjC3DwTC3T8Wd4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ku9sREOU; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BbJqsznC"
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-36b7b7b7a80so1531430a91.1
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 02:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780650069; x=1781254869; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o8BGdjq1Uu650RISG3GNTyGokpi2RqaLxlN7t9YSlPM=;
-        b=BbJqsznC1aDzjzu8k2S8098KtddGlkbGsT15vcLJKsH7bL8JynyPIh87IHA9PSVa1h
-         n2jmCcu8WIg7JuH55M610vIAgx6zszdRKUZrUMNnI8UGknhJTh8MJrlXDVoYsU6vxJc6
-         Fvsv3uN4NxpZHOIqioqHLDZrbSvBcwbhkmL1CkKDsqN5qmZ6/IzjWY+BAja1HpOWusG+
-         pUyxuxnft3zCCGVXsMvHv6yTw7KIbcroyj85/Xu8siqQvdgLW5xQjBxjv4XehBIfjgUZ
-         3ckCq284/m74Yf0wxJQ2BZk7PWuiAne+7GAqRePt4E99Gp9NHzzR5ICL8ScHB3eSqfbe
-         1Cig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780650069; x=1781254869;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=o8BGdjq1Uu650RISG3GNTyGokpi2RqaLxlN7t9YSlPM=;
-        b=cdF5IPONlcJM2UL4pV6Gnf5oRlc1UhzahH1m6pGAFI7rIGCUAsO9pDnP8G6kx5OG3v
-         rgEjLBJ4ToxpqSj66BTnhv0lEa+/MNVSrLEo0dI0aWPekrOwUc6SkgxBZOFwPLMgSMvK
-         1mFXWtWuO5r1hNU0rNZoUqTTUqTDiUIUCLcIDYTkFs/NssZvHhRBP8dZRIJYwc7hA0ZT
-         SW0I6FNQmh8V4IVvktU6keElqHMGqd6Dx9G2nOOmm0cKezsYIY15A/GOr/HfL9HCK0VN
-         4Peg7w9bkYz5dN3qWxeB/aUjGWNwY9e+5/KNNObwSK2Vylsq2nAyfij3ZvoeHgykXJc9
-         7NGQ==
-X-Gm-Message-State: AOJu0Yw9gdzG1jEAIkH8fwFYRKvnTDhDRFx8zAdldTxiep5JhLnsmvLJ
-	OEXygf56CDZs0qX67FVAmAjFGQxHhA/ojadcM1cCue1Yr6sx+IMKSByj
-X-Gm-Gg: Acq92OF1Lqfz9kk0dr8rHZoDEdAtfkWuxLKPGG90TeZKHsBe2r8DYMDvcg4j7WGKAv6
-	84DesmkrWR6t/PN5myRII4C6A9YBxOyQQ3iRVy1JeUbqPWN3hZqRb0ewzzlNssnl0HbGmBsgAvk
-	VgtN344fmRlX0P7euJ06py+rw1KNeEOESMl4dhnvtCNfZaXyvlw13hwxcAnbo45oX66hSLqTwPN
-	4Ua0ASezc6BCwOelSrDSTu+5OlwjWhfTHGN1erWjmdX6a8TEV49+pwatjgUFZ5ets0PjA5vnrzy
-	G37lRtWN+PlsfEZ4NTB1N+HP8O+EZhSZZ/6p5ekM4R2NG9se8PY+IMlR8hwqWj7oDKPOklAikn6
-	QC6Uy4VoYiRBBuAWjm4QiveAkqDB7pJd6kVm7evGhuj5QaiXvCLAMlhIW+/QDtDIsCUwBspxd84
-	mzP7DFp4PtZTwa5/kO5y2Xb+s=
-X-Received: by 2002:a17:90b:3c8c:b0:369:74b3:a103 with SMTP id 98e67ed59e1d1-371316163cfmr1609773a91.8.1780650069088;
-        Fri, 05 Jun 2026 02:01:09 -0700 (PDT)
-Received: from laptop ([59.6.68.4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0a4e59sm7670920a12.16.2026.06.05.02.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 02:01:08 -0700 (PDT)
-From: Woojin Ji <random6.xyz@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ku9sREOU"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780652562;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tcbI5oMdHfrZMmfJmEO2u5fdYdlkgLeMh+rHDAyJk7o=;
+	b=ku9sREOU0m/e17nrxJ/Hw9MhGNwZ6UdX7bI9Hr7iE2VqZ4Ch8201C52ZCx3e3B9Eyk62Qk
+	rVmnIS3+v3YumOiTyae/Lv4+t0HnAiMiReVwXlG3Qk/686zi6i5YF3q4esT+3XJEzx5S15
+	popexIu0IJ2lLHWAkym6s61Etxpbzx4=
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: Dave Marchevsky <davemarchevsky@fb.com>,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Woojin Ji <random6.xyz@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add arena direct-value one-past-end reject test
-Date: Fri,  5 Jun 2026 18:01:00 +0900
-Message-ID: <20260605090105.511475-1-random6.xyz@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DJ0DRM980L8V.3MR51HBLAVAEP@etsalapatis.com>
-References: <20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com> <DIZJ5P33U6YT.14OWBKG3T9LVD@etsalapatis.com> <20260604153712.199362-1-random6.xyz@gmail.com> <DJ0DRM980L8V.3MR51HBLAVAEP@etsalapatis.com>
+	kaitao.cheng@linux.dev,
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH bpf-next v2] bpf: Clear rb node linkage when freeing bpf_rb_root
+Date: Fri,  5 Jun 2026 17:41:43 +0800
+Message-ID: <20260605094143.5509-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thanks, I dug into the inline assembly route more.=0D
-=0D
-A hand-encoded BPF_PSEUDO_MAP_VALUE ldimm64 in verifier_arena.c can produce=
-=0D
-the right instruction bytes only with __imm_addr(arena), but that emits=0D
-R_BPF_64_NODYLD32. The selftests libbpf/bpftool link step rejects that=0D
-relocation type.=0D
-=0D
-I also tried register, immediate, and memory constraints with raw bytes. Th=
-ose=0D
-either fail in the BPF backend address matching or NOP padding path, or low=
-er=0D
-to a normal R_BPF_64_64 load followed by an ALU add. The latter does not=0D
-exercise arena_map_direct_value_addr() with off =3D=3D arena_size; it tests=
- a=0D
-later ALU-add path instead.=0D
-=0D
-I also checked the legacy test_verifier route. It can express the raw insn=
-=0D
-directly, but it requires adding arena-specific map creation and mmap fixup=
-=0D
-plumbing to the legacy runner. That seems more intrusive and less aligned w=
-ith=0D
-new selftests than the small prog_tests raw-instruction test.=0D
-=0D
-So my current preference is still to keep the userspace raw-instruction tes=
-t.=0D
-If that sounds reasonable, I can send v3 with this rationale added to the=0D
-commit message/changelog.=0D
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
+
+bpf_rb_root_free() detaches the root by copying the current rb_root_cached
+and then replacing the live root with RB_ROOT_CACHED. It then walks the
+copied root and drops each object contained in the tree.
+
+This leaves the rb node state intact while dropping the object. If the
+object is refcounted and survives the drop, its bpf_rb_node_kern still
+contains an owner pointer to the freed root and stale rb tree linkage. If
+a later bpf_rb_root allocation reuses the same address, bpf_rbtree_remove()
+can incorrectly pass the owner check and call rb_erase_cached() on a node
+whose rb pointers belong to the old tree.
+
+Mirror the list draining behavior by marking nodes as busy while the root
+is being detached, then clear the rb node and release the owner before
+dropping the containing object. This makes surviving nodes unowned and
+safe to reject from remove or accept for a later add.
+
+Fixes: 9c395c1b99bd ("bpf: Add basic bpf_rb_{root,node} support")
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+---
+Changes in v2:
+ - Use [PATCH bpf-next] tag
+ - Minimized code churn
+
+Link to v1:
+https://lore.kernel.org/all/20260601055859.13888-1-kaitao.cheng@linux.dev/
+
+---
+ kernel/bpf/helpers.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 03004e4451f5..8ba2b8965caf 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2306,6 +2306,7 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+ 		      struct bpf_spin_lock *spin_lock)
+ {
+ 	struct rb_root_cached orig_root, *root = rb_root;
++	struct bpf_rb_node_kern *node;
+ 	struct rb_node *pos, *n;
+ 	void *obj;
+ 
+@@ -2314,14 +2315,20 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+ 
+ 	__bpf_spin_lock_irqsave(spin_lock);
+ 	orig_root = *root;
++	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
++		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
++		WRITE_ONCE(node->owner, BPF_PTR_POISON);
++	}
+ 	*root = RB_ROOT_CACHED;
+ 	__bpf_spin_unlock_irqrestore(spin_lock);
+ 
+ 	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
+ 		obj = pos;
+ 		obj -= field->graph_root.node_offset;
+-
+-
++		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
++		RB_CLEAR_NODE(pos);
++		/* Ensure __bpf_rbtree_add() sees the node as unlinked. */
++		smp_store_release(&node->owner, NULL);
+ 		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
+ 	}
+ }
+-- 
+2.50.1 (Apple Git-155)
+
