@@ -1,99 +1,151 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48C732B99E
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 22:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFCF314D06
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 22:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780697836; cv=none; b=OKWZ9oufFCu+3KwN1jjWHGmHdzGoqBgHXO5860S8VUbzXQY4f3OwbiY+QHyjJdt1Jlr6pd4ZTDCO8Pt8MMXQqpCT4v51UyAqzneaD9RlZcL24fAL/sFMQtkK2Tl5XJpNA6JNP7dg4tp/HGNgk6edhSjB8JNEbWxhju2zd6v0hto=
+	t=1780698027; cv=none; b=sMbuU9sJgXbPM1yxhxHlzDCpcZriMHAiiehBBXzCIIjKrYW6hhgi01dp/rt1/J1di1F7h2EUnpkHfqgTWoXOmsfZgBlkkkgMQrZ8WMYySJSJmJmclf5T7hJaD+BMtrGry1VBfVyqL1Y4HAoxGFV5hU6vKOPK6JiLXAmQwMuODfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780697836; c=relaxed/simple;
-	bh=lZRXOI6zlXYJz1U5XqjlBx/cQ8DwYkwjeF8Z5E4Vh7w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=t3zKRwx1SXVmE7+JSJgeWgiOsIUUcDr77eQp2pqHaBw2JGVfovyN69a+aDz9WQAHqcoNoNoL7Iw6bpVZR3LE0bPhI4nBqU4p/klJU6m2TuI8ScRQNk47yDcnOCkFCNYLP0SuFpCS2Gy0Fd5m1fTkXCN8CflwcZf7zZmO+fdvBIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y8RXPdUZ; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780698027; c=relaxed/simple;
+	bh=SSgMS6VY3I1lm3bClh6I4FauBoAd1m//qrd98BHZM9Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q7gXMBUNHtusk3ptpigoOAvip6tCF71ftbTErhjFDZzAiLmOFs2o3WR+59HMe8yrg5IUNKJkFTSHKnhX3iluuy3GTN+InkhaOctfOpkTNVCztYWsn9965EYr+yI9LTL/SBXHOt7e0OAwaNyvzJg+PbTCgMOkMDh6AijVGUmTJzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Wqodrn/q; arc=none smtp.client-ip=209.85.210.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y8RXPdUZ"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69e46524711so1516586eaf.0
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 15:17:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Wqodrn/q"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-8421f0e9c5bso1113386b3a.3
+        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 15:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780697834; x=1781302634; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lZRXOI6zlXYJz1U5XqjlBx/cQ8DwYkwjeF8Z5E4Vh7w=;
-        b=Y8RXPdUZo9TMss83j+1DPAJ3Dhdcm+jAebgD/qATQjED3vpDJXTuf3FZ7va8hu1FyF
-         WZJpJaPI8chccPR8veDbXzzlwuniR2tlMXwkKfXGDRe2wfU5pEayOv3XPWfzRfWBnv1o
-         QFdDTqlGTvCg5j1tULyhXq2YSHmgjJ5P2NYZq2hT82hNP38TJ7hTs245CVfKmIAfxTxi
-         BDI0ueE/7H4EJUlDqafk2uWpgfXzClxORPB2CmKzYu0UAPekZRkQnV2KeHAh2W6izYbk
-         +5uh30Ir/bABBwLfffRXoRMPwargrJ8EEekQRfvWYhuUOZz5LN7ne6tiNO7daQpT6VdP
-         H2Tg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780698025; x=1781302825; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ozc7ZOVaDa/PQgfVHJJiUiyg5LTkkp0SlTOtK2nj+gU=;
+        b=Wqodrn/qqmv65KhorqFB39/NnU+w0YG7kr40YyiqJiFlRn7BwIU6m/iEVIvn7vTjxD
+         sTryYUzWRobbdUseJzj4fFCOuwHLSla2ckt3gimlYvEMrNhwLxD9Po7AXZD7YAcuzdP2
+         h3Jq1BbrpRJY+TrAqYzPbB+aNAuODv+0e4KUVi1q/q0K8F6+6Ty8KeMaCWeXhZZbw9dN
+         aERHcnT/wAXvBVU6MO6Gxsa5u4RLR99i5nUoc+hF81TocGnQuCvnDqbWexIBJiiIUTw5
+         Mdi/k01U3LwCsMtaosNiWk0JroDj2AdBjCL3DPqu2ajRnuVYTsGGTpoo/gxfwTs1kx9J
+         1KFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780697834; x=1781302634;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lZRXOI6zlXYJz1U5XqjlBx/cQ8DwYkwjeF8Z5E4Vh7w=;
-        b=LoYzo6jMI3o3yTSkaf81I8A93uOE+NLZqxKL0hmPFwrjmONMCUCpvNYBB4KMsClf/M
-         rLe2+FuoL7rWaelH8437b5JPEZDoW68TPuVb2MTjitbSSppzBR9KPDfj4hjehn6byda5
-         AFL1YAGZDgc6x21HQvK4+PV3MAcdZ0ULu8jApLNB2sW8qVhyqTrlspWrXJbMBnSgiqiD
-         /2pd1CrdDbxLDIgmd6mzWZCtaKKSwkJLQIqJ8fD/GdlPW8Af2oCTEDNzRGKZnJmXID1N
-         Lmmd28UB2ZIebwBjdxOQKS0tHjUPWmHfCFD4MuZZjjxD9qSg9qISkA6run9x5mXcb0a4
-         engA==
-X-Forwarded-Encrypted: i=1; AFNElJ9r2zN8qXQH3j7HX8Fn/AjDjY0K3i5qD/mf3XL12JRLc2wFFWj44SUX1sGynOFh2ODyXs8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaXweECqEwlhdCVw4uIEfm7nlamOx7oQy7MX77Ce9NIZYGz/Y0
-	gW7gt2pzlBl5jIbb1FkHfBrWVz8z43IXhZbs5kXOlEsmekQH3My+AboN
-X-Gm-Gg: Acq92OEYZNL+eZCdgwz5InpMNkvK+WDfWXdc5GbTUxZmaVLXA2SRThsXyZ87ElhYrJX
-	dxZhKS4etCrVqWGlqUeuCZnHWwHL3BGq1cVr9KyNjDBze4ms5+tQy5+EoXOkyTqXffm2HQ0squO
-	J3fsaYGmYqiV9NwJm3UZDct6NJ56no7mXc3r0QH9UTmkS07rMeeou8uzSpKH9xTl22ZqUrS3RKE
-	XKAssz44t4idOaNbxlRLOEtmwsXItZdPFdcue+m8lzb7ed2dtv5CAYn1un7LNXCsjjLz54V0aCB
-	hPjWM8LGLrja8d4sPUqgJRZdtk7UwTJVqK9yzFXwI/awQ6KKmtx/3yqzaRdOJ5uAHSzASy6lGso
-	cj+xj1uEfJO4bXNEW6LBxOCjyK6B8ybTVlJeT1QroGaqfS3/uoucwxc6b2pi/ijRbtmPJOopw/+
-	TH/atCOUtzCXrFoo8mSasRSI5imNhnNNs1YcfuOQ3sDrFVEwh+2Hgr+lQRxOebyzogCWNSagTF0
-	KNh57NF1CdClpH3A/ybdjRcBa6B
-X-Received: by 2002:a05:6820:208c:b0:69e:31fc:d12c with SMTP id 006d021491bc7-69e68b1bdefmr2976137eaf.4.1780697833870;
-        Fri, 05 Jun 2026 15:17:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:45::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d7c351e3sm8110404fac.5.2026.06.05.15.17.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 15:17:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780698025; x=1781302825;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ozc7ZOVaDa/PQgfVHJJiUiyg5LTkkp0SlTOtK2nj+gU=;
+        b=Vm5nZe2xa68SZRwtbyS5ytmL//QdH/AxZX0ZA6aVdCjM31KmOp08uAWN8Df8ROIKK9
+         K+U4W7gk6DKh0exSanziKknhAW6QwlDzuMZWgfLjVAWYQqlLShwANSiVrH9aeWWp+cWF
+         a4xdP3AmXGE+kxlFJ+H5nXnjeutWroJqPat7FDj2k0cYspm/Sv6g1FKp1eb+Nvhemf7k
+         j1LxUVc4JqPeFssTlY+Kp3VTBcivkgmE958pA1D/7ss1CabrknebE4Z2d9jKwrn12KuT
+         IYHgY1NkcXKGW9Asr4hqROkY8I4ov3JKVtZqkYE85D+W9NIlw59SbkpDvs97HDg+T4Xp
+         IhNQ==
+X-Gm-Message-State: AOJu0YxjSID1hISn7O57bpC8l8MokSt8seBopM35towdmOKGxyMaooqw
+	blBPxkAtyaUJTdNO065PtDmhMkLpe6cLpEyDrDcyoJ6sfvBOnPe1m7Vz9FUVxIYu+OVTP9F/MqC
+	7R4xX8agLM5f7Fs4=
+X-Gm-Gg: Acq92OGy1Cvz/vsHt1+gfqgJJLw9gTbpMCnTvDKxWouJKel6PkWYABxVlzPcLY3Nfnf
+	WQ92uQOA9rjgCDDUVX46zryycRrI8oh4gbsYhiz8VXXKgHVETVxGWNoAlJPzJ7PhH2vG5mf8LuZ
+	R/T53NVRTgZOgsO0JNXAKmZsyxHzHcmrHj4b73Nw6oy/C8lAE2he5ylPmT5VR+6qvGpMWwFRRt+
+	n3qD7y8A8FAjyyjRWNOHs7M6UtpTQpZRRPT6pQryKNnbQokTnDfgi6ePlXOTfPTXiM5QopBOM6K
+	tTcuOxStYrU+nTTkF3rsBfTPDivmn2dT7/p2qe9tfDjumWZjyFZ9pKfEYjZn9rhh/EExWrQ7qy9
+	K1Tu1CQ5SHAk8sVkhRXd0NkJfAdWhvxU1vbyVi1qjfTnP788K71l9bxNQQBNdobOyGEXqHiQYvB
+	CxZdZFkTcj95chxWPhT1El1HiKyqVUSFEBrxA=
+X-Received: by 2002:a05:6a00:9a3:b0:842:5c90:736b with SMTP id d2e1a72fcca58-842b0f4d433mr5504558b3a.29.1780698024607;
+        Fri, 05 Jun 2026 15:20:24 -0700 (PDT)
+Received: from krios.lan ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84282372868sm11648844b3a.17.2026.06.05.15.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jun 2026 15:20:24 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	mattbobrowski@google.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v4 0/3] selftests/bpf: libarena: Add initial data structures
+Date: Fri,  5 Jun 2026 18:20:17 -0400
+Message-ID: <20260605222020.5231-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 05 Jun 2026 15:17:11 -0700
-Message-Id: <DJ1GP6MSYCMS.3JJI1SRBMMGBZ@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "bpf" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf 0/2] bpf, verifier: fix PTR_TO_FLOW_KEYS
- constant-offset OOB
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: aerc
-References: <20260604150755.2487555-1-gnq25@mails.tsinghua.edu.cn>
- <CAADnVQJCXbZ27oZRYcd6=9WdaKvkMc4-PAK2ocd1hmRU=1C2rA@mail.gmail.com>
- <1f66a74b.74fd1.19e97406869.Coremail.gnq25@mails.tsinghua.edu.cn>
-In-Reply-To: <1f66a74b.74fd1.19e97406869.Coremail.gnq25@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Jun 5, 2026 at 3:07 AM PDT, Nuoqi Gui wrote:
-> Thanks, will retarget bpf-next. One clarification for my own understandin=
-g
-> of the security boundary here: is the "not a security issue" classificati=
-on
-> driven purely by no released kernel being affected, or also by flow
-> dissector attach requiring CAP_NET_ADMIN limiting reachability? Want to=
-=20
-> make sure I categorize similar verifier regressions correctly in the futu=
-re.
+Add two new data structures to libarena. These data structures initially
+resided in the sched-ext repo (https://github.com/sched-ext/scx) and
+have been adapted to the internal libarena build system. The data
+structures are:
 
-please do not top post.
+- Red black tree: Fundamental tree data structure that can also serve
+  as a base for more domain-specific data structures.
 
-Any CAP_* means that it's a privileged task, hence not a security issue. Ju=
-st a bug.
+- Lev-Chase deque: Queue data structure that allows efficient work
+  stealing, useful in scheduling scenarios.
+
+The data structures are accompanied by selftests that are automatically
+discovered by the existing libarena test_progs selftest and incorporated
+in the CI.
+
+CHANGELOG
+=========
+
+v3 -> v4 (https://lore.kernel.org/bpf/20260604235016.20856-1-emil@etsalapatis.com/)
+- Turn off load_acquire/store_relesase - dependent selftests for s390 (CI)
+- Various style/non-functional nits (AI)
+
+v2 -> v3 (https://lore.kernel.org/bpf/20260603182727.3922-1-emil@etsalapatis.com/)
+
+- Add workaround to handle LLVM 21 and GCC 15 assignment-to-memset promotions
+  that are causing verification failures for arena programs (CI)
+- Incorporate Sashiko feedback for cleanup edge cases (Sashiko)
+- Simplify some of the ordering semantics in spmc
+
+v1 -> v2 (https://lore.kernel.org/bpf/20260511214100.9487-1-emil@etsalapatis.com/):
+
+- Rename tests from st_ to test_ (Alexei)
+- Removed the freelist caches from the rbtrees, previously used to defer freeing (Alexei)
+- Moved the type and function definitions to use the __arena identifier
+- Removed the typecasts during function return and directly return __arena
+  pointers (Alexei)
+- Renamed queues to spmc queues to abstract away the algorithm (Alexei)
+- Adjusted the memory barriers in the spmc queue
+- Added multithreaded testing harness for libarena programs (Alexei)
+- Added parallel selftest for queues (Alexei)
+- Split least upper bound and exact find operations back into separate
+  functions to prevent RB_DUPLICATE-related bug (AI)
+
+
+Emil Tsalapatis (3):
+  selftests/bpf: libarena: Add rbtree data structure
+  selftests/bpf: libarena: Add spmc queue data structure
+  selftests/bpf: libarena: parallel test harness and spmc parallel
+    selftest
+
+ .../bpf/libarena/include/libarena/rbtree.h    |   83 ++
+ .../bpf/libarena/include/libarena/spmc.h      |   27 +
+ .../bpf/libarena/include/libarena/userspace.h |    6 +
+ .../selftests/test_parallel_spmc.bpf.c        |  673 +++++++++++
+ .../bpf/libarena/selftests/test_rbtree.bpf.c  |  968 +++++++++++++++
+ .../bpf/libarena/selftests/test_spmc.bpf.c    |  194 +++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   | 1047 +++++++++++++++++
+ .../selftests/bpf/libarena/src/spmc.bpf.c     |  234 ++++
+ .../selftests/bpf/prog_tests/libarena.c       |  187 +++
+ 9 files changed, 3419 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/spmc.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_spmc.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/spmc.bpf.c
+
+-- 
+2.54.0
+
