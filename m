@@ -1,138 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFC437E2EE
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 12:22:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F62D5A01
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 12:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780662132; cv=none; b=jZyonRN/zeHYfqt3netRQL92rZp/LRpH09P+Rvq7sKFZzNEfD13YBFsmRLmwQPeg12H7NHDwnWSpnIESkEkJJz3nwbXsPfnpiN84ofzlnMU11l3R7J75Qjvm/TGWJIprWv+5d0KI4UJQspK6T9QzwEMUgUyvMDJWc8jv9ijacG4=
+	t=1780662167; cv=none; b=eNPjlTU0ZINPSoEBYnvscm5tAFkjbxBOCtZV6OoTdv5zwOp9+ZEeOszycGkm6ACtotjm8JZBf9rfP5rtIOdSVUh0YlKFap/zNzdmpvmsCUt380JEvUZwDtQUfExJSVHMq30hKi0ViHUX7UIum2WqNc6RvCG/BarDTCj8Q3WN22M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780662132; c=relaxed/simple;
-	bh=FkhXNTuRdMOWnGzKFAZXbJcvhCSfm+nl2opUkNJDGVw=;
+	s=arc-20240116; t=1780662167; c=relaxed/simple;
+	bh=a7SecOqdduHbqsP/KeGFjY8WtpqwYTFh/W8nCnoWV7k=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EXhOW5mPfSl8oDw8f7pacwaSDffUzBShgND8sc1IkAwsACP7ZEYuJD5xIiXeoTS1Xhsec2orsdnO4v3jO3OMqaXkwPs+cGR4XFruXhUzFgyYHXQyK8GDuV3ZCOI737p781sylpImoNQ7giww9lnC4NF8tX4gv8dzoy55Ek/NYhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZlSpeGu; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=I1ArzWLKC4v+y+HZgPRkxKOrvFRw39NitzOfjYpfGgVOKET7XjqM/TNAE0OSqOlBpl6O4ik9xabbAkCrm7xIUcL3MQpcU4Xj8Y0+9rru1QAYKvbLV9TJ1x1Ehrr7N6Wi92SKn+1/qWpgk+9gbQKwGVu5hP+lfbhihKMxPD9BQ4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlLaFa7V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZlSpeGu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF46C1F00893;
-	Fri,  5 Jun 2026 12:22:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlLaFa7V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978A01F00893;
+	Fri,  5 Jun 2026 12:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780662130;
-	bh=FdDMoNMGPQQ4E2Es54PvHiWabNTkCm6aTMPzj7SaZIw=;
+	s=k20260515; t=1780662165;
+	bh=mDA2lP8VWe1Not8GBTacppwgi6mIVSVPk/rDlaoHMpc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kZlSpeGuH5saKGtZ+5xkCnZz8p3x6ZVlRON1p2r81uzgMTv3v2jcJNkf7GYJNU9SS
-	 OAlH0ZiBjC06jT3cbdBIrViyNgXLuzEiiXMBd/0P/Eof+FC6U2yveVtLhIo00hoTt2
-	 4Hh4+L0A4eRz3k8ri+gcnOzJ5Ty6S6MG2H1HXdVAY1tYMALinFD5luJMIWXJttTSUn
-	 fx9orBClCghXeSlK3XW2OSIVDfcUI88LsQwdidtG0VoJe/7NFsG4z/8RYeYMXxDYkv
-	 25WakuEul1BKUwu4ODEi5Cf0aqChrE4HOl2nRWbvZ6x0nU24t7LrXTa1MZ90VlEfJV
-	 E01rLzcfdRQKg==
-Content-Type: multipart/mixed; boundary="===============1327767064383600339=="
+	b=ZlLaFa7VUu5glbKP4UICLKx6eOFisXprcp0BjMGuV7ADaIVjraamcHrW2ZkkczWsQ
+	 4CTSVLc3E0Sa1Q2jdxp7+gPrNt9XBjUEJRdWcYaqL+zNqHs+vm2ROMiLi3Q3Et7UOB
+	 z5L2AUbOtIm1nS2Buh9W0qGWAbvRDz9qve4B5B4GkgvYH5nb7bZp1AAOx1KDSn9mx1
+	 IcwPikVoVh67N/KLGCeO0nZ1S/CFEoruYV7XRQXTMeP8xoT2Af71HWpmNqGUJ5oOx9
+	 pLhQ0r0HwE7oauOZptD+N1v0cjU6mkY4yIrbosh8diOcOVfYl5w8DjddyKv/SBNbA9
+	 L2qSUxUcT/5Ng==
+Content-Type: multipart/mixed; boundary="===============5061178354112411199=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <22927163b097eb5fccb320750193dcdaccc1a0c31add85153903234b19b8b7a3@mail.kernel.org>
-In-Reply-To: <20260605-rhash-v7-7-5b8e05f8630d@meta.com>
-References: <20260605-rhash-v7-7-5b8e05f8630d@meta.com>
-Subject: Re: [PATCH bpf-next v7 07/12] bpf: Optimize word-sized keys for resizable hashtable
+Message-Id: <6b923e9e93c63fe9d52cec371f06d2848ed9386333d46c2bb6c2f96dc07443d4@mail.kernel.org>
+In-Reply-To: <20260605115713.3224051-1-linuxoid@gmail.com>
+References: <20260605115713.3224051-1-linuxoid@gmail.com>
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: add arena split and fork tests
 From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  5 Jun 2026 12:22:09 +0000 (UTC)
+To: linuxoid@gmail.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,memxor@gmail.com
+Cc: song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 12:22:45 +0000 (UTC)
 
---===============1327767064383600339==
+--===============5061178354112411199==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 7b9408b8320c..b4366cad3cfa 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -2763,6 +2763,31 @@ static inline void *rhtab_elem_value(struct rhtab_elem *l, u32 key_size)
->  	return l->data + round_up(key_size, 8);
->  }
->
-> +/* Specialize hash function and objcmp for long sized key */
-> +static __always_inline int rhtab_key_cmp_long(struct rhashtable_compare_arg *arg,
-> +					      const void *ptr)
-> +{
-> +	const unsigned long key1 = *(const unsigned long *)arg->key;
-> +	const struct rhtab_elem *key2 = ptr;
-> +
-> +	return key1 != *(const unsigned long *)key2->data;
-
-Could dereferencing these pointers directly cause alignment faults on
-architectures that require strict alignment?
-
-Since BPF programs can pass unaligned pointers (such as from packet data
-in skb->data) directly to map helpers, using get_unaligned() might be
-necessary here to prevent kernel panics.
-
-Previous discussion: The author responded in v5 that "the same problem
-exists for the htab jhash2" but did not address the concern. This issue
-was raised by sashiko-bot in v5 and v6, and repeated by BPF CI bot in v6.
-
-Reference: https://lore.kernel.org/bpf/20260528182522.23D121F00A3C@smtp.kernel.org/
-
-> +}
-> +
-> +static __always_inline u32 rhtab_hashfn_long(const void *data, u32 len, u32 seed)
-> +{
-> +	u64 k = *(const unsigned long *)data;
-
-Same alignment issue here: direct dereferencing could fault on
-strict-alignment architectures like ARM32 or SPARC.
-
-> +
-> +	return (u32)(k ^ (k >> 32)) ^ seed;
-
-Does applying the seed after folding the key make hash collisions entirely
-independent of the seed?
-
-If a BPF program or an attacker inserts keys constructed as:
-
-    k = (Y << 32) | (X ^ Y)
-
-These keys will all fold to exactly X before the XOR with the seed, meaning
-the hash output for all such keys satisfies:
-
-    f(key1) ^ seed == f(key2) ^ seed
-
-for any random seed.
-
-If rhashtable detects a long bucket chain and triggers a background rehash
-with a new seed, won't all these colliding keys move together to the same
-new bucket?
-
-This might trap the rhashtable worker in an infinite loop of rehashing,
-leading to a 100% CPU livelock.
-
-Previous discussion: The author acknowledged in v5 that "the attack is
-possible in theory" but decided to "leave for performance" without
-addressing it. This issue was raised by sashiko-bot in v5 and v6, and
-repeated by BPF CI bot in v6.
-
-Reference: https://lore.kernel.org/bpf/20260528182522.23D121F00A3C@smtp.kernel.org/
-
-> +}
-> +
-> +static const struct rhashtable_params rhtab_params_long = {
-> +	.head_offset = offsetof(struct rhtab_elem, node),
-> +	.key_offset  = offsetof(struct rhtab_elem, data),
-> +	.key_len     = sizeof(long),
-> +	.hashfn      = rhtab_hashfn_long,
-> +	.obj_cmpfn   = rhtab_key_cmp_long,
-> +};
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+> new file mode 100644
+> index 000000000000..bb134e9adb60
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+> @@ -0,0 +1,53 @@
 
 [ ... ]
+
+> +	pid = fork();
+> +	if (pid == 0) {
+> +		unsigned char vec;
+> +		int rc;
+> +
+> +		/* If the mapping was not inherited the range is unmapped in
+> +		 * the child, so mincore() fails with ENOMEM. A success means
+> +		 * the child wrongly inherited the mapping.
+> +		 */
+
+This isn't a bug, but does this multi-line comment match the preferred
+BPF subsystem comment style? The guidelines ask for the opening /* to be
+on its own line, for example:
+
+		/*
+		 * If the mapping was not inherited the range is unmapped in
+		 * the child, so mincore() fails with ENOMEM. A success means
+		 * the child wrongly inherited the mapping.
+		 */
+
+This was raised on v2 and does not appear to be addressed yet.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27013077824
---===============1327767064383600339==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27013893868
+--===============5061178354112411199==--
