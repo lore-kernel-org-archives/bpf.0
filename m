@@ -1,95 +1,173 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B409221770B;
-	Fri,  5 Jun 2026 12:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CDE35A39F
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 12:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780662340; cv=none; b=Qz0M2bOYHQS25jGFJKERXMnFp5sZguWz3e1DZHSLKfju8ASJVToFBIuQYfNrtz8oMe4FwLr7sjx765rI6Iw1XWFHVabVtjhj0KidtmJEsL9xf3Z1bSXUag29eEqUeQQ1XEjXcS6kFj3obSN7L53s9ix6/VINgzat4tlZG01Prwo=
+	t=1780663213; cv=none; b=f/yU0GrfHq5rI+NWzJEJdkhgCgmZOf8iV9vAsry93gn7ooH/cVOekpGuQBgPPQd0JB+1LMj4a5RAKfQlzHO66IHzprsodkXAONu3byOXBzMqWddcd7aRFI1bAuFTC+tYZwIDAVFrhtz9t1eJV2atCPWjNKJFbBuMiFZmUMf8w7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780662340; c=relaxed/simple;
-	bh=7hiGcFLxFEKhHkZjVyJqJBXCTKtT6gXdmQ9JGqsFrVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QjNYGHw7HAa+9UW2OeyFAlsm6+2hI6sOd12W4v2PM2oolHubS78Dl1ZUA37Xh5IEJJxJlt9Wfa9XV6H9d5o3MgFBDa8mSt8EPQ9wLAsj/cZOfL/HUhtbQI9NyTow3Bad+ZdVoraZakqV7w4O39GwmKmSoJDpSvJJCyFNDbPyhi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=O33AwwK3; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780663213; c=relaxed/simple;
+	bh=T/tOGzkzhhn6p+uG/Jr65mulWzItficsu5KvA8R57cM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=OchKwbqmcumtubJLMKkp4FmVMlxwK+L6yW7MK/HGPvi2375e0a0760s9QBFHIYKOF1naKbzuXSAM6uOsq9NLQU/yHIejHmZOBKZeOdZ1JRYIEClw54iJm4hLLfj/csb0L7byCwfAnguKJxeDgQpYrucgRFr06rbOW3VjtWbCoG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBjqnu1p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="O33AwwK3"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=554cJHTZWjVGBaLg4qLyp/xmftBxh0/L7bcES1SXh00=; b=O33AwwK3/CjjUs+yB1ErwPMdbt
-	FD+oeo1ZO6j36NurPsHeHl41fV3SewL9z8gH0JLY3rqF+25F3LTO1iVDxPAOq3IbHGsM8EjvLmdsn
-	B6p+HOzJTE06Y1ayqlUcMlqbB/rUzsTKI2AffP7G92bdIyYsVlP+MYeSXfZ7hfWken05E5tJbTj2P
-	bronOdTVniE7SNHGiCLQjV7XIVezlG5PNbjeWLDLZ3p1SJjt8DgvefiolCXvYXVBxqJjsi/V/yk6i
-	3QSD5ANTVxYRmqA0OFav3OnSoPHRYIttZfJD5pi9qoiZjXo4eg0O3UOlZaw3D7lZylF/Wnk2Um2D9
-	xyXdOt9Q==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wVTc6-005HwE-1G;
-	Fri, 05 Jun 2026 12:25:26 +0000
-Date: Fri, 5 Jun 2026 05:25:21 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
-	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>
-Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
- buffers (update 1)
-Message-ID: <aiK94g9vphHls3x_@gmail.com>
-References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBjqnu1p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124871F00893;
+	Fri,  5 Jun 2026 12:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780663212;
+	bh=JEJB4afI6DhxDbR5CwBCnT3AAeGZeuODJoAByRUg+jI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=aBjqnu1paEdfCRnSlVCKnGDxY45GRGMxDbg8B0OW0zasxavjErOm9gN+hdozC+5yX
+	 9YtEHQRevncuMV19BilZhT185YmU6IQnRnrcSXbEOrNKJ+igBcssw2qThlTfcx9YIi
+	 Z27JQLqSCrq3hx0IGYZpd1+aKG3dpXewf2oK0zS5DuT/Z4MugAwOT+aVTUrLNdsUOB
+	 f7yuu/dv/sbAuX6ju6KDs30gy1z2BZ5zOlovMIpkxJ6UEVKWiW6SrzdfEo6dt5pUIH
+	 B56f7EhQ2c1HtinFW9si9HRAtrBoDkZzVjwcFDN9S/aEsxcZRVPe8OCkFe9wjzDiDn
+	 LbzclopVt1Kfw==
+Content-Type: multipart/mixed; boundary="===============3520698004461516831=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
-X-Debian-User: leitao
+Message-Id: <e564e01c7b39f2b6196dfd4aa52dc00ae3db255a71f31f2955cd9b0c59a91de5@mail.kernel.org>
+In-Reply-To: <20260605-rhash-v7-5-5b8e05f8630d@meta.com>
+References: <20260605-rhash-v7-5-5b8e05f8630d@meta.com>
+Subject: Re: [PATCH bpf-next v7 05/12] bpf: Implement iteration ops for resizable hashtab
+From: bot+bpf-ci@kernel.org
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  5 Jun 2026 12:40:12 +0000 (UTC)
 
-On Wed, Apr 08, 2026 at 03:30:28AM -0700, Breno Leitao wrote:
-> Currently, the .getsockopt callback requires __user pointers:
-> 
->   int (*getsockopt)(struct socket *sock, int level,
->                     int optname, char __user *optval, int __user *optlen);
-> 
-> This prevents kernel callers (io_uring, BPF) from using getsockopt on
-> levels other than SOL_SOCKET, since they pass kernel pointers.
-> 
-> Following Linus' suggestion [0], this series introduces sockopt_t, a
-> type-safe wrapper around iov_iter, and a getsockopt_iter callback that
-> works with both user and kernel buffers. AF_PACKET and CAN raw are
-> converted as initial users, with selftests covering the trickiest
-> conversion patterns.
+--===============3520698004461516831==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Quick update on this effort.
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 10f3a058747b..a149713d0953 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -3020,8 +3020,79 @@ static void rhtab_map_free_internal_structs(struct bpf_map *map)
 
-All proto_ops users have been converted to getsockopt_iter and submitted.
+[ ... ]
 
-Most conversions are already in linux-next. Three remain:
+> +static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
+> +				void *callback_ctx, u64 flags)
+> +{
+> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
+> +	void *prev_key = NULL;
+> +	struct rhtab_elem *elem;
+> +	int num_elems = 0;
+> +	u64 ret = 0;
+> +
+> +	cant_migrate();
+> +
+> +	if (flags != 0)
+> +		return -EINVAL;
+> +
+> +	rcu_read_lock();
+> +	/*
+> +	 * Best-effort iteration: if rhashtable is concurrently resized or
+> +	 * elements are deleted/inserted, there may be missed or duplicate
+> +	 * elements visited.
+> +	 */
+> +	while ((elem = rhashtable_next_key(&rhtab->ht, prev_key))) {
 
-1) rds: Under review
-   https://lore.kernel.org/all/20260605-getsock_more-v2-3-80f38cdb8706@debian.org/
+The rhashtable_next_key() documentation notes that a full iteration is
+not guaranteed to terminate under adversarial or sustained rehashing.
 
-2) smc: Submitted today. This is only limited to UBUF right now
-   https://lore.kernel.org/all/20260605-getsockopt_smc-v1-1-65da62fa44c4@debian.org/
+This loop has no external bound and runs under rcu_read_lock() with
+migration disabled.  Can continuous concurrent resizes keep this loop
+from terminating, leading to a soft lockup or RCU stall?
 
-3) CAN drivers: Reviewed and acked, pending Marc's merge
-   https://lore.kernel.org/all/f83e25e1-b9f5-4810-bbd6-fdb8d2a10c8e@hartkopp.net/
+> +		if (IS_ERR(elem))
+> +			break;
 
-Once these are merged, I'll rename getsockopt_iter to getsockopt and
-remove the legacy path.
+If prev_key is deleted concurrently, or by the callback itself,
+rhashtable_next_key() returns ERR_PTR(-ENOENT) and this break exits the
+loop.  Does that abort the iteration immediately and skip the remaining
+elements?
 
-Next, I'll convert struct proto the same way to eliminate the remaining
-userspace optlen/optval pointers.
+rhtab_map_get_next_key() handles the same -ENOENT case by falling back
+to the first key:
 
-After that, io_uring getsockopt operations will be unblocked.
+	/* if not found, return the first key */
+	if (PTR_ERR(elem) == -ENOENT)
+		elem = rhashtable_next_key(&rhtab->ht, NULL);
+
+Should bpf_each_rhash_elem() do something similar rather than breaking,
+given the comment describes this as best-effort iteration?
+
+> +		num_elems++;
+> +		ret = callback_fn((u64)(long)map,
+> +				  (u64)(long)elem->data,
+> +				  (u64)(long)rhtab_elem_value(elem, map->key_size),
+> +				  (u64)(long)callback_ctx, 0);
+> +		if (ret)
+> +			break;
+> +
+> +		prev_key = elem->data;	/* valid while RCU held */
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	return num_elems;
+> }
+>
+> static u64 rhtab_map_mem_usage(const struct bpf_map *map)
+> @@ -3034,6 +3105,275 @@ static u64 rhtab_map_mem_usage(const struct bpf_map *map)
+
+[ ... ]
+
+> +static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+> +					       const union bpf_attr *attr,
+> +					       union bpf_attr __user *uattr,
+> +					       bool do_delete)
+> +{
+
+[ ... ]
+
+> +	while (elem && !IS_ERR(elem) && total < max_count) {
+> +		memcpy(dst_key, elem->data, key_size);
+> +		rhtab_read_elem_value(map, dst_val, elem, elem_map_flags);
+> +		check_and_init_map_value(map, dst_val);
+> +
+> +		if (do_delete)
+> +			del_elems[total] = elem;
+> +
+> +		elem = rhashtable_next_key(&rhtab->ht, dst_key);
+> +		dst_key += key_size;
+> +		dst_val += value_size;
+> +		total++;
+> +
+> +		/* Bail to userspace to avoid stalls. */
+> +		if (need_resched())
+> +			break;
+> +	}
+
+[ ... ]
+
+> +	if (do_delete) {
+> +		for (i = 0; i < total; i++)
+> +			rhtab_delete_elem(rhtab, del_elems[i], NULL, 0);
+> +	}
+
+Deferring the deletion until after the iteration leaves the elements
+visible in the hash table while they are copied into the user buffers.
+
+Does this open a window where a concurrent batch operation can
+traverse, copy, and return the same elements to userspace?
+
+If so, does that break the exactly-once consumption semantics expected
+when a batch is used to drain a map like a work queue?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27013077824
+--===============3520698004461516831==--
