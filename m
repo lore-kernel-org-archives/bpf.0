@@ -1,63 +1,63 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A20240B6FC
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD8040B6E9
+	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 06:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780641262; cv=none; b=qrDVtqzQjarvUy3JUwsr3M9YaObDVhFs0YL0P/L/Fql2XsRfS1WXrJhtn/3aqvQXqEp09GIPOLUm0z7UHPx/p93DbtyFl25nESwP7ODAP7GGib6KPb4GBYhzDgUedQ7RPD+s5xJC8uPBnXeMj/EL4uGc6rehgNWgPZlzQZNLFwg=
+	t=1780641264; cv=none; b=ZPBD901Bm1Kgkcx799WuodKc/6m8HxEf29X3gf4mSFncYd6IOXx6K0mttGd2j4hEw6o84VeboiA3Nhk8rHccb63EVNUuRH1xJ4FpAdfFUAKzcxX3zHjgMqZW0Rk8iigp9ivUt/PXGbBmtJqPSYDR+n/XwfGEmyLm1o/Zuj5bs+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780641262; c=relaxed/simple;
-	bh=Zx8BVuewp3WDAm/Uv78SzIQlMFeLxi5T/kD/zBmP7LQ=;
+	s=arc-20240116; t=1780641264; c=relaxed/simple;
+	bh=0oGrY7jTTimVhb+eJfUgncyf8jPrkZNdCJuoG7LWJIU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vo8ED135CrvDaAAzWlVXQ4Tsy/GWB3IdXzq1Zn3n0itjtR+Hc6DGdVMjiwgZfVtXOx1s7h31aaPEJ6ZfhB/GWbPdmWjgdB6xqJ+ipxKU4HtKfrhQlxZW5fZvaD8TOOqVilPPv1ZB01Xakyn6+wUJZQ5e88ghs0FGOc643VHeCc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pGnRaHv3; arc=none smtp.client-ip=209.85.221.65
+	 MIME-Version; b=JShwviarnZFJNAmVcwXrG0Kxq2EHwMYaR/TzxFVD1bUCYndfzSLivRx72bjAxiZ5nnu/kT8KkuoydYhQ3Zo1c2A3ujmCItKnO3SQdQEWkO0vdLyQwMwMrLSC2lkghajDrJiE5tRw1PKyEHo74hUwA5A+SZ4RW/WGAMsImptAngM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQTPolGn; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pGnRaHv3"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-45ef56d9b67so1175403f8f.2
-        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQTPolGn"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b12270b3so9106595e9.1
+        for <bpf@vger.kernel.org>; Thu, 04 Jun 2026 23:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780641256; x=1781246056; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780641259; x=1781246059; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YzUUWWI8+qMI5ixrO3evvT6QNsH8Cv2XgC9/qu6j6zo=;
-        b=pGnRaHv3YWmHBEG/J+dl6WhCabXN9K1DGOsECKgQ7hdPeLO5JbC7dA6iXdelpbHjvd
-         PyVgmKAQ67hi+sUkTQYdY+ZmGmyW0/s6hTZdSrhR+ZiwrBIxIMjt+7ROAnfSdturHKA3
-         hvnV54wFSD0/HIUtGzMFbqlNTv3wn0pCyYT+xVuVJoGOIGl4/z8eBT+E59ShCw+M3OV1
-         xuhOTPvl3ezC98nOryBw8PoSP6jNiCAMAWJfH/afMVZ3mPZ3WSlhuVzos3u17KyGFMAm
-         ze9UprGlkBzn5lOtcxhmTShi0SvEesqxkzR9lKXLrGdsHRFjju+k2bSaGZIT9QsHP31J
-         Wv8A==
+        bh=UKOA1Ko+IZQ1+zC21FgziY0+TI0a5iMA/JoBEpo0OSs=;
+        b=ZQTPolGnIa8bSnOdKXg8hCC70EWRKO0p0hOxj0QV9gjJwtQGYz6JqBIM2MjGd5RCJj
+         g+T2RTo4TYEhJnuRQI7pRXAZkTTf/qIXs5FqOGLBGkeE5xRVrsup3du8gw0cBx7ZB9Xt
+         Yj1Jg99U+OA5SgWcIExpNqibk3GlMIne2nnSfQNNbRvoc0HNhZkWIeR8hHS/W+uEdlD9
+         SKIxaBVhxkthA8vi8DE7yDu3qN+vbsqa4WLmBv4wpsQ5z+A//04z8385n///6rWhy1Og
+         0wn6eANt8aXn0cHBMDveg578vXyjkj2FynSPThGweDEGvAUzfQ7PuU3puwihYSb1GTaY
+         vDBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780641256; x=1781246056;
+        d=1e100.net; s=20251104; t=1780641259; x=1781246059;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YzUUWWI8+qMI5ixrO3evvT6QNsH8Cv2XgC9/qu6j6zo=;
-        b=EVCzWCq38P+4w4vS6VNg3z42FJvWJkarYle2RkasFEIWpi89TimhY72VmjqMDUNH/B
-         RijMZOMNJ31wwVWAcIU67uQg6slFVcCe0B1dXolhalwl8WZcXBHjaDICXy0+Dpwl0lRm
-         2IBbAI21JkC2qJT7BZ2IbjzyI08TT+39FRYFGedod1DmphOQKrWJB0chZXoqAwj+C8fq
-         oe7xkWSEXJcreObBDJQfPBk/DYxqlLjS93PKB3oosHGpv8hBYJ8EyFhLwFacAEmCOWvY
-         1iollD39W7W0XUg2Wt1cHkVZhuoU36XhbwxCzCk8kJxHduAfzgJW3uXKFMRpl5/wTygl
-         BK5A==
-X-Gm-Message-State: AOJu0YzUWAQEKh39FPIBFFsnuI8cyIop9QpFMvyAd0fcQC6zW7+z2jdp
-	ZIaxg2xaJbp0CwJYWlwYCe1p6s7HFi6Xt2SM3a1I7YD90YZIYuTTR8/BvyGIFiSd
-X-Gm-Gg: Acq92OEiVBKQ0OwzulbCkDFj57j0XPzkcBy6T5g8FIoZalL8Q8IYfS4omYUCMnwhP1J
-	HNsNb17IiA74NJA6adCorNiny6fFUF8PcoT5CWD9XJdZ1hGhCtuSyFSE2GI7VScnjtD62WStt85
-	KRGvgAaVzgyIq4WKl3X47o6IHHSQu+HIo5P8QQEyKj9QewFHGz0JNVAMmurdsF54nuUxQYbtfrS
-	W5DBDpuG5pRBxLczznbOWgsXhiERE6vn8cleStqcvLOv/DJaae9CwTt4ltEI2cAIK4twXVdCqrD
-	+l6uwZNZRx1gWLWfn3I2WVuf3/WrjhJiCAaxLRLuzm/0C+yh8ZsaJLchjZbEdXf2MyPCVzf5Zq2
-	3uoa/83Qy2g3kb4BgUjvi5icH/XqyPP1wVBfAa58qlVQrD4YzAwPxbgp6hwKzqP1HNnzFtACAwU
-	+m1CMHmpdrhcAwGaabCkpRRdsBmp7zbWgfQbqpf2+AQUZxqUYrqj7vBnxSI9ZsSdnrw5dCrQEKa
-	p6d9Oj+h6esF4twWpfVZGo1RyRP4eAksE5+Ieh4EvguCJRIGZ+cc9Q81PJfP4iz2aOi3Q4w0Xmx
-X-Received: by 2002:a05:6000:4697:b0:45e:739b:3e43 with SMTP id ffacd0b85a97d-46030186d90mr2405765f8f.0.1780641256338;
-        Thu, 04 Jun 2026 23:34:16 -0700 (PDT)
+        bh=UKOA1Ko+IZQ1+zC21FgziY0+TI0a5iMA/JoBEpo0OSs=;
+        b=VJlom4tI+SeHWVT3+hy3OtpcJY/kUGZLU9H6K4H8Dd+Ne9m4G5kHebrJVpmBqxEBBE
+         swyXY713vh4Hqhx6tQkg/ayyRV4gkfOvyiMx5GU0ZljJOp0zWgRxbOM5N6xjz1p8L+IS
+         NFzsQ3o3LrCydK0WEcuVcxNSRPt/2/+YigeWSBBeTRDb/EX5wpCSIr+oty5+oKdidalM
+         pt1lsmz7eF63PIigbCUg3Y6HHGwo6llHxZOjUCT7MbEpisFOLykma1ryR8+Byo6YLCKB
+         6UIttGhekBIK2iiOkpH3xAXaQAoNRGecmOqMq6vGjAH6rKCu4WDOIfsaRxJOfJrhJ5tA
+         ambQ==
+X-Gm-Message-State: AOJu0YyZLSkl0qHuNpKX59/cVeU/NfEcDwPUamVwDNLtbPTt7Rq7nnxu
+	J72w8JIRTTwzCUxSfXUgWlcU8iBgbFxne8cgg+7/gPKLjHJGSU1TKyBbqw3cEsZq
+X-Gm-Gg: Acq92OGJWG0a9xV58b9sjI2RSTCQOySBjcQpsbIIn5aY0YbaXVMXQrJV6iqYGYJSnOP
+	dooDe9HfIcmPpYxrcLTy5Tp6X7LbYPGEQZuoUZd2bylIOtgzRZZiU4UrSWeGNjU7ivImT352J3a
+	rl+3AQff45S4qYHqb1IYtrL0zERCqi0IyRYXIkZKT0AZs09taphNk+RaBwRHuwsfqESyfRRJION
+	37zZys7bdzQ2ZnSlMzjYPvxJ8g1ydmawZF43EmBJUn67ZJizte+lwypELRSIQQBVOZ/ZtMtwDj9
+	vecjCOY6VLjA1/CfwGOhIMNu/8aIA2EltESL/MgTdgwKy3rxE3IzfgexWPG1ODqECzO3ndjfL4B
+	qfC7Oh+rloEXt0Xw0pLcxmQx+WFEXOwaCBj4EToJvi0s/Kdxh7veA4G5sL3UUG1eDbLtJO/0wht
+	mfNFssQiwoANwS2jMd1WbZi9f0V+BcYTclV5+lkUA8xX6Ep8Yt6ks6oDNGHAOEHsxuJmY5iTskr
+	odq6Qig/dgxSX0m6tpm/dGh9HzMb6VgyNi5B/At4BpG3rycJy+38kiROnN4BjEWdeUai6LENEmM
+X-Received: by 2002:a05:600c:37c9:b0:490:adb6:7957 with SMTP id 5b1f17b1804b1-490c262dcb5mr28704535e9.33.1780641259205;
+        Thu, 04 Jun 2026 23:34:19 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35133csm22686403f8f.25.2026.06.04.23.34.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3e59f5sm130638045e9.14.2026.06.04.23.34.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:34:15 -0700 (PDT)
+        Thu, 04 Jun 2026 23:34:18 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/17] bpf: Add source and instruction diagnostic context
-Date: Fri,  5 Jun 2026 08:33:53 +0200
-Message-ID: <20260605063412.974640-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 06/17] bpf: Track verifier reference diagnostic history
+Date: Fri,  5 Jun 2026 08:33:56 +0200
+Message-ID: <20260605063412.974640-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260605063412.974640-1-memxor@gmail.com>
 References: <20260605063412.974640-1-memxor@gmail.com>
@@ -79,470 +79,212 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12842; i=memxor@gmail.com; h=from:subject; bh=Zx8BVuewp3WDAm/Uv78SzIQlMFeLxi5T/kD/zBmP7LQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt3C5tWr+RxaVjTy9J/Zf37MwoCft+o56prLc1UvOO wtmPmbvKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwERyVjH8Zin/wjDlak67VbXf 31tWfy495Lt/4dHss49TNe9c/drqZMbwP6B3j/ouo0DV6+UeDx0XhLIk+c6IbBJQX6Sg3rb8znt TBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6801; i=memxor@gmail.com; h=from:subject; bh=0oGrY7jTTimVhb+eJfUgncyf8jPrkZNdCJuoG7LWJIU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUspt6j9/NI9WZOMkhV/aP2+teXbiuWaAqd2Hz93v77rZ mMOS/7JjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExk+3ZGhvn5hQrXj3G9ntt+ fmvM3K9xPGrvK3NFkv7ZLTnXluR/tpHhn9mnqizTQ/Lrv62LdFXaNtVg+pITAfvzblbaMZ5bfX2 zGwcA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Teach verifier diagnostics to annotate an instruction with BTF source line
-information and nearby BPF instructions. The renderer keeps source text in
-a fixed-width lane and prints instructions in a stable right-hand gutter.
+Add reference acquire and release events to diagnostic history so Resource
+Lifetime Safety reports can show the lifetime of a specific reference id
+along the path.
 
-Wrap annotation text under the source line so long error labels are readable
-while the source and instruction lanes keep their fixed layout.
-
-Keeping source and instruction context in one commit preserves the visual
-layout contract that later diagnostic reports rely on.
+Record acquisitions after the verifier assigns the reference id. Record
+releases only after release_reference_nomark() succeeds, including the
+kptr_xchg RCU conversion path that consumes an owning reference.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 384 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h |   4 +
- 2 files changed, 388 insertions(+)
+ kernel/bpf/diagnostics.c | 57 ++++++++++++++++++++++++++++++++++++++--
+ kernel/bpf/diagnostics.h | 11 ++++++++
+ kernel/bpf/verifier.c    | 12 +++++++--
+ 3 files changed, 76 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index d9a103cf3a16..652d4627c2b0 100644
+index 1bdc7e69fbce..56c1236ffe7c 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -1,16 +1,45 @@
- // SPDX-License-Identifier: GPL-2.0-only
- // Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
- 
-+#include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
-+#include <linux/btf.h>
-+#include <linux/kernel.h>
- #include <linux/stdarg.h>
- #include <linux/string.h>
- 
-+#include "disasm.h"
- #include "diagnostics.h"
- 
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
- #define BPF_DIAG_TEXT_WIDTH 120
- #define BPF_DIAG_TEXT_INDENT "  "
- #define BPF_DIAG_MSG_LEN 512
-+#define BPF_DIAG_SOURCE_CONTEXT 2
-+#define BPF_DIAG_INSN_CONTEXT 2
-+#define BPF_DIAG_COLUMN_GAP 3
-+#define BPF_DIAG_SOURCE_LANE_WIDTH 88
-+#define BPF_DIAG_TAB_WIDTH 8
-+
-+struct bpf_diag_source {
-+	const char *file;
-+	const char *line;
-+	u32 file_name_off;
-+	int line_num;
-+	int line_col;
-+};
-+
-+struct bpf_diag_insn {
-+	char text[160];
-+	int idx;
-+	bool valid;
-+};
-+
-+struct bpf_diag_insn_buf {
-+	char *buf;
-+	size_t size;
-+	size_t len;
-+};
- 
- static void bpf_diag_print_wrapped_prefixed(struct bpf_verifier_env *env,
- 					    const char *first_prefix,
-@@ -68,6 +97,282 @@ static void bpf_diag_vprint_indented(struct bpf_verifier_env *env,
- 	bpf_diag_print_wrapped_text(env, buf);
+@@ -842,13 +842,38 @@ void bpf_diag_record_stack_arg(struct bpf_verifier_state *state, u32 insn_idx,
+ 	bpf_diag_append_history(state, &event);
  }
  
-+static int bpf_diag_line_width(unsigned int line)
++static void bpf_diag_record_ref(struct bpf_verifier_state *state, u32 insn_idx,
++				u8 kind, u32 ref_id)
 +{
-+	int width = 1;
-+
-+	while (line >= 10) {
-+		line /= 10;
-+		width++;
-+	}
-+
-+	return width;
-+}
-+
-+static const char *bpf_diag_func_name(struct bpf_verifier_env *env, u32 insn_idx)
-+{
-+	const struct bpf_subprog_info *subprog;
-+	const struct bpf_func_info *info;
-+	const struct btf_type *type;
-+	int subprogno;
-+
-+	if (!env->prog->aux->func_info || !env->prog->aux->btf)
-+		return NULL;
-+
-+	subprog = bpf_find_containing_subprog(env, insn_idx);
-+	if (!subprog)
-+		return NULL;
-+
-+	subprogno = subprog - env->subprog_info;
-+	info = &env->prog->aux->func_info[subprogno];
-+	type = btf_type_by_id(env->prog->aux->btf, info->type_id);
-+	if (!type)
-+		return NULL;
-+
-+	return btf_name_by_offset(env->prog->aux->btf, type->name_off);
-+}
-+
-+static bool bpf_diag_fill_source(struct bpf_verifier_env *env,
-+				 const struct bpf_line_info *linfo,
-+				 struct bpf_diag_source *src)
-+{
-+	const char *file, *line;
-+
-+	file = btf_name_by_offset(env->prog->aux->btf, linfo->file_name_off);
-+	line = btf_name_by_offset(env->prog->aux->btf, linfo->line_off);
-+	if (!file || !*file || !line || !*line)
-+		return false;
-+
-+	src->file = kbasename(file);
-+	src->line = line;
-+	src->file_name_off = linfo->file_name_off;
-+	src->line_num = BPF_LINE_INFO_LINE_NUM(linfo->line_col);
-+	src->line_col = BPF_LINE_INFO_LINE_COL(linfo->line_col);
-+	return true;
-+}
-+
-+static bool bpf_diag_get_source(struct bpf_verifier_env *env, u32 insn_idx,
-+				struct bpf_diag_source *src)
-+{
-+	const struct bpf_line_info *linfo;
-+
-+	linfo = bpf_find_linfo(env->prog, insn_idx);
-+	if (!linfo)
-+		return false;
-+
-+	return bpf_diag_fill_source(env, linfo, src);
-+}
-+
-+static const char *bpf_diag_find_source_line(struct bpf_verifier_env *env,
-+					     u32 file_name_off, int line_num)
-+{
-+	const struct bpf_line_info *linfo = env->prog->aux->linfo;
-+	struct bpf_diag_source src;
-+	u32 i;
-+
-+	for (i = 0; i < env->prog->aux->nr_linfo; i++) {
-+		if (linfo[i].file_name_off != file_name_off ||
-+		    BPF_LINE_INFO_LINE_NUM(linfo[i].line_col) != line_num)
-+			continue;
-+		if (bpf_diag_fill_source(env, &linfo[i], &src))
-+			return src.line;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int bpf_diag_line_indent(const char *line)
-+{
-+	int indent = 0;
-+
-+	while (*line == ' ' || *line == '\t') {
-+		if (*line == '\t')
-+			indent = round_up(indent + 1, BPF_DIAG_TAB_WIDTH);
-+		else
-+			indent++;
-+		line++;
-+	}
-+
-+	return indent;
-+}
-+
-+static const char *bpf_diag_marker_label(char marker)
-+{
-+	switch (marker) {
-+	case '!':
-+		return "error";
-+	case '?':
-+		return "branch";
-+	case '~':
-+		return "update";
-+	case '+':
-+		return "acquired";
-+	case '-':
-+		return "released";
-+	default:
-+		return "note";
-+	}
-+}
-+
-+static void bpf_diag_insn_print(void *private_data, const char *fmt, ...)
-+{
-+	struct bpf_diag_insn_buf *buf = private_data;
-+	va_list args;
-+
-+	if (buf->len >= buf->size)
-+		return;
-+
-+	va_start(args, fmt);
-+	buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len,
-+			       fmt, args);
-+	va_end(args);
-+}
-+
-+static const char *bpf_diag_kfunc_name(void *private_data,
-+				       const struct bpf_insn *insn)
-+{
-+	const struct btf_type *func;
-+	struct btf *btf;
-+
-+	(void)private_data;
-+
-+	if (insn->src_reg != BPF_PSEUDO_KFUNC_CALL || insn->off)
-+		return NULL;
-+
-+	btf = bpf_get_btf_vmlinux();
-+	if (IS_ERR_OR_NULL(btf))
-+		return NULL;
-+
-+	func = btf_type_by_id(btf, insn->imm);
-+	if (!func)
-+		return NULL;
-+
-+	return btf_name_by_offset(btf, func->name_off);
-+}
-+
-+static void bpf_diag_format_insn(struct bpf_verifier_env *env, int insn_idx,
-+				 struct bpf_diag_insn *diag_insn)
-+{
-+	struct bpf_insn *insn;
-+	struct bpf_diag_insn_buf buf = {
-+		.buf = diag_insn->text,
-+		.size = sizeof(diag_insn->text),
-+	};
-+	const struct bpf_insn_cbs cbs = {
-+		.cb_call = bpf_diag_kfunc_name,
-+		.cb_print = bpf_diag_insn_print,
-+		.private_data = &buf,
++	struct bpf_diag_history_event event = {
++		.insn_idx = insn_idx,
++		.kind = kind,
++		.ref.ref_id = ref_id,
 +	};
 +
-+	diag_insn->idx = insn_idx;
-+	diag_insn->valid = false;
-+	diag_insn->text[0] = '\0';
-+
-+	if (insn_idx < 0 || insn_idx >= env->prog->len)
-+		return;
-+
-+	if (insn_idx > 0 && bpf_is_ldimm64(&env->prog->insnsi[insn_idx - 1]))
-+		return;
-+
-+	insn = &env->prog->insnsi[insn_idx];
-+	if (bpf_is_ldimm64(insn) && insn_idx + 1 >= env->prog->len)
-+		return;
-+
-+	print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
-+	while (buf.len && (diag_insn->text[buf.len - 1] == '\n' ||
-+			   diag_insn->text[buf.len - 1] == '\r'))
-+		diag_insn->text[--buf.len] = '\0';
-+
-+	diag_insn->valid = true;
++	bpf_diag_append_history(state, &event);
 +}
 +
-+static void bpf_diag_format_source_text(char *buf, size_t size,
-+					const char *line, int width)
++void bpf_diag_record_ref_acquire(struct bpf_verifier_state *state, u32 insn_idx,
++				 u32 ref_id)
 +{
-+	bool truncated = false;
-+	int col = 0, len = 0;
-+
-+	if (!size)
-+		return;
-+	if (width <= 0) {
-+		buf[0] = '\0';
-+		return;
-+	}
-+
-+	line = line ?: "...";
-+	while (*line && col < width && len + 1 < size) {
-+		if (*line == '\t') {
-+			int next = round_up(col + 1, BPF_DIAG_TAB_WIDTH);
-+
-+			while (col < next && col < width && len + 1 < size) {
-+				buf[len++] = ' ';
-+				col++;
-+			}
-+			line++;
-+			continue;
-+		}
-+
-+		buf[len++] = *line++;
-+		col++;
-+	}
-+
-+	if (*line)
-+		truncated = true;
-+	if (truncated) {
-+		int ellipsis_len = min(3, width);
-+
-+		while (len > 0 && col > width - ellipsis_len) {
-+			len--;
-+			col--;
-+		}
-+		while (ellipsis_len-- && len + 1 < size) {
-+			buf[len++] = '.';
-+			col++;
-+		}
-+	}
-+
-+	buf[len] = '\0';
++	bpf_diag_record_ref(state, insn_idx, BPF_DIAG_HISTORY_REF_ACQUIRE,
++			    ref_id);
 +}
 +
-+static void bpf_diag_format_source_lane(char *buf, size_t size,
-+					const char *source_prefix,
-+					int source_line_width,
-+					int line_num, const char *line)
++void bpf_diag_record_ref_release(struct bpf_verifier_state *state, u32 insn_idx,
++				 u32 ref_id)
 +{
-+	int len, text_width;
-+
-+	len = scnprintf(buf, size, "%s%*d | ",
-+			source_prefix, source_line_width, line_num);
-+	if (len >= (int)size)
-+		return;
-+
-+	text_width = BPF_DIAG_SOURCE_LANE_WIDTH - len;
-+	bpf_diag_format_source_text(buf + len, size - len, line, text_width);
++	bpf_diag_record_ref(state, insn_idx, BPF_DIAG_HISTORY_REF_RELEASE,
++			    ref_id);
 +}
 +
-+static void bpf_diag_print_source_insn_line(struct bpf_verifier_env *env,
-+					    const char *source_prefix,
-+					    int source_line_width,
-+					    int line_num, const char *line,
-+					    const struct bpf_diag_insn *diag_insn,
-+					    int focus_insn_idx,
-+					    int insn_width)
-+{
-+	char source_lane[BPF_DIAG_SOURCE_LANE_WIDTH + 1];
-+
-+	bpf_diag_format_source_lane(source_lane, sizeof(source_lane),
-+				    source_prefix, source_line_width,
-+				    line_num, line);
-+
-+	verbose(env, "  %-*s%*s", BPF_DIAG_SOURCE_LANE_WIDTH,
-+		source_lane, BPF_DIAG_COLUMN_GAP, "");
-+	if (diag_insn->valid)
-+		verbose(env, "%s%*d | %s",
-+			diag_insn->idx == focus_insn_idx ? ">>> " : "    ",
-+			insn_width, diag_insn->idx, diag_insn->text);
-+	verbose(env, "\n");
-+}
-+
- static const char *bpf_diag_category_name(enum bpf_diag_category category)
+ static int bpf_diag_history_start_idx(const struct bpf_verifier_state *state,
+ 				      const struct bpf_diag_history_opts *opts)
  {
- 	switch (category) {
-@@ -93,6 +398,7 @@ static const char *bpf_diag_category_name(enum bpf_diag_category category)
+ 	int i;
+ 
+-	if (!opts || (opts->scope != BPF_DIAG_HISTORY_SCOPE_REG &&
+-		      opts->scope != BPF_DIAG_HISTORY_SCOPE_STACK_ARG))
++	if (!opts || opts->scope == BPF_DIAG_HISTORY_SCOPE_ALL)
+ 		return 0;
+ 
+ 	for (i = state->diag_history_cnt; i > 0; i--) {
+@@ -864,6 +889,10 @@ static int bpf_diag_history_start_idx(const struct bpf_verifier_state *state,
+ 		    event->stack_arg.slot == opts->stack_arg_slot &&
+ 		    event->stack_arg.frameno == opts->frameno)
+ 			return i - 1;
++		if (opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
++		    event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE &&
++		    event->ref.ref_id == opts->ref_id)
++			return i - 1;
  	}
+ 
+ 	return 0;
+@@ -886,6 +915,10 @@ static bool bpf_diag_history_event_visible(const struct bpf_diag_history_event *
+ 		return opts->scope == BPF_DIAG_HISTORY_SCOPE_STACK_ARG &&
+ 		       event->stack_arg.slot == opts->stack_arg_slot &&
+ 		       event->stack_arg.frameno == opts->frameno;
++	case BPF_DIAG_HISTORY_REF_ACQUIRE:
++	case BPF_DIAG_HISTORY_REF_RELEASE:
++		return opts->scope == BPF_DIAG_HISTORY_SCOPE_REF &&
++		       event->ref.ref_id == opts->ref_id;
+ 	default:
+ 		return false;
+ 	}
+@@ -1084,6 +1117,21 @@ static void bpf_diag_print_reg_mod(struct bpf_verifier_env *env,
+ 			       event->reg.dst_reg, old_buf, new_buf);
  }
  
-+
- void bpf_diag_report_header(struct bpf_verifier_env *env,
- 			    enum bpf_diag_category category,
- 			    const char *problem)
-@@ -134,3 +440,81 @@ void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, .
- 	va_end(args);
- 	verbose(env, "\n");
- }
-+
-+static void bpf_diag_print_source_annotation(struct bpf_verifier_env *env,
-+					     int line_width, int indent,
-+					     const char *label,
-+					     const char *msg)
++static void bpf_diag_print_ref_event(struct bpf_verifier_env *env,
++				     const struct bpf_diag_history_event *event)
 +{
-+	char first_prefix[128], next_prefix[128], text[BPF_DIAG_MSG_LEN];
-+
-+	scnprintf(first_prefix, sizeof(first_prefix), "  %*s | %*s^-- ",
-+		  line_width + 4, "", indent, "");
-+	scnprintf(next_prefix, sizeof(next_prefix), "  %*s | %*s    ",
-+		  line_width + 4, "", indent, "");
-+	scnprintf(text, sizeof(text), "%s: %s", label, msg);
-+
-+	bpf_diag_print_wrapped_prefixed(env, first_prefix, next_prefix, text);
-+}
-+
-+void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
-+			    char marker, const char *fmt, ...)
-+{
-+	struct bpf_diag_source src;
-+	struct bpf_diag_insn diag_insn[1 + BPF_DIAG_INSN_CONTEXT * 2];
-+	char msg[BPF_DIAG_MSG_LEN];
-+	const char *func, *label;
-+	int start_line, end_line, line_num, indent, width;
-+	int insn_width, i;
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vscnprintf(msg, sizeof(msg), fmt, args);
-+	va_end(args);
-+	label = bpf_diag_marker_label(marker);
-+
-+	if (!bpf_diag_get_source(env, insn_idx, &src)) {
-+		verbose(env, "  insn %u\n", insn_idx);
-+		bpf_diag_print_source_annotation(env, 0, 0, label, msg);
++	if (event->kind == BPF_DIAG_HISTORY_REF_ACQUIRE) {
++		bpf_diag_report_source(env, event->insn_idx, '+',
++				       "owned resource (id=%u)",
++				       event->ref.ref_id);
 +		return;
 +	}
 +
-+	func = bpf_diag_func_name(env, insn_idx);
-+	if (func && *func)
-+		verbose(env, "  %s @ %s:%d:%d\n", func, src.file,
-+			src.line_num, src.line_col);
-+	else
-+		verbose(env, "  %s:%d:%d\n", src.file, src.line_num,
-+			src.line_col);
-+
-+	start_line = max_t(int, 1, src.line_num - BPF_DIAG_SOURCE_CONTEXT);
-+	end_line = src.line_num + BPF_DIAG_SOURCE_CONTEXT;
-+	width = bpf_diag_line_width(end_line);
-+	indent = bpf_diag_line_indent(src.line);
-+	insn_width = bpf_diag_line_width(env->prog->len ? env->prog->len - 1 : 0);
-+
-+	for (i = 0; i < ARRAY_SIZE(diag_insn); i++) {
-+		int row = i - BPF_DIAG_INSN_CONTEXT;
-+
-+		bpf_diag_format_insn(env, insn_idx + row, &diag_insn[i]);
-+	}
-+
-+	for (line_num = start_line; line_num <= end_line; line_num++) {
-+		const char *line;
-+		int row = line_num - src.line_num;
-+
-+		line = line_num == src.line_num ?
-+		       src.line :
-+		       bpf_diag_find_source_line(env, src.file_name_off, line_num);
-+
-+		bpf_diag_print_source_insn_line(env,
-+						line_num == src.line_num ?
-+						">>> " : "    ",
-+						width, line_num, line,
-+						&diag_insn[row + BPF_DIAG_INSN_CONTEXT],
-+						insn_idx, insn_width);
-+		if (line_num == src.line_num)
-+			bpf_diag_print_source_annotation(env, width, indent,
-+							 label, msg);
-+	}
++	bpf_diag_report_source(env, event->insn_idx, '-',
++			       "owned resource (id=%u)",
++			       event->ref.ref_id);
 +}
++
+ void bpf_diag_print_history(struct bpf_verifier_env *env,
+ 			    const struct bpf_diag_history_opts *opts)
+ {
+@@ -1122,6 +1170,11 @@ void bpf_diag_print_history(struct bpf_verifier_env *env,
+ 			bpf_diag_print_reg_mod(env, event);
+ 			printed = true;
+ 			break;
++		case BPF_DIAG_HISTORY_REF_ACQUIRE:
++		case BPF_DIAG_HISTORY_REF_RELEASE:
++			bpf_diag_print_ref_event(env, event);
++			printed = true;
++			break;
+ 		default:
+ 			break;
+ 		}
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index 8bfc7104eeec..ba60cc3af548 100644
+index b8dfe8103966..c6ace61547c6 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -5,6 +5,7 @@
- #define __BPF_DIAGNOSTICS_H
+@@ -69,6 +69,9 @@ struct bpf_diag_history_event {
+ 			u8 reason;
+ 			struct bpf_diag_reg_snapshot old, new;
+ 		} stack_arg;
++		struct {
++			u32 ref_id;
++		} ref;
+ 	};
+ };
  
- #include <linux/compiler_attributes.h>
-+#include <linux/types.h>
+@@ -78,12 +81,15 @@ enum bpf_diag_history_kind {
+ 	BPF_DIAG_HISTORY_BRANCH,
+ 	BPF_DIAG_HISTORY_REG_MOD,
+ 	BPF_DIAG_HISTORY_STACK_ARG,
++	BPF_DIAG_HISTORY_REF_ACQUIRE,
++	BPF_DIAG_HISTORY_REF_RELEASE,
+ };
  
- enum bpf_diag_category {
- 	BPF_DIAG_CATEGORY_MEMORY_SAFETY,
-@@ -28,5 +29,8 @@ void bpf_diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
- void bpf_diag_report_section(struct bpf_verifier_env *env, const char *title);
- void bpf_diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
- 	__printf(2, 3);
-+void bpf_diag_report_source(struct bpf_verifier_env *env, u32 insn_idx,
-+			    char marker, const char *fmt, ...)
-+	__printf(4, 5);
+ enum bpf_diag_history_scope {
+ 	BPF_DIAG_HISTORY_SCOPE_ALL,
+ 	BPF_DIAG_HISTORY_SCOPE_REG,
+ 	BPF_DIAG_HISTORY_SCOPE_STACK_ARG,
++	BPF_DIAG_HISTORY_SCOPE_REF,
+ };
  
- #endif /* __BPF_DIAGNOSTICS_H */
+ enum bpf_diag_stack_arg_reason {
+@@ -97,6 +103,7 @@ struct bpf_diag_history_opts {
+ 	u32 frameno;
+ 	int regno;
+ 	int stack_arg_slot;
++	u32 ref_id;
+ };
+ 
+ struct bpf_verifier_env;
+@@ -134,6 +141,10 @@ void bpf_diag_record_stack_arg(struct bpf_verifier_state *state, u32 insn_idx,
+ 			       enum bpf_diag_stack_arg_reason reason,
+ 			       const struct bpf_reg_state *old_reg,
+ 			       const struct bpf_reg_state *new_reg);
++void bpf_diag_record_ref_acquire(struct bpf_verifier_state *state, u32 insn_idx,
++				 u32 ref_id);
++void bpf_diag_record_ref_release(struct bpf_verifier_state *state, u32 insn_idx,
++				 u32 ref_id);
+ void bpf_diag_print_history(struct bpf_verifier_env *env,
+ 			    const struct bpf_diag_history_opts *opts);
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 188201d48108..9b9ffa57b95a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1434,6 +1434,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
+ 	s->type = REF_TYPE_PTR;
+ 	s->id = ++env->id_gen;
+ 	s->parent_id = parent_id;
++	bpf_diag_record_ref_acquire(env->cur_state, insn_idx, s->id);
+ 	return s->id;
+ }
+ 
+@@ -8998,8 +8999,12 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 	if (err)
+ 		return err;
+ 
+-	if (find_reference_state(vstate, id))
+-		WARN_ON_ONCE(release_reference_nomark(vstate, id));
++	if (find_reference_state(vstate, id)) {
++		err = release_reference_nomark(vstate, id);
++		WARN_ON_ONCE(err);
++		if (!err)
++			bpf_diag_record_ref_release(vstate, env->insn_idx, id);
++	}
+ 
+ 	while ((id = idstack_pop(idstack))) {
+ 		/*
+@@ -9088,6 +9093,9 @@ static int ref_convert_alloc_rcu_protected(struct bpf_verifier_env *env, u32 id)
+ 	int err;
+ 
+ 	err = release_reference_nomark(env->cur_state, id);
++	if (err)
++		return err;
++	bpf_diag_record_ref_release(env->cur_state, env->insn_idx, id);
+ 
+ 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
+ 		if (reg->id != id)
 -- 
 2.53.0
 
