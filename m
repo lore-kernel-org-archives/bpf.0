@@ -1,58 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8CC3FD973
-	for <bpf@vger.kernel.org>; Fri,  5 Jun 2026 05:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A983FFAA4;
+	Fri,  5 Jun 2026 05:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780638103; cv=none; b=ueeKlAo3reKXyk4z0biZUZTHXsO5t3LhHXCezt7NCBP4MTTV8Ov5wffXVU0fXS5MIFMUh4cL7l1dFLXbEwRaFRhG76REND08O5RBk9dFyp636I7ICe5Fvwtrt7FYuZT7LhKLLBD6+QDVh9wDmukd+ao7yd7i4mLAxvieKnOU4Tc=
+	t=1780638106; cv=none; b=JqTekq4qeFeOtjH/MGUWCvixT+TwdPklIxUWJ6wwKsMRF/gJ42RkIP1+FQOFwfruRw/lepBfE0+BYUXH2VP7TDXlSp2ZkgxzV8mNII0AxzST23L84+rG8ZNKr71HKKzWWHws0lfFsE1ZyzMkiRgiXRkUyQwxunJ768k5hzcLPoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780638103; c=relaxed/simple;
-	bh=OYMeV7jWag8jjr/SGJIJdoM4RRdbcgCBusx85a29JNQ=;
+	s=arc-20240116; t=1780638106; c=relaxed/simple;
+	bh=MbtvuBNH3GysMzOJRSBr0Nwx1iy6lfFNP2fljYwUfY0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oU1UFBLJll+gdYKR7S9N5NmSGasMO1vshW3zx/90mnbuCZcdOCm2e509IGk+wxuEv/wodUxvMLE3ZEw57w8AP8O+LPYM83pduPrutQFrIjHGa8QriBjop0NV7r6UDQsWcMYasteb/zSAJC5pdfZs8g4tR+keX1rUuGvLhmDsI5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtpaSBS2; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=FeGrI3N4IfKJZqJZhY5z1n4mhEJHpXLIMac/vho/FDEdra1YEnxJ1YkVYHUCBatg84bC+JHysD32sVPyIfeiQEQzuB8OX6Evihh5jgwaQ1QIWim1sEtvlI5ptlXA0cGsv3zz+Y9lzdyIZHfYcYjq8ijkQoU2KjsUr22+lUusNyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJLeiJLp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtpaSBS2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBF01F00893;
-	Fri,  5 Jun 2026 05:41:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJLeiJLp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D277E1F008A1;
+	Fri,  5 Jun 2026 05:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780638100;
-	bh=q22StVZMYHsonhMzLNuiRfEYi7dvpll9rGA0FOoOgUM=;
+	s=k20260515; t=1780638101;
+	bh=3bY5pS2rVgQa9nC8tbPnRn1j/SHdGkv637KqxwEbuVU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MtpaSBS2B8/yj1/qNZAb9WHYCnjNj27PwYI5lXQJo85xkRnQsg4DKIlY1uI0ueiUx
-	 ToVdE10Fu5Z3VhKQKvcKS89ZBNL3K6jOoF3r72TfRhHQA6Eq7W/2HbDUQkA2zfoemR
-	 0VaQToPhD9c5H1bI7fcaz57vnMDSD63jwE/oCvxXKng4rt9/Nl2cvJLIpaZdGA81GG
-	 StZn55tMh7YgzOWhbi0WCDj5h3Oc7FAkFAR3su2rLJlDTPB4tgKzh0J4P/fjxYMYHw
-	 fsXjG6p0o+fixfl1iqd00Qchx3E2puIeuiGTlblq198oWVSCWK0yBjhJiBDii98NWv
-	 TpBw4tC3vxejg==
+	b=WJLeiJLpGTULrGaD3KJ5ZO/qhAD/WTXhS88AlVTFLOs0aEjG5xtuCJqqos8RhJbat
+	 mhChDxDbwYUJxeI0ODSa/E0r5b1XWCOKqOdT25UJhv6TGQix4wMpvjFST/D5kTuJFk
+	 27FwOTqTMEKtwJN2N6W9wm5pWcOYnYuG7OU6u/Y/VwZaGJ047neU3hDZOzt+uJ3rsl
+	 G9u+LiEKJRa6WeYT4eVdlb5WPAX6/uTHy7tzVCKVlsdS0xFwBLqATE+4bnJVyYww1Z
+	 3y0kwJU7MisSREttB7QzSQ6+O2nrwCPqi4p6ikyNj17aW5wdwTKN61KaHzmEPIHFLT
+	 vKcGr7z7vAMsg==
 Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id AA5CAF40077;
-	Fri,  5 Jun 2026 01:41:37 -0400 (EDT)
+	by mailfauth.phl.internal (Postfix) with ESMTP id 26FE3F40075;
+	Fri,  5 Jun 2026 01:41:39 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Fri, 05 Jun 2026 01:41:37 -0400
-X-ME-Sender: <xms:kWEianm9Odxpr9h6xdaPwhDWDJ5YH7HqaUwKQxlp3j0r6dI8I90zMQ>
-    <xme:kWEiavvxzvFtzcUcv6abPoh-DBPv49w99o17uRdV1j-7P4IHprxyMAukE5PVUnDH3
-    pVSydazCmNDqaYSXUY3kcmxHfOB_raDnd7wsdT2_wlnqxKrNrgV>
-X-ME-Received: <xmr:kWEiajggkh-tASySkGZXu1iL_P9HENioaTqgteAX_tCamtGXa7VyVV3v8tE>
-X-ME-Proxy-Cause: dmFkZTFhOfDTFTb8fH37X+ASfp2vsHy1Fqb2Lywq6X3h5fMlxk7wW33nxe7aSTekseFO11
-    xBiB7Md3Dfg950zHftACRl4BCrZIGkOLORwuU667qK/t4b7uPTnvvrgSwCuAred6lniidQ
-    x6+o43dstQnrbqqi/v6Nl3jrEdQj/OnTFIkpkf7j4tfd81Pm1F4hDhUzK5vMKXR0zokP4K
-    KZGWpXQjfkPb9q0v8LW9bszX8CgnIWJLXLSKFiZe/Ul+6TINXLg1BnxiItQp/bB4zXvV+6
-    Qcp88FhWc5Q0N1TQTHx/VoF2pZ7nT3Uyapa4Doti8umM92UFgjuSWC48vH+lnu7P/MqXQy
-    5fmb7JXidSEtZ94DTq5AOqHkZS7B2jcW9RZpYNSTVsMl9756g7TyoyUAFQFdU+5zUF86JT
-    O36jgGKgvkCiI3g/Alv7jhIIamDTa/2iF9zV4B9PuQLxCfp9mSan8it3Ky4vGO0AzNa51w
-    vgVxfBvfzy2ytIVHsdR/uT05Yd6f2+ctUGK6dq5LzLXUloZnu6mrSspEjLUK874UUfCORI
-    FJccIc8RovUYWSz3K+Ftmeex7VWfnVHNcot6oL84ZpNZHdYPSiXSvNW+O2od2TihDsP6xV
-    St0xihM/B25nP3OR4yRm05xPXFUOB1ge+YKPKimm6RhFij7O/o/GIeT+R93g
-X-ME-Proxy: <xmx:kWEiaiDOZsHfPNWIaLqP-4_yMp9ZKXLRyU3MIY8Vo5mry8H2klWyTQ>
-    <xmx:kWEiar7aqjz1N348figYbayWOIYX4Af2r3tIqOC1b4hwUp7M-DnevA>
-    <xmx:kWEiaoJDR4KPW_08OV68VwuW9HU6BNbRd4VR3aaXIy0Jjk7LSccJzA>
-    <xmx:kWEiah9PNqNFR5Jm-Tdeh9sUpApNCPY-y8xlLkyVD9W8EZqFrq55nA>
-    <xmx:kWEialQSKyg28ndyK26UTqInfnkj-dfLao45xwK79Xar3-690K2wpn1e>
+  by phl-compute-01.internal (MEProxy); Fri, 05 Jun 2026 01:41:39 -0400
+X-ME-Sender: <xms:k2EiapF7hlZDOAuYu1xlaWFvcJpn8Cm5ugjMNMJOagiFqAYdbByCPg>
+    <xme:k2EialJVF-ZtJPh1V3OUR0_zu6n4HpKdeYgdMK6l84mTGY_gK7pyQYiNuCFjZ2wg4
+    5S8bswIlx3N_yM8KbJyfQMaTVRARomPBIZkFWCzf2mGxZpLXY2mLQ>
+X-ME-Received: <xmr:k2EiasXzSUJRLCKRSIBhhiulg3FNaSdfob9iET4hpfjWEX8GvyzYYdWfMRs>
+X-ME-Proxy-Cause: dmFkZTFCwYGExB8+n21rrRlgZz2BZEPfw3mIE0bRNe76RMQAdH8f2KDaPLT52qZo7gxyWp
+    0wXQACdPWdspv4jN5UYFCpihH+vrJtJ5nM33JJDnQyPnqbA42Pv6gENFpmiA7vDUbZDCAC
+    N+ZmE7MklGAiGBNJA045y18Z9khhPwbxKZPuahNIwIz69+nOH0m/THs5eb4pu9rOFYQQI9
+    b1h3voWmc5QUasjwQpRDRo+W3jNrB4TeCrmSTmM73SZRB0LYstjQaA4JitE82TBWNXKOy5
+    NeQugQn5+UA17tSJ+MYIgsz9Sw+H8LaFdylvI7Cq2OhiaEqC4YLyUJJOJm9vOjE+2O1Njz
+    jp4sreZDsZ269nsz2mo/kcC7coE3T6hddbvivsAbKivqCFPV3/0vs6kZgVMc2e9TJrhRt4
+    fHYKqMx8M1PZxSYs7AntkRGfCKC7aBsXRQ6kbOk1KsC10Ei1hZZuLRE8BTnXhSkdEHM54H
+    lhpM6NGWlljg7EPOyVAxg2wG6/DdZVDRtaWTY3aH6bYu8JoW+/jY1i4UdVw5IgTsxxQHR1
+    ltgW9dvVp0pCbLg/ftDSu7Dc+bAfuiwlzk6SJccnFUDu09D5+4zqk8qhwu9T3M94LlcZXi
+    jn3q9K0ZJyPphv2GjNN8d5hWgag33nJE1mZKYhWRYKxAOyy1OdD4jaybX7SA
+X-ME-Proxy: <xmx:k2Eias0jMk5GlOmh2DXtBQ5-5tzjEw9qSOBxOxEgsYizTC0ECdEugw>
+    <xmx:k2EiamoqF-zDWQKbkEyB1dqrcB2cUwWkm2thwUYyh2wufveCu9AkkQ>
+    <xmx:k2Eiao_sY7kt7z2Q1-2nU-EK_BZpV2cLs3RLyBW7YCsXhyIApA9sMw>
+    <xmx:k2EialnCWn-F4YFUJBMWw3EtFjhK3cGFSYQpUKjiHcAcLfU1WL_gcA>
+    <xmx:k2Eiaj5M9ptUWrJTGR04zTPVBfdJXeqhGffyzzQAFSVHZjVACJC7NSX5>
 Feedback-ID: i8dbe485b:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Jun 2026 01:41:36 -0400 (EDT)
+ 5 Jun 2026 01:41:38 -0400 (EDT)
 From: Boqun Feng <boqun@kernel.org>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
@@ -100,10 +100,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
 	linux-kernel@vger.kernel.org,	linux-openrisc@vger.kernel.org,
 	linux-s390@vger.kernel.org,	linux-arch@vger.kernel.org,
 	bpf@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,	Boqun Feng <boqun.feng@gmail.com>
-Subject: [PATCH v3 03/13] preempt: Introduce __preempt_count_{sub, add}_return()
-Date: Thu,  4 Jun 2026 22:41:18 -0700
-Message-ID: <20260605054128.5925-4-boqun@kernel.org>
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v3 04/13] openrisc: Include <linux/cpumask.h> in smp.h
+Date: Thu,  4 Jun 2026 22:41:19 -0700
+Message-ID: <20260605054128.5925-5-boqun@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260605054128.5925-1-boqun@kernel.org>
 References: <20260605054128.5925-1-boqun@kernel.org>
@@ -115,133 +115,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Boqun Feng <boqun.feng@gmail.com>
+From: Lyude Paul <lyude@redhat.com>
 
-In order to use preempt_count() to tracking the interrupt disable
-nesting level, __preempt_count_{add,sub}_return() are introduced, as
-their name suggest, these primitives return the new value of the
-preempt_count() after changing it. The following example shows the usage
-of it in local_interrupt_disable():
+While OpenRISC currently doesn't fail to build upstream, it appears that
+include <asm/smp.h> in the right headers is enough to break that -
+primarily because OpenRISC's asm/smp.h header doesn't actually provide any
+definition for struct cpumask. Which means the only reason we aren't
+failing to build kernel is because we've been lucky enough that every spot
+including asm/smp.h already has definitions for struct cpumask pulled in.
 
-	// increase the HARDIRQ_DISABLE bit
-	new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
+This became evident when trying to work on a patch series for adding
+ref-counted interrupt enable/disables to the kernel, where introducing a
+new interrupt_rc.h header suddenly introduced a build error on OpenRISC:
 
-	// if it's the first-time increment, then disable the interrupt
-	// at hardware level.
-	if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
-		local_irq_save(flags);
-		raw_cpu_write(local_interrupt_disable_state.flags, flags);
-	}
+     In file included from include/linux/interrupt_rc.h:17,
+                      from include/linux/spinlock.h:60,
+                      from include/linux/mmzone.h:8,
+                      from include/linux/gfp.h:7,
+                      from include/linux/mm.h:7,
+                      from arch/openrisc/include/asm/pgalloc.h:20,
+                      from arch/openrisc/include/asm/io.h:18,
+                      from include/linux/io.h:12,
+                      from drivers/irqchip/irq-ompic.c:61:
+     arch/openrisc/include/asm/smp.h:21:59: warning: 'struct cpumask'
+     declared inside parameter list will not be visible outside of this
+     definition or declaration
+        21 | extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
+           |                                                           ^~~~~~~
+     arch/openrisc/include/asm/smp.h:23:54: warning: 'struct cpumask'
+     declared inside parameter list will not be visible outside of this
+     definition or declaration
+        23 | extern void set_smp_cross_call(void (*)(const struct cpumask *, unsigned int));
+           |                                                      ^~~~~~~
+     drivers/irqchip/irq-ompic.c: In function 'ompic_of_init':
+  >> drivers/irqchip/irq-ompic.c:191:28: error: passing argument 1 of
+     'set_smp_cross_call' from incompatible pointer type
+     [-Werror=incompatible-pointer-types]
+       191 |         set_smp_cross_call(ompic_raise_softirq);
+           |                            ^~~~~~~~~~~~~~~~~~~
+           |                            |
+           |                            void (*)(const struct cpumask *, unsigned int)
+     arch/openrisc/include/asm/smp.h:23:32: note: expected 'void (*)(const
+     struct cpumask *, unsigned int)' but argument is of type 'void
+     (*)(const struct cpumask *, unsigned int)'
+        23 | extern void set_smp_cross_call(void (*)(const struct cpumask *, unsigned int));
 
-Having these primitives will avoid a read of preempt_count() after
-changing preempt_count() on certain architectures.
+To fix this, let's take an example from the smp.h headers of other
+architectures (x86, hexagon, arm64, probably more): just include
+linux/cpumask.h at the top.
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com> # s390
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Acked-by: Stafford Horne <shorne@gmail.com>
 Signed-off-by: Boqun Feng <boqun@kernel.org>
-Link: https://patch.msgid.link/20260121223933.1568682-4-lyude@redhat.com
+Link: https://patch.msgid.link/20260121223933.1568682-5-lyude@redhat.com
 ---
- arch/arm64/include/asm/preempt.h | 18 ++++++++++++++++++
- arch/s390/include/asm/preempt.h  | 10 ++++++++++
- arch/x86/include/asm/preempt.h   | 10 ++++++++++
- include/asm-generic/preempt.h    | 14 ++++++++++++++
- 4 files changed, 52 insertions(+)
+ arch/openrisc/include/asm/smp.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
-index 932ea4b62042..0dd8221d1bef 100644
---- a/arch/arm64/include/asm/preempt.h
-+++ b/arch/arm64/include/asm/preempt.h
-@@ -55,6 +55,24 @@ static inline void __preempt_count_sub(int val)
- 	WRITE_ONCE(current_thread_info()->preempt.count, pc);
- }
+diff --git a/arch/openrisc/include/asm/smp.h b/arch/openrisc/include/asm/smp.h
+index 007296f160ef..84653aaffa96 100644
+--- a/arch/openrisc/include/asm/smp.h
++++ b/arch/openrisc/include/asm/smp.h
+@@ -9,6 +9,8 @@
+ #ifndef __ASM_OPENRISC_SMP_H
+ #define __ASM_OPENRISC_SMP_H
  
-+static inline int __preempt_count_add_return(int val)
-+{
-+	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
-+	pc += val;
-+	WRITE_ONCE(current_thread_info()->preempt.count, pc);
++#include <linux/cpumask.h>
 +
-+	return pc;
-+}
-+
-+static inline int __preempt_count_sub_return(int val)
-+{
-+	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
-+	pc -= val;
-+	WRITE_ONCE(current_thread_info()->preempt.count, pc);
-+
-+	return pc;
-+}
-+
- static inline bool __preempt_count_dec_and_test(void)
- {
- 	struct thread_info *ti = current_thread_info();
-diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
-index 6e5821bb047e..0a25d4648b4c 100644
---- a/arch/s390/include/asm/preempt.h
-+++ b/arch/s390/include/asm/preempt.h
-@@ -139,6 +139,16 @@ static __always_inline bool should_resched(int preempt_offset)
- 	return unlikely(READ_ONCE(get_lowcore()->preempt_count) == preempt_offset);
- }
+ #include <asm/spr.h>
+ #include <asm/spr_defs.h>
  
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	return val + __atomic_add(val, &get_lowcore()->preempt_count);
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	return __preempt_count_add_return(-val);
-+}
-+
- #define init_task_preempt_count(p)	do { } while (0)
- /* Deferred to CPU bringup time */
- #define init_idle_preempt_count(p, cpu)	do { } while (0)
-diff --git a/arch/x86/include/asm/preempt.h b/arch/x86/include/asm/preempt.h
-index 578441db09f0..1220656f3370 100644
---- a/arch/x86/include/asm/preempt.h
-+++ b/arch/x86/include/asm/preempt.h
-@@ -85,6 +85,16 @@ static __always_inline void __preempt_count_sub(int val)
- 	raw_cpu_add_4(__preempt_count, -val);
- }
- 
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	return raw_cpu_add_return_4(__preempt_count, val);
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	return raw_cpu_add_return_4(__preempt_count, -val);
-+}
-+
- /*
-  * Because we keep PREEMPT_NEED_RESCHED set when we do _not_ need to reschedule
-  * a decrement which hits zero means we have no preempt_count and should
-diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
-index 51f8f3881523..c8683c046615 100644
---- a/include/asm-generic/preempt.h
-+++ b/include/asm-generic/preempt.h
-@@ -59,6 +59,20 @@ static __always_inline void __preempt_count_sub(int val)
- 	*preempt_count_ptr() -= val;
- }
- 
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	*preempt_count_ptr() += val;
-+
-+	return *preempt_count_ptr();
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	*preempt_count_ptr() -= val;
-+
-+	return *preempt_count_ptr();
-+}
-+
- static __always_inline bool __preempt_count_dec_and_test(void)
- {
- 	/*
 -- 
 2.51.0
 
