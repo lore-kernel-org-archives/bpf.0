@@ -1,273 +1,223 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498CA2D3A7B
-	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 16:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7A02D8767
+	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 17:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780763273; cv=none; b=TwOEP9RizUWZFZn5FBIS9ZePr1LtUv/9pBwV/aeUZNorVydZt6tvpt4ZxKBB0TurfQ8yPpjBt1mLNrawHoNkFGcFwRTNFUa/Cw5Apr/29joyg16Su261tLxeGXYzI+3mnY3pD69rsPj8KWciN20jFd32puEwyZ/K4lgsk7NsbOg=
+	t=1780767055; cv=none; b=WHOivdqlqLeenWiKGyacXhdW/sH1+LfQBY6PF/s2xUz78KN3PiS59cUXsJykyEgadtO//iouIL80SohYEScFyFbgQYN9ekA4HWqGZFKX7AkD3o15UnSkVrHmmhjYeeIlZsGCtjl8BHxfUw/x7gcgPk3P3KYB8nSIb/8VP8WJeAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780763273; c=relaxed/simple;
-	bh=dF7QO6ZjPt2ZR9/UvbN/N52OV08VOWQaY8itXBTTf2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YL6YifPoiU1ACy4n7RteFl475sC9M3n4rD1kJpk/E7fxS83RuCJNUmc+j0qLZLyZqJZdVek9suLzYg3up6qnbdVlES/aBxvbsDRkIEhK3TAcq6Abm1NEwmNPdeTLwFmeXYuZtchf2FJ1ZeoAI6yiixDZs7XbzKQCfPfU28SoiTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pybbn/JM; arc=none smtp.client-ip=209.85.128.174
+	s=arc-20240116; t=1780767055; c=relaxed/simple;
+	bh=KhHPFtGddhvbGqrouM7o4LGuh5cbQX+sRxuTTBC/3Yo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L0N/wbLh4OddUuNXPhSNWIxZcYNT7JVVIEqa4APTMG5+gSGcBq7gMLV1FtYLHEgvCkZrJeJnK41ZGUZr7u5kXuXpP0obkOJSaL7Nvx0nkpaJHw2eeT4WoFo5eAOXNCtmCNje14qjOe+EbSzHD3VWhfYNFwAFvdj4LpUcdf4Bja8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLZ5LT4N; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pybbn/JM"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7dd3f176f84so34382447b3.0
-        for <bpf@vger.kernel.org>; Sat, 06 Jun 2026 09:27:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLZ5LT4N"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490b2b037d2so25442755e9.3
+        for <bpf@vger.kernel.org>; Sat, 06 Jun 2026 10:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780763271; x=1781368071; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BttLOF29gVUPciUNpnBFamecNHnBLVu+zJ6G0qMKk0=;
-        b=Pybbn/JMz/sJHzD0EzKvAF+MiZTvbspGyQOhVccDTR7WcTL9B651iL/QgVC4RXptax
-         j3lY6n9O12p0QCIe1OklATLhTuo1X64OtRFD2ROXku/43Bir3pOrgORNVx/tX7iPS3ey
-         vEZaKhzB+BjD0/dj6HlIW17KEGvrpq4PdK2azeKzxV7MAtuAKicS3B93LCIlK/zNecZ8
-         i2byXHy1F6w+hNnw8dRen4zY/snjmeytugoAFnbMNtYxV4oxq1Avke/PI8EN479kLaEJ
-         023bhRReXK99WihFPTmo7wIRkORD4749LK8n6Lo8sMEIFyPwWn28FQYqzIhAq4YCx0Uh
-         n+qQ==
+        d=gmail.com; s=20251104; t=1780767050; x=1781371850; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8WWt0jB/eTMnLnunuUHyMCV3cRR0/N8bV7Y/N+sxwqc=;
+        b=BLZ5LT4NkCeHDguvPeXqj2Vxw7z3va5TKY/YNF+v/jJfO8+Tv4ZOLCmgLkJDUzW9/U
+         vgeQvEXUapcPfYaEVmOQfoqt4Wd3t9h0vjEi0zo33rZyK9sNtt/V8j/JzGRMsei4+qNm
+         GQMGRnwxziYU3Ijoj9bdFjAt+rVEqytO9aOlYegnQ6II3RQ8gG7lXOek/KGi3DLmRH8r
+         XnmP1memUgnGwwptetrKo83vjID+oQgGSpbIKXlj0IXtWjTdFsQYC8hUPLh0AgVlmup1
+         aXtk3D23JAz2J9s6zlGd/hW5fMnmGrtPVqWJdomoWiCgUCZyiaMTRhFd6X+k57t6r96l
+         2ICQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780763271; x=1781368071;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7BttLOF29gVUPciUNpnBFamecNHnBLVu+zJ6G0qMKk0=;
-        b=W/RtD65t2Ab9V/j+S3s7cmv/InzX1dJr7YjseI92QswlEDeEYUcuCsxpKFwcHYkf7K
-         dbhUH9XqDqLGtzrwzJwxXxPs8GVnrTYWyYiqWET+s+IrDHefB+Sk9dL6siyO737m8uAN
-         aisV3mvlGES9v7HNGnZMp2bvDI+w/zHqp4p8Cb4TptT8ETAGa48eFWVRnFIuYc3CrvX6
-         9bewt+PH2//vuZGdRBHC/koLpcLcC2ZcDkHLWlk9uWmOsGUHaYw8R/P2o3KHpEHnKXTE
-         jyawUn7g1ji3urQBS8dWTT5gPxiArcLXr7xzqcSSyHCZS5Xft1FMJG6oyy7C2gnvD0vN
-         HI7g==
-X-Forwarded-Encrypted: i=1; AFNElJ/GOnlB68QyOBT+Nujvh4TmBNazEgIKUmOPHt9GiNzVJKN90Ijx/83f98J/XQU4TqFps94=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywkoy+30aTAUDUc8/axWmBbFNt0x/2B1AiUp4vQJPHZty12RQJs
-	/73cwkSroYOsls4DhfIzJ/ZJ1ExKQMTL6y4LcQ5Ap70w5qkUVqq57c5aik3AUg==
-X-Gm-Gg: Acq92OFYXg6W/1VMP3szVfy9hGMfUzVSeNFv3gACxJ5wA4g34kARrA0TTHe1u2Qy3qq
-	kHwCyaOyNMXKhIdDRO/PUITk5O/TyhaMiWtoxfo/YQl+QG0XJHkWnMmy8gn4mGndZ8F4aPNE6t3
-	7E55E7sep8yG8U69uLI+k1G3pCmeJWpis2NVmpww8B4ja/thq64xMW1cwG8hoNkWeu0P49lycmK
-	PuRvpa6XKeq2OOK+ug7TeR1anr1RCAC44MNgZYsSWKzpKOKuxUgZBOlMn5IF1XenKphldlCgAnR
-	Yls3eiv/WIFNktqTMMx5gj9xI9JnnCkzDsyDVdYIcS1+Jjlnhc4v9DSvCRq2018U/TFhjZj5qGW
-	59tOcqpLApT6saOHv0+g0+GwO0VLTcECO6IbWxVCAmtOKzmRiwXDl4gViGA/+l1SupuNLQaUF3I
-	gLOSifdQoSmChhjtbnrANxB28oeR6a0+U3pq7a43G9V+YiL6g7XEgxPnjU0WSXLEs0ww==
-X-Received: by 2002:a05:690c:d87:b0:7b9:d6b8:b9ac with SMTP id 00721157ae682-7ed0ed4eef8mr81055147b3.26.1780763270872;
-        Sat, 06 Jun 2026 09:27:50 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:694:b67f:fc7:4c0a])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7ea2167b40bsm62834257b3.17.2026.06.06.09.27.50
+        d=1e100.net; s=20251104; t=1780767050; x=1781371850;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WWt0jB/eTMnLnunuUHyMCV3cRR0/N8bV7Y/N+sxwqc=;
+        b=LALOTS7HI1hN+157AY/+qZrpxMXTaGNOi8PoLLSU6XwAC+ja6naDfT/QyBDyC0CszW
+         qp7Rg2ZrmlvaPVLrKsUnyZKhNQNWX6KxxPDmOJjkYEE69JkETeQeoc3fttVS2cZeglJW
+         LlZLlkWjvQk6HCq2McTsPzGNA/rwnl4+/BJOeryXj+rGlfuz3lu27G8rHENKhhLhfp+/
+         b9MA2WLeNeXMZ3AdiLCV3A85MW6WfprwUTfDWtSlpYWTc18Ko8eVofkq1kQI0XihlbrF
+         itv3Xjt0sTMZBEnRsEr5BUG541aIus/6WO4mJkFfvynz3iFKV4OVp2qoDKT2OfJ4E8pC
+         Dhgw==
+X-Gm-Message-State: AOJu0YwfKrS6rJAozbAsAqLE933hgBvBFyhd5KmRI3MIHVp3iEAytRiZ
+	rY8VHSE29r15vRZu8tXrUDqwYtKNove3PUqc9qTBfw3xS4Ox3WnHXGva
+X-Gm-Gg: Acq92OHSbZ3igkLUZByX8pF1E5PLkfqU/gXE7/wGGB+bkuketE0+HLssTXo5O8eY4PD
+	FzniNyq+kPpBrpoKAajZjRkDWF3TdcYKWZvq9irct64FBLv9jOWZ+B5IOPQLBrUFtpJt0oLHOor
+	Xroq06I8ot+EpL8ax0CmZUB0qZ2mgT0bYNPK34p/4adPnVziQEVTLtyXK89lrh2lXTfWQIqLYI9
+	EaeXASRZoaPlilQST32sbO3GYMK6Di9FMk3m6hYc0alCNvGjLniWPMGC1cf8dXW3bhC2KT/T2kp
+	cDO7kLGAteYD+Q2TVIqy8vRfGglsvqH+MuGTa00ynm5Ph0WPONJ/rk7yXkJvUIQbVbBRu85EVGJ
+	+M6Iw4Yp36UjTdNxlI6nwt+VVFb3SospVWPFYs+ASDXZH6SPT/5IzrsgXGdmPOGBv8aasCpjV+d
+	MYeZaXLh9Rt5pmQOqmp0cPM8c=
+X-Received: by 2002:adf:ff89:0:b0:45e:ef2e:25a8 with SMTP id ffacd0b85a97d-46030623f7emr10633257f8f.32.1780767050349;
+        Sat, 06 Jun 2026 10:30:50 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:2::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f344541sm33944127f8f.22.2026.06.06.10.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Jun 2026 09:27:50 -0700 (PDT)
-Date: Sat, 6 Jun 2026 12:27:49 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/1] bpf: fix deadlock in special field
- destruction in NMI
-Message-ID: <aiRG9nsbRi2cO3XT@zenbox>
-References: <20260519011450.1144935-2-utilityemal77@gmail.com>
- <20260519015123.36096C2BCB7@smtp.kernel.org>
- <agxkV-hsdwhvMliI@suesslenovo>
- <agyG3eQwgmoJwmj2@suesslenovo>
- <DIMWGCWL1AG2.14F7CN23GMS8N@gmail.com>
+        Sat, 06 Jun 2026 10:30:49 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Date: Sat, 06 Jun 2026 10:30:32 -0700
+Subject: [PATCH bpf-next] rhashtable: Fix rhashtable_next_key() build
+ warnings
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DIMWGCWL1AG2.14F7CN23GMS8N@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260606-rhash_fixes_1-v1-1-932ab036e6bc@meta.com>
+X-B4-Tracking: v=1; b=H4sIADdZJGoC/x3JQQqDMBAF0KsMf20gySKVXKUUifptZhMlU4og3
+ r3Qt30XjF1pyHKh86ume0OWMAiWWtqbTldkQfQx+eST67VYnTY9aVNwa+S8jCGxPIhBcHT+C1m
+ emI/NNZ4fvO77B4jiW/xpAAAA
+X-Change-ID: 20260606-rhash_fixes_1-d2ebc816ea7e
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780767048; l=5937;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=Yj6tnh4npk6QFFnOuuSYEgpUrwffjBtl/hpCzuFLRDQ=;
+ b=q8k39tjjDAf+dF4/NrQy9m2sX7BAwrhZ+tyn3DeWi8qyRMtXao+TFHa/AGEd8K6uced+Khlez
+ MYOTpg8qs8jCfJm1jz35RHilHE7NIQAYgPn0CWSyrD40o4HOOYF7GX7
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-On Tue, May 19, 2026 at 09:27:58PM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Tue May 19, 2026 at 5:59 PM CEST, Justin Suess wrote:
-> > On Tue, May 19, 2026 at 10:42:44AM -0400, Justin Suess wrote:
-> >> Looks like this kfunc also tries to eagerly free fields and is callable
-> >> from tp_btf/nmi_handler with no recovery mechanism.
-> >>
-> >> I don't see a good way to handle this at all... it also is effectively
-> >> already bugged in the existing code unless I'm missing something
-> >>
-> >> Since you can use it to call abritrary dtors in NMI.
-> >>
-> >> 1.
-> >>
-> >> In some context where task_acquire is valid:
-> >>
-> >> struct blah {
-> >>   struct task_struct __kptr* task;
-> >> }
-> >>
-> >> b = bpf_task_acquire(...)
-> >> a = bpf_obj_new(typeof(*blah_ptr));
-> >> bpf_kptr_xchg(a->task, b);
-> >>
-> >> 2.
-> >>
-> >> Then xchg a into map
-> >> bpf_kptr_xchg([map slot], a);
-> >> ...
-> >>
-> >> 3.
-> >>
-> >> In tp_btf/nmi_handler we exchange the obj out of the map
-> >> and then drop it.
-> >>
-> >> c = bpf_kptr_xchg([slot where a is stored], NULL);
-> >> bpf_obj_drop(c);
-> >>
-> >> And because this can be called on an object not in a map, we don't have
-> >> a good recovery mechanism.
-> >>
-> >> Because tp_btf/nmi_handler is always in_nmi and hence irqs_disabled, in
-> >> the code before this patch the task_struct dtor will be invoked and
-> >> cause a deadlock.
-> >>
-> >> This patch will not fix the issue and just free a struct blah holding the
-> >> reference without actually dropping it.
-> >>
-> >> Unless I'm missing something then this whole approach taken by this
-> >> patch can't handle this case since the bpf_obj is detached from the map
-> >> entirely and has no allocator recovery mechanism at all.
-> >>
-> >> Then we are back to square 1 needing to defer the freeing with irq work.
-> >>
-> >> Kumar / Alexei do you have anything on this?
-> >
-> > I've confirmed this is a viable mechanism to deadlock as well
-> >
-> > Using the above approach, just exchanging out of a map and dropping the
-> > bpf_obj containing a task_struct kptr can be used to cause a deadlock
-> > outside any map path:
-> >
-> > On 576482b55c19e7ec00e162a0fde4c4f1a95128c7 (bpf-next/master) w/ RCU_NOCB_CPU/RCU_EXPERT:
-> >
-> >   [   10.773819] ================================
-> >   [   10.773820] WARNING: inconsistent lock state
-> >   [   10.773821] 7.1.0-rc2-g576482b55c19 #150 Not tainted
-> >   [   10.773822] --------------------------------
-> >   [   10.773822] inconsistent {INITIAL USE} -> {IN-NMI} usage.
-> >   [   10.773823] test_progs/471 [HC1[1]:SC0[0]:HE0:SE1] takes:
-> >   [   10.773825] ffff98623d66f0e8 (&rdp->nocb_lock){-.-.}-{2:2}, at: __call_rcu_common.constprop.0+0x54a/0x730
-> >   [   10.773832] {INITIAL USE} state was registered at:
-> >   [   10.773832]   lock_acquire+0xbf/0x2e0
-> >   [   10.773835]   _raw_spin_lock+0x30/0x40
-> >   [   10.773838]   rcu_nocb_gp_kthread+0x13f/0xb90
-> >   [   10.773840]   kthread+0xf4/0x130
-> >   [   10.773845]   ret_from_fork+0x264/0x330
-> >   [   10.773848]   ret_from_fork_asm+0x1a/0x30
-> >   [   10.773851] irq event stamp: 1127908
-> >   [   10.773851] hardirqs last  enabled at (1127907): [<ffffffff87104484>] _raw_spin_unlock_irqrestore+0x44/0x60
-> >   [   10.773853] hardirqs last disabled at (1127908): [<ffffffff871041a1>] _raw_spin_lock_irqsave+0x51/0x60
-> >   [   10.773854] softirqs last  enabled at (1127782): [<ffffffff862e6b80>] __irq_exit_rcu+0xc0/0x100
-> >   [   10.773857] softirqs last disabled at (1127777): [<ffffffff862e6b80>] __irq_exit_rcu+0xc0/0x100
-> >   [   10.773858]
-> >                  other info that might help us debug this:
-> >   [   10.773859]  Possible unsafe locking scenario:
-> >
-> >   [   10.773859]        CPU0
-> >   [   10.773859]        ----
-> >   [   10.773860]   lock(&rdp->nocb_lock);
-> >   [   10.773861]   <Interrupt>
-> >   [   10.773861]     lock(&rdp->nocb_lock);
-> >   [   10.773862]
-> >                   *** DEADLOCK ***
-> >
-> >   [   10.773862] 4 locks held by test_progs/471:
-> >   [   10.773863]  #0: ffffffff885ccaf0 (dup_mmap_sem){.+.+}-{0:0}, at: copy_process+0x1e39/0x2b80
-> >   [   10.773866]  #1: ffff9861c33a2ff8 (&mm->mmap_lock){++++}-{4:4}, at: dup_mmap+0x83/0x990
-> >   [   10.773871]  #2: ffff9861c1152ff8 (&mm->mmap_lock/1){+.+.}-{4:4}, at: dup_mmap+0xc8/0x990
-> >   [   10.773874]  #3: ffffffff885f43b8 (kmemleak_lock){-.-.}-{2:2}, at: __create_object+0x3a/0xa0
-> >   [   10.773877]
-> >                  stack backtrace:
-> >   [   10.773879] CPU: 1 UID: 0 PID: 471 Comm: test_progs Not tainted 7.1.0-rc2-g576482b55c19 #150 PREEMPT(full)
-> >   [   10.773881] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
-> >   [   10.773882] Call Trace:
-> >   [   10.773883]  <NMI>
-> >   [   10.773884]  dump_stack_lvl+0x5d/0x80
-> >   [   10.773887]  print_usage_bug.part.0+0x22b/0x2c0
-> >   [   10.773891]  lock_acquire+0x295/0x2e0
-> >   [   10.773893]  ? __call_rcu_common.constprop.0+0x54a/0x730
-> >   [   10.773896]  _raw_spin_lock+0x30/0x40
-> >   [   10.773898]  ? __call_rcu_common.constprop.0+0x54a/0x730
-> >   [   10.773899]  __call_rcu_common.constprop.0+0x54a/0x730
-> >   [   10.773903]  bpf_obj_free_fields+0x118/0x250
-> >   [   10.773907]  bpf_obj_drop+0x4f/0x80
-> >   [   10.773910]  bpf_prog_b7ff9c2e6c583824_clear_task_kptrs_from_nmi+0x174/0x1f4
-> >   [   10.773912]  bpf_trace_run3+0x126/0x430
-> >   [   10.773916]  ? __pfx_perf_event_nmi_handler+0x10/0x10
-> >   [   10.773919]  nmi_handle.part.0+0x15b/0x250
-> >   [   10.773922]  ? __pfx_perf_event_nmi_handler+0x10/0x10
-> >   [   10.773924]  default_do_nmi+0x120/0x180
-> >   [   10.773927]  exc_nmi+0xe3/0x110
-> >   [   10.773928]  end_repeat_nmi+0xf/0x53
-> >   [   10.773931] RIP: 0010:__link_object+0xb4/0x270
-> >   [   10.773932] Code: 00 00 00 48 c7 c6 80 36 bb 89 48 c7 43 70 00 00 00 00 48 c7 43 78 00 00 00 00 48 89 3d 35 62 50 03 eb 66 48 89 c8 48 8b 48 30 <48> 8d 70 10 48 39 d1 73 11 48 03 48 38 48 39 cf 0f 82 2f 01 00 00
-> >   [   10.773933] RSP: 0018:ffffb516013b7a60 EFLAGS: 00000082
-> >   [   10.773935] RAX: ffff9861c37b5c80 RBX: ffff9861df869878 RCX: ffff9861c3776420
-> >   [   10.773936] RDX: ffff9861c3769e00 RSI: ffff9861c43564f8 RDI: ffff9861c3769d00
-> >   [   10.773936] RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000000000000
-> >   [   10.773937] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9861c3769d00
-> >   [   10.773937] R13: 0000000000000286 R14: 0000000000000000 R15: 0000000000000001
-> >   [   10.773943]  ? __link_object+0xb4/0x270
-> >   [   10.773945]  ? __link_object+0xb4/0x270
-> >   [   10.773947]  </NMI>
-> >   [   10.773947]  <TASK>
-> >   [   10.773948]  __create_object+0x51/0xa0
-> >   [   10.773951]  kmem_cache_alloc_from_sheaf_noprof+0x1e2/0x290
-> >   [   10.773956]  mas_dup_build+0x41d/0x7f0
-> >   [   10.773960]  __mt_dup+0x78/0xf0
-> >   [   10.773967]  dup_mmap+0x12e/0x990
-> >   [   10.773972]  ? srso_alias_return_thunk+0x5/0xfbef5
-> >   [   10.773973]  ? lock_acquire+0xbf/0x2e0
-> >   [   10.773979]  copy_process+0x1e45/0x2b80
-> >   [   10.773985]  kernel_clone+0xbb/0x3d0
-> >   [   10.773986]  ? srso_alias_return_thunk+0x5/0xfbef5
-> >   [   10.773987]  ? __lock_acquire+0x481/0x2590
-> >   [   10.773993]  __do_sys_clone+0x65/0x90
-> >   [   10.773998]  do_syscall_64+0xa1/0x5f0
-> >   [   10.774002]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> >   [   10.774003] RIP: 0033:0x7f9da26e8f2f
-> >   [   10.774005] Code: 89 e7 e8 c4 0e f6 ff 45 31 c0 31 d2 31 f6 64 48 8b 04 25 10 00 00 00 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 59 89 c5 85 c0 75 31 64 48 8b 04 25 10 00 00
-> >   [   10.774005] RSP: 002b:00007ffc278b4540 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-> >   [   10.774007] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f9da26e8f2f
-> >   [   10.774007] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-> >   [   10.774008] RBP: 00007ffc278b4740 R08: 0000000000000000 R09: 0000000000000001
-> >   [   10.774008] R10: 00007f9da2acaf10 R11: 0000000000000246 R12: 0000000000000003
-> >   [   10.774009] R13: 0000000000000001 R14: 0000000000000000 R15: 00005625de8b38d0
-> >   [   10.774014]  </TASK>
-> >   [   10.866584] perf: interrupt took too long (6193 > 6190), lowering kernel.perf_event_max_sample_rate to 32000
-> >   [   16.630663] kauditd_printk_skb: 30 callbacks suppressed
-> >
-> > I can give the reproducer if wished.
-> >
-> > You can see the path involves bpf_obj_drop and not any map methods at
-> > all.
-> >
-> > But basically this makes the whole mechanism of relying on map allocators to
-> > recycle and free objects in irqs_disabled contexts unsound because kptrs
-> > can live and be released outside map contexts.
-> 
-> The approach in this version is still different than what I had proposed. For
-> the particular case you highlighted, we should just reject bpf_obj_drop() in
-> is_tracing_prog_type() once the object has kptr fields etc. If someone still
-> wants it they should just use bpf_wq to defer manually.
->
-Would you be opposed to me submitting a fix for *just* the bpf_obj_drop case?
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Since your proposed solution for that is just a tiny verifier fix w/ btf_record_has_field and a prog_type check and is mostly unrelated to this fix for the map cases.
+rhashtable.o builds with warnings as rhashtable_next_key() kdoc
+from lib/rhashtable.c does not have the arguments descriptions.
 
-It's a small fix, but just don't want to be rude and submit anything if
-you're working on that too in your patch. :)
+Move rhashtable_next_key() kdoc from header to c file, matching
+other functions.
 
-Thanks for your guidance with this fix in general and apologize for my
-misinterpretation of the intended route.
+Move rhashtable_next_key() next to the other forward declarations
+in the header file.
 
-Kind Regards,
-Justin
-> The whole prealloc related change to the map is unnecessary, as I said before.
-> It's an orthogonal change. We should also not use irqs_disabled() and just do
-> the skipping unconditionally.
-> 
-> Let me work on a patch, since the nuance is obviously getting lost in email.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202606061925.WI4bYI8k-lkp@intel.com/
+Fixes: 8f4fa9f89b72 ("rhashtable: Add rhashtable_next_key() API")
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+ include/linux/rhashtable.h | 42 ++----------------------------------------
+ lib/rhashtable.c           | 35 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 36 insertions(+), 41 deletions(-)
+
+diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
+index 3de3412d53c8..79f83b6eec27 100644
+--- a/include/linux/rhashtable.h
++++ b/include/linux/rhashtable.h
+@@ -263,6 +263,8 @@ struct rhash_lock_head __rcu **__rht_bucket_nested(
+ struct rhash_lock_head __rcu **rht_bucket_nested_insert(
+ 	struct rhashtable *ht, struct bucket_table *tbl, unsigned int hash);
+ 
++void *rhashtable_next_key(struct rhashtable *ht, const void *prev_key);
++
+ #define rht_dereference(p, ht) \
+ 	rcu_dereference_protected(p, lockdep_rht_mutex_is_held(ht))
+ 
+@@ -650,46 +652,6 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
+ 	return NULL;
+ }
+ 
+-/**
+- * rhashtable_next_key - return next element after a given key
+- * @ht:		hash table
+- * @prev_key:	pointer to previous key, or NULL for the first element
+- *
+- * WARNING: this walk is highly unstable. Unlike rhashtable_walk_*(),
+- * it cannot detect a concurrent resize or rehash, so a full iteration
+- * is NOT guaranteed to terminate under adversarial or sustained
+- * rehashing. Callers MUST tolerate skipped and duplicated elements and
+- * SHOULD bound their loop externally.
+- *
+- * Returns the next element in best-effort iteration order, walking the
+- * @tbl chain (including any future_tbl in flight). Caller must hold RCU.
+- *
+- * Pass @prev_key == NULL to obtain the first element. To iterate, set
+- * @prev_key to the key of the previously returned element on each call,
+- * and stop when NULL is returned.
+- *
+- * Best-effort semantics:
+- *   - Across the tbl->future_tbl chain, an element being migrated may
+- *     transiently appear in both tables and be observed twice.
+- *   - Concurrent inserts may or may not be observed.
+- *   - Termination of a full iteration loop is NOT guaranteed under
+- *     adversarial continuous rehash; callers MUST tolerate skips and
+- *     repeats and SHOULD bound their loop externally.
+- *   - Behavior on tables that contain duplicate keys is undefined:
+- *     duplicates may be skipped, repeated, or trap the walk in a
+- *     cycle. Callers requiring duplicate-key iteration must use
+- *     rhashtable_walk_*() instead.
+- *   - rhltable instances are not supported and return
+- *     ERR_PTR(-EOPNOTSUPP).
+- *   - If prev_key was concurrently deleted and is not present in any
+- *     in-flight table, returns ERR_PTR(-ENOENT).
+- *
+- * Returns entry of the next element, or NULL when iteration is exhausted,
+- * or ERR_PTR(-ENOENT) if prev_key is not found, or
+- * ERR_PTR(-EOPNOTSUPP) if @ht is an rhltable.
+- */
+-void *rhashtable_next_key(struct rhashtable *ht, const void *prev_key);
+-
+ /**
+  * rhashtable_lookup - search hash table
+  * @ht:		hash table
+diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+index dd6eaa09c55d..907637967c0b 100644
+--- a/lib/rhashtable.c
++++ b/lib/rhashtable.c
+@@ -730,8 +730,41 @@ static struct rhash_head *__rhashtable_next_in_table(
+ 
+ /**
+  * rhashtable_next_key - return next element after a given key
++ * @ht:		hash table
++ * @prev_key:	pointer to previous key, or NULL for the first element
+  *
+- * See include/linux/rhashtable.h for the full contract.
++ * WARNING: this walk is highly unstable. Unlike rhashtable_walk_*(),
++ * it cannot detect a concurrent resize or rehash, so a full iteration
++ * is NOT guaranteed to terminate under adversarial or sustained
++ * rehashing. Callers MUST tolerate skipped and duplicated elements and
++ * SHOULD bound their loop externally.
++ *
++ * Returns the next element in best-effort iteration order, walking the
++ * @tbl chain (including any future_tbl in flight). Caller must hold RCU.
++ *
++ * Pass @prev_key == NULL to obtain the first element. To iterate, set
++ * @prev_key to the key of the previously returned element on each call,
++ * and stop when NULL is returned.
++ *
++ * Best-effort semantics:
++ *   - Across the tbl->future_tbl chain, an element being migrated may
++ *     transiently appear in both tables and be observed twice.
++ *   - Concurrent inserts may or may not be observed.
++ *   - Termination of a full iteration loop is NOT guaranteed under
++ *     adversarial continuous rehash; callers MUST tolerate skips and
++ *     repeats and SHOULD bound their loop externally.
++ *   - Behavior on tables that contain duplicate keys is undefined:
++ *     duplicates may be skipped, repeated, or trap the walk in a
++ *     cycle. Callers requiring duplicate-key iteration must use
++ *     rhashtable_walk_*() instead.
++ *   - rhltable instances are not supported and return
++ *     ERR_PTR(-EOPNOTSUPP).
++ *   - If prev_key was concurrently deleted and is not present in any
++ *     in-flight table, returns ERR_PTR(-ENOENT).
++ *
++ * Returns entry of the next element, or NULL when iteration is exhausted,
++ * or ERR_PTR(-ENOENT) if prev_key is not found, or
++ * ERR_PTR(-EOPNOTSUPP) if @ht is an rhltable.
+  */
+ void *rhashtable_next_key(struct rhashtable *ht, const void *prev_key)
+ {
+
+---
+base-commit: 5a9a7457df6ca17e8a4a4551781eea1f4b02a64e
+change-id: 20260606-rhash_fixes_1-d2ebc816ea7e
+
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
