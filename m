@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159BC3AFAE3
-	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 15:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5AC2F5468
+	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 15:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780760737; cv=none; b=FfpI1NsHGYf/5k7KW3oufXQ85uaHU2tuScZ1463Nei3dvv1SAUcuU+PpqrmS1RRfBCk78N78nfariptuZG88KVQKxzYRUFhCtSJ5MKgZPE5r6LDn84My+lLamYJScrIUy8mN2iDbEzdWAQjXudl55HOJ+Nyh8kb0ODBernAKiwY=
+	t=1780760737; cv=none; b=uJvcjIKlWzJAx4ck9ytju3OQOjAoHcb6lbtvbk0GOu7cmZ+u+lJ22lTv9N83QbnJM+ShZQ2taW/nDQPrvHLtUzPsWuOSYoDtNkAXCzrYY6Swv1IeaenzduQnLnvYCmuVLERwxde6qOS4XomrxVIUmo/UAaW2gENjosf6kIfcWGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780760737; c=relaxed/simple;
-	bh=HFT8f9HdpLzFFRWQfzjBf7LkkjqawgVDMySFCirybjw=;
+	bh=Q+PPI1oCJwX5FROdLzIBjo4ZiX2q+xLJMYwdnR9Qcvw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YKJJz9CbIKUFyJsvQHJ/iIKC3L/JSRXAwHt44m3T8Xyy+SBDtGKOYoxPiJTcxumpAO9maTbj2kf9Kh1xzRzeZ4e29L3hdFJ5sTTWtGwYzJmmrfp+A/baZyMIrNH6L1fOwA46j405oJMe65BeGVfY11O6n6UczwzwJ7sHGYbVJUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=km9yLtPj; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ACXod7Midlt8KhI5OjT/+B07vJgaI5C6VkXnEWDUeI04svunmo9c9+p90tacUBJsqe+OmR4Dhf4U/bHkHYBz70Ots8lLhZQEcNuYl/6zvoA1/9hJdxlVXidkw4Xeq52XoGaQreJr/L+wqZAKmpC5mx+2iJFcLwePpEPjifShl8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SEF+RpMH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="km9yLtPj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B901F00899;
-	Sat,  6 Jun 2026 15:45:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SEF+RpMH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D091F00893;
+	Sat,  6 Jun 2026 15:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780760735;
-	bh=kPl2iw2jp0J0RYQWWVU7kcZsCwXH5NeWvV0zSIjy9Xk=;
+	s=k20260515; t=1780760736;
+	bh=Pqo3ruBtIbK215ALKQBFN7Somgb6PJjbkHULEsrxzNk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=km9yLtPj3xjm60XISFwU3kd6dXE2536lhplDed1U92ij0y2dqxcB6Fu4FZjhY11lb
-	 HEnhDOXIf0629Ss/WYqmvmyz+JP4gAQY1tq8dD1hsJtQrchHqQOV03wKSGb6mPnaKk
-	 DXBUf80ielxAS6eYoAaPbh8vjBVUNkk0x6qfZf/2G+8kHXzcFpTw8kCbOCjJsDtnpZ
-	 /EtOCrPvJtyicqw3VB+Ijo04NY7IdsgVGBp5wvE1TjZuioZR2fgKmVO/peU4gKb+w3
-	 FB0F/NwtwKEJEZk13EIsm2txW/zYKVefsZ41inQWTbelVi9Sjp6KtxDGVZcDrSGDeZ
-	 3uQi+X97rKAYQ==
+	b=SEF+RpMHSTpwvZaUWKKPlIwOcjgHTH8KCEn9TZq5IB4Gl6YaM8LCjWt+kgb+EKKwV
+	 +kEe4hgYV8HqnhjI8jIOHQq7+dc1hnJ54VbFG4FJrxRadoiKBZkhYWSxf9uaJIt8iV
+	 JAvLZmfyVnPrC8jof7dU0Va75+q5w2Yy8LAc/PDjgKthAJO2BbFH6Z0k7AlstvCRKS
+	 U0ELf2TxvFYnm8dTLuukRAZ8Ac5vltFckIMajE68HKiWXJhIOYxIsACBQVgo0yGFa2
+	 cP59nvVw5DaTFQATpEZ7GJiFn/PtBRcT4SJFPZgShk1zR8l3xCZXdC0I9sja1KMfcj
+	 T8iWvl5GCXBqw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v4 3/4] net: mvpp2: refill RX buffers before XDP or
- skb use
+Subject: Re: [PATCH net v4 4/4] net: mvpp2: build skb from XDP-adjusted data
+ on XDP_PASS
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Til Kaiser" <mail@tk154.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260605154457.163304-4-mail@tk154.de>
-References: <20260605154457.163304-4-mail@tk154.de>
+In-Reply-To: <20260605154457.163304-5-mail@tk154.de>
+References: <20260605154457.163304-5-mail@tk154.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 06 Jun 2026 15:45:34 +0000
-Message-Id: <20260606154535.87B901F00899@smtp.kernel.org>
+Date: Sat, 06 Jun 2026 15:45:35 +0000
+Message-Id: <20260606154536.49D091F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,116 +47,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
+New issues:
+- [High] DMA Cache Coherency / Data Corruption on SKB allocation failure
+- [Medium] Inconsistent RX statistics accounting based on XDP verdict
+
 Pre-existing issues:
-- [Critical] Pre-existing bug in `mvpp2_buff_hdr_pool_put` where `phys_addr=
-` and `dma_addr` are swapped, leading to a potential crash during `phys_to_=
-virt()`.
-- [High] Unratelimited `netdev_err` and `netdev_warn` calls in the NAPI pol=
-l loop can cause syslog flooding and CPU livelock.
-- [High] Missing `dma_sync_single_for_device` when dropping packets and ret=
-urning them to the hardware pool.
+- [High] Invalid Checksum Offload after XDP modifications
 --
 
-commit 475b5364852b812377b363f98f67c255857f76d2
+commit 0263440b3040a39c7d150dacdd56fed200308953
 Author: Til Kaiser <mail@tk154.de>
 
-net: mvpp2: refill RX buffers before XDP or skb use
+net: mvpp2: build skb from XDP-adjusted data on XDP_PASS
 
-This commit reorders the RX processing in the mvpp2 driver to refill
-the hardware buffer manager (BM) pool before handing the current
-descriptor buffer over to XDP or allocating an skb. If the refill
-fails, the packet is dropped and the original buffer is returned to
-the pool.
+This commit updates rx_offset and rx_bytes from XDP data pointers for XDP_P=
+ASS
+verdicts. This allows the built SKB to reflect packet geometry changes made
+by the XDP program before reaching the network stack.
 
 > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/ne=
 t/ethernet/marvell/mvpp2/mvpp2_main.c
-> index 3372ed27cc8d6..481daafdc1cbc 100644
+> index 481daafdc1cbc..dd30674148aa4 100644
 > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
 > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> @@ -3971,6 +3971,12 @@ static int mvpp2_rx(struct mvpp2_port *port, struc=
+[ ... ]
+> @@ -3999,6 +4000,10 @@ static int mvpp2_rx(struct mvpp2_port *port, struc=
 t napi_struct *napi,
->  		else
->  			frag_size =3D bm_pool->frag_size;
+>  				continue;
+>  			}
 > =20
-> +		err =3D mvpp2_rx_refill(port, bm_pool, pp, pool);
-> +		if (err) {
-> +			netdev_err(port->dev, "failed to refill BM pools\n");
+> +			/* Update offset and length to reflect any XDP adjustments. */
+> +			rx_offset =3D xdp.data     - data;
+> +			rx_bytes  =3D xdp.data_end - xdp.data;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but since this log is inside the
-high-frequency NAPI poll loop, could persistent memory pressure cause syslog
-flooding and CPU livelock? Should this use netdev_err_ratelimited() instead?
+Could this cause DMA cache coherency issues if SKB allocation fails?
 
-> +			goto err_drop_frame;
-> +		}
-> +
->  		if (xdp_prog) {
+If an XDP program shrinks the packet (for example, by calling
+bpf_xdp_adjust_tail()), rx_bytes is reduced. If build_skb() then fails
+shortly after this, the buffer is recycled via page_pool_put_page() using
+the modified rx_bytes:
 
-[ ... ]
-
-> @@ -4008,8 +4008,21 @@ static int mvpp2_rx(struct mvpp2_port *port, struc=
-t napi_struct *napi,
->  			skb =3D slab_build_skb(data);
->  		if (!skb) {
->  			netdev_warn(port->dev, "skb build failed\n");
-
-[Severity: High]
-This is a pre-existing issue, but similar to the refill error above, could
-this cause syslog flooding under memory pressure? Would it be better to use
-netdev_warn_ratelimited() here?
-
-> -			goto err_drop_frame;
-> +			if (pp) {
-
-[ ... ]
-
-> @@ -4048,13 +4052,14 @@ static int mvpp2_rx(struct mvpp2_port *port, stru=
-ct napi_struct *napi,
->  		continue;
-> =20
->  err_drop_frame:
-> -		dev->stats.rx_errors++;
-> -		mvpp2_rx_error(port, rx_desc);
->  		/* Return the buffer to the pool */
->  		if (rx_status & MVPP2_RXD_BUF_HDR)
->  			mvpp2_buff_hdr_pool_put(port, rx_desc, pool, rx_status);
-
-[Severity: Critical]
-This is a pre-existing issue, but this patch makes the err_drop_frame path
-more likely to be hit on refill failure. Looking at
-mvpp2_buff_hdr_pool_put(), the physical and DMA addresses appear to be
-extracted backwards:
-
-mvpp2_buff_hdr_pool_put() {
-    phys_addr =3D mvpp2_rxdesc_dma_addr_get(port, rx_desc);
-    dma_addr =3D mvpp2_rxdesc_cookie_get(port, rx_desc);
+mvpp2_rx() {
     ...
-    buff_hdr =3D (struct mvpp2_buff_hdr *)phys_to_virt(phys_addr);
+    if (!skb) {
+        netdev_warn(port->dev, "skb build failed\n");
+        if (pp) {
+            page_pool_put_page(pp, virt_to_head_page(data),
+                               rx_bytes + MVPP2_MH_SIZE,
+                               true);
+    ...
 }
 
-Does this cause an invalid memory dereference since phys_addr actually
-contains an IOVA instead of the physical address?
+Does this leave the trailing bytes of the original packet buffer unsynced
+for the device, potentially causing data corruption for the next packet
+received into this recycled page?
 
->  		else
->  			mvpp2_bm_pool_put(port, pool, dma_addr, phys_addr);
+> +
+>  			metasize =3D xdp.data - xdp.data_meta;
+>  		}
+> =20
+> @@ -4041,7 +4046,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct=
+ napi_struct *napi,
+>  		ps.rx_packets++;
+>  		ps.rx_bytes +=3D rx_bytes;
+
+[Severity: Medium]
+Will this result in inconsistent RX byte statistics?
+
+If the XDP program returns a non-PASS verdict like XDP_DROP or XDP_TX, the
+loop continues early and adds the original hardware descriptor length to
+ps.rx_bytes. For an XDP_PASS verdict, it reaches this point and adds the
+potentially smaller XDP-adjusted rx_bytes length.
+
+Could this discrepancy lead to inconsistent interface statistics?
+
+> =20
+> -		skb_reserve(skb, MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM);
+> +		skb_reserve(skb, rx_offset);
+>  		skb_put(skb, rx_bytes);
+>  		if (metasize)
+>  			skb_metadata_set(skb, metasize);
+>  		skb->ip_summed =3D mvpp2_rx_csum(port, rx_status);
 
 [Severity: High]
-This is a pre-existing issue, but early in mvpp2_rx(), ownership of the
-packet buffer is explicitly transferred to the CPU via
-dma_sync_single_range_for_cpu().
+This is a pre-existing issue, but will applying the hardware checksum status
+still be safe after XDP modifications?
 
-If a subsequent error is detected and we jump to the err_drop_frame label,
-the buffer is returned directly to the hardware BM pool without calling
-dma_sync_single_range_for_device().
+If the XDP program alters the packet contents or geometry (for example,
+decapsulation via bpf_xdp_adjust_head()), the hardware checksum validation
+performed on the original wire packet is no longer valid.
 
-Does this violate the DMA API rules and potentially cause memory corruption
-for the next packet if dirty cache lines are written back?
-
-> +err_drop_frame_retired:
-> +		dev->stats.rx_errors++;
-> +		mvpp2_rx_error(port, rx_desc);
->  	}
+Now that XDP geometry changes are allowed to reach the network stack via th=
+is
+patch, does the driver need to invalidate the hardware checksum status if X=
+DP
+might have modified the packet? Without doing so, corrupted packets might
+bypass software checksum validation.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605154457.1633=
-04-1-mail@tk154.de?part=3D3
+04-1-mail@tk154.de?part=3D4
