@@ -1,100 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099653ACEFB
-	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 12:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760C73A7F6E
+	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 12:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780750628; cv=none; b=np/ilgy3ahL1WZ2hwLyGVQWMikHMmGeB2E/wkT70AEdPJwujSBfoPRtSkAli9DsYgAy3mrpH6DTMEjDFZfbAOGXK076NdTcbAbDFNFKuu/p6nfU3RLMhQf4zt44bK1KD6CuFRpXuPO/B9UqwC8gQSu/I2iLYZqFn4n8J4HOoLNM=
+	t=1780750677; cv=none; b=Na1CqlbAOOF1uDgZrNxAOtovP0Cve67OWc5AgOsb2S5isIPRADIsJXZ+z90L80PkE7ccHgSuYL/l5gyFgM+gFfPq72wJnCWA+UyJH0pzY0jpIYsCba3C5Gjh6m57Ms9fzAVH2UPAbpoIA4fO7lx2H2qnthU1r8ewrGJFlmNX9pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780750628; c=relaxed/simple;
-	bh=EEfuUIRIHT7+HzTGt/LJoT4ekM8V7IbAAtYGFsM3/DA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=r/0qJagdJEoRWYKi3wdgKL5l7OJNZPxFIyuuP7e07xpGD7U89Mq9sR2WnpjMW0walnyP3hKzwoFTGa3BNXUS4j4V2Wsk8akIS2qSEsFuRPaleItpEA4urEZYqvFZVAYP7br+/IYukICDwW9PRREtTeeeWBIqPdNkQIQF5VaxYCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jx38Ust/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780750677; c=relaxed/simple;
+	bh=yLdlxn6wnXWvE70fdE6r10MFvEYbWAWQsm/plhLqsUw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NNUE5QSdVXf26rp9afErp6+BNF0NdSYei+P/UTeAz6Oj5UCBzmkHLUGB78T0pp3GaeaFZYsBxH8d5BF6nFSVDo5u4UyigRorj5Tf9aGrMXBg01vSPwiFDYWr96RirS5tFYrPoM3sLAyB6029cIyb3WR60/h+DYwjOxUlb+s9OnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V0JK8tXF; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jx38Ust/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8861F00893;
-	Sat,  6 Jun 2026 12:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780750626;
-	bh=1/25LaGfLZ9I75Fyz56ZqqKNRD2zWLTHCdhysYZcOwg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jx38Ust/y/3Y5KTrzTSFZkiKIPbFJYRZ5KQfWljcib4ttmbuj+EzqGN8jPpRlDqTS
-	 WMm2xVI3nFO6Bx18yifjSKhs5uGGRkwZLMZqkYRNPKpHqmFli5EDrbV1eHzKr2FBrk
-	 Sk8Il6aHD2I+nRvrLLGvftrnUkrqwX5C7gFOX45sCQZ/vWG2VLAIPKOm2TTwhOZWpS
-	 oXSpl8LdgdDOfXCp4pkWTWTOh9f4b8FNClNi3GqniwYBcrUvBrsFKpFeHgaNnSWc9v
-	 lmWmhfTE1o9pgGDs5uwbhXaoSSh6HjkxmeijVmb3vyi7H7jtU+H6eSx/sGnZ1n/s2S
-	 UmVk+wkIZMwdA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv8 bpf-next 21/29] selftests/bpf: Add tracing multi
- skel/pattern/ids attach tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260606123955.345967-22-jolsa@kernel.org>
-References: <20260606123955.345967-22-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 06 Jun 2026 12:57:06 +0000
-Message-Id: <20260606125706.6E8861F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V0JK8tXF"
+Message-ID: <cf8cef69-85c6-4d6f-b3f3-eb79fb2e075d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780750664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RlEFEF1O4G2UXEfB1iSkIV3C6hrJc1jLqx1ZQFCYkCU=;
+	b=V0JK8tXFL9oJI8kIYQqKY8br1OUd8l+KnJNNpsTOnQMOCetjMJxHQbNiGpvOK+RamSXMwW
+	zZaWfDF2TNrxG1H53as/CD+HiZhsIj0GiTjbIVKvGSPXOO7G1RB5kVuZZxCimOAlG461U/
+	hMw8aExQ77jF0P7MMSzVaHEm4WMSsII=
+Date: Sat, 6 Jun 2026 20:57:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf v3] bpf: fix NULL pointer dereference in
+ bpf_task_from_vpid()
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Juntong Deng <juntong.deng@outlook.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260606091941.1803115-1-rhkrqnwk98@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260606091941.1803115-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The selftest relies on undefined libbpf APIs, leading to compilatio=
-n failures.
---
-
-commit 71b9bc6b97c3cb1e6333868f2e7bc66a92fb6084
-Author: Jiri Olsa <jolsa@kernel.org>
-
-selftests/bpf: Add tracing multi skel/pattern/ids attach tests
-
-This patch adds tests for tracing_multi link attachment using various libbpf
-APIs including skeleton, function pattern, and BTF IDs.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/too=
-ls/testing/selftests/bpf/prog_tests/tracing_multi.c
-> new file mode 100644
-> index 0000000000000..f333b2514b345
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-[ ... ]
-> +static void test_link_api_pattern(void)
-> +{
-> +	struct tracing_multi *skel;
+On 2026/6/6 17:19, Sechang Lim wrote:
+[...]
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b5314c9fed3c..226c31ccb5d6 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2912,7 +2912,14 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(s32 vpid)
+>  {
+>  	struct task_struct *p;
+>  
+> +	if (in_interrupt())
+> +		return NULL;
 > +
-> +	skel =3D tracing_multi__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "tracing_multi__open_and_load"))
-> +		return;
-> +
-> +	skel->bss->pid =3D getpid();
-> +
-> +	skel->links.test_fentry =3D bpf_program__attach_tracing_multi(skel->pro=
-gs.test_fentry,
-> +					"bpf_fentry_test*", NULL);
+>  	rcu_read_lock();
 
-[Severity: Low]
-Does this cause a build failure? bpf_program__attach_tracing_multi() does n=
-ot
-appear to be defined in tools/lib/bpf/ or anywhere else in the tree in this
-patch.
+Better to use guard(rcu)() here, and drop the rcu_read_unlock().
 
-[ ... ]
-> +static void test_link_api_ids(void)
-> +{
-> +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+Thanks,
+Leon
 
-[Severity: Low]
-Is struct bpf_tracing_multi_opts missing from this patch? Using this
-undefined structure will likely lead to an incomplete type error during
-selftest compilation.
+> +	if (!task_active_pid_ns(current)) {
+> +		rcu_read_unlock();
+> +		return NULL;
+> +	}
+>  	p = find_task_by_vpid(vpid);
+>  	if (p)
+>  		p = bpf_task_acquire(p);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260606123955.3459=
-67-22-jolsa@kernel.org?part=3D1
