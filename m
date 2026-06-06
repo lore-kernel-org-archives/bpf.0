@@ -1,134 +1,162 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A161A724C
-	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 03:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780717818; cv=pass; b=dPWZlf7A6nYeiYIa+H1IXULW024qs8aRxhvEqBOMcqjuGu3rYTfJ413UbuTINPIsnMdjFXNGXhliDqCl3/2Oa4Rfr9LfwiS9QZ5OQ/YR3V4CefrMrQdZbvBMIdq5xyo+O4bgZbyUM5xqm6q4HY+W8x8CfWrzTbEW8jxIHS/0vfc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780717818; c=relaxed/simple;
-	bh=lIw+o11/0Y0T0lOVNegkquJjAspZYJj3oFxx3bVgRe4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nw/NXmqTr39lGjI1xDbaMD1EtrNtB1uAbSPHW1TSj/ulJ5XpfkeTeRgehMJeC945PiaSDZksm9RoNnOkUiyfDOlPAhFJ+KO0EsLRO79uf34f1pgH8IP69pHbJFbMqxY3lvfONIx4YlnmGC30MtcfJ7cq2uHm1r91Zs/AMqGGU8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ivqo+zez; arc=pass smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A442D3A69
+	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 03:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780718314; cv=none; b=q39uyehZwga2OJjwxtIo7OYedUmMe5kK3t1QKrf+jeGPQ7OQa5pUIHNB8oCV56O2JIVzeWBIxEDZaLZ8i0i7J9j5950pGS61r+dNXrTv+IKkTejj2u6EVsEhkFngY/686mHbVHUtOyv2Jkrepx5jQwsvAOYRpEau3N9kukyQrYI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780718314; c=relaxed/simple;
+	bh=OEoIxi0GIIXzHNo+sitwf64Y7auwxVmC7N9xy7C0zBQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CfccSPYuebEPUJ282IJTTjxmAs5lA4ugxOj2q13uFjGVmyOxVRuIz4HqPOrCPbNCmgZb11ROfg2vyBAbJap8PLpdUaBKA8bL2N8GWnDIM6muVthvfuq865MSO6u0UvIiQvkVPh840jpOEQlAqRlXJnxRhcP63hAm+yfK7YH8kjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bm3riK5V; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ivqo+zez"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7dc93d02916so28289107b3.3
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2026 20:50:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780717816; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZJeyUZV8rZfJobvyVKYyNDhLQsLDBiIBWrKalwkmooJtulsebuFzCohlHUCgaVliH4
-         OMf3op6Jhba06PV0DTgXmpIGYKXmjrjH1K4ZKjH/hNNsZPaFgIkFHABniZuRhHOaUYmG
-         JhhUholMGVYe3uw07OgbmZqF5E/PX3WeOCZAelkAkwHpGOQiCeRHno6TPwYNIJ2wnUZC
-         S2pDTguyEEzKLTLdzGIdRldg/sxfz0/uiyZ+xXV0kl7jAP0UCpY7KdEYKEMWCWcHYAbW
-         PBRzyvin0ievtgof5zrv7L3942rA7QSh2GfoacvK9UD6W+oz6Ij+XRLfXj9voKxEfCY2
-         rHWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Jg9MKZJlpAVkFYtPfyUSTFTMLnfmI/Ebtp2GHarI+GY=;
-        fh=Z5WQEMxVv31e2/6rYwYX+0uquY04Z3XIWlHCqvcmIDY=;
-        b=e3PjhXVCsOC3ND6bhgfbkyX8WyIr0fEqo10tin+Pxfm72btBzP0Nw5D7IQ5d5P8loP
-         HhGUzkjqhzNQ6Sqm7DugifRtqZUyfRspmrr6NTd5GW1U1jhfoZBSYC6Dy3iCziwCJ2Dz
-         PYRvb1bIJF2aet+1PkWIiAhonVKnlP6pio/PxGbsuGJYa/I/pXXO7spQb1uWK0c+4xPq
-         /jHeYktyElgnYic6adCUjod3Bih5kqKrg+SGgZk4ivM53n7XpUSLnhkn1zzJM/TKDcLd
-         C09v3dB/zTDSz28APU89RAtPEN7AXbm9Mx9i+7BkrTlXwcS8ZO+7YnxAeYYKEH6+PcJz
-         AQ6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780717816; x=1781322616; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jg9MKZJlpAVkFYtPfyUSTFTMLnfmI/Ebtp2GHarI+GY=;
-        b=ivqo+zez2SGGZdWc0H83/TNvepcnUFXL6u+qisp7c+rpsQBZ/6rYEhX5HM5Q1l8iDw
-         0TGOwpNSSHfo8nLLoAr4O3nO3xbFPe+d5hOpS/BuJojgpb9Szk5VWtiaNbdoCTl0M0S9
-         Q/PFuoqq2bA1FdTWCE1FyfL5qnNcCoLjYL3oinliiyStVGUOPVLEcItibqvYaLJQiT06
-         5zFIKNlKTkpN59FvueJCQ0jFltRa7UEHhkEWgXJLyhC9taQQPrKBntO7poU4F30aXJKo
-         LAy/0CWmy1yDQ8l3DcrbGHTNZCbrSNXQ7R62zrL/Ye6dDwJHkKy+Rl4UHTDeI50m9Yc0
-         Rogg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780717816; x=1781322616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Jg9MKZJlpAVkFYtPfyUSTFTMLnfmI/Ebtp2GHarI+GY=;
-        b=fFKzACxzklP8aEwAa+tUKtNkFPGvK7nJv9foVoYBi1bdH9cSgZBmiBq1dNvpOSMP2a
-         xCCQtQPYD1ByhwTXi0Y0NWl0h2a9sfvJZLqYYiTNKFiQ5NGBJL34Av3FamHPkW6nKZHH
-         Pal040fb6hQKjKOR4Xf3YgVQqmNZ1/mL8zcD6uGViULEB38TRpbeywya8+6u1CUAs8+/
-         9KfDuMjgPeoBavLQBF0lMaoJRza5nSx/rgxUq+UEiAndePUUmuMPJRh2IPWm+/CRKwCF
-         5FVUal+nAomdPDx0SmVukCLWC5y10ZlOmANyhN/ewrmWfUMpsOZitDB/KYMcar9ZzORY
-         FXWQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+PREu0wdPyZjyQPSZ2qR/89BUU61GsW3FxS6xxY2NWw4eooxtRjvDWxdKk278nt8wkYE4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcoYq0ik92K0lueT664Qm9pzeUZ20wMvjhu26Z5cjf7ieAxxuA
-	niZ9fYeVfXg6eRGaInnF0NmdYjHX6D6REr2evpIgXALZap5hn0h0NOkudNaI8c+1A3T9C32rBO9
-	fjs96Jss2rK4BBifsnIq1O2lLUywNYHo=
-X-Gm-Gg: Acq92OEatU2x0+4CCBFvUFzM0oj1TaLb1DvHFYrVfLxL3koiVMJTh+qb2HWFrmGiLG3
-	3p39qr127iHRC/fPIiheOkE3a2Wbv2y0NWgTzheqvdtYvYNKt66OQNuvwvMR1j3wWkofAWwnNEQ
-	8iZLEzMO0s6ehlLiL565L3YXmJ2KblA1hYXhT/lnNRqe6T5YUTZ0LDwMioK5YEWk5y3ilD0qtBR
-	yjkdDNLkb2Tr/XZRrOoTDcNlhA24HAhkxd3wHbkVeFr/03lIVesQ8ALiKjdQQ6iImNFQeFiu7G6
-	InDVSwRpXKaISUcA9YfGOO1CPm1NHKSucA==
-X-Received: by 2002:a05:690c:260d:b0:7c0:56f:5b59 with SMTP id
- 00721157ae682-7ed0aad0211mr66610437b3.15.1780717816081; Fri, 05 Jun 2026
- 20:50:16 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bm3riK5V"
+Message-ID: <b7114d6f-989f-49e1-918f-3bdf9d319624@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780718300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Agl+Zv2W56VjUDH6mhAKCavu7dinG363UWIQgopHFiA=;
+	b=Bm3riK5VR+DtIGjlGcVYK1e8UrGAKkU6dPmhuwn0oS9yoV8k0ZR71CNe+ut6K5maoWd3Q8
+	/Vsbfw1gUSfAwMPcY+6BonavJ+YT+FKxOUwj303fQQIut2z/tcEPZhN2XmjISd0z/Ukvno
+	1sdgHoCx+iVUf5Us/YZ0FSzvQENOBwM=
+Date: Fri, 5 Jun 2026 20:58:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260606024540.47362-1-ethantidmore06@gmail.com>
- <86b976f32a179141dbeb3eed5fa106f18f2e46b5c6849ca2c800484847d1deb7@mail.kernel.org>
- <DJ1NDNGUKCZR.3CRKEWPZ3OOMN@gmail.com>
-In-Reply-To: <DJ1NDNGUKCZR.3CRKEWPZ3OOMN@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 5 Jun 2026 20:50:05 -0700
-X-Gm-Features: AVHnY4LgMuk7Lewq_tlZFb20dXjzoprl00PC7dlfaeyjk2nweYknssxPdgF8O_c
-Message-ID: <CAMB2axNfrP8HXQ4WimBv9HWex0x-Y1A5+Uas6XNcUgvhgQgV5Q@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Fix signedness bug
-To: Ethan Tidmore <ethantidmore06@gmail.com>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 1/2] bpf: Tighten cgroup storage cookie checks for prog
+ arrays
+Content-Language: en-GB
+To: Daniel Borkmann <daniel@iogearbox.net>, Lin Ma <malin89@huawei.com>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+ YiFei Zhu <zhuyifei@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Amery Hung <ameryhung@gmail.com>, Rongzhen Cui <cuirongzhen@huawei.com>,
+ Jingguo Tan <tanjingguo@huawei.com>, cenxianlong@huawei.com,
+ chenzhe@huawei.com
+References: <20260604070318.2869813-1-malin89@huawei.com>
+ <a8342b94-9732-4878-b794-086106c93585@linux.dev>
+ <86dac3e9-3af2-4bc6-93e5-d62aa70fb362@iogearbox.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <86dac3e9-3af2-4bc6-93e5-d62aa70fb362@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jun 5, 2026 at 8:31=E2=80=AFPM Ethan Tidmore <ethantidmore06@gmail.=
-com> wrote:
->
-> On Fri Jun 5, 2026 at 10:25 PM CDT, bot+bpf-ci wrote:
-> >> commit cc27f12c12ff54b8eace339c3e130317bf205277
-> >> Author:     Ethan Tidmore <ethantidmore06@gmail.com>
-> >>
-> >>     bpf: Fix signedness bug
-> >>
-> >>     The function acquire_reference() returns negative error codes and =
-'id'
-> >>     is an unsigned integer, so the check (id < 0) is always impossible=
-.
-> >
-> > Is this commit message accurate? Looking at check_kfunc_call() in
-> > kernel/bpf/verifier.c, the variable 'id' is declared as a signed int:
-> >
-> >     const struct btf_param *args;
-> >     u32 i, nargs, ptr_type_id;
-> >     struct btf *desc_btf;
-> >     int id;
->
-> No, 'id' is assigned as a u32:
 
-You might want to pull bpf-next and check again then.
 
+On 6/5/26 4:16 PM, Daniel Borkmann wrote:
+> On 6/4/26 6:56 PM, Yonghong Song wrote:
+>> On 6/4/26 12:03 AM, Lin Ma wrote:
+>>> The recent KCTF-reported cgroup local storage issue assigned
+>>> CVE-2025-38502 was fixed by commit abad3d0bad72 ("bpf: Fix oob access
+>>> in cgroup local storage").
+>>>
+>>> However, the previous fixes are still incomplete. The current 
+>>> prog-array
+>>> compatibility check treats a program with no cgroup storage as
+>>> compatible with any stored storage cookie. This allows a storage-less
+>>> program to bridge a tail-call chain between an entry program and a
+>>> storage-using callee even though runtime cgroup local storage still
+>>> follows the caller context.
+>>>
+>>> Require exact per-type storage_cookie equality when checking prog-array
+>>> compatibility. This blocks zero-storage bridge programs from joining a
+>>> prog-array owned by a storage-using program and closes the residual
+>>> A -> B(no storage) -> C(storage) path.
+>>>
+>>> This also aligns with Amery Hung's earlier NULL-storage tail-call 
+>>> fix by
+>>> requiring storage use to match consistently across prog-array users.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: abad3d0bad72 ("bpf: Fix oob access in cgroup local storage")
+>>> Tested-by: Amery Hung <ameryhung@gmail.com>
+>>> Signed-off-by: Lin Ma <malin89@huawei.com>
+>>> Signed-off-by: Rongzhen Cui <cuirongzhen@huawei.com>
+>>> Signed-off-by: Jingguo Tan <tanjingguo@huawei.com>
+>>
+>> Acked-by: Yonghong Song <yonghong.song@linux.dev>
 >
->         u32 i, nargs, ptr_type_id, id;
+> Sorry for jumping in late, but I would have an alternative suggestion 
+> below:
 >
-> --
-> Thanks,
-> ET
-> https://github.com/sponsors/ethantidmore
+>>> v1: 
+>>> https://lore.kernel.org/bpf/20260601095158.1186318-1-malin89@huawei.com/ 
+>>>
+>>> v1 -> v2:
+>>>   - refine the commit message and mention the relation to Amery Hung's
+>>>     NULL-storage tail-call fix
+>>>   - add patch 2/2 selftests for tail-call cgroup storage prog-array
+>>>     checks
+>>> v2: 
+>>> https://lore.kernel.org/bpf/31927f33-9db0-4a39-b38a-72b33487979e@linux.dev/T/#t
+>>> v2 -> v3:
+>>>   - use abad3d0bad72 as the Fixes tag
+>>> v3: 
+>>> https://lore.kernel.org/bpf/7b3e1adae5c92153e991ac406b2d334609c36d866b5bf81e4465cf63bde0a79c@mail.kernel.org/T/#t
+>>> v3 -> v4:
+>>>   - no changes
+>>> ---
+>>>   kernel/bpf/core.c | 8 ++++++--
+>>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>>> index 6aa2a8b24030..f0b61b10f30e 100644
+>>> --- a/kernel/bpf/core.c
+>>> +++ b/kernel/bpf/core.c
+>>> @@ -2470,8 +2470,12 @@ static bool __bpf_prog_map_compatible(struct 
+>>> bpf_map *map,
+>>>                   break;
+>>>               cookie = aux->cgroup_storage[i] ?
+>>>                    aux->cgroup_storage[i]->cookie : 0;
+>>> -            ret = map->owner->storage_cookie[i] == cookie ||
+>>> -                  !cookie;
+>>> +            /*
+>>> +             * Tail calls keep using the caller cgroup storage
+>>> +             * context, so prog-array members must use the same
+>>> +             * storage cookie.
+>>> +             */
+>>> +            ret = map->owner->storage_cookie[i] == cookie;
+>
+>
+> This would basically break if the leaf program does not use cgroup 
+> storage.. can
+> you please try out the below diff ... rationale: this would allow A -> 
+> B(no storage)
+> but reject the A -> B(no storage) -> C(storage) case:
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index a656a8572bdb..649cce41e13f 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2481,7 +2481,7 @@ static bool __bpf_prog_map_compatible(struct 
+> bpf_map *map,
+>                         cookie = aux->cgroup_storage[i] ?
+> aux->cgroup_storage[i]->cookie : 0;
+>                         ret = map->owner->storage_cookie[i] == cookie ||
+> -                             !cookie;
+> +                             (!cookie && !aux->tail_call_reachable);
+>                 }
+>                 if (ret &&
+>                      map->owner->attach_func_proto != aux->attach_func_proto) {
+
+I just tried. All tests (including patch v4) passed. Your patch indeed
+preserves the leaf prog (last one in the chain). Thanks!
+
