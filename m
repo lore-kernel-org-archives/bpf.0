@@ -1,95 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC33B390CB0;
-	Sat,  6 Jun 2026 11:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC50135DA7F
+	for <bpf@vger.kernel.org>; Sat,  6 Jun 2026 12:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780745564; cv=none; b=Ihmu4OklloTlLHDymvJ6+OxG4A5xnIzHMqhWSm0o+uMsy8KzafW8F0ZO765BXWJoGEkLNoS8eAfAPfAfhkSDTt9uNcrTxXL6H82Kye6LdkOdcOvniS0340WOd9nuapVXdki7j3qv64mw05i46dFLsur0F/Tb64XcISHEeoVu6hM=
+	t=1780748106; cv=none; b=mAW0VrM8acoAMMzfyIh80UcuVYzRqqSNWuQYTITjk0E8sO8poN3r0PPho332rkhjJNtcq2OjP7QEzPOJpzRD7PAL3LR78FHZ9tf7eWcIbkWx28Z1VQQg9TRhj1UjP1IT1+DFYHWoiu7w91xXXyOro+64cWXuajigCf3eymGzbMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780745564; c=relaxed/simple;
-	bh=/fey9nILQzxR3op27+ma2fTj/lsexsQ1dR4PWF0h/+0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DVb7D1sYZ29v681qNYR06Wkr7+XC+ViIlbQlmX2/TDu4jNOfzHIHviC2DIKy66KIJckVa7V6QrPO+oLCjIRCnT65h8pCyEkQO98/R2KcAdT+g4NJLr26ZZhKdudWANm2inWh+h29tTiSt9bsAMmr1M7HqH7JyImv6hKw3VZ/xxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJZ99ci7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780748106; c=relaxed/simple;
+	bh=f1sM0H1av6k+Hy6T9Xy+2NldQ7cqpmFYHD6dji1DiH0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BLyu/sHvPGNhZ35Ij6vEnnfJNdTm7I9aU/hpJKhAZDs7B7U27VMD9TNF+Xtm4cJKzoqB6dL0dhmrxpD+Sw2dpx/72xGQYr6ym/X0zTMzh+oqmqitmBPE+a+kMmM00snoiLQ1wGItnmQCJfIvzu45fmqsnS6lyMjcr52TmI2L+C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOroPkMl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJZ99ci7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B381F00893;
-	Sat,  6 Jun 2026 11:32:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOroPkMl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4D71F00893;
+	Sat,  6 Jun 2026 12:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780745563;
-	bh=/fey9nILQzxR3op27+ma2fTj/lsexsQ1dR4PWF0h/+0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UJZ99ci7VIJxN/L7DAesJt/Xht8ffAWcvEE9Xi8QRQf1gHwTiE5CIXR6a20WhZRNB
-	 nGK+pOYYvoQeCVMEJ/eWmQVok7m6Qy5zi4b7JIFuInMEUhNvaLbuPZP7fmxRW0kaZX
-	 n6M1Uj9PGUGSu8KY17q0YXIC5Q7EhOUjBW/QAslKC3cu8syrciMSRWiQ5SKzNlP8um
-	 Br+wbZWYL8VoF9Kwa63i3sZ2evE5kcGh+u/0nuIg3CcrpIoRYyx0mX9VECtuhmq4cr
-	 pxYy+DaB6MxJ/4Dd5fh+iMr7t/WxLD9aiPxtzZEvcENH/uCWMgAEDV31iA894XjRTl
-	 9Oi1G2xkmmsug==
-Content-Type: multipart/mixed; boundary="===============7208419686952190815=="
+	s=k20260515; t=1780748105;
+	bh=n6ixPlLBT9NyImMKjDxlAteMaeGuRs1uqwsl6mEJt58=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NOroPkMlIuXi7EoeUrJ+qHZhoEpvK8xcVm3BQXjhDeUCZEWG2kEKctFzLUnfeXnXL
+	 4tcRqgAOLEjRTvNTGqZMnYPFM5dNbqvnNv8RbWjIp2SsJihmTfY+/n4cMNn0jHSf9R
+	 0RyEN6FDeL261zCoQri09L2rHGTV0YVr6M+E65/cLz5L4vrHDHLFXJTN7DRKYU+doh
+	 /kwFW0U/kCHfcncjPDnPMGe1CEjtmWnlzW6sWw7E4d4mI1eQj1ZfBJpyFaG0RGbxX5
+	 xya1iLvw9qR1VIPYLvcAEaIH9W362ZQxIVYPBGX63ss44fLpy6eClfnyRarS9XaPnC
+	 CMBdurPWzc+9A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 1/4] net: mvpp2: sync RX data at the hardware
+ packet offset
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Til Kaiser" <mail@tk154.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260605121332.147397-2-mail@tk154.de>
+References: <20260605121332.147397-2-mail@tk154.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 06 Jun 2026 12:15:05 +0000
+Message-Id: <20260606121505.6B4D71F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <d32a022041bcaad4e649101b948998b953415f4d8f4eea26422cbc28e0b9dd41@mail.kernel.org>
-In-Reply-To: <20260606-c3-01-v3-v3-2-97c51f592f15@mails.tsinghua.edu.cn>
-References: <20260606-c3-01-v3-v3-2-97c51f592f15@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: add tests for PTR_TO_FLOW_KEYS offset bounds
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com
-Cc: gnq25@mails.tsinghua.edu.cn,john.fastabend@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat,  6 Jun 2026 11:32:42 +0000 (UTC)
 
---===============7208419686952190815==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] If SKB allocation fails after XDP processing, the buffer is recycl=
+ed with a potentially truncated DMA sync size, leading to possible data cor=
+ruption.
+--
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index 89779d897aba..8a3d69e2453c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+commit 2937dd51dcd41c34cf709a921bae57060051477d
+Author: Til Kaiser <mail@tk154.de>
 
-[ ... ]
+net: mvpp2: sync RX data at the hardware packet offset
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_flow_keys.c b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-> new file mode 100644
-> index 000000000000..d780a36a6e9a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_flow_keys.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Bounds checks for PTR_TO_FLOW_KEYS pointer arithmetic. */
+mvpp2 programs the RX queue packet offset, so hardware writes received
+data at dma_addr + MVPP2_SKB_HEADROOM. The current CPU sync starts at
+dma_addr and only covers rx_bytes + MVPP2_MH_SIZE bytes, which syncs the
+unused headroom and misses the same number of bytes at the packet tail.
 
-[ ... ]
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/ne=
+t/ethernet/marvell/mvpp2/mvpp2_main.c
+> index f442b874bb593..92a701f4fe3f5 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -3946,9 +3946,10 @@ static int mvpp2_rx(struct mvpp2_port *port, struc=
+t napi_struct *napi,
+>  			dma_dir =3D DMA_FROM_DEVICE;
+>  		}
+> =20
+> -		dma_sync_single_for_cpu(dev->dev.parent, dma_addr,
+> -					rx_bytes + MVPP2_MH_SIZE,
+> -					dma_dir);
+> +		dma_sync_single_range_for_cpu(dev->dev.parent, dma_addr,
+> +					      MVPP2_SKB_HEADROOM,
+> +					      rx_bytes + MVPP2_MH_SIZE,
+> +					      dma_dir);
+> =20
+>  		/* Buffer header not supported */
+>  		if (rx_status & MVPP2_RXD_BUF_HDR)
 
-> +
-> +/* Equivalent OOB expressed directly in insn->off; this form was always
-> + * rejected and is kept to show both forms now share one diagnostic.
-> + */
+[Severity: High]
+Can recycling the buffer with a truncated DMA sync size corrupt memory?
 
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? The guidelines specify that the opening /* should be
-on its own line, with the comment text starting on the next line.
+Looking further down in mvpp2_rx(), if an XDP program shrinks the packet,
+rx_bytes is updated to the smaller size:
 
-Note: This style issue has been consistently raised in reviews for v1, v2,
-and v3 but has not been addressed.
+	rx_bytes  =3D xdp.data_end - xdp.data;
 
-Reference: https://lore.kernel.org/bpf/20260604154507.B5CB51F00893@smtp.kernel.org/
+If the subsequent build_skb() or slab_build_skb() allocation fails, the err=
+or
+path recycles the buffer with the modified rx_bytes:
 
-> +SEC("flow_dissector")
-> +__description("flow_keys: OOB via insn->off rejected")
-> +__failure __msg("invalid access to flow keys off=4096 size=8")
-> +__naked void flow_keys_insn_off_oob(void)
+	if (!skb) {
+		netdev_warn(port->dev, "skb build failed\n");
+		if (pp) {
+			page_pool_put_page(pp, virt_to_head_page(data),
+					   rx_bytes + MVPP2_MH_SIZE,
+					   true);
 
-[ ... ]
+Because rx_bytes is truncated, does this leave dirty CPU cache lines at the
+tail of the original packet uncleaned?
 
+If the hardware reuses this buffer to DMA a new packet, random CPU cache
+evictions of these dirty lines could silently corrupt the new packet data
+in RAM on non-coherent architectures.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27060463888
---===============7208419686952190815==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605121332.1473=
+97-1-mail@tk154.de?part=3D1
