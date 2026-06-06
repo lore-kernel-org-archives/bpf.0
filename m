@@ -1,143 +1,173 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7B6327BFC;
-	Sat,  6 Jun 2026 10:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7809D1DE8AE;
+	Sat,  6 Jun 2026 10:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780740173; cv=none; b=B+7xuAC+lnw6pvTppKsp40id9n/T4D1xv3aXMGqn9+zdazwM0WR1Hi4D1Brw8vSy3aBDFxkkoyoClxLqhk+Q35tHMmdla4E/uLrl+cIZel6uiZ6Vgn9VHcRHfGK6PvSewDUWtCfKTcWztfLVzBQKbCGE3q28FbCAB8vUnaYibu8=
+	t=1780743065; cv=none; b=WEeRzIMho7BCc+KdS3FmeJQ4yWlP2SCSVsN+7E9oVzSk6+IM7dLB0l6nigk5Px67N7/CZ6Kf6wIB5sNlqcOnh346LTJugr1BAYojxjq5XQD7aX6BmUV1hGmrOyOzVLXVwvyW2JGaG79UwTa7oQwqn7BAPrvhfjyMy3tdu7Yvr0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780740173; c=relaxed/simple;
-	bh=mnVJlo2ryhLpfOvFaLz8ysaSPtY55fwilz7NYfh6fRs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SXQ7IqZzGRmsbM54vqYYaUuwEQEBcNSdiQ2cbKLNuf1R5PXWez/GfBM/XVxWb2gtjT6LrxW1xHg8SCt0RbRwZSglE3eiWSWAFrxl5YwmxSfuY7cp2QyyvEHb+sDhn8KIQ0EG1CPMc1IX5sg4MDQ9hY6o5HZqlXu6YNEQ/Xu/Ai0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gXYkY1WwYzKHMY0;
-	Sat,  6 Jun 2026 18:02:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id B6E2440562;
-	Sat,  6 Jun 2026 18:02:43 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgBHvIFA8CNqeKBGAw--.36613S2;
-	Sat, 06 Jun 2026 18:02:41 +0800 (CST)
-Message-ID: <84823ae5-a65f-4dec-9718-950be4fbb562@huaweicloud.com>
-Date: Sat, 6 Jun 2026 18:02:40 +0800
+	s=arc-20240116; t=1780743065; c=relaxed/simple;
+	bh=3WKnqiuCgpZ4Rp/sq+DwdP+pvJyuhG86erKPK93MD+8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=srVe2ztr7BWACZwxNCfhf8thoalb076B1asGFKCFLmjPdEhIz+BPjpqJpUTLPu9Z4Gq5kMLz+plRz5ZFMwONAJDkfXXSp1cKG3sPMVUKdhaMZ01sU/eZpomHTg4+zSetvJphqdSAa6MZ1FsPJnsbWf10mcz2vuHpTqiE+VYfzhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=cOULiTlj; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="cOULiTlj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=ce7d/WdUbTDORvcIrULpQib/hqt6wR+
+	TyKyy7F4b9sg=; b=cOULiTljw5oDO1p6Ca1k5afZGDz322zuUpqu04MBLuwRNvV
+	3QltvDElWSWJLSSn30ze3Xbh8Q+tBL9jUBFAWQ0/gkl9LWJSZWE9j+R39ORZDkzB
+	h2iVZ7g7G6YQHGEwUFyS64sSTYi9fW0MOUaq1IrE88wXIokHcsE4br1m5aGE=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web5 (Coremail) with SMTP id zAQGZQC3cMB++yNqENcwAg--.58351S3;
+	Sat, 06 Jun 2026 18:50:39 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Sat, 06 Jun 2026 18:50:37 +0800
+Subject: [PATCH bpf-next v3 1/2] bpf, verifier: fold reg->var_off into
+ PTR_TO_FLOW_KEYS bounds check
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 2/3] bpf: Add validation for bpf_set_retval
- argument
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, xukuohai@huaweicloud.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- yonghong.song@linux.dev, sdf@fomichev.me, zhuyifei@google.com,
- mattbobrowski@google.com, 2022090917019@std.uestc.edu.cn,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260605140243.664590-3-xukuohai@huaweicloud.com>
- <8c3468a91bbfac22f819b0ac7f1307de0bb5bec062229b36387550e05807e485@mail.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <8c3468a91bbfac22f819b0ac7f1307de0bb5bec062229b36387550e05807e485@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBHvIFA8CNqeKBGAw--.36613S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW7WFWxuw4rZF45ZryrWFg_yoW5Xr15pF
-	4kGrWDJr1DZr1a93y7Krs7Zr40yw1qq3yfCFn8GwnFyanIvwn3tryUWF4agFyavF95Wr40
-	kF4j9ws29FWqvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-	0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-	1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-	evJa73UjIFyTuYvjTRNJ5oDUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Message-Id: <20260606-c3-01-v3-v3-1-97c51f592f15@mails.tsinghua.edu.cn>
+References: <20260606-c3-01-v3-v3-0-97c51f592f15@mails.tsinghua.edu.cn>
+In-Reply-To: <20260606-c3-01-v3-v3-0-97c51f592f15@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>
+Cc: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780743040; l=3996;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=3WKnqiuCgpZ4Rp/sq+DwdP+pvJyuhG86erKPK93MD+8=;
+ b=BTLKFAmXh834tN0iRneiTf5uoKV7Djw0Ve0r0f/JejApD31GwHXcsV+V6qIZRn/QXhXNMXk2p
+ 9WjQSqmMl8vAczn99pFOQijk7H4aQaalk5sIOYgVaiG4sLmm//QUP4O
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:zAQGZQC3cMB++yNqENcwAg--.58351S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFWDGw4rXrWfCFWUtFW7twb_yoWrXFyxpF
+	s8W342yr4DJr12ga12y3W7AFy5Gwsaqa1akFWjy34fAFn5Zwn0gFyjgrW29rySkr98Cw4I
+	vr40qFZF93WDAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Av
+	z4vE14v_Gw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_
+	Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwI
+	xGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
+	JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcV
+	C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1Z2-7UUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgAKA2ojTRugSwADs8
 
-On 6/5/2026 11:19 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8ed484cb1a8a..a50280bb0d45 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -9790,6 +9792,29 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
->>   		reg_set_urange32(ret_reg, 0, nr_cpu_ids - 1);
->>   		reg_bounds_sync(ret_reg);
->>   		break;
->> +	case BPF_FUNC_get_retval:
->> +		/*
->> +		 * bpf_get_retval may see arbitrary value passed by bpf_prog_run_array_cg for
->> +		 * CGROUP_GETSOCKOPT type.
->> +		 */
->> +		if (prog_type == BPF_PROG_TYPE_CGROUP_SOCKOPT &&
->> +		    env->prog->expected_attach_type == BPF_CGROUP_GETSOCKOPT)
->> +			break;
->> +
->> +		if (prog_type == BPF_PROG_TYPE_LSM &&
->> +		    env->prog->expected_attach_type == BPF_LSM_CGROUP) {
->> +			if (!env->prog->aux->attach_func_proto->type)
->> +				break;
->> +			bpf_lsm_get_retval_range(env->prog, &range);
-> 
-> For a boolean LSM hook, bpf_lsm_get_retval_range() returns the range
-> [0, 1], and this code refines the bpf_get_retval() return register to
-> that range.
-> 
-> Can that static range be violated at runtime when multiple programs are
-> attached to the same cgroup hook with BPF_F_ALLOW_MULTI?
-> 
-> In bpf_prog_run_array_cg(), if an earlier program returns 0 the retval
-> is translated to an error:
-> 
-> 	if (!func_ret && !IS_ERR_VALUE((long)run_ctx.retval))
-> 		run_ctx.retval = -EPERM;
-> 
-> A later program that calls bpf_get_retval() would then receive -EPERM
-> (-1) at runtime, which is outside the [0, 1] range the verifier assumed
-> here.
-> 
-> Does this static-versus-runtime mismatch let the verifier reason about
-> bounds that the value can actually fall outside of?
-> 
-> This was raised on the v5 posting and does not appear to have a reply
-> yet:
-> 
->    https://lore.kernel.org/bpf/20260605144232.95A141F00893@smtp.kernel.org/
-> 
+Constant pointer arithmetic on a PTR_TO_FLOW_KEYS register lands the
+constant in reg->var_off (e.g. flow_keys(imm=4096)), but the
+PTR_TO_FLOW_KEYS path in check_mem_access() passes only insn->off to
+check_flow_keys_access() and never folds reg->var_off.value.  The
+verifier therefore accepts an access that, at runtime, dereferences past
+struct bpf_flow_keys -- a verifier/runtime divergence that yields an
+out-of-bounds read and write of kernel stack memory.
 
-Yes, returning -EPERM for a boolean hook breaks the verifier assumption.
-I will create a follow-up patch to fix it, as the current patchset has
-already been applied.
+Commit 022ac0750883 ("bpf: use reg->var_off instead of reg->off for
+pointers") removed the generic "off += reg->off" that check_mem_access()
+applied before the per-type dispatch and replaced it with per-path
+folding of reg->var_off.value (for example the ctx path now folds the
+register offset via check_ctx_access()).  The PTR_TO_FLOW_KEYS path was
+not given the equivalent fold, so a constant offset that used to be
+folded and rejected is now silently accepted:
 
->> +		} else {
->> +			range.minval = -MAX_ERRNO;
->> +			range.maxval = 0;
->> +		}
->> +
->> +		reg_set_srange64(ret_reg, range.minval, range.maxval);
->> +		reg_set_srange32(ret_reg, range.minval, range.maxval);
->> +		reg_bounds_sync(ret_reg);
->> +		break;
->>   	}
->>
->>   	return reg_bounds_sanity_check(env, ret_reg, "retval");
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27021279696
+  before 022ac0750883: the offset stays in reg->off and is folded
+    generically, so the access is checked with off=4096 and rejected.
+  after  022ac0750883: the offset lands in reg->var_off, the flow_keys
+    path checks off=0 and accepts; at runtime the access dereferences
+    base + 0x1000.
+
+For a BPF_PROG_TYPE_FLOW_DISSECTOR program the following is accepted:
+
+  r2 = *(u64 *)(r1 + 144)   ; R2=flow_keys (PTR_TO_FLOW_KEYS)
+  r2 += 0x1000              ; R2=flow_keys(imm=4096), accepted
+  r0 = *(u64 *)(r2 + 0)     ; accepted, var_off.value=0x1000 ignored
+
+while the equivalent insn->off form
+
+  r0 = *(u64 *)(r2 + 0x1000)
+
+has the same effective offset but is correctly rejected with
+"invalid access to flow keys off=4096 size=8", which isolates the defect
+to the missing var_off fold.  Once attached as a flow dissector, the
+accepted program reads kernel stack past struct bpf_flow_keys (a
+kernel-stack / KASLR information leak) and can likewise write past it,
+corrupting kernel memory.
+
+Fix it by folding reg->var_off.value into the offset before the bounds
+check and rejecting non-constant offsets, mirroring the other pointer
+types (e.g. check_ctx_access()).
+
+No released kernel is affected; the regression is confined to the 7.1
+development cycle (reproduced on v7.1-rc1..rc5), and v7.0.x rejects the
+program above.
+
+Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ kernel/bpf/verifier.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 935595138aa0..68ddd465584c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4728,9 +4728,21 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 	return err;
+ }
+ 
+-static int check_flow_keys_access(struct bpf_verifier_env *env, int off,
+-				  int size)
++static int check_flow_keys_access(struct bpf_verifier_env *env,
++				  struct bpf_reg_state *reg, argno_t argno,
++				  int off, int size)
+ {
++	/* Only a constant offset is allowed here; fold it into off. */
++	if (!tnum_is_const(reg->var_off)) {
++		char tn_buf[48];
++
++		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
++		verbose(env, "%s invalid variable offset to flow keys: off=%d, var_off=%s\n",
++			reg_arg_name(env, argno), off, tn_buf);
++		return -EACCES;
++	}
++	off += reg->var_off.value;
++
+ 	if (size < 0 || off < 0 ||
+ 	    (u64)off + size > sizeof(struct bpf_flow_keys)) {
+ 		verbose(env, "invalid access to flow keys off=%d size=%d\n",
+@@ -6239,7 +6251,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 			return -EACCES;
+ 		}
+ 
+-		err = check_flow_keys_access(env, off, size);
++		err = check_flow_keys_access(env, reg, argno, off, size);
+ 		if (!err && t == BPF_READ && value_regno >= 0)
+ 			mark_reg_unknown(env, regs, value_regno);
+ 	} else if (type_is_sk_pointer(reg->type)) {
+
+-- 
+2.34.1
 
