@@ -1,113 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76E7233947;
-	Sat,  6 Jun 2026 01:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD9F234994;
+	Sat,  6 Jun 2026 01:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780707687; cv=none; b=OTkTjZeXGUSMhTinB5j6Jq+hhtl1p240+5OJ/yM6Fzx9L1a9qm0w3+Pufc1fjq2a2TuHLJlm9mxs/1eOQmSl14RRSgdLpTN6UpnC2LBTZzJ+i5RXZJrn6FxzeGEbF8u0x2tC7b96mpwT5dZKuO+dPAEmeHHZ7rlXqh7oTOwbJwY=
+	t=1780707688; cv=none; b=MunP8gdKEfD8DlOzaOWsxmUVssfrGBIQ1QFoJsbMlX3cRKgdXls3pJF+1JF546r6QT+cquPTEDtBFRi9mkdy/H4zi84WxMMW3yjJXCwgjrMPOWQoHKbdKJ86Nk8C9FuV7CcJ0iv3uRWP77MN/ouvy9yP7WXE0hgiLY52BKxGBVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780707687; c=relaxed/simple;
-	bh=EO4q6i3jXdWTe6oVb5UC52qvKDWdl20Kvh4JdH7qre4=;
+	s=arc-20240116; t=1780707688; c=relaxed/simple;
+	bh=V1KzJFEcnbwVL6q2o0gGXvKS+qYnCubIpWx7qFlctU4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LG0iOG/VeZl0sSxL18EpHb+HYoXHV2vozwhfJ4wCW7ci8IhHnV408/sXx2zlDMIp0E4XmyE5P2fT6+lKwQGSnVD+N080oVAojNdruFjNl8PDLTdJMhotCXqkI7bqvuGPl7NXHekXnSqIjBXJVfqOPK2EzVadoSEV38BRE7uKGyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCA0dQ+x; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Qk9Il/KuvQgkMHF5sSIOdJ59JN+exJuMPUCkSbWMo5RIWy0roUzIcnIF+gd6DXJgHAfdpwGGPNXlSy1YeeircBS9cIhn62YkG3J6h+VHJ3vqjyUR8v0fPVjoNOuyfQXK6QQqO+dTTI3t9U9TM4tOqilNRwv/e8ZZYcnOsYI2tQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=imF50CW0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCA0dQ+x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D381F00893;
-	Sat,  6 Jun 2026 01:01:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="imF50CW0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1484A1F00899;
+	Sat,  6 Jun 2026 01:01:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780707686;
-	bh=oP+jNgVBecQGFs1d0ULqwhZV8edXNeyWW92ngkrESQA=;
+	s=k20260515; t=1780707687;
+	bh=6I/4FpwPpQ0csdu04ya3rx1sT88+Aeo67Yd/d83OPQo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jCA0dQ+xpCGFn3FQNYrxayjAz1UG7MlHjYLdm729YWM+2qUkz587WA6pIh9ncWBfE
-	 EYJ3tpuQ32y3m2fgqGYxYRU6qDJEOulNrYi7Y3Rbbne/D8w9cngbF+T2jMzLe3hHdo
-	 IQuk5zEQH6/uLedYmn44Hin7tlDifuIUEiXPmuKze0R4aiUNSbqdM1hxpwZaVZDmhU
-	 QiS9MT2o48NW1MzL9TTysloYaLAWUFYcJIxkXAT+d6Xzg5dDoofGGhwSzJC9bTojQ3
-	 TW/aGF5FifqbfsIEA5DSTTBh83aoyFEOlsnMS0hy03VzBUtp9ktoD8aMg7f9L5otPt
-	 ERVUNMArmZRhw==
+	b=imF50CW06CSg1PQ1syu5S5xONwjljoabVrQITvibnOJfVPK4fIPT2cNT9iW+DWL4C
+	 9/36uXW+ZjuMomtO8YLWesLfqkx9A5pXYI5TWvcB0TakZi1tLqmUHWAZ0I37odWXPu
+	 +9RjjsLxey2LJGwzzk7z/HdH6gkDDswNkYU9fYRa0rdCTDiiV0piSTW2ZdjFDYmxa9
+	 6cyLYlWe9DyAjRH9AJaIKH4PsTOr229aKS+rEj4/W7Uh94ZkxtlmpxT3wv+Iv/JXjU
+	 4+FtkREdw/RDxh0M5BgfYLfoEuAEX125V0bJa05A9cSVIHJlXm+iXNJeN8OFTboz6y
+	 7AUMMGhHiTaZg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 12/14] gpio: tc956x: add TC956x/QPS615
- support
+Subject: Re: [PATCH net-next v2 13/14] net: stmmac: tc956x: add
+ TC956x/QPS615 support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
-Cc: robh@kernel.org, bpf@vger.kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org
-In-Reply-To: <20260605010022.968612-13-elder@riscstar.com>
-References: <20260605010022.968612-13-elder@riscstar.com>
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, robh@kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260605010022.968612-14-elder@riscstar.com>
+References: <20260605010022.968612-14-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 06 Jun 2026 01:01:25 +0000
-Message-Id: <20260606010125.F1D381F00893@smtp.kernel.org>
+Date: Sat, 06 Jun 2026 01:01:26 +0000
+Message-Id: <20260606010127.1484A1F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] API Misuse: `fixed_direction_output` completely breaks direction q=
-uerying and fails to enforce input-only pins.
-- [Low] Build failure due to assignment to non-existent member `fixed_direc=
-tion_mask` in `struct gpio_regmap_config`.
+- [High] Leaked IRQ mappings and potential Use-After-Free on the probe erro=
+r path if IRQ mapping or resource initialization fails.
+- [High] Uninitialized stack variables passed to `devm_irq_domain_instantia=
+te()` can cause a kernel panic or memory corruption.
+- [Low] Invalid Makefile rule referencing a non-existent Kconfig symbol and=
+ missing file.
 --
 
-commit 5da78e90b4b1867131b8f557ae59d72ce4db9776
-Author: Alex Elder <elder@riscstar.com>
+commit 55f951da9fbefea49a26410638dbb60af63d2658
+Author: Daniel Thompson <daniel@riscstar.com>
 
-gpio: tc956x: add TC956x/QPS615 support
+net: stmmac: tc956x: add TC956x/QPS615 support
 
-This commit adds a generic regmap-based GPIO driver for the Toshiba TC956x
-Ethernet-AVB/TSN bridge. The device acts as an auxiliary device to the PCIe
-endpoint function driver.
+Toshiba TC956x is an Ethernet AVB/TSN bridge and is essentially a small
+and highly-specialized SoC. This commit adds a driver for the eMAC/MSIGEN
+combination found on these devices.
 
-> diff --git a/drivers/gpio/gpio-tc956x.c b/drivers/gpio/gpio-tc956x.c
-> new file mode 100644
-> index 0000000000000..0dc6b1028d970
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-tc956x.c
-[ ... ]
-> +static int tc956x_gpio_probe(struct auxiliary_device *adev,
-> +			     const struct auxiliary_device_id *id)
-> +{
-[ ... ]
-> +	config.reg_stride =3D GPIO_REG_STRIDE;
-> +	config.ngpio_per_reg =3D GPIO_PER_REG;
-> +	config.init_valid_mask =3D tc956x_gpio_init_valid_mask;
-> +	config.fixed_direction_mask =3D fixed;
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/e=
+thernet/stmicro/stmmac/Makefile
+> index a1cea2f57252e..e8e7f95dbe3e8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> @@ -51,4 +51,6 @@ obj-$(CONFIG_STMMAC_PCI)	+=3D stmmac-pci.o
+>  obj-$(CONFIG_DWMAC_INTEL)	+=3D dwmac-intel.o
+>  obj-$(CONFIG_DWMAC_LOONGSON)	+=3D dwmac-loongson.o
+>  obj-$(CONFIG_DWMAC_MOTORCOMM)	+=3D dwmac-motorcomm.o
+> +obj-$(CONFIG_TC956X_PCI)	+=3D tc956x-pci.o
 
 [Severity: Low]
-Is fixed_direction_mask a valid member of struct gpio_regmap_config?
-It does not appear to be defined in include/linux/gpio/regmap.h, which
-could lead to a build failure here.
+Is this line a leftover from a previous iteration? The correct Kconfig
+symbol appears to be CONFIG_TOSHIBA_TC956X_PCI, and the source file
+tc956x_pci.c was placed in drivers/misc/ rather than the stmmac directory.
 
-> +	config.fixed_direction_output =3D zeroes;
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c b/drivers=
+/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+> new file mode 100644
+> index 0000000000000..c77585e4a50e6
+> --- /dev/null
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+[ ... ]
+> +/* We have one IRQ chip instance with 25 IRQs in its domain */
+> +static struct irq_domain *
+> +tc956x_msigen_irq_domain_instantiate(struct tc956x_data *td)
+> +{
+> +	struct irq_domain_chip_generic_info dgc_info;
+> +	struct irq_domain_info info;
 
 [Severity: High]
-Does providing an all-zeroes bitmap to fixed_direction_output achieve the
-intended input-only constraints?
+Does this pass uninitialized stack variables to the core IRQ domain subsyst=
+em?
 
-Looking at gpio_regmap_get_direction() in drivers/gpio/gpio-regmap.c:
+These local variables are declared on the stack without zero-initialization.
+Since only a subset of their fields are populated before passing them to
+devm_irq_domain_instantiate(), fields like info.fwnode and info.parent could
+contain arbitrary stack garbage.
 
-	if (gpio->fixed_direction_output) {
-		if (test_bit(offset, gpio->fixed_direction_output))
-			return GPIO_LINE_DIRECTION_OUT;
-		else
-			return GPIO_LINE_DIRECTION_IN;
-	}
-
-Providing a non-NULL fixed_direction_output causes the API to bypass
-hardware direction queries for all pins, unconditionally reporting all
-37 pins as inputs.
-
-Furthermore, since reg_dir_in_base is also provided, the API will still
-allow users to configure these supposedly input-only pins as outputs
-because it does not check fixed_direction_output during set_direction
-operations.
+If the core IRQ domain subsystem tries to dereference a garbage pointer in
+info.fwnode, could it lead to memory corruption or a page fault during prob=
+e?
 
 > +
-> +	gpio_regmap =3D devm_gpio_regmap_register(dev, &config);
+> +	dgc_info.name =3D devm_kasprintf(td->dev, GFP_KERNEL, "tc956x-msigen-%d=
+",
+> +				       td->auxbus_data->mac_id);
+[ ... ]
+> +	info.init =3D tc956x_msigen_irq_domain_init;
+> +	info.exit =3D tc956x_msigen_irq_domain_exit;
+> +
+> +	return devm_irq_domain_instantiate(td->dev, &info);
+> +}
+[ ... ]
+> +static int tc956x_stmmac_resources_init(struct tc956x_data *td)
+> +{
+> +	struct irq_domain *irq_domain =3D td->irq_domain;
+> +	struct stmmac_resources *res =3D &td->res;
+> +	u32 i;
+> +
+> +	res->irq =3D irq_create_mapping(irq_domain, HWIRQ_EVENT);
+> +	if (!res->irq)
+> +		return -EINVAL;
+> +
+> +	for (i =3D 0; i < td->plat->tx_queues_to_use; i++) {
+> +		res->tx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_TX0 + i);
+> +		if (!res->tx_irq[i])
+> +			return -EINVAL;
+
+[Severity: High]
+If irq_create_mapping() fails here or in the RX loop below, this returns
+an error without unwinding previously successful mappings.=20
+
+When the caller tc956x_dwmac_probe() encounters this error:
+
+tc956x_dwmac_probe() {
+    ...
+	ret =3D tc956x_stmmac_resources_init(td);
+	if (ret) {
+		ret =3D dev_err_probe(dev, ret,
+				    "failed to initialize stmmac resources\n");
+		goto err_put_mdio;
+	}
+    ...
+}
+
+It jumps to err_put_mdio, bypassing tc956x_stmmac_resources_exit() entirely.
+
+Since devres will automatically free the irq_domain on probe failure, will =
+the
+undisposed mappings cause a kernel warning and leave undisposed irq_desc
+structures pointing to the freed domain, leading to a use-after-free?
+
+> +	}
+> +
+> +	for (i =3D 0; i < td->plat->rx_queues_to_use; i++) {
+> +		res->rx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_RX0 + i);
+> +		if (!res->rx_irq[i])
+> +			return -EINVAL;
+> +	}
+> +
+> +	res->addr =3D td->auxbus_data->emac;
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260605010022.9686=
-12-1-elder@riscstar.com?part=3D12
+12-1-elder@riscstar.com?part=3D13
