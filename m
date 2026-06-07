@@ -1,79 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470904071E5
-	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 19:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537482FD696;
+	Sun,  7 Jun 2026 20:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780861208; cv=none; b=gvqUwUmKte20bQ7UcT31I4LhscwLoB4+h7TeaAKYQLmLkv9beZ7YD6x1p2ACrM14hHeOm4RCfgoOya6LhBuScbh5NxBmp4rCRiu3Fe+fe2ABXeNP1v2YQq03DXVmMaf1wEv809nM6tPoSJzUFovIAuZNBrrjVHzQis29iogjVg0=
+	t=1780863037; cv=none; b=X9vm+biIXHX3aZIOH1pyk0GJUmFPk/qOx+Llen0/W4FW/cgK2IQWJxevsf7fiNw8Yl72C3JS8NauElYuLFSL+3fLDvIZhcT9pt277VHgv5F9hJpK/ufAjwut8o0LTDh6l2HDcypPNf/5+F8RxF0U9Wuj2lON/4W6d2XGV++CSf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780861208; c=relaxed/simple;
-	bh=1EgKhOEi8gcijUG7l7+bPxyzHE80kXIYpOPLzVVBwu4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=jhZzIYXf5L4lOpF3wC2nqO2uHYlHE7BFnbjuIEg5v4B/0KDnxSyncgnLTIli0j2cyy/KjVf4AydTao083+oszkVqEYcL5gSWqUt27cp9NRl+M/lJs6veRd6H6QjCscUmKIHUahbdfVKd0RV3TSWma9aoKv95vE0e1gFrZBQO5Mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPTwyOTW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780863037; c=relaxed/simple;
+	bh=7wIHOSWYohEmLG6pMXnfULhqgb287plk20JlAu4I5Ys=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=d97dowDZxsqYeUdgH+/y7zANiRF7m/pACZ1WJ8w8AUZdGuq8l69TLzZYpsvwu7FX/POQfesV0MT/ktWF1BHXzIU0ZCfefQgUXEEOxACpWnARb0P3sGwRBwAsGS9Dp/VtcWmPhFOJZqQkFywMsq+JalNyOn/rl2wU5oNwNKMvjE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bShHqSnI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPTwyOTW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4BE1F00893;
-	Sun,  7 Jun 2026 19:40:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bShHqSnI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BEA1F00893;
+	Sun,  7 Jun 2026 20:10:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780861206;
-	bh=IkUkVjcaoMDjvkT71YecdfKaos7ibZ8n6f+Z3ypgBdo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=iPTwyOTW5Gt1XE+A/zTQuW7v9cC6e7YvDZgVpyKlWwJvuW9Cy+IJNh5eIkgr56y2U
-	 TVIDx2h7HsJHuaD9PZfkIS+dgT946dF8p2+dhNTltRwQ+ar9oTRFeNkAlWOtt7JKux
-	 bFzShwli66C0N/NKMC1HD2cx4wVxakR9ETAm/mBBrcXrC6HQ8406y6TA+ecEx6rN60
-	 zJFiW4MwhoypfuZ9vwDGxvPbsYq9K01bmjguhpe3FPLfPQ96e0uU4Ae0yHIa5HDhl4
-	 SSoc+YSkuL9Z7qczBJNYJVjS/+qKMnDZzDyZzMG7VRWDhtt2KPaH76i96jylUjwqrP
-	 s7hyTK73Wc3ug==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56B2F3930C9A;
-	Sun,  7 Jun 2026 19:40:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1780863036;
+	bh=7wIHOSWYohEmLG6pMXnfULhqgb287plk20JlAu4I5Ys=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=bShHqSnI6oWOfUDSbW6cYy9eMbRTgUko/xyPhiYjQd4+q8UgRyl4FX9sU96QojKmj
+	 7jK6GH6Y5DzVZNl/oYRof/zwlsdAgIq4fxxaZFx4NGJtrqT4D5dnzx3nfJWfCBYTOo
+	 qOhK6VyjprDy5b4PtURtf5opb1bLBCMSUX9BCEzhGEFgCit94GdQXXSZ8nj/J1X447
+	 DHVTof/qqRgiYNi6dpMLHS0InhtO5TGWFhmblbiv2yVcqPhabshMvd3rR4d7/yfzL6
+	 CUrw06X/S8BL4t3f+hrAxCmBx9mGTYM7AciY6l3xlakeFNLHf3tkdeUpikDVPqcxDZ
+	 IOF2V8sJaovvQ==
+From: Tejun Heo <tj@kernel.org>
+To: bot+bpf-ci@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: david@kernel.org,
+	arighi@nvidia.com,
+	memxor@gmail.com,
+	akpm@linux-foundation.org,
+	rppt@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	martin.lau@kernel.org,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	void@manifault.com,
+	changwoo@igalia.com,
+	clm@meta.com,
+	ihor.solodrai@linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] arm64: mm: Complete the PTE store in ptep_try_set()
+Date: Sun, 07 Jun 2026 10:04:19 -1000
+Message-Id: <1780862659.ccb18e27e916dc4b@kernel.org>
+In-Reply-To: <5f68f44310d4878185fd5ebc52d66530b99f174c6d04ab1170dc53cefaa54568@mail.kernel.org>
+References: <088f52fd25860ca961449d53f91b214a@kernel.org>
+	<5f68f44310d4878185fd5ebc52d66530b99f174c6d04ab1170dc53cefaa54568@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] rhashtable: Fix rhashtable_next_key() build
- warnings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178086120590.289093.11149901271242453541.git-patchwork-notify@kernel.org>
-Date: Sun, 07 Jun 2026 19:40:05 +0000
-References: <20260606-rhash_fixes_1-v1-1-932ab036e6bc@meta.com>
-In-Reply-To: <20260606-rhash_fixes_1-v1-1-932ab036e6bc@meta.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au,
- yatsenko@meta.com, lkp@intel.com
 
-Hello:
+> Can this path actually loop, or is the deferred barrier guaranteed to be
+> flushed before the faulting instruction is retried?
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I don't know the arm64 paths well enough to say. What I can see is that
+ptep_try_set() only runs as an apply_to_page_range() callback, and
+apply_to_pte_range() brackets it with lazy_mmu_mode_enable()/disable(), with
+the disable() flushing TIF_LAZY_MMU_PENDING before returning. The barriers
+would land before the access is retried. It also looks like the same
+queue_pte_barriers() path __set_pte() already uses. I'd defer to Catalin and
+the arm64 folks on whether that actually closes the case.
 
-On Sat, 06 Jun 2026 10:30:32 -0700 you wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
-> 
-> rhashtable.o builds with warnings as rhashtable_next_key() kdoc
-> from lib/rhashtable.c does not have the arguments descriptions.
-> 
-> Move rhashtable_next_key() kdoc from header to c file, matching
-> other functions.
-> 
-> [...]
+Thanks.
 
-Here is the summary with links:
-  - [bpf-next] rhashtable: Fix rhashtable_next_key() build warnings
-    https://git.kernel.org/bpf/bpf-next/c/1444ee886e6f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--
+tejun
