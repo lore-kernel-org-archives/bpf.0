@@ -1,64 +1,64 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822E226CFE
-	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 08:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6B136C5BB
+	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 08:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780821885; cv=none; b=dR8Bph00DrEUYe7fOXfoSiEN7ROs5bQmgpuzykG0Blrfj8ZzNt2pHXK9wIvMUHYFal0y/DDdYQ/WhPbe1C1HswiJkBx2dRsHDQOSJ7UmJGmy1UTtVv4DHnvDCpxa1zMHXKMm61pINmsS/099HrnDntSkiPeKAncziPrOqjptbx8=
+	t=1780822795; cv=none; b=NJkkaYTMm/uIFek3k5Mg+Nt/8OViEEIYoXFzpLYJD3gTtxlurjfHjdn++uphW5V0K2QDTAUIydAVRjFMUYV7DWWkhy5X9O/esmUej3BnsP4bn/JsUCV2e274tiytYBABZDhpaFnOXOT5wA619rkxz0PjU6B2YvkXUuLYX+gCIpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780821885; c=relaxed/simple;
-	bh=xobaJ9SWAk+kihLedQKH0ZlyvTgeKpY25z0SvgUy1oo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=jipZaa9SgY6/GD/ygmw56OIvOjPNxGq6WAL2YML1ki60N0KBFwf/tOPVS+MIVTxrNv9khi5oQbmHN310+hTcDbtoqXXltA8WoXQauuCqQ4/wiDEYQ6RgX1RS7sc3e1u0+rN/RRi18jQKydllaecX38rWAQhqfE64MxKqBbcBVoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bI/wbCtX; arc=none smtp.client-ip=209.85.128.67
+	s=arc-20240116; t=1780822795; c=relaxed/simple;
+	bh=51hCHviJV9dx2kHJUEdIxPea9gknSXJj2/BlEWlzHPA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=EI3neFziqtz3ouGS9EGEs06Lj0S/WM4NWE87cF2kMW1hn9r9Okml8LVOCUUBXCkwAh2iAMu9tA6wv1ZuzlqtJAaBrTpmQTbWwHOSZ9iGORyzFIgbbkvmpKq3mI87HpQIaqjuCOWS+0Xuyn2Vj3ygApG8kLkJRI9jYWV3xgX7eIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IrE0gVMt; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bI/wbCtX"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490b613a17bso31395615e9.3
-        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 01:44:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrE0gVMt"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-490cdae130cso649125e9.0
+        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 01:59:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780821883; x=1781426683; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1780822792; x=1781427592; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r7+ZiWaNPav1VWLwodt5w+X2OYlFouCP0YvxMscLZOw=;
-        b=bI/wbCtXr0ZpYBjvRHNxy5Qyri4oCAROqzYU4UBcV9BDwSi5w9iDWrZEyAXHraA9zA
-         qlxVEW9hJTS66Zh8+xyAan2rLaIPw3ojBWh9QCofPiSUqgf10MoxvIgIMUWdbR+yTAew
-         3u8mDScMpgYYwaLB6eMU26xb9NuuYnXu51CckwnIGOghaMC245quVU/E4kZvRvW5ByL9
-         Jk/BiKdJmdHSRnmQd4ntIC71fNAHFwN4mS8vROyb3e9HSSy4w6LQB2NV7YhsvXdn+YVd
-         /1MocRhUW975INNzVjdWr0yp0b+5KClHG3XmIABq5cinvKwOMpnDXTJU8i/WhzCgRmr6
-         e1cQ==
+        bh=hd8eJQE2e7HGUVx3+ey2vy9S5cDeuFg6IlJZJVllcIw=;
+        b=IrE0gVMtulCp3oN+57lGho/0OvEyOcm17i4vJeiNhE9ynyhO2q26zdmuxh/tu2IPeY
+         SCHz/B3zBNOHZIkgY0hf4t9GCZgIHZnh+czAQ3UymI0m/m5SrMI+IaXYo3C+FFotApdD
+         ZoBU7FONBHEYzKjsZzOCu+HhfZCWHqlxs0YMuWu5n2ZHJSYjhfi3P2INkkNPICzgV9mm
+         1JvcWhCl3jN+yQg/CRAt2HQ5nbZIG7RGU6X8I3KnOdKg0w+7noDqvtjfwW0rNH1G8w9I
+         P6q34vJZnO9m/lWgHwm/Lj2qNI8+0FvT9DF5FrOTafbujNCMuDZIyjSOkFU2lOHgj6FA
+         NiwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780821883; x=1781426683;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1780822792; x=1781427592;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=r7+ZiWaNPav1VWLwodt5w+X2OYlFouCP0YvxMscLZOw=;
-        b=h327BLWOUZI/q9qbO0STLtUSn7V5hNyUpR8riYQB6ed5pymzF2Ez2HWuPA0W/SE7lG
-         q6mgcfR2TYtJiIfCad41htL5KR1lqMzevYUoUg/diiGsvwk3N4f9YhG+XQEtewXI0RPv
-         hY3H+KpR1IdVppHYKBqCQ8KboCcif5nBRJ/TYtKZxgfT685YQfCpyfeegpzqkP9bKd8o
-         vNWdlwz3Q4ea39rwe/QZ8c+97O/5mpx2k/ZFq8ZRgqOkf6xbATv7bJoBE9SRfY+AasL2
-         PXKoLbpf4HPNQChKgFBEmvjuDWL4RP+Q2oce9niAQFFqdPzBEavltXaVaT3oVcqP69Xc
-         MXIQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9sJcAB840ZI1jFDKqlXr7ov3nsgpWGE3k2mHewo7ycqWRX/yjkgzyn6TiPpW+VGzUvqYo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7xDVWnWk8sHZ1dgbrzI7OfnLCxpKhYjymI46M4aL42RF1JvoM
-	o0ozAWwdOpLNGJ67R0bbE2cqdpda/ZE+O/yDycDaICb/u0pn20TjS6FQ
-X-Gm-Gg: Acq92OFKdMTodygvpbCQTubpKB7PY0lilF3EEk6nTokTs+mw6oh3oaupJpEkzXb1m4z
-	Vp5H4wDBH1ULjI8W7Bn2XYUcAwuKUmyEBdDu67keARMqYJR+d2dZltfU5cK/zJrfqtfqG92uOj3
-	wggnbJZ47pfY5cUOTcnDrCE0chLFixXEr91+DkDKbyoqIfUkBG7SDTamHQaCbDazESbhnvWytd1
-	3S4IeMusRt3v+JaD2HPWLjchq96lAzBNM8DWg67wkhSxAa4GTwu1v7XvRZSHhiknM+9PvSWYlLI
-	kTjZSlUrY6OrwcIz5ThxL+Lk0BQDr72rvyxFT15QWQG91Nmcez5iNeXtqEJDhygd8Z3PuaDjDjA
-	osRKCPthn1NEKGW1SSmoljomR3wV3N81ccS7SOcbkwRybKb9dEy+aPSuvVm696RPk4ermbmcH06
-	6znNZScku7cQr53c0ZWVnATIq01X5jOd1esJMzQGAtEcn2rF/J8HHx22M4GUVOy/ktHQ3ZOjMXw
-	JS6fZSs4hLxjXq8S8GiPqiPQXzu3Kc7ePxfJDb27S9TRjmR8sMawnux8tpO2Iv1RSCPrYbjN3SI
-X-Received: by 2002:a05:600c:8216:b0:490:688b:f9f8 with SMTP id 5b1f17b1804b1-490c261ad21mr172906665e9.27.1780821882662;
-        Sun, 07 Jun 2026 01:44:42 -0700 (PDT)
+        bh=hd8eJQE2e7HGUVx3+ey2vy9S5cDeuFg6IlJZJVllcIw=;
+        b=c22GjgWVJ/ciJJb/NnxMD7bHJZsaA4C91BFTs7reUgoUzSW5YJ8SwXiOvioWyqFrPm
+         sw5pU8NPZ2oAZlgeqZEWJ4dJLS40lICQY4kkRTsjrTIQPn+8TaxTfnCZEsEdECOuw9TN
+         Y4Tvss+BgbXK7K5UQVedHS98QApMWxQoBCSZQSTQPRI+STqnTZ+rhylMWFJZvI9eP4h2
+         iQhnMaxDXSDkXdBzYqON95caWb+8zNl6SvJMDIv/G7qHPbsLGt/kmF+KMzucwHbkuXb2
+         QrWFLmJTD4RI5m1snitNnaUudFUS4T1xgO3EorV19w9RGv6j7DQmlP8UNobZbl5qh50o
+         reTQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+7gRtbYEEckmj9KvxRAE1ngvA7LsyYbJMFZwalHDoTF8UxPQXjoebZTMQuYQ+ZoAv25Qs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAif4HBXnnxb0stLVRUlPz8N9/JmgQBMU7dR4qo2d6+RL628mZ
+	pEMSCfXQUiGjHjZTr/qdgQ93YLxSEay6xAM05CgBo3NVIfLFa1j+A5FJ
+X-Gm-Gg: Acq92OEUhAQnmmE4hkankvUCVJQg1wnSFoOKJf8dtB8T1MA7rsCA8DjHjPccw7f0uI/
+	JN4bKbmKCyn6VTWSyA+/1YFDeYtPgNdkS5Txs4GFfOroxsQNikI1ShaZVYuOtZ+1pzm9Dhc8Cle
+	s8YUoWiW8t+KC6SQ5hyk+tMEpPQBNUAY44xtR1go1AkWUCKKLmbiqfInqLsYCzjcmktt+HQh37L
+	p6tLqK697j3h1ijWrlggZUDzVvz8PqIRN+kvUnjMFmaX1e23utFQRAQUY8pl7wgWfB/XvPx56x7
+	//ZgwZnfhMiFcwv7hnP2EMgIZKXz8IUo3kqK9Scjo1UcdLZZzL9RLtwF9CG8xIeQalzlr4EdaUD
+	Ui3DLsIqTa8zOwP1DU1xAMndKmNDIVx0el3uQa8Wc2FF6nxSRXUOdZn8pF9nOCD8rdBLFmFUfn8
+	nRb7IxlhIT8M+G2l+FK2RGEg98W2nddZcLNN5yCua18GjISsT1M9bC0nxbaOThTftEMRyLNhBiE
+	KDtgGNOKkAK/94s2HB1dlTiH1GGF5QFKNZJ7Zy2tYKkvdiA0/iUl7eg7sM9ovGTVB6jh4jotbjE
+X-Received: by 2002:a05:600c:628c:b0:48f:e26a:1744 with SMTP id 5b1f17b1804b1-490c25a87f5mr166153635e9.9.1780822792343;
+        Sun, 07 Jun 2026 01:59:52 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bda4fd52sm276651355e9.0.2026.06.07.01.44.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35fd33sm45756094f8f.35.2026.06.07.01.59.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 01:44:41 -0700 (PDT)
+        Sun, 07 Jun 2026 01:59:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,100 +67,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 07 Jun 2026 10:44:41 +0200
-Message-Id: <DJ2OO6CSLUR6.2AGL1QQ2QSSDR@gmail.com>
-Subject: Re: [PATCH bpf v3] bpf: fix NULL pointer dereference in
- bpf_task_from_vpid()
+Date: Sun, 07 Jun 2026 10:59:51 +0200
+Message-Id: <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
+Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <houtao1@huawei.com>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
+ expansion
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Juntong Deng" <juntong.deng@outlook.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
+To: "Paul Moses" <p@1g4.org>, <martin.lau@linux.dev>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <20260606091941.1803115-1-rhkrqnwk98@gmail.com>
-In-Reply-To: <20260606091941.1803115-1-rhkrqnwk98@gmail.com>
+References: <20260605234301.1109063-1-p@1g4.org>
+In-Reply-To: <20260605234301.1109063-1-p@1g4.org>
 
-On Sat Jun 6, 2026 at 11:19 AM CEST, Sechang Lim wrote:
-> bpf_task_from_vpid() looks up a task in the pid namespace of the
-> current task, via find_task_by_vpid():
+On Sat Jun 6, 2026 at 1:43 AM CEST, Paul Moses wrote:
+> btf_parse_struct_metas() walks user-supplied BTF during BPF_BTF_LOAD,
+> and btf_repeat_fields() expands repeatable fields from array elements
+> into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
 >
->   find_task_by_vpid(vpid)
->     find_task_by_pid_ns(vpid, task_active_pid_ns(current))
->       find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
+> The remaining-capacity check performs the expanded field count calculatio=
+n
+> in u32. A malformed BTF can wrap that calculation, causing the check to
+> pass even when the expanded field count exceeds the scratch array
+> capacity. The following memcpy() can then write past the end of the
+> array.
 >
-> cgroup_skb programs run in softirq, which may interrupt a task that is
-> itself in do_exit(). Once that task has passed
-> exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
-> cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
-> dereferences &NULL->idr:
+> Use checked addition and multiplication before copying repeated fields
+> and reject impossible counts.
 >
->   BUG: kernel NULL pointer dereference, address: 0000000000000050
->   RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
->   Call Trace:
->    <IRQ>
->    find_pid_ns kernel/pid.c:370 [inline]
->    find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
->    bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
->    bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
->    __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
->    sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
->    tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
->    </IRQ>
->    <TASK>
->    do_exit+0xa63/0x1270 kernel/exit.c:1010
->    get_signal+0x141c/0x1530 kernel/signal.c:3037
->
-> Return NULL when bpf_task_from_vpid() runs in interrupt
-> context, or when current has no pid namespace.
->
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating =
+btf fields")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paul Moses <p@1g4.org>
 > ---
-> v3:
->  - Also handle current with no pid namespace
+
+Do you have an example where this actually occurred in practice?
+
+>  kernel/bpf/btf.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 >
-> v2:
->  - Reject calls from interrupt context (Yonghong Song)
->  - https://lore.kernel.org/bpf/20260605200501.1619406-1-rhkrqnwk98@gmail.=
-com/
->
-> v1:
->  - https://lore.kernel.org/bpf/20260603204206.773482-1-rhkrqnwk98@gmail.c=
-om/
->
->  kernel/bpf/helpers.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index b5314c9fed3c..226c31ccb5d6 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2912,7 +2912,14 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid=
-(s32 vpid)
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a62d78581207..510aa32847da 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -3668,7 +3668,7 @@ static int btf_get_field_type(const struct btf *btf=
+, const struct btf_type *var_
+>  static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
+>  			     u32 field_cnt, u32 repeat_cnt, u32 elem_size)
 >  {
->  	struct task_struct *p;
+> -	u32 i, j;
+> +	u32 i, j, total_cnt, total_repeats;
+>  	u32 cur;
 >
-> +	if (in_interrupt())
-> +		return NULL;
-> +
-
-This seems too broad, I would just drop this hunk. It seems unrelated to th=
-e fix.
-IIUC we only need the bit below to prevent the original NULL deref.
-
-pw-bot: cr
-
->  	rcu_read_lock();
-> +	if (!task_active_pid_ns(current)) {
-> +		rcu_read_unlock();
-> +		return NULL;
-> +	}
->  	p =3D find_task_by_vpid(vpid);
->  	if (p)
->  		p =3D bpf_task_acquire(p);
+>  	/* Ensure not repeating fields that should not be repeated. */
+> @@ -3686,10 +3686,9 @@ static int btf_repeat_fields(struct btf_field_info=
+ *info, int info_cnt,
+>  		}
+>  	}
+>
+> -	/* The type of struct size or variable size is u32,
+> -	 * so the multiplication will not overflow.
+> -	 */
+> -	if (field_cnt * (repeat_cnt + 1) > info_cnt)
+> +	if (check_add_overflow(repeat_cnt, 1, &total_repeats) ||
+> +	    check_mul_overflow(field_cnt, total_repeats, &total_cnt) ||
+> +	    total_cnt > (u32)info_cnt)
+>  		return -E2BIG;
+>
+>  	cur =3D field_cnt;
 
