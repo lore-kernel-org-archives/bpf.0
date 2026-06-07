@@ -1,113 +1,142 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F422A38C2C6
-	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 11:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D7539B971;
+	Sun,  7 Jun 2026 13:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780830504; cv=none; b=e6XEdYV8KGs6lOoyDra0SwYNafBgNLaeX5/7kDmhTAWSqpVeM7T6ukVEb6q40WFTXFuxKLxEPJzZQaXf4vUoQlhUkgAa73gHX2nnCZgBAvZH7/k4b2zuwLnlrb2eBQ7l7AiKMup8uai+8QIatK5nF/Jr87IPTHfIBrobtkjEhUQ=
+	t=1780838683; cv=none; b=Q5ZPZ8aV9lclfNFuxSDqr926ILWeFkwGxGcMU4ohztSccKLzW/UydY6pXSXAYdIa6pcPzWWIvw8q0JSI+bdVV4eFHfEEC2q855aHi2HUYX2UZaksuynNxxedMBiJL3O4lZ0xzzab+sR97ie4k7gEfd3e84NKVsVBnG0KeoAuYtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780830504; c=relaxed/simple;
-	bh=AOgI9qJFRjoVJ06WbokHbmBDTumJdvoTNpQhxuw+ZHE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=cEDOYFmpyubwlWPaNNDfQTD4WO8uoqKq/M914JXGfx5uWnGmAFLnZ6KjU4zKs3KkOt5a3Fx9F0esKmgVvHC0iWIemtudblj9wMwvbacGMgYpsup6zMSUz/ZqmV2RUfkLw7H+U8bUpfMhP6n/xuf+sVuukYgAfVIDH9KgmQhGHBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EGFnHFJB; arc=none smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780838683; c=relaxed/simple;
+	bh=VA1ESUV8h/8/d/qjT/vRMVuax4MwKtKKs5+taCejwZU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kGKG8nsVNT5ff+1sFlsPVix3RUQZvNeBToZUNQyZnf6KWc+QDsZ2kGxYNRlO3H62CTOGdXht8iqk5aQY20NYqJ9oC/fTTuR+QUMz0zSEhx9Q+mH1HouxUt49TrC2+ciGvvsoyxOI3dszVJg4e4CUpbhdc2UJTDNhZc/zLJ2g7sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Dl81IMvV; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EGFnHFJB"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso37808815e9.2
-        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 04:08:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Dl81IMvV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780830501; x=1781435301; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AOgI9qJFRjoVJ06WbokHbmBDTumJdvoTNpQhxuw+ZHE=;
-        b=EGFnHFJBkDElNMcTpyjmJAl62CDsIJnOXnOM/zL4b09ml/0GLOCqx43XQMel/bbNAR
-         bO3QNPVkSYB5K9bjWKqX6I2mcw2Aml5zPTJ7zcjZ3Ayd8PlX4pbD9lbqGacyYIrUaRIY
-         ZWGZw/pIvWIqzVaNGFPTff2DOdw9BL6K44eZBJk6SYSf2gjr8qwOiM50tlB6rWV5djrE
-         ABJR8t9M/ADPL8ZMxCVMaVNTfY3o7qu6Y6a67Zhj55JoHd/S3YcjyGsGDqBA34GsIO2d
-         bb2klHnX1vl3o9AGBAAQzKQUeSR8hXKhSKma0xEgPGR3DKlzRlaAYpCdUK4Kfwr+MPA2
-         qKAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780830501; x=1781435301;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AOgI9qJFRjoVJ06WbokHbmBDTumJdvoTNpQhxuw+ZHE=;
-        b=nzpuVc/DZZpxYc5iOUkynkWHRywFMHho+xzUwTYh6qmwgPLWkNGP5TWhSPHALpaOqV
-         i2vDUYUJKSYnZjtE6+8IdJm/dEvyybDFIFwdGBYbrl1gSUjFGx05ioiU9O1TvnbMWV/C
-         RNd7lZI7bRczIlDKJ+6yihMZX1VcnS/YltQ7Rdg48zh8rj///QaNNdrA4fYwemY9izNn
-         Ll4c5tgyRGJq88rkZeHB5pulHZTqM+iTYsEQXOHBdlGvZeRICGACOJTRbN6kFdpnuL1A
-         hO9zF34H5a8pU2rh5gzyN5+DqPTn1e7NAE8RI64jbXrdU4XuBvEME/D4wTRDzao16fiC
-         impg==
-X-Forwarded-Encrypted: i=1; AFNElJ8K9LZU4sDMng50tch5Sj9WJUQ2vGS1XSgyy/RrqfA7jali9NOr9IPvKcwAjrFFxAwhT8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydHm2aaMuNy8nOX5Ko+RUpqobAUgiZUXLGQwi30hVLvsGo05S7
-	W2Fv8IOxrGDFp4Owt7FF83a3KDIxvBY71BzYqQV3pdmQ9dFXr+ha5FsG
-X-Gm-Gg: Acq92OFeriuzKWPz+ZJFT8crBawBrxME1Lqs1hM9J9vtLGMrErnNnh7Y3zLQ2nOs3QL
-	/vjpWWMTSLeONQUX/5tSrtma+918QScJL7QKLPwB9gadDHNNAO60D3rAao9ie2L51Rgo7nZCa9G
-	Kv1S9HTDk01duOmecmqPuCcOfMML80nIbHlyi7mk/g+Ze01BbCnz0qAd4W2dEsDCgAtlT3gZ2cz
-	SJJ9ZqhhxQK8uElcbFBWpbZzc10ue85EPu9sMkv1NUAtB3fsZ8GIDB2+MWUTMDlPlTky7ZeuorB
-	pgYEVslLvF4cQgNlHMe3P+/v89F3PnZRg82gbrfLcJJhsENz/Ba48EwW0sBomesoCPn3Tl8cFOZ
-	z35bqieZLrM6vyvRSVUwP7NXk9ma6WnMEkqBuFmMn3joIKMbhuED01VovsJcvUNc7sTm+lXBA8W
-	fWpH7tI6FPB33HjIoURKo9Mbf/CzGyomyB6+13jSIeOwfKMuO2JEDan49nNqFjEffNnvzjTu0XR
-	Y4x0Ggkc5l+RVROPI1CLcf9JlTfYiFuvl6ipVUlTEiku5zgXUFal5o4hJ8DOSvDf9gcPxIofyma
-X-Received: by 2002:a05:600c:314b:b0:490:548e:b854 with SMTP id 5b1f17b1804b1-490c25f5e25mr179077305e9.26.1780830501193;
-        Sun, 07 Jun 2026 04:08:21 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3e4b5asm312996515e9.13.2026.06.07.04.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 04:08:20 -0700 (PDT)
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=myCX7E31llrE57DLcg93MGslqWvS0eWJEj3T6r4sZ2M=; b=Dl81IM
+	vV/vZnVWAE0cvXAEZqV4y/ovrBIkUobjjjpYzEP75Z2CqNI1D7V12NRHz+LDh4Km
+	acT9fBy1Q8B7pWuE6KzSvoYQ/nV+XBswvl73Uxz64xulIZjK7gN/+YVFYnJ8/0um
+	ZFHesFvW0emS7KCmecYeuT0uyAvzWvg0F+M0k=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web4 (Coremail) with SMTP id ywQGZQD3CJ4KcSVqdwgUAg--.41669S2;
+	Sun, 07 Jun 2026 21:24:26 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
+Date: Sun, 07 Jun 2026 21:24:12 +0800
+Message-Id: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 07 Jun 2026 13:08:19 +0200
-Message-Id: <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Paul Moses" <p@1g4.org>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <houtao1@huawei.com>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
-X-Mailer: aerc 0.21.0
-References: <20260605234301.1109063-1-p@1g4.org>
- <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
- <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
-In-Reply-To: <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPxwJWoC/y2NwQ6CMBBEf8Xs2TbdhRr05H8YDgVaWKMFWyAaw
+ r9b0MxpJi9vFog2sI1wOSwQ7MyRe58KHQ9Qd8a3VnCTOpCik0oRTqGYSWSUu+pMWGhDkOAhWMf
+ vXXSDanBQ/sY4VXdbj5tiwzqOYx8++92MO/w356gRdSYpLwqlUaBo/Yv09Wn4EeUY2bfdZKRtJ
+ ll7KNd1/QJC2KSYvAAAAA==
+X-Change-ID: 20260606-f01-v2-324fb92185a2
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Daniel Xu <dxu@dxuuu.xyz>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780838667; l=2427;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=VA1ESUV8h/8/d/qjT/vRMVuax4MwKtKKs5+taCejwZU=;
+ b=UaxguWEC/vPvk3w/PC8y9fC+r/IiZUJO9lYEc4hO2StpqdQdZtPFL3GJoCigUiuxtPLTeLTrp
+ tcQYH6rYqfWCewCzoC9JBAJyGdaJYeJxFb5XTCDsaHDk+335MabdXxD
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ywQGZQD3CJ4KcSVqdwgUAg--.41669S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1xWr43Xr1rArW3WFykKrg_yoW5JrW5pr
+	WrWFW3Xr1kAr1fJa1Iyay29FyFgFWkJr1akrn3Jw15Z34rX348XrWF9F4ava4aya43Ww4Y
+	v34IqFn09a45AFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
+	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxkIecxEwVAFwVW5GwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+	0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
+	IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
+	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+	Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUY1v3UUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQELA2okna+SRgAEsk
 
-On Sun Jun 7, 2026 at 12:11 PM CEST, Paul Moses wrote:
->>
->> Do you have an example where this actually occurred in practice?
->>
->
-> Yes.
->
+An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
+inner map template. The flag allows a concrete inner array with a
+different max_entries value to replace the template.
 
-Right, I know you can get a splat. But how did you stumble on it? Is this B=
-TF
-produced during compilation, or hand-crafted case meant to exercise the lim=
-its
-such that we get the splat? If you have a small reproducer, it might make s=
-ense
-to include it as a selftest as well.
+The verifier currently uses the template's max_entries to elide
+nullness for a constant-key lookup through the inner map pointer. At
+runtime, the lookup uses the concrete inner array's max_entries instead.
+The verifier can therefore accept an unchecked dereference even though
+the runtime helper returns NULL.
 
-> [...]
->
-> Also, I still haven't made the connection between the CI failure and
-> my patch. I produced what looks like the tcg variation of the same
-> failure as a oneoff while testing an (functionally) unpatched kernel.
-> I'm not even sure it's the kernel at all and not some weirdness
-> between clang and qemu. Seems low frequency intermittent from what
-> I've seen so far. Any ideas appreciated.
->
+Patch 1 keeps lookups through BPF_F_INNER_MAP array templates nullable.
+Patch 2 adds a verifier regression test for the unchecked dereference.
 
-It is unrelated.
+Before the fix, the regression program is accepted and the runtime
+reproducer triggers a NULL dereference. With the fix, both programs are
+rejected with an invalid map_value_or_null access.
+
+Tested by compiling kernel/bpf/verifier.o and
+verifier_map_in_map.bpf.o, and by running the regression program and
+runtime reproducer in QEMU before and after the fix.
+
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+v1->v2:
+- Update the can_elide_value_nullness() comment to match the changed
+  parameter (const struct bpf_map *map).
+
+v1: https://patch.msgid.link/20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Ihor Solodrai <isolodrai@meta.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Nuoqi Gui (2):
+      bpf: Keep dynamic inner array lookups nullable
+      selftests/bpf: Cover dynamic inner array lookup nullability
+
+ kernel/bpf/verifier.c                              | 15 ++++----
+ .../selftests/bpf/progs/verifier_map_in_map.c      | 40 ++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 6 deletions(-)
+---
+base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+change-id: 20260606-f01-v2-324fb92185a2
+
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+
