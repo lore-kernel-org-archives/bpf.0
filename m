@@ -1,192 +1,153 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64DD2D3ECF
-	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 15:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780847126; cv=pass; b=V4eywqUzhzha2mxUi7cjX7viYTx1Cg2U4bsdNt9ZtEYkElGZ+YWw0qYR2Cx0EPpV6jBRRwh+Uzld03e8us4tSdLAZ8wSAIVcti0rHXinU0dKGyiDDqfLUB0qBw+8l1VuYsYmEEw6DhR6wfqJYLHFKiQN0h8bjaB9hRjf1lR1UsU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780847126; c=relaxed/simple;
-	bh=pLV8jV7hklDSB01P/rnfhLSZYgR8gFqSdLAXyj5xtJk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GVjbx05dTn7N7c5C++rck24LiH+7fk3O0rXCM7NwiZkdxYRLeewiubf3nHKIunIVSBQ1dqjJBSZVy45RQWc9tcVw4EbNiuSd1zLu7SwTMyUnom1+ktHBEJipKzw9IvrZlLrEiuKtl94UGD9CBjPMESy5iimoRgGCBNYczPw/UO0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UnxbW4Fd; arc=pass smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFB22E736F
+	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 16:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780851353; cv=none; b=cytiLgI4vD1pDWbHhQsRWqzMyDdKIUzgLQBmluCwmN71dHI9XVPqn0fvVcfDbijrSa6i4MS/AZLIaYRP//0mH2m+e1R2Kv24Smrzuxwq/ESsZkpSN7vAgUIWRpRAl1lGcyhXbzRHcO0Clj3J68HGOgDeEEC0XIfgtV3dAEE985o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780851353; c=relaxed/simple;
+	bh=vq0VLS/ylpM3CmAEtZEwDI7OGBBgEUHxL8PTx+OEr9E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=jy23I6o7hKKA1+5LZvPMQeBTvLo3MRQZGMu6LJij0Gkybem6zsNu0lDIrYStKAS/kfJQU657xGJ+FB0PLwJdRBoAspOaoNg5biWlPKIBub1cJJZ6gfm+snDBjeKbnhXqyMGyV9hxmes20qF7mFJ7Me1acd5zTBEMR6pHftntEls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=myKldV5g; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UnxbW4Fd"
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-43d133d9a28so1281222fac.2
-        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 08:45:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780847123; cv=none;
-        d=google.com; s=arc-20240605;
-        b=C994sRbc7Cch8Nk3t0I9xVhFDZGWl+Ws9VjOkv6lObQap3J8DWANbIUEVvIiFNE+h+
-         4af5Dsu14/VCJv9NZAxLrCT8nNN84FZIS4qQSpbqRIABE4lHeBms+Q3KsYfcIr0gvy85
-         7KP1/t5FqpXQirvCFln6phuYkH4hR8EXm/z4FjyZ/dhm2zS7nve4ONJLPEjbR1xmotXt
-         hZLG2esIYBQ2umYlM5QtMh+6FPzrO5+XB46fhHNyIU60Gu2oBcWkHrYUwwaVExYR7uP7
-         woyajyf5o2MuoF2Y8HBRgaAZiVN1HFGuv2DjWVdL/lnOG3HF/PTG/f/fTu3Z23aDYIXZ
-         OhZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=9wfBsAbCYwCC2GqYSny2LRPTg6nVEL/SrB7w99G8/W4=;
-        fh=hi3MOtPVo1YlDPQ7zKB95XpbzMZdyuPX8KaQe/D7Zxo=;
-        b=MDY2F72F1yMF6+PXop+Zidd/4nQjENOmGnSuhkw3/gu5LntltJoL3ZCZ2kV0/PjL8R
-         QK+ncNoBJONQht6o2myriSs2d3kXvndYUYZ9EpLkCB+KLZC+K2QR1clgSfx4Wqao4GGX
-         EaR2P/46syRNAin6uQG5ExtnJwMW3LK+r/j6hqo8IfwShgiIxp0PnAy+decEmMfpQ3Or
-         Wtl6A0DfK6x4Mud5Y0vab2vx2zMvkniZNNi6F54Uj2m2evDeGM2hRIgc5UtmX09Sc1fu
-         OyNjIMzQzKRSmfy50ijM1RN+SfKlocdeMjKs9z6MndXBofizLMIDLabcJbBm5dBvTeaK
-         JIHQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="myKldV5g"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-486b93fc7c8so216170b6e.3
+        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 09:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780847123; x=1781451923; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wfBsAbCYwCC2GqYSny2LRPTg6nVEL/SrB7w99G8/W4=;
-        b=UnxbW4Fd1sPOojgcS6audDCi+j/KdBqj1fWcz4sSNofmtIyq+TAfBCu+YLfyIJ9l5W
-         CBBw3AtElUaQrKI6stbRdv2CVpR6qXYh5z/FugHjb+U31sy/wxcCiJjNA42E1al9zF+c
-         fMaI6BLMRUrvHTZljFDdq9L99aeB7ENiy85B7UD8ueGy1QQJckGuqREzWh8C6kK6Vbpk
-         8TEztiXVn2fFBHEnJEy+7uyIHQa5X3q4sPMqKFTT159KSBgxrGJzo3sDpDRp/z7CB+O4
-         fx8d5IQmG+1M9nxWsYHWZGztzhvpIbRL2hHNVVaq7yBf3HchZTl/MXnHG1ia5CY8lXOP
-         wy9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780847123; x=1781451923;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780851351; x=1781456151; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9wfBsAbCYwCC2GqYSny2LRPTg6nVEL/SrB7w99G8/W4=;
-        b=hSFoSMzTaXSg+hLHJvp7+WwpeHAaQGmEBHYDZpCfrQDa1PttPbQvb5ZcKMmeR5JrnG
-         B1qLDsNGqxplRt4ufnfNA/pMgbT0/uKuUezzVdGLjlLkUhsvLp8eCVuE79r6h0OdnHCF
-         zrBRYPJY3FXgXCaWuXNCeAcFjunnPId9c5fPZdoUgRRxjjLct2gQPCsImWtA6txxyn9l
-         dvObzmubYaMd7Cs9dgq/Ccnh4sgQyHd3fL8Gu5pNEEBtcTbEtkJ/6A7Ty74HtrTv9jTv
-         hdM67553C8tdRWECUokFxNTQFczJ+hu9v7lhgIPyL5sxmnn6gaPlKIuPJuKVOiUFXZNQ
-         nOvg==
-X-Forwarded-Encrypted: i=1; AFNElJ+QPRTOUISxhNOTPbzkKpHpkhQos1fF643g1qQ2sH37Or0OETRVPCHoMBlx++bH+R2oqRI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYTVDTw6wOwTbFMxS/KruffIpb/KfwaTC33fI35c8JeINUIvOL
-	zyJxlrHB7fKfg4vkee8axwOY49zOx0poPMMhxxl4HxA8+9ZiNhj2XiDwR/PSm6Jf8tPEpJnFdl/
-	T5MZg6UgCIO8Kt9PyA1eRKcPN0QWI8xQ=
-X-Gm-Gg: Acq92OHW0qUlbnNLfyOEQFB19L1zymS606b2sGUqmfH8po2TQnD5Tq53nP3bncCwdy+
-	4m0QVEdGStTfhKbLF8n6gSDKm62xk2pL8SvKN+WO/QKRQmLCRPjsfCbiu3F32Q8h715Tplp7FW6
-	90dP/bOp3Tl4/MvcTCrzs7e6AfGER3ISLEZUHNAHCzAGkCrwY1zLdCG8JupTYNWnC9R9K28zWvR
-	6z0Rj7zh4QYFfIbQeKxUuIKLtXGCgaG4sjXzJKzMPhBZMaDkkHn7QkQjuWGWWUFnVvG1OfDkJ9i
-	T1VtTzSzVFn7Vzit35BC+LJ5PB+aA7mF4pbagnnWPxr6CI9E
-X-Received: by 2002:a05:6870:d69b:b0:42c:ecc9:58b5 with SMTP id
- 586e51a60fabf-4413d6437b6mr6270670fac.11.1780847123432; Sun, 07 Jun 2026
- 08:45:23 -0700 (PDT)
+        bh=X3oVPDjM9UNiAad2kRETnB/VhLXES/+/2f8UxjTzkJ8=;
+        b=myKldV5gKWkOayJ8U/ypJOEEHBRkDxE7v6Hy0Nq01Lqk/TwIAcjO028egEo65OTyAd
+         DdXY3lBxFAmqNvqAMpFJZpI1kLLn6CTliJpCvgkWcTILaYNLTNffoGzCJL4Mgqzh0/cj
+         5vmXrKXmpT9VvguBA2uQ9qL70jxmJQczNqFOvBMuhHu1FZH/77JeKuw7/V8xQWaLzDx2
+         LK37ACEanT6iXhPrJseRltQm3oc32HBVCBjJkkCAjATaRy08+4xOpMqtBJR1ekg1o7wd
+         2V9ZNQj5FzVerFkOm7jSYpo7Dy5GpqWw688rx/WCOcbySVkzF+u5PVtMJ0zB1SvKRrp2
+         R1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780851351; x=1781456151;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X3oVPDjM9UNiAad2kRETnB/VhLXES/+/2f8UxjTzkJ8=;
+        b=go6XgTlklKwce7rHXWDBFnxHHejDQl98bnCknC926rULTfQ3hbvMxrmqC4osa+b8to
+         Sj5FJbqqFKEwdevyrBgyXns9AKEwgoUIf+Xj7kgp4iYb2eV3K27gPB+1ouZVYmG4pKMb
+         fUI/+x9aQzn1sQ5NNYYBfyVLkZ1itNZFkEEHEA29YVaEeSDrrnSaTU+qWYH2ulvDUGU3
+         ICVNKjpM3dJoRwz4pZI7vlhXeiN6ca0B7ZBkd3JYwWxjX9GDGZiHC6quXLWVwgFUuvy8
+         MrsiLnSUgix6NFRVTjhjV3GEPCb6Ahaif8ptVA93osdpScjeEuMQG+DLvDcL/H6Ipist
+         w+Og==
+X-Forwarded-Encrypted: i=1; AFNElJ+0iMjvpTEx005ElGalUxA7xhYKbZMLM1kaQFsnd95gD5XIPq9zwdsGAMpMCs5SsqRdMfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA15TN2qd5jZEb/Kmi+Ne91G5oQL7xTRDMmQgxmxMwny+Xk+zv
+	4ctpcamTS+YE0AVOy32h2cVP4ZBtfzadmNegBe3RcmwBrBQaP7ArlN+9
+X-Gm-Gg: Acq92OGb40aBQZ+WzlZskm+jBv8YzhOu/oupYuEBxf86mQmkSTH+kUOVKVaPmcEBhfq
+	zj6bjp85l3eK+YbJ4es9rtfptBvLSgBDH7VWC8Nbm6RsEx52zFzhAgauAiHlQkhG6PSS2sqkc+i
+	pGyItSv40S1KyFauGq8/j79HFhakigvQt+H7D2dLTGgfrkM3SewhdLaMgdvOnhTTjrWNYoikmg+
+	2tuW2OcjE5KXweuuVfM8S57jMBrqip8i6TkynAEKQOYm+tnvo/wcMQSCZGkB7tqEyiCvn2I9D8S
+	w/wO/Ir98lHThYvPR0FGkaFiJ/kkgyrGHgE4E8Jw1i0Zkv33hJhcrjTyWr46J0uy3gXB5vDvxYG
+	enPYRAdjLBx5kLJidyXxMw+ngP0NXA2OOttNtlhDq2KjS1EhX/xlVb04RX1bHDtjDV/jv8skjJ1
+	h8qCQLlvf3wkVRU469fTM82EwCQ+uQQGvGcwA6qhsck1GvEwg+buVWHMey1sXtAyuO3ouulA11m
+	eAl55Kut34rlRJ803UIHUdjsx7Y
+X-Received: by 2002:a05:6808:181c:b0:486:4bd0:9a29 with SMTP id 5614622812f47-4868df0166fmr6506417b6e.43.1780851351218;
+        Sun, 07 Jun 2026 09:55:51 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:52::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d7263efcsm14254294fac.0.2026.06.07.09.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Jun 2026 09:55:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260607145747.1494514-1-lgs201920130244@gmail.com>
-In-Reply-To: <20260607145747.1494514-1-lgs201920130244@gmail.com>
-From: David CARLIER <devnexen@gmail.com>
-Date: Sun, 7 Jun 2026 16:45:12 +0100
-X-Gm-Features: AVVi8CdY2BXFYwyALCEu97p932ccl-6BhYKrBK8BkYsba51UqnUMNPOIBGeL_ww
-Message-ID: <CA+XhMqx+q53AwRekMD0T-92maOizqGFEgcBRCNvChWQ3JBAg2A@mail.gmail.com>
-Subject: Re: [PATCH v2] net: lan966x: restore RX state on reload failure
-To: Guangshuo Li <lgs201920130244@gmail.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 07 Jun 2026 09:55:47 -0700
+Message-Id: <DJ2Z46YDPFUR.3BDR6ZW4P912C@gmail.com>
+Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <houtao1@huawei.com>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
+ expansion
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Paul Moses" <p@1g4.org>,
+ <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260605234301.1109063-1-p@1g4.org>
+ <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
+In-Reply-To: <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
 
-ACK on the code part at least, maintainers might disagree with this:
-changelog could also note the subject rename ("restore XDP RXQ page
-pool" -> "restore RX state"), so the scope change from v1 is obvious
-but that s a very minor nit IMO.
+On Sun Jun 7, 2026 at 1:59 AM PDT, Kumar Kartikeya Dwivedi wrote:
+> On Sat Jun 6, 2026 at 1:43 AM CEST, Paul Moses wrote:
+>> btf_parse_struct_metas() walks user-supplied BTF during BPF_BTF_LOAD,
+>> and btf_repeat_fields() expands repeatable fields from array elements
+>> into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
+>>
+>> The remaining-capacity check performs the expanded field count calculati=
+on
+>> in u32. A malformed BTF can wrap that calculation, causing the check to
+>> pass even when the expanded field count exceeds the scratch array
+>> capacity. The following memcpy() can then write past the end of the
+>> array.
+>>
+>> Use checked addition and multiplication before copying repeated fields
+>> and reject impossible counts.
+>>
+>> Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating=
+ btf fields")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Paul Moses <p@1g4.org>
+>> ---
+>
+> Do you have an example where this actually occurred in practice?
+>
+>>  kernel/bpf/btf.c | 9 ++++-----
+>>  1 file changed, 4 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index a62d78581207..510aa32847da 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -3668,7 +3668,7 @@ static int btf_get_field_type(const struct btf *bt=
+f, const struct btf_type *var_
+>>  static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
+>>  			     u32 field_cnt, u32 repeat_cnt, u32 elem_size)
+>>  {
+>> -	u32 i, j;
+>> +	u32 i, j, total_cnt, total_repeats;
+>>  	u32 cur;
+>>
+>>  	/* Ensure not repeating fields that should not be repeated. */
+>> @@ -3686,10 +3686,9 @@ static int btf_repeat_fields(struct btf_field_inf=
+o *info, int info_cnt,
+>>  		}
+>>  	}
+>>
+>> -	/* The type of struct size or variable size is u32,
+>> -	 * so the multiplication will not overflow.
+>> -	 */
+>> -	if (field_cnt * (repeat_cnt + 1) > info_cnt)
+>> +	if (check_add_overflow(repeat_cnt, 1, &total_repeats) ||
+>> +	    check_mul_overflow(field_cnt, total_repeats, &total_cnt) ||
+>> +	    total_cnt > (u32)info_cnt)
+>>  		return -E2BIG;
 
-Reviewed-by: David Carlier <devnexen@gmail.com>
+The callers of this function do:
+        if (nelems > 1) {
+                err =3D btf_repeat_fields(info, info_cnt, ret, nelems - 1, =
+t->size);
 
-On Sun, 7 Jun 2026 at 15:58, Guangshuo Li <lgs201920130244@gmail.com> wrote:
->
-> lan966x_fdma_reload() backs up rx->page_pool and rx->fdma before
-> reallocating the RX resources for the new MTU. If the allocation fails,
-> the restore path puts these fields back before restarting RX.
->
-> However, the reload path also updates rx->page_order and rx->max_mtu
-> before calling lan966x_fdma_rx_alloc(). These fields are not restored on
-> failure, so RX can be restarted with the old pages, old FDMA state and
-> old page pool, but with the page geometry from the failed new MTU.
->
-> This can make the XDP path advertise a frame size derived from the new
-> page_order while the actual RX pages still come from the old allocation.
-> For example, after a failed reload to a jumbo MTU, xdp_init_buff() may be
-> called with a frame size larger than the restored RX pages.
->
-> lan966x_fdma_rx_alloc_page_pool() also registers the newly allocated page
-> pool with each port's XDP RXQ before fdma_alloc_coherent() is called. If
-> fdma_alloc_coherent() fails, the new page pool is destroyed, but the
-> rollback path does not restore the per-port XDP RXQ mem model
-> registration either.
->
-> Save and restore rx->page_order and rx->max_mtu, and restore the old page
-> pool registration for each port's XDP RXQ before RX is started again.
-> This keeps the restored RX state consistent after a failed reload.
->
-> Fixes: 59c3d55a946c ("net: lan966x: fix use-after-free and leak in lan966x_fdma_reload()")
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
-> ---
-> v2:
->   - Save and restore rx->page_order and rx->max_mtu in the reload rollback
->     path.
->   - Keep the XDP RXQ page-pool registration restore from v1.
->
->  .../ethernet/microchip/lan966x/lan966x_fdma.c | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> index f8ce735a7fc0..8272ad085150 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> @@ -815,6 +815,7 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
->         struct page *(*old_pages)[FDMA_RX_DCB_MAX_DBS];
->         struct page_pool *page_pool;
->         struct fdma fdma_rx_old;
-> +       int page_order, max_mtu;
->         int err, i, j;
->
->         old_pages = kmemdup(lan966x->rx.page, sizeof(lan966x->rx.page),
-> @@ -825,6 +826,8 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
->         /* Store these for later to free them */
->         memcpy(&fdma_rx_old, &lan966x->rx.fdma, sizeof(struct fdma));
->         page_pool = lan966x->rx.page_pool;
-> +       page_order = lan966x->rx.page_order;
-> +       max_mtu = lan966x->rx.max_mtu;
->
->         napi_synchronize(&lan966x->napi);
->         napi_disable(&lan966x->napi);
-> @@ -854,7 +857,24 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
->         return 0;
->  restore:
->         lan966x->rx.page_pool = page_pool;
-> +       lan966x->rx.page_order = page_order;
-> +       lan966x->rx.max_mtu = max_mtu;
->         memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
-> +       /*
-> +        * lan966x_fdma_rx_alloc_page_pool() registered the new pool with
-> +        * each port's XDP RXQ before the allocation failed. The new pool is
-> +        * destroyed by lan966x_fdma_rx_alloc(), so restore the old pool's
-> +        * registration before restarting RX.
-> +        */
-> +       for (i = 0; i < lan966x->num_phys_ports; i++) {
-> +               if (!lan966x->ports[i])
-> +                       continue;
-> +
-> +               xdp_rxq_info_unreg_mem_model(&lan966x->ports[i]->xdp_rxq);
-> +               xdp_rxq_info_reg_mem_model(&lan966x->ports[i]->xdp_rxq,
-> +                                          MEM_TYPE_PAGE_POOL, page_pool);
-> +       }
-> +
->         lan966x_fdma_rx_start(&lan966x->rx);
->
->         lan966x_fdma_wakeup_netdev(lan966x);
-> --
-> 2.43.0
->
+so repeat_cnt cannot overflow.
+
+'ret' (which is field_cnt) comes from btf_find_struct_field().
+To overflow the struct needs to have 32k valid fields.
+Is this really what is happening?
+
+The issues is deeper. Please have a reliable reproducer first.
+
