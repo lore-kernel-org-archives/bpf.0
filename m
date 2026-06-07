@@ -1,346 +1,227 @@
-Received: from mail-4317.protonmail.ch (mail-4317.protonmail.ch [185.70.43.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE681A6813;
-	Sun,  7 Jun 2026 17:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4232A23395E
+	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 18:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780854828; cv=none; b=hhTqR9LVmu+JBehz+fS3IxYN1VQstxf3/1D2MLL1wfiiqZQmsnCexlOSLd4WlOUAVMpd3o/dFjrO08J2r+w5xnLip4WnPqw41JRboVwxrgWOYJD6r6XKX50iDZACruCxDdslcZTNpCORknGESb5ZuFYgH2NNa6HJOCk2b9ecBWs=
+	t=1780856016; cv=none; b=ltpsDRe5OBuQz0+Jt6Fi62t47S8xGbVSf+zfNKjTBUJV1GKTTjbhP5t8+Ua+sBf5NPQ8TRyEMuSCQiciW0+FkuW9dkOR6BDpy6FREu6x5cjn+TaUxz2cuhnky+tDcLkwjVP7flNe/UCCZYXK+D4ZtIGijsAmDp93/OJY6erlhbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780854828; c=relaxed/simple;
-	bh=p/bHsc5YHGZa281e53YytBiFpnR7omyH0e9yoXl0WQg=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OBkK7iKQZrjkI4ExFDhUIkH4ICVxvNdUipS98ZAp/24//J+UCbPpe0l+rRUz7ToRCjXSelRyqhidr6FsVnfoFfxVQ6i/iVGl6kXdN8qEbE0Vv0oy7+mdExRLDL/VStTkf7Q3ZdxMpEJz2TAF7UMqMJW736YMXv/3PT3I9ir/2hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org; spf=pass smtp.mailfrom=1g4.org; dkim=pass (2048-bit key) header.d=1g4.org header.i=@1g4.org header.b=v4uN6sQR; arc=none smtp.client-ip=185.70.43.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+	s=arc-20240116; t=1780856016; c=relaxed/simple;
+	bh=BP5TyjY1pCtGKAT//P7a7GvSHOPY7JKM31CFHBGd4Qs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=fKHTEKQasb/QYrxJ/+4DHpR9CXGQEIW8Xjtaq4DEALbn5/h/AOwarl4Q05L2wyJwsdMsOdgH3MB6VpdJYEOZ8Me4//2VX/NXMwxbai58YnqeLh5kDgcRVr531CGtD0gfwFdBo4QbSeVcjtmJfX3pAMmLFRbtjI7SFKRuQ1F3pGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rE1QYYK0; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=1g4.org header.i=@1g4.org header.b="v4uN6sQR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail2; t=1780854821; x=1781114021;
-	bh=rPmNPkqPeD17J1C8bhg8sIXUeSnrw/25puTS7EelNoY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=v4uN6sQRfFxk0qqDDwfYuUy6y6HmfA68x6MHt+pdX643UJdaz6lVzcm1esz/RNSNs
-	 ZL5Ly4ow2+RH/2un6CMZImILeoKp4KyeeQ04o/Clb5jrNeetc7mUUuiYpGSWiWfJVs
-	 E0JXKjZum8Qa1GSFXi2vQD02ZuilZ85E4MhUKlMtgZGuFN+l8NSqr5tnclmTk8YxkH
-	 xnNLYzFz5qGeCEv/kfbO6FkEPiCGbh1nS88xxre7cDc2Cs6MK1HIgoiYA4i200WcQw
-	 IdAwzxj3du25FDZHDRF23+DKCXPm9dlMRYbO46iNex0dbaZBKv1vqEvN6B0P4nrlWF
-	 bnaK1aO81TdHw==
-Date: Sun, 07 Jun 2026 17:53:37 +0000
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-From: Paul Moses <p@1g4.org>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, bpf@vger.kernel.org, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, houtao1@huawei.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before expansion
-Message-ID: <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
-In-Reply-To: <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
-References: <20260605234301.1109063-1-p@1g4.org> <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com> <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org> <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: d1771357e8570fc26cbdd1e325c00b20143c1505
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rE1QYYK0"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-48611addcfbso1387911b6e.1
+        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 11:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780856014; x=1781460814; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j3HXEYBCN+P/6hSxIy3mpYQoUowU8aTo9ESTr8/tzPI=;
+        b=rE1QYYK0dVxik6mH8AsS/SFr8PiHyanCL93p7jT/6osWXHnTypGUVS3LqOklwLiyle
+         0mquJaZ6EAe9QMD9e08alKt85ELwTIb31vDgFQS6puIzyFVxCd3nIBu4Kxyt9Vqq/Oa6
+         WV3FKYDmcY9YsSJ0ZJCUy+cNHNuIBCMMMvNN7zUczkUIttU/6K8oyGeTkmzNcu/Ju8pe
+         gWq+f/X/aQDqzvdwBmM3xNUtQxRRK/sYk70vCLG8gAcn1ESv/h1qDH1eauAbofGnOwDe
+         v6Nzn3nywlK6HNY0tTHCM3B8C3qGkP6fyytmzKfaxEEGfzRVmBV1YG5g1Ok0PgSdSK+Y
+         Mamw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780856014; x=1781460814;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j3HXEYBCN+P/6hSxIy3mpYQoUowU8aTo9ESTr8/tzPI=;
+        b=kHDQXcT8E9xLebmtLSqyBEMujnOzcERmAlnjRtVvBibfDDMPYeTPhiFEhI7643u0vt
+         eA0I22B969qYdc++GCbMjBTI9bMC6RCiWjb51Yf9fExpM8FFx5l+pDtYmEL/sDY/7QuH
+         dtuA06T9G33SRFsZZ3lJnD0HvF+JoMZmm2hP0OhrfH614mQ7BSTo4OcaOCbW2lSW43vy
+         Eu9O3fuiLrljpWGgdsDTh3g+qgQBaSSuj9jTUw6P9laYW31krVayAxtyqbQXOlPg8QgE
+         EYedV+eQuN8Uuh6H32ymhuc/sV5S3kcH/gFc1caSxRIyLbbcSSM+FkrPNV1yWPVORTEF
+         6ALQ==
+X-Gm-Message-State: AOJu0YwzhAEVTXX/X5FnVFm+O8iUpWmxHr2bODjIr0qaP/2VTM51QSCU
+	uFXZkj4R47Mh4uN8aVt04wcjO3+Q7wnL9iHI7+bURGz6xOpr7OagDteu
+X-Gm-Gg: Acq92OEhkJtqCwnrxh/KFXInZfBzGE3n8+QiBmUVsoy0PIj9gMtI505RE130I6Y1I/e
+	VYH+skVDPj3yzThCd7KSNaHkyU0JdwH9jloN9jMrWnRRL8GVu8+ii1/7Lg2lUVdq/0kQgRsiPO9
+	fAi0EM9qaqZbkXWG82McccbDlMd0b5uKjW3UtN79ry5tO7d1IKgjuO+0+M4zcOrKsh2OyMdNLcl
+	QhW66gMQeCvXHlzTWLYre3qiL2PYdrlNp/XqX1N2wVD+Is5KiucHJXs3SkcDE5VUoHFYZbh+Q7h
+	pL1PmPlddJqJr6u3ZOpc+kYA1OE6Vgql2g/93WnGUfFX1pRLe3rSiQqybk4Ox8cHA9aQafw+Oq8
+	2ej/b8BCcoCJykLObjjJBiVSoxOZZb8k1ST+O5Wx9DY+VZ+4bykKeTPl4CLEyGmluaqErrljMK/
+	2KQhRW8xb0HG6zmrF5A3rL/aOl7nWEBot6xqww15hl/niqa8Q3imK70dBL3jawkOveVzfju6Z/7
+	NSRQ9uGNVyiI4b5cXybjcOSnto=
+X-Received: by 2002:a05:6808:1a19:b0:486:52c6:36d8 with SMTP id 5614622812f47-4868db2dc14mr6846567b6e.5.1780856014039;
+        Sun, 07 Jun 2026 11:13:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e7965006sm10804134a34.23.2026.06.07.11.13.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Jun 2026 11:13:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 07 Jun 2026 11:13:32 -0700
+Message-Id: <DJ30RPYRXESZ.2P3LP98X55VMG@gmail.com>
+Subject: Re: [PATCHv8 bpf-next 28/29] selftests/bpf: Add tracing multi
+ attach benchmark test
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>, "Menglong
+ Dong" <menglong8.dong@gmail.com>, "Steven Rostedt" <rostedt@kernel.org>
+X-Mailer: aerc
+References: <20260606123955.345967-1-jolsa@kernel.org>
+ <20260606123955.345967-29-jolsa@kernel.org>
+In-Reply-To: <20260606123955.345967-29-jolsa@kernel.org>
 
->=20
-> Right, I know you can get a splat. But how did you stumble on it? Is this=
- BTF
-> produced during compilation, or hand-crafted case meant to exercise the l=
-imits
-> such that we get the splat? If you have a small reproducer, it might make=
- sense
-> to include it as a selftest as well.
+On Sat Jun 6, 2026 at 5:39 AM PDT, Jiri Olsa wrote:
+> Adding benchmark test that attaches to (almost) all allowed tracing
+> functions and display attach/detach times.
+>
+>   # ./test_progs -t tracing_multi_bench_attach -v
+>   bpf_testmod.ko is already unloaded.
+>   Loading bpf_testmod.ko...
+>   Successfully loaded bpf_testmod.ko.
+>   serial_test_tracing_multi_bench_attach:PASS:btf__load_vmlinux_btf 0 nse=
+c
+>   serial_test_tracing_multi_bench_attach:PASS:tracing_multi_bench__open_a=
+nd_load 0 nsec
+>   serial_test_tracing_multi_bench_attach:PASS:get_syms 0 nsec
+>   serial_test_tracing_multi_bench_attach:PASS:bpf_program__attach_tracing=
+_multi 0 nsec
+>   serial_test_tracing_multi_bench_attach: found 51186 functions
+>   serial_test_tracing_multi_bench_attach: attached in   1.295s
+>   serial_test_tracing_multi_bench_attach: detached in   0.243s
 
-Yes, it could be converted to a test, it's intended to produce the splat. I=
-'ll=20
-work on that.
+...
 
->=20
-> The callers of this function do:
->         if (nelems > 1) {
->                 err =3D btf_repeat_fields(info, info_cnt, ret, nelems - 1=
-, t->size);
->=20
-> so repeat_cnt cannot overflow.
->=20
-> 'ret' (which is field_cnt) comes from btf_find_struct_field().
-> To overflow the struct needs to have 32k valid fields.
-> Is this really what is happening?
->=20
-> The issues is deeper. Please have a reliable reproducer first.
->=20
->=20
-
-The repro is 100% reliable, the array repeat count is derived from=20
-nelems - 1, so repeat_cnt + 1 recovers nelems. The overflow is in=20
-the u32 multiplication of the number of fields by the number of=20
-array elements. A small field count can still wrap when multiplied by=20
-a large array element count. 10 * 429496730 wraps from 0x100000004 to 4,=20
-allowing the capacity check to pass before btf_repeat_fields() copies=20
-past the fixed scratch array.
-
-
-#define _GNU_SOURCE
-#include <errno.h>
-#include <linux/bpf.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/syscall.h>
-#include <unistd.h>
-
-#ifndef __NR_bpf
-#error "__NR_bpf is required for this probe"
-#endif
-
-#define LOCAL_BTF_MAGIC 0xeb9fU
-#define LOCAL_BTF_VERSION 1U
-#define LOCAL_BTF_KIND_INT 1U
-#define LOCAL_BTF_KIND_PTR 2U
-#define LOCAL_BTF_KIND_ARRAY 3U
-#define LOCAL_BTF_KIND_STRUCT 4U
-#define LOCAL_BTF_KIND_TYPE_TAG 18U
-#define LOCAL_BTF_INFO(kind, vlen) (((kind) << 24) | (vlen))
-#define LOCAL_BTF_INT_BITS(bits) (bits)
-
-#define TYPE_ID_INT 1U
-#define TYPE_ID_TARGET 2U
-#define TYPE_ID_KPTR_TAG 3U
-#define TYPE_ID_KPTR_PTR 4U
-#define TYPE_ID_SPIN_LOCK 5U
-#define TYPE_ID_OUTER 6U
-#define TYPE_ID_ARRAY 7U
-#define TYPE_ID_ELEM 8U
-
-#define ELEM_FIELD_COUNT 10U
-#define ELEM_SIZE 8U
-#define OUTER_ARRAY_OFFSET_BYTES 8U
-#define OUTER_ARRAY_NELEMS 429496730U
-#define OUTER_VALUE_SIZE (OUTER_ARRAY_OFFSET_BYTES + (ELEM_SIZE * OUTER_ARR=
-AY_NELEMS))
-
-struct local_btf_header {
-=09uint16_t magic;
-=09uint8_t version;
-=09uint8_t flags;
-=09uint32_t hdr_len;
-=09uint32_t type_off;
-=09uint32_t type_len;
-=09uint32_t str_off;
-=09uint32_t str_len;
-=09uint32_t layout_off;
-=09uint32_t layout_len;
-};
-
-struct local_btf_type {
-=09uint32_t name_off;
-=09uint32_t info;
-=09uint32_t size_or_type;
-};
-
-struct local_btf_member {
-=09uint32_t name_off;
-=09uint32_t type;
-=09uint32_t offset;
-};
-
-struct local_btf_array {
-=09uint32_t type;
-=09uint32_t index_type;
-=09uint32_t nelems;
-};
-
-struct bytes {
-=09uint8_t *data;
-=09size_t len;
-=09size_t cap;
-};
-
-static int append_bytes(struct bytes *out, const void *src, size_t len)
-{
-=09if (len > out->cap || out->len > out->cap - len)
-=09=09return -1;
-=09memcpy(out->data + out->len, src, len);
-=09out->len +=3D len;
-=09return 0;
-}
-
-static int append_type(struct bytes *out, uint32_t name_off, uint32_t kind,
-=09=09       uint32_t vlen, uint32_t size_or_type)
-{
-=09struct local_btf_type type =3D {
-=09=09.name_off =3D name_off,
-=09=09.info =3D LOCAL_BTF_INFO(kind, vlen),
-=09=09.size_or_type =3D size_or_type,
-=09};
-
-=09return append_bytes(out, &type, sizeof(type));
-}
-
-static int append_u32(struct bytes *out, uint32_t value)
-{
-=09return append_bytes(out, &value, sizeof(value));
-}
-
-static int append_member(struct bytes *out, uint32_t name_off, uint32_t typ=
-e,
-=09=09=09 uint32_t bit_offset)
-{
-=09struct local_btf_member member =3D {
-=09=09.name_off =3D name_off,
-=09=09.type =3D type,
-=09=09.offset =3D bit_offset,
-=09};
-
-=09return append_bytes(out, &member, sizeof(member));
-}
-
-static int append_array(struct bytes *out, uint32_t type, uint32_t index_ty=
-pe,
-=09=09=09uint32_t nelems)
-{
-=09struct local_btf_array array =3D {
-=09=09.type =3D type,
-=09=09.index_type =3D index_type,
-=09=09.nelems =3D nelems,
-=09};
-
-=09return append_bytes(out, &array, sizeof(array));
-}
-
-static uint32_t add_string(struct bytes *strings, const char *value)
-{
-=09uint32_t offset =3D (uint32_t)strings->len;
-=09size_t len =3D strlen(value) + 1U;
-
-=09if (append_bytes(strings, value, len) < 0)
-=09=09return UINT32_MAX;
-=09return offset;
-}
-
-static int build_btf_blob(uint8_t *blob, size_t blob_cap, size_t *blob_len)
-{
-=09uint8_t type_buf[1024];
-=09uint8_t str_buf[512] =3D { 0 };
-=09struct bytes types =3D { .data =3D type_buf, .len =3D 0, .cap =3D sizeof=
-(type_buf) };
-=09struct bytes strings =3D { .data =3D str_buf, .len =3D 1, .cap =3D sizeo=
-f(str_buf) };
-=09uint32_t str_int =3D add_string(&strings, "int");
-=09uint32_t str_target =3D add_string(&strings, "target");
-=09uint32_t str_kptr =3D add_string(&strings, "kptr_untrusted");
-=09uint32_t str_spin =3D add_string(&strings, "bpf_spin_lock");
-=09uint32_t str_outer =3D add_string(&strings, "outer");
-=09uint32_t str_lock =3D add_string(&strings, "lock");
-=09uint32_t str_items =3D add_string(&strings, "items");
-=09uint32_t str_elem =3D add_string(&strings, "elem");
-=09uint32_t str_fields[ELEM_FIELD_COUNT];
-=09struct local_btf_header header;
-=09struct bytes full =3D { .data =3D blob, .len =3D 0, .cap =3D blob_cap };
-=09uint32_t i;
-
-=09for (i =3D 0; i < ELEM_FIELD_COUNT; i++) {
-=09=09char name[8];
-
-=09=09snprintf(name, sizeof(name), "f%u", i);
-=09=09str_fields[i] =3D add_string(&strings, name);
-=09}
-=09if (str_int =3D=3D UINT32_MAX || str_target =3D=3D UINT32_MAX || str_kpt=
-r =3D=3D UINT32_MAX ||
-=09    str_spin =3D=3D UINT32_MAX || str_outer =3D=3D UINT32_MAX || str_loc=
-k =3D=3D UINT32_MAX ||
-=09    str_items =3D=3D UINT32_MAX || str_elem =3D=3D UINT32_MAX)
-=09=09return -1;
-=09for (i =3D 0; i < ELEM_FIELD_COUNT; i++) {
-=09=09if (str_fields[i] =3D=3D UINT32_MAX)
-=09=09=09return -1;
-=09}
-
-=09if (append_type(&types, str_int, LOCAL_BTF_KIND_INT, 0, 4) < 0 ||
-=09    append_u32(&types, LOCAL_BTF_INT_BITS(32)) < 0 ||
-=09    append_type(&types, str_target, LOCAL_BTF_KIND_STRUCT, 0, 1) < 0 ||
-=09    append_type(&types, str_kptr, LOCAL_BTF_KIND_TYPE_TAG, 0, TYPE_ID_TA=
-RGET) < 0 ||
-=09    append_type(&types, 0, LOCAL_BTF_KIND_PTR, 0, TYPE_ID_KPTR_TAG) < 0 =
-||
-=09    append_type(&types, str_spin, LOCAL_BTF_KIND_STRUCT, 0, 4) < 0 ||
-=09    append_type(&types, str_outer, LOCAL_BTF_KIND_STRUCT, 2, OUTER_VALUE=
-_SIZE) < 0 ||
-=09    append_member(&types, str_lock, TYPE_ID_SPIN_LOCK, 0) < 0 ||
-=09    append_member(&types, str_items, TYPE_ID_ARRAY, OUTER_ARRAY_OFFSET_B=
-YTES * 8U) < 0 ||
-=09    append_type(&types, 0, LOCAL_BTF_KIND_ARRAY, 0, 0) < 0 ||
-=09    append_array(&types, TYPE_ID_ELEM, TYPE_ID_INT, OUTER_ARRAY_NELEMS) =
-< 0 ||
-=09    append_type(&types, str_elem, LOCAL_BTF_KIND_STRUCT, ELEM_FIELD_COUN=
-T, ELEM_SIZE) < 0)
-=09=09return -1;
-=09for (i =3D 0; i < ELEM_FIELD_COUNT; i++) {
-=09=09if (append_member(&types, str_fields[i], TYPE_ID_KPTR_PTR, 0) < 0)
-=09=09=09return -1;
-=09}
-
-=09memset(&header, 0, sizeof(header));
-=09header.magic =3D LOCAL_BTF_MAGIC;
-=09header.version =3D LOCAL_BTF_VERSION;
-=09header.hdr_len =3D sizeof(header);
-=09header.type_off =3D 0;
-=09header.type_len =3D (uint32_t)types.len;
-=09header.str_off =3D (uint32_t)types.len;
-=09header.str_len =3D (uint32_t)strings.len;
-
-=09if (append_bytes(&full, &header, sizeof(header)) < 0 ||
-=09    append_bytes(&full, types.data, types.len) < 0 ||
-=09    append_bytes(&full, strings.data, strings.len) < 0)
-=09=09return -1;
-
-=09*blob_len =3D full.len;
-=09return 0;
-}
-
-static long load_reviewed_btf_variant(void)
-{
-=09uint8_t blob[4096];
-=09char log_buf[4096];
-=09union bpf_attr attr;
-=09size_t blob_len =3D 0;
-
-=09memset(log_buf, 0, sizeof(log_buf));
-=09memset(&attr, 0, sizeof(attr));
-=09if (build_btf_blob(blob, sizeof(blob), &blob_len) < 0)
-=09=09return -2;
-
-=09attr.btf =3D (uint64_t)(uintptr_t)blob;
-=09attr.btf_size =3D (uint32_t)blob_len;
-=09attr.btf_log_buf =3D (uint64_t)(uintptr_t)log_buf;
-=09attr.btf_log_size =3D sizeof(log_buf);
-=09attr.btf_log_level =3D 1;
-
-=09printf("btf_invalid_variant: submitting reviewed BTF payload size=3D%zu =
-nelems=3D%u\n",
-=09       blob_len, OUTER_ARRAY_NELEMS);
-=09errno =3D 0;
-=09return syscall(__NR_bpf, BPF_BTF_LOAD, &attr, sizeof(attr));
-}
-
-int main(void)
-{
-=09long ret =3D load_reviewed_btf_variant();
-=09int saved_errno =3D errno;
-
-=09if (ret =3D=3D -2) {
-=09=09printf("btf_invalid_variant: failed to build bounded BTF payload\n");
-=09=09return 1;
-=09}
-=09printf("btf_invalid_variant: BPF_BTF_LOAD ret=3D%ld errno=3D%d (%s)\n",
-=09       ret, saved_errno, strerror(saved_errno));
-=09printf("btf_invalid_variant: bounded invalid-access attempt complete\n")=
+> +	if (!ASSERT_OK(bpf_get_ksyms(&ksyms, true), "get_syms"))
+> +		goto cleanup;
+> +
+> +	/* Get all ftrace 'safe' symbols.. */
+> +	for (i =3D 0; i < ksyms->filtered_cnt; i++) {
+> +		if (!tsearch(&ksyms->filtered_syms[i], &root, compare)) {
+> +			ASSERT_FAIL("tsearch failed");
+> +			goto cleanup;
+> +		}
+> +	}
+> +
+> +	/* ..and filter them through BTF and btf_type_is_traceable_func. */
+> +	nr =3D btf__type_cnt(btf);
+> +	for (type_id =3D 1; type_id < nr; type_id++) {
+> +		const struct btf_type *type;
+> +		const char *str;
+> +
+> +		type =3D btf__type_by_id(btf, type_id);
+> +		if (!type)
+> +			break;
+> +
+> +		if (BTF_INFO_KIND(type->info) !=3D BTF_KIND_FUNC)
+> +			continue;
+> +
+> +		str =3D btf__name_by_offset(btf, type->name_off);
+> +		if (!str)
+> +			break;
+> +
+> +		if (!tfind(&str, &root, compare))
+> +			continue;
+> +
+> +		if (!btf_type_is_traceable_func(btf, type))
+> +			continue;
+> +
+> +		err =3D libbpf_ensure_mem((void **) &ids, &cap, sizeof(*ids), cnt + 1)=
 ;
-=09return 0;
-}
+> +		if (err)
+> +			goto cleanup;
+> +
+> +		ids[cnt++] =3D type_id;
+> +	}
+
+This filtering wasn't enough.
+I've added removal of duplicates here while applying:
+
++       /*
++        * Collect names that are not unique in kallsyms. The kernel resolv=
+es a
++        * tracing-multi BTF id to an address with kallsyms_lookup_name(), =
+which
++        * returns the first symbol of that name. For a duplicate name that=
+ may
++        * be a different (non-ftrace-able) instance than the ftrace-able o=
+ne in
++        * available_filter_functions, so attaching to it by BTF id fails w=
+ith
++        * -ENOENT (e.g. t_start/t_next/t_stop). ksyms->syms is sorted by n=
+ame,
++        * so equal names are adjacent.
++        */
++       for (i =3D 1; i < ksyms->sym_cnt; i++) {
++               if (strcmp(ksyms->syms[i].name, ksyms->syms[i - 1].name))
++                       continue;
++               if (!tsearch(&ksyms->syms[i].name, &dups, compare)) {
++                       ASSERT_FAIL("tsearch failed");
++                       goto cleanup;
++               }
++       }
+
+
++               /* Skip names that are not unique in kallsyms, see above. *=
+/
++               if (tfind(&str, &dups, compare))
++                       continue;
+
+
+As claude explains it:
+----
+1. The kernel attaches tracing_multi by BTF id. To get an address it resolv=
+es
+the BTF function name via kallsyms_lookup_name(tname) and requires
+ftrace_location(addr) =E2=80=94 kernel/bpf/verifier.c:19380:
+addr =3D kallsyms_lookup_name(tname);
+...
+if (!addr || !ftrace_location(addr))
+        return -ENOENT;
+2. t_start/t_next/t_stop each have 5 instances in this kernel. Only one is
+ftrace-able =E2=80=94 the copies in kernel/trace/* are built notrace (ftrac=
+e's Makefile
+strips -pg), so only the unrelated copy is in available_filter_functions:
+3. kallsyms_lookup_name() returns the lowest-address instance among equal n=
+ames
+(exact strcmp, lowest seq). That instance has no fentry =E2=86=92 ftrace_lo=
+cation()
+returns 0 =E2=86=92 -ENOENT, which aborts the whole all-or-nothing bench at=
+tach.
+
+Why the bench includes them: it intersects BTF FUNC names with
+available_filter_functions names. Since some t_start is ftrace-able, the na=
+me
+passes the filter =E2=80=94 but the kernel resolves the wrong (non-ftrace-a=
+ble)
+t_start. The author's kernel apparently had the ftrace-able copy at the low=
+est
+address, so it passed there.
+
+This is a pre-existing limitation, not multi-specific: single fentry attach=
+ by
+BTF id uses the same kallsyms_lookup_name(tname) path (verifier.c:19120) =
+=E2=80=94 you
+can't reliably fentry-attach to any duplicate-named function on this kernel
+either.
+----
+
+Maybe we should adjust bpf_get_ksyms() instead. Not sure.
+
+After the fix in my gcc 15 kernel with KASAN:
+serial_test_tracing_multi_bench_attach: found 49045 functions
+serial_test_tracing_multi_bench_attach: attached in   4.115s
+serial_test_tracing_multi_bench_attach: detached in   2.313s
 
