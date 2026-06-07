@@ -1,64 +1,63 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6B136C5BB
-	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 08:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03951E98E3
+	for <bpf@vger.kernel.org>; Sun,  7 Jun 2026 09:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780822795; cv=none; b=NJkkaYTMm/uIFek3k5Mg+Nt/8OViEEIYoXFzpLYJD3gTtxlurjfHjdn++uphW5V0K2QDTAUIydAVRjFMUYV7DWWkhy5X9O/esmUej3BnsP4bn/JsUCV2e274tiytYBABZDhpaFnOXOT5wA619rkxz0PjU6B2YvkXUuLYX+gCIpY=
+	t=1780823845; cv=none; b=XV9VJ/34bL8TfZNPTG+R+kWMQYBKN/5cmWe7aNAAI8VLQurNp7cHdr0xpODP6n+IUX49k1wDPb/oJnkJJrqazy8Sg3FprElC/qKTaI+CLpfmJf6+eUFQEqMSLoulktBgsqgl/jRapABvVZ0vcJvSa2umJiVl0awLqeucbeBwgl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780822795; c=relaxed/simple;
-	bh=51hCHviJV9dx2kHJUEdIxPea9gknSXJj2/BlEWlzHPA=;
+	s=arc-20240116; t=1780823845; c=relaxed/simple;
+	bh=sGRfu/p05xv6+8wOEt3PXH38SdB+tJA9PS7n97haZ8A=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=EI3neFziqtz3ouGS9EGEs06Lj0S/WM4NWE87cF2kMW1hn9r9Okml8LVOCUUBXCkwAh2iAMu9tA6wv1ZuzlqtJAaBrTpmQTbWwHOSZ9iGORyzFIgbbkvmpKq3mI87HpQIaqjuCOWS+0Xuyn2Vj3ygApG8kLkJRI9jYWV3xgX7eIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IrE0gVMt; arc=none smtp.client-ip=209.85.128.66
+	 References:In-Reply-To; b=p5LJPMFE2JsgbH4vJAcRj/TqxZpz7SDoEESdG9W7CRHCyF9RPbQ2VOO8W3JI9P6T+6iMfReFf8A2N37gnySyP648Wm2CTIwR+AIGZ3A1tdKH6bq6LVdkb5elXEnfCvy35Rj/d1hIpQaSSoHwubrjnnFVxNxDXJ7wYcoPPYBeMkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnnEQoLZ; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrE0gVMt"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-490cdae130cso649125e9.0
-        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 01:59:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnnEQoLZ"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso27186745e9.1
+        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 02:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780822792; x=1781427592; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780823842; x=1781428642; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hd8eJQE2e7HGUVx3+ey2vy9S5cDeuFg6IlJZJVllcIw=;
-        b=IrE0gVMtulCp3oN+57lGho/0OvEyOcm17i4vJeiNhE9ynyhO2q26zdmuxh/tu2IPeY
-         SCHz/B3zBNOHZIkgY0hf4t9GCZgIHZnh+czAQ3UymI0m/m5SrMI+IaXYo3C+FFotApdD
-         ZoBU7FONBHEYzKjsZzOCu+HhfZCWHqlxs0YMuWu5n2ZHJSYjhfi3P2INkkNPICzgV9mm
-         1JvcWhCl3jN+yQg/CRAt2HQ5nbZIG7RGU6X8I3KnOdKg0w+7noDqvtjfwW0rNH1G8w9I
-         P6q34vJZnO9m/lWgHwm/Lj2qNI8+0FvT9DF5FrOTafbujNCMuDZIyjSOkFU2lOHgj6FA
-         NiwQ==
+        bh=Or/uZEM1Mr/Fy//hQIxqzuqiLQi1LgViOgSt2pTVu/8=;
+        b=WnnEQoLZ70Cy29e+cEjIwu6ms3oKEhJFMVRJCQEewXs37RXNgvWhEdmXR5LrbXNOtw
+         SBM1ouPHoUelaY+Jx2EJyJbeTuSR3SdUyBBp3acPYV9M86JBwoPxUNJbarj9uIjRXK4L
+         WM2ig8na4CAQlMsVlXhechr2dYbr9lZrIuGzjyu8EfeEpvFhg8C5EKOj/s7kxzDSeBPq
+         ejtLh5a6j3f0i3b3MQNIUZciR5ioMtjPTkOtIjNTlGOwD7AZbKCMttWwc/UgCq41eebm
+         oYkNrvWF2x6TWt5ooeJq8jHvX5rxBMwUgGygK9qLF19ImGodqaLZBp5PE3qMHs5Np/Zj
+         DMIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780822792; x=1781427592;
+        d=1e100.net; s=20251104; t=1780823842; x=1781428642;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hd8eJQE2e7HGUVx3+ey2vy9S5cDeuFg6IlJZJVllcIw=;
-        b=c22GjgWVJ/ciJJb/NnxMD7bHJZsaA4C91BFTs7reUgoUzSW5YJ8SwXiOvioWyqFrPm
-         sw5pU8NPZ2oAZlgeqZEWJ4dJLS40lICQY4kkRTsjrTIQPn+8TaxTfnCZEsEdECOuw9TN
-         Y4Tvss+BgbXK7K5UQVedHS98QApMWxQoBCSZQSTQPRI+STqnTZ+rhylMWFJZvI9eP4h2
-         iQhnMaxDXSDkXdBzYqON95caWb+8zNl6SvJMDIv/G7qHPbsLGt/kmF+KMzucwHbkuXb2
-         QrWFLmJTD4RI5m1snitNnaUudFUS4T1xgO3EorV19w9RGv6j7DQmlP8UNobZbl5qh50o
-         reTQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+7gRtbYEEckmj9KvxRAE1ngvA7LsyYbJMFZwalHDoTF8UxPQXjoebZTMQuYQ+ZoAv25Qs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAif4HBXnnxb0stLVRUlPz8N9/JmgQBMU7dR4qo2d6+RL628mZ
-	pEMSCfXQUiGjHjZTr/qdgQ93YLxSEay6xAM05CgBo3NVIfLFa1j+A5FJ
-X-Gm-Gg: Acq92OEUhAQnmmE4hkankvUCVJQg1wnSFoOKJf8dtB8T1MA7rsCA8DjHjPccw7f0uI/
-	JN4bKbmKCyn6VTWSyA+/1YFDeYtPgNdkS5Txs4GFfOroxsQNikI1ShaZVYuOtZ+1pzm9Dhc8Cle
-	s8YUoWiW8t+KC6SQ5hyk+tMEpPQBNUAY44xtR1go1AkWUCKKLmbiqfInqLsYCzjcmktt+HQh37L
-	p6tLqK697j3h1ijWrlggZUDzVvz8PqIRN+kvUnjMFmaX1e23utFQRAQUY8pl7wgWfB/XvPx56x7
-	//ZgwZnfhMiFcwv7hnP2EMgIZKXz8IUo3kqK9Scjo1UcdLZZzL9RLtwF9CG8xIeQalzlr4EdaUD
-	Ui3DLsIqTa8zOwP1DU1xAMndKmNDIVx0el3uQa8Wc2FF6nxSRXUOdZn8pF9nOCD8rdBLFmFUfn8
-	nRb7IxlhIT8M+G2l+FK2RGEg98W2nddZcLNN5yCua18GjISsT1M9bC0nxbaOThTftEMRyLNhBiE
-	KDtgGNOKkAK/94s2HB1dlTiH1GGF5QFKNZJ7Zy2tYKkvdiA0/iUl7eg7sM9ovGTVB6jh4jotbjE
-X-Received: by 2002:a05:600c:628c:b0:48f:e26a:1744 with SMTP id 5b1f17b1804b1-490c25a87f5mr166153635e9.9.1780822792343;
-        Sun, 07 Jun 2026 01:59:52 -0700 (PDT)
+        bh=Or/uZEM1Mr/Fy//hQIxqzuqiLQi1LgViOgSt2pTVu/8=;
+        b=BAE9/SLKsd2ZULpwAEZeXxDcP5Z1FStzRDTAdGYVuX747kG9Xh73rnuw/Nn38F7T2x
+         PyvixvqMReSMoBxYi+wUqfI1lTgXqBU1jnk6ueBJr06QEB6wSPbmhhF+R0pBswFF+cuJ
+         OX6kiil4eJe1yELlBMvM5DqtlhiYgr71uZIKZ8sPHEshhm7wvTI5IxbbdkXPmDZQqubg
+         O8vjkUC5uI0QevbrRrLSRGx8lwXs2UagW93FwbL6MPJkd1Sp5MUvIvI+YRd3lzamRQTu
+         xE9ayP9We6bZLGOmlytpE8Zcb6oXxN58EjLRcYMOApzDWHxpREgcJDHJNRhq9PqymQLL
+         mVog==
+X-Gm-Message-State: AOJu0YxuhgXY8ZvC1dqD+mQtFaIloeHDZoVTFIDmWR0/Sa3I5epry/S3
+	VI9U3XcaiUzy3MXspBCHwVX0W/k9HOBuV5XV3NY7KqimkCsI8T1OZL2s
+X-Gm-Gg: Acq92OHSwjpD4LswgyuzgLlvqgENzXzZYQ2lN74MO0XMTK4mQ/deRLQnPJpb7V2O4IA
+	AJHQAmCaNyhSpHLplQXg2RXlcTHjoOtGPCHGaG2QmBaom0g6E7O9ur4Eax6HR1DgWQOErrP3UbF
+	hfCxu1d85aMB3/z+m63Q9YU0nA7hMlBQqSgXBwP0TwlI5dSm7oijmn1JCj6s+xAvHL9QoPIxfj2
+	c28b+DAPgFcDHGF9JPk79ZCO4z3KrW0bIRnMSKY5st6SUfr1v8Pphjeu11w9AGayEZQoxAbr0Yd
+	syw30dMm4/1najq1EBLyLZAnKA0OPH/gcIeR8Bof+B7LV+GeWgTAqsQDFIWqEpKtSaX70Whd2Mf
+	HipIFtnxQoM2Pc9oWPYVDN1wGWK+sxJFpkq3n3ZFWw4eqUZZXCIkRtWtJ2TSI8/vEgmt6Rl1s3D
+	IQGboTcBCSLhtjSfur+Rq3M81tOGzKsdlTLcuxS+N+d+X/PHZsfEIsPmyaqOoNS3hS1YJjc6k9m
+	G8knX48OBnEs8U51x3nJuBFD9qWW38ROYnhkJv53RqCZO5cZo4fN/DBRkyniYXIcn0Hov6ugPvp
+X-Received: by 2002:a05:600c:5248:b0:490:c024:2ec8 with SMTP id 5b1f17b1804b1-490c2522657mr179010725e9.0.1780823842143;
+        Sun, 07 Jun 2026 02:17:22 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35fd33sm45756094f8f.35.2026.06.07.01.59.51
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46028a6dce6sm34703602f8f.30.2026.06.07.02.17.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2026 01:59:51 -0700 (PDT)
+        Sun, 07 Jun 2026 02:17:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,74 +66,102 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 07 Jun 2026 10:59:51 +0200
-Message-Id: <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
-Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <houtao1@huawei.com>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
+Date: Sun, 07 Jun 2026 11:17:21 +0200
+Message-Id: <DJ2PD6LPWBZH.23QDYT24490ZH@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf, lpm_trie: Allow lookups from sleepable BPF
+ programs
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Paul Moses" <p@1g4.org>, <martin.lau@linux.dev>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <bpf@vger.kernel.org>
+To: <sashiko-reviews@lists.linux.dev>, "Vlad Poenaru" <vlad.wing@gmail.com>
 X-Mailer: aerc 0.21.0
-References: <20260605234301.1109063-1-p@1g4.org>
-In-Reply-To: <20260605234301.1109063-1-p@1g4.org>
+References: <20260529174233.2954240-1-vlad.wing@gmail.com>
+ <20260529190220.2090C1F00893@smtp.kernel.org>
+In-Reply-To: <20260529190220.2090C1F00893@smtp.kernel.org>
 
-On Sat Jun 6, 2026 at 1:43 AM CEST, Paul Moses wrote:
-> btf_parse_struct_metas() walks user-supplied BTF during BPF_BTF_LOAD,
-> and btf_repeat_fields() expands repeatable fields from array elements
-> into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
+On Fri May 29, 2026 at 9:02 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
 >
-> The remaining-capacity check performs the expanded field count calculatio=
-n
-> in u32. A malformed BTF can wrap that calculation, causing the check to
-> pass even when the expanded field count exceeds the scratch array
-> capacity. The following memcpy() can then write past the end of the
-> array.
+> Pre-existing issues:
+> - [High] This problem wasn't introduced by this patch, but the fix is inc=
+omplete. The patch resolves an RCU lockdep splat in `trie_lookup_elem` for =
+sleepable BPF programs, but leaves identical core kernel locking rule viola=
+tions in `trie_update_elem` and `trie_delete_elem`. Sleepable eBPF programs=
+ hold `rcu_read_lock_trace()`, not the classic `rcu_read_lock()`. The updat=
+e and delete operations acquire the map's spinlock (`trie->lock`) and corre=
+ctly serialize access, but they use `rcu_dereference()` to traverse the tri=
+e instead of the update-side API `rcu_dereference_protected()`. `rcu_derefe=
+rence()` strictly asserts that `rcu_read_lock_held()` is true. Holding a sp=
+inlock disables preemption but does not satisfy this check, leading to the =
+exact same 'suspicious rcu_dereference_check() usage' lockdep splat that th=
+is patch aimed to fix.
+> --
 >
-> Use checked addition and multiplication before copying repeated fields
-> and reject impossible counts.
+> commit 1ac6e30b3c7fb4d93d67bfcbb5dc35077814b266
+> Author: Vlad Poenaru <vlad.wing@gmail.com>
 >
-> Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating =
-btf fields")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paul Moses <p@1g4.org>
-> ---
+> bpf, lpm_trie: Allow lookups from sleepable BPF programs
+>
+> This commit fixes a lockdep warning caused by sleepable BPF programs
+> accessing LPM tries. It updates the RCU dereference checks in
+> trie_lookup_elem() to use bpf_rcu_lock_held() instead of
+> rcu_read_lock_bh_held().
+>
+>> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+>> index 0f57608b385d4..ac36063cb7e62 100644
+>> --- a/kernel/bpf/lpm_trie.c
+>> +++ b/kernel/bpf/lpm_trie.c
+> [ ... ]
+>> @@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, v=
+oid *_key)
+>>  		 */
+>>  		next_bit =3D extract_bit(key->data, node->prefixlen);
+>>  		node =3D rcu_dereference_check(node->child[next_bit],
+>> -					     rcu_read_lock_bh_held());
+>> +					     bpf_rcu_lock_held());
+>>  	}
+>>
+>>  	if (!found)
+>
+> [Severity: High]
+> This is a pre-existing issue, but does this patch leave the fix incomplet=
+e?
+>
+> While this patch updates the lookup path to avoid lockdep splats from sle=
+epable
+> BPF programs, sleepable BPF programs can also trigger map updates and del=
+etes.
+> The functions trie_update_elem() and trie_delete_elem() acquire the map's
+> spinlock (trie->lock) but traverse the tree using rcu_dereference():
+>
+> kernel/bpf/lpm_trie.c:trie_update_elem() {
+> ...
+>         while ((node =3D rcu_dereference(*slot))) {
+>                 matchlen =3D longest_prefix_match(trie, node, key);
+> ...
+> }
+>
+> kernel/bpf/lpm_trie.c:trie_delete_elem() {
+> ...
+>         while ((node =3D rcu_dereference(*trim))) {
+>                 matchlen =3D longest_prefix_match(trie, node, key);
+> ...
+> }
+>
+> Because rcu_dereference() strictly asserts that rcu_read_lock_held() is t=
+rue,
+> and holding a spinlock does not satisfy the classic RCU read lock check, =
+won't
+> calling map updates or deletes from sleepable programs still trigger the =
+exact
+> same suspicious rcu_dereference_check() usage lockdep splats?
 
-Do you have an example where this actually occurred in practice?
+Please address this feedback for other instances and respin.
 
->  kernel/bpf/btf.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+pw-bot: cr
+
 >
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index a62d78581207..510aa32847da 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -3668,7 +3668,7 @@ static int btf_get_field_type(const struct btf *btf=
-, const struct btf_type *var_
->  static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
->  			     u32 field_cnt, u32 repeat_cnt, u32 elem_size)
->  {
-> -	u32 i, j;
-> +	u32 i, j, total_cnt, total_repeats;
->  	u32 cur;
->
->  	/* Ensure not repeating fields that should not be repeated. */
-> @@ -3686,10 +3686,9 @@ static int btf_repeat_fields(struct btf_field_info=
- *info, int info_cnt,
->  		}
->  	}
->
-> -	/* The type of struct size or variable size is u32,
-> -	 * so the multiplication will not overflow.
-> -	 */
-> -	if (field_cnt * (repeat_cnt + 1) > info_cnt)
-> +	if (check_add_overflow(repeat_cnt, 1, &total_repeats) ||
-> +	    check_mul_overflow(field_cnt, total_repeats, &total_cnt) ||
-> +	    total_cnt > (u32)info_cnt)
->  		return -E2BIG;
->
->  	cur =3D field_cnt;
+> Should these paths be updated to use rcu_dereference_protected() since th=
+e
+> trie->lock is held?
 
