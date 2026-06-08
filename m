@@ -1,101 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594EF30FC03;
-	Mon,  8 Jun 2026 02:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0461A274B23
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 05:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780885759; cv=none; b=BNY5/nOafboctXi162LbLROAGqhLxa2j0dH7cZExMTWlwcfwdWNpXpRbzTT8+ojYxCmr9KGjBDTvxT8qULtHEiR7KF9yKwrwPeSgHTGeTN/dfKfiC4dfom9HHisUEEbs0pGH3j0pXdvSUQwoObEU+cZL4pEnrkSFnAFoQ9kFBpg=
+	t=1780894843; cv=none; b=gGYByQblwZFK/7I9pDJ4tJT6l77cmc8OolC6y/10AowxP/zqr2EcGqQZhQLSmAUFazaN7QWfTIlhtYF1YBL5YZUmI5Dx3bxliKpWML1KMJQ2cw7mXt6DEOJbYEXS0rUR9kGgoAwr5Wj4pFZP/250q8CKgcdUYpppqtA2UyjlRq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780885759; c=relaxed/simple;
-	bh=1yW3nGF+k1cyd6TOnr3aI6fuKTkcHeoCFzAPA0owvD4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=DAHfWbAiJuXk4GufugxYWmGH9WR8ZmQ1rdGUWDM02FIhpBr6kXS3fuRdLRauSILod1mN3nvJ7f5cPuHi52PhSzLdotDOuySxaoG/5JbNJaqdNF+Ti+aq33t9YvIvwxtIk/DLJetdxFDBNkMD/pRnE+WerCs3yvfJWw70bYuMpS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YryrMEOK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780894843; c=relaxed/simple;
+	bh=Oh1MV1RWGEKUsSG9k6LPTui2Lt/unV+D836axWkaWRo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fOxyHR6eSZaOR2HFy4xB6dyBqWWs7fHUjAxaJB/1ALXMkbYBMx7Ec8cXx87ui4xr1TGgZG9gRxoypRIk22fVZX9ENbj5E+zVhhGKH++ac8vVZV/xw12YfqZ9bC5Ma77PQXROXorZ7J8IUe5Zz/dfM1h6cXBsFkGv0YA+e6Ci5sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FpHm9+ga; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YryrMEOK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AADE1F00893;
-	Mon,  8 Jun 2026 02:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780885758;
-	bh=aBSarULtiAIbNgz7EOEuuFuqzWO+yqoqqHghdSCdJ5U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=YryrMEOKa/URJl9Ed4LYJYVdYFN79dFfhRsvvv/Z2A1pqVOsyC+1yNXergIxdOPcj
-	 nb/sKI5iK0Bp6WZ1ZQ12IUDbIhbFAUkhWBeZXZRe9MFmyuESIXFgQS/K2Js3xzaB4W
-	 EKNs5xdDxxgzs8r3dlyHGfmcJI2VpUUrMPhRA2DGA+TbFbWlHUhLjnYURUDgy0xqMx
-	 FMq5r7u6B5QLeBGREwD6tuajwJ7pRsuhRTtzmKrPdAl/aMbPPIGjDv3QXFMo3CPU6D
-	 QpVVgtwoFki47KPVdduvlwH2a1Jky7Lt5byDMZ4ly2wCl8Ah5rk1xiJjDi08WxdnD2
-	 6qhyn9rpUdaxg==
-Date: Mon, 8 Jun 2026 11:29:11 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v2 3/6] bootconfig: render embedded bootconfig as a
- kernel cmdline at build time
-Message-Id: <20260608112911.ec62dfd24adf235b6db5506b@kernel.org>
-In-Reply-To: <20260605-bootconfig_using_tools-v2-3-d309f544b5f7@debian.org>
-References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
-	<20260605-bootconfig_using_tools-v2-3-d309f544b5f7@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FpHm9+ga"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2c0c1e0d00bso38236675ad.0
+        for <bpf@vger.kernel.org>; Sun, 07 Jun 2026 22:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780894841; x=1781499641; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4p5Co7VxrJ6oR2ZhA3C1MwZelFLsSrAfJgqOqIxMmA=;
+        b=FpHm9+galER5UGM6rhbgXE43GsEfiVmfZ1hTMhskQlhpzShl9Zgo+OTHcIdAj2FBhs
+         zEMFr5yC25SthYw1dHEbv9TkQmstejSoiH1b+GYzq5CPobSb0nKUdw2yW9q9TrjpohhC
+         YHS2xBpPHVbIGgPnXdLdoZ4ySVYb+Dh31X4kmTSGQ6NDAHq0v5l90nYbIiUmN629HPnv
+         TDnM9hw+7gQdUF8STqNIvaI8xdHszbiqvp6TNgYLdq2ycw7Ybheb+APvn9xFoOFZJFPV
+         2Qn6gh+XPsbweU4XNEuNK0Pqc2/7pgwbT2PryE89Gb6W/QZsFqI7Buf25Cd6/ceoXo2z
+         8jfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780894841; x=1781499641;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R4p5Co7VxrJ6oR2ZhA3C1MwZelFLsSrAfJgqOqIxMmA=;
+        b=KoTDhSw/zHIuEr1KsWIx3irDYBuVa0UcksyJxXZuuK0ov68dF18zkwIlFbdK0Q7UkO
+         b0zaJGbfB+cFA8CXH7pLP9X8b3ZHSZAx00gksdTtbKmoZdJLwhOymLfPRSoV0fHXrdsp
+         hSC0SqT2vRe4sJhWERF/6lD84MwMrG9ZwRXF3+RaTdRCEIwTanrHtNMSOtgmjpjH3HiZ
+         COILk/sgA4XwPQAiokift8F28vdspjH0CK7WomJjKKP6oVJVXG8CI38gK6vqrRpmiqXU
+         pC+VTkgualIz37me0ggIFTWu5Y1gB7EI3VaQ4g9yaotn9UQ2LNoIdDgAqS2Ap4tN0HkT
+         88PQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/YcHiXLKZECxkxsnqxXpc+AxJoW5teYDy/LAvAL1bOCud7uunQ4qoikdORJhGXPA3Cqeg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjkeuuWYQcxJTv0duWYc5Eb6ju/tmmS5aY8W0TqoPZPnLoJDfl
+	An6R5KoEZhGk4ZlR3rCmaYlxzZoVhdoHonbOyUvby2300YwfYQ1Tf9Bc
+X-Gm-Gg: Acq92OHulz9ZCd3cpoRfVE6RHHPbp1ES/eYaRmBSrOx3RNRfmG1jqpAtKjvrOJxmpus
+	sK+Mj8nm4eLkLmbIEnHXFR6EzviMX/yaiqFeizi7YjfOFV7nWnimwmpI/GSPQOmx6m902j9Qsd5
+	IZFuWPcRZgOUh+ReZLSRRFwh1XFEB3eXvc+2x7mXgYdVY8Hu1VmWAKCPJDrLJQsnpbj4/kcVHMr
+	+I/Qj743cbFfxbER3BUSKXDV9qMZ8f4zgnuAaUPJw847yEGA+Sv8XjbGPHBqTCwqEbRP6qm0bPi
+	vLWGkDqEqpYDe/GOSeJQZcUBOVc7WhIinFWKiu2Ia720NKx4+u9DAHGcXjlriL1ZQXkYg3I12e1
+	c/Ekiv5ZA/b4C+wJq9ZNZVEaO6fRvblMREOAAPikjojQch96rNwKwlNK8LdxTz90mmclTYqnR7y
+	7GPzbuNfHO+FN1sMbU0Y+xfnW1UG4oRd/DePnevsDmgAwYSiTtPtr0YGNDy0/s1+Coi6wq53t+
+X-Received: by 2002:a17:903:1b4e:b0:2bd:8dbb:293e with SMTP id d9443c01a7336-2c1e820e57cmr159075445ad.14.1780894841141;
+        Sun, 07 Jun 2026 22:00:41 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164fa00b3sm158987715ad.32.2026.06.07.22.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2026 22:00:40 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Juntong Deng <juntong.deng@outlook.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v4] bpf: fix NULL pointer dereference in bpf_task_from_vpid()
+Date: Mon,  8 Jun 2026 05:00:00 +0000
+Message-ID: <20260608050001.2545245-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Breno,
+bpf_task_from_vpid() looks up a task in the pid namespace of the
+current task, via find_task_by_vpid():
 
-On Fri, 05 Jun 2026 05:03:34 -0700
-Breno Leitao <leitao@debian.org> wrote:
+  find_task_by_vpid(vpid)
+    find_task_by_pid_ns(vpid, task_active_pid_ns(current))
+      find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
 
-> diff --git a/tools/bootconfig/Makefile b/tools/bootconfig/Makefile
-> index 90eb47c9d8de..aa75a7828685 100644
-> --- a/tools/bootconfig/Makefile
-> +++ b/tools/bootconfig/Makefile
-> @@ -15,10 +15,14 @@ override CFLAGS += -Wall -g -I$(CURDIR)/include
->  ALL_TARGETS := bootconfig
->  ALL_PROGRAMS := $(patsubst %,$(OUTPUT)%,$(ALL_TARGETS))
->  
-> -all: $(ALL_PROGRAMS) test
-> +all: $(ALL_PROGRAMS)
->  
-> +# bootconfig is a build host tool: Kbuild's prepare hook runs it on the
-> +# build machine to render the embedded cmdline, so always compile it with
-> +# $(HOSTCC). Using $(CC) would cross-compile it under ARCH=... builds and
-> +# fail to exec on the host ("Exec format error").
->  $(OUTPUT)bootconfig: main.c include/linux/bootconfig.h $(LIBSRC)
-> -	$(CC) $(filter %.c,$^) $(CFLAGS) $(LDFLAGS) -o $@
-> +	$(HOSTCC) $(filter %.c,$^) $(CFLAGS) $(LDFLAGS) -o $@
+cgroup_skb programs run in softirq, which may interrupt a task that is
+itself in do_exit(). Once that task has passed
+exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
+cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
+dereferences &NULL->idr:
 
+  BUG: kernel NULL pointer dereference, address: 0000000000000050
+  RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
+  Call Trace:
+   <IRQ>
+   find_pid_ns kernel/pid.c:370 [inline]
+   find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
+   bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
+   bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
+   __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
+   sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
+   tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
+   </IRQ>
+   <TASK>
+   do_exit+0xa63/0x1270 kernel/exit.c:1010
+   get_signal+0x141c/0x1530 kernel/signal.c:3037
 
-> Is it safe to pass $(CFLAGS) and $(LDFLAGS) to $(HOSTCC) here?
-> When cross-compiling, $(CFLAGS) and $(LDFLAGS) often contain target-specific
-> flags. Passing these target flags to the host compiler might cause it to fail,
-> or incorrectly generate binaries for the target architecture that fail to
-> execute on the build host.
+Bail out when current has no pid namespace.
 
-Sashiko found a problem here. Hmm, I would like to build the bootconfig
-tool just as a tool. (like `cd tools/bootconfig; make`)
-Can we identify the build (make) is called from kernel build process or not
-and switching CC/CFLAGS/LDFLAGS?
+Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+v4:
+ - Drop the in_interrupt() check. (Kumar Kartikeya Dwivedi)
+ - Switch to guard(rcu)() and drop the explicit rcu_read_unlock(). (Leon
+   Hwang)
 
-> 
-> Additionally, since bootconfig is an administrative utility meant to be
-> deployed on the target system, will permanently hardcoding $(HOSTCC) prevent
-> users from cross-compiling it for their target devices?
+v3:
+ - https://lore.kernel.org/bpf/20260606091941.1803115-1-rhkrqnwk98@gmail.com/
 
-This is also a good point. We need cros build binary and host binary.
+v2:
+ - https://lore.kernel.org/bpf/20260605200501.1619406-1-rhkrqnwk98@gmail.com/
 
-Thank you,
+v1:
+ - https://lore.kernel.org/bpf/20260603204206.773482-1-rhkrqnwk98@gmail.com/
 
+ kernel/bpf/helpers.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b5314c9fed3c..80aa3bf203b0 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2912,11 +2912,13 @@ __bpf_kfunc struct task_struct *bpf_task_from_vpid(s32 vpid)
+ {
+ 	struct task_struct *p;
+ 
+-	rcu_read_lock();
++	guard(rcu)();
++	if (!task_active_pid_ns(current))
++		return NULL;
++
+ 	p = find_task_by_vpid(vpid);
+ 	if (p)
+ 		p = bpf_task_acquire(p);
+-	rcu_read_unlock();
+ 
+ 	return p;
+ }
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.43.0
+
