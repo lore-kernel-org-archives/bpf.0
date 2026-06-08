@@ -1,147 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699631E820
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16518246BC0;
+	Mon,  8 Jun 2026 15:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780934187; cv=none; b=KNuI3vILCzkz0cruio5jDBWZ6YaC9t2SIZIAqUGLDc0rJ8qOzdNx0gTVPQVPMh6YhNJzS963HVDQUaacAiEIu01p+5DhjR1J1+Nc6e80mgP+TKWynb2ZODnbX79oOl+zboG2qdkqAce6+LngyoEPGPOGueuvqLpf5VuK+CqF1Z0=
+	t=1780934208; cv=none; b=G9LD26ARYDi+AJ/aX4fJ0F4+18E9kBwn+t3Xqnk0GiusyDldLJjbCgb094L9GMc4ZjyGXkEv+6X8X4b+kzDDJevOlmvXFLEfTwarI7qreTdJqXyNdzGvRGwjOGhaejrz9yagnSI1ARiYOKYrS9aW9na/pzCSl9vJonjjCAu3PcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780934187; c=relaxed/simple;
-	bh=FP6ydiX8S0TPC1DxSia8xvmBQQkV7Rf78cUGlLimpOw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TxZ+JUQKCpwWV076+8y9mq6C1P52+/p1NMV2wWrmV05aT4LWBcOD16XpWcZlux1ZSM3CO1/hnIzJkN1qgAPaBiiTWyUsGQsStEHQjaR8FKrTPSkokbszCsj5MybMAVZtzzYLBTb+IY7+LZ5M/odSb6yq2/kmNYBHJNJopVyO0wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NEAL8Zmx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780934208; c=relaxed/simple;
+	bh=llWfrzerBUN7P3dWZ3mbH60SFdg2/wgYwjLD96wLuSA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Wvq1032cVj9oaSlYsxI4+gfgBTpH8eEN5z83FeSwsWikmCaQysrBPEeyLpVt4nqq9rNJnGZnRufAyTm2kE2NzKvGKXdUkb2qwtYq2TR/4WdPitRYMVXnj+Z/2XCNwNok2dsflKuFcKiPl1cqwEj5aHGCna4fZaffCL60MCMLM4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUb8ql96; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NEAL8Zmx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F03C1F00893;
-	Mon,  8 Jun 2026 15:56:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUb8ql96"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 189E01F00893;
+	Mon,  8 Jun 2026 15:56:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780934186;
-	bh=xv118yzOoEZACwYPT54eBHkhS1ajC1NTX92AdTWLi90=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NEAL8ZmxDQDRG6/5ceDCoFfwE3iRC3yFftb5Dp2CDO/5lkDL0suvKZV99a7HmJqBI
-	 SZMNGU0vWEFHeFeheTfs+WiZAK4HL/VpFDimxFUC7bc/CjaLuxbA6FpKeW+sldCtPj
-	 Q0AKSloMmLB99nMfYoVNVwkOy4mRsHdEDi5MfmQmHKaE3TJ6TAORS+2oAnUHlOdK6U
-	 2029kwvHmplZh4rNy5cqiZ0f44Q/7eDQABog6ZfOPS3RmoOcGYxHctonKDfO+Dfl65
-	 B+ScerKixZRHHsSJRD42zOvC7YVztouWSEQ3ZU3My1wuBQkZAuE2FZdTt3YsNZOMtp
-	 B3D4s/g+7sakA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/5] bpf: Cancel special fields on map value
- recycle
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608144841.1732406-4-memxor@gmail.com>
-References: <20260608144841.1732406-4-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 15:56:25 +0000
-Message-Id: <20260608155626.1F03C1F00893@smtp.kernel.org>
+	s=k20260515; t=1780934206;
+	bh=YUvXvRme0KQ6SDRxfWBQEQX9hoBdn5xz97TQef5u+78=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cUb8ql96PzgYE+524+Sv1ey8jQJsJbuLz5bQDmcMOFFZcVRS82HwJiSTG2wMjDhFs
+	 i4aIwYKj8kaQz6hqTM08jVrllX5Dj5XLA9PyrMchpwebyjmD8Zzwz5bcgMZsnaPRQs
+	 pcYWpOjXbfCf2Y9vi/N0K6MfGyEGzZedop0u1fW/DwMl+WDyssJNF1ftQ7zTK/9Yfk
+	 Lpqsvt25xkU2STmjqXcz/UIVDfgujZwRKOTWwc/6ZVIsvjRk3DLgrpmx49GeVDjS8A
+	 S7IEFIeW56ISGD/s6gn7z5FaYIiMm6Jk5LvTP/b1Ti7BGdpRNThkpQgxls+E4tNvFo
+	 ksgjEPV78sMOg==
+Content-Type: multipart/mixed; boundary="===============6158332718169548460=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <d2a502a8663b9f28e4a55e948cbf70fdec01e3d71417816b534c002b467d718c@mail.kernel.org>
+In-Reply-To: <20260608145113.65857-3-leon.hwang@linux.dev>
+References: <20260608145113.65857-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v5 2/9] bpf: Introduce global percpu data
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  8 Jun 2026 15:56:46 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Replacing bpf_obj_free_fields() with bpf_obj_cancel_fields() in ma=
-p update and delete paths fails to clear BTF special fields (kptrs, list he=
-ads, etc.), causing recycled map elements to silently inherit these fields =
-from previously deleted or overwritten keys.
---
+--===============6158332718169548460==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 0b4e0636a1d77531077ad0491c76e6b6595a28c6
-Author: Justin Suess <utilityemal77@gmail.com>
+> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+> index b2a19acadb91..5787246bef30 100644
+> --- a/kernel/bpf/const_fold.c
+> +++ b/kernel/bpf/const_fold.c
+> @@ -182,7 +182,6 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
+>  		u64 val = 0;
+>
+>  		if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_value_addr ||
+> -		    map->map_type == BPF_MAP_TYPE_INSN_ARRAY ||
+>  		    off < 0 || off + size > map->value_size ||
+>  		    bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
+>  			*dst = unknown;
 
-bpf: Cancel special fields on map value recycle
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2690d063a240..eecd9ab82e91 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5556,6 +5556,8 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
+>  	u64 addr;
+>  	int err;
+>
+> +	if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY || map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
+> +		return -EINVAL;
+>  	err = map->ops->map_direct_value_addr(map, &addr, off);
 
-This patch introduces bpf_obj_cancel_fields() to replace
-bpf_obj_free_fields() in map update and delete paths. It restricts
-eager cleanup to timers, workqueues, and task works, leaving other
-fields attached for final map destruction.
+Here bpf_map_direct_read() now refuses both insn arrays and percpu arrays,
+which makes sense since a percpu value address cannot be constant-folded
+at verification time.
 
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index e6271a2bf6d64..4e8d6fe6999bf 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -384,7 +384,7 @@ static long array_map_update_elem(struct bpf_map *map=
-, void *key, void *value,
->  	if (array->map.map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
->  		val =3D this_cpu_ptr(array->pptrs[index & array->index_mask]);
->  		copy_map_value(map, val, value);
-> -		bpf_obj_free_fields(array->map.record, val);
-> +		bpf_obj_cancel_fields(array->map.record, val);
->  	} else {
->  		val =3D array->value +
->  			(u64)array->elem_size * (index & array->index_mask);
-> @@ -392,7 +392,7 @@ static long array_map_update_elem(struct bpf_map *map=
-, void *key, void *value,
->  			copy_map_value_locked(map, val, value, false);
->  		else
->  			copy_map_value(map, val, value);
-> -		bpf_obj_free_fields(array->map.record, val);
-> +		bpf_obj_cancel_fields(array->map.record, val);
+The const_fold.c hunk above was adjusted to cope with this: it dropped its
+own BPF_MAP_TYPE_INSN_ARRAY pre-check and instead lets a bpf_map_direct_read()
+failure fall through to "*dst = unknown".
 
-[Severity: High]
-Does this prevent userspace from clearing kptrs in array maps?
+Is the equivalent read path in check_mem_access() missing the same treatment?
 
-Because bpf_obj_cancel_fields() leaves kptrs untouched and copy_map_value()
-skips copying BTF fields from the user, array elements are updated without
-freeing or zeroing old kptrs.
+kernel/bpf/verifier.c:check_mem_access() {
+    ...
+    /*
+     * If map is read-only, track its contents as scalars,
+     * unless it is an insn array (see the special case below)
+     */
+    if (tnum_is_const(reg->var_off) &&
+        bpf_map_is_rdonly(map) &&
+        map->ops->map_direct_value_addr &&
+        map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
+        int map_off = off + reg->var_off.value;
+        u64 val = 0;
 
-This permanently attaches the kptr to the array slot until map destruction,
-making it impossible to clear them by updating the element with zeroes.
+        err = bpf_map_direct_read(map, map_off, size, &val, is_ldsx);
+        if (err)
+            return err;
+    ...
+}
 
-[ ... ]
+Since percpu_array_map_ops now sets map_direct_value_addr, a frozen percpu
+array created with BPF_F_RDONLY_PROG satisfies this condition (it is rdonly,
+has map_direct_value_addr, and is not an insn array).  It enters the branch,
+calls bpf_map_direct_read(), gets the new -EINVAL, and returns it.
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index b4366cad3cfa5..a9b2b882b90f2 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-[ ... ]
-> @@ -833,8 +837,8 @@ static int htab_lru_map_gen_lookup(struct bpf_map *ma=
-p,
->  	return insn - insn_buf;
->  }
-> =20
-> -static void check_and_free_fields(struct bpf_htab *htab,
-> -				  struct htab_elem *elem)
-> +static void check_and_cancel_fields(struct bpf_htab *htab,
-> +				    struct htab_elem *elem)
->  {
->  	if (IS_ERR_OR_NULL(htab->map.record))
->  		return;
-> @@ -844,11 +848,11 @@ static void check_and_free_fields(struct bpf_htab *=
-htab,
->  		int cpu;
-> =20
->  		for_each_possible_cpu(cpu)
-> -			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
-> +			bpf_obj_cancel_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
->  	} else {
->  		void *map_value =3D htab_elem_value(elem, htab->map.key_size);
-> =20
-> -		bpf_obj_free_fields(htab->map.record, map_value);
-> +		bpf_obj_cancel_fields(htab->map.record, map_value);
->  	}
->  }
+Does that mean a plain LDX from such a read-only percpu value is now rejected
+at load time with a bare -EINVAL and no verbose() message, rather than being
+tracked as an unknown scalar the way the const_fold.c path handles it (and the
+way insn arrays are explicitly handled in the else-if below)?
 
-[Severity: High]
-Does this allow recycled hash map elements to silently inherit kptrs from
-previously deleted keys?
+Should this branch also exclude BPF_MAP_TYPE_PERCPU_ARRAY, so the load falls
+through to mark_reg_unknown() instead of failing?
 
-When an element is deleted, it goes back to the freelist or memory allocator
-cache. Since check_and_cancel_fields() no longer clears BTF special fields
-like kptrs or list heads, these fields remain intact in the recycled memory.
 
-When alloc_htab_elem() reuses this memory for a new key, copy_map_value()
-intentionally skips over BTF fields.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-The new element will thus silently inherit the kptr from the old element,
-breaking cross-key isolation.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
-406-1-memxor@gmail.com?part=3D3
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27147120330
+--===============6158332718169548460==--
