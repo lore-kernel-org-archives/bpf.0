@@ -1,142 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6941F30BB
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 16:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D556F326942
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 16:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780936842; cv=none; b=WYJ7KVRbtNeBXKiwkGBN1cki3bo/l9yLPGEoRB4060IZElRzZmQs3FxZzALSOeFYoqPr1q+b2M4hcwEuZ9fyUtzU6vDBrk11dwWBR5InVbwoP0Yalqom2LVcMSK4KlQ+5ODr0SiV0ici2OvSGoUe7wOO+61aMPgZr/+wZSvaoFg=
+	t=1780937522; cv=none; b=WWeA4dMlHJ65IGLtndABXPl+nk3QBi16LSq7K6p7M8hhxbVLJfiv/L4pH0xZ+s4GMQqFS/VZStuhWxE529EB4qKmZHBxY+Z/1Femk5ZDP75fQ8GDbpcUu6gqxZnWj3updGj6cmyQeZsKJJztkd55tjiYr8u6+iUdpO5CQ6EJtaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780936842; c=relaxed/simple;
-	bh=82Rmi6TJq3q0TO79OeD+weQj3RxVI1Vdg2ZKILv4dro=;
+	s=arc-20240116; t=1780937522; c=relaxed/simple;
+	bh=OSyPv8MKRhLMHXi7b3pNpLECZnq4VhsexcvWsxXfSYg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IU1KpZnPUcFimI1DTWBhwQqmur9aKyEFujMMXSVVcOcHDGqJT8Xe2oS8YA7roxGjqRtO+usnjRtJAgW2EG2auL9esvkR7hhBnGPs8oj+SS3mMp2sSegus9r0PwQH9OkDh9aObOWef8qeiy8y3EiuljSplLdTquoIFEqbOInPK0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pdpk1MVm; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=htmoHHRMCY1I4we1IACEe/fAJNKR7MHy6B7SIo7frme/i5bKBvt5ty/6vssMpDaNF2m6AazWoC3x1RlsGfdzcnzC4y95rmlbm+unRxUEOTp6qIJQTBI05Ycxi2l8rz1zcoVnY76CrD+Syn7xzgrqahY/PDNbSWvhFtCGF8SAVQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtBfwzj0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pdpk1MVm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272F91F00893;
-	Mon,  8 Jun 2026 16:40:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtBfwzj0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2111F00893;
+	Mon,  8 Jun 2026 16:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780936841;
-	bh=KmFbWDaGyObUAm0tkkta7VsZQbXs2HGOYaxou+NEJIg=;
+	s=k20260515; t=1780937521;
+	bh=p59nL6WsMTcj2voephxY7wHR4jdACb8iX9EhIOkZPFU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Pdpk1MVmMPL1nIGd6BXG5Z1s+rOIQC8Tczwtbdpu3pCfBDkTM3ue9n7bMA9Zo9wsZ
-	 Be/RH0plnTE32rr24Ji7BuqEWLs/gNv6Iw6LKl117g/QZyfTQrTb+HSzCi6lJTobaw
-	 UC4g6OR3xSTiQA9AlmqLcE3zzHe9fXC+/vCoBF+mC9ELqow38MlN47rWx4uxwtyDi5
-	 F3MvN6ooxQTT1PVcruJUnh/ACdCl9CYd7lOhjmbgVHvG+nwYQm9HuUiOSUXWRfWJxC
-	 +wqTsVlBNFuhDSBuuA/BPEbEpedFq/cgnpCOMzcM7jMz30nm5FGFcLoFv3kcjtEw6Y
-	 LNRbaEZ4eT3zg==
+	b=UtBfwzj0VNNkKZTYmDH97PvOW+4yp8LM6XOSzY3u+nxS2IgHSND+fYxHS8qXvFyC7
+	 PfhPx49s5qfAqr56m6PtIq+JDLgj/sVX+ZDZ5CCziYQflWBgdf92q3+5An85gta8xr
+	 kGAcjGrKxzpFyErjiNBBb9hIvtznJgpaTBOklr8ZYD3VkxHwCdOWG6QFElzd2mGqmV
+	 JSeqwE1QvWzXP65DnGNU6tjr2N0L+dBqj1Y285bJNMZ+UNY9/NSqwTpD5bb2M/pLD+
+	 ZTpyCp7jQiSa2iRx6AT+2EwZmdUaisvn2B+1pHgXcYrsCyM4M3TPjw3lmPcbkXM5iD
+	 beuvd1uV4wqYQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 5/5] selftests/bpf: Exercise kptr map update
- lifetime
+Subject: Re: [PATCH v3 3/6] bootconfig: render embedded bootconfig as a
+ kernel cmdline at build time
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Breno Leitao" <leitao@debian.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608144841.1732406-6-memxor@gmail.com>
-References: <20260608144841.1732406-6-memxor@gmail.com>
+In-Reply-To: <20260608-bootconfig_using_tools-v3-3-4ddd079a0696@debian.org>
+References: <20260608-bootconfig_using_tools-v3-3-4ddd079a0696@debian.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 16:40:40 +0000
-Message-Id: <20260608164041.272F91F00893@smtp.kernel.org>
+Date: Mon, 08 Jun 2026 16:52:00 +0000
+Message-Id: <20260608165201.7E2111F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Critical] The newly added selftests incorrectly assert that map updates =
-preserve old kptr references, codifying severe preexisting kernel bugs wher=
-e bpf_obj_free_fields() is missing during map updates. This leads to leaked=
- kptrs and cross-key uninitialized memory corruption in hash maps.
+- [Low] Cross-compiling the kernel with LLVM/Clang will fail with an "Exec =
+format error" when building `embedded_cmdline.bin`.
+- [Low] Mixing different access flags (`"aw"` vs `"a"`) for the same `.init=
+.rodata` section causes a fatal section type mismatch error with `ld.lld`.
 --
 
-commit 4d2aa8d889c01038cf4926ada20dda3564090fb2
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+commit 53ecb8492a80850833ff3357341fcf9ac0a1298e
+Author: Breno Leitao <leitao@debian.org>
 
-selftests/bpf: Exercise kptr map update lifetime
+bootconfig: render embedded bootconfig as a kernel cmdline at build time
 
-Add focused map_kptr coverage for BPF-side map updates that touch values
-containing referenced kptrs. The new syscall programs stash the testmod
-refcounted object in various maps, then update the same map from BPF.
+Add the build-time pipeline that renders the "kernel" subtree of
+CONFIG_BOOT_CONFIG_EMBED_FILE into a flat cmdline string. This involves
+adding tools/bootconfig to the make prepare step and adding
+lib/embedded-cmdline.S to embed the rendered text.
 
-> diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing=
-/selftests/bpf/progs/map_kptr.c
-> index e708ffbe1f610..3fbefc568e0a6 100644
-> --- a/tools/testing/selftests/bpf/progs/map_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/map_kptr.c
-
+> diff --git a/Makefile b/Makefile
+> index bf196c6df5b92..a7572703f9ce8 100644
+> --- a/Makefile
+> +++ b/Makefile
 [ ... ]
-
-> +SEC("syscall")
-> +int test_array_map_update_kptr(void *ctx)
-> +{
-> +	struct map_value init =3D {}, *v;
-> +	int key =3D 0, ret;
+> @@ -1545,6 +1545,17 @@ prepare: tools/bpf/resolve_btfids
+>  endif
+>  endif
+> =20
+> +# tools/bootconfig renders the embedded bootconfig into a cmdline at bui=
+ld time.
+> +ifdef CONFIG_BOOT_CONFIG_EMBED_CMDLINE
+> +prepare: tools/bootconfig
+> +endif
 > +
-> +	v =3D bpf_map_lookup_elem(&array_map, &key);
-> +	if (!v)
-> +		return 1;
-> +	ret =3D stash_ref_ptr(v);
-> +	if (ret)
-> +		return ret;
-> +	ret =3D check_refs(3);
-> +	if (ret)
-> +		return ret;
-> +	ret =3D bpf_map_update_elem(&array_map, &key, &init, BPF_EXIST);
-> +	if (ret)
-> +		return 4;
-> +	return check_refs(3);
-> +}
+> +# tools/bootconfig is run on the build host during prepare, so force a h=
+ost
+> +# binary here; its own Makefile keeps $(CC) for standalone and cross bui=
+lds.
+> +tools/bootconfig: FORCE
+> +	$(Q)mkdir -p $(objtree)/tools
+> +	$(Q)$(MAKE) O=3D$(abspath $(objtree)) subdir=3Dtools -C $(srctree)/tool=
+s/ bootconfig CC=3D$(HOSTCC)
+
+[Severity: Low]
+When cross-compiling with Clang (e.g., LLVM=3D1 CROSS_COMPILE=3Daarch64-lin=
+ux-gnu-),
+will this build the tool as a host binary?
+
+Since CROSS_COMPILE isn't unset and CFLAGS aren't overridden with host flag=
+s,
+it appears tools/scripts/Makefile.include will still append target flags li=
+ke
+--target=3D$(CLANG_TARGET). This can result in the tool being erroneously
+compiled as a target-architecture binary.
+
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 7f75cc6edf94a..4ace86a5cb6de 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+[ ... ]
+> @@ -273,6 +273,22 @@ filechk_defbconf =3D cat $(or $(real-prereqs), /dev/=
+null)
+>  $(obj)/default.bconf: $(CONFIG_BOOT_CONFIG_EMBED_FILE) FORCE
+>  	$(call filechk,defbconf)
+> =20
+> +obj-$(CONFIG_BOOT_CONFIG_EMBED_CMDLINE) +=3D embedded-cmdline.o
+> +$(obj)/embedded-cmdline.o: $(obj)/embedded_cmdline.bin
 > +
-> +#define DEFINE_HASH_UPDATE_KPTR_TEST(name, map)			\
-> +SEC("syscall")							\
-> +int name(void *ctx)						\
-> +{								\
-> +	struct map_value init =3D {}, *v;				\
-> +	int key =3D 0, ret;					\
-> +								\
-> +	ret =3D bpf_map_update_elem(&map, &key, &init, BPF_NOEXIST); \
-> +	if (ret)						\
-> +		return 1;					\
-> +	v =3D bpf_map_lookup_elem(&map, &key);			\
-> +	if (!v)							\
-> +		return 2;					\
-> +	ret =3D stash_ref_ptr(v);					\
-> +	if (ret)						\
-> +		return ret;					\
-> +	ret =3D check_refs(3);					\
-> +	if (ret)						\
-> +		return ret;					\
-> +	ret =3D bpf_map_update_elem(&map, &key, &init, BPF_EXIST); \
-> +	if (ret)						\
-> +		return 4;					\
-> +	return check_refs(3);					\
-> +}
+> +# Render the bootconfig "kernel" subtree to a flat cmdline string using
+> +# the userspace tools/bootconfig parser (-C mode). The runtime prepend
+> +# helper enforces COMMAND_LINE_SIZE at boot, so no build-time size
+> +# check is performed here (COMMAND_LINE_SIZE is an arch header
+> +# constant, not a Kconfig value).
+> +quiet_cmd_render_cmdline =3D BCONF2C $@
+> +      cmd_render_cmdline =3D \
+> +	$(objtree)/tools/bootconfig/bootconfig -C $< > $@
 
-[Severity: Critical]
-This is a pre-existing issue, but does this selftest actually codify an
-existing memory leak and uninitialized memory corruption in the kernel?
+[Severity: Low]
+If the bootconfig tool was accidentally cross-compiled due to target flags
+bleeding into the host build above, could executing it here on the build
+host fail with an Exec format error?
 
-Looking at array_map_update_elem() and htab_map_update_elem() in the kernel,
-they incorrectly use bpf_obj_cancel_fields() instead of
-bpf_obj_free_fields() when overwriting elements. Because
-bpf_obj_cancel_fields() explicitly skips BPF_KPTR_REF, the old kptr
-references are never freed.
+> diff --git a/lib/embedded-cmdline.S b/lib/embedded-cmdline.S
+> new file mode 100644
+> index 0000000000000..740d7ad2dc016
+> --- /dev/null
+> +++ b/lib/embedded-cmdline.S
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Embed the build-time-rendered bootconfig "kernel" subtree as a flat
+> + * cmdline string. setup_arch() prepends this to boot_command_line on
+> + * architectures that select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG.
+> + *
+> + * Copyright (c) 2026 Meta Platforms, Inc. and affiliates
+> + * Copyright (c) 2026 Breno Leitao <leitao@debian.org>
+> + */
+> +	.section .init.rodata, "a", %progbits
 
-For hash maps specifically, htab_map_update_elem() allocates a new element
-(l_new), and copy_map_value() explicitly skips copying special BTF fields
-like kptrs. This means l_new receives uninitialized garbage memory for its
-kptr field before being inserted into the map. Meanwhile, the old element is
-placed in the freelist without its kptr being freed, leaking the reference.
+[Severity: Low]
+Does this cause a section type mismatch with the existing bootconfig data?
 
-By asserting check_refs(3) after the map update, is the test just measuring
-this leak and ignoring the uninitialized garbage now present in the map,
-rather than confirming that the kptr was gracefully preserved?
+The existing lib/bootconfig-data.S places embedded bootconfig data into
+.section .init.rodata, "aw" (allocatable and writable). When both files are
+compiled together, modern linkers like ld.lld enforce section attributes
+and will fail the build if the same section name mixes writable ("aw") and
+read-only ("a") flags.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
-406-1-memxor@gmail.com?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608-bootconfig=
+_using_tools-v3-0-4ddd079a0696@debian.org?part=3D3
