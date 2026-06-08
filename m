@@ -1,30 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5918325B0BC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A4829DB86
 	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 12:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780923558; cv=none; b=dmuQB74Wu7M80q3TphiSaLBnFFm+7JewonIsaXUkOrW38OyyNaZlnEIU+L+4KEmoRZgy7W6ec4VVb47vcdrFXM8glWc5fWqpjO/Oxopvz9eqVmJWOom8I0eYhoDgJfMtSo2d0vFwZ9DdCXHhoe7mSDLk5vJaxod0iUSCmQ7WF8s=
+	t=1780923558; cv=none; b=t/cd3x7FgN2DbhKMy0znzZR7uG/tbhve2WeU/R9SRCZx9L9QKyYoNaIJ7+xm9crOdMaNti0z7J86NvFcdwOXW5N54LiEW/NZr7wptpSPz9mJyRQu5oeBl3LqEADG3bdBRhrSnZ0YYWEY986D5asdO8WiJ+GQU1jrPf1xxaZlz4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780923558; c=relaxed/simple;
-	bh=5FNPCPysBtlY1McZBVnBdBHZEzilhetJuuzqH/78qcU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GBaWgJ48zkPhtJj/KdabT1IwxKF8SSk1PoV1EGCuOpUEWsIoqYrqiFzwD3kaXAQ3DvRYUf7JQGqBVPmiAdayUOvRD8AqCYYBri7qGed9u6YEpnE1GxeYz0sWoa+O5IslvR3Lpkvurm59FG+Q2HF5hfY+AxStClw5HwM2mAE3owg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l4zdgaSc; arc=none smtp.client-ip=91.218.175.183
+	bh=TGqy07e0KYWbqiUT34j9FgI4+mqzg0Sk7pj9Hp1mx78=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sSQf1VL5Dcu5ZKURekhqTPPozOkjzi9RzV4IaS+uIjLkQnjdpBx2Wi1mVOiVVp1XjDHj5KWyBwloLjWmg0jvmYhvEUxRCEKZvlrPaVkCMOkn1RuM7EsrtJnkNLjrUfyOrw4Op7Wyc82pZd7oRifMWzMeveMQCGRbYmbM2CeQREY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CkYmGqRA; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l4zdgaSc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CkYmGqRA"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780923541;
+	t=1780923555;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PGHH0jvqAvskxAvzSGW+VDZz2ncp2vRZIRhqBagTjPs=;
-	b=l4zdgaScfewFK6IX3WJMvUOIf8TjtU953zJIglPxHvX6jl26BSwH6fRKDHXOsycLMWuA/1
-	LIoSeHQC4JbLA/YjiskzXx9HmhqUXHZdvlOZEbTKT2BLoMlbZn+sRY22/+cK6EV+c3/n9Q
-	oZdah3OmhOxPwD4sEyAziDx3ncmvA1E=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/z9lruv/1Ak6FgR3qictfE2wiKZjsqaHqmY33SqWS/c=;
+	b=CkYmGqRA5zperjGEMNE9HW8CqVdhDBCq1zGzFLJLqt/tJiOTzkyvquzaYie+4468oMEEWt
+	jb0Dgn5K4ttBntNblWwlvirAjKP8zOA8NVmUsdpQiv1vBxceKAoGirq5sC+STcQDP5H7+Y
+	9J7TXZq4Yq2tgDxU6Kw9GIsyqLPe7bI=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
@@ -34,11 +36,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
@@ -49,9 +51,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v8 0/2] bpf: tcp: Fix null-ptr-deref in arbitrary SYN Cookie
-Date: Mon,  8 Jun 2026 20:58:26 +0800
-Message-ID: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for BPF-assigned sockets
+Date: Mon,  8 Jun 2026 20:58:27 +0800
+Message-ID: <20260608125846.157004-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,100 +66,168 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-bpf_sk_assign_tcp_reqsk() does not validate the L4 protocol of the skb,
-only checking skb->protocol (L3). A BPF program that calls this kfunc on
-a non-TCP skb (e.g. UDP) will succeed, attaching a TCP reqsk to the skb.
+bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
+causing a panic when the skb enters the wrong L4 receive path [1].
+An initial attempt tried to fix this in the BPF helper by checking
+iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
+this check via a TOCTOU attack by modifying iph->protocol around the
+call:
 
-When the skb enters the UDP receive path, skb_steal_sock() returns the
-TCP listener socket from the reqsk. The UDP code then casts this TCP
-socket to udp_sock and accesses UDP-specific fields at invalid offsets,
-causing a null pointer dereference:
+    iph->protocol = IPPROTO_TCP;
+    bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+    iph->protocol = IPPROTO_UDP;
 
-  BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
-  Read of size 4 at addr 0000000000000008 by task test_progs/537
+Furthermore, bpf_sk_assign() has had the same class of vulnerability
+since its introduction — it can assign any socket type to any skb
+without protocol validation.  Since the BPF helper check alone cannot
+prevent a malicious BPF program from crashing the kernel, add protocol
+validation in skb_steal_sock() to reject mismatched sockets regardless
+of how they were assigned.
 
-  CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
-  Call Trace:
-   <IRQ>
-   dump_stack_lvl (lib/dump_stack.c:123)
-   print_report (mm/kasan/report.c:487)
-   kasan_report (mm/kasan/report.c:597)
-   __kasan_check_read (mm/kasan/shadow.c:32)
-   __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
-   udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
-   udp_queue_rcv_skb (net/ipv4/udp.c:2532)
-   udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
-   __udp4_lib_rcv (net/ipv4/udp.c:2742)
-   udp_rcv (net/ipv4/udp.c:2937)
-   ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
-   ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
-   ip_local_deliver (net/ipv4/ip_input.c:265)
-   __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
-   __netif_receive_skb (net/core/dev.c:6280)
+The check is applied to all prefetched sockets.  Early demux paths
+already only assign matching protocols (e.g., UDP early demux only
+assigns UDP sockets to UDP skbs), so they pass the check naturally and
+the extra branch is negligible.
 
-Solution
+Pass the expected protocol from callers rather than extracting it from
+the IP header.  For IPv6, walking extension headers to find the L4
+protocol is complex and unnecessary since each caller already knows
+the protocol it handles.
 
-Validating the protocol in the helper is not enough: a BPF program can
-bypass an ip_hdr(skb)->protocol check via TOCTOU by rewriting the header
-around the call, and bpf_sk_assign() has the same problem since it can
-assign any socket type to any skb. So validate the protocol where the
-assigned socket is consumed instead.
+[1] https://lore.kernel.org/bpf/20260403015851.148209-1-jiayuan.chen@linux.dev/
+[2] https://sashiko.dev/#/patchset/20260403015851.148209-1-jiayuan.chen%40linux.dev
 
-Patch 1: Validate the L4 protocol in skb_steal_sock(). Each caller passes
-the protocol it handles (TCP or UDP), and a prefetched socket whose
-protocol does not match is rejected, regardless of how it was assigned.
-Patch 2: Add a selftest that calls bpf_sk_assign_tcp_reqsk() on a UDP skb
-and verifies the stack no longer crashes.
-
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-v1: https://lore.kernel.org/bpf/20260323105510.51990-1-jiayuan.chen@linux.dev/
-v2: https://lore.kernel.org/bpf/20260326062657.88446-1-jiayuan.chen@linux.dev/
-v3: https://lore.kernel.org/bpf/20260327133915.286037-1-jiayuan.chen@linux.dev/
-v4: https://lore.kernel.org/bpf/20260330080746.319680-1-jiayuan.chen@linux.dev/
-v5: https://lore.kernel.org/bpf/20260401110511.73355-1-jiayuan.chen@linux.dev/
-v6: https://lore.kernel.org/all/20260403015851.148209-1-jiayuan.chen@linux.dev/
+ include/net/inet6_hashtables.h |  7 ++++---
+ include/net/inet_hashtables.h  |  7 ++++---
+ include/net/request_sock.h     | 16 +++++++++++++++-
+ net/ipv4/udp.c                 |  2 +-
+ net/ipv6/udp.c                 |  2 +-
+ 5 files changed, 25 insertions(+), 9 deletions(-)
 
-Changes in v6 & v7: 
-- resend and keep selftest.
-
-Changes in v5:
-- use skb_header_pointer instead of pskb_may_pull.
-
-Changes in v5:
-- Add pskb_may_pull before accessing IP/IPv6 headers in kfunc
-- Use buf[] instead of buf[32], verify recv data with ASSERT_STREQ
-- Remove unnecessary variable initializations in selftest and BPF
-
-Changes in v4:
-- Check if assign_ret is EINVAL instead of checking if it is 0
-
-Changes in v3:
-- Add IPv6 test coverage, reuse test_cases[] to iterate over both
-  address families
-- Share TCP/UDP port to simplify BPF program, remove unnecessary
-  global variables
-- Use connect_to_fd() + send()/recv() instead of manual sockaddr
-  construction
-- Suggested by Kuniyuki Iwashima
-
-Changes in v2:
-- Add Reviewed-by tag from Kuniyuki Iwashima for patch 1
-- Use UDP socket recv() instead of kern_sync_rcu() for synchronization
-  in selftest
-
-Jiayuan Chen (2):
-  net: Validate protocol in skb_steal_sock() for BPF-assigned sockets
-  selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-
- include/net/inet6_hashtables.h                |   7 +-
- include/net/inet_hashtables.h                 |   7 +-
- include/net/request_sock.h                    |  16 ++-
- net/ipv4/udp.c                                |   2 +-
- net/ipv6/udp.c                                |   2 +-
- .../bpf/prog_tests/tcp_custom_syncookie.c     |  87 ++++++++++++++-
- .../bpf/progs/test_tcp_custom_syncookie.c     | 102 ++++++++++++++++++
- 7 files changed, 210 insertions(+), 13 deletions(-)
-
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index 2cc5d416bbb5a..218498373a9c1 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -106,12 +106,13 @@ static inline
+ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 			      const struct in6_addr *saddr, const __be16 sport,
+ 			      const struct in6_addr *daddr, const __be16 dport,
+-			      bool *refcounted, inet6_ehashfn_t *ehashfn)
++			      bool *refcounted, inet6_ehashfn_t *ehashfn,
++			      int protocol)
+ {
+ 	struct sock *sk, *reuse_sk;
+ 	bool prefetched;
+ 
+-	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
+ 	if (!sk)
+ 		return NULL;
+ 
+@@ -153,7 +154,7 @@ static inline struct sock *__inet6_lookup_skb(struct sk_buff *skb, int doff,
+ 	struct sock *sk;
+ 
+ 	sk = inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, &ip6h->daddr, dport,
+-			      refcounted, inet6_ehashfn);
++			      refcounted, inet6_ehashfn, IPPROTO_TCP);
+ 	if (IS_ERR(sk))
+ 		return NULL;
+ 	if (sk)
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 6e2fe186d0dcb..a2a044f93cc4b 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -446,12 +446,13 @@ static inline
+ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 			     const __be32 saddr, const __be16 sport,
+ 			     const __be32 daddr, const __be16 dport,
+-			     bool *refcounted, inet_ehashfn_t *ehashfn)
++			     bool *refcounted, inet_ehashfn_t *ehashfn,
++			     int protocol)
+ {
+ 	struct sock *sk, *reuse_sk;
+ 	bool prefetched;
+ 
+-	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
+ 	if (!sk)
+ 		return NULL;
+ 
+@@ -494,7 +495,7 @@ static inline struct sock *__inet_lookup_skb(struct sk_buff *skb,
+ 	struct sock *sk;
+ 
+ 	sk = inet_steal_sock(net, skb, doff, iph->saddr, sport, iph->daddr, dport,
+-			     refcounted, inet_ehashfn);
++			     refcounted, inet_ehashfn, IPPROTO_TCP);
+ 	if (IS_ERR(sk))
+ 		return NULL;
+ 	if (sk)
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index 5a9c826a7092d..c2b8c6350b624 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -89,9 +89,11 @@ static inline struct sock *req_to_sk(struct request_sock *req)
+  * @skb: sk_buff to steal the socket from
+  * @refcounted: is set to true if the socket is reference-counted
+  * @prefetched: is set to true if the socket was assigned from bpf
++ * @protocol: expected L4 protocol
+  */
+ static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+-					  bool *refcounted, bool *prefetched)
++					  bool *refcounted, bool *prefetched,
++					  int protocol)
+ {
+ 	struct sock *sk = skb->sk;
+ 
+@@ -103,6 +105,18 @@ static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+ 
+ 	*prefetched = skb_sk_is_prefetched(skb);
+ 	if (*prefetched) {
++		/* A non-full socket here is either a reqsk or a
++		 * timewait sock, both only contain sock_common and
++		 * lack sk_protocol. Since both can only be TCP,
++		 * use IPPROTO_TCP as the protocol.
++		 */
++		if (unlikely(((sk_fullsock(sk) ? sk->sk_protocol : IPPROTO_TCP) != protocol))) {
++			skb_orphan(skb);
++			*prefetched = false;
++			*refcounted = false;
++			return NULL;
++		}
++
+ #if IS_ENABLED(CONFIG_SYN_COOKIES)
+ 		if (sk->sk_state == TCP_NEW_SYN_RECV && inet_reqsk(sk)->syncookie) {
+ 			struct request_sock *req = inet_reqsk(sk);
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 0ac2bf4f8759b..ceb4d29a64aca 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2618,7 +2618,7 @@ int udp_rcv(struct sk_buff *skb)
+ 		goto csum_error;
+ 
+ 	sk = inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
+-			     &refcounted, udp_ehashfn);
++			     &refcounted, udp_ehashfn, IPPROTO_UDP);
+ 	if (IS_ERR(sk))
+ 		goto no_sk;
+ 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 15e032194eccc..d9c12cce5acef 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1106,7 +1106,7 @@ INDIRECT_CALLABLE_SCOPE int udpv6_rcv(struct sk_buff *skb)
+ 
+ 	/* Check if the socket is already available, e.g. due to early demux */
+ 	sk = inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
+-			      &refcounted, udp6_ehashfn);
++			      &refcounted, udp6_ehashfn, IPPROTO_UDP);
+ 	if (IS_ERR(sk))
+ 		goto no_sk;
+ 
 -- 
 2.43.0
 
