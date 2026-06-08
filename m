@@ -1,175 +1,292 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D25E279903
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 22:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330D170808
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 23:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780958861; cv=none; b=ZSvwqhsKNcZPdEJIC2Mcr/JzRV1OKwyT+2UOcmN5A7Y0mEaDa6cO3+z16sgmIUdMrhCmReVzf4Hbid9bFumKXr/4zzswIIUvXiNnxBcK+DTWchYcSTJi9fiyFlIIFLIuLvi8UY3BAHG13XruxS9R+e2OqqoEZCwzu+F2jW7inmI=
+	t=1780962470; cv=none; b=GTZ5eIA+sZvjX6Ev3oct+1CUscf2jDnjeqnSZOrt6+paKcgxIa8CoEG+6+Fq5w/6JvbCjV6Gum4lFnsc5PnuBEGGB0r47wB0vyj2n+qSBOnKUbkU1btaQF8aef3YnjXtcGmI1GWO+13HbNi7WRbMGnfJ9XbYjw21GinzKoDkpfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780958861; c=relaxed/simple;
-	bh=rA2diYXlKM26hvh1N+s4o9HX51c4rjZCryaDSzZf5Lk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fn3pzZD6zIuw2A4klnRKNDXqKDn1u+3ZiqEjSGKttDoa7FKfRFkhBqWP/MGpyGO3TYzYrtfZofzJFqw281DQ4jCla81gCEkLIXCfaVeOl7g2Q5mGglxzz1Ky2Eo8cVnQD8YiF/nVZgOVrMU3biAGf4RfjA4wGME6vrg3gnDaemc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZC8n2aoj; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1780962470; c=relaxed/simple;
+	bh=qsw3gFuEDDd/10GTCx1sLdDEfaGN1mHdgkhpswkXXtU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=akS1Wbj8fQmjSPJdSLUYNlaHc6+v+yrKeP95YoLOz/awTHG+Y3Fku1hOCFcun7c24gmfTRPSPZ9Y/R5kz/fwdiBzJIB6wQZvra8oXkxOkJDlSn4KR+x5kvk/GA8w8PaOUmMaMv3NKMTFYtkg7kyDiGaAS5GZWXp1dckda1jOKBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PrSfX23V; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZC8n2aoj"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-137dd523634so7710246c88.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 15:47:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PrSfX23V"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-3078e0dcd67so2924172eec.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 16:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780958859; x=1781563659; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QEGVQ0M+SgYUmHdGUTH8kzMgflfS+kHy0QHV9BLJSE=;
-        b=ZC8n2aojZqM51DkLzfTZY1i8EoiOzMMkxhgUgpx2UwtR7iYJKRVD6GpD8ZhXopRuRI
-         zIZ+/r0NCkErN7hVx5ylTFhf/d5538SRcFj/82vO4Icru6ywHjEpRzTvp5jpdQIjBKRH
-         iiylQT+SyHRY1E8tknHuP4YtLTq0fqU8jXTPASgy9g9jfyaAUubMiVUZTbWLpgLxBLFP
-         414HDdBwYWWiVm2XzqGHMOoRVtsWBFZebXF6o7JpTsGZe2+hEUgZyHTXP7nOzvntm+7x
-         +GsYca7zlvLqW0oJrQviVjgmF0ifNdWNH49o4RSAoAyuGCFojZQNcoxfl4GkIGo66lOI
-         DTKw==
+        d=gmail.com; s=20251104; t=1780962468; x=1781567268; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=N2/aQwU8OTPKgUWRmAxXsCOG+ZY1qYT2b6xmL/fJ8x4=;
+        b=PrSfX23VQvCKILVC0DPmqdz5w1Y0eXawf02zeXCpc9w2qC5mNJdO3nLaQzPMTDSYyT
+         AgVXmbvXT2ZnV8PkLpFtZKt5zuc+35484mqwewxIk1V+IvBl1cgaHHRWD5AYoWykSVKO
+         eQmmGP8KR0sbWT9FyMJnk7jOtl7tVmPqy39fwyZE6jE6Q2GuWFL/rtwpKA3E36ntZrig
+         1QvhwnsOU466UOc1nqZ/ttCIrCt8OZt8O61FI4eHnvk76o58oXGS7SRV41GuTI47cXHX
+         tNYBFhvZGjHKbcf2Tp3Hlf32RHUYmqNV3GrTz6NFwa4d4u6SrKPuhIHvPStawU6SX3E1
+         3ppQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780958859; x=1781563659;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QEGVQ0M+SgYUmHdGUTH8kzMgflfS+kHy0QHV9BLJSE=;
-        b=UB+hOlMAv+gdpP6qhFpGahstarta3UDYGdvo0MDjNnKC8nPagvz2kJkZiyK0yrGtAh
-         Sbj6Sot//UdIEhfwFtACn1pNDFEOKpaXz+Lb3/AmBE/TTOG6Pdy6Mrxn48hdrkusAGMj
-         yfVf8fZGmDGyFfAGytm1ypa1KWXfALUY/bRoMXVylazLJp4WpyvUMsjTy8wT/ScGBXZc
-         XRjpDwvgZem/bYTGLp6dRh8+4VA0Qra/unEMVhWenbwupQ7wiYCphJDVljBNcJOlVSB+
-         5hthJLqjLMfFvTf38DQb3z1gGfvThOQgXw+63WT78hE6ViMYhtT6OJwUy6oc7UE8dWIs
-         Fi4g==
-X-Gm-Message-State: AOJu0YwjHMJYJeJrdTwDWbH0WXVqAGBJ8o3fIb6GdIJA44cY2Ydx97Zd
-	nRujTlarKrH63GMHbyhlR0Kh2yBVuj+Qc/4fycSexGYm4J7Rwe6PL0tRRZG06SmUd571JKsz758
-	MoHg13wfxTA==
-X-Gm-Gg: Acq92OG7A6zttJYQa37XlTj2MJ1tFDgDOZPHRNd+akCtuFwSyrDW3/UhifltiCkgpQw
-	rnLuiOMdzBkbExgGmKoYkeWO00U3FjAc0Wxza60epmZsVZNGrxn+p2H4szlAj7PgyWe/0hfTa9s
-	QmGmWgN44WhhDY/RyotL+DCRJZDoFKOrHfkisKh2/bH8L1yRwCR8dq9tgMO+p4RAFH/hurYa536
-	9JNqgxzll9/6hHk+PekNMDn48aZ+iGNGiQDeDT7yGLSkbGmtW2xJQqiaPowdBAtIdGRvv8wqDt4
-	4SmZ/aiLtiibBtIpnoqBbrKT5fP0t1Z+ii0TMqgsSR3JhkpswLgjMUDMsZIuDZ6lQHSgZXGoZKg
-	NxYoNcXv/NZslmLD5WLihm8K+ENCUkl133KVQ2GFGDBLB4LTD8bpHVwZp4ICFxiZBDoDJqljwdM
-	vf1DXweKcBNLahHSXsy7lXARwMaTyqsA==
-X-Received: by 2002:a05:7022:699d:b0:132:5d42:55ba with SMTP id a92af1059eb24-138066d8107mr8252776c88.16.1780958858965;
-        Mon, 08 Jun 2026 15:47:38 -0700 (PDT)
-Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::abe5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5539432sm16095148c88.9.2026.06.08.15.47.37
+        d=1e100.net; s=20251104; t=1780962468; x=1781567268;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2/aQwU8OTPKgUWRmAxXsCOG+ZY1qYT2b6xmL/fJ8x4=;
+        b=USG7MC1XbUwxjr9xS7b8alq66v3bvUm3kLfmVHQAtTsyCMrR+GOGIrjP4Svnk2Y0fT
+         KCI4rf+AJMinCrS37gQ0C9sJZez6naHUk7xoVRpmW9z/Xe3dsrBQx/p0xFbZ7SJIPP8C
+         uV+NzcYL8DVpbey0r701EepSUJZwdVxJctvwfhafN0LOSz9pnZ0yGLK6Oi7pUcYZ5uKi
+         cmRl68eLJlFzLI1Hf5QZsXqzH2O0NBVcUkcsiPwv093+m8nXX1ub6aCNyFcmYJFg83h8
+         DghOANTicz0kw+1sZiwR/iMQ0IN2ZHkfiRCBxCgAjR8ptQ6q+cxGVcYFm+G6lOVW+qwI
+         7wkA==
+X-Forwarded-Encrypted: i=1; AFNElJ/zbdBC1YmZPsF7NIJHezxeicTulf3EX1JVIt5mN+uWl0UvBybtM/m9WHXbSy/BUW967+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrFXhrMUPwNTLxCWzgz1DkkZOYoxv7vmj8Vyr+U8SusFfBhnKp
+	TkMx+I6KIryQ33RGtjK489mOBJbuEeM9HTCnDhG06ZvJ+ziqdI4AkLw2fGKB98dD
+X-Gm-Gg: Acq92OG5IEDNypGX4Qf96SOVX8XcY1UM+31/aiAPhIqJshD+0cEhutVKVp49rg6PjVa
+	NXSFfsbiGvhP3e6AQpvGLL2jN1zhl72Mag3a93i0+WTjn6Pz51M2erYnJJNDf0wVnU9aDb1n1Zl
+	ITSc3rfBlBD92m3Ou4QIoOQVHp+oB69qSB3TvWN8gninFlBYJKpGIuK540SZhyC28ozfja0/4Rd
+	F7OEuudY+WPVvBwE0JAfCpi0BtLgP3eTINuGhYa+n49zVMRUUQqnzgn6lH+Z36hC+HcDThmGrJp
+	+psxWdrxqtQA8+rLtGoK31U0XU9mubrVF/71LT5sdShWqAYj2wYnHVoQRVvYYFqWqxC8uLuEQUu
+	nf42QMjbrplUU55yX1XJqsJv9NM3FO7iWo+IQzQvZBx4csisrn4yv/+oD8WY6Vd/brfo3gYUYCZ
+	oHsFLSmaUbOiv0/ixw5AxlL5p3ssR0NSgWj8F7xYGMNW3d4H5MfUAH1gVt/On+PT55DNK750ZBF
+	IU/HwO9FmtJSDEowAI=
+X-Received: by 2002:a05:7300:2209:b0:304:c651:bdea with SMTP id 5a478bee46e88-3077b22a913mr10557497eec.21.1780962467732;
+        Mon, 08 Jun 2026 16:47:47 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cde6:fb53:a1a3:a385? ([2620:10d:c090:500::3:b685])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dea8e76sm18001055eec.18.2026.06.08.16.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 15:47:38 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	kuba@kernel.org,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next] selftests/bpf: libarena: Avoid spurious spmc parallel selftest errors
-Date: Mon,  8 Jun 2026 18:47:32 -0400
-Message-ID: <20260608224732.4482-1-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
+        Mon, 08 Jun 2026 16:47:47 -0700 (PDT)
+Message-ID: <028ed8571ea0aee867facb2defc8340e8421b258.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 08/17] bpf: Report Register Type Safety
+ errors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Mon, 08 Jun 2026 16:47:45 -0700
+In-Reply-To: <20260605063412.974640-9-memxor@gmail.com>
+References: <20260605063412.974640-1-memxor@gmail.com>
+	 <20260605063412.974640-9-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The libarena parallel spmc selftest is nondeterministic by design.
-As a result it depends up to a point on the relative timing between the
-producer and consumer threads. This introduces the possibility for two
-kinds of spurious failures that this patch addresses.
+On Fri, 2026-06-05 at 08:33 +0200, Kumar Kartikeya Dwivedi wrote:
 
-1) Spurious timeouts. The test proceeds in phases, and threads use a
-   common counter as a barrier to avoid proceeding to the next phase
-   until all threads are ready to do so. If a thread takes too long to
-   reach the barrier, the already waiting threads may time out.
+[...]
 
-   Increase the current timeout. The timeout's value is a balance
-   between the maximum amount of time spent on the test and the
-   possibility of spurious failures. Right now the timeout is too short.
-   Err on the side of caution and significantly increase it to avoid
-   spurious failures.
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 7a122c5025c2..920ac17758c2 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+> @@ -457,6 +457,16 @@ static const char *bpf_diag_context_name(enum bpf_di=
+ag_context_kind kind)
+>  	}
+>  }
+> =20
+> +static u32 bpf_diag_current_frameno(const struct bpf_verifier_env *env)
+> +{
+> +	const struct bpf_verifier_state *state =3D env->cur_state;
+> +
+> +	if (!state || !state->frame[state->curframe])
+> +		return 0;
+> +
+> +	return state->frame[state->curframe]->frameno;
+> +}
 
-2) Spurious resize failures. Some selftests require the spmc queue to
-   resize itself. This in turn requires for the producer side to be
-   materially faster than the consumer side so that the queue gets full
-   enough for a resize. However, in the benchmark the spmc queue's producer
-   is outnumbered 3:1. To offset it we add busy waits for consume
-   queues. However, we still see occasional failures due to the queue
-   never resizing.
+Nit: this can be `return state->frame[state->curframe]->frameno;`,
+     it is never called in a context when there is no current state.
 
-   Minimize the possibility for this in two ways: First, remove one of
-   the consumers. The 2 consumers still exercise the "race between
-   consumers" scenario. Second, increase the busy wait duration to
-   decrease the rate by which the consumers act on the queue.
 
-   While at it, also replace a stray invalid error value "153" with EINVAL.
+[...]
 
-Fixes: 42998f819256 ("selftests/bpf: libarena: parallel test harness and spmc parallel selftest")
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- .../libarena/selftests/test_parallel_spmc.bpf.c    | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+> +void bpf_diag_report_invalid_deref(struct bpf_verifier_env *env, u32 ins=
+n_idx,
+> +				   int regno, const char *reg_name,
+> +				   const char *type_name,
+> +				   enum bpf_diag_invalid_deref_kind kind,
+> +				   s64 offset)
 
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
-index 000a4d58665a..a81aa29c9671 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
-@@ -7,7 +7,7 @@
- #include <libarena/asan.h>
- #include <libarena/spmc.h>
- 
--#define TEST_SPMC_THREADS 4
-+#define TEST_SPMC_THREADS 3
- #define TEST_SPMC_STEALERS (TEST_SPMC_THREADS - 1)
- 
- /* 
-@@ -17,7 +17,7 @@
-  * and operations are wait-free we just spin around the quiescence
-  * point instead. If we time out, we just fail the benchmark.
-  */
--#define TEST_SPMC_SYNC_SPINS (1U << 18)
-+#define TEST_SPMC_SYNC_SPINS (1U << 24)
- 
- /*
-  * We track all the values we retrieve from the queue
-@@ -61,7 +61,7 @@ static volatile u64 round_steals;
-  * We have multiple stealers and a single owner. We sometimes want the owner
-  * to successfully outproduce the stealers, we add a busy loop in them.
-  */
--#define TEST_SPMC_WASTE_ROUNDS (1024)
-+#define TEST_SPMC_WASTE_ROUNDS (1UL << 12)
- 
- /*
-  * The spmc data structure depends on the runtime fully
-@@ -112,10 +112,6 @@ static bool spmc_tests_enabled(void)
- 	{								\
- 		return spmc_##prefix##_stealer();					\
- 	}								\
--	SEC("syscall") int parallel_test_spmc_##prefix##__3(void)	\
--	{								\
--		return spmc_##prefix##_stealer();					\
--	}
- 
- static int spmc_common_init(u64 total)
- {
-@@ -451,10 +447,10 @@ static int spmc_resize_owner(void)
- 			resized = true;
- 	}
- 
--	/* Did we get to resize while racing/ */
-+	/* Did we get to resize while racing? */
- 	if (!resized) {
- 		test_abort = true;
--		return -153;
-+		return -EINVAL;
- 	}
- 
- 	/* 
--- 
-2.54.0
+Nit: bpf_diag_report_register_type() accepts reason as a char*, while
+     this function uses an enum. Maybe keep the interface consistent
+     between similar functions?
 
+
+[...]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7bb2a81ee353..adf660ab9e7d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[...]
+
+> @@ -13707,12 +13736,28 @@ static int adjust_ptr_min_max_vals(struct bpf_v=
+erifier_env *env,
+>  		verbose(env,
+>  			"R%d 32-bit pointer arithmetic prohibited\n",
+>  			dst);
+> +		scnprintf(reason, sizeof(reason),
+> +			  "R%d holds %s. 32-bit ALU operations on pointers discard pointer pr=
+ovenance, so the verifier cannot keep the result as a safe "
+> +			  "pointer.",
+> +			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
+> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +					      "32-bit pointer arithmetic",
+> +					      reason,
+> +					      "Use 64-bit pointer arithmetic with an allowed, bounded scala=
+r offset, or convert the value to a scalar only after pointer use "
+> +					      "is complete.");
+
+Nit: What is our recommended way to convert a pointer to a scalar?
+     Might be non-trivial, I'd drop this suggestion or provided a recipe.
+
+>  		return -EACCES;
+>  	}
+> =20
+>  	if (ptr_reg->type & PTR_MAYBE_NULL) {
+>  		verbose(env, "R%d pointer arithmetic on %s prohibited, null-check it f=
+irst\n",
+>  			dst, reg_type_str(env, ptr_reg->type));
+> +		scnprintf(reason, sizeof(reason),
+> +			  "R%d may be NULL (%s). Pointer arithmetic is allowed only after the=
+ program proves the pointer is non-NULL on this path.",
+> +			  dst, reg_type_str(env, ptr_reg->type));
+> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +					      "pointer arithmetic before NULL check",
+> +					      reason,
+> +					      "Add a NULL check first, and do the pointer arithmetic only o=
+n the non-NULL branch.");
+
+Nit: "Make sure that a NULL check precedes any arithmetic performed on the =
+pointer."
+     (as this is most likely because of the compiler shenanigans).
+
+>  		return -EACCES;
+>  	}
+> =20
+> @@ -13749,6 +13794,13 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  	default:
+>  		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
+>  			dst, reg_type_str(env, ptr_reg->type));
+> +		scnprintf(reason, sizeof(reason),
+> +			  "R%d holds %s. This pointer kind does not allow arithmetic because =
+changing its offset would lose the verifier's required provenance.",
+> +			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
+> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +					      "pointer arithmetic is not allowed",
+> +					      reason,
+> +					      "Keep this pointer unchanged, or derive an allowed pointer ty=
+pe before applying a bounded offset.");
+                                                                           =
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                                           =
+ What does this mean?
+                                                                           =
+ As far as I understand, this check would fire for sockets
+                                                                           =
+ and CONST_PTR_TO_DYNPTR. I'd drop this suggestion altogether.
+
+>  		return -EACCES;
+>  	}
+> =20
+> @@ -13758,9 +13810,26 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  	dst_reg->type =3D ptr_reg->type;
+>  	dst_reg->id =3D ptr_reg->id;
+> =20
+> -	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
+> -	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
+> +	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type)) {
+> +		scnprintf(reason, sizeof(reason),
+> +			  "The scalar offset used with R%d has a range the verifier cannot sa=
+fely add to %s.",
+> +			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
+
+Maybe print what counts as a sane offset as well?
+
+> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +					      "pointer offset is not safe",
+> +					      reason,
+> +					      "Clamp or bound-check the scalar offset before adding it to t=
+he pointer.");
+> +		return -EINVAL;
+> +	}
+> +	if (!check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type)) {
+> +		scnprintf(reason, sizeof(reason),
+> +			  "R%d already has an offset that is outside the verifier's safe poin=
+ter range for %s.",
+> +			  dst, bpf_diag_reg_type_plain(env, ptr_reg->type));
+> +		bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +					      "pointer offset is not safe",
+> +					      reason,
+> +					      "Keep the base pointer within the verifier's allowed offset r=
+ange before applying more arithmetic.");
+>  		return -EINVAL;
+> +	}
+> =20
+>  	/* pointer types do not carry 32-bit bounds at the moment. */
+>  	__mark_reg32_unbounded(dst_reg);
+> @@ -13803,6 +13872,14 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  			/* scalar -=3D pointer.  Creates an unknown scalar */
+>  			verbose(env, "R%d tried to subtract pointer from scalar\n",
+>  				dst);
+> +			scnprintf(reason, sizeof(reason),
+> +				  "This operation subtracts a pointer from scalar register R%d. The =
+verifier does not allow pointer provenance to flow through scalar "
+
+Nit: I'd just say that verifier does not allow this, avoiding the provenanc=
+e flow.
+
+> +				  "subtraction.",
+> +				  dst);
+> +			bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +						      "pointer subtracted from scalar",
+> +						      reason,
+> +						      "Keep pointer values in pointer registers, or use explicit s=
+calar values that do not come from pointer arithmetic.");
+
+Nit: "Keep pointer values in pointer registers...", I'd drop this,
+     it is not very clear what the pointer register is.
+
+>  			return -EACCES;
+>  		}
+>  		/* We don't allow subtraction from FP, because (according to
+> @@ -13812,6 +13889,14 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  		if (ptr_reg->type =3D=3D PTR_TO_STACK) {
+>  			verbose(env, "R%d subtraction from stack pointer prohibited\n",
+>  				dst);
+> +			scnprintf(reason, sizeof(reason),
+> +				  "R%d is derived from the frame pointer. Subtracting from a stack p=
+ointer is not allowed because stack accesses must stay within the "
+> +				  "verifier's tracked frame offsets.",
+> +				  dst);
+> +			bpf_diag_report_register_type(env, env->insn_idx, dst,
+> +						      "subtraction from stack pointer",
+> +						      reason,
+> +						      "Use fixed negative stack offsets from R10, and avoid arithm=
+etic that moves the frame pointer backward.");
+
+This is a misleading suggestion. We do allow varying offset access for R10.
+Also, the final offset must be negative, but intermediate values can be pos=
+itive.
+
+>  			return -EACCES;
+>  		}
+>  		dst_reg->r64 =3D cnum64_add(ptr_reg->r64, cnum64_negate(off_reg->r64))=
+;
+
+[...]
