@@ -1,119 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016C93CB8F4
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF581480963
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930421; cv=none; b=AmEC6QW/Q+PimEIUccXSmSyB5epfGzpnuJGDjzxmYnDlaM9dSHzFxGKTs61eXjo1reZr1SoNkTynRzwoHEn5pUipEa3CGBAeRLIbBr/Vgg0Qu9JUYz+YovlgqVZLuIETBtEONj3ex7Mwr68aXAHCjXOojB8A5Xwg85BUC2echK8=
+	t=1780930556; cv=none; b=j9Av7a2TYqedWBFjD0PDEJMY8lMXMr6dDi3dmHWTGCdxJYZTAWUqefkJhJz385GPDdPbrh1WR+SBSAzUnevIP6O9rMO3BUurtIS68H+C+pySRuT+zvMrU8v6ecYzeLhJ+X4HfhrqtufFCc9OITrqP7YukrqwoH9MjcCuD47YshQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930421; c=relaxed/simple;
-	bh=KiqF8/MAkDcFtk9sqhNSCq2gu3JKJehODIn0a4JltT0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mYrDeOEw9QHsz4NWN2tFtjjpc6hdEpvPuBoEPZEVoaFFXVYRO1tfMX/0H3OgxOEJJAI2e0xwLIsK+zU9vn/7zjAQaZrv9l5afgZiOVn5ASE5oN8+ObNABsBePBnraHq5h7q/iBkooqpzsl4NSoyV34FNeZlQZF5zT3sXufc2BIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kY2KEk0p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780930556; c=relaxed/simple;
+	bh=VMNDqBp0Cy8XekWXaHAUNRcSL2ZLfh+2UMAq0xwoKaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iT6RLGlZvf++QFShnjd8kB3MuLB5PdLG8znic9dCEJnx/5RyRi5NngnePLEinGMz2nhpFMIkHcjiOFgeOJL2ekQ7uLR0T005n0VhXj3S7P49lfhrItlM0PbN/3f+0g80tL94k8LLw1XZud+h2qRDAVyvBSKWqEY8W4M8lLUKjpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HIyt4It/; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kY2KEk0p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BFD1F00893;
-	Mon,  8 Jun 2026 14:53:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780930419;
-	bh=Hs7MLgPitmIVyTcMReuVekArW/KJua4lDQKGvGkwbOY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kY2KEk0paqc1Gt2Vq6G+LTvJi/PtWI6+uwWD0JESyn9Q3WsfC+S3J8nbtjcz1y7G/
-	 xm0pVjLdVc5HGrJmarrdsgDQnaQjBrrutZFECbiSPy1VdRkb/2eWGXDxt7Jy/tT6T0
-	 0yYge5zTCj7HOBP69ZQMwsYnwr2hNT6RQc5snCTGt0542dLDIqstiAblZMtFoKk3GO
-	 Is/Zb0be62ktxOk01qVz6iP/a/mOB60OkgwhywUxj6AHfrW+GqxdxpfzU9VLSyrA5V
-	 +vBw5XfHix1S5n4gef9nqk5dIOKuwh5dPBoV/w7bgLevaqtaW/Cq1cVR/g89X75DUy
-	 zqtRj7awmyQkQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: strengthen
- bpf_kfunc_implicit_arg to verify aux injection
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HIyt4It/"
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8cceb2ecc03so38069346d6.3
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780930549; x=1781535349; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vU8Tk4A4RjDYcT3OUJAeuDXG3Ce7DLThoR+CZQwpZiE=;
+        b=HIyt4It/b0CwC+GpaLocy1srnkcMtiQt6PQvY2ANndnlGQ8tHnaB/FjiUUch6CDwg/
+         jFG9zs+gFDHxjsP9cNr84o/NO1V6PbmqxMbRDhC5CgJaQ1VJsJ2XaofMq/7BOARTZ9Nb
+         Zi8IFdObngG6S0W7e+2SvwWCRn3PVX6fIHA/7xRRNtwQv9SVdSU2v/NTznLQhBBz9YBp
+         SuKYBnFy9iM9nSEvUentenszwlS3U+wQ3d+MdyBhSAQiE1szMTFy9Chmf3XvOGT8d53h
+         ugmXEeNLtS9T9cMseRn26ooF6c+Alh6+UmRMzkcmbM/DVjVU+SqNdl8+MlEP2pMDkJYm
+         Gx+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780930549; x=1781535349;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vU8Tk4A4RjDYcT3OUJAeuDXG3Ce7DLThoR+CZQwpZiE=;
+        b=MmsQ8Cn68POXf/6DhPe1RdbRug6YeD7Y+iDscvy81QyLwq8a09IFwtICrnOCXvuf6F
+         kFEl0hYWp2X8AaL5XQTe1A1BdM3BMVHXoxgVNVJEDfOHtgGaX+Y6EbwPTEY2ucmBLfB7
+         rgjPb6HvyYq8GiK2Vd7RVn0kA23y5epUAWsVulXX/DoZxW7S96QQ3rC2mnZCs/YUtQ1G
+         i9DEIrTQf3SpUikcU95DI7edXwmF/osgpQ7UDnlI8uaPJrAdz3OV8dfMTjO/Z2AmrHmQ
+         Fqhdgea2YNLYgAWhGUJ0LjKkb9esgIfpJ4o882R+MpYw8ygqGqbUqOglfcch6UOIbq4A
+         z8Ng==
+X-Gm-Message-State: AOJu0YxkK7TtOClCdwPL0BZ5MTgfs+3gdKRWvY28AZSlRC2a/5Xr5BYg
+	bA5Cu9h9vIss/2ogE8mAWtZNSLFX47EcRwBmkFWMXpedWG/Gy4fpTtXr
+X-Gm-Gg: Acq92OHeh8UkTDohV8JX4IYfvod6pS9zFQTxGHSnmEuDE8S+ql2oFrFJxGx4i/jDPss
+	na36qztyh81eH7qpJbtFVIhWY1Pusks/5reTMj4w7B5eui8AGNNeN1mMNT4qMNLg3zJY/nsZon6
+	36OiPLdQbmwimegGpVE8uA8gK4xvL1tcBlTmV/DJGZCcT4JtpPQP7399spnSx6y/5hjlTxOB9j2
+	sWHXkMELImDGg1yXHpd4PoXSuTuLaXAaiLpRs1K7tG2eIF8kOSFJJuHKZe4vYpEWCPubLfXjXHU
+	nv7Kfl7qcx3k6ykzWDV73wFtOgeM4UUarPLOV9uKK1bYWUIcxCtd/pgR3GTc+EK3LSAX+EBswU1
+	3ANvZYTyXbLh2IImXmyNOKZaCpJ0aYOPUVxkZzS1MnEfpHY5HUfg2zfj2KSTMoj53VwDRfc7Lun
+	eodruT6hHhcWm/u+11QEqTEBG/b985
+X-Received: by 2002:a0c:d809:0:b0:8ce:befc:dfe9 with SMTP id 6a1803df08f44-8cee6009304mr175142066d6.17.1780930548590;
+        Mon, 08 Jun 2026 07:55:48 -0700 (PDT)
+Received: from localhost ([43.225.189.113])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ceccdcc968sm176992026d6.22.2026.06.08.07.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 07:55:47 -0700 (PDT)
+Date: Mon, 8 Jun 2026 17:55:40 +0300
+From: Dan Carpenter <error27@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608142618.3064380-3-chenyuan_fl@163.com>
-References: <20260608142618.3064380-3-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 14:53:39 +0000
-Message-Id: <20260608145339.81BFD1F00893@smtp.kernel.org>
+Subject: [bug report] bpf: Refactor object relationship tracking and fix
+ dynptr UAF bug
+Message-ID: <aibX7BzvtbZYoZcY@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Unsafe memory access in `bpf_kfunc_implicit_arg` leading to kern=
-el panic on verifier injection failure
-- [Low] BPF subsystem multi-line comment style violation
---
+Hello Amery Hung,
 
-commit 7fe0e7a112c19898e04e79eb1d5d25a017d9fcd2
-Author: Yuan Chen <chenyuan@kylinos.cn>
+Commit 308c7a0ae885 ("bpf: Refactor object relationship tracking and
+fix dynptr UAF bug") from May 28, 2026 (linux-next), leads to the
+following Smatch static checker warning:
 
-selftests/bpf: strengthen bpf_kfunc_implicit_arg to verify aux injection
+	kernel/bpf/verifier.c:13115 check_kfunc_call()
+	warn: error code type promoted to positive: 'id'
 
-This commit updates bpf_kfunc_implicit_arg to verify that the kernel correc=
-tly
-injected the bpf_prog_aux pointer. It checks the name field of the aux poin=
-ter
-to ensure it matches the expected prefix, attempting to catch cases where t=
-he
-verifier leaves a stale register value.
+kernel/bpf/verifier.c
+    12810 static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+    12811                             int *insn_idx_p)
+    12812 {
+    12813         bool sleepable, rcu_lock, rcu_unlock, preempt_disable, preempt_enable;
+    12814         struct bpf_reg_state *regs = cur_regs(env);
+    12815         const char *func_name, *ptr_type_name;
+    12816         const struct btf_type *t, *ptr_type;
+    12817         struct bpf_kfunc_call_arg_meta meta;
+    12818         struct bpf_insn_aux_data *insn_aux;
+    12819         int err, insn_idx = *insn_idx_p;
+    12820         u32 i, nargs, ptr_type_id, id;
+                                             ^^
+Originally id was int.  It needs to be int for the error handling to
+work.
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+    12821         const struct btf_param *args;
+    12822         struct btf *desc_btf;
+    12823 
+    12824         /* skip for now, but return error when we find this in fixup_kfunc_call */
 
-[ ... ]
+[ snip ]
 
-> @@ -1827,7 +1827,11 @@ int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_=
-ops_args *args, struct bpf_pro
-> =20
->  int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux)
->  {
-> -	if (aux && a > 0)
-> +	/* Verify the kernel injected the correct bpf_prog_aux pointer
-> +	 * rather than leaving a stale register value. */
+    13112                 mark_btf_func_reg_size(env, BPF_REG_0, sizeof(void *));
+    13113                 if (is_kfunc_acquire(&meta)) {
+    13114                         id = acquire_reference(env, insn_idx, 0);
+--> 13115                         if (id < 0)
+                                      ^^^^^^
 
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred BPF
-subsystem comment style?
+    13116                                 return id;
+    13117                         regs[BPF_REG_0].id = id;
+    13118                 } else if (is_rbtree_node_type(ptr_type) || is_list_node_type(ptr_type)) {
+    13119                         ref_set_non_owning(env, &regs[BPF_REG_0]);
 
-The BPF subsystem guidelines require multi-line comments to have the
-opening /* on its own line:
+This email is a free service from the Smatch-CI project [smatch.sf.net].
 
-/*
- * Verify the kernel injected the correct bpf_prog_aux pointer
- * rather than leaving a stale register value.
- */
-
-> +	if (!aux || strncmp(aux->name, "test_kfunc", sizeof("test_kfunc") - 1))
-
-[Severity: Medium]
-If the verifier skips injection and leaves a stale, non-NULL register
-value in the aux variable, won't dereferencing aux->name cause a kernel
-panic?
-
-The commit message mentions that in cases like a BTF mismatch, the stale
-register would not contain a valid aux pointer. If aux is a garbage pointer
-rather than NULL, the !aux check will evaluate to false, and the strncmp
-call will attempt to read from unmapped or invalid memory.
-
-Could this use something like copy_from_kernel_nofault() or similar safe
-memory access to gracefully fail the test instead of crashing the host kern=
-el?
-
-> +		return -EINVAL;
-> +	if (a > 0)
->  		return a;
->  	return -EINVAL;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608142618.3064=
-380-1-chenyuan_fl@163.com?part=3D2
+regards,
+dan carpenter
