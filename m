@@ -1,126 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E927A2135AD
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 13:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32FF3B7769;
+	Mon,  8 Jun 2026 14:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780926674; cv=none; b=RNkdFP8VvwintAMOOVdMgXBoDXPSZ4rfGBD3OJgHb5hqBtwugDDqF18mkOlhRNPlicV+nlOHJBXju7c9o5dz0bnEdAHFut9WTgT9yiXckj6uLSJeDNCork/xuC405BxcjUI81dfVDLWUAPk/i8pmaHonVszttJFQUQEDKAcv204=
+	t=1780927657; cv=none; b=pRBU0Nhb8mrkAAJD0T/8GFLoOTBR0zGRC7wkcLJh2EsJ5eKmBh6BVaoPOFbZ3igLj43hCWsX5EtE2SJb8G+HJ77O1DfEP/G3queqkvDqWhLFmkIGnWoV7VBvXR99NETGrOFhrbsan/8WK3OLJh5Y3Kl99nhkpKJtECEzD6VsNDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780926674; c=relaxed/simple;
-	bh=zqPEguX31sWWl9I0stIwjoyf4bllP9HfI7b6Fsx0iAA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Sq4H/rIyPlynhqkLE+4Ux2TRfEP0L5AWyQFxpfVaZgIrzduAOO2nahFRjsDOFJkPu3yyr3scAMppCV903vBBRbOQ023LMSjVd2DfVS6y0aQahcpNq66fef7/cQuWKgx7ii7emBlV8rN2HFmMYbrhEzYtFATyxxP4+eFFTmTwPgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOQBxcx6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780927657; c=relaxed/simple;
+	bh=0e3Xl3yjrHcFlMvjOK1Kqj7/x9MCgopzq0b/wQ1QQ9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fk7jDSVAOElGx1pK/ksh+EqX0sbeqzXHfk6a9cAo1q4urRACn/7o8BabHiodUsA7rj0qkTu5CRayitV97ldLhcCIP1nf2AuO/gHcgC4tcQO6YGn5kql1Fy2WPym4XwqsiPIJeDaymf6QNmY85GQPgIoehRw9J1hqKxuvZpDr26E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O5c0AqbW; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOQBxcx6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF451F00893;
-	Mon,  8 Jun 2026 13:51:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780926672;
-	bh=qn9yTRQpRdUs2Tx4+VglCH/bIvnDikNZMZh/aLDU7k0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eOQBxcx6PK+mH556c1XsqfmIk0p77lN20CKvswiLxkZn+vLdaLyayAKdRGM8EHUe1
-	 TFYm9UEyai69YO1QjAQj0RURhA10u+z3ZWvDEF1yj6BHmYpVTb01A7V/a7UNLZtkbX
-	 GB4WffX88CfZvaWBBoBXsOCRzpZKFSDsbgzMm9aCRNxxp1IILd8FYD53TtUqpyhrS+
-	 k1SSlIDb3GPcn6MwhjPnNm/ZUJ4meuZvBx8oKwa0uNxqyxhtcuGMqNMAESB5vLbQuD
-	 sFQXdZFfQ9QVCxQZjOXV6oyBD6x/Y5Wzs9EdlC4PFsWhNx2MXz4gVOsm3zLmJ7JvlX
-	 iNYb0RQb3GPiA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v5 2/4] net: mvpp2: limit XDP frame size to the RX
- buffer
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Til Kaiser" <mail@tk154.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260607134943.21996-3-mail@tk154.de>
-References: <20260607134943.21996-3-mail@tk154.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 13:51:11 +0000
-Message-Id: <20260608135112.1AF451F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O5c0AqbW"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=OGkQSvLtArZajcsynm70hHIEzVSivdden6PGwjoo+b0=; b=O5c0AqbWpYmPB8p+XlyKWv2WlR
+	ro1otrdZGLf4tvn5X0XoOW76zSdneaP7uo1K8SNBUxyY4s6OS1wX//hmxiWC1lLFoqvko/lrH/25Q
+	QZ4Wis/NyzS8z+YhXD8HUzLPR0AVTZbXkjc5jHb+EEs6mLZb8/TaYYZqDEoasBg9x1JbmN2frMZ03
+	Pu9ZOt223OsMiXxxusNeGb0TmXKCexztbO0Mv6qKESgL5xUc6ejZs5d4Dfq9SPz2VgkwgbLT+w9ua
+	2jNr731ujFfbdVBoxwAwwGRf9Dy+6xhV8LGJTd7R+TTAziWI1U2BKeBeBQCD3AVkVYvDbbevmIBN8
+	iiGuZ3Cg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wWadT-000000015mN-01OU;
+	Mon, 08 Jun 2026 14:07:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 43CBC30044E; Mon, 08 Jun 2026 16:06:54 +0200 (CEST)
+Date: Mon, 8 Jun 2026 16:06:54 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: bpf@vger.kernel.org, Tengda Wu <wutengda@huaweicloud.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
+	mbenes@suse.cz, pmladek@suse.com
+Subject: Re: [PATCH] rethook: Use tsk->on_cpu to check task execution state
+Message-ID: <20260608140654.GE3102624@noisy.programming.kicks-ass.net>
+References: <20260525132253.1889726-1-wutengda@huaweicloud.com>
+ <20260526123719.482f07a3843e207e22d95378@kernel.org>
+ <94179dab-ffb7-4fab-af45-b20bfb686ab3@huaweicloud.com>
+ <20260601084001.9566b443746447ec2bb1a9fb@kernel.org>
+ <20260604093445.GF3126523@noisy.programming.kicks-ass.net>
+ <20260605224341.c926299d613b6102912c9a3f@kernel.org>
+ <679a1c8f-1e4d-4ae5-83e1-d0068e6de1a6@huaweicloud.com>
+ <20260608093449.GH4149641@noisy.programming.kicks-ass.net>
+ <20260608102326.GB3161497@noisy.programming.kicks-ass.net>
+ <20260608220811.d4a0b58961cfb9eeb6bbbccb@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260608220811.d4a0b58961cfb9eeb6bbbccb@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Mon, Jun 08, 2026 at 10:08:11PM +0900, Masami Hiramatsu wrote:
 
-Pre-existing issues:
-- [High] Changing MTU to a value > 1664 silently disables per-CPU pools whi=
-le leaving XDP programs attached, leading to a NULL pointer dereference whe=
-n XDP drops or redirects packets.
---
+> > > Anyway, I'm wondering what the purpose of this check here is, there is
+> > > no real comment, and commit 5120d167e21c ("rethook: Remove warning
+> > > messages printed for finding return address of a frame.") is just pure
+> > > voodoo as well.
+> > 
+> > FWIW, you should have had this discussion then.
+> 
+> Indeed. The rethook is making a shadow stack by list, thus caller must
+> guarantee the target process is blocked at least during this function.
+> 
+> The commit messages suggest that when BPF takes a backtrace, it also
+> includes other running tasks. Is that safe?
 
-commit de2e76bdbee6c2ad0c3dc5a24f4854767f944f85
-Author: Til Kaiser <mail@tk154.de>
+Well, you get to keep the pieces. At this point safe only pertains to
+'doesn't-crash', all correctness is out the window.
 
-net: mvpp2: limit XDP frame size to the RX buffer
+I always forget the crazy BPF does ;-)
 
-mvpp2 has short and long BM pools, and short pool buffers can be smaller
-than PAGE_SIZE. The XDP path nevertheless initializes every xdp_buff with
-PAGE_SIZE as frame size.
+> > > Also, note the comment that goes with the usage of
+> > > task_on_another_cpu(); that thing is racy as all heck.
+> > > 
+> > > So it really comes down to what the purpose of this check is.
+> 
+> This check has been introduced when it is copied from
+> kretprobe_find_ret_addr(). It has the comment:
+> 
+>  * The @tsk must be 'current' or a task which is not running. @fp is a hint
+> 
+> IIRC, I added this check to explicitly verify this condition.
 
-> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/ne=
-t/ethernet/marvell/mvpp2/mvpp2_main.c
-> index 92a701f4fe3f5..3372ed27cc8d6 100644
-> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> @@ -3979,7 +3979,7 @@ static int mvpp2_rx(struct mvpp2_port *port, struct=
- napi_struct *napi,
->  			else
->  				xdp_rxq =3D &rxq->xdp_rxq_long;
-> =20
-> -			xdp_init_buff(&xdp, PAGE_SIZE, xdp_rxq);
-> +			xdp_init_buff(&xdp, bm_pool->frag_size, xdp_rxq);
->  			xdp_prepare_buff(&xdp, data,
->  					 MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM,
->  					 rx_bytes, true);
+Right, but it is a prescriptive comment, not an explanatory one. That
+is, it doesn't explain the condition.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but could this lead to a NULL
-pointer dereference in the XDP path?
+> > > I suspect the issue at hand is that tsk->rethook elements, such as
+> > > iterated by __rethook_find_ret_addr() are not safe to be accessed for a
+> > > running task.
+> > > 
+> > > Notably while rethook_recycle() has some RCU thing on, that objpool
+> > > thing (and the recycle name itself) seems to strongly suggest iterating
+> > > these things is not sound (you could start with things from this task,
+> > > hit a recycled entry and continue iterating rethooks from another task).
+> > > 
+> > > Also note that the current check is also racy, nothing really prevents a
+> > > wakeup from happening right after you observe task_is_running() being
+> > > false. The task can then get scheduled in on another CPU and tear down
+> > > its rethooks concurrent with __rethook_find_ret_addr().
+> 
+> Yeah, but is there any way to ensure the task is blocked? Even if it is
+> blocked, like TASK_UNINTERRUPTIBLE, unless holding the actual lock in
+> the rethook, it may not be possible to ensure it?
+> 
+> Of course, we could give up on checking within this function and leave
+> everything to the caller to guarantee - as kretprobe does.
+> 
+> BTW, the reason why we made it possible to pass tasks other than current
+>  is that the stack unwinding code itself supported unwinding tasks other
+> than current, so we had no choice but to create this interface.
+> 
+> However, it is a bad idea to check this in deep inside of unwinding.
 
-If the MTU is changed to a value > 1664 on another port, mvpp2_change_mtu()
-globally disables per-CPU pools:
+This, you cannot take locks in unwinding. The only thing you can do is
+try to do the best you can without crashing.
 
-drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c:mvpp2_change_mtu() {
-    ...
-	if (priv->percpu_pools) {
-		netdev_warn(dev, "mtu %d too high, switching to shared buffers", mtu);
-		mvpp2_bm_switch_buffers(priv, false);
-	}
-    ...
-}
+Typically unwind only happens on self -- this is natural, a task crashes
+and unwinds itself, or a task does something (takes a lock, hits a
+tracepoint, etc) and takes a snapshot of its own stack, and this is
+safe.
 
-This leaves other ports with their XDP programs still attached but without
-per-CPU pools. When a packet arrives, mvpp2_rx() leaves pp as NULL:
-
-drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c:mvpp2_rx() {
-    ...
-		if (port->priv->percpu_pools) {
-			pp =3D port->priv->page_pool[pool];
-			dma_dir =3D page_pool_get_dma_dir(pp);
-		} else {
-			dma_dir =3D DMA_FROM_DEVICE;
-		}
-    ...
-}
-
-Shortly after xdp_prepare_buff() in mvpp2_rx(), mvpp2_run_xdp() is called
-with the NULL pp. If the XDP program drops or redirects the packet, does
-mvpp2_run_xdp() pass the NULL pp to page_pool_put_page(), causing a panic?
-
-drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c:mvpp2_run_xdp() {
-    ...
-	case XDP_DROP:
-		ret =3D MVPP2_XDP_DROPPED;
-		page =3D virt_to_head_page(xdp->data);
-		page_pool_put_page(pp, page, sync, true);
-    ...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260607134943.2199=
-6-1-mail@tk154.de?part=3D2
+Things like live-patch use task_call_func(), which ensures the callback
+function is done while holding sufficient locks for the task to not
+change state.
