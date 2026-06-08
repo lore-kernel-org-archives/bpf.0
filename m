@@ -1,63 +1,63 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73143DEAFB
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDEF3DEFFC
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930127; cv=none; b=gwWiYhmMKnYBh52Bk7wE0M6JgwJ4v9e3CeWsV2idsJA038q25Gz6Gbb0salnReOvcc5SqgICI5t70cldkbHqwoG7WoMbV4Vi4TvG+YDhrzeHEhTfQ1vfImVaBFjkANReVhcMqxVUSTHK4DJilSzPFx3+HmhsowYmC418gxBAm0g=
+	t=1780930128; cv=none; b=QVBPt4SxpplLT1AWz5lq20K7LdS7RE1OUJfchReHmbuMMtVfOvESUnzwH5eFr67F0F5J3XXErhlAXBI9+LbUQ6FY8mhxnZHNujK+Hh+TGbV1apXYlLiz31enHneAT2Fnzn9UV2Tk3kNHVo6kKV/gjM/BTbI7B8C9kL5kqez/uo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930127; c=relaxed/simple;
-	bh=/Cy3NxzmsLV48pkFD6Kb5gjUyf7HWwtzMj+ScXPvRrU=;
+	s=arc-20240116; t=1780930128; c=relaxed/simple;
+	bh=ufAIpZ0vqfnpXv3s+oFLvQT7Guah5dUoVbwr9AM6L5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u6rdz5sCvtv1wSpSX8JZV3iNs+soD/wlUUZ6slSGhtOzWNFKB94xojmQgY6TL6j8QbSMQxGzdTFQvO2mmGfq7YmqBz4f4eAUABhqXrcxjFvqmE5fAzE8YaMhRtrCv3/2ETEGKlfU0h+QOyKND/26VTJJq+udmmNfgChI8uFFbZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NkE/4R+g; arc=none smtp.client-ip=209.85.128.67
+	 MIME-Version; b=gcWfbjgPJ+KTjL/s96fPchs5agw8MZpKM64dieU5YgkINN0l4lgjLUMZC3zTMjgJu0CJlsOKKV7gRvhDsoy0YXhVzVd5A/cjz34FknNcxNIea02GsK543qaYvXP0GruC6BsWmCPDALW6PzwU8JG/CK9Lv4bza1vsiJKpgLn6CBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ks3PDyqC; arc=none smtp.client-ip=209.85.221.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NkE/4R+g"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490bb83a3f6so36818635e9.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:48:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ks3PDyqC"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-45ee5cdbd28so3212044f8f.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780930124; x=1781534924; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780930125; x=1781534925; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jKtVGxsu6RwAnK1V9OojbyWlUqbsVTWouxAJah2IUJg=;
-        b=NkE/4R+g3pJyzIadhsEj43+bC5K6iE0H8/2EucxeM7n8myuF1gTct6PFQlSIvpeOfs
-         XWHA6LX+YhJMRKdAzVGH89EZp/DuekcE0JFIskuZYda0QQNQoZ+J3rZD2k0jaRHeHdBF
-         bX4gV5qsqWyvz09Cyz7/q8HKq6phSla1kD6hnMa1d0j+FruDtVHKWSRGcffu4PGxFjaO
-         WbK+EXlZV2DAGt7G+3v0OlQr+UZprqxyVSdgm9GgfrkABktDSEASXVtByXN5ot43Q4QK
-         W1MGSfYCrvwXxXDRZ/1ZBlINUBNSdVh2FQejs2+/cqC1zFa7DwxZoQHGXkxYl2DrD8Vx
-         QcWA==
+        bh=/nr/Mzz5zjyW8yrdv0iIT+uDlWoBbHtqihW7EGCAPRM=;
+        b=ks3PDyqCudiKPV1MfVOxsYIAgWX5v/r8YYvU9/oyd/O6Ys564DhlFb2PguJn2qReIJ
+         xrDGuqvZNM2gyFp0/42oPS3rd9WBExPKsdNczyBmYCkn6PlSAfELV0S5Wm34+yZ8y0ww
+         eWoWtwF90TCpYoOt5WRW0uwlmxBlJztNgP0Z7WZWFaJTZmME8DArwV87iQEWOHTT5WAl
+         uOXwrbcXRicjp11lbrE2vjCLLaK5EXabJ5fXsQkzDp1tyfbnAk6iAr4u+/PpHOkUBCCW
+         HwJOzqm21mlSc9LFky0kuCb3nxsc4dIFp1a1Tju0Ezzn5cr6hLKvu3baKbALMvftSww3
+         Q6kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780930124; x=1781534924;
+        d=1e100.net; s=20251104; t=1780930125; x=1781534925;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jKtVGxsu6RwAnK1V9OojbyWlUqbsVTWouxAJah2IUJg=;
-        b=ImgAmBj+yZ7dJeb+Nu/huZEH3QaWC8c8tYGHGfL11JzKEMb++Mfkn6m4aXv9Kxe29f
-         J3yENqP4svAcLqiFQgnPbWgzmfglhHyuEHizBnxAmWkwCjjpuKATIsHlFR9qGyFlhVb5
-         RhoUOwfP+Z/q57a41UoI6TrepsoOjd6Bz8S6Q21LTCwmx4BaHtjX4wmSiSIirseEi7bv
-         24EwjdnzrNtShDOurSn5zNG+B52gUYpMehUdc59nFeLnBVSjoUHPVoIzaXFmb88XloYs
-         0DXslKBVPXqRsi7npAyE8Lw6oOI3vaZ2XQGCiOPt6uwp54jtPPUK+cx4o55cMVMZm1Va
-         Rxgw==
-X-Gm-Message-State: AOJu0YzjSuh19u3mHwbJ9VXzCx2HYjK7l7GeQLvSSjht7xFdyY0VKcQf
-	ZS16R1HYjFLjlVeYd/PDVCRolHNd8xndVYESuzxTlzM3ZXcNlAxP2zh/SRwTH8u7
-X-Gm-Gg: Acq92OHzePMmQ4iBZAfmfDQFKVyY//O9aZ/hy1zFmP/jaMMHS8RVBZHnqKIvfBMTte6
-	lWmagEOdG46sjrt6vIsGbi5bqwtxLxV6mY+Z6kapT6wx1ds6t6z9fPa76a2ws3Y5vo58ZDlNDIZ
-	suGFYwMFaWCF3pVZny2LdsvLYS3JZWszDgHIo7O2YmUf/iSjD2PXRQMHsjxstqhx8NWNBKQZRBd
-	5xl4H/Uo0ng45bRQdDTJ9H/4i4LVyVRYMKhwR4HeS9+fs+L0nlFHgv6wM5NLEo5S7bX2cKCcjmH
-	DwKHtXywVRnS3gL4bL9bsep1KLWji5snz10MTTSagHOyDWpC/eY2UdBMmBPA5Dtx5wXZX1nSzxF
-	S8UMj3iWpzKvfqxCUKTX2ZoZwVYFKkD5+/g9fhZPcl65m1Vt0cTOLsTlPruMuDWcFReoa6NKTB+
-	Rgo/YC0VwPAq81JZJw2UHvmTItG+PbRN14R9IjCy8rggf/ojgA+ZzoraaZLdvqB05dce6akQS0j
-	FGbRs54625D+yW4dZSej2Q7vRHRn/jNdSX5xrrVuBGJzN7sumhaCWLhhiks8nlp6YXIKMyKN+mH
-X-Received: by 2002:a05:600c:620f:b0:48a:5565:ec3d with SMTP id 5b1f17b1804b1-490c2612e9amr243134075e9.22.1780930123973;
-        Mon, 08 Jun 2026 07:48:43 -0700 (PDT)
+        bh=/nr/Mzz5zjyW8yrdv0iIT+uDlWoBbHtqihW7EGCAPRM=;
+        b=jjhyu1UsKWPAITQs48d9EXhgSzZpNeAT4dWXcx0Pwwx5Sga4xbINXQ5V+Q9LM9O6uF
+         uS3ulbGI7kakjFY5pyyB/lZh18zgk6h4Y8FG9GIX8BfOQT9j7lratlTcXXD8hTHs9QNI
+         1VjC9IkD7hepBNVr5gXZjgIA43C1MYK9cSF9fnISOWDV01e8L82+JG8YP8W1M5QiLXCQ
+         Qmal2WJYlx3NtrzS4ShciKQ8JeeKPDCCOqIQjyq/vccjEE1jJ/O4CyYjzY2Rhk/IwV2Y
+         12f+IGg1qc/Btya9ZGAG21k48SBAlyu4nfCaPaWfr6Rroon7+Gblacj9NCqnZ/lWqAtj
+         RCZw==
+X-Gm-Message-State: AOJu0Yxdk8YCxolvXvTbvdG7r5OPpfbIz1S2+gxD1L6jheeHrc4xiuwP
+	tEUfRAFfLf1zJv7vK2d1ltIpMoRudR1+1NmJf0JLqcSgt/VIGaLpg9tZ+IwjaEAn
+X-Gm-Gg: Acq92OEUM9xPsxQDVvg7H5Z2ljdU5Y8/glVIre4S3gqi8mySWNzRTZj3PlKRZR4IAw2
+	7fZ6YDzxFQ/LNHJWF1upEavvbsvZYBG76hXJOKUyHe/E4LGNYcVss2wPQE9ImoyH0qQZ9WbinE9
+	gmez/b5L2U7tP3Au1B4H4ajvXt4QZIBOglZxGK7myz1X0T8kM1yt5gSQWqgl+M3R2kmtf+PaJ3g
+	3xmagoDItR/lz9jPMZq1iDoBOMY+oq5M3b0je2RQOxnHzP7DSpSeBSSqYCypWy1Kwt8eLAkhXfh
+	CcQeUCIkJ3tPPgtaagCjknNDFv+ek1TNERjqMlw1aj4kHZtMkcccbWhOk8XhS4vpEAycJIMWhNW
+	shfkLvlUNQXYXO0Zujq9JXVyEu2hZjddH18rWXZcIWh+vutty7P1uCUgTXXaFS/PDV2Uj/rF2E1
+	iMG4C/+2S6sbXuHGSB2Te0Go8Ze9ttK4macsm/XEUvSH85/yKKNlVtXR3iOvD/T3zMM0AV+bj9H
+	EKzWJrlmtOXT/CG/hqZSJVbiVtFgYMcDwtIxfIFjEdjA2NZApdUVylfOewZFHckmMdI0mFMAWAq
+X-Received: by 2002:a05:600c:4689:b0:490:bbc1:c9be with SMTP id 5b1f17b1804b1-490c2c63f53mr206893785e9.0.1780930125027;
+        Mon, 08 Jun 2026 07:48:45 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc4082c3sm385512735e9.13.2026.06.08.07.48.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc23394asm397574965e9.0.2026.06.08.07.48.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 07:48:43 -0700 (PDT)
+        Mon, 08 Jun 2026 07:48:44 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Justin Suess <utilityemal77@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Justin Suess <utilityemal77@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/5] bpf: Reject bpf_obj_drop() from tracing progs
-Date: Mon,  8 Jun 2026 16:48:35 +0200
-Message-ID: <20260608144841.1732406-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 3/5] bpf: Cancel special fields on map value recycle
+Date: Mon,  8 Jun 2026 16:48:36 +0200
+Message-ID: <20260608144841.1732406-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260608144841.1732406-1-memxor@gmail.com>
 References: <20260608144841.1732406-1-memxor@gmail.com>
@@ -80,246 +80,371 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8637; i=memxor@gmail.com; h=from:subject; bh=4U88F8nHW9iA3tcSYRWKGrRPJx6mxOt+2zR0Undfxgg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUvtmhR7f8VUbr2D5QHvHnFO5am8NEuRhSlb+0he8f/Oo vva9y07SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJHaWIZ/5gUpTeIewXuetmv9 aTulvGkri4p37vuPZ9oXamTdXfj+CcNPxp6rOvFKgZL9HJ5Pgvh+ZT2w8fkR5xc9+ZHQbNZf/Nb cAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15181; i=memxor@gmail.com; h=from:subject; bh=rMSXMLxjZjhu8EEF0G5hffQ83yMjkJkdSoaLdO6B8Zk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUvtmtSVMw8ZowsC3dTk4x25n51ZEyGm2auSoj7VM3H+v xwP6d6OUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATOTeZ4b/lULmPBceWSdX8qdX 106Y7n9qs9L51WfdpldebI15bnIrm5Gh1/PE3sDetY6ruMNyPru7LxG1b08Mep1rrLc7WuvT3Rx mAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
 From: Justin Suess <utilityemal77@gmail.com>
 
-bpf_obj_drop() runs bpf_obj_free_fields() synchronously for
-program-allocated objects. When such an object contains NMI unsafe
-fields, a non-iterator tracing program can reach that destruction from
-arbitrary instrumented context, including NMI.
+Map update and delete paths currently call bpf_obj_free_fields() when a
+value is being replaced or recycled. That makes field destruction depend
+on the context of the update/delete operation. For tracing programs this
+can include NMI context, where referenced kptr destructors, uptr
+unpinning, and graph root destruction are not generally safe.
 
-NMI is likely one instance of this problem, and other instances would
-include possible unsafe reentrancy. Deferring bpf_obj_drop() is not
-appealing either: it would add delayed-free machinery to a release
-operation that otherwise has straightforward synchronous ownership
-semantics.
+Introduce bpf_obj_cancel_fields() for the reusable-value path. It only
+performs NMI-safe cleanup for timer, workqueue, and task_work fields.
+Fields that need full destruction are left attached to the recycled value
+and are destroyed by the final cleanup path instead.
 
-Reject bpf_obj_drop() and bpf_percpu_obj_drop() from tracing programs
-unless every field in the object's BTF record is explicitly NMI safe.
-Note that while bpf_rb_root and bpf_list_head would be NMI safe on their
-own to free, the objects recursively held by them may not be; be
-conservative and just mark them as not NMI safe for now.
+Switch array and hashtab update/delete/recycle paths to this cancel
+helper. Keep bpf_obj_free_fields() for final map destruction and for
+bpf_mem_alloc destructors. Preallocated hashtabs do not have allocator
+destructors, so teardown continues to walk the normal and extra elements
+and fully destroy their fields.
 
-Use a whitelist for the NMI-safe field set instead of listing only known
-NMI unsafe fields. Locks, async fields, unreferenced kptrs, and
-refcounts are known to be NMI safe because their destruction is either a
-no-op, simple state reset, or async cancellation. Referenced kptrs,
-percpu referenced kptrs, uptrs, graph roots, graph nodes, and any future
-field type are rejected until audited for arbitrary tracing and NMI
-contexts. This is less susceptible to future changes in fields that were
-previously safe by exclusion, and to new fields being added without
-updating this check.
+This deliberately relaxes the eager-free semantics of map update/delete
+for special fields. Programs that relied on a recycled map slot becoming
+empty immediately after update/delete were relying on behavior that
+cannot be implemented safely from every BPF execution context without
+offloading arbitrary destructors.
 
-Convert the existing recursive local-object drop success case to a
-syscall program in the same commit, since this verifier change makes the
-old tracing program form invalid. The test still exercises
-bpf_obj_drop() releasing a referenced task kptr from a safe program
-type.
+There is a chance this change breaks programs making assumptions
+regarding the eager freeing of fields. If so, we can relax semantics to
+cancellation only when irqs_disabled() is true in the future. However,
+theoretically, map values that get reused eagerly already have weaker
+guarantees as parallel users can recreate freed fields before the new
+element becomes visible again.
 
-Fixes: ac9f06050a35 ("bpf: Introduce bpf_obj_drop")
+Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 Co-developed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h                           | 29 +++++++++++++
- kernel/bpf/verifier.c                         | 14 +++++++
- .../selftests/bpf/prog_tests/task_kfunc.c     | 42 ++++++++++++++++++-
- .../selftests/bpf/progs/task_kfunc_success.c  | 13 +++---
- 4 files changed, 90 insertions(+), 8 deletions(-)
+ include/linux/bpf.h                           |  1 +
+ kernel/bpf/arraymap.c                         |  8 ++---
+ kernel/bpf/hashtab.c                          | 32 +++++++++++--------
+ kernel/bpf/syscall.c                          | 27 ++++++++++++++++
+ .../selftests/bpf/prog_tests/htab_update.c    |  4 +--
+ .../selftests/bpf/prog_tests/map_kptr.c       | 10 +-----
+ .../testing/selftests/bpf/progs/htab_update.c |  4 +--
+ 7 files changed, 55 insertions(+), 31 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 62bba7a4876f..0654d2ffadc1 100644
+index 0654d2ffadc1..fc24b81cc206 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_f
- 	return rec->field_mask & type;
+@@ -2717,6 +2717,7 @@ bool btf_record_equal(const struct btf_record *rec_a, const struct btf_record *r
+ void bpf_obj_free_timer(const struct btf_record *rec, void *obj);
+ void bpf_obj_free_workqueue(const struct btf_record *rec, void *obj);
+ void bpf_obj_free_task_work(const struct btf_record *rec, void *obj);
++void bpf_obj_cancel_fields(const struct btf_record *rec, void *obj);
+ void bpf_obj_free_fields(const struct btf_record *rec, void *obj);
+ void __bpf_obj_drop_impl(void *p, const struct btf_record *rec, bool percpu);
+ 
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index e6271a2bf6d6..4e8d6fe6999b 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -384,7 +384,7 @@ static long array_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	if (array->map.map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+ 		val = this_cpu_ptr(array->pptrs[index & array->index_mask]);
+ 		copy_map_value(map, val, value);
+-		bpf_obj_free_fields(array->map.record, val);
++		bpf_obj_cancel_fields(array->map.record, val);
+ 	} else {
+ 		val = array->value +
+ 			(u64)array->elem_size * (index & array->index_mask);
+@@ -392,7 +392,7 @@ static long array_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 			copy_map_value_locked(map, val, value, false);
+ 		else
+ 			copy_map_value(map, val, value);
+-		bpf_obj_free_fields(array->map.record, val);
++		bpf_obj_cancel_fields(array->map.record, val);
+ 	}
+ 	return 0;
+ }
+@@ -432,14 +432,14 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 		cpu = map_flags >> 32;
+ 		ptr = per_cpu_ptr(pptr, cpu);
+ 		copy_map_value(map, ptr, value);
+-		bpf_obj_free_fields(array->map.record, ptr);
++		bpf_obj_cancel_fields(array->map.record, ptr);
+ 		goto unlock;
+ 	}
+ 	for_each_possible_cpu(cpu) {
+ 		ptr = per_cpu_ptr(pptr, cpu);
+ 		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
+ 		copy_map_value(map, ptr, val);
+-		bpf_obj_free_fields(array->map.record, ptr);
++		bpf_obj_cancel_fields(array->map.record, ptr);
+ 	}
+ unlock:
+ 	rcu_read_unlock();
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index b4366cad3cfa..a9b2b882b90f 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -243,6 +243,10 @@ static void htab_free_prealloced_fields(struct bpf_htab *htab)
+ 
+ 	if (IS_ERR_OR_NULL(htab->map.record))
+ 		return;
++	/*
++	 * Preallocated maps do not have a bpf_mem_alloc destructor, so fully
++	 * destroy every element, including the extra elements.
++	 */
+ 	if (htab_has_extra_elems(htab))
+ 		num_entries += num_possible_cpus();
+ 	for (i = 0; i < num_entries; i++) {
+@@ -833,8 +837,8 @@ static int htab_lru_map_gen_lookup(struct bpf_map *map,
+ 	return insn - insn_buf;
  }
  
-+static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
+-static void check_and_free_fields(struct bpf_htab *htab,
+-				  struct htab_elem *elem)
++static void check_and_cancel_fields(struct bpf_htab *htab,
++				    struct htab_elem *elem)
+ {
+ 	if (IS_ERR_OR_NULL(htab->map.record))
+ 		return;
+@@ -844,11 +848,11 @@ static void check_and_free_fields(struct bpf_htab *htab,
+ 		int cpu;
+ 
+ 		for_each_possible_cpu(cpu)
+-			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
++			bpf_obj_cancel_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
+ 	} else {
+ 		void *map_value = htab_elem_value(elem, htab->map.key_size);
+ 
+-		bpf_obj_free_fields(htab->map.record, map_value);
++		bpf_obj_cancel_fields(htab->map.record, map_value);
+ 	}
+ }
+ 
+@@ -883,7 +887,7 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	htab_unlock_bucket(b, flags);
+ 
+ 	if (l == tgt_l)
+-		check_and_free_fields(htab, l);
++		check_and_cancel_fields(htab, l);
+ 	return l == tgt_l;
+ }
+ 
+@@ -948,7 +952,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 
+ static void htab_elem_free(struct bpf_htab *htab, struct htab_elem *l)
+ {
+-	check_and_free_fields(htab, l);
++	check_and_cancel_fields(htab, l);
+ 
+ 	if (htab->map.map_type == BPF_MAP_TYPE_PERCPU_HASH)
+ 		bpf_mem_cache_free(&htab->pcpu_ma, l->ptr_to_pptr);
+@@ -1001,7 +1005,7 @@ static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
+ 
+ 	if (htab_is_prealloc(htab)) {
+ 		bpf_map_dec_elem_count(&htab->map);
+-		check_and_free_fields(htab, l);
++		check_and_cancel_fields(htab, l);
+ 		pcpu_freelist_push(&htab->freelist, &l->fnode);
+ 	} else {
+ 		dec_elem_count(htab);
+@@ -1018,7 +1022,7 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 		/* copy true value_size bytes */
+ 		ptr = this_cpu_ptr(pptr);
+ 		copy_map_value(&htab->map, ptr, value);
+-		bpf_obj_free_fields(htab->map.record, ptr);
++		bpf_obj_cancel_fields(htab->map.record, ptr);
+ 	} else {
+ 		u32 size = round_up(htab->map.value_size, 8);
+ 		void *val;
+@@ -1028,7 +1032,7 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 			cpu = map_flags >> 32;
+ 			ptr = per_cpu_ptr(pptr, cpu);
+ 			copy_map_value(&htab->map, ptr, value);
+-			bpf_obj_free_fields(htab->map.record, ptr);
++			bpf_obj_cancel_fields(htab->map.record, ptr);
+ 			return;
+ 		}
+ 
+@@ -1036,7 +1040,7 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 			ptr = per_cpu_ptr(pptr, cpu);
+ 			val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
+ 			copy_map_value(&htab->map, ptr, val);
+-			bpf_obj_free_fields(htab->map.record, ptr);
++			bpf_obj_cancel_fields(htab->map.record, ptr);
+ 		}
+ 	}
+ }
+@@ -1252,11 +1256,11 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	if (l_old) {
+ 		hlist_nulls_del_rcu(&l_old->hash_node);
+ 
+-		/* l_old has already been stashed in htab->extra_elems, free
+-		 * its special fields before it is available for reuse.
++		/* l_old has already been stashed in htab->extra_elems, cancel
++		 * its reusable special fields before it is available for reuse.
+ 		 */
+ 		if (htab_is_prealloc(htab))
+-			check_and_free_fields(htab, l_old);
++			check_and_cancel_fields(htab, l_old);
+ 	}
+ 	htab_unlock_bucket(b, flags);
+ 	if (l_old && !htab_is_prealloc(htab))
+@@ -1269,7 +1273,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 
+ static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
+ {
+-	check_and_free_fields(htab, elem);
++	check_and_cancel_fields(htab, elem);
+ 	bpf_map_dec_elem_count(&htab->map);
+ 	bpf_lru_push_free(&htab->lru, &elem->lru_node);
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d4188a992bd8..8d12aa3728ea 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -808,6 +808,33 @@ void bpf_obj_free_task_work(const struct btf_record *rec, void *obj)
+ 	bpf_task_work_cancel_and_free(obj + rec->task_work_off);
+ }
+ 
++void bpf_obj_cancel_fields(const struct btf_record *rec, void *obj)
 +{
-+	switch (type) {
-+	case BPF_SPIN_LOCK:
-+	case BPF_RES_SPIN_LOCK:
-+	case BPF_TIMER:
-+	case BPF_WORKQUEUE:
-+	case BPF_TASK_WORK:
-+	case BPF_KPTR_UNREF:
-+	case BPF_REFCOUNT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static inline bool btf_record_has_nmi_unsafe_fields(const struct btf_record *rec)
-+{
++	const struct btf_field *fields;
 +	int i;
 +
 +	if (IS_ERR_OR_NULL(rec))
-+		return false;
++		return;
++	fields = rec->fields;
 +	for (i = 0; i < rec->cnt; i++) {
-+		if (!btf_field_is_nmi_safe(rec->fields[i].type))
-+			return true;
-+	}
-+	return false;
-+}
++		void *field_ptr = obj + fields[i].offset;
 +
- static inline void bpf_obj_init(const struct btf_record *rec, void *obj)
- {
- 	int i;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 26bfb4465725..d636484f1d6c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -205,6 +205,7 @@ static int release_reference_nomark(struct bpf_verifier_state *state, int id);
- static int release_reference(struct bpf_verifier_env *env, int id);
- static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
- static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
-+static bool is_tracing_prog_type(const struct bpf_prog *prog);
- static int ref_set_non_owning(struct bpf_verifier_env *env,
- 			      struct bpf_reg_state *reg);
- static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bpf_reg_state *reg);
-@@ -12970,6 +12971,19 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err < 0)
- 		return err;
- 
-+	if ((is_bpf_obj_drop_kfunc(meta.func_id) ||
-+	     is_bpf_percpu_obj_drop_kfunc(meta.func_id)) && is_tracing_prog_type(env->prog)) {
-+		struct btf_struct_meta *struct_meta;
-+
-+		struct_meta = btf_find_struct_meta(meta.arg_btf, meta.arg_btf_id);
-+		if (struct_meta &&
-+		    btf_record_has_nmi_unsafe_fields(struct_meta->record)) {
-+			verbose(env, "%s cannot be used in tracing programs on types with NMI unsafe fields\n",
-+				func_name);
-+			return -EINVAL;
++		switch (fields[i].type) {
++		case BPF_TIMER:
++			bpf_timer_cancel_and_free(field_ptr);
++			break;
++		case BPF_WORKQUEUE:
++			bpf_wq_cancel_and_free(field_ptr);
++			break;
++		case BPF_TASK_WORK:
++			bpf_task_work_cancel_and_free(field_ptr);
++			break;
++		default:
++			break;
 +		}
 +	}
-+
- 	if (is_bpf_rbtree_add_kfunc(meta.func_id)) {
- 		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
- 					 set_rbtree_add_callback_state);
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-index 83b90335967a..e6e95c1416e6 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-@@ -68,6 +68,36 @@ static void run_success_test(const char *prog_name)
- 	task_kfunc_success__destroy(skel);
- }
- 
-+static void run_syscall_success_test(const char *prog_name)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct task_kfunc_success *skel;
-+	struct bpf_program *prog;
-+	int err;
-+
-+	skel = open_load_task_kfunc_skel();
-+	if (!ASSERT_OK_PTR(skel, "open_load_skel"))
-+		return;
-+
-+	if (!ASSERT_OK(skel->bss->err, "pre_run_err"))
-+		goto cleanup;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(opts.retval, 0, "retval"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->err, "post_run_err");
-+
-+cleanup:
-+	task_kfunc_success__destroy(skel);
 +}
 +
- static int run_vpid_test(void *prog_name)
+ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
  {
- 	struct task_kfunc_success *skel;
-@@ -140,7 +170,6 @@ static const char * const success_tests[] = {
- 	"test_task_acquire_release_argument",
- 	"test_task_acquire_release_current",
- 	"test_task_acquire_leave_in_map",
--	"test_task_xchg_release",
- 	"test_task_map_acquire_release",
- 	"test_task_current_acquire_release",
- 	"test_task_from_pid_arg",
-@@ -151,6 +180,10 @@ static const char * const success_tests[] = {
- 	"test_task_kfunc_flavor_relo_not_found",
- };
+ 	const struct btf_field *fields;
+diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+index ea1a6766fbe9..0a28d4346924 100644
+--- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
++++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+@@ -23,7 +23,7 @@ static void test_reenter_update(void)
+ 	if (!ASSERT_OK_PTR(skel, "htab_update__open"))
+ 		return;
  
-+static const char * const syscall_success_tests[] = {
-+	"test_task_xchg_release",
-+};
-+
- static const char * const vpid_success_tests[] = {
- 	"test_task_from_vpid_current",
- 	"test_task_from_vpid_invalid",
-@@ -167,6 +200,13 @@ void test_task_kfunc(void)
- 		run_success_test(success_tests[i]);
+-	bpf_program__set_autoload(skel->progs.bpf_obj_free_fields, true);
++	bpf_program__set_autoload(skel->progs.bpf_obj_cancel_fields, true);
+ 	err = htab_update__load(skel);
+ 	if (!ASSERT_TRUE(!err, "htab_update__load") || err)
+ 		goto out;
+@@ -50,7 +50,7 @@ static void test_reenter_update(void)
+ 	/*
+ 	 * Second update: replace existing element with same key and trigger
+ 	 * the reentrancy of bpf_map_update_elem().
+-	 * check_and_free_fields() calls bpf_obj_free_fields() on the old
++	 * check_and_cancel_fields() calls bpf_obj_cancel_fields() on the old
+ 	 * value, which is where fentry program runs and performs a nested
+ 	 * bpf_map_update_elem(), triggering -EDEADLK.
+ 	 */
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr.c b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
+index 03b46f17cf53..ec6f2f2e8308 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_kptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
+@@ -51,7 +51,6 @@ static void test_map_kptr_success(bool test_run)
+ 	ret = bpf_map__update_elem(skel->maps.array_map,
+ 				   &key, sizeof(key), buf, sizeof(buf), 0);
+ 	ASSERT_OK(ret, "array_map update");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+@@ -59,49 +58,42 @@ static void test_map_kptr_success(bool test_run)
+ 	ret = bpf_map__update_elem(skel->maps.pcpu_array_map,
+ 				   &key, sizeof(key), pbuf, cpu * sizeof(buf), 0);
+ 	ASSERT_OK(ret, "pcpu_array_map update");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.hash_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "hash_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.pcpu_hash_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "pcpu_hash_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.hash_malloc_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "hash_malloc_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.pcpu_hash_malloc_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "pcpu_hash_malloc_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.lru_hash_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "lru_hash_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+ 
+ 	ret = bpf_map__delete_elem(skel->maps.lru_pcpu_hash_map, &key, sizeof(key), 0);
+ 	ASSERT_OK(ret, "lru_pcpu_hash_map delete");
+-	skel->data->ref--;
+ 	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_map_kptr_ref3), &opts);
+ 	ASSERT_OK(ret, "test_map_kptr_ref3 refcount");
+ 	ASSERT_OK(opts.retval, "test_map_kptr_ref3 retval");
+@@ -175,7 +167,7 @@ void serial_test_map_kptr(void)
+ 		ASSERT_OK(kern_sync_rcu(), "sync rcu");
+ 		wait_for_map_release();
+ 
+-		/* Observe refcount dropping to 1 on synchronous delete elem */
++		/* Observe refcount dropping to 1 on map release. */
+ 		test_map_kptr_success(true);
  	}
  
-+	for (i = 0; i < ARRAY_SIZE(syscall_success_tests); i++) {
-+		if (!test__start_subtest(syscall_success_tests[i]))
-+			continue;
-+
-+		run_syscall_success_test(syscall_success_tests[i]);
-+	}
-+
- 	for (i = 0; i < ARRAY_SIZE(vpid_success_tests); i++) {
- 		if (!test__start_subtest(vpid_success_tests[i]))
- 			continue;
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-index 5fb4fc19d26a..d63a79ee33dc 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-@@ -140,17 +140,17 @@ int BPF_PROG(test_task_acquire_leave_in_map, struct task_struct *task, u64 clone
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/htab_update.c b/tools/testing/selftests/bpf/progs/htab_update.c
+index 195d3b2fba00..62c1b1325ec2 100644
+--- a/tools/testing/selftests/bpf/progs/htab_update.c
++++ b/tools/testing/selftests/bpf/progs/htab_update.c
+@@ -22,8 +22,8 @@ struct {
+ int pid = 0;
+ int update_err = 0;
  
--SEC("tp_btf/task_newtask")
--int BPF_PROG(test_task_xchg_release, struct task_struct *task, u64 clone_flags)
-+SEC("syscall")
-+int test_task_xchg_release(const void *ctx)
+-SEC("?fentry/bpf_obj_free_fields")
+-int bpf_obj_free_fields(void *ctx)
++SEC("?fentry/bpf_obj_cancel_fields")
++int bpf_obj_cancel_fields(void *ctx)
  {
--	struct task_struct *kptr, *acquired;
-+	struct task_struct *task, *kptr, *acquired;
- 	struct __tasks_kfunc_map_value *v, *local;
- 	int refcnt, refcnt_after_drop;
- 	long status;
- 
--	if (!is_test_kfunc_task())
--		return 0;
-+	(void)ctx;
- 
-+	task = bpf_get_current_task_btf();
- 	status = tasks_kfunc_map_insert(task);
- 	if (status) {
- 		err = 1;
-@@ -191,7 +191,7 @@ int BPF_PROG(test_task_xchg_release, struct task_struct *task, u64 clone_flags)
- 		return 0;
- 	}
- 
--	/* Stash a copy into local kptr and check if it is released recursively */
-+	/* Stash a copy into local kptr and check if it is released recursively. */
- 	acquired = bpf_task_acquire(kptr);
- 	if (!acquired) {
- 		err = 7;
-@@ -220,7 +220,6 @@ int BPF_PROG(test_task_xchg_release, struct task_struct *task, u64 clone_flags)
- 	}
- 
- 	bpf_task_release(kptr);
--
- 	return 0;
- }
- 
+ 	__u32 key = 0;
+ 	struct val value = { .payload = 1 };
 -- 
 2.53.0
 
