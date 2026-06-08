@@ -1,347 +1,134 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F37229E0FD
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 12:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0122DF719;
+	Mon,  8 Jun 2026 13:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780923570; cv=none; b=Cw8yvWl3UWJrrmjAMFmCF0HZiwgwhMev/BHDxqr/RT3UN3UUBJUmZR64zUjKuveWoXBy8jSO1mKYoxetRTK7KQc/Ov1rMXJS/g7ONvvc4Ud+xzDlORQrhrTp1Yva8Yta6dH1VCvVkoKAYb6O2qKp2dz/UkZ4nofcu4ZeVhn0Ddw=
+	t=1780923898; cv=none; b=OGoqvmic4/OrTUBBi4N2Kslmgg1ZxstBKW0HfZziYSaOo4qcbdX6BgkLdZIUcx1VrSHqg94m9PEaTMwic3V6FA0aZ3UR53J9gXyCOm8j9GP077iQomVAUvChxxyj06GPcOFa94xB8nC7EIsqq7ZgWvFe01Eu4gvab8e6Gyh6bCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780923570; c=relaxed/simple;
-	bh=pppSCiti4jvi5EsxxegmSDnZrha/rHxM9F+JK/EvxDU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k5vA5JRpyo2TxXOLbNVwAeMQukdh8z5GcrewqEzzkhGM/2c+1qYB1Z4XXquQUOIr0PuNs6W3dv4Fes6JOvV9BvgHE8mAa+eVmRBdnnVe9Bw59DScP3BWTZT6h+T509wvv58Sillxzfz7rPM5wAMzHK98cNrk5g5byOmc8YDCkGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FHYQcl/j; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780923898; c=relaxed/simple;
+	bh=BFN9j1L9bHi3SsKKw2kFSIa3T21c5+TnnoLCielMAQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gwf28zYKXHjUIgL3IFPIuvRoSZez9gmOWaHw1MtaTYzZkdpPMwb4vCs+AoK8tTOV8odWYdRc2ATAKK5DWjbdCkPAK0Dfkji/eFEoeW3Fzfuj3gusY3akhD06YAfyNBqEPhkFQlv1H+RhkM/Z0rGNMw/MFm3NLihR3IjtjXHMLVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X/bK2s3C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FHYQcl/j"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780923566;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k3XNGhcQHJVmcyavdjn9EhDX/kEW3MIT6FKFuaZuhMc=;
-	b=FHYQcl/jKZ6FER/I7Nsw0rubDgjwRebm9faiJzCI6Qy+D8pGv+GbpsYyyaMA55ERV5fNNp
-	otTEdJUoB4CTR2WhYFXTqtOWwbmMlOHux0E0n4s3X5YKNLzplzDmAwIwYJtk6UlEz/Yi4n
-	ogIVPOzzs4Q498mo8pFRzuuYhHCq0lA=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Joe Stringer <joe@wand.net.nz>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v8 2/2] selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
-Date: Mon,  8 Jun 2026 20:58:28 +0800
-Message-ID: <20260608125846.157004-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260608125846.157004-1-jiayuan.chen@linux.dev>
-References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X/bK2s3C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9361F00893;
+	Mon,  8 Jun 2026 13:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780923897;
+	bh=aizvCcX/2MPlDbQGT1VKqHWF+USG6wHXOds6qmKibWs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=X/bK2s3CL+bCYsDUN0eSgmLC9xipEfxcINDrNT/KPIRkuaaGZ/m7pDVsAZctszALg
+	 wZTBe3oNxCL6p2O85HLV2NVSMcnwH/CGuGKWz8CmgyrWsOMFtTqFdxQYqb7kujTqLC
+	 mCqOqEWHMNtPJ/1wYTpBGc/EqynL7KPid6VSKiyf3tBXVOtmavh9qFGZgNumIMnu93
+	 1XodM9LlK+QL9PXz5agSuPGDfzscHsWrqPXw8ppaUdYO7P6NuRbKbOT9MZSwqSuN/Z
+	 DCvew4H4xxgvoydEOLY/jP0a1Se3/ra1Idat8gIkkL663ThLRrivakmsCa1ArBefaA
+	 PeIAzXN26+ZJg==
+Message-ID: <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
+Date: Mon, 8 Jun 2026 15:04:52 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: Simon Schippers <simon.schippers@tu-dortmund.de>, netdev@vger.kernel.org,
+ =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-6-hawk@kernel.org>
+ <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add test_tcp_custom_syncookie_protocol_check to test assigning a TCP sk to
-UDP skb->sk. The test sends a UDP packet through TC ingress, where a BPF
-program calls bpf_sk_assign_tcp_reqsk() on it. A UDP server's recv() is
-used for synchronization to ensure the BPF program has finished processing
-before checking the result.
 
-Without the fix in bpf_sk_assign_tcp_reqsk(), this will cause a null
-pointer dereference panic when the kernel processes it through the UDP
-receive path.
 
-Test result:
-	./test_progs -a tcp_custom_syncookie_protocol_check -v
-	setup_netns:PASS:create netns 0 nsec
-	setup_netns:PASS:ip 0 nsec
-	write_sysctl:PASS:open sysctl 0 nsec
-	write_sysctl:PASS:write sysctl 0 nsec
-	setup_netns:PASS:write_sysctl 0 nsec
-	test_tcp_custom_syncookie_protocol_check:PASS:open_and_load 0 nsec
-	setup_tc:PASS:qdisc add dev lo clsact 0 nsec
-	setup_tc:PASS:filter add dev lo ingress 0 nsec
-	run_protocol_check:PASS:start tcp_server 0 nsec
-	run_protocol_check:PASS:start udp_server 0 nsec
-	run_protocol_check:PASS:connect udp_client 0 nsec
-	run_protocol_check:PASS:send udp 0 nsec
-	run_protocol_check:PASS:recv udp 0 nsec
-	run_protocol_check:PASS:recv data 0 nsec
-	run_protocol_check:PASS:udp_intercepted 0 nsec
-	#492/1   tcp_custom_syncookie_protocol_check/IPv4 TCP:OK
-	run_protocol_check:PASS:start tcp_server 0 nsec
-	run_protocol_check:PASS:start udp_server 0 nsec
-	run_protocol_check:PASS:connect udp_client 0 nsec
-	run_protocol_check:PASS:send udp 0 nsec
-	run_protocol_check:PASS:recv udp 0 nsec
-	run_protocol_check:PASS:recv data 0 nsec
-	run_protocol_check:PASS:udp_intercepted 0 nsec
-	#492/2   tcp_custom_syncookie_protocol_check/IPv6 TCP:OK
-	#492     tcp_custom_syncookie_protocol_check:OK
-	Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+On 08/06/2026 12.38, Simon Schippers wrote:
+> On 5/27/26 15:54, hawk@kernel.org wrote:
+>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>
+>> Per-packet BQL completion forces DQL to converge on limit=2, causing
+>> excessive NAPI scheduling overhead and qdisc requeues.
+>>
+>> Accumulate BQL completions and flush them when a configurable time
+>> threshold is exceeded, letting DQL discover a limit that bounds actual
+>> queuing delay to the configured interval. Coalescing state persists
+>> across NAPI polls in struct veth_rq so completions can accumulate
+>> beyond a single budget=64 cycle.
+>>
+>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+>> completion.
+>>
+>>    ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>>    ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+>>
+>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+>> ---
+> 
+> I found the issue that n_bql may become infinitly large if producer
+> and consumer have the same speed (and tx_usecs is large). It could
+> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
+> Also I figured that no hardware BQL driver ever completes more than
+> BQL limit many elements.
+> 
+> Therefore, I propose a simpler logic (see attachment) that completes
+> either on the usual bql_flush_ns or if n_bql > dql.limit.
+> If n_bql > dql.limit then we either have the case above that the
+> producer is as fast as the consumer or we have BQL starvation.
+> 
+> if (state->time + bql_flush_ns <= current_time ||
+> 	state->n_bql > peer_txq->dql.limit) {
+> 
+> It must be n_bql *bigger than* dql.limit because the producer will
+> always exceed the limit before it stops, see netdev_tx_sent_queue().
+> It is fast because peer_txq->dql.limit is in the cacheline of the
+> completion path, see dynamic_queue_limits.h.
+> 
+> Another advantage is that we avoid the snippet checking for empty
+> and BQL stopped which requires an smp_rmb() and an test_bit().
+> 
+> Apart from that I:
+> - Always call veth_bql_maybe_complete() in the for loop to have
+>    more accurate completion intervals when having mixed XDP and
+>    non-XDP packets.
+> - Made it so tx_usecs = 0 is now also a normal case.
+> - Change the type of n_bql to uint instead of int.
+> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
+> - Moved the bql_state init in __veth_napi_enable_range() in front
+>    of napi_enable() to avoid a race (Sashiko).
+> - Moved the bql_state reset in veth_napi_del_range() after the
+>    ptr_ring_cleanup() (probably does not matter but makes sense to me)
+> 
+> Benchmarks look just fine, see commit message.
+> 
+> WDYT?
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../bpf/prog_tests/tcp_custom_syncookie.c     |  87 ++++++++++++++-
- .../bpf/progs/test_tcp_custom_syncookie.c     | 102 ++++++++++++++++++
- 2 files changed, 185 insertions(+), 4 deletions(-)
+Looks good to me, I will use this in my V7 patchset.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-index 00d5c32674fc9..03103b7b9c5bf 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include <stdlib.h>
- #include <net/if.h>
-+#include <netinet/in.h>
- 
- #include "test_progs.h"
- #include "cgroup_helpers.h"
-@@ -47,11 +48,10 @@ static int setup_netns(void)
- 	return -1;
- }
- 
--static int setup_tc(struct test_tcp_custom_syncookie *skel)
-+static int setup_tc(int prog_fd)
- {
- 	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
--	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
--		    .prog_fd = bpf_program__fd(skel->progs.tcp_custom_syncookie));
-+	LIBBPF_OPTS(bpf_tc_opts, tc_attach, .prog_fd = prog_fd);
- 
- 	qdisc_lo.ifindex = if_nametoindex("lo");
- 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
-@@ -147,7 +147,7 @@ void test_tcp_custom_syncookie(void)
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
- 
--	if (setup_tc(skel))
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie)))
- 		goto destroy_skel;
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-@@ -165,6 +165,85 @@ void test_tcp_custom_syncookie(void)
- 
- destroy_skel:
- 	system("tc qdisc del dev lo clsact");
-+	test_tcp_custom_syncookie__destroy(skel);
-+}
-+
-+/* TCP and UDP servers share the same port. The BPF program intercepts
-+ * the UDP packet, looks up the TCP listener via the dest port, and
-+ * attempts to assign a TCP reqsk to the UDP skb.
-+ * Although bpf_sk_assign_tcp_reqsk() assign udp skb to tcp reqsk, the
-+ * network stack should not crash.
-+ */
-+static void run_protocol_check(struct test_tcp_custom_syncookie *skel,
-+			       int family, const char *addr)
-+{
-+	int tcp_server, udp_server, udp_client;
-+	char buf[] = "test";
-+	int port, ret;
-+
-+	tcp_server = start_server(family, SOCK_STREAM, addr, 0, 0);
-+	if (!ASSERT_NEQ(tcp_server, -1, "start tcp_server"))
-+		return;
-+
-+	port = ntohs(get_socket_local_port(tcp_server));
-+
-+	/* UDP server on same port for synchronization and port sharing */
-+	udp_server = start_server(family, SOCK_DGRAM, addr, port, 0);
-+	if (!ASSERT_NEQ(udp_server, -1, "start udp_server"))
-+		goto close_tcp;
-+
-+	skel->bss->udp_intercepted = false;
-+
-+	udp_client = connect_to_fd(udp_server, 0);
-+	if (!ASSERT_NEQ(udp_client, -1, "connect udp_client"))
-+		goto close_udp_server;
-+
-+	ret = send(udp_client, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(ret, sizeof(buf), "send udp"))
-+		goto close_udp_client;
-+
-+	memset(buf, 0, sizeof(buf));
-+
-+	/* recv() ensures TC ingress BPF has processed the skb */
-+	ret = recv(udp_server, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(ret, sizeof(buf), "recv udp"))
-+		goto close_udp_client;
-+
-+	ASSERT_STREQ(buf, "test", "recv data");
-+	ASSERT_EQ(skel->bss->udp_intercepted, true, "udp_intercepted");
-+
-+close_udp_client:
-+	close(udp_client);
-+close_udp_server:
-+	close(udp_server);
-+close_tcp:
-+	close(tcp_server);
-+}
-+
-+void test_tcp_custom_syncookie_protocol_check(void)
-+{
-+	struct test_tcp_custom_syncookie *skel;
-+	int i;
-+
-+	if (setup_netns())
-+		return;
- 
-+	skel = test_tcp_custom_syncookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (setup_tc(bpf_program__fd(skel->progs.tcp_custom_syncookie_badproto)))
-+		goto destroy_skel;
-+
-+	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
-+		if (!test__start_subtest(test_cases[i].name))
-+			continue;
-+
-+		run_protocol_check(skel, test_cases[i].family,
-+				   test_cases[i].addr);
-+	}
-+
-+destroy_skel:
-+	system("tc qdisc del dev lo clsact");
- 	test_tcp_custom_syncookie__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-index 7d5293de19523..5cf99d2a12aa5 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_custom_syncookie.c
-@@ -588,4 +588,106 @@ int tcp_custom_syncookie(struct __sk_buff *skb)
- 	return tcp_handle_ack(&ctx);
- }
- 
-+/* Test: call bpf_sk_assign_tcp_reqsk() on a UDP skb. */
-+bool udp_intercepted;
-+
-+static int badproto_lookup_assign(struct __sk_buff *skb,
-+				  struct bpf_sock_tuple *tuple, u32 tuple_size)
-+{
-+	struct bpf_tcp_req_attrs attrs = {};
-+	struct bpf_sock *skc;
-+	struct sock *sk;
-+
-+	skc = bpf_skc_lookup_tcp(skb, tuple, tuple_size, -1, 0);
-+	if (!skc)
-+		return TC_ACT_OK;
-+
-+	if (skc->state != TCP_LISTEN) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	sk = (struct sock *)bpf_skc_to_tcp_sock(skc);
-+	if (!sk) {
-+		bpf_sk_release(skc);
-+		return TC_ACT_OK;
-+	}
-+
-+	attrs.mss = 1460;
-+	attrs.wscale_ok = 1;
-+	attrs.snd_wscale = 7;
-+	attrs.rcv_wscale = 7;
-+	attrs.sack_ok = 1;
-+
-+	bpf_sk_assign_tcp_reqsk(skb, sk, &attrs, sizeof(attrs));
-+
-+	bpf_sk_release(skc);
-+	return TC_ACT_OK;
-+}
-+
-+SEC("tc")
-+int tcp_custom_syncookie_badproto(struct __sk_buff *skb)
-+{
-+	void *data = (void *)(long)skb->data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	struct bpf_sock_tuple tuple = {};
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	struct ipv6hdr *ip6h;
-+	struct udphdr *udp;
-+
-+	eth = (struct ethhdr *)data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_OK;
-+
-+	switch (bpf_ntohs(eth->h_proto)) {
-+	case ETH_P_IP:
-+		iph = (struct iphdr *)(eth + 1);
-+		if (iph + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		if (iph->protocol != IPPROTO_UDP)
-+			return TC_ACT_OK;
-+
-+		udp = (struct udphdr *)(iph + 1);
-+		if (udp + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		udp_intercepted = true;
-+
-+		tuple.ipv4.saddr = iph->saddr;
-+		tuple.ipv4.daddr = iph->daddr;
-+		tuple.ipv4.sport = udp->source;
-+		tuple.ipv4.dport = udp->dest;
-+
-+		return badproto_lookup_assign(skb, &tuple,
-+					      sizeof(tuple.ipv4));
-+	case ETH_P_IPV6:
-+		ip6h = (struct ipv6hdr *)(eth + 1);
-+		if (ip6h + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		if (ip6h->nexthdr != IPPROTO_UDP)
-+			return TC_ACT_OK;
-+
-+		udp = (struct udphdr *)(ip6h + 1);
-+		if (udp + 1 > data_end)
-+			return TC_ACT_OK;
-+
-+		udp_intercepted = true;
-+
-+		__builtin_memcpy(tuple.ipv6.saddr, &ip6h->saddr,
-+				 sizeof(tuple.ipv6.saddr));
-+		__builtin_memcpy(tuple.ipv6.daddr, &ip6h->daddr,
-+				 sizeof(tuple.ipv6.daddr));
-+		tuple.ipv6.sport = udp->source;
-+		tuple.ipv6.dport = udp->dest;
-+
-+		return badproto_lookup_assign(skb, &tuple,
-+					      sizeof(tuple.ipv6));
-+	default:
-+		return TC_ACT_OK;
-+	}
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+A bike-shedding issue: We change the coalescing parameters for the veth
+net_device, but should this be a TX or RX parameter?
 
+For physical NICs adjusting TX coalescing will affect the BQL as this
+affect the TX completion of the transmitted packets. For veth, it is the
+veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
+is where this patch adds netdev_tx_completed_queue calls for BQL.
+Any opinions on the "TX" or "RX" color?
+
+--Jesper
