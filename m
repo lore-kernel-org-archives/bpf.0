@@ -1,111 +1,136 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E883563E1
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 20:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F923E9C36
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 20:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780948909; cv=none; b=prE168pkCGyX8Ld/xMKyZRZsF3pX0Zr+EOzoq+YUYtINpWnU4zjsavXP6iqPGSIfx+C7t8fqYzp3Vklt5sV3yJlmKJpv4ff7jmP4RvFlzw2trrcJP+DROWezAdXV5P3+glC4nnyvqIfGtN1QyOftNWHhTJ3MyAcGdhzMTqdt43k=
+	t=1780948942; cv=none; b=BuEGjurM7XDnDStexhSztlu3TJyZCuuRgWhEMupZqLkgTbWTx3pKz5H9grNxisDZZCWRIU3MyEmjGqlhI6HzQoNWL3pmNg+zIy30Uv4RQfQLyIcqegwYvJEj4uJ6ZQohu8vy7TaTKQ8YihA9UdyZNnz9OmCgDGIFcGFFiNCenyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780948909; c=relaxed/simple;
-	bh=TXnwBHRGekJNCNs6l6QYmnGYpiNGy3SB2AnSS2LrOcw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u9JtjitqMsWgqOqY54kMGar3n8OOistN49yuO31UHSwNG2ZrMxnGZBXo1nmYznnTbUmDkxriVVuA52FdCTO0lrMSpcTrp5yDvwHW1FW/zWmuflvCAxM2Vl/F8zzIDkOcHWMZOfBXrKIQkpvcIlmKWNJm8rqWaXm87o/8IWLTqsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eZAWrj49; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1780948942; c=relaxed/simple;
+	bh=wrqE2O76YCV8wdY1YPpUUnMYdTSt/lGtjLT9N9f7KaA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=XWFaDkFokTO5UeZscS050r2xlgLLQ/GNvCtGh9pHeRAkb7qJ6w79UQS6Jn2rpz8fYbFF5bCGHbmEVR7ejxaD/jT+6IInZ8kpmXKdISQfCUWvDOq7yf5KomBf3CmcuS9tifjRgl3D/+TBn/xAHt/BRkrIRmvHDEcKt3jfuYRpDI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JaGM42CN; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eZAWrj49"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304d0ac5e3cso8532937eec.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 13:01:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JaGM42CN"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e6b5dfde3cso2574270a34.3
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 13:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780948907; x=1781553707; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TXnwBHRGekJNCNs6l6QYmnGYpiNGy3SB2AnSS2LrOcw=;
-        b=eZAWrj49hX9Vepu8XP/+7VQF2hp1DhvY6a2SyjcSfGxiXmIhrOyVyLGBTC4+a95NOX
-         dybKpvV2fygRL9pDl2uxIewFpkXphr1zQTomJ69RXdKRlwaZBLLdaCItNDXrsU9jM11H
-         Sm+e+hqJks3aGhkRrgreGdILe5lCo4K1/5ZsmvBlLwy50MvJJqniyGsc9FBcWTUCpXH7
-         qLF1Zs8qL5cwYt1RLNSVZwB43m8N9D/s60DvRf8EGS4pNb8i+PdRqNIdPviskJi+Y0pm
-         mJq6HxdbBiSKrKRI9J+APV4KTJWG78qZbIpP9Y1IrjyPta8uA0QAJ17N4O9w30MuulKU
-         1v/g==
+        d=gmail.com; s=20251104; t=1780948940; x=1781553740; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
+        b=JaGM42CND++GVCO/APZTAt8fet5/AfRQBUcUWxHYxHHqZInMxKQbF6OT3FmXDjtx6i
+         ozM356muRW6wHE7nxLSzn0SpJLwzCmam74OffTWA0QxKNXp2uBjvUKkWZHa5Qn2qSMvL
+         LUMkkAtJm/hr/K3MutMWwkwk9vP0EL8d053cguGLhQO+eWhd9DcMNR1Mp9om4+fpp3Ne
+         R6SlRzNODEgUPxSoeYrLPmWT5FDBkX33xxLwNapI3/HMCNc2SEWNQmWHBOZPmRQYpqpp
+         +PAbwSpx/A6u4EDuoiFZcwRcVVsnSb9x8xXTMxRMeUutezTmyBN38WGw74RGHhb8To9j
+         5amQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780948907; x=1781553707;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TXnwBHRGekJNCNs6l6QYmnGYpiNGy3SB2AnSS2LrOcw=;
-        b=U1vpz9vf8hZOD1REaTMqD/Nt3rqMk6KJgVV0gQR1+KStFJrOv5121aXiGiGEBaw/fz
-         koiHU/sAN+pcCacyOXKlt2SG77JYXUGdytUExuY8qpaIg8YaQJXVhL0Moco8ADOBltZp
-         sY3CWIGZy5diq4KhjHFeuSVgvmL4T6L/gfvlEdbroj8/FC/WZ6g8ecvepfr9aViGcUfu
-         8WeEDP2IB9jelfUZVrB4AnmztTAw5EIsw+nWeh6OWG2E5dtypyo32fV+AiSW5v2njbgI
-         XiM+Ea7dyCFyhNXOFrhGDFhUlDklfh7PLAcA2Pqh2rpCYymvHEUhiDtZd+ygaXdJXgFn
-         u7PQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+W7XCIhTg4ZoV91f1l4XaqHmofGOuX81razqGoJA5fXHiokJe+9acI8uNThjaIrSOhrMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYr7CVwufT1DnxYNo8o4mFGri+lxxho7srqWQiPeYd5TsKm8GW
-	tSM7GOAjGe6IFIvd6fSpFUwdOgWpoEnH4bEIhDbU/r7aqIJLUJ3CUfOu
-X-Gm-Gg: Acq92OHNVzRFJ+GZDvu4e1xcRnwTkfJvaFi43N5TVxE3y5RpVcGSL3xHLn5MoaDZcze
-	wiX6PA5ErwldvUsnxuL21YsEpyjV8hh5k6ju0qFP4hebngbwlO80AqlvPeNgUArSUrTB2cuoVP2
-	S5jFTomeNKC2JN65HLjE64u1yTyMD60Myyhoqz/Us7ay2IDwiE3ryiG3h878XBEruqyxDUvvJn0
-	ejISx5nKWnHHdazhq01WISFAZJ4S7ejbFcD6pBpOSLi0Sag4s0wTzDoji/Tz+5V5KIudXcUXyXg
-	AdqVa/GliMK/KDxGN8ag/cMrot6xXAcDwsMJ60rw/tHt1CbnuaTLdL/ZbxbyJUsVKGIXtdTCs3f
-	FutnFJy4hdDnJGtQjkc2IAn8dSDyfMVBQWCDA7qtbPh0XU/wdTwCvg0N3ak0k0BI5d4sfioV3Q2
-	7l/Kt9zAz+um5CGT73jXvKVhVegQMF81GpOTQROAnoy9AgQau19PO7ql6wuYrbuB4EZGZxnwteG
-	bTE5qqPGfMw4VzQ
-X-Received: by 2002:a05:7300:534f:b0:304:d32e:65f9 with SMTP id 5a478bee46e88-3077aee8646mr9878346eec.6.1780948907037;
-        Mon, 08 Jun 2026 13:01:47 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:1875:35fb:3a7:e87f? ([2620:10d:c090:500::3:d25])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3078c1ac378sm10521461eec.1.2026.06.08.13.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 13:01:46 -0700 (PDT)
-Message-ID: <189a79443144cacf4a257f0627586f917d8d18a2.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Moses <p@1g4.org>, martin.lau@linux.dev, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
- bpf@vger.kernel.org
-Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	houtao1@huawei.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date: Mon, 08 Jun 2026 13:01:44 -0700
-In-Reply-To: <20260605234301.1109063-1-p@1g4.org>
-References: <20260605234301.1109063-1-p@1g4.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1780948940; x=1781553740;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
+        b=hQHK76hHICHatG+C5GUoLl2IYj8FktC9RqdmJfe523SvrcVuvQ2/YsOMsVpYEbqV5j
+         +jskEutwlzIBdfj3WH2tZpVez4xhkV6HhyMJhyhO0V9k4utizLTa026LUo1oooJVl2XB
+         RY3cXmlcHotLuCulsX4nnA7MsgZvQWbmlXwd0ChGfvCp4QzYOYlyAj/cbv/c0TkR2Tce
+         fxn64D6uSTo3mO8X/Sl6ILOlgtNkQQdgwTwc9IlcwOYDxeUG6aanMR+fN97vMy6FgSl1
+         xn7cg5dNUTmHl/bnvQlSQxm92AcwZHZeAQpleDlMpWs0eP98SU7VZHAcgvxN05+rVGn7
+         Uqaw==
+X-Gm-Message-State: AOJu0Yxwa7WM25ltJn+eE13CITERlCDFpQAs0fuldiiJndShb0cHoar5
+	ftWBTwhpPGVR6jy+rUpi+PWf68UFMV2+TL6UQFKKkwpoMmV4LCfQvTKGsLyWVg==
+X-Gm-Gg: Acq92OHFBUtne9DzpYxVZrdy2FMFyxElfLdhYmTmJyVKCPC3/g1JIDk1M6TUqSj1yRt
+	BNW4QuJi9Hnfyyz/YGq23w/VFQC1K91Diy3F5mq7pyeOUOpCmRpOSdWKIQg7kg4VKz76twuMCDd
+	U1ZAX6BhfSASOZHGySY4o5yhVT3qHSWiDNbBu1PtfiVmuiId+8l9jm73EtvfwpwU+sNvwADwzIN
+	vCIWIg+7vbB0dzMhv8Nj9nsETtkNM8T2CpoiAi60b2w4Ki27KWRYTvU2LYPVyNACOS59F+doesu
+	sYoGghD99mfNP7FfU1q7nFYN4X2ULPVLDLTBem9P5DNxriLHF59fboBbNylUXL7XeRB1/B2wUkd
+	jQ+ODBP4nHooqWK9RPc8F0zLdJEQ4f/jJ65l+mRHSddZxG7ppBwGwoaRom7BmRwTw0ZDZ8kJvkb
+	Q9MsdWxquaJ0wsXKPXfs3f+HXs5hAwNt714vwXTnMIM3WKF38nH6GbrFtGu7Tlp6E6188KwZVMX
+	nMjXvdO4zUhIIP0JS+BTJ7OAnC+BC4FM0+/iks=
+X-Received: by 2002:a05:6830:902:b0:7dc:dd19:7f53 with SMTP id 46e09a7af769-7e70c7906d4mr9896252a34.14.1780948940066;
+        Mon, 08 Jun 2026 13:02:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5c::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e7923af1sm13046364a34.20.2026.06.08.13.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jun 2026 13:02:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 08 Jun 2026 13:02:17 -0700
+Message-Id: <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Jiayuan Chen"
+ <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>
+Cc: <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Willem de
+ Bruijn" <willemdebruijn.kernel@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, "Joe Stringer" <joe@wand.net.nz>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock()
+ for BPF-assigned sockets
+X-Mailer: aerc
+References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+ <20260608125846.157004-2-jiayuan.chen@linux.dev>
+ <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
+In-Reply-To: <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
 
-On Fri, 2026-06-05 at 23:43 +0000, Paul Moses wrote:
-> btf_parse_struct_metas() walks user-supplied BTF during BPF_BTF_LOAD,
-> and btf_repeat_fields() expands repeatable fields from array elements
-> into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
->=20
-> The remaining-capacity check performs the expanded field count calculatio=
-n
-> in u32. A malformed BTF can wrap that calculation, causing the check to
-> pass even when the expanded field count exceeds the scratch array
-> capacity. The following memcpy() can then write past the end of the
-> array.
->=20
-> Use checked addition and multiplication before copying repeated fields
-> and reject impossible counts.
->=20
-> Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating =
-btf fields")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paul Moses <p@1g4.org>
-> ---
+On Mon Jun 8, 2026 at 10:21 AM PDT, Kuniyuki Iwashima wrote:
+> On Mon, Jun 8, 2026 at 5:59=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.d=
+ev> wrote:
+>>
+>> bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
+>> causing a panic when the skb enters the wrong L4 receive path [1].
+>> An initial attempt tried to fix this in the BPF helper by checking
+>> iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
+>> this check via a TOCTOU attack by modifying iph->protocol around the
+>> call:
+>>
+>>     iph->protocol =3D IPPROTO_TCP;
+>>     bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+>>     iph->protocol =3D IPPROTO_UDP;
+>>
+>> Furthermore, bpf_sk_assign() has had the same class of vulnerability
+>> since its introduction =E2=80=94 it can assign any socket type to any sk=
+b
+>> without protocol validation.  Since the BPF helper check alone cannot
+>> prevent a malicious BPF program from crashing the kernel, add protocol
+>
+> I'm curious about the BPF maintainers' stance on this kind of "bug"
+> where admin tries to shoot oneself in the foot.
+>
+> I saw Alexei said this recently, and I guess it applies here as well ?
+> https://lore.kernel.org/bpf/CAADnVQLh7VEKAtckzz=3DXOVPT8ovpDQshvPPCWHDQu2=
+OWQx27_w@mail.gmail.com/
+>
+> ---8<---
+> Not every "bug" needs a fix.
+> If a malicious bpf user wants to crash the kernel they will
+> find a way to do so. Especially with agents.
+> We cannot realistically close all of the holes.
+> Right now the priority is to fix the issues that normal
+> users can hit and not bots.
+> ---8<---
 
-Regardless of the sibling email I sent, I think that this is a good
-defensive practice to use check_{add,mul}_overflow() here.
-Having said that, it would be nice to have a selftest in the patch-set.
+In addition to that I have to add that skb_steal_sock() is performance
+critical path of networking stack. Adding runtime overheard there
+because bots can find a way to abuse the interfaces is not a good trade off=
+.
+If there is no simple way to fix it completely on the bpf side
+then we have to flag this issue as "won't fix" and move on.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-[...]
