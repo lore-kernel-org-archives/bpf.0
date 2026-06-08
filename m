@@ -1,58 +1,80 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92233B14A6;
-	Mon,  8 Jun 2026 08:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC163B1014
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780908219; cv=none; b=LzTLLqFXmfSQ3t+VfhDwHTvIcNvkBFt8Eyf39yS3KDQMYPK+8HPAR3CoKHP3ixQ/QKe7DqVMhp5C7Hyv6POZL1pDP0LAi0vlDudrMM9aezaZhzcItTT9qYQvA9baxXCFA4yW3tvo963AMjfjdJ3//tkVZXQehNj0Fu2o5S22Prw=
+	t=1780908774; cv=none; b=giVilmZePSgZwPNspx436GRM2DVBLrVrK0PXZb8Iv1XUYaAFtFZb/ni3rC2im5bB7Yhsuojj6jK13SObrv/iUzulliQQi5RpqEzMcNCiQ9a8oRSAcIhW68+it3dWdB0e6V4zjPUtUq3Zz5rZcEAb8hbdwg6n/M9fOaf0ktyVOnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780908219; c=relaxed/simple;
-	bh=FjzT5RcBQdDdIEoaNoG32miDcUBIMi1hQyHWzkZszv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XmwAUH2++oTVhFMSQGp0fC7tS/Sk8nygFiSfG9RzBvO86mR01nX60Z0u8G0XCmDe7pUg+lBSyqZHNx3c6kyVQPDYeZXdlE3V5qo7TOp7MSSy7htP8FXBphc3Di0FDIypZA4c2wlkMjfFMP7eb8TmAqsh8wu2dBgH4/81Irwvpkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Y3K2BCo0; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780908774; c=relaxed/simple;
+	bh=71kngNLglTQFWzZYkjVAWT0fHT+5MJVHKiuaOh/1EgQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OpXBqGra/YPitRJsM442VemQBTYFZG6Guea/NhecxeRmUT9MPWsUZlcqhuMTKTJoaUmS9vH3JkWQI6G5xifdDoN/RF0q7gFNPZIUwnauo/W1UpAHptJVJQUfVjaq9CgbyFqG98YraZA4FnTl+iY5dxfWgASXj1O7EHZJPszuuRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IOFTK4Ag; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Y3K2BCo0"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DE1A3290;
-	Mon,  8 Jun 2026 01:43:30 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 693C33F99C;
-	Mon,  8 Jun 2026 01:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780908215; bh=FjzT5RcBQdDdIEoaNoG32miDcUBIMi1hQyHWzkZszv4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y3K2BCo0/UBNqU0k0thuEuhnek8OYAJF79Xh+dFBb16uvJzUHv0//2JXHjFGytIIY
-	 ZTcaOYXijTpBDiXvaHTdKouF7fWJCVNNJxmbHGVH4xqTlTynktxZc/o7XT6d1vqF9l
-	 2bj0jXSxM/9AaXUe8OGPBioPd65MM7iMjNx4qrig=
-Date: Mon, 8 Jun 2026 09:43:29 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Andrea Righi <arighi@nvidia.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOFTK4Ag"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490af320e2aso44718395e9.2
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 01:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780908771; x=1781513571; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
+        b=IOFTK4Ag/Fh423MXLErk25yqTc/H6GVAub/458cV/r+cGCGj/fTnQdeEqQyJvwkA7S
+         qRshw+rSQOex2QIdvzssxJ90ysoVDk9cefNRdZenzfK2/5sLUen7O4nfwScdtz81DmOA
+         DqMhOHQfju0U4/4y5Ct/FDrffrqw69KGj+kQNpU/GhgcKTLi7/B/ZPqUrXZbG2Iz/C7X
+         nQnLHM7xIsc5MdXMzmYkdSJpMxbHR3t8bGt0AksjW7aH2HeXSyadL2ZcE5MGrL0oS0Ma
+         3U2ug8NRcoJMgO3RdrMwVPpzzIrUFgXo/vwqTS1xDZx/1Ulfy1WZtLoSemz84aLsictQ
+         aWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780908771; x=1781513571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
+        b=SjaIR9SZiZi+SuaQdmYEWb54IAJhvpEJemCcD4ZSAlPos+rBmIa3IsD1TGOLgbFHzy
+         29eoq8+Bo1w81b7govYmq3iGSA6PbJnYERduLhh0SKR74U2s9nNl2tOWUllxi5o/bfO/
+         oW3c0DTQiIFM+D89JkVNqR4SF8EU8qmKdyh9UqH5hEm3k6WiB77Yf/lJipeMwShgWMFz
+         l33n8z1XYIUhNYbIkp3NDSRENWcSF9aJWqF3KqW7Xx7ByXc7INDyzaRX15dJzSxSz3li
+         BjgV4rwnJv3V1gQojhQl8n063V69HVkfBWKQUAEpzj2CEW6BXBb8qoB3PfOdFlpfgeqC
+         bSAA==
+X-Forwarded-Encrypted: i=1; AFNElJ+g3wOzj5wip4PRm7UNNtWaMioihuX7L5cCVZdCzsaG5ZA5D1N5Vwlwdln7f93S5yu6mQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBvleYV8qpWpPAHL7rn2e9ZocARbFPfp01j2Bn7gCcFRPjjDuY
+	hh+GjWUlA1+S+wkA589NOBDleSUsI7o9JDlnUNQ1++EvLke1WqsjQhXh
+X-Gm-Gg: Acq92OF6/eIoMXdUdAYGWzt8N5JPD6eKpyG6zh9e7o69muliVzv4RUxWb0AWYOGKWb9
+	L1T6XODlHtzHDoSfzl8RqAkjcnhSKdJohXg/K4Gb0rSln+Srrx5uh4nnJT/1hGjjGasvVVG6Dz5
+	cPQ6y7JWwKherGogjLPyl1aDys40DNSKJJp0TJ2nZCRmInnDOv+pxf+BI02NMbpNEimWA1IqrgR
+	AvZvh8DgcGT4Bcf/N2mb/LuCpSQ4pA6pZFl7HGImQ8Fh36eC3gwslV8gNUogWZD9VAzjtT1NH2w
+	+wxoaX6Q8BOoaV4dMOhMD6vPW3CLG2Zg6r2P3wpzGZVgAalYzyVrdVfYTWeQobVPh8EoacAyOWT
+	HwmlX6rTjhcm97Wh8P1Yh19XTeqwH1WrQavZMHhEk8x+Vjk1Cs0j30HJbzGtPynZAD5RrLCxEMR
+	MoBraKJ4wd+LSj23vE6/l47g==
+X-Received: by 2002:a05:600c:83c3:b0:48f:d612:3c59 with SMTP id 5b1f17b1804b1-490c25a21a9mr267462155e9.9.1780908771176;
+        Mon, 08 Jun 2026 01:52:51 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc413adbsm378495555e9.15.2026.06.08.01.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 01:52:50 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 8 Jun 2026 10:52:47 +0200
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next] arm64: mm: Complete the PTE store in
- ptep_try_set()
-Message-ID: <aiaAsTnEtwHx9JqE@arm.com>
-References: <088f52fd25860ca961449d53f91b214a@kernel.org>
- <5f68f44310d4878185fd5ebc52d66530b99f174c6d04ab1170dc53cefaa54568@mail.kernel.org>
- <1780862659.ccb18e27e916dc4b@kernel.org>
- <aiXVFK_qb54is8b1@arm.com>
- <7f5f7c94601312c1a401fb18998291cc@kernel.org>
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
+Message-ID: <aiaC37sAQD5kOfQZ@krava>
+References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,53 +83,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7f5f7c94601312c1a401fb18998291cc@kernel.org>
+In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
 
-On Sun, Jun 07, 2026 at 09:25:47PM -1000, Tejun Heo wrote:
-> ptep_try_set() installs a kernel PTE with try_cmpxchg() but, unlike
-> __set_pte(), skips the barriers that arm64 requires after writing a valid
-> kernel PTE. Without them a subsequent access can fault instead of seeing
-> the new mapping.
+On Sun, Jun 07, 2026 at 09:24:12PM +0800, Nuoqi Gui wrote:
+> An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
+> inner map template. The flag allows a concrete inner array with a
+> different max_entries value to replace the template.
 > 
-> Issue them with emit_pte_barriers() rather than __set_pte_complete().
-> ptep_try_set() must finish the store before it returns, but
-> __set_pte_complete() would defer the barriers when the calling context is in
-> lazy MMU mode.
+> The verifier currently uses the template's max_entries to elide
+> nullness for a constant-key lookup through the inner map pointer. At
+> runtime, the lookup uses the concrete inner array's max_entries instead.
+> The verifier can therefore accept an unchecked dereference even though
+> the runtime helper returns NULL.
 > 
-> v2: Emit the barriers directly instead of __set_pte_complete(). (Catalin)
-
-Nit: I'd place this after the --- line.
-
-> Fixes: 258df8fce42f ("mm: Add ptep_try_set() for lockless empty-slot installs")
-> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> Link: https://lore.kernel.org/all/aiRFcz78QTZdIHHB@arm.com/
-> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Patch 1 keeps lookups through BPF_F_INNER_MAP array templates nullable.
+> Patch 2 adds a verifier regression test for the unchecked dereference.
+> 
+> Before the fix, the regression program is accepted and the runtime
+> reproducer triggers a NULL dereference. With the fix, both programs are
+> rejected with an invalid map_value_or_null access.
+> 
+> Tested by compiling kernel/bpf/verifier.o and
+> verifier_map_in_map.bpf.o, and by running the regression program and
+> runtime reproducer in QEMU before and after the fix.
+> 
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 > ---
->  arch/arm64/include/asm/pgtable.h | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> v1->v2:
+> - Update the can_elide_value_nullness() comment to match the changed
+>   parameter (const struct bpf_map *map).
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
 > 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 3ce0f2a6cab6..3e579c26b383 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -1838,7 +1838,16 @@ static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
->  {
->  	pteval_t old = 0;
->  
-> -	return try_cmpxchg(&pte_val(*ptep), &old, pte_val(new_pte));
-> +	if (!try_cmpxchg(&pte_val(*ptep), &old, pte_val(new_pte)))
-> +		return false;
-> +
-> +	/*
-> +	 * The store must be complete by the time this returns, but the caller
-> +	 * may be in lazy MMU mode, where __set_pte_complete() would defer the
-> +	 * barriers. Issue them directly.
-> +	 */
-> +	emit_pte_barriers();
-> +	return true;
->  }
->  #define ptep_try_set ptep_try_set
-
-It looks fine now. Thanks!
-
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> v1: https://patch.msgid.link/20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn
+> 
+> To: Alexei Starovoitov <ast@kernel.org>
+> To: Daniel Borkmann <daniel@iogearbox.net>
+> To: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Daniel Xu <dxu@dxuuu.xyz>
+> Cc: Eduard Zingerman <eddyz87@gmail.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yonghong.song@linux.dev>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Ihor Solodrai <isolodrai@meta.com>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> 
+> ---
+> Nuoqi Gui (2):
+>       bpf: Keep dynamic inner array lookups nullable
+>       selftests/bpf: Cover dynamic inner array lookup nullability
+> 
+>  kernel/bpf/verifier.c                              | 15 ++++----
+>  .../selftests/bpf/progs/verifier_map_in_map.c      | 40 ++++++++++++++++++++++
+>  2 files changed, 49 insertions(+), 6 deletions(-)
+> ---
+> base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+> change-id: 20260606-f01-v2-324fb92185a2
+> 
+> Best regards,
+> --  
+> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> 
