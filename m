@@ -1,288 +1,119 @@
 Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD513DFC9B
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DDD3CC7F3
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930130; cv=none; b=IqJ7yiHVZaA0GKWqBImN+ytqUFjheYrsTaLSJ1Zeu9YB/xZ9msomNdngHGBYkBfm/CE5pF8vS9u06LPWOkwoMBKTaB47ssi5pV94ZfPH1ji2hJHIf+MBRN2rEK+5/r3SzWRjIkSjySCzGLQYKJmGQkYjmj/nzMVtHBbAvx+cbFs=
+	t=1780930320; cv=none; b=bj7hoyOSJv0my1WDU91v+s4RxlAZPyxhsjkCbbx7rhk366zaIKlNKFcCwNoB+Mh3aG5XStF7Og41kI+JUX5FyYwf+gW6bMEscBVQcl3AzHEpzlE+Lu52jzQsm7x4dMPZwgbkQwmuT+lPh0Zys+q82Bt+6QvRbNIN3Shm8/hk+0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930130; c=relaxed/simple;
-	bh=E60PEvF8b/GhVdbiOH+su95Nyd8Z0lqGpVxPMzPkMoQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h+xIBMijgMnIA6Tk7n14p8cuRJ5z7CWqXp4Y6vSUnw9iVsJBeRZa3LVeJ6U6QWhxiVvoPBr/Pz7Ge1HEosKCntEdjKSkrDv+BKXnLLRgOnUdvSuPNF0+Yr8JXkyRPpaaEnjKGX2LT2Yu8Ljpu1wejSivUrJzg11ipdZp3jvI1Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NE7ViPKm; arc=none smtp.client-ip=209.85.128.67
+	s=arc-20240116; t=1780930320; c=relaxed/simple;
+	bh=jjdoee8A/UvKLL/NSAvBhFmYk3jMveTG0G8NbasCwis=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=qB8bffWLprz290cZXPYEFA+w0l3K7WzOZlRd88dXXEB6bf668igZJ5hZUGq8+oRCmzCHiFuIGI8F7vfcm2MawJ/WAVrsX/3s8DxPy8IBA8RmQq+Dm0xzj+h42flgoUXQY2RgxX2y7hPDrrGybhRh/soYsU/sLct1zu3pAw4WSqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EYjCKBEW; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NE7ViPKm"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490b7866869so51325445e9.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:48:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EYjCKBEW"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-490b7866869so51368145e9.2
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780930127; x=1781534927; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780930317; x=1781535117; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pDDNl631Uxp17oTKNMP/mxzsb2F72nW0tI3DrJT9rwk=;
-        b=NE7ViPKmbGgqQChRe3MNuGp4mlEFGA7Ga/y2NMo1v1dADAj9AoplsoY1fiGI05O382
-         4GHGB5evdWL9n3LCCxZv5jNBVEYrOJuHqCZ99niu+dH66p+Lp5mbml0MxJcW3iOSrWuG
-         m2qm7wOTeM3iaiO5x6o5odHg0y3lLz0GCsqkHAQADthk46jdzOAdTLlbhMCV1tmcszUu
-         7KVVxz4NjjZGc34TWnwlVhwm4SZVQQGe79HZSIS74X5UEnDIOox/ga8F0Nj4KwYfAf+1
-         7IF698GM4fQHlKs8WqZHOkwa4+aadJHo8OgT/x0TuKXrWpiEQ69lWvU3PEan2tXktsvL
-         ef5Q==
+        bh=jjdoee8A/UvKLL/NSAvBhFmYk3jMveTG0G8NbasCwis=;
+        b=EYjCKBEWpYnYWGowfNu9rYoJE4wERGpGqcGNzjWwJJgkQHyTx8rXjV78RcM0Ul4LjN
+         09kXOnNzve+RUvSpkcaHFiACcmbfKxdmj3+1ny/qTrL/jUA7gs0nGTm/cnlcwxAy5VcW
+         ibUXq9lW7wewRzhHGUPsqd3G4wfhF5lZGpSZigW7zPccnf8RX4YdBGdbx0oTzdy3NWo8
+         t6ZiMir03FNf9Ewb/uGOorrn4Eo/EdrweXF11jHNpdHIJdzSCLVin/x8I7RfQFK7ZhoA
+         j3pF6exQd+/yyaUYLCJXmXp10hVGCqqEZhNjRRw9Efkxy4k5/Yc0Z8hYdPP5Cjw3vHz7
+         47RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780930127; x=1781534927;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pDDNl631Uxp17oTKNMP/mxzsb2F72nW0tI3DrJT9rwk=;
-        b=oaEfKEgy9umn2YaieLc1l74AykUqhfmnCXXZoMfqhlGIhSFzeYdlLzGaWQ9KxI4Z5N
-         OAOwNNosS1Meue/ygmBkX4oQwXMy41iYu7xty2wZmbL2pB0X6bwRp+4Gao3kISNKhebl
-         f2NMlWoial41hK2XC4mir3I6+uwsM2fJNhq5jJLL8HRoiRohbgnQplsNA31tUog5igil
-         ZmaFZml5ALLypJxjdQMHEa3Ln2jpRjgrZcsbYaVQyaYzYGMZ7fgIjQSB/vosgAeIv8py
-         dNtzUBQMqzLmDn7NHDoafWKF2RUZ2FTkUlR+14RJ40gGeQ1ujpx/a+Gk2hZn25fS70Ph
-         ZZgg==
-X-Gm-Message-State: AOJu0YxJ8XPV5fb5EWZWLxbqtA+00lLJJxpK3YQibSS4IvbELvvDqHSE
-	0yYvEhJT5B+GzLoInEGZf/iN++hPmJqcMkiTAVz7Jo/+R4sZ2kwlUCoW+l7eG2h+
-X-Gm-Gg: Acq92OFnYZ6wjJ1OV+RMtwtzZ93C8fNAA8O6jObRRR+P5aRUE2mtP2nTd2koFBdyVjA
-	ecRis7R5EedoPC4pzHOSHsWP8fg+ViM/q2QwWHpFww8YlakybRBExwqkWw5NcO5F4Fe1+7Crftz
-	skOMHOjXB/WKnkLeNRpMSYG8f6SKjsazUTlqHdSu4YxVAjETGK3vIYk+EXFgLqQzbxNDDdFhaYm
-	+CHUjonMptUi85leiBW4aY+O+fdSj1OCmKUxM0GedZPtkKMV1XpTQPAbupoJxWTnhNMyJgB8Cis
-	QbQN50sFbB1lXO4C9HBSkUbEoo5z0wIFO2TL4QtZRYMLbCQjPbdh2jNflewHddQViccYWkaCyb3
-	r/4z27/lY5zk67AjePbQ0YENCOWmOoV4WUPAc8VV/nd4GZIY8IPGN3L8MK1yOp/lHgxtQz5NwSi
-	OHsU5035dalxUICOu7Ye7T9uvaEUHC+aAfxGCH8zt8snR+hLcJIeGrKv+8ASgCPabD2F6IDNZ6Z
-	w3X8h1X2rvNhmroJMg9522eYjtfL5ZOZ5wCeO6RePzlDOwK65j4awbAqa3U80LwrpGrahED3r6r
-X-Received: by 2002:a05:600c:6995:b0:490:9d1b:f06a with SMTP id 5b1f17b1804b1-490c25dae8dmr248970825e9.10.1780930127259;
-        Mon, 08 Jun 2026 07:48:47 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780930317; x=1781535117;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jjdoee8A/UvKLL/NSAvBhFmYk3jMveTG0G8NbasCwis=;
+        b=cAxTiya9ASjdVoceUMqXwm/dpMWV3VSEzcdc4vozu7k+zuFF0lbXMM2Jx4qLqkPXxA
+         xVvOEuGRCu14MDIxJ6Pfe9T5Io3E3jZlH4sHp8L+l7ue4DolZNDdZetI0LzDhrrE/AQi
+         3YN27je4BfQbqnTHWq6uadAZ85jPn+VfZRjQIGs72iuG2B9hkv8O2PSNBVafdJq+1P4A
+         VcQPtVAaUUG4UFlZZsNJWUPJbqfrBZXNi1yEmibyYOYBxx/1EPOG823tmzbX3JEB06LB
+         lmDi1T8zdpQ/php9aVX5bCUrcWnlnuXW3j/gvFHRYfOV/k49e36OfydYjGIKK0syJV2a
+         SBog==
+X-Forwarded-Encrypted: i=1; AFNElJ+YH0KTAO4eN4LoUfS3ocE6io9QwKQT/TwhEM2b/CXdOFmhLoh5YrF4MMqDsTpCD3/CTo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqBgwm652KzcxhgMVvDXT2y+TquSkrpU40u57OqwTBYpq+Atva
+	sA4i2meWpgxdCCPIYazgKDdZlfkdRbwvxdroczhZWUJSgMXrUirGzosE
+X-Gm-Gg: Acq92OELFyC5cyMp89zj2c4SZ4AlLHSUj81msW1iUuNBx0jhRKlkJ/GakJVju5pYmGh
+	BpL52IcladQTwqByVUic/467UHGPYkSAli0Bn6dYSTAIg4L81hNDH26DCOX9aV7QxDdn7vVZV2u
+	c1i/ryiweiAibvPtNIwtz1Dj9GHXbjYmgb70bzCAmJOtYUWfNOBVuZStbToeeXRt3K2hs9A6ysm
+	Qg3XIFQtzgkblyGXtHA+g4zXxAnhClR8Zd13F5uGT7MyNsFH89bijFSO1c/r/gCpTII3/n7m28D
+	xLfA+FS0ZHoyKLVie4r5irklMYpYjyLxfrtqfUW/A6v8DihRYoYvvSo1dJycx66Uoy1F8we7Lc7
+	/DAQylizzw5vPH1xAi2jQysJbuRzcgYuqXcs5vXmF8duzcAuiKGtSZ8d4WzGPUMdB+PzKtkBvU2
+	MHoTdlJuCY/oHKPgqS58T0S4vEgrSsHNZgkvH/L/kwQhHuFPW1Z1ASL/ol4sDmPMJs/Bx/Akn4m
+	8woj85pl1DD0g81gEo2SSCNLlc3omDSjfUKgzHI7ZC+fMTZTBjrecyxGEfjJBoxlNzG5Vecg7+9
+X-Received: by 2002:a05:600c:818c:b0:490:b0e1:2161 with SMTP id 5b1f17b1804b1-490c25b39fdmr290749675e9.2.1780930317552;
+        Mon, 08 Jun 2026 07:51:57 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3cc140sm479039865e9.9.2026.06.08.07.48.46
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f3529e0sm54980209f8f.28.2026.06.08.07.51.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 07:48:46 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Justin Suess <utilityemal77@gmail.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 5/5] selftests/bpf: Exercise kptr map update lifetime
-Date: Mon,  8 Jun 2026 16:48:38 +0200
-Message-ID: <20260608144841.1732406-6-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260608144841.1732406-1-memxor@gmail.com>
-References: <20260608144841.1732406-1-memxor@gmail.com>
+        Mon, 08 Jun 2026 07:51:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5596; i=memxor@gmail.com; h=from:subject; bh=E60PEvF8b/GhVdbiOH+su95Nyd8Z0lqGpVxPMzPkMoQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUvtmvRmxZCgaywp3Wb/b2qs27Mhtk4qdtG+TY16/Fu/h 9T9/rGho5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABN50MzIcPnziVnl6ef7H391 UtVYGlfQ8WSW02yTj9Jr/hQcFMy0mMvIMEv5zLFaVbFdm6uV+v8/UDpkpdcSXeZQJzC52nfd1Ip prAA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 08 Jun 2026 16:51:56 +0200
+Message-Id: <DJ3R3WUVLHHB.3MOBZNZHH5KA9@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Justin Suess" <utilityemal77@gmail.com>, <kkd@meta.com>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 1/5] bpf: Treat non-iterator tracing progs
+ as tracing
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260608144841.1732406-1-memxor@gmail.com>
+ <20260608144841.1732406-2-memxor@gmail.com>
+In-Reply-To: <20260608144841.1732406-2-memxor@gmail.com>
 
-Add focused map_kptr coverage for BPF-side map updates that touch values
-containing referenced kptrs.
+On Mon Jun 8, 2026 at 4:48 PM CEST, Kumar Kartikeya Dwivedi wrote:
+> The is_tracing_prog_type() predicate omitted BPF_PROG_TYPE_TRACING even
+> though fentry, fexit, fmod_ret, raw_tp BTF and similar programs have the
+> same execution-context concerns as the tracing program types already
+> covered by the helper.
+>
+> This matters for map compatibility checks that reject bpf_spin_lock,
+> bpf_list_head and bpf_rb_root in tracing contexts. BPF_PROG_TYPE_TRACING
+> programs can run from arbitrary instrumented contexts, including places
+> where taking these locks or manipulating graph roots is not safe.
+> BPF_TRACE_ITER is different: iterator programs run from task context, so
+> we continue to exclude them.
+>
+> This can reject existing fentry/fexit-style programs that use map values
+> with these fields. Such programs were accepted only because the
+> predicate missed this program type; their use depends on semantics the
+> verifier already rejects for equivalent tracing hooks.
+>
+> Move is_tracing_prog_type() checks from check_map_prog_compatibility()
+> to points where the fields are actually used to avoid preemptively
+> rejecting tracing programs that use maps with such fields but do not
+> touch these fields.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-The new syscall programs stash the testmod refcounted object in an array
-map, a preallocated hash map, and a no-prealloc hash map, then update the
-same map from BPF. The refcount must remain elevated after the update,
-while the userspace runner destroys the skeleton and reuses the existing
-refcount wait to confirm map teardown releases the kptr.
-
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/prog_tests/map_kptr.c       | 56 ++++++++++++
- tools/testing/selftests/bpf/progs/map_kptr.c  | 89 ++++++++++++++++++-
- 2 files changed, 142 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr.c b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-index ec6f2f2e8308..17e707dddda8 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
-@@ -143,12 +143,68 @@ static void wait_for_map_release(void)
- 	map_kptr__destroy(skel);
- }
- 
-+enum map_update_kptr_case {
-+	MAP_UPDATE_KPTR_ARRAY,
-+	MAP_UPDATE_KPTR_HASH,
-+	MAP_UPDATE_KPTR_HASH_MALLOC,
-+};
-+
-+static struct bpf_program *map_update_kptr_prog(struct map_kptr *skel,
-+						enum map_update_kptr_case test)
-+{
-+	switch (test) {
-+	case MAP_UPDATE_KPTR_ARRAY:
-+		return skel->progs.test_array_map_update_kptr;
-+	case MAP_UPDATE_KPTR_HASH:
-+		return skel->progs.test_hash_map_update_kptr;
-+	case MAP_UPDATE_KPTR_HASH_MALLOC:
-+		return skel->progs.test_hash_malloc_map_update_kptr;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void test_map_update_kptr(enum map_update_kptr_case test)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct map_kptr *skel;
-+	struct bpf_program *prog;
-+	int ret;
-+
-+	skel = map_kptr__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "map_kptr__open_and_load"))
-+		return;
-+
-+	prog = map_update_kptr_prog(skel, test);
-+	if (!ASSERT_OK_PTR(prog, "map_update_kptr_prog"))
-+		goto out;
-+
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(ret, "map_update_kptr"))
-+		goto out;
-+	if (!ASSERT_OK(opts.retval, "map_update_kptr retval"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->num_of_refs, 3, "refs_after_update");
-+
-+out:
-+	map_kptr__destroy(skel);
-+	wait_for_map_release();
-+}
-+
- void serial_test_map_kptr(void)
- {
- 	struct rcu_tasks_trace_gp *skel;
- 
- 	RUN_TESTS(map_kptr_fail);
- 
-+	if (test__start_subtest("update_array_map_kptr"))
-+		test_map_update_kptr(MAP_UPDATE_KPTR_ARRAY);
-+	if (test__start_subtest("update_hash_map_kptr"))
-+		test_map_update_kptr(MAP_UPDATE_KPTR_HASH);
-+	if (test__start_subtest("update_hash_malloc_map_kptr"))
-+		test_map_update_kptr(MAP_UPDATE_KPTR_HASH_MALLOC);
-+
- 	skel = rcu_tasks_trace_gp__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "rcu_tasks_trace_gp__open_and_load"))
- 		return;
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing/selftests/bpf/progs/map_kptr.c
-index e708ffbe1f61..3fbefc568e0a 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr.c
-@@ -489,8 +489,7 @@ int test_map_kptr_ref3(struct __sk_buff *ctx)
- 
- int num_of_refs;
- 
--SEC("syscall")
--int count_ref(void *ctx)
-+static __always_inline int read_ref_count(void)
- {
- 	struct prog_test_ref_kfunc *p;
- 	unsigned long arg = 0;
-@@ -500,11 +499,95 @@ int count_ref(void *ctx)
- 		return 1;
- 
- 	num_of_refs = p->cnt.refs.counter;
--
- 	bpf_kfunc_call_test_release(p);
- 	return 0;
- }
- 
-+SEC("syscall")
-+int count_ref(void *ctx)
-+{
-+	return read_ref_count();
-+}
-+
-+static __always_inline int stash_ref_ptr(struct map_value *v)
-+{
-+	struct prog_test_ref_kfunc *p, *old;
-+	unsigned long arg = 0;
-+
-+	p = bpf_kfunc_call_test_acquire(&arg);
-+	if (!p)
-+		return 1;
-+
-+	old = bpf_kptr_xchg(&v->ref_ptr, p);
-+	if (old) {
-+		bpf_kfunc_call_test_release(old);
-+		old = bpf_kptr_xchg(&v->ref_ptr, NULL);
-+		if (old)
-+			bpf_kfunc_call_test_release(old);
-+		return 2;
-+	}
-+	return 0;
-+}
-+
-+static __always_inline int check_refs(int expected)
-+{
-+	int ret;
-+
-+	ret = read_ref_count();
-+	if (ret)
-+		return ret;
-+	return num_of_refs == expected ? 0 : 3;
-+}
-+
-+SEC("syscall")
-+int test_array_map_update_kptr(void *ctx)
-+{
-+	struct map_value init = {}, *v;
-+	int key = 0, ret;
-+
-+	v = bpf_map_lookup_elem(&array_map, &key);
-+	if (!v)
-+		return 1;
-+	ret = stash_ref_ptr(v);
-+	if (ret)
-+		return ret;
-+	ret = check_refs(3);
-+	if (ret)
-+		return ret;
-+	ret = bpf_map_update_elem(&array_map, &key, &init, BPF_EXIST);
-+	if (ret)
-+		return 4;
-+	return check_refs(3);
-+}
-+
-+#define DEFINE_HASH_UPDATE_KPTR_TEST(name, map)			\
-+SEC("syscall")							\
-+int name(void *ctx)						\
-+{								\
-+	struct map_value init = {}, *v;				\
-+	int key = 0, ret;					\
-+								\
-+	ret = bpf_map_update_elem(&map, &key, &init, BPF_NOEXIST); \
-+	if (ret)						\
-+		return 1;					\
-+	v = bpf_map_lookup_elem(&map, &key);			\
-+	if (!v)							\
-+		return 2;					\
-+	ret = stash_ref_ptr(v);					\
-+	if (ret)						\
-+		return ret;					\
-+	ret = check_refs(3);					\
-+	if (ret)						\
-+		return ret;					\
-+	ret = bpf_map_update_elem(&map, &key, &init, BPF_EXIST); \
-+	if (ret)						\
-+		return 4;					\
-+	return check_refs(3);					\
-+}
-+
-+DEFINE_HASH_UPDATE_KPTR_TEST(test_hash_map_update_kptr, hash_map)
-+DEFINE_HASH_UPDATE_KPTR_TEST(test_hash_malloc_map_update_kptr, hash_malloc_map)
-+
- SEC("syscall")
- int test_ls_map_kptr_ref1(void *ctx)
- {
--- 
-2.53.0
-
+This particular patch causes regressions for at least one production progra=
+m
+using bpf_spin_lock() from fentry, and a bunch of selftests (which are most=
+ly
+due to the movement of the checks, and usage of spin locks in tracing progs=
+ that
+can be adjusted). As such, there is potential of breakage here, but it also
+implies the current behavior is broken.
