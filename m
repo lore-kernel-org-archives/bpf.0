@@ -1,62 +1,63 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D723DB630
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54B23DEFFC
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 14:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780930125; cv=none; b=OM041eMgULR+JYMKLmxA8cA7IVAY199b3jtMrfk6bcKdruGnUhgHQ2hiby+AO/3P6VHxhnR6yp/Vah24guJRhcrrlMYUmfjm2vG5c/pX0OkrtMCKQubgkVZuOyKemagdNM31VpFFLNe5JVSb6d2UYGd0DV0bjopqSJw3vYIailc=
+	t=1780930126; cv=none; b=Y7nRxUrX+hnjxY8lboM3L7EQNRxDGoP8TpE9VYU2RneqOTYJbCin2UreLcQ6mxlIPe+PYn/7znyGZ8HeWjd8XQ+YKX/KeIRD27Jh2jGrJaTs2fAX0u6hXjReSFM5F6FNbxbMHYFXIZnbbEEn0ZyauZoTzHM34mZX5JjlG6vWGDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780930125; c=relaxed/simple;
-	bh=Na2LsqshzRv7AVoWDWwjSMckR83aQ2do/o9XY+EH+XE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EaKzDIQe+ULMxVxpCEMVx9x5MQRFde8fxRA55x4mXOwAd3s4f5He1p2oP35O4sICiLeB+EDnUeaDkdB29lLDbmQTT/3Icrq76x/fSEtcua8xCM7capYFjP93obFLAefFyr9wMGa8DXHm64Hz0ZN+1KSbq+3LzEO2IlXo7e4yEb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNhj3PB6; arc=none smtp.client-ip=209.85.128.68
+	s=arc-20240116; t=1780930126; c=relaxed/simple;
+	bh=3eRX0Bg0knjPlMkY96paeUYSCsSzeBTRyWTibDIM1Q8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EBTwzEiCc7c1HpCElGFfl59uvKmlJ48bgvZscMDvEjmaG4XHdW7k89WBf/FbG3ZAB86rwHlT/sqayl4VjrerdCj2+8ldgO5CgjRY3ehRGzEzK0DAULEEC+FMUd3f4FAVqnOwvyIFOx3X3GtViCeEBTEPooovbfG1pV4tPhCU2zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9EnsTmz; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNhj3PB6"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-490cf3000f0so14175625e9.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:48:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9EnsTmz"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so48870165e9.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 07:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780930122; x=1781534922; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dsi9K/zIIJIB7ZfPOehP7bemxzVh8aOQ8gPGkf0Wdng=;
-        b=BNhj3PB6WEwyYHfamxbKFhDz7lka/nT4RwxClgKoB8qYi6lOp0bWit+iiPm7R23wEH
-         nEpRIwAH2evlpDg/cxrzJYMzJlTJX3SuqhpU1tWDURbAftxn0auB/Le6TEzvyhcO6VLB
-         7U2Ve1W8UxGdopdYlwB/4nKRo8pcoahqAYI6n4MIR88lI1PXCCgvFZrtggxtxcUWi7DU
-         O84eyf10vUhsOjhsd+VgTVqkmKaWqGmvT9vXaGK/nMyvuIGPER1+f39LhzL7TPORIroE
-         P9ss5a2nmxK8QBnZdR4nV2zPL3Xwa3AqtY3ChqFOrFBSuLaQqR408vJJOTrNHImRFBGu
-         MYtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780930122; x=1781534922;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780930123; x=1781534923; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dsi9K/zIIJIB7ZfPOehP7bemxzVh8aOQ8gPGkf0Wdng=;
-        b=d5IhUNfGyJzqXHt7VG112H7X9V6durf6joGzc0HdmbPEcMNRWVyTDAjegto+0WzGnX
-         FkivllKqp7PXQeWasqUclJAzwrwhZVhLlKCBoEmxCPFgC+C+z/hnh7Sx+8puKEaqOP+J
-         4dRgrUsK4BawtBWqu54bS0ngOJueWO01e3aIbWPshHWUTvqVuEeL+Mw2vYRlwqbgiXww
-         PG5OgNeVLwjHoJuQOiRRXDYFD+debPnzKOXMaoV3qs4YvXijBsoTuU0klN+QQB4rWvz5
-         Fi9LhOc8W3hDhxI4aARk10A6OR9LYzL5WnTRQsWQs1/XGbcw6qFlt0RCLyXG2DZ/qYT0
-         wMFQ==
-X-Gm-Message-State: AOJu0Yy9W1wzieTWXu3F9s90ehMktAaKN4OW642uoD6S9EB3Sq4BGVz9
-	9riRoUn/AAzt7TOeFjej+SoM+kXiHNqqc7Sy9UQ44fy7yxqHQT+SChgkjtr7G4bK
-X-Gm-Gg: Acq92OFmQ1rJd0l5mR7sl0rWiCEX5SFUu8RQZxZoDrvTxwIq+n4MMgqGp75O4jX/3nH
-	wlkwZtXtG9xsbcAB5s7E7FyFrQgxZNvEHG16/rgWCxj8gycI5O9lYlEGRlH2MQEiW4qFqN1cwE3
-	WTK9o9BONsk9dCiqkPiuS5iGXQSf7TSyWB7hrouGq4116TCnVKXElf8JQXE3KOZ3bhuK4yvzmnW
-	PpW+AJOsir+BdUZfPOaaQmryNrZlhAj660/JrClN4N6Ap4t11nMb2mKX7RFRPCFruJuAMeprTrS
-	PHazt5Z+QV/6aIhMN4ltEFNerxbFXZD3kdEzkHX+pL+mcDfAXBc8F3tfgssXQYPUV+WEtWDiThu
-	AW++vgBKQoDGAqOP30WpdHUVoNcy8k57xecJlMY10EXSvoRXj9bzJVzqMOoT7YhIXDa/BCpf9rE
-	3F2gHbqV8RxZfEMBRD5PoF6pgs0IQsV5J5rcB6/ZGb3/OwzaN2FTSoxX/xbYsjgUWTl3bk0DG/W
-	4YwhIFEsRkNdUDF0G9GDftI95FstdxNu98CJMOFKsv3MvU2q3X6BUmAD2Q+YffFbBXPL6omArvT
-	Fn5zrX8SpS8=
-X-Received: by 2002:a05:600c:528c:b0:490:cdb2:fb5e with SMTP id 5b1f17b1804b1-490cdb2fd19mr99661825e9.22.1780930121819;
-        Mon, 08 Jun 2026 07:48:41 -0700 (PDT)
+        bh=OtqKYm3KQT1a1ZPlvfea35PV4eJ27Zv9NK/UFrHfRGQ=;
+        b=U9EnsTmzxXRmF6IEFMN+dd8uwX8UljXwK/F3iawmlSB9dvHZIjYn0sPkPRWdf/QWLX
+         cjIYOVpgySjxVLFT2wVqtGGvndUq678F/upmOBbmp2NmZHebOu+NHtqpjoKDsftZsK83
+         F/WXXzFCV8nPfzxttqsrTzfa6ovvGQWsquYzbxOR2GAu8xwgQj78Uk26yioTUA7HTTX8
+         jeMws9PNC+wNY9IABQVwFrhgLImeVPw8BobVA3HPRELMcBD7tKSUqd3Zo4ALh3YsktA0
+         Uz3f9o+ef5sdSJv5mE7LB389regHYoHyY7EtoHKlGly846NDh3IamEmVFFjOupm+T68p
+         EveQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780930123; x=1781534923;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OtqKYm3KQT1a1ZPlvfea35PV4eJ27Zv9NK/UFrHfRGQ=;
+        b=bEdrP8qfF0vF59cBsA0MbXAs0FFMrjIR7N1pNPUtNrV3KJgiQznCLQRuDRzT5eOG9n
+         IRSYqF+KTUf9sQdiWzNHnEsdf7+5rddCx2h1TqWQg4I6i4MMDcpuVdeAtduL66NoQs44
+         pQn2gMLPwzmoGuXrpRoHxJxoY2CJcoq7K/yWQeLrv1MUSuI7eJoY2NyQ3WFTrjE61+BZ
+         ZMvTnRgR62BNbJc79AQbvK7pvr6WUt+ukuYzJtVoOtEYNCXCIdTkprzrjezoqnXURING
+         1hjFdDXrlXhc2mdBnEPXLSl8ixRoAYM+pnmws6bVMsKl+YJlsOA74l7L52P3N6Nrw1xP
+         LI5g==
+X-Gm-Message-State: AOJu0YxD7QYdJw7cNtpKwk5qEktJSH+shMYs0A3hbF081DBnSyhbDvLQ
+	4tHHWHlA5oCvBEN1qWbfTG7COzCfZmM+Z4/R5SRig9izIhJKqpg9hu187ZYe9XsD
+X-Gm-Gg: Acq92OGXdMqeCFCrwLokQt8Jc1n+YrlidsA6+2aDztezZizOouN096jm1TiTnzrn0sG
+	maFl4tv9SqSUmez2jQu25+tH2XNRfptzvmZX+Wh21EEHJJC+lerMeg8h9B0Mamr6ASF5n6g9pU3
+	bc1flPaFYCGmFc+S4AekY4otNldPxvdrm4Gij4EiLcecaZ/2EQB7F8GmNN1PrXlNOCGrP8Ey5qL
+	YdLmVY+NBv7xvEOahBQKfkCbeAJFc4U1cTm8BHsXrQDkWLDltPCN7cr0M0C1nP/Ffd487hlYp7h
+	6HXOKEgcnAj+3ZwoiuJRWEtod5nqF5uPQuDe9s53meSRU0ByAa06Rk1eAF9IsEgonI81JfalfIf
+	CdN9Ja51wbZFIuHhXPLYdwKd6anruOxFXNMI4zNnegrk5VM2CvRbTuMQ3dZfJ0TnmSQGH3ZvkRq
+	zWtTg7Rw6XzXEbDiwVQS/SDSxM9gfoGAs55dVMiuVCTrlBCIJFEdW/glL+iMOacNxHLiFw/bfVQ
+	qWfYxZkaUx2E/dsyXOJLGP2UteWWM9rANffH86GrH3EFHqWGv1DdkKnMbANM6QhyGXp9ny0ij4N
+X-Received: by 2002:a05:600c:83c5:b0:48a:7a10:4f17 with SMTP id 5b1f17b1804b1-490c258f424mr265792835e9.6.1780930122851;
+        Mon, 08 Jun 2026 07:48:42 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3fcf5bsm479008815e9.9.2026.06.08.07.48.41
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3b59f0sm465447005e9.2.2026.06.08.07.48.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 07:48:41 -0700 (PDT)
+        Mon, 08 Jun 2026 07:48:42 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,63 +68,131 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Justin Suess <utilityemal77@gmail.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/5] Fix kptr dtor deadlock
-Date: Mon,  8 Jun 2026 16:48:33 +0200
-Message-ID: <20260608144841.1732406-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/5] bpf: Treat non-iterator tracing progs as tracing
+Date: Mon,  8 Jun 2026 16:48:34 +0200
+Message-ID: <20260608144841.1732406-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260608144841.1732406-1-memxor@gmail.com>
+References: <20260608144841.1732406-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2061; i=memxor@gmail.com; h=from:subject; bh=Na2LsqshzRv7AVoWDWwjSMckR83aQ2do/o9XY+EH+XE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUvtmmS4V+DXO6V7o/PSKguuFb+8Gu6QH+/jkXaTI9dAq 2WzY0RHKQuDGBeDrJgiS8n/fUzGJyp/B9ou44aZw8oEMoSBi1MAJrI3gZHhoVTfUv/urfP58vzk OALsDjyfp79c0LQ9+AHzwyrpM6Z7Gf4X7c5eLLVvEj/PK+lJZxkLNYLfT32i1y/qsV5gW+bsFQV cAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4406; i=memxor@gmail.com; h=from:subject; bh=3eRX0Bg0knjPlMkY96paeUYSCsSzeBTRyWTibDIM1Q8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUvtmiRzerDXmdCZilUrfR637jfauDs3ZPZCn6zaQsbQ4 FtfX/d0lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCJC0xj+yu5alMvLuEqDb69c 3NnVWdMcNVdFe//ds77i3+SNZ/8/O8fIMNdkWqSV0EKNq+cmGdbETPk+/8Ev0ehThWZXDidVux5 LYQIA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Referenced kptr destruction can run from tracing/NMI contexts through
-bpf_obj_drop() and map value update/delete paths, reaching NMI-unsafe
-special field teardown and deadlocks. Justin reported the issue and
-iterated on fixes in [0]-[2], and also confirmed the bpf_obj_drop()
-reproducer in [3].
+The is_tracing_prog_type() predicate omitted BPF_PROG_TYPE_TRACING even
+though fentry, fexit, fmod_ret, raw_tp BTF and similar programs have the
+same execution-context concerns as the tracing program types already
+covered by the helper.
 
-This series rejects unsafe obj drops from non-iterator tracing programs,
-limits map value recycle to NMI-safe field cancellation, and adds
-focused selftests for the obj_drop(), NMI delete, and recycle teardown
-cases.
+This matters for map compatibility checks that reject bpf_spin_lock,
+bpf_list_head and bpf_rb_root in tracing contexts. BPF_PROG_TYPE_TRACING
+programs can run from arbitrary instrumented contexts, including places
+where taking these locks or manipulating graph roots is not safe.
+BPF_TRACE_ITER is different: iterator programs run from task context, so
+we continue to exclude them.
 
-See patches for details.
+This can reject existing fentry/fexit-style programs that use map values
+with these fields. Such programs were accepted only because the
+predicate missed this program type; their use depends on semantics the
+verifier already rejects for equivalent tracing hooks.
 
-  [0]: https://lore.kernel.org/bpf/20260505150851.3090688-1-utilityemal77@gmail.com
-  [1]: https://lore.kernel.org/bpf/20260507175453.1140400-1-utilityemal77@gmail.com
-  [2]: https://lore.kernel.org/bpf/20260519011450.1144935-1-utilityemal77@gmail.com
-  [3]: https://lore.kernel.org/bpf/agyG3eQwgmoJwmj2@suesslenovo
+Move is_tracing_prog_type() checks from check_map_prog_compatibility()
+to points where the fields are actually used to avoid preemptively
+rejecting tracing programs that use maps with such fields but do not
+touch these fields.
 
-Justin Suess (2):
-  bpf: Reject bpf_obj_drop() from tracing progs
-  bpf: Cancel special fields on map value recycle
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c | 37 ++++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
 
-Kumar Kartikeya Dwivedi (3):
-  bpf: Treat non-iterator tracing progs as tracing
-  selftests/bpf: Exercise unsafe obj drops from tracing progs
-  selftests/bpf: Exercise kptr map update lifetime
-
- include/linux/bpf.h                           | 30 +++++++
- kernel/bpf/arraymap.c                         |  8 +-
- kernel/bpf/hashtab.c                          | 32 ++++---
- kernel/bpf/syscall.c                          | 27 ++++++
- kernel/bpf/verifier.c                         | 51 +++++++----
- .../selftests/bpf/prog_tests/htab_update.c    |  4 +-
- .../selftests/bpf/prog_tests/map_kptr.c       | 66 ++++++++++++--
- .../selftests/bpf/prog_tests/task_kfunc.c     | 42 ++++++++-
- .../testing/selftests/bpf/progs/htab_update.c |  4 +-
- tools/testing/selftests/bpf/progs/map_kptr.c  | 89 ++++++++++++++++++-
- .../selftests/bpf/progs/task_kfunc_failure.c  | 43 +++++++++
- .../selftests/bpf/progs/task_kfunc_success.c  | 13 ++-
- 12 files changed, 352 insertions(+), 57 deletions(-)
-
-
-base-commit: 50dff00615522f3ec03449680ca23beb4cfc549c
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ed7ba0e6a9ce..26bfb4465725 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6967,6 +6967,11 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 	u32 spin_lock_off;
+ 	int err;
+ 
++	if (is_tracing_prog_type(env->prog)) {
++		verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
++		return -EINVAL;
++	}
++
+ 	if (!is_const) {
+ 		verbose(env,
+ 			"%s doesn't have constant offset. %s_lock has to be at the constant offset\n",
+@@ -12222,6 +12227,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				return ret;
+ 			break;
+ 		case KF_ARG_PTR_TO_LIST_HEAD:
++			if (is_tracing_prog_type(env->prog)) {
++				verbose(env, "tracing progs cannot use bpf_{list_head,rb_root} yet\n");
++				return -EINVAL;
++			}
+ 			if (reg->type != PTR_TO_MAP_VALUE &&
+ 			    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+ 				verbose(env, "%s expected pointer to map value or allocated object\n",
+@@ -12238,6 +12247,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				return ret;
+ 			break;
+ 		case KF_ARG_PTR_TO_RB_ROOT:
++			if (is_tracing_prog_type(env->prog)) {
++				verbose(env, "tracing progs cannot use bpf_{list_head,rb_root} yet\n");
++				return -EINVAL;
++			}
+ 			if (reg->type != PTR_TO_MAP_VALUE &&
+ 			    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+ 				verbose(env, "%s expected pointer to map value or allocated object\n",
+@@ -17664,9 +17677,11 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
+ 	return __add_used_btf(env, btf);
+ }
+ 
+-static bool is_tracing_prog_type(enum bpf_prog_type type)
++static bool is_tracing_prog_type(const struct bpf_prog *prog)
+ {
+-	switch (type) {
++	switch (resolve_prog_type(prog)) {
++	case BPF_PROG_TYPE_TRACING:
++		return prog->expected_attach_type != BPF_TRACE_ITER;
+ 	case BPF_PROG_TYPE_KPROBE:
+ 	case BPF_PROG_TYPE_TRACEPOINT:
+ 	case BPF_PROG_TYPE_PERF_EVENT:
+@@ -17697,24 +17712,16 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
+-	if (btf_record_has_field(map->record, BPF_LIST_HEAD) ||
+-	    btf_record_has_field(map->record, BPF_RB_ROOT)) {
+-		if (is_tracing_prog_type(prog_type)) {
+-			verbose(env, "tracing progs cannot use bpf_{list_head,rb_root} yet\n");
+-			return -EINVAL;
+-		}
+-	}
+-
+ 	if (btf_record_has_field(map->record, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK)) {
+ 		if (prog_type == BPF_PROG_TYPE_SOCKET_FILTER) {
+ 			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
+ 			return -EINVAL;
+ 		}
+-
+-		if (is_tracing_prog_type(prog_type)) {
+-			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+-			return -EINVAL;
+-		}
++		/*
++		 * Rejecting tracing progs accessing maps with bpf_spin_lock in
++		 * them here would be too conservative; let's defer rejection
++		 * until seeing first use.
++		 */
+ 	}
+ 
+ 	if ((bpf_prog_is_offloaded(prog->aux) || bpf_map_is_offloaded(map)) &&
 -- 
 2.53.0
 
