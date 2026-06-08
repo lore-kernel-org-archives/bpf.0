@@ -1,110 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE97330B01;
-	Mon,  8 Jun 2026 11:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D33834389A
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 11:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780916846; cv=none; b=UNxP/iqE8B5Sqjh3dZcdm58z5C1vBqQsClDANZMpJtMTWRdXDN2KHuqXwqh5BDuICk3xh5U8wbGvMl9sfcRCpGJ/7YKNZ3xY62xkYBIgxUSbBmSxzUOuLFgEV/HXM2WxtBIRLM2qTydNjQUBYqdcZWHJFU3f9YJznm8in5CUPUI=
+	t=1780917264; cv=none; b=kv1ytBNQZg/xmP8wt+hbiMp2R8B/XM2Guc68g/Z4x1NnARtoBc9h1P7TFecaP4h+1pR59Tq5S/u5mZeA6h2FPwb6HYY+3+aLmwNBxG24yk380enNPNIjLatHl65K6e8PFbKkqtht9n2JNKIi8oNUPPuxnAKNm3mSqDhBooRl/os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780916846; c=relaxed/simple;
-	bh=2JzKXlLht8WwgD9yj++BEeDa/5KquAwShMwatn079Sk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Dt/t6A/jTmu2yJ7TdihEVaL8XlMvMbdtAnn2BOUlD/JOProxOnczwH49/VVhQDjHHZ+5AKVGRG+o0wu5Fy9iaQWJyfY2IyXz5tLkqUWnS2vQ6WNJZWIQtgFKiJyH0sX177Y/OwMKNdbFNP+Auamfw1lQOTBHfRmTEUJcCxQ/Xwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBGw3Is5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780917264; c=relaxed/simple;
+	bh=M3DD2m+fXho4svJjmvEEpFXUcIvCQL47UP2rpzrWLYc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Bli0mXqmD50i0L3Pj8zfplcsTLhc1HCLDrHgjxCezppL13x74g0CKX4j10vw7vJXwlSU0U3yvRYtk9vw8Q0UF/YXB6gru3jBIlvbdQ5raJIBUOM9JqHw4YbWiRoH8yF+9LRriOTD7dacizM5ls15y1OVxxbijNYe/OSdQrz3g28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oAHfg5kZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBGw3Is5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6DDF1F00893;
-	Mon,  8 Jun 2026 11:07:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oAHfg5kZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2279B1F00893;
+	Mon,  8 Jun 2026 11:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780916845;
-	bh=2DGoeXcKtLbg8rt5fjSfRzNCiiWHdVOnkxCtyWVtAWE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dBGw3Is5BX7BXtGU/7LE9uNpg3swoL/O2uGE+JKd/+asUTVp/Jhow+7hcFbENNdX/
-	 jon2fTS5YE84HBSpw/zxlusbMkafOLcIVIBH/kqwaoaqw7PTA4IYdW9iXDVhvptGZ5
-	 WWx61pWy7ltOyf5/pc/5eXOlBEmMF/o9varkQqKBEMhSKfPXPInb3sIcLdMgTNTYEa
-	 nWpC3ihgX6RUPxQTVHBKOJg4lDXgnit7O0jpngcDg9sYgWhydkBmufHf34JykOBtn6
-	 E42On7goVmXTzQ2Xf5aQGIZAXh6hYOtNXLV5/946K20VdCaanqHyhcSNWDMXBlR0z1
-	 CjYhzSzrCkCmA==
-Content-Type: multipart/mixed; boundary="===============0807563568734763837=="
+	s=k20260515; t=1780917263;
+	bh=MdfBieDf9iGin2eHbx5wHzTcdCVzv43Uh1ZskgkjRvI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oAHfg5kZX/X6wqerzfIthe/y5ou16mJWyBfOf7ysSuuF1msQH9Ht7RFX3fCLUCVSS
+	 IW3e/+KiXT3Rigk4N7+PXiJHQvIu6tnhihsu4Y9aXuTDX00VrNW4lBpgpkrG4a+6cI
+	 uF3wQKRnktZxyjEM4t6sAjXMbtrawr0ZH6zynoF3hqsDWfrDzGppp4AYE9vlfcyR9F
+	 VHwQ1zpylORwC9LlXp2pCFpNGfIibD6Cm6yrbWrPL7ZdIHjCNwwLcX0iurbtcht65+
+	 JEFGBD97ShMVCTuSt1NtkvJ6Lk1EcUvA48XGIuWyVS1FttHlECXygiEEBjy6tcVKZC
+	 saZKqAA10/oGw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 2/3] LoongArch: BPF: Inline
+ bpf_get_current_task{_btf}() helpers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260608103516.20643-3-yangtiezhu@loongson.cn>
+References: <20260608103516.20643-3-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 08 Jun 2026 11:14:22 +0000
+Message-Id: <20260608111423.2279B1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <9f3df2278bfa3db163dc38d388bb060c9459f1c5eab5f42ffd67969d23e5b99f@mail.kernel.org>
-In-Reply-To: <20260608103516.20643-3-yangtiezhu@loongson.cn>
-References: <20260608103516.20643-3-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v1 2/3] LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
-From: bot+bpf-ci@kernel.org
-To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
-Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  8 Jun 2026 11:07:24 +0000 (UTC)
 
---===============0807563568734763837==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] If JIT compilation is disabled at runtime, the BPF interpreter wil=
+l crash when executing helpers that are claimed to be inlined by the JIT.
+--
+
+commit 58b3e664499664c93a443a71b2b41eaa41f69bcd
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+
+LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+
+This commit implements inlining for the bpf_get_current_task and
+bpf_get_current_task_btf helpers in the LoongArch BPF JIT compiler.
+It extracts the task_struct pointer directly from the $tp register.
 
 > diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 058ffbbaad85..7967de9395ec 100644
+> index 24913dc7f4e83..b93b67d22c26a 100644
 > --- a/arch/loongarch/net/bpf_jit.c
 > +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -1147,6 +1147,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
->
->  	/* function call */
->  	case BPF_JMP | BPF_CALL:
-> +		/* Implement helper call to bpf_get_current_task/_btf() inline */
-> +		if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
-> +					   insn->imm == BPF_FUNC_get_current_task_btf)) {
-> +			move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_TP);
-> +			break;
-> +		}
-> +
-
-sashiko-bot raised a concern in v1 about the dependency on patch 1/3:
-On 32-bit LoongArch builds, does __switch_to() add TASK_STRUCT_OFFSET
-to the task pointer and store the biased pointer directly into $tp
-without unbiasing it?
-
-This patch directly reads $tp to get the task_struct pointer. If the
-preceding patch (1/3) leaves a biased pointer in $tp on 32-bit builds,
-wouldn't this inlined bpf_get_current_task() return an incorrect pointer
-offset by TASK_STRUCT_OFFSET (2000 bytes)?
-
-The concern originated from this review:
-https://lore.kernel.org/all/20260608105329.610981F00893@smtp.kernel.org/
-
-The original comment asked:
-
-> Does this leave a biased task_struct pointer in the $tp register on
-> 32-bit builds?
->
-> Since the current macro is now directly mapped to $tp in
-> arch/loongarch/include/asm/current.h:
->
-> register struct task_struct *current_thread_pointer __asm__("$tp");
-> #define current get_current()
->
-> If a1 (next) has TASK_STRUCT_OFFSET added to it to bypass assembly
-> immediate offset limitations on 32-bit builds, this move instruction
-> places that biased pointer into $tp without unbiasing it before
-> returning.
->
-> When __switch_to() returns to C code, wouldn't evaluating the current
-> macro dereference a pointer shifted by TASK_STRUCT_OFFSET (2000 bytes
-> on 32-bit) and cause immediate memory corruption or kernel panics
-> during context switch?
-
-This comment does not appear to have been addressed.
-
 [ ... ]
+> @@ -2367,3 +2374,14 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+>  {
+>  	return true;
+>  }
+> +
+> +bool bpf_jit_inlines_helper_call(s32 imm)
+> +{
+> +	switch (imm) {
+> +	case BPF_FUNC_get_current_task:
+> +	case BPF_FUNC_get_current_task_btf:
+> +		return true;
 
+[Severity: High]
+Will unconditionally claiming that the JIT inlines these helpers cause
+a crash when JIT compilation is disabled at runtime?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+If net.core.bpf_jit_enable=3D0 (and CONFIG_BPF_JIT_ALWAYS_ON is not set),
+the program falls back to the BPF interpreter. The verifier calls
+bpf_jit_inlines_helper_call() during fixup_bpf_calls():
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27132522999
---===============0807563568734763837==--
+kernel/bpf/fixups.c:fixup_bpf_calls() {
+    ...
+    /* Skip inlining the helper call if the JIT does it. */
+    if (bpf_jit_inlines_helper_call(insn->imm))
+        goto next_insn;
+    ...
+}
+
+Because this now returns true, the verifier skips fixing up the call offset,
+leaving insn->imm as the raw helper ID. The BPF interpreter then handles
+BPF_JMP | BPF_CALL by executing (__bpf_call_base + insn->imm).
+
+Calling __bpf_call_base + raw_helper_id jumps into an invalid address space.
+Could this lead to an immediate kernel panic when the BPF interpreter execu=
+tes
+these helpers?
+
+> +	default:
+> +		return false;
+> +	}
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608103516.2064=
+3-1-yangtiezhu@loongson.cn?part=3D2
