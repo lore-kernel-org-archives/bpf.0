@@ -1,121 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C926C3AEF4A
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AF731E850
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780907269; cv=none; b=ce2/qjoZstl/eFpCoKXsoe5onoC1v6QYRVvBCT2f0FRhVcX5sTD4RpWneIroyuPYxbPQ27K679LkMtJleYe+wUGxwBUMzvNUFNil9yoAug74EzQRGLWR8a44Pqf7fJI31hdX118LpEOYRsElz4ImdUdxCZ8v/nU5sr8eqEhbopw=
+	t=1780907496; cv=none; b=pJH0ITXHmNddbtIXXctzbCLLC4Ok1fWtcIFW4g7mmvtAnVgIHF3iRv79Ia18yRrMOL1dqcF3kHws8mPC0k9+bet6zyl+U7juZv/ppV+RSU/q+VKVi8RwH4LXYz7lrEm3PMEby78PFVhRxS8YZ4JKkn7GJy4+Ug2/pImXlOXB3zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780907269; c=relaxed/simple;
-	bh=S4bBjnCGjsC2BWuLIr5I83iVS2dQJBmuksSVJLQ/ReQ=;
+	s=arc-20240116; t=1780907496; c=relaxed/simple;
+	bh=kHueoHBiVl6RAbc2Hb9D79YQO7gNE7iaqTHY4hTGS1c=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=StqhFqu8vqHEsId1/ONemclrfTmJODi7s701oBgyHJunS7XRx3ax8pldZvPhZ3soBgZjb/EbyeuA1IZQH1IfZmyxJvc3WfhbBNnLRrzLwdDR/fgSn3ui137JWoj7ROTm40ZWo2g5KZMzozBtqkxEfe4ab4fQZoOkT99fo07VF5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NRUG0WG9; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=OK8BBdqs5zoEHv+bDf2BKEKzMofYfVVADPeqncJqMxwD0urvYmjI9DToo3illNMfnZBI1Y6TVn3D/uSedvMO5JjZ2XH89B+A3eYrQ806NHp9bI2W7QNVYEzCUmXvURnfYgwqpwnscx/QL0cjY23kdIPvo2Nae3NLOHuMJKTGaLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qn50OTiX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NRUG0WG9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399BB1F00898;
-	Mon,  8 Jun 2026 08:27:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qn50OTiX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0C81F00893;
+	Mon,  8 Jun 2026 08:31:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780907266;
-	bh=UNFVl6CGRdqx2ftUWo01UqUsIxDmH6U37EdYcgfHkfE=;
+	s=k20260515; t=1780907495;
+	bh=D8NItsj86tz8Pvh/iq4Lc4Sh0cHHY9vjtSKZkheiUp8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NRUG0WG9x1ywOrzNf79zJ0GOUZdAjQZZn11koR/LUcXWPBPEnFIRuB93Lc83+Laz/
-	 QGmmWjETb+h3hTpFgxDoLWzPK2bP3U1mcWA+Y0DMtq3/gSua/nmJs6EgssTYRtC17J
-	 vVmBTTFP8ZIQwwxLS8+MTZkgjK03FMBCaZhfdQIwd2/pPAsdOD7XDv/GKtAKIrL1HY
-	 /eOOIN5RBk4kidWMoAAPHn1GSwFnycmaVKXvAWenh1RrjCoqTsxlVAOG06zDgCflUc
-	 tKIiwp6hQcemX49vH0GfXCrJT1x7t3WIq2/3vqy5ejiMwKKy74iMJBYX0gGSdmkio2
-	 OzHhf+02QzRzg==
+	b=Qn50OTiXqEYWJKlUVadwjp+BlwMVGWLyuBaodNULMqSNy+WnuRfa96jUcYU3dKieF
+	 z/Njl7BMEjrRVVwHTWU6EKg8V6LGg0f13nnRia5FqtTCUwxLmEDnNrk0thoEBV/vr3
+	 pccpIwLlJUH8MTcSgwPz15Vudo/9SgDuY6YEmPZteY8xdYZ30O4DusVFrEMPzo83TR
+	 T2EsRmWLoaZDwChrVdA0di2HYtCu+6dzG5iPRJkTIO75Qo5Db+cKm6JFx2GfmL4lI5
+	 LDvY09L2OoPIvw+8rsYydCE37HA8D9R2RAbtFMKHb1o+ftMrC5u2o3a5Tomy0rK47z
+	 lTPd+Ouo49p3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 06/15] asm-generic: barrier: Add
- smp_cond_load_acquire_timeout()
+Subject: Re: [PATCH v12 02/15] arm64: barrier: Support
+ smp_cond_load_relaxed_timeout()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ankur Arora" <ankur.a.arora@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608080440.127491-7-ankur.a.arora@oracle.com>
-References: <20260608080440.127491-7-ankur.a.arora@oracle.com>
+In-Reply-To: <20260608080440.127491-3-ankur.a.arora@oracle.com>
+References: <20260608080440.127491-3-ankur.a.arora@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 08:27:45 +0000
-Message-Id: <20260608082746.399BB1F00898@smtp.kernel.org>
+Date: Mon, 08 Jun 2026 08:31:34 +0000
+Message-Id: <20260608083135.6C0C81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] ACQUIRE semantics violation in `smp_cond_load_acquire_timeout()` o=
-n weakly-ordered architectures.
+- [High] Zero or negative timeout requests incorrectly block in WFE/WFET.
+- [Low] The macro `cpu_poll_relax` references `arch_timer_evtstrm_available=
+`, which is not exported, causing link errors for loadable modules.
 --
 
-commit 0c67207964772b92d28f5af7e4a97ea44a103e9b
+commit aa12eab164f56555b3ffac8b49cd2f96ce88e36c
 Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-asm-generic: barrier: Add smp_cond_load_acquire_timeout()
+arm64: barrier: Support smp_cond_load_relaxed_timeout()
 
-This commit adds the acquire variant of smp_cond_load_relaxed_timeout().
-It attempts to provide acquire ordering by reusing the relaxed variant and
-adding a control dependency combined with smp_acquire__after_ctrl_dep().
+This commit supports waiting in smp_cond_load_relaxed_timeout via
+__cmpwait_relaxed on ARM64 when the event-stream is enabled.
 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index c56df9513a084..0ab26e98842c0 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
+> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/ba=
+rrier.h
+> index 9495c4441a46b..6190e178db51f 100644
+> --- a/arch/arm64/include/asm/barrier.h
+> +++ b/arch/arm64/include/asm/barrier.h
 
 [ ... ]
 
-> +/**
-> + * smp_cond_load_acquire_timeout() - (Spin) wait for cond with ACQUIRE o=
-rdering
-> + * until a timeout expires.
-> + * @ptr: pointer to the variable to wait on.
-> + * @cond_expr: boolean expression to wait for.
-> + * @time_expr_ns: monotonic expression that evaluates to time in ns or,
-> + *  on failure, returns a negative value.
-> + * @timeout_ns: timeout value in ns
-> + * (Both of the above are assumed to be compatible with s64.)
+> @@ -219,6 +220,26 @@ do {									\
+>  	(typeof(*ptr))VAL;						\
+>  })
+> =20
+> +/* Re-declared here to avoid include dependency. */
+> +extern bool arch_timer_evtstrm_available(void);
+> +
+> +/*
+> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxe=
+d()
+> + * for the ptr value to change.
 > + *
-> + * Equivalent to using smp_cond_load_acquire() on the condition variable=
- with
-> + * a timeout.
+> + * Since this period is reasonably long, choose SMP_TIMEOUT_POLL_COUNT
+> + * to be 1, so smp_cond_load_{relaxed,acquire}_timeout() does a
+> + * time-check in each iteration.
 > + */
-> +#ifndef smp_cond_load_acquire_timeout
-> +#define smp_cond_load_acquire_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	__unqual_scalar_typeof(*(ptr)) VAL;				\
-> +	VAL =3D smp_cond_load_relaxed_timeout(ptr, cond_expr,		\
-> +					     time_expr_ns,		\
-> +					     timeout_ns);		\
-> +	if (cond_expr)							\
-> +		barrier();						\
-> +	smp_acquire__after_ctrl_dep();					\
+> +#define SMP_TIMEOUT_POLL_COUNT	1
+> +
+> +#define cpu_poll_relax(ptr, val, timeout_ns) do {			\
+> +	if (arch_timer_evtstrm_available())				\
+
+[Severity: Low]
+Will this regression cause undefined symbol errors for loadable modules?
+
+Since smp_cond_load_relaxed_timeout is a generic synchronization API, it wi=
+ll
+be expanded in caller modules and rely on cpu_poll_relax.
+
+However, arch_timer_evtstrm_available is currently only exported for KUnit
+testing in drivers/clocksource/arm_arch_timer.c:
+
+    EXPORT_SYMBOL_IF_KUNIT(arch_timer_evtstrm_available);
+
+Does this need a general EXPORT_SYMBOL to prevent linking failures when use=
+d in
+standard loadable modules?
+
+> +		__cmpwait_relaxed(ptr, val);				\
 
 [Severity: High]
-Does this sequence correctly establish a control dependency for the caller's
-subsequent instructions?
+Could this inadvertently block when given a zero or negative timeout?
 
-According to Documentation/memory-barriers.txt, control dependencies only
-apply to stores executed strictly within the conditional clauses (the true
-or false branches), not to code following the if statement. Since the
-caller's subsequent stores reside outside this conditional block, they
-appear unconditional to the CPU.
+When looking at the generic wrapper in include/asm-generic/barrier.h,
+smp_cond_load_relaxed_timeout executes cpu_poll_relax on the first iteration
+before evaluating if the timeout has expired:
 
-Furthermore, smp_acquire__after_ctrl_dep() typically falls back to
-smp_rmb(). On weakly-ordered architectures like RISC-V, where smp_rmb() is
-implemented as "fence r, r" and only enforces load-to-load ordering, could
-the CPU speculatively execute subsequent stores before the final load of VAL
-completes?
+        cpu_poll_relax(__PTR, VAL, (u64)__timeout);
+        if (++__count < __spin)
+                continue;
 
-Could this violate the expected acquire semantics if the caller relies on
-the barrier in the timeout or failure path?
+If a caller provides a zero or negative timeout expecting an immediate
+non-blocking poll, this falls through to __cmpwait_relaxed.
 
-> +	(typeof(*(ptr)))VAL;						\
-> +})
-> +#endif
+For negative timeouts, casting to u64 results in a huge unsigned value
+(U64_MAX). Might this cause WFET to block indefinitely?
+
+Even if WFET is unsupported, __cmpwait_relaxed uses WFE, which ignores the
+timeout and blocks the CPU until the variable changes or an event stream
+interrupt occurs. Does this introduce unintended latency for what should be=
+ a
+zero-latency fast-path failure?
+
+> +	else								\
+> +		cpu_relax();						\
+> +} while (0)
+> +
+>  #include <asm-generic/barrier.h>
+> =20
+>  #endif	/* __ASSEMBLER__ */
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608080440.1274=
-91-1-ankur.a.arora@oracle.com?part=3D6
+91-1-ankur.a.arora@oracle.com?part=3D2
