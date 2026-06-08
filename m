@@ -1,103 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3343F86F0;
-	Mon,  8 Jun 2026 15:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A513D31B824
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780932542; cv=none; b=qEFdNq3ewbMHiicbX1/YQq46ImVWGpCbG7UYbPUmTlnJBDFQrF8AIRyxqMlUGDxphS+Kse3mRfsFQtN8R+lA9hEDoHyspF8c+gA83drxttpJUJenY5X7r7XwhqrWDwfQIdQDN+YsnfaFuBCBGJZh+AX1e8G4WHD32jCwKK1m6Sc=
+	t=1780933209; cv=none; b=AuBUwEHdmIfLvBpUBRdTgr5d9YDnyrF51ZoAyW2azAqYRV5rH6P+2YGxrew/lN8S6yHYeU1f7JlsmF/U2kCAa0+7Xsi5/ypzWxfgWgcAHjUgL5Wd1tHqpIxRjqejhlAqjuWlmAnEDLnqV1IafzXUWYfcrsy1peTWh41uHP5bbR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780932542; c=relaxed/simple;
-	bh=ruOoPw8KSp1nwPQ+QqQCeHylpQlZOONgAyyZkL8UwWE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mscfYL+F8EZgNsnLCASSfJTn/vPGDMfzSB9l07qIJWaaclk1Of+ibEKqUeL1mtAnnTJDE7+OKuNJJEQgr5NKKvqiH7ambTmNywwt8wZ+OafrBpnF1kf91LDXsYPlnwEN8NjGcf3AHmL+v0LRtTJqzLD2qHYQg1No+UZAW9bM0Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K39J/HsK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780933209; c=relaxed/simple;
+	bh=FkvF3mbkjfiW7CKANbeF6JmBwxGZ/+51vBSjHFyxdHw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=HUzaH10feuZ7Uwkt89wcEEKs7w8IO0lf8cFUVFGGJ2MFBZ8dIjR3S/doMIr574VDKrugsRY6wydOL4i2pCDHV9LOBwSddxFWom0/O8mlWBeqvi1t7t+xb8nXfdPpOOOpoO3D/NXgRW5PrceMBnt+dJqKhhE7j6MNhVrwyUl7PeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMah+VO2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K39J/HsK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBF01F00893;
-	Mon,  8 Jun 2026 15:29:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMah+VO2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E011F00893;
+	Mon,  8 Jun 2026 15:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780932540;
-	bh=Y7zUaafp4sH7EgWu88JE7CmhzxOdcagT03WiG0Hhjug=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=K39J/HsKTtU1zZOkisYAslGhwrKX7/v2POLYCvMKLN8Rl2azWwu/XNYYzeKdq4pQg
-	 dDuSULhjfvtYXB+lSijcohN4+p1j2efQ9sUziq+cbQaSHjcA3M/Wt1rzc5l/vuvlxH
-	 vW0xo9q+gUWp4uM3FJ/8q9Tu7oLn8mnDeEvPm/qIS4951QI3hIYOPrYn/eZ4ocwiXk
-	 V8U7ppEPeRDhV0MeudFIQLS7LcImxmYTvvrLwHS+GYzOpECKCQuAAoTpffOn2uMmvU
-	 Hm9I4jQ0VzuFe1BxL4uvY5BzpTwnq6zuoO34HovhyOzIWyXA2v4ImdanVBFY2d+ypY
-	 E/mFceOWJy9GA==
-Content-Type: multipart/mixed; boundary="===============6644831115638570827=="
+	s=k20260515; t=1780933208;
+	bh=bV2Wn13qXSoUF4LeGxQpijy13gpVXBh6Q2peXdZmlno=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=YMah+VO2HSs038d0hpyGG0fJodVGzuakap9zPpgooTGNGdvMrG5K7o32SZsXbbxhE
+	 i/CowjQvsPD8icZTYlQipu3xnw19kF2Ec0vVmJ9L5yUYJDFkGPMqU/LBOvZDe6w0MT
+	 UGmNMdFhlSQspSxtQa9H94e9tb1yxEYcwRkzZCTnTabfAkkdTozCOGxzHMfU26dqX/
+	 WGjYYZacrJoeCbnBUTXKyUCk2PtI8X9BuZZCRxs2AvSJE1wj/H/jwgPEDvE0SnneEB
+	 J920gXV/9QqoH4JswynLExHg78QAlvX2KV+vlVzaCNKhhr0zF+Am1A0XfPu2sGcSsG
+	 X8jcoh+XyqZ5w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 2/5] bpf: Reject bpf_obj_drop() from tracing
+ progs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260608144841.1732406-3-memxor@gmail.com>
+References: <20260608144841.1732406-3-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 08 Jun 2026 15:40:07 +0000
+Message-Id: <20260608154008.27E011F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <f7c7f1ea3da3115928819d4b4071cde9bda3786ffaf1fd60b06180719d64f625@mail.kernel.org>
-In-Reply-To: <20260608145113.65857-6-leon.hwang@linux.dev>
-References: <20260608145113.65857-6-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v5 5/9] bpftool: Generate skeleton for global percpu data
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  8 Jun 2026 15:29:00 +0000 (UTC)
 
---===============6644831115638570827==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 6ae7262ebe0c..e0c5c643fe9e 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
+Pre-existing issues:
+- [High] BPF_TIMER and BPF_WORKQUEUE fields are incorrectly whitelisted as =
+NMI-safe, causing a deadlock when bpf_obj_drop() is called from NMI context.
+--
 
-[ ... ]
+commit 3287c13e44b513ce0d9b41e4aa24cd264b519b04
+Author: Justin Suess <utilityemal77@gmail.com>
 
-> @@ -254,6 +254,11 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
->  	return NULL;
+bpf: Reject bpf_obj_drop() from tracing progs
+
+This commit restricts bpf_obj_drop() and bpf_percpu_obj_drop() in tracing
+programs to only allow objects whose fields are explicitly whitelisted as
+NMI-safe. It replaces the previous blacklist approach with a whitelist to
+better handle future field types.
+
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct=
+ btf_record *rec, enum btf_f
+>  	return rec->field_mask & type;
 >  }
->
-> +static bool bpf_map_is_percpu_data(const struct bpf_map *map)
+> =20
+> +static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
 > +{
-> +	return bpf_map__is_internal(map) && bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY;
+> +	switch (type) {
+> +	case BPF_SPIN_LOCK:
+> +	case BPF_RES_SPIN_LOCK:
+> +	case BPF_TIMER:
+> +	case BPF_WORKQUEUE:
+
+[Severity: High]
+This is a pre-existing issue, but is it safe to include BPF_TIMER and
+BPF_WORKQUEUE in this NMI-safe whitelist?
+
+Dropping an object with these fields calls bpf_timer_cancel_and_free() or
+bpf_wq_cancel_and_free(), which synchronously invokes bpf_prog_put() via
+bpf_async_update_prog_callback():
+
+kernel/bpf/helpers.c:bpf_async_cancel_and_free() {
+    ...
+    bpf_async_update_prog_callback(cb, NULL, NULL);
+    ...
+}
+
+If this drops the last reference to the BPF program while in NMI context,
+__bpf_prog_put() falls back to schedule_work() since irqs are disabled:
+
+kernel/bpf/syscall.c:__bpf_prog_put() {
+    if (in_hardirq() || irqs_disabled()) {
+        INIT_WORK(&aux->work, bpf_prog_put_deferred);
+        schedule_work(&aux->work);
+    } else {
+        ...
+}
+
+Since schedule_work() takes a raw spin lock on the workqueue pool, couldn't
+this hard deadlock if the NMI interrupted another thread that was already
+holding the workqueue pool lock?
+
+Unlike BPF_TASK_WORK, which safely defers destruction via irq_work_queue
+when irqs_disabled(), these fields do not appear to be NMI-safe.
+
+> +	case BPF_TASK_WORK:
+> +	case BPF_KPTR_UNREF:
+> +	case BPF_REFCOUNT:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
 > +}
-> +
 
-[ ... ]
-
-> @@ -847,7 +851,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
->  	bpf_object__for_each_map(map, obj) {
->  		const char *mmap_flags;
->
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_mmapable_map(map, ident, sizeof(ident)) || bpf_map_is_percpu_data(map))
->  			continue;
-
-By skipping the .percpu map here during light skeleton generation in
-gen_trace(), is the user-space buffer for .percpu left writable?
-
-If a user modifies skel->percpu after the light skeleton is loaded, will
-that silently succeed without actually updating the kernel per-cpu map?
-
-The regular skeleton path appears protected, since libbpf mprotect()s the
-percpu mmaped buffer read-only at load in bpf_object__populate_internal_map().
-For the light skeleton, gen_trace() skips the .percpu map, so its initial
-value buffer is never finalized with skel_finalize_map_data() and never
-mprotect()'d to PROT_READ, leaving it writable.
-
-Does the generated light skeleton need an explicit mprotect(..., PROT_READ)
-on the .percpu initial value buffer to enforce the read-only constraint
-described in the commit message?
-
-This was raised on v4 (https://lore.kernel.org/bpf/20260414212650.4F89BC19425@smtp.kernel.org/)
-where the response was that the mprotect(..., PROT_READ) added in patch #4
-should be moved into this patch so it isn't missed. The v5 code here looks
-unchanged from v4, and the mprotect does not appear to have been moved in.
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27147120330
---===============6644831115638570827==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
+406-1-memxor@gmail.com?part=3D2
