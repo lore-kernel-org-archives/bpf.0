@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BFA3E7BCA
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7133ED3BB
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780931471; cv=none; b=HJs3LMhqX6mHYEJd+5O67DPnhUZwqW/7FnuUPSxjp3I9lrctjGD7CjhECWZvWUeX5w/9sfvTEP75UHwRevT3A5A4WJu6ZQmsQw340+CnFgm4blQ25xMKNU4KdcoQR1JM9C5IhS/7+DEYzVYa/SupBmk1jW/h9ove96cwOgWrqt8=
+	t=1780931612; cv=none; b=BRgAGMrM+Qa1/sojVLTaOEcwBPu7gLgcCkeKfmu/PXIWvHk6RgtQQn4ETNy0gXP+LX2ASgNu/oHoBhCmnF2bhaHg1i9uyce0+xxpnkpgUP295p/0AJxwNYRxy4Ucdm6Jqmb48Z9P+cTXVgEcFQMT3C/pnmApJUJFQuiRJazUgNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780931471; c=relaxed/simple;
-	bh=esqEcT6dCMPEA9qubbqCfAjxBDsaVuJbMCm9RiX+no0=;
+	s=arc-20240116; t=1780931612; c=relaxed/simple;
+	bh=PDGOGwNyvxwNHGYfEd4yH5vBevgdDQR+TfpgiMpAmKQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=X8MVjrUaZcKqir+/DbMXGPuXtO6qli7lV+Lll8EPlZl0bXKw/znwyl6dxZyNcCTq6pnpR1XF1N9aly81F6dVm6yshAz0b0rmCFV7xGKSLkJNTr1mQLOGDeYyVIcTP1Z7uBEqg9KM3WppWNbDJqazg7AK3ki587cK0cpw6DoxUtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtR38CRp; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=YdMLBg9TKAunhoT+YpPlmxDF3FnXE81jqXtM2qLValPK8C+VDlHTFCMlByWrLTAUdTfbPDMV6xrQVb500H2t0c6uOVrwA9Xc5DQNIZuYWV09kQ3IT8RsGPWcapQKIRHFp4YtJ2xZUese9/m/Oh6aeHKP0r4pD3Q33GDj6PshDDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/1J0VYw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtR38CRp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A701F00893;
-	Mon,  8 Jun 2026 15:11:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/1J0VYw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730D81F00893;
+	Mon,  8 Jun 2026 15:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780931470;
-	bh=al0TBRuE6aj4B/+craPiTs7pl7E/zIz69622If/uPj8=;
+	s=k20260515; t=1780931611;
+	bh=kUCBROqQWOKxcqa/tHac2i3i7tr8p4yrPGmpND/ilEI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gtR38CRpTywiX3h86i2PfzHOGZPeL8uNxwJpoZCwH15qBWgZssKPErXxhMdHHvSiS
-	 riyeDuBw4EkToQS+K5doyJxPv3AmiBYsUQ+1wowDkqquLQFXZ4ZYAEPdWauRg8VZ33
-	 BybIVLq+BV6HDekOInPJXX5WOmZhHDJ5nb0sqv+vIxv595EGF38OKQu48EI2c5HheZ
-	 18FLoq6S+k5TGB+lZlcpMKyKbrTVifq/PcjfyL6+BAbzzqcxzFlmivcukbSrdZNLRK
-	 JuEGgxJ4efURJ49uLJdUoBAyUEFR6qan7N+DnmssMlTN0UHA9iygKYgthVI0z0SqVE
-	 Trh8U50LNXDtQ==
+	b=Y/1J0VYwuZRr4odXLVHPI+m57EpZYVlbVZWOvGxeaZzWRbdRRqhkH/OpQbVQMx89N
+	 UP4o2IcH3eN3159QppfxQLkDbmwk2xe/aamu1D0KdMazMZxB93cRto1R/a1TJkc91O
+	 ry2vAk7evBB0QpbyUI+qCr0v0w+88p890C/WJx3ebV1XQf8pHUqRoPAnJ1ZRSkGrn4
+	 kSIW0AmARub85DwjN7QUC+F1k7cJwpjAURAsz6eC35WhG38k9Pta8NhxA8MCKvxc51
+	 152VjWBBJRCMfxKsmDRvgwqLjkT43T7ztk+QbUzR6hU0+c7qC/PVIPOKNKHv6znCIh
+	 bC14CePWwcmLw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 5/9] bpftool: Generate skeleton for global
- percpu data
+Subject: Re: [PATCH bpf-next v1 1/5] bpf: Treat non-iterator tracing progs
+ as tracing
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608145113.65857-6-leon.hwang@linux.dev>
-References: <20260608145113.65857-6-leon.hwang@linux.dev>
+In-Reply-To: <20260608144841.1732406-2-memxor@gmail.com>
+References: <20260608144841.1732406-2-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 15:11:09 +0000
-Message-Id: <20260608151109.D0A701F00893@smtp.kernel.org>
+Date: Mon, 08 Jun 2026 15:13:31 +0000
+Message-Id: <20260608151331.730D81F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,87 +46,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Exposing `.percpu` maps via `skel->percpu` in generated skeletons =
-introduces severe abstraction violations: silent write failures in Light Sk=
-eletons and stale data reads in Subskeletons.
+- [High] Tracing programs can deadlock the kernel by acquiring `bpf_spin_lo=
+ck` via `bpf_map_update_elem` with the `BPF_F_LOCK` flag, bypassing the ver=
+ifier's safety checks.
 --
 
-commit 8d5ae684c03b8ed70309315b60b9b65b471e24bd
-Author: Leon Hwang <leon.hwang@linux.dev>
+commit 0ab13739c010beba3fc294b839936a5123924643
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpftool: Generate skeleton for global percpu data
+bpf: Treat non-iterator tracing progs as tracing
 
-This patch enhances bpftool to generate skeletons that properly handle glob=
-al
-percpu variables. The generated skeleton includes a dedicated nested struct=
-ure
-for percpu data, allowing easier initialization.
+This patch updates the is_tracing_prog_type() helper to include non-iterator
+tracing programs. It modifies check_map_prog_compatibility() to defer rejec=
+ting
+tracing progs that access maps with bpf_spin_lock until their first use,
+avoiding overly conservative rejections.
 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 6ae7262ebe0c1..e0c5c643fe9ea 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ed7ba0e6a9ce0..26bfb44657253 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 [ ... ]
-
-> @@ -263,13 +268,12 @@ static bool is_mmapable_map(const struct bpf_map *m=
-ap, char *buf, size_t sz)
->  		return true;
+> @@ -17697,24 +17712,16 @@ static int check_map_prog_compatibility(struct =
+bpf_verifier_env *env,
+>  		return -EACCES;
 >  	}
 > =20
-> -	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMA=
-PABLE))
-> -		return false;
+>  	if (btf_record_has_field(map->record, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK=
+)) {
+>  		if (prog_type =3D=3D BPF_PROG_TYPE_SOCKET_FILTER) {
+>  			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
+>  			return -EINVAL;
+>  		}
 > -
-> -	if (!get_map_ident(map, buf, sz))
-> -		return false;
-> +	if (bpf_map__is_internal(map) &&
-> +	    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_percpu_da=
-ta(map)) &&
-> +	    get_map_ident(map, buf, sz))
-> +		return true;
-> =20
-> -	return true;
-> +	return false;
->  }
+> -		if (is_tracing_prog_type(prog_type)) {
+> -			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+> -			return -EINVAL;
+> -		}
+> +		/*
+> +		 * Rejecting tracing progs accessing maps with bpf_spin_lock in
+> +		 * them here would be too conservative; let's defer rejection
+> +		 * until seeing first use.
+> +		 */
 
 [Severity: High]
-Does forcibly treating the percpu maps as mmapable here break subskeletons?
+Is it possible for tracing programs to deadlock the kernel by acquiring
+the spinlock via bpf_map_update_elem()?
 
-Since subskeletons operate on an already-loaded BPF object to read or write
-live state, this change might cause do_subskeleton() to export pointers to
-disconnected user-space memory.
+By deferring the rejection to process_spin_lock(), we prevent explicit
+bpf_spin_lock() calls in the tracing program. However, tracing programs mig=
+ht
+still be able to call bpf_map_update_elem() with the BPF_F_LOCK flag.
 
-If they point to the disconnected PROT_READ initialization buffer instead of
-live state, would reads always return stale initial data and fail to reflect
-live kernel modifications?
+If a tracing program passes BPF_F_LOCK:
 
-[ ... ]
+kernel/bpf/hashtab.c:htab_map_update_elem() {
+	if (unlikely(map_flags & BPF_F_LOCK)) {
+		if (unlikely(!btf_record_has_field(map->record, BPF_SPIN_LOCK)))
+			return -EINVAL;
+    ...
+}
 
-> @@ -847,7 +851,7 @@ static int gen_trace(struct bpf_object *obj, const ch=
-ar *obj_name, const char *h
->  	bpf_object__for_each_map(map, obj) {
->  		const char *mmap_flags;
-> =20
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_mmapable_map(map, ident, sizeof(ident)) || bpf_map_is_percpu_d=
-ata(map))
->  			continue;
-> =20
->  		if (bpf_map__map_flags(map) & BPF_F_RDONLY_PROG)
+This leads to copy_map_value_locked() which takes the lock:
 
-[Severity: High]
-Does skipping map finalization for percpu maps in light skeletons leave the
-user-space initialization buffer mapped as PROT_READ | PROT_WRITE?
+kernel/bpf/helpers.c:copy_map_value_locked() {
+    ...
+	preempt_disable();
+	__bpf_spin_lock_irqsave(lock);
+    ...
+}
 
-In standard skeletons managed by libbpf, the buffer is protected with
-PROT_READ to explicitly crash on invalid writes.
+Since tracing programs can run in NMI context, if an NMI interrupts another
+context that is currently holding this exact spinlock, wouldn't it result in
+an AA deadlock?
 
-If we skip finalization here in gen_trace(), it seems writes to lskel->perc=
-pu
-after load() might silently succeed without actually updating the kernel ma=
-p.
+Does the verifier block BPF_F_LOCK dynamically at load time, or does removi=
+ng
+this map compatibility check expose us to this deadlock vector?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608145113.6585=
-7-1-leon.hwang@linux.dev?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
+406-1-memxor@gmail.com?part=3D1
