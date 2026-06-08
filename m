@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C393ACA75
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE4B3AC0C0
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780906931; cv=none; b=pXKg3Rv1ZNRHVZJ0u6R8nazO94R4FCeEWdlHbtlDqmPe7p5k17AjRUiAgSVDRrw7QdaQi9BjtzE9dtqH/VhsP37GHvdW3W4QY5vz2Znbm4rY1YEwd0Qqw7n7O0qwtmZyiCQNeb+ibyTu/DWTdMTwfxeTmMZKv+/T7b28iEoLOi4=
+	t=1780906987; cv=none; b=OwxFHoRPLr8ZiN9hdJ1EBYXMixwdjetDpz62d0iQ+NViGuiPfWWw4sYXmmRqXeCROx3Lt3zUOYlbuDldF5048WgkM2USOCCEFWkdK9Lx+5OWcgZZrueJPIciwRB/CAxCpCjV4P53i4fwK3tmQG1jwG2ZPxKHGe02cCD3FrhrEUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780906931; c=relaxed/simple;
-	bh=9EatgNzRlrzvOCg6toTqMXh0hZ5O+OyeMIYbIZdHtyA=;
+	s=arc-20240116; t=1780906987; c=relaxed/simple;
+	bh=ytAKH//DFzNZfRCGI1xGCTwP8eb3k3IMqu1ALqCQNFw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZfeZN1VXIGmTboKkAu2Cq+W7g1JarWEm/RdykfV5q6DimXDaDQYE1+wlg3aUqjhwCETFWXUKnyLckACpU3cUmvi6HOJHOQShn6/c3Y9nQ27VBYDGy2zQRtUuOqpvXGKpDeNXPFhsc2losRVOPJr7sDa+wXpKEgdh2KlafvjLz+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQr8PTFO; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bcu4tt8FywLkleTlU/PAu1xeGUIJiwguZkkdvWwytlgdnexriN2x8IEAgKkEmxpVPsCVj3gABMHyNSNt+Ll11IUxyaWlqJfOQ+wj1NXR8+M4u9tHbVpi++W8V6+gvJY05Xee2SnJnGnlEC+goLt4SkcB4EYJZ1tlm6WnHhRpRGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYNPB8hX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQr8PTFO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4151F00898;
-	Mon,  8 Jun 2026 08:22:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYNPB8hX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADEA61F00893;
+	Mon,  8 Jun 2026 08:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780906928;
-	bh=/3Os5gXhiIDUvDuL+5vagjPaDAGFNCYZN1P5+ZZpd0E=;
+	s=k20260515; t=1780906984;
+	bh=rny1OZV3T1dRVFf/PA0/vCgAu432iNsOCnYPQRZ4RpQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RQr8PTFOUCbZL9tiSP1YlPoLe6CaWN48VFYaNk7Rz2GF38t0SW2joUp7nLlnIoJAg
-	 uDqqOpLnrdnlEkzBVXZkUHEZ7/BJAl5HV9vwlFy3AWhCNBo+tkaGL/TMHFV7aGt+Ni
-	 L/FPC0WVtQy4Sgas63akbm9g8lds1mk8p770XYVEaIqZoyOmxslQN1sdcq6kgwqJKA
-	 5EVERoFIQjQBRFJyagNceW5dJXCo5FSORtqQFs2JklwHZfal9wPyg4gbssQAqg6F/z
-	 ZP7ojxDHqYdGYWCdc5N2UqXputgNWyCNQ+RfofUNoL80A2oadCL/SQ4kFr4O1U7zvI
-	 Xnzfc7yNu8gOg==
+	b=SYNPB8hXmEhtPRkzYe25nPgFrgxgo1KtFGRH905U4035bmmfqwzlrqGtovl0BfUNM
+	 3s4Uz6bXeeeBdFTHbOJUBm2ynfKxWkE+Wo4KjjrtPTAlSFhE3cjM9EpH7b7syKW3Le
+	 XqZI1T9v4KW5RzRlMgki2uGwbQRmkPkY93d6zyFU5QTcABd8W9+RBwyVkEy0FMqyCE
+	 /Rzrr82wcb2PB8L07L98NrafAZbTr2P7SgjveqjibVNK7ya3QSZEiLKZycCMWc7R/f
+	 ROaAD7eho/2oXvk8sYysnpb1rXKB7jaYPjjl9S/Las09lveXdS1yEtf+Ts1T2E4A/I
+	 jC3OjPPneDJzA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 03/15] arm64/delay: move some constants out to a
- separate header
+Subject: Re: [PATCH v12 07/15] atomic: Add atomic_cond_read_*_timeout()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ankur Arora" <ankur.a.arora@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608080440.127491-4-ankur.a.arora@oracle.com>
-References: <20260608080440.127491-4-ankur.a.arora@oracle.com>
+In-Reply-To: <20260608080440.127491-8-ankur.a.arora@oracle.com>
+References: <20260608080440.127491-8-ankur.a.arora@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 08:22:08 +0000
-Message-Id: <20260608082208.8B4151F00898@smtp.kernel.org>
+Date: Mon, 08 Jun 2026 08:23:04 +0000
+Message-Id: <20260608082304.ADEA61F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,74 +45,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Integer overflow in RPMH_USECS_TO_CYCLES causing premature wakeup =
-from cpuidle for sleep durations > 223 seconds.
+- [High] The `atomic64_cond_read_acquire_timeout` and `atomic64_cond_read_r=
+elaxed_timeout` macros can cause torn reads and synchronization failures on=
+ 32-bit architectures.
 --
 
-commit 9dcd4c7ce0611e9eee2b5361157ecadfee51f77d
+commit aafb3af0335d368d82aaca86bf6b2a18f8ae6033
 Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-arm64/delay: move some constants out to a separate header
+atomic: Add atomic_cond_read_*_timeout()
 
-Moves some constants and functions related to xloops, cycles computation
-out to a new header. Also make __delay_cycles() available outside of
-arch/arm64/lib/delay.c.
+Add atomic load wrappers, atomic_cond_read_*_timeout() and
+atomic64_cond_read_*_timeout() for the cond-load timeout interfaces. Also
+add a short description for the interfaces.
 
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index c6f7d5c9c493d..ad5ec5c0de0a3 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -146,10 +146,10 @@ enum {
->   *  +---------------------------------------------------+
->   */
-> =20
-> -#define USECS_TO_CYCLES(time_usecs)			\
-> -	xloops_to_cycles((time_usecs) * 0x10C7UL)
-> +#define RPMH_USECS_TO_CYCLES(time_usecs)		\
-> +	rpmh_xloops_to_cycles((time_usecs) * 0x10C7UL)
-> =20
-> -static inline unsigned long xloops_to_cycles(u64 xloops)
-> +static inline unsigned long rpmh_xloops_to_cycles(u64 xloops)
->  {
->  	return (xloops * loops_per_jiffy * HZ) >> 32;
->  }
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does the multiplication
-in rpmh_xloops_to_cycles() overflow for large sleep durations?
-
-On Qualcomm ARM64 SoCs, loops_per_jiffy * HZ evaluates to the arch timer
-rate, typically 19.2 MHz. The intermediate 64-bit multiplication will
-overflow the 64-bit boundary if wakeup_us exceeds approximately 223
-seconds.
+> diff --git a/include/linux/atomic.h b/include/linux/atomic.h
+> index 8dd57c3a99e9b..5bcb86e077845 100644
+> --- a/include/linux/atomic.h
+> +++ b/include/linux/atomic.h
 
 [ ... ]
 
-> @@ -819,7 +819,7 @@ void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv)
->  	wakeup_us =3D ktime_to_us(wakeup);
+> @@ -31,6 +31,16 @@
+>  #define atomic64_cond_read_acquire(v, c) smp_cond_load_acquire(&(v)->cou=
+nter, (c))
+>  #define atomic64_cond_read_relaxed(v, c) smp_cond_load_relaxed(&(v)->cou=
+nter, (c))
 > =20
->  	/* Convert the wakeup to arch timer scale */
-> -	wakeup_cycles =3D USECS_TO_CYCLES(wakeup_us);
-> +	wakeup_cycles =3D RPMH_USECS_TO_CYCLES(wakeup_us);
->  	wakeup_cycles +=3D arch_timer_read_counter();
+> +#define atomic_cond_read_acquire_timeout(v, c, e, t) \
+> +	smp_cond_load_acquire_timeout(&(v)->counter, (c), (e), (t))
+> +#define atomic_cond_read_relaxed_timeout(v, c, e, t) \
+> +	smp_cond_load_relaxed_timeout(&(v)->counter, (c), (e), (t))
+> +
+> +#define atomic64_cond_read_acquire_timeout(v, c, e, t) \
+> +	smp_cond_load_acquire_timeout(&(v)->counter, (c), (e), (t))
+> +#define atomic64_cond_read_relaxed_timeout(v, c, e, t) \
+> +	smp_cond_load_relaxed_timeout(&(v)->counter, (c), (e), (t))
 
 [Severity: High]
-This is a pre-existing issue, but what happens in rpmh_rsc_write_next_wakeu=
-p()
-when there are no pending timers?
+Will this cause torn reads and synchronization failures on 32-bit
+architectures?
 
-If dev_pm_genpd_get_next_hrtimer() returns a maximum timeout value,
-wakeup_us would severely overflow the 64-bit bounds in RPMH_USECS_TO_CYCLES=
-()
-multiple times.
+On 32-bit platforms, atomic64_t operations typically rely on spinlocks or
+specific instructions to prevent tearing. These new macros bypass the
+architecture-specific atomic64_read() and directly use
+smp_cond_load_acquire_timeout() and smp_cond_load_relaxed_timeout() on the
+counter member.
 
-Could this overflow cause the macro to return a wrapped, drastically
-smaller cycle count, which is then added to arch_timer_read_counter()
-and written to the RSC timer registers, causing the SoC to wake up
-prematurely from cpuidle instead of remaining in deep sleep?
+These macros poll using a lockless READ_ONCE(). On 32-bit systems, a 64-bit
+READ_ONCE() compiles into two separate 32-bit memory loads. If concurrent
+writers modify the counter via spinlocked atomic64 operations, the lockless
+polling loop could observe torn (partially updated) reads.
+
+If a torn read spuriously satisfies the polling condition, the loop might e=
+xit
+prematurely with a corrupt value.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608080440.1274=
-91-1-ankur.a.arora@oracle.com?part=3D3
+91-1-ankur.a.arora@oracle.com?part=3D7
