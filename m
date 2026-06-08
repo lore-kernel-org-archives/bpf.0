@@ -1,81 +1,81 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BFF3D1CAF
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 18:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705F13D9043
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 18:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780942668; cv=pass; b=QAxgRuLWv/sIZeZUi7ytqZNSlRYtNEfkvpMuffUyT6v6RqwKf3qRqTwLpehQC9N2RvSlrFhlFTcZhrfc2qgBkLinvSvVx6mbQySrTf+y0KPRRlww1Zc3vzAPx8gE+4HQd/3LmnQbco6Cg6EI8wecqBaDvrJ7KP1wiNFHuiYyYI8=
+	t=1780942728; cv=pass; b=gcXBuki89Gf6MPkgCskl64ICpCDzzWBv9YZQpDv0Lu+HgRwNxUohHvjpnrOk2fVHT0OC46/ITfk9OgMp8BYP44QzvWqtJtydtlYUcRqeGFjH3NkcIhIBIJXrtSpLS51vQmVB0prOWjqEQ+q109AxlR7e20flT+PF7DVjrFnmX8c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780942668; c=relaxed/simple;
-	bh=qEXPWKJAUq9h7gKR3mFd+TXuFcMvNL0MlYhGUvYhw74=;
+	s=arc-20240116; t=1780942728; c=relaxed/simple;
+	bh=d2yZGc+pur2tsE9GREIpCITGt9vkKOB4lYnN0N72K0E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NV23xKkzPCnUM/lHaIlNkLs4Cw7LEvguOXammlHRR9D5xj/vY99VIopYi9txVBKJqSb4LccnI0um73KcQUgim5XJZ9wi5hDlQt+PHsEMgVPKreXPfCtLQEvC3yz+8Z9lfkDZq+sNUO/5BbCtiFAIPB2ijRlAaMaZJs+rN5k3ipU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pcSDhrqL; arc=pass smtp.client-ip=209.85.214.172
+	 To:Cc:Content-Type; b=G81MHZHfJ0Zb+nzUi7DwmzfcFGKJ6W+uaz/FRnMTuEkVVEEgU1KDcE9qr21h3OVoih+79XS6MIMtbvvyVjJe4PoYzbz5kaFDYXJ4Zp9npUaHJZEVWB6668+fusiduzeor40ASknHjzAU/qCOgQPurzp/X3pXo7OUC3wwGBKnvtE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m7O2yjPR; arc=pass smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pcSDhrqL"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso31665935ad.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 11:17:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780942667; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m7O2yjPR"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-36bd175fdbaso2904853a91.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 11:18:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780942726; cv=none;
         d=google.com; s=arc-20240605;
-        b=X9QKhZILgbxx4a6IwX9Hoo4SOmbz0kcCWB18VlDXVzA/cI2Nmw+l/+0DrYHdIM5JzS
-         yGHqGnAMGXliDdH86JPwyw8V7hRZmm/657kxB5q4qdXH1TbkRhOb9W1TYJBGXL4jB78Z
-         A+9MM+fs7I303l53xwkLcH+QqSpgKpH+vKvYHuIKr/wMNvgrmjZnpAEJeUVoVFToZ43F
-         hpBVHDcK/Rha1mKEa1GK5DdzrLPnL/6dYyP8SvELapxohDYkyGgVyG3CZY2sN4lvLfbF
-         zz5Gyrb8T3U8gQZxaq1B4Fk/j6tlTU/xADpAahmSgr2imv5TsZl6m5QV8XNpOvcTldmx
-         gjbA==
+        b=NnKyOigdyLpqPvDWQAWoW+dC5p5Yh0j3yxeINvk9oTi58EsSHlWdkXIfZlfNFM9W5a
+         MkDCBsbcR5x/vxYNHlB9JUoH2W2FZMKqCto/fQqxq+lkJSuu68m7SuzfFMOWbKoi65Qj
+         6whyyqWThFaXz7u5NvDJgLZFI5RG6rE11h6UPTHg33FI/TSUDTEj+H/3zoVLCA/e9rcv
+         4EbTNYlcJEN8tT7PRthnCUX9cEC+JQtyzl7rcAJln+crFwK8+pKTW64pbI9Fa6AIsHFM
+         dVZ30bICaV9nI4hct17JlD0mfTd8KKU4Vnt4kSrVFVXGzVirkBJ4Mt5nc4zcPGvVdqd3
+         Ow6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
-        fh=78A92xKN0inphqxGkHcvwryHF4So1r2374/wLD6oGNw=;
-        b=IToGueRkGKmeA5YT3+NfbDIIAJuN0DLv/6pVTC+GlzbJCm3j+EAXMs4Kro1ylrIjP5
-         jPKhe3NDaGt/+NZR2QkcgUOV8WQXI4UJuiaEDnygsTqeh5XwQ8XZJaA0m6Mb2uV+06zN
-         SEcTXp0JD7DLhqGHNrGliHPWsrCI+PRY9OKUjGaZUs2EO0L0eZz2jXsEIvkK5dZGMRRH
-         JVmVmYspCRY4uCbJkDAbV+dmJDk84PEUuUaTuTIl7CtxeE/O+X0qvM17k/VcwLm7+NNh
-         gvWoO5cVwFHtBDP2QGSw83pSiPccjewNzndRbi+qc+zmfBjVw7ZDvz8aU61I8XGcEkDS
-         CZDA==;
+        bh=QVGYoj/1AbUgccCQxiAjwRvdNqm7duAViNPULxhObvY=;
+        fh=v5E3PfQzGx5WRpBUGhE1FFqq3b3hlA6f+CVO6RViyNk=;
+        b=cdV9cT21i/rqtxDdX1QW3NINupydKyEL+I+jlUENX3RCNer5IIxnaN2GJmsas11U0s
+         5NBl3VsmfW4qatdoTj0mTOovr08i6pF1A5e4EVTcomlikPf6hmSG7YnzGRhPlsLE+zd1
+         B7yYcjbiot6/MdQDDKHNuII3OXMRpuaP8nwIs8BEI+j2MDk5WG3MqBLjkOIC+AswZwxy
+         nq9lnmGO5tNsxqw8aBDMlmD0SRDtg1AUF2ZANLjSkGzQcZy28FIe74Py72dpLjGUUbLR
+         MCSHxha8tpJ2F3Zcod634CLbu3iIwNBNmFJTuYcOGCWd0fG5R4T7ZVWRK2fa4LKhDgs8
+         Y7Cg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780942667; x=1781547467; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780942726; x=1781547526; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
-        b=pcSDhrqLqZgA9oHaxYDBaH5WqiBwXPi5NJ7hSn9ETt3Eo3lmZ39nh4EyGS3XeWgueu
-         BxlUSn7HvrLwOdQcML8aQfaJVcODOfB7X5GCDVCeQYG+K7bIrTSJAud1ht9BIrurtHLX
-         XBCF0dz0vlzEF6MX6I/gf6X7YqxVZIu5v4Crkzjt9pKpJm6MV9xq3K5sDcnQVYcRQaWA
-         7YNUqEK+S90fHiNtO40xi+pSs5bcIrcd0CQNSd1TxCPjG2DDv0UJ7btUqUeb2hRakZRA
-         maKSifJtb1ElbQZ8+ZhUJP2acxqs9DtdvX2lwwkjn8A1O6j1HzDOYrFB1uuKUwrSvwBX
-         aIPQ==
+        bh=QVGYoj/1AbUgccCQxiAjwRvdNqm7duAViNPULxhObvY=;
+        b=m7O2yjPRJEOvX3Jn/IHY4LNewqwSiZKGNlgxItNEqywCga0k+HAj/kfVPk6UXYkKY4
+         r6XaYqYEQcGkajdXou+3N/Ilfzf7RZzetvoig8yh9rMOfX2lFeBptKIFznCIZLRtPb4j
+         SqwCvs7Z1LqKqPb5l/lBWRPUej8VuYOxEveHrnXuoaYxnxH6VVPpip5hCYOVwnvpGKG/
+         NTRKAIJkpiXYHIgJ/PWyP9+XJVVHzeYPuZm6b+M2B8RAoCjH45+GVwUi7aSni1Tdzgkg
+         Y1oE9s79/8YjrlrPBEZ0nfVtjm153oc105XX0AVgOHT5O1fj8knDaheu8hnwgU1Pd4/r
+         UWbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780942667; x=1781547467;
+        d=1e100.net; s=20251104; t=1780942726; x=1781547526;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=t5DnDar6JBnPe48ajQB1Hb9265gKUCW9aay647po/SI=;
-        b=qDu3bvrA35PGApZ2hd9r+IZFCol5bZYSvs22wCBi1wzJbXsD6bZmAE4vQnjyYMzo+a
-         888xCwSAYw//vdgZjAkfn0RYheX1oy4EKs2FBRCU5IYTVrP03xEf0va7v85kd3fnd9Mm
-         229Ui0WGxiArqY14WgsAdxIvWaMTyJ9HahXGzkTvKRoBigtKkR+Hfu1lIQAFRbWAXyUX
-         cWwSKJcPKkqPQPOaspsoWgZzXiqAw001QE0MeyTZRGF7N3xxUfPQTgdTFlfVmbiwzC0s
-         RF30HNo28jYn1RUIicpGngBjCcyhKg/b0O2VdZoHkHLH6jiwi1wk/26ICRePujNP9MU0
-         nVrg==
-X-Forwarded-Encrypted: i=1; AFNElJ8pYjMyJE0G+vmoP6HHL9tqkz+j0r3dINOuD6D1NtZ4JXJdoiXrYoJctTIYiPv+ddt1OQs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9tecY9NBB/qynWEIQQd+5drrbzT0aWVuyQ4aFu7BC+MXY63GZ
-	d08M+eGWmFZYDVpHRomwx7TdXBgSv+URmRnPdScf6eVd+sKB2kSyiW28Bn5umMr0Y14o1MusXCy
-	YLqjbfAKUXx5F8Nh6AUWNfrcgfGZ0wj4=
-X-Gm-Gg: Acq92OGEBgibfgIJx9ILTunidIXPSORsWoGdXP+fNk7VejSkpTzS55yOhOxMGVbEGaX
-	i7+EG0pmksS3ZVYiT5e/Z54DBYBwiJfA6rWLUjsxWpdPYOmaNTaR8mMBwC4Qyua+HVCYtx8qdk+
-	kwUB6DYWL76kYyttkDO8NLgbV+vC2/j21NsYfSXlhwCpWwXWmoWFYl1AuCkFRt9Ryo8uNK9ANp0
-	ELRy3hE59xVBgU87xeZXID+HwnGc18MU/NI+NUwcJ5uAUH2jGfhD8Tm0m1l1tCMckFs53sLqmbd
-	m8ef5CZyVzLKUGrFIHDivr19RDdJqPtDKTvnV3w284A2HfjogZTUj7miqeyW4eSBz7HF3JYnRHI
-	AjYKmsgoQlVxXN6s=
-X-Received: by 2002:a17:903:1b44:b0:2c0:c262:b925 with SMTP id
- d9443c01a7336-2c1e7f9252fmr195715815ad.25.1780942667015; Mon, 08 Jun 2026
- 11:17:47 -0700 (PDT)
+        bh=QVGYoj/1AbUgccCQxiAjwRvdNqm7duAViNPULxhObvY=;
+        b=MPb/2reokJE2sNYSnMSscGpbfKt7An5XbaNI5hUvCfF+Kq881OfNsg4BAcFZTthLIH
+         ZrjJ31ifEvO0hrCJO5YwvOVpJXEQDYB7iafPIagQAnhatvNhJaaBF3CVCovIbrXXnuRW
+         iN4yX/j6nZYS53WoQStBcnV4lFW4H+QPw61gIFfN8Upt14yNuxhTiup1jzoAacbf/ICn
+         eio71Pp8EwciQG3Bj/dw1vCCNZWrFaHqFqJcmXcwJtx1sA+ZDIFXhncfaWA88KOheObV
+         sLwJqec+CleS3JBlsxBrxnGI0N7XSwDhrA0RZXTSKw92VlDb367Vjy/VN1j9jTb/I3Rv
+         1klQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9nj10A2DY5XXwXYkR9ojecnCwVacUWAxALk6zOY1IOnzQf5iwGjg5h+fcqmczw/vYhYRY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiqjTds5B2iY+MJea6JKQdEFIplH9GQwyakicFzb201txQoGnt
+	OlexQtJD+zz+qY/oMQnB0I5Azd0znt4TabNnEQy5XU32mU4naMWxS2oi00XmUliInSAaijVoXFn
+	7to+inF3qBLl6eiKyhB6OEefy/GHqNyU=
+X-Gm-Gg: Acq92OHg9hwe4CdnXNPB9zlkImUI4cEtHi090F0y3pL/p6VPL/FgvYwY5zdlc86+vO3
+	yTAosLos7RYgMoOCBTL6ib+QzeC43lkYbaAyyZwrOD5FziJEFluy5zaot2beW4rpxRnIr3wSqQV
+	3nGPlpC5VnxFM38Sk0XLF9Sz9Kvuk8ijLCDoUgsoPduPX2lz0xMBnurB9GZIx9tNUVEjB21xGsI
+	0CHGvDoFaJ2wjR6xWSesdeiKfmGeoyHbImCCuxo+kE+NdFEUaXqTVTTUc4WAX57EjVcdMYie1EE
+	Uj0+0yAm9K1Z3VjcqfmGBNuupHsIYOctMa5hpEqkmrZ0o5Hk6K0M5B97eFwBLJCdFRKK0LDOKfN
+	041J4vYnT6Aib9Pc=
+X-Received: by 2002:a17:90b:3fd0:b0:36a:3176:ad08 with SMTP id
+ 98e67ed59e1d1-370f0d52f42mr16776510a91.25.1780942725707; Mon, 08 Jun 2026
+ 11:18:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,14 +83,14 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260529031604.888137-1-chenyuan_fl@163.com> <20260604031033.806727-1-chenyuan_fl@163.com>
- <20260604031033.806727-2-chenyuan_fl@163.com> <e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com>
-In-Reply-To: <e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com>
+ <20260604031033.806727-4-chenyuan_fl@163.com> <a1561e36-08dc-4ad1-848b-88974f529d10@gmail.com>
+In-Reply-To: <a1561e36-08dc-4ad1-848b-88974f529d10@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 8 Jun 2026 11:17:31 -0700
-X-Gm-Features: AVVi8CcTUadNsMgxD4J0IajYU5XL2tzBD2ThgUFwBi0fy2o_akjL-kP-J_G8V_M
-Message-ID: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] libbpf: Skip bpf_object__probe_loading()
- when BPF token is in use
+Date: Mon, 8 Jun 2026 11:18:29 -0700
+X-Gm-Features: AVVi8Ccp1BPMVe7rixi3BZCJ4sZctHvRQuY55dQObYYFeNddy9ZFd7YuHS4dJTw
+Message-ID: <CAEf4BzbbmTFaNjT4bRTEm3BxAROkRrTdfxwPNy9HmMt_LFaSHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] libbpf: fix feature probe failures for
+ implicit BPF tokens
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: chenyuan_fl@163.com, andrii@kernel.org, ast@kernel.org, 
 	bpf@vger.kernel.org, chenyuan@kylinos.cn, daniel@iogearbox.net, 
@@ -98,75 +98,104 @@ Cc: chenyuan_fl@163.com, andrii@kernel.org, ast@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 4, 2026 at 4:16=E2=80=AFAM Mykyta Yatsenko
+On Thu, Jun 4, 2026 at 7:40=E2=80=AFAM Mykyta Yatsenko
 <mykyta.yatsenko5@gmail.com> wrote:
 >
 > On 6/4/26 4:10 AM, chenyuan_fl@163.com wrote:
 > > From: Yuan Chen <chenyuan@kylinos.cn>
 > >
-> > bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
-> > TRACEPOINT programs to verify the BPF environment works.  When a
-> > BPF token is in use with restricted program type permissions, these
-> > probe loads may fail because the token does not allow the specific
-> > program types, even though BPF loading is perfectly functional.
+> > probe_fd() converts BPF syscall failures to return value 0,
+> > which feat_supported() interprets as 'feature absent' (ret=3D=3D0),
+> > even when the probe failed due to a BPF token's restricted
+> > program/map type mask.
 > >
-> > Fix by skipping the probe when a token FD is present: BPF token
-> > creation itself proves the kernel has a working BPF subsystem.
-> > Real BPF issues will be caught during actual program and map loading.
+> > In a user namespace with an implicit BPF token, the sequence is:
+> >   1. bpf_object_open() -> no feat_cache yet -> global cache used
+> >   2. bpf_object_prepare_token() -> creates token, sets feat_cache->toke=
+n_fd
+> >   3. bpf_object__create_maps() -> feat_supported() runs probe
+> >      -> bpf_prog_load(SOCKET_FILTER) with token -> -EPERM
+> >      -> probe_fd(-EPERM) -> returns 0
+> >      -> feat_supported sees ret=3D=3D0 -> FEAT_MISSING
+> >      -> internal maps (global data) skipped -> verifier EINVAL
+> >
+> > Fix by making probe_fd() return the negative error on failure
+> > instead of 0, so feat_supported() enters the ret<0 path.
+> >
+> > Additionally add a token_fd rescue in feat_supported() for the
+> > ret<0 case: when a BPF token is present, a failed feature probe
+> > is treated as 'feature supported' because token creation itself
+> > proves the kernel BPF subsystem works.  Real BPF issues will
+> > be caught during actual program/map loading.
 > >
 > > Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 > > ---
-> >  tools/lib/bpf/libbpf.c | 10 +++-------
-> >  1 file changed, 3 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index ab2071fdd3e8..7e21c5eb9533 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj=
-)
-> >               BPF_EXIT_INSN(),
-> >       };
-> >       int ret, insn_cnt =3D ARRAY_SIZE(insns);
-> > -     LIBBPF_OPTS(bpf_prog_load_opts, opts,
-> > -             .token_fd =3D obj->token_fd,
-> > -             .prog_flags =3D obj->token_fd ? BPF_F_TOKEN_FD : 0,
-> > -     );
-> >
-> > -     if (obj->gen_loader)
-> > +     if (obj->gen_loader || obj->token_fd)
 >
-> This change makes sense, bpf_object__probe_loading() does very basic
-> check that BPF works on a given kernel. In this case, when token is
-> passed, this is ok to skip. An alternative, trying to make
-> bpf_object__probe_loading() correctly token aware is worse.
->
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> It looks wrong to say that any feature is supported just because there is
+> token_fd present. In patch 1 we only checked that BPF is available, so
+> it was ok skipping probing. This one looks a bit more risky.
 
-This is the only patch in the series that makes sense to apply, but I
-don't see this series in patchworks. Can you please resend just this
-one to BPF mailing list? Thanks
+Yep, agreed, this is not the right approach. Please double check what
+kind of issues you still have with only patch 1 applied, and let's
+discuss possible solutions (if there are still problems).
 
+> Is the reason this code fails because of BPF_PROG_TYPE_SOCKET_FILTER not =
+enabled
+> in the token? I suggest fetch the first supported program type from the t=
+oken and
+> pass it down to bpf_prog_load().
 >
-> >               return 0;
+> >  tools/lib/bpf/features.c | 23 +++++++++++++++++++++--
+> >  1 file changed, 21 insertions(+), 2 deletions(-)
 > >
-> >       ret =3D bump_rlimit_memlock();
-> > @@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
-> >                       errstr(ret));
+> > diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> > index b7e388f99d0b..f934452e52f0 100644
+> > --- a/tools/lib/bpf/features.c
+> > +++ b/tools/lib/bpf/features.c
+> > @@ -16,7 +16,14 @@ int probe_fd(int fd)
+> >  {
+> >       if (fd >=3D 0)
+> >               close(fd);
+> > -     return fd >=3D 0;
+> > +     /* Return 1 on success, negative error on failure, so
+> > +      * feat_supported() can distinguish probe errors from
+> > +      * genuine feature absence.  When a BPF token is present,
+> > +      * a negative return triggers the rescue path that marks
+> > +      * the feature as SUPPORTED (token creation itself proves
+> > +      * the kernel BPF subsystem works).
+> > +      */
+> > +     return fd >=3D 0 ? 1 : fd;
+> >  }
 > >
-> >       /* make sure basic loading works */
-> > -     ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", i=
-nsns, insn_cnt, &opts);
-> > +     ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", i=
-nsns, insn_cnt, NULL);
-> >       if (ret < 0)
-> > -             ret =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GP=
-L", insns, insn_cnt, &opts);
-> > +             ret =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GP=
-L", insns, insn_cnt, NULL);
-> >       if (ret < 0) {
-> >               ret =3D errno;
-> >               pr_warn("Error in %s(): %s. Couldn't load trivial BPF pro=
-gram. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=3Dy) and/or th=
-at RLIMIT_MEMLOCK is set to big enough value.\n",
+> >  static int probe_kern_prog_name(int token_fd)
+> > @@ -725,9 +732,21 @@ bool feat_supported(struct kern_feature_cache *cac=
+he, enum kern_feature_id feat_
+> >               } else if (ret =3D=3D 0) {
+> >                       WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+> >               } else {
+> > +                     /*
+> > +                      * A BPF token may restrict which program/map typ=
+es
+> > +                      * are permitted, causing the probe to fail even
+> > +                      * though the kernel supports the feature.  When =
+a
+> > +                      * token is present the probe is best-effort: BPF
+> > +                      * token creation itself proves the kernel has a
+> > +                      * working BPF subsystem.  Real BPF issues will b=
+e
+> > +                      * caught during actual program/map loading.
+> > +                      */
+> > +                     if (cache->token_fd)
+> > +                             WRITE_ONCE(cache->res[feat_id], FEAT_SUPP=
+ORTED);
+> > +                     else
+> > +                             WRITE_ONCE(cache->res[feat_id], FEAT_MISS=
+ING);
+> >                       pr_warn("Detection of kernel %s support failed: %=
+s\n",
+> >                               feat->desc, errstr(ret));
+> > -                     WRITE_ONCE(cache->res[feat_id], FEAT_MISSING);
+> >               }
+> >       }
+> >
 >
