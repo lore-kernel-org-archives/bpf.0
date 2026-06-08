@@ -1,136 +1,189 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F923E9C36
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 20:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B9731F9A2
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 20:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780948942; cv=none; b=BuEGjurM7XDnDStexhSztlu3TJyZCuuRgWhEMupZqLkgTbWTx3pKz5H9grNxisDZZCWRIU3MyEmjGqlhI6HzQoNWL3pmNg+zIy30Uv4RQfQLyIcqegwYvJEj4uJ6ZQohu8vy7TaTKQ8YihA9UdyZNnz9OmCgDGIFcGFFiNCenyI=
+	t=1780950696; cv=none; b=nYCAJsgrMUHxG6AWOP0YFWQlxZ+IMPANAfYC8QMP8w5BVZI+CMr6OuU5swXJuMY1Or0HMSJLv4mtGA5fqgvQgrmWAy7YPu2tDiAPig2Le+St9yqGVqgeSSWYf0thNVSOMlV56sQJtc4Y8eyWNvy6TSei6gph7Y6LhCAuCJGREhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780948942; c=relaxed/simple;
-	bh=wrqE2O76YCV8wdY1YPpUUnMYdTSt/lGtjLT9N9f7KaA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=XWFaDkFokTO5UeZscS050r2xlgLLQ/GNvCtGh9pHeRAkb7qJ6w79UQS6Jn2rpz8fYbFF5bCGHbmEVR7ejxaD/jT+6IInZ8kpmXKdISQfCUWvDOq7yf5KomBf3CmcuS9tifjRgl3D/+TBn/xAHt/BRkrIRmvHDEcKt3jfuYRpDI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JaGM42CN; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780950696; c=relaxed/simple;
+	bh=g+hB/yLQ6vKKkVlN8bF6XCd8McWiw35mowG9ThCTB7Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X60Wr1Udduwg2090u/BcBxuI5tPOOOVYMsam0mRAf4Eiec4swqJqEFcCGgaWnkI3/YDLHYeA+bTzhGUQLhU2t88auomQBsecFTNT5YUwOr+Cp+i1iHq9F+fV6idyL9UiSeDu+l/o3Fzj/4gKJd4ornmsrySoxf0XIv3LpquRGFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=UPhOH13r; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JaGM42CN"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e6b5dfde3cso2574270a34.3
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 13:02:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="UPhOH13r"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bf55c39e16so22832295ad.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 13:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780948940; x=1781553740; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
-        b=JaGM42CND++GVCO/APZTAt8fet5/AfRQBUcUWxHYxHHqZInMxKQbF6OT3FmXDjtx6i
-         ozM356muRW6wHE7nxLSzn0SpJLwzCmam74OffTWA0QxKNXp2uBjvUKkWZHa5Qn2qSMvL
-         LUMkkAtJm/hr/K3MutMWwkwk9vP0EL8d053cguGLhQO+eWhd9DcMNR1Mp9om4+fpp3Ne
-         R6SlRzNODEgUPxSoeYrLPmWT5FDBkX33xxLwNapI3/HMCNc2SEWNQmWHBOZPmRQYpqpp
-         +PAbwSpx/A6u4EDuoiFZcwRcVVsnSb9x8xXTMxRMeUutezTmyBN38WGw74RGHhb8To9j
-         5amQ==
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1780950694; x=1781555494; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwfi1hNRVN18tx6MvutAXdjRReqdu40MZi3rUahoZ8o=;
+        b=UPhOH13r6lLqSx6YrNSgIY1lhaFxRo7ZrVw9xzxUrna1VUg0TyYdTdzG55X1doURsM
+         YrWs1reysVtG0FpYGb1MRokQauO/DRlVh2ut2R7EoO4HMaeNwmG7tHQxCgW2d3pA1O8F
+         GVIw7ZCuPLMKhcA4g9pplMsXljeuv6Hrc6UecfpJFBkrCcFIBo1Vz6TFGSHGbVz9lLW5
+         6t4oBbzIOkq2hWE7tNJk5R0O1i60EFD0hitC3b9ikj0BhXzqjLuOHsM7woR/4n2Zi9/d
+         WZFLIV1oExHYuQVYY5zuDeN4/QjI9wIxLltnD+J6IyRaj7nZyjyd+CM3dQ01GkkST81v
+         UMMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780948940; x=1781553740;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pwrxcif3XUtEKF7lrhb7eyL0FpVd3GzB9U/X8qwd09o=;
-        b=hQHK76hHICHatG+C5GUoLl2IYj8FktC9RqdmJfe523SvrcVuvQ2/YsOMsVpYEbqV5j
-         +jskEutwlzIBdfj3WH2tZpVez4xhkV6HhyMJhyhO0V9k4utizLTa026LUo1oooJVl2XB
-         RY3cXmlcHotLuCulsX4nnA7MsgZvQWbmlXwd0ChGfvCp4QzYOYlyAj/cbv/c0TkR2Tce
-         fxn64D6uSTo3mO8X/Sl6ILOlgtNkQQdgwTwc9IlcwOYDxeUG6aanMR+fN97vMy6FgSl1
-         xn7cg5dNUTmHl/bnvQlSQxm92AcwZHZeAQpleDlMpWs0eP98SU7VZHAcgvxN05+rVGn7
-         Uqaw==
-X-Gm-Message-State: AOJu0Yxwa7WM25ltJn+eE13CITERlCDFpQAs0fuldiiJndShb0cHoar5
-	ftWBTwhpPGVR6jy+rUpi+PWf68UFMV2+TL6UQFKKkwpoMmV4LCfQvTKGsLyWVg==
-X-Gm-Gg: Acq92OHFBUtne9DzpYxVZrdy2FMFyxElfLdhYmTmJyVKCPC3/g1JIDk1M6TUqSj1yRt
-	BNW4QuJi9Hnfyyz/YGq23w/VFQC1K91Diy3F5mq7pyeOUOpCmRpOSdWKIQg7kg4VKz76twuMCDd
-	U1ZAX6BhfSASOZHGySY4o5yhVT3qHSWiDNbBu1PtfiVmuiId+8l9jm73EtvfwpwU+sNvwADwzIN
-	vCIWIg+7vbB0dzMhv8Nj9nsETtkNM8T2CpoiAi60b2w4Ki27KWRYTvU2LYPVyNACOS59F+doesu
-	sYoGghD99mfNP7FfU1q7nFYN4X2ULPVLDLTBem9P5DNxriLHF59fboBbNylUXL7XeRB1/B2wUkd
-	jQ+ODBP4nHooqWK9RPc8F0zLdJEQ4f/jJ65l+mRHSddZxG7ppBwGwoaRom7BmRwTw0ZDZ8kJvkb
-	Q9MsdWxquaJ0wsXKPXfs3f+HXs5hAwNt714vwXTnMIM3WKF38nH6GbrFtGu7Tlp6E6188KwZVMX
-	nMjXvdO4zUhIIP0JS+BTJ7OAnC+BC4FM0+/iks=
-X-Received: by 2002:a05:6830:902:b0:7dc:dd19:7f53 with SMTP id 46e09a7af769-7e70c7906d4mr9896252a34.14.1780948940066;
-        Mon, 08 Jun 2026 13:02:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5c::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e7923af1sm13046364a34.20.2026.06.08.13.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2026 13:02:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780950694; x=1781555494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gwfi1hNRVN18tx6MvutAXdjRReqdu40MZi3rUahoZ8o=;
+        b=eia6Bkiy+S5Abh613EQkZGwtiomNHVvd2mZY0pVv9r2yo2pUadFJZlEYqv3Y3c9HzA
+         sqNc3NR6lHNxxSpvB78ghO9uhfefV1oYOCsCJWFoRlLpNNekgLe/PT7Up6kfvSTMQIlr
+         VthGyHCev420UfZ7JipznUIoAkuajNnlFh/ZY57iJs2w44KReS/KJwHKfXpWRvBXxKRS
+         +yk98VqNRep/ghnzKDrnyNHB0J7G7MqieOyBJoXbXETdfvfuQjS0WMHOKKukaRwKHVAw
+         2gpI4FiqPx64uLdmHOaf3jX1alFx7aqFCzCZI4jTkxGxuXmUrDSFhzEJJ5XVA22y01fR
+         Jj8g==
+X-Forwarded-Encrypted: i=1; AFNElJ/UfmF8izZKQ59GU4hESq3gEc6mr2VZKVEAnVXcCZHTAkaWJHtaUo/Xt9MorTsjCyc7Ges=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnfgDBCGdRX3jBHjdQyDkyvp75kIv697dAlaVOWl/kMDMnT/vl
+	e5kFxyBuxjr4zu5DcCpNKOV6xdqEibFWAmsoeADqn875gAiO+earCSrnuSvawm3tCxQ=
+X-Gm-Gg: Acq92OH3KnHElbrnwJzA0P3qhFQmoynGpQGlKi1HZPe1UxuNQYfmxEH8FWVg9qvGU82
+	4wdzBaNsORBX5QOYSTo0gTp3LdrG2oYfFCBLhHYPdl2XH8+CiG2QqoR6MoNmXqCdICamlaDFTIS
+	xtB1Ytoo9aImvA7f3rXGlNhl29b0KswMCk7D1klv/PnNVbHr06VkGpXIHIPoOiAfY3ZluiMDPgz
+	dwimA21CE7oMKY+KOplHTOFpQL3ooVmWWgVXg87QD4sAsl6jCzf2e9hjFV2fGUsHG3EHRwsmFWX
+	shb3tAlPfJg8MHnHL0519N96Y05Qk3dsnAXy9S8VKmdl9QEo+rNM/oUTk1oL5UKGGqW2U5p2E9c
+	SPanMrfBbnUWYqTOO9NxVhnuLTfrCO1xVPvWiWNfSFArwhE++v/z3Xq+xslW5njAtOEJMz+RDJr
+	+JSgJiI8lbbRcN/+uR9044Szw7
+X-Received: by 2002:a17:902:e5ca:b0:2c0:fa52:1c47 with SMTP id d9443c01a7336-2c1ec906ca3mr146009545ad.25.1780950693780;
+        Mon, 08 Jun 2026 13:31:33 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:e::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f8429fsm235533945ad.18.2026.06.08.13.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 13:31:33 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Somnath Kotur <somnath.kotur@broadcom.com>,
+	Andy Gospodarek <andrew.gospodarek@broadcom.com>
+Cc: horms@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net] bnxt: fix head underflow on XDP head-grow
+Date: Mon,  8 Jun 2026 13:31:28 -0700
+Message-ID: <20260608203129.920104-1-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 08 Jun 2026 13:02:17 -0700
-Message-Id: <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Jiayuan Chen"
- <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>
-Cc: <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Willem de
- Bruijn" <willemdebruijn.kernel@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, "Joe Stringer" <joe@wand.net.nz>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock()
- for BPF-assigned sockets
-X-Mailer: aerc
-References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
- <20260608125846.157004-2-jiayuan.chen@linux.dev>
- <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
-In-Reply-To: <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon Jun 8, 2026 at 10:21 AM PDT, Kuniyuki Iwashima wrote:
-> On Mon, Jun 8, 2026 at 5:59=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.d=
-ev> wrote:
->>
->> bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
->> causing a panic when the skb enters the wrong L4 receive path [1].
->> An initial attempt tried to fix this in the BPF helper by checking
->> iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
->> this check via a TOCTOU attack by modifying iph->protocol around the
->> call:
->>
->>     iph->protocol =3D IPPROTO_TCP;
->>     bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
->>     iph->protocol =3D IPPROTO_UDP;
->>
->> Furthermore, bpf_sk_assign() has had the same class of vulnerability
->> since its introduction =E2=80=94 it can assign any socket type to any sk=
-b
->> without protocol validation.  Since the BPF helper check alone cannot
->> prevent a malicious BPF program from crashing the kernel, add protocol
->
-> I'm curious about the BPF maintainers' stance on this kind of "bug"
-> where admin tries to shoot oneself in the foot.
->
-> I saw Alexei said this recently, and I guess it applies here as well ?
-> https://lore.kernel.org/bpf/CAADnVQLh7VEKAtckzz=3DXOVPT8ovpDQshvPPCWHDQu2=
-OWQx27_w@mail.gmail.com/
->
-> ---8<---
-> Not every "bug" needs a fix.
-> If a malicious bpf user wants to crash the kernel they will
-> find a way to do so. Especially with agents.
-> We cannot realistically close all of the holes.
-> Right now the priority is to fix the issues that normal
-> users can hit and not bots.
-> ---8<---
+The xdp.py test test_xdp_native_adjst_head_grow_data crashes when run on
+a bnxt machine (and also crashes in NIPA).
 
-In addition to that I have to add that skb_steal_sock() is performance
-critical path of networking stack. Adding runtime overheard there
-because bots can find a way to abuse the interfaces is not a good trade off=
-.
-If there is no simple way to fix it completely on the bpf side
-then we have to flag this issue as "won't fix" and move on.
+It seems that the bug is an underflow in bnxt_rx_multi_page_skb, which
+builds the skb head:
+
+  napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
+
+The problem with this expression is that in page mode rx_offset is:
+
+  bp->rx_offset = NET_IP_ALIGN + XDP_PACKET_HEADROOM;
+
+Which evaluates (at least on x86_64) to 258.
+
+The test test_xdp_native_adjst_head_grow_data tests a case where the
+head is adjusted by -256.
+
+When this test runs, data_ptr is shifted to frag_start + 2 (where
+frag_start = page_address(page) + offset).
+
+Then, bnxt_rx_multi_page_skb is invoked and the napi_build_skb
+expression subtracts 258, landing at an address before frag_start. This
+could be either the previous fragment or the previous physical page when
+the frag_offset is < 256 (e.g. if the fragment started at offset 0).
+
+When the skb is freed, the page pool fragment reference is dropped on
+either the wrong page or the wrong frag of the right page. In either
+case, the corrupted reference count can lead to the page being
+prematurely recycled while still in use. Once (incorrectly) recycled, it
+can be handed out again and on driver teardown this would result in a
+double free.
+
+The commit under fixes updated this code to handle the case where the
+native page size is >= 64k, but it unintentionally broke the head grow
+case.
+
+To fix this, we need to do a bit of math to recover the offset if this
+is a page fragment since it is not passed into rx_skb_func
+(bnxt_rx_multi_page_skb, in this case).
+
+Once the offset is recovered, build the skb at the start of the fragment
+and then use skb_reserve to adjust the layout.
+
+There are two cases, the non-adjustment case and the adjustment case.
+
+In both cases, the skb is built at page_address(page) + frag_offset to
+account for the case where the native page size >= 64K and skb_reserve
+is called with data_ptr - (page_address(page) + frag_offset). That
+difference equals bp->rx_offset when data_ptr was not moved, or
+bp->rx_offset + xdp_adjust when XDP adjusted the head.
+
+Re-running the failing test with this commit applied causes the test to
+run successfully to completion.
+
+The other rx_skb_func implementations don't have this issue.
+
+Fixes: f6974b4c2d8e ("bnxt_en: Fix page pool logic for page size >= 64K")
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 35e1f8f663c7..448609cc1617 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1174,7 +1174,9 @@ static struct sk_buff *bnxt_rx_multi_page_skb(struct bnxt *bp,
+ 	unsigned int len = offset_and_len & 0xffff;
+ 	struct page *page = data;
+ 	u16 prod = rxr->rx_prod;
++	unsigned int frag_off;
+ 	struct sk_buff *skb;
++	void *frag_start;
+ 	int err;
+ 
+ 	err = bnxt_alloc_rx_data(bp, rxr, prod, GFP_ATOMIC);
+@@ -1185,13 +1187,15 @@ static struct sk_buff *bnxt_rx_multi_page_skb(struct bnxt *bp,
+ 	dma_addr -= bp->rx_dma_offset;
+ 	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, rxr->rx_page_size,
+ 				bp->rx_dir);
+-	skb = napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
++	frag_off = dma_addr - page_pool_get_dma_addr(page);
++	frag_start = page_address(page) + frag_off;
++	skb = napi_build_skb(frag_start, rxr->rx_page_size);
+ 	if (!skb) {
+ 		page_pool_recycle_direct(rxr->page_pool, page);
+ 		return NULL;
+ 	}
+ 	skb_mark_for_recycle(skb);
+-	skb_reserve(skb, bp->rx_offset);
++	skb_reserve(skb, data_ptr - (u8 *)frag_start);
+ 	__skb_put(skb, len);
+ 
+ 	return skb;
+
+base-commit: 9772589b57e44aedc240211c5c3f7a684a034d3a
+-- 
+2.53.0-Meta
 
