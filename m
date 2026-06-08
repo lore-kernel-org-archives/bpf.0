@@ -1,111 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D33834389A
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 11:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075713655CC;
+	Mon,  8 Jun 2026 11:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780917264; cv=none; b=kv1ytBNQZg/xmP8wt+hbiMp2R8B/XM2Guc68g/Z4x1NnARtoBc9h1P7TFecaP4h+1pR59Tq5S/u5mZeA6h2FPwb6HYY+3+aLmwNBxG24yk380enNPNIjLatHl65K6e8PFbKkqtht9n2JNKIi8oNUPPuxnAKNm3mSqDhBooRl/os=
+	t=1780917528; cv=none; b=Osd7o+nwAI3W/bWjmD3bi+awW2AGC4GbhCLTuG5dL0XiX5iGWfD+bXB7T9mSvzgolKdRpNuIGOUWMFuexQ7HEElnjDUQsgG5JGlAHZixhTGkN6h3s6U4B/RTfOqEF6sLurK3aerzzKSEP1if8ncgOa9xxZxa+/JzBJpxS2wte1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780917264; c=relaxed/simple;
-	bh=M3DD2m+fXho4svJjmvEEpFXUcIvCQL47UP2rpzrWLYc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Bli0mXqmD50i0L3Pj8zfplcsTLhc1HCLDrHgjxCezppL13x74g0CKX4j10vw7vJXwlSU0U3yvRYtk9vw8Q0UF/YXB6gru3jBIlvbdQ5raJIBUOM9JqHw4YbWiRoH8yF+9LRriOTD7dacizM5ls15y1OVxxbijNYe/OSdQrz3g28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oAHfg5kZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780917528; c=relaxed/simple;
+	bh=fgPSFmZU70J4lAyv37jgZbsIHtlby8TPTKMnoy4eeN0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RhwXX1vQF8lWQGn8u6vGxEfdhZvru+agnTr/gSZKnTdRBoNncZiQyzWhgj6731BwnqG2tucs6pfXoTBnUF6bili8B1R1H4q47HCt9LfiS6UI4fWJmh47BCFJceuNv5axBB4B9xEGnsEucvHfItF0maBmqyWEKBVkKHtbcm2SGZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EY5UWmeT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oAHfg5kZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2279B1F00893;
-	Mon,  8 Jun 2026 11:14:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EY5UWmeT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D931F00898;
+	Mon,  8 Jun 2026 11:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780917263;
-	bh=MdfBieDf9iGin2eHbx5wHzTcdCVzv43Uh1ZskgkjRvI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oAHfg5kZX/X6wqerzfIthe/y5ou16mJWyBfOf7ysSuuF1msQH9Ht7RFX3fCLUCVSS
-	 IW3e/+KiXT3Rigk4N7+PXiJHQvIu6tnhihsu4Y9aXuTDX00VrNW4lBpgpkrG4a+6cI
-	 uF3wQKRnktZxyjEM4t6sAjXMbtrawr0ZH6zynoF3hqsDWfrDzGppp4AYE9vlfcyR9F
-	 VHwQ1zpylORwC9LlXp2pCFpNGfIibD6Cm6yrbWrPL7ZdIHjCNwwLcX0iurbtcht65+
-	 JEFGBD97ShMVCTuSt1NtkvJ6Lk1EcUvA48XGIuWyVS1FttHlECXygiEEBjy6tcVKZC
-	 saZKqAA10/oGw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 2/3] LoongArch: BPF: Inline
- bpf_get_current_task{_btf}() helpers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608103516.20643-3-yangtiezhu@loongson.cn>
-References: <20260608103516.20643-3-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 11:14:22 +0000
-Message-Id: <20260608111423.2279B1F00893@smtp.kernel.org>
+	s=k20260515; t=1780917526;
+	bh=kRm/fex1UGV/WyUyxxwCB+Cy/BgaxwrrURO+3519IV8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EY5UWmeT+kxsNwvu0kVV82r14S/KTDbKB/Pe740T0L850hQASc8WzYRX9Q0Do3TK0
+	 AggAhq4BNdD19OICHFUDMRrYHvNQPtIcZd2r9EtIhfHwiWudCu8CgPpSmqwLDefot6
+	 OPFHW1ELs8wWHTUfE4VR/z3aqFHS5BvQTFZef0rCQH588yYME0HXsAeLLGbBLM/IHq
+	 vukeJsXmQbU/go5lSes7pWA+hbdeCTaw6vTTVfPDgd0GRaHlC9jE6rFvWwtO9auKnx
+	 7rXIocLlZy3Ta0hH/LZYGfadryTbzBzWxVGKVe44eKaR9vy2IJd5ETbKUSfTMaNShE
+	 l11oHj1JdwWUw==
+Content-Type: multipart/mixed; boundary="===============2203711265836068332=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <25a3cb18ab3ece4604c3de687f5ac721c299a8e44fba0c84098e6e9ab3c68741@mail.kernel.org>
+In-Reply-To: <20260608103516.20643-2-yangtiezhu@loongson.cn>
+References: <20260608103516.20643-2-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v1 1/3] LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  8 Jun 2026 11:18:46 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] If JIT compilation is disabled at runtime, the BPF interpreter wil=
-l crash when executing helpers that are claimed to be inlined by the JIT.
---
+--===============2203711265836068332==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 58b3e664499664c93a443a71b2b41eaa41f69bcd
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
+> index f377d8f5c51a..33a10221d73a 100644
+> --- a/arch/loongarch/kernel/switch.S
+> +++ b/arch/loongarch/kernel/switch.S
+> @@ -12,7 +12,7 @@
+>
+>  /*
+>   * task_struct *__switch_to(task_struct *prev, task_struct *next,
+> - *			    struct thread_info *next_ti, void *sched_ra, void *sched_cfa)
+> + *			    void *sched_ra, void *sched_cfa)
+>   */
+>  	.align	5
+>  SYM_FUNC_START(__switch_to)
 
-LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+For context, the 32-bit path biases a1 at function entry:
 
-This commit implements inlining for the bpf_get_current_task and
-bpf_get_current_task_btf helpers in the LoongArch BPF JIT compiler.
-It extracts the task_struct pointer directly from the $tp register.
-
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 24913dc7f4e83..b93b67d22c26a 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-[ ... ]
-> @@ -2367,3 +2374,14 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->  {
->  	return true;
->  }
-> +
-> +bool bpf_jit_inlines_helper_call(s32 imm)
-> +{
-> +	switch (imm) {
-> +	case BPF_FUNC_get_current_task:
-> +	case BPF_FUNC_get_current_task_btf:
-> +		return true;
-
-[Severity: High]
-Will unconditionally claiming that the JIT inlines these helpers cause
-a crash when JIT compilation is disabled at runtime?
-
-If net.core.bpf_jit_enable=3D0 (and CONFIG_BPF_JIT_ALWAYS_ON is not set),
-the program falls back to the BPF interpreter. The verifier calls
-bpf_jit_inlines_helper_call() during fixup_bpf_calls():
-
-kernel/bpf/fixups.c:fixup_bpf_calls() {
-    ...
-    /* Skip inlining the helper call if the JIT does it. */
-    if (bpf_jit_inlines_helper_call(insn->imm))
-        goto next_insn;
-    ...
+arch/loongarch/kernel/switch.S:__switch_to() {
+	#ifdef CONFIG_32BIT
+		PTR_ADDI	a0, a0, TASK_STRUCT_OFFSET
+		PTR_ADDI	a1, a1, TASK_STRUCT_OFFSET
+	#endif
+	...
 }
 
-Because this now returns true, the verifier skips fixing up the call offset,
-leaving insn->imm as the raw helper ID. The BPF interpreter then handles
-BPF_JMP | BPF_CALL by executing (__bpf_call_base + insn->imm).
+so on 32-bit a1 holds (task_struct + TASK_STRUCT_OFFSET).  This bias lets the
+THREAD_* field accesses encoded as (FIELD - TASK_STRUCT_OFFSET) fit the 12-bit
+signed load/store immediate range.
 
-Calling __bpf_call_base + raw_helper_id jumps into an invalid address space.
-Could this lead to an immediate kernel panic when the BPF interpreter execu=
-tes
-these helpers?
+> @@ -33,11 +33,12 @@ SYM_FUNC_START(__switch_to)
+>  	LONG_SPTR	t8, t7, 0
+>  #endif
+>
+> -	move	tp, a2
+> +	move	tp, a1
+>  	cpu_restore_nonscratch a1
 
-> +	default:
-> +		return false;
-> +	}
-> +}
+On 32-bit, does this leave $tp biased by TASK_STRUCT_OFFSET?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608103516.2064=
-3-1-yangtiezhu@loongson.cn?part=3D2
+The old code set $tp from a2 (next_ti), which was an unbiased thread_info
+pointer.  The new code sets $tp from a1, and on 32-bit a1 was biased by
++TASK_STRUCT_OFFSET at entry.  a0 is un-biased before return:
+
+arch/loongarch/kernel/switch.S:__switch_to() {
+	...
+	#ifdef CONFIG_32BIT
+		PTR_ADDI	a0, a0, -TASK_STRUCT_OFFSET
+	#endif
+	jr	ra
+}
+
+but a1 is never un-biased, so $tp would hold (task_struct + TASK_STRUCT_OFFSET).
+
+Under THREAD_INFO_IN_TASK, get_current() reads $tp directly as the raw
+task_struct pointer with no offset compensation:
+
+arch/loongarch/include/asm/current.h {
+	register struct task_struct *current_thread_pointer __asm__("$tp");
+	static __always_inline struct task_struct *get_current(void)
+	{
+		return current_thread_pointer;
+	}
+}
+
+The exception-entry paths (SAVE_SOME and handle_syscall) restore $tp from
+cpu_tasks, which set_current() populates with the raw, unbiased task pointer:
+
+arch/loongarch/include/asm/switch_to.h:set_current() {
+	__this_cpu_write(cpu_tasks, task);
+	...
+}
+
+so everywhere except the scheduler path $tp holds the raw task_struct.
+
+After __switch_to() returns into __schedule(), would every current->field
+access on 32-bit then dereference (task_struct + TASK_STRUCT_OFFSET) until the
+next exception entry reloads $tp from cpu_tasks?
+
+The commit message says the patch "correctly neutralizes the structural
+pointer bias on 32-bit platforms while cleanly falling back to 0 on 64-bit
+systems."  That appears to apply to the new
+
+	LONG_LPTR	t0, tp, (TASK_STACK - TASK_STRUCT_OFFSET)
+
+load, but the move tp, a1 itself still stores the biased pointer into the live
+current-task register.
+
+THREAD_INFO_IN_TASK is selected unconditionally for LoongArch (no if 64BIT in
+arch/loongarch/Kconfig), and CONFIG_32BIT (LA32R/LA32S) is a selectable kernel
+type, so the 32-bit path is real, supported code.
+
+Would something like
+
+	move	tp, a1
+	#ifdef CONFIG_32BIT
+		PTR_ADDI	tp, tp, -TASK_STRUCT_OFFSET
+	#endif
+
+be needed here, or some other un-biasing of $tp on 32-bit?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27132522999
+--===============2203711265836068332==--
