@@ -1,229 +1,168 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD4338238D
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 18:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780942000; cv=none; b=fFegBrKEQ8hDdrcU4vvwsnazU+vO8EwIjqLVe5dtR5T307E5pP7iuDBL8hIpD49xIsbgEpbG28E2oOHVrWb4MGVf3WBK/mwr2QlOO1YXLfUrJIOiszN68bmtAMKCcTPig31tDbm1eYTN8+c5FgsNGiSQL6gmtlBs36EpP0RwNWw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780942000; c=relaxed/simple;
-	bh=9j1zwOiqYR/j62a4SmkndR3I/fBKjx3NMWjiae/q3ic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qtgW8kRnhGfTMuBo0/2BfWbhbcUi/ws+UrV4NA9y3otHB0XP4irSRD2637MRzjiYBaqGh0Mb4NKReruYqHqUXBKUrz3vpdRTe/38QT13slFAsn6CF/RCNqb6N2dDh7M1IJ2wkp3+hgcyLHkItuGk9dS5pu4zVofHDglZvLA0+DI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D/CmtwqX; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27EB2352021
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 18:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780942461; cv=pass; b=k/lDHjDyUeoVv5iY5/s/1xaXc1cq6iUWLMsUfox1M5NFBVVWuPS8+O0OpVoteg3NjxnsFH2wedzi1Wu0ewUiDXoI+W6fTihiniToGxQmNXq/9s5Lhw4ZXnXdBPPqMwAzJumfMF0KZt+mEyMCcrwvANnYY6nI1EzAde7juh8c40I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780942461; c=relaxed/simple;
+	bh=cdobpiwLWv7oVVX/pldaFU009Uk0NSg+Z2E2eK4qo7Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=La0ixdj79ZbSj1zhq8gsnbaMA2KtsCz7PXtLbBSmDYkCj4n4imarCp1wMC3K1GxIPfN97ThpTV9t3WdvHIdmpesHCSaIvXeAa5EFOUWXq59t3z8Zymde6a1Ct3N04sBNPOrFt94AJlUaefrjvbjJq6w9xYjMOsx08GmEcoMfijI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUPy1lFt; arc=pass smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D/CmtwqX"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-45efa80e0afso3581829f8f.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 11:06:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUPy1lFt"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso31643885ad.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 11:14:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780942458; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cAbp4CwoUEm/RslcAVxWtXHFcQvbuwYOfsHb49RKyBTs/AqWJ6/UjE1EqJq3OpMVl3
+         0vnk7q7Wd2apCvidCZ3vaYqSnTIRj8FkhRF76Jb+ZmrBAPO3T/Azrk7MKGO/TmZ0kFgD
+         63lzWT7tNUPpJwmNIXCHuCao9gmwQ0fOBbGnuv0oJBgwHZ8tEm/BHU5KvhxET8Un/bIC
+         dVV1r8A0kFXI+Ay9pyWv9INEfJIUdZbX1/en3O3qxd5LNqRnqDlT9t68PwCKkV+r1gVU
+         7pFZQ8sXbtzdPlZCawVrtWdENgbyqDs7v7/IiJ/vEaj04EPzxRXifcwPSz+s/k4DUqEv
+         p69w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
+        fh=K9q+kWibaSNW/zvOXDSSIYsSM0i7+Yq8uBM1+SvFFHM=;
+        b=jInVrFjDSbzu9nUB5BoKxJzWDirGCZHxmcCyIVhWpWX3GzoI73dMwAzcBc/lwl+UhI
+         vhYB8BwUkTgAuEYKdOjMl+SS3pIN6ThrGMBzeXcZc7PTT4Ik4/RDc6GBxlFtxkToKuPh
+         6W+XHKrhF1TqbD5qm3ccpa6nOhOyzc2h3VY6B+s6WKjzAlSGW+ISDIa02HBoQWAz+LUJ
+         z1AQfV0xQIBnJFAeH3Agpe32miN9LREMy+VI5e3zVvKDxEKIX87h11OGFUtUfU0+Dgqj
+         vNtVE0V2eMdAdR7/+dRQovTaPdK5hU+w61fEx4N2FCFJPTla5penzhu3dyIflaIwdAsV
+         DG/g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1780941998; x=1781546798; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ruO8SnBumLZRLs1kOpD88cW4Qstol4o2xlBdcC+hpIQ=;
-        b=D/CmtwqXNyGX0yfK977KF9gElPvNCIInU2NrzbQmhyWE0xKKWUEcjUNzDODyE5jo4H
-         sBnXO5I/0mY3/8ps/lM9mP4IK2FwzXYuwTOflph70TpmF3rnTN6gqDaNYNwD6gSU/A2i
-         4Sj93K9kZ8snRreaiYJrDglKHandL+bfm1LmLR+8JXL+aAaHdBBqOzcRtKSyAuSLosNx
-         aYPfG8IU6BbSM/T4+q37xRRpQjqlIpRzvMZHBH73AK/lA6wU26fM1UNDAxO6ysSSwxuk
-         bZQ/xe4x3cNYqeM95kcG6dE+ZG0/FhSehLhpAG9lcHIYS1nzGJlGPeXUl9dFkvc3bHbO
-         82Rg==
+        d=gmail.com; s=20251104; t=1780942458; x=1781547258; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
+        b=CUPy1lFt2e62Q3gx3DrcJT8CL7ht1lt5Cqb/ppN/yOepqEoKTejdWxMU4SH/r2TWkF
+         7Ju6SAvv0unNQTWDoio4oeQ9tdyUhmJaqf+iAcJ7oCNKy6URZB0Ib9V1x8rJcTwv8uf7
+         MmReM+YFzR28VzN43fJSSCMSJn2TpPbL4vK74ZioYRuKO16N06H8aU2oRrobm7Pco1eh
+         4e90ZiGmna7jobG8/e3f0zO7E1y3S9QSRKVnXw9ZkF0CExzmbXQ8Q6Fhp3w2MrKBi3Dj
+         /+Z1KoUjTas+eqq13ylQwJ1DPZM5hmeZpUQ45EHfc2SR9fMNh1CDwVNJo8K2Onfb/8cN
+         6Oyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780941998; x=1781546798;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ruO8SnBumLZRLs1kOpD88cW4Qstol4o2xlBdcC+hpIQ=;
-        b=VQ2dtT+hGwdtk3vYcztvp33GFTsHaPPGRIeUnSlPV2GcKQaMoLFP6etLhmrg5RJmED
-         X4Z1jA1CRM9GKtJOu3g+eAA1lqHDcUoy0zl+65U0laT/31BwUaY2oShE3jYy1ErG19WR
-         7Zvyowi5V4UyntdnlRgAQK2kyCWI8sk8OK3OnYm5l+wqJ98E2Fv7G2Tn60JmQQY4NwYG
-         tYhJi55fte4Eh6w4W9vN1w2t4F3Fddfyr5+t/W03QcR3+cYE1CG5lcB0vySDaK6EhN3F
-         Wt9DAexptkk/ZtvG4S843mk5/KH0iJmgtd2ZSjwIqo0pmsePHT4dSm1CnUXZGRj9lZRL
-         w4+A==
-X-Forwarded-Encrypted: i=1; AFNElJ+oxq6qhIkIcwZ0H7X3210f1sW4X6V/fuJUb5gi0wD+c/3rmvpu5Yr/1epto7wRo1AnlEc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywerafcgj5zE+tU3KyJJSy8YzAOtASuqDMTw5nI+CO98l01+0rp
-	h7AKm5FrYv0jbQFAvMvRwCJZPTIdFoyD/ZDRdi+vsW1REZOrVaJ8OPxFp+/YQORy5/k=
-X-Gm-Gg: Acq92OGMx/Lp+7PIzi/HIE36nNiCosbt2HWBpJ/i+UcgXYj0ht9fXyH7/90MOHqZ/xB
-	UZqvqjCLfbBhfLxJRnaL+7xRSflNnSvgWKvsQsjM/qCzJLqjA+maMdjYRgCa2cNR37p9Qgr4h10
-	jvFuY1K/FlpUHWJ0C7oBNpWlfqnB7G7F16iDc4lXBSfDt7KMWzEDL6lab9W4+DUMq5Y2PMVtRQm
-	hfBaEdsqSIFmZaEGOb5uWcfgH8SQhiRhfyyspUH0ulIJhJe5fUVY179E+lxUwhQT7XPW0Y4bQQz
-	IEob5QhuBsKviEk67QfAvQY/47K8bIfJdOkBgDlLvHr0BwRihy2DLxyBoAvBzIN+nfe66RxHAOZ
-	Mt/xiBfDlhslykKp5LS/yWhMAaWuEMi1EYAtKUr/O8fiHZvbINJ0XPD0bdaWlCuEJY17huXpJOj
-	p5MseOQezoumnTd0h8mxjIDFnJTM4fvwb4jBVPIes=
-X-Received: by 2002:a05:6000:468d:b0:446:db72:e8ec with SMTP id ffacd0b85a97d-46030643609mr17198053f8f.23.1780941997560;
-        Mon, 08 Jun 2026 11:06:37 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcb13sm54421372f8f.2.2026.06.08.11.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2026 11:06:36 -0700 (PDT)
-Message-ID: <48f06bc5-0283-4720-a5e5-843af16cb9dd@linaro.org>
-Date: Mon, 8 Jun 2026 19:06:35 +0100
+        d=1e100.net; s=20251104; t=1780942458; x=1781547258;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bLVgW0YpQ2LvPnx562WBAcfO+Acupv1Ug4Sxu3bRE0k=;
+        b=mkW6Xe6+AMk+Wu8YNZFlh5TBsvwcJrxdn9PpObgh3g5NbfhjhWECj6rijLMwVwg/v2
+         WaAeKo0aydeUmVo5vKHL5gJ3z7XER9NL71frgYR7BfwYVaF/p06iIHlIDEorumCNI4Sh
+         MyZmF+gFcSbE/CYb9u2nmquvDzIX56AMeXDRujkn27o/W1qdpTaicrKaWJKBR8S6HEME
+         X0kPfWHmrbwWROguGdCBpoCuFZCVJtja38yxHzEiR0meIRW8Y2YD6PDtyj6ycEMS/Xkm
+         HHB5yUjaf3kKjibw/S96+NqU7/jqhByaypgXt6jRXPyzoZ6xwLXH1Z6R6CWBeVyuxYKt
+         8mug==
+X-Forwarded-Encrypted: i=1; AFNElJ/bYEebSfLK3HtJEZmyJDqiyJVY0RaIoRH2uUVVoGTAV4XMSS9zrDBvAKR7jURkyLCnYxs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbLlEGBep1vn57rLl5rf75EPwJKVOhqO6vRa+YiXtgZLYETanK
+	nmcU0tt69wO69wJemAiacG8deG1KQ+NgmLt3BfHlzUgkXqM1uGH/JeSIS6E5bBw1SMFBqK6l+8G
+	kQsNw+SPVh2mMr6rU15chLx+9Wu7tjy0=
+X-Gm-Gg: Acq92OETM/FayIXRXOji+n1+mRT7jdLo5b73snf+lQxyh+t4RwvGBeQSCt62Gm/Yb/3
+	H7RxB9Lwl+cXqY06PCN3oVKDRrh2kSbdZzQW3Jo9GK8fEu8sNneLHjLb/TPjaObCDgmsK+67S+R
+	NyZrLMd3JPw7wxj+ojFY1Qn6xoHWJuCJZPe48UuxDZKv5ul07UGmLytqiBPejAbMElGIO5uLeIr
+	dt+dHO9dgpIy3Yu3pEHJf//YajYMXDxBdqT2pLd8Z6x3gBNqT5AcnKl6pTNW7nUNV3/9wwNKKeW
+	iKpjqricyCCsdNk7KPbj9LOG0KE0EUOtgDjNyNnWuKD77xbJWyTfY9SyRoPITCjtcbUdM14riO+
+	sILPLcfJgSsyRvBWqsUnBcYZvUQ==
+X-Received: by 2002:a17:903:1813:b0:2c0:c262:b919 with SMTP id
+ d9443c01a7336-2c1e78e4e97mr111388825ad.5.1780942458521; Mon, 08 Jun 2026
+ 11:14:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] perf: Use a union to clear branch entry bitfields
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>,
- Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Stephane Eranian <eranian@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
- <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260527121207.2312181-1-puranjay@kernel.org>
- <20260527121207.2312181-3-puranjay@kernel.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260527121207.2312181-3-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260529031604.888137-1-chenyuan_fl@163.com> <20260604031033.806727-1-chenyuan_fl@163.com>
+ <20260604031033.806727-3-chenyuan_fl@163.com>
+In-Reply-To: <20260604031033.806727-3-chenyuan_fl@163.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 8 Jun 2026 11:14:04 -0700
+X-Gm-Features: AVVi8CfeHqtpS-HGlLc4glXkts_Xp6ARPR9VGj-S1X4pyp51n5kXFrLsUu96gpI
+Message-ID: <CAEf4BzavhAkKLdmsZLd0r0bUd-B1XKS6a+Ec9xfqaZVZNiu1UA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Add ARRAY map type to
+ token tests that use struct_ops global data
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	chenyuan@kylinos.cn, daniel@iogearbox.net, eddyz87@gmail.com, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 27/05/2026 1:11 pm, Puranjay Mohan wrote:
-> perf_clear_branch_entry_bitfields() zeroes individual bitfields of struct
-> perf_branch_entry but has repeatedly fallen out of sync when new fields
-> were added (new_type and priv were missed).
-> 
-> Wrap the bitfields in an anonymous struct inside a union with a u64
-> bitfields member, and clear them all with a single assignment. This
-> avoids having to update the clearing function every time a new bitfield
-> is added.
-> 
-> Fixes: bfe4daf850f4 ("perf/core: Add perf_clear_branch_entry_bitfields() helper")
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+On Wed, Jun 3, 2026 at 8:11=E2=80=AFPM <chenyuan_fl@163.com> wrote:
+>
+> From: Yuan Chen <chenyuan@kylinos.cn>
+>
+> obj_priv_btf_success, obj_priv_implicit_token and
+> obj_priv_implicit_token_envvar use the dummy_st_ops_success skeleton,
+> whose struct_ops programs reference global variables backed by ARRAY
+> maps.  Without BPF_MAP_TYPE_ARRAY in the token allowed map types,
+> bpf_object__load() fails because the kernel rejects ARRAY map creation
+> for global data.
+>
+> Add BPF_MAP_TYPE_ARRAY to the token permission mask for these three
+> subtests so their skeletons can load successfully.
+>
+> This is distinct from the libbpf probe issue: the skeletons genuinely
+> require ARRAY maps for their global data, not merely for probing.
+>
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 > ---
->   include/linux/perf_event.h            |  9 +--------
->   include/uapi/linux/perf_event.h       | 25 +++++++++++++++----------
->   tools/include/uapi/linux/perf_event.h | 25 +++++++++++++++----------
->   3 files changed, 31 insertions(+), 28 deletions(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea..f7360c43f902 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1474,14 +1474,7 @@ static inline u32 perf_sample_data_size(struct perf_sample_data *data,
->    */
->   static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
->   {
-> -	br->mispred	= 0;
-> -	br->predicted	= 0;
-> -	br->in_tx	= 0;
-> -	br->abort	= 0;
-> -	br->cycles	= 0;
-> -	br->type	= 0;
-> -	br->spec	= PERF_BR_SPEC_NA;
-> -	br->reserved	= 0;
-> +	br->bitfields = 0;
+>  tools/testing/selftests/bpf/prog_tests/token.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+> index f2f5d36ae00a..1812de87bedb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/token.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
+> @@ -1214,7 +1214,7 @@ void serial_test_token(void)
+>                 struct bpffs_opts opts =3D {
+>                         /* allow BTF loading */
+>                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
+ | bit(BPF_PROG_LOAD),
+> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
+> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
+MAP_TYPE_ARRAY),
+>                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
+>                         .attachs =3D ~0ULL,
+>                 };
+> @@ -1225,7 +1225,7 @@ void serial_test_token(void)
+>                 struct bpffs_opts opts =3D {
+>                         /* allow BTF loading */
+>                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
+ | bit(BPF_PROG_LOAD),
+> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
+> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
+MAP_TYPE_ARRAY),
+>                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
+>                         .attachs =3D ~0ULL,
+>                 };
+> @@ -1236,7 +1236,7 @@ void serial_test_token(void)
+>                 struct bpffs_opts opts =3D {
+>                         /* allow BTF loading */
+>                         .cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_MAP_CREATE)=
+ | bit(BPF_PROG_LOAD),
+> -                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS),
+> +                       .maps =3D bit(BPF_MAP_TYPE_STRUCT_OPS) | bit(BPF_=
+MAP_TYPE_ARRAY),
 
-The comment above here says:
+Hm.. ARRAY map is unprivileged, you shouldn't need this. Are you sure
+this test failing for you is not a consequence of the issue you fixed
+in the first patch?
 
-  * The to and from fields are not cleared because they are
-  * systematically modified by caller.
-
-But this is an inline function and the to/from fields are always 
-assigned right after calling it. Surely the compiler can work that out 
-and this was a premature optimization.
-
-If we rename it to perf_clear_branch_entry() and do:
-
-   *br = (struct perf_branch_entry) {0};
-
-Then we can delete a big comment, remove a potential source of bugs if 
-even more members are added, not have to update the uapi headers and 
-simplify it instead of working around the original issue.
-
->   }
->   
->   extern void perf_output_sample(struct perf_output_handle *handle,
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index fd10aa8d697f..c2e7b1b1c4fa 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -1491,16 +1491,21 @@ union perf_mem_data_src {
->   struct perf_branch_entry {
->   	__u64	from;
->   	__u64	to;
-> -	__u64	mispred   :  1, /* target mispredicted */
-> -		predicted :  1, /* target predicted */
-> -		in_tx     :  1, /* in transaction */
-> -		abort     :  1, /* transaction abort */
-> -		cycles    : 16, /* cycle count to last branch */
-> -		type      :  4, /* branch type */
-> -		spec      :  2, /* branch speculation info */
-> -		new_type  :  4, /* additional branch type */
-> -		priv      :  3, /* privilege level */
-> -		reserved  : 31;
-> +	union {
-> +		struct {
-> +			__u64	mispred   :  1, /* target mispredicted */
-> +				predicted :  1, /* target predicted */
-> +				in_tx     :  1, /* in transaction */
-> +				abort     :  1, /* transaction abort */
-> +				cycles    : 16, /* cycle count to last branch */
-> +				type      :  4, /* branch type */
-> +				spec      :  2, /* branch speculation info */
-> +				new_type  :  4, /* additional branch type */
-> +				priv      :  3, /* privilege level */
-> +				reserved  : 31;
-> +		};
-> +		__u64	bitfields;
-> +	};
->   };
->   
->   /* Size of used info bits in struct perf_branch_entry */
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index fd10aa8d697f..c2e7b1b1c4fa 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -1491,16 +1491,21 @@ union perf_mem_data_src {
->   struct perf_branch_entry {
->   	__u64	from;
->   	__u64	to;
-> -	__u64	mispred   :  1, /* target mispredicted */
-> -		predicted :  1, /* target predicted */
-> -		in_tx     :  1, /* in transaction */
-> -		abort     :  1, /* transaction abort */
-> -		cycles    : 16, /* cycle count to last branch */
-> -		type      :  4, /* branch type */
-> -		spec      :  2, /* branch speculation info */
-> -		new_type  :  4, /* additional branch type */
-> -		priv      :  3, /* privilege level */
-> -		reserved  : 31;
-> +	union {
-> +		struct {
-> +			__u64	mispred   :  1, /* target mispredicted */
-> +				predicted :  1, /* target predicted */
-> +				in_tx     :  1, /* in transaction */
-> +				abort     :  1, /* transaction abort */
-> +				cycles    : 16, /* cycle count to last branch */
-> +				type      :  4, /* branch type */
-> +				spec      :  2, /* branch speculation info */
-> +				new_type  :  4, /* additional branch type */
-> +				priv      :  3, /* privilege level */
-> +				reserved  : 31;
-> +		};
-> +		__u64	bitfields;
-> +	};
->   };
->   
->   /* Size of used info bits in struct perf_branch_entry */
-
+>                         .progs =3D bit(BPF_PROG_TYPE_STRUCT_OPS),
+>                         .attachs =3D ~0ULL,
+>                 };
+> --
+> 2.54.0
+>
