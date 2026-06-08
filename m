@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA94D3C9EFB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7373012CDA5;
 	Mon,  8 Jun 2026 14:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780928853; cv=none; b=oLkM+Vnuwx0NTVePAut8DW2yMc4TQ8WMBB75kpHhxYpircya1HREQkWRCByZyRG3OuRA3uTObe/rN4BRPYx2ghzEdDmdc7a958IGe9sfBzRsU6k7qsE0yljY+IExkqQLE2W8DS0Au6Xj8648w6zc07dgQlpx094+GzZRdC7pkLo=
+	t=1780928853; cv=none; b=d+gIM3f+oejHcxtSUnxTvaNfbHjK3IH/wRKh0+C42DySBAoMH1AMNbXxLAU+0ol5Es/0kZfbiN0FuViI4s/b5zvVo1BF6EgjTOhZMKMnQYH4Nad1fWq/Xqkn73aT67Kf6Bor2Oex2adMlwHtnQ7hIt9be0OINWwZR0PnY2ILgoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780928853; c=relaxed/simple;
-	bh=i/yKIQgDIXqLq1rcqI/cxHYLwHc2D2z1FozXQR3IUVs=;
+	bh=hKq87oloK4wQOobWABNNaOIg2C7pwg1eUmkYrjTqUaw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fsyQiDLNlzKMxHzF2twUSc/OL0kjS/lkJQqRB3lJyraid9aeG8yqbqO78MZNfsutehFbanHNkCLDkFKH17ZA+u9YnKad4ekMPXu778Vetaw5gJ4SpnlxLZVce5LYbyPsydkSnnPrboNRBqtCWQ4aHleRd1YNdPwR2TgsMU0LE5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YnqXzP9y; arc=none smtp.client-ip=117.135.210.4
+	 MIME-Version; b=hsLxhStwt1jnoVqx5okUOxAb6TcHkM2Xwn5XW66f6jyYbZJoM6HpHOyH3/aojZ9neptsuwoC290TELM5Eqz7E8rGffFA9vDzbMgkPLJD5QL8vgK57vVoAh7XNX3O8vCVetttzkN2KJyjlFwZCWmkMTqAvtsMF/buM6Rr+qGpv4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=JNd8qohc; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YnqXzP9y"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="JNd8qohc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Nd
-	5rUULCZjZP2nQi41ANALB/Ntn6/CskZz64rWrwRr0=; b=YnqXzP9yvdmSvEL8j1
-	NthxAjvP9+uEpb7NYqWouK7nYppPYaLzebEfiug+/C0pQubHv19RboErHi4b4Lq7
-	GOKHLQJ4N2E5kmz7P+Fcc15OFqvmQUL6j41u2QjH+DZQ4FLMKK5bjsRwed56LG36
-	hHD9dgg3SdJlFKHx8qXJX4pao=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Lk
+	u9J1QQClxXUHMC+AqzpMiIb0/zD0xqOOn1lD3TYNc=; b=JNd8qohcBb256lFdVE
+	mNZtNyb7YabQKS3Xq+57Ni7tJcKCaE4Iri1ncBzduChQaUP4kUPSNdWnLN/Zv/Ir
+	l+MlfbpXZGescDYtd8tJA/z470HbqezLF2OyzhTKdkNRIRN4bqPTnsdHnJscBHhD
+	x6b0yE+7MhMcCx8Ox/JZo3N+E=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wBXwtUW0SZqv3LYBw--.1507S2;
-	Mon, 08 Jun 2026 22:26:33 +0800 (CST)
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wBXwtUW0SZqv3LYBw--.1507S4;
+	Mon, 08 Jun 2026 22:26:42 +0800 (CST)
 From: chenyuan_fl@163.com
 To: chenyuan_fl@163.com
 Cc: andrii@kernel.org,
@@ -43,12 +43,13 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev
-Subject: [PATCH bpf v5 0/2] bpf: Fix kfunc implicit arg injection and add selftest
-Date: Mon,  8 Jun 2026 22:26:16 +0800
-Message-ID: <20260608142618.3064380-1-chenyuan_fl@163.com>
+Subject: [PATCH bpf v5 2/2] selftests/bpf: strengthen bpf_kfunc_implicit_arg to verify aux injection
+Date: Mon,  8 Jun 2026 22:26:18 +0800
+Message-ID: <20260608142618.3064380-3-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602093836.2632714-1-chenyuan_fl@163.com>
+In-Reply-To: <20260608142618.3064380-1-chenyuan_fl@163.com>
 References: <20260602093836.2632714-1-chenyuan_fl@163.com>
+ <20260608142618.3064380-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,52 +57,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBXwtUW0SZqv3LYBw--.1507S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJryDZFW5tF4rKF43Xry3CFg_yoW8AFW5pF
-	WrJr1Ykr48J3WSgas3Ar4xZr1Fgan3X3y3GF98K340yFs8ZF18XryFyr1fXayYyrn3WrW2
-	vas2qFWkW3Wqy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziHGQDUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hqeXGom0RoE5wAA3a
+X-CM-TRANSID:_____wBXwtUW0SZqv3LYBw--.1507S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFW8WF1ftry5ury5Gw48WFg_yoW8XFy3pa
+	97Jr10kr97Xa17XFn7GF48XFWrKFs3XrW8AF1DGr95Zr4kX340qF18tFyFvFnI9r4Fq3Wf
+	AayxKFW5uw48ZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR1rWrUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5gKgXmom0SIFggAA3i
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-v4: https://lore.kernel.org/bpf/20260602093836.2632714-1-chenyuan_fl@163.com/
+Verify that the KF_IMPLICIT_ARGS injection path correctly passes
+the bpf_prog_aux pointer by checking aux->name in
+bpf_kfunc_implicit_arg() for the expected program name prefix.
+If the verifier incorrectly skipped injection (as could happen
+with pahole 1.30's BTF mismatch), the stale register would not
+contain a valid aux pointer and the name check would fail.
 
-v1 made btf_types_are_same() cross-BTF aware by comparing kind, size
-and name.  Alan Maguire pointed out that this would be too permissive
-since two different structs can share the same name and size.
+This is a positive test exercised by the existing kfunc_implicit_args
+selftest, which calls bpf_kfunc_implicit_arg(5) and expects a return
+value of 5.
 
-v2 used a name-based classifier (get_kfunc_arg_inject_type).
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-v3 splits the combined is_kfunc_arg_ignore || is_kfunc_arg_implicit
-check in check_kfunc_args(), so that an implicit argument reaching
-is_kfunc_arg_implicit() without any prior handler is rejected with
--EFAULT instead of silently skipped (Eduard Zingerman).  This prevents
-the silent fallthrough that occurred when module BTF was inconsistent
-with vmlinux (e.g. pahole 1.30 breaking distilled base dedup).
-
-v4: fix a build error in the selftest.
-
-v5 changes:
-- Patch 1: extend the kfunc allow-list in check_kfunc_args() to cover
-  all kfuncs with implicit args handled in bpf_fixup_kfunc_call():
-  obj_new, percpu_obj_new, obj_drop, percpu_obj_drop,
-  refcount_acquire, list_push, rbtree_add (Eduard Zingerman).
-- Patch 2: simplify the selftest by verifying aux->name in
-  bpf_kfunc_implicit_arg() instead of adding a separate struct_ops
-  test program with inline assembly (Eduard Zingerman).  This is
-  a single-file change exercised by the existing kfunc_implicit_args
-  selftest.
-
-Yuan Chen (2):
-  bpf: Fix kfunc implicit arg inject type detection to prevent invalid
-    pointer deref
-  selftests/bpf: strengthen bpf_kfunc_implicit_arg to verify aux injection
-
- kernel/bpf/verifier.c                              | 19 +++++++++++++++--
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  6 +++++-
- 2 files changed, 22 insertions(+), 3 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 30f1cd23093c..624d57a5c79a 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1906,7 +1906,11 @@ int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, struct bpf_pro
+ 
+ int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux)
+ {
+-	if (aux && a > 0)
++	/* Verify the kernel injected the correct bpf_prog_aux pointer
++	 * rather than leaving a stale register value. */
++	if (!aux || strncmp(aux->name, "test_kfunc", sizeof("test_kfunc") - 1))
++		return -EINVAL;
++	if (a > 0)
+ 		return a;
+ 	return -EINVAL;
+ }
 -- 
 2.54.0
 
