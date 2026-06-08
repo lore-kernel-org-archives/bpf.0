@@ -1,155 +1,120 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC163B1014
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 08:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5843B1014;
+	Mon,  8 Jun 2026 08:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780908774; cv=none; b=giVilmZePSgZwPNspx436GRM2DVBLrVrK0PXZb8Iv1XUYaAFtFZb/ni3rC2im5bB7Yhsuojj6jK13SObrv/iUzulliQQi5RpqEzMcNCiQ9a8oRSAcIhW68+it3dWdB0e6V4zjPUtUq3Zz5rZcEAb8hbdwg6n/M9fOaf0ktyVOnA=
+	t=1780908808; cv=none; b=DNdaj7ehxoSPaeNmO85gf+S3zeCFvQcPYPqN5Wmcag8nV3koWKZo3ufcJycSrsphvPy2T58s+Ae4v7KllwZm86MvAtMH2xm7gb9OH8PXV8IrLSf7APw48Xp9JnP9oGw+Eur/okGs35fEqWC19GSVokOqVlkPxKE5AtvYQtwW5fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780908774; c=relaxed/simple;
-	bh=71kngNLglTQFWzZYkjVAWT0fHT+5MJVHKiuaOh/1EgQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OpXBqGra/YPitRJsM442VemQBTYFZG6Guea/NhecxeRmUT9MPWsUZlcqhuMTKTJoaUmS9vH3JkWQI6G5xifdDoN/RF0q7gFNPZIUwnauo/W1UpAHptJVJQUfVjaq9CgbyFqG98YraZA4FnTl+iY5dxfWgASXj1O7EHZJPszuuRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IOFTK4Ag; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780908808; c=relaxed/simple;
+	bh=jjCZ4n7MNDYhl9YaC7H8utHm0FgViydSvGutONMYr+E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MTFIBcdmbIWBnvbXsXCAMZnvY++sdSEDy7ehy0Txkq0CxrwsE4hrLt53nftLij4yEnqO60OyZ7DxsZ66sj14MHJIYTTUwlz0FoXxkhv4uTiOMo//27D23yuSmHGPtEdT3c2aWFWxCsEid9Sebbqq0LP9LDyzYw5R/U1tnzr56OM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVKylabz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOFTK4Ag"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490af320e2aso44718395e9.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 01:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780908771; x=1781513571; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
-        b=IOFTK4Ag/Fh423MXLErk25yqTc/H6GVAub/458cV/r+cGCGj/fTnQdeEqQyJvwkA7S
-         qRshw+rSQOex2QIdvzssxJ90ysoVDk9cefNRdZenzfK2/5sLUen7O4nfwScdtz81DmOA
-         DqMhOHQfju0U4/4y5Ct/FDrffrqw69KGj+kQNpU/GhgcKTLi7/B/ZPqUrXZbG2Iz/C7X
-         nQnLHM7xIsc5MdXMzmYkdSJpMxbHR3t8bGt0AksjW7aH2HeXSyadL2ZcE5MGrL0oS0Ma
-         3U2ug8NRcoJMgO3RdrMwVPpzzIrUFgXo/vwqTS1xDZx/1Ulfy1WZtLoSemz84aLsictQ
-         aWIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780908771; x=1781513571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RAmzFalsZ1626ri7eqynS376s1QmdxkNtdz+K5A5+m4=;
-        b=SjaIR9SZiZi+SuaQdmYEWb54IAJhvpEJemCcD4ZSAlPos+rBmIa3IsD1TGOLgbFHzy
-         29eoq8+Bo1w81b7govYmq3iGSA6PbJnYERduLhh0SKR74U2s9nNl2tOWUllxi5o/bfO/
-         oW3c0DTQiIFM+D89JkVNqR4SF8EU8qmKdyh9UqH5hEm3k6WiB77Yf/lJipeMwShgWMFz
-         l33n8z1XYIUhNYbIkp3NDSRENWcSF9aJWqF3KqW7Xx7ByXc7INDyzaRX15dJzSxSz3li
-         BjgV4rwnJv3V1gQojhQl8n063V69HVkfBWKQUAEpzj2CEW6BXBb8qoB3PfOdFlpfgeqC
-         bSAA==
-X-Forwarded-Encrypted: i=1; AFNElJ+g3wOzj5wip4PRm7UNNtWaMioihuX7L5cCVZdCzsaG5ZA5D1N5Vwlwdln7f93S5yu6mQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBvleYV8qpWpPAHL7rn2e9ZocARbFPfp01j2Bn7gCcFRPjjDuY
-	hh+GjWUlA1+S+wkA589NOBDleSUsI7o9JDlnUNQ1++EvLke1WqsjQhXh
-X-Gm-Gg: Acq92OF6/eIoMXdUdAYGWzt8N5JPD6eKpyG6zh9e7o69muliVzv4RUxWb0AWYOGKWb9
-	L1T6XODlHtzHDoSfzl8RqAkjcnhSKdJohXg/K4Gb0rSln+Srrx5uh4nnJT/1hGjjGasvVVG6Dz5
-	cPQ6y7JWwKherGogjLPyl1aDys40DNSKJJp0TJ2nZCRmInnDOv+pxf+BI02NMbpNEimWA1IqrgR
-	AvZvh8DgcGT4Bcf/N2mb/LuCpSQ4pA6pZFl7HGImQ8Fh36eC3gwslV8gNUogWZD9VAzjtT1NH2w
-	+wxoaX6Q8BOoaV4dMOhMD6vPW3CLG2Zg6r2P3wpzGZVgAalYzyVrdVfYTWeQobVPh8EoacAyOWT
-	HwmlX6rTjhcm97Wh8P1Yh19XTeqwH1WrQavZMHhEk8x+Vjk1Cs0j30HJbzGtPynZAD5RrLCxEMR
-	MoBraKJ4wd+LSj23vE6/l47g==
-X-Received: by 2002:a05:600c:83c3:b0:48f:d612:3c59 with SMTP id 5b1f17b1804b1-490c25a21a9mr267462155e9.9.1780908771176;
-        Mon, 08 Jun 2026 01:52:51 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc413adbsm378495555e9.15.2026.06.08.01.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 01:52:50 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 8 Jun 2026 10:52:47 +0200
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
-Message-ID: <aiaC37sAQD5kOfQZ@krava>
-References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVKylabz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7821F00893;
+	Mon,  8 Jun 2026 08:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780908806;
+	bh=QhilvN5aSWTGwC57M5NdEtZmpsttzMJLF7Z7dKXPBic=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VVKylabzMp3qTG1Y8XpYVm2td1ZJAiNomj2Dsel3X6DlStYttHKw6UziREvzu6bvE
+	 qeTsW+6f5YjsIdtXMybXSWiJUMBzhBzid2B0KwytadnWTrnPmVkRVpnzZXn5rCSj6z
+	 +2F/nf1YIDde22M+boo8HcElj18/w33+swdiixEwKVdUfrpfTs31gip6NZLQIxoRw9
+	 wY0NMamP5C5iWi0IXDxyxvB93QoQKp4GXDCxRB2crVs/NkaQm3JZvzT8Qec1NPel9D
+	 jyw4HritvyVZFaC8AdWv/C8M5QM9xpog4nTUrxEqyjTn/oFABVn6amVkQuABfoJG01
+	 JmhbKeRG1ndrg==
+Content-Type: multipart/mixed; boundary="===============1553892507643223952=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
+Message-Id: <7d2189443a0181a123e53e5ea93f3a905b1cb4d71d5d6bdfa27a77ed4be65448@mail.kernel.org>
+In-Reply-To: <20260608080440.127491-2-ankur.a.arora@oracle.com>
+References: <20260608080440.127491-2-ankur.a.arora@oracle.com>
+Subject: Re: [PATCH v12 01/15] asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
+From: bot+bpf-ci@kernel.org
+To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
+Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  8 Jun 2026 08:53:25 +0000 (UTC)
 
-On Sun, Jun 07, 2026 at 09:24:12PM +0800, Nuoqi Gui wrote:
-> An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
-> inner map template. The flag allows a concrete inner array with a
-> different max_entries value to replace the template.
-> 
-> The verifier currently uses the template's max_entries to elide
-> nullness for a constant-key lookup through the inner map pointer. At
-> runtime, the lookup uses the concrete inner array's max_entries instead.
-> The verifier can therefore accept an unchecked dereference even though
-> the runtime helper returns NULL.
-> 
-> Patch 1 keeps lookups through BPF_F_INNER_MAP array templates nullable.
-> Patch 2 adds a verifier regression test for the unchecked dereference.
-> 
-> Before the fix, the regression program is accepted and the runtime
-> reproducer triggers a NULL dereference. With the fix, both programs are
-> rejected with an invalid map_value_or_null access.
-> 
-> Tested by compiling kernel/bpf/verifier.o and
-> verifier_map_in_map.bpf.o, and by running the regression program and
-> runtime reproducer in QEMU before and after the fix.
-> 
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
-> v1->v2:
-> - Update the can_elide_value_nullness() comment to match the changed
->   parameter (const struct bpf_map *map).
+--===============1553892507643223952==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index d4f581c1e21d..c56df9513a08 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -273,6 +273,75 @@ do {									\
 
-jirka
+[ ... ]
 
-> 
-> v1: https://patch.msgid.link/20260604151153.2488051-1-gnq25@mails.tsinghua.edu.cn
-> 
-> To: Alexei Starovoitov <ast@kernel.org>
-> To: Daniel Borkmann <daniel@iogearbox.net>
-> To: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Daniel Xu <dxu@dxuuu.xyz>
-> Cc: Eduard Zingerman <eddyz87@gmail.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Ihor Solodrai <isolodrai@meta.com>
-> Cc: bpf@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> 
-> ---
-> Nuoqi Gui (2):
->       bpf: Keep dynamic inner array lookups nullable
->       selftests/bpf: Cover dynamic inner array lookup nullability
-> 
->  kernel/bpf/verifier.c                              | 15 ++++----
->  .../selftests/bpf/progs/verifier_map_in_map.c      | 40 ++++++++++++++++++++++
->  2 files changed, 49 insertions(+), 6 deletions(-)
-> ---
-> base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
-> change-id: 20260606-f01-v2-324fb92185a2
-> 
-> Best regards,
-> --  
-> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> 
+> +#ifndef smp_cond_load_relaxed_timeout
+> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
+> +				      time_expr_ns, timeout_ns)		\
+> +({									\
+> +	typeof(ptr) __PTR = (ptr);					\
+> +	__unqual_scalar_typeof(*(ptr)) VAL;				\
+> +	u32 __count = 0, __spin = SMP_TIMEOUT_POLL_COUNT;		\
+> +	s64 __timeout = (s64)timeout_ns;				\
+> +	s64 __time_now, __time_end = 0;					\
+> +									\
+> +	for (;;) {							\
+> +		VAL = READ_ONCE(*__PTR);				\
+> +		if (cond_expr)						\
+> +			break;						\
+> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
+
+__timeout is held as a signed s64 but is cast to u64 here.  On the first
+iterations __timeout still holds the raw timeout_ns argument before any
+time-check has run.  If a caller passes a negative or already-expired
+timeout_ns, the (u64) cast turns it into a value close to U64_MAX.
+
+This is harmless while cpu_poll_relax() ignores its timeout argument and
+falls back to cpu_relax().  Would it misbehave on an architecture whose
+cpu_poll_relax() consumes the value, such as an arm64 WFET variant that
+uses it as an event-stream deadline?
+
+David Laight raised this on v11
+(https://lore.kernel.org/lkml/20260508093206.389d9af2@pumpkin/):
+
+  Yes, the code is ok if cpu_poll_relax() ignores the timeout. But for
+  WFE it is all broken. ... if you assume/require that the converted
+  time is either 0 or greater than 200 then it can be used as the
+  initialiser for __n.
+
+The Sashiko bot repeated the same concern as a medium finding on v12.
+The v12 cover note opts to document the valid range rather than clamp at
+runtime, but the code still passes (u64)__timeout unguarded, so would it
+be worth converting timeout_ns into an absolute end-time (or 0 when WFE
+is unused) before it reaches cpu_poll_relax()?
+
+> +		if (++__count < __spin)					\
+> +			continue;					\
+> +		__time_now = (s64)(time_expr_ns);			\
+> +		if (unlikely(__time_end == 0))				\
+> +			__time_end = __time_now + __timeout;		\
+> +		__timeout = __time_end - __time_now;			\
+> +		if (__time_now <= 0 || __timeout <= 0) {		\
+> +			VAL = READ_ONCE(*__PTR);			\
+> +			break;						\
+> +		}							\
+> +		__count = 0;						\
+> +	}								\
+> +	(typeof(*(ptr)))VAL;						\
+> +})
+> +#endif
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27125050324
+--===============1553892507643223952==--
