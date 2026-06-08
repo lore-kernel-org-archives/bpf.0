@@ -1,124 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A513D31B824
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD0D2E9729
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780933209; cv=none; b=AuBUwEHdmIfLvBpUBRdTgr5d9YDnyrF51ZoAyW2azAqYRV5rH6P+2YGxrew/lN8S6yHYeU1f7JlsmF/U2kCAa0+7Xsi5/ypzWxfgWgcAHjUgL5Wd1tHqpIxRjqejhlAqjuWlmAnEDLnqV1IafzXUWYfcrsy1peTWh41uHP5bbR0=
+	t=1780933478; cv=none; b=JQFaDsbUvE+VVwMaZgUz92JWAczL1VXm1WFZeSOlkybwR1EzEYsoADIVMeEdC4H/v4CLOLVrhKFP8tVfbe+O/vh7D8R119FXEo+rPRpWNDCXKJ2WoXrhUOhvPWut96ebHIT0F3dsBSW2K3EBlcEakJqtvqkYLZZ1nAk1VbeAB0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780933209; c=relaxed/simple;
-	bh=FkvF3mbkjfiW7CKANbeF6JmBwxGZ/+51vBSjHFyxdHw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HUzaH10feuZ7Uwkt89wcEEKs7w8IO0lf8cFUVFGGJ2MFBZ8dIjR3S/doMIr574VDKrugsRY6wydOL4i2pCDHV9LOBwSddxFWom0/O8mlWBeqvi1t7t+xb8nXfdPpOOOpoO3D/NXgRW5PrceMBnt+dJqKhhE7j6MNhVrwyUl7PeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMah+VO2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780933478; c=relaxed/simple;
+	bh=rY/R8NHX5B58eju/P7vWPvPmeD3t7bmhli3x0P6LxwY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f9khxiyuY/eMQAhzUXcE7uzG2YEBHzZe8TicaDz5F9kV4/9TB1wX9I6Tn2zrvtK67F/RNh5krieyR7vxZmw1Z7ExP917WDCl701nz/j6tSXSg3CiiSTjLQrLkbPEOmeSu84GP+ceoS9xPbXaydUwCuNp8dLW0Ak41abRCKz4fTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFKuZZ9H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMah+VO2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E011F00893;
-	Mon,  8 Jun 2026 15:40:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFKuZZ9H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC1691F00893;
+	Mon,  8 Jun 2026 15:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780933208;
-	bh=bV2Wn13qXSoUF4LeGxQpijy13gpVXBh6Q2peXdZmlno=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YMah+VO2HSs038d0hpyGG0fJodVGzuakap9zPpgooTGNGdvMrG5K7o32SZsXbbxhE
-	 i/CowjQvsPD8icZTYlQipu3xnw19kF2Ec0vVmJ9L5yUYJDFkGPMqU/LBOvZDe6w0MT
-	 UGmNMdFhlSQspSxtQa9H94e9tb1yxEYcwRkzZCTnTabfAkkdTozCOGxzHMfU26dqX/
-	 WGjYYZacrJoeCbnBUTXKyUCk2PtI8X9BuZZCRxs2AvSJE1wj/H/jwgPEDvE0SnneEB
-	 J920gXV/9QqoH4JswynLExHg78QAlvX2KV+vlVzaCNKhhr0zF+Am1A0XfPu2sGcSsG
-	 X8jcoh+XyqZ5w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 2/5] bpf: Reject bpf_obj_drop() from tracing
- progs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608144841.1732406-3-memxor@gmail.com>
-References: <20260608144841.1732406-3-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 15:40:07 +0000
-Message-Id: <20260608154008.27E011F00893@smtp.kernel.org>
+	s=k20260515; t=1780933477;
+	bh=T21Z5+pC2iJEzM1TWC/18jDu7ERaQCxJcWbNpZtT3rU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=oFKuZZ9HcUupU5Q9oLhbJuX5F1tWYMGn4tUXa9dQCRLASaKkKSu0dEvjiBBF2YCaT
+	 iSIiTRq5HUmQj525Hce350By1pcWFGIxcPhoGrBbx4IkwDcab29s+TCmYqSE9l2sRV
+	 jg9T2i2ERiz0hjEjNv3O0buUPGukoAZac0z5ZtikAX0iaBJGGI+UXYM+qNYG4lih1A
+	 kt/9KmPtfQR7YVWqbaXRV7TCqixp3IISUxYlsi/6QaDRXyijWbG4b9BX7HIDwqUxts
+	 HltPjip+27EvIwbnwRUjst5xzbDtDLtGY7eYhAAGFIW1neoEbY1Uhtev30Hzko8kGd
+	 A5BUvM0dir0Ew==
+Content-Type: multipart/mixed; boundary="===============3917546861797218486=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <4b7e6ff96b3a39b6f9738de78f9f31382d93501aa956df8d94831b35a6129432@mail.kernel.org>
+In-Reply-To: <20260608144841.1732406-2-memxor@gmail.com>
+References: <20260608144841.1732406-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/5] bpf: Treat non-iterator tracing progs as tracing
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,utilityemal77@gmail.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  8 Jun 2026 15:44:36 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============3917546861797218486==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] BPF_TIMER and BPF_WORKQUEUE fields are incorrectly whitelisted as =
-NMI-safe, causing a deadlock when bpf_obj_drop() is called from NMI context.
---
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ed7ba0e6a9ce..26bfb4465725 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-commit 3287c13e44b513ce0d9b41e4aa24cd264b519b04
-Author: Justin Suess <utilityemal77@gmail.com>
+[ ... ]
 
-bpf: Reject bpf_obj_drop() from tracing progs
+> @@ -17697,24 +17712,16 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+>  		return -EACCES;
+>  	}
+>
+> -	if (btf_record_has_field(map->record, BPF_LIST_HEAD) ||
+> -	    btf_record_has_field(map->record, BPF_RB_ROOT)) {
+> -		if (is_tracing_prog_type(prog_type)) {
+> -			verbose(env, "tracing progs cannot use bpf_{list_head,rb_root} yet\n");
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+>  	if (btf_record_has_field(map->record, BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK)) {
+>  		if (prog_type == BPF_PROG_TYPE_SOCKET_FILTER) {
+>  			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
+>  			return -EINVAL;
+>  		}
+> -
+> -		if (is_tracing_prog_type(prog_type)) {
+> -			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+> -			return -EINVAL;
+> -		}
+> +		/*
+> +		 * Rejecting tracing progs accessing maps with bpf_spin_lock in
+> +		 * them here would be too conservative; let's defer rejection
+> +		 * until seeing first use.
+> +		 */
+>  	}
 
-This commit restricts bpf_obj_drop() and bpf_percpu_obj_drop() in tracing
-programs to only allow objects whose fields are explicitly whitelisted as
-NMI-safe. It replaces the previous blacklist approach with a whitelist to
-better handle future field types.
+By deferring the is_tracing_prog_type() check to process_spin_lock(), the
+patch prevents explicit bpf_spin_lock() calls but may not prevent tracing
+programs from calling bpf_map_update_elem() with the BPF_F_LOCK flag.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct=
- btf_record *rec, enum btf_f
->  	return rec->field_mask & type;
->  }
-> =20
-> +static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
-> +{
-> +	switch (type) {
-> +	case BPF_SPIN_LOCK:
-> +	case BPF_RES_SPIN_LOCK:
-> +	case BPF_TIMER:
-> +	case BPF_WORKQUEUE:
+This flag triggers copy_map_value_locked() which acquires the spinlock via
+__bpf_spin_lock_irqsave(). Since tracing programs can run in NMI context,
+if an NMI interrupts another context holding the same spinlock, it could
+result in an AA deadlock:
 
-[Severity: High]
-This is a pre-existing issue, but is it safe to include BPF_TIMER and
-BPF_WORKQUEUE in this NMI-safe whitelist?
+CPU1                                    CPU2 (NMI)
+bpf_map_update_elem(BPF_F_LOCK)         bpf_map_update_elem(BPF_F_LOCK)
+  copy_map_value_locked()                 copy_map_value_locked()
+    __bpf_spin_lock_irqsave()               __bpf_spin_lock_irqsave()
+      spin_lock()                             spin_lock() <- deadlock
+      [NMI arrives] ------>
 
-Dropping an object with these fields calls bpf_timer_cancel_and_free() or
-bpf_wq_cancel_and_free(), which synchronously invokes bpf_prog_put() via
-bpf_async_update_prog_callback():
+Does the verifier block BPF_F_LOCK at load time, or does removing this map
+compatibility check expose us to this deadlock vector?
 
-kernel/bpf/helpers.c:bpf_async_cancel_and_free() {
-    ...
-    bpf_async_update_prog_callback(cb, NULL, NULL);
-    ...
-}
+This concern was raised by sashiko-bot@kernel.org on lore:
+https://lore.kernel.org/bpf/20260608151331.730D81F00893@smtp.kernel.org/
 
-If this drops the last reference to the BPF program while in NMI context,
-__bpf_prog_put() falls back to schedule_work() since irqs are disabled:
+The commit message also states:
 
-kernel/bpf/syscall.c:__bpf_prog_put() {
-    if (in_hardirq() || irqs_disabled()) {
-        INIT_WORK(&aux->work, bpf_prog_put_deferred);
-        schedule_work(&aux->work);
-    } else {
-        ...
-}
+> bpf: Treat non-iterator tracing progs as tracing
+>
+> The is_tracing_prog_type() predicate omitted BPF_PROG_TYPE_TRACING even
+> though fentry, fexit, fmod_ret, raw_tp BTF and similar programs have the
+> same execution-context concerns as the tracing program types already
+> covered by the helper.
+>
+> This matters for map compatibility checks that reject bpf_spin_lock,
+> bpf_list_head and bpf_rb_root in tracing contexts. BPF_PROG_TYPE_TRACING
+> programs can run from arbitrary instrumented contexts, including places
+> where taking these locks or manipulating graph roots is not safe.
+> BPF_TRACE_ITER is different: iterator programs run from task context, so
+> we continue to exclude them.
+>
+> This can reject existing fentry/fexit-style programs that use map values
+> with these fields. Such programs were accepted only because the
+> predicate missed this program type; their use depends on semantics the
+> verifier already rejects for equivalent tracing hooks.
+>
+> Move is_tracing_prog_type() checks from check_map_prog_compatibility()
+> to points where the fields are actually used to avoid preemptively
+> rejecting tracing programs that use maps with such fields but do not
+> touch these fields.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Since schedule_work() takes a raw spin lock on the workqueue pool, couldn't
-this hard deadlock if the NMI interrupted another thread that was already
-holding the workqueue pool lock?
+This looks like a bug fix for handling BPF_PROG_TYPE_TRACING programs.
 
-Unlike BPF_TASK_WORK, which safely defers destruction via irq_work_queue
-when irqs_disabled(), these fields do not appear to be NMI-safe.
+Should this include:
 
-> +	case BPF_TASK_WORK:
-> +	case BPF_KPTR_UNREF:
-> +	case BPF_REFCOUNT:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
+  Fixes: f1b9509c2fb0 ("bpf: Replace prog_raw_tp+btf_id with prog_tracing")
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
-406-1-memxor@gmail.com?part=3D2
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27147105932
+--===============3917546861797218486==--
