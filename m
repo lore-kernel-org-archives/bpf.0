@@ -1,180 +1,93 @@
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4050E25B08C;
-	Mon,  8 Jun 2026 13:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEDD34AB0B
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 13:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780924428; cv=none; b=NNDSowADbCtSdV1svfbF2BcJvbmETvljSVM8MUNENaNybgoLx9nW30acPZKEqxfYcEfemkPzi4Z/UCfdqHYh5GOcC5agBqLGiCeZeloFoFm/Hs2yqOT12fcqI6z50uwKFQ4pGobNjpPObAI/H183+zlcWQx6mVcztk7fgkcNh7U=
+	t=1780925126; cv=none; b=pfKsvCHCwryUyqrLC+rncMOZIulfvI9tu5S2+OLMYzPN2AVL+6CoK/jFXC6qNvINQNjJkEglomSaIyDz8WR/tdjaQUrcRDMv7L/zdOdl1LWD2EMvXXVK5ULGG0SWsuNUxtCXX7ZVwKH4LX/KWSidbU/iDJplz7vUMG/MyosA86c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780924428; c=relaxed/simple;
-	bh=mvy10hRTDRi5Z60KMRZgDerGypXk+bmuBV9ZRiZvXRw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=A/wDpxNRD8KRRs0MZv55HU6m/7lxfeCDVSfJaxekSW1kacfsOWDmU+ubyf2KeW+kTf4OFBUkc7fw7ORMuUNAIbi4jIyIcafL2OTSXk4n5F968yZPzjF+eWPY7exLXF+MM0RTooQ4c3c+SV0sd0q4W/c+2Im6//DI/a3EP4OrSDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=KOKvek1c; arc=none smtp.client-ip=130.149.7.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
+	s=arc-20240116; t=1780925126; c=relaxed/simple;
+	bh=nFL36VEInBxRBs34deavHFuTICMOSNOEqC2X0HTq11k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=cu/RPEDemSK4BKnanvdWRCzXR4U2+mxA7W28qpbAUOaJ524CPiM2vNHMDK5BiTe7Y3DGeqL7c9HPMk26zxiKyZwku4dFj9q+7ZgScISycrxaK0NA7bJnRuY5+D+bwPzqjTxcmfXajzX03l/W3/wsNGU8E41n/ei0r2yhTw03McI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i6gDpwLI; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="KOKvek1c"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-  d=tu-berlin.de; s=dkim-tub26; t=1780924425;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=24yOuIKlqcFA9syMazCqxweLj6xoa6jUerFmuK+rQ4w=;
-  b=KOKvek1c6Drfc1kVEtLX6QDUzixP7MaMW/9ccghJWioLZZNN7sN1IZAc
-   ETx55nn8pI5osd+crN+arom5Y8K9yneZPEa2C0xTH/tq2Y/Sayr8w6GXu
-   eDHZmiG0RM+vYjswIf5GXQcF/JSjq1bQjCz7bf+ySXSNVTH3kavI2tTFY
-   l/cgzutXUSoObaFG9wquFo716g1D+T9k9N/Q54yfBmoFApk32P7O7B/n7
-   ytAvsM3XkIknn+jCX90bEk7wouU+9jZitkkt+kuEZxDJyjqe+LgL5vl/W
-   pSCSRVMC4uVtFfs9O5rW4ejfNF5aefeijLehdmSt9+nhV2s5bYIRBvDfB
-   Q==;
-X-CSE-ConnectionGUID: JxFSwjFWRRO53cGz9f/4uQ==
-X-CSE-MsgGUID: c+zXCUgFQzaFCpj0N2RZrA==
-X-IronPort-AV: E=Sophos;i="6.24,194,1774306800"; 
-   d="scan'208";a="48439609"
-Received: from bulkmail.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.143])
-  by mailrelay.tu-berlin.de with ESMTP; 08 Jun 2026 15:13:37 +0200
-Message-ID: <e8478d82-5af6-44f7-a481-584c09ae8337@tu-berlin.de>
-Date: Mon, 8 Jun 2026 15:13:35 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i6gDpwLI"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490b8ac62baso35062495e9.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 06:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780925123; x=1781529923; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nFL36VEInBxRBs34deavHFuTICMOSNOEqC2X0HTq11k=;
+        b=i6gDpwLIo38MfIZPRzp4xLRNfEFRx1DTzgumLsVWLN5+M9uYhLrgWIvf9OauQj8fib
+         pGf2NGDg12OVg4jW2see/TXUuDsvMnPsy9Rr9vqQZDYWInrUb0/0Yn4MoaG3cF4d2voZ
+         OtLbPZTLHfn6q/eHUIlGTS50VmOXUhNZBqTNyLK0bg0htx2mcrN/PqAfUbkczdh+GYNN
+         NGsH9z3/PPNme3w7JZbheleVeXcljXgJdOLBKN7a4m+WYEUmJ8lLb/LG9wP6gXrVNS/j
+         yFyOkQYNYUPTOe9C9dRG5mmOomEbcC9V96KJUZR2t7lBSdvNC0JV8j2uIjIZ49uGaaZL
+         E3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780925123; x=1781529923;
+        h=mime-version:content-transfer-encoding:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nFL36VEInBxRBs34deavHFuTICMOSNOEqC2X0HTq11k=;
+        b=AA0iHhiD+NfSGlLMYVtDDMzWk+Gi87wuhQZbGvK1vk7Qf2QjvAGcvNPHjPwSdurRMV
+         8RVrFcHOcvSWV13UalyqeIdIyipYhkjHPtbvK/nmg1NbaVAH6EOofuhMpM/jDDmKpi6o
+         oUgrxohd2boRLYWV0B73NLAKlJikRVdYKmRBC5JPIjwWWZg8KvcA/fwxwyMNGjNqr9vS
+         p/5GZlk1ClbVguT65leD2nUXvfWBKPDV715+dH3owWSKWLGXeqUXOlbhOnyw9r5jVnsk
+         mqsTc/1jWstk1CH3EzVstIW5AzR2uiwuM/BDmYh25QFWLWtGgE/WEYbSRR9cHkKZKPgX
+         2aow==
+X-Forwarded-Encrypted: i=1; AFNElJ8d+Lh5eATk6MTbSKRz3YJg4o3vKX1XecYtz3sg0XTwLDaE5xFCutxDDPvn2LgmVscmZw0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7pVsp5bgyd8mmoC5nAkVYiLrT5HPX4wNJ3to6LgWoIgpAATO7
+	j2JEDOtMgh3A9BzXNoVnnrztcJaXwb7zTWgUPGR2tIP+FUx4SnxvjGD1
+X-Gm-Gg: Acq92OF/WXqPEmwoMcRxgsukNYs6dx1UgTb3+rZiGX9zFsKKh17Pju7VsO66cE8Vaxz
+	GULvpABfdu53NuwqHOZoCAhhtRvuPZntqMzlu/wmWRgRq5BxekzXPavsKrjvlYc0L8dP/cWzEDV
+	J3enLd2Hbdg4GK6GZXaQD5pHage5J8jwpwK3Wba6UQ2xbDZxORQw5vsbFHMGcEUtpuEFZVTLONU
+	x5vHlhxRzczcrI8cdNox1TpjOXtDI6SHflEOnqXahQaM8uqCu71F5PilWYPISCD8t61v6CmSPLS
+	zZtjnbLiBul2Xx0zQAoNaNnK0UFJGarMyXfF8VJjQxX6FLxBSaDZm5kEauBg3nNppSQIojKlBAV
+	LJE58B23+nDgdGCt7CYFA65Sq/OyT3jhILiYV3hdvrvuBnYJLrZWtXcaN/FGk8Ts6b+SPLuy63R
+	2JwE3OxIZ+OZEYa04S6cjSc8wouqCe7A==
+X-Received: by 2002:a05:600c:4689:b0:490:bbc1:c9be with SMTP id 5b1f17b1804b1-490c2c63f53mr202240725e9.0.1780925122794;
+        Mon, 08 Jun 2026 06:25:22 -0700 (PDT)
+Received: from [127.0.1.1] ([46.140.7.198])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc39eb04sm404126955e9.6.2026.06.08.06.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 06:25:22 -0700 (PDT)
+From: Ruslan Valiyev <linuxoid@gmail.com>
+To: mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ martin.lau@linux.dev, memxor@gmail.com
+Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: add arena split and fork tests
+In-Reply-To: <d12081a0-b933-44cd-8c46-5d7b83cf0347@gmail.com>
+References: <20260605115713.3224051-1-linuxoid@gmail.com>
+ <d12081a0-b933-44cd-8c46-5d7b83cf0347@gmail.com>
+Date: Mon, 08 Jun 2026 15:25:21 +0200
+Message-ID: <178092512130.4115875.16630628542529866765@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: Jesper Dangaard Brouer <hawk@kernel.org>, Simon Schippers
-	<simon.schippers@tu-dortmund.de>, <netdev@vger.kernel.org>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
- <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-In-Reply-To: <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Fri, Jun 5, 2026 at 4:31 PM Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> w=
+rote:
+> Two tests are quite small and share common setup. Does it make sense to
+> put them into the same file, extract common function and turn them into
+> 2 subtests. You can check other BPF selftests to see how to implement
+> subtests.
 
-On 6/8/26 3:04 PM, Jesper Dangaard Brouer wrote:
-> 
-> 
-> On 08/06/2026 12.38, Simon Schippers wrote:
->> On 5/27/26 15:54, hawk@kernel.org wrote:
->>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>
->>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>> excessive NAPI scheduling overhead and qdisc requeues.
->>>
->>> Accumulate BQL completions and flush them when a configurable time
->>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>> queuing delay to the configured interval. Coalescing state persists
->>> across NAPI polls in struct veth_rq so completions can accumulate
->>> beyond a single budget=64 cycle.
->>>
->>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>> completion.
->>>
->>>    ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>    ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>
->>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>> ---
->>
->> I found the issue that n_bql may become infinitly large if producer
->> and consumer have the same speed (and tx_usecs is large). It could
->> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
->> Also I figured that no hardware BQL driver ever completes more than
->> BQL limit many elements.
->>
->> Therefore, I propose a simpler logic (see attachment) that completes
->> either on the usual bql_flush_ns or if n_bql > dql.limit.
->> If n_bql > dql.limit then we either have the case above that the
->> producer is as fast as the consumer or we have BQL starvation.
->>
->> if (state->time + bql_flush_ns <= current_time ||
->>     state->n_bql > peer_txq->dql.limit) {
->>
->> It must be n_bql *bigger than* dql.limit because the producer will
->> always exceed the limit before it stops, see netdev_tx_sent_queue().
->> It is fast because peer_txq->dql.limit is in the cacheline of the
->> completion path, see dynamic_queue_limits.h.
->>
->> Another advantage is that we avoid the snippet checking for empty
->> and BQL stopped which requires an smp_rmb() and an test_bit().
->>
->> Apart from that I:
->> - Always call veth_bql_maybe_complete() in the for loop to have
->>    more accurate completion intervals when having mixed XDP and
->>    non-XDP packets.
->> - Made it so tx_usecs = 0 is now also a normal case.
->> - Change the type of n_bql to uint instead of int.
->> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
->> - Moved the bql_state init in __veth_napi_enable_range() in front
->>    of napi_enable() to avoid a race (Sashiko).
->> - Moved the bql_state reset in veth_napi_del_range() after the
->>    ptr_ring_cleanup() (probably does not matter but makes sense to me)
->>
->> Benchmarks look just fine, see commit message.
->>
->> WDYT?
+Sounds good, will do in v3: one file with a shared setup helper and two
+subtests, "split" and "fork".
 
-> 
-> Looks good to me, I will use this in my V7 patchset.
-> 
-> A bike-shedding issue: We change the coalescing parameters for the veth
-> net_device, but should this be a TX or RX parameter?
-> 
-
-Hi,
-
-The results look a little bit suspicious, that in some cases the p99 is 
-smaller than the average, which can happen if you have really large max 
-values. It feels something is off with the methodology. I think we 
-should drop the avg, and include the max value. This would give a better 
-picture.
-
-Is state->n_bql += veth_ptr_is_bql(ptr) something that is commonly done 
-in the kernel? It relies on bool normalization which feels a bit 
-implicit to me.
-
-> For physical NICs adjusting TX coalescing will affect the BQL as this
-> affect the TX completion of the transmitted packets. For veth, it is the
-> veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
-> is where this patch adds netdev_tx_completed_queue calls for BQL.
-> Any opinions on the "TX" or "RX" color?
-I think I would prefer to configure it on the tx dev, and the recv side 
-gets the value from the peer. Maybe something like this.
-
-@@ -997,11 +998,12 @@ static int veth_xdp_rcv(struct veth_rq *rq, int 
-budget,
-         struct veth_bql_state *state = &rq->bql_state;
-         int i, done = 0, n_xdpf = 0;
-         void *xdpf[VETH_XDP_BATCH];
--       struct veth_priv *priv;
--       u64 bql_flush_ns;
-+       u64 bql_flush_ns = 0;
-
--       priv = netdev_priv(rq->dev);
--       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
-+       if (peer_txq) {
-+           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
-+           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
-+       }
-
-         /* Clamp stored timestamp in case we migrated to a CPU with a 
-behind
-          * sched_clock(); prevents the deadline from never firing.
-
-- Jonas
+Thanks,
+Ruslan
