@@ -1,99 +1,106 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D8AEEA8
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 05:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172FA2D738F;
+	Mon,  8 Jun 2026 07:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780897342; cv=none; b=MB6pNHVLYsE5PPjDOAk7BK1gL3Fi1AqAK2IiBDOsGFiin5ZNX9rXpYlCZu8bzHsW9FWC/7cr75bFLsXEw0BNKHswnwVMgbcT3Eyosoc6I/reQHJkF+HuFUjAFW3z4eGMXiyzMHH8/g5lvasjBUSPQ1hQbiignfesg83f6Y84M58=
+	t=1780903550; cv=none; b=aWZ6seP4vrG3/nSkV+i1vPPnXKjpYiz+2/mx4iJu7Ni0314RiKfF5anPBPfPxuXIOKOrAY/yNXx+HpLYdtQzVUkMxvhLmd6U1z36SsS3OgthubFxgWpzWVj3bg6GBOvi2siKrkGdWy21gTOfvuBGpOKPX96pedhtPgskOBrn1Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780897342; c=relaxed/simple;
-	bh=y+mJ1HXnv5NYZRtUwHjiZPac81J7u7FEbFFH3q7zkqo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rl+cxsxLNkRJXkwo336UHVAT2vE3kDslcTQVV41/ymk8ltGosqLyG6DIwUAh7lffYEW0jfIO2MLwdkQZfzkS5vH5ioMKZtHWqSBBoUbAhTHbcp6O/KpNroXNlgcLi0gmrf7IN7uJGuU5uWY70zIiwshk1KNL8QZrR5v8ja/A+zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OyR5zI9H; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780903550; c=relaxed/simple;
+	bh=0UjPM8frBifh6/4lW6B6dDRE6A9s1KZ7yCcfVrCsGAk=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=KTrS1Y+iSNyieoZ4LV3mN38fB67t0oDv9Aroon0fUdIRSG05PVg6OYbWRuwbWMRgKiegzxU1mhR/q4R8+ZsdRqPkZiNquvUFxGfezf8Gl6naJv4vdmogbM4oBzCO+Pky1C1oYxh5pNfcqFbiO0pHuYP9SuUp0j1C54u1k/hNgSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=km2IxtHZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OyR5zI9H"
-Message-ID: <b89c1f53-2ba8-4b70-9058-fcc59eda40d7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780897338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k5ntvAPtl29747l3/yszg83JHhSsUZDw64t/HzACw7Y=;
-	b=OyR5zI9H3itlVcp0CNOQoyp1w42jq+WnYobfDtewaMS2WXNlOi5dsHpwY81vJzIK/HxdvM
-	TylQoPXigQR1KPTQXeAorPonnhnVW3iF9cPk7GsK8DI8unKAOKta7m5lOJcO7snoqcLJkb
-	BYYV/xOnLj3drQ02zF7oy8PhyllZhy4=
-Date: Mon, 8 Jun 2026 13:42:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="km2IxtHZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F141F00893;
+	Mon,  8 Jun 2026 07:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780903548;
+	bh=KTBGi8oCZ29Roe5CgH69uQStkzIgyiOeC35FA5eeDPU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=km2IxtHZIktwRU6635g8jlJprIRhl9fSIjqUyOj5lz8NlJoVU7udXLnh9gxiQHqfN
+	 Ho8tP98QVDYT7e7M1vtNBaxY3ZqxywP7vPxCLlfSpM5R37nNY4LON6vctCRHBZ9rTJ
+	 AOrOiBs+dZ7MEKnAO2NzHFmJsnmNM9zdqPbSrcKfbT8snI4b0mjjwpcfKftahXkR57
+	 Amyr1wvgAcMN0xcrfpIud3JS0pAhGC71a0s36Az/truacRX9P6qr3vVc8dGSr6VpIG
+	 ibS5OGgaRSMwuZ1n4j6e4QEzUSpG0Bs4StxI4B6M5tp9/dh5M/m70rDA3VfPBW66hF
+	 KKSdU8i8BNyAQ==
+Date: Sun, 07 Jun 2026 21:25:47 -1000
+Message-ID: <7f5f7c94601312c1a401fb18998291cc@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>,
+ Andrea Righi <arighi@nvidia.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Mike Rapoport <rppt@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ David Vernet <void@manifault.com>,
+ Changwoo Min <changwoo@igalia.com>,
+ linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org,
+ bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: [PATCH v2 bpf-next] arm64: mm: Complete the PTE store in ptep_try_set()
+In-Reply-To: <aiXVFK_qb54is8b1@arm.com>
+References: <088f52fd25860ca961449d53f91b214a@kernel.org>
+ <5f68f44310d4878185fd5ebc52d66530b99f174c6d04ab1170dc53cefaa54568@mail.kernel.org>
+ <1780862659.ccb18e27e916dc4b@kernel.org>
+ <aiXVFK_qb54is8b1@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf v4] bpf: fix NULL pointer dereference in
- bpf_task_from_vpid()
-Content-Language: en-US
-To: Sechang Lim <rhkrqnwk98@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Juntong Deng <juntong.deng@outlook.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260608050001.2545245-1-rhkrqnwk98@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260608050001.2545245-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 8/6/26 13:00, Sechang Lim wrote:
-> bpf_task_from_vpid() looks up a task in the pid namespace of the
-> current task, via find_task_by_vpid():
-> 
->   find_task_by_vpid(vpid)
->     find_task_by_pid_ns(vpid, task_active_pid_ns(current))
->       find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
-> 
-> cgroup_skb programs run in softirq, which may interrupt a task that is
-> itself in do_exit(). Once that task has passed
-> exit_notify() -> release_task() -> __unhash_process(), its thread_pid is
-> cleared, so task_active_pid_ns(current) returns NULL and find_pid_ns()
-> dereferences &NULL->idr:
-> 
->   BUG: kernel NULL pointer dereference, address: 0000000000000050
->   RIP: 0010:idr_find+0x11/0x30 lib/idr.c:176
->   Call Trace:
->    <IRQ>
->    find_pid_ns kernel/pid.c:370 [inline]
->    find_task_by_pid_ns+0x3b/0xe0 kernel/pid.c:485
->    bpf_task_from_vpid+0x5b/0x200 kernel/bpf/helpers.c:2916
->    bpf_prog_run_array_cg+0x17e/0x530 kernel/bpf/cgroup.c:81
->    __cgroup_bpf_run_filter_skb+0x12b/0x250 kernel/bpf/cgroup.c:1612
->    sk_filter_trim_cap+0x1dc/0x4c0 net/core/filter.c:148
->    tcp_v4_rcv+0x18d1/0x2200 net/ipv4/tcp_ipv4.c:2223
->    </IRQ>
->    <TASK>
->    do_exit+0xa63/0x1270 kernel/exit.c:1010
->    get_signal+0x141c/0x1530 kernel/signal.c:3037
-> 
-> Bail out when current has no pid namespace.
-> 
-> Fixes: 675c3596ff32 ("bpf: Add bpf_task_from_vpid() kfunc")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
-> v4:
->  - Drop the in_interrupt() check. (Kumar Kartikeya Dwivedi)
->  - Switch to guard(rcu)() and drop the explicit rcu_read_unlock(). (Leon
->    Hwang)
-> 
-LGTM:
+ptep_try_set() installs a kernel PTE with try_cmpxchg() but, unlike
+__set_pte(), skips the barriers that arm64 requires after writing a valid
+kernel PTE. Without them a subsequent access can fault instead of seeing
+the new mapping.
 
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Issue them with emit_pte_barriers() rather than __set_pte_complete().
+ptep_try_set() must finish the store before it returns, but
+__set_pte_complete() would defer the barriers when the calling context is in
+lazy MMU mode.
 
+v2: Emit the barriers directly instead of __set_pte_complete(). (Catalin)
+
+Fixes: 258df8fce42f ("mm: Add ptep_try_set() for lockless empty-slot installs")
+Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/all/aiRFcz78QTZdIHHB@arm.com/
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ arch/arm64/include/asm/pgtable.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 3ce0f2a6cab6..3e579c26b383 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -1838,7 +1838,16 @@ static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
+ {
+ 	pteval_t old = 0;
+ 
+-	return try_cmpxchg(&pte_val(*ptep), &old, pte_val(new_pte));
++	if (!try_cmpxchg(&pte_val(*ptep), &old, pte_val(new_pte)))
++		return false;
++
++	/*
++	 * The store must be complete by the time this returns, but the caller
++	 * may be in lazy MMU mode, where __set_pte_complete() would defer the
++	 * barriers. Issue them directly.
++	 */
++	emit_pte_barriers();
++	return true;
+ }
+ #define ptep_try_set ptep_try_set
+ 
+-- 
+2.51.1
