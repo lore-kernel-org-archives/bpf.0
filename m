@@ -1,155 +1,175 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9552B3A7F5D
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 22:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780958105; cv=pass; b=ulgNHC/qTO4AsmEdjaKit4hLTK1s0YWMJCp16y9gCwIFI9GXo3VO9qIYQ0ooJbZTeQmTsFVUH3ajaNiXLcU8q/kVnxcx4VfYW6w8/c/sC+U47RLQopS0+X2zoyntnXpSfo975N9Ocj2qlEe5t1VDcj+C/h8kso4KTw9/rymCM08=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780958105; c=relaxed/simple;
-	bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gE5+Q5Fdi9a9RR2tytHTawrXttAQJjmjCqhtdSr22IFPqWx7gwJJJO2WuQ6Y6LbwBMjcFZpUwfoB3SO7Y9xY8kwAqDsupginpPttqjvVJMctuVc5nmhONFtNln+SaVRwT/D50VQT7Vid4fUJTfXV4lM89/XC1ZONTZcjubvvtVk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UZNxa8s+; arc=pass smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D25E279903
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 22:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780958861; cv=none; b=ZSvwqhsKNcZPdEJIC2Mcr/JzRV1OKwyT+2UOcmN5A7Y0mEaDa6cO3+z16sgmIUdMrhCmReVzf4Hbid9bFumKXr/4zzswIIUvXiNnxBcK+DTWchYcSTJi9fiyFlIIFLIuLvi8UY3BAHG13XruxS9R+e2OqqoEZCwzu+F2jW7inmI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780958861; c=relaxed/simple;
+	bh=rA2diYXlKM26hvh1N+s4o9HX51c4rjZCryaDSzZf5Lk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fn3pzZD6zIuw2A4klnRKNDXqKDn1u+3ZiqEjSGKttDoa7FKfRFkhBqWP/MGpyGO3TYzYrtfZofzJFqw281DQ4jCla81gCEkLIXCfaVeOl7g2Q5mGglxzz1Ky2Eo8cVnQD8YiF/nVZgOVrMU3biAGf4RfjA4wGME6vrg3gnDaemc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZC8n2aoj; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UZNxa8s+"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-137335bc3caso5994272c88.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 15:35:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780958104; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QLImADUG2sAMIzInV15tw0gyaQxH1JqTZc5MHCRaboQPpS4wsepT2jSedCSuk71yZu
-         oRzhWAmWSWdaAAIGS8Z/QoECfp87b5Z3Cv5T7/HF9I17tY/u5eEgevmmBIRAe+5rhC/w
-         bAWIljUabiAQy/6DlyxYhfrm3fFOAM1kpbEzoMbJqcn98wr9YtB82GcX68dITGUGxKPo
-         ZtqLvTc7iHhyQq/zbAwSAIVUVbrSAnc1/0nCYDC/6H63f/D1uihQP4+AoO4TKU1B4WIv
-         /zb1vSXotxbwGSZn5kOYjJuD+Rp5aWtcUBAuThZl0+tyLSGX8CV+vIhk6Y2mcthLrT72
-         kG8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        fh=kmRvHxmDLs5pbKaJdQTavgS/zJ6Y323XsJ5DztoZt50=;
-        b=jXDEdT/CUQcCAXpwiXRssWVkBrOJbbnNgP2E6CIfoH1QZRdDUQXWFiUfBTpPyXfKR4
-         bLRZeFnzlMXAQVLv5yEuEt3LI3F0Jy3g3fYKUdJSkEdr6+T5H3LK1/XYUtpYVy94/Hcz
-         EDYqt3IxXrD+daQAVkUECBONcu+jFW6h62d6Ww9xa7NwLmR3Hjf9veeJUw4Rby5f9Mqx
-         4iCGhjuAY1ufTnMANbtOczyAKYjM2g5QC3c5R9nUorSmgAXlVoKv7dMqck4OEBb/rGTh
-         9A6BEyeUalgAgH2Ol+Bldym+x9YCRlBo5yDBXptdkMME2ETuUT+quOJ1pq3f6iGJEvt5
-         EToA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZC8n2aoj"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-137dd523634so7710246c88.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 15:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780958104; x=1781562904; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        b=UZNxa8s+iZMlCKqqQ1SbxK57Q3Mgj26fl1kt8gO1WwVaxYIsXgTmnrv1WnNIVI21Ef
-         53r3p7KPeaiGY7+oDsX+jn1SYPyV2AxytFPoKSKpBFXhlmbWMgBejk7hWBeYAX8Bxxky
-         sv1VD8HA3ebiW20l8NaEhreYlqd8yveMID1vmkZZicG0Uco3a6+BVHIi2S3B0WUhxbcL
-         KQ6Tfhdo+fNHMKiK+EHvWTJD/c3K4A0C9cA1keoGi8QfjbhMivN+m6ymqIvHLl/NYfx4
-         KDF8qzEC6dBWSXSu7ns3YVGCCbVIXJXO0PhK02RIleXx20QbMSJwB+1FPda+HlamrJm7
-         AVkA==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780958859; x=1781563659; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5QEGVQ0M+SgYUmHdGUTH8kzMgflfS+kHy0QHV9BLJSE=;
+        b=ZC8n2aojZqM51DkLzfTZY1i8EoiOzMMkxhgUgpx2UwtR7iYJKRVD6GpD8ZhXopRuRI
+         zIZ+/r0NCkErN7hVx5ylTFhf/d5538SRcFj/82vO4Icru6ywHjEpRzTvp5jpdQIjBKRH
+         iiylQT+SyHRY1E8tknHuP4YtLTq0fqU8jXTPASgy9g9jfyaAUubMiVUZTbWLpgLxBLFP
+         414HDdBwYWWiVm2XzqGHMOoRVtsWBFZebXF6o7JpTsGZe2+hEUgZyHTXP7nOzvntm+7x
+         +GsYca7zlvLqW0oJrQviVjgmF0ifNdWNH49o4RSAoAyuGCFojZQNcoxfl4GkIGo66lOI
+         DTKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780958104; x=1781562904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/rpv0hsisGb3nHHvAOO3ELylrxjpXbdj4HzmBdxPovY=;
-        b=XdLKVo+kXRTPzrsqK9TeG0ar0/BH6PyW/d3Wb6vpdkbQeZ70NN0YORFZ90R/aXL1DZ
-         phtlfmH2SzdKJHdpncdabdIGtFcV9uBv6IkXMvOpp/ZMh4qkMQD9Qmkzo8CZ17g1pbvN
-         euIz6U9OafNlxeXEBRq6PF00U/lASlpmzYFQfHImA4yUFAIPqSPu+PTlc7gN/nK3t/vi
-         pgFIxmlo3fV+Isy1dBv1sxx5xS3CJddI2O4n8gGsmDRf5okk/Z8eIRTU8rhv2sXUDfKN
-         UUF2YPXw3qJ0eul5XpFNhPvSCCrM8Ykp33HZH1ZEnrKELk+ryBcw/Ta3sRhhwWaNdE4t
-         R7TA==
-X-Forwarded-Encrypted: i=1; AFNElJ/sIjOPsw9DkgTzl85LmAW6Dil/D3HC3PEbdaYdkryfqyr+1uLe8KUmFGfmpon6HBGKp1k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKNhiuFhl4IYOwPLQBU3w4X9EWRZj1ZcRETy6R/Cf6Zabs060J
-	idURkyRwrxsFQHOKp9gZaHxqq0eVnymUHFSF82WRLCzrWl8MI9oAN+GeCQlQA/xyFxrvAvW4q+8
-	QiXjv8oLjOBQfQ1KyZZYAliydwCtzjHBZoongnx9p
-X-Gm-Gg: Acq92OGiZc2tcH63CcOA2B1D9qK5BeGL0Ev7kFHSgsb6I5HOfs0J3/3I8FiFGQw2VDL
-	wbbzdBHASB3+IYrTjTNu9Im0qkECweUeSm5GMpYjNEg6DBpBGTU5VqDZEfUOwYFcHUHLuSvqR1i
-	IGutD/7FerAfhvKf9nwzxNli8on44P1DfvIf0mglZYOIM2dE6wsHB1ASeIODPBxtEJVbZdZz3/s
-	qzVoUOcROccgWvXtVhXEK3s7CBEtcj1gWnqP8tOqUbfFWDbtcPAk2yHh12rx7aR3Zv1W3I9FtmR
-	SmzQQ9f1Wll48shYjoHW2ZITHb8t2ZiMTBmDJQRyOGXkUsLeFOuizftptUfREFEQDvypyegf6hj
-	C3cLkjsxFwF/V6inD0IDLUc+3U6NsZt+5QbCSfb48YlZid5ivNTryzBlLHgdK
-X-Received: by 2002:a05:7022:510:b0:136:83f5:c80 with SMTP id
- a92af1059eb24-138066608abmr7982404c88.4.1780958102929; Mon, 08 Jun 2026
- 15:35:02 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780958859; x=1781563659;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5QEGVQ0M+SgYUmHdGUTH8kzMgflfS+kHy0QHV9BLJSE=;
+        b=UB+hOlMAv+gdpP6qhFpGahstarta3UDYGdvo0MDjNnKC8nPagvz2kJkZiyK0yrGtAh
+         Sbj6Sot//UdIEhfwFtACn1pNDFEOKpaXz+Lb3/AmBE/TTOG6Pdy6Mrxn48hdrkusAGMj
+         yfVf8fZGmDGyFfAGytm1ypa1KWXfALUY/bRoMXVylazLJp4WpyvUMsjTy8wT/ScGBXZc
+         XRjpDwvgZem/bYTGLp6dRh8+4VA0Qra/unEMVhWenbwupQ7wiYCphJDVljBNcJOlVSB+
+         5hthJLqjLMfFvTf38DQb3z1gGfvThOQgXw+63WT78hE6ViMYhtT6OJwUy6oc7UE8dWIs
+         Fi4g==
+X-Gm-Message-State: AOJu0YwjHMJYJeJrdTwDWbH0WXVqAGBJ8o3fIb6GdIJA44cY2Ydx97Zd
+	nRujTlarKrH63GMHbyhlR0Kh2yBVuj+Qc/4fycSexGYm4J7Rwe6PL0tRRZG06SmUd571JKsz758
+	MoHg13wfxTA==
+X-Gm-Gg: Acq92OG7A6zttJYQa37XlTj2MJ1tFDgDOZPHRNd+akCtuFwSyrDW3/UhifltiCkgpQw
+	rnLuiOMdzBkbExgGmKoYkeWO00U3FjAc0Wxza60epmZsVZNGrxn+p2H4szlAj7PgyWe/0hfTa9s
+	QmGmWgN44WhhDY/RyotL+DCRJZDoFKOrHfkisKh2/bH8L1yRwCR8dq9tgMO+p4RAFH/hurYa536
+	9JNqgxzll9/6hHk+PekNMDn48aZ+iGNGiQDeDT7yGLSkbGmtW2xJQqiaPowdBAtIdGRvv8wqDt4
+	4SmZ/aiLtiibBtIpnoqBbrKT5fP0t1Z+ii0TMqgsSR3JhkpswLgjMUDMsZIuDZ6lQHSgZXGoZKg
+	NxYoNcXv/NZslmLD5WLihm8K+ENCUkl133KVQ2GFGDBLB4LTD8bpHVwZp4ICFxiZBDoDJqljwdM
+	vf1DXweKcBNLahHSXsy7lXARwMaTyqsA==
+X-Received: by 2002:a05:7022:699d:b0:132:5d42:55ba with SMTP id a92af1059eb24-138066d8107mr8252776c88.16.1780958858965;
+        Mon, 08 Jun 2026 15:47:38 -0700 (PDT)
+Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::abe5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5539432sm16095148c88.9.2026.06.08.15.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 15:47:38 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	kuba@kernel.org,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next] selftests/bpf: libarena: Avoid spurious spmc parallel selftest errors
+Date: Mon,  8 Jun 2026 18:47:32 -0400
+Message-ID: <20260608224732.4482-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
- <20260608125846.157004-2-jiayuan.chen@linux.dev> <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
- <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com> <CAAVpQUATP7S7OEZw4P_7fp5zmQO-T5jByxAfp0+YsjRENeWscg@mail.gmail.com>
- <CAADnVQKa2Z2HKKZMhyD1HrurQ4LTcCS0Mm0YPxtisGKwVfcxmg@mail.gmail.com>
- <CAAVpQUCJH3iknHSfNwMqvHVc_V09zNDK-YbXbqa-=K159PTqiw@mail.gmail.com> <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
-In-Reply-To: <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 8 Jun 2026 15:34:51 -0700
-X-Gm-Features: AVVi8CdeAbkRwHhPre5-1lF1rzTOH3OTwg-sIWZIP8BtHCUTHJ-Y9jp0mJntayw
-Message-ID: <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
-Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for
- BPF-assigned sockets
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Joe Stringer <joe@wand.net.nz>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 8, 2026 at 3:16=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon Jun 8, 2026 at 2:35 PM PDT, Kuniyuki Iwashima wrote:
-> >>
-> >> btw is earlier sashiko TOCTOU concern real?
-> >
-> > Yes, the selftest in patch 2 should reproduce null-ptr-deref.
-> > (I tested one in a prior version)
-> >
-> >
-> >> iph->protocol =3D IPPROTO_TCP;
-> >> bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
-> >> iph->protocol =3D IPPROTO_UDP;
-> >>
-> >> as far as I can tell past bpf_sk_assign_tcp_reqsk()
-> >> the networking stack only looks at skb->protocol,
-> >> so modifying iph->protocol will only mess up
-> >> things on the wire (if this packet goes out).
-> >
-> > ip_rcv_finish_core() uses iph->protocol for early demux
-> > and ip_local_deliver_finish() also uses it for demux.
->
-> ok. Another idea... we can keep the checks on bpf side and
-> teach the verifier to invalidate packet pointers at bpf_sk_assign_tcp_req=
-sk()
-> and introduce new concept of "readonly skb".
-> So after invalidation the reloaded sbk->data will be read only.
+The libarena parallel spmc selftest is nondeterministic by design.
+As a result it depends up to a point on the relative timing between the
+producer and consumer threads. This introduces the possibility for two
+kinds of spurious failures that this patch addresses.
 
-Yes, this is exactly what I had in mind in the other thread :)
+1) Spurious timeouts. The test proceeds in phases, and threads use a
+   common counter as a barrier to avoid proceeding to the next phase
+   until all threads are ready to do so. If a thread takes too long to
+   reach the barrier, the already waiting threads may time out.
 
----8<---
-On top of L4 validation in bpf_sk_assign() and bpf_sk_assign_tcp_reqsk(),
-can't we mark such an skb immutable after the helpers and catch
-subsequent writes to skb->data on the verifier ?
----8<---
+   Increase the current timeout. The timeout's value is a balance
+   between the maximum amount of time spent on the test and the
+   possibility of spurious failures. Right now the timeout is too short.
+   Err on the side of caution and significantly increase it to avoid
+   spurious failures.
 
+2) Spurious resize failures. Some selftests require the spmc queue to
+   resize itself. This in turn requires for the producer side to be
+   materially faster than the consumer side so that the queue gets full
+   enough for a resize. However, in the benchmark the spmc queue's producer
+   is outnumbered 3:1. To offset it we add busy waits for consume
+   queues. However, we still see occasional failures due to the queue
+   never resizing.
 
-> There is no such thing today. The verifier only understands PTR_TO_PACKET
-> as read/write. So it's not easy, but probably good thing to have
-> for this and other cases where bpf prog shouldn't touch the packet
-> once it called some kfunc/helper.
+   Minimize the possibility for this in two ways: First, remove one of
+   the consumers. The 2 consumers still exercise the "race between
+   consumers" scenario. Second, increase the busy wait duration to
+   decrease the rate by which the consumers act on the queue.
 
-This would be useful and we could (re)move some validations from
-the fast path.
+   While at it, also replace a stray invalid error value "153" with EINVAL.
+
+Fixes: 42998f819256 ("selftests/bpf: libarena: parallel test harness and spmc parallel selftest")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ .../libarena/selftests/test_parallel_spmc.bpf.c    | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+index 000a4d58665a..a81aa29c9671 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+@@ -7,7 +7,7 @@
+ #include <libarena/asan.h>
+ #include <libarena/spmc.h>
+ 
+-#define TEST_SPMC_THREADS 4
++#define TEST_SPMC_THREADS 3
+ #define TEST_SPMC_STEALERS (TEST_SPMC_THREADS - 1)
+ 
+ /* 
+@@ -17,7 +17,7 @@
+  * and operations are wait-free we just spin around the quiescence
+  * point instead. If we time out, we just fail the benchmark.
+  */
+-#define TEST_SPMC_SYNC_SPINS (1U << 18)
++#define TEST_SPMC_SYNC_SPINS (1U << 24)
+ 
+ /*
+  * We track all the values we retrieve from the queue
+@@ -61,7 +61,7 @@ static volatile u64 round_steals;
+  * We have multiple stealers and a single owner. We sometimes want the owner
+  * to successfully outproduce the stealers, we add a busy loop in them.
+  */
+-#define TEST_SPMC_WASTE_ROUNDS (1024)
++#define TEST_SPMC_WASTE_ROUNDS (1UL << 12)
+ 
+ /*
+  * The spmc data structure depends on the runtime fully
+@@ -112,10 +112,6 @@ static bool spmc_tests_enabled(void)
+ 	{								\
+ 		return spmc_##prefix##_stealer();					\
+ 	}								\
+-	SEC("syscall") int parallel_test_spmc_##prefix##__3(void)	\
+-	{								\
+-		return spmc_##prefix##_stealer();					\
+-	}
+ 
+ static int spmc_common_init(u64 total)
+ {
+@@ -451,10 +447,10 @@ static int spmc_resize_owner(void)
+ 			resized = true;
+ 	}
+ 
+-	/* Did we get to resize while racing/ */
++	/* Did we get to resize while racing? */
+ 	if (!resized) {
+ 		test_abort = true;
+-		return -153;
++		return -EINVAL;
+ 	}
+ 
+ 	/* 
+-- 
+2.54.0
+
