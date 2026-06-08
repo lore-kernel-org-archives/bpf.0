@@ -1,179 +1,152 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2263112CDA5;
-	Mon,  8 Jun 2026 14:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B423D3009;
+	Mon,  8 Jun 2026 14:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780928858; cv=none; b=u67e/K0EYbJQunePqSqbpM1W8QM7mRFTsH9B1O7DLG5EeYJjX6kqiTOcAY5hQ7fFBQfQbofnlUmvgM0z6zcYsk1ipaxVxX+ADnm8tTX0W0ZwjE3nTGrwpowreubp8QbSQqsgoYVZpx9l0rUFRsLY4PmLlVuI9VSCHXYGvAq2s3U=
+	t=1780929690; cv=none; b=TSPChthtii70UEi5VpxW++IIILFBAdT95h6k5ZXlsewdx7uOsPEUem8XslIENv29FJbFshGqx13F1d6Qzv614ct3j7PxFsveKd2suw4sr9TarkyRXdpWWHaLEWeU2FLfWWmk1PrKttjKnccyCjyvHp8QvT6E7+w8SfuN4mAdjmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780928858; c=relaxed/simple;
-	bh=+j/JAhJnALJ4cCbHA+VTYEnS7qq7B8wQYlLy0761Q8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PlOhonClG+qlGILopT8/SWJ5RUbFzWh3iOz0cJgHwovchIhc/Dq8/8JE70Qe3bsQOccWQrsT9praKf0vWy7wL80v+bF6T0gJjMndp9e7AoPwFwUD25y0AJF78UpTCIoAfboiBNHJDgpJgghEhBhRr/GFWRQRWN8aWXMgTpZO08s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kZbQgVkJ; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1780929690; c=relaxed/simple;
+	bh=yUXqpasB+MSeeefpUH62TjJdO4x17t42vFlSY/OK84c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J/zjUrNUy2Fp8R8GVkbfi0mf2//3PaH1vHE0JLzaq0a52w1kGSycyJbkS+U3NF6w8xykkb5twVINJHreZ2P2SgP8tUvEoxST+Aamt/4BiISLdinGqRohFlY58knJG8OeByVYTrSPg0BM2immhZtxTF/t9L8J3JU1P92ar2C1Pww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=wYgCwwxa; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kZbQgVkJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=q3
-	f0C7K6TnXwmufgRurL9Y/1EPh762OHN/OQvjdWdWY=; b=kZbQgVkJqIE3zyrAyW
-	x0S0CvaO21UJIfT2E2KKSKLbbHsF+s6Bh7rvtI0zHaOoXTTLkBkfoSENo1p9eqkJ
-	X8IH88VkfN+Obu6QIhppbKB19QyjyNBs6idDJbyHU/yd7z0ZFHF6nEXBnM32dVUi
-	YZIcDNQ9N7YYOM4qCmZIz0pzk=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wBXwtUW0SZqv3LYBw--.1507S3;
-	Mon, 08 Jun 2026 22:26:38 +0800 (CST)
-From: chenyuan_fl@163.com
-To: chenyuan_fl@163.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bot+bpf-ci@kernel.org,
-	bpf@vger.kernel.org,
-	chenyuan@kylinos.cn,
-	clm@meta.com,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH bpf v5 1/2] bpf: Fix kfunc implicit arg inject type detection to prevent invalid pointer deref
-Date: Mon,  8 Jun 2026 22:26:17 +0800
-Message-ID: <20260608142618.3064380-2-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260608142618.3064380-1-chenyuan_fl@163.com>
-References: <20260602093836.2632714-1-chenyuan_fl@163.com>
- <20260608142618.3064380-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="wYgCwwxa"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=sEosvUGqJ+H4je3T3hSMYurtpjfcIhb58UDxG8taiBg=; b=wYgCwwxa4hwZCXQX8cyJFi8eGk
+	KxcHLx6KXHB/4DcaEE/JQgjTNsztmKelouL6DkSto8QxLLTziemda4LueywKzzOujU9XkaB/P9iYA
+	I7kP0lRk2Z0fq6W3sjFfD1hdYRzY+WHkO1QpCW63HxO93PVgCVljDo26QxvLsB8Y6/8PD/h2tNtrM
+	IR74FpZnxNxwc6XuqUpzd6pzJGmEP/cZsa6ugakcVo/ewkAPiOSHGt2BEvcXcMQgqlb1Nru780XM5
+	Gd8OQ0qtN2Hnb50P4ejc+F8gkHCbQo/F8tcFiuvoe/KbxZNsF580YANz+LDlWQps6k4wOAL9xn3q9
+	NRcCEYfQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWbA6-007h6n-32;
+	Mon, 08 Jun 2026 14:41:11 +0000
+Date: Mon, 8 Jun 2026 07:41:05 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 6/6] x86/setup: prepend embedded bootconfig cmdline
+ before parse_early_param
+Message-ID: <aibSj4XeRWJmasCx@gmail.com>
+References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
+ <20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
+ <20260608191928.d7d2dea899b94f05d397f891@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBXwtUW0SZqv3LYBw--.1507S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWr1xAr4kAryDAr4xKryUZFb_yoW7Gr1rpF
-	WrJr1qkr4kGw4xKwn3Ar4fAry5uw4xAa13JFWDGFyFvFs8Ww4SqwsYkry3uF90yr15JF42
-	vw1qqrWqgFyUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zir-BtUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAR6fXWom0R6L2wAA3O
+In-Reply-To: <20260608191928.d7d2dea899b94f05d397f891@kernel.org>
+X-Debian-User: leitao
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+On Mon, Jun 08, 2026 at 07:19:28PM +0900, Masami Hiramatsu wrote:
+> On Fri, 05 Jun 2026 05:03:37 -0700
+> Breno Leitao <leitao@debian.org> wrote:
+> 
+> > Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
+> > CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
+> > build-time-rendered embedded bootconfig "kernel" subtree is part of
+> > boot_command_line by the time parse_early_param() runs. early_param()
+> > handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
+> > CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
+> > 
+> > Gate the prepend on the bootconfig opt-in: only fold in the embedded
+> > kernel.* keys when "bootconfig" is present on the command line, or
+> > CONFIG_BOOT_CONFIG_FORCE is set. Applying the embedded cmdline
+> > unconditionally would (a) diverge from how embedded init.* keys are
+> > treated and (b) break fail-safe recovery: a malformed embedded
+> > console=/mem= could panic the boot with no way for the admin to disable
+> > it by dropping "bootconfig" from the bootloader cmdline.
+> > cmdline_find_option_bool() runs before parse_early_param(), so the gate
+> > is cheap and correctly ordered.
+> > 
+> > Select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG so the user-visible
+> > CONFIG_BOOT_CONFIG_EMBED_CMDLINE option becomes selectable on x86.
+> 
+> This seems like a dummy config. what code does depend on this flag?
 
-When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-the verifier must identify it so the kernel injects env->prog->aux into
-the correct register at runtime.  The original check used
-is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-module BTF type against vmlinux.
+No C code reads ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG directly — it's
+a silent gating symbol, the same ARCH_SUPPORTS_* idiom as
+ARCH_SUPPORTS_CFI, ARCH_SUPPORTS_LTO_CLANG, etc.
 
-Root Cause
+Its only role is the depends on line of BOOT_CONFIG_EMBED_CMDLINE: an
+arch selects it once its setup_arch() calls
+xbc_prepend_embedded_cmdline(), and that makes the user-visible
+BOOT_CONFIG_EMBED_CMDLINE selectable.
 
-This issue was triggered by pahole 1.30 generating module BTF with
-incorrect type information, which caused the kernel's distilled base
-BTF deduplication for modules to fail.  As a result, the module retained
-its own copy of struct bpf_prog_aux with a different BTF ID than
-vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
-the kernel must be robust against such inconsistencies: a BTF mismatch
-should result in a clean rejection, not a kernel crash or information
-disclosure.
+Right now, only x86 supports embedded bootconfig, thus, only x86 does
+the following (last patch):
 
-When the distilled base dedup fails and btf_types_are_same() cannot
-match the module's bpf_prog_aux type against vmlinux's,
-is_kfunc_arg_prog_aux() returned false and the code fell through
-silently without setting arg_prog.  The kfunc then received whatever
-value was in the argument register and dereferenced it as a
-bpf_prog_aux pointer, leading to:
+	config X86
+	+       select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
 
-  BUG: kernel invalid pointer dereference, address: 00000000000009e2
-  RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
-  RDI: 0x000000000000046d (stale register value)
+So, no other platform can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE.
 
-In the observed crash the stale value was the process PID, causing a
-dereference within the unmapped NULL page.  However, an attacker able
-to control the register value -- for example by writing a BPF program
-that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-could redirect the dereference to arbitrary kernel memory, turning
-this into an information disclosure.  The fix ensures the verifier
-either validates and injects the correct bpf_prog_aux pointer, or
-rejects the program outright -- no silent fallthrough that could
-be exploited.
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -378,12 +378,15 @@ static void __init setup_boot_config(void)
+> >  	int pos, ret;
+> >  	size_t size;
+> >  	char *err;
+> > +	bool from_embedded = false;
+> >  
+> >  	/* Cut out the bootconfig data even if we have no bootconfig option */
+> >  	data = get_boot_config_from_initrd(&size);
+> >  	/* If there is no bootconfig in initrd, try embedded one. */
+> > -	if (!data)
+> > +	if (!data) {
+> >  		data = xbc_get_embedded_bootconfig(&size);
+> > +		from_embedded = true;
+> 
+> Even from embedded bootconfig, if the arch set 
+> ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n, this must be applied to
+> the cmdline as we are doing.
 
-Crash Stack Trace
+Right — that path is preserved. When the arch doesn't select
+ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG, BOOT_CONFIG_EMBED_CMDLINE is
+unselectable, so xbc_embedded_cmdline_applied() is the no-op stub
+returning false.
 
-  PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
-   #0 machine_kexec at ffffffff812f6e26
-   #1 __crash_kexec at ffffffff8145a788
-   #2 crash_kexec at ffffffff8145ac24
-   #3 oops_end at ffffffff812bb67c
-   #4 page_fault_oops at ffffffff813053a1
-   #5 exc_page_fault at ffffffff828e60a1
-   #6 asm_exc_page_fault at ffffffff810012a6
-      [exception RIP: bpf_prog_get_assoc_struct_ops+10]
-      RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
-      RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
-      RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
-   #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
-   #8 bpf_trace_run2 at ffffffff814f8332
-   #9 __traceiter_sys_enter at ffffffff81415f45
-  #10 trace_syscall_enter at ffffffff81416735
-  #11 do_syscall_64 at ffffffff828e06a1
+> >  	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> >  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > @@ -421,8 +424,17 @@ static void __init setup_boot_config(void)
+> >  	} else {
+> >  		xbc_get_info(&ret, NULL);
+> >  		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+> > -		/* keys starting with "kernel." are passed via cmdline */
+> > -		extra_command_line = xbc_make_cmdline("kernel");
+> > +		/*
+> > +		 * keys starting with "kernel." are passed via cmdline. When
+> > +		 * this bootconfig came from the embedded source and
+> > +		 * setup_arch() already prepended the rendered "kernel" subtree
+> > +		 * to boot_command_line, rendering again here would duplicate
+> > +		 * the keys in saved_command_line and make accumulating handlers
+> > +		 * (console=, earlycon=, ...) re-register the same value. Skip
+> > +		 * only when the prepend really happened.
+> 
+> Also, this should mention ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n case.
 
-Fix
+Ack, I will update
 
-Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
-check in check_kfunc_args() so that an implicit argument reaching
-is_kfunc_arg_implicit() without being handled by a prior handler is
-rejected with -EFAULT, instead of silently skipped.  Existing implicit
-      args in bpf_fixup_kfunc_call() (obj_new, percpu_obj_new, obj_drop,
-      percpu_obj_drop, refcount_acquire, list_push, rbtree_add) are
-      explicitly allowed.
-
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/verifier.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8ed484cb1a8a..91aaed7a5eeb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11885,9 +11885,27 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			continue;
- 		}
- 
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-+		if (is_kfunc_arg_ignore(btf, &args[i]))
- 			continue;
- 
-+		if (is_kfunc_arg_implicit(meta, i)) {
-+			/* kfuncs with implicit args (e.g. 'off' parameter)
-+			 * handled during verification in bpf_fixup_kfunc_call():
-+			 * obj_new, percpu_obj_new, obj_drop, percpu_obj_drop,
-+			 * refcount_acquire, list_push, rbtree_add. Don't flag them. */
-+			if (is_bpf_obj_new_kfunc(meta->func_id) ||
-+			    is_bpf_percpu_obj_new_kfunc(meta->func_id) ||
-+			    is_bpf_obj_drop_kfunc(meta->func_id) ||
-+			    is_bpf_percpu_obj_drop_kfunc(meta->func_id) ||
-+			    is_bpf_refcount_acquire_kfunc(meta->func_id) ||
-+			    is_bpf_list_push_kfunc(meta->func_id) ||
-+			    is_bpf_rbtree_add_kfunc(meta->func_id))
-+				continue;
-+			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-+				reg_arg_name(env, argno));
-+			return -EFAULT;
-+		}
-+
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 
- 		if (btf_type_is_scalar(t)) {
--- 
-2.54.0
-
+Thanks for the review,
+--breno
