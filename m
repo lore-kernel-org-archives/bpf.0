@@ -1,131 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38153F822F
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC0F3F8ED6
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 15:22:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780932082; cv=none; b=O+8WT3UapXuq6rYcEv7ZbqSYcKHPEaLQVjTjCEIQaTUmccytIb2aeISjx1eLuRvnrnzUpjTf1etQdR0ZMrHc73EB7mafKrS3FkrL+/BhQHw7FXOVFDhl06cK8qgy8ooCuPnaOqn+guhxkdw8rav0W1tkFVxhIandh0tc58jwe9A=
+	t=1780932149; cv=none; b=E7LRCdwrfxUokvQ2gzdXBaX21CadNALdIqZUTc0AiQoAw0TsocnWDT5WLIWIjCIABLOguaq4abU8S6Y8gNu0tdMtnORIW03dO9r2TAnMCz4ljLy0pCG3SPlUwq3w4yt9kcTycgegFEyKj7MK/nqM6xLZsVFJCQZ7qM3ybQgSWu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780932082; c=relaxed/simple;
-	bh=MAIegue6BM0sipLUF1W0Yevh7/GoFTBDMvhgRMS4JnQ=;
+	s=arc-20240116; t=1780932149; c=relaxed/simple;
+	bh=zBxWNviSMZIC+obdkpta5aNFbLZIAHeE9RKj1FwB5jQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hd6kzESIifm3APwO/AQHijFnE8cncM7IWKX6NY0n1MTwL+IsUrycZHHOBTWqkHLkYAKDn66RS1QpH99tLabmu5hwvy7zwtaqyS4I41apRALp4F6qDHDdA8PPO70TmQCXVBnnER4V69pa35jJjwEWE1MVc14+95Q9oICJadNhT2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNyVGXfa; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=AmBmNhCUrDYzMXmQlGIeF/VgZmjEiQJcd6MMdFrHWIkLrjiek5tbd+3/A11efVaV14LXyLUQ8VobTkhtbzJuEViqhmL4hCxEz6u66/0pk4nKZ+TF4F8bxPohXbE/TviYgL5LhSTjv24scqwyiTOJ7iinWZgxkFbdK+FQUN80gHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgLzPu/D; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNyVGXfa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9181F00893;
-	Mon,  8 Jun 2026 15:21:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgLzPu/D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39071F00893;
+	Mon,  8 Jun 2026 15:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780932080;
-	bh=7j+8ckKdMlars7Y2keiMkROeOw2TgWgs10BRNGBllgA=;
+	s=k20260515; t=1780932148;
+	bh=njRVmNhcXNoaglLQrRWb0+CB2LnesgpHsEPN8z7axVA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PNyVGXfaevh7ULCwsqZCEIeJbZaGrcXPCv4VXqZuWKK8tAM2fuVGrrlxqHBKxiFx3
-	 MIHhtBY9BAvt/xGcHicXxpTCJVj8y37I8AoMAVceCVHm9w4YnjlF6k1AM/ra/S5XIK
-	 Z/qYDqb5C+bUjBBi6d9YDP4fxAU7/PbbQhhsO0S8IEvBeZPz2nZMb8IVjzL31XBgaN
-	 fSTl+hobU/ZsRkKpfBWaQZmc0AQ22BFVPTzwfa8R6VWfQ6RMI+bwTbyJUwOoX3wVr1
-	 PX4tN3cXm5oCSGLedbh1PQ/hBPsrYixuLByr+8inL8Cl/0TKu0VDJ4gcc1ZH4GdcnA
-	 w6V1cGkheor3g==
+	b=MgLzPu/DGq/0QeObh/pA23zh9fSXix0Or5WZgbxS+25S6C50TqwXuX0yLqWQJ4E8H
+	 6RAHRQiXq3tijXlWh1EAQuafHKmDYc3p0xvh5kacFaSBjxY/uVJmJH0Bop3QtmZxKo
+	 zn6YPNsppPoIIIWLbgaIHDlJmepKBY1/PntCf7EGUtgrdcni20rIs6L9YZrJvRkUP2
+	 xJBrf6dAnUV8nPZIijMeGxEVLst5gIXmavK6tfmJdcypE/kC7r48FU+zc3V0sg3uaT
+	 HdZNjK5gyvsrMaMXU2wI+wHD96xG9UHOJ4gF8b8ml+4O+vOJwlI348+SEyvNOrKupy
+	 3Xo7hFzxaBU3A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 8/9] selftests/bpf: Add test to verify
- xlated insns for global percpu data
+Subject: Re: [PATCH bpf-next v5 7/9] selftests/bpf: Add tests to verify
+ verifier log for global percpu data
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608145113.65857-9-leon.hwang@linux.dev>
-References: <20260608145113.65857-9-leon.hwang@linux.dev>
+In-Reply-To: <20260608145113.65857-8-leon.hwang@linux.dev>
+References: <20260608145113.65857-8-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 08 Jun 2026 15:21:19 +0000
-Message-Id: <20260608152120.8B9181F00893@smtp.kernel.org>
+Date: Mon, 08 Jun 2026 15:22:27 +0000
+Message-Id: <20260608152227.E39071F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Validation logic for the `insns` array uses the wrong `idx` variabl=
-e, rendering the bounds check logically ineffective.
-- [Low] The `ld_imm64_to_u64()` helper incorrectly casts a signed 32-bit in=
-teger to `__u64`, causing unintended sign extension.
+- [Medium] `RUN_TESTS` macro is incorrectly wrapped inside `test__start_sub=
+test()`, which breaks the subtest hierarchy.
 --
 
-commit 7b07fe4e4f25a49af6769218dfb2293981c5c2b2
+commit 1dcc43260f6040ba128a20fe56dd3f75bb90a451
 Author: Leon Hwang <leon.hwang@linux.dev>
 
-selftests/bpf: Add test to verify xlated insns for global percpu data
-   =20
-This patch adds a test to verify global percpu data related translated
-instructions in BPF. It compares the translated ld_imm64 instruction with
-the one in the ELF object file, and verifies the addition of the
-mov64_percpu_reg instruction.
+selftests/bpf: Add tests to verify verifier log for global percpu data
+
+This patch adds two tests to verify the verifier log output when a
+percpu_array map is incorrectly used as a const string.
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/=
 tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index 729878d5d3b31..c3b9423246b55 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 [ ... ]
-> +static __u64 ld_imm64_to_u64(const struct bpf_insn *insn)
+> @@ -244,6 +244,11 @@ static void test_global_percpu_data_lskel(void)
+>  	free(online);
+>  }
+> =20
+> +static void test_global_percpu_data_verifier_log(void)
 > +{
-> +	return ((__u64) insn[1].imm << 32) | (__u64) insn[0].imm;
-
-[Severity: Low]
-Does this code inadvertently sign-extend the lower 32 bits?
-
-The imm field in struct bpf_insn is a signed 32-bit integer (__s32). Casting
-it directly to __u64 performs sign extension. If insn[0].imm were to contain
-a value with its most significant bit set, it would be sign-extended,
-corrupting the resulting 64-bit value.
-
-Should this cast to __u32 first before casting to __u64, like
-(__u64)(__u32)insn[0].imm?
-
+> +	RUN_TESTS(test_global_percpu_data);
 > +}
 > +
-> +static void test_global_percpu_data_xlated(void)
-> +{
-> +	struct bpf_insn ld_imm64_raw[2], ld_imm64_xlated[2], mov64_percpu_reg, =
-*insns =3D NULL;
+>  void test_global_percpu_data(void)
+>  {
 [ ... ]
-> +	prog =3D skel->progs.verifier_percpu_read;
-> +	idx =3D find_ld_imm64(bpf_program__insns(prog), bpf_program__insn_cnt(p=
-rog), ld_imm64_raw);
-> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 raw"))
-> +		goto out;
-> +
-> +	err =3D test_global_percpu_data__load(skel);
-> +	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-> +		goto out;
-> +
-> +	err =3D get_xlated_program(bpf_program__fd(prog), &insns, &cnt);
-> +	if (!ASSERT_OK(err, "get_xlated_program"))
-> +		goto out;
-> +	if (!ASSERT_GT(cnt, idx + 2, "xlated insn count"))
-> +		goto out;
+> @@ -255,4 +260,6 @@ void test_global_percpu_data(void)
+>  		test_global_percpu_data_init();
+>  	if (test__start_subtest("lskel"))
+>  		test_global_percpu_data_lskel();
+> +	if (test__start_subtest("verifier_log"))
+> +		test_global_percpu_data_verifier_log();
 
-[Severity: Low]
-Is this bounds check using the correct index variable?
+[Severity: Medium]
+Does this accidentally break the subtest hierarchy?
 
-At this point, idx holds the index from the raw BPF program. Because the
-BPF verifier can insert instructions, the index in the translated program
-might differ from the raw index.
+The BPF selftests framework does not support nested subtests, and
+test__start_subtest_with_desc() explicitly calls test__end_subtest() if a
+subtest is already active.
 
-Could this bounds check be moved after idx is updated below, since
-&insns[idx + 2] is accessed later using the translated index?
+Because RUN_TESTS() internally creates a new subtest for each program in the
+skeleton, invoking test_global_percpu_data_verifier_log() while the
+"verifier_log" subtest is active will immediately terminate the "verifier_l=
+og"
+subtest.
 
-> +
-> +	idx =3D find_ld_imm64(insns, cnt, ld_imm64_xlated);
-> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 xlated"))
-> +		goto out;
-> +
-> +	ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm64 opco=
-de");
-> +	ASSERT_TRUE(ld_imm64_xlated[0].dst_reg =3D=3D ld_imm64_raw[0].dst_reg, =
-"ld_imm64 dst_reg");
+This causes the parent subtest to falsely report as passing with zero
+assertions, and the skeleton tests will run as flat peer subtests rather th=
+an
+being logically grouped.
+
+Could RUN_TESTS() be used directly here without wrapping it in
+test__start_subtest()?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608145113.6585=
-7-1-leon.hwang@linux.dev?part=3D8
+7-1-leon.hwang@linux.dev?part=3D7
