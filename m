@@ -1,207 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021D625B0B5;
-	Mon,  8 Jun 2026 13:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF5A29DB64;
+	Mon,  8 Jun 2026 13:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780924098; cv=none; b=Ls3TDBh6AGB4M7cY96A3G5bRq8+ZCnjdNC5MMLKQ9RHWclclMMJ/Sx3aCA9g6hweuJouhW9Q9PsDOxEF0ixmNMccCIHrwUvZP4ybnnaeTW1GxNGWUcpsbNhKZdHCAHHnXwFb5AKT7Dc9S/CNTG2mw8PdqYt3fI4Mx9UG3Li2GxA=
+	t=1780924193; cv=none; b=BA+UAWlkluI8FUce5yCU4zZxfvkko8KeNlinZ8+mVJjdKNmuQ+1C4QSTjpRvWo5d/ZlMNd1sxoGEuKV3mI/5lx/ILusSUMkKQUa3oCWqD+cCML3XKIcSks4wcd0K/ccEun83WcpEzi+ftE0eAzG6mTzS7PaZbEvJcAkSOxDGduo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780924098; c=relaxed/simple;
-	bh=yBeu7x0HLfDYB6aE4TZympchPHPdEH2T5dCuyN5mEnQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=U7FCPOpdXJg8wYju43WRIKbtG7c65tsfOdiKzOXCjNYorfoPLJ0qUi0FyrZBzgY/SXc7OC8Fnhand9pjtnmIeDBI7P5gNRQIYAaUkGExMU4jHACl1L5GF1cjxFzRZhs3Bdgi2jhKhX6JLNt7leRC1pXP+Hu/JA5zQ05SN0RVu3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0mheIZM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780924193; c=relaxed/simple;
+	bh=a4xP8RCXhHTuk1OmWoDtA1nUxXkbfRRh8V6ytyhYvKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eIFOEVENyyXK+QP5viYYQUR+eYkWmHGIzYMFJAdcjKoVydCfUwynYu/VDhsnYVQGyB7JniwAD1Vj7rCfs+SB7le+SzW0YndcHv58BKylJv2TuFXqg0Kwu1dccXYrHUpzP+Uz9nhYfdXX7r86vlxDGMGtuY4zeRIzjZB6unBfy+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DnS7CDiX; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0mheIZM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B411E1F00893;
-	Mon,  8 Jun 2026 13:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780924096;
-	bh=Zd0+jNvPkXeWN0Z847elvpT2TNqm09oVmWqgBxiuXWc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=k0mheIZMVr1L5L8fXXJL35Us7mMFXkw1dgOh+pLa69q4GDs51DZegI3QEvH6DA25O
-	 EkwltIfDsUQJYt7sm/sJOhLb6GTl+xu4OGJxGPMwZ2mvIPqm4QEXZZpZeWOGR7S4Eq
-	 T7KyQ/y6dDJvDPNkZnGmvVvm6QkSyFosqIVU3TR2cXG1pfx0ONmolmK3bm+jhSxKL+
-	 SJ8Am/sXRBvBFpoHEU11aOVHklqCOU+Dl1/8QLdhGk4PUy5On4AaSBEOqp2TlujOKB
-	 69vx5A1FG+riQWbywdSH5mVsACSh4HgaHwDSiJLGtzmIWm1bf0LtnzSA5J+27SPS2c
-	 xHwaJMSCZMDnw==
-Date: Mon, 8 Jun 2026 22:08:11 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org
-Cc: Tengda Wu <wutengda@huaweicloud.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Alexei Starovoitov
- <ast@kernel.org>, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
- jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com
-Subject: Re: [PATCH] rethook: Use tsk->on_cpu to check task execution state
-Message-Id: <20260608220811.d4a0b58961cfb9eeb6bbbccb@kernel.org>
-In-Reply-To: <20260608102326.GB3161497@noisy.programming.kicks-ass.net>
-References: <20260525132253.1889726-1-wutengda@huaweicloud.com>
-	<20260526123719.482f07a3843e207e22d95378@kernel.org>
-	<94179dab-ffb7-4fab-af45-b20bfb686ab3@huaweicloud.com>
-	<20260601084001.9566b443746447ec2bb1a9fb@kernel.org>
-	<20260604093445.GF3126523@noisy.programming.kicks-ass.net>
-	<20260605224341.c926299d613b6102912c9a3f@kernel.org>
-	<679a1c8f-1e4d-4ae5-83e1-d0068e6de1a6@huaweicloud.com>
-	<20260608093449.GH4149641@noisy.programming.kicks-ass.net>
-	<20260608102326.GB3161497@noisy.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DnS7CDiX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780924192; x=1812460192;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a4xP8RCXhHTuk1OmWoDtA1nUxXkbfRRh8V6ytyhYvKw=;
+  b=DnS7CDiXRIh0YVySDVNkMTKf2bgiJk0QQwaHJ3SYTJkCmWrGm6m5R4YN
+   +zwm1+zUtb5tMWqPJt2cbYeCuwCxrGvPs0GqeMaDhE83rbt/ReLBP934Q
+   LtSpdWFjGVV1IEeHs6auGg7aNlEdq8eLNkyaV/3vSYQvULKkqpwj5zILK
+   oY6ecROXNmOZQXbrgivYBhe3Zeoy3Gz2310Th7iZc07+L2UO7FZgYJu18
+   rIhrCKXD46mcvAYyaJkbFWtj8itQbxXRRyZQkueTczDfTdB3GXX1fHOQ8
+   OknWswcUCoT6qTxKtM0db05pBFLo/mvEaQFHybqXHCYScquViHDHNWKzr
+   A==;
+X-CSE-ConnectionGUID: i0s2mVOPTkS0Oo5qnbzMZg==
+X-CSE-MsgGUID: a/MX1r8SRgKSrjaTaPksNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11810"; a="92223680"
+X-IronPort-AV: E=Sophos;i="6.24,194,1774335600"; 
+   d="scan'208";a="92223680"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 06:09:51 -0700
+X-CSE-ConnectionGUID: I1tkXw6tSCKAQpXa/WY9JA==
+X-CSE-MsgGUID: EylWRlzcRO+q0+8RlIrxXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,194,1774335600"; 
+   d="scan'208";a="269252914"
+Received: from brc05.iind.intel.com (HELO brc05..) ([10.190.162.156])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 06:09:47 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	stfomichev@gmail.com,
+	kernelxing@tencent.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Cc: bpf@vger.kernel.org
+Subject: [PATCH net-next v3 0/4] selftests/xsk: simplify UMEM setup
+Date: Mon,  8 Jun 2026 18:39:33 +0530
+Message-ID: <20260608130938.958793-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 8 Jun 2026 12:23:26 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+This series simplifies UMEM handling in selftests/xsk.
 
-> On Mon, Jun 08, 2026 at 11:34:49AM +0200, Peter Zijlstra wrote:
-> > 
-> > +Live patching folks
-> > 
-> > On Mon, Jun 08, 2026 at 09:52:37AM +0800, Tengda Wu wrote:
-> > 
-> > > Background: We are verifying the support of live patches for functions that
-> > > have a kretprobe. The specific verification method is as follows:
-> > > 
-> > > We construct a function foo() that calls bar():
-> > > 
-> > > void bar(void)
-> > > {
-> > >     for (;;) {
-> > >         schedule();
-> > >     }
-> > > }
-> > > 
-> > > void foo(void)
-> > > {
-> > >     bar();
-> > > }
-> > > 
-> > > A kretprobe is attached to bar():
-> > > 
-> > > echo 'r:rp1 bar' > /sys/kernel/tracing/kprobe_events
-> > > echo 1 > /sys/kernel/tracing/events/kprobes/rp1/enable
-> > > 
-> > > Then foo() is triggered. The expected behavior is that bar() will call
-> > > schedule() and yield the CPU.
-> > > 
-> > > After that, the live patch is activated to attempt replacing the implementation
-> > > of foo(). The expectation is that this should succeed.
-> > 
-> > This wholly depends on how foo() calls bar(), if it is a normal call,
-> > then no, it should not succeed, because foo() is still on the stack.
-> > 
-> > If it is a tail-call, then yes, because foo() is no longer relevant.
-> > 
-> > > However, in reality, because the task that called schedule() is still in the
-> > > RUNNING state,
-> > 
-> > So calling schedule() without setting state is dodgy in the first place.
-> > Who is doing this? All wait primitives will set this to
-> > TASK_UNINTERRUPTIBLE or something along those lines.
-> > 
-> > > the condition task_is_running(tsk) inside rethook_find_ret_addr()
-> > > is not satisfied, causing the function to return early. This, in turn,
-> > > prevents stack_trace_save_tsk_reliable() from determining the stack as
-> > > reliable, leading to a failure in activating the live patch.
-> > > 
-> > > **Not sure if this is correct:**
-> > > 
-> > > We believe that after a task voluntarily calls schedule(), when the stack
-> > > is expected to be reliable, it is a safe time to activate a live patch.
-> > 
-> > Calling schedule() without setting state is a no-op and really shouldn't
-> > count much at all.
-> > 
-> > > Additionally, a similar tsk->on_cpu check can be found elsewhere in the
-> > > kernel (See task_on_another_cpu() in arch/x86/include/asm/unwind.h).
-> > > Therefore, we propose changing the task_is_running(tsk) condition to
-> > > tsk->on_cpu.
-> > 
-> > Anyway, I'm wondering what the purpose of this check here is, there is
-> > no real comment, and commit 5120d167e21c ("rethook: Remove warning
-> > messages printed for finding return address of a frame.") is just pure
-> > voodoo as well.
-> 
-> FWIW, you should have had this discussion then.
+It centralizes UMEM property setup through helpers, moves UMEM ownership
+from ifobject to socket-owned state, and normalizes umem_size/mmap_size
+usage across the touched paths.
 
-Indeed. The rethook is making a shadow stack by list, thus caller must
-guarantee the target process is blocked at least during this function.
+v1 -> v2:
+- Applied helper usage consistently across the touched test paths.
+- Moved UMEM ownership to socket-owned state and switched to one
+  heap-backed umem_real object at xsk_arr[0] with explicit reset/cleanup.
+- Kept shared-UMEM TX behavior unchanged via TX-local UMEM state
+  copy/reset during TX configuration.
+- Folded pkt_generate() umem parameter removal into the ownership
+  refactor patch (no standalone cleanup patch). [Maciej]
+- Updated mmap_size teardown handling to join the RX worker thread in
+  single-thread mode before cleanup to synchronize UMEM mapping state.
 
-The commit messages suggest that when BPF takes a backtrace, it also
-includes other running tasks. Is that safe?
+v2 -> v3:
+- Reverted the unnecessary pkt_generate() interface change. [Maciej]
+- Removed the unneeded umem_rx/umem_tx locals in
+  testapp_validate_traffic(). [Maciej]
+- No functional changes, only review-driven cleanup.
 
-> 
-> > Also, note the comment that goes with the usage of
-> > task_on_another_cpu(); that thing is racy as all heck.
-> > 
-> > So it really comes down to what the purpose of this check is.
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 
-This check has been introduced when it is copied from
-kretprobe_find_ret_addr(). It has the comment:
+Tushar Vyavahare (4):
+  selftests/xsk: Introduce helpers for setting UMEM properties
+  selftests/xsk: Move UMEM state from ifobject to xsk_socket_info
+  selftests/xsk: Use umem_size() helper consistently
+  selftests/xsk: Introduce mmap_size in umem struct
 
- * The @tsk must be 'current' or a task which is not running. @fp is a hint
-
-IIRC, I added this check to explicitly verify this condition.
-
-> > 
-> > I suspect the issue at hand is that tsk->rethook elements, such as
-> > iterated by __rethook_find_ret_addr() are not safe to be accessed for a
-> > running task.
-> > 
-> > Notably while rethook_recycle() has some RCU thing on, that objpool
-> > thing (and the recycle name itself) seems to strongly suggest iterating
-> > these things is not sound (you could start with things from this task,
-> > hit a recycled entry and continue iterating rethooks from another task).
-> > 
-> > Also note that the current check is also racy, nothing really prevents a
-> > wakeup from happening right after you observe task_is_running() being
-> > false. The task can then get scheduled in on another CPU and tear down
-> > its rethooks concurrent with __rethook_find_ret_addr().
-
-Yeah, but is there any way to ensure the task is blocked? Even if it is
-blocked, like TASK_UNINTERRUPTIBLE, unless holding the actual lock in
-the rethook, it may not be possible to ensure it?
-
-Of course, we could give up on checking within this function and leave
-everything to the caller to guarantee - as kretprobe does.
-
-BTW, the reason why we made it possible to pass tasks other than current
- is that the stack unwinding code itself supported unwinding tasks other
-than current, so we had no choice but to create this interface.
-
-However, it is a bad idea to check this in deep inside of unwinding.
-
-> > Now, livepatch itself calls unwind from a proper context, but unwinds in
-> > general are not. This rethook stuff doesn't seem to be sound in general.
-> 
-> I suspect just entirely removing the check is the sanest option at this
-> point. Callers that do it right (livepatch) are guaranteed consistent
-> data, and the rest gets whatever pieces.
-
-Agreed.
-
-> 
-> Notably, unwind_next() holds rcu, so the iteration is protected from any
-> of those rethook_node things getting freed. Its just that the iteration
-> can go sideways and you might not get a sane answer.
-> 
-> The very worst possible option is getting stuck in an infinite loop when
-> concurrent with agressive rethook re-use or something daft like that,
-> but that seems extremely unlikely.
-
-
-OK, thanks for your review!
-
-Tengda, can you send a patch to just remove the check?
-
-Thank you,
+ .../selftests/bpf/prog_tests/test_xsk.c       | 193 ++++++++++--------
+ .../selftests/bpf/prog_tests/test_xsk.h       |   3 +-
+ 2 files changed, 111 insertions(+), 85 deletions(-)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.43.0
+
