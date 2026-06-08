@@ -1,123 +1,184 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E922E9729
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 19:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164003F8242
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 19:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780948688; cv=none; b=THcT/gzHn8CDvK7nbxucvZpTy9himWUeD+fM4UUlOq2vcu4gfmR3ufEV0EWyfoG/cKXjqMa/DIdAdlwsB1pmVmMl1ZH1150mays/8zLBNygFpSQKOCwC1wvgrK1IQslJJ56aUtFg7pa0iv8GHFgvugY3lIt2ArL3xvP4IMwXG1A=
+	t=1780948787; cv=none; b=Duzw0NcZ3tDr9Jlv7mwdcW9niYEllbExjHkVA/02nQTXMbHgcWX4/c5reHXMk3wE+ogohAXMDrqVAvlyg7nZtNi3VKF4HzGzz7MMob7SwKjqWndzxsBQDjUybdeBZrXam3dlUAE1dwFqyWYPlROF7M1eqkNhx7Qsxdlq1mGv3B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780948688; c=relaxed/simple;
-	bh=6r9vbyCh4ODQGh6cykBW9zlBP7LN1nCYV/Ax1BNV05U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=C7X8WNANHYJjcuHROTcNQK5EGfaxET+oWrjWRMZL4WiWcDzopOOJxhXQp6NTE+8YdKTzCidrNqt5mJPG6D06e+Mxm/npZ4fnA79VTDqR9e38mpIHvPAVrdtz5f1GZdtfZFYm1eRIxjTkLw9vKLJHygFiVbEXg4Lig2wvHI1bEO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcxkyJyo; arc=none smtp.client-ip=209.85.167.181
+	s=arc-20240116; t=1780948787; c=relaxed/simple;
+	bh=pP5wAIxFb4TuDtHklK7t2r96/cLDYX9cu/5cAeBOiYI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HPyJ1kXK26OHMOF572aSRigGSdIs+2CfeKRjiAhFnFtRWZsNgrVN89xjzDQqXCldC26kpYXhj+UUingSEGB4KZTpgr+LxFZtkGHTmrIL8NtTzcIrM/QOqjCYdwu+m2VPq3ha9UMHSHF0+S2xiqv8vjw42p3zerqT0rJ+tZuNnig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CC+LaQmu; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcxkyJyo"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4863a7dac63so2405535b6e.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 12:58:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CC+LaQmu"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-3042a388168so2544442eec.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 12:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780948686; x=1781553486; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Tq3KQGC3tU2yK+mYapte3MwesmVqS3nwz+ecMDb+Ng=;
-        b=QcxkyJyoEAospXZqyI0YINj+5t5IOOMW1a1/jLjG0a0L8KAqJpO5fvCf/fuOkXsfB+
-         +j7GFEc+n7baijoj/fjJ5+6upOTYGmmRYKn7wINMWqWZKzF0DPb/ZciWEe19NSnfNXI7
-         XMZcsOm6/isJWTyP32U730ACyqbOug6yD4noNADmiUdZhusaWQF6OdQslRnq2GKD6IwS
-         pZ8UtoPT+7TdGFzCYDbvrhTxSQz14Nx6V/ZNXRqZGTmWD31PqEpN0VcLeo2PQ7wu1h9Z
-         NlbvNDVxjBQJIu2H+9qA7fHS4W9bNoHco/7InZN35Ocq3G1M8k8T7+gqwm02+JW8w6/w
-         FERg==
+        d=gmail.com; s=20251104; t=1780948785; x=1781553585; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Lynx5jaczBFbCjQaOB4+zPyp2PFUK+IBKvmn6JxbYEw=;
+        b=CC+LaQmu3MW5Wn7djRCmADI53v84eWcHbQjPX2mKASABuw1MqwaP6SGKzQdJAMTW7Q
+         Qa6+7WyiB3aiEOXpS2pbNwREEQCrvsQqVD0EekfqXk16p9mh7KyCy3JaK/qA/Rmw+5GX
+         k6kk2t4TKWeX2DuaPtX662SgXeSqfVanO1ZriQhkwxz5FkI/jtaQXA/vu+5TuKMpRhC2
+         8V3DdUPl8Wxl4xz/tduqu+oxL3vG1KVqjwVzZC4NUBWzYrblQLkPrLkQSMJcwHmqYr07
+         w6ns+wOe/MmCeC4J+TD+nBYa7UNdUmIzQLDC0ibkeXHrfb6UyIkQ8slW4m/guDw0cn9+
+         re7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780948686; x=1781553486;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tq3KQGC3tU2yK+mYapte3MwesmVqS3nwz+ecMDb+Ng=;
-        b=IYPffsrfh4Nxkm4SzOgZMX+B1+wfQP3zy2dkIXsDMfKOUc35CGLmR7gabJw/ep0TU5
-         AXeqPmWqCMkynw325vhaAh/3yGhoySj+LUgc2xtgxbXY5xKFdPItfJyrYwUriAgMQu86
-         99G5ILvoa9bfCAlIffveaKf80pFSOktj78FBMxy/Sngj1V7AOMC3p3CtGCSx+Kxd5pTW
-         hosQbsQq7RvdaqV5zJ3SMwpvf72R4CXyX4moTlHc7iogXTf4ENQi2i1PjlpsL4uHcOvT
-         lLtSL3j6GhABW020vMKsHrwaA3gxfkLjzNThOY6KwsNSn808mrcml97MRGshO2Rdk/Os
-         79nA==
-X-Forwarded-Encrypted: i=1; AFNElJ9fNt4FZnusOba588s8KuvPaq+0AFD49NUTvfrffiJ/cxdt4RdK3SP7LbNsZnVtBl6NoOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdTArSEdJTmrHevIfGx6DKOEgyucWzm+ZogQGgxeFQkOa9mm0j
-	y86jzPW1fSnxr3Ql5hnyYbv9UP4i6msIAqECP6YM/oHV52+Ls6o8fQd8rceicw==
-X-Gm-Gg: Acq92OHKGwDheedLDQqpn5eZuxWiAZJnNvpa8Iz18fxAwcqumBVd9ZuhsJDEaTB57vZ
-	JC16CAxsVZFX8O+HRX7LsaB1KTHK6RWMCHmsSI4qMp7zLhSIaD1snKPt3XxZWJ78cpOvmYktzL+
-	jBsHs2TYpmBHzfPv/TCoR4/9TLxnemhpxw4FC7c8rhODUlx4OOUOaP5Kj4VgO0TtZwYcKpjJInh
-	Sq7W/Su8+aI0KWaVDuaeFHo8FRFxfV7YU/i5v+g62qTYcv3Kk50fCCtbHfN0fXeXoNcYajAC2LS
-	Wno+fuJ3zjHAlwjoKPDU+h7ljTfTJsrrSdUkrhsQRuHuh8Ri8nSYxMg+0XUnC1oCgBzKs5xQ46d
-	7q5SE1hCe+/zCg5Ap7kvoseiBo3MqzeYNQvDfxRblsXsOoMRBg14mv+f4hqP88dR3njEMn/PUJh
-	zRkWBGMv/xV8/sO4lDlb0gRr2BJ1BB/XTab4cGenNKnItoTJ9MLjJgj4Fy2dTTanaWhaCftT+nw
-	vqyRXQ2Z7wKdsYh5DGOjHo5gAM=
-X-Received: by 2002:a05:6808:c227:b0:485:4443:dbed with SMTP id 5614622812f47-4868dbf7a46mr10511768b6e.8.1780948686022;
-        Mon, 08 Jun 2026 12:58:06 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:9::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b7ad946sm14131286b6e.8.2026.06.08.12.58.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2026 12:58:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1780948785; x=1781553585;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lynx5jaczBFbCjQaOB4+zPyp2PFUK+IBKvmn6JxbYEw=;
+        b=Ru35awZWoqoh2ouPzNntEMUPc12Kxnq29nNNtuK62Awrppy6gDHAmAyOA1hcVLhLrV
+         SN/fMnzdQXe63YSmHEI9alhDOTGiXsctrpbMyEVahQzJETwyTVVM+ioNyWOLQr3G9bYH
+         X1yEWpDQlQgubnHb4ue6CAGdEXIw1bdpYo56lGl0OvuIvgQU+e9jtQM+LXCMYujmiOit
+         YeTSVJ1UtbNExlqZ56/vankBT/2dIhfw/D5FhUnMD/uLXL1TgXE0GQNq34URDcxD+f+P
+         QE+iw9fmsG/C7DFaLvIdPC8RMd6uMgA1WtdqRM/9XwXKtAdiPQ1zJDbvyBf4UQLkj3q5
+         CPJA==
+X-Forwarded-Encrypted: i=1; AFNElJ+vsFsGch4Pmzwlz/T1NangVWF7mNrpNnfWpsBJH0q8aMyg1YmcsV16EG8B20eZVbuTdnQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgS7w4dznruoOVIHWvFutcNqNhQ6hOfkuovpJq8ADNtBpPfDKQ
+	zmrqQZ1Mhk0gqD2t8vytIOrX7ulYpIOMJtHLHymB82w7Q9PpXpvYQoey
+X-Gm-Gg: Acq92OFlkbDG0VPsmIEUl9RB88JmtjpklReq4kco3uup8Y4KIbB2OHwmjE0M7Mk9DPU
+	3kDBFw0+jmO57s42W3VYPnw10Y/75Po33mTOOngGKa/LDEh6qg8QbcDx4BgEVIhZvuUEmTKXW0d
+	liQx8lND0OPFf9XozcTS217yviBasYbCqz351JSjQMbWB4UtOowkMlvYj13wP8TJoG3iQstMwAZ
+	jAnMpSo88tf9gf/PdVcam1UZ7tFkgDmDOBrXt8wRoJarDLqVKkvY3bXRY2diWeixGQlTB3YrYCh
+	CpY42O/NfK2UnNdULB8H7tLLnsf+RdpDbpxfIc6t0/0rBxzw8rJlPp7OClzmaRBhOfYBcyviY7u
+	A3M1CSs+7GKO+ZmRC5ah12JheFyBsY5pcMebQLPjeCfFTn6soGgQE/p5Qpi2zKitVpSKspIvHnd
+	3bj3jj20HmxuWHYg8KNULl1DLb3vtUuwlSisLXQAAhPXa6wPNLfVaAu8EA/aPxPDBzYj3vvuz0V
+	5qTur18ghDFmXTt
+X-Received: by 2002:a05:693c:3618:b0:2da:13c6:f27b with SMTP id 5a478bee46e88-3077fde276dmr6656296eec.5.1780948784960;
+        Mon, 08 Jun 2026 12:59:44 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:1875:35fb:3a7:e87f? ([2620:10d:c090:500::3:d25])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcad34esm25741417eec.11.2026.06.08.12.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 12:59:44 -0700 (PDT)
+Message-ID: <d7ccd692ea8c6009785ad141e6ae4bbc68347517.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
+ expansion
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Moses <p@1g4.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, 	bpf@vger.kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, 	houtao1@huawei.com,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Mon, 08 Jun 2026 12:59:41 -0700
+In-Reply-To: <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
+References: <20260605234301.1109063-1-p@1g4.org>
+	 <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
+	 <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
+	 <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
+	 <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 08 Jun 2026 12:58:04 -0700
-Message-Id: <DJ3XMAR8TVS5.R5MDDZH8N1IS@gmail.com>
-Cc: <andrii@kernel.org>, <ast@kernel.org>, <bot+bpf-ci@kernel.org>,
- <bpf@vger.kernel.org>, <chenyuan@kylinos.cn>, <clm@meta.com>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>,
- <jolsa@kernel.org>, <linux-kernel@vger.kernel.org>,
- <martin.lau@kernel.org>, <martin.lau@linux.dev>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf v5 0/2] bpf: Fix kfunc implicit arg injection and
- add selftest
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <chenyuan_fl@163.com>
-X-Mailer: aerc
-References: <20260602093836.2632714-1-chenyuan_fl@163.com>
- <20260608142618.3064380-1-chenyuan_fl@163.com>
-In-Reply-To: <20260608142618.3064380-1-chenyuan_fl@163.com>
+MIME-Version: 1.0
 
-On Mon Jun 8, 2026 at 7:26 AM PDT, chenyuan_fl wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
->
-> v4: https://lore.kernel.org/bpf/20260602093836.2632714-1-chenyuan_fl@163.=
-com/
->
-> v1 made btf_types_are_same() cross-BTF aware by comparing kind, size
-> and name.  Alan Maguire pointed out that this would be too permissive
-> since two different structs can share the same name and size.
->
-> v2 used a name-based classifier (get_kfunc_arg_inject_type).
->
-> v3 splits the combined is_kfunc_arg_ignore || is_kfunc_arg_implicit
-> check in check_kfunc_args(), so that an implicit argument reaching
-> is_kfunc_arg_implicit() without any prior handler is rejected with
-> -EFAULT instead of silently skipped (Eduard Zingerman).  This prevents
-> the silent fallthrough that occurred when module BTF was inconsistent
-> with vmlinux (e.g. pahole 1.30 breaking distilled base dedup).
->
-> v4: fix a build error in the selftest.
->
-> v5 changes:
-> - Patch 1: extend the kfunc allow-list in check_kfunc_args() to cover
->   all kfuncs with implicit args handled in bpf_fixup_kfunc_call():
->   obj_new, percpu_obj_new, obj_drop, percpu_obj_drop,
->   refcount_acquire, list_push, rbtree_add (Eduard Zingerman).
-> - Patch 2: simplify the selftest by verifying aux->name in
->   bpf_kfunc_implicit_arg() instead of adding a separate struct_ops
->   test program with inline assembly (Eduard Zingerman).  This is
->   a single-file change exercised by the existing kfunc_implicit_args
->   selftest.
+On Sun, 2026-06-07 at 17:53 +0000, Paul Moses wrote:
 
-Pls address feedback from Eduard and respin with [PATCH bpf-next v6] subjec=
-t.
+[...]
 
-pw-bot: cr
+The repro is legit.
+Here is a somewhat minimized version as a selftest:
 
+    diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testi=
+ng/selftests/bpf/prog_tests/btf.c
+    index a9de328a8697..212ca4472a89 100644
+    --- a/tools/testing/selftests/bpf/prog_tests/btf.c
+    +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+    @@ -4258,6 +4258,44 @@ static struct btf_raw_test raw_tests[] =3D {
+            .max_entries =3D 1,
+     },
+   =20
+    +{
+    +#define N 0x1999999aU
+    +       .descr =3D "repeat fields overflow",
+    +       .raw_types =3D {
+    +               /* int */                                              =
+ /* [1] */
+    +               BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
+    +               /* struct target {} */                                 =
+ /* [2] */
+    +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0,=
+ 0), 1),
+    +               /* type_tag "kptr_untrusted" -> target */              =
+ /* [3] */
+    +               BTF_TYPE_TAG_ENC(NAME_TBD, 2),
+    +               /* target * (kptr) */                                  =
+ /* [4] */
+    +               BTF_PTR_ENC(3),
+    +               /* struct outer { target *kp; elem items[N]; } */      =
+ /* [5] */
+    +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0,=
+ 2), (N * 8u + 8u)),
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* kp          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 6, 64),        /* items       =
+ */
+    +               /* elem[N] */                                   /* [6] =
+*/
+    +               BTF_TYPE_ARRAY_ENC(7, 1, N),
+    +               /* struct elem { target *f0..f9; } */                  =
+ /* [7] */
+    +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0,=
+ 10), 8),
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f0          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f1          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f2          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f3          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f4          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f5          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f6          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f7          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f8          =
+ */
+    +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f9          =
+ */
+    +               BTF_END_RAW,
+    +       },
+    +       BTF_STR_SEC("\0target\0kptr_untrusted\0outer\0kp\0items\0elem"
+    +                   "\0f0\0f1\0f2\0f3\0f4\0f5\0f6\0f7\0f8\0f9"),
+    +       .btf_load_err =3D true,
+    +#undef N
+    +},
+    +
+     }; /* struct btf_raw_test raw_tests[] */
+   =20
+     static const char *get_next_str(const char *start, const char *end)
+
+However, as far as I understand the repro hits an overflow only
+because `BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 10), 8)`
+lies about `struct elem` size. It is specified as 8, while in reality it is=
+ 80.
+The size of 80 would make `struct outer` unrepresentable in BTF,
+because (N * 80 + 8) exceeds u32 range, and that's what btf_type->size uses=
+.
+Given that btf_repeat_fields() only traverses structs/arrays but not unions=
+,
+I suspect that overflow won't happen in `field_cnt * (repeat_cnt + 1)`
+if proper size checks were implemented in btf_struct_check_meta() / btf_str=
+uct_resolve().
+Even more, If I change "kptr_untrusted" to "kptr_untrusted11" to avoid fiel=
+ds parsing,
+the kernel accepts the bogus BTF.
+
+Paul, could you please investigate why is this happening?
