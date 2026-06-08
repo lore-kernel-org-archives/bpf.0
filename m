@@ -1,212 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B173C1984;
-	Mon,  8 Jun 2026 10:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1853A6EE9;
+	Mon,  8 Jun 2026 10:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780913975; cv=none; b=auvGdStxXJQ0d5xS7mpXBfJWxXXjdKcUkVem7hld/tZeMY4I7nvqEX8XaCDTuIqdp2BbnBWIV8tOTrUBqQvHqZ15vNNj8wvmQoXUfts2vkIzc69F58tDpaecnyXOnlO37qHO/C8ZWIimQ7/zFPts4io0YJT+2bQZydAkkacozws=
+	t=1780914927; cv=none; b=o07QhB0o2F7NS8Tc+WFiXNKxoG9YTi/5DZCqpmGbOJgOf2CA77/5fFzBWjSZTkVxv0H5g6eVERXeQhJtz3/OQYIRum88eDyknsNQ8Fk811/v1MBLA9vwPzZwaqQbQ8wZgYuyT2cz42Eg0xv896IBjsvgEVh8x5yOCgGf3sv7PlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780913975; c=relaxed/simple;
-	bh=f7eLZc/IcHT5GqFj5jujnTXujqX51uaz+wAaa3DATI4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=uzm+1j/pKGQzOniIauFp+Blm6oPAqEQAUUYnmh5iDqjV4NhGwCEMxu8ha0ZKNhs8jocE9/emCXNXSlVBsu+c/nQj570hl+P0MHYSgSuxqr/tq1k9CMXGqiDF9hFpW0rMxjLNW7v9GUeUDNTB3GGeFmHxcnBQQJiiweziIPPep6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=igvi1hOk; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="igvi1hOk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C501C1F00893;
-	Mon,  8 Jun 2026 10:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780913974;
-	bh=xrtlRFuiFzACaPUvDm3r3nLqN434Rs35tM7jQeJ31MA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=igvi1hOkDTsC3TCzgw5kQLirJqXjKfYp+StSBUbew7x7SB+Haxv4OEjgNg0BWlgrB
-	 wRZ8ix4u0MsAm3+KiEbxV+OiHnsiq0xmjkMRM5jqy1wxsbMaNK9lYw6/Xm1gQMWF3r
-	 eEJF5NRE4DP/VZnvkSzesE1gVmVLWRgOmdxSFiWNSD7GueUngYKKL6Af22fuXaLqzs
-	 DjQmUICaIO5WKYPg1v0/6at8tXcVfAXxNOSjxgD+6hxgTz/xJ89qIRW3UEawVe4NB+
-	 1U/6EsvW9oM+XvKvRjFA0KE7clLvMpj5E3FbYXhgGC1AfEZ1Vd84VyIgCpUJ7GLWn5
-	 6ILCsrzRZV78Q==
-Date: Mon, 8 Jun 2026 19:19:28 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v2 6/6] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
-Message-Id: <20260608191928.d7d2dea899b94f05d397f891@kernel.org>
-In-Reply-To: <20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
-References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
-	<20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1780914927; c=relaxed/simple;
+	bh=USjb7Tbsrh4MH7ZWDfykE81K39Hoa+48mu863rrvlLs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2o8mUynIo+tCb0mH8alN8jPGjOpbWCwTSuYXmKZMg1J7ST+Hqm60lk7JX5gG0Zih/J25/EvbRJIWN/TH8o9z9gdGhzc8o5ctqTXauraNxxAT4VVeR/ecqdS68Dmosv5q990GdQaRwdLL4amrRkfl1VlVdeIqHxR3u7/+extOEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxEuvomiZq6skRAA--.47771S3;
+	Mon, 08 Jun 2026 18:35:20 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxSeDlmiZqLqafAA--.40549S2;
+	Mon, 08 Jun 2026 18:35:18 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] Move thread_info into task_struct for LoongArch
+Date: Mon,  8 Jun 2026 18:35:13 +0800
+Message-ID: <20260608103516.20643-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxSeDlmiZqLqafAA--.40549S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Zw1DArW3JFWDuFWkXw1UArc_yoW8Ww15pF
+	ZFv39xGrW8Gr93Aw1ay34Durn8Jw1vgw12g3ZFy34xCw43XF1UXr18Grn8XF98tw40qry0
+	gF1rKwn0ga4UJwbCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
 
-On Fri, 05 Jun 2026 05:03:37 -0700
-Breno Leitao <leitao@debian.org> wrote:
+This is a formal patch series, based on 7.1-rc7, addressed all
+the review comments, tested with stress-ng, successfully passed
+the 3-hours stress testing suite.
 
-> Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
-> CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
-> build-time-rendered embedded bootconfig "kernel" subtree is part of
-> boot_command_line by the time parse_early_param() runs. early_param()
-> handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
-> CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
-> 
-> Gate the prepend on the bootconfig opt-in: only fold in the embedded
-> kernel.* keys when "bootconfig" is present on the command line, or
-> CONFIG_BOOT_CONFIG_FORCE is set. Applying the embedded cmdline
-> unconditionally would (a) diverge from how embedded init.* keys are
-> treated and (b) break fail-safe recovery: a malformed embedded
-> console=/mem= could panic the boot with no way for the admin to disable
-> it by dropping "bootconfig" from the bootloader cmdline.
-> cmdline_find_option_bool() runs before parse_early_param(), so the gate
-> is cheap and correctly ordered.
-> 
-> Select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG so the user-visible
-> CONFIG_BOOT_CONFIG_EMBED_CMDLINE option becomes selectable on x86.
+stress-ng --context $(nproc) --timeout 30m --metrics-brief
+stress-ng --sysbadaddr $(nproc) --timeout 30m
+stress-ng --fault $(nproc) --timeout 30m
+stress-ng --pthread $(nproc) --timeout 30m
+stress-ng --schedmix $(nproc) --yield $(nproc) --timeout 60m --metrics
 
-This seems like a dummy config. what code does depend on this flag?
+Additionally, UnixBench benchmarking shows a steady performance
+lift across all core counts.
 
-> 
-> With this select in place, setup_boot_config() in init/main.c would
-> otherwise render the embedded "kernel" subtree a second time via
-> xbc_make_cmdline("kernel") into extra_command_line, duplicating every
-> embedded kernel.* key in saved_command_line and making accumulating
-> handlers (console=, earlycon=, ...) register the same value twice. Skip
-> that render only when xbc_prepend_embedded_cmdline() actually prepended
-> the keys, reported by xbc_embedded_cmdline_applied().
-> 
-> Keying the skip on the prepend itself, rather than re-deriving the
-> opt-in, keeps the two paths consistent even when setup_arch() and the
-> runtime parser detect "bootconfig" differently (e.g. "bootconfig=1"):
-> the keys are then rendered at runtime instead of being dropped.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  arch/x86/Kconfig        |  1 +
->  arch/x86/kernel/setup.c | 16 ++++++++++++++++
->  init/main.c             | 18 +++++++++++++++---
->  3 files changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f24810015234..f839795692b4 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -126,6 +126,7 @@ config X86
->  	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
->  	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
->  	select ARCH_SUPPORTS_CFI		if X86_64
-> +	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
->  	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
->  	select ARCH_SUPPORTS_LTO_CLANG
->  	select ARCH_SUPPORTS_LTO_CLANG_THIN
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 46882ce79c3a..26a82a41f44c 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -6,6 +6,7 @@
->   * parts of early kernel initialization.
->   */
->  #include <linux/acpi.h>
-> +#include <linux/bootconfig.h>
->  #include <linux/console.h>
->  #include <linux/cpu.h>
->  #include <linux/crash_dump.h>
-> @@ -36,6 +37,7 @@
->  #include <asm/bios_ebda.h>
->  #include <asm/bugs.h>
->  #include <asm/cacheinfo.h>
-> +#include <asm/cmdline.h>
->  #include <asm/coco.h>
->  #include <asm/cpu.h>
->  #include <asm/efi.h>
-> @@ -924,6 +926,20 @@ void __init setup_arch(char **cmdline_p)
->  	builtin_cmdline_added = true;
->  #endif
->  
-> +	/*
-> +	 * Honor the same opt-in as the runtime bootconfig parser: only fold
-> +	 * the embedded kernel.* keys into the cmdline when "bootconfig" is
-> +	 * present on the command line (or CONFIG_BOOT_CONFIG_FORCE is set).
-> +	 * This keeps fail-safe recovery working -- dropping "bootconfig" from
-> +	 * the bootloader cmdline disables the embedded keys -- so a malformed
-> +	 * embedded console=/mem= cannot brick a boot with no way out. It also
-> +	 * matches setup_boot_config(), which bails out under the same
-> +	 * condition before parsing the embedded bootconfig at runtime.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE) ||
-> +	    cmdline_find_option_bool(boot_command_line, "bootconfig"))
-> +		xbc_prepend_embedded_cmdline(boot_command_line, COMMAND_LINE_SIZE);
-> +
->  	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
->  	*cmdline_p = command_line;
->  
-> diff --git a/init/main.c b/init/main.c
-> index e363232b428b..567f641a5731 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -378,12 +378,15 @@ static void __init setup_boot_config(void)
->  	int pos, ret;
->  	size_t size;
->  	char *err;
-> +	bool from_embedded = false;
->  
->  	/* Cut out the bootconfig data even if we have no bootconfig option */
->  	data = get_boot_config_from_initrd(&size);
->  	/* If there is no bootconfig in initrd, try embedded one. */
-> -	if (!data)
-> +	if (!data) {
->  		data = xbc_get_embedded_bootconfig(&size);
-> +		from_embedded = true;
+Tiezhu Yang (3):
+  LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
+  LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+  LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
 
-Even from embedded bootconfig, if the arch set 
-ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n, this must be applied to
-the cmdline as we are doing.
-
-> +	}
->  
->  	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
->  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> @@ -421,8 +424,17 @@ static void __init setup_boot_config(void)
->  	} else {
->  		xbc_get_info(&ret, NULL);
->  		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
-> -		/* keys starting with "kernel." are passed via cmdline */
-> -		extra_command_line = xbc_make_cmdline("kernel");
-> +		/*
-> +		 * keys starting with "kernel." are passed via cmdline. When
-> +		 * this bootconfig came from the embedded source and
-> +		 * setup_arch() already prepended the rendered "kernel" subtree
-> +		 * to boot_command_line, rendering again here would duplicate
-> +		 * the keys in saved_command_line and make accumulating handlers
-> +		 * (console=, earlycon=, ...) re-register the same value. Skip
-> +		 * only when the prepend really happened.
-
-Also, this should mention ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n case.
-
-Thank you,
-
-> +		 */
-> +		if (!from_embedded || !xbc_embedded_cmdline_applied())
-> +			extra_command_line = xbc_make_cmdline("kernel");
->  		/* Also, "init." keys are init arguments */
->  		extra_init_args = xbc_make_cmdline("init");
->  	}
-> 
-> -- 
-> 2.53.0-Meta
-> 
-
+ .../core/thread-info-in-task/arch-support.txt |  2 +-
+ arch/loongarch/Kconfig                        |  1 +
+ arch/loongarch/include/asm/current.h          | 30 +++++++++++++++++++
+ arch/loongarch/include/asm/smp.h              |  3 +-
+ arch/loongarch/include/asm/stackframe.h       |  9 ++++--
+ arch/loongarch/include/asm/switch_to.h        |  6 ++--
+ arch/loongarch/include/asm/thread_info.h      | 10 -------
+ arch/loongarch/kernel/asm-offsets.c           |  6 ++--
+ arch/loongarch/kernel/entry.S                 |  7 +++--
+ arch/loongarch/kernel/head.S                  | 18 ++++++-----
+ arch/loongarch/kernel/process.c               |  3 ++
+ arch/loongarch/kernel/relocate.c              |  2 +-
+ arch/loongarch/kernel/setup.c                 |  1 +
+ arch/loongarch/kernel/smp.c                   |  6 ++--
+ arch/loongarch/kernel/switch.S                | 13 ++++----
+ arch/loongarch/net/bpf_jit.c                  | 26 ++++++++++++++++
+ 16 files changed, 105 insertions(+), 38 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/current.h
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.42.0
+
