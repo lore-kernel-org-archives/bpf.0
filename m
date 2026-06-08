@@ -1,197 +1,142 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080253CAE74;
-	Mon,  8 Jun 2026 16:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6941F30BB
+	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 16:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780935920; cv=none; b=Ucz2vL9ZYWk0vJcU9TlC6CtL+unOWWWoLwqxuyHVlvSvahz0PVTA5AXRKmjBfxERhplH2L0j+E0Xv5xq/Dcni5PHFs6DNYuTKh236x8zsv4OusGg99iLwPsK21AUkQ5zVQYmFObla/aMmqIvhj0enRTxyEUk+npr9a0YLIHApLM=
+	t=1780936842; cv=none; b=WYJ7KVRbtNeBXKiwkGBN1cki3bo/l9yLPGEoRB4060IZElRzZmQs3FxZzALSOeFYoqPr1q+b2M4hcwEuZ9fyUtzU6vDBrk11dwWBR5InVbwoP0Yalqom2LVcMSK4KlQ+5ODr0SiV0ici2OvSGoUe7wOO+61aMPgZr/+wZSvaoFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780935920; c=relaxed/simple;
-	bh=QPhqsebsO3HMrGMEDz9OVg+K2hivuE3EfkbyqQu5hD8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KfzjfgIG4UxAOA5NKdySohaV5cLMfRSd67Oe+kSn138N3ia4axKAYW49yqBtm1gaNIcXOA/vvmtTWW8Ja9nHAHT83YHmP1guKftMCjX+D2f/a7P55krc8w3TPsBdUp8UC2AkkDHu1GgfcwhPK0ztv01OHox+lD4/Er7TnkPoQS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Y57GJxVy; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780936842; c=relaxed/simple;
+	bh=82Rmi6TJq3q0TO79OeD+weQj3RxVI1Vdg2ZKILv4dro=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=IU1KpZnPUcFimI1DTWBhwQqmur9aKyEFujMMXSVVcOcHDGqJT8Xe2oS8YA7roxGjqRtO+usnjRtJAgW2EG2auL9esvkR7hhBnGPs8oj+SS3mMp2sSegus9r0PwQH9OkDh9aObOWef8qeiy8y3EiuljSplLdTquoIFEqbOInPK0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pdpk1MVm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Y57GJxVy"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=k3Cl903UI3FDV6LUKk48+poCJ8NTaQVxa7IZmgH5xJo=; b=Y57GJxVy0Z/3PZerkPoYPQ/glg
-	3m+yPuxaSBUbeyEdegfqNviDIUfRupRmv8T9OsnFh3gK6AZeuHPcbmOhp5IboKcZS6bl5AwpngRaj
-	SvmHzwxkq43HVzxulK3PuAArB9/Qyx7Go8jhGcwbSTY1sMA5iUjvj4Fo5Ybo9ytYLrIfriuv0MuoT
-	AVI3OJlF0st2BuTcgbwXAvOQI/ZSIqWj207vwC6ov6uxMimRm+SMGwSf89AYBZzc/TPN9OZZMap61
-	V3efzaWoTbY2Uv8FlbW0Xlczic8i5FG9xK5Ou1lmkk1E0/7udx4txJbppllhNH5vm2+gBN4WSa75r
-	r13yHgsg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wWcmq-007kkS-1k;
-	Mon, 08 Jun 2026 16:25:16 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 08 Jun 2026 09:24:03 -0700
-Subject: [PATCH v3 6/6] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pdpk1MVm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272F91F00893;
+	Mon,  8 Jun 2026 16:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780936841;
+	bh=KmFbWDaGyObUAm0tkkta7VsZQbXs2HGOYaxou+NEJIg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Pdpk1MVmMPL1nIGd6BXG5Z1s+rOIQC8Tczwtbdpu3pCfBDkTM3ue9n7bMA9Zo9wsZ
+	 Be/RH0plnTE32rr24Ji7BuqEWLs/gNv6Iw6LKl117g/QZyfTQrTb+HSzCi6lJTobaw
+	 UC4g6OR3xSTiQA9AlmqLcE3zzHe9fXC+/vCoBF+mC9ELqow38MlN47rWx4uxwtyDi5
+	 F3MvN6ooxQTT1PVcruJUnh/ACdCl9CYd7lOhjmbgVHvG+nwYQm9HuUiOSUXWRfWJxC
+	 +wqTsVlBNFuhDSBuuA/BPEbEpedFq/cgnpCOMzcM7jMz30nm5FGFcLoFv3kcjtEw6Y
+	 LNRbaEZ4eT3zg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 5/5] selftests/bpf: Exercise kptr map update
+ lifetime
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260608144841.1732406-6-memxor@gmail.com>
+References: <20260608144841.1732406-6-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 08 Jun 2026 16:40:40 +0000
+Message-Id: <20260608164041.272F91F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260608-bootconfig_using_tools-v3-6-4ddd079a0696@debian.org>
-References: <20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org>
-In-Reply-To: <20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
- Nicolas Schier <nsc@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4701; i=leitao@debian.org;
- h=from:subject:message-id; bh=QPhqsebsO3HMrGMEDz9OVg+K2hivuE3EfkbyqQu5hD8=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqJuzKQzotX3VnuQ3pkChLcKjYqne9Rkk/Fise6
- 5L2G8PWUCCJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaibsygAKCRA1o5Of/Hh3
- baulD/4ntC/2wFrwFoTpj+Ekd46/woo3jQHZ2cN4TKhCNemATLVEhbN5SJyc0kVJrGnp2cQ0aYD
- A07hhnikjrrdJGToNvsxR1O5AzbJG7gWPf23sREIpzPIkOmO98Xr1cMQdhRvJf4rXmetHBtQ0zP
- W6NeMkBAV3/82ZRRu/HxubNvmE8mQdCInbc3a/3gVYhzbUO2pSIeB53mT8plF5N2q4gO9lvSNd5
- 7qGQXgLZkMUyzxZeSCn3xZNEFia4mCRseBMdQ7FX5qpJ2+uQcY/sS8thvFk6PCQK5qsJXMKOoHq
- 03w3fyPdgSOhq9jSCOKklGbv9l8uuuKqyp1zKYqSy3mZv6IuuYXJsPstwGv/4X/wI5NEJ0UHdUr
- J+gTdMv+lWRZ3BeFLi+RpD68c14bh2xNrVu6BUlcztBTCLv8IYJycewKhs2CDsUSeMrsVRmXJCz
- 5lIr6LqfQ8JPa6PQs9bMiyLsJEN4EGn1FO5438Gykb0eqV5lY7FRt+A7Vr/OGZ9rzX/no2dCs3n
- Oaho0VwF3GhTx2B5GFmynW3T0iCEYPgfleYV29orNpJqlz4CZZtU3WwWtAg48LMMmKILhlN94fK
- faZA4exkX66neesJe9o3g6rm528KCiKHTJcdHq8nicVl1YM/SrOZISddtuDeL7zUhz8GfHUOwQl
- FK4oqOCzEFaKtNg==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
 
-Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
-CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
-build-time-rendered embedded bootconfig "kernel" subtree is part of
-boot_command_line by the time parse_early_param() runs. early_param()
-handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
-CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- arch/x86/Kconfig        |  1 +
- arch/x86/kernel/setup.c | 16 ++++++++++++++++
- init/main.c             | 25 ++++++++++++++++++++++---
- 3 files changed, 39 insertions(+), 3 deletions(-)
+Pre-existing issues:
+- [Critical] The newly added selftests incorrectly assert that map updates =
+preserve old kptr references, codifying severe preexisting kernel bugs wher=
+e bpf_obj_free_fields() is missing during map updates. This leads to leaked=
+ kptrs and cross-key uninitialized memory corruption in hash maps.
+--
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f24810015234..f839795692b4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -126,6 +126,7 @@ config X86
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
- 	select ARCH_SUPPORTS_CFI		if X86_64
-+	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
- 	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 46882ce79c3a..003f8651db6c 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -6,6 +6,7 @@
-  * parts of early kernel initialization.
-  */
- #include <linux/acpi.h>
-+#include <linux/bootconfig.h>
- #include <linux/console.h>
- #include <linux/cpu.h>
- #include <linux/crash_dump.h>
-@@ -36,6 +37,7 @@
- #include <asm/bios_ebda.h>
- #include <asm/bugs.h>
- #include <asm/cacheinfo.h>
-+#include <asm/cmdline.h>
- #include <asm/coco.h>
- #include <asm/cpu.h>
- #include <asm/efi.h>
-@@ -924,6 +926,20 @@ void __init setup_arch(char **cmdline_p)
- 	builtin_cmdline_added = true;
- #endif
- 
-+	/*
-+	 * Match the runtime bootconfig parser's opt-in: only fold the
-+	 * embedded kernel.* keys into the cmdline when "bootconfig" is
-+	 * present on the command line, or CONFIG_BOOT_CONFIG_FORCE is set.
-+	 * setup_boot_config() bails out under the same condition, so the
-+	 * early prepend stays in lockstep with what the late runtime parser
-+	 * would have applied. CONFIG_BOOT_CONFIG_FORCE defaults to y when
-+	 * BOOT_CONFIG_EMBED is set, so on the default config the embedded
-+	 * keys are applied unconditionally.
-+	 */
-+	if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE) ||
-+	    cmdline_find_option_bool(boot_command_line, "bootconfig"))
-+		xbc_prepend_embedded_cmdline(boot_command_line, COMMAND_LINE_SIZE);
-+
- 	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
- 
-diff --git a/init/main.c b/init/main.c
-index e363232b428b..2ecb6aa536dd 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -378,12 +378,15 @@ static void __init setup_boot_config(void)
- 	int pos, ret;
- 	size_t size;
- 	char *err;
-+	bool from_embedded = false;
- 
- 	/* Cut out the bootconfig data even if we have no bootconfig option */
- 	data = get_boot_config_from_initrd(&size);
- 	/* If there is no bootconfig in initrd, try embedded one. */
--	if (!data)
-+	if (!data) {
- 		data = xbc_get_embedded_bootconfig(&size);
-+		from_embedded = true;
-+	}
- 
- 	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
- 	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-@@ -421,8 +424,24 @@ static void __init setup_boot_config(void)
- 	} else {
- 		xbc_get_info(&ret, NULL);
- 		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
--		/* keys starting with "kernel." are passed via cmdline */
--		extra_command_line = xbc_make_cmdline("kernel");
-+		/*
-+		 * keys starting with "kernel." are passed via cmdline. When
-+		 * this bootconfig came from the embedded source and
-+		 * setup_arch() already prepended the rendered "kernel" subtree
-+		 * to boot_command_line, rendering again here would duplicate
-+		 * the keys in saved_command_line and make accumulating handlers
-+		 * (console=, earlycon=, ...) re-register the same value. Skip
-+		 * only when the prepend really happened.
-+		 *
-+		 * On arches that do not select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG,
-+		 * CONFIG_BOOT_CONFIG_EMBED_CMDLINE is unselectable and
-+		 * xbc_embedded_cmdline_applied() collapses to a stub returning
-+		 * false, so this path still runs and the embedded "kernel"
-+		 * keys reach the cmdline via the runtime parser exactly as
-+		 * before this series.
-+		 */
-+		if (!from_embedded || !xbc_embedded_cmdline_applied())
-+			extra_command_line = xbc_make_cmdline("kernel");
- 		/* Also, "init." keys are init arguments */
- 		extra_init_args = xbc_make_cmdline("init");
- 	}
+commit 4d2aa8d889c01038cf4926ada20dda3564090fb2
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
--- 
-2.53.0-Meta
+selftests/bpf: Exercise kptr map update lifetime
 
+Add focused map_kptr coverage for BPF-side map updates that touch values
+containing referenced kptrs. The new syscall programs stash the testmod
+refcounted object in various maps, then update the same map from BPF.
+
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing=
+/selftests/bpf/progs/map_kptr.c
+> index e708ffbe1f610..3fbefc568e0a6 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr.c
+
+[ ... ]
+
+> +SEC("syscall")
+> +int test_array_map_update_kptr(void *ctx)
+> +{
+> +	struct map_value init =3D {}, *v;
+> +	int key =3D 0, ret;
+> +
+> +	v =3D bpf_map_lookup_elem(&array_map, &key);
+> +	if (!v)
+> +		return 1;
+> +	ret =3D stash_ref_ptr(v);
+> +	if (ret)
+> +		return ret;
+> +	ret =3D check_refs(3);
+> +	if (ret)
+> +		return ret;
+> +	ret =3D bpf_map_update_elem(&array_map, &key, &init, BPF_EXIST);
+> +	if (ret)
+> +		return 4;
+> +	return check_refs(3);
+> +}
+> +
+> +#define DEFINE_HASH_UPDATE_KPTR_TEST(name, map)			\
+> +SEC("syscall")							\
+> +int name(void *ctx)						\
+> +{								\
+> +	struct map_value init =3D {}, *v;				\
+> +	int key =3D 0, ret;					\
+> +								\
+> +	ret =3D bpf_map_update_elem(&map, &key, &init, BPF_NOEXIST); \
+> +	if (ret)						\
+> +		return 1;					\
+> +	v =3D bpf_map_lookup_elem(&map, &key);			\
+> +	if (!v)							\
+> +		return 2;					\
+> +	ret =3D stash_ref_ptr(v);					\
+> +	if (ret)						\
+> +		return ret;					\
+> +	ret =3D check_refs(3);					\
+> +	if (ret)						\
+> +		return ret;					\
+> +	ret =3D bpf_map_update_elem(&map, &key, &init, BPF_EXIST); \
+> +	if (ret)						\
+> +		return 4;					\
+> +	return check_refs(3);					\
+> +}
+
+[Severity: Critical]
+This is a pre-existing issue, but does this selftest actually codify an
+existing memory leak and uninitialized memory corruption in the kernel?
+
+Looking at array_map_update_elem() and htab_map_update_elem() in the kernel,
+they incorrectly use bpf_obj_cancel_fields() instead of
+bpf_obj_free_fields() when overwriting elements. Because
+bpf_obj_cancel_fields() explicitly skips BPF_KPTR_REF, the old kptr
+references are never freed.
+
+For hash maps specifically, htab_map_update_elem() allocates a new element
+(l_new), and copy_map_value() explicitly skips copying special BTF fields
+like kptrs. This means l_new receives uninitialized garbage memory for its
+kptr field before being inserted into the map. Meanwhile, the old element is
+placed in the freelist without its kptr being freed, leaking the reference.
+
+By asserting check_refs(3) after the map update, is the test just measuring
+this leak and ignoring the uninitialized garbage now present in the map,
+rather than confirming that the kptr was gracefully preserved?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608144841.1732=
+406-1-memxor@gmail.com?part=3D5
