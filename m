@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1574D372EDB;
-	Mon,  8 Jun 2026 12:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7EF374190;
+	Mon,  8 Jun 2026 12:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780920015; cv=none; b=amHH1pZEsxZmi2vhELFGcvrpTr2SKYGinlJy2g7RQnv0jvJ3DSDGW33UVdRzIPCKrYAGj9P2wl5ruXwJ6JdLRxyciYwWL10oTFptsxC05jEWaggZbzepSe4PJGeIHgwVZMCGgMot7hsq+R2ZWj2zxcE7LlzLWybEmPoMS/xm4o0=
+	t=1780920016; cv=none; b=joAHwIFeu5GlNTKDYHis1JtBjXnIMe7g9oEEjEn0/GcTDdWtW0RNnkOGuaV8Kgg0G5TgjDNU7XfWKeiQYryps7gjvJo8cDxBasD3Y7jkQ0M49AnDBfkNPB0jN/ehk9sSHAFkOSFdTBr2UMaVxkuODh3m1J/268NM7jY6jYf59wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780920015; c=relaxed/simple;
-	bh=iSUmoylf8/1ygBkTEmCjhBqfVrg1PFhIznDLN/bx3kw=;
+	s=arc-20240116; t=1780920016; c=relaxed/simple;
+	bh=RTbexiDmA0k6WhMICkfZFgn5eSdOkppo7Y8ZAANHLzw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gyQIw9bmBH8NcjTMRM1YbHqS4/eRcBsQ+CfdwmaH3d18rKDGV9eKRT5uFg3NQvLpvLq/UG6DLamay258n0DR/xhCO/99FpvViX1NKtGCkgUXOXqqARJdKprrP9JlrB8Bt0lgkNJ7neOXYpe81VQarem3Ou+tWqecb6a+CKIsB50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdsopHfq; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=AzINmcZike2SCfy/zQNKVE/2aXXKLnKWdzkr4uAHELz9cdb6zu3yw2cNOHAPloXyv04AVUlxJIF+gdKDDsXXTIFtfi92k+CZ/XxPaPPjv/scZ+EHq9eVDhHf/LNpm3m7BZEpIJkdtndWalQE9wI+HaOr3aR+GI9JUYSPEg5sxSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFGM8N3r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdsopHfq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6AE1F00893;
-	Mon,  8 Jun 2026 12:00:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFGM8N3r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6729F1F00898;
+	Mon,  8 Jun 2026 12:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780920014;
-	bh=i4t1rDwmbFC0mDMHdQRS20cjdrug12x5V1MErA96jds=;
+	s=k20260515; t=1780920015;
+	bh=qsD2oRjrCcrZPKdGTJvv1+6WcUONRfvZ5mjhjjBqDGc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=NdsopHfq00KU3uY9+9/LkeiqsLWts9dWYorUAsx/9hYIjfnKC+Ar2RgAvslhzQA7O
-	 YPdMxDUwm2yLpX2nVkEj5TXiqi8M7s3bdjwzyud61fK0L+Az/zpiBAfdsuzEkvTNwP
-	 gejSPEfz7lXrzesvO7YHhshDudn0rRboruaT0czBTV98/L3p1rZCpNS/dZrlgmiLr6
-	 0aCD4Y+8FGAL5OaO3w4bPvP3ILKUFqa5wEfhwkPWCLp7B5rJ3eY2RNqgGHSnCeebju
-	 K8BbhW3dyaXO92MpFwYK/kzV52Z2z41ShAU+Mk/8/iS8LEk2dbrazMakIVWXgi+GA8
-	 dBzuXYv9Cky7A==
+	b=VFGM8N3rK6zrSAQuAfzB01hk0Vrc/IL15oNCw3zoNeEO5ra97Ao9lqwYjLcMUjkjl
+	 jUEAgatoAJ3IdnY6NzLfvpNi6XtWws//FsRpBpei9s1CtyxUQXfrjjKMXeVdCASgzm
+	 B1rBThf/6gLi2Sc05qFy8Q2UGo0v1tNIoV42ovzqYVUMdQZ6gUFsLPESxJOL3ffzg7
+	 tZVs4EfbHAulP+7hEw1oyNPOQaFd1Dle4VfRcr2Nip5oR0tI4WqiLIkwKS8Hz8Pi8Y
+	 oaCnLs70laMvqh7KrVqcZeaUQ18TedTo0ICPceSjSzsjJHKSx7DUG3wrow6wfQ8c+j
+	 1E/10Q8C/Utrw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198563930D69;
-	Mon,  8 Jun 2026 12:00:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A4A3930D69;
+	Mon,  8 Jun 2026 12:00:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,44 +37,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] Keep dynamic inner array lookups nullable
+Subject: Re: [PATCH bpf v4] bpf: fix NULL pointer dereference in
+ bpf_task_from_vpid()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178092001263.1007295.5762213253620384461.git-patchwork-notify@kernel.org>
-Date: Mon, 08 Jun 2026 12:00:12 +0000
-References: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
-In-Reply-To: <20260607-f01-v2-v2-0-da48453146e8@mails.tsinghua.edu.cn>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, dxu@dxuuu.xyz,
- eddyz87@gmail.com, john.fastabend@gmail.com, martin.lau@linux.dev,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- shuah@kernel.org, isolodrai@meta.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org
+ <178092001415.1007295.3281904800740524491.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Jun 2026 12:00:14 +0000
+References: <20260608050001.2545245-1-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260608050001.2545245-1-rhkrqnwk98@gmail.com>
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, juntong.deng@outlook.com,
+ leon.hwang@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-On Sun, 07 Jun 2026 21:24:12 +0800 you wrote:
-> An ARRAY_OF_MAPS can use an array created with BPF_F_INNER_MAP as its
-> inner map template. The flag allows a concrete inner array with a
-> different max_entries value to replace the template.
+On Mon,  8 Jun 2026 05:00:00 +0000 you wrote:
+> bpf_task_from_vpid() looks up a task in the pid namespace of the
+> current task, via find_task_by_vpid():
 > 
-> The verifier currently uses the template's max_entries to elide
-> nullness for a constant-key lookup through the inner map pointer. At
-> runtime, the lookup uses the concrete inner array's max_entries instead.
-> The verifier can therefore accept an unchecked dereference even though
-> the runtime helper returns NULL.
+>   find_task_by_vpid(vpid)
+>     find_task_by_pid_ns(vpid, task_active_pid_ns(current))
+>       find_pid_ns(nr, ns) -> idr_find(&ns->idr, nr)
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v2,1/2] bpf: Keep dynamic inner array lookups nullable
-    (no matching commit)
-  - [bpf,v2,2/2] selftests/bpf: Cover dynamic inner array lookup nullability
-    https://git.kernel.org/bpf/bpf-next/c/a3847994b4d2
+  - [bpf,v4] bpf: fix NULL pointer dereference in bpf_task_from_vpid()
+    https://git.kernel.org/bpf/bpf-next/c/50dff0061552
 
 You are awesome, thank you!
 -- 
