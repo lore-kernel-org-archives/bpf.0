@@ -1,161 +1,212 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9521A3B7B7B
-	for <bpf@vger.kernel.org>; Mon,  8 Jun 2026 10:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B173C1984;
+	Mon,  8 Jun 2026 10:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780913506; cv=none; b=kMxiIjf4Hyf8gsn4/zDTZwSBTQ3Jj4Ibs5OhS7EMW7nxlWZlxvl7qd7t7gw3As4aDKI1LFue8HFJI/aSpX2ZwuiNsQR2ydHsO2oWXxAVEHT6KxCQz6e1oHqGLKfql1z5rFxRWulcK/qJ8Mr+YFd/5UzPXqhcZqqdQhimfM0tA6Y=
+	t=1780913975; cv=none; b=auvGdStxXJQ0d5xS7mpXBfJWxXXjdKcUkVem7hld/tZeMY4I7nvqEX8XaCDTuIqdp2BbnBWIV8tOTrUBqQvHqZ15vNNj8wvmQoXUfts2vkIzc69F58tDpaecnyXOnlO37qHO/C8ZWIimQ7/zFPts4io0YJT+2bQZydAkkacozws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780913506; c=relaxed/simple;
-	bh=ZaYXd74wO4W947HBTLlc43sIaBj9s8ZXEj28ePkAUzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ADAkM21FOvp8Oko+FqHUQJ/Wag0rN2dsH9cOPiGKzVdOUJz4ADQjdV41OkgBThIBnwwAXPH5atoYJn1tu98dxiQP1Shci60RgP0edyCMVubGBUS3Vpx24mwP7vnqovShuKnN6vJb5mnB7fvAugpUQIvaFly1sSZhfe2kHm/IVII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PbaywxLR; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1780913975; c=relaxed/simple;
+	bh=f7eLZc/IcHT5GqFj5jujnTXujqX51uaz+wAaa3DATI4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=uzm+1j/pKGQzOniIauFp+Blm6oPAqEQAUUYnmh5iDqjV4NhGwCEMxu8ha0ZKNhs8jocE9/emCXNXSlVBsu+c/nQj570hl+P0MHYSgSuxqr/tq1k9CMXGqiDF9hFpW0rMxjLNW7v9GUeUDNTB3GGeFmHxcnBQQJiiweziIPPep6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=igvi1hOk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PbaywxLR"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-bed2195323cso587163866b.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 03:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780913503; x=1781518303; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULW3bj4Y9orybcM84cc6zZ+siCehkEue96H8pU01HE4=;
-        b=PbaywxLRRJcFc6D4PN+jAuMtrXmWYW0gKWzzt6w7/31C6rL26o8/gpyKZXN5je1LFD
-         GGYxgyam+F+73wZAttyjBk/vk5PxHZ3jjXJkRWD1ZpVb1gD1mvs8baf6aGvPiBKW5phu
-         nX8/K5rdj4CqWUUSpdkKjg3av7NP41KVAvYXC42KqWGyzOGRY4MMoKrXHJ+VQVex0pL1
-         d5+Sj7XOTZjklWAlx/iP0JQQgkHa5Ews2KT5j2UqUd9z8bp7N2sjLgV40OyFCVsPhWTf
-         JmGlerg1zcya3T5imp0V+57UTPQEvwekB/Xtn1MrNC458Zc1d8ApVfSX2KMCzDDxSvtl
-         IYDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780913503; x=1781518303;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ULW3bj4Y9orybcM84cc6zZ+siCehkEue96H8pU01HE4=;
-        b=CoTQjyVZqsbz9R84VtD4AullbbEre4lgSguVRXl5bf1x1UCS1wFPHF1wM7t3ZA5PUl
-         erh1uVsjmJ+vFM/a8TwgPsSzhM+YUP1d5vpuMkgMPzx8dGUC0KApOHfllSyZVD+P41m2
-         gkJudN+yn/auX9rDILcgrV+xecsOiBvGoLeRQb56ifgWIVbYFLj88nK5t7dFnkHpSSmI
-         +pH2Qt66/1JOayV4zh2z0QqmoUtZ0e8CFTF76EwjD0pZyvqNLTQ8yZ1yscbXl/29sr9F
-         aP4gG8HnQoksvAl2CiWx6zkLXWR9JWfOdYwhq8P2xL0rshhMwYpIeilfUBVgkS5py5FX
-         ZgSw==
-X-Gm-Message-State: AOJu0YwDhgT9rWuO1WTxmpcWXusOj7BOX5iuhp1UkBKww+meYTL77WnY
-	PvTigUJ4dno/xGcZMWivki2bW41sNS5ABMvKm2eQh55HFaJdaoxE6/wKV4kS9PqWYOs=
-X-Gm-Gg: Acq92OHGQhGuO2uPGD7N1h/dF3D1gBiMJnRbYqxUA0RupIUjFrTa2O/AlnOss86IEnZ
-	YcNKSZ3F2TTdrinSoNOxxvnXOjyqCNwdrjXe3Bf4HJnW0eBCI1S13hl4DiCLKmdsImJOh10RNVW
-	H23Jij814dP1ruaVDbcEOgPQmsPZbb3yEMPCkb2W2/lGrOVWFTVNB7bCScWKEe2p5ea7MsZWVKD
-	s2ChBZfxMKaE/NIH3XaNIPKLR4mO5F/cuX82aErT1ntbLPjWcCxD5bqUpBpeTlcLx2vwpCk4HAq
-	8qQ6GxFjhKHik/FPNFen6EzrKqWtFdEhgkDE+lCgda8W8SbuVN7xrxZ3dAH/jhxGRmKNFQF1E0i
-	WLkPTYTyDIJqyRU5OKg08LUpC0weNlYrBA40xoNhU0M6TuoXX3B0sjr5Nbb/4Yi9QJ+jnhx4ai4
-	qbfjXVxnU3KCLQyh26aw0SD5JHXu//BNDrHobIdfcVinb5IIs6cYPCRtvzLKhFhgE=
-X-Received: by 2002:a17:906:7950:b0:bed:2a8b:3e72 with SMTP id a640c23a62f3a-bf370c66fbemr645648766b.21.1780913502989;
-        Mon, 08 Jun 2026 03:11:42 -0700 (PDT)
-Received: from u94a (218-164-53-75.dynamic-ip.hinet.net. [218.164.53.75])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df0a4b60sm16012687a12.15.2026.06.08.03.11.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 03:11:41 -0700 (PDT)
-Date: Mon, 8 Jun 2026 18:11:32 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Zhenzhong Wu <jt26wzz@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	menglong8.dong@gmail.com, eddyz87@gmail.com, stable@vger.kernel.org, mykolal@fb.com, 
-	tamird@kernel.org
-Subject: Re: [PATCH stable 6.6.y v2 0/3] bpf: backport scalar not-equal
- tracking fixes
-Message-ID: <aiaTZCQLWy-96M9O@u94a>
-References: <20260607170959.823755-1-jt26wzz@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="igvi1hOk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C501C1F00893;
+	Mon,  8 Jun 2026 10:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780913974;
+	bh=xrtlRFuiFzACaPUvDm3r3nLqN434Rs35tM7jQeJ31MA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=igvi1hOkDTsC3TCzgw5kQLirJqXjKfYp+StSBUbew7x7SB+Haxv4OEjgNg0BWlgrB
+	 wRZ8ix4u0MsAm3+KiEbxV+OiHnsiq0xmjkMRM5jqy1wxsbMaNK9lYw6/Xm1gQMWF3r
+	 eEJF5NRE4DP/VZnvkSzesE1gVmVLWRgOmdxSFiWNSD7GueUngYKKL6Af22fuXaLqzs
+	 DjQmUICaIO5WKYPg1v0/6at8tXcVfAXxNOSjxgD+6hxgTz/xJ89qIRW3UEawVe4NB+
+	 1U/6EsvW9oM+XvKvRjFA0KE7clLvMpj5E3FbYXhgGC1AfEZ1Vd84VyIgCpUJ7GLWn5
+	 6ILCsrzRZV78Q==
+Date: Mon, 8 Jun 2026 19:19:28 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 6/6] x86/setup: prepend embedded bootconfig cmdline
+ before parse_early_param
+Message-Id: <20260608191928.d7d2dea899b94f05d397f891@kernel.org>
+In-Reply-To: <20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
+References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
+	<20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260607170959.823755-1-jt26wzz@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Zhenzhong,
+On Fri, 05 Jun 2026 05:03:37 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-On Mon, Jun 08, 2026 at 01:09:55AM +0800, Zhenzhong Wu wrote:
-> Hi,
+> Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
+> CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
+> build-time-rendered embedded bootconfig "kernel" subtree is part of
+> boot_command_line by the time parse_early_param() runs. early_param()
+> handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
+> CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
 > 
-> This series backports two BPF verifier scalar range-tracking fixes to
-> 6.6.y and adds a selftest. It fixes a verifier state-pruning issue where
-> an impossible linked-scalar path can be kept while the real success path is
-> pruned.
-...
->   15: (85) call bpf_get_func_ret#184    ; R0_w=scalar() fp-8_w=mmmmmmmm
->   16: (79) r7 = *(u64 *)(r10 -8)        ; R7_w=scalar() R10=fp0
->   17: (15) if r0 == 0x0 goto pc+1       ; R0_w=scalar()
->   18: (bf) r7 = r0                      ; R0=scalar(id=1) R7=scalar(id=1)
->   19: (55) if r0 != 0x0 goto pc+6       ; R0=0
->   20: (67) r7 <<= 32                    ; R7_w=0
->   21: (77) r7 >>= 32                    ; R7_w=0
->   22: (b7) r1 = 1                       ; R1_w=1
->   23: (55) if r7 != 0xf goto pc+1
-...
-> I also checked bpf-next: bpf-next passes even when the d028f87517d6 JNE
-> refinement is reverted, because newer kernels also have the later
-> 4bf79f9be434e ("bpf: Track equal scalars history on per-instruction level")
-> precision-tracking change. I did not use 4bf79f9be434e as the stable
-> backport base because it is a broader jmp_history/precision-tracking change
-> for linked scalars. For 6.6.y this series keeps the smaller stable backport
-> path that directly follows the bisected fix: preserve scalar bounds after
-> conditional refinement, then add the not-equal range refinement in the older
-> reg_set_min_max() layout.
-...
+> Gate the prepend on the bootconfig opt-in: only fold in the embedded
+> kernel.* keys when "bootconfig" is present on the command line, or
+> CONFIG_BOOT_CONFIG_FORCE is set. Applying the embedded cmdline
+> unconditionally would (a) diverge from how embedded init.* keys are
+> treated and (b) break fail-safe recovery: a malformed embedded
+> console=/mem= could panic the boot with no way for the admin to disable
+> it by dropping "bootconfig" from the bootloader cmdline.
+> cmdline_find_option_bool() runs before parse_early_param(), so the gate
+> is cheap and correctly ordered.
+> 
+> Select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG so the user-visible
+> CONFIG_BOOT_CONFIG_EMBED_CMDLINE option becomes selectable on x86.
 
-To be honest I have not figure everything out yet, but I really much
-prefer we backport commit 4bf79f9be434e ("bpf: Track equal scalars
-history on per-instruction level") to address the issue instead. While
-'bpf: make the verifier tracks the "not equal" for regs' itself is
-self-contained and reasonable, "bpf: drop knowledge-losing
-__reg_combine_{32,64}_into_{64,32} logic" comes from a much larger
-series[1], and taking that out of context seems rather risky[2].
+This seems like a dummy config. what code does depend on this flag?
 
-More importantly, 'bpf: make the verifier tracks the "not equal" for
-regs' does not address root cause of the issue, it merely mask the issue
-by making the two states different enough that the two is no longer
-equal, which works for the Rust specific case you have, but won't work
-if the value was slightly different (e.g. "r0 == 1" followed by "r0 !=
-1").
+> 
+> With this select in place, setup_boot_config() in init/main.c would
+> otherwise render the embedded "kernel" subtree a second time via
+> xbc_make_cmdline("kernel") into extra_command_line, duplicating every
+> embedded kernel.* key in saved_command_line and making accumulating
+> handlers (console=, earlycon=, ...) register the same value twice. Skip
+> that render only when xbc_prepend_embedded_cmdline() actually prepended
+> the keys, reported by xbc_embedded_cmdline_applied().
+> 
+> Keying the skip on the prepend itself, rather than re-deriving the
+> opt-in, keeps the two paths consistent even when setup_arch() and the
+> runtime parser detect "bootconfig" differently (e.g. "bootconfig=1"):
+> the keys are then rendered at runtime instead of being dropped.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  arch/x86/Kconfig        |  1 +
+>  arch/x86/kernel/setup.c | 16 ++++++++++++++++
+>  init/main.c             | 18 +++++++++++++++---
+>  3 files changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f24810015234..f839795692b4 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -126,6 +126,7 @@ config X86
+>  	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+>  	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+>  	select ARCH_SUPPORTS_CFI		if X86_64
+> +	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
+>  	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
+>  	select ARCH_SUPPORTS_LTO_CLANG
+>  	select ARCH_SUPPORTS_LTO_CLANG_THIN
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index 46882ce79c3a..26a82a41f44c 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -6,6 +6,7 @@
+>   * parts of early kernel initialization.
+>   */
+>  #include <linux/acpi.h>
+> +#include <linux/bootconfig.h>
+>  #include <linux/console.h>
+>  #include <linux/cpu.h>
+>  #include <linux/crash_dump.h>
+> @@ -36,6 +37,7 @@
+>  #include <asm/bios_ebda.h>
+>  #include <asm/bugs.h>
+>  #include <asm/cacheinfo.h>
+> +#include <asm/cmdline.h>
+>  #include <asm/coco.h>
+>  #include <asm/cpu.h>
+>  #include <asm/efi.h>
+> @@ -924,6 +926,20 @@ void __init setup_arch(char **cmdline_p)
+>  	builtin_cmdline_added = true;
+>  #endif
+>  
+> +	/*
+> +	 * Honor the same opt-in as the runtime bootconfig parser: only fold
+> +	 * the embedded kernel.* keys into the cmdline when "bootconfig" is
+> +	 * present on the command line (or CONFIG_BOOT_CONFIG_FORCE is set).
+> +	 * This keeps fail-safe recovery working -- dropping "bootconfig" from
+> +	 * the bootloader cmdline disables the embedded keys -- so a malformed
+> +	 * embedded console=/mem= cannot brick a boot with no way out. It also
+> +	 * matches setup_boot_config(), which bails out under the same
+> +	 * condition before parsing the embedded bootconfig at runtime.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE) ||
+> +	    cmdline_find_option_bool(boot_command_line, "bootconfig"))
+> +		xbc_prepend_embedded_cmdline(boot_command_line, COMMAND_LINE_SIZE);
+> +
+>  	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+>  	*cmdline_p = command_line;
+>  
+> diff --git a/init/main.c b/init/main.c
+> index e363232b428b..567f641a5731 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -378,12 +378,15 @@ static void __init setup_boot_config(void)
+>  	int pos, ret;
+>  	size_t size;
+>  	char *err;
+> +	bool from_embedded = false;
+>  
+>  	/* Cut out the bootconfig data even if we have no bootconfig option */
+>  	data = get_boot_config_from_initrd(&size);
+>  	/* If there is no bootconfig in initrd, try embedded one. */
+> -	if (!data)
+> +	if (!data) {
+>  		data = xbc_get_embedded_bootconfig(&size);
+> +		from_embedded = true;
 
-The root cause to the problem have been stated by you already, it is:
+Even from embedded bootconfig, if the arch set 
+ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n, this must be applied to
+the cmdline as we are doing.
 
-> The relevant pruning point is that regsafe()/states_equal() accepted the
-> real success-path state against an earlier cached state where r0 was an
-> imprecise scalar and r7 constraints were loose enough to cover the current
-> r7.
+> +	}
+>  
+>  	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> @@ -421,8 +424,17 @@ static void __init setup_boot_config(void)
+>  	} else {
+>  		xbc_get_info(&ret, NULL);
+>  		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+> -		/* keys starting with "kernel." are passed via cmdline */
+> -		extra_command_line = xbc_make_cmdline("kernel");
+> +		/*
+> +		 * keys starting with "kernel." are passed via cmdline. When
+> +		 * this bootconfig came from the embedded source and
+> +		 * setup_arch() already prepended the rendered "kernel" subtree
+> +		 * to boot_command_line, rendering again here would duplicate
+> +		 * the keys in saved_command_line and make accumulating handlers
+> +		 * (console=, earlycon=, ...) re-register the same value. Skip
+> +		 * only when the prepend really happened.
 
-Looking at the verifier log you have, in the impossible path we have
-r0.id == r7.id from instruction 18, where as the real success path (that
-skips instruction 18) does not have that relationship, thus the two
-should be considered different, and that seems just what "bpf: track
-find_equal_scalars history on per-instruction level" solves by having
-the correct precise mark.
+Also, this should mention ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG=n case.
 
-Could you give backporting the full "bpf: track find_equal_scalars history on
-per-instruction level" series[3] a try? For 6.6 it should be doable, and
-hopefully for 6.1, too, but not too sure about earlier ones. If you prefer I
-work on it I can also give it a try later this week.
+Thank you,
 
-As for the selftest, it would need to be send separately and by itself
-to bpf-next, and picked up there, before it can be backported to stable.
-I suggest you look at [4] and have your test placed similarly, and
-mention that your test specifically test a Rust/Aya pattern.
+> +		 */
+> +		if (!from_embedded || !xbc_embedded_cmdline_applied())
+> +			extra_command_line = xbc_make_cmdline("kernel");
+>  		/* Also, "init." keys are init arguments */
+>  		extra_init_args = xbc_make_cmdline("init");
+>  	}
+> 
+> -- 
+> 2.53.0-Meta
+> 
 
 
-Thanks,
-Shung-Hsi
-
-1: https://lore.kernel.org/r/20231102033759.2541186-1-andrii@kernel.org
-2: https://lore.kernel.org/bpf/20260601182508.29C811F00893@smtp.kernel.org/
-3: https://lore.kernel.org/bpf/20240718202357.1746514-1-eddyz87@gmail.com/
-4: https://lore.kernel.org/bpf/20240718202357.1746514-4-eddyz87@gmail.com/
-
-[...]
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
