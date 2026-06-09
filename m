@@ -1,110 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89651E260C
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 10:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B523B3F23B6;
+	Tue,  9 Jun 2026 10:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780999525; cv=none; b=bXDFKdFVQeXAYZH8jfSF5zXXUokydX1QnNlklZkOvCQZTJRG7AEcd5OrI4buB3PPmoDot8fyAiNmSAFB3fTQ+VCw1M1c0za94Y1guj1g5cyfHVyGwc1dBDtRhILbHCh/EkrjS98gWbasWMazH6CH27JxgSDp74WnNfBMayJ2akg=
+	t=1781000230; cv=none; b=E+6G2HhkWt5mQ18QXviOrqTdidBjsW8Nf6bZE6CRMl0MHxewzLBb2qyUeoPbPkZp5pdp4cQcc5HZCif/3/sR4WHBJLnbWJroTNE2KL+DMswbZdOACFul4n9A8Ir4H1QY+0JQ4Hw7H4j9Ghfa0u8CGnV5b5zjSaFritnbHtf/Nt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780999525; c=relaxed/simple;
-	bh=jaNioM4Duopm7wQPClnumqpTmanSpEh1XvdORXG/kWM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=oUUceA0t7C/pNgFRn/b2/WptDK9CxYlKCQCifdeNiT8Glb1pv5sxVH5jjRAyWfcFWVQLhOEfb6IGI6pWFWVjWlvPn8izeJBP2qXJmiBOtcgimHz4/woE0ABbzfMzri7yqHmZ9+yWHE6j4bjQZ4uQEcTtvjZOBELySLSGfJZ+Mdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyrMsbGD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781000230; c=relaxed/simple;
+	bh=CA358HIu20sn56nJ4KQrMlv/y7IL84T5f3Hax0mdNvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b38edYKGYs9j4YE0cOC1ng8zwdW2kNQFa2g1yXMFCD2kr6BP3mjMpigkrOKKronxxAqwee9Q9kYLBojkE7nHYwdB3SOOFrG0xGreALbVPHDzMxdVNy2++s1IbEOpyKxc35JpOoJ/r/mNWH4e4nTi7Npnn+5uxRwKRqb4FKQAaLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=QCzVuM8I; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyrMsbGD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ACE1F00893;
-	Tue,  9 Jun 2026 10:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780999524;
-	bh=x6X9YhyCGygenY9RGMxpNMYs3nuEa8uBLoHWhXtlx6c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SyrMsbGDRFXM1XMgwOSJiPqx6mypJnJ4DThUHwJVbqcYqh1B17Y7uUE1MqlV2BB9U
-	 3qrS/Z/uI/ANh6OeuaP5DkUIJp+IqctCNAZcrsXoHvrpu1mAcFuGNdl+wWOtEUAdqQ
-	 1fiVhdzH5X5cvwjbrp9vR/Lkjav4mTx8S/v5BA8Q4KcCLKS/3ARljQc8YK9B2GKMpB
-	 y5JkdWZgM/eN05mPeMvnkFXuNErVeXQxl1goD0OAMFcPYkqoWVnt+GzCa4HjY1FNG7
-	 0P0EAgPd1izLenufnisPJ2HVkxwPOPvuTx09xwRQpRCLGb8ymzyvBFlJ9Yy1PTTpan
-	 TtLGOlGNCC0LQ==
-Content-Type: multipart/mixed; boundary="===============2522026566685583619=="
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="QCzVuM8I"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nXkhW7gK992U0F8zjkoZLE6zzrR6bII1RM3e5glVcQk=; b=QCzVuM8IXTjKEuMSpZiFN95Bx7
+	qH9fdod7i1VMGT+zkh9TLJ9aZg4CoB4m7kouZ1dgAuevUD2R3mqZJ5+Lxy41sB02gvk1dP6/22gQl
+	pY9zkgvp48Tvff4FoMvAr1vHAkznkF1TWMZMU3koFf9NOpRCK9nF7Ecr0OaoiZnn/JRCnA4bOgiWF
+	iaxUqHZITvky06UhN3a/4mGZsGKn1rKkC/yla321BJb0kScqT9GZTcH+96eXaj/GuzMa9zjCOQwTb
+	zmi+ga0U/Mdn5AD7IlnfeqNQgmKPLNP8rtmo7KTidgR6mCp9vVbMUR8C32w5vvo/LzKQjnRNUxthc
+	ecwz68nw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wWtVc-008KRz-0e;
+	Tue, 09 Jun 2026 10:16:37 +0000
+Date: Tue, 9 Jun 2026 03:16:30 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v3 0/6] bootconfig: embed kernel.* cmdline at build time
+Message-ID: <aifi1tbU2eeExo5o@gmail.com>
+References: <20260608-bootconfig_using_tools-v3-0-4ddd079a0696@debian.org>
+ <20260609104611.a0a5def510944d12cd0b6dfc@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <57de2c7627d38482f75a18b79b3556d45225da3eb307343d04ce47cfbe154e33@mail.kernel.org>
-In-Reply-To: <20260609093719.2858096-2-memxor@gmail.com>
-References: <20260609093719.2858096-2-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/4] bpf: Reject bpf_obj_drop() from tracing progs
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  9 Jun 2026 10:05:23 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260609104611.a0a5def510944d12cd0b6dfc@kernel.org>
+X-Debian-User: leitao
 
---===============2522026566685583619==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Jun 09, 2026 at 10:46:11AM +0900, Masami Hiramatsu wrote:
+> On Mon, 08 Jun 2026 09:23:57 -0700
+> Breno Leitao <leitao@debian.org> wrote:
+> 
+> > The userspace pieces (xbc_snprint_cmdline() in lib/, tools/bootconfig -C)
+> > already landed; this series wires the rendered cmdline into the kernel.
+> > 
+> > Motivation: today the embedded bootconfig is parsed at runtime, after
+> > parse_early_param() has already run, so early_param() handlers can't
+> > see embedded values. Folding the kernel.* subtree into the cmdline at
+> > build time gives a CONFIG_CMDLINE-equivalent for embedded-bootconfig
+> > users without forcing them to maintain two cmdline sources.
+> > 
+> > Behaviorally, the "kernel" subtree is rendered to a flat string at
+> > build time and stashed in .init.rodata. setup_arch() prepends it to
+> > boot_command_line before parse_early_param() runs. Overflow is a soft
+> > error: the helper logs and leaves boot_command_line untouched rather
+> > than panicking, so an oversized embedded bconf cannot brick a boot.
+> > 
+> 
+> Sashiko still leaves some comments. 
+> https://sashiko.dev/#/patchset/20260608-bootconfig_using_tools-v3-0-4ddd079a0696%40debian.org
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 62bba7a4876f..0654d2ffadc1 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_f
->  	return rec->field_mask & type;
->  }
->
-> +static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
-> +{
-> +	switch (type) {
-> +	case BPF_SPIN_LOCK:
-> +	case BPF_RES_SPIN_LOCK:
-> +	case BPF_TIMER:
-> +	case BPF_WORKQUEUE:
+Ack. There are two "low" issues and one high. I will fix all of them in
+v4.
 
-Can the BPF_TIMER and BPF_WORKQUEUE cases really be treated as NMI safe
-here?
+> BTW, can you also update the document (Documentation/admin-guide/bootconfig.rst)
+> about what is the expected behavior of this feature (kconfigs, examples)?
 
-Dropping an object with one of these fields runs through
-bpf_timer_cancel_and_free() or bpf_wq_cancel_and_free(), which calls
-bpf_prog_put() synchronously via bpf_async_update_prog_callback().
-
-If that drops the last reference to the program in NMI context,
-__bpf_prog_put() falls back to schedule_work() because irqs are disabled:
-
-    schedule_work()
-      -> queue_work_on()
-        -> raw spin lock on the workqueue pool
-
-Can this hard deadlock if the NMI interrupted a thread that was already
-holding that workqueue pool lock?
-
-BPF_TASK_WORK defers its destruction via irq_work_queue() when
-irqs_disabled(), but BPF_TIMER and BPF_WORKQUEUE do not appear to take
-that path, so they do not look NMI safe in the same way.
-
-This was raised as a high-severity concern on v1 of this series by the
-Sashiko AI review:
-
-  https://lore.kernel.org/bpf/20260608154008.27E011F00893@smtp.kernel.org
-
-The v2 respin left btf_field_is_nmi_safe() unchanged, still listing
-BPF_TIMER and BPF_WORKQUEUE, so this may still be unaddressed.
-
-> +	case BPF_TASK_WORK:
-> +	case BPF_KPTR_UNREF:
-> +	case BPF_REFCOUNT:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
+Sure, good idea. I will add a new patch documenting this new feature.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27197841616
---===============2522026566685583619==--
+Thanks for the review,
+--breno
