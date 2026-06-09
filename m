@@ -1,173 +1,108 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0D83115A5;
-	Tue,  9 Jun 2026 01:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC47426B2D3;
+	Tue,  9 Jun 2026 01:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780968646; cv=none; b=eJS/+BA4qh2yr8K2nnw8gLAAJIB+b9qmAUmWhTHCoKIMu0/xftDeaS0BcLNbAxE05irSPpLKwT8sc/PKCLh7AiKX7lJtBQmscATLtQGDXVa30MNbRZMfDsbwu9IC7/xkWRcax/6jRIQXf9pViIajeWIU+gCJKlUSCMqUZxUT/Qg=
+	t=1780968893; cv=none; b=Uv31CCrvMJhshezk26QmOQF60NidXEKs2SZHuGgdmXTFqUbshl4GHTxfEOhhqS6eJgY4zmyAr09n0yoyp4RQtzWrHJ/d7Nd4PtfUT9xf2VE+mm93QQX7xBFw0aw6RgB4kgrxucx7k67OAl+zKk2NLnJoDoJFzLzZ7v39GVKNWSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780968646; c=relaxed/simple;
-	bh=wbBkMfNzgrpdw/AQgcjPP5Qj1kkdSNWHGzysULcHpco=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Gu0wcr+SHwSXpH9o9WJe5R+qwfqUOVi5xeJ2EFg99bayP1Db6qqhDYSFaVF6SWkGJVyXOVLoQF6YI29Yqa9LioQX4YUlbLZc7tqqFED273UHvW9AMn5MlaJKACZImS5txCeu/qEWpPa1gB7IOjy9Uq+U1uxryz38ThjzQruoW0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=GXHK18xP; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1780968893; c=relaxed/simple;
+	bh=ub253+LnCietUqOYZskAZYNVdjA1Fth/D8XFf5NguYk=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=goLgZLBhBQ4qvYRTHwcoqMJVaz4e0ccX3l2vLAKjzM+dRt7moq45MrIieRzBqBJWRtxLbvlbKy+ZlGWFdWI/BQsfvOXhEyzRof4Xg2d9Lcxsuao2qniHQgVOL7kpKEPwTLeidS/K4sq/UCGlDREYpuwVL7yHkdU4ogY4L647y6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Por0PhLM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="GXHK18xP"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=PE7SL/rp0gOOvRnYwk24N7Jwk/rjpDxGlneTY/S2ePs=;
-	b=GXHK18xPIo6UAyvaNbYue7chNh+G1m83OPO29zHBSk24lYO/83w3wP9wpyOVwyx8Q5YzjHNUR
-	5eYTruuQOt8dZP8Ls3oh1Z2eHBi1qaLwiPSoRQEGAq8iJKmIETZZEHdV+AZTQfUAReDL8Gi6mK1
-	hINfKXA0QtOWZBwdkDjAWdo=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4gZB3q23nrzLlW4;
-	Tue,  9 Jun 2026 09:22:47 +0800 (CST)
-Received: from dggpemf100012.china.huawei.com (unknown [7.185.36.196])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5215B40562;
-	Tue,  9 Jun 2026 09:30:40 +0800 (CST)
-Received: from [10.174.176.103] (10.174.176.103) by
- dggpemf100012.china.huawei.com (7.185.36.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 9 Jun 2026 09:30:39 +0800
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
-To: Eduard Zingerman <eddyz87@gmail.com>, Paul Moses <p@1g4.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>
-CC: <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <bpf@vger.kernel.org>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20260605234301.1109063-1-p@1g4.org>
- <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
- <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
- <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
- <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
- <d7ccd692ea8c6009785ad141e6ae4bbc68347517.camel@gmail.com>
-From: Hou Tao <houtao1@huawei.com>
-Message-ID: <83321d7b-516c-f4a0-65ea-6fd224ba3110@huawei.com>
-Date: Tue, 9 Jun 2026 09:30:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Por0PhLM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F081F00893;
+	Tue,  9 Jun 2026 01:34:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780968892;
+	bh=vmZpCmuQ7wnqO/HZtrmD6xeHLLBF/ouoM10uO0DNTf8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Por0PhLMP79NepOjIWPiWkHnvzQ+eXwkBv5Xjv5jYrjk1TDsj1TzcrF7PoZjBCyfF
+	 jgv2uffcCsM1ZokMG1TLIFUzabaXkdrc3+SM5xT/rf/W0JW0O+QKLHxfR94MCuy520
+	 hLYj16XH8DsHmXkv3Y7nli2hm1IX+sIW4mqjOZPgpX+7/HKm/DQLs2/Txzpxag1y8o
+	 TL0lyaqZ/n1CgpI5TDjO5iSlu8CYqOPzSm2zZR5dxNW35ykbeFw3IZK8y/SEUXfhr8
+	 3STcmTvgYn3EXYv85pIhFURsr5u5Bv8HMdWyo7R9wUaCkvb+4nGH6TmoqwWNKsGuAe
+	 9dQuJO7jD3+2A==
+Date: Tue, 9 Jun 2026 10:34:46 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 6/6] x86/setup: prepend embedded bootconfig cmdline
+ before parse_early_param
+Message-Id: <20260609103446.7d29679c90e834ff8e32c56d@kernel.org>
+In-Reply-To: <aibSj4XeRWJmasCx@gmail.com>
+References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
+	<20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
+	<20260608191928.d7d2dea899b94f05d397f891@kernel.org>
+	<aibSj4XeRWJmasCx@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <d7ccd692ea8c6009785ad141e6ae4bbc68347517.camel@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemf100012.china.huawei.com (7.185.36.196)
 
-Hi,
+On Mon, 8 Jun 2026 07:41:05 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-On 6/9/2026 3:59 AM, Eduard Zingerman wrote:
-> On Sun, 2026-06-07 at 17:53 +0000, Paul Moses wrote:
->
-> [...]
->
-> The repro is legit.
-> Here is a somewhat minimized version as a selftest:
->
->     diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
->     index a9de328a8697..212ca4472a89 100644
->     --- a/tools/testing/selftests/bpf/prog_tests/btf.c
->     +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
->     @@ -4258,6 +4258,44 @@ static struct btf_raw_test raw_tests[] = {
->             .max_entries = 1,
->      },
->     
->     +{
->     +#define N 0x1999999aU
->     +       .descr = "repeat fields overflow",
->     +       .raw_types = {
->     +               /* int */                                               /* [1] */
->     +               BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
->     +               /* struct target {} */                                  /* [2] */
->     +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 0), 1),
->     +               /* type_tag "kptr_untrusted" -> target */               /* [3] */
->     +               BTF_TYPE_TAG_ENC(NAME_TBD, 2),
->     +               /* target * (kptr) */                                   /* [4] */
->     +               BTF_PTR_ENC(3),
->     +               /* struct outer { target *kp; elem items[N]; } */       /* [5] */
->     +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 2), (N * 8u + 8u)),
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* kp           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 6, 64),        /* items        */
->     +               /* elem[N] */                                   /* [6] */
->     +               BTF_TYPE_ARRAY_ENC(7, 1, N),
->     +               /* struct elem { target *f0..f9; } */                   /* [7] */
->     +               BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 10), 8),
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f0           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f1           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f2           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f3           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f4           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f5           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f6           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f7           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f8           */
->     +               BTF_MEMBER_ENC(NAME_TBD, 4, 0),         /* f9           */
->     +               BTF_END_RAW,
->     +       },
->     +       BTF_STR_SEC("\0target\0kptr_untrusted\0outer\0kp\0items\0elem"
->     +                   "\0f0\0f1\0f2\0f3\0f4\0f5\0f6\0f7\0f8\0f9"),
->     +       .btf_load_err = true,
->     +#undef N
->     +},
->     +
->      }; /* struct btf_raw_test raw_tests[] */
->     
->      static const char *get_next_str(const char *start, const char *end)
->
-> However, as far as I understand the repro hits an overflow only
-> because `BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 10), 8)`
-> lies about `struct elem` size. It is specified as 8, while in reality it is 80.
+> On Mon, Jun 08, 2026 at 07:19:28PM +0900, Masami Hiramatsu wrote:
+> > On Fri, 05 Jun 2026 05:03:37 -0700
+> > Breno Leitao <leitao@debian.org> wrote:
+> > 
+> > > Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
+> > > CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
+> > > build-time-rendered embedded bootconfig "kernel" subtree is part of
+> > > boot_command_line by the time parse_early_param() runs. early_param()
+> > > handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
+> > > CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
+> > > 
+> > > Gate the prepend on the bootconfig opt-in: only fold in the embedded
+> > > kernel.* keys when "bootconfig" is present on the command line, or
+> > > CONFIG_BOOT_CONFIG_FORCE is set. Applying the embedded cmdline
+> > > unconditionally would (a) diverge from how embedded init.* keys are
+> > > treated and (b) break fail-safe recovery: a malformed embedded
+> > > console=/mem= could panic the boot with no way for the admin to disable
+> > > it by dropping "bootconfig" from the bootloader cmdline.
+> > > cmdline_find_option_bool() runs before parse_early_param(), so the gate
+> > > is cheap and correctly ordered.
+> > > 
+> > > Select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG so the user-visible
+> > > CONFIG_BOOT_CONFIG_EMBED_CMDLINE option becomes selectable on x86.
+> > 
+> > This seems like a dummy config. what code does depend on this flag?
+> 
+> No C code reads ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG directly — it's
+> a silent gating symbol, the same ARCH_SUPPORTS_* idiom as
+> ARCH_SUPPORTS_CFI, ARCH_SUPPORTS_LTO_CLANG, etc.
+> 
+> Its only role is the depends on line of BOOT_CONFIG_EMBED_CMDLINE: an
+> arch selects it once its setup_arch() calls
+> xbc_prepend_embedded_cmdline(), and that makes the user-visible
+> BOOT_CONFIG_EMBED_CMDLINE selectable.
+> 
+> Right now, only x86 supports embedded bootconfig, thus, only x86 does
+> the following (last patch):
+> 
+> 	config X86
+> 	+       select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
+> 
+> So, no other platform can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE.
 
-No exactly. Every field in the struct elem has the same offset (0), so
-the size of struct elem is correct, but the field definition of struct
-elem is incorrect.
-> The size of 80 would make `struct outer` unrepresentable in BTF,
-> because (N * 80 + 8) exceeds u32 range, and that's what btf_type->size uses.
-> Given that btf_repeat_fields() only traverses structs/arrays but not unions,
-> I suspect that overflow won't happen in `field_cnt * (repeat_cnt + 1)`
-> if proper size checks were implemented in btf_struct_check_meta() / btf_struct_resolve().
-> Even more, If I change "kptr_untrusted" to "kptr_untrusted11" to avoid fields parsing,
-> the kernel accepts the bogus BTF.
+Ah, OK. I missed the 3/6, which defined the dependency.
 
-btf_struct_check_meta has checked the validity of field offset. However
-it seems the checking is loose:
+Thanks!
 
-                /*
-                 * ">" instead of ">=" because the last member could be
-                 * "char a[0];"
-                 */
-                if (last_offset > offset) {
-                        btf_verifier_log_member(env, t, member,
-                                                "Invalid member
-bits_offset");
-                        return -EINVAL;
-                }
-
-For struct elem, all fields have the offset 0, so the offset checking is
-passed. From the code snippet above, it seems BTF tries to support the
-following struct definition below, is it OK to only support the last
-zero-sized field in struct definition ?
-
-struct elem {
-    int a;
-    char b[0];
-    int c;
-    char d[0];
-}
-
-
->
-> Paul, could you please investigate why is this happening?
-> .
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
