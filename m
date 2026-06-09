@@ -1,62 +1,62 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D01242DFFB
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7692942EEBC
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781013367; cv=none; b=YYLIfP9l2VDN/tXYWwxrkezGiSepHHad2BGmeET48YtOlHoWpMS7XkyCLXj8NWzLSJjGXrXy8tum3WxLONAlyFWc4+4nmx469lvvVuiHnT1LOeaIFkz6joHqJgbJk/vCeCvg/eoxW5m7Lr9imS6VYHxeVAbR2YGZlcjl0P9ayq0=
+	t=1781013370; cv=none; b=YlcwUPF56h58Sc86Eudu0/1bElsAgmibjdduDAmZJgoMGCgcD6Oe3hxsLB4locEvRQzea2UHNCouLTxtnQe0Muryck8mUgxBwIjLJUoaB+hsDFdJa5kyP+V+ePQyOqTuTlpIA3bcgXdd3kgozO0xFTRV/U46nZuqRXE0byvjCKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781013367; c=relaxed/simple;
-	bh=gaj2WvsU+CPIIU8/1kxABMamLpQxKo//cHQbkXB/pDo=;
+	s=arc-20240116; t=1781013370; c=relaxed/simple;
+	bh=UqVNFGJfDdd0kyN6R0iGsNtgaDj3ye0cvUiB41jCyBw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rly4hjnjABDT5Tr4OYf+rxq0SMWfFudBprhK2t9qbu8Ph2Xg4ykwGPrbXJ2OjMDl67ZFMKJjO/rEpcIz7Lf+gHyTsq9rWv/RyQt1/ehUlFl+3FZggS8ozn1LlIwc8nPuLa6kULxLZfEmcEyR52VtTfq3AjFDuB7+pTdBewglyR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NeKiTK8A; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version; b=VbMbx9kfCl/FmpHYLGwvbd7OwAOLb/iIe+F8r1eDaAVH1eQnWdv4THuAwbTEpirOR1AxkiyVlvjXpMR5XSnXLa8WIYsbV63FVqDZtuiOG/CFLZVcy67O0PT8WsjcXeLV7KVR0gXxVNz8Rx3D38x/YNpyNOmeegSNk/hCocXjX1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8lPozpk; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NeKiTK8A"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-490be03d47bso48003325e9.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 06:56:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8lPozpk"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-490ac10e337so49189845e9.3
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 06:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781013365; x=1781618165; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781013368; x=1781618168; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TkopdShqq52E1sVeco8cvO6NJqDv29P/mWZiYCnJaeA=;
-        b=NeKiTK8AawWfuv4x+jLTjCVs2stygwR7cpoU45BeBMU/0pCEH4xuzpRXkibqiL3blG
-         YYFt14RwcuHDTe/ErCpOUqq1L1ATZPqASKLxgxptYrgVaDSbCxNLV7EdtD5+RuZAuFYr
-         3Y94DKSynxmRTskTmyKMbs6h099qvmsY1MVrYjOa6LYTnBfnzgjRXnX4kaDLEsrjO7Mq
-         aZPhmTRmy2NZY+bBkR56IVJNM86fol4YpuQzk/XReJm7bbvZZ2jNO1shSUC2hbu4bTG8
-         QsEnJ1MLSxH9Z5ZQDx2wU397xg9dQqoPDHUJwcdheh66kyclKUWpbFW8Zw6nYxatNwWt
-         eanw==
+        bh=8VORlzG4J3+9OsMpc4x4bAnSfjCXZwFKTUiBRjE5exs=;
+        b=e8lPozpk4tTtcjEYP5JY+DQ6HagRZONw5t/BFZ3hh5A9YlsS/+iXGxo0t+yBasM/EB
+         gaeQqDSUTv8C6wupywvdosM72kX84g5epo8rC+RZrARTrht2CF+hIFX1f2fHwkaaAIu4
+         FdY+5VJyqeMNVqeKGyk0frpd3rvyNH96kgjU/2ozhmnpkg80o80LksaNIKqBK8UtNf/W
+         uX1AkFFBEKaZlOe7w5MkjLHriQ9eM4AjbfSLmb426/wS37BMs85N7SmxTx7hsTrnyXuX
+         2O4an9a9oVjvZCLJhU2E6Xpdyb9tiMk92X1FdNGRJEiqfc0oqmx8Ld1D4aQ8WbrP1DTy
+         IbSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781013365; x=1781618165;
+        d=1e100.net; s=20251104; t=1781013368; x=1781618168;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TkopdShqq52E1sVeco8cvO6NJqDv29P/mWZiYCnJaeA=;
-        b=OUHMcL/x4Dl6LfkqryZdYvundX1PvuqeWZRo4T1zgqKtG73RuVI+tjfLFLhRi+HJip
-         ZNpqSLFKHSQ3nQmtc04RTcyTTu76ZfhKfMzoLyhjJBUezQ26BUtlbEpz0Bf2vm3nEmLQ
-         6sPf1CT8+05w7D8ln00rs2AbMyp0ed18NWTC8J3hzqcOs+aJMfCHI1+lQ1/1OsiRot1+
-         Bu5GTfQTolhQPTCjsRzqW0y8+8fyx/sD30gDmVi3vt9bgrwanL/8S4mEeaaWsCopLOZf
-         EnKkwekqQ6/CUyG15HljnqpFfC5gJ80hl8oK4LpcTY6RKkH5wwj+PWdJQhfF9MrsBci9
-         9caQ==
-X-Gm-Message-State: AOJu0Yy7SJ6w/9O0yhTfxIWQNw4s02JVgHOSxQvjAHMigCPhpTcmCMol
-	6G+grxwnB88aiw9yIq47SB2mkC3eaSj09bmahORiiNQSSob5bEYltM9pSMxEmcVIUqOV89Ta
-X-Gm-Gg: Acq92OHY2BMByStvt4YcyJGSTekr3f0NfzBVfymdirgmRGj8EhGejKkuSgUUKOfb634
-	hPH48kapTqjknoxhmtw3Q+8FF8r9RFhb2p6xIu8Cy0+cB8AiIDtAKqxVqb3mrE0VmOsxQBgkFfA
-	ceeY+mFvoiPdz1d5vYezGEhSC15W+8M9EptvPtIpGfkWIjM8/KHx6Sr+1hH7zZtQuBdG7sM/JhZ
-	0GfkW9+SQxjuDg17XriAD0/0fbBbc2cyNV6HpLMBOULRfMH0WhEk551JkGZpgZlYHJiciCNTTMx
-	yOG0OPOPVGhmOTNk/c2dTmSCWeSDE78WtAJ4LrgRtvupRcJZElTHQ9o9V5WT+/aNNBOHG6OBm+F
-	k/8MwSa113iUwVKrCe+onSvuFfAh0zn9s0w+23hRcVWk0NwbBPh8eOMzuVgb5KOmWUYld85zgVo
-	1DG7JhKrpQJZPNrc1ePShbSwCvnKFxWYRIbSuRfA==
-X-Received: by 2002:a05:600c:1d27:b0:48f:d5b8:5b07 with SMTP id 5b1f17b1804b1-490c25e10f9mr346031765e9.20.1781013364723;
-        Tue, 09 Jun 2026 06:56:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc39eb04sm488561035e9.6.2026.06.09.06.56.04
+        bh=8VORlzG4J3+9OsMpc4x4bAnSfjCXZwFKTUiBRjE5exs=;
+        b=TeEvU0DiPvAYS7AnTeH3WrlaPPmvmdBXxHA0ZdeOjaj4noPFrTXvrx34eo4C5GQL4Q
+         KJ2BFxAso572iLtW4is862xeeBo6obgsXBRYXzeuzLcxxhcvIv35qlTIFeZL+u0btxt1
+         ouV0OQa13VEwYrvbQSJQNH6HA2irZM6FtkS5bALVc9Sp95qsXrNk5TQub6UoBTIV6Zp2
+         YgcEHcVMzhMHoL73Ke71iluaYiynXlqm6YosiqkvIdRErbeLNrM8p+m0H9GvEnFOdIeT
+         oa3fdKn4qzcmGxKFXVraSPfawAQbyCGr1m8HqkY4duH9p6eTzV+3cNp43n6gMnV0IIFb
+         LQGg==
+X-Gm-Message-State: AOJu0YwvlNygGmg2P5/ZY6e7bRFEcJtoQQDKEpYTYNiSET0lHkAn2Yku
+	1Y8gUL+Ed3xagQnBGdxoNJBNetd6CwZrj7wrNGoVhZfaTpGvCdsXVBX/8BNPZ0Z/eDmOzjew
+X-Gm-Gg: Acq92OFKSKeN/cIS00rf/8PG1m2pGPmK5im0vbk95RvKsOcadKBrcIT3Ai2HVo0TTJl
+	edxectGgEX3f9I+Wj/DyCCYklHk6bixrHoC8XI2teEHNMwgJqEBoW703l1OK12UVZWcVw6OAzaB
+	n+FykNjAjaws4PWxNjp+aDne4TWkhxwHTOH4U4ZTqqimHdhz4IfSf/EKwuXBRxxeKTPbn7zVTGj
+	ExA7gG995DrqUiHRqJji2iUO2w2by2Cpq870wpwTwLTXgzqkPok/LnjE39CWbzJ3YvAp461Hjl2
+	li8qrfrda9FqZ6YX+grsb9hSbuikVbvAhALb/IB44cvSnYcx90AD+kgQkA1mtlQMQNDd2XHV3T0
+	Nl80AwVTO/XBM6vOP3yoM8fPBBqYucmy6/Y6xfeTpo+wX+CqPUlmf0DQIuXwLmWsuZU2j54leeO
+	uHscj3BmqFfIH4njTpWB/JLeu+Bw==
+X-Received: by 2002:a05:600c:609b:b0:490:5466:8576 with SMTP id 5b1f17b1804b1-490c259854emr324063715e9.1.1781013367725;
+        Tue, 09 Jun 2026 06:56:07 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:3::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490c2d2d11asm429927045e9.1.2026.06.09.06.56.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 06:56:04 -0700 (PDT)
+        Tue, 09 Jun 2026 06:56:07 -0700 (PDT)
 From: Vlad Poenaru <vlad.wing@gmail.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -71,11 +71,10 @@ To: bpf@vger.kernel.org,
 	Jiri Olsa <jolsa@kernel.org>,
 	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 Cc: Emil Tsalapatis <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] bpf, lpm_trie: Allow access from sleepable BPF programs
-Date: Tue,  9 Jun 2026 06:55:57 -0700
-Message-ID: <20260609135558.193287-2-vlad.wing@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2 2/2] bpf, lpm_trie: Allow sleepable programs to use LPM trie maps directly
+Date: Tue,  9 Jun 2026 06:55:58 -0700
+Message-ID: <20260609135558.193287-3-vlad.wing@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260609135558.193287-1-vlad.wing@gmail.com>
 References: <20260529174233.2954240-1-vlad.wing@gmail.com>
@@ -88,109 +87,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-trie_lookup_elem() annotates its rcu_dereference_check() walks with
-only rcu_read_lock_bh_held().  Because rcu_dereference_check(p, c)
-resolves to "c || rcu_read_lock_held()", this passes for XDP/NAPI and
-classic RCU readers but fails for sleepable BPF programs, which enter
-via __bpf_prog_enter_sleepable() and hold only rcu_read_lock_trace().
+The previous change relaxed the rcu_dereference annotations in
+lpm_trie.c so the trie walks no longer trip lockdep when reached from a
+sleepable BPF program holding only rcu_read_lock_trace().  By itself
+that only helps tries reached as the inner map of a map-of-maps, or
+from the classic-RCU syscall path: a sleepable program that references
+an LPM trie directly is still rejected at load time by
+check_map_prog_compatibility(), whose sleepable whitelist omits
+BPF_MAP_TYPE_LPM_TRIE:
 
-trie_update_elem() and trie_delete_elem() have the same problem in a
-different form: they walk the trie with plain rcu_dereference(), which
-asserts rcu_read_lock_held() unconditionally.  Both are reachable from
-sleepable BPF programs via the bpf_map_update_elem / bpf_map_delete_elem
-helpers, and from the syscall path under classic rcu_read_lock().  In
-the writer paths the trie is actually protected by trie->lock (an
-rqspinlock taken across the walk); we never relied on the RCU read-side
-lock to keep nodes alive there.
+  Sleepable programs can only use array, hash, ringbuf and local storage maps
 
-A sleepable LSM hook that ends up touching an LPM trie therefore
-triggers lockdep on debug kernels:
+LPM trie nodes are allocated from a bpf_mem_alloc (trie->ma) and freed
+with bpf_mem_cache_free_rcu(), which chains a regular RCU grace period
+into a Tasks Trace grace period before the node -- and the value
+embedded in it that trie_lookup_elem() returns to the program -- is
+released.  That is the same reclaim discipline BPF_MAP_TYPE_HASH relies
+on for sleepable access, so a value handed to a sleepable reader cannot
+be freed while the program is still running under rcu_read_lock_trace().
+The writer paths take trie->lock across the walk and never relied on the
+RCU read-side lock to keep nodes alive.
 
-  =============================
-  WARNING: suspicious RCU usage
-  7.1.0-... Tainted: G            E
-  -----------------------------
-  kernel/bpf/lpm_trie.c:249 suspicious rcu_dereference_check() usage!
-  1 lock held by net_tests/540:
-   #0: (rcu_tasks_trace_srcu_struct){....}-{0:0},
-       at: __bpf_prog_enter_sleepable+0x26/0x280
-  Call Trace:
-   dump_stack_lvl
-   lockdep_rcu_suspicious
-   trie_lookup_elem
-   bpf_prog_..._enforce_security_socket_connect
-   bpf_trampoline_...
-   security_socket_connect
-   __sys_connect
-   do_syscall_64
+Add BPF_MAP_TYPE_LPM_TRIE to the sleepable map whitelist so these
+programs can use LPM tries directly.
 
-This is lockdep-only -- no UAF, since Tasks Trace RCU does serialize
-against the trie's reclaim path -- but it spams the console once per
-distinct callsite on every debug kernel running a sleepable BPF LSM
-that touches an LPM trie, which is increasingly common.
-
-For the lookup path, switch the rcu_dereference_check() annotation
-from rcu_read_lock_bh_held() to bpf_rcu_lock_held(), which accepts all
-three contexts (classic, BH, Tasks Trace).  Other map types already
-follow this convention.
-
-For trie_update_elem() and trie_delete_elem(), annotate the walks as
-rcu_dereference_protected(*p, 1) -- matching trie_free() in the same
-file -- since trie->lock is held across the walk.  rqspinlock has no
-lockdep_map, so the predicate degenerates to '1' rather than
-lockdep_is_held(&trie->lock); the protection is real but not
-machine-verifiable.  trie_get_next_key() also uses bare
-rcu_dereference() but is reachable only from the BPF syscall, which
-holds classic rcu_read_lock() before dispatching, so it is left
-untouched.
-
-Fixes: 694cea395fde ("bpf: Allow RCU-protected lookups to happen from bh context")
-Cc: stable@vger.kernel.org
 Signed-off-by: Vlad Poenaru <vlad.wing@gmail.com>
 ---
- kernel/bpf/lpm_trie.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 0f57608b385d..4d6f25db9ba1 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -246,7 +246,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 
- 	/* Start walking the trie from the root node ... */
- 
--	for (node = rcu_dereference_check(trie->root, rcu_read_lock_bh_held());
-+	for (node = rcu_dereference_check(trie->root, bpf_rcu_lock_held());
- 	     node;) {
- 		unsigned int next_bit;
- 		size_t matchlen;
-@@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 		 */
- 		next_bit = extract_bit(key->data, node->prefixlen);
- 		node = rcu_dereference_check(node->child[next_bit],
--					     rcu_read_lock_bh_held());
-+					     bpf_rcu_lock_held());
- 	}
- 
- 	if (!found)
-@@ -359,7 +359,7 @@ static long trie_update_elem(struct bpf_map *map,
- 	 */
- 	slot = &trie->root;
- 
--	while ((node = rcu_dereference(*slot))) {
-+	while ((node = rcu_dereference_protected(*slot, 1))) {
- 		matchlen = longest_prefix_match(trie, node, key);
- 
- 		if (node->prefixlen != matchlen ||
-@@ -482,7 +482,7 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
- 	trim = &trie->root;
- 	trim2 = trim;
- 	parent = NULL;
--	while ((node = rcu_dereference(*trim))) {
-+	while ((node = rcu_dereference_protected(*trim, 1))) {
- 		matchlen = longest_prefix_match(trie, node, key);
- 
- 		if (node->prefixlen != matchlen ||
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7fb88e1cd7c4..71c1e59e4df4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18122,6 +18122,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 		case BPF_MAP_TYPE_PERCPU_HASH:
+ 		case BPF_MAP_TYPE_PERCPU_ARRAY:
+ 		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++		case BPF_MAP_TYPE_LPM_TRIE:
+ 		case BPF_MAP_TYPE_ARRAY_OF_MAPS:
+ 		case BPF_MAP_TYPE_HASH_OF_MAPS:
+ 		case BPF_MAP_TYPE_RINGBUF:
 -- 
 2.53.0-Meta
 
