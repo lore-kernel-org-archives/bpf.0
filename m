@@ -1,80 +1,90 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FE5315D49
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 22:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006C640D575
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 23:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781043715; cv=none; b=PvTZXYE2OmWUwBWpf69nNPeVxrE1b09Zgg6pOL76CN4lWc9YqELTDY4e6w5cVpRmVBH0dEB9siTfW8tuOydS28ZiOqYGRWd6qOQe0eScQhwrfDGpok4xOhteJ0TFTyyjvKTYTfixBySqjOiy7uDr+cqexW2bIlQ6Bg877bBaZGo=
+	t=1781048058; cv=none; b=cXvra4sooxmP+jgXUgqabKAVF0K6YPMETJO0VzIa3etYY1NqVfP1R9XFdmLap6PhhW1J/ijUy7aF9GVLLobCnG/bY7pzkbobJPwqor2q2fafctS3x1I+iFO1hKOiWE/QO/3yJLMzq7msZnvk9Wp5KQEGiz4AEzmYu+vV+hiJqYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781043715; c=relaxed/simple;
-	bh=yEKGtu2e4uK4Bod46cbDRvfekf1NB7CrPwMqfAf7MNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HlcUbjCtTYuWayTVB7i8noBIegOmtgj9q7BIJevmr5qSFIEwmXgZJQM/9sIupk5STzKzl5pGfF71IqKfCV3rJWEL9K22FLMAYo+r4c/zf+V3by2an3wCaVCei1mNOOkcWcztKmDxLcrFvj4ptdF86zxbsRuTA563sq/gm6UVwgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=snCpx6Qe; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="snCpx6Qe"
-Message-ID: <2bd48c7e-e1b4-4498-99ba-18df16e7b358@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781043711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k0yOQP8J31/xGy/19GRiGfVQjZatw67nUmbWHOWT3uA=;
-	b=snCpx6Qev+fRiFzf4D4PcqKqRmWmW2rx4+Djs2TmcfBIQ9RtuEW/HAiNUoXNi6aODXYy8j
-	cB4xcC4v4AqfUDU+/IcpRQZA4XL6rjorj2Fh07UPLD5Nr8RwNHJEAWnstYBG67BXmPYtiW
-	qQdbF4KjeSN/l7gJMn/WhSukAQqjOQY=
-Date: Tue, 9 Jun 2026 15:21:45 -0700
+	s=arc-20240116; t=1781048058; c=relaxed/simple;
+	bh=UkZa0/ORKID80KWsZgW5Y/vTIEa2SAPFlhsABfrZmmU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q8zjY8+GD5UBpvzL2x/vozpgvbo4jDZ8R6c8FuV84/1iZ8yu73WkMwKu9GKLuKNZjtcnNeCxZ4eGSCvps33AsrTo5gF44JlfLl6r674wgmz8BWF4rYo9RIPIzViXbvw+bYWQokDwNOTkUiN3v1JPl+7y4J6Ql1MrbR6OGWBhmHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 0BAB514B04B8DC; Tue,  9 Jun 2026 16:34:02 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] selftests/bpf: Fix tests for llvm23 true signature
+Date: Tue,  9 Jun 2026 16:34:02 -0700
+Message-ID: <20260609233402.2711071-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
- tailcall subprogs with maps
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260609163947.1717694-1-yonghong.song@linux.dev>
- <20260609163952.1718472-1-yonghong.song@linux.dev>
- <DJ4PQYTQDWQT.1ENYNRIC3C7IH@gmail.com>
- <145c7132-ec43-4238-801d-55d518fb0da8@linux.dev>
- <DJ4ULU6H2NYA.24B49ESUI6RNP@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DJ4ULU6H2NYA.24B49ESUI6RNP@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
+LLVM23 ([1]) records the 'true' function signature in BTF, i.e. the
+signature inferred after optimization rather than the one written in C.
+This caused two kinds of selftest failures (see below).
 
+Case 1: keep int return type for tailcall subprogs
 
-On 6/9/26 2:49 PM, Alexei Starovoitov wrote:
-> On Tue Jun 9, 2026 at 2:30 PM PDT, Yonghong Song wrote:
->> const struct bpf_func_proto bpf_tail_call_proto = {         /* func is
->> unused for tail_call, we set it to pass the          * get_helper_proto
->> check          */         .func           = BPF_PTR_POISON,
->> .gpl_only       = false,         .ret_type       = RET_VOID,
->> .arg1_type      = ARG_PTR_TO_CTX,         .arg2_type      =
->> ARG_CONST_MAP_PTR,         .arg3_type      = ARG_ANYTHING, }; and for
->> RET_VOID, we have below in verifier.c:         switch
->> (base_type(ret_type)) {         case RET_INTEGER:                 /*
->> sets type to SCALAR_VALUE */                 mark_reg_unknown(env, regs,
->> BPF_REG_0);                 break;         case RET_VOID:
->>     regs[BPF_REG_0].type = NOT_INIT;                 break; so we cannot
->> return 'r0'.
-> Ahh, so bpf_tail_call() is a void return.
-> Then, I'll take it back. bpf_tail_call_static() is correct with void return.
-> I guess we have to teach the verifier to accept void subprogs asap.
->
-> In the meantime let's do shortest possible hack for tailcall_bpf2bpf_hierarchy1.c
-> to pass with llvm 23.
+The verifier requires any subprog that issues a bpf_tail_call to return
+an 'int' (see check_btf_func() in kernel/bpf/check_btf.c, which rejects
+it with "tail_call is only allowed in functions that return 'int'").
 
-Sounds good. Will do.
+Several tailcall subprogs do 'return 0' (or another constant) whose
+result no caller uses. With llvm23 the compiler folds the constant and,
+since the return value is dead, optimizes the subprog to effectively
+return 'void' and records 'void' in BTF, so the program fails to load.
+
+Use barrier_var() and __sink() to prevent returned value from being
+optimized.
+
+Case 2: adjust tracing prog ctx layout for the true signature
+
+test_pkt_access_subprog2() has an unused argument that llvm optimizes
+away. Before llvm23 the BTF signature did not match the optimized
+assembly, so the verifier fell back to MAX_BPF_FUNC_REG_ARGS (5) u64
+arguments and the fexit return value sat after args[5]. With llvm23 the
+true signature has a single argument, so the return value moves to the
+slot after args[1]. Select the matching ctx struct based on __clang_major=
+__
+so the test works with both old and new llvm.
+
+  [1] https://github.com/llvm/llvm-project/pull/198426
+
+Changelogs:
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260609163947.1717694-1-yonghong.s=
+ong@linux.dev/
+    - Do not use bpf array map or bpf global var. Use __sink() instead.
+
+Yonghong Song (2):
+  selftests/bpf: Keep int return type for tailcall subprogs
+  selftests/bpf: Adjust fexit_bpf2bpf ctx layout for llvm23 true
+    signature
+
+ .../selftests/bpf/progs/fexit_bpf2bpf.c       | 13 ++++++++--
+ .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |  5 +++-
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy1.c   | 13 ++++++----
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy2.c   | 24 +++++++++++++------
+ .../bpf/progs/tailcall_bpf2bpf_hierarchy3.c   | 13 +++++++---
+ .../progs/tailcall_bpf2bpf_hierarchy_fentry.c | 13 +++++++---
+ .../selftests/bpf/progs/verifier_sock.c       |  9 +++++--
+ 7 files changed, 68 insertions(+), 22 deletions(-)
+
+--=20
+2.53.0-Meta
 
