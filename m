@@ -1,281 +1,265 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99787175A7E
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 21:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BCF2D7DC6
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 21:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781040652; cv=none; b=PWWTsqMFHgPHwqwPjFx/5kBjou7Qm7RLU77xGEWCD/OfQFjwHOZhO00l4Bl9eprwekUSD98DRsnBCtprvI9cEWVqGV0iQm7paiImocGdUN2G7HpX+cXW2BObh4pgEHRB1EAgemQoQCULAzGKy4SubKcJ1RU4FYDw4k01TuX7/TY=
+	t=1781040715; cv=none; b=oO4QfuP4qY86tqmP1jhlCsi59jvzsyo+kRcM028M0AgYH1tjrJL40OYjhNfQoEPXrS/7UBG/NN0SiwxJyDxp3IaCCHRU8x5QWYjo7sgx7v1lymeU/DBumJOoVzIbVb4XVgXTA9/0Ew/XKOmJQm3ChfU/RSoN2GyUuKQMpc10fR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781040652; c=relaxed/simple;
-	bh=ejpellxJKhM/KGATwoMc4zHPaCq5nxm3cwu6wuGA4iE=;
+	s=arc-20240116; t=1781040715; c=relaxed/simple;
+	bh=u02KRuZlQFzGkv6nJNfx75RixQFD4xM54PRC9sX+TeM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RPJbYx/rjJIbz3hnhqFJGpA8gStbfwMJaJvqFfJ3X7irLMJ1fK1DRB3PKGUvrt9zTv+z/DdSTb4mId59dhMF15F2vnH+Kiqdc1n4/9B5iLEQ8goocfPz7LPvy/o8N4fy2g/54/8uNfUqfTCHfOePFU4lJbj5CXXm6Rq+RSYk6qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PDfafIFV; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=GzQW8jsZXIggs/LmRbWdRyUiXwC98uZ5DPpTqLxUEw7Qix8wLPtP/ugDKNqYv6DnkdSqsGS6YFXbvI0iRcfv55Bk7C+l4YPyQ8FiyYRxfbdvAM/RouI4/m5IHHR0Tr/7unIfWN4oV0fT+QTWeQNB8RdhirEEJj2w9Qn8LfAccy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=mfqFmqt+; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PDfafIFV"
-Message-ID: <145c7132-ec43-4238-801d-55d518fb0da8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781040645;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nmlBWo0+rWPXLwn7ya4fbeJQB/bh8ZRt3Hwo0RZPmh4=;
-	b=PDfafIFVxicggATAgq+hYxPYBWoS/ipSJczmMon+f3bhv+mAUEUq90JNq51FvShDXLHr4e
-	6forrD8RCkS5QNB1iY7zE7xJg4T1QRzA7AIhMBg5OBbpAHilQ/mXIfEBEmMn9OcSaZX6sX
-	rtkO8OgvcvuFg1C0zikgFTHe8Wu1XEc=
-Date: Tue, 9 Jun 2026 14:30:34 -0700
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="mfqFmqt+"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-486badc02ecso1497074b6e.3
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 14:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1781040712; x=1781645512; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aGjz6oXrvv0vYyL9h564g5u9rOXsQ9Yj+tb2sJWaYA0=;
+        b=mfqFmqt+WJx8NSYfElhOBMTg++c3r8Yq+qOtPE6j+Rp39nGafXgFVejdw+XX6c1G8Y
+         WtGm1CHAjgdwVPbNMbusNhxrPEgqJ8ftBfI1CDBJrDXH58mf1cQs3T3t56ngL+brvLLL
+         mDkoPrurq+wWZP9/d3whgV2TL2M9jI29yrLoMadcZACt5Jkj7gMG0WC2DmIrIOQ1lWJ4
+         C84XQsZVeKsgRr9YkfYO+eZ6f41JO+z9W/2xJUO0ziqf9pp4rDolAUM9CN+pWjUre6Ew
+         KJLk2jUKoV5kpdOXgZjpUwWgg+0QmjaoZ/mmlgLndXknfUAZwyoJGFNJ8tQSbUdtBZ4z
+         v8IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781040712; x=1781645512;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aGjz6oXrvv0vYyL9h564g5u9rOXsQ9Yj+tb2sJWaYA0=;
+        b=RYgssHh56j3FTgVLcio8ZVQqdPgB8TenvzB26tAOKLwL9Z5+GBovZgdeBIQawVe/WA
+         b9Pva2KyVvlqKt/UlsnU1HRPzQvNRCVHaCGQnHI9DgS+IwURcLf63bIaK340Fo9aokQU
+         aGHtZUr3+xZ1qniyWWYq83JDmu/UwmDMw6ZgBP1DfM/iwdeOpHiEPTJocN76d2nxpV1Z
+         Kth6F1BjbCck60Pffk9Bwe/6PUXUug7RBMBXDvcR4eWZmlAbn1hvWk0Uc9/DAZKSt8Jt
+         QHkX33iNo4hhBvfUcjl5i8l/YrXGIuigHV4LJUXvFI4ySbdAimhWjl3RKkEGX6QMY5z4
+         1Z6A==
+X-Forwarded-Encrypted: i=1; AFNElJ+upVRUKHMJ2bzS9zSQAerh/d8Ug7Z8d91vWC6z2ATVJ7dg2qhIvNdJ0mgfrtZMV7wXKFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaEbDrjFNwjyGT179fW+WFlb0ZFeSCysxAutEVQx2PvUpMM/0X
+	2OCvKPVCcD+Vt6B4WSdl39kTM4DkmbIyaUumRWycN5Mg3W19tsgxo/JR0kZJSVCSVy2Skqv4xQn
+	D1NUFiAI=
+X-Gm-Gg: Acq92OEUrq82dSGLVn3itlHT47TjDc1xabMBi+W0Vc95YA7gTNnfZXVV2cKg8eOqRM4
+	3qzQqztsj6FMz8TThT46fTV6EvqXwudCq6dThIygsZ66k11TBYpg9mJ8Q/mIY9zWK8u9yUJRC8c
+	sch393d8B4V/Yy5uSv3jzBL9GmOsGHI/Rn9zlWvOz09eW6GgYLdRPZnb31nnbOABbNfmn8G7dbG
+	43VXWhqTxtvXCMEoMJi4gp+K9wh+E/Bw4CHRHAhEsVlMUTPYEK8EDN9/GagfRwBi69I12YQQTly
+	jfWGDpQa395JkhUjcP2rCxlTqgwQc2hOxDCl9D+urOHXR+B0hvLQwbGAy8p45EoMz9ca89xL3rf
+	NgOIO3PNkgjbqaji/WMFduKmvIyoL8UG32M+oeVZKYDWwRSRB9QZ/IxrmKQ7vBmglYobqnkKndT
+	kFPeWLsX840dhVwMnr+zqgmaVALzqL4rwGew==
+X-Received: by 2002:a05:6808:191e:b0:47b:bd7b:10e5 with SMTP id 5614622812f47-4868db2d9eamr11794474b6e.3.1781040712262;
+        Tue, 09 Jun 2026 14:31:52 -0700 (PDT)
+Received: from [172.22.22.28] ([73.62.185.64])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b5a5a64sm17024127b6e.4.2026.06.09.14.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2026 14:31:51 -0700 (PDT)
+Message-ID: <e5c0fc2a-dcf0-4165-b2dc-d16c6cbe92df@riscstar.com>
+Date: Tue, 9 Jun 2026 16:31:48 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
- tailcall subprogs with maps
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260609163947.1717694-1-yonghong.song@linux.dev>
- <20260609163952.1718472-1-yonghong.song@linux.dev>
- <DJ4PQYTQDWQT.1ENYNRIC3C7IH@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DJ4PQYTQDWQT.1ENYNRIC3C7IH@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 10/14] dt-bindings: net: toshiba,tc9654-dwmac:
+ add TC9564 Ethernet bridge
+To: Rob Herring <robh@kernel.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+ arnd@arndb.de, gregkh@linuxfoundation.org,
+ Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260605010022.968612-1-elder@riscstar.com>
+ <20260605010022.968612-11-elder@riscstar.com>
+ <20260605144032.GA3659201-robh@kernel.org>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <20260605144032.GA3659201-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
-
-
-On 6/9/26 11:00 AM, Alexei Starovoitov wrote:
-> On Tue Jun 9, 2026 at 9:39 AM PDT, Yonghong Song wrote:
->> LLVM23 ([1]) supports 'true' function signature in BTF. The return type
->> of the caller of a tailcall must be an 'int'. Otherwise, verification will
->> fail (see check_btf_func() in check_btf.c). So with llvm23, it is possible
->> that the compiler may change the caller's return type from 'int' to 'void'.
->> To prevent this, barrier_var() is used to avoid returning a constant prone
->> to be optimized.
+On 6/5/26 9:40 AM, Rob Herring wrote:
+> On Thu, Jun 04, 2026 at 08:00:17PM -0500, Alex Elder wrote:
+>> From: Daniel Thompson <daniel@riscstar.com>
 >>
->> Use Array map to store the subprog return values. Otherwise, due to
+>> Add devicetree bindings for the Toshiba TC956x family of Ethernet-AVB/TSN
+>> bridges.
 >>
->>          data_map = bpf_object__find_map_by_name(fentry_obj, ".bss");
->>          if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
->>                            "find data_map"))
->>                  goto out;
+>> The TC9564 contains a PCIe switch with one upstream and three downstream
+>> PCIe ports.  The third PCIe downstream port has an attached embedded PCIe
+>> endpoint, and that endpoint implements two PCIe functions.  Each internal
+>> PCIe function has a Synopsys XGMAC Ethernet interface capable of 10 Gbps
+>> operation.
 >>
->> in prog_tests/tailcalls.c test_tailcall_hierarchy_count(),
->> the test result will be different from the original one.
+>> The TC9564 also implements an embedded GPIO controller, which exposes
+>> 10 lines externally.  Some platforms use these GPIO lines, so this
+>> GPIO controller is managed by a separate driver.  Other embedded
+>> peripherals (like a microcontroller, SRAM, and UART) are currently
+>> unused.
 >>
->>    [1] https://github.com/llvm/llvm-project/pull/198426
+>> The GPIO controller is managed by registers accessed via MMIO on an
+>> internal PCIe function's registers.
 >>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+>> Signed-off-by: Alex Elder <elder@riscstar.com>
 >> ---
->>   .../bpf/progs/tailcall_bpf2bpf_hierarchy1.c   | 21 +++++++++++++++----
->>   .../progs/tailcall_bpf2bpf_hierarchy_fentry.c | 20 +++++++++++++++---
->>   2 files changed, 34 insertions(+), 7 deletions(-)
+>>   .../bindings/net/toshiba,tc9564-dwmac.yaml    | 120 ++++++++++++++++++
+>>   MAINTAINERS                                   |   6 +
+>>   2 files changed, 126 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
 >>
->> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
->> index d556b19413d7..13b0ee9475a8 100644
->> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
->> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
->> @@ -11,25 +11,38 @@ struct {
->>   	__uint(value_size, sizeof(__u32));
->>   } jmp_table SEC(".maps");
->>   
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_ARRAY);
->> +	__uint(max_entries, 2);
->> +	__type(key, int);
->> +	__type(value, __u64);
->> +} array SEC(".maps");
+>> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
+>> new file mode 100644
+>> index 0000000000000..6e7a63dfcf86a
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/toshiba,tc9564-dwmac.yaml
+>> @@ -0,0 +1,120 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/toshiba,tc9564-dwmac.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->>   int count = 0;
->>   
->>   static __noinline
->>   int subprog_tail(struct __sk_buff *skb)
->>   {
->> +	int ret = 0;
+>> +title: Toshiba TC956x Ethernet-AVB/TSN Controller
 >> +
->>   	bpf_tail_call_static(skb, &jmp_table, 0);
->> -	return 0;
->> +	barrier_var(ret);
->> +	return ret;
-> I think it's missing the actual fix.
-> bpf_tail_call_static() should return 0; instead of being void.
-> And here, instead of barrier_var() tricks,
-> it can pass the return from bpf_tail_call_static() further out.
-
-The following should work:
-
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 9d160b5b9c0e..7bf2d6d63436 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -147,7 +147,7 @@
-   */
-  #if (defined(__clang__) && __clang_major__ >= 8) || (!defined(__clang__) && __GNUC__ > 12)
-  #if defined(__bpf__)
--static __always_inline void
-+static __always_inline int
-  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-  {
-         if (!__builtin_constant_p(slot))
-@@ -172,6 +172,8 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-                      "call 12"
-                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
-                      : "r0", "r1", "r2", "r3", "r4", "r5");
-+
-+       return 0;
-  }
-  #endif
-  #endif
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sock.c b/tools/testing/selftests/bpf/progs/verifier_sock.c
-index 9f680cf44512..d41a832da928 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sock.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sock.c
-@@ -1120,8 +1120,11 @@ int tail_call(struct __sk_buff *sk)
-  static __noinline
-  int static_tail_call(struct __sk_buff *sk)
-  {
--       bpf_tail_call_static(sk, &jmp_table, 0);
--       return 0;
-+       int ret;
-+
-+       ret = bpf_tail_call_static(sk, &jmp_table, 0);
-+       barrier_var(ret);
-+       return ret;
-  }
-  
-  /* Tail calls in sub-programs invalidate packet pointers. */
-@@ -1144,10 +1147,12 @@ __failure __msg("invalid mem access")
-  int invalidate_pkt_pointers_by_static_tail_call(struct __sk_buff *sk)
-  {
-         int *p = (void *)(long)sk->data;
-+       int ret;
-  
-         if ((void *)(p + 1) > (void *)(long)sk->data_end)
-                 return TCX_DROP;
--       static_tail_call(sk);
-+       ret = static_tail_call(sk);
-+       __sink(ret);
-         *p = 42; /* this is unsafe */
-         return TCX_PASS;
-  }
-
-Note that for above static_tail_call(), we cannot do
-
-int static_tail_call(struct __sk_buff *sk)
-{
-	return bpf_tail_call_static(sk, &jmp_table, 0);
-}
-
-The following is some llvm optimization dump for
-return bpf_tail_call_static(sk, &jmp_table, 0):
-
-; Function Attrs: noinline nounwind
-define internal fastcc void @static_tail_call(ptr noundef %0) unnamed_addr #2 !dbg !34454 {
-     #dbg_value(ptr %0, !34457, !DIExpression(), !34458)
-     #dbg_value(ptr %0, !34388, !DIExpression(), !34459)
-     #dbg_value(ptr @jmp_table, !34395, !DIExpression(), !34459)
-     #dbg_value(i32 0, !34396, !DIExpression(), !34459)
-   tail call void asm sideeffect "r1 = $0\0A\09r2 = $1\0A\09r3 = $2\0A\09call 12", "r,r,i,~{r0},~{r1},~{r2},~{r3},~{r4},~{r5}"(ptr %0, ptr nonnull @jmp_table, i32 0) #7, !dbg !34461, !srcloc !34400
-   ret void, !dbg !34462
-}
-
-define dso_local range(i32 0, 3) i32 @invalidate_pkt_pointers_by_static_tail_call(ptr noundef %0) #3 section "tc" !dbg !34424 {
-...
-15:                                               ; preds = %1
-   tail call fastcc void @static_tail_call(ptr noundef %0), !dbg !34445
-   store i32 0, ptr %2, align 4, !dbg !34446, !DIAssignID !34447
-     #dbg_assign(i32 0, !34428, !DIExpression(), !34447, ptr %2, !DIExpression(), !34433)
-   call void asm sideeffect "", "=*imr,0"(ptr nonnull elementtype(i32) %2, i32 0) #7, !dbg !34448, !srcloc !34449
-   store i32 42, ptr %7, align 4, !dbg !34450
-   br label %16, !dbg !34451
-...
-}
-
-For static_tail_call(), compiler knows the return value 0. So it changed
-the signature to 'void static_tail_call(...)'. The value '0' is used in
-invalidate_pkt_pointers_by_static_tail_call().
-
-Could you check whether the above change make sense?
-
-BTW, for the helper, it would be great if we can return 'r0'.
-
-static __always_inline int
-bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-{
-         if (!__builtin_constant_p(slot))
-                 __bpf_unreachable();
-
-         /*
-          * Provide a hard guarantee that LLVM won't optimize setting r2 (map
-          * pointer) and r3 (constant map index) from _different paths_ ending
-          * up at the _same_ call insn as otherwise we won't be able to use the
-          * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
-          * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-          * tracking for prog array pokes") for details on verifier tracking.
-          *
-          * Note on clobber list: we need to stay in-line with BPF calling
-          * convention, so even if we don't end up using r0, r4, r5, we need
-          * to mark them as clobber so that LLVM doesn't end up using them
-          * before / after the call.
-          */
-         asm volatile("r1 = %[ctx]\n\t"
-                      "r2 = %[map]\n\t"
-                      "r3 = %[slot]\n\t"
-                      "call 12"
-                      :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
-                      : "r0", "r1", "r2", "r3", "r4", "r5");
-
-         return 'r0';
-}
-
-But we have
-
-const struct bpf_func_proto bpf_tail_call_proto = {         /* func is 
-unused for tail_call, we set it to pass the          * get_helper_proto 
-check          */         .func           = BPF_PTR_POISON,         
-.gpl_only       = false,         .ret_type       = RET_VOID,         
-.arg1_type      = ARG_PTR_TO_CTX,         .arg2_type      = 
-ARG_CONST_MAP_PTR,         .arg3_type      = ARG_ANYTHING, }; and for 
-RET_VOID, we have below in verifier.c:         switch 
-(base_type(ret_type)) {         case RET_INTEGER:                 /* 
-sets type to SCALAR_VALUE */                 mark_reg_unknown(env, regs, 
-BPF_REG_0);                 break;         case RET_VOID:               
-   regs[BPF_REG_0].type = NOT_INIT;                 break; so we cannot 
-return 'r0'.
-
->
->>   }
->>   
->>   SEC("tc")
->>   int entry(struct __sk_buff *skb)
->>   {
->> -	int ret = 1;
->> +	int ret = 1, ret1, ret2, key1 = 0, key2 = 1;
->>   
->>   	clobber_regs_stack();
->>   
->>   	count++;
->> -	subprog_tail(skb);
->> -	subprog_tail(skb);
->> +	ret1 = subprog_tail(skb);
->> +	ret2 = subprog_tail(skb);
+>> +maintainers:
+>> +  - Alex Elder <elder@riscstar.com>
+>> +  - Daniel Thompson <daniel@riscstar.com>
 >> +
->> +	bpf_map_update_elem(&array, &key1, &ret1, 0);
->> +	bpf_map_update_elem(&array, &key2, &ret2, 0);
+>> +description: |
+>> +  The Toshiba TC9564 (and more generally, TC956x) incorporates a PCIe
+>> +  gen 3 switch with one upstream and three downstream ports.  The first
+>> +  two downstream ports are exposed externally, while the third is used
+>> +  by an internal PCIe endpoint.  The PCIe endpoint implements two PCIe
+>> +  functions, and attached to each of these is a 10 Gbps capable Synopsys
+>> +  Ethernet controller.
+>> +
+>> +  The TC956x additionally implements other internal IP blocks, and in
+>> +  particular it implements a GPIO controller.  Ten of the 35 GPIO lines
+>> +  implemented are exposed externally and are usable by the platform.
+>> +  It is platform-dependent whether the GPIO function must be exposed,
+>> +  and if it is, PCIe function 0 supplies it.
+>> +
+>> +              ----------------------------------
+>> +              |              Host              |
+>> +              ------+...+----------+........+---
+>> +                    |i2c|          |  PCIe  |
+>> +    ----------------+...+----------+........+------
+>> +    | TC956x        |I2C|          |upstream|     |
+>> +    |               -----        --+--------+---  |
+>> +    |  -----  ------  -------    | PCIe switch |  |
+>> +    |  |SPI|  |GPIO|  |reset|    |             |  |
+>> +    |  -----  ------  |clock|    | DS3 DS2 DS1 |  |
+>> +    |                 -------    ---++--++--++--  |
+>> +    |  -----  ------     downstream//    \\  \\   |  downstream
+>> +    |  |MCU|  |SRAM|    /==========/      \\  \===== PCIe port 1
+>> +    |  -----  ------   //PCIe port 3       \\     |
+>> +    |                  ||                   \======= downstream
+>> +    |  ----+-----------++-----------+----         |  PCIe port 2
+>> +    |  | M | internal PCIe endpoint | M |         |
+>> +    |  | S |------------------------| S |  ------ |
+>> +    |  | I |   PCIe   |  |   PCIe   | I |  |UART| |
+>> +    |  | G |function 0|  |function 1| G |  ------ |
+> 
+> I don't see nodes for these PCI functions. Boot this platform with
+> CONFIG_PCI_DYNAMIC_OF_NODES enabled and use the resulting DT node
+> structure. Anything else is wrong. This will give you the DTS:
+> 
+> dtc -O dts /proc/device-tree
+> 
+> The ethernet nodes should be just these PCI function nodes. You need to
+> make the DWMAC PCI driver (stmmac_pci.c) bind to those 2 PCI devices.
+> And really, a DT node for them should be completely optional (unless
+> there's some power on ctrl needed).
+> 
+> Everything else like SPI, GPIO, UART, etc. should be under the PCIe
+> switch upstream node in a pci-ep-bus.
 
-__sink(ret1)/__sink(ret2) should work here.
+I unfortunately hadn't looked closely enough at pci-ep-bus
+before.  It really looks like what we should use.  It's a
+simple bus, and we'll use platform drivers and compatible
+strings to match the devices on the bus.
 
-> I'm sure there is a way to do this without introducing maps or global volatile variables.
->
-> pw-bot: cr
+I'll work toward converting things over to use this model.
+
+> 
+> 
+>> +    |  | E |----++----|  |----++----| E |         |
+>> +    |  | N |  eMAC 0  |  |  eMAC 1  | N |         |
+>> +    --------+.......+------+.....+-----------------
+>> +            |USXGMII|      |SGMII|
+>> +          --+.......+--  --+.....+--
+>> +          |  ARQ113C  |  | QEP8121 |
+>> +          |    PHY    |  |   PHY   |
+>> +          -------------  -----------
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+>> +
+>> +  gpio:
+>> +    type: object
+>> +    description: Embedded GPIO controller
+>> +    $ref: /schemas/gpio/gpio.yaml#
+> 
+> gpio.yaml alone does not define a GPIO controller. How many #gpio-cells
+> needs to be defined.
+> 
+> Is there no address associated with the controller?
+> 
+>> +
+>> +  ethernet:
+>> +    type: object
+>> +    description: XGMAC Ethernet controller
+>> +    $ref: /schemas/net/ethernet-controller.yaml#
+>> +    properties:
+>> +      mdio:
+>> +        $ref: snps,dwmac.yaml#/properties/mdio
+> 
+> Either all of snps,dwmac.yaml should apply or none of it. Generally, we
+> only reference whole schema files (OF graph being a notable exception).
+
+OK.
+
+> 
+>> +    required:
+>> +      - mdio
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/pci/pci-device.yaml#
+>> +  - $ref: /schemas/pci/pci-bus-common.yaml#
+> 
+> These 2 are just pci-pci-bridge.yaml.
+
+OK.
+
+					-Alex
+
+> 
+> Rob
 
