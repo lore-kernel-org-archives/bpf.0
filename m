@@ -1,249 +1,345 @@
-Received: from mail-oi1-f227.google.com (mail-oi1-f227.google.com [209.85.167.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BBB3624A8
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 04:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.227
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47E71A9F90;
+	Tue,  9 Jun 2026 04:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780978945; cv=none; b=Wp5As6PthlC1UPYTag7pa+k7HxfYhj1HvgQBlHCXneb2gjqtQ7smwD2s0tcg7zEh0Fm+K1yOSTesyETdAaDC3vKZ3JacJruQdaudZuSdJKR0i0rJ1Uirda5TzflO7bvzHHIvvne03zFPba52o7/qbbQQl1pU5I7G02T19KraBfM=
+	t=1780979594; cv=none; b=JsCoO0D1hGq1bSVVZ4aVlSJ5P4S4+qt7axXEfhc6LxB52Q77C6Ca+6aOPplEOa+giFwV/mAcpxlrzSRvgsEjUNSAHXzrZgceECbbff7p6Yarhm18nKGjoUoWMruFoK/Smf8iekUudXq5Esj2X/gLH0EJhSOXUgAScK6+a5WYJTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780978945; c=relaxed/simple;
-	bh=smA0giQHE1P9FF80RotSfjaSOtdzldCmDQxcw4m2Wy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HAQooDzorff4MAjLlKKXVAm2tPpUyTjnicSin6W0nOjo/CQ9oGwdlFPJeN7E+sIuEjJKnFPEtT/gQmdsf2lwUKXqyVgnMVj5xda3Aietwmweqi9g6p9RvddjLz+noRj1P/GLbtzfqiFFUA1uAVV8p+MVAc25kKU4tFIn/90Ljhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=W6l4MenU; arc=none smtp.client-ip=209.85.167.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1780979594; c=relaxed/simple;
+	bh=8n2rUa58ndHtThTWZ59/AdSok7/ztYMrngn8BMaCEY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W/stz3/wpjGG1PoxIQkVTpIYHsFFn1VI65Wzn00AagUKgq/ZtTJ/o2rVuoLu7N6dDm9eAtZpH3/eCXO6XEn+3twzLE6pKYjPHEvniXjA+rP70lK4U9oy9vkF9k09HheWpL7XOF63WUYo+sQW8O+n7VETJePbwCSOW9zyyh2GYCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=eS9pLD2O; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="W6l4MenU"
-Received: by mail-oi1-f227.google.com with SMTP id 5614622812f47-4864a5c83f1so3258959b6e.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 21:22:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780978943; x=1781583743;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sqJ0yEROhI6TYJRx3bxjJKXQdqrVAhw4OoV/coVrF24=;
-        b=j5xOcSrGqHcKfu2MgESWtB2ZHFCDEIBiQRkKPO76aOWFshCnfI0Pbs1xGyLo/bRCbP
-         Hpg0fbmacmBy+AXLWLMpdfMCdw/WmALsHtM7xjJ8dbmpSWBH73U7M5guNGJjeupqI48V
-         ntPUSeOubsjceBtWnARLK/T2l1Q6TpNUlBkyxhAohSu153ZGGB1ro7MMBa6PidtlB4cP
-         jFaMFc4yviVd3vA5vfcZYi4xEEFqjFokxxymaIh5rkgvriW54bCSBmDhtSZK9XyUYP3Q
-         VjAngTmNPLnrq9yep8AGoNWAL7RnXX2CMf5fuJYQ2l964pdh5Vlta51aZ4NxbhTE4jW2
-         rGTw==
-X-Forwarded-Encrypted: i=1; AFNElJ+MxhMKVrCcnmeLIcf1J0WnnT/o9Sqknl8/iLlMHpvpz2MI/j3sBqMbfc4uli9BnB76PIY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiBvRPO7FUGhYMKwWCbH6kdlEJ/1KmKLWZRie2DWzKMySMAoEa
-	uAaw/0qYjHygNSrRDYc3wrezMIDHyg5ZQNAh5RIcXsWQPVIroNUpL8+OUPhoM4ioom1vNdnfbd0
-	BH/GVYM5TGmlgPD65IsjbUAJOXkXAuOHu387KCU4Rf1csQK3+vgfnyUMT1/nZQqT6UeujVdM1aW
-	Ma5UF0RO0NGMDr06Bah/hiwrE3PfKpz0qYgIYgsjGni6FcNQZFjRFcDvVtz/A/QCoe72SYErvdI
-	Nwjg/k=
-X-Gm-Gg: Acq92OG2wfi3vAhkAFYGzLLcMkUQAnEbDGH4MMt+etWdEMfP1MN+1gLjVHYgs5VHzqQ
-	dqAVJPxIk08pszJEXdexr2kdFk3fNOa4dXTYgxGywg25JwaGHpVu7ufPVZpESI3Vz71e+HLT2yw
-	twhl/tGChhjPDiF/wDu6uSOdvEvYJEWCL1NGBh+0corQZTRaA6sNwDSTTbv9UFqPX5rjn24heQq
-	6zRN4+xrx97bR0gl0MY5w8UYQc77vQfr79eMBFh2J1kGu2bxmg6siYfq3fS6RPRfrHwTjksY+yQ
-	SdseJWLly0iQo/k2iOk7irBzYnc2/0bNygslgpvguWV52sdOqA/qR91qsgUN49k63I/JBcYseay
-	c/3pGa33nwiCryc+Nkcli8ZONQjS4PeXHkFqQZUNigDiE4Z5FftYjPBr/F3bdhppS+FzWi0WzVt
-	W3gA7YJhCP/TmhNcVrQvsEDcu+B4hnUUdcAqz7ghlck8+O78eq4gP3qVF1T70NYchW62keOg==
-X-Received: by 2002:a05:6808:250e:b0:486:89d8:6d4d with SMTP id 5614622812f47-4868e006bb4mr10266057b6e.43.1780978942644;
-        Mon, 08 Jun 2026 21:22:22 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-117.dlp.protect.broadcom.com. [144.49.247.117])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-440d7bae93bsm1795478fac.3.2026.06.08.21.22.21
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Jun 2026 21:22:22 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-bf523a51c24so229651366b.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 21:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1780978940; x=1781583740; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sqJ0yEROhI6TYJRx3bxjJKXQdqrVAhw4OoV/coVrF24=;
-        b=W6l4MenUVxVKXiX3AkzlFV+RWbhsMDjRDpnQD9WODqQhhv4uBMdkrgMa0kSWh/XBU3
-         bWIJpTtrTu6w2Pr2e9HueO1ft3c0/wn7fTUx+L1WxLTC6SYWedrKasqXacNfuyiA0z2P
-         T+uNsmjDGS5ku82/TW6JEU/HbqtvpmZfTQ4X0=
-X-Forwarded-Encrypted: i=1; AFNElJ+6KMvHBDRhlGhej9YxsQap99fE7gu436SSItq0F+bYtdybhun+7lTpWPjwOYE32jjB+Oo=@vger.kernel.org
-X-Received: by 2002:a17:907:cf8c:b0:bf1:7897:9477 with SMTP id a640c23a62f3a-bf370b6008dmr849590466b.18.1780978940135;
-        Mon, 08 Jun 2026 21:22:20 -0700 (PDT)
-X-Received: by 2002:a17:907:cf8c:b0:bf1:7897:9477 with SMTP id
- a640c23a62f3a-bf370b6008dmr849588566b.18.1780978939620; Mon, 08 Jun 2026
- 21:22:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="eS9pLD2O"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 7AC8120B7167; Mon,  8 Jun 2026 21:32:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7AC8120B7167
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1780979569;
+	bh=EbqJ/IkzsqoSz7UPJbS0opNH84rgjXe7KslEbNh6Usk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eS9pLD2OlBsevnqnj6DzY/nw3dRmV+Y/GyvmYNdJo6w7yHs+4bf2I5aFLEf5xt8gC
+	 ya8ua+iMUKffMq5zX0ZsoQnMSbhK2v8CS4hUSi0DGDcLy0yt+g6vMFNf4PTgDt3BNL
+	 4c6nZ+3kLAk2USHYeRPVHTySfTsqMEA+ovIxhjMw=
+Date: Mon, 8 Jun 2026 21:32:49 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+	horms@kernel.org, shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+	yury.norov@gmail.com, pavan.chebbi@broadcom.com
+Subject: Re: [PATCH net-next v10 2/2] net: mana: force full-page RX buffers
+ via ethtool private flag
+Message-ID: <aieXcRe47AKklXKr@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260602202801.1873742-1-dipayanroy@linux.microsoft.com>
+ <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
+ <c3b2ab74-754d-4d09-b7a2-d274343d0936@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260608203129.920104-1-joe@dama.to>
-In-Reply-To: <20260608203129.920104-1-joe@dama.to>
-From: Michael Chan <michael.chan@broadcom.com>
-Date: Mon, 8 Jun 2026 21:22:07 -0700
-X-Gm-Features: AVVi8CeXmnXuosWbk5ifAWP-UZzQrdAi-4E8QncGPH0yg7sVs8DfeWTY_qzPgwk
-Message-ID: <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
-Subject: Re: [PATCH net] bnxt: fix head underflow on XDP head-grow
-To: Joe Damato <joe@dama.to>
-Cc: netdev@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Somnath Kotur <somnath.kotur@broadcom.com>, 
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000001814b60653ca7941"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3b2ab74-754d-4d09-b7a2-d274343d0936@intel.com>
 
---0000000000001814b60653ca7941
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 04, 2026 at 11:40:30AM -0700, Jacob Keller wrote:
+> On 6/2/2026 1:24 PM, Dipayaan Roy wrote:
+> > On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
+> > allocation in the RX refill path can cause 15-20% throughput
+> > regression under high connection counts (>16 TCP streams).
+> > 
+> > Add an ethtool private flag "full-page-rx" that allows the user to
+> > force one RX buffer per page, bypassing the page_pool fragment path.
+> > This restores line-rate (180+ Gbps) performance on affected platforms.
+> > 
+> > Usage:
+> >   ethtool --set-priv-flags eth0 full-page-rx on
+> > 
+> > There is no behavioral change by default. The flag must be explicitly
+> > enabled by the user or udev rule.
+> > 
+> > The existing single-buffer-per-page logic for XDP and jumbo frames is
+> > consolidated into a new helper mana_use_single_rxbuf_per_page() which
+> > is now the single decision point for both the automatic and
+> > user-controlled paths.
+> > 
+> > Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+> > ---
+> 
+> I had one or two minor nits, but nothing that I think really deserves a
+> v11. The only real comment is a future "gotcha" that could happen if you
+> ever added a second private flag, which seems unlikely and maybe not
+> worth dealing with until it matters.
+> 
+> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+>
 
-On Mon, Jun 8, 2026 at 1:31=E2=80=AFPM Joe Damato <joe@dama.to> wrote:
->
-> The xdp.py test test_xdp_native_adjst_head_grow_data crashes when run on
-> a bnxt machine (and also crashes in NIPA).
->
-> It seems that the bug is an underflow in bnxt_rx_multi_page_skb, which
-> builds the skb head:
->
->   napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
->
-> The problem with this expression is that in page mode rx_offset is:
->
->   bp->rx_offset =3D NET_IP_ALIGN + XDP_PACKET_HEADROOM;
->
-> Which evaluates (at least on x86_64) to 258.
->
-> The test test_xdp_native_adjst_head_grow_data tests a case where the
-> head is adjusted by -256.
->
-> When this test runs, data_ptr is shifted to frag_start + 2 (where
-> frag_start =3D page_address(page) + offset).
->
-> Then, bnxt_rx_multi_page_skb is invoked and the napi_build_skb
-> expression subtracts 258, landing at an address before frag_start. This
-> could be either the previous fragment or the previous physical page when
-> the frag_offset is < 256 (e.g. if the fragment started at offset 0).
->
-> When the skb is freed, the page pool fragment reference is dropped on
-> either the wrong page or the wrong frag of the right page. In either
-> case, the corrupted reference count can lead to the page being
-> prematurely recycled while still in use. Once (incorrectly) recycled, it
-> can be handed out again and on driver teardown this would result in a
-> double free.
->
-> The commit under fixes updated this code to handle the case where the
-> native page size is >=3D 64k, but it unintentionally broke the head grow
-> case.
->
-> To fix this, we need to do a bit of math to recover the offset if this
-> is a page fragment since it is not passed into rx_skb_func
-> (bnxt_rx_multi_page_skb, in this case).
+Hi Jacob,
 
-I wonder if we should add an offset field to struct bnxt_sw_rx_bd to
-simplify things for page mode.  Struct bnxt_sw_rx_agg_bd has the
-offset field for a similar purpose.  Thanks.
+Thank you for the review.
+I will keep this patch as is, since no plans for any new private flags.
 
---0000000000001814b60653ca7941
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Regards
+Dipayaan Roy
 
-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
-DPVtLUtep/P3evQuAtTQRaKedjamBcUpJ7qUhBuv/Z07LlLIlB/vfNSPWe1V+njTezc8m3VfvNEC
-qEpXasPSfDgfcuUhcPR+7++oUDaTt9iqGFOjwiURxx08pL6ogSuiT41O4Xu7msabnUE6RY0O0xR5
-5UGwbpC1QSmnBq7TAy8oQg/nNw4vowEh3S2lmjdHCOdR270Ygd7jet8WQKa5ia4ZK4QdkS8+5uLt
-rMMRyM3QurndiZZJBipjPvEWJR/+jod8867f3n0CAwEAAaOCAd0wggHZMA4GA1UdDwEB/wQEAwIF
-oDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3Nl
-Y3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEF
-BQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1Ud
-IAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIB
-FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAy
-hjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBQAKTaeXHq6D68tUC3boCOFGLCgkjAdBgNVHQ4EFgQUJbO/Fi7RhZHYmATVQf6NlAH2
-qUcwDQYJKoZIhvcNAQELBQADggIBABcLQEF8mPE9o6GHJd52vmHFsKsf8vRmdMEouFxrW+GhXXzg
-2/AqqhXeeFZki82D6/5VAPkeVcgDeGZ43Bv89GHnjh/Vv0iCUGHgClZezpWdKCAXkn698xoh1+Wx
-K/c/SHMqGWfBSVm1ygKAWkmzJLF/rd4vUE0pjvZVBpNSVkjXgc80dTZcs7OvoFnt14UgvjuYe+Ia
-H/ux6819kbi0Tmmj5LwSZW8GXw3zcPmAyEYc0ZDCZk9QckL5yPzMlTAsy0Q+NMVpJ8onLj/mHgTk
-Ev8zt1OUE8MlXZj2+wgVY+az2T8rGmqRU2iOzRlJnc86qVwuwjL9AA9v4R13Yt8zYyA7jL0NiBNP
-WaOSajKBB5Z/4ZVtcvOMILD1+G+CVZX7GUWERT9NRXw/SyIEMU59lFbuvy4zxe3+RbOleCgp3pze
-q8HE2p9rkOJT3MkCNLxe+ij4RytIvPQXACsZeLdfTDUnjeXCDDJ9KugVhuqMelAZc4NissPz8FOn
-2NK++r5/QamlFqYRhsFxSBIvhkh2Q/hD3/zy4j17Yf/FUje5uyg03FblSBOk2WYpRpXEuCpyn5pb
-bYVIzfhQJgwGfO+L8BAeZIFjO1QL3s/zzn+RBlTl4wdDzh8L9eS+QEDhMcSsqb4fFRDbsoVuRjpx
-R5MunSUzk4GcmmM19m7oHhPGeKwIMYICVzCCAlMCAQEwYjBSMQswCQYDVQQGEwJCRTEZMBcGA1UE
-ChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBHQ0MgUjYgU01JTUUgQ0Eg
-MjAyMwIMZh03KTi4m/vsqWZxMA0GCWCGSAFlAwQCAQUAoIHHMC8GCSqGSIb3DQEJBDEiBCDSkF/T
-ZadjpVL0y1acEVunwb5MhV1n3mubeQrLbRaqhDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yNjA2MDkwNDIyMjBaMFwGCSqGSIb3DQEJDzFPME0wCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEHMAsGCWCG
-SAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBtdBFaLJlom/Ji/bRswO0OQ1WF0l060jf6y5v2R/dT
-50N8s4k6+xYUIBCunuwNCSqBSNvQM7VLAEEQGq1ESvG3p6NJtZxs7dctgZIetxLsCjkWRE4GX3ln
-e6IsthSc8pApxUBPgG8iBf1sNyy2y/hjD1vj40h+2T+Gd+2PUxV73GHjYwiYbvwQq3pzeYtZ97nM
-v3pGD+iCHelrkG8WR7eMbcH5d9h3BVsyVyR11Ji/wCVN90/RxydRwDOFR1yGsdyTntnWngMxwe87
-oF+eADFVx6Nl7n5f/B0zgH3CHR7BtM9/SQUJnw1HpcrBCg5i3gliofDgh0d1+WZcA2/B4TRv
---0000000000001814b60653ca7941--
+> >  drivers/net/ethernet/microsoft/mana/mana_en.c |  22 +++-
+> >  .../ethernet/microsoft/mana/mana_ethtool.c    | 103 ++++++++++++++++++
+> >  include/net/mana/mana.h                       |   8 ++
+> >  3 files changed, 131 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > index db14357d3732..447cecfd3f67 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > @@ -744,6 +744,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
+> >  	return va;
+> >  }
+> >  
+> > +static bool
+> > +mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
+> > +{
+> > +	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
+> > +	 * in the RX refill path (~2kB buffer) can cause significant throughput
+> > +	 * regression under high connection counts. Allow user to force one RX
+> > +	 * buffer per page via ethtool private flag to bypass the fragment
+> > +	 * path.
+> > +	 */
+> > +	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
+> > +		return true;
+> > +
+> > +	/* For xdp and jumbo frames make sure only one packet fits per page. */
+> > +	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
+> > +		return true;
+> 
+> Technically you could combine all three into one if, but I agree that
+> clarity and space for the comment about why the private flag exists
+> makes sense.
+> 
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
+> >  static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
+> >  			       int mtu, u32 *datasize, u32 *alloc_size,
+> > @@ -754,8 +773,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
+> >  	/* Calculate datasize first (consistent across all cases) */
+> >  	*datasize = mtu + ETH_HLEN;
+> >  
+> > -	/* For xdp and jumbo frames make sure only one packet fits per page */
+> > -	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
+> > +	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
+> >  		if (mana_xdp_get(apc)) {
+> >  			*headroom = XDP_PACKET_HEADROOM;
+> >  			*alloc_size = PAGE_SIZE;
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> > index 7e79681634db..f22bbb325948 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> > @@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
+> >  	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
+> >  };
+> >  
+> > +static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
+> > +	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
+> > +};
+> > +
+> >  static int mana_get_sset_count(struct net_device *ndev, int stringset)
+> >  {
+> >  	struct mana_port_context *apc = netdev_priv(ndev);
+> > @@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
+> >  		       ARRAY_SIZE(mana_phy_stats) +
+> >  		       ARRAY_SIZE(mana_hc_stats)  +
+> >  		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
+> > +
+> > +	case ETH_SS_PRIV_FLAGS:
+> > +		return MANA_PRIV_FLAG_MAX;
+> > +
+> >  	default:
+> >  		return -EINVAL;
+> >  	}
+> > @@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
+> >  	}
+> >  }
+> >  
+> > +static void mana_get_strings_priv_flags(u8 **data)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
+> > +		ethtool_puts(data, mana_priv_flags[i]);
+> > +}
+> > +
+> >  static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+> >  {
+> >  	struct mana_port_context *apc = netdev_priv(ndev);
+> > @@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+> >  	case ETH_SS_STATS:
+> >  		mana_get_strings_stats(apc, &data);
+> >  		break;
+> > +	case ETH_SS_PRIV_FLAGS:
+> > +		mana_get_strings_priv_flags(&data);
+> > +		break;
+> >  	default:
+> >  		break;
+> >  	}
+> > @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
+> >  	return 0;
+> >  }
+> >  
+> > +static u32 mana_get_priv_flags(struct net_device *ndev)
+> > +{
+> > +	struct mana_port_context *apc = netdev_priv(ndev);
+> > +
+> > +	return apc->priv_flags;
+> > +}
+> > +
+> > +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> > +{
+> > +	struct mana_port_context *apc = netdev_priv(ndev);
+> > +	u32 changed = apc->priv_flags ^ priv_flags;
+> > +	u32 old_priv_flags = apc->priv_flags;
+> > +	bool schedule_port_reset = false;
+> > +	int err = 0;
+> > +
+> > +	if (!changed)
+> > +		return 0;
+> > +
+> > +	/* Reject unknown bits */
+> > +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> > +		return -EINVAL;
+> 
+> Good. Explicit rejection ensures that there's no risk of bad value. I
+> think this is only required for the legacy ioctl interface, and won't be
+> able to have a bit set that isn't in your accepted list. However the
+> legacy ioctl interface looks like it doesn't do that double checking, so
+> its good to have this.
+> 
+> > +
+> > +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> > +		apc->priv_flags = priv_flags;
+> > +
+> 
+> In the (unlikely) event that you need another private flag in the
+> future, this bit seems like it shouldn't be inside the if block here. It
+> seems like you'd want to either do this at the end or up front. Of
+> course it doesn't matter as long as this is the only private flag you have.
+> 
+> > +		if (!apc->port_is_up) {
+> > +			/* Port is down, flag updated to apply on next up
+> > +			 * so just return.
+> > +			 */
+> > +			return 0;
+> > +		}
+> > +
+> > +		/* Pre-allocate buffers to prevent failure in mana_attach
+> > +		 * later
+> > +		 */
+> > +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+> > +		if (err) {
+> > +			netdev_err(ndev,
+> > +				   "Insufficient memory for new allocations\n");
+> > +			apc->priv_flags = old_priv_flags;
+> > +			return err;
+> > +		}
+> > +
+> > +		err = mana_detach(ndev, false);
+> > +		if (err) {
+> > +			netdev_err(ndev, "mana_detach failed: %d\n", err);
+> > +			apc->priv_flags = old_priv_flags;
+> > +
+> > +			/* Port is in an inconsistent state. Restore
+> > +			 * 'port_is_up' so that queue reset work handler
+> > +			 * can properly detach and re-attach.
+> > +			 */
+> > +			apc->port_is_up = true;
+> > +			schedule_port_reset = true;
+> > +			goto out;
+> > +		}
+> > +
+> > +		err = mana_attach(ndev);
+> > +		if (err) {
+> > +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> > +			apc->priv_flags = old_priv_flags;
+> > +
+> > +			/* Restore 'port_is_up' so the reset work handler
+> > +			 * can properly detach/attach. Without this,
+> > +			 * the handler sees port_is_up=false and skips
+> > +			 * queue allocation, leaving the port dead.
+> > +			 */
+> > +			apc->port_is_up = true;
+> > +			schedule_port_reset = true;
+> > +		}
+> 
+> I might have made this bit a separate function, but that comes from
+> history of working with older drivers which accumulated a larger number
+> of private flags. Given that we frown on adding new ones except in more
+> rare cases these days, this is probably fine.
+> 
+> > +	}
+> > +
+> > +out:
+> > +	mana_pre_dealloc_rxbufs(apc);
+> > +
+> > +	if (schedule_port_reset)
+> > +		queue_work(apc->ac->per_port_queue_reset_wq,
+> > +			   &apc->queue_reset_work);
+> > +
+> > +	return err;
+> > +}
+> > +
+> >  const struct ethtool_ops mana_ethtool_ops = {
+> >  	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES,
+> >  	.get_ethtool_stats	= mana_get_ethtool_stats,
+> > @@ -608,4 +709,6 @@ const struct ethtool_ops mana_ethtool_ops = {
+> >  	.set_ringparam          = mana_set_ringparam,
+> >  	.get_link_ksettings	= mana_get_link_ksettings,
+> >  	.get_link		= ethtool_op_get_link,
+> > +	.get_priv_flags		= mana_get_priv_flags,
+> > +	.set_priv_flags		= mana_set_priv_flags,
+> >  };
+> > diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+> > index d9c27310fd04..26fd5e041a47 100644
+> > --- a/include/net/mana/mana.h
+> > +++ b/include/net/mana/mana.h
+> > @@ -30,6 +30,12 @@ enum TRI_STATE {
+> >  	TRI_STATE_TRUE = 1
+> >  };
+> >  
+> > +/* MANA ethtool private flag bit positions */
+> > +enum mana_priv_flag_bits {
+> > +	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
+> > +	MANA_PRIV_FLAG_MAX,
+> 
+> For cases like this, I find it helpful to add a comment indicating this
+> must be the last entry. (and in that case, drop the trailing comma).
+> 
+> > +};
+> > +
+> >  /* Number of entries for hardware indirection table must be in power of 2 */
+> >  #define MANA_INDIRECT_TABLE_MAX_SIZE 512
+> >  #define MANA_INDIRECT_TABLE_DEF_SIZE 64
+> > @@ -531,6 +537,8 @@ struct mana_port_context {
+> >  	u32 rxbpre_headroom;
+> >  	u32 rxbpre_frag_count;
+> >  
+> > +	u32 priv_flags;
+> > +
+> >  	struct bpf_prog *bpf_prog;
+> >  
+> >  	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
+> 
