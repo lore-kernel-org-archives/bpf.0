@@ -1,209 +1,183 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917C13D47B8
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 06:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974A36EAB0
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 06:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780986350; cv=none; b=E+tnn8EinLbjPB/NIT5HDODLycxrtxjTdmy+7gnTW2C4ur/UJ6YhRPOHB6nbK837/Qa/Z2nGlOIE1jqGgwTGq2KsqPHbS9RyeCyWWOWUvdNIaLoAVAFCny1QHd4w7Vl8+BO9yoNRQqAMSbMHFWDr4UZMtyJrCgqORRJ8ZfhAW30=
+	t=1780986994; cv=none; b=qJGyR1olUZZ/2DyvhM5NEn3hI2+NaE6/phk5GIC3GtPYOQLojfeYr8XdFhcKdyT18raDdh9Grb9fbMTU/lv4EYzE3zLsFbsG4vjbY/NKehJDD42nGlpRBgVR7GLYVU/AfVQ5ZFyZTOY0eMFIwDO1EVEFrxoh3E61IWJGMaSBTts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780986350; c=relaxed/simple;
-	bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KoWfhG6mPvy48fthx1yUbBpIrklRzLXFlZpPbHi2o54RHqUz/My67ES80NwIq5CT0RTjHkfbtWgYsFv2tx9hgkFcwjdsFTzDEHI9qx9qAv4mQDV3Xu+X8ZfsKZDvd6HICM8m715xHk2c9sQkR5qYrKSlkFuahomMbPfXxQwNf6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qd6qoZi7; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780986994; c=relaxed/simple;
+	bh=Hkzd8ny5+eb1sUz4GxJPXNxDTMF5Pg62d0dQMlh67wI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaM4oJ34gsK61glKrXXVTWGkpHvC/UKWqhi4/HQ7C0VJMqk1bF+xnNvjVkeQ7cNwvPYeOkDirozhmXcMeQXmZHFr5HUE3CYzdisujEICTTjxDekSNI7YwPuUKAJ1s2NRqF2I21SUDEXD0cMatj1lwnU5fRBmloDyytN9kMOSwp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=0G/PHPaF; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qd6qoZi7"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso35052005ad.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 23:25:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="0G/PHPaF"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-36d8b644473so5064837a91.3
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 23:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780986348; x=1781591148; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
-        b=qd6qoZi7CygTRrbJdWRfAx/SluTzcolcmk8WsXC5IzW2sYDpPCNKTxWlyDgQv/4aMI
-         iIYqvulFFuuOl6RFULWVigWBiScXz3QvmRPHgJNpf2s0lStghoV/qWVCkZXcoy+dClr8
-         jCuGm0ngy14SgAFBA4y74fWD4YXxHhept8QE0X1WlmtrRjoi/cOEvytEkh8KiXjrgdh3
-         Sn3rDKu69fK50+/7IwI1GX67YlsxM9iO/Aop+t/02qr0O3ycsYJC3SCFhfqNRd4CqS8B
-         AER8t13XI537LTmVjYCQFtgSQoko9Y0Qp9lmPPJIJUQJl1zfTBA7cqhnq6/EyOLx+ziE
-         c45A==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1780986993; x=1781591793; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cdYODyfjwv2ON36BDjLCAyyFyBd+chXxXmNwR8kYud0=;
+        b=0G/PHPaFz4bHCrtsrq7CmU4CHfhr4WFHUNAb+/j6w9tPKPAcCvOZEa3GcPYX03z8uh
+         8wceXs34MnXaYf2qZeuh9w2A6APGMfCC32nOPDAXVGOTnlPDedvVQohVhCIyLnhUWLIZ
+         oH0nEKtSXpt68fKrh18Y7RQ+yvoKzHfXRfDglctKr+QXftz6gL2uXuYkxtf+3DjEVzpv
+         5iTVIyMbsMdaOF871+vcSWFSQgYgiyBEEcqa2d3zPTA10L+w/x5Bc14obVqIMivHYE/O
+         sKPjWteHbVC5lr1R3JTADd+oEzuV62lOY3tDDXRY/Dhn45NAsDozDO/dxXshhgr6WCMi
+         ZAww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780986348; x=1781591148;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
-        b=LFQCgIoQ/+sR3n2uYbTghyr45abzTNMx9Ne5aUYStuVxnuBb7A47M39tKKM5t7o7Ue
-         /F9SsgjKKMTXHwvpk4XP3n+eebSG+oWT1WPWd7sParOzGUhdH6UIs0XixIGYCWx1JfWr
-         /XMEqaaB2f8Wr8AmtLxYXlAq6nONb8nkrsEVMGdzpuCWZabThRrwbpqwNI3Wq2FiG38K
-         2qVHte7V3oImJilap4ILu4FuqwjnMea4X9t2edrBFAwYhiZ2pw1lK487oBeNpdAy90YL
-         1o9E46HNDTDsLN2vaMTeRXRN1xKekeK1hLV6QbxViOCkq4xn8Oi/A40/O215CEMWCymp
-         CxXQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8zI1GrCNtKlK7aC6AIfROHnpnv6LA4HxqWodnqNqbZnztMJv8Q7dVHsypWkJouggVNk9E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMP2ajln7pX24cbBcdhGA9SlQ0JARVbwyBQ/VWhUr3T8vvDnsW
-	GAB44ylPKlMgC2BXAVsz+wVUefbOCQaPd9NyEdr5oFaVAyHPidqtWI00
-X-Gm-Gg: Acq92OHYUbfRcyoRbH2l7HgRdY4D30TlSutSgheDuiJPM9imYbZv2E4kUBwZIWn80eX
-	X6IgdPOjt9jyG3wI9wGNiftwlthlaFGaacp1hMJ4z2z2QCUuTjovTAsxAeJUPy9FXvp/v9h7loF
-	Wldk5LHAohH0lob+SS9yt5VrYYg8kMclZU3Z5fyyBcYNNjqzrefF5FH09nM81ytUCZ0hzufz5O3
-	VF4CQTzrKw4v3cXgAZ+j4H8h18ggkSOm+u/EQa6TrgH6Ze3d9lM77k9+ja/3sjEqUyqlMc00ez3
-	DnZcDvt3Lx6cMayv9AbOaKL/6yAAzZcWj8sLyyTSiI11T/LWuZlV3BySx7EDVg2KybK+QuHXIe6
-	qgdQb17J5eL8UuhhODZHiBDQxFhP5jw7YLJDaYrWcmNLjrXxv3OqUVr0b/U7crBL/qDrCC1JI5I
-	nzSHaM6DYzu53GETy6DDJNvJmkAFZ1YUfoGw/wtXPw+/fbqBFxSqGGuUi89fhp/w==
-X-Received: by 2002:a17:902:da8a:b0:2bf:305a:310d with SMTP id d9443c01a7336-2c1e7f92548mr224154905ad.24.1780986347946;
-        Mon, 08 Jun 2026 23:25:47 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e627sm205571345ad.52.2026.06.08.23.25.47
+        d=1e100.net; s=20251104; t=1780986993; x=1781591793;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cdYODyfjwv2ON36BDjLCAyyFyBd+chXxXmNwR8kYud0=;
+        b=Iw+ub3j/rGYzIbCPt3aOZnki7FHTwEjq843tl6WE1JrnxeyLXPoZT1d/6elm1PzS5y
+         vj2cTQcQuz3WSG2CmAQ1R8K0Mjsmd+yyd881aK8L6vcCI53iYAczkQbzYFLsbSE4xf1J
+         9UiCLKpJ0SBqgMIVD2PMlm640CpR7cNwLZkP4J93PcCgwR58z6otX59198rU7oghpzUj
+         2HCZA7oOIK3PYPp+pWsME/rrxxF/z3rFbRVgGy+7Eleg0J5jc9jfWVc7A0YCRQN5zM4j
+         AxZJ5sFUPxcGhiZHoJYb6XUZvrNImc5w5higzsSkiBMoRUW0iow6jw9jwFx7KS4npG27
+         EpIA==
+X-Gm-Message-State: AOJu0YwEQf+mRjE9nvjesUJUFlDjRe/q91JYmsocGfHvh0leT03qC6gF
+	19Y5LjiC0d8EPEm0KMH0v8dY2HsjQrJba8U9mIVdkuIIjsav7qtzIQf6lfj2wGYSgA27cUwo546
+	KxVOIb3CJyQ==
+X-Gm-Gg: Acq92OGdRXKfhbtd6fTRu1GBqiH7CuYyT95z8k5+M5cZqPp7MxrJq8ZmYQFGqqsIJy7
+	O0dqiaxTf6yiZNhWyeXozxbWLBLfldFrrfavWmZSAZq8EVepipOfh8/kEw4PLJ01Mmw+R9XFK4/
+	3oT5hz6eZQhM+4fSjweOHLMTD/H/DvPlbGn8s7jDoGevaF/yZaA7idw7tslV7OGynmENniEcALP
+	KB2zZy1TbrbBpSTbJ5vBMlSfDVnhlsjNoNfj8xLA2K+kt4pfyKJ/4LESUaWbDd/IYCJc3NY0sPR
+	/nnnUjExIAhmuGUp0UtD486cOFqa93tr4NjKzNGnBZfsygD8wXikxtckGHw7AP+3QXs8SrKeZJK
+	tQTz1+UpnZ83t4MDAaRtQXN//aam7N20agOpQB3g4PL+TMAHIXuKRXGBWzfvdeH8S/IFDwTiD11
+	yWqWkHYttHlNAiW0BPE0ot1YQ0VqHWBMPUN2CfZgRiDSh5I8eSJGVVj9yhbwIECA==
+X-Received: by 2002:a05:6a21:1b81:b0:3b4:84de:aa79 with SMTP id adf61e73a8af0-3b4cd09b4f5mr22705072637.44.1780986992557;
+        Mon, 08 Jun 2026 23:36:32 -0700 (PDT)
+Received: from krios (d206-116-244-52.bchsia.telus.net. [206.116.244.52])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df034a2csm17515353a12.3.2026.06.08.23.36.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 23:25:47 -0700 (PDT)
-Message-ID: <670285aeb26ab8c4d4254a73a50f513bf9355246.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Hou Tao <houtao1@huawei.com>, Paul Moses <p@1g4.org>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, 	bpf@vger.kernel.org, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, 	linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Date: Mon, 08 Jun 2026 23:25:44 -0700
-In-Reply-To: <83321d7b-516c-f4a0-65ea-6fd224ba3110@huawei.com>
-References: <20260605234301.1109063-1-p@1g4.org>
-	 <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
-	 <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
-	 <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
-	 <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
-	 <d7ccd692ea8c6009785ad141e6ae4bbc68347517.camel@gmail.com>
-	 <83321d7b-516c-f4a0-65ea-6fd224ba3110@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.56.2-9 
+        Mon, 08 Jun 2026 23:36:32 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	kuba@kernel.org,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2] selftests/bpf: libarena: Avoid spurious spmc parallel selftest errors
+Date: Tue,  9 Jun 2026 02:36:30 -0400
+Message-ID: <20260609063630.10245-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-T24gVHVlLCAyMDI2LTA2LTA5IGF0IDA5OjMwICswODAwLCBIb3UgVGFvIHdyb3RlOgo+IEhpLAo+
-IAo+IE9uIDYvOS8yMDI2IDM6NTkgQU0sIEVkdWFyZCBaaW5nZXJtYW4gd3JvdGU6Cj4gPiBPbiBT
-dW4sIDIwMjYtMDYtMDcgYXQgMTc6NTMgKzAwMDAsIFBhdWwgTW9zZXMgd3JvdGU6Cj4gPiAKPiA+
-IFsuLi5dCj4gPiAKPiA+IFRoZSByZXBybyBpcyBsZWdpdC4KPiA+IEhlcmUgaXMgYSBzb21ld2hh
-dCBtaW5pbWl6ZWQgdmVyc2lvbiBhcyBhIHNlbGZ0ZXN0Ogo+ID4gCj4gPiDCoMKgwqAgZGlmZiAt
-LWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2J0Zi5jIGIvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvYnRmLmMKPiA+IMKgwqDCoCBpbmRl
-eCBhOWRlMzI4YTg2OTcuLjIxMmNhNDQ3MmE4OSAxMDA2NDQKPiA+IMKgwqDCoCAtLS0gYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9idGYuYwo+ID4gwqDCoMKgICsrKyBi
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2J0Zi5jCj4gPiDCoMKgwqAg
-QEAgLTQyNTgsNiArNDI1OCw0NCBAQCBzdGF0aWMgc3RydWN0IGJ0Zl9yYXdfdGVzdCByYXdfdGVz
-dHNbXSA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLm1heF9lbnRyaWVzID0gMSwKPiA+
-IMKgwqDCoMKgIH0sCj4gPiDCoMKgwqAgCj4gPiDCoMKgwqAgK3sKPiA+IMKgwqDCoCArI2RlZmlu
-ZSBOIDB4MTk5OTk5OWFVCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCAuZGVzY3IgPSAicmVwZWF0
-IGZpZWxkcyBvdmVyZmxvdyIsCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCAucmF3X3R5cGVzID0g
-ewo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIGludCAqL8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIFsxXSAqLwo+ID4gwqDCoMKgICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9UWVBFX0lOVF9FTkMoMCwgQlRGX0lOVF9TSUdO
-RUQsIDAsIDMyLCA0KSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAv
-KiBzdHJ1Y3QgdGFyZ2V0IHt9ICovwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIFsyXSAqLwo+ID4gwqDCoMKgICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9UWVBFX0VOQyhOQU1FX1RCRCwgQlRGX0lORk9f
-RU5DKEJURl9LSU5EX1NUUlVDVCwgMCwgMCksIDEpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIC8qIHR5cGVfdGFnICJrcHRyX3VudHJ1c3RlZCIgLT4gdGFyZ2V0ICov
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBbM10gKi8KPiA+IMKgwqDCoCArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfVFlQRV9UQUdfRU5DKE5BTUVfVEJELCAyKSwKPiA+
-IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiB0YXJnZXQgKiAoa3B0cikg
-Ki/CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAvKiBbNF0gKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBCVEZfUFRSX0VOQygzKSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAvKiBzdHJ1Y3Qgb3V0ZXIgeyB0YXJnZXQgKmtwOyBlbGVtIGl0ZW1zW05dOyB9ICov
-wqDCoMKgwqDCoMKgIC8qIFs1XSAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIEJURl9UWVBFX0VOQyhOQU1FX1RCRCwgQlRGX0lORk9fRU5DKEJURl9LSU5EX1NUUlVD
-VCwgMCwgMiksIChOICogOHUgKyA4dSkpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKg
-IC8qIGtwwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNiwgNjQpLMKgwqDCoMKgwqDC
-oMKgIC8qIGl0ZW1zwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAvKiBlbGVtW05dICovwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyogWzZdICovCj4gPiDCoMKg
-wqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQlRGX1RZUEVfQVJSQVlfRU5DKDcsIDEs
-IE4pLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIHN0cnVjdCBl
-bGVtIHsgdGFyZ2V0ICpmMC4uZjk7IH0gKi/CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgLyogWzddICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-QlRGX1RZUEVfRU5DKE5BTUVfVEJELCBCVEZfSU5GT19FTkMoQlRGX0tJTkRfU1RSVUNULCAwLCAx
-MCksIDgpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9NRU1C
-RVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKgIC8qIGYwwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZf
-TUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKgwqDCoMKgwqDCoCAvKiBmMcKgwqDCoMKg
-wqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-QlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKgwqDCoMKgwqDCoMKgwqAgLyogZjLCoMKg
-wqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKgIC8qIGYz
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKgwqDCoMKgwqDCoCAv
-KiBmNMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgQlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKgwqDCoMKgwqDCoMKg
-wqAgLyogZjXCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKg
-wqDCoMKgIC8qIGY2wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKg
-wqDCoMKgwqDCoCAvKiBmN8KgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKg
-wqDCoMKgwqDCoMKgwqAgLyogZjjCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAw
-KSzCoMKgwqDCoMKgwqDCoMKgIC8qIGY5wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDC
-oCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfRU5EX1JBVywKPiA+IMKgwqDCoCAr
-wqDCoMKgwqDCoMKgIH0sCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCBCVEZfU1RSX1NFQygiXDB0
-YXJnZXRcMGtwdHJfdW50cnVzdGVkXDBvdXRlclwwa3BcMGl0ZW1zXDBlbGVtIgo+ID4gwqDCoMKg
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIlwwZjBcMGYxXDBmMlwwZjNc
-MGY0XDBmNVwwZjZcMGY3XDBmOFwwZjkiKSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgIC5idGZf
-bG9hZF9lcnIgPSB0cnVlLAo+ID4gwqDCoMKgICsjdW5kZWYgTgo+ID4gwqDCoMKgICt9LAo+ID4g
-wqDCoMKgICsKPiA+IMKgwqDCoMKgIH07IC8qIHN0cnVjdCBidGZfcmF3X3Rlc3QgcmF3X3Rlc3Rz
-W10gKi8KPiA+IMKgwqDCoCAKPiA+IMKgwqDCoMKgIHN0YXRpYyBjb25zdCBjaGFyICpnZXRfbmV4
-dF9zdHIoY29uc3QgY2hhciAqc3RhcnQsIGNvbnN0IGNoYXIgKmVuZCkKPiA+IAo+ID4gSG93ZXZl
-ciwgYXMgZmFyIGFzIEkgdW5kZXJzdGFuZCB0aGUgcmVwcm8gaGl0cyBhbiBvdmVyZmxvdyBvbmx5
-Cj4gPiBiZWNhdXNlIGBCVEZfVFlQRV9FTkMoTkFNRV9UQkQsIEJURl9JTkZPX0VOQyhCVEZfS0lO
-RF9TVFJVQ1QsIDAsIDEwKSwgOClgCj4gPiBsaWVzIGFib3V0IGBzdHJ1Y3QgZWxlbWAgc2l6ZS4g
-SXQgaXMgc3BlY2lmaWVkIGFzIDgsIHdoaWxlIGluIHJlYWxpdHkgaXQgaXMgODAuCj4gCj4gTm8g
-ZXhhY3RseS4gRXZlcnkgZmllbGQgaW4gdGhlIHN0cnVjdCBlbGVtIGhhcyB0aGUgc2FtZSBvZmZz
-ZXQgKDApLCBzbwo+IHRoZSBzaXplIG9mIHN0cnVjdCBlbGVtIGlzIGNvcnJlY3QsIGJ1dCB0aGUg
-ZmllbGQgZGVmaW5pdGlvbiBvZiBzdHJ1Y3QKPiBlbGVtIGlzIGluY29ycmVjdC4KCkhtLCByaWdo
-dCwgdGhhbmsgeW91LgpPaywgdGhpcyBtZWFucyB0aGF0IHRoZSBmaXggc3VnZ2VzdGVkIGJ5IFBh
-dWwgc2hvdWxkIGJlIGxhbmRlZAphbmQgdGhlcmUgYXJlIG5vIGZ1cnRoZXIgaXNzdWVzIHdpdGgg
-QlRGIHZhbGlkYXRpb24uCihCdXQgaXQgd291bGQgYmUgbmljZSB0byBoYXZlIHNlbGZ0ZXN0IGlu
-Y2x1ZGVkIGluIHRoZSBwYXRjaHNldCkuCgo+ID4gVGhlIHNpemUgb2YgODAgd291bGQgbWFrZSBg
-c3RydWN0IG91dGVyYCB1bnJlcHJlc2VudGFibGUgaW4gQlRGLAo+ID4gYmVjYXVzZSAoTiAqIDgw
-ICsgOCkgZXhjZWVkcyB1MzIgcmFuZ2UsIGFuZCB0aGF0J3Mgd2hhdCBidGZfdHlwZS0+c2l6ZSB1
-c2VzLgo+ID4gR2l2ZW4gdGhhdCBidGZfcmVwZWF0X2ZpZWxkcygpIG9ubHkgdHJhdmVyc2VzIHN0
-cnVjdHMvYXJyYXlzIGJ1dCBub3QgdW5pb25zLAo+ID4gSSBzdXNwZWN0IHRoYXQgb3ZlcmZsb3cg
-d29uJ3QgaGFwcGVuIGluIGBmaWVsZF9jbnQgKiAocmVwZWF0X2NudCArIDEpYAo+ID4gaWYgcHJv
-cGVyIHNpemUgY2hlY2tzIHdlcmUgaW1wbGVtZW50ZWQgaW4gYnRmX3N0cnVjdF9jaGVja19tZXRh
-KCkgLyBidGZfc3RydWN0X3Jlc29sdmUoKS4KPiA+IEV2ZW4gbW9yZSwgSWYgSSBjaGFuZ2UgImtw
-dHJfdW50cnVzdGVkIiB0byAia3B0cl91bnRydXN0ZWQxMSIgdG8gYXZvaWQgZmllbGRzIHBhcnNp
-bmcsCj4gPiB0aGUga2VybmVsIGFjY2VwdHMgdGhlIGJvZ3VzIEJURi4KPiAKPiBidGZfc3RydWN0
-X2NoZWNrX21ldGEgaGFzIGNoZWNrZWQgdGhlIHZhbGlkaXR5IG9mIGZpZWxkIG9mZnNldC4gSG93
-ZXZlcgo+IGl0IHNlZW1zIHRoZSBjaGVja2luZyBpcyBsb29zZToKPiAKPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgLyoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
-ICI+IiBpbnN0ZWFkIG9mICI+PSIgYmVjYXVzZSB0aGUgbGFzdCBtZW1iZXIgY291bGQgYmUKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqICJjaGFyIGFbMF07Igo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGlmIChsYXN0X29mZnNldCA+IG9mZnNldCkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnRmX3ZlcmlmaWVyX2xvZ19tZW1iZXIoZW52LCB0LCBt
-ZW1iZXIsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiSW52YWxpZCBt
-ZW1iZXIKPiBiaXRzX29mZnNldCIpOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FSU5WQUw7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIH0KPiAKPiBGb3Igc3RydWN0IGVsZW0sIGFsbCBmaWVsZHMgaGF2ZSB0aGUgb2Zmc2V0
-IDAsIHNvIHRoZSBvZmZzZXQgY2hlY2tpbmcgaXMKPiBwYXNzZWQuIEZyb20gdGhlIGNvZGUgc25p
-cHBldCBhYm92ZSwgaXQgc2VlbXMgQlRGIHRyaWVzIHRvIHN1cHBvcnQgdGhlCj4gZm9sbG93aW5n
-IHN0cnVjdCBkZWZpbml0aW9uIGJlbG93LCBpcyBpdCBPSyB0byBvbmx5IHN1cHBvcnQgdGhlIGxh
-c3QKPiB6ZXJvLXNpemVkIGZpZWxkIGluIHN0cnVjdCBkZWZpbml0aW9uID8KPiAKPiBzdHJ1Y3Qg
-ZWxlbSB7Cj4gwqDCoMKgIGludCBhOwo+IMKgwqDCoCBjaGFyIGJbMF07Cj4gwqDCoMKgIGludCBj
-Owo+IMKgwqDCoCBjaGFyIGRbMF07Cj4gfQoKSSB0aGluayBDIHN0YW5kYXJkIG9ubHkgYWxsb3dz
-IHplcm8gc2l6ZWQgYXJyYXlzIHRvIGJlIHBsYWNlZCBhdCB0aGUKZW5kIG9mIHRoZSBzdHJ1Y3R1
-cmUgZGVmaW5pdGlvbi4gQnJvYWRlciBxdWVzdGlvbiBpcyBpZiB3ZSB3YW50IEJURgp2YWxpZGF0
-aW9uIHRvIHJlamVjdCBvdmVybGFwcGluZyBmaWVsZHMgb3V0c2lkZSBvZiB1bmlvbnMuCk5vdCBz
-dXJlIGlmIHRoZXJlIGlzIGEgcHJhY3RpY2FsIHJlYXNvbiB0byBkbyBzby4K
+The libarena parallel spmc selftest is nondeterministic by design.
+As a result it depends up to a point on the relative timing between the
+producer and consumer threads. This introduces the possibility for two
+kinds of spurious failures that this patch addresses.
+
+1) Spurious timeouts. The test proceeds in phases, and threads use a
+   common counter as a barrier to avoid proceeding to the next phase
+   until all threads are ready to do so. If a thread takes too long to
+   reach the barrier, the already waiting threads may time out.
+
+   Increase the current timeout. The timeout's value is a balance
+   between the maximum amount of time spent on the test and the
+   possibility of spurious failures. Right now the timeout is too short.
+   Err on the side of caution and significantly increase it to avoid
+   spurious failures.
+
+2) Spurious resize failures. Some selftests require the spmc queue to
+   resize itself. This in turn requires for the producer side to be
+   materially faster than the consumer side so that the queue gets full
+   enough for a resize. However, in the benchmark the spmc queue's producer
+   is outnumbered 3:1. To offset it we add busy waits for consume
+   queues. However, we still see occasional failures due to the queue
+   never resizing.
+
+   Minimize the possibility for this in two ways: First, remove one of
+   the consumers. The 2 consumers still exercise the "race between
+   consumers" scenario. Second, increase the busy wait duration to
+   decrease the rate by which the consumers act on the queue.
+
+   While at it, also replace a stray invalid error value "153" with EINVAL.
+
+Fixes: 42998f819256 ("selftests/bpf: libarena: parallel test harness and spmc parallel selftest")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+
+CHANGELOG
+
+v1 -> v2
+- Scaled TEST_SPMC_SYNC_SPINS down to BPF_MAX_LOOPS to keep it
+  compatible with bpf_for loops (CI)
+
+
+ .../libarena/selftests/test_parallel_spmc.bpf.c    | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+index 981c845e2d15..f08f2a92e194 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_spmc.bpf.c
+@@ -7,7 +7,7 @@
+ #include <libarena/asan.h>
+ #include <libarena/spmc.h>
+ 
+-#define TEST_SPMC_THREADS 4
++#define TEST_SPMC_THREADS 3
+ #define TEST_SPMC_STEALERS (TEST_SPMC_THREADS - 1)
+ 
+ /* 
+@@ -17,7 +17,7 @@
+  * and operations are wait-free we just spin around the quiescence
+  * point instead. If we time out, we just fail the benchmark.
+  */
+-#define TEST_SPMC_SYNC_SPINS (1U << 18)
++#define TEST_SPMC_SYNC_SPINS BPF_MAX_LOOPS
+ 
+ /*
+  * We track all the values we retrieve from the queue
+@@ -61,7 +61,7 @@ static volatile u64 round_steals;
+  * We have multiple stealers and a single owner. We sometimes want the owner
+  * to successfully outproduce the stealers, we add a busy loop in them.
+  */
+-#define TEST_SPMC_WASTE_ROUNDS (1024)
++#define TEST_SPMC_WASTE_ROUNDS (1UL << 12)
+ 
+ /*
+  * The spmc data structure depends on the runtime fully
+@@ -112,10 +112,6 @@ static bool spmc_tests_enabled(void)
+ 	{								\
+ 		return spmc_##prefix##_stealer();					\
+ 	}								\
+-	SEC("syscall") int parallel_test_spmc_##prefix##__3(void)	\
+-	{								\
+-		return spmc_##prefix##_stealer();					\
+-	}
+ 
+ static int spmc_common_init(u64 total)
+ {
+@@ -452,10 +448,10 @@ static int spmc_resize_owner(void)
+ 			resized = true;
+ 	}
+ 
+-	/* Did we get to resize while racing/ */
++	/* Did we get to resize while racing? */
+ 	if (!resized) {
+ 		test_abort = true;
+-		return -153;
++		return -EINVAL;
+ 	}
+ 
+ 	/* 
+-- 
+2.54.0
 
