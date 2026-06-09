@@ -1,170 +1,130 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE23266B72
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F86D28C874
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781011394; cv=none; b=Q41K9CZiiD3MIX6VoKoVwavkLfuoFt+gyDm04tqEaI/JzaUOtLgJhwk90yToPO4+DB9HBiQKMfn4XZlOImEvWIkTC3inmZngbGLO6MiOU/120NXP6Uf5LPpAF4FG/J13PEhTtaayG1ISwHiA+JVCEoP/g97meyyRPeBs8PSguhw=
+	t=1781011475; cv=none; b=lABRQcHiWki4CQFpPnwc17Gq3NqzI+FyvkCMQlGF52TGTWOBHVB8KLPooXo7opjQRwf+i6aGcDEzIpLlMnHEryNdOwI40N1gIxSa/ztzpBt6nb+BZQNVec54Hm031zLuR0QVr4Px8WTNv1lhfuw4rU1VvLoqg5dKFq8LEIijuec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781011394; c=relaxed/simple;
-	bh=aBhiQJaYmOwVyxz82eYRazavqn1zkyHxz3lTj0dRthQ=;
+	s=arc-20240116; t=1781011475; c=relaxed/simple;
+	bh=DBTUHWYYtAJHBUm6xFnBNoXeFgf5VXKZ/gLOxM1bD10=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoeAijtIrzL+12LRnIF0Ppb3FyAeeQDT+UNtKtS5rZP3m3/JpZcp6rH8kjnS4yKK77Cag70i+cjS19cs2/0ZO1CrQLXGjVG2Dy7iiNy/C6AdPhUlB4HH07piFJZo8rRZSXZ8oC3fmGOY5diiqcFrh8G+wnO2DW0tzmtpGt8eNRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nnjOgMVp; arc=none smtp.client-ip=209.85.128.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=a3HUGOiDfHTkKYv9gWV+dguJENsv88X1iocF0PxDiPNJLOKBX7F4ZSVZGPCKhCZOQ1PxrTrxFyGsFlhBQEPyR22ohuWhFZIqIu9EkP6gra8TjliPlDSeAqemWPnC7HmXj8gfYNW6Z7t+ILMIpedWUGaXVf3JEa+ECpiJn5DKhks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QO5tu8mf; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nnjOgMVp"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490af320e2aso60543185e9.2
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 06:23:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QO5tu8mf"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-45eedc94d37so2800369f8f.3
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 06:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781011390; x=1781616190; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/ZV6RsZExqbpNR2Ks/4acYQkYZtNf2DRP83lBEHNlGM=;
-        b=nnjOgMVpfnjmRYdnbDTuwQQYulzjrXqeOV19olJL850kGlwTnVUyPuhdKMfF0m0Uew
-         GrYTYBF9XsMVV99jTqrlrJ+bRSWIqYePSxdF+c4a1IzHZvDxMIyVvwZh4a3i2HdMbKOH
-         qIpal2uGPUwzOpbvcyej1hwPIJlB0ovEUS4oDQFcrPcKQllMGbAxfbpgS+9TqX1a2k49
-         0YEVG2RHi1nwwFbWp65vot6aCyl3Z3DgXzQa47bHgBzKk+dKrr/6na2UXSGTIaV7rJqs
-         Vng7EDf5/HJKFog7WcQqDHBha2DT7RqbLd+oZaco9zlUYRPvdDt37BnoCvYjir/vVA63
-         5xkw==
+        d=gmail.com; s=20251104; t=1781011470; x=1781616270; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RtgZ2moWRCMeSXG0w3yTlyIp2nfaemvwN7OoUhkz6vU=;
+        b=QO5tu8mfVZyLDCglPD8A8jyYAs5ERhnXw17RldOAAuVXvqeXkhbBF3b/HJJfYWEme0
+         NlJ0+0P6J3Zg72AueKzdfU4Sj8u3FcjY3BHt2JeEfnwAMIBIER/N+Rb+rv8AWUMapKHc
+         q+oPjZiG1gwJQLWyZe/K4HnxovSJQXbHYnr2dXvzfVwsTJgsT29mod3sm3/CRAbJuTb2
+         84ag/OyiysrJ0j3QYrsJPPGJ1EmGXRjbjVxmbX2kkuoP4BzcB/3mapJxf3sqIYIDq7m4
+         zyLgE2/0ooGbOup0y1Rn7vXj6oX83CudpqLQBBGEUBrAQacL8m4JHOX0wSms0GBIF0jh
+         u9Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781011390; x=1781616190;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ZV6RsZExqbpNR2Ks/4acYQkYZtNf2DRP83lBEHNlGM=;
-        b=EuQ+3drxo8d3ekFyR/a0hY7s1hHtMie1fnmGLnDn4lhialF9lBcdPztr2/GMOxgKJO
-         sjUSPO9dXRRAsuw8+YCI1Xvt+tqY65tMBbk5FKd1WSUq6oMWFy9roe0pNIoEDi+1LN0B
-         z38EN2gHXOUfptByM9syeSbGSal8JKbBkbKLRREDLwwT4cutWjOWkpEnK7eZWIdeD9BC
-         on3XXXNB5Y90Ot+9CcSXOciJu/1+ZarhghhC2iVKKHVVFAg9li66/jsNxtGMursG1UZ3
-         5AvjE44bgAqtNrA0REQ/6cRct027jKzg7iqheb6nJTItykuQMOOLM+ae9CzPP+gTfwg3
-         06yA==
-X-Gm-Message-State: AOJu0Yy7tcfpQ1+ndZZvff0dvn5JMUjsdxkeYYsJzWpk1TyBo3gIIBFV
-	V/Kho7VGpcpxFaGjcwGmBphaW4ff84UwMgZ3IPE5SXJz9qHk/6DrNTUF
-X-Gm-Gg: Acq92OHP2cjfx2J/wqgiU/Dqu+LbKGWAslBaTT7Yv/UBgpsng/AE8MUIvKeLPzq/txD
-	BnuTheZqmerup6B48tzMAmiMCByo7UIlJKN4r7GYZ1FWAMCvEI/vODZ1UvIcgeM/tOwEbLWh5yk
-	+Y5ymDVnoSEqabiTffFm5hu1EQO/7C/Qa7uRMNB7bWJm04RI4CwJYYbu/qgA8ApaGvpSP1mC8Z/
-	MIvm9OteeRidjdzLRjIeaC4WhV0FN6n49kJacGql7PwtrqVbATxtQNbtRMA5sMeir+I3gPfSVmS
-	kJ77RZ2JOFSL1Qmtz++pKf9rSFe5gEcgO2IeKYOl21hLik2k2Uh7FhJTGfx7hdp3y7f9FjwI+Rt
-	8usTCStR+tXxh6yQj9OGNPsZ9DzJ9OibhrGTnGxiS8nw7oXdgJETm767xLTNkNmeqID//2JMBmy
-	Q5klbcUZqgZUcy9v9cEvXQCu2a30oaoAZDZaOt
-X-Received: by 2002:a05:600c:608e:b0:490:b355:9c8c with SMTP id 5b1f17b1804b1-490c25f3f00mr306947365e9.23.1781011390145;
-        Tue, 09 Jun 2026 06:23:10 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781011470; x=1781616270;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RtgZ2moWRCMeSXG0w3yTlyIp2nfaemvwN7OoUhkz6vU=;
+        b=FPWbymUp12kBJiT6OlW7hIUO/FZXzCseiVWxeRcTZr23yDskUW0OCMoXmJbFFXcVM8
+         0TCGau/5V2QjbTcHo5NTjOv2qEW4apP63JsgO1X7umkD/AYco0Pv244ESgKy3cHprock
+         6nkF2pK6wkpJn5GSVMHRqQuI7mffjL1uzrZwFAtchdmucdVnFfv0btbk0h8BFLN9JBiO
+         neSj2L1zBuIHC9RgUYOGV90jIbfk3goChVeedy97bRagU6JkZbCu5BLpQolpD+L8Vpgz
+         8qX+LAL2IjHe1FnsnPWzvWSGITaUVkgVcO60bMXSF7zGca9ZCVOVLDrXA45kg9qj/XKJ
+         pzxA==
+X-Forwarded-Encrypted: i=1; AFNElJ/h6hm/kQyhzSI4FoXMLV2zhZ77UVTcOxv+P10s7XiJziIW28ew2MM5068As71umihC1QY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzI2632cPz8vna6iDTXFsW8EDzxKjr2HBHiz7kJtdvi7dKkOkgf
+	gL1/0XFr5LGDT8yqtqvscHLBlE22jlbCe+dFy8iJ00oSbVHUb8zyaiOi
+X-Gm-Gg: Acq92OGl8nEVLV+4Qucl+3ve6tPQJXMh2qgWdRWreSduZ3k9GttX89qoEvxEepkRhFZ
+	heF0rGFSC4cxOOaqQdnPBKBbmyRy5YKg3g9XmYHrWtJDizBjK77SqVzlhF+3+/3VvPzRAmsMTZb
+	Due67OdKeNomBlOPvzd/nFCGcbbnAiHHvhjeTQKt+z3cRJAQanC12phsMQtH15rzCcDd2QnBVGx
+	qC9GCUYUifwC2u/LubsRsUMeNdbt9cgkG+D5bZ5tFerPuwG9+JjSHN+cYq/osl0sJI4k8ncCmLi
+	7tylTdV7gnx4qcLMVUe4Dn+d3p8mxm9G6AayVu/J3xvo1oJdyUHGp9UBFjWr8MX10Firham9cMD
+	DOtTTTP6sa6DDhjJgagla/YAM1v9oJ97c6l9yQ2bO2RhjK9r/oA6ITuGzz3EuKZinXkjMfpVf/p
+	QMxzH3uqqo5+cI500G8wIWeUnM4g==
+X-Received: by 2002:a05:6000:4022:b0:44a:b931:f32a with SMTP id ffacd0b85a97d-460566beef3mr4044783f8f.27.1781011470193;
+        Tue, 09 Jun 2026 06:24:30 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcbe3sm57972104f8f.8.2026.06.09.06.23.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35133csm60043351f8f.25.2026.06.09.06.24.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 06:23:09 -0700 (PDT)
+        Tue, 09 Jun 2026 06:24:29 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 9 Jun 2026 15:23:07 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Tue, 9 Jun 2026 15:24:27 +0200
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	songliubraving@fb.com, yhs@fb.com, oleg@redhat.com,
+	mhiramat@kernel.org, martin.lau@kernel.org, yonghong.song@linux.dev,
+	clm@meta.com, ihor.solodrai@linux.dev
 Subject: Re: [PATCH bpf-next 2/6] bpf: Add support to specify uprobe_multi
  target via file descriptor
-Message-ID: <aigTuxypMn07LnIz@krava>
+Message-ID: <aigUC-Jh80ilRk25@krava>
 References: <20260609104244.588321-3-jolsa@kernel.org>
- <20260609105723.311541F00898@smtp.kernel.org>
+ <e651c603d7b7501bbf77c4b516098c3135a8b45d445ed8e3994f6dd76d01f6a8@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260609105723.311541F00898@smtp.kernel.org>
+In-Reply-To: <e651c603d7b7501bbf77c4b516098c3135a8b45d445ed8e3994f6dd76d01f6a8@mail.kernel.org>
 
-On Tue, Jun 09, 2026 at 10:57:22AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] Missing strict zero-validation for the unused `path_fd` field when the `BPF_F_UPROBE_MULTI_PATH_FD` flag is not set.
-> - [Low] Mixing scope-based cleanup (`CLASS()`) with `goto`-based error handling in `bpf_uprobe_multi_link_attach`.
-> --
+On Tue, Jun 09, 2026 at 11:17:11AM +0000, bot+bpf-ci@kernel.org wrote:
+> > Allow uprobe_multi link to identify the target binary by an already
+> > opened file descriptor.
+> >
+> > Adding new BPF_F_UPROBE_MULTI_PATH_FD flag and the path_fd field for
+> > the attr.link_create.uprobe_multi struct.
+> >
+> > When the flag is set, we resolve the target from path_fd, without the
+> > flag, we keep the existing string path behavior.
+> >
+> > I don't see a use case for supporting O_PATH file descriptors, because
+> > we need need to read the binary first to get probes offsets, so I'm
+> > using the CLASS(fd, f), which fails for O_PATH fds.
+> >
+> > Assisted-by: Codex:GPT-5.4
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > 
-> commit f7958ff1ce57c1ab456d3f134881a0081a58b8ed
-> Author: Jiri Olsa <jolsa@kernel.org>
+> This change also fixes a latent bug in bpf_link_show_fdinfo(), changing
+> the exact-equality test to a bitwise test:
 > 
-> bpf: Add support to specify uprobe_multi target via file descriptor
+> 	else if (link->type == BPF_LINK_TYPE_UPROBE_MULTI)
+> 		seq_printf(m, "link_type:\t%s\n", link->flags & BPF_F_UPROBE_MULTI_RETURN ?
+> 			   "uretprobe_multi" : "uprobe_multi");
 > 
-> This commit adds the BPF_F_UPROBE_MULTI_PATH_FD flag to allow uprobe_multi
-> links to specify the target binary using an already opened file descriptor
-> instead of a path string.
+> The original "link->flags == BPF_F_UPROBE_MULTI_RETURN" was harmless
+> while BPF_F_UPROBE_MULTI_RETURN was the only defined uprobe_multi flag.
+> This commit adds a second flag (BPF_F_UPROBE_MULTI_PATH_FD), so the
+> exact "==" comparison would misreport a uretprobe_multi link as
+> "uprobe_multi" whenever both flags are set.
 > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 970ce7bbf99e1..4965006d58ee6 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> [ ... ]
-> > @@ -3240,29 +3241,51 @@ int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> [ ... ]
-> >  	uref_ctr_offsets = u64_to_user_ptr(attr->link_create.uprobe_multi.ref_ctr_offsets);
-> >  	ucookies = u64_to_user_ptr(attr->link_create.uprobe_multi.cookies);
-> > +	upath = u64_to_user_ptr(attr->link_create.uprobe_multi.path);
-> >  
-> > -	err = user_path_at(AT_FDCWD, upath, LOOKUP_FOLLOW, &path);
-> > -	if (err)
-> > -		return err;
-> > +	if (flags & BPF_F_UPROBE_MULTI_PATH_FD) {
-> > +		/*
-> > +		 * When BPF_F_UPROBE_MULTI_PATH_FD is set, the executable is identified
-> > +		 * by path_fd, and upath must be NULL.
-> > +		 */
-> > +		if (upath)
-> > +			return -EINVAL;
-> > +
-> > +		CLASS(fd, f)(attr->link_create.uprobe_multi.path_fd);
+> Should this carry a Fixes: tag pointing at the commit that introduced
+> the fragile comparison?
 > 
-> [Severity: Low]
-> Does this code violate the cleanup subsystem guidelines by mixing scope-based
-> cleanup with goto-based error handling?
-> 
-> The bpf_uprobe_multi_link_attach() function relies heavily on goto labels
-> for error paths (e.g., error_path_put, error_free, error_unregister). The
-> kernel guidelines state that goto-based cleanup and scope-based cleanup
-> helpers (like CLASS) should never be mixed in the same function.
-> 
-> Should this function be fully converted to scope-based cleanup, or should it
-> use explicit fdget()/fdput() without CLASS() instead?
+>   Fixes: 803f0700a3bb ("bpf: Show precise link_type for {uprobe,kprobe}_multi fdinfo")
 
-ah true, I'll unwind the fd retrieval or perhaps move the path retrival
-into separate function, will check
-
-> > +		if (fd_empty(f))
-> > +			return -EBADF;
-> > +		path = fd_file(f)->f_path;
-> > +		path_get(&path);
-> > +	} else {
-> > +		/*
-> > +		 * When BPF_F_UPROBE_MULTI_PATH_FD is not set, the path is resolved
-> > +		 * relative to the cwd (AT_FDCWD) or absolute  using the upath string.
-> > +		 */
-> > +		if (!upath)
-> > +			return -EINVAL;
-> 
-> [Severity: Medium]
-> Should there be strict zero-validation for the unused path_fd field here?
-> 
-> When the BPF_F_UPROBE_MULTI_PATH_FD flag is not set, this branch is taken
-> and attr->link_create.uprobe_multi.path_fd is ignored without being
-> validated as zero.
-> 
-> If userspace passes uninitialized garbage in this field, it won't be
-> rejected. Could this break forward compatibility if path_fd needs to be
-> assigned a new meaning in the future?
-
-right, I'll add the path_fd check in here
+hum, I don't think so, it wasn't really a bug until this change
 
 jirka
 
 > 
-> > +
-> > +		err = user_path_at(AT_FDCWD, upath, LOOKUP_FOLLOW, &path);
-> > +		if (err)
-> > +			return err;
-> > +	}
 > 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260609104244.588321-1-jolsa@kernel.org?part=2
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27201419867
+
