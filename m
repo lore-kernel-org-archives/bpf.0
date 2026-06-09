@@ -1,138 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E37B33B6C4
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97968372B24
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781038284; cv=none; b=gLsyqIXQNBQV98FosHydW0EHvLuhmWTncWioLVm2+90ZchgbWDfkJoI6KpUQ4WI2LwesADTcVamdoFereKnfn8eOygYrOUhqjtQCMvfsin/aoVDqpHwaJiqLWiWgJ3173J/bfUcWrpjRYLFQGHPviRuudb5wnqMdwhsU5DlYbZw=
+	t=1781038703; cv=none; b=WSzdN9Glc7jEfNWkM62YzrWCWSnKdoxiU6m11dD3gFlbydF24QDWy4zUqGv221QB/l6h2ttitlwfJLH3ZabS5Yweu5gjeqmPUYFppiSEiCnBhIiCvJSfx8acdnYIbHxAte7QphWtfOuR32DAx81Zt3OTuRMii9vbp8UykD69WDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781038284; c=relaxed/simple;
-	bh=ZqqOar3K2NP3xPOKyP+HDYf9pHbvxNdM1Q38Vg/gm8c=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oHMPD4ATxL82nUuy7h7SU+1KGMwubEtEVcWEF/jjEifpL/6Y/D5XhrOuHS+YlKMiqzFSGtU2p8CfjdyrK3/QsAq7GcTnCtWQFzsCWgQ3etwaZC4XrRvbIGGkqRGm1bXevQUpF9RVcC54FJlS+hhiPee7FXiHwqnoU6aEp0FoAXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TvCnBFnW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781038703; c=relaxed/simple;
+	bh=hyOFsXdUVhUcL87be7MzZtwg+ol62jQs0ssG8nMwEZ4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iDLrz8JswHga3LaHgCN2k/jcaxtaV7ZR4qUdwAODQzDNJYKtFIXyA0+tugI5o8RyRX6/r2lGEnGZ1aoJwaKaCu5wjp//3/XvTJg1ZCcMMbiJ6fBnrYERo0QLh6UyO5LVxFmDvpg5YI1UdkWUW8GPd1RSk+1IuOWWQMOhgYNByu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iR3GVy+F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TvCnBFnW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BB31F00893;
-	Tue,  9 Jun 2026 20:51:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iR3GVy+F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E11001F00893;
+	Tue,  9 Jun 2026 20:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781038283;
-	bh=o9o4M5P/iW5fwftLFXK3d+C4QdqYKStpo+GxEIAqQZk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TvCnBFnWmF0yT8lG8LSdBcUYZ38z0WpikVQrtmACTJMZS8kODCF0IPUkRL0eKbJFS
-	 QFFSObNXwHwLB15JrfaYSb5cZ+z3jv/fpntEgMSt1kmwmrTM5kxUtLh069LxXOk9Lf
-	 7VuxAQRCUTBaUSJGe+G4cfmFjU9FVIF29EOAt7RulAh79K2A1H36ZkT2i+Kxnml1pb
-	 ruKn4Am5Hx6JL0HzzdlWw4e/y4ZdubveOLJEMNwfye2xPef0PD2cOJi4tzpc3cBOGD
-	 4opquiEdDiHWEPdW0rGC/emFtDbu0nW9ABVsK1eSfa1zhYPToYaf6GtXQUF3POUvmI
-	 bb0/CqW2oSu6A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Exercise kptr map update
- lifetime
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609202548.3571690-5-memxor@gmail.com>
-References: <20260609202548.3571690-5-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 20:51:22 +0000
-Message-Id: <20260609205122.E8BB31F00893@smtp.kernel.org>
+	s=k20260515; t=1781038702;
+	bh=iXmPJhyp3x1BdK0j3PvYgLgVmyHL1/MXW+PSEpzQXkY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=iR3GVy+FqxKnngOFrMVrNeCcfDN33rA24geESIEp1K4yw/Sj+TdWOiluGpPPa9jHp
+	 WX6ZqeWPHEQk9RP63CjFqf0lXK1G8qYEdKdUsApkpWFzMtuBVQDVK0aGWzmSy7tCV+
+	 4cFwavMI6KmtvyMcioxpXilhl+3LtYBEyKKrpp97jN+MBb6BlfYdP1avGHHvu3QsBW
+	 EbwFxl2uIVyl+hD63ctLyYfFhCIgMoWiTBpa65tI6SgoSt2JqKvG2eb0JOxyrBvSpU
+	 LOYV7Ifgimq54g4AcwMla/fzB7lwZwzS15vptG/AoH+SUK92c18u52ebXxXmB8xWyL
+	 Gb3siET0RztZw==
+Content-Type: multipart/mixed; boundary="===============3685913275376362949=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <7a1365f68163df1f81f1f1e367013e6ac89132b2b687d072a8a7a54c6c1026c0@mail.kernel.org>
+In-Reply-To: <20260609202548.3571690-2-memxor@gmail.com>
+References: <20260609202548.3571690-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Reject bpf_obj_drop() from tracing progs
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  9 Jun 2026 20:58:21 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============3685913275376362949==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] The newly added selftests (`test_array_map_update_kptr` and `test_=
-hash_map_update_kptr`) codify a preexisting bug where `bpf_map_update_elem`=
- fails to free kptrs in hash and array maps. The tests assert that the kptr=
- refcount remains elevated (`check_refs(3)`) after the update, incorrectly =
-locking in the broken BTF field lifecycle behavior.
---
-
-commit ca10a096e58e2f06a9a6605b1b8ff02a49d2d192
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-selftests/bpf: Exercise kptr map update lifetime
-
-This commit adds focused map_kptr coverage for BPF-side map updates that
-touch values containing referenced kptrs. The test stashes refcounted objec=
-ts
-in array and hash maps, then updates them from BPF to verify the refcount
-behavior during map teardown.
-
-> diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing=
-/selftests/bpf/progs/map_kptr.c
-> index e708ffbe1f610..3fbefc568e0a6 100644
-> --- a/tools/testing/selftests/bpf/progs/map_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/map_kptr.c
-[ ... ]
-> @@ -500,11 +499,95 @@ int count_ref(void *ctx)
-[ ... ]
-> +SEC("syscall")
-> +int test_array_map_update_kptr(void *ctx)
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 62bba7a4876f..0654d2ffadc1 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_f
+>  	return rec->field_mask & type;
+>  }
+>
+> +static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
 > +{
-> +	struct map_value init =3D {}, *v;
-> +	int key =3D 0, ret;
-> +
-> +	v =3D bpf_map_lookup_elem(&array_map, &key);
-> +	if (!v)
-> +		return 1;
-> +	ret =3D stash_ref_ptr(v);
-> +	if (ret)
-> +		return ret;
-> +	ret =3D check_refs(3);
-> +	if (ret)
-> +		return ret;
-> +	ret =3D bpf_map_update_elem(&array_map, &key, &init, BPF_EXIST);
-> +	if (ret)
-> +		return 4;
-> +	return check_refs(3);
-
-[Severity: High]
-This is a pre-existing issue, but does this test codify a bug where
-bpf_map_update_elem() fails to free kptrs in hash and array maps?
-
-When a map element is overwritten with an empty value, shouldn't the kptr
-reference count drop? According to the BTF field lifecycle guidelines, map
-updates that overwrite existing values with copy_map_value() must call
-bpf_obj_free_fields() to release resources held by the old value.
-
-However, it appears array_map_update_elem() in kernel/bpf/arraymap.c calls
-bpf_obj_cancel_fields():
-
-kernel/bpf/arraymap.c:array_map_update_elem() {
-    ...
-    copy_map_value(map, val, value);
-    bpf_obj_cancel_fields(map, val);
-    ...
-}
-
-And free_htab_elem() in kernel/bpf/hashtab.c calls
-check_and_cancel_fields() before pushing to the freelist:
-
-kernel/bpf/hashtab.c:free_htab_elem() {
-    ...
-    check_and_cancel_fields(htab, l);
-    pcpu_freelist_push(&htab->freelist, &l->fnode);
-    ...
-}
-
-Both of these paths skip kptr cleanup.
-
-By asserting that the refcount remains unchanged at 3 after the update in
-test_array_map_update_kptr() and test_hash_map_update_kptr(), the tests app=
-ear
-to incorrectly lock in the broken BTF field lifecycle behavior where array
-kptrs leak and preallocated hash map kptrs are resurrected when reallocated.
-
+> +	switch (type) {
+> +	case BPF_SPIN_LOCK:
+> +	case BPF_RES_SPIN_LOCK:
+> +	case BPF_TIMER:
+> +	case BPF_WORKQUEUE:
+> +	case BPF_TASK_WORK:
+> +	case BPF_KPTR_UNREF:
+> +	case BPF_REFCOUNT:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
 > +}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609202548.3571=
-690-1-memxor@gmail.com?part=3D4
+Is it safe to include BPF_TIMER and BPF_WORKQUEUE in this NMI-safe
+whitelist? Looking at the cleanup paths, dropping an object with these
+fields calls bpf_timer_cancel_and_free() or bpf_wq_cancel_and_free(),
+which synchronously invoke bpf_prog_put() via
+bpf_async_update_prog_callback():
+
+kernel/bpf/helpers.c:bpf_async_update_prog_callback()
+    bpf_prog_put()
+        __bpf_prog_put()
+            schedule_work()
+
+If this drops the last reference to the BPF program while in NMI context,
+__bpf_prog_put() falls back to schedule_work() since irqs are disabled.
+Since schedule_work() takes a raw spin lock on the workqueue pool, couldn't
+this hard deadlock if the NMI interrupted another thread that was already
+holding the workqueue pool lock?
+
+BPF_TASK_WORK safely defers via irq_work_queue(), but these fields do not
+appear to have the same protection.
+
+This concern was raised by sashiko-bot in v1:
+https://lore.kernel.org/bpf/20260608154008.27E011F00893@smtp.kernel.org/
+
+Would it be safer to exclude BPF_TIMER and BPF_WORKQUEUE from the
+NMI-safe whitelist?
+
+> +
+> +static inline bool btf_record_has_nmi_unsafe_fields(const struct btf_record *rec)
+> +{
+> +	int i;
+> +
+> +	if (IS_ERR_OR_NULL(rec))
+> +		return false;
+> +	for (i = 0; i < rec->cnt; i++) {
+> +		if (!btf_field_is_nmi_safe(rec->fields[i].type))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+
+This isn't a bug, but these helper functions were suggested to be moved
+from the header file into verifier.c since they are only used there:
+https://lore.kernel.org/bpf/6461e40c-d5a9-41a5-aaba-bf063de67d3f@gmail.com/
+
+Is there a reason to keep them in the header?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27234422852
+--===============3685913275376362949==--
