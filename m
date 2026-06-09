@@ -1,98 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2073AF646
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 10:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89651E260C
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 10:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780999366; cv=none; b=VxCpiZtFTb6dRbyApm2W6PQniSgmu9tVwN50bdQ44MxXi6Mk2HOfiU0E0z/aYsgkqeJnikv2O1hR60CBMwC5H8a2/jW8P7cPon0uBf7ZaVidYIhNA8D64gAjN8YdB7KIa4Yu1iZbVuAVt3onhJN9X+K2tMw5W+rJMDtp2eNQL9A=
+	t=1780999525; cv=none; b=bXDFKdFVQeXAYZH8jfSF5zXXUokydX1QnNlklZkOvCQZTJRG7AEcd5OrI4buB3PPmoDot8fyAiNmSAFB3fTQ+VCw1M1c0za94Y1guj1g5cyfHVyGwc1dBDtRhILbHCh/EkrjS98gWbasWMazH6CH27JxgSDp74WnNfBMayJ2akg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780999366; c=relaxed/simple;
-	bh=RwwlXsYWpv5/4HOh1nA1cNBwZh9t5+NRbiiZssh73xQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VqciOd8VVT3DsnM+fQI21YcQj+xOT312Ce+2Uck50avNVTJjVRLZf6SWC3qjAKnx7xTJ8EcGRz0tBg73Zk16kluZWwWthWyadIABONiKFSJchuTkIva2vjihHyWZkVMaHvXHlwuZa4QYEhFj8goqJfUG9dzWR6isxAOoX0JCpIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbiNLtcT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780999525; c=relaxed/simple;
+	bh=jaNioM4Duopm7wQPClnumqpTmanSpEh1XvdORXG/kWM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oUUceA0t7C/pNgFRn/b2/WptDK9CxYlKCQCifdeNiT8Glb1pv5sxVH5jjRAyWfcFWVQLhOEfb6IGI6pWFWVjWlvPn8izeJBP2qXJmiBOtcgimHz4/woE0ABbzfMzri7yqHmZ9+yWHE6j4bjQZ4uQEcTtvjZOBELySLSGfJZ+Mdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyrMsbGD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbiNLtcT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A401F00893;
-	Tue,  9 Jun 2026 10:02:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyrMsbGD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ACE1F00893;
+	Tue,  9 Jun 2026 10:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780999365;
-	bh=Rz6gpNcea764HxcvwpZK0WOyqiiyL6lEUvBfXL+kpkc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GbiNLtcTxc5sL7spcAzMjf5sfSr6K+sE30HxbbOjXWYm0V3tSZCLdeTjKnnrP+bff
-	 mcNFF5Prh92fDMYyB2Nf+wIRozVjf1cX2M9BNiMICeOBZL9s+rWheP7Im42lzPW1tK
-	 /sV9uYDE8hA2OMLXZZXKT9oz8tjwjpkqXadXqYAu/RLngrtwFmpQrq8lWlKSO4VVe/
-	 eITNS1NZDKNuacY2AKzNMoR3+Rjboj0fXSIFrnPob4YPFqctnMDoKm3KqI8hSY75YQ
-	 QquZHjqaC2IQFFB2bcyBkpoOz98FQOFkiD9Ck33Z8lzeqfY75dZlSDFuvRNw8C9d/6
-	 3XXLhEoyXZgEA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Exercise unsafe obj
- drops from tracing progs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609093719.2858096-4-memxor@gmail.com>
-References: <20260609093719.2858096-4-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 10:02:44 +0000
-Message-Id: <20260609100245.28A401F00893@smtp.kernel.org>
+	s=k20260515; t=1780999524;
+	bh=x6X9YhyCGygenY9RGMxpNMYs3nuEa8uBLoHWhXtlx6c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SyrMsbGDRFXM1XMgwOSJiPqx6mypJnJ4DThUHwJVbqcYqh1B17Y7uUE1MqlV2BB9U
+	 3qrS/Z/uI/ANh6OeuaP5DkUIJp+IqctCNAZcrsXoHvrpu1mAcFuGNdl+wWOtEUAdqQ
+	 1fiVhdzH5X5cvwjbrp9vR/Lkjav4mTx8S/v5BA8Q4KcCLKS/3ARljQc8YK9B2GKMpB
+	 y5JkdWZgM/eN05mPeMvnkFXuNErVeXQxl1goD0OAMFcPYkqoWVnt+GzCa4HjY1FNG7
+	 0P0EAgPd1izLenufnisPJ2HVkxwPOPvuTx09xwRQpRCLGb8ymzyvBFlJ9Yy1PTTpan
+	 TtLGOlGNCC0LQ==
+Content-Type: multipart/mixed; boundary="===============2522026566685583619=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <57de2c7627d38482f75a18b79b3556d45225da3eb307343d04ce47cfbe154e33@mail.kernel.org>
+In-Reply-To: <20260609093719.2858096-2-memxor@gmail.com>
+References: <20260609093719.2858096-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/4] bpf: Reject bpf_obj_drop() from tracing progs
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  9 Jun 2026 10:05:23 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The selftest `task_kfunc_obj_drop_nmi_with_kptr` uses the x86-on=
-ly `nmi_handler` tracepoint, breaking the test suite on other architectures.
---
+--===============2522026566685583619==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 1282fb89cc1ac86a478ae0747dc71f01a3bfc729
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-selftests/bpf: Exercise unsafe obj drops from tracing progs
-
-This commit adds task_kfunc failure cases for bpf_obj_drop() on local
-objects with referenced kptr fields. It introduces tests for tracing and
-NMI tracing programs to ensure they are rejected by the verifier.
-
-> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/too=
-ls/testing/selftests/bpf/progs/task_kfunc_failure.c
-> --- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-
-[ ... ]
-
-> +SEC("tp_btf/nmi_handler")
-> +__failure __msg("bpf_obj_drop cannot be used in tracing programs on type=
-s with NMI unsafe fields")
-> +int BPF_PROG(task_kfunc_obj_drop_nmi_with_kptr, void *handler, s64 delta=
-_ns,
-> +	     int handled)
-
-[Severity: Medium]
-Will this break the selftest suite on non-x86 architectures?
-
-The nmi_handler tracepoint is only defined and instantiated on x86
-architectures. On non-x86 architectures like ARM64 or RISC-V, libbpf will
-fail to resolve the BTF ID for this tracepoint, and the BPF program load
-will abort before the verifier is invoked.
-
-Consequently, the test_loader framework will not find the expected verifier
-failure message in the log, causing the test to incorrectly report as faile=
-d.
-Is there an architecture-independent tracepoint that could be used instead,
-or should this test be skipped on non-x86 platforms?
-
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 62bba7a4876f..0654d2ffadc1 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -492,6 +492,35 @@ static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_f
+>  	return rec->field_mask & type;
+>  }
+>
+> +static inline bool btf_field_is_nmi_safe(enum btf_field_type type)
 > +{
-> +	struct __tasks_kfunc_map_value *local;
-> +	struct task_struct *task, *acquired, *old;
+> +	switch (type) {
+> +	case BPF_SPIN_LOCK:
+> +	case BPF_RES_SPIN_LOCK:
+> +	case BPF_TIMER:
+> +	case BPF_WORKQUEUE:
 
-[ ... ]
+Can the BPF_TIMER and BPF_WORKQUEUE cases really be treated as NMI safe
+here?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609093719.2858=
-096-1-memxor@gmail.com?part=3D3
+Dropping an object with one of these fields runs through
+bpf_timer_cancel_and_free() or bpf_wq_cancel_and_free(), which calls
+bpf_prog_put() synchronously via bpf_async_update_prog_callback().
+
+If that drops the last reference to the program in NMI context,
+__bpf_prog_put() falls back to schedule_work() because irqs are disabled:
+
+    schedule_work()
+      -> queue_work_on()
+        -> raw spin lock on the workqueue pool
+
+Can this hard deadlock if the NMI interrupted a thread that was already
+holding that workqueue pool lock?
+
+BPF_TASK_WORK defers its destruction via irq_work_queue() when
+irqs_disabled(), but BPF_TIMER and BPF_WORKQUEUE do not appear to take
+that path, so they do not look NMI safe in the same way.
+
+This was raised as a high-severity concern on v1 of this series by the
+Sashiko AI review:
+
+  https://lore.kernel.org/bpf/20260608154008.27E011F00893@smtp.kernel.org
+
+The v2 respin left btf_field_is_nmi_safe() unchanged, still listing
+BPF_TIMER and BPF_WORKQUEUE, so this may still be unaddressed.
+
+> +	case BPF_TASK_WORK:
+> +	case BPF_KPTR_UNREF:
+> +	case BPF_REFCOUNT:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27197841616
+--===============2522026566685583619==--
