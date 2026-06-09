@@ -1,75 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048982DB7BB;
-	Tue,  9 Jun 2026 14:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935373A254D;
+	Tue,  9 Jun 2026 14:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781015365; cv=none; b=UnmPprZLXHjXdf++YRvYZ4lWzg6OkPsU4q8wqonnb6m/gI8/1wDOpVAtYmUeMQmaNAgDqdXmKBwD8YKUsIC4At7l+WWffEDcmNjkuFXM7BMPzSWOc/faTNagUBDr4y63Sxs61MwQF5wogZ/l4EucI0lJV5wXUrRelSCD3Au6J00=
+	t=1781015722; cv=none; b=uolt6wB+tMqqIXFqKOQgoyB0M9CGIl44bTKUyZeuMAeN4zFv0sRUd5RSdkgxFH0bjyBy4oENUYhwrR+dQm4j0bfX38uNjSkmJOzNvqaXGfGVK/9fSwhxqEOkFMdFMmiYFqKfLi6BTaJK9ebBt+jw6emClAOmwjf0+RKHFnPdL0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781015365; c=relaxed/simple;
-	bh=wRcu3WoLpdEZ7BD0wu3ZmAsFyvGFy/Lcn30HBvVhAIg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i8SureEl5yK/xR/+Iu1aOt98ow8TRzImMAU4FIf8DNmLPhFWfabobm31iAeBlhuUtPtQBaDSkTSMyvjIy6og2iiDP6/fuE0bHm3bS/1tLz5nssM8t9/n89ViRQYeihbKn9CpLcFZ9XL5EU6nizbDVsR4wfiMjGzm/AGwvpLtUhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0sUlJo/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781015722; c=relaxed/simple;
+	bh=pTosJoN0vxt8hJlIP4Ujd6s20gXCNR9h6aVdPOJnF0I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AbGuGBXbq55LMZjJ6R+yP51UJD89BM/HVbCpwhDB6+N4DfgsJ+u9K3sISa5q2BCht16uakxucFcy5ANUQvqOouB8bZnnhE+vY+YgbdSrQEFMASFo1oV3WuvvDbY0ON9WvnXMFA+Wic/s3YcsTH9XYjEQYVaBK1MdhrXzWPYkHSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fShlL7Im; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0sUlJo/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8357D1F00893;
-	Tue,  9 Jun 2026 14:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781015364;
-	bh=FHtJQh32TR2Ep3SS+qJozuZJQQbDjtDSJvrc7SOfY4o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=A0sUlJo/I/MQLviYSKd2K16Ykg0FbSS9EdD9ODNQR1fEnSHri2d47+wFzkuYDEEYQ
-	 TX/2OH+AUTJN+4z/3CPNphf0awbUQYeDYyR4RgRhHCkhgwyaPebqGhlrqfI5GJkSRm
-	 U7QP56uk5JDJcCJ6ndu1mnpoAzwbrxzoRrQ5y/7E+pqSpkBxJ2Kxohkz2NqtPNZgXY
-	 BxaZ4Trcs585SJJieRG0A2fJUhYv3AhXeCWLil1THrhsarAveCTHxMjR0f5dFcqrh7
-	 +VVSIcG/BTUlpchp8b2cm3Jhs9BE289rDrQ89n9ROFNprGl4KGYX+VNzDLGKxciad7
-	 SReDaVWwutwVg==
-Date: Tue, 9 Jun 2026 10:29:22 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Martin KaFai Lau
- <kafai@fb.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Menglong Dong
- <menglong8.dong@gmail.com>
-Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry
- function
-Message-ID: <20260609102922.3c489f76@fedora>
-In-Reply-To: <20260603110554.29590-4-jolsa@kernel.org>
-References: <20260603110554.29590-1-jolsa@kernel.org>
-	<20260603110554.29590-4-jolsa@kernel.org>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fShlL7Im"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=pTosJoN0vxt8hJlIP4Ujd6s20gXCNR9h6aVdPOJnF0I=; b=fShlL7Im0NHgeJ6XPrfofitG2G
+	xLxquEMO1yYsGKOxIuLw1hYNd/aexDJWBAa7RYcdLVvznx7sFRijSpmvq+a3SbZ0egD7rQRO8XCT0
+	sFjeu++6dK6o6FCd2sdg4ZxO97qLT/W4spili35j2dxt3KFfB+HaeM+jDsiPbdzmjjSvkww7J7Nc/
+	HogSFzIoDKQiQQ//ea0rnQyBozlO/wqwm/nHzkFhCh8N3rwNrKFQFNzfcuEM9K6USnmm0k8KEafhA
+	/VaUo1oFYyoRaKJeOm50BIpX1eFDakq3QbOP6HNRhfxLUmCMVJpqMJHktPnFu2AmYKWeVxWB5JJ25
+	FBHoUAFA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wWxXv-0000000FrWA-1E4W;
+	Tue, 09 Jun 2026 14:35:15 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 21CF330025D; Tue, 09 Jun 2026 16:35:15 +0200 (CEST)
+Date: Tue, 9 Jun 2026 16:35:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] rqspinlock: Fix order in raw_res_spin_(un)lock_irq to
+ allow schedule
+Message-ID: <20260609143515.GA49951@noisy.programming.kicks-ass.net>
+References: <20260609094941.56122-1-gmonaco@redhat.com>
+ <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
 
-On Wed,  3 Jun 2026 13:05:27 +0200
-Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Jun 09, 2026 at 01:22:35PM +0200, Arnd Bergmann wrote:
+> On Tue, Jun 9, 2026, at 11:49, Gabriele Monaco wrote:
+> > raw_res_spin_unlock_irqrestore() calls raw_res_spin_unlock() and then
+> > restores interrupts, this means preemption is enabled when interrupts
+> > are still disabled (as part of raw_res_spin_unlock()) so this cannot
+> > trigger an actual preemption.
+> > This is inconsistent with other spinlock implementations
+> > (raw_spin_unlock_irqrestore() and bpf_res_spin_unlock_irqrestore()
+> > itself).
+> >
+> > Adjust the macro to ensure interrupts are enabled before enabling
+> > preemption, allowing to schedule at that point. Make the same
+> > modification in the error path of raw_res_spin_lock_irqsave().
+> >
+> > Fixes: 101acd2e78b1 ("rqspinlock: Add macros for rqspinlock usage")
 
-> Renaming __add_hash_entry to add_ftrace_hash_entry and making it global,
-> it will be used in following changes outside ftrace.c object.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/ftrace.h | 1 +
->  kernel/trace/ftrace.c  | 9 ++++-----
->  2 files changed, 5 insertions(+), 5 deletions(-)
-
-It's getting late in the RC release and I'm guessing this series will
-likely not make the next merge window. The first three patches are
-rather trivial and since the rest of the series depends on them, I'm
-happy to take them and apply them for the next merge window. That way
-you can continue development in the next rotation without needing these
-ftrace patches.
-
-Would that work for you?
-
--- Steve
+Yeah, this is right. spinlocks always get one preempt_disable, in
+addition they might also get irq or bh disable.
