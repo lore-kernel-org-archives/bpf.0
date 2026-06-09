@@ -1,128 +1,138 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA033C062D
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 05:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E34352005;
+	Tue,  9 Jun 2026 05:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780982405; cv=none; b=NX9TGsIf+FbaPUdw3FOOLzHnnwwsi6qq+v9eIsyXaUSrrb/wUZT5oDz1+9XASIHpJOg0xm248QifVDHmnOU4sC/3s2VKgORDBF9nkj4wk6te6hQnMoPpQhuKLUWZJPRwrLFrRuYEy6tZCX8wLg3BYn7lE8o8GKviA5PldUkjM8o=
+	t=1780982903; cv=none; b=kmKKYA7/UMVKnAaQO8EzB4UVbNIdKQhIaMUekYLEU2L+9dVTNbjA9ptqD1kn9ScT8alW5OqNMpWk/kE8LdGwGDFT+IkozlSyVJTPZxtxb8X2BPnBjNrrwdmGVSeohBUaLvCtJWux8TVrGShPnLbn4uVv0f0xKGsQ7CbY9vIWmng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780982405; c=relaxed/simple;
-	bh=idGronfk/CNWgoMTgjyc2YqGwMIt5TpuaKIUvksXZeQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YRjZm8jYYcDY2En1G+zpVv7l81nKaj57tAkym4viON/h/1imie1YajMUPomQI8acbU8SEk8AImDSwoyMQDqOzkdSKjF1OAWnrBQCT8wLYRG3Ix62j84paNGB5X/IIBY7Agrrncan9ED1cDguZ8WgMxruflmCrn4EwYd7lxvGEzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k+jlu7oE; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780982903; c=relaxed/simple;
+	bh=miGvQ7OcNkP1xM07xmH/WdSP/NOx1KgDd0KuKha1J0M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=L7iRV/wrWUjmyAbcCB8vT3wT5G5L22oKANzLZbTfBVMVSNVweAIWzWS+WFTwMqSOiy4483KhvXTx9wS+tMS2YjA3cpBMVkYyi54TJSeo5hmRXj9irCtUYTQdsjnXVFcAUKW5PnM+8k0P6e7lSXGJ+6NDgLiE3DyB2B7N6Qtirvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iz8/VuQ/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k+jlu7oE"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780982390;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ClAMcshP9ole+jZsJ6EjKcYMFHKoHLwcztBI66MgTZo=;
-	b=k+jlu7oEVRMPaM5cZ0DElHGQr26MJ5LHN0b3FzhQmloM/0Qot3EJAJj0Fvb1geyVU9Na+S
-	R739AVvmFqxlSXDfecnwF9G+611PlKBgQbh7b9dt4Mfkl30r2cg/pjnr8RF6B7ouVv/MN4
-	d9IQAY6Nmoh2745sJ4Y8fioopbNvITU=
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Subject: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Date: Tue, 09 Jun 2026 05:19:25 +0000
-Message-Id: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iz8/VuQ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977BB1F00893;
+	Tue,  9 Jun 2026 05:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780982901;
+	bh=czVjotyfZexn9adB3RFUFnF4NhcdTAcg3FtXwJl12t0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iz8/VuQ/PzArOPT5oN2M4U0JlU7ovkP9Vg1qBg16gzc+gadrIH9C9W0EZs4Fr0INI
+	 bzM84fwWUFRu+nP4X4DBlQTqImldlMfz/SMWzpGiFMmO/9rxGl/WNr3JCWS9c06Cf+
+	 PVmjM17jntGSxa0T0wu2H6dI4PD3q02Dviu4VM6iZLz68RTq6+Hwc3COJPwvHB7Ewr
+	 6+87RrqlHvV3uAnXctXhRobro8Iu4sxV+qe2cHfHp9BkJOl2hr91oLfsgQUjtf3nIH
+	 AtOXqPjxAyHKR++DbxtTgy7nCD06EMsKa5U8EUnHQH/qccTuGKQZ2C1UgBGjo2RsEm
+	 gS+dPbES7rRTA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 5/7] perf test: Enhance annotate test coverage and
+ isolate config
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ian Rogers" <irogers@google.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260609051759.405027-6-irogers@google.com>
+References: <20260609051759.405027-6-irogers@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 09 Jun 2026 05:28:21 +0000
+Message-Id: <20260609052821.977BB1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAF2iJ2oC/yWM0Q6CMAxFf4X02cYxlSX+ivGhjAI1MEw7jQnh3
- x36eG7uOSsYq7DBtVpB+S0mSypQHyqII6WBUbrC4J1vXOMCks7NGfusFBk7UY4ZI02TYX3x/uS
- 4Dy4EKP5TuZfPr327/9le7aMIe3B/tGSMrVKK4z4tKoOk40yWWWHbvkKjaSSdAAAA
-X-Change-ID: 20260607-arm64-ftrace-direct-calls-152230ef7077
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- bpf@vger.kernel.org, Florent Revest <revest@chromium.org>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huawei.com>, 
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 
-On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-would change the offset of the pre-function type hash (see
-baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-and the compiler support needed to reconcile the two does not exist
-yet.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Premature script abort and unreachable error handling logic due =
+to the global `set -e` shell option in `test_disassembler`.
+- [Low] The cleanup function unnecessarily attempts to delete temporary con=
+figuration files that the script never creates.
+--
 
-The result is that a CONFIG_CFI=y arm64 kernel has no
-ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
-and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
-programs are all unavailable. Deployments that want both kCFI
-hardening and BPF-based security monitoring currently have to give
-one of them up. systemd's bpf-restrict-fs feature hits this today:
-https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
+commit 4dda72bcf9505cc21e386908e19f007d3ab5a6ec
+Author: Ian Rogers <irogers@google.com>
 
-CALL_OPS is an optimization for direct calls, not a dependency.
-In-BL-range trampolines are reached by a direct branch without
-consulting the ops pointer, and out-of-range trampolines already
-fall back to ftrace_caller, where the DIRECT_CALLS machinery
-(call_direct_funcs() storing the trampoline in ftrace_regs, the
-ftrace_caller tail-call) is gated on DIRECT_CALLS alone. s390 and
-loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this way,
-without having CALL_OPS at all.
+perf test: Enhance annotate test coverage and isolate config
+   =20
+This commit updates the annotate.sh shell test to cover different disassemb=
+ler
+backends utilizing the new command-line option. It also attempts to isolate
+the test script from host environment pollution by exporting
+PERF_CONFIG=3D/dev/null at the start of the script.
 
-Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
-widening its #ifdef and using the existing ftrace_rec_update_ops()
-wrapper (no functional change for current configurations). Patch 2
-drops the CALL_OPS requirement from the DIRECT_CALLS select.
+> diff --git a/tools/perf/tests/shell/annotate.sh b/tools/perf/tests/shell/=
+annotate.sh
+> index 689de58e92384..d3bafa7e3db55 100755
+> --- a/tools/perf/tests/shell/annotate.sh
+> +++ b/tools/perf/tests/shell/annotate.sh
 
-Configurations that keep CALL_OPS (clang !CFI, and GCC without
-CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
-clang build, every object file is byte-identical before and after
-the series except ftrace.o itself, and its disassembly is identical.
-CFI builds (and GCC -Os builds) gain working direct calls, with
-out-of-range attachments taking the ftrace_caller dispatch path
-instead of the per-callsite fast path.
+[ ... ]
 
-We tested on a 6.18.y-based kernel and on this base with clang
-kCFI builds (CONFIG_CFI=y, enforcing) under qemu (TCG, and KVM on an
-arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
-and BPF LSM programs load, attach and execute; the ftrace-direct
-sample modules (including both modify samples, exercising
-ftrace_modify_call()) run cleanly; no CFI violations observed. The
-fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
-modify_return, tracing_struct, lsm and trampoline_count selftests and
-the ftrace direct-call selftests (test.d/direct) pass on the new
-configuration with results identical to a CALL_OPS kernel built from
-the same tree, and a broader test_progs sweep showed no differences
-attributable to this series. Without the series, all of the above
-fail at attach time with -ENOTSUPP.
+> @@ -23,6 +25,7 @@ disasm_regex=3D"[0-9]*\.[0-9]* *: *\w*: *\w*"
+>  cleanup() {
+>    rm -rf "${perfdata}" "${perfout}"
+>    rm -rf "${perfdata}".old
+> +  rm -f /tmp/__perf_test.config.*
+> =20
+>    trap - EXIT TERM INT
+>  }
 
-riscv has the same gap (its DIRECT_CALLS select also requires
-CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
-acceptable for arm64 we can follow up there.
+[Severity: Low]
+Is this cleanup necessary?=20
 
----
-Jose Fernandez (Anthropic) (2):
-      arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OPS
-      arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
+Since PERF_CONFIG is exported to /dev/null at the start of the script, it
+doesn't appear that any temporary configuration files matching this pattern
+are ever created by this test.
 
- arch/arm64/Kconfig         | 2 +-
- arch/arm64/kernel/ftrace.c | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
----
-base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
-change-id: 20260607-arm64-ftrace-direct-calls-152230ef7077
+[ ... ]
 
-Best regards,
---  
-Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+> @@ -106,8 +109,61 @@ test_basic() {
+> +test_disassembler() {
+> +  disassembler=3D$1
+> +  feature=3D$2
 
+[ ... ]
+
+> +  perf annotate --no-demangle -i "${perfdata}" --stdio --percent-limit 1=
+0 --disassembler "${disassembler}" 2> /dev/null > "${perfout}"
+> +  ret=3D$?
+> +
+> +  if [ "x${ret}" !=3D "x0" ]
+> +  then
+> +    echo "annotate with ${disassembler} [Failed: perf annotate error]"
+> +    err=3D1
+> +    return 1
+> +  fi
+
+[Severity: Medium]
+Because this script operates with set -e globally, will a failure of perf
+annotate immediately abort the script?=20
+
+If the command fails, it seems the shell would terminate before reaching the
+ret=3D$? assignment, making the explicit error handling and logging dead co=
+de.
+
+> +
+> +  # check if it has the target symbol
+> +  if ! grep -q "${testsym}" "${perfout}"
+> +  then
+> +    echo "annotate with ${disassembler} [Failed: missing target symbol]"
+> +    err=3D1
+> +    return 1
+> +  fi
+
+[Severity: Medium]
+Similarly, since the test_disassembler function is called sequentially
+without protection, will returning 1 here trigger a set -e abort at the call
+site?
+
+This might abruptly halt the entire test suite and prevent the remaining
+disassembler backends from running, rather than continuing to the next test
+as the err=3D1 assignment suggests.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609051759.4050=
+27-1-irogers@google.com?part=3D5
