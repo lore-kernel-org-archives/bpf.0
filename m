@@ -1,161 +1,114 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B0735C1AE
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 14:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C499533F5A0;
+	Tue,  9 Jun 2026 14:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016662; cv=none; b=hj3fFHrpVtG/L+8LP9URQq6dNtp18y36xA7VwtdLZDlHikiLgabU7dUCeOwthxlPkEc4qqED9FKAaxTUF7Kq2+7qKhXO/eWBpFRGNF5BT4l7AlVQCDK9DAUwLGGEnBFAJ5DODL+wRrZXbH72V9EmkUd+rTMRHkxWUudNE/LfUBw=
+	t=1781016959; cv=none; b=jlYbwW3lDvd57Tr2+H9U8rbrDpNuug17Z6mHm3/CeAlS3ofI6VPNHZugYUoYVVn2rUq3Gey4c/D2PM3QhIlcWA+mZtLzZLaxqLCfJ+rQAPvrLVydg5TlFXlHqv+E3FRmQGUBWVhiK6AqsBjIRS0eARpWObrAW6QxJsnSWokeIgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781016662; c=relaxed/simple;
-	bh=gxPRu6nbXG6vnDGagaNFiPthkbWpRHQdXXkxtNNL2Ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fs/zq+D+/uvLi1J7AsASry1qHuut3cfwhUtyiK4whDpgjjx+jAhD6T3js533fu/y9Kv367xZNhrVvLIwMYm+tx6kuuF8oY6HBA4QWZgtEYvS7MGUxbojEjGOgulBroQx0OX7fszxPdWjbO2z2o0WqUWVa1A3LXskdrocLUO0cf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=QHI3la7a; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1781016959; c=relaxed/simple;
+	bh=OkWYuxTB9G6Mjp2u4ScYGrLXonSUh1c0jfaAzDcMuIQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BHNDzMU5Yte5Ce/C/Sy2/1d03MLJFaDsRQpJSVfJxTf5Nlz5AuA7B5O78+uMztkeEhuIE6rBJxpogZpNp0eYz5Py54pNtQuVMQXdsQz6MuhhtirInSuSIrElDiF8g4Tu8Qj5uGvIjgTmwr3pBfZ3F6fmkx7tuV/HqcD1WzcoJJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=VCaYB++S; arc=none smtp.client-ip=52.175.55.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="QHI3la7a"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c8585ecdd71so2012128a12.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 07:50:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="VCaYB++S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1781016659; x=1781621459; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CX1RLepI6BxsG1iHPv+ylDoNwQ0QIiidp1+2cKX8sjE=;
-        b=QHI3la7aq7We/mUYCxIFPmB6lw/If0nWNbQXczWFkyvpLWJuxxb8aqCdbq1dInyBrV
-         XlWISMKWfDPdVdkHMHq8xXDQdxiT5SUM6/WFNvR7IqI50kvVaZJ/KJbx8WvreuFlI+fd
-         4yCSmg2Y283FUI/fE6DP9hpvgrFYKH2erqm8FSbK8XtQ/6fYRfOak0JXwbc8WH1GF1B5
-         d4BBStBetC10jA2zHyiRyiiFVWlpz/Z/k893Ps+NRtg2fG/pT46Y7kAgRrRlaky5Pfhd
-         nHIoLR58Okv0vww+UVaOPsnwm0sY27eMyyKUtR5uIywLO/GRwF+7ArgrvIKvIQtYnFx+
-         8P3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781016659; x=1781621459;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CX1RLepI6BxsG1iHPv+ylDoNwQ0QIiidp1+2cKX8sjE=;
-        b=aoi2f6lfXrBIuwYpwLJFlu963xKNU3ecrZyjekcixSKRydKlcGxEmHuKXvyI3bLMap
-         uyyHcnSYwAi42wWiLz4GW5FERkHelt5rs4/CqBo65T/N2nP1xwKCIlpvS4L+7qa3w2g3
-         SaBC83LBVh57/XKknJqw3cpgRZEadOOJ9Owp+YUvFArxLvUvT9H6oLYkpdm9wE6UjQzS
-         t+hT5RBWkEt0PZYFckKU4LWftHsjFn93Vgnl8D/Iz7tj4lNhpo62JBXZcRWuy1Iimnbq
-         tvqOf4FAnCliC2CvOxr4kxUK93Z2sBXNx+E7RdUjPkIf8RrEhGkzWOu56CT8ERsRoaXP
-         Bu0g==
-X-Forwarded-Encrypted: i=1; AFNElJ/VwsI6nxTJrfGvfP28eP6UqtR0Z5jIYGprpKCr0StanqLB+hnasDaq0r4tjcJ2LIRoYcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNcFuiRePmw0eL8SB7A3rhXF0+6Q6UrKubE8RM0uvonfOMybQL
-	La0z2XZOc7XpAmJXSaCqonbQp9X1NYgj5BWErItFi5bboFcjbq9MR34QbAKnD/cL5aI=
-X-Gm-Gg: Acq92OFs5swd6AruoCLNaof7DNfEMtFlq1usqoPliz0yUKx8aB+OqY89WzT1ATntVus
-	X6WZb9LwSTZ3oTgpOC1sby5Z/2MTV6jMbzyrXiOZp3wLiUSRDxFlWDp7UIKLkYcgdF90Klz9GMM
-	ZQy6DEBeE9MbZForwjaXz7vbzAXBRf9vOWhD9qwlmESQP1TQr2CSzNxDkx3yTguQV7PyBt8xIRA
-	36+B3sQ3ESwQ17nDoCbpOr/iJld1yfG+XpQO5IUXg4Y1TiGXvkBt/kkrCjFiY2hlsKy76fuMCfX
-	XfMDpUWgFsCi2juIccY3UH3bFZg8t+H7gAD2CjKJMRn+oqjvD1SG3yOoudpRuRACnDkwGAppoJ5
-	yW8TxYV7HlLnoj1K/xylgONEKQ6Jp5wYnmQ6Xb2jvBSBYdKsw+BAAtLImgoLRR3+9Y50sbnfyyC
-	9knOcw/HXcCrSZ6A==
-X-Received: by 2002:a05:6a00:bd04:b0:82f:2226:5aeb with SMTP id d2e1a72fcca58-842b0fa16a6mr20948292b3a.20.1781016659235;
-        Tue, 09 Jun 2026 07:50:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:f::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828821d0sm21446834b3a.28.2026.06.09.07.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 07:50:58 -0700 (PDT)
-Date: Tue, 9 Jun 2026 07:50:57 -0700
-From: Joe Damato <joe@dama.to>
-To: Michael Chan <michael.chan@broadcom.com>
-Cc: netdev@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] bnxt: fix head underflow on XDP head-grow
-Message-ID: <aigoUdgW/icfFwvh@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260608203129.920104-1-joe@dama.to>
- <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=jL/9+s3Pr094UNG1PalCQW0wDlNELr8
+	stMh7twBcJT0=; b=VCaYB++SpACJv2SmAtJj0R+ZxEmLEa8H12uOzOcyPHpGaQU
+	2ekjwO6fuvP8jkb+iGFTJ4OC825NQXSCNCrVZzf4V5SE6DNEutTWqfP9u8XQhNqc
+	Yx4zPWHAfFpkp2QXgXm+hsO0Ndtc/r2Wrc7aOr1PW7JyFkchBS6CAvWIYuMo=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web5 (Coremail) with SMTP id zAQGZQBXEMBqKShqQodBAg--.40025S3;
+	Tue, 09 Jun 2026 22:55:39 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Date: Tue, 09 Jun 2026 22:55:18 +0800
+Subject: [PATCH bpf-next 1/2] bpf: Reject scalar addition from untrusted
+ memory
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+References: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016941; l=1303;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=OkWYuxTB9G6Mjp2u4ScYGrLXonSUh1c0jfaAzDcMuIQ=;
+ b=IKboBUhVYFvvszz9aYxo8sG+f5c7yqxBFIE8SsPan0HyMh9ajvSmk+kfztjbDMcHkzWV29kbG
+ zaswRMCqsZYCIv9f6Qb1xwvtZz9epBtezwkbNK0R0aGBVVRF2PVcpSR
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:zAQGZQBXEMBqKShqQodBAg--.40025S3
+X-Coremail-Antispam: 1UD129KBjvJXoWrZryxGw4rtFyrGr4UKw4kJFb_yoW8JrWkpr
+	4kWr9Fqr4DAFW7uasrZF4jvFyYga1rtw4rCa15A34xt3WDJFy0qF47Ka47XrZ0yF40va18
+	tFyYvayj9ay7AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACdTQADsc
 
-On Mon, Jun 08, 2026 at 09:22:07PM -0700, Michael Chan wrote:
-> On Mon, Jun 8, 2026 at 1:31 PM Joe Damato <joe@dama.to> wrote:
-> >
-> > The xdp.py test test_xdp_native_adjst_head_grow_data crashes when run on
-> > a bnxt machine (and also crashes in NIPA).
-> >
-> > It seems that the bug is an underflow in bnxt_rx_multi_page_skb, which
-> > builds the skb head:
-> >
-> >   napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
-> >
-> > The problem with this expression is that in page mode rx_offset is:
-> >
-> >   bp->rx_offset = NET_IP_ALIGN + XDP_PACKET_HEADROOM;
-> >
-> > Which evaluates (at least on x86_64) to 258.
-> >
-> > The test test_xdp_native_adjst_head_grow_data tests a case where the
-> > head is adjusted by -256.
-> >
-> > When this test runs, data_ptr is shifted to frag_start + 2 (where
-> > frag_start = page_address(page) + offset).
-> >
-> > Then, bnxt_rx_multi_page_skb is invoked and the napi_build_skb
-> > expression subtracts 258, landing at an address before frag_start. This
-> > could be either the previous fragment or the previous physical page when
-> > the frag_offset is < 256 (e.g. if the fragment started at offset 0).
-> >
-> > When the skb is freed, the page pool fragment reference is dropped on
-> > either the wrong page or the wrong frag of the right page. In either
-> > case, the corrupted reference count can lead to the page being
-> > prematurely recycled while still in use. Once (incorrectly) recycled, it
-> > can be handed out again and on driver teardown this would result in a
-> > double free.
-> >
-> > The commit under fixes updated this code to handle the case where the
-> > native page size is >= 64k, but it unintentionally broke the head grow
-> > case.
-> >
-> > To fix this, we need to do a bit of math to recover the offset if this
-> > is a page fragment since it is not passed into rx_skb_func
-> > (bnxt_rx_multi_page_skb, in this case).
-> 
-> I wonder if we should add an offset field to struct bnxt_sw_rx_bd to
-> simplify things for page mode.  Struct bnxt_sw_rx_agg_bd has the
-> offset field for a similar purpose.  Thanks.
+scalar += rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with the
+pointer as the source register. The untrusted PTR_TO_MEM case returns there
+without updating the scalar destination, leaving stale verifier state.
 
-I don't mind doing that, but I wonder if that's better material for net-next?
+Reject that addition before the early return. Pointer += scalar remains
+handled by the existing untrusted-memory rule.
 
-In other words, we get the minimal fix in (this patch?) and then do the
-cleanup and struct tweaking as a follow-up in net-next?
+Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+ kernel/bpf/verifier.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I could definitely be wrong; I had just assumed patches for net were supposed
-to be as minimal as possible.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c8d980fdd709..c6b350f9585a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14823,6 +14823,14 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 				 * This is legal, but we have to reverse our
+ 				 * src/dest handling in computing the range
+ 				 */
++				if (opcode == BPF_ADD &&
++				    base_type(src_reg->type) == PTR_TO_MEM &&
++				    (src_reg->type & PTR_UNTRUSTED)) {
++					verbose(env, "R%d tried to add from %s to scalar\n",
++						insn->dst_reg,
++						reg_type_str(env, src_reg->type));
++					return -EACCES;
++				}
+ 				err = mark_chain_precision(env, insn->dst_reg);
+ 				if (err)
+ 					return err;
+
+-- 
+2.34.1
+
