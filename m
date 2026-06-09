@@ -1,119 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913E240F8DD;
-	Tue,  9 Jun 2026 13:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01E43839BA
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781012558; cv=none; b=IdSUGUgmb+Zn+O7kXhqDOoyasMNavmx4chvmMITD6HDE4BH1j2LKkBxYBS5QkGqPtlNqxX0E9yv+u9AjbUudK7y2dY2xsrqfbg0wjOyPYEQ7MmhKJkVCIH9dRZXCbFg9qznKoDYNjxCXlTh/oDoWkQ1Fpp8SZNtuwAeWkPcXqRw=
+	t=1781013314; cv=none; b=gerwKJQtoCuDkhZSfmrZxF5mp7NjcZMibzrKuOpobSAdyrW4NH4OS+zbWCvuus2nqVGBXdr0GfYWWO7JNY8nQnp0SjzLo0mVb5XcpzrY7MxaO+yOILdhiHh0cbKw13q697tmBuZYdeoQkx+ZrM6l4m+X9sM/4aq5mzuR6lSmvWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781012558; c=relaxed/simple;
-	bh=Y1wUWHBKm3/Zs/CE7pVm2ZqFO23AzDHIRLAyKzRX6lM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sl0CmGpy+U/cXYHETQUqejZj27jN+DMSDcRs0wEMqNrxRu2ZXqNe7dQv0nsOx13j3TgOQbvLgeoFvajs9i2kwlc7gt6Pgo2a/LPGjPzAgGw3Cxz39iXGQxiGodNgu8Ygpps+cSmLXasE1b3O/sb/o4It8MCy76lLWc7UsqDTFBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKqQE5Wg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781013314; c=relaxed/simple;
+	bh=7B0VErhoO4IBLdB2pAQxOtd59aX4STChOKYtOvn3Bos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QF7CPJEM88ucdaRSm8slPo8AGLNs8JVHMUImT4kqAPQx87VDuuHH2AVq/4IYEPxDVVS6Xfw5UlDlQtaoN9F77B8EOf3YeZiKpiPKula8lR910dbBubgJ4pv9+0ktR+cGzitk19wSyPBSVw2brmQURHddybiwGQnUhHXaeJnFB1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=htAaPuM4; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKqQE5Wg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A37E1F00893;
-	Tue,  9 Jun 2026 13:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781012557;
-	bh=NquCjEZvusEGIuHGHHSR69tFVmrlWzkYk7LEGsWixW4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mKqQE5WgOFpvZ44wPQowGLeJ/srCSqIn4C48bIkEDGSPG9RfGJAATFl4ck0aUtglK
-	 Q/SEIzSzlE04Z6D2GXPfkrQVIzd54Cx91ETFYAQoj8QYHl5RhjO2HvEAns9S777ZKn
-	 TYbJuuXVZs2p1Lw4vmkxmaHfAzugUt6sJpWgrfMJaYffBK4EtuvBqT+lv9c4q9cTYM
-	 I+X9z0LAN9Q1xAcUzNQmXbX3kC5FAGfd7QCswrFECTz5znLWw0TFPrqyFRWhf+j0ZE
-	 vAlT3XqRw9hqXFV7qq6I92Sqi01ma2iWP860uEUm0oa7oOAUB5wCV3AAtcYrhbU07I
-	 XuaiCKIYLNcbA==
-Content-Type: multipart/mixed; boundary="===============7615833700415675074=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="htAaPuM4"
+Message-ID: <f0468cb2-1b52-4216-9592-ceb204f6ea41@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781013310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WBshCEsRUNVy8WU5f/Zn3mDRm2/wce9vXr1J5RuHeR4=;
+	b=htAaPuM4fnOFbMYZaI1pGxilzz4ejjV1WNh/zLiXjozIaHA7pqxaYOrEVTUAvTsDuKisbl
+	YHSQsCs6VThLtTH3fgNdDtV0MZpILgQvNTaN150sa1mexygstjuzMdA3Q5zPIaIAc6EOge
+	5NWO7RzaD7l1+TdJxBm7fV77NN3rSGk=
+Date: Tue, 9 Jun 2026 21:54:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <30794e5dc88b1aabb86bd03cccd8e29d3c7f3fd9d98f88f2a7656b9a481d23b5@mail.kernel.org>
-In-Reply-To: <20260609131100.3097225-1-chenyuan_fl@163.com>
-References: <20260609131100.3097225-1-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,andrii.nakryiko@gmail.com
-Cc: andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,chenyuan@kylinos.cn,chenyuan_fl@163.com,daniel@iogearbox.net,eddyz87@gmail.com,linux-kselftest@vger.kernel.org,mykyta.yatsenko5@gmail.com,shuah@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  9 Jun 2026 13:42:36 +0000 (UTC)
+Subject: Re: [PATCH bpf v8 1/2] net: Validate protocol in skb_steal_sock() for
+ BPF-assigned sockets
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Joe Stringer <joe@wand.net.nz>, Network Development
+ <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260608125846.157004-1-jiayuan.chen@linux.dev>
+ <20260608125846.157004-2-jiayuan.chen@linux.dev>
+ <CAAVpQUDZoEVEX1kXok-29dzVHk=ZK_2MkZyZY8kRHCJCfAWVFg@mail.gmail.com>
+ <DJ3XPJA746S5.NYKZWY1HBH8O@gmail.com>
+ <CAAVpQUATP7S7OEZw4P_7fp5zmQO-T5jByxAfp0+YsjRENeWscg@mail.gmail.com>
+ <CAADnVQKa2Z2HKKZMhyD1HrurQ4LTcCS0Mm0YPxtisGKwVfcxmg@mail.gmail.com>
+ <CAAVpQUCJH3iknHSfNwMqvHVc_V09zNDK-YbXbqa-=K159PTqiw@mail.gmail.com>
+ <DJ40JYME18U1.3RA3TUXB3MH3M@gmail.com>
+ <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CAAVpQUC1Ot9vr09gNoe+vxgLoqU8Wwn2DV+CQZYYpAJUATJiWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============7615833700415675074==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> commit 234ebb868e2e11460c8be69f6726ec05ff912183
-> Author: Yuan Chen <chenyuan@kylinos.cn>
-> Date:   Tue Jun 9 21:11:00 2026 +0800
+On 6/9/26 6:34 AM, Kuniyuki Iwashima wrote:
+> On Mon, Jun 8, 2026 at 3:16 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>> On Mon Jun 8, 2026 at 2:35 PM PDT, Kuniyuki Iwashima wrote:
+>>>> btw is earlier sashiko TOCTOU concern real?
+>>> Yes, the selftest in patch 2 should reproduce null-ptr-deref.
+>>> (I tested one in a prior version)
+>>>
+>>>
+>>>> iph->protocol = IPPROTO_TCP;
+>>>> bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+>>>> iph->protocol = IPPROTO_UDP;
+>>>>
+>>>> as far as I can tell past bpf_sk_assign_tcp_reqsk()
+>>>> the networking stack only looks at skb->protocol,
+>>>> so modifying iph->protocol will only mess up
+>>>> things on the wire (if this packet goes out).
+>>> ip_rcv_finish_core() uses iph->protocol for early demux
+>>> and ip_local_deliver_finish() also uses it for demux.
+>> ok. Another idea... we can keep the checks on bpf side and
+>> teach the verifier to invalidate packet pointers at bpf_sk_assign_tcp_reqsk()
+>> and introduce new concept of "readonly skb".
+>> So after invalidation the reloaded sbk->data will be read only.
+> Yes, this is exactly what I had in mind in the other thread :)
 >
->     libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+> ---8<---
+> On top of L4 validation in bpf_sk_assign() and bpf_sk_assign_tcp_reqsk(),
+> can't we mark such an skb immutable after the helpers and catch
+> subsequent writes to skb->data on the verifier ?
+> ---8<---
 >
->     bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
->     TRACEPOINT programs to verify the BPF environment works.  When a
->     BPF token is in use with restricted program type permissions, these
->     probe loads may fail because the token does not allow the specific
->     program types, even though BPF loading is perfectly functional.
 >
->     Fix by skipping the probe when a token FD is present: BPF token
->     creation itself proves the kernel has a working BPF subsystem.
->     Real BPF issues will be caught during actual program and map loading.
->
->     Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-
-This looks like a fix for a regression introduced when token_fd was wired
-into feature probing logic. The CI bot suggested in the v2 review that this
-should include:
-
-  Fixes: f3dcee938f48 ("libbpf: Wire up token_fd into feature probing logic")
-
-The commit f3dcee938f48 added token_fd support to bpf_object__probe_loading(),
-which made the trivial SOCKET_FILTER and TRACEPOINT probe loads subject to the
-token's restricted program-type permissions. This can cause the probes to fail
-even when BPF loading is perfectly functional.
-
-Should this patch include the Fixes tag to help backporting and tracking the
-regression it addresses?
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 3a80a018fc7d..a3ce25928120 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
->  		BPF_EXIT_INSN(),
->  	};
->  	int ret, insn_cnt = ARRAY_SIZE(insns);
-> -	LIBBPF_OPTS(bpf_prog_load_opts, opts,
-> -		.token_fd = obj->token_fd,
-> -		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
-> -	);
->
-> -	if (obj->gen_loader)
-> +	if (obj->gen_loader || obj->token_fd)
->  		return 0;
->
->  	ret = bump_rlimit_memlock();
-> @@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
->  			errstr(ret));
->
->  	/* make sure basic loading works */
-> -	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
-> +	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
->  	if (ret < 0)
-> -		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
-> +		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
->  	if (ret < 0) {
->  		ret = errno;
->  		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+>> There is no such thing today. The verifier only understands PTR_TO_PACKET
+>> as read/write. So it's not easy, but probably good thing to have
+>> for this and other cases where bpf prog shouldn't touch the packet
+>> once it called some kfunc/helper.
+> This would be useful and we could (re)move some validations from
+> the fast path.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Hi Kuniyuki and Alexei,
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27208871676
---===============7615833700415675074==--
+
+Thanks both for the discussion, it makes sense to me.
+
+I'll go back to fixing this in the helper itself, like the previous 
+version did.
+
+
+Then, as a longer-term and more general solution, I'll try look into 
+marking the
+skb as immutable after these helpers so the verifier can reject any 
+later writes
+to the packet.
+
