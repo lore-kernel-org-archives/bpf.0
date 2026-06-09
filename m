@@ -1,142 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5DD5B21A
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406783B0AF0
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781021846; cv=none; b=syIXD6QChROMuRJmCQd3oLV0FqSdcrxxwKHBOb8qGO60HsUqoiQuj92DN/mPA3pAlLjb8ip5ElPTvv57c9P4m9go3RNk9GF9bfHuGr2GvFQzhipUQIFNrY86gh4tq/dm7RreKWVoRSETLg/epKHtkhz7wimG2yAr7JeZ9AetMs4=
+	t=1781022004; cv=none; b=O27//9CcjU31Iz7d7IMdRawUz6eawCJaYTK3/Tu+d73JMs2r1iwWJJ5ioovgs/iBoO330miyckZMKaT9J6MCAQktzZ2lAFtji9+9mVxEwt8BGHFUD6m6toe0/cNw2LAu0tOeqhAEsN0r119mHN331EZ+EwjxbzwIy/kJsJPk+as=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781021846; c=relaxed/simple;
-	bh=a7BaPzoHrLNvlTzQBa0bT9fKKRLcfCtzz3ZaV4BUbR4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EKHWB6CryLPPuu+jjL+r4ZUa3XYytMrn7HWFgD+uyZXx+HzSFqVpZXgSP6woUllt2oFH61QtJnNHJHN0zioNyBcYbTQvKBPBp+U5nc9y4oB9G4Zh6FCQawp/jQC2Rm56tcM3c/rJ+5M3kzeBoNOvxmkwbz5PE8elURntFnPCWPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ygl2i57n; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=DIPfDj5U; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781022004; c=relaxed/simple;
+	bh=jsh+j7mdV7bUaWi/mOg0+ehvxQXKi2xt/TV5N9LSKbA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=gE4GGAnbiR8W0kl5BZZfX/cIimPpekGb3428zJfNYA/iPvdEw3oUOwN4k0AgDvPgB9zeSU4ReQRWf8/HEOTJz657907RBAGhqBANsBL3/l64fsE1nnWt25aL9n0Dspa3tReDa8iXp4xoXvOvioa/1Y19vMMqmudPqscJQJiWREw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=PCLYtuA7; arc=none smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ygl2i57n";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="DIPfDj5U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781021842;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a7BaPzoHrLNvlTzQBa0bT9fKKRLcfCtzz3ZaV4BUbR4=;
-	b=Ygl2i57ntFpKrQtX1PVr+76LwjWTxuawBbkrpF7bv0xd2+YbsOKN/hCCYdR2URuOeEwFh2
-	Lieev/xRKVjbBt5RPZCWAO2+ugWNhbU7pwUHq5XcMFDwUpnc8niDBlDt1BUrPLRZSWXzMQ
-	IxRNrC4c0pG6qA1cuA3OVKd8th9X5yk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-257-wrtyUh3rNpOA81bYI4ZfCQ-1; Tue, 09 Jun 2026 12:17:21 -0400
-X-MC-Unique: wrtyUh3rNpOA81bYI4ZfCQ-1
-X-Mimecast-MFC-AGG-ID: wrtyUh3rNpOA81bYI4ZfCQ_1781021840
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-490afe64f26so28523045e9.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:17:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="PCLYtuA7"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-306f36df4feso3752177eec.0
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781021840; x=1781626640; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=a7BaPzoHrLNvlTzQBa0bT9fKKRLcfCtzz3ZaV4BUbR4=;
-        b=DIPfDj5UaiSYEOpAjhvpAeT2bzP8scfcR6fD6GtkF/Tn9Qtm5KqWJ+5giIREsE2Qhx
-         LJT11ZQxu57hvwiO9FSTZTzn8ZuyjXkwdk5px16PxH8bzSohzLDRslXWtnOqyn/Zxhn0
-         pthFT9pYBcwk3onIvP4in6TPPUa1D02q9lpuX6jHtl6d3qdAMexMgRqlAQWfngllL4x5
-         RMzQb4GK9NJYsgoqwCvbaFbF4Nomp1+au/6A+/KPz5sAz8W2m6Dwu2EP6St5jdtKZ0uB
-         yhrhLvMjCvhwdbY/vk+Mkrk0oNVtJFOfsA5xRyMOuKloatzfr+9F8O+Y3hj09yhV1Ah6
-         wGMQ==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781022002; x=1781626802; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JCfH3ntzyc8thzIJSax7tUmLwbg8LIrjztkpC02J1dk=;
+        b=PCLYtuA7Bc515ucaQKup1WSSlw0aS44BfIZ7tEEGvWlTSPo8o4oJ4aHG6HhSMziyGb
+         4rHjghRuMgWk0vCM2qQdrtdI8L8cKxB+OMny3c8y/GbhjOF/Jdj6PAfGGsw9Iq2FVHhx
+         B5KpP/vvNK012LU5EWfJiKwHhAkj9PfGszRHeCFG8JMfAcdAlnwBAhdL5+MV/CVCRA1v
+         TxwoUuAYEU5jSh/IN0JILBuSlDGQh7xiulPQ7KgUkulxNMTDtp8BKciRpTGrIE9a2PoP
+         jUxVbdp/SmRSgxe0Y/vX+lLsnffgYHAuLr6jRirg7fIX9hlIn1rtgE11ODlqpC/h/ajG
+         lLfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781021840; x=1781626640;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7BaPzoHrLNvlTzQBa0bT9fKKRLcfCtzz3ZaV4BUbR4=;
-        b=Ylej0Hjj6e6O4Qv1UBl5fLoOIjXWZWlGOxvHy8kai1Dm52yqMiYWOApsLnpcn5/FuI
-         ihL1sTuAUSdXBkQt4Do8lmJAXMCG9zQ9IvaEShx3+1oSkz5wYl79uke830ILpcf2aUqv
-         +TXC+d3UDdZAmnXjDbEYanj6FKZUTZVIaSkHGD022OK8mYHoI/s0+dFV7knsY2Nxj7gt
-         W6e7h2M31WbtM6CZBufkPYEXVxVh75H7/gPDtUp3yvSpko20lPbWWswertvgocjxbALL
-         yhl2E0RAcNf0n7U8/u+mUNeuFwfwEpS9P/4B4BBdRuKNKYKU7CYNrKZV18921Ef1OuEW
-         Nbzg==
-X-Forwarded-Encrypted: i=1; AFNElJ+0woXBXpFYiN2KZ5samdyup3R0Mxqx/rKkmGIffsD37aP6kIbY+DU5TLbRTtcgkF4bTi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKNjxvbNLG/xIjDEBvMSC6CbNawGQX6jvr7jutDwviN5AL6fZI
-	o/GUtsCBrM3QbCdEipys+Vw8kkxPw84srWUqP/MWTXICSjm5H47PfxRDyVQsLoXeFRnSXQNTLSx
-	GcZoyhuFItwXzqtP+kKTTjEW2kUKRyaUcquY3DghAqKeFmy88yh/1AA==
-X-Gm-Gg: Acq92OH/1TUYTkVFRjQFPiyQ39eTMFd81jtEGcRSOfWp6H49wqE6MrDdVg2oTL+DaWj
-	fv6SrLHRzS8Wau9oj+E0PkZtgczpcknIEwpHiXSGfNn5OSq64F7znaVhFBb2Ip5ZBy6OUqtG8Ic
-	kwW4rPLJ6zyyOPf9d/NKnIJvhfzORKxymmnTSm7CgMKGjevn7kM+jwPr6rx9AIXwUeGmfT54UPf
-	hN0qhl7YDJTeydg6YSYIL2IEMKRwcyB3lqDayd0DL5Sxkq/nLSXc9JONuub2d62UrguJRVEr4UQ
-	4G7SgPNs19rG7jnwz3stGNTB6Os0uHRaPLkN6LOzschUheLbeTG6Fh4uIK1Tv5A+JyN/I4Z8fB0
-	H+z+PPyCKYEMQ3bAZpUidC7ROKv3KLqlzvLAj
-X-Received: by 2002:a05:600c:1986:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-490c2cc27bdmr286472445e9.6.1781021839839;
-        Tue, 09 Jun 2026 09:17:19 -0700 (PDT)
-X-Received: by 2002:a05:600c:1986:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-490c2cc27bdmr286471965e9.6.1781021839417;
-        Tue, 09 Jun 2026 09:17:19 -0700 (PDT)
-Received: from [192.168.1.167] ([185.168.96.228])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490be1f69bcsm532407115e9.8.2026.06.09.09.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 09:17:18 -0700 (PDT)
-Message-ID: <b9562bea557a68981b6a9400ec33072330ae621f.camel@redhat.com>
-Subject: Re: [PATCH] rqspinlock: Fix order in raw_res_spin_(un)lock_irq to
- allow schedule
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Arnd Bergmann
- <arnd@arndb.de>,  Alexei Starovoitov	 <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko	 <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,  Linux-Arch
- <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, Waiman Long
- <longman@redhat.com>
-Date: Tue, 09 Jun 2026 18:17:17 +0200
-In-Reply-To: <DJ4LJ3T8PYRG.3TG272FHH78RM@gmail.com>
-References: <20260609094941.56122-1-gmonaco@redhat.com>
-	 <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
-	 <defc6b1339dea2f64f936902dd6e1f850cff9f4e.camel@redhat.com>
-	 <DJ4LJ3T8PYRG.3TG272FHH78RM@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        d=1e100.net; s=20251104; t=1781022002; x=1781626802;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JCfH3ntzyc8thzIJSax7tUmLwbg8LIrjztkpC02J1dk=;
+        b=knaWCfKBsAIEEfVT9+w2x7zm3A9d6fXvwVMwA8ifkwbf9RQaQiZ3Y6GLSLgj54S0Rf
+         HmC9hcyM4DDxJIyo54HwmcAeL91JWqI3gNAPrB782NI4V9486bYK9SS/yWqWOB4w+Ohf
+         CUoH9pmBJcoOBif4jKPgQvl+BFwhP11QqUYsq96XjlzeO0ddO7iEeTDrXh1iD63DkyPI
+         M/Zd3AXitv2ruFYE073iIFLCM7vva1ooBNhZnzxVwM/BeHMUH1a9VcFVwNyJwhhzE4St
+         FG7MDG6hONSm+XotYvlV0ph9gmxMuJqclUN5pZ/DsPArL4sgBvraOCbkg2BhhWQHgBvx
+         WhqA==
+X-Forwarded-Encrypted: i=1; AFNElJ9nHBBLsY1XSz685pnMwwNAbj1jvRrKCKvMQpVhNJwB+JAc5uIQFyS+RgEqmLJ34C5jZi4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGzULZTGzXv01hL2eiVjHWzCI0jTnK7yJXROBlM11M8ZsvWcFs
+	cLeBWinoZ4djaNqCfu4hs20iPKImxpnBBd0FMfAokhD5MMBG6GiQ8Xlsb9x1/20419xGZB77amm
+	buL1nnT/QJw==
+X-Gm-Gg: Acq92OEsx8L+77E+X0vXlVYTMkEuoQR7PPMsZwhMzrDtfsb9iUR1hClxJGMJny87mug
+	xwtC9he/lYBmvrxlIrhyOB/eiyeZZp2fxNlFJq1Y+CouNELQG4B0kA9pnkgF7PZpgWdwpqha9R/
+	yIDbisZLXW8euAWIgYWzKxAu2epBgVlwpOipRnFu2CLyL/Tt5rC3cX9960+ipCGp4rehp7zi7Jn
+	qnPyAPTCWLWPDlhuEZyiCuk9GmoY/EOvSmHIaxTLUWSPkAypwO9RXMAx2siPeJE5ZB6GCHtyetC
+	WIqpYLUOerl+aQ1LZIebxGhVSFXYQYd2/3L6cVBqra5r2Ix4YaCD+hcXUNs0V2RgQrJ7I4LQWSI
+	JPmmgPKYlFpZ7TEvA651+iEE3BmulY391MX88Muxffc3h7djDPQ2ce93mWi/GoiX9RK19TReuFj
+	srjoiKm/UOezBxyLpYRePaU9+i2w==
+X-Received: by 2002:a05:7300:a8e:b0:2c1:82c2:bc31 with SMTP id 5a478bee46e88-3077ffb4ba1mr6947474eec.10.1781022002220;
+        Tue, 09 Jun 2026 09:20:02 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::3297])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df349d8sm21801108eec.22.2026.06.09.09.20.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2026 09:20:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Jun 2026 12:19:59 -0400
+Message-Id: <DJ4NLVDJKPGA.2BFAROFHZPLO5@etsalapatis.com>
+Subject: Re: [PATCH bpf v2 2/2] bpf, lpm_trie: Allow sleepable programs to
+ use LPM trie maps directly
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Vlad Poenaru" <vlad.wing@gmail.com>, <bpf@vger.kernel.org>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260529174233.2954240-1-vlad.wing@gmail.com>
+ <20260609135558.193287-1-vlad.wing@gmail.com>
+ <20260609135558.193287-3-vlad.wing@gmail.com>
+In-Reply-To: <20260609135558.193287-3-vlad.wing@gmail.com>
 
-On Tue, 2026-06-09 at 16:42 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Tue Jun 9, 2026 at 3:04 PM CEST, Gabriele Monaco wrote:
-> > On Tue, 2026-06-09 at 13:22 +0200, Arnd Bergmann wrote:
-> >=20
-> > > Did you see this cause measurable performance problems,
-> > > or did you find it through inspection?
-> >=20
-> > I noticed it while debugging an ENOMEM issue in the test_maps BPF
-> > selftest on PREEMPT_RT and this was an obvious cuplrit (irq_work
-> > not scheduled during a stress run). Turns out the problem is still
-> > there after this fix though.
->=20
-> I would imagine this to be the least of your problems, I think
-> there's a bunch of blockers for complete selftests passing with
-> PREEMPT_RT support in BPF.
->=20
+On Tue Jun 9, 2026 at 9:55 AM EDT, Vlad Poenaru wrote:
+> The previous change relaxed the rcu_dereference annotations in
+> lpm_trie.c so the trie walks no longer trip lockdep when reached from a
+> sleepable BPF program holding only rcu_read_lock_trace().  By itself
+> that only helps tries reached as the inner map of a map-of-maps, or
+> from the classic-RCU syscall path: a sleepable program that references
+> an LPM trie directly is still rejected at load time by
+> check_map_prog_compatibility(), whose sleepable whitelist omits
+> BPF_MAP_TYPE_LPM_TRIE:
+>
+>   Sleepable programs can only use array, hash, ringbuf and local storage =
+maps
+>
+> LPM trie nodes are allocated from a bpf_mem_alloc (trie->ma) and freed
+> with bpf_mem_cache_free_rcu(), which chains a regular RCU grace period
+> into a Tasks Trace grace period before the node -- and the value
+> embedded in it that trie_lookup_elem() returns to the program -- is
+> released.  That is the same reclaim discipline BPF_MAP_TYPE_HASH relies
+> on for sleepable access, so a value handed to a sleepable reader cannot
+> be freed while the program is still running under rcu_read_lock_trace().
+> The writer paths take trie->lock across the walk and never relied on the
+> RCU read-side lock to keep nodes alive.
+>
+> Add BPF_MAP_TYPE_LPM_TRIE to the sleepable map whitelist so these
+> programs can use LPM tries directly.
+>
+> Signed-off-by: Vlad Poenaru <vlad.wing@gmail.com>
 
-Well, I'm starting to believe that too..
-At the moment on well tuned machines we are only observing ENOMEM
-issues in the test_maps and only when it's literally hogging the
-allocator (preallocation is off and 100 treads do updates in parallel).
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-What else are you expecting to fail under PREEMPT_RT?
-
-> > > > Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
-> > >=20
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de> # asm-generic
->=20
-> The patch makes sense to me as well.
->=20
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-Thanks,
-Gabriele
+> ---
+>  kernel/bpf/verifier.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7fb88e1cd7c4..71c1e59e4df4 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -18122,6 +18122,7 @@ static int check_map_prog_compatibility(struct bp=
+f_verifier_env *env,
+>  		case BPF_MAP_TYPE_PERCPU_HASH:
+>  		case BPF_MAP_TYPE_PERCPU_ARRAY:
+>  		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+> +		case BPF_MAP_TYPE_LPM_TRIE:
+>  		case BPF_MAP_TYPE_ARRAY_OF_MAPS:
+>  		case BPF_MAP_TYPE_HASH_OF_MAPS:
+>  		case BPF_MAP_TYPE_RINGBUF:
 
