@@ -1,176 +1,287 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CDF1A3164
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 00:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8FC7DA66
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 00:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780966486; cv=none; b=ZHjhTRt8qHACgeFEjQLEsqEBanM7YrclHtCMOoiPAKNcMbGoEODJUIBYUeUENsIzKXeWF3tdij2JEYupJbNP9/amMqt28Q3XMOYcYhB3ysn0e0/q8++ED8sYYbAYjl4emlnE3YVqmMW4/mS7Q4MykP1CuSOIKZUmPESq2XTgi1Q=
+	t=1780966567; cv=none; b=n+WZbzJ+hp2ZMjzPtS474vtWj1oMwBUlyV47SWRFiT7Ea5p0VUtyNYuOKS85X70hRXYgjjpkfneJM08wZcmJorU/yrWao53zV8R3XBbgLhq3w29NZGZkmb7lLaTyNUBOzm+Gk4UqDkFxuFBN9VYc99Jfd019eDECUnSujICTftg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780966486; c=relaxed/simple;
-	bh=HizIU7PO1rTOVADEYw9dMz4syuwIqJs+ko5PEB8Zdyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jpVwbuqpxXVe+DeSNwYMCfNn+9r3dt6vDqMjYnlw6BhenajCesS4Z2IK+xnrArbDUkoruhhmSKiHoNji1b/fqscEGJc1QNtB4YNNBySglf0tu3FV2IshrkvaZ/UWG2OqTkxvjCUEUYlgCyCzT25hL1Csy7lEUCg3PZfTlW3LxhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PYhAVP+j; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780966567; c=relaxed/simple;
+	bh=CQiqV1KaE4298GS9iOOY1pvTIAej+c3yZkpXzwYVvWY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VtXiWIQfkqyPnllSqBkQZvRhXOBrSt34sVQFJw5Ecc7LRgWg8Skf4Fb0jzw94CWFM7cwlDyZtnCXz8eKSSJxfYqpSkzRfC5XamMj5XliDAB4eg9enP1ygob0M/CvV9HIawuM34pfnawdLRlGLhTEPcsrg07hxoyOPQoCctPetL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GIy9wz+T; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PYhAVP+j"
-Message-ID: <eab4e479-2023-49b8-9915-1c8ef2356837@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780966482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oRbxXpWP1GUzrMvxfNMBkZVNChXRENxrvWd0JZV++Fc=;
-	b=PYhAVP+jiIO40T6kMqsQpunwloO7vfL1h3AS4QRAxgTR1fD8kyVlOyoF64SvdBS0aQcSpP
-	yUAVxgUKYKRxCltV84uabfKaiOV8B/KLFBFx30LiGdCb/4hVn05kp5tO2zFHoBpndt2lcg
-	9ii29khf9ojVdOMMhZR83sLzCtBLjbw=
-Date: Mon, 8 Jun 2026 17:54:36 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GIy9wz+T"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-13810b63a1aso1961631c88.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 17:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780966565; x=1781571365; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/WbVDq4Me5SvMdt7jQSlsDmPo63jO8d/GWOnS8OM5oU=;
+        b=GIy9wz+TJxDWNgt2DW58H3ATZoMYpl2/wQQw2dIBF8A9528fhG/432tKysmD3TlLJP
+         PlVU6zxPMmYq7zMTigt1hjIge4W4BVlJqF4LgXMrKE2Vwi0yumWVv7YQnFZh+9Ug5Uyw
+         aAgybUr33Wu7yLj37nScibIL6O6wbykNodhWSkIYdp1vM1R9TvrGKchZCVNwVYv6g4B6
+         UVYZUGS23Byd30ZiYvb73VDYLzJZjPDUo/mBml8DZtoab61e0p99vmOxICPcDN5Cog+I
+         GQOhtfuJA6o71DvtSx/1J6MrMEg8NtJvNanL6VeZv5zP+C+AxDB1vwCPVAxb3DAOFSqF
+         EBLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780966565; x=1781571365;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/WbVDq4Me5SvMdt7jQSlsDmPo63jO8d/GWOnS8OM5oU=;
+        b=PsQcRWIDUn05R+D9iJ5NfhTDZK9LuL5n94sBGdGHmyLZqaC9mE9z/y5gEtsK+5uL/w
+         wRJOLFWP+3vHlxb1WuWt+hJN6+XCJb2X5+KlykxeM3UVpBK1BtJZ5C42msi6G4LCWHDs
+         Qx9iNqwZz7Lq2b7OMjmNT1mySy/C20uAg+wzNdBXqIgkPki6xsmS9+vA51Mc6DYODPAX
+         ++MggleLZFWz5XNQg9NUurHdlKiP4sPqJbRhq8116rnz2tAnOgabbGWETkSTYgwLaHqz
+         SsKUfJD3H5b9lPWwQIj4lR5+eLg6MFI//SpdcqF2zMryzqu+NIPBneGAEJ9Va/zPUQsH
+         SWqw==
+X-Forwarded-Encrypted: i=1; AFNElJ+pU6wHnVwfcN6yaE+ojI8U0/tsmCkJQ8+JP3lTZsD6YoH87+TCQqUv5svi6hfIdQbhpTo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBppYpMGgEqykLY8ovXVRG07ETrJ2pVj2Y0CylEa1AMvtslpjx
+	8naEJfk5giTEhaVcTWXEogCucQ2KYonIZUmao37QdkBYqKIJFE7DYGHp
+X-Gm-Gg: Acq92OEfkd/eFA4C50D4y1mRmyPObZ4EgxFiQxzooiK/DiYOWN9NvySpt0Icw+jD2Gm
+	Gqs44DqlAwanl8YPghNnd6qeR0zqfa3MPecgM9Qw881wkIt13TUIePjVmotftZBVfCYK3vAozHM
+	G/ZGQW5vT3STDBt33LReG9wFoSCA4e3N0FvesKOun7FeiFDvj9NPtR2Y7KQ0NQ81gHXDSR2LxAZ
+	+jIEBUZT1t55/tUmekKJ1YyMVji4Z0Z4X+Iw+UsR8e85RyJ6mY9a0tKo8tUDjtrQ1AG5hw3yI7k
+	7eFev/8qKV2PUPRl9ve3gz+iSMZMRvyYW1oonCfg2F5FkamKnh4luaXQLYMKttXiluWitQWGxdV
+	rhtfjmEECgRPB42nkG5El7ka5rcbLgHPX+APC9KnifW2rRovjOuQmKEXpwD8bhT/Ij4wkK/xZMa
+	4RXpnk7esHVvo9Ld423zkxDSse+c3Q64RECY1MNYWFlE61cG0s6tTtBymsfyV0a1ihE362sfccT
+	0veVL5+dStQF+1cBNc=
+X-Received: by 2002:a05:7022:1284:b0:138:1987:7d8d with SMTP id a92af1059eb24-13831b9d2a0mr258272c88.18.1780966564859;
+        Mon, 08 Jun 2026 17:56:04 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cde6:fb53:a1a3:a385? ([2620:10d:c090:500::3:b685])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f5550bcdsm14286859c88.14.2026.06.08.17.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 17:56:04 -0700 (PDT)
+Message-ID: <52592e76c7e3b735d3fb33899c8f32fab8346cd8.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 09/17] bpf: Report Memory Safety bounds
+ errors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Mon, 08 Jun 2026 17:56:03 -0700
+In-Reply-To: <20260605063412.974640-10-memxor@gmail.com>
+References: <20260605063412.974640-1-memxor@gmail.com>
+	 <20260605063412.974640-10-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
-To: chenyuan_fl@163.com
-Cc: andrii@kernel.org, ast@kernel.org, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, chenyuan@kylinos.cn, clm@meta.com,
- daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, martin.lau@linux.dev,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
-References: <20260602093836.2632714-1-chenyuan_fl@163.com>
- <20260608142618.3064380-1-chenyuan_fl@163.com>
- <20260608142618.3064380-2-chenyuan_fl@163.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260608142618.3064380-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 6/8/26 7:26 AM, chenyuan_fl@163.com wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> When a module kfunc declares an implicit struct bpf_prog_aux * argument,
-> the verifier must identify it so the kernel injects env->prog->aux into
-> the correct register at runtime.  The original check used
-> is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
-> module BTF type against vmlinux.
-> 
-> Root Cause
-> 
-> This issue was triggered by pahole 1.30 generating module BTF with
-> incorrect type information, which caused the kernel's distilled base
-> BTF deduplication for modules to fail.  As a result, the module retained
-> its own copy of struct bpf_prog_aux with a different BTF ID than
-> vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
-> the kernel must be robust against such inconsistencies: a BTF mismatch
-> should result in a clean rejection, not a kernel crash or information
-> disclosure.
-> 
-> When the distilled base dedup fails and btf_types_are_same() cannot
-> match the module's bpf_prog_aux type against vmlinux's,
-> is_kfunc_arg_prog_aux() returned false and the code fell through
-> silently without setting arg_prog.  The kfunc then received whatever
-> value was in the argument register and dereferenced it as a
-> bpf_prog_aux pointer, leading to:
-> 
->   BUG: kernel invalid pointer dereference, address: 00000000000009e2
->   RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
->   RDI: 0x000000000000046d (stale register value)
-> 
-> In the observed crash the stale value was the process PID, causing a
-> dereference within the unmapped NULL page.  However, an attacker able
-> to control the register value -- for example by writing a BPF program
-> that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
-> could redirect the dereference to arbitrary kernel memory, turning
-> this into an information disclosure.  The fix ensures the verifier
-> either validates and injects the correct bpf_prog_aux pointer, or
-> rejects the program outright -- no silent fallthrough that could
-> be exploited.
-> 
-> Crash Stack Trace
-> 
->   PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
->    #0 machine_kexec at ffffffff812f6e26
->    #1 __crash_kexec at ffffffff8145a788
->    #2 crash_kexec at ffffffff8145ac24
->    #3 oops_end at ffffffff812bb67c
->    #4 page_fault_oops at ffffffff813053a1
->    #5 exc_page_fault at ffffffff828e60a1
->    #6 asm_exc_page_fault at ffffffff810012a6
->       [exception RIP: bpf_prog_get_assoc_struct_ops+10]
->       RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
->       RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
->       RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
->    #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
->    #8 bpf_trace_run2 at ffffffff814f8332
->    #9 __traceiter_sys_enter at ffffffff81415f45
->   #10 trace_syscall_enter at ffffffff81416735
->   #11 do_syscall_64 at ffffffff828e06a1
-> 
-> Fix
-> 
-> Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
-> check in check_kfunc_args() so that an implicit argument reaching
-> is_kfunc_arg_implicit() without being handled by a prior handler is
-> rejected with -EFAULT, instead of silently skipped.  Existing implicit
->       args in bpf_fixup_kfunc_call() (obj_new, percpu_obj_new, obj_drop,
->       percpu_obj_drop, refcount_acquire, list_push, rbtree_add) are
->       explicitly allowed.
-> 
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
+On Fri, 2026-06-05 at 08:33 +0200, Kumar Kartikeya Dwivedi wrote:
+
+[...]
+
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 920ac17758c2..0abe1ab19d25 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+
+[...]
+
+> +void bpf_diag_report_mem_bounds(struct bpf_verifier_env *env, u32 insn_i=
+dx,
+> +				int regno, const char *reg_name,
+> +				const char *type_name,
+> +				enum bpf_diag_mem_bounds_kind kind,
+> +				int off, int size, u32 mem_size,
+> +				const struct bpf_reg_state *reg)
+
+Nit: here as well, I'm not sure the 'enum' pays for itself.
+
+> +{
+> +	struct bpf_diag_history_opts opts =3D {
+> +		.scope =3D BPF_DIAG_HISTORY_SCOPE_REG,
+> +		.frameno =3D bpf_diag_current_frameno(env),
+> +		.regno =3D regno,
+> +	};
+> +	char offset_desc[256];
+> +	char proof[192];
+> +	u64 max_start, max_end;
+> +
+> +	switch (kind) {
+> +	case BPF_DIAG_MEM_NEGATIVE_MIN:
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The smallest possible offset is %lld, below 0",
+> +			  reg_smin(reg) + off);
+> +		break;
+> +	case BPF_DIAG_MEM_MIN_OUT_OF_RANGE:
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The smallest possible access starts at %lld, outside an object of =
+size %u",
+> +			  reg_smin(reg) + off, mem_size);
+> +		break;
+> +	case BPF_DIAG_MEM_UNBOUNDED:
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The access needs offset + size <=3D %u, but %s has no safe upper b=
+ound",
+
+Nit: this prints something like "... The access needs offset + size <=3D 48=
+ ...",
+     it is not obvious what "size" means in this context.
+
+> +			  mem_size, reg_name);
+> +		break;
+> +	case BPF_DIAG_MEM_MAX_OUT_OF_RANGE:
+> +	default:
+> +		if (off < 0 && reg_umax(reg) < (u64)-off)
+
+Could you please explain this a bit?
+
+> +			max_start =3D 0;
+> +		else
+> +			max_start =3D reg_umax(reg) + off;
+> +		max_end =3D max_start + size;
+> +		scnprintf(proof, sizeof(proof),
+> +			  "The largest possible access ends at %llu, beyond an object of size=
+ %u",
+> +			  max_end, mem_size);
+> +		break;
+> +	}
+> +
+> +	bpf_diag_format_access_offset(offset_desc, sizeof(offset_desc), off, re=
+g);
+> +
+> +	bpf_diag_report_header(env, BPF_DIAG_CATEGORY_MEMORY_SAFETY,
+> +			       "access outside bounds");
+> +	bpf_diag_report_reason(env,
+> +			       "The verifier cannot prove that this access stays within the o=
+bject: %s. %s is %s; offset is %s; access size %d; object size %u.",
+> +			       proof, reg_name, type_name, offset_desc, size,
+> +			       mem_size);
+> +
+> +	bpf_diag_report_section(env, "At");
+> +	bpf_diag_report_source(env, insn_idx, '!',
+> +			       "access may be outside object bounds");
+> +
+> +	bpf_diag_print_history(env, &opts);
+> +
+> +	bpf_diag_report_suggestion(env,
+> +				   "Add or adjust a bounds check that proves offset + access size st=
+ays within the object.");
+> +}
+> +
+>  void bpf_diag_clear_history(struct bpf_verifier_state *state)
+>  {
+>  	kfree(state->diag_history);
+
+[...]
+
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8ed484cb1a8a..91aaed7a5eeb 100644
+> index adf660ab9e7d..e9c121892b7e 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -11885,9 +11885,27 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			continue;
->  		}
->  
-> -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-> +		if (is_kfunc_arg_ignore(btf, &args[i]))
->  			continue;
->  
-> +		if (is_kfunc_arg_implicit(meta, i)) {
-> +			/* kfuncs with implicit args (e.g. 'off' parameter)
-> +			 * handled during verification in bpf_fixup_kfunc_call():
-> +			 * obj_new, percpu_obj_new, obj_drop, percpu_obj_drop,
-> +			 * refcount_acquire, list_push, rbtree_add. Don't flag them. */
-> +			if (is_bpf_obj_new_kfunc(meta->func_id) ||
-> +			    is_bpf_percpu_obj_new_kfunc(meta->func_id) ||
-> +			    is_bpf_obj_drop_kfunc(meta->func_id) ||
-> +			    is_bpf_percpu_obj_drop_kfunc(meta->func_id) ||
-> +			    is_bpf_refcount_acquire_kfunc(meta->func_id) ||
-> +			    is_bpf_list_push_kfunc(meta->func_id) ||
-> +			    is_bpf_rbtree_add_kfunc(meta->func_id))
 
-Is the goal here to have a nice error message?
+[...]
 
-I think this will fail for other functions like bpf_wq_set_callback().
-For a proper check, the list must include every single kfunc with KF_IMPLICIT_ARGS, no?
-
-If we go this route, then the list of flagged kfuncs can be collected automatically.
-I'm not sure we actually want to do this.
-
-> +				continue;
-> +			verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
-> +				reg_arg_name(env, argno));
-> +			return -EFAULT;
-> +		}
+> +static void bpf_diag_report_stack_read_failure(struct bpf_verifier_env *=
+env,
+> +					       int off, int i, int size,
+> +					       bool poisoned)
+> +{
+> +	char reason[256];
 > +
->  		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
->  
->  		if (btf_type_is_scalar(t)) {
+> +	if (poisoned) {
+> +		scnprintf(reason, sizeof(reason),
+> +			  "This read uses %d bytes at stack offset %d, but byte %d in that ra=
+nge is poisoned because it was eliminated as dead code on this "
+> +			  "path.",
+> +			  size, off, i);
+> +		bpf_diag_report_memory(env, env->insn_idx,
+> +				       "poisoned stack read",
+> +				       reason,
+> +				       "Avoid reading stack bytes written only by code that the veri=
+fier proved unreachable, or initialize the stack range again on "
+> +				       "this path.");
+> +		return;
 
+That's an internal error, it should be properly propagated as -EFAULT
+from check_stack_read_fixed_off() instead of being nicely printed here.
+
+> +	}
+> +
+> +	scnprintf(reason, sizeof(reason),
+> +		  "This read uses %d bytes at stack offset %d, but byte %d in that ran=
+ge is uninitialized on this path.",
+> +		  size, off, i);
+> +	bpf_diag_report_memory(env, env->insn_idx,
+> +			       "uninitialized stack read",
+> +			       reason,
+> +			       "Initialize every byte in the stack range before reading it, o=
+r adjust the offset and size so the read covers only initialized "
+> +			       "bytes.");
+
+Might also mention that uninitialized stack reads are allowed when the
+program is loaded in a privileged mode.
+
+> +}
+> +
+>  /* Read the stack at 'off' and put the results into the register indicat=
+ed by
+>   * 'dst_regno'. It handles reg filling if the addressed stack slot is a
+>   * spilled reg.
+
+[...]
+
+> @@ -3976,10 +4023,20 @@ static int check_stack_read(struct bpf_verifier_e=
+nv *env,
+>  	 */
+>  	if (dst_regno < 0 && var_off) {
+>  		char tn_buf[48];
+> +		char reason[256];
+> =20
+>  		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+>  		verbose(env, "variable offset stack pointer cannot be passed into help=
+er function; var_off=3D%s off=3D%d size=3D%d\n",
+>  			tn_buf, off, size);
+> +		scnprintf(reason, sizeof(reason),
+> +			  "The helper would access the stack through a variable offset %s plu=
+s fixed offset %d and size %d. Helper stack arguments need a "
+> +			  "precise stack range so the verifier can prove every byte is initia=
+lized and inside the stack.",
+> +			  tn_buf, off, size);
+
+It is not clear from such reason formulation that the problem is with regis=
+ter not being constant, tbh.
+
+> +		bpf_diag_report_memory(env, env->insn_idx,
+> +				       "variable stack access",
+> +				       reason,
+> +				       "Use a fixed stack offset for helper memory arguments, or add=
+ bounds checks and copy the needed bytes into a fixed stack slot "
+> +				       "first.");
+>  		return -EACCES;
+>  	}
+>  	/* Variable offset is prohibited for unprivileged mode for simplicity
+
+> @@ -4266,6 +4333,11 @@ static int check_mem_region_access(struct bpf_veri=
+fier_env *env, struct bpf_reg_
+>  	if (reg_umax(reg) >=3D BPF_MAX_VAR_OFF) {
+>  		verbose(env, "%s unbounded memory access, make sure to bounds check an=
+y such access\n",
+>  			reg_arg_name(env, argno));
+> +		bpf_diag_report_mem_bounds(env, env->insn_idx, reg_from_argno(argno),
+> +					   reg_arg_name(env, argno),
+> +					   reg_type_str(env, reg->type),
+> +					   BPF_DIAG_MEM_UNBOUNDED,
+> +					   off, size, mem_size, reg);
+
+I think that BPF_MAX_VAR_OFF limit should be mentioned in the error message=
+.
+
+[...]
+
+(I'll continue tomorrow).
