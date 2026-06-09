@@ -1,130 +1,104 @@
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B569240BCD0;
-	Tue,  9 Jun 2026 13:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71F1416D04
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781010549; cv=none; b=NOkrfwwZrJvfc++gCMUMNbkii7btQxPgqBQm8TcP7Whd+qjX7M2sXRr14Khpj+7IWJfQFWRueJqEvi2YSMjxJdiHar5Wh+RF9Xg5M7D/hYIOphIPlqQb8JCK0sEJS+Ko/FZlZjh68fyGLs+2rC0BB6u+YEAstS2+BLV/kJWqeaQ=
+	t=1781010614; cv=none; b=afez08pmknPnOYPPJHPlrNIxeKcjWuCT4W/BNCEWlaP94n5+6EYbku/BvCzea3w6BGfJ4B6TPuYBQlV2KF2nF0aod0SlZRM9k+RST9p78cXOcNWasRg7h1XGyt95zEw/Jg5CfUGSX+eKwYYQiylOGmEoWGH0CIMPMc2+ZGeRhME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781010549; c=relaxed/simple;
-	bh=1WSdNihG2hlHtswr5nr1x4M286nV1U00IzeEXjGpIR0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=qsSxFUo8kweRL7fiePsTJVwSGy1tnjU4eIQhr/6iyHnT47jCJtDoo+H5Rc48S24zAdncsJoJU17wjm0YZOwjSXOvpgf6JxA97hM8N9esMa1i5dHfaW69p7K6IChD/2LXrXxq56qBrUoN+MNvVtQVm7k6OvMBaFl1mR/A2ACMw3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=MW9rMPso; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jylBLqej; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1781010614; c=relaxed/simple;
+	bh=6z03W7Morm7yWrmKypG3Vnw+d4q2fK9rQhoU8AF66fo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ajHHeYx23xKAQFtWgJLpPiqPRBbN1fYpt6iMlF0RHvslBSwWDk05djDyWmt7Mwn3KjWOkyqXFpdwAVAduikZIQqq3fn2dJBXCe6XG62Hw6kcTt5U/oPAF8ZqO9qHqTeTuEE2xjwee2bEo8lz7EAv2frYffkeGJr/6t077cuOisI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ieRh3JEM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="MW9rMPso";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jylBLqej"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 732437A018A;
-	Tue,  9 Jun 2026 09:09:06 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Tue, 09 Jun 2026 09:09:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1781010545;
-	 x=1781096945; bh=c16TIIba6yuBUv6EB0M3c/VoSio+y6VjjvsXrzOnibk=; b=
-	MW9rMPsoKoiFfm0qtMVt+DX+xVHKXV70e02B5oBFiHNRsNwZrbLjk/d8Bhc69/I2
-	ewCEAqmluDmaFmtvthEKt54q/mlESWSoEFhANe5jI6ZweoQ4BOEcYnQO3W3MIQCm
-	HURTseqM3dJ2LJ8ASypmbLnU0on9jZn4Z9dItliQee79a+HDrxE4qtdGzTWbroox
-	kzDQp93XCOfx6d1RPYniTpvo4zH1dwrZcmA2M3fmNwnIN5m+mVuYjbIPIS3mhD1c
-	wJB1Rm4v8mc8J5Mf9LJnB5XUFAI2lRul9W1StfCGu7ExfRzumExqvmpZjbMRGXVF
-	Hpe5UyJ5Jh4DhacMrD5FbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781010545; x=
-	1781096945; bh=c16TIIba6yuBUv6EB0M3c/VoSio+y6VjjvsXrzOnibk=; b=j
-	ylBLqejpG9Ou2+ga3UlNNM99QtZx4sERrtN/8OUv6s6/EIrDXVSQENGrbCvptSLZ
-	gfjRtVS5WGB2BEkJJw6o6NLQeZfYwO9DQoe015cuwZrDHGbF6l/2ov3zcv7lZ5gY
-	77mlVV9zApOVCImRolHmkZ2yiFt4EXrGaUxV9qfzshHLy37BaZLtmDhhjviB/0Q4
-	KbNwzksSkRrBAjtDZ1pf0Ev1+pbSP1FwKjfcrr/kza4e2ArRgmTNiAYf6UYiXeim
-	/w45fRZmmdyv7a2LMGSi/42Cksnez7NKHXByzcmCg1J/gvUT2cxDJ5fF04Vl7VHZ
-	j7cBsg/ktjP9MyRfelumA==
-X-ME-Sender: <xms:cRAoaiuKTQRkuWlVRKylznAsNYOYdxb6hV6bPVkTYTle5RGuKiRElw>
-    <xme:cRAoaiRKWQQWzUHtEwM-r1xKtKq90G_u0cEviw1aI5TMIZmBYzo3s7KIC567aU9lx
-    e18nkQFo90PsTHz6rInSW32PYo5ufhwg04ODHRdHyEIqQTR-iAM6Go>
-X-ME-Proxy-Cause: dmFkZTEwzBbeWbxPV+DtJz9wRCnV8k+/6ZDn2QjQhLonipiml/WF3aer4F/DbgUhyyK1NJ
-    LScwo6GMYWASD/eDzamCqo1/6MwTEuDrkaq7kWT7QfI+u0PaO6TIgZ19kztRYd2HDBKN8s
-    KhQTX8yo69eMjItZcw/PDFUTgX9cAhoBsEVAfmgVxuzaZrqz2qNOfSMFAZGfMGXqzUEIxO
-    ilsF3+Zo75C/UaarYQiNPwjtPBnUz/6sBJfBNMGFPLw8FTDZRGImg0W+ThKhsP610ZEQW5
-    CweZ9rw/lFg94glbaQ7jSLX44Axvy3zWQWjnUTFcJWrj/lxTues7A7SyBHVAa6nPx43CBR
-    G9mPUcEXyVUytvgj9c9U8ji5pBmwJj3CBqxxWs4iTah3paJMDmtUONT7Zb1p3Bu85hpMRF
-    75gBHBVhFvICGkGsQ6vlR3p4wLw+HUh8ocq70GOmx636liEYXd4L5ts/YBibdGLYEqmEdl
-    udL64vghK8GB18fjHfmgW4axKgILWC9MJWp7yPrb0n11DNJ4X9/01hE+xsnV5a9YTTMWEj
-    mBLFKJDacJDkjGwZ9valeurnbq91Dr6Q5F+cGTAkHIgcN3nCoqNWlVBdV38m6488+R0MCo
-    zgVewD28jp864oQb0PRQNM/+dvC9Tk6LYKvlwsAP/q+jdxeWXoWfS0CS7DEQ
-X-ME-Proxy: <xmx:cRAoal95xTFS3dTlcRx9uksCnjpFBz1wL1ugpyfXb4yKAXoDSFyeKw>
-    <xmx:cRAoamGHlCIKLxjiNckY7h9PN_e89pvq394EMpfEfhwiqMoRaE25Rw>
-    <xmx:cRAoandbBlnSjnVd6gmtzK_TBwtpOoi8O6gx0VdPrLDJzGzbQXOwKw>
-    <xmx:cRAoannwyqjdB56GmS4eFHpolCX4XkK3VFjwVGuxySYTuEacCDSi8Q>
-    <xmx:cRAoas4WpQEgqSkdqcT5BFu8DeHeBiMgEoqOSa5M8Ggd3U3GVD68ZE7X>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0F4191820086; Tue,  9 Jun 2026 09:09:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ieRh3JEM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299691F00893;
+	Tue,  9 Jun 2026 13:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781010613;
+	bh=ZcwlnJ9t48qgCfyHqiEqK44CPvWScQG1kyGGhVVgHC8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ieRh3JEMME2fl+vV37NlTJyw8MUnoGkmMZs22Mtjbke7GYb0G7oKM+qXYduV7DCPk
+	 LEf0kPFxmbLYDVqIruFJugI9Hv2E0iyj6On6J/2ZZHePqRCHWjxNCHdx3Azt4AgySW
+	 WuS3riiZWZgJ/4BrizB7Rq8QH8E61O5TY0gy/aNm1zSqAaHl+hKYYKmboAtwYj5+NS
+	 I/S1VnVmBBlsaAzzt1vf3YYduMn2nBLGSKsJU7bmncBn167f/nplF/bT4YwBp+cb6L
+	 IZ4yuP426JJZapyOdEXymz2U/jItIqlKQQjV0FkuYUMJE1xy4YGOBKJdik3j1BSaQB
+	 u2+dhz9G7mHnw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3 4/4] selftests/xsk: Introduce mmap_size in
+ umem struct
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260608130938.958793-5-tushar.vyavahare@intel.com>
+References: <20260608130938.958793-5-tushar.vyavahare@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 09 Jun 2026 13:10:12 +0000
+Message-Id: <20260609131013.299691F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-ThreadId: ANX22ru2X65k
-Date: Tue, 09 Jun 2026 15:08:44 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Gabriele Monaco" <gmonaco@redhat.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Cc: "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Will Deacon" <will@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
- "Waiman Long" <longman@redhat.com>
-Message-Id: <caa4faff-68ad-4601-9f80-68551b015615@app.fastmail.com>
-In-Reply-To: <defc6b1339dea2f64f936902dd6e1f850cff9f4e.camel@redhat.com>
-References: <20260609094941.56122-1-gmonaco@redhat.com>
- <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
- <defc6b1339dea2f64f936902dd6e1f850cff9f4e.camel@redhat.com>
-Subject: Re: [PATCH] rqspinlock: Fix order in raw_res_spin_(un)lock_irq to allow
- schedule
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 9, 2026, at 15:04, Gabriele Monaco wrote:
-> On Tue, 2026-06-09 at 13:22 +0200, Arnd Bergmann wrote:
->> Should this be Cc:stable@vger.kernel.org=C2=A0to get backported?
->
-> Not sure if the Fixes: is enough to trigger the automation, I rarely
-> remember to Cc:stable@vger.kernel.org and they're usually picked.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Unconditional `pthread_join` in the single-thread path can cause=
+ the test suite to hang indefinitely due to a deadlock with an unsafe signa=
+l handler.
+--
 
-There is always human interaction. If you just have 'Fixes',
-this means someone will have to look at the patch carefully
-and make a decision, since a lot of bugfix patches either don't
-apply to old kernels or don't fall under the rules for stable
-backports.
+commit 2b44f1770c5b4b9bb0b75f25f4cfb408f2d008dd
+Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Subject: selftests/xsk: Introduce mmap_size in umem struct
 
-If the patch gets tagged Cc:, this means it is expected to be
-backported and needs less manual work.
+This commit stores the final mapping length in xsk_umem_info as mmap_size w=
+hen
+the UMEM mapping is created, and uses that value during teardown. It also
+joins the RX worker thread before cleanup in the single-thread path.
 
-> In case I guess I'd need to re-submit the patch right?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
+sting/selftests/bpf/prog_tests/test_xsk.c
+> index 17a467a7dd7f6..72875071d4f12 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+[ ... ]
+> @@ -1857,8 +1856,7 @@ static int __testapp_validate_traffic(struct test_s=
+pec *test, struct ifobject *i
+> =20
+>  	if (!ifobj2)
+>  		pthread_kill(t0, SIGUSR1);
+> -	else
+> -		pthread_join(t0, NULL);
+> +	pthread_join(t0, NULL);
 
-It can be added by whoever picks up the patch.
+[Severity: Medium]
+Will this unconditional pthread_join() cause the test suite to hang
+indefinitely if the worker thread self-deadlocks?
 
->> Did you see this cause measurable performance problems,
->> or did you find it through inspection?
->
-> I noticed it while debugging an ENOMEM issue in the test_maps BPF
-> selftest on PREEMPT_RT and this was an obvious cuplrit (irq_work not
-> scheduled during a stress run). Turns out the problem is still there
-> after this fix though.
+The worker thread t0 is terminated by sending SIGUSR1 asynchronously, which=
+ is
+caught by handler():
 
-Ok
+tools/testing/selftests/bpf/prog_tests/test_xsk.c:handler() {
+	pthread_exit(NULL);
+}
 
-       Arnd
+Since pthread_exit() is not async-signal-safe, if the signal interrupts the
+worker thread while it holds an internal libc lock (such as during memory
+allocation or mutex acquisition), pthread_exit() can self-deadlock when
+attempting to acquire the same lock during thread-local teardown.
+
+Before this patch, the deadlocked thread was leaked but did not block the m=
+ain
+test thread. By adding an unconditional pthread_join(t0, NULL) here, won't =
+the
+main thread now block forever waiting for the deadlocked thread, causing the
+entire test suite to hang?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608130938.9587=
+93-1-tushar.vyavahare@intel.com?part=3D4
