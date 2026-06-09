@@ -1,146 +1,147 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB614C8FE7
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D73331EAE;
+	Tue,  9 Jun 2026 17:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781026480; cv=none; b=iymamTmYVOkd8O3YKr+CmCDD6MYnqPKp5vqds0AdVdUhBqVr19nN74c9Y21qJy29FsmAev+wxOF+UJa1TpQBGDMWEyh1XbnL8I9paZ6oCkuo5o3mif2xvdG/7ei55UztYcxAa2V8zjx7vrZvS040iTvZ/DKBa2efj7qHwq+Z6gI=
+	t=1781027469; cv=none; b=Z79vn4IOUFLkVeUvWQIh5KTRQVR0f4UVn0dw8nz5YqpxkJejWo0eBw5H2G6veKFIIn9DVn0HKFFRXsoAm5G47HEkr/DpUOhjklD/5JfHSsuY0egViRykjbq+zEQmOo/EsVYdfzponyhN2MAlYFn35Ltt09rrwT0cQ4pDf0sugMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781026480; c=relaxed/simple;
-	bh=8N7XuyRU6c4ER45QABIfU6iv2y0qjX2rwhUyYzCewtw=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tk2Gri+fBmiDnZ3G3FqGHlWOaewAi8VKPbwydiU2WmHd3BRlrEcwZ+cuX5yHxXDtSa/lfVOBs29gBrPpzdWZdyAC3zTCwNe+I8acFy00ievcHnk6B8466BdQb5EEe55dUFLzEPbBuMwGFyjp/KkzzXQ9vpammtjlyc8dTCbVbXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=OpZ1b/mA; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1781027469; c=relaxed/simple;
+	bh=MHSrLwUeLOfYLkwPcrWffBG0d8LBYSrvwS+e7ygv0cM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f+LiV+S+k69vfc+HKy32pfsV2w5uz9E9cx4UDcim9D59p0fI+Gfcx7SIQCbleP8UupnXedTODuPP5G5XH2z2X25SK7xBZa9/K01ec8DapCLFOQg7fEc8s/PolzRkG4w/9abHWBIsjjqw1hr9Nt6AY7KN8GhQHbpsTTW4N9Nf1sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l9Tu4E46; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="OpZ1b/mA"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c8584bbbf2cso3811712a12.3
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 10:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1781026478; x=1781631278; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H0O37JLU9+UUO6RjfEV3qnVTJcbwi/sCUYtuia8QZ84=;
-        b=OpZ1b/mAM7il9uLaDmV2dJfnKy7q0QPThcx2nA6IjX8bxsh6e7XaTsXd+Wof6Ww5Ap
-         Y1WLFpxOgzjlLXSuzXP5+TDlJ71nFcdbNpxZKMvuWgVx3VuZ/JN1eaDKeedW/+syCUA0
-         tYgrE4GHaYtKFnwneCV3rWaqVNq/2eYhg5szLbsYhgLiKX1lZgTeaSNQKrt5fvXF6FI8
-         5eYa9eDXbSA7X6v3kmmoqXM20Um+z+mzTic4dqPtH3fsgcX1k3MX7CasgmGiphY3bIxZ
-         01kNywJk0sGhDcfJ+ceQs09n816BXtMDBYMPNkSQQwc5jaTe7qbus5l6Pj0TafgLFfF4
-         G57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781026478; x=1781631278;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H0O37JLU9+UUO6RjfEV3qnVTJcbwi/sCUYtuia8QZ84=;
-        b=BewSYA6t+ULmxs+PahX4ZjP9J9wQivPzbNjqT7Say8XsuayiIg+Yf4kI8PaaU15p1f
-         K0KZNJ0M1+Ld9TsPbAWe5E9g7bug+4Ll+CPfbNSeYa2Qitkrdyz4lYrsPdqYDu+CC8SI
-         Gq3WN36DFlApp29iXC9Ezbijk8v3bSPX+oC/t4KtYLEcO8DJu+lgrVLygVHfUxdy09nW
-         ZVlTtDv1CD6lpGx3ldvPIN/+wLzxgsM9hwlo82j+FISAgjgIvNILr80sN5G/dB7ftJ0X
-         FZ4crNiZBFJRCKq2IRj/qkMZeoRPkvFvlGnwiJtL8WmU8u0+CuoLCEof2JK7L2O44V9W
-         BvJw==
-X-Forwarded-Encrypted: i=1; AFNElJ9od5Afq7pKiioPKPkUqmjIHu+qho1NpEo0W+8eihFbp4myDsFJMJPF6P0T9a5Wl6IOS0s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySXhcFI0LnHrFzG7f5ZTw2OKa0yPF/Sc3CA1GSjQgVjFa6vNOs
-	NJikd9os3RV1Zu3RU1fllY8FygFKDrdAm/fsiHhuBTySxV6XHJwrTFFRxQfO7C5am7c=
-X-Gm-Gg: Acq92OFA5kVbC56MkH4Geapw2PdcHWji16CSfQ0DgbgPLw3XOmcwa0rLSJ2NASEoaM0
-	d2w2hyzoXGNGRmNIkLaeGO2iQQpqdxGzsVzAEIos69cclV/4E6TofWoByXNPcdXparZn0KzH1Lk
-	ubg8swjSj1dW5TLD6sO1jD5Im25Y9rTwxwv/hhfrovcqW2TP+2cy2hbg6cXGKfXlXLbXmtP7e01
-	DuJlLBgy9MMAGJTTlLZHgxOeEx6VzWESjGbsRE+Ec1stzrRdMerOpUnhh+g2zVXK+oi03Kmeb31
-	YQ448NtoS1IZ5XfOKBF955bQOHbeCjEmHYf2xuUlDoxUiMwFfzqmKizoRpNN0N6RPqjbi06gijK
-	yY1C5NCg0btrhYhhr3GVDlifbpifYCGgoPQ88jGNVmBTV0b1gijNyOmeZlvjOL3TkJsPuz9Aj8c
-	Vb82w7wg+wIxpyymg=
-X-Received: by 2002:a05:6a00:908e:b0:842:459b:d61b with SMTP id d2e1a72fcca58-842b0f90d88mr21560405b3a.32.1781026478050;
-        Tue, 09 Jun 2026 10:34:38 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:12::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842828e5638sm22758898b3a.50.2026.06.09.10.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 10:34:37 -0700 (PDT)
-Date: Tue, 9 Jun 2026 10:34:36 -0700
-From: Joe Damato <joe@dama.to>
-To: Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] bnxt: fix head underflow on XDP head-grow
-Message-ID: <aihOrCfOLloudXmk@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260608203129.920104-1-joe@dama.to>
- <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
- <aigoUdgW/icfFwvh@devvm20253.cco0.facebook.com>
- <CACKFLinzaJr8EjXx7yME5cKv9LR1+pF+2iY43V+GeYdEjbUo+Q@mail.gmail.com>
- <aihLw8yR6Vu5B6lS@devvm20253.cco0.facebook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l9Tu4E46"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B381F00893;
+	Tue,  9 Jun 2026 17:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781027467;
+	bh=cFXAfTPwn5puZHl7L/GydstH0PobxJJd7HC+8+4WE30=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=l9Tu4E46gqjGAwhuTOUnqz5NbqW4G+Njutq0In/8eTz1yIOmG3VoXviWZkUsIcKOv
+	 kHj6TkbCqZQCaXXX6JKD0yuvuYa4Wtp8+4jpbaoe2nmpmAp5AQwC6DrSsZLwkO3hcC
+	 7tW6yj4WCfanHVD3T/YaJwJohiZ4qdKiwnu7ej48tdUKa4kdd+PL/nGcoVKk1ac43o
+	 +Ey8R6rBCXNKhkzghrz1JgEZ34fcnBdMWL8m8BtlRLg+VDPhQvLFJCSrLHgw+xMP+c
+	 RR/5ts/wHSKOP+E45fQE1P7w+jm+YC1sNX37hx2QTFN7hKyDLF/b/Rw0yOT5tiDU0a
+	 O2MW9iQcCofOw==
+Content-Type: multipart/mixed; boundary="===============4493727351168416969=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aihLw8yR6Vu5B6lS@devvm20253.cco0.facebook.com>
+Message-Id: <d8b1da1af69842d46dd4a02216a183e8ba611a2af4ca07ed4c2c7957be4698cc@mail.kernel.org>
+In-Reply-To: <20260609172052.81613-1-avinash.duduskar@gmail.com>
+References: <20260609172052.81613-1-avinash.duduskar@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
+From: bot+bpf-ci@kernel.org
+To: avinash.duduskar@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,hawk@kernel.org,kpsingh@kernel.org,toke@redhat.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  9 Jun 2026 17:51:07 +0000 (UTC)
 
-On Tue, Jun 09, 2026 at 10:22:12AM -0700, Joe Damato wrote:
-> On Tue, Jun 09, 2026 at 09:44:17AM -0700, Michael Chan wrote:
-> > On Tue, Jun 9, 2026 at 7:51 AM Joe Damato <joe@dama.to> wrote:
-> > >
-> > > On Mon, Jun 08, 2026 at 09:22:07PM -0700, Michael Chan wrote:
-> > > > On Mon, Jun 8, 2026 at 1:31 PM Joe Damato <joe@dama.to> wrote:
-> > > > >
-> > > > > To fix this, we need to do a bit of math to recover the offset if this
-> > > > > is a page fragment since it is not passed into rx_skb_func
-> > > > > (bnxt_rx_multi_page_skb, in this case).
-> > > >
-> > > > I wonder if we should add an offset field to struct bnxt_sw_rx_bd to
-> > > > simplify things for page mode.  Struct bnxt_sw_rx_agg_bd has the
-> > > > offset field for a similar purpose.  Thanks.
-> > >
-> > > I don't mind doing that, but I wonder if that's better material for net-next?
-> > >
-> > > In other words, we get the minimal fix in (this patch?) and then do the
-> > > cleanup and struct tweaking as a follow-up in net-next?
-> > >
-> > > I could definitely be wrong; I had just assumed patches for net were supposed
-> > > to be as minimal as possible.
-> > 
-> > I think some minor refactoring/struct changes to make the fix
-> > cleaner/simpler should be fine for -net.  I think the total number of
-> > line changes should be about the same either way.
-> 
-> OK. Are you OK with changing the signature of rx_skb_func? I was going to add
-> offset as an argument so it can be passed through.
+--===============4493727351168416969==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Oh, actually nevermind. I think once offset is store in the struct we can
-derive like this?
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 11dd610fa5fa..aa7fe378a35d 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
 
-frag_start = page_address(page) + rxr->rx_buf_ring[cons].offset;
+[ ... ]
 
-And then the signature doesn't need to change.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9590877b0714..782fa86df95a 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -6119,10 +6119,28 @@ static const struct bpf_func_proto bpf_skb_get_xfrm_state_proto = {
+>  #endif
+>
+>  #if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
+> -static int bpf_fib_set_fwd_params(struct bpf_fib_lookup *params, u32 mtu)
+> +static int bpf_fib_set_fwd_params(struct net_device *dev,
+> +				  struct bpf_fib_lookup *params,
+> +				  u32 flags, u32 mtu)
+>  {
+>  	params->h_vlan_TCI = 0;
+>  	params->h_vlan_proto = 0;
+> +
+> +	if ((flags & BPF_FIB_LOOKUP_VLAN) && is_vlan_dev(dev)) {
+> +		struct net_device *real_dev = vlan_dev_real_dev(dev);
+
+Does this correctly handle stacked VLANs (QinQ)? Both the commit message
+and the inline comment below mention that stacked VLANs are not walked and
+only the immediate parent is resolved.
+
+However, looking at the implementation of vlan_dev_real_dev() in
+net/8021q/vlan_core.c:
+
+const struct net_device *vlan_dev_real_dev(const struct net_device *dev)
+{
+    while (is_vlan_dev(dev))
+        dev = vlan_dev_priv(dev)->real_dev;
+    return dev;
+}
+
+It appears vlan_dev_real_dev() loops through all stacked VLANs to return
+the ultimate non-VLAN underlying device.
+
+If the configuration is QinQ, wouldn't this set params->ifindex to the base
+physical device while only returning the topmost VLAN tag in
+params->h_vlan_TCI? This could cause an XDP program to push only a single
+tag and drop the intermediate VLAN tags, bypassing the outer VLAN entirely.
+
+Should this use vlan_dev_priv(dev)->real_dev instead to only get the
+immediate parent as intended?
+
+> +
+> +		/* Only the immediate parent is resolved; stacked VLANs
+
+This isn't a bug, but the comment style here differs from BPF subsystem
+guidelines. The opening /* has comment text on the same line, but the BPF
+comment style prefers the opening /* on its own line with text starting
+on the next line.
+
+> +		 * (QinQ) are not walked, and a NULL real_dev (which
+> +		 * is_vlan_dev() rules out in practice) keeps the
+> +		 * original ifindex.
+> +		 */
+> +		if (real_dev) {
+> +			params->h_vlan_proto = vlan_dev_vlan_proto(dev);
+> +			params->h_vlan_TCI = htons(vlan_dev_vlan_id(dev));
+> +			params->ifindex = real_dev->ifindex;
+> +		}
+> +	}
+> +
+>  	if (mtu)
+>  		params->mtu_result = mtu; /* union with tot_len */
+>
+> @@ -6265,7 +6283,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>  	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
+>
+>  set_fwd_params:
+> -	return bpf_fib_set_fwd_params(params, mtu);
+> +	return bpf_fib_set_fwd_params(dev, params, flags, mtu);
+>  }
+>  #endif
+
+[ ... ]
+
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 11dd610fa5fa..aa7fe378a35d 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27223878961
+--===============4493727351168416969==--
