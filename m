@@ -1,33 +1,32 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB0542B74B;
-	Tue,  9 Jun 2026 14:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A446221FCD;
+	Tue,  9 Jun 2026 15:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016960; cv=none; b=cO9ySSj/XnYEBLO+RHfU25ELlXgQ+PPaT+Ht1Fe5qiLcV3PXoBR+EQWfPBhrnu0hagoN5EnlTXtoBlgN0R87TEeVxPquL0i2//HdlJDuB88UfBlppyLIQemraT7Q14O/URECZyrj0vyy4oFJ4z3+bEd97hvbvGycpLvGBZOByAc=
+	t=1781017394; cv=none; b=uO/1ekJTqkNTqRBzKi7iqT1sFXCC064onQgE5KpzLEb9R/uIVzEtnSmQKdPq+rcMhTe3YwqUpfu7tx8xLuuwKVGpT/SDg1pyF9FQjEMmdQ7nuGd9z6g2fap01F7z5BCB25M14YKgTkm+hlaJ0PaSARWa1vUqaTtRI/akr/zj3PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781016960; c=relaxed/simple;
-	bh=f1GtDHYavZM/VY10dMvSenAtCn/h1MCCk2FK1el+UyE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Od7jzuly8WhC2rXPjIO4H8rpL56ItWfEhpeUerzIKZsqEZKhZ38JlmGTDLA+H0cryRNPnn82PqTMytak/PM31Te2htpvsmIAYdTxS2MCUAA7Pwe4bLP2AFJZXUieOq/aZPN7FS4m28ZCIX+a+zorv/8sD519LK0Zp3eIh1kbE8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=S1Uk/7kR; arc=none smtp.client-ip=52.229.168.213
+	s=arc-20240116; t=1781017394; c=relaxed/simple;
+	bh=uS9T9xrOQ3uW4fa8o3RrPf4daIkGaOyuEJA/jDxFn34=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TDN5zsLhM+Fy2s36cSlpSglPuQpemNOmk+uNQrvOmN2UvL/BVWnetb+tTnL9V7hc4TuSVGW2BizjdyioTVev1arz8tcAYtxnlhukjRRwAQLTVofyGLQMVCjB2i/pAVuACyxuzan2NWAhUJXCiqeWUkePfY4ELYwxf8gerwm5a8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=fE0BNuAO; arc=none smtp.client-ip=52.175.55.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="S1Uk/7kR"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="fE0BNuAO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
 	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=iw/2JnR+lvZnQGgGf3w+49HqVwjVY390Bjd+q6hztJM=; b=S1Uk/7
-	kR0KoiGufK0zP5LDKqAJbwnWGE9YLPkLoDoSXK2FMVLeV5Em7nGfDbMUD755sz2G
-	mdR4XJxBzDQfkH1Fi722HgsPNhhtPuLZDpAQBN1UgG8lF3ZFWIOyqY3OuA3mJQlI
-	ghDQevVND+iWh17qkHmbYdf07cMktdq0zz0U4=
+	To:Cc; bh=pAk+e+7kZwHmPhyCNpULaOB0zFbkRzaLPt8ftiq2Ggk=; b=fE0BNu
+	AOPiioA7n2p8P+Hef2PGYE6zUV9VD32H4Fh54ocaMnmpSh7P99iMU1slFTyu/4e9
+	tFW4x3Izcx0CIGsNJ3fOovRF0AkPB3IRecwqzQuJ3WZ/6JXlb9QP2UxwCllk6hik
+	rQl9itBUXrWloIpusDfqAVbWcPacgQbCLhkxk=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQBXEMBqKShqQodBAg--.40025S2;
-	Tue, 09 Jun 2026 22:55:39 +0800 (CST)
+	by web2 (Coremail) with SMTP id yQQGZQCXcporKyhqMNgjAg--.44237S2;
+	Tue, 09 Jun 2026 23:03:07 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next 0/2] bpf: Reject scalar addition from untrusted
- memory
-Date: Tue, 09 Jun 2026 22:55:17 +0800
-Message-Id: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next 0/2] bpf: Fix gotox target validation against CFG
+Date: Tue, 09 Jun 2026 23:03:05 +0800
+Message-Id: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,80 +35,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFUpKGoC/zXM0QrCMAyF4VcZuTaQrTqmryK76NJEK1JHM2Uw9
- u52Di9/zuFbwCRHMbhUC2T5RIuvVKI+VMB3n26CMZSGhpqWWjqjUo3k0Ng/fUYfAg6jYpJ5QmL
- Wzp+O6lwHBRizaJx/+BX+L+j3xd7DQ3jabFjXLzt5x0SIAAAA
-X-Change-ID: 20260609-f01-03-scalar-add-bpf-next-0ccf8a54f338
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+X-B4-Tracking: v=1; b=H4sIACorKGoC/zWMywqDMBBFf0Vm3YFxwGj7K6ULHxM7LhJJogTEf
+ zdt6fJw7zkHRAkqER7VAUF2jepdgfpWwfju3SyoU2FgYkOG7mipRmKcffIZh9Wik5yQWxbDraG
+ umaC4axCr+dt9wv8Fr98St2GRMX2ycJ4X/nHvJ4MAAAA=
+X-Change-ID: 20260609-f01-02-gotox-bpf-next-272e6276085d
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Anton Protopopov <a.s.protopopov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016941; l=1398;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781017389; l=1537;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=f1GtDHYavZM/VY10dMvSenAtCn/h1MCCk2FK1el+UyE=;
- b=mZjMM2OfUrFWQdRAcTLr7KPsT1zgYSqgfsLv4PgS6UFM8HVO6u9W8su5TanY5pOvKD+vHHsjp
- MT8ReL2Ht8XBMQ9CN6u2wnJA9dCzUDCjAEAKafLeXS6h6s0RxUsu+gt
+ bh=uS9T9xrOQ3uW4fa8o3RrPf4daIkGaOyuEJA/jDxFn34=;
+ b=Rbvm7bam/fLZ8qgZpwM+xDgQBCblCII8eZcdfMdFHZWy3uMBuesVW/6EyHrT84jB8i7/Vbc4b
+ Rc4gborFieYC35jSH8H54VPyXpbRq0iVisMMD78PVSSNqIFsx2GPqWz
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQBXEMBqKShqQodBAg--.40025S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF48Zr1UuryxKF1fJryrWFg_yoW8GrWUpr
-	y8JFyavw1ktFsrGa43ZF4jvF1F9F1rG3yYgF1xA34UCasxJFy8tF47KayUArZ8C3WkZayY
-	gFyUZwn09a17AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:yQQGZQCXcporKyhqMNgjAg--.44237S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur1kuFWDGr4fKF1UZrWrZrb_yoW8XrWkpF
+	y7XF13trW8JFZ2g3W3tF47XryrWrn5Gw1YkF4xJw1Iyw1rGF95JrW8KasxZFZ8ta4rZw4r
+	WFy0vF1fCr4kCrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
-	Y4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
-	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACdTQABse
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4
+	vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+	7VCjz48v1sIEY20_GrWkJr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxkIecxEwVAFwVW5WwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+	x26r4rKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
+	xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+	1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
+	6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
+	pf9x0Jjoq2NUUUUU=
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgUNA2onzACf5wAAsw
 
-scalar += rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with the
-pointer as the source register. The untrusted PTR_TO_MEM case returns there
-without updating the scalar destination, leaving stale verifier state.
+For gotox, CFG construction models the indirect-jump target set in
+insn_aux_data->jt, but do_check() later follows targets from the runtime
+PTR_TO_INSN register's own INSN_ARRAY map. If the same gotox can be
+reached with PTR_TO_INSN values from different maps, do_check() can accept
+a target that CFG did not model.
 
-Reject that addition before the early return. Pointer += scalar remains
-handled by the existing untrusted-memory rule.
+On x86, that can transfer control into another subprog without a matching
+BPF call frame and crash when the program is run.
 
-Patch 1 adds the verifier rejection. Patch 2 adds a verifier regression
-test for scalar += bpf_rdonly_cast(..., 0).
+Fix this by rejecting gotox map targets that are absent from the CFG jump
+table built for that instruction. Add a regression test covering the
+two-map cross-subprog case.
 
 Validation:
 
-  unpatched bpf-next 8496d9020ff3:
-    BPF_PROG_LOAD -> fd=4 errno=0
-    RESULT: verifier ACCEPTED (unexpected_accept)
+  unpatched bpf-next b9452b594fd3:
+    F01_02_LOAD_FD=5 errno=0 (accepted)
+    SELFTEST F01-02 gotox-cross-subprog: FAIL
 
-  patched bpf-next 8496d9020ff3 + this series:
-    BPF_PROG_LOAD -> fd=-1 errno=13 (Permission denied)
-    R1 tried to add from rdonly_untrusted_mem to scalar
-    RESULT: verifier REJECTED as expected
+  patched bpf-next b9452b594fd3 + this series:
+    F01_02_LOAD_FD=-1 errno=22 (Invalid argument)
+    gotox target 14 from map id=2 is not in the CFG jump table
+    SELFTEST F01-02 gotox-cross-subprog: PASS
 
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
 Nuoqi Gui (2):
-      bpf: Reject scalar addition from untrusted memory
-      selftests/bpf: Cover scalar addition from rdonly untrusted memory
+      bpf: Fix gotox target validation against CFG
+      selftests/bpf: Add cross-subprog gotox target coverage
 
- kernel/bpf/verifier.c                                   |  8 ++++++++
- .../testing/selftests/bpf/progs/mem_rdonly_untrusted.c  | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+)
+ kernel/bpf/verifier.c                              | 26 ++++++++
+ tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
+ 2 files changed, 99 insertions(+)
 ---
-base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
-change-id: 20260609-f01-03-scalar-add-bpf-next-0ccf8a54f338
+base-commit: b9452b594fd3aecbfd4aa0a6a1f741330a37dab7
+change-id: 20260609-f01-02-gotox-bpf-next-272e6276085d
 
 Best regards,
 --  
