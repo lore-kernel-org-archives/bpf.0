@@ -1,108 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC47426B2D3;
-	Tue,  9 Jun 2026 01:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76F63438B3;
+	Tue,  9 Jun 2026 01:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780968893; cv=none; b=Uv31CCrvMJhshezk26QmOQF60NidXEKs2SZHuGgdmXTFqUbshl4GHTxfEOhhqS6eJgY4zmyAr09n0yoyp4RQtzWrHJ/d7Nd4PtfUT9xf2VE+mm93QQX7xBFw0aw6RgB4kgrxucx7k67OAl+zKk2NLnJoDoJFzLzZ7v39GVKNWSk=
+	t=1780969137; cv=none; b=hg3AArE9J1bkiTEynHCUg1NTnKA2L/8X9hOXCvdAIA27F8lTUdDNM644H5Saqil1Q3wknT3hHKG6hk7knj1TLlFbTXNb5JHWp4iZ+cYZeywAPF5mVELBKbkCcdx9fMjmMLdp+T0BjWFXwz+Cf1EmlHWi7MK/trphdArtpAXIeog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780968893; c=relaxed/simple;
-	bh=ub253+LnCietUqOYZskAZYNVdjA1Fth/D8XFf5NguYk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=goLgZLBhBQ4qvYRTHwcoqMJVaz4e0ccX3l2vLAKjzM+dRt7moq45MrIieRzBqBJWRtxLbvlbKy+ZlGWFdWI/BQsfvOXhEyzRof4Xg2d9Lcxsuao2qniHQgVOL7kpKEPwTLeidS/K4sq/UCGlDREYpuwVL7yHkdU4ogY4L647y6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Por0PhLM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780969137; c=relaxed/simple;
+	bh=QGP14ChqOqWDARMufemqIhiBCcuUsJDAgQPOhMUCTcY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ay+J8gpvRSRK9itd7n5GaXdSXZGpqqXWmhBNwDTvPaFqOpvx0Fx5d3Z3hK1wwfnsAWhlfCc16JbNzeaLC4bmQTJLuC7MVsPnVME1ZDy0XenXMKXF05Dqy2q7yXaCrBjlh68AUNPFNXAjytVrjaJfUw1H/jyOaKWtTczfVjRc2hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=mTn7KZe/; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Por0PhLM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F081F00893;
-	Tue,  9 Jun 2026 01:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780968892;
-	bh=vmZpCmuQ7wnqO/HZtrmD6xeHLLBF/ouoM10uO0DNTf8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Por0PhLMP79NepOjIWPiWkHnvzQ+eXwkBv5Xjv5jYrjk1TDsj1TzcrF7PoZjBCyfF
-	 jgv2uffcCsM1ZokMG1TLIFUzabaXkdrc3+SM5xT/rf/W0JW0O+QKLHxfR94MCuy520
-	 hLYj16XH8DsHmXkv3Y7nli2hm1IX+sIW4mqjOZPgpX+7/HKm/DQLs2/Txzpxag1y8o
-	 TL0lyaqZ/n1CgpI5TDjO5iSlu8CYqOPzSm2zZR5dxNW35ykbeFw3IZK8y/SEUXfhr8
-	 3STcmTvgYn3EXYv85pIhFURsr5u5Bv8HMdWyo7R9wUaCkvb+4nGH6TmoqwWNKsGuAe
-	 9dQuJO7jD3+2A==
-Date: Tue, 9 Jun 2026 10:34:46 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v2 6/6] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
-Message-Id: <20260609103446.7d29679c90e834ff8e32c56d@kernel.org>
-In-Reply-To: <aibSj4XeRWJmasCx@gmail.com>
-References: <20260605-bootconfig_using_tools-v2-0-d309f544b5f7@debian.org>
-	<20260605-bootconfig_using_tools-v2-6-d309f544b5f7@debian.org>
-	<20260608191928.d7d2dea899b94f05d397f891@kernel.org>
-	<aibSj4XeRWJmasCx@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="mTn7KZe/"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=HO6DGfU3xacey1W43Ld+NtfEtj2hV6hCNfH5uDNJXJE=;
+	b=mTn7KZe//jeJvtyz+0rJ7TaeRaHON4eHxFTaPps68SscPn+PRPgy9c63srUkzdwf/VJW4yr0q
+	CK1avzhCuJHPDW+3L+ENfGjx7SZPrnzlMC9zN/z/gSMRwyF95vTFOLzwQT6f7nBepFzGtlQSAJp
+	NvRSOj+rAodzIQE9UZhwc84=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gZBFB0jLgz1prwj;
+	Tue,  9 Jun 2026 09:30:54 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0AB0B40561;
+	Tue,  9 Jun 2026 09:38:50 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 9 Jun 2026 09:38:48 +0800
+Message-ID: <2bd07ecf-9f7f-4c47-b5d8-0f17b72bc56d@huawei.com>
+Date: Tue, 9 Jun 2026 09:38:48 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/5] arch/riscv: Add bitrev.h file to support rev8 and
+ brev8
+To: Yury Norov <ynorov@nvidia.com>, Paul Walmsley <pjw@kernel.org>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+	<linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, Eric Biggers
+	<ebiggers@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+	<sdf@fomichev.me>, <linux-kernel@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-arch@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC: David Laight <david.laight.linux@gmail.com>
+References: <20260506175207.110893-1-ynorov@nvidia.com>
+ <20260506175207.110893-5-ynorov@nvidia.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <20260506175207.110893-5-ynorov@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-On Mon, 8 Jun 2026 07:41:05 -0700
-Breno Leitao <leitao@debian.org> wrote:
 
-> On Mon, Jun 08, 2026 at 07:19:28PM +0900, Masami Hiramatsu wrote:
-> > On Fri, 05 Jun 2026 05:03:37 -0700
-> > Breno Leitao <leitao@debian.org> wrote:
-> > 
-> > > Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
-> > > CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
-> > > build-time-rendered embedded bootconfig "kernel" subtree is part of
-> > > boot_command_line by the time parse_early_param() runs. early_param()
-> > > handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
-> > > CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
-> > > 
-> > > Gate the prepend on the bootconfig opt-in: only fold in the embedded
-> > > kernel.* keys when "bootconfig" is present on the command line, or
-> > > CONFIG_BOOT_CONFIG_FORCE is set. Applying the embedded cmdline
-> > > unconditionally would (a) diverge from how embedded init.* keys are
-> > > treated and (b) break fail-safe recovery: a malformed embedded
-> > > console=/mem= could panic the boot with no way for the admin to disable
-> > > it by dropping "bootconfig" from the bootloader cmdline.
-> > > cmdline_find_option_bool() runs before parse_early_param(), so the gate
-> > > is cheap and correctly ordered.
-> > > 
-> > > Select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG so the user-visible
-> > > CONFIG_BOOT_CONFIG_EMBED_CMDLINE option becomes selectable on x86.
-> > 
-> > This seems like a dummy config. what code does depend on this flag?
-> 
-> No C code reads ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG directly — it's
-> a silent gating symbol, the same ARCH_SUPPORTS_* idiom as
-> ARCH_SUPPORTS_CFI, ARCH_SUPPORTS_LTO_CLANG, etc.
-> 
-> Its only role is the depends on line of BOOT_CONFIG_EMBED_CMDLINE: an
-> arch selects it once its setup_arch() calls
-> xbc_prepend_embedded_cmdline(), and that makes the user-visible
-> BOOT_CONFIG_EMBED_CMDLINE selectable.
-> 
-> Right now, only x86 supports embedded bootconfig, thus, only x86 does
-> the following (last patch):
-> 
-> 	config X86
-> 	+       select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
-> 
-> So, no other platform can see CONFIG_BOOT_CONFIG_EMBED_CMDLINE.
 
-Ah, OK. I missed the 3/6, which defined the dependency.
+On 5/7/2026 1:52 AM, Yury Norov wrote:
+> From: Jinjie Ruan <ruanjinjie@huawei.com>
+> 
+> The RISC-V Bit-manipulation Extension for Cryptography (Zbkb) provides
+> the 'brev8' instruction, which reverses the bits within each byte.
+> Combined with the 'rev8' instruction (from Zbb or Zbkb), which reverses
+> the byte order of a register, we can efficiently implement 16-bit,
+> 32-bit, and (on RV64) 64-bit bit reversal.
+> 
+> This is significantly faster than the default software table-lookup
+> implementation in lib/bitrev.c, as it replaces memory accesses and
+> multiple arithmetic operations with just two or three hardware
+> instructions.
+> 
+> Select HAVE_ARCH_BITREVERSE as well as GENERIC_BITREVERSE,
+> and provide <asm/bitrev.h> to utilize these instructions when
+> the Zbkb extension is available at runtime via the alternatives
+> mechanism.
+> 
+> [Yury: select the options conditionally on BITREVERSE]
+> 
+> Link: https://docs.riscv.org/reference/isa/unpriv/b-st-ext.html
+> Suggested-by: David Laight <david.laight.linux@gmail.com>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+> ---
+>  arch/riscv/Kconfig              |  2 ++
+>  arch/riscv/include/asm/bitrev.h | 51 +++++++++++++++++++++++++++++++++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 arch/riscv/include/asm/bitrev.h
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d235396c4514..a708583f785d 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -104,6 +104,7 @@ config RISCV
+>  	select FUNCTION_ALIGNMENT_8B if DYNAMIC_FTRACE_WITH_CALL_OPS
+>  	select GENERIC_ARCH_TOPOLOGY
+>  	select GENERIC_ATOMIC64 if !64BIT
+> +	select GENERIC_BITREVERSE if HAVE_ARCH_BITREVERSE
 
-Thanks!
+Maybe 'select GENERIC_BITREVERSE if BITREVERSE' ?
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>  	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+>  	select GENERIC_CPU_DEVICES
+>  	select GENERIC_CPU_VULNERABILITIES
+> @@ -128,6 +129,7 @@ config RISCV
+>  	select HAS_IOPORT if MMU
+>  	select HAVE_ALIGNED_STRUCT_PAGE
+>  	select HAVE_ARCH_AUDITSYSCALL
+> +	select HAVE_ARCH_BITREVERSE if RISCV_ISA_ZBKB && BITREVERSE
+>  	select HAVE_ARCH_HUGE_VMALLOC if HAVE_ARCH_HUGE_VMAP
+>  	select HAVE_ARCH_HUGE_VMAP if MMU && 64BIT
+>  	select HAVE_ARCH_JUMP_LABEL
+> diff --git a/arch/riscv/include/asm/bitrev.h b/arch/riscv/include/asm/bitrev.h
+> new file mode 100644
+> index 000000000000..4b9b8d34cc3b
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/bitrev.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_BITREV_H
+> +#define __ASM_BITREV_H
+> +
+> +#include <linux/types.h>
+> +#include <asm/cpufeature-macros.h>
+> +#include <asm/hwcap.h>
+> +#include <asm-generic/bitops/__bitrev.h>
+> +
+> +static __always_inline __attribute_const__ u32 __arch_bitrev32(u32 x)
+> +{
+> +	unsigned long result;
+> +
+> +	if (!riscv_has_extension_likely(RISCV_ISA_EXT_ZBKB))
+> +		return generic___bitrev32(x);
+> +
+> +	asm volatile(
+> +		".option push\n"
+> +		".option arch,+zbkb\n"
+> +		"rev8 %0, %1\n"
+> +		"brev8 %0, %0\n"
+> +		".option pop"
+> +		: "=r" (result) : "r" ((long)x)
+> +	);
+> +
+> +	return result >> (__riscv_xlen - 32);
+> +}
+> +
+> +static __always_inline __attribute_const__ u16 __arch_bitrev16(u16 x)
+> +{
+> +	return __arch_bitrev32(x) >> 16;
+> +}
+> +
+> +static __always_inline __attribute_const__ u8 __arch_bitrev8(u8 x)
+> +{
+> +	unsigned long result;
+> +
+> +	if (!riscv_has_extension_likely(RISCV_ISA_EXT_ZBKB))
+> +		return generic___bitrev8(x);
+> +
+> +	asm volatile(
+> +		".option push\n"
+> +		".option arch,+zbkb\n"
+> +		"brev8 %0, %1\n"
+> +		".option pop"
+> +		: "=r" (result) : "r" ((long)x)
+> +	);
+> +
+> +	return result;
+> +}
+> +#endif
+
