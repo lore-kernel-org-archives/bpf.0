@@ -1,157 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493C33749F5
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F42B3939DA
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781036078; cv=none; b=CY0fw1z/YEw6DUNXLy4CCeCO8cz6vymFt3G2I4XNFCCcVK/nhJaK3zlT67ENxUDTcfVHojkUQkqWaF7mKcsrJO90eqZLqySJtgkcL5KdFOkh+rVSJgwH1SnUw9TJ+D2v0vUqF/6zfbkRaAPj9olm8Fv5ucLr/Z10ivtVzIiEJnA=
+	t=1781036752; cv=none; b=h5dQhpckUyS2n+xg/AwY97MMHwsqBvB7WJ+YjuzbbaJcPppp2yCPUd5qt8v+F+G+irFBCakxqSiYk2APafeUngbufOMIRp2J3k6+YqDY2u6eys57e8a6ms0/kQRratQ/H0162My8OOojMQOdj4nQgwfNSEsg+sXxtxnYwKMScbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781036078; c=relaxed/simple;
-	bh=hprTfB754mLY1EMoptmcabMyk8Qi2IBNgYxDZtI+sD0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=fTCn1MLNk5g6n0/pLX6LiopqMroyJ0VxE/rW2fGW6xjqXWgtb9NjUGT6OdhH1lOUc+/xkWS7Gp9+fR2eHEWuDjegV+XGfsqlc+iNr/8ioGHsnD+BFUWy+AA6++apgd5aGmCxcuQe10rVOCojCC1ByHgyk5gA8jbQQ5TGd2XOxWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JS4NESIi; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tmdqwAyV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781036752; c=relaxed/simple;
+	bh=pE57AZIv8StEXNnNoTc7avwcH1V5LswkC87aOD2fEpI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NofD0bn2Jdu1InTstEo2rZ+XBoHVSSVoA98aFvo8qi6FFMwfWHdMyt/WT88DNGpJbRn1Bkg/dvuYSUjhKfNVDBgl3PX0klYvnKwnVT9SNH1uvTP/6JaAcntrvlGEyQoPvg+H/k38rcIjFkvwp07B+j+SwgsA7n9VwBZketkckaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gKPP15lE; arc=none smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JS4NESIi";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tmdqwAyV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781036076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hprTfB754mLY1EMoptmcabMyk8Qi2IBNgYxDZtI+sD0=;
-	b=JS4NESIi8uIDfQb+NZsLbDIbpI5JPVMx+3iW7ayX7HnzYCT/XbKmU4m5OK2hZzPflMeEL0
-	VABktHeiOvgwUWWm9rvkmS6F4FbxDxaROESohspd41pepmfqi99VD+At/AXyKp+swteOlI
-	iJumZofZ6+HPRV6u825Lk76CHD66xO8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-519-b0fH3MJdMwqc6SeGoPHNXQ-1; Tue, 09 Jun 2026 16:14:35 -0400
-X-MC-Unique: b0fH3MJdMwqc6SeGoPHNXQ-1
-X-Mimecast-MFC-AGG-ID: b0fH3MJdMwqc6SeGoPHNXQ_1781036073
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-490abeb7298so62303405e9.2
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 13:14:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gKPP15lE"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-45ef29c5561so3234423f8f.0
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 13:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781036073; x=1781640873; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hprTfB754mLY1EMoptmcabMyk8Qi2IBNgYxDZtI+sD0=;
-        b=tmdqwAyV8sweQ+4yf72Tfz1NqU+yJbIV5m7Wcc6lUrH/KqEhlpdHmf2zHMgU67fCZn
-         zmedDU1OTZ/P7jn9LkWfOATk1HrVodlYM3sEEVbDIJczdmKsjZlfHxdjyk1pao1cmiAR
-         7quodlGILi7ydUjojrvZo0/QO7F5mxJiJwCkj8n9h3dllKE40cc13tl4VFALvVnd8L/C
-         SK/QvYd3qOwkOwPu7/q3ViDmRUcpKEc06OoM4MgLMB1fJghefDDX1HMd75iekgdDD+Fs
-         0PCidiUQMbgJzvk1+UPEx8FMZkkUzS7zUjqy3NVKbir6+r+6wlDzPkCQAWgVoP641IIZ
-         1TAw==
+        d=gmail.com; s=20251104; t=1781036750; x=1781641550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jr+SU3sus1bvEp8jC99qtI2zm8iD9CvR4tXETMhNRMY=;
+        b=gKPP15lEhh+DvpREku0bt8JJkw+QM5KxjpJaonCX16Phdoxa1HOWnkpJZcwT9KkMdu
+         x1ZRs56g1VBAH30YLxyKnNbLegtu0BzB7HJU2QoYtQtEpKwr8eN0I2YoL0HJUdbhUwGG
+         YAh+CgY5669ik8OeLKPMkB+QlRlAJTZ+zRZ+8b0XVABRtCsclDWL4pSyeMIJB5S3yCE5
+         tiAUqH+IBQsas/sScpbR/avXjVfgEO+2RoCmHwlDOk/6UF5xT/+a/o5Mrb2UcqJ3+zd+
+         6rfrXuP+BRrqjI0zhBYYkXn89seKAVJI+Obxieps4LkDGeTnvZLim0/w0p4cyrHql61G
+         3Fgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781036073; x=1781640873;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hprTfB754mLY1EMoptmcabMyk8Qi2IBNgYxDZtI+sD0=;
-        b=ixYLpeOuStRIpEHvimNbWYd6q/pMOjmdr7AOkyqEHeaVKTvAFVzqMwlUjW3dD2LeAg
-         8crtA5pPXF4cObI4xj907gORs0fX10UajjHs8cFzDGbK4xYIiygnsmfD+iIrLUSL7O2W
-         SxEtM38QVI8PwiFmt/gez3q1KE5DpPlzhGtNgpuPmpAh96u3xGoY4BeK0/jDUHGVvs45
-         gZg0pckEN8iOM5/N3DzBdZbxzUS34KOnVt8oGuT//e9ZA4a5Ow5hg9mKUx5uA85kWhPc
-         GGXgJY5OzhC1FsUeusGxtvzlR9jSxXYD1tE+5tp3sQwDY2U9fIk6PyTEB3ITvNEXFqdx
-         YjOg==
-X-Forwarded-Encrypted: i=1; AFNElJ/Q3mRDxXum8bqDiHlpG4dwZ0ecUkS1cz1XrTzkPdp24o+iqGfJCFKud0aKR4sr/aT4Wxc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynaVpy9Qk7rpHhEMcU04+qpZnJ1Lk9nmdv1IEsng7HjZG30BCP
-	ES4g6kJFF7j5RotDzDA8SvL1WMQ4R5ulwGjYn+O6G3bn0HAkrO5y2Jt6buYblPSTjSlp55V7TSk
-	Kg/cHNF6fczoEmIDuyd98TguUR/S9ja/f2fBdV6wmL+PwKVM5B/0pPw==
-X-Gm-Gg: Acq92OHS1zb3xmPt7eFK2yAGLgJ2Bzj2Ly5URnfBQ8XfjYMsp1hCTaMbvIAyd4VF8K+
-	FIb35kHEffYaUSSSDz9VoZ0Aok4/hrIprLJkmDw8bvyK4IbqNrZ5PXfixz5SNAQP5i+e7a18oLw
-	kuEVYB9UQNlDlAVJdEjyGDSt3SUkIugaejR9vOmvBp0bYRN1HdrdKZRq2qCB1joVjUOk0n3rpgg
-	cjPNrlyyepK5ZzvxQ7py6AlUtf341vpB71hLrDJ/XVTpaHcFc5qDadBty4erc2M2zq91rcYxbHF
-	eaiBJWg5xRnXYp+GPI8WpirhlQ4pHKtww16uF9ZSR8VQjDuRG7j5TIp2h5UXnkPQuZkOBUAUAVE
-	FYKJpDJTj5bTyjH4HRINUwQ49SsNt+viFAnnzAoHhY9Ly7bhCiCVP9SNf0lw=
-X-Received: by 2002:a05:600c:a086:b0:490:52fb:12dd with SMTP id 5b1f17b1804b1-490c259f616mr361087195e9.10.1781036073013;
-        Tue, 09 Jun 2026 13:14:33 -0700 (PDT)
-X-Received: by 2002:a05:600c:a086:b0:490:52fb:12dd with SMTP id 5b1f17b1804b1-490c259f616mr361086915e9.10.1781036072659;
-        Tue, 09 Jun 2026 13:14:32 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3b5b06sm460746815e9.3.2026.06.09.13.14.31
+        d=1e100.net; s=20251104; t=1781036750; x=1781641550;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jr+SU3sus1bvEp8jC99qtI2zm8iD9CvR4tXETMhNRMY=;
+        b=a8QJHdEX3c4e/IfDTmvSf5X2oUoZZohkZPcS7qtmGcnvX7dDjx4HxC28OcqBYt6HB0
+         do9WA9Wqajpd9Nc06q4ncIvfbkNz55vkePmatM6iqYoJARPBcf4ApRBuXL+l8D5Eae9W
+         DjmDtabP/4TpaBrXKcNd5SkTtDM1E0g5TFqXAN6WAebOsLqXfrdNc0+Y9zmAST+VfVyW
+         qQs3CAcIL7xSs+x8JAX0anZtEFi+wQkaKQ12pJBoAJ1SEfh7zHVUHM9DI3Zz+y7q/mkX
+         CN8seWZAyUJNzKMA7vIPLIhDQBW9ZvmW+D+2xVSicxxF19bVYCK8wOaB82XtYDLjLVxp
+         LiWg==
+X-Gm-Message-State: AOJu0Yz0VLgKsue9y/2fJmUXhOVDOTfHJjjNSR9Fcx4yx1wSTbtEEYFD
+	tzXtdR5R2L7GU2TdgJHvMgfhXstNvx+wSXHdIPgavpQyh2pS4BkJFiksOLGKuuw9
+X-Gm-Gg: Acq92OFivuQohcSGhrbCHiLtkIsD1bGemUEYjpJ9OIydCOfpwqvcXybKNoo/qZ7Atiu
+	bZliydaJJqnEWPitcJTFgG+DbGRYLjUDDDku35c2wyaPfFo7+uPqhh5oWVJDOdjuf7iE94MW2Xw
+	dzAhWy9XFU7xfhSG5UNz34JCrYneFDy3aUGEPHFJ3+EBZuqDIxRAYHKCeFj2T09MzZnicYWGkeM
+	tOmJPMK1e8mkeTJO8wShun5YzZNog1Jhlu5oVd/qqju4J4X0J7p7mfpzbcDLE52FH4Idz0X5XZI
+	BC9K/JqkQCRkG7rkBu0TZjrsQvrzUK4DyIw1q7GbqkD7sguYiE0CHg0ZhP/EEl4uc2LOjpOabVI
+	jyrourVcMgXGnrkC0emVz64gkhOOxswVqF/NcYziAdxxBQEBN6C7mXqa3xB3tc7gKfpQqTP8juu
+	4ZmnS8qRL2ms0zBz4TCvZsDw+qHFsvyZd4JQEICbg6mQ8scQypVenRo1HLLRu3iF1/xNbvcI/0y
+	hOv+bRZeSuizo3I8QYkKuH+qmrwv30c6OAU9T4y+eJ9Vta+qqIGLDyvrie7NnB8T+knP3+yMjPt
+X-Received: by 2002:a05:6000:1211:b0:45e:f073:d2fc with SMTP id ffacd0b85a97d-460302e445dmr23277516f8f.11.1781036749750;
+        Tue, 09 Jun 2026 13:25:49 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcad5sm71442116f8f.5.2026.06.09.13.25.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 13:14:31 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id ADE4C7BC400; Tue, 09 Jun 2026 22:14:30 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jesper
- Dangaard Brouer <hawk@kernel.org>, KP Singh <kpsingh@kernel.org>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-In-Reply-To: <20260609172052.81613-1-avinash.duduskar@gmail.com>
-References: <20260609172052.81613-1-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 09 Jun 2026 22:14:30 +0200
-Message-ID: <87a4t3a2u1.fsf@toke.dk>
+        Tue, 09 Jun 2026 13:25:49 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Justin Suess <utilityemal77@gmail.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/4] Fix kptr dtor deadlock
+Date: Tue,  9 Jun 2026 22:25:42 +0200
+Message-ID: <20260609202548.3571690-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2708; i=memxor@gmail.com; h=from:subject; bh=pE57AZIv8StEXNnNoTc7avwcH1V5LswkC87aOD2fEpI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIUujLJZxE8Nny4shV4rTFRduba7OnsA3U0Wz/av0zZh7z 6Q7rt7qKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQuf2T4KzvXcK5085rGE42n b39TN39Wvf1a8H19rm1v4t5dtdm8KZ/hn/6k+PuZP1+mljZnrTu5QkpvOV9r0vGlR/Y5GJ133vl qARMA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+Referenced kptr destruction can run from tracing/NMI contexts through
+bpf_obj_drop() and map value update/delete paths, reaching NMI-unsafe
+special field teardown and deadlocks. Justin reported the issue and
+iterated on fixes in [0]-[2], and also confirmed the bpf_obj_drop()
+reproducer in [3].
 
-> bpf_fib_lookup() returns the FIB-resolved egress ifindex straight
-> from the fib result. When the egress is a VLAN device, the returned
-> ifindex is the VLAN netdev's, which has no XDP xmit handler; XDP
-> programs that want to forward the frame (e.g. xdp-forward) must
-> instead target the underlying physical device and push the VLAN tag
-> themselves. Today the program has no way to learn either the
-> underlying ifindex or the VLAN tag without maintaining its own
-> VLAN-to-ifindex map in userspace and refreshing it on netlink
-> events.
->
-> Add BPF_FIB_LOOKUP_VLAN. When the caller sets this flag and the fib
-> result is a VLAN device, populate the existing output fields
-> params->h_vlan_proto and params->h_vlan_TCI from the VLAN device,
-> and replace params->ifindex with the underlying real device's
-> ifindex. params->h_vlan_TCI carries the VID only, with PCP and DEI
-> bits zero; a consumer wanting to set egress priority writes PCP
-> itself. Only the immediate parent is resolved; stacked VLANs (QinQ)
-> are not walked. When the flag is not set, behaviour is unchanged:
-> h_vlan_proto and h_vlan_TCI are zeroed and ifindex is left at the
-> FIB result.
->
-> This lets an XDP redirect target the physical device and learn the
-> tag to push in a single lookup, which xdp-forward's optional VLAN
-> mode (xdp-project/xdp-tools#504) wants from the kernel side.
->
-> The change extends bpf_fib_set_fwd_params() to take the egress dev
-> and the lookup flags so the VLAN swap happens in the same place the
-> vlan output fields are zeroed by default. Both IPv4 and IPv6
-> callers pass through. The helper's input semantics are unchanged.
-> Under !CONFIG_VLAN_8021Q, is_vlan_dev() returns false and the new
-> block is a no-op.
->
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+This series rejects unsafe obj drops from non-iterator tracing programs,
+limits map value recycle to NMI-safe field cancellation, and adds
+focused selftests for the obj_drop(), NMI delete, and recycle teardown
+cases.
 
-Other than the bots' comment, I think we should make this bidirectional.
-I.e., it should also be possible to supply the vlan tag from the packet
-when doing the lookup.
+See patches for details.
 
-This requires a second flag, which has to be exclusive with
-BPF_FIB_LOOKUP_TBID, as the tbid field unfortunately overlaps with the
-VLAN fields (so they can't be used together as input).
+  [0]: https://lore.kernel.org/bpf/20260505150851.3090688-1-utilityemal77@gmail.com
+  [1]: https://lore.kernel.org/bpf/20260507175453.1140400-1-utilityemal77@gmail.com
+  [2]: https://lore.kernel.org/bpf/20260519011450.1144935-1-utilityemal77@gmail.com
+  [3]: https://lore.kernel.org/bpf/agyG3eQwgmoJwmj2@suesslenovo
 
--Toke
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260609093719.2858096-1-memxor@gmail.com
+
+ * Replace bpf_obj_cancel_fields() to use bpf_map_free_internal_structs(). (Mykyta)
+ * Fix CI failures.
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260608144841.1732406-1-memxor@gmail.com
+
+ * Drop is_tracing_prog_type() fix due to compat breakage, revisit separately.
+ * Rework bpf_obj_drop() fix to additionally reject non-iter tracing progs.
+
+Justin Suess (2):
+  bpf: Reject bpf_obj_drop() from tracing progs
+  bpf: Cancel special fields on map value recycle
+
+Kumar Kartikeya Dwivedi (2):
+  selftests/bpf: Exercise unsafe obj drops from tracing progs
+  selftests/bpf: Exercise kptr map update lifetime
+
+ include/linux/bpf.h                           | 30 +++++++
+ kernel/bpf/arraymap.c                         |  8 +-
+ kernel/bpf/hashtab.c                          | 32 ++++---
+ kernel/bpf/syscall.c                          |  5 ++
+ kernel/bpf/verifier.c                         | 17 ++++
+ .../selftests/bpf/prog_tests/htab_update.c    |  4 +-
+ .../selftests/bpf/prog_tests/linked_list.c    | 33 +++----
+ .../selftests/bpf/prog_tests/map_kptr.c       | 66 ++++++++++++--
+ .../bpf/prog_tests/refcounted_kptr.c          |  8 +-
+ .../selftests/bpf/prog_tests/task_kfunc.c     | 42 ++++++++-
+ .../testing/selftests/bpf/progs/htab_update.c |  4 +-
+ .../testing/selftests/bpf/progs/linked_list.c | 71 +++++++++++++++
+ tools/testing/selftests/bpf/progs/map_kptr.c  | 89 ++++++++++++++++++-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 20 ++++-
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 40 +++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 13 ++-
+ 16 files changed, 421 insertions(+), 61 deletions(-)
+
+
+base-commit: c15261b1bba0bb7921552cdd86c8b0202697a8f9
+-- 
+2.53.0
 
