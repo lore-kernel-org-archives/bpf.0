@@ -1,103 +1,80 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DB63E638B
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 22:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FE5315D49
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 22:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781042515; cv=none; b=kaS9G20h5C1NLGq7P36394ZRqYtqkRQgtelSfHE5L6g631JVVFOl2Azo2k4hJSA7Bi1H5Cc+w8hrq9s00m5bQe2MZ+Su9pLwB/MNsu5IbWx9jL9KN8xzaCu+6kUoKynNKGXIwMtVtMSF2w+KrcRYPSRR5dkAFht3Oqv82o3l3OY=
+	t=1781043715; cv=none; b=PvTZXYE2OmWUwBWpf69nNPeVxrE1b09Zgg6pOL76CN4lWc9YqELTDY4e6w5cVpRmVBH0dEB9siTfW8tuOydS28ZiOqYGRWd6qOQe0eScQhwrfDGpok4xOhteJ0TFTyyjvKTYTfixBySqjOiy7uDr+cqexW2bIlQ6Bg877bBaZGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781042515; c=relaxed/simple;
-	bh=oAmwGBfC1XZd5jw6fYdLWLKuIRBVQ3XIl0fIzPCuEOw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MZdvGq6B1MzChYFViH/Cj53ShevIGb/oIuObmCeFZbAReYkfIWTHuoOdvMQ3xm5pmdj0Qh7KRT3ZVdznyUsMd40td6x6paIYeDxbRQPK6aeuKo/GGIAbRuFcTxBuPmhgjvxQ0s2SipuJbiOeI8OzbtRkGBGefPVdDKcdHxa0jcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqvjGZPu; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781043715; c=relaxed/simple;
+	bh=yEKGtu2e4uK4Bod46cbDRvfekf1NB7CrPwMqfAf7MNQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HlcUbjCtTYuWayTVB7i8noBIegOmtgj9q7BIJevmr5qSFIEwmXgZJQM/9sIupk5STzKzl5pGfF71IqKfCV3rJWEL9K22FLMAYo+r4c/zf+V3by2an3wCaVCei1mNOOkcWcztKmDxLcrFvj4ptdF86zxbsRuTA563sq/gm6UVwgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=snCpx6Qe; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqvjGZPu"
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-43d2ff651f2so4925436fac.2
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 15:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781042513; x=1781647313; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oAmwGBfC1XZd5jw6fYdLWLKuIRBVQ3XIl0fIzPCuEOw=;
-        b=QqvjGZPuwaWmb4H9PjRIDJrIjwN37tI6F2S40bdpEZH1Vlk+VEacTkkz/Hislaexrg
-         H5q8UXPiv2nF8Aas3IoYwap/YdVK22rwWQOqurxht5RAD5URxroMY3/9latcIye+WWGo
-         Q40iLrpdKb7ap7A0eBHf3LdB0FIldZFWqBYxbcmDMCwwQCku3zdhBQbSuivqU8gPMCOe
-         nixvfqN10xGJuKK5HXMezBEwS6sW4qYvNaXP7mLMfngj6/KlCupuXWHSuks3diDgdo9q
-         12oHonMsiENfpl4+YdcYRGEyiNQa3xfmxyP+SXJTh2AAU9i8K7kPanZAPnAzuRtFqbpK
-         0pvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781042513; x=1781647313;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oAmwGBfC1XZd5jw6fYdLWLKuIRBVQ3XIl0fIzPCuEOw=;
-        b=X82czmrlGl9NlWVmHHb9cTLWC9U1dgQuWl6pnTVkLvFqoR3i/OTvw4ZytX6YTZMArv
-         x8EIgHpS90inEg8URUsxAovHEzNSTxFaRptcghQutFVHp8lgRr7+AMRE6GZZZMch/ujS
-         azCuSq7FdTdfxNb2LfEslknnzyv7UYwvRj7jD48LkRiEFS2tWWAhqneMz/4Db91gWFUW
-         rjSssSo1tqBVbSYTHYWzSiA0JorYwR6kQ4T+z1S0SKL8QAmMqAzAF7HA8juqljF07mGV
-         YlkXP1+7X22IRpSf8qoKxUWaGLzxaUu5NmtYWWLbBq9BJqSZswQ6V1WK2cix1Q6pgP0i
-         a/Iw==
-X-Forwarded-Encrypted: i=1; AFNElJ/vdoYI2CzVkR0frkLUJMCLSkCMXDStWynUCoTwOwmxL9sOUu6g+SDCSCPA+1zT3AIrYb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPTh3spETnqOfaCKdSILp98G7UF8WampY/wv9cK0S6xX/2X0gk
-	1qsT19XJvW6UnQd4/c9R+ZEGXbuacf3Cfp3UlChigqMTLtPYWty8BA9G
-X-Gm-Gg: Acq92OF2tYPUa9lLSLWl787m+KBwZHZQf67VgjPQSy2O5uwqbq8u8/zi/mQ48xN79Yn
-	tXAXy3s4weW2xVeNnUW83X/g9sJ+4AR310/osTJPCF7T114kwgjfPEt+I6UntM1wmeoIs3ZkFLb
-	NPDnkpuYecsPwbErwuJoM9l3VTqF22CQkqpxFhlXp3Vupos09q6Y8+mluLS2BPtg3lRDdUHKU7/
-	2CgNbZWqTlzWkRqEsSS5j4O3A/eWwLnphQdFbzIXOEzwnxxavAYCRBgWhfGB0KQdPDG/7FRgUv2
-	UM4JbUaiFBChGxbIQz/eL2Ej0wKLR/vxbW8LeUurCgeY9EnWpfCmJ9lVNdwjsHSEj8810dtU2F/
-	sdcSxp9WXnvYgGXXGK77e9Viu1VM8V3QnQpM7BNG01xG5n1z2pz3i8i3JPblBHlVp4EGxOWAuN5
-	cNHPUqfBkz8SrfOCJLsO0zw6uBOTHNwGmns2u6B5kvhDAF9f6u2+fcEi7rPquZ1qlzCaSJFQLZM
-	l+OELsWYvRIVFJxSppKmWVimJY=
-X-Received: by 2002:a05:6870:e12c:b0:43d:3ae0:ecc9 with SMTP id 586e51a60fabf-4413d8a24fbmr12770822fac.25.1781042513102;
-        Tue, 09 Jun 2026 15:01:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:6::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d8297395sm18208520fac.11.2026.06.09.15.01.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 15:01:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="snCpx6Qe"
+Message-ID: <2bd48c7e-e1b4-4498-99ba-18df16e7b358@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781043711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k0yOQP8J31/xGy/19GRiGfVQjZatw67nUmbWHOWT3uA=;
+	b=snCpx6Qev+fRiFzf4D4PcqKqRmWmW2rx4+Djs2TmcfBIQ9RtuEW/HAiNUoXNi6aODXYy8j
+	cB4xcC4v4AqfUDU+/IcpRQZA4XL6rjorj2Fh07UPLD5Nr8RwNHJEAWnstYBG67BXmPYtiW
+	qQdbF4KjeSN/l7gJMn/WhSukAQqjOQY=
+Date: Tue, 9 Jun 2026 15:21:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 15:01:51 -0700
-Message-Id: <DJ4UVMEEOUIF.8C5PH54S5HSK@gmail.com>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <rostedt@goodmis.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] bpf: Tracing progs on the stack save subtree can result
- in OOM
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mahnur A" <s.mahnur.a@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <CAJ-umGQ9edRUCnaLYTW1F2wbRDhxM7RRra545ZYbM+8++ModaA@mail.gmail.com>
-In-Reply-To: <CAJ-umGQ9edRUCnaLYTW1F2wbRDhxM7RRra545ZYbM+8++ModaA@mail.gmail.com>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
+ tailcall subprogs with maps
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260609163947.1717694-1-yonghong.song@linux.dev>
+ <20260609163952.1718472-1-yonghong.song@linux.dev>
+ <DJ4PQYTQDWQT.1ENYNRIC3C7IH@gmail.com>
+ <145c7132-ec43-4238-801d-55d518fb0da8@linux.dev>
+ <DJ4ULU6H2NYA.24B49ESUI6RNP@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DJ4ULU6H2NYA.24B49ESUI6RNP@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue Jun 9, 2026 at 10:04 AM PDT, Mahnur A wrote:
-> Hi,
->
-> I hit the following case on the current mainline kernel (7.1-rc7)
->
-> BPF tracing programs that allocate something and have a deferred-free for=
- it:
-> Attached to any function in the stack save / unwind result in OOM.
->
->
-> KASAN, slub_debug etc. all save a stack on every alloc/free.
-> An example bpf program updates a map element,
-> before lookup and retrieval of the timer object.
-> It then calls bpf_timer_init().
-> If this happens at every alloc/free event,
-> a new timer object gets allocated with every map element update,
-> while the previous one is deferred-free (via kfree_rcu).
 
-It's a known design constraint.
-A bunch of things in the kernel need call_rcu().
-bpf is not immune to such requirements.
+
+On 6/9/26 2:49 PM, Alexei Starovoitov wrote:
+> On Tue Jun 9, 2026 at 2:30 PM PDT, Yonghong Song wrote:
+>> const struct bpf_func_proto bpf_tail_call_proto = {         /* func is
+>> unused for tail_call, we set it to pass the          * get_helper_proto
+>> check          */         .func           = BPF_PTR_POISON,
+>> .gpl_only       = false,         .ret_type       = RET_VOID,
+>> .arg1_type      = ARG_PTR_TO_CTX,         .arg2_type      =
+>> ARG_CONST_MAP_PTR,         .arg3_type      = ARG_ANYTHING, }; and for
+>> RET_VOID, we have below in verifier.c:         switch
+>> (base_type(ret_type)) {         case RET_INTEGER:                 /*
+>> sets type to SCALAR_VALUE */                 mark_reg_unknown(env, regs,
+>> BPF_REG_0);                 break;         case RET_VOID:
+>>     regs[BPF_REG_0].type = NOT_INIT;                 break; so we cannot
+>> return 'r0'.
+> Ahh, so bpf_tail_call() is a void return.
+> Then, I'll take it back. bpf_tail_call_static() is correct with void return.
+> I guess we have to teach the verifier to accept void subprogs asap.
+>
+> In the meantime let's do shortest possible hack for tailcall_bpf2bpf_hierarchy1.c
+> to pass with llvm 23.
+
+Sounds good. Will do.
 
