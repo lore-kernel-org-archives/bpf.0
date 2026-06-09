@@ -1,104 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71F1416D04
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 13:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C73C408608;
+	Tue,  9 Jun 2026 13:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781010614; cv=none; b=afez08pmknPnOYPPJHPlrNIxeKcjWuCT4W/BNCEWlaP94n5+6EYbku/BvCzea3w6BGfJ4B6TPuYBQlV2KF2nF0aod0SlZRM9k+RST9p78cXOcNWasRg7h1XGyt95zEw/Jg5CfUGSX+eKwYYQiylOGmEoWGH0CIMPMc2+ZGeRhME=
+	t=1781010709; cv=none; b=gAlXzcEt2RGBKG5WNIeiGDtEwD+FQUWLxqFHF/6SxQYhxTUsKBwfS5A4oIaVqKI+lSxW1lhsCAKkehspkYSa/GOvQeaKSkA/P8drySgyijywb3hciVXHX158J8jcbVwpPvjNgl83yBgtIhxJi2PzHtMDTohKwCjaZcP0MDU11Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781010614; c=relaxed/simple;
-	bh=6z03W7Morm7yWrmKypG3Vnw+d4q2fK9rQhoU8AF66fo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ajHHeYx23xKAQFtWgJLpPiqPRBbN1fYpt6iMlF0RHvslBSwWDk05djDyWmt7Mwn3KjWOkyqXFpdwAVAduikZIQqq3fn2dJBXCe6XG62Hw6kcTt5U/oPAF8ZqO9qHqTeTuEE2xjwee2bEo8lz7EAv2frYffkeGJr/6t077cuOisI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ieRh3JEM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781010709; c=relaxed/simple;
+	bh=cNMCsVmjpyoIcJwmYtdqjz5auyf3WVePYRZffBtEjIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=b5C6MdSdLKpKJpWkP/leKXSP9qoV5vXAmeTB5XgBvqqO56gRAUxnd70CPRlh87YHgflWaeQe23GJPdJ1GUNmREzTJn/YhAe8cy5vZshhVHRxBy5gQPR94E6mi6E3UfVoap8ZrMCK+TZzhv7ft915EBiVinMj42Ip/Aw5KrYFz+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nZcTUzTZ; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ieRh3JEM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299691F00893;
-	Tue,  9 Jun 2026 13:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781010613;
-	bh=ZcwlnJ9t48qgCfyHqiEqK44CPvWScQG1kyGGhVVgHC8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ieRh3JEMME2fl+vV37NlTJyw8MUnoGkmMZs22Mtjbke7GYb0G7oKM+qXYduV7DCPk
-	 LEf0kPFxmbLYDVqIruFJugI9Hv2E0iyj6On6J/2ZZHePqRCHWjxNCHdx3Azt4AgySW
-	 WuS3riiZWZgJ/4BrizB7Rq8QH8E61O5TY0gy/aNm1zSqAaHl+hKYYKmboAtwYj5+NS
-	 I/S1VnVmBBlsaAzzt1vf3YYduMn2nBLGSKsJU7bmncBn167f/nplF/bT4YwBp+cb6L
-	 IZ4yuP426JJZapyOdEXymz2U/jItIqlKQQjV0FkuYUMJE1xy4YGOBKJdik3j1BSaQB
-	 u2+dhz9G7mHnw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 4/4] selftests/xsk: Introduce mmap_size in
- umem struct
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260608130938.958793-5-tushar.vyavahare@intel.com>
-References: <20260608130938.958793-5-tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 13:10:12 +0000
-Message-Id: <20260609131013.299691F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nZcTUzTZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=c5
+	0F5kPryHPBKKAhs6EjQOHtwcJTbFVsHxkqhql+Ro4=; b=nZcTUzTZq3v6n+FjSm
+	ODysGnD5lbu4cC+N2UY+BBc2X6wm1QpVR7EhAFr5FjHqwCzPLzEv9Dr0thFBrQvp
+	haa7ST8DLHc+uLbX05cKZDUsS17bKraLL5vjXhbr6tKFYVZ7ZV5xY2NSsdRTC/P+
+	tj3/oKVkfkWoz29Bu1lr2pMqo=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDHzpjuEChqlpqhCQ--.20624S2;
+	Tue, 09 Jun 2026 21:11:13 +0800 (CST)
+From: chenyuan_fl@163.com
+To: andrii.nakryiko@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	chenyuan@kylinos.cn,
+	chenyuan_fl@163.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	shuah@kernel.org
+Subject: [PATCH bpf] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+Date: Tue,  9 Jun 2026 21:11:00 +0800
+Message-ID: <20260609131100.3097225-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
+References: <CAEf4BzaY3LLmMbSm1ritXwTvqGYi+KSWSkqMYJd62D7opu4ZnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDHzpjuEChqlpqhCQ--.20624S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trWUJw1xWw4rtF13trWUJwb_yoW8ZFWxpF
+	n0yF92kFWUJw4rurWkJa10ka1rKa1Ig3ZxGFsxXrWavw4qqF4ktr1ayFsIyF1Yq395K3W3
+	Z3y3u3yDZr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piznQUUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAhHkomooEPE8AwAA3J
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Unconditional `pthread_join` in the single-thread path can cause=
- the test suite to hang indefinitely due to a deadlock with an unsafe signa=
-l handler.
---
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-commit 2b44f1770c5b4b9bb0b75f25f4cfb408f2d008dd
-Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Subject: selftests/xsk: Introduce mmap_size in umem struct
+bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+TRACEPOINT programs to verify the BPF environment works.  When a
+BPF token is in use with restricted program type permissions, these
+probe loads may fail because the token does not allow the specific
+program types, even though BPF loading is perfectly functional.
 
-This commit stores the final mapping length in xsk_umem_info as mmap_size w=
-hen
-the UMEM mapping is created, and uses that value during teardown. It also
-joins the RX worker thread before cleanup in the single-thread path.
+Fix by skipping the probe when a token FD is present: BPF token
+creation itself proves the kernel has a working BPF subsystem.
+Real BPF issues will be caught during actual program and map loading.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
-sting/selftests/bpf/prog_tests/test_xsk.c
-> index 17a467a7dd7f6..72875071d4f12 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-[ ... ]
-> @@ -1857,8 +1856,7 @@ static int __testapp_validate_traffic(struct test_s=
-pec *test, struct ifobject *i
-> =20
->  	if (!ifobj2)
->  		pthread_kill(t0, SIGUSR1);
-> -	else
-> -		pthread_join(t0, NULL);
-> +	pthread_join(t0, NULL);
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/lib/bpf/libbpf.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-[Severity: Medium]
-Will this unconditional pthread_join() cause the test suite to hang
-indefinitely if the worker thread self-deadlocks?
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ab2071fdd3e8..7e21c5eb9533 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 		BPF_EXIT_INSN(),
+ 	};
+ 	int ret, insn_cnt = ARRAY_SIZE(insns);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.token_fd = obj->token_fd,
+-		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+-	);
+ 
+-	if (obj->gen_loader)
++	if (obj->gen_loader || obj->token_fd)
+ 		return 0;
+ 
+ 	ret = bump_rlimit_memlock();
+@@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 			errstr(ret));
+ 
+ 	/* make sure basic loading works */
+-	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0)
+-		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
++		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0) {
+ 		ret = errno;
+ 		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+-- 
+2.54.0
 
-The worker thread t0 is terminated by sending SIGUSR1 asynchronously, which=
- is
-caught by handler():
-
-tools/testing/selftests/bpf/prog_tests/test_xsk.c:handler() {
-	pthread_exit(NULL);
-}
-
-Since pthread_exit() is not async-signal-safe, if the signal interrupts the
-worker thread while it holds an internal libc lock (such as during memory
-allocation or mutex acquisition), pthread_exit() can self-deadlock when
-attempting to acquire the same lock during thread-local teardown.
-
-Before this patch, the deadlocked thread was leaked but did not block the m=
-ain
-test thread. By adding an unconditional pthread_join(t0, NULL) here, won't =
-the
-main thread now block forever waiting for the deadlocked thread, causing the
-entire test suite to hang?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260608130938.9587=
-93-1-tushar.vyavahare@intel.com?part=3D4
