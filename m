@@ -1,99 +1,139 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63BF23D9DB9;
-	Tue,  9 Jun 2026 07:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E293D0BFB
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 07:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780988781; cv=none; b=S8c4itwTB1uMICleiEfP4SRSFORb1m8AkI0w39f6cwLpNYF1A74/95E/VsrMoftVu2ix8U0k8qxJNhQWXY/zM4ddGUsV0sMVCo9Kg997NfSNJmb4j9h8J1GfgfcZRNTnMDg9vzlaE+ZRtvVW6ezZ3IXWRNBnlSD0azKak1YymD0=
+	t=1780988861; cv=none; b=EjiWweVv/Z/6P0L2KCiNOsQb4L/OJRRMjc7o5EfNG7xpByOwTcncn3ScPRmMAQs6x0PS9MfmzARnCiZ6P4H7EtJN/ViQn3IZYJlrOxG4I5DrL5xqsN7Rnz1zbsksHcS+FKsOwFVnrU8u+P6DPE89T8m8u9xfw1lGBD6zd6wcsWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780988781; c=relaxed/simple;
-	bh=/1p9O9WrK8BRBzAZ2Ybv1OoY/AKYevpga6mRKbC4PJo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VYlsc1MKP29FTdyICFTJWBJdgpcYPqF+FXDWXxVhsp4loDzndqR/W6r2oxzMqVKU1Z2AiBtR1onr5V9P4l2sLf6Tj3/61qBFEj1V/AGH6+AWj7KjaYk5q/Mv9gyMimfKAfFadyYeIa8DMaWFJGwYZCYC0bAXsdHB3V+RjLnO+Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pg5y11nF; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1780988861; c=relaxed/simple;
+	bh=ih/WFkHQ584rId30STWxtTkSWunNrrmDUCVGPyksHj8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=YxUKgsyrThKFb5to1LMA0to5QymskaZBOwAo4JDoqLJVHLilD/JohhTMmRaEE+ChqYnW0aNaaJhSipFUjQhgOpZvJ7KDFrw/hfmMjd0oUketXjYtykkTGubD2YGAQ4WXsNrmngi9F9kX7F3YFCZohPugKUR6RE1CgSiKNmmDYR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JP+hUxrK; arc=none smtp.client-ip=74.125.82.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pg5y11nF"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ob9OfVRU9ZHHyh2Prr29GebKBWTRqDdF/FoIinPntFI=; b=pg5y11nF09BUheVQ59jR8Rzyyj
-	ZSZoFw3llG+GCcgFj7Nb8IxPuzjgK1Dds/rfEAgU5DKixXXOQpx233gn+ebBnw/a/bEWhJCDo5qxR
-	XfabMhCOZQLuBsc89kFaof/aXhF1bHUww2go1pBXQdQ8RbFgyKHupX/qmEOHqcySfrSBDn4umJ3dQ
-	Q1E52F7YWXJCs98B9S98RiGB0xEDwIYLG00kTz6NiFIlemvzpz2dNPJwZKNNoCfbfwNcZuFmGe3+J
-	gsC7K4ivMSUA9Df8VeNTvy8k/f5BLtOfJV0e5hBsbB6Xa4aYy1m3rwz2Fm9vArrKmHdN3JahbxnQT
-	1wT50E9A==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wWqWo-000000024tO-1NDV;
-	Tue, 09 Jun 2026 07:05:40 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id AC310300642; Tue, 09 Jun 2026 09:05:36 +0200 (CEST)
-Date: Tue, 9 Jun 2026 09:05:36 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: bpf@vger.kernel.org, Tengda Wu <wutengda@huaweicloud.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
-	mbenes@suse.cz, pmladek@suse.com
-Subject: Re: [PATCH] rethook: Use tsk->on_cpu to check task execution state
-Message-ID: <20260609070536.GF3102624@noisy.programming.kicks-ass.net>
-References: <94179dab-ffb7-4fab-af45-b20bfb686ab3@huaweicloud.com>
- <20260601084001.9566b443746447ec2bb1a9fb@kernel.org>
- <20260604093445.GF3126523@noisy.programming.kicks-ass.net>
- <20260605224341.c926299d613b6102912c9a3f@kernel.org>
- <679a1c8f-1e4d-4ae5-83e1-d0068e6de1a6@huaweicloud.com>
- <20260608093449.GH4149641@noisy.programming.kicks-ass.net>
- <20260608102326.GB3161497@noisy.programming.kicks-ass.net>
- <20260608220811.d4a0b58961cfb9eeb6bbbccb@kernel.org>
- <20260608140654.GE3102624@noisy.programming.kicks-ass.net>
- <20260609134153.d06aef367a366e5d976cba62@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JP+hUxrK"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-304dd917645so5128003eec.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 00:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780988859; x=1781593659; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:from:subject:message-id:mime-version
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxckLdcG/zu0VSlVCoGLUc2yFYusbAIrF0yTwxkZNwI=;
+        b=JP+hUxrKS5f9kEZf/4TiHpSHULrr702pRmmwcOXBRDpOV18vw56gGEANyrT22d4qGQ
+         91LlezF/Ex5frtqhakKD8ZYec6zPJU1bwfUkrJ48PHehWTTFycvTCrLmJlSn5JpgGY3g
+         SPckAyDaiDUR3XjtsHhm8x7iKIqnVcwlqcYw7R3RNv1ytWWdxcxlFcbfP1knRRyHovzQ
+         4Q38+T4jP/BMHam5fk2G21rXtCnsIYar1VWGuYygFnVPMZA0WldjZJ0wMu+AUstBN3+P
+         nYnKzVMxXaLZBO1V2HFxUKv8xLDp7NNhMfwNkfBBM5IZm8g4BeNt90K5+XqHDZanZVOD
+         AXDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780988859; x=1781593659;
+        h=content-transfer-encoding:to:from:subject:message-id:mime-version
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxckLdcG/zu0VSlVCoGLUc2yFYusbAIrF0yTwxkZNwI=;
+        b=dzpflbgF/pfGgQiYK9zksbdU1npo+09NUUnuBChPkR/uv5szot5iPdM/byEkWjxOoS
+         K2EutglkawG13/h9ogsTmLLc5yjivecw3NJbcvxfLp2yVe17IVYi4mWcF9YscsjU5QPP
+         su4BUNReLsGejfucyI3D6N3ujw30IatAsu4WJrdSUHAbDpgE70zxF1xMmsbMvAhSxp0w
+         5b3LTroyrvwNbnlAH/w+0CrPEsGTBlf/Uiu/aOwNUBFq9ArwRkrte0zKO7/gaLoggoVc
+         Kh/Ix3qgCsSaaU5ioMGhBpZ8cO3JknE9a+6pj8H9D8UQFaDXPM8J/Yp3hgplAdaZuzHh
+         LifA==
+X-Forwarded-Encrypted: i=1; AFNElJ8+kmV75aecaS3Ah0x5RRfPAVCyJ13eSDPc3Jx5uhDhcWzvMaCS5LJYcRpm3uKQbok47M8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz23M5sacWkRDieuRAKKD5jjE1fdazbbdHOOix1PsWKachBBtxQ
+	7NQXvvEvlmsqiZyAcqPoI9Em+ub8u2NGG5zZPW4y6uKsH18iay/CbtATpNCcwm6153lAkiJ3cVj
+	V+X6M2mpP3g==
+X-Received: from dlbrx9.prod.google.com ([2002:a05:7022:1709:b0:138:57f:8a4f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6713:b0:130:c9cc:3395
+ with SMTP id a92af1059eb24-1380673186dmr9484727c88.29.1780988859141; Tue, 09
+ Jun 2026 00:07:39 -0700 (PDT)
+Date: Tue,  9 Jun 2026 00:07:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609134153.d06aef367a366e5d976cba62@kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.1064.gd145956f57-goog
+Message-ID: <20260609070732.545416-1-irogers@google.com>
+Subject: [PATCH v2 0/7] perf annotate: Add elfutils libasm disassembler support
+From: Ian Rogers <irogers@google.com>
+To: Serhei Makarov <serhei@serhei.io>, mark@klomp.org, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tomas Glozar <tglozar@redhat.com>, 
+	Blake Jones <blakejones@google.com>, Dmitrii Dolgov <9erthalion6@gmail.com>, 
+	Alexandre Chartre <alexandre.chartre@oracle.com>, Costa Shulyupin <costa.shul@redhat.com>, 
+	Yuzhuo Jing <yuzhuo@google.com>, Michael Jeanson <mjeanson@efficios.com>, Leo Yan <leo.yan@arm.com>, 
+	Tianyou Li <tianyou.li@intel.com>, Zecheng Li <zecheng@google.com>, 
+	Rong Bao <rong.bao@csmantle.top>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 09, 2026 at 01:41:53PM +0900, Masami Hiramatsu wrote:
+This series adds a new `libasm` disassembly backend to `perf annotate`,
+leveraging the `elfutils` libasm library. This allows perf to use the
+widely available elfutils for disassembly alongside capstone, libLLVM, and =
+objdump.
 
-> > This, you cannot take locks in unwinding. The only thing you can do is
-> > try to do the best you can without crashing.
-> > 
-> > Typically unwind only happens on self -- this is natural, a task crashes
-> > and unwinds itself, or a task does something (takes a lock, hits a
-> > tracepoint, etc) and takes a snapshot of its own stack, and this is
-> > safe.
-> > 
-> > Things like live-patch use task_call_func(), which ensures the callback
-> > function is done while holding sufficient locks for the task to not
-> > change state.
-> 
-> Hmm, is there any way to ensure the function is called from task_call_func()?
+v2 changes:
+- Patch 1: Added a note to the commit message acknowledging that older elfu=
+tils static builds lacking `-lebl` dependencies in pkg-config are explicitl=
+y unsupported, while intentionally retaining the feature check and API depe=
+ndencies.
+- Patch 2: Fixed `NO_LIBELF=3D1` build breakages by implicitly disabling `l=
+ibasm` and removing the unconditional `#warning` in favor of silent fallbac=
+ks or standard warnings.
+- Patch 3: Fixed `libasm` block boundary tracking and corrected callback er=
+ror/return values, preventing memory leaks and infinite loops in the disass=
+embly extraction loop.
+- Patch 5: Fixed script robustness in `tests/shell/annotate.sh` by ensuring=
+ cleanup functions run reliably, `set -e` doesn't abort prematurely on grep=
+ failures, and configs are properly restored.
+- Patch 6: Refactored `jit_write_elf` to accept the `e_machine` parameter d=
+irectly instead of post-patching the generated ELF file with `libelf`. The =
+target architecture is now extracted dynamically and passed into `jit_write=
+_elf`, simplifying the interaction with BPF and making it fully compatible =
+with all disassemblers.
+- Patch 7: Fixed a TOCTOU race condition when creating the symlink in `test=
+s/shell/annotate.sh` by placing `perf.data` inside an isolated temporary di=
+rectory.
+- General: The cover letter now lists capstone, libLLVM, and objdump as the=
+ existing disassemblers instead of just objdump.
 
-Nope. And you shouldn't want to.
+Ian Rogers (7):
+  tools build: Add feature check for elfutils libasm
+  perf build: Add build support and capability for elfutils libasm
+  perf annotate: Implement elfutils libasm disassembler backend
+  perf annotate: Add --disassembler command-line option
+  perf test: Enhance annotate test coverage and isolate config
+  perf annotate: Support BPF JIT disassembly via genelf
+  perf test: Add BPF JIT annotation test coverage for all disassemblers
 
-> (Maybe checking p->pi_lock, but this is not sure the lock owner is this
-> context?) If not, I need to make this available only for current task
-> (anyway it just return kretprobe trampoline address, no critical issue)
-> or, introduce a spinlock.
-> 
-> Or, eventually it may be better to replace kretprobe/rethook with
-> fprobe return handler.
+ tools/build/Makefile.feature       |   2 +
+ tools/build/feature/Makefile       |   9 ++
+ tools/build/feature/test-libasm.c  |  19 +++
+ tools/perf/Makefile.config         |  22 ++++
+ tools/perf/builtin-annotate.c      |  10 ++
+ tools/perf/builtin-check.c         |   1 +
+ tools/perf/tests/genelf.c          |   2 +-
+ tools/perf/tests/shell/annotate.sh | 133 +++++++++++++++++++++
+ tools/perf/util/Build              |   1 +
+ tools/perf/util/annotate.c         |   8 +-
+ tools/perf/util/annotate.h         |   3 +
+ tools/perf/util/disasm.c           | 114 +++++++++++++++++-
+ tools/perf/util/disasm.h           |   1 +
+ tools/perf/util/genelf.c           |   4 +-
+ tools/perf/util/genelf.h           |   2 +-
+ tools/perf/util/jitdump.c          |   2 +-
+ tools/perf/util/libasm.c           | 184 +++++++++++++++++++++++++++++
+ tools/perf/util/libasm.h           |  27 +++++
+ 18 files changed, 531 insertions(+), 13 deletions(-)
+ create mode 100644 tools/build/feature/test-libasm.c
+ create mode 100644 tools/perf/util/libasm.c
+ create mode 100644 tools/perf/util/libasm.h
 
-I'm not sure where you're wanting to go. AFAICT the current rethook
-stuff won't crash when called on an active task, it might just not give
-the right results -- but that is true for the entire unwind, so who
-cares?
-
-Those who call unwind on active tasks get to keep the pieces, not our
-problem etc.
+--
+2.54.0.1064.gd145956f57-goog
