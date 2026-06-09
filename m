@@ -1,33 +1,33 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F66A2DA765;
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB0542B74B;
 	Tue,  9 Jun 2026 14:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781016960; cv=none; b=bpSQJ80uhI2TxUwBjOS58BzArMHyDlS4XR5UgRbHhuga0qmYjU6AJMgPnGKW/9uDFL2A9EByXfRDlDGQ7liuf4NP6IREJm4v4ws/i9jyJxs8ari12N+OL9svygBAaubiXNXviUtyqc1VhBTzRKqXGkrV7XylkwOsLzQZQFgs3n8=
+	t=1781016960; cv=none; b=cO9ySSj/XnYEBLO+RHfU25ELlXgQ+PPaT+Ht1Fe5qiLcV3PXoBR+EQWfPBhrnu0hagoN5EnlTXtoBlgN0R87TEeVxPquL0i2//HdlJDuB88UfBlppyLIQemraT7Q14O/URECZyrj0vyy4oFJ4z3+bEd97hvbvGycpLvGBZOByAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1781016960; c=relaxed/simple;
-	bh=ZuWGA/kMKspTQF5vqcm//og2gLLY9DL+cdoQNe9mZcQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=axHRdFiUJCvUyYdr321XU543nIe4dT9sKQssnJFqtTOf0JtSVKuvGskSEb/i/SbLBxhjfoDNUBrf9qdSJAATib5DjRhPRS/DwBjfRtDm9wIxTLvQkdU16FksvbOUVpZrTR+0ZNkABR0vmNN6CJZQ3gSPTYtMTuo35sMopUlGrt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=k+SzwQjO; arc=none smtp.client-ip=13.76.78.106
+	bh=f1GtDHYavZM/VY10dMvSenAtCn/h1MCCk2FK1el+UyE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Od7jzuly8WhC2rXPjIO4H8rpL56ItWfEhpeUerzIKZsqEZKhZ38JlmGTDLA+H0cryRNPnn82PqTMytak/PM31Te2htpvsmIAYdTxS2MCUAA7Pwe4bLP2AFJZXUieOq/aZPN7FS4m28ZCIX+a+zorv/8sD519LK0Zp3eIh1kbE8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=S1Uk/7kR; arc=none smtp.client-ip=52.229.168.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="k+SzwQjO"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="S1Uk/7kR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=W0NHYNVYKqNo//xZEgW10TZ+pwXXZsT
-	D6dAve04rqxQ=; b=k+SzwQjOPdJf3Du2GMcwRr37N78nzjL56Eu5LISiqcIqL6k
-	EWIBV6CVvUyUCCqlglqlKUT0g2//jHE1qQSacKzbIN9aHBTnOv3yYrxBomH1ae36
-	p7BJ8EgT/0ExtthvYDDgW4KEjRiZlDjnCoe3zYR0nKT2bfIdTyz19Eo+/4Co=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=iw/2JnR+lvZnQGgGf3w+49HqVwjVY390Bjd+q6hztJM=; b=S1Uk/7
+	kR0KoiGufK0zP5LDKqAJbwnWGE9YLPkLoDoSXK2FMVLeV5Em7nGfDbMUD755sz2G
+	mdR4XJxBzDQfkH1Fi722HgsPNhhtPuLZDpAQBN1UgG8lF3ZFWIOyqY3OuA3mJQlI
+	ghDQevVND+iWh17qkHmbYdf07cMktdq0zz0U4=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQBXEMBqKShqQodBAg--.40025S4;
+	by web5 (Coremail) with SMTP id zAQGZQBXEMBqKShqQodBAg--.40025S2;
 	Tue, 09 Jun 2026 22:55:39 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Tue, 09 Jun 2026 22:55:19 +0800
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover scalar addition from
- rdonly untrusted memory
+Subject: [PATCH bpf-next 0/2] bpf: Reject scalar addition from untrusted
+ memory
+Date: Tue, 09 Jun 2026 22:55:17 +0800
+Message-Id: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,9 +36,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260609-f01-03-scalar-add-bpf-next-v1-2-e6212e274155@mails.tsinghua.edu.cn>
-References: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
-In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAFUpKGoC/zXM0QrCMAyF4VcZuTaQrTqmryK76NJEK1JHM2Uw9
+ u52Di9/zuFbwCRHMbhUC2T5RIuvVKI+VMB3n26CMZSGhpqWWjqjUo3k0Ng/fUYfAg6jYpJ5QmL
+ Wzp+O6lwHBRizaJx/+BX+L+j3xd7DQ3jabFjXLzt5x0SIAAAA
+X-Change-ID: 20260609-f01-03-scalar-add-bpf-next-0ccf8a54f338
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
 Cc: Eduard Zingerman <eddyz87@gmail.com>, 
@@ -50,18 +51,18 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016941; l=1229;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781016941; l=1398;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=ZuWGA/kMKspTQF5vqcm//og2gLLY9DL+cdoQNe9mZcQ=;
- b=QeHLXJkR72On696CLgYdyyhTh/Ckou3j9cCA7h3vMPGiLkJQElO7za+JPrr5ATxguTxCY7EFb
- B9MhryKX7y8CgAaQ1keFkF96tCiZmvV5Gunmu9JXOQZk/kKh6BZBsFM
+ bh=f1GtDHYavZM/VY10dMvSenAtCn/h1MCCk2FK1el+UyE=;
+ b=mZjMM2OfUrFWQdRAcTLr7KPsT1zgYSqgfsLv4PgS6UFM8HVO6u9W8su5TanY5pOvKD+vHHsjp
+ MT8ReL2Ht8XBMQ9CN6u2wnJA9dCzUDCjAEAKafLeXS6h6s0RxUsu+gt
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQBXEMBqKShqQodBAg--.40025S4
-X-Coremail-Antispam: 1UD129KBjvJXoWruFy7Ar1rJFWUZF47KrWfZrb_yoW8JF1Upw
-	4kGryagrn3JrnrJas3Cay7XF4rKF1kXFyYka1Iy34UGFW8Jryxtr18Ka1UXrZ8C3yrZrZY
-	vFW7K3s093yxJaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBC1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:zAQGZQBXEMBqKShqQodBAg--.40025S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF48Zr1UuryxKF1fJryrWFg_yoW8GrWUpr
+	y8JFyavw1ktFsrGa43ZF4jvF1F9F1rG3yYgF1xA34UCasxJFy8tF47KayUArZ8C3WkZayY
+	gFyUZwn09a17AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
 	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
@@ -69,52 +70,48 @@ X-Coremail-Antispam: 1UD129KBjvJXoWruFy7Ar1rJFWUZF47KrWfZrb_yoW8JF1Upw
 	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
 	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
 	Y4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j
-	6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
-	vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-	Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42
-	IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACdTQAFsa
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8I
+	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+	4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgINA2onzACdTQABse
 
-Add a verifier test for scalar += rdonly_untrusted_mem. The program gets a
-read-only untrusted memory value from bpf_rdonly_cast(..., 0). It then adds
-that value to a scalar destination. The verifier should reject this instead
-of preserving stale scalar state.
+scalar += rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with the
+pointer as the source register. The untrusted PTR_TO_MEM case returns there
+without updating the scalar destination, leaving stale verifier state.
+
+Reject that addition before the early return. Pointer += scalar remains
+handled by the existing untrusted-memory rule.
+
+Patch 1 adds the verifier rejection. Patch 2 adds a verifier regression
+test for scalar += bpf_rdonly_cast(..., 0).
+
+Validation:
+
+  unpatched bpf-next 8496d9020ff3:
+    BPF_PROG_LOAD -> fd=4 errno=0
+    RESULT: verifier ACCEPTED (unexpected_accept)
+
+  patched bpf-next 8496d9020ff3 + this series:
+    BPF_PROG_LOAD -> fd=-1 errno=13 (Permission denied)
+    R1 tried to add from rdonly_untrusted_mem to scalar
+    RESULT: verifier REJECTED as expected
 
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
+Nuoqi Gui (2):
+      bpf: Reject scalar addition from untrusted memory
+      selftests/bpf: Cover scalar addition from rdonly untrusted memory
+
+ kernel/bpf/verifier.c                                   |  8 ++++++++
  .../testing/selftests/bpf/progs/mem_rdonly_untrusted.c  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ 2 files changed, 25 insertions(+)
+---
+base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
+change-id: 20260609-f01-03-scalar-add-bpf-next-0ccf8a54f338
 
-diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-index 5b4453747c23..303b8ed3e70b 100644
---- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-+++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-@@ -77,6 +77,23 @@ int offset_not_tracked(void *ctx)
- 	return s;
- }
- 
-+SEC("socket")
-+__failure
-+__msg("R1 tried to add from rdonly_untrusted_mem to scalar")
-+__naked void scalar_add_not_ok(void)
-+{
-+	asm volatile ("r1 = 0;"
-+	"r2 = 0;"
-+	"call %[bpf_rdonly_cast];"
-+	"r1 = 0;"
-+	"r1 += r0;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_rdonly_cast)
-+	: __clobber_all);
-+}
-+
- SEC("socket")
- __failure
- __msg("cannot write into rdonly_untrusted_mem")
-
--- 
-2.34.1
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
