@@ -1,35 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094E4381AEF;
-	Tue,  9 Jun 2026 19:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A516336680C;
+	Tue,  9 Jun 2026 20:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781034620; cv=none; b=fDZn6HcLooUbm2jlCqbGeNbJl5vm5+rI4Sci0Rc8EYuLU09FK6cF7AhFMEoQ9GuFtVg+ozcyAaPgERY3pboqYrgNBeHBCbIGmytLCI1Ak/eQQq+V58l3hplokwEaeMuChBaptjjS4JkBMQTX9im2BrNWett1HRvVveNN18+PU+0=
+	t=1781035948; cv=none; b=mUr/VdNgWNA9iglAorb4V0HXjWk8CClBaieLAXM4KcZLUWYsz/sz8U5FEqNcySHGqe3dJ/hglLLVW/aEExm8lR5zr7f+ep0NGlaWgXakuQUBOrsOGbtOhm4WpIYHgiHO0ujAs+Dtdwlp3bvR78tj8xfUwknwq5Ry9dTKnrbn/7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781034620; c=relaxed/simple;
-	bh=gtyja1AfPN5eHKQAXMeIHBSKQjxsb5L0L2Z5wYhjUV4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qdTv/4PyGvFCPgcboxypQuJEoPglbonXdKYIgiqoQYJ0yRZv9f0azIjAq/1g6bc488y607VZg+yPrf1fd/+gkS03wgUrc/R8G3ZmZzrjwoVu5ufZ6XBBDeHTAhxvWTeibYvMRr/a6l7MuU3evfgJXg8UlGZBJW5f68qXyBNp/AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFalzrdH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781035948; c=relaxed/simple;
+	bh=Atyu/7pLp9nLA3fbR0DTc7/trd1D5Mix0uq3yK/JY1A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ap2tvQNUZXrF/aa3TjqCq1yOoBnBNWMD8nI+d4iyoAewvx85FBEelycdsLdViC2pUNCgcHdKsJutMqIlZMS+OKvx3SJ+SpgxShr+chvr4lKQdRpQClozMqD0DEgzfdLr8RXjpB53KCdwL8athin05h3mEQLvhxYReJJXLIYfcX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g22nnqto; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFalzrdH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B751F00893;
-	Tue,  9 Jun 2026 19:50:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g22nnqto"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D856B1F00893;
+	Tue,  9 Jun 2026 20:12:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781034615;
-	bh=JA227PLJ34wR8bV+KjkohVo6HejSGCaeUcI3E3Q6FHo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=GFalzrdHmgk1t8AkSjSNDMpOBBzvH6icfUjTSZ8YMmrM/SrrRJzAQcCasWj6z/SX3
-	 9cdJZzDNz9j6kPI/IEbLBMCxcVVoFeFEQAATLNkIOIsUSezbzxGMNgJLQhexsVDTO9
-	 MlhfKAt+yacGBvBDxg0H7q/GNBJAVroVGrj7tLKUjktXuX5tO6ti8VNZHhR6jsJgfM
-	 vtYmc1PQaW1NjX8oL63WgyknGKpi2bYBD9Lpaqf2nCpN2Xm2MUF0DsNBiE1Gok2rYh
-	 2UD7L/sft1T3DPz6vCUy2nA50UMeIUCxhETwAuOMBHbdbMom8emMpqGq0/dqKLWhKk
-	 AS7qYuWB5SAXQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197E039309B5;
-	Tue,  9 Jun 2026 19:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1781035947;
+	bh=emWf4agjYWuWZV+h8FdWLJQebR+n3UTCVhIW+1ZyukI=;
+	h=From:To:Cc:Subject:Date;
+	b=g22nnqtou1sbm5A0gVcZ+Wk1+ftAm941psaVn/UDeVLl3TIJIQ2Fcr/OGqK5kkb9B
+	 mGhyWjjckWG1oceWoGYpYK0RWtxgxmHzAnggFDHXvn7opGwB0qmuoxwyC9GWvDwWf6
+	 V4jGROWKkvyoGoKRikYOoka2PAhQRU1c7TSas4nYfKpeD0HoGArZUAD423zPmd2FX2
+	 WcFq1Xz/rjPUHxIcSR8bx2JKmKnwdK9+28abA0YX3UADRyTwaku1inOhnaJ4bNkTPW
+	 w/laJAElTr8mbpViN3L8YqSH/TSunHGurDih4dRqj4vGrd1fstFm2deozRLvUIXyx6
+	 VNkwQPmEnfvQg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	corbet@lwn.net,
+	linux-doc@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 0/3] docs: net: more adjustments to docs
+Date: Tue,  9 Jun 2026 13:12:21 -0700
+Message-ID: <20260609201224.1191391-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,54 +47,27 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] bpf,
- lpm_trie: Allow sleepable BPF programs to use LPM tries
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178103461364.2620314.3413571029788507354.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Jun 2026 19:50:13 +0000
-References: <20260609135558.193287-1-vlad.wing@gmail.com>
-In-Reply-To: <20260609135558.193287-1-vlad.wing@gmail.com>
-To: Vlad Poenaru <vlad.wing@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, toke@redhat.com,
- emil@etsalapatis.com, linux-kernel@vger.kernel.org
 
-Hello:
+A few small updates to the docs. Mostly typos this time.
+This is trying to prepare docs for getting fed directly
+into AI reviews.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Jakub Kicinski (3):
+  docs: net: fix minor issues with XDP metadata docs
+  docs: net: tls-offload: document tls_dev_del, tls_dev_resync, and
+    rekey
+  docs: net: fix minor issues with devlink docs
 
-On Tue,  9 Jun 2026 06:55:56 -0700 you wrote:
-> trie_lookup_elem() annotates its rcu_dereference_check() walks with only
-> rcu_read_lock_bh_held(), so a sleepable BPF program that touches an LPM
-> trie (e.g. a sleepable LSM hook calling bpf_map_lookup_elem()) trips a
-> "suspicious RCU usage" lockdep splat on debug kernels: it holds only
-> rcu_read_lock_trace(), which that annotation does not accept.
-> 
-> Patch 1 relaxes the rcu_dereference annotations in the trie walks so they
-> no longer trip lockdep from the Tasks Trace context, including the
-> trie_update_elem()/trie_delete_elem() writer walks (protected by
-> trie->lock). Patch 2 adds BPF_MAP_TYPE_LPM_TRIE to the verifier's
-> sleepable map whitelist so sleepable programs can reference an LPM trie
-> directly, not just as the inner map of a map-of-maps. LPM trie nodes are
-> reclaimed via bpf_mem_cache_free_rcu(), which chains a regular RCU grace
-> period into a Tasks Trace grace period before freeing -- the same
-> discipline BPF_MAP_TYPE_HASH relies on for sleepable access.
-> 
-> [...]
+ .../networking/devlink/devlink-health.rst     | 12 +++++---
+ .../networking/devlink/devlink-params.rst     |  2 +-
+ .../networking/devlink/devlink-port.rst       |  5 +++-
+ .../networking/devlink/devlink-trap.rst       |  8 +++--
+ Documentation/networking/devlink/index.rst    | 10 +++----
+ Documentation/networking/tls-offload.rst      | 29 ++++++++++++++++++
+ Documentation/networking/xdp-rx-metadata.rst  |  2 +-
+ Documentation/networking/xsk-tx-metadata.rst  | 30 ++++++++++---------
+ 8 files changed, 69 insertions(+), 29 deletions(-)
 
-Here is the summary with links:
-  - [bpf,v2,1/2] bpf, lpm_trie: Allow access from sleepable BPF programs
-    https://git.kernel.org/bpf/bpf-next/c/2f884d371faf
-  - [bpf,v2,2/2] bpf, lpm_trie: Allow sleepable programs to use LPM trie maps directly
-    https://git.kernel.org/bpf/bpf-next/c/a3d76e27bbbf
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.54.0
 
