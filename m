@@ -1,130 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B99E3E314C
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43C8346E67
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 19:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781031179; cv=none; b=X9aqiKBk3y+6zwJ7QK95sWBT0Q2+t2c4BG18GmWGx/xgIVAzgnc0YRM/BfJBBR7j8wwlBZKdiLd5o3+AcqoXvAx3Q6OK0ZKzDYmHM4jfqnBXx5rINWfOGXe3N+1mo5XCvYt57m6crdew/yY69R3o2pm0lx7IdVUEUaLOo2PHmf8=
+	t=1781033520; cv=none; b=YfYIOzo0h/HIOyDtgRivlCq+M+1D5gH7YJvYO/yOHfieazHH1PTMaeee3tBL6myjHy3Z9nLpEWfNCUkp/j0IPx9OPQ9YOnxQGJ9AOJTTai7AupzuagsiFYlLaYoLm7ICLir0PqZXnqGpR0rlzxj87jP7MswhJT1lXp108mVLYRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781031179; c=relaxed/simple;
-	bh=TLqXQpH0GrCodlLr/XLoKgZQIs7QBgJk4tzNq9k1Wzk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kRXrkET++y3GfwymWMlM3WfYOeholrIcja8wLci1dvQ/cfrNds9B/kZFW0g3aacZoapWZ4C4EkZmzKO5M/w0TjVWLF/q5qxxykr1d1kbAadF+wL+fnfVcYHog2MBz39IJY0tT/tn/6nL+zF0mfmOYzcCeLC2uTrf9P58PpKHjqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/gbX5ZX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781033520; c=relaxed/simple;
+	bh=siQdt2hkhW3iAMO5kNOKMav5d04Hqm+XiTImGFfTjnk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ELmxJk97/6JR7RG+JBHz6xwcN0hOxYmcEM4FB2FkvU0/F7EgC1vqyMnu6jPfWfcG6ZW9or/wO/9iQu21OlO7mQqc4UUxuouDYPqvXeSHr9B/UXM7+Ac4/JKfYklu28FqTxea7+KcJSNhbEDo89CZ21P4FCukwarq03id8gcSe/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=QmZriRxT; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/gbX5ZX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09111F00893;
-	Tue,  9 Jun 2026 18:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781031177;
-	bh=VbVj1+5LOE7ysrBmrXthSgba00HMoHk2Wt3N/eDcbO4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=W/gbX5ZXzDbcA72jZRCjOqJWP8qRbPGeshNw1OjF6ohU4jd8b6F1ctU+h0pKFM5bl
-	 XwV3BGlAv6oCr39wpg1oMKS5F9WsStpLhfggN/yZrG7VVtggCQhiTf5PejNEZuymCS
-	 1/fIlz5jMu8ORV07ZtlHTs3aa46AzbqsivGjURX9Z8VdRgGWCWEqVX7gi2xouJmvMh
-	 O7C7Js4SeY5fbfy1lTroUb4ZjhwsAjrsQ2Bes9jJU4agQl+2AWiVQ4GhKcer31scc0
-	 XM9AWR7PbU1p+eXfxGniDYP18aY8DHWcqWsSrJDU1A/IBVoOEZiWOsQrtN/vWz5DA6
-	 ZjpI7cnIUQXig==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: fix integer overflow in
- bpf_msg_pop_data() bounds check
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609183927.4021802-1-rhkrqnwk98@gmail.com>
-References: <20260609183927.4021802-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 18:52:57 +0000
-Message-Id: <20260609185257.A09111F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="QmZriRxT"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-486560db92cso4481777b6e.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 12:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1781033518; x=1781638318; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SB0hkJoV0gPF+mcJ/isTFdgNlIuPqjaVKGVPd+vcG44=;
+        b=QmZriRxT3/aOV4I7QK7srMxpTS+gOqS84p76nY/earcSBKTPoXzB/ZkbziD4DQs6cv
+         Z013rNBJ+GmCiYIv+51PGtmcaNbQT05zn5Qfx21/ibT9NIh5+pD6fP/rc9+kInOC6e8S
+         +CmmRj93evzLK2z5+LKwrNGP8qoFovQ1bX1dPGmLqDUD8mKhIdaiYd5Fgv2vD+izVt/x
+         IIAjOAjMDKQHLNM6p1+AU2DYqhAba9+M1YPf1vAuqr85PXi7cjF5T/sUPqJV6IvGrBFw
+         w0QD4b9QGLYmdwM3qg1vw6E/+2o3UXNll+nJVTowAOgkmof2Y8phEB+dOnQHBZ/lHDLG
+         5Wgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781033518; x=1781638318;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SB0hkJoV0gPF+mcJ/isTFdgNlIuPqjaVKGVPd+vcG44=;
+        b=RHEHDB1GBKm8hmH9aXJziPOBTz26Gdgx/D7Vk4AtZfyT1G11dVMtMvZOgnRuemat27
+         Ac9ru2dtW7XX+78VCQ7yArRXUombwAo6Y+LrMk2husQIKOswLLkx2UZdwVkWuSazhhbD
+         a801t3ycvGqOqaUvVPHv8BggDGXvy8FV3VaVQaMGwGwaOuWIQs7dY7sgVYPx6hZuBEX7
+         mxDJ5OHEyuzMPmjtswsCYn1oHdgY5Nb76BpE2qFF7mJ/35JZCUtUPlBW8Uk9rRKA4AGe
+         AJvVpWEkHb4KskVZN+KvhmAVHJcTDaOTXu0lDUFJggl3IG/aXWQHPHW/wnx7sNCQS9BA
+         0fhA==
+X-Forwarded-Encrypted: i=1; AFNElJ/oTpM2v1E5ycuByMD426D/bk36RPbdYWfVGBSDyKMkwZg/dSVtw4z7kRvl8cOUqULUP5s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPFhzcIiLkNOfVpg/WrYb/wfG9ZcSrk3enIS9fc7bHqLAXDxUV
+	DQhcnENQVWbGUd9XIVgo3OJpB/fTvmxgoLha5wqBhE6WQmL8F3wycBR2WpsnGS2GRg0=
+X-Gm-Gg: Acq92OHuxNxZNy/4dWAgnzmS7rISYQUhNx6ZeG8mMlZNc0jYK2ZfAlAIuCj9cbxokXc
+	1LbCX91FRy45AdRN2J8qmgE4oDSPkJCj29oE3wL59lT0LCfO3benq2kEMS7Y89zFVwMzOaKV/SI
+	EgF+IzdEt5xC0XvElCM4PBnyXk85tpfEM13r1IpMJECnfH0jpuM5RK8B8qGf7/FoLxsaDYEd6Qe
+	Rd2LvQqIzVq97+HgleGMQM/Cezt/m2ZfIvhArnVc+y5BBH4tLybCCKT2H23HmQ++/9ExfrZI996
+	suzMCsSN+gVIuouMOW0tS7Cf/vj7V5DbP5YGTKeP0sOTBepkwZXoiVCmPHWEc49rjjdkRt5QcFx
+	VNNtRaNQczMlTnhEZMSiUE37m/yuQAWiZQFEj1Jtofwy+ymBq108q/onHjowO4GaRojRMunM6A0
+	klNEJgepSLJb8TRnhwwaH+XzBFeSfjMaWHkg==
+X-Received: by 2002:a05:6808:2448:b0:467:eccb:b788 with SMTP id 5614622812f47-4868dddb842mr13686943b6e.9.1781033517995;
+        Tue, 09 Jun 2026 12:31:57 -0700 (PDT)
+Received: from [172.22.22.28] ([73.62.185.64])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b32f372sm16507092b6e.0.2026.06.09.12.31.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2026 12:31:57 -0700 (PDT)
+Message-ID: <6e289973-53c7-4008-baff-d7f31edf6910@riscstar.com>
+Date: Tue, 9 Jun 2026 14:31:54 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 03/14] net: pcs: pcs-xpcs-regmap: support XPCS
+ memory-mapped MDIO bus via regmap
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+ konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org
+Cc: Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260605010022.968612-1-elder@riscstar.com>
+ <20260605010022.968612-4-elder@riscstar.com>
+ <566af63b-05a9-43f8-94e9-19af737c848a@bootlin.com>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <566af63b-05a9-43f8-94e9-19af737c848a@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 6/5/26 10:35 AM, Maxime Chevallier wrote:
+>> +					  const struct xpcs_regmap_config *config)
+>> +{
+>> +	static atomic_t id = ATOMIC_INIT(-1);
+>> +	struct dw_xpcs_regmap *pxpcs;
+>> +	struct dw_xpcs *xpcs;
+>> +	int ret;
+>> +
+>> +	pxpcs = devm_kzalloc(dev, sizeof(*pxpcs), GFP_KERNEL);
+>> +	if (!pxpcs)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	pxpcs->dev = dev;
+>> +	pxpcs->regmap = config->regmap;
+>> +	pxpcs->reg_indir = config->reg_indir;
+> Looking at the overall series, is there any reason for this flag ?
+> 
+> Looks like the reg_indir=false path isn't used at all in this series.
+> 
+> Maybe just drop it and let anyone add it back should the need arise ?
 
-Pre-existing issues:
-- [High] Unbounded `len` parameter in `bpf_msg_push_data` causes a 32-bit i=
-nteger overflow when calculating the page allocation size (`copy + len`), r=
-esulting in an out-of-bounds heap write.
-- [High] Incorrect scatterlist element offset calculation when splitting an=
- element in `bpf_msg_push_data` inflates the page offset, leading to out-of=
--bounds memory accesses.
---
+You're right that it's always true (in this one case it's used).
 
-commit 619f5b1d1aebdbd6457c3ac6e3a92bc45be7278c
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+I think it's fine to get rid of the reg_indir flag, and that
+will simplify a lot of things.  It eliminates the need for the
+xpcs_regmap_config structure (just register with regmap pointer
+instead).
 
-bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+The "pcs-xpcs-regmap.h" header could be removed too if we declared
+devm_xpcs_regmap_register() in "drivers/net/pcs/pcs-xpcs.h".  (I
+won't do this unless you or someone else suggests it though.)
 
-start and len are u32, so start + len evaluates in 32-bit and wraps before
-storing it in last. The bounds check can then be passed with an out-of-range
-start/len.
+I will rearrange the code to support only the indirect access
+method for this code.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9590877b0714f..31467c0b4279e 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2974,7 +2974,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
-u32, start,
->  	   u32, len, u64, flags)
->  {
->  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
-> -	u64 last =3D start + len;
-> +	u64 last =3D (u64)start + len;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but while fixing the integer
-overflow in bpf_msg_pop_data(), could a similar overflow occur in
-bpf_msg_push_data()?
-
-Looking at net/core/filter.c:bpf_msg_push_data(), both copy and len are u32:
-
-	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-			   get_order(copy + len));
-
-If a large len is provided, copy + len could wrap around to a small value,
-resulting in a much smaller allocation than required.
-
-Later in the same function:
-
-			to =3D raw + front + len;
-
-			memcpy(to, from, back);
-
-Since len is zero-extended to a 64-bit pointer offset, to evaluates to an
-address far outside the allocated page. Could this result in an out-of-boun=
-ds
-write if a BPF program provides a maliciously large len?
-
-[Severity: High]
-This is another pre-existing issue in bpf_msg_push_data(), but does the
-scatterlist element split calculate the offset correctly?
-
-When splitting an element into psge and rsge:
-
-		psge->length =3D start - offset;
-		rsge.length -=3D psge->length;
-		rsge.offset +=3D start;
-
-Is start the absolute byte offset from the beginning of the entire message?
-If the split element is not the first one in the message, wouldn't rsge.off=
-set
-be inflated by the cumulative length of all previous elements instead of the
-relative offset (start - offset)?
-
-When the network stack eventually reads or writes to this element via sg_vi=
-rt(),
-could this cause an out-of-bounds access past the end of the physical page?
-
->  	int pop;
-> =20
->  	if (unlikely(flags))
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609183927.4021=
-802-1-rhkrqnwk98@gmail.com?part=3D1
+					-Alex
