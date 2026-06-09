@@ -1,54 +1,54 @@
 Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCCF1B4156
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 05:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA643148C5
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 05:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780982302; cv=none; b=tvDP2zY+HThSfaDTwNHwwosa0yGyaPx01ja5iVccvuDuo+gR9om+ljgLncWPhTvZoj7KkXS+RRCajOuuWArj7it5byMe93pTljA996Y7kZtFAw1OSNelsMSeFhHN31IdffUDBZ81SJW3SwI4y7pIPKoFQ/lL8f/0WZukZM64KR8=
+	t=1780982308; cv=none; b=qxX1W9snpBiaTQRsWVCPBlzIf46UfWUwbi5pnQ2WWke3zmzTTDrV9DJWf2QrQNT8t1+aUIpFf1Cj14cYxT4E/YXmEJi5ArBledL7wTW8Bi/x4XrFlBZFfwjov+5z9lmwuCmTV2xEAcuXXSG8Wx23+aKTvVq47wt5Uscu4AmyYZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780982302; c=relaxed/simple;
-	bh=AULg6TS9zdVYAzc0iEIaIlPZ4bBNNUvjdY5hipajSlY=;
+	s=arc-20240116; t=1780982308; c=relaxed/simple;
+	bh=qvz4oeLDy+YWznYpNNUEyf6DwxyVkylxfaL4HrqO2Lo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=nwIvr3Ub5Qj4pA4xyZCqZjY2j7mk1ZKbVxzuzQi7sChzumovF+8l6AM6VIO6+ehscDzDbZu2IZlCuaf1jRzATpMZu8Cc04saOofNbPVI1fxfsds6kpcP5RNA/8eyfTM1eJikC7GdZ8uJ0tK1LxqhReJ0GQOUDFgAOwDW3X1BNKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pGljWcFd; arc=none smtp.client-ip=74.125.82.201
+	 To:Content-Type; b=sSwZyhR0fa+BFFokvMGydLqRiuDUB18a9opK+Y8ZHdg9sEJg5dTbo+Cy4dt3HYl4b3ZxPKarJIHSLWfrT1zOnTob3gsM9l/y8w7LX4eE4dc6V4bFPCNB9RZE2AA3k4jY5sDEDS0GsBCRp6cryLgy4DYxHoPvNB36MDyAv2ZuxF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HcNW6t8t; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pGljWcFd"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-304f1820babso6397445eec.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 22:18:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HcNW6t8t"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-304f23c55b2so5118486eec.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 22:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780982299; x=1781587099; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780982304; x=1781587104; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0dcjYmV9oSCkLLYv23l2rswMcx+M5a96riI5dhneKmU=;
-        b=pGljWcFdWzeJ9jGem+R150+gALjZqWQixpT0VYzI/+dLLDBZy8emUclpPUU9S9AWju
-         8hXilTz/d6Cd2rlVpTu0WgxC0fI0uJ7+oj5bg+vXQCiAVxi6qCQ3y5pvnCr6BvGU0Jxy
-         xuPKVDu38C3nRW7nZQOL/CUs13Gp+4S841RHP7lkI3OD8T4CNbaNxZRYYjwvyCXCSPww
-         xM4BaO+hIGXINyEENPTs79Ekb/3hPfmAwHXulP2T0snEk8NAHOttYg0RY5fMMy1a3z+o
-         5j2zdqdyLdPFnOISE4RVYzPCUyNb8IwKsToJhrVjOxAcsXB3Z+0cfSa6qP2/6iZUBJmr
-         8akQ==
+        bh=gIXHmPDGDS7Qgr8fkgDEhnMYUYxH1NQb9jxl9ja86zM=;
+        b=HcNW6t8tWJW5zxBRTqT4XDLGAd9v62tUg8PTFi9TwdxiWM1KDbYmdNxHOKUrNBfwrO
+         8qz71TTPuYTx/gUuHUr3r98NEo6lWARwfz0AOVKL7Ac1f6L01k6eKTdw9H1DkZjxHd+8
+         rbwDXcpadWZ2VJix/2RyuG5HHtlx9F4K8uBHAStaBTP19EB8aW77xzz4DCMqjXUjIfXq
+         pFPsglS1fa44aqy7zCHHl4Bc4LQ9LSX9/PW3w2aZBLIwOFFG3ZohpFvqnWc9qrqYIH4B
+         abmP+08J3h+6sPmHKcSlxFMrhndnaH9KX1TiNKjSFqfeRuIcqELqYAcqfvZ0ih7cKCua
+         KT4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780982299; x=1781587099;
+        d=1e100.net; s=20251104; t=1780982304; x=1781587104;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0dcjYmV9oSCkLLYv23l2rswMcx+M5a96riI5dhneKmU=;
-        b=nHjfXpiTRXJc5P4X0Zw0TrCFXJAKSJmpaGtusR5H33BD4lOLJTNo9Ko3SyIehAxT+t
-         bBJavmz/+o59XFTCERlRDe02I8VDz5/969frAoNDZNBlThMBaMy09DkFceH5AZHqZrHN
-         p6cZSxFnLqQRQrfh8ZlOzvGUXXYD+frZgZK4RzoCTxoUUV/J/Z2DIESJgxsRn9wl2jFj
-         /0Yw/DkO6eo1hvRK1F3D8mt0JM/PJ3XZy/fscFpXuNOKWENrgUNXzPTRRFzqLb73+mbS
-         uRRohahUrQ4JNtdn++hlGN2OPym47hAovKwVkYNbkJGSj3k7GF9+XM3cZqoBjFThIgN7
-         Of5A==
-X-Forwarded-Encrypted: i=1; AFNElJ8ITT+bf/Fa8/KiV5LYhEPbneguyVVaO5YHhbuJb10ABP62cKJ3sCSz3DSXBKOZ5DLn4uI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMY1Nv30kCZopNsY4ddb/BCMia0ubBMSyhoc77jJ22ixBhqEqk
-	Cy5G7PgulSznL9Jx6tbzdBvlsr2uY5l346carVLZwbp5dUNlECg3hpGFVjPkYr/f9XmG94qphd8
-	/YaNj59KlWQ==
-X-Received: from dyclx3.prod.google.com ([2002:a05:693c:2183:b0:303:f2fa:386c])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:419e:b0:137:4061:8cc2
- with SMTP id a92af1059eb24-1380670e1f3mr8837301c88.35.1780982299033; Mon, 08
- Jun 2026 22:18:19 -0700 (PDT)
-Date: Mon,  8 Jun 2026 22:17:57 -0700
+        bh=gIXHmPDGDS7Qgr8fkgDEhnMYUYxH1NQb9jxl9ja86zM=;
+        b=LtPT0Mkot2xh3Ig59Fx78Te9f7AfBsUVrYYSVDJbz0PmWmM9uSlE86wU9xeV6ZPu/0
+         o1H2DYt7ov/TDH3J0L0YaOjeRroFslkmiuVfc8Wx2Iq5TyL0YQVyuF1gCEsT3wT+z00u
+         lbHr4+9orYNxOteCn/PHQ7idqPAMeSkZwuPeabmjA2xdSHa7mfoOrX9SraAIcDg1bToU
+         3TVePAfKbTDbkEzg3LixzRdBLZSIXlTP0qrTsaMc9L6b7Fo0RH0Et0YC+JcxMYOY/w0s
+         hcAZB3lOAOWJjN/FWeM1MtHiZirqQOF+BOq3wmwAW99gJfRTusiAkkzdHhYn6DyNSikD
+         ARtQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/SAkC7+5lWu25IIIXgrTy6hutxbgEWkmaG0+hmYhUe+ZEy+lPZwfXPYwJsk2T8Uq2H/hQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDvHLE6kAn+upu/LpLVes9nLC8hf9OO30jK2DT68ballQN+Wmr
+	mJRxIOe7xWDdmS79DgOnT/wkYIlwReG6QB5LN1TKfVcoEXO6Z1igqbPEjI6kVk8XJgARkIEYscs
+	EnvX1rVkBQQ==
+X-Received: from dycso24.prod.google.com ([2002:a05:693c:3618:b0:304:e89d:c06b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:4347:b0:304:bce9:25fa
+ with SMTP id 5a478bee46e88-3077b3305c5mr10548935eec.4.1780982303685; Mon, 08
+ Jun 2026 22:18:23 -0700 (PDT)
+Date: Mon,  8 Jun 2026 22:17:59 -0700
 In-Reply-To: <20260609051759.405027-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260609051759.405027-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.1064.gd145956f57-goog
-Message-ID: <20260609051759.405027-6-irogers@google.com>
-Subject: [PATCH v1 5/7] perf test: Enhance annotate test coverage and isolate config
+Message-ID: <20260609051759.405027-8-irogers@google.com>
+Subject: [PATCH v1 7/7] perf test: Add BPF JIT annotation test coverage for
+ all disassemblers
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -74,45 +75,29 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Update the annotate.sh shell test to test different disassembler
-backends (objdump, llvm, capstone, libasm) utilizing the new
---disassembler command-line option.
-Isolate the test script from host environment pollution by exporting
-PERF_CONFIG=/dev/null at the start of the script, ensuring it runs
-hermetically.
+Expand the annotate.sh shell test to verify BPF JIT disassembly.
+If the test is run with sufficient privileges (root/CAP_BPF) and
+captures system BPF programs, it will extract a JITted BPF program
+symbol from the perf report and run perf annotate on it.
+This validates the temporary ELF generation and disassembles it using
+each of the supported disassembler backends (objdump, llvm, capstone,
+and libasm).
 
 Assisted-by: Antigravity:Google Gemini 3.5-flash
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/shell/annotate.sh | 56 ++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ tools/perf/tests/shell/annotate.sh | 69 ++++++++++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
 diff --git a/tools/perf/tests/shell/annotate.sh b/tools/perf/tests/shell/annotate.sh
-index 689de58e9238..d3bafa7e3db5 100755
+index d3bafa7e3db5..d8c710470c52 100755
 --- a/tools/perf/tests/shell/annotate.sh
 +++ b/tools/perf/tests/shell/annotate.sh
-@@ -4,6 +4,8 @@
+@@ -165,5 +165,74 @@ then
+   test_disassembler "libasm" "libasm"
+ fi
  
- set -e
- 
-+export PERF_CONFIG=/dev/null
-+
- shelldir=$(dirname "$0")
- 
- # shellcheck source=lib/perf_has_symbol.sh
-@@ -23,6 +25,7 @@ disasm_regex="[0-9]*\.[0-9]* *: *\w*: *\w*"
- cleanup() {
-   rm -rf "${perfdata}" "${perfout}"
-   rm -rf "${perfdata}".old
-+  rm -f /tmp/__perf_test.config.*
- 
-   trap - EXIT TERM INT
- }
-@@ -106,8 +109,61 @@ test_basic() {
-   echo "${mode} annotate test [Success]"
- }
- 
-+test_disassembler() {
++test_bpf_disassembler() {
 +  disassembler=$1
 +  feature=$2
 +
@@ -120,52 +105,65 @@ index 689de58e9238..d3bafa7e3db5 100755
 +  then
 +    if ! perf check feature "${feature}" > /dev/null 2>&1
 +    then
-+      echo "Skip test for ${disassembler} (feature ${feature} not supported)"
++      echo "Skip BPF JIT test for ${disassembler} (feature ${feature} not supported)"
 +      return 0
 +    fi
 +  fi
 +
-+  echo "Test annotate with disassembler: ${disassembler}"
++  echo "Test BPF JIT annotate with disassembler: ${disassembler}"
 +
-+  perf annotate --no-demangle -i "${perfdata}" --stdio --percent-limit 10 --disassembler "${disassembler}" 2> /dev/null > "${perfout}"
-+  ret=$?
-+
-+  if [ "x${ret}" != "x0" ]
++  if ! perf annotate --no-demangle -i "${perfdata}" --stdio "${bpf_sym}" \
++      --disassembler "${disassembler}" 2> /dev/null > "${perfout}"
 +  then
-+    echo "annotate with ${disassembler} [Failed: perf annotate error]"
++    echo "BPF JIT annotate with ${disassembler} [Failed: perf annotate error]"
 +    err=1
 +    return 1
 +  fi
 +
-+  # check if it has the target symbol
-+  if ! grep -q "${testsym}" "${perfout}"
-+  then
-+    echo "annotate with ${disassembler} [Failed: missing target symbol]"
-+    err=1
-+    return 1
-+  fi
-+
-+  # check if it has the disassembly lines
 +  if ! grep -q "${disasm_regex}" "${perfout}"
 +  then
-+    echo "annotate with ${disassembler} [Failed: missing disasm output]"
++    echo "BPF JIT annotate with ${disassembler} [Failed: missing disasm output]"
 +    err=1
 +    return 1
 +  fi
 +
-+  echo "annotate with ${disassembler} [Success]"
++  echo "BPF JIT annotate with ${disassembler} [Success]"
 +  return 0
 +}
 +
- test_basic Basic
- test_basic Pipe
- 
++test_bpf() {
++  echo "Test annotate with BPF JIT output"
++
++  if ! perf check -q feature libbpf-strings ; then
++    echo "BPF annotation test [Skipped - libbpf-strings not supported]"
++    return 0
++  fi
++
++  rm -f "${perfdata}"
++
++  if ! perf record -a -e cycles -F 4000 -o "${perfdata}" -- sleep 1 2> /dev/null
++  then
++    echo "BPF annotation test [Skipped - perf record -a failed, probably no privileges]"
++    return 0
++  fi
++
++  bpf_sym=$(perf report --stdio -i "${perfdata}" 2>/dev/null | \
++      grep -E -o 'bpf_prog_[0-9a-f]{16}_[0-9A-Za-z_]*' | head -1)
++
++  if [ -z "${bpf_sym}" ]; then
++    echo "BPF annotation test [Skipped - no JITted BPF symbols with samples found]"
++    return 0
++  fi
++
++  test_bpf_disassembler "objdump" ""
++  test_bpf_disassembler "llvm" "libLLVM"
++  test_bpf_disassembler "capstone" "libcapstone"
++  test_bpf_disassembler "libasm" "libasm"
++}
++
 +if [ "${err}" -eq 0 ]
 +then
-+  test_disassembler "objdump" ""
-+  test_disassembler "llvm" "libLLVM"
-+  test_disassembler "capstone" "libcapstone"
-+  test_disassembler "libasm" "libasm"
++  test_bpf
 +fi
 +
  cleanup
