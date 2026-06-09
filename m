@@ -1,64 +1,38 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7876B342CB1
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 08:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F264383982;
+	Tue,  9 Jun 2026 08:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780994635; cv=none; b=jIHfLmUTIJZ0COvwqx4u8O8gHfbuCmz8Q6o5nGa9S/Wlx4HwSTCBMUNnybXC6AEP5db8gGjyl/rla+7uQR6H3/xtbT8aXxNrP+tbv5g+eDwrQOZdkYxuBPsvF7zv/EIUn5S/XODOpWTTvzZL6xATdcfcMcfc9/fo8HwfZwJnsWo=
+	t=1780994873; cv=none; b=rKIAGHkP2VTFriXUV53Wt8jrS3a6f23sHt93zT+T7FwCiNEBr1kf7/So2dh1Ans+SvMtOiXeDh2DYUrdpnF412DDgV/dt4p348bNGyNgl+jvtZ3N+1afoiuMImL1SjujkTm353gBOttjEY56qi59xOujKAl68ZqlZ6HCrxVnBO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780994635; c=relaxed/simple;
-	bh=4rTCpYdKEey/fxpJBzRiYD23VkjVM1koVws/Fj54klA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=sFvyhHZXEWldyFoQaexK3htilEueKLoTWnpVGwwq+cmR0RFQxyqHpaZFcVdIyHM1P+QGNL/TpWNzX0cEpNriniRzw45UkPyM/hhysp1EnjwvKa8QaN2rA5nLTFcELOfjeC669AAwUT7GjYPAbTr30vxYMNGH/XxtscJ4gqOV3OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MPAkhf1u; arc=none smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780994873; c=relaxed/simple;
+	bh=B5zAEOf8R+GXxcdL/bb2XYRmO9k5KeskzXUSgYrauDk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
+	 References:In-Reply-To; b=Sh113+Z3yGNWWbBZsvfT47IxOBLVJAp5DM9roKqK+0eqe5HhuiZPXcshJW3azSMGOZy9CytkVheCCRBxq2TE1JV2AfCesG2yheBTyVarkaDJHweH03ueDqsv1x9EVo0dBveGQ/fKtjxHQkeaOeZW0/ZvCY7uhsgtAzzUV1qSxuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ISpERdkX; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MPAkhf1u"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-45ef616daf6so4795660f8f.3
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 01:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780994633; x=1781599433; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4rTCpYdKEey/fxpJBzRiYD23VkjVM1koVws/Fj54klA=;
-        b=MPAkhf1uquZqzFn6EULJov+ZxAnSdVdGje6+ibL577WuH8w69cfqy/zmD36dPcNysJ
-         lw7EWhjKnbUo94gp9tGq6tjvv3UWGuFCRiC0e6NN6XLEkVSw6taCWkiiBmhgvi3ki0uH
-         QNu8CUqYp2FmCiPxJmtIcdcEDeCCQtfLaxAHQHHhF4IuHI9u3EVHrhlRZPstaYX0XAKS
-         oiB2fInu+VDd7Ynw4KLaCpdByGW9imd4dKr9DmFbI11wMpfPVs9adFQLzAmN8iBYzZlX
-         JRYM3sIJxIpmtm0Bvs30+q6qLWiHMjLfaGvjhsWkfxjNsJvURrWbBq+Fzk7F2HzkG71q
-         mTTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780994633; x=1781599433;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4rTCpYdKEey/fxpJBzRiYD23VkjVM1koVws/Fj54klA=;
-        b=H/DxHDt+fCnZCjkAzSeA0y5pRpTQdc8PdpK+aBh22gkgIxfC4l4PwxNZQYbVcPmIku
-         zswPRhRV8jv0bY1BE95C/z4VlY31N0Yl26gblIoINXgq+ua9K3OerUez7as0veYBRgr2
-         UlZ6fm5s2KspIZvC3L4oM++qKarmUTyxX8BjdXb4Mp2FuNMPvrTg0GwBln+qvtHIt8oi
-         4CtDBrQDanqi6p6YUj0ZHqwSxtRnrvyCAD1QQhi5K7Efb6T3jn4ATeplbLjtOdmmsWVQ
-         qwWx74S2hhT7kWXExyXELzYTR2Rpwl3XBGiI4nYwwMDetBGqy1ThD7VVpw7d/+hIOJjj
-         lVjw==
-X-Forwarded-Encrypted: i=1; AFNElJ/U2hU92aOWqJjsqidxRWMjEFm2FaC2eXfKtytgcMnTakA6ZEQ7AFg+torKAS9Z1Q77Z0k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze8wCHQ2uENL6AEE8ydXBDlKQZt7BPF06H+OgHN2zkwxpPINDD
-	/jEGEwxmw42c5oq4rjopdNx5Ku7b/Atj4hTzi13N2X3C/U31qwQseAF4
-X-Gm-Gg: Acq92OFNxDArzPk9fH6klYQEJwovsP7UrEnSCTlA5jMwk7iWnnmo+7lpHpRgGQvXm0K
-	KIa2QR1WOsvUKK/CcGMjwGHh59W21D3sX0zZ0vuB62xPMioxqCLPsZ3gjgYCOeJiaYYdQvnHQuu
-	scQ2B72kxrnhLYDLxLqhwELaEkruA8trOlTaXCdbvAdrwQCj6TNPfpdDTmPktx4oAlNF7gqSmm8
-	O/UTi0ysoEY3l2mGlQM4S/CJPx2ZP33hHWC+zjQsY6ltE1PiVzVCJ8aIGq3fMsDFkUoEI9RJfbg
-	lroEYsz2EcuePUJZ4vOvMIGkbuyRZJTcU6hLjUSDf8ObWXMNrqI8ZAoILKNoJjPTFLB/fXpVtba
-	R3H37qr3iUvib54UjCeK/YkP5tKYLKN1AyjQQFROTJGhn8XYLkZ4rerk/czrMkwkNyFllz1BUcx
-	l+oFPs8+qJo5CwWH8rdeQt/RZG0JuWvNPBP9d4DePP3tlMcsTYnBkVCDeetw2jJ+5CdDKMfLtPM
-	N81yJBoHN2ooqIoPdFOhlifMh4B6xFOC1jYQMc2oRcWgTIPnW5Rf8DEAXjeTY5l5GQxxC+kJM24
-X-Received: by 2002:adf:e30e:0:b0:460:1233:ecf2 with SMTP id ffacd0b85a97d-46030609798mr22356467f8f.30.1780994632620;
-        Tue, 09 Jun 2026 01:43:52 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcb13sm60610866f8f.2.2026.06.09.01.43.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 01:43:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ISpERdkX"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 8A8854E42C7D;
+	Tue,  9 Jun 2026 08:47:48 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4810A5FFC1;
+	Tue,  9 Jun 2026 08:47:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B4163106A2AC4;
+	Tue,  9 Jun 2026 10:47:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1780994866; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=YjDdX3vciOF19PxithdDPrRHmvsQu1FVpC/1SU6RqHs=;
+	b=ISpERdkX3duCHiXejPbFzvffW7F4yI9mZSAqibAXZRDOS5dhq7ubqMdN+moqHgxnQLg9Jx
+	hwdzoXVU1SAANvZTq6vsCFH6SkPou/QuDLszyJnJGCnVdeB6K3ZueYWLl1rzgLpgfeOnUV
+	nCRWeqc0nVSwoMk2hh6S8OrKQu7NyzzNmyugGBsRatDQur+H+PxeD2mxojrJg1SYJxPM+i
+	Zt3uw97k9gKDSFAAyoOXMWF4HRHbS68V71sngePYfbVIzefB5XUJKKlmT7rgb7EyJnHVEJ
+	CD3h8BarmuhxOLzK2tLJGvI+HiyjkzyCcgYZ3BAbGUrsuN2M3YepKtLuaqcrWA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,53 +41,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 10:43:51 +0200
-Message-Id: <DJ4DWMO4HXCM.3NVLDGNT2704E@gmail.com>
-Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <houtao1@huawei.com>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
- expansion
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Paul Moses" <p@1g4.org>,
- <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <memxor@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260605234301.1109063-1-p@1g4.org>
- <189a79443144cacf4a257f0627586f917d8d18a2.camel@gmail.com>
-In-Reply-To: <189a79443144cacf4a257f0627586f917d8d18a2.camel@gmail.com>
+Date: Tue, 09 Jun 2026 10:47:36 +0200
+Message-Id: <DJ4DZHRVAV59.SPVM2QDQN0C@bootlin.com>
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ <linux-arm-kernel@lists.infradead.org>, <martin.lau@kernel.org>,
+ <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <john.fastabend@gmail.com>,
+ <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+ <shuah@kernel.org>, <mcoquelin.stm32@gmail.com>,
+ <alexandre.torgue@foss.st.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 2/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260604-kasan-v2-2-c066e627fda8@bootlin.com>
+ <1e7ab52954b9ff584d6871c2ec234a7155b577f29128564d0d597809cafad826@mail.kernel.org>
+In-Reply-To: <1e7ab52954b9ff584d6871c2ec234a7155b577f29128564d0d597809cafad826@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon Jun 8, 2026 at 10:01 PM CEST, Eduard Zingerman wrote:
-> On Fri, 2026-06-05 at 23:43 +0000, Paul Moses wrote:
->> btf_parse_struct_metas() walks user-supplied BTF during BPF_BTF_LOAD,
->> and btf_repeat_fields() expands repeatable fields from array elements
->> into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
->>
->> The remaining-capacity check performs the expanded field count calculati=
-on
->> in u32. A malformed BTF can wrap that calculation, causing the check to
->> pass even when the expanded field count exceeds the scratch array
->> capacity. The following memcpy() can then write past the end of the
->> array.
->>
->> Use checked addition and multiplication before copying repeated fields
->> and reject impossible counts.
->>
->> Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating=
- btf fields")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Paul Moses <p@1g4.org>
->> ---
+On Thu Jun 4, 2026 at 11:13 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+>> index eb3de35734f0..a8e004f88b92 100644
+>> --- a/kernel/bpf/Kconfig
+>> +++ b/kernel/bpf/Kconfig
 >
-> Regardless of the sibling email I sent, I think that this is a good
-> defensive practice to use check_{add,mul}_overflow() here.
-> Having said that, it would be nice to have a selftest in the patch-set.
+> [ ... ]
 >
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>> @@ -101,4 +105,9 @@ config BPF_LSM
+>>
+>>  	  If you are unsure how to answer this question, answer N.
+>>
+>> +config BPF_JIT_KASAN
+>> +	bool
+>> +	depends on HAVE_EBPF_JIT_KASAN
+>> +	default y if BPF_JIT && KASAN_GENERIC && KASAN_VMALLOC && VMAP_STACK
+>> +
+>>  endmenu # "BPF subsystem"
 >
+> This isn't a bug, but a design concern raised on an earlier posting of
+> this work doesn't look fully resolved.
+>
+> In the v1 (RFC) discussion, the suggestion was to not add a config knob
+> at all and instead do the instrumentation inside the JIT whenever
+> KASAN_GENERIC is set:
+>
+>   "Let's not add more config knobs. Even this patch looks redundant.
+>    Inside JIT do instrumentation when KASAN_GENERIC is set."
+>
+>   https://lore.kernel.org/bpf/CAADnVQLj=3DUosnsC-4V2+mN92Fe0-kW++U+m-O9c9=
+3kk6BwiXgw@mail.gmail.com/
+>
+> The reasoning given for keeping the internal Kconfig was that it lets
+> selftests adapt their behavior without sprinkling arch and KASAN
+> conditionals, and another reviewer agreed that approach was reasonable.
+>
+> That "this patch looks redundant" objection was never explicitly
+> retracted or re-acked, yet the BPF_JIT_KASAN config is retained here.
+>
+> Has this design point been settled?
 
-Paul,
-Please follow up with a selftest reproducer to exercise the bug.
+I still advocate to keep this BPF_JIT_KASAN, which is used later in
+patch 7/8 to check whether kasan tests should be executed or not.
 
-> [...]
+Alexis
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/269783=
+80520
+
+
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
