@@ -1,106 +1,158 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648BB49690C
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9F93F9F58
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781023667; cv=none; b=Y8W9ZdYF04sF3vx0oPkmP450VuWhJ8Ka5jYkSztVlmlSYfTHCz7ZMjcpkQ19A/maI6Ap3PsPJ0bPrHDZYt2XPRpJohpd05hxW5fvPHV88NvmLXpgv1ak84amuMa5Goh8LheO8rlZ6kKW8Djf8z1cSGyjY9qhVvhUlZ57M47SrsE=
+	t=1781023698; cv=none; b=pRUoaFOu/oy2/h3bRg0TN6zAG0VY8AlVeKGGTNX9TsFkV1vRGU5aKvVQBG++mLhAX20cjszLMsL5Gfgf7XFZs7h69YfGFzVHcIS4xP/pc4pBwsiWk8QtleHtPtEhnr50NXd0GTWUhM6ECGob4gDjKzHNU4wIx0f5dzwnbEcIW54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781023667; c=relaxed/simple;
-	bh=8tfPgrZ5njwmpOJtSnueMm9pFl26DajhtsqxQdPZBho=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NFHRp7arUQ2P56xbxpY4uQd+6/ucwi5CaOBY7RoHuZOUJnaJlYiwUQPbCWMmuUF7aWUNgAsjHBv6B3vnP7Ywi56rP6vcgCGUhA3ucqtXf+IzW4OEiYMLLiw9akgwZPbNB6lOvQXJNSbclTPtEnUL5OUcfjtpMmPaoLbvjV7ya3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+UUsVQl; arc=none smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781023698; c=relaxed/simple;
+	bh=00E9cvEjzG5aFbbiaYKxl0+KB+J89WdwaLKQUJQiHWY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=SbEYoMDE6IJOHUINFr0i0h7iC4mkdFe41ZOUJrGmsKmdNBoa61uNMDQO0uXbqtLKnPHEAq4TF0AypzjNYJ1jann9EGtzGlXebXM6hwNDrLs+wXtPooU8HYOMGWGKvzR0sPCtDUC7e4y+noJrrrPhCMFj/72PEuJQhhW6V0K3zsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lm7Xte2t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+UUsVQl"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-137ec563a95so7217987c88.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781023664; x=1781628464; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8tfPgrZ5njwmpOJtSnueMm9pFl26DajhtsqxQdPZBho=;
-        b=g+UUsVQlOBTpDMk+OabNam55ZBM9vrq1xEKWCft+aUs0+F989KaB5Ai+62pLRWg17U
-         4x+hezgfs9n7+La/v+Arpuo88g0Q2ApY6JVzmhCzAUCg1XCef07gP+LBGRE4cacTHYU4
-         /05SmcLddo++RRHT0WGwnlTEjhMxFDV4wJHyWIGTNtjRUvK+ECWGuIdYzjN4oOT5aP7G
-         tVdJtBuy9Qs7Zz+mAzCpTxz7AgEVgAvQKbq8qfg7/wtk9VrN2YrBzZk8KlcxU6rNeO3f
-         zf2DeoULvEpVrlQrVzulSYtRwykpoEROezkCcilpbKE1Ro0KBequ0O2eMLt+eCurgi4J
-         IsUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781023664; x=1781628464;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tfPgrZ5njwmpOJtSnueMm9pFl26DajhtsqxQdPZBho=;
-        b=dbtVnA5IS+frldN4uoio39a1LZ+n+Eif+++ZwcTthvOcV/7yNmf4ojoruqL0WxD3wF
-         Bk7JsGr29xE/nWB4T05SmQvA6PIfTzUh5gMUpwi4qjHXEsPLa74LaMwGzDH711xSJ6A/
-         3DEyGO6Dy+qDevHCynl/ckfswI3ZLb0HI0JigFbi/FHpShrHlpTDB6PXB+0Hnk/TcWZY
-         2XzqxWNZMkejLGk1OBEwwDBafpsFbOpnFuikr8cSVoNyux2K4BlHHB/msWVHkw5j36yC
-         Ms//ZYDAgML0VkyZuFWSDzP31Ug3jK8PBo2MnNPKAQF5Su0MHeHhPWMnbs7TejrWtQiQ
-         v1Cw==
-X-Forwarded-Encrypted: i=1; AFNElJ+jiR5lXKVi2+acbAxymA3k4PZ7+eNGPb73ruWI3xqS7HFcEGiD5GrXXBxcmT6zY3m3LCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI3MNjQFOJfhQ+Kgi9gemOG/O0jbXmh+256/101qT2OwoZ97sI
-	Dle346zCt7jcw+GUOcnoScihtMekPo1Bz/ZPOldOExdBLa9H491yaQCv
-X-Gm-Gg: Acq92OF4irt5b/72on4R22SZLKXTQThod7A59vT20FaLfMq94lv46L6Zy3ZsC7rOc23
-	nEyYD4EGEKaDa3ebJB8844Wp+GtuG92/l3ToeUAi5L1qhGcwgYh3lHqThZnEyoHSqxJNE20Tet+
-	9iQzGdPuYGcDRXjotF0+IBIgTUzmnHQLPuauCo7C5hwSbdGyXMhFXGvp9iRUe/b3U7hlIqYIrSz
-	pT1ylVPZSz6EpNNtHhBVvD7GNvRNH87WuquGEc/63RGagY/dM0BIxaESpJ7Gid1Sr6iZob52hVv
-	wkqP4W1MJiuthVkMz1wORfdHxqdbHk+pJQd1hHw6JUSUwYOPm5J6bmTJX0mtRe0xdN5I+cOXV34
-	TqXp+3uyC0DLVZSvm1Z5FvOGVL6AfJiZvCNMYZ2zu5n1gQ+fMHMETe71gf9QIy3AMCnyEuhs4eD
-	rEINiNa2aX5vxcuRburPARn4arBV6Yuwwi2035y+3s5O9UMYgYcuQh7HNXnjgu3oU/pTVhEH+cN
-	51GAqVZp3gAoL/wtAU=
-X-Received: by 2002:a05:7022:211:b0:128:d967:4673 with SMTP id a92af1059eb24-138066a8020mr11624934c88.16.1781023664342;
-        Tue, 09 Jun 2026 09:47:44 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:bc91:a683:c279:a106? ([2620:10d:c090:500::3:1322])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f553ab33sm15118442c88.10.2026.06.09.09.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 09:47:44 -0700 (PDT)
-Message-ID: <c51441fb2fa48d604818dffa59b7009f396fa0d3.camel@gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Add BTF repeated field count
- overflow test
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Moses <p@1g4.org>, martin.lau@linux.dev, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
- bpf@vger.kernel.org
-Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	houtao1@huawei.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date: Tue, 09 Jun 2026 09:47:41 -0700
-In-Reply-To: <SzebdWqm2zREZBf8Tc5Kc-JDWbh9nBztnk4PUu5kRSD1OOdr_ESVTt__2Hd3-lClr47jIjJCXfOH0RHsMpjjpEUh_R2v30nh3T1IXNT6Pbo=@1g4.org>
-References: 
-	<SzebdWqm2zREZBf8Tc5Kc-JDWbh9nBztnk4PUu5kRSD1OOdr_ESVTt__2Hd3-lClr47jIjJCXfOH0RHsMpjjpEUh_R2v30nh3T1IXNT6Pbo=@1g4.org>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lm7Xte2t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3821F00898;
+	Tue,  9 Jun 2026 16:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781023697;
+	bh=VhiYzKXOWztPhQ+qxpC9u+ufc2M8WvwBA5hcsobX2Jg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Lm7Xte2tZMcCh8tS5Qu4rnYH/dujb6avmXRpDQItkOxz9v3uSB7M37pVG8jDFO50v
+	 EXIPnhcMJLpgsfJ3/2UaOjSx0MzPrQeTDLgDicVVKhhkYPG7/uAGQXSp9+YFJGsUsX
+	 sx5iYgbTg5YRNMTZ3x4NO9rw5U2rgEXJI9M9zMpSt3uB0Wop8NtJ3ckA+yq4aPZfR6
+	 gEIdBEF0cdai1DsdGUdT0OpuZfvao5He3ng4M0m+bVPqFjQKSPqC7HkpNtsuEC8oEQ
+	 CS0Rggt92lV1NuA52QC1pp8v3kumzhJcI3KEupe4BGLtbjPnpguXUjRgVKc2z+cS3e
+	 9e+qx4QEGfzmg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
+ tailcall subprogs with maps
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260609163952.1718472-1-yonghong.song@linux.dev>
+References: <20260609163952.1718472-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+Date: Tue, 09 Jun 2026 16:48:15 +0000
+Message-Id: <20260609164816.DB3821F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Tue, 2026-06-09 at 11:37 +0000, Paul Moses wrote:
-> From 7129e266643883a4f83e65fce3ce20c7f7269fb3 Mon Sep 17 00:00:00 2001
-> From: Paul Moses <p@1g4.org>
-> Date: Tue, 9 Jun 2026 05:08:54 -0500
-> Subject: [PATCH bpf] selftests/bpf: Add BTF repeated field count overflow=
- test
->=20
-> Add a raw BTF test that exercises repeated special-field expansion with a
-> large array count. The compact element layout keeps the array byte size
-> representable while the repeated field count overflows the old u32 capaci=
-ty
-> calculation in btf_repeat_fields().
->=20
-> Signed-off-by: Paul Moses <p@1g4.org>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The BPF array map `array` defines its value type as `__u64` (8 b=
+ytes), but the code passes pointers to local `int` variables (4 bytes) as t=
+he map value to `bpf_map_update_elem()`. This causes an out-of-bounds stack=
+ read by the BPF helper, leading to either BPF verifier rejection or incorr=
+ect map state.
+--
 
-Note that this selftest is depending on a fix:
-https://lore.kernel.org/bpf/DJ4DWMO4HXCM.3NVLDGNT2704E@gmail.com/T/#t
-W/o the fix KASAN warning is reported when executing the test.
+commit 638a9e186d9da40d2e394848eda6a546f07a86fd
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
-[...]
+selftests/bpf: Keep int return type for tailcall subprogs with maps
+
+This commit prevents LLVM23 from changing the caller's return type in BPF
+tailcalls by using a barrier_var. It also switches to using an Array map to
+store subprog return values to preserve test results.
+
+Link: https://github.com/llvm/llvm-project/pull/198426
+
+> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy=
+1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
+
+[ ... ]
+
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 2);
+> +	__type(key, int);
+> +	__type(value, __u64);
+> +} array SEC(".maps");
+
+[ ... ]
+
+>  SEC("tc")
+>  int entry(struct __sk_buff *skb)
+>  {
+> -	int ret =3D 1;
+> +	int ret =3D 1, ret1, ret2, key1 =3D 0, key2 =3D 1;
+> =20
+>  	clobber_regs_stack();
+> =20
+>  	count++;
+> -	subprog_tail(skb);
+> -	subprog_tail(skb);
+> +	ret1 =3D subprog_tail(skb);
+> +	ret2 =3D subprog_tail(skb);
+> +
+> +	bpf_map_update_elem(&array, &key1, &ret1, 0);
+> +	bpf_map_update_elem(&array, &key2, &ret2, 0);
+
+[Severity: Medium]
+Will the BPF verifier reject these bpf_map_update_elem() calls, or
+will they read out-of-bounds on the stack?
+
+The array map defines its value size as __u64 (8 bytes), but ret1 and
+ret2 are declared as 32-bit int variables (4 bytes). When passed into
+bpf_map_update_elem(), the helper will read 8 bytes starting from the
+pointers to the 4-byte integers, potentially reading uninitialized
+adjacent stack memory.
+
+> =20
+>  	return ret;
+>  }
+
+> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy=
+_fentry.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fe=
+ntry.c
+> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry=
+.c
+> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry=
+.c
+
+[ ... ]
+
+> +struct {
+> +        __uint(type, BPF_MAP_TYPE_ARRAY);
+> +        __uint(max_entries, 2);
+> +        __type(key, int);
+> +        __type(value, __u64);
+> +} array SEC(".maps");
+
+[ ... ]
+
+>  SEC("fentry/dummy")
+>  int BPF_PROG(fentry, struct sk_buff *skb)
+>  {
+> +	int key1 =3D 0, key2 =3D 1, ret1, ret2;
+> +
+>  	clobber_regs_stack();
+> =20
+>  	count++;
+> -	subprog_tail(ctx);
+> -	subprog_tail(ctx);
+> +	ret1 =3D subprog_tail(ctx);
+> +	ret2 =3D subprog_tail(ctx);
+> +	bpf_map_update_elem(&array, &key1, &ret1, 0);
+> +	bpf_map_update_elem(&array, &key2, &ret2, 0);
+
+[Severity: Medium]
+Are ret1 and ret2 causing the same 4-byte stack read for an 8-byte map value
+here in the fentry program?
+
+> =20
+>  	return 0;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609163947.1717=
+694-1-yonghong.song@linux.dev?part=3D1
