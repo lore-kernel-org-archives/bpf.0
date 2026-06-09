@@ -1,203 +1,170 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21923BED06
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BBE29B77E
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:39:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781022984; cv=none; b=W75P3bil1c7esCkp2Jjs4iH39qqAB3FuT1Uxkws6a5xOJaQuZSGkE4ggvzFynFXHpzSyh+nwMkfGTU2BcUI14vxEj4VlirpKKNHec/MKqS4co/TlTZj9UolOaGelAICNZFN/rkudZU2rpUu8M/BSVk6Q9tg4j7i6xIiWzC57Uik=
+	t=1781023174; cv=none; b=BjFKSdaqIbe0QDAgRNo0x17hY7Wqg3XTkqlqmm8RdfZmnMmRN10ko/q1d9xIfjGRuimm20mPRxAu4t1+xnvlfddfHmEewdd1TK1/aeSzH1iUJMXFjn7WFvYFaVBstUxujGK+7lRZ18RGpNPc9F27jAcx/xgqYKRs/pAq9ytw5Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781022984; c=relaxed/simple;
-	bh=oVxXvNlK+2x3E33IMRV6GjfD0zx1nEbsNx5xYHuYv2w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=TX6idVVnlckJVMkPyMceyu17eKv+bmJxMuh+xq45kyIqQkbfhhfFy69MXXUzBtzg3dvkNy0m3ePgWUYRBgXsBYEB7IDMmxZourjBuhoLhu4FuzpiaSGDPI/I+pRbeAw3tHOf3IRZM5DI63f1ZMMuaTMmwRMKyPBx9aG1P17p1o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=XeQ5AIDi; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781023174; c=relaxed/simple;
+	bh=LQACEq2UOT31OkUElwT7WD22QhTB9SWN5/MhVo3nCGk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CVJEaP4Sa/s/qr69EaVIdwEBZQvbTgnSyTsLKgYIkC/FAZyIYnxrjYRJyiUNnHViVi3wROZwyxTh2Dckeznk24B2q+f9jwvrkLdsTMpwIEF4TAaDbFEYm/FzbwelLXB/c0TlW9Ee0jxsVFF+LkaYyVp6F64ZcHPeqziNdPV4q4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IShlxb6n; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="XeQ5AIDi"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-137335bc3caso7097413c88.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:36:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IShlxb6n"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304d7f31215so5101512eec.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:39:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781022982; x=1781627782; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Zm66UDgugDuJh+suaGoWf+oPueZ1pKYv/n0XCt6RiE=;
-        b=XeQ5AIDiFHtmODUR12yVSegTZDC6+2LTuwQS/yAuk5g/SAHha0Il8F90wJ/geXl95B
-         vMWVKK7PsGjDAzKSRKX1Yx+d/BVJqc0Iumf5Jsec5f2FVpi0wbiGXvL7T799z9uDHs/Y
-         nCKUPhEcnNjwQS9Fh0t7ra2HqLz35VTEV1sJgGoiWWT3nT7BE/Shk2pz8Fy0XawiMKa8
-         ebeDmFY06BgotWJ2SI1Zu/4ZQmB1w09FjMACltvSTw3yWaqD6n/swVVz1gyHkUmMcO8o
-         7dXel3SCd7sybYdXP51Km8JhqZgFs/dv9vIXAaUhqXFFdDed/dSsX8J51NCNSeKlRYw4
-         q40Q==
+        d=gmail.com; s=20251104; t=1781023172; x=1781627972; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VFJG2uxSMG7F0K/WXML4SmD0jp20hFrSyvhDPKqltno=;
+        b=IShlxb6nX0TM6ZnSSKONtc+3rBWCzm575lZv1Berr+LQYznnqSPtDXBChG07TAwrxd
+         xlqKLKz8KH6yfsllFMglDnLVbSqEfcbNPod4uDPLE8CkZOCiUOdOKJss6mQOJY3l/91i
+         XdMltmDUG+rAmwvwep0f2xOUAo3XSO4FCQcsU/oDe4s8rLRy9YgfOHW0iHc041E/T2LW
+         he6+fdYh+h4x15bpNaPwhZ8x9lcbaqhr/GdAB3MaVa8lLK13RyHOULJ98BhC/GH0Nofd
+         50KKisjjxjGliUfpWK4bxsh+c1kaKirNQiLSnFEEJ+YGfFe01iB5S9WZZVDt1mHvmlkQ
+         ONCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781022982; x=1781627782;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/Zm66UDgugDuJh+suaGoWf+oPueZ1pKYv/n0XCt6RiE=;
-        b=JCsEEKj2Cw5yxLYdbRlKmpT3oFDe+Ks7UmV/O3+bMI6YLSaDCGK7t3Rdo2uzWQVooR
-         Dv8iZoasfOWVCqRv8x+YT73a2VXpEMbmr3ea6nks5hqHxCS1ap+bj/HJ8lKPVihECoMT
-         6ujI+6OVKxpQhTkKtkcSGYrqtqWkPNi/67oOF+iGHBTIlktZfhdD5NMrd9+Cws6P1ryX
-         EOgjhX2u1RI92+aXec9PHXAP/bf5gTDyoZDYjeERDbFTYzqsd/2UKk6U8MgbDgP909YL
-         4FjxbU5NauyEO+26vfX8BIQ0SaBwJvXWN3lkIE3pxtLbHKwLep+/6BN47mriK18ixzLB
-         8A0g==
-X-Forwarded-Encrypted: i=1; AFNElJ8tTVSaAgSGeeKQwEvonEveH3ZfjMxIT2sCf7pBgKmyjXKKx+QJYYf6R805E8GVKVaFqYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA8yJlCMiafdA7nP2XhCtCEDDEBPhmsCCNeiGEPSasACeC3txY
-	5A3b3TVN9vVSHUXuJq9ztJQ07iHZSlhhXqlGUpdeFX/s7NHCBgqFqezbytdQeeqM6MU=
-X-Gm-Gg: Acq92OFEiYU0HI0duzLQbhB3iqtkyj9mkYwLUy5E5FS8VoesztUTxFdbWe9yZV+SVKY
-	1/MrKAR2g5f/y7SIF9u2CwCHSngFXYB3S/8YSYLDTgDvP0mzMZdrV0KTbDFTzNAMOiyiSzw3z/n
-	WOaIGdW3SVURQrkUQokP8mNjgUe9mzHAMqAPCBhqg+cXZxteadvhjFZIymtIsWhZLlcQQaXocep
-	Q9e6d1OQ/iIWUcQaRgnxgDD8LTw5tNXgd0as2rNL2KwzNrC7ET2RSdCIBcr2EJZL9qtK+hV3VBu
-	BTN20vioR/0kcOSWuzZOWytX08lNKnloRV1HFNa5nzLeZh+sxeAcdIqwwvyGS0IEXEO5S1ksqTN
-	UwsnP8sHos5ijqu+D0M/v//qh7Qc1F6cb6VZ1KRpCg4ngbCD8DAeIfMjqTK+k2RYBAItfVs38GU
-	JsQ0NuQhxG7BoDBus=
-X-Received: by 2002:a05:7022:ef18:b0:134:cf34:b8e0 with SMTP id a92af1059eb24-13806660872mr11361311c88.9.1781022981682;
-        Tue, 09 Jun 2026 09:36:21 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::3297])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-137f554f732sm15063231c88.12.2026.06.09.09.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 09:36:21 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781023172; x=1781627972;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFJG2uxSMG7F0K/WXML4SmD0jp20hFrSyvhDPKqltno=;
+        b=od3UAxbFuYuNavVo+6G/dDwaquVxf/PIIx4u7aYUyC3LDIGP3DteCPymbzIaMPKJlh
+         7Lj6Dw2YNyGLmLxQP5PmFeGFQPv8EzFC2+/IBK3y7ZxRpO3W1RZvqnE5LJAxxkCsY+SP
+         2sCCVR34ryS3BjaFO06j1axC9DUSRZs577ACvPTluKblol9C1EzsB36Aen2iEd39286n
+         uEIj8jGG5jHgf/22ivtV9zlMExRhqEpGm0v9U9zDTJBu/sEeLtjZJxlIkbl4wWLwKlOk
+         wQdcQWu9Rvf09JIZPSFeskR22tagW4mweLmb/mXffLCLMaEDGIT9tLJROnWThUQNME53
+         Aihw==
+X-Forwarded-Encrypted: i=1; AFNElJ+ZROJ4DpL7G4rD1lBG0rkoq/G7wZk96jN4R8R+1lnT84INhjRue9fm9OcUQGojpDWeO1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf9/yR++TSG0SLV8jQbRwGEYoz0XsLwONG/YIXTvjdBmhiTJ4f
+	Oi7MUsgKYtVmOSCDreyFjttI/ZvNbp+dPTDDszEdcFgE3ielawZ3hhS9
+X-Gm-Gg: Acq92OEw/Y8Y341cgKnpIenW3ahnMnJ1cTj4uxPlOlC8ZfiK9irtNsZ0Ep8QgYPYag+
+	sPFw5ql0UkpVGAntSxen0ncLryEAJEF7IwvcrRQYZSVZtykExlyVdGWa1/eFBUvog+xv/rVXJZF
+	6Q1d+/qBVDpDNaaF675sm1PCPf6Y/3VwZgNuD9UuVlhW8fIGi+lLQPjK/FWpnQvlPc3sUXf7+HQ
+	fkvd4EzAmDUMHp3L56EsSEOXNWzp6+NNv8HZYBrH67UgDME9PWyFY5UaUx7Ft11448DP/fUjSI/
+	j0QuwwU7bR0/kwlX4YRHe99m06zBW6GCSkhZfAKUAqinYMAQV9dbEJIM1H+N7Gkn3MspIf/z7Ki
+	HQJDHTKFax0jsa7DQw55mvimugXv7YZn36JN/A4izMedzHET9rInUUqrWrI7bfZx7VCX4T2Ukkq
+	VZyfiDuxNC1esQCOk3TIHwCyYx1A4MJZr3wrQyK6AHYPwZLAEtHqYZcAOYDV6opJbAuqjXYNF5R
+	OnobuB2HiubQvNhleI=
+X-Received: by 2002:a05:7301:fa08:b0:2f3:986d:2d01 with SMTP id 5a478bee46e88-3077b595238mr12255574eec.19.1781023172134;
+        Tue, 09 Jun 2026 09:39:32 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:bc91:a683:c279:a106? ([2620:10d:c090:500::3:1322])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcb98aasm21321182eec.12.2026.06.09.09.39.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 09:39:31 -0700 (PDT)
+Message-ID: <9a66a9e8ac66192e9bd2b938c893e6cffa4aa10f.camel@gmail.com>
+Subject: Re: [PATCH bpf v6 1/2] bpf: Fix kfunc implicit arg inject type
+ detection to prevent invalid pointer deref
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org, ast@kernel.org, bot+bpf-ci@kernel.org,
+ bpf@vger.kernel.org, 	chenyuan@kylinos.cn, clm@meta.com,
+ daniel@iogearbox.net, ihor.solodrai@linux.dev, 	jolsa@kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@kernel.org, 	martin.lau@linux.dev,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
+Date: Tue, 09 Jun 2026 09:39:29 -0700
+In-Reply-To: <20260609125214.3096351-2-chenyuan_fl@163.com>
+References: <20260608142618.3064380-1-chenyuan_fl@163.com>
+	 <20260609125214.3096351-1-chenyuan_fl@163.com>
+	 <20260609125214.3096351-2-chenyuan_fl@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 12:36:18 -0400
-Message-Id: <DJ4NYD3BBJ3A.3TEL5PAOUE579@etsalapatis.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf, lpm_trie: Allow access from sleepable
- BPF programs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Vlad Poenaru" <vlad.wing@gmail.com>, <bpf@vger.kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: "Emil Tsalapatis" <emil@etsalapatis.com>,
- <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260529174233.2954240-1-vlad.wing@gmail.com>
- <20260609135558.193287-1-vlad.wing@gmail.com>
- <20260609135558.193287-2-vlad.wing@gmail.com>
-In-Reply-To: <20260609135558.193287-2-vlad.wing@gmail.com>
+MIME-Version: 1.0
 
-On Tue Jun 9, 2026 at 9:55 AM EDT, Vlad Poenaru wrote:
-> trie_lookup_elem() annotates its rcu_dereference_check() walks with
-> only rcu_read_lock_bh_held().  Because rcu_dereference_check(p, c)
-> resolves to "c || rcu_read_lock_held()", this passes for XDP/NAPI and
-> classic RCU readers but fails for sleepable BPF programs, which enter
-> via __bpf_prog_enter_sleepable() and hold only rcu_read_lock_trace().
->
-> trie_update_elem() and trie_delete_elem() have the same problem in a
-> different form: they walk the trie with plain rcu_dereference(), which
-> asserts rcu_read_lock_held() unconditionally.  Both are reachable from
-> sleepable BPF programs via the bpf_map_update_elem / bpf_map_delete_elem
-> helpers, and from the syscall path under classic rcu_read_lock().  In
-> the writer paths the trie is actually protected by trie->lock (an
-> rqspinlock taken across the walk); we never relied on the RCU read-side
-> lock to keep nodes alive there.
->
-> A sleepable LSM hook that ends up touching an LPM trie therefore
-> triggers lockdep on debug kernels:
->
->   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
->   WARNING: suspicious RCU usage
->   7.1.0-... Tainted: G            E
->   -----------------------------
->   kernel/bpf/lpm_trie.c:249 suspicious rcu_dereference_check() usage!
->   1 lock held by net_tests/540:
->    #0: (rcu_tasks_trace_srcu_struct){....}-{0:0},
->        at: __bpf_prog_enter_sleepable+0x26/0x280
->   Call Trace:
->    dump_stack_lvl
->    lockdep_rcu_suspicious
->    trie_lookup_elem
->    bpf_prog_..._enforce_security_socket_connect
->    bpf_trampoline_...
->    security_socket_connect
->    __sys_connect
->    do_syscall_64
->
-> This is lockdep-only -- no UAF, since Tasks Trace RCU does serialize
-> against the trie's reclaim path -- but it spams the console once per
-> distinct callsite on every debug kernel running a sleepable BPF LSM
-> that touches an LPM trie, which is increasingly common.
->
-> For the lookup path, switch the rcu_dereference_check() annotation
-> from rcu_read_lock_bh_held() to bpf_rcu_lock_held(), which accepts all
-> three contexts (classic, BH, Tasks Trace).  Other map types already
-> follow this convention.
->
-> For trie_update_elem() and trie_delete_elem(), annotate the walks as
-> rcu_dereference_protected(*p, 1) -- matching trie_free() in the same
-> file -- since trie->lock is held across the walk.  rqspinlock has no
-> lockdep_map, so the predicate degenerates to '1' rather than
-> lockdep_is_held(&trie->lock); the protection is real but not
-> machine-verifiable.  trie_get_next_key() also uses bare
-> rcu_dereference() but is reachable only from the BPF syscall, which
-> holds classic rcu_read_lock() before dispatching, so it is left
-> untouched.
->
-> Fixes: 694cea395fde ("bpf: Allow RCU-protected lookups to happen from bh =
-context")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Vlad Poenaru <vlad.wing@gmail.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
+On Tue, 2026-06-09 at 20:52 +0800, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+>=20
+> When a module kfunc declares an implicit struct bpf_prog_aux * argument,
+> the verifier must identify it so the kernel injects env->prog->aux into
+> the correct register at runtime.  The original check used
+> is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
+> module BTF type against vmlinux.
+>=20
+> Root Cause
+>=20
+> This issue was triggered by pahole 1.30 generating module BTF with
+> incorrect type information, which caused the kernel's distilled base
+> BTF deduplication for modules to fail.  As a result, the module retained
+> its own copy of struct bpf_prog_aux with a different BTF ID than
+> vmlinux's definition.  While pahole 1.31 fixed the BTF generation issue,
+> the kernel must be robust against such inconsistencies: a BTF mismatch
+> should result in a clean rejection, not a kernel crash or information
+> disclosure.
+>=20
+> When the distilled base dedup fails and btf_types_are_same() cannot
+> match the module's bpf_prog_aux type against vmlinux's,
+> is_kfunc_arg_prog_aux() returned false and the code fell through
+> silently without setting arg_prog.  The kfunc then received whatever
+> value was in the argument register and dereferenced it as a
+> bpf_prog_aux pointer, leading to:
+>=20
+>   BUG: kernel invalid pointer dereference, address: 00000000000009e2
+>   RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
+>   RDI: 0x000000000000046d (stale register value)
+>=20
+> In the observed crash the stale value was the process PID, causing a
+> dereference within the unmapped NULL page.  However, an attacker able
+> to control the register value -- for example by writing a BPF program
+> that explicitly sets R2 before calling a KF_IMPLICIT_ARGS kfunc --
+> could redirect the dereference to arbitrary kernel memory, turning
+> this into an information disclosure.  The fix ensures the verifier
+> either validates and injects the correct bpf_prog_aux pointer, or
+> rejects the program outright -- no silent fallthrough that could
+> be exploited.
+>=20
+> Crash Stack Trace
+>=20
+>   PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
+>    #0 machine_kexec at ffffffff812f6e26
+>    #1 __crash_kexec at ffffffff8145a788
+>    #2 crash_kexec at ffffffff8145ac24
+>    #3 oops_end at ffffffff812bb67c
+>    #4 page_fault_oops at ffffffff813053a1
+>    #5 exc_page_fault at ffffffff828e60a1
+>    #6 asm_exc_page_fault at ffffffff810012a6
+>       [exception RIP: bpf_prog_get_assoc_struct_ops+10]
+>       RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
+>       RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
+>       RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
+>    #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmo=
+d]
+>    #8 bpf_trace_run2 at ffffffff814f8332
+>    #9 __traceiter_sys_enter at ffffffff81415f45
+>   #10 trace_syscall_enter at ffffffff81416735
+>   #11 do_syscall_64 at ffffffff828e06a1
+>=20
+> Fix
+>=20
+> Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit()
+> check in check_kfunc_args() so that an implicit argument reaching
+> is_kfunc_arg_implicit() without being handled by a prior handler is
+> rejected with -EFAULT, instead of silently skipped.  Existing implicit
+>       args in bpf_fixup_kfunc_call() (obj_new, percpu_obj_new, obj_drop,
+>       percpu_obj_drop, refcount_acquire, list_push, rbtree_add) are
+>       explicitly allowed.
+>=20
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 > ---
->  kernel/bpf/lpm_trie.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-> index 0f57608b385d..4d6f25db9ba1 100644
-> --- a/kernel/bpf/lpm_trie.c
-> +++ b/kernel/bpf/lpm_trie.c
-> @@ -246,7 +246,7 @@ static void *trie_lookup_elem(struct bpf_map *map, vo=
-id *_key)
-> =20
->  	/* Start walking the trie from the root node ... */
-> =20
-> -	for (node =3D rcu_dereference_check(trie->root, rcu_read_lock_bh_held()=
-);
-> +	for (node =3D rcu_dereference_check(trie->root, bpf_rcu_lock_held());
->  	     node;) {
->  		unsigned int next_bit;
->  		size_t matchlen;
-> @@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, vo=
-id *_key)
->  		 */
->  		next_bit =3D extract_bit(key->data, node->prefixlen);
->  		node =3D rcu_dereference_check(node->child[next_bit],
-> -					     rcu_read_lock_bh_held());
-> +					     bpf_rcu_lock_held());
->  	}
-> =20
->  	if (!found)
-> @@ -359,7 +359,7 @@ static long trie_update_elem(struct bpf_map *map,
->  	 */
->  	slot =3D &trie->root;
-> =20
-> -	while ((node =3D rcu_dereference(*slot))) {
-> +	while ((node =3D rcu_dereference_protected(*slot, 1))) {
->  		matchlen =3D longest_prefix_match(trie, node, key);
-> =20
->  		if (node->prefixlen !=3D matchlen ||
-> @@ -482,7 +482,7 @@ static long trie_delete_elem(struct bpf_map *map, voi=
-d *_key)
->  	trim =3D &trie->root;
->  	trim2 =3D trim;
->  	parent =3D NULL;
-> -	while ((node =3D rcu_dereference(*trim))) {
-> +	while ((node =3D rcu_dereference_protected(*trim, 1))) {
->  		matchlen =3D longest_prefix_match(trie, node, key);
-> =20
->  		if (node->prefixlen !=3D matchlen ||
 
+Please do not drop acks.
+Also, wdyt about this:
+https://lore.kernel.org/bpf/20260602093836.2632714-1-chenyuan_fl@163.com/T/=
+#m736b14f7e8b0a117bf0791ce79fc0896df8ca0f2
+?
+
+[...]
