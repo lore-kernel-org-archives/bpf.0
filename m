@@ -1,96 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2DD343894
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43DE4C9543;
+	Tue,  9 Jun 2026 18:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781030622; cv=none; b=Ri00DfNGA+YVkpL6iKgGRmJp/zE8EikT+0lTXCDt+P/ytlIax/gOthI9IyaKJLmZA40OVhprJ/qyIW2ijV1ZLOra5bYr1XF11BEUMrApGn4/tpRpkpP+YpTnNXoqTw6gkw7nMbzEe4FSE9huGcWs9J3Q9UFa5yz4fYy0bosa5yQ=
+	t=1781030781; cv=none; b=XcPBM9T++4gqsMGDm2uIscGxj481y6jlTe9rfU8Zk1qPM8CFxIotIfo7MMprcLEtUjBmkZ//hQ4Hn2uluTCJDBBALYQpJqo3MQ1DQxYcEqBXoJ24J2OBaixbtyG0g5TCrySCFXfDJjmd3yMTUsuk8YaJPSYIVylMJnWYz1fmhw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781030622; c=relaxed/simple;
-	bh=3sZr8aWKz6NoWdAehVLqQ+NR9pLs06MWgGeDQdrwJHw=;
+	s=arc-20240116; t=1781030781; c=relaxed/simple;
+	bh=pAw9+f89Qrk9ps1V6Vhz9RJ4row8MZXODznclXWVHhs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nr+zD5axYpLWr7JnR0EdI4nYAJQg3626UDEG2aBi/bSjzZ3pBGzrrsBe3DbyB3uodSwq/ytgRK1QNggkfvZgqKp4sLohMlWesPKCMTXesGcpxP3ANanrAvfvXiSCgv0PMB8n1DA3uWmX3yTxHKtQ/rlc8lelaTfUn2dsuPRQzcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArLq18bo; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=np/GAmCjtPkyR50BU66MzwNYUsBgPtPvYn9mwfwwdSTnPj7p4MUkvBh7lL7HHjtWGJn5C7kWxRc+MIzprZS3VQiFN8n3xLxWC30TAv8sKVYooR3Z/qpl7QLm9t3Kznr+eX1kpy+fbhHoSjk0KN/GwKi3BDZL4NvhP6CB68nqdbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epgCepHe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArLq18bo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623541F00898;
-	Tue,  9 Jun 2026 18:43:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epgCepHe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104641F00893;
+	Tue,  9 Jun 2026 18:46:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781030621;
-	bh=G1lsx8PpF2ufjmozjWFIbKdXkMTYjFFSmHIklIuJSIY=;
+	s=k20260515; t=1781030780;
+	bh=RjOQC7GIzyNw+YTMjqCGjizypR7RLw09IXuo01mvHrE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ArLq18boGoyyjTcl96mYFjICLO3ehxJxIKn8kiRFg+hfzO/aO5kCrk7akYjDYueJq
-	 EuZp+E9JYTDCvl5czOldvhWgtey0KlRGdTKYZ4KS8Fq2U3FYAql16/6pitHGJH7MNM
-	 KoTqCpGeyPjwjhJ4qvCeAeIy/U1upE4ssMbNqA5epJny9CWUdsxXlCkGHwQV+j27BK
-	 HrcxvOxI7Q6XrNVA5gAqZba8O2LHEzAerg/D77DqMsVARc0/Ieuu0xnQkUEwmrntZp
-	 nH+frgaNP461IGwelrRKL3ONdOwMVaMc073J9bhnZ3ThxDDXPi9eki2EqHXWoO0KPM
-	 vBgDcVYaUn9XA==
+	b=epgCepHeaPUGtRI5Ot/dksIvnZChPq3DJRDDnnk3WTIHMP1OyZxIxK1GBndRmcxNJ
+	 5yp0x+VxVKq6eq3rM2ZeJ4DlevoMDFmhiGl/zjOUwlcQlqyUdIb4Es4vWoupIqROy8
+	 6aDXRrRQELazUaVUsiPQuma0LYRogQifaM+jeOkzK2AT2oVIxTQMxUumw+IYj2Ux+D
+	 DNTvZNWXELDNPr5QnnebpAwqFBQm1X9HcQl2G2xTAzG9YITpcUBsLru3NugPG7OP2j
+	 ZpouTs/v+ybeu/irdNcKjHLTvEEizpCHOauNsqvt9ssjs/NP5bvMurdf09LaI1INIh
+	 0BSKZCkj2729w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Adjust fexit_bpf2bpf ctx
- layout for llvm23 true signature
+Subject: Re: [PATCH v3 1/7] tools build: Add feature check for elfutils
+ libasm
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609164002.1721294-1-yonghong.song@linux.dev>
-References: <20260609164002.1721294-1-yonghong.song@linux.dev>
+To: "Ian Rogers" <irogers@google.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260609182108.975586-2-irogers@google.com>
+References: <20260609182108.975586-2-irogers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 18:43:40 +0000
-Message-Id: <20260609184341.623541F00898@smtp.kernel.org>
+Date: Tue, 09 Jun 2026 18:46:19 +0000
+Message-Id: <20260609184620.104641F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Low] The modified multi-line comment retains text on the same line as th=
-e opening `/*`, violating the BPF subsystem comment style guidelines.
+- [Medium] ASMLIBS is missing the -ldl dependency for static builds.
+- [Medium] Passing NULL to an integer/boolean argument in disasm_begin trig=
+gers implicit pointer-to-integer conversion errors.
 --
 
-commit 895b9c1828c7212301bcd7381a175a6b61a7df58
-Author: Yonghong Song <yonghong.song@linux.dev>
+commit 9ca40464008d6c950047c60bdb1b0966c47a038d
+Author: Ian Rogers <irogers@google.com>
 
-selftests/bpf: Adjust fexit_bpf2bpf ctx layout for llvm23 true signature
+tools build: Add feature check for elfutils libasm
 
-This commit adjusts the fexit context layout for test_pkt_access_subprog2()
-to accommodate differences in how llvm23 records the function signature in
-BTF. It selects the matching arguments struct based on the compiler version
-to ensure compatibility.
+This commit introduces a build-time feature test for the elfutils libasm
+library in the shared tools/build system. It adds the test program and
+updates the Makefiles to attempt building it to detect support.
 
-> diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/te=
-sting/selftests/bpf/progs/fexit_bpf2bpf.c
-> --- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-> +++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-> @@ -53,14 +53,23 @@ int BPF_PROG(test_subprog1, struct sk_buff *skb, int =
-ret)
->   *   r0 =3D *(u32 *)(r1 + 0)
->   *   w0 <<=3D 1
->   *   exit
-> - * In such case the verifier falls back to conservative and
-> + * Before llvm23, in such case the verifier falls back to conservative a=
-nd
->   * tracing program can access arguments and return value as u64
-> - * instead of accurate types.
-> + * instead of accurate types. With llvm23, the true signature
-> + *   int test_pkt_access_subprog2(volatile struct __sk_buff *skb)
-> + * is available in btf.
->   */
-
-[Severity: Low]
-This is a pre-existing issue, but since this multi-line comment block is
-being modified, could we update its opening to comply with the current
-BPF subsystem style rules?
-
-The guidelines prefer the opening /* to be on its own line, rather than
-keeping text on the same line.
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> index 62909a9c799d3..f0f39a2ab2035 100644
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
 
 [ ... ]
 
+> @@ -184,6 +185,11 @@ ifeq ($(findstring -static,${LDFLAGS}),-static)
+>    DWARFLIBS +=3D -ldl
+>  endif
+> =20
+> +ASMLIBS :=3D -lasm -ldw -lelf
+> +ifeq ($(findstring -static,${LDFLAGS}),-static)
+> +  ASMLIBS +=3D -lz -llzma -lbz2 -lzstd
+> +endif
+
+[Severity: Medium]
+Will this fail to link during static builds?  Since libdw dynamically
+loads backend modules via dlopen, it requires libdl.  DWARFLIBS above
+correctly adds -ldl for static builds, but ASMLIBS omits it, which might
+cause the feature test to fail and spuriously report libasm as unsupported.
+
+> +
+>  $(OUTPUT)test-libdw.bin:
+>  	$(BUILD) $(DWLIBS)
+> =20
+
+[ ... ]
+
+> diff --git a/tools/build/feature/test-libasm.c b/tools/build/feature/test=
+-libasm.c
+> new file mode 100644
+> index 0000000000000..928fc46ecc755
+> --- /dev/null
+> +++ b/tools/build/feature/test-libasm.c
+
+[ ... ]
+
+> @@ -0,0 +1,20 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stddef.h>
+> +#include <elfutils/libasm.h>
+> +#include <gelf.h>
+> +
+> +struct ebl;
+> +extern struct ebl *ebl_openbackend(Elf *elf);
+> +extern void ebl_closebackend(struct ebl *ebl);
+> +
+> +int main(void)
+> +{
+> +	Elf *elf =3D elf_begin(0, ELF_C_READ, NULL);
+> +	struct ebl *ebl =3D ebl_openbackend(elf);
+> +	DisasmCtx_t *ctx =3D disasm_begin(ebl, elf, NULL);
+
+[Severity: Medium]
+Will this fail to build on modern compilers?  The third argument to
+disasm_begin() is typically a boolean or integer type (like show_bytes or
+fd), but NULL is passed here.  This causes a -Wint-conversion warning,
+which compilers like GCC 14 elevate to a hard error by default.  This
+could cause the feature test to unconditionally fail.
+
+> +
+> +	disasm_end(ctx);
+> +	ebl_closebackend(ebl);
+> +	elf_end(elf);
+> +	return 0;
+> +}
+
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609163947.1717=
-694-1-yonghong.song@linux.dev?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609182108.9755=
+86-1-irogers@google.com?part=3D1
