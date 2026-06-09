@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830603EB0FD
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2DD343894
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781030573; cv=none; b=mMvusT/8akafhl9MOx8rwLNkO30WBYzlDsEohkVqC+QZYBbGUbsC2L+xapmMxSFm/Ng13AriDy4JsSaiP9QplnJTsknVU7DKDl1NoJOesrZz694TQBWN4SxBCfnT9JSjKw9UpOsUlCnDphJt4Tq4BhSowRVxvbX0T+dEsZGagxY=
+	t=1781030622; cv=none; b=Ri00DfNGA+YVkpL6iKgGRmJp/zE8EikT+0lTXCDt+P/ytlIax/gOthI9IyaKJLmZA40OVhprJ/qyIW2ijV1ZLOra5bYr1XF11BEUMrApGn4/tpRpkpP+YpTnNXoqTw6gkw7nMbzEe4FSE9huGcWs9J3Q9UFa5yz4fYy0bosa5yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781030573; c=relaxed/simple;
-	bh=KZYgQO6rRUq0DtDJOBzoetc5JL0/u7Y0hOhLOeTToTo=;
+	s=arc-20240116; t=1781030622; c=relaxed/simple;
+	bh=3sZr8aWKz6NoWdAehVLqQ+NR9pLs06MWgGeDQdrwJHw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C0Yl00dHe8+onlIJZM0xK7n528PaT8RVayiFjFFTlhNjHMDEUtI8vgpWJ3PhB/wmfAx2SvBMAIF1JcTlJJK2I6nFqr6mOGaqDkq5c12wGBIA7lqGgbLx2dPd/GB11I1RdMSR2clPixTxyQWlXyRalMobI+MKv/i8S437nCCCaF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iimKRPiz; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nr+zD5axYpLWr7JnR0EdI4nYAJQg3626UDEG2aBi/bSjzZ3pBGzrrsBe3DbyB3uodSwq/ytgRK1QNggkfvZgqKp4sLohMlWesPKCMTXesGcpxP3ANanrAvfvXiSCgv0PMB8n1DA3uWmX3yTxHKtQ/rlc8lelaTfUn2dsuPRQzcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArLq18bo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iimKRPiz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C691F00893;
-	Tue,  9 Jun 2026 18:42:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArLq18bo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623541F00898;
+	Tue,  9 Jun 2026 18:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781030572;
-	bh=htg6OZZTSa6YrO27lyMlnYczZiehFAycfZWOqvLfXsE=;
+	s=k20260515; t=1781030621;
+	bh=G1lsx8PpF2ufjmozjWFIbKdXkMTYjFFSmHIklIuJSIY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iimKRPiz89C4V49NudahniJEkoT9XnmZC1DuiLKBLg5ZuH99V/iYP3lQ618ubvHhi
-	 1daPvXnGJxsNaG51H5Vb1QW4F+51woSUuZ9Aq1EtfJoc4qOs8iZmGd7ShzkjKnA1x1
-	 ChHm13SNLd+UMbIYEQF8HEE9hlpu2UoAVgG3t8kRqN/xENU3vijiMOKghlCfDKZcj9
-	 a3TtThGfzdR3Wu1q15OyEPtVYnN/o+7+E08aZWt4QKt/yxge+5VwezouAWMBvtStSK
-	 TKkpdrKdfpc9nr2ICX3m5c0irYdbV9/BN7Ik8e4CZspWPXoaNnLDrXdUO+4+6g8Zd8
-	 App67MPPlNF2Q==
+	b=ArLq18boGoyyjTcl96mYFjICLO3ehxJxIKn8kiRFg+hfzO/aO5kCrk7akYjDYueJq
+	 EuZp+E9JYTDCvl5czOldvhWgtey0KlRGdTKYZ4KS8Fq2U3FYAql16/6pitHGJH7MNM
+	 KoTqCpGeyPjwjhJ4qvCeAeIy/U1upE4ssMbNqA5epJny9CWUdsxXlCkGHwQV+j27BK
+	 HrcxvOxI7Q6XrNVA5gAqZba8O2LHEzAerg/D77DqMsVARc0/Ieuu0xnQkUEwmrntZp
+	 nH+frgaNP461IGwelrRKL3ONdOwMVaMc073J9bhnZ3ThxDDXPi9eki2EqHXWoO0KPM
+	 vBgDcVYaUn9XA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Keep int return type for
- tailcall subprogs
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Adjust fexit_bpf2bpf ctx
+ layout for llvm23 true signature
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609163957.1719798-1-yonghong.song@linux.dev>
-References: <20260609163957.1719798-1-yonghong.song@linux.dev>
+In-Reply-To: <20260609164002.1721294-1-yonghong.song@linux.dev>
+References: <20260609164002.1721294-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 18:42:51 +0000
-Message-Id: <20260609184252.15C691F00893@smtp.kernel.org>
+Date: Tue, 09 Jun 2026 18:43:40 +0000
+Message-Id: <20260609184341.623541F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,73 +46,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Incomplete fix for compiler optimization: `classifier_0` does no=
-t consume `subprog_tail0` return value.
+
+Pre-existing issues:
+- [Low] The modified multi-line comment retains text on the same line as th=
+e opening `/*`, violating the BPF subsystem comment style guidelines.
 --
 
-commit 889c5150d158afd20cd2f2219687b45dbae685e2
+commit 895b9c1828c7212301bcd7381a175a6b61a7df58
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Keep int return type for tailcall subprogs
+selftests/bpf: Adjust fexit_bpf2bpf ctx layout for llvm23 true signature
 
-This commit updates selftests to prevent the LLVM23 compiler from
-optimizing away the return value of subprogs that issue a bpf_tail_call.
-It does this by storing the return value into a global variable so the
-compiler cannot change the subprog return type to void.
+This commit adjusts the fexit context layout for test_pkt_access_subprog2()
+to accommodate differences in how llvm23 records the function signature in
+BTF. It selects the matching arguments struct based on the compiler version
+to ensure compatibility.
 
-> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy=
-2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
-> index ae94c9c70ab7d..8f217bef3d62c 100644
-> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
-> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+> diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/te=
+sting/selftests/bpf/progs/fexit_bpf2bpf.c
+> --- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+> +++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+> @@ -53,14 +53,23 @@ int BPF_PROG(test_subprog1, struct sk_buff *skb, int =
+ret)
+>   *   r0 =3D *(u32 *)(r1 + 0)
+>   *   w0 <<=3D 1
+>   *   exit
+> - * In such case the verifier falls back to conservative and
+> + * Before llvm23, in such case the verifier falls back to conservative a=
+nd
+>   * tracing program can access arguments and return value as u64
+> - * instead of accurate types.
+> + * instead of accurate types. With llvm23, the true signature
+> + *   int test_pkt_access_subprog2(volatile struct __sk_buff *skb)
+> + * is available in btf.
+>   */
+
+[Severity: Low]
+This is a pre-existing issue, but since this multi-line comment block is
+being modified, could we update its opening to comply with the current
+BPF subsystem style rules?
+
+The guidelines prefer the opening /* to be on its own line, rather than
+keeping text on the same line.
+
 [ ... ]
-> @@ -41,16 +44,21 @@ int classifier_0(struct __sk_buff *skb)
-
-[Severity: Medium]
-Does this miss an update to classifier_0()?
-
-The commit message notes that "Where the caller does not already consume the
-return value, store it into a global variable as well".
-
-In this file, classifier_1() and tailcall_bpf2bpf_hierarchy_2() were
-updated to store the return values into ret1 and ret2.
-
-However, classifier_0() still calls subprog_tail0(skb) without consuming its
-return value:
-
-int classifier_0(struct __sk_buff *skb)
-{
-        count0++;
-        subprog_tail0(skb);
-        return 0;
-}
-
-Could this allow the compiler to still optimize away the return type of
-subprog_tail0?
-
->  static __noinline
->  int subprog_tail1(struct __sk_buff *skb)
->  {
-> +	int ret =3D 0;
-> +
->  	bpf_tail_call_static(skb, &jmp_table, 1);
-> -	return 0;
-> +	barrier_var(ret);
-> +	return ret;
->  }
-> =20
-> +int ret1, ret2;
-> +
->  __auxiliary
->  SEC("tc")
->  int classifier_1(struct __sk_buff *skb)
->  {
->  	count1++;
-> -	subprog_tail1(skb);
-> +	ret1 =3D subprog_tail1(skb);
->  	return 0;
->  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609163947.1717=
-694-1-yonghong.song@linux.dev?part=3D2
+694-1-yonghong.song@linux.dev?part=3D3
