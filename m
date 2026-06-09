@@ -1,345 +1,151 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47E71A9F90;
-	Tue,  9 Jun 2026 04:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E17532B110;
+	Tue,  9 Jun 2026 04:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780979594; cv=none; b=JsCoO0D1hGq1bSVVZ4aVlSJ5P4S4+qt7axXEfhc6LxB52Q77C6Ca+6aOPplEOa+giFwV/mAcpxlrzSRvgsEjUNSAHXzrZgceECbbff7p6Yarhm18nKGjoUoWMruFoK/Smf8iekUudXq5Esj2X/gLH0EJhSOXUgAScK6+a5WYJTM=
+	t=1780980120; cv=none; b=uObW8wILnRV+FvCgeUYhvZxk5QseyySMPchQllh0dZZ7jN4a0AphZyjunbmdO4kuo0ldvubAE0naCtgCCHp4GAlig9J8CYI1/OVOYUxpGQVOaHPAVRv5AcaggDz78iMZt8KAXQT+V9K6sZ/SLJjgF0tSnOa93Lq1lmHcR0Eju5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780979594; c=relaxed/simple;
-	bh=8n2rUa58ndHtThTWZ59/AdSok7/ztYMrngn8BMaCEY8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/stz3/wpjGG1PoxIQkVTpIYHsFFn1VI65Wzn00AagUKgq/ZtTJ/o2rVuoLu7N6dDm9eAtZpH3/eCXO6XEn+3twzLE6pKYjPHEvniXjA+rP70lK4U9oy9vkF9k09HheWpL7XOF63WUYo+sQW8O+n7VETJePbwCSOW9zyyh2GYCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=eS9pLD2O; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1780980120; c=relaxed/simple;
+	bh=ODTgco8lQgyeZF0iLEKh8rsmikQ/7p4bPbPINfUkBbc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hntOBGuP24daObiBx5s6/lIDfzldVt00SlywKW+yErGyD9MrQQPrpeAyPXhkNxNyO9xbF47hu/U1RJIXxy02Rc/Ult/pE5mdu6Kfjs0JRIjTnyL5PvLdGbXrG+291wbUEkCjBV/RPJ/9FXQxB3LBDw/3uj7LpZiAay6HSizoHeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XknvzGb7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="eS9pLD2O"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id 7AC8120B7167; Mon,  8 Jun 2026 21:32:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7AC8120B7167
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1780979569;
-	bh=EbqJ/IkzsqoSz7UPJbS0opNH84rgjXe7KslEbNh6Usk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eS9pLD2OlBsevnqnj6DzY/nw3dRmV+Y/GyvmYNdJo6w7yHs+4bf2I5aFLEf5xt8gC
-	 ya8ua+iMUKffMq5zX0ZsoQnMSbhK2v8CS4hUSi0DGDcLy0yt+g6vMFNf4PTgDt3BNL
-	 4c6nZ+3kLAk2USHYeRPVHTySfTsqMEA+ovIxhjMw=
-Date: Mon, 8 Jun 2026 21:32:49 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Jacob Keller <jacob.e.keller@intel.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
-	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
-	yury.norov@gmail.com, pavan.chebbi@broadcom.com
-Subject: Re: [PATCH net-next v10 2/2] net: mana: force full-page RX buffers
- via ethtool private flag
-Message-ID: <aieXcRe47AKklXKr@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260602202801.1873742-1-dipayanroy@linux.microsoft.com>
- <20260602202801.1873742-3-dipayanroy@linux.microsoft.com>
- <c3b2ab74-754d-4d09-b7a2-d274343d0936@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XknvzGb7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4443D1F00893;
+	Tue,  9 Jun 2026 04:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780980119;
+	bh=DLDc4HxqREBDDt3hVXVOTqiMnbSOgshyTeK20M4+cd0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=XknvzGb7XLqIUt0PUwebvatHXmiGs+RasSizR/qDGNhKcscOEKUuIygjGhTwLIzdF
+	 tQG6X0bNRI2N79lIikJjfjeO/lPqpcjEoNwg66K/uTrCdUitbBOTpsDtY71A5RowW6
+	 383DQAe+oxpIopeNWEQsqngETkQAm5iqV4BhREs1HT9xHh/ljM9nn17rgu5rVOFSvB
+	 NaZjuAW38OTtMT+mDCX1qbq1oVvvHx9oM4ZOts4D/Phpv0GLJa7Leq28plGqewsskq
+	 1gH4+MN9eTzBZD/7+vfVA5hMGHyycu1eOq+tgTQ2CEIoogHtyQgtDr+01n4ciMt/Rt
+	 6M19H6GRmE+Kw==
+Date: Tue, 9 Jun 2026 13:41:53 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: bpf@vger.kernel.org, Tengda Wu <wutengda@huaweicloud.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Alexei Starovoitov <ast@kernel.org>,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, Josh
+ Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org, mbenes@suse.cz,
+ pmladek@suse.com
+Subject: Re: [PATCH] rethook: Use tsk->on_cpu to check task execution state
+Message-Id: <20260609134153.d06aef367a366e5d976cba62@kernel.org>
+In-Reply-To: <20260608140654.GE3102624@noisy.programming.kicks-ass.net>
+References: <20260525132253.1889726-1-wutengda@huaweicloud.com>
+	<20260526123719.482f07a3843e207e22d95378@kernel.org>
+	<94179dab-ffb7-4fab-af45-b20bfb686ab3@huaweicloud.com>
+	<20260601084001.9566b443746447ec2bb1a9fb@kernel.org>
+	<20260604093445.GF3126523@noisy.programming.kicks-ass.net>
+	<20260605224341.c926299d613b6102912c9a3f@kernel.org>
+	<679a1c8f-1e4d-4ae5-83e1-d0068e6de1a6@huaweicloud.com>
+	<20260608093449.GH4149641@noisy.programming.kicks-ass.net>
+	<20260608102326.GB3161497@noisy.programming.kicks-ass.net>
+	<20260608220811.d4a0b58961cfb9eeb6bbbccb@kernel.org>
+	<20260608140654.GE3102624@noisy.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3b2ab74-754d-4d09-b7a2-d274343d0936@intel.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 04, 2026 at 11:40:30AM -0700, Jacob Keller wrote:
-> On 6/2/2026 1:24 PM, Dipayaan Roy wrote:
-> > On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
-> > allocation in the RX refill path can cause 15-20% throughput
-> > regression under high connection counts (>16 TCP streams).
-> > 
-> > Add an ethtool private flag "full-page-rx" that allows the user to
-> > force one RX buffer per page, bypassing the page_pool fragment path.
-> > This restores line-rate (180+ Gbps) performance on affected platforms.
-> > 
-> > Usage:
-> >   ethtool --set-priv-flags eth0 full-page-rx on
-> > 
-> > There is no behavioral change by default. The flag must be explicitly
-> > enabled by the user or udev rule.
-> > 
-> > The existing single-buffer-per-page logic for XDP and jumbo frames is
-> > consolidated into a new helper mana_use_single_rxbuf_per_page() which
-> > is now the single decision point for both the automatic and
-> > user-controlled paths.
-> > 
-> > Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-> > ---
-> 
-> I had one or two minor nits, but nothing that I think really deserves a
-> v11. The only real comment is a future "gotcha" that could happen if you
-> ever added a second private flag, which seems unlikely and maybe not
-> worth dealing with until it matters.
-> 
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
->
+On Mon, 8 Jun 2026 16:06:54 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Hi Jacob,
-
-Thank you for the review.
-I will keep this patch as is, since no plans for any new private flags.
-
-Regards
-Dipayaan Roy
-
-> >  drivers/net/ethernet/microsoft/mana/mana_en.c |  22 +++-
-> >  .../ethernet/microsoft/mana/mana_ethtool.c    | 103 ++++++++++++++++++
-> >  include/net/mana/mana.h                       |   8 ++
-> >  3 files changed, 131 insertions(+), 2 deletions(-)
+> On Mon, Jun 08, 2026 at 10:08:11PM +0900, Masami Hiramatsu wrote:
+> 
+> > > > Anyway, I'm wondering what the purpose of this check here is, there is
+> > > > no real comment, and commit 5120d167e21c ("rethook: Remove warning
+> > > > messages printed for finding return address of a frame.") is just pure
+> > > > voodoo as well.
+> > > 
+> > > FWIW, you should have had this discussion then.
 > > 
-> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> > index db14357d3732..447cecfd3f67 100644
-> > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> > @@ -744,6 +744,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
-> >  	return va;
-> >  }
-> >  
-> > +static bool
-> > +mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
-> > +{
-> > +	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
-> > +	 * in the RX refill path (~2kB buffer) can cause significant throughput
-> > +	 * regression under high connection counts. Allow user to force one RX
-> > +	 * buffer per page via ethtool private flag to bypass the fragment
-> > +	 * path.
-> > +	 */
-> > +	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
-> > +		return true;
-> > +
-> > +	/* For xdp and jumbo frames make sure only one packet fits per page. */
-> > +	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
-> > +		return true;
+> > Indeed. The rethook is making a shadow stack by list, thus caller must
+> > guarantee the target process is blocked at least during this function.
+> > 
+> > The commit messages suggest that when BPF takes a backtrace, it also
+> > includes other running tasks. Is that safe?
 > 
-> Technically you could combine all three into one if, but I agree that
-> clarity and space for the comment about why the private flag exists
-> makes sense.
+> Well, you get to keep the pieces. At this point safe only pertains to
+> 'doesn't-crash', all correctness is out the window.
 > 
-> > +
-> > +	return false;
-> > +}
-> > +
-> >  /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
-> >  static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
-> >  			       int mtu, u32 *datasize, u32 *alloc_size,
-> > @@ -754,8 +773,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
-> >  	/* Calculate datasize first (consistent across all cases) */
-> >  	*datasize = mtu + ETH_HLEN;
-> >  
-> > -	/* For xdp and jumbo frames make sure only one packet fits per page */
-> > -	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
-> > +	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
-> >  		if (mana_xdp_get(apc)) {
-> >  			*headroom = XDP_PACKET_HEADROOM;
-> >  			*alloc_size = PAGE_SIZE;
-> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> > index 7e79681634db..f22bbb325948 100644
-> > --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> > +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> > @@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
-> >  	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
-> >  };
-> >  
-> > +static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
-> > +	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
-> > +};
-> > +
-> >  static int mana_get_sset_count(struct net_device *ndev, int stringset)
-> >  {
-> >  	struct mana_port_context *apc = netdev_priv(ndev);
-> > @@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
-> >  		       ARRAY_SIZE(mana_phy_stats) +
-> >  		       ARRAY_SIZE(mana_hc_stats)  +
-> >  		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
-> > +
-> > +	case ETH_SS_PRIV_FLAGS:
-> > +		return MANA_PRIV_FLAG_MAX;
-> > +
-> >  	default:
-> >  		return -EINVAL;
-> >  	}
-> > @@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
-> >  	}
-> >  }
-> >  
-> > +static void mana_get_strings_priv_flags(u8 **data)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
-> > +		ethtool_puts(data, mana_priv_flags[i]);
-> > +}
-> > +
-> >  static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
-> >  {
-> >  	struct mana_port_context *apc = netdev_priv(ndev);
-> > @@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
-> >  	case ETH_SS_STATS:
-> >  		mana_get_strings_stats(apc, &data);
-> >  		break;
-> > +	case ETH_SS_PRIV_FLAGS:
-> > +		mana_get_strings_priv_flags(&data);
-> > +		break;
-> >  	default:
-> >  		break;
-> >  	}
-> > @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
-> >  	return 0;
-> >  }
-> >  
-> > +static u32 mana_get_priv_flags(struct net_device *ndev)
-> > +{
-> > +	struct mana_port_context *apc = netdev_priv(ndev);
-> > +
-> > +	return apc->priv_flags;
-> > +}
-> > +
-> > +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-> > +{
-> > +	struct mana_port_context *apc = netdev_priv(ndev);
-> > +	u32 changed = apc->priv_flags ^ priv_flags;
-> > +	u32 old_priv_flags = apc->priv_flags;
-> > +	bool schedule_port_reset = false;
-> > +	int err = 0;
-> > +
-> > +	if (!changed)
-> > +		return 0;
-> > +
-> > +	/* Reject unknown bits */
-> > +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-> > +		return -EINVAL;
+> I always forget the crazy BPF does ;-)
 > 
-> Good. Explicit rejection ensures that there's no risk of bad value. I
-> think this is only required for the legacy ioctl interface, and won't be
-> able to have a bit set that isn't in your accepted list. However the
-> legacy ioctl interface looks like it doesn't do that double checking, so
-> its good to have this.
+> > > > Also, note the comment that goes with the usage of
+> > > > task_on_another_cpu(); that thing is racy as all heck.
+> > > > 
+> > > > So it really comes down to what the purpose of this check is.
+> > 
+> > This check has been introduced when it is copied from
+> > kretprobe_find_ret_addr(). It has the comment:
+> > 
+> >  * The @tsk must be 'current' or a task which is not running. @fp is a hint
+> > 
+> > IIRC, I added this check to explicitly verify this condition.
 > 
-> > +
-> > +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-> > +		apc->priv_flags = priv_flags;
-> > +
+> Right, but it is a prescriptive comment, not an explanatory one. That
+> is, it doesn't explain the condition.
 > 
-> In the (unlikely) event that you need another private flag in the
-> future, this bit seems like it shouldn't be inside the if block here. It
-> seems like you'd want to either do this at the end or up front. Of
-> course it doesn't matter as long as this is the only private flag you have.
+> > > > I suspect the issue at hand is that tsk->rethook elements, such as
+> > > > iterated by __rethook_find_ret_addr() are not safe to be accessed for a
+> > > > running task.
+> > > > 
+> > > > Notably while rethook_recycle() has some RCU thing on, that objpool
+> > > > thing (and the recycle name itself) seems to strongly suggest iterating
+> > > > these things is not sound (you could start with things from this task,
+> > > > hit a recycled entry and continue iterating rethooks from another task).
+> > > > 
+> > > > Also note that the current check is also racy, nothing really prevents a
+> > > > wakeup from happening right after you observe task_is_running() being
+> > > > false. The task can then get scheduled in on another CPU and tear down
+> > > > its rethooks concurrent with __rethook_find_ret_addr().
+> > 
+> > Yeah, but is there any way to ensure the task is blocked? Even if it is
+> > blocked, like TASK_UNINTERRUPTIBLE, unless holding the actual lock in
+> > the rethook, it may not be possible to ensure it?
+> > 
+> > Of course, we could give up on checking within this function and leave
+> > everything to the caller to guarantee - as kretprobe does.
+> > 
+> > BTW, the reason why we made it possible to pass tasks other than current
+> >  is that the stack unwinding code itself supported unwinding tasks other
+> > than current, so we had no choice but to create this interface.
+> > 
+> > However, it is a bad idea to check this in deep inside of unwinding.
 > 
-> > +		if (!apc->port_is_up) {
-> > +			/* Port is down, flag updated to apply on next up
-> > +			 * so just return.
-> > +			 */
-> > +			return 0;
-> > +		}
-> > +
-> > +		/* Pre-allocate buffers to prevent failure in mana_attach
-> > +		 * later
-> > +		 */
-> > +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
-> > +		if (err) {
-> > +			netdev_err(ndev,
-> > +				   "Insufficient memory for new allocations\n");
-> > +			apc->priv_flags = old_priv_flags;
-> > +			return err;
-> > +		}
-> > +
-> > +		err = mana_detach(ndev, false);
-> > +		if (err) {
-> > +			netdev_err(ndev, "mana_detach failed: %d\n", err);
-> > +			apc->priv_flags = old_priv_flags;
-> > +
-> > +			/* Port is in an inconsistent state. Restore
-> > +			 * 'port_is_up' so that queue reset work handler
-> > +			 * can properly detach and re-attach.
-> > +			 */
-> > +			apc->port_is_up = true;
-> > +			schedule_port_reset = true;
-> > +			goto out;
-> > +		}
-> > +
-> > +		err = mana_attach(ndev);
-> > +		if (err) {
-> > +			netdev_err(ndev, "mana_attach failed: %d\n", err);
-> > +			apc->priv_flags = old_priv_flags;
-> > +
-> > +			/* Restore 'port_is_up' so the reset work handler
-> > +			 * can properly detach/attach. Without this,
-> > +			 * the handler sees port_is_up=false and skips
-> > +			 * queue allocation, leaving the port dead.
-> > +			 */
-> > +			apc->port_is_up = true;
-> > +			schedule_port_reset = true;
-> > +		}
+> This, you cannot take locks in unwinding. The only thing you can do is
+> try to do the best you can without crashing.
 > 
-> I might have made this bit a separate function, but that comes from
-> history of working with older drivers which accumulated a larger number
-> of private flags. Given that we frown on adding new ones except in more
-> rare cases these days, this is probably fine.
+> Typically unwind only happens on self -- this is natural, a task crashes
+> and unwinds itself, or a task does something (takes a lock, hits a
+> tracepoint, etc) and takes a snapshot of its own stack, and this is
+> safe.
 > 
-> > +	}
-> > +
-> > +out:
-> > +	mana_pre_dealloc_rxbufs(apc);
-> > +
-> > +	if (schedule_port_reset)
-> > +		queue_work(apc->ac->per_port_queue_reset_wq,
-> > +			   &apc->queue_reset_work);
-> > +
-> > +	return err;
-> > +}
-> > +
-> >  const struct ethtool_ops mana_ethtool_ops = {
-> >  	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES,
-> >  	.get_ethtool_stats	= mana_get_ethtool_stats,
-> > @@ -608,4 +709,6 @@ const struct ethtool_ops mana_ethtool_ops = {
-> >  	.set_ringparam          = mana_set_ringparam,
-> >  	.get_link_ksettings	= mana_get_link_ksettings,
-> >  	.get_link		= ethtool_op_get_link,
-> > +	.get_priv_flags		= mana_get_priv_flags,
-> > +	.set_priv_flags		= mana_set_priv_flags,
-> >  };
-> > diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-> > index d9c27310fd04..26fd5e041a47 100644
-> > --- a/include/net/mana/mana.h
-> > +++ b/include/net/mana/mana.h
-> > @@ -30,6 +30,12 @@ enum TRI_STATE {
-> >  	TRI_STATE_TRUE = 1
-> >  };
-> >  
-> > +/* MANA ethtool private flag bit positions */
-> > +enum mana_priv_flag_bits {
-> > +	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
-> > +	MANA_PRIV_FLAG_MAX,
-> 
-> For cases like this, I find it helpful to add a comment indicating this
-> must be the last entry. (and in that case, drop the trailing comma).
-> 
-> > +};
-> > +
-> >  /* Number of entries for hardware indirection table must be in power of 2 */
-> >  #define MANA_INDIRECT_TABLE_MAX_SIZE 512
-> >  #define MANA_INDIRECT_TABLE_DEF_SIZE 64
-> > @@ -531,6 +537,8 @@ struct mana_port_context {
-> >  	u32 rxbpre_headroom;
-> >  	u32 rxbpre_frag_count;
-> >  
-> > +	u32 priv_flags;
-> > +
-> >  	struct bpf_prog *bpf_prog;
-> >  
-> >  	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
-> 
+> Things like live-patch use task_call_func(), which ensures the callback
+> function is done while holding sufficient locks for the task to not
+> change state.
+
+Hmm, is there any way to ensure the function is called from task_call_func()?
+(Maybe checking p->pi_lock, but this is not sure the lock owner is this
+context?) If not, I need to make this available only for current task
+(anyway it just return kretprobe trampoline address, no critical issue)
+or, introduce a spinlock.
+
+Or, eventually it may be better to replace kretprobe/rethook with
+fprobe return handler.
+
+Thank you,
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
