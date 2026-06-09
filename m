@@ -1,137 +1,289 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB63341062
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 15:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB2F43C05B;
+	Tue,  9 Jun 2026 15:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781017694; cv=none; b=Sl1w/GHvzxZ4JMBLV37jGrZPI5sjunUMKBylXOGnWzkbGstcB69OXOgEi1rnr+oRIBFXOzSrGmfUjll4qjs2+CplE7vzowxcSus+4uBrXH42JJWcUq+XVf7enI0FBf2OP20JKdj+zgoPTBsHb8CHKdqd+FEknM2/6ZWtDqe/1tY=
+	t=1781017717; cv=none; b=kyM8e2+T0QEqovi5ozLkRgRE5u1qwCqXfe9UHJpWDtjE4mylEvlJW/Oa5XkvNH02BpVKIQdo9HIVK+6wFhXfWI7FCDG7Y7/Q3YeCAS6swrTU3iBoLZU+SWFu/meLBo2Jb9fQ1F5ZmcyMiQKy9wNn7GU3cxMkKgRBIKhNtebXOZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781017694; c=relaxed/simple;
-	bh=o4BkTr9793bjq7EpNhsjKTlQqZ70r9EvtSYnZ8R2KOE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mbg9VTA7+k35UMgYj3BFQaKFothVfNuouTf5Jd/zRMVvoQFZhRUNLrFlX6dYDcDc3mnUSUy/y+nx0VBDO0B9fdeJho6xDxRQ5mDxvdZE3Kb5+2GGGeEsUUahR2iyhGoPsTRQzvU3E1OuGY5PkTkRwXqd66C0n2uq0sOIIEO58Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Inwb9xTN; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Inwb9xTN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387981F00893;
-	Tue,  9 Jun 2026 15:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781017693;
-	bh=XaiVkTAGjszZUV/XZUSjht8kXMxZUDDMXiTk0yYVRV0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Inwb9xTN6WjjTCJag5JKlrHd/ZtfS8VW5lNy8aP2DxoCSAUX5xOccCz/7diNfh6h9
-	 K5zqF2K/tAJsSRF0djucRDYyJlcRzp/7NZREtR9IxkzF/5pcPfOFYylwqkuKtMTJJ+
-	 U9fIDSAXYO8fxMd1tJxdMvuk2sWes/x+a0wJrQI64gjg3RKn4bJIYzNcVTj3aDpAv3
-	 EHGoz+OPIuu3VIE8ID3CzdhbBrncyIbIZW/uZLRNGlcyCZp1I9KE1tLqs8CHwf2XA3
-	 E8PwABe2cv1FusF9JU+vhrDu9thU9cQed0fiiWJ5zzRdYcsSzIYsIPlnoHoahKhWlE
-	 /86xKf/95TYXQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover scalar addition from
- rdonly untrusted memory
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-2-e6212e274155@mails.tsinghua.edu.cn>
-References: <20260609-f01-03-scalar-add-bpf-next-v1-2-e6212e274155@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 15:08:12 +0000
-Message-Id: <20260609150813.387981F00893@smtp.kernel.org>
+	s=arc-20240116; t=1781017717; c=relaxed/simple;
+	bh=6DkbYSHqspwZcj9nBK7hTUw+gO3qPLcjNxLLT0k8DW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y5kwX4La7z6Sw1GZK3NAPwYvwq2GyWWNPY51ya7s0ogVTz0iTS34ON8Qvfn5b2aPR4fVjEQr4AS9wBcYlFp22Bc+Coy0UZHBtx5TPNN9Sb6s+egiqEwi5uJwG/1fUye1ygpu/wg+T0kHuFHE2FCsqp7wNZvd//3HzKnb+HJWj74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+Received: from [129.217.186.234] ([129.217.186.234])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 659F886r012405
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 9 Jun 2026 17:08:08 +0200 (CEST)
+Message-ID: <5e6315b1-b734-4f5f-af5e-bc76612f0993@tu-dortmund.de>
+Date: Tue, 9 Jun 2026 17:08:07 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+References: <20260527135418.1166665-1-hawk@kernel.org>
+ <20260527135418.1166665-6-hawk@kernel.org>
+ <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
+ <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
+ <e8478d82-5af6-44f7-a481-584c09ae8337@tu-berlin.de>
+ <b8569d0f-7a99-4488-a1bb-63d813231b7d@tu-dortmund.de>
+ <90fc9fc1-f396-4ed1-888f-89a96294664e@kernel.org>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <90fc9fc1-f396-4ed1-888f-89a96294664e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 6/9/26 15:59, Jesper Dangaard Brouer wrote:
+> 
+> 
+> On 08/06/2026 16.21, Simon Schippers wrote:
+>> On 6/8/26 15:13, Jonas Köppeler wrote:
+>>>
+>>> On 6/8/26 3:04 PM, Jesper Dangaard Brouer wrote:
+>>>>
+>>>>
+>>>> On 08/06/2026 12.38, Simon Schippers wrote:
+>>>>> On 5/27/26 15:54, hawk@kernel.org wrote:
+>>>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>>>>>
+>>>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
+>>>>>> excessive NAPI scheduling overhead and qdisc requeues.
+>>>>>>
+>>>>>> Accumulate BQL completions and flush them when a configurable time
+>>>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
+>>>>>> queuing delay to the configured interval. Coalescing state persists
+>>>>>> across NAPI polls in struct veth_rq so completions can accumulate
+>>>>>> beyond a single budget=64 cycle.
+>>>>>>
+>>>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+>>>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+>>>>>> completion.
+>>>>>>
+>>>>>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>>>>>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+>>>>>>
+>>>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+>>>>>> ---
+>>>>>
+>>>>> I found the issue that n_bql may become infinitly large if producer
+>>>>> and consumer have the same speed (and tx_usecs is large). It could
+>>>>> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
+>>>>> Also I figured that no hardware BQL driver ever completes more than
+>>>>> BQL limit many elements.
+>>>>>
+>>>>> Therefore, I propose a simpler logic (see attachment) that completes
+>>>>> either on the usual bql_flush_ns or if n_bql > dql.limit.
+>>>>> If n_bql > dql.limit then we either have the case above that the
+>>>>> producer is as fast as the consumer or we have BQL starvation.
+>>>>>
+>>>>> if (state->time + bql_flush_ns <= current_time ||
+>>>>>      state->n_bql > peer_txq->dql.limit) {
+>>>>>
+>>>>> It must be n_bql *bigger than* dql.limit because the producer will
+>>>>> always exceed the limit before it stops, see netdev_tx_sent_queue().
+>>>>> It is fast because peer_txq->dql.limit is in the cacheline of the
+>>>>> completion path, see dynamic_queue_limits.h.
+>>>>>
+>>>>> Another advantage is that we avoid the snippet checking for empty
+>>>>> and BQL stopped which requires an smp_rmb() and an test_bit().
+>>>>>
+>>>>> Apart from that I:
+>>>>> - Always call veth_bql_maybe_complete() in the for loop to have
+>>>>>     more accurate completion intervals when having mixed XDP and
+>>>>>     non-XDP packets.
+>>>>> - Made it so tx_usecs = 0 is now also a normal case.
+>>>>> - Change the type of n_bql to uint instead of int.
+>>>>> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
+>>>>> - Moved the bql_state init in __veth_napi_enable_range() in front
+>>>>>     of napi_enable() to avoid a race (Sashiko).
+>>>>> - Moved the bql_state reset in veth_napi_del_range() after the
+>>>>>     ptr_ring_cleanup() (probably does not matter but makes sense to me)
+>>>>>
+>>>>> Benchmarks look just fine, see commit message.
+>>>>>
+>>>>> WDYT?
+>>>
+>>>>
+>>>> Looks good to me, I will use this in my V7 patchset.
+>>>>
+>>>> A bike-shedding issue: We change the coalescing parameters for the veth
+>>>> net_device, but should this be a TX or RX parameter?
+>>>>
+>>>
+>>> Hi,
+>>>
+>>> The results look a little bit suspicious, that in some cases the p99 is smaller than the average, which can happen if you have really large max values. It feels something is off with the methodology. I think we should drop the avg, and include the max value. This would give a better picture.
+>>
+>> Luckily I saved the raw test result from /tmp (the raw ping output
+>> is included).
+>>
+>> extract_ping_p99() seems to be broken. It has issues ordering the
+>> numbers. So if there are 2 or 3 numbers after the point I think.
+>> avg ping is fine.
+>>
+>> Claude Sonnet wrote a script for me to recalculate the p99 pings
+>> from the raw ping output).
+> 
+> For programming switch to Claude Opus, as Sonnet cannot code IMHO.
 
-New issues:
-- [Low] The newly added selftest only verifies the rejection of `BPF_ADD` w=
-ith untrusted pointers, missing coverage for other vulnerable ALU operation=
-s.
+Already used 95% of my Copilot Pro+ Tokens this month :P
 
-Pre-existing issues:
-- [Critical] This problem wasn't introduced by this patch, but the verifier=
- incorrectly allows scalar operations (like BPF_SUB, BPF_AND, BPF_XOR) with=
- untrusted pointers, leading to arbitrary kernel memory read/write vulnerab=
-ilities.
---
+> (Claude Opus wrote the selftest we placed in [1])
+> 
+> Is your script still based on our github[1] selftest ?
+> If so, then please make some PR(s) against my repo.
+> I want this to be easy reproducible for others.
+> 
+> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing
+> 
 
-commit f35b72689eaa4c1dd4c68b268d4611d79f672994
-Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+I forked Jonas latest branch [1] and ran the tests with that.
 
-selftests/bpf: Cover scalar addition from rdonly untrusted memory
+But I faced 2 issues that I then fixed:
+- Ping fails in some runs (~20%) -> My fix: Retry the run until it
+  works.
+- extract_ping_p99() has a bug for me which caused wrong results,
+  as pointed out by Jonas -> Also fixed it
 
-This commit adds a BPF verifier selftest for scalar addition with
-rdonly_untrusted_mem. It checks if the verifier properly rejects adding an
-untrusted memory value to a scalar destination.
+Because of the inconsistencies I will rerun over night to have
+clean benchmark results.
 
-> diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/t=
-ools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-> index 5b4453747c230..303b8ed3e70b6 100644
-> --- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-> +++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-[ ... ]
-> @@ -77,6 +77,23 @@ int offset_not_tracked(void *ctx)
->  	return s;
->  }
-> =20
-> +SEC("socket")
-> +__failure
-> +__msg("R1 tried to add from rdonly_untrusted_mem to scalar")
-> +__naked void scalar_add_not_ok(void)
-> +{
-> +	asm volatile ("r1 =3D 0;"
-> +	"r2 =3D 0;"
-> +	"call %[bpf_rdonly_cast];"
-> +	"r1 =3D 0;"
-> +	"r1 +=3D r0;"
+I will make a PR tomorrow.
 
-[Severity: Critical]
-This is a pre-existing issue, but the verifier incorrectly allows scalar
-operations like subtraction, bitwise AND, and XOR with untrusted pointers,
-leading to arbitrary kernel memory read/write vulnerabilities.
+[1] https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark
 
-In kernel/bpf/verifier.c:adjust_reg_min_max_vals(), the check explicitly
-tests for addition:
+>> Below is the new result. Not 100% sure but this seems right now.
+>> Most pings are the same.
+>>
+>> Ping RTT ms (p99)
+>> ===========================================================================
+>> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
+>> -------+-------+-------+-------+-------+--------+--------+---------++------
+>>       0 | 0.028 | 0.115 | 0.159 | 0.161 |  0.163 |  0.161 |   0.163 || 0.154
+>>       1 | 0.027 | 0.123 | 0.169 | 0.172 |  0.169 |  0.173 |   0.172 || 0.169
+>>      10 | 0.030 | 0.117 | 0.189 | 0.193 |  0.195 |  0.192 |   0.196 || 0.186
+>>     100 | 0.045 | 0.134 | 0.233 | 0.368 |  0.365 |  0.369 |   0.361 || 0.358
+>>    1000 | 0.230 | 0.300 | 0.412 |  1.26 |   2.11 |   2.12 |    2.13 ||  2.07
+>>   10000 |  2.04 |  2.55 |  2.54 |  2.72 |   3.77 |   12.1 |    20.1 ||  20.3
+>>
+>>>
+>>> Is state->n_bql += veth_ptr_is_bql(ptr) something that is commonly done in the kernel? It relies on bool normalization which feels a bit implicit to me.
+>>
+>> Ok, we could swap for something like
+>>
+>> if (veth_ptr_is_bql(ptr))
+>>     state->n_bql+;
+> 
+> I'll see if I can adjust the V7 patch to this feedback.
 
-	if (opcode =3D=3D BPF_ADD &&
-	    base_type(src_reg->type) =3D=3D PTR_TO_MEM &&
-	    (src_reg->type & PTR_UNTRUSTED)) {
-		verbose(env, "R%d tried to add from %s to scalar\n", ...);
+Yes, and also this snippet pointed out by Jonas below:
 
-For other ALU operations, the verifier delegates to
-adjust_ptr_min_max_vals(), which returns early:
+ -       struct veth_priv *priv;
+ -       u64 bql_flush_ns;
+ +       u64 bql_flush_ns = 0;
 
-	if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM &&
-	    (ptr_reg->type & PTR_UNTRUSTED))
-		return 0;
+ -       priv = netdev_priv(rq->dev);
+ -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
+ +       if (peer_txq) {
+ +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
+ +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
+ +       }
 
-This early return bypasses all opcode validation and leaves the destination
-register unmodified as a scalar value with its original bounds. At runtime,
-the register receives the result of the pointer arithmetic and can be used
-to bypass bounds checks.
+Or is peer_txq != 0 guaranteed in veth_xdp_rcv()?
 
-Could the verifier be updated to properly reject all invalid ALU operations
-on untrusted pointers?
 
-[Severity: Low]
-Is it possible to expand this selftest to cover other ALU operations?
+And also I would change in the commit message:
 
-Because the verifier code currently ignores operations other than addition,
-adding tests like scalar_sub_not_ok or scalar_xor_not_ok would ensure these
-operations are also correctly rejected and expose the missing verifier chec=
-ks.
+"Flushing when n_bql exceeds dql.limit handles two cases:
+- BQL starvation
+- The steady-state case where the producer and consumer run at the
+  same speed with a large tx-usecs, which would otherwise allow n_bql
+  to grow without bound (and potentially overflow int)."
 
-> +	"r0 =3D 0;"
-> +	"exit;"
-> +	:
-> +	: __imm(bpf_rdonly_cast)
-> +	: __clobber_all);
-> +}
+... to just...
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609-f01-03-sca=
-lar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn?part=3D2
+"Flushing when n_bql exceeds dql.limit handles BQL starvation."
+
+... because after rethinking I think I overstated here.
+n_bql should also not grow infinitely for the v6 version.
+Nevertheless the new method should be simpler and faster.
+
+> 
+> 
+>>>
+>>>> For physical NICs adjusting TX coalescing will affect the BQL as this
+>>>> affect the TX completion of the transmitted packets. For veth, it is the
+>>>> veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
+>>>> is where this patch adds netdev_tx_completed_queue calls for BQL.
+>>>> Any opinions on the "TX" or "RX" color?
+>>
+>> Personally I would also say TX.
+>>
+> 
+> Okay, we seem to have more votes for TX :-)
+> 
+> 
+>>> I think I would prefer to configure it on the tx dev, and the recv
+>>> side gets the value from the peer. Maybe something like this.
+>>>
+> 
+> I'm considering if we should simplify the config by having veth pairs have the same tx-coal value. WDYT?
+
+I can not think of a case where a user would like to have a different
+tx-coal value on either side..
+So it's fine for me.
+
+> 
+> 
+>>> @@ -997,11 +998,12 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>>>          struct veth_bql_state *state = &rq->bql_state;
+>>>          int i, done = 0, n_xdpf = 0;
+>>>          void *xdpf[VETH_XDP_BATCH];
+>>
+>> Why this deletion?
+>>
+>>> -       struct veth_priv *priv;
+>>> -       u64 bql_flush_ns;
+>>> +       u64 bql_flush_ns = 0;
+>>>
+>>> -       priv = netdev_priv(rq->dev);
+>>> -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
+>>
+>> I see we should check if peer_txq exists.
+>>
+>>> +       if (peer_txq) {
+>>> +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
+>>> +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
+>>> +       }
+>>>
+>>>          /* Clamp stored timestamp in case we migrated to a CPU with a behind
+>>>           * sched_clock(); prevents the deadline from never firing.
+>>>
+>>> - Jonas
+> 
+> --Jesper
+> 
