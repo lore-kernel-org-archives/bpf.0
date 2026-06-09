@@ -1,53 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9630B346FBC;
-	Tue,  9 Jun 2026 02:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB33A26CE32
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 02:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780970785; cv=none; b=J5ue3mf/ErFTgBU+IA3WTpnFRgaPRfhM+bNwmakgEEpJBmdZVaadERo/dV645n4eEEQJoxCT78ifjlx0tgTb/LhXNo25652dJBe47u71qVf7rlVY4qvTzXkTuvADEgKYiDWPctgZfHx2zIJaVpbPOoso+f1E0c2aHo0UxlfGmq0=
+	t=1780971838; cv=none; b=iSTd3T+4TdCxgNsP2I1g97f0HU3bUdWqunnTXHugKFzjQqMTI6ejjQSmzhthexlojjCiVDsg1ozyPXas33hIiS1KO2nEuhd3tngJL5PnuL8xVToJVjosqlQGzIXmgr8I6ZCGU1StMd0AnPUvd3p0ojB5Bpej1NKTQ+9dgJK0Xf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780970785; c=relaxed/simple;
-	bh=+ZU+8q3YzQl6NM0T5FTCPvEVjQzYWV1OKXa0+76ccYM=;
+	s=arc-20240116; t=1780971838; c=relaxed/simple;
+	bh=4Kh4Cfp3zAFu7AFZE668kBJQF++pR2uYHFcVCJuZIkY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rJtS4njN4mX+0oFqteOQzWdgMtMRReGQw54p/02Jmnrlxf+ZiSap20//vgzzNQJDtyJhCbyFIyzQ/BjiZEBL6z5LiKpqHUL9JRPd1nRAZz8VOxfgApT6sKymtoJaGNZ0kC73fO6WNlre//9bdcqOkFETIFyP8VBngEtzxhGO7co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSDzm/J1; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=uRUuUDxUU5sX3s/TYUa6TWArPsC8hKxQINzIh+BSiCrnXfI9uURKfMJGPiy35Hf3T3f/SRDde0c4gv7UJvr/oyPpQ/Ksz66YnGRfq6wSnHra+Pi+Vf87pdATCXfQisHEZrj5koHXvcjA43hv7tsRQaC/zsw4zLB/PY+T9IVETDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l225m7mF; arc=none smtp.client-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSDzm/J1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31151F00893;
-	Tue,  9 Jun 2026 02:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780970783;
-	bh=Y1AN9aEbDpmG7aUuWdVXhYudC9Qm5EVzSPLGx8WTLhQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OSDzm/J1Ssa8QQpz78roFl1qyl/l4vg2zKkMr4o1OYKoqGnXCKQCTLgStxRa/a/M5
-	 /oYbd55Mz/pz+rE1TlgqYOL/uq4bH82PJmLGt05ZEesmYS+QlXTiW/hZBQ3zXZwYS/
-	 VRzBYOgnKq81W1tKETjTuWMY62TeGQnElbhS+lTTYvSW1AtdAFcFnHvZcC/S2R64Es
-	 XIZbv3K/vH+8/KgT+pi4nsTM0Bcl/O0bLuvLRCbOTGUduX4PoVwcd9TK2oBWL0/G2a
-	 bnsUcVQWgD8D/V6qgLhlGMjBWRwfpZ+YIlNlClxR0UAMEJQXffpVdMgRL3aobuZe/2
-	 8dZmNAbVaQulg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: t.fuechsel@gmx.de
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	fmancera@suse.de,
-	ebiggers@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l225m7mF"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-304e83724bfso6047996eec.0
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 19:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780971836; x=1781576636; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DAR6Vz6+zacpmaDX06JjKNC9VzrSzhj5Igmbq9ULD8c=;
+        b=l225m7mFM9GUbH7ZXuykpdophk+cjuJ2Mbxk+n1/j+/HL+0nIBpOCvhHdXOMd5vSp9
+         b5JMAzgyQBxC5D5tQ2cwrA/p8k0fN6p/Fb+HtkGhElUuKEj6sqi/AwLAFHZFZWysivwl
+         0fQ6Jwb+JHdIWjC39nsSqGRp+ttzoBM1HAmSaJzd9A/Nkxz9pjQAz9bmW7cQUe8g7sh5
+         2rXE+qZeQtBZDPCwygfOSJ/smB1Shibfo9f/3CZhKjIJLtaHDzLa0OJrbEcTSr5pqbAl
+         71aiGR+b4j7gPhULWi4zrpVOJ2JUV2d09vOFfr3DwV2kj9ZyHMD4h99RYY6P/NDsKpR5
+         hsJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780971836; x=1781576636;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DAR6Vz6+zacpmaDX06JjKNC9VzrSzhj5Igmbq9ULD8c=;
+        b=JyIx38GFS4qakSxYPUT364MhC4rFbEWeSPaWZmULtyOHwcMK0iOoKa71OahRn5g8fe
+         DDwf2oBaXbUjRCBitAoB6CM/LD5cCHFOYb/BCJvNmmhcXZM313idc839MHWP/E7n5E6P
+         VKVc9coU5t9rUJwSRlYcnP0wgyFM+eWyflG6ZA5HmrCpJJRLNasmtMjr707dMyEo+GK0
+         XiY/ZZaytFuuHQFa3XjMwlqgjS2ZB/xl5hRq8+mV1CLWCN1+T7Piyad/iucejmV5/6ck
+         0QbkIKwAyAFiWfxF4Y/71KcQTu3SWrvszMBDNzxzijre3kmZJQvqQ2L2WsmmKeB4xey2
+         wTog==
+X-Forwarded-Encrypted: i=1; AFNElJ9RapQ8eGFze+v82T+r5V0G4mpnVK1BPkmbJ2crgw3Jwe93Q3QYJ7yBUp/r5ft8yIE2Opw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2fk/DFr6bfZjKOaAdKKJoETbP9AZxvbXDpW2OMcCF0rPuxU9i
+	nWc/0zt4dB8pynjrmfpES532SfDd6KHdWXTMkxYa2dcmiKWaCOqaOsrf07nuLQ==
+X-Gm-Gg: Acq92OEbybbqbeeaUcScYCbvb8WWI+ulR3YBpKQrJP0OJWWBICBPfzyia4jzcTJCE+z
+	yy/D+OwfdanzbagNVWfCT12F4WDfC54ntj/mgxSi7mtSD/3cO9Nr17D+IcvSj0mSnk4Pay8fdAd
+	xjyUY1RK6Y0gyqC6lec+NsTZZp+xkXhfFDmKqK9w07GU6gGOC1OaXG5X1uzLjkf1JgBBizsk1JW
+	vPMcm4Zp3pBnAkNETS7XqE0TA4GoMPbsZ8CosaIt1QSw6YuwCfXe+3leW6e7ZtRGZTkqtvxF5XF
+	lsMoJE4/iixJWAG/0Acve1Lzy2OallnTwVqrwDf8OtSXqf+LKsA1aGaSJxyRSmcyDZw9qYWj9sa
+	hMg4l8VcKVwOUBxTp3F+7dzxVACdV2yiJuzWHDM89gimPM9rAeEO4/3uCe/lsID4B8FkNPj3aJR
+	imKvcfYzSpR/RtgQbEuXcsTthd1yHA+rqpzPICEEu4WOj4Gd6lwOaMblEl9zxR2eayFVynzAQ=
+X-Received: by 2002:a05:693c:62c3:b0:307:d4e7:b18b with SMTP id 5a478bee46e88-307d4e7b28bmr363355eec.20.1780971836063;
+        Mon, 08 Jun 2026 19:23:56 -0700 (PDT)
+Received: from pop-os.. ([2601:647:6802:dbc0:2534:7d6b:e6e0:1a46])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df8076csm20765922eec.29.2026.06.08.19.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2026 19:23:55 -0700 (PDT)
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: larahishamahmadby@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
 	bpf@vger.kernel.org,
-	lukas.prause@ikt.uni-hannover.de
-Subject: Re: [PATCHv3 net-next] tcp: Add TCP ROCCET congestion control module.
-Date: Mon,  8 Jun 2026 19:06:20 -0700
-Message-ID: <20260609020620.787588-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <ah_ZFYB_tiw45_fg@volt-roccet-vm>
-References: <ah_ZFYB_tiw45_fg@volt-roccet-vm>
+	daniel@iogearbox.net
+Subject: Re: [RFC] eBPF-based production deadlock-risk detector: kprobe/uprobe/tracepoint pipeline with userspace wait-for graph and Rust runtime awareness
+Date: Mon,  8 Jun 2026 19:23:53 -0700
+Message-ID: <20260609022353.44120-1-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAKCqX5oNwWaY7OMsdN-wJWf6YZMBdbxaDmyonj+bf-Bs-+0Ytw@mail.gmail.com>
+References: <CAKCqX5oNwWaY7OMsdN-wJWf6YZMBdbxaDmyonj+bf-Bs-+0Ytw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,321 +78,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-tcp: Add TCP ROCCET congestion control module.
+Hi Lara,
 
-This patch adds a new TCP congestion control algorithm derived from
-TCP CUBIC, called ROCCET, which adds bufferbloat detection based on
-srRTT and ACK arrival rate, and replaces HyStart with a custom slow
-start phase called LAUNCH. A few observations follow.
+Nice work, and thanks for the detailed write-up.
 
-[Low]
-The commit message says:
+Before you invest more in the userspace wait-for graph and cycle
+detection logic, I'd strongly suggest taking a look at liblockdep
+first. It is the userspace port of the kernel's lockdep, i.e. the
+exact same lock-correctness validator the kernel uses, packaged as a
+library that intercepts pthread_mutex/pthread_rwlock and friends. The
+lock-order graph, cycle/deadlock detection, and lock-class tracking
+you are reimplementing in your loader (and partly in BPF) are all
+things lockdep already does, and it has had many years of hardening on
+exactly these problems (false positives, lock classes, nesting, etc.).
 
-  The second metric is the acknowledgment arrival rate sampled over 5
-  RTT intervals.
+Some background that may save you time:
 
-Looking at update_ack_rate(), the sampling window is a fixed 100 ms
-wall-clock interval (u32 interval = USEC_PER_MSEC * 100), not a
-multiple of the connection's RTT. The 5*curr_rtt window only governs
-ca->next_srrtt_check. Should the commit message match the
-implementation, or should the implementation be changed to actually
-sample over 5 RTT intervals?
+  - https://lwn.net/Articles/536373/
+  - https://github.com/svagionitis/liblockdep-kernel
+  - https://www.vctlabs.com/posts/2014/Jul/09/liblockdep/
 
-[Low]
-Could the commit message also discuss why ROCCET cannot be implemented
-as a BPF struct_ops program on top of CUBIC, given that this same
-patch already registers BTF kfuncs for the struct_ops interface and
-that most of the file is a verbatim copy of CUBIC?
+Reusing the lockdep validator instead of growing a parallel graph
+implementation has a couple of advantages: you inherit a well-tested
+deadlock-detection engine, and you stay closer to semantics kernel
+developers already understand. Your eBPF pipeline could then focus on
+what it is uniquely good at - low-overhead, production-safe event
+collection across kprobe/uprobe/tracepoint sources - and feed those
+normalized lock events into the lockdep algorithm rather than
+recomputing cycles yourself. That separation may also make question
+(1) (lock-order graph in BPF) and question (4) (upstreaming fit) much
+easier to answer.
 
-> diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
-> index 301b47660305..23197958324b 100644
-> --- a/net/ipv4/Kconfig
-> +++ b/net/ipv4/Kconfig
-> @@ -663,6 +663,18 @@ config TCP_CONG_CDG
->  	    delay gradients." In Networking 2011. Preprint:
->  	    http://caia.swin.edu.au/cv/dahayes/content/networking2011-cdg-preprint.pdf
->  
-> +config TCP_CONG_ROCCET
-> +	tristate "ROCCET TCP"
-> +	default n
-> +	help
-> +	  TCP ROCCET is a sender-side only modification of the TCP CUBIC
-> +	  protocol stack/TCP CUBIC congestion control algorithm that
-> +	  optimizes the performance of TCP congestion control. Especially
-> +	  for networks with large buffers (wireless, cellular networks),
-> +	  TCP ROCCET has improved performance by maintaining similar
-> +	  throughput as CUBIC while reducing the latency.
-> +	  For more information, see: https://arxiv.org/abs/2510.25281
+It is also worth checking the current state of the code: the in-tree
+liblockdep under tools/lib/lockdep/ was removed from the kernel tree a
+while back, so the out-of-tree forks above are the practical starting
+points if you want to build on it.
 
-[Low]
-The help text describes ROCCET as a "modification of the TCP CUBIC
-protocol stack/TCP CUBIC congestion control algorithm", but CUBIC
-itself is not modified by this patch; ROCCET is a new sibling module
-that copies large parts of CUBIC. The acronym ROCCET is also never
-expanded here. Should the help text be reworded?
-
-> diff --git a/net/ipv4/tcp_roccet.h b/net/ipv4/tcp_roccet.h
-> new file mode 100644
-> index 000000000000..5025d14667bb
-> --- /dev/null
-> +++ b/net/ipv4/tcp_roccet.h
-> @@ -0,0 +1,46 @@
-
-[Low]
-Is the separate header net/ipv4/tcp_roccet.h needed? It only declares
-struct ack_rate and struct roccettcp, both of which are used solely
-inside tcp_roccet.c. Other in-tree CCs (tcp_cubic.c, tcp_bbr.c,
-tcp_vegas.c, tcp_dctcp.c, tcp_bic.c, tcp_cdg.c, ...) keep their
-per-socket state in the .c file.
-
-> +struct roccettcp {
-> +	u32 cnt;		/* increase cwnd by 1 after ACKs */
-[ ... ]
-> +	u32 curr_rtt;		/* the minimum rtt of current round */
-
-[Low]
-The comment says "the minimum rtt of current round", but in
-roccettcp_acked() curr_rtt is assigned the latest sample
-(ca->curr_rtt = sample->rtt_us;) without any min-of-round logic. Was
-the comment intended to be copied from tcp_cubic.c, where curr_rtt
-has different semantics?
-
-> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
-> new file mode 100644
-> index 000000000000..900329bb070b
-> --- /dev/null
-> +++ b/net/ipv4/tcp_roccet.c
-[ ... ]
-> +/* Parameters that are specific to the ROCCET-Algorithm */
-> +static int sr_rtt_upper_bound __read_mostly = 100;
-> +static int ack_rate_diff_ss __read_mostly = 10;
-> +
-> +module_param(sr_rtt_upper_bound, int, 0644);
-> +MODULE_PARM_DESC(sr_rtt_upper_bound, "ROCCET's upper bound for srRTT.");
-> +module_param(ack_rate_diff_ss, int, 0644);
-> +MODULE_PARM_DESC(ack_rate_diff_ss,
-> +		 "ROCCET's threshold to exit slow start if ACK-rate defer by given amount of segments.");
-> +
-> +static int fast_convergence __read_mostly = 1;
-> +static int beta __read_mostly = 717; /* = 717/1024 (BICTCP_BETA_SCALE) */
-> +static int initial_ssthresh __read_mostly;
-> +static int bic_scale __read_mostly = 41;
-> +static int tcp_friendliness __read_mostly = 1;
-
-[Low]
-sr_rtt_upper_bound and ack_rate_diff_ss are declared signed int and
-exposed as 0644 module params, but they are compared to and added to
-u32 quantities (curr_srrtt, get_ack_rate_diff(), roccet_xj). If a
-negative value is written, the signed-to-unsigned promotion turns it
-into a very large unsigned, effectively disabling the bufferbloat
-detection branch. Should these be unsigned int with a setter that
-rejects 0 / negative values?
-
-[Low]
-Is there a way to avoid adding seven new module_param tunables to a
-new in-tree CC? Five of them duplicate CUBIC's identically named
-knobs (fast_convergence, beta, initial_ssthresh, bic_scale,
-tcp_friendliness), which makes it hard for an admin to reason about
-which knob applies to which CC, and these are global (not per-netns)
-unlike the sysctls used by other modern CCs.
-
-> +static __always_inline void update_min_rtt(struct sock *sk)
-> +{
-> +	struct roccettcp *ca = inet_csk_ca(sk);
-> +
-> +	/* Check if new lower min RTT was found. If so, set it directly */
-> +	if (ca->curr_rtt < ca->curr_min_rtt)
-> +		ca->curr_min_rtt = max(ca->curr_rtt, 1);
-> +}
-
-[High]
-Can update_min_rtt() and update_srrtt() leave curr_min_rtt at 0 and
-crash the kernel via divide-by-zero in roccettcp_cong_avoid()?
-
-After roccettcp_reset() (called from roccettcp_init() and from
-roccettcp_state(TCP_CA_Loss)) curr_rtt is 0 and curr_min_rtt is ~0U.
-On the next ACK that reaches roccettcp_cong_avoid() before
-roccettcp_acked() has set curr_rtt to a non-zero value (the early
-return in roccettcp_acked() suppresses updates for HZ jiffies after
-fast recovery), update_min_rtt() does:
-
-	if (ca->curr_rtt < ca->curr_min_rtt)
-		ca->curr_min_rtt = max(ca->curr_rtt, 1);
-
-so curr_min_rtt is clamped to 1. Then update_srrtt() runs:
-
-	if (ca->curr_rtt < ca->curr_min_rtt)
-		ca->curr_min_rtt = ca->curr_rtt;
-
-which overwrites curr_min_rtt with 0 (curr_rtt). update_srrtt()
-returns early on its own divide-by-zero guard, but cong_avoid keeps
-running and reaches:
-
-	roccet_xj = ((jitter * 100) / ca->curr_min_rtt) +
-		    sr_rtt_upper_bound;
-
-and divides by 0.
-
-Once curr_min_rtt becomes 0, the unsigned compare
-(ca->curr_rtt < ca->curr_min_rtt) is false for any later positive
-curr_rtt, so curr_min_rtt stays 0 for the lifetime of the socket. Is
-that intended?
-
-> +/* Compute srRTT.
-> + */
-> +static __always_inline void update_srrtt(struct sock *sk)
-> +{
-[ ... ]
-> +	u32 rrtt = (100 * (ca->curr_rtt - ca->curr_min_rtt)) /
-> +		   ca->curr_min_rtt;
-
-[Medium]
-Can this overflow? curr_rtt and curr_min_rtt are microseconds and can
-reach values close to TCP_RTO_MAX (~120 s). 100 * (curr_rtt -
-curr_min_rtt) is computed in u32 and wraps once the difference
-exceeds about 42.9 ms. The wrapped rrtt is then folded into
-curr_srrtt and drives the LAUNCH/ORBITER decisions. Should this be
-promoted to u64 with div_u64()?
-
-[ ... ]
-> +__bpf_kfunc static void roccettcp_cwnd_event(struct sock *sk,
-> +					     enum tcp_ca_event event)
-> +{
-> +	if (event == CA_EVENT_TX_START) {
-> +		struct roccettcp *ca = inet_csk_ca(sk);
-> +		u32 now = tcp_jiffies32;
-> +		s32 delta;
-> +
-> +		delta = now - tcp_sk(sk)->lsndtime;
-> +
-> +		/* We were application limited (idle) for a while.
-> +		 * Shift epoch_start to keep cwnd growth to cubic curve.
-> +		 */
-> +		if (ca->epoch_start && delta > 0) {
-> +			ca->epoch_start += delta;
-> +			if (after(ca->epoch_start, now))
-> +				ca->epoch_start = now;
-> +		}
-> +		return;
-> +	}
-> +}
-
-[High]
-Is this body reachable? In include/net/tcp.h tcp_ca_event() dispatches
-CA_EVENT_TX_START exclusively to .cwnd_event_tx_start and returns
-before calling .cwnd_event:
-
-	if (event == CA_EVENT_TX_START) {
-		if (icsk->icsk_ca_ops->cwnd_event_tx_start)
-			icsk->icsk_ca_ops->cwnd_event_tx_start(sk);
-		return;
-	}
-
-tcp_cubic.c handles this by registering cubictcp_cwnd_event_tx_start
-in .cwnd_event_tx_start. With the registration here only setting
-.cwnd_event = roccettcp_cwnd_event, the entire idle-period
-epoch_start adjustment is dead code, and on a transition out of
-application-limited idle bictcp_update() will compute t with a stale
-epoch_start, which then propagates through:
-
-	delta = (cube_rtt_scale * offs * offs * offs) >> (10 + 3 * BICTCP_HZ);
-
-producing a large bic_target/cnt. Should this be wired to
-.cwnd_event_tx_start instead?
-
-[ ... ]
-> +/* calculate the cubic root of x using a table lookup followed by one
-> + * Newton-Raphson iteration.
-> + * Avg err ~= 0.195%
-> + */
-> +static u32 cubic_root(u64 a)
-[ ... ]
-> +/* Compute congestion window to use.
-> + */
-> +static __always_inline void bictcp_update(struct roccettcp *ca, u32 cwnd,
-> +					  u32 acked)
-
-[Low]
-cubic_root(), bictcp_update(), the module_param block, and the
-precomputation in roccettcp_register() appear to be byte-for-byte
-copies of tcp_cubic.c. Should these be factored as shared helpers in
-a common file (or ROCCET implemented as a BPF struct_ops on top of
-CUBIC) so that future numerical fixes to CUBIC propagate to ROCCET?
-
-[ ... ]
-> +__bpf_kfunc static void roccettcp_cong_avoid(struct sock *sk, u32 ack,
-> +					     u32 acked)
-> +{
-> +	struct tcp_sock *tp = tcp_sk(sk);
-> +	struct roccettcp *ca = inet_csk_ca(sk);
-> +
-> +	u32 now = jiffies_to_usecs(tcp_jiffies32);
-> +	bool evaluate_srrtt = false;
-> +	u32 roccet_xj;
-> +	u32 jitter;
-> +
-> +	if (after(ca->last_rtt, ca->curr_rtt))
-> +		jitter = ca->last_rtt - ca->curr_rtt;
-> +	else
-> +		jitter = ca->curr_rtt - ca->last_rtt;
-
-[Low]
-after() is the TCP sequence-number macro from include/net/tcp.h.
-Using it here for an RTT-microsecond comparison works (it expands to
-a signed 32-bit subtraction), but it is a sequence-space helper and
-reads as a layering mistake. The same file uses raw subtraction with
-<= a few lines below ("now - ca->roccet_last_event_time_us <= 100 *
-USEC_PER_MSEC"), so the time arithmetic is internally inconsistent.
-Could the after() uses be replaced with explicit (s32) subtractions?
-
-[Low]
-On the very first call after a reset, ca->last_rtt is 0, so this
-computes jitter = |curr_rtt - 0| = curr_rtt, i.e. an entire RTT
-worth of "jitter". That value then feeds roccet_xj and loosens the
-bufferbloat-detection threshold during the LAUNCH phase the
-algorithm is supposed to keep tightest. Should the first sample be
-suppressed (e.g., skip jitter computation while last_rtt == 0)?
-
-[ ... ]
-> +	roccet_xj = ((jitter * 100) / ca->curr_min_rtt) +
-> +		    sr_rtt_upper_bound;
-> +	if (roccet_xj < sr_rtt_upper_bound)
-> +		roccet_xj = sr_rtt_upper_bound;
-
-[Medium]
-Same overflow class as update_srrtt(): jitter * 100 is computed in
-u32. With jitter above ~42.9 ms in microseconds the multiplication
-wraps, and the subsequent clamp "if (roccet_xj < sr_rtt_upper_bound)"
-only catches a subset of the wrap cases. The wrapped value drives
-whether the cwnd-reduction branch fires. Should jitter * 100 be
-performed in u64?
-
-[ ... ]
-> +static int __init roccettcp_register(void)
-> +{
-> +	int ret;
-> +
-> +	BUILD_BUG_ON(sizeof(struct roccettcp) > ICSK_CA_PRIV_SIZE);
-[ ... ]
-> +	beta_scale =
-> +		8 * (BICTCP_BETA_SCALE + beta) / 3 / (BICTCP_BETA_SCALE - beta);
-[ ... ]
-> +	/* divide by bic_scale and by constant Srtt (100ms) */
-> +	do_div(cube_factor, bic_scale * 10);
-
-[Low]
-Can these divides panic at module load if bic_scale=0 or beta=1024 is
-passed via modprobe? do_div(cube_factor, bic_scale * 10) divides by 0
-when bic_scale is 0, and beta_scale divides by (BICTCP_BETA_SCALE -
-beta) which is 0 when beta is 1024. The same shape exists in
-tcp_cubic.c, but should the new file sanity-check these inputs
-before computing the precomputed factors?
-
-[Low]
-MODULE_VERSION("1.0") is more typical of out-of-tree DKMS modules
-than of in-tree code; should it be dropped here?
--- 
-pw-bot: cr
+Thanks,
+Cong
