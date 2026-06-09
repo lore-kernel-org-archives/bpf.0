@@ -1,83 +1,84 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838643CFF79
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 06:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917C13D47B8
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 06:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780986041; cv=none; b=lwBs2+r5S83cfewYSJDRfFSlDKcx791fQ9e027xdiTMR0r/g0Y9Mkot7Bjs0P10O7+koO2zv/h1vGHdbYcWa/cyyDcanWEHB9llezk0SaSFarJGNCWIZeYeVEomcJP6zCx74XlR+YufGbURMcGZNRxFo3rtiW+0ZunlA5VcY+rQ=
+	t=1780986350; cv=none; b=E+tnn8EinLbjPB/NIT5HDODLycxrtxjTdmy+7gnTW2C4ur/UJ6YhRPOHB6nbK837/Qa/Z2nGlOIE1jqGgwTGq2KsqPHbS9RyeCyWWOWUvdNIaLoAVAFCny1QHd4w7Vl8+BO9yoNRQqAMSbMHFWDr4UZMtyJrCgqORRJ8ZfhAW30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780986041; c=relaxed/simple;
-	bh=59BYnUJvAIePb2VZBI/fz1ozbVQZ7Vi0JTONFFwKaf8=;
+	s=arc-20240116; t=1780986350; c=relaxed/simple;
+	bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CSlbEp6+8ShkKNoTEaBAp3lqOH2t7ooPZSYseJFCouonWXw0zVxWrnVfMuY4I+i9R55/qSvxYAgRuE+Fg6JsTacsAFCAEs17B+mAutcb55Ha0xCaXqboefjA8EByW8lf6RsDZR708M6ECzQJL8UF6+sERN+1inmyVVN/YdzoAdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K7x1V3/h; arc=none smtp.client-ip=209.85.216.48
+	 Content-Type:MIME-Version; b=KoWfhG6mPvy48fthx1yUbBpIrklRzLXFlZpPbHi2o54RHqUz/My67ES80NwIq5CT0RTjHkfbtWgYsFv2tx9hgkFcwjdsFTzDEHI9qx9qAv4mQDV3Xu+X8ZfsKZDvd6HICM8m715xHk2c9sQkR5qYrKSlkFuahomMbPfXxQwNf6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qd6qoZi7; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K7x1V3/h"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36da8439078so4561341a91.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 23:20:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qd6qoZi7"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bf0ddaf50fso35052005ad.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 23:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780986040; x=1781590840; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780986348; x=1781591148; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ygTYj/KNafIzaOesNpmK0Q14mDJk1wjTmzJnvwA/XPg=;
-        b=K7x1V3/hT3tZoa4A5lj+p/TUmtPEDkeo2ZiFdab5mScFvk/HYOJ7h7Gg5UQKiyHHeo
-         RjSbijiWdWL5y0T0JEvD6JyNE9Q3h3H8FG3PwskOMa7V4DnYGHeb4BNdQheel+RPIadW
-         WltyfD530q4u1eKifrYR8DPhGZR7FHNgnOrbJXDMkhKXE9AyWhm7N3RtxBrTAsmgSsMm
-         qtq0bnfCo3zrIMbWaOSyfjT1S0+bfX/JFp9i/0meP01EgByEGL850usa9nJrivZLQnvR
-         Rg4w/xMsvZEOZmmucV2cBBGQS5sprCPTusoW7hq2KYLP0UDn5FUTbgor5UjZ8r2m+rj9
-         dd4w==
+        bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
+        b=qd6qoZi7CygTRrbJdWRfAx/SluTzcolcmk8WsXC5IzW2sYDpPCNKTxWlyDgQv/4aMI
+         iIYqvulFFuuOl6RFULWVigWBiScXz3QvmRPHgJNpf2s0lStghoV/qWVCkZXcoy+dClr8
+         jCuGm0ngy14SgAFBA4y74fWD4YXxHhept8QE0X1WlmtrRjoi/cOEvytEkh8KiXjrgdh3
+         Sn3rDKu69fK50+/7IwI1GX67YlsxM9iO/Aop+t/02qr0O3ycsYJC3SCFhfqNRd4CqS8B
+         AER8t13XI537LTmVjYCQFtgSQoko9Y0Qp9lmPPJIJUQJl1zfTBA7cqhnq6/EyOLx+ziE
+         c45A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780986040; x=1781590840;
+        d=1e100.net; s=20251104; t=1780986348; x=1781591148;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ygTYj/KNafIzaOesNpmK0Q14mDJk1wjTmzJnvwA/XPg=;
-        b=iTDiISavyQW0aLf6U9JsIGhliuvggoTDFS7BRvNXswJqcPBqwcvVL47s68kDKCXsyA
-         28LD9ZPFtj5czT9BovOjEdZlXD+xv3I1R7zLoZ1t/EW5z02Tg3KZuKbD9CqKXB+bwrAb
-         OgqjciOxcf9jT4FfqIZGPwq2+4wFMnFNwM2PXjsPqdRe+ktdxpQg2LXls0w0Nw13W438
-         JY5+exM2VNttVy0++0oqoWXGJp9fEOyq9P8NhcgY46AHmUpeCCfOqwG/A06V/6VlkPCI
-         G8FxO0FddCKB+TlxFPlqO4Fus/MkACY5jUD5FlBNPTR1oeFU4we1OLjGEbDf6W9ayU+e
-         chcA==
-X-Forwarded-Encrypted: i=1; AFNElJ81Bt8Y0CtNuSnvG8RTSAuyXQHZGSgeG6lcFjVzz4MXZbB8jyl1YYnXQKQprDmSdivgQZg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznBGNgVlnAvjtGfJ9lteE1/xxovmt+CqnY4sHdHKWG3PKIAT4w
-	bPLSPx+hjjzSwMvW+v2OjzgmGOcGA+jpeic1MUTHfT7n0fPUJpKV3BFb
-X-Gm-Gg: Acq92OGOspHiMshKA8VFvLb2gB9owy67FKn2ukaf5BRJ/8fnGNCJvoS2YxdD6WEc4vy
-	cwqJdegCeYmJH0m06sME75W7ka8xYkq9Yrg8ZRXXJtkdPkI3gNc890L9BUxrFHZuIHG2b8xENBk
-	IzIGNwkWVPXA3VbPy8INjvNj6DgWwso1lv+G9KvKJxvlcrrQLOB83HXNm/kt3UijWEJIYHSWZeC
-	GHOyGE+Z5Ssrx3UUz0vPKU4cOobQUKXzwFRGYpSSGCyuJZldSbQWk32cm4APUjLOOhmYx8ks5Ps
-	fYlydJSh6S4MQXV3qIdec6heT6ODo8nBghCs4ZhzCdp2PUJHfN5XenuBWzVRDBIMvFB6whKPTtM
-	K+nUijXgK6XyrgHhVhOMad16hFlB11AGFddKZF97aSOjVmDnDrB8UwP6makWjsk0cZ84kRy1Wqi
-	brXz/v6OZR/XfZaOL/MWFrWYgQZ2ZjfRvCwS0eBQw/wEIjB2wU7JGN/jVa81hl0A==
-X-Received: by 2002:a17:90b:1d89:b0:368:ea0c:1b75 with SMTP id 98e67ed59e1d1-370ee82fe25mr19783866a91.6.1780986039807;
-        Mon, 08 Jun 2026 23:20:39 -0700 (PDT)
+        bh=0lmAb3H28yFRWqL/vFjuTMrG8sen3Ov+rd3zZcbDV9g=;
+        b=LFQCgIoQ/+sR3n2uYbTghyr45abzTNMx9Ne5aUYStuVxnuBb7A47M39tKKM5t7o7Ue
+         /F9SsgjKKMTXHwvpk4XP3n+eebSG+oWT1WPWd7sParOzGUhdH6UIs0XixIGYCWx1JfWr
+         /XMEqaaB2f8Wr8AmtLxYXlAq6nONb8nkrsEVMGdzpuCWZabThRrwbpqwNI3Wq2FiG38K
+         2qVHte7V3oImJilap4ILu4FuqwjnMea4X9t2edrBFAwYhiZ2pw1lK487oBeNpdAy90YL
+         1o9E46HNDTDsLN2vaMTeRXRN1xKekeK1hLV6QbxViOCkq4xn8Oi/A40/O215CEMWCymp
+         CxXQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8zI1GrCNtKlK7aC6AIfROHnpnv6LA4HxqWodnqNqbZnztMJv8Q7dVHsypWkJouggVNk9E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMP2ajln7pX24cbBcdhGA9SlQ0JARVbwyBQ/VWhUr3T8vvDnsW
+	GAB44ylPKlMgC2BXAVsz+wVUefbOCQaPd9NyEdr5oFaVAyHPidqtWI00
+X-Gm-Gg: Acq92OHYUbfRcyoRbH2l7HgRdY4D30TlSutSgheDuiJPM9imYbZv2E4kUBwZIWn80eX
+	X6IgdPOjt9jyG3wI9wGNiftwlthlaFGaacp1hMJ4z2z2QCUuTjovTAsxAeJUPy9FXvp/v9h7loF
+	Wldk5LHAohH0lob+SS9yt5VrYYg8kMclZU3Z5fyyBcYNNjqzrefF5FH09nM81ytUCZ0hzufz5O3
+	VF4CQTzrKw4v3cXgAZ+j4H8h18ggkSOm+u/EQa6TrgH6Ze3d9lM77k9+ja/3sjEqUyqlMc00ez3
+	DnZcDvt3Lx6cMayv9AbOaKL/6yAAzZcWj8sLyyTSiI11T/LWuZlV3BySx7EDVg2KybK+QuHXIe6
+	qgdQb17J5eL8UuhhODZHiBDQxFhP5jw7YLJDaYrWcmNLjrXxv3OqUVr0b/U7crBL/qDrCC1JI5I
+	nzSHaM6DYzu53GETy6DDJNvJmkAFZ1YUfoGw/wtXPw+/fbqBFxSqGGuUi89fhp/w==
+X-Received: by 2002:a17:902:da8a:b0:2bf:305a:310d with SMTP id d9443c01a7336-2c1e7f92548mr224154905ad.24.1780986347946;
+        Mon, 08 Jun 2026 23:25:47 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3712ef0add7sm12079255a91.0.2026.06.08.23.20.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e627sm205571345ad.52.2026.06.08.23.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2026 23:20:39 -0700 (PDT)
-Message-ID: <0d63a8d68bf0778d6e931ed27892a5bcb151295d.camel@gmail.com>
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix kfunc implicit arg inject type
- detection to prevent invalid pointer deref
+        Mon, 08 Jun 2026 23:25:47 -0700 (PDT)
+Message-ID: <670285aeb26ab8c4d4254a73a50f513bf9355246.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Validate BTF repeated field counts before
+ expansion
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, chenyuan_fl@163.com
-Cc: andrii@kernel.org, ast@kernel.org, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, 	chenyuan@kylinos.cn, clm@meta.com,
- daniel@iogearbox.net, jolsa@kernel.org, 	linux-kernel@vger.kernel.org,
- martin.lau@kernel.org, martin.lau@linux.dev, 	memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev
-Date: Mon, 08 Jun 2026 23:20:36 -0700
-In-Reply-To: <118b0bc7-5126-465d-993c-3b25e331e2cf@linux.dev>
-References: <20260602093836.2632714-1-chenyuan_fl@163.com>
-	 <20260608142618.3064380-1-chenyuan_fl@163.com>
-	 <20260608142618.3064380-2-chenyuan_fl@163.com>
-	 <eab4e479-2023-49b8-9915-1c8ef2356837@linux.dev>
-	 <49c36dc0f52bd05d0f8c055e3d3e96992ae716a6.camel@gmail.com>
-	 <118b0bc7-5126-465d-993c-3b25e331e2cf@linux.dev>
+To: Hou Tao <houtao1@huawei.com>, Paul Moses <p@1g4.org>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, 	bpf@vger.kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, 	linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Date: Mon, 08 Jun 2026 23:25:44 -0700
+In-Reply-To: <83321d7b-516c-f4a0-65ea-6fd224ba3110@huawei.com>
+References: <20260605234301.1109063-1-p@1g4.org>
+	 <DJ2OZSCSEVEI.3APUCE7ML9X4Q@gmail.com>
+	 <E0xEdilT0Z6figMeDAyw03ex29iX0RfOAUXuh4aTJxUrKHK2Bg5N8lKCHNvQoQQ1UzndFFqDJ_zmAMYHLqSgSfF1menSW7C9VKDSBhYrTT0=@1g4.org>
+	 <DJ2RQ5NHDCZT.2R218ZSS80NQ4@gmail.com>
+	 <0_PQcsqBnb7dqgu9UPK6jIQvePSosttml5p2ZDoXAzy2AseVjvBu3ihswwZPWr5bZkOUCdH6HUvw3MRKJEwVYJAkT3j5gdNBHZp8l7_cP6Y=@1g4.org>
+	 <d7ccd692ea8c6009785ad141e6ae4bbc68347517.camel@gmail.com>
+	 <83321d7b-516c-f4a0-65ea-6fd224ba3110@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 User-Agent: Evolution 3.56.2-9 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -86,208 +87,123 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2026-06-08 at 18:18 -0700, Ihor Solodrai wrote:
+T24gVHVlLCAyMDI2LTA2LTA5IGF0IDA5OjMwICswODAwLCBIb3UgVGFvIHdyb3RlOgo+IEhpLAo+
+IAo+IE9uIDYvOS8yMDI2IDM6NTkgQU0sIEVkdWFyZCBaaW5nZXJtYW4gd3JvdGU6Cj4gPiBPbiBT
+dW4sIDIwMjYtMDYtMDcgYXQgMTc6NTMgKzAwMDAsIFBhdWwgTW9zZXMgd3JvdGU6Cj4gPiAKPiA+
+IFsuLi5dCj4gPiAKPiA+IFRoZSByZXBybyBpcyBsZWdpdC4KPiA+IEhlcmUgaXMgYSBzb21ld2hh
+dCBtaW5pbWl6ZWQgdmVyc2lvbiBhcyBhIHNlbGZ0ZXN0Ogo+ID4gCj4gPiDCoMKgwqAgZGlmZiAt
+LWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2J0Zi5jIGIvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvYnRmLmMKPiA+IMKgwqDCoCBpbmRl
+eCBhOWRlMzI4YTg2OTcuLjIxMmNhNDQ3MmE4OSAxMDA2NDQKPiA+IMKgwqDCoCAtLS0gYS90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9idGYuYwo+ID4gwqDCoMKgICsrKyBi
+L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2J0Zi5jCj4gPiDCoMKgwqAg
+QEAgLTQyNTgsNiArNDI1OCw0NCBAQCBzdGF0aWMgc3RydWN0IGJ0Zl9yYXdfdGVzdCByYXdfdGVz
+dHNbXSA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLm1heF9lbnRyaWVzID0gMSwKPiA+
+IMKgwqDCoMKgIH0sCj4gPiDCoMKgwqAgCj4gPiDCoMKgwqAgK3sKPiA+IMKgwqDCoCArI2RlZmlu
+ZSBOIDB4MTk5OTk5OWFVCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCAuZGVzY3IgPSAicmVwZWF0
+IGZpZWxkcyBvdmVyZmxvdyIsCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCAucmF3X3R5cGVzID0g
+ewo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIGludCAqL8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIFsxXSAqLwo+ID4gwqDCoMKgICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9UWVBFX0lOVF9FTkMoMCwgQlRGX0lOVF9TSUdO
+RUQsIDAsIDMyLCA0KSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAv
+KiBzdHJ1Y3QgdGFyZ2V0IHt9ICovwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIFsyXSAqLwo+ID4gwqDCoMKgICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9UWVBFX0VOQyhOQU1FX1RCRCwgQlRGX0lORk9f
+RU5DKEJURl9LSU5EX1NUUlVDVCwgMCwgMCksIDEpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIC8qIHR5cGVfdGFnICJrcHRyX3VudHJ1c3RlZCIgLT4gdGFyZ2V0ICov
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBbM10gKi8KPiA+IMKgwqDCoCArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfVFlQRV9UQUdfRU5DKE5BTUVfVEJELCAyKSwKPiA+
+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAvKiB0YXJnZXQgKiAoa3B0cikg
+Ki/CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAvKiBbNF0gKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBCVEZfUFRSX0VOQygzKSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAvKiBzdHJ1Y3Qgb3V0ZXIgeyB0YXJnZXQgKmtwOyBlbGVtIGl0ZW1zW05dOyB9ICov
+wqDCoMKgwqDCoMKgIC8qIFs1XSAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIEJURl9UWVBFX0VOQyhOQU1FX1RCRCwgQlRGX0lORk9fRU5DKEJURl9LSU5EX1NUUlVD
+VCwgMCwgMiksIChOICogOHUgKyA4dSkpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKg
+IC8qIGtwwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNiwgNjQpLMKgwqDCoMKgwqDC
+oMKgIC8qIGl0ZW1zwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAvKiBlbGVtW05dICovwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyogWzZdICovCj4gPiDCoMKg
+wqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQlRGX1RZUEVfQVJSQVlfRU5DKDcsIDEs
+IE4pLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIHN0cnVjdCBl
+bGVtIHsgdGFyZ2V0ICpmMC4uZjk7IH0gKi/CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgLyogWzddICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+QlRGX1RZUEVfRU5DKE5BTUVfVEJELCBCVEZfSU5GT19FTkMoQlRGX0tJTkRfU1RSVUNULCAwLCAx
+MCksIDgpLAo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9NRU1C
+RVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKgIC8qIGYwwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZf
+TUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKgwqDCoMKgwqDCoCAvKiBmMcKgwqDCoMKg
+wqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+QlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKgwqDCoMKgwqDCoMKgwqAgLyogZjLCoMKg
+wqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKgwqDCoMKgIC8qIGYz
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKgwqDCoMKgwqDCoCAv
+KiBmNMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgQlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKgwqDCoMKgwqDCoMKg
+wqAgLyogZjXCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAwKSzCoMKgwqDCoMKg
+wqDCoMKgIC8qIGY2wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoCArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfTUVNQkVSX0VOQyhOQU1FX1RCRCwgNCwgMCkswqDCoMKg
+wqDCoMKgwqDCoCAvKiBmN8KgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqAgK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQlRGX01FTUJFUl9FTkMoTkFNRV9UQkQsIDQsIDApLMKg
+wqDCoMKgwqDCoMKgwqAgLyogZjjCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gwqDCoMKgICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEJURl9NRU1CRVJfRU5DKE5BTUVfVEJELCA0LCAw
+KSzCoMKgwqDCoMKgwqDCoMKgIC8qIGY5wqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDC
+oCArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBCVEZfRU5EX1JBVywKPiA+IMKgwqDCoCAr
+wqDCoMKgwqDCoMKgIH0sCj4gPiDCoMKgwqAgK8KgwqDCoMKgwqDCoCBCVEZfU1RSX1NFQygiXDB0
+YXJnZXRcMGtwdHJfdW50cnVzdGVkXDBvdXRlclwwa3BcMGl0ZW1zXDBlbGVtIgo+ID4gwqDCoMKg
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIlwwZjBcMGYxXDBmMlwwZjNc
+MGY0XDBmNVwwZjZcMGY3XDBmOFwwZjkiKSwKPiA+IMKgwqDCoCArwqDCoMKgwqDCoMKgIC5idGZf
+bG9hZF9lcnIgPSB0cnVlLAo+ID4gwqDCoMKgICsjdW5kZWYgTgo+ID4gwqDCoMKgICt9LAo+ID4g
+wqDCoMKgICsKPiA+IMKgwqDCoMKgIH07IC8qIHN0cnVjdCBidGZfcmF3X3Rlc3QgcmF3X3Rlc3Rz
+W10gKi8KPiA+IMKgwqDCoCAKPiA+IMKgwqDCoMKgIHN0YXRpYyBjb25zdCBjaGFyICpnZXRfbmV4
+dF9zdHIoY29uc3QgY2hhciAqc3RhcnQsIGNvbnN0IGNoYXIgKmVuZCkKPiA+IAo+ID4gSG93ZXZl
+ciwgYXMgZmFyIGFzIEkgdW5kZXJzdGFuZCB0aGUgcmVwcm8gaGl0cyBhbiBvdmVyZmxvdyBvbmx5
+Cj4gPiBiZWNhdXNlIGBCVEZfVFlQRV9FTkMoTkFNRV9UQkQsIEJURl9JTkZPX0VOQyhCVEZfS0lO
+RF9TVFJVQ1QsIDAsIDEwKSwgOClgCj4gPiBsaWVzIGFib3V0IGBzdHJ1Y3QgZWxlbWAgc2l6ZS4g
+SXQgaXMgc3BlY2lmaWVkIGFzIDgsIHdoaWxlIGluIHJlYWxpdHkgaXQgaXMgODAuCj4gCj4gTm8g
+ZXhhY3RseS4gRXZlcnkgZmllbGQgaW4gdGhlIHN0cnVjdCBlbGVtIGhhcyB0aGUgc2FtZSBvZmZz
+ZXQgKDApLCBzbwo+IHRoZSBzaXplIG9mIHN0cnVjdCBlbGVtIGlzIGNvcnJlY3QsIGJ1dCB0aGUg
+ZmllbGQgZGVmaW5pdGlvbiBvZiBzdHJ1Y3QKPiBlbGVtIGlzIGluY29ycmVjdC4KCkhtLCByaWdo
+dCwgdGhhbmsgeW91LgpPaywgdGhpcyBtZWFucyB0aGF0IHRoZSBmaXggc3VnZ2VzdGVkIGJ5IFBh
+dWwgc2hvdWxkIGJlIGxhbmRlZAphbmQgdGhlcmUgYXJlIG5vIGZ1cnRoZXIgaXNzdWVzIHdpdGgg
+QlRGIHZhbGlkYXRpb24uCihCdXQgaXQgd291bGQgYmUgbmljZSB0byBoYXZlIHNlbGZ0ZXN0IGlu
+Y2x1ZGVkIGluIHRoZSBwYXRjaHNldCkuCgo+ID4gVGhlIHNpemUgb2YgODAgd291bGQgbWFrZSBg
+c3RydWN0IG91dGVyYCB1bnJlcHJlc2VudGFibGUgaW4gQlRGLAo+ID4gYmVjYXVzZSAoTiAqIDgw
+ICsgOCkgZXhjZWVkcyB1MzIgcmFuZ2UsIGFuZCB0aGF0J3Mgd2hhdCBidGZfdHlwZS0+c2l6ZSB1
+c2VzLgo+ID4gR2l2ZW4gdGhhdCBidGZfcmVwZWF0X2ZpZWxkcygpIG9ubHkgdHJhdmVyc2VzIHN0
+cnVjdHMvYXJyYXlzIGJ1dCBub3QgdW5pb25zLAo+ID4gSSBzdXNwZWN0IHRoYXQgb3ZlcmZsb3cg
+d29uJ3QgaGFwcGVuIGluIGBmaWVsZF9jbnQgKiAocmVwZWF0X2NudCArIDEpYAo+ID4gaWYgcHJv
+cGVyIHNpemUgY2hlY2tzIHdlcmUgaW1wbGVtZW50ZWQgaW4gYnRmX3N0cnVjdF9jaGVja19tZXRh
+KCkgLyBidGZfc3RydWN0X3Jlc29sdmUoKS4KPiA+IEV2ZW4gbW9yZSwgSWYgSSBjaGFuZ2UgImtw
+dHJfdW50cnVzdGVkIiB0byAia3B0cl91bnRydXN0ZWQxMSIgdG8gYXZvaWQgZmllbGRzIHBhcnNp
+bmcsCj4gPiB0aGUga2VybmVsIGFjY2VwdHMgdGhlIGJvZ3VzIEJURi4KPiAKPiBidGZfc3RydWN0
+X2NoZWNrX21ldGEgaGFzIGNoZWNrZWQgdGhlIHZhbGlkaXR5IG9mIGZpZWxkIG9mZnNldC4gSG93
+ZXZlcgo+IGl0IHNlZW1zIHRoZSBjaGVja2luZyBpcyBsb29zZToKPiAKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgLyoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+ICI+IiBpbnN0ZWFkIG9mICI+PSIgYmVjYXVzZSB0aGUgbGFzdCBtZW1iZXIgY291bGQgYmUKPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqICJjaGFyIGFbMF07Igo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGlmIChsYXN0X29mZnNldCA+IG9mZnNldCkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnRmX3ZlcmlmaWVyX2xvZ19tZW1iZXIoZW52LCB0LCBt
+ZW1iZXIsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiSW52YWxpZCBt
+ZW1iZXIKPiBiaXRzX29mZnNldCIpOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FSU5WQUw7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIH0KPiAKPiBGb3Igc3RydWN0IGVsZW0sIGFsbCBmaWVsZHMgaGF2ZSB0aGUgb2Zmc2V0
+IDAsIHNvIHRoZSBvZmZzZXQgY2hlY2tpbmcgaXMKPiBwYXNzZWQuIEZyb20gdGhlIGNvZGUgc25p
+cHBldCBhYm92ZSwgaXQgc2VlbXMgQlRGIHRyaWVzIHRvIHN1cHBvcnQgdGhlCj4gZm9sbG93aW5n
+IHN0cnVjdCBkZWZpbml0aW9uIGJlbG93LCBpcyBpdCBPSyB0byBvbmx5IHN1cHBvcnQgdGhlIGxh
+c3QKPiB6ZXJvLXNpemVkIGZpZWxkIGluIHN0cnVjdCBkZWZpbml0aW9uID8KPiAKPiBzdHJ1Y3Qg
+ZWxlbSB7Cj4gwqDCoMKgIGludCBhOwo+IMKgwqDCoCBjaGFyIGJbMF07Cj4gwqDCoMKgIGludCBj
+Owo+IMKgwqDCoCBjaGFyIGRbMF07Cj4gfQoKSSB0aGluayBDIHN0YW5kYXJkIG9ubHkgYWxsb3dz
+IHplcm8gc2l6ZWQgYXJyYXlzIHRvIGJlIHBsYWNlZCBhdCB0aGUKZW5kIG9mIHRoZSBzdHJ1Y3R1
+cmUgZGVmaW5pdGlvbi4gQnJvYWRlciBxdWVzdGlvbiBpcyBpZiB3ZSB3YW50IEJURgp2YWxpZGF0
+aW9uIHRvIHJlamVjdCBvdmVybGFwcGluZyBmaWVsZHMgb3V0c2lkZSBvZiB1bmlvbnMuCk5vdCBz
+dXJlIGlmIHRoZXJlIGlzIGEgcHJhY3RpY2FsIHJlYXNvbiB0byBkbyBzby4K
 
-[...]
-
-> > > > @@ -11885,9 +11885,27 @@ static int check_kfunc_args(struct bpf_ver=
-ifier_env *env, struct bpf_kfunc_call_
-> > > > =C2=A0			continue;
-> > > > =C2=A0		}
-> > > > =C2=A0
-> > > > -		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(=
-meta, i))
-> > > > +		if (is_kfunc_arg_ignore(btf, &args[i]))
-> > > > =C2=A0			continue;
-> > > > =C2=A0
-> > > > +		if (is_kfunc_arg_implicit(meta, i)) {
-> > > > +			/* kfuncs with implicit args (e.g. 'off' parameter)
-> > > > +			 * handled during verification in bpf_fixup_kfunc_call():
-> > > > +			 * obj_new, percpu_obj_new, obj_drop, percpu_obj_drop,
-> > > > +			 * refcount_acquire, list_push, rbtree_add. Don't flag them. */
-> > > > +			if (is_bpf_obj_new_kfunc(meta->func_id) ||
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_percpu_obj_new_kfunc(meta->func_id) |=
-|
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_obj_drop_kfunc(meta->func_id) ||
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_percpu_obj_drop_kfunc(meta->func_id) =
-||
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_refcount_acquire_kfunc(meta->func_id)=
- ||
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_list_push_kfunc(meta->func_id) ||
-> > > > +			=C2=A0=C2=A0=C2=A0 is_bpf_rbtree_add_kfunc(meta->func_id))
-> > >=20
-> > > Is the goal here to have a nice error message?
-> > >=20
-> > > I think this will fail for other functions like bpf_wq_set_callback()=
-.
-> > > For a proper check, the list must include every single kfunc with KF_=
-IMPLICIT_ARGS, no?
-> > >=20
-> > > If we go this route, then the list of flagged kfuncs can be collected=
- automatically.
-> > > I'm not sure we actually want to do this.
-> >=20
-> > The calls to functions with implicit arguments are patched by
-> > bpf_fixup_kfunc_call(). As far as I understand, this function:
-> > - handles functions with implicit bpf_prog_aux generically
-> > - handles the functions listed above on a case-by-case basis.
-> >=20
-> > The goal is not to have a nice error message, but to prevent runtime
-> > from reading garbage from a register.
->=20
-> In check_kfunc_args() we only needed to know whether the arg is implicit,
-> independent of its type, which is_kfunc_arg_implicit() already does. To s=
-kip it.
->=20
-> For vmlinux kernel kfuncs this should be enough, I think.
->=20
-> To properly harden against reading garbage for a *module* kfunc, I think =
-the=20
-> verifier would have to check for the specific BTF type, e.g. "are we patc=
-hing a=20
-> struct bpf_prog_aux pointer?".
-
-The only way for a module kfunc can have implicit args is to have
-bpf_prog_aux parameter and an implicit args flag.
-There are no module-specific callbacks to do custom implicit args patching.
-
-The actual arguments patching is done by verifier.c:bpf_fixup_kfunc_call().
-It has the following structure:
-
-  int bpf_fixup_kfunc_call(...)
-  {
-	...
-
-	if (is_bpf_obj_new_kfunc(desc->func_id) || is_bpf_percpu_obj_new_kfunc(des=
-c->func_id)) {
-		... patch args ...
-	} else if (is_bpf_obj_drop_kfunc(desc->func_id) ||
-		   is_bpf_percpu_obj_drop_kfunc(desc->func_id) ||
-		   is_bpf_refcount_acquire_kfunc(desc->func_id)) {
-		... patch args ...
-	} else if (is_bpf_list_push_kfunc(desc->func_id) ||
-		   is_bpf_rbtree_add_kfunc(desc->func_id)) {
-                ... patch args ...
-	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_ctx=
-] ||
-		   desc->func_id =3D=3D special_kfunc_list[KF_bpf_rdonly_cast]) {
-		...
-	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_session_is_retur=
-n] && ...) {
-		...
-	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_session_cookie] =
-&& ...) {
-		...
-	}
-
-	if (env->insn_aux_data[insn_idx].arg_prog) {
-		u32 regno =3D env->insn_aux_data[insn_idx].arg_prog;
-                ... patch bpf_prog_aux arg in `regno` ...
-	}
-	return 0;
-  }
- =20
-Also consider how check_kfunc_args() looks w/o this patch:
-
-  static int check_kfunc_args(...)
-  {
-	...
-	for (i =3D 0; i < nargs; i++) {
-		...
-		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
-			... set env->insn_aux_data[insn_idx].arg_prog ...
-		}
-		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-			continue;
-		...
-	}
-	return 0;
-  }
-
-The `is_kfunc_arg_prog_aux(btf, &args[i])` might return false in case of bo=
-gus BTF.
-In such a case `insn_aux_data[insn_idx].arg_prog` won't be set and no patch=
-ing
-would happen in check_kfunc_args(). The kfunc call would remain and the kfu=
-nc would
-read whatever happens to be in the should-have-been patched register.
-
-So this patch modifies check_kfunc_args() to error out if function is
-marked with implicit args flag, but neither of known good implicit
-args cases is present.
-
-> It could be done immediately before patching, but at that point the verif=
-ication is
-> complete, right?..
-
-Actually, yes. The following should be a legit fix as well (I think):
-
-  diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-  index b27352d72b4f..6d6f4ccf2021 100644
-  --- a/include/linux/bpf_verifier.h
-  +++ b/include/linux/bpf_verifier.h
-  @@ -1606,6 +1606,7 @@ enum bpf_reg_arg_type {
-   struct bpf_kfunc_desc {
-          struct btf_func_model func_model;
-          u32 func_id;
-  +       u32 flags;
-          s32 imm;
-          u16 offset;
-          unsigned long addr;
-  diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-  index 02239c56801b..6e5f5a14a29c 100644
-  --- a/kernel/bpf/verifier.c
-  +++ b/kernel/bpf/verifier.c
-  @@ -2752,6 +2752,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env=
-, u32 func_id, u16 offset)
-  =20
-          desc =3D &tab->descs[tab->nr_descs++];
-          desc->func_id =3D func_id;
-  +       desc->flags =3D kfunc.flags ? *kfunc.flags : 0;
-          desc->offset =3D offset;
-          desc->addr =3D addr;
-          desc->func_model =3D func_model;
-  @@ -19753,9 +19754,7 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
-                  insn_buf[4] =3D BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG=
-_1);
-                  insn_buf[5] =3D BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0);
-                  *cnt =3D 6;
-  -       }
-  -
-  -       if (env->insn_aux_data[insn_idx].arg_prog) {
-  +       } else if (env->insn_aux_data[insn_idx].arg_prog) {
-                  u32 regno =3D env->insn_aux_data[insn_idx].arg_prog;
-                  struct bpf_insn ld_addrs[2] =3D { BPF_LD_IMM64(regno, (lo=
-ng)env->prog->aux) };
-                  int idx =3D *cnt;
-  @@ -19764,6 +19763,10 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
-                  insn_buf[idx++] =3D ld_addrs[1];
-                  insn_buf[idx++] =3D *insn;
-                  *cnt =3D idx;
-  +       } else if (desc->flags & KF_IMPLICIT_ARGS) {
-  +               verbose(env, "don't know how to patch kfunc call at instr=
-uction %d, possible BTF mismatch, kfunc is marked with KF_IMPLICIT_ARGS\n",
-  +                       insn_idx);
-  +               return -EFAULT;
-          }
-          return 0;
-   }
-
-> Other than that we'd have to somehow pass through from check_kfunc_args()=
- to
-> bpf_fixup_kfunc_call() information like "arg 1 of this kfunc can be patch=
-ed to prog_aux" etc.
-> We sort of do that already with the meta->arg_prog =3D true
->=20
-> In a module one can define arbitrary kfuncs and add KF_IMPLICIT_ARGS to t=
-hem, so
-> proper hardening needs to be generic.
->=20
-> I think this boils down to whether we want to error-check module kfuncs o=
-r not.
-> Not sure what the verifier strategy is here, but my understanding is that=
- in general
-> a custom module can easily make kernel read garbage, and it's not a kerne=
-l's problem.
