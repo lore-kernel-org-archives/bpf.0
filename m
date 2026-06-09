@@ -1,213 +1,235 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99ABC36897E
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9192B40D58B
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 20:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781037848; cv=none; b=d1o1QSFkY8AI+8SrupwPWnnBTzaG5i5lOqloTAEy7MCUIknqK1JmTwQ/kQfzV/xj6qx5ZEE2gsHbetmAF5d5qT9j75nHFBCOW9pZgWgjoZU9XcZ71WZ5hy4XtNbkid3zggK+9u1begaunvZnXXe67MmkxQQzfen7jdWxfuO3a+M=
+	t=1781037938; cv=none; b=f4kLdUwaK2I4rHO3hroYNuyFR9IayZlwPd14WZKjgs6y5uL9LbsilsUjZyt4ukU3l5CTxaLbMNeYCf1fRFtSBCE86Y18lwXkL7a8OUe0OexDKniqC4K1KSaOtXPmBsN9VcO1jIZf4BS2kuvM+qpDFwptBdpBTaqHXkZ7l76OHXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781037848; c=relaxed/simple;
-	bh=QDqrHaAT3Z5GRNTMoHp4a6SY83zELweOUi7Rvw+Q+fI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=szwUIGu14ZyWDALv1Mz1502CZqTTr3pOSCXAY5TdQjBTpIKnX3qbOf4EMA4fmqyA+x/najPj+D7ywE2s/fosqdgSNH62Kj1yqpVQx12Mr9sKxoAL3mpXHySq6U0WJ5GQ40T7qRF8G0pP6cBSM8G4ByYUcrW+mhP6YxpiOUhKE5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=irmFiY5i; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781037938; c=relaxed/simple;
+	bh=S1x9x4Ghq2az/KolNp8/QcD1M4y0M34YTVMgXCocxJ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dmx/Of9yysdS5pw5sH77BQpz273C+PwRdhMDwRN04cN5t1wxz9QHBPDq0wZxcm1XbKkmC6KW8Z6U4RGbAAduo8LlLE+zPwcHgL53xUqdGnm5vSlGoHJeE9ohapWA8lBHeAaF3+ichTMGEaAbyzvyxt3eeAjJU4d8n9emmutDJgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=bY3Jl71K; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="irmFiY5i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1A51F00893;
-	Tue,  9 Jun 2026 20:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781037847;
-	bh=qgDapqs+eBf16D2JrOuRW9QTS6xuvY2nZtj4hL7JCqE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=irmFiY5iqfy8RRBZoIVlhrAgmU12VOptEW+mZME4D+77Xvs3BAGNkJlW4/8Ih56pN
-	 ilcwCTdt5eP5N2ZYQFJVKRvo5aa82lnZswJ46ZplDI4XUynC11cWjdeA3Vi+c8IqK5
-	 lA/jWsxPlEGc1IktrsXKlHpL5W2CGbB4pAZ5K1O40FI0UC8mnEsmC/Eigm6VYjU21F
-	 Nj30aJSeKLC6w3wvZ6hkSarHKeExIUTMbrXolHQjvdxxvzH8zu+yMD86DiqU/BBhBZ
-	 apa0rzJorXL1iEpLJvvJPjkJQ7/HRYfUUOUZPOIULqRht0eMepQsmI0LbklEsR3FQl
-	 b7OeDjd7Z3V1Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 2/4] bpf: Cancel special fields on map value
- recycle
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609202548.3571690-3-memxor@gmail.com>
-References: <20260609202548.3571690-3-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 20:44:06 +0000
-Message-Id: <20260609204406.ED1A51F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="bY3Jl71K"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c0c2c7d45eso54238595ad.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 13:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1781037936; x=1781642736; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3K1B8gwLWAzRfKm1h5Jy5RNbuV45+npcCR0eQNcT6pI=;
+        b=bY3Jl71KzeiSX+qbk/Ej89CmWJtq3qZvVP6F2+KRJ+3HYsjg5uu7W1fYrduqF9650O
+         IyJdME7uF2r+s0GBzutwhaMmMu0tDQGg30RzPfcuXofPdkVmSMY0izKdAMWBr3uTbkAV
+         xB7/gMyuRBUDNRgNlU9kNkhFqYzLQND7LJ6XErTZxFQBWQIZwBlAioFd2x8MyETXDYPP
+         XQkAcVIniyKqxg0ZKN0oiWWostJFUr/79Zn1OOBe9kcMbMYcQGgAwSVt5O9asPq6K3XU
+         7pYJLh4a+ypTCaymBJ+JGc3vSUf/c6i9TFvFNEaVuGdrmjIT4as8auWZILvhCdv/IQtF
+         LAoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781037936; x=1781642736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3K1B8gwLWAzRfKm1h5Jy5RNbuV45+npcCR0eQNcT6pI=;
+        b=ggNdbypiszqek9/FaKfxpoazprusgz6G+As7SsHubJ3BDywgPWq6AN7MFnEkIqTu6+
+         9HbeEyovh2C9PjyJE3oxoQUJmYuRBHgXI6Nf/FkOmIDudP+2S5NTuryyjfRx0fYUjybX
+         GQ5rLIcrzH+GIOBT1eC7yxEH3sFtrk7aeyFBSrZ3El8lqdG5vwbpcAG0z+BrMf9nnaXL
+         H946wrEaCENnjgAu0vqjGo5aMar67OVV9iC6ICju7EL1PIS00P1tb8Mf0GV33BNvi6e3
+         SBF7H7IwsKbvfd2WaI2JmvOwZwkxN0AOzloMMDGMxxo1aF/kijDeLTh+KIONq/aWcU4v
+         MjkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9Lswz2XlDIusiBPKo7xfbieaHPTgNg9f3isOdHVC+X+Is7KAR7tolK58e0MgjNbe9Q+uk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPvRrcG/ehkyW1uEqnquIZD00/kjwkde/iRCDwxLEpnNOMuY40
+	GlYRTFMjvUN3HYq0ONyP4RPwgFevp+fMCTbi1+ep96jYsS6cE7FVHZa1cMDBxKgeTqs=
+X-Gm-Gg: Acq92OHK1Ef99wjx9QeZ69IJNAM7jAx8VCByq3vsE2IMztM7tfOmQ8DYLwujC/T4nR+
+	oMxJtZlVkcqKCZqbbaCUIpQdaiosf0vGv8tAQpmDvhnh1C+BfP2wkiEmMXzIX96ktRdaoFTdGaZ
+	i6+4KZIfFxBByDoKEjN1nj+Wy3UkJgj8YS0221ji2a0Juw0N9HBw91yhZmv/NOtJJqVREyk/aCv
+	g6+W7Wl0FUVulPx3UeIChj988Kcliy8rWZ26xHd0VM5DMUfyBVWancbq5lsD0/yyli0L+noeCgv
+	hgnKtECK2+kKhCgvGdwtthf/QOVY1pOJFenhaKPsMYWEMuLjrS2Jj9KmpwLlP7x760iayJxvKD4
+	Wtind7a0eCQbwdGjCZBkaLxVM7TrVYU2AsCpEjrSLO43amLFfaahzRza55RQWVkB4w8tiEbFnDh
+	RJKvchPSPVGxs7wZM=
+X-Received: by 2002:a17:903:22c4:b0:2c0:c262:b91f with SMTP id d9443c01a7336-2c1e80e431emr246254985ad.8.1781037935811;
+        Tue, 09 Jun 2026 13:45:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4a::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f6d37esm292358325ad.9.2026.06.09.13.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 13:45:35 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
+	Somnath Kotur <somnath.kotur@broadcom.com>
+Cc: horms@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v2] bnxt: fix head underflow on XDP head-grow
+Date: Tue,  9 Jun 2026 13:44:58 -0700
+Message-ID: <20260609204458.2237787-2-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Map updates and deletions on field-capable map types fail to fully=
- clear special BTF fields (BPF-001 violation).
-- [Low] Multi-line comment uses the deprecated style with text starting on =
-the same line as the opening '/*'.
---
+The xdp.py test test_xdp_native_adjst_head_grow_data crashes when run on
+a bnxt machine (and also crashes in NIPA).
 
-commit ffac6bea087651cd2b865ac62682061845ecd16e
-Author: Justin Suess <utilityemal77@gmail.com>
+It seems that the bug is an underflow in bnxt_rx_multi_page_skb, which
+builds the skb head:
 
-bpf: Cancel special fields on map value recycle
+  napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
 
-This commit introduces bpf_obj_cancel_fields() to perform NMI-safe cleanup
-of timer, workqueue, and task_work fields on the reusable-value path. It
-updates array and hashtab update and delete paths to use this cancel
-helper instead of bpf_obj_free_fields().
+The problem with this expression is that in page mode, rx_offset is:
 
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
+  bp->rx_offset = NET_IP_ALIGN + XDP_PACKET_HEADROOM;
 
-[ ... ]
+Which evaluates (at least on x86_64) to 258.
 
-> @@ -384,7 +384,7 @@ static long array_map_update_elem(struct bpf_map *map=
-, void *key, void *value,
->  	if (array->map.map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
->  		val =3D this_cpu_ptr(array->pptrs[index & array->index_mask]);
->  		copy_map_value(map, val, value);
-> -		bpf_obj_free_fields(array->map.record, val);
-> +		bpf_obj_cancel_fields(map, val);
+The test test_xdp_native_adjst_head_grow_data tests a case where the
+head is adjusted by -256.
 
-[Severity: High]
-Does this change violate the BPF subsystem invariant for map updates?
+When this test runs, data_ptr is shifted to frag_start + 2 (where
+frag_start = page_address(page) + offset).
 
-When copy_map_value() overwrites an existing map value, the subsystem guide
-states that bpf_obj_free_fields() must be called to fully release resources
-held by the old value. By switching to bpf_obj_cancel_fields() in
-array_map_update_elem(), it appears fields like BPF_KPTR_REF or
-BPF_LIST_HEAD are skipped, which could retain kernel resources in recycled
-elements.
+Then, bnxt_rx_multi_page_skb is invoked and the napi_build_skb
+expression subtracts 258, landing at an address before frag_start. This
+could be either the previous fragment or the previous physical page when
+the offset is < 256 (e.g. if the fragment started at offset 0).
 
->  	} else {
->  		val =3D array->value +
->  			(u64)array->elem_size * (index & array->index_mask);
-> @@ -392,7 +392,7 @@ static long array_map_update_elem(struct bpf_map *map=
-, void *key, void *value,
->  			copy_map_value_locked(map, val, value, false);
->  		else
->  			copy_map_value(map, val, value);
-> -		bpf_obj_free_fields(array->map.record, val);
-> +		bpf_obj_cancel_fields(map, val);
->  	}
->  	return 0;
->  }
+When the skb is freed, the page pool fragment reference is dropped on
+either the wrong page or the wrong frag of the right page. In either
+case, the corrupted reference count can lead to the page being
+prematurely recycled while still in use. Once (incorrectly) recycled, it
+can be handed out again and on driver teardown this would result in a
+double free.
 
-[ ... ]
+The commit under fixes updated this code to handle the case where the
+native page size is >= 64k, but it unintentionally broke the head grow
+case.
 
-> @@ -432,14 +432,14 @@ int bpf_percpu_array_update(struct bpf_map *map, vo=
-id *key, void *value,
->  		cpu =3D map_flags >> 32;
->  		ptr =3D per_cpu_ptr(pptr, cpu);
->  		copy_map_value(map, ptr, value);
-> -		bpf_obj_free_fields(array->map.record, ptr);
-> +		bpf_obj_cancel_fields(map, ptr);
+To fix this, add an offset field to struct bnxt_sw_rx_bd, mirroring the
+existing offset field in struct bnxt_sw_rx_agg_bd. Populate it on
+allocation and preserve it on reuse.
 
-[Severity: High]
-Could this leak old BTF fields during a per-cpu array update?
+In bnxt_rx_multi_page_skb, use the newly added offset field to compute
+the fragment start and pass that to napi_build_skb. Adjust the layout
+with skb_reserve.
 
-Similar to the issue above, replacing bpf_obj_free_fields() with
-bpf_obj_cancel_fields() here in bpf_percpu_array_update() seems to
-bypass the full destruction of special fields when overwriting the
-old map value.
+There are two cases, the non-adjustment case and the adjustment case.
 
->  		goto unlock;
->  	}
->  	for_each_possible_cpu(cpu) {
->  		ptr =3D per_cpu_ptr(pptr, cpu);
->  		val =3D (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
->  		copy_map_value(map, ptr, val);
-> -		bpf_obj_free_fields(array->map.record, ptr);
-> +		bpf_obj_cancel_fields(map, ptr);
->  	}
->  unlock:
->  	rcu_read_unlock();
+In both cases, the skb is built at page_address(page) + offset to
+account for the case where the native page size >= 64K and skb_reserve
+is called with data_ptr - (page_address(page) + offset). That
+difference equals bp->rx_offset when data_ptr was not moved, or
+bp->rx_offset + xdp_adjust when XDP adjusted the head.
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
+Re-running the failing test with this commit applied causes the test to
+run successfully to completion.
 
-[ ... ]
+The other rx_skb_func implementations don't have this issue.
 
-> @@ -833,8 +837,8 @@ static int htab_lru_map_gen_lookup(struct bpf_map *ma=
-p,
->  	return insn - insn_buf;
->  }
-> =20
-> -static void check_and_free_fields(struct bpf_htab *htab,
-> -				  struct htab_elem *elem)
-> +static void check_and_cancel_fields(struct bpf_htab *htab,
-> +				    struct htab_elem *elem)
->  {
->  	if (IS_ERR_OR_NULL(htab->map.record))
->  		return;
-> @@ -844,11 +848,11 @@ static void check_and_free_fields(struct bpf_htab *=
-htab,
->  		int cpu;
-> =20
->  		for_each_possible_cpu(cpu)
-> -			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
-> +			bpf_obj_cancel_fields(&htab->map, per_cpu_ptr(pptr, cpu));
->  	} else {
->  		void *map_value =3D htab_elem_value(elem, htab->map.key_size);
-> =20
-> -		bpf_obj_free_fields(htab->map.record, map_value);
-> +		bpf_obj_cancel_fields(&htab->map, map_value);
+Fixes: f6974b4c2d8e ("bnxt_en: Fix page pool logic for page size >= 64K")
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ v2:
+   - Add offset to bnxt_sw_rx_bd, mirroring bnxt_sw_rx_agg_bd,
+     as suggested by Michael Chan, eliminating math and simplifying code
+     in bnxt_rx_multi_page_skb
+   - Re-ran the xdp.py test to confirm the crash is resolved.
 
-[Severity: High]
-Does this leave special fields partially initialized?
+ v1: https://lore.kernel.org/netdev/20260608203129.920104-1-joe@dama.to/
 
-By calling bpf_obj_cancel_fields() instead of bpf_obj_free_fields() in
-check_and_cancel_fields(), the map value is not fully zeroed and special
-fields are not fully released. This is required for operations reusing
-these elements across both delete and update paths.
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 10 ++++++++--
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h |  1 +
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
->  	}
->  }
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 35e1f8f663c7..12e73ffff6c3 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1011,6 +1011,7 @@ int bnxt_alloc_rx_data(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+ 		mapping += bp->rx_dma_offset;
+ 		rx_buf->data = page;
+ 		rx_buf->data_ptr = page_address(page) + offset + bp->rx_offset;
++		rx_buf->offset = offset;
+ 	} else {
+ 		u8 *data = __bnxt_alloc_rx_frag(bp, &mapping, rxr, gfp);
+ 
+@@ -1019,6 +1020,7 @@ int bnxt_alloc_rx_data(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+ 
+ 		rx_buf->data = data;
+ 		rx_buf->data_ptr = data + bp->rx_offset;
++		rx_buf->offset = 0;
+ 	}
+ 	rx_buf->mapping = mapping;
+ 
+@@ -1040,6 +1042,7 @@ void bnxt_reuse_rx_data(struct bnxt_rx_ring_info *rxr, u16 cons, void *data)
+ 	prod_rx_buf->data_ptr = cons_rx_buf->data_ptr;
+ 
+ 	prod_rx_buf->mapping = cons_rx_buf->mapping;
++	prod_rx_buf->offset = cons_rx_buf->offset;
+ 
+ 	prod_bd = &rxr->rx_desc_ring[RX_RING(bp, prod)][RX_IDX(prod)];
+ 	cons_bd = &rxr->rx_desc_ring[RX_RING(bp, cons)][RX_IDX(cons)];
+@@ -1175,8 +1178,11 @@ static struct sk_buff *bnxt_rx_multi_page_skb(struct bnxt *bp,
+ 	struct page *page = data;
+ 	u16 prod = rxr->rx_prod;
+ 	struct sk_buff *skb;
++	void *frag_start;
+ 	int err;
+ 
++	frag_start = page_address(page) + rxr->rx_buf_ring[cons].offset;
++
+ 	err = bnxt_alloc_rx_data(bp, rxr, prod, GFP_ATOMIC);
+ 	if (unlikely(err)) {
+ 		bnxt_reuse_rx_data(rxr, cons, data);
+@@ -1185,13 +1191,13 @@ static struct sk_buff *bnxt_rx_multi_page_skb(struct bnxt *bp,
+ 	dma_addr -= bp->rx_dma_offset;
+ 	dma_sync_single_for_cpu(&bp->pdev->dev, dma_addr, rxr->rx_page_size,
+ 				bp->rx_dir);
+-	skb = napi_build_skb(data_ptr - bp->rx_offset, rxr->rx_page_size);
++	skb = napi_build_skb(frag_start, rxr->rx_page_size);
+ 	if (!skb) {
+ 		page_pool_recycle_direct(rxr->page_pool, page);
+ 		return NULL;
+ 	}
+ 	skb_mark_for_recycle(skb);
+-	skb_reserve(skb, bp->rx_offset);
++	skb_reserve(skb, data_ptr - (u8 *)frag_start);
+ 	__skb_put(skb, len);
+ 
+ 	return skb;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+index 61c847b36b9f..a2e75cfb65ab 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+@@ -911,6 +911,7 @@ struct bnxt_sw_rx_bd {
+ 	void			*data;
+ 	u8			*data_ptr;
+ 	dma_addr_t		mapping;
++	unsigned int		offset;
+ };
+ 
+ struct bnxt_sw_rx_agg_bd {
 
-[ ... ]
+base-commit: 0aa05daef7848a5ac11158949dc73cd741995dc1
+-- 
+2.53.0-Meta
 
-> @@ -1252,11 +1256,11 @@ static long htab_map_update_elem(struct bpf_map *=
-map, void *key, void *value,
->  	if (l_old) {
->  		hlist_nulls_del_rcu(&l_old->hash_node);
-> =20
-> -		/* l_old has already been stashed in htab->extra_elems, free
-> -		 * its special fields before it is available for reuse.
-> +		/* l_old has already been stashed in htab->extra_elems, cancel
-> +		 * its reusable special fields before it is available for reuse.
->  		 */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style?
-
-The BPF guidelines strictly require that multi-line comments have the
-opening '/*' on its own line, with the comment text starting on the
-next line.
-
->  		if (htab_is_prealloc(htab))
-> -			check_and_free_fields(htab, l_old);
-> +			check_and_cancel_fields(htab, l_old);
-
-[Severity: High]
-Is it safe to reuse the old element without dropping its special fields?
-
-In htab_map_update_elem(), replacing check_and_free_fields() with
-check_and_cancel_fields() means that when the old element is pushed to the
-extra_elems or freelist, it may still hold onto kernel resources like
-kptrs or list heads.
-
->  	}
->  	htab_unlock_bucket(b, flags);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609202548.3571=
-690-1-memxor@gmail.com?part=3D2
