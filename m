@@ -1,288 +1,232 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-qt1-f227.google.com (mail-qt1-f227.google.com [209.85.160.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AA543E9C4
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781023414; cv=pass; b=o1jZ4FIVwVmcyHfCB2/k3Rq5cd/p1O0uEa+dGkRL9HlSO3QhQfy+rsbV+8es71Dh+DDGaykdRVFIShfiefaDuQxMV3DI/fv5tgS9poH0aSLz71DkO4NjwI2lnR0qA6Ktj3OxZcVdwMUpVtcyDHUVaCqHLcEtOqXq0piipN+1k5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781023414; c=relaxed/simple;
-	bh=ZeeXnTRW6gn8NEAsuf/mvUB03v1GIsbdVpbXeMyOpNY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871024963D6
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.227
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781023476; cv=none; b=QNgvpUxyOoFXYQQhuGU+bjJCET344nWyk2mEmUIbp+6s3h4uJR2JADLF4a2GknQZt0YNNuv/ZZI0Mq8ACpdm4yTz/aorjPydAsjK9RCUvUfg6h7lBjTs4Ju2A1eWEKtZUVSZDwEd9KO1UO8PkpKuqWtFJmfam3W6MvyRXNY2DiA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781023476; c=relaxed/simple;
+	bh=ixd1Z6hBx+cJ7EAaZtHFourF9R1z6l0MHDoD2rxUeRU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kysRpmd179CAHirH6aXVNN6u2FDEM2CiXp0jle8GFEycDP97Y7y6AsOiZ/0htySnVaPWPc3sVVpTQrhYJxR0njhmfBumcNBYYg+qwqJ6spllJr0x82HWA2zQXd2NXx4szwSOqpPELgtHRf4kKSFj20K8QwNZ4Czwxi0yMxOLok8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ic9PaNR+; arc=pass smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Content-Type; b=AUZtCMijHoB5/40J7X1DdSZGMDkFHZJipf+xih40thaE9s9p1NEQx+qdqU54sZE8mHUezCODBLCz/gCmgB40sDAbMJLcXKdUL7KigTQYgftVfnCFsRqUmd/RipJ8HdSo9pF082+7kLk1q+beCYAUWfDXjnuLYuYab4ac7U3d8CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Tr30c6N+; arc=none smtp.client-ip=209.85.160.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ic9PaNR+"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c0b9328c4aso40364665ad.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:43:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781023412; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YxrcDckQ+npGYiNLdAKFx4inVwQStCXJp0oa8vQ65L9woQqMrFCU40Tm8pZZFKCVW2
-         R6MI6tLihbr3ZDNGGQSX+WiWsGeruAgfEmy0HQyXoF7Th5SxOWGTllkGcGpBYM1m9p8g
-         jUpsCs4OYBm15FLbEI+fgLJDIJghaeWuRSRD9CSOYDGaT3IgHjsGF6jjquIuU76jjpez
-         AjXhBGgylrRCwaLnO37nSlqozU+axnsQPBGNiO2y/MJ4sGeIfQQSm7PJysbC5sXGnryU
-         hZ+vLKw+RSM+jI5EMEz5HWdFH8n2YfKje8mST2Q9PQ9y0Aej1jY2KEq2NWAsAJ94Np97
-         4fjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VAzcYQhG7oyOvuLy1RsuzIzorkNF93A1Ez0XAGpnftY=;
-        fh=gmwDEIPTZpVx9ZrNxYG131e1TTqW0Mw4vNPL4FBVcnI=;
-        b=fAFmjMlXPWjdRujt3Y0hvFF+UmD1/MC2Ol5LlmqClx1fHpFa9SNBbkOgLaCgy1v8SX
-         NDSGgHDpIs0NVMLYz3JkVsTeYD0DXb20VyuSjOElQ9iDlHUdlOGwPlU3iZCVV6smVm94
-         XCwv0aBmPbgqmF/voJrMM0RQ0B2whdKrGBhcelYX67oYYY6wq8cI+ZRpHy/MFcLkZ6Oi
-         aQjchL0hhzj4ZPODLXX1uShXfTeP94HaKPuFk3yglp1qQ/o9tp4FlU+HE7vV/CQDrsWy
-         OCzyGuq3OXed1o1OP5JRC8QqfuyMuKTMnDhxSCXTrbAaRANAfMsPMjRjdTF0bjRW21dF
-         qo8w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781023412; x=1781628212; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VAzcYQhG7oyOvuLy1RsuzIzorkNF93A1Ez0XAGpnftY=;
-        b=Ic9PaNR+U7yqLGPOmxMDz/3afyh9PMpmwcROoMGS0M/QgH2OvARkEve7vDutinIMTj
-         lHE+NZRWqp04YwTeEBtCr+Y6yDHKBCkvhD/u1HeMuaFSP7hg8mCGOQjAEa26EcKpfp3M
-         /5vQKTJ12EwKR94ffKdQatBACfsvwHr0lRygEVLJ88tFhzxSo4VviT24TnMaw/ScRxyO
-         820+jijX6hfIVQaFe12ULpej40bcFFcdlEjc2kXCvpx3omCVcFkIenqALMDGPDG6J8qw
-         diocl+pL2fhxAgqtOmQJzfde9DgnRLAwunlPlW9xeOl/akENBClsPmaXLnkJ2/4mNOSW
-         Qmog==
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Tr30c6N+"
+Received: by mail-qt1-f227.google.com with SMTP id d75a77b69052e-5177945a22eso39406921cf.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:44:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781023412; x=1781628212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VAzcYQhG7oyOvuLy1RsuzIzorkNF93A1Ez0XAGpnftY=;
-        b=eV+gKXq8XaqAtf/YjC60XOaJyf05w3zyZSRj6ZyX3t0HNuO/EBqiRFnKbNSFzwJVOa
-         N2LQIXxlOvXUaLKzbKNof+1RfBaV7+ButVkROaujNOjDJBJjxVLXIwuqnqgjjSbj00ej
-         J/rc3+kNqGiAL1Ejv6oYbgEK644R0gwpNup6oI9JGaaq6WwmESz4hwmbhGQpcj61z1k8
-         VPS0VQAlAavlQ2zovWgxq9LM40Kd5/VSuzWZBnH7Gwqgk549KgzvQzehh7MvLbRbt4GA
-         VoXbwXd8RlNx0xLPg57S6egi6idZNRlD8XtTd8GBUGxUU1FTG43n6/apEJ0hSF8Ph6ZM
-         lXQA==
-X-Forwarded-Encrypted: i=1; AFNElJ+rKF/NgO8y7hdxdUfcOA84BRykftfh0tj88E4fJp+pSRN/+LtvzbD8KdaOxmKXHmUAzO0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxaCNBo7iSXxYcbeDbMBCSS5oCFc/Ar+SM2g7wpDnuocY25hqF
-	+AVd/502KNHEPcUa5SMkTKsXVebCF5jImNK40mkL2dCaMonwY958zNm/FbdjyyVvfp7oIfU7dPa
-	46E5jh7kT2k6WNdYXYO8EaUh8Gfq9gG4=
-X-Gm-Gg: Acq92OH//fw7pctcnBlAkf25/IkjmUHx539TqfiQtTWKdJ4KEuOhm/BvwRj9fhenrij
-	Seuarh51Y5hQxxDSchGxseWwy0e/tI08Vj5OvsgsI1wn3aHMlq3ojNr71nWCqY+C7Df7VxWT2gL
-	ga0FFljIboAQbt+WnNRPlQwxBdYRzXrHxxDGRK+conGPvDZpB1B5BfhKLUN1znvrgUE7te1BohK
-	P9Zb7HD7Y6jPDK4OapioduGmdPksRpFAVq5W55fv2ORwjCZ++AyLNusq7wNZf3xoEw5fl9tpu7f
-	dyriGc29bOUTO4P3QKqkkb8cjte6lZzI5ta/ctVm9CZqAZql59W6Zy5Vo1NWylZamupmiePbzM5
-	h1Yp1lrvJR28t/Nk=
-X-Received: by 2002:a17:903:1acb:b0:2c0:ccdb:e02c with SMTP id
- d9443c01a7336-2c2a1baf93fmr49184375ad.7.1781023412021; Tue, 09 Jun 2026
- 09:43:32 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781023473; x=1781628273;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yss8mNIwMdHXUpUfSlftSouu2YXtp8o7BP95AIoPN7s=;
+        b=JnjzjgA6da7r51DmWkwRRo5DGBQdK3mn098OXDh3wj+urTJlTz0JxEkjBKm4ILSx7a
+         u/jpEoJBbOAG8z+7OgiR0xUgvRGHDLzYisyp7HVu2gos5lISzbj3JPVG+yuAhFXXt/2H
+         6Eeav0pr/6/kS4UFZ2OnNSEMtqFwuZcHrj8Ta7S4bXmKjLertcPyEXgn+r85dYpHj0lA
+         6MOXIyQdI273cKGo5YNLHR9KeCNuepI8iL+Cb6Jm9/HKr8xfREd4LZ9BWHajHPXqnt3G
+         FhY8dKmQPHFBQhOplcQqDlowSbwwDRjGKDs7WRA7QWmBUyRxQ3umnHKGIbEREkjqfqhm
+         ylEg==
+X-Forwarded-Encrypted: i=1; AFNElJ/3I5CkXgV2rhLcSgOCyt49c/rGK4Ufnwn42Jd1PUcSibhAfvTEX6/YXZnQ++hnQihURjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8TTVli+Klduv9/vAJqOn4pN0+LEmQ8KpGxQrALhQxON9BhNG2
+	UFv6MygUXjvpwomfBf5AeIzjChVh3eZWrYnV38liL3h+ra6+z/33OSrpPoLnAQEnc7nWsufSLC9
+	145UvUzaXi73blfwnOu6TiyS0tGVorCTydQdviaoegnNgSX4ZpbiDW64Meb+YgMgQ1dX0x8WpWo
+	wC8KJTOSOi70jssy+BxEcNclAsTqSgOHO0sYXSZ0/ucsCFkfGI8qRrXozOjuiabcAhfEU9g0sXT
+	/v/xKo=
+X-Gm-Gg: Acq92OE/3xv4mQUf2VULtbp++FEXlmopqv0ybSl+r7XHCAifdqKHAsHz+rhWOiq+4tf
+	DIHa+zNhMfBX12W0Ci9jWT6RsQgXNiOX2YQKeUlflnVUz6qBRre+BUTyXy9S0FSorH5mMbRC6qP
+	keTk7eCs5OMajdlHOFFgo/ZkM61Pm4gofVpnqac0M5o9o0Gyzgw9i8v/i6X3XXfeQ+GSL2N9Qdf
+	reTuDFKQzg9qv0O119PnMiErLW0H+8HK/L7PFaYJGSTjF49wkAAqfhZedqgVPmUGjWetGcdVIsf
+	QfQPI+hk+u4a+6trneEc/tF5fsD0FOn9/luEYIuoWKXk3OdJNCr/dYBMDfW+nRzG9B5npxmhs/F
+	ioSBIaBiECGXRj9cxsSB5A/vDftZGfhX31FIJl+KQ1pPWySGMK0tMFuGXL7hQTYYV7ortxWt6yf
+	9N9KE7Ynf142rGrYR5RMbGSTM8png/KT0gzk7xieJ6Y9pihJNdldlgUGRiqdQdtc+ouv4OJQ==
+X-Received: by 2002:a05:622a:53ca:b0:517:675f:3eff with SMTP id d75a77b69052e-51795a8772emr330441811cf.10.1781023473167;
+        Tue, 09 Jun 2026 09:44:33 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-118.dlp.protect.broadcom.com. [144.49.247.118])
+        by smtp-relay.gmail.com with ESMTPS id d75a77b69052e-51785ba0d68sm8248141cf.19.2026.06.09.09.44.32
+        for <bpf@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jun 2026 09:44:33 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-bec405b1c6fso13430366b.0
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1781023471; x=1781628271; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yss8mNIwMdHXUpUfSlftSouu2YXtp8o7BP95AIoPN7s=;
+        b=Tr30c6N+O9aQAZ6NBlO0Gf574qJjpe9N2DqIKKbftHGqwN4qOHePcsM67rwp2UneD7
+         JBmlFiFOtvGrojPRXMuWGE/Hfh6tkq9JxskfBSiCyukdnvQ4ir8MVoqUvxoZqnqdB0ee
+         j4JI0kKMgtkJNMffZ06aOx7/hVz/XjpE0GwdQ=
+X-Forwarded-Encrypted: i=1; AFNElJ/1yjFxHUsvM9j1ITVUZ/jgPHFArCEp+NuSdJoAUSGJXnWj4VLUVdIGcVIAvjvXJgfMWBM=@vger.kernel.org
+X-Received: by 2002:a17:907:7289:b0:bf3:230c:4c64 with SMTP id a640c23a62f3a-bf371f52a44mr1079916066b.16.1781023471401;
+        Tue, 09 Jun 2026 09:44:31 -0700 (PDT)
+X-Received: by 2002:a17:907:7289:b0:bf3:230c:4c64 with SMTP id
+ a640c23a62f3a-bf371f52a44mr1079914766b.16.1781023470912; Tue, 09 Jun 2026
+ 09:44:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260526205840.173790-1-jolsa@kernel.org> <20260526205840.173790-6-jolsa@kernel.org>
- <CAEf4BzZiFUeFa4fdghuSGpqiEzyvJVxs6TDgJd5U4hSj--imiQ@mail.gmail.com> <aif8jkUPst-tTskE@krava>
-In-Reply-To: <aif8jkUPst-tTskE@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 9 Jun 2026 09:43:15 -0700
-X-Gm-Features: AVVi8CcxU0GCPRZ75YMUdnjcLSr_MdbLTt88syLtDsUgv9esYUAaAZ68vqS0Nr0
-Message-ID: <CAEf4BzbsB-PRZRqkz37YK5wYNR=ajZv2N7tEznpZM0rdyYC_xA@mail.gmail.com>
-Subject: Re: [PATCHv4 05/13] uprobes/x86: Move optimized uprobe from nop5 to nop10
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20260608203129.920104-1-joe@dama.to> <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
+ <aigoUdgW/icfFwvh@devvm20253.cco0.facebook.com>
+In-Reply-To: <aigoUdgW/icfFwvh@devvm20253.cco0.facebook.com>
+From: Michael Chan <michael.chan@broadcom.com>
+Date: Tue, 9 Jun 2026 09:44:17 -0700
+X-Gm-Features: AVVi8CeQ9UVEZ-dALzREYPtL9CweYyN0C8yEBj5PELc00kfklbKPfYsK-FDK3Hs
+Message-ID: <CACKFLinzaJr8EjXx7yME5cKv9LR1+pF+2iY43V+GeYdEjbUo+Q@mail.gmail.com>
+Subject: Re: [PATCH net] bnxt: fix head underflow on XDP head-grow
+To: Joe Damato <joe@dama.to>, Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Somnath Kotur <somnath.kotur@broadcom.com>, 
+	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000006043920653d4d7c9"
+
+--0000000000006043920653d4d7c9
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 9, 2026 at 4:44=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
+On Tue, Jun 9, 2026 at 7:51=E2=80=AFAM Joe Damato <joe@dama.to> wrote:
 >
-> On Mon, Jun 08, 2026 at 01:46:39PM -0700, Andrii Nakryiko wrote:
-> > On Tue, May 26, 2026 at 1:59=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wr=
-ote:
+> On Mon, Jun 08, 2026 at 09:22:07PM -0700, Michael Chan wrote:
+> > On Mon, Jun 8, 2026 at 1:31=E2=80=AFPM Joe Damato <joe@dama.to> wrote:
 > > >
-> > > Andrii reported an issue with optimized uprobes [1] that can clobber
-> > > redzone area with call instruction storing return address on stack
-> > > where user code may keep temporary data without adjusting rsp.
-> > >
-> > > Fixing this by moving the optimized uprobes on top of 10-bytes nop
-> > > instruction, so we can squeeze another instruction to escape the
-> > > redzone area before doing the call, like:
-> > >
-> > >   lea -0x80(%rsp), %rsp
-> > >   call tramp
-> > >
-> > > Note the lea instruction is used to adjust the rsp register without
-> > > changing the flags.
-> > >
-> > > We use nop10 and following transformation to optimized instructions
-> > > above and back as suggested by Peterz [2].
-> > >
-> > > Optimize path (int3_update_optimize):
-> > >
-> > >   1) Initial state after set_swbp() installed the uprobe:
-> > >       cc 2e 0f 1f 84 00 00 00 00 00
-> > >
-> > >      From offset 0 this is INT3 followed by the tail of the original
-> > >      10-byte NOP.
-> > >
-> > >      After a previous unoptimization bytes 5..9 may still contain the
-> > >      old call instruction, which remains valid for threads already th=
-ere.
-> > >
-> > >   2) Rewrite the LEA tail and call displacement:
-> > >       cc [8d 64 24 80 e8 d0 d1 d2 d3]
-> > >
-> > >      From offset 0 this traps on the uprobe INT3.  Bytes 1..9 are not
-> > >      executable entry points while byte 0 is trapped.
-> > >
-> > >   3) Publish the first LEA byte:
-> > >       [48] 8d 64 24 80 e8 d0 d1 d2 d3
-> > >
-> > >      From offset 0 this is:
-> > >         lea -0x80(%rsp), %rsp
-> > >         call <uprobe-trampoline>
-> > >
-> > > Unoptimize path (int3_update_unoptimize):
-> > >
-> > >   1) Initial optimized state:
-> > >       48 8d 64 24 80 e8 d0 d1 d2 d3
-> > >      Same as 3) above.
-> > >
-> > >   2) Trap new entries before restoring the NOP bytes:
-> > >       [cc] 8d 64 24 80 e8 d0 d1 d2 d3
-> > >
-> > >      From offset 0 this traps. A thread that had already executed the
-> > >      LEA can still reach the intact CALL at offset 5.
-> > >
-> > >   3) Restore bytes 1..4 of the original NOP while keeping byte 0 trap=
-ped
-> > >      and byte 5 as CALL.
-> > >       cc [2e 0f 1f 84] e8 d0 d1 d2 d3
-> > >
-> > >      From offset 0 this still traps. Offset 5 is still the CALL for a=
-ny
-> > >      thread that was already past the first LEA byte.
-> > >
-> > >   4) Publish the first byte of the original NOP:
-> > >       [66] 2e 0f 1f 84 e8 d0 d1 d2 d3
-> > >
-> > >      From offset 0 this is the restored 10-byte NOP; the CALL opcode =
-and
-> > >      displacement are now only NOP operands.  Offset 5 still decodes =
-as
-> > >      CALL for a thread that was already there.
-> > >
-> > >      Tthere is only a single target uprobe-trampoline for the given n=
-op10
-> > >      instruction address, so the CALL instruction will not be changed=
- across
-> > >      unoptimization/optimization cycles.
-> > >      Therefore, any task that is preempted at the CALL instruction is=
- guaranteed
-> > >      to observe that CALL and not anything else.
-> > >
-> > > Note as explained in [2] we need to use following nop10:
-> > >        PF1   PF2   ESC   NOPL  MOD   SIB   DISP32
-> > > NOP10: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- =
-cs nopw 0x00000000(%rax,%rax,1)
-> > >
-> > > which means we need to allow 0x2e prefix which maps to INAT_PFX_CS
-> > > attribute in is_prefix_bad function.
-> > >
-> > > Also changing the uprobe syscall error when called out of uprobe
-> > > trampoline to -EPROTO, so we are able to detect the fixed kernel.
-> > >
-> > > The optimized uprobe performance stays the same:
-> > >
-> > >         uprobe-nop     :    3.129 =C2=B1 0.013M/s
-> > >         uprobe-push    :    3.045 =C2=B1 0.006M/s
-> > >         uprobe-ret     :    1.095 =C2=B1 0.004M/s
-> > >   -->   uprobe-nop10   :    7.170 =C2=B1 0.020M/s
-> > >         uretprobe-nop  :    2.143 =C2=B1 0.021M/s
-> > >         uretprobe-push :    2.090 =C2=B1 0.000M/s
-> > >         uretprobe-ret  :    0.942 =C2=B1 0.000M/s
-> > >   -->   uretprobe-nop10:    3.381 =C2=B1 0.003M/s
-> > >         usdt-nop       :    3.245 =C2=B1 0.004M/s
-> > >   -->   usdt-nop10     :    7.256 =C2=B1 0.023M/s
-> > >
-> > > [1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel=
-.org/
-> > > [2] https://lore.kernel.org/bpf/20260518104306.GU3102624@noisy.progra=
-mming.kicks-ass.net/#t
-> > > Reported-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Closes: https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@ke=
-rnel.org/
-> > > Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> > > Assisted-by: Codex:GPT-5.5
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  arch/x86/kernel/uprobes.c | 255 ++++++++++++++++++++++++++++--------=
---
-> > >  1 file changed, 190 insertions(+), 65 deletions(-)
-> > >
+> > > To fix this, we need to do a bit of math to recover the offset if thi=
+s
+> > > is a page fragment since it is not passed into rx_skb_func
+> > > (bnxt_rx_multi_page_skb, in this case).
 > >
-> > [...]
-> >
-> > > @@ -943,13 +1026,31 @@ static int int3_update(struct arch_uprobe *aup=
-robe, struct vm_area_struct *vma,
-> > >         smp_text_poke_sync_each_cpu();
-> > >
-> > >         /*
-> > > -        * Write first byte.
-> > > +        * 3) Restore bytes 1..4 of the original NOP while keeping by=
-te 0 trapped
-> > > +        *    and byte 5 as CALL:
-> > > +        *    cc [2e 0f 1f 84] e8 d0 d1 d2 d3
-> > > +        */
-> > > +       ctx.expect =3D EXPECT_SWBP_OPTIMIZED;
-> > > +       err =3D uprobe_write(auprobe, vma, vaddr + 1, insn + 1,
-> > > +                          LEA_INSN_SIZE - 1, verify_insn,
-> > > +                          true /* is_register */, false /* do_update=
-_ref_ctr */,
-> >
-> > tbh, it's quite subtle and non-obvious why is_register should be set
-> > to true first two times (and especially that is_register and
-> > do_update_ref_ctr are implicitly connected), not sure how to make it
-> > cleaner, but maybe leave a short comment explaining this twice
-> > register, once unregister sequence?
+> > I wonder if we should add an offset field to struct bnxt_sw_rx_bd to
+> > simplify things for page mode.  Struct bnxt_sw_rx_agg_bd has the
+> > offset field for a similar purpose.  Thanks.
 >
-> ok, I came up with comment below
+> I don't mind doing that, but I wonder if that's better material for net-n=
+ext?
 >
-> thanks,
-> jirka
+> In other words, we get the minimal fix in (this patch?) and then do the
+> cleanup and struct tweaking as a follow-up in net-next?
 >
->
-> ---
-> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> index de544516ea70..92449f34c005 100644
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -1011,6 +1011,12 @@ static int int3_update_unoptimize(struct arch_upro=
-be *auprobe, struct vm_area_st
->         int err;
->
->         /*
-> +        * Note the first two uprobe_write calls use is_register=3Dtrue, =
-because they
-> +        * are intermediate patching states while the probe is still acti=
-ve.
+> I could definitely be wrong; I had just assumed patches for net were supp=
+osed
+> to be as minimal as possible.
 
-this doesn't really explain why is_register=3Dtrue is the right one. It
-actually doesn't matter as long as do_update_ref_ctr=3Dtrue, isn't that
-right? So maybe just to avoid a bit of confusion let's pass
-is_register=3Dfalse and do_update_ref_ctr=3Dfalse, and in the comment
-explain as you said that it's intermediate update and we don't want to
-update refctr just yet until the very last step?
+I think some minor refactoring/struct changes to make the fix
+cleaner/simpler should be fine for -net.  I think the total number of
+line changes should be about the same either way.
 
-> +        *
-> +        * The last uprobe_write to nop10 instruction is called with is_r=
-egister=3Dfalse
-> +        * and do_update_ref_ctr=3Dtrue to trigger the refctr update.
-> +        *
->          * 1) Initial optimized state:
->          *    48 8d 64 24 80 e8 d0 d1 d2 d3
->          *
+--0000000000006043920653d4d7c9
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+DPVtLUtep/P3evQuAtTQRaKedjamBcUpJ7qUhBuv/Z07LlLIlB/vfNSPWe1V+njTezc8m3VfvNEC
+qEpXasPSfDgfcuUhcPR+7++oUDaTt9iqGFOjwiURxx08pL6ogSuiT41O4Xu7msabnUE6RY0O0xR5
+5UGwbpC1QSmnBq7TAy8oQg/nNw4vowEh3S2lmjdHCOdR270Ygd7jet8WQKa5ia4ZK4QdkS8+5uLt
+rMMRyM3QurndiZZJBipjPvEWJR/+jod8867f3n0CAwEAAaOCAd0wggHZMA4GA1UdDwEB/wQEAwIF
+oDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3Nl
+Y3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEF
+BQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1Ud
+IAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIB
+FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAy
+hjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBQAKTaeXHq6D68tUC3boCOFGLCgkjAdBgNVHQ4EFgQUJbO/Fi7RhZHYmATVQf6NlAH2
+qUcwDQYJKoZIhvcNAQELBQADggIBABcLQEF8mPE9o6GHJd52vmHFsKsf8vRmdMEouFxrW+GhXXzg
+2/AqqhXeeFZki82D6/5VAPkeVcgDeGZ43Bv89GHnjh/Vv0iCUGHgClZezpWdKCAXkn698xoh1+Wx
+K/c/SHMqGWfBSVm1ygKAWkmzJLF/rd4vUE0pjvZVBpNSVkjXgc80dTZcs7OvoFnt14UgvjuYe+Ia
+H/ux6819kbi0Tmmj5LwSZW8GXw3zcPmAyEYc0ZDCZk9QckL5yPzMlTAsy0Q+NMVpJ8onLj/mHgTk
+Ev8zt1OUE8MlXZj2+wgVY+az2T8rGmqRU2iOzRlJnc86qVwuwjL9AA9v4R13Yt8zYyA7jL0NiBNP
+WaOSajKBB5Z/4ZVtcvOMILD1+G+CVZX7GUWERT9NRXw/SyIEMU59lFbuvy4zxe3+RbOleCgp3pze
+q8HE2p9rkOJT3MkCNLxe+ij4RytIvPQXACsZeLdfTDUnjeXCDDJ9KugVhuqMelAZc4NissPz8FOn
+2NK++r5/QamlFqYRhsFxSBIvhkh2Q/hD3/zy4j17Yf/FUje5uyg03FblSBOk2WYpRpXEuCpyn5pb
+bYVIzfhQJgwGfO+L8BAeZIFjO1QL3s/zzn+RBlTl4wdDzh8L9eS+QEDhMcSsqb4fFRDbsoVuRjpx
+R5MunSUzk4GcmmM19m7oHhPGeKwIMYICVzCCAlMCAQEwYjBSMQswCQYDVQQGEwJCRTEZMBcGA1UE
+ChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBHQ0MgUjYgU01JTUUgQ0Eg
+MjAyMwIMZh03KTi4m/vsqWZxMA0GCWCGSAFlAwQCAQUAoIHHMC8GCSqGSIb3DQEJBDEiBCCTi2ax
+4G4tomwKZbBDoDUw6NAJqu4+zYMEf2l9v3GgcTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
+CSqGSIb3DQEJBTEPFw0yNjA2MDkxNjQ0MzFaMFwGCSqGSIb3DQEJDzFPME0wCwYJYIZIAWUDBAEq
+MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEHMAsGCWCG
+SAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAqK4Jz6PzxHLSwRcEvgA9tuQgf/+Lmo7t9lh5q8yq9
+bdTdHBZ4XWADI8qE3SBkpkpwuLkNfaRF9rMqw7Sqsaz4Dj6zOZlEJyJJuZYvD+mevYI9aREinX3+
+nIJwcGqQiYJZScZNCiKj7FhohLLWQw/oGzdQU0nCSgXlZJUXX82pbuxM/HQ1Ixtw9LkUuo3KA2Bf
+dBCkiYRYdx/REdVud95w0XDVav0Ai/A8SYpFiej0ESde2sFA8mk1LI7zQU0hF5BBUap8OhD5Eosj
+AlT6vCtJJddrWOSjikW8mPqWwi15W+I8LOiMeuNip1mrVdqHO1vP6/Pomp5rhaSMJtpzJlAx
+--0000000000006043920653d4d7c9--
