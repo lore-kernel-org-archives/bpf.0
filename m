@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C9D364E9E
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 05:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCCF1B4156
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 05:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780982300; cv=none; b=nGu4zX6E2VXmRjHeJiVYiK/pG4wuEtWDyAt/M1Najfsxcd3RU65a4BidUXjDcAfe26A1c/Vxj2yBFzijhknKAMyZrApa1uskwyiK/Fof6Godw+LxgyaVpfD/wCxdvCGWWGlwzdR7BTPnBk3+ZLZ6e2xLWz/l5wq+9aJ7BjgpWDk=
+	t=1780982302; cv=none; b=tvDP2zY+HThSfaDTwNHwwosa0yGyaPx01ja5iVccvuDuo+gR9om+ljgLncWPhTvZoj7KkXS+RRCajOuuWArj7it5byMe93pTljA996Y7kZtFAw1OSNelsMSeFhHN31IdffUDBZ81SJW3SwI4y7pIPKoFQ/lL8f/0WZukZM64KR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780982300; c=relaxed/simple;
-	bh=CPAJiqP85MtVfxcVBaEaPWgup7ptDFM4XkRTGGxiA4A=;
+	s=arc-20240116; t=1780982302; c=relaxed/simple;
+	bh=AULg6TS9zdVYAzc0iEIaIlPZ4bBNNUvjdY5hipajSlY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=MECb2vVIucSh+ge8mJEJvHZEkLo6qjiD37fP4fgOeEOpWn5MSv+laLhRphfIfi4TbHnvCHycLGMQ5UauHjsJO2/Bs1pEaJ4nmWi0/g1dRg3/yHVB0/ZYYNsqIPm5BvI8+N7U+fz+3WN88BWDyhRPehzFn5IVbFLw9BlIUYrZkg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b3ytXVdX; arc=none smtp.client-ip=74.125.82.202
+	 To:Content-Type; b=nwIvr3Ub5Qj4pA4xyZCqZjY2j7mk1ZKbVxzuzQi7sChzumovF+8l6AM6VIO6+ehscDzDbZu2IZlCuaf1jRzATpMZu8Cc04saOofNbPVI1fxfsds6kpcP5RNA/8eyfTM1eJikC7GdZ8uJ0tK1LxqhReJ0GQOUDFgAOwDW3X1BNKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pGljWcFd; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b3ytXVdX"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-304b8d0ee63so7199457eec.0
-        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 22:18:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pGljWcFd"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-304f1820babso6397445eec.1
+        for <bpf@vger.kernel.org>; Mon, 08 Jun 2026 22:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780982297; x=1781587097; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1780982299; x=1781587099; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/nQ6SihkTIAHNVuQde+l6sb21AGloI7WP9qqXJPRNAs=;
-        b=b3ytXVdXwCZlXmw4mWz+V6Z7xY1sC0pcEhqXxcv0iWfV9uC5RHca5Teg/cEqdpt4gW
-         KbXaVkxA6hQFYAU8qXTc0VIFHJYne4A8FxDg6eZlhPnFsZMeaiwyH/yMdgovo1f+4I8i
-         C+t+L6H7ivPM0q5TDYdjXyOVHiEXVnUcctEtQEO21u/NBHkBy/i+j3PfldRHbrSpfxP4
-         GQGjV2/2ujqmJXmtRaEbJ3s2lRfqxpFaTBL9uDrpw3tQo5l9r4KB+KnMqT6WIxZ8Qm/t
-         LVZ8n8KmiA3lc0AOlo3knnV5xbgCT1uWaIuB+VK+5ShlsAa62AU1DOOfACATS6SrJDVE
-         IG8Q==
+        bh=0dcjYmV9oSCkLLYv23l2rswMcx+M5a96riI5dhneKmU=;
+        b=pGljWcFdWzeJ9jGem+R150+gALjZqWQixpT0VYzI/+dLLDBZy8emUclpPUU9S9AWju
+         8hXilTz/d6Cd2rlVpTu0WgxC0fI0uJ7+oj5bg+vXQCiAVxi6qCQ3y5pvnCr6BvGU0Jxy
+         xuPKVDu38C3nRW7nZQOL/CUs13Gp+4S841RHP7lkI3OD8T4CNbaNxZRYYjwvyCXCSPww
+         xM4BaO+hIGXINyEENPTs79Ekb/3hPfmAwHXulP2T0snEk8NAHOttYg0RY5fMMy1a3z+o
+         5j2zdqdyLdPFnOISE4RVYzPCUyNb8IwKsToJhrVjOxAcsXB3Z+0cfSa6qP2/6iZUBJmr
+         8akQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780982297; x=1781587097;
+        d=1e100.net; s=20251104; t=1780982299; x=1781587099;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/nQ6SihkTIAHNVuQde+l6sb21AGloI7WP9qqXJPRNAs=;
-        b=SSwOmzQhij7f2xROQcDhakYat7uI2oxLRROWTnI89b4MSuJALq4syn+fivhWWxRHNH
-         0Ei4IoRaLgVHQCDs9rfUwTcQ8py6D9dARws/sadCqL6l8DjpifGkL1R7X7Na/BiXUwqq
-         Krz+KRPE6QGM+9PXn/byGQWYKp7DH0jwXFjS9Y186dQOI4ZHyDOmWKkEwezp4Q4pyPxx
-         Z0WyqrRXid6U0gFm3hCbgJPbqkz5fA1QKvpoyCXn+5ow9ssVXeBkVv7Xq8jMr0aT2Hs8
-         frVyitRItLsy3aSMkYIcoujMQNb3S68DuK5d78C/8g81xK0YVbeJe3GIUH5zIy9Ny3wI
-         mtNA==
-X-Forwarded-Encrypted: i=1; AFNElJ/rmRchgNG45EcCkHSlf7yfawklyGWU3KbzBsjg8WPUCuIaHfDVw62pnEXfxk2TLnc1LM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUzC92XwThhwBkcUkIoXZUQpwJtOm7XJoaiQGUbcKfdulyNb70
-	Qmb2U6AV663nQUpbDrujdblaQA0YyIfyFQeKc4no65FK06cWFOcdqkieSOWUBzqawuYucgE1YJ7
-	OaMPYc4r7fw==
-X-Received: from dycmg19.prod.google.com ([2002:a05:693c:2513:b0:303:93ec:5fc5])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:2288:b0:304:df8b:71ee
- with SMTP id 5a478bee46e88-3077af31664mr10178479eec.7.1780982296904; Mon, 08
- Jun 2026 22:18:16 -0700 (PDT)
-Date: Mon,  8 Jun 2026 22:17:56 -0700
+        bh=0dcjYmV9oSCkLLYv23l2rswMcx+M5a96riI5dhneKmU=;
+        b=nHjfXpiTRXJc5P4X0Zw0TrCFXJAKSJmpaGtusR5H33BD4lOLJTNo9Ko3SyIehAxT+t
+         bBJavmz/+o59XFTCERlRDe02I8VDz5/969frAoNDZNBlThMBaMy09DkFceH5AZHqZrHN
+         p6cZSxFnLqQRQrfh8ZlOzvGUXXYD+frZgZK4RzoCTxoUUV/J/Z2DIESJgxsRn9wl2jFj
+         /0Yw/DkO6eo1hvRK1F3D8mt0JM/PJ3XZy/fscFpXuNOKWENrgUNXzPTRRFzqLb73+mbS
+         uRRohahUrQ4JNtdn++hlGN2OPym47hAovKwVkYNbkJGSj3k7GF9+XM3cZqoBjFThIgN7
+         Of5A==
+X-Forwarded-Encrypted: i=1; AFNElJ8ITT+bf/Fa8/KiV5LYhEPbneguyVVaO5YHhbuJb10ABP62cKJ3sCSz3DSXBKOZ5DLn4uI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMY1Nv30kCZopNsY4ddb/BCMia0ubBMSyhoc77jJ22ixBhqEqk
+	Cy5G7PgulSznL9Jx6tbzdBvlsr2uY5l346carVLZwbp5dUNlECg3hpGFVjPkYr/f9XmG94qphd8
+	/YaNj59KlWQ==
+X-Received: from dyclx3.prod.google.com ([2002:a05:693c:2183:b0:303:f2fa:386c])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:419e:b0:137:4061:8cc2
+ with SMTP id a92af1059eb24-1380670e1f3mr8837301c88.35.1780982299033; Mon, 08
+ Jun 2026 22:18:19 -0700 (PDT)
+Date: Mon,  8 Jun 2026 22:17:57 -0700
 In-Reply-To: <20260609051759.405027-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260609051759.405027-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.1064.gd145956f57-goog
-Message-ID: <20260609051759.405027-5-irogers@google.com>
-Subject: [PATCH v1 4/7] perf annotate: Add --disassembler command-line option
+Message-ID: <20260609051759.405027-6-irogers@google.com>
+Subject: [PATCH v1 5/7] perf test: Enhance annotate test coverage and isolate config
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -74,52 +74,102 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add the --disassembler command-line option to perf annotate. This
-allows users to explicitly request or override the disassembler
-preferences (e.g. --disassembler libasm) directly on the command
-line.
+Update the annotate.sh shell test to test different disassembler
+backends (objdump, llvm, capstone, libasm) utilizing the new
+--disassembler command-line option.
+Isolate the test script from host environment pollution by exporting
+PERF_CONFIG=/dev/null at the start of the script, ensuring it runs
+hermetically.
 
 Assisted-by: Antigravity:Google Gemini 3.5-flash
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/perf/tests/shell/annotate.sh | 56 ++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 8a0eb30eac24..57a88adfb130 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -699,6 +699,7 @@ int cmd_annotate(int argc, const char **argv)
- 		.set = 0,
- 	};
- 	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
-+	const char *disassemblers_str = NULL;
- 	struct option options[] = {
- 	OPT_STRING('i', "input", &input_name, "file",
- 		    "input file name"),
-@@ -782,6 +783,8 @@ int cmd_annotate(int argc, const char **argv)
- 		    "Do not display empty (or dummy) events in the output"),
- 	OPT_BOOLEAN(0, "code-with-type", &annotate_opts.code_with_type,
- 		    "Show data type info in code annotation (memory instructions only)"),
-+	OPT_STRING(0, "disassembler", &disassemblers_str, "names",
-+		   "comma separated list of disassemblers to use"),
- 	OPT_END()
- 	};
- 	int ret;
-@@ -825,6 +828,13 @@ int cmd_annotate(int argc, const char **argv)
- 			return -ENOMEM;
- 	}
+diff --git a/tools/perf/tests/shell/annotate.sh b/tools/perf/tests/shell/annotate.sh
+index 689de58e9238..d3bafa7e3db5 100755
+--- a/tools/perf/tests/shell/annotate.sh
++++ b/tools/perf/tests/shell/annotate.sh
+@@ -4,6 +4,8 @@
  
-+	if (disassemblers_str) {
-+		memset(annotate_opts.disassemblers, 0, sizeof(annotate_opts.disassemblers));
-+		ret = annotation_options__add_disassemblers_str(&annotate_opts, disassemblers_str);
-+		if (ret)
-+			return -EINVAL;
-+	}
+ set -e
+ 
++export PERF_CONFIG=/dev/null
 +
- 	if (annotate_check_args() < 0)
- 		return -EINVAL;
+ shelldir=$(dirname "$0")
  
+ # shellcheck source=lib/perf_has_symbol.sh
+@@ -23,6 +25,7 @@ disasm_regex="[0-9]*\.[0-9]* *: *\w*: *\w*"
+ cleanup() {
+   rm -rf "${perfdata}" "${perfout}"
+   rm -rf "${perfdata}".old
++  rm -f /tmp/__perf_test.config.*
+ 
+   trap - EXIT TERM INT
+ }
+@@ -106,8 +109,61 @@ test_basic() {
+   echo "${mode} annotate test [Success]"
+ }
+ 
++test_disassembler() {
++  disassembler=$1
++  feature=$2
++
++  if [ -n "${feature}" ]
++  then
++    if ! perf check feature "${feature}" > /dev/null 2>&1
++    then
++      echo "Skip test for ${disassembler} (feature ${feature} not supported)"
++      return 0
++    fi
++  fi
++
++  echo "Test annotate with disassembler: ${disassembler}"
++
++  perf annotate --no-demangle -i "${perfdata}" --stdio --percent-limit 10 --disassembler "${disassembler}" 2> /dev/null > "${perfout}"
++  ret=$?
++
++  if [ "x${ret}" != "x0" ]
++  then
++    echo "annotate with ${disassembler} [Failed: perf annotate error]"
++    err=1
++    return 1
++  fi
++
++  # check if it has the target symbol
++  if ! grep -q "${testsym}" "${perfout}"
++  then
++    echo "annotate with ${disassembler} [Failed: missing target symbol]"
++    err=1
++    return 1
++  fi
++
++  # check if it has the disassembly lines
++  if ! grep -q "${disasm_regex}" "${perfout}"
++  then
++    echo "annotate with ${disassembler} [Failed: missing disasm output]"
++    err=1
++    return 1
++  fi
++
++  echo "annotate with ${disassembler} [Success]"
++  return 0
++}
++
+ test_basic Basic
+ test_basic Pipe
+ 
++if [ "${err}" -eq 0 ]
++then
++  test_disassembler "objdump" ""
++  test_disassembler "llvm" "libLLVM"
++  test_disassembler "capstone" "libcapstone"
++  test_disassembler "libasm" "libasm"
++fi
++
+ cleanup
+ exit $err
 -- 
 2.54.0.1064.gd145956f57-goog
 
