@@ -1,64 +1,63 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1216340D57C
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 21:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12CA40D57C
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 21:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781041750; cv=none; b=d0MT349X+C5Z0hmhTsJBjWvemZM3J6hUU2QCMs+hsb2AT3BqPs3c+vWYxrZksvuXIeT2+Io+UNAsFTOM9W/aMBGHv7tGUO/Qm9B7mh8HZsCrji7Av8ulx8Vh9qiSMnVfUJKxtMxm01IetyMQlrEhupJvO0H6O+CPx9m4ktv58jI=
+	t=1781041796; cv=none; b=SfJzH2RmFexehYSDcqJ+Gcnw1CpgkeWLRV4krPnkZNsFzrcInsSw8+3LyftT4nV5JllC/VddeSQEeeq9jVIehqt4L5i2cIFs+//Xu34qjPSmAZayW/NwFfgNnfu1irGKhcEiHHglepDufh6eJ/gKY5021J8BU7VmiSMCA2d5Qi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781041750; c=relaxed/simple;
-	bh=7+nDeECa0mrwxUoPNMsskC8Qd7CFRkaGciXDK0p174w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=G2k0aKeh6+nSNKj5eg/TYFC42shOBhPV/2u1oYM1fwW+SNDPgyycLq+kxE2IOCj/PwN1DEYwbH2SRCOBxJcpk1S+SOHnN2kaVkysVsvezJd+j/zRhUITvanZSQP+0HALUZHFDeTl3Gzj63GRkkupKS9vqs/EiEPdeFaQkgE+X+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qDbDzli9; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781041796; c=relaxed/simple;
+	bh=rjQq9J4Z9IRuW6j1KbXmx1VYe6G0FqjI1V/g5qaCbdk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Z0wu8esj21AQrM+0ggxXiGtiatp85i6yPqAZ5FeWMXMB048TV9xwCMFpOvAGBZkOA1NDpF1D2ziffy0CdctvULNoZE9ouUc7m+tB03voiVz6l2MGpwesYzg2ZVj3wFKxFjbuRph0Lc77LYbvgCGGcjWFNC2a2zH8vJ/ns9y03ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=rEuvGabl; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qDbDzli9"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-4864a5c83f1so3864729b6e.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 14:49:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="rEuvGabl"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-3075ce9c05aso429862eec.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 14:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781041748; x=1781646548; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781041792; x=1781646592; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7o/nRCgBurIHM9VuiCk+6PysoIU/3yVOZLoqzr7QXjE=;
-        b=qDbDzli9PtGmuXAioUbObTdRvQz7g7GqlofEK3ZbIp6I8/ABKChbkmwyFb8N2BL0DO
-         FL1pdTSGZBLK6dXD8DHCPZkQQz1YzRRJSwnbLYzbQUvcTdy1VE56JQMYkNRJ4UCvDwrL
-         Ml4RqH5ZrSoLO41Wni6WJGohrbBc/9r69OlYp3ELNTjRLFp2OV4tFMckol2/oa2+J353
-         PY02yGksJ73y0teRRl1XcZHA6OIMNFZ/137ngLJm2oR94O4Bq4BS+7dxRKP9EV9MOEO7
-         /yQvCHF8fgGJwnBcUzbNVn2FPMa8juEkWgGCNK+9nSWm3ljSXVzuCJvYscY2gunkE4yT
-         B9dA==
+        bh=Ykgrngf0RMYTi2ZIUhUxKrQbnkWLDpe8Dsbbr92vEWs=;
+        b=rEuvGableTN1j7VEB1AB0BZ4OXfxYmAQX3wbSU3Lo8JKTVPX3wZKiBIJ5QiFf22MIr
+         w/CZcN/lg3W6o5wO02g4bBjVIIXIUDrPJtidmp3CxZzPI/U83f9u05HfqJTXbObTu3SS
+         OpMUL2S2gXVsmaCaGELM/ARCF9XGq4I28Hp5ZR33TXtFFfPlCvC0eSZAY8kBwtxVpClK
+         O5wucq3uBg/EKn+Izp+XG1C8ktIdZJLBayb8CSX9HUsDBesRkDAdNxjbwt8thiAcNF/d
+         k5ThCRY5AaM2skr682Ruk3NYo0QEQx3SSy24ck7c0d8rMYszOVa5DWM0eXoA44syX40/
+         HoaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781041748; x=1781646548;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1781041792; x=1781646592;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7o/nRCgBurIHM9VuiCk+6PysoIU/3yVOZLoqzr7QXjE=;
-        b=PfdyWXsxEd/5hoXoWR1QlYMJjuy31D12jgTtbqThMjKrYBXFl4yQ2GlHfHF+uayRyo
-         Kss3N5ALa5ismp3spxliaOKZsdvqopSSedbqUHQRDdK1uBOZzZA8U9rH3kSa4N/2W4QI
-         5UR050IAbrTU3TBWu5gxXJ8AnqSt2sSjwbdykqLXx83cY8PucjVmOmvNekfOHRUkje1F
-         2uI8VlnHNEIVa/BtRKgBtrdU3pCsFUH5wAc1c3yDnUCXbljqRJpVjInOagktXY7DksvF
-         O7nyPSM3bkMFaWQtMhjXGDlbBR2LT+ryrwNgC3YwKqU3ZMmcyLng1FM87WipGB9Kwjsp
-         UtPA==
-X-Forwarded-Encrypted: i=1; AFNElJ+k3xQq/C2+9aGSZJgN14jg/DJVWctZAK7DuGCImlfA5ip2rjibGXOXA3OpmbZqBBb1O60=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbAGYyNtavTJinv+TcXjA/Nc7ffdCsglk4mkmUWnnKWaNL0XZo
-	1QxIShYHDOPxXolnWyScK7TKo7rqWKo+LWJM3oGjqe/eXBEIJBqkBxTF
-X-Gm-Gg: Acq92OH3jo1bOiDr1E+/u4H8gEE54H7VQttqXBeFe4i1jaUN8C9TZomC9WhlPK0ot3o
-	pAYPn55b9hlEPIDAvtRrQ5ApEkPb2DEOLPoN3CgCXCj6f/tpK8rvrsQb+9deukrfOISmTXa2g8b
-	UgbxwDD2nrz1muOZJoIDckp4OSHyf2te4mrb7aL+adLMc6eX17dd/9hBoUfvkbYRr1sZsd3aiaX
-	O12sqq4viUJgTsFjzAE3YwhRSfGG3BlrfRHNSHjtULdr5UImQoXVHs594NBtN3J9FYgfZG/CG7s
-	IjRjwH3eRSgWlKGe7JEPV4CaQoGcoBd5q9/WrtvgpSrdwtIVLpNDpiOoE5v6kj1Fsky2gaTVO+u
-	XnvZbcF8TQ1/JHS3NlNSlRGX7RNEjPRI+n+Ls2mz/R2Z8nU3mDepeM+nw7SJXQuw4K/fb75jaTZ
-	ZnkeHST9TCGd64Io0/AuWvqaiojDSZ09WLaTt4pc38NAVIT2aE7V2vonwAL8f42sGM9zPJ5MzZ9
-	xgAIxyGpKPGddZoAvlPoPvPCXL4
-X-Received: by 2002:a05:6808:e8d9:20b0:486:a5e9:c320 with SMTP id 5614622812f47-486a5e9c39dmr7889376b6e.29.1781041747936;
-        Tue, 09 Jun 2026 14:49:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:51::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b745773sm17882030b6e.6.2026.06.09.14.49.05
+        bh=Ykgrngf0RMYTi2ZIUhUxKrQbnkWLDpe8Dsbbr92vEWs=;
+        b=pL+1fTmi+DYeWO3TAH0PGC3Knzd9ccS9/uJXzycAjTrMYlDgK4djmIYE17q//Da6Zw
+         SwuldbFicPovpG2djs4DPWzP6TdCClYuXPhQwKYXclBCU5KcW9gpF+xbtkzjAPhsotLC
+         OG2aJcoPaqa1D3cK4LDBgO/sxwgKhUnKLstjnUkzhLjPMvyC/wUwnrXq2yJQ85RjQQXW
+         zIcn3dQkS7rocc/dBtfdRadCSQVCyV0ndxdcG3s5g+FNNfx/TfWDTCXci7ttpMnRwk9q
+         qh/XjGpGv/mHtOLLdXAjeqylUFm9eeTiJdEjLW7JKtR41WMAs/gdYoE07TSTW9dWgm3v
+         Wz9w==
+X-Gm-Message-State: AOJu0Yx13RrLNjurCS233LD90sRgA8S1KmEEN3txF7LI1l3FCjI7Awpv
+	s58HnkGQxY06CpVm+44HmJR8XZEH4DlCAfKnurzs5wVY+eEpoJgnza58fnJ2EZxCjkiPx4njNc2
+	BsT5J4Nq+eQ==
+X-Gm-Gg: Acq92OGBprLXytGqPvjy8P3DdaxsSLpAn/x6YwB2lxmFMfG1rybpyqvsPawySauIV1E
+	MxTXqQ4Uh64TO7EEgLlVY+KVLx0+moESSRHVIPgQW5ZD/WIYmLJHE2yhfwEMnLUYPWt/zeeA5O6
+	DqDaojTgdUNxq8pcPgpvsjG0HVNkPI5Q+ABrYXyR1fcte7AJz+UZtTUEXhVDsd2dx2kNs6G6QfQ
+	nEvRYtgqJejf7+BHwmq2UF8lD2LSg0L+UhqR78MLR5rI2pCD9Ax7TRSm5aRSOk1nAjWRTrTfUYc
+	ORiL1rkzGg5ar0L0xJas3MqhxzFMBYEstkHmn8/5BzlDpgauzid29+xQoNRcFHMAlggmpsD1BWx
+	XSUS1bNhHo31x4zOcrP7O2DUmAJbjRwRIGQm9FRuRZPZcLScl2KsAMgIAEYaNy+fd6fr/0B4KVq
+	noRxEWJApLpb3aC/0=
+X-Received: by 2002:a05:7301:2923:b0:2ed:e12:3773 with SMTP id 5a478bee46e88-3077b38a42fmr14652456eec.35.1781041791712;
+        Tue, 09 Jun 2026 14:49:51 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::3297])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df9bbd4sm20804510eec.30.2026.06.09.14.49.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 14:49:06 -0700 (PDT)
+        Tue, 09 Jun 2026 14:49:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,55 +66,129 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 14:49:04 -0700
-Message-Id: <DJ4ULU6H2NYA.24B49ESUI6RNP@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- <kernel-team@fb.com>, "Martin KaFai Lau" <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
- tailcall subprogs with maps
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260609163947.1717694-1-yonghong.song@linux.dev>
- <20260609163952.1718472-1-yonghong.song@linux.dev>
- <DJ4PQYTQDWQT.1ENYNRIC3C7IH@gmail.com>
- <145c7132-ec43-4238-801d-55d518fb0da8@linux.dev>
-In-Reply-To: <145c7132-ec43-4238-801d-55d518fb0da8@linux.dev>
+Date: Tue, 09 Jun 2026 17:49:49 -0400
+Message-Id: <DJ4UMEV0NQE2.14XTJKL239Z4Y@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf, sockmap: fix integer overflow in
+ bpf_msg_pop_data() bounds check
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <sashiko-reviews@lists.linux.dev>, "Sechang Lim" <rhkrqnwk98@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260609183927.4021802-1-rhkrqnwk98@gmail.com>
+ <20260609185257.A09111F00893@smtp.kernel.org>
+In-Reply-To: <20260609185257.A09111F00893@smtp.kernel.org>
 
-On Tue Jun 9, 2026 at 2:30 PM PDT, Yonghong Song wrote:
+On Tue Jun 9, 2026 at 2:52 PM EDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
 >
-> const struct bpf_func_proto bpf_tail_call_proto =3D { =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 /* func is=20
-> unused for tail_call, we set it to pass the =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0* get_helper_proto=20
-> check =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0*/ =C2=A0 =C2=A0 =C2=A0 =C2=A0 .f=
-unc =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =3D BPF_PTR_POISON, =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0=20
-> .gpl_only =C2=A0 =C2=A0 =C2=A0 =3D false, =C2=A0 =C2=A0 =C2=A0 =C2=A0 .re=
-t_type =C2=A0 =C2=A0 =C2=A0 =3D RET_VOID, =C2=A0 =C2=A0 =C2=A0 =C2=A0=20
-> .arg1_type =C2=A0 =C2=A0 =C2=A0=3D ARG_PTR_TO_CTX, =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 .arg2_type =C2=A0 =C2=A0 =C2=A0=3D=20
-> ARG_CONST_MAP_PTR, =C2=A0 =C2=A0 =C2=A0 =C2=A0 .arg3_type =C2=A0 =C2=A0 =
-=C2=A0=3D ARG_ANYTHING, }; and for=20
-> RET_VOID, we have below in verifier.c: =C2=A0 =C2=A0 =C2=A0 =C2=A0 switch=
-=20
-> (base_type(ret_type)) { =C2=A0 =C2=A0 =C2=A0 =C2=A0 case RET_INTEGER: =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 /*=20
-> sets type to SCALAR_VALUE */ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 mark_reg_unknown(env, regs,=20
-> BPF_REG_0); =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 break=
-; =C2=A0 =C2=A0 =C2=A0 =C2=A0 case RET_VOID: =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0=20
->  =C2=A0 regs[BPF_REG_0].type =3D NOT_INIT; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 break; so we cannot=20
-> return 'r0'.
+> Pre-existing issues:
+> - [High] Unbounded `len` parameter in `bpf_msg_push_data` causes a 32-bit=
+ integer overflow when calculating the page allocation size (`copy + len`),=
+ resulting in an out-of-bounds heap write.
+> - [High] Incorrect scatterlist element offset calculation when splitting =
+an element in `bpf_msg_push_data` inflates the page offset, leading to out-=
+of-bounds memory accesses.
+> --
+>
+> commit 619f5b1d1aebdbd6457c3ac6e3a92bc45be7278c
+> Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-Ahh, so bpf_tail_call() is a void return.
-Then, I'll take it back. bpf_tail_call_static() is correct with void return=
-.
-I guess we have to teach the verifier to accept void subprogs asap.
+The change seems solid, the error is apparent from code inspection
+alone (though a repro wouldn't hurt). Can you also turn pop from an int
+to a u32? It should never be negative AFAICT, and we assign to it from
+a u32 so since we're fixing int types...
 
-In the meantime let's do shortest possible hack for tailcall_bpf2bpf_hierar=
-chy1.c
-to pass with llvm 23.
+>
+> bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+>
+> start and len are u32, so start + len evaluates in 32-bit and wraps befor=
+e
+> storing it in last. The bounds check can then be passed with an out-of-ra=
+nge
+> start/len.
+>
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 9590877b0714f..31467c0b4279e 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -2974,7 +2974,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg,=
+ u32, start,
+>>  	   u32, len, u64, flags)
+>>  {
+>>  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
+>> -	u64 last =3D start + len;
+>> +	u64 last =3D (u64)start + len;
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but while fixing the integer
+> overflow in bpf_msg_pop_data(), could a similar overflow occur in
+> bpf_msg_push_data()?
+>
+> Looking at net/core/filter.c:bpf_msg_push_data(), both copy and len are u=
+32:
+>
+> 	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+> 			   get_order(copy + len));
+>
+
+This seems like a valid concern. Can you add it to the patch? Making
+copy a u64 should do it.
+
+> If a large len is provided, copy + len could wrap around to a small value=
+,
+> resulting in a much smaller allocation than required.
+>
+> Later in the same function:
+>
+> 			to =3D raw + front + len;
+>
+> 			memcpy(to, from, back);
+>
+> Since len is zero-extended to a 64-bit pointer offset, to evaluates to an
+> address far outside the allocated page. Could this result in an out-of-bo=
+unds
+> write if a BPF program provides a maliciously large len?
+>
+
+As for hte other:
+
+> [Severity: High]
+> This is another pre-existing issue in bpf_msg_push_data(), but does the
+> scatterlist element split calculate the offset correctly?
+>
+> When splitting an element into psge and rsge:
+>
+> 		psge->length =3D start - offset;
+> 		rsge.length -=3D psge->length;
+> 		rsge.offset +=3D start;
+>
+> Is start the absolute byte offset from the beginning of the entire messag=
+e?
+
+It is.
+
+> If the split element is not the first one in the message, wouldn't rsge.o=
+ffset
+> be inflated by the cumulative length of all previous elements instead of =
+the
+> relative offset (start - offset)?
+
+It does, this seems like a real bug. AFAICT the offset of rsge should be=20
+
+rsge.offset =3D start + len.
+
+Can you confirm and add to the next version?
+
+>
+> When the network stack eventually reads or writes to this element via sg_=
+virt(),
+> could this cause an out-of-bounds access past the end of the physical pag=
+e?
+
+
+>
+>>  	int pop;
+>> =20
+>>  	if (unlikely(flags))
+
