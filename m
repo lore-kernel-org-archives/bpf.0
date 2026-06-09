@@ -1,137 +1,150 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC4B43DA2C
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C4148AE39;
+	Tue,  9 Jun 2026 17:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781025734; cv=none; b=Qu0ISYSj8YRwAq4b0Cb04p9eMhuqZeUOFSDX08CCxR7MNsALZy+V2ARn/3+5tk3GfMRC3rEypBCOY1bAHkOSsdRmZ5xIzstIKjrSLoHsswo3DnsZ5xat1ZKJ0aZC9rOCU2jBBOozvILdFpIFop5KQVP/rmIOdYu4wPnVfpMIhQM=
+	t=1781025907; cv=none; b=tSOnsrkLeixYv9Bb5o1wdZ/2k14BEm+bI84JAaWpLIwanhsj/eC1voz6R4IBmvc7jEGdNK3yuhz14Ox/+P81O6bNZCce/JGAc2L115J8t23sE7mMGllQybm8Ad68zNp6PFd3hrijuJOePbmrjhhMbUmB7zNXkU4SteFYIA4mlMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781025734; c=relaxed/simple;
-	bh=EAoIaV9pNUjobuXUO1ePSeJoEsKaKZUvgUq0xCcWJwI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AyIvFWy/QgvLF9wt1KhW004hy2pjIty16m3ookViggiKkT1Xyq3SDxy1DjlvpN68tumfrMM6b5zZY4jPyMyy3+pEiVYBC6snQoCwFYYCoRJAyu1PxpExGCLiFL2MCs6RcQ7kV8zOALKk4McXhx/448xxddvQ8/3D1LWS44iV7YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=Q2XumI+s; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1781025907; c=relaxed/simple;
+	bh=R3LgZNeYMC5YZb9x2LhfI7SCcEY4bbrZV5kXT1rdB7c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iMp1KLpUegUeGL9mFp2Ljm9xtxwzrb0pfne7mocnsG4U+jjUNl50eqxF9Ga5kN9XATEgKI1buvyIVriud6zVUskcakzblEKFhL458HnCOLv/JnYLBSZQztZqBUomc5KTCFDSWNlf8o3zds/QCeFp+++qqH3/ltWVwR8vUwc+tKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jsSOJ7Se; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="Q2XumI+s"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-36b900f350fso5165862a91.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 10:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1781025733; x=1781630533; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ce4y9KqIyAjhQ6PxfVsDJXSaJXhk3BB5Jl2BkdFmxQk=;
-        b=Q2XumI+s7PiJcVemIXJ1aONkvFkfaHnVplgbOxj4xZ0iLYzpqf+A/RoRuHAHdTJTR1
-         6XNdxdOmCljF+crs5Actzofs2AxmZvdcMWPMrCYBjfW2awBus3MGZxABreZ4YPdsE1WZ
-         TT9++opAPgypJXOpmzi58g0i2qBLwdh2dGvGr0uAQ2hJX0F/92CxdCTJddxPAppWo79j
-         fkJ7wYUeAV7c5I26wK5/Lof6mmHqqVBq9iIGaUSI7BWy9UQPHTjfdMoGq22ivNADOXkn
-         fJAiwRHvzMiieIbA8R+rAQv6MgtWKMGFxKJcI8W57pOG1iobm78fk3f0cjvQKoyDEIkz
-         S69g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781025733; x=1781630533;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ce4y9KqIyAjhQ6PxfVsDJXSaJXhk3BB5Jl2BkdFmxQk=;
-        b=NaARTCEute6Uxjvj38yaB7q+vrG5iVDxyPLr8UntgMn3IsTCW/CSdiJ8gF/MkB6oGP
-         GTEFM7ghLK6A9V1eRHISTljfTrU/xqMC/Kkyem1B+7dHFK8tDZ0h6w7TF+Kal6XsqOdy
-         xRagTBC2VlhHwnZ6ZsDiLiOu0ExoGnBvbrVbZhxHH88k0vrSCDQyFLYs/qi5knr8TLx1
-         sA9xRnPu4gTnAKYy/b+rmVa++vYUKCiCoZpoUk+V+JvBDX82Ds6kwTNsbb/h4p3G99Gj
-         wQuWH256SgpELnk2eCzxLIyCdQrG0SqRCJhpOhhNlmauyR38K0HwuUc5EhdHwE1HnHfM
-         qPeg==
-X-Forwarded-Encrypted: i=1; AFNElJ/0B4VtLw/h1NdQQs7Gvrxl0vpUiQTVs/i2wQklbow9cX7u7MmEI4BMQxZK2thBWZlZFS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznsM07ETJRbACAaT5hJz7rEMjR3O3CBplcTQANuXiLqzFzCc0q
-	wvKmfWHGpuKKLm4j+q7SFv5bgdv9D/JRqDlc7rfr2ucoTWFKHSBoQrOjq5p7R5RyAe0=
-X-Gm-Gg: Acq92OFPopTc/UN2OFqZdR1Qmtdx6tphL6uRDM3SxWr2kBEfPOu0ew4dOPUyxuE7tJE
-	IgGi2Alm32cBhl7AYLaVhP5h+0hwXPNJhnORbCLVv5c1w/f7LFk+jiFKHCldDUJHxSP6fl7e+9E
-	qZl7oTcFgHXDGIljHnlBezH7XZRuWJsUw5p5RePa7UWMaFFzRtg4KrvGGgoOrSnbWRPRg/uogTd
-	NIMO2nUBNvAFeKbPhOtaZqSdprMdRVTrU++nnZF8kBb+mhO3y8w7lgKk4q/YRXgoT5npf1L5gpw
-	cmgb735tKR8Ukjzyey4Ufg6aJHX7NQ15RYRhgfTnJPFCrmZ25JP0ntsnFiAfQJzQMn0TRFSicxz
-	jeVwUmV6dwXvVkUo2GTTBiotvvIuCVkQ/pxcIG706yZWhz+oPgDgMFhoeE2jWnFF5Hkrg4GR6tj
-	lc6rwizhPP1jVcoTQDihwdwN5v+Q==
-X-Received: by 2002:a17:90b:3d01:b0:36b:b3f4:d578 with SMTP id 98e67ed59e1d1-370f0095c8emr22699988a91.15.1781025732705;
-        Tue, 09 Jun 2026 10:22:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4d::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f6bf830b2sm18483208a91.4.2026.06.09.10.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 10:22:12 -0700 (PDT)
-Date: Tue, 9 Jun 2026 10:22:11 -0700
-From: Joe Damato <joe@dama.to>
-To: Michael Chan <michael.chan@broadcom.com>
-Cc: netdev@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] bnxt: fix head underflow on XDP head-grow
-Message-ID: <aihLw8yR6Vu5B6lS@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Somnath Kotur <somnath.kotur@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>, horms@kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260608203129.920104-1-joe@dama.to>
- <CACKFLikOyMh3Kbee-AifLXQryyPt-CftW7VYHeeKWoCuMoXj8w@mail.gmail.com>
- <aigoUdgW/icfFwvh@devvm20253.cco0.facebook.com>
- <CACKFLinzaJr8EjXx7yME5cKv9LR1+pF+2iY43V+GeYdEjbUo+Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jsSOJ7Se"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781025906; x=1812561906;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R3LgZNeYMC5YZb9x2LhfI7SCcEY4bbrZV5kXT1rdB7c=;
+  b=jsSOJ7Se3NFWgX8rPLn36rp9cp8uijwKeqFRlNETufCFTwILwMytYkGs
+   lBAWgBN9wYTWBhVOg7sLIg64S5sSGrSnN1f0/AYUspDVlNUdqHNR3GEq8
+   mtA+AOcMBLdNF5LcU0pURlYj2kpSoyMwU1qovBsRTRh7er+9gfcZ+ZF7K
+   uQ38mfITwU8EWHd6pTYYll+VxgEEWcs3Mf5JeOTt2mB1yfV8Lv7nALt8S
+   qaQNj+TcRfZCOxPMLRG3xN34zCrJmvLlhDUT22MMxqtAG4HE857CVb6fS
+   ROJSOAdcoTqzZ1fIFmitK5/K9CaRFLWSRUe2gzHsSzraDmB9hwwgwR/Zj
+   w==;
+X-CSE-ConnectionGUID: B2y/wFieTo+SFSSwjy99JA==
+X-CSE-MsgGUID: 3GVhJkeBT46xQlM31HN7Pg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="99373430"
+X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
+   d="scan'208";a="99373430"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 10:25:05 -0700
+X-CSE-ConnectionGUID: MERZpGPrRamlaZVZSuMdHQ==
+X-CSE-MsgGUID: nT9MXXb5QQiEbzLvP9oPKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
+   d="scan'208";a="250995093"
+Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
+  by fmviesa005.fm.intel.com with ESMTP; 09 Jun 2026 10:25:04 -0700
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	anthony.l.nguyen@intel.com,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Simon Horman <horms@kernel.org>,
+	Patryk Holda <patryk.holda@intel.com>
+Subject: [PATCH net 2/3] ixgbe: do not configure xps for XDP queues
+Date: Tue,  9 Jun 2026 10:24:55 -0700
+Message-ID: <20260609172458.4046222-3-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20260609172458.4046222-1-anthony.l.nguyen@intel.com>
+References: <20260609172458.4046222-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACKFLinzaJr8EjXx7yME5cKv9LR1+pF+2iY43V+GeYdEjbUo+Q@mail.gmail.com>
 
-On Tue, Jun 09, 2026 at 09:44:17AM -0700, Michael Chan wrote:
-> On Tue, Jun 9, 2026 at 7:51 AM Joe Damato <joe@dama.to> wrote:
-> >
-> > On Mon, Jun 08, 2026 at 09:22:07PM -0700, Michael Chan wrote:
-> > > On Mon, Jun 8, 2026 at 1:31 PM Joe Damato <joe@dama.to> wrote:
-> > > >
-> > > > To fix this, we need to do a bit of math to recover the offset if this
-> > > > is a page fragment since it is not passed into rx_skb_func
-> > > > (bnxt_rx_multi_page_skb, in this case).
-> > >
-> > > I wonder if we should add an offset field to struct bnxt_sw_rx_bd to
-> > > simplify things for page mode.  Struct bnxt_sw_rx_agg_bd has the
-> > > offset field for a similar purpose.  Thanks.
-> >
-> > I don't mind doing that, but I wonder if that's better material for net-next?
-> >
-> > In other words, we get the minimal fix in (this patch?) and then do the
-> > cleanup and struct tweaking as a follow-up in net-next?
-> >
-> > I could definitely be wrong; I had just assumed patches for net were supposed
-> > to be as minimal as possible.
-> 
-> I think some minor refactoring/struct changes to make the fix
-> cleaner/simpler should be fine for -net.  I think the total number of
-> line changes should be about the same either way.
+From: Larysa Zaremba <larysa.zaremba@intel.com>
 
-OK. Are you OK with changing the signature of rx_skb_func? I was going to add
-offset as an argument so it can be passed through.
+netif_set_xps_queue() should not be called for an XDP Tx queue, since such
+queues are not netdev-exposed. On systems with number of CPUs >=64, on E610
+adapter, netdev is configured with maximum number queue pairs being 63
+(due to MSI-X assignment), but configuring XDP results in 64 XDP queues.
+
+So, during XDP program load, when netif_set_xps_queue() is called for the
+last XDP queue, we get a WARNING with a call trace and KASAN report
+afterwards (if enabled).
+
+[ 2012.699800] WARNING: net/core/dev.c:2854 at __netif_set_xps_queue+0x116a/0x1e40, CPU#36: xdpsock/103668
+[...]
+[ 2012.700029] RIP: 0010:__netif_set_xps_queue+0x116a/0x1e40
+[ 2012.700035] Code: b6 34 06 48 89 f8 83 e0 07 83 c0 01 40 38 f0 7c 09 40 84 f6 0f 85 03 0a 00 00 0f b7 44 24 40 66 43 89 44 6a 18 e9 01 fb ff ff <0f> 0b e9 f2 ee ff ff 44 8b 44 24 44 45 85 c0 74 50 4d 85 e4 0f 84
+[ 2012.700040] RSP: 0018:ffff8882369aeb28 EFLAGS: 00010246
+[ 2012.700046] RAX: 0000000000000000 RBX: 000000000000003f RCX: 0000000000000000
+[ 2012.700050] RDX: 1ffff1111da3d891 RSI: ffff888120e34250 RDI: ffff8888ed1ec488
+[ 2012.700054] RBP: ffff888913281560 R08: 0000000000000000 R09: ffff8888ed1ec000
+[ 2012.700058] R10: ffff8888a2e83180 R11: 0000000000000000 R12: 0000000000007fa8
+[ 2012.700061] R13: 000000000000003f R14: ffff888120e34854 R15: ffff8889132817c8
+[ 2012.700065] FS:  00007fc8ea9ff740(0000) GS:ffff88884cefe000(0000) knlGS:0000000000000000
+[ 2012.700069] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 2012.700073] CR2: 00007f81c8000020 CR3: 00000002299f8006 CR4: 00000000007726f0
+[ 2012.700077] PKRU: 55555554
+[ 2012.700080] Call Trace:
+[ 2012.700084]  <TASK>
+[ 2012.700087]  ? ktime_get+0x61/0x150
+[ 2012.700097]  ? usleep_range_state+0x133/0x1b0
+[ 2012.700108]  ? __pfx_usleep_range_state+0x10/0x10
+[ 2012.700114]  netif_set_xps_queue+0x31/0x50
+[ 2012.700119]  ixgbe_configure_tx_ring+0x472/0x920 [ixgbe]
+[...]
+[ 2012.700486]  ixgbe_xdp+0x38f/0x750 [ixgbe]
+
+[...]
+
+[ 2012.701094] BUG: KASAN: slab-out-of-bounds in __netif_set_xps_queue+0x1ac5/0x1e40
+[ 2012.701100] Write of size 4 at addr ffff88888d43cff8 by task xdpsock/103668
+
+Skip XPS configuration for XDP Tx queues.
+
+Fixes: 33fdc82f0883 ("ixgbe: add support for XDP_TX action")
+Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Tested-by: Patryk Holda <patryk.holda@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index 2646ee6f295f..9ec250c26284 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -3958,7 +3958,8 @@ void ixgbe_configure_tx_ring(struct ixgbe_adapter *adapter,
+ 	}
+ 
+ 	/* initialize XPS */
+-	if (!test_and_set_bit(__IXGBE_TX_XPS_INIT_DONE, ring->state)) {
++	if (!ring_is_xdp(ring) &&
++	    !test_and_set_bit(__IXGBE_TX_XPS_INIT_DONE, ring->state)) {
+ 		struct ixgbe_q_vector *q_vector = ring->q_vector;
+ 
+ 		if (q_vector)
+-- 
+2.47.1
+
