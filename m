@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAD92D0C98
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 10:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0ED2D0C98
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 10:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781001800; cv=none; b=fjEFQqkCQX8VzMYH+9+yvd/CaKIEDXOEZFtQ0woP5kAXYT4TX9CNqlvwwV4LUstuRKCrJIEt3xLMQCEHPXGHEt5CMsgTBo+/YuruUTF3Uys7v9jlDlkJg46fy76+ltML8ilJL7tgaDfArQ2suXWpK4H24jdvsAG1xPJqD/PGvFo=
+	t=1781001810; cv=none; b=nlPo5V+HD4xezBIE8cBInpHK1g8ejtKPM+WA3FCMWgTb4MXd+ykVpu3w/teGs0zkEmjTAVvoeLTEJEXcZjeQvwm+7mrpkatPwOTx55k7OdlOHREVKr9MDbnPr2HfcK3DOIX40KMsnvokSuArTlIxj4X90Mq9s2gUxf+7KUR1ueI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781001800; c=relaxed/simple;
-	bh=Vv1cZAv+0c1IBEatJNuSKcFZRHTQi6NTL8A+Gzrw4oM=;
+	s=arc-20240116; t=1781001810; c=relaxed/simple;
+	bh=purgn8u0Q1JdiFmU8kmpkR89xU+I+lCjdnWgdasJoFA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ACUQcwX+uZTbqc5HOx/SEMUb5GffocSHwm/aR226dCq+GmHH6oBHgUNgq3D7wJUgShjV7cNvQG8bh+G32SO9kEPMQXLhD9Uepl8oK3ps2IQOeLLTL+kB7ZCrzkMdN08Y3X73oYy0yK4OJ0brzLNfVKkL7nSIbpo01xciAy3hs5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j6hU5L9d; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=tGFRth9+f/XyBAnRy8qDMLsXqYIlbn7U9mOzk/E0MgaIT5uPiqxt80v4DicKsULLOnPnULV/qycsHE//bG2rIOsSekpWaz9kHYW6c17yiY4wswLt90ykvyC7bujgJG6iElizz1EYda9y0ugzlFsV1MKNsd7ScN7EMfRGwBmyuDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MY2kLzkE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j6hU5L9d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5FE1F00893;
-	Tue,  9 Jun 2026 10:43:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MY2kLzkE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8B11F00893;
+	Tue,  9 Jun 2026 10:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781001799;
-	bh=v+v3iXW2lWkTytq7OLGagYfrOsYjsQexmVsAgWSCYOY=;
+	s=k20260515; t=1781001808;
+	bh=fEapK3MfSiztnYTiNm2M45mnByCVN7+w7yqH2/5S/0I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=j6hU5L9dPlFTi8BPytDvqO9bhClesKaDy9vEvOlx3xzgAv7ytEOhRxsN0Cz52emLx
-	 qsC7ay6AP9amZfZ0+o+GON3+PeeCrU26XPMW/QAYE7bxZr4qit45v8YoSMo/TiEOWb
-	 RS8FFq3nVZFOkVUZj70nLfXVxn8QRT19rqpYaI97VYR4NMOLzB+VZsvWADRD+pLXmn
-	 iQIbNS2IwYAuSal5TvNH07bnWkN5dUCkwMZ9DsAn6eUjOyfY7Moj/4Qg7D4qHHBcyo
-	 d0nsQk58T/rcJFm5m6nJbaM2Vmr5PG9IWs8jOZ6G8CVfdEFIGOStPZJSaCwGqLGVJ1
-	 E1Jc6hoVEgd/A==
+	b=MY2kLzkEYrnTXSfEbxPYBnjAM8ArGoAvT5kwqkoO5r1jgwhQCBiLLJlURzeQAQ39u
+	 DGmKjejA/5G6NWyH9V43GbhNhiqOrDsTAXtdZ1NApBQ6FMK0JeEOliF/hOxrHC9QPe
+	 +aEBRUeyzA7N0oMQYfN0G7JD42/v7IKz18F8p8jHBsSMJVkaImDjiywNz1yyNz7Bx2
+	 j66UyLz2cOVI0df/ev5i7JfgJGN/gOErywjjfQU9KyZsDvCC5jKauHw3d7utP2EGnx
+	 kHHluUh/o6AePHtw1yuwVdPMFZFEIh8JZMkF6a3M+EIxXHR/ieC3Rqah/K/BYlZ6Eg
+	 fM3vRSsVjLw0Q==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -37,9 +37,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Oleg Nesterov <oleg@redhat.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH bpf-next 3/6] libbpf: Add path_fd to struct bpf_link_create_opts
-Date: Tue,  9 Jun 2026 12:42:41 +0200
-Message-ID: <20260609104244.588321-4-jolsa@kernel.org>
+Subject: [PATCH bpf-next 4/6] selftests/bpf: Add uprobe_multi path_fd test
+Date: Tue,  9 Jun 2026 12:42:42 +0200
+Message-ID: <20260609104244.588321-5-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260609104244.588321-1-jolsa@kernel.org>
 References: <20260609104244.588321-1-jolsa@kernel.org>
@@ -51,49 +51,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding the path_fd field to struct bpf_link_create_opts and passing it
-through kernel attr interface.
+Add a uprobe_multi link API selftest that opens /proc/self/exe and passes
+the resulting descriptor through opts.uprobe_multi.path_fd with
+BPF_F_UPROBE_MULTI_PATH_FD set.
 
 Assisted-by: Codex:GPT-5.4
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/bpf.c | 1 +
- tools/lib/bpf/bpf.h | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/uprobe_multi_test.c        | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index f37e3416f61a..96819c082c77 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -842,6 +842,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		attr.link_create.uprobe_multi.ref_ctr_offsets = ptr_to_u64(OPTS_GET(opts, uprobe_multi.ref_ctr_offsets, 0));
- 		attr.link_create.uprobe_multi.cookies = ptr_to_u64(OPTS_GET(opts, uprobe_multi.cookies, 0));
- 		attr.link_create.uprobe_multi.pid = OPTS_GET(opts, uprobe_multi.pid, 0);
-+		attr.link_create.uprobe_multi.path_fd = OPTS_GET(opts, uprobe_multi.path_fd, 0);
- 		if (!OPTS_ZEROED(opts, uprobe_multi))
- 			return libbpf_err(-EINVAL);
- 		break;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 012354131cf6..7534a593edae 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -444,6 +444,7 @@ struct bpf_link_create_opts {
- 			const unsigned long *ref_ctr_offsets;
- 			const __u64 *cookies;
- 			__u32 pid;
-+			__u32 path_fd;
- 		} uprobe_multi;
- 		struct {
- 			__u64 cookie;
-@@ -477,7 +478,7 @@ struct bpf_link_create_opts {
- 	};
- 	size_t :0;
- };
--#define bpf_link_create_opts__last_field uprobe_multi.pid
-+#define bpf_link_create_opts__last_field uprobe_multi.path_fd
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+index 56cbea280fbd..8c9eba1d4084 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+@@ -2,6 +2,7 @@
  
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
+ #include <unistd.h>
+ #include <pthread.h>
++#include <fcntl.h>
+ #include <test_progs.h>
+ #include "uprobe_multi.skel.h"
+ #include "uprobe_multi_bench.skel.h"
+@@ -757,6 +758,65 @@ static void test_link_api(void)
+ 	__test_link_api(&child);
+ }
+ 
++static void test_link_api_path_fd(void)
++{
++	const char *resolve_path = "/proc/self/exe";
++	LIBBPF_OPTS(bpf_link_create_opts, opts);
++	int prog_fd, link_fd = -1, path_fd = -1;
++	struct uprobe_multi *skel = NULL;
++	unsigned long *offsets = NULL;
++	const char *syms[3] = {
++		"uprobe_multi_func_1",
++		"uprobe_multi_func_2",
++		"uprobe_multi_func_3",
++	};
++	int err;
++
++	err = elf_resolve_syms_offsets(resolve_path, ARRAY_SIZE(syms), syms,
++				       &offsets, STT_FUNC);
++	if (!ASSERT_OK(err, "elf_resolve_syms_offsets"))
++		return;
++
++	path_fd = open(resolve_path, O_RDONLY);
++	if (!ASSERT_GE(path_fd, 0, "path_fd"))
++		goto cleanup;
++
++	opts.uprobe_multi.path_fd = path_fd;
++	opts.uprobe_multi.offsets = offsets;
++	opts.uprobe_multi.cnt = ARRAY_SIZE(syms);
++	opts.uprobe_multi.flags = BPF_F_UPROBE_MULTI_PATH_FD;
++
++	skel = uprobe_multi__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uprobe_multi__open_and_load"))
++		goto cleanup;
++
++	prog_fd = bpf_program__fd(skel->progs.uprobe);
++	link_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_UPROBE_MULTI, &opts);
++	if (!ASSERT_GE(link_fd, 0, "bpf_link_create"))
++		goto cleanup;
++
++	skel->bss->uprobe_multi_func_1_addr = (__u64)uprobe_multi_func_1;
++	skel->bss->uprobe_multi_func_2_addr = (__u64)uprobe_multi_func_2;
++	skel->bss->uprobe_multi_func_3_addr = (__u64)uprobe_multi_func_3;
++	skel->bss->pid = getpid();
++
++	uprobe_multi_func_1();
++	uprobe_multi_func_2();
++	uprobe_multi_func_3();
++
++	ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, "uprobe_multi_func_1_result");
++	ASSERT_EQ(skel->bss->uprobe_multi_func_2_result, 1, "uprobe_multi_func_2_result");
++	ASSERT_EQ(skel->bss->uprobe_multi_func_3_result, 1, "uprobe_multi_func_3_result");
++
++cleanup:
++	if (link_fd >= 0)
++		close(link_fd);
++	if (path_fd >= 0)
++		close(path_fd);
++	uprobe_multi__destroy(skel);
++	free(offsets);
++}
++
+ static struct bpf_program *
+ get_program(struct uprobe_multi_consumers *skel, int prog)
+ {
+@@ -1354,6 +1414,8 @@ void test_uprobe_multi_test(void)
+ 		test_attach_api_syms();
+ 	if (test__start_subtest("link_api"))
+ 		test_link_api();
++	if (test__start_subtest("link_api_path_fd"))
++		test_link_api_path_fd();
+ 	if (test__start_subtest("bench_uprobe"))
+ 		test_bench_attach_uprobe();
+ 	if (test__start_subtest("bench_usdt"))
 -- 
 2.54.0
 
