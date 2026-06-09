@@ -1,108 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584EC242D6A
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 15:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7A448C418;
+	Tue,  9 Jun 2026 15:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781019609; cv=none; b=hqEg6/ml3nQu054S6jHd+qgKIgy9ItsGjLWoNPqzJ6UElxyRO/jALMrDi1CVtglQywDc1ZhvveaTf0g4gSq4W60JKo9/ZmoiylD9S/PctqPUUIP0sLTrfWPsK6sg02iqHN3JhFURE4c582nhBSxGt6dc1+IxPPdoMKfjMCz8s2c=
+	t=1781019779; cv=none; b=Q5JPbnpxtFBKVDuCdMIwDKGD4suEBbGetb34NLIQjy9X/OS37hv8ZICFl/0VaOG0p4PF2OSRsqeCnNuv+DUx5sQ6QDlTIAtQRA73VUMFQ+alXdKSb78lOQYSaqjg4ga5oVFD7nMu3ID3dDK3+lcLDfmgG6GrpKizn3LasUFJ7k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781019609; c=relaxed/simple;
-	bh=MsVmNFSYIsjxe17qO4ZLxMZRQoo1HKXWv0fxWQbkWIM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PRUMpK4CsylAIn5y1v7rwH3jPM98TXb71ODa1FxXIrE8cpvzmXtyYwzQINQ/FZR3m6rha5723p7msx8onphZCfJ8OM65V+qBvbffBppfhxJ3sI5kd6sg6zdMN6aeDGfroh0Sgiae+qRHhjh4Rq8oc+blBdM9d02B5AEy/RQ5/3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iruBYU4N; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781019779; c=relaxed/simple;
+	bh=DC/Oh9g7g6yNkRtxABzOIsaF0OUdbLWnISkWuLMmnz8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AxvQrHrbcItNZW5fGkqIB3Ngjf3PScD1oZasnSUr59oipvPY4soMlaoy2Z7KD04KX4GUwj7bSH+YhE0jpV7/eowBs4bM09e85DFBkj38BQuDdLQuoB5Nol3dniAXtbs7hNJj0Mhdo+tIMhcnExPiXUQ/3dhv+OhPDdB79J8n6vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jbBxhCey; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iruBYU4N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED4F1F0089B;
-	Tue,  9 Jun 2026 15:40:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jbBxhCey"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4C01F00898;
+	Tue,  9 Jun 2026 15:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781019608;
-	bh=GAu3zLcE60mowJWm/Melsm2f/TIX+km9nC88x4yn92w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iruBYU4NbN3rM6cjLQV/i6/xJRmXCi00o9DnWnF8IidAzvrS6VMaZJttaT8Hqfo7T
-	 fRmdipuBg90PNcXd/Gpo7us+2/pooDfsDwpVJ+dD5udULygQcZLL/3zVg3mDMqPJQO
-	 ovm5BFztXGgFh2d3BejU/hpH33B730JvshbH0SuKZhtbMy11nKS8uzsN38UKXQMueq
-	 qhrVlrJQHNh6pdnLe77WKgRvLm6LPniAy51RdnJGIDVCRt7UA46oonsk/N3HyAhTWP
-	 x8gISNj8J4N2ie0MOGC+2FTlTXHx0Ux280gkIiR6WGDZhPnQt2AffeQ2+ChFWiDsUz
-	 GJbN+A8lZVA+A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add cross-subprog gotox
- target coverage
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260609-f01-02-gotox-bpf-next-v1-2-b441d63a1559@mails.tsinghua.edu.cn>
-References: <20260609-f01-02-gotox-bpf-next-v1-2-b441d63a1559@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 09 Jun 2026 15:40:07 +0000
-Message-Id: <20260609154008.1ED4F1F0089B@smtp.kernel.org>
+	s=k20260515; t=1781019778;
+	bh=apID2qM7uHzXx8KSCa0dv61i3wb+0bcboRzEZeQ7HS0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jbBxhCey3ScA+bP3rvIKM9cDB/oFmAaIDsDHUAwwp6Vj46CuwW3SniXwnqLF3+Tcn
+	 IKjlK+ii8odxxmUFATD7SdimMS0Il1r8i3ZPdXywW8GfGhZU2i69Ksc81DMzzH9ulX
+	 25Ik7MmDqIPdIZQQn3u4k8AMWZWqeRXZXGCvFXA9rGcvRjaxBPlCnFOSWKRY532VHX
+	 Jl3BJUrCuF4UmROyzqz2Onvsnh+7QqFiDFDVS72uTI6VDrmbF48UyW132/+RHs0A2l
+	 pAB2/0Mx0fj0FWGr+4xNv0UTYyp457DqX4kobsGQ88nR7o9AhfJEfGj35TAhJnjtcN
+	 7T87GC3HF7tsA==
+Content-Type: multipart/mixed; boundary="===============5047575541896268026=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <7ec49cbf243822be83aa8d47da10b3d8a739952e544fcd86aeab6b1ccd447d90@mail.kernel.org>
+In-Reply-To: <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
+References: <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation against CFG
+From: bot+bpf-ci@kernel.org
+To: gnq25@mails.tsinghua.edu.cn,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,a.s.protopopov@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  9 Jun 2026 15:42:57 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The test `check_cross_subprog_gotox_target` incorrectly expects =
-`bpf_prog_load` to fail with `-EACCES`, but the verifier actually rejects c=
-ross-subprog jump targets with `-EINVAL`, causing a false test failure.
---
+--===============5047575541896268026==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit f7ef2af9b62d2a415c2072928a61150823abda72
-Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-selftests/bpf: Add cross-subprog gotox target coverage
-
-This commit adds a gotox regression test with two one-entry INSN_ARRAY maps
-to verify that the control flow graph handles indirect jumps correctly. It
-ensures that when a verified path loads a map whose target points to another
-subprog, the program load is rejected.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/t=
-esting/selftests/bpf/prog_tests/bpf_gotox.c
-> index 73dc63882b7d5..866b4a14ccb7c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-
-[ ... ]
-
-> @@ -393,6 +417,52 @@ reject_offsets(struct bpf_insn *insns, __u32 insn_cn=
-t, int off1, int off2, int o
->  		close(prog_fd);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ed7ba0e6a9ce..25fa90e731e3 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17124,6 +17124,23 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
+>  	return 0;
 >  }
-> =20
-> +static void
-> +check_cross_subprog_gotox_target(struct bpf_gotox *skel __always_unused)
+>
+> +static bool is_cfg_indirect_jump_target(struct bpf_verifier_env *env,
+> +					u32 target)
 > +{
+> +	struct bpf_iarray *jt = env->insn_aux_data[env->insn_idx].jt;
+> +	int i;
+> +
+> +	if (!jt)
+> +		return false;
+> +
+> +	for (i = 0; i < jt->cnt; i++) {
+> +		if (jt->items[i] == target)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  /* gotox *dst_reg */
+>  static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
 
 [ ... ]
 
-> +	prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
-> +				insns, ARRAY_SIZE(insns), NULL);
-> +	if (!ASSERT_EQ(prog_fd, -EACCES, "cross_subprog_gotox_prog_load"))
-
-[Severity: Medium]
-Will this assertion fail because the verifier returns -EINVAL instead of
--EACCES?
-
-When the verifier inspects the gotox target via check_indirect_jump(), the
-target fails the is_cfg_indirect_jump_target() check. This causes the
-verifier to explicitly reject the load with -EINVAL.
-
-The memory access itself passes the verifier's check_map_access() bounds
-check since it reads from a valid offset, so we don't get the -EACCES return
-value here.
-
-Should this test expect -EINVAL instead?
-
-> +		close(prog_fd);
+> @@ -17171,6 +17188,15 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+>  		return -EINVAL;
+>  	}
+>
+> +	for (i = 0; i < n; i++) {
+> +		if (!is_cfg_indirect_jump_target(env, env->gotox_tmp_buf->items[i])) {
+> +			verbose(env,
+> +				"gotox target %u from map id=%d is not in the CFG jump table\n",
+> +				env->gotox_tmp_buf->items[i], map->id);
+> +			return -EINVAL;
+> +		}
+> +	}
 > +
-> +	close(bad_fd);
-> +	close(good_fd);
-> +}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609-f01-02-got=
-ox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn?part=3D2
+Could this nested loop create an O(N * M) algorithmic complexity that
+bypasses verifier complexity limits?
+
+The outer loop iterates n times, and is_cfg_indirect_jump_target()
+performs a linear scan over jt->cnt items. Both n and jt->cnt are bounded
+by the map's max_entries, which can be very large.
+
+Since there is no cond_resched() here, this creates a synchronous
+iteration sequence that could trigger the kernel watchdog panic or lead to
+CPU soft lockup.
+
+Given that both gotox_tmp_buf->items and jt->items are strictly sorted
+arrays, could this be optimized to O(N + M) using a two-pointer merge
+approach or O(N log M) using binary search?
+
+Raised by sashiko-bot@kernel.org in v1:
+https://lore.kernel.org/bpf/20260609151359.3C6F51F00893@smtp.kernel.org/
+
+>  	for (i = 0; i < n - 1; i++) {
+>  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27216356316
+--===============5047575541896268026==--
