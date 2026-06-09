@@ -1,103 +1,148 @@
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AE13FB06B
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 16:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0098E4A3417
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781024244; cv=none; b=qma8S+EjERYAE+/5vbV57r6SxLAuimHfF6I6sumGu59tRKCoKf6Fpu1tCEMCSJbhkzbM6cCH6gASr7OhcOzGTxrD+RsUPot03fullFK1J0YK6JdGfTffGI/dsoCEVuWYrXgK3gO2JLLvvTtbW+qqiqFLqUHi/YE6lNp0L7YJYxw=
+	t=1781024473; cv=none; b=IF3BoRdjQydZDp0/ZAR4l/ZUMk8yvD/+AsHhXKporLwxmFDBdfoJINYWh6HIsWjFxjar9CWdOmLb8cKvgjoLHD/+gQmqVyrdD0sT1QvW/X/2xMiptSyK5iMnPNfW1kwaZ71GYp3RTJW7UEZGXAHvX/A2lAVEx5ol3luZyY6K2GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781024244; c=relaxed/simple;
-	bh=txaHnFd2kEzMn2NCa6kJKZmvPyQwxRlm1pVcMc/jxPY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Qib3wA294VSbKpyhpWLbSutnlFEzZH/1uIr/ukz2z48qy2O8IeS3zP+hWqSjO7ic+ceG99FysV+7q/n/hMwJeiFquzDZJUO8UIEHrgfFHEDmDmV/8XGEIdZFtWjcDkrdWmBylXZK/iKMlsJ2Dq/xFg70pPN2lb0j7K03pIN6M6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=am1oHjsQ; arc=none smtp.client-ip=209.85.161.49
+	s=arc-20240116; t=1781024473; c=relaxed/simple;
+	bh=WDmcAROiZzPtamIVySVJ0+BibdW1AO8nRjbT9ZEyGoI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qWzvyJQwjEIOpVYzZhKMROarbo6YSXYViO6IsR0gwhIZhoiyQ9YJXvrw6e0C+ya96myBR/wjtYT2soS/jAfEia93S0xAVYrhEzPM4r7fn683RNbPRqZ1vyqbElujz6lPxJIvbXjnqWhZn9khDPp3znbVgtVwsw/2czeVcFRG0y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JE1KJOEi; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="am1oHjsQ"
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-69e8d815c3dso1150345eaf.1
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 09:57:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JE1KJOEi"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-30759632453so8624786eec.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 10:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781024243; x=1781629043; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=txaHnFd2kEzMn2NCa6kJKZmvPyQwxRlm1pVcMc/jxPY=;
-        b=am1oHjsQrmrVK9phahzHHzAXs11aKqG65g0ce1GmeC/xR2DdQ/15Kp4iO+3LE8VdDy
-         b7nNkuiExKFPxdHygHgsv39gtbFSzNeJKmpdI5N2Ew8ngyan47iU+PiI0g7DWKRMpqIV
-         pK7ufdOqKY7MHOImA5BXTNpSH+WF1YPUdQ9YP18GOZPttGt/0RYJYy3xiEHKfoymHxmZ
-         e3TVCnlQ5qQe84+tITwBLldXQMKd+mkZVKwHaPTOumlZkXdgT3d9IZ7POODFJvMx/vsA
-         Yjqr/DKGUsirsjei0R3PZgWAqxxUSx9smPMei/MRw8YrnldCao1fOrytItG96gQGz49x
-         L5CQ==
+        d=gmail.com; s=20251104; t=1781024470; x=1781629270; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nN5MW2PnNv4yAQd89c4hNRm4nd60DU2qj0yVzLTHfgQ=;
+        b=JE1KJOEieOOlKJGRgX8eiMzTvNK+/DFOwma9VrfuMe1zXZ6xoa94jINYcgeBaghl+Z
+         xwq38GjAvk3k42bxWycQVSF9XDh6u/Mi0YbE2sDoXWnPgYxcfEeQEAgpGhuxzY9O6oMG
+         evJn4b3p6EueErSsuo+fRG4L0HGpY5zSPrl5UnJ+X6hjWkbeX4QoGD/GoYPge+6sD7BU
+         jC5I6VGeA0o+PfRWCON9itDnpNUQgXqEH6td4lgMckEkK5v20B4Jq1CUmhJnHE7uX2mh
+         v2kzXmE4SNyhDeRH6FN7eutwdAQg9VG13fi//W7rtLFqUh75CXaF0HjdQ9wCycShyZto
+         qWqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781024243; x=1781629043;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=txaHnFd2kEzMn2NCa6kJKZmvPyQwxRlm1pVcMc/jxPY=;
-        b=Sk8BxIPr0zApNGsIUuyD85I7Bw3epDlzfE/h8yufr8tbDT3KIGquSM1XVuHazUd8pO
-         s2et42qyvi7N0PUtSpBLvr1bkMANfjRuTwNUF7c5at8uKgCTf1jMRqWczi32Drn5rHXH
-         8z1XGlyuZ40cEdg+I2t2YcAqdO6CRQq4ir7Mzer55QZztM2S0Sxu6+aKzlumHfcGAc4n
-         sIgjPH6u4kRBx4pdP2qI6wcLcPSCJol1fCcE4xA29hf6fdwxr59+/ijtdThpDNsK3MwC
-         RXwX5BD2KKZFKMnSqnWQJTdwKz+vzzQbz+Myevl5zNHnammgBFy4K5qWqcSLgJYLhvZr
-         vuFQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+zdaLb+oG0TlHmVX8IcT8ut5iQbIqK+ujl8DHcBOQtmIuBZs0UBOE9B5la7LtoZXEa7aw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlFnZyUo7tNL/+WtyQd1d5epgBsExsBJRFG+tXEWCoP13ZIYaN
-	Eq++qwiotu5bLn7TQ4GFM73SuNmspmNsOzDv7c6vyvGU6fKHqc8LvraW
-X-Gm-Gg: Acq92OH+cLjySUvRBEO+I70Qa/et39vtHbgkcLnKrHYNeFXXYESwiFV5VGQaEeEyVU4
-	U3IQSMsAth8DVG7gPAUwMIyo0E4xGQFysV6ML1QDwzmqrGZ9AwYPbSj2VorEgoaTWb8bmwmkfMM
-	gZnxEBiFALyWPj2EnItlRIKMr6D+yRcQRkZVGNW/l3YpFgNPKthSb8IEOoZEx2FdTi6LM9v9r4h
-	UoCZJ1QXupZU+W6Z3YUGcYjiEEz8kQOKFUbIK9WeeZxhM4T8SgDIS9RUdeJhtozcJ2XxQDOjpiE
-	VbcmquzZH4oIzHhZSmtDYWffyQWraJqWR9SF3MhJ8Yuv0TMr7ANjby0pkdYQka6JIey+XY8PyYq
-	STzoHXFnsZ2NNMuPJzT68MmyXKudrJaze1MV+2uEu4EndrR0acqhVlCUf+kc1B8HTBJtytlMeGB
-	cibnvfQwY/0eXJZNvO0yngFDtZSBXU2IdPYWkrm+OfPjw92E79Ay8yQWoxWz5zlTu4e5WA9/diF
-	iPvRmZLt+7cOh9RPs9iols5gto=
-X-Received: by 2002:a05:6820:618:b0:69d:8f47:f682 with SMTP id 006d021491bc7-69eac9f5dc2mr2867484eaf.36.1781024242591;
-        Tue, 09 Jun 2026 09:57:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69e4620c6a3sm12509316eaf.1.2026.06.09.09.57.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 09:57:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781024470; x=1781629270;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nN5MW2PnNv4yAQd89c4hNRm4nd60DU2qj0yVzLTHfgQ=;
+        b=cDQ1L8B8KNh9zHMi5NAWsaOJVfP+c33DYASJeqmkcPS85mOO6Gqc3V/jNV96GCUThD
+         dMKvn3LgBtwns3HLAjDPVzgDsGm/USRR1ymoN2/bUQv57F8hWe3OmrhdmNaI3xGfj4lR
+         V1qg+UZn9cXGAfi1Snk7IjVtvfzQWzTN6oJTFfZi72z1mhcm4dymDykJuC8l068AqM1T
+         htEIMU8WOpJrWwXotQNoaw/cuylOzKQzfiOM5NZwOqkNYxJTEc8lp17MclBTAf9f0iL0
+         +IOxvpgk6RZYpEgNzqcrB3a2HCS5nHfNpo51NIT2Gtp1urVZY6uRPyd0AJ1/QPQfiC2O
+         Mgmg==
+X-Forwarded-Encrypted: i=1; AFNElJ/ukwsf+ns6tUyOxqiC7eTqVUcg8fgfy+6Mp1jTRZ7B5PbgCKlb5WbJPcPopcCrvMui4WQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/OyoOCyTc8dfHhkthUr5gsKE0ooy9kLXp9eRyD0JmFuYsfRMq
+	S/04O0lLLk7icw3L/g9P4VBqV4TK1uoNuCPZ2+Y9z8MutqC+82LrAZG8
+X-Gm-Gg: Acq92OHhZ92R2MeNPllPRE6bQ2ACFe3aKVG55oizLxoau6lqO3ciCmtVOgi7xv36HQQ
+	P8pyzLSCOVnQnFPrjXgwpZb/W7nzpRlIUvD6X0rSZ/xYRia39Z157pAJtW209HmXFI79ZyL0gd9
+	mQMAQHVf5784cB+jMQPooFhZMZvyMWzUiDHPnTqUzk1eTAHw/L1AjMUEIvzv7U/OuUN4B15kzyG
+	+KXj7x5czGkIWV3+RsaDFossWIQTwOTuD6GF8tVsGy19U3VvmtwwkpoQ7N9Vs3UHc8sce2LTCN8
+	1B0WqcT0qDb4U3G08cU5hlqHokEmWBXNtW3Cu6f6sLjfRWc106iPvkHin1GgGP7DlrsQeQRsmHz
+	nv9cyMhF/aMHY6UTLtqOtdRWOXbJjIAOTVW7JqrMtcr94Iw9sjfYQpJPM95AXsBKlkzF7YRAONQ
+	dVJBk7694hPwMjDwWVxiHz6AJokiAgTVylTtM04C2JOZMnk6D+hzncxhHX9sh6X+OXwufD7Iv90
+	QE+ojD/HdOeRPaYnxI=
+X-Received: by 2002:a05:7301:1009:b0:2f2:32bc:787d with SMTP id 5a478bee46e88-3077b1f31f7mr11653007eec.23.1781024469439;
+        Tue, 09 Jun 2026 10:01:09 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:bc91:a683:c279:a106? ([2620:10d:c090:500::3:1322])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df191d0sm31809976eec.21.2026.06.09.10.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 10:01:09 -0700 (PDT)
+Message-ID: <c6cf40ef2957b6b2acf8820bce10becda20d9dfd.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject scalar addition from untrusted
+ memory
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend	
+ <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa	
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 09 Jun 2026 10:01:07 -0700
+In-Reply-To: <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+References: 
+	<20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+	 <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 09:57:21 -0700
-Message-Id: <DJ4OEH5KOP21.3HLMYH6CGBIMF@gmail.com>
-Cc: "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Will Deacon" <will@kernel.org>, "Boqun Feng"
- <boqun@kernel.org>, "Waiman Long" <longman@redhat.com>
-Subject: Re: [PATCH] rqspinlock: Fix order in raw_res_spin_(un)lock_irq to
- allow schedule
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Gabriele Monaco" <gmonaco@redhat.com>, "Arnd Bergmann" <arnd@arndb.de>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, <bpf@vger.kernel.org>, "Linux-Arch"
- <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc
-References: <20260609094941.56122-1-gmonaco@redhat.com>
- <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
- <defc6b1339dea2f64f936902dd6e1f850cff9f4e.camel@redhat.com>
-In-Reply-To: <defc6b1339dea2f64f936902dd6e1f850cff9f4e.camel@redhat.com>
+MIME-Version: 1.0
 
-On Tue Jun 9, 2026 at 6:04 AM PDT, Gabriele Monaco wrote:
-> On Tue, 2026-06-09 at 13:22 +0200, Arnd Bergmann wrote:
->> Should this be Cc:stable@vger.kernel.org=C2=A0to get backported?
->
-> Not sure if the Fixes: is enough to trigger the automation, I rarely
-> remember to Cc:stable@vger.kernel.org and they're usually picked.
->
-> In case I guess I'd need to re-submit the patch right?
+On Tue, 2026-06-09 at 22:55 +0800, Nuoqi Gui wrote:
+> scalar +=3D rdonly_untrusted_mem reaches adjust_ptr_min_max_vals() with t=
+he
+> pointer as the source register. The untrusted PTR_TO_MEM case returns the=
+re
+> without updating the scalar destination, leaving stale verifier state.
+>=20
+> Reject that addition before the early return. Pointer +=3D scalar remains
+> handled by the existing untrusted-memory rule.
+>=20
+> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c8d980fdd709..c6b350f9585a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14823,6 +14823,14 @@ static int adjust_reg_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  				 * This is legal, but we have to reverse our
+>  				 * src/dest handling in computing the range
+>  				 */
+> +				if (opcode =3D=3D BPF_ADD &&
+> +				    base_type(src_reg->type) =3D=3D PTR_TO_MEM &&
+> +				    (src_reg->type & PTR_UNTRUSTED)) {
+> +					verbose(env, "R%d tried to add from %s to scalar\n",
+> +						insn->dst_reg,
+> +						reg_type_str(env, src_reg->type));
+> +					return -EACCES;
+> +				}
+>  				err =3D mark_chain_precision(env, insn->dst_reg);
+>  				if (err)
+>  					return err;
 
-Yes. For whatever reason the patch didn't reach the patchwork.
+Should the fix be like this:
 
-Please resubmit with [PATCH bpf-next] subject, so that CI can test it prope=
-rly.
-And collect Acks.
+  diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+  index 7d27ba396d32..9c85dd680a46 100644
+  --- a/kernel/bpf/verifier.c
+  +++ b/kernel/bpf/verifier.c
+  @@ -13593,8 +13593,10 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
+rifier_env *env,
+           * Accesses to untrusted PTR_TO_MEM are done through probe
+           * instructions, hence no need to track offsets.
+           */
+  -       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type =
+& PTR_UNTRUSTED))
+  +       if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type =
+& PTR_UNTRUSTED)) {
+  +               *dst_reg =3D *ptr_reg;
+                  return 0;
+  +       }
+  =20
+          switch (base_type(ptr_reg->type)) {
+          case PTR_TO_CTX:
+
+Instead?
