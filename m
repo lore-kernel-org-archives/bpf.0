@@ -1,126 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9D939D6FA
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 09:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A834F3D5253
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 09:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780998647; cv=none; b=UwarBSthpWkbjImZyOqW8sN0QK7YFvavApmX1ZvH5kDLtGyL3b+VL1zy121TKDa5V2P10VSf/+04ZxxgsOwn9UJriHRnpsv/scgwGbdAXREPgtBFJAZkvgTZboOwzOc8Q0H1e+caJZBsplaFU6mJHqqr+kr3F7pOMn3DS5nlz6o=
+	t=1780998925; cv=none; b=Rh2hKoICHimL/J27jKRqnMs8A3knW+jWiVzM/fxkrsgVN4tNOMXYwDUQ1LGp5knCE91CK261JL5jcjnRHvEqDR3vrTUqYR9qXrMxdKIcVRPcOs+HdsRYVnHdS8PuqztMvH89BOs7rncH+ua8RnFoNQ3uy542z+zICWXQ15PsF7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780998647; c=relaxed/simple;
-	bh=LVsisOh2t/3BY9u48eKv6sHKecTbrxVyTPE/nrEqEDE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eBvPMbZjC8mZkGarO77Iu4SZ55C6sYOuNkVGOWI4EULnq+AwgMna4r2BbfnYC9+lFPZoArPW+Fy0bsItW6K9ZUpCkC0PSrbTsWhI3gcq46djHBD4RBSdXdPTuOmEJRJY9o2mOq6I/bYn1FM8ICPRDhIStxp8v1+60Pj7xiTty+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omqD8ec4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780998925; c=relaxed/simple;
+	bh=DcBFsIpAZhGV4SWAntpK9gOP0R33pu3PxexqnuhfXzo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=F7zSn3CFRe6H2jj34y7JHTiEcjOrLLo/AFllbFz4cduznCb7XR2H5lCtfV4Zoxu0TL+Z2H15s5Eifn+IoL80H6Hushvw/2V4GqWZWWiAiOFdQgBtq8rw1suN7yfRDw+KIXzRKS2oqex4a8FOPLt8+/desUKlScv3Gnkpq9l7HpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gx+k18nN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omqD8ec4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC1F1F0089A
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 09:50:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gx+k18nN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE501F00893;
+	Tue,  9 Jun 2026 09:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780998645;
-	bh=LVsisOh2t/3BY9u48eKv6sHKecTbrxVyTPE/nrEqEDE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=omqD8ec4RwhqP75Swo+2L1XAYZsWpuWBoMBChLXYdR8kYizp0aLPgiic5S64rpMmk
-	 vb9iiZRLGgGyAFPj5RuQMpZZTb2eaZs29sOweS0GIp33uyAiyd5eb+Ztgfny7mctrC
-	 bNwBiIBwmzDof78RMjqPSG+5SC9BKZntXnazkz8JxepMnr0huQvNNZSzWTh0riXf0D
-	 GkQDMjqq4ZXWeg3veFYUtg+j1toh+4hFnrvb8WXX6LJu+bVCdseEUM4wtZH2HNdCnt
-	 SZYD+BjwnVx38RcvcS8nr6K/kHbHa08B59TF7yWJnMn1M0EglAuhQ4ZsOjLJPm5bBe
-	 ycrjhqeLYPTKQ==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-bef8b97655eso998342266b.0
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 02:50:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9U+7plpuhfQVoPfVurgzsxqS3rUx31dujvR/xBYoTABqRt9M4u8fXjuswE79Jd9OuIyjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt8YAACYafzQLhaGB8xQkMjFSX5I2Fr7haYvrlfUGidtZTp7gn
-	ZPN8jxAfalm1ncpxCkugAIABhNdyDzxxTfyS5mPBpTXOolvzt2LHCI/3g5cmpAtQNgNR3u/srVz
-	qIPqOrOWX25bkTOO+g/PKlW9YRzffr3o=
-X-Received: by 2002:a17:907:60cd:b0:bed:f8a3:23a0 with SMTP id
- a640c23a62f3a-bf3a8a0ce48mr751853766b.25.1780998643858; Tue, 09 Jun 2026
- 02:50:43 -0700 (PDT)
+	s=k20260515; t=1780998924;
+	bh=fOTKfp2g1PtYi407qKWhxiXLUPEzfiVWr56yAWFfTWU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gx+k18nNLPBNp0OWZcB5GCI9QjLEuE047+7fk2DoF8UtJs0oz8e1RY/2tWFZphDwx
+	 QdbKX9E2dpXcrun3qZIoBZAIFQCIC6K3XnOeDGfAWu1cdfmuM90N9zh16uodgAWnP3
+	 +ibjms+gRh/mclNx1qmt8lJeGLzcZ1Yj39pBJFOxzfL+/HqqDjafUTYT8wwOEGNvuQ
+	 rfJLcxr62IU3k/6wNObiepmrh7BsICw1XiIjqecBcabSQ82hb5nEcbaa106en+jynO
+	 wZDNhc91Y4J8z1yUNHiP8Eejl6W1CnencWexjk20RsUZDVr16ruoGig1MENVk9qc11
+	 dOCHbDymRnW2g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 2/4] bpf: Cancel special fields on map value
+ recycle
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260609093719.2858096-3-memxor@gmail.com>
+References: <20260609093719.2858096-3-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 09 Jun 2026 09:55:23 +0000
+Message-Id: <20260609095524.3AE501F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-From: Puranjay Mohan <puranjay@kernel.org>
-Date: Tue, 9 Jun 2026 10:50:28 +0100
-X-Gmail-Original-Message-ID: <CANk7y0jKE1Mq5FQD1M9+CUQt-+G2EQN7hCvUCQJE=hFmsr+o0A@mail.gmail.com>
-X-Gm-Features: AVVi8CeSrRlbGA71o_97ek791-ypZvvhb-lg2xrkdnUMSr3_kQBTCBTCfOxMfQY
-Message-ID: <CANk7y0jKE1Mq5FQD1M9+CUQt-+G2EQN7hCvUCQJE=hFmsr+o0A@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	Florent Revest <revest@chromium.org>, Xu Kuohai <xukuohai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 9, 2026 at 6:19=E2=80=AFAM Jose Fernandez (Anthropic)
-<jose.fernandez@linux.dev> wrote:
->
-> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-> would change the offset of the pre-function type hash (see
-> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-> and the compiler support needed to reconcile the two does not exist
-> yet.
->
-> The result is that a CONFIG_CFI=3Dy arm64 kernel has no
-> ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
-> and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
-> programs are all unavailable. Deployments that want both kCFI
-> hardening and BPF-based security monitoring currently have to give
-> one of them up. systemd's bpf-restrict-fs feature hits this today:
-> https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
->
-> CALL_OPS is an optimization for direct calls, not a dependency.
-> In-BL-range trampolines are reached by a direct branch without
-> consulting the ops pointer, and out-of-range trampolines already
-> fall back to ftrace_caller, where the DIRECT_CALLS machinery
-> (call_direct_funcs() storing the trampoline in ftrace_regs, the
-> ftrace_caller tail-call) is gated on DIRECT_CALLS alone. s390 and
-> loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this way,
-> without having CALL_OPS at all.
->
-> Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
-> widening its #ifdef and using the existing ftrace_rec_update_ops()
-> wrapper (no functional change for current configurations). Patch 2
-> drops the CALL_OPS requirement from the DIRECT_CALLS select.
->
-> Configurations that keep CALL_OPS (clang !CFI, and GCC without
-> CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
-> clang build, every object file is byte-identical before and after
-> the series except ftrace.o itself, and its disassembly is identical.
-> CFI builds (and GCC -Os builds) gain working direct calls, with
-> out-of-range attachments taking the ftrace_caller dispatch path
-> instead of the per-callsite fast path.
->
-> We tested on a 6.18.y-based kernel and on this base with clang
-> kCFI builds (CONFIG_CFI=3Dy, enforcing) under qemu (TCG, and KVM on an
-> arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
-> and BPF LSM programs load, attach and execute; the ftrace-direct
-> sample modules (including both modify samples, exercising
-> ftrace_modify_call()) run cleanly; no CFI violations observed. The
-> fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
-> modify_return, tracing_struct, lsm and trampoline_count selftests and
-> the ftrace direct-call selftests (test.d/direct) pass on the new
-> configuration with results identical to a CALL_OPS kernel built from
-> the same tree, and a broader test_progs sweep showed no differences
-> attributable to this series. Without the series, all of the above
-> fail at attach time with -ENOTSUPP.
->
-> riscv has the same gap (its DIRECT_CALLS select also requires
-> CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
-> acceptable for arm64 we can follow up there.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] Replacing `bpf_obj_free_fields()` with `bpf_obj_cancel_fields(=
+)` fails to zero or free kernel pointers on map element deletion and update=
+, causing new hash map keys to inherit valid kptrs from deleted elements (c=
+ross-key contamination).
+--
 
-It looks correct to me and should work.
+commit a156fa02499cc2be66e3982937fa823e00008e97
+Author: Justin Suess <utilityemal77@gmail.com>
 
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+    bpf: Cancel special fields on map value recycle
+
+This commit introduces bpf_obj_cancel_fields() for NMI-safe cleanup of time=
+r,
+workqueue, and task_work fields on map value recycle. It replaces
+bpf_obj_free_fields() in the array and hashtab update/delete/recycle paths.
+
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index e6271a2bf6d64..4e8d6fe6999bf 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+[ ... ]
+> @@ -392,7 +392,7 @@ static long array_map_update_elem(struct bpf_map *map=
+, void *key, void *value,
+>  			copy_map_value_locked(map, val, value, false);
+>  		else
+>  			copy_map_value(map, val, value);
+> -		bpf_obj_free_fields(array->map.record, val);
+> +		bpf_obj_cancel_fields(array->map.record, val);
+>  	}
+>  	return 0;
+
+[Severity: Critical]
+Does replacing bpf_obj_free_fields() with bpf_obj_cancel_fields() fail to c=
+lear
+old kptrs in the array slot?
+
+Since the new bpf_obj_cancel_fields() helper only processes timers and
+workqueues, the old kernel pointers (like BPF_KPTR_REF) seem to remain valid
+and unzeroed in the slot indefinitely.
+
+[ ... ]
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index b4366cad3cfa5..a9b2b882b90f2 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+[ ... ]
+> @@ -844,11 +848,11 @@ static void check_and_free_fields(struct bpf_htab *=
+htab,
+>  		int cpu;
+> =20
+>  		for_each_possible_cpu(cpu)
+> -			bpf_obj_free_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
+> +			bpf_obj_cancel_fields(htab->map.record, per_cpu_ptr(pptr, cpu));
+>  	} else {
+>  		void *map_value =3D htab_elem_value(elem, htab->map.key_size);
+> =20
+> -		bpf_obj_free_fields(htab->map.record, map_value);
+> +		bpf_obj_cancel_fields(htab->map.record, map_value);
+>  	}
+>  }
+
+[Severity: Critical]
+Can this leak kernel pointers between different hash keys?
+
+When a hash map element is deleted, check_and_cancel_fields() is called.
+Because it doesn't clear kptrs, the element is returned to the memory cache=
+ or
+preallocated freelist with its kernel pointers still intact.
+
+When a new hash map element is inserted for a different key, alloc_htab_ele=
+m()
+reuses this memory. Because copy_map_value() safely skips writing to special
+BTF field offsets:
+
+alloc_htab_elem() {
+    ...
+    copy_map_value(&htab->map, htab_elem_value(l_new, key_size), value);
+    ...
+}
+
+won't the new element silently inherit the valid kernel pointers from the
+previously deleted key?
+
+[ ... ]
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index d4188a992bd8b..8d12aa3728ea9 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+[ ... ]
+> +void bpf_obj_cancel_fields(const struct btf_record *rec, void *obj)
+> +{
+> +	const struct btf_field *fields;
+> +	int i;
+> +
+> +	if (IS_ERR_OR_NULL(rec))
+> +		return;
+> +	fields =3D rec->fields;
+> +	for (i =3D 0; i < rec->cnt; i++) {
+> +		void *field_ptr =3D obj + fields[i].offset;
+> +
+> +		switch (fields[i].type) {
+> +		case BPF_TIMER:
+> +			bpf_timer_cancel_and_free(field_ptr);
+> +			break;
+> +		case BPF_WORKQUEUE:
+> +			bpf_wq_cancel_and_free(field_ptr);
+> +			break;
+> +		case BPF_TASK_WORK:
+> +			bpf_task_work_cancel_and_free(field_ptr);
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +}
+
+[Severity: Critical]
+Since this new helper handles BPF_TIMER, BPF_WORKQUEUE, and BPF_TASK_WORK,
+doesn't it leave fields like BPF_KPTR_REF, BPF_LIST_HEAD, BPF_UPTR and
+BPF_RB_ROOT completely intact without zeroing them?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609093719.2858=
+096-1-memxor@gmail.com?part=3D2
