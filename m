@@ -1,150 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C4148AE39;
-	Tue,  9 Jun 2026 17:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B8E49250F
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781025907; cv=none; b=tSOnsrkLeixYv9Bb5o1wdZ/2k14BEm+bI84JAaWpLIwanhsj/eC1voz6R4IBmvc7jEGdNK3yuhz14Ox/+P81O6bNZCce/JGAc2L115J8t23sE7mMGllQybm8Ad68zNp6PFd3hrijuJOePbmrjhhMbUmB7zNXkU4SteFYIA4mlMA=
+	t=1781026034; cv=none; b=fZPXIgGeioe6JcLyI8co15XdfiOUwESN6Pj8m01Pjck6L4sbVANo0yL9kWoHaQ6xoVhe6ZAKByU+Ss6JhLhAVphAMai9NvNrDzKcsk1Ic1pjfK9PYz7GBpE7NXc1vyNm8cDJW/7++AIZEJl7jki6wq/Q/gthD8/8vGHavTP5r+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781025907; c=relaxed/simple;
-	bh=R3LgZNeYMC5YZb9x2LhfI7SCcEY4bbrZV5kXT1rdB7c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iMp1KLpUegUeGL9mFp2Ljm9xtxwzrb0pfne7mocnsG4U+jjUNl50eqxF9Ga5kN9XATEgKI1buvyIVriud6zVUskcakzblEKFhL458HnCOLv/JnYLBSZQztZqBUomc5KTCFDSWNlf8o3zds/QCeFp+++qqH3/ltWVwR8vUwc+tKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jsSOJ7Se; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781026034; c=relaxed/simple;
+	bh=XP12//l6icFutubq5HcIhpjs1JD3dOe7rFIpKieBZYw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HvH10zZM42tOU92Vbl5OH2nlMYaXt5L7ewP0u451BImKAOBhitEJ3ZYyw0ydaBceXHp7zG1xtoXV7N7YUjkt/EgIg4P37Q8nhkjLJT/bmWemPHkftyOZ9F+bQQMhh4VgTJdj5zqIE0G1v7H2jd5afiZxRQ0RX8Ho3F1YCLM5mIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZvMEgxK; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jsSOJ7Se"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781025906; x=1812561906;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R3LgZNeYMC5YZb9x2LhfI7SCcEY4bbrZV5kXT1rdB7c=;
-  b=jsSOJ7Se3NFWgX8rPLn36rp9cp8uijwKeqFRlNETufCFTwILwMytYkGs
-   lBAWgBN9wYTWBhVOg7sLIg64S5sSGrSnN1f0/AYUspDVlNUdqHNR3GEq8
-   mtA+AOcMBLdNF5LcU0pURlYj2kpSoyMwU1qovBsRTRh7er+9gfcZ+ZF7K
-   uQ38mfITwU8EWHd6pTYYll+VxgEEWcs3Mf5JeOTt2mB1yfV8Lv7nALt8S
-   qaQNj+TcRfZCOxPMLRG3xN34zCrJmvLlhDUT22MMxqtAG4HE857CVb6fS
-   ROJSOAdcoTqzZ1fIFmitK5/K9CaRFLWSRUe2gzHsSzraDmB9hwwgwR/Zj
-   w==;
-X-CSE-ConnectionGUID: B2y/wFieTo+SFSSwjy99JA==
-X-CSE-MsgGUID: 3GVhJkeBT46xQlM31HN7Pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="99373430"
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="99373430"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 10:25:05 -0700
-X-CSE-ConnectionGUID: MERZpGPrRamlaZVZSuMdHQ==
-X-CSE-MsgGUID: nT9MXXb5QQiEbzLvP9oPKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="250995093"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Jun 2026 10:25:04 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	anthony.l.nguyen@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Simon Horman <horms@kernel.org>,
-	Patryk Holda <patryk.holda@intel.com>
-Subject: [PATCH net 2/3] ixgbe: do not configure xps for XDP queues
-Date: Tue,  9 Jun 2026 10:24:55 -0700
-Message-ID: <20260609172458.4046222-3-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260609172458.4046222-1-anthony.l.nguyen@intel.com>
-References: <20260609172458.4046222-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZvMEgxK"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13832028e9fso1023445c88.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 10:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781026028; x=1781630828; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
+        b=pZvMEgxKr9855ZmlbJoiA/5IKV1qyqQYvEsPckraclBbWt+9s8fU4r09aEpQ8YeFYR
+         uT0trqUMPq1LO3IE+n3zNVjNZEdlfcpQoOyTlcRC5olidb7HRvEIKqnyrMAwrw8obzUs
+         vFRpJBxwJZPRgtVSamSawsn/OZMZeHC/RBd1v6XNA9yeS2IFh31gqe0a9wNrN3D9TsGT
+         1b14ToPrZgL4KZW7HAVIoXotTxfrMzq0rvL7eQZjWL4d+zqUydEfuDOJx+fgBDXyieE1
+         2HqenjksjLG60RPwJ2hUWtvTlbe/FkoBu4466/3dgPgslzH8q5/qWt6WomwuJ2/SFKXF
+         kpJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781026028; x=1781630828;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vXMiGqxbaUP+oImtGF3Od5sBeqsgvxmpYzRfPRB1FZM=;
+        b=mgtjNR/ZWwZExcNan/Jrx656GiaNtt5AJJq1lImrMZoetNVo9jWt/XKFQyMPsEFeAs
+         6AdmFWjMOWHWQsL12uF1cqAluJfQ8wAQYuPq4lBVwdhIF22ZgFo4TAwb9qsIG+KYsVWL
+         QJSHphiFgCWyFLvhVMOE1AGydDHsxhliXA70h67YGa/oI2TrtqpSN/RDhgt/mZIXtGC2
+         gf44/TOmlvoOM907rLBpQOVy0CprOK29TCLgiqEpvSyho4ekpBogh8mKxDPyGOP1UcfV
+         FsNq3iAbLu5g4iYOatcFGlt3wMs4VL8FM35rSIQ52cunn1jbjLNMEOZMZt5ckgItALfs
+         m6Tw==
+X-Gm-Message-State: AOJu0Yzxlx+eLc53OVJfAypEjjo0+WTPpDmkysWvPIvdyNv3LDOsdG19
+	5Y5ka9zh0JyHumCRDxMbSUhDrF3+juRdb4Z1hCQxOMqmpmkLifQmnCqy
+X-Gm-Gg: Acq92OGWAOAVKoqnbANPBW7+zUWHOd/jHOUAXQM/QgTfLCk3RAkYI0v+RnFedK7KMZR
+	1soCk/Ywdtg/fsaASBFrQR3JzBzWQZ5QzuVYa/gD9mas/CVmyC1JWFFIOLq67PN34paWm8F7Y81
+	5KU+PxWuX6dAapU9AehNzk9HbqpoDnqjA81npJWaxktBdzvqmElq49Rh/cZPSukVagXawnuRYJG
+	XbHCTuZjYcwF9wGVgWUsVgnrPPa746h4uJpme40nIA9y5HOduZjs7i1S3tB175zAm5nvOoA8Qgs
+	I7y9XZti1Y5WKVNubWfIvcc1bLwKaluEFPVJTNHp3l338dSIPpTuO+9BbKg8z94hP8tUx7i8lOI
+	jH2B+hNPEsImtnKzMVWecnZN5Gb6tSSwNlxscwrMJZ3Ef/m7nm6jD93IvUj16dww3/sxR5SZcBg
+	wGI0cgYcBsQif2Fk7jCvRrojqWzKgxEiW9SDmtSlV9tDUG0LbU530OJbDX7Thp9M/6eTPGPDXd0
+	WQKyQxeLKWkrTfnBxQ=
+X-Received: by 2002:a05:7022:f9a:b0:11a:342e:8a98 with SMTP id a92af1059eb24-138065b2f54mr12010692c88.0.1781026028061;
+        Tue, 09 Jun 2026 10:27:08 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:f998:4362:fa1b:11a8? ([2620:10d:c090:500::3:f603])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1381495bb00sm9369001c88.3.2026.06.09.10.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 10:27:07 -0700 (PDT)
+Message-ID: <b58e49c8f4d2d4d5d1a9a8f27e77b56b04b5a70d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation against
+ CFG
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Anton Protopopov <a.s.protopopov@gmail.com>, Nuoqi Gui
+	 <gnq25@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan	 <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 09 Jun 2026 10:27:06 -0700
+In-Reply-To: <aig3p8QFlWv1sFqV@mail.gmail.com>
+References: 
+	<20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+	 <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
+	 <aig3p8QFlWv1sFqV@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Larysa Zaremba <larysa.zaremba@intel.com>
+On Tue, 2026-06-09 at 15:56 +0000, Anton Protopopov wrote:
+> On 26/06/09 11:03PM, Nuoqi Gui wrote:
+> > CFG construction records the modeled gotox target set in
+> > insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
+> > target is in the current subprog. check_indirect_jump() later validates=
+ and
+> > follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
+> > verifier does not check that targets copied from that map match the tar=
+gets
+> > that CFG construction modeled for this gotox instruction.
+> >=20
+> > This lets one gotox instruction observe two different INSN_ARRAY maps. =
+CFG
+> > can select a map whose target is in the current subprog. Another path t=
+o
+> > the same gotox can carry a PTR_TO_INSN value from a map whose target po=
+ints
+> > at a different subprog. The verifier then accepts an edge absent from t=
+he
+> > CFG.
+> >=20
+> > On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
+> > target not modeled by CFG can enter another subprog without a matching =
+BPF
+> > call frame and crash when executed. Validation observed a GPF in
+> > bpf_test_run().
+> >=20
+> > Fix this by requiring every target copied from the actual PTR_TO_INSN m=
+ap
+> > to be present in the CFG jump table built for the current gotox
+> > instruction.
+> > Reject the program before pushing verifier states for any unmodeled tar=
+get.
+> >=20
+> > Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> > Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> > ---
+> >  kernel/bpf/verifier.c | 26 ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >=20
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index ed7ba0e6a9ce..25fa90e731e3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -17124,6 +17124,23 @@ static int indirect_jump_min_max_index(struct =
+bpf_verifier_env *env,
+> >  	return 0;
+> >  }
+> > =20
+> > +static bool is_cfg_indirect_jump_target(struct bpf_verifier_env *env,
+> > +					u32 target)
+> > +{
+> > +	struct bpf_iarray *jt =3D env->insn_aux_data[env->insn_idx].jt;
+> > +	int i;
+> > +
+> > +	if (!jt)
+> > +		return false;
+> > +
+> > +	for (i =3D 0; i < jt->cnt; i++) {
+> > +		if (jt->items[i] =3D=3D target)
+> > +			return true;
+> > +	}
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  /* gotox *dst_reg */
+> >  static int check_indirect_jump(struct bpf_verifier_env *env, struct bp=
+f_insn *insn)
+> >  {
+> > @@ -17171,6 +17188,15 @@ static int check_indirect_jump(struct bpf_veri=
+fier_env *env, struct bpf_insn *in
+> >  		return -EINVAL;
+> >  	}
+> > =20
+> > +	for (i =3D 0; i < n; i++) {
+> > +		if (!is_cfg_indirect_jump_target(env, env->gotox_tmp_buf->items[i]))=
+ {
+> > +			verbose(env,
+> > +				"gotox target %u from map id=3D%d is not in the CFG jump table\n",
+> > +				env->gotox_tmp_buf->items[i], map->id);
+> > +			return -EINVAL;
+> > +		}
+> > +	}
+>=20
+> Thanks for reporting the bug.
+>=20
+> As for the fix, would it make more sense to either record maps in
+> check_cfg or to re-check subfunc boundaries here?
 
-netif_set_xps_queue() should not be called for an XDP Tx queue, since such
-queues are not netdev-exposed. On systems with number of CPUs >=64, on E610
-adapter, netdev is configured with maximum number queue pairs being 63
-(due to MSI-X assignment), but configuring XDP results in 64 XDP queues.
++1 for checking if the jump is within subprog boundaries assumed for the go=
+tox.
 
-So, during XDP program load, when netif_set_xps_queue() is called for the
-last XDP queue, we get a WARNING with a call trace and KASAN report
-afterwards (if enabled).
-
-[ 2012.699800] WARNING: net/core/dev.c:2854 at __netif_set_xps_queue+0x116a/0x1e40, CPU#36: xdpsock/103668
-[...]
-[ 2012.700029] RIP: 0010:__netif_set_xps_queue+0x116a/0x1e40
-[ 2012.700035] Code: b6 34 06 48 89 f8 83 e0 07 83 c0 01 40 38 f0 7c 09 40 84 f6 0f 85 03 0a 00 00 0f b7 44 24 40 66 43 89 44 6a 18 e9 01 fb ff ff <0f> 0b e9 f2 ee ff ff 44 8b 44 24 44 45 85 c0 74 50 4d 85 e4 0f 84
-[ 2012.700040] RSP: 0018:ffff8882369aeb28 EFLAGS: 00010246
-[ 2012.700046] RAX: 0000000000000000 RBX: 000000000000003f RCX: 0000000000000000
-[ 2012.700050] RDX: 1ffff1111da3d891 RSI: ffff888120e34250 RDI: ffff8888ed1ec488
-[ 2012.700054] RBP: ffff888913281560 R08: 0000000000000000 R09: ffff8888ed1ec000
-[ 2012.700058] R10: ffff8888a2e83180 R11: 0000000000000000 R12: 0000000000007fa8
-[ 2012.700061] R13: 000000000000003f R14: ffff888120e34854 R15: ffff8889132817c8
-[ 2012.700065] FS:  00007fc8ea9ff740(0000) GS:ffff88884cefe000(0000) knlGS:0000000000000000
-[ 2012.700069] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 2012.700073] CR2: 00007f81c8000020 CR3: 00000002299f8006 CR4: 00000000007726f0
-[ 2012.700077] PKRU: 55555554
-[ 2012.700080] Call Trace:
-[ 2012.700084]  <TASK>
-[ 2012.700087]  ? ktime_get+0x61/0x150
-[ 2012.700097]  ? usleep_range_state+0x133/0x1b0
-[ 2012.700108]  ? __pfx_usleep_range_state+0x10/0x10
-[ 2012.700114]  netif_set_xps_queue+0x31/0x50
-[ 2012.700119]  ixgbe_configure_tx_ring+0x472/0x920 [ixgbe]
-[...]
-[ 2012.700486]  ixgbe_xdp+0x38f/0x750 [ixgbe]
-
-[...]
-
-[ 2012.701094] BUG: KASAN: slab-out-of-bounds in __netif_set_xps_queue+0x1ac5/0x1e40
-[ 2012.701100] Write of size 4 at addr ffff88888d43cff8 by task xdpsock/103668
-
-Skip XPS configuration for XDP Tx queues.
-
-Fixes: 33fdc82f0883 ("ixgbe: add support for XDP_TX action")
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Tested-by: Patryk Holda <patryk.holda@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 2646ee6f295f..9ec250c26284 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -3958,7 +3958,8 @@ void ixgbe_configure_tx_ring(struct ixgbe_adapter *adapter,
- 	}
- 
- 	/* initialize XPS */
--	if (!test_and_set_bit(__IXGBE_TX_XPS_INIT_DONE, ring->state)) {
-+	if (!ring_is_xdp(ring) &&
-+	    !test_and_set_bit(__IXGBE_TX_XPS_INIT_DONE, ring->state)) {
- 		struct ixgbe_q_vector *q_vector = ring->q_vector;
- 
- 		if (q_vector)
--- 
-2.47.1
-
+> >  	for (i =3D 0; i < n - 1; i++) {
+> >  		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+> >  		other_branch =3D push_stack(env, env->gotox_tmp_buf->items[i],
+> >=20
+> > --=20
+> > 2.34.1
+> >=20
