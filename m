@@ -1,153 +1,124 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2381B3B6BE8
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781024544; cv=none; b=IbthviQdiiwHJuC7AMvXpRqoly3R88MFGkaA50+hEQI9XO26aC3J7spwpn0chA1YIAxayEmQ899JdN9lsJ5KOPLSEkGao5oA4Om+Sr7Iv33tBdkwnoOeRee2Xv7lQd7Pi67jtbhTezIu/T8ub4RFgZV74zOls7cDu9CyMi1V+yU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781024544; c=relaxed/simple;
-	bh=cNdsAI7Z5D7KsKcEyB+EW7DpMSbpeItLfIJp3ChdbcQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ULs1jJ5K+YJa8EtVsEsqsRTbj87EQjoRk/mJ869MOH7mcLKAWJCa/FKm9b0ZWDTqJ71EZ/szHgrU4HxVBLl5QciGLJgSg+w/ZwGP6OsG8iC75W8u+yQq/9hBupBTxCAMXgQbPj2tYFMsOiZi0I2XssTJNlLw+I5LS+9o+aepflI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v2OeLYRX; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BF04B8DD0
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 17:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781024675; cv=pass; b=oW42zLjm56VYVIMi1Jp3QNMxJZ+QwBD92+McSIJVhbOof5cHigDZrrEF34wAAzS014jcJk+8jh+XEXHUPl7yvaWhF93mhay48jug8Yo9kMkvGyVtb4+LlUZ0vtgdsdw3AMNEVI4bo+vq5X3JRf3zdBw0PX9pnYozA9zyF1uISnI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781024675; c=relaxed/simple;
+	bh=BAbbimQpEHy8btdA47PpCZm87JFf7PlY50yw3RdP/XU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=F+j9LifF+eYe1uXEX4LOfBHIpEns+g35YUSckjTjkKUqh+aHVdS7VwsAiB2hWRKqGqzHKhQizgtZSZ8ZdK0+dUmHdDY1mfBm0fKvxvnKj/wkGUBRM/1ODbcbG/4GHLKQwFLVRLdtycQsMit20Eup7trW7PZsvr16UEu3hY6mUnU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rmIhtM/D; arc=pass smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v2OeLYRX"
-Message-ID: <7f5e6242-c5f4-4238-95cb-7bc24d5e1b9a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781024526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KFwcyz1tM8wZUAwOLgquJfIAbvVblL8BdNmlIMOE2tc=;
-	b=v2OeLYRXn63F+QG7UMybyt0ZQBDYedpvFKmBM3P8JQHceyPA0nkZFj1AaBlL4zOnMDJLlB
-	vRZms+buV2RcbAvRWDaKXGrcDDLODtruFNTLppoka+2IJ+UX6qMxUMYz9tVTDQvIUKm6xK
-	yPQednr0XiABfKqC9T8ObK5FlccIZVw=
-Date: Tue, 9 Jun 2026 10:02:02 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rmIhtM/D"
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-486304fa184so5103237b6e.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 10:04:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781024672; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jr21Yojcww5kXSAZ++cNbc+UFm2FDh+nT775+Z6Yda8tlnN8uQ1/Hy8Q6ZXWEHpkiT
+         5mtAzKyEgr4i6e4anR24Riiy1Sd/TLGOI2Hp7kmZffQPLZiuaMEIVirHYM7yFcvz2SU9
+         86anl8orolcdSRRFLEcWvCLItJMOkIw3LSHK8o61PawwQi9dfxCo7S7RpMarlbR7Nr2y
+         AWFBhoovSFPSly0adTFYKvV49jb9Bgm621X3a7u3V8auZvIexD9No9YJwhvTqIyt7pLd
+         49ApL2ltVXxOtfhMB5ti1mRIcAJaqmn3Jm0uK2KaBRtuKfKilg9J7cTvwJxfJU5dfbQQ
+         //4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:dkim-signature;
+        bh=BAbbimQpEHy8btdA47PpCZm87JFf7PlY50yw3RdP/XU=;
+        fh=gjQP6wX+A2VuFnDRIrL7V+RhH3sXHicguRWQSuXrS/M=;
+        b=HFz0kGd93koAMJ5RZw1GLsa/DbgbLDG5bU2yTa1oiF3LBIahSk2hc70L170HClGoUb
+         H479XxY4tATuoixTqdY9Qzv0/LyVx4giU7EXuzKtuZ4fNSgwo/SDvubbJZcDkwLx/+I7
+         RXKkf509YQswCjepR3O4D0GcLKCu28tjmi9OzqenQ+ypHi+mof1En1f7SmOegq6erzum
+         1LftCM0S3sjjyviN2Ys1bp7CBR07yrJKN1Si3sQBrL/wDt4YyHBQD7d/l+vF2HhK260P
+         wB/pE1TZPdNBgBsHV3CEJPcO45pLTRSsUg8jFXJM+ETaS5VqJ3B2fk/6CO3WCgsKnFZ9
+         JckA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781024672; x=1781629472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BAbbimQpEHy8btdA47PpCZm87JFf7PlY50yw3RdP/XU=;
+        b=rmIhtM/DZGpq20mrEqmdXK+VzTjqetDeP/UI2KQNFLhJyFnL3MxHIBFzuKsmg7bRv3
+         7izzd8jLJV8UCJ4Ot95kHUMMmspuLJFTlKfc5mA+U5GCBCluK/aJz2RuZN9IRUk2Geqa
+         5qFRH2PAYtxdSeNNfCQLfbJoU7apJ7iOnBsITXoYgCmhX2CCsCagsDr80IQ0GZX7ouzd
+         iAzIlI+ufMwTWEnOfvMKIlTOESiUfl6/e8t4r9FmBTkSWudxEkmT2B1DCuL3D6FowxHD
+         bhvz4de00J84QqvIceYjbgYCiOX6uxhTTNp6UM8OcQJtONp5a38IudKcaKe9O3z2pss2
+         QfLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781024672; x=1781629472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BAbbimQpEHy8btdA47PpCZm87JFf7PlY50yw3RdP/XU=;
+        b=H6ft6z84Tzshz/LgYWcGS6e9oAM2PZDroyO2kgRtyt1sRWwU8uHIBPnLxEjRCzIfP+
+         wN7hJDquDgNiJspfF/ARombFQ3MzlH/YOLcX6zh0JyBX19oUXCr/0pZ9LkDgWwXE1keN
+         2UxsC67T3c/XwFTtuSUx4TVEYUyV/Z4rqIidm4lywOdjDcIdfTbvadlAAIxLGt2JQlqJ
+         R44lI8mAu1chKEQEZ6i2x4u13pytfY8sfFZTrFZvrqKMGHFQ24vES43iJDoAmHrEcgMs
+         RrUI6gHp0cRlt3SPvRX6IO0tPMScD6rgQl3N96/HpbE8QsoPJcfYWVFFmQIQW3MbCZea
+         xiDA==
+X-Gm-Message-State: AOJu0YyAQMJurytPM75v2ROtBCbdLqBh8+7SATkhnzJpexa927uuxVLH
+	nCJuSeIYPJzqn5nkBxWU/7/IEahk0R4sIJlu6JjqbUAxb37/OoocCG8dosD0P80gKIx3NhQPQDJ
+	ywV0DVNwAaWqPX36e4Z6PLEo/s1PABrxdMfSLM+g=
+X-Gm-Gg: Acq92OEsXaof3W8/tfGAE1nB8Bl5X5V1hb9RQHguyR76J0pIZ/1zgipgtlcYDL8aj5p
+	A8BI9I5j/2LIwpvvb4/Md7h5vI3OTVQ6sCBAT1ENeSO60mPA/J01U49qNIM7d3Th1SpTUtz1yvi
+	tN/byMNGV3TciSaz/VoumUMRcf8Y4in4NXilCG9Q9hTsmUf801A74mbqbFqFPTf0JiEUwKVlXrw
+	FhYFzjJpBkNDJzXiUb3ffoFei+fuKdCDZFe3VHpuqsoodJ0oS71LNGWgUsy48cBfwu3PV6wMeSN
+	/6g2naAgeOmDNIKEzuaOBugfSw==
+X-Received: by 2002:a05:6808:11c1:b0:479:fa21:adfe with SMTP id
+ 5614622812f47-486f0007210mr2291412b6e.6.1781024672246; Tue, 09 Jun 2026
+ 10:04:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Keep int return type for
- tailcall subprogs with maps
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260609163952.1718472-1-yonghong.song@linux.dev>
- <20260609164816.DB3821F00898@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260609164816.DB3821F00898@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+From: Mahnur A <s.mahnur.a@gmail.com>
+Date: Tue, 9 Jun 2026 19:04:20 +0200
+X-Gm-Features: AVVi8Cd7s_fOHtIxiieh-sY893tbG3cF_CrxC7Y_7zFD9IRWyK2ShY6Fziz4pm4
+Message-ID: <CAJ-umGQ9edRUCnaLYTW1F2wbRDhxM7RRra545ZYbM+8++ModaA@mail.gmail.com>
+Subject: [BUG] bpf: Tracing progs on the stack save subtree can result in OOM
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	rostedt@goodmis.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+I hit the following case on the current mainline kernel (7.1-rc7)
+
+BPF tracing programs that allocate something and have a deferred-free for i=
+t:
+Attached to any function in the stack save / unwind result in OOM.
 
 
+KASAN, slub_debug etc. all save a stack on every alloc/free.
+An example bpf program updates a map element,
+before lookup and retrieval of the timer object.
+It then calls bpf_timer_init().
+If this happens at every alloc/free event,
+a new timer object gets allocated with every map element update,
+while the previous one is deferred-free (via kfree_rcu).
 
-On 6/9/26 9:48 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The BPF array map `array` defines its value type as `__u64` (8 bytes), but the code passes pointers to local `int` variables (4 bytes) as the map value to `bpf_map_update_elem()`. This causes an out-of-bounds stack read by the BPF helper, leading to either BPF verifier rejection or incorrect map state.
-> --
->
-> commit 638a9e186d9da40d2e394848eda6a546f07a86fd
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> selftests/bpf: Keep int return type for tailcall subprogs with maps
->
-> This commit prevents LLVM23 from changing the caller's return type in BPF
-> tailcalls by using a barrier_var. It also switches to using an Array map to
-> store subprog return values to preserve test results.
->
-> Link: https://github.com/llvm/llvm-project/pull/198426
->
->> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
->> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
->> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
-> [ ... ]
->
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_ARRAY);
->> +	__uint(max_entries, 2);
->> +	__type(key, int);
->> +	__type(value, __u64);
->> +} array SEC(".maps");
+All these alloc/free cause cascading probes to fire which in turn trigger m=
+ore.
+The timer objects accumulate without bound.
+kfree_rcu()'d timer objects are reclaimed at a slower rate (or RCU stalls).
+This results in OOM which eventually kills init.
 
-> [ ... ]
->
->>   SEC("tc")
->>   int entry(struct __sk_buff *skb)
->>   {
->> -	int ret = 1;
->> +	int ret = 1, ret1, ret2, key1 = 0, key2 = 1;
->>   
->>   	clobber_regs_stack();
->>   
->>   	count++;
->> -	subprog_tail(skb);
->> -	subprog_tail(skb);
->> +	ret1 = subprog_tail(skb);
->> +	ret2 = subprog_tail(skb);
->> +
->> +	bpf_map_update_elem(&array, &key1, &ret1, 0);
->> +	bpf_map_update_elem(&array, &key2, &ret2, 0);
-> [Severity: Medium]
-> Will the BPF verifier reject these bpf_map_update_elem() calls, or
-> will they read out-of-bounds on the stack?
->
-> The array map defines its value size as __u64 (8 bytes), but ret1 and
-> ret2 are declared as 32-bit int variables (4 bytes). When passed into
-> bpf_map_update_elem(), the helper will read 8 bytes starting from the
-> pointers to the 4-byte integers, potentially reading uninitialized
-> adjacent stack memory.
+Please find the reproducer, config files and the full backtrace here:
+https://gist.github.com/MahnurA/622d0cd44df686e241a4b043023871a2
 
-Good point. I should do __type(value, int) instead of __type(value, __u64).
-Will fix in the next revision.
+A possible patch could be to not allow BPF programs to attach to such
+points at all,
+but I'm not sure how that would scale.
+I=E2=80=99m happy to test debug patches or provide additional information.
 
->
->>   
->>   	return ret;
->>   }
->> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry.c
->> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry.c
->> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy_fentry.c
-> [ ... ]
->
->> +struct {
->> +        __uint(type, BPF_MAP_TYPE_ARRAY);
->> +        __uint(max_entries, 2);
->> +        __type(key, int);
->> +        __type(value, __u64);
->> +} array SEC(".maps");
-> [ ... ]
->
->>   SEC("fentry/dummy")
->>   int BPF_PROG(fentry, struct sk_buff *skb)
->>   {
->> +	int key1 = 0, key2 = 1, ret1, ret2;
->> +
->>   	clobber_regs_stack();
->>   
->>   	count++;
->> -	subprog_tail(ctx);
->> -	subprog_tail(ctx);
->> +	ret1 = subprog_tail(ctx);
->> +	ret2 = subprog_tail(ctx);
->> +	bpf_map_update_elem(&array, &key1, &ret1, 0);
->> +	bpf_map_update_elem(&array, &key2, &ret2, 0);
-> [Severity: Medium]
-> Are ret1 and ret2 causing the same 4-byte stack read for an 8-byte map value
-> here in the fentry program?
-
-The same as above. The value type in the map should be just 'int'.
-
->
->>   
->>   	return 0;
->>   }
-
+Best regards,
+Mahnur
