@@ -1,148 +1,212 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98F7481668
-	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5ED363087
+	for <bpf@vger.kernel.org>; Tue,  9 Jun 2026 18:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781030383; cv=none; b=QKunFdmY+iXX/j6bHTJRX4GMjOyhHwCFEXvHD01KK6J1GuamxRsaNFF9romX+ULe1JcWrxsiuXO69IYqtjZ8nhOSHPbHsJxZK7SB6Rm5howyUmH0nmG7DmlDYg0B5q6z5llQwBmkcrlTQUJMSGVIkz7Inea0YQwWy48yySMwdPA=
+	t=1781030408; cv=none; b=N/fatnsw7Jzgtyz3ZcDRdlJ/404rKdNGO8QIlZs9X9YZA41P+jMQxHxUhzhuV+JywKCbim7+KFjFH6z5Btfla98E25174rBvma7eCEkpoA9UHKmx3FF6njmPdKNghRJbR3lOG1ePrbZR62rl5tEQWB0w9uF6vglN5zAsI2GKy0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781030383; c=relaxed/simple;
-	bh=T35csNRp44bHur/yLsWKZYVmWYj1MSMEmQcrTkBCMFo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f7I7CmXCyVeDswOmcb/65wZBcF8HGbehjPHnL532TZGbzJGGnA93z16q96XPblrA0ffVNeIM0w8ZR6ql0q8OjFp7CXF8aLv59A040B9njJid4YlNBfoZTewcHzWbmilR9kMsrCB7OnvXzz5TTzBHHpKHMPTgUge7nY4uThqei6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gfNDjV5J; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781030408; c=relaxed/simple;
+	bh=KxcRlVXdhzyTftXTuirhm/LpEsvJti2IkH63RC84v/A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=k2SairlSXEdL0YFyWpoAvHS1eGiOsNoDAZucWCD8V9N950XBB+MSJIGjxOWQ7AUuyVWoNPaQU/vpy1quccVMqL2Gp3CzzbiIGW3d3z4wihJ2AG5BVcVQEjibBq6+y5VwLhPg6OqHylYhZGy6M8xTAVLDyH10/6jxEfMiYHELyRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=gR8vZZn3; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gfNDjV5J"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-36b8d414666so3374014a91.3
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 11:39:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="gR8vZZn3"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-307d0405e07so1570415eec.1
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 11:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781030381; x=1781635181; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgBJaGA+2PRCOgDDMrQ8yVdOjKxw4/VzWOqWrrWZF+g=;
-        b=gfNDjV5JXZviWYwxsEV54l/jbQECYy5PAWTgR7JsSxxwGIdrt43h4MJjAX3xoVP1KY
-         +OMI776kL5zrbd1NDxoJCYTVvUvBYFdJ1d/ahYlyQKBi1aYDkBSLvVs09S6cpybUaD42
-         8LtuBhfvTygtxk4ToigBa9gcuCQmpbjxWzKu31vHcTV1SPCkKjSAn+byO1GBmOw8EEih
-         XB4IrWANiq/sRR7WSXacgW7NrlqvzXzwVU2HwzoHOPloRTjUdx38IkR+caaGqNaj+TFi
-         O6P90SmfOJOaLeP25EZS5Q48yO3BLlHyTrSRuEMHqbfvC3pgR7oTrTLezQmLwRxrg4t2
-         01mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781030381; x=1781635181;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781030406; x=1781635206; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kgBJaGA+2PRCOgDDMrQ8yVdOjKxw4/VzWOqWrrWZF+g=;
-        b=WjyrMO6QTrJTiQuBqeA4KW3+YGW4ket2A1LNHQdc0+ci492MYZySy/R3pbnyAFe3hv
-         AACXmkvxjA9XIKA3Xqn5RxY0Mcx0IahkUTrtKs11b7ZOCdqvHwh0cpL9f776xPmRUj7X
-         5pE4wxj7c7wor3vxPcWMUkPNsxzNq93OFmQVViLc73VZ8W3UGQ02qD0Nk5FlFD/aK6Aq
-         f9/DyqMJflxXvBOEAOZZt5lqzelgjJcnTqGECMWfyojW4ix4n7OHQUop+UNyC0+V4lCJ
-         X/ZHAZZ5osLwdk4BFFur4dVHiB/1/gDC+isPv7dhURJ+GdbSOeIKNx3tcwNt14KkDdvT
-         mizA==
-X-Forwarded-Encrypted: i=1; AFNElJ+Gy1m0x3pNffI+i77oW3J1kNJTdhuP6l50DGrPcC3q3E68BDBUjkUc8nEsOrKCGBDheg8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/9MV3gwEZjqni2jUXf08m3YmuMiUkj3juiYDQxlXNPwk71lZa
-	YViZxuIdfq5yMGaisKa6xw4iUi/iRtRVSA/2vlvzuKYawM752a2pTu6z
-X-Gm-Gg: Acq92OEbwCYi33Za3PJXTeBUwVh609NuAiLrR7IUqt6yi7ASLG+RpWMPKOqzVoeOtyv
-	ynW5YU9oAa42wi7h6m5JkuecAEFVmoSjHRorr90hDbJvKzDldQIr2RMUUQ0wv+1ExqSnRrSmu5O
-	uv9GJWhQ9uPiN598L9oPk0YzFnVGa5FgPrqo4LzeHfO94B8Xjt5k/VAawPwKSmqXGf0bb4ZunTx
-	3YPygcbDrqY1B6Jeh3C/XCMgHk3HOXW7l+n0a9TXqOAijsLVmZzTgvayfiYdo1FZCp6KFzhfSdE
-	8dwiTzX4gCs774OPX9UigQaT19AgFCgAo3aa3op0XdZlJP3Ggv6Thu6ihfiJ9UWQbCIH5M8SUa/
-	7ICADCDnB+EsKsoEAPrg/rMzi0v7K6KskAGb2aVFSybIIs+NioI/JCUrMCpt4LqeJuqmV3Z8fGL
-	88ZiEVefi/5URs28nssIpwyW1ex+LtqDpwvb2S+UWQ8kfI0+FZa/4J3+ysKT0tUDr5iKmTe3hq3
-	Bn/SwSmI9Y=
-X-Received: by 2002:a17:90b:570d:b0:36a:f612:e695 with SMTP id 98e67ed59e1d1-375211ae4c4mr4508510a91.17.1781030381081;
-        Tue, 09 Jun 2026 11:39:41 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36f70a28c0esm20486626a91.12.2026.06.09.11.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 11:39:40 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Zijian Zhang <zijianzhang@bytedance.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
-Date: Tue,  9 Jun 2026 18:39:26 +0000
-Message-ID: <20260609183927.4021802-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=XxZdzUXTKoVzY8ECTZacPVb3vRrlTkx7Oijlt3fiTlg=;
+        b=gR8vZZn3HvnlPrIndunFV+wBaG6Q80/RDIqQN5IhYACB6r/+KMwRTyq4m96OmYzLlJ
+         KTuxHaSiPRs07NoW5T5X8zMFSjRznBydVNdsYpeZD7voYYa12zcQlZnq5J0qD2SmUv7w
+         Y73v9+u4q9EyuuK7+HrfRphjMvXyMP/FA2S/bm+GXse/j5Xq1ZTt5bqtbtt1PUMO92uD
+         upXpAaCkrXQHXVUD3prAV4hApAV7OpNJICRUJPGPzuC94qK86yRSMgZxT4aaB5ON3w3j
+         /As0Cnl1vCNBIzqminxURIjRW2TzlNJUy9O1Oigg0dJfW+vXCa44Rey7vXsszYKfKj3F
+         lqcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781030406; x=1781635206;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XxZdzUXTKoVzY8ECTZacPVb3vRrlTkx7Oijlt3fiTlg=;
+        b=dd348CLuc1/OwIzzrJCPOJsRwKr3mnXbGP63MFPZJz7R2/KoWKWamXFIrZBFPzmkr6
+         EdTrUkcLNQyA9ETNoBgl6kQFnrB7FdqYOGeawudZ5pBO2a5fTnW81rnzHB/MvvQsWwfn
+         Bz+/HAXRGJfwTWf2AoE5zMq4YugmN/Ql4fF4hhMuzz4ZereXQEGKWUqYlM6DixktGjFk
+         +523InV08M7/m5xpO1FO3fflIDM31VUY+mwJWayks59B16qZ0TJwrr6pE5w01hdcb8Uc
+         +AfqWBGQtSg6H54vMTrBmCOCd5E/+aav9FQvB8PqZuGEUe6SxRUy+fDD8xOXwKb/ywo2
+         ia4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9Z9j61J0DeggVYD7VouI9eTu5EgXsWEYuqIOaWQcUbJjVEIkZQp0zc4/41zfLyCxwbYrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT9JQ51iRD/O0hj8WzIbIlpJKYxAViRJGtA0XEtvEIYNziofrK
+	l/41ZU1ZOpe8VY1I+VwpQjlYU34wAruRHOw2/c3AJYiOi+WZdM/sxpgzC5c3h5bkvgI=
+X-Gm-Gg: Acq92OHiJHUZTRQ3kqMGgMknbU8nG4O9Gbl3/Hn+g2B894LaH4Sy/838//E0/3M8ask
+	FIaxmAZEZI7usiM1cv60ITVDvYZDVXSPmo5mjDL5oIcwx12yiDK3le6ZdNqfmLEOuwRF2Buo7zi
+	avKqiZEp0FK6tZhmfJJ/dZDcph7ikt4pAiNZd0x3Q9aah1OtTCgkcWifoIQ5Izgfc2jRxkZJhyw
+	aRnBQ7/w/3biPNorrCaTDAVXy8HKOPdsH8tiJH9FmF02IXpdPWtke01uMTqEHvVx4pxomnszTiy
+	kMk/N7hMD/YM92iX3GyzkQy9Z31BuFg/g0EYAzdBZ0loq7I1ideCND8KEIdcIcIiOYOB7TLkgGV
+	ay8Qj/mEe5n/E/FwIl+MyM161w3djQ0vLcO82iHMVTyZYkDGDZ2DTnzd3J2T1JEshI3PvaoOQl0
+	cd89JhN2o8fGa8mhKYpNGLWY19fA==
+X-Received: by 2002:a05:7300:8cac:b0:306:f474:738c with SMTP id 5a478bee46e88-3077b084d97mr12702339eec.13.1781030406061;
+        Tue, 09 Jun 2026 11:40:06 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::3297])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074dcad34esm32039312eec.11.2026.06.09.11.40.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2026 11:40:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Jun 2026 14:40:03 -0400
+Message-Id: <DJ4QL4538Q8K.1CQO51UWYJQ2J@etsalapatis.com>
+Cc: <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <emil@etsalapatis.com>, <mykyta.yatsenko5@gmail.com>
+Subject: Re: [PATCH v3 bpf-next] selftests/bpf: add tests for arena vma
+ split and fork
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Ruslan Valiyev" <linuxoid@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <martin.lau@linux.dev>, <memxor@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <d12081a0-b933-44cd-8c46-5d7b83cf0347@gmail.com>
+ <20260609083709.168755-1-linuxoid@gmail.com>
+In-Reply-To: <20260609083709.168755-1-linuxoid@gmail.com>
 
-start and len are u32, so
+On Tue Jun 9, 2026 at 4:37 AM EDT, Ruslan Valiyev wrote:
+> Add a test that an arena map's mmap()ed region cannot be split by a
+> partial munmap() (the "split" subtest, which expects -EINVAL) and is not
+> inherited across fork() (the "fork" subtest, where mincore() reports the
+> child's range as unmapped).
+>
+> Signed-off-by: Ruslan Valiyev <linuxoid@gmail.com>
 
-	u64 last = start + len;
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-evaluates start + len in 32-bit and wraps before storing it in last.
-The bounds check
-
-	if (start >= offset + l || last > msg->sg.size)
-		return -EINVAL;
-
-can then be passed with an out-of-range start/len, after which the pop
-loop runs off the end of the scatterlist and sk_msg_shift_left() calls
-put_page() on the empty msg->sg.end slot:
-
-  Oops: general protection fault, probably for non-canonical address
-  0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
-  KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-  RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
-  RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
-  RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
-  Call Trace:
-   <TASK>
-   bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
-   bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
-   sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
-   tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
-   tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
-   __sock_sendmsg+0x153/0x1c0 net/socket.c:802
-   __sys_sendto+0x326/0x430 net/socket.c:2265
-   __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
-   do_syscall_64+0x14c/0x480
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-   </TASK>
-
-Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 80439767e0ee..d6d2fc589218 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2974,7 +2974,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 	   u32, len, u64, flags)
- {
- 	u32 i = 0, l = 0, space, offset = 0;
--	u64 last = start + len;
-+	u64 last = (u64)start + len;
- 	int pop;
- 
- 	if (unlikely(flags))
--- 
-2.43.0
+> ---
+> v3:
+> - Consolidate into one file with a shared setup helper and two
+>   subtests.
+> - Put the opening /* of the multi-line comment on its own line.
+> v2:
+> - Drop the regression-test framing and per-callback details.
+> - Split the original single test; unpack the mincore() check.
+>
+>  .../selftests/bpf/prog_tests/arena_vma.c      | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_vma.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_vma.c b/tools/t=
+esting/selftests/bpf/prog_tests/arena_vma.c
+> new file mode 100644
+> index 0000000000000..f6c07cd31d08b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_vma.c
+> @@ -0,0 +1,94 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <errno.h>
+> +#include <sys/mman.h>
+> +#include <sys/wait.h>
+> +
+> +/* Make sure arena mappings cannot be split or inherited. */
+> +
+> +#define NR_PAGES 3
+> +
+> +static int arena_mmap(int *fd, void **area, size_t *sz)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags =3D BPF_F_MMAPABLE);
+> +
+> +	*sz =3D (size_t)NR_PAGES * sysconf(_SC_PAGESIZE);
+> +
+> +	*fd =3D bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_vma", 0, 0, NR_PAGES,=
+ &opts);
+> +	if (!ASSERT_OK_FD(*fd, "arena map create"))
+> +		return -1;
+> +
+> +	*area =3D mmap(NULL, *sz, PROT_READ | PROT_WRITE, MAP_SHARED, *fd, 0);
+> +	if (!ASSERT_NEQ(*area, MAP_FAILED, "mmap arena")) {
+> +		close(*fd);
+> +		return -1;
+> +	}
+> +	return 0;
+> +}
+> +
+> +/* A partial munmap that would split the arena mapping must be rejected.=
+ */
+> +static void split_test(void)
+> +{
+> +	long ps =3D sysconf(_SC_PAGESIZE);
+> +	void *area;
+> +	size_t sz;
+> +	int fd, ret, err;
+> +
+> +	if (arena_mmap(&fd, &area, &sz))
+> +		return;
+> +
+> +	ret =3D munmap((char *)area + ps, ps);
+> +	err =3D errno;
+> +	if (ASSERT_ERR(ret, "split munmap"))
+> +		ASSERT_EQ(err, EINVAL, "split munmap errno");
+> +
+> +	munmap(area, sz);
+> +	close(fd);
+> +}
+> +
+> +/* A forked child must not inherit the arena mapping. */
+> +static void fork_test(void)
+> +{
+> +	long ps =3D sysconf(_SC_PAGESIZE);
+> +	void *area;
+> +	size_t sz;
+> +	int fd, ret, status;
+> +	pid_t pid;
+> +
+> +	if (arena_mmap(&fd, &area, &sz))
+> +		return;
+> +
+> +	pid =3D fork();
+> +	if (pid =3D=3D 0) {
+> +		unsigned char vec;
+> +		int rc;
+> +
+> +		/*
+> +		 * If the mapping was not inherited the range is unmapped in
+> +		 * the child, so mincore() fails with ENOMEM. A success means
+> +		 * the child wrongly inherited the mapping.
+> +		 */
+> +		rc =3D mincore(area, ps, &vec);
+> +		if (rc =3D=3D 0)
+> +			_exit(1);
+> +		_exit(errno =3D=3D ENOMEM ? 0 : 2);
+> +	}
+> +	if (ASSERT_GE(pid, 0, "fork")) {
+> +		while ((ret =3D waitpid(pid, &status, 0)) < 0 && errno =3D=3D EINTR)
+> +			;
+> +		if (ASSERT_EQ(ret, pid, "waitpid"))
+> +			ASSERT_TRUE(WIFEXITED(status) && WEXITSTATUS(status) =3D=3D 0,
+> +				    "child must not inherit arena mapping");
+> +	}
+> +
+> +	munmap(area, sz);
+> +	close(fd);
+> +}
+> +
+> +void test_arena_vma(void)
+> +{
+> +	if (test__start_subtest("split"))
+> +		split_test();
+> +	if (test__start_subtest("fork"))
+> +		fork_test();
+> +}
+>
+> base-commit: 174914ea551314c52a61713b9c4bde9e42d48073
 
