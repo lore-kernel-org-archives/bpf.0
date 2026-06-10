@@ -1,219 +1,158 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-06.mail-europe.com (mail-06.mail-europe.com [85.9.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A793A2E25
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 08:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538CB384CCE
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 08:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.9.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781079184; cv=none; b=jMGEZpWJwBNJJznhBCLeBjgrUQ1qEwwkv7PA8b1Fuh2yG+SDyY/dR1vz32X9eipJOrdD+5vpTBFYxC9pdSqi+XcC0eXaOyBEh8MXqThEmgR5r8YOwN8Dk2p+L+m9JtfwdCuLUwtc/J7HwV18Xenf25OofbRdf1R/ALacMdh451E=
+	t=1781079311; cv=none; b=D64idxNWSRZn3XjIJPl+n6UNE91qIk4INvawnYI5Xe/j5lCpDvPd/su52/TisIlNFL3biViJR+MEF8oUJTvh0Hv7Zl71z1yIHoTa/pDfHb+B0FGnQ1ZAu/qksAVshV1wI7NSb9Vdk3E/bmusDUUEI/J8oJH4D71xgALcdEcB2Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781079184; c=relaxed/simple;
-	bh=1LwNYa0nsMkWi/VTO8ktSvbDoho+LWniLHNV/RoBPe8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zt51tGI4H45sR/captep1/MNTu9ghb7UjsyHLl/YW7OoP+6eHam1PrSi/k0oLOVYHqS0G0E0b5FyBuyTDmWjZo1RkZKtic9o2WHCXM56X6SslEQueWvjf5d7lM72a4j7MSt8gO8Lt/JoSVrrq/XfiBtR1dHLqdvPT5mFsbUGkPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EhrL1R3h; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781079311; c=relaxed/simple;
+	bh=o87GlFZouziDxJNQmfzvLl4CN2jqcWxVngxFdCfuAQs=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=PWbk3e6LPpUghzbY6YipzHDGoMfBqtXlyKnEvtFf3sFsKZd38tAxbMYhq6W0zfrnQNXxJNiEfoL15E9v64eYtzNgqTnE2IMX/NPLzjDGov/NDSIP1itEh1Agb0e46mQ76vpaHPg+1slFNACUUXy5SIO+We+VYqScNyWZhWu46do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org; spf=pass smtp.mailfrom=1g4.org; dkim=pass (2048-bit key) header.d=1g4.org header.i=@1g4.org header.b=UAJuiRCo; arc=none smtp.client-ip=85.9.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhrL1R3h"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-36dd65b95f2so4641678a91.0
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 01:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781079183; x=1781683983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v3kEhRN8jP8NPUF2dXs8XkRxqkJ3rS6M1G7akkNNwjA=;
-        b=EhrL1R3hdkqryyd3ucapXsWMPROpZzMH4iUhRLjXv8TgLGWeLR/WvY/GPTgo2xu4pW
-         79nJRKn3ZOXY41JqoVRUriMH8ZGBP+JfN/HTgDisraMEHRb0XfJTrnn/pjSisn7c24te
-         cxuDudj7V/iWuSzI3f9tpTncqFvGyz/PoduaSkBD9gVkAKIW/nHOenGNMRvjNe2dmtbj
-         PJkdzQsXbpsECCqhrDlfXX5FvbkvROHNiqjF6whzD3EUYMBAEVcwKm4w16R9yuErdAgC
-         TeoEs8jN9xBCxIrWIKObIm5J28ZcuyJKc/BzLyB4cYj4kMfIsHYKQGoiRYnGa+Z3/Im9
-         ToVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781079183; x=1781683983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=v3kEhRN8jP8NPUF2dXs8XkRxqkJ3rS6M1G7akkNNwjA=;
-        b=Ia/7Ey/TJoXTEvj7C8+BEhGIPD4Wzy/99leN2u+Ssgc7V2L6dnVRaoZNvAhtIVFjHl
-         JS/xcQDYXQg+ZQ9qO2AssaE2GmTVxEaYEOC1MtVybJhEULxrQZP5aeHA24nmPZAfyaF1
-         y6x0vLyTLbuohZr56GlXUGbrTZY+1xQx3+KsYfFNlwSA2Jt5JDDWCfRGixP+cONxSjjD
-         u1Ai+mPDRbYOo9V3prgWL64HSxv3J39D+ESDM0a5XJzksd1039XuO6KprS1gfANVEUlg
-         U17OEhNqwFsduX5SBcVq6wnLE4jXns3w+dF7cXL+Y8cJtiZU1rZ+kHhXaNUl7Ge3RcF1
-         HpVg==
-X-Forwarded-Encrypted: i=1; AFNElJ8tAzHt0S80vb09MFPC726lcZI1N0RzUHldwcD5Ap7LX3h/1Wlh5uhDQ7I2vMk6PCOE1Bc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaPjuSWN+t/b/CWVvLW4RdwXtLzK0sGwKqc7M/2cQ+l8knEAQ0
-	kmq/cf2uBew+EF77WnJ84qQUA9y9DUs3qkVPEPHfScQ9lb0RjSgNU6uj
-X-Gm-Gg: Acq92OEwLJmOrMs6yfGFvMyhqs4ZkFU5mNNBy5DsTxR/eDHQet+hniMT5GJ5F4G2C/K
-	HPraQ3x9GGeMj2FVLdXaSrb7kdv+sIITB8aCBoEjxQg9n1HJKX2e5DG4x1o3h0RQpHfsK8iJ8WM
-	k2EhqUKVW2iYrD2iGnnZhBH4A/t4qiDB4H3+/dMNMyaC7NZqhtmX/oU+Be+WAL3BEPD73SPzvxE
-	HqoCFMMBuDuqM+a9gSCMcIP3SmHasF0UQi66nKUzfAHvrCn4AbjfFoel3sVJTlgVDk69dco67+N
-	O0LCkqPlyh/XW48Sgkzye0hKiVIKtRDA5FxooHEaYsMlHm4mJ72UulqzFwR2ZlYn2yTPBrLwm2t
-	B3x8ZbhpiHPYNc9y3Up7z6t5LZycmAWIIESoJs9EExq+uxdTkE/7hRxmdyEURHV0e63F22Sfjpz
-	uFOrlJvCHSOFZ4mUAdnABheui0VDqVlUM8UVaah0J4m7pIl7Db9bOJUkSsypd4N0QDjiCSkQWn
-X-Received: by 2002:a17:90b:2f0d:b0:368:3830:a8bd with SMTP id 98e67ed59e1d1-37131041514mr18542159a91.7.1781079182633;
-        Wed, 10 Jun 2026 01:13:02 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37645c1aeb5sm1241003a91.2.2026.06.10.01.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 01:13:02 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Cong Wang <cwang@multikernel.io>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: add test for bpf_msg_pop_data() overflow
-Date: Wed, 10 Jun 2026 08:11:54 +0000
-Message-ID: <20260610081218.506709-3-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
-References: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
+	dkim=pass (2048-bit key) header.d=1g4.org header.i=@1g4.org header.b="UAJuiRCo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
+	s=protonmail2; t=1781079298; x=1781338498;
+	bh=sGlE8SUDHPBzUdtaKzWTSHFJvgvyCcuoz/ycf7sL140=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=UAJuiRCoZQ5QWkRSc4li6iri4O76EfC/0cJQpl6YxcrsV40kDqySKUHH+nAc7ZM0K
+	 n95+aNP+NYd4IfBpYfh4vP/U+F6jSLwQTR0lMM0jKk42FDsDgjtNI3lAVDm8mvgXhE
+	 Sm4WsZH4UtrLv8pY8ZYPcpQL3YdaxhNm45aCZ6oMX7UGJwSRFphEtMJus8pTuQenOC
+	 PcASjg7Wl7oSa/M+M7pPNfkkntjC4FyflquyfOsSVnA+RPjTPPtbK8//3NdD4djidx
+	 PoD2Wucd44YQ+iUOFkYfJbqSaIjgYnADqTnP/Bt9fy9KXTqI33iTX5cQutbf/Tt34M
+	 u081P7IExn5Tw==
+Date: Wed, 10 Jun 2026 08:14:47 +0000
+To: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, bpf@vger.kernel.org
+From: Paul Moses <p@1g4.org>
+Cc: song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, houtao1@huawei.com, linux-kernel@vger.kernel.org, Paul Moses <p@1g4.org>, stable@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Validate BTF repeated field counts before expansion
+Message-ID: <20260610081434.2141515-1-p@1g4.org>
+Feedback-ID: 8253658:user:proton
+X-Pm-Message-ID: db82099a15662a0e7eb91c1a1e7bd0d5bda21c35
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
-close to U32_MAX, which overflows the start + len bounds check. The sk_msg
-program records the return value over a sendmsg and the test checks that
-the call is rejected with -EINVAL.
+btf_parse_struct_metas() walks user supplied BTF during BPF_BTF_LOAD,
+and btf_repeat_fields() expands repeatable fields from array elements
+into the fixed BTF_FIELDS_MAX scratch array used by btf_parse_fields().
 
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+The remaining-capacity check performs the expanded field count calculation
+in u32. A malformed BTF can wrap that calculation, causing the check to
+pass even when the expanded field count exceeds the scratch array
+capacity. The following memcpy() can then write past the end of the
+array.
+
+Use checked multiplication before copying repeated fields and reject=20
+impossible counts.
+
+Add a raw BTF test that exercises repeated special-field expansion with a
+large array count. The compact element layout keeps the array byte size
+representable while the repeated field count overflows the old u32 capacity
+calculation in btf_repeat_fields().
+
+Fixes: 797d73ee232d ("bpf: Check the remaining info_cnt before repeating bt=
+f fields")
+Cc: stable@vger.kernel.org
+Signed-off-by: Paul Moses <p@1g4.org>
+
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
- .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+v1..v2
+1. Combine fix and test
+2. Drop check_add_overflow
+---
+ kernel/bpf/btf.c                             |  8 ++---
+ tools/testing/selftests/bpf/prog_tests/btf.c | 37 ++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index d2846579285f..cb3229711f93 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -14,6 +14,7 @@
- #include "test_sockmap_pass_prog.skel.h"
- #include "test_sockmap_drop_prog.skel.h"
- #include "test_sockmap_change_tail.skel.h"
-+#include "test_sockmap_msg_pop_data.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #include "sockmap_helpers.h"
-@@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(void)
- 	test_sockmap_change_tail__destroy(skel);
- }
- 
-+static void test_sockmap_msg_verdict_pop_data(void)
-+{
-+	struct test_sockmap_msg_pop_data *skel;
-+	int err, map, verdict;
-+	int c1 = -1, p1 = -1, sent;
-+	int zero = 0;
-+	char *buf;
-+	const size_t len = 32 * 1024;
-+
-+	skel = test_sockmap_msg_pop_data__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	verdict = bpf_program__fd(skel->progs.prog_msg_pop_data);
-+	map = bpf_map__fd(skel->maps.sock_map);
-+
-+	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	err = create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
-+	if (!ASSERT_OK(err, "create_pair"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out_close;
-+
-+	buf = calloc(len, 1);
-+	if (!ASSERT_OK_PTR(buf, "calloc"))
-+		goto out_close;
-+
-+	sent = xsend(c1, buf, len, 0);
-+	ASSERT_EQ(sent, (ssize_t)len, "xsend");
-+	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow");
-+
-+	free(buf);
-+
-+out_close:
-+	close(c1);
-+	close(p1);
-+out:
-+	test_sockmap_msg_pop_data__destroy(skel);
-+}
-+
- static void test_sockmap_skb_verdict_peek_helper(int map)
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index a62d78581207..7a28886f1307 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3668,7 +3668,7 @@ static int btf_get_field_type(const struct btf *btf, =
+const struct btf_type *var_
+ static int btf_repeat_fields(struct btf_field_info *info, int info_cnt,
+ =09=09=09     u32 field_cnt, u32 repeat_cnt, u32 elem_size)
  {
- 	int err, c1, p1, zero = 0, sent, recvd, avail;
-@@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_fionread(false);
- 	if (test__start_subtest("sockmap skb_verdict change tail"))
- 		test_sockmap_skb_verdict_change_tail();
-+	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
-+		test_sockmap_msg_verdict_pop_data();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
- 		test_sockmap_skb_verdict_peek();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-new file mode 100644
-index 000000000000..301e65b95256
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+#define POP_START 0x48a3
-+#define POP_LEN   0xfffffffd
-+
-+long pop_data_ret = 1;
-+
-+SEC("sk_msg")
-+int prog_msg_pop_data(struct sk_msg_md *msg)
+-=09u32 i, j;
++=09u32 i, j, total_cnt;
+ =09u32 cur;
+=20
+ =09/* Ensure not repeating fields that should not be repeated. */
+@@ -3686,10 +3686,8 @@ static int btf_repeat_fields(struct btf_field_info *=
+info, int info_cnt,
+ =09=09}
+ =09}
+=20
+-=09/* The type of struct size or variable size is u32,
+-=09 * so the multiplication will not overflow.
+-=09 */
+-=09if (field_cnt * (repeat_cnt + 1) > info_cnt)
++=09if (check_mul_overflow(field_cnt, repeat_cnt + 1, &total_cnt) ||
++=09    total_cnt > (u32)info_cnt)
+ =09=09return -E2BIG;
+=20
+ =09cur =3D field_cnt;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/s=
+elftests/bpf/prog_tests/btf.c
+index 054ecb6b1e9f..9fcbc554e351 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -4258,6 +4258,43 @@ static struct btf_raw_test raw_tests[] =3D {
+ =09.max_entries =3D 1,
+ },
+=20
 +{
-+	if (msg->size <= POP_START)
-+		return SK_PASS;
-+
-+	pop_data_ret = bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
++=09.descr =3D "struct test repeated fields count overflow",
++=09.raw_types =3D {
++=09=09BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),=09/* [1] */
++=09=09BTF_STRUCT_ENC(NAME_TBD, 0, 0),=09=09=09=09/* [2] */
++=09=09BTF_TYPE_TAG_ENC(NAME_TBD, 2),=09=09=09=09/* [3] */
++=09=09BTF_PTR_ENC(3),=09=09=09=09=09=09/* [4] */
++=09=09BTF_TYPE_ARRAY_ENC(4, 1, 1),=09=09=09=09/* [5] */
++=09=09BTF_STRUCT_ENC(NAME_TBD, 10, 8),=09=09=09/* [6] */
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 5, 0),
++=09=09BTF_TYPE_ARRAY_ENC(6, 1, 0x1999999aU),=09=09=09/* [7] */
++=09=09BTF_STRUCT_ENC(NAME_TBD, 2, 8 + 8 * 0x1999999aU),=09/* [8] */
++=09=09BTF_MEMBER_ENC(NAME_TBD, 4, 0),
++=09=09BTF_MEMBER_ENC(NAME_TBD, 7, 64),
++=09=09BTF_END_RAW,
++=09},
++=09BTF_STR_SEC("\0int\0prog_test_ref_kfunc\0kptr_untrusted\0elem"
++=09=09    "\0p0\0p1\0p2\0p3\0p4\0p5\0p6\0p7\0p8\0p9"
++=09=09    "\0outer\0trigger\0elems"),
++=09.map_type =3D BPF_MAP_TYPE_ARRAY,
++=09.map_name =3D "repeat_fields",
++=09.key_size =3D sizeof(int),
++=09.value_size =3D 8 + 8 * 0x1999999aU,
++=09.key_type_id =3D 1,
++=09.value_type_id =3D 8,
++=09.max_entries =3D 1,
++=09.btf_load_err =3D true,
++},
+ }; /* struct btf_raw_test raw_tests[] */
+=20
+ static const char *get_next_str(const char *start, const char *end)
+--=20
+2.54.0
+
 
