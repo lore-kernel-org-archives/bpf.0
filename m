@@ -1,163 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C751D798E
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 08:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1041A358D32
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 08:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781080084; cv=none; b=KeSurXKLP13YhYsMnhRusriz8IfR4nirtwl+TWTQ2FWTu9jmM8LMGoOLZdNdlR472d6dh7REYeQUJS4y1AyuCeiveIKotYhYBa8iKXJuL1xNrEOmUP/TtOIHtCzpCq6RagMOHs4PgY9V+3qKWqcFhgvgr2aiE7u48ecvcTLPebQ=
+	t=1781080280; cv=none; b=cRp1JpSLgS5mVotYosSiHNKSjstu74CDPi249/IxEcg/ZukI/vHv745BeobakUMhA9YyJo+FgessxuPQASZfaqR5IaGuX11Gx4llfogSyzLLSZEZkgNNGrFU8wIqOZs0QFsXL2KEexwP23SlNJEjQDZvRucYeXR0g41rGQLn4WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781080084; c=relaxed/simple;
-	bh=w/Rd+6VQiikd90AGS/vN3KTaFTulxK2ltXgqBvUR96g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d8AvodMzLV+PaJZnaSsvZgHBffQ9INSg1psmGZTPwpkoD1O+iU5vNgHCs6B1mjb2emmd9w7RO4JoGqDOAUPUm7T6KE0gviJwtF4U4czpLMPvnv5vxUhTUJ0VNUoxPPYLDUG86MBmbs9Sdg/7H5vZ1sqaMeccMU1BKZXP0FG7Qto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJ7OOep+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781080280; c=relaxed/simple;
+	bh=DNKI3SeCVbAWNfiehbspstRvodE6MgRI2cSszie5lXA=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAQI5Ga1gkAOGVJrba4MUBba2FZ8ZuVGbR4/lRnW+MoK65IzT2HGL2xQ1swqePSv9XjSDP1rJm7i4hGh2ZadTZFzsGRSuS8ObdClT5p+AvNmTFYFSyjt6b0A2wx4tIr6fbeLI1pFV8g9fvG6XxRTfYDz7V7tnKzXyusG35CLM9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ngt9c6q3; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJ7OOep+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409F81F00893;
-	Wed, 10 Jun 2026 08:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781080083;
-	bh=mWDtX93xujJ9ROI07lrGj295khzWCzNXRWYrXx2hBxo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lJ7OOep+CKlUEeVE+lS2fioNVR7Km9HnCD0dFCcBjokFu+CijvRoYlD3ACjCwKNSQ
-	 VXDfF3Mut/KyrWY889OUCAJ1pfT0Cu1ng6BC0x9p7uA7jPCVUf7VVWmRjJv9x1Awm8
-	 2CadydzaScB26Jvo36zfr3j8jxO2LFIwaJd6cv0wniSQWD37d4MfwPGKmCQX1OdHjL
-	 Zax2PovWCsIoSyJJr6OnPjYLR1whSl47yt0+4ba74h/rIQR3IKl619EairBvTds/CP
-	 wVfbuobIZa4ciyP2R++1gyaktohb7/+M0tpdYoWjsuf2u1+K5ibF8ds7bNYgDnAqhb
-	 S6uukitEE1bbg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf, sockmap: fix integer overflow in
- bpf_msg_pop_data() bounds check
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260610081218.506709-2-rhkrqnwk98@gmail.com>
-References: <20260610081218.506709-2-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 08:28:02 +0000
-Message-Id: <20260610082803.409F81F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ngt9c6q3"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4905529b933so69733275e9.0
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 01:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781080277; x=1781685077; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sEbnD3/XNv/9tQE895vM2cSQoRf1dBoy5thU9exe3hk=;
+        b=Ngt9c6q3L8msVBQsEl8mt0VHp9XC7/Ysase0e00hVgYGVuKqXMLN+NpvzMIkbVreOz
+         dN1kytGVcrNnDE0uj3bBnFl6ETEF5AeU+2PAb+ETdiz67Db8+LnJE3MWmrVWpow98GIm
+         jOKVq1k1b3n2epG8+Al4lWBKpy7yPIXg7OlpEpnPo+xKupd6D+rrW2t2F5l8gjDBiOeJ
+         PnqjBH7zNWd41HZrCRcGTmDzw4kqpLZlwk5zHMLBwiEc6QF66Yj05YD5APTENBxUYOv6
+         8iqPzoD76Y7YvqKNsGTMuEGvRP2rYJCDG2Q1uyQ7uDUquD89T2v8BiL2oKNbTk/IXU2x
+         1mBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781080277; x=1781685077;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sEbnD3/XNv/9tQE895vM2cSQoRf1dBoy5thU9exe3hk=;
+        b=o+VTeTNDV/rNSbcgWuvgTn/w0MsxEfIio1pXVao/z3AxCyHxpNy5Fan4lrX73n+3PI
+         lZ/ESzNsHCWsY5KMxH+v5EEIwYAnkc+vH9a7Dpr+4Vc7Q2MQ+Y4Qin0EExihy5ZLNyBI
+         Yx+fN3FBtx2Mp5gRMM5bG6yEdBgUl/8bCNEj4YPk3vICygQsVpT3KZMRZx3I8bnrDZEW
+         wTBeMwpstAmDGJgomX9Z1O6GymPjH7STRt1klJMgI/JhsgRI+3nrG2xK+GZQPr4gDgMj
+         wKZQDUmaJk7umLVXDx0jBv0cWuxwxgsj5UiheynU2sMFyjd4KqyMGAOhKo3up54fB1rf
+         AK7A==
+X-Forwarded-Encrypted: i=1; AFNElJ9bmTOphbRVR3IKVuml0Z84p/vAer+2vaX/oipW4/ZKRneXwecculc685/hxYwSGokVRL0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygDOBirv9vygRlH0AletpTqwhhtsPI1pFkU1+EVmXNA22uj1M6
+	l1QDcFNNSjTVsuvxM+h4nuFlVoM4wKp612plPYnBcIfDgjSodZzaadTz
+X-Gm-Gg: Acq92OEAmJT5yO5evqAWn0s2SdoDEnerrAd+Qr4YfCdUKmcNUPPFOi2Cb21L/IKydYf
+	o8oq+f92E/zZfDMyNH0P5rEPU3bB+YBOgTBO8BBjVjTseL1mMDg3egeWKXvOGHoHiP5+UsUwE5P
+	wJJ7pOtTaE+LxSy/SXKxgslUe/VEJOrVgq2or+V4plflQB4A1nCtnDF/dwxwWdgbmwnVvWZWY1b
+	MPNFP7c4DEwyLdrVlQ0Ry8fKVpWYa4AxYBBHTBV8J0yG2DYNyF43fduAxGAvKMAvWr075mWwDIO
+	fXDrjEbWX7RKRsuwadkEzOmDa9mqnlolCah3WHfBvFfpXTmK02EAgElGRoJ3XMwUH8qIlEvaDRl
+	z2Hsdl3QWcb34L0RDbrpt/HBvsMWPE9Iwxz6CwIS16AZWnV9QKBMQ1aL5+H60etFCOGZjjuNmX/
+	FlfSgYt4+KsSwiBI0mDzZvsQ==
+X-Received: by 2002:a05:600c:8b70:b0:490:ae94:a7e6 with SMTP id 5b1f17b1804b1-490c25c20e0mr371947695e9.24.1781080277251;
+        Wed, 10 Jun 2026 01:31:17 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3d6c65sm536994045e9.12.2026.06.10.01.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 01:31:16 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 10 Jun 2026 10:31:14 +0200
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH bpf-next 2/6] bpf: Add support to specify uprobe_multi
+ target via file descriptor
+Message-ID: <aikg0kljumneVrkC@krava>
+References: <20260609104244.588321-1-jolsa@kernel.org>
+ <20260609104244.588321-3-jolsa@kernel.org>
+ <DJ4Q7RSSY0IT.1IDOSQBEWUQ6I@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DJ4Q7RSSY0IT.1IDOSQBEWUQ6I@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+On Tue, Jun 09, 2026 at 11:22:38AM -0700, Alexei Starovoitov wrote:
+> On Tue Jun 9, 2026 at 3:42 AM PDT, Jiri Olsa wrote:
+> >  	flags = attr->link_create.uprobe_multi.flags;
+> > -	if (flags & ~BPF_F_UPROBE_MULTI_RETURN)
+> > +	if (flags & ~(BPF_F_UPROBE_MULTI_RETURN|BPF_F_UPROBE_MULTI_PATH_FD))
+> 
+> In addition to what bots said, pls run checkpatch on above.
+> It should complain of lack of ' '.
 
-Pre-existing issues:
-- [Critical] Integer overflow in bpf_msg_push_data leading to out-of-bounds=
- kernel memory write.
-- [High] NULL pointer dereference when bpf_msg_pop_data completely empties =
-the message.
-- [High] sk_msg_shift_left and sk_msg_shift_right fail to shift the msg->sg=
-.copy bitmap.
-- [High] Information leak due to uninitialized memory allocation in bpf_msg=
-_push_data.
---
+it complains only about a typo..
 
-commit 291c1f747004c017b1fe863b58e41dd47655f42e
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+jirka
 
-bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
 
-start and len are u32, so u64 last =3D start + len evaluates start + len in
-32-bit and wraps before storing it in last. The bounds check can then be
-passed with an out-of-range start/len. Widen the addition with a (u64) cast
-so the bound is evaluated in 64-bit and a len near U32_MAX no longer wraps.
+---
+jolsa@krava:~/kernel$ ./scripts/checkpatch.pl 0002-bpf-Add-support-to-specify-uprobe_multi-target-via-f.patch 
+WARNING: Possible repeated word: 'need'
+#17: 
+we need need to read the binary first to get probes offsets, so I'm
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9590877b0714f..8dac0f4d9fcaf 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2974,8 +2974,8 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
-u32, start,
->  	   u32, len, u64, flags)
->  {
->  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
-> -	u64 last =3D start + len;
-> -	int pop;
-> +	u64 last =3D (u64)start + len;
-> +	u32 pop;
-> =20
->  	if (unlikely(flags))
->  		return -EINVAL;
+total: 0 errors, 1 warnings, 119 lines checked
 
-[Severity: High]
-This is a pre-existing issue, but I have a question about the end of this
-function. If a BPF program pops the entire message payload (i.e. start =3D=
-=3D 0
-and len =3D=3D msg->sg.size), the bounds check passes and the pop loop shif=
-ts
-out all elements, leaving an empty scatterlist.
+NOTE: For some of the reported defects, checkpatch may be able to
+      mechanically convert to the typical style using --fix or --fix-inplace.
 
-At the end of bpf_msg_pop_data(), we unconditionally call:
+0002-bpf-Add-support-to-specify-uprobe_multi-target-via-f.patch has style problems, please review.
 
-    sk_msg_compute_data_pointers(msg);
-
-Which does:
-
-    struct scatterlist *sge =3D sk_msg_elem(msg, msg->sg.start);
-    ...
-    msg->data =3D sg_virt(sge);
-
-Since the element is now empty, does this cause a NULL pointer dereference
-when sg_virt() attempts to dereference the page struct?
-
-[Severity: Critical]
-This is a pre-existing issue, but I noticed a potential integer overflow in
-the related bpf_msg_push_data() function.
-
-In net/core/filter.c:bpf_msg_push_data():
-
-    page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-                       get_order(copy + len));
-    ...
-            to =3D raw + front + len;
-            memcpy(to, from, back);
-
-Since len is an unchecked u32 passed from the BPF program, if a very large
-len is provided, could copy + len wrap around in 32-bit math and result in
-a small memory allocation?
-
-If so, the pointer arithmetic for the destination variable would calculate
-an address far beyond the allocated page, potentially causing the memcpy()
-to write controlled payload data out of bounds.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but looking at the same
-allocation in bpf_msg_push_data():
-
-    page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-                       get_order(copy + len));
-
-It appears to omit the __GFP_ZERO flag. Since only the original front and
-back regions are explicitly initialized, does this leave the newly inserted
-len bytes uninitialized?
-
-If the BPF program does not manually overwrite these bytes, could
-uninitialized kernel memory become part of the packet payload and be
-transmitted over the network?
-
-[Severity: High]
-This is a pre-existing issue, but while reviewing the scatterlist shifts, I
-noticed sk_msg_shift_left() in net/core/filter.c updates the data array:
-
-    do {
-        prev =3D i;
-        sk_msg_iter_var_next(i);
-        msg->sg.data[prev] =3D msg->sg.data[i];
-    } while (i !=3D msg->sg.end);
-
-However, it doesn't appear to shift the corresponding bits in the
-msg->sg.copy bitmap.
-
-Could this desynchronization cause read-only or cloned elements to lose
-their copy flag, allowing them to be incorrectly mapped as writable by
-sk_msg_compute_data_pointers()?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610081218.5067=
-09-1-rhkrqnwk98@gmail.com?part=3D1
+NOTE: If any of the errors are false positives, please report
+      them to the maintainer, see CHECKPATCH in MAINTAINERS.
