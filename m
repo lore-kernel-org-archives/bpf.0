@@ -1,98 +1,229 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C5B29D266;
-	Wed, 10 Jun 2026 16:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A561429D266;
+	Wed, 10 Jun 2026 16:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781109032; cv=none; b=t7rOxq5luNrMCZqoa2iLfsQwEVY0CR4RcdHnpqQ9FfDj7Gwc5RIFsDS139/oXRAdrFac99YGhPY37C1h4sh3/wb0WtUzXiLL3GepBq06XCrAC7NDEA+0mkkXSZVh2KGv2y7cYqtiaHP4DXbmUcxWxEgiveKQ9blKQsTTZ6MYVvo=
+	t=1781109034; cv=none; b=mH8GSZwH/EQzCvj4cO4w6DS0Lp/ij1Jy72Y3z35drsORpeE4m+ITHG/vdFD24DzXkhSvpKGanwkX5gmt1XFukFKaiPlSAX3zdkVHnorNNQm+FWHW5ZE2qLAxSQjbUIPg1T7im/JYpvI5Wu0te167HoNUFA39O09JuWhUovVkwS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781109032; c=relaxed/simple;
-	bh=SLcGQ4ITzXYS4V2CWdBn6tCOCjjsrO1KlLsuijpZOOE=;
+	s=arc-20240116; t=1781109034; c=relaxed/simple;
+	bh=bzzN9LgGSFxt+HUM8qwxm6TDxioiNp05CKnhySDKqtQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Rt+f8NLcd1T7WnWl4MweBT8mKL3GMDRNWtRjb2WzBG3voxBbob//wB9Gw0Qw93Ch6sx/sqVxfPUuIWGi7kgBJofCG9whFr99szIQ3dIuDbd0pUeZY0igoG5QGyMlmLoJLcqnW2zHEKSVrBDkMLFgnHrUQBHRPiAFm31lARprHj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SshA315+; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=bU0PTGkaeiPUCI8AzjXcORO6h+Kv47s+8rmo6snHRGapFiEbOswoQJVo6Gb7uNnJ/5sLe3B8Drwi/X1SwoVMvbMbwD1za3wuh8hQ7Fm7o1C8VKj4uIo3YzQTPnew1iOqAt54njqsiZB7GvFxjVw/0aF7hxHABe7KUCA8u+w5KTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gs+u4Smd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SshA315+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB45A1F00893;
-	Wed, 10 Jun 2026 16:30:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs+u4Smd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E101F00898;
+	Wed, 10 Jun 2026 16:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781109031;
-	bh=PmiNopTKELNVxRRz64d2VMjYn3asLtHGeFlB4yVILP8=;
+	s=k20260515; t=1781109033;
+	bh=OxMe21Cv5RjJwXpM95clCOD1WxBtVt9yPtHG1wNYPbc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SshA315+z0RBRhaZiWpl896ON8J7Cp7Ax1CAx4zvcfga7YpRoeqWysPUBkCVAcn6B
-	 z5WSS/LRZSpN92VUTRfmtYxXkvKmyNL5QlXlH5iX92FX3SVsZgiExVUNH7UVfraBN8
-	 RkElQ2qI180YX1RrECrgqDuXdQqfvyZeWvFFBKP1EaFJ4ibHLj204OUSJDHzxYZryp
-	 jVdF0RhcglQ6PGHwu3zERtIwWNYbvTLA/Wzj3ZNAsUnUiP1jFjU2Z285vScp09o+IM
-	 8pEXY/IOwTcuDD4jO0/aXYu0nKX4tirQtzlI3LtIN5gKqFIGJ4HeZhTgIGirtmDpaO
-	 xoyKE5nOD/yIw==
-Content-Type: multipart/mixed; boundary="===============4751957696987930576=="
+	b=gs+u4SmdfxjgLnOPOKwut0tP2v8M0BF8JBUYU8tX4j0Bz78x9IHj7Z4kEfA7j9bur
+	 9wobO08K1W+g04WMm+6AWAa2ISI1u6ASNvM+til/kKjRfkZvLub4dWOMbRIla9yfA7
+	 ZgOtEFMpreCH1vaYiVzw191JKjg26AzS7Fqyj8rZFarj9rnt9tKV8caq15R8XfToNH
+	 j26YC6PlOH038quHuuXDLNFxpwCCsnZ5daRm12aL3il7hd3ArHIhf0hlHybnrOVM7d
+	 NNFytuzgcnHBPhC6kz4bFJuTVIsGt0KYZTlbevfdzYXWHfnTmMR0Fe1loK566LSdND
+	 GoofvDOrABCsw==
+Content-Type: multipart/mixed; boundary="===============0413197802770624427=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0131313fafcf415294f02e034ea77cc7c34108e5b9e9f542a4b9c8e60cc9d767@mail.kernel.org>
-In-Reply-To: <20260610145059.113412-2-chenyuan_fl@163.com>
-References: <20260610145059.113412-2-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+Message-Id: <b2a09e444a9b53441fb2d3b36f14528f9584723f0a03b5601119183e7a3f0910@mail.kernel.org>
+In-Reply-To: <20260610145059.113412-3-chenyuan_fl@163.com>
+References: <20260610145059.113412-3-chenyuan_fl@163.com>
+Subject: Re: [PATCH bpf-next v3 2/2] libbpf: fetch probeable prog type from token for feature probes
 From: bot+bpf-ci@kernel.org
 To: chenyuan_fl@163.com,chenyuan_fl@163.com
 Cc: andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,chenyuan@kylinos.cn,daniel@iogearbox.net,eddyz87@gmail.com,linux-kselftest@vger.kernel.org,shuah@kernel.org,mykyta.yatsenko5@gmail.com,andrii.nakryiko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 10 Jun 2026 16:30:30 +0000 (UTC)
+Date: Wed, 10 Jun 2026 16:30:32 +0000 (UTC)
 
---===============4751957696987930576==
+--===============0413197802770624427==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
-> TRACEPOINT programs to verify the BPF environment works.  When a
-> BPF token is in use with restricted program type permissions, these
-> probe loads may fail because the token does not allow the specific
-> program types, even though BPF loading is perfectly functional.
-> Fix by skipping the probe when a token FD is present: BPF token
-> creation itself proves the kernel has a working BPF subsystem.
-> Real BPF issues will be caught during actual program and map loading.
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0b..f008ee50e246 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -19,6 +19,57 @@ int probe_fd(int fd)
+>  	return fd >= 0;
+>  }
+>
+> +/* Fetch the first program type from the token that can be used for
+> + * feature probes.  Only a few common types are checked that are known
+> + * to accept a trivial "return 0" program.  Returns the type on success,
+> + * -EINVAL if the token has no probeable type.
+> + */
+> +static int token_probeable_prog_type(int token_fd)
+> +{
+> +	/* Types that accept a simple "return 0" probe program */
+> +	/* Types that accept a trivial "return 0" program without
+> +	 * specific expected_attach_type.  Types requiring expected_attach_type
+> +	 * (CGROUP_SOCK, CGROUP_SOCK_ADDR, LWT_*, NETFILTER) are excluded.
+> +	 */
 
-This describes a bug fix but there is no Fixes: tag.
+There seem to be two comment blocks describing the probeable[] array
+back-to-back here.  The first single-line comment looks like a leftover
+from an earlier revision; should it be removed?
 
-The probe-loading failure with a restricted BPF token came in when the
-token-aware opts were added to bpf_object__probe_loading(), passing the
-token FD into the trivial SOCKET_FILTER and TRACEPOINT probe loads:
+> +	static const int probeable[] = {
+> +		BPF_PROG_TYPE_SOCKET_FILTER,
+> +		BPF_PROG_TYPE_KPROBE,
+> +		BPF_PROG_TYPE_SCHED_CLS,
+> +		BPF_PROG_TYPE_SCHED_ACT,
+> +		BPF_PROG_TYPE_TRACEPOINT,
+> +		BPF_PROG_TYPE_XDP,
+> +		BPF_PROG_TYPE_PERF_EVENT,
+> +		BPF_PROG_TYPE_CGROUP_SKB,
+> +		BPF_PROG_TYPE_SOCK_OPS,
+> +		BPF_PROG_TYPE_SK_SKB,
+> +		BPF_PROG_TYPE_CGROUP_DEVICE,
+> +		BPF_PROG_TYPE_SK_MSG,
+> +		BPF_PROG_TYPE_RAW_TRACEPOINT,
+> +		BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
+> +		BPF_PROG_TYPE_CGROUP_SOCKOPT,
+> +		BPF_PROG_TYPE_CGROUP_SYSCTL,
+> +		BPF_PROG_TYPE_FLOW_DISSECTOR,
+> +		BPF_PROG_TYPE_SK_LOOKUP,
+> +	};
 
-    LIBBPF_OPTS(bpf_prog_load_opts, opts,
-        .token_fd = obj->token_fd,
-        .prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
-    );
+The list places BPF_PROG_TYPE_SOCKET_FILTER first, and the no-token case
+also returns SOCKET_FILTER.  This matters for the two probes below that
+previously used TRACEPOINT.
 
-which is the code this patch removes.  Should this include:
+> +	struct bpf_token_info info = {};
+> +	__u32 info_len = sizeof(info);
+> +	int i, err;
+> +
+> +	if (!token_fd)
+> +		return BPF_PROG_TYPE_SOCKET_FILTER;
+> +
+> +	err = bpf_obj_get_info_by_fd(token_fd, &info, &info_len);
+> +	if (err)
+> +		return -errno;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(probeable); i++) {
+> +		if (info.allowed_progs & (1ULL << probeable[i]))
+> +			return probeable[i];
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
 
-  Fixes: 6b434b61b4d9 ("libbpf: Wire up BPF token support at BPF object level")
+[ ... ]
 
-In the earlier resend thread, Mykyta Yatsenko asked for a Fixes: tag to
-be added:
+> @@ -257,8 +318,13 @@ static int probe_kern_probe_read_kernel(int token_fd)
+>  		BPF_EXIT_INSN(),
+>  	};
+>  	int fd, insn_cnt = ARRAY_SIZE(insns);
+> +	int prog_type;
+>
+> -	fd = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
+> +	prog_type = token_probeable_prog_type(token_fd);
+> +	if (prog_type < 0)
+> +		return 1;
+> +
+> +	fd = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &opts);
 
-  https://lore.kernel.org/bpf/2ec75142-04b6-4d03-9aad-7441b6350f2b@gmail.com/
+This probe tests for BPF_FUNC_probe_read_kernel and previously hardcoded
+BPF_PROG_TYPE_TRACEPOINT.  In the no-token case token_probeable_prog_type()
+now returns BPF_PROG_TYPE_SOCKET_FILTER instead.
 
-  > Please resend your patch applying these: ... add fixes tag ...
+For a TRACEPOINT program, probe_read_kernel is reachable through:
 
-That request does not appear to be reflected in this version, which still
-carries no Fixes: tag.
+    tp_prog_func_proto() -> bpf_tracing_func_proto()
 
-The same thread also asked to include any Acked-bys.  Mykyta Yatsenko gave
-an Acked-by on v2:
+For a SOCKET_FILTER program the helper is only reachable through
+bpf_base_func_proto(), where it is gated behind
+bpf_token_capable(CAP_PERFMON) and
+security_locked_down(LOCKDOWN_BPF_READ_KERNEL), and is not exposed via
+sk_filter_func_proto().
 
-  https://lore.kernel.org/bpf/e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com/
+Does this narrow the conditions under which the probe succeeds, so that
+FEAT_PROBE_READ_KERNEL can be misreported in the no-token case that
+previously used TRACEPOINT?
 
-  > This change makes sense ...
-  > Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> +	return probe_fd(fd);
+>  }
+>
 
-Should this be carried forward as:
+[ ... ]
 
-  Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> @@ -277,6 +343,7 @@ static int probe_prog_bind_map(int token_fd)
+>  		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
+>  	);
+>  	int ret, map, prog, insn_cnt = ARRAY_SIZE(insns);
+> +	int prog_type;
+>
+>  	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_bind", sizeof(int), 32, 1, &map_opts);
+>  	if (map < 0) {
+> @@ -286,7 +353,12 @@ static int probe_prog_bind_map(int token_fd)
+>  		return ret;
+>  	}
+>
+> -	prog = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
+> +	prog = prog_type = token_probeable_prog_type(token_fd);
+
+This assigns the result to both prog and prog_type, but prog is
+unconditionally overwritten by the bpf_prog_load() call just below before
+it is ever read.  The assignment to prog looks like dead code; should this
+just be:
+
+	prog_type = token_probeable_prog_type(token_fd);
+
+> +	if (prog_type < 0) {
+> +		close(map);
+> +		return 1;
+> +	}
+> +	prog = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &prog_opts);
+>  	if (prog < 0) {
+>  		close(map);
+>  		return 0;
+
+[ ... ]
+
+> @@ -435,8 +507,13 @@ static int probe_kern_bpf_cookie(int token_fd)
+>  		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
+>  	);
+>  	int ret, insn_cnt = ARRAY_SIZE(insns);
+> +	int prog_type;
+>
+> -	ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
+> +	prog_type = token_probeable_prog_type(token_fd);
+> +	if (prog_type < 0)
+> +		return 1;
+> +
+> +	ret = bpf_prog_load(prog_type, NULL, "GPL", insns, insn_cnt, &opts);
+
+This probe tests for BPF_FUNC_get_attach_cookie and previously hardcoded
+BPF_PROG_TYPE_TRACEPOINT.  In the no-token case token_probeable_prog_type()
+now returns BPF_PROG_TYPE_SOCKET_FILTER.
+
+The get_attach_cookie func_proto is only returned for tracing program
+types (kprobe via kprobe_prog_func_proto, tracepoint via tp_prog_func_proto,
+perf_event via pe_prog_func_proto, raw_tp/tracing).
+
+For a SOCKET_FILTER program, helper resolution goes:
+
+    sk_filter_func_proto() -> bpf_sk_base_func_proto() -> bpf_base_func_proto()
+
+none of which expose BPF_FUNC_get_attach_cookie.
+
+Does this mean the verifier rejects the trivial program, bpf_prog_load()
+fails, probe_fd() returns 0, and feat_supported() caches FEAT_MISSING, so
+FEAT_BPF_COOKIE is reported as unsupported on kernels that do support it,
+even with no token in use?
+
+> +	return probe_fd(ret);
+>  }
+>
 
 
 ---
@@ -100,4 +231,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27285576775
---===============4751957696987930576==--
+--===============0413197802770624427==--
