@@ -1,162 +1,211 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176B440B6DF
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 16:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BDC3D88EF
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 16:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781107203; cv=none; b=gh0bkomoz7+3c8CqjIIRD1lMDGQSSS+C31bRl0HfjjxfCLpBmusqEpOrV1CHce/5tO+WLEOOjrLqs1SWbnUIqvPcTHP5E0Ur1l9/yHvGw1L7q5B5XaeuUXvqqMOjM2/lwbOmyy5c/A6o5dlnrhdX4bGW2xHaCcOzhCXy/zISbvo=
+	t=1781107616; cv=none; b=A7B9UNudx56R4EktWQ0vqPblHuZScTsxZO9fmO0dVpWGJ6DsrAPV7tNbfazSMhEc+jp3EohvXeZzM4SkaCdJr2yVXpnRiF0euiSab3dDfcr2mPqQ2ttqNjEhZ4Z8qVRjo1ghzC3SekeClkuAi9MmdDhK2Q5NUZ/G3h/mtmu6wKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781107203; c=relaxed/simple;
-	bh=WtF70tSYlfV59u8ccX/fbGSpFKSEEQD6mNZHUVlKfVc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fM1GnFBgpjhdXw4kZleu/Pb2CnpneWVe9O07Uad7W0nnmSDIScacdkDzfn1tbc3rRlXa2p18gPMz5Itqozc+94mBvE4fvJemHazdspYYIWTNO1sFcYk0pWXC9cCIdZIz0QnO3b3yvHIgrkwLPR/ilnVfXJ/XQRbhHFqg/Gti6/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKP9dFHU; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781107616; c=relaxed/simple;
+	bh=x8QlCP4ZkpZ0w1JKHxMi8dQlagZU8Bs6hP6vPqjauiQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ul7Fwg6PawwCk7YZ2I8BkzGEbQrNnHgc0xpQEOeRIa/J03aPwPUtyiFZJE5lJmwIEzoP7v/xGF0ANja5Bv5DD4+41JO/xDF5uwMsE8L5pHL2Vp4wFOAjYCsl5kzIKRG7yiskgvCPS+H9T8qMEWham50c2M2ALAYtKBTV2DmUh1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gl7/jac+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKP9dFHU"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c855599a77aso3527625a12.0
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 09:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781107201; x=1781712001; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tvEcYgkrIYlG7OjV31xLPt6UwG/Rf1sskqXVnMDutYA=;
-        b=NKP9dFHUeNChZ6wKKaWkIsUekZ4OyV3k1qgZILAea4yOXogtKaHUKN3zTSSC3yfucl
-         ohDdUpFXr+GT0FaT/QiVVwd+AcNDZv9MnzBZQ+9lLmR5dtHodxUots0aAhtcQI+gsofn
-         r9FMqobw3Mf+6OTbTecE1xUFvhbJFfjt1xdwEkHztokY4YeFNnf5TKR0Bf2ZQWs/c0Oa
-         ADqM43zCzNspxNHebdhoMztDTvzIqQVdo7MQTNA9Zf4Yf8tH7FH0UmtJzldqN/f5h9F+
-         WRWuXK4BJCNOUg0OuKPg8TVB50uOe7qw7wfckWQO6Qqx5Yz2IL2y09Btd3eV97wA65+e
-         SFog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781107201; x=1781712001;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tvEcYgkrIYlG7OjV31xLPt6UwG/Rf1sskqXVnMDutYA=;
-        b=GYbI6VWFIVMnks+Ro7Ie7Y6sWJt6cl+ni5TR8KtB+L4IwoYcEkSApeYwVs3i8vxdBB
-         771YNieoFzsjjS8FEtLC2Dhxm+eYOCS6JcrF1Rng9CWExwOjJ2Y2C33/MDyO/vFDfkcF
-         9EgAMEzJzvhQ4QthhK7Su6LEiYlDHNljoErwek5qAWkF2RxU4CNAoI9rCgaiee3tg8fV
-         Tlsy72tvbZyW+xJoYujAVLdRol8AVO60nQVznS55nVBt2kSwBB4NrD+4igbt35L1Vasz
-         gDIHpwyqq5SSktJJTOmJE6L5+BNdztEF7iDRDm9DvlCB1ZEHnY7UYSUXh3yX+kgMy5aH
-         CGOg==
-X-Forwarded-Encrypted: i=1; AFNElJ8u5I4O7OkN+b85JFZTUnsreWbUgcKg3qlsI8KEnqUBVhsea+UK/kxGVOu3/oH6vwNyYsk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5fu9wPe/7FUaerGoHw8bNU/d1tgLzwWe4fsufcDOJceUCEgmV
-	Y0+IKN9e21t5Gf5PCHE5AMBBYpi3fU8QkM7xHCYZmPPMpVV5BPXMtySD
-X-Gm-Gg: Acq92OHJg837++wi9yhOHzhhMR9wLtNdnxFmjG7H8VBB11/1QYWnRpmY8nyd2HObCr3
-	gzx/DFFTTY1V74AeYf5XuUmCffafTFDkUtwclw5QKD7bdCztKCObyboX8AhNYGT0nvnOU1qsKxw
-	FnfHf0M4tEYtN3oualDji/vQxejsAHaPf/qHUfQ7MfTfdxF6KTQbnij4E8+IvL5etS80EFgdDjO
-	1JF5lxc+NHavEoQ5A7sDzQlpmC5NYW4jIoICx9cHEJ6TfLlhu6dGa61K4E8X8DE4MK0OA+NOMYM
-	M/4ux/t5fCKutIzqKYEAmKp8ljUEd05uI884OwSNuX4vto+3sWa3K9uuafOeQhxzYBDmvs5ebnV
-	E3qhNS5l3PmbrARVE89Ln2iA/ucW+I6ccS/vY4G3dCefwekzcxt41sR7Mu32Rd524BCsPptefbQ
-	m2a/M+CIlz3QEOc7oFLVHVtVPW/vB19EpscIZXrshhhG7gCdiDdQOPgHkcUTP8GubKFG0Eg1le
-X-Received: by 2002:a05:6a21:6e04:b0:3b3:2703:110 with SMTP id adf61e73a8af0-3b4ccd1b49cmr31578364637.4.1781107201346;
-        Wed, 10 Jun 2026 09:00:01 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df043ce0sm21362076a12.11.2026.06.10.08.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 09:00:00 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Lawrence Brakmo <brakmo@fb.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v2] tcp: clear sock_ops cb flags before force-closing a child socket
-Date: Wed, 10 Jun 2026 15:59:44 +0000
-Message-ID: <20260610155946.894878-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gl7/jac+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394461F00893;
+	Wed, 10 Jun 2026 16:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781107615;
+	bh=qJJvi/ks+w6mM1jhL4snWBTL8VFkW8snnDlGL2h0iSE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gl7/jac+iAobMuerNMKmnuvhJlXlVwPa9G/UnM6tniBnMrb7qJrhcgdAl3U4rVJmF
+	 pKptsmkKIhwvRCBshi7EOa+xNwQSMVPbrTVE4i/lqlfOwNeDz65yKIU30bSL8X72eS
+	 RJpsODQQ6L2OOtCu+6md1fDXuyH0QZVrd5pCRZYfDvKq01d0aDo4FQeoX3ukojZ2BF
+	 Zi7UmnQyvn9Z1bUYLIE93CfxHGDRlcdhxJ81jZNR0VUkMqYjbUbPPsfFnORlQYEO0y
+	 FSbivUHfSGrvdllMycV0/8kcqiZ2Y0jzNWDTkOVwcCtwVZPuBnh8OdLcMkqIK6qX8Y
+	 wGWDLhXifaViA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add cgroup kptr NMI deadlock
+ reproducer
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Justin Suess" <utilityemal77@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260610155225.1221740-1-utilityemal77@gmail.com>
+References: <20260610155225.1221740-1-utilityemal77@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 16:06:54 +0000
+Message-Id: <20260610160655.394461F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-A child socket inherits the listener's bpf_sock_ops_cb_flags via
-sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-without it.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [Medium] Test fails on uniprocessor environments due to hardcoding CPU 1.
+- [Medium] Unhandled `perf_event_open` errors result in silent false PASS.
+- [Medium] Premature exit from `/dev/kmsg` read loop on `EPIPE` leads to fa=
+lse negatives.
+- [Low] Fragile test logic bypassing exported cgroup helpers.
+--
 
-If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
-calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
+commit 6fece5f542be76494e7860faa5c9a7968d90f02e
+Author: Justin Suess <utilityemal77@gmail.com>
 
-  WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
-  RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
-  Call Trace:
-   <IRQ>
-   tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
-   tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
-   tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
-   tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
-   </IRQ>
+selftests/bpf: Add cgroup kptr NMI deadlock reproducer
 
-The child is freed before it is ever established, so it should run no
-sock_ops callback. Clear its cb flags in inet_csk_prepare_forced_close(),
-which covers all forced-close callers.
+This commit adds a BPF selftest reproducer for a cgroup kptr NMI deadlock. =
+It
+exercises a path where a BPF map element's destructor is invoked from an NMI
+context when a map element is freed.
 
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
-v2:
- - move the clearing into inet_csk_prepare_forced_close() (Jiayuan Chen,
-   Simon Horman)
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-v1:
- - https://lore.kernel.org/all/20260605094954.1374489-1-rhkrqnwk98@gmail.com/
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadl=
+ock_repro.c b/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadlo=
+ck_repro.c
+> new file mode 100644
+> index 0000000000000..428e321865cee
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadlock_rep=
+ro.c
 
- include/net/tcp.h               | 7 +++++++
- net/ipv4/inet_connection_sock.c | 1 +
- 2 files changed, 8 insertions(+)
+[ ... ]
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 98848db62894..97eac5fa341c 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2942,6 +2942,11 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return tcp_call_bpf(sk, op, 3, args);
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+	tcp_sk(sk)->bpf_sock_ops_cb_flags = 0;
-+}
-+
- #else
- static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
- {
-@@ -2959,6 +2964,8 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return -EPERM;
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk) {}
-+
- #endif
- 
- static inline u32 tcp_timeout_init(struct sock *sk)
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index dbcd37dfdc15..209f73a61a1d 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1290,6 +1290,7 @@ void inet_csk_prepare_forced_close(struct sock *sk)
- 	__releases(&sk->sk_lock.slock)
- {
- 	/* sk_clone_lock locked the socket and set refcnt to 2 */
-+	tcp_clear_sock_ops_cb_flags(sk);
- 	bh_unlock_sock(sk);
- 	sock_put(sk);
- 	inet_csk_prepare_for_destroy_sock(sk);
--- 
-2.43.0
+> +static bool kmsg_saw_splat(int fd)
+> +{
+> +	char buf[8192];
+> +	ssize_t n;
+> +	bool saw =3D false;
+> +
+> +	/* bpf_cgroup_release_dtor in any splat stack means NMI ran the dtor. */
+> +	while ((n =3D read(fd, buf, sizeof(buf) - 1)) > 0) {
 
+[Severity: Medium]
+Will this loop terminate prematurely if the ring buffer overwrites some old=
+er
+messages?
+
+For /dev/kmsg, read() returns -1 with errno set to EPIPE if messages are
+overwritten. By breaking on <=3D 0, the test will stop reading the remaining
+available messages in the buffer. Should this handle EPIPE and continue
+reading?
+
+> +		buf[n] =3D '\0';
+> +		if (strstr(buf, "bpf_cgroup_release_dtor"))
+> +			saw =3D true;
+> +	}
+> +	return saw;
+> +}
+
+[ ... ]
+
+> +static int create_repro_cgroup(char *cgroup_path, size_t cgroup_path_sz)
+> +{
+> +	format_repro_cgroup_path(cgroup_path, cgroup_path_sz,
+> +				 REPRO_CGROUP_REL_PATH);
+> +	if (mkdir(cgroup_path, 0777))
+> +		return -errno;
+> +
+> +	return 0;
+> +}
+
+[Severity: Low]
+Is there a reason to manually reconstruct the cgroup mount paths and call
+mkdir directly here?
+
+If the BPF selftest cgroup framework changes its internal mount paths, this
+might break since get_cgroup_id() will look in a different directory. Could
+this use the exported create_and_get_cgroup() and remove_cgroup() helpers
+instead?
+
+[ ... ]
+
+> +static int open_nmi_pmu_event_on_cpu(int cpu)
+> +{
+> +	struct perf_event_attr attr =3D {
+> +		.freq =3D 1,
+> +		.sample_freq =3D 1000,
+> +		.type =3D PERF_TYPE_HARDWARE,
+> +		.config =3D PERF_COUNT_HW_CPU_CYCLES,
+> +	};
+> +	int pmu_fd;
+> +
+> +	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1 /* pid */, cpu,
+> +			 -1 /* group_fd */, 0 /* flags */);
+> +	if (pmu_fd =3D=3D -1) {
+> +		if (errno =3D=3D ENOENT || errno =3D=3D EOPNOTSUPP) {
+> +			printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
+> +			test__skip();
+> +		}
+> +		return -1;
+> +	}
+
+[Severity: Medium]
+If perf_event_open fails with an error other than ENOENT or EOPNOTSUPP
+(such as EACCES or ENFILE), this returns -1 without calling test__skip()
+or asserting.
+
+Later in run_cgroup_kptr_nmi_deadlock_repro(), this causes the test to bail
+out and report a PASS without running. Should we add an assertion here for
+unexpected errors?
+
+> +
+> +	return pmu_fd;
+> +}
+> +
+> +static bool pin_to_cpu(int cpu, cpu_set_t *old_cpuset)
+> +{
+> +	cpu_set_t cpuset;
+> +	int err;
+> +
+> +	err =3D sched_getaffinity(getpid(), sizeof(*old_cpuset), old_cpuset);
+> +	if (!ASSERT_OK(err, "sched_getaffinity"))
+> +		return false;
+> +
+> +	CPU_ZERO(&cpuset);
+> +	CPU_SET(cpu, &cpuset);
+> +	err =3D sched_setaffinity(getpid(), sizeof(cpuset), &cpuset);
+> +	if (!ASSERT_OK(err, "sched_setaffinity"))
+
+[Severity: Medium]
+Since REPRO_CPU is hardcoded to 1, will this unconditionally fail the test
+on uniprocessor environments?
+
+Would it be better to query the available CPUs from the initial affinity ma=
+sk,
+or gracefully skip the test if CPU 1 is unavailable, rather than failing the
+assertion?
+
+> +		return false;
+> +
+> +	return true;
+> +}
+
+[ ... ]
+
+> +static void run_cgroup_kptr_nmi_deadlock_repro(void)
+> +{
+
+[ ... ]
+
+> +	pmu_fd =3D open_nmi_pmu_event_on_cpu(REPRO_CPU);
+> +	if (pmu_fd < 0)
+> +		goto destroy_skel;
+
+[Severity: Medium]
+As mentioned above, if open_nmi_pmu_event_on_cpu() encounters an unexpected
+error, it returns -1. This goto destroy_skel path then exits the test
+without triggering any assertions.
+
+Does this lead to a silent false PASS if perf_event_open fails for reasons
+other than lacking hardware support?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610155225.1221=
+740-1-utilityemal77@gmail.com?part=3D1
