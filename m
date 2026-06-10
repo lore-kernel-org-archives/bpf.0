@@ -1,211 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BDC3D88EF
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 16:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C5B29D266;
+	Wed, 10 Jun 2026 16:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781107616; cv=none; b=A7B9UNudx56R4EktWQ0vqPblHuZScTsxZO9fmO0dVpWGJ6DsrAPV7tNbfazSMhEc+jp3EohvXeZzM4SkaCdJr2yVXpnRiF0euiSab3dDfcr2mPqQ2ttqNjEhZ4Z8qVRjo1ghzC3SekeClkuAi9MmdDhK2Q5NUZ/G3h/mtmu6wKE=
+	t=1781109032; cv=none; b=t7rOxq5luNrMCZqoa2iLfsQwEVY0CR4RcdHnpqQ9FfDj7Gwc5RIFsDS139/oXRAdrFac99YGhPY37C1h4sh3/wb0WtUzXiLL3GepBq06XCrAC7NDEA+0mkkXSZVh2KGv2y7cYqtiaHP4DXbmUcxWxEgiveKQ9blKQsTTZ6MYVvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781107616; c=relaxed/simple;
-	bh=x8QlCP4ZkpZ0w1JKHxMi8dQlagZU8Bs6hP6vPqjauiQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ul7Fwg6PawwCk7YZ2I8BkzGEbQrNnHgc0xpQEOeRIa/J03aPwPUtyiFZJE5lJmwIEzoP7v/xGF0ANja5Bv5DD4+41JO/xDF5uwMsE8L5pHL2Vp4wFOAjYCsl5kzIKRG7yiskgvCPS+H9T8qMEWham50c2M2ALAYtKBTV2DmUh1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gl7/jac+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781109032; c=relaxed/simple;
+	bh=SLcGQ4ITzXYS4V2CWdBn6tCOCjjsrO1KlLsuijpZOOE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Rt+f8NLcd1T7WnWl4MweBT8mKL3GMDRNWtRjb2WzBG3voxBbob//wB9Gw0Qw93Ch6sx/sqVxfPUuIWGi7kgBJofCG9whFr99szIQ3dIuDbd0pUeZY0igoG5QGyMlmLoJLcqnW2zHEKSVrBDkMLFgnHrUQBHRPiAFm31lARprHj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SshA315+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gl7/jac+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394461F00893;
-	Wed, 10 Jun 2026 16:06:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SshA315+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB45A1F00893;
+	Wed, 10 Jun 2026 16:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781107615;
-	bh=qJJvi/ks+w6mM1jhL4snWBTL8VFkW8snnDlGL2h0iSE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gl7/jac+iAobMuerNMKmnuvhJlXlVwPa9G/UnM6tniBnMrb7qJrhcgdAl3U4rVJmF
-	 pKptsmkKIhwvRCBshi7EOa+xNwQSMVPbrTVE4i/lqlfOwNeDz65yKIU30bSL8X72eS
-	 RJpsODQQ6L2OOtCu+6md1fDXuyH0QZVrd5pCRZYfDvKq01d0aDo4FQeoX3ukojZ2BF
-	 Zi7UmnQyvn9Z1bUYLIE93CfxHGDRlcdhxJ81jZNR0VUkMqYjbUbPPsfFnORlQYEO0y
-	 FSbivUHfSGrvdllMycV0/8kcqiZ2Y0jzNWDTkOVwcCtwVZPuBnh8OdLcMkqIK6qX8Y
-	 wGWDLhXifaViA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add cgroup kptr NMI deadlock
- reproducer
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Justin Suess" <utilityemal77@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260610155225.1221740-1-utilityemal77@gmail.com>
-References: <20260610155225.1221740-1-utilityemal77@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 16:06:54 +0000
-Message-Id: <20260610160655.394461F00893@smtp.kernel.org>
+	s=k20260515; t=1781109031;
+	bh=PmiNopTKELNVxRRz64d2VMjYn3asLtHGeFlB4yVILP8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SshA315+z0RBRhaZiWpl896ON8J7Cp7Ax1CAx4zvcfga7YpRoeqWysPUBkCVAcn6B
+	 z5WSS/LRZSpN92VUTRfmtYxXkvKmyNL5QlXlH5iX92FX3SVsZgiExVUNH7UVfraBN8
+	 RkElQ2qI180YX1RrECrgqDuXdQqfvyZeWvFFBKP1EaFJ4ibHLj204OUSJDHzxYZryp
+	 jVdF0RhcglQ6PGHwu3zERtIwWNYbvTLA/Wzj3ZNAsUnUiP1jFjU2Z285vScp09o+IM
+	 8pEXY/IOwTcuDD4jO0/aXYu0nKX4tirQtzlI3LtIN5gKqFIGJ4HeZhTgIGirtmDpaO
+	 xoyKE5nOD/yIw==
+Content-Type: multipart/mixed; boundary="===============4751957696987930576=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <0131313fafcf415294f02e034ea77cc7c34108e5b9e9f542a4b9c8e60cc9d767@mail.kernel.org>
+In-Reply-To: <20260610145059.113412-2-chenyuan_fl@163.com>
+References: <20260610145059.113412-2-chenyuan_fl@163.com>
+Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,chenyuan_fl@163.com
+Cc: andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,chenyuan@kylinos.cn,daniel@iogearbox.net,eddyz87@gmail.com,linux-kselftest@vger.kernel.org,shuah@kernel.org,mykyta.yatsenko5@gmail.com,andrii.nakryiko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 10 Jun 2026 16:30:30 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [Medium] Test fails on uniprocessor environments due to hardcoding CPU 1.
-- [Medium] Unhandled `perf_event_open` errors result in silent false PASS.
-- [Medium] Premature exit from `/dev/kmsg` read loop on `EPIPE` leads to fa=
-lse negatives.
-- [Low] Fragile test logic bypassing exported cgroup helpers.
---
+--===============4751957696987930576==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 6fece5f542be76494e7860faa5c9a7968d90f02e
-Author: Justin Suess <utilityemal77@gmail.com>
+> bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+> TRACEPOINT programs to verify the BPF environment works.  When a
+> BPF token is in use with restricted program type permissions, these
+> probe loads may fail because the token does not allow the specific
+> program types, even though BPF loading is perfectly functional.
+> Fix by skipping the probe when a token FD is present: BPF token
+> creation itself proves the kernel has a working BPF subsystem.
+> Real BPF issues will be caught during actual program and map loading.
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 
-selftests/bpf: Add cgroup kptr NMI deadlock reproducer
+This describes a bug fix but there is no Fixes: tag.
 
-This commit adds a BPF selftest reproducer for a cgroup kptr NMI deadlock. =
-It
-exercises a path where a BPF map element's destructor is invoked from an NMI
-context when a map element is freed.
+The probe-loading failure with a restricted BPF token came in when the
+token-aware opts were added to bpf_object__probe_loading(), passing the
+token FD into the trivial SOCKET_FILTER and TRACEPOINT probe loads:
 
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+    LIBBPF_OPTS(bpf_prog_load_opts, opts,
+        .token_fd = obj->token_fd,
+        .prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+    );
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadl=
-ock_repro.c b/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadlo=
-ck_repro.c
-> new file mode 100644
-> index 0000000000000..428e321865cee
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_kptr_nmi_deadlock_rep=
-ro.c
+which is the code this patch removes.  Should this include:
 
-[ ... ]
+  Fixes: 6b434b61b4d9 ("libbpf: Wire up BPF token support at BPF object level")
 
-> +static bool kmsg_saw_splat(int fd)
-> +{
-> +	char buf[8192];
-> +	ssize_t n;
-> +	bool saw =3D false;
-> +
-> +	/* bpf_cgroup_release_dtor in any splat stack means NMI ran the dtor. */
-> +	while ((n =3D read(fd, buf, sizeof(buf) - 1)) > 0) {
+In the earlier resend thread, Mykyta Yatsenko asked for a Fixes: tag to
+be added:
 
-[Severity: Medium]
-Will this loop terminate prematurely if the ring buffer overwrites some old=
-er
-messages?
+  https://lore.kernel.org/bpf/2ec75142-04b6-4d03-9aad-7441b6350f2b@gmail.com/
 
-For /dev/kmsg, read() returns -1 with errno set to EPIPE if messages are
-overwritten. By breaking on <=3D 0, the test will stop reading the remaining
-available messages in the buffer. Should this handle EPIPE and continue
-reading?
+  > Please resend your patch applying these: ... add fixes tag ...
 
-> +		buf[n] =3D '\0';
-> +		if (strstr(buf, "bpf_cgroup_release_dtor"))
-> +			saw =3D true;
-> +	}
-> +	return saw;
-> +}
+That request does not appear to be reflected in this version, which still
+carries no Fixes: tag.
 
-[ ... ]
+The same thread also asked to include any Acked-bys.  Mykyta Yatsenko gave
+an Acked-by on v2:
 
-> +static int create_repro_cgroup(char *cgroup_path, size_t cgroup_path_sz)
-> +{
-> +	format_repro_cgroup_path(cgroup_path, cgroup_path_sz,
-> +				 REPRO_CGROUP_REL_PATH);
-> +	if (mkdir(cgroup_path, 0777))
-> +		return -errno;
-> +
-> +	return 0;
-> +}
+  https://lore.kernel.org/bpf/e23baad8-1709-4210-81c8-22741b9dfb3e@gmail.com/
 
-[Severity: Low]
-Is there a reason to manually reconstruct the cgroup mount paths and call
-mkdir directly here?
+  > This change makes sense ...
+  > Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-If the BPF selftest cgroup framework changes its internal mount paths, this
-might break since get_cgroup_id() will look in a different directory. Could
-this use the exported create_and_get_cgroup() and remove_cgroup() helpers
-instead?
+Should this be carried forward as:
 
-[ ... ]
+  Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-> +static int open_nmi_pmu_event_on_cpu(int cpu)
-> +{
-> +	struct perf_event_attr attr =3D {
-> +		.freq =3D 1,
-> +		.sample_freq =3D 1000,
-> +		.type =3D PERF_TYPE_HARDWARE,
-> +		.config =3D PERF_COUNT_HW_CPU_CYCLES,
-> +	};
-> +	int pmu_fd;
-> +
-> +	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1 /* pid */, cpu,
-> +			 -1 /* group_fd */, 0 /* flags */);
-> +	if (pmu_fd =3D=3D -1) {
-> +		if (errno =3D=3D ENOENT || errno =3D=3D EOPNOTSUPP) {
-> +			printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
-> +			test__skip();
-> +		}
-> +		return -1;
-> +	}
 
-[Severity: Medium]
-If perf_event_open fails with an error other than ENOENT or EOPNOTSUPP
-(such as EACCES or ENFILE), this returns -1 without calling test__skip()
-or asserting.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Later in run_cgroup_kptr_nmi_deadlock_repro(), this causes the test to bail
-out and report a PASS without running. Should we add an assertion here for
-unexpected errors?
-
-> +
-> +	return pmu_fd;
-> +}
-> +
-> +static bool pin_to_cpu(int cpu, cpu_set_t *old_cpuset)
-> +{
-> +	cpu_set_t cpuset;
-> +	int err;
-> +
-> +	err =3D sched_getaffinity(getpid(), sizeof(*old_cpuset), old_cpuset);
-> +	if (!ASSERT_OK(err, "sched_getaffinity"))
-> +		return false;
-> +
-> +	CPU_ZERO(&cpuset);
-> +	CPU_SET(cpu, &cpuset);
-> +	err =3D sched_setaffinity(getpid(), sizeof(cpuset), &cpuset);
-> +	if (!ASSERT_OK(err, "sched_setaffinity"))
-
-[Severity: Medium]
-Since REPRO_CPU is hardcoded to 1, will this unconditionally fail the test
-on uniprocessor environments?
-
-Would it be better to query the available CPUs from the initial affinity ma=
-sk,
-or gracefully skip the test if CPU 1 is unavailable, rather than failing the
-assertion?
-
-> +		return false;
-> +
-> +	return true;
-> +}
-
-[ ... ]
-
-> +static void run_cgroup_kptr_nmi_deadlock_repro(void)
-> +{
-
-[ ... ]
-
-> +	pmu_fd =3D open_nmi_pmu_event_on_cpu(REPRO_CPU);
-> +	if (pmu_fd < 0)
-> +		goto destroy_skel;
-
-[Severity: Medium]
-As mentioned above, if open_nmi_pmu_event_on_cpu() encounters an unexpected
-error, it returns -1. This goto destroy_skel path then exits the test
-without triggering any assertions.
-
-Does this lead to a silent false PASS if perf_event_open fails for reasons
-other than lacking hardware support?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610155225.1221=
-740-1-utilityemal77@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27285576775
+--===============4751957696987930576==--
