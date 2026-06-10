@@ -1,147 +1,263 @@
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A798332EBD;
-	Wed, 10 Jun 2026 21:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53E93176EF
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 21:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781125612; cv=none; b=bIaTVLVKQ44OLLhWhekZQ3F8o9Bw6TnwF5IdiO9PjpScPtnFDuVI+ZPoMdx9MZhlJmdLHr8A/iRN6WNk5eQrod2RuKib/LTzZwfOEcezVdtfEqR1/HaDFYcfO5/+hx6LCLSRhCbCHdBAbTjyBBlkPaA9dfzVNq5Bvj9su3780to=
+	t=1781128555; cv=none; b=CZbPK0qT0dpKHv9SgIxgeg45laLIUniixXb8glkZFEINOnKiinmFGWz8BKvHZYRkDMn8kI/thNTsmy+D9wY5cuEis6BbKPDS9ki9aS1lVfYuulmUUE+rP3n1TGb3wJ5HyLih61ROn2UG0osFPZWi4285ie3M1FonYMGiia307Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781125612; c=relaxed/simple;
-	bh=Gu8I7AZcu5Pqi7tAdy5uX9okFvOafv+/nm0muIbVN3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VXKSd75tP0GeGleLjWR3mG9lEjtfkSsvQ8cMS3V+mpNcmXPW5tJAkcKybzJJh+ftmWSsAjIu7bFTTDwvXCX4UEqL9wM+hyKhrR1xyBRI/QZa55Y8ft1ObkyA3fJprVnK3mPAmdZk08vvlZG2DcHYf+ZOPMvLxUFnbB+8xoK5hXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=CDUmeZiI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Wy8DralP; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1781128555; c=relaxed/simple;
+	bh=Xd+iV7Z7Ts9EpzVEc30Xw8zHpduDF5PdUnmNqKlYDRM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SnxJkjINl7o5m1UkrLYfYyRYghFTZaIJ/txyIG+TB4dJXE2E3xwFekCYbgnN6ofR35VyRxVw7tS2d61jYZCQwREzuY/Dn3UqnETG2Nv/SWA5vJ2RxfLJ/L+vohBUpipQwroabGto+dnlrBjHKvVsLNqHSi+aPgw5R5ceUcSaMW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NZx5kQWa; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="CDUmeZiI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Wy8DralP"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 179BBEC0096;
-	Wed, 10 Jun 2026 17:06:48 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Wed, 10 Jun 2026 17:06:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1781125608; x=
-	1781212008; bh=7qBCh3gDl1ak4P0bVMUvL6VE/LLHT4oSo+lsPme6ySE=; b=C
-	DUmeZiIbT2v8pWMHCJj2y0dMXIquf16glosar8hmpSPDXxkxZRsA4Y7AVot+fdbY
-	idcaApzSSpxXfBOnwXKx/BbmhqHQQUBw5cQ7X9ZGZW7tZ7FJ4A2XkYLfvqMGb/92
-	wP3X9WaoUwMtnwMxdAm+NXl9+hB3atYj7QfKDG2bZG7qo/5HZ96yf7tqKH7Br4iE
-	ZlqPOFsK+jbh7W3sqQiKvCgeH8LDMWA3VM4o9kD+ZD+bLU99gkG3qBg8UF+WiP2Y
-	sbQTUa2KjEw5I8L3Yqm/h9zm4a35O6CO3UXWSK9xD5YSwpsm6IvIaFVN03vk0cKy
-	fF+9O/ZgBmF0BkwMikQyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1781125608; x=1781212008; bh=7qBCh3gDl1ak4P0bVMUvL6VE/LLHT4oSo+l
-	sPme6ySE=; b=Wy8DralPWjq7L4bD9RCgRBLnQFoUVa1dpbgjUgOWJWp4f6NKnZe
-	C0bWwbiBrFpKXIqdJu00b1b7af2AXvBITc+dxoqDA13W1brc99a13Yb43T1Pr2bE
-	hx8DKCAxRKpSukf5YDLowzPKIxCBVvYsARWBd/45Vl2KXiAsnlBFqEQMq/pAhsut
-	6/svDbiNuBShvjh3Dj1ixLvcwNDhUECv9D2p5k93YBT3GnFDHMMb9M6rQIzBeF52
-	vEZaQgadeHcdnDrJ0u56w0RAwdkMW/moETKHbiI9hWGz8eJOTMgpIkK4goWWtsDQ
-	MOuCOAHK2lK1pTjYi/uzxHe5bWHEW31edBg==
-X-ME-Sender: <xms:59Epap5mRk7KE72pwzapgFRZLvRvjvdL-XzhGpiEmUJ4IZSzFBQGsw>
-    <xme:59EpavB20lxzhnT1ciqukzojNbtzGLgxo3wxuQxROHnFR5BMvX2g2tknVceeFzkH-
-    JjEWoo-AL3oPGFK3VfEKhGzpt2qAgZjC85_6xLGkNFo-btWjls1a9I>
-X-ME-Received: <xmr:59Epav9RUSu8OcyVVMjfNfGPzqnyTBh11ppxY9IoITeRYRkuiLBVMf7x_6aONHBKyLrru81avdbYWjsc8fqQLgQ>
-X-ME-Proxy-Cause: dmFkZTGRWUTkdaP6/sQeM9MdhMG4Z8z+pJd6HMi4aa/ytvVDkQfsNFv4viq7LfTutpCmVm
-    ov3s6z95Jsq61+6uuXDE29YvAFsiXElLt6jwI4G59I1UQBHHmHoi3EHHk2tDzgxMdekbMy
-    ceMZMKHnjzJS/tVsbiPkKdXTLXCxnk+W96pcxVgJa9a9Gewq3phkNLDFs7UXvu5xZzyLxV
-    87OYGb+8rc7VgwOOLlyLGaijNH/I7MvosqTaECmdIPFW/Dw2OUJ4EmkAF9kXZOBNY/FRKr
-    46pTKg3ovzg4C223xZXv7szB+pG89u9RTpnaj9qaxfda1FnAvU9Y+3GHYcLY/N8cokgzWX
-    krc/Uph/scbX5v3kUHSePaE/4iLx2tiOiEBzAVLXuUNqz2QyvlbIwO+hi4xyXcEum6hsX8
-    hRDvtXYYhwJ2PZOQBywN8csunF3tJKGpgKIB8K4/ZeYsCBC81AEZMfHQZCWMfMM4S29QY/
-    5wUFhK1oaONKU2DCbTJ5nD8cI3WgAsqNQK7cqq4Qr5nduxTd1xbHowmFFLtj2zvVLhhQ1W
-    4wp2aJMlJwhzi9vvgaWL1fLDO+bv2rfsOmF/PWZ9/YeHBbcHfofIkZ/ka7I1W4FlCrjDWN
-    0LudBaOBOi+gd6i0iFS+C8O0vTBZtJ2t50/h2gd4EeO0w10ZueUs9mgX+mhg
-X-ME-Proxy: <xmx:59EpaiGCyYytw5irCRRyrGRxwdvzUZnfZeW81pnTuAMjDCOlum5eow>
-    <xmx:59EpapQvEg6FYZQMvMLjH1LYFFSmFL5_bt7ygBwPbpPTsFJe_1lfWQ>
-    <xmx:59EpapTZWu4FJWzSsXQF1Wmy5WSXUaegqpf4Smsgy08UtNgKhic-Sg>
-    <xmx:59Epas2mg6Fg7BCNGFVHDo81Ot4kOr-TUb9BPoKFt8ID8PQzEM-wTA>
-    <xmx:6NEpaj4KSDibTsYG8ypVPAjeNAI-v-6zoCZGdx58ZMDvIlxxtrHLVdZ0>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Jun 2026 17:06:47 -0400 (EDT)
-Date: Wed, 10 Jun 2026 23:06:44 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	corbet@lwn.net, linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-	john.fastabend@gmail.com, skhan@linuxfoundation.org
-Subject: Re: [PATCH net-next 2/3] docs: net: tls-offload: document
- tls_dev_del, tls_dev_resync, and rekey
-Message-ID: <ainR5GAK8LaHJYMP@krikkit>
-References: <20260609201224.1191391-1-kuba@kernel.org>
- <20260609201224.1191391-3-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NZx5kQWa"
+Message-ID: <a56eebfa-9fac-44ca-a3a5-80c0a41bdebb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781128549;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8Xq3T8jGSwlCoS9TBcLots22CwpjKVQ5tiqS1ynXAs0=;
+	b=NZx5kQWaP3w/38qQC11nz4BQvD9L76TDbmaNJ5n5o5iZ5epV6H+HYWaKJLB+m6YcrolrNB
+	pxs2I/GGTwF6LVABh2E04hBajrRJpfvEXIbfWaB/Qt1H9MgDMg5mbL4syBW/TsJew6bs+m
+	9M7v8eu16pO4qVkBmGyl78S+X4kc2No=
+Date: Wed, 10 Jun 2026 14:55:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260609201224.1191391-3-kuba@kernel.org>
+Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
+ under 5-level paging
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
+ <CA+fCnZcRLZS4r=FBB6EX-G3+=X675q96hkdR_wLJexeuW-tPVw@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CA+fCnZcRLZS4r=FBB6EX-G3+=X675q96hkdR_wLJexeuW-tPVw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-2026-06-09, 13:12:23 -0700, Jakub Kicinski wrote:
-> Fill in some gaps in the TLS offload doc:
+On 6/10/26 11:39 AM, Andrey Konovalov wrote:
+> On Wed, Jun 10, 2026 at 7:57 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On x86_64 with 5-level paging (LA57) and inline generic KASAN, the
+>> following flaky splat may be observed on boot:
+>>
+>>     BUG: KASAN: wild-memory-access in do_raw_spin_lock+0xcf/0x260
+>>     Write of size 4 at addr ff110001000c90b8 by task swapper/0/0
+>>
+>>     CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.1.0-rc5-gcba33e0b2907 #1 PREEMPT(full)
+>>     Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+>>     Call Trace:
+>>      <IRQ>
+>>      dump_stack_lvl+0x54/0x70
+>>      kasan_report+0x117/0x150
+>>      ? do_raw_spin_lock+0xcf/0x260
+>>      kasan_check_range+0x264/0x2c0
+>>      do_raw_spin_lock+0xcf/0x260
+>>      handle_edge_irq+0x35/0x770
+>>      ? do_raw_spin_unlock+0x51/0x2a0
+>>      __common_interrupt+0xae/0x120
+>>      common_interrupt+0x7c/0x90
+>>      </IRQ>
+>>      <TASK>
+>>      asm_common_interrupt+0x26/0x40
+>>     RIP: 0010:identify_cpu+0x2b2/0x3460
+>>     Code: 00 41 c7 07 00 00 00 00 4d 89 e6 49 c1 ee 03 43 0f b6 04 06 84 c0 0f 85 a3 1c 00 00 41 c7 04 24 00 00 00 00 31 c0 31 c9 0f a2 <89> c7 42 0f b6 44 05 00 84 c0 0f 85 ad 1c 00 00 41 89 3f 48 8b 44
+>>     RSP: 0000:ffffffff97807df0 EFLAGS: 00000246
+>>     RAX: 0000000000000020 RBX: 00000000756e6547 RCX: 000000006c65746e
+>>     RDX: 0000000049656e69 RSI: 0000000000000000 RDI: ffffffff98632fd8
+>>     RBP: 1ffffffff30c65fc R08: dffffc0000000000 R09: 0000000000000004
+>>     R10: ffffffff98632fc4 R11: fffffbfff30c65fb R12: ffffffff98633050
+>>     R13: ffffffff98633048 R14: 1ffffffff30c660a R15: ffffffff98632fe0
+>>      identify_boot_cpu+0xd/0xd0
+>>      arch_cpu_finalize_init+0x24/0x1f0
+>>      start_kernel+0x31e/0x3e0
+>>      x86_64_start_reservations+0x24/0x30
+>>      x86_64_start_kernel+0x13a/0x140
+>>      common_startup_64+0x12c/0x137
+>>      </TASK>
+>>
+>> It fires very early in boot. If kasan_multi_shot is set, the reports
+>> are non-fatal and keep repeating, and the boot CPU wedges before
+>> userspace is reached. The accessed addresses are valid 5-level kernel
+>> pointers, so the report is a false positive.
+>>
+>> The root cause is in generic KASAN not seeing
+>> cpu_feature_enabled(X86_FEATURE_LA57) set, because the bit is cleared
+>> in identify_cpu() when the offending interrupt happens [1]:
+>>
+>>   memset(&c->x86_capability, 0, ...);   /* clears X86_FEATURE_LA57 */
+>>   ...
+>>   get_cpu_cap(c);                       /* re-reads CPUID, restores it */
+>>
+>> addr_has_metadata() then uses the 4-level threshold, and 5-level
+>> kernel addresses fall below it, so kasan_check_range() reports them as
+>> wild-memory-access.
+>>
+>> Define USE_EARLY_PGTABLE_L5 in mm/kasan/generic.c so
+>> addr_has_metadata() uses the stable variable, as
+>> arch/x86/mm/kasan_init_64.c already does.
 > 
-> - describe the tls_dev_del and tls_dev_resync callbacks
-> - add a mention of rekeying being out of scope for now
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: john.fastabend@gmail.com
-> CC: sd@queasysnail.net
-> CC: corbet@lwn.net
-> CC: skhan@linuxfoundation.org
-> CC: linux-doc@vger.kernel.org
-> ---
->  Documentation/networking/tls-offload.rst | 29 ++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/networking/tls-offload.rst b/Documentation/networking/tls-offload.rst
-> index c173f537bf4d..a41f46885e8c 100644
-> --- a/Documentation/networking/tls-offload.rst
-> +++ b/Documentation/networking/tls-offload.rst
-> @@ -104,6 +104,29 @@ at the end of kernel structures (see :c:member:`driver_state` members
->  in ``include/net/tls.h``) to avoid additional allocations and pointer
->  dereferences.
->  
-> +When the offloaded connection is destroyed the core calls
-> +the :c:member:`tls_dev_del` callback so the driver can release per-direction
-> +state:
-> +
-> +.. code-block:: c
-> +
-> +	void (*tls_dev_del)(struct net_device *netdev,
-> +			    struct tls_context *ctx,
-> +			    enum tls_offload_ctx_dir direction);
-> +
-> +``tls_dev_del`` is mandatory whenever ``tls_dev_add`` is provided.
-> +
-> +The third TLS device callback is :c:member:`tls_dev_resync`, called by the core
-> +to synchronize the TCP stream with the record boundaries:
-> +
-> +.. code-block:: c
-> +
-> +	int (*tls_dev_resync)(struct net_device *netdev,
-> +			      struct sock *sk, u32 seq, u8 *rcd_sn,
-> +			      enum tls_offload_ctx_dir direction);
-> +
-> +See the `Resync handling`_ section for details.
+> It took me some digging to find which stable variable you refer to
+> here; I think this needs to be better explained.
 
-Hmm, this callback is not mentioned at all in the "Resync handling"
-section. I think it'd be good to add at least a quick note there about
-how/when it's invoked, and what the arguments mean (at least the two
-types of sequence numbers, since the rest is identical to the other
-driver CBs).
+Hi Andrey, thank you for the quick review.
 
--- 
-Sabrina
+Yeah, it's:
+
+  unsigned int __section(".data") __pgtable_l5_enabled;
+
+I'll add more details in next revision.
+
+> 
+>>
+>> Some context on how this was noticed and reproduced below.
+>>
+>> We started seeing flaky splats as above [2][3] on BPF CI runs after
+>> runner hardware has been upgraded. Specifically, new x86 runners are
+>> c7i.metal-24xl AWS EC2 instances, which are Intel Sapphire Rapids
+>> machines that support LA57 feature, and have it enabled.
+>>
+>> The splats can be reproduced with qemu on any x86_64 host with
+>>   -cpu max -accel tcg
+>>
+>> Build a kernel with:
+>>   CONFIG_KASAN=y
+>>   CONFIG_KASAN_GENERIC=y
+>>   CONFIG_KASAN_INLINE=y
+>>
+>> Boot it with kasan_multi_shot. The fault fires fast before userspace,
+>> so no rootfs is required. For example:
+>>
+>>   qemu-system-x86_64 -display none -serial stdio -no-reboot \
+>>     -smp 4 -m 5G -cpu max -accel tcg \
+>>     -kernel arch/x86/boot/bzImage \
+>>     -append "console=ttyS0,115200 earlyprintk=serial,0,115200 panic=-1 kasan_multi_shot nokaslr"
+>>
+>> It's a timing race, so a single boot hits it only sometimes.
+>> However running several qemu instances in parallel on the same host
+>> significantly increases the hitrate.
+>>
+>> I confirmed the proposed fix eliminates the splats.
+>>
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/common.c?h=v7.1-rc7#n2001
+>> [2] https://github.com/kernel-patches/bpf/actions/runs/27271262414/job/80542509369
+>> [3] https://github.com/kernel-patches/bpf/actions/runs/27260143782/job/80505353689
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  mm/kasan/generic.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+>> index 2b8e73f5f6a7..b5f430f2dbb6 100644
+>> --- a/mm/kasan/generic.c
+>> +++ b/mm/kasan/generic.c
+>> @@ -9,6 +9,13 @@
+>>   *        Andrey Konovalov <andreyknvl@gmail.com>
+>>   */
+>>
+>> +/*
+>> + * check_region_inline() and addr_has_metadata() can run very early.
+>> + * For example, in an interrupt taken while identify_cpu() has the CPU
+>> + * capability bits temporarily cleared.
+>> + */
+>> +#define USE_EARLY_PGTABLE_L5
+> 
+> There are other users of addr_has_metadata(), besides ones in generic.c.
+> 
+> Thus, should we place this definition into mm/kasan/kasan.h? And
+> likely guard it with ifdef KASAN_GENERIC || KASAN_SW_TAGS (HW_TAGS
+> should not be affected by this AFAIU).
+
+It appears setting USE_EARLY_PGTABLE_L5 in kasan.h will not work.
+
+USE_EARLY_PGTABLE_L5 needs to be set before 
+arch/x86/include/asm/pgtable_64_types.h is included, which is very early.
+
+For example, it arrives to kasan/generic.c through a long path starting
+at linux/interrupt.h:
+
+   In file included from ./arch/x86/include/asm/pgtable_types.h:277,
+                   from ./arch/x86/include/asm/processor.h:21,
+                   from ./arch/x86/include/asm/cpufeature.h:5,
+                   from ./arch/x86/include/asm/thread_info.h:59,
+                   from ./include/linux/thread_info.h:62,
+                   from ./include/linux/smp.h:119,
+                   from ./include/linux/alloc_tag.h:14,
+                   from ./include/linux/percpu.h:5,
+                   from ./include/linux/context_tracking_state.h:5,
+                   from ./include/linux/hardirq.h:5,
+                   from ./include/linux/interrupt.h:11,
+                   from mm/kasan/generic.c:13:
+
+So if we want to cover all users of addr_has_metadata(), we'll have to
+add #define USE_EARLY_PGTABLE_L5 in multiple files: generic.c, report.c,
+report_generic.c, maybe others?
+
+Any other ideas?
+
+I determined the include path like follows:
+
+cd linux # at 9716c086c8e8 torvalds/master
+make defconfig
+./scripts/config -e KASAN -e KASAN_GENERIC -e KASAN_INLINE
+make olddefconfig
+make mm/kasan/generic.i
+
+# then modify pgtable_64_types.h
+
+diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
+index 7eb61ef6a185..c6b754143fb4 100644
+--- a/arch/x86/include/asm/pgtable_64_types.h
++++ b/arch/x86/include/asm/pgtable_64_types.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef _ASM_X86_PGTABLE_64_DEFS_H
+ #define _ASM_X86_PGTABLE_64_DEFS_H
++#error TRACE
+ 
+ #include <asm/sparsemem.h>
+
+And then:
+eval "$(grep '^savedcmd_' mm/kasan/.generic.i.cmd | head -1 | sed 's/^savedcmd_[^ ]* := //')"
+
+
+> 
+> And let's also extend the comment to explain better what's going on. I
+> like the way the issue is explained here:
+> 
+> https://elixir.bootlin.com/linux/v7.0.12/source/arch/x86/boot/startup/sme.c#L36
+
+ok
+
+> 
+>> +
+>>  #include <linux/export.h>
+>>  #include <linux/interrupt.h>
+>>  #include <linux/init.h>
+>> --
+>> 2.54.0
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+>> To view this discussion visit https://groups.google.com/d/msgid/kasan-dev/20260610175651.647515-1-ihor.solodrai%40linux.dev.
+
