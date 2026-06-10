@@ -1,102 +1,84 @@
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59CF3749F3
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 23:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DF529B228;
+	Wed, 10 Jun 2026 23:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781134988; cv=none; b=BRkuXHYVX+87T7bWVSQj9AAxDiy5aN9/UqVMf9EweuRLpT9s2tR0Cc3y7shLb2GJhilGLkx3+0V2pSDCcs+dTLef6D8toPhPZBzJyoWdBncN393Ch68qU0tEtuGjwfUBveNa/EhmB7zvko/FbFRFZffs7AgZ296nPNbaONJDjoE=
+	t=1781135300; cv=none; b=cauF8R+HmDkEn3660cf1yCnGGwCV8DzGDBjvboTBE+yKWvPHQjgo5g3Ao70aN/8ctYLc5HLuuW0LHhgeOpIuzGJvLoAmNVp2ZPi1HBcjVSQEwQT5HeCdpKqV+3MYaG16L1TGuOzDnBVszBPacN9LjonWmAisrhuh0eVSQ9pSNfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781134988; c=relaxed/simple;
-	bh=JsSFSoN44TFVz/6cV9BMkzX2QhQadkdQZzqFNXNwr0I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ItieHhubpwVdlwbV/NdZF3Mn7q+AGDYIz+kE7nzO6AEEAPBF1av3044fM0xcKAQwRW9QufzS6j4L38tQHGR3neJaRtexRGWe5UA1t6WONCslATeylIqHlrrdYsVUgF9LDXiN1LeSDQNJ9I+ljjZX4nGpEZtjy+82GEgemXrJo+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUJBhkB8; arc=none smtp.client-ip=209.85.216.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781135300; c=relaxed/simple;
+	bh=txrw+D81HZEGFl1Vf9TS619X42vwoHqpSYn6M6I85q8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WgHYNY4HWP9+E2pVyPpn77aGZvUt4us3Bbholr699+JiUibYqR0Czy6WEDvDqNnMazoJ63XkYVbxyerSUNvSsYLUMGn5xF+L29SsMrWuKDoQ2xwG8rZSEBTzw5zYeitII3L9xKUpjinkxZbq7FKgL2P10FCqLEdHYhUV1feDgzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YaMZNenr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUJBhkB8"
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-36baeec21dcso4790934a91.3
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 16:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781134987; x=1781739787; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=an0SgUn1oFV1bun03BprU1b2Uy0096MbOZfVjaHKMKY=;
-        b=UUJBhkB8sfpvem76yql6tqKJZ/ehx6KUnAf3EaoOARnr2Ce6EIqJx0/uXQqIEvTR23
-         GVFuRlmhrE4XFu+auh6oEcrhhgdbteoEdKv3vLDEP1dmD9t6OcGCAZfUxJWd8BS0PuzF
-         R+xhGBLMrm5t3P/TjFMlkeULDS2xozEiHZ4CXkUIPUS8nMvzyCP6BpaSP/YJVy6nS/NR
-         RT4nD+Ve2ftWudlHjCXt/7bEzbtSYFUh1DWr9PZjCFNC9HcHiJuurvHLdnKvrgxzkLlh
-         cW23kHyJXGkP/Q7PqUrHVhJhmbxXJTJ67ByRcStPjNrWf/5JDD+fZhou+zM3n58hleYa
-         ft3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781134987; x=1781739787;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=an0SgUn1oFV1bun03BprU1b2Uy0096MbOZfVjaHKMKY=;
-        b=pV+lbOpROzPk3zZy2PxlFEZLCzSwBH5rfCoTpXxUiIG0rsqAo9cPGBzmiEHftrMbR0
-         49DZTsXLVjmFweYzCcP9D0+QpLoGPlRY8I7hbrbv9hPBVIbYc9JwYRLfk2snXKAdb8K+
-         quZbEErofYtcGRkET1FqmehEkbsVuj327uSGT1FL9ckczBih6TLQUonW2HwvpnXGg0wr
-         N87fzWrOsAv8FB8KGB7mIZT8GWZj25Zjf5ewmGOPjYmQpevrG/tGr2TTyUetTwwFZeKk
-         nDOJ/uGGm3W0wTKcoAmvt/O+DCHhzivRsFSRL89RFihOXOMYsIcTp5k6rI5V3CwC7UIP
-         i6Jw==
-X-Forwarded-Encrypted: i=1; AFNElJ+QjTq1qSB1yNCzJZqvas5KvR74IwfGD0aIbDfbbpZ/YxwIVffnhVEn6o4jG3XFqoWlU5w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNHa5GJeymY5FKbmRRaSHXIUSQEeG0QKkPk9ibhpPIDxqsRv6Y
-	8VSP3lByR3sAgrE5joTTslmkD57mU7Spvlbgc7UebwfkLhidYDijma0S
-X-Gm-Gg: Acq92OHnWowKcHkoC9cYMeviLC1RPoyEQoo57MrqHtQjoulK/gsQgh47FOHxinwp23k
-	VOH5pBCy3nm/YvoqveoppUHOvNwLSz92KHdJRbinb3LTNyV1SfhwiVQGpN7eqHnai3JAQ+tS2Yu
-	A+gDVGPe6Ure0c6LReQOE5r3Th2ZJG5+Msd9gL28W7hfnEB5UAqHB4QYrnM0CRFdfM7bxwktVAE
-	J4fFv8lGdVVU1ahn2rbCVhFNpy0InbuV0jgY2rGmBJwK4Y0siN5gm8PXsJGZn2hbbBhxoIzijjc
-	bu1HfnjwJDGZnl9Vaj0Qug7+VpNIDpnhanW8pHdLeJuRPyw8zP2eF6kbG+iVHk39odjU7+WufFd
-	RH4pS3PTC4ezWCtG/ReubhKx6hlFOGGM/HTxxwTxHmEMkfsxlpp5Q26eDGkFqjhB3Ch2EUT7gHa
-	bXPikgrZynLJShjRjUzzs9ilg=
-X-Received: by 2002:a17:90b:5708:b0:362:e826:cefe with SMTP id 98e67ed59e1d1-377a9194d84mr388890a91.23.1781134987030;
-        Wed, 10 Jun 2026 16:43:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-377522a1a9esm495657a91.4.2026.06.10.16.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 16:43:06 -0700 (PDT)
-Date: Wed, 10 Jun 2026 16:42:59 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, skhan@linuxfoundation.org, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me
-Subject: Re: [PATCH net-next 1/3] docs: net: fix minor issues with XDP
- metadata docs
-Message-ID: <ain2fMNX27Z-ZlzT@devvm7509.cco0.facebook.com>
-References: <20260609201224.1191391-1-kuba@kernel.org>
- <20260609201224.1191391-2-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YaMZNenr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAB21F00893;
+	Wed, 10 Jun 2026 23:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781135299;
+	bh=CipF9A3gfrHphLRf0QX+lIslSp8tKH7k4N7NF3mNvV0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=YaMZNenrB6P+OuXYjDINwwcyoTZdeDq+A1fgt1j3RaVV/IRjjUB9D2CKFJxpJVqg4
+	 eGPCJhLnD+CxIJdMR7UnmS01XmaQwpiEq1aClPo163koLgU8NMeyVz3uNJkrlndwU/
+	 wvX2/DHVUBWJljLB9DoVssiANycB2q59U0HDEg5QZp5tfW/5yzQ4m720JXFJ/rL/6t
+	 cA4K/VqDq1BnJihdd2pxXoQEP9xNDNrU6AIj2nxkrRUvWpQmCzFqmA0vYcdO/gbcoF
+	 XZgMxWORr7uCqFoBeU8zOr5dMYQRbmJ0jN6m40qPXxjm2uiF+sW7ODVoCGAJVeR0+3
+	 uJhzF4grcHlOw==
+Content-Type: multipart/mixed; boundary="===============3421189048308312154=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260609201224.1191391-2-kuba@kernel.org>
+Message-Id: <b632af6b40610fe3296b0b6cdd160c98596f81649817f23a3b63595ce4f1f103@mail.kernel.org>
+In-Reply-To: <20260610230329.727075-4-daniel@iogearbox.net>
+References: <20260610230329.727075-4-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 3/5] bpftool: Cover loader metadata with the program signature
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,ast@kernel.org
+Cc: kpsingh@kernel.org,James.Bottomley@hansenpartnership.com,paul@paul-moore.com,bboscaccy@linux.microsoft.com,memxor@gmail.com,torvalds@linux-foundation.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 10 Jun 2026 23:48:19 +0000 (UTC)
 
-On 06/09, Jakub Kicinski wrote:
-> Minor updates to the XDP metadata documentation:
-> - s/union/struct/ for xsk_tx_metadata
-> - document nested request and completion metadata fields
-> - point capability queries at the xsk-features attribute
-> - fix grammar in the XDP RX metadata guide
-> - typos
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: corbet@lwn.net
-> CC: skhan@linuxfoundation.org
-> CC: ast@kernel.org
-> CC: daniel@iogearbox.net
-> CC: hawk@kernel.org
-> CC: john.fastabend@gmail.com
-> CC: sdf@fomichev.me
-> CC: linux-doc@vger.kernel.org
-> CC: bpf@vger.kernel.org
+--===============3421189048308312154==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> bpftool: Cover loader metadata with the program signature
+>
+>     bpftool_prog_sign() signed only the loader instructions. The metadata
+>     blob the loader installs was left to an in-loader hash check, which
+>     the kernel now performs at load time over insns || metadata.
+>
+>     Sign that same concatenation: pass the metadata blob (gen_loader_opts
+>     data) through to bpftool_prog_sign() and feed insns || metadata to
+>     CMS_final(). The excl_prog_hash stays a digest of the instructions
+>     alone; it binds the metadata map to the loader and is matched against
+>     prog->digest by the verifier, independent of what the signature covers.
+>
+>     The signed artifact is now plain data: both bytes the signature
+>     covers are embedded verbatim in the generated skeleton, so signing
+>     and verifying an lskel is an ordinary CMS operation that a signer or
+>     auditor can perform (or reproduce) offline, without analyzing loader
+>     bytecode to establish what the signature actually attests to [0].
+>
+>     Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+
+This closes a gap where the loader metadata was left outside the program
+signature. The signing path in bpftool_prog_sign() was introduced by commit
+40863f4d6ef2 ("bpftool: Add support for signing BPF programs"), which fed
+only opts->insns to the signature and set only sopts.insns/sopts.insns_sz in
+gen_trace(). Should this carry a Fixes: tag?
+
+  Fixes: 40863f4d6ef2 ("bpftool: Add support for signing BPF programs")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27312517811
+--===============3421189048308312154==--
