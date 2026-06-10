@@ -1,134 +1,106 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B46404893;
-	Wed, 10 Jun 2026 12:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49703AE199
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 12:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781094150; cv=none; b=K0rkDEfsH23VUJv0YmgorH4Xv1f/IrnI1PdOoNpn5b3VL/kPgW0kPWRJkwpEkH+y33F4v13Y2c4NYmqkg9Ozy/Nn0VDMd2STb38ASvMJclSoc1QlTEXT4z2JjpSecmq/Lq0n3oLoVNL0N8ADaa3XwSbS9R8qOH7IqSQGFEbEXA4=
+	t=1781095545; cv=none; b=LPlaHTCIR4efJZBP4o3hGSXuEx7ETJMNrDVillSY5sAkfjK1f8W0XRLq7jU+VULzrshdxJH4JoRc4IBK13lzPKQTsEdE4T4oxpNadpZwkj2KRhdNIeU2jeQ9toRgqvK7JvQOR/fsJO54egAAZ2T8qEvc5mGGje3kLYr9am8M4kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781094150; c=relaxed/simple;
-	bh=5wvr6NCVt3/Vg0UdbksHA31ysB55JZCNbfzpY0W/Wqs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=R+RoHbBOoR/N66wMrs93fjYpGzZP5g6pPJs6uF07ye4I06vzs87mCGWl7Sev9wiEatPSPh3P4qEY9/pbpBKNG+8PXcA1+3RFEpvot18Rzuf3svZbkmLBE3ZaGnfYtRozqCL+TwdMjN5QVIcN/ZR4nf28r7R8WuXe8jM2B/2G0zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZWw/gYo6 reason="signature verification failed"; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781095545; c=relaxed/simple;
+	bh=OsSTuld6c7lCkdPg3Ah5qMecUqP9cL63G32ShJK54YM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=trImg+5hhkGE9YVwYwzXU9Gr12jG3MLM1o8XrBzAV+e+vp0W14CnpEQAHE2NztJyYE7Y0oJaGNobNR3BUmwhZl5JNtuJxPwspjHn2+kH5M8RAOBkIAH0JC1oJMovPUXnBXL233T7pptydJaow/jvLn+kNC//rYiWZ1a+pBKKcDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVdb/7vD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZWw/gYo6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=J1RMT/SRCXFU6XY72xnqxeR
-	Tx+NNZgMcwcnvCQ9L434=; b=ZWw/gYo6a0MLswTmgGEuRlQgLjeTmWOe4Xspbvh
-	5yAOh66GzKw9HpIXrE1RfC7e3hBffmvfRyHZqwJoj/eUQmY8m2xPhsG1RiioY1zr
-	l1yoNQQAKmGQ365PNVK5Voes9qDeMKjvcOq/YA45m21QOMlEvyoNHQDf0mQqkaby
-	CWK4=
-Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
- ajax-webmail-web2 (Coremail) ; Wed, 10 Jun 2026 20:22:22 +0800 (GMT+08:00)
-Date: Wed, 10 Jun 2026 20:22:22 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: "Anton Protopopov" <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation
- against CFG
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <aig3p8QFlWv1sFqV@mail.gmail.com>
-References: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
- <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
- <aig3p8QFlWv1sFqV@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVdb/7vD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE211F00898;
+	Wed, 10 Jun 2026 12:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781095544;
+	bh=8aTNs82JEVzD0XEjQ8Nw8MWZCmO9iJ7Ek44C3gzdvjE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AVdb/7vDvUNdxazuEmXLJ3m790wzzMa5l9WFXS+jcz6CxcRqmVYew+WWj6IG7Goo0
+	 yZUqg4zyt1YDLlbZ3sYY//mWfcmYNXXwl56iYjE+Ua6nLd78hpbOiPm1/oGv501AAr
+	 JkvbSbhlzKXhZFI3lAKqBjEZZLo/9Dsd/XxCewtPyMBp7vwaFMf+ba6hDMMWRgRBJS
+	 3em5rXzTVHtaIFk1GisT8tAwQSzWKoise+5lh94OigAteY+cEmcaYxZDMZvAXJrzJb
+	 HSzBKvXEFph7QXsOOxRk355PtOfYG4X0p+JVyxlllxHKxjAaH7jKzbNUpxvQ6YSRKb
+	 98OIDFFrlpaMg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix setting retval to -EPERM for
+ cgroup hooks not returning errno
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260610201724.733943-2-xukuohai@huaweicloud.com>
+References: <20260610201724.733943-2-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 12:45:43 +0000
+Message-Id: <20260610124544.3EE211F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-ID: <4295c0cc.79a2e.19eb17bd1c2.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQA3FJz+VilqUGIoAg--.51506W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEOA2ooki9lEAA
-	CsF
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQW50b24gUHJvdG9wb3Bv
-diIgPGEucy5wcm90b3BvcG92QGdtYWlsLmNvbT4KPiBTZW5kIHRpbWU6VHVlc2RheSwgMDkvMDYv
-MjAyNiAyMzo1NjoyMwo+IFRvOiAiTnVvcWkgR3VpIiA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1
-LmNuPgo+IENjOiBicGZAdmdlci5rZXJuZWwub3JnLCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0
-QGtlcm5lbC5vcmc+LCAiRGFuaWVsIEJvcmttYW5uIiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAi
-QW5kcmlpIE5ha3J5aWtvIiA8YW5kcmlpQGtlcm5lbC5vcmc+LCAiRWR1YXJkIFppbmdlcm1hbiIg
-PGVkZHl6ODdAZ21haWwuY29tPiwgIlNodWFoIEtoYW4iIDxzaHVhaEBrZXJuZWwub3JnPiwgbGlu
-dXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-Zwo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHQgMS8yXSBicGY6IEZpeCBnb3RveCB0YXJn
-ZXQgdmFsaWRhdGlvbiBhZ2FpbnN0IENGRwo+IAo+IE9uIDI2LzA2LzA5IDExOjAzUE0sIE51b3Fp
-IEd1aSB3cm90ZToKPiA+IENGRyBjb25zdHJ1Y3Rpb24gcmVjb3JkcyB0aGUgbW9kZWxlZCBnb3Rv
-eCB0YXJnZXQgc2V0IGluCj4gPiBpbnNuX2F1eF9kYXRhLT5qdC4gSXQgaW5jbHVkZXMgSU5TTl9B
-UlJBWSBtYXBzIGJhc2VkIG9uIHdoZXRoZXIgdGhlIG1hcAo+ID4gdGFyZ2V0IGlzIGluIHRoZSBj
-dXJyZW50IHN1YnByb2cuIGNoZWNrX2luZGlyZWN0X2p1bXAoKSBsYXRlciB2YWxpZGF0ZXMgYW5k
-Cj4gPiBmb2xsb3dzIHRoZSBjdXJyZW50IFBUUl9UT19JTlNOIHJlZ2lzdGVyJ3MgYWN0dWFsIElO
-U05fQVJSQVkgbWFwLiBUaGUKPiA+IHZlcmlmaWVyIGRvZXMgbm90IGNoZWNrIHRoYXQgdGFyZ2V0
-cyBjb3BpZWQgZnJvbSB0aGF0IG1hcCBtYXRjaCB0aGUgdGFyZ2V0cwo+ID4gdGhhdCBDRkcgY29u
-c3RydWN0aW9uIG1vZGVsZWQgZm9yIHRoaXMgZ290b3ggaW5zdHJ1Y3Rpb24uCj4gPiAKPiA+IFRo
-aXMgbGV0cyBvbmUgZ290b3ggaW5zdHJ1Y3Rpb24gb2JzZXJ2ZSB0d28gZGlmZmVyZW50IElOU05f
-QVJSQVkgbWFwcy4gQ0ZHCj4gPiBjYW4gc2VsZWN0IGEgbWFwIHdob3NlIHRhcmdldCBpcyBpbiB0
-aGUgY3VycmVudCBzdWJwcm9nLiBBbm90aGVyIHBhdGggdG8KPiA+IHRoZSBzYW1lIGdvdG94IGNh
-biBjYXJyeSBhIFBUUl9UT19JTlNOIHZhbHVlIGZyb20gYSBtYXAgd2hvc2UgdGFyZ2V0IHBvaW50
-cwo+ID4gYXQgYSBkaWZmZXJlbnQgc3VicHJvZy4gVGhlIHZlcmlmaWVyIHRoZW4gYWNjZXB0cyBh
-biBlZGdlIGFic2VudCBmcm9tIHRoZQo+ID4gQ0ZHLgo+ID4gCj4gPiBPbiB4ODYsIGdvdG94IGJl
-Y29tZXMgYSByYXcgaW5kaXJlY3QganVtcCBpbiB0aGUgSklUIGltYWdlLiBBY2NlcHRpbmcgYQo+
-ID4gdGFyZ2V0IG5vdCBtb2RlbGVkIGJ5IENGRyBjYW4gZW50ZXIgYW5vdGhlciBzdWJwcm9nIHdp
-dGhvdXQgYSBtYXRjaGluZyBCUEYKPiA+IGNhbGwgZnJhbWUgYW5kIGNyYXNoIHdoZW4gZXhlY3V0
-ZWQuIFZhbGlkYXRpb24gb2JzZXJ2ZWQgYSBHUEYgaW4KPiA+IGJwZl90ZXN0X3J1bigpLgo+ID4g
-Cj4gPiBGaXggdGhpcyBieSByZXF1aXJpbmcgZXZlcnkgdGFyZ2V0IGNvcGllZCBmcm9tIHRoZSBh
-Y3R1YWwgUFRSX1RPX0lOU04gbWFwCj4gPiB0byBiZSBwcmVzZW50IGluIHRoZSBDRkcganVtcCB0
-YWJsZSBidWlsdCBmb3IgdGhlIGN1cnJlbnQgZ290b3gKPiA+IGluc3RydWN0aW9uLgo+ID4gUmVq
-ZWN0IHRoZSBwcm9ncmFtIGJlZm9yZSBwdXNoaW5nIHZlcmlmaWVyIHN0YXRlcyBmb3IgYW55IHVu
-bW9kZWxlZCB0YXJnZXQuCj4gPiAKPiA+IEZpeGVzOiA0OTNkOWUwZDYwODMgKCJicGYsIHg4Njog
-YWRkIHN1cHBvcnQgZm9yIGluZGlyZWN0IGp1bXBzIikKPiA+IFNpZ25lZC1vZmYtYnk6IE51b3Fp
-IEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+ID4gLS0tCj4gPiAga2VybmVsL2Jw
-Zi92ZXJpZmllci5jIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUg
-Y2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEva2VybmVsL2Jw
-Zi92ZXJpZmllci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiBpbmRleCBlZDdiYTBlNmE5
-Y2UuLjI1ZmE5MGU3MzFlMyAxMDA2NDQKPiA+IC0tLSBhL2tlcm5lbC9icGYvdmVyaWZpZXIuYwo+
-ID4gKysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiBAQCAtMTcxMjQsNiArMTcxMjQsMjMg
-QEAgc3RhdGljIGludCBpbmRpcmVjdF9qdW1wX21pbl9tYXhfaW5kZXgoc3RydWN0IGJwZl92ZXJp
-Zmllcl9lbnYgKmVudiwKPiA+ICAJcmV0dXJuIDA7Cj4gPiAgfQo+ID4gIAo+ID4gK3N0YXRpYyBi
-b29sIGlzX2NmZ19pbmRpcmVjdF9qdW1wX3RhcmdldChzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAq
-ZW52LAo+ID4gKwkJCQkJdTMyIHRhcmdldCkKPiA+ICt7Cj4gPiArCXN0cnVjdCBicGZfaWFycmF5
-ICpqdCA9IGVudi0+aW5zbl9hdXhfZGF0YVtlbnYtPmluc25faWR4XS5qdDsKPiA+ICsJaW50IGk7
-Cj4gPiArCj4gPiArCWlmICghanQpCj4gPiArCQlyZXR1cm4gZmFsc2U7Cj4gPiArCj4gPiArCWZv
-ciAoaSA9IDA7IGkgPCBqdC0+Y250OyBpKyspIHsKPiA+ICsJCWlmIChqdC0+aXRlbXNbaV0gPT0g
-dGFyZ2V0KQo+ID4gKwkJCXJldHVybiB0cnVlOwo+ID4gKwl9Cj4gPiArCj4gPiArCXJldHVybiBm
-YWxzZTsKPiA+ICt9Cj4gPiArCj4gPiAgLyogZ290b3ggKmRzdF9yZWcgKi8KPiA+ICBzdGF0aWMg
-aW50IGNoZWNrX2luZGlyZWN0X2p1bXAoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVudiwgc3Ry
-dWN0IGJwZl9pbnNuICppbnNuKQo+ID4gIHsKPiA+IEBAIC0xNzE3MSw2ICsxNzE4OCwxNSBAQCBz
-dGF0aWMgaW50IGNoZWNrX2luZGlyZWN0X2p1bXAoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVu
-diwgc3RydWN0IGJwZl9pbnNuICppbgo+ID4gIAkJcmV0dXJuIC1FSU5WQUw7Cj4gPiAgCX0KPiA+
-ICAKPiA+ICsJZm9yIChpID0gMDsgaSA8IG47IGkrKykgewo+ID4gKwkJaWYgKCFpc19jZmdfaW5k
-aXJlY3RfanVtcF90YXJnZXQoZW52LCBlbnYtPmdvdG94X3RtcF9idWYtPml0ZW1zW2ldKSkgewo+
-ID4gKwkJCXZlcmJvc2UoZW52LAo+ID4gKwkJCQkiZ290b3ggdGFyZ2V0ICV1IGZyb20gbWFwIGlk
-PSVkIGlzIG5vdCBpbiB0aGUgQ0ZHIGp1bXAgdGFibGVcbiIsCj4gPiArCQkJCWVudi0+Z290b3hf
-dG1wX2J1Zi0+aXRlbXNbaV0sIG1hcC0+aWQpOwo+ID4gKwkJCXJldHVybiAtRUlOVkFMOwo+ID4g
-KwkJfQo+ID4gKwl9Cj4gCj4gVGhhbmtzIGZvciByZXBvcnRpbmcgdGhlIGJ1Zy4KPiAKPiBBcyBm
-b3IgdGhlIGZpeCwgd291bGQgaXQgbWFrZSBtb3JlIHNlbnNlIHRvIGVpdGhlciByZWNvcmQgbWFw
-cyBpbgo+IGNoZWNrX2NmZyBvciB0byByZS1jaGVjayBzdWJmdW5jIGJvdW5kYXJpZXMgaGVyZT8K
-PiAKPiA+ICAJZm9yIChpID0gMDsgaSA8IG4gLSAxOyBpKyspIHsKPiA+ICAJCW1hcmtfaW5kaXJl
-Y3RfdGFyZ2V0KGVudiwgZW52LT5nb3RveF90bXBfYnVmLT5pdGVtc1tpXSk7Cj4gPiAgCQlvdGhl
-cl9icmFuY2ggPSBwdXNoX3N0YWNrKGVudiwgZW52LT5nb3RveF90bXBfYnVmLT5pdGVtc1tpXSwK
-PiA+IAo+ID4gLS0gCj4gPiAyLjM0LjEKPiA+IAoKSGkgQW50b24sIEVkdWFyZCwKClRoYW5rcyBm
-b3IgdGhlIHJldmlldy4KCkkgYWdyZWUgdGhhdCBjaGVja2luZyB0aGUgY3VycmVudCBzdWJwcm9n
-IGJvdW5kcyBpbiBjaGVja19pbmRpcmVjdF9qdW1wKCkKaXMgdGhlIGJldHRlciBmaXguIEkgd2ls
-bCByZXdvcmsgdjIgdG8gdmFsaWRhdGUgdGhlIHJ1bnRpbWUgSU5TTl9BUlJBWQp0YXJnZXRzIGFn
-YWluc3QgdGhlIHN1YnByb2cgY29udGFpbmluZyB0aGUgZ290b3ggaW5zdHJ1Y3Rpb24sIGluc3Rl
-YWQgb2YKZG9pbmcgQ0ZHIGp1bXAtdGFibGUgbWVtYmVyc2hpcCBjaGVja3MuCgpJIHdpbGwgYWxz
-byBmaXggdGhlIHNlbGZ0ZXN0IGV4cGVjdGVkIGVycm5vLgo=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The patch breaks cgroup BPF boolean LSM hooks by ignoring a BPF pr=
+ogram's denial (exit code 0). It leaves `run_ctx.retval` unmodified for boo=
+lean hooks, which fails to enforce denials, ignores overrides from previous=
+ programs in the cgroup array, and causes the trampoline to incorrectly fal=
+l back to the original kernel function.
+--
+
+commit b6b16c6bf2bc0b50b22feebf85585b33ce70965a
+Author: Xu Kuohai <xukuohai@huawei.com>
+
+bpf: Fix setting retval to -EPERM for cgroup hooks not returning errno
+
+This commit modifies bpf_prog_run_array_cg() to avoid setting the hook retu=
+rn
+value to -EPERM when a cgroup BPF program exits with 0 for non-errno hooks
+(such as boolean or void LSM hooks).
+
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 35d1f1428ef39..83ce66296ac19 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+
+[ ... ]
+
+> @@ -83,7 +105,8 @@ bpf_prog_run_array_cg(const struct cgroup_bpf *cgrp,
+>  			*(ret_flags) |=3D (func_ret >> 1);
+>  			func_ret &=3D 1;
+>  		}
+> -		if (!func_ret && !IS_ERR_VALUE((long)run_ctx.retval))
+> +		if (!func_ret && cgroup_bpf_hook_returns_errno(atype) &&
+> +		    !IS_ERR_VALUE((long)run_ctx.retval))
+>  			run_ctx.retval =3D -EPERM;
+
+[Severity: High]
+Could this change cause BPF program denials to be ignored for boolean hooks?
+
+In cgroup BPF, a program returning 0 typically signifies a denial. By
+requiring cgroup_bpf_hook_returns_errno() to be true here, a func_ret of 0
+is ignored for boolean hooks, leaving run_ctx.retval unmodified.
+
+If a prior program in the cgroup array called bpf_set_retval(1), and the
+current program returns 0 (denial), run_ctx.retval remains 1. Doesn't this
+break cgroup hierarchy semantics where a denial must override an allow?
+
+Additionally, if run_ctx.retval remains 0, the fmod_ret trampoline interpre=
+ts
+0 as an instruction to call the original kernel function rather than skippi=
+ng
+it. If the underlying kernel function returns 1, the operation ends up being
+allowed. Does this unintentionally bypass the BPF program's intent to deny
+the operation?
+
+>  		item++;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610201724.7339=
+43-1-xukuohai@huaweicloud.com?part=3D1
