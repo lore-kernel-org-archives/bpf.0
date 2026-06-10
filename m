@@ -1,152 +1,77 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E6D30C63B
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 05:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3781A6839
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 05:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781068425; cv=none; b=Qs+fLaT2hOzH8q0LHsw/VYlTwCbOnbs5sLkbFgNhx7Wkuzth+1v3xBWI/hO1YLk2m2kUs1r21IVhUXSIZVBRb2BaWrQ2WFYu9AgH8MKl5sCxViJ/61V1Eif7B62PN3a4lylbe35L8lXXPfjcdpAki+4QsLdOHz6jQGkxXtSQvB4=
+	t=1781068726; cv=none; b=HswNGmLbWr/2kMehFyT8kGKzCYDp6JXZn9p2Fs0X4k114VI318BnISVy3J2tRcuesqQ440ukT3UrFz0YakX2RGI8/4qnieYFVjKn0rxwqDq3iFLOLDL1VF8N8MtDzmLhphOEbvHNqn3vnDonxLPwHs9wTbDsCofAJFQ5qxNvnkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781068425; c=relaxed/simple;
-	bh=Jw44zc0riFpioKES9tU7Vrfr4BhP+D4LBHxN6e1YyZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KGQjlMPbj5uxITOsdJQt06PlKZYXj4envAs0XZrwZ9vDQ0mnzejDIcP3Wv34AwjA0J/4T/Pq5265mS2lfUkBVxywf6G7E3ruF7pvdgFvZ2jto6zAS3NgDLlFbzu//xr8+zdWfGcLufxyA4rltiFWDRDWD0qz/xSnTbwY+D8PMXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ehUx2dJl; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ehUx2dJl"
-Message-ID: <b35a2395-0e15-4390-ba7a-b48748e7e3f3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781068419;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YAopxE9EczGUg3PSk7OujdIhtgCxg1HVADKqStzgMSs=;
-	b=ehUx2dJl+Ti4rMEszXvyVtRZEkTLbQmKkfKl36MgKtj/ym3Fx467HOftJa+95Axc/hYFES
-	t9Gl1XeKVVmZ9gEnf2GWwA13SX6apaZed7qWD1tfsJxR03wwM05hmV81wstCJtC5xycPOG
-	GbHUWw5jNe5ZBjkC7GBI3g50NaMnR20=
-Date: Wed, 10 Jun 2026 13:13:22 +0800
+	s=arc-20240116; t=1781068726; c=relaxed/simple;
+	bh=BHnvX3Jpmk7IMeN90Bt6Cpce+yZmPKAxV0SXYb9GM8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hl40z/SG+zyFuWg7wKiZ1+iNSlO0FZU3qFwXLIUBVZWA9P7T6Z5leL4yqVD1V6x1Q0MVmwVi45ODTXeAgtqulr3lvQfoxYhdSAmUOhfr9O1hPeBE1Z+l+3BIgGGafqls3ODRPPk+f9U7is66bwPTIo0MrlJLwoOqj7Resp1ab8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 633AB14C3ED424; Tue,  9 Jun 2026 22:18:31 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next] selftests/bpf: Fix bpf_iter/task_vma test
+Date: Tue,  9 Jun 2026 22:18:31 -0700
+Message-ID: <20260610051831.1346659-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP program
-To: sun jian <sun.jian.kdev@gmail.com>,
- Menglong Dong <menglong.dong@linux.dev>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- shuah@kernel.org, liuhangbin@gmail.com
-References: <20260609100214.337538-1-sun.jian.kdev@gmail.com>
- <L0cwr1-KRSKR7-dJdjDmJA@linux.dev>
- <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
- <AgOg1pJHQN-gpKhYUz3SMw@linux.dev>
- <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
+For selftest bpf_iter/task_vma, I got a failure like below on my qemu run=
+:
 
-On 6/10/26 9:58 AM, sun jian wrote:
-> On Wed, Jun 10, 2026 at 9:21 AM Menglong Dong <menglong.dong@linux.dev> wrote:
->> On 2026/6/10 08:06 Emil Tsalapatis <emil@etsalapatis.com> write:
->>> On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
->>>> On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
-[...]
->>>> Hi, Jian.
->>>>
->>>> This sounds like a good idea in this case. When I have a look at bpf_clone_redirect(),
->>>> I found that it use skb_clone() too, which means it has the same problem. The
->>>> data can be modified by other xdp prog in the destination NIC if we use
->>>> bpf_clone_redirect().
->>>>
->>>> So maybe this is the default logic, and I'm not sure if this patch can break the
->>>> existing users :/
->>> I think for use cases where we are using bpf_clone_redirect() to use
->>> one clone for inspection this would add an unnecessary copy. Maybe
->>> adding *_copy() variants instead of changing the *_clone() would be
->>> better? That way we wouldn't be changing the behavior for existing
->>> consumers and the naming would be consistent with the skb_* methods.
->> Agree. It's not a good idea to change the logic of the existing API. Or
->> maybe we can add a BPF_F_CLONE flag for the existing API.
->>
->>> But more importantly, is there an actual use case for the kind of API
->>> that the modified selftest requires? Nobody until now has considered
->>> the existing behavior to be a problem.
->> Agree too. Obviously, this is not a bug. For the use case in the commit
->> log, it's something that can be fixed by the user themself. If we need
->> modify the MAC, we'd better attach a BPF program for all the egress
->> device in the devmap.
->>
-[...]
->>>>
-> Thanks for all the comments.
->
-> I agree this should not be treated as a generic skb_clone() issue, and I
-> understand the concern about changing existing clone/shared-data semantics.
->
-> The case I was trying to address is narrower: generic XDP devmap
-> broadcast/multi redirect with per-devmap-entry egress programs. The use case is
-> not newly introduced by this patch. The existing xdp_veth_egress test already
-> attaches xdp_devmap_prog to all egress devmap entries, and that program rewrites
-> eth->h_source based on ctx->egress_ifindex. My change only strengthens the test
-> from checking that the observed MAC is not equal to a single magic MAC to
-> checking that each destination observes the MAC selected for its own egress
-> ifindex.
->
-> So attaching an egress program to all devmap entries is already what this test
-> does. The SKB_MODE failure happens because the cloned skbs can still share the
-> packet data, and a later per-egress rewrite can be observed by another
-> destination.
->
-> That said, I see the concern that this may need a clearer semantic boundary
-> between clone and copy behavior. I will also check the last_dst path pointed out
-> by Sashiko before deciding whether this should be handled as a bug fix, or
-> whether it needs a separate explicit copy/isolated redirect semantic instead.
+test_task_vma_common:FAIL:compare_output unexpected compare_output:
+    actual
+    '561593546000-561593585000r--p0000000000:241256579534/root/devshare/b=
+pf-next/tools/testing/selftests/bpf/test_progs'
+    !=3D expected
+    '561593546000-561593585000r--p0000000000:245551546830/root/devshare/b=
+pf-next/tools/testing/selftests/bpf/test_progs'
 
+Further debuging found out file->f_inode->i_ino value may exceed 32bit,
+e.g., i_ino =3D 0x14c2eae35, but the format string is '%u'. This caused
+inode mismatch between bpf iter and proc result.
 
-I agree there's a real concern here. For context, native XDP already 
-makes a full copy
-of the frame for every broadcast destination:
+Fix the issue by using format string '%llu' to accommodate 64bit i_ino.
 
-   dev_map_enqueue_multi -> dev_map_enqueue_clone -> xdpf_clone
+Fixes: e8168840e16c ("selftests/bpf: Add test for bpf_iter_task_vma")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-so on the native path each destination gets its own independent buffer.
-
-The generic path is the odd one out, because skb_clone() shares the 
-underlying data.
-I think this rationale should be spelled out in the commit message.
-
-Regarding performance: generic XDP is already a slow path — the ingress 
-side already
-linearizes / expands the skb (pskb_expand_head() in 
-netif_receive_generic_xdp())
-so the extra copy here is not a concern.
-
-
-However, there is one problem with the patch as it stands.
-
-The last destination is transmitted using the original skb directly, 
-without unsharing it.
-So with two destinations where the first one has no egress XDP program 
-and the second (i.e. the last one) does,
-the egress modification on the second destination will corrupt the 
-packet sent to the first.
-
-This could be addressed by doing the skb_unshare() inside 
-dev_map_generic_redirect() instead ?
-
-For the non-broadcast (existing) path the skb is not cloned, so 
-skb_unshare() simply returns it unchanged.
-
-
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c b/too=
+ls/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
+index d64ba7ddaed5..d7fb561ed4fb 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
+@@ -52,7 +52,7 @@ SEC("iter/task_vma") int proc_maps(struct bpf_iter__tas=
+k_vma *ctx)
+ 		bpf_d_path(&file->f_path, d_path_buf, D_PATH_BUF_SIZE);
+=20
+ 		BPF_SEQ_PRINTF(seq, "%08llx ", vma->vm_pgoff << 12);
+-		BPF_SEQ_PRINTF(seq, "%02x:%02x %u", MAJOR(dev), MINOR(dev),
++		BPF_SEQ_PRINTF(seq, "%02x:%02x %llu", MAJOR(dev), MINOR(dev),
+ 			       file->f_inode->i_ino);
+ 		BPF_SEQ_PRINTF(seq, "\t%s\n", d_path_buf);
+ 	} else {
+--=20
+2.52.0
 
