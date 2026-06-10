@@ -1,104 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8921E3290C9
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 14:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7498E3FA5D8;
+	Wed, 10 Jun 2026 14:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781103047; cv=none; b=YM0gYv38GuUIl3IF2To1ZGEs6kVbTWjQvV9r5lNmj4iaCo7NNP0YQJCuafQ0XTlYRc1uS0vuqY2zpwyg7h2Cly/SuHkjkYL5Ze11fysSzsx55MzUVt5N4JLDzTv/xPyuwKhzbu/yQGdN7p7M2RDezTG7CHndzqInb6JE6ZMExtg=
+	t=1781103110; cv=none; b=QO4Ycjhh+orFmOcyH4JHDvVV3nty9otNOwntquDHyl4pF2vnnYpgC7sdyLDzUNMocDwraAXmd7v5hVfMJUywame+6XYKrj4grhPVTTw0Nrxwmr228Yck/WGc9lP+evvQ2S9hW0MQVGketjYCmZ8vfg352SOtaO0WkhqYA1hApX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781103047; c=relaxed/simple;
-	bh=bwjOrdwOq6GBr2rSKLojDESFkX457LTwh9tp9RsZS/0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AIvrrOKx9Tp1mxeiUL6igPLoY/YbNJkfMaQPypg+UxRkiKElwjbFAymdqbIVveBuR93BxZgg58JM/v1WTBYZMDEOIl/emHnrCAqbIeU2mL+VtZDoFq332aDXITLsrPUGEqYhgiRrnUy714H6t9Qg5SM+kC4Z5dFFcfXTtej80T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D9o2G+Bc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781103110; c=relaxed/simple;
+	bh=cNMCsVmjpyoIcJwmYtdqjz5auyf3WVePYRZffBtEjIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LXTktl0Gd3vmrXv7IOvxyEZeyGkWnHffD0YJpQdXYgSj4paQaa+hzvkMKNpcMox0CTpyT4QSEVA+3j0umhFGKWOFf42qf+6pPwuaqz+7Yc0hdK0HmYDc6y/jeiaX150bV2ojwVffSs/bCh5UWGguGLZHUUAhECVDnoXMLGJSNrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZjGcG3Au; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D9o2G+Bc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D3D11F00893;
-	Wed, 10 Jun 2026 14:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781103046;
-	bh=UnSzCGwE7kJeN0Dotnn8VSjr1oJyqj61jMscNsFxQ34=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D9o2G+Bc2xZEW2Is0ce9MOpyN+YwCeMFF/qlSEuTLo6rem6MUrbWUb5AEICbkBKft
-	 dvGPjV6GzbPGCA+pVkcdibrMf+PoJpWszOTaZkFfOyXp0ClThy5yoRGQrcuU+JiXow
-	 VL2oSbS3vAX74y2Qb8H4NEP4UD/L3bKReYhvsq8GCzFdoHfkJKingpZ086wJSKYliU
-	 ultMECeQjjkk3f2RX62QKG6nOWTDDrygbG7SBlIlcQb9qGPQ+BiwNrqlh0SCGxcowb
-	 H+1I2Q8JpHZnTO46xUNxvY3AuAsgm+edwB5JqGPo0plWj3HrZeu1eKIOeo2QaCVuhl
-	 qk/9KSQWVtWsg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv2 bpf-next 4/6] selftests/bpf: Add uprobe_multi path_fd
- test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260610143627.804790-5-jolsa@kernel.org>
-References: <20260610143627.804790-5-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 14:50:45 +0000
-Message-Id: <20260610145046.1D3D11F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ZjGcG3Au"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=c5
+	0F5kPryHPBKKAhs6EjQOHtwcJTbFVsHxkqhql+Ro4=; b=ZjGcG3Auchzh5dNdCR
+	NYD9r72onKFZWxPGaZygXt7+Dwc3p7wQw6tWiEASa5wGkq+A6Kal32mp/zGesgv0
+	oWqXM9iUbdnN71SXKd0kI+YE2GB91Vb5SwthtWNuIAVcZfqNO3PirLAVsKrcLPnn
+	7j1WgHZA4tAGagb5Nva7ZiChE=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgC3sr_ZeSlqaWzoBQ--.16220S3;
+	Wed, 10 Jun 2026 22:51:11 +0800 (CST)
+From: chenyuan_fl@163.com
+To: chenyuan_fl@163.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	chenyuan@kylinos.cn,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	andrii.nakryiko@gmail.com
+Subject: [PATCH bpf-next v3 1/2] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+Date: Wed, 10 Jun 2026 22:50:53 +0800
+Message-ID: <20260610145059.113412-2-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260610145059.113412-1-chenyuan_fl@163.com>
+References: <20260604031033.806727-1-chenyuan_fl@163.com>
+ <20260610145059.113412-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgC3sr_ZeSlqaWzoBQ--.16220S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trWUJw1xWw4rtF13trWUJwb_yoW8ZFWxpF
+	n0yF92kFWUJw4rurWkJa10ka1rKa1Ig3ZxGFsxXrWavw4qqF4ktr1ayFsIyF1Yq395K3W3
+	Z3y3u3yDZr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_sjjUUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5h96OGoped9CQQAA3d
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The selftest references a nonexistent struct member `path_fd` and a=
-n undeclared flag `BPF_F_UPROBE_MULTI_PATH_FD`, which will cause a compilat=
-ion error.
---
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-commit e5937d581d08ece9671b371d37fb6cd0d497b692
-Author: Jiri Olsa <jolsa@kernel.org>
+bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+TRACEPOINT programs to verify the BPF environment works.  When a
+BPF token is in use with restricted program type permissions, these
+probe loads may fail because the token does not allow the specific
+program types, even though BPF loading is perfectly functional.
 
-selftests/bpf: Add uprobe_multi path_fd test
+Fix by skipping the probe when a token FD is present: BPF token
+creation itself proves the kernel has a working BPF subsystem.
+Real BPF issues will be caught during actual program and map loading.
 
-This commit adds a uprobe_multi link API selftest that opens /proc/self/exe
-and passes the resulting descriptor through opts.uprobe_multi.path_fd with
-BPF_F_UPROBE_MULTI_PATH_FD set.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/lib/bpf/libbpf.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b=
-/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> index 56cbea280fbd2..ffcf3c92f0474 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ab2071fdd3e8..7e21c5eb9533 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5167,12 +5167,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 		BPF_EXIT_INSN(),
+ 	};
+ 	int ret, insn_cnt = ARRAY_SIZE(insns);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.token_fd = obj->token_fd,
+-		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+-	);
+ 
+-	if (obj->gen_loader)
++	if (obj->gen_loader || obj->token_fd)
+ 		return 0;
+ 
+ 	ret = bump_rlimit_memlock();
+@@ -5181,9 +5177,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 			errstr(ret));
+ 
+ 	/* make sure basic loading works */
+-	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0)
+-		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
++		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0) {
+ 		ret = errno;
+ 		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+-- 
+2.54.0
 
-[ ... ]
-
-> @@ -757,6 +758,65 @@ static void test_link_api(void)
->  	__test_link_api(&child);
->  }
-> =20
-> +static void test_link_api_path_fd(void)
-> +{
-> +	LIBBPF_OPTS(bpf_link_create_opts, opts);
-> +	const char *resolve_path =3D "/proc/self/exe";
-> +	int prog_fd, link_fd =3D -1, path_fd =3D -1;
-
-[ ... ]
-
-> +	path_fd =3D open(resolve_path, O_RDONLY);
-> +	if (!ASSERT_GE(path_fd, 0, "path_fd"))
-> +		goto cleanup;
-> +
-> +	opts.uprobe_multi.path_fd =3D path_fd;
-> +	opts.uprobe_multi.offsets =3D offsets;
-> +	opts.uprobe_multi.cnt =3D ARRAY_SIZE(syms);
-> +	opts.uprobe_multi.flags =3D BPF_F_UPROBE_MULTI_PATH_FD;
-
-[Severity: Low]
-Does this code reference an API that hasn't been introduced yet?
-
-The struct field path_fd is not a valid member of uprobe_multi within
-struct bpf_link_create_opts in the libbpf headers, and the
-BPF_F_UPROBE_MULTI_PATH_FD macro is undeclared.
-
-Because the patch doesn't include the corresponding kernel or libbpf
-changes, it looks like this will cause a compilation error.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610143627.8047=
-90-5-jolsa@kernel.org?part=3D1
