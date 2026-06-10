@@ -1,45 +1,79 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBAC351C28
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 17:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA234352030
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 17:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781114244; cv=none; b=oUD6+EpniiJbwpmRACC/7m+zg0WXg4Fg1LDDR4rtJyVuYWoW6aOY2bvromfohvz7CxN6OqABbJjDkpwdXwc06c52Dt446g4UvMC+PxJArxVnJ7mzT7Tm5vf+u3GmuklX4t52DSmUGRuAatOZ+VN6VJNHpGr9hCJxlQbXiVRCzL4=
+	t=1781114376; cv=none; b=rDJ0PjKRKw7LsAo56CKFnKtn/FBuzesRnuPx1ZZ6UR8t+badPxkCIzjvX5NvX6zAdhqgnh9f1JBnVDQHssjk47Auz97cMy9zO2LsO42kZxeHuUBBgXuOz9Sm0CsGtXgPHzT+8xKPjmv2bnskbDSWhbKO4V216EQWWGAHHje8dzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781114244; c=relaxed/simple;
-	bh=PSyiABTrn2B9+RliA2ihw4lkCq8xGqmI9vbheu53qLM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DD7pmSZ8lU+iLJ2tFGwaTgov8tBhwmSxW12HJ0If/SYqpqtUY46OeKuqajLeiwe0+mfK+lNKeHHAIWfOGonb0hFuAAo8eeKAaGerWMdC+In+15J5P1+lZgIiNYCShPg9viedO+L1IR1GWhNnHIYNlo6SKEY95aCz2i3cYIskz38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FMZfG3P3; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781114376; c=relaxed/simple;
+	bh=MOH8uvDl49+FgVeTGAfgbY1LaUOs8A8UBGtliJWpA48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTdv3yCzEdGH5vLW9wc4MTwIVz0G4Nk84NY+nGpHSutPEF7GCcZuhzRv97B9qQcBL8xyc7iQaQcjWRUSv96vz3EKm2X99ELVfxLbTdCLcMO9y0MsV2uCj2ovYcIfDSCrEFlPDl84rApPpcZ2zVh84Gmz7oNJK3pKkpACBV3EoWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOrXu8e5; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FMZfG3P3"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781114239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TtdGMbUuSGcoHFLrymBJZ08Jr0hWDxTV7oU5nDom8zw=;
-	b=FMZfG3P3vcrwigPol9KDhU2dsyNDkkhZgt7JaxrvHVcNUI797BVeZ1Az7WWARoedhUfduI
-	wza2iGuAXLuNgXS91NF1A8YDXvMi9SEt0ugqqGhZeXfmI9KstgiJ8yNK4ssC/j/ayfzQRu
-	4LxBDVl/cztDWQvfMBNdTOStN09WdkM=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOrXu8e5"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-842848fd613so6019403b3a.3
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 10:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781114374; x=1781719174; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wE+IA+8Dk7eFT8d7+2Q1/q+SA8sUoegIzrCmxHEg14k=;
+        b=eOrXu8e5c6ft/upmrbjYIHBEepU/1etQL7kKI1pChoglqY/hecddzLh8UpHRdizZ0t
+         a9pqrkSk66dA66z4GrmF2QUoJemnZ8lTXPgJ+Ku1BG6TXTEOWVXxGJmCDeKwU0H6BGgO
+         LGDd8Dd9NcJKUf+fUG9cIt3Ud86n7ke4Y5BMrsNInWekb7jNVaj2YXj2uHUrRHn85m/T
+         EjWv5K+yLTlXf9J2mi+ADNh8wbIJueUD/R2znelggZm+MVqGhIzpxgVXXaiOIkk9/psx
+         Dz1Ur1g5PljuhTCZmxsWtVEqcyHwzn1oButyELiJxLhEb8i7g7J0z4SoNwPF+JGrY2hc
+         ZimQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781114374; x=1781719174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wE+IA+8Dk7eFT8d7+2Q1/q+SA8sUoegIzrCmxHEg14k=;
+        b=HUZgk2E7qOet4NMCyzCzFE7CcMr4c5Wrp7fhpbs2DjqCG3QGRU614K4sHCTfcpQhR+
+         G1gYCkOtX/aAKxWnUCAaFwoS/9Qj8gtBhg2hqhHWaWO+B1EYME00Mfa/NgH+SNNFheoq
+         ETc9kG/xTcP6Jg03CeOC49aJ9Lt7poN3GDGJosQIS9vuK+Cr3kjLko0mZ4pY3iJGoKHs
+         QN17nhsO15Ykpe9luehW6kCyNfzx4CaNXZTtXO7WUhnOJ7OnzaXK+Z+9w4QLRGYIyj2n
+         LjoRj5+AZSlvnKT0bKpHFYTYO1IPreoQ/nL5SiFcLIbGsBqxBsZxg5k1JbCW+p1su4N7
+         5RMQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8cloO0ViHrU9zuaZ42MNjIfdNCU/NnPhKowSplVy3tIqKreUW46E6XYGQuhpJD6+AGThQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxho9dTIyEwZEYMYxPWznNPIi38Wu6UlfRxNVGNRKZsj4lhiUqN
+	oyJbvJvrweAW0SuuU8sCp7OSFHRb+Zz6axLcoiqlNGRi/BtZ4b2QwSeM
+X-Gm-Gg: Acq92OEavpa1ZrqgHP1iA4xwnMZqvybeLjeFSM1b8IDJKP2A0u7c6Y5r11yWZrI1wRv
+	oiZi2RCx1roH2DZCRJJGNUmJO7KWolzThgc+vzCQ74Bp7pK/QVcnViWtgW58qY+Nb44ssKWO2s6
+	/yyL8bIMkvD+V734ukxobTq/MaQtvuIAjrfp8mN1ppJich1dNaJq8sp03BVojjsm8RWAU+XNnRQ
+	xzjJXfUT0/9meAGdF8QtvDhPAgEa4K0xcGw7d9vg6GNYYprAxkQq1oeviw0U1kJ3fyGznhzYFqw
+	z4S+pMsZF3zKW+DU+m4K4mzjzuHxk75cW55Dm0vfn9Z1+C9HMlEXgSWpVDvh957i4Gx5HwxXPbw
+	nKWdfb2HXNMwJMpDLRWTrda7aBYBeKon41Ee48d9dx8kmPDj3ptrQCeI+53FXllkfapJlTvaxEc
+	fwkyAHgH8DAlgYU1hX8NS0L3GpdLKStDFwh9WmcW5Yy9z1wuTtNvNd4veE1+ave/woWC66+kSiQ
+	V+B5qc43+s=
+X-Received: by 2002:a05:6a00:10c2:b0:842:3be7:4d51 with SMTP id d2e1a72fcca58-8430a66ee10mr9635935b3a.15.1781114374097;
+        Wed, 10 Jun 2026 10:59:34 -0700 (PDT)
+Received: from cps-manycore-1.. ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428325d9a3sm25235306b3a.34.2026.06.10.10.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 10:59:33 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Cong Wang <cong.wang@bytedance.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86 under 5-level paging
-Date: Wed, 10 Jun 2026 10:56:51 -0700
-Message-ID: <20260610175651.647515-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf] bpf, sockmap: take the socket lock in udp_bpf_recvmsg()
+Date: Wed, 10 Jun 2026 17:59:17 +0000
+Message-ID: <20260610175922.1103871-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,123 +81,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On x86_64 with 5-level paging (LA57) and inline generic KASAN, the
-following flaky splat may be observed on boot:
+udp_bpf_recvmsg() drains the psock ingress_msg queue through
+sk_msg_recvmsg() without holding the socket lock. __sk_msg_recvmsg()
+walks the head sk_msg's scatterlist and updates each entry in place
+(sge->length -= copy, sge->offset += copy), drops the page once an entry
+is consumed, and frees the sk_msg when it is drained. ingress_lock only
+serializes the queue list operations, not this per-entry consume;
+copy_page_to_iter() can fault, so the loop cannot hold a spinlock.
 
-    BUG: KASAN: wild-memory-access in do_raw_spin_lock+0xcf/0x260
-    Write of size 4 at addr ff110001000c90b8 by task swapper/0/0
+Two threads calling recvmsg() on the same UDP socket then consume the
+same sk_msg at once:
 
-    CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.1.0-rc5-gcba33e0b2907 #1 PREEMPT(full)
-    Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-    Call Trace:
-     <IRQ>
-     dump_stack_lvl+0x54/0x70
-     kasan_report+0x117/0x150
-     ? do_raw_spin_lock+0xcf/0x260
-     kasan_check_range+0x264/0x2c0
-     do_raw_spin_lock+0xcf/0x260
-     handle_edge_irq+0x35/0x770
-     ? do_raw_spin_unlock+0x51/0x2a0
-     __common_interrupt+0xae/0x120
-     common_interrupt+0x7c/0x90
-     </IRQ>
-     <TASK>
-     asm_common_interrupt+0x26/0x40
-    RIP: 0010:identify_cpu+0x2b2/0x3460
-    Code: 00 41 c7 07 00 00 00 00 4d 89 e6 49 c1 ee 03 43 0f b6 04 06 84 c0 0f 85 a3 1c 00 00 41 c7 04 24 00 00 00 00 31 c0 31 c9 0f a2 <89> c7 42 0f b6 44 05 00 84 c0 0f 85 ad 1c 00 00 41 89 3f 48 8b 44
-    RSP: 0000:ffffffff97807df0 EFLAGS: 00000246
-    RAX: 0000000000000020 RBX: 00000000756e6547 RCX: 000000006c65746e
-    RDX: 0000000049656e69 RSI: 0000000000000000 RDI: ffffffff98632fd8
-    RBP: 1ffffffff30c65fc R08: dffffc0000000000 R09: 0000000000000004
-    R10: ffffffff98632fc4 R11: fffffbfff30c65fb R12: ffffffff98633050
-    R13: ffffffff98633048 R14: 1ffffffff30c660a R15: ffffffff98632fe0
-     identify_boot_cpu+0xd/0xd0
-     arch_cpu_finalize_init+0x24/0x1f0
-     start_kernel+0x31e/0x3e0
-     x86_64_start_reservations+0x24/0x30
-     x86_64_start_kernel+0x13a/0x140
-     common_startup_64+0x12c/0x137
-     </TASK>
+  CPU0                                CPU1
 
-It fires very early in boot. If kasan_multi_shot is set, the reports
-are non-fatal and keep repeating, and the boot CPU wedges before
-userspace is reached. The accessed addresses are valid 5-level kernel
-pointers, so the report is a false positive.
+  sk_msg_recvmsg                      sk_msg_recvmsg
+    copy = sge->length                 copy = sge->length
+    copy_page_to_iter(copy)            copy_page_to_iter(copy)
+    sge->length -= copy
+      /* sge->length == 0 */
+                                       sge->length -= copy
+                                         /* underflows to ~0U */
 
-The root cause is in generic KASAN not seeing
-cpu_feature_enabled(X86_FEATURE_LA57) set, because the bit is cleared
-in identify_cpu() when the offending interrupt happens [1]:
+The next pass loads the underflowed length into a signed int, the value
+is negative so the copied + copy > len clamp is skipped, and
+copy_page_to_iter() is handed ~2^64 as its size_t bytes, which trips
+page_copy_sane(). The same race can put_page() one page twice and free
+the sk_msg while the other reader still walks it.
 
-  memset(&c->x86_capability, 0, ...);   /* clears X86_FEATURE_LA57 */
-  ...
-  get_cpu_cap(c);                       /* re-reads CPUID, restores it */
+  WARNING: CPU: 0 PID: 5484 at lib/iov_iter.c:356 copy_page_to_iter
+  WARNING: CPU: 1 PID: 5485 at lib/iov_iter.c:356 copy_page_to_iter
+  CPU: 1 UID: 0 PID: 5485 Comm: syz.6.1204 Not tainted 7.1.0-rc7 #1
+  RIP: 0010:copy_page_to_iter+0xa9/0x270
+  Call Trace:
+   <TASK>
+   __sk_msg_recvmsg+0x384/0x9a0
+   udp_bpf_recvmsg+0x1a0/0x6f0
+   sock_recvmsg+0x124/0x150
+   __sys_recvfrom+0x1c2/0x2b0
+   __x64_sys_recvfrom+0x7b/0x90
+   do_syscall_64+0x115/0x6d0
+   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+   </TASK>
 
-addr_has_metadata() then uses the 4-level threshold, and 5-level
-kernel addresses fall below it, so kasan_check_range() reports them as
-wild-memory-access.
+tcp_bpf_recvmsg_parser() already serializes this with lock_sock() around
+__sk_msg_recvmsg(); udp_bpf_recvmsg() does not. Take the socket lock
+around the sk_msg_recvmsg() consume so a given ingress sk_msg is drained
+by one reader at a time. The wait path is left unlocked, as
+udp_msg_wait_data() sleeps without dropping the socket lock.
 
-Define USE_EARLY_PGTABLE_L5 in mm/kasan/generic.c so
-addr_has_metadata() uses the stable variable, as
-arch/x86/mm/kasan_init_64.c already does.
-
-Some context on how this was noticed and reproduced below.
-
-We started seeing flaky splats as above [2][3] on BPF CI runs after
-runner hardware has been upgraded. Specifically, new x86 runners are
-c7i.metal-24xl AWS EC2 instances, which are Intel Sapphire Rapids
-machines that support LA57 feature, and have it enabled.
-
-The splats can be reproduced with qemu on any x86_64 host with
-  -cpu max -accel tcg
-
-Build a kernel with:
-  CONFIG_KASAN=y
-  CONFIG_KASAN_GENERIC=y
-  CONFIG_KASAN_INLINE=y
-
-Boot it with kasan_multi_shot. The fault fires fast before userspace,
-so no rootfs is required. For example:
-
-  qemu-system-x86_64 -display none -serial stdio -no-reboot \
-    -smp 4 -m 5G -cpu max -accel tcg \
-    -kernel arch/x86/boot/bzImage \
-    -append "console=ttyS0,115200 earlyprintk=serial,0,115200 panic=-1 kasan_multi_shot nokaslr"
-
-It's a timing race, so a single boot hits it only sometimes.
-However running several qemu instances in parallel on the same host
-significantly increases the hitrate.
-
-I confirmed the proposed fix eliminates the splats.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/common.c?h=v7.1-rc7#n2001
-[2] https://github.com/kernel-patches/bpf/actions/runs/27271262414/job/80542509369
-[3] https://github.com/kernel-patches/bpf/actions/runs/27260143782/job/80505353689
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Fixes: 1f5be6b3b063 ("udp: Implement udp_bpf_recvmsg() for sockmap")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- mm/kasan/generic.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ net/ipv4/udp_bpf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index 2b8e73f5f6a7..b5f430f2dbb6 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -9,6 +9,13 @@
-  *        Andrey Konovalov <andreyknvl@gmail.com>
-  */
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index 9f33b07b1481..8dd73e9ee1ea 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -80,7 +80,9 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 	}
  
-+/*
-+ * check_region_inline() and addr_has_metadata() can run very early.
-+ * For example, in an interrupt taken while identify_cpu() has the CPU
-+ * capability bits temporarily cleared.
-+ */
-+#define USE_EARLY_PGTABLE_L5
-+
- #include <linux/export.h>
- #include <linux/interrupt.h>
- #include <linux/init.h>
+ msg_bytes_ready:
++	lock_sock(sk);
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	release_sock(sk);
+ 	if (!copied) {
+ 		long timeo;
+ 		int data;
 -- 
-2.54.0
+2.43.0
 
