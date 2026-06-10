@@ -1,33 +1,33 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4932C11CA
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51E023B63E
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781062914; cv=none; b=XXn1qmA54jUSl5z+5hc6HALzV/dnVIktMzBypvMTVh5kZaQBC/fStV5AnS6fHiWoJ8tWoAn6wu+u/WUmPvGk9kVO9SHgwcEsePNwQ2EDa5IgQKQWYuu83LWz2oqBV52nmXd5Q7iGOG0JO2FhMIFNIfDBGXLO3lQYhArcJiX1vnM=
+	t=1781063128; cv=none; b=OPvtGm9u3dY4WAFPMlkKpeywOtiO2Vmin9xXuLlhlqz9EUzQOJpQlI1x7wPgcqyPtjujV0UGK5U5xThq3gOvG+GvI48xvEKQt8tC3n9QezF2lYRd9dF0vREFIXIQPhUa32P5LWq4SFolCSDaSHC5Risav9JQ8IzBIqXaEfxW5lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781062914; c=relaxed/simple;
-	bh=tXbFrbokO5RZwDmSC5TllgPNjYOVFJgh0OQ/kUbi8xY=;
+	s=arc-20240116; t=1781063128; c=relaxed/simple;
+	bh=gwJWGz77qe/1ByjH2crEmxFB0VTpP5Uh8us4EGeuVZs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T4F9r2NFK7vlMT8eYDQEZjNVfNeyyRJapPd8dF2uS7ThaVwcafRvHcOs7UfT2OfMUo9iq9nvxuulEFZHJqKirJYSNIFPGAu4bv76WS384H40nIy6PN2qc0ZgTjCLjTxY4eqmTUjqDjifiae42sJxkr8/zCQkJq/bXeI5wBiecMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HaSvH6w7; arc=none smtp.client-ip=91.218.175.179
+	 In-Reply-To:Content-Type; b=EDNOYKycblTBorNcBJhSJZYrlvomP1SAmyqh9BmqvxUUHLPyGFHWmpbjWJBktQSJJr5ptdtlxDB6E3rLI5fdiH3Oo6s0UnlEsbRC3aX6th2xtaNceuEJhVgQNdlDStS7Thxu9nCmFpdDJ6/+m19LaelJM+h0YdlaJti97i0HdQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M8qYx/uU; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HaSvH6w7"
-Message-ID: <862565aa-a5c3-47ec-ad9d-a6c64c61d150@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M8qYx/uU"
+Message-ID: <811b9cd4-829e-4a02-8265-ea0f64d7991f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781062900;
+	t=1781063122;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rsPmWvfwQSOjTS6cBu2jrJ8w2ejWLn3A0JR8MmqOkUc=;
-	b=HaSvH6w7hldLcwyWH/baAYc+XHulhMAP3lSVQZzKosObpocWxCEeosljZGthdLOuBA5InH
-	iyPpfWqhWOJ0Ck9GCypn0HudfPB2SjJL3+jVzroW1kMrKWjj9RPyV169ZVUZZ18jSFclNQ
-	o0CvozPXZ0GQ5OJfBnI3TFzC9eJF14Q=
-Date: Tue, 9 Jun 2026 20:41:36 -0700
+	bh=5ukLTOUrZY9TshkkY0HnPkd3VQYy5ImvpCPeKTGUyn8=;
+	b=M8qYx/uUxrM/7AaNOj8lkJJRx4Gw+6O0m3ls2e9R2ZXe1tMmfoOpzzdbv1KRoaJOKojXTS
+	WU+a6/yOln06iVRWj6iPGSrL+dLVyZf9Xuwi7xnW2pY/R1fCQvsvy99OtcLa+uq4N0yF1O
+	ZRIYyksfovSbR2kC/TkimCQDxDhLrkU=
+Date: Tue, 9 Jun 2026 20:45:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,38 +37,58 @@ MIME-Version: 1.0
 Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Keep int return type for
  tailcall subprogs
 Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ kernel-team@fb.com, martin.lau@kernel.org, eddyz87@gmail.com, clm@meta.com,
+ ihor.solodrai@linux.dev
 References: <20260609233407.2711577-1-yonghong.song@linux.dev>
- <20260609234251.C1A6F1F00893@smtp.kernel.org>
+ <5ece679164a4c99cbba93f55c2f9609be6e315d4813737a15b083c9f7dffa17f@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260609234251.C1A6F1F00893@smtp.kernel.org>
+In-Reply-To: <5ece679164a4c99cbba93f55c2f9609be6e315d4813737a15b083c9f7dffa17f@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 6/9/26 4:42 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Incomplete application of compiler optimization mitigation in `classifier_0`.
-> --
->
-> commit 230de7228ec64290b0e30a90f68ca96dd2ee6dd0
-> Author: Yonghong Song <yonghong.song@linux.dev>
-> selftests/bpf: Keep int return type for tailcall subprogs
->
-> This commit updates tailcall subprograms to prevent LLVM 23 from optimizing
-> their return types from 'int' to 'void', which would cause verifier failures.
-> It uses barrier_var() and __sink() to ensure the compiler retains the int
-> return type.
+On 6/9/26 5:07 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+>> index ce97d141daee..c4fadee5aadc 100644
+>> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+> [ ... ]
 >
 >> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
->> index ae94c9c70ab7d..6fde0ab921486 100644
+>> index ae94c9c70ab7..6fde0ab92148 100644
 >> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
 >> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
-> [ ... ]
+>> @@ -25,8 +25,11 @@ int count1 = 0;
+>>   static __noinline
+>>   int subprog_tail0(struct __sk_buff *skb)
+>>   {
+>> +	int ret = 0;
+>> +
+>>   	bpf_tail_call_static(skb, &jmp_table, 0);
+>> -	return 0;
+>> +	barrier_var(ret);
+>> +	return ret;
+>>   }
+>>
+>>   __auxiliary
+>>   SEC("tc")
+>>   int classifier_0(struct __sk_buff *skb)
+>>   {
+>>   	count0++;
+>>   	subprog_tail0(skb);
+>>   	return 0;
+>>   }
+> The patch adds barrier_var() to subprog_tail0() to prevent the compiler
+> from optimizing its return type from int to void. However, is the
+> approach sufficient for classifier_0()?
+>
+> Looking at how the patch handles other callers like classifier_1():
+>
 >> @@ -41,16 +44,22 @@ int classifier_0(struct __sk_buff *skb)
 >>   static __noinline
 >>   int subprog_tail1(struct __sk_buff *skb)
@@ -80,7 +100,7 @@ On 6/9/26 4:42 PM, sashiko-bot@kernel.org wrote:
 >> +	barrier_var(ret);
 >> +	return ret;
 >>   }
->>   
+>>
 >>   __auxiliary
 >>   SEC("tc")
 >>   int classifier_1(struct __sk_buff *skb)
@@ -93,46 +113,46 @@ On 6/9/26 4:42 PM, sashiko-bot@kernel.org wrote:
 >> +	__sink(ret);
 >>   	return 0;
 >>   }
-> [Severity: Medium]
-> In classifier_1() here, the return value of subprog_tail1() is captured and
-> sunk using __sink() to prevent optimization. Should classifier_0() also be
-> updated symmetrically to capture and sink the return value of subprog_tail0()?
+> In classifier_1(), the return value is captured and passed to __sink().
+> This creates a use at the callsite that forces the compiler to preserve
+> the int return type.
 >
-> Looking at classifier_0() in the same file:
->
-> __auxiliary
-> SEC("tc")
-> int classifier_0(struct __sk_buff *skb)
-> {
-> 	count0++;
-> 	subprog_tail0(skb);
-> 	return 0;
-> }
->
-> While the return value of subprog_tail0() is currently sunk elsewhere in
-> tailcall_bpf2bpf_hierarchy_2(), leaving this callsite unsunk could
-> potentially leave the code fragile to LLVM optimizations that might create a
-> void-returning clone of subprog_tail0() specifically for classifier_0().
+> Without capturing and sinking the return value in classifier_0(), could
+> LLVM still create a void-returning clone of subprog_tail0() for this
+> specific callsite? While subprog_tail0() is also called from
+> tailcall_bpf2bpf_hierarchy_2() where its return value is properly sunk,
+> the compiler might still specialize the function differently for the two
+> callsites.
 
-We should be fine. In the same file, we have  SEC("tc")
-  int tailcall_bpf2bpf_hierarchy_2(struct __sk_buff *skb)
-  {
--	int ret = 0;
-+	int ret = 0, ret1, ret2;
-  
-  	clobber_regs_stack();
-  
--	subprog_tail0(skb);
--	subprog_tail1(skb);
--
-+	ret1 = subprog_tail0(skb);
-+	ret2 = subprog_tail1(skb);
-+	__sink(ret1);
-+	__sink(ret2);
-  	__sink(ret);
-  	return (count1 << 16) | count0;
-  }
+We should be fine. In the same file, we have  SEC("tc")
+
+__success
+__retval(33)
+SEC("tc")
+int tailcall_bpf2bpf_hierarchy_2(struct __sk_buff *skb)
+{
+         int ret = 0, ret1, ret2;
+
+         clobber_regs_stack();
+
+         ret1 = subprog_tail0(skb);
+         ret2 = subprog_tail1(skb);
+         __sink(ret1);
+         __sink(ret2);
+         __sink(ret);
+         return (count1 << 16) | count0;
+}
 
 This will guarantee subprog_tail0() will have a return value.
 
+
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27243286945
 
