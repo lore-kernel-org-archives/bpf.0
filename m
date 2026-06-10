@@ -1,92 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D579A3EAC61;
-	Wed, 10 Jun 2026 12:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B46404893;
+	Wed, 10 Jun 2026 12:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781094104; cv=none; b=oK5qNzELYFRE07oZAIannjw6vhxICv7a1QTlmLWLjWPUkUu6lS5N6Uzs5uplRKGgrxYHW28cYERwo/dcLUm5h8bOBr/wx9OtNuRzAOXLnffkz2YiYq6ldaC1Sl+NB4WBHZB5VZkKwmitap9ZpkmTHElYI0l+BY54VrX2TUhoU2s=
+	t=1781094150; cv=none; b=K0rkDEfsH23VUJv0YmgorH4Xv1f/IrnI1PdOoNpn5b3VL/kPgW0kPWRJkwpEkH+y33F4v13Y2c4NYmqkg9Ozy/Nn0VDMd2STb38ASvMJclSoc1QlTEXT4z2JjpSecmq/Lq0n3oLoVNL0N8ADaa3XwSbS9R8qOH7IqSQGFEbEXA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781094104; c=relaxed/simple;
-	bh=d0l/dHJdExBIlQM6KUzlKfQwWAgL4a+FKUHuWytkyc8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ioqwtmWi+W1h2vp6CdXTT6zQ6aU1PjqNgfXUjpzm+IK76xYuJLdDUterXlfbej8+5YnGUFLQyI5Kreyy0NmxDZ657m/cjingtPXSY6pj+WwZ7F0uS/lxIP1ifcMnLwL+z8GdNtCVMXPLTQcEDfUafUjjEEYx917yMWodYOo2pow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lwcs9k8s; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781094150; c=relaxed/simple;
+	bh=5wvr6NCVt3/Vg0UdbksHA31ysB55JZCNbfzpY0W/Wqs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=R+RoHbBOoR/N66wMrs93fjYpGzZP5g6pPJs6uF07ye4I06vzs87mCGWl7Sev9wiEatPSPh3P4qEY9/pbpBKNG+8PXcA1+3RFEpvot18Rzuf3svZbkmLBE3ZaGnfYtRozqCL+TwdMjN5QVIcN/ZR4nf28r7R8WuXe8jM2B/2G0zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZWw/gYo6 reason="signature verification failed"; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lwcs9k8s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879881F00893;
-	Wed, 10 Jun 2026 12:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781094103;
-	bh=B7hcHOLd1VJ3srRjTkD53x+D+s0NHnSIqCb/3hDyXcg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Lwcs9k8slHd89VbEutEdOnjL/JN7IbzRVAfhDuPmIIWIDHJ4gD+QLVRczE50oIzSp
-	 ojaSA8ofF1saCn35O4RoELGZyY25MFabPtWexy0TKfkDkox7zJdzNUJx6yi/bxNSz7
-	 9UooaV5jXix2d6uhtUkIgDjJOWKNPhkJGU0MEmxL6VAUpxWtpOveq3S4Pnhxa5tFF2
-	 rdE51AKvXzGi93gdmYd0NCpZvVV3pV4v1lmyx6YQRIGtcQsN6QvZDghclMOTPGdgV2
-	 PW7WP35s3IQaIdpIGjFCpHpEjZHZFso3UQuNOC/+1m56FJFctb38EKy/39K2yi+nfx
-	 6viaS9/bPbV+Q==
-Message-ID: <8f032f16-04d7-466f-9006-ef80d91e8c6a@kernel.org>
-Date: Wed, 10 Jun 2026 14:21:38 +0200
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZWw/gYo6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=J1RMT/SRCXFU6XY72xnqxeR
+	Tx+NNZgMcwcnvCQ9L434=; b=ZWw/gYo6a0MLswTmgGEuRlQgLjeTmWOe4Xspbvh
+	5yAOh66GzKw9HpIXrE1RfC7e3hBffmvfRyHZqwJoj/eUQmY8m2xPhsG1RiioY1zr
+	l1yoNQQAKmGQ365PNVK5Voes9qDeMKjvcOq/YA45m21QOMlEvyoNHQDf0mQqkaby
+	CWK4=
+Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
+ ajax-webmail-web2 (Coremail) ; Wed, 10 Jun 2026 20:22:22 +0800 (GMT+08:00)
+Date: Wed, 10 Jun 2026 20:22:22 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>
+Cc: bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH bpf-next 1/2] bpf: Fix gotox target validation
+ against CFG
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <aig3p8QFlWv1sFqV@mail.gmail.com>
+References: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+ <20260609-f01-02-gotox-bpf-next-v1-1-b441d63a1559@mails.tsinghua.edu.cn>
+ <aig3p8QFlWv1sFqV@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 2/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-3-hawk@kernel.org>
- <a7d86867-3c2b-4fbb-902b-61c4e2a561bc@redhat.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <a7d86867-3c2b-4fbb-902b-61c4e2a561bc@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-ID: <4295c0cc.79a2e.19eb17bd1c2.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:yQQGZQA3FJz+VilqUGIoAg--.51506W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEOA2ooki9lEAA
+	CsF
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-
-
-On 04/06/2026 10.19, Paolo Abeni wrote:
-> On 5/27/26 3:54 PM, hawk@kernel.org wrote:
->> @@ -348,10 +381,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
->>   {
->>   	struct veth_priv *rcv_priv, *priv = netdev_priv(dev);
->>   	struct veth_rq *rq = NULL;
->> -	struct netdev_queue *txq;
->> +	struct netdev_queue *txq = NULL;
-> 
-> Minor nit: please fix the variables declaration order above.
-> 
->> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
->>   		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
->>   	}
->>   
->> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
->> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
->> +	 * synchronize_net(), and NAPI can no longer clear it.
->> +	 * Only wake when the device is still up.
->> +	 */
->> +	peer = rtnl_dereference(priv->peer);
->> +	if (peer) {
->> +		int peer_end = min_t(int, end, peer->real_num_tx_queues);
-> 
-> Sashiko noted you may need to additionally complete/reset the tx queue
-> in the <old_real_num_tx_queues> .. <new_real_num_tx_queue> range, and I
-> think it's right.
-> 
-
-Trying a new approach in V7, that avoids calling reset. Instead, before
-ptr_ring_cleanup(), consume any remaining packets and do the correct BQL
-accounting.  Lets see if that pleases Sashiko ;-)
-
---Jesper
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiQW50b24gUHJvdG9wb3Bv
+diIgPGEucy5wcm90b3BvcG92QGdtYWlsLmNvbT4KPiBTZW5kIHRpbWU6VHVlc2RheSwgMDkvMDYv
+MjAyNiAyMzo1NjoyMwo+IFRvOiAiTnVvcWkgR3VpIiA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1
+LmNuPgo+IENjOiBicGZAdmdlci5rZXJuZWwub3JnLCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YXN0
+QGtlcm5lbC5vcmc+LCAiRGFuaWVsIEJvcmttYW5uIiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+LCAi
+QW5kcmlpIE5ha3J5aWtvIiA8YW5kcmlpQGtlcm5lbC5vcmc+LCAiRWR1YXJkIFppbmdlcm1hbiIg
+PGVkZHl6ODdAZ21haWwuY29tPiwgIlNodWFoIEtoYW4iIDxzaHVhaEBrZXJuZWwub3JnPiwgbGlu
+dXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
+Zwo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHQgMS8yXSBicGY6IEZpeCBnb3RveCB0YXJn
+ZXQgdmFsaWRhdGlvbiBhZ2FpbnN0IENGRwo+IAo+IE9uIDI2LzA2LzA5IDExOjAzUE0sIE51b3Fp
+IEd1aSB3cm90ZToKPiA+IENGRyBjb25zdHJ1Y3Rpb24gcmVjb3JkcyB0aGUgbW9kZWxlZCBnb3Rv
+eCB0YXJnZXQgc2V0IGluCj4gPiBpbnNuX2F1eF9kYXRhLT5qdC4gSXQgaW5jbHVkZXMgSU5TTl9B
+UlJBWSBtYXBzIGJhc2VkIG9uIHdoZXRoZXIgdGhlIG1hcAo+ID4gdGFyZ2V0IGlzIGluIHRoZSBj
+dXJyZW50IHN1YnByb2cuIGNoZWNrX2luZGlyZWN0X2p1bXAoKSBsYXRlciB2YWxpZGF0ZXMgYW5k
+Cj4gPiBmb2xsb3dzIHRoZSBjdXJyZW50IFBUUl9UT19JTlNOIHJlZ2lzdGVyJ3MgYWN0dWFsIElO
+U05fQVJSQVkgbWFwLiBUaGUKPiA+IHZlcmlmaWVyIGRvZXMgbm90IGNoZWNrIHRoYXQgdGFyZ2V0
+cyBjb3BpZWQgZnJvbSB0aGF0IG1hcCBtYXRjaCB0aGUgdGFyZ2V0cwo+ID4gdGhhdCBDRkcgY29u
+c3RydWN0aW9uIG1vZGVsZWQgZm9yIHRoaXMgZ290b3ggaW5zdHJ1Y3Rpb24uCj4gPiAKPiA+IFRo
+aXMgbGV0cyBvbmUgZ290b3ggaW5zdHJ1Y3Rpb24gb2JzZXJ2ZSB0d28gZGlmZmVyZW50IElOU05f
+QVJSQVkgbWFwcy4gQ0ZHCj4gPiBjYW4gc2VsZWN0IGEgbWFwIHdob3NlIHRhcmdldCBpcyBpbiB0
+aGUgY3VycmVudCBzdWJwcm9nLiBBbm90aGVyIHBhdGggdG8KPiA+IHRoZSBzYW1lIGdvdG94IGNh
+biBjYXJyeSBhIFBUUl9UT19JTlNOIHZhbHVlIGZyb20gYSBtYXAgd2hvc2UgdGFyZ2V0IHBvaW50
+cwo+ID4gYXQgYSBkaWZmZXJlbnQgc3VicHJvZy4gVGhlIHZlcmlmaWVyIHRoZW4gYWNjZXB0cyBh
+biBlZGdlIGFic2VudCBmcm9tIHRoZQo+ID4gQ0ZHLgo+ID4gCj4gPiBPbiB4ODYsIGdvdG94IGJl
+Y29tZXMgYSByYXcgaW5kaXJlY3QganVtcCBpbiB0aGUgSklUIGltYWdlLiBBY2NlcHRpbmcgYQo+
+ID4gdGFyZ2V0IG5vdCBtb2RlbGVkIGJ5IENGRyBjYW4gZW50ZXIgYW5vdGhlciBzdWJwcm9nIHdp
+dGhvdXQgYSBtYXRjaGluZyBCUEYKPiA+IGNhbGwgZnJhbWUgYW5kIGNyYXNoIHdoZW4gZXhlY3V0
+ZWQuIFZhbGlkYXRpb24gb2JzZXJ2ZWQgYSBHUEYgaW4KPiA+IGJwZl90ZXN0X3J1bigpLgo+ID4g
+Cj4gPiBGaXggdGhpcyBieSByZXF1aXJpbmcgZXZlcnkgdGFyZ2V0IGNvcGllZCBmcm9tIHRoZSBh
+Y3R1YWwgUFRSX1RPX0lOU04gbWFwCj4gPiB0byBiZSBwcmVzZW50IGluIHRoZSBDRkcganVtcCB0
+YWJsZSBidWlsdCBmb3IgdGhlIGN1cnJlbnQgZ290b3gKPiA+IGluc3RydWN0aW9uLgo+ID4gUmVq
+ZWN0IHRoZSBwcm9ncmFtIGJlZm9yZSBwdXNoaW5nIHZlcmlmaWVyIHN0YXRlcyBmb3IgYW55IHVu
+bW9kZWxlZCB0YXJnZXQuCj4gPiAKPiA+IEZpeGVzOiA0OTNkOWUwZDYwODMgKCJicGYsIHg4Njog
+YWRkIHN1cHBvcnQgZm9yIGluZGlyZWN0IGp1bXBzIikKPiA+IFNpZ25lZC1vZmYtYnk6IE51b3Fp
+IEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+ID4gLS0tCj4gPiAga2VybmVsL2Jw
+Zi92ZXJpZmllci5jIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKysrKysKPiA+ICAxIGZpbGUg
+Y2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEva2VybmVsL2Jw
+Zi92ZXJpZmllci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiBpbmRleCBlZDdiYTBlNmE5
+Y2UuLjI1ZmE5MGU3MzFlMyAxMDA2NDQKPiA+IC0tLSBhL2tlcm5lbC9icGYvdmVyaWZpZXIuYwo+
+ID4gKysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiBAQCAtMTcxMjQsNiArMTcxMjQsMjMg
+QEAgc3RhdGljIGludCBpbmRpcmVjdF9qdW1wX21pbl9tYXhfaW5kZXgoc3RydWN0IGJwZl92ZXJp
+Zmllcl9lbnYgKmVudiwKPiA+ICAJcmV0dXJuIDA7Cj4gPiAgfQo+ID4gIAo+ID4gK3N0YXRpYyBi
+b29sIGlzX2NmZ19pbmRpcmVjdF9qdW1wX3RhcmdldChzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAq
+ZW52LAo+ID4gKwkJCQkJdTMyIHRhcmdldCkKPiA+ICt7Cj4gPiArCXN0cnVjdCBicGZfaWFycmF5
+ICpqdCA9IGVudi0+aW5zbl9hdXhfZGF0YVtlbnYtPmluc25faWR4XS5qdDsKPiA+ICsJaW50IGk7
+Cj4gPiArCj4gPiArCWlmICghanQpCj4gPiArCQlyZXR1cm4gZmFsc2U7Cj4gPiArCj4gPiArCWZv
+ciAoaSA9IDA7IGkgPCBqdC0+Y250OyBpKyspIHsKPiA+ICsJCWlmIChqdC0+aXRlbXNbaV0gPT0g
+dGFyZ2V0KQo+ID4gKwkJCXJldHVybiB0cnVlOwo+ID4gKwl9Cj4gPiArCj4gPiArCXJldHVybiBm
+YWxzZTsKPiA+ICt9Cj4gPiArCj4gPiAgLyogZ290b3ggKmRzdF9yZWcgKi8KPiA+ICBzdGF0aWMg
+aW50IGNoZWNrX2luZGlyZWN0X2p1bXAoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVudiwgc3Ry
+dWN0IGJwZl9pbnNuICppbnNuKQo+ID4gIHsKPiA+IEBAIC0xNzE3MSw2ICsxNzE4OCwxNSBAQCBz
+dGF0aWMgaW50IGNoZWNrX2luZGlyZWN0X2p1bXAoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVu
+diwgc3RydWN0IGJwZl9pbnNuICppbgo+ID4gIAkJcmV0dXJuIC1FSU5WQUw7Cj4gPiAgCX0KPiA+
+ICAKPiA+ICsJZm9yIChpID0gMDsgaSA8IG47IGkrKykgewo+ID4gKwkJaWYgKCFpc19jZmdfaW5k
+aXJlY3RfanVtcF90YXJnZXQoZW52LCBlbnYtPmdvdG94X3RtcF9idWYtPml0ZW1zW2ldKSkgewo+
+ID4gKwkJCXZlcmJvc2UoZW52LAo+ID4gKwkJCQkiZ290b3ggdGFyZ2V0ICV1IGZyb20gbWFwIGlk
+PSVkIGlzIG5vdCBpbiB0aGUgQ0ZHIGp1bXAgdGFibGVcbiIsCj4gPiArCQkJCWVudi0+Z290b3hf
+dG1wX2J1Zi0+aXRlbXNbaV0sIG1hcC0+aWQpOwo+ID4gKwkJCXJldHVybiAtRUlOVkFMOwo+ID4g
+KwkJfQo+ID4gKwl9Cj4gCj4gVGhhbmtzIGZvciByZXBvcnRpbmcgdGhlIGJ1Zy4KPiAKPiBBcyBm
+b3IgdGhlIGZpeCwgd291bGQgaXQgbWFrZSBtb3JlIHNlbnNlIHRvIGVpdGhlciByZWNvcmQgbWFw
+cyBpbgo+IGNoZWNrX2NmZyBvciB0byByZS1jaGVjayBzdWJmdW5jIGJvdW5kYXJpZXMgaGVyZT8K
+PiAKPiA+ICAJZm9yIChpID0gMDsgaSA8IG4gLSAxOyBpKyspIHsKPiA+ICAJCW1hcmtfaW5kaXJl
+Y3RfdGFyZ2V0KGVudiwgZW52LT5nb3RveF90bXBfYnVmLT5pdGVtc1tpXSk7Cj4gPiAgCQlvdGhl
+cl9icmFuY2ggPSBwdXNoX3N0YWNrKGVudiwgZW52LT5nb3RveF90bXBfYnVmLT5pdGVtc1tpXSwK
+PiA+IAo+ID4gLS0gCj4gPiAyLjM0LjEKPiA+IAoKSGkgQW50b24sIEVkdWFyZCwKClRoYW5rcyBm
+b3IgdGhlIHJldmlldy4KCkkgYWdyZWUgdGhhdCBjaGVja2luZyB0aGUgY3VycmVudCBzdWJwcm9n
+IGJvdW5kcyBpbiBjaGVja19pbmRpcmVjdF9qdW1wKCkKaXMgdGhlIGJldHRlciBmaXguIEkgd2ls
+bCByZXdvcmsgdjIgdG8gdmFsaWRhdGUgdGhlIHJ1bnRpbWUgSU5TTl9BUlJBWQp0YXJnZXRzIGFn
+YWluc3QgdGhlIHN1YnByb2cgY29udGFpbmluZyB0aGUgZ290b3ggaW5zdHJ1Y3Rpb24sIGluc3Rl
+YWQgb2YKZG9pbmcgQ0ZHIGp1bXAtdGFibGUgbWVtYmVyc2hpcCBjaGVja3MuCgpJIHdpbGwgYWxz
+byBmaXggdGhlIHNlbGZ0ZXN0IGV4cGVjdGVkIGVycm5vLgo=
