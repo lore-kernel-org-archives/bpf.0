@@ -1,100 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71023409E0F;
-	Wed, 10 Jun 2026 14:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64943331EBD
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 14:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781102247; cv=none; b=YaZV0Xu/xMWLE3O8KnUk092aJTaW/EaYeeWBywdnmg5bByoxm14GwSWE2agFLnXjAljW2j/lbBphnXTHEdh7IgKem1OBsVYfOMQWKKMXIY2n6Grt9rLoKb/PFBxlWsj/JAcbApqM0mJ/IF9zLP/K+MH5PWA4xNvcAWgCPPccmOs=
+	t=1781102251; cv=none; b=hB5dgUmMYFX4g9VzkAqreoaoVHUgtpCM4Btnpe43hza9FWNOvI5gbqxU2dUOsCUd+vMBQvF31ov25L8xSAXwEUxwbVNNLk+A9RAUGoU4AlTNMnfmc/VQsboNRT/y8sXe6iXPJVxEdmHzQrfdgQ0b1J+OoIbUcgOCfCK6AdBylXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781102247; c=relaxed/simple;
-	bh=14MudBlUo/MiPH62vrRijCz+mEnKk/r8tJPHbsWJiTE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=SFGP8GvQQ9F2oeDFORad4uerfoyGnI6sWuVyG2CM1rr+fRsqVDRK+iz2LOhvv+qEly7kkzuIZr3FocEL3FSro5/ljvIQLlIFjN8Pfh88yT9MiG9vK1tSICwDOON82k/JZJiPE957LicVDxc22t9zjrYg2u+BGdwQAoi1iWkEUn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LEtZ3tx1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781102251; c=relaxed/simple;
+	bh=GY53+V3JiVpOg8CqDvd6M1ozZNaWg13g7MqXVy7nFhg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NNdlA4UxGVHvLiTa3hfDoAkHHFgnqye9I6kbrxl2cv3DQA8EJIquy/uLPA+R7tAvQ4evK2TgW1Mm2rjrLey5jnCaLY34oQAFrUVM7sGk1FpBYIXOLkKoImQPfNKd8RhN08w+MNUascWG5UcHdat26bo0/hbhfrXi7DS0zA6uG+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNlthR6+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LEtZ3tx1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C6C1F00893;
-	Wed, 10 Jun 2026 14:37:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNlthR6+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C65A1F00898;
+	Wed, 10 Jun 2026 14:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781102246;
-	bh=+aUpp/Xae8vWFXmLRO1/JAbTv8IzKAGIRt8w/cXpVdQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=LEtZ3tx1sTTlNW8kg8MsrEOL+4bev4KawN4LIsraa35YLBdb+AoV0/bvVL+ILpTrf
-	 vAspeoHdgoo1SU7lbnRtKZLwKg+XDy3v2iTnjfumEgeF2lSJh0FVuako2GEg1D7bPj
-	 qH6mEM/ipHlZfPBdoSIIfBQ+clOUsAxvMWel4inbHxFxegfV0dM7dMkwItVrK2/AMn
-	 3IIrur9Xcr2IeLkE6rFtdoA9aR9caCxKG9WTHKdpSqy1bOmnV5RsHAQTTdaDcoEozb
-	 xIaxnW13GNdUcTsSPKjY0seom93MdmAMe7PfJbPjN70mUpFLdCD8TpGibcjxd4FzLY
-	 PJAhbotN9CkPQ==
-Date: Wed, 10 Jun 2026 23:37:20 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v4 6/7] Documentation: bootconfig: document build-time
- cmdline rendering
-Message-Id: <20260610233720.82fe59cf42aa57659c2e5697@kernel.org>
-In-Reply-To: <20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
-References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
-	<20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20260515; t=1781102250;
+	bh=16WniKoIEb4BpYzobLHhPPBTgQWYnQ6y4Qcbzsskkdo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=cNlthR6+fqqhyZ7sl583csUPB9pmxs9AgRTmd4GaRCyMo0zNdbemePiNOxJ5WZnss
+	 UYdBXS8/C19qILgIYwksynI/QV+H/QdKU7TnwsC5uMvyp5xrTosxqvRbLuCmWtkIUx
+	 +OP90W0udvahvOO/QepyOadLma/R4R/MHB/jEKkHDZnN+hDXiHaYYG8Oe6a2W7aq9b
+	 ny8ykUzq8VwG2zChNzaPF1nz65NZCXfhYS+zYuw0+6qnqsp8/6/wClo2zhLFrsC0gv
+	 cBiDZbhR5MG94KayzayUm4gRICixO5zb+OsktdR9IJQRYuBmv5gw85n+7VpDZxWzl/
+	 F62ua9hfKzmvw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCHv2 bpf-next 6/6] selftests/bpf: Fix typo in verify_umulti_link_info
+Date: Wed, 10 Jun 2026 16:36:27 +0200
+Message-ID: <20260610143627.804790-7-jolsa@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260610143627.804790-1-jolsa@kernel.org>
+References: <20260610143627.804790-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 09 Jun 2026 03:28:33 -0700
-Breno Leitao <leitao@debian.org> wrote:
+We verify info.uprobe_multi.flags against wrong kprobe-multi flag
+(BPF_F_KPROBE_MULTI_RETURN). It's the same value as the correct
+flag (BPF_F_UPROBE_MULTI_RETURN), so there's not functional change.
 
-> Add a section describing CONFIG_BOOT_CONFIG_EMBED_CMDLINE: what it
-> does (renders the embedded "kernel" subtree to a flat cmdline at
-> build time so early_param() handlers see the values), what it
-> requires (BOOT_CONFIG_EMBED, a non-empty BOOT_CONFIG_EMBED_FILE,
-> and ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG -- currently x86 only),
-> the bootconfig opt-in semantics, the initrd-vs-embedded precedence,
-> and the soft-error overflow behavior.
+Fixes: 147c69307bcf ("selftests/bpf: Add link_info test for uprobe_multi link")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Breno,
-
-Thanks for adding the document. But related to the Sashiko's comment,
-I believe it's necessary to pre-describe in this document how the
-kernel behaves with various combinations of cmdline and bootconfig,
-both embbedded and initrd/bootloader.
-
-We can have these ways to pass the kernel options.
-
-- bootloader cmdline
-- embedded cmdline
-- initrd bootconfig
-- embedded bootconfig (standard/cmdline)
-
-Clearly, we will have the option to choose between a standard embedded
-boot configuration or a command-line one, not either, but the behavior
-is different. I confirmed that is covered.
-
-Embedded bootconfig is a kind of default bootconfig, which is NOT used
-when initrd has another bootconfig. I made this design because of
-/proc/bootconfig, which is not merged with embedded one. However, 
-CONFIG_BOOT_CONFIG_EMBED_CMDLINE will be a bit different, if it is
-embedded and "bootconfig" feature is enabled, the embbedded one
-has been used already. 
-
-To avoid confusion, when this option is used, shouldn't we treat it
-the same way as if embedded command lines were enabled, and either
-not display it in /proc/bootconfig (or always display it, by merging
-the rendered string)?
-
-Thank you,
-
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+index e40114620751..f589eefbf9fb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
++++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+@@ -469,7 +469,7 @@ verify_umulti_link_info(int fd, bool retprobe, __u64 *offsets,
+ 
+ 		ASSERT_EQ(info.uprobe_multi.pid, getpid(), "info.uprobe_multi.pid");
+ 		ASSERT_EQ(info.uprobe_multi.count, 3, "info.uprobe_multi.count");
+-		ASSERT_EQ(info.uprobe_multi.flags & BPF_F_KPROBE_MULTI_RETURN,
++		ASSERT_EQ(info.uprobe_multi.flags & BPF_F_UPROBE_MULTI_RETURN,
+ 			  retprobe, "info.uprobe_multi.flags.retprobe");
+ 		ASSERT_EQ(info.uprobe_multi.path_size, strlen(path) + 1, "info.uprobe_multi.path_size");
+ 		ASSERT_STREQ(path_buf, path, "info.uprobe_multi.path");
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.54.0
+
