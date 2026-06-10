@@ -1,80 +1,104 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA3741325E;
-	Wed, 10 Jun 2026 14:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8921E3290C9
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 14:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781103032; cv=none; b=gzbXe246vHtsPSliiJjrS7RpDFIcjepkVt3AWPnWEf0h0hK/njV+TgV5eEn0U7ApDIpFJ0H4tu41RYChuF3k4dnhR06agX6mLrzz9L+zaYHCG4gPiyiOxMr8rBfq7F3yzQFpfh28Sx3vFZv57gDBAwXGuK1kXpdEam7cl8ZYg8Q=
+	t=1781103047; cv=none; b=YM0gYv38GuUIl3IF2To1ZGEs6kVbTWjQvV9r5lNmj4iaCo7NNP0YQJCuafQ0XTlYRc1uS0vuqY2zpwyg7h2Cly/SuHkjkYL5Ze11fysSzsx55MzUVt5N4JLDzTv/xPyuwKhzbu/yQGdN7p7M2RDezTG7CHndzqInb6JE6ZMExtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781103032; c=relaxed/simple;
-	bh=kEmwiT7ztaLKTE/AXyDw16pOXNuEA+bcUkuEUtNrnXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xg2YImxQTZEqorogyMzSxFtnr5GfnG8IpI8TxWWCyTSK0yrCyi/51tRWw1xx65QOClS2G+NM7qc1H5hkDmDv8bNSWSohSgdWRwcv+8fLU6gN3kneep+HHFJTQ4F6yb5KAZMO+aSJahlryOUjPkJMgAG+7AMGiZxpvrQPYanTreQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=vB0w3on8; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1781103047; c=relaxed/simple;
+	bh=bwjOrdwOq6GBr2rSKLojDESFkX457LTwh9tp9RsZS/0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=AIvrrOKx9Tp1mxeiUL6igPLoY/YbNJkfMaQPypg+UxRkiKElwjbFAymdqbIVveBuR93BxZgg58JM/v1WTBYZMDEOIl/emHnrCAqbIeU2mL+VtZDoFq332aDXITLsrPUGEqYhgiRrnUy714H6t9Qg5SM+kC4Z5dFFcfXTtej80T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D9o2G+Bc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="vB0w3on8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=6cBb/7PfPr18seAAc+jd6aknLhtzGWH29hDyeS4Ef0o=; b=vB0w3on8CW+4+m7XCQiAD0sE2W
-	2jix2Do0ndAYMaX/PguTiuR6HZ+hL3mBxD+DgRlz2KI2Kwebsf7uUf8CN6s3tof2Z/GpwpcRGWNe1
-	+A2lHI+MheKIWTdxsIE71tUH7Gw+hk3COooxfpKhhJFfDj/1yEEB1e7Xcm4vHPj92/p8O1rQgJ0Lq
-	cDijR2vtpBHqlTYjlSMvhB9sTwqT+hHHwUH0e4Oj0TOVd9WkkDS/XOO549/fKgvs7hDr/xMAX0yuk
-	ZTnXYoj6iKaTP81n3Ic8LaHeFezf4ovtqypav/Lbpz6OnJnj6Z1NFUnJmBASMLO6iV+33+La4nXxY
-	CAWz81Bg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wXKFx-009GU7-0L;
-	Wed, 10 Jun 2026 14:50:13 +0000
-Date: Wed, 10 Jun 2026 07:50:07 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Julian Braha <julianbraha@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v4 3/7] bootconfig: render embedded bootconfig as a
- kernel cmdline at build time
-Message-ID: <ail5fuwSj_cOHOn_@gmail.com>
-References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
- <20260609-bootconfig_using_tools-v4-3-73c463f03a97@debian.org>
- <ebb4fb1d-effe-44c6-82dd-8223b36419a1@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D9o2G+Bc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D3D11F00893;
+	Wed, 10 Jun 2026 14:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781103046;
+	bh=UnSzCGwE7kJeN0Dotnn8VSjr1oJyqj61jMscNsFxQ34=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=D9o2G+Bc2xZEW2Is0ce9MOpyN+YwCeMFF/qlSEuTLo6rem6MUrbWUb5AEICbkBKft
+	 dvGPjV6GzbPGCA+pVkcdibrMf+PoJpWszOTaZkFfOyXp0ClThy5yoRGQrcuU+JiXow
+	 VL2oSbS3vAX74y2Qb8H4NEP4UD/L3bKReYhvsq8GCzFdoHfkJKingpZ086wJSKYliU
+	 ultMECeQjjkk3f2RX62QKG6nOWTDDrygbG7SBlIlcQb9qGPQ+BiwNrqlh0SCGxcowb
+	 H+1I2Q8JpHZnTO46xUNxvY3AuAsgm+edwB5JqGPo0plWj3HrZeu1eKIOeo2QaCVuhl
+	 qk/9KSQWVtWsg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv2 bpf-next 4/6] selftests/bpf: Add uprobe_multi path_fd
+ test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260610143627.804790-5-jolsa@kernel.org>
+References: <20260610143627.804790-5-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 14:50:45 +0000
+Message-Id: <20260610145046.1D3D11F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebb4fb1d-effe-44c6-82dd-8223b36419a1@gmail.com>
-X-Debian-User: leitao
 
-Hello Julian,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The selftest references a nonexistent struct member `path_fd` and a=
+n undeclared flag `BPF_F_UPROBE_MULTI_PATH_FD`, which will cause a compilat=
+ion error.
+--
 
-On Wed, Jun 10, 2026 at 02:44:52PM +0100, Julian Braha wrote:
-> On 6/9/26 11:28, Breno Leitao wrote:
-> > +	depends on BOOT_CONFIG_EMBED
-> > +	depends on BOOT_CONFIG_EMBED_FILE != ""
-> 
-> Hi Breno,
-> 
-> Just an FYI, this dependency on BOOT_CONFIG_EMBED is redundant because
-> the:
-> BOOT_CONFIG_EMBED_FILE != ""
-> is only possible when BOOT_CONFIG_EMBED is enabled.
+commit e5937d581d08ece9671b371d37fb6cd0d497b692
+Author: Jiri Olsa <jolsa@kernel.org>
 
-Good catch, thanks. BOOT_CONFIG_EMBED_FILE itself already depends on
-BOOT_CONFIG_EMBED, so the explicit line is redundant. I'll drop it!
+selftests/bpf: Add uprobe_multi path_fd test
 
-Thanks for the review,
---breno
+This commit adds a uprobe_multi link API selftest that opens /proc/self/exe
+and passes the resulting descriptor through opts.uprobe_multi.path_fd with
+BPF_F_UPROBE_MULTI_PATH_FD set.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b=
+/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> index 56cbea280fbd2..ffcf3c92f0474 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+
+[ ... ]
+
+> @@ -757,6 +758,65 @@ static void test_link_api(void)
+>  	__test_link_api(&child);
+>  }
+> =20
+> +static void test_link_api_path_fd(void)
+> +{
+> +	LIBBPF_OPTS(bpf_link_create_opts, opts);
+> +	const char *resolve_path =3D "/proc/self/exe";
+> +	int prog_fd, link_fd =3D -1, path_fd =3D -1;
+
+[ ... ]
+
+> +	path_fd =3D open(resolve_path, O_RDONLY);
+> +	if (!ASSERT_GE(path_fd, 0, "path_fd"))
+> +		goto cleanup;
+> +
+> +	opts.uprobe_multi.path_fd =3D path_fd;
+> +	opts.uprobe_multi.offsets =3D offsets;
+> +	opts.uprobe_multi.cnt =3D ARRAY_SIZE(syms);
+> +	opts.uprobe_multi.flags =3D BPF_F_UPROBE_MULTI_PATH_FD;
+
+[Severity: Low]
+Does this code reference an API that hasn't been introduced yet?
+
+The struct field path_fd is not a valid member of uprobe_multi within
+struct bpf_link_create_opts in the libbpf headers, and the
+BPF_F_UPROBE_MULTI_PATH_FD macro is undeclared.
+
+Because the patch doesn't include the corresponding kernel or libbpf
+changes, it looks like this will cause a compilation error.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610143627.8047=
+90-5-jolsa@kernel.org?part=3D1
