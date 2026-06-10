@@ -1,76 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB6B43C079
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 15:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECF03E9C1F;
+	Wed, 10 Jun 2026 15:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781104217; cv=none; b=LHVGkyjS3y1GDZdiO/tkkbp1TOmOBysibfM7A0NNaDuDVtDWsQJHl6fJ0vHlaFdjuGVLICd0ApUOEEh5VB5sLx4u+ggREJJHVozp1NSfTCi0gd5jYAb0umCpQ8iReNAfb/omnoV3UKjFZqShDz6k5RksOTuZxhLZEK2oHcG/PDw=
+	t=1781105740; cv=none; b=uZ2M558+WpI73yCqf6IsZt1uacSpEWNp+fvIetd56eEwaBs34989j6/J2cujGBpDQpYuC0tl8AO2jrLq0EAsczR7q2m7NBweV4wFJpK33ZWrUgVkWoQjgZA2oYsuyeS6sOkAgzWVB6DjnPCExZ6xXVQrAnOysICnVJ3FI0EezWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781104217; c=relaxed/simple;
-	bh=05S0yOYLddk5hHaQgUNsXd9rFc14eOED5u46Gb0DAHg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eGI+XdzXrwSvt2fSJ3WrrYo0ePqly/fzRtYuLPlJTM/Q8RdP/WEa4/LMwHNUvMRbafTsk16rlOn74Fzcep9+dMEAH8vsFI2aLzIN1Jd61I9Quslbw9O47M5R7tM6/9vox9++CZCsxvnE0t16SHv2unZpsiIRFN7gtqVzyIO2lWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2Ma48D+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781105740; c=relaxed/simple;
+	bh=GvWXVWLwRQ2bycvg7mU2B5ogSsTBdZT4F9A0wcMEgbA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F8x6T6xtelSyMi6U6qMcY6rNBq8Fs50I+iRy7IG2JDZ0yGUZuiSc7aC3OhCBS8TIcUReqvpNpafFGCy5QoFN1STSh8FqfvOPFLaw7RSlyCl28KbSs+iWRhtRHKeDRBGWtS22aTjX5+m29I/QSblIIzyP4qeBsv1o1T7lcpTU40Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZCdm4Yq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2Ma48D+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E71F1F0089A;
-	Wed, 10 Jun 2026 15:10:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZCdm4Yq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAF41F00893;
+	Wed, 10 Jun 2026 15:35:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781104216;
-	bh=YTBACdzYC0m1sfjAugFPn2aveydq4thLmcD+xldBZts=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=i2Ma48D+IdDFEnM8xOu3i4yFmiOi0/A+tkstDGSUv757wVFlZ4qFlTLxHObYe9mf8
-	 NgFCRDOfFy3mIDTCZEPO4FL0XyMjS0zKjKH30S6v1X1c7BjTCZE5tyU1dYWiF//jKb
-	 i8no4sehnYONzETNoK7lHsySlBgwiFpenvbpshUzx9j6QfC1iQERM0rNQZvfilQqv8
-	 h8iHelB/fDsnaQZFnDT3PDFHyDVvpYRlK7Irgblb3MagMfLIcKT6q+es4eyN0jFTUE
-	 XSMBSqTLlic48FtJggByZoy6XN/LtF7GGL2Yot/4Uxj2IxvPB1ZF7tT+QWqpiPw5FC
-	 yLl5HGVzFBl3Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939073930D5F;
-	Wed, 10 Jun 2026 15:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1781105738;
+	bh=fZANZX22CMmcnXsZ0uxIrtLQDjClRITx4CzSwp36iag=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=iZCdm4YqUjZPH2PKl44O05qemfatIhkXPkNJGHC+NtZeGCQxJ79Qd37RiVUg74y/r
+	 ywaBWFsm91xWXUCwVsWPt17ndQ0Ds9ekmmBa/ibi5X2ti+6fwIGozMuJRydzmGHPjk
+	 LGcfDFvKQVBlanL32t0L0bsxWch1T8+qJVPugJc4vGC+oMnz01ion5YdyhwvKYe+vk
+	 FP5fTPXBStJCa02sAEZraPDFHb9FCAusk6oTe43w2Ozl6a96T1rSnRURfl7z7ijRGL
+	 e4irYYduOBQIoA12sa/KodPqXGDU/civhVADVhcmct04w8oYTeSYIBGLmLKplRmMaX
+	 SV1cfToQ7dpaA==
+Date: Wed, 10 Jun 2026 11:35:36 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <songliubraving@fb.com>,
+ "Yonghong Song" <yhs@fb.com>, "Menglong Dong" <menglong8.dong@gmail.com>
+Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry
+ function
+Message-ID: <20260610113536.77172ad1@robin>
+In-Reply-To: <DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com>
+References: <20260603110554.29590-1-jolsa@kernel.org>
+	<20260603110554.29590-4-jolsa@kernel.org>
+	<20260609102922.3c489f76@fedora>
+	<DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix bpf_iter/task_vma test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178110421414.3082243.2862648154007476914.git-patchwork-notify@kernel.org>
-Date: Wed, 10 Jun 2026 15:10:14 +0000
-References: <20260610051831.1346659-1-yonghong.song@linux.dev>
-In-Reply-To: <20260610051831.1346659-1-yonghong.song@linux.dev>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Tue, 09 Jun 2026 16:43:19 +0200
+"Kumar Kartikeya Dwivedi" <memxor@gmail.com> wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue,  9 Jun 2026 22:18:31 -0700 you wrote:
-> For selftest bpf_iter/task_vma, I got a failure like below on my qemu run:
+> Hi Steven,
+> Version 8 of this set was already applied to bpf-next.
 > 
-> test_task_vma_common:FAIL:compare_output unexpected compare_output:
->     actual
->     '561593546000-561593585000r--p0000000000:241256579534/root/devshare/bpf-next/tools/testing/selftests/bpf/test_progs'
->     != expected
->     '561593546000-561593585000r--p0000000000:245551546830/root/devshare/bpf-next/tools/testing/selftests/bpf/test_progs'
-> 
-> [...]
+> https://lore.kernel.org/bpf/178085644764.273544.8250000589480262551.git-patchwork-notify@kernel.org
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix bpf_iter/task_vma test
-    https://git.kernel.org/bpf/bpf-next/c/2e8ad1ff712d
+It should have waited for my review of the first three patches though.
+I like to run them through my tests before giving the OK. As they are
+generic changes to my code.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+They are trivial changes, but regardless, someone should have asked.
 
-
+-- Steve
