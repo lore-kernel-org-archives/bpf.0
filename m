@@ -1,79 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64943331EBD
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 14:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E62416CEC
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 14:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781102251; cv=none; b=hB5dgUmMYFX4g9VzkAqreoaoVHUgtpCM4Btnpe43hza9FWNOvI5gbqxU2dUOsCUd+vMBQvF31ov25L8xSAXwEUxwbVNNLk+A9RAUGoU4AlTNMnfmc/VQsboNRT/y8sXe6iXPJVxEdmHzQrfdgQ0b1J+OoIbUcgOCfCK6AdBylXg=
+	t=1781102904; cv=none; b=snZfjo5dDyl90EZjPWmQ0pzKfh8Hmi8zCqBEu0Kpmzgpmgze1aafUbigenRMIaPlqD2shoP1NBdgcY2fs9R0qPFHRpb0psqP53pXPG1+9wwPcLQ+RAO8Av7aiAPKsFDgKgK195sGwNk1ZhxQvNsSlvW8dk8oEhvSLQAssCCnsMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781102251; c=relaxed/simple;
-	bh=GY53+V3JiVpOg8CqDvd6M1ozZNaWg13g7MqXVy7nFhg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NNdlA4UxGVHvLiTa3hfDoAkHHFgnqye9I6kbrxl2cv3DQA8EJIquy/uLPA+R7tAvQ4evK2TgW1Mm2rjrLey5jnCaLY34oQAFrUVM7sGk1FpBYIXOLkKoImQPfNKd8RhN08w+MNUascWG5UcHdat26bo0/hbhfrXi7DS0zA6uG+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNlthR6+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781102904; c=relaxed/simple;
+	bh=k8dYNWTtlRLiT33VfIQ84qxgM+3q2MTqwR+zBxajFiM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=FdNCC1k33Ej1WfUM+klehhV6JYtIEHTEUNG2nqRWB/r6yJgzcudo7qSr1HExxQh2fZwJSJFl1QRDIFm4ztQhvS1Vixkp4mN/cEl3RgkVEXCo8lpol3Zx6D7kKWAhepMMhezVRomPfGldAZfh31HXyOQveOXzuGd28jsc8ID4LoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLxnpzXb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNlthR6+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C65A1F00898;
-	Wed, 10 Jun 2026 14:37:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLxnpzXb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E831F00893;
+	Wed, 10 Jun 2026 14:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781102250;
-	bh=16WniKoIEb4BpYzobLHhPPBTgQWYnQ6y4Qcbzsskkdo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cNlthR6+fqqhyZ7sl583csUPB9pmxs9AgRTmd4GaRCyMo0zNdbemePiNOxJ5WZnss
-	 UYdBXS8/C19qILgIYwksynI/QV+H/QdKU7TnwsC5uMvyp5xrTosxqvRbLuCmWtkIUx
-	 +OP90W0udvahvOO/QepyOadLma/R4R/MHB/jEKkHDZnN+hDXiHaYYG8Oe6a2W7aq9b
-	 ny8ykUzq8VwG2zChNzaPF1nz65NZCXfhYS+zYuw0+6qnqsp8/6/wClo2zhLFrsC0gv
-	 cBiDZbhR5MG94KayzayUm4gRICixO5zb+OsktdR9IJQRYuBmv5gw85n+7VpDZxWzl/
-	 F62ua9hfKzmvw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCHv2 bpf-next 6/6] selftests/bpf: Fix typo in verify_umulti_link_info
-Date: Wed, 10 Jun 2026 16:36:27 +0200
-Message-ID: <20260610143627.804790-7-jolsa@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260610143627.804790-1-jolsa@kernel.org>
-References: <20260610143627.804790-1-jolsa@kernel.org>
+	s=k20260515; t=1781102902;
+	bh=kr3lAVjRvUzOV3fa4oqbRlAGisyuULMpieNUemeC5UY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SLxnpzXbOpd1dMdV+ofALWGFl5NvleNvPhu+1ovNYoHt5t2Z13GfmVXHurX7r+uMk
+	 pbq3C1rhrJJ7WZNLVjTSNPbfCE9u8poEhCrlKpdS7OYHPzHCGnLIic7JE0IJZhd3d1
+	 4Uwn7T2ioC/G9C8Id+lWqxqIaDoh7yXhPhfJvJlo+0oZvdvVaaY/YtY82G0aWSQdGm
+	 fMzgsOOKyGMcYn7WzvC28pMPwjTgls1Yj+fmw+QkV81MYVFtqM4ofGwFi0BFKRYxO3
+	 c57Bdljcicu78M1VtwOFQh+6E+IKW2HW2QzhU1vGPesR66OxVoodpR3+YEMmhi1uCU
+	 ij3dLzCk3inFg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv2 bpf-next 5/6] selftests/bpf: Add uprobe_multi path_fd
+ fail tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260610143627.804790-6-jolsa@kernel.org>
+References: <20260610143627.804790-6-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 14:48:21 +0000
+Message-Id: <20260610144822.32E831F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-We verify info.uprobe_multi.flags against wrong kprobe-multi flag
-(BPF_F_KPROBE_MULTI_RETURN). It's the same value as the correct
-flag (BPF_F_UPROBE_MULTI_RETURN), so there's not functional change.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The patch references an undefined struct member `path_fd` and an un=
+declared macro `BPF_F_UPROBE_MULTI_PATH_FD`, which will cause compilation t=
+o fail.
+--
 
-Fixes: 147c69307bcf ("selftests/bpf: Add link_info test for uprobe_multi link")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit 0e3f7d4f9ed46a64d02a1c29acb4f8e2215cb7c0
+Author: Jiri Olsa <jolsa@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index e40114620751..f589eefbf9fb 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -469,7 +469,7 @@ verify_umulti_link_info(int fd, bool retprobe, __u64 *offsets,
- 
- 		ASSERT_EQ(info.uprobe_multi.pid, getpid(), "info.uprobe_multi.pid");
- 		ASSERT_EQ(info.uprobe_multi.count, 3, "info.uprobe_multi.count");
--		ASSERT_EQ(info.uprobe_multi.flags & BPF_F_KPROBE_MULTI_RETURN,
-+		ASSERT_EQ(info.uprobe_multi.flags & BPF_F_UPROBE_MULTI_RETURN,
- 			  retprobe, "info.uprobe_multi.flags.retprobe");
- 		ASSERT_EQ(info.uprobe_multi.path_size, strlen(path) + 1, "info.uprobe_multi.path_size");
- 		ASSERT_STREQ(path_buf, path, "info.uprobe_multi.path");
--- 
-2.54.0
+selftests/bpf: Add uprobe_multi path_fd fail tests
 
+This commit adds tests to the attach_api_fails suite to verify that
+invalid setups using the new path_fd feature in uprobe_multi fail as
+expected.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b=
+/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> @@ -536,7 +536,37 @@ static void test_attach_api_fails(void)
+
+[ ... ]
+
+> -	ASSERT_EQ(link_fd, -EINVAL, "pid_is_wrong");
+> +	if (!ASSERT_EQ(link_fd, -EINVAL, "pid_is_wrong"))
+> +		goto cleanup;
+> +
+> +	/* wrong path_fd */
+> +	LIBBPF_OPTS_RESET(opts,
+> +		.uprobe_multi.path =3D NULL,
+> +		.uprobe_multi.path_fd =3D -1,
+> +		.uprobe_multi.flags =3D BPF_F_UPROBE_MULTI_PATH_FD,
+
+[Severity: Low]
+Does this commit depend on a missing prerequisite patch?=20
+
+The path_fd member and BPF_F_UPROBE_MULTI_PATH_FD macro do not appear to be
+defined in the current tree's bpf_link_create_opts struct or UAPI headers,
+which will cause a compilation failure here.
+
+> +		.uprobe_multi.offsets =3D (unsigned long *)&offset,
+> +		.uprobe_multi.cnt =3D 1,
+> +	);
+> +
+> +	link_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_UPROBE_MULTI, &opts);
+> +	if (!ASSERT_ERR(link_fd, "link_fd"))
+> +		goto cleanup;
+> +	if (!ASSERT_EQ(link_fd, -EBADF, "path_fd_is_wrong"))
+> +		goto cleanup;
+> +
+> +	/* path and path_fd both set with BPF_F_UPROBE_MULTI_PATH_FD flag */
+> +	LIBBPF_OPTS_RESET(opts,
+> +		.uprobe_multi.path =3D path,
+> +		.uprobe_multi.path_fd =3D 1,
+> +		.uprobe_multi.flags =3D BPF_F_UPROBE_MULTI_PATH_FD,
+> +		.uprobe_multi.offsets =3D (unsigned long *)&offset,
+> +		.uprobe_multi.cnt =3D 1,
+> +	);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610143627.8047=
+90-6-jolsa@kernel.org?part=3D1
