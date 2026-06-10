@@ -1,363 +1,369 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1513ED13F;
-	Wed, 10 Jun 2026 10:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D43B3891
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 10:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781086549; cv=none; b=Uysp4zVV3pXtxpYaf9nTkX9VraQqowUiY4Hnt00cekNP3r5Vr1R9foZrBGIK9feADSV0md041biVfoWDTSFjxDzxCnfQW/4+NSRNNLIGHbRiXKAXEBXIZxMYQ0GZt9zSE1UCqd3byMvxEo5dIqF6KfMSkRBQel9WjAd7gvrLNY4=
+	t=1781087364; cv=none; b=oHPob8diyYw+gD1vYvZ5/WsYklbMrWc7p4qHXgDDepfPDWBcEq1cAohmczYugkRcY7l82UYNMwznKWR9WVl6ExNIm694n2oBR6LXUB5y9QOXdWsE5q23ND84l6ngDxpJU392YVAVnKMfoDk/wepyac1Quv3k+v10tXMAuY/wjrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781086549; c=relaxed/simple;
-	bh=vEq9Rv03mpbNdTfPWEWfnwT22GPNBbx9wYn4wx9W5mE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r28YNvbxuXaeFPBEIfiw9zNb7C09QYm9gPxHxZyUZ5oO4CVjGVQmvKSoisNaYYDkEg+0MKIh3cOXqSvmQPedk4shTBA+VMI2OZmPZS8wb9n9K7FCJz4uZctBkbhMGizYEpbKKWTA//WAtvV/6hslyt4AXoGpyJ5os+icE8Z2cwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N9bXsgh5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781087364; c=relaxed/simple;
+	bh=QPtDcvibkTTtCzwOD8YF+IlZt5VnWw/gaGRrHJJssZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f3iS/e81iBvS8uznd62vaPSTWD522Jfhil8pceD3s3r6SlXC0HNn+wqF/BwXL9qVYp2eO6s1woBWnyeDK/SQ1IOFnqgUAR5z9tCRx6jDHOPTXtLU8nZ/mVeDoblqpGjVj5SzblmuEcIg1xMenbGgA3jGzi+6VmtsYpxBIfGJqTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k5/gEh4B; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N9bXsgh5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B851B1F00893;
-	Wed, 10 Jun 2026 10:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781086547;
-	bh=jVGzH0+5ZsJlz3zw8RMPQKLSocsN610DG7FY1dVE+9I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=N9bXsgh5a9VWrjRTE7YjLalzQXWWiZ21iZlZUS9sxb2X6VHiXqGpry/Oo26DnlISt
-	 cdZbf7dgMSXe7zRIXzySBD6Yj3T9M36o3xBcmNZe8p6qM9c5/8HFJPoHcP5emUAPHe
-	 wbD0pyUC1nqO6gH2xhe/WYSATQ99BcyrR2KCAhzUmyAM5JmoNzIVU4cJ2gQnsWTHd0
-	 syNJS4m7oW1KLf+O/gfaEX0muKz46vKGll+8J44B/FsvBa9YfcxD95Eb11RNXeZWAf
-	 lfqdHj5OlKlDjt7DV/Kdj3e9joTa0MmiaMmKLajNGR+x2/LZ3qYJK7prKYmhid7Kca
-	 B0oCao+1w1/yg==
-Message-ID: <ffca21d8-ee29-4d63-8db2-73634124fdd8@kernel.org>
-Date: Wed, 10 Jun 2026 12:15:42 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k5/gEh4B"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36d5b11201aso4216990a91.2
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781087362; x=1781692162; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AVL5w877GoMWOO5dFwbFSHOEuKXJFw4fjgo6QHpTzSQ=;
+        b=k5/gEh4B626KnJJ0WJQ1JA5aK9nxDsIbsuvTp1m2chfxDzDdP0Nd9WWlvLbobENyFR
+         rqO+K0XSfS/rCqTWbXRIgz6HFJLG/VqadFbyyre0SUyDGWsFAimTcn2+c51i/ocydOkP
+         bC1zVByKzIWSBdzE84Ps4SYeXHbFO+frhX60NIeSLRqNMgCM7zpgJGoK7xhtY9RpoirY
+         XKb8MYXVH+I547OeKU4IxxpBx77lnUXsYDDxbiqW3jpDTkm3PscrXmz/xSMO+eOelr2f
+         4vjT3aIb9z7mVr6S6bzrYkZYa+cDn4vxJ8FWKTi+y1WIL7WJs0dZnCmseyHZ+ylVbHXd
+         XgdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781087362; x=1781692162;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AVL5w877GoMWOO5dFwbFSHOEuKXJFw4fjgo6QHpTzSQ=;
+        b=TZ1ZHlntzz6Yf6HOe/1ZEObcLIsmNfCYiivQWPsNOlB65/venVGXMbd/frW9Ahq6zr
+         sTc3SNcp+7SbSnj3Pvpmqwql6aAl9eXhxTlvSiZbJpmNcBm40jbg6q7XMsrVM+kSdahn
+         RaQ1/YlNW9SOvT0GCNKsu4hZa8TiLTBkSpghorXdy0zocmMqQIDL6eofiFYcOOrMnJvz
+         QPZ/07NzHVoh7Ca1E3b2swjED3fOixlDW9dvBHa6mpjR5eL2cAUHqfREiXg6uSsSNwnA
+         8fmKAFeCfahJMswKyIgfbmLSANS4YgyMcFiXeMfZO2HXSuul70SOGvJO0LJPJiL//Nv0
+         RQBA==
+X-Gm-Message-State: AOJu0YzdnuzFIir5lqUQAqwgm6mHilh3GlZPqII5fk/gkh/ZCmIKU+pV
+	9Nqm/ZkwYuHKqAB1wMPoEIDuEiYR4uLxPKPbs/I6qObCVBjQhUKZORblZpI1K3K3nEI=
+X-Gm-Gg: Acq92OFVoGOZNtrgij0OJKeHCTUT6xQyKHUu+ivs/zqtK2TAq9mir1k113IK+I6r+uQ
+	oXGv3nRN3BhkRdehI7S2tFM/H19Y2opS/em1rtT48C8+bTOiGcIi1I10x8nQBQ64SR6FzhAlFdc
+	JTvby+TZuu1y+vHAAG0+FDjZjRVq0ekAts2i/rDYR8x9LvQEmiTxZCxL5js0U93gq5gqKz51y8g
+	OJfaNLoLQAH8ha4c8ykGQfXjCqgwKhr6ciHF2FQKLJvJMYj6uDjY8SUsMb1me7TBDBy0loqjodr
+	l3Ya2mUkQry75MSAh2EC9Eg7besg3gi10UBxUtyICbIwoGWd6WHO4IIsGZ9k7orXxYevEMUR+OI
+	3IcVNemwWrMbfyixJcXMxKHhK0/nyQthHHh83pPOvHBG0tRSByKQMrkOmNnQ5S9o8oQ1JT+cCt6
+	ttYQiAXmDgFMmwCfhcCNnF+qpWeJ2uN2DeUePBnmKEIsgNGqyTT5dzPVz36pwnNFmCOntlGPlhH
+	XR9QT6GXaGD
+X-Received: by 2002:a17:90b:380a:b0:35b:8d89:719b with SMTP id 98e67ed59e1d1-370ee344da3mr24890606a91.1.1781087361603;
+        Wed, 10 Jun 2026 03:29:21 -0700 (PDT)
+Received: from localhost.localdomain ([2a12:a304:100::109f])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-376460ee14fsm1855460a91.1.2026.06.10.03.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 03:29:21 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Menglong Dong <menglong.dong@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Sun Jian <sun.jian.kdev@gmail.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Run generic devmap egress prog on private skb
+Date: Wed, 10 Jun 2026 18:28:49 +0800
+Message-ID: <20260610102850.483291-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: Simon Schippers <simon.schippers@tu-dortmund.de>,
- =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
- netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
- <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
- <e8478d82-5af6-44f7-a481-584c09ae8337@tu-berlin.de>
- <b8569d0f-7a99-4488-a1bb-63d813231b7d@tu-dortmund.de>
- <90fc9fc1-f396-4ed1-888f-89a96294664e@kernel.org>
- <5e6315b1-b734-4f5f-af5e-bc76612f0993@tu-dortmund.de>
- <fb84879b-9fdf-4474-b152-9cbf0887bd21@tu-dortmund.de>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <fb84879b-9fdf-4474-b152-9cbf0887bd21@tu-dortmund.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Generic XDP devmap multi redirect uses skb_clone() for the
+intermediate destinations and sends the last destination with the
+original skb. This can leave multiple destinations sharing the same
+packet data.
 
+This becomes visible when a devmap egress program mutates packet data.
+One destination can observe changes made for another destination. The
+last-destination path has the same problem: the last destination runs on
+the original skb, so its egress program can modify packet data still
+shared with earlier cloned skbs.
 
+Native XDP broadcast redirect does not have this issue because
+xdpf_clone() copies the frame data for each destination. Generic XDP
+should provide the same per-destination isolation before running a
+devmap egress program.
 
-On 10/06/2026 09.04, Simon Schippers wrote:
-> On 6/9/26 17:08, Simon Schippers wrote:
->> On 6/9/26 15:59, Jesper Dangaard Brouer wrote:
->>>
->>>
->>> On 08/06/2026 16.21, Simon Schippers wrote:
->>>> On 6/8/26 15:13, Jonas Köppeler wrote:
->>>>>
->>>>> On 6/8/26 3:04 PM, Jesper Dangaard Brouer wrote:
->>>>>>
->>>>>>
->>>>>> On 08/06/2026 12.38, Simon Schippers wrote:
->>>>>>> On 5/27/26 15:54, hawk@kernel.org wrote:
->>>>>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>>>
->>>>>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>>>>>>> excessive NAPI scheduling overhead and qdisc requeues.
->>>>>>>>
->>>>>>>> Accumulate BQL completions and flush them when a configurable time
->>>>>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>>>>>>> queuing delay to the configured interval. Coalescing state persists
->>>>>>>> across NAPI polls in struct veth_rq so completions can accumulate
->>>>>>>> beyond a single budget=64 cycle.
->>>>>>>>
->>>>>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>>>>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>>>>>>> completion.
->>>>>>>>
->>>>>>>>      ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>>>>>>      ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>>>>>>
->>>>>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>>> ---
->>>>>>>
->>>>>>> I found the issue that n_bql may become infinitly large if producer
->>>>>>> and consumer have the same speed (and tx_usecs is large). It could
->>>>>>> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
->>>>>>> Also I figured that no hardware BQL driver ever completes more than
->>>>>>> BQL limit many elements.
->>>>>>>
->>>>>>> Therefore, I propose a simpler logic (see attachment) that completes
->>>>>>> either on the usual bql_flush_ns or if n_bql > dql.limit.
->>>>>>> If n_bql > dql.limit then we either have the case above that the
->>>>>>> producer is as fast as the consumer or we have BQL starvation.
->>>>>>>
->>>>>>> if (state->time + bql_flush_ns <= current_time ||
->>>>>>>       state->n_bql > peer_txq->dql.limit) {
->>>>>>>
->>>>>>> It must be n_bql *bigger than* dql.limit because the producer will
->>>>>>> always exceed the limit before it stops, see netdev_tx_sent_queue().
->>>>>>> It is fast because peer_txq->dql.limit is in the cacheline of the
->>>>>>> completion path, see dynamic_queue_limits.h.
->>>>>>>
->>>>>>> Another advantage is that we avoid the snippet checking for empty
->>>>>>> and BQL stopped which requires an smp_rmb() and an test_bit().
->>>>>>>
->>>>>>> Apart from that I:
->>>>>>> - Always call veth_bql_maybe_complete() in the for loop to have
->>>>>>>      more accurate completion intervals when having mixed XDP and
->>>>>>>      non-XDP packets.
->>>>>>> - Made it so tx_usecs = 0 is now also a normal case.
->>>>>>> - Change the type of n_bql to uint instead of int.
->>>>>>> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
->>>>>>> - Moved the bql_state init in __veth_napi_enable_range() in front
->>>>>>>      of napi_enable() to avoid a race (Sashiko).
->>>>>>> - Moved the bql_state reset in veth_napi_del_range() after the
->>>>>>>      ptr_ring_cleanup() (probably does not matter but makes sense to me)
->>>>>>>
->>>>>>> Benchmarks look just fine, see commit message.
->>>>>>>
->>>>>>> WDYT?
->>>>>
->>>>>>
->>>>>> Looks good to me, I will use this in my V7 patchset.
->>>>>>
->>>>>> A bike-shedding issue: We change the coalescing parameters for the veth
->>>>>> net_device, but should this be a TX or RX parameter?
->>>>>>
->>>>>
->>>>> Hi,
->>>>>
->>>>> The results look a little bit suspicious, that in some cases the p99 is smaller than the average, which can happen if you have really large max values. It feels something is off with the methodology. I think we should drop the avg, and include the max value. This would give a better picture.
->>>>
->>>> Luckily I saved the raw test result from /tmp (the raw ping output
->>>> is included).
->>>>
->>>> extract_ping_p99() seems to be broken. It has issues ordering the
->>>> numbers. So if there are 2 or 3 numbers after the point I think.
->>>> avg ping is fine.
->>>>
->>>> Claude Sonnet wrote a script for me to recalculate the p99 pings
->>>> from the raw ping output).
->>>
->>> For programming switch to Claude Opus, as Sonnet cannot code IMHO.
->>
->> Already used 95% of my Copilot Pro+ Tokens this month :P
->>
+Fix this by making cloned skbs private in dev_map_generic_redirect()
+before running the devmap egress program. Use skb_copy() instead of
+skb_unshare() so that allocation failure does not consume the skb and
+the existing caller error paths keep their ownership semantics.
 
-LOL - I'm lucky to (still) have unlimited tokens.
+Add a selftest that covers the last-destination case where earlier
+destinations do not have a devmap egress program, while the final
+destination does.
 
->>> (Claude Opus wrote the selftest we placed in [1])
->>>
->>> Is your script still based on our github[1] selftest ?
->>> If so, then please make some PR(s) against my repo.
->>> I want this to be easy reproducible for others.
->>>
->>> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing
->>>
->>
->> I forked Jonas latest branch [1] and ran the tests with that.
->>
->> But I faced 2 issues that I then fixed:
->> - Ping fails in some runs (~20%) -> My fix: Retry the run until it
->>    works.
->> - extract_ping_p99() has a bug for me which caused wrong results,
->>    as pointed out by Jonas -> Also fixed it
->>
->> Because of the inconsistencies I will rerun over night to have
->> clean benchmark results.
->>
->> I will make a PR tomorrow.
->>
->> [1] https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark
->>
-> 
-> I ran the benchmarks over night and they look fine,
-> see ASCII table below.
-> I do not see a regression, tx_usecs of 50us even outperforms stock.
-> 
+Tested with:
+  ./test_progs -t xdp_veth_egress
+  ./test_progs -t xdp_veth
+  ./test_progs -t xdp
 
-Very interesting that tx_usecs 50us is generally performing better.
-It seems we should "sweep" the area between 0-100 usecs for finding best
-default from the beginning. (And see cool colored graphs that Jonas
-generated).
+Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
+Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
 
+Changes in v2:
+- Move the private-copy step into dev_map_generic_redirect() so the
+  last-destination path is covered as well.
+- Use skb_copy() instead of skb_unshare() to keep caller ownership
+  unchanged on allocation failure.
+- Add a generic XDP last-destination selftest case.
 
-> I did a PR, see [1]. Most of the code changes are by Jonas,
-> because he rewrote the code to allow the usage of pktgen and
-> added the bql_sweep.sh script. Thanks Jonas!
-> My part is the 2 bugfixes, the output as ASCII table and
-> the new benchmark results with my new 'v7' method.
-> 
-> I have not tested bql_sweep.sh inside virtme-ng, I ran my benchmarks
-> on the host system. I guess you could mount the folder with read+write
-> in vng and then run bql_sweep.sh there.
-> 
-> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing/pull/9
-> 
+ kernel/bpf/devmap.c                           |  10 ++
+ .../selftests/bpf/prog_tests/test_xdp_veth.c  | 151 +++++++++++++++++-
+ 2 files changed, 158 insertions(+), 3 deletions(-)
 
-I will take a look today.
-- Will likely just merge after sanity checking as I want us iterate faster
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index cc0a43ebab6b..59f267685bc6 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -700,12 +700,22 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
+ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
+ 			     const struct bpf_prog *xdp_prog)
+ {
++	struct sk_buff *nskb;
+ 	int err;
+ 
+ 	err = xdp_ok_fwd_dev(dst->dev, skb->len);
+ 	if (unlikely(err))
+ 		return err;
+ 
++	if (dst->xdp_prog && skb_cloned(skb)) {
++		nskb = skb_copy(skb, GFP_ATOMIC);
++		if (!nskb)
++			return -ENOMEM;
++
++		consume_skb(skb);
++		skb = nskb;
++	}
++
+ 	/* Redirect has already succeeded semantically at this point, so we just
+ 	 * return 0 even if packet is dropped. Helper below takes care of
+ 	 * freeing skb.
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+index 3e98a1665936..1f0b9ade12fe 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+@@ -456,7 +456,11 @@ static void xdp_veth_egress(u32 flags)
+ 			.remote_flags = flags,
+ 		}
+ 	};
+-	const char magic_mac[6] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
++	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
++	};
+ 	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
+ 	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
+ 	struct xdp_redirect_map *xdp_redirect_map;
+@@ -512,7 +516,7 @@ static void xdp_veth_egress(u32 flags)
+ 						 &net_config, prog_cfg, i))
+ 			goto destroy_xdp_redirect_map;
+ 
+-		err = bpf_map_update_elem(mac_map, &ifindex, magic_mac, 0);
++		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
+ 		if (!ASSERT_OK(err, "bpf_map_update_elem"))
+ 			goto destroy_xdp_redirect_map;
+ 
+@@ -531,13 +535,16 @@ static void xdp_veth_egress(u32 flags)
+ 
+ 	for (i = 0; i < 2; i++) {
+ 		u32 key = i;
++		__be64 expected = 0;
+ 		u64 res;
+ 
+ 		err = bpf_map_lookup_elem(res_map, &key, &res);
+ 		if (!ASSERT_OK(err, "get MAC res"))
+ 			goto destroy_xdp_redirect_map;
+ 
+-		ASSERT_STRNEQ((const char *)&res, magic_mac, ETH_ALEN, "compare mac");
++		/* store_mac_1/2 run on the second/third remote veths. */
++		memcpy(&expected, egress_macs[i + 1], ETH_ALEN);
++		ASSERT_EQ(res, expected, "compare mac");
+ 	}
+ 
+ destroy_xdp_redirect_map:
+@@ -551,6 +558,141 @@ static void xdp_veth_egress(u32 flags)
+ 	cleanup_network(&net_config);
+ }
+ 
++static void xdp_veth_egress_last_dst(u32 flags)
++{
++	struct prog_configuration prog_cfg[VETH_PAIRS_COUNT] = {
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "store_mac_1",
++			.local_flags = flags,
++			.remote_flags = flags,
++		},
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "store_mac_2",
++			.local_flags = flags,
++			.remote_flags = flags,
++		},
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "xdp_dummy_prog",
++			.local_flags = flags,
++			.remote_flags = flags,
++		}
++	};
++	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
++		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
++	};
++	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
++	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
++	struct xdp_redirect_map *xdp_redirect_map;
++	struct net_configuration net_config;
++	int mac_map, egress_map, res_map;
++	struct nstoken *nstoken = NULL;
++	struct xdp_dummy *xdp_dummy;
++	__be64 last_mac = 0;
++	bool found = false;
++	int err;
++	int i;
++
++	xdp_dummy = xdp_dummy__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_dummy, "xdp_dummy__open_and_load"))
++		return;
++
++	xdp_redirect_multi_kern = xdp_redirect_multi_kern__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_redirect_multi_kern, "xdp_redirect_multi_kern__open_and_load"))
++		goto destroy_xdp_dummy;
++
++	xdp_redirect_map = xdp_redirect_map__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_load"))
++		goto destroy_xdp_redirect_multi_kern;
++
++	if (!ASSERT_OK(create_network(&net_config), "create network"))
++		goto destroy_xdp_redirect_map;
++
++	mac_map = bpf_map__fd(xdp_redirect_multi_kern->maps.mac_map);
++	if (!ASSERT_OK_FD(mac_map, "open mac_map"))
++		goto destroy_xdp_redirect_map;
++
++	egress_map = bpf_map__fd(xdp_redirect_multi_kern->maps.map_egress);
++	if (!ASSERT_OK_FD(egress_map, "open map_egress"))
++		goto destroy_xdp_redirect_map;
++
++	bpf_objs[0] = xdp_dummy->obj;
++	bpf_objs[1] = xdp_redirect_multi_kern->obj;
++	bpf_objs[2] = xdp_redirect_map->obj;
++
++	nstoken = open_netns(net_config.ns0_name);
++	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
++		goto destroy_xdp_redirect_map;
++
++	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
++		struct bpf_devmap_val devmap_val = {};
++		int ifindex = if_nametoindex(net_config.veth_cfg[i].local_veth);
++
++		SYS(destroy_xdp_redirect_map,
++		    "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
++		    net_config.veth_cfg[i].namespace, IP_NEIGH,
++		    net_config.veth_cfg[i].remote_veth);
++
++		if (attach_programs_to_veth_pair(bpf_objs, VETH_EGRESS_SKEL_NB,
++						 &net_config, prog_cfg, i))
++			goto destroy_xdp_redirect_map;
++
++		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
++		if (!ASSERT_OK(err, "bpf_map_update_elem"))
++			goto destroy_xdp_redirect_map;
++
++		devmap_val.ifindex = ifindex;
++		devmap_val.bpf_prog.fd = -1;
++
++		if (i == VETH_PAIRS_COUNT - 1)
++			devmap_val.bpf_prog.fd =
++				bpf_program__fd(xdp_redirect_multi_kern->progs.xdp_devmap_prog);
++
++		err = bpf_map_update_elem(egress_map, &ifindex, &devmap_val, 0);
++		if (!ASSERT_OK(err, "bpf_map_update_elem"))
++			goto destroy_xdp_redirect_map;
++	}
++
++	SYS_NOFAIL("ip netns exec %s ping %s -i 0.1 -c 4 -W1 > /dev/null ",
++		   net_config.veth_cfg[0].namespace, IP_NEIGH);
++
++	res_map = bpf_map__fd(xdp_redirect_map->maps.rx_mac);
++	if (!ASSERT_OK_FD(res_map, "open rx_map"))
++		goto destroy_xdp_redirect_map;
++
++	memcpy(&last_mac, egress_macs[VETH_PAIRS_COUNT - 1], ETH_ALEN);
++
++	for (i = 0; i < VETH_PAIRS_COUNT - 1; i++) {
++		u32 key = i;
++		u64 res;
++
++		err = bpf_map_lookup_elem(res_map, &key, &res);
++		if (err == -ENOENT)
++			continue;
++		if (!ASSERT_OK(err, "get MAC res"))
++			goto destroy_xdp_redirect_map;
++
++		found = true;
++		ASSERT_NEQ(res, last_mac, "compare last dst mac");
++	}
++
++	ASSERT_TRUE(found, "found earlier dst mac");
++
++destroy_xdp_redirect_map:
++	close_netns(nstoken);
++	xdp_redirect_map__destroy(xdp_redirect_map);
++destroy_xdp_redirect_multi_kern:
++	xdp_redirect_multi_kern__destroy(xdp_redirect_multi_kern);
++destroy_xdp_dummy:
++	xdp_dummy__destroy(xdp_dummy);
++
++	cleanup_network(&net_config);
++}
++
+ void test_xdp_veth_redirect(void)
+ {
+ 	if (test__start_subtest("0"))
+@@ -596,4 +738,7 @@ void test_xdp_veth_egress(void)
+ 
+ 	if (test__start_subtest("SKB_MODE/egress"))
+ 		xdp_veth_egress(XDP_FLAGS_SKB_MODE);
++
++	if (test__start_subtest("SKB_MODE/egress_last_dst"))
++		xdp_veth_egress_last_dst(XDP_FLAGS_SKB_MODE);
+ }
 
-> 
-> System information:
-> Ryzen 5 5600X @ fixed 4.3 GHz, 3200 MHz RAM, CPU mitigations disabled,
-> SMT disabled, on host system (NOT virtme-ng).
-> 
-> Patched benchmark command:
-> sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list \
-> "0 50 100 500 1000 5000 10000" --nrules-list "0 1 10 100 1000 10000" \
-> --pktgen --duration 20 --qdisc fq_codel --no-bpftrace
-> 
-> Stock benchmark command:
-> sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list "0" --nrules-list \
-> "0 1 10 100 1000 10000" --pktgen --duration 20 --qdisc fq_codel \
-> --no-bpftrace
-> 
-> Throughput (pps)
-> ===========================================================================
-> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
-> -------+-------+-------+-------+-------+--------+--------+---------++------
->       0 | 1.62M | 1.89M | 1.75M | 1.73M |  1.73M |  1.73M |   1.73M || 1.76M
->       1 | 1.51M | 1.72M | 1.63M | 1.60M |  1.60M |  1.60M |   1.60M || 1.65M
->      10 | 1.33M | 1.52M | 1.47M | 1.41M |  1.41M |  1.41M |   1.41M || 1.45M
->     100 |  681K |  751K |  756K |  726K |   721K |   723K |    730K ||  736K
->    1000 |  116K |  123K |  124K |  124K |   124K |   125K |    123K ||  126K
->   10000 |   13K |   13K |   13K |   13K |    13K |    13K |     13K ||   13K
-> 
-> 
-> Ping RTT ms (avg)
-> ===========================================================================
-> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
-> -------+-------+-------+-------+-------+--------+--------+---------++------
->       0 | 0.016 | 0.089 | 0.136 | 0.137 |  0.138 |  0.134 |   0.135 || 0.132
->       1 | 0.018 | 0.097 | 0.144 | 0.146 |  0.146 |  0.150 |   0.147 || 0.142
->      10 | 0.019 | 0.093 | 0.156 | 0.164 |  0.164 |  0.164 |   0.167 || 0.158
->     100 | 0.029 | 0.104 | 0.180 | 0.315 |  0.312 |  0.314 |   0.311 || 0.307
->    1000 | 0.139 | 0.201 | 0.309 | 0.971 |   1.66 |   1.81 |    1.82 ||  1.77
->   10000 |  1.12 |  1.74 |  1.72 |  1.83 |   2.90 |   9.14 |    15.9 ||  17.2
-> 
-> 
-> Ping RTT ms (p99)
-> ===========================================================================
-> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
-> -------+-------+-------+-------+-------+--------+--------+---------++------
->       0 | 0.026 | 0.122 | 0.161 | 0.164 |  0.164 |  0.159 |   0.161 || 0.155
->       1 | 0.028 | 0.123 | 0.169 | 0.173 |  0.173 |  0.175 |   0.173 || 0.165
->      10 | 0.032 | 0.119 | 0.187 | 0.194 |  0.193 |  0.193 |   0.197 || 0.185
->     100 | 0.047 | 0.134 | 0.232 | 0.368 |  0.369 |  0.367 |   0.359 || 0.361
->    1000 | 0.232 | 0.303 | 0.409 |  1.27 |   2.13 |   2.10 |    2.13 ||  2.10
->   10000 |  1.94 |  2.52 |  2.59 |  2.69 |   3.87 |   12.0 |    20.0 ||  20.3
-> 
+base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+-- 
+2.43.0
 
-Looks like 50us delivers better (lower) latency and higher throughput 
-across the range.
-I'm strongly considering changing V7 to use 50usec as default.
-
-> 
->>>> Below is the new result. Not 100% sure but this seems right now.
->>>> Most pings are the same.
->>>>
->>>> Ping RTT ms (p99)
->>>> ===========================================================================
->>>> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->>>> -------+-------+-------+-------+-------+--------+--------+---------++------
->>>>        0 | 0.028 | 0.115 | 0.159 | 0.161 |  0.163 |  0.161 |   0.163 || 0.154
->>>>        1 | 0.027 | 0.123 | 0.169 | 0.172 |  0.169 |  0.173 |   0.172 || 0.169
->>>>       10 | 0.030 | 0.117 | 0.189 | 0.193 |  0.195 |  0.192 |   0.196 || 0.186
->>>>      100 | 0.045 | 0.134 | 0.233 | 0.368 |  0.365 |  0.369 |   0.361 || 0.358
->>>>     1000 | 0.230 | 0.300 | 0.412 |  1.26 |   2.11 |   2.12 |    2.13 ||  2.07
->>>>    10000 |  2.04 |  2.55 |  2.54 |  2.72 |   3.77 |   12.1 |    20.1 ||  20.3
->>>>
->>>>>
->>>>> Is state->n_bql += veth_ptr_is_bql(ptr) something that is commonly done in the kernel? It relies on bool normalization which feels a bit implicit to me.
->>>>
->>>> Ok, we could swap for something like
->>>>
->>>> if (veth_ptr_is_bql(ptr))
->>>>      state->n_bql+;
->>>
->>> I'll see if I can adjust the V7 patch to this feedback.
->>
->> Yes, and also this snippet pointed out by Jonas below:
->>
->>   -       struct veth_priv *priv;
->>   -       u64 bql_flush_ns;
->>   +       u64 bql_flush_ns = 0;
->>
->>   -       priv = netdev_priv(rq->dev);
->>   -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
->>   +       if (peer_txq) {
->>   +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
->>   +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
->>   +       }
->>
->> Or is peer_txq != 0 guaranteed in veth_xdp_rcv()?
->>
->>
->> And also I would change in the commit message:
->>
->> "Flushing when n_bql exceeds dql.limit handles two cases:
->> - BQL starvation
->> - The steady-state case where the producer and consumer run at the
->>    same speed with a large tx-usecs, which would otherwise allow n_bql
->>    to grow without bound (and potentially overflow int)."
->>
->> ... to just...
->>
->> "Flushing when n_bql exceeds dql.limit handles BQL starvation."
->>
->> ... because after rethinking I think I overstated here.
->> n_bql should also not grow infinitely for the v6 version.
->> Nevertheless the new method should be simpler and faster.
-
-Ok, adjusted this for V7 patch.
-
->>>
->>>
->>>>>
->>>>>> For physical NICs adjusting TX coalescing will affect the BQL as this
->>>>>> affect the TX completion of the transmitted packets. For veth, it is the
->>>>>> veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
->>>>>> is where this patch adds netdev_tx_completed_queue calls for BQL.
->>>>>> Any opinions on the "TX" or "RX" color?
->>>>
->>>> Personally I would also say TX.
->>>>
->>>
->>> Okay, we seem to have more votes for TX :-)
->>>
->>>
->>>>> I think I would prefer to configure it on the tx dev, and the recv
->>>>> side gets the value from the peer. Maybe something like this.
->>>>>
->>>
->>> I'm considering if we should simplify the config by having veth pairs have the same tx-coal value. WDYT?
->>
->> I can not think of a case where a user would like to have a different
->> tx-coal value on either side..
->> So it's fine for me.
-
-Okay, agreed - switching V7 to have mirrored tx-coal value.
-
---Jesper
