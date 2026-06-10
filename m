@@ -1,369 +1,168 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D43B3891
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 10:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A043538B7D5
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 10:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781087364; cv=none; b=oHPob8diyYw+gD1vYvZ5/WsYklbMrWc7p4qHXgDDepfPDWBcEq1cAohmczYugkRcY7l82UYNMwznKWR9WVl6ExNIm694n2oBR6LXUB5y9QOXdWsE5q23ND84l6ngDxpJU392YVAVnKMfoDk/wepyac1Quv3k+v10tXMAuY/wjrk=
+	t=1781087496; cv=none; b=VKFzjYR2vvkIlvMnXx8Y4R5CaedwsP/fD8yVYYaUITOcKoDRuZdRJ1No6LgoUYo3Ycv+cD7tod9SMM6hT5t7+nxtr8VnN4eIf+TR4flcQNip6nIUw+NuIusCZzhIDo/g7unzEeu+sGIQfJQHQOj5TwqWVyAJolkS/pZwM6JKX1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781087364; c=relaxed/simple;
-	bh=QPtDcvibkTTtCzwOD8YF+IlZt5VnWw/gaGRrHJJssZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f3iS/e81iBvS8uznd62vaPSTWD522Jfhil8pceD3s3r6SlXC0HNn+wqF/BwXL9qVYp2eO6s1woBWnyeDK/SQ1IOFnqgUAR5z9tCRx6jDHOPTXtLU8nZ/mVeDoblqpGjVj5SzblmuEcIg1xMenbGgA3jGzi+6VmtsYpxBIfGJqTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k5/gEh4B; arc=none smtp.client-ip=209.85.216.50
+	s=arc-20240116; t=1781087496; c=relaxed/simple;
+	bh=XbSYp7JQkZVOB9T33+JNyFC3UuskBxLulRs78wndIbA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=YPttHwx15bCSkgYjkISjbGcGXfCmGu7AU7LpZ4BwqHNREihDz2MlyFkJU09CJKMC/t8e53pBLw25z7xI5s99MgJQZLSMJAnwM5U+HPjOymmm/NwjldZOdHiCuz8Ey5QNSxPw4SgZR3Wd8vutck5mlcn1BOP1VBoFR9KWfBI07y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ag47dxCd; arc=none smtp.client-ip=209.85.221.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k5/gEh4B"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-36d5b11201aso4216990a91.2
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:29:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ag47dxCd"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-45ef616daf6so6073541f8f.3
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781087362; x=1781692162; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVL5w877GoMWOO5dFwbFSHOEuKXJFw4fjgo6QHpTzSQ=;
-        b=k5/gEh4B626KnJJ0WJQ1JA5aK9nxDsIbsuvTp1m2chfxDzDdP0Nd9WWlvLbobENyFR
-         rqO+K0XSfS/rCqTWbXRIgz6HFJLG/VqadFbyyre0SUyDGWsFAimTcn2+c51i/ocydOkP
-         bC1zVByKzIWSBdzE84Ps4SYeXHbFO+frhX60NIeSLRqNMgCM7zpgJGoK7xhtY9RpoirY
-         XKb8MYXVH+I547OeKU4IxxpBx77lnUXsYDDxbiqW3jpDTkm3PscrXmz/xSMO+eOelr2f
-         4vjT3aIb9z7mVr6S6bzrYkZYa+cDn4vxJ8FWKTi+y1WIL7WJs0dZnCmseyHZ+ylVbHXd
-         XgdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781087362; x=1781692162;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781087493; x=1781692293; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AVL5w877GoMWOO5dFwbFSHOEuKXJFw4fjgo6QHpTzSQ=;
-        b=TZ1ZHlntzz6Yf6HOe/1ZEObcLIsmNfCYiivQWPsNOlB65/venVGXMbd/frW9Ahq6zr
-         sTc3SNcp+7SbSnj3Pvpmqwql6aAl9eXhxTlvSiZbJpmNcBm40jbg6q7XMsrVM+kSdahn
-         RaQ1/YlNW9SOvT0GCNKsu4hZa8TiLTBkSpghorXdy0zocmMqQIDL6eofiFYcOOrMnJvz
-         QPZ/07NzHVoh7Ca1E3b2swjED3fOixlDW9dvBHa6mpjR5eL2cAUHqfREiXg6uSsSNwnA
-         8fmKAFeCfahJMswKyIgfbmLSANS4YgyMcFiXeMfZO2HXSuul70SOGvJO0LJPJiL//Nv0
-         RQBA==
-X-Gm-Message-State: AOJu0YzdnuzFIir5lqUQAqwgm6mHilh3GlZPqII5fk/gkh/ZCmIKU+pV
-	9Nqm/ZkwYuHKqAB1wMPoEIDuEiYR4uLxPKPbs/I6qObCVBjQhUKZORblZpI1K3K3nEI=
-X-Gm-Gg: Acq92OFVoGOZNtrgij0OJKeHCTUT6xQyKHUu+ivs/zqtK2TAq9mir1k113IK+I6r+uQ
-	oXGv3nRN3BhkRdehI7S2tFM/H19Y2opS/em1rtT48C8+bTOiGcIi1I10x8nQBQ64SR6FzhAlFdc
-	JTvby+TZuu1y+vHAAG0+FDjZjRVq0ekAts2i/rDYR8x9LvQEmiTxZCxL5js0U93gq5gqKz51y8g
-	OJfaNLoLQAH8ha4c8ykGQfXjCqgwKhr6ciHF2FQKLJvJMYj6uDjY8SUsMb1me7TBDBy0loqjodr
-	l3Ya2mUkQry75MSAh2EC9Eg7besg3gi10UBxUtyICbIwoGWd6WHO4IIsGZ9k7orXxYevEMUR+OI
-	3IcVNemwWrMbfyixJcXMxKHhK0/nyQthHHh83pPOvHBG0tRSByKQMrkOmNnQ5S9o8oQ1JT+cCt6
-	ttYQiAXmDgFMmwCfhcCNnF+qpWeJ2uN2DeUePBnmKEIsgNGqyTT5dzPVz36pwnNFmCOntlGPlhH
-	XR9QT6GXaGD
-X-Received: by 2002:a17:90b:380a:b0:35b:8d89:719b with SMTP id 98e67ed59e1d1-370ee344da3mr24890606a91.1.1781087361603;
-        Wed, 10 Jun 2026 03:29:21 -0700 (PDT)
-Received: from localhost.localdomain ([2a12:a304:100::109f])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-376460ee14fsm1855460a91.1.2026.06.10.03.29.09
+        bh=1IyIE/9EwwGwBSMypNHlFqQrU/upNBUE0sY83YzNexo=;
+        b=ag47dxCdtRCoiGebrGQ3S0T3qr4vl/v9qi2eOapgbEHymkTGMQVhAuEn6t+veXoWKQ
+         4IwtCoJefc/lT86aBbyidvxjJqlq3g7GibTRNRBh6j7ATgTn3xZpvnKYX7Fq7IrtrPQa
+         QlGmRVAEkeBFKK9oyxLy7Tje+0Ro8xclZi969tH/Q5FVFH0WCbSVCJ3TJ6M//ierAEzt
+         y0m5QRlK7+VIZwJhwD3mtbLkykbznfy8TQOI4tea0B8uR/6nd2Mp8RAs30JmSaIXIBbB
+         sJKlTUk1m0m/fAvOp6tYDn7mLAzUy/L0ppGEm1A4DYUNB4GjorUe3UX0htKR/EVvldOL
+         40aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781087493; x=1781692293;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1IyIE/9EwwGwBSMypNHlFqQrU/upNBUE0sY83YzNexo=;
+        b=WM1SnZ4rl8aBd8PUhmNOkrw4w539lJcHESojsUlYYahBQl29z6hYIdDsW/w0zDGJbZ
+         ZcZA7BZRiiU/SHzcRaPN+cQSb0Tg46xi9f7rf39sSqS/YUsqRT6X7BHX8r4bIDRQ6OiW
+         FheC754StyF6xDci0gYlfa4lhwnMQGcH8SRGggC0pTzDwFtDDFm5cLyyirmf56NRwvEv
+         prvlAi8A0rgg7bryiGEiiFhXtwRDa70pxmQMbLAVf5DeDB48vy4ujVpTo19Y/GuYOd9K
+         slO3hQ1I0M11hFj2C7Eojd2bkCnhmeOM9a91H7FJp1UOC69XDApxPfycnO0s3Y/ocg2k
+         7drg==
+X-Gm-Message-State: AOJu0Yx+AdKOlRwKQrvgLu9fFmCv6jDWV71uwq5TwkqG1y5FGMyQUzP6
+	vaucPycLs+PbqQKm46cVT+6RYbn27ni6f4aZLph7ZAh1rRuIQ2jFx7LP5WkNwd2x
+X-Gm-Gg: Acq92OFNU4eT+Q/TOKz634Kc8z8ekPdwczmLMflxR7EH0ztGbF521s1r4ldiijJir4W
+	91K9L5aCQQCnxV+7FAmNcMogMb0T6g1QlYtWkhFhf4bRkyl235bsWU4mmRQP6ok2LT36+tB2F3g
+	ijLhpWZWA5xb7aBoTiAR5mZ5LPuTZNT9d2DxV5YVIzayI0G4/XOpvlo83g3SJtdnq04rV85gkIf
+	frcFZj2FsKYfDRiIOpA5xCm2Q++SSrXjKaUUKk2g5Px5+xu1mwLr7wdT/eCkzno3n4xYrSBITHP
+	qnoDJGFBErLVgJslTYFw4CJCqcrA3qlgKuetzQNnuJZRt1D11ur9eX/lRjsd2lEUubm+CLCqRQl
+	pXuZVQmfVjBsCxbXseTvOmZBSM/Z+JzO8KkSR4DdXusEjNVx7+Npd/vT20IqQuFqwQjzHEidtRb
+	CKaPHInABxoYfYrdTqyZalA8ZziwqEp5wloQ1MajIx2dMxyGBBv6G4ZfT8+RX5ScqIZZOSEl+Il
+	cXvEGeiIYFnGDfMOFLARx88HaJt89M/WVMq7CTJoCUyKQWLXMNthFeydcuobcO/dkRzl8z0oqiv
+X-Received: by 2002:adf:e00a:0:20b0:43d:6fb7:fedb with SMTP id ffacd0b85a97d-46030623307mr26149361f8f.36.1781087492616;
+        Wed, 10 Jun 2026 03:31:32 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f351ac0sm124308489f8f.27.2026.06.10.03.31.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 03:29:21 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Menglong Dong <menglong.dong@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2] bpf: Run generic devmap egress prog on private skb
-Date: Wed, 10 Jun 2026 18:28:49 +0800
-Message-ID: <20260610102850.483291-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 10 Jun 2026 03:31:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 10 Jun 2026 12:31:31 +0200
+Message-Id: <DJ5ATM1R9KGE.18HBGC4MWTYU2@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] rqspinlock: Fix order in
+ raw_res_spin_(un)lock_irq to allow schedule
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, "Gabriele Monaco"
+ <gmonaco@redhat.com>
+X-Mailer: aerc 0.21.0
+References: <20260610090431.32427-1-gmonaco@redhat.com>
+ <20260610091602.318C01F00893@smtp.kernel.org>
+In-Reply-To: <20260610091602.318C01F00893@smtp.kernel.org>
 
-Generic XDP devmap multi redirect uses skb_clone() for the
-intermediate destinations and sends the last destination with the
-original skb. This can leave multiple destinations sharing the same
-packet data.
+On Wed Jun 10, 2026 at 11:16 AM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] kernel/locking/locktorture.c ignores the return value of raw_res=
+_spin_lock and raw_res_spin_lock_irqsave, proceeding to modify shared state=
+ without holding the lock on failure.
+> --
+>
+> commit 92f88363aff605830b5600d6bc2a3ec351170c8e
+> Author: Gabriele Monaco <gmonaco@redhat.com>
+>
+> rqspinlock: Fix order in raw_res_spin_(un)lock_irq to allow schedule
+>
+> This commit fixes the preemption enabling order in the resilient spinlock
+> unlock macros. It ensures interrupts are enabled before preemption to
+> allow scheduling, maintaining consistency with other spinlock implementat=
+ions.
+>
+>> diff --git a/include/asm-generic/rqspinlock.h b/include/asm-generic/rqsp=
+inlock.h
+>> index 151d267a496b3..4d46643f46cbc 100644
+>> --- a/include/asm-generic/rqspinlock.h
+>> +++ b/include/asm-generic/rqspinlock.h
+>> @@ -243,12 +243,20 @@ static __always_inline void res_spin_unlock(rqspin=
+lock_t *lock)
+>>  	({                                        \
+>>  		int __ret;                        \
+>>  		local_irq_save(flags);            \
+>> -		__ret =3D raw_res_spin_lock(lock);  \
+>> -		if (__ret)                        \
+>> +		preempt_disable();                \
+>> +		__ret =3D res_spin_lock(lock);      \
+>> +		if (__ret) {                      \
+>>  			local_irq_restore(flags); \
+>> +			preempt_enable();         \
+>> +		}                                 \
+>>  		__ret;                            \
+>>  	})
+>>
+>> -#define raw_res_spin_unlock_irqrestore(lock, flags) ({ raw_res_spin_unl=
+ock(lock); local_irq_restore(flags); })
+>> +#define raw_res_spin_unlock_irqrestore(lock, flags) \
+>> +	({                                          \
+>> +		res_spin_unlock(lock);              \
+>> +		local_irq_restore(flags);           \
+>> +		preempt_enable();                   \
+>> +	})
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but while reviewing the resili=
+ent
+> spinlock changes, I noticed a pre-existing issue in the locktorture modul=
+e.
+>
+> Does locktorture correctly handle the return values from the resilient
+> spinlock API?
+>
+> In kernel/locking/locktorture.c:torture_raw_res_spin_write_lock(), the
+> return value is discarded:
+>
+>     raw_res_spin_lock(&rqspinlock);
+>     return 0;
+>
+> Similarly, in torture_raw_res_spin_write_lock_irq():
+>
+>     raw_res_spin_lock_irqsave(&rqspinlock, flags);
+>     cxt.cur_ops->flags =3D flags;
+>     return 0;
+>
+> Since raw_res_spin_lock and raw_res_spin_lock_irqsave can fail and return
+> an error code like -EDEADLK or -ETIMEDOUT, ignoring the return value
+> allows the caller to proceed unlocked into the critical section.
+>
+> When the torture thread later calls raw_res_spin_unlock(), it will cause
+> an unbalanced preempt_enable() because the failed lock acquisition path
+> already restored preemption.
+>
+> Furthermore, it forcibly clears the lock state, which could unlock a lock
+> legitimately held by another thread, potentially causing lock state
+> corruption and panics.
 
-This becomes visible when a devmap egress program mutates packet data.
-One destination can observe changes made for another destination. The
-last-destination path has the same problem: the last destination runs on
-the original skb, so its egress program can modify packet data still
-shared with earlier cloned skbs.
-
-Native XDP broadcast redirect does not have this issue because
-xdpf_clone() copies the frame data for each destination. Generic XDP
-should provide the same per-destination isolation before running a
-devmap egress program.
-
-Fix this by making cloned skbs private in dev_map_generic_redirect()
-before running the devmap egress program. Use skb_copy() instead of
-skb_unshare() so that allocation failure does not consume the skb and
-the existing caller error paths keep their ownership semantics.
-
-Add a selftest that covers the last-destination case where earlier
-destinations do not have a devmap egress program, while the final
-destination does.
-
-Tested with:
-  ./test_progs -t xdp_veth_egress
-  ./test_progs -t xdp_veth
-  ./test_progs -t xdp
-
-Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
-v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
-
-Changes in v2:
-- Move the private-copy step into dev_map_generic_redirect() so the
-  last-destination path is covered as well.
-- Use skb_copy() instead of skb_unshare() to keep caller ownership
-  unchanged on allocation failure.
-- Add a generic XDP last-destination selftest case.
-
- kernel/bpf/devmap.c                           |  10 ++
- .../selftests/bpf/prog_tests/test_xdp_veth.c  | 151 +++++++++++++++++-
- 2 files changed, 158 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index cc0a43ebab6b..59f267685bc6 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -700,12 +700,22 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
- int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
- 			     const struct bpf_prog *xdp_prog)
- {
-+	struct sk_buff *nskb;
- 	int err;
- 
- 	err = xdp_ok_fwd_dev(dst->dev, skb->len);
- 	if (unlikely(err))
- 		return err;
- 
-+	if (dst->xdp_prog && skb_cloned(skb)) {
-+		nskb = skb_copy(skb, GFP_ATOMIC);
-+		if (!nskb)
-+			return -ENOMEM;
-+
-+		consume_skb(skb);
-+		skb = nskb;
-+	}
-+
- 	/* Redirect has already succeeded semantically at this point, so we just
- 	 * return 0 even if packet is dropped. Helper below takes care of
- 	 * freeing skb.
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index 3e98a1665936..1f0b9ade12fe 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -456,7 +456,11 @@ static void xdp_veth_egress(u32 flags)
- 			.remote_flags = flags,
- 		}
- 	};
--	const char magic_mac[6] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
-+	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
-+	};
- 	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
- 	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
- 	struct xdp_redirect_map *xdp_redirect_map;
-@@ -512,7 +516,7 @@ static void xdp_veth_egress(u32 flags)
- 						 &net_config, prog_cfg, i))
- 			goto destroy_xdp_redirect_map;
- 
--		err = bpf_map_update_elem(mac_map, &ifindex, magic_mac, 0);
-+		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
- 		if (!ASSERT_OK(err, "bpf_map_update_elem"))
- 			goto destroy_xdp_redirect_map;
- 
-@@ -531,13 +535,16 @@ static void xdp_veth_egress(u32 flags)
- 
- 	for (i = 0; i < 2; i++) {
- 		u32 key = i;
-+		__be64 expected = 0;
- 		u64 res;
- 
- 		err = bpf_map_lookup_elem(res_map, &key, &res);
- 		if (!ASSERT_OK(err, "get MAC res"))
- 			goto destroy_xdp_redirect_map;
- 
--		ASSERT_STRNEQ((const char *)&res, magic_mac, ETH_ALEN, "compare mac");
-+		/* store_mac_1/2 run on the second/third remote veths. */
-+		memcpy(&expected, egress_macs[i + 1], ETH_ALEN);
-+		ASSERT_EQ(res, expected, "compare mac");
- 	}
- 
- destroy_xdp_redirect_map:
-@@ -551,6 +558,141 @@ static void xdp_veth_egress(u32 flags)
- 	cleanup_network(&net_config);
- }
- 
-+static void xdp_veth_egress_last_dst(u32 flags)
-+{
-+	struct prog_configuration prog_cfg[VETH_PAIRS_COUNT] = {
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "store_mac_1",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		},
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "store_mac_2",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		},
-+		{
-+			.local_name = "xdp_redirect_map_all_prog",
-+			.remote_name = "xdp_dummy_prog",
-+			.local_flags = flags,
-+			.remote_flags = flags,
-+		}
-+	};
-+	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] = {
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
-+		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
-+	};
-+	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
-+	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
-+	struct xdp_redirect_map *xdp_redirect_map;
-+	struct net_configuration net_config;
-+	int mac_map, egress_map, res_map;
-+	struct nstoken *nstoken = NULL;
-+	struct xdp_dummy *xdp_dummy;
-+	__be64 last_mac = 0;
-+	bool found = false;
-+	int err;
-+	int i;
-+
-+	xdp_dummy = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_dummy, "xdp_dummy__open_and_load"))
-+		return;
-+
-+	xdp_redirect_multi_kern = xdp_redirect_multi_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_redirect_multi_kern, "xdp_redirect_multi_kern__open_and_load"))
-+		goto destroy_xdp_dummy;
-+
-+	xdp_redirect_map = xdp_redirect_map__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_load"))
-+		goto destroy_xdp_redirect_multi_kern;
-+
-+	if (!ASSERT_OK(create_network(&net_config), "create network"))
-+		goto destroy_xdp_redirect_map;
-+
-+	mac_map = bpf_map__fd(xdp_redirect_multi_kern->maps.mac_map);
-+	if (!ASSERT_OK_FD(mac_map, "open mac_map"))
-+		goto destroy_xdp_redirect_map;
-+
-+	egress_map = bpf_map__fd(xdp_redirect_multi_kern->maps.map_egress);
-+	if (!ASSERT_OK_FD(egress_map, "open map_egress"))
-+		goto destroy_xdp_redirect_map;
-+
-+	bpf_objs[0] = xdp_dummy->obj;
-+	bpf_objs[1] = xdp_redirect_multi_kern->obj;
-+	bpf_objs[2] = xdp_redirect_map->obj;
-+
-+	nstoken = open_netns(net_config.ns0_name);
-+	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
-+		goto destroy_xdp_redirect_map;
-+
-+	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
-+		struct bpf_devmap_val devmap_val = {};
-+		int ifindex = if_nametoindex(net_config.veth_cfg[i].local_veth);
-+
-+		SYS(destroy_xdp_redirect_map,
-+		    "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
-+		    net_config.veth_cfg[i].namespace, IP_NEIGH,
-+		    net_config.veth_cfg[i].remote_veth);
-+
-+		if (attach_programs_to_veth_pair(bpf_objs, VETH_EGRESS_SKEL_NB,
-+						 &net_config, prog_cfg, i))
-+			goto destroy_xdp_redirect_map;
-+
-+		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto destroy_xdp_redirect_map;
-+
-+		devmap_val.ifindex = ifindex;
-+		devmap_val.bpf_prog.fd = -1;
-+
-+		if (i == VETH_PAIRS_COUNT - 1)
-+			devmap_val.bpf_prog.fd =
-+				bpf_program__fd(xdp_redirect_multi_kern->progs.xdp_devmap_prog);
-+
-+		err = bpf_map_update_elem(egress_map, &ifindex, &devmap_val, 0);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto destroy_xdp_redirect_map;
-+	}
-+
-+	SYS_NOFAIL("ip netns exec %s ping %s -i 0.1 -c 4 -W1 > /dev/null ",
-+		   net_config.veth_cfg[0].namespace, IP_NEIGH);
-+
-+	res_map = bpf_map__fd(xdp_redirect_map->maps.rx_mac);
-+	if (!ASSERT_OK_FD(res_map, "open rx_map"))
-+		goto destroy_xdp_redirect_map;
-+
-+	memcpy(&last_mac, egress_macs[VETH_PAIRS_COUNT - 1], ETH_ALEN);
-+
-+	for (i = 0; i < VETH_PAIRS_COUNT - 1; i++) {
-+		u32 key = i;
-+		u64 res;
-+
-+		err = bpf_map_lookup_elem(res_map, &key, &res);
-+		if (err == -ENOENT)
-+			continue;
-+		if (!ASSERT_OK(err, "get MAC res"))
-+			goto destroy_xdp_redirect_map;
-+
-+		found = true;
-+		ASSERT_NEQ(res, last_mac, "compare last dst mac");
-+	}
-+
-+	ASSERT_TRUE(found, "found earlier dst mac");
-+
-+destroy_xdp_redirect_map:
-+	close_netns(nstoken);
-+	xdp_redirect_map__destroy(xdp_redirect_map);
-+destroy_xdp_redirect_multi_kern:
-+	xdp_redirect_multi_kern__destroy(xdp_redirect_multi_kern);
-+destroy_xdp_dummy:
-+	xdp_dummy__destroy(xdp_dummy);
-+
-+	cleanup_network(&net_config);
-+}
-+
- void test_xdp_veth_redirect(void)
- {
- 	if (test__start_subtest("0"))
-@@ -596,4 +738,7 @@ void test_xdp_veth_egress(void)
- 
- 	if (test__start_subtest("SKB_MODE/egress"))
- 		xdp_veth_egress(XDP_FLAGS_SKB_MODE);
-+
-+	if (test__start_subtest("SKB_MODE/egress_last_dst"))
-+		xdp_veth_egress_last_dst(XDP_FLAGS_SKB_MODE);
- }
-
-base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
--- 
-2.43.0
+In case of locktorture, error checking is skipped because it does not exerc=
+ise
+deadlocks, it's only for locking scalability and correctness checks.
 
