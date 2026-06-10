@@ -1,107 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D040740D562;
-	Wed, 10 Jun 2026 00:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA130242D9D
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 01:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781051886; cv=none; b=aBu+k3kxe3Mzj7TdVPEeHBgC7Wd0qFtNk/LA+XTWt7sL7dzyof4fzvzEMevMgKrhJwLU82DMfX1jM79hxAbZhu8KFqgQPD3kWiKXxRybssqutBL7rZPhjNHKqmheBpF4QHpwff0j6KQPBpdfFlmp2IWPiWrSAFYddc92HV2wdVA=
+	t=1781054510; cv=none; b=s8JSHAWVWc0hhLRsiQGuXmaVMYEMTIVewRvONRlNMtgou1flHlPQ6geNWIXrjggetyzZ5bcu2m00yTEd1D/e/5wPiFHkB26T+Jz59QfRTHmfgfbi+E+I1dUSqe+finD321GQozUjbxH+ahyRw89CS7fBvQb5LdNs7JvEN3qFUZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781051886; c=relaxed/simple;
-	bh=SxmIZJ+n1HkZTEshek9Vc2EZp4Ecq/SPC0XEfEnplJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HzQIYIk/Q+y0Igt6dmR284lW/AIarYAe+EthnO62wUJrINC5DZOE8N1mPPbiN+gnJCuuWEEugWnd222fMK36wEJvBCNbXpH6aSFBH8/vwaPOIaeWUZlRdr3z/Lq/6I4++bxv0FR7pKKWWREd3acnV9XA8mlWXm8xRl1oQrhOQm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMOvifmd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781054510; c=relaxed/simple;
+	bh=RvIol9gM/1py5Hk7h4bLp0YoIkMSmUzyYPhAbZ4stdo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BsiWJg4UaHlQvtJz/ud6+uGF2cIHq3YcEni0/D2bgBqQkKNhn+iVTyf425i+ziY04Cbc0YbbMmBmf4dkuEGEiA3eFnl/i7WJU3mycbigBgud5jSM19hib/VD1PoGtOkEAcBVmShEU0oNSc07o5Z52GC9UmdhtesM8unaws5Iorg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bxpB40Vv; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMOvifmd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC47E1F00893;
-	Wed, 10 Jun 2026 00:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781051885;
-	bh=EevDIl3T2tRBqKOfS6hGhqCsYiv62Le6WH61wInv79E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=kMOvifmdrxuqXxaTsT7spri7/bwWkkDRVMbJ/XqDSXYookm952FeqwRm2HxMp5mYY
-	 nWkmXXOuZV8rl2zXMgE2RAKtR9aEN4/Ke5uOTWtj6KPJdDw3YM0Zu/QvxyNfXUtZww
-	 bPKoYSVqJ+kD+2HylJDpSzc4/YkXqGgqy4zHnMb80oAtPlGO4h01f4GV8jhXzPPdeJ
-	 AJywWCIqPchi3OmLGlnEL1He6wD/klnKE5rFKr/+9/JLMsEBOfLZMIEz2/Lon4GF7W
-	 zonQvFtAA5c8IzxsTKNm5cjUQXpJ8xM75DhEPj0au4u6X4huY0LiKA9OgjiKqIJGLd
-	 8/fBQSYk0k7Aw==
-Date: Tue, 9 Jun 2026 17:38:04 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Carlos Fangmeier <carlos.fangmeier@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Andrew
- Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Ong Boon Leong
- <boon.leong.ong@intel.com>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: prevent kernel panic during XDP program
- and XSK pool transitions
-Message-ID: <20260609173804.77d13413@kernel.org>
-In-Reply-To: <20260605-main-v1-1-aed15b1cf1af@gmail.com>
-References: <20260605-main-v1-1-aed15b1cf1af@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bxpB40Vv"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781054496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jbRzG6Pa36uez5VKdsIv2ql0J1GpmIHCqFTPixbR7/o=;
+	b=bxpB40Vvc0ffLgfxsdSmHEVmfGQoqhtPRbWF8R6I+AuIYCZJGyL0xye2AExJHV1Illbc1D
+	uM3OlhIi9wkbKa/S2XQc7lN3WqvWYoymrvt3l2eQ0vrRL42Wd7mwYh0JPnRjG8S+1UtCPG
+	37kMelikDsIFVMspvuA4BOtMrAHttVg=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Sun Jian <sun.jian.kdev@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ shuah@kernel.org, liuhangbin@gmail.com
+Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP program
+Date: Wed, 10 Jun 2026 09:21:25 +0800
+Message-ID: <AgOg1pJHQN-gpKhYUz3SMw@linux.dev>
+In-Reply-To: <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
+References:
+ <20260609100214.337538-1-sun.jian.kdev@gmail.com>
+ <L0cwr1-KRSKR7-dJdjDmJA@linux.dev>
+ <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 05 Jun 2026 00:56:35 -0700 Carlos Fangmeier wrote:
-> stmmac_xdp_set_prog() tears down and rebuilds all DMA channels via
-> stmmac_xdp_release()/stmmac_xdp_open() without pausing the netdev
-> TX path. Similarly, stmmac_xdp_enable_pool() and
-> stmmac_xdp_disable_pool() reconfigure individual queue DMA rings
-> while TX remains active.
+On 2026/6/10 08:06 Emil Tsalapatis <emil@etsalapatis.com> write:
+> On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
+> > On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
+> >> dev_map_redirect_clone() uses skb_clone() when redirecting a generic XDP
+> >> skb to multiple devmap destinations. The cloned skb can share packet data
+> >> with other clones.
+> >> 
+> >> If the destination devmap entry has an egress XDP program, that program
+> >> can modify packet data. Such modifications can then be observed by other
+> >> clones sharing the same packet data.
+> >> 
+> >> This can be reproduced by strengthening xdp_veth_egress to configure a
+> >> different source MAC for each egress device and checking that store_mac_1/2
+> >> observe the MAC configured for their own egress devices. Without the fix,
+> >> the SKB_MODE subtest observes store_mac_1 receiving the MAC configured for
+> >> the next egress device.
+> >> 
+> >> Fix this by unsharing the cloned skb before running the devmap egress XDP
+> >> program. Limit the extra copy to destinations with an attached egress
+> >> program.
+> >
+> > Hi, Jian.
+> >
+> > This sounds like a good idea in this case. When I have a look at bpf_clone_redirect(),
+> > I found that it use skb_clone() too, which means it has the same problem. The
+> > data can be modified by other xdp prog in the destination NIC if we use
+> > bpf_clone_redirect().
+> >
+> > So maybe this is the default logic, and I'm not sure if this patch can break the
+> > existing users :/
+> 
+> I think for use cases where we are using bpf_clone_redirect() to use
+> one clone for inspection this would add an unnecessary copy. Maybe
+> adding *_copy() variants instead of changing the *_clone() would be
+> better? That way we wouldn't be changing the behavior for existing
+> consumers and the naming would be consistent with the skb_* methods.
 
-This still looks racy. Please look at other drivers
+Agree. It's not a good idea to change the logic of the existing API. Or
+maybe we can add a BPF_F_CLONE flag for the existing API.
 
-> If the kernel transmits a frame during these windows =E2=80=94 for exampl=
-e an
-> MLD report queued by the IPv6 stack =E2=80=94 stmmac_xmit() calls
-> dwmac4_set_addr() against an MMIO register whose mapping has been
-> torn down, triggering a level-3 translation fault:
->=20
->   Unable to handle kernel paging request at virtual address ffff8000840ec=
-000
->   pc : dwmac4_set_addr+0x8/0x18
->   lr : stmmac_xmit+0x64c/0xb60
->   Call trace:
->    dwmac4_set_addr+0x8/0x18
->    dev_hard_start_xmit+0xb0/0x220
->    sch_direct_xmit+0x108/0x3f0
->    __dev_queue_xmit+0x844/0xd00
->    ip6_finish_output2+0x2d8/0x610
->    mld_sendpack+0x180/0x2e0
->    mld_ifc_work+0x1dc/0x480
->=20
-> The existing netif_tx_disable() in stmmac_xdp_release() is not
-> sufficient because stmmac_xdp_open() re-enables TX via
-> netif_tx_start_all_queues() before the caller regains control, leaving
-> a window where the freshly rebuilt rings can race with pending TX work.
->=20
-> Fix this by wrapping each reconfiguration path with
-> netif_tx_disable()/netif_tx_wake_all_queues():
->=20
->  - stmmac_xdp_set_prog(): hold TX disabled across the full
->    stmmac_xdp_release() + stmmac_xdp_open() sequence, only waking
->    TX after stmmac_xdp_open() returns.
->=20
->  - stmmac_xdp_enable_pool(): disable TX before tearing down the
->    queue, re-enable after the queue is rebuilt and NAPI is active.
->=20
->  - stmmac_xdp_disable_pool(): same pattern around the pool teardown
->    and queue rebuild.
->=20
-> Tested on Cortex-A55 (stmmac/dwmac4, kernel 6.6.60) with AF_XDP
+> 
+> But more importantly, is there an actual use case for the kind of API
+> that the modified selftest requires? Nobody until now has considered
+> the existing behavior to be a problem.
 
-That's an ancient kernel, you'll have to test an upstream kernel
-for us to merge the patch
---=20
-pw-bot: cr
+Agree too. Obviously, this is not a bug. For the use case in the commit
+log, it's something that can be fixed by the user themself. If we need
+modify the MAC, we'd better attach a BPF program for all the egress
+device in the devmap.
+
+> 
+> >
+> > Thanks!
+> > Menglong Dong
+> >
+> >> 
+> >> Tested with:
+> >>   ./test_progs -t xdp_veth_egress
+> >>   ./test_progs -t xdp_veth
+> >>   ./test_progs -t xdp
+> > [...]
+> >>  
+> >>  destroy_xdp_redirect_map:
+> >> -- 
+> >> 2.43.0
+> >> 
+> >> 
+> >> 
+> 
+
+
+
+
