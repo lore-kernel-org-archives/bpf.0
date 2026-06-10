@@ -1,114 +1,142 @@
-Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074043644CF
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 04:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB01E370D69
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 04:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781066441; cv=none; b=m6LKUKnPJF6oUWQCwvwFujtzRlwHsCqnJVas9/4cpAF8a3rEra4QbDv/kW1Emm19fpxhEdRZHKQSwpqAsK7pGDvjxRNcUD7gMtC46WzVcvYdkao1HJdDK+WCmRdZFW9YImMFAwr1i76dE3J7cw/zaFnl0+gXK6r+Zwut0YVRc04=
+	t=1781066597; cv=none; b=MhDSelkWZlM5a6IZIXMwigfPFTvQugYD4xf1r8YyjEc1UHnoj92tFqNPEzsvcVzBizTciqdaWItzxmlG4cA33Jv9wZWdIUzkQDT3z4W3oJx4h0Qj53F9nhqA0exGFYsf2Ry4Mioufpu/rJlwbz4p3jT9yAvvnTn4k0xLyjvH+5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781066441; c=relaxed/simple;
-	bh=Wrs612k4HMzgEdRdl2RtVJxH6qi+BSvMo2suBh87tOg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u3Al5LRTNR+K7ATp3naiAnyowtCll/rE0TqXRl2ll+QXIycG7FmC2sl/1Zfm/+dYRvhpzk7XbGZ6MFTC5aMDnX7GZ96cwt0MvzRIH9i7J+pp/e9u95urKe5qZOKLUBM2K+fH7gXk2m6LXmpdLcaQOA4hwiOraeH4iJy3BHPj72c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=glSQkWXp; arc=none smtp.client-ip=74.125.82.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781066597; c=relaxed/simple;
+	bh=YugiFesYD2nWr2HkyCAvq+z4fvPBJPssyXkaIQEWn8o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GmCEoSyz2j7pzt2rCBaq99+MUqs4dhly8fIrvdW49Ud6zcAZ/TsTwizKbtnHvsC+Vanwdsckf1OGmUIQXq2ykPYPhDdfH5nMaVs2GlsRpxSwjKdrJpXervRwCfrqudIKsb1godpi84JYdnPMrwDofkpLYFVDbOMLeuMV1fSnWnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net; spf=pass smtp.mailfrom=craftyguy.net; dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b=HjIzng/P; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=craftyguy.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="glSQkWXp"
-Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-307d0405e07so2220768eec.1
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 21:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781066439; x=1781671239; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zOeWxYHjR6btBdoFOnH8/C9j8Azo7z3JwI2PgFMzUYY=;
-        b=glSQkWXpMqsqW40lgfuHWX1h7X0V5YGtxqVRVJrhOCEZ8veQM7HuE/kz9Y+CUeBQzE
-         Ylzd6mLsljEmkY7VJs4AZUS0zBOQs0BmK1ReADf0Gzvz7TN4bBLaZJtIRpbHQNWIgcEo
-         TXv6cAVrRQxvBVC19fUdtijnp2RT+FbpTDreBjkuqaWcpPoRYEafj2TQWWwRfyeqrwfZ
-         Kqgs8mOa0tfzDDj0aVY/1nHt4gsOBD9rYGlRGDxoPqZyED7X0YV8LTZ0MQ2z1dL49X7w
-         uOJwss9YPVG1JQC8lyOE5C6t/WK5vCOeO3bQsOlwuHcnvRblDwAgb9t11d/cYUJNsibr
-         /exg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781066439; x=1781671239;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zOeWxYHjR6btBdoFOnH8/C9j8Azo7z3JwI2PgFMzUYY=;
-        b=Gm4y50P6vSqkmNcsspoN2xiclfjBN6Kij6/TrExpLsNK3CEi5i7HjrG0LOCU5aQyK+
-         fm3ap92/zdoZ6God2yRB5pqIek42Ka7ZEw4kjpdn7psH20h8GHxJg7Ve14lM0WHkgH4H
-         vBLHHnmKRx3vd0hP/jo0hGL2AuKNcjo+KBHKeOW82MlnaQksSAvPcDGAW/x7jHAkrAMv
-         XxhOe0wfYdBNBVrtW3qopof5eBUHrooE6+eTnwVwgSpJCcV+ZEHFa2slYe/zxPqpmhYZ
-         HclMtyEh1ZglwoufUAFoDhoYCkw1BnIadgqu7Ui0fQmztYYPdpugeV4qNHC/6rpfivQI
-         d1Lw==
-X-Gm-Message-State: AOJu0YyewEUkRRl3yyQD9OMKaXnooSye24wyfIavLNkdtVY/+l1ioSGg
-	FM153t8IzpK6LqcDkO/DZ7JzdTqJJu+l/aHsfnaH6vkSEG37RDHjuE7TbBHEnjcc
-X-Gm-Gg: Acq92OHHrJIjuET5yQ0zZ0rPkQ6Lrrnw2wFYoJTV5I5+0d72DGznRyOIGCOUAQWvSU0
-	u4cmMSD0L9vOHrVF46a7aT6VNMyYrYQtRvZgnOoU4/2ZDtgrlww7+hMaO/Gkpa2Im0CYBGrGlT7
-	nvyDVSyJcauX/4mtfPrkucy2RbSyvzqlZAkC/NX8am0GY+q2ItnzyyCnLdnVuiopBhXs/7W3ce4
-	96tSeKg5IwYknp+hrzIwgDoBcNo+FDgQ1i53nfMvn1W5I0KkuaaxRIG7Yrsz36kwB80jc6UQQUh
-	pmUU5ADBfd/UCiu3Qic4EOyAGFO2srRvz7cVO7jI5g+RPp/5zte36EcBoLtArCWMcys6keiyTWR
-	XHedxl9HxqsYglCJJWAb/NS/Emd+dH4C4rNfwFkXEqvG2yTtM/LAijPYjTqfn4iC1+YfBQDkMnE
-	7yv4ubS30r1YEZikBNfA6JFFKhPjOb5qvnnM+MuAA4hrw7cGoYtZTu6/isvRr0gmCiP9++IqePy
-	UZsKWPAFGgt618Op+x3P/H6kBpBJZ7Hbt4wtl08oinYwj33JWa9TJqb8p6u6Yo6dEvRJ6kyqq0G
-	dqbMWEE94wRht8Xf+3pm6MeSOwr6
-X-Received: by 2002:a05:693c:374c:b0:304:2cc9:2ba8 with SMTP id 5a478bee46e88-3077b32a2a0mr12893217eec.30.1781066439103;
-        Tue, 09 Jun 2026 21:40:39 -0700 (PDT)
-Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074df48671sm24737900eec.24.2026.06.09.21.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 21:40:38 -0700 (PDT)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v2] selftests/bpf: correct CONFIG_PPC64 macro name in comment
-Date: Tue,  9 Jun 2026 21:40:20 -0700
-Message-ID: <20260610044023.225820-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b="HjIzng/P"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=craftyguy.net;
+	s=key1; t=1781066582;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xrfCOYnawNby/+6P5H5Tb/h+uk8XWKJB+gnkB26erd0=;
+	b=HjIzng/PovlFPzFjQIm3WEnGb3lIqEqOpN83SRyVl11T0Q6qhZZ2c665qUk+FpBzWNZSCc
+	p6lBKhYhWMqi7mtmsb6CFySW9JvTlQuicxxP66QwLuyhv3qrXdD6bzXqCPDqFDR0EQ1vBy
+	pW41C5Y3GEHBAlb7lN4Tp59P/gSQLV1yZ50g8UMnARlIjc8KfJEdqIbMbsoYx8zlf7CHuI
+	eQbW5a7+UgkBsVhGWRYdkLhj0kktK9pCr3D8bO40VCgXIPJo6kKyMJLSlH/AtOPtfF1xH/
+	k4fSQ0fQvKyI2IhqM+t++UnxBSJtse5s3E9NzdXFC5FaQ6gYYA33YAtMoOBTqA==
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Jun 2026 21:42:56 -0700
+Message-Id: <DJ53EPMYFXVH.3I4BP5PF8XJ9G@craftyguy.net>
+Cc: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>,
+ <bpf@vger.kernel.org>, "Florent Revest" <revest@chromium.org>, "Puranjay
+ Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huawei.com>
+Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without
+ CALL_OPS
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Clayton Craft" <clayton@craftyguy.net>
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Catalin Marinas"
+ <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>
+References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-A comment in tools/testing/selftests/bpf/progs/test_fill_link_info.c
-incorrectly refers to CONFIG_PPC6 instead of CONFIG_PPC64. Correct it.
+On Mon Jun 8, 2026 at 10:19 PM PDT, Jose Fernandez (Anthropic) wrote:
+> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
+> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
+> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
+> would change the offset of the pre-function type hash (see
+> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
+> and the compiler support needed to reconcile the two does not exist
+> yet.
+>
+> The result is that a CONFIG_CFI=3Dy arm64 kernel has no
+> ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
+> and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
+> programs are all unavailable. Deployments that want both kCFI
+> hardening and BPF-based security monitoring currently have to give
+> one of them up. systemd's bpf-restrict-fs feature hits this today:
+> https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
+>
+> CALL_OPS is an optimization for direct calls, not a dependency.
+> In-BL-range trampolines are reached by a direct branch without
+> consulting the ops pointer, and out-of-range trampolines already
+> fall back to ftrace_caller, where the DIRECT_CALLS machinery
+> (call_direct_funcs() storing the trampoline in ftrace_regs, the
+> ftrace_caller tail-call) is gated on DIRECT_CALLS alone. s390 and
+> loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this way,
+> without having CALL_OPS at all.
+>
+> Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
+> widening its #ifdef and using the existing ftrace_rec_update_ops()
+> wrapper (no functional change for current configurations). Patch 2
+> drops the CALL_OPS requirement from the DIRECT_CALLS select.
+>
+> Configurations that keep CALL_OPS (clang !CFI, and GCC without
+> CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
+> clang build, every object file is byte-identical before and after
+> the series except ftrace.o itself, and its disassembly is identical.
+> CFI builds (and GCC -Os builds) gain working direct calls, with
+> out-of-range attachments taking the ftrace_caller dispatch path
+> instead of the per-callsite fast path.
+>
+> We tested on a 6.18.y-based kernel and on this base with clang
+> kCFI builds (CONFIG_CFI=3Dy, enforcing) under qemu (TCG, and KVM on an
+> arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
+> and BPF LSM programs load, attach and execute; the ftrace-direct
+> sample modules (including both modify samples, exercising
+> ftrace_modify_call()) run cleanly; no CFI violations observed. The
+> fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
+> modify_return, tracing_struct, lsm and trampoline_count selftests and
+> the ftrace direct-call selftests (test.d/direct) pass on the new
+> configuration with results identical to a CALL_OPS kernel built from
+> the same tree, and a broader test_progs sweep showed no differences
+> attributable to this series. Without the series, all of the above
+> fail at attach time with -ENOTSUPP.
+>
+> riscv has the same gap (its DIRECT_CALLS select also requires
+> CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
+> acceptable for arm64 we can follow up there.
+>
+> ---
+> Jose Fernandez (Anthropic) (2):
+>       arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OP=
+S
+>       arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
+>
+>  arch/arm64/Kconfig         | 2 +-
+>  arch/arm64/kernel/ftrace.c | 5 +++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+> change-id: 20260607-arm64-ftrace-direct-calls-152230ef7077
+>
+> Best regards,
+> --
+> Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-Discovered while searching for CONFIG_* symbols referenced in code but
-not defined in any Kconfig file.
+Thanks for fixing this! I gave it a try on an aarch64 laptop (macbook m2)
+using kernel 7.0.11 with CFI=3Dy && DEBUG_INFO_BTF=3Dy, built with clang. A=
+FAIK it
+seems to work great, I am able to finally run systemd with BPF support (e.g=
+.,
+unprivileged nspawn works now)
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
----
-Changes from v1: Fix typo in file name in commit message
-
- tools/testing/selftests/bpf/progs/test_fill_link_info.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_fill_link_info.c b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-index fac33a14f200..137bd6292163 100644
---- a/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-+++ b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-@@ -12,7 +12,7 @@ extern bool CONFIG_PPC64 __kconfig __weak;
- 
- /* This function is here to have CONFIG_X86_KERNEL_IBT,
-  * CONFIG_PPC_FTRACE_OUT_OF_LINE, CONFIG_KPROBES_ON_FTRACE,
-- * CONFIG_PPC6 used and added to object BTF.
-+ * CONFIG_PPC64 used and added to object BTF.
-  */
- int unused(void)
- {
--- 
-2.43.0
+Tested-by: Clayton Craft <craftyguy@postmarketos.org>
 
