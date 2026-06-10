@@ -1,158 +1,169 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D977D348C70
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 17:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBAC351C28
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 17:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781112916; cv=none; b=Sl2uZe276V3b7PIcZ4JAaBreG+VlY4tLZKJeF9SXLJq+t1kz2MHdKmdu718CLuSccv/pPVd+vM5cT+xq5BwaW/pqMw6YvdKKym5UGT0bQBDxKVJGr59OmchqSWHMWfYRvWv8WiKssJFSgmB3m1VayJSH0cmiFfQRQPVG+OXNQYo=
+	t=1781114244; cv=none; b=oUD6+EpniiJbwpmRACC/7m+zg0WXg4Fg1LDDR4rtJyVuYWoW6aOY2bvromfohvz7CxN6OqABbJjDkpwdXwc06c52Dt446g4UvMC+PxJArxVnJ7mzT7Tm5vf+u3GmuklX4t52DSmUGRuAatOZ+VN6VJNHpGr9hCJxlQbXiVRCzL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781112916; c=relaxed/simple;
-	bh=GC4dbUj72/CzNM//E7ZABcGs/pl4qLAV5yt/OMal3/E=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=u9QxNkfQHHsappMXMtKx5xPI2ZtWQag+Av932D2G+I2UAcHTteM9Eyf7aCeSwKRVfS0s4uyMnjh6Rki0tS2wapz5w4Do+3sMmLktafUBLH7FVzYuxFbc1nOTAntoxXUTTGuhY4RXAP8Emjzxx532Srexn2Wj9ns2Q5ItNFtgiqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mKvri2hf; arc=none smtp.client-ip=209.85.160.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781114244; c=relaxed/simple;
+	bh=PSyiABTrn2B9+RliA2ihw4lkCq8xGqmI9vbheu53qLM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DD7pmSZ8lU+iLJ2tFGwaTgov8tBhwmSxW12HJ0If/SYqpqtUY46OeKuqajLeiwe0+mfK+lNKeHHAIWfOGonb0hFuAAo8eeKAaGerWMdC+In+15J5P1+lZgIiNYCShPg9viedO+L1IR1GWhNnHIYNlo6SKEY95aCz2i3cYIskz38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FMZfG3P3; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mKvri2hf"
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-43b7e186a0cso2870971fac.0
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 10:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781112914; x=1781717714; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MKXcTAXyiY5MMHqAfWwxOYdso2q+yhhH5j2phXAXPxw=;
-        b=mKvri2hfaIpYBPgrMl5ojn1pAFQQ4qGrSeuxtj39iQ7QolwSgmurRK3KTHszE3dvt0
-         stkf7MCF7zu2AFFOS2U0s6a2QiNQB3avcmI3uZEmItSwsyhplQ3RLWREwIWIyi8PYpf8
-         OudqskRW2+FJ8yIQBiVs5QVZunlYwQm7iT0fcZeR+F+YwhPZKPZO2bKZ3M/pPsKChH1U
-         XCXZbDiRArSO913o2Es+6kaJNM9cKKkA56Y4xcyEmuze2m4zbunOefHj4ZxeX/CEwkE8
-         B2Q7Z/Jmut6f+RQ3uYKo58BKeaEk4xxznPgZNL/CIMtJOxKzOm3+tMVHfaGXPAae4Jq7
-         0C5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781112914; x=1781717714;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MKXcTAXyiY5MMHqAfWwxOYdso2q+yhhH5j2phXAXPxw=;
-        b=YEOgAJWtXimXEWYz/V+bWStSBjRsEOOPJFweXfx5NnqMi/jgXmfARCkmr8OKjWKp7E
-         ww3l9ylr7o+QwLTOHrDYVO6SbonYCB1ApTmVieXBV96doR2WM1YXucdilSsC2XLGoMuM
-         KIUhhK8QqTEl9oBj8O6pWrjxmmxR6Q926m/QTr71wn6Gy3xQZkyt35yIfRTsExgobIfN
-         j8ojNWj+eADlGrwbZVdmrk/GmT9TSDxUaJiRpjyrFIjcmgmfYdSgLaLnA/3qkWNY+1XF
-         2OYNL/9xMGlNoFTw3aGSw7BwKYxCJj78QXcc65eDdLrNwntf8C+Kv5iGAYGioaE9V5Y0
-         18yw==
-X-Forwarded-Encrypted: i=1; AFNElJ+6AX5aSl5eUXORVCo5vZla9hqNWkjyQE1l19mI6aO5uQ9ZJFQHlFQllEvpFrMtDfI/lKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOia15rb61Np9XCAEwJ0DVP/9AxIxwndEpOLIyH28gt/ilELKu
-	3R7mw86DB+QuuvVgghfFZA8Z/TWzcomO8V2byUaRbq44NBAiNoCE8Qlh
-X-Gm-Gg: Acq92OFJZPKAg+XGOKmRO/z5hLyAMd/McVz1HOOc1p3KYygopAFZMeqZAjdOxYElDTH
-	5olpQ4MPQUrYd6hnBWEa8Rt4EXGB1G4pwvBn1Mfcdz1UsqHkvLPlOwye1iRW6n675C+T3cVYR4+
-	muFDaE+VvW3kM2jck6AthsylDKgDbXr1HDZzvYN2rvqMl4+l/mQLaW72SA+ws9X2yEds8dveolb
-	c3gC2oQjYD4qjsLb+sDCNcqKkO5h0srnxZtfo1T0B8q5sGLxe4FNoEBA2RTGETtFZicolMIdL7z
-	3ED5wm8HnCN1V3vXG0DyeUll+SpXlh7ElK5RPilbEHMmgYVFdgP3Kp9G7DSF48O7vWBhVh0YSn+
-	KUTLxcZhyN/NHwyMTZ5xOTmR5kn+vxlvp0sawy0lObLsYqz8OXdd+vEM9bKvqq8RyGFSNbr7y5G
-	0Nx5hcBorrD5x1HBvuoQponXeccYOSNn/3Weat/L/11/6uSAIECWEDSbbFphx4W+dIYkl9WedYL
-	Nh6Eat9IycFtjMARpunlCPr0wA2
-X-Received: by 2002:a05:6871:606:b0:442:3434:7dd6 with SMTP id 586e51a60fabf-4423434e34emr404867fac.14.1781112913657;
-        Wed, 10 Jun 2026 10:35:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:55::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d7263efcsm22580309fac.0.2026.06.10.10.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jun 2026 10:35:12 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FMZfG3P3"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781114239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TtdGMbUuSGcoHFLrymBJZ08Jr0hWDxTV7oU5nDom8zw=;
+	b=FMZfG3P3vcrwigPol9KDhU2dsyNDkkhZgt7JaxrvHVcNUI797BVeZ1Az7WWARoedhUfduI
+	wza2iGuAXLuNgXS91NF1A8YDXvMi9SEt0ugqqGhZeXfmI9KstgiJ8yNK4ssC/j/ayfzQRu
+	4LxBDVl/cztDWQvfMBNdTOStN09WdkM=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86 under 5-level paging
+Date: Wed, 10 Jun 2026 10:56:51 -0700
+Message-ID: <20260610175651.647515-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 10 Jun 2026 10:35:10 -0700
-Message-Id: <DJ5JTZ788GDY.FXAAY47YDG3N@gmail.com>
-Cc: "Eduard Zingerman" <eddyz87@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "David S . Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Cong Wang" <cwang@multikernel.io>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/2] bpf, sockmap: fix integer overflow in
- bpf_msg_pop_data() bounds check
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>
-X-Mailer: aerc
-References: <20260610081218.506709-1-rhkrqnwk98@gmail.com>
- <20260610081218.506709-2-rhkrqnwk98@gmail.com>
-In-Reply-To: <20260610081218.506709-2-rhkrqnwk98@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed Jun 10, 2026 at 1:11 AM PDT, Sechang Lim wrote:
-> start and len are u32, so
->
-> 	u64 last =3D start + len;
->
-> evaluates start + len in 32-bit and wraps before storing it in last.
-> The bounds check
->
-> 	if (start >=3D offset + l || last > msg->sg.size)
-> 		return -EINVAL;
->
-> can then be passed with an out-of-range start/len, after which the pop
-> loop runs off the end of the scatterlist and sk_msg_shift_left() calls
-> put_page() on the empty msg->sg.end slot:
->
->   Oops: general protection fault, probably for non-canonical address
->   0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
->   KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->   RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
->   RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
->   RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
->   Call Trace:
->    <TASK>
->    bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
->    bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
->    sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
->    tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
->    tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
->    __sock_sendmsg+0x153/0x1c0 net/socket.c:802
->    __sys_sendto+0x326/0x430 net/socket.c:2265
->    __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
->    do_syscall_64+0x14c/0x480
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
->    </TASK>
->
-> Widen the addition with a (u64) cast so the bound is evaluated in
-> 64-bit and a len near U32_MAX no longer wraps below msg->sg.size.
->
-> While here, change pop from int to u32. It counts bytes against the
-> unsigned scatterlist lengths and can never be negative, so the signed
-> type only invites sign-confusion in the pop loop.
->
-> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> ---
->  net/core/filter.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 80439767e0ee..9cdfec2ca11e 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2974,8 +2974,8 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
-u32, start,
->  	   u32, len, u64, flags)
->  {
->  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
-> -	u64 last =3D start + len;
-> -	int pop;
-> +	u64 last =3D (u64)start + len;
+On x86_64 with 5-level paging (LA57) and inline generic KASAN, the
+following flaky splat may be observed on boot:
 
-sashiko is correct that there are 4 other issue in very similar code path
-all in skmsg. Please fix them all in one go.
+    BUG: KASAN: wild-memory-access in do_raw_spin_lock+0xcf/0x260
+    Write of size 4 at addr ff110001000c90b8 by task swapper/0/0
 
-pw-bot: cr
+    CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.1.0-rc5-gcba33e0b2907 #1 PREEMPT(full)
+    Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+    Call Trace:
+     <IRQ>
+     dump_stack_lvl+0x54/0x70
+     kasan_report+0x117/0x150
+     ? do_raw_spin_lock+0xcf/0x260
+     kasan_check_range+0x264/0x2c0
+     do_raw_spin_lock+0xcf/0x260
+     handle_edge_irq+0x35/0x770
+     ? do_raw_spin_unlock+0x51/0x2a0
+     __common_interrupt+0xae/0x120
+     common_interrupt+0x7c/0x90
+     </IRQ>
+     <TASK>
+     asm_common_interrupt+0x26/0x40
+    RIP: 0010:identify_cpu+0x2b2/0x3460
+    Code: 00 41 c7 07 00 00 00 00 4d 89 e6 49 c1 ee 03 43 0f b6 04 06 84 c0 0f 85 a3 1c 00 00 41 c7 04 24 00 00 00 00 31 c0 31 c9 0f a2 <89> c7 42 0f b6 44 05 00 84 c0 0f 85 ad 1c 00 00 41 89 3f 48 8b 44
+    RSP: 0000:ffffffff97807df0 EFLAGS: 00000246
+    RAX: 0000000000000020 RBX: 00000000756e6547 RCX: 000000006c65746e
+    RDX: 0000000049656e69 RSI: 0000000000000000 RDI: ffffffff98632fd8
+    RBP: 1ffffffff30c65fc R08: dffffc0000000000 R09: 0000000000000004
+    R10: ffffffff98632fc4 R11: fffffbfff30c65fb R12: ffffffff98633050
+    R13: ffffffff98633048 R14: 1ffffffff30c660a R15: ffffffff98632fe0
+     identify_boot_cpu+0xd/0xd0
+     arch_cpu_finalize_init+0x24/0x1f0
+     start_kernel+0x31e/0x3e0
+     x86_64_start_reservations+0x24/0x30
+     x86_64_start_kernel+0x13a/0x140
+     common_startup_64+0x12c/0x137
+     </TASK>
+
+It fires very early in boot. If kasan_multi_shot is set, the reports
+are non-fatal and keep repeating, and the boot CPU wedges before
+userspace is reached. The accessed addresses are valid 5-level kernel
+pointers, so the report is a false positive.
+
+The root cause is in generic KASAN not seeing
+cpu_feature_enabled(X86_FEATURE_LA57) set, because the bit is cleared
+in identify_cpu() when the offending interrupt happens [1]:
+
+  memset(&c->x86_capability, 0, ...);   /* clears X86_FEATURE_LA57 */
+  ...
+  get_cpu_cap(c);                       /* re-reads CPUID, restores it */
+
+addr_has_metadata() then uses the 4-level threshold, and 5-level
+kernel addresses fall below it, so kasan_check_range() reports them as
+wild-memory-access.
+
+Define USE_EARLY_PGTABLE_L5 in mm/kasan/generic.c so
+addr_has_metadata() uses the stable variable, as
+arch/x86/mm/kasan_init_64.c already does.
+
+Some context on how this was noticed and reproduced below.
+
+We started seeing flaky splats as above [2][3] on BPF CI runs after
+runner hardware has been upgraded. Specifically, new x86 runners are
+c7i.metal-24xl AWS EC2 instances, which are Intel Sapphire Rapids
+machines that support LA57 feature, and have it enabled.
+
+The splats can be reproduced with qemu on any x86_64 host with
+  -cpu max -accel tcg
+
+Build a kernel with:
+  CONFIG_KASAN=y
+  CONFIG_KASAN_GENERIC=y
+  CONFIG_KASAN_INLINE=y
+
+Boot it with kasan_multi_shot. The fault fires fast before userspace,
+so no rootfs is required. For example:
+
+  qemu-system-x86_64 -display none -serial stdio -no-reboot \
+    -smp 4 -m 5G -cpu max -accel tcg \
+    -kernel arch/x86/boot/bzImage \
+    -append "console=ttyS0,115200 earlyprintk=serial,0,115200 panic=-1 kasan_multi_shot nokaslr"
+
+It's a timing race, so a single boot hits it only sometimes.
+However running several qemu instances in parallel on the same host
+significantly increases the hitrate.
+
+I confirmed the proposed fix eliminates the splats.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/common.c?h=v7.1-rc7#n2001
+[2] https://github.com/kernel-patches/bpf/actions/runs/27271262414/job/80542509369
+[3] https://github.com/kernel-patches/bpf/actions/runs/27260143782/job/80505353689
+
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ mm/kasan/generic.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index 2b8e73f5f6a7..b5f430f2dbb6 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -9,6 +9,13 @@
+  *        Andrey Konovalov <andreyknvl@gmail.com>
+  */
+ 
++/*
++ * check_region_inline() and addr_has_metadata() can run very early.
++ * For example, in an interrupt taken while identify_cpu() has the CPU
++ * capability bits temporarily cleared.
++ */
++#define USE_EARLY_PGTABLE_L5
++
+ #include <linux/export.h>
+ #include <linux/interrupt.h>
+ #include <linux/init.h>
+-- 
+2.54.0
+
