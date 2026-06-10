@@ -1,106 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49703AE199
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 12:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EDE370AF0
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 13:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781095545; cv=none; b=LPlaHTCIR4efJZBP4o3hGSXuEx7ETJMNrDVillSY5sAkfjK1f8W0XRLq7jU+VULzrshdxJH4JoRc4IBK13lzPKQTsEdE4T4oxpNadpZwkj2KRhdNIeU2jeQ9toRgqvK7JvQOR/fsJO54egAAZ2T8qEvc5mGGje3kLYr9am8M4kA=
+	t=1781096420; cv=none; b=R5pBALP1TcIZEgf9ggFqbfJCVriH7WOVeQnNFdKpYmmrd8NuysFEEDZyB2MU7KXaT0H/hiK6gbuuG8DmMRdsMJ6DygRC51M7Z8TpiWZ1+lSeL1k7wOIMS8Zas2U6s3xse+f/dQUEomQ688Qpx/emHK1rlCCGMdalTHshen+GaSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781095545; c=relaxed/simple;
-	bh=OsSTuld6c7lCkdPg3Ah5qMecUqP9cL63G32ShJK54YM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=trImg+5hhkGE9YVwYwzXU9Gr12jG3MLM1o8XrBzAV+e+vp0W14CnpEQAHE2NztJyYE7Y0oJaGNobNR3BUmwhZl5JNtuJxPwspjHn2+kH5M8RAOBkIAH0JC1oJMovPUXnBXL233T7pptydJaow/jvLn+kNC//rYiWZ1a+pBKKcDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVdb/7vD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781096420; c=relaxed/simple;
+	bh=A9EvpKcqN53vmQLvEM3hL0lEKlk78UrMK3C3bXsNnZI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PScbhevz20lB1bWkS3KQOQytjrli4wIh1T1gAqLCwNO8SP7kGTMzv+8nnniOoKpr8GEAQroOFqPIRK8DV70qJ0Agkpy5QeJhw2nrhVjAMK1PDukTVIjgCZttk0+5h45B5/IbGgcq3I+uvLjJeD0zEG/0KLuNUGpzVZj64ykaiBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WUy0xljL; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVdb/7vD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE211F00898;
-	Wed, 10 Jun 2026 12:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781095544;
-	bh=8aTNs82JEVzD0XEjQ8Nw8MWZCmO9iJ7Ek44C3gzdvjE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AVdb/7vDvUNdxazuEmXLJ3m790wzzMa5l9WFXS+jcz6CxcRqmVYew+WWj6IG7Goo0
-	 yZUqg4zyt1YDLlbZ3sYY//mWfcmYNXXwl56iYjE+Ua6nLd78hpbOiPm1/oGv501AAr
-	 JkvbSbhlzKXhZFI3lAKqBjEZZLo/9Dsd/XxCewtPyMBp7vwaFMf+ba6hDMMWRgRBJS
-	 3em5rXzTVHtaIFk1GisT8tAwQSzWKoise+5lh94OigAteY+cEmcaYxZDMZvAXJrzJb
-	 HSzBKvXEFph7QXsOOxRk355PtOfYG4X0p+JVyxlllxHKxjAaH7jKzbNUpxvQ6YSRKb
-	 98OIDFFrlpaMg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: Fix setting retval to -EPERM for
- cgroup hooks not returning errno
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260610201724.733943-2-xukuohai@huaweicloud.com>
-References: <20260610201724.733943-2-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 12:45:43 +0000
-Message-Id: <20260610124544.3EE211F00898@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WUy0xljL"
+Message-ID: <08c35c70-a59e-4e0e-91db-22b5ec30b611@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781096407;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5SGtVNbcwG9pfhAaZcDYoFasUWq/H1TadDKPDknF8II=;
+	b=WUy0xljLQiJAIo67fX3LQRJbG2sHV+A9+3ozf9jf9XImgyJA9KCXtOyj593qFuDCYbCYQg
+	ra5M/me58EipPsMZMBemokyOnIQGyn3qBFvzbjJ0FxEToT9cndDdD/tmfvxpMnsu4GHBUu
+	twjmYgOsWPZbcu+UB12Eqbv3UcTHuFU=
+Date: Wed, 10 Jun 2026 20:59:31 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf v2] bpf: Run generic devmap egress prog on private skb
+To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
+Cc: Menglong Dong <menglong.dong@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Jiayuan Chen
+ <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Hangbin Liu <liuhangbin@gmail.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?=
+ =?UTF-8?Q?sen?= <toke@redhat.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260610102850.483291-1-sun.jian.kdev@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260610102850.483291-1-sun.jian.kdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The patch breaks cgroup BPF boolean LSM hooks by ignoring a BPF pr=
-ogram's denial (exit code 0). It leaves `run_ctx.retval` unmodified for boo=
-lean hooks, which fails to enforce denials, ignores overrides from previous=
- programs in the cgroup array, and causes the trampoline to incorrectly fal=
-l back to the original kernel function.
---
 
-commit b6b16c6bf2bc0b50b22feebf85585b33ce70965a
-Author: Xu Kuohai <xukuohai@huawei.com>
+On 6/10/26 6:28 PM, Sun Jian wrote:
+> Generic XDP devmap multi redirect uses skb_clone() for the
+> intermediate destinations and sends the last destination with the
+> original skb. This can leave multiple destinations sharing the same
+> packet data.
+>
+> This becomes visible when a devmap egress program mutates packet data.
+> One destination can observe changes made for another destination. The
+> last-destination path has the same problem: the last destination runs on
+> the original skb, so its egress program can modify packet data still
+> shared with earlier cloned skbs.
+>
+> Native XDP broadcast redirect does not have this issue because
+> xdpf_clone() copies the frame data for each destination. Generic XDP
+> should provide the same per-destination isolation before running a
+> devmap egress program.
+>
+> Fix this by making cloned skbs private in dev_map_generic_redirect()
+> before running the devmap egress program. Use skb_copy() instead of
+> skb_unshare() so that allocation failure does not consume the skb and
+> the existing caller error paths keep their ownership semantics.
+>
+> Add a selftest that covers the last-destination case where earlier
+> destinations do not have a devmap egress program, while the final
+> destination does.
+>
+> Tested with:
+>    ./test_progs -t xdp_veth_egress
+>    ./test_progs -t xdp_veth
+>    ./test_progs -t xdp
+>
+> Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
+> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+> v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
+>
+> Changes in v2:
+> - Move the private-copy step into dev_map_generic_redirect() so the
+>    last-destination path is covered as well.
+> - Use skb_copy() instead of skb_unshare() to keep caller ownership
+>    unchanged on allocation failure.
+> - Add a generic XDP last-destination selftest case.
+>
+>   kernel/bpf/devmap.c                           |  10 ++
+>   .../selftests/bpf/prog_tests/test_xdp_veth.c  | 151 +++++++++++++++++-
+>   2 files changed, 158 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> index cc0a43ebab6b..59f267685bc6 100644
+> --- a/kernel/bpf/devmap.c
+> +++ b/kernel/bpf/devmap.c
+> @@ -700,12 +700,22 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
+>   int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
+>   			     const struct bpf_prog *xdp_prog)
+>   {
+> +	struct sk_buff *nskb;
+>   	int err;
+>   
+>   	err = xdp_ok_fwd_dev(dst->dev, skb->len);
+>   	if (unlikely(err))
+>   		return err;
+>   
+> +	if (dst->xdp_prog && skb_cloned(skb)) {
+> +		nskb = skb_copy(skb, GFP_ATOMIC);
+> +		if (!nskb)
+> +			return -ENOMEM;
+> +
+> +		consume_skb(skb);
+> +		skb = nskb;
+> +	}
+> +
 
-bpf: Fix setting retval to -EPERM for cgroup hooks not returning errno
 
-This commit modifies bpf_prog_run_array_cg() to avoid setting the hook retu=
-rn
-value to -EPERM when a cgroup BPF program exits with 0 for non-errno hooks
-(such as boolean or void LSM hooks).
+LGTM.
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 35d1f1428ef39..83ce66296ac19 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
 
-[ ... ]
+Please split selftest as a seprated patch of a patchset.
 
-> @@ -83,7 +105,8 @@ bpf_prog_run_array_cg(const struct cgroup_bpf *cgrp,
->  			*(ret_flags) |=3D (func_ret >> 1);
->  			func_ret &=3D 1;
->  		}
-> -		if (!func_ret && !IS_ERR_VALUE((long)run_ctx.retval))
-> +		if (!func_ret && cgroup_bpf_hook_returns_errno(atype) &&
-> +		    !IS_ERR_VALUE((long)run_ctx.retval))
->  			run_ctx.retval =3D -EPERM;
+>   	/* Redirect has already succeeded semantically at this point, so we just
+>   	 * return 0 even if packet is dropped. Helper below takes care of
+>   	 * freeing skb.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+> index 3e98a1665936..1f0b9ade12fe 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+> @@ -456,7 +456,11 @@ static void xdp_veth_egress(u32 flags)
+>   			.remote_flags = flags,
+>   		
 
-[Severity: High]
-Could this change cause BPF program denials to be ignored for boolean hooks?
 
-In cgroup BPF, a program returning 0 typically signifies a denial. By
-requiring cgroup_bpf_hook_returns_errno() to be true here, a func_ret of 0
-is ignored for boolean hooks, leaving run_ctx.retval unmodified.
+[...]
 
-If a prior program in the cgroup array called bpf_set_retval(1), and the
-current program returns 0 (denial), run_ctx.retval remains 1. Doesn't this
-break cgroup hierarchy semantics where a denial must override an allow?
+> +	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
+> +		struct bpf_devmap_val devmap_val = {};
+> +		int ifindex = if_nametoindex(net_config.veth_cfg[i].local_veth);
+> +
+> +		SYS(destroy_xdp_redirect_map,
+> +		    "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
+> +		    net_config.veth_cfg[i].namespace, IP_NEIGH,
+> +		    net_config.veth_cfg[i].remote_veth);
+> +
+> +		if (attach_programs_to_veth_pair(bpf_objs, VETH_EGRESS_SKEL_NB,
+> +						 &net_config, prog_cfg, i))
+> +			goto destroy_xdp_redirect_map;
+> +
+> +		err = bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
+> +		if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> +			goto destroy_xdp_redirect_map;
+> +
+> +		devmap_val.ifindex = ifindex;
+> +		devmap_val.bpf_prog.fd = -1;
+> +
+> +		if (i == VETH_PAIRS_COUNT - 1)
+> +			devmap_val.bpf_prog.fd =
+> +				bpf_program__fd(xdp_redirect_multi_kern->progs.xdp_devmap_prog);
+> +
+> +		err = bpf_map_update_elem(egress_map, &ifindex, &devmap_val, 0);
 
-Additionally, if run_ctx.retval remains 0, the fmod_ret trampoline interpre=
-ts
-0 as an instruction to call the original kernel function rather than skippi=
-ng
-it. If the underlying kernel function returns 1, the operation ends up being
-allowed. Does this unintentionally bypass the BPF program's intent to deny
-the operation?
 
->  		item++;
->  	}
+The kernel walks DEVMAP_HASH in bucket order so I don't think we can 
+guarantee that the entry at VETH_PAIRS_COUNT - 1 is the last dst.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610201724.7339=
-43-1-xukuohai@huaweicloud.com?part=3D1
+Could we use i as the key instead, so the entry order becomes 
+deterministic? (bucket is key & (n_buckets - 1).)
