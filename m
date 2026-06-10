@@ -1,403 +1,133 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487B540488C;
-	Wed, 10 Jun 2026 12:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF013406822;
+	Wed, 10 Jun 2026 12:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781092847; cv=none; b=PAfcghiuQMxaekGRQm9iII/MMeIYEeJ7DCLsgESTwRFyPxCFT/Mm+ucldId96t4KpSpQ2C+wrmNBoEGCCd2U450O18PKRzwVW+h5mw5fjmgUTsTznTKsirBwWgEkLIRectIYdTubb2fbRrZDI1JFUCb1+LCzILQMFODjReQot3Y=
+	t=1781093811; cv=none; b=pVDb3w4I01/RXtbxKlnTai51DlresuPgb5A+fMLwxBkdJdTwFRh1ZmXUidWZuFo8wHCYdmDDOeGtctbBSzT5bH/P5e4Ocir0C/QWtIfMvcucDNooETbS0S8BPM1u7iaD52rQpfTz8uRqhBXi2zl8I2+TyXCLd8EZo1l2GGVbs0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781092847; c=relaxed/simple;
-	bh=apdiJ2DO6MzYCPJEQ3xXu3KvikcOG8WaoZApYxQ8jrk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N+uQX6/Sd/pgx6+Vz7CgHydpPth9HxTH3FPtzzl7AcClk9+W5fe4DPH3wEz7riDSxgAAL/3b0Ciz27UV32e6ILSU2BU1Xd6zU1S/jzZ8BM2NfE2Fz2UdD1+GfiQDssFSKGdMk3VGhWqySoa1sF0HsfnAeWlWs3SB1EUVrMhkVu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=AncBorru; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	s=arc-20240116; t=1781093811; c=relaxed/simple;
+	bh=zALaufOLMYLnsWwx7+2sF1JJMuzq3viR/a0vJQ1dwWQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=cBws1rMf3KeRcDYBiz2qvgAwNUmMFC3IAJJrpZvf4KEUQtDw1jIy3nvJmlkSXGGvZ/9fFsGmw3+H9R0sFOg2LTvzJJk1uwn7HBchKdVQgvKP2+dm8Vxo4lZ33NSrFzrIOM/Krt4cOeBWpdVrrlWJ2ysZLI1xaVB7HpPMaMJlf9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZhmfxllV reason="signature verification failed"; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="AncBorru"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1781092815;
-	bh=apdiJ2DO6MzYCPJEQ3xXu3KvikcOG8WaoZApYxQ8jrk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=AncBorruT0Ld5K1uLRfLzA8/hxMh6jr3jRFS9nu1I5uZwq8D1zJHq2jyPJtlMwSlq
-	 yyHqvY70Nku6e8ZsB5nt6rGs3Oa67XUGYeeR+xqfoXrogt2rdmoSSMZ9hrVctHUHsp
-	 iq/MYO0nNCvgQbk9ZRUAgz+ddwHdDE6yB7nd4InI=
-Received: from [129.217.186.234] ([129.217.186.234])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65AC0EWD025831
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 10 Jun 2026 14:00:14 +0200 (CEST)
-Message-ID: <476dff81-a5af-4319-84d3-0852906f2be9@tu-dortmund.de>
-Date: Wed, 10 Jun 2026 14:00:13 +0200
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZhmfxllV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=QQQUOTyb3L4y+c+DtR3LhZZ
+	rBdjJRFyBZess1u4JjIU=; b=ZhmfxllVTe/G6L1npuRuHfLJc897ICuNnxU500j
+	hm6SJtM9pkw4zUFCWrLrYPrP4Nxx/BoTQWSKq8Xe2b43eSRALZMX1YXARVrPGZrF
+	7MbbcgOcwXCWcbCpcmmtxXPdjc0dfSNqdxmV5R5sQoz85KdygvgCu9caVJmproB4
+	9iYA=
+Received: from gnq25$mails.tsinghua.edu.cn ( [59.66.19.181] ) by
+ ajax-webmail-web2 (Coremail) ; Wed, 10 Jun 2026 20:16:21 +0800 (GMT+08:00)
+Date: Wed, 10 Jun 2026 20:16:21 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: "Eduard Zingerman" <eddyz87@gmail.com>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"John Fastabend" <john.fastabend@gmail.com>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	"Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Re: [PATCH bpf-next 1/2] bpf: Reject scalar addition from
+ untrusted memory
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <DJ4Q75GQJ6MW.2TNULY7BLDWA0@etsalapatis.com>
+References: <20260609-f01-03-scalar-add-bpf-next-v1-0-e6212e274155@mails.tsinghua.edu.cn>
+ <20260609-f01-03-scalar-add-bpf-next-v1-1-e6212e274155@mails.tsinghua.edu.cn>
+ <c6cf40ef2957b6b2acf8820bce10becda20d9dfd.camel@gmail.com>
+ <DJ4Q75GQJ6MW.2TNULY7BLDWA0@etsalapatis.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-To: Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller"
- <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
- <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
- <e8478d82-5af6-44f7-a481-584c09ae8337@tu-berlin.de>
- <b8569d0f-7a99-4488-a1bb-63d813231b7d@tu-dortmund.de>
- <90fc9fc1-f396-4ed1-888f-89a96294664e@kernel.org>
- <5e6315b1-b734-4f5f-af5e-bc76612f0993@tu-dortmund.de>
- <fb84879b-9fdf-4474-b152-9cbf0887bd21@tu-dortmund.de>
- <ffca21d8-ee29-4d63-8db2-73634124fdd8@kernel.org>
-Content-Language: en-US
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <ffca21d8-ee29-4d63-8db2-73634124fdd8@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-ID: <551f4852.79a12.19eb176505e.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:yQQGZQA3FJyVVSlqVF0oAg--.51498W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEOA2ooki9lEAA
+	BsG
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On 6/10/26 12:15, Jesper Dangaard Brouer wrote:
-> 
-> 
-> 
-> On 10/06/2026 09.04, Simon Schippers wrote:
->> On 6/9/26 17:08, Simon Schippers wrote:
->>> On 6/9/26 15:59, Jesper Dangaard Brouer wrote:
->>>>
->>>>
->>>> On 08/06/2026 16.21, Simon Schippers wrote:
->>>>> On 6/8/26 15:13, Jonas Köppeler wrote:
->>>>>>
->>>>>> On 6/8/26 3:04 PM, Jesper Dangaard Brouer wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 08/06/2026 12.38, Simon Schippers wrote:
->>>>>>>> On 5/27/26 15:54, hawk@kernel.org wrote:
->>>>>>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>>>>
->>>>>>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>>>>>>>> excessive NAPI scheduling overhead and qdisc requeues.
->>>>>>>>>
->>>>>>>>> Accumulate BQL completions and flush them when a configurable time
->>>>>>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>>>>>>>> queuing delay to the configured interval. Coalescing state persists
->>>>>>>>> across NAPI polls in struct veth_rq so completions can accumulate
->>>>>>>>> beyond a single budget=64 cycle.
->>>>>>>>>
->>>>>>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>>>>>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>>>>>>>> completion.
->>>>>>>>>
->>>>>>>>>      ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>>>>>>>      ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>>>>>>>
->>>>>>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>>>> ---
->>>>>>>>
->>>>>>>> I found the issue that n_bql may become infinitly large if producer
->>>>>>>> and consumer have the same speed (and tx_usecs is large). It could
->>>>>>>> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
->>>>>>>> Also I figured that no hardware BQL driver ever completes more than
->>>>>>>> BQL limit many elements.
->>>>>>>>
->>>>>>>> Therefore, I propose a simpler logic (see attachment) that completes
->>>>>>>> either on the usual bql_flush_ns or if n_bql > dql.limit.
->>>>>>>> If n_bql > dql.limit then we either have the case above that the
->>>>>>>> producer is as fast as the consumer or we have BQL starvation.
->>>>>>>>
->>>>>>>> if (state->time + bql_flush_ns <= current_time ||
->>>>>>>>       state->n_bql > peer_txq->dql.limit) {
->>>>>>>>
->>>>>>>> It must be n_bql *bigger than* dql.limit because the producer will
->>>>>>>> always exceed the limit before it stops, see netdev_tx_sent_queue().
->>>>>>>> It is fast because peer_txq->dql.limit is in the cacheline of the
->>>>>>>> completion path, see dynamic_queue_limits.h.
->>>>>>>>
->>>>>>>> Another advantage is that we avoid the snippet checking for empty
->>>>>>>> and BQL stopped which requires an smp_rmb() and an test_bit().
->>>>>>>>
->>>>>>>> Apart from that I:
->>>>>>>> - Always call veth_bql_maybe_complete() in the for loop to have
->>>>>>>>      more accurate completion intervals when having mixed XDP and
->>>>>>>>      non-XDP packets.
->>>>>>>> - Made it so tx_usecs = 0 is now also a normal case.
->>>>>>>> - Change the type of n_bql to uint instead of int.
->>>>>>>> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
->>>>>>>> - Moved the bql_state init in __veth_napi_enable_range() in front
->>>>>>>>      of napi_enable() to avoid a race (Sashiko).
->>>>>>>> - Moved the bql_state reset in veth_napi_del_range() after the
->>>>>>>>      ptr_ring_cleanup() (probably does not matter but makes sense to me)
->>>>>>>>
->>>>>>>> Benchmarks look just fine, see commit message.
->>>>>>>>
->>>>>>>> WDYT?
->>>>>>
->>>>>>>
->>>>>>> Looks good to me, I will use this in my V7 patchset.
->>>>>>>
->>>>>>> A bike-shedding issue: We change the coalescing parameters for the veth
->>>>>>> net_device, but should this be a TX or RX parameter?
->>>>>>>
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> The results look a little bit suspicious, that in some cases the p99 is smaller than the average, which can happen if you have really large max values. It feels something is off with the methodology. I think we should drop the avg, and include the max value. This would give a better picture.
->>>>>
->>>>> Luckily I saved the raw test result from /tmp (the raw ping output
->>>>> is included).
->>>>>
->>>>> extract_ping_p99() seems to be broken. It has issues ordering the
->>>>> numbers. So if there are 2 or 3 numbers after the point I think.
->>>>> avg ping is fine.
->>>>>
->>>>> Claude Sonnet wrote a script for me to recalculate the p99 pings
->>>>> from the raw ping output).
->>>>
->>>> For programming switch to Claude Opus, as Sonnet cannot code IMHO.
->>>
->>> Already used 95% of my Copilot Pro+ Tokens this month :P
->>>
-> 
-> LOL - I'm lucky to (still) have unlimited tokens.
-> 
->>>> (Claude Opus wrote the selftest we placed in [1])
->>>>
->>>> Is your script still based on our github[1] selftest ?
->>>> If so, then please make some PR(s) against my repo.
->>>> I want this to be easy reproducible for others.
->>>>
->>>> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing
->>>>
->>>
->>> I forked Jonas latest branch [1] and ran the tests with that.
->>>
->>> But I faced 2 issues that I then fixed:
->>> - Ping fails in some runs (~20%) -> My fix: Retry the run until it
->>>    works.
->>> - extract_ping_p99() has a bug for me which caused wrong results,
->>>    as pointed out by Jonas -> Also fixed it
->>>
->>> Because of the inconsistencies I will rerun over night to have
->>> clean benchmark results.
->>>
->>> I will make a PR tomorrow.
->>>
->>> [1] https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark
->>>
->>
->> I ran the benchmarks over night and they look fine,
->> see ASCII table below.
->> I do not see a regression, tx_usecs of 50us even outperforms stock.
->>
-> 
-> Very interesting that tx_usecs 50us is generally performing better.
-> It seems we should "sweep" the area between 0-100 usecs for finding best
-> default from the beginning. (And see cool colored graphs that Jonas
-> generated).
-> 
-
-For quick verification I ran 5 runs in the 10-90us range
-for --nrules=0 and 20s per run. Here the results:
-
-sudo ./veth_bql_sweep.sh --runs 5 --tx-usecs-list \
-"0 10 20 30 40 50 60 70 80 90" --nrules-list "0" --pktgen \
- --duration 20 --qdisc fq_codel --no-bpftrace
-
-Throughput (pps)
-================================================================================
-nrules |  10us |  20us |  30us |  40us |  50us |  60us |  70us |  80us |  90us |
--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-     0 | 1.75M | 1.76M | 1.76M | 1.76M | 1.76M | 1.76M | 1.77M | 1.77M | 1.76M |
-
-
-Ping RTT ms (avg)
-================================================================================
-nrules |  10us |  20us |  30us |  40us |  50us |  60us |  70us |  80us |  90us |
--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-     0 | 0.133 | 0.133 | 0.132 | 0.132 | 0.130 | 0.133 | 0.132 | 0.131 | 0.131 |
-
-
-Ping RTT ms (p99)
-================================================================================
-nrules |  10us |  20us |  30us |  40us |  50us |  60us |  70us |  80us |  90us |
--------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-     0 | 0.158 | 0.156 | 0.155 | 0.159 | 0.156 | 0.156 | 0.156 | 0.153 | 0.153 |
-
-
-Now 50us is just as fast as stock, even though I changed *nothing* :/
-Nevertheless still great.
-
-Even 10us seems valid. Maybe it just has to be as big as the time
-for running a single veth_xdp_rcv() execution? Idk :D
-
-> 
->> I did a PR, see [1]. Most of the code changes are by Jonas,
->> because he rewrote the code to allow the usage of pktgen and
->> added the bql_sweep.sh script. Thanks Jonas!
->> My part is the 2 bugfixes, the output as ASCII table and
->> the new benchmark results with my new 'v7' method.
->>
->> I have not tested bql_sweep.sh inside virtme-ng, I ran my benchmarks
->> on the host system. I guess you could mount the folder with read+write
->> in vng and then run bql_sweep.sh there.
->>
->> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing/pull/9
->>
-> 
-> I will take a look today.
-> - Will likely just merge after sanity checking as I want us iterate faster
-> 
->>
->> System information:
->> Ryzen 5 5600X @ fixed 4.3 GHz, 3200 MHz RAM, CPU mitigations disabled,
->> SMT disabled, on host system (NOT virtme-ng).
->>
->> Patched benchmark command:
->> sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list \
->> "0 50 100 500 1000 5000 10000" --nrules-list "0 1 10 100 1000 10000" \
->> --pktgen --duration 20 --qdisc fq_codel --no-bpftrace
->>
->> Stock benchmark command:
->> sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list "0" --nrules-list \
->> "0 1 10 100 1000 10000" --pktgen --duration 20 --qdisc fq_codel \
->> --no-bpftrace
->>
->> Throughput (pps)
->> ===========================================================================
->> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->> -------+-------+-------+-------+-------+--------+--------+---------++------
->>       0 | 1.62M | 1.89M | 1.75M | 1.73M |  1.73M |  1.73M |   1.73M || 1.76M
->>       1 | 1.51M | 1.72M | 1.63M | 1.60M |  1.60M |  1.60M |   1.60M || 1.65M
->>      10 | 1.33M | 1.52M | 1.47M | 1.41M |  1.41M |  1.41M |   1.41M || 1.45M
->>     100 |  681K |  751K |  756K |  726K |   721K |   723K |    730K ||  736K
->>    1000 |  116K |  123K |  124K |  124K |   124K |   125K |    123K ||  126K
->>   10000 |   13K |   13K |   13K |   13K |    13K |    13K |     13K ||   13K
->>
->>
->> Ping RTT ms (avg)
->> ===========================================================================
->> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->> -------+-------+-------+-------+-------+--------+--------+---------++------
->>       0 | 0.016 | 0.089 | 0.136 | 0.137 |  0.138 |  0.134 |   0.135 || 0.132
->>       1 | 0.018 | 0.097 | 0.144 | 0.146 |  0.146 |  0.150 |   0.147 || 0.142
->>      10 | 0.019 | 0.093 | 0.156 | 0.164 |  0.164 |  0.164 |   0.167 || 0.158
->>     100 | 0.029 | 0.104 | 0.180 | 0.315 |  0.312 |  0.314 |   0.311 || 0.307
->>    1000 | 0.139 | 0.201 | 0.309 | 0.971 |   1.66 |   1.81 |    1.82 ||  1.77
->>   10000 |  1.12 |  1.74 |  1.72 |  1.83 |   2.90 |   9.14 |    15.9 ||  17.2
->>
->>
->> Ping RTT ms (p99)
->> ===========================================================================
->> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->> -------+-------+-------+-------+-------+--------+--------+---------++------
->>       0 | 0.026 | 0.122 | 0.161 | 0.164 |  0.164 |  0.159 |   0.161 || 0.155
->>       1 | 0.028 | 0.123 | 0.169 | 0.173 |  0.173 |  0.175 |   0.173 || 0.165
->>      10 | 0.032 | 0.119 | 0.187 | 0.194 |  0.193 |  0.193 |   0.197 || 0.185
->>     100 | 0.047 | 0.134 | 0.232 | 0.368 |  0.369 |  0.367 |   0.359 || 0.361
->>    1000 | 0.232 | 0.303 | 0.409 |  1.27 |   2.13 |   2.10 |    2.13 ||  2.10
->>   10000 |  1.94 |  2.52 |  2.59 |  2.69 |   3.87 |   12.0 |    20.0 ||  20.3
->>
-> 
-> Looks like 50us delivers better (lower) latency and higher throughput across the range.
-> I'm strongly considering changing V7 to use 50usec as default.
-> 
->>
->>>>> Below is the new result. Not 100% sure but this seems right now.
->>>>> Most pings are the same.
->>>>>
->>>>> Ping RTT ms (p99)
->>>>> ===========================================================================
->>>>> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->>>>> -------+-------+-------+-------+-------+--------+--------+---------++------
->>>>>        0 | 0.028 | 0.115 | 0.159 | 0.161 |  0.163 |  0.161 |   0.163 || 0.154
->>>>>        1 | 0.027 | 0.123 | 0.169 | 0.172 |  0.169 |  0.173 |   0.172 || 0.169
->>>>>       10 | 0.030 | 0.117 | 0.189 | 0.193 |  0.195 |  0.192 |   0.196 || 0.186
->>>>>      100 | 0.045 | 0.134 | 0.233 | 0.368 |  0.365 |  0.369 |   0.361 || 0.358
->>>>>     1000 | 0.230 | 0.300 | 0.412 |  1.26 |   2.11 |   2.12 |    2.13 ||  2.07
->>>>>    10000 |  2.04 |  2.55 |  2.54 |  2.72 |   3.77 |   12.1 |    20.1 ||  20.3
->>>>>
->>>>>>
->>>>>> Is state->n_bql += veth_ptr_is_bql(ptr) something that is commonly done in the kernel? It relies on bool normalization which feels a bit implicit to me.
->>>>>
->>>>> Ok, we could swap for something like
->>>>>
->>>>> if (veth_ptr_is_bql(ptr))
->>>>>      state->n_bql+;
->>>>
->>>> I'll see if I can adjust the V7 patch to this feedback.
->>>
->>> Yes, and also this snippet pointed out by Jonas below:
->>>
->>>   -       struct veth_priv *priv;
->>>   -       u64 bql_flush_ns;
->>>   +       u64 bql_flush_ns = 0;
->>>
->>>   -       priv = netdev_priv(rq->dev);
->>>   -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
->>>   +       if (peer_txq) {
->>>   +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
->>>   +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
->>>   +       }
->>>
->>> Or is peer_txq != 0 guaranteed in veth_xdp_rcv()?
->>>
->>>
->>> And also I would change in the commit message:
->>>
->>> "Flushing when n_bql exceeds dql.limit handles two cases:
->>> - BQL starvation
->>> - The steady-state case where the producer and consumer run at the
->>>    same speed with a large tx-usecs, which would otherwise allow n_bql
->>>    to grow without bound (and potentially overflow int)."
->>>
->>> ... to just...
->>>
->>> "Flushing when n_bql exceeds dql.limit handles BQL starvation."
->>>
->>> ... because after rethinking I think I overstated here.
->>> n_bql should also not grow infinitely for the v6 version.
->>> Nevertheless the new method should be simpler and faster.
-> 
-> Ok, adjusted this for V7 patch.
-> 
->>>>
->>>>
->>>>>>
->>>>>>> For physical NICs adjusting TX coalescing will affect the BQL as this
->>>>>>> affect the TX completion of the transmitted packets. For veth, it is the
->>>>>>> veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
->>>>>>> is where this patch adds netdev_tx_completed_queue calls for BQL.
->>>>>>> Any opinions on the "TX" or "RX" color?
->>>>>
->>>>> Personally I would also say TX.
->>>>>
->>>>
->>>> Okay, we seem to have more votes for TX :-)
->>>>
->>>>
->>>>>> I think I would prefer to configure it on the tx dev, and the recv
->>>>>> side gets the value from the peer. Maybe something like this.
->>>>>>
->>>>
->>>> I'm considering if we should simplify the config by having veth pairs have the same tx-coal value. WDYT?
->>>
->>> I can not think of a case where a user would like to have a different
->>> tx-coal value on either side..
->>> So it's fine for me.
-> 
-> Okay, agreed - switching V7 to have mirrored tx-coal value.
-> 
-> --Jesper
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiRW1pbCBUc2FsYXBhdGlz
+IiA8ZW1pbEBldHNhbGFwYXRpcy5jb20+Cj4gU2VuZCB0aW1lOldlZG5lc2RheSwgMTAvMDYvMjAy
+NiAwMjoyMTo0OQo+IFRvOiAiRWR1YXJkIFppbmdlcm1hbiIgPGVkZHl6ODdAZ21haWwuY29tPiwg
+Ik51b3FpIEd1aSIgPGducTI1QG1haWxzLnRzaW5naHVhLmVkdS5jbj4sICJBbGV4ZWkgU3Rhcm92
+b2l0b3YiIDxhc3RAa2VybmVsLm9yZz4sICJEYW5pZWwgQm9ya21hbm4iIDxkYW5pZWxAaW9nZWFy
+Ym94Lm5ldD4sICJBbmRyaWkgTmFrcnlpa28iIDxhbmRyaWlAa2VybmVsLm9yZz4KPiBDYzogIkt1
+bWFyIEthcnRpa2V5YSBEd2l2ZWRpIiA8bWVteG9yQGdtYWlsLmNvbT4sICJKb2huIEZhc3RhYmVu
+ZCIgPGpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbT4sICJNYXJ0aW4gS2FGYWkgTGF1IiA8bWFydGlu
+LmxhdUBsaW51eC5kZXY+LCAiU29uZyBMaXUiIDxzb25nQGtlcm5lbC5vcmc+LCAiWW9uZ2hvbmcg
+U29uZyIgPHlvbmdob25nLnNvbmdAbGludXguZGV2PiwgIkppcmkgT2xzYSIgPGpvbHNhQGtlcm5l
+bC5vcmc+LCAiU2h1YWggS2hhbiIgPHNodWFoQGtlcm5lbC5vcmc+LCBicGZAdmdlci5rZXJuZWwu
+b3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rc2VsZnRlc3RAdmdlci5r
+ZXJuZWwub3JnCj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4dCAxLzJdIGJwZjogUmVqZWN0
+IHNjYWxhciBhZGRpdGlvbiBmcm9tIHVudHJ1c3RlZCBtZW1vcnkKPiAKPiBPbiBUdWUgSnVuIDks
+IDIwMjYgYXQgMTowMSBQTSBFRFQsIEVkdWFyZCBaaW5nZXJtYW4gd3JvdGU6Cj4gPiBPbiBUdWUs
+IDIwMjYtMDYtMDkgYXQgMjI6NTUgKzA4MDAsIE51b3FpIEd1aSB3cm90ZToKPiA+PiBzY2FsYXIg
+Kz0gcmRvbmx5X3VudHJ1c3RlZF9tZW0gcmVhY2hlcyBhZGp1c3RfcHRyX21pbl9tYXhfdmFscygp
+IHdpdGggdGhlCj4gPj4gcG9pbnRlciBhcyB0aGUgc291cmNlIHJlZ2lzdGVyLiBUaGUgdW50cnVz
+dGVkIFBUUl9UT19NRU0gY2FzZSByZXR1cm5zIHRoZXJlCj4gPj4gd2l0aG91dCB1cGRhdGluZyB0
+aGUgc2NhbGFyIGRlc3RpbmF0aW9uLCBsZWF2aW5nIHN0YWxlIHZlcmlmaWVyIHN0YXRlLgo+ID4+
+IAo+ID4+IFJlamVjdCB0aGF0IGFkZGl0aW9uIGJlZm9yZSB0aGUgZWFybHkgcmV0dXJuLiBQb2lu
+dGVyICs9IHNjYWxhciByZW1haW5zCj4gPj4gaGFuZGxlZCBieSB0aGUgZXhpc3RpbmcgdW50cnVz
+dGVkLW1lbW9yeSBydWxlLgo+ID4+IAo+ID4+IEZpeGVzOiBmMjM2MmE1N2FlZmYgKCJicGY6IGFs
+bG93IHZvaWQqIGNhc3QgdXNpbmcgYnBmX3Jkb25seV9jYXN0KCkiKQo+ID4+IFNpZ25lZC1vZmYt
+Ynk6IE51b3FpIEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+ID4+IC0tLQo+ID4+
+ICBrZXJuZWwvYnBmL3ZlcmlmaWVyLmMgfCA4ICsrKysrKysrCj4gPj4gIDEgZmlsZSBjaGFuZ2Vk
+LCA4IGluc2VydGlvbnMoKykKPiA+PiAKPiA+PiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi92ZXJp
+Zmllci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPj4gaW5kZXggYzhkOTgwZmRkNzA5Li5j
+NmIzNTBmOTU4NWEgMTAwNjQ0Cj4gPj4gLS0tIGEva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPj4g
+KysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPj4gQEAgLTE0ODIzLDYgKzE0ODIzLDE0IEBA
+IHN0YXRpYyBpbnQgYWRqdXN0X3JlZ19taW5fbWF4X3ZhbHMoc3RydWN0IGJwZl92ZXJpZmllcl9l
+bnYgKmVudiwKPiA+PiAgCQkJCSAqIFRoaXMgaXMgbGVnYWwsIGJ1dCB3ZSBoYXZlIHRvIHJldmVy
+c2Ugb3VyCj4gPj4gIAkJCQkgKiBzcmMvZGVzdCBoYW5kbGluZyBpbiBjb21wdXRpbmcgdGhlIHJh
+bmdlCj4gPj4gIAkJCQkgKi8KPiA+PiArCQkJCWlmIChvcGNvZGUgPT0gQlBGX0FERCAmJgo+ID4+
+ICsJCQkJICAgIGJhc2VfdHlwZShzcmNfcmVnLT50eXBlKSA9PSBQVFJfVE9fTUVNICYmCj4gPj4g
+KwkJCQkgICAgKHNyY19yZWctPnR5cGUgJiBQVFJfVU5UUlVTVEVEKSkgewo+ID4+ICsJCQkJCXZl
+cmJvc2UoZW52LCAiUiVkIHRyaWVkIHRvIGFkZCBmcm9tICVzIHRvIHNjYWxhclxuIiwKPiA+PiAr
+CQkJCQkJaW5zbi0+ZHN0X3JlZywKPiA+PiArCQkJCQkJcmVnX3R5cGVfc3RyKGVudiwgc3JjX3Jl
+Zy0+dHlwZSkpOwo+ID4+ICsJCQkJCXJldHVybiAtRUFDQ0VTOwo+ID4+ICsJCQkJfQo+ID4+ICAJ
+CQkJZXJyID0gbWFya19jaGFpbl9wcmVjaXNpb24oZW52LCBpbnNuLT5kc3RfcmVnKTsKPiA+PiAg
+CQkJCWlmIChlcnIpCj4gPj4gIAkJCQkJcmV0dXJuIGVycjsKPiA+Cj4gPiBTaG91bGQgdGhlIGZp
+eCBiZSBsaWtlIHRoaXM6Cj4gPgo+ID4gICBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi92ZXJpZmll
+ci5jIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiAgIGluZGV4IDdkMjdiYTM5NmQzMi4uOWM4
+NWRkNjgwYTQ2IDEwMDY0NAo+ID4gICAtLS0gYS9rZXJuZWwvYnBmL3ZlcmlmaWVyLmMKPiA+ICAg
+KysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gPiAgIEBAIC0xMzU5Myw4ICsxMzU5MywxMCBA
+QCBzdGF0aWMgaW50IGFkanVzdF9wdHJfbWluX21heF92YWxzKHN0cnVjdCBicGZfdmVyaWZpZXJf
+ZW52ICplbnYsCj4gPiAgICAgICAgICAgICogQWNjZXNzZXMgdG8gdW50cnVzdGVkIFBUUl9UT19N
+RU0gYXJlIGRvbmUgdGhyb3VnaCBwcm9iZQo+ID4gICAgICAgICAgICAqIGluc3RydWN0aW9ucywg
+aGVuY2Ugbm8gbmVlZCB0byB0cmFjayBvZmZzZXRzLgo+ID4gICAgICAgICAgICAqLwo+ID4gICAt
+ICAgICAgIGlmIChiYXNlX3R5cGUocHRyX3JlZy0+dHlwZSkgPT0gUFRSX1RPX01FTSAmJiAocHRy
+X3JlZy0+dHlwZSAmIFBUUl9VTlRSVVNURUQpKQo+ID4gICArICAgICAgIGlmIChiYXNlX3R5cGUo
+cHRyX3JlZy0+dHlwZSkgPT0gUFRSX1RPX01FTSAmJiAocHRyX3JlZy0+dHlwZSAmIFBUUl9VTlRS
+VVNURUQpKSB7Cj4gPiAgICsgICAgICAgICAgICAgICAqZHN0X3JlZyA9ICpwdHJfcmVnOwo+ID4g
+ICAgICAgICAgICAgICAgICAgcmV0dXJuIDA7Cj4gPiAgICsgICAgICAgfQo+ID4gICAgCj4gPiAg
+ICAgICAgICAgc3dpdGNoIChiYXNlX3R5cGUocHRyX3JlZy0+dHlwZSkpIHsKPiA+ICAgICAgICAg
+ICBjYXNlIFBUUl9UT19DVFg6Cj4gPgo+ID4gSW5zdGVhZD8KPiAKPiBTZWNvbmRlZCwgQUZBSUNU
+IHRoZXJlIGlzIG5vIHJlYXNvbiB0byBmYWlsIHZlcmlmaWNhdGlvbiBzaW5jZSB3ZSBqdXN0Cj4g
+dGhlIHBvaW50ZXIncyB2YWx1ZSB0byB0aGUgc2NhbGFyLiBXaGV0aGVyIHRoZSBvcGVyYXRpb24g
+bWFrZXMgc2Vuc2UgaXMKPiB1cCB0byB0aGUgcHJvZ3JhbW1lciB0byBkZWNpZGUuCgpUaGFua3Mu
+CgpBZ3JlZWQsIHJlamVjdGluZyBzY2FsYXIgKz0gcG9pbnRlciBpcyBub3QgdGhlIHJpZ2h0IHNl
+bWFudGljIGZpeC4gVGhlIGJ1ZyBpcwp0aGF0IHRoZSB1bnRydXN0ZWQgUFRSX1RPX01FTSBlYXJs
+eSByZXR1cm4gbGVhdmVzIGRzdCBzdGF0ZSBzdGFsZS4KCkknbGwgc2VuZCB2MiBtb3ZpbmcgdGhl
+IGZpeCBpbnRvIGFkanVzdF9wdHJfbWluX21heF92YWxzKCkuCg==
