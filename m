@@ -1,253 +1,177 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F9A32B105
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 18:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781116774; cv=pass; b=aDg4VkRlmBF1ZOrp37dJ2JmBemK1R4KLL1ukPQ/rkOjvsJmN368ltPL6sdv7D2W7VZVvUbSbNr5R4HiUF1zco3da7JNvD0wp0bZ9u7Yj/yO/9OJEMZXZ6ypqnAti61C+thc7iOSXFpAo9t+zhxK5bFf7OI9IkNUKb1G9IfWrtU8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781116774; c=relaxed/simple;
-	bh=aRSQey8t3zeVlUBixJVoeRN2sHbAyrNfCVqldIQvljQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qXoyIBBeiUWz0vrHwtzLh8zPibNt9A3efLxT4RcF/wM5lVw5BKhMuapkNn11W/HbbbAGYUXj1/0GUHn4UIqGV8gZMhI+0CnDeWPnWLmE+Ncu++f19wxFt+mf618K847B+94sta73iMjR4cwixwoiK92P7IlwPYFUMXWC25v9qI4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ULHqXCpB; arc=pass smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7F91799F
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 19:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781119053; cv=none; b=ptBh5HchjXmuxS67iRk4maH72fRZJ8cxFoxsQkIU1x9xtbtPXSTJeWN72twoWycAAgJgei33/J2PV2Cg0f24X+ZpE0HQKclfyzaua3tTKRemf2JvhYNPeyOAjl2JB2tI80Gjp82bBZJoc4guKZ+xT+8L9hJ/pdi3gWyrgZ6HmL8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781119053; c=relaxed/simple;
+	bh=AZvi6ZNzBZy6L1WVZ0LtkofFo1vWzMWYeJFKz3V4hFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ENIv1nUm3l9D3vE0YznjsJxKK9uLNGJl9VSuZ2bXdeoMbwu/H5bP5jNwb19GMfDhCL/59gAkKmpx1zcU9erPyTRVX4ZK31aKP9PFJNSJApSw4zhaXM3OrLyMnYf48n6TZ0WHm99SgzV9Cxo2vtu+O7wmgZIKQgLN7qUiPGywihk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OghVc7pR; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ULHqXCpB"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490d1e54b3bso34240035e9.1
-        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 11:39:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781116772; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P33lnqOob0KiSEtMeCF6y9/RNY87mkvOVMOg5KWgLimR6+PQPtdgssm0uOdCsySmaN
-         f4dQ9EfXOD3rT9Y3N0VvH9ibZFhXxRuiXIaahO4PVo1jILVRrd5VI3KIOXGAWxcIWbCz
-         i5+YkpaV3DoB4bxYTP6Sdw2wUMPBDtPlN5Oqrxy1CV1dcpwygTYcEqfQQRdqPvBiCel+
-         q4rAKulAuHt6yPXWEwrVgl3cMqmehBGm775x+4HQxa3cZwHz4jZ3De1NSTeB5eaMvECF
-         zODetBVZDrsn/Tto6xIquwMUG3N0Edp9RLTrPV5s4iOsVtDEOjJmGJcurq4gZ6K3Omx2
-         ivqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QAI5rGE1lcochlZ5iYlpDGay/XmnlZU+2TzD3/+oOuo=;
-        fh=5J72raPVtknhZsRN8/PgThEXnbSw+jyrPljNPHEGcuc=;
-        b=JTjINQ0gH0FsWovyKfgijvPKg/kBteaOMrcl72jPd0duCweHDk1VkrpF7IS2m33kSl
-         6gWbTshyem0lnHQfN/4R/sy4uFrzejwvFlWCae54bX7VVlAEy7hkDUYOpREMKbmDVMam
-         K13md8BcWu9oj8NpzsvqdXjx3cF29Zd5Wo/QwU9GAF7KnKMvkcf9UT9zvxz9+FKeZVgA
-         IX7Vi3lwTI/BQbYopRD/YbIRUj5kdT+v+pYFdMVaqHzpTB/I7yHrIcy7UjMuVAxVOOdg
-         a4/HgMUzUN2eCHOW9IznoLiUA/0Vfa0BCuPQvrcELn2ZJ8nrrwgBlmtyTXZIQSG3S2W+
-         mimw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781116772; x=1781721572; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QAI5rGE1lcochlZ5iYlpDGay/XmnlZU+2TzD3/+oOuo=;
-        b=ULHqXCpBIu7BNPilpKVAEAQvv3KQ9RqLflKC29BWdwXxXV1rsYl5variAgw8kc8smM
-         d4zaKNk6yNCMlF8CFbziHKB1pekkWzqq8yRBVh1nMGedI5zYZFCM+OVZPlf6S+UDpa/y
-         42/X2CYSr6b+bwgqRgQOqtXukKqs5RWmIKCETx0EoH/psb3JHQDe1HdgeAEnvYsCV6Kk
-         N1i0YEESyh4hIUE7HTiqYumoHOYOu+TBcMD5dKcpwaHkksXHrEjv1Ne1ZbMo4AFiF9rG
-         XIc9twHNIhW8EEL7J1BMiuNIwe/Q+oUUGU5r9XUZWCmpYCYQUiAipujXsbsxldvHsVgV
-         c3qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781116772; x=1781721572;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QAI5rGE1lcochlZ5iYlpDGay/XmnlZU+2TzD3/+oOuo=;
-        b=jQjWLhGTvK4k6iaStgnUrsgQlHxLZnvIJi9nJkVZbBguJ1Up6D8jBfJR1d4CpOdHgF
-         iRvxExd88vbebg6hQL+O4NVVYeWN68cbtJXwL2inFKJVUUmjq3/YUzOk3oICWCvlUAvK
-         D4laD/O/r8Jo+p/+drrA0eotK1qoQWrOuWYpGU/KdrXE5x6d7apdeDzYt2dJr+7W9LEI
-         NJqyOFYOubsBd2c6VrcbMOIH2p7p7xGIlRUWeYVoaUevzhvhENvpvB6hrDHpW1WeCr32
-         gvMdDaFnfheC7fUbJ8IxxKL6urgzobectfcSqfX0c5tD9hD2JSyzW6clzYq3S1WjLfLt
-         oHkg==
-X-Forwarded-Encrypted: i=1; AFNElJ8EcbSGBAW41t6PkR5G5woYhGKho+ImJqpAT78b2Cfksm/wm/g+5IVlZzb1U/1k3k6STZY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeKgi+GynjKEhHQcf/BZvjSlzro3HTOz5U7SKHO65cN9tBYVh3
-	9DyphNC8HDBlxsk9aneBz8HcIJX1IfiZh5q2rXV1Zn5UgMrTTtaMc0LrEIfE6k0SfIKM6O3Xebb
-	SdWp2Pqf8S2syI0/obuN94zTAGm6BGQc=
-X-Gm-Gg: Acq92OFLclaD+DKslRcGRoAhBfKFNuimIfouCtAh3MU5iCb9lFntuBIdCNz9zH3IfEW
-	NuQFTqtmOyjN7tz0ZVFtBIxdpAWVbZcYef5SU5nVcarrMiS3X+YN+yqx6q3m1paFoFCB9X5q/R6
-	09FyFtkwPW5J/ZwNRpXvJL84b1yLPGC2Foa6ER3Q8F/Trs874cZHWKANMm6cjkDF8QDvbafMfk5
-	gC+xHUTjWvtR+hlguCcBhZssjVdQJBpDy/xA5sWlJFRyLWgciczY6k77H7TmwYBMTYhthHFs2aS
-	8EqPYbmgs8DXhSiaOaaZT1R0Dsr7fm2zeX3/BRn3TIsuk9/IHbCF
-X-Received: by 2002:a05:600c:c059:10b0:488:b187:3c with SMTP id
- 5b1f17b1804b1-490c265b439mr323245315e9.14.1781116771269; Wed, 10 Jun 2026
- 11:39:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OghVc7pR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781119050;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/myOSqG7uv5qCnsE2QetCIJ83uVxLLLFgvexWhF+Xlo=;
+	b=OghVc7pRk0Ov/DwVRl//a5iY8SVK9k4d+eEyHrqZ+fzntU23sVxPe8jLBQ4IFvHG3dDtzm
+	QJtK40AGMrw2Xyv/APkiacmmvN3eRcdeEf9q1JR2onBRp3gpapR59enVTirnc+pGb6SWeg
+	xz5VC49mfA3M/tEtuoCGLIZQWJ10qWE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-wXi_R3TWMLeok5rQbRDlbA-1; Wed,
+ 10 Jun 2026 15:17:23 -0400
+X-MC-Unique: wXi_R3TWMLeok5rQbRDlbA-1
+X-Mimecast-MFC-AGG-ID: wXi_R3TWMLeok5rQbRDlbA_1781119041
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E7FC180048E;
+	Wed, 10 Jun 2026 19:17:20 +0000 (UTC)
+Received: from thinkpad (headnet02.pony-001.prod.iad2.dc.redhat.com [10.2.32.102])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CABD23008DCB;
+	Wed, 10 Jun 2026 19:17:13 +0000 (UTC)
+Date: Wed, 10 Jun 2026 21:17:10 +0200
+From: Felix Maurer <fmaurer@redhat.com>
+To: Daniel Hodges <daniel@danielhodges.dev>
+Cc: Daniel Hodges <git@danielhodges.dev>, bpf@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, vadim.fedorenko@linux.dev, song@kernel.org,
+	yatsenko@meta.com, martin.lau@linux.dev, eddyz87@gmail.com,
+	haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev,
+	herbert@gondor.apana.org.au, davem@davemloft.net
+Subject: Re: [PATCH bpf-next v8 0/4] Add cryptographic hash and signature
+ verification kfuncs to BPF
+Message-ID: <aim4Ntj22wM30Ga8@thinkpad>
+References: <20260225202935.31986-1-git@danielhodges.dev>
+ <ag8zGP5azt743BWc@thinkpad>
+ <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260610175651.647515-1-ihor.solodrai@linux.dev>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Wed, 10 Jun 2026 20:39:19 +0200
-X-Gm-Features: AVVi8CcOmKKzzKpfqJi3RQYIzBaDejV9oYlpv_30ztPULZsRV2up2gs-F5uqBVw
-Message-ID: <CA+fCnZcRLZS4r=FBB6EX-G3+=X675q96hkdR_wLJexeuW-tPVw@mail.gmail.com>
-Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
- under 5-level paging
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, Jun 10, 2026 at 7:57=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
-dev> wrote:
->
-> On x86_64 with 5-level paging (LA57) and inline generic KASAN, the
-> following flaky splat may be observed on boot:
->
->     BUG: KASAN: wild-memory-access in do_raw_spin_lock+0xcf/0x260
->     Write of size 4 at addr ff110001000c90b8 by task swapper/0/0
->
->     CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.1.0-rc5-gcba33e0b2=
-907 #1 PREEMPT(full)
->     Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix,=
- 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
->     Call Trace:
->      <IRQ>
->      dump_stack_lvl+0x54/0x70
->      kasan_report+0x117/0x150
->      ? do_raw_spin_lock+0xcf/0x260
->      kasan_check_range+0x264/0x2c0
->      do_raw_spin_lock+0xcf/0x260
->      handle_edge_irq+0x35/0x770
->      ? do_raw_spin_unlock+0x51/0x2a0
->      __common_interrupt+0xae/0x120
->      common_interrupt+0x7c/0x90
->      </IRQ>
->      <TASK>
->      asm_common_interrupt+0x26/0x40
->     RIP: 0010:identify_cpu+0x2b2/0x3460
->     Code: 00 41 c7 07 00 00 00 00 4d 89 e6 49 c1 ee 03 43 0f b6 04 06 84 =
-c0 0f 85 a3 1c 00 00 41 c7 04 24 00 00 00 00 31 c0 31 c9 0f a2 <89> c7 42 0=
-f b6 44 05 00 84 c0 0f 85 ad 1c 00 00 41 89 3f 48 8b 44
->     RSP: 0000:ffffffff97807df0 EFLAGS: 00000246
->     RAX: 0000000000000020 RBX: 00000000756e6547 RCX: 000000006c65746e
->     RDX: 0000000049656e69 RSI: 0000000000000000 RDI: ffffffff98632fd8
->     RBP: 1ffffffff30c65fc R08: dffffc0000000000 R09: 0000000000000004
->     R10: ffffffff98632fc4 R11: fffffbfff30c65fb R12: ffffffff98633050
->     R13: ffffffff98633048 R14: 1ffffffff30c660a R15: ffffffff98632fe0
->      identify_boot_cpu+0xd/0xd0
->      arch_cpu_finalize_init+0x24/0x1f0
->      start_kernel+0x31e/0x3e0
->      x86_64_start_reservations+0x24/0x30
->      x86_64_start_kernel+0x13a/0x140
->      common_startup_64+0x12c/0x137
->      </TASK>
->
-> It fires very early in boot. If kasan_multi_shot is set, the reports
-> are non-fatal and keep repeating, and the boot CPU wedges before
-> userspace is reached. The accessed addresses are valid 5-level kernel
-> pointers, so the report is a false positive.
->
-> The root cause is in generic KASAN not seeing
-> cpu_feature_enabled(X86_FEATURE_LA57) set, because the bit is cleared
-> in identify_cpu() when the offending interrupt happens [1]:
->
->   memset(&c->x86_capability, 0, ...);   /* clears X86_FEATURE_LA57 */
->   ...
->   get_cpu_cap(c);                       /* re-reads CPUID, restores it */
->
-> addr_has_metadata() then uses the 4-level threshold, and 5-level
-> kernel addresses fall below it, so kasan_check_range() reports them as
-> wild-memory-access.
->
-> Define USE_EARLY_PGTABLE_L5 in mm/kasan/generic.c so
-> addr_has_metadata() uses the stable variable, as
-> arch/x86/mm/kasan_init_64.c already does.
+Hi Daniel,
 
-It took me some digging to find which stable variable you refer to
-here; I think this needs to be better explained.
+Sorry for taking long to get back to you, I've been on vacation for a
+while.
 
->
-> Some context on how this was noticed and reproduced below.
->
-> We started seeing flaky splats as above [2][3] on BPF CI runs after
-> runner hardware has been upgraded. Specifically, new x86 runners are
-> c7i.metal-24xl AWS EC2 instances, which are Intel Sapphire Rapids
-> machines that support LA57 feature, and have it enabled.
->
-> The splats can be reproduced with qemu on any x86_64 host with
->   -cpu max -accel tcg
->
-> Build a kernel with:
->   CONFIG_KASAN=3Dy
->   CONFIG_KASAN_GENERIC=3Dy
->   CONFIG_KASAN_INLINE=3Dy
->
-> Boot it with kasan_multi_shot. The fault fires fast before userspace,
-> so no rootfs is required. For example:
->
->   qemu-system-x86_64 -display none -serial stdio -no-reboot \
->     -smp 4 -m 5G -cpu max -accel tcg \
->     -kernel arch/x86/boot/bzImage \
->     -append "console=3DttyS0,115200 earlyprintk=3Dserial,0,115200 panic=
-=3D-1 kasan_multi_shot nokaslr"
->
-> It's a timing race, so a single boot hits it only sometimes.
-> However running several qemu instances in parallel on the same host
-> significantly increases the hitrate.
->
-> I confirmed the proposed fix eliminates the splats.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/arch/x86/kernel/cpu/common.c?h=3Dv7.1-rc7#n2001
-> [2] https://github.com/kernel-patches/bpf/actions/runs/27271262414/job/80=
-542509369
-> [3] https://github.com/kernel-patches/bpf/actions/runs/27260143782/job/80=
-505353689
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  mm/kasan/generic.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-> index 2b8e73f5f6a7..b5f430f2dbb6 100644
-> --- a/mm/kasan/generic.c
-> +++ b/mm/kasan/generic.c
-> @@ -9,6 +9,13 @@
->   *        Andrey Konovalov <andreyknvl@gmail.com>
->   */
->
-> +/*
-> + * check_region_inline() and addr_has_metadata() can run very early.
-> + * For example, in an interrupt taken while identify_cpu() has the CPU
-> + * capability bits temporarily cleared.
-> + */
-> +#define USE_EARLY_PGTABLE_L5
+> It would also be helpful to hear about what your use case is.
 
-There are other users of addr_has_metadata(), besides ones in generic.c.
+I'll put this one first, as it probably informs my thinking quite a bit.
+My use case is accessing hash functions from the networking bpf hooks,
+mostly XDP and tc. I'm less interested in the cryptographic hash
+functions (although I think we should support them as well), but
+checksums like CRC32c which have efficient implementations in the kernel
+and are not straightforward to implement in bpf.
 
-Thus, should we place this definition into mm/kasan/kasan.h? And
-likely guard it with ifdef KASAN_GENERIC || KASAN_SW_TAGS (HW_TAGS
-should not be affected by this AFAIU).
-
-And let's also extend the comment to explain better what's going on. I
-like the way the issue is explained here:
-
-https://elixir.bootlin.com/linux/v7.0.12/source/arch/x86/boot/startup/sme.c=
-#L36
-
-> +
->  #include <linux/export.h>
->  #include <linux/interrupt.h>
->  #include <linux/init.h>
-> --
-> 2.54.0
+> > Taking an initial look at your hashing patches, I'm wondering: the usual
+> > interface to hash/digest algorithms is to have three functions: an
+> > init() function to set up state
 >
-> --
-> You received this message because you are subscribed to the Google Groups=
- "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion visit https://groups.google.com/d/msgid/kasan-dev=
-/20260610175651.647515-1-ihor.solodrai%40linux.dev.
+> Doesn't bpf_crypto_ctx_create already provide the initialization? I was
+> trying to make that pattern work by adding the bpf_crypto_type_id to
+> make the code a little more maintainable.
+
+No, bpf_crypto_ctx_create() doesn't do the initialization I was
+referring to, it only creates the tfm that is later used to do the
+hashing. The actual init() of the hash function happens inside
+crypto_shash_digest(). More details at the end of my reply.
+
+> > an update() function that can be called  multiple times to hash new
+> > bytes, and a finalize() function that creates the actual hash.
+> > Depending on the algorithm, some of them (esp.  finalize) may be
+> > no-ops. Often, a fourth function, like hash(), is provided
+>
+> I think the bpf_crypto_encrypt should cover that along with the
+> bpf_crypto_hash in the first patch.
+
+Not sure if I understand you correctly, bpf_crypto_encrypt() shouldn't
+be callable for a hashing crypto context at all?
+
+> > I think we should provide the same init/update/finalize interface in bpf
+> > as well to make the API more flexible. That would require splitting out
+> > the shash_desc from the (mostly static) context. But doing so would also
+> > address the review comment from bpf-ci bot to patch 1. WDYT?
+>
+> I was trying to make things work with the existing bpf_crypto_ctx
+> lifecycle. IIRC in the V1/V2 of the series there was a separate struct
+> but it was suggested to integrate the changes into bpf_crypto_ctx.
+
+Yes, I see that the idea is to integrate into the existing life cycle
+and I appreciate that! But IIUC, they are subtly different at the
+moment.  Just to be sure, the idea of your first two patches is to
+provide an interface to shash that supports the do-all-at-once function
+hash()/digest() (i.e., internally do init+update+finalize), pretty much
+the equivalent of the existing encrypt() + decrypt() interface to
+skcipher, right? I.e. not supporting each and every use case for now but
+just the case where all data is available and we want to hash/encrypt/
+decrypt in one go?
+
+With that assumption, the current implementation for skcipher looks like
+this: we have bpf_crypto_ctx_create(). It sets up a bpf_crypto_ctx with
+the chosen algorithm, the right key, etc. It must be called from a
+sleepable bpf program because it may require to load the kernel module
+with the requested algorithm. The prepared bpf_crypto_ctx can be stored
+in a map so it can be used from other (non-sleepable) bpf programs,
+e.g., XDP programs.
+
+When the bpf_crypto_ctx is used with encrypt()/decrypt(), both functions
+have the siv argument. It's a dynptr to some memory, containing the IV
+for algorithms that need it, but also has room for the *state* if the
+algorithm needs it. This means, the state is provided (fresh) for each
+invocation of encrypt/decrypt.
+
+Your proposed implementation for shash, bpf_crypto_ctx_create() calls
+bpf_crypto_shash_alloc_tfm() which creates the tfm (just as above, needs
+to be in a sleepable bpf program to potentially load modules), but it
+also allocates the shash_desc which has room for some algorithm state if
+needed. This mixes the static, long-living, reusable tfm with the
+per-invocation shash_desc. shash is safe to use with the same tfm
+concurrently exactly because the state is stored in the shash_desc,
+which must not be used concurrently. Think of the shash_desc to be the
+equivalent of the siv for skcipher.
+
+Therefore, I think the memory for shash_desc.__ctx should come from a
+dynptr as well. Do you agree or did I miss something?
+
+Btw, your bpf_crypto_shash_alloc_tfm() never sets shash_desc.__ctx, so
+that's a bug anyways.
+
+> Regarding the bpf-ci bot I think it's somewhat valid, but you could
+> solve that by putting the bpf_crypto_ctx in a per CPU map or protecting
+> it with a bpf spinlock.
+
+Two things for that: for networking use cases, needing a lock because of
+implementation details doesn't sound very intriguing. Plus, if per-cpu
+or a lock are required, that's currently not enforced. This means an
+invalid/unsafe bpf program could pass the verifier, right?
+
+> If you want to give it a go feel free.
+
+If you're still interested in pursuing this, please go ahead with your
+work, I don't want to take it from you. Only if you're explicitly not
+interested anymore, I'll go ahead and try to build something on top of
+you work. Just let me know :)
+
+Thanks,
+   Felix
+
