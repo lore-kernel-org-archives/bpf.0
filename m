@@ -1,359 +1,255 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF9B1465B4;
-	Wed, 10 Jun 2026 07:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03AF385D85
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 07:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781075084; cv=none; b=NDx0TNWLMw40n+OYbSujoNJvDKv8L8GMywci+s+oYlzVTEgkns/SlGy9m1W060m7fmwALCsU320uj3Jrs2X3hSdUPFQ8Prpq+rzpAdrT2RtbBovmp9Z8RaH2my95mftvtLCdBgxNaKvclavIX00MpaiY8IcBdEoo7Z0N7TEN6k0=
+	t=1781075632; cv=none; b=FV9oVPWsDWv6jy65suSdicH1xdZ1YJ3mkpX7HmYhYq+FFvC/XXXtS7qReOxL26Zc7pLLkRVWFAj/lwadhNLhsAqrAC/BLyaMFqTfaSjx73Frl6+yqacZYNom1u0BTwWuYgux4VA7TGuNpSY9mkJ/pS1Bpm+S4hpmDKtfZbOcuWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781075084; c=relaxed/simple;
-	bh=zO22p2kz0zbI/8P3e70thMESsr7D1s3bagjfJ4ECxJE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=feZgql60gqAu6A7i23P4jZO5zOXAfreQ7voBMn5xRrLVi5DzP5JV8GRugVOMrTEVXZkNTJmgq/781aYWif9IAr+3m5b9lkZS64Yfbr55BRdq144FcnqvV5LqkEqEdppnGscRYNRQ3SIfs6gkn2RFnSRi0Ns2jPbSUpDXqcyQZ4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
-Received: from [129.217.186.234] ([129.217.186.234])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65A74HDq021388
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 10 Jun 2026 09:04:17 +0200 (CEST)
-Message-ID: <fb84879b-9fdf-4474-b152-9cbf0887bd21@tu-dortmund.de>
-Date: Wed, 10 Jun 2026 09:04:16 +0200
+	s=arc-20240116; t=1781075632; c=relaxed/simple;
+	bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pfn/3k0duH8ilHHcV5TavSynU7/o+iCc7sVCmH6lo0IY06oXsOGEtqqZhfUs6AL2TbOrbG5vCVmDRmGQkzSMIn4xNkQE7mOxZEeDLyWJMXGehgvv2sazc9wav/AhIEsxXmdUTQLVqKaiPIE5w0hiir4OGdclnHYp9ZruGLwlUys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6UFO26m; arc=none smtp.client-ip=209.85.214.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6UFO26m"
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2c0c3315c5dso67211455ad.3
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 00:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781075630; x=1781680430; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
+        b=V6UFO26mrR8jlINLiVfxjBhxh+OvmhJPe3xZLarevWETHG6JgRGzcKr9DiLPstL0GE
+         TypiCqLbJVS7PDUjBMI2wSsvM9EzPJtCidVz2TvGfiVkykckj6EwgPZgYh1AbysxIqOD
+         YQjywpFFzmxK4h2eZJeq/ts5cawwXu6XAxL0Du9kP6kVwSE0cvEeC/rXrx7vFUBJbHlP
+         sZkTcB++MXC5HdQ05zC3sWbftURxrxacgufM/WgSQyKgArnVHumn6BN4rsbF6piSqLsk
+         UclhWVQwH4QLWUpYlSwdRY43X5Bwsrf0OtOuXj0GiOgvnPCSOrLdYANjtTvnlD6j0YvH
+         X7iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781075630; x=1781680430;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yzdEMh5lHMBwcaHbKYzieVMCGt4oUIEY8iF46MdpcK0=;
+        b=X706H2/EP8Nsry17o1pzifRTNQRKwUhZZ5T6XOXmXIhLQRftlCsvpQszXdpPxyEbwr
+         IPxYBEGXvPXHSy5ARK/NYbYofugfT4l8RNldoZbpVv9YUJlBw8kt48WuAqgL0mkKROdc
+         enFlSPUex06N4OVS+Y+C60b8kLsmr4WX1Xe7q8mLXhhng9LNlBcfUJDYYzCkQxnH0svx
+         lvcM339+ljF4cCtHp6hmbbiN9yDp43/QUPCAvKOlkNpRNtStsmZD5bhf2kE6/rJ+1pjv
+         6VRqstgUMnwJ0/XWkXEGJTxpvNcOzuRx7pqbgIlvHgbYc8fm2AfZO7qckisq/hiOJ0Oz
+         pI4g==
+X-Forwarded-Encrypted: i=1; AFNElJ8AEo0THuxiHUpHfvDeUdw9ZsnATfWQIE4rSkCbVZkAl9Stn7xLwXBNW2IgWfQVdcgs/50=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5aGf5OIiMZmW2fg6bbam/Gz+05K+k6SpwcOhALKXWd7/NRZTd
+	+O2FpTQxY1ip5VWhwbYIIE4D9queckeudczhMwbqL9pXmMy+xySt19eg
+X-Gm-Gg: Acq92OGChfqjiXbMmgXuSGZeybW8vFImbQKxl5couzWMR6fEnnX9/oxJZiyQYF8DJCe
+	/6W8yLhIgaxeBFcIojVeqMftzUbUcziuoP2VouV3Nyu0BD2Fkec9VWn+pqxSx9NkF7WPrNEq4rn
+	8Szd+SRax86U6dmBhOToXqDfWWXA9+vFtbmnW6VohjOtcxb6FDpbDNNzV6GNM7N0ukrhjfLoUCE
+	D46fnhvwvXm+YJbiHJ1DEvigx87o8qhUhMWaPo1qicEf9f9tYdxNncjm7+xuhr/PWgoYY9GfRqx
+	ii1z2jE/fpvL/jE9UBXv3LgC/QwKB3GjPInUfgZ8LK0to9m22YTuGy/U+Ba8CDuP7DC+77/xjYp
+	O+6evAPjHv9fK/udtlb5Rex0IyXnvfMS3drnuwFZjQSTGqjiMlUPf1PHFpJ6d+JDv3vXk6oS3by
+	y5UlrcJ+MxxCIsEP5BaDfN6JRyHUf3Huj4
+X-Received: by 2002:a17:902:ef08:b0:2b9:6458:1a2c with SMTP id d9443c01a7336-2c1e820e30bmr298583035ad.13.1781075629930;
+        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
+Received: from [172.30.1.91] ([59.6.68.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c164f875casm237059765ad.22.2026.06.10.00.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 00:13:49 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+Date: Wed, 10 Jun 2026 16:13:45 +0900
+Subject: [PATCH bpf-next v3] selftests/bpf: Add arena direct-value
+ one-past-end reject test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 5/5] veth: time-based BQL completion
- coalescing via ethtool tx-usecs
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-To: Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller"
- <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-References: <20260527135418.1166665-1-hawk@kernel.org>
- <20260527135418.1166665-6-hawk@kernel.org>
- <db2aa3b9-09d4-46d8-aafc-0a859ee8b635@tu-dortmund.de>
- <7fcb9f02-db61-416c-a6f5-b737d74110ec@kernel.org>
- <e8478d82-5af6-44f7-a481-584c09ae8337@tu-berlin.de>
- <b8569d0f-7a99-4488-a1bb-63d813231b7d@tu-dortmund.de>
- <90fc9fc1-f396-4ed1-888f-89a96294664e@kernel.org>
- <5e6315b1-b734-4f5f-af5e-bc76612f0993@tu-dortmund.de>
-Content-Language: en-US
-In-Reply-To: <5e6315b1-b734-4f5f-af5e-bc76612f0993@tu-dortmund.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260610-arena-direct-value-v1-v3-1-d5f0d935ee45@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOyw6DIBBFf6VhXRoe9dVV/6PpAnBQGkUDSmyM/
+ 16kGzdNk9nczJxzZ0UenAGPbqcVOQjGm8HGwM8npFphG8CmjhkxwnKSE46FAytwbRyoCQfRzYA
+ DxaCvtS6zQlalRJEdHWizJO8DyVFjC8uEnt+Nn+Ur0rt2v22Nnwb3Ti8Emog/bXEoLiSnShFRK
+ qHuTS9Md1FDnzoCO1qyXxYWLaJiSrKSAi/yo2Xbtg/ppg5jHAEAAA==
+X-Change-ID: 20260603-arena-direct-value-v1-ef4df857b98b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>, 
+ Junyoung Jang <graypanda.inzag@gmail.com>, 
+ Woojin Ji <random6.xyz@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5647; i=random6.xyz@gmail.com;
+ h=from:subject:message-id; bh=53JyhO7i5frR2tFIJKi76YP5Onuf89dbn1JJ8Mp4sJ0=;
+ b=owEBbQKS/ZANAwAKAUOXRMMVrfhrAcsmYgBqKQ6q/0Mnw8OjeZLWplgHEnkOYShXxKmetW4OQ
+ f6Q92Vn4+mJAjMEAAEKAB0WIQSrknTJbxUcAdPNt5BDl0TDFa34awUCaikOqgAKCRBDl0TDFa34
+ axveEACfexJ/1G1cZljjcqjlGuRWEziCRKgYU15g/chjQTl7g7ce7+MNBPJURxttv7VmgW8uZyM
+ secmTrgsg4TwTKq6Wfskg2RjJe3P4PRdILTfmNrUtP16bH3UqHC9Btq0vJsgv7jTOz29wlt2I4a
+ MVjM3D9QsjZCG5Di0aMYscwcDJXJ4qhfHDeS53PoIeEekdyeB77nH08zgqScL/x0rT3WpCmniwt
+ SxIJe/bsgZeDHafcB8uj69SD06r+wp7TcbRZ0h5VyOJmDmer/AUAxa+6t2A41t5akW4DRoI4eE1
+ AmygEVyo3tIp7mVxCaTnlhlzw2aIIu77F6iqFaCyPQaBDCKVzksuW0ntC705i6r0NzgQaecTCfE
+ BvxShBIn1RXvR79xlWWVICvn+mpQ6YI/lod57n6L5EaTVPI6k2ugHAfl5wbolZhlvUJNEE3i7Qd
+ syNJdaATVgpv1EJE0dd6cUx/66H5EFzraxcUhnoDDqk0VLGQ+RHhyErtRYgO07OGYPsouZe41j3
+ sB0nMJlUuqn6jijDuLbwpiXwz6+hnjx4b3O3qCYqKEZ/AbtZJK0PP5H2JI7RjcVJS34iLOhbSTM
+ jsFBgEn98SICUzKnrdTRITXJ2oWZmSzPm+mMs/Vx6Mwu4HM4JfvBFXhJvuBCe1T8X0cTgLLF0qQ
+ WFf8czg0/HWX1Cg==
+X-Developer-Key: i=random6.xyz@gmail.com; a=openpgp;
+ fpr=AB9274C96F151C01D3CDB790439744C315ADF86B
 
-On 6/9/26 17:08, Simon Schippers wrote:
-> On 6/9/26 15:59, Jesper Dangaard Brouer wrote:
->>
->>
->> On 08/06/2026 16.21, Simon Schippers wrote:
->>> On 6/8/26 15:13, Jonas Köppeler wrote:
->>>>
->>>> On 6/8/26 3:04 PM, Jesper Dangaard Brouer wrote:
->>>>>
->>>>>
->>>>> On 08/06/2026 12.38, Simon Schippers wrote:
->>>>>> On 5/27/26 15:54, hawk@kernel.org wrote:
->>>>>>> From: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>>
->>>>>>> Per-packet BQL completion forces DQL to converge on limit=2, causing
->>>>>>> excessive NAPI scheduling overhead and qdisc requeues.
->>>>>>>
->>>>>>> Accumulate BQL completions and flush them when a configurable time
->>>>>>> threshold is exceeded, letting DQL discover a limit that bounds actual
->>>>>>> queuing delay to the configured interval. Coalescing state persists
->>>>>>> across NAPI polls in struct veth_rq so completions can accumulate
->>>>>>> beyond a single budget=64 cycle.
->>>>>>>
->>>>>>> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
->>>>>>> setting tx-usecs to 0 disables coalescing and falls back to per-packet
->>>>>>> completion.
->>>>>>>
->>>>>>>     ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
->>>>>>>     ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
->>>>>>>
->>>>>>> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
->>>>>>> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
->>>>>>> ---
->>>>>>
->>>>>> I found the issue that n_bql may become infinitly large if producer
->>>>>> and consumer have the same speed (and tx_usecs is large). It could
->>>>>> cause a potential BUG_ON if n_bql grows beyond INT_MAX...
->>>>>> Also I figured that no hardware BQL driver ever completes more than
->>>>>> BQL limit many elements.
->>>>>>
->>>>>> Therefore, I propose a simpler logic (see attachment) that completes
->>>>>> either on the usual bql_flush_ns or if n_bql > dql.limit.
->>>>>> If n_bql > dql.limit then we either have the case above that the
->>>>>> producer is as fast as the consumer or we have BQL starvation.
->>>>>>
->>>>>> if (state->time + bql_flush_ns <= current_time ||
->>>>>>      state->n_bql > peer_txq->dql.limit) {
->>>>>>
->>>>>> It must be n_bql *bigger than* dql.limit because the producer will
->>>>>> always exceed the limit before it stops, see netdev_tx_sent_queue().
->>>>>> It is fast because peer_txq->dql.limit is in the cacheline of the
->>>>>> completion path, see dynamic_queue_limits.h.
->>>>>>
->>>>>> Another advantage is that we avoid the snippet checking for empty
->>>>>> and BQL stopped which requires an smp_rmb() and an test_bit().
->>>>>>
->>>>>> Apart from that I:
->>>>>> - Always call veth_bql_maybe_complete() in the for loop to have
->>>>>>     more accurate completion intervals when having mixed XDP and
->>>>>>     non-XDP packets.
->>>>>> - Made it so tx_usecs = 0 is now also a normal case.
->>>>>> - Change the type of n_bql to uint instead of int.
->>>>>> - Added _ONCE() for tx_coalesce_usecs as suggested by Paolo.
->>>>>> - Moved the bql_state init in __veth_napi_enable_range() in front
->>>>>>     of napi_enable() to avoid a race (Sashiko).
->>>>>> - Moved the bql_state reset in veth_napi_del_range() after the
->>>>>>     ptr_ring_cleanup() (probably does not matter but makes sense to me)
->>>>>>
->>>>>> Benchmarks look just fine, see commit message.
->>>>>>
->>>>>> WDYT?
->>>>
->>>>>
->>>>> Looks good to me, I will use this in my V7 patchset.
->>>>>
->>>>> A bike-shedding issue: We change the coalescing parameters for the veth
->>>>> net_device, but should this be a TX or RX parameter?
->>>>>
->>>>
->>>> Hi,
->>>>
->>>> The results look a little bit suspicious, that in some cases the p99 is smaller than the average, which can happen if you have really large max values. It feels something is off with the methodology. I think we should drop the avg, and include the max value. This would give a better picture.
->>>
->>> Luckily I saved the raw test result from /tmp (the raw ping output
->>> is included).
->>>
->>> extract_ping_p99() seems to be broken. It has issues ordering the
->>> numbers. So if there are 2 or 3 numbers after the point I think.
->>> avg ping is fine.
->>>
->>> Claude Sonnet wrote a script for me to recalculate the p99 pings
->>> from the raw ping output).
->>
->> For programming switch to Claude Opus, as Sonnet cannot code IMHO.
-> 
-> Already used 95% of my Copilot Pro+ Tokens this month :P
-> 
->> (Claude Opus wrote the selftest we placed in [1])
->>
->> Is your script still based on our github[1] selftest ?
->> If so, then please make some PR(s) against my repo.
->> I want this to be easy reproducible for others.
->>
->> [1] https://github.com/netoptimizer/veth-backpressure-performance-testing
->>
-> 
-> I forked Jonas latest branch [1] and ran the tests with that.
-> 
-> But I faced 2 issues that I then fixed:
-> - Ping fails in some runs (~20%) -> My fix: Retry the run until it
->   works.
-> - extract_ping_p99() has a bug for me which caused wrong results,
->   as pointed out by Jonas -> Also fixed it
-> 
-> Because of the inconsistencies I will rerun over night to have
-> clean benchmark results.
-> 
-> I will make a PR tomorrow.
-> 
-> [1] https://github.com/jkoeppeler/veth-backpressure-performance-testing/tree/pktgen-and-benchmark
-> 
+BPF_MAP_TYPE_ARENA supports direct-value pseudo loads, but unlike array
+maps its map value_size is zero and the valid direct-value range is the
+arena mmap size, max_entries * PAGE_SIZE.
 
-I ran the benchmarks over night and they look fine,
-see ASCII table below.
-I do not see a regression, tx_usecs of 50us even outperforms stock.
+Commit 3ac1a467e376 ("bpf: Fix off-by-one boundary validation in arena
+direct-value access") fixed arena_map_direct_value_addr() to reject an
+offset exactly at the end of the arena mapping. Add a regression test
+that loads a BPF_PSEUDO_MAP_VALUE with off == arena_size and verifies
+that the verifier rejects it with the expected offset in the log.
 
-I did a PR, see [1]. Most of the code changes are by Jonas,
-because he rewrote the code to allow the usage of pktgen and
-added the bql_sweep.sh script. Thanks Jonas!
-My part is the 2 bugfixes, the output as ASCII table and
-the new benchmark results with my new 'v7' method.
+This is intentionally kept as a userspace raw-instruction test. I tried
+expressing the same BPF_PSEUDO_MAP_VALUE + off == arena_size case in
+verifier_arena.c with inline assembly. The only form that produces the
+desired instruction bytes uses __imm_addr(arena), but that emits
+R_BPF_64_NODYLD32, which the libbpf/bpftool link step rejects. Other
+register, immediate, and memory constraints either fail in the BPF
+backend or lower to a normal R_BPF_64_64 load followed by an ALU add,
+which does not exercise arena_map_direct_value_addr() with the boundary
+offset in the second ldimm64 slot.
 
-I have not tested bql_sweep.sh inside virtme-ng, I ran my benchmarks
-on the host system. I guess you could mount the folder with read+write
-in vng and then run bql_sweep.sh there.
+A legacy test_verifier fixture can express the raw instruction directly,
+but it needs arena map creation, mmap, and fixup plumbing in the legacy
+runner. That is more intrusive than the small prog_tests raw-instruction
+test.
 
-[1] https://github.com/netoptimizer/veth-backpressure-performance-testing/pull/9
+Use the userspace raw-instruction test, following the existing selftests
+pattern used for direct map-value pseudo loads, so insns[1].imm can be
+set to arena_size precisely.
 
+Assisted-by: ChatGPT:gpt-5.5
+Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Junyoung Jang <graypanda.inzag@gmail.com>
+---
+Changes in v3:
+- Document why verifier_arena.c inline assembly cannot express this case:
+  __imm_addr emits R_BPF_64_NODYLD32, while other constraints either fail
+  in the BPF backend or miss the pseudo-load boundary path.
+- Mention that natural C forms lower to a normal load plus ALU add, so they
+  do not exercise arena_map_direct_value_addr() with off == arena_size.
+- Keep the userspace raw-instruction test as the least intrusive option;
+  test_verifier was checked but would require legacy runner arena plumbing.
+- Link to v2: https://patch.msgid.link/20260605-arena-direct-value-v1-v2-1-a92cb281e376@gmail.com
 
-System information:
-Ryzen 5 5600X @ fixed 4.3 GHz, 3200 MHz RAM, CPU mitigations disabled,
-SMT disabled, on host system (NOT virtme-ng).
+Changes in v2:
+- Explain why this uses a userspace raw-instruction test rather than a
+  verifier_arena.c failure program: the test must set the second
+  BPF_PSEUDO_MAP_VALUE ldimm64 immediate to arena_size exactly. For
+  arena globals, libbpf derives that immediate from the arena-relative
+  symbol offset, so the boundary value cannot be represented directly as
+  a verifier_arena.c C-level failure program.
+- Link to v1: https://patch.msgid.link/20260603-arena-direct-value-v1-v1-1-7b31cc0a8cac@gmail.com
 
-Patched benchmark command:
-sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list \
-"0 50 100 500 1000 5000 10000" --nrules-list "0 1 10 100 1000 10000" \
---pktgen --duration 20 --qdisc fq_codel --no-bpftrace
+Tested on x86_64 with tools/testing/selftests/bpf/vmtest.sh:
+  $ ./test_progs -t arena_direct_value
+  #2/1     arena_direct_value/one_past_end:OK
+  #2       arena_direct_value:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+---
+ .../selftests/bpf/prog_tests/arena_direct_value.c  | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-Stock benchmark command:
-sudo ./veth_bql_sweep.sh --runs 10 --tx-usecs-list "0" --nrules-list \
-"0 1 10 100 1000 10000" --pktgen --duration 20 --qdisc fq_codel \
---no-bpftrace
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+new file mode 100644
+index 000000000000..b7760b021670
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#define ARENA_PAGES 32
++
++static void test_arena_direct_value_one_past_end(void)
++{
++	char log_buf[16384] = {}, expected[128];
++	__u32 arena_sz = ARENA_PAGES * getpagesize();
++	struct bpf_insn insns[] = {
++		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
++	void *arena = MAP_FAILED;
++	int map_fd, prog_fd;
++
++	map_opts.map_flags = BPF_F_MMAPABLE;
++	prog_opts.log_buf = log_buf;
++	prog_opts.log_size = sizeof(log_buf);
++	prog_opts.log_level = 1;
++
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena_direct_value",
++				0, 0, ARENA_PAGES, &map_opts);
++	if (map_fd < 0) {
++		if (errno == EOPNOTSUPP || errno == EINVAL) {
++			test__skip();
++			return;
++		}
++		ASSERT_GE(map_fd, 0, "bpf_map_create");
++		return;
++	}
++
++	arena = mmap(NULL, arena_sz, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	if (!ASSERT_NEQ(arena, MAP_FAILED, "arena_mmap"))
++		goto cleanup;
++
++	insns[0].imm = map_fd;
++	insns[1].imm = arena_sz;
++
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
++				"arena_direct_value", "GPL", insns,
++				ARRAY_SIZE(insns), &prog_opts);
++	if (!ASSERT_LT(prog_fd, 0, "prog_load")) {
++		if (prog_fd >= 0)
++			close(prog_fd);
++		prog_fd = -1;
++		goto cleanup;
++	}
++
++	snprintf(expected, sizeof(expected),
++		 "invalid access to map value pointer, value_size=0 off=%u",
++		 arena_sz);
++	ASSERT_HAS_SUBSTR(log_buf, expected, "verifier_log");
++
++cleanup:
++	if (arena != MAP_FAILED)
++		munmap(arena, arena_sz);
++	close(map_fd);
++}
++
++void test_arena_direct_value(void)
++{
++	if (test__start_subtest("one_past_end"))
++		test_arena_direct_value_one_past_end();
++}
 
-Throughput (pps)
-===========================================================================
-nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
--------+-------+-------+-------+-------+--------+--------+---------++------
-     0 | 1.62M | 1.89M | 1.75M | 1.73M |  1.73M |  1.73M |   1.73M || 1.76M
-     1 | 1.51M | 1.72M | 1.63M | 1.60M |  1.60M |  1.60M |   1.60M || 1.65M
-    10 | 1.33M | 1.52M | 1.47M | 1.41M |  1.41M |  1.41M |   1.41M || 1.45M
-   100 |  681K |  751K |  756K |  726K |   721K |   723K |    730K ||  736K
-  1000 |  116K |  123K |  124K |  124K |   124K |   125K |    123K ||  126K
- 10000 |   13K |   13K |   13K |   13K |    13K |    13K |     13K ||   13K
+---
+base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+change-id: 20260603-arena-direct-value-v1-ef4df857b98b
 
+Best regards,
+--  
+Woojin Ji <random6.xyz@gmail.com>
 
-Ping RTT ms (avg)
-===========================================================================
-nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
--------+-------+-------+-------+-------+--------+--------+---------++------
-     0 | 0.016 | 0.089 | 0.136 | 0.137 |  0.138 |  0.134 |   0.135 || 0.132
-     1 | 0.018 | 0.097 | 0.144 | 0.146 |  0.146 |  0.150 |   0.147 || 0.142
-    10 | 0.019 | 0.093 | 0.156 | 0.164 |  0.164 |  0.164 |   0.167 || 0.158
-   100 | 0.029 | 0.104 | 0.180 | 0.315 |  0.312 |  0.314 |   0.311 || 0.307
-  1000 | 0.139 | 0.201 | 0.309 | 0.971 |   1.66 |   1.81 |    1.82 ||  1.77
- 10000 |  1.12 |  1.74 |  1.72 |  1.83 |   2.90 |   9.14 |    15.9 ||  17.2
-
-
-Ping RTT ms (p99)
-===========================================================================
-nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
--------+-------+-------+-------+-------+--------+--------+---------++------
-     0 | 0.026 | 0.122 | 0.161 | 0.164 |  0.164 |  0.159 |   0.161 || 0.155
-     1 | 0.028 | 0.123 | 0.169 | 0.173 |  0.173 |  0.175 |   0.173 || 0.165
-    10 | 0.032 | 0.119 | 0.187 | 0.194 |  0.193 |  0.193 |   0.197 || 0.185
-   100 | 0.047 | 0.134 | 0.232 | 0.368 |  0.369 |  0.367 |   0.359 || 0.361
-  1000 | 0.232 | 0.303 | 0.409 |  1.27 |   2.13 |   2.10 |    2.13 ||  2.10
- 10000 |  1.94 |  2.52 |  2.59 |  2.69 |   3.87 |   12.0 |    20.0 ||  20.3
-
-
->>> Below is the new result. Not 100% sure but this seems right now.
->>> Most pings are the same.
->>>
->>> Ping RTT ms (p99)
->>> ===========================================================================
->>> nrules |   0us |  50us | 100us | 500us | 1000us | 5000us | 10000us || stock
->>> -------+-------+-------+-------+-------+--------+--------+---------++------
->>>       0 | 0.028 | 0.115 | 0.159 | 0.161 |  0.163 |  0.161 |   0.163 || 0.154
->>>       1 | 0.027 | 0.123 | 0.169 | 0.172 |  0.169 |  0.173 |   0.172 || 0.169
->>>      10 | 0.030 | 0.117 | 0.189 | 0.193 |  0.195 |  0.192 |   0.196 || 0.186
->>>     100 | 0.045 | 0.134 | 0.233 | 0.368 |  0.365 |  0.369 |   0.361 || 0.358
->>>    1000 | 0.230 | 0.300 | 0.412 |  1.26 |   2.11 |   2.12 |    2.13 ||  2.07
->>>   10000 |  2.04 |  2.55 |  2.54 |  2.72 |   3.77 |   12.1 |    20.1 ||  20.3
->>>
->>>>
->>>> Is state->n_bql += veth_ptr_is_bql(ptr) something that is commonly done in the kernel? It relies on bool normalization which feels a bit implicit to me.
->>>
->>> Ok, we could swap for something like
->>>
->>> if (veth_ptr_is_bql(ptr))
->>>     state->n_bql+;
->>
->> I'll see if I can adjust the V7 patch to this feedback.
-> 
-> Yes, and also this snippet pointed out by Jonas below:
-> 
->  -       struct veth_priv *priv;
->  -       u64 bql_flush_ns;
->  +       u64 bql_flush_ns = 0;
-> 
->  -       priv = netdev_priv(rq->dev);
->  -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
->  +       if (peer_txq) {
->  +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
->  +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
->  +       }
-> 
-> Or is peer_txq != 0 guaranteed in veth_xdp_rcv()?
-> 
-> 
-> And also I would change in the commit message:
-> 
-> "Flushing when n_bql exceeds dql.limit handles two cases:
-> - BQL starvation
-> - The steady-state case where the producer and consumer run at the
->   same speed with a large tx-usecs, which would otherwise allow n_bql
->   to grow without bound (and potentially overflow int)."
-> 
-> ... to just...
-> 
-> "Flushing when n_bql exceeds dql.limit handles BQL starvation."
-> 
-> ... because after rethinking I think I overstated here.
-> n_bql should also not grow infinitely for the v6 version.
-> Nevertheless the new method should be simpler and faster.
-> 
->>
->>
->>>>
->>>>> For physical NICs adjusting TX coalescing will affect the BQL as this
->>>>> affect the TX completion of the transmitted packets. For veth, it is the
->>>>> veth-peer's RX NAPI that is "completing" or emptying the ptr_ring, which
->>>>> is where this patch adds netdev_tx_completed_queue calls for BQL.
->>>>> Any opinions on the "TX" or "RX" color?
->>>
->>> Personally I would also say TX.
->>>
->>
->> Okay, we seem to have more votes for TX :-)
->>
->>
->>>> I think I would prefer to configure it on the tx dev, and the recv
->>>> side gets the value from the peer. Maybe something like this.
->>>>
->>
->> I'm considering if we should simplify the config by having veth pairs have the same tx-coal value. WDYT?
-> 
-> I can not think of a case where a user would like to have a different
-> tx-coal value on either side..
-> So it's fine for me.
-> 
->>
->>
->>>> @@ -997,11 +998,12 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->>>>          struct veth_bql_state *state = &rq->bql_state;
->>>>          int i, done = 0, n_xdpf = 0;
->>>>          void *xdpf[VETH_XDP_BATCH];
->>>
->>> Why this deletion?
->>>
->>>> -       struct veth_priv *priv;
->>>> -       u64 bql_flush_ns;
->>>> +       u64 bql_flush_ns = 0;
->>>>
->>>> -       priv = netdev_priv(rq->dev);
->>>> -       bql_flush_ns = (u64)priv->tx_coal_usecs * 1000;
->>>
->>> I see we should check if peer_txq exists.
->>>
->>>> +       if (peer_txq) {
->>>> +           struct veth_priv *peer_priv = netdev_priv(peer_txq->dev);
->>>> +           bql_flush_ns = (u64)READ_ONCE(peer_priv->tx_coal_usecs) * 1000;
->>>> +       }
->>>>
->>>>          /* Clamp stored timestamp in case we migrated to a CPU with a behind
->>>>           * sched_clock(); prevents the deadline from never firing.
->>>>
->>>> - Jonas
->>
->> --Jesper
->>
