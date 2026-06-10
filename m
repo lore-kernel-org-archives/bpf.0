@@ -1,151 +1,157 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07E61F936
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 00:06:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB4D26ACC
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 00:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781049967; cv=none; b=ogj0IX8ZHkRJ+2VqsrIxRx0EvUOqynSlD2ngnixvd+4Azxinah+gTDYJoqMyU2P6NqafOCqOZOJ6AjNZR4Q5NE0FRzvnfwQIA6grZtIRZm6+f4PUmABfZmqW6Kx287ss4lcGO40irM3Fk7PwOtJJDfwpnAZrYHfX/dxlvM2zigk=
+	t=1781049985; cv=none; b=dOCJaQgT4AtVQ3tin934zThp35yt6792/j071b0PEnhCnCLYxfgRyiCwmE7vBhFzcEhypF3JouEPMt3oP6V9VOqCT4cv00Km+q+/6Z3pKrhGIpjILpjHSVTO/bnhAXlezvXTAjSe99dad3p8vQ3qhNithPvPzXnX4QUI4xKo8hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781049967; c=relaxed/simple;
-	bh=r1vbyfeCtYG6OGx7YM1c8slsjLM5GVhJMK4JM/LtzFE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Wn5zy/iOpMLFrqzSdJ0xtyr3mkbIri+COhe9gfwavtG1tu9JEtkDuQ8QOBdwa/wBFXJrc3xjTR0iCgF4gQZlY2vpIp3v9Z78rAkHV3/Uyhu0rXgpvjKTbxe/2T0Iaxyr7xR105ESbDFLcSde4lTiG3CZ0S0o62IngVUs4Hgsid0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=iuQ8spfK; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781049985; c=relaxed/simple;
+	bh=dM03eu628RE3wROC0+gCC2QtCyeGg2bw1zSpRZeZxVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XI0MI45TQHRSw58Wg0TjuOOYzJyvTcuRKlFt5/oF1SVtWyNjvKedJ+NWKkstw9cti+U6lTo2tkEH/WU/4sgirijffpA2lmiJzdG9hVlBYU4cAp6LaicateRjDYTT43AlYiI6FkBOogy3dmek45JAX0THHKZaQjp+vFNYlwX4PM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VwDCicfV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="iuQ8spfK"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-304d7f31215so5476633eec.1
-        for <bpf@vger.kernel.org>; Tue, 09 Jun 2026 17:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781049965; x=1781654765; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kj983b4aP9iTymCXxslRDVIMvDkVOBbHTYZp1bhw+6s=;
-        b=iuQ8spfK1Iat4dw7kvDF3eT0iRlrgXea8KgeclovNgqmuidX8lMZtX30UsXf7EZkZB
-         w6p4NrXwy92qPMAekQNDEWW/W6I/zuY0H/u/Sc/7A2Upk0I5t95ph6JNR65U2rLgtpdm
-         NLI+M/o5675+3eoCVCzu6KBAnDFu2j8IC5DkOpQS5QGGUzATHxtzSFz188Sn4xCaSvP2
-         sMY1/xCgDzwXzGzjdOG7yadGOhxkINQD6zEkTUg+u+A7PgJ33Qj+Ygg6PHf5P9nm9d7T
-         u5+csh++zvP4PGTg1HzekkkDhVcU8tj0yJMXLjkgZleg5fGuiMGk6ExeLimeEN2iPixR
-         CtsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781049965; x=1781654765;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kj983b4aP9iTymCXxslRDVIMvDkVOBbHTYZp1bhw+6s=;
-        b=rN+NaZs0xjcUKVP+J3ztoP2kSABXhudEMT4l0yyLjLGEkq+HUp2krr9cSjXAhDD+wa
-         GDcLs7/EMD4i7lQPhrwbNO3DgdkvyHnPeYuWlCXsFYHTUjJRdW/0so8wZpVJCKLhclNW
-         anbkONLs8X8MDwhhkSLYJCDjhIJCceh5ndaF6Ug7TaWEjrEDhzze8dBZGgWmiGbOd6PE
-         vCatUpiz4HNlKavc8wj+vKD/uA1ckhIRqVkBjcj33wBreq+eE7khu6LY3tHbw89bt2bz
-         vp31yeHJBeS6x1xdJGAfjPVQr42D7N1umwA7nFxyUzOTCnKqHVeojG07Sdeur9/C33aJ
-         ksKQ==
-X-Gm-Message-State: AOJu0YyS9mO0R6vzdD0dnE/2ihoeI9wXNks6kJk9Fhx7hoxHylWd4JeE
-	C5rU9xEJmC1LbAWopu7DLS/Pi+1OgBhhXpdZEho3nBVsCzNWqj4p/bWPJFm59Cfe+wc=
-X-Gm-Gg: Acq92OEvL6Oyzy2id0LWLNjsmvaC2j7ki0h7Z4sLTwWlltUEpiztvcU2QXYZnVDjmiU
-	0p1ED56934O1ASiOyGRHk8uxS29fxxwz0Rk85i9MjrDRGIul5wqlIEf3OMcyQJ1ZkyBk7Oew7mS
-	/7p8JKk10hfpQ6Rfw1O9DFnH5OhT+zGlPV/V4waz61PDj67J5hjU+pxU1LExS8R6QBF/Srg+HpB
-	v0bSN2dAIcFGVH7YCZSlXeVdwR6gfnxk0n0Y8luX9VyVhX3EzF85VnkUzGnX1cr67bVlvHgTNp5
-	7sDClXqgCGYETSvi9QJ2h0xc5sqle/+DxkGFxenP8Xu8so7b0Rn2+2E1ShJkwek5NtvXANKrjwO
-	3kCOu1nCOJ6+71wpZA5d+SIopZMkrZ5weI3/vAO9r/20Fh0oXfunm1nRSZUcYwt1T0Z9xkNN/wa
-	b/sqtfqGrShyn4NCY=
-X-Received: by 2002:a05:7300:d70d:b0:304:c520:4e14 with SMTP id 5a478bee46e88-3077b32888bmr15659364eec.11.1781049964814;
-        Tue, 09 Jun 2026 17:06:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::3297])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3074db85f60sm28979462eec.8.2026.06.09.17.06.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2026 17:06:04 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VwDCicfV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781049981;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z+BdsIiubxTigLolxNCr0T6sAxrzBceT6zqzj07dt1M=;
+	b=VwDCicfVP5wy0jNNOvQKAsAMb/yF22mbD3slXG17EzJxkW7d6vvOmrDIrMfD9INzJb0YZV
+	JT6tjgN7yj5+vCx/bMxrBfFuGFmzsvdhRXhUO8Ry73EEgje96vuyIkDgDukrurebODpEL4
+	Ee4nxlT+SWdxnXyjP2uAdYdWWcOHXrE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-21fD-jIrMvCit92WjLgOpg-1; Tue,
+ 09 Jun 2026 20:06:20 -0400
+X-MC-Unique: 21fD-jIrMvCit92WjLgOpg-1
+X-Mimecast-MFC-AGG-ID: 21fD-jIrMvCit92WjLgOpg_1781049978
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 422B71955EA9;
+	Wed, 10 Jun 2026 00:06:17 +0000 (UTC)
+Received: from [10.22.65.187] (unknown [10.22.65.187])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 32153180067E;
+	Wed, 10 Jun 2026 00:06:12 +0000 (UTC)
+Message-ID: <9a9f3716-8a93-44c6-a913-04e893d06645@redhat.com>
+Date: Tue, 9 Jun 2026 20:06:12 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 20:06:01 -0400
-Message-Id: <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
-Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP
- program
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Menglong Dong" <menglong.dong@linux.dev>, "Sun Jian"
- <sun.jian.kdev@gmail.com>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <davem@davemloft.net>, <kuba@kernel.org>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <shuah@kernel.org>, <liuhangbin@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260609100214.337538-1-sun.jian.kdev@gmail.com>
- <L0cwr1-KRSKR7-dJdjDmJA@linux.dev>
-In-Reply-To: <L0cwr1-KRSKR7-dJdjDmJA@linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] rqspinlock: Fix order in raw_res_spin_(un)lock_irq to
+ allow schedule
+To: Arnd Bergmann <arnd@arndb.de>, Gabriele Monaco <gmonaco@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>
+References: <20260609094941.56122-1-gmonaco@redhat.com>
+ <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <d40ba64d-78d9-45f5-99b9-4bfb1fc27f6c@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
-> On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
->> dev_map_redirect_clone() uses skb_clone() when redirecting a generic XDP
->> skb to multiple devmap destinations. The cloned skb can share packet dat=
-a
->> with other clones.
->>=20
->> If the destination devmap entry has an egress XDP program, that program
->> can modify packet data. Such modifications can then be observed by other
->> clones sharing the same packet data.
->>=20
->> This can be reproduced by strengthening xdp_veth_egress to configure a
->> different source MAC for each egress device and checking that store_mac_=
-1/2
->> observe the MAC configured for their own egress devices. Without the fix=
-,
->> the SKB_MODE subtest observes store_mac_1 receiving the MAC configured f=
-or
->> the next egress device.
->>=20
->> Fix this by unsharing the cloned skb before running the devmap egress XD=
-P
->> program. Limit the extra copy to destinations with an attached egress
->> program.
+On 6/9/26 7:22 AM, Arnd Bergmann wrote:
+> On Tue, Jun 9, 2026, at 11:49, Gabriele Monaco wrote:
+>> raw_res_spin_unlock_irqrestore() calls raw_res_spin_unlock() and then
+>> restores interrupts, this means preemption is enabled when interrupts
+>> are still disabled (as part of raw_res_spin_unlock()) so this cannot
+>> trigger an actual preemption.
+>> This is inconsistent with other spinlock implementations
+>> (raw_spin_unlock_irqrestore() and bpf_res_spin_unlock_irqrestore()
+>> itself).
+>>
+>> Adjust the macro to ensure interrupts are enabled before enabling
+>> preemption, allowing to schedule at that point. Make the same
+>> modification in the error path of raw_res_spin_lock_irqsave().
+>>
+>> Fixes: 101acd2e78b1 ("rqspinlock: Add macros for rqspinlock usage")
+> Should this be Cc:stable@vger.kernel.org to get backported?
 >
-> Hi, Jian.
+> Did you see this cause measurable performance problems,
+> or did you find it through inspection?
 >
-> This sounds like a good idea in this case. When I have a look at bpf_clon=
-e_redirect(),
-> I found that it use skb_clone() too, which means it has the same problem.=
- The
-> data can be modified by other xdp prog in the destination NIC if we use
-> bpf_clone_redirect().
+>> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de> # asm-generic
 >
-> So maybe this is the default logic, and I'm not sure if this patch can br=
-eak the
-> existing users :/
+> This should probably get merged through the BPF tree, but I've
+> added the kernel/locking maintainers to Cc as well, since I
+> feel it's more useful to have them look at it than me.
+>
+> Maybe it would be good to update (as a separate patch) the
+> MAINTAINERS file so the locking subsystem also includes the
+> headers currently missing:
+>
+> arch/*/include/asm/*spinlock*.h
+> arch/*/include/asm/*rwlock*.h
+> include/asm-generic/*spinlock*.h
+> include/asm-generic/*rwlock*.h
+>
+>         Arnd
+>
+> (full patch quoted below)
+>
+>> ---
+>>   include/asm-generic/rqspinlock.h | 14 +++++++++++---
+>>   1 file changed, 11 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/asm-generic/rqspinlock.h
+>> b/include/asm-generic/rqspinlock.h
+>> index 151d267a49..4d46643f46 100644
+>> --- a/include/asm-generic/rqspinlock.h
+>> +++ b/include/asm-generic/rqspinlock.h
+>> @@ -243,12 +243,20 @@ static __always_inline void
+>> res_spin_unlock(rqspinlock_t *lock)
+>>   	({                                        \
+>>   		int __ret;                        \
+>>   		local_irq_save(flags);            \
+>> -		__ret = raw_res_spin_lock(lock);  \
+>> -		if (__ret)                        \
+>> +		preempt_disable();                \
+>> +		__ret = res_spin_lock(lock);      \
+>> +		if (__ret) {                      \
+>>   			local_irq_restore(flags); \
+>> +			preempt_enable();         \
+>> +		}                                 \
+>>   		__ret;                            \
+>>   	})
+>>
+>> -#define raw_res_spin_unlock_irqrestore(lock, flags) ({
+>> raw_res_spin_unlock(lock); local_irq_restore(flags); })
+>> +#define raw_res_spin_unlock_irqrestore(lock, flags) \
+>> +	({                                          \
+>> +		res_spin_unlock(lock);              \
+>> +		local_irq_restore(flags);           \
+>> +		preempt_enable();                   \
+>> +	})
+>>
+>>   #endif /* __ASM_GENERIC_RQSPINLOCK_H */
+>>
+>> base-commit: e43ffb69e0438cddd72aaa30898b4dc446f664f8
+>> -- 
+>> 2.54.0
 
-I think for use cases where we are using bpf_clone_redirect() to use
-one clone for inspection this would add an unnecessary copy. Maybe
-adding *_copy() variants instead of changing the *_clone() would be
-better? That way we wouldn't be changing the behavior for existing
-consumers and the naming would be consistent with the skb_* methods.
+Disabling interrupt will also disable preemption. However, the possible 
+side effect of scheduler preemption when preemption is enabled will make 
+these res_spin_lock APIs behave more like regular spinlock. So
 
-But more importantly, is there an actual use case for the kind of API
-that the modified selftest requires? Nobody until now has considered
-the existing behavior to be a problem.
-
->
-> Thanks!
-> Menglong Dong
->
->>=20
->> Tested with:
->>   ./test_progs -t xdp_veth_egress
->>   ./test_progs -t xdp_veth
->>   ./test_progs -t xdp
-> [...]
->> =20
->>  destroy_xdp_redirect_map:
->> --=20
->> 2.43.0
->>=20
->>=20
->>=20
+Acked-by: Waiman Long <longman@redhat.com>
 
