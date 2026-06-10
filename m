@@ -1,142 +1,152 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB01E370D69
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 04:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E6D30C63B
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 05:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781066597; cv=none; b=MhDSelkWZlM5a6IZIXMwigfPFTvQugYD4xf1r8YyjEc1UHnoj92tFqNPEzsvcVzBizTciqdaWItzxmlG4cA33Jv9wZWdIUzkQDT3z4W3oJx4h0Qj53F9nhqA0exGFYsf2Ry4Mioufpu/rJlwbz4p3jT9yAvvnTn4k0xLyjvH+5c=
+	t=1781068425; cv=none; b=Qs+fLaT2hOzH8q0LHsw/VYlTwCbOnbs5sLkbFgNhx7Wkuzth+1v3xBWI/hO1YLk2m2kUs1r21IVhUXSIZVBRb2BaWrQ2WFYu9AgH8MKl5sCxViJ/61V1Eif7B62PN3a4lylbe35L8lXXPfjcdpAki+4QsLdOHz6jQGkxXtSQvB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781066597; c=relaxed/simple;
-	bh=YugiFesYD2nWr2HkyCAvq+z4fvPBJPssyXkaIQEWn8o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=GmCEoSyz2j7pzt2rCBaq99+MUqs4dhly8fIrvdW49Ud6zcAZ/TsTwizKbtnHvsC+Vanwdsckf1OGmUIQXq2ykPYPhDdfH5nMaVs2GlsRpxSwjKdrJpXervRwCfrqudIKsb1godpi84JYdnPMrwDofkpLYFVDbOMLeuMV1fSnWnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net; spf=pass smtp.mailfrom=craftyguy.net; dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b=HjIzng/P; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=craftyguy.net
+	s=arc-20240116; t=1781068425; c=relaxed/simple;
+	bh=Jw44zc0riFpioKES9tU7Vrfr4BhP+D4LBHxN6e1YyZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KGQjlMPbj5uxITOsdJQt06PlKZYXj4envAs0XZrwZ9vDQ0mnzejDIcP3Wv34AwjA0J/4T/Pq5265mS2lfUkBVxywf6G7E3ruF7pvdgFvZ2jto6zAS3NgDLlFbzu//xr8+zdWfGcLufxyA4rltiFWDRDWD0qz/xSnTbwY+D8PMXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ehUx2dJl; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b="HjIzng/P"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ehUx2dJl"
+Message-ID: <b35a2395-0e15-4390-ba7a-b48748e7e3f3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781068419;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAopxE9EczGUg3PSk7OujdIhtgCxg1HVADKqStzgMSs=;
+	b=ehUx2dJl+Ti4rMEszXvyVtRZEkTLbQmKkfKl36MgKtj/ym3Fx467HOftJa+95Axc/hYFES
+	t9Gl1XeKVVmZ9gEnf2GWwA13SX6apaZed7qWD1tfsJxR03wwM05hmV81wstCJtC5xycPOG
+	GbHUWw5jNe5ZBjkC7GBI3g50NaMnR20=
+Date: Wed, 10 Jun 2026 13:13:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=craftyguy.net;
-	s=key1; t=1781066582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xrfCOYnawNby/+6P5H5Tb/h+uk8XWKJB+gnkB26erd0=;
-	b=HjIzng/PovlFPzFjQIm3WEnGb3lIqEqOpN83SRyVl11T0Q6qhZZ2c665qUk+FpBzWNZSCc
-	p6lBKhYhWMqi7mtmsb6CFySW9JvTlQuicxxP66QwLuyhv3qrXdD6bzXqCPDqFDR0EQ1vBy
-	pW41C5Y3GEHBAlb7lN4Tp59P/gSQLV1yZ50g8UMnARlIjc8KfJEdqIbMbsoYx8zlf7CHuI
-	eQbW5a7+UgkBsVhGWRYdkLhj0kktK9pCr3D8bO40VCgXIPJo6kKyMJLSlH/AtOPtfF1xH/
-	k4fSQ0fQvKyI2IhqM+t++UnxBSJtse5s3E9NzdXFC5FaQ6gYYA33YAtMoOBTqA==
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 21:42:56 -0700
-Message-Id: <DJ53EPMYFXVH.3I4BP5PF8XJ9G@craftyguy.net>
-Cc: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>,
- <bpf@vger.kernel.org>, "Florent Revest" <revest@chromium.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without
- CALL_OPS
+MIME-Version: 1.0
+Subject: Re: [PATCH] bpf: Unshare cloned skb before devmap egress XDP program
+To: sun jian <sun.jian.kdev@gmail.com>,
+ Menglong Dong <menglong.dong@linux.dev>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ shuah@kernel.org, liuhangbin@gmail.com
+References: <20260609100214.337538-1-sun.jian.kdev@gmail.com>
+ <L0cwr1-KRSKR7-dJdjDmJA@linux.dev>
+ <DJ4XIOT2RVMT.28I5LA2UOZVUI@etsalapatis.com>
+ <AgOg1pJHQN-gpKhYUz3SMw@linux.dev>
+ <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Clayton Craft" <clayton@craftyguy.net>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CABFUUZH9F+tiitstSBy2-M=WC84jg28CVMXU+Lu-va6jm71fDw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Mon Jun 8, 2026 at 10:19 PM PDT, Jose Fernandez (Anthropic) wrote:
-> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-> would change the offset of the pre-function type hash (see
-> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-> and the compiler support needed to reconcile the two does not exist
-> yet.
->
-> The result is that a CONFIG_CFI=3Dy arm64 kernel has no
-> ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
-> and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
-> programs are all unavailable. Deployments that want both kCFI
-> hardening and BPF-based security monitoring currently have to give
-> one of them up. systemd's bpf-restrict-fs feature hits this today:
-> https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
->
-> CALL_OPS is an optimization for direct calls, not a dependency.
-> In-BL-range trampolines are reached by a direct branch without
-> consulting the ops pointer, and out-of-range trampolines already
-> fall back to ftrace_caller, where the DIRECT_CALLS machinery
-> (call_direct_funcs() storing the trampoline in ftrace_regs, the
-> ftrace_caller tail-call) is gated on DIRECT_CALLS alone. s390 and
-> loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this way,
-> without having CALL_OPS at all.
->
-> Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
-> widening its #ifdef and using the existing ftrace_rec_update_ops()
-> wrapper (no functional change for current configurations). Patch 2
-> drops the CALL_OPS requirement from the DIRECT_CALLS select.
->
-> Configurations that keep CALL_OPS (clang !CFI, and GCC without
-> CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
-> clang build, every object file is byte-identical before and after
-> the series except ftrace.o itself, and its disassembly is identical.
-> CFI builds (and GCC -Os builds) gain working direct calls, with
-> out-of-range attachments taking the ftrace_caller dispatch path
-> instead of the per-callsite fast path.
->
-> We tested on a 6.18.y-based kernel and on this base with clang
-> kCFI builds (CONFIG_CFI=3Dy, enforcing) under qemu (TCG, and KVM on an
-> arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
-> and BPF LSM programs load, attach and execute; the ftrace-direct
-> sample modules (including both modify samples, exercising
-> ftrace_modify_call()) run cleanly; no CFI violations observed. The
-> fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
-> modify_return, tracing_struct, lsm and trampoline_count selftests and
-> the ftrace direct-call selftests (test.d/direct) pass on the new
-> configuration with results identical to a CALL_OPS kernel built from
-> the same tree, and a broader test_progs sweep showed no differences
-> attributable to this series. Without the series, all of the above
-> fail at attach time with -ENOTSUPP.
->
-> riscv has the same gap (its DIRECT_CALLS select also requires
-> CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
-> acceptable for arm64 we can follow up there.
->
-> ---
-> Jose Fernandez (Anthropic) (2):
->       arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OP=
-S
->       arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
->
->  arch/arm64/Kconfig         | 2 +-
->  arch/arm64/kernel/ftrace.c | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
-> change-id: 20260607-arm64-ftrace-direct-calls-152230ef7077
->
-> Best regards,
-> --
-> Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-Thanks for fixing this! I gave it a try on an aarch64 laptop (macbook m2)
-using kernel 7.0.11 with CFI=3Dy && DEBUG_INFO_BTF=3Dy, built with clang. A=
-FAIK it
-seems to work great, I am able to finally run systemd with BPF support (e.g=
-.,
-unprivileged nspawn works now)
+On 6/10/26 9:58 AM, sun jian wrote:
+> On Wed, Jun 10, 2026 at 9:21 AM Menglong Dong <menglong.dong@linux.dev> wrote:
+>> On 2026/6/10 08:06 Emil Tsalapatis <emil@etsalapatis.com> write:
+>>> On Tue Jun 9, 2026 at 7:06 AM EDT, Menglong Dong wrote:
+>>>> On 2026/6/9 18:02 Sun Jian <sun.jian.kdev@gmail.com> write:
+[...]
+>>>> Hi, Jian.
+>>>>
+>>>> This sounds like a good idea in this case. When I have a look at bpf_clone_redirect(),
+>>>> I found that it use skb_clone() too, which means it has the same problem. The
+>>>> data can be modified by other xdp prog in the destination NIC if we use
+>>>> bpf_clone_redirect().
+>>>>
+>>>> So maybe this is the default logic, and I'm not sure if this patch can break the
+>>>> existing users :/
+>>> I think for use cases where we are using bpf_clone_redirect() to use
+>>> one clone for inspection this would add an unnecessary copy. Maybe
+>>> adding *_copy() variants instead of changing the *_clone() would be
+>>> better? That way we wouldn't be changing the behavior for existing
+>>> consumers and the naming would be consistent with the skb_* methods.
+>> Agree. It's not a good idea to change the logic of the existing API. Or
+>> maybe we can add a BPF_F_CLONE flag for the existing API.
+>>
+>>> But more importantly, is there an actual use case for the kind of API
+>>> that the modified selftest requires? Nobody until now has considered
+>>> the existing behavior to be a problem.
+>> Agree too. Obviously, this is not a bug. For the use case in the commit
+>> log, it's something that can be fixed by the user themself. If we need
+>> modify the MAC, we'd better attach a BPF program for all the egress
+>> device in the devmap.
+>>
+[...]
+>>>>
+> Thanks for all the comments.
+>
+> I agree this should not be treated as a generic skb_clone() issue, and I
+> understand the concern about changing existing clone/shared-data semantics.
+>
+> The case I was trying to address is narrower: generic XDP devmap
+> broadcast/multi redirect with per-devmap-entry egress programs. The use case is
+> not newly introduced by this patch. The existing xdp_veth_egress test already
+> attaches xdp_devmap_prog to all egress devmap entries, and that program rewrites
+> eth->h_source based on ctx->egress_ifindex. My change only strengthens the test
+> from checking that the observed MAC is not equal to a single magic MAC to
+> checking that each destination observes the MAC selected for its own egress
+> ifindex.
+>
+> So attaching an egress program to all devmap entries is already what this test
+> does. The SKB_MODE failure happens because the cloned skbs can still share the
+> packet data, and a later per-egress rewrite can be observed by another
+> destination.
+>
+> That said, I see the concern that this may need a clearer semantic boundary
+> between clone and copy behavior. I will also check the last_dst path pointed out
+> by Sashiko before deciding whether this should be handled as a bug fix, or
+> whether it needs a separate explicit copy/isolated redirect semantic instead.
 
-Tested-by: Clayton Craft <craftyguy@postmarketos.org>
+
+I agree there's a real concern here. For context, native XDP already 
+makes a full copy
+of the frame for every broadcast destination:
+
+   dev_map_enqueue_multi -> dev_map_enqueue_clone -> xdpf_clone
+
+so on the native path each destination gets its own independent buffer.
+
+The generic path is the odd one out, because skb_clone() shares the 
+underlying data.
+I think this rationale should be spelled out in the commit message.
+
+Regarding performance: generic XDP is already a slow path — the ingress 
+side already
+linearizes / expands the skb (pskb_expand_head() in 
+netif_receive_generic_xdp())
+so the extra copy here is not a concern.
+
+
+However, there is one problem with the patch as it stands.
+
+The last destination is transmitted using the original skb directly, 
+without unsharing it.
+So with two destinations where the first one has no egress XDP program 
+and the second (i.e. the last one) does,
+the egress modification on the second destination will corrupt the 
+packet sent to the first.
+
+This could be addressed by doing the skb_unshare() inside 
+dev_map_generic_redirect() instead ?
+
+For the non-broadcast (existing) path the skb is not cloned, so 
+skb_unshare() simply returns it unchanged.
+
+
 
