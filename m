@@ -1,128 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84F0823DE;
-	Wed, 10 Jun 2026 03:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4932C11CA
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 03:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781061382; cv=none; b=FqJb+o48RHBpWC5alNqglDMoGchm5MdoqcZKHDgdeUpIDKjnTFStFh1r6M9OJPKRS0zw7yNseJmrDvbGm+eRzznSG0wMhyqHnr/fTETasqgyTyfTtqoNAzLz6NJ0S6jGXdPL3961U6DYrjhC+cg+wLVFGskk9Pwdnx4jRA3jcqw=
+	t=1781062914; cv=none; b=XXn1qmA54jUSl5z+5hc6HALzV/dnVIktMzBypvMTVh5kZaQBC/fStV5AnS6fHiWoJ8tWoAn6wu+u/WUmPvGk9kVO9SHgwcEsePNwQ2EDa5IgQKQWYuu83LWz2oqBV52nmXd5Q7iGOG0JO2FhMIFNIfDBGXLO3lQYhArcJiX1vnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781061382; c=relaxed/simple;
-	bh=r2mjX9Qde3TcVB6EdODD3vjSWowd16mTaZ/srUt0JiE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HfVwVLReAbqM25oHvR+AcI4oHDYq9J9tqBmd16TL/XY7rGFAHCOB4Z9Vycx8SZ/wXU4iN0DrF9mTrSq4owrWBWp3ERckX8GCG+AZettbE4UxFkIO7VCbk45TFJ8T/GiFN9ro1heXXOrgEDg2AfXkz/asC19n78C4PixnAjPf/8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmnWQAFA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781062914; c=relaxed/simple;
+	bh=tXbFrbokO5RZwDmSC5TllgPNjYOVFJgh0OQ/kUbi8xY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T4F9r2NFK7vlMT8eYDQEZjNVfNeyyRJapPd8dF2uS7ThaVwcafRvHcOs7UfT2OfMUo9iq9nvxuulEFZHJqKirJYSNIFPGAu4bv76WS384H40nIy6PN2qc0ZgTjCLjTxY4eqmTUjqDjifiae42sJxkr8/zCQkJq/bXeI5wBiecMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HaSvH6w7; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmnWQAFA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77171F00893;
-	Wed, 10 Jun 2026 03:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781061381;
-	bh=/2IkXVbGeTqGtaf4w/vx4QCWyCaN0wtxnmt7LDWWlo4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KmnWQAFAHFHm9evcZ04wpC+PgOKoCYsz2AOb7Ig7tiuMfDzlWuFumRgf8yif5Ggjg
-	 OhoB+XV9RMt3mhncJ8RjZPFOwz9uriKSxA4qy2oHQAzuF+Z9cHLuwlJsXaUEeK98qa
-	 5hFpYGYj3mcbL3dwKRCC7ZVWwb3Tcc0esHGfQLtMmehYrGDqyEjG1dyY8Vso3kay35
-	 BadWh6kUWMQj8BW9k1fb9CTaReOHtk2L7Dx0pD/vYeiiqZ/udsLRWaiMA6/S+otjnd
-	 7tKZFRV9IkRW1nktu2mmIbp0lORbAAUjlkPdUUYB1YNbad+srBw8jBvYpUyDjRS9jo
-	 c8pCZCV7hSRfA==
-Content-Type: multipart/mixed; boundary="===============2913729978520096314=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HaSvH6w7"
+Message-ID: <862565aa-a5c3-47ec-ad9d-a6c64c61d150@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781062900;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rsPmWvfwQSOjTS6cBu2jrJ8w2ejWLn3A0JR8MmqOkUc=;
+	b=HaSvH6w7hldLcwyWH/baAYc+XHulhMAP3lSVQZzKosObpocWxCEeosljZGthdLOuBA5InH
+	iyPpfWqhWOJ0Ck9GCypn0HudfPB2SjJL3+jVzroW1kMrKWjj9RPyV169ZVUZZ18jSFclNQ
+	o0CvozPXZ0GQ5OJfBnI3TFzC9eJF14Q=
+Date: Tue, 9 Jun 2026 20:41:36 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c66036b0e1528d69dc15e19faca58b8aa3453cac9d2554984b3130e96321b357@mail.kernel.org>
-In-Reply-To: <20260610024637.343364-1-sanghyun.park.cnu@gmail.com>
-References: <20260610024637.343364-1-sanghyun.park.cnu@gmail.com>
-Subject: Re: [PATCH bpf-next v4] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
-From: bot+bpf-ci@kernel.org
-To: sanghyun.park.cnu@gmail.com,yonghong.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: sanghyun.park.cnu@gmail.com,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,memxor@gmail.com,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,emil@etsalapatis.com,puranjay@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 10 Jun 2026 03:16:20 +0000 (UTC)
-
---===============2913729978520096314==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Keep int return type for
+ tailcall subprogs
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260609233407.2711577-1-yonghong.song@linux.dev>
+ <20260609234251.C1A6F1F00893@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260609234251.C1A6F1F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index e791ae065c39..77f90b887bf1 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
 
-[ ... ]
 
-> @@ -765,14 +775,38 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
->  	if (!task)
->  		return -ENOENT;
+On 6/9/26 4:42 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Incomplete application of compiler optimization mitigation in `classifier_0`.
+> --
 >
-> -	mm = task->mm;
-> +	if (task == current) {
-> +		mm = task->mm;
-> +	} else {
-> +		/*
-> +		 * Foreign task: pin task->mm against a concurrent exit_mm().
-> +		 * Use trylock on alloc_lock instead of get_task_mm()'s
-> +		 * blocking task_lock() to avoid deadlocking the target task.
-> +		 */
-> +		if (!IS_ENABLED(CONFIG_MMU))
-> +			return -EOPNOTSUPP;
-> +		if (irqs_disabled())
-> +			return -EBUSY;
-> +		if (!spin_trylock(&task->alloc_lock))
-> +			return -EBUSY;
-> +		mm = task->mm;
-> +		if (mm && !(task->flags & PF_KTHREAD)) {
-> +			mmget(mm);
-> +			mmput_needed = true;
-> +		} else {
-> +			mm = NULL;
-> +		}
-> +		spin_unlock(&task->alloc_lock);
-> +	}
->  	if (!mm)
->  		return -ENOENT;
+> commit 230de7228ec64290b0e30a90f68ca96dd2ee6dd0
+> Author: Yonghong Song <yonghong.song@linux.dev>
+> selftests/bpf: Keep int return type for tailcall subprogs
 >
->  	irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+> This commit updates tailcall subprograms to prevent LLVM 23 from optimizing
+> their return types from 'int' to 'void', which would cause verifier failures.
+> It uses barrier_var() and __sink() to ensure the compiler retains the int
+> return type.
 >
-> -	if (irq_work_busy || !mmap_read_trylock(mm))
-> -		return -EBUSY;
-> +	if (irq_work_busy || !mmap_read_trylock(mm)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+>> index ae94c9c70ab7d..6fde0ab921486 100644
+>> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
+> [ ... ]
+>> @@ -41,16 +44,22 @@ int classifier_0(struct __sk_buff *skb)
+>>   static __noinline
+>>   int subprog_tail1(struct __sk_buff *skb)
+>>   {
+>> +	int ret = 0;
+>> +
+>>   	bpf_tail_call_static(skb, &jmp_table, 1);
+>> -	return 0;
+>> +	barrier_var(ret);
+>> +	return ret;
+>>   }
+>>   
+>>   __auxiliary
+>>   SEC("tc")
+>>   int classifier_1(struct __sk_buff *skb)
+>>   {
+>> +	int ret;
+>> +
+>>   	count1++;
+>> -	subprog_tail1(skb);
+>> +	ret = subprog_tail1(skb);
+>> +	__sink(ret);
+>>   	return 0;
+>>   }
+> [Severity: Medium]
+> In classifier_1() here, the return value of subprog_tail1() is captured and
+> sunk using __sink() to prevent optimization. Should classifier_0() also be
+> updated symmetrically to capture and sink the return value of subprog_tail0()?
 >
->  	vma = find_vma(mm, start);
-                         ^^^^^^^^
-
-sashiko-bot@kernel.org raised a concern about this in v4: bpf_find_vma()
-traverses the VMA tree of an external mm_struct (from a foreign task) without
-checking check_stable_address_space(mm).
-
-When inspecting a foreign task, the mm_struct could be flagged with
-MMF_UNSTABLE if it was subject to an OOM reap or a dup_mmap() failure. In this
-state, the maple tree can contain XA_ZERO_ENTRY markers.
-
-If find_vma() returns one of these markers, could the subsequent check using
-vma->vm_start dereference an internal integer value and cause a kernel panic?
-
+> Looking at classifier_0() in the same file:
 >
-> @@ -782,6 +816,9 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
->  		ret = 0;
->  	}
->  	bpf_mmap_unlock_mm(work, mm);
-> +out:
-> +	if (mmput_needed)
-> +		bpf_iter_mmput_async(mm);
->  	return ret;
->  }
+> __auxiliary
+> SEC("tc")
+> int classifier_0(struct __sk_buff *skb)
+> {
+> 	count0++;
+> 	subprog_tail0(skb);
+> 	return 0;
+> }
+>
+> While the return value of subprog_tail0() is currently sunk elsewhere in
+> tailcall_bpf2bpf_hierarchy_2(), leaving this callsite unsunk could
+> potentially leave the code fragile to LLVM optimizations that might create a
+> void-returning clone of subprog_tail0() specifically for classifier_0().
+
+We should be fine. In the same file, we have  SEC("tc")
+  int tailcall_bpf2bpf_hierarchy_2(struct __sk_buff *skb)
+  {
+-	int ret = 0;
++	int ret = 0, ret1, ret2;
+  
+  	clobber_regs_stack();
+  
+-	subprog_tail0(skb);
+-	subprog_tail1(skb);
+-
++	ret1 = subprog_tail0(skb);
++	ret2 = subprog_tail1(skb);
++	__sink(ret1);
++	__sink(ret2);
+  	__sink(ret);
+  	return (count1 << 16) | count0;
+  }
+
+This will guarantee subprog_tail0() will have a return value.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27250036662
---===============2913729978520096314==--
