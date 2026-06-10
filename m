@@ -1,139 +1,127 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F374192EA
-	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 15:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781106015; cv=none; b=f7UbUkpKFMorWgIN5Ax2dhB+mkLRTfRE1GVdo9mFUWhzljKsPz6pxySDCQ4T9jZLDbc2Lf5FAd1Y1wYNuW/djcEUKJtj5euq38WfQnWw3YDkfn8agiMLTyHm6ae3y8APxJDnwbGELgOZW8IYCizvq/CJLAZnUpn7jJ/Le70UqsY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781106015; c=relaxed/simple;
-	bh=SZo+09VJxPe0aRxDHQZ37YCIqZpsDi3j6Pm9Twc42yE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=fgRKsJ5Kx3Gx2S9zXO+hVUr0trUvIuJOZT4bjdfTfQELfJYTpsXeqpCiWuRcFbuzcsgLXMZMKaZBujJXz0/yJpzbQ2JtVbztpH4ku2isVCBVmR0nXaeJpl2fK5/YMNU+DBotgfwxFjzmQppsD6I/Kbx8eH/M/rpLycea6TT0TOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JkPoYF/G; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1624963BA
+	for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 15:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781106184; cv=pass; b=Zis2kYpSFh8wrvOGqf7wQWHeNY7PAzt4Kfd/mPNcm8RvT+YcKk64+HvEa9XuE+fkA1qHhvSsTH/in+XFiKReO0t7jTqsne5ugPxJOW8ewUecbrA+5KxahWoXrNkJVZP01rmITaoy1ej+WWj1X/4ecHkBIlzf2QgaHTB/uk2swj8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781106184; c=relaxed/simple;
+	bh=Cv7gE6iLI28Rayqre7JCuHoIrvBZAom9KVFcD8JyulU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kYcQfO4Mow/D400228Zr/8OXeq2gqrG1WlSSUGeKSvbPzrYWKZbdHTN6iCb4bPAM7w7/SDzgm1/pwPFTuQ/9DhL510PcTGRRJt432OcgXAuzjQFkkk9+lhee3QGdxdlUm74ziMc1Rw90IfTqJdRf2luJU0MkUHfvmrYgtoBI2tc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBl8kK7v; arc=pass smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JkPoYF/G"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6AD331A383D;
-	Wed, 10 Jun 2026 15:40:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3F0155FFC9;
-	Wed, 10 Jun 2026 15:40:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 58747106B97E1;
-	Wed, 10 Jun 2026 17:40:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1781106010; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5duFWAYGS7rkhiNuj3l/wN6KVWVUG4NZ+MvKqmTsnpw=;
-	b=JkPoYF/GLe+scz7jLExUUOGBmNQDG+GFoMQDpYarEdJu/5vDgmW9wsraL4eYZ+o9NvQvM3
-	kvJYPSbbCwUJDspxGKdL6VQXZubtPGaBjBuywpEJrWc7RgDDyXuPXKMVOQUigOuWzpLLbf
-	8jJLbM60gll9em2/jTlrHhyO6SKYpRNEXUO0MxsxyFiC2cpLMP4Rx3JgnA0l0IN8TMc1pB
-	PWcCHWcpZjIKtdJcP+lbIwTj66J6SeLgXMKKG/GA0bYNTMHNAmTDrX7v5Dcr3UI2SI+Z94
-	0mrpBlTFut7Jkz28M1KguonIsgrk8+ovGccPEq0HtKHJXMtexT9JO6Gi+EusRg==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBl8kK7v"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c855599a77aso3515172a12.0
+        for <bpf@vger.kernel.org>; Wed, 10 Jun 2026 08:43:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781106183; cv=none;
+        d=google.com; s=arc-20240605;
+        b=M7p/UlBJHMsZJLm7dzBPDDpe3iM31fezGFQi0qTIF63ttPEUBWXal3sytPVB2ufbBH
+         rtUiBXvyAU6wqtOQpgxTgXbU1qFTPi6uNzPiCHlwH6ZRqE5ZkXDZBbk/fbabAcYMmHNZ
+         E6MU1plpSiUYft6ytglOwkNNTLgrjFCws/OQznrWYUwWHyOhkTd5b5N1ONhJuiELP1Dx
+         EAdMhvS9jS/KxuT+4FXQM03TiyLkzlbpuEVOOhTAn85QuQt1WPfvBd5GF+Zqybalm5zQ
+         MS2Sn6525Xfpki4CLZG3BMTPNll30dx1tGlZ9KDTzy7EHnUcIT+AStdMyhaTYE2hKyJi
+         NRMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Cv7gE6iLI28Rayqre7JCuHoIrvBZAom9KVFcD8JyulU=;
+        fh=v39LYTR7pUbh0lZMs+95HXRzQ7N/3fhHKIyicQYQnpE=;
+        b=GVb1eMBjTEmx63HlIjxpm4SVsiY0S+tM90IEoljv8GJm1FNKk7Wzd7ONbA0aDo4CeS
+         MNrtCau/aqfzOAmO0HGHZRbQWQ8BRlv0QPJoDnR+aM2nAIHWbkijRVHKe1Viu3RbWvEh
+         788Zrw0frWFOXgKfwiSUjXfwjCQx1sSB6mxNeNAQhtdqqg6uh0x2lzWhwL55M4ynNJeX
+         +G9SB35JmSWa2T4bcZX5zUS+XkB8YQ54Nt8jSvKrJdjK6X5KZMdP1HTBc7X0CvzCJIJv
+         9neveKlWc62wraaE4UYNxIt3V7raOWZ/apI/hZ7lS4ffCADmALhnGWM3ANardbx+yPRE
+         zoOA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781106183; x=1781710983; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cv7gE6iLI28Rayqre7JCuHoIrvBZAom9KVFcD8JyulU=;
+        b=NBl8kK7vs7g1kEQ5+12/naidREVJAlqcPqMyWGf8YIpulQ3ZypWhDmcX/fZzmwt6qe
+         pFHsjBSLCEaosl6xVuhj8tH6NN3N+VIOSdgo5GHB9DHjXvg7brs76F1/bw3RTv9UBwSL
+         dbv2n4jVrgVZSPPP9MSWsOpyRRXEplPhQGLWG5r/EIvYuJdYLx1vdcYw/Xcws/eQgf4m
+         2TGxi7JIhl0tXoO1oqNdG/+beVZpPMSas4zuYfAUZeV1i9FCVjwUUczlqqoHK63EKmUa
+         nUgyAL5m7Fbsqvk7fs8PDda+TAsZ9S0LUhTHdXrNTQRVhNC89W5LDZz2aifDiM25ie/O
+         6TVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781106183; x=1781710983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Cv7gE6iLI28Rayqre7JCuHoIrvBZAom9KVFcD8JyulU=;
+        b=F4K3StOWsHqNcsxQOZHIQj6WpyIqHjLCIXfIh/KTHqoGbkHMeFqW8NhmE9CH5wmy8a
+         Ex38M1cWZFOEgx4cN2ayJ3ajcVMHroTe0GI5dnU0HPTEwG5FaiOrG8djfUaYMvnwIzOV
+         gfri+dEWDNaFibIV0xkm57iVAvjdx3ImbMF9RgvyABIVm0z/0NJVYJb7WWyPShaBWS3h
+         nM0rYg9ErUNy64ZCZA/j9nyD2tVT3GCiwMBmY/GHXYxhshVVo9FfsXmQoOIel5Nko9d8
+         n0OeIn2qu7GubdwuEzPOjKckDkzuYJt/Ze4i8xKDQqZ8Ik3hv4d120m50oDMGEKuddab
+         NegQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9MCgyHQAiNYR8jRqtiYwtxplCpwICeETmgl4+8XviKMWRlvYxbOzyoZuO0dIGzJNh6Y3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMBDsB1koSeIVnW0CMRmTFsVUEH8ARE47p7VhHEBfm+QCOKUZy
+	O3JPtEZaq3K5nbXf0uW3mzSVylsZJ3pIWLSW4AKY78w3S/ktSiYjpAG2BOeyqrQAkrgbyBSBAeD
+	R0GZYCf+mj+wzpqjIqTPSe6kCfEAbW0Q=
+X-Gm-Gg: Acq92OHUfvCcDAFfMdJNnId0HqvbQ8LZjUGVMTL9UqGLExFnT+4ATLc9+vFUvqxv5Zg
+	ED+KFOI2AseVsJks486zlh0gEiUWnldfqAra5FtK7BPTNEXxhp2sQugkeHaKNyHljSW+ZdwvTof
+	/RiZ0cyDIpWLqHfqexc8XKLC9fr875UDgtFGM2CnavBXjOSaqzGFMLBFsBn7r38HDQZLIf5EBM/
+	SJnmzqk4azx3m6zE7IevgYOxy0dTrEfnn0mXW9q0r2MXOzSmSA35diXan/lgCuhQTeyy65UFVdc
+	Q7PLoeCYKAPwXNYdVtIpzZhT6iYE65AUYIrrv7qfMHVPYOBTeGasJj+O3tWdRkYfBks79A1LBnG
+	UTcNQQarrvNvX2Un+qM9C+6yRhJzUeH1CIx0=
+X-Received: by 2002:a05:6a20:6a27:b0:3aa:f9cb:d43e with SMTP id
+ adf61e73a8af0-3b4ccdbe063mr30315804637.18.1781106182666; Wed, 10 Jun 2026
+ 08:43:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260603110554.29590-1-jolsa@kernel.org> <20260603110554.29590-4-jolsa@kernel.org>
+ <20260609102922.3c489f76@fedora> <DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com> <20260610113536.77172ad1@robin>
+In-Reply-To: <20260610113536.77172ad1@robin>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 10 Jun 2026 08:42:51 -0700
+X-Gm-Features: AVVi8CeN6QnCWHARnizI32fh6UpRcmeczia8YRAursoaXCH_D31y9WtnUreXmzM
+Message-ID: <CAADnVQ+RhRiUp8FeptdVKZimGd-Wv8C+NbW5U4hh+7Hi5abQxw@mail.gmail.com>
+Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry function
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 10 Jun 2026 17:40:09 +0200
-Message-Id: <DJ5HDX2K5CTF.YRZ9TDI6QCII@bootlin.com>
-Subject: Re: [PATCH bpf-next v2 3/8] bpf, x86: add helper to emit kasan
- checks in x86 JITed programs
-Cc: <bpf@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260604-kasan-v2-3-c066e627fda8@bootlin.com>
- <20260604205035.CF9C91F00893@smtp.kernel.org>
-In-Reply-To: <20260604205035.CF9C91F00893@smtp.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu Jun 4, 2026 at 10:50 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] `emit_kasan_check` fails to save and restore the x86-64 call=
-er-saved registers `%r10` and `%r11`, which are actively used by the BPF JI=
-T as `BPF_REG_AX` and `AUX_REG`.
-> --
+On Wed, Jun 10, 2026 at 8:35=E2=80=AFAM Steven Rostedt <rostedt@kernel.org>=
+ wrote:
 >
-> commit 77bd053eee8b8130b5fe38c11b29a99d8c12317a
-> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
+> On Tue, 09 Jun 2026 16:43:19 +0200
+> "Kumar Kartikeya Dwivedi" <memxor@gmail.com> wrote:
 >
+> > Hi Steven,
+> > Version 8 of this set was already applied to bpf-next.
+> >
+> > https://lore.kernel.org/bpf/178085644764.273544.8250000589480262551.git=
+-patchwork-notify@kernel.org
 >
-> bpf, x86: add helper to emit kasan checks in x86 JITed programs
+> It should have waited for my review of the first three patches though.
+> I like to run them through my tests before giving the OK. As they are
+> generic changes to my code.
 >
-> This commit adds the emit_kasan_check() function to insert KASAN shadow
-> memory checks before memory accesses in JIT-compiled BPF programs. It wor=
-ks
-> by saving caller-saved registers, computing the accessed address, invokin=
-g
-> the relevant KASAN function, and then restoring the registers.
->
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index a0c541a441cfa..0981791014eb3 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
-> [ ... ]
->> @@ -1330,6 +1343,86 @@ static void emit_store_stack_imm64(u8 **pprog, in=
-t reg, int stack_off, u64 imm64
->>  	emit_stx(pprog, BPF_DW, BPF_REG_FP, reg, stack_off);
->>  }
->> =20
->> +static int emit_kasan_check(u8 **pprog, u32 addr_reg, struct bpf_insn *=
-insn,
->> +			    u8 *ip, bool is_write, bool accesses_stack_only)
->> +{
-> [ ... ]
->> +	/* Save r8 */
->> +	EMIT2(0x41, 0x50);
->> +	/* Save r9 */
->> +	EMIT2(0x41, 0x51);
->> +
->
-> [Severity: Critical]
-> Does this code fail to save and restore %r10 and %r11?
->
-> These registers are caller-saved in the x86-64 System V ABI, and the call=
-ed
-> C KASAN functions (like __asan_store8) are permitted to clobber them. In
-> the BPF JIT, %r10 maps to BPF_REG_AX and %r11 maps to AUX_REG, which are
-> actively used as temporary registers right before memory operations. If t=
-hey
-> are clobbered by the KASAN check, it could lead to corrupted operands or
-> invalid memory accesses.
+> They are trivial changes, but regardless, someone should have asked.
 
-This point has been discussed a bit in the RFC: Alexei suggested to
-get rid of it. In theory, r10 and r11 _should_ indeed be saved, as JIT
-comp can indeed use BPF_REG_RAX and AUX_REG (eg: simple BPF_ATOMIC insn
-with BPF_FETCH). But here, the list of called functions is pretty
-limited (__asan_{load,store}{1,2,4,8}), and so we can try to optimize a
-bit by skipping those. Those kernel asan functions, when checking on my
-vmlinux file, do not touch r10 or r11:
+If my memory doesn't fail me you said it's fine during v1,v2 iterations.
+The last v3 - v8 you were silent, so we assumed you're still fine.
 
-  for i in 1 2 3 4
-  do
-          for j in load store
-          do
-                  objdump --disassemble=3D__asan_${j}${i} vmlinux|grep -e r=
-10 -e r11
-          done
-  done
+While at it, please review Mykyta's set:
+https://patchwork.kernel.org/user/todo/netdevbpf/?series=3D1096695
 
-but here, it is just proving that those registers are not clobbered _in
-the nominal asan path_ (ie not fault) and _in my kernel, with my
-toolchain_. I think dropping those registers is worth, considering the
-gain (two less push and two less pop per x86 load or store insn).
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+It's also been pending for almost a month now.
