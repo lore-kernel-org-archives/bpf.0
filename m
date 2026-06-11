@@ -1,190 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247F7377544
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 08:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721E01E47CC
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 08:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781166253; cv=none; b=HWLzX9shBtRMXJ9+VMj5guD5IPH7zhIlRK7FIv4do+zCUt5C4scVV0B12++a9meX6qf3MsOVvflioECWhVnpbXL29KrcdM6TkONpgEcpO1B1VQE2Jxr9h190+LNgH612jhYPbQSwhsJyT0gALMDsoZdrxlvesibnmGjBa5Alt4s=
+	t=1781166641; cv=none; b=QFTEvvRPLtkjtfAzxYOiO3PJXZW2bRtT/qr/mTKQF5dZAy+sTnytBg814inDMaiDEsHePIQGbEELEZW1qfk5VwM8kRTWsJpDNt/4WwkWV5PRt+G4CY/tBeyZzs1sEoUtklnaIdzpQiv66D2xnMkmsbbHjRLNqiJMnY47+4Eybkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781166253; c=relaxed/simple;
-	bh=a6Yvow8n2ykwCb67sdPNyrWwWVkiXSgA1mV9EkbQnuI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fSA+4CneqS5TJe6Iq/nZSD1VHb4iAC13tGaCZU6qXwFepnmIg4hRoBqQ5MM7GgGkiFA+oqSjvHOSsRITpyRdci/fVpQ99KrlHeT7WSo2tKntRQ3HZfEfGPlvgo6C3MURrKd2+N0MQ/0nhzOylt4g8TQTZJTpmlhJO+Cs075h9uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cw8aZCrG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781166641; c=relaxed/simple;
+	bh=XR0V+4h+8MJh9uy6euPn7a63rvq06PZMS77yDeSWSwQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=E0adKvCXPBAdgZY7en/Z+ax5E9WC7A9wXA/fwjAGZQOW0DS5Eavuj3+xBsZted33DXpeAV/vCNmCg+fX6AZMSpkJ4IAj+FHrfYz3Rq3pI7IH0GYEvY1NiFFdEO8p2YT77w+vrOsPgNY2Tn5+VitOwsoPZzf9wyOPahgsnHh+HTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ctDdKLeH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=XFevLNkb; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cw8aZCrG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905381F00898;
-	Thu, 11 Jun 2026 08:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781166251;
-	bh=D7w8PzZg+nYgqk35xBzeRJFV6A1yLz4I0AZE571+Aa8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cw8aZCrG+OC4bubwWkxIiwohsiPihD1GOKHZclKjncy6othqW45qxO+17Gg+wLjIk
-	 3CQW3WI1bEwSrWsiYhlhzc8KSWw1NVuenyBwFnxohdEv0GMAApZ2H+1fO5z4ql94JC
-	 XcXfgnYQpXZGT+0WxnivtSi5x4rtbcuOXE8rPIhu5w8SBtq+kGT1250fRJdGDKpady
-	 3+bWF1K+CBicU1ixn1/GaB7CaXBeyB9b9mKf3kVxgN4qnA40iP/tiJPI7nEiA4WPeF
-	 aiWRfAyODI31py0GjccO1ybn4hoQ3gCLd3vhoSjcQHxK75bqx/NwU3TH42BrA55hun
-	 6tq7fC3x9r8iA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Cover generic devmap egress
- last-dst rewrite
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sun Jian" <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611080850.536996-3-sun.jian.kdev@gmail.com>
-References: <20260611080850.536996-3-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 08:24:11 +0000
-Message-Id: <20260611082411.905381F00898@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ctDdKLeH";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="XFevLNkb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781166639;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+	b=ctDdKLeHJRLv5m4ouOEffdB3b8dMB1SYIaqvPfmg7+M+zZsNIwwCSEJbHGFhN5mdB1EbKp
+	ckjha26x5ELzzLHrCMciBPGgESKot7uOIhfVmVYBR6qDKztklov2TKgRA+9hTYYBgv8SeF
+	aOyX6yOsFDjV9gF/L7PtRMPzSLzqDMU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-147-3Jef1yJpNE2JpG8VPiYRng-1; Thu, 11 Jun 2026 04:30:38 -0400
+X-MC-Unique: 3Jef1yJpNE2JpG8VPiYRng-1
+X-Mimecast-MFC-AGG-ID: 3Jef1yJpNE2JpG8VPiYRng_1781166637
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-490c4f61a34so40432055e9.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 01:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1781166637; x=1781771437; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+        b=XFevLNkbb2tPXCzcxti/MwmkwoZL1FVCyYfFqjRoidx3forL6ayFkISRluyeI3VOL4
+         nZ4MC3HZ4+5nwOTxeBihImXnsk4JOeR6dYziKuL0nyz7guzIWcathuGv4rqNf+jCbkrY
+         WDgSOc9CUsSLWEqPD8EbYMQw7u6xdsThNWiFfLeXMDhCui5po1XTqRFt8XSDTBvpUBuE
+         DAGcyesZ3jcAeqpjVfTBm90uBo/QreH+10Ct2WlOzdk1l9dxQw8DDKZWGBCJtDTBi78a
+         BtzOclt9zyK/DM+MW9S03kH8Nd8o92gPlLSZs+i9yk+YMniYe8UK9RS24Zifbmn7lBC5
+         5N4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781166637; x=1781771437;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=K0b7sev+YXar1BdsAXXs6+O/y7RGvS4oVWMa4UAvNR4=;
+        b=iSGJz9b6dDwnTJzCBLTJ2+uRVWHFTZ+MEX1JO5mMt1ZkqAaVy74GdmI0dfO72jW3vr
+         VfvmMqGXXSwfThmTr0lPjtUvCUP4HgQu9Gflnrc+BhCGcI1+oYKLIE+ftWOPW13R4MIR
+         FUK0MEIqgWIA7BySdsaF2alH5xDWltg/B90V39bI6Fu8cMjkQY7fjvjIjLAlote7P77/
+         UOf0ZbZe37xqXeduUXDO+Zq3S0oTcikNzSubJAx8ncXQAC/4G3kpj926jA1yIrLPq38L
+         zvOJGiQs44eRJRsTHbcTYTXe19aEYW12nS+oc4IsziK3JxjBuQCEXn6AvRB/DOF6BIpz
+         E60w==
+X-Forwarded-Encrypted: i=1; AFNElJ8wK0TVlHl2S/hoFrVSvocasdJLnyMNlHbSYLdF8K6NM1lUb82QXa27afP7KYUGxco350I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUhyWWZIe94CRqC2gh1NCLzmBPnT0Xx4JwGx6Ss9UOTh3Ah0DP
+	wGWaIfCOl2mL2YBQLYx/BcpiJzUal4EQVJ34xnIcnXYouUNsBhmf5Jbaiil5Vcenmgv9DYeyyXl
+	vmEfjY2O6UsMM576srEWyjbc34w38X2ARRbwVHaY2mM003AzcPn8wVA==
+X-Gm-Gg: Acq92OH+XOilRo5bAGQitD19rMbf92X3QrEGuLUFtOsDDhHTu2XMnRNge1N8o/tHv3l
+	wtmt+ugCfnG0RS0xCYtVagrm5AZhZTWsZhCKMhO+C8oC7cPOOi0PGu2AVadat3TQaGU8kkgFaY1
+	wy/HWXVELTUuMIYWpVrLNZpQYVARwgQTy0OqCuVnmIcEd1b/34TjxBs3pGRQZuWnMsj3EzW2FQs
+	7o1sAxCWfjpmvvUmyGQJ3UB+OoUH0ZrlcFqFxFdyM+71QZluyvnUzqaynDj4KMPJuvHac82pfdV
+	36CdULWwymPBo+n8wbk5k6omhKWN0PgkVv0DL+MZKhCGdHYi2o5CLfdnwfvQT8Y8hAgRCBvF9Jq
+	NCc4pYeY2iV+Exj2kK5DZo4aVFBo8RNoxYmPV4FR6aLcPD46GnJoepJ0B
+X-Received: by 2002:a05:600c:4444:b0:490:bcf6:469f with SMTP id 5b1f17b1804b1-490e534d301mr20585855e9.0.1781166636997;
+        Thu, 11 Jun 2026 01:30:36 -0700 (PDT)
+X-Received: by 2002:a05:600c:4444:b0:490:bcf6:469f with SMTP id 5b1f17b1804b1-490e534d301mr20585325e9.0.1781166636452;
+        Thu, 11 Jun 2026 01:30:36 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e2c9057bsm55175325e9.5.2026.06.11.01.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 01:30:35 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0F0E17BCC96; Thu, 11 Jun 2026 10:30:35 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, shuah@kernel.org, jiayuan.chen@linux.dev,
+ menglong.dong@linux.dev, emil@etsalapatis.com, Sun Jian
+ <sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Run generic devmap egress prog on
+ private skb
+In-Reply-To: <20260611080850.536996-2-sun.jian.kdev@gmail.com>
+References: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+ <20260611080850.536996-2-sun.jian.kdev@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 11 Jun 2026 10:30:35 +0200
+Message-ID: <87se6t8ono.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+Sun Jian <sun.jian.kdev@gmail.com> writes:
 
-New issues:
-- [High] bpf_map_lookup_elem on an ARRAY map never returns -ENOENT, masking=
- dropped packets and causing a false positive test pass.
-- [Low] The test performs manual FD validation (`ASSERT_OK_FD`) on map file=
- descriptors immediately after successfully loading the skeleton, violating=
- the explicit BPF selftest guidelines.
-
-Pre-existing issues:
-- [Critical] Uninitialized stack structure `net_config` is passed to cleanu=
-p functions on early error paths, causing arbitrary shell command execution=
- via stack garbage.
-- [High] bpf_map_update_elem reads 8 bytes from a 6-byte user-space array, =
-causing an out-of-bounds stack read.
---
-
-commit 89d44c6ff3ea8b2a422a70685fda70fa6ebcbf9c
-Author: Sun Jian <sun.jian.kdev@gmail.com>
-
-selftests/bpf: Cover generic devmap egress last-dst rewrite
-
-Strengthen xdp_veth_egress to check that each destination observes the
-MAC selected for its own egress ifindex, instead of only checking that
-the observed MAC differs from a single magic value.
-
-Add a generic XDP last-destination test where earlier destinations do
-not have a devmap egress program while the final destination does.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/too=
-ls/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> index 3e98a16659362..0fa2cf835c629 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> @@ -456,7 +456,11 @@ static void xdp_veth_egress(u32 flags)
->  			.remote_flags =3D flags,
->  		}
->  	};
-> -	const char magic_mac[6] =3D { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
-> +	const unsigned char egress_macs[VETH_PAIRS_COUNT][ETH_ALEN] =3D {
-> +		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01 },
-> +		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02 },
-> +		{ 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x03 },
-> +	};
-
-[Severity: Critical]
-This is a pre-existing issue, but does the error handling in
-xdp_veth_egress() execute arbitrary shell commands?
-
-In xdp_veth_egress(), net_config is declared on the stack without
-initialization. If an early failure occurs (such as
-xdp_dummy__open_and_load() failing), the error path calls
-cleanup_network(&net_config).
-
-This cleanup function invokes SYS_NOFAIL("ip netns del %s",=20
-net_config.ns0_name), which will execute a command using whatever stack
-garbage is in the uninitialized ns0_name field.
-
-The new xdp_veth_egress_last_dst() function added in this patch correctly
-uses net_config =3D {} to avoid this problem.
-
-[ ... ]
-> @@ -512,7 +516,7 @@ static void xdp_veth_egress(u32 flags)
->  						 &net_config, prog_cfg, i))
->  			goto destroy_xdp_redirect_map;
-> =20
-> -		err =3D bpf_map_update_elem(mac_map, &ifindex, magic_mac, 0);
-> +		err =3D bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
-
-[Severity: High]
-This is a pre-existing issue duplicated by this patch, but does this
-bpf_map_update_elem() call read out of bounds?
-
-The mac_map is defined in xdp_redirect_multi_kern.c with a value_size of
-8 bytes (__be64), but egress_macs elements are only 6 bytes (ETH_ALEN).
-For the final element in the array, this operation will read 2 bytes past
-the end of the egress_macs stack array into stack garbage.
-
-[ ... ]
-> +static void xdp_veth_egress_last_dst(u32 flags)
-> +{
-[ ... ]
-> +	mac_map =3D bpf_map__fd(xdp_redirect_multi_kern->maps.mac_map);
-> +	if (!ASSERT_OK_FD(mac_map, "open mac_map"))
-> +		goto destroy_xdp_redirect_map;
+> Generic XDP devmap multi redirect uses skb_clone() for intermediate
+> destinations and sends the last destination with the original skb. This
+> can leave multiple destinations sharing the same packet data.
+>
+> This becomes visible after generic devmap egress-program support was
+> added: a devmap egress program may mutate packet data, and another
+> destination sharing the same data can observe that mutation.
+>
+> Native XDP broadcast redirect does not have this issue because
+> xdpf_clone() copies the frame data for each destination. Generic XDP
+> should provide the same per-destination isolation before running a
+> devmap egress program.
+>
+> Fix this by making cloned skbs private before running the generic devmap
+> egress program. Use skb_copy() instead of skb_unshare() so allocation
+> failure does not consume the skb and the existing caller error paths keep
+> their ownership semantics.
+>
+> Fixes: 2ea5eabaf04a ("bpf: devmap: Implement devmap prog execution for ge=
+neric XDP")
+> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  kernel/bpf/devmap.c | 41 +++++++++++++++++++++++++++++++----------
+>  1 file changed, 31 insertions(+), 10 deletions(-)
+>
+> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> index cc0a43ebab6b..a3d6c60dbddb 100644
+> --- a/kernel/bpf/devmap.c
+> +++ b/kernel/bpf/devmap.c
+> @@ -512,35 +512,52 @@ static inline int __xdp_enqueue(struct net_device *=
+dev, struct xdp_frame *xdpf,
+>  	return 0;
+>  }
+>=20=20
+> -static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dtab=
+_netdev *dst)
+> +static int dev_map_bpf_prog_run_skb(struct sk_buff **pskb,
+> +				    struct bpf_dtab_netdev *dst,
+> +				    u32 *act)
+>  {
+> +	struct sk_buff *skb =3D *pskb;
+>  	struct xdp_txq_info txq =3D { .dev =3D dst->dev };
+>  	struct xdp_buff xdp;
+> -	u32 act;
+>=20=20
+> -	if (!dst->xdp_prog)
+> -		return XDP_PASS;
+> +	if (!dst->xdp_prog) {
+> +		*act =3D XDP_PASS;
+> +		return 0;
+> +	}
 > +
-> +	egress_map =3D bpf_map__fd(xdp_redirect_multi_kern->maps.map_egress);
-> +	if (!ASSERT_OK_FD(egress_map, "open map_egress"))
-> +		goto destroy_xdp_redirect_map;
+> +	if (skb_cloned(skb)) {
+> +		struct sk_buff *nskb;
+> +
+> +		nskb =3D skb_copy(skb, GFP_ATOMIC);
+> +		if (!nskb)
+> +			return -ENOMEM;
+> +
+> +		nskb->mac_len =3D skb->mac_len;
+> +		consume_skb(skb);
+> +		skb =3D nskb;
+> +		*pskb =3D nskb;
+> +	}
 
-[Severity: Low]
-Is this FD validation necessary?
+So with all this pointer soup and back and forth, the version you had in
+v2 (with the check and skb_copy() in dev_map_generic_redirect()) was
+much cleaner :/
 
-According to BPF selftest guidelines, after a successful
-xdp_redirect_multi_kern__open_and_load(), all maps are guaranteed to be
-created with valid FDs. Manual FD validation like this is not needed when
-using skeleton-generated fields.
+-Toke
 
-[ ... ]
-> +		err =3D bpf_map_update_elem(mac_map, &ifindex, egress_macs[i], 0);
-> +		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-> +			goto destroy_xdp_redirect_map;
-
-[Severity: High]
-Does this bpf_map_update_elem() call also read out of bounds, similar to
-the pre-existing issue above?
-
-The map expects an 8-byte value (__be64), but the egress_macs array element
-provides only 6 bytes.
-
-[ ... ]
-> +	for (i =3D 0; i < VETH_PAIRS_COUNT - 1; i++) {
->  		u32 key =3D i;
->  		u64 res;
-> =20
->  		err =3D bpf_map_lookup_elem(res_map, &key, &res);
-> +		if (err =3D=3D -ENOENT)
-> +			continue;
->  		if (!ASSERT_OK(err, "get MAC res"))
->  			goto destroy_xdp_redirect_map;
-> =20
-> -		ASSERT_STRNEQ((const char *)&res, magic_mac, ETH_ALEN, "compare mac");
-> +		found =3D true;
-> +		ASSERT_NEQ(res, last_mac, "compare last dst mac");
->  	}
-
-[Severity: High]
-Can bpf_map_lookup_elem() actually return -ENOENT for this map type?
-
-Looking at xdp_redirect_map.c, rx_mac is a BPF_MAP_TYPE_ARRAY. Since array
-maps pre-allocate their elements and zero-initialize them, lookups for valid
-indices will always succeed (returning 0) and yield the current element
-value (0 if unwritten), rather than returning -ENOENT.
-
-If a packet is dropped and never updates the map, the value will remain 0.
-The bpf_map_lookup_elem() call will succeed (err =3D=3D 0), and the test wi=
-ll
-trivially pass because res (0) is not equal to last_mac. Does this mask
-datapath failures and cause a false positive test pass?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611080850.5369=
-96-1-sun.jian.kdev@gmail.com?part=3D2
