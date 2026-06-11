@@ -1,145 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91015175A72
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 02:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F5218E91
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 02:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781143669; cv=none; b=CDAqbdK7NppnayPx7hBHg9yuoqiGpV/uwI6EypstGYEWyPEqLhHXrMRATaH4UYpnXk+fVMb+MgB+DzKqoxfJYzfSzXbZrvQt9HY/kmZIa2wBfGYZb4oR5mupgb6t960RcFa+kVvnOtgoSco+hbVxN/sKnSFr+x+fGFYgVbI7G8w=
+	t=1781143701; cv=none; b=YFUxV0Bo6ErFkDD95CYkGUFzn3zMW/4nn64d5CiNGikgy3UOHwDqC4kBeg0T8NXPRir3Mj6WJuOZyvwnp+pJ9vdnQGS/+z5VP5/rhtUQdenhwNJu/WYkt46o5sU2RX2f2E8MVkShP/jHH0WThnK936T8SombrtuAzAZMI3OqHjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781143669; c=relaxed/simple;
-	bh=+9/YAIl+UmgFlw5JU80MpnYldYbqir96UplENUymAvk=;
+	s=arc-20240116; t=1781143701; c=relaxed/simple;
+	bh=A6e70RyQh29Xltd2fv2XWy+4Pk7ezUgWfsvl9KrfmI8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MyNUqNkO91FoQdXPrqMOOvpOzhISkK6Et1hsyF+rU1LJrrJ4i1aHOg5BFMvQ1Gq20PSwTELeYSwXtYmVo3eDWaJebcWvet0NJW4n/OEDDa7BaoEd4WG3xq/m/8EuuKomXyGtXJR9ZVQgLSqThNpT6EtItp8PTuhQ/1u6B33ZS70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hK4zbY1w; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=EjrdrmgCtT33MctrOddaps7b3NEEg4UF8ULXAvbje5O0shOjTPbP1EGgJIo5xzAQJyWHt/jor/Q/6yKv9i8YarULtu5wkrSyCu3oFzyW0I0qEvb58cS5X9yBbgyqeMmpqsh80FCfKSUKUtDaEgUEi/YzaNu56jxQuBUwWztH6ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fODieRA7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hK4zbY1w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0A11F00893;
-	Thu, 11 Jun 2026 02:07:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fODieRA7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F18B1F00893;
+	Thu, 11 Jun 2026 02:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781143668;
-	bh=ZQ/qejNXtY9tK4tLwKx3CK6XDTc+gS6rvocnsqIGGVA=;
+	s=k20260515; t=1781143700;
+	bh=No/1QB3np+ErhWhGVTRTPL3TvQbnINMD7nqkcBYpPB0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hK4zbY1wBaVEfyl2bjKmV3jdIS7wQOu+90SagdHy6oVep+BYnnqvX8YNdQoH9BoP+
-	 4CXx0i+zWNXRpi/M9PACDK1oGX5ZBrkjj/R0hUuahvXCj+FLti9KSRcM58qsGr+biX
-	 yXzts6kcg0DI7a8N2vuBicLJe8zkrwBMrGdBv2b4MtBqcGBuUIEQwtQdWQO76fpO3E
-	 ObmQpvESEGrzZRZFMMSosOeD699FdN1K+zpGtNteoStqLYX/eEiUMzd3dY3hbKOjN/
-	 N9+Qsb7XIuk6WaBELVBiHVtNvItp2zOTCDoUb1//p2YKTgoMZHZ+uByXqgVWyKE+c+
-	 egOt+USQgXe/A==
+	b=fODieRA7+k6UNASUWLFNHhagDKzhcv5u9khxMCp8YCY6vGCXQ/P9EZKHEE9AEwPMI
+	 8qAcCtnWCT+WNRq1dfgWuopTot2OayXN73ncq2DQaZFE+uAT249W0vguIpVftXV8Ey
+	 IGxKPz7bu/nr5Nvq7jGykZF7CxckJlnoecwrppnh/xmlek+80cNXIn2aKddhPPNZiL
+	 +OHOEtv8qN+tBeNP1qK4wqBqxdnKGhq+KQU8MAFYSvOMmMf9xdQhReIGSdw42BQgLv
+	 KpfQob9G3kItUfKGyW8TS9u22n+uH217i4d+sMshxhpzNj9AlHmDD+e/kLIceIUSaR
+	 yHNL9Gujk8GBQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 2/3] LoongArch: BPF: Inline
- bpf_get_current_task{_btf}() helpers
+Subject: Re: [PATCH v2 1/3] LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611015327.12108-3-yangtiezhu@loongson.cn>
-References: <20260611015327.12108-3-yangtiezhu@loongson.cn>
+In-Reply-To: <20260611015327.12108-2-yangtiezhu@loongson.cn>
+References: <20260611015327.12108-2-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 02:07:47 +0000
-Message-Id: <20260611020748.1F0A11F00893@smtp.kernel.org>
+Date: Thu, 11 Jun 2026 02:08:19 +0000
+Message-Id: <20260611020820.1F18B1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] The `!bpf_jit_enable` check is an incomplete, architecture-specifi=
-c workaround for a core BPF verifier bug. It fails to handle JIT compilatio=
-n failures and leaves ARM64, PowerPC, and RISC-V completely vulnerable to t=
-he exact same interpreter kernel panic.
+- [High] In 32-bit kernels, the `$tp` (current task pointer) holds a biased=
+ pointer during `__switch_to()`, exposing the kernel to memory corruption o=
+r crashes if a synchronous exception occurs.
+- [High] Missing `try_get_task_stack()` in `show_stacktrace()` allows a use=
+-after-free read of kernel stack memory, causing an information leak.
 --
 
-commit a76f924522a402d8fb15714c189dca631202c35b
+commit a68f9b2fc34ae06149cefb44ef7146643d52f85f
 Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
 
-This commit inlines bpf_get_current_task() and bpf_get_current_task_btf()
-helpers into a single move instruction for LoongArch. It also adds a check
-for bpf_jit_enable in bpf_jit_inlines_helper_call() to safely fallback to
-the BPF interpreter when JIT is disabled.
+Select THREAD_INFO_IN_TASK for LoongArch to move thread_info off the
+stack into task_struct. Initialize a per-CPU cpu_tasks variable, update
+assembly paths to restore the $tp register from it, and adjust stack
+accesses and unwinding to account for the new configuration.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 24913dc7f4e83..cb379b236d7dd 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
+> diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switc=
+h.S
+> index f377d8f5c51a6..d6e0d05d6fd39 100644
+> --- a/arch/loongarch/kernel/switch.S
+> +++ b/arch/loongarch/kernel/switch.S
 
 [ ... ]
 
-> @@ -2367,3 +2374,18 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->  {
->  	return true;
->  }
-> +
-> +bool bpf_jit_inlines_helper_call(s32 imm)
-> +{
-> +	/* Prevent interpreter panic when JIT is disabled at runtime */
-> +	if (!bpf_jit_enable)
-> +		return false;
+> @@ -33,11 +33,12 @@ SYM_FUNC_START(__switch_to)
+>  	LONG_SPTR	t8, t7, 0
+>  #endif
+> =20
+> -	move	tp, a2
+> +	move		tp, a1
+>  	cpu_restore_nonscratch a1
+> =20
+> -	li.w		t0, _THREAD_SIZE
+> -	PTR_ADD		t0, t0, tp
+> +	LONG_LPTR	t0, a1, (TASK_STACK - TASK_STRUCT_OFFSET)
+> +	PTR_LI		t1, _THREAD_SIZE
+> +	PTR_ADD		t0, t0, t1
+>  	set_saved_sp	t0, t1, t2
+> =20
+>  	LONG_LPTR	t1, a1, (THREAD_CSRPRMD - TASK_STRUCT_OFFSET)
+> @@ -45,6 +46,7 @@ SYM_FUNC_START(__switch_to)
+> =20
+>  #ifdef CONFIG_32BIT
+>  	PTR_ADDI	a0, a0, -TASK_STRUCT_OFFSET
+> +	PTR_ADDI	tp, tp, -TASK_STRUCT_OFFSET
 
 [Severity: High]
-This is a pre-existing issue, but does this !bpf_jit_enable check fully
-prevent the interpreter panic?
+Could the delayed removal of the bias from the thread pointer cause
+issues if a synchronous exception occurs?
 
-In the BPF verifier, do_misc_fixups() calls bpf_jit_inlines_helper_call(). =
-If
-the architecture promises to inline the helper, it skips rewriting insn->imm
-from its raw enum ID to the required interpreter offset:
+For 32-bit kernels, a1 is biased by TASK_STRUCT_OFFSET at the start
+of __switch_to(). The code copies this biased pointer directly into tp
+and only removes the bias at the end of the function.
 
-kernel/bpf/fixups.c:do_misc_fixups() {
-    ...
-    /* Skip inlining the helper call if the JIT does it. */
-    if (bpf_jit_inlines_helper_call(insn->imm))
-        goto next_insn;
-    ...
-}
+While local interrupts are disabled during this window, synchronous
+exceptions such as hardware data watchpoints might still trigger. If
+do_watch() executes during this window, it would use the biased tp
+(pointing to next_task + 2000), potentially causing out-of-bounds
+memory accesses or kernel panics.
 
-If bpf_jit_enable is 1 but JIT compilation later dynamically fails (e.g., v=
-ia
-bpf_jit_alloc_exec() returning NULL), bpf_prog_select_runtime() falls back =
-to
-the interpreter:
+>  #endif
+>  	jr	ra
+>  SYM_FUNC_END(__switch_to)
 
-kernel/bpf/core.c:bpf_prog_select_runtime() {
-    ...
-    fp =3D bpf_prog_jit_compile(env, fp);
-    bpf_prog_jit_attempt_done(fp);
-    if (!fp->jited && jit_needed) {
-        *err =3D -ENOTSUPP;
-    ...
-}
-
-The interpreter then blindly executes (__bpf_call_base + insn->imm) using t=
-he
-unpatched enum ID, which triggers the same fatal Instruction Alignment Fault
-(ADEF) kernel panic.
-
-Furthermore, ARM64, PowerPC, and RISC-V unconditionally return true from th=
-eir
-implementations of bpf_jit_inlines_helper_call(). Are they left completely
-vulnerable to the exact same interpreter kernel panic when JIT is disabled =
-or
-fails?
-
-Could this root cause be addressed in the BPF core instead of being handled=
- as
-an architecture-specific workaround?
-
+> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> index 5d49b742e3bf6..7e4206da4876b 100644
+> --- a/arch/loongarch/kernel/traps.c
+> +++ b/arch/loongarch/kernel/traps.c
+> @@ -90,6 +90,9 @@ static void show_backtrace(struct task_struct *task, co=
+nst struct pt_regs *regs,
+>  	if (!task)
+>  		task =3D current;
+> =20
+> +	if (!try_get_task_stack(task))
+> +		return;
 > +
-> +	switch (imm) {
-> +	case BPF_FUNC_get_current_task:
-> +	case BPF_FUNC_get_current_task_btf:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
+
+[Severity: High]
+Is there a similar use-after-free risk in show_stacktrace() when
+reading from the stack pointer?
+
+While try_get_task_stack() correctly protects show_backtrace(),
+show_stacktrace() appears to read directly from the task's stack
+pointer via __get_addr() without acquiring a reference.
+
+With THREAD_INFO_IN_TASK enabled, the stack can be freed before the
+task_struct. If show_stacktrace() is called on an exiting task
+(for example, via SysRq-T iterating over all tasks), could it read
+from a freed and reallocated stack, leaking memory contents?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611015327.1210=
-8-1-yangtiezhu@loongson.cn?part=3D2
+8-1-yangtiezhu@loongson.cn?part=3D1
