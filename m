@@ -1,131 +1,118 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC48397352
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 17:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF2E495519;
+	Thu, 11 Jun 2026 17:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781199315; cv=none; b=oXXD05Y5XU4flxfRAHVuhPPDna5GIDsgLv4oHBaCyAh/UQQCDL0DuLfcKGuxfiwLx8v+aRgroyuV/nrRTocYWddLfKy+Gxxi03b/LE8C3l7et4Sxvu0E2Nrb18iWJg5M8DizMOqu7a1AbjcmJ71wJl/1+OBzU1sZywiUNehS7YI=
+	t=1781200509; cv=none; b=OpZ+l6sQcrmhu+ZSqU9yrRGOvbcNExw8crreSzQ60rjAdkj6NS1GFK+F5/QspVNA/nMSQa9dW6+4ZKvtAnZelqX4AGESjIqoS1zuF8GYwbZZjX/plGtdkO5XbzXeKlckf3uGRTddjBZyysxwNYtp3uOn1boih1kXSKTQx/bqu7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781199315; c=relaxed/simple;
-	bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DPtJnlnu+r2SHMkIm8QStsVaqetILRforJ4G4drY5te0AsCgs8w/OX1iZw6r6mcpMSyRx2kYSI1H2E+Zy4/QZLEIxwb3QXsLeI7cdQ5Gb0RyAytcVj8E8obToqWZzQ+slaaKX7BoYQE2EtJ/S78xWP/Kym2BYKiOYwb2MeCDtYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYZ5dLNJ; arc=none smtp.client-ip=209.85.167.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781200509; c=relaxed/simple;
+	bh=cPIe7wNGfYJBpQv7Nx1WxLsUuivH06BEc6DUM0fs1uA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ioSHoCWd0yerXLJlwTujKXM+FFnSAdwg4BCaoap/0u8M/Vv9sWlpr+Fks6OvpdxUi6RUR/H6fpQRuyiPN5FjP8U9vb9bCsvdMj+58u9JVG27CR5dcy/QginlQhaTYbJzyKl+CD6LBQ9tLqWh34uTrf7cc+Yd8hNiOHmFpWp8dTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=wtY05MCn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ej0fXKWl; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYZ5dLNJ"
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-48650c78e09so74749b6e.2
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 10:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781199313; x=1781804113; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
-        b=BYZ5dLNJ1IBvEK5ib/bzK5ktyDRpKQtTz0Pa5eSPDrRyO72d5rfJM2JumMtKNGXkt+
-         Ys04gx2n/EgEtvqa/TSdPfzMZ9NGwrNvFbA7nZdBKZ7mync+PH0VgbJbYeU9qylu+OJW
-         zBLsD/iHJocBFpsF94KLithPi919Q/dyq3PY1fp69kJ2OpG2iRbw/ati5BXIU6THDNgL
-         OKZqkhrDOZdaNUPLT5o3neeRa9qQxe0bm/ErKIHk+b35QEn1KAaIafA3mRt33tldqUBp
-         9OzcgR9BQyPWiLi1hd3rv2DL2b7z1Udg54FK6QybRP8eh33Su/SWLQprae4W4efFY7kG
-         66nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781199313; x=1781804113;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
-        b=NhHxdCxLKDUsqIqsRlt3ACcHLgtaKvSkxPnwD4QjqjGTgpOge55vlPUG/DdWu6OyJr
-         G0r3l//e+C9LL01zwUmRId5q6BqafSwA2NGhH1PvR3dAsICQeWK/qf2IsfLSJzVmFfEa
-         ztlbUwtGEnhuWxHn0I7US/azFptYsuVWWwJDnSUWoLGksKIBIukhGOqOyB3wh0v3uvjo
-         W3ed324wwzOrMfoC0xAQg+o6QxIZO2CdMdg9NKsMIh/xDtNXcJro7ZjEKTp8INYxpVvP
-         EJk6sDo7oDyLDeBtpte75rqJD2rLEnT0Gm+2tj9KH939CObZW9GxGkPKAzzSGNbj5f3f
-         t5vw==
-X-Forwarded-Encrypted: i=1; AFNElJ8LKjJRhwmOYyKthG91trYUHyjm9DHcqTbC61fOtR2bxTivgVtlESprAjgDiXbLbmXIqDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOu49B6rbILv/Q+Mxr7qGhJ+wUqqsu/lwgoAWZ9G/mZ8Qy9Ps0
-	BuF94pKbUEzXOha4OF5SrV4lIIvTCKOwpEiqR3nBHuEfvnLWzMNBqvSK
-X-Gm-Gg: Acq92OHK3/yFOOx9lAVMFqQwN7dvihMO9tuSqitT8XlnON3Ahu4bsS/LAxxc8xqSYmk
-	TNWCDHUy6LKAOCVzCUvgQS9m6ef6EUh7euiR4y2MoEbHBIl/h3bG9PVstRN5pib/VZ6unrl5g/N
-	Y32fN+JJlx3/kk4lBnTxmujSiLmSjDo/5eF/I/ejqecL+2a12ZUAEYNL7H9nLW6gWYni6mk1etC
-	MWPb8qQKokoNvG85+Ru/ENiw4r1oe23B5yo0h+bhXZVtxjNQi5Fj9cdvyYaKyyCX0MmPGWBS1eM
-	3tYj3400maTWEfvmdM24H4d1nAzUgrVDDCqcV5A0sqi/ecEVCuFd0xm2RyCUJqx9h8gTDKvgTvv
-	fIQgulvlxMmvRyB//+9GJ/ycubI21pQNPut4v5hwDtcfct5HIG7U38Qk4j4Qe9XdymXcgV2h8xG
-	ceMnYOVditr3jjsPB5PuVq24M+WO2UJzSpB2/bYAwjsENhuPqk78aamMFakB6NdF42nyAJaMV16
-	0MQcztyZidfAxyYVA==
-X-Received: by 2002:a05:6808:c2d5:b0:485:29ad:d1a9 with SMTP id 5614622812f47-4871a1611famr2717742b6e.37.1781199313083;
-        Thu, 11 Jun 2026 10:35:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5d::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b91f944sm21186925b6e.9.2026.06.11.10.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 10:35:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="wtY05MCn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ej0fXKWl"
+Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 321E714000DE;
+	Thu, 11 Jun 2026 13:55:06 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Thu, 11 Jun 2026 13:55:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1781200506; x=
+	1781286906; bh=DpDGwYTiEmlVfuPcgxAW8xBcBbXtperaiJP2RjA+kAs=; b=w
+	tY05MCnBVVFz4OHn4SQl+8VHQHeRZGaQeAXgjm3djqS/ZxbhlH+HdTD/Lb72zrA7
+	jg1wwl245M5WpZVVq/qgM4aOte5A7XLFMWZlUceY0bJFoRUDDaKRxwc9HQISnbN6
+	bI1bjvVWv80dsjCf6PUrkQJcwQqsj1NTGfQymY5Nc+wQHCFA6MBdF0ugU8rwhBUA
+	iWaVDvVGrJoGkFs3xg4eXrkfI+ecKlIKXPnBnZc1mAy5SKP2V8VJYldXTklMenwh
+	6Id2juOtQ+WdTzwP4eU8FEQBKCJex13cy3qrr27lvPNHYf4JLISpVKmQKWLjyBdV
+	y7sh7MKk/nAEeFCTst8Rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1781200506; x=1781286906; bh=DpDGwYTiEmlVfuPcgxAW8xBcBbXtperaiJP
+	2RjA+kAs=; b=ej0fXKWlpxe2w29QdmVro99U5e6lZJf6wlPk/RPhyKTboRyGhag
+	TPiHJbdyJXuWIFNun+F0FWiMU/5GyjGGPiaEuDcgZioVBElWVwWT6nd4D8HELDGf
+	H2H2wqM2NU/QfpL4JsRY8jhMbSSxHjbeB7/jhrWl8vJNq/thieaEVpbPaWXdZUAN
+	D1u+IwG+GgqOEnTL/13TbAowdSVLsMw2Vt5h03dd1z/H24EswWkdls/P1fJExypF
+	avN/klM4ZRcS/OJ2qEpCGUeLqXykxbWL0NIjo+TswbV1fIxBJTTf+OnrUrNxhhM9
+	IajOjeZy2JidsmCLNo8UCcbk/bBbM9ACwUw==
+X-ME-Sender: <xms:evYqal5LlrIFzR944YV3uavjl8sgmyLYJUxdw9ZU8JyIg_q5fNuToA>
+    <xme:evYqarBcWzv2FfCBkNq9rAfmSk-miFLp9QU_YjEjGvpNHz1jExwEa-zeJT8b-kox9
+    KTAZAViwH-p9gt5fajXLk4L_HfIlr6KWhnAh0n-BuytXxrtC7NSPA>
+X-ME-Received: <xmr:evYqar-kBTfN14rxKamyyk09_54A4amD3TEKBg9woXLGj7MMeYVBMm0tUL_VQZCrG3vFuuX33K_eeNyGKdchftI>
+X-ME-Proxy-Cause: dmFkZTEZNBy54vgAFiR0CArURaTeZox1edOnLO2IBwBO/bGhrb+b+ifUKoNSe0IoToDONM
+    OsO9bPI0v3EXXByQMBBW4H2NW93pFXT+2VM3jrDBVmjO4imS0M2JdFcjn7FWGEMU8DNEH+
+    ZjG4YI5mgtUq2PK/aoeEb1WNMn+z6ItI/UMWQ9BI0ILzBBeuq0QOFo6G/TauVMq/XpiLW5
+    zLiRkMXMfVH/Lo89VaGlJB5Rd905cHteyfpwTTPQ5e4v8mSrITO8UthR63bIYt7llWTcPu
+    xiqfx3fQJ63lKAEmvS+7qRTVeieN7dOAw0EuHUPBexmRBmdde6ovZnoof/YKTf6+x6q9p1
+    cnwiuXYMi5T1v/fOVxgYG26z1Mn0aMPX1HspUST1EkGM1S212lNVJc8yhxrGo6vg8zlwX1
+    eMzfarovW2fOCtWprUG7ODw7bOcPTVDzWL1MX/dnQrWuTlsaPzj1HVhS6TJ+yqwczFvoH4
+    7fzEgwR2sYPmig62V48OXJXPneQo3O1lkZbiIT7TLjSd5HtMoGef9YGgGNihRm2kVKFbsk
+    DVssucBC0Sr6q/w0tTnuOe99nMyGhZw/C7quXKO4v8gbRjGhJ+OzLj+BjQPsjHkoukcUNr
+    TOmT4qPvv4bOEQJetz63F7bEQR5LGyzk7LVbWujBNYNLbg5Z8SMRuNHSnaIg
+X-ME-Proxy: <xmx:evYqauE96VMrZpBvncxbdVXbWVQuG6kG4I477GASZwI29tmouleniw>
+    <xmx:evYqalSgQ-7qgQ4YUQJN_f15wu9jDeG04_L5PmeHVFbkU0bh5_9rsA>
+    <xmx:evYqalRbtD9qw5eaZPVXfnM30sagK9zA1F_7enDJrilRihkeftx5Uw>
+    <xmx:evYqao1lMswN6oxBi6Ndyx4rKJIZ7umSYSYUWkb8eMRFNPH-2_Q8lw>
+    <xmx:evYqav50_dEkKmnUM67Z9eJGJdFIJF_Nnuiw91Sm9mT2AjPolSLh57LH>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 11 Jun 2026 13:55:05 -0400 (EDT)
+Date: Thu, 11 Jun 2026 19:55:03 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	corbet@lwn.net, linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+	john.fastabend@gmail.com, skhan@linuxfoundation.org
+Subject: Re: [PATCH net-next 2/3] docs: net: tls-offload: document
+ tls_dev_del, tls_dev_resync, and rekey
+Message-ID: <air2dydoeoNexwfu@krikkit>
+References: <20260609201224.1191391-1-kuba@kernel.org>
+ <20260609201224.1191391-3-kuba@kernel.org>
+ <ainR5GAK8LaHJYMP@krikkit>
+ <20260611101817.18964bd9@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 10:35:11 -0700
-Message-Id: <DJ6EGJ8S87HP.2WOTGYK374XKI@gmail.com>
-Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "bpf" <bpf@vger.kernel.org>, "linux-trace-kernel"
- <linux-trace-kernel@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <songliubraving@fb.com>,
- "Yonghong Song" <yhs@fb.com>, "Menglong Dong" <menglong8.dong@gmail.com>
-Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry
- function
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Steven Rostedt" <rostedt@kernel.org>
-X-Mailer: aerc
-References: <20260603110554.29590-1-jolsa@kernel.org>
- <20260603110554.29590-4-jolsa@kernel.org> <20260609102922.3c489f76@fedora>
- <DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com> <20260610113536.77172ad1@robin>
- <CAADnVQ+RhRiUp8FeptdVKZimGd-Wv8C+NbW5U4hh+7Hi5abQxw@mail.gmail.com>
- <20260611094648.04622890@gandalf.local.home>
-In-Reply-To: <20260611094648.04622890@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260611101817.18964bd9@kernel.org>
 
-On Thu Jun 11, 2026 at 6:46 AM PDT, Steven Rostedt wrote:
-> On Wed, 10 Jun 2026 08:42:51 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
->> If my memory doesn't fail me you said it's fine during v1,v2 iterations.
->
-> I'm fine with it, but I wanted to test it first. Did I give an Acked-by?
->
->> The last v3 - v8 you were silent, so we assumed you're still fine.
->
-> When I see AI reports that say the series needs a fix, I don't bother
-> looking. I thought that was the entire point of AI; to let the maintainer
-> not have to review if the AI found something.
+2026-06-11, 10:18:17 -0700, Jakub Kicinski wrote:
+> On Wed, 10 Jun 2026 23:06:44 +0200 Sabrina Dubroca wrote:
+> > > +The third TLS device callback is :c:member:`tls_dev_resync`, called by the core
+> > > +to synchronize the TCP stream with the record boundaries:
+> > > +
+> > > +.. code-block:: c
+> > > +
+> > > +	int (*tls_dev_resync)(struct net_device *netdev,
+> > > +			      struct sock *sk, u32 seq, u8 *rcd_sn,
+> > > +			      enum tls_offload_ctx_dir direction);
+> > > +
+> > > +See the `Resync handling`_ section for details.  
+> > 
+> > Hmm, this callback is not mentioned at all in the "Resync handling"
+> > section. I think it'd be good to add at least a quick note there about
+> > how/when it's invoked, and what the arguments mean (at least the two
+> > types of sequence numbers, since the rest is identical to the other
+> > driver CBs).
+> 
+> Something like this, you mean?
 
-AI finds things to consider, but when they're considered and postponned
-to future it doesn't understand that and keep reporting the same thing
-every revision. So it might look like that patches are landing with
-outstanding AI complains, but this is not the case.
+Yeah, exactly.
 
-btw since patches touch ftrace from time to time should we add your
-ftrace testsuite to bpf CI ?
-How automated is it?
-
->
->>=20
->> While at it, please review Mykyta's set:
->> https://patchwork.kernel.org/user/todo/netdevbpf/?series=3D1096695
->>=20
->> It's also been pending for almost a month now.
->
-> Have a better link? I just get a blank page as "TODO" is set to what I ha=
-ve.
-
-Ohh. I meant this set:
-https://lore.kernel.org/bpf/CAEf4BzZFjsEv3aLktwdCZF6EXoCL+eefX+6xa3XGrhBmfO=
-1SqA@mail.gmail.com/
-where you said that you'll think more about it after pto.
-Would be great to land it now for this merge window, so we have
-discoverability right now and if better approach comes in the future
-we can adjust to it later.
-=20
+-- 
+Sabrina
