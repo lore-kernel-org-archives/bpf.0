@@ -1,61 +1,63 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBEC35E1C0
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 08:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B948F376BE8
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 08:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781165347; cv=none; b=MtYPJcObTGPh0CerrIErVGi+fpCHG9xzAd8nwxUyzDQ1UhT9S8TiIWMabX8dbhKGZ5TDpXLxzzTPs4lFk1UJGtn+Qv2zumlL8v1nGRjI24GQAzfesXor5Lz6B7pQ+icWzS2iNt4EuoE3w6gAv6CcUQ6KuA0LSvWxjJeAv4xemFs=
+	t=1781165356; cv=none; b=Ycjsr8QIQ03wldF+4FcEiCJv4FU4jvykVQsLK3hXn9QGY2GUosX1CUA4gm5kAos/g56Mow31FgmPf9CSc6ynSQ02kn8+JIXcXniCj52/SlfWvB3uFGUgJTFzQntk8Q7maRrgs0JyMFehftXYZhYlvoSVDzs/IBhb2KWTcbP5tBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781165347; c=relaxed/simple;
-	bh=43aTg0uqeeQ1d2jMcSX4cwzeXgZpgGmCmaoUiCwIYpI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bk6Y5ivodk0kNautdjrmZH3iMyvTPewrTlQmt8ZWnIyoXgJFgRcOl40PK2Fo0wx5hcKPdEFaHruPtk0CrJ/ttK0gApuDrmxazxNMqL1dPNo/BqeXuEow3HwwCKyiTNnvX+QKukTg7ZmWoDZipu3jYR96xvuldS5mg3yZiZipKmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ByieKP5v; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1781165356; c=relaxed/simple;
+	bh=sR75Kxpp9ciWrEqzIhWSy15CiwlustcGI+ACVNAzzmQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hFo3TKUoeWOa64p9e577jRNbBq+MTG+CI/PWs7WXCoifTA93boqU2Cx6zzyrbCNP6l0u/1HhDF5r9hZX/8r+pIUAnKdTXsFqjabRiuxGlUfI8Fruts8QrHBU3U25YX9BkpAPTqIrdSrGQ3rZ9Le9XxkLYihIKoIsO/FzyQ1yNrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rOR6XUw0; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ByieKP5v"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2c0c2d792c8so51445905ad.1
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 01:09:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rOR6XUw0"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0c2d792c8so51446655ad.1
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 01:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781165346; x=1781770146; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ez/7YuAJr4Y+RG8kQa8JolzS7h4/ienZb2p4vynCkX0=;
-        b=ByieKP5vYX53ZzYn26b8aIuF4w2nt9RdK9oz9i3Pjkcaq6FstjjKqymiWu6abi8/6u
-         yN7DVZyQfN04v+PutYDUoEDYakHbmHuVkCabjR0m/gvxbWIDRkROG+xzpqoRMEn4g/EI
-         p82Mgd14OMGuthhDvxrz1nPM2XHdkgXE0XYHiXzbvbBS/Lk8WE2P0p1fqiGM6V/sLzft
-         Oi1I8NgKVN2ZRPf2JGbRLyANRUy8AssFq6CHQep3eLk/dVAzc/q6hXmfhyslMU+/oLKv
-         9lvZJOdYtdtz1nFH/MTmokqrSuAYxUjSSjx0HrW9WwrIhJCMuR/n5u9cCMivJjsPrHBH
-         l9jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781165346; x=1781770146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781165354; x=1781770154; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ez/7YuAJr4Y+RG8kQa8JolzS7h4/ienZb2p4vynCkX0=;
-        b=M0gTmR1pxCL0Lxu73VVaZCVHiWGjFB5kHG0Mm0h9TntC4SyeElRLvU7lvIEAOg0NEP
-         QDnWtxYalwRHX+u4YXMxE4USkcHyo3FVei0GljAeAQJE3v8srJM/C1y5EBYLWalhSFH8
-         m8SnXBXT/AFr7H6dBvXkD44Co4E6ovkstxReYhqYPoIrML7uvoUEoLVGhTnpBdhAjVSL
-         HbC9QCYqbL6TPSAzkxmULvuhN6S66mJjvN+oc1E95vfrjM9u9tN3gccqTurrVQ1z16EB
-         q9kVuaD0b5R+dkl8/bYY6xIjhvk0uDRTLTHqxPQNfG0iy70iXpzpO+dtCLaPVfBT6wOy
-         Ebyw==
-X-Gm-Message-State: AOJu0Yzyls8kgl8KFA+BMW0vAOL6IARW0Tl31RHUj+YS4RCVFne5dX4Z
-	aGwDz7rYIPoEh4J15NLP0rbrShJWlVaKWjQlIYPZUP7tpku3ura7CDgamSF3yVHSOs4=
-X-Gm-Gg: Acq92OHjITteik6O0snFmwbZAdwr4M/CJwyD+lmsQOJCH9YiX5OzmWGvsf9AMEGjFWq
-	NJ5Z/rAGXSWfnv8E/Ryh7FOvzZ8bQA8Z81iJHkO9nWJy1iUWr+c7/ZPOav3UaxXfWOSRZm+V93f
-	TEN24FYe27HxEZMIu5RQpVI9iJMstfWR37KxJJOYjenP3EsimldhmDfd74YT8MAE0M2idJ69co/
-	sSrkB5/dCSWh7auAzc4ZmYNIiuo4leAtZor6nByZNTnIjRdyHqcsfm6Es6XB17uE0bj2rN+adOY
-	E49LYbgAKkW5zZN2CMuhv8TR0Z1bCnPltt/BG0lxw7DM229fbZUtqzKq7fNQB7D4WYoD9DoqFel
-	90ABSD11QGI6uZ7J/zvEDobkLvU0QHMFZ5C232fdYYjqRskyrQPKbgo7sy7X/5ztffAWO3pAPcB
-	AP8CiQ0u9cQQR975ld6eD1aKW7cn/Avhp+tMMQb7+BouqQ1YJn4uzgqoI/yulbUWGtBXKgY+6TA
-	YqWi/tV0ryee36ZsyFvYN8dxN5ls7Qt6CmwDok=
-X-Received: by 2002:a17:903:f8c:b0:2c1:a19:8396 with SMTP id d9443c01a7336-2c2f2a780bamr19562055ad.31.1781165345756;
-        Thu, 11 Jun 2026 01:09:05 -0700 (PDT)
+        bh=mEmkuWYgkwtDboU8MaRt1GYSESJN149ZsYa5eKF7+QE=;
+        b=rOR6XUw01oMY3DEKqmiZLIDFKJz41ylz9ZwC24Dmvd31Ku5TVFwM8paItgRDhaoT7f
+         OJiXW0t0cL/t/bVaeEK6GoaHrkxuRsX6RJibl0BJX9Y0+LuhQ4C1z6sq6JRAV0VnL8Uz
+         GlbR4snkE9vXj2MgkfcU7UKaBzppYsFub+5eFKpnlKBFHX5TOqp3BHaHGZTmLpdK2uyD
+         f8okEJVW0MHnEA3KbDOOSnNNnsRG8QgMlzmIRVdG99PQQc6teSSVrL+XtchQXGCbw5XT
+         BkzRlOQuns2ZX+8jrYlxA/h2tCPAcM4tA0wrPaHvc753gmk9WT1XIne+o8QTjD3yqOo+
+         P1qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781165354; x=1781770154;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mEmkuWYgkwtDboU8MaRt1GYSESJN149ZsYa5eKF7+QE=;
+        b=W0xY5dmvSrM+AblvrP1S/KSq1CEYQextXhpLOwWHYUekulx+3BDOo8AgqbO37t/FRQ
+         gMH+gi4tIyb9kg4d+Q3nisY2lzcEcQdUE+fqNfe/iL1aiEaN2MtIj7VtidfSwwr2ZDTG
+         lcYCs/AXDISoRtc5fod49a6LedxX2FL8Evaex10KkRhnuKwzsmJyRFIrfqCSvHi46+td
+         +iSy10WXMx5Q9oBfHS52cdxp32zwMuFh45O8qCb6iQtb8xqzRylnEr5nQ+4mEhZxRDba
+         jtGw6UtjOtOgBzN+0zeeZBb/9QUbzbzoii+i7QKdsYTCV7CrQ32TOEUlVYUhCCrOzvrQ
+         4/6g==
+X-Gm-Message-State: AOJu0Yxyjl11dYyDjTPZWIgvnD/bvugH+uZh8B7FzqzJ+WnPhuSyEld7
+	cDRgT7rmm2okQJJAjjreNx2TqAgxMOTdw4L0bY3gEbI065aWgltGySAnNGDDnKzkvwE=
+X-Gm-Gg: Acq92OHbCwwtkweeZroGF8wJF8zBrysS5LeQjwTYg8vRXEQgO0LVTOsysNFGT0owU6i
+	VZ2rA51kiiKZqZIg1GJSBzQgjgdIaoNiSm53AM6cLm5tmfl68Ftbii/XA/eNEhQhSMCvqRTvhWV
+	6bPBVyYXiRFyjrOWF0vnyRhMSlRuEYYfGPIzZnffVWlDx9BwbIbDvkUweyUxjxmPKsZc69JXIIe
+	pYEkeMIc4F9nJ/vluS8lU8wjjtGRn6px/vsMsJ5V5DvF0J+UAJNMoAGmJd0IupqSQ+55dgFogch
+	HLWfFjwYC9+udQxMJNBVdhYzBD8ym5pIdMIIAkvwyu0YU1ogTDHbs7dbrZcrudnFmjTfmtpTtyg
+	bwM4rpUVaxJaSXp46wCYy7QQZ3AKNfdqQabSJ4bH0QxRtzr1yt63ArPME/TYAoLxml86XLwEbs6
+	4TOZ48xIZ71pGUluLVgvyxj1QcQfy/QWbIimxlLgtacOvWzK3/fJdsoR2PRNbZbm8oZIyskWJ2g
+	GLoaxFfF9H/3MyenICD7Ngcfk6W
+X-Received: by 2002:a17:903:1205:b0:2bf:2114:ecc2 with SMTP id d9443c01a7336-2c2f305ddebmr19239665ad.35.1781165353999;
+        Thu, 11 Jun 2026 01:09:13 -0700 (PDT)
 Received: from u2404-VMware-Virtual-Platform.localdomain ([2a12:a304:100::109f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad138sm277591035ad.82.2026.06.11.01.08.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c1664ad138sm277591035ad.82.2026.06.11.01.09.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 01:09:05 -0700 (PDT)
+        Thu, 11 Jun 2026 01:09:13 -0700 (PDT)
 From: Sun Jian <sun.jian.kdev@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -76,10 +78,12 @@ Cc: netdev@vger.kernel.org,
 	menglong.dong@linux.dev,
 	emil@etsalapatis.com,
 	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf v4 0/2] bpf: Fix generic devmap egress skb sharing
-Date: Thu, 11 Jun 2026 16:08:47 +0800
-Message-ID: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v4 1/2] bpf: Run generic devmap egress prog on private skb
+Date: Thu, 11 Jun 2026 16:08:48 +0800
+Message-ID: <20260611080850.536996-2-sun.jian.kdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+References: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,52 +93,119 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Generic XDP devmap multi redirect can leave cloned skbs sharing packet
-data. When a devmap egress program mutates packet data, another
-destination sharing the same data may observe that mutation.
+Generic XDP devmap multi redirect uses skb_clone() for intermediate
+destinations and sends the last destination with the original skb. This
+can leave multiple destinations sharing the same packet data.
+
+This becomes visible after generic devmap egress-program support was
+added: a devmap egress program may mutate packet data, and another
+destination sharing the same data can observe that mutation.
+
+Native XDP broadcast redirect does not have this issue because
+xdpf_clone() copies the frame data for each destination. Generic XDP
+should provide the same per-destination isolation before running a
+devmap egress program.
 
 Fix this by making cloned skbs private before running the generic devmap
-egress program. Add selftest coverage for the last-destination case,
-where the final destination runs on the original skb while earlier
-destinations use cloned skbs.
+egress program. Use skb_copy() instead of skb_unshare() so allocation
+failure does not consume the skb and the existing caller error paths keep
+their ownership semantics.
 
+Fixes: 2ea5eabaf04a ("bpf: devmap: Implement devmap prog execution for generic XDP")
+Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
+ kernel/bpf/devmap.c | 41 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 31 insertions(+), 10 deletions(-)
 
-v4:
-
-* Preserve mac_len after skb_copy().
-* Separate errno return from XDP action output in
-  dev_map_bpf_prog_run_skb().
-* Zero-initialize net_config in the new selftest.
-
-v3: https://lore.kernel.org/bpf/20260611043317.512843-1-sun.jian.kdev@gmail.com/T/#m77fde65437b0398cb470649d4f1feeb85bc134bc
-
-* Split the kernel fix and selftest into separate patches.
-* Move the private-copy logic into dev_map_bpf_prog_run_skb().
-* Use deterministic DEVMAP_HASH keys in the last-destination selftest.
-* Fix the Fixes tag.
-
-v2: https://lore.kernel.org/bpf/08c35c70-a59e-4e0e-91db-22b5ec30b611@linux.dev/T/#m613671b243e8651c47f84bb329f0ea668974c549
-
-* Move the private-copy step into dev_map_generic_redirect() so the
-  last-destination path is covered as well.
-* Use skb_copy() instead of skb_unshare() to keep caller ownership
-  unchanged on allocation failure.
-* Add a generic XDP last-destination selftest case.
-
-v1: https://lore.kernel.org/bpf/CABFUUZFimdrZdq=NWi+N-0sJZWvMwY=f4iF6-3TVMS8=m07Zmw@mail.gmail.com/
-
-
-Sun Jian (2):
-  bpf: Run generic devmap egress prog on private skb
-  selftests/bpf: Cover generic devmap egress last-dst rewrite
-
- kernel/bpf/devmap.c                           |  41 +++--
- .../selftests/bpf/prog_tests/test_xdp_veth.c  | 152 +++++++++++++++++-
- 2 files changed, 180 insertions(+), 13 deletions(-)
-
-
-base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index cc0a43ebab6b..a3d6c60dbddb 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -512,35 +512,52 @@ static inline int __xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
+ 	return 0;
+ }
+ 
+-static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dtab_netdev *dst)
++static int dev_map_bpf_prog_run_skb(struct sk_buff **pskb,
++				    struct bpf_dtab_netdev *dst,
++				    u32 *act)
+ {
++	struct sk_buff *skb = *pskb;
+ 	struct xdp_txq_info txq = { .dev = dst->dev };
+ 	struct xdp_buff xdp;
+-	u32 act;
+ 
+-	if (!dst->xdp_prog)
+-		return XDP_PASS;
++	if (!dst->xdp_prog) {
++		*act = XDP_PASS;
++		return 0;
++	}
++
++	if (skb_cloned(skb)) {
++		struct sk_buff *nskb;
++
++		nskb = skb_copy(skb, GFP_ATOMIC);
++		if (!nskb)
++			return -ENOMEM;
++
++		nskb->mac_len = skb->mac_len;
++		consume_skb(skb);
++		skb = nskb;
++		*pskb = nskb;
++	}
+ 
+ 	__skb_pull(skb, skb->mac_len);
+ 	xdp.txq = &txq;
+ 
+-	act = bpf_prog_run_generic_xdp(skb, &xdp, dst->xdp_prog);
+-	switch (act) {
++	*act = bpf_prog_run_generic_xdp(skb, &xdp, dst->xdp_prog);
++	switch (*act) {
+ 	case XDP_PASS:
+ 		__skb_push(skb, skb->mac_len);
+ 		break;
+ 	default:
+-		bpf_warn_invalid_xdp_action(NULL, dst->xdp_prog, act);
++		bpf_warn_invalid_xdp_action(NULL, dst->xdp_prog, *act);
+ 		fallthrough;
+ 	case XDP_ABORTED:
+-		trace_xdp_exception(dst->dev, dst->xdp_prog, act);
++		trace_xdp_exception(dst->dev, dst->xdp_prog, *act);
+ 		fallthrough;
+ 	case XDP_DROP:
+ 		kfree_skb(skb);
+ 		break;
+ 	}
+ 
+-	return act;
++	return 0;
+ }
+ 
+ int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
+@@ -700,6 +717,7 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
+ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
+ 			     const struct bpf_prog *xdp_prog)
+ {
++	u32 act;
+ 	int err;
+ 
+ 	err = xdp_ok_fwd_dev(dst->dev, skb->len);
+@@ -710,7 +728,10 @@ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
+ 	 * return 0 even if packet is dropped. Helper below takes care of
+ 	 * freeing skb.
+ 	 */
+-	if (dev_map_bpf_prog_run_skb(skb, dst) != XDP_PASS)
++	err = dev_map_bpf_prog_run_skb(&skb, dst, &act);
++	if (err)
++		return err;
++	if (act != XDP_PASS)
+ 		return 0;
+ 
+ 	skb->dev = dst->dev;
 -- 
 2.43.0
 
