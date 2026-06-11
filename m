@@ -1,199 +1,216 @@
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010061.outbound.protection.outlook.com [52.101.56.61])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BE64BCAD9;
-	Thu, 11 Jun 2026 18:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781204290; cv=fail; b=D4ibDgreyIVssDJYOELGwbseZYl/dLoHViwyOrQmJjBIqJx3jsk6ANGpDhzjJFOmHdUFZKfRBQ6PPaDKirQrHSIT1x0nIKVEMhdlHKiyKEPQ43ApC8ThTaxh0Bb0s8s8C545ZOrb+PZ/JqV6sTbk81KDo/rA/g7M9rqzCHUh1Eo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781204290; c=relaxed/simple;
-	bh=Iz0o52+6abTRehp0q7Mxkq7+oO+XGVBRLJMphrPV1Z4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oKhCzLTjCNqPu2I788+fGQHQ84xr7zzPiLwI1vHb6/VNfBeFk0yx4/Ds86vjA5i3m6XJ14DYOSJcDH55RepbWo+wTnrZwrsIhk+c0vqSvwpE6GG12LQ/mW1HhJXfdas2JOJtsqXFesU+XtttnXVkMTXUdTnBb9K5Vra/ocd36Bw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=elMIIn4s; arc=fail smtp.client-ip=52.101.56.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE20648AE33;
+	Thu, 11 Jun 2026 18:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781204355; cv=none; b=C4+znNMI0qBXb0gfzaCtqDe4i9pO1yQbZPHCN64qnln1Zn5XCIAJkPAzHbVMHEEjJ9eDsbiVc+7qZ9wYvog83E3v90J+6xcJitT26mlzQ7pnR2cghfxiRF3PlZsuOH+EM86XXLHi/pU9p4Apxp3HTaQUPE7iu7wmOHuSIdBCRwc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781204355; c=relaxed/simple;
+	bh=CycKIp2LRSIA7ajOQ2jNYyVfWjLBvkvz00XEN6t4V8M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ry/QVbX0WCImreKdlYK7EdKwppHcsM/jVdPfuGUel7EckDpEiAnRSAaFf0Ht9q4wbD3P9BRPXwzW13GHuQTTnI5C8z+HTO0+kefbSuovmNW2S289K4GmBvBUyetFWgE4zq4jzclDubiQsW7qmbd0Z2Zvlubg7rw1+JlRLogBWZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcPD2boL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="elMIIn4s"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y41khLSUn7jgK7WOorvLy8VOzGU/7V9ZIH8OIY9Mk/DBFwbi/20D/jQsYzVHEcdg/AxQmZBcoIxXp8VtJUH2k2TQ245u0lJLImagBDFM8V1qn4hIGznHJWwuXQ2XP197VX25t8JvDhEobfnBaNg5Ue2RLwA44MdaEmrC0+sI9ICJ+6KV/ckfcd/X3YgA8eEsR3TOY4BAANWQ/Nb9i4Y4zZe+W+nLpfVJvgP45HtREueH++uWAgGzx1wTpUvSjyPPbC+qnVAOnx4Uc10sJkVa4DjmeoinYcR2OtWfLdn8mbWsuaA6jpnX6t2f1Nr+1stuUcXJKwcd5kukqE3jSCuSug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6n3h8aYmpJaqSNDsk6xy76KfnD8qUzKGQ9jTTSvkUA=;
- b=QmEvWrHYC7QO5y17/1DgTy7+wW3TQb+eQXCd3c6st7dUrHjVwbH1WNnFFS7ERr958kHqMQ6kfCmiPrtOaeka1Jg2Mwx4zmOKBwmKu687vNSX5IeQB9XOAaIviiwfO+WPI+EJROPsO5VzOnf8USAxyXOutcw/vBzoGqIV6aR24H3jsprFQ7NAl24x9Jahds3zTx91Dw1zQDa1WjdWhihtdwDW7OK8dk9YfXu8xn4AkRddCPeVAAM5vVd0tN4T3TEr+rgLvYiS83qa30VAtYSwETNQQcqz7Me+T97/ZXouxMZW5D/6oELIXiVWpSQpgj4P6TEBJBjO4CHSSAX4uTfTPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=siemens.com smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6n3h8aYmpJaqSNDsk6xy76KfnD8qUzKGQ9jTTSvkUA=;
- b=elMIIn4styi48Yslv2m26gt6/u958mR76HZxHX3suH3NJJQb3nvhYE5LszZ63DIcCXSZwa7Qz66XebqTUTrspa+13CyCZr4DLbAbHZzl5g2bT4wveRIwrWb0HQFgxD7AkLN8htfKPSoHcPyrBKQE13C8tO6/v7mMmz7sQAEtavw=
-Received: from MW4PR03CA0303.namprd03.prod.outlook.com (2603:10b6:303:dd::8)
- by SA1PR10MB6592.namprd10.prod.outlook.com (2603:10b6:806:2be::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Thu, 11 Jun
- 2026 18:58:05 +0000
-Received: from CO1PEPF000066E6.namprd05.prod.outlook.com
- (2603:10b6:303:dd:cafe::ab) by MW4PR03CA0303.outlook.office365.com
- (2603:10b6:303:dd::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.13 via Frontend Transport; Thu,
- 11 Jun 2026 18:58:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- CO1PEPF000066E6.mail.protection.outlook.com (10.167.249.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.113.7 via Frontend Transport; Thu, 11 Jun 2026 18:58:04 +0000
-Received: from DFLE212.ent.ti.com (10.64.6.70) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Thu, 11 Jun
- 2026 13:58:02 -0500
-Received: from DFLE210.ent.ti.com (10.64.6.68) by DFLE212.ent.ti.com
- (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Thu, 11 Jun
- 2026 13:58:02 -0500
-Received: from fllvem-mr08.itg.ti.com (10.64.41.88) by DFLE210.ent.ti.com
- (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
- Transport; Thu, 11 Jun 2026 13:58:02 -0500
-Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
-	by fllvem-mr08.itg.ti.com (8.18.1/8.18.1) with ESMTP id 65BIw2193924044;
-	Thu, 11 Jun 2026 13:58:02 -0500
-Received: from localhost (ti.dhcp.ti.com [172.24.231.93])
-	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 65BIw0J2028177;
-	Thu, 11 Jun 2026 13:58:01 -0500
-From: Meghana Malladi <m-malladi@ti.com>
-To: <diogo.ivo@siemens.com>, <haokexin@gmail.com>,
-	<vadim.fedorenko@linux.dev>, <devnexen@gmail.com>, <horms@kernel.org>,
-	<jacob.e.keller@intel.com>, <m-malladi@ti.com>, <sdf@fomichev.me>,
-	<john.fastabend@gmail.com>, <hawk@kernel.org>, <daniel@iogearbox.net>,
-	<ast@kernel.org>, <pabeni@redhat.com>, <kuba@kernel.org>,
-	<edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Roger Quadros
-	<rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net 4/4] net: ti: icssg: Fix XSK zero copy TX during application wakeup
-Date: Fri, 12 Jun 2026 00:27:44 +0530
-Message-ID: <20260611185744.2498070-5-m-malladi@ti.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260611185744.2498070-1-m-malladi@ti.com>
-References: <20260611185744.2498070-1-m-malladi@ti.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcPD2boL"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58969C2BCB0;
+	Thu, 11 Jun 2026 18:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1781204355;
+	bh=CycKIp2LRSIA7ajOQ2jNYyVfWjLBvkvz00XEN6t4V8M=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=XcPD2boLxdlPfsIgk/hAYSmSpLqRTZwCtbrqyqOedNIhvZtTaOWG8+GOP9hkV5U3d
+	 k5TiASvI/ksC/hJD3SNs8sJQQnU/8v+sMQMRIE+SmgOD9tMVFOA0zJAECNO3fxBK1N
+	 J/hnUEUOKgqzLNDFlEsGVN0yLrTtReY0NOp2i8WQ2yFVkUrA4rPj9MW3xamOt1y+BI
+	 R+10B1XnQBGMf6U7zy9bbzj0SIHv8kwsaeCAZ08rZyBM0YbHGIty/gOLoWcqVR5Irr
+	 URD5mK++HNW6LMcbrNo/0qDEQoS71Rzj/6mKl7DJ2KFR24oR7P8V5MWD1xouVToofk
+	 eGEih1ArkmjKQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B3F5CD8C9D;
+	Thu, 11 Jun 2026 18:59:15 +0000 (UTC)
+From: Alex Roberts via B4 Relay <devnull+alex.roberts109.outlook.com@kernel.org>
+Date: Thu, 11 Jun 2026 13:59:10 -0500
+Subject: [PATCH] Add LoadPin support for eBPF program loading
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E6:EE_|SA1PR10MB6592:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ec39f30-5fb9-48e5-2200-08dec7eb5e0b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700016|1800799024|376014|7416014|23010399003|921020|6133799003|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	ESAiXLd/GxkSbF45N95NuRs0rEbgJknp535tB2xqgNQgrsmCSqQG+HZhKeflKxeKFMBoN6wub8ZAh0wCPUc9wSspx+3ufi+YrxOX83rUlnMf3GK8KjRTCKNR2cUd2zCxuUuBK8xkUItII9H9M3JyaQNhuz0LxYuQcJbvDhEQCB6O0klXK5Ai6Q3v+Fkv0fnaPdpKBUFIhJg619Q0nz3YFfQyM1+FWzns5m9dCf1fsRmGp0E+3GSeUDV/87FG6zNsRmVSOpfsxO32Xdi4vuJaWsP5Vlo6NNklLVQMsuKbu/8fj6e5Q5gM408OsFI6Emw6WeMh+K3QfKgHAPXra8/nghZmppFbCRyJ/A46z2V4dzGy2bb01UFrMTHFHH1kSvVx5Qw+NDxqw1XUsFjKZtWIVmJwLw6+xWttuy15mpTrIdr/ba8nrE5tmGmRSj7G2EncOoaRpKsE366V9bSNx8F5/MC2shrAAQ7swmx48Qj+LQlSbXMGNYtS4KAC20SvViJNeTLcpV2yst96wnJ6dLOil2hyoYgf2G83r+lVFvI7ovlpvil2wH17vSx9SJhqDi0CwWTbieF0cEs0cxIrzAJtI75E5fvf0X6WyvXnuvKXVi+DwcT1PGcilajsnKrD46+B/PjZ6Yc96K4edqDcWvY7h7SHYrGp+4QP0FJNg1Pe6Zgeihh3VbJvxodYg+aN7KMA+r95RVCVq07HpL4XD4U6a/s6qNT9xBaoUxAihRM7MgFm06om1sRuSu0/G4wBFku5NHb9h78G4Q05oLxt/pFygQ==
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(1800799024)(376014)(7416014)(23010399003)(921020)(6133799003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	alzZf9f6XZGPSEYnjBdqbJs2dO1n1lLD6ISyQmilobD8VwlixU2EmMwKR7MzRYxZGRc7xstIxxBRb7e4vbY5jIr2ulOlFta5X6Mpl1YTKv4vAC57eIvtLbB/foBXs1BdnSucIHQOSz4v0Gnytn/1bwx18NbOIsWnbfRq/o2+2S+7gNczlXflkC+MMhVdbifA69cTcptoAXqiTQJOsY7NrLigFeLNiKHhBRAZdepXDl0JqmbBVJtbJEsij0ZQMpjB+t+LfV5eNKQ6SA6LrIoX6njEjP4ps0VHN1UprP76zWwfX4N43LOSkqwchVkkytwVrcNF1nNoAASiHHwI3yqabwsWEBlYZls1s5cy7JAGgjfAM1Rxki/xVXA2qGLzRIblo7HIYNduU7kXAE8M5uAdfXi4Rqv3zKhWnnaXTi+NfUxDabux9jqEcy72ANM/pkcz
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 18:58:04.0949
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec39f30-5fb9-48e5-2200-08dec7eb5e0b
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6592
+Message-Id: <20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d@outlook.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQrCMBBFr1Jm7UBSaxCvIi4yk4kdCWlIrAild
+ zfq8n1472/QpKo0uAwbVHlp0yV3sIcBePb5LqihM4xmdMZZizRhjYxp8aFoRqES0ZwdTzYIncw
+ Rukm+CVL1mefu5jWlPpYqUd+/q+vtz22lh/Dz24d9/wBoSuMPjAAAAA==
+X-Change-ID: 20260611-b4-rfc-loadpin-ebpf-086c41deb503
+To: Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ KP Singh <kpsingh@kernel.org>, Alex Roberts <alex.roberts109@outlook.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6115;
+ i=alex.roberts109@outlook.com; h=from:subject:message-id;
+ bh=kja/4mgWlMnUqr7hZArx3pkWuFe/YGd2AE8OlioL1Yg=;
+ b=owGbwMvMwCEWzZjUEpRpN5nxtFoSQ5Y2a1Py18mKdw6lNof73xXkv/9m/qsTW2v/MIZvU2wrS
+ fmo4+3UUcrCIMbBICumyMKnyPP7sYle/asFy6Nh5rAygQxh4OIUgIkIrmZkmCmpFbGhfarsP8mL
+ Gx9ynfE+kfGx+UXSqwYTw+15E3WtjRgZjvWZHJCX+HfK+2vSt7Ajv72Wa6s8dT2+o/LWF+OU115
+ H2QE=
+X-Developer-Key: i=alex.roberts109@outlook.com; a=openpgp;
+ fpr=0E210CFBE3342E7FEAA0A75B5B01628452693E93
+X-Endpoint-Received: by B4 Relay for alex.roberts109@outlook.com/default
+ with auth_id=817
+X-Original-From: Alex Roberts <alex.roberts109@outlook.com>
+Reply-To: alex.roberts109@outlook.com
 
-emac_xsk_xmit_zc() handles tx xmit for zero copy and gets called
-inside napi context. User application wakes up the kernel while
-initiating the transmit which triggers napi to start processing
-the tx packets. The num_tx check inside emac_tx_complete_packets()
-returns early if no packet transfer happen hindering the call
-to emac_xsk_xmit_zc(). Remove this check to let application
-wakeup initiate zero copy xmit traffic.
+From: Alex Roberts <alex.roberts109@outlook.com>
 
-Add __netif_tx_lock() to ensure that the TX queue is protected
-from concurrent access during the transmission of XDP frames.
-This fixes netdev watchdog timeout for long runs.
+Add LoadPin LSM hook to bpf_prog_load to prevent loading of BPF
+programs from untrusted filesystems
 
-Fixes: e2dc7bfd677f ("net: ti: icssg-prueth: Move common functions into a separate file")
-Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 ---
- drivers/net/ethernet/ti/icssg/icssg_common.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+There have been several efforts to provide a trust mechanism for eBPF programs –
+particularly in the form of a signed program. After many discussions, BPF
+Signing became supported [1].
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index 82ddef9c17d5..c3f3cacdb28e 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -93,8 +93,8 @@ void prueth_ndev_del_tx_napi(struct prueth_emac *emac, int num)
+This patch series intends to provide an alternative trust mechanism for eBPF
+programs using LoadPin and the LoadPin dm-verity support. The approach is to pin
+eBPF userspace loaders to a single filesystem or to one or more dm-verity
+integrity protected filesystems. This is similar to the existing  Loadpin+verity
+implementation and approach of e.g., loading unsigned kernel modules or kexec
+images from a pinned trusted filesystem [2].
+
+When a userspace application attempts to load a BPF program, LoadPin
+first checks whether the exe_file is located on the pinned root, if so
+bpf_prog_load is allowed. Otherwise, Loadpin denies bpf_prog_load. Additionally,
+if verity support is enabled, LoadPin determines whether the exe_file is located
+on a verity backed device and whether the root digest of that device is in the
+list of trusted digests. bpf_prog_load is allowed if the verity device has a
+trusted root digest.
+
+Background:
+In a secure boot environment, secure boot can be extended to the root filesystem
+by means of dm-verity. Placing userspace eBPF programs on trusted filesystems
+and restricting their use to a trusted filesystem implicitly extends the trust
+to the underlying BPF program itself, without having to sign the bytecode.
+Rather than sign each program and load keys into the kernel keyring, it can be
+sufficient to sign the filesystem.
+
+Additional Considerations:
+Because the userspace loader itself defines the filesystem to pin from, it
+should be acknowledged that this does not necessarily solve the dynamically
+generated eBPF usecase. For example, if the pinned filesystem includes bpftrace
+or other userspace applications that dynamically generate and load eBPF
+bytecode, this trust mechanism does not apply. But for systems that either
+   1) remove/do-not-provide dynamically generating programs or
+   2) loadpin filesystem(s) that exclude such programs,
+then it can be reasoned that only trusted bytecode is loaded.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?h=for-next&id=58a5820582e4c809dd26b3f2d396cf072411d6e8
+[2] https://lore.kernel.org/lkml/20220517163437.v4.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid/
+
+Signed-off-by: Alex Roberts <alex.roberts109@outlook.com>
+---
+ include/linux/kernel_read_file.h |  1 +
+ security/loadpin/Kconfig         | 12 ++++++++++++
+ security/loadpin/loadpin.c       | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+
+diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
+index d613a7b4dd35..75cbd514562f 100644
+--- a/include/linux/kernel_read_file.h
++++ b/include/linux/kernel_read_file.h
+@@ -15,6 +15,7 @@
+ 	id(POLICY, security-policy)		\
+ 	id(X509_CERTIFICATE, x509-certificate)	\
+ 	id(MODULE_COMPRESSED, kernel-module-compressed) \
++	id(EBPF, ebpf) \
+ 	id(MAX_ID, )
+ 
+ #define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
+diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+index aef63d3e30df..be0754735d5d 100644
+--- a/security/loadpin/Kconfig
++++ b/security/loadpin/Kconfig
+@@ -42,3 +42,15 @@ config SECURITY_LOADPIN_VERITY
+ 
+ 	  This is followed by the verity digests, with one digest per
+ 	  line.
++
++config SECURITY_LOADPIN_EBPF
++	bool "Pin ebpf programs to one filesystem"
++	depends on SECURITY_LOADPIN
++	help
++	  eBPF program loading is pinned to the first filesystem from which the
++	  application loading the progam resides. When enabled, applications on
++	  other filesystems that attempt to load an eBPF program will be rejected.
++	  This is best used when applications that load eBPF programs reside on a
++	  read-only filesystem from which tools for dynamically generating eBPF
++	  programs such as bpftrace are not installed. This will not restrict the
++	  kernel from loading a bpf program.
+\ No newline at end of file
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index f71861f98e1a..47fd7e247edb 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -23,6 +23,10 @@
+ #include <uapi/linux/loadpin.h>
+ #include <uapi/linux/lsm.h>
+ 
++#ifdef CONFIG_SECURITY_LOADPIN_EBPF
++#include <linux/bpf.h>
++#endif /* CONFIG_SECURITY_LOADPIN_BPF */
++
+ #define VERITY_DIGEST_FILE_HEADER "# LOADPIN_TRUSTED_VERITY_ROOT_DIGESTS"
+ 
+ static void report_load(const char *origin, struct file *file, char *operation)
+@@ -204,6 +208,28 @@ static int loadpin_load_data(enum kernel_load_data_id id, bool contents)
+ 	return loadpin_check(NULL, (enum kernel_read_file_id) id);
  }
- EXPORT_SYMBOL_GPL(prueth_ndev_del_tx_napi);
  
--static int emac_xsk_xmit_zc(struct prueth_emac *emac,
--			    unsigned int q_idx)
-+static void emac_xsk_xmit_zc(struct prueth_emac *emac,
-+			     unsigned int q_idx)
- {
- 	struct prueth_tx_chn *tx_chn = &emac->tx_chns[q_idx];
- 	struct xsk_buff_pool *pool = tx_chn->xsk_pool;
-@@ -115,7 +115,7 @@ static int emac_xsk_xmit_zc(struct prueth_emac *emac,
- 	 * necessary
- 	 */
- 	if (descs_avail <= MAX_SKB_FRAGS)
--		return 0;
-+		return;
++#ifdef CONFIG_SECURITY_LOADPIN_EBPF
++static int loadpin_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
++				  struct bpf_token *token, bool is_kernel)
++{
++	int res = 0;
++	struct file *exe_file = NULL;
++	struct mm_struct *mm = current->mm;
++
++	if (is_kernel || !mm)
++		return 0;
++
++	exe_file = get_mm_exe_file(mm);
++	if (!exe_file)
++		return 0;
++
++	res = loadpin_check(exe_file, READING_EBPF);
++	fput(exe_file);
++
++	return res;
++}
++#endif /* CONFIG_SECURITY_LOADPIN_EBPF */
++
+ static const struct lsm_id loadpin_lsmid = {
+ 	.name = "loadpin",
+ 	.id = LSM_ID_LOADPIN,
+@@ -213,6 +239,9 @@ static struct security_hook_list loadpin_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(sb_free_security, loadpin_sb_free_security),
+ 	LSM_HOOK_INIT(kernel_read_file, loadpin_read_file),
+ 	LSM_HOOK_INIT(kernel_load_data, loadpin_load_data),
++#ifdef CONFIG_SECURITY_LOADPIN_EBPF
++	LSM_HOOK_INIT(bpf_prog_load, loadpin_bpf_prog_load),
++#endif /* CONFIG_SECURITY_LOADPIN_EBPF */
+ };
  
- 	descs_avail -= MAX_SKB_FRAGS;
- 
-@@ -169,9 +169,6 @@ static int emac_xsk_xmit_zc(struct prueth_emac *emac,
- 
- 		num_tx++;
- 	}
--
--	xsk_tx_release(tx_chn->xsk_pool);
--	return num_tx;
- }
- 
- void prueth_xmit_free(struct prueth_tx_chn *tx_chn,
-@@ -279,9 +276,6 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
- 		num_tx++;
- 	}
- 
--	if (!num_tx)
--		return 0;
--
- 	netif_txq = netdev_get_tx_queue(ndev, chn);
- 	netdev_tx_completed_queue(netif_txq, num_tx, total_bytes);
- 
-@@ -306,7 +300,9 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
- 
- 		netif_txq = netdev_get_tx_queue(ndev, chn);
- 		txq_trans_cond_update(netif_txq);
-+		__netif_tx_lock(netif_txq, smp_processor_id());
- 		emac_xsk_xmit_zc(emac, chn);
-+		__netif_tx_unlock(netif_txq);
- 	}
- 
- 	return num_tx;
--- 
-2.43.0
+ static void __init parse_exclude(void)
+
+---
+base-commit: 122b52f0bab007ebeb414c8280c1def17b9ed1f4
+change-id: 20260611-b4-rfc-loadpin-ebpf-086c41deb503
+
+Best regards,
+--  
+Alex Roberts <alex.roberts109@outlook.com>
+
 
