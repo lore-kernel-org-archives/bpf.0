@@ -1,133 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AD53C1091
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 11:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AA130D3F6
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 11:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781178800; cv=none; b=l4UwYEVgUOm/sLtbicAqdOGf68itD0lM+LJLv4N9bASJEfRIdIvLiYgHvXtTvd1DD/iLoa2e1K/wxVv9boF/S1au4AbatMrxPTqhcNv3V5y98YxQb+zpjF9JzGpbd/dXtgrf4/JLOR4INeUVBJdaQsC+tfGhCZHjnzG6VC5uh1Q=
+	t=1781178873; cv=none; b=hN+DWf46yVj1Z5Cx8uuJHWiUwkdH24sBDGtMlX7vxCWC/g196T+jedWPN0sPEILTe7wAse0SRSjrIxk21KFpO4tW87mrxRynxKGko4L1f1VNiOsjByEY/EqTmjVUwYrGDK9tUw2ZiCrugiJpl7kU3w8vvV5+GG1kVjCTouXjbus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781178800; c=relaxed/simple;
-	bh=FtxmyKFjgrAAI3dShoT5YtLlh+qN09sCypQxep2Efk4=;
+	s=arc-20240116; t=1781178873; c=relaxed/simple;
+	bh=HrkMVNLlm1YnqQ/qrek+rgrnWsnk03ePdBmZSEiHei8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Fc+BRMslrX4wPiwDhMLXIbMZA0H8HSDFnSewejXr7nDIsMfK6ydGf/B+nDRgrwDAm9Vm/+mxxTaQBC1WFXtiiwXbncpiWnP0nIPrlH6Jc7AO4fixcglrevD7aM1buj0cliat2og/3TFNwzaMVjqRrQGyOC1lUv6qs+X40tCPU4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIUNYLf5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=R/g/jZL3quq1LG58N1ObxcwxZa480Py1j0fWtOYAykHDYy/atmJNwfVWdfKfj7yV8fBh/OWKFu0fsuCccE460VpuwDw+F7+jOM22CvdIzRdC1O4VWTOKOHq3mTPARc/afcOwP03P0awRSJKImHxF9JiDCMqWyb0Ox8BN7N/Vff8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfOuyABR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIUNYLf5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B5F1F00893;
-	Thu, 11 Jun 2026 11:53:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfOuyABR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEA01F00893;
+	Thu, 11 Jun 2026 11:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781178799;
-	bh=iuQNdlDNY8tB67Lvm1YXTYHX/dOVsGXu4pHfTBa8/zY=;
+	s=k20260515; t=1781178872;
+	bh=wo2xNs8wPBRDLqaOroQr27BWyOfouyVV5fqAPxdtZXY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WIUNYLf5nO/28t0tm6Xj4D85Yqs1sgIjDsCflhP869kiWVl6GtUQR00Rm4IgYRNa1
-	 V+fynzr4dO8uyB+NqRygzPIoucDNq+CW0o09OS7APT3epeQzEXrQDJwMwKMZhcBqiN
-	 EgOwcwNw0BZmQo6D69Nt+u+haEj5Hd1FsQvMqGTD9Rqwjt0Ivwx0TACSZCzPDu7duq
-	 +F+KsBt4cSPOeSzRCCtwSzZBJQnHxSI6358QiU1EXPHTbJVilwR7cIJjcg/AaIiHic
-	 If6s3UbPwEV3pCldgzafT0nPoOq/UKncV06Qs2O0KJaS369Q3wQFH1ytUgrck4wv45
-	 6y7QfrGFqkT/g==
+	b=GfOuyABRNubKz7eKC2Dy6M0wvxYjJBdNY6j5UgUzz1CtCy+pUxUWh6LecnGtum0VH
+	 arrybz1Q9Hv6frqMN+x5UoVY8v5f+oyQ+Z+eRszwqcmu+k3iVql79TCsP5LlnU8b7U
+	 k18NNUuYQ25zSzZoZiIRArPpHNq5/MoTwlsENBkUf2cSgON5QZlTNY07qIVw+fnPAi
+	 PxqpM2pFL/HVUnGXeZInogCkeY3ago0SYFBA2PkkRPS8eZEW/RFwCBuDa0UxgPVqlU
+	 eWZY60u1gbh+2w65Y9EXjWfokUbKTqOtPSPPSKY83onQpDYI2iLfIz8qH5PHXhOxoi
+	 WDaUCWOXKZ+Mw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv3 bpf-next 4/7] libbpf: Add path_fd to struct
- bpf_link_create_opts
+Subject: Re: [PATCHv3 bpf-next 6/7] selftests/bpf: Add uprobe_multi path_fd
+ fail tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611114230.950379-5-jolsa@kernel.org>
-References: <20260611114230.950379-5-jolsa@kernel.org>
+In-Reply-To: <20260611114230.950379-7-jolsa@kernel.org>
+References: <20260611114230.950379-7-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 11:53:18 +0000
-Message-Id: <20260611115319.56B5F1F00893@smtp.kernel.org>
+Date: Thu, 11 Jun 2026 11:54:31 +0000
+Message-Id: <20260611115432.1FEA01F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The kernel-side implementation for processing `path_fd` is compl=
-etely missing.
-- [Medium] The high-level libbpf API for uprobe_multi was not updated to su=
-pport `path_fd`.
-- [Low] The patch references a non-existent `path_fd` field in `union bpf_a=
-ttr`'s `uprobe_multi` struct, which will cause a fatal compilation failure.
-- [Low] The `path_fd` field is incorrectly typed as `__u32` instead of a si=
-gned integer, breaking proper semantics for special directory file descript=
-ors like `AT_FDCWD`.
+- [Low] The patch introduces a compilation failure because it uses the unde=
+clared macro BPF_F_UPROBE_MULTI_PATH_FD and references a non-existent struc=
+t member 'path_fd' in struct bpf_link_create_opts.
 --
 
-commit f8c10c02ad07ee86163cb02487766ca5ac58a262
+commit acbff7cfc9a00c3bfed7027c436c6abc5a678d5d
 Author: Jiri Olsa <jolsa@kernel.org>
 
-libbpf: Add path_fd to struct bpf_link_create_opts
+selftests/bpf: Add uprobe_multi path_fd fail tests
 
-This patch adds the path_fd field to struct bpf_link_create_opts and
-attempts to pass it through the kernel attribute interface for uprobe_multi
-links.
+This commit adds new tests to the attach_api_fails suite in
+uprobe_multi_test.c to ensure that incorrect setups using path_fd fail
+as expected.
 
-> libbpf: Add path_fd to struct bpf_link_create_opts
->=20
-> Adding the path_fd field to struct bpf_link_create_opts and passing it
-> through kernel attr interface.
-
-[Severity: Medium]
-Are there missing kernel-side changes in this patch? The commit message
-states the field is being passed through the kernel attr interface, but the=
-re
-are no corresponding changes in sys_bpf() or bpf_uprobe_multi_link_attach()
-to extract and utilize the path_fd parameter.
-
-[Severity: Medium]
-Will this feature be exposed to the high-level libbpf API? The path_fd field
-was added to the low-level struct bpf_link_create_opts, but the user-facing
-struct bpf_uprobe_multi_opts and bpf_program__attach_uprobe_multi() do not
-appear to be updated to support it.
-
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index f37e3416f61a5..96819c082c772 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -842,6 +842,7 @@ int bpf_link_create(int prog_fd, int target_fd,
->  		attr.link_create.uprobe_multi.ref_ctr_offsets =3D ptr_to_u64(OPTS_GET(=
-opts, uprobe_multi.ref_ctr_offsets, 0));
->  		attr.link_create.uprobe_multi.cookies =3D ptr_to_u64(OPTS_GET(opts, up=
-robe_multi.cookies, 0));
->  		attr.link_create.uprobe_multi.pid =3D OPTS_GET(opts, uprobe_multi.pid,=
- 0);
-> +		attr.link_create.uprobe_multi.path_fd =3D OPTS_GET(opts, uprobe_multi.=
-path_fd, 0);
-
-[Severity: Low]
-Does this assignment cause a build failure? It looks like the path_fd field
-has not been added to the UAPI union bpf_attr for uprobe_multi.
-
->  		if (!OPTS_ZEROED(opts, uprobe_multi))
->  			return libbpf_err(-EINVAL);
->  		break;
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b=
+/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> index 56cbea280fbd2..58a7db7fba902 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
 [ ... ]
-
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 012354131cf66..7534a593edae2 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -444,6 +444,7 @@ struct bpf_link_create_opts {
->  			const unsigned long *ref_ctr_offsets;
->  			const __u64 *cookies;
->  			__u32 pid;
-> +			__u32 path_fd;
+> @@ -536,7 +536,37 @@ static void test_attach_api_fails(void)
+>  	link_fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_UPROBE_MULTI, &opts);
+>  	if (!ASSERT_ERR(link_fd, "link_fd"))
+>  		goto cleanup;
+> -	ASSERT_EQ(link_fd, -EINVAL, "pid_is_wrong");
+> +	if (!ASSERT_EQ(link_fd, -EINVAL, "pid_is_wrong"))
+> +		goto cleanup;
+> +
+> +	/* wrong path_fd */
+> +	LIBBPF_OPTS_RESET(opts,
+> +		.uprobe_multi.path =3D NULL,
+> +		.uprobe_multi.path_fd =3D -1,
+> +		.uprobe_multi.flags =3D BPF_F_UPROBE_MULTI_PATH_FD,
 
 [Severity: Low]
-Should path_fd be defined as a signed integer, such as __s32 or int? File
-descriptors intended for path lookup need to support special values like
-AT_FDCWD (-100), which will wrap around if stored in an unsigned 32-bit
-variable.
+Does this cause a compilation failure? The struct member path_fd in
+bpf_link_create_opts and the BPF_F_UPROBE_MULTI_PATH_FD macro appear to be
+missing or undeclared here, which would typically cause the compiler to fail
+with an undeclared identifier error.
 
->  		} uprobe_multi;
->  		struct {
->  			__u64 cookie;
+> +		.uprobe_multi.offsets =3D (unsigned long *)&offset,
+> +		.uprobe_multi.cnt =3D 1,
+> +	);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611114230.9503=
-79-5-jolsa@kernel.org?part=3D1
+79-7-jolsa@kernel.org?part=3D1
