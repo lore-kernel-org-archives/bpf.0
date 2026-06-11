@@ -1,71 +1,76 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32223AC0C0
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 09:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07F03BED66
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 09:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781170662; cv=none; b=VzExvtiJoRezZEdUHjKWbWBLbiQib/G0ramr5TOK5XK0EitWq5whhoXtIQ46MiUdXbREYRngcFTSUC4VU30wADMCCektOC65Ztd33aN7WUzxr9fjJGFvM2whGzNf/JL4lMPAnzfWS44Zm2hbAsWbRYJZGLIcXa5mjsjNx30s0Q8=
+	t=1781170669; cv=none; b=aGA7fNEfproCs/ZfDAv2CjzMPTvppQuvS0A2iO7dhAGfwyhJrZpx6WJXfKFD9P/djsQiI82zJjFQg2FI9wtZT8COLBzRo2GSt5XEkSnVR0DQP8pa9VFnRwD+P/2WF/l6T+c1o2I5kDB+qkKmsWEG6+qCJMdjkYvT4KKu0qDeu1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781170662; c=relaxed/simple;
-	bh=PU98PknZMnvOtEXRkJ7cg9UcsU4aKjZWeVdvA+PVoXU=;
+	s=arc-20240116; t=1781170669; c=relaxed/simple;
+	bh=RXGWonNJsTpKp63dGZeF6C6rR65Jux1BlW8HHmSlvkE=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zp8hBugq9da5Ri1zwKf57Erwc8hiQ8zxNYB3iQCdhqPXwJE792IgdDsb5bg5tuwgaBx1qa8i2mte/AUFTrOSNDL6ZeHrf4tb1f8ET1LnH/xcR2eSo7pOlOkU1AxbaD22EidJyWxRr106Ody26/3eZp+Zo4iWZCgVXYPBC3ueMfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NF6gOWt9; arc=none smtp.client-ip=209.85.128.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=JI8PfOVH9A/1vOPbNlGKytm9pHqSsNRAAwUbRyzXyKFf81kIqyzSGO6nR5m5ffYhZaAEok7RKgXSnTJ/S+USJ2v5Ly9bUBZK+Qqc3fLryBGHbdh0p7SNUZxvx+bu/GeZd5gfXYde+ydXaqTVpIDyPKKxBlxiTn50EREyGeBDc1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qvCtlFKZ; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NF6gOWt9"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490b3e03939so5816145e9.1
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 02:37:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qvCtlFKZ"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-460166910e6so4095521f8f.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 02:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781170659; x=1781775459; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781170666; x=1781775466; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zruVWqFGgpp7NEcooTDP5im8iVaG/yBcmkbIj0gbxBg=;
-        b=NF6gOWt9CTRMsaPNeyenYlkhEr/0A2yBj4B2zsERs3fUajCDKgxNosI+cPnXBFkKbw
-         mk13eJRK1x4OxtGob101ngwiITGUE7NJJgeFm0AAv+Rs8UINOOk9d18clR0LFQMCZyk4
-         8RHoLZX2e3NWtECrj7MGugJffDQHzx0k4Nu3LsrCJWe3RXLPKB1VDc6vHspnuDr19ulw
-         B6E+8sn7x7sjP2nW2KVR9dzqqyIuASv/zphiNNAzJI0Lmv0j6duQCFEG/VvnJ0ugxtvP
-         /3dJdx5Eq+98h/oFfFu1QKS28QRotNl5cbnT6J3gIG2vZ2gMGv21ftsWpgplZEYW0O9K
-         p4WA==
+        bh=gGaFz2qptunT/Ub1/2XY6XPkKOp0++7hetebbbs9weY=;
+        b=qvCtlFKZxIzpclw6DLHvlhQo9ESgA1iBe49orRy2c+X4Y7kMDTKgNi0PmKz+o2xN1w
+         evd6KHES6qNU2+bIic6jn5tca3NcVMqbb4r6iorqioLem6gEUruAoF7leXIDYqQrJWms
+         fsEyQMmJaOdXLaW2P3Bq3roKdj0oX6iKdxeu+0pxQUdfPt7lSpgjhmtD8nOXuSEPQW2H
+         UF90Bw/DFe+BDkFPGjcQTS6uw/620MeMJLLMUUJ631neO+3lJTDlfAenwk6bv1Hv93i+
+         QRTkXrrfwDIifTism6a02UAUy/0HIfWVBfwormFRECP7bTm1ATOlKvmBmAlxkFYbclX9
+         Y6OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781170659; x=1781775459;
+        d=1e100.net; s=20251104; t=1781170666; x=1781775466;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zruVWqFGgpp7NEcooTDP5im8iVaG/yBcmkbIj0gbxBg=;
-        b=UvV/DrAe1HvthLyGjMhMz77LOuE148eOXO1U8UjnIY0et9NsckIXmd0YLtQ3UZbBBc
-         bjgBcroTXzKwGWT1bOX6p1suApG5cEYTNAbe4QQMoCHKkQcKu8lfQHEDDj0+A+4fpA/F
-         o+vfeln8AHhCAvjHR6iDNXk8eYTrLmUIXoTPQLEsRjOABi8rcL8CGwTtalBW+pO8uSqe
-         ch8nxeOYihX5tcWvkgj2OKSuLFWJNLrDMxWMpkv2wcieQDVYVM0txp0+p0e0DY/7E3WB
-         yaGxiJUfHlSyEKj1XpcaQO4jn/QlT3g41hmAaimVxLBhQGwZhC3XPltcI1abwlKMPkUZ
-         Ning==
-X-Gm-Message-State: AOJu0YzuMWofqQgKNNACHI7Jtpiz9ZFMiqlDE5e7DzyVePb9cr7IGoLA
-	GlFUg2OjXUsnP7A6u7UampGJRwPjCahBC9q9EbaoVklnpzC296JkI+U1
-X-Gm-Gg: Acq92OHmp1RfS6hosGkJVTj3Tsv+D2ADEsQCgJTHKRR66l6NNliXfJ23Dt6uWcLsBHU
-	0tCnCgJb7CiRoi5jwOwPctueg3bYzo3PJWXa5/KwIkgneynORNasp7fBUhiucP07nAToAtxM2vg
-	SNB3q7rrX/AIh5TYVZG0zmn5BBP70qYkrOPh1V7PLtVfzl1HMWvHltBidrga8sA86ezNHthA4zS
-	Ym8hMwF5Es3PLp/8Stst7RaD3Z0yBMlg+RlIJUeOEa2NI7i/rw5loLoFoGMHvvGryCM8ryZybUN
-	LxBGsnPFqg+x00ux1BE0iCUX72CnoiA68j4kgf1HfDdcbs6R5MKkAKO7DxIDf7vSR4tfAlFMMEe
-	TtYHI+iTY25GdOTuXxX0NMryEsBeoogMyPw2jKjAaG4aNJRYzg52Nv5tpjWxGZDZFuSgXy+4edn
-	311E9ImNMyqw79F1oh24inxfr83w==
-X-Received: by 2002:a05:600c:4f47:b0:490:b26c:64ad with SMTP id 5b1f17b1804b1-490e52d5bfdmr20909335e9.5.1781170659085;
-        Thu, 11 Jun 2026 02:37:39 -0700 (PDT)
+        bh=gGaFz2qptunT/Ub1/2XY6XPkKOp0++7hetebbbs9weY=;
+        b=msVDy/40Y/rR3cgb3FS7NxBxvmQEkryByYzhoHQ/nseCNT35qZeTaOHNYLRZOJ17SO
+         sIKvTMseTxeXhM6+z4ACwkciMUXXYjRc3WFhRWPRUevgcvNE+1y7GF0w/yVKxHi7fPi2
+         jCUscGOlm91nFeJ1dz/GQRPvy+5GSJ0YTBsNRzeDitS64aCsPhGnS+R634RDPGK7P9UL
+         ilA2OYK3KoyDMV1GNU3w8LbBihvcxxLaOaNmiNkFttqCgAU9IlKbNO9iRqIvFZl0bX9k
+         xe6EV3R5TrbxfdnY2d+EaODj4xdckrIdlK2n8j83dg+HOAjI+MdcqVzIBi2YLd6W0p9Q
+         HAgw==
+X-Forwarded-Encrypted: i=1; AFNElJ9COcdegR0QIhf1qSyLfC5cvz/diSTaNZwXucrO9qiYvq8nMzFoMNxr5EDfNLdEM5u2Ioc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw440SrM3/BemAuhj1iyCEmgeINUgpjstYirK9UFGwYh08VCXOT
+	BqyywAjNv5+aNQWaFZAzBtBvh0XZGepwytdsECTpkPHVGMiceaCyDV3k
+X-Gm-Gg: Acq92OGImzo0jO38Ws9t9BsDwROfJLmunqoxWUgAz4kB2Vr0kbLPIjCBNFsNfC/9hQp
+	VmqqhjlvAYOHX/zvKlN9KOZwDYbtuMJm8KqTM1to7uOGecGz8MkhjljJzy96IXRxvpYj7W5aLHF
+	VaZAWr2HwzMDhU4AbfJ3rx9iq1QMj3Xxo6CxnTZ3Vks+B+/vMfHz4X0yORrY3DBsHPJm8NTDZST
+	eECR0yCSuFRbYLl1mrvCxUzP64Sr2R5rK8wDRXtMr6TyPGf5BY0Lxb4MfHXPWmDnMpSBs/SONqv
+	c4E9T82KG89l5pCqJEo4fCvx7keWzbmboeiakIWZ30npWVy2+1EEJ4G+OSnTelss9Vy7QEWMxS7
+	OUFnEAMeUclyQa0DfbMdpuMeC9aFj7frkhbqFhA+pMpMkVML2WZ30wSW8GEcRcxZRz4DX48fr5p
+	NLY3N93B6gnuxLb81eEf8PCceICw==
+X-Received: by 2002:a05:6000:2883:b0:460:1301:dec8 with SMTP id ffacd0b85a97d-46067576742mr3065499f8f.3.1781170666010;
+        Thu, 11 Jun 2026 02:37:46 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e52acb98sm37556865e9.5.2026.06.11.02.37.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f35fb24sm85495446f8f.34.2026.06.11.02.37.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 02:37:38 -0700 (PDT)
+        Thu, 11 Jun 2026 02:37:45 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 11 Jun 2026 11:37:37 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCHv2 bpf-next 1/6] bpf: Use user_path_at for path resolution
- in uprobe_multi
-Message-ID: <aiqB4eSTxR4Aw9YJ@krava>
-References: <20260610143627.804790-2-jolsa@kernel.org>
- <20260610145235.CB1441F00893@smtp.kernel.org>
+Date: Thu, 11 Jun 2026 11:37:43 +0200
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	songliubraving@fb.com, yhs@fb.com, oleg@redhat.com,
+	mhiramat@kernel.org, martin.lau@kernel.org, yonghong.song@linux.dev,
+	clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCHv2 bpf-next 2/6] bpf: Add support to specify uprobe_multi
+ target via file descriptor
+Message-ID: <aiqB55NxlVk_dlmz@krava>
+References: <20260610143627.804790-3-jolsa@kernel.org>
+ <bc91a6fbfbb53b29a1f48a07c8412caaca1a0f8429bf75d40f58272eacfdfcbd@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,76 +79,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260610145235.CB1441F00893@smtp.kernel.org>
+In-Reply-To: <bc91a6fbfbb53b29a1f48a07c8412caaca1a0f8429bf75d40f58272eacfdfcbd@mail.kernel.org>
 
-On Wed, Jun 10, 2026 at 02:52:35PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+On Wed, Jun 10, 2026 at 03:51:39PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index d4188a992bd8..cef9bd6316a5 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3475,7 +3475,7 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+> >  			seq_printf(m, "link_type:\t%s\n", link->flags == BPF_F_KPROBE_MULTI_RETURN ?
+> >  				   "kretprobe_multi" : "kprobe_multi");
+> >  		else if (link->type == BPF_LINK_TYPE_UPROBE_MULTI)
+> > -			seq_printf(m, "link_type:\t%s\n", link->flags == BPF_F_UPROBE_MULTI_RETURN ?
+> > +			seq_printf(m, "link_type:\t%s\n", link->flags & BPF_F_UPROBE_MULTI_RETURN ?
+> >  				   "uretprobe_multi" : "uprobe_multi");
 > 
-> Pre-existing issues:
-> - [Critical] Missing `access_ok()` checks before calling `__get_user()` on user-controlled arrays, leading to arbitrary kernel memory read.
-> --
+> This change in bpf_link_show_fdinfo() switches the uprobe_multi check from
+> an equality test to a bitwise test.  Once a second flag bit exists (the
+> BPF_F_UPROBE_MULTI_PATH_FD flag added by this same patch), a uretprobe_multi
+> link created with both flags set would be misreported as "uprobe_multi"
+> because the equality test no longer matches.
 > 
-> commit e18574361f20d4f27005e4d927610e3ce16986dd
-> Author: Jiri Olsa <jolsa@kernel.org>
+> The equality comparison was introduced in:
 > 
-> bpf: Use user_path_at for path resolution in uprobe_multi
+>   803f0700a3bb ("bpf: Show precise link_type for {uprobe,kprobe}_multi fdinfo")
 > 
-> Resolve the uprobe_multi user path with user_path_at() instead of copying
-> the string with strndup_user() and passing it to kern_path(). This removes
-> the temporary allocation and keeps the lookup logic in one helper.
+> Should this change include:
+> 
+>   Fixes: 803f0700a3bb ("bpf: Show precise link_type for {uprobe,kprobe}_multi fdinfo")
+
+answered this one in previous version
+
+jirka
+
 > 
 > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 90432f0fc2a8e..970ce7bbf99e1 100644
+> > index 970ce7bbf99e..f5d68f6d90f3 100644
 > > --- a/kernel/trace/bpf_trace.c
 > > +++ b/kernel/trace/bpf_trace.c
+> > @@ -3214,6 +3215,38 @@ static u64 bpf_uprobe_multi_cookie(struct bpf_run_ctx *ctx)
+> >  	return run_ctx->uprobe->cookie;
+> >  }
+> >
+> > +static int bpf_uprobe_multi_get_path(const union bpf_attr *attr, struct path *path)
+> > +{
+> > +	void __user *upath = u64_to_user_ptr(attr->link_create.uprobe_multi.path);
+> > +	u32 path_fd = attr->link_create.uprobe_multi.path_fd;
+> > +	u32 flags = attr->link_create.uprobe_multi.flags;
+> > +
+> > +	if (flags & BPF_F_UPROBE_MULTI_PATH_FD) {
 > 
 > [ ... ]
 > 
-> > @@ -3261,14 +3260,7 @@ int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >  	uref_ctr_offsets = u64_to_user_ptr(attr->link_create.uprobe_multi.ref_ctr_offsets);
-> >  	ucookies = u64_to_user_ptr(attr->link_create.uprobe_multi.cookies);
-> >  
-> > -	name = strndup_user(upath, PATH_MAX);
-> > -	if (IS_ERR(name)) {
-> > -		err = PTR_ERR(name);
-> > -		return err;
-> > -	}
-> > -
-> > -	err = kern_path(name, LOOKUP_FOLLOW, &path);
-> > -	kfree(name);
-> > +	err = user_path_at(AT_FDCWD, upath, LOOKUP_FOLLOW, &path);
-> >  	if (err)
-> >  		return err;
-> >  
+> > +	}
+> > +
+> > +	/*
+> > +	 * When BPF_F_UPROBE_MULTI_PATH_FD is not set, the path is resolved
+> > +	 * relative to the cwd (AT_FDCWD) or absolute using the upath string.
+> > +	 */
+> > +	if (!upath || path_fd)
+> > +		return -EINVAL;
 > 
-> [Severity: Critical]
-> This isn't a bug introduced by this patch, but while looking at
-> bpf_uprobe_multi_link_attach(), I noticed the user-provided arrays
-> uoffsets, uref_ctr_offsets, and ucookies are accessed shortly after this
-> path resolution:
+> This isn't a bug, but the non-FD branch (taken when
+> BPF_F_UPROBE_MULTI_PATH_FD is not set) reads path_fd in the check
+> 'if (!upath || path_fd)'.
 > 
-> kernel/trace/bpf_trace.c:bpf_uprobe_multi_link_attach() {
->     ...
->     if (__get_user(uprobes[i].offset, uoffsets + i)) {
->     ...
->     if (uref_ctr_offsets && __get_user(uprobes[i].ref_ctr_offset, uref_ctr_offsets + i)) {
->     ...
->     if (ucookies && __get_user(uprobes[i].cookie, ucookies + i)) {
->     ...
-> }
+> path_fd is only meaningful when BPF_F_UPROBE_MULTI_PATH_FD is set.  A caller
+> that supplies a valid string path but leaves path_fd as non-zero garbage (in
+> a struct large enough to include path_fd) would get a spurious -EINVAL here.
 > 
-> Are these arrays validated with access_ok() before __get_user() is called?
+> The garbage value is never dereferenced or used for arithmetic, so this looks
+> more like defensive input validation than a dangerous use, and old-style
+> callers passing the pre-path_fd struct size get path_fd zeroed and pass
+> cleanly.
 > 
-> Because __get_user() bypasses the access_ok() address-space bounds check
-> on most architectures, could an attacker supply kernel addresses for these
-> arrays, causing the kernel to read arbitrary memory and store it into the
-> uprobes structures?
+> Is rejecting a non-zero path_fd in the string-path mode intended, or should
+> path_fd be ignored when the flag is absent?
 > 
-> If an attacker retrieves these contents by querying the link info via
-> bpf_obj_get_info_by_fd() (which calls bpf_uprobe_multi_link_fill_link_info()
-> and copies the memory back to user space), could this act as an arbitrary
-> kernel memory read primitive to bypass kernel lockdown and KASLR?
+> > +
+> > +	return user_path_at(AT_FDCWD, upath, LOOKUP_FOLLOW, path);
+> > +}
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27284577665
 
-ugh right.. will include fix for this in next version
-
-jirka
