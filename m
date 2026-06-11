@@ -1,94 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F74D342538
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 11:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A625342538
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 11:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781178475; cv=none; b=r3P4M2Mj8lGAlxyY70CEQKJkDKykBc797zFAxzK9zg8G10/VxWq9muui6tvHe1KnAJuYzFsGWb6v5dalf1Cv6FSz0mabrYHPY/7J4JC3tO9m09E6lKk2WU/O8uMvtVtLZLAfQrLzALcEH2GADEdhip1L90MEs91dHTESIqmLmmQ=
+	t=1781178479; cv=none; b=EbemcagR5z8PfFY1bJnpe6GCMFMrMDhvwBi+hUrI0vtHOfIQYi+zWoUS6U2TMmuy8v/2Bymlq43HsHVxll4mjHi6IxGTM3oNyoSX3l9V8KY/pwCsK47Xao6BMp4I6GZ4F4ZYclYECjwKxyJNfIzsRiscrFQF3f9a2RnMhz60Bqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781178475; c=relaxed/simple;
-	bh=1HvMwkdhqh4AXm47edttSrRJgGBut6w6bK8lbwYG6XY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V9iM2SvnV0KY5yWQzI7LgpuS4Nxd+pWSeF8ZNGRVM3kM9SRmRSd8lTsSBKGTljOMj5PVYFYrJN1ouPngIpzTswoKpTBPubDazK9z2TuvFFMSOE76RMzBo4VWJLyxiyh1/gUhUzRjGnwnVEHf/TLsMj7mek3eZar3iqyMeHS5kWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKOfq9F8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781178479; c=relaxed/simple;
+	bh=XoJJqz/Vzlhe5uQ13vjg3VCYz0+nnya2oNA5rEu2MFI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MvSPMYjqIYWW+0megSGQHoZxv3EWm/6tYSJK3uDQcdC7Y+GbQ7T7OHRVOETaUGxRYCx3vFh8yGyG4p9qtqAf49mNDVIaGgXeF2QApYXXR/NahmVl94d1v1EY0BhCBkEkY1bDapgeD7KW/d4JeXNzw3kd7EBNt4r4U6q/XMowYwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RORblfg7; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKOfq9F8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8061F00893;
-	Thu, 11 Jun 2026 11:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781178473;
-	bh=4Zx9S+miKde5EOmH8hj78OG+TpYelbf+i8jGU9iL6kM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aKOfq9F8t3/xQdf29NYkTvFghW/RTuN6Tk4lyvHc9bvCc++LsunU2cnIz4QVaWcFQ
-	 oIJOZgZf7IWKV1vexKZW+8YcnzB2vY4jeV5+R832K9KTOzNh5cwIfzipTZvkuPM5h4
-	 sWBMGDYoisi53WQALJQZerE5vjkzNZDFUWVoAuJdFo7YJhHVCLJ6jPfg94AIRs5OJl
-	 WIyL67L5BuAm+laVkXZxbTMi2MklxF4AcbDz0Bj1B39UjFOTkaL0/mjA5Mn8AdiZgr
-	 Z7vJ7wkT5LBaj1vJWJi+zpXqGfIL7SD/rmu1dg9vO7rAmEpo1CLg64ivlqyVBZFcVv
-	 pCVl1XDGFS0wg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 3/7] selftest/bpf: Fixing powerpc JIT disassembly
- failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: adubey@linux.ibm.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611153826.31187-4-adubey@linux.ibm.com>
-References: <20260611153826.31187-4-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 11:47:53 +0000
-Message-Id: <20260611114753.9B8061F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RORblfg7"
+Message-ID: <ee8eb9dc-3692-44eb-b807-3699201ddc49@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781178475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KQnWBNAsCzAJ3HZFLh8gKD/BTcTn+ZltOUCQYwic1XA=;
+	b=RORblfg7meoiuNtp/4rapSWxIbyQ3GSD56k+VHAHqBL8MYQlHZlZ8AwsPmqEN/U1lUg5xC
+	2TkMpkl7U1+iTVWyuEPZSZNb6SJAm00yHNu1vXY1DlG/NXb3xMs4wKQHraPF7QMXm8y1S3
+	pxg1RJ3/urOmVLrfdS3obkRRcKbX5Hs=
+Date: Thu, 11 Jun 2026 19:47:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH net v3] tcp: clear sock_ops cb flags before force-closing
+ a child socket
+To: Sechang Lim <rhkrqnwk98@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Neal Cardwell <ncardwell@google.com>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Simon Horman <horms@kernel.org>,
+ Lawrence Brakmo <brakmo@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The patch introduces a C++ style single-line comment (`//`) which v=
-iolates the BPF subsystem comment style guidelines.
---
 
-commit 90e32beb297573769f660f2e6d0779da36d4155e
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+On 6/11/26 5:29 PM, Sechang Lim wrote:
+> A child socket inherits the listener's bpf_sock_ops_cb_flags via
+> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
+> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
+> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
+> without it.
+>
+> If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
+> calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
+>
+>    WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
+>    RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
+>    Call Trace:
+>     <IRQ>
+>     tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
+>     tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
+>     tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
+>     tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
+>     </IRQ>
+>
+> The child is freed before it is ever established, so it should run no
+> sock_ops callback. Clear its cb flags in inet_csk_prepare_for_destroy_sock(),
+> the common point for the IPv4, IPv6 and chtls forced-close paths and for the
+> MPTCP ->syn_recv_sock() failure path (dispose_child), which reaches tcp_done()
+> on a child that was never established too.
+>
+> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 
-selftest/bpf: Fixing powerpc JIT disassembly failure
 
-This commit ensures that the trampoline stubs JITed at the tail of the
-epilogue do not expose the dummy trampoline address to the disassembly flow.
-It prevents the disassembler from ingesting this memory address by
-truncating the last bytes from JITed buffers before disassembly.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/tes=
-ting/selftests/bpf/jit_disasm_helpers.c
-> index 364c557c51158..466d62b4ca285 100644
-> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
 
-[ ... ]
-
-> @@ -216,9 +218,26 @@ int get_jited_program_text(int fd, char *text, size_=
-t text_sz)
-
-[ ... ]
-
->  	for (pc =3D 0, i =3D 0; i < jited_funcs; ++i) {
->  		fprintf(text_out, "func #%d:\n", i);
-> -		disasm_one_func(text_out, image + pc, func_lens[i]);
-> +		// Disabled JIT have zero func_lens, hence underflow
-[Severity: Low]
-This isn't a bug, but does this C++ style comment violate the BPF subsystem
-conventions which require standard C-style block comments for single-line
-comments?
-
-> +		__u32 disasm_len =3D func_lens[i] > trunc_len ?
-> +					func_lens[i] - trunc_len : 0;
-> +		disasm_one_func(text_out, image + pc, disasm_len);
->  		fprintf(text_out, "\n");
->  		pc +=3D func_lens[i];
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611153826.3118=
-7-1-adubey@linux.ibm.com?part=3D3
