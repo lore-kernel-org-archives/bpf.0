@@ -1,159 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625183BA24E
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 12:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046EC3AC0C0
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 12:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781182419; cv=none; b=PWmBcsCq0n0fgcCBp991cbPLashzebd0oGPvRmY+kwaa+5LX3CqXTLTYaRko7YznDeSc9Bhyu8M4b7g6MUljUzMfiCdehcfALGnlPZ4t5EH7dQtJaf+7H0Cd//GysitVRyBxhvTd1qcTgV146CrARJJiQ/HiNTIr+z3AMBDH0Hc=
+	t=1781182454; cv=none; b=Rdq/687DBfWsnBPkRdawe1RejmqUQb6o8PSiDSJybkHSDiqsilUxTjGobKEqA3lIVH8TVYG+y5NXcllYnHgbAO/1a8e3aqmv+8Dn+5tJIrJ4lJDLD54n6ZbMoTzt2np2CDB+kC9xALfo+74VN99tPX0TMvkCSEA8CmuZmVWcetU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781182419; c=relaxed/simple;
-	bh=xe33OjRJ31yRlDzYAGzErlNddpCQA9aul2/O0t5h0tM=;
+	s=arc-20240116; t=1781182454; c=relaxed/simple;
+	bh=qy2bmGf6dq8kht4xSi5Q+4DcHvPABXRB+7qgmntn9ek=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=H+Mrfw4c46TIUCWs96QeKdtX9Ln4tEbeWCVSm9by4LOCDrLeWvglm+4wTf85a06/xdj6OuZPNnDFtOhfQ6ZxxNDOWvVOOjKhPf5plQ3hIk0Enl+Ayb0a1bUJPVakSwk7S+5VcoNlGRJEveQ7UuusYQAfCnl3LqOOivRjgU0SZa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuFeCFWN; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=F6JogCtF8dZ3zlPUmZ1hV66dDxu9+EToxQk/XsYUB534Ki0zt0Y6LDfozS9x1057iOpnYISdmXumG5h4pmpZkgo7B/hhe/dXnr8QcxdehAoEIRmcjEm1mwUJAkmGZwLcTnj7zBCpnshgTFJ5hz8+TU4cFOXrBWtax04/O3CdS/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LneOc1Ti; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuFeCFWN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277F91F00893;
-	Thu, 11 Jun 2026 12:53:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LneOc1Ti"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669491F00893;
+	Thu, 11 Jun 2026 12:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781182418;
-	bh=qtQHCIu7KmqigFVs07xy+HLjKPMG3HCp195Jq8jcnQo=;
+	s=k20260515; t=1781182450;
+	bh=jERi/YbqTRVDMBsgqi97AJV6iX5WGS+du3XbLZtsXYI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nuFeCFWN7GRppVDpeucuHWk5I8ZDmaCUWe59yNr0nI2bhZfx6ei1JWCez62JrQqtW
-	 /L11vE1lnZOGU/L62D2N5zdJ+fQqY9fjT4dIOgBbdO6sxVYYPkPf0U/mJl6d04stKE
-	 qLdxmMgJh4z3GqPeM53t5WBEGzBruatqz2T13E6oe1OSaepTUwnDCkDBMiWPgbbV1J
-	 UZTxCthNmrY32cWYCeoPoshyUrcuFoWCg+tkPbSbEByZ1VjUipxiYJ2iPKy5/jjCQ5
-	 zygL4+IakmkKZ/TkLPodo5xrHAMG4/4lK3VYROdKXspFN6XWny+i2cAwbjynGTF3JG
-	 odSIcgpCPFOYw==
+	b=LneOc1Ti+zUqkQPpUhDys/8yeH/xqeJ7UHlNeHkJxe++6jt2K13S78QRivBgqhu8w
+	 IOaanOipMoJC3m5mFpGR00qCpyJyf+zOPHvDUkSnHL2G4631JWHA0BzLdVGoKkGbQO
+	 DsR9fY+FxFSJkGqp5GVHsqKZdDy1MRNCBiadaOjth4iHu1mu88JEeIciZZjoGbXw8v
+	 O0w+sImLgYhgdK9Qfa0QUtBh8MmU2xm+B3KQrI2klW8OGy40apYkg+SqYACyFiNsxf
+	 ZBen7S4hdPCzaLaR4VScF2acJTJ2qO9JxUF1nX62g6twY4wJG8ufWKDd2PlAJCj+xo
+	 /GPVBedNwKmeA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 5/7] sockmap: Fix use-after-free in
- udp_bpf_recvmsg()
+Subject: Re: [PATCH bpf v2 2/7] bpf, sockmap: Fix wrong rsge offset in
+ bpf_msg_push_data()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611123538.156005-6-jiayuan.chen@linux.dev>
-References: <20260611123538.156005-6-jiayuan.chen@linux.dev>
+In-Reply-To: <20260611123538.156005-3-jiayuan.chen@linux.dev>
+References: <20260611123538.156005-3-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 12:53:37 +0000
-Message-Id: <20260611125338.277F91F00893@smtp.kernel.org>
+Date: Thu, 11 Jun 2026 12:54:09 +0000
+Message-Id: <20260611125410.669491F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [Critical] The addition of `lock_sock(sk)` creates a D-state deadlock and=
- an unkillable spin loop if a packet is queued to `psock->ingress_skb` but =
-cannot be converted due to memory limits.
-
 Pre-existing issues:
-- [High] Delegating to `sk_udp_recvmsg` on a blocking socket can cause a pe=
-rmanent hang if BPF programs redirect incoming packets to `psock`.
+- [Critical] bpf_msg_push_data() reads a stale scatterlist length from an u=
+nused ring buffer slot when appending to the end of a message, leading to s=
+evere memory corruption, buffer overflows, and ring corruption.
 --
 
-commit 8b4a0fe8904c1ee85231827ded90d15006435b9c
-Author: Kuniyuki Iwashima <kuniyu@google.com>
+commit db7f1ec823fbb81c9afb65284fd3f58d01a87a71
+Author: Weiming Shi <bestswngs@gmail.com>
 
-sockmap: Fix use-after-free in udp_bpf_recvmsg()
+bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
 
-This patch aims to fix a use-after-free in sk_msg_recvmsg reported by syzbo=
-t.
-It adds lock_sock serialization around sk_msg_recvmsg in udp_bpf_recvmsg
-to prevent multiple threads from concurrently touching the same sk_msg.
+This commit fixes an issue in bpf_msg_push_data() where splitting a scatter=
+list
+element incorrectly advanced the tail's page offset by the absolute message
+byte offset (start) instead of the byte position within the element
+(start - offset). This caused rsge.offset to overshoot, leading to
+out-of-bounds accesses.
 
-Link: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e0.GAE@goog=
-le.com/
-
-> diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> index 9f33b07b14813..ad57c4c9eaab6 100644
-> --- a/net/ipv4/udp_bpf.c
-> +++ b/net/ipv4/udp_bpf.c
-
-[ ... ]
-
-> @@ -79,6 +81,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msgh=
-dr *msg, size_t len,
->  		goto out;
->  	}
-> =20
-> +	lock_sock(sk);
->  msg_bytes_ready:
->  	copied =3D sk_msg_recvmsg(sk, psock, msg, len, flags);
->  	if (!copied) {
-> @@ -90,11 +93,17 @@ static int udp_bpf_recvmsg(struct sock *sk, struct ms=
-ghdr *msg, size_t len,
->  		if (data) {
->  			if (psock_has_data(psock))
->  				goto msg_bytes_ready;
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 3c8f1cedb217f..3e555f276ba80 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2872,7 +2872,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
+ u32, start,
 
 [Severity: Critical]
-Does this new locking introduce a potential unkillable spin loop under memo=
-ry
-pressure?
+This is a pre-existing issue, but does bpf_msg_push_data() read a stale
+length from an unused ring buffer slot when appending to the end of a messa=
+ge?
 
-If sk_receive_queue fills up and hits the sk_rcvbuf limit, and a BPF program
-redirects a packet to psock (placing it in ingress_skb), the backlog work
-might fail to move it to ingress_msg with -EAGAIN due to the memory limits.
+When appending data to the end of the sk_msg ring (where
+start =3D=3D msg->sg.size), the loop iterating over the scatterlist evaluat=
+es
+all valid elements and terminates with i =3D=3D msg->sg.end:
 
-When recvmsg is called, it acquires lock_sock here, and sk_msg_recvmsg
-returns 0 since ingress_msg is empty.
+net/core/filter.c:bpf_msg_push_data() {
+    ...
+	do {
+		offset +=3D l;
+		l =3D sk_msg_elem(msg, i)->length;
 
-Then udp_msg_wait_data checks udp_msg_has_data. Since there is data
-in ingress_skb, it immediately returns 1 without releasing lock_sock:
+		if (start < offset + l)
+			break;
+		sk_msg_iter_var_next(i);
+	} while (i !=3D msg->sg.end);
+    ...
+}
 
-	ret =3D udp_msg_has_data(sk, psock);
-	if (!ret) {
-		release_sock(sk);
-		...
+After this loop, the code evaluates the space and reads the copy length:
 
-Then back in udp_bpf_recvmsg, we hit the code above. Because
-psock_has_data is true, it jumps back to msg_bytes_ready.
+    if (!space || (space =3D=3D 1 && start !=3D offset))
+		copy =3D msg->sg.data[i].length;
 
-The lock is never released, and we never read from sk_receive_queue, so the
-memory limit is never resolved. Could the syscall spin indefinitely holding
-lock_sock, causing any other threads attempting to operate on the socket
-to hang in D-state?
+Because start !=3D offset evaluates to true when appending, this reads
+msg->sg.data[msg->sg.end].length. This slot is outside the valid ring
+bounds and contains a stale, garbage length from prior operations.
 
-> +
-> +			release_sock(sk);
-> +
->  			ret =3D sk_udp_recvmsg(sk, msg, len, flags);
->  			goto out;
->  		}
+This garbage copy value can lead to severe memory corruption and buffer
+overflows. For example, if copy is non-zero, it allocates a buffer based
+on copy + len. Later, it copies front bytes into the new allocation using
+memcpy:
 
-[Severity: High]
-This isn't a bug introduced by this patch, but could delegating to
-sk_udp_recvmsg here result in a permanent hang for blocking sockets?
+	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+			   get_order(copy + len));
+    ...
+		if (front)
+			memcpy(raw, from, front);
 
-When psock_has_data is false, this code (and similar code at the start of
-udp_bpf_recvmsg) delegates to sk_udp_recvmsg. For a blocking socket,
-sk_udp_recvmsg will sleep waiting for data exclusively on sk_receive_queue.
+Since front is the size of the actual last element, and the stale copy
+value can be small, front can easily exceed the allocated page size,
+causing memcpy to overflow the allocated page.
 
-If a packet arrives later and a BPF verdict program redirects it to the
-socket's psock (meaning it goes to psock->ingress_skb or ingress_msg
-instead of sk_receive_queue), the socket wait queue is awoken.
+Additionally, if the stale copy value happens to be 0 on a completely full
+ring, the code skips the allocation, executes sk_msg_iter_next(msg, end)
+unconditionally, and wraps msg->sg.end to equal msg->sg.start, permanently
+leaking all message pages.
 
-However, sk_udp_recvmsg will only check sk_receive_queue, find it empty,
-and immediately go back to sleep.
+Could this garbage read lead to memory corruption, buffer overflows, and
+ring corruption?
 
-Will this result in the syscall ignoring valid data successfully queued in
-psock and hanging indefinitely?
-
->  		copied =3D -EAGAIN;
->  	}
-> +
-> +	release_sock(sk);
-> +
->  	ret =3D copied;
->  out:
->  	sk_psock_put(sk, psock);
+> =20
+>  		psge->length =3D start - offset;
+>  		rsge.length -=3D psge->length;
+> -		rsge.offset +=3D start;
+> +		rsge.offset +=3D start - offset;
+> =20
+>  		sk_msg_iter_var_next(i);
+>  		sg_unmark_end(psge);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611123538.1560=
-05-1-jiayuan.chen@linux.dev?part=3D5
+05-1-jiayuan.chen@linux.dev?part=3D2
