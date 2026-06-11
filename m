@@ -1,139 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF39224B04
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 14:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135C735504D
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 15:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781189716; cv=none; b=dpQVCLdNjszwcrhGlCFnMSvKVlhjze+0QvsQqmC5F6ZPR+2apyOoI9Wr6cu+zGOWq8ffZ4++3xHpJzpD3WbO3emBl72ujgP3Yvf2sojjXX9PplIU64lmJYhIKNcBejf2fLGcm8WfFx0HM73qXCen6WoRAohdg5Bm0QpdfRpt1vo=
+	t=1781190471; cv=none; b=TyVMCLGhd89YCxpsBAoc322fLFEKMjp8EosQH36kKuLH7l2NzKiZydo88x+5Y44nxytJuJKuy52ox6MSwclOr6+nSuKo7iaSZBIyxtNgbVQDP/AslAvKQ3RB1/ZTbUQFf8H0SfhnKoK8b2JgG+lU9mS8UOInclJnmxD2vUcsBBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781189716; c=relaxed/simple;
-	bh=6GpCEY6YapVZ/MtIaDTtmPRPX7Cx+DNTdTy5i8sGOw0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=H8wJ6di15zEdrtBrtx/0j4wriY+D6xeZ2RgTB3IdlDS4AKWxpLbrr9/pjKZAT95PJ23a4x3jju3XqctjzDsOm2JfVxLOrFx8VuAJUlDO7/78sBlsoCFmU8hKtcm4v/gTtz0kNciCNrvqzpM41uDNPJtq1ZW9nEZgUqP3bfUtXIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzQpK7Sh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781190471; c=relaxed/simple;
+	bh=9FEuV5fSd29uNBGYMcM4imW91zywpwZ5wJYK4FqNSvs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ePkoelkez7V3jPVKzECPtcp488ADwHaL/G5zbr0F6RvSXDeoJ2jjtlCXOHWUB9d3nZieSiMQovy7bLkEyCBFFarvu2tdX7Y0dbPVhOymBryXzoSba3+u+E7+iT41AqhSwivE3iWvGaH9f7qWvub7uQaglejnfRVjy8S6wZn0ABU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N06gQObH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzQpK7Sh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21D31F00893;
-	Thu, 11 Jun 2026 14:55:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781189715;
-	bh=bhtRuPbAhVBV7sjw2AxnX4g4JhaBq0ehmBxhi2OKAgI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jzQpK7Sh75fRJpbH8OglYz+im1SoVqwNXhS7TictnjHAodwYtaVSGYKcl0Pb/tBWl
-	 s+7dNUxlveEJLO1bLXLFxzx6enHYNrIXVMYm+Ke3EGrDBJZY5l7DIu0MaCzIxXapZl
-	 z4TPoiVzHj+BYterQbpfTj6vdQ0loOvfIzOr2pYy71juB2p4CT1hjCk5XwH2yqFhP9
-	 1lvJF9tQ1zFoh3MICT7q9DOClEX3khB8tVIxSav2L7iIgy6ut5UTE/l6On0zdKAzJL
-	 inaIhZvwac6hM0ktxBZrPcB9siRczC//3WjejDKJh1WngO28WOBb9fVa521TppgCb5
-	 WhD0c0Eha7CjQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 3/7] bpf, sockmap: zero-initialize pages
- allocated in bpf_msg_push_data
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611123538.156005-4-jiayuan.chen@linux.dev>
-References: <20260611123538.156005-4-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 14:55:14 +0000
-Message-Id: <20260611145514.D21D31F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N06gQObH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781190469;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HLMNQWK2qUjD76HjTu4AN6U4NjDfgr0okMXaX6F1/oM=;
+	b=N06gQObHu3p33xcF6MrUEB1nOai2i7kVKBubytShLl5MUbgWs4dVxcd4chWJy5Y2gqQPXr
+	/4HZGNetEDhttbs2hUtCnhS2wJ5XoKvcdr8GPDtY7IvFd5h9d8X0SB3lq9cQHF/x4q0X7x
+	BGfUVVFWAz3UmNDmM85mrEVMyzzWT6A=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-330-tZiFQOrbPjWXr5V1ILfKng-1; Thu,
+ 11 Jun 2026 11:07:46 -0400
+X-MC-Unique: tZiFQOrbPjWXr5V1ILfKng-1
+X-Mimecast-MFC-AGG-ID: tZiFQOrbPjWXr5V1ILfKng_1781190464
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4AD9B1953963;
+	Thu, 11 Jun 2026 15:07:44 +0000 (UTC)
+Received: from fedora-pc.redhat.corp (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 13128195410A;
+	Thu, 11 Jun 2026 15:07:40 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Gabriele Monaco <gmonaco@redhat.com>
+Subject: [PATCH bpf-next] selftsets/bpf: Retry map update on helper_fill_hashmap()
+Date: Thu, 11 Jun 2026 17:07:03 +0200
+Message-ID: <20260611150704.95133-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+helper_fill_hashmap() is used also on parallel and stress map tests.
+Those are consistently failing with ENOMEM on kernels built with
+PREEMPT_RT if preallocation is disabled. The failure is transient and
+only called by the memory cache refill running in a preemptible
+irq_work, which can easily stall in case of contention.
 
-Pre-existing issues:
-- [Critical] Uninitialized Variable Read / Scatterlist Corruption
---
+Use a retriable update in those cases to handle transient ENOMEM and
+make the test more stable also on PREEMPT_RT.
+Also fix the sign of the value printed in case of error (strerror()
+expects a positive errno while updates return it negative).
 
-commit e06d02e025ff8d66244e941a327109ac3cb65c1b
-Author: Weiming Shi <bestswngs@gmail.com>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ tools/testing/selftests/bpf/test_maps.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-bpf, sockmap: zero-initialize pages allocated in bpf_msg_push_data
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index ccc5acd55f..c32da7bd8b 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -260,6 +260,16 @@ static void test_hashmap_percpu(unsigned int task, void *data)
+ 	close(fd);
+ }
+ 
++#define MAP_RETRIES 20
++
++static bool can_retry(int err)
++{
++	return (err == EAGAIN || err == EBUSY ||
++		((err == ENOMEM || err == E2BIG) &&
++		 map_opts.map_flags == BPF_F_NO_PREALLOC));
++}
++
++
+ #define VALUE_SIZE 3
+ static int helper_fill_hashmap(int max_entries)
+ {
+@@ -274,10 +284,11 @@ static int helper_fill_hashmap(int max_entries)
+ 
+ 	for (i = 0; i < max_entries; i++) {
+ 		key = i; value[0] = key;
+-		ret = bpf_map_update_elem(fd, &key, value, BPF_NOEXIST);
++		ret = map_update_retriable(fd, &key, value, BPF_NOEXIST,
++					   MAP_RETRIES, can_retry);
+ 		CHECK(ret != 0,
+ 		      "can't update hashmap",
+-		      "err: %s\n", strerror(ret));
++		      "err: %s\n", strerror(-ret));
+ 	}
+ 
+ 	return fd;
+@@ -1392,17 +1403,9 @@ static void test_map_stress(void)
+ #define DO_UPDATE 1
+ #define DO_DELETE 0
+ 
+-#define MAP_RETRIES 20
+ #define MAX_DELAY_US 50000
+ #define MIN_DELAY_RANGE_US 5000
+ 
+-static bool can_retry(int err)
+-{
+-	return (err == EAGAIN || err == EBUSY ||
+-		((err == ENOMEM || err == E2BIG) &&
+-		 map_opts.map_flags == BPF_F_NO_PREALLOC));
+-}
+-
+ int map_update_retriable(int map_fd, const void *key, const void *value, int flags, int attempts,
+ 			 retry_for_error_fn need_retry)
+ {
 
-bpf_msg_push_data() allocates pages via alloc_pages() without
-__GFP_ZERO. In the non-copy path, the entire page of uninitialized
-heap content is added directly to the sk_msg scatterlist, which is
-then transmitted over TCP to userspace via tcp_bpf_push(). In the
-copy path, a gap of len bytes between the front and back memcpy
-regions is similarly left uninitialized.
+base-commit: 2d3090a8aeb596a26935db0955d46c9a5db5c6ce
+-- 
+2.54.0
 
-This leads to a kernel heap information leak: stale page content
-including kernel pointers from the direct-map and vmemmap regions
-is transmitted to userspace, which can be used to defeat KASLR.
-
-Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
-page is always zeroed before it enters the scatterlist.
-
-Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 3e555f276ba80..6e345ca65ca14 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2832,7 +2832,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
->  	if (unlikely(copy + len < copy))
->  		return -EINVAL;
-> =20
-> -	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-> +	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZER=
-O,
->  			   get_order(copy + len));
->  	if (unlikely(!page))
->  		return -ENOMEM;
-
-[Severity: Critical]
-This is a pre-existing issue and was not introduced by this patch, but does
-this allocation use a garbage length when appending data?
-
-Looking at bpf_msg_push_data(), if start =3D=3D total_length, the loop iter=
-ating
-through the scatterlist finishes with i =3D=3D msg->sg.end:
-
-net/core/filter.c:bpf_msg_push_data() {
-    ...
-	do {
-		offset +=3D l;
-		l =3D sk_msg_elem(msg, i)->length;
-
-		if (start < offset + l)
-			break;
-		sk_msg_iter_var_next(i);
-	} while (i !=3D msg->sg.end);
-    ...
-	if (!space || (space =3D=3D 1 && start !=3D offset))
-		copy =3D msg->sg.data[i].length;
-
-Since i =3D=3D msg->sg.end, does the assignment to copy read from an unused=
- or
-stale scatterlist element, leaving it set to either 0 or garbage data?
-
-If so, this garbage copy value is then used in the alloc_pages() call above
-to calculate the allocation size.
-
-When copy is 0, the non-copy path is taken, which can increment msg->sg.end,
-wrap it around to msg->sg.start, and corrupt the ring buffer state by making
-it appear empty.
-
-When copy is a non-zero garbage value, it can corrupt the scatterlist length
-later when we do:
-
-net/core/filter.c:bpf_msg_push_data() {
-    ...
-		sg_set_page(&msg->sg.data[new], page, len + copy, 0);
-    ...
-}
-
-Will this cause a mismatch with msg->sg.size and lead to out-of-bounds memo=
-ry
-accesses during transmission?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611123538.1560=
-05-1-jiayuan.chen@linux.dev?part=3D3
