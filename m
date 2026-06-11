@@ -1,124 +1,226 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB80E35675A
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 20:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781210174; cv=pass; b=g23zpRKZe3DHshGXABThN49s7uEn8sRPKpY6H4gwtcyE1tRdEQd01xS2qyqQI9H5kn1UqGGPjs+DklO6UmTRw6C/ZvPpOfOZ1vODcIaQwTBg+fMMq4oNJPoI9N5nyG1sIEagry5UKJvqJYmQATCu3H3yazAlqL6i4/sFrXBZfEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781210174; c=relaxed/simple;
-	bh=fHBU0IbhMdtCAj1nEhgINTHE+uyQRBUCmKIBL29z7N4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n/xa6AGhQKLRGR7xL9gAkJn7MMErmqug+tjF9DwQX2Zcj6hZiP4G1TJtUHeo//2O7xyPfUCrfV9y/N2jVFdZBya+VmKK9ojZ5XpWbgIVXEG+QhZATN2IwVrcvr3Gsp6E07TrwnE+i8Uv/8nX9i0Dn48LdzF8caYngxoH6Y7g9Cc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cU8SJfXf; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED3E4968EF
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 20:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781210236; cv=none; b=AMG924oVVrT3++2W0UvfTfpXBGtPaZq63KzpuODjFe0dsr4nLpFnWfnJD6G7urgojSTAVoL0UsCG3+hH8WvlNUpH/RDRAXdcdobtEHCvPmdSY6qdKwY3ouQTsc8MXNvGVO4r8aDYPeEVf0+AdOfEhtuSguRBxMv+g9PnXsivA2o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781210236; c=relaxed/simple;
+	bh=CJup5kn+//3c6lvhS7G15fADLqy2j/lGG5vzKHuwCek=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=XLzAIVH+8xbMlwBye3ncUjoBKfD9Zd4+Wgqxd+d1hueWhl7k8leK85ow14N1jB3A/C2Yc/h4QWISkexOV1BLIVu7qLyxcW++NIyno81TKUvlxSj55X/3JrNCt5C3Z7Y9a/6yyFekF7oh5M0UdH1lKij2A7mp/S12DQLHE3OY614=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VhO1C+xo; arc=none smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cU8SJfXf"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51788280e71so2429431cf.0
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 13:36:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781210172; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hbBllZ0+BIHgRaXF4SA+Sn2M09rN1OJwqZlYsfgIGFtOb0sHKO63hR1OZoI6R8QZok
-         qLCum7Tjuf8PF2WitUlUuqHvpaVSoF0qcuzP7wQv0+YmXnO7BVQscDEC9C4/KcA4n6TM
-         SwL7FExY2RlPsPCbZXLqA1VVOjRciElI5NTjeuM4AUphPXvJqfxUx9KP2He/Jx2MsXJz
-         6qlMQ9xvsnu5Q0lI2oOmdkClujJz20td8G/0Ut7q6st/BRnTtMFk178NiSNEKCMTv188
-         EUAcxxRTDAhmYyabWizWjNbvdaR9Cv8TzyJAn+aEc5ksTWKoQ242gqDHHe35IJZAkHN4
-         UDSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fHBU0IbhMdtCAj1nEhgINTHE+uyQRBUCmKIBL29z7N4=;
-        fh=bmp9mHZo/n3nheutllsAjrE2QyskNrja4wLPYThdf4Y=;
-        b=Dyr+MUY+mS/Wyn8XUfBy4MJYcDw3Khx1i9wp3UxwJKqtZcDxQiYTPeS/GQILCIOVao
-         VCl3LoVeP2tytQ1QCEX+aLc+KEQE+kEay5o9Aw8A3uRyozH09VcKksrMq7cnKxRVhG2i
-         QARn/3x6mclwj0GmqTA56a2qQKWmTXjbtis2v8k+7qGJl9vCRFY1UiSXyZnJ2TwYhm2X
-         q4XX9yqkz7xEFs/H5qtrJEm9P18ylM2NyOvXEfKcj5/E/YFNXT4wFjP6ws+oqjuK7qFS
-         QFljnQhFG5iELKa0nrOpAfx33JDPUXBJvH6WIylwcBpZyHyf/w5RKnKjmdMfS/IeMV+4
-         5reQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VhO1C+xo"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-13721dfd471so339188c88.1
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 13:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781210172; x=1781814972; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781210234; x=1781815034; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fHBU0IbhMdtCAj1nEhgINTHE+uyQRBUCmKIBL29z7N4=;
-        b=cU8SJfXfJXLzGHgJ/r34vTrLBnm8A2hpkqOAD/d1bDON1x/84AB48QWZT/4l77KzXI
-         llkML2k7A9GO3Eglw+ExM1TRz6iNzgQcTj4fh7TLP+TEuPmJgpilWTVbOriUC2yfAN+T
-         oR0fWZuh2X+HOEXmR4YSk+8D47G2vjgBNikmwCOXJ3wOC8M8fK3ymRPcgw8lZySYNzz7
-         3AeE8fhn7Fiu31UJffpzefIN+GjOtDlrm7aEpZ0IakqGwjZ2hDDoJ4oLjm57INbfPkNb
-         7onBV9LCgDdAsboILTe1ooJzdC8DCvOoAfB4Sz5HOFXyDFFBKnTU3WZhi2/qAbU+1N2/
-         An8g==
+        bh=W7mqNjhHyqtg/51iXjZww+ewEqqH7eyuOnewfNHYD/Q=;
+        b=VhO1C+xoj+nNEVls7VJNrHzkh/zGw/aGdHr8WRV5eYtZ0W08R2nAcI87v4WxIHe14H
+         RCouEXjRy1zb/CTX5Ly0C1qo5HYxKiu4DtYE7IDawaPjXwFG3i8kpVP1CdafALAjfSfi
+         afkJkJayB+5WLQA5fNaZeeHGAu4NpmgdND/IBR+Ogn5TRH1iYKN5T1GS/jw99pqtY9vh
+         Wig8wyVd4SkDGcQ7dumL8lTP5Fa9Osw/qADKEkditSvbABOLOUHpxpfop9MfRn/esoIh
+         NZ4yxAH9Ddm0X7oggrC6HV1kJoWx4ZX+lZajE/asmT6eZHYcsXCg5Tgk2T2QJ+VQIHDH
+         wS1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781210172; x=1781814972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fHBU0IbhMdtCAj1nEhgINTHE+uyQRBUCmKIBL29z7N4=;
-        b=Nm1TRLVQ5f7kSwSkP8YWHOzOdo7zU8rodDrCK43P7LSvwiJtYIfnpD31EhM4aGgMY4
-         HiXvXgkuT2cZXxCTwJMjoFogpDQgo0nfN9AEKjDCqdFvxE5RKPvvCQe6/IAG1t/ohUyE
-         R1k/PBDE+9rGw3rhABUuUy1qKOm1MWSOLZIRjxHBHY1uKJcT/yV4cC2frj7ucbTRS2pf
-         ihnBGpkDz9hL3hdFxH8fdHHXizkLTc5SPCwfYvhpjL11DAPnwcu67f56i8ASwghAUlCa
-         4lxM668jUtKTPdBmp4H9jP2uf0WYLayxUphvqzCnif3AGOUCgN5OOTPLw8hhZd90Io0M
-         hHbg==
-X-Forwarded-Encrypted: i=1; AFNElJ8PhWErA/DT9oReECUOFPPE25/Sgby49gykMAQmnMq1kaZLyF3ytG06nhmxJpkMQ9KPuH4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXUcEIxlH2b58zImEpbKFbXeN7MK9itY/R1KHQuPNDNyM2zcnO
-	4chSIxeWM83TG4C5mAVMGfFI2rAFBDi6tjRKtNZSsB0fHRVwhr4rFbTzWIa/YumTz6ju3Tzezlw
-	fHoxd+6Ho0arC/Siago2+vaqY76Aq3WAC59aC3X5c
-X-Gm-Gg: Acq92OHrEMnYuw49oQlFDQLT9hZnqVjbawV7g7tCCxi8q9mzzpiLgmG9t3ppx9XSQ3e
-	sL0whfEeOOw+uRqAGogl7xXOarh0yvyP3dg0u3gzKBs8CPWQuMv6PQIKLQFl71HishGfwsnA271
-	vJy6VnTWvI20A+CelrShLPwPbjY2nyuEmQ1oQEJh+oQfiVBVeF52vrcP+YCrTrptUE5uzwO7c3b
-	uIXL3XjmdmvVPDVPicEcj61rQCuHmkrS3Mq5PHgP2fMG7E/QKoZ1I1jdKjguM2JzNJ5W4h6fQhG
-	q0dVX/AkgVUlWAaKGcYiXPZXUavf6TcTIF/E4S1hzWEYv7hNDhqVK3dt6UVG8KuAxAXGWQ288dF
-	aIfpQHKiyYLX0TRX5lJw=
-X-Received: by 2002:ac8:5d12:0:b0:517:a174:f419 with SMTP id
- d75a77b69052e-517edd1bbc9mr69665221cf.19.1781210171888; Thu, 11 Jun 2026
- 13:36:11 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781210234; x=1781815034;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W7mqNjhHyqtg/51iXjZww+ewEqqH7eyuOnewfNHYD/Q=;
+        b=sQkjBPxTClk4trfIw54kwGv8wq35XrV6WGCFfKeTn3Xtdvjdhpw9VNL7IxxCDPpNLk
+         OuiCAQWh9qSqhw9JQtboAh2B4tO1mdaoIfEv+9dZlN/9UcIXHIqRjJXkoFxP+GX9Nfrm
+         juZzzSbrhWNRTpWYodWcVF9pwXRui7veAc1sAuhszz8dxRo5Zdon6ZbTthiZGZ/4c50f
+         juDtZiLk4qjQwbDpA85La19UdhmuDlaEGG8POzhqloODzkZPvgWPIvxGL310hFrLYHiB
+         Y+L//ersItxbm6aetjtr/6kM1G8s5zT9KDwNG777aAvtYnF/yLhSlKxYdxUdjl1s1nwj
+         J/HQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8vU87N6UOhkUuygD7Y+3j9DCFjq8sqATakRLXTqJcDnsvjesQRClhTTDPdyhqMZx2iS8E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGBxqEm0eRZQr3iDAMYvs4VmtPsBmztTmdWkSddhwb6L7i9zlc
+	mh1g4CcqkjiditEiTZ2zbKk0zk9EcQLkXndugIqSuonNgSbMnNixSI4xfezXcS3j/zM=
+X-Gm-Gg: Acq92OFIdI8mMNNcd0xg2d8baZ8epud6L0uwCkmD5mU1BDDADnsChUOkMy15ABN1Pxb
+	BEF6xM1COvVlb9iDgbPTzhyrWnxf1G/aVMEmF42l7EE3XLfNYqhS9qaEQE/0QSSxDXF2yrmMwAH
+	KQaGcIRoQ1XU1IM+xC2AimsrFYesaMMhXfHKuDF9BVKb6hdYjMbsc+h2JquHm2uVWwGtnOgxZOQ
+	OwjIFmZY/Theb/RwjC8P7zAODVLzVVYpUinCW+IA9gqSwckJzN/a+/ysgVM2fHvcD7eSV6Ba5Ub
+	2sLcVzBgUV64OJzTntTcLLtnQf6+E2T2PYqGUK9yXXqcEj68bypeF3VAu5mr+uyiqCZ2ylUIxHJ
+	eB4okkVzmbv9v0aj/fSFJsymG7+GXKUB0gWBLBLEcTwh4s91x7ZnQbwYRGPCcbLdHdPRa3XtncO
+	zBsWT/0fvF+ip8+lQ=
+X-Received: by 2002:a05:7022:f40e:b0:137:ea00:3f3a with SMTP id a92af1059eb24-13842151e39mr2739263c88.9.1781210234161;
+        Thu, 11 Jun 2026 13:37:14 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::3c95])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384303a312sm3809521c88.12.2026.06.11.13.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2026 13:37:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260611161504.228319-1-chia-yu.chang@nokia-bell-labs.com>
- <20260611161504.228319-4-chia-yu.chang@nokia-bell-labs.com>
- <CANn89iKkPJqOM=0KV8O8=2zWrZObj+E+VJoLztp4sUi7Vj0aQg@mail.gmail.com>
- <CADVnQyk+sOAKU_WtPja7_hgiXw8he9U1g6AY7iEm5q3F3R-Hag@mail.gmail.com>
- <PAXPR07MB7984D14DA66C0E4B89BA1D4BA31B2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <CANn89i+dS_h8_FH9KdO4NPu46VSi3uFZ3yGnA6AKD1UzMzySKg@mail.gmail.com> <PAXPR07MB79847E7E64F4ECFA0FC3A612A31B2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-In-Reply-To: <PAXPR07MB79847E7E64F4ECFA0FC3A612A31B2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 11 Jun 2026 13:36:00 -0700
-X-Gm-Features: AVVi8Cc1qElfZSwEp4ihq22L5tT5Xcq2RvWzms7w7c4PXXDizdUc9k1o8r1vTMc
-Message-ID: <CANn89iJp3-EQaPcrFXs38t6yDO_p4BcSnsGR7FmOP6fRpoL8HA@mail.gmail.com>
-Subject: Re: [PATCH v1 net-next 3/4] tcp: Add tso_segs() CC callback for TCP Prague
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-Cc: Neal Cardwell <ncardwell@google.com>, "horms@kernel.org" <horms@kernel.org>, 
-	"dsahern@kernel.org" <dsahern@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, 
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>, 
-	"stephen@networkplumber.org" <stephen@networkplumber.org>, "davem@davemloft.net" <davem@davemloft.net>, 
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
-	"kuniyu@google.com" <kuniyu@google.com>, "ij@kernel.org" <ij@kernel.org>, 
-	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
-	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
-	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
-	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>, 
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
-	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 11 Jun 2026 16:37:11 -0400
+Message-Id: <DJ6IBVPSUNFM.3VJW6W39N5AKK@etsalapatis.com>
+Cc: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v2 7/7] selftests/bpf: add test for
+ bpf_msg_pop_data() overflow
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
+ <20260611123538.156005-8-jiayuan.chen@linux.dev>
+In-Reply-To: <20260611123538.156005-8-jiayuan.chen@linux.dev>
 
-On Thu, Jun 11, 2026 at 1:33=E2=80=AFPM Chia-Yu Chang (Nokia)
-<chia-yu.chang@nokia-bell-labs.com> wrote:
+On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
+> From: Sechang Lim <rhkrqnwk98@gmail.com>
+>
+> Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
+> close to U32_MAX, which overflows the start + len bounds check. The sk_ms=
+g
+> program records the return value over a sendmsg and the test checks that
+> the call is rejected with -EINVAL.
 >
 
-> Hi Eric,
->
-> Sure, in this case I will need to remove exisitng .min_tso_segs hooks and=
- replace them with new .tso_segs in the next version.
->
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Please send a stand alone patch for this only, do not add it to a series.
+> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
+>  .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_po=
+p_data.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
+ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index d2846579285f2..cb3229711f93a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -14,6 +14,7 @@
+>  #include "test_sockmap_pass_prog.skel.h"
+>  #include "test_sockmap_drop_prog.skel.h"
+>  #include "test_sockmap_change_tail.skel.h"
+> +#include "test_sockmap_msg_pop_data.skel.h"
+>  #include "bpf_iter_sockmap.skel.h"
+> =20
+>  #include "sockmap_helpers.h"
+> @@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(voi=
+d)
+>  	test_sockmap_change_tail__destroy(skel);
+>  }
+> =20
+> +static void test_sockmap_msg_verdict_pop_data(void)
+> +{
+> +	struct test_sockmap_msg_pop_data *skel;
+> +	int err, map, verdict;
+> +	int c1 =3D -1, p1 =3D -1, sent;
+> +	int zero =3D 0;
+> +	char *buf;
+> +	const size_t len =3D 32 * 1024;
+> +
+> +	skel =3D test_sockmap_msg_pop_data__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	verdict =3D bpf_program__fd(skel->progs.prog_msg_pop_data);
+> +	map =3D bpf_map__fd(skel->maps.sock_map);
+> +
+> +	err =3D bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
+> +	if (!ASSERT_OK(err, "bpf_prog_attach"))
+> +		goto out;
+> +
+> +	err =3D create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
+> +	if (!ASSERT_OK(err, "create_pair"))
+> +		goto out;
+> +
+> +	err =3D bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> +		goto out_close;
+> +
+> +	buf =3D calloc(len, 1);
+> +	if (!ASSERT_OK_PTR(buf, "calloc"))
+> +		goto out_close;
+> +
+> +	sent =3D xsend(c1, buf, len, 0);
+> +	ASSERT_EQ(sent, (ssize_t)len, "xsend");
+> +	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow=
+");
+> +
+> +	free(buf);
+> +
+> +out_close:
+> +	close(c1);
+> +	close(p1);
+> +out:
+> +	test_sockmap_msg_pop_data__destroy(skel);
+> +}
+> +
+>  static void test_sockmap_skb_verdict_peek_helper(int map)
+>  {
+>  	int err, c1, p1, zero =3D 0, sent, recvd, avail;
+> @@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
+>  		test_sockmap_skb_verdict_fionread(false);
+>  	if (test__start_subtest("sockmap skb_verdict change tail"))
+>  		test_sockmap_skb_verdict_change_tail();
+> +	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
+> +		test_sockmap_msg_verdict_pop_data();
+>  	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
+>  		test_sockmap_skb_verdict_peek();
+>  	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
+> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.=
+c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+> new file mode 100644
+> index 0000000000000..301e65b95256c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_SOCKMAP);
+> +	__uint(max_entries, 1);
+> +	__type(key, int);
+> +	__type(value, int);
+> +} sock_map SEC(".maps");
+> +
+> +#define POP_START 0x48a3
+> +#define POP_LEN   0xfffffffd
+> +
+> +long pop_data_ret =3D 1;
+> +
+> +SEC("sk_msg")
+> +int prog_msg_pop_data(struct sk_msg_md *msg)
+> +{
+> +	if (msg->size <=3D POP_START)
+> +		return SK_PASS;
+> +
+> +	pop_data_ret =3D bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
+> +	return SK_PASS;
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+
