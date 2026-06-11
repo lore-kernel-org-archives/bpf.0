@@ -1,63 +1,64 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C9940BCD2
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 16:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12343409E1B
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 16:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781196858; cv=none; b=One+k8HHmiTTxiOUK45HFQvWVmeUmesKEqsUUGoQCs7nPnw/nG240tmUg27h6gCu53+WCN3fE2CORQQVGPWSivAY7E0uuKF1UYH6SpjSSs1G2/doyYFktyZjPI9jh1V0dIgGIOSRjGRBIQ52VX0mta3DUZzM+WsCG0/DM6b16Ss=
+	t=1781196960; cv=none; b=qD1QK5J/+8YIhGQg49EIJdtzYvGAcIqRPcU6GdMk7b7idKcH2sdUFw+5xttJGeM9Q5AxGvxIYLmoX4U/kdWG5fLe/LH2rqiBHXCZgkac603pfsobV6spAj0JKO5/9XAcSr+Ol/WtaVqjuu1FHoQJneOS4B6YIIXiupIXcfwBj9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781196858; c=relaxed/simple;
-	bh=xQ7CqVM6Cv/wUPHS4u37ELPAUEgOdL1GoqD+eDoxsTw=;
+	s=arc-20240116; t=1781196960; c=relaxed/simple;
+	bh=T6g7rg3VitWcivV7EeuR9/yu2am9emv7c3wvIiILvEA=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=CXBdP87ufEYcoRn2D0CmRBCmHW2B8St5J8ohNFvtIuDYa2AhP/bEMdN/glMBN8rM5Nwtozv5hmhBSZRCE0ZvlcOXw9mPhcekDP32ec7iTV93pO4V68t9A6L+yS0Mlu8aeVKtNmziGq00DJAHXZ4uXHMJDGAzK6JDuRpD+a1c6zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=piQdKggZ; arc=none smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 References:In-Reply-To; b=iNCUimlBlgjv3Ru/v9uD9nKFaOOibE65fDqJ8fYb6oqRb2/DFt5d73ZtTn4v25Ak2zgeVYfNMaqiPX/UYJ/6Vp28f3NFSI1nrS5jHE6fjGRBCgo9HKOM79xcGcxsZkcBLykgktb29gte3FaoppO7piCYcPweBVMpVQUhJwkFsQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RrUnnujf; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="piQdKggZ"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-307d0405e07so144699eec.1
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 09:54:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrUnnujf"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7e6f27619e7so72486a34.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 09:55:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781196856; x=1781801656; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781196957; x=1781801757; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u6ceVOGme5lPB581G5XFGTQ1yGvtSh529zyR2h7e/S8=;
-        b=piQdKggZb7scrSLHx6CVg3bcoXXRmB70LzOUxA7VJ/k9a8e50JQE3GQZZ0xyGuhOzx
-         fPXbi7Jb2abCZA/r6sXrdb7UpO1XBE8qIE7pFVSLBadLs8VbXVqFzZRagAtabVIfjx8M
-         kGVUBxcDnm+LF13lASl8u1q/ExUhlCGfCnDr9/KFpeR1jx5mgGM9Li2oxPPC3dOTz85s
-         /xF/MThN2/pD9/uvo5N8N7Ri9LYX763+B5f408FYJR+mmMcKEXWQyM69zohd0/1d2Yyj
-         4FsWWx6OVZ/+At3P4QdESrGL9I6Y96r0o2BNMs9OSZkU96+Ki8OoqMLSvFUVlqW0+6Wd
-         9Q7g==
+        bh=Fh9XW+WhkgIww8VbLUN7r2hGLoFdTbeh596jB8sD3f8=;
+        b=RrUnnujfxy00+c8g0X3L+FmekhiBn1M/EKVeBtewSm6yEa7uQvLWyRmLZuD0xfqbYn
+         0cDT7LicQCJJa/Zi6im+5xgF8fTQL3qVHl0mHYTmsM772KfVUSkcQi3DAqx4F391xC0Q
+         vBX/LhpnlttN8XBXYIsT0OTHg0HWKZLqDz1nzjTOiV9m446+viAhbJx/HOP+DH+lkRy4
+         jV1Yx7HOxTvnQMXFMdWIZ4Jn/XjZN7QQm0331U23FqGvTixU7HyaHmMGoHstkSddo6kM
+         MfmwEpfL+6ODeWEvBpbjYyBcDFYu0iyTocjeY26znnSj69ZSDEXw3b0T7k1ARVJ4/L9L
+         AP1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781196856; x=1781801656;
+        d=1e100.net; s=20251104; t=1781196957; x=1781801757;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=u6ceVOGme5lPB581G5XFGTQ1yGvtSh529zyR2h7e/S8=;
-        b=VnYToYKUqhoDAbVB5YL3ky0gVA3gduwPlOP1/R9CM0zk66ttXE5Uy3CgBGx7Eukt/S
-         1G96oNyN0pOxAo6E8ePWcRCMUtEdx8/vSmYzBO7Un7jAV1lq7Xp6Bppg1fqjIL2SxysM
-         1hEL5DF7R82F1UrtSHfbBohPmBLcfg+Gh9i+NZLNcLfwrtZLpW5UJZ/iXHuCMLlkLHNH
-         +2N4LuEPm28+UI/HKvhVuesda+HRlNy8KBKOLIPsnbaG2AfB8CK0xCQWKAEeohr5OKAC
-         m6CcZ3/UDz/iBAfRu/QZ0mNyqHrS8d0N8H4NvrArKB2rXeBwU0vBIRzgNkn7S1Mu6EoT
-         ED8A==
-X-Forwarded-Encrypted: i=1; AFNElJ9V76Xflle90ZXr71DYSCEgNxcHS13uaYPS+8RKKQQ0jkyjCyotIdfQ30kWpxUClPW/4b0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc5Fk8DzgWW0huomH6vZz73B3Vk4FPSwIA4kpsHtMyV24Y4XGG
-	8AdE4S/9Aq/ar5/tZMdFbD6hZcVrVVQJ9u81Swk3tJuVefoukSeTh708fcik62geZ0k=
-X-Gm-Gg: Acq92OHuMUae1FrdjTQvZUby4ocFiU3zyPM9IjPkCTb6I7ysuuDBtxRR0sPmHUx9J3/
-	dhVVzqWV0wxbLXhnMqljnv65J1kWILvq6C/tzcEHXdqJFIE+yqTR42fgZ9QSHKaUDX0cPX9TEwM
-	+ZqC8T0wy2TG3iGmH/muWzLCeRNKS/Uw9rQaETZl1Rp+tEAMZ3kzIDlGUNBT2PGLCtBGTaNCd8K
-	mgunB/Kvvas8JKnLJ2Kxx+7j3cYV88Lt7x2HDLKwOlDTSzKaoK81q2AzPHR8A6nfneGQ3pVRU04
-	hfcP+S0jczVvmy90iVF/n/qg9eEZpkcMeIMAGSpnNayB7AoqmUaTFmeDD/rlGewGJBPFgE+trK5
-	NxVTwiGIkbTUSw4s/APlO6W96yyQiINxue9nyBjoLWcpNoradxFcmtSoAaq9f8Xy315bV2Wmqvz
-	i8XfuV
-X-Received: by 2002:a05:7301:688c:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-308049fbd21mr2915715eec.22.1781196856367;
-        Thu, 11 Jun 2026 09:54:16 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::9f35])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30806c2f3absm2523710eec.5.2026.06.11.09.54.13
+        bh=Fh9XW+WhkgIww8VbLUN7r2hGLoFdTbeh596jB8sD3f8=;
+        b=iyrXHxOXA3ky0J+tMDt7d09tmqKk5XKOBTNCagEJo2O+XUiReFQQLhRiwowbbhSSJ9
+         lz2EzqH3/ykwxUBy1a1dpGiBA635P6GuIey7igAqcM4W6njIFl+Hef6YqlyyOJBI2yrZ
+         PGSIYfxOkPZIAWLhHTxPbpVgRv6ysREMjtO1sibZAO3Tdhr+7cIqOTRFVPpOhz1UI36C
+         w9tZO6Q+FpHUD5aWMIWYzmbl99XRb1lRVIvfeit3xFZnnFrCbnqOSsUnIYiXYDbnztdq
+         DU5BB8alozX8IPBv2fztwHCT/4gzlWoNVVituJDQNrCn6g4a1ep7eFYh+l9PBaZMPGR8
+         PpRw==
+X-Forwarded-Encrypted: i=1; AFNElJ8wTS2VmH/SOe3e9A/d9moM25ghB/Ni06byy+Dtv6KttgeHII6Ree39m6U83MHLo0GlLiw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+n+o/+zaKVB3AJWfuridTVvkn8QNJ2xbPggY678JNjQTYzSSh
+	5y+JnES21j+aPJeX/S8AO9ynaP03WaUTrbiOTdIWlWx704cRCvtusEka
+X-Gm-Gg: Acq92OGxqQEW+KxFMeckzjbXVnFjTI5taFM2vCXTulg5TVlXT8FRwHc4/zJEYhf3ipS
+	SNhg2cvZRG5CFZHuZV/uvssyCq3/ez5D09nIQ8QACE7yDgstfEq8qxAH1QhNO1anfA8ciiK8SsG
+	5xKXyn8FD5tF7Xv2LFlkSFKWNdnq7yNWEsFBOeYNaVcYDPW/SipUZK7xQ8YvxEwoJy0gmrHnI/r
+	i/pxo05YPtlBTUXHQXUcupcPRpNvNmFdjHbDKzOphuPFcmJ/rqHVPkJy7hoGgQS5LRvKTp8i5ti
+	FoIJJxpnRq0lL+NXshZ1SNRibIdFWCLhLtqkwyi1x6HE6SYUtbMa1mTQ/J+zJUpZc19gEY6GSMD
+	yb6kVf7pEXdc2Ql38rjyx8A0IxXX35mP4J7SAI8v0peGQLj7Xrtp+cQwT6sKqy9ohigiqvuCW72
+	ikMZ/FbgIw79t1ubggvzkBdzmGIRp/caae6DeowkV2QE3YfVuccKSAgBKweIq6CCBO3VsSfRUOy
+	ZX7II3/UXRd6BwjXg==
+X-Received: by 2002:a05:6830:6885:b0:7d7:d524:bc88 with SMTP id 46e09a7af769-7e7735278camr2782858a34.10.1781196956889;
+        Thu, 11 Jun 2026 09:55:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:47::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e774cee36fsm1748641a34.22.2026.06.11.09.55.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 09:54:15 -0700 (PDT)
+        Thu, 11 Jun 2026 09:55:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,100 +67,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 12:54:12 -0400
-Message-Id: <DJ6DL5UQ8RM8.15SYAIW57HN7I@etsalapatis.com>
-Cc: "Sechang Lim" <rhkrqnwk98@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>,
- "Shuah Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Cong Wang"
- <cong.wang@bytedance.com>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 6/7] bpf, sockmap: fix integer overflow in
- bpf_msg_pop_data() bounds check
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
- <20260611123538.156005-7-jiayuan.chen@linux.dev>
-In-Reply-To: <20260611123538.156005-7-jiayuan.chen@linux.dev>
+Date: Thu, 11 Jun 2026 09:55:55 -0700
+Message-Id: <DJ6DMGTPWXJN.1YKSBHULQ1PB9@gmail.com>
+Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+ <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <kpsingh@kernel.org>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <menglong8.dong@gmail.com>, <eddyz87@gmail.com>,
+ <shung-hsi.yu@suse.com>, <stable@vger.kernel.org>, <mykolal@fb.com>,
+ <tamird@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: add helper retval linked scalar
+ pruning selftest
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Zhenzhong Wu" <jt26wzz@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260611160749.391279-1-jt26wzz@gmail.com>
+In-Reply-To: <20260611160749.391279-1-jt26wzz@gmail.com>
 
-On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
-> From: Sechang Lim <rhkrqnwk98@gmail.com>
+On Thu Jun 11, 2026 at 9:07 AM PDT, Zhenzhong Wu wrote:
+> Add a verifier runtime test for a branch pattern where a helper return
+> value and a related scalar stay live across the same control-flow
+> sequence. Rust/Aya-generated eBPF can naturally produce this shape when
+> a match on a helper status keeps data derived before the helper call
+> live across the same branches. Such code commonly uses the helper return
+> value in r0, where 0 means success, producing an r0 =3D=3D 0 / r0 !=3D 0
+> branch shape.
 >
-> start and len are u32, so
+> The test preserves that branch shape but shifts the success value to 1
+> before branching. Using r0 =3D=3D 1 / r0 !=3D 1 avoids depending on the
+> verifier's not-equal-zero refinement, so the test exercises linked
+> scalar precision and pruning behavior directly instead of being masked
+> by zero-specific range refinement.
 >
-> 	u64 last =3D start + len;
+> On affected kernels the verifier can explore an impossible path where
+> r0 and r7 are linked by scalar ID, keep the wrong branch, and make the
+> test return 1. With linked scalar precision tracked per instruction,
+> state pruning keeps the real success path, and the test returns 0.
 >
-> evaluates start + len in 32-bit and wraps before storing it in last.
-> The bounds check
->
-> 	if (start >=3D offset + l || last > msg->sg.size)
-> 		return -EINVAL;
->
-> can then be passed with an out-of-range start/len, after which the pop
-> loop runs off the end of the scatterlist and sk_msg_shift_left() calls
-> put_page() on the empty msg->sg.end slot:
->
->   Oops: general protection fault, probably for non-canonical address
->   0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
->   KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->   RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
->   RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
->   RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
->   Call Trace:
->    <TASK>
->    bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
->    bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
->    sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
->    tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
->    tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
->    __sock_sendmsg+0x153/0x1c0 net/socket.c:802
->    __sys_sendto+0x326/0x430 net/socket.c:2265
->    __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
->    do_syscall_64+0x14c/0x480
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
->    </TASK>
->
-> Widen the addition with a (u64) cast so the bound is evaluated in
-> 64-bit and a len near U32_MAX no longer wraps below msg->sg.size.
->
-> While here, change pop from int to u32. It counts bytes against the
-> unsigned scatterlist lengths and can never be negative, so the signed
-> type only invites sign-confusion in the pop loop.
->
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> Suggested-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
 > ---
->  net/core/filter.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../selftests/bpf/progs/verifier_scalar_ids.c | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 >
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index e35e681a15dca..742aeeea13c26 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3048,8 +3048,8 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
-u32, start,
->  	   u32, len, u64, flags)
->  {
->  	u32 i =3D 0, l =3D 0, space, offset =3D 0;
-> -	u64 last =3D start + len;
-> -	int pop;
-> +	u64 last =3D (u64)start + len;
-> +	u32 pop;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/to=
+ols/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> index 70ae14d60..de71d547f 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> @@ -448,6 +448,41 @@ __naked void linked_regs_broken_link_2(void)
+>  	: __clobber_all);
+>  }
 > =20
->  	if (unlikely(flags))
->  		return -EINVAL;
+> +SEC("tc")
+> +__description("helper retval linked scalar pruning")
+> +__success __retval(0)
+> +__naked void helper_retval_linked_scalar_pruning(void)
+> +{
+> +	asm volatile (
+> +	"r7 =3D *(u32 *)(r1 + %[__sk_buff_data_end]);"
+> +	"r5 =3D *(u32 *)(r1 + %[__sk_buff_data]);"
+> +	"r7 -=3D r5;"
+> +	"r2 =3D 0;"
+> +	"r3 =3D r10;"
+> +	"r3 +=3D -8;"
+> +	"r4 =3D 1;"
+> +	"call %[bpf_skb_load_bytes];"
+> +	"r0 +=3D 1;"
+> +	"r6 =3D 1;"
+> +	/* success path keeps r7 independent; failure path links r7 to r0. */
+> +	"if r0 =3D=3D 1 goto l0_%=3D;"
 
+this exercises linked registers with BPF_ADD_CONST logic.
+We already have such tests. Why do we need this one?
+How is it different?
+
+pw-bot: cr
