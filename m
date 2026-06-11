@@ -1,153 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4615286D70
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 04:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B89365A19
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 05:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781153933; cv=none; b=LM1zu9Q24FX0raS+bkr64MArnVTRABbUuB8MJV6FavQ5qBQEmJBxqPaSKvEuLkQCm/s6wShWh/JSZLQa0OaH9HcdrkZIyMmB4eydfw1OMWGQvGrym4Os4uTF7mXswqcguwrRx9chRLDeSoAV+cQGSxERLjbZqQOh5VHwzeOGiBA=
+	t=1781154333; cv=none; b=AeZtcgqW2swkbvl09Rllua1X5N8DQPvTaz1WiKLngLB+qrXTezjvNQ85WvIK+U6C3u1iqhKz7NkF0zBQ1UKrVeJl5OPo4qbHz3qUN4FAisQNSdZcXFOpo0YaKD4EDPQi9m0+t062HVj6dthtbE7sYquBSfsOk5TN6ftgKEVFVcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781153933; c=relaxed/simple;
-	bh=tO+z+7og8IDjWZVl/rJCkTDFtT1ydBeBxWlLtfyz4TY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UQMv8QB+GvcyakyfbNF28QtFSSON3yM5+R9wyuPYASct0FE3eD64IkC7pPE+IKPd52UW9oNfG9da6O2L+IcNT5ahO6wG2qVvHSQfQw9+i5hM5GZhiWKRqzuFLXqfuzDEeHp8OumCChRXh63YIUiYNvkHEcy1wV6RzVjP1El1qUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T94BkOrW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781154333; c=relaxed/simple;
+	bh=0Vp/CkXo4f4LibD/XuKyhEXDGKM30ok/hlm85tBQI14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o6ittgsD5mLv6nsGlJbTbhq1ATvQqg1Oz6tOHrNui1znn/71X9ZjGp0qFhb3SOQ+oBpMGxOPKxRTjOh5Sqq65XX2QHpdQIVMNL3zfkgrs7KGpXB4D+3cDtwv4opT+PO+o5uSpb4wqbEWOsSy9pH5BJTsAfuP/jKNYKISo9vn6+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OG3nAYAq; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T94BkOrW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5B71F00898;
-	Thu, 11 Jun 2026 04:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781153923;
-	bh=dEFnHYHfqoE10wg4/QfDl3mT+XnJgev6U+d9aVRx7A8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T94BkOrWHXBDZH9mZKdimZaDKMjMd4n1BLP+mHvh2OwexAf4rEAsalnZYfsdClYqG
-	 2ZOHgrWoq8PsPGVcP1E4GRoLtWa75+SijmY3shO1NlXl24uoloO64/so3II2Xa+Psg
-	 z7yaEBceRrl89rPF0qqxlBiWOP/6hwoEqzWruiDwPy7PFoSD53j4YhObw8hZAPYLWv
-	 BLBqjDuLiUy5iwZZgK+Wr5TviSgM6E9goP6o/ShReNey55QzkiZ2/JM2zIP0gPkCcQ
-	 juPRKupwBg+lF4pv7QSybip1GmAo0DbR9DgO9OYTwFkIVeOzwcmyiMzt6LTcCGXkeJ
-	 siREUdlEFyusQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf: Run generic devmap egress prog on
- private skb
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sun Jian" <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611043317.512843-2-sun.jian.kdev@gmail.com>
-References: <20260611043317.512843-2-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 04:58:42 +0000
-Message-Id: <20260611045842.7A5B71F00898@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OG3nAYAq"
+Message-ID: <c00b2e74-c1eb-4441-a090-0d68fffe4376@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781154322;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qUVFqqm/60zjtt88IvfjuOrD2ZoPKjcgjmqQ+Vm2pzk=;
+	b=OG3nAYAqEO05JuERQx1Bwg0tQgFRQen+Y+/YGIwMG68s6S4TNE1R50s5lp7rIbIYEkb/AB
+	W05R1ZMH1wGf2/v1q1P8jljiykDyq2umWmbM2JPCAKpmqW0xhW3JmgijMd8RQCfTyimn3f
+	TpGEg3EdNBlL30JL+5+7nigLjSAmi2M=
+Date: Thu, 11 Jun 2026 13:04:47 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v5 2/9] bpf: Introduce global percpu data
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260608145113.65857-3-leon.hwang@linux.dev>
+ <20260608151347.2C77D1F00893@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260608151347.2C77D1F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] A maliciously crafted or buggy BPF devmap egress program can c=
-ause a double free of an skb by returning an action code that implicitly ca=
-sts to a negative integer.
-- [High] skb_copy() zeroes out skb->mac_len, causing generic XDP to operate=
- on the wrong skb->data offset and potentially read garbage from uninitiali=
-zed headroom.
---
+On 8/6/26 23:13, sashiko-bot@kernel.org wrote:
+[...]
+>> +
+>> +			aux = &env->insn_aux_data[i + delta];
+>> +			map = env->used_maps[aux->map_index];
+>> +			if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
+>> +				goto next_insn;
+>> +
+>> +			/*
+>> +			 * Reuse the original ld_imm64 insn, and add one
+>> +			 * mov64_percpu_reg insn.
+>> +			 */
+>> +
+>> +			insn_buf[0] = insn[1];
+>> +			insn_buf[1] = BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
+> 
+> [Severity: Critical]
+> Can this crash the kernel if JIT compilation fails dynamically and falls back
+> to the BPF interpreter?
 
-commit b95ebb55a25ce44657b1e9ee2add3b1177f06853
-Author: Sun Jian <sun.jian.kdev@gmail.com>
 
-bpf: Run generic devmap egress prog on private skb
+Sounds reasonable.
 
-This commit introduces a fix to prevent multiple destinations from sharing
-the same packet data in generic devmap egress programs by copying cloned
-skbs before running the program.
+I think it is a pre-existing issue, because the interpreter does not
+support BPF_MOV64_PERCPU_REG() insn.
 
-> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> index cc0a43ebab6b9..14506834345aa 100644
-> --- a/kernel/bpf/devmap.c
-> +++ b/kernel/bpf/devmap.c
-> @@ -512,8 +512,10 @@ static inline int __xdp_enqueue(struct net_device *d=
-ev, struct xdp_frame *xdpf,
->  	return 0;
->  }
-> =20
-> -static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dtab=
-_netdev *dst)
-> +static int dev_map_bpf_prog_run_skb(struct sk_buff **pskb,
-> +				    struct bpf_dtab_netdev *dst)
+Also, the interpreter does not support user addr_space_cast insn.
 
-[Severity: Critical]
-The return type here was changed from u32 to int. Because xdp action codes
-returned by bpf programs are unconstrained 32-bit unsigned integers, what
-happens if a program returns a value with the highest bit set?=20
+Will fix them btw.
 
-Could this arbitrary unsigned action code be implicitly cast to a negative
-integer, causing callers to mistakenly interpret it as a kernel error?
+> 
+> While env->prog->jit_requested checks if JIT was requested, it doesn't
+> guarantee JIT success. If the interpreter (___bpf_prog_run()) executes this
+> BPF_MOV64_PERCPU_REG instruction, it ignores the special BPF_ADDR_PERCPU
+> offset (-1) for ALU64_MOV_X:
+> 
+[...]> kernel/bpf/verifier.c:check_mem_access() {
+> ...
+> 			if (tnum_is_const(reg->var_off) &&
+> 			    bpf_map_is_rdonly(map) &&
+> 			    map->ops->map_direct_value_addr &&
+> 			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
+> ...
+> }
+> 
+> returning -EINVAL here propagates the error back up to check_mem_access()
+> and aborts verification.
+> 
 
->  {
-> +	struct sk_buff *skb =3D *pskb;
->  	struct xdp_txq_info txq =3D { .dev =3D dst->dev };
->  	struct xdp_buff xdp;
+Correct.
 
-[ ... ]
+I've added a test to verify it that it will return -EINVAL for rdonly
+percpu_array map.
 
-> @@ -521,6 +523,18 @@ static u32 dev_map_bpf_prog_run_skb(struct sk_buff *=
-skb, struct bpf_dtab_netdev
->  	if (!dst->xdp_prog)
->  		return XDP_PASS;
-> =20
-> +	if (skb_cloned(skb)) {
-> +		struct sk_buff *nskb;
-> +
-> +		nskb =3D skb_copy(skb, GFP_ATOMIC);
+Will exclude BPF_MAP_TYPE_PERCPU_ARRAY here, and add a test.
 
-[Severity: High]
-Does skb_copy preserve the mac_len field?
+Thanks,
+Leon
 
-Because skb_copy allocates a new skb and zeroes out the structure up to the
-headers, mac_len is left as 0.
+>>  	err = map->ops->map_direct_value_addr(map, &addr, off);
+>>  	if (err)
+>>  		return err;
+> 
 
-> +		if (!nskb)
-> +			return -ENOMEM;
-> +
-> +		consume_skb(skb);
-> +		skb =3D nskb;
-> +		*pskb =3D nskb;
-> +	}
-> +
->  	__skb_pull(skb, skb->mac_len);
-
-[Severity: High]
-Following up on the skb_copy question above, if mac_len is 0, will this
-pull 0 bytes instead of the expected header length?
-
-If so, the data pointer would remain at the mac header instead of the
-network header. If an egress program later modifies the ethernet header
-and triggers the mac update path, could this push the data pointer
-backwards into uninitialized headroom, leading to protocol corruption
-or leaked kernel memory?
-
-[ ... ]
-
-> @@ -710,7 +724,10 @@ int dev_map_generic_redirect(struct bpf_dtab_netdev =
-*dst, struct sk_buff *skb,
->  	 * return 0 even if packet is dropped. Helper below takes care of
->  	 * freeing skb.
->  	 */
-> -	if (dev_map_bpf_prog_run_skb(skb, dst) !=3D XDP_PASS)
-> +	err =3D dev_map_bpf_prog_run_skb(&skb, dst);
-> +	if (err < 0)
-> +		return err;
-
-[Severity: Critical]
-If dev_map_bpf_prog_run_skb returns a negative integer due to an implicitly
-cast unsigned action code as mentioned above, will it hit this error path?
-
-If dev_map_bpf_prog_run_skb already dropped the packet via kfree_skb, will
-propagating this negative value cause higher level callers to execute their
-own error paths and free the identical skb a second time?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611043317.5128=
-43-1-sun.jian.kdev@gmail.com?part=3D1
