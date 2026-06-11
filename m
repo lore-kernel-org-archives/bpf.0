@@ -1,390 +1,147 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013017.outbound.protection.outlook.com [40.93.196.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56EE4D2ECF
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 18:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781203318; cv=none; b=eyuxMqWx19EHfjgIC7UYsFOIyckbV+qQFtlQICsqsiG3+QkJkTF1RozaQa01yAbJ8ph13ne0EaY0qcbEOkuy2G4w/pQ5/yA9iNJt9uIlfhvBhQ6LykJDJc9vLPJVQ05E+srsTo2XyAW6zc7Rqc4LHDrnSIlvH0d30WDqRdNW5w4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781203318; c=relaxed/simple;
-	bh=IkEHZPSDtCkUJmB9jlcPSk6gUtKj+1tZjpR+VAgd3ss=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=BfB06EcfUJLZQYp4Q3a81RRA+FWAV/y+tOcqgn6uzPRbtMB4Yx0wwOOdy1zlIYDZJ52YDTB8S+/wMaN3FqvqpZguOChIen7GDSj5doczVvZ56RpCAI1wvY2X/R/s/PzVTCY2BUDdQX0Vz1l1o8sunNK5j+whv8YVW8IxbpOjAxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=p9yJaWXM; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB93642B74B;
+	Thu, 11 Jun 2026 18:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781204274; cv=fail; b=tPp2nJtmLwNHtZYi/0LBFh6b6JkJwvLQcXYm/ImNM6IK2AyHQlaRjWyA5rNAwJWIlBZrP7E6iQ1HtSM5j03iVnNoaB9jT4f0ie0HVYCRj9Zj1gsh4kb/RyUxjhygQtpocy8AzTBwuyb2aYfMApoeVK9ZNrKtfoH7Qmm937WMfJA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781204274; c=relaxed/simple;
+	bh=N/Q+LvKuVdOnq/I8CemD+jwmRfxD10c+VwS315ZV4as=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jarTXq2xo8R90BdmfpTIZKy0QQuisf/wzu+7/8gZJGaOV1fmjAVKMZ5en+SAFqvW58AMruTFkNNQ6EtlyFSirrtO+OgJyIoDFNxAPEvFcfHwqmii9eLzfzLEt+jhHN7iyjHwUHJWY0vXsIV2o1XVrPXUuduazsUnMOsgiPvmkdQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=m1l2ljv5; arc=fail smtp.client-ip=40.93.196.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="p9yJaWXM"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-30749947917so579696eec.1
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 11:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781203316; x=1781808116; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F7QM0qmxmtR/YrFr0aJ+thth8ELg/lCSgHx9ugycN6k=;
-        b=p9yJaWXMDd3WP1Cb4U5SZU9NgtNRsl/G/EZ0l8KOhMuETmjCdg0olBowjrDxmpNkXi
-         fvxENa5uPfRyidx/Fm3oFDnsZWQqB7IBY1sneQ4na2v9H4592QND9C7z3ofI2W3zvTlZ
-         /MzaC9QaGzs6LKjKblop0m7lFXI/l3hZvl5+aqL8pXzmSv2hD7bt9vxwQRnsCfs52+dB
-         RAyw1ggrftHM/lmA4qLft4PVabqLXUjYB0PVHig7QIk36U6mAeYQP/KuDJAvLfpyP3tP
-         KOL/SoLmd7jzeTkBZ9dAez0sxCvC/3qTfTL994vV3ypcsZOQdLKlerugSAWF9aOt/6EG
-         aJvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781203316; x=1781808116;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F7QM0qmxmtR/YrFr0aJ+thth8ELg/lCSgHx9ugycN6k=;
-        b=V1vaGn0LRNAAXHh+pFIPi+k4qXa3MvVa5fvB5FWsXDgMnxadIlcAvn8QhFbOZQZOJm
-         Jxv8rWcXCW46tlUAnqvqIPp7bHT4rm8XcHk96XO8QagRyafU1VkbczbjueT09aVklolu
-         w7xxxEFVd6RCzEZDBX1odnTl0sFOhok0/zUQhbALfa+bScGNO7EGdhyZL42veLg+KecS
-         e2AuQZklA3q2tY/BXDxKaD119lll7Dp4msiDDTKmXqGP36mgqYpWGJQYj/CfEK8k2nPb
-         4rXxRWKb9PRRSu/IAXrjCZNR/rFfeMuKZDKgvH1BO31d2rQVGbYmHBDL1/6+uvCGg+r6
-         e9YQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/yMiBaVbpqnKcIQZ8ABx+pqhUL3hoiD0F7n2fmfW7l99SdU1OqcRMBcOOfOgRaJ7PZqAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY88yVZs59hFTkk4bClpGmP3m4rfQmF4GNTYB2D3YdvVejy3yz
-	wPKbM4oFgbPFqkuf6LP+qfxxWxyuR5/DCLtG8mVb+IweDJ1+TZpMwNniuLrEs30EA1Y=
-X-Gm-Gg: Acq92OFOrAB2VMIUUbOglbDWmQ/BpOsENb9QRwgts8VEdeSmfTKfuOhvFwvjtcRtKXE
-	Vq1w196u7E4P+KcLUIm5UI6PGT+eWNS894cU7fUbrA2A6L/CCwWG4W2+88l9GFP6+5XXHBE8xOm
-	0hfP5hKLkoYuEQSfbr9Hs+vS46qfoX5QH9hPAApCtGV3mHNoeL3Lk2t1cJqYs8WoLWAwSI03e0U
-	J967tDgPkLXyLVWpJEANo5VnFH1amhKUk9LRIRPILYKUMO/26hkp46q6hJbAOYha11tMR5j6yQq
-	t+g/LwFwyDPg6O5asSKoIOUzfferEilQ9prurcxRpJfooW2ydx74gXHxOty9Bji6j4R7BUPumPH
-	Uv4KUE69k9DhyZjo6vjW1nJpzCyYFHJxCovL8iLG6NDk/naH1i0a3IYepx4Xx8MNZy1TxTUq1gQ
-	ZCDk0e
-X-Received: by 2002:a05:7300:2146:b0:307:26a3:75e4 with SMTP id 5a478bee46e88-3080461f82cmr3319194eec.4.1781203315661;
-        Thu, 11 Jun 2026 11:41:55 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::9f35])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30806c2f420sm2775011eec.6.2026.06.11.11.41.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 11:41:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="m1l2ljv5"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=APpshNWehy36kvBjtUIkXUH1WsvDLKQ+JpWqsqg7nJoS5rz9EK1a7E4R3IFZPtzG9jdFSGIGdcCSuAwPMu/cXif/j26KeJx8g7i0FAUN2p0JM7NbrpOQFNFJd80yHRGJa3dGPv6mhz2qSGN3r6vrMbB9A/mHdKMkKL0IvV9iEHlt8R9JOtuo0nUU0ga6Qo6X22W30/W+g0qdCP6Me9QLxS4qEpGQivXdjJkK4kATDKqtl0tWuJczr49zbHOchFdYwnQqHx/+jnCZYVHlAZpKcnqvyeOxN2OKobEDUZAPr0jiCOIAC6EXd2giuAfWRkN/7idL7rOQ/k8OYLQKD4CJKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S2pImc4D8sTpFiweu+no+tpdSqPLHxJwNSYKQhfepgU=;
+ b=tkWcUBxXefGX8xVuNgsp5zK/OH/Pq2nSqdEcP1h2x7+f0DBuDm8f69A3aXD8Ii6Nf6TXglT6XrD7EE08JthNVqUPZFg3XPtT/P+PnWc2KH/KZUiYiVknxeFsvjf6WJjT6pV8AT0R/R1hct1Rd8dd+XKKG89PVJMJA9zhJuXNYDAntBramh2RqLpt5KJwZ29Wi0HW0d3yxD8ZsjNvuzBnGCiT+J6nOOXhhX1C1MSc86wQnVpPXEiYaP1WvWX+aZ129oXKn4WiwVzBJO4KfRPsX57CKsLP/vzT2XjXlwXwDXzGymN5XmsxPe+B7ozPtzxeYQZxruDowKMZyRo81d4NPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=siemens.com smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S2pImc4D8sTpFiweu+no+tpdSqPLHxJwNSYKQhfepgU=;
+ b=m1l2ljv5rFf90oPITgMtGMJLh6d/u0MMi1mfPaJ3eRUfjQ3fvmOpE4mljLbQpiQQbzfibvYMP1rfMxS3WnMMx12SsK3W/kvlPx12QG7Vi6SYxRIs3jM8XJ3aI9p3MQdpbUboDAleVLgRpim8xEk/zzEDt1ovMAU2T2mtvfO+SX4=
+Received: from BN9PR03CA0249.namprd03.prod.outlook.com (2603:10b6:408:ff::14)
+ by IA3PR10MB8274.namprd10.prod.outlook.com (2603:10b6:208:570::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Thu, 11 Jun
+ 2026 18:57:50 +0000
+Received: from BN2PEPF000055DB.namprd21.prod.outlook.com
+ (2603:10b6:408:ff:cafe::58) by BN9PR03CA0249.outlook.office365.com
+ (2603:10b6:408:ff::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.11 via Frontend Transport; Thu,
+ 11 Jun 2026 18:57:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ BN2PEPF000055DB.mail.protection.outlook.com (10.167.245.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.139.1 via Frontend Transport; Thu, 11 Jun 2026 18:57:50 +0000
+Received: from DLEE213.ent.ti.com (157.170.170.116) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Thu, 11 Jun
+ 2026 13:57:49 -0500
+Received: from DLEE215.ent.ti.com (157.170.170.118) by DLEE213.ent.ti.com
+ (157.170.170.116) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Thu, 11 Jun
+ 2026 13:57:49 -0500
+Received: from fllvem-mr07.itg.ti.com (10.64.41.89) by DLEE215.ent.ti.com
+ (157.170.170.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
+ Transport; Thu, 11 Jun 2026 13:57:49 -0500
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+	by fllvem-mr07.itg.ti.com (8.18.1/8.18.1) with ESMTP id 65BIvnNR652932;
+	Thu, 11 Jun 2026 13:57:49 -0500
+Received: from localhost (ti.dhcp.ti.com [172.24.231.93])
+	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 65BIvmdx013169;
+	Thu, 11 Jun 2026 13:57:48 -0500
+From: Meghana Malladi <m-malladi@ti.com>
+To: <diogo.ivo@siemens.com>, <haokexin@gmail.com>,
+	<vadim.fedorenko@linux.dev>, <devnexen@gmail.com>, <horms@kernel.org>,
+	<jacob.e.keller@intel.com>, <m-malladi@ti.com>, <sdf@fomichev.me>,
+	<john.fastabend@gmail.com>, <hawk@kernel.org>, <daniel@iogearbox.net>,
+	<ast@kernel.org>, <pabeni@redhat.com>, <kuba@kernel.org>,
+	<edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Roger Quadros
+	<rogerq@kernel.org>, <danishanwar@ti.com>
+Subject: [PATCH net 0/4] ICSSG XDP zero copy bug fixes
+Date: Fri, 12 Jun 2026 00:27:40 +0530
+Message-ID: <20260611185744.2498070-1-m-malladi@ti.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 14:41:52 -0400
-Message-Id: <DJ6FVL7EYA5O.2ZU3PP948P777@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Zhang Cen" <rollkingzzc@gmail.com>, <stable@vger.kernel.org>, "Han
- Guidong" <2045gemini@gmail.com>, "John Fastabend"
- <john.fastabend@gmail.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Jakub Sitnicki" <jakub@cloudflare.com>, "Shuah
- Khan" <shuah@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Sechang Lim" <rhkrqnwk98@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Cong Wang" <cong.wang@bytedance.com>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 4/7] bpf, sockmap: keep sk_msg copy state in sync
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
- <20260611123538.156005-5-jiayuan.chen@linux.dev>
-In-Reply-To: <20260611123538.156005-5-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000055DB:EE_|IA3PR10MB8274:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fdc76e4-b203-4059-7dc6-08dec7eb55c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|23010399003|1800799024|7416014|376014|82310400026|921020|56012099006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	WSvrIKKzhH0BfOXTmNFvbpverDdQbQ75WUq2jaNkbg0Lr/guk6gTI0ifOlmEiRZ7QWGbBymwDbaagtSWg+Iz8kax0Gbh+HUylz33phhOTGg1apWqeHG7AE1KA8TU6OmlZplO5yQIViGjePiAT76y0qUbr+HMUwJ2DUzMq7cARg/xmSEVk59Mj5S+OZMP3ulwH9rZEUBaDkmIY5Dwn/PRYi904dJqjEczjJGT6xmXVwmKOr0AfUvzqW5OIrsdXHum5k9ql4n3l9UZ47aFzNimcNST9e/lJ7rbgKCQtYhOAnxHQnbGrQvKKrMpC5yLQ4x7UgHIIagX8irf3ZtJYtXakIVgasimYRZpp9L6tBeXPmQn7AQeUueOf+wDsEtmu9HUUQUtVfjWx1OkSpiH29e9pF6VxWDr1nKIuT7hJrHlMrmG8MLBvqYLTbK5ApvrYWRSuaV7o6C1if/63TLb9mSgFGD6vYlDdbP5OD6MhndIUidJ1jF8SKf6IzZI/42GN135/6yaKZjalJVvrTnJv/+AmMOyTkCH25tt/Sq580Ilrsik7/yr54wVNdLRVjBnYQ3ft0KMHlnHdn4Uj0P2SsIXDBKgQoHdSayLgI1bpXFHSnxDS4MQBaUZse8btQ+hSacfjsm5s2tolyBPvbPZgvchGrF9CjwSiYw3ZdsOn9LWU93z2aDhY9XE+5Et91zShN/OnWEV7zeGk+iNA4AnceM3Me4Z0qfkI31ZrHqweSM5d8RuF3zKAtLkdIEeCb2wI9oz9Ssvj0RtyPpe6B34s0flwg==
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(1800799024)(7416014)(376014)(82310400026)(921020)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	m7TkflagbNFePcQ/V/IelM9RuqpBxKd5SdmRbAvIGm/qV6LqbqOpbvW9XZ8+J36htVq4XT363KE8F9p3teiAnkb6OLADRdrHg+QFyZZHuvCGiZ2GdvnOLtPK9JA0GA/Iz5Nr0w2qxJV8PFU8y8J5AvTWWvRFjPCGHPqzK3w6a3gnxqIxLpupBoqqephK8d1sB8j4T6Pm7HK8YQUfPqcnkFxBweFDMLlzANDCsHYmfCS/34CyYdWbtOe4TUAVY+BhYvLPK5yCGJ0Z4XQOGOXxRZkC83G2EadncJf7srozn7gWNG4qXd0ujdjqQnvxW52qPXkLCAy51FhKDMWtOeOs7l+7uqj1E/fz9r6IojGS+RoyB6z3f8EwUrZc4UZ135+KtvlDjmxADewgDt8XJEGawPe5T+ANKF7DX6s+MPApx5FflIUZab+3EoTwY3rRYQ/T
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 18:57:50.2370
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fdc76e4-b203-4059-7dc6-08dec7eb55c6
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF000055DB.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR10MB8274
 
-On Thu Jun 11, 2026 at 8:34 AM EDT, Jiayuan Chen wrote:
-> From: Zhang Cen <rollkingzzc@gmail.com>
->
-> SK_MSG uses msg->sg.copy as per-scatterlist-entry provenance. Entries
-> with this bit set are copied before data/data_end are exposed to SK_MSG
-> BPF programs for direct packet access.
->
-> bpf_msg_pull_data(), bpf_msg_push_data(), and bpf_msg_pop_data()
-> rewrite the sk_msg scatterlist ring by collapsing, splitting, and
-> shifting entries. These operations move msg->sg.data[] entries, but the
-> parallel copy bitmap can be left behind on the old slot. A copied entry
-> can then return to msg->sg.start with its copy bit clear and be exposed
-> as directly writable packet data.
->
-> This corruption path requires an attached SK_MSG BPF program that calls
-> the mutating helpers; ordinary sockmap/TLS traffic that never runs
-> push/pop/pull helper sequences is not affected.
->
-> Keep msg->sg.copy synchronized with scatterlist entry moves, preserve
-> the copy bit when an entry is split, clear it when a helper replaces an
-> entry with a private page, and clear slots vacated by pull-data
-> compaction.
->
-> Fixes: 015632bb30da ("bpf: sk_msg program helper bpf_sk_msg_pull_data")
-> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Han Guidong <2045gemini@gmail.com>
-> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: Han Guidong <2045gemini@gmail.com>
-> Signed-off-by: Zhang Cen <rollkingzzc@gmail.com>
+This patch series fixes bugs introduced while adding xdp
+zero copy support in the icssg driver.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Patch 1/4: Fix wakeup handling for Rx when available CPPI
+descriptor is zero
+Patch 2,3/4: Fix destination tag in CPPI descriptor to enable
+proper Tx xmit for HSR offload mode with XDP and zero copy
+Patch 4/4: Fix Tx copy wakeup handling for XDP zero copy
 
-There's a bunch of nits here in terms of complexity but the fix is correct
-and considering how many reports are flying around for the same helpers
-it's iom better to just get them fixed asap.
+Meghana Malladi (4):
+  net: ti: icssg-prueth: Fix AF_XDP fill ring alloc and wakeup condition
+  net: ti: icssg: Use undirected TX tag for native XDP in HSR offload
+    mode
+  net: ti: icssg: Use undirected TX tag for XDP zero copy in HSR offload
+    mode
+  net: ti: icssg: Fix XSK zero copy TX during application wakeup
 
-> ---
->  net/core/filter.c | 88 ++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 83 insertions(+), 5 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 6e345ca65ca14..e35e681a15dca 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2654,6 +2654,38 @@ static void sk_msg_reset_curr(struct sk_msg *msg)
->  	}
->  }
-> =20
-> +static bool sk_msg_elem_is_copy(const struct sk_msg *msg, u32 i)
-> +{
-> +	return test_bit(i, msg->sg.copy);
-> +}
-> +
-> +static void sk_msg_clear_elem_copy(struct sk_msg *msg, u32 i)
-> +{
-> +	__clear_bit(i, msg->sg.copy);
-> +}
-> +
-> +static void sk_msg_set_elem_copy(struct sk_msg *msg, u32 i)
-> +{
-> +	__set_bit(i, msg->sg.copy);
-> +}
-> +
-> +static void sk_msg_clear_copy_range(struct sk_msg *msg, u32 start, u32 e=
-nd)
-> +{
-> +	while (start !=3D end) {
-> +		sk_msg_clear_elem_copy(msg, start);
-> +		sk_msg_iter_var_next(start);
-> +	}
-> +}
-> +
-> +static void sk_msg_sg_move(struct sk_msg *msg, u32 dst, u32 src)
-> +{
-> +	msg->sg.data[dst] =3D msg->sg.data[src];
-> +	if (sk_msg_elem_is_copy(msg, src))
-> +		sk_msg_set_elem_copy(msg, dst);
-> +	else
-> +		sk_msg_clear_elem_copy(msg, dst);
-> +}
-> +
->  static const struct bpf_func_proto bpf_msg_cork_bytes_proto =3D {
->  	.func           =3D bpf_msg_cork_bytes,
->  	.gpl_only       =3D false,
-> @@ -2692,7 +2724,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg,=
- u32, start,
->  	 * account for the headroom.
->  	 */
->  	bytes_sg_total =3D start - offset + bytes;
-> -	if (!test_bit(i, msg->sg.copy) && bytes_sg_total <=3D len)
-> +	if (!sk_msg_elem_is_copy(msg, i) && bytes_sg_total <=3D len)
->  		goto out;
-> =20
->  	/* At this point we need to linearize multiple scatterlist
-> @@ -2738,6 +2770,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg,=
- u32, start,
->  	} while (i !=3D last_sge);
-> =20
->  	sg_set_page(&msg->sg.data[first_sge], page, copy, 0);
-> +	sk_msg_clear_elem_copy(msg, first_sge);
-> =20
->  	/* To repair sg ring we need to shift entries. If we only
->  	 * had a single entry though we can just replace it and
-> @@ -2747,8 +2780,14 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg=
-, u32, start,
->  	shift =3D last_sge > first_sge ?
->  		last_sge - first_sge - 1 :
->  		NR_MSG_FRAG_IDS - first_sge + last_sge - 1;
-> -	if (!shift)
-> +	if (!shift) {
-> +		sk_msg_clear_elem_copy(msg, msg->sg.end);
->  		goto out;
-> +	}
-> +
-> +	i =3D first_sge;
-> +	sk_msg_iter_var_next(i);
-> +	sk_msg_clear_copy_range(msg, i, last_sge);
-> =20
->  	i =3D first_sge;
->  	sk_msg_iter_var_next(i);
-> @@ -2762,16 +2801,18 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, ms=
-g, u32, start,
->  		if (move_from =3D=3D msg->sg.end)
->  			break;
-> =20
-> -		msg->sg.data[i] =3D msg->sg.data[move_from];
-> +		sk_msg_sg_move(msg, i, move_from);
->  		msg->sg.data[move_from].length =3D 0;
->  		msg->sg.data[move_from].page_link =3D 0;
->  		msg->sg.data[move_from].offset =3D 0;
-> +		sk_msg_clear_elem_copy(msg, move_from);
->  		sk_msg_iter_var_next(i);
->  	} while (1);
-> =20
->  	msg->sg.end =3D msg->sg.end - shift > msg->sg.end ?
->  		      msg->sg.end - shift + NR_MSG_FRAG_IDS :
->  		      msg->sg.end - shift;
-> +	sk_msg_clear_elem_copy(msg, msg->sg.end);
->  out:
->  	sk_msg_reset_curr(msg);
->  	msg->data =3D sg_virt(&msg->sg.data[first_sge]) + start - offset;
-> @@ -2794,6 +2835,8 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
->  {
->  	struct scatterlist sge, nsge, nnsge, rsge =3D {0}, *psge;
->  	u32 new, i =3D 0, l =3D 0, space, copy =3D 0, offset =3D 0;
-> +	bool sge_copy =3D false, nsge_copy =3D false, nnsge_copy =3D false;
-> +	bool rsge_copy =3D false;
->  	u8 *raw, *to, *from;
->  	struct page *page;
-> =20
-> @@ -2869,6 +2912,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
->  			sk_msg_iter_var_prev(i);
->  		psge =3D sk_msg_elem(msg, i);
->  		rsge =3D sk_msg_elem_cpy(msg, i);
-> +		rsge_copy =3D sk_msg_elem_is_copy(msg, i);
-> =20
->  		psge->length =3D start - offset;
->  		rsge.length -=3D psge->length;
-> @@ -2894,23 +2938,34 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, ms=
-g, u32, start,
->  	/* Shift one or two slots as needed */
->  	sge =3D sk_msg_elem_cpy(msg, new);
->  	sg_unmark_end(&sge);
-> +	sge_copy =3D sk_msg_elem_is_copy(msg, new);
-> =20
->  	nsge =3D sk_msg_elem_cpy(msg, i);
-> +	nsge_copy =3D sk_msg_elem_is_copy(msg, i);
->  	if (rsge.length) {
->  		sk_msg_iter_var_next(i);
->  		nnsge =3D sk_msg_elem_cpy(msg, i);
-> +		nnsge_copy =3D sk_msg_elem_is_copy(msg, i);
->  		sk_msg_iter_next(msg, end);
->  	}
-> =20
->  	while (i !=3D msg->sg.end) {
->  		msg->sg.data[i] =3D sge;
-> +		if (sge_copy)
-> +			sk_msg_set_elem_copy(msg, i);
-> +		else
-> +			sk_msg_clear_elem_copy(msg, i);
->  		sge =3D nsge;
-> +		sge_copy =3D nsge_copy;
->  		sk_msg_iter_var_next(i);
->  		if (rsge.length) {
->  			nsge =3D nnsge;
-> +			nsge_copy =3D nnsge_copy;
->  			nnsge =3D sk_msg_elem_cpy(msg, i);
-> +			nnsge_copy =3D sk_msg_elem_is_copy(msg, i);
->  		} else {
->  			nsge =3D sk_msg_elem_cpy(msg, i);
-> +			nsge_copy =3D sk_msg_elem_is_copy(msg, i);
->  		}
->  	}
-> =20
-> @@ -2918,13 +2973,18 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, ms=
-g, u32, start,
->  	/* Place newly allocated data buffer */
->  	sk_mem_charge(msg->sk, len);
->  	msg->sg.size +=3D len;
-> -	__clear_bit(new, msg->sg.copy);
-> +	sk_msg_clear_elem_copy(msg, new);
->  	sg_set_page(&msg->sg.data[new], page, len + copy, 0);
->  	if (rsge.length) {
->  		get_page(sg_page(&rsge));
->  		sk_msg_iter_var_next(new);
->  		msg->sg.data[new] =3D rsge;
-> +		if (rsge_copy)
-> +			sk_msg_set_elem_copy(msg, new);
-> +		else
-> +			sk_msg_clear_elem_copy(msg, new);
->  	}
-> +	sk_msg_clear_elem_copy(msg, msg->sg.end);
-> =20
->  	sk_msg_reset_curr(msg);
->  	sk_msg_compute_data_pointers(msg);
-> @@ -2950,27 +3010,38 @@ static void sk_msg_shift_left(struct sk_msg *msg,=
- int i)
->  	do {
->  		prev =3D i;
->  		sk_msg_iter_var_next(i);
-> -		msg->sg.data[prev] =3D msg->sg.data[i];
-> +		sk_msg_sg_move(msg, prev, i);
->  	} while (i !=3D msg->sg.end);
-> =20
->  	sk_msg_iter_prev(msg, end);
-> +	sk_msg_clear_elem_copy(msg, msg->sg.end);
->  }
-> =20
->  static void sk_msg_shift_right(struct sk_msg *msg, int i)
->  {
->  	struct scatterlist tmp, sge;
-> +	bool tmp_copy, sge_copy;
-> =20
->  	sk_msg_iter_next(msg, end);
->  	sge =3D sk_msg_elem_cpy(msg, i);
-> +	sge_copy =3D sk_msg_elem_is_copy(msg, i);
->  	sk_msg_iter_var_next(i);
->  	tmp =3D sk_msg_elem_cpy(msg, i);
-> +	tmp_copy =3D sk_msg_elem_is_copy(msg, i);
-> =20
->  	while (i !=3D msg->sg.end) {
->  		msg->sg.data[i] =3D sge;
-> +		if (sge_copy)
-> +			sk_msg_set_elem_copy(msg, i);
-> +		else
-> +			sk_msg_clear_elem_copy(msg, i);
->  		sk_msg_iter_var_next(i);
->  		sge =3D tmp;
-> +		sge_copy =3D tmp_copy;
->  		tmp =3D sk_msg_elem_cpy(msg, i);
-> +		tmp_copy =3D sk_msg_elem_is_copy(msg, i);
->  	}
-> +	sk_msg_clear_elem_copy(msg, msg->sg.end);
->  }
-> =20
->  BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
-> @@ -3027,8 +3098,10 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg,=
- u32, start,
->  	 */
->  	if (start !=3D offset) {
->  		struct scatterlist *nsge, *sge =3D sk_msg_elem(msg, i);
-> +		u32 sge_idx =3D i;
->  		int a =3D start - offset;
->  		int b =3D sge->length - pop - a;
-> +		bool sge_copy =3D sk_msg_elem_is_copy(msg, sge_idx);
-> =20
->  		sk_msg_iter_var_next(i);
-> =20
-> @@ -3041,6 +3114,10 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg,=
- u32, start,
->  				sg_set_page(nsge,
->  					    sg_page(sge),
->  					    b, sge->offset + pop + a);
-> +				if (sge_copy)
-> +					sk_msg_set_elem_copy(msg, i);
-> +				else
-> +					sk_msg_clear_elem_copy(msg, i);
->  			} else {
->  				struct page *page, *orig;
->  				u8 *to, *from;
-> @@ -3057,6 +3134,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, =
-u32, start,
->  				memcpy(to, from, a);
->  				memcpy(to + a, from + a + pop, b);
->  				sg_set_page(sge, page, a + b, 0);
-> +				sk_msg_clear_elem_copy(msg, sge_idx);
->  				put_page(orig);
->  			}
->  			pop =3D 0;
+ drivers/net/ethernet/ti/icssg/icssg_common.c | 62 +++++++++++++-------
+ 1 file changed, 41 insertions(+), 21 deletions(-)
+
+
+base-commit: 29899ec61ac6fcc9d46f5f8d0b72117d9a676c2e
+prerequisite-patch-id: ad8d47ed85a33f742a58e9f48e060303908493ba
+-- 
+2.43.0
 
