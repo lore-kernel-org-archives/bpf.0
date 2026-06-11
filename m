@@ -1,193 +1,121 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9463B636A
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781162069; cv=pass; b=VHnVQkwirx6HuMLiPLxHTsgq3q++IL7cCKU+ynn7teUxcS0RwPTfjhioDk0SkolpGI37utVpENO2E7MX+pnyBh7qOiQsknK6LKVCL7WPG8huA/jvSZmg1CzsHBT43Wa+0ExthjtOO+tQckNLwWjU4M34UTnUYUPBbj2XM8TeRGM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781162069; c=relaxed/simple;
-	bh=LaLu0ei2yC0WN2S4l4Sm1HIA5UTS3G0Rf2gbgD78kYM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U0OYrN7N4sxR59p3mHU+54RfsxEK39nBlwb/ULnWdIaB5ojesZSgkiODXylJhf8JQCKXISmdwqf2jE37Flrx8oxwaMhrDdPqKSDwA6I39lK/lFDqCjVnMQ6EkaUe7bQ2rR9O8/Cot7ScARUHGQefoiZRTbeDzb8V11p1/eqRaf8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Esfhz6vA; arc=pass smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2CE1F5821
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781162310; cv=none; b=XUkcCDWywJSO4Qs3wYGaXaW04GdjH+JPwJFrKeCNlOdHFZ066cLjU4u6Xg4jlI/u4wDniGfaxH7zUTDhXtydoOWnW3qXZuKmxFsH9k4dCwhPjyFhsvCC21xgp6elv9tBHC2fej0j+fnkszNG4B8zIaCcYBcEw8+3ONvvyQWmM34=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781162310; c=relaxed/simple;
+	bh=dR/vVr7aWi0JcLEVyb0dZ8/xblvOj8u1zZGAYlIs/Oo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YzXDzYCYvd+EcSvQtWibVZfg/2cZRpYgfJuYqjy4x7H5B032dZPNg6aWENsD5F4gMncjnTwEhfqdCs39htcgmMI79zhBe50ps6HJ3N0Kv/HFdFfI/fqgfQ2CQN4scCRTL0Pmy20Cc5H6KLGLQjhJFxPnN0MBFGAn2q/rbYpAawo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnkQRnQD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Esfhz6vA"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-66077e888b2so7636805d50.3
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 00:14:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781162067; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MamLb/31hM9YUNGU/+uxXcwWSHTuqQblfCV5H4xZignK+wYeEYDRZDKH6Ju7YugCyX
-         Nr1snFf6xaQObewav9UNenYKwqMDNr8nSzfSGXjwTKe2KtLr7Z9688ZYnyAUUkw5qraw
-         QCP47jduBCueluAS/XO08bimDkGc/Ozz98VspzVw/fk0lKZn8KNu+etihUUQ0u0/hCox
-         NXuzmLc1p9buCpm3gAa9+FzC0BXcyvV5Mxtw7vnmFgtr1HPLrsibUaFkEDbhr9XYZpii
-         rRZMQmekzAjSkNIoBdB8tXgvoqIx2zQSkdYzZQzbnMNKbGhpS1IThrtm4SgkDbGSrz3k
-         rgWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GjwvHah3OGukX9xzSqK99XscYrnIt8dls7UMLocE7GE=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=AuUUZveS/E6/z1hDr6ovHbGjLVC9Awmr92ITH25TywdILB1uuJ6blDKXsQJTUWY69s
-         Hz8nKan2EE3eyCgWgJpQWEAD9TA+vfEivBPuQ41Fh4FtfkuG+okz/AsGo3uBmQUPv0+a
-         Tp8m+dad8wtDnS8p+sDM5L2/sjhZPiIwi+rQqxM7r5lv84mmWetPxRgiCyQYb7Xp0Zb+
-         ssX56m/OqjmL/WLXKFvD4aSrh6nGDSZlc71FbQkLPkFikW6qsiFHsh3bAEPuhA0ERr/8
-         JuHOxKKO6ohuL3HAdd5ffi4BvnnX7LvKu2xGwfjRyGrj3Sp6OWowpT8l253KzvIApqjU
-         VONg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781162067; x=1781766867; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GjwvHah3OGukX9xzSqK99XscYrnIt8dls7UMLocE7GE=;
-        b=Esfhz6vARHDXkTn7hu/xbEsya0KZ7j1ZlGCJyDqK+yYNBtwKChbfpvu0DgQuYjCN/x
-         BypfmSI99AMQq6ljEGypOtft+T58JG4RDD1cEHgnbdCUbP8YUWcgko260/FdjLk+Ljx1
-         2+++gqIB6Kd8wDP9rmLOSu0B5wqdg8O/TpQG9Pftoa4KVCXQYK8QRGnfuoE2Id6a4ISU
-         rGpyFDolFO/bUn/plmUTgJJfLWUWywpk63dNDKIxy+QI2BMMy/iDhcCkJLPGC6/va3yf
-         rMdfyAGBafUqmu5FYhrY1u7GudrcAqDE6azO1YRMHxiGSrcE4NawIWcZnB/FlLrRCdda
-         ZZ9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781162067; x=1781766867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GjwvHah3OGukX9xzSqK99XscYrnIt8dls7UMLocE7GE=;
-        b=W4oFkxxs1+bwXM6Ait6TPX2qOitPSdbWs8pVNWLpqSd2bgVD+B+sz/xD/3q4oz4d/n
-         o/lO118KMGVHeqw+ZbDsaV98pkyDlSd65o1T77gdiELVtex/W/i5CpuhBoGuaEfn0+AB
-         Ay0UDSHfhWSGGPHWJQseFMHmsh1BkWXe+t/a13xw3ZYfSAlSiO2iFDaYyXJNtVZfIN34
-         r7hqXtSWb95xmzaMmvLwjlAlUROVrZPMvd0TRN9NdQbG7f4iUK484g3QPt6u/xDLhddU
-         BKS0UEG9LmDc+do291bvXYLSENCrKj2Mk5JLX4eOsRdj75b+yoyjSSDnniKPzZSpEa/s
-         Wuow==
-X-Gm-Message-State: AOJu0Yyn6DTZ+6LP0GPRnbQgcoTFtD0Fyk9UWY52rMUsD/bad0zy/3H5
-	IEwqhWQqlECav3MyIV1CxwgmaxZpVUefmyQpcR2KukSbYf+jaIJuUVkx77isXizKqTXe5ozyl/3
-	+zDVKC3+sylVPA1/oW7M3OyUdjFRSlBQ=
-X-Gm-Gg: Acq92OGa8msC4EfvawfHeKJY+jCKB5aQyeO5N27M6AALDWmBViIFKspZ0WATxOv7MD0
-	F7RGPPVpSf97oCJ7WUjCqbGNCtY+jcY/YC/K/seiWOHx9LaR7eDOYhRTxDbSbmZCvTEjd96F6Yo
-	g5TwNb1IezVwm0aNbwARCFMU3XEkNPSJAo52RDcO7oCbrzGkAzAjXY01laZmPn4IRSc4PqHGnWQ
-	uOOWOsmEjgurB6plh1Wo0NzFIS4aH0mh07tBusXvLItgeECiOf+xOj1r45HwT9/5YOh9j3RyJ0U
-	QD82WrssycHpkt3PIDEXHJpu7twCUTjMfZv3lunm0fqxp846XxQvp5dwbvQ1+K+YGr4lfL1ja0p
-	lYBs6
-X-Received: by 2002:a05:690e:480c:b0:65e:20b1:e963 with SMTP id
- 956f58d0204a3-6626986c14amr839447d50.34.1781162067120; Thu, 11 Jun 2026
- 00:14:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnkQRnQD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8DF1F00893;
+	Thu, 11 Jun 2026 07:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781162308;
+	bh=hbOikQmyX4LXYCHZKPWdrfBghgJh2rdrFCPajfD5cEk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XnkQRnQD+ooQrHfivVMxTDsIGKYz4H6tIkXyWDSQo569+o2ejYi4t34j8dQjyoXtd
+	 BKVPLXX/XlAH8tYkiEv3yFLbHog5FRKQr70V+OVhnzNAX+KwUZFgk/jdqANoEm3D9q
+	 iPdic4d5sOELN+VrGImWUYIFbeN1F3bJ6zxmohfbqwLkd/u+/ConDKBcyeALHwWg56
+	 9Gm2DStcRIjmK7A7M2B6TkrkzPEBj7jjZ8Wyjv3BxDLp1LVUXqiKmL+NT4sQmOtp7g
+	 ZWzgPVsZ7P8dCNeNt1dTdluxJEz+KG5sleklTkzEQn9UMgmMRnU/CxYepvP8/QtPK4
+	 EX3eqCijmvsZQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1] bpf: Fix unaligned interpreter panic on JIT
+ fallback path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260611070009.26257-1-yangtiezhu@loongson.cn>
+References: <20260611070009.26257-1-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 11 Jun 2026 07:18:28 +0000
+Message-Id: <20260611071828.8C8DF1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260611043317.512843-3-sun.jian.kdev@gmail.com> <20260611044722.174351F00893@smtp.kernel.org>
-In-Reply-To: <20260611044722.174351F00893@smtp.kernel.org>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Thu, 11 Jun 2026 15:14:16 +0800
-X-Gm-Features: AVVi8CdTMjhN_TbxNVF-V5AimCd7-pfZXPvv7Jc7KtCcCcWlkevfdchOdbxr8so
-Message-ID: <CABFUUZFGa205D7hAQiOK6h=Y6iLaiDvBU=8TjQObtcqhf0=Lig@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover generic devmap egress
- last-dst rewrite
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 11, 2026 at 12:47=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] Uninitialized `net_config` is passed to `cleanup_network()` on e=
-arly error paths, causing arbitrary shell commands to be executed via `syst=
-em()`.
-> --
->
-> commit 60bbc3bd1e74368d2d682d8956f86b733750dfd9
-> Author: Sun Jian <sun.jian.kdev@gmail.com>
-> selftests/bpf: Cover generic devmap egress last-dst rewrite
->
-> This patch strengthens xdp_veth_egress to check that destinations observe
-> the correct MAC address for their own egress ifindex. It also adds a new
-> generic XDP last-destination test to cover cases where earlier destinatio=
-ns
-> do not have a devmap egress program.
->
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/t=
-ools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> > index 3e98a16659362..681415cacb75c 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-> [ ... ]
-> > +static void xdp_veth_egress_last_dst(u32 flags)
-> > +{
-> [ ... ]
-> > +     struct net_configuration net_config;
-> > +     int mac_map, egress_map, res_map;
-> > +     struct nstoken *nstoken =3D NULL;
-> > +     struct xdp_dummy *xdp_dummy;
-> > +     __be64 last_mac =3D 0;
-> > +     bool found =3D false;
-> > +     int err;
-> > +     int i;
-> > +
-> > +     xdp_dummy =3D xdp_dummy__open_and_load();
-> > +     if (!ASSERT_OK_PTR(xdp_dummy, "xdp_dummy__open_and_load"))
-> > +             return;
-> > +
-> > +     xdp_redirect_multi_kern =3D xdp_redirect_multi_kern__open_and_loa=
-d();
-> > +     if (!ASSERT_OK_PTR(xdp_redirect_multi_kern, "xdp_redirect_multi_k=
-ern__open_and_load"))
-> > +             goto destroy_xdp_dummy;
-> > +
-> > +     xdp_redirect_map =3D xdp_redirect_map__open_and_load();
-> > +     if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_=
-load"))
-> > +             goto destroy_xdp_redirect_multi_kern;
-> > +
-> > +     if (!ASSERT_OK(create_network(&net_config), "create network"))
-> > +             goto destroy_xdp_redirect_map;
-> [ ... ]
-> > +destroy_xdp_redirect_map:
-> > +     close_netns(nstoken);
-> > +     xdp_redirect_map__destroy(xdp_redirect_map);
-> > +destroy_xdp_redirect_multi_kern:
-> > +     xdp_redirect_multi_kern__destroy(xdp_redirect_multi_kern);
-> > +destroy_xdp_dummy:
-> > +     xdp_dummy__destroy(xdp_dummy);
-> > +
-> > +     cleanup_network(&net_config);
->
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does this early error
-> handling path pass uninitialized stack memory to cleanup_network()?
->
-> If xdp_redirect_multi_kern__open_and_load() or
-> xdp_redirect_map__open_and_load() fail before create_network() is called,
-> the goto labels eventually reach cleanup_network(&net_config).
->
-> Since cleanup_network() passes net_config fields like ns0_name to SYS_NOF=
-AIL
-> which executes system commands, could passing uninitialized stack garbage
-> here lead to unpredictable shell command execution as root?
->
-> Would it be safer to zero-initialize net_config with `=3D {}` when declar=
-ing it?
->
-> > +}
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611043317.51=
-2843-1-sun.jian.kdev@gmail.com?part=3D2
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Type confusion between BPF helper enum IDs and address offsets in =
+`bpf_fixup_fallback_inline_helpers()` leads to potential silent instruction=
+ corruption.
+--
 
-Thanks for the review.
+commit e06144ee47e54fe6934472bff4024530f26b7737
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-I will zero-initialize net_config in the new test in v4, so the cleanup
-path is safe even if an earlier setup step fails before create_network()
-initializes it.
+bpf: Fix unaligned interpreter panic on JIT fallback path
 
-Thanks,
-Jian
+This commit introduces a fallback fixup phase to rewrite the call offsets
+for inlined helpers when JIT compilation fails or is skipped. This prevents
+unaligned memory access panics when falling back to the interpreter.
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 649cce41e13f3..de0c46b495b40 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+[ ... ]
+> @@ -2608,6 +2608,30 @@ static struct bpf_prog *bpf_prog_jit_compile(struc=
+t bpf_verifier_env *env, struc
+>  	return prog;
+>  }
+> =20
+> +/*
+> + * Rewrite the helper call offset for inlined helpers when fallback to
+> + * the interpreter happens due to JIT compilation failure or JIT disable=
+d.
+> + */
+> +static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env *e=
+nv, struct bpf_prog *fp)
+> +{
+> +	struct bpf_insn *insn =3D fp->insnsi;
+> +	const struct bpf_func_proto *fn;
+> +	int i;
+> +
+> +	if (!env || !env->ops->get_func_proto)
+> +		return;
+> +
+> +	for (i =3D 0; i < fp->len; i++, insn++) {
+> +		if (insn->code =3D=3D (BPF_JMP | BPF_CALL) && insn->src_reg =3D=3D 0) {
+> +			if (bpf_jit_inlines_helper_call(insn->imm)) {
+
+[Severity: High]
+Could this cause a type confusion where a patched address offset is
+misinterpreted as a helper enum ID?
+
+Since bpf_do_misc_fixups() already patches insn->imm with a 32-bit address
+offset (fn->func - __bpf_call_base) for helpers that are NOT expected to be
+inlined by the JIT, insn->imm will already be an offset when reaching this
+loop for non-inlined helpers.
+
+If the distance between a non-inlined helper and __bpf_call_base happens to
+match the enum ID of an inlined helper (for example,
+BPF_FUNC_get_smp_processor_id =3D 8), wouldn't bpf_jit_inlines_helper_call()
+falsely return true?
+
+> +				fn =3D env->ops->get_func_proto(insn->imm, fp);
+> +				if (fn && fn->func)
+> +					insn->imm =3D fn->func - __bpf_call_base;
+
+If the type confusion triggers, it seems this line would overwrite the
+original, correct offset with the offset of an entirely different helper
+function, potentially causing the interpreter to execute the wrong helper.
+
+> +			}
+> +		}
+> +	}
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611070009.2625=
+7-1-yangtiezhu@loongson.cn?part=3D1
