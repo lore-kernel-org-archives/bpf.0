@@ -1,32 +1,35 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181B2237180;
-	Thu, 11 Jun 2026 01:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B9C23FC41;
+	Thu, 11 Jun 2026 01:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781142814; cv=none; b=acq9ahKkTITxEXMGyUezI3ZO5RQJN0CrDJw22Hb1acuLEd313Clc1BF+Kx/mzK+ftMVVQ/874cUjhtww0S+YODUHcAPJAEgoeGHUgUnFZbHwbbro+xpy0fDTy+JlNqtdF0rjNtE6BZEAaYszRtApD0xNPxw0wC17sW3mbwFnlOA=
+	t=1781142815; cv=none; b=IkvA0AgrtRFe/iYW2RH4wn7nBn9mQT7U2S/XXHLEb5bqPuex2Aoa5oXWLqXzVAydVUscYzIvdXxrLp3+ZSuaE6HgWU3QMfEYmtdby3ptFl/dZMc2u3EEHRuyakN2PJ6OmVj8ZKY1xm4hxseiFJOtW1iFK8hfMRM4YKuCtPUTE8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781142814; c=relaxed/simple;
-	bh=RDVFVRReQjfk9qU39UCYeD0z3cOE4puQLG6+tKjJJOA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VI5hguQYL2Ca9HPhgGyEaOLCphVyW97OHZ6AqCr2rhPyklk0JLwOI2vCihc0kZWE3gPyw8tX/JfBHo48R/IE5fzPJkn8zGA9BX5ZWY/kQQx/y/vVtEiuOnWc5tBoxMdvwz4HECqvY38XDYYbj1szrU7ZsnVI5SqAwruzZrHa3S4=
+	s=arc-20240116; t=1781142815; c=relaxed/simple;
+	bh=a+WWJK1OsRk2PQIR6ycFumNzrETgsSywDSl8cizvmAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TUWn0heisyCH0R//+Gn1Q11VJiMXen1RXw+5NdeO9zE8yMKk31E6FxIgtmKPqVWYsjZaouReLM+J5IWHCkwXAa2bF/Z0o3P4tuULH/rqDvKQXWkedRuOnyCyENqeRmB0joYCFyOkjMQyuIibk/FjnGjuRbMA4cC8B8O8txcqVfI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxVXgZFSpqCecSAA--.25541S3;
+	by gateway (Coremail) with SMTP id _____8AxI_AaFSpqEecSAA--.49997S3;
 	Thu, 11 Jun 2026 09:53:30 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBx68EXFSpqrXaiAA--.43928S2;
-	Thu, 11 Jun 2026 09:53:28 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowJBx68EXFSpqrXaiAA--.43928S4;
+	Thu, 11 Jun 2026 09:53:29 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Hengqi Chen <hengqi.chen@gmail.com>
 Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] Move thread_info into task_struct for LoongArch
-Date: Thu, 11 Jun 2026 09:53:24 +0800
-Message-ID: <20260611015327.12108-1-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 2/3] LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+Date: Thu, 11 Jun 2026 09:53:26 +0800
+Message-ID: <20260611015327.12108-3-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260611015327.12108-1-yangtiezhu@loongson.cn>
+References: <20260611015327.12108-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,58 +37,163 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBx68EXFSpqrXaiAA--.43928S2
+X-CM-TRANSID:qMiowJBx68EXFSpqrXaiAA--.43928S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZrWkur48KF48GFyfAFW8GrX_yoW8Xr1DpF
-	9rCrn8Gr4rGr93A3Zxt34q9rn8Jw1vgw1aqanIy348CF4aqF1UXw18Gr1DXF90qw4rtrW0
-	qFyrKw1agFyUJacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFyrtF15Aw13uw45urWrXrc_yoWrWw43pF
+	WUCr4Ykr4kX34fKrWxJw4DZr1Yyw4DZryUGFy7KF4Fka13Xr1Yqr1fK3W3tFZ5CrWkuF1x
+	Z39rKF1q9F1UZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1a6r1DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y
-	6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-	AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE
-	2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-	C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73
-	UjIFyTuYvjxU7fMaUUUUU
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AK
+	xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUoxR6UUUUU
 
-Based on 7.1-rc7, tested with stress-ng, successfully passed
-the 3-hours stress testing suite, UnixBench benchmarking shows
-a steady performance lift across all core counts.
+The pointer to task_struct is always available in the $tp register,
+the calls to bpf_get_current_task() and bpf_get_current_task_btf()
+can be inlined into a single move instruction.
 
-Thanks Huacai, Wang Rui, sashiko-bot and bot+bpf-ci for your
-review comments and valuable suggestions.
+(1) Here is the sample test.c:
 
-Tiezhu Yang (3):
-  LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
-  LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
-  LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
 
- .../core/thread-info-in-task/arch-support.txt |  2 +-
- arch/loongarch/Kconfig                        |  1 +
- arch/loongarch/include/asm/current.h          | 31 +++++++++++++++++++
- arch/loongarch/include/asm/smp.h              |  3 +-
- arch/loongarch/include/asm/stackframe.h       |  9 ++++--
- arch/loongarch/include/asm/switch_to.h        |  6 ++--
- arch/loongarch/include/asm/thread_info.h      | 10 ------
- arch/loongarch/kernel/asm-offsets.c           |  6 ++--
- arch/loongarch/kernel/entry.S                 |  7 +++--
- arch/loongarch/kernel/head.S                  | 18 ++++++-----
- arch/loongarch/kernel/process.c               |  2 ++
- arch/loongarch/kernel/relocate.c              |  2 +-
- arch/loongarch/kernel/setup.c                 |  1 +
- arch/loongarch/kernel/smp.c                   |  6 ++--
- arch/loongarch/kernel/switch.S                | 14 +++++----
- arch/loongarch/kernel/traps.c                 |  5 +++
- arch/loongarch/net/bpf_jit.c                  | 30 ++++++++++++++++++
- 17 files changed, 115 insertions(+), 38 deletions(-)
- create mode 100644 arch/loongarch/include/asm/current.h
+  SEC("raw_tp/sys_enter")
+  long test_task(void *ctx)
+  {
+	  return (long)bpf_get_current_task();
+  }
+  char _license[] SEC("license") = "GPL";
 
+(2) Here are the test steps:
+
+  sudo yum install libbpf-devel kernel-devel bpftool
+  clang -target bpf -O2 -c test.c -o test.o
+  sudo sysctl -w net.core.bpf_jit_enable=1
+  sudo bpftool prog show name test_task
+  sudo rm -f /sys/fs/bpf/test_task
+  sudo bpftool prog load test.o /sys/fs/bpf/test_task
+  ID=$(sudo bpftool prog show pinned /sys/fs/bpf/test_task | grep -oE '^[0-9]+')
+  sudo bpftool prog dump jited id $ID
+
+(3) Here are the test results:
+
+Before: 6 instructions
+
+  ...
+  64:	lu12i.w	$t1, 1093
+  68:	ori	$t1, $t1, 3320
+  6c:	lu32i.d	$t1, 0
+  70:	lu52i.d	$t1, $t1, -1792
+  74:	jirl	$ra, $t1, 0
+  78:	move	$a5, $a0
+  ...
+
+After: 1 instruction
+
+  ...
+  64:	move	$a5, $tp
+  ...
+
+This is similar with commit 2bb138cb20a6 ("bpf, arm64: Inline
+bpf_get_current_task/_btf() helpers").
+
+Additionally, a safety check for bpf_jit_enable is introduced in
+bpf_jit_inlines_helper_call(). If CONFIG_BPF_JIT_ALWAYS_ON is not
+set and JIT is disabled at runtime, the function returns false to
+safely accommodate the fallback path to the BPF interpreter.
+
+Without this check, bpf_jit_inlines_helper_call() unconditionally
+returns true. As a result, the verifier would skip fixing up the
+call offset, leaving insn->imm as the raw helper ID rather than
+the expected "insn->imm = fn->func - __bpf_call_base".
+
+When the fallback interpreter executes (__bpf_call_base + insn->imm)
+with this raw ID, it jumps into an unaligned invalid address space,
+triggering a fatal instruction alignment fault (ADEF) kernel panic.
+
+(1) Here is the sample test_panic.c:
+
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
+
+  SEC("kprobe/sys_getpid")
+  int test_panic_vulner(void *ctx)
+  {
+  	struct task_struct *task;
+
+  	task = (struct task_struct *)bpf_get_current_task();
+  	if (task)
+  		bpf_printk("Task address: %p\n", task);
+
+  	return 0;
+  }
+
+  char LICENSE[] SEC("license") = "GPL";
+
+(2) Kernel panic reproduction steps without the bpf_jit_enable check:
+
+  clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
+  sudo sysctl -w net.core.bpf_jit_enable=0
+  sudo bpftool prog load test_panic.o /sys/fs/bpf/test_panic autoattach
+
+(3) Kernel panic information without the bpf_jit_enable check:
+  Kernel ade access[#1]:
+  ...
+      ra: 9000000000486e50 ___bpf_prog_run+0x1370/0x36b0
+     ERA: 9000000000485383 __bpf_prog_ret0_warn+0x13/0x20
+  ...
+   ESTAT: 00080000 [ADEF] (IS= ECode=8 EsubCode=0)
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 24913dc7f4e8..cb379b236d7d 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1147,6 +1147,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* function call */
+ 	case BPF_JMP | BPF_CALL:
++		/* Implement helper call to bpf_get_current_task/_btf() inline */
++		if (insn->src_reg == 0 && (insn->imm == BPF_FUNC_get_current_task ||
++					   insn->imm == BPF_FUNC_get_current_task_btf)) {
++			move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_TP);
++			break;
++		}
++
+ 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
+ 					    &func_addr, &func_addr_fixed);
+ 		if (ret < 0)
+@@ -2367,3 +2374,18 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_inlines_helper_call(s32 imm)
++{
++	/* Prevent interpreter panic when JIT is disabled at runtime */
++	if (!bpf_jit_enable)
++		return false;
++
++	switch (imm) {
++	case BPF_FUNC_get_current_task:
++	case BPF_FUNC_get_current_task_btf:
++		return true;
++	default:
++		return false;
++	}
++}
 -- 
 2.42.0
 
