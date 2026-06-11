@@ -1,61 +1,63 @@
-Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781213B5307
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1763B3C11
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781161986; cv=none; b=YL2YqFveOGjPop5V7Htyt5u8W4EY+4WCgfpEGULEuDqal7rGl2GxpSBu5i9tE8xVw3yXU1QCuYvnpupEYOQdIt7V9svYPVh+MpmtRMxUk8K7IamV/8SuR0zVr/j0VMKtffESYJNs5uNIMM0jLPCVPLe3tjaHCACaeHoWH9kjPi4=
+	t=1781161996; cv=none; b=mz6To3l1rP/oVh4DC70LYTxiREAcSi2I/XfUHJW/Ymom3o+1CR7LV1IqcPw1zg0CV4ESqjxcVYZsf2fd9dCvzNsZLYPp8r2s/030S2ImFea+kH20/mwbH1zvQWKHzm3HuHHsKfGqkXh8lznD6eUCCoDOoBkYQEZWbjXbBY8/Oj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781161986; c=relaxed/simple;
-	bh=5Fmuk1WPgZ6FNiG4XsMRoLQLg665mOSxeBLCg1WHEJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XMtb+e7W5TSDSnjF3jFNr65HnhhF/M4IgWCLqjTXUIynL6wtRjSrgKePpatXLlNojSyd1+6EL8+1lzPLBez8m48X+4k8J0PNnirJMLoOkRSPfSYBJyV+kigHCyixLhd3iO8k/WtmwmqC4gqjjcZqAuXvjj2mzrTBsMCUbS8UNYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mz4olM/Y; arc=none smtp.client-ip=209.85.128.193
+	s=arc-20240116; t=1781161996; c=relaxed/simple;
+	bh=ufFawdkbPQyxtvP/vY4bfmggah69hAiP4MacVPkP8Ng=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RGTKBa+buZaNOPyHPutY87Lytsw8FoRSS7igSlWwlK4v8TZqEfI/ZtTImLzl9R891XwkHItEG+p2mraFrgQTk86CBnfH3AQBN7D0d8rcdeqNJGeax7FsScFUm/lhS/Xs2JPaQFRJLbPE8K3uqmVMhft6rl2CcRycl7C4yruiGWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4ddX5Wl; arc=none smtp.client-ip=209.85.128.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mz4olM/Y"
-Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-7de68222e96so70362007b3.2
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 00:13:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4ddX5Wl"
+Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-7efac480dc6so58583917b3.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 00:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781161983; x=1781766783; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBX/SP+Br7VLRns9PD3V50R59mUWLcgOroTlWmFsbRo=;
-        b=mz4olM/YfkHNqwH6OTFi9mfIi5e0Ovqa4xUXyuDtlrLB8Sf5RhW9tN48zAMPJ6+gDg
-         k6iaiaUkc4ZkgisKao4QVy8f7qPMkOp7mZIuYk5fnsaZwOT052GmpNAnIyPqkiLRILDz
-         9w6wEgnjuWvbsOvRrOkN0yNa0dvMEke2aAYF46HGnSwk1SLjys3RfUsyeyTrNGEhcZGh
-         624lcj7vi3Ngyaqao308A+ay6k07jKiWOXMTZ1gGfqafAYGZsviI/D5qThS0p2IO7txq
-         dGGWzHQflj61zuzj9QUru4x5TjtssUC7xpniURoAjauPkk26U8PEv0/OtXk3v0jfSHIM
-         fi9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781161983; x=1781766783;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781161993; x=1781766793; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RBX/SP+Br7VLRns9PD3V50R59mUWLcgOroTlWmFsbRo=;
-        b=BSVL6l97nGr/447RjOhcs2rJxk72/3Y6EaG86VfdofUmF8es8xMUN0OB8AsAJW9sBw
-         c6aLcilLQRsTY6w0NOheBQ2Cd6CoOGiCxpG5YEcV5IB9hgs4OpBiDzhZ501I0LQnB4GX
-         DyaNzQu0g6Nyo9AHjlhSsO2s8+TZMB6Jw0FbqEoHWiRvp7Lp4jlAU2KNXolhNzd0jqa2
-         +BlhLAp/Vln1hWbmjTk1mgDTAI5X1B9IU2ACl8ukY8FBwP8tW0PcWEi3YCRUeCwp/+I6
-         I141ywajC2QjgOfYmxV2frf7jIQfHebbwRtLGGv+9XSPTkCT2kaxOyj3l+Aiq9bj8Eok
-         NjbA==
-X-Forwarded-Encrypted: i=1; AFNElJ/DSA9elqam7zTDtKLonuWzLKWeiVB5C8/Jcsob9h8ubp7PC4icLt+sPnYnLKTYc/wZgdw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6/L/TNFxsOKwiBC4OsSH+Wy6MMv4+dA/QJt8UFiEbCQ4CrPX3
-	qVZnlAlOHPPOXcAVNvUlBErcb68qYy4w8Pnv1IWSAGWJ6uMhrqjvNvII
-X-Gm-Gg: Acq92OFcZcoeHQOcnaAsf70lUjRwLMPv7VnBsP/H0kHY2apP/TDvQXKUpikXyNfXyPE
-	0j/03QlcP1zFSLkzMs5EcZ/oW0sX2R/5miUUcrK6spTDHSyODYAchvl+VdYubWLLt+eO+kjDx9I
-	AopZI1mmlQzj3+6Q8L87/N2RIj/yE5yasvF+MdbOGYbV1pSgDKgqubRsd/7Qoxd/UgTFFIRLWso
-	QzAiSFKhPts+dZ2hjvkpAkAC/NK0anVw8Q0GhkKuWM2lg8+6TO+2Qv9wTBXXrtkvvzCzjVPv0F4
-	bwSwhfY7wszvB4THhf7fwnVRSigEgomswPX8urf33IZzBQ+LnGGoQh6OGfsrY7s8D4iKIln6Nty
-	Fxv4/FwtHCHxoHHcW039JasJIMcun5eGnVG/KW1UCxqIz0N6M/Ikll0NUNp8V1PsOSNK9F3ppPK
-	A/5CrSJKTaTCJQ/G3w+4gma8zH4zUKz9yxibazLYjWi7pMOGyUsJ4=
-X-Received: by 2002:a05:690c:6c13:b0:7db:f8b1:cd80 with SMTP id 00721157ae682-7f654f04a6fmr17001257b3.2.1781161983511;
-        Thu, 11 Jun 2026 00:13:03 -0700 (PDT)
+        bh=5vZX9ZLsq7+qZlX0ydHeLJ+45hrHGXpIcH8h2xOtT/8=;
+        b=C4ddX5WlCj4AYUW4cKSySGq0wwb9BoMyxb/QwchQ7qagzgnJEcRcUO3RW+9H3NUpRd
+         43T8T1GbbTKzD89ouPfW0w7K21sE0afxflf8/wlQS+YbpZBxW+mZiuwbqwx3AEkxclhl
+         Rd7MYvoNYuzPdP+BCSfzIy63idieg7yqd0B8zQuNYH0sFjAbRNzSO57MLblOJ1jv1tbc
+         5zRQZ9ulaKIxaayCJ113BuDMdLE5f+c0oErDIFd08y1Ge6Xl68+5HfqzRuoO+Rr5ucnK
+         +E53mBF45smRdg51AJ76vMTuBsaUP10v2LvV+SAJNoObxR84b5+DFt7PyAwFl+hLNHaC
+         ZZ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781161993; x=1781766793;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5vZX9ZLsq7+qZlX0ydHeLJ+45hrHGXpIcH8h2xOtT/8=;
+        b=CPu9VYn+u2jYJIX3f8fFdsH4CFdk89UcBy0bmGZ3Ati3rAeHLIpG6b9BWzH8yyreK7
+         dGwwz1I9AGVEegmMUHdChMr/eGLG7F4HgV8xdQ7CMgEs5KuJ7apocmfhUoN3s9v3mcmn
+         ylNqlEMED8ywYSIdjjSWxOSR/HOjvF5s9014r0ZhxeUoIv+khTkxRkNYhVx6duUZEdq6
+         XPAb/wMHMIBWOmPbVITW+44d7dAn7eSolYxu6NyRw/4+EDtwBTJBXalF1T5ARWTysOgZ
+         kVp4hmheqMUr8vMXEolRhIT5ePjmTZzS8NjLrkf+zLaX+WQAsYtsWDayruVI6tbxYIvD
+         YW3Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+nnCnkbh92HrW2J15raW5WM1/4HNyo+UfGKNiVfJ+M/YVfC0tcgSmCYL42DZM9kguVwTQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/Be3IdO5+dB3MSYU5zvZLzv/ePJ0BDbav4bLCnl9V+zaiUK/C
+	ceflwMeLD1lwcWTnI85GDkpKpwFs5nOePtTZ3OWFRNMXniXl/Ueqq1qw
+X-Gm-Gg: Acq92OH6twPVEfQwk1SJtomCARsa7R90MLOce95sDK8vBS+Di4C0qDRVj5ipmlInZWb
+	DoDtW5GTPISj+WaIvJXUuzUdgVHAaBMh2FnbxbcfdPUTGCcSn2hFWw9GyoyfuFmcW107MJvm7ek
+	/fITn2gAk9p7JECoT58JN4X3w4cGmgi9vx3N32N1KH8n+nJriKG4h5OpRp0Kq+zZ4tC6G5582kc
+	Z3lXRmqN06ufn7NhMhzBqLsa0Mud4+C7GYJBWbKwMpDzQgGANNAOk9JLPv7QJM50vt0gbBVRhIw
+	eXARbN10TV+ArTzvOOZWgnkZ+PovWNqolQyQ9SBVjK/EoF10U5LNd0h8wKDJZCqJt9ntSIlMNQ7
+	x6FOwazs3KQZXxDW6Z8Hjvu56gmXrerFQUZONKs9f2srKA/GmZQTIc7HusiMiSyoxNMSGjIRPU6
+	sPPPE96GKs/EEP57tbEKrxw//q4Vmf8fDfNBtAoKu1iGkkGngAiAt1eqteoZOpDA==
+X-Received: by 2002:a05:690c:c4c9:b0:7dd:63c7:39b6 with SMTP id 00721157ae682-7f655007fb6mr16817817b3.9.1781161992785;
+        Thu, 11 Jun 2026 00:13:12 -0700 (PDT)
 Received: from localhost.localdomain ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7f693504701sm2551487b3.15.2026.06.11.00.12.54
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7f693504701sm2551487b3.15.2026.06.11.00.13.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 00:13:03 -0700 (PDT)
+        Thu, 11 Jun 2026 00:13:12 -0700 (PDT)
 From: menglong8.dong@gmail.com
 X-Google-Original-From: dongml2@chinatelecom.cn
 To: jasowang@redhat.com
@@ -81,10 +83,12 @@ Cc: mst@redhat.com,
 	virtualization@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next 0/3] xsk: support tx napi busy_poll
-Date: Thu, 11 Jun 2026 15:12:39 +0800
-Message-ID: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
+Subject: [PATCH net-next 1/3] net: busy-poll: introduce sk_tx_busy_loop()
+Date: Thu, 11 Jun 2026 15:12:40 +0800
+Message-ID: <20260611071242.2485058-2-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
+References: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -95,32 +99,179 @@ Content-Transfer-Encoding: 8bit
 
 From: Menglong Dong <dongml2@chinatelecom.cn>
 
-For now, we use sk_busy_loop() in __xsk_sendmsg() to send the data in tx
-ring. The sk_busy_loop() will poll on the target NAPI. However, for the
-nic driver that support the tx napi, such as virtio-net, it can't schedule
-the tx NAPI, but only the rx NAPI. If we enable the busy_poll for xsk and
-use virtio-net, we can't send data, as the rx NAPI in virtio-net doesn't
-handle the packet sending.
+For now, we use sk_busy_loop() for both rx and tx path. The sk_busy_loop()
+will call napi_busy_loop() for the specified napi_id. However, some
+nic drivers have tx napi, such as virtio-net. In this case, sk_busy_loop()
+doesn't work, as it can only schedule the NAPI for the rx queue.
 
-Fix this by introduce the sk_tx_busy_loop(), which will poll on the tx
-NAPI if available. To get the tx NAPI from the napi_id, we add the
-"tx_napi" field to napi_struct, which is ugly :/
+Therefore, introduce sk_tx_busy_loop() for the nic drivers that support tx
+napi, which will schedule the tx napi if available.
 
-Another choice is to call virtnet_xsk_xmit() in virtnet_poll() too. But
-this a little contradict the design of tx NAPI.
-
-Menglong Dong (3):
-  net: busy-poll: introduce sk_tx_busy_loop()
-  virtio_net: initialize napi.tx_napi in virtnet_alloc_queues()
-  xsk: replace sk_busy_loop with sk_tx_busy_loop in __xsk_sendmsg()
-
- drivers/net/virtio_net.c  |  1 +
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+---
  include/linux/netdevice.h |  1 +
  include/net/busy_poll.h   | 41 ++++++++++++++++++++++++++++++++++++---
- net/core/dev.c            | 23 +++++-----------------
- net/xdp/xsk.c             |  2 +-
- 5 files changed, 46 insertions(+), 22 deletions(-)
+ net/core/dev.c            | 26 +++++++------------------
+ 3 files changed, 46 insertions(+), 22 deletions(-)
 
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 0e1e581efc5a..8a771b014d54 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -416,6 +416,7 @@ struct napi_struct {
+ 	int			napi_rmap_idx;
+ 	int			index;
+ 	struct napi_config	*config;
++	struct napi_struct	*tx_napi;
+ };
+ 
+ enum {
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index 6e172d0f6ef5..0959e80272c7 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -33,6 +33,12 @@ static inline bool napi_id_valid(unsigned int napi_id)
+ 
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 
++enum {
++	NAPI_F_PREFER_BUSY_POLL	= 1,
++	NAPI_F_END_ON_RESCHED	= 2,
++	NAPI_F_TX_NAPI		= 4,
++};
++
+ struct napi_struct;
+ extern unsigned int sysctl_net_busy_read __read_mostly;
+ extern unsigned int sysctl_net_busy_poll __read_mostly;
+@@ -49,9 +55,9 @@ static inline bool sk_can_busy_loop(const struct sock *sk)
+ 
+ bool sk_busy_loop_end(void *p, unsigned long start_time);
+ 
+-void napi_busy_loop(unsigned int napi_id,
+-		    bool (*loop_end)(void *, unsigned long),
+-		    void *loop_end_arg, bool prefer_busy_poll, u16 budget);
++void __napi_busy_loop(unsigned int napi_id,
++		      bool (*loop_end)(void *, unsigned long),
++		      void *loop_end_arg, unsigned int flags, u16 budget);
+ 
+ void napi_busy_loop_rcu(unsigned int napi_id,
+ 			bool (*loop_end)(void *, unsigned long),
+@@ -60,6 +66,17 @@ void napi_busy_loop_rcu(unsigned int napi_id,
+ void napi_suspend_irqs(unsigned int napi_id);
+ void napi_resume_irqs(unsigned int napi_id);
+ 
++static inline void napi_busy_loop(unsigned int napi_id,
++				  bool (*loop_end)(void *, unsigned long),
++				  void *loop_end_arg, bool prefer_busy_poll, u16 budget)
++{
++	unsigned int flags = prefer_busy_poll ? NAPI_F_PREFER_BUSY_POLL : 0;
++
++	rcu_read_lock();
++	__napi_busy_loop(napi_id, loop_end, loop_end_arg, flags, budget);
++	rcu_read_unlock();
++}
++
+ #else /* CONFIG_NET_RX_BUSY_POLL */
+ static inline unsigned long net_busy_loop_on(void)
+ {
+@@ -126,6 +143,24 @@ static inline void sk_busy_loop(struct sock *sk, int nonblock)
+ #endif
+ }
+ 
++static inline void sk_tx_busy_loop(struct sock *sk, int nonblock)
++{
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	unsigned int napi_id = READ_ONCE(sk->sk_napi_id);
++	unsigned int flags = NAPI_F_TX_NAPI;
++
++	if (READ_ONCE(sk->sk_prefer_busy_poll))
++		flags |= NAPI_F_PREFER_BUSY_POLL;
++
++	if (napi_id_valid(napi_id)) {
++		rcu_read_lock();
++		__napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk, flags,
++				 READ_ONCE(sk->sk_busy_poll_budget) ?: BUSY_POLL_BUDGET);
++		rcu_read_unlock();
++	}
++#endif
++}
++
+ /* used in the NIC receive handler to mark the skb */
+ static inline void __skb_mark_napi_id(struct sk_buff *skb,
+ 				      const struct gro_node *gro)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 0c6c270d9f7d..645a2e851918 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6878,11 +6878,6 @@ static void __busy_poll_stop(struct napi_struct *napi, unsigned long timeout)
+ 		      HRTIMER_MODE_REL_PINNED);
+ }
+ 
+-enum {
+-	NAPI_F_PREFER_BUSY_POLL	= 1,
+-	NAPI_F_END_ON_RESCHED	= 2,
+-};
+-
+ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock,
+ 			   unsigned flags, u16 budget)
+ {
+@@ -6932,9 +6927,9 @@ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock,
+ 	local_bh_enable();
+ }
+ 
+-static void __napi_busy_loop(unsigned int napi_id,
++void __napi_busy_loop(unsigned int napi_id,
+ 		      bool (*loop_end)(void *, unsigned long),
+-		      void *loop_end_arg, unsigned flags, u16 budget)
++		      void *loop_end_arg, unsigned int flags, u16 budget)
+ {
+ 	unsigned long start_time = loop_end ? busy_loop_current_time() : 0;
+ 	int (*napi_poll)(struct napi_struct *napi, int budget);
+@@ -6951,6 +6946,9 @@ static void __napi_busy_loop(unsigned int napi_id,
+ 	if (!napi)
+ 		return;
+ 
++	if ((flags & NAPI_F_TX_NAPI) && napi->tx_napi)
++		napi = napi->tx_napi;
++
+ 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_disable();
+ 	for (;;) {
+@@ -7015,6 +7013,7 @@ static void __napi_busy_loop(unsigned int napi_id,
+ 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_enable();
+ }
++EXPORT_SYMBOL(__napi_busy_loop);
+ 
+ void napi_busy_loop_rcu(unsigned int napi_id,
+ 			bool (*loop_end)(void *, unsigned long),
+@@ -7028,18 +7027,6 @@ void napi_busy_loop_rcu(unsigned int napi_id,
+ 	__napi_busy_loop(napi_id, loop_end, loop_end_arg, flags, budget);
+ }
+ 
+-void napi_busy_loop(unsigned int napi_id,
+-		    bool (*loop_end)(void *, unsigned long),
+-		    void *loop_end_arg, bool prefer_busy_poll, u16 budget)
+-{
+-	unsigned flags = prefer_busy_poll ? NAPI_F_PREFER_BUSY_POLL : 0;
+-
+-	rcu_read_lock();
+-	__napi_busy_loop(napi_id, loop_end, loop_end_arg, flags, budget);
+-	rcu_read_unlock();
+-}
+-EXPORT_SYMBOL(napi_busy_loop);
+-
+ void napi_suspend_irqs(unsigned int napi_id)
+ {
+ 	struct napi_struct *napi;
+@@ -7579,6 +7566,7 @@ void netif_napi_add_weight_locked(struct net_device *dev,
+ 	napi->poll_owner = -1;
+ #endif
+ 	napi->list_owner = -1;
++	napi->tx_napi = NULL;
+ 	set_bit(NAPI_STATE_SCHED, &napi->state);
+ 	set_bit(NAPI_STATE_NPSVC, &napi->state);
+ 	netif_napi_dev_list_add(dev, napi);
 -- 
 2.54.0
 
