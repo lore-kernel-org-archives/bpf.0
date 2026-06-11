@@ -1,110 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34C4408034;
-	Thu, 11 Jun 2026 17:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC48397352
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 17:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781198305; cv=none; b=WhTQHw9F/3sHRueVQxkTtJ8BYxg1A7hldIz4ypJX3yro1tev2xZiUWXfgPqINeP/lDF66fkBgwsaHped7EXhJVvD7xkNDR5fIQBCG4HdEvvdTcpeFcajEidadiSmTVXaBy7F2YPHrQ42acC8WAbtdeZJ90JrUNQglDtf70xFBko=
+	t=1781199315; cv=none; b=oXXD05Y5XU4flxfRAHVuhPPDna5GIDsgLv4oHBaCyAh/UQQCDL0DuLfcKGuxfiwLx8v+aRgroyuV/nrRTocYWddLfKy+Gxxi03b/LE8C3l7et4Sxvu0E2Nrb18iWJg5M8DizMOqu7a1AbjcmJ71wJl/1+OBzU1sZywiUNehS7YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781198305; c=relaxed/simple;
-	bh=2/4YhDGk8rS1eb9x1UZCiSNZtGtVwrSNHMRRH8/d9gA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RAj9brY7a9HNyT/0YGRFR2DQ6QUsv1/Z1DAne4cLkv0JLU2xCpf1uzzFB3FBkumrmN8odvZjjjJVrAtR+0N+rBYTKAYgaHzMpKJJUqWII5FT+0ixmIjPVzm3BRfCXT6GHaCupK/8j3A+QseZMrULrjXT9/N2xeOtTb0i7VV7t74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I793zi1X; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781199315; c=relaxed/simple;
+	bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=DPtJnlnu+r2SHMkIm8QStsVaqetILRforJ4G4drY5te0AsCgs8w/OX1iZw6r6mcpMSyRx2kYSI1H2E+Zy4/QZLEIxwb3QXsLeI7cdQ5Gb0RyAytcVj8E8obToqWZzQ+slaaKX7BoYQE2EtJ/S78xWP/Kym2BYKiOYwb2MeCDtYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYZ5dLNJ; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I793zi1X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F384E1F00899;
-	Thu, 11 Jun 2026 17:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781198298;
-	bh=4ftVrlKfxNBZ5L1qsZ1tyjka8GLPo2zlURIhpvXfdyQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=I793zi1XTUiKfGJris+A1lqSuFB+TAYeOfOnqQoP590A4ZtsKdFN47EAGe9dqDFOx
-	 3XJfyWN5clsNSrgKpGDwhbXXYaosyPtcrKwX7x5SDkHSlrvj0i4r9L5OAo6G069HTt
-	 gu1QUveYay+06rM2IXCcp5+wQ+n+R/z4KgPk8EzS5tOjUjQ9TkrOHoa+Zsi2sq7OXO
-	 IO1L2c3nA46BNPQgAHkMOkvPAFNmmmWaOC/4mssqd8ERkTom3wZIIWor4ndqQnAMYN
-	 Zt6DUhDo+weFEaHt4temC2C5ASR6HudLCJGAPEen7MWbBg0auYtcb78zonoQ+/doro
-	 Qffh/ooXQ+V9w==
-Date: Thu, 11 Jun 2026 10:18:17 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org, john.fastabend@gmail.com,
- skhan@linuxfoundation.org
-Subject: Re: [PATCH net-next 2/3] docs: net: tls-offload: document
- tls_dev_del, tls_dev_resync, and rekey
-Message-ID: <20260611101817.18964bd9@kernel.org>
-In-Reply-To: <ainR5GAK8LaHJYMP@krikkit>
-References: <20260609201224.1191391-1-kuba@kernel.org>
-	<20260609201224.1191391-3-kuba@kernel.org>
-	<ainR5GAK8LaHJYMP@krikkit>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYZ5dLNJ"
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-48650c78e09so74749b6e.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 10:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781199313; x=1781804113; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
+        b=BYZ5dLNJ1IBvEK5ib/bzK5ktyDRpKQtTz0Pa5eSPDrRyO72d5rfJM2JumMtKNGXkt+
+         Ys04gx2n/EgEtvqa/TSdPfzMZ9NGwrNvFbA7nZdBKZ7mync+PH0VgbJbYeU9qylu+OJW
+         zBLsD/iHJocBFpsF94KLithPi919Q/dyq3PY1fp69kJ2OpG2iRbw/ati5BXIU6THDNgL
+         OKZqkhrDOZdaNUPLT5o3neeRa9qQxe0bm/ErKIHk+b35QEn1KAaIafA3mRt33tldqUBp
+         9OzcgR9BQyPWiLi1hd3rv2DL2b7z1Udg54FK6QybRP8eh33Su/SWLQprae4W4efFY7kG
+         66nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781199313; x=1781804113;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vbkZN8+SdeptEibqFYK5kEEH1xB7aIc1ObJ8q49tt+I=;
+        b=NhHxdCxLKDUsqIqsRlt3ACcHLgtaKvSkxPnwD4QjqjGTgpOge55vlPUG/DdWu6OyJr
+         G0r3l//e+C9LL01zwUmRId5q6BqafSwA2NGhH1PvR3dAsICQeWK/qf2IsfLSJzVmFfEa
+         ztlbUwtGEnhuWxHn0I7US/azFptYsuVWWwJDnSUWoLGksKIBIukhGOqOyB3wh0v3uvjo
+         W3ed324wwzOrMfoC0xAQg+o6QxIZO2CdMdg9NKsMIh/xDtNXcJro7ZjEKTp8INYxpVvP
+         EJk6sDo7oDyLDeBtpte75rqJD2rLEnT0Gm+2tj9KH939CObZW9GxGkPKAzzSGNbj5f3f
+         t5vw==
+X-Forwarded-Encrypted: i=1; AFNElJ8LKjJRhwmOYyKthG91trYUHyjm9DHcqTbC61fOtR2bxTivgVtlESprAjgDiXbLbmXIqDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOu49B6rbILv/Q+Mxr7qGhJ+wUqqsu/lwgoAWZ9G/mZ8Qy9Ps0
+	BuF94pKbUEzXOha4OF5SrV4lIIvTCKOwpEiqR3nBHuEfvnLWzMNBqvSK
+X-Gm-Gg: Acq92OHK3/yFOOx9lAVMFqQwN7dvihMO9tuSqitT8XlnON3Ahu4bsS/LAxxc8xqSYmk
+	TNWCDHUy6LKAOCVzCUvgQS9m6ef6EUh7euiR4y2MoEbHBIl/h3bG9PVstRN5pib/VZ6unrl5g/N
+	Y32fN+JJlx3/kk4lBnTxmujSiLmSjDo/5eF/I/ejqecL+2a12ZUAEYNL7H9nLW6gWYni6mk1etC
+	MWPb8qQKokoNvG85+Ru/ENiw4r1oe23B5yo0h+bhXZVtxjNQi5Fj9cdvyYaKyyCX0MmPGWBS1eM
+	3tYj3400maTWEfvmdM24H4d1nAzUgrVDDCqcV5A0sqi/ecEVCuFd0xm2RyCUJqx9h8gTDKvgTvv
+	fIQgulvlxMmvRyB//+9GJ/ycubI21pQNPut4v5hwDtcfct5HIG7U38Qk4j4Qe9XdymXcgV2h8xG
+	ceMnYOVditr3jjsPB5PuVq24M+WO2UJzSpB2/bYAwjsENhuPqk78aamMFakB6NdF42nyAJaMV16
+	0MQcztyZidfAxyYVA==
+X-Received: by 2002:a05:6808:c2d5:b0:485:29ad:d1a9 with SMTP id 5614622812f47-4871a1611famr2717742b6e.37.1781199313083;
+        Thu, 11 Jun 2026 10:35:13 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5d::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4865b91f944sm21186925b6e.9.2026.06.11.10.35.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2026 10:35:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 11 Jun 2026 10:35:11 -0700
+Message-Id: <DJ6EGJ8S87HP.2WOTGYK374XKI@gmail.com>
+Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "bpf" <bpf@vger.kernel.org>, "linux-trace-kernel"
+ <linux-trace-kernel@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <songliubraving@fb.com>,
+ "Yonghong Song" <yhs@fb.com>, "Menglong Dong" <menglong8.dong@gmail.com>
+Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry
+ function
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Steven Rostedt" <rostedt@kernel.org>
+X-Mailer: aerc
+References: <20260603110554.29590-1-jolsa@kernel.org>
+ <20260603110554.29590-4-jolsa@kernel.org> <20260609102922.3c489f76@fedora>
+ <DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com> <20260610113536.77172ad1@robin>
+ <CAADnVQ+RhRiUp8FeptdVKZimGd-Wv8C+NbW5U4hh+7Hi5abQxw@mail.gmail.com>
+ <20260611094648.04622890@gandalf.local.home>
+In-Reply-To: <20260611094648.04622890@gandalf.local.home>
 
-On Wed, 10 Jun 2026 23:06:44 +0200 Sabrina Dubroca wrote:
-> > +The third TLS device callback is :c:member:`tls_dev_resync`, called by the core
-> > +to synchronize the TCP stream with the record boundaries:
-> > +
-> > +.. code-block:: c
-> > +
-> > +	int (*tls_dev_resync)(struct net_device *netdev,
-> > +			      struct sock *sk, u32 seq, u8 *rcd_sn,
-> > +			      enum tls_offload_ctx_dir direction);
-> > +
-> > +See the `Resync handling`_ section for details.  
-> 
-> Hmm, this callback is not mentioned at all in the "Resync handling"
-> section. I think it'd be good to add at least a quick note there about
-> how/when it's invoked, and what the arguments mean (at least the two
-> types of sequence numbers, since the rest is identical to the other
-> driver CBs).
+On Thu Jun 11, 2026 at 6:46 AM PDT, Steven Rostedt wrote:
+> On Wed, 10 Jun 2026 08:42:51 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>
+>> If my memory doesn't fail me you said it's fine during v1,v2 iterations.
+>
+> I'm fine with it, but I wanted to test it first. Did I give an Acked-by?
+>
+>> The last v3 - v8 you were silent, so we assumed you're still fine.
+>
+> When I see AI reports that say the series needs a fix, I don't bother
+> looking. I thought that was the entire point of AI; to let the maintainer
+> not have to review if the AI found something.
 
-Something like this, you mean?
+AI finds things to consider, but when they're considered and postponned
+to future it doesn't understand that and keep reporting the same thing
+every revision. So it might look like that patches are landing with
+outstanding AI complains, but this is not the case.
 
---- a/Documentation/networking/tls-offload.rst
-+++ b/Documentation/networking/tls-offload.rst
-@@ -278,9 +278,9 @@ sequence number (as it will be updated from a different context).
-   bool tls_offload_tx_resync_pending(struct sock *sk)
- 
- Next time ``ktls`` pushes a record it will first send its TCP sequence number
--and TLS record number to the driver. Stack will also make sure that
--the new record will start on a segment boundary (like it does when
--the connection is initially added).
-+and TLS record number to the driver via the ``tls_dev_resync`` callback.
-+Stack will also make sure that the new record will start on a segment boundary
-+(like it does when the connection is initially added).
- 
- RX
- --
-@@ -372,9 +372,10 @@ all TLS record headers that have been logged since the resync request
- started.
- 
- The kernel confirms the guessed location was correct and tells the device
--the record sequence number. Meanwhile, the device had been parsing
--and counting all records since the just-confirmed one, it adds the number
--of records it had seen to the record number provided by the kernel.
-+the record sequence number via the ``tls_dev_resync`` callback. Meanwhile,
-+the device had been parsing and counting all records since the just-confirmed
-+one, it adds the number of records it had seen to the record number provided
-+by the kernel.
- At this point the device is in sync and can resume decryption at next
- segment boundary.
- 
-@@ -398,7 +399,8 @@ schedules resynchronization after it has received two completely encrypted
- records.
- 
- The stack waits for the socket to drain and informs the device about
--the next expected record number and its TCP sequence number. If the
-+the next expected record number and its TCP sequence number via the
-+``tls_dev_resync`` callback. If the
- records continue to be received fully encrypted stack retries the
- synchronization with an exponential back off (first after 2 encrypted
- records, then after 4 records, after 8, after 16... up until every
+btw since patches touch ftrace from time to time should we add your
+ftrace testsuite to bpf CI ?
+How automated is it?
+
+>
+>>=20
+>> While at it, please review Mykyta's set:
+>> https://patchwork.kernel.org/user/todo/netdevbpf/?series=3D1096695
+>>=20
+>> It's also been pending for almost a month now.
+>
+> Have a better link? I just get a blank page as "TODO" is set to what I ha=
+ve.
+
+Ohh. I meant this set:
+https://lore.kernel.org/bpf/CAEf4BzZFjsEv3aLktwdCZF6EXoCL+eefX+6xa3XGrhBmfO=
+1SqA@mail.gmail.com/
+where you said that you'll think more about it after pto.
+Would be great to land it now for this merge window, so we have
+discoverability right now and if better approach comes in the future
+we can adjust to it later.
+=20
