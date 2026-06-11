@@ -1,170 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1103F0743
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 12:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B360B403AE5;
+	Thu, 11 Jun 2026 13:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781182694; cv=none; b=N1NW2s1WWt0zts263y+TAltuyZfp0BIhNoqDEUmrdiZq2/7tFSxjjJDf7OsqRli6cQKXzaaX0g0P5lgas8a99ecXWGe1tdJ1SQah7Mhnc6Z+dlaFwbQ6Qt7jyzQrGz4ZfPz18zs/Segmnfx+uxcfZwMx+xZXTgs5fsF4YzkV0l8=
+	t=1781183725; cv=none; b=jxOx0YBkWNVnOQpr9LBb9iTFfz8YjZtg+Ec5bkK2OiE1dRSQPNjnsvyLuxPhQkEi0HFttK53KNjYk8lsT86WfCxj0XSTHLxeKF9LzMQXRXIJvcePDztXIrWFHjngqbJpOYMyvDjrqGdtDArAS48Qiy64FsoxXloVjKaamLWVL1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781182694; c=relaxed/simple;
-	bh=8KP8yfo963ZmKDEHELu6LAZBCQCeqJ7GoRRIBu+Q3kM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KLcURhVFOieaKQeLH07iRilvOdbEm1t0BuecfbjCsoGHslkeH44vvfDYaYHRMRPykVkfY/ROcwqEuxt1XFK7jVAT9TLfSw7toYEU/A44qedSsiAPqrONgLTNxpEpk8H3+ElEH3mCs2saNSh/FQmHbEOCdmKqd4RKPcwKl9fa4DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YHFHWKNs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781183725; c=relaxed/simple;
+	bh=PdKWkdCDHflSZtNTqELwSvbkjpf+tKc5hRvfZMTzIHE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VH43PHN/lgw5sKoBqfcaqDCXfjVIwJ+WliNzmjVMbVhaYvzSW+9Z4vkoyj1oLptQ+hIOjjZTRZn9vHzZ4MkO6DgYrPZ/lixztpazYUCVqQ9M5mg0e37D0BOlTy+u6NBFKAN55uaKPYnZqWmSh+hCPoiudE2ri+A/A8fi/RPlphQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbrMvpik; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YHFHWKNs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 193281F00893;
-	Thu, 11 Jun 2026 12:58:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbrMvpik"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B131F00898;
+	Thu, 11 Jun 2026 13:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781182693;
-	bh=0WN5UsgxZfwGvFjN2uu1MO+Q73y8YH8r6bQtBRZL4Q4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YHFHWKNsEO7ZysrWIE/Gez7JbiJeQl7fEXAeaJyuHG5lu7lceb4NWVHqobm1qmiZc
-	 re1p7FzFmhJQ7PpbSAFm+3bHlhPuNcg8StMY1UXt4KLcHS/Dg4g5CmiDz/67FThS6f
-	 GdAuE3oZH211O1imuSMb34aKthNr3vRpdbWWCvKFyZM21kHbujOr0kgRpYLwm9T/X9
-	 1fn4hUb3Rp+tEWDzwLkCzsp6nq930ZjVSJJVvfVvmoGUyYTMIfS5LEZEKcjrMX73cO
-	 2TsOSgcB8T4lK5KMYyXXDHVNeaT2rRznOZKeChFCuSJmPSQLzZ/tENxgP2+IdyuWZC
-	 +aN74Yvplsb3w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/7] bpf, sockmap: reject overflowing copy + len
- in bpf_msg_push_data()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611123538.156005-2-jiayuan.chen@linux.dev>
-References: <20260611123538.156005-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 11 Jun 2026 12:58:12 +0000
-Message-Id: <20260611125813.193281F00893@smtp.kernel.org>
+	s=k20260515; t=1781183719;
+	bh=3GRY++hgn/u6Bom4CtnUx66yzo2ytmPfyNCNHvCqzmw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gbrMvpikylV3ogYKQYR/GTXbviDSjLxUJI+VH0ZjQdorkMpggYnbCEIQUEZGrK32C
+	 0Stsm0NkaNqr1prSn0T7IoTmHChTkCkZ+rKHUH/eS2JQUE61r9cqEmOgFd9a9swL8z
+	 r2rweIqfG87aRiWFlB8uL/qjENpDxCTOcgtRb8xakzCySB5GyV1MbnD0SPRKAswd1J
+	 tU7UoUOg2fnIfuxWUB90hhUz1obggLM0/zC6nCEPv/HzfTBmCWcmvXgBSh60ab/bFj
+	 xYV5vUcvN/huyvMFuJo93aFAojxOIQ5xe1n/mc/kxFCddIeVAogGM0xHXzBnMjNhL2
+	 Nm0vlyRYufpUw==
+Content-Type: multipart/mixed; boundary="===============0228148785043914855=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <bd394275c89a43251cb8e94a36b7d2cc61ef4433847b1c407cc53fc6a1efc2b6@mail.kernel.org>
+In-Reply-To: <20260611123538.156005-6-jiayuan.chen@linux.dev>
+References: <20260611123538.156005-6-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf v2 5/7] sockmap: Fix use-after-free in udp_bpf_recvmsg()
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: kuniyu@google.com,syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com,jiayuan.chen@linux.dev,jakub@cloudflare.com,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,martin.lau@linux.dev,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,hawk@kernel.org,rhkrqnwk98@gmail.com,ihor.solodrai@linux.dev,cong.wang@bytedance.com,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 11 Jun 2026 13:15:18 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+--===============0228148785043914855==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [Critical] bpf_msg_push_data and bpf_msg_pull_data lack a definitive `sta=
-rt <=3D msg->sg.size` validation. When operating on an empty or shrunk mess=
-age, the do-while loop executes at least once and accesses the unused slot =
-at `msg->sg.start`. This slot may contain a 'ghost' element from a previous=
- `sk_msg_recvmsg` consumption, retaining a non-zero length and a freed page=
- pointer. The lack of a `msg->sg.size` check allows a crafted `start` offse=
-t to bypass the bounds check, leading to a severe use-after-free.
-- [High] Appending data to a full scatterlist ring bypasses the fallback pa=
-th and corrupts the ring state. When `space =3D=3D 0` and the append offset=
- matches the end of the message, `bpf_msg_push_data` reads `copy =3D msg->s=
-g.data[msg->sg.end].length`. If this unused slot is zero, the `if (copy)` f=
-allback block is skipped. The function unconditionally increments `msg->sg.=
-end`, forcing it to wrap around and equal `msg->sg.start`. This breaks the =
-ring buffer state, causing `sk_msg_elem_used()` to return 0, falsely emptyi=
-ng the ring and leaking all previously allocated pages.
---
+> syzbot reported use-after-free of struct sk_msg in sk_msg_recvmsg(). [0]
+>
+> sk_msg_recvmsg() peeks sk_msg from psock->ingress_msg under a lock,
+> but its processing is lockless.
+>
+> Thus, sk_msg_recvmsg() must be serialised by callers, otherwise
+> multiple threads could touch the same sk_msg.
+>
+> For example, TCP uses lock_sock(), and AF_UNIX uses unix_sk(sk)->iolock.
+>
+> Initially, udp_bpf_recvmsg() had used lock_sock(), but the cited
+> commit accidentally removed it.
 
-commit 82335dc5248913fa01b7466c6fedd541ff09a2f0
-Author: Weiming Shi <bestswngs@gmail.com>
+Is "accidentally removed it" the right wording here?
 
-bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+The cited commit 9f2470fbc4cb ("skmsg: Improve udp_bpf_recvmsg() accuracy")
+removed the lock_sock()/release_sock() pair deliberately, and its own message
+argues for it:
 
-This commit adds an overflow check to prevent copy + len from wrapping
-around when allocating a page in bpf_msg_push_data. This fixes an issue
-where an undersized allocation could lead to an out-of-bounds memcpy.
+  UDP does not lock the sock during BH Rx path, it makes no sense for its
+  ->recvmsg() to lock the sock.
 
-Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+So the removal looks like an intentional change that overlooked the lock's
+role in serialising sk_msg_recvmsg() against concurrent recvmsg(), rather
+than an accidental deletion. Would something like "inadvertently dropped the
+serialisation" describe it more precisely?
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 9590877b0714f..3c8f1cedb217f 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2829,6 +2829,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
- u32, start,
->  	if (!space || (space =3D=3D 1 && start !=3D offset))
->  		copy =3D msg->sg.data[i].length;
-> =20
-> +	if (unlikely(copy + len < copy))
-> +		return -EINVAL;
-> +
->  	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
->  			   get_order(copy + len));
->  	if (unlikely(!page))
 
-[Severity: Critical]
-This is a pre-existing issue, but does bpf_msg_push_data lack a definitive
-start <=3D msg->sg.size validation?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-When operating on an empty or shrunk message, the do-while loop executes
-at least once and accesses the unused slot at msg->sg.start:
-
-    do {
-        offset +=3D l;
-        l =3D sk_msg_elem(msg, i)->length;
-
-        if (start < offset + l)
-            break;
-        sk_msg_iter_var_next(i);
-    } while (i !=3D msg->sg.end);
-
-    if (start > offset + l)
-        return -EINVAL;
-
-If sk_msg_recvmsg advances msg->sg.start and frees the page without
-zeroing the element length or pointer, could this helper read a stale
-ghost element?
-
-Without a msg->sg.size validation, could the helper incorrectly accept the
-bounds as valid, leading to memcpy operations on a freed page pointer?
-
-[Severity: High]
-This is a pre-existing issue, but does appending data to a full
-scatterlist ring bypass the fallback path and corrupt the ring state?
-
-When space is 0 and the append offset matches the end of the message,
-bpf_msg_push_data reads copy =3D msg->sg.data[msg->sg.end].length:
-
-    if (!space || (space =3D=3D 1 && start !=3D offset))
-        copy =3D msg->sg.data[i].length;
-
-If this unused slot is zero, the if (copy) fallback block is skipped:
-
-    if (copy) {
-        ...
-        goto place_new;
-    }
-
-    ...
-
-    /* Slot(s) to place newly allocated data */
-    sk_msg_iter_next(msg, end);
-
-Does this unconditionally increment msg->sg.end, forcing it to wrap around
-and equal msg->sg.start?
-
-If so, could this break the ring buffer state, causing sk_msg_elem_used to
-return 0, falsely emptying the ring and leaking all previously allocated
-pages?
-
-[Severity: Critical]
-This is a pre-existing issue, but does a similar logic apply to
-bpf_msg_pull_data?
-
-    do {
-        offset +=3D len;
-        len =3D sk_msg_elem(msg, i)->length;
-        if (start < offset + len)
-            break;
-        sk_msg_iter_var_next(i);
-    } while (i !=3D msg->sg.end);
-
-    if (unlikely(start >=3D offset + len))
-        return -EINVAL;
-
-Could this fail to validate against the actual message size and proceed
-to process freed scatterlist elements?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611123538.1560=
-05-1-jiayuan.chen@linux.dev?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27347782396
+--===============0228148785043914855==--
