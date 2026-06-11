@@ -1,167 +1,151 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A491A9F90
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 22:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781218099; cv=none; b=bgMZCrp5U4objOqWZ+9YZtrS6wtVSuQaxojdijXtkkby2I/LGPJVT5spYO7zTjJBoiAcMfCM8lFI7ZxjkwV15SU3t1hmlveEeZcsqmhTE8piwXmkGj+6dDaAp5d+sUQuk4CU8O3EHOtgGUcxU5utnZXqTmCJteVDrqC24F0fsfk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781218099; c=relaxed/simple;
-	bh=SOurTV8MVSezXPtIqOaux2KDSaFDWyGI/YwP8/bMyS0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
-	 References:In-Reply-To; b=FM5ibfWm+VibBgQTphB12FFY1tocjDM3yK5syUKENthkW/q4Ac62UscdDd+viZ0v8r6Zry6S/TlChlSquZCEIbwQWa6iKp38qXMWwrc7TET4rsNtoY/vQTneCjhfRpb8eIM8tC7SCGqozoOLoA/Y+TNNLuSAqES5i1AcOprH9To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=GtbSd7T9; arc=none smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04264396B7F
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 22:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781218616; cv=pass; b=D8adXBYlTnMpYq8ZExxft6cyMNsE5JC2f47jUG2Jzp48m5J9l+hlPkPntrEV6q6ZQmmGaenTcVNogbK9JjJDRryMJO+0zxNobCvI39W/wbCspc8FI3bM8xkiw6UxYiojMX8hMfHAjBQHO5YwP8WoE+qOZdbV9TZ7nspBLpYKQXc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781218616; c=relaxed/simple;
+	bh=80IYC70Oqf5mkhaHEMZbvU5upw4Wm2QTz2Iwsnv8oa4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aAiCKHtTjgfGE85iDWwXKgZqjCCdy/b+0mr3wehjOYk9ylnzK2le1nTh9PIZqCmgRNDVcFO8p5M4ukES6N2T+7J+SZuB2C1etYHD/pF+/0Xb6W2TnLkrIYYiSrZT9lokYkJr/udYjpWdAJ6bPXJCn2M4EyYlk6XyrTNGci7MrEk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Uvf95QhK; arc=pass smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="GtbSd7T9"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-30759632453so843936eec.1
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 15:48:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Uvf95QhK"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2c0c2d8b95bso2780915ad.1
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 15:56:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781218613; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ab5JeSCp1G+395gx3kBmtDt3fxGmFnv6INTy776abIwV4/Bk0mJXMVpl1Z07L2BG9H
+         iCMx+nrJQEvzLDcmE2VRr8R0byk1BNUefWW9jvTSj9UTD9w5QG1zwjzXdyTSiqtsteBO
+         SCyOcmXqjjJ3heCLc69QKP3WiHltNjSk4NZyL/y0hlEFZJO6p7YCTvLwrCkA7VvoCF6A
+         aFCrFdSbo51kTs3zQp4BZs4DymVmTtHg1bJ5XKK4td38N5xuF/4WdGcMNEjlxBHlKa7C
+         c9iLoudjN4ca/gpWE7m2T6vCjgZJzFF/Mfo5mZybdTxjm1SzD+N7kj+YUyN9diSpPF1k
+         Yueg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sGYX8yE3GouSmB36dE4d3FWlMSjRjKMWRg/5nxp8fB8=;
+        fh=SF4ldo6NxhnR/a3QlrWrqrwYN8DiRmzbDzDpeDYcD88=;
+        b=QJQ+6MxWjUGDM++rtaUpMfiEq8O+z/gwkcdS8eXlSxpaxVO1wz7dvIpE6M2wqOcZz+
+         PcpJpJx+CUzOdUZ1NoViOh2+c/iQJQCTg1oJZFnAzPOJAbzsNW8zXJdkCy8Az8iSJxlT
+         kdDe5BlZQb6uIc8GX9BpYWt2WU3xW4VMpJm/u9Ri3Abe7YVorNXSzgG/+pofBCx20ddx
+         r3x9HQKGVDbThzkYa99QQVgd/ajzmmilxu7tZnxwl7M0xnOfsKtrxnDdBIZY9l4sxdiH
+         hRiDr90dc2M9X1nbV+Xb3sAHKjjGkqmpyDDEJ51b+Z1Uhe31Bnuqa9u/NpRz71USzhUi
+         KmyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781218097; x=1781822897; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1781218613; x=1781823413; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BxLD5BCySm0EUvi8VVSUy2Of5J/r9n7rRnE2RlT1lf0=;
-        b=GtbSd7T9J9+hwiJaCzoYCNC9UeQ1Dwpc9l4v8z+bIdy4ZmoJ3SziT2jRs6s4zcPDol
-         MuPMrV03r6LBrUdGEe00fib7aimRibDVwn4JJLrJ89f7TQSYiQEthdNjGaILXRT7NwM0
-         PFRNqB93v/jGvlgvrh7hFzr16kiWAizoaR4C1wMzBCKZFZq7USkFL9FzM5Bg0qDVJamk
-         0krhjmWcHjhmKeE2cKucBc63V88xLOc77pQ5YJukNwhlp1iAxBWylI2BUIBLZNSTDMo+
-         tk9n7Pfqg09h+j+DvcaQybisLMB4mFnN1l6Oi53ehRPj2x9Shq7n44map31qftrouOLk
-         dulg==
+        bh=sGYX8yE3GouSmB36dE4d3FWlMSjRjKMWRg/5nxp8fB8=;
+        b=Uvf95QhKe8gsE507vXK4mzeblnXg7tk9VfD49UfRShWQGtWCXXjk054NlyEz4g4FSs
+         FSAU2N7j9bswIIDgbxyjpQmtoJBjXDUeCQ+MBmN8AIqBBoqPTVbY4h+a+tBEDjaqGBhH
+         lGyGIy2ugrZx+hoqee+0a9Oy6781Kscl9DECIaTEKivo9FCDgrry6rA3wO2etmUP8rEx
+         J2VNKhZ8HKzijzndbQnZtS5GjKrQtCYHPtv8W0QoyuK41yE9z4QYFsJHmCohs6vgyXdc
+         e9okEfh6U6Gq29IOISlSSzL33GgzIPy3PDkcnMMwTVdcNi6pLKA/S/k6Jgn4K3/xg8V1
+         tPJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781218097; x=1781822897;
-        h=in-reply-to:references:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BxLD5BCySm0EUvi8VVSUy2Of5J/r9n7rRnE2RlT1lf0=;
-        b=nC7FtD8IexzIet3Tk01xxb/BdjXqceUwLOKOFRw/Y6MAk6hTVg9ZuCnZ1jUZXuNMDh
-         W1AVHKnT4IxADvQC6PvYh9/w4leVa66Sm66mOXmCGrX8lvAEw7kZUpW+cYlTfEWE4LAV
-         rZd7bHQlRP3IwmYKHOd/q/Iegn7Tpo/DTD3zmYVCoQ43WnfbVoeFZBXb0gHE9/QWUOnJ
-         CmkSnRru7yW6lssQt+ma2WoaEF5Zq6Nvv4pnBPSDCYz8nxHra4xLyKcP3YdDcQt62xVJ
-         E5FjUz00LdLnxZ0hLhwmj6gVAbAMnta021K1VU9ZIfkdeZv+MC1eIkB2LfTw5LbeZPQa
-         4xbA==
-X-Forwarded-Encrypted: i=1; AFNElJ+R4+EI/YdJm4Z0ag2rZlfpnkqQBuG5KK64GCnd6rN1x+CuGL6tOQCF+2c4PWrsZ1rkhns=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBetzxg5uoJ9hV/YMQPPHHpZjgxYeWkUELDojwp86CxJIei+iY
-	yQnohgpy7UdyJErEjOl6IpLCB9c0bASbOyjIHlVU3d5sOVM5vrqfNGjh7C1KKn66aZI=
-X-Gm-Gg: Acq92OFOdkKzL/C6mMzIVu1H7LP1wFtALW3mJaZEV3kkJhAtlJ6Mwhu8ChHI3gxiX6p
-	CyxKlat1oYivYbqlJHmDn95Ek7hWoc1Cq0ykS8sicitWh6ZrhKYLUJRATcxdTYmc92yV3EPup0c
-	utOXHxLcB9OuZsPkk39JJyDhYmkULtLLvr9JhTyxsS6+tMlhUZ/zWJ/F91osF+ty1M/QyqjUwTF
-	j3IxvqLl1T+VIGFQ2FFHmfpukyRBrpSAL6fkERqV6bOowX7xGTyQ2nLZgAJEJLoYAmS1tRjXj05
-	vJHAr8WXqzGp1hUj85NgtM+oTD7nmx0VIgEGceRoulMJMzxOf0zKbPg3vfgeLNrmkQB337ZPYWo
-	kXBqwnW4laHV6IZ9awP5HIgcoPEMKEcLxNP1h1zSpITpzAnPan2mYrsGqm7lGleXN7OfRUhbGtP
-	+jiU1D
-X-Received: by 2002:a05:7300:578f:b0:2f2:6dde:df53 with SMTP id 5a478bee46e88-3082009bd41mr206505eec.17.1781218096849;
-        Thu, 11 Jun 2026 15:48:16 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::3c95])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081eb8f8b2sm670952eec.27.2026.06.11.15.48.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 15:48:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781218613; x=1781823413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sGYX8yE3GouSmB36dE4d3FWlMSjRjKMWRg/5nxp8fB8=;
+        b=oV6TqiWwW6zUkItPnX+X/2najUYCUdCHU0zCMZSATBL5xq6I3J5dap5Fzif7Z9hdbD
+         v6Q+K3h+gV5+2Coq5Wix4zyg6sVaBegcdNys7pPH3E1U+gpi6weP3aBw+QJzyCRBP1SB
+         WbySbGrLA9QoLrCtEo5+pQ38/Y3E9/veyKjvKSvb14cnFA28HN5H3Dt3jZSbnESfFLmW
+         MgCDuhtbvFxKOgzdowiDdAclb2fqI63ZE549Mhb4LtfIR2X+6wgd6xcTq2Hu2kal5d6f
+         wXXEiLA6UXMFTTxgNjez4q2RkSDPwouTQz1ZIRccHtwQ8KdonYlok2o3jAvi8GeCW3bD
+         N5CQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+kqT7S3bB8iXSBkCPF6bN0TlbYgYvDvlQTKyIJ9Vb33mHoe2LtWQf25xO31h+ruAU3Zy0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo7P669tlYfUbdTLx08KN3rKXybtb2lEkMpJEI2wBIArKfwZ6o
+	hZUGc8cur8SghYCT8WuLkZgAATFyB+QvG8b0eN2sDY0Yjhw0kLG4AZMHeAlBoFWkTt+ve/tFX8a
+	6vL6I1O4IZ5Zb1i4/hWwsYPsOIb8otXsNLJuMP/D8
+X-Gm-Gg: Acq92OGm8zvXawTRtjk/OMhCRJqjq6RD+0LQUQDTOH4hWMr4J+aCE/0WEnu4SgdmK5F
+	HGse8LoH4ym40EOpd2SGrN1fWsiIXwOuLYYWHyknjT52P/GncOp7E4oCJoBPzReNlYj0Pojkds2
+	tJcdI5G2u0bRWVzT/0Jb8pfkRRBVe5RKw0ht2jJvT/FIMxm0C5NPz8fQlB8VhvlXHoycF6BKJWb
+	1UY/8hv/7PkBkKB9+uxogZmMt9Ge4ORbAtv99oFl7R7BoMgItByfSrwpwb40oZ6/e368wgTnfFB
+	18bT1PM=
+X-Received: by 2002:a17:903:1b23:b0:2c0:b19b:ef0d with SMTP id
+ d9443c01a7336-2c41255f24bmr4235855ad.19.1781218613229; Thu, 11 Jun 2026
+ 15:56:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260610230329.727075-1-daniel@iogearbox.net>
+In-Reply-To: <20260610230329.727075-1-daniel@iogearbox.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 11 Jun 2026 18:56:40 -0400
+X-Gm-Features: AVVi8Ce4dPShB80KHWBIUCrtea8Uet8pr9jdlDCau5GkiPWMBa1JwKrUn85Nfmg
+Message-ID: <CAHC9VhTA7tOp16wGzb1QYnkJsVz1X3oNcmT6bb_9334=B2smEw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] Verify BPF signed loader at load time
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, kpsingh@kernel.org, James.Bottomley@hansenpartnership.com, 
+	bboscaccy@linux.microsoft.com, memxor@gmail.com, 
+	torvalds@linux-foundation.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Jun 2026 18:48:14 -0400
-Message-Id: <DJ6L48CNN9YT.2JOLEI37QISDC@etsalapatis.com>
-Subject: Re: [PATCH bpf-next] selftsets/bpf: Retry map update on
- helper_fill_hashmap()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Gabriele Monaco" <gmonaco@redhat.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Shuah Khan"
- <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260611150704.95133-1-gmonaco@redhat.com>
-In-Reply-To: <20260611150704.95133-1-gmonaco@redhat.com>
 
-On Thu Jun 11, 2026 at 11:07 AM EDT, Gabriele Monaco wrote:
-> helper_fill_hashmap() is used also on parallel and stress map tests.
-> Those are consistently failing with ENOMEM on kernels built with
-> PREEMPT_RT if preallocation is disabled. The failure is transient and
-> only called by the memory cache refill running in a preemptible
-> irq_work, which can easily stall in case of contention.
+On Wed, Jun 10, 2026 at 7:03=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
 >
-> Use a retriable update in those cases to handle transient ENOMEM and
-> make the test more stable also on PREEMPT_RT.
-> Also fix the sign of the value printed in case of error (strerror()
-> expects a positive errno while updates return it negative).
+> The BPF signing scheme signs a light skeleton's loader program and lets
+> the loader vouch for everything else: bpftool bakes the SHA256 of the
+> metadata map into the loader's instructions, signs the instructions, and
+> the loader compares the (frozen, exclusive) map against that hash from
+> within BPF once it runs. The construction is sound as a trusted hash
+> chain, but the kernel itself never attests the metadata, and that split
+> has been the recurring objection from the LSM / integrity side since the
+> scheme was proposed.
 >
-> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-The bot has a point about changing the code to & BPF_F_PREALLOC, but
-we touch test_maps.c twice a year and that only for bugfixes. There will
-probably be no other consumer of this function in the foreseeable future.
-Similarly, the whole file uses CHECK() so imo it's fine to keep this as-is.
-
-> ---
->  tools/testing/selftests/bpf/test_maps.c | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
+> This proposal closes both gaps by having the kernel verify the metadata
+> at BPF_PROG_LOAD time, before the LSM admission hook and before the
+> verifier, /without/ growing the UAPI. A signed loader binds its metadata
+> map(s) through the existing fd_array/fd_array_cnt, and exclusive maps
+> are already bound to the loader's digest via excl_prog_hash. When a
+> signature is present, the kernel collects the exclusive maps from the
+> fd_array and appends their frozen contents to the instructions before
+> PKCS#7 verification, so the signature covers ...
 >
-> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/self=
-tests/bpf/test_maps.c
-> index ccc5acd55f..c32da7bd8b 100644
-> --- a/tools/testing/selftests/bpf/test_maps.c
-> +++ b/tools/testing/selftests/bpf/test_maps.c
-> @@ -260,6 +260,16 @@ static void test_hashmap_percpu(unsigned int task, v=
-oid *data)
->  	close(fd);
->  }
-> =20
-> +#define MAP_RETRIES 20
-> +
-> +static bool can_retry(int err)
-> +{
-> +	return (err =3D=3D EAGAIN || err =3D=3D EBUSY ||
-> +		((err =3D=3D ENOMEM || err =3D=3D E2BIG) &&
-> +		 map_opts.map_flags =3D=3D BPF_F_NO_PREALLOC));
-> +}
-> +
-> +
->  #define VALUE_SIZE 3
->  static int helper_fill_hashmap(int max_entries)
->  {
-> @@ -274,10 +284,11 @@ static int helper_fill_hashmap(int max_entries)
-> =20
->  	for (i =3D 0; i < max_entries; i++) {
->  		key =3D i; value[0] =3D key;
-> -		ret =3D bpf_map_update_elem(fd, &key, value, BPF_NOEXIST);
-> +		ret =3D map_update_retriable(fd, &key, value, BPF_NOEXIST,
-> +					   MAP_RETRIES, can_retry);
->  		CHECK(ret !=3D 0,
->  		      "can't update hashmap",
-> -		      "err: %s\n", strerror(ret));
-> +		      "err: %s\n", strerror(-ret));
->  	}
-> =20
->  	return fd;
-> @@ -1392,17 +1403,9 @@ static void test_map_stress(void)
->  #define DO_UPDATE 1
->  #define DO_DELETE 0
-> =20
-> -#define MAP_RETRIES 20
->  #define MAX_DELAY_US 50000
->  #define MIN_DELAY_RANGE_US 5000
-> =20
-> -static bool can_retry(int err)
-> -{
-> -	return (err =3D=3D EAGAIN || err =3D=3D EBUSY ||
-> -		((err =3D=3D ENOMEM || err =3D=3D E2BIG) &&
-> -		 map_opts.map_flags =3D=3D BPF_F_NO_PREALLOC));
-> -}
-> -
->  int map_update_retriable(int map_fd, const void *key, const void *value,=
- int flags, int attempts,
->  			 retry_for_error_fn need_retry)
->  {
+>     insns || metadata_0 || metadata_1 || [...]
 >
-> base-commit: 2d3090a8aeb596a26935db0955d46c9a5db5c6ce
+> ... in fd_array order. The in-loader hash check is dropped from the
+> gen_loader entirely: generated loaders carry no verification logic
+> anymore, and signing or verifying a skeleton becomes an ordinary CMS
+> operation over bytes that sit verbatim in the skeleton, reproducible
+> offline. A signed program is either BPF_SIG_UNSIGNED or BPF_SIG_VERIFIED
+> with nothing in between.
 
+I'll be honest and say I'm a bit surprised to see this patchset,
+especially since KP and Alexei argued so strongly against this
+signature scheme, preferring KP's scheme where the loader verified the
+maps.  I'd be curious to hear the reason for the change of heart if
+you can share it.  Regardless of the motivation for this change, I
+obviously think this is a significant improvement over KP's signature
+scheme which shipped in Linux v6.18.
+
+I also think it is worth mentioning the similarities to work Blaise
+did before the most recent Hornet version:
+
+https://lore.kernel.org/linux-security-module/20250929213520.1821223-1-bbos=
+caccy@linux.microsoft.com/
+
+While Blaise's patchset added to the UAPI, that was done simply to
+retain compatibility with KP's signature scheme; your patchset does
+without any UAPI additions, but loses compatibility with existing
+signed lskels.  Beyond that, the basic signature scheme between
+Blaise's patchset and what you are proposing appears the same ...
+which is a good thing as far as I'm concerned.
+
+--=20
+paul-moore.com
