@@ -1,63 +1,63 @@
-Received: from mail-yw1-f194.google.com (mail-yw1-f194.google.com [209.85.128.194])
+Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AB63B47F0
-	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A773B6370
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 07:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781162004; cv=none; b=MEd7Tv2zVdlpgUwqy2QVmtNF6Y2jycPC4cCVG+jBMkfWuklaPrMuThj+9hrqPC8aX4XPurwYXys8Rt8quuLFHmpRy8QhhDoz/JsY781GM4V1h0BXJTVWr40FNE/+dOk8XBteGibkbOwIYTX79y2/Cam+Xl06813ZSxhNntTVYgg=
+	t=1781162012; cv=none; b=byDquZSbst5keU7YVibJRK0XfjuUw8aKEE/geMLRnr8wd8S/GtwvOLXU2knIQ6CDLXBVJBQnzPyRn34KfLNhB78pF93KLXf5VuMtsIomhJsFASb1qJgKOgY4kPyY7wuT+PPSUKsK1WbRt4+Wh9AZZk9BWK2drqRbn+9187KzExo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781162004; c=relaxed/simple;
-	bh=xIYuk1b0GTpsWcIVIg4zf/5vOm0XAhvVbZrtDZjApvQ=;
+	s=arc-20240116; t=1781162012; c=relaxed/simple;
+	bh=lkne1EM6WpIPMx8e4MpL26FHJHdGGWRJ2jTLHd0ZWjM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tA7UwIkAuhLnLl3uBkKuDc6dNtxpPAUkHtmfQ5+Ko0+oR6DL+UeB2BJ+8DAmdX/ptQClGnOnmeCOXsLnKQK7uZ2TdLj71jRE/j4IFJABrDv5NGZykN9FKBdRZxJkiIEjFUmJu7Bh15CYmucUqXHJjtohOKH03+c90/5A9EuhXXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rP2XE2nN; arc=none smtp.client-ip=209.85.128.194
+	 MIME-Version; b=hubXmY3MJHTY232vwr+kxkhUy8xdJmk6A/Lip//xtBJ3wNG8ZuXLCBxoarxlR0/eTNPDn1jB0emJP5J3wZDB1pZntA9EyTwdKFJyA3s90Xtz4zxBhlJ6RsjgyGeexsCod8hLVckM+oyXWY7FjUpedV7KRHtMe3AdVPII61bp9/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9uXe68N; arc=none smtp.client-ip=209.85.128.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rP2XE2nN"
-Received: by mail-yw1-f194.google.com with SMTP id 00721157ae682-7e8b45dfb3dso90698807b3.3
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 00:13:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9uXe68N"
+Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-7ea16f090b4so96189077b3.2
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 00:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781162002; x=1781766802; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781162011; x=1781766811; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KuaK5tAXGNz9SIgM947GwEn0x65wr34XvqFUv1VfkTw=;
-        b=rP2XE2nNNIpSmnn4vFxfD4LMIHZS0abPdZ0L4g3Tkeke9KscuClA6wAVgFMkFIAIY9
-         BBhExw75qxfusLQtX3KHmEbLhlL9O8BN/qrR9hYtE9PDzIQEJDqbCJrPuKYejbraEktr
-         kEgMHlcqv1/cIHdKBaO1D11jVkSwkRwB5dt+sZopL/FNAEkOuErXX0Zx6plgHZkR/ozW
-         KEAgkaWwf0pJY1JA/Qtyd3p8HoZh2cyUXW5NWiP8aTtYLQwEIpVhkrkghUXcgDyC4Dak
-         jlEkAafdzCaPU/Bl97W3ZhxxJ1VQWD5qVBJ8a4jjNFKWpreZN7aoxCwTwJPVDZuHViOv
-         4RVA==
+        bh=wHOxG2aEVrWsk+iCIk+Omdwp9IYJcGKP+/ZeDWqwKBM=;
+        b=W9uXe68NFHWYcomTui40bamyV45FeWELpKIkzeHwOj1yjffhDDKCQyeSI31y9s8NMk
+         EzptMfJdr8cNZZPlCG42yZvCUCXLkHkUby0cWw1VELA9nNQaeRWysOGh3RVNoPsg0tx8
+         UvhFHSO/NODJzflxdYuS64sgm+YdCgSjyc61JUd+0poF5/iwF42LwBtZUnI7VdbEpXET
+         jHhZ9DE4l/lhhvBt/oYSpdCCc3zGLOEKHjMUIG+X+4I0IhuNEe2MZfODemQf9/5ps+4t
+         4sN51FCMMt04m5sMBC2nOm9PVUkvr9yZ35QmbajHw2rbOMi2x0ZLTwmxw1oLIIj5UmJY
+         wFhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781162002; x=1781766802;
+        d=1e100.net; s=20251104; t=1781162011; x=1781766811;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=KuaK5tAXGNz9SIgM947GwEn0x65wr34XvqFUv1VfkTw=;
-        b=C6f/Fn0AQpSzgaEkFJ1Gmb+gZdRQ6FWp3JlK4cIuUAeuYWd7AsUsXraxPkAHeeOn6B
-         BTEVRmW2HtMyNL7CW+FqM5ZRJdMarzrJrZwQ7O5UgKUHirsvShYeas0eNoiyiZabZlf4
-         jK8Vzrn2UULZCKGvup+i2vHn4CGQ9o1jLkmwKOHTM0jx1zTuPIYzb8hr5C+buO9wZ7wj
-         eosE/QgswU+2wyd89lduFttbaPeHrI6lxnBEYrulvsYFucK9UBJkN+JCZV6TnZV0AB/7
-         tML3fGeYZhrpAXY2DgVFk2u+kKl3yChqcQulU1hSIoevcx/awsPStezPq1nzhfX8D3ra
-         XcAA==
-X-Forwarded-Encrypted: i=1; AFNElJ+zFnzKsJ0DPNbxzsnb815tSu5/8pdngc8XoWAhAGY0b1eNUtvZyXULoE8kv/Sp5u28C7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNaK2D6hcl9Bmt22OqhC6FNbvkNaOWo4XulVp4AZmYyKRA22zM
-	dp9Nw9JRvisDV43B+w4YAbN7HKIYOU2nf0Z0TURwICTUIJGdn+2dSAGO
-X-Gm-Gg: Acq92OHS2nWowTLwk9+24aZ2hrgXhHLqFX82iFD/sIDd89X4AGQjY/+WqCZDKK1GJ1i
-	4Wma+3VSM3Ob6V0FamZQGUYKIcfBEd0tnZqXdaDR7TdK/2Qomt4Uw6GTvaCAw3QPJirM/9i/dUo
-	iCwcfjVvXgrBYNis9oXgDkeRDv7v04X7tsifz2H1tbXEU51eb3d3kz8i3gKNo5tA8m1K8F48vLK
-	b77nqhO/mFb7cJhP9mqSOEChg+ONqf+xlZenGmlyMIg89+HkJPKSy/1xitFePpmjVzkqB2BnSs7
-	te1+1HxvhoY7wy7gJYVI8Mo+EXvR8M63hX/9iVsOQUR65FYEz2fNspVaOQnljRMnU8K+K/sNu07
-	6BFoTT3hI7lZvZZORKDLf1jP0XOYvrZGm7P1dZFEb/jkpwy94rkXklP/bdESNKk7+ti5BxcvzvV
-	t+OhozAxS1UumKv7TikGqfCA9r+nXb5jY3qlAMne+FY2toHJBs6gU=
-X-Received: by 2002:a05:690c:6b83:b0:7bf:55b:8f97 with SMTP id 00721157ae682-7f6561dc497mr17405317b3.14.1781162001681;
-        Thu, 11 Jun 2026 00:13:21 -0700 (PDT)
+        bh=wHOxG2aEVrWsk+iCIk+Omdwp9IYJcGKP+/ZeDWqwKBM=;
+        b=qepXXVvfxJhrCGA++kfLDfKLWWxOv8Wjoi12SwuJETKykjqJfAGmQTdAwYcM8mvKu8
+         xutmoL26UKdQiy9PsT5OxytL0v2tpavhjKTogX/m6ZfVxYLi+RGtZN/cGFzEvMPhroP9
+         CyXYouavPU7938WYeeuqragmQw+2DpDYCcuu9fQzG/zsN55/QvKxxJhMSfuhxLtNpQSC
+         3L/L6OJ2LDrf8Fy55VVoV+3xFIj4VoHE0BJZh/Ya2aB7imK3WnJwx3ogE8s3DxKwoLoe
+         nLhcgZhAIGBPDkIvxPRgd20KUW8zOKA312wMOCLN+W3P3ID5DqgZsogp32MpksP4vEP1
+         Rcfg==
+X-Forwarded-Encrypted: i=1; AFNElJ+XHiubpZjs1GAxg8auuVHVgczSxf8oTNPP1f5Rybx/94envoUhXNxWm4jExZk78uxmLaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbTvNl1lAW6mVWdY/JroY9jDylK8GbrI5S+YpZ7TKjyy6kaexU
+	b7wbSVzbt7EcQ09RSHOxbJVUH5d3SoIfPC4Dk/GzQxsh7fUYR5XxDq2D
+X-Gm-Gg: Acq92OFAJYAc9pTEhbbVKcd9993u9wvDUnQbA6Htz8OabP47PP0Lldp4o8W6ASprDhE
+	8kgGjAgH7rXX04N0ytDSXnsUrIPdk0L6XhSZor9wL/7WSQ3+KtFyGl7a8Vmb6MOLhCdaE/aUGly
+	Dd39zJ3WqlhU9akafnmVfWXusSQolZoysST6tssgR3CDzRjyponPPiXxVb3lb2Da4YW9bNXXebo
+	3oxODC/vIV8ppeUVq5BwZYuDub60QutprMgIq+WxUSioMtEMUF8D8KN4mqQBk/UAWEe4UZsxOkW
+	DyMId+hEt0RDv1pTyswFHpOt3/PcSFkThYgsRA2aQfRO+cqswT42SDpC2RDra5x+5UCFoRibtcY
+	ecfFePiNQkz5ZeEdi3lp+03/TYBb6vGkWJ02alRCbgFqvvgjKnzQsi5MXIsKcD/QFQr1oBI+gNN
+	1kohMpO6IpfuAkvYJHe2AmxCPl/6Zu2XOmF2VJ4X0+7vlVUe+wI10=
+X-Received: by 2002:a05:690c:6008:b0:7dd:16e2:7291 with SMTP id 00721157ae682-7f658709aeamr16983037b3.39.1781162010767;
+        Thu, 11 Jun 2026 00:13:30 -0700 (PDT)
 Received: from localhost.localdomain ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7f693504701sm2551487b3.15.2026.06.11.00.13.13
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7f693504701sm2551487b3.15.2026.06.11.00.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 00:13:21 -0700 (PDT)
+        Thu, 11 Jun 2026 00:13:30 -0700 (PDT)
 From: menglong8.dong@gmail.com
 X-Google-Original-From: dongml2@chinatelecom.cn
 To: jasowang@redhat.com
@@ -83,9 +83,9 @@ Cc: mst@redhat.com,
 	virtualization@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next 2/3] virtio_net: initialize napi.tx_napi in virtnet_alloc_queues()
-Date: Thu, 11 Jun 2026 15:12:41 +0800
-Message-ID: <20260611071242.2485058-3-dongml2@chinatelecom.cn>
+Subject: [PATCH net-next 3/3] xsk: replace sk_busy_loop with sk_tx_busy_loop in __xsk_sendmsg()
+Date: Thu, 11 Jun 2026 15:12:42 +0800
+Message-ID: <20260611071242.2485058-4-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
 References: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
@@ -99,26 +99,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Menglong Dong <dongml2@chinatelecom.cn>
 
-Ininialize the tx_napi for the rx queue, which will allow us get the tx
-napi from the rx napi.
+Replace sk_busy_loop with sk_tx_busy_loop to support tx napi in
+__xsk_sendmsg().
 
+Fixes: a0731952d9cd ("xsk: Add busy-poll support for {recv,send}msg()")
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
- drivers/net/virtio_net.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/xdp/xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 86b5c1ca568c..d72c124c9760 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -6543,6 +6543,7 @@ static int virtnet_alloc_queues(struct virtnet_info *vi)
- 					 virtnet_poll_tx,
- 					 napi_tx ? napi_weight : 0);
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 5e5786cd9af5..2bf9a7313ac4 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1158,7 +1158,7 @@ static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len
+ 		return -ENOBUFS;
  
-+		vi->rq[i].napi.tx_napi = &vi->sq[i].napi;
- 		sg_init_table(vi->rq[i].sg, ARRAY_SIZE(vi->rq[i].sg));
- 		ewma_pkt_len_init(&vi->rq[i].mrg_avg_pkt_len);
- 		sg_init_table(vi->sq[i].sg, ARRAY_SIZE(vi->sq[i].sg));
+ 	if (sk_can_busy_loop(sk))
+-		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
++		sk_tx_busy_loop(sk, 1); /* only support non-blocking sockets */
+ 
+ 	if (xs->zc && xsk_no_wakeup(sk))
+ 		return 0;
 -- 
 2.54.0
 
