@@ -1,134 +1,188 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 265CB35F165;
-	Thu, 11 Jun 2026 08:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781167212; cv=none; b=GI+xLvpsgJICJ3YCxhBThr0uL7pmr4izEAcxEmaABZp1juszRZtK1c2YgFb5JoH1Rn1VWgvy+J7mgulqOGlxiDym5aBfjsvnw4P4fRTug0JEq3lnc0vl63jzyLZMb+JI05AKHE0+1Ujj/j8IDh9ngQUuiL22FkJCShk1UFcsC14=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781167212; c=relaxed/simple;
-	bh=6rH52f7mPeRjAgcKXhUl+7F2bjlYwn8Qjl9TnoFlsFY=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=MZCv8L5QvxQ1P/4L88QlVEXon0PYL68MZvcunSPVliRAbu5dmGVDiGLAgmj926nNtA8VcaCJ2vlRJ4Drh8tWPJdEOqnBt7Yf7mI+wnKL4iWg+Iy5NbfB1shskoNaj4PvjvrBW8HUIYA2ey1N5lsCsstqqIxTs8B4pD4kfS+CY1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxBOlpdCpqRgMTAA--.44424S3;
-	Thu, 11 Jun 2026 16:40:09 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxTMJodCpq0bqiAA--.44375S3;
-	Thu, 11 Jun 2026 16:40:08 +0800 (CST)
-Subject: Re: [PATCH bpf-next v1] bpf: Fix unaligned interpreter panic on JIT
- fallback path
-To: Leon Hwang <leon.hwang@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260611070009.26257-1-yangtiezhu@loongson.cn>
- <aaca5c93-3b03-4fa2-9653-87c396e5ec7e@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <af1920f1-5b8b-434e-c265-5d679af624b4@loongson.cn>
-Date: Thu, 11 Jun 2026 16:40:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D87376483
+	for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 09:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781168535; cv=pass; b=VJS45rMKnVbQeviyhplwKLwoktWIkuk4nOZw72yYOcfETl/rl+2i0JuQFjkL3D2qsTxHE0fL/1BqVs+lEokHqn4O3kYXRJo0j6ouAUUFJmzYUswtgrd83fqpo42bdq2sF0OJ+0Lgg2QPN1omKHNVZnfpTwUajU7bZzf1MTdFe4Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781168535; c=relaxed/simple;
+	bh=Q1PsgtMA+I3Pe0Hr6XqziPGeccF4AlHt2HLLuWMgILU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rxhf8NBahe2WrB7U6dGDYFTinGFeDM5LMjaeQr3DQ6uml+XE/Cj5r7i33ze7M31z+QR26oBYj7psQnw2ItvIWB97GdAKjBbAx0FBeXC2zF9I1ucTOWmTf5/8msnCS9PLw65FhmGNhJlYVg2rjvslgoWtG8ZQ1s09GR3gfGZA4vk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCGaCUu4; arc=pass smtp.client-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCGaCUu4"
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-6626cd98209so216074d50.3
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 02:02:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781168532; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RNg5/v/MFzfYt/lsKceH+mnTuwVWEvLJD+L7ydzJ1vZU/jYV6pYMHwk2Nf+p01XhfD
+         laLAt722B/VMCeL1mau3MC9uNpMm2pa9NEibthIPP3bfOTXSr/VsV1dMI1izliNEgdFl
+         6Hp87nXay9eCIaSD8xT9GpUR3bWG5mlbN8zAsITt7c8yhvA703+bfOqnz9bg58ss/ZOX
+         VWz1lPxw8nlBOjxzcWuNIMldFUhO6IR4i71hfh/d5vktmRkM0pjvp5/ftJLXNd2YA4MQ
+         7s9xHL10ORWJVIvVqsQRB/cQrEnhTbKJRlAiARrrFpU5MeVrgQkhFG1Wuk/kvXzenCCu
+         1ojw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jwgGnyW8OZXRqBLUH9knN6tol2cVMvAKSmD8wOWynoc=;
+        fh=VJXWVwrReZtgeJiUnfL7ujEb+s5IEz/pGErmzloTzK4=;
+        b=IxVctcwIz5HBsDey8wiLIqd6Ve+r5eXzm8HjyIYuXu4IzWjzR4JtkCkqW5VwWmTz9K
+         L20Hnk+Vxvsn+fm5fqW2Q8+Gnimi4kgtzHXdFZ3TgpTVAx4pEAsjswWIPlEW/4rz0Zj4
+         ataAfafeFcqGy1BZf8dFRCbqxOOXYcCFttfbTUxh3d8bLBdJvSBE5hrT+sS6tAzfEifu
+         sTfD3hagxgAIJnLqbRd1WZIXPe0/Ko9ZQlQwmzv1clEBjTW52x0Ig84zAJX+YXnCqeou
+         bCy0tMpkWiCgDqZADAVX2TafcJ8+jUn24aQdI6+u/ffwaz7Zxh3lXLwHQcJdgAT8yEa7
+         Qypg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781168532; x=1781773332; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jwgGnyW8OZXRqBLUH9knN6tol2cVMvAKSmD8wOWynoc=;
+        b=OCGaCUu4Ub0Iozx6xOL6F/dl3Eg1b7rpzo1ZDasQvD+ZQWkggaxZmg7Y5/hW52hOFs
+         Lg01MkAvSugVoGBJvm3NRDnoBUWyd+NPkr3GezdgT/r723iGQTLJ0KB8gxRI6T3lRDiX
+         ZNXC9FJiyeXUDQ7+KQ6XRJWC864Vp7NfmwpT6lrGwBh1YPuWNDkjHY0jC7fdneq2480N
+         4hkjCJGIu9gQiIKkTfO4bOWqRcOl4hDAXd4r5ePG6WXzRLXEwhTPrlkeWVNiUIyTQWxc
+         oiMkH0oJiK+JRBIHuvR2r2mZMNbs+Z5wmol1CmTqlCvnUZsUPmORm8aX6l5UCUHO8S65
+         MBlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781168532; x=1781773332;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jwgGnyW8OZXRqBLUH9knN6tol2cVMvAKSmD8wOWynoc=;
+        b=qcwlSZe26VkmWRghoGxIQ5fcqjltnUfSmcYF1oNbPwjPgIkhp4ztHneJLU6mPb6ZtN
+         pNzXD7X16eTPqAOQ2OhsmULAfGo48aCLJ/X1nY5qFFW9kpjFUHFJPeqb0GTH373KZAEa
+         PppppHwPC8Tes3RBcpjd63n7dl8815CwfRC68dVj5OI6PNdUtwRdiguunVBXl49NfRjE
+         AbUfEnSABtbOCY55+aXxzpScictBmDwHt7O0eCyu1LorZqbjhBu3POUoupDKls1tx6uw
+         4hIf9nc9jz+sspwNFiAlfnU4DYH3p2HKc/4r3XH/tazOAKHubmcpreEaRFR72NnTpAor
+         FsWg==
+X-Gm-Message-State: AOJu0Yy9h2KMwfRlAlM24Xt413KnVHKtJ6enzZLtBl5ZsRMfQjl8VklM
+	HMG/uLbwRt6qTk1agP64rAMYC90jiFfreSmO7jDcN91yMB5jKE5ysZq7WiHCCjEgal8+gMfaJ/q
+	zog3ER1Uyr8aezYaC6hfuhqLskawQLNs=
+X-Gm-Gg: Acq92OEdD1smTI3vCph4s2SqyQ0Slhxi1y2m8zC0O3GJ1nPoRzzpL+6OA4nTR1tlLx6
+	2h74FkIK0fl2UNPl+up00n2Tcf553C4wWblZPoJgiyWt7GPUJo/WnjzuYql+Mys/pWlW/EDkaF9
+	mpP88eCGKuwX1TbgfPaHgGWQ1aGytP4hFqK7vW/cqsb6eRwZklkhxMqEC/booMiNQfvjBJowCdn
+	cLb3QcAOgvF8bXeSKO87OJPWiCu5VboooO5tn6k6phCThOVvl1nu3PMjue4XGROI2of6luuxGwA
+	hgn7Khbhpk9G3bKwwy9dcB3cu+rM4fFzmPkAli9bhhn1SM6OzdWlRt76tojEdOggJ94y8w==
+X-Received: by 2002:a05:690e:1289:b0:65e:40ef:dc8f with SMTP id
+ 956f58d0204a3-662699d47e2mr1333630d50.51.1781168532418; Thu, 11 Jun 2026
+ 02:02:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aaca5c93-3b03-4fa2-9653-87c396e5ec7e@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTMJodCpq0bqiAA--.44375S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZF1rKFy5uryrGw18Kr1kCrX_yoW8uw4fpF
-	WDG342yF47JayIga9rJ3W3uw15K3yrKr4UG3yrtryDA3Z0vrn3GF15KrZY9FZ3Cr1xCw12
-	vr4jvF17uF1kGFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU466zUUUUU
+References: <20260611080850.536996-1-sun.jian.kdev@gmail.com>
+ <20260611080850.536996-2-sun.jian.kdev@gmail.com> <87se6t8ono.fsf@toke.dk>
+In-Reply-To: <87se6t8ono.fsf@toke.dk>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 11 Jun 2026 17:02:01 +0800
+X-Gm-Features: AVVi8Cf37KuwlUK8Z0rVVPD6yzLkCu6ujOmcxJpQ3mVeHP2o2QssOHKpn8udIUs
+Message-ID: <CABFUUZHMomSb0_goXcWvamVhuRCrft-L18UgJ2TowEXiptsQqw@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Run generic devmap egress prog on private skb
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, davem@davemloft.net, kuba@kernel.org, 
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org, 
+	jiayuan.chen@linux.dev, menglong.dong@linux.dev, emil@etsalapatis.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/6/11 下午3:37, Leon Hwang wrote:
-> On 11/6/26 15:00, Tiezhu Yang wrote:
-> [...]
->>   
->> +/*
->> + * Rewrite the helper call offset for inlined helpers when fallback to
->> + * the interpreter happens due to JIT compilation failure or JIT disabled.
->> + */
->> +static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
->> +{
->> +	struct bpf_insn *insn = fp->insnsi;
->> +	const struct bpf_func_proto *fn;
->> +	int i;
->> +
->> +	if (!env || !env->ops->get_func_proto)
->> +		return;
->> +
->> +	for (i = 0; i < fp->len; i++, insn++) {
->> +		if (insn->code == (BPF_JMP | BPF_CALL) && insn->src_reg == 0) {
->> +			if (bpf_jit_inlines_helper_call(insn->imm)) {
->> +				fn = env->ops->get_func_proto(insn->imm, fp);
->> +				if (fn && fn->func)
->> +					insn->imm = fn->func - __bpf_call_base;
-> 
-> Might have pointer-to-integer warning?
+On Thu, Jun 11, 2026 at 4:30=E2=80=AFPM Toke H=C3=B8iland-J=C3=B8rgensen <t=
+oke@redhat.com> wrote:
+>
+> Sun Jian <sun.jian.kdev@gmail.com> writes:
+>
+> > Generic XDP devmap multi redirect uses skb_clone() for intermediate
+> > destinations and sends the last destination with the original skb. This
+> > can leave multiple destinations sharing the same packet data.
+> >
+> > This becomes visible after generic devmap egress-program support was
+> > added: a devmap egress program may mutate packet data, and another
+> > destination sharing the same data can observe that mutation.
+> >
+> > Native XDP broadcast redirect does not have this issue because
+> > xdpf_clone() copies the frame data for each destination. Generic XDP
+> > should provide the same per-destination isolation before running a
+> > devmap egress program.
+> >
+> > Fix this by making cloned skbs private before running the generic devma=
+p
+> > egress program. Use skb_copy() instead of skb_unshare() so allocation
+> > failure does not consume the skb and the existing caller error paths ke=
+ep
+> > their ownership semantics.
+> >
+> > Fixes: 2ea5eabaf04a ("bpf: devmap: Implement devmap prog execution for =
+generic XDP")
+> > Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> > Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> > Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > ---
+> >  kernel/bpf/devmap.c | 41 +++++++++++++++++++++++++++++++----------
+> >  1 file changed, 31 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> > index cc0a43ebab6b..a3d6c60dbddb 100644
+> > --- a/kernel/bpf/devmap.c
+> > +++ b/kernel/bpf/devmap.c
+> > @@ -512,35 +512,52 @@ static inline int __xdp_enqueue(struct net_device=
+ *dev, struct xdp_frame *xdpf,
+> >       return 0;
+> >  }
+> >
+> > -static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dt=
+ab_netdev *dst)
+> > +static int dev_map_bpf_prog_run_skb(struct sk_buff **pskb,
+> > +                                 struct bpf_dtab_netdev *dst,
+> > +                                 u32 *act)
+> >  {
+> > +     struct sk_buff *skb =3D *pskb;
+> >       struct xdp_txq_info txq =3D { .dev =3D dst->dev };
+> >       struct xdp_buff xdp;
+> > -     u32 act;
+> >
+> > -     if (!dst->xdp_prog)
+> > -             return XDP_PASS;
+> > +     if (!dst->xdp_prog) {
+> > +             *act =3D XDP_PASS;
+> > +             return 0;
+> > +     }
+> > +
+> > +     if (skb_cloned(skb)) {
+> > +             struct sk_buff *nskb;
+> > +
+> > +             nskb =3D skb_copy(skb, GFP_ATOMIC);
+> > +             if (!nskb)
+> > +                     return -ENOMEM;
+> > +
+> > +             nskb->mac_len =3D skb->mac_len;
+> > +             consume_skb(skb);
+> > +             skb =3D nskb;
+> > +             *pskb =3D nskb;
+> > +     }
+>
+> So with all this pointer soup and back and forth, the version you had in
+> v2 (with the check and skb_copy() in dev_map_generic_redirect()) was
+> much cleaner :/
+>
+> -Toke
+>
+Hi Toke,
 
-Thanks for the review!
+Thanks, that makes sense. I agree that v4 made the helper interface less
+clean.
 
-I followed the existing implementation patterns in bpf_do_misc_fixups(),
-where it explicitly assigns the delta directly without an explicit cast:
+I'll wait for more feedback before respinning.
 
-   insn->imm = fn->func - __bpf_call_base;
-
-Keeping it this way ensures maximum consistency with the native code
-style in the BPF subsystem, and it does not trigger pointer-to-integer
-conversion warnings during my compilation tests.
-
->> +			}
->> +		}
->> +	}
->> +}
->> +
->>   struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
->>   					   int *err)
->>   {
->> @@ -2639,6 +2663,15 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>   
->>   		fp = bpf_prog_jit_compile(env, fp);
->>   		bpf_prog_jit_attempt_done(fp);
->> +
->> +		/*
->> +		 * If JIT compilation failed or is disabled (!fp->jited), we are
->> +		 * about to fall back to the interpreter path. Fix up the call
->> +		 * offsets to prevent unaligned memory access panic.
->> +		 */
->> +		if (!fp->jited)
->> +			bpf_fixup_fallback_inline_helpers(env, fp);
->> +
-> 
-> Better to move it after (!fp->jited && jit_needed)?
-
-This is a very sharp catch!
-
-Moving it after (!fp->jited && jit_needed) avoids redundant instruction
-traversal on mandatory JIT failure paths. I will update the placement
-in the next vision.
-
-Thanks,
-Tiezhu
-
+Sun Jian
