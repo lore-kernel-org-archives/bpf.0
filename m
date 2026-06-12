@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8420F3E6DD8
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 13:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF343D3D03
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 13:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781269889; cv=none; b=WJ412ilapSA/5/311BzLeACbvLgviKk0NbQjkXAVzJOHUzkudloHkUgNnkI3yiaGqNfxZmWOuaqBIYO/RwcMMdFenHadKdWZ02xO9CN0ndersvZ8jzg3Th2Us+OksoAcTzUWeSUZn/1DToqX7p4lFk9v1r2MyR41WTvD9C2+gvw=
+	t=1781269908; cv=none; b=HCFp0/dH1H3ZsmljbP5rKEr159DdytselxEd2uhVjudiGLnS4HtQf8WnfdQleBwYrwHni+7TmstAtys4ThUuUwycNERoKKWLAlVRRgoW9X/cA/GIqMj4x9OnLzhoynWXwJ12mwDAY59cjhLNVepfB99rofebOucozpWJ+zPZ2es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781269889; c=relaxed/simple;
-	bh=JXtqE9YTuIq4R48P9TtcmqB9vx5NWro1w0KY0eXWhEE=;
+	s=arc-20240116; t=1781269908; c=relaxed/simple;
+	bh=KCraM+EOKKtEb873qQFCwAKytsR15+WPPZ/s6qIBlbE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NxNajfn8CyCl3WBKoXOJW7yslr6cO08MpjVJH38Nq0lC4f9xpbTWF4M5G4FLZidEfyH7WCDul/ADPpSMeTTjOq0KguhtSf/L/WHXKhf9rK/HCjMiInHAPCvh5yGPNb/h453jStPk3+D/H2pZRRe46gdGQrbhZUrbjPudBmEMqFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MoQz+x1O; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=FMQ+c1q3TKCXjE3MF5UIJUIMBa2larp3ZTymmOvAcfDVRKS2qlw1HWEwnzVKj44GhxN3MmcHbsJto5tui+oN/xwJ+AUQxC0CG9y+75GEy69jYni1lNSVAEtE6xhkwTohBqa3q32pBIH8Tz4BwaA/1fDqKQ78mlSBTPdGVU6G3YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WotCd8T6; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MoQz+x1O"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WotCd8T6"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781269886;
+	t=1781269904;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pEwXjD1N+xKLsuU/OO/TYmO4ustI98AtD6SHSptQWZI=;
-	b=MoQz+x1OgUUeh0wz07/3AIZO83Zf/Ew2N9Z53N5bOCuB5BFkep6Z9SqngUiwSPdE9586Xy
-	R+rpYJ/m+4XiJbmd7jIk7rCcIW9WYlnufesNkX6mHqKrmBXmz8QuxsPhdksJ7ovQbkhojh
-	IDVk5NL4iXY3hOR2QYBckEV6ojYg7Y8=
+	bh=oh5du0PbUOJ2GCFr1/FdoSkmCPgoB9UDf0M/aVUSOIg=;
+	b=WotCd8T6xhakfQS10jEkOBFsEtnhX0jhGy/njNitf+TPhmjVoN5W+tsO8IQcvS3SJh7KlB
+	+dGlnwkO3/5PXldwWe0uIYgCX8wqRBxuD4wRvih6PPJjdIKuJ4k/DeaRKueV/Rc+uc9D2v
+	XR6875vUTWJi9EUtCWbzlnxU4HWJb+M=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Sechang Lim <rhkrqnwk98@gmail.com>,
@@ -56,9 +56,9 @@ Cc: Sechang Lim <rhkrqnwk98@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 6/7] bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
-Date: Fri, 12 Jun 2026 21:07:50 +0800
-Message-ID: <20260612130919.299124-7-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v3 7/7] selftests/bpf: add test for bpf_msg_pop_data() overflow
+Date: Fri, 12 Jun 2026 21:07:51 +0800
+Message-ID: <20260612130919.299124-8-jiayuan.chen@linux.dev>
 In-Reply-To: <20260612130919.299124-1-jiayuan.chen@linux.dev>
 References: <20260612130919.299124-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -72,71 +72,127 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 
-start and len are u32, so
+Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
+close to U32_MAX, which overflows the start + len bounds check. The sk_msg
+program records the return value over a sendmsg and the test checks that
+the call is rejected with -EINVAL.
 
-	u64 last = start + len;
-
-evaluates start + len in 32-bit and wraps before storing it in last.
-The bounds check
-
-	if (start >= offset + l || last > msg->sg.size)
-		return -EINVAL;
-
-can then be passed with an out-of-range start/len, after which the pop
-loop runs off the end of the scatterlist and sk_msg_shift_left() calls
-put_page() on the empty msg->sg.end slot:
-
-  Oops: general protection fault, probably for non-canonical address
-  0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
-  KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-  RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
-  RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
-  RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
-  Call Trace:
-   <TASK>
-   bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
-   bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
-   sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
-   tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
-   tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
-   __sock_sendmsg+0x153/0x1c0 net/socket.c:802
-   __sys_sendto+0x326/0x430 net/socket.c:2265
-   __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
-   do_syscall_64+0x14c/0x480
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-   </TASK>
-
-Widen the addition with a (u64) cast so the bound is evaluated in
-64-bit and a len near U32_MAX no longer wraps below msg->sg.size.
-
-While here, change pop from int to u32. It counts bytes against the
-unsigned scatterlist lengths and can never be negative, so the signed
-type only invites sign-confusion in the pop loop.
-
-Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
 Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/core/filter.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 643411e292ce5..f6d0c779c0417 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3048,8 +3048,8 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 	   u32, len, u64, flags)
- {
- 	u32 i = 0, l = 0, space, offset = 0;
--	u64 last = start + len;
--	int pop;
-+	u64 last = (u64)start + len;
-+	u32 pop;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index d2846579285f2..cb3229711f93a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -14,6 +14,7 @@
+ #include "test_sockmap_pass_prog.skel.h"
+ #include "test_sockmap_drop_prog.skel.h"
+ #include "test_sockmap_change_tail.skel.h"
++#include "test_sockmap_msg_pop_data.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
  
- 	if (unlikely(flags))
- 		return -EINVAL;
+ #include "sockmap_helpers.h"
+@@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(void)
+ 	test_sockmap_change_tail__destroy(skel);
+ }
+ 
++static void test_sockmap_msg_verdict_pop_data(void)
++{
++	struct test_sockmap_msg_pop_data *skel;
++	int err, map, verdict;
++	int c1 = -1, p1 = -1, sent;
++	int zero = 0;
++	char *buf;
++	const size_t len = 32 * 1024;
++
++	skel = test_sockmap_msg_pop_data__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	verdict = bpf_program__fd(skel->progs.prog_msg_pop_data);
++	map = bpf_map__fd(skel->maps.sock_map);
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	err = create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem"))
++		goto out_close;
++
++	buf = calloc(len, 1);
++	if (!ASSERT_OK_PTR(buf, "calloc"))
++		goto out_close;
++
++	sent = xsend(c1, buf, len, 0);
++	ASSERT_EQ(sent, (ssize_t)len, "xsend");
++	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow");
++
++	free(buf);
++
++out_close:
++	close(c1);
++	close(p1);
++out:
++	test_sockmap_msg_pop_data__destroy(skel);
++}
++
+ static void test_sockmap_skb_verdict_peek_helper(int map)
+ {
+ 	int err, c1, p1, zero = 0, sent, recvd, avail;
+@@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
+ 		test_sockmap_skb_verdict_fionread(false);
+ 	if (test__start_subtest("sockmap skb_verdict change tail"))
+ 		test_sockmap_skb_verdict_change_tail();
++	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
++		test_sockmap_msg_verdict_pop_data();
+ 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
+ 		test_sockmap_skb_verdict_peek();
+ 	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+new file mode 100644
+index 0000000000000..301e65b95256c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++} sock_map SEC(".maps");
++
++#define POP_START 0x48a3
++#define POP_LEN   0xfffffffd
++
++long pop_data_ret = 1;
++
++SEC("sk_msg")
++int prog_msg_pop_data(struct sk_msg_md *msg)
++{
++	if (msg->size <= POP_START)
++		return SK_PASS;
++
++	pop_data_ret = bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
++	return SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
