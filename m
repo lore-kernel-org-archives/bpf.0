@@ -1,149 +1,137 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EA5374A1B
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781284206; cv=pass; b=IxEfmYXd62hZE63na0WKFd3kpLc7PfOfbIx/VOF3rrTr6hqIqJJo6I6Q3fjDWn/thCFM/7ai4I1xDBHc0TZGG0NxW1XwO/hZh5uQD/ui3YyMRshVHIg1U3kCZ7B+fsUDBfX8O1QWzzMv5qEip6hE0Z0+Cbta6PJU9qG6tRG5VC4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781284206; c=relaxed/simple;
-	bh=YKWWA8HN/7LM+Kslx5n3GFPqlJF8ctu6GvvxJUabjrM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mK/7f8yYBy88509i1vyA/kXBzqsTbFf8FlOSKRkIvdhPa0Py3GJkxhXeS11H/N7Ubaq6XRt2493V3jQQfwB5QVWzPYyJ01Qu1E9Ts4G8xVKC4u4g7PLBLKbpXdJbDFgR+t0MDpWICM5hukl/OscAQQUnnLZlm3GWAgZX72rAdnE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I1+Zi4XZ; arc=pass smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25434405C4D;
+	Fri, 12 Jun 2026 17:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781284910; cv=none; b=hMEzBLwdGXTlEp8d9ZSRoMDfL8aH26t6qfLqbegAZxod4KlIwS7vW3cQI1UiekjRjwhNoMBbNY6qFIvDKsnOoXGrFznejYVa3WrAasupRecWPViUhaaWI/Dmrm7v8kzWP4BupcC53YhgJyb7zwPFG2YMU6I0K7DqbRO86OAH1Bw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781284910; c=relaxed/simple;
+	bh=7HAYKMd+/celBV+WiTjQDc9z3dQLsE8U64chPNnjc2g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=M3iY8Ajkj9D8pZjtb7rCMhMDnW+eviLlw2yhtEF0JuoRTfdJmTPNeoj8MmYJ5DEy0MdtkHR0TX2lCgDxEn6s4MuD1TgjXqitx8bvokb6o+qZtRKmgG1x9iDDoxCk/kZl4OETP5PN/wW9GT3/vBCQ+im0+lu4ZbE8eFyH/rBNAaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=UVfhknRg; arc=none smtp.client-ip=130.149.7.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1+Zi4XZ"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36d5b11201aso905301a91.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 10:10:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781284205; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dXM5dV/6drpATeBRQTPMcBo9uRZNDNxh6bsHQStns9lvpmDgsDY9oKq46rgMPRo8oM
-         D8NC1TUG1pgYB294KceiEDTGl4plDe6rccufhgRMI2ByCoMToqGgJfN9u7b+QrZWMdm9
-         sA9gih8rMoWqYULG4DQ9vtryWeIJFx73lBXaeEVB2EqWngIEBneWB8iHjG63G1bbG2Yl
-         OGfbaTvoSd+7lm2jWlkPzHGPqjnGaZw3+W+Q0EnYq5K2ntU8Ud9scY4pjJfkRykgj2mY
-         q3O7r/F3QYUsJ+jyHk33cWFZ1G2rBUZO2DWa6mQ/AxOry/9EKMsU9/fdsowp+lq+YyvS
-         F3ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
-        fh=aJKsifnmJVYxrENXiuFCKNqbPRSNyCakkVCrcNXD7Z0=;
-        b=TYVAQPwG/7eZvns1DvCSWNglR18VUAF1yLiq3rGZDD3YsmM2hRidagaQ9HWhQ3LL6D
-         4owZfKaubFLOXYM3jO1ccDrs5mk1ncSnCtHwzjFJRklhVsn/9x9fWfWYOzypYVdzzKnL
-         l9NxNI1tV9TkPIGt8MMRlPFl+v9WguCtk729jBHFp1jZgW7wEHkYDpUJN+qz3J7kW4od
-         XcCWXdIvBAB/VKiD8vR+1brp0IrMMfMIfJznU1wxwwQIX7A+2we7GvTgjnYFn2reOI2B
-         uZdA6sZnn8ZGvhAvvKIjY1wj/GAbIlWkNmASGbk9C8qQFJA6bCMkQHTJm3ikrb1+lfFW
-         FpQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781284205; x=1781889005; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
-        b=I1+Zi4XZYPbd6/vuqeQM+ytqnwbHnJcXmu0iwaFPvzApf1sjqqaX17FdXTxlIp4mPx
-         rM27daPEW5rLeTavd+I7qLqBnxqtnwG6fCrRWENZ8rr8knjlT1smCIGstXOx5CoOyAlH
-         iYCeMVIO4PQDE3KReq2cHXOM+T18MYObDsnGPVVBAUYpq+uaARLaZa8JSClUUSRVNi6R
-         WCVrZJhTsDcPuN8pzWYSlsDqwcMpdyOHYtouoX89YiY2cp0Qs8AinToJtXGb3nJJah26
-         oSsJEC9TdJtOu3H55m8iAw8FFupKF67QUgd3q/0wBKjgww3AmB+zvizMkukj4f6I/8ch
-         jojw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781284205; x=1781889005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
-        b=ARJPrxILhL/YEPdSHPckrtm7mBtwwjWkoLQMZwMTyGjd9EIYm8rdUD5/FK3t6b+EZD
-         KspFwYgXbF4YwzbtDy+fRBswuUCUt98x9knQxlJJmZSRCjQtp2zVQySKd77M3ZROgVQN
-         mpoYRyKvQLrCDpFtPbZ+z/EOP1oyctgjI7dBq7C4yKD+kKdYdslv/Xh3QqDurXGkdqmy
-         EVrbMjgfac83sZNXZjWS0gjcc7AGnBOdelRvZMLoqhu7pzcRTR2/mD24P+w+4C2a+yWk
-         EfsmaJGlpsaZ/KTOJN3svwubdzjljd6XvDfrzTSpMPx77vJj9Sj4PPh1RXRjfJdSC3Jl
-         lOiw==
-X-Gm-Message-State: AOJu0Yzybwztu3M1wyWImXEqoIHFUEWwbifjUIQQI0BjODzTztfRntf1
-	ZNRfgyHFO3w+gRf5N/fpBOCTnF0VgU3077VHjKHhcCMcO3ZRT7WfyUN1/p1e4ya4i8+LDMn5VMG
-	GHHLOZ/bkHbz1dss4EQhtPvtkwodyZ6Q=
-X-Gm-Gg: Acq92OG7te1ovuOWRCg93xB/+NylkZd0UEUfodOjvd4V8HHSGZpkB3PNc3P2gZNwn76
-	Q/SSORo8wuG+Vqt7EqJKGGv+5caPrZSek4WHUb16EidDtaUUSGJOmwVnf1szNNwA/gKav8oYT+8
-	0hlM1ps6TSiuJAVoqwownsFlExyhlEGi7R0EDEnwOJsf9RoCmdOm0wBqn9lvgXLCDqtawbD0rjN
-	1j6Q6cjvLtu6okN+Ihh3oVs5+T2M2wwdZ/Rmzp0hd8zmp9fKHY1vjaji7B7z5yfHTagGOLlyOjq
-	dMNLssRGliObFo/0P0U5WGXKy09NaybjitIyp6XBItGN4UmEH8T33jYrQy+6xFx98SE+FLbN4/m
-	WTwdis+z9j9nDlj2nZnA7yKaT
-X-Received: by 2002:a17:90b:2dca:b0:366:10f1:3d86 with SMTP id
- 98e67ed59e1d1-37c2bd75872mr189256a91.22.1781284204833; Fri, 12 Jun 2026
- 10:10:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="UVfhknRg"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
+  d=tu-berlin.de; s=dkim-tub26; t=1781284905;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OV1+Rqtca2bNABQo0c5sCFhOHb8swb/BaM75V70D7kY=;
+  b=UVfhknRgpb6m2LcWFfUf+yOVAMZ6A6ZaKF1lWk6B6kHVPFvQ0vuwx+i/
+   A7bucdv2dNGRjCsxTWGQ0NO9GtcnNnKhHjDzQicwYFynXZYlE60v8IF1X
+   JjXNFTbQcr90pLw517pwBokUPc9vasKGDQGIltW7m4CLJA3Zz07I8OTRz
+   uiq2mpoFQtqbVVwol2cqxcgHtxCAnAvaJBMaDXzz3LZTdwb/1WTZ6/iL4
+   8GBBjUHypeRDGxTUUDAK8ONNj+IxpEShnwTvCk9FG3OC2xCjo8yyN7os1
+   OgKAb5J8gCDA9r/+wbY6V2Q/qaGve1Ve+e/DySD+Ioc4E5tXha9vhG1pR
+   A==;
+X-CSE-ConnectionGUID: Co7ywSanTKqBgyUi/m5VUQ==
+X-CSE-MsgGUID: N7qmqRnERK2hk9xgbm/myg==
+X-IronPort-AV: E=Sophos;i="6.24,201,1774306800"; 
+   d="scan'208";a="48673396"
+Received: from postcard.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.142])
+  by mailrelay.tu-berlin.de with ESMTP; 12 Jun 2026 19:21:37 +0200
+Message-ID: <4ddf3bcb-db5d-4821-ab32-577de93973a7@tu-berlin.de>
+Date: Fri, 12 Jun 2026 19:21:33 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612130919.299124-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260612130919.299124-1-jiayuan.chen@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 12 Jun 2026 10:09:52 -0700
-X-Gm-Features: AVVi8Cdt5YY96GuciSaCwsRw-A8ob7HHQLryVxTyFCQcmv_QVvBEG-eceoLw8Qs
-Message-ID: <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Shuah Khan <shuah@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Sechang Lim <rhkrqnwk98@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
+To: Simon Schippers <simon.schippers@tu-dortmund.de>, <hawk@kernel.org>,
+	<netdev@vger.kernel.org>
+CC: <kernel-team@cloudflare.com>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Chris Arges
+	<carges@cloudflare.com>, Mike Freemon <mfreemon@cloudflare.com>,
+	=?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>, Breno Leitao
+	<leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, <bpf@vger.kernel.org>
+References: <20260612083530.1650245-1-hawk@kernel.org>
+ <5c326cb0-9b7c-4d67-8f80-0c9be1e8fcba@tu-dortmund.de>
+Content-Language: en-US
+From: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Autocrypt: addr=j.koeppeler@tu-berlin.de; keydata=
+ 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
+In-Reply-To: <5c326cb0-9b7c-4d67-8f80-0c9be1e8fcba@tu-dortmund.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 12, 2026 at 6:09=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
->
-> All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
-> Kuniyuki and Sechang Lim, which have already been reviewed by me and John=
- and Jakub.
->
-> https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
-> https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.co=
-m/
-> https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.com/
-> https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
-> https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
-> https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
->
-> The automated reviewer (sashiko) may still flag a few other potential
-> issues on top of this series. After looking into them, they are either
-> already covered by the patches here, or only reachable under very narrow
-> conditions that require a specially crafted BPF program and an unusual
-> sk_msg ring state, so they are not practical to trigger and are left out
-> of this series. I'm collecting these fixes together because the same
-> problems have been re-sent many times in slightly different forms, and I
-> hope this series can be prioritized for merging so the duplicates can
-> finally settle. With so many AI-generated patches floating around for
-> these spots, leaving them unmerged just keeps wasting maintainer review
-> cycles on the same issues.
->
->
-> v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
->         Reverse xmas tree style is used suggested by Cong.
->         (not all code match reverse xmas tree due to variable dependency)
-> v1->v2: fix problem when fix the conflict.
->
+On 6/12/26 16:10, Simon Schippers wrote:
+> On 6/12/26 10:35, hawk@kernel.org wrote:
+>> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>>
+>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+>> latency by dynamically limiting in-flight packets in the ptr_ring and
+>> moving buffering into the qdisc where AQM algorithms can act on it.
+> 
+> LGTM, thanks for the detailed changelog :)
+> 
+> Maybe we should stop searching for the perfect tx-usecs value.
+> 100us is probably fine for most hardware to not have a performance
+> regression. And lowering it does not really improve the RTT anyways.
+> Do you agree?
+I agree, I already thought that it just might be a very lucky case when 
+using 50us where something accidentally aligns nicely. Interestingly, I 
+could also reproduce that 50us was consistently a little better compared 
+to 100us on an Intel CPU. Maybe if I get the time, I'll have another 
+look at it, but in general I think 50us or 100us does not really matter.
 
-Kuniyuki,
+> 
+> Nevertheless, I will compile and run the benchmarks again.
+> 
+> I will go on vacation from 15th to 24th of June, so I will not be able
+> to contribute code or run benchmarks then.
+> 
+> Thanks,
+> Simon
+> 
 
-one patch is yours. thanks.
-Please help review the rest.
-
-Thanks!
