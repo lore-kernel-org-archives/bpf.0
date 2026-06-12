@@ -1,137 +1,181 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F52389100
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781303855; cv=pass; b=Ec0747CZkukMi3HEvcSCfOZWUOUMtEyeUpUhTWSfEiKW5IqEFz0YsZOmzpu4Z178SsZB/1/mjpGsBPbgUO14hoCNdvnIr59axl976kjPL16RMLSu73ClJ3dR8b/wUugw74s77NI31QbPs70p9v4oVX+8dsxlUg5T4a8JTlZ68Go=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781303855; c=relaxed/simple;
-	bh=upxYdsljs1Q3FobyTQ4N3L2JqmWumXD9D4kqsVO1Mn8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aeyvkcLSlHxW54csG0bnkh99soJZ7PwoWKwvpDW/Z8HzUQurzLhghFe6GJNBZkeKfVoGKpv2XTzxuupmkydckDNsNKQV9JfuCbLhbOV99ICHCJPar16mduJ43q4Ov8kPwVie27SpGzjA7lTzmV0VuSth1nP+GNjA+qW3A46sDHM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iCYTY5sb; arc=pass smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76EA364022
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781303890; cv=none; b=q91un/Up+iuFtdtuuM8skF61zVQnO13qfiE7w0r3FnmPbAEU/kGLtD+xl2sPjwOr2VIohXSB/1QJ1vLe1cSLmTbEpI+wjrUHrByfo/BrhHBE0Q4diH8Ho8z25u7OV8M/1Bj4dqnagSUfnO85JWO8CRt7+LWAlDSQDWZfFRMYUdA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781303890; c=relaxed/simple;
+	bh=B3wB4uGk+oU/OMPLbz9dYvLPTH2BAFwuf4iI50kP2Xg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PxQZptlzgIt9TmHcE4JKTP9Ggp0yhk/HoNcEIjwxckEsew/12CBp7nyjhaQZw2Mapnbkf6ZqxcoTWSCD+SBxXHuDMtDr2vZ2ZjKIKxAXWXjyL570gCfTLABqp1m4hI7NTsMNOKsbw+ZBFtNyNAr2JRXjxiGlixf/82CHkESiAIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jfN0PMhl; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCYTY5sb"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-51778077b28so15497061cf.1
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 15:37:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781303853; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GxDuBuz6zt90ODBQHS5DsjjwdZXY+EQUrQpvbBthFQy53x/RMc8HRqsECTYoH/E4a/
-         jgnPl3ILR0uKs/EhyPHQ/5Z0kx0VPE8TSFZCrilSpr+hFJTFtp4R7ukRAaMipxzUAAbp
-         ENfuofL3Lfrd3q5ex3mejacXIiuvdGlbyZlN8/NK9eGKWBq/PEOuYuXwYsUlzGn3Wc1v
-         NYfsjphfj/EUrxp7kbxMuiir65hNxfuXLwfm/wdDSPdLnFM7BjzHH8twIm/k9GJgHQ2A
-         /bQoqRJvm+V+dr/voKxG3JxqiYovsC3t/ZMmlYzWfHh52mBD/tlUjubIH2rVQLeMIttF
-         bN1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        fh=fasCMz1cCqW68EhiD5+wNKOYwk7DeThMxe74/5vaSqU=;
-        b=jgGqUWWpFePO/HHIM/9AoqYAP5MB65Qyu5dZ+ojanBL5GWyHe5m7HrRVtimM8cWd1M
-         S5zuUD77Knqg7R2GAYXoKlfSQ0jwgsfm7AGTol6yc+7l4y1Fy20MtXr1fEbB67HzTg43
-         ytysNSp9i6pUFY1IME2DQwgBZMOLORcbcxHfQQeTAcI2kHn92GzpsTKM1MJo5/sNkhNV
-         d1a0ZgKoLHn/0/eId3Fr/NFsgmzkOgnjgYPgf5s60gHPb+qRmFKP1JeaRLaWhuJoz0I0
-         tZmxUJ5f/IWaFwX9W2Mkghj/N94MCKpN/meRexc6AOKLYQ84erMgLjy5I6fZtK0TWtIv
-         vYzQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781303853; x=1781908653; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        b=iCYTY5sbSdPsbXX+Ikcrb9lffX5RC17UTN2t8Qd58+V+9775DZeBZm+lXP7o0z7Hsg
-         KWVt1wz0AZQGE1FJBzyJg24wDt14s/XlozKQxDoFiIJA8g+reTnWQic0brbTyC6+L1sP
-         AB7WjHqBEXIuMzLNmlg6f5YLdjdEnt1ywIOKpHcWhScdcdsLTafMz8hS+3fmNii5whyR
-         rr6Wm+cMJOXnKEK5naMDICLrAgM4XlWHR0t2WfCddk/Rr00O/6bHIdBbGTcZw/DC363s
-         TjZ6Su/15uokHWnJjqqSnVCWQZqOln0+NaMpR2NpNRMeKC79XbhCRVCZuo3bDkyStq83
-         Bl0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781303853; x=1781908653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rBRAHcebZQ7InUHNMGol8uXlGZUk31ysomU2l/3gZBk=;
-        b=W2pFwQEiSDOkflMY4xUFdoNPEr0xGYxUe6Cnr8LNWLYm8bvmrR5FsXIIquSIVqS3zA
-         kXmhJxA9IT8eQamuuhN4OkjRzakt3/+Q4B9NUF9SKINGGWslwKnkSNh7nqMQwqJPBkpM
-         4dFHSL6jFESEVn3vTN+/l5nBNAAkqtiJ81kPMc2nCXCiMonJUFT3ISvZ50ewdTbXLohw
-         AjFY1ka0P8e6XWT8ybfts7iqJmXzXXa3lfZI19bKXuZcRVk3FCwWAmbjQpSoBmpKVrr+
-         10rKd4WbcnpfBoG9okS23QoAfrro1HF8ZoKu8tBDAh0niGw9lERb0hFGdeT/d28vtUyA
-         3mrQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8xJHdB0VgWK/fyGt5SKNnUtBOFterWMl0Shw46Qr+d6yftbQ/Lka+jd7kHq0O3Rm1zWVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbsT0qEkOcfJRA2Zwl1Oc43IJdFNZLV/XNWJygCxH+W8p+v79+
-	bg6BU+uplNNyco/qmFX/8dkfU11DfSnLa3j8iw6pg0b3+kHxIq2shrK6Lxt4BkI2ZLrhjdp1ZHl
-	fdkRHV5OlW432zdbCQPNdOKmoDRniIou5PIN7VzMHvg==
-X-Gm-Gg: Acq92OFaUwzFcSHf4SUPFhUt7m45ddQrDP5u4eaMgGSO06yixoQEOdi1iTG+GKHfdbb
-	GAxQKoP2muvTaP0wnFrMVPWWCssvI14oGPhO0EPFuOTK8deMh1VdBfiEwk+2A+6w9c5gkwbvGS4
-	ZxQR2DhtDztMC0a5nd1KT2TqQcTMeYVkAPvULULq+44liXwJy0uXUXNSN876EMX0sswlAvCwYtw
-	JNQTImDM3oftNJnj1u7Ai2w2mUmDH3T81cQCe/khMYBsZCZL4Hx8zLhuZnQaxkzI1A+F5t1nDtl
-	LyFAdeYb5aMNkN7MU/yw/ozKOZoXgt6lTDzZjw86AoSc/fI3N02Kp/zGnVFYf1ZZf9xXGE5+pU5
-	fdx5n0lst
-X-Received: by 2002:a05:622a:5147:b0:50f:bb77:a084 with SMTP id
- d75a77b69052e-517fe48d46bmr70305501cf.25.1781303853375; Fri, 12 Jun 2026
- 15:37:33 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jfN0PMhl"
+Message-ID: <300fc9d4-467d-40e7-b7e7-097bded02b6a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781303885;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ht2SR2ifm1paDa+PbjOGRAsdp+TWNYoe+kZwHX+ymxw=;
+	b=jfN0PMhlEWCKCJJ9csX93MfFgj/3n7IrMjOMq8Ch6Hwe/yXyFsar7wy3IZAS8+KIAN8hdf
+	Ilho25xOVx09IQcH3Lx1ocG1zd0nFyeVOM4J7apXXFretTO4RTYyeK4VZH0iWq2nPzlFja
+	eMcCiFV6fraSuFjilMJZ5Pk6VzQIspU=
+Date: Fri, 12 Jun 2026 15:37:43 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
- <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk> <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
-In-Reply-To: <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
-From: clubby789 <clubby789@gmail.com>
-Date: Fri, 12 Jun 2026 23:37:21 +0100
-X-Gm-Features: AVVi8CfgjBSgYWbftHOxOIpBd0igqwxLIi0I8C044rd7QU4om_B4hew3bdGZkvw
-Message-ID: <CAO1UbGemPgHNj1VYONQGx3HJbMMmORctF=jQbGPGUFQYGch7qw@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
- with `SECCOMP_MODE_FILTER`
-To: Will Drewry <wad@chromium.org>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: BPF CI for Stable
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>
+References: <aiJ2X7ut4lky47aV@u94a>
+ <a45e6e99-fcb8-4a7b-8012-8c7e88ea7598@linux.dev> <aikYGA9To89q3Jd2@u94a>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aikYGA9To89q3Jd2@u94a>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jun 12, 2026 at 8:25=E2=80=AFPM Will Drewry <wad@chromium.org> wrot=
-e:
->
-> So I have two concerns here --
->
-> 1. By layering, STRICT becomes subject to FILTER RET behaviors.
-> 2. If we did want to layer them, it would be ideal to separate the 'upgra=
-de'
->     decision from the access checks and make the layering path explicit.
->
-> If you are running a legacy binary that uses STRICT in Docker, then I
-> understand the goal, but there are userspace options.
->
-> I think it's hard to want to open the door on changing STRICT without
-> a good reason to work through all the implications that come with it:
-> cross-checking every SECCOMP_MODE_FILTER reference, sorting
-> out thread sync interactions, ...
->
-> That said, this change could be streamlined and look for ways
-> to minimize any potential implications.
->
-> Am I missing something or overstating it?
->
-> Thanks!
+On 6/10/26 1:18 AM, Shung-Hsi Yu wrote:
+> On Fri, Jun 05, 2026 at 10:12:14AM -0700, Ihor Solodrai wrote:
+>> On 6/5/26 12:45 AM, Shung-Hsi Yu wrote:
+> [...]
+>>>   Is it possible to get BPF CI for stable in its own repository under a
+>>>   GitHub organization (e.g. libbpf/stable-bpf-ci)?
+>>
+>> Hi Shung-Hsi,
+>>
+>> I think a better home for the BPF CI targeting stable kernels is
+>> kernel-patches org [1] for a couple of reasons. First, repos in the
+>> kernel-patches org have access to hardware - generic runners provided
+>> by Meta and s390x runners provided by IBM. Second reason is that this
+>> org hosts source of truth repos for most of BPF CI code, even though a
+>> big chunk of it lives in libbpf/ci.
+>>
+>> Let me know if this makes sense, and I'll create a new repository and
+>> grant you write permissions there.
+> 
+> Make sense, let's have it in kernel-patches org.
 
-Thanks for the review - I'm currently working on a new version which
-addresses some of the implementation
-issues. On the semantics side:
-The current version runs strict checks before filters. I think it
-makes more sense to run filters, run strict checks, then return the
-filter result (assuming strict checks were survived)
-Since the strict checks logically work as another filter layer,
-documentation says
-> Synchronization will fail if another thread in the same process is in SEC=
-COMP_MODE_STRICT
-So refusing to sync threads which are using both modes seems the most
-reasonable.
+Here you go: https://github.com/kernel-patches/linux-stable
+
+I've sent you an invite.
+
+I vibe-code basic sync with upstream. README describes how it works, but
+I'll reiterate here for visibility on the list.
+
+The repository has a main branch with only the CI code, test branches
+for each tracked stable version, and Linux mainline mirror.
+
+There is a sync job that runs daily. It:
+  * syncs torvalds/master
+  * then for each listed stable version
+    * pulls in the tree
+    * applies the patches from the queue repo
+    * overlays .github/ and ci/ from the main branch, adding a commit
+      * this is similar to what KPD does for bpf-next, but without patchwork and KPD
+    * pushes the result to linux-X.Y.y branch
+
+The testing workflow (test.yml), which currently doesn't do anything
+interesting, is triggered on push to linux-* branches.
+
+The scripts are straightforward, though a little verbose as is typical
+for vibe code. Feel free to edit it as you see fit, or even scrap it.
+I wanted to have something working before handing over the repo to you.
+
+This way we have an automated sync + trigger running on schedule right
+out of the box. With that, you can add code to test.yml to actually 
+build and run tests.
+
+I think you can copy most of the stuff from your libbpf fork, but it'll
+have to be tested and debugged of course.
+
+And the best part is you can make use of the hardware available to the
+kernel-patches org: beefy bare-metal machines for testing, s390x runners,
+codebuild. Oh, and AI reviews of course, if you want to experiment with that.
+
+My understanding is you'll be maintaining the stable part of the CI, but
+feel free to reach out if you need help.
+
+Have fun!
+
+> 
+> [...]
+>>> Technically BPF CI for stable can also simply be merged back to
+>>> libbpf/libbpf
+>>
+>> No, that's a bad idea.
+>>
+>>> , but that felt less ideal because:
+>>> - kbuilder-debian container image currently doesn't work when testing
+>>>   stable kernels (I haven't look at reason of failure, might not be hard
+>>>   to fix)
+>>
+>> Technically, it's not a hard requirement to use the container.
+>> It makes the build jobs a little faster and a little more reliable, but
+>> it was crafted for bpf-next testing, which may not be ideal for stable.
+>> If necessary you could develop a separate "kbuilder-stable" container, but
+>> it's up to you to decide whether it's needed.
+> 
+> Understood, I'll stick with Ubuntu 24.04.
+> 
+>>> - actions that tests stable kernel will be mixed with actions targeting
+>>>   libbpf itself 
+>>> - BPF CI for stable will have to contain version-specific tweaks (e.g.
+>>>   [4])
+>>
+>> This is fine and expected. It is of course great to be able to reuse code,
+>> but practically speaking, I think in this case it may be more work to
+>> keep the common parts compatible with both stable and bpf-next workflows,
+>> than maintaining two diverged CI trees.
+>>
+>> The rule of thumb should be this: if you can use a libbpf/ci action, do
+>> it. If there is something very specific to the workflow, keep it in place.
+>> Don't be shy copy-pasting yaml fragments that work for you, it's fine.
+> [...]
+>>> OTOH we can also try kernel-patches/bpf-like approach and have a
+>>> kernel-patches/stable, providing proper, fully-fledged BPF CI for stable
+>>> that tests incoming patchset to stable (not sure if Daniel was asking
+>>> about this during the session). But I find this to be much more work.
+>>
+>> We don't have to do this work right away (or ever).
+>>
+>> First let's set up the kernel-patches/stable (or whatever the name) with
+>> the implementation you already have.
+>>
+>> We can enhance and improve it when there are cycles and willingness to do
+>> so in the future, 
+> 
+> Sounds good to me, let's go with kernel-patches/stable. Thanks!
+> 
+>>> The current approach of applying queued patches from stable-queue[5],
+>>> while comes with quite some delay between the moment patch is proposed
+>>> to stable mailing vs the moment said patch gets tested, seem like a
+>>> workable compromise.
+>>
+>> This can be automated by the way.
+>> Check out linux-next sync on current BPF CI, it's straightforward [2].
+>> There is a job periodically syncing a branch, and the CI pipeline is
+>> triggered on push.
+> 
+> I'll looking this, thanks for the pointer.
+> 
+> Shung-Hsi
+> 
+>> [1] https://github.com/kernel-patches/
+>> [2] https://github.com/kernel-patches/vmtest/blob/master/.github/workflows/linux-next-sync.yml
+> [...]
+
