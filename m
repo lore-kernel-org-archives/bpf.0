@@ -1,127 +1,163 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B305306B08
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212E2396562
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781289278; cv=pass; b=DIah/st35rMtgiU8Dm9Z4cYwDzhNyd/Qtv2ebr6PUQjbuCr0F4ad4fnbpdl4kDbL2Pr1CECpzRDXp8m0lqwKzMStRzWCpdLCVMKv0tzj4epR0IOlOh7awdJktTBEtxtOJURUSk3HELOtF7d51aTOlP8Ov+DgCWZcCAOxTC8oA9A=
+	t=1781289814; cv=pass; b=WPt4oLS/OjAsMoh4nyzM9SqIdu7PcsflL8r0JOhDat0gvBRg/2WrMvo5z3lxBQho9u5j8fsuZpIXpGVTZmYalzMPYCXcFyEVJQXg/LjkE2L/5jdYVvepQwD0RqGYF9PeB0oiD1K20EbjT2vk9CdcWO5XsI9iVoCNF6N6cHAl6vA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781289278; c=relaxed/simple;
-	bh=fx0MzIxMVvSvgIzyBZbRnRQSIiFTKkQqo6pT3/wbQdY=;
+	s=arc-20240116; t=1781289814; c=relaxed/simple;
+	bh=IQZpujVP87VTdmXVxfTNfi9J/0IXL9EHLyAaVdEbWQw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z33l7r4ZoeuUovTA7hNKojol77MsE6dC7YFUSXFysxOOaDhLda4mQ5DMTx0QaDyFPZH9oM83LWN+i3jlGjnVkWpxjCxNI8+WguX2T1Rkn+UMpxC7z0FcZWB5RTPhc/+8C94dBajOEB8o8u06Kqn2k3V/+l/D15FW0GDC77PHntc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lh0H9m6j; arc=pass smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=LFuhstzYZB4USi+Gf3pnbeVyZuVppcu5NPWvX03j2Bn72WcQe59nS6Akd2ocXHSOPV8AkwAsHvAg4ivO+hYAE5aHiCz613+rwKoH9hJ3gdcv3J0c5FSBFU5ryXQHXS8g02cQoGquvRvTG3TEgjbYuCkAi4DZ68/uuzq+rJww1ko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FNqgjgKD; arc=pass smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lh0H9m6j"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84231305a80so828463b3a.0
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 11:34:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781289276; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNqgjgKD"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-137dd3af345so1324103c88.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 11:43:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781289812; cv=none;
         d=google.com; s=arc-20240605;
-        b=WyjZU2rpOMFuNKrwUq+aPjKyRuEiFJczovgYW6bFK7qVzW0+A38VUyFg7QmbbtIyXc
-         iILP5vMQVd6oEgxFYJ3j+Y6FHsBHqnKLleMXzb9HqS0/aTmm9iEv8tMj2hUlKKGmkzwT
-         6BLlNciHfOewOj3Sge6A6zA3BziyTgAD8QwjG5W9Db5R1BequHuAMnfkqINpLh2QZaQt
-         Qd2eMIh9dHBHZMfEW5rPgo8GEgK16sUg78NmveDrMVeCzVAWrYnOcH1T4Qmsw+CKn+U0
-         CLdiXeueJP8mcG3xzQkFh6iPVLpKqx+JA12ToPX3jHfjP6d8SW9UT2/jWAPs+cAEYsPA
-         N35A==
+        b=GmkpFWlOlcYhb2/hWZNutxfjqSNzyJA7C5hze5HsF7IPRZpoNi4Dd6yYXqEBVmy57v
+         tzZEYKUmjGl2scyc64E0/0y3tBoT+/gkpP16EtHrmFaP/fwHKtn97JjpWG03FvHRgBCF
+         G7HEen6nabGJmynb23SRMN4SAZEWF1Nto3T0ThWQTmpuvz9o+kqLO1PgK4K0R88AjFPy
+         8tILuCQcULwWYZkYNXgE8vn4hEVt9NTIJkU7/0qPEjNDXKHVs+eAJOKXqw5tYfmOQLnF
+         RYrbcP5e/QZ9wA1h45auKn+Dj0Sj6c2jmYiL0m4DlGVm6gXrRbbh0/ZWtiNeBCUFquHX
+         4buw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=fx0MzIxMVvSvgIzyBZbRnRQSIiFTKkQqo6pT3/wbQdY=;
-        fh=tS/ZvMhU86kIFhz27Cke+JzhBKD0AMtpe9brAhpSkzA=;
-        b=DxrsIF9wtpEYcinX8dFmfArmpuAFOWfJfawnlMwVUi4yBj5JiWm6ZDZRcN1NGKWZmV
-         BbFhk9MD+chKqXfKnNyenbz8DpnWDk3ft1Pos0iiOiu/JRr70nJ/Ic1iP5a55gASAO3a
-         msR71A/4SjITURFg2tpSOdsVX0MZxrwu8zsPhPe/4XxdAhm/dDZ8eLr1rMm8KVHJBZAj
-         bxem1z2P4BJL+nt5QW9ZXuYXRAEcJKIoVvjs5QjZ4EhbRWE53Gam552/amaOzV1HKrgO
-         P/eH8fQXDCffk20SnAEkYN+On6xYyi7OebkFCx/amtkqRoV7QhxNhdK+V4rV1tPRL+Uy
-         P/VA==;
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        fh=SMN6aGEIJ9520ZfVb29NSv23iIPBBhGcX/AuFXkgSiE=;
+        b=WXni1gfo+JyUq20qi+ZOygfEUukFpiJtoNxzpKb4dKSMg4L6fBFOp9MqWG93XWa3Dn
+         irI6ruVuYe6ic+krgfbq8l5BxGM9UpncUbEfj4x6w6YVD6mN2+QyPV9lrnr4pxhFRxS3
+         1uI57xuvMyOQXYG+zJp5zuuixq2IKT1LAnwU4kT0jTxXwtZ+4rELSBUoz6KnHEo+PV+L
+         FQXSHwHtaus5+zY6/c93yqd1W8HAqinMAIS8b0IOqvv0t7prPRg72D64tjqFgut6DQQX
+         mYGazkzo+ueZ7oqchpI0JVXdFWiJROR1gmYMSCYzwEtcVlicGyVfD0TShg4vQZY3o5E+
+         iPqA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781289276; x=1781894076; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781289812; x=1781894612; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fx0MzIxMVvSvgIzyBZbRnRQSIiFTKkQqo6pT3/wbQdY=;
-        b=Lh0H9m6jyIR+PD8Ye+qRHuYZziPwIayRolMFmDsEipZMJFiboDNgltZvPmjBGhzVLb
-         O53UsGkl99pitYGgmh3dZ6TdEgFRe0bOq80bN7cMgQoeT+WLX28eP1AAkUlKaZkCez+6
-         HPagc2wVq6GpaXzBF8FdxEy058tlVMkirYg9u46gyyPZpd8Tv7q70T8JfFuPAvPv6gI5
-         fplynwQMOgSK6ONEiWAYGY5ygpLFu7GgHxRQCmtIGMcUfeRy8AKpwRRQfvnlrIyJbIP6
-         /3mX3Jtwe1kUjSq6DmE5P3ymur0DQJUJbqSPed/W+osfLqDoxg1MBnhHRtnRuRPsuIbP
-         LaLw==
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        b=FNqgjgKDckM/ef/CMXnPTNMN1jfEk8s4gs8f9SetKVyxbd+n4K1AEEwZ3OYV0H9yw4
+         TndiQagpsw9Dv0OpqPJmlWl/X2s99mp5geH0oRQ5iP5EWzQbOgGz1/OmDiNiRxXKEqLg
+         PthTVFY+8Zzjbo3qsNgag8YlB9qYdkUToYF5pC4fTCsnpQZNIT/38ySyjf4F+HbiFg+j
+         eFNaOxY7BZnmnuXq2mqSLvVgyERmOmN5pmLO8lgUad0/tjRIBIN2N6LgM7+el73WXaS0
+         dlu5/OuXV50SmD3cWcZzGLqXCgD4lKqGiYuSS/HbmTtMIjARhWiMh4+a9NrxSxm+LeFy
+         LH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781289276; x=1781894076;
+        d=1e100.net; s=20251104; t=1781289812; x=1781894612;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fx0MzIxMVvSvgIzyBZbRnRQSIiFTKkQqo6pT3/wbQdY=;
-        b=JTJa4SQqdFLSoeu7VYYxa1kuGWGH6c+G0l0j5IpO6Sgc0M6nhtGpoRMQikkyJf0cmK
-         +DNjQR/G1DZc9up3m5TopuSDP7eMRt0WJsTgDRsfpiQ3mffKOjydCq5z4Vu6uKuDA2rY
-         FtcdWogkV3aosvjX3GpKqZMbiPabA3iEouLaFrSp50la/ZBh97Wja9B7jTVmULwCvfRA
-         aGzRKxbig74PoQKHgmMRkkBkcwCHn8r9Iqkup6j7pGzVOeqS0LEVKA0xuoDqbu7TuYNF
-         h7VxHLAnmKl1bSeUBYWkNSffW2emGymIK1ZmUBXtLN3RbYCHOn5tJjbPfsscqamaUQhg
-         N6hw==
-X-Forwarded-Encrypted: i=1; AFNElJ8zqxBDQirtVHQ66Df8/C9aE3ED4IiaL3wfPkqdYB8Pmxps2ke8jR5pH89AObqklFvWM+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdGW6Y6jkbCdJfdIn8wXiPJSBAtFX+jOjajC0RHCeMMqYsJIbo
-	M3Tt6O5FD9aOh3l5RMTXL/CPCWk1/eZ/XJcBJAcUi2fT0emoBy8GHpQx0DwOtK62zuRvDalT//Z
-	Z27qpn5eoGIIuj+eDjZziIpe4PlpfVAk=
-X-Gm-Gg: Acq92OGlxx859StJDQg7Fz3ZDApOF6hfaskyXLcdkfi/1BOxGLGdNQsiufNhTsxAvdq
-	x1ti3zehBjfD/oEcGNdwuKjiCNcGK8hj4bfDrmZNFNtiGVaydvWvRTIHFGHKagprkiy433f1HLt
-	xIXxP+6c7ZGanaf5HTaQQeqS9uedLOEQ1kO23h7bJdGAc/XAwwO59dVfsOmSLojfTbUplXI4HVR
-	Xn1rrpMep6w3vYYyWZvOvuuj5lBw8SqiqlBSfzMuPajVW2ww28W4j71XxPr14VQDZaCgEuLqcOv
-	m9amSxej69AQJ3KfwzS0SSHxRHK/WmCmejLSRC7T2I7jSfQp4gNJQCcEz/2W7kVFbdsiWB2Qemw
-	ifILigUG26I/XU/Sfejy4JHsp
-X-Received: by 2002:a05:6a00:94c8:b0:842:614e:cc8a with SMTP id
- d2e1a72fcca58-844e1a2ffa7mr845553b3a.28.1781289276251; Fri, 12 Jun 2026
- 11:34:36 -0700 (PDT)
+        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
+        b=DFuI5Abs1a+6PQ0yNYYKsYR/nr4q+d9Yi4QZH5IQS9rQ1uBdlXmFS3VZ779CSWsjdB
+         190tWiQyzfqoMRl/LuGMLhEnvbVOKzIA+PcYZKAJ+sNlPcY+U2u/nxWe8kSUkiaWBMaC
+         drk0TNBkw1aTN7fj9LA5+ebOria3ZZ0AvgeGgKwffpSuhB0WGQE19G2zf6C5TjZBC6gR
+         BC4ZnIk6FAaYivy9U3MfMZeitA1STI9KjnO8p6EMrGmmIO/sRfqngOtV238aJIj4OTRL
+         DCbpag6OmuGPO09EgAT6QdVH3Wxsjt5CuYlcKq5r2babAAdbhpwLeic/KJKjJj1Sw2P0
+         NFNw==
+X-Forwarded-Encrypted: i=1; AFNElJ/ND2idKS4ItRPi1+vZcUEvYSDj3KyQWB7OgaK6ejIltThPgztik6Uk7r0qzu1HebhoTI8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYWnlFCe66KH7/JVxtzYxZx9cDqb34RGDxPp/2DR6VT/Jl6GLY
+	q5jqNy55jJ1xOavxSxxCqVxLcuCQ34eIv2EjZg+76jiY46oi7iALA2naW3Id7HDyIQeN4dRRXnF
+	biR1/flh2pWWzp8ZMWiFKlmbdEKaKcmILbfsiExeM
+X-Gm-Gg: Acq92OGc8iD5peedka7KVHYLU5w8YZ8qcBplmMYBB56yWKUloJ3qYujWLvo38QG6TsV
+	xy/MyUwYm4ofcHpVd8QsMQS3f0VWl+m2kW/MW0ncc92oj9Sv7o2hZdAjUZydHHbx5od7bw5jz83
+	Yiys/+5Zbscp7VwszwLcqyZpsxwW/aqdEc5j4LbF5pSnFVVur+hOrzsfcUqhl8bzhVEHvJZYRP2
+	QrnogfZYhqv0H2390nckjO59bPMNHHujCOPFeA/uih5xMMIoqUt7sRjkovYOMdkgDoMwyrY/TAR
+	2FrqxuVOutam62EhyHPxcgNnUc9bemxnVsUI5H9ALw7AtE+48a7+1YPPbsQ3lqIxLaI30NSMfAo
+	TYyGu7jYeyadVeLppLOpO1Z+MP+Hj0pHaSpdg5vP6dPWFNYagDVKO
+X-Received: by 2002:a05:7022:418:b0:137:fe07:8a2d with SMTP id
+ a92af1059eb24-1386f24121cmr436470c88.6.1781289811262; Fri, 12 Jun 2026
+ 11:43:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
- <CAADnVQ+KTNKkf_Tc-RZR-g8wEfJU4qWcOPnjDbA2=PEtZsYnYg@mail.gmail.com> <aixMETjhANSYBZP_@pop-os.localdomain>
-In-Reply-To: <aixMETjhANSYBZP_@pop-os.localdomain>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 12 Jun 2026 11:34:25 -0700
-X-Gm-Features: AVVi8CfQKniRQEMr5OnUvtD3CO2bD1CLLbu29ZZ1l2MB6fCjeNzhT_TTtepnwQw
-Message-ID: <CAADnVQLzEopmoR7vdTnno25gCqT99ja3jPaMGUnW+edg9P9Sew@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/5] tcp: opportunistic loopback splice for
- BPF-paired sockets
-To: Cong Wang <cwang@multikernel.io>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Hemanth Malla <hemanthmalla@gmail.com>, 
-	zijianzhang@bytedance.com
+References: <20260612130919.299124-1-jiayuan.chen@linux.dev> <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+In-Reply-To: <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 12 Jun 2026 11:43:17 -0700
+X-Gm-Features: AVVi8CfZ2Yztrdd9Cz0a8Cioo193fVEec7AtKDsitODSamBkyRtcTNl8C85ikBY
+Message-ID: <CAAVpQUBmiyfW-3FjssDUmbOXyA+QbsFyATEs2D38ZbWfpNQE+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Shuah Khan <shuah@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Sechang Lim <rhkrqnwk98@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 11:12=E2=80=AFAM Cong Wang <cwang@multikernel.io> w=
-rote:
+On Fri, Jun 12, 2026 at 10:10=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, Jun 12, 2026 at 09:01:43AM -0700, Alexei Starovoitov wrote:
-> > Just saying that the code is free nowadays, so whether it's 1k lines
-> > or 10 lines is irrelevant for the discussion.
+> On Fri, Jun 12, 2026 at 6:09=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.=
+dev> wrote:
 > >
-> > As far as the idea goes, I think, it would be interesting in pre-AI era=
-,
-> > but today splice and friends are a prime target for bugs and more bugs.
-> > skmsg and tcp_bpf are reeling from unfixed bugs too,
-> > so my take is that we should not add any new features to skmsg
-> > and instead deprecate what is already there.
+> >
+> > All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
+> > Kuniyuki and Sechang Lim, which have already been reviewed by me and Jo=
+hn and Jakub.
+> >
+> > https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.=
+com/
+> > https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.co=
+m/
+> > https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+> >
+> > The automated reviewer (sashiko) may still flag a few other potential
+> > issues on top of this series. After looking into them, they are either
+> > already covered by the patches here, or only reachable under very narro=
+w
+> > conditions that require a specially crafted BPF program and an unusual
+> > sk_msg ring state, so they are not practical to trigger and are left ou=
+t
+> > of this series. I'm collecting these fixes together because the same
+> > problems have been re-sent many times in slightly different forms, and =
+I
+> > hope this series can be prioritized for merging so the duplicates can
+> > finally settle. With so many AI-generated patches floating around for
+> > these spots, leaving them unmerged just keeps wasting maintainer review
+> > cycles on the same issues.
+> >
+> >
+> > v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
+> >         Reverse xmas tree style is used suggested by Cong.
+> >         (not all code match reverse xmas tree due to variable dependenc=
+y)
+> > v1->v2: fix problem when fix the conflict.
+> >
 >
-> I guess maybe the name misleads you, it has nothing related to splice()
-> syscall. Its ring buffer was developed on top of include/linux/circ_buf.h
-> which again has nothing related to splice()/vmsplice()/pipe().
+> Kuniyuki,
 >
-> In case it is not obvious, this patchset does not add any new user-space
-> interface, only a kfunc which is visible to only sockmap eBPF programs
-> which already require CAP_BPF privilege.
+> one patch is yours. thanks.
+> Please help review the rest.
 
-Not the name, but the concept. Taking from one socket and feeding
-into another already caused a ton of issues for the networking stack.
-If you can convince Kuba we can entertain it.
+Sure, will look into it.
+
+Thanks
