@@ -1,150 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DE332C94A;
-	Fri, 12 Jun 2026 06:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781245061; cv=none; b=dQ5ZyZaTZqFdcuCO50IZzqSwQj45AIBHvoDP6Bu4axy2fu/oM2zsa/wS9s9Z0cVZNUztMCZDwN5bLm9oBycyAl7LGecK3sCKrj4q7H+HuOpv3eAieni8o+QR0wM11NWqx9FaF67J+XJP9O7qq5msCSGEta/DTHm1iliFBOob75E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781245061; c=relaxed/simple;
-	bh=UrUuv+1gy9sm5hjgnZOwk1bV1HIdJUe49L2wujlrtcA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxDA4cFECVVwJ6EjZjVXHzhqEEfuuA0AqKqQURbpAdQm2fbZSrfHJCerGHmgjCTKiGLJS771uKQO8+4qsEOM2khEuoh+HWERuFCuVW9y/+dAwzdE+V9FGbHPgYdxfrOX0XNSjg1RDY/jHNM5+KSDGFmCSUV48wDypXFixep7k6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmYwyszG; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B8F381AF9
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 06:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781245965; cv=pass; b=TNbwiwGmZFsWo/i25+h5TTO5A8SqbNMXCckxQy+HkWsSQxFG6QmzccRxg4Z+aN5oWuV68LxOqLAY69BYr7yvWTxv1CQcWRvDcH4i2tqTfEk3fPtkwgTcm88NWgmaiXdamBiOu+68PNuM2rV+KFxnfg92lKhZkvuAHx2YzA33biI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781245965; c=relaxed/simple;
+	bh=E70qoRUfGKWHoRfDr/vGHx+xj9G4daC6qsXk61KaDnQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=exK+MKDyn6iMVGvp3QcVHJPm1lj374k199ZiW+taB+WMWjwcxT39kXZ8qxD7y2l1N14tpmWOiniwgEBmjGr1xqXFssOpGIfj3OT56e23BARHzGhPaDYGZvbWxfNSw6WPtUwotehy0GBUnstvqj4lXlObuHzmtlCNSVC7Fbi35xQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8aetRYR; arc=pass smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmYwyszG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781245059; x=1812781059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UrUuv+1gy9sm5hjgnZOwk1bV1HIdJUe49L2wujlrtcA=;
-  b=DmYwyszGe7lpKxv9bEO2mwEF32/CmE3S/b3MBADvr+qovY2Dk2Djtp8V
-   1xSedHqfXxs1SqjFYdLPLBUzVFK1Sv6exfyzgXBHI1z8ZBpmE0oElSZQK
-   f58Bm90GK3tcc2+3Qt7x0pPB5ToHlLx6+bCqWwdLT9OdVOX/E2DZYrxMW
-   F/eb7aD94fA7JnZgPr+DwtMOlBWZauexgPhOOdU6Q5/sJypObIWUNicQa
-   qZRoKGNum1vOskAMf4gmWuPhNW5M3gElCtCcyVyiKv4VtGNZAZYk13QZJ
-   044sn4JdpGqRMbm6iIY3Tj7MSdvBIk+zVy4Ava1IEalATRfMOybCq1Wu+
-   w==;
-X-CSE-ConnectionGUID: Wn1ooLNZQQ2Bg7uAx/70jw==
-X-CSE-MsgGUID: BfeAj1oHSkCH4ZbKr0tkfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="82056495"
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="82056495"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 23:17:38 -0700
-X-CSE-ConnectionGUID: GE3Y+wr0Sgmv9QnKDuU5PA==
-X-CSE-MsgGUID: zNSZIJi2SrOZA6OpndBU8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="251685497"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 11 Jun 2026 23:17:35 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXvCu-00000000OOv-3sQV;
-	Fri, 12 Jun 2026 06:17:32 +0000
-Date: Fri, 12 Jun 2026 14:17:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Roberts via B4 Relay <devnull+alex.roberts109.outlook.com@kernel.org>,
-	Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Alex Roberts <alex.roberts109@outlook.com>
-Subject: Re: [PATCH] Add LoadPin support for eBPF program loading
-Message-ID: <202606121426.NrJtdO3K-lkp@intel.com>
-References: <20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d@outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8aetRYR"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so6818785e9.0
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 23:32:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781245962; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KCcBtTZWtj+GjNDr0tmB98EcP8hQfCvL+Mdzu3nxHOtyo4M8xrASxpw6YXOm3rxmy1
+         yH7SsLoYfcyfDjN5Y3jSL+O7Gjf+EwSDpllCFGbWRz/Sn9y20lPzteZkyjUbxQEk9PLp
+         VEu3NZJN64A9niCmzhekGbm/eWmWWtxH2L/eq9XSRGC8SNiMa6mE29bpoCs41zi6sW3b
+         kr+T7H2KL/WsV4ysjtMI+HM1JsuGXDIIohtp7JvlAIXDE4mC9AXPZxhpgOSKULzDWHCZ
+         KOlU6kkCvkvhvzEo65UH8vPf0xiOjpvWCfpBLzruLx2h6DAsAqvJ2Y2vJVnlfF1BKBRk
+         J5XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
+        fh=Un3aoqM0HkpUA8U8Sefs+lNTl6GsjR9V6W7nEiKMWjM=;
+        b=KUN+9oUdbLk7FpoZxi3qHUF/Q6GxdYinlN6QmicD8XJxMjo32QKe5UY8/IkQYnRAdO
+         raEh1AI65k3/cukMLlJ4/7k9kvA7e44xpAh2QBqEdVC/dee0ojcKn5JDzIyvNwMUhIdi
+         lrbzfc2UyQKAPyww03OedLERE6AMJv4mN71XW+/+kerdkBAFOWXNajNH4tmmLSQ9pZQk
+         K5u7viqBYRZKhb3lpcXX1hoRn/Og/AvJ7/kZrOgZ8gjo6zPojBG/nmwbnX3Ue3pmezs2
+         QQ2EvkF1+GPNOHizJG+k0NZndkqvcoY+/GHym+veX3LqKmQl1CL7MVUy5sLFPmeQi90M
+         WT0g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781245962; x=1781850762; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
+        b=e8aetRYRQwZmtknKmu4v4+nYP6KiEPcT3u7uPP2jMrifEHDi3ShhupYI/IxSHv3shr
+         1dJkXYHifLJPIe21NAXm1R+kVzAxqgCJt0wtRJBMbTmvOpt0RL9xEvmIr7zIVgfQT9HR
+         aLU9mFOllcrO2VBIYWEjVfKzuWOqhvPdDN88rgXJRtr3NHe5iGKxtYsKTcxv1c2+YO7H
+         aLdwPJuT9S7OtJJbNPfGODmU4R9CwTWtHs8tlbpVVBIsiA1UWsm1ek0OHuVzOJ8fjpqc
+         +8ieKRcj0mjWWVUtk3CVH98yJ7jyFOOjRuopbtOR5qqD82x+EC0O0JU23Z+oMc6TjcYb
+         pR+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781245962; x=1781850762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
+        b=TouCetn88e+uFDFEtezFEXHemsxA2fv+Y5LGgM5p2LU+x5oTukh6r0pmsLzg9lBbv3
+         Wxedj/pHYYCOAeluxOFYwQRV1l9Hkyx8mAYtc8vRSQthEJ3dpbDewJSVN8+IBZiF7Hm5
+         /WbJqHuUvaxVY/WAhw+H94Hmo+uqqosMTkic4UckC7wlYFerTTtd73gQ0AE7HKt67ZPv
+         eI3drZ7dotoGYA6Pe74owmd7ndp3UtBarosivgybO4ymzuejG8jgD7xl3INeVWgkmS9f
+         O1FuTWRP1Jg+1dTwIyIWpwa5acz0e8/x45EprdMll1TId4Ze0yjo63U2vxWbPnWOsKDh
+         ifNQ==
+X-Gm-Message-State: AOJu0YxLx496LRusmF8qIKumRABgGh1B/jwvG0vznOHrRcgeyfsHJhCh
+	dkM16j8yUOChxxT8D1QMKXLEE2mZl8z7hw7oZT4a5wJvSJ+NdvQ55+w1ozxHbCoX6HrJddqwCFq
+	NYj89sA8E/0jQyiEor4Dag7+oAqPQay0=
+X-Gm-Gg: Acq92OFXH7Cv4JFBwyaTovXqURiFYHMa3QxlUUC0ijMjlDNPE2qcbC4xvvK37hZVJzB
+	6gJDgHg+jRmLPUmUry6cDxeQpKYY0+Grkkpic3WaG3ikTrZh3+zXcj4oJtkTkZ/kA6k2e+7qx3y
+	r+h1db33TdyN6+nxZQBRmjsNIZQ09VAo3bJ4mMRTA2tB7zmt1q2UkDdxM0VpTFet+SuJfAxEzen
+	9VnJgMOFqANtBTTC8mmGOT19T2Abmw/aLY8yojxRjE0AJ/FE2VS6YqxQ/ZM74ij0nC3BWa9S0Qq
+	WyRv
+X-Received: by 2002:a05:600c:3b90:b0:490:b629:286c with SMTP id
+ 5b1f17b1804b1-490ec4c4d5dmr13864405e9.12.1781245961963; Thu, 11 Jun 2026
+ 23:32:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d@outlook.com>
+References: <20260611160749.391279-1-jt26wzz@gmail.com> <6e70a018efc87ba1334617b2e6c75ca003e7b1345affe15f1b605634a4ebd183@mail.kernel.org>
+In-Reply-To: <6e70a018efc87ba1334617b2e6c75ca003e7b1345affe15f1b605634a4ebd183@mail.kernel.org>
+From: Zhenzhong Wu <jt26wzz@gmail.com>
+Date: Fri, 12 Jun 2026 14:32:30 +0800
+X-Gm-Features: AVVi8CezUJQ5dJo2tCsl4YwT6OFMv_yZWKbGu9cEm2eLDv1JPD0X-poujETqbbQ
+Message-ID: <CALgi0XntTQpXBPG-znFGohvSMHDmMf93kqz9K6k2dN2rPE_ABA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: add helper retval linked scalar
+ pruning selftest
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com, 
+	jolsa@kernel.org, menglong8.dong@gmail.com, eddyz87@gmail.com, 
+	shung-hsi.yu@suse.com, stable@vger.kernel.org, mykolal@fb.com, 
+	tamird@kernel.org, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alex,
+Thanks for taking a look.
 
-kernel test robot noticed the following build errors:
+I used `r0 +=3D 1` only to shift the helper success value from 0 to
+1, so this test is not masked by the verifier's not-equal-zero
+refinement. In this reproducer, `r0 +=3D 1` does not enter the internal
+BPF_ADD_CONST linked-scalar path.
 
-[auto build test ERROR on 122b52f0bab007ebeb414c8280c1def17b9ed1f4]
+The helper returns an integer with `R0 id=3D0`, `r0 +=3D 1` keeps
+`R0 id=3D0`, and the `r0`/`r7` scalar-id relation is established later
+by the `r7 =3D r0` move on the failure path.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Roberts-via-B4-Relay/Add-LoadPin-support-for-eBPF-program-loading/20260612-031559
-base:   122b52f0bab007ebeb414c8280c1def17b9ed1f4
-patch link:    https://lore.kernel.org/r/20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d%40outlook.com
-patch subject: [PATCH] Add LoadPin support for eBPF program loading
-config: nios2-randconfig-002-20260612 (https://download.01.org/0day-ci/archive/20260612/202606121426.NrJtdO3K-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606121426.NrJtdO3K-lkp@intel.com/reproduce)
+The success path skips that move and keeps `r7` independent. The test
+is intended to cover pruning between those two different state shapes,
+not ADD_CONST delta propagation.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606121426.NrJtdO3K-lkp@intel.com/
+Separately, I don't think the Fixes tag suggested by the bot is
+appropriate. I do not have evidence that b0388bafa494 introduced this
+issue. I can reproduce the issue on v5.10.258, v5.15.209, v6.1.91 and
+v6.6.142. The upstream change that fixes this state shape is the later
+linked-scalar precision tracking change:
 
-All errors (new ones prefixed by >>):
+  4bf79f9be434
+  ("bpf: Track equal scalars history on per-instruction level")
 
-   In file included from <command-line>:
-   security/selinux/hooks.c: In function 'selinux_kernel_read_file':
->> include/linux/compiler_types.h:699:45: error: call to '__compiletime_assert_916' declared with attribute error: New kernel_read_file_id introduced; update SELinux!
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:680:25: note: in definition of macro '__compiletime_assert'
-     680 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:699:9: note: in expansion of macro '_compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:40:37: note: in expansion of macro 'compiletime_assert'
-      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   security/selinux/hooks.c:4412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-    4412 |         BUILD_BUG_ON_MSG(READING_MAX_ID > 8,
-         |         ^~~~~~~~~~~~~~~~
-   security/selinux/hooks.c: In function 'selinux_kernel_load_data':
->> include/linux/compiler_types.h:699:45: error: call to '__compiletime_assert_917' declared with attribute error: New kernel_load_data_id introduced; update SELinux!
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:680:25: note: in definition of macro '__compiletime_assert'
-     680 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:699:9: note: in expansion of macro '_compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:40:37: note: in expansion of macro 'compiletime_assert'
-      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   security/selinux/hooks.c:4449:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-    4449 |         BUILD_BUG_ON_MSG(LOADING_MAX_ID > 8,
-         |         ^~~~~~~~~~~~~~~~
+More background is in the v2 thread:
 
+  https://lore.kernel.org/r/20260607170959.823755-1-jt26wzz@gmail.com/
 
-vim +/__compiletime_assert_916 +699 include/linux/compiler_types.h
+BR,
+Zhenzhong
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  685  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  686  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  687  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  688  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  689  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  690   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  691   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  692   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  693   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  694   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  695   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  696   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  697   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  698  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @699  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  700  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, Jun 12, 2026 at 12:58=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+>
+> > selftests/bpf: add helper retval linked scalar pruning selftest
+> >
+> >     Add a verifier runtime test for a branch pattern where a helper ret=
+urn
+> >     value and a related scalar stay live across the same control-flow
+> >     sequence. Rust/Aya-generated eBPF can naturally produce this shape =
+when
+> >     a match on a helper status keeps data derived before the helper cal=
+l
+> >     live across the same branches. Such code commonly uses the helper r=
+eturn
+> >     value in r0, where 0 means success, producing an r0 =3D=3D 0 / r0 !=
+=3D 0
+> >     branch shape.
+> >
+> >     The test preserves that branch shape but shifts the success value t=
+o 1
+> >     before branching. Using r0 =3D=3D 1 / r0 !=3D 1 avoids depending on=
+ the
+> >     verifier's not-equal-zero refinement, so the test exercises linked
+> >     scalar precision and pruning behavior directly instead of being mas=
+ked
+> >     by zero-specific range refinement.
+> >
+> >     On affected kernels the verifier can explore an impossible path whe=
+re
+> >     r0 and r7 are linked by scalar ID, keep the wrong branch, and make =
+the
+> >     test return 1. With linked scalar precision tracked per instruction=
+,
+> >     state pruning keeps the real success path, and the test returns 0.
+> >
+> >     Suggested-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> >     Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
+>
+> This adds a regression test for a verifier state-pruning issue with
+> scalars linked by scalar ID, but there is no Fixes: tag.
+>
+> The test structure (success path keeps r7 independent with id=3D0, failur=
+e
+> path links r7 to r0) matches the "registers with id=3D0 in cached state v=
+s
+> linked in current state" pruning scenario that was addressed by changing
+> check_scalar_ids() and regsafe() to treat rold->id =3D=3D 0 as independen=
+t.
+>
+> Should this carry:
+>
+>   Fixes: b0388bafa494 ("bpf: Relax scalar id equivalence for state prunin=
+g")
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/273612=
+18656
