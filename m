@@ -1,173 +1,135 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FFB3914E4
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 16:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781280119; cv=pass; b=g7RNTBcGVW4PAnt63lb52xfjV1lWcN6pV67eky4OINqQCVf4THapySn7Oyxlcg1Ka3LLg6V7kOFdGbAjg6uH/gMCUntFenQ3XIdCs8tm3dS7betpHB7jHIEca5hLOS7nOppYLkHyb0z3x6EtGrIOgsfe3xHhjNt8l9LZNxT90uo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781280119; c=relaxed/simple;
-	bh=xLmT1CglDc1tRi97nwnjGAiRAUXSf/PXHXAe9jH7qa0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dPz3H9ZWMWYT7YqvaaMqXgHG1z1SjJxsTKbcM7ElXEO3pYlnRBE9B8sV7kzjcSOjPXmuafODs549s6KWkgJ2hjUmAnK0UM/S7waM9Ty42jRqeCx/PnlG414O6Ih897gh2k7KIqtFR6kmbidTOVYc9R1xFQCFEwaeUzh/7kYiFiA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmayjKZf; arc=pass smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF72835CBC3
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 16:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781280272; cv=none; b=KbyJkCKfZWK08vy7KaWSu133ZSp9QXEE46b0B/IMMaxTxnO/YBJQnQjyauZpgm4GJrYdFgBU+EKze5hdOGNrPOheURm0hzX4/719Zyio/EdbsZiyO2hOYb0Wyp9bXNf/h8hERMWWXOTtI5llfGLkz4TUMG9wqHdCRVzSC0Go/d4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781280272; c=relaxed/simple;
+	bh=Dgq0d5IxI7LC/ibes1FpOx3wjjhpIMfmAGq0LmAr+jg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=XNn+nr1wLhL9tEiNv/S3H025VbH9xQcyBjDnDsegt+nKNf2t77inyuzfUnzKny8n91ye6Vvvq6/jVx34PEP5u4cWSmZD4LjpjjHue8eeVbUukr0ep0rseezmfMTxzjnafWTzZPrEKw0D4i2G+gq2OihSaBNi05lypmySxlZfmgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dl65yJzC; arc=none smtp.client-ip=209.85.160.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmayjKZf"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36d98b9aa9aso975425a91.3
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 09:01:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781280116; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aNoTChZofIg2ELddWL25uJR4AMXzHDE//cuz/DhlgGjJbFA9SnkCTk8TCGZ0qjoWzu
-         BwTy5O4kUnEYj5/gjBcIIwxOd6LvSC5vr04dsIzhn95+cF47rDSW3DsfdbyphhizyptN
-         JGixyYZhNV/OvqksJ+3SJ/7iPzrQSs2suEr+TsSNGQk6b9pVJZpOgTp8K9nc0IYR6v4A
-         etxuGyQ1kHLT/BOYzDIlXBx+SDcjm1mZPfk57J0OSRXegjl7FSoSFIyZ0k3whvlsL5QQ
-         CjaJIUwWOd6Ey7mhgadFF1mlFUNnQWFrIm1Bpl5DzuU4+RwURN0xaoUjFtoXSoh1pooS
-         wbEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3NluFMG/+8oV4UqiIPnUP3waoS+zwZ5/CDcQWyg+zCA=;
-        fh=zNUieA+TCC3md4T5wY3jjGGdvg4wOO8nzmz8iWOX5GI=;
-        b=VFNHy4rJMntxPO5osWvFpfm4DqNZfsGWM56u0DMZTpKgUsgWhO2NxOT/dlfCfVEAYl
-         6ElM0KE4D31U0f27OK7RO3eNNSjgaPvXbCYAb0mdeXJ3gM/y0DVyBI+fs43pqF67fXW8
-         ZKpCvNi6Mo+tn9NEMxm1R9FnZmboodYjJjg9qtr2lCrbQMJ3ecqV1JuE3VN68rw9IqJd
-         FFF2tzu1PTlFb7r9Cjubwr+0KaGpGFP24J2YJyA1p7wzkROuMsOltsv50wof8CzNjWjX
-         Zhdvc3jLEkZHfbMC1J22orrJPiZltexkCHsGe2LY5+47PhNDVHvlFD5OGLOU7Acww4Dx
-         oV+Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dl65yJzC"
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-43bf95c3f6fso1116914fac.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 09:04:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781280116; x=1781884916; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781280270; x=1781885070; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3NluFMG/+8oV4UqiIPnUP3waoS+zwZ5/CDcQWyg+zCA=;
-        b=LmayjKZfXj6a0qpPllyDM4QM/G4gpUaLGmES8roRE15fVN/SSLH4vStK+sgtEvfLWT
-         9gJUB5R+symRRzxQK0nHtekVFmD7fmTRG6mjyeDLY3vMnAIdvhYTaPYpKsp2C1wA+rsR
-         dJ0ganFgAmJDcNmdQFu499jp/zSQbXykkpBDi/c3BN2Vv7tiGgWdCNadvjXBiM1oLcAu
-         FYfe2bwzRVG2AEwV84HmOPnWb57F52fDPp44jZUTtp3BEpC/xs8j3ENwasrO0yP4+h9N
-         FPkVH0Nkrw7nBENJWzjutiOF3AOO4QksPTAdL5h+nM7UjYm9co/WyB3Fe8fo8PRxBg2U
-         76cw==
+        bh=sKS75dTi+dzJ2YpMpG0rfsRbp0U/xYE/c1D9hfWBrtc=;
+        b=Dl65yJzC0DEoWyY3j89sUyrQvTQhDSJoRkI4FXftciWJTxXTh0UFCpl6OnaeXtBH1w
+         09gd5eeFNZmEpkDCVNmxNC254gLP7/hUdwtpaDAJuWTzoXkVL8edaPuq2pZcv/GG/HEg
+         dMc8qSBbIjwh5zsURJpIKNHaieFzpjNMhQngaSajiMvhEmkTfQQlMmqWPkBjHYd6rr4W
+         9UyG+3x0Y6dGMFtwTbLdrKTUY7IHpwG7WSIvaIuzmGBHQF5MnK0Ds2BMsSRPAffrRmQv
+         rp1vGOlRc7+sJnqmFcZz1btZPGxetXl8wSPYyqzcfzX4VjEH7CX3roSd++NJHwah0xg+
+         WiRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781280116; x=1781884916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3NluFMG/+8oV4UqiIPnUP3waoS+zwZ5/CDcQWyg+zCA=;
-        b=YxYBeTH3AIGNvGChNAmC5VXERJhLy/xmVY0b6AJ8vfRZNZ7aTu2nmlZVIXJ7EEnXHl
-         xd+azthwltsVaWhYn5llfTumZN85zyIX8LAd8kset+7RM3mRCLvJL+33yfP8iWIGVCRJ
-         S/e5eH9OfITCfGBxCCw5j40HS4sO/BxEAD4ZOHMBgAGyGMyVl/wv0sND5XGzXcfMo+um
-         5ERFAVMFIn3s1h4OwQivUcf5gKEMnCi6BwlBBGy0ehVN1fs5pYHaHPKqfFMXTTn8CPko
-         u+Wh/apAJpWW5UHD1hDDZ9t7OSzDArGhpKPbVDhDADIoh+yf6zUc4aN9cRLUb5lmh4Ci
-         9wdw==
-X-Forwarded-Encrypted: i=1; AFNElJ821JsdOb+YqytrfsqzZPo1qlRKQdbs0UEMj4ZS5hqIeONi+/4psRqeXfMbtlUBHUOhvow=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgLVgDPaR7ObTLFRZNHEPEuZz7sd97UQNgdMrCnuXBVheSdHOe
-	Ao1vhk/Fcevf8CFOJmi41KkeiyJP+zzVnRHYyAMiohsmcs+ZInF6zSvkmAfMmlmonxjbWgAfPlg
-	qa+tFRzt4LXBlZn473QilSW2CXJf/yAw=
-X-Gm-Gg: Acq92OFZn8R9PjeuKVr9iKO1Bbe/m36FxVpGmR5sGrrw5AhShnJWYGCU0d9cA+JWmRE
-	XCgdm/vCVKlzP4bXZ6iir4XYGWZfI05OI4RGgMtrFRywHjOwxZ/ZG88VfcSeJMT+fSLk0wGAex/
-	x22OGvUqaayIwdRNfdqt0iuLv8LR2oDiom1a2M4u6wCjRuvw/DN+IA1IgcKaRAwW0pR2VS6c0Q9
-	HBpNcH7XbfdkVBKLYOpdcs4xzqe6/7ruOvsOTxMjBpu5uZc1OuOleLdkZ4X4dy5rqlUhiiSf/e9
-	qz0n/IpNLSkERvg4oE3kyL3jWvA+c2PGYtqwAoJTAxnzLlFuhaDtR+pOvJOC4PUjBkvPd3stqRF
-	r9/TDzDAy+AWKkOuibQcCKp/HcLJAmIg3hLo=
-X-Received: by 2002:a05:6300:6708:b0:3aa:c93b:625b with SMTP id
- adf61e73a8af0-3b783c74eadmr4367140637.3.1781280115162; Fri, 12 Jun 2026
- 09:01:55 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781280270; x=1781885070;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sKS75dTi+dzJ2YpMpG0rfsRbp0U/xYE/c1D9hfWBrtc=;
+        b=jCx1JgPPxjmeaKptNGyQToGxl/FzOAVt0xEtivSaUkrbfa3FFEIRMcnhUOq+s6FTdJ
+         swJuFfkx/Ge9ly3VQQvhimaxsNzgYa2S8aORGLeO8H7vEXOnOdXqbLFs4B0XqEFQUTbq
+         MIXD4SLiR4c/aJ65OEn2WjqW3G++5G9fCIB6+rVfQlDh9vu4McJRIOOZuYWoSZyn4Ecs
+         QpKkMZK3eXfnyd/9vGkhbzW1jQ8u1Uy95pntxIgYAMFO8YSx22WRG4fUzi89NKcNdT2h
+         zUoTiC8sTp2oru9BmfyukBeMdWIm+z2JXhbXyzmnN+9npagMqBwxZkMdV7Pu9HZ53n6y
+         nWUA==
+X-Gm-Message-State: AOJu0YwB+WdNqQOH38pAU1+edo7P96KCQD8hShoTBfwYeNfVQ5VzVTuh
+	qCg4Zwc8o0QfZhrgYBFQCde7cyoHeNvv5fNuO2zJY5TOp6E/9boubHdOHpbe7g==
+X-Gm-Gg: Acq92OEZEADodbL1D0ue5T3o01RMGyx8IiK5ig4Kyy1FXaIvqtOk9qD1NfhFg6OWSYQ
+	LlQ1NnRG372yUNyavBSCO7mpOdN/135Ul0oUM4O52+ZU0WcIiJi49br7ap/X+qdr3+9C7hzRLq6
+	BuwBjLEKK7iTyyEH7oMN4FHRNa8M4MJNTTkMQd/GDNQUUrHufqqqmhSTU8NY0an+hJfiZYcytOE
+	2BukPBZ3gX+qjMUBH5ttUQZTMi9fzDERpoh5X2n/ss6gN44pNVppq8wN2en1qjGYhGwFuM43G2v
+	Sm2WgV78963P3sgLZj5Mpde5QY9jIZWvoK/yVrWzYSWWk4REFd2nvkUHMe+i6EH+GqjJvsb2QRS
+	L1vLYWzKF+1ibIk81SPu+v7C33NK1okhxzNELVrdg99++7xPSw5LRHhSxmDpFAHjdsaOZyvhZKo
+	a4Uids5Qvio5ar7kCz982JisDo6U8Ka5l2lLUIYRGLmIajy0cSUgjDQJuuo+2g+5piqP88Xfz9/
+	eRu6LaAvXf1vG6K2A==
+X-Received: by 2002:a05:6870:7124:b0:433:cb0d:7702 with SMTP id 586e51a60fabf-4426ee46ademr1365648fac.13.1781280269446;
+        Fri, 12 Jun 2026 09:04:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4d::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4426abf260dsm2047439fac.6.2026.06.12.09.04.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2026 09:04:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
-In-Reply-To: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 12 Jun 2026 09:01:43 -0700
-X-Gm-Features: AVVi8Cf3XUkYJ4-XhNrmqW9iOjgBV1BE-aGRWP1cVs3vyQnQRIzHDQ5CDQInRCg
-Message-ID: <CAADnVQ+KTNKkf_Tc-RZR-g8wEfJU4qWcOPnjDbA2=PEtZsYnYg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/5] tcp: opportunistic loopback splice for
- BPF-paired sockets
-To: Cong Wang <xiyou.wangcong@gmail.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Hemanth Malla <hemanthmalla@gmail.com>, 
-	zijianzhang@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 12 Jun 2026 09:04:28 -0700
+Message-Id: <DJ775MFSG561.2SI6FNLLV8NG5@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH v1 bpf-next/net 5/5] selftest: bpf: Add test for
+ hwtstamp proxy.
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>,
+ <sashiko-reviews@lists.linux.dev>
+X-Mailer: aerc
+References: <20260612001803.23341-6-kuniyu@google.com>
+ <20260612003138.E67A01F00A3A@smtp.kernel.org>
+ <CAAVpQUCRU1ie22PbegWgGnfyWw9V0wSTjgQpw=5Wwb2RZ=su+w@mail.gmail.com>
+In-Reply-To: <CAAVpQUCRU1ie22PbegWgGnfyWw9V0wSTjgQpw=5Wwb2RZ=su+w@mail.gmail.com>
 
-On Thu, Jun 11, 2026 at 6:15=E2=80=AFPM Cong Wang <xiyou.wangcong@gmail.com=
-> wrote:
+On Thu Jun 11, 2026 at 11:03 PM PDT, Kuniyuki Iwashima wrote:
+> On Thu, Jun 11, 2026 at 5:31=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>>
+>> Thank you for your contribution! Sashiko AI review found 5 potential iss=
+ue(s) to consider:
+>> - [High] Comparing a potentially negative return value to `sizeof()` cau=
+ses failure handling to be skipped, erroneously dropping packets.
+>> - [Medium] Incorrect struct cast for SO_TIMESTAMPING_NEW cmsg data cause=
+s test failures on 32-bit systems.
+>> - [Medium] Typo in the test assertion prevents verification of TX timest=
+amp keys.
+>> - [Low] Multi-line comments violate the BPF subsystem comment style.
+>> - [Low] The `buf_cmsg` array is not fully initialized before being passe=
+d to `sendmsg()`, passing uninitialized stack data to the kernel.
+>> --
+>>
+>> commit e747f30190af013f6f5cc858f0dacb86e902e2d2
+>> Author: Kuniyuki Iwashima <kuniyu@google.com>
+>>
+>> selftest: bpf: Add test for hwtstamp proxy.
+>>
+>> This selftest simulates the hardware timestamp proxy scenario using two
+>> UDP sockets, simulating a userspace proxy via a GENEVE device.
+>>
+>> > diff --git a/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c b=
+/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+>> > new file mode 100644
+>> > index 0000000000000..d0f90f22bea22
+>> > --- /dev/null
+>> > +++ b/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+>> [ ... ]
+>> > +char *ipv4_commands[] =3D {
+>> > +     "ip link set dev lo up",
+>> > +     "ip link add geneve0 type geneve local " APP_SRC_IPV4 " external=
+",
+>> > +     "ip addr add " APP_SRC_IPV4 "/24 dev geneve0",
+>> > +     "ip link set dev geneve0 address aa:bb:cc:dd:ee:ff",
+>> > +     "ip link set dev geneve0 up",
+>> > +     "ip route add " APP_DST_IPV4 "/32 dev geneve0",
+>> > +     /* We do not forward ARP to the wire in this test,
+>> > +      * so a static neighbour entry is needed for APP_DST_IPV4.
+>> > +      */
+>>
+>> [Severity: Low]
+>> Does this multi-line comment format violate the BPF subsystem comment st=
+yle?
+>> It seems the subsystem guidelines prefer the opening /* on its own line =
+for
+>> multi-line comments.
 >
-> This series adds an opportunistic "loopback splice" fast path for two
-> locally-connected TCP sockets that a sock_ops BPF program pairs at
-> handshake completion. Once paired, sendmsg copies the user payload into
-> a per-direction in-kernel byte ring and recvmsg drains it on the other
-> side; both copies happen in their own task's mm, so the fast path incurs
-> no skb construction, no softirq, and no TCP protocol-state processing.
->
-> The underlying TCP connection stays fully real: sequence numbers are
-> frozen at post-handshake values, so FIN/RST/keepalive keep flowing
-> through the normal paths and the pair tears down via a regular close.
-> Pairing is opt-in per flow and fallback is per-message - handshake-style
-> traffic takes the TCP path, the bulk phase takes the ring, on the same
-> socket. Nothing leaves the host and applications need no changes: no new
-> address family, no LD_PRELOAD, no source modification.
->
-> The target use cases are co-located endpoints that speak plain TCP:
->  - regular TCP loopback (127.0.0.1) between processes on the same host;
->  - container sidecar deployments - e.g. a service-mesh sidecar proxy and
->    its application in the same pod, talking over loopback or a veth pair =
--
->    where the per-skb veth+bridge cost is exactly what the ring sidesteps.
->
-> Highlights (TCP_RR, 1 KB request/response, netperf, pinned CPUs,
-> baseline TCP vs splice; full tables across message sizes and TCP_STREAM
-> in patches 1 and 2):
->
->   loopback (127.0.0.1):
->     without busy-poll:   105.8k -> 235.1k tps  (2.2x)
->     with busy-poll 50us: 106.1k -> 713.0k tps  (6.7x)
->
->   container (netns + veth + bridge):
->     without busy-poll:    99.9k -> 233.9k tps  (2.3x)
->     with busy-poll 50us: 100.4k -> 704.9k tps  (7.0x)
->
-> Synchronous-RPC (TCP_RR) at a 1 KB message wins ~2.2x without busy
-> polling and ~6.7x with it (the win grows toward smaller messages and
-> narrows toward 64 KB), because the ring removes the per-cycle kernel TCP
-> receive-path cost and the receiver can spin on the ring directly -
-> loopback delivers via the per-CPU backlog and exposes no pollable
-> napi_id, so the generic sk_busy_loop() is a no-op there. Bulk streaming
-> is roughly neutral on bare-metal loopback but wins decisively (up to
-> ~6x) container-to-container, where per-skb veth+bridge cost dominates
-> the path the ring sidesteps.
->
-> ---
-> Cong Wang (5):
->   tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback
->     splice
->   tcp_bpf: busy-poll the splice ring before parking the receiver
->   selftests/bpf: add tcp_splice basic round-trip test
->   bpf: allow SO_BUSY_POLL in bpf_setsockopt()
->   selftests/bpf: set SO_BUSY_POLL from the tcp_splice sockops prog
->
->  include/linux/skmsg.h                         |   9 +
->  include/net/tcp.h                             |   8 +
->  net/core/filter.c                             |   1 +
->  net/core/skmsg.c                              |   3 +
->  net/ipv4/tcp_bpf.c                            | 847 +++++++++++++++++-
->  .../selftests/bpf/prog_tests/tcp_splice.c     | 206 +++++
->  .../selftests/bpf/progs/test_tcp_splice.c     | 125 +++
->  7 files changed, 1198 insertions(+), 1 deletion(-)
+> Gray zone, this is rather net one :)
 
-Just saying that the code is free nowadays, so whether it's 1k lines
-or 10 lines is irrelevant for the discussion.
-
-As far as the idea goes, I think, it would be interesting in pre-AI era,
-but today splice and friends are a prime target for bugs and more bugs.
-skmsg and tcp_bpf are reeling from unfixed bugs too,
-so my take is that we should not add any new features to skmsg
-and instead deprecate what is already there.
+bot is correct on this one :) BPF prefers normal kernel coding style.
