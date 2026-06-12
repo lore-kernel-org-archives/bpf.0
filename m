@@ -1,133 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24834332623
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95F33090C6
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781290708; cv=none; b=JXnY844F98iQ9iwVsTWgOvccqYEep9WSWMnr7aj6IwoPF8/YwB4NZ7ILrRlWkdnCLa15qUfCJDRsHjMRQQgmp+T/3notqahi+YQBDwgHfwFfQpGXuMO/o6/gLwgVFOlzKVQU35f8vfif7a1N2szbP8wi0tsfOGcdyY3xgaFZO5k=
+	t=1781290709; cv=none; b=tUuC+YtiHePO9mVNCwAAVQ6HcS+Q+ttFQvskfHc13PoSg4H6neaDgxV4fjBO7UaoQPq6/9N0mcB0xtgD9e/65LpoDthOZkwePrAPfm4hO9EvLXs1MpYXUBVwYti0VXLFVoDeBhVkTvXlhfp8/WetVwWTKwEkIQug1PYAHEz2Wyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781290708; c=relaxed/simple;
-	bh=cdzdTd+CqU8Pq5mUWI9iBScFWsv/Ja5TsKMV+4btFlM=;
+	s=arc-20240116; t=1781290709; c=relaxed/simple;
+	bh=hlyrtnX0tyGyG27N4e2zXL4/5d/1+toWf8Jd2h7x89I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tlD7fU2ivpGJhDQkQwxhZJho8yvu8TN1WlwI4pt6WoIbddBn2OREYEhLkQQmOvbKktvI1Y3kDRzjrtN/2uaeB0qjJCTsoT5atPzLdygoIkMZc/PO981mRnfRFThgAzu0ovUC3Jt7Ippgunakyf38nUv67IjH107+jyTa2s0EJzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lc9Stvfd; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Xs+JkkSorsPr6ineLq9m4CTJReE+8qHMpC2h7S8nfMv2RUz5N5hAGVc0sFp5hMxvknDPldB7xHpYsAnPSC0X1B0Flg7aEXCPw57zxgcgI/q8MEynvnbhtjPU9YKeYd5dGe9Riu9ZedQEckYwBchEj2eUVRoB7ZXvZM2Lkez1Muo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFRC+w6o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lc9Stvfd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7071F000E9;
-	Fri, 12 Jun 2026 18:58:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFRC+w6o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB711F00A3D;
+	Fri, 12 Jun 2026 18:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781290706;
-	bh=UWRYoFn+ZoPozjewP12ianTfXnhBoNlAZzeVCGyu5Vc=;
+	s=k20260515; t=1781290707;
+	bh=lXhOAHZfX3nTcQAvM5ZZCdHwoJnwEREfZN8ihEHdq6M=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lc9StvfdlJn3vRCy5L4HQ+6rV3oKXUQ5w1+m1hSDeuu4LpplCDue4nZRZqT3SCZGL
-	 xf5WedWk3qn/X3mCbha/pXrBKTrh3Vww+Dmtb0ScygERI4gyv9Fe4NJj4L44ph06N/
-	 Dk4LtxuMYV5QhEuzEzLz75Dy6Ns4TVBT1UQw+PkzI5erabekZQoPA+1E0z7CvuU4PK
-	 Y2xTZN2TPG/C2WI57/ijkV02Cls+l2nCfypLG5XFmcZSYeSRZvUBf5aK1GKFQs7WVN
-	 k/BvHCyKrFeM1keDJZwnn6DVKzAsLNJv71+U+HtOo9pMh5e47gBtCRIrZNDyC+pqn4
-	 io35/fA4HM+Bw==
+	b=WFRC+w6oQhv4p51H24NtaA/Kawx5tfzcq8FMBbiYEvGDwhpIn76xNE0RTyanfcYPc
+	 4mX0xizM4kcJb5u3mLimFirVVVa3hXgDQF3rMICDC40F7S6DFTtC2vXBn+fBsn173G
+	 wUs1VdGw4EgvCmdvbPjwpSJ6O6fvT91uvLmqUcKbEQI9mOf7DBHc5QeINRwnUw2kKm
+	 5uaAv7TNRGpw6HIRTHYKU3MHac+PUoNW+CAIQXYiqUTtyrhIaYp8kqo8c4zLEud/nM
+	 nLYUhShHbtbzrj+fOP063p3QMcSVyF/6vvw6iZkteX5SjeM/zu6uR7KhYQrqGsc235
+	 VpS5pZpmUlo8w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 2/4] net: ti: icssg: Use undirected TX tag for
- native XDP in HSR offload mode
+Subject: Re: [PATCH net 1/4] net: ti: icssg-prueth: Fix AF_XDP fill ring
+ alloc and wakeup condition
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Meghana Malladi" <m-malladi@ti.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260611185744.2498070-3-m-malladi@ti.com>
-References: <20260611185744.2498070-3-m-malladi@ti.com>
+In-Reply-To: <20260611185744.2498070-2-m-malladi@ti.com>
+References: <20260611185744.2498070-2-m-malladi@ti.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 12 Jun 2026 18:58:26 +0000
-Message-Id: <20260612185826.AF7071F000E9@smtp.kernel.org>
+Date: Fri, 12 Jun 2026 18:58:27 +0000
+Message-Id: <20260612185827.BBB711F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] DMA Mapping / Page Pool Corruption
+- [Critical] Integer underflow in `pkt_len -=3D 4` leads to massive XDP out=
+-of-bounds read/write in Zero Copy mode and skb_over_panic in standard mode.
+- [High] In `icssg_napi_rx_poll()`, when zero-copy is enabled, `num_rx` is =
+overwritten instead of accumulated across multiple flows, and the full `bud=
+get` is passed to each flow.
 --
 
-commit e56804b68dffcb60ec1826c1b1a00d1c6ff8b34b
+commit c6fd345481cd54bff877bdb42096a81eabfe43d0
 Author: Meghana Malladi <m-malladi@ti.com>
 
-net: ti: icssg: Use undirected TX tag for native XDP in HSR offload mode
+net: ti: icssg-prueth: Fix AF_XDP fill ring alloc and wakeup condition
 
-This commit updates emac_xmit_xdp_frame() to set the correct destination
-tag and tag insertion flags for XDP TX frames when in HSR offload mode.
-This allows the PRU firmware to properly duplicate the frames and insert
-the HSR sequence tag.
+This patch fixes AF_XDP fill ring allocation by introducing an allocation
+budget based on available descriptors. It prevents pool exhaustion errors
+and spurious XSK wakeups by avoiding allocations when the descriptor pool
+is empty.
 
 > diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/e=
 thernet/ti/icssg/icssg_common.c
-> index 55a696912811f..ede32f266729e 100644
+> index a28a608f9bf4b..55a696912811f 100644
 > --- a/drivers/net/ethernet/ti/icssg/icssg_common.c
 > +++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-
-[ ... ]
-
-> @@ -737,9 +738,25 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
-> =20
->  	/* set dst tag to indicate internal qid at the firmware which is at
->  	 * bit8..bit15. bit0..bit7 indicates port num for directed
-> -	 * packets in case of switch mode operation
-> +	 * packets in case of switch mode operation and port num 0
-> +	 * for undirected packets in case of HSR offload mode.
-> +	 *
-> +	 * XDP_TX frames arrive on a slave port with the HSR tag already
-> +	 * stripped by the PRU firmware.  Like skb TX via hsr0, they must
-> +	 * be sent as undirected so the PRU duplicates them to both ports
-> +	 * and re-inserts the HSR sequence tag.
->  	 */
-> -	cppi5_desc_set_tags_ids(&first_desc->hdr, 0, (emac->port_id | (q_idx <<=
- 8)));
-> +	dst_tag_id =3D emac->port_id | (q_idx << 8);
-> +
-> +	if (emac->prueth->is_hsr_offload_mode &&
-> +	    (ndev->features & NETIF_F_HW_HSR_DUP))
-> +		dst_tag_id =3D PRUETH_UNDIRECTED_PKT_DST_TAG;
-> +
-> +	if (emac->prueth->is_hsr_offload_mode &&
-> +	    (ndev->features & NETIF_F_HW_HSR_TAG_INS))
-> +		epib[1] |=3D PRUETH_UNDIRECTED_PKT_TAG_INS;
-> +
-> +	cppi5_desc_set_tags_ids(&first_desc->hdr, 0, dst_tag_id);
+> @@ -927,6 +927,7 @@ static int emac_rx_packet_zc(struct prueth_emac *emac=
+, u32 flow_id,
+>  	struct cppi5_host_desc_t *desc_rx;
+>  	struct prueth_swdata *swdata;
+>  	dma_addr_t desc_dma, buf_dma;
+> +	int avail_desc, alloc_budget;
 
 [Severity: High]
-This is a pre-existing issue, but is it possible that prueth_xmit_free()
-inadvertently destroys the persistent DMA mapping managed by the page pool
-for XDP_TX frames?
+This isn't a bug introduced by this patch, but could icssg_napi_rx_poll()
+mishandle the budget and num_rx values when calling emac_rx_packet_zc()
+for multiple flows?
 
-In emac_xmit_xdp_frame(), when an XDP frame is transmitted via XDP_TX, it
-reuses the page pool's pre-existing DMA address without creating a new mapp=
-ing:
+In icssg_napi_rx_poll():
 
-    if (buff_type =3D=3D PRUETH_TX_BUFF_TYPE_XDP_TX) {
-        page =3D virt_to_head_page(xdpf->data);
-        ...
-        buf_dma =3D page_pool_get_dma_addr(page);
-        buf_dma +=3D xdpf->headroom + sizeof(struct xdp_frame);
+    if (rx_chn->xsk_pool) {
+        num_rx =3D emac_rx_packet_zc(emac, flow, budget);
     } else {
-        buf_dma =3D dma_map_single(...);
 
-However, during TX completion or error handling, prueth_xmit_free()
-unconditionally calls dma_unmap_single() on the buffer for PRUETH_SWDATA_XD=
-PF:
+Because num_rx is overwritten instead of accumulated across multiple flows,
+and the full budget is unconditionally passed to each flow, might the driver
+process up to N * budget packets per NAPI cycle? If the last flow evaluated
+processes 0 packets while previous flows processed many, could NAPI
+incorrectly assume no work was done and drop out of polling mode?
 
-    dma_unmap_single(tx_chn->dma_dev, buf_dma, buf_dma_len,
-                     DMA_TO_DEVICE);
+[Severity: Critical]
+This is a pre-existing issue, but does unconditionally subtracting 4 from
+pkt_len cause an integer underflow if a short descriptor is received?
 
-Could this cause an IOMMU fault or memory corruption when this page is
-later recycled and the hardware tries to DMA into the unmapped address?
+In emac_rx_packet_zc():
 
->  	k3_udma_glue_tx_dma_to_cppi5_addr(tx_chn->tx_chn, &buf_dma);
->  	cppi5_hdesc_attach_buf(first_desc, buf_dma, xdpf->len, buf_dma, xdpf->l=
-en);
->  	swdata =3D cppi5_hdesc_get_swdata(first_desc);
+    pkt_len =3D cppi5_hdesc_get_pktlen(desc_rx);
+    /* firmware adds 4 CRC bytes, strip them */
+    pkt_len -=3D 4;
+    ...
+    xsk_buff_set_size(xdp, pkt_len);
+
+If the hardware provides a malformed descriptor with a length less than 4,
+the unsigned subtraction could underflow, resulting in a large 32-bit value.
+When passed to xsk_buff_set_size(), this sets a malformed data_end, which
+could allow an XDP program to perform out-of-bounds reads or writes.
+
+The same integer underflow exists in the standard RX path in
+emac_rx_packet():
+
+    pkt_len -=3D 4;
+    ...
+    skb_put(skb, pkt_len);
+
+Passing the underflowed length to skb_put() might directly trigger a kernel
+panic via skb_over_panic(). Should there be a bounds check before the
+subtraction?
+
+>  	struct xdp_buff *xdp;
+>  	int xdp_status =3D 0;
+>  	int count =3D 0;
+> @@ -993,16 +994,13 @@ static int emac_rx_packet_zc(struct prueth_emac *em=
+ac, u32 flow_id,
+>  	if (xdp_status & ICSSG_XDP_REDIR)
+>  		xdp_do_flush();
+> =20
+> -	/* Allocate xsk buffers from the pool for the "count" number of
+> -	 * packets processed in order to be able to receive more packets.
+> -	 */
+> -	ret =3D prueth_rx_alloc_zc(emac, count);
+> +	avail_desc =3D k3_cppi_desc_pool_avail(rx_chn->desc_pool);
+> +	alloc_budget =3D min_t(int, budget, avail_desc);
+> +
+> +	ret =3D prueth_rx_alloc_zc(emac, alloc_budget);
+> =20
+>  	if (xsk_uses_need_wakeup(rx_chn->xsk_pool)) {
+> -		/* If the user space doesn't provide enough buffers then it must
+> -		 * explicitly wake up the kernel when new buffers are available
+> -		 */
+> -		if (ret < count)
+> +		if (ret < alloc_budget)
+>  			xsk_set_rx_need_wakeup(rx_chn->xsk_pool);
+>  		else
+>  			xsk_clear_rx_need_wakeup(rx_chn->xsk_pool);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260611185744.2498=
-070-1-m-malladi@ti.com?part=3D2
+070-1-m-malladi@ti.com?part=3D1
