@@ -1,181 +1,93 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76EA364022
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C5A3D9DD3;
+	Fri, 12 Jun 2026 22:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781303890; cv=none; b=q91un/Up+iuFtdtuuM8skF61zVQnO13qfiE7w0r3FnmPbAEU/kGLtD+xl2sPjwOr2VIohXSB/1QJ1vLe1cSLmTbEpI+wjrUHrByfo/BrhHBE0Q4diH8Ho8z25u7OV8M/1Bj4dqnagSUfnO85JWO8CRt7+LWAlDSQDWZfFRMYUdA=
+	t=1781304016; cv=none; b=fn1XoKTezb/yMYwjHPCmteh/j/9Vb9iePs2bd7G/pjkC0ql3UIXsOAxVz1dnIG4ggtikaD32QQNx811jpdA/P/KVhqqewLlEoFuXHC/wQgLOWU3e5T/nr1DyH3jGiL4Tpd/hBHdxguy083FCsKVLvs8KVr1c/lOkWgFpCzadU2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781303890; c=relaxed/simple;
-	bh=B3wB4uGk+oU/OMPLbz9dYvLPTH2BAFwuf4iI50kP2Xg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PxQZptlzgIt9TmHcE4JKTP9Ggp0yhk/HoNcEIjwxckEsew/12CBp7nyjhaQZw2Mapnbkf6ZqxcoTWSCD+SBxXHuDMtDr2vZ2ZjKIKxAXWXjyL570gCfTLABqp1m4hI7NTsMNOKsbw+ZBFtNyNAr2JRXjxiGlixf/82CHkESiAIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jfN0PMhl; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781304016; c=relaxed/simple;
+	bh=O34CWYNB4JNCHuFinuFFQmZbHDr3G62djOQlHcUnWlk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=BJZNvpn/kvlXxW+T8FMXuEhjCPvwno/E3+it4T9YDGLt51D3SKpRltxwZn+4yxKzX4FAaF5BqTe15v8PnZaZTtDy0mOocsmkMmGDkylwmg3B4zlDMEKfMALxcRk8iY5Qg5/BqKX8YFT31FKmh57/ZEJWclGh3HS0AJtq9vnlkdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NDD/DmxW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jfN0PMhl"
-Message-ID: <300fc9d4-467d-40e7-b7e7-097bded02b6a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781303885;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ht2SR2ifm1paDa+PbjOGRAsdp+TWNYoe+kZwHX+ymxw=;
-	b=jfN0PMhlEWCKCJJ9csX93MfFgj/3n7IrMjOMq8Ch6Hwe/yXyFsar7wy3IZAS8+KIAN8hdf
-	Ilho25xOVx09IQcH3Lx1ocG1zd0nFyeVOM4J7apXXFretTO4RTYyeK4VZH0iWq2nPzlFja
-	eMcCiFV6fraSuFjilMJZ5Pk6VzQIspU=
-Date: Fri, 12 Jun 2026 15:37:43 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NDD/DmxW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75FE71F00A3A;
+	Fri, 12 Jun 2026 22:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781304014;
+	bh=u30FmF1ZvAzhrJKphZvci1P+EsZosvD8EEfcSGzZ/is=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=NDD/DmxWjHhSgBtz9jrtuCa+eJZelGvRY8O9im70Pu2qDbwJPiDCm+hcTACuIX/Qa
+	 a+ikRUGzGx/nKBMcRcnQe9yZ8yjeLEcE7wfUa0XF67eBVW54hmJBsHlV123Sa7uV8+
+	 jvMTTo1t5G+aRKonmofEDkSR1LiqoSxs9xw3OQS77DXshJ9EFAm/T4H4yrFjka09eI
+	 H1b10IPZBRdMMBRZgc61neVM+qfF/n3qMkbp3u4BfnFCp+WshgTdWK1VGheNxMZS5h
+	 P5o32d46biisyVyvZg1ONgnY0dtGY8uom3sdhB6a7QEa1iAuz/fa2p7t1MjAlEorIu
+	 V3Ve8H501S1yg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5687E39E4DB9;
+	Fri, 12 Jun 2026 22:40:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: BPF CI for Stable
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>
-References: <aiJ2X7ut4lky47aV@u94a>
- <a45e6e99-fcb8-4a7b-8012-8c7e88ea7598@linux.dev> <aikYGA9To89q3Jd2@u94a>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <aikYGA9To89q3Jd2@u94a>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: simplify UMEM setup
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178130401114.1275309.12520760927935385997.git-patchwork-notify@kernel.org>
+Date: Fri, 12 Jun 2026 22:40:11 +0000
+References: <20260608130938.958793-1-tushar.vyavahare@intel.com>
+In-Reply-To: <20260608130938.958793-1-tushar.vyavahare@intel.com>
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Cc: netdev@vger.kernel.org, magnus.karlsson@intel.com,
+ maciej.fijalkowski@intel.com, stfomichev@gmail.com, kernelxing@tencent.com,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, tirthendu.sarkar@intel.com, bpf@vger.kernel.org
 
-On 6/10/26 1:18 AM, Shung-Hsi Yu wrote:
-> On Fri, Jun 05, 2026 at 10:12:14AM -0700, Ihor Solodrai wrote:
->> On 6/5/26 12:45 AM, Shung-Hsi Yu wrote:
-> [...]
->>>   Is it possible to get BPF CI for stable in its own repository under a
->>>   GitHub organization (e.g. libbpf/stable-bpf-ci)?
->>
->> Hi Shung-Hsi,
->>
->> I think a better home for the BPF CI targeting stable kernels is
->> kernel-patches org [1] for a couple of reasons. First, repos in the
->> kernel-patches org have access to hardware - generic runners provided
->> by Meta and s390x runners provided by IBM. Second reason is that this
->> org hosts source of truth repos for most of BPF CI code, even though a
->> big chunk of it lives in libbpf/ci.
->>
->> Let me know if this makes sense, and I'll create a new repository and
->> grant you write permissions there.
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  8 Jun 2026 18:39:33 +0530 you wrote:
+> This series simplifies UMEM handling in selftests/xsk.
 > 
-> Make sense, let's have it in kernel-patches org.
-
-Here you go: https://github.com/kernel-patches/linux-stable
-
-I've sent you an invite.
-
-I vibe-code basic sync with upstream. README describes how it works, but
-I'll reiterate here for visibility on the list.
-
-The repository has a main branch with only the CI code, test branches
-for each tracked stable version, and Linux mainline mirror.
-
-There is a sync job that runs daily. It:
-  * syncs torvalds/master
-  * then for each listed stable version
-    * pulls in the tree
-    * applies the patches from the queue repo
-    * overlays .github/ and ci/ from the main branch, adding a commit
-      * this is similar to what KPD does for bpf-next, but without patchwork and KPD
-    * pushes the result to linux-X.Y.y branch
-
-The testing workflow (test.yml), which currently doesn't do anything
-interesting, is triggered on push to linux-* branches.
-
-The scripts are straightforward, though a little verbose as is typical
-for vibe code. Feel free to edit it as you see fit, or even scrap it.
-I wanted to have something working before handing over the repo to you.
-
-This way we have an automated sync + trigger running on schedule right
-out of the box. With that, you can add code to test.yml to actually 
-build and run tests.
-
-I think you can copy most of the stuff from your libbpf fork, but it'll
-have to be tested and debugged of course.
-
-And the best part is you can make use of the hardware available to the
-kernel-patches org: beefy bare-metal machines for testing, s390x runners,
-codebuild. Oh, and AI reviews of course, if you want to experiment with that.
-
-My understanding is you'll be maintaining the stable part of the CI, but
-feel free to reach out if you need help.
-
-Have fun!
-
+> It centralizes UMEM property setup through helpers, moves UMEM ownership
+> from ifobject to socket-owned state, and normalizes umem_size/mmap_size
+> usage across the touched paths.
+> 
+> v1 -> v2:
+> - Applied helper usage consistently across the touched test paths.
+> - Moved UMEM ownership to socket-owned state and switched to one
+>   heap-backed umem_real object at xsk_arr[0] with explicit reset/cleanup.
+> - Kept shared-UMEM TX behavior unchanged via TX-local UMEM state
+>   copy/reset during TX configuration.
+> - Folded pkt_generate() umem parameter removal into the ownership
+>   refactor patch (no standalone cleanup patch). [Maciej]
+> - Updated mmap_size teardown handling to join the RX worker thread in
+>   single-thread mode before cleanup to synchronize UMEM mapping state.
 > 
 > [...]
->>> Technically BPF CI for stable can also simply be merged back to
->>> libbpf/libbpf
->>
->> No, that's a bad idea.
->>
->>> , but that felt less ideal because:
->>> - kbuilder-debian container image currently doesn't work when testing
->>>   stable kernels (I haven't look at reason of failure, might not be hard
->>>   to fix)
->>
->> Technically, it's not a hard requirement to use the container.
->> It makes the build jobs a little faster and a little more reliable, but
->> it was crafted for bpf-next testing, which may not be ideal for stable.
->> If necessary you could develop a separate "kbuilder-stable" container, but
->> it's up to you to decide whether it's needed.
-> 
-> Understood, I'll stick with Ubuntu 24.04.
-> 
->>> - actions that tests stable kernel will be mixed with actions targeting
->>>   libbpf itself 
->>> - BPF CI for stable will have to contain version-specific tweaks (e.g.
->>>   [4])
->>
->> This is fine and expected. It is of course great to be able to reuse code,
->> but practically speaking, I think in this case it may be more work to
->> keep the common parts compatible with both stable and bpf-next workflows,
->> than maintaining two diverged CI trees.
->>
->> The rule of thumb should be this: if you can use a libbpf/ci action, do
->> it. If there is something very specific to the workflow, keep it in place.
->> Don't be shy copy-pasting yaml fragments that work for you, it's fine.
-> [...]
->>> OTOH we can also try kernel-patches/bpf-like approach and have a
->>> kernel-patches/stable, providing proper, fully-fledged BPF CI for stable
->>> that tests incoming patchset to stable (not sure if Daniel was asking
->>> about this during the session). But I find this to be much more work.
->>
->> We don't have to do this work right away (or ever).
->>
->> First let's set up the kernel-patches/stable (or whatever the name) with
->> the implementation you already have.
->>
->> We can enhance and improve it when there are cycles and willingness to do
->> so in the future, 
-> 
-> Sounds good to me, let's go with kernel-patches/stable. Thanks!
-> 
->>> The current approach of applying queued patches from stable-queue[5],
->>> while comes with quite some delay between the moment patch is proposed
->>> to stable mailing vs the moment said patch gets tested, seem like a
->>> workable compromise.
->>
->> This can be automated by the way.
->> Check out linux-next sync on current BPF CI, it's straightforward [2].
->> There is a job periodically syncing a branch, and the CI pipeline is
->> triggered on push.
-> 
-> I'll looking this, thanks for the pointer.
-> 
-> Shung-Hsi
-> 
->> [1] https://github.com/kernel-patches/
->> [2] https://github.com/kernel-patches/vmtest/blob/master/.github/workflows/linux-next-sync.yml
-> [...]
+
+Here is the summary with links:
+  - [net-next,v3,1/4] selftests/xsk: Introduce helpers for setting UMEM properties
+    https://git.kernel.org/netdev/net-next/c/19ff5c545750
+  - [net-next,v3,2/4] selftests/xsk: Move UMEM state from ifobject to xsk_socket_info
+    https://git.kernel.org/netdev/net-next/c/b17631032769
+  - [net-next,v3,3/4] selftests/xsk: Use umem_size() helper consistently
+    https://git.kernel.org/netdev/net-next/c/1a24fe421739
+  - [net-next,v3,4/4] selftests/xsk: Introduce mmap_size in umem struct
+    https://git.kernel.org/netdev/net-next/c/0fe61052acb0
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
