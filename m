@@ -1,196 +1,130 @@
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43EA388891
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E43D3D05
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781302214; cv=none; b=gyEQ/RmL+8A58qAhnVdiwqRcxQsi2ADRwv+AkiG6kgR7OlQlD9BnqAd4AtyBHxac8v772LuLKLbxROVGbDvn8YZlsbgQUio0gdrY3E6e5ibwf8ByHVeNmu4yUH78m38DBNsxqBI3hJ4MSdKDj57N4LVss+veYBFPVsP9p2/RUT0=
+	t=1781303267; cv=none; b=m6p1tPc0HQM9rEsdVNa2vQLE2JCkTMa5JYXRAPHkbJ9nQC/WYsTHFXWt1P0+Vo+eBULR86dy6ajnDsBM7Vu5biuym9n49XU8MGdpN4IvG95xRg6vc/JckiQ2To3IYXH9UUst4TD1g084TCyegNnfmEsKxDsAHlJ25JCzvf3pFvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781302214; c=relaxed/simple;
-	bh=ktDJ37hZzdDqYp2UKKDN3CY2hhJA5scnC2EENECQ8oU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=KjIkKvdREUbSMAXlBFb94COEyWXCQoOqbAUfq0vJvhwZ/vkXTBqQdB0AcqasO3eGFsRITSjccwI5VaWv3m2SYJ/xjZSgUMkA6rZp+ILLyyGg9CR5fnhi2LCNKN0ZJm0HvGkei0ckmhfxxnqK9ZjVWMcUtVPrYrLFiViUBhXRIW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-486a2a910efso3044681b6e.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 15:10:12 -0700 (PDT)
+	s=arc-20240116; t=1781303267; c=relaxed/simple;
+	bh=lGEMy8UIN+fTJmtIdtuFJyBWyHQUMLGF+H4nss57VLo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rpFqkhV1KFfUaMweRq1k+E1WsIkTZD22vCVueTSrFasUflTtJjJVekpxhx5Xa+uN1HLyMIzlt3tCoRWbw3EHkqkZcXM17dpvYksIb5miX5oe/Lupd1+KNVbsWD8AKx+MrgyHGSsHSng0Y8/uvR+GTazIFePOSDt49y9EJT28U50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cY7xsJA9; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cY7xsJA9"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1383e116edfso1839273c88.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 15:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781303265; x=1781908065; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tdOIpPwQMpYh5nCpsBhSLYhKVNtHCNddyJ/gLUgFL/s=;
+        b=cY7xsJA9VwVlFPywfn6d9BBupAE8A3LtzQ8nXtOTOea6oseE3WRgvDGyq532z/Qhtc
+         fSuWX0S0q9ZLCN+/mINrLcOmoYGt4dcJM4d2AGWPhjuKYHyLGTZB1RjdAhE+pBc4mqC+
+         zSVNwwm9rT0OQrHkOtlq/PsFxIk4ZfXBzIgcC8pOgvuQaMdQR+8zQ/lWmjUzoW7Ov+4k
+         +yy5cd1FEAA/TVg6YVcua5JwSR3AxXC/+YeKUHuy65RO3W3FsvnmPOq3YWuFu7qbXb1e
+         DZLYWbrWW3q7EWVnMZIZR/QVrwICCQa8lq1IaPVLfmjJsBJAaktkv6pmiTWcpxuV+4C3
+         WERA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781302212; x=1781907012;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20251104; t=1781303265; x=1781908065;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yOXfUgUCVkiAGlnZ3O8tZBJZjmy7q3zIDCpedOitVB4=;
-        b=koBWOtx+c6AAiGTLChv5ieNRBt7hTRwQS3HXqHQN4613HU9E1hhRklhsIAEcl96y9N
-         xF+qd6/d0OrlHNcwt8ZhJyOsawvh5QuXsdqs0uAXlorf5kgRo7DZFkOxbPpZ/pkMpwmL
-         4yT0s8oO9saRAxj2Un9oJbMelBhy0CvfnRsqvueclCCv4yIg2PuH/larLaSPe9pRRfMx
-         dktSxjV5XceLq+X5p6rqmyTRD6gF8nv0OCp7SQD3SnGTVCK/vn40PTcMfwAt4DbyBYRs
-         MskNHELN6orgIeHqJPKOEnQL/sF3SrIPkgFXE2Q6a2/z/5xvQkpSpBw6AV4vQ+80EM7f
-         czsg==
-X-Gm-Message-State: AOJu0Yw+n9MY2R9uSECyE/BHche4f6ObSJrkV0p6Auwhvd8z/G1JUM8p
-	Jo1vySOP+37Cr9H7nX9uZkGbcPkxGGRPm+6fSHl+xcq7wNFtU2HHgkl0y/a0/FuquYzTRkWbI/1
-	UnCNFLXo28EJr9RKCQ0TaL88rvyO/H96t+esioExFQNda8dGEsQ2KJkwhcyc=
+        bh=tdOIpPwQMpYh5nCpsBhSLYhKVNtHCNddyJ/gLUgFL/s=;
+        b=sJblVSZv7t1rvdT1Tu/bklkEG6mgj7UiSjXqCo0ki4LwgxcUF4pDf6kC3CqNY1ONOU
+         3MDm/hw9IOiOjyvPB6fMPfBYSTi2pVvM+Pd+vcicuIQVdUSGpiEVaqUauCeixS2TSUO6
+         ppAssG571gQYekVe21ccX98knAjJZmUNn3QBikJQO7n/JfpJuCqTHNOopIipqNLPOHDk
+         ZlUMxsBxvJvTiDo5m/9SLQKi5gqTPtnjxdpByhmOUHD9fa8c57zE/DlynjLDNRo6YXIL
+         h/W9p9e2294lTYx2sPkOovzDBPWFpAZrxwjccuOjgzvwZv0pERsN3txb3OzfS4/089gh
+         Qe2Q==
+X-Gm-Message-State: AOJu0YzP2jSdG8OLiQudDTqp/RJwTvVnlEZv11TIUQu4S1j0f9G9+53W
+	mThMC/qOc5cgsCncl4xanlmyqjMQAOFRMxYEMSICsZ4eElKgjQnpqm/a
+X-Gm-Gg: Acq92OHNPABKq+57IjCxjrZBwtMuf3c0sh2OCaQBZX+9OUGD48lgoaK03gVegVYizYn
+	tlFE9SscfbeqtFfPPTeawQfGRYZkXVl330TjanJvChKr4sZ3hDnAmSTxNA1vlR4ht77fffyBRAY
+	aRGZCpmKU/ezUAxjvhldtu7w2wE/rP1hXpF04EToz/v+IhIjXEv2fgSOAs28D2vPeMuBFNb4hk+
+	VJkvEzZbhv4kkKcHYT0arCqnJj+Kkz/Nelnej/fN3nv+gg3cXiyixujV26D/tvcJ0SljkuavvXo
+	4bEDFfAfu1+0x3zRXyCeHjbqC6QShpsv7kYtwLLsq4eh6l+nGvT7nI3t6WzOOFPdAEubStOzitM
+	23VuD+Ho/jC2bZfI3/XrRaKq5Xol0mWBYmizqhv+s2CP9XMwP6m4kjGff9qnyyYbkxveGBmi8zZ
+	0oUfm1ECS4WvVNXWu4c3zpa9+EW9d1ts9RfaB6IWQ8MklGui6z7p9ugIuFeNB9p9CuEcWTGg9bP
+	y1WqXZxiaHjhlLE
+X-Received: by 2002:a05:7022:309:b0:138:236a:c521 with SMTP id a92af1059eb24-1384baf12b0mr2300612c88.2.1781303265082;
+        Fri, 12 Jun 2026 15:27:45 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c503:9b3a:29da:a70c? ([2620:10d:c090:500::9f26])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1386f20ad25sm1289668c88.0.2026.06.12.15.27.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 15:27:44 -0700 (PDT)
+Message-ID: <76cf1da72418d905cfd52dc9e0efa7c37cf8ba76.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack
+ reads
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Woojin Ji <random6.xyz@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	
+ <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
+ <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Fri, 12 Jun 2026 15:27:42 -0700
+In-Reply-To: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
+References: <20260611-bpf-stack-var-off-zero-v1-v1-1-0ec407376147@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:6f85:b0:479:faac:1fbf with SMTP id
- 5614622812f47-4872f2f6a43mr3621597b6e.2.1781302212004; Fri, 12 Jun 2026
- 15:10:12 -0700 (PDT)
-Date: Fri, 12 Jun 2026 15:10:11 -0700
-In-Reply-To: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a2c83c3.428ffe26.258b27.015f.GAE@google.com>
-Subject: [syzbot ci] Re: tcp: opportunistic loopback splice for BPF-paired sockets
-From: syzbot ci <syzbot+cibd4edd60e2329298@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, cwang@multikernel.io, hemanthmalla@gmail.com, 
-	jakub@cloudflare.com, jiayuan.chen@linux.dev, john.fastabend@gmail.com, 
-	netdev@vger.kernel.org, xiyou.wangcong@gmail.com, zijianzhang@bytedance.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
 
-syzbot ci has tested the following series
+On Thu, 2026-06-11 at 19:11 +0900, Woojin Ji wrote:
+> mark_reg_stack_read() currently treats a variable-offset stack read as
+> known-zero only when every byte in the read range has STACK_ZERO type.
+> This loses precision for stack bytes that are represented as STACK_SPILL
+> but come from a spilled scalar const zero.
+>=20
+> Fixed-offset stack reads already preserve such partial reads from a
+> spilled scalar zero as const zero. Variable-offset stack writes also keep
+> a spilled scalar zero intact when a zero write overlaps it. The read side
+> is therefore inconsistent and can reject otherwise valid programs: a byte
+> read from a spilled zero becomes an unknown u8 and may then make a
+> stack access through that value appear out of bounds.
+>=20
+> Treat STACK_SPILL bytes backed by a spilled scalar const zero as zero
+> bytes in mark_reg_stack_read(). When such a spilled scalar is used to
+> prove the destination register is const zero, mark every contributing
+> source stack slot precise before state pruning can use an explored
+> zero-spill path for a later non-zero spill path.
+>=20
+> This has to be done eagerly for variable-offset loads. Fixed-offset stack
+> fills can record one source stack slot in the jump history and propagate
+> destination precision back to that slot later, but a variable-offset load
+> may source bytes from multiple stack slots. Seed precision backtracking
+> with every zero-spill slot that contributes to the const-zero
+> classification instead.
+>=20
+> Add verifier selftests for both sides: accepted programs that read a byte
+> through a variable stack offset from spilled zero scalars, including a
+> multi-slot range, and a rejected program that would be accepted unsafely
+> by a naive implementation that promotes spilled zero bytes to const zero
+> without tracking the source spilled slot precisely. Use
+> BPF_F_TEST_STATE_FREQ for the rejected test so it does not depend on the
+> current verifier checkpoint heuristic thresholds.
+>=20
+> Tested:
+>   ./test_progs -t verifier_var_off
+>=20
+> Assisted-by: opencode:gpt-5.5
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
 
-[v1] tcp: opportunistic loopback splice for BPF-paired sockets
-https://lore.kernel.org/all/20260612011452.134466-1-xiyou.wangcong@gmail.com
-* [RFC PATCH bpf-next 1/5] tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback splice
-* [RFC PATCH bpf-next 2/5] tcp_bpf: busy-poll the splice ring before parking the receiver
-* [RFC PATCH bpf-next 3/5] selftests/bpf: add tcp_splice basic round-trip test
-* [RFC PATCH bpf-next 4/5] bpf: allow SO_BUSY_POLL in bpf_setsockopt()
-* [RFC PATCH bpf-next 5/5] selftests/bpf: set SO_BUSY_POLL from the tcp_splice sockops prog
-
-and found the following issues:
-* WARNING: suspicious RCU usage in tcp_bpf_recvmsg
-* WARNING: suspicious RCU usage in tcp_bpf_splice_sendmsg
-
-Full report is available here:
-https://ci.syzbot.org/series/7c43d5ae-cb19-4b2b-96ad-f7f0806ac63c
-
-***
-
-WARNING: suspicious RCU usage in tcp_bpf_recvmsg
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      30dee2c176e7954f63d1fa3e52d172f30beb9bfb
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/09e43fc4-ebab-492e-b1de-15bb86aa4588/config
-syz repro: https://ci.syzbot.org/findings/79db1500-f71c-4550-8525-89bf06044d60/syz_repro
-
-=============================
-WARNING: suspicious RCU usage
-syzkaller #0 Not tainted
------------------------------
-net/ipv4/tcp_bpf.c:883 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-no locks held by syz.0.17/5822.
-
-stack backtrace:
-CPU: 1 UID: 0 PID: 5822 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- lockdep_rcu_suspicious+0x13f/0x1d0 kernel/locking/lockdep.c:6876
- sk_psock_is_spliced net/ipv4/tcp_bpf.c:883 [inline]
- tcp_bpf_recvmsg+0x1780/0x1980 net/ipv4/tcp_bpf.c:405
- sock_recvmsg_nosec+0xee/0x140 net/socket.c:1137
- ____sys_recvmsg+0x3e3/0x4a0 net/socket.c:2916
- ___sys_recvmsg+0x215/0x590 net/socket.c:2960
- do_recvmmsg+0x334/0x800 net/socket.c:3055
- __sys_recvmmsg net/socket.c:3129 [inline]
- __do_sys_recvmmsg net/socket.c:3152 [inline]
- __se_sys_recvmmsg net/socket.c:3145 [inline]
- __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3145
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x174/0x580 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f1af799ce59
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1af87bc028 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-RAX: ffffffffffffffda RBX: 00007f1af7c15fa0 RCX: 00007f1af799ce59
-RDX: 0000000000000002 RSI: 0000200000000400 RDI: 0000000000000003
-RBP: 00007f1af7a32d6f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000010051 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f1af7c16038 R14: 00007f1af7c15fa0 R15: 00007ffdef205588
- </TASK>
-
-
-***
-
-WARNING: suspicious RCU usage in tcp_bpf_splice_sendmsg
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      30dee2c176e7954f63d1fa3e52d172f30beb9bfb
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/09e43fc4-ebab-492e-b1de-15bb86aa4588/config
-syz repro: https://ci.syzbot.org/findings/8144de7d-1a2e-454e-ab17-08d1c6586df2/syz_repro
-
-=============================
-WARNING: suspicious RCU usage
-syzkaller #0 Not tainted
------------------------------
-net/ipv4/tcp_bpf.c:883 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-no locks held by syz.2.19/5817.
-
-stack backtrace:
-CPU: 0 UID: 0 PID: 5817 Comm: syz.2.19 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- lockdep_rcu_suspicious+0x13f/0x1d0 kernel/locking/lockdep.c:6876
- sk_psock_is_spliced net/ipv4/tcp_bpf.c:883 [inline]
- tcp_bpf_splice_sendmsg+0x1165/0x1490 net/ipv4/tcp_bpf.c:897
- sock_sendmsg_nosec net/socket.c:787 [inline]
- __sock_sendmsg net/socket.c:802 [inline]
- ____sys_sendmsg+0x80a/0x9f0 net/socket.c:2698
- ___sys_sendmsg+0x2a5/0x360 net/socket.c:2752
- __sys_sendmmsg+0x27c/0x4e0 net/socket.c:2841
- __do_sys_sendmmsg net/socket.c:2868 [inline]
- __se_sys_sendmmsg net/socket.c:2865 [inline]
- __x64_sys_sendmmsg+0xa0/0xc0 net/socket.c:2865
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x174/0x580 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fd1c339ce59
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd1c42e3028 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
-RAX: ffffffffffffffda RBX: 00007fd1c3615fa0 RCX: 00007fd1c339ce59
-RDX: 0000000000000001 RSI: 0000200000001000 RDI: 0000000000000003
-RBP: 00007fd1c3432d6f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000004008005 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fd1c3616038 R14: 00007fd1c3615fa0 R15: 00007ffdcdbac378
- </TASK>
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
-
-To test a patch for this bug, please reply with `#syz test`
-(should be on a separate line).
-
-The patch should be attached to the email.
-Note: arguments like custom git repos and branches are not supported.
+This patch does not apply cleanly to current bpf-next, and that's the
+branch it should target. Also note that tests should be split as a
+separate patch in the patch-set.
