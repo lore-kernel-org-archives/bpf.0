@@ -1,195 +1,139 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B8F381AF9
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 06:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703872DB78C
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 07:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781245965; cv=pass; b=TNbwiwGmZFsWo/i25+h5TTO5A8SqbNMXCckxQy+HkWsSQxFG6QmzccRxg4Z+aN5oWuV68LxOqLAY69BYr7yvWTxv1CQcWRvDcH4i2tqTfEk3fPtkwgTcm88NWgmaiXdamBiOu+68PNuM2rV+KFxnfg92lKhZkvuAHx2YzA33biI=
+	t=1781247918; cv=pass; b=mZxBvUpoYs/M8hGyHTpgwFPqropIwkl6LiIa1VqooKBNGwM5ydmd07ZVUI2dgTskV4hu0UvF0Q8W6YzMSWsSwtlsbQ95Hn6iaVPyo6XhYRyOJ7Mx3P7zPMBKO9Xqyqq5epiZT8pz7joe5ewl6S5oXdSDm5T4VoGAnfJiOB7QnbU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781245965; c=relaxed/simple;
-	bh=E70qoRUfGKWHoRfDr/vGHx+xj9G4daC6qsXk61KaDnQ=;
+	s=arc-20240116; t=1781247918; c=relaxed/simple;
+	bh=+Qls2skSc/3vmZca9FbusO2tssEcMmdJgi9u1ZaRRZc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=exK+MKDyn6iMVGvp3QcVHJPm1lj374k199ZiW+taB+WMWjwcxT39kXZ8qxD7y2l1N14tpmWOiniwgEBmjGr1xqXFssOpGIfj3OT56e23BARHzGhPaDYGZvbWxfNSw6WPtUwotehy0GBUnstvqj4lXlObuHzmtlCNSVC7Fbi35xQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8aetRYR; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=RCBVf0tvCYD2ujze99+hJeFBgAFtkRiurvxpL620JoXyCFbfNZMkdbO3vFsnFrwHehP3CIagM4UHfURxHOasX0XEjtfwEyBnrRSh6Yiy20wnZJoY9uO8Vq6jqlg9YJJYKubbZLq6dH70ykUJT0xQf0apdTyirFs1LmNgmP6TjfM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bxm54qHQ; arc=pass smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8aetRYR"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-490b8a97b11so6818785e9.0
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 23:32:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781245962; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bxm54qHQ"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-138129a622dso1227143c88.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 00:05:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781247916; cv=none;
         d=google.com; s=arc-20240605;
-        b=KCcBtTZWtj+GjNDr0tmB98EcP8hQfCvL+Mdzu3nxHOtyo4M8xrASxpw6YXOm3rxmy1
-         yH7SsLoYfcyfDjN5Y3jSL+O7Gjf+EwSDpllCFGbWRz/Sn9y20lPzteZkyjUbxQEk9PLp
-         VEu3NZJN64A9niCmzhekGbm/eWmWWtxH2L/eq9XSRGC8SNiMa6mE29bpoCs41zi6sW3b
-         kr+T7H2KL/WsV4ysjtMI+HM1JsuGXDIIohtp7JvlAIXDE4mC9AXPZxhpgOSKULzDWHCZ
-         KOlU6kkCvkvhvzEo65UH8vPf0xiOjpvWCfpBLzruLx2h6DAsAqvJ2Y2vJVnlfF1BKBRk
-         J5XA==
+        b=Fi36j9OuTJGGZUFQ7SpHV4aVCOf4qrOpc9+H+9sKYH60Qc058JINtbNNxL7qtljNtc
+         QKHvAkZTD05oNP2N9XMGAfKhqFnHRzqyLe4JuixOFlBb5t/rUR/a4ZNyEOg5avQCHr8E
+         4euCx2fQmhdk1IPgPbLJdhaWz9UrSaXgY5ePMHEoYSIh66SBzQfHPD5+pfL0LLHtWFsP
+         8F4yGEOgM+vf93ei832yFEvViFXpx/nPKQMxB8ajf2KWBxuO4yU/72ffwc7FsUWtueF6
+         VIVzpTwP321SpD+i5L8vA9WN1qd2Tg5gQUG2wArtX3MRzF55dyR4zlhnS6WERSKQOHS0
+         43iw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
-        fh=Un3aoqM0HkpUA8U8Sefs+lNTl6GsjR9V6W7nEiKMWjM=;
-        b=KUN+9oUdbLk7FpoZxi3qHUF/Q6GxdYinlN6QmicD8XJxMjo32QKe5UY8/IkQYnRAdO
-         raEh1AI65k3/cukMLlJ4/7k9kvA7e44xpAh2QBqEdVC/dee0ojcKn5JDzIyvNwMUhIdi
-         lrbzfc2UyQKAPyww03OedLERE6AMJv4mN71XW+/+kerdkBAFOWXNajNH4tmmLSQ9pZQk
-         K5u7viqBYRZKhb3lpcXX1hoRn/Og/AvJ7/kZrOgZ8gjo6zPojBG/nmwbnX3Ue3pmezs2
-         QQ2EvkF1+GPNOHizJG+k0NZndkqvcoY+/GHym+veX3LqKmQl1CL7MVUy5sLFPmeQi90M
-         WT0g==;
+        bh=ySAFFGZVCImVoCKxPs5cex2u/fdf51xmls8xn6ywiMk=;
+        fh=Hk+c7LaTgtQdrrU1wgp5rjyS6qTWSh/h1KQ+WVa2Ass=;
+        b=U0JemZ3MxmCMN362afdvTf4ARA718K7O8rztrXRfCxOZXyTgrboHK1m3eQWOk+X89Y
+         r6jrQw59t60vrWPyToKIKpLzft6zrJVYvu0nrJlWIOEnStpJYUAQiad4QxrjvmCzgYMC
+         iMAG+QbFyK8C1uR+kreMwZTqDkzHMAb4QTq3sJVzvB5I4GVT7dcYHCFZ+Dnt8e1k/lqf
+         zYwNoshjHj4Mxjgt+8YiAq3U/Uy5advTWKHI19LeWGmobaVvq0nOe1Y+72dLTNmVcw+D
+         eVPkizt2HJZousDIr0wMBM4XHQm/54BgC2TiZl89z/1APsJ3WZHFW2GYwBCmv0sWkiTw
+         7Jbg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781245962; x=1781850762; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781247916; x=1781852716; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
-        b=e8aetRYRQwZmtknKmu4v4+nYP6KiEPcT3u7uPP2jMrifEHDi3ShhupYI/IxSHv3shr
-         1dJkXYHifLJPIe21NAXm1R+kVzAxqgCJt0wtRJBMbTmvOpt0RL9xEvmIr7zIVgfQT9HR
-         aLU9mFOllcrO2VBIYWEjVfKzuWOqhvPdDN88rgXJRtr3NHe5iGKxtYsKTcxv1c2+YO7H
-         aLdwPJuT9S7OtJJbNPfGODmU4R9CwTWtHs8tlbpVVBIsiA1UWsm1ek0OHuVzOJ8fjpqc
-         +8ieKRcj0mjWWVUtk3CVH98yJ7jyFOOjRuopbtOR5qqD82x+EC0O0JU23Z+oMc6TjcYb
-         pR+w==
+        bh=ySAFFGZVCImVoCKxPs5cex2u/fdf51xmls8xn6ywiMk=;
+        b=bxm54qHQ7BEliOa27UeqSlYEiTrVztCM2OfOnFapoIrqPcFceUHBInvR1IRqJAQgG+
+         pYP0ks/dz5gQXQcOE/UHtNavFcMcH69TezmZVqPpJkdWZ2hAMoRYb04q9/9auCDeNPpR
+         UUaociiZ7oTP3E6+wR3zd7WypUUsMdR4GDgMvFqOMQ9HQUfSwCBfVANgATihoiCl8sxC
+         Zalov4LTNuAh7q0M1vN9WXWdDQ8U3lSq/xu3dsaCiPi/lNfafnrI1pkoTVkzyYMch5tp
+         aygAs8K3XoBVGhtZVsqlmloibyR1bAXlaG1T4gPk6E7E0GQKKITTSiEgt430HV9md0OC
+         dNKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781245962; x=1781850762;
+        d=1e100.net; s=20251104; t=1781247916; x=1781852716;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1CO6Doo//w2RGkJIhLZDU9oQk9kpI1zOxu1zlLLy3gI=;
-        b=TouCetn88e+uFDFEtezFEXHemsxA2fv+Y5LGgM5p2LU+x5oTukh6r0pmsLzg9lBbv3
-         Wxedj/pHYYCOAeluxOFYwQRV1l9Hkyx8mAYtc8vRSQthEJ3dpbDewJSVN8+IBZiF7Hm5
-         /WbJqHuUvaxVY/WAhw+H94Hmo+uqqosMTkic4UckC7wlYFerTTtd73gQ0AE7HKt67ZPv
-         eI3drZ7dotoGYA6Pe74owmd7ndp3UtBarosivgybO4ymzuejG8jgD7xl3INeVWgkmS9f
-         O1FuTWRP1Jg+1dTwIyIWpwa5acz0e8/x45EprdMll1TId4Ze0yjo63U2vxWbPnWOsKDh
-         ifNQ==
-X-Gm-Message-State: AOJu0YxLx496LRusmF8qIKumRABgGh1B/jwvG0vznOHrRcgeyfsHJhCh
-	dkM16j8yUOChxxT8D1QMKXLEE2mZl8z7hw7oZT4a5wJvSJ+NdvQ55+w1ozxHbCoX6HrJddqwCFq
-	NYj89sA8E/0jQyiEor4Dag7+oAqPQay0=
-X-Gm-Gg: Acq92OFXH7Cv4JFBwyaTovXqURiFYHMa3QxlUUC0ijMjlDNPE2qcbC4xvvK37hZVJzB
-	6gJDgHg+jRmLPUmUry6cDxeQpKYY0+Grkkpic3WaG3ikTrZh3+zXcj4oJtkTkZ/kA6k2e+7qx3y
-	r+h1db33TdyN6+nxZQBRmjsNIZQ09VAo3bJ4mMRTA2tB7zmt1q2UkDdxM0VpTFet+SuJfAxEzen
-	9VnJgMOFqANtBTTC8mmGOT19T2Abmw/aLY8yojxRjE0AJ/FE2VS6YqxQ/ZM74ij0nC3BWa9S0Qq
-	WyRv
-X-Received: by 2002:a05:600c:3b90:b0:490:b629:286c with SMTP id
- 5b1f17b1804b1-490ec4c4d5dmr13864405e9.12.1781245961963; Thu, 11 Jun 2026
- 23:32:41 -0700 (PDT)
+        bh=ySAFFGZVCImVoCKxPs5cex2u/fdf51xmls8xn6ywiMk=;
+        b=N1uP029vfE8/i795cpvX9k7SEBZ7cTGzOgAS8KxiIFSyZ1ZWE2VINncQgyhfgWbEz7
+         KRbHkCQeu4kJxtQ2OpDAxRU1wP5YJu2WGY6nbusF4YKHHU+UZV6NvWawxWIuT3g7Cl/9
+         qcuCgqX/TJhVOmYaHZcIMs7l7ti1ukDlxAu5Y7Dv2deLzpK75F4Vtzoe42yQwnxUf7Cj
+         U/yTY70WN2Ttd4jgUTazjnZtmgu1e9LKLmVMxBkI79uG0zEh4nLCP5u0ikV+yBScY5VW
+         EOA6QcSP9E9ql3ywHmZxfExhArhPnKrzrFwIk0SHhQ0dYtzys8Yp8OYbunQv5Uq0kw5y
+         tQYQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+/jz3cHSVru+WsqURIiPt+fPmfcuR/Q/4ha7bZRsAv/TsVoYw+PmTV0R88I4LpFvXdNAc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9zYtqcDFyoj4Tpe72hKUBOiB+sMGunezE9mOhlaoepf/uqyA8
+	f2VS4z9s79OCMewtqeAHCUkrYjrHQ3IdO4tYD9bh+c3BOKCQNRK6jzLo0t/e+7TmkJXCj1rWuSP
+	/66r/lmmJtEbVvPkSOm6MD5fS62v8yfbWW+dQXWXY
+X-Gm-Gg: Acq92OEaj0k1tvgMIWBWHosUZczroTsGT1f9DjcLNpthM1x3tHyFMojnC1BXHIzHm7i
+	6OGfx9DepBomvbtB/YFeXk97gFIgApMrIqWrQCtnPYe642B0IZhiI6savf5nvc504nj3ETM7Sks
+	cIgk6c0whRCuEsEtr4k3hlh17lp4QlhdZ9GoaP6+5KqmXWEVlTZbh1pHm0RZheAnIkKvG/V6piZ
+	a4ZREcj1SZyucwj54obSI9ti02pkZ0yiZri8VfYX+f43Cxq4vNnKiyN8GmTPYtBU4rkpEFbG1fa
+	GBNYvO9vvenESnvMrzMXdwGYYjLgtj/Oz39xut6GbKC31NG7+tjCeOFDPJIQnaXTXHoeoepd0Oq
+	wztMHUkVw60dqmRkD2cf40pNU/onnfdF9CwD07FOPAeTmbFXk/iVy
+X-Received: by 2002:a05:7022:f82:b0:12d:d972:b96e with SMTP id
+ a92af1059eb24-1384bba8b3amr736453c88.20.1781247915492; Fri, 12 Jun 2026
+ 00:05:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611160749.391279-1-jt26wzz@gmail.com> <6e70a018efc87ba1334617b2e6c75ca003e7b1345affe15f1b605634a4ebd183@mail.kernel.org>
-In-Reply-To: <6e70a018efc87ba1334617b2e6c75ca003e7b1345affe15f1b605634a4ebd183@mail.kernel.org>
-From: Zhenzhong Wu <jt26wzz@gmail.com>
-Date: Fri, 12 Jun 2026 14:32:30 +0800
-X-Gm-Features: AVVi8CezUJQ5dJo2tCsl4YwT6OFMv_yZWKbGu9cEm2eLDv1JPD0X-poujETqbbQ
-Message-ID: <CALgi0XntTQpXBPG-znFGohvSMHDmMf93kqz9K6k2dN2rPE_ABA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: add helper retval linked scalar
- pruning selftest
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com, 
-	jolsa@kernel.org, menglong8.dong@gmail.com, eddyz87@gmail.com, 
-	shung-hsi.yu@suse.com, stable@vger.kernel.org, mykolal@fb.com, 
-	tamird@kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
+References: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 12 Jun 2026 00:05:03 -0700
+X-Gm-Features: AVVi8Ccmokh-rVUbp9NLMiWL4MP-Zle5S0yShB9T0PhjR4_ZLN2X0FgYOQboXjs
+Message-ID: <CAAVpQUBL1pFxgVtNjM=YcWuE7YfvBpUf65WBpUBzjVZJgz=hTw@mail.gmail.com>
+Subject: Re: [PATCH net v3] tcp: clear sock_ops cb flags before force-closing
+ a child socket
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Lawrence Brakmo <brakmo@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Thanks for taking a look.
-
-I used `r0 +=3D 1` only to shift the helper success value from 0 to
-1, so this test is not masked by the verifier's not-equal-zero
-refinement. In this reproducer, `r0 +=3D 1` does not enter the internal
-BPF_ADD_CONST linked-scalar path.
-
-The helper returns an integer with `R0 id=3D0`, `r0 +=3D 1` keeps
-`R0 id=3D0`, and the `r0`/`r7` scalar-id relation is established later
-by the `r7 =3D r0` move on the failure path.
-
-The success path skips that move and keeps `r7` independent. The test
-is intended to cover pruning between those two different state shapes,
-not ADD_CONST delta propagation.
-
-Separately, I don't think the Fixes tag suggested by the bot is
-appropriate. I do not have evidence that b0388bafa494 introduced this
-issue. I can reproduce the issue on v5.10.258, v5.15.209, v6.1.91 and
-v6.6.142. The upstream change that fixes this state shape is the later
-linked-scalar precision tracking change:
-
-  4bf79f9be434
-  ("bpf: Track equal scalars history on per-instruction level")
-
-More background is in the v2 thread:
-
-  https://lore.kernel.org/r/20260607170959.823755-1-jt26wzz@gmail.com/
-
-BR,
-Zhenzhong
-
-On Fri, Jun 12, 2026 at 12:58=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Thu, Jun 11, 2026 at 2:29=E2=80=AFAM Sechang Lim <rhkrqnwk98@gmail.com> =
+wrote:
 >
-> > selftests/bpf: add helper retval linked scalar pruning selftest
-> >
-> >     Add a verifier runtime test for a branch pattern where a helper ret=
-urn
-> >     value and a related scalar stay live across the same control-flow
-> >     sequence. Rust/Aya-generated eBPF can naturally produce this shape =
-when
-> >     a match on a helper status keeps data derived before the helper cal=
-l
-> >     live across the same branches. Such code commonly uses the helper r=
-eturn
-> >     value in r0, where 0 means success, producing an r0 =3D=3D 0 / r0 !=
-=3D 0
-> >     branch shape.
-> >
-> >     The test preserves that branch shape but shifts the success value t=
-o 1
-> >     before branching. Using r0 =3D=3D 1 / r0 !=3D 1 avoids depending on=
- the
-> >     verifier's not-equal-zero refinement, so the test exercises linked
-> >     scalar precision and pruning behavior directly instead of being mas=
-ked
-> >     by zero-specific range refinement.
-> >
-> >     On affected kernels the verifier can explore an impossible path whe=
-re
-> >     r0 and r7 are linked by scalar ID, keep the wrong branch, and make =
+> A child socket inherits the listener's bpf_sock_ops_cb_flags via
+> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
+> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
+> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
+> without it.
+>
+> If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state(=
+)
+> calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me()=
+:
+>
+>   WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
+>   RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
+>   Call Trace:
+>    <IRQ>
+>    tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
+>    tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
+>    tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
+>    tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
+>    </IRQ>
+>
+> The child is freed before it is ever established, so it should run no
+> sock_ops callback. Clear its cb flags in inet_csk_prepare_for_destroy_soc=
+k(),
+> the common point for the IPv4, IPv6 and chtls forced-close paths and for =
 the
-> >     test return 1. With linked scalar precision tracked per instruction=
-,
-> >     state pruning keeps the real success path, and the test returns 0.
-> >
-> >     Suggested-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> >     Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
+> MPTCP ->syn_recv_sock() failure path (dispose_child), which reaches tcp_d=
+one()
+> on a child that was never established too.
 >
-> This adds a regression test for a verifier state-pruning issue with
-> scalars linked by scalar ID, but there is no Fixes: tag.
->
-> The test structure (success path keeps r7 independent with id=3D0, failur=
-e
-> path links r7 to r0) matches the "registers with id=3D0 in cached state v=
-s
-> linked in current state" pruning scenario that was addressed by changing
-> check_scalar_ids() and regsafe() to treat rold->id =3D=3D 0 as independen=
-t.
->
-> Should this carry:
->
->   Fixes: b0388bafa494 ("bpf: Relax scalar id equivalence for state prunin=
-g")
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/273612=
-18656
+> Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
+> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
