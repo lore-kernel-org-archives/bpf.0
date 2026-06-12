@@ -1,176 +1,294 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72163A71B6
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 19:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781291312; cv=none; b=Amyqj1zo8ATkyYh9nGOfkB4C+6VVavXtXuJ47pO/3YMTZznJcd6QARpC5gZAM7BrQX8I1MSynS7jmxseFIYi0w9y8TvaTrSZeqJh7nxqicdtGX3cQragh4379BHab70u6aghI4Oo2GzOr9djsUHU0Ed98DxuH/YcTkp68zyTUHM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781291312; c=relaxed/simple;
-	bh=X+VcqjVk5xe1IGzIBlKN5MD3fYQxuB+IlK0MfxlaRAM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CcOph8zgjVeaZOJbykfcsPTnGcuu1nfRCmPXaAvXh+n3jKYzauU/QtOHKHLyfkIsP3dSoR2KXXygagNVhniaIqsXIK/MAVLnaOJpX5b6LZ0pVKAcET0R2Jznzt13Ey8vEVamUF7ynLj8iU+oWXjT65fsVVUyEt9BtnEfPHTpb8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hUMwy0Gx; arc=none smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D5D3793D0
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 19:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781292324; cv=pass; b=Zmu/dEiIi1tZXmQ3H7AslyWHC+v0cgLhwd0K1A8lutW4pE9sgoalKlaNb5w/X9q0AleU37PI/HzdMyKDLDVjD/XhzpQLhmW6lc+WDpWtG99FCohCgM7syE8QHQyLs+cATOPbAFOy+ojU8POnLWR/eBuegTsZkdER7SGyVvAoiUA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781292324; c=relaxed/simple;
+	bh=wtdSAI/WhKGBjuABTv5R/kXIRbC/rjQy6jOp30gmmV0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Kapz/6NXXPrcQV2aTDS5JCUPceGtzQg2Vweh22XpLs7zZHyULDdu27j8wrHkYFhX0atOtioBSUgoFQ+Q7mG/wU4Fn6HfMvkZY4tyi49PyGqcRPRDnwhMcgb8hrt7B8ByQgL8/YtzdTB14V5V71eRfmQKscCjOcx07MVDDhrr5Dk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DgF8gDjd; arc=pass smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUMwy0Gx"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1363fe80fe8so2070316c88.0
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 12:08:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DgF8gDjd"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5aa7bf3d512so1800738e87.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 12:25:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781292320; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kqXcETVSYviutSoOVA7pSk53jfIExCO3vM4dBGMprlko/B35IUh2bJDl7+1LF5ehtU
+         +W/TlOU91kxLJDr1jqP5AinuzGut2N9mfnW7flxUXgLm7P8YSncEBWvWdk4d14hO6Qcc
+         K6qrgTd+WbLSqF+E0iy/LsgMP8gXB3A8iBCAH857vXPFaW2DzjL9faudyPxFakqzjGij
+         vJ6NPKP/7wwcs6E4NaNSn3pXVvmUCywxmuzZg9vd/iLB2BdGu0U1lq2JPZqoomaH/8Bd
+         jId5B67Ue+eLApzzo/8RiPeMWyMhBnN/03BYJDakSSwyvRaqG4FLF1dp+p4UHsWcPovW
+         NeHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        fh=FoN+rL7dCRthnuOcyLqQZqrTZnhRAcIUpXF0ph9x/Cw=;
+        b=ai6os0CQY5YxyYXpTk2RR7TAUGufd+uT8HmbJ7TredgGaKtGx1eb1/cRHwia9KrvU9
+         DPrGG9YRMrzJdDXNVMcxBCbQ3x5My6mhzAqvdPfJme8LpefbuoT4RgE5WkPRnqScCJPI
+         M8sOr31Gz1Zgv3YIlt3gaLY50G5ruOe6Vn/FIiCCyHNbCiGMvrYKGEF0a69avWD+CN78
+         daTNpBRk1uzXjZhNcvXIKiDnTJpnbuslljF4U4rSFPfKbNL/BZrFiNJPJ5xkxnJft0Ob
+         uyikwG/advWGId5l15zT3ztgM3bWX76OarWwx3PB+PCdkINYB4hVB8O9VNV/Zk4v4bOd
+         S/bQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781291311; x=1781896111; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yqOZsjAHJ/FhXXRO1KhYqWotlbjaQ4fmexWXcigXZYU=;
-        b=hUMwy0GxzaDj0IZLFCS4ed/cJfKZ+ehMdAu84PCx8Cn2yEJgySQyNXDvuq7fex17Ct
-         c+MgsMU0hhn4t7ne4Lb2sYc7whaAhR616edO2BO+nMylyXXl+wzj59Wu/RzQEM9rio6v
-         eGkGZWP0ioPLbgr7N/r9rT41ToRquSgDWfKyPORVeIMsRnDc9W4Se6HrYTYqYb03ROF5
-         Sit89C4udewPtTy1CZ7KUy6vvrrnq0dDjzHOHXB3lMEPWN9UpeV0ieNXMpPm9mwzyYwq
-         X0mo7fjR6ZTMJP3ucXCX8GJkVFwG6MYjhg9jVObu2q/sPkMyAIjBXnTpxOggmxSC3xO0
-         nIiQ==
+        d=chromium.org; s=google; t=1781292320; x=1781897120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        b=DgF8gDjdoPbi+WpN19e2HKMcEIJNpsRgG6t0J3ouGRuudtJMGdY/fnnNPidXbkFatF
+         M/yI372egOH3EOroPtM2WdecxJojBzPApVemjhnc5QWBgXo4VCSkWmFNZXup6jl+DPRa
+         dimn87G92CKfrIQBovIao5xy9HjLv8f9ykmeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781291311; x=1781896111;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yqOZsjAHJ/FhXXRO1KhYqWotlbjaQ4fmexWXcigXZYU=;
-        b=ePF6JU964MiApbRbdshW1gPIv8mcoqRznANws6rslnCsIwilam1aN1P9a/EhiOvdyG
-         M3tjNtK3uGqzCYBCfJ9qzNq4ovJfPeqUSATvrdok1TfSlxJoI23cSrRDAhhdfCUmvG7P
-         HunD4Hl7Z0KD04AMmIRrvr7tcwmuGX4T4HA8nQOpJAq/lfxIWC4peEpSsd6j8cIOKZBO
-         UFddk5UwjL8Rzj9EpXHmf7Vi7A9OrhCMmjScq7m9JmDt0S6cCnwYesn7WBbpB2TFQyFy
-         RCk9t5ZQ8c2Qxn/NLeRO+WMUGP/aIcynZz1A8typhDBGTOuOLp26ABpsE65glf57mHX8
-         7k9Q==
-X-Forwarded-Encrypted: i=1; AFNElJ8xv3gs3W5sLPa/prOv0WqD9oLtHpLcvBba3Lj5NAu3jvgBxR42kPCSvHgK+Wz9S6dl03Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcjaMXnH5sVu3/ASLuEdlMG+5mL8MY1lPYz9LpqL9SGh0JaoeZ
-	jvIfdk+7thldkjbHqAZ45qy4CxlSZTJrVjCbcOln97LZJxKLakMHTilSmqqWVa0l
-X-Gm-Gg: Acq92OG1H3jB/6s7DwRlMwfx2mbxnpRysYbs188RorREHe760/d41ClIW5aOcuixn8H
-	4kr6ADP/6rj0FXl5zYhaiqdh8wzpA8XU9dkgZgJpLlK4BCvsKV/2UWafdPuSAFgc4MNl6/vAgyp
-	kkrkHG/XL3OiD2hX/y8/pIPuWLmbW+Tpsj6/ymVXhaaOJwqdCwtSFGVlZ4I6LLGu84uMQGGHVFj
-	b4bw9V3wco+rDObdneR1jlBejbusEZ/1gahgmjF3p6Fw/yXEtBd16vbxfhRWnS95oozbw4Dn/2a
-	9AeQyoE46/VnDsBXxA6nxbn2RCxACpZxrQn9X1HwyXPLubjKz70zOfCtM9dw/Y/RD8xQu3YC7mD
-	mTgSbaO+DrWFBUp6Do8sWTA6mFg2QYTFbKinQ9Nnop+YKjACnUss5ao8gWlz5TiRbYXlnhq/ER+
-	6aoHHUuYeOvb8JeA809YMB/y7YpJHuBcrflp3MV0yliesGV2Wbds1XRfBENdgMGOWe5FxlAnYZ6
-	Ej/Ylw=
-X-Received: by 2002:a05:701b:2906:b0:136:ff02:d00b with SMTP id a92af1059eb24-1384bb7b5b2mr1017612c88.25.1781291310399;
-        Fri, 12 Jun 2026 12:08:30 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:8f06:d707:6dd3:c26? ([2620:10d:c090:500::2:9c4f])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b96d6c4sm3246219c88.9.2026.06.12.12.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 12:08:30 -0700 (PDT)
-Message-ID: <7a5c9c3e8ef2cb86b7ae38fb4593e7337e9962c0.camel@gmail.com>
-Subject: Re: Proposing a change to cnumXX_normalize
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Hugh Coleman <htcolema@uwaterloo.ca>
-Cc: yanze.li@ubc.ca, bpf@vger.kernel.org
-Date: Fri, 12 Jun 2026 12:08:28 -0700
-In-Reply-To: <8c297913-c48b-4d50-a253-039037c21e53@uwaterloo.ca>
-References: <8c297913-c48b-4d50-a253-039037c21e53@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        d=1e100.net; s=20251104; t=1781292320; x=1781897120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JzbhYOVx15zdNgTlmqivEDbnFdm8e7TKoj1i3uih1i8=;
+        b=aimJjGFb6g05LxBqIp6mMKZGlp+tpF6Rnl8RChj95ihJoCJ/v7doW9ZFl8PmaF1sxI
+         Is/pB7N7o92BzkotW5+Cn5LBRdMOYBmAwk6e14b187/h+W5PPvWuAHwY2M+6nj10GBS/
+         BCECzelZq93CuPRsoGHj9BIwmE9pKM0tZEifI6Fg3ulmAvYRiJn+c0xepq7f3cOtCeaD
+         +xB3PibHu0IpVSby6hb4ivkl7nLRu8QN2vqojJ1LEkDlwGCvBDXID3vylRh76b4VbMpX
+         Fjmgru+cSi1I7rtejkDSRn7vci6ORAxh35q8A+xRfAvRYe7bDccr8ms0RMQTpn3w7Zij
+         u+Lw==
+X-Forwarded-Encrypted: i=1; AFNElJ9eOzdq5TOGd75Q/mMZsvi4LUPS0AeFHh+o46xJ3gFtcMrJ1h50aSFyhLiq3BFnAUBMbXM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+Ns4qoXgP0UdGW01K440OwnF1IzJVaD7Iyi3E5/xek76VqUYK
+	c5dhAC0tTzG4+9Q9ZM/qKTFcbUjqjUbnjDMb7Oeyk+0gpGeDC08SvMNRpqh1MYHk3JpFtpWLtnH
+	ZJkp+IUAOb0lyVD28Ob4fN0/eGsgqNrczLdMGwNIL
+X-Gm-Gg: Acq92OH07WlCLQufhNpyfMzD2hWKUuyb71MOrb3UD7p8Il8E167EdkIg9muUC4CQRb8
+	pCDEhVtnYTUpiHA9gmz1j9duF5daoWdTPtW2tPPPXHkMZ0Y4yoSKFO/cwAM9cWJjNLk8+OLb60S
+	/kfM0Zb/ALc8XAdwgGifCyxE+tgTLVEoxp6Wezi1RUwBWbRDekVPKqILxCyhxe0gieNEZKLXM1U
+	Jo1160g8IjU2OV0sMJhndnnmn6eQLn7ZI/s2gJaaTzhudEI8qU+PGqz7X0QFurCAtUlE21SZjui
+	iPIeOjc859ysf0JydLhlJXGmin6zHVi+OSI6WilcaoIzhx1L
+X-Received: by 2002:a05:6512:3b0a:b0:5aa:854c:61e0 with SMTP id
+ 2adb3069b0e04-5ad2db452d1mr1311594e87.20.1781292319447; Fri, 12 Jun 2026
+ 12:25:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk> <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+In-Reply-To: <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+From: Will Drewry <wad@chromium.org>
+Date: Fri, 12 Jun 2026 14:25:03 -0500
+X-Gm-Features: AVVi8CdO18l0E0vkUdggPdi_e7VaCUHGrQ-SUpY-fJfFGaS3PLmAAujQ6BHqK08
+Message-ID: <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+To: Jamie Hill-Daniel <clubby789@gmail.com>
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2026-06-10 at 19:21 -0700, Hugh Coleman wrote:
-
-Hi Hugh,
-
-Sorry for the delayed response.
-CC'ing mailing list in case people have some additional opinions.
-
-> I'm a research assistant working with a PhD student at the University of=
-=20
-> British Columbia (cc'ed). Broadly, we're working on formalizing the=20
-> soundness of the eBPF verifier in the F* programming language.
-
-Nice to meet someone from Vancouver here.
-
-> So far, we have been able to prove the soundness of the "circular=20
-> number" operations you implemented earlier this year in `cnum.c` and=20
-> `cnum_defs.h`. However, we were a little surprised by the implementation=
-=20
-> of `cnumXX_normalize` (specific emphasis added):
->=20
-> static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
-> {
->    if (cnum.size =3D=3D UT_MAX && cnum.base !=3D 0 && cnum.base !=3D (ut)=
-ST_MAX)
->    //                                                        ^^^^^^^^^^
->      cnum.base =3D 0;
->    return cnum;
-> }
+On Tue, May 26, 2026 at 10:42=E2=80=AFAM Jamie Hill-Daniel <clubby789@gmail=
+.com> wrote:
 >
-> To us, the natural requirement that this function should satisfy is=20
-> that: `x` is a concretization of (the cnum) `C` if and only if `x` is a=
-=20
-> concretization of `normalize(C)`. That is, `normalize` should faithfully=
-=20
-> preserve the domain of possible values. However, as written, this=20
-> normalization function doesn't quite do this, as the condition checks=20
-> for `(ut)ST_MAX` (0x7fff...) rather than `UT_MAX`. In particular, this=
-=20
-> means that it sends the empty cnum to the unbounded cnum. We're=20
-> wondering if there's a reason it was chosen to be implemented this way.
+> It is currently impossible to enable `SECCOMP_MODE_STRICT` if
+> `SECCOMP_MODE_FILTER` is enabled, and vice-versa. This makes using
+> seccomp difficult in environments such as Docker, which installs a
+> seccomp filter by default.
 
-In theory, the normalization function is unnecessary, if something
-hits a full circle, then the primitive functions shouldn't be
-sensitive to exact starting position.
-However, I wanted a representation for an for empty cnum w/o adding
-more fields to the cnum structure, and I picked the { UT_MAX, UT_MAX }
-pair for this purpose. Which added a requirement for normalization.
-The idea is to guard for is_empty() at relevant operations and to
-apply normalize() to the results of the operations that can produce a
-{ UT_MAX, UT_MAX } as a legit full-circle value.
+Some quick thoughts on your resend -- the original reasons for
+this approach:
+(a) filter policy !=3D strict policy
+(b) filter can implement strict, if layering is desired
+(c) minimize checks in the syscall entry/return path
 
-Hence, normalize(EMPTY) is not supposed to be called ever.
+I'd expected folks to simply create the ~80 byte strict filter and install
+it if they needed STRICT policy. More discussion below.
 
-> We would propose changing `(ut)ST_MAX` to `UT_MAX`, so that this=20
-> function has the "if and only if" property described above.
+> Introduce a new internal `SECCOMP_MODE_COMBINED`
+> that runs `strict` checks, followed by any installed filters.
+>
+> Link: https://github.com/moby/moby/issues/42082
+> Signed-off-by: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+> ---
+>  kernel/seccomp.c | 46 ++++++++++++++++++++++++++--------------------
+>  1 file changed, 26 insertions(+), 20 deletions(-)
+>
+> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> index 25f62867a16d..8201a050d358 100644
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -33,6 +33,8 @@
+>
+>  /* Not exposed in headers: strictly internal use only. */
+>  #define SECCOMP_MODE_DEAD      (SECCOMP_MODE_FILTER + 1)
+> +/* Run SECCOMP_MODE_STRICT checks, followed by SECCOMP_MODE_FILTER  */
+> +#define SECCOMP_MODE_COMBINED (SECCOMP_MODE_DEAD + 1)
 
-I vaguely remember one of the test cases ending up sensitive to
-preserving { ST_MAX, UT_MAX }. It was an intermediate result which was
-further narrowed by some operation and that narrowing was not precise
-enough if the intermediate result was normalized to { 0, UT_MAX }.
+I'm not sure if DEAD is meant to be fixed at the end of all modes or
+not -- given that it's internal.
 
-However, if I simplify the normalize() function to:
+>
+>  #ifdef CONFIG_SECCOMP_FILTER
+>  #include <linux/file.h>
+> @@ -432,14 +434,21 @@ static u32 seccomp_run_filters(const struct seccomp=
+_data *sd,
+>  }
+>  #endif /* CONFIG_SECCOMP_FILTER */
+>
+> -static inline bool seccomp_may_assign_mode(unsigned long seccomp_mode)
+> +/**
+> + * seccomp_needs_combined: internal function for checking if requested m=
+ode
+> + * needs to be upgraded to `SECCOMP_MODE_COMBINED`.
+> + *
+> + */
+> +static inline bool seccomp_needs_combined(unsigned long seccomp_mode)
 
-    struct cnum_t FN(normalize)(struct cnum_t cnum)
-    {
-         if (cnum.size =3D=3D UT_MAX && cnum.base !=3D 0)
-                 cnum.base =3D 0;
-         return cnum;
-    }
+It is easier to reason about if you keep the access checks separate from th=
+e
+behavior-change decision. Setting seccomp modes isn't on a particularly
+performance-critical path, so we can be more verbose and explicit.
 
-I don't see any selftests failing at the moment.
-So, maybe it was a deficiency of some of the non-final versions of
-other primitive operations, and the ST_MAX condition can be removed.
+>  {
+>         assert_spin_locked(&current->sighand->siglock);
+>
+> -       if (current->seccomp.mode && current->seccomp.mode !=3D seccomp_m=
+ode)
+> -               return false;
+> +       if ((current->seccomp.mode =3D=3D SECCOMP_MODE_STRICT ||
+> +            current->seccomp.mode =3D=3D SECCOMP_MODE_FILTER) &&
+> +           current->seccomp.mode !=3D seccomp_mode)
+> +               return true;
 
-> Accordingly,=20
-> since `cnumXX_add` and `cnumXX_negate` depend on this behaviour, we also=
-=20
-> propose corresponding patches to these functions. (In fact, we can=20
-> entirely eliminate the need for `normalize`.) We see this as an=20
-> advantage as it simplifies the implementation of `add` and also=20
-> eliminates a potentially surprising property of `normalize`.
->=20
-> We are not ourselves active kernel contributors, but if you agree with=
-=20
-> our assessment, hopefully the attached .patch file can be of use to you.=
-=20
-> We would also be happy to share the F* soundness proofs for these=20
-> amended operations.
+AFAICT, the only valid "combined" case is current->seccomp.mode=3D=3DFILTER
+and seccomp_mode=3D=3DSTRICT.   There are other allowed transitions, but
+not allowed for transitioning from FILTER->STRICT via COMBINED.
 
-As for the patch itself, it seems it just inlines the normalize()
-calls in-place, so I don't see why it's needed, tbh.
-normalize() is not an externally visible function.
-Shouldn't it be possible for the proof assistant to do such inlining
-on it's own?
+If this wasn't subsuming the update access check, then the single allowed
+transition could be checked in set_mode_strict() (or a helper).
 
-Best regards,
-Eduard Zingerman
+>
+> -       return true;
+> +       return false;
+>  }
+>
+>  void __weak arch_seccomp_spec_mitigate(struct task_struct *task) { }
+> @@ -1407,6 +1416,9 @@ int __secure_computing(void)
+>                 WARN_ON_ONCE(1);
+>                 do_exit(SIGKILL);
+>                 return -1;
+> +       case SECCOMP_MODE_COMBINED:
+> +               __secure_computing_strict(this_syscall);
+> +               return __seccomp_filter(this_syscall, false);
+>         default:
+>                 BUG();
+>         }
+> @@ -1421,30 +1433,23 @@ long prctl_get_seccomp(void)
+>  /**
+>   * seccomp_set_mode_strict: internal function for setting strict seccomp
+>   *
+> - * Once current->seccomp.mode is non-zero, it may not be changed.
+> + * Once current->seccomp.mode is non-zero, it may only be changed to `CO=
+MBINED` or `DEAD`.
+>   *
+> - * Returns 0 on success or -EINVAL on failure.
+>   */
+> -static long seccomp_set_mode_strict(void)
+> +static void seccomp_set_mode_strict(void)
+>  {
+> -       const unsigned long seccomp_mode =3D SECCOMP_MODE_STRICT;
+> -       long ret =3D -EINVAL;
+> +       unsigned long seccomp_mode =3D SECCOMP_MODE_STRICT;
+>
+>         spin_lock_irq(&current->sighand->siglock);
+>
+> -       if (!seccomp_may_assign_mode(seccomp_mode))
+> -               goto out;
+> +       if (seccomp_needs_combined(seccomp_mode))
+> +               seccomp_mode =3D SECCOMP_MODE_COMBINED;
+>
+>  #ifdef TIF_NOTSC
+>         disable_TSC();
+>  #endif
+>         seccomp_assign_mode(current, seccomp_mode, 0);
+> -       ret =3D 0;
+> -
+> -out:
+>         spin_unlock_irq(&current->sighand->siglock);
+> -
+> -       return ret;
+
+Is this reachable when mode is DEAD? In its current form, it would fail
+out on may_assign_mode(), but now you have to consider if a race
+could silently clobber the DEAD value (let's say).
+
+>  }
+>
+>  #ifdef CONFIG_SECCOMP_FILTER
+> @@ -1956,7 +1961,7 @@ static bool has_duplicate_listener(struct seccomp_f=
+ilter *new_child)
+>  static long seccomp_set_mode_filter(unsigned int flags,
+>                                     const char __user *filter)
+>  {
+> -       const unsigned long seccomp_mode =3D SECCOMP_MODE_FILTER;
+> +       long seccomp_mode =3D SECCOMP_MODE_FILTER;
+>         struct seccomp_filter *prepared =3D NULL;
+>         long ret =3D -EINVAL;
+>         int listener =3D -1;
+> @@ -2016,8 +2021,8 @@ static long seccomp_set_mode_filter(unsigned int fl=
+ags,
+>
+>         spin_lock_irq(&current->sighand->siglock);
+>
+> -       if (!seccomp_may_assign_mode(seccomp_mode))
+> -               goto out;
+> +       if (seccomp_needs_combined(seccomp_mode))
+> +               seccomp_mode =3D SECCOMP_MODE_COMBINED;
+
+So I have two concerns here --
+
+1. By layering, STRICT becomes subject to FILTER RET behaviors.
+2. If we did want to layer them, it would be ideal to separate the 'upgrade=
+'
+    decision from the access checks and make the layering path explicit.
+
+If you are running a legacy binary that uses STRICT in Docker, then I
+understand the goal, but there are userspace options.
+
+I think it's hard to want to open the door on changing STRICT without
+a good reason to work through all the implications that come with it:
+cross-checking every SECCOMP_MODE_FILTER reference, sorting
+out thread sync interactions, ...
+
+That said, this change could be streamlined and look for ways
+to minimize any potential implications.
+
+Am I missing something or overstating it?
+
+Thanks!
+will
+
+>
+>         if (has_duplicate_listener(prepared)) {
+>                 ret =3D -EBUSY;
+> @@ -2105,7 +2110,8 @@ static long do_seccomp(unsigned int op, unsigned in=
+t flags,
+>         case SECCOMP_SET_MODE_STRICT:
+>                 if (flags !=3D 0 || uargs !=3D NULL)
+>                         return -EINVAL;
+> -               return seccomp_set_mode_strict();
+> +               seccomp_set_mode_strict();
+> +               return 0;
+>         case SECCOMP_SET_MODE_FILTER:
+>                 return seccomp_set_mode_filter(flags, uargs);
+>         case SECCOMP_GET_ACTION_AVAIL:
+>
+> --
+> 2.54.0
+>
