@@ -1,147 +1,149 @@
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4803403139
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781283859; cv=none; b=TBCkCZ/x/Ibg7dXhftNhKnSM7ZHiPc2vmRZiEBpbyzZclwVx6l6+EZ7gnqravwdabQUTe5tOVqmqbZEPQ3pIOAFCY/Re48rLB0BPR9VydCTD9KLDmWQnovQGuc2roeRgd0vCkTHJ5PnXJfUjk8lW77MGENwvaWGjVZ2Vpv2M/zA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781283859; c=relaxed/simple;
-	bh=x7JBV1YxVrPj4/1vBdgzqqKO1DpryrChHhSxeL1cbvA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=joqdWzyTErKz8bh01PYmn7uWNkpTuowlbQxMx3GrCcuAzFtseW2b3X9ZI7oVlgIezjPgrv2n+5osMVanKuUVruLWXZr6IPjElhXoze3dZy8w97khvVNqt/LEugU6QiYKxpXHzTpYgZ8MfOVfdvKKSdESIwRXwfswcrok1pTr+uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h0XmpJfB; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EA5374A1B
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781284206; cv=pass; b=IxEfmYXd62hZE63na0WKFd3kpLc7PfOfbIx/VOF3rrTr6hqIqJJo6I6Q3fjDWn/thCFM/7ai4I1xDBHc0TZGG0NxW1XwO/hZh5uQD/ui3YyMRshVHIg1U3kCZ7B+fsUDBfX8O1QWzzMv5qEip6hE0Z0+Cbta6PJU9qG6tRG5VC4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781284206; c=relaxed/simple;
+	bh=YKWWA8HN/7LM+Kslx5n3GFPqlJF8ctu6GvvxJUabjrM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mK/7f8yYBy88509i1vyA/kXBzqsTbFf8FlOSKRkIvdhPa0Py3GJkxhXeS11H/N7Ubaq6XRt2493V3jQQfwB5QVWzPYyJ01Qu1E9Ts4G8xVKC4u4g7PLBLKbpXdJbDFgR+t0MDpWICM5hukl/OscAQQUnnLZlm3GWAgZX72rAdnE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I1+Zi4XZ; arc=pass smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h0XmpJfB"
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4863ee8474eso878416b6e.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 10:04:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1+Zi4XZ"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36d5b11201aso905301a91.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 10:10:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781284205; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dXM5dV/6drpATeBRQTPMcBo9uRZNDNxh6bsHQStns9lvpmDgsDY9oKq46rgMPRo8oM
+         D8NC1TUG1pgYB294KceiEDTGl4plDe6rccufhgRMI2ByCoMToqGgJfN9u7b+QrZWMdm9
+         sA9gih8rMoWqYULG4DQ9vtryWeIJFx73lBXaeEVB2EqWngIEBneWB8iHjG63G1bbG2Yl
+         OGfbaTvoSd+7lm2jWlkPzHGPqjnGaZw3+W+Q0EnYq5K2ntU8Ud9scY4pjJfkRykgj2mY
+         q3O7r/F3QYUsJ+jyHk33cWFZ1G2rBUZO2DWa6mQ/AxOry/9EKMsU9/fdsowp+lq+YyvS
+         F3ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
+        fh=aJKsifnmJVYxrENXiuFCKNqbPRSNyCakkVCrcNXD7Z0=;
+        b=TYVAQPwG/7eZvns1DvCSWNglR18VUAF1yLiq3rGZDD3YsmM2hRidagaQ9HWhQ3LL6D
+         4owZfKaubFLOXYM3jO1ccDrs5mk1ncSnCtHwzjFJRklhVsn/9x9fWfWYOzypYVdzzKnL
+         l9NxNI1tV9TkPIGt8MMRlPFl+v9WguCtk729jBHFp1jZgW7wEHkYDpUJN+qz3J7kW4od
+         XcCWXdIvBAB/VKiD8vR+1brp0IrMMfMIfJznU1wxwwQIX7A+2we7GvTgjnYFn2reOI2B
+         uZdA6sZnn8ZGvhAvvKIjY1wj/GAbIlWkNmASGbk9C8qQFJA6bCMkQHTJm3ikrb1+lfFW
+         FpQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781283858; x=1781888658; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781284205; x=1781889005; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O+CzGFIuAycc3JTH3gFYPgt2Y0prLl/gqutaLhPH2tg=;
-        b=h0XmpJfBN3aA8/I9MeOh7mZ22rIraPMCUXRe6Uo+/kmLDnY9rZbBQMd568HZA4h3ZQ
-         gsbgQTr1ZOzAtsFlwOoeLGnJWH6s5sVqlCui/ppWHwNXmded1gzYe18b6n1ZkkjrsTay
-         +8vWO01kLZCQk4QMFMae6yrQtiLSPg5vMOJ9QItqfoUxtoEMb430ANmT7CWRCtW7czJP
-         EnjYHStfTfrmHOUUfMnKsZ9jHlCpUV3QX0DPhbceYjLSztdE4KUjdCSx9tIJdyEagyua
-         hDl3djBwg5mRxvlSvSnk2gh+w3RuCKIi7bRW7FlM+BB4ZfoadunexQWEkMy64bKkT2+y
-         JX+Q==
+        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
+        b=I1+Zi4XZYPbd6/vuqeQM+ytqnwbHnJcXmu0iwaFPvzApf1sjqqaX17FdXTxlIp4mPx
+         rM27daPEW5rLeTavd+I7qLqBnxqtnwG6fCrRWENZ8rr8knjlT1smCIGstXOx5CoOyAlH
+         iYCeMVIO4PQDE3KReq2cHXOM+T18MYObDsnGPVVBAUYpq+uaARLaZa8JSClUUSRVNi6R
+         WCVrZJhTsDcPuN8pzWYSlsDqwcMpdyOHYtouoX89YiY2cp0Qs8AinToJtXGb3nJJah26
+         oSsJEC9TdJtOu3H55m8iAw8FFupKF67QUgd3q/0wBKjgww3AmB+zvizMkukj4f6I/8ch
+         jojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781283858; x=1781888658;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O+CzGFIuAycc3JTH3gFYPgt2Y0prLl/gqutaLhPH2tg=;
-        b=VP3SDAZKzElAfswQIejhCeo6LHvg7JROAmJWs7hNm4MHSY7m1i/tF1sa9S4ia1bhi9
-         /cuUUEOdJ8+982QNWsjd0cWE+VOQh7Iv+/gO2n2Bk41yB5klfnN6tG0qVC6oMqusx9pg
-         xlfpP9rhwQXdr5w9pGc46OUA1ov1cJi0xUT/tSgyHPEVpoDUAhl+SsVlzScwBc29+aNA
-         ZZyCCCQ792OUEkmDecJr5JizQXDmvUx7ro+mcxNv4m9ykPIPl1zgDI92P+yXWEQHKcYt
-         ccxWouAKGlzbEhOtVxjHvdjsYC+veRM86rnGw6gfmhi4sMcNjoLQSO8m86z4RZImnSB6
-         vxAg==
-X-Forwarded-Encrypted: i=1; AFNElJ/J4rUkfCKBLLpLmj1gSchnHTSIGcmSLEBXzEBk1Sk7lWtUry581ppFPOe+mR8TVuKA9CQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFOEaFxo4Ukn03eJ6gH6PdBXhrgCYGf1w8Tyiz/mIdzp61jIOf
-	wC3zLPzBirMhYhnL6npguUxrHVS0TQtMWogjJVdcr6sK0t/ZRAtZilD2
-X-Gm-Gg: Acq92OFmPL6VkWDYoq+km2XRn6iY5R92WvgEGdnRZrb8BpSqhul0JpyQGJFkDeXfCAH
-	KXMWd5m9Qlx9CPBmV1S1HiqL2FEgolFCu+3gqeRWc8f4EArkXOaev6KzLQIsSJkD/l2WAX7cQkZ
-	4w8J1dOry6pMWSHZocE4B1+DGzYONhOs8yTXbA92bnUM8cPtDtfcOrrb9wOXEFiuBAzJATaXo2H
-	Nuvfmhmt/jlxw2eeoiRukXeE+N8xD2W2Z1HuftAG+47oZZw/zabx/pVGiH+GAmYlrO6QsqzJfkT
-	RmUmNJTGXnoIVmbhRa4IdhnCp+LmQBLSXTlZof5A0fWdPMvGl60NJNATommF06HXHu6OiNbj3wu
-	MpaER1uhJz28sRboLRqc2yugFgXPAO7fI0jH9ECpkES5K3V6Mu3a1tccUVw2Vzu2GiZGKDQOzXz
-	c2zdsqHbM4JYPWFpsOqGuFU5AbmQgQ3nsXhYtWDIJ1dfxhL2YM2UXNZCj074MKrY28seEq0rw3x
-	R1ARj1v9/z2Sov+Nw==
-X-Received: by 2002:a05:6808:c413:b0:486:a606:c6b5 with SMTP id 5614622812f47-4872f50eab1mr2764073b6e.23.1781283857489;
-        Fri, 12 Jun 2026 10:04:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:18::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-487313bcf8asm1337937b6e.2.2026.06.12.10.04.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 10:04:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781284205; x=1781889005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nDX6t2X+QHHxQFviKq3UoU1UcseXTprmkcNTRxD96mA=;
+        b=ARJPrxILhL/YEPdSHPckrtm7mBtwwjWkoLQMZwMTyGjd9EIYm8rdUD5/FK3t6b+EZD
+         KspFwYgXbF4YwzbtDy+fRBswuUCUt98x9knQxlJJmZSRCjQtp2zVQySKd77M3ZROgVQN
+         mpoYRyKvQLrCDpFtPbZ+z/EOP1oyctgjI7dBq7C4yKD+kKdYdslv/Xh3QqDurXGkdqmy
+         EVrbMjgfac83sZNXZjWS0gjcc7AGnBOdelRvZMLoqhu7pzcRTR2/mD24P+w+4C2a+yWk
+         EfsmaJGlpsaZ/KTOJN3svwubdzjljd6XvDfrzTSpMPx77vJj9Sj4PPh1RXRjfJdSC3Jl
+         lOiw==
+X-Gm-Message-State: AOJu0Yzybwztu3M1wyWImXEqoIHFUEWwbifjUIQQI0BjODzTztfRntf1
+	ZNRfgyHFO3w+gRf5N/fpBOCTnF0VgU3077VHjKHhcCMcO3ZRT7WfyUN1/p1e4ya4i8+LDMn5VMG
+	GHHLOZ/bkHbz1dss4EQhtPvtkwodyZ6Q=
+X-Gm-Gg: Acq92OG7te1ovuOWRCg93xB/+NylkZd0UEUfodOjvd4V8HHSGZpkB3PNc3P2gZNwn76
+	Q/SSORo8wuG+Vqt7EqJKGGv+5caPrZSek4WHUb16EidDtaUUSGJOmwVnf1szNNwA/gKav8oYT+8
+	0hlM1ps6TSiuJAVoqwownsFlExyhlEGi7R0EDEnwOJsf9RoCmdOm0wBqn9lvgXLCDqtawbD0rjN
+	1j6Q6cjvLtu6okN+Ihh3oVs5+T2M2wwdZ/Rmzp0hd8zmp9fKHY1vjaji7B7z5yfHTagGOLlyOjq
+	dMNLssRGliObFo/0P0U5WGXKy09NaybjitIyp6XBItGN4UmEH8T33jYrQy+6xFx98SE+FLbN4/m
+	WTwdis+z9j9nDlj2nZnA7yKaT
+X-Received: by 2002:a17:90b:2dca:b0:366:10f1:3d86 with SMTP id
+ 98e67ed59e1d1-37c2bd75872mr189256a91.22.1781284204833; Fri, 12 Jun 2026
+ 10:10:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260612130919.299124-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260612130919.299124-1-jiayuan.chen@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 12 Jun 2026 10:09:52 -0700
+X-Gm-Features: AVVi8Cdt5YY96GuciSaCwsRw-A8ob7HHQLryVxTyFCQcmv_QVvBEG-eceoLw8Qs
+Message-ID: <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Shuah Khan <shuah@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Sechang Lim <rhkrqnwk98@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 12 Jun 2026 10:04:15 -0700
-Message-Id: <DJ78FEGKX5S8.1H2M4C8415L98@gmail.com>
-Cc: "Zhenzhong Wu" <jt26wzz@gmail.com>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <kpsingh@kernel.org>, <haoluo@google.com>, <jolsa@kernel.org>,
- <menglong8.dong@gmail.com>, <eddyz87@gmail.com>, <stable@vger.kernel.org>,
- <mykolal@fb.com>, <tamird@kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: add helper retval linked scalar
- pruning selftest
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Shung-Hsi Yu" <shung-hsi.yu@suse.com>
-X-Mailer: aerc
-References: <20260611160749.391279-1-jt26wzz@gmail.com>
- <DJ6DMGTPWXJN.1YKSBHULQ1PB9@gmail.com> <aivZ9jYGw6QRxLQQ@u94a>
-In-Reply-To: <aivZ9jYGw6QRxLQQ@u94a>
 
-On Fri Jun 12, 2026 at 3:18 AM PDT, Shung-Hsi Yu wrote:
-> On Thu, Jun 11, 2026 at 09:55:55AM -0700, Alexei Starovoitov wrote:
->> On Thu Jun 11, 2026 at 9:07 AM PDT, Zhenzhong Wu wrote:
->> > Add a verifier runtime test for a branch pattern where a helper return
->> > value and a related scalar stay live across the same control-flow
->> > sequence. Rust/Aya-generated eBPF can naturally produce this shape whe=
-n
->> > a match on a helper status keeps data derived before the helper call
->> > live across the same branches. Such code commonly uses the helper retu=
-rn
->> > value in r0, where 0 means success, producing an r0 =3D=3D 0 / r0 !=3D=
- 0
->> > branch shape.
-> [...]
->> > +SEC("tc")
->> > +__description("helper retval linked scalar pruning")
->> > +__success __retval(0)
->> > +__naked void helper_retval_linked_scalar_pruning(void)
->> > +{
->> > +	asm volatile (
->> > +	"r7 =3D *(u32 *)(r1 + %[__sk_buff_data_end]);"
->> > +	"r5 =3D *(u32 *)(r1 + %[__sk_buff_data]);"
->> > +	"r7 -=3D r5;"
->> > +	"r2 =3D 0;"
->> > +	"r3 =3D r10;"
->> > +	"r3 +=3D -8;"
->> > +	"r4 =3D 1;"
->> > +	"call %[bpf_skb_load_bytes];"
->> > +	"r0 +=3D 1;"
->> > +	"r6 =3D 1;"
->> > +	/* success path keeps r7 independent; failure path links r7 to r0. *=
-/
->> > +	"if r0 =3D=3D 1 goto l0_%=3D;"
->>=20
->> this exercises linked registers with BPF_ADD_CONST logic.
->> We already have such tests. Why do we need this one?
->> How is it different?
+On Fri, Jun 12, 2026 at 6:09=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
 >
-> BPF_ADD_CONST wasn't what was meant to be tested.
 >
-> The main logic is r7.id =3D=3D r0.id only happens on "if r0 =3D=3D 1 goto=
- l0_%=3D"
-> fall through, and does not have such link otherwise. I only check tests
-> added in commit c0087d59e504 ("selftests/bpf: tests for per-insn
-> sync_linked_regs() precision tracking"), but it doesn't seem like such
-> conditional linking was tested.=20
+> All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
+> Kuniyuki and Sechang Lim, which have already been reviewed by me and John=
+ and Jakub.
 >
-> The other rational is that this seem like a common pattern that is
-> genereated from Rust-based BPF program.
+> https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
+> https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.co=
+m/
+> https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.com/
+> https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
+> https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
+> https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
 >
->> > +	/* success path keeps r7 independent; failure path links r7 to r0. *=
-/
->> > +	"if r0 =3D=3D 1 goto l0_%=3D;"
->> > +	"r7 =3D r0;"
->          ^^^^^^^ conditional scalar linking
+> The automated reviewer (sashiko) may still flag a few other potential
+> issues on top of this series. After looking into them, they are either
+> already covered by the patches here, or only reachable under very narrow
+> conditions that require a specially crafted BPF program and an unusual
+> sk_msg ring state, so they are not practical to trigger and are left out
+> of this series. I'm collecting these fixes together because the same
+> problems have been re-sent many times in slightly different forms, and I
+> hope this series can be prioritized for merging so the duplicates can
+> finally settle. With so many AI-generated patches floating around for
+> these spots, leaving them unmerged just keeps wasting maintainer review
+> cycles on the same issues.
+>
+>
+> v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
+>         Reverse xmas tree style is used suggested by Cong.
+>         (not all code match reverse xmas tree due to variable dependency)
+> v1->v2: fix problem when fix the conflict.
+>
 
-Fine, it's a regular register linking without BPF_ADD_CONST.
-Still the question remains. I believe:
-"We already have such tests. Why do we need this one? How is it different?"
+Kuniyuki,
 
+one patch is yours. thanks.
+Please help review the rest.
+
+Thanks!
