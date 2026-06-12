@@ -1,62 +1,62 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6F82264A7
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 01:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE85F314A6F
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 01:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781226924; cv=none; b=XS2FcGI8jc7/RKWJLZS/8/SuMXJK3gm5HUozx38AzNSgZawjRh+RJuusZtjTJiamNkflmvypjpF9jxqb2UpV/gHhoGCcB+DpYBmEQ7kLZE0/sNFcGF5ppDwXS8RPLR4oJvPaOpX2UYZTVRXrXi1uIbURADntvoqrcBGbpIpNq8o=
+	t=1781226925; cv=none; b=aYJoxBqhQZMXRexrlScPl3CQcn3/Nmm3iU+GvD7R9hH6y2NdL522BFe1yELQ6IhW5nWd2nvmp4mhnodOEtxet3DO5jl5J9bLkeklqyzcEJAjX4HnZixXY49BxcGtbt07AlyoAI/BeM5CU5WhnK3FNcGmDNHoNL/y/X22E0yxAgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781226924; c=relaxed/simple;
-	bh=fnJuavT71SaYMp8YHtSumr/AzT063gWmBCp0+f5FIeE=;
+	s=arc-20240116; t=1781226925; c=relaxed/simple;
+	bh=COHCbV0CvcM7bELFtI/sihawmLxEBJAqATrSzh46ujQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mcumgMCbbVcHltoHHyLWFbuZtdxlvzjVKSDj/ZDVHrEdgQ03lJAZY0q2HNzIVQrN9NBVDWKDy2oinxNSgcM7yWpZIaMqgSNkys/9/F+2fEyP5L1NMTbYXoHCaaXqv4aCpAvZ7mJkm4Vd+w1gjrc3W1kQXir6baKTE19fI8N6Nro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sdd4woh0; arc=none smtp.client-ip=74.125.82.54
+	 MIME-Version; b=EvjW5D8Mq5KSyIiebuj1hSbE5vUqeX8OxRD0unsMo4DvtdYxF+ZTjDN/xRx4HzVGbj5Hkz7yJwAseA1S72qf2qGriYuDUnbrjZdb09yk02urQse1sHq6jluAYYT7aZju7xnR+IDE+0EEaPKAITKc/VoBbtm99IAE6h4MI5yBID0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZpvwbW/; arc=none smtp.client-ip=74.125.82.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sdd4woh0"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-137dd3af345so410131c88.0
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 18:15:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZpvwbW/"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-13817614cd3so852546c88.0
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 18:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781226921; x=1781831721; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781226923; x=1781831723; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UN+cd0V7eh6P/XjvI6AdUyUAsxL3p1hB0mM+x3ai7gI=;
-        b=Sdd4woh01RkvOyz1mRtmNJIWy2G46u+YVfhzMPV1zI+/e/f8SK58RaiFJL28oHS+xL
-         TTGhUX8opJylXkL76p3UikauCX9CKl46BauqPDaUmJ5WuwOwN5RXB6YcMuWTuWTtJeek
-         dqr/Qk1jlK0xLtEiefqSad/8PYAV16PWQocQEcmoV8DfWbt909Fr/9YR2VkqWCz7zboo
-         aRyxTfQ57bwaLXfssOYRgRkF8TqHsydNR8EVuVZtpe4fQ89hE3g+4PyudGC2QyCXGhFu
-         J1jhbtR2MwAVVIFQBRO2MWA3rDthzayOr1AI/W2SjWRTzcmenzV5wlh2BLnrbEYU/Iuk
-         c0HQ==
+        bh=/2bXgl76ARckVx8v2O8eskzZpGAm4pEf6DbV38TBgpY=;
+        b=JZpvwbW/Pb+Po0QPzyea8zDrBgB4BuDTXxhc4I8lX5nLbdWWo7J0zhGaHFuwcsqfLM
+         5h6yFZoQhlQBYnpkgYbv2jucux1roEmL2zTSN9XPvSM5HfMeDBlmUijDE1VRlhhBn+/3
+         uaPrABN5SK64XSHhkOd9NtXF+/Sag+8fB+oJbok9jBlbj/erzLRx6POUVNs33mdF1biZ
+         LfFFoE1hFmOFFGkdbom8f4JPmsdzEEVpLZYvlm7E1m6Njm0YbXzSv/NgBxQPWR0uItlx
+         kYPFXalPRc1fmRO7Wsg+IR07Qpjs2SiQPRx+GGkzZmcCv5wSIXmCIMjbAAeuC5qOS1Br
+         svhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781226921; x=1781831721;
+        d=1e100.net; s=20251104; t=1781226923; x=1781831723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=UN+cd0V7eh6P/XjvI6AdUyUAsxL3p1hB0mM+x3ai7gI=;
-        b=LOtVd/XJ/HjoBsNuf3EClJy1WEFEDG4Td3stdycMfKn7CbJ481XFgtbmAl8kbkAM9j
-         oDQw3GPjdv6lkfn2jW2amz9HhWsN/Eeo8K9Uj/WXyDZQiBPVfBVVge3ou0K1SLJASRQW
-         IayZl70qXuKWXszzYmn81Gpvdb3mtXXdXsraXbd1CiFD4tpkjKnf4fWRBBpy0jYg6IWO
-         cKW3gLzEX35f2bY9mWgZ31FiDWd9FzwQnGlLuLnMKKh0KhqVTNmYB8cO24G8Fh9xaJCB
-         DzbE7jkdDbxhlVGXr7BkXThY74pbO2vsvJzQemcofAk4ptO0u2NwpVM+hu5UUf6Qa/vp
-         yX1A==
-X-Gm-Message-State: AOJu0Yws4NwNVtImeHooCHOLn7vqMtsomoK1Jht/9fVlVQ7dGdHg4Dvn
-	tuTRkJ7+bKAL90HuVxuz6k372AJt7hUcvio2cvyGO3onYYacARHn7H0b
-X-Gm-Gg: Acq92OHjhPot5dRIV2DDUCLQL86ev7MK4yssMG56/U6Y5+cHTMWUsGYNmd7oJwohr47
-	phlQJqNOK8O3xY+33IxMYmcZUhP1r4BRh79GJcQTVJiFrHFiY39scyMUDo3s7Gguz6F8oYf6FWo
-	zGURCn+ZXyl7H2jGxtPXEVAS9XM4gmJFy4Nwfg8KdE3s4H/u3e2GAIw3/x4ZD0dw3fU5H0K1X9l
-	1EZND3DRZ7Te57149C2h/dbTDP5uMOHIf2kKu8PQGYI8FRy0rocc4TeyWQfUnsg3UUGALLUAvbZ
-	TkCAIBEkKF/4hRl1cP5cj6oWe4dUaNGoPAug5qt9KFmo+8rvlJJoJ8QMlXdNOsN0w4wELzEhLMS
-	Bf7jwvdvH+X3wSOQ9dAE6e5fdPLngPRDNuW70kie9kepoocr0RrrEhJoR/dRUrDx3JE/7r8PMa2
-	YSUw6epbvgd1QGgPxmba4169/eDvW880Kk/oHXCSV/VYLnSjjxWz3Ukynz2KCSoJHRGA==
-X-Received: by 2002:a05:7022:43a9:b0:136:d237:b42f with SMTP id a92af1059eb24-1384bb97396mr341577c88.32.1781226920829;
-        Thu, 11 Jun 2026 18:15:20 -0700 (PDT)
+        bh=/2bXgl76ARckVx8v2O8eskzZpGAm4pEf6DbV38TBgpY=;
+        b=egyAiufZbWE9bCzxrhLfFnOcoYR4YO0kdnxxEF9NdFSyZKR+S+4fO3B+O5ovVtEjUt
+         7ebTEmCjM1JSLJ7+2WGXFERyHqexhSNK9V/UCbbv8MVE9dJF9MDmv9cOiiJGIdloYFRc
+         RUpuwpZlsGY3+hMHCKjvUK8RqGnOSktG8tSXY+4usNhl+wGeithwnW/yj9UlkF3jB3Ti
+         TKf0IgF5XTGwQddU41xhWq/5NfmMleksFKip4jb8GlaZ5TIyi8V4gqPdoZ4os43tGQoz
+         Vg8aYu4rwlmWt7OpAMY6AOsV67LOgdFPQcO8XpQnbOLkEYRkpIoT5rVp9n38qjIQxExS
+         E5qg==
+X-Gm-Message-State: AOJu0YyiKtja8LdkXDD7dTVCHJnU21SfA3qxQXAL/GFdSQUkBUGQdotd
+	/E7Cy3GDwAPKzoUJcY13PT6YfzzDnoIQKFd+Z75aDBxuB2vC8mtGsjO1
+X-Gm-Gg: Acq92OEsG9IQLf8C4SokXPVe6xo7hd9aBwA2FazYgwW0RitE/EPX6DBmkOBUfxXbaF0
+	AoSzeWr5JCFsGQp8uLmirBNg4hqDdtcIPxSy216SQe6u8WA6ETukSI04LxXtO6tavhUm6mD4Q8r
+	9aveoF73/dh7CKvGQf5+Goa8RtRvaAb2lFvH3XHdyunv/HzFA4mGncniw8+vFWWLQmTAoAKAbXx
+	47L0jd5UiLo8vblYQb6aRnjlbQLj/G4rYqVg4FZSO5nY08KmKMmIcyo4ZPu2oG8eR8NXyO3Uhlw
+	h39bOvgmtcyNgUxMo+aSLCL5ALnsrnufRmrxlIce3Hd0+3ovSmLhUcYlGQ/JlUpZs7+EYeEKge3
+	myQgLVtUIDeZBmr8SAuDvrLFs/Ov+W/e+iRd4CO0efsQrJk4cpze68jTAhWD1vHu2jHhI0AqQC0
+	u9eYK+Az2z2GL4bmveDPPmI5CDzmcjOm/wr75UeoCOwwJdT46Y7ojrFnS4mHchLRa6Kw==
+X-Received: by 2002:a05:7022:497:b0:12d:b66f:35d7 with SMTP id a92af1059eb24-1384bb4a215mr309056c88.10.1781226922819;
+        Thu, 11 Jun 2026 18:15:22 -0700 (PDT)
 Received: from pop-os.scu.edu ([129.210.115.107])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b975e55sm596257c88.13.2026.06.11.18.15.19
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b975e55sm596257c88.13.2026.06.11.18.15.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 18:15:20 -0700 (PDT)
+        Thu, 11 Jun 2026 18:15:22 -0700 (PDT)
 From: Cong Wang <xiyou.wangcong@gmail.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: bpf@vger.kernel.org,
 	zijianzhang@bytedance.com,
 	Cong Wang <xiyou.wangcong@gmail.com>,
 	Cong Wang <cwang@multikernel.io>
-Subject: [RFC PATCH bpf-next 1/5] tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback splice
-Date: Thu, 11 Jun 2026 18:14:48 -0700
-Message-ID: <20260612011452.134466-2-xiyou.wangcong@gmail.com>
+Subject: [RFC PATCH bpf-next 3/5] selftests/bpf: add tcp_splice basic round-trip test
+Date: Thu, 11 Jun 2026 18:14:50 -0700
+Message-ID: <20260612011452.134466-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
 References: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
@@ -81,1060 +81,346 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two locally-connected TCP sockets can be paired by a sock_ops BPF
-program at handshake completion. Once paired, sendmsg copies the user
-payload into a per-direction kernel-side byte ring; recvmsg drains the
-ring into the user buffer. Both copies happen in their own task's mm,
-so no cross-mm pin / kmap dance is needed and the splice fast path
-incurs no skb construction, no softirq, and no TCP protocol-state
-processing. The TCP wire connection itself never sees the spliced
-bytes: sequence numbers stay frozen at post-handshake values, so FIN,
-RST, and keepalive continue to work through the regular paths and the
-pair tears down via a normal close handshake.
+Loads a sock_ops BPF program that, on each ESTABLISHED callback,
+inserts self into a sockhash keyed by the local 4-tuple, looks up
+the peer using the swapped 4-tuple, and calls the new
+bpf_sock_splice_pair kfunc on whichever peer it finds. Counters track
+how many calls returned 0 (winner) vs -EEXIST (race loser) vs other
+errors.
 
-Per-direction ring layout
--------------------------
-
-The ring is a power-of-two byte buffer (16 KiB by default) backed by
-order-2 pages from __get_free_pages(), manipulated through
-include/linux/circ_buf.h macros. Both per-direction rings are allocated
-when the pair is formed, so the data path never allocates. Producer and
-consumer are SPSC (one socket each side), so head and tail are updated
-with smp_store_release() / smp_load_acquire() without a data-path lock.
-Each side keeps a private cache of the other's cursor (the producer
-caches ring_tail) and reads the real, cross-CPU cursor only when the
-cache is exhausted - standard SPSC cursor caching. sendmsg copies from
-the user iov into the ring at head; recvmsg copies out at tail.
-
-The ring is the queue between sender and receiver - it accumulates
-across recvmsg calls, so a sequence of small sends amortises into one
-wake when the receiver isn't draining synchronously. This is what
-makes the splice path viable for streaming workloads without forcing
-per-message rendezvous. The cost is one extra in-kernel copy compared
-to a sender->user-pages direct mechanism, but the benefit is that the
-splice path can stay engaged across arbitrary phasing between sender
-and receiver - no app cooperation required.
-
-The sender keeps the peer ring alive across the copy with a per-pair
-percpu_ref rather than a per-message socket refcount, and validates
-only its own socket's error/shutdown state, as the rest of tcp_bpf does
-- a peer reset reaches it over the still-live TCP connection. Both keep
-the per-message cost off cross-CPU cachelines.
-
-Sender (splice_send_ring) defers to tcp_sendmsg() when (a) the peer
-rcv_queue is non-empty (preserving stream ordering against prior TCP
-fallback) or (b) the ring is full (TCP-level backpressure via sndbuf /
-snd_wnd absorbs the overflow). Receiver (tcp_bpf_splice_recvmsg)
-defers to tcp_recvmsg() when the rcv_queue holds data and the ring is
-empty. The end-to-end ordering invariant is: rcv_queue bytes are
-always older than any ring bytes drained alongside them, because the
-sender only writes to the ring while the peer rcv_queue is empty.
-
-For bytes that take the splice fast path, SO_SNDBUF and SO_RCVBUF are
-not honored - the sndbuf / rcvbuf accounting machinery is exactly
-what splice intentionally bypasses. The associated infrastructure -
-sk_mem_charge / sk_mem_uncharge, sk_forward_alloc,
-prot->memory_allocated, tcp_memory_pressure, the per-cpu reserves -
-is among the most painful parts of TCP to maintain, and spliced bytes
-opt out of it as a side effect of having no skb-borne kernel-side
-bytes to account for. The ring's own capacity is bounded
-(SPLICE_RING_SIZE), giving a hard upper bound on per-pair memory.
-SIOCINQ / SIOCOUTQ reflect only the underlying TCP socket's frozen
-counters, and getsockopt(TCP_INFO) likewise. Bytes that take the TCP
-fallback go through the regular TCP path with all of its normal
-accounting.
-
-Pairing is opt-in per flow - the BPF program at handshake decides
-which connections to splice. Applications that mix handshake-style
-traffic and bulk streaming on the same paired socket get the right
-behaviour on both phases automatically: the handshake survives via
-TCP fallback, the bulk phase runs through the ring.
-
-The receiver parks on the socket waitqueue when the ring is empty.
-A following patch adds an optional bounded busy-poll of the ring
-before parking, gated on the socket's SO_BUSY_POLL budget; it is off
-by default and is what turns the latency-bound TCP_RR case into a
-large win once enabled. The numbers below are with busy polling
-disabled.
-
-Microbenchmarks
----------------
-
-Pinned to two adjacent CPUs (sender CPU 1, receiver CPU 0), 10s per
-run, 3 runs averaged; netperf to 127.0.0.1. Splice without busy
-polling.
-
-Bare-metal loopback:
-
-  TCP_STREAM  msg=   64 B:   2577 ->  1680  Mbps  (0.65x)
-              msg=  256 B:   9336 ->  8640  Mbps  (0.93x)
-              msg=    1 KB: 22416 -> 24136  Mbps  (1.08x)
-              msg=    4 KB: 37893 -> 52304  Mbps  (1.38x)
-              msg=   16 KB: 48019 -> 53235  Mbps  (1.11x)
-              msg=   64 KB: 49686 -> 49418  Mbps  (0.99x)
-
-  TCP_RR      sz=     1 B:  110.2k -> 267.0k tps  (2.42x)
-              sz=    64 B:  111.6k -> 265.7k tps  (2.38x)
-              sz=     1 KB: 105.8k -> 235.1k tps  (2.22x)
-              sz=    16 KB:  40.5k ->  89.6k tps  (2.21x)
-              sz=    64 KB:  17.8k ->  20.9k tps  (1.17x)
-
-Container-to-container (two network namespaces connected via veth pair
-plus Linux bridge, processes pinned in the same way):
-
-  TCP_STREAM  msg=   64 B:   1420 ->   1643 Mbps  (1.16x)
-              msg=    1 KB:  3710 -> 21326 Mbps  (5.75x)
-              msg=    4 KB:  8084 -> 48834 Mbps  (6.04x)
-              msg=   16 KB: 26083 -> 27788 Mbps  (1.07x)
-              msg=   64 KB: 47659 -> 47507 Mbps  (1.00x)
-
-  TCP_RR      sz=     1 B:  105.0k -> 265.0k tps  (2.52x)
-              sz=    64 B:  101.2k -> 264.3k tps  (2.61x)
-              sz=     1 KB:  99.9k -> 233.9k tps  (2.34x)
-              sz=    16 KB:  44.8k ->  91.1k tps  (2.03x)
-              sz=    64 KB:  18.1k ->  23.5k tps  (1.30x)
-
-Synchronous-RPC workloads (TCP_RR) win 2.0-2.6x across both
-environments because the ring eliminates the per-cycle overhead of the
-kernel TCP receive path. Mid-message streaming wins on loopback
-(4-16 KB at 1.1-1.4x). Tiny-message streaming on bare-metal loopback
-regresses to 0.65x because loopback TCP's TSO super-segments amortise
-per-batch cost to ~20 ns/msg, below the ring's 2-copy per-cycle floor;
-this is structural. In containers the same workload wins decisively
-because per-packet veth+bridge overhead dwarfs the ring's floor:
-STREAM-1 KB and STREAM-4 KB go 5.75x and 6.04x because TCP's per-skb
-cost dominates the container path and the ring sidesteps it entirely.
+Userspace creates a loopback TCP pair, waits for both ESTABLISHED
+callbacks to land, then verifies pair_ok >= 1 and pair_other_err == 0.
+A receiver thread blocks in recv() before the main thread sends; the
+test asserts the bytes round-trip through the rendezvous data plane.
 
 Assisted-by: Claude:claude-opus-4.8
 Signed-off-by: Cong Wang <cwang@multikernel.io>
 ---
- include/linux/skmsg.h |   9 +
- include/net/tcp.h     |   8 +
- net/core/skmsg.c      |   3 +
- net/ipv4/tcp_bpf.c    | 809 +++++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 828 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/tcp_splice.c     | 206 ++++++++++++++++++
+ .../selftests/bpf/progs/test_tcp_splice.c     | 101 +++++++++
+ 2 files changed, 307 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_splice.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tcp_splice.c
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 19f4f253b4f9..c9b7144cc846 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -80,6 +80,8 @@ struct sk_psock_work_state {
- 	u32				off;
- };
- 
-+struct sk_psock_splice;	/* defined in net/ipv4/tcp_bpf.c */
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_splice.c b/tools/testing/selftests/bpf/prog_tests/tcp_splice.c
+new file mode 100644
+index 000000000000..b80a1129c6aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_splice.c
+@@ -0,0 +1,206 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++#include "test_tcp_splice.skel.h"
 +
- struct sk_psock {
- 	struct sock			*sk;
- 	struct sock			*sk_redir;
-@@ -121,6 +123,13 @@ struct sk_psock {
- 	struct delayed_work		work;
- 	struct sock			*sk_pair;
- 	struct rcu_work			rwork;
++#include <pthread.h>
++#include <sys/wait.h>
++#include <unistd.h>
 +
-+	/* Loopback splice state for paired stream sockets. NULL until the
-+	 * first bpf_sock_splice_pair() call on this psock; lazily allocated
-+	 * and kept for the lifetime of the psock so that sender/receiver
-+	 * paths don't need to revalidate the pointer mid-flight.
-+	 */
-+	struct sk_psock_splice __rcu	*splice;
- };
- 
- int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 98848db62894..c1597accdac9 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2855,6 +2855,8 @@ struct sk_psock;
- #ifdef CONFIG_BPF_SYSCALL
- int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
- void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
-+void tcp_bpf_splice_unpair(struct sk_psock *psock);
-+void tcp_bpf_splice_destroy(struct sk_psock *psock);
- #ifdef CONFIG_BPF_STREAM_PARSER
- struct strparser;
- int tcp_bpf_strp_read_sock(struct strparser *strp, read_descriptor_t *desc,
-@@ -2880,6 +2882,12 @@ static inline void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
- }
- #endif
- 
-+#if !defined(CONFIG_BPF_SYSCALL)
-+struct sk_psock;
-+static inline void tcp_bpf_splice_unpair(struct sk_psock *psock) {}
-+static inline void tcp_bpf_splice_destroy(struct sk_psock *psock) {}
-+#endif
++#define MSG "hello rendezvous"
++#define CLIENT_BANNER "client-banner"
++#define SERVER_BANNER "server-banner"
 +
- #ifdef CONFIG_CGROUP_BPF
- static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
- 				      struct sk_buff *skb,
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index e1850caf1a71..b39fc249a18d 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -881,12 +881,15 @@ static void sk_psock_destroy(struct work_struct *work)
- 		sock_put(psock->sk_redir);
- 	if (psock->sk_pair)
- 		sock_put(psock->sk_pair);
-+	tcp_bpf_splice_destroy(psock);
- 	sock_put(psock->sk);
- 	kfree(psock);
- }
- 
- void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
- {
-+	tcp_bpf_splice_unpair(psock);
-+
- 	write_lock_bh(&sk->sk_callback_lock);
- 	sk_psock_restore_proto(sk, psock);
- 	rcu_assign_sk_user_data(sk, NULL);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index cc0bd73f36b6..549f37077244 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -4,14 +4,31 @@
- #include <linux/skmsg.h>
- #include <linux/filter.h>
- #include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/circ_buf.h>
- #include <linux/init.h>
-+#include <linux/mm.h>
- #include <linux/wait.h>
- #include <linux/util_macros.h>
-+#include <linux/percpu-refcount.h>
- 
- #include <net/inet_common.h>
-+#include <net/inet_sock.h>
- #include <net/tls.h>
- #include <asm/ioctls.h>
- 
-+static bool sk_psock_is_spliced(const struct sk_psock *psock);
-+static int tcp_bpf_splice_recvmsg(struct sock *sk, struct sk_psock *psock,
-+				  struct msghdr *msg, size_t len,
-+				  int flags, int *err);
-+static int splice_send_ring(struct sock *sk, struct sk_psock *psock,
-+			    struct msghdr *msg, size_t size, int flags);
-+static int tcp_bpf_splice_sendmsg(struct sock *sk, struct msghdr *msg,
-+				  size_t size);
-+static void splice_ring_free(struct sk_psock_splice *s);
-+static bool tcp_bpf_is_readable(struct sock *sk);
-+
- void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	struct tcp_sock *tcp;
-@@ -365,6 +382,46 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 	psock = sk_psock_get(sk);
- 	if (unlikely(!psock))
- 		return tcp_recvmsg(sk, msg, len, flags);
-+
-+	/* Splice dispatch.
-+	 *
-+	 * Streaming-friendly ordering: drain anything TCP has already
-+	 * queued in sk_receive_queue FIRST. The sender stays on plain
-+	 * tcp_sendmsg() (preserving Nagle, TSO, sk_write_queue
-+	 * coalescing) whenever the peer rcv_queue has bytes in flight,
-+	 * so if a receiver is keeping up with a bulk stream we never
-+	 * publish a bvec and never push the sender into per-message
-+	 * synchronous mode. Only when sk_receive_queue is empty (the
-+	 * receiver would otherwise block) do we enter the rendezvous
-+	 * path; the sender's opportunistic check then finds our pinned
-+	 * iov and does the direct user-to-user copy fast path.
-+	 *
-+	 * splice_recvmsg returns 0 with no error if rcv_queue gained
-+	 * bytes during the wait (TCP arrival raced our pin), in which
-+	 * case the next block below drains them via tcp_recvmsg() and
-+	 * stream ordering is preserved end-to-end.
-+	 */
-+	if (sk_psock_is_spliced(psock)) {
-+		int err = 0, rcopied;
-+
-+		/* tcp_bpf_splice_recvmsg drains the ring first (ring bytes
-+		 * predate any rcv_queue bytes when both have data) and only
-+		 * returns 0 when both are empty or rcv_queue has the only
-+		 * bytes left. The block below then routes the rcv_queue
-+		 * drain via tcp_recvmsg().
-+		 */
-+		rcopied = tcp_bpf_splice_recvmsg(sk, psock, msg, len,
-+						 flags, &err);
-+		if (rcopied > 0) {
-+			sk_psock_put(sk, psock);
-+			return rcopied;
-+		}
-+		if (err) {
-+			sk_psock_put(sk, psock);
-+			return err;
-+		}
-+	}
-+
- 	if (!skb_queue_empty(&sk->sk_receive_queue) &&
- 	    sk_psock_queue_empty(psock)) {
- 		sk_psock_put(sk, psock);
-@@ -626,8 +683,9 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
- 	prot[TCP_BPF_BASE]			= *base;
- 	prot[TCP_BPF_BASE].destroy		= sock_map_destroy;
- 	prot[TCP_BPF_BASE].close		= sock_map_close;
-+	prot[TCP_BPF_BASE].sendmsg		= tcp_bpf_splice_sendmsg;
- 	prot[TCP_BPF_BASE].recvmsg		= tcp_bpf_recvmsg;
--	prot[TCP_BPF_BASE].sock_is_readable	= sk_msg_is_readable;
-+	prot[TCP_BPF_BASE].sock_is_readable	= tcp_bpf_is_readable;
- 	prot[TCP_BPF_BASE].ioctl		= tcp_bpf_ioctl;
- 
- 	prot[TCP_BPF_TX]			= prot[TCP_BPF_BASE];
-@@ -756,4 +814,753 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
- 	if (is_insidevar(prot, tcp_bpf_prots))
- 		newsk->sk_prot = sk->sk_prot_creator;
- }
-+
-+/* Per-psock splice state: a SPSC byte ring (this socket reads from
-+ * ring_buf; the paired sender writes into it). Sender defers to
-+ * tcp_sendmsg() when peer rcv_queue is non-empty (ordering) or the
-+ * ring is full (backpressure); receiver defers to tcp_recvmsg() when
-+ * rcv_queue has data. Head/tail are monotonic; buffer offset is
-+ * (cursor & (ring_size - 1)). Data path is lockless via release/
-+ * acquire on head/tail; ->lock serialises only lazy alloc / teardown.
-+ */
-+struct sk_psock_splice {
-+	struct sk_psock		*peer;      /* NULL after unpair */
-+	spinlock_t		lock;       /* alloc/teardown only */
-+	void			*ring_buf;  /* order-2 pages, ring_size bytes */
-+	size_t			ring_size;  /* power of 2 */
-+	struct percpu_ref	ring_ref;   /* cross-socket writers into ring_buf */
-+
-+	/* Producer and consumer cursors live on separate cache lines: the
-+	 * writer's release-store of ring_head must not invalidate the
-+	 * reader's hot ring_tail line, and vice versa. cached_tail is the
-+	 * producer's private cache of ring_tail, kept on the producer's own
-+	 * line, so the producer reads the consumer-owned ring_tail only when
-+	 * its cache says the ring is full - standard SPSC cursor caching.
-+	 */
-+	unsigned long		ring_head ____cacheline_aligned_in_smp;
-+	unsigned long		cached_tail;
-+	unsigned long		ring_tail ____cacheline_aligned_in_smp;
++struct recv_arg {
++	int fd;
++	char buf[64];
++	int n;
++	int err;
 +};
 +
-+#define SPLICE_RING_SIZE	(16U * 1024U)
++static void *recv_thread(void *p)
++{
++	struct recv_arg *a = p;
 +
-+/* Wake any waiters parked on @sk. Used at teardown so a sleeping
-+ * receiver observes the cleared ->peer and exits. The smp_mb() closes
-+ * the same lost-wakeup window as splice_wake_sync() below.
++	a->n = recv(a->fd, a->buf, sizeof(a->buf) - 1, 0);
++	a->err = errno;
++	return NULL;
++}
++
++struct send_arg {
++	int fd;
++	const char *buf;
++	size_t len;
++	int n;
++	int err;
++};
++
++static void *send_thread(void *p)
++{
++	struct send_arg *a = p;
++
++	a->n = send(a->fd, a->buf, a->len, 0);
++	a->err = errno;
++	return NULL;
++}
++
++static int run_basic(int cgroup_fd, struct test_tcp_splice *skel)
++{
++	pthread_t tid;
++	struct recv_arg a = {};
++	int sfd = -1, cfd = -1, lfd = -1;
++	int n, err = -1;
++
++	lfd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (!ASSERT_GE(lfd, 0, "start_server"))
++		return -1;
++
++	cfd = connect_to_fd(lfd, 0);
++	if (!ASSERT_GE(cfd, 0, "connect_to_fd"))
++		goto out;
++
++	sfd = accept(lfd, NULL, NULL);
++	if (!ASSERT_GE(sfd, 0, "accept"))
++		goto out;
++
++	/* Give both ESTABLISHED sock_ops callbacks a moment to run. */
++	usleep(50 * 1000);
++
++	if (!ASSERT_GE(skel->bss->pair_ok, 1, "splice paired"))
++		goto out;
++	ASSERT_EQ(skel->bss->pair_other_err, 0, "no unexpected pair errors");
++
++	/* Drive the splice fast path: receiver enters recv() and publishes
++	 * its bvec, sender then writes directly into it.
++	 */
++	a.fd = sfd;
++	if (!ASSERT_OK(pthread_create(&tid, NULL, recv_thread, &a),
++		       "pthread_create"))
++		goto out;
++	usleep(20 * 1000); /* let recv block */
++
++	n = send(cfd, MSG, strlen(MSG), 0);
++	ASSERT_EQ(n, (int)strlen(MSG), "send length");
++
++	pthread_join(tid, NULL);
++	ASSERT_EQ(a.n, (int)strlen(MSG), "recv length");
++	a.buf[a.n > 0 ? a.n : 0] = 0;
++	ASSERT_STREQ(a.buf, MSG, "recv contents");
++
++	err = 0;
++out:
++	if (cfd >= 0)
++		close(cfd);
++	if (sfd >= 0)
++		close(sfd);
++	if (lfd >= 0)
++		close(lfd);
++	return err;
++}
++
++/* Bidirectional-write deadlock-avoidance test.
++ *
++ * Both sides issue send() before either calls recv(), the classic
++ * pattern that used to deadlock under synchronous rendezvous (and
++ * the actual cause of "kex_exchange_identification: write: Broken
++ * pipe" with SSH on loopback). The bounded-wait fallback in
++ * tcp_bpf_splice_sendmsg() must let both writes complete via the
++ * normal TCP path within ~1 ms, and the banners must arrive intact
++ * on the other side when recv() is called next.
 + */
-+static inline void splice_wake(struct sock *sk)
++static int run_bidir_write(int cgroup_fd, struct test_tcp_splice *skel)
 +{
-+	wait_queue_head_t *wq = sk_sleep(sk);
++	pthread_t client_send_tid, server_send_tid;
++	struct send_arg cs = { .buf = CLIENT_BANNER,
++			       .len = sizeof(CLIENT_BANNER) - 1 };
++	struct send_arg ss = { .buf = SERVER_BANNER,
++			       .len = sizeof(SERVER_BANNER) - 1 };
++	struct recv_arg cr = {}, sr = {};
++	int sfd = -1, cfd = -1, lfd = -1;
++	int err = -1;
 +
-+	smp_mb();
-+	if (wq && waitqueue_active(wq))
-+		wake_up_interruptible_all(wq);
++	lfd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (!ASSERT_GE(lfd, 0, "start_server"))
++		return -1;
++	cfd = connect_to_fd(lfd, 0);
++	if (!ASSERT_GE(cfd, 0, "connect_to_fd"))
++		goto out;
++	sfd = accept(lfd, NULL, NULL);
++	if (!ASSERT_GE(sfd, 0, "accept"))
++		goto out;
++
++	usleep(50 * 1000); /* let pair complete */
++
++	/* Both sides write first, neither reads yet. Both must return
++	 * within bounded time (no deadlock).
++	 */
++	cs.fd = cfd;
++	ss.fd = sfd;
++	if (!ASSERT_OK(pthread_create(&client_send_tid, NULL, send_thread, &cs),
++		       "client send thread"))
++		goto out;
++	if (!ASSERT_OK(pthread_create(&server_send_tid, NULL, send_thread, &ss),
++		       "server send thread"))
++		goto out;
++
++	pthread_join(client_send_tid, NULL);
++	pthread_join(server_send_tid, NULL);
++	ASSERT_EQ(cs.n, (int)cs.len, "client send length");
++	ASSERT_EQ(ss.n, (int)ss.len, "server send length");
++
++	/* Now read on each side - the bytes the peer wrote should have
++	 * landed via the TCP fallback path.
++	 */
++	cr.fd = cfd;
++	cr.n = recv(cr.fd, cr.buf, sizeof(cr.buf) - 1, 0);
++	ASSERT_EQ(cr.n, (int)ss.len, "client recv length");
++	cr.buf[cr.n > 0 ? cr.n : 0] = 0;
++	ASSERT_STREQ(cr.buf, SERVER_BANNER, "client got server banner");
++
++	sr.fd = sfd;
++	sr.n = recv(sr.fd, sr.buf, sizeof(sr.buf) - 1, 0);
++	ASSERT_EQ(sr.n, (int)cs.len, "server recv length");
++	sr.buf[sr.n > 0 ? sr.n : 0] = 0;
++	ASSERT_STREQ(sr.buf, CLIENT_BANNER, "server got client banner");
++
++	err = 0;
++out:
++	if (cfd >= 0)
++		close(cfd);
++	if (sfd >= 0)
++		close(sfd);
++	if (lfd >= 0)
++		close(lfd);
++	return err;
 +}
 +
-+/* Wake the receiver after a producer write to the ring. The _poll
-+ * variant with EPOLLIN | EPOLLRDNORM is required so poll()/select()/
-+ * epoll waiters see the wake (a plain sync wake carries no mask and is
-+ * silently dropped by poll waiters); wait_event-style waiters wake on
-+ * it too. The smp_mb() orders the ring head publish before the
-+ * waitqueue_active() check, pairing with set_current_state() in the
-+ * consumer's wait loop - without it the producer can skip the wake
-+ * while the consumer concurrently parks with the predicate just-
-+ * not-yet-true, a lost wakeup. _sync hints the scheduler to keep the
-+ * wakee on the producer's CPU.
++void test_tcp_splice(void)
++{
++	struct test_tcp_splice *skel;
++	int cgroup_fd, prog_fd;
++
++	cgroup_fd = test__join_cgroup("/tcp_splice");
++	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
++		return;
++
++	skel = test_tcp_splice__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
++		goto close_cgroup;
++
++	prog_fd = bpf_program__fd(skel->progs.sockops_splice);
++	if (!ASSERT_OK(bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0),
++		       "attach sockops"))
++		goto destroy_skel;
++
++	if (test__start_subtest("basic"))
++		run_basic(cgroup_fd, skel);
++	if (test__start_subtest("bidir_write"))
++		run_bidir_write(cgroup_fd, skel);
++
++destroy_skel:
++	test_tcp_splice__destroy(skel);
++close_cgroup:
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_tcp_splice.c b/tools/testing/selftests/bpf/progs/test_tcp_splice.c
+new file mode 100644
+index 000000000000..09c7f0f9e311
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_tcp_splice.c
+@@ -0,0 +1,101 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Sock_ops BPF program that pairs locally-connected TCP sockets via the
++ * bpf_sock_splice_pair kfunc. Each side of an established loopback
++ * connection inserts itself into a sockhash keyed by its 4-tuple and
++ * looks up the peer using the swapped tuple. Whichever side finds the
++ * peer attempts to splice; the race loser sees -EEXIST.
 + */
-+static inline void splice_wake_sync(struct sock *sk)
-+{
-+	wait_queue_head_t *wq = sk_sleep(sk);
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
 +
-+	smp_mb();
-+	if (wq && waitqueue_active(wq))
-+		wake_up_interruptible_sync_poll(wq, EPOLLIN | EPOLLRDNORM);
++struct flow_key {
++	__u32	saddr;
++	__u32	daddr;
++	__u16	sport;
++	__u16	dport;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKHASH);
++	__uint(max_entries, 16);
++	__type(key, struct flow_key);
++	__type(value, __u64);
++} rendezvous SEC(".maps");
++
++int bpf_sock_splice_pair(struct sock *peer, struct bpf_sock_ops_kern *skops) __ksym;
++void *bpf_cast_to_kern_ctx(void *obj) __ksym;
++
++__u32 pair_ok;
++__u32 pair_other_err;
++
++/* IPv4 only: the verifier doesn't accept memcpy from sock_ops ctx
++ * because it lowers to "ctx + reg" pointer arithmetic. IPv6 support
++ * would need explicit field-by-field reads of local_ip6[i] /
++ * remote_ip6[i] at constant indices.
++ */
++static __always_inline void mk_key(struct bpf_sock_ops *s,
++				   struct flow_key *k, int swap)
++{
++	/* skops->local_port is already in host byte order. skops->remote_port
++	 * is laid out as the network-order 16-bit port in the upper half of
++	 * a u32 (see sock_ops_convert_ctx_access); bpf_ntohl produces the
++	 * host-order port directly - no further shift.
++	 */
++	__u16 lport = (__u16)s->local_port;
++	__u16 rport = bpf_ntohl(s->remote_port);
++
++	if (!swap) {
++		k->saddr = s->local_ip4;
++		k->daddr = s->remote_ip4;
++		k->sport = lport;
++		k->dport = rport;
++	} else {
++		k->saddr = s->remote_ip4;
++		k->daddr = s->local_ip4;
++		k->sport = rport;
++		k->dport = lport;
++	}
 +}
 +
-+static bool sk_psock_is_spliced(const struct sk_psock *psock)
++SEC("sockops")
++int sockops_splice(struct bpf_sock_ops *skops)
 +{
-+	struct sk_psock_splice *s = rcu_dereference(psock->splice);
-+
-+	return s && rcu_access_pointer(s->peer);
-+}
-+
-+static int tcp_bpf_splice_sendmsg(struct sock *sk, struct msghdr *msg,
-+				  size_t size)
-+{
-+	struct sk_psock *psock;
-+	int spliced = 0;
++	struct flow_key self_key, peer_key;
++	struct bpf_sock *peer;
 +	int ret;
 +
-+	psock = sk_psock_get(sk);
-+	if (psock) {
-+		if (sk_psock_is_spliced(psock)) {
-+			int flags = (msg->msg_flags &
-+				     ~MSG_SENDPAGE_DECRYPTED) |
-+				     MSG_NO_SHARED_FRAGS;
++	if (skops->op != BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB &&
++	    skops->op != BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB)
++		return 0;
++	if (skops->family != 2 /* AF_INET */)
++		return 0;
 +
-+			spliced = splice_send_ring(sk, psock, msg,
-+						   size, flags);
-+		}
-+		sk_psock_put(sk, psock);
-+	}
++	mk_key(skops, &self_key, 0);
++	mk_key(skops, &peer_key, 1);
 +
-+	if ((size_t)spliced < size) {
-+		ret = tcp_sendmsg(sk, msg, size - spliced);
-+		if (ret < 0)
-+			return spliced > 0 ? spliced : ret;
-+		return spliced + ret;
-+	}
-+	return spliced;
-+}
-+
-+/* percpu_ref release: fires after percpu_ref_kill() once every in-flight
-+ * cross-socket sender has dropped its hold. Safe to free the ring and the
-+ * splice state now.
-+ */
-+static void splice_ring_ref_release(struct percpu_ref *ref)
-+{
-+	struct sk_psock_splice *s =
-+		container_of(ref, struct sk_psock_splice, ring_ref);
-+
-+	splice_ring_free(s);
-+	percpu_ref_exit(&s->ring_ref);
-+	kfree(s);
-+}
-+
-+static struct sk_psock_splice *splice_get_or_alloc(struct sk_psock *psock)
-+{
-+	struct sk_psock_splice *s, *old;
-+
-+	s = rcu_dereference_protected(psock->splice, 1);
-+	if (s)
-+		return s;
-+
-+	s = kzalloc_obj(*s, GFP_ATOMIC);
-+	if (!s)
-+		return NULL;
-+	spin_lock_init(&s->lock);
-+
-+	if (percpu_ref_init(&s->ring_ref, splice_ring_ref_release, 0,
-+			    GFP_ATOMIC)) {
-+		kfree(s);
-+		return NULL;
-+	}
-+
-+	old = cmpxchg((struct sk_psock_splice **)&psock->splice, NULL, s);
-+	if (old) {
-+		percpu_ref_exit(&s->ring_ref);
-+		kfree(s);
-+		return old;
-+	}
-+	return s;
-+}
-+
-+static void splice_lock_pair(struct sk_psock_splice *a,
-+			     struct sk_psock_splice *b)
-+{
-+	if (a < b) {
-+		spin_lock_bh(&a->lock);
-+		spin_lock_nested(&b->lock, SINGLE_DEPTH_NESTING);
-+	} else {
-+		spin_lock_bh(&b->lock);
-+		spin_lock_nested(&a->lock, SINGLE_DEPTH_NESTING);
-+	}
-+}
-+
-+static void splice_unlock_pair(struct sk_psock_splice *a,
-+			       struct sk_psock_splice *b)
-+{
-+	if (a < b) {
-+		spin_unlock(&b->lock);
-+		spin_unlock_bh(&a->lock);
-+	} else {
-+		spin_unlock(&a->lock);
-+		spin_unlock_bh(&b->lock);
-+	}
-+}
-+
-+/*
-+ * Tear down a splice pair. Idempotent and safe to call from any teardown
-+ * path (sk_psock_drop, tcp_close, tcp_disconnect, RST handler). No-op if
-+ * the psock was never spliced.
-+ *
-+ * Note: the splice_state allocation is NOT freed here - it lives until
-+ * sk_psock_destroy. That keeps sender/receiver fast paths free of
-+ * lifetime dances.
-+ */
-+void tcp_bpf_splice_unpair(struct sk_psock *psock)
-+{
-+	struct sk_psock_splice *self_s, *peer_s;
-+	struct sk_psock *peer;
-+	bool was_paired = false;
-+
-+	self_s = rcu_dereference_protected(psock->splice, 1);
-+	if (!self_s)
-+		return;
-+
-+	rcu_read_lock();
-+	peer = rcu_dereference(self_s->peer);
-+	if (!peer) {
-+		rcu_read_unlock();
-+		return;
-+	}
-+	if (!sk_psock_get(peer->sk)) {
-+		rcu_read_unlock();
-+		return;
-+	}
-+	rcu_read_unlock();
-+
-+	peer_s = rcu_dereference_protected(peer->splice, 1);
-+	if (!peer_s) {
-+		sk_psock_put(peer->sk, peer);
-+		return;
-+	}
-+
-+	splice_lock_pair(self_s, peer_s);
-+	if (self_s->peer == peer && peer_s->peer == psock) {
-+		rcu_assign_pointer(self_s->peer, NULL);
-+		rcu_assign_pointer(peer_s->peer, NULL);
-+		was_paired = true;
-+	}
-+	splice_unlock_pair(self_s, peer_s);
-+
-+	/* Wake any blocked rendezvous waiters on either side. They will
-+	 * re-check the predicate, see splice->peer == NULL, and exit.
++	/* BPF_ANY: a reused 4-tuple after close (e.g. fast reconnect) must
++	 * overwrite the stale entry rather than silently fail.
 +	 */
-+	splice_wake(psock->sk);
-+	splice_wake(peer->sk);
++	bpf_sock_hash_update(skops, &rendezvous, &self_key, BPF_ANY);
 +
-+	if (was_paired) {
-+		/* Drop the pair's psock references. Ring buffers are NOT
-+		 * freed here: a recvmsg may be mid-splice_ring_read() on
-+		 * either side, holding only sk_psock_get() - it does not
-+		 * keep ring_buf alive. Defer the kvfree to
-+		 * tcp_bpf_splice_destroy(), which runs after psock teardown
-+		 * has drained all callers.
-+		 */
-+		sk_psock_put(peer->sk, peer);
-+		sk_psock_put(psock->sk, psock);
-+	}
-+	sk_psock_put(peer->sk, peer);
-+}
-+EXPORT_SYMBOL_GPL(tcp_bpf_splice_unpair);
++	peer = bpf_map_lookup_elem(&rendezvous, &peer_key);
++	if (!peer)
++		return 0;
 +
-+void tcp_bpf_splice_destroy(struct sk_psock *psock)
-+{
-+	struct sk_psock_splice *s;
-+
-+	/* Kill the ring ref; splice_ring_ref_release() frees the ring and s
-+	 * once any in-flight cross-socket sender has dropped its hold.
++	/* The sockhash bpf_map_lookup_elem above is an acquire, so @peer
++	 * carries a reference. A sock_ops program cannot call
++	 * bpf_sk_release, so the reference is handed to bpf_sock_splice_pair
++	 * which is KF_RELEASE and consumes it - no explicit release here,
++	 * and none is possible from this program type.
 +	 */
-+	s = rcu_dereference_protected(psock->splice, 1);
-+	if (s)
-+		percpu_ref_kill(&s->ring_ref);
-+}
-+EXPORT_SYMBOL_GPL(tcp_bpf_splice_destroy);
-+
-+/* The PASSIVE_ESTABLISHED_CB fires BEFORE the kernel transitions the
-+ * accepted child's state from TCP_SYN_RECV to TCP_ESTABLISHED.Accept
-+ * SYN_RECV here since we know the callback contract guarantees
-+ * imminent ESTABLISHED.
-+ */
-+static bool splice_state_ok(int state)
-+{
-+	return state == TCP_ESTABLISHED || state == TCP_SYN_RECV;
-+}
-+
-+static int splice_validate(struct sock *a, struct sock *b)
-+{
-+	struct tcp_sock *ta = tcp_sk(a), *tb = tcp_sk(b);
-+
-+	if (a->sk_family != b->sk_family)
-+		return -EINVAL;
-+	if (a->sk_protocol != IPPROTO_TCP || b->sk_protocol != IPPROTO_TCP)
-+		return -EINVAL;
-+	if (!splice_state_ok(a->sk_state) || !splice_state_ok(b->sk_state))
-+		return -EINVAL;
-+	if (ta->repair || tb->repair)
-+		return -EINVAL;
-+	if (ta->urg_data || tb->urg_data)
-+		return -EINVAL;
++	ret = bpf_sock_splice_pair((struct sock *)peer,
++				   bpf_cast_to_kern_ctx(skops));
++	if (ret == 0)
++		__sync_fetch_and_add(&pair_ok, 1);
++	else if (ret != -17 /* -EEXIST: race loser, expected */)
++		__sync_fetch_and_add(&pair_other_err, 1);
 +	return 0;
 +}
 +
-+static int splice_ring_alloc(struct sk_psock_splice *s)
-+{
-+	void *buf;
-+
-+	if (READ_ONCE(s->ring_buf))
-+		return 0;
-+
-+	buf = (void *)__get_free_pages(GFP_ATOMIC | __GFP_NOWARN,
-+				       get_order(SPLICE_RING_SIZE));
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	spin_lock_bh(&s->lock);
-+	if (s->ring_buf) {
-+		spin_unlock_bh(&s->lock);
-+		free_pages((unsigned long)buf, get_order(SPLICE_RING_SIZE));
-+		return 0;
-+	}
-+	s->ring_buf    = buf;
-+	s->ring_size   = SPLICE_RING_SIZE;
-+	s->ring_head   = 0;
-+	s->ring_tail   = 0;
-+	s->cached_tail = 0;
-+	spin_unlock_bh(&s->lock);
-+	return 0;
-+}
-+
-+static void splice_ring_free(struct sk_psock_splice *s)
-+{
-+	void *buf;
-+
-+	spin_lock_bh(&s->lock);
-+	buf = s->ring_buf;
-+	s->ring_buf    = NULL;
-+	s->ring_size   = 0;
-+	s->ring_head   = 0;
-+	s->ring_tail   = 0;
-+	s->cached_tail = 0;
-+	spin_unlock_bh(&s->lock);
-+
-+	if (buf)
-+		free_pages((unsigned long)buf, get_order(SPLICE_RING_SIZE));
-+}
-+
-+static size_t splice_ring_write(struct sk_psock_splice *s,
-+				struct iov_iter *from, size_t size)
-+{
-+	unsigned long head, tail, mask;
-+	size_t avail, want, to_end, first, second, done;
-+
-+	if (!s->ring_buf)
-+		return 0;
-+
-+	mask = s->ring_size - 1;
-+	head = s->ring_head;
-+	/* Use the producer's cached_tail, refreshed by splice_ring_space()
-+	 * earlier in this same send. It is conservative - the real ring_tail
-+	 * only advances - so the free space computed here never exceeds the
-+	 * true free space, and we avoid a second cross-CPU ring_tail read.
-+	 */
-+	tail = s->cached_tail;
-+	avail = CIRC_SPACE(head, tail, s->ring_size);
-+	want = min_t(size_t, size, avail);
-+	if (!want)
-+		return 0;
-+
-+	to_end = s->ring_size - (head & mask);
-+	first  = min_t(size_t, want, to_end);
-+
-+	done = copy_from_iter(s->ring_buf + (head & mask), first, from);
-+	if (done < first) {
-+		/* Publish data before head advance. */
-+		smp_store_release(&s->ring_head, head + done);
-+		return done;
-+	}
-+	second = want - first;
-+	if (second) {
-+		done = copy_from_iter(s->ring_buf, second, from);
-+		/* Publish data before head advance. */
-+		smp_store_release(&s->ring_head, head + first + done);
-+		return first + done;
-+	}
-+	/* Publish data before head advance. */
-+	smp_store_release(&s->ring_head, head + first);
-+	return first;
-+}
-+
-+static size_t splice_ring_space(struct sk_psock_splice *s)
-+{
-+	unsigned long head = s->ring_head;
-+	size_t space = CIRC_SPACE(head, s->cached_tail, s->ring_size);
-+
-+	if (space)
-+		return space;
-+	/* Cache exhausted; refresh from the consumer-owned cursor - the only
-+	 * cross-CPU ring_tail read. Pairs with smp_store_release(&ring_tail).
-+	 */
-+	s->cached_tail = smp_load_acquire(&s->ring_tail);
-+	return CIRC_SPACE(head, s->cached_tail, s->ring_size);
-+}
-+
-+static size_t splice_ring_read(struct sk_psock_splice *s,
-+			       struct iov_iter *to, size_t size)
-+{
-+	unsigned long head, tail, mask;
-+	size_t have, want, to_end, first, second, done;
-+
-+	if (!s->ring_buf)
-+		return 0;
-+
-+	mask = s->ring_size - 1;
-+	tail = s->ring_tail;
-+	/* Pairs with smp_store_release(&ring_head) in splice_ring_write():
-+	 * ensure we read producer's data after observing the head advance.
-+	 */
-+	head = smp_load_acquire(&s->ring_head);
-+	have = CIRC_CNT(head, tail, s->ring_size);
-+	want = min_t(size_t, size, have);
-+	if (!want)
-+		return 0;
-+
-+	to_end = s->ring_size - (tail & mask);
-+	first  = min_t(size_t, want, to_end);
-+
-+	done = copy_to_iter(s->ring_buf + (tail & mask), first, to);
-+	if (done < first) {
-+		/* Release: free slots before the producer sees the advance. */
-+		smp_store_release(&s->ring_tail, tail + done);
-+		return done;
-+	}
-+	second = want - first;
-+	if (second) {
-+		done = copy_to_iter(s->ring_buf, second, to);
-+		/* Release: free slots before the producer sees the advance. */
-+		smp_store_release(&s->ring_tail, tail + first + done);
-+		return first + done;
-+	}
-+	/* Release: free slots before the producer sees the advance. */
-+	smp_store_release(&s->ring_tail, tail + first);
-+	return first;
-+}
-+
-+static bool splice_ring_has_data(const struct sk_psock_splice *s)
-+{
-+	if (!s->ring_buf)
-+		return false;
-+	/* Acquire ring_head so any data published by the producer is
-+	 * visible if we go on to read it after this check.
-+	 */
-+	return CIRC_CNT(smp_load_acquire(&s->ring_head),
-+			READ_ONCE(s->ring_tail),
-+			s->ring_size) > 0;
-+}
-+
-+static bool splice_recv_ready(struct sock *sk, struct sk_psock_splice *s)
-+{
-+	return splice_ring_has_data(s) ||
-+	       !skb_queue_empty(&sk->sk_receive_queue) ||
-+	       READ_ONCE(sk->sk_err) ||
-+	       (READ_ONCE(sk->sk_shutdown) & RCV_SHUTDOWN) ||
-+	       !rcu_access_pointer(s->peer);
-+}
-+
-+static long splice_recv_wait(struct sock *sk, struct sk_psock_splice *s,
-+			     long timeo)
-+{
-+	return wait_event_interruptible_timeout(*sk_sleep(sk),
-+					splice_recv_ready(sk, s), timeo);
-+}
-+
-+/* prot->sock_is_readable for paired-splice sockets. tcp_stream_is_readable()
-+ * (via tcp_poll() / select() / epoll) consults this to mark POLLIN when
-+ * sk_receive_queue is empty - we must also report data sitting in the
-+ * splice ring, otherwise poll-driven readers wait forever despite the
-+ * sender having produced bytes.
-+ */
-+static bool tcp_bpf_is_readable(struct sock *sk)
-+{
-+	struct sk_psock_splice *s;
-+	struct sk_psock *psock;
-+	bool readable = false;
-+
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	if (psock) {
-+		s = rcu_dereference(psock->splice);
-+		if (s && splice_ring_has_data(s))
-+			readable = true;
-+		else
-+			readable = !list_empty(&psock->ingress_msg);
-+	}
-+	rcu_read_unlock();
-+	return readable;
-+}
-+
-+/*
-+ * Drain the ring or sleep until the sender publishes more data.
-+ * A spurious wake loops back and re-waits rather than returning 0,
-+ * because the dispatcher's TCP/sk_msg fallback is keyed on
-+ * sk_receive_queue / psock->ingress_msg - neither observes the ring,
-+ * so returning 0 with no error would deadlock the caller in
-+ * tcp_msg_wait_data() that the sender's next splice_wake_sync()
-+ * cannot satisfy.
-+ *
-+ * Returning 0 is reserved for: EOF (peer shutdown), pair gone, or
-+ * sk_receive_queue gained bytes (sender dropped back to tcp_sendmsg,
-+ * defer to the TCP path). Errors are reported via *err.
-+ *
-+ * Caller must NOT hold sk's socket lock - this function may sleep.
-+ */
-+static int tcp_bpf_splice_recvmsg(struct sock *sk,
-+				  struct sk_psock *psock,
-+				  struct msghdr *msg, size_t len,
-+				  int flags, int *err)
-+{
-+	struct sk_psock_splice *s;
-+	size_t copied;
-+	long timeo;
-+
-+	*err = 0;
-+	/* PEEK is not implemented against the ring (no peek-without-advance
-+	 * helper). Return 0 with no error so the dispatcher defers to the
-+	 * TCP path; ring contents are invisible to PEEK but the socket
-+	 * continues to work for normal apps.
-+	 */
-+	if (flags & MSG_PEEK)
-+		return 0;
-+
-+	s = rcu_dereference_protected(psock->splice, 1);
-+	if (!s)
-+		return 0;
-+
-+	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-+
-+	for (;;) {
-+		copied = splice_ring_read(s, &msg->msg_iter, len);
-+		if (copied)
-+			return copied;
-+
-+		/* Stream-ordering: if the sender ever dropped back to
-+		 * tcp_sendmsg, those bytes are now in sk_receive_queue
-+		 * and predate any future ring writes (sender only writes
-+		 * to the ring when peer rcv_queue is empty).
-+		 */
-+		if (!skb_queue_empty(&sk->sk_receive_queue))
-+			return 0;
-+
-+		if (sk->sk_err) {
-+			*err = -sk->sk_err;
-+			return 0;
-+		}
-+		if (sk->sk_shutdown & RCV_SHUTDOWN)
-+			return 0; /* EOF */
-+		if (!rcu_access_pointer(s->peer))
-+			return 0; /* Pair gone */
-+		if (signal_pending(current)) {
-+			*err = sock_intr_errno(timeo);
-+			return 0;
-+		}
-+		if (!timeo) {
-+			*err = -EAGAIN;
-+			return 0;
-+		}
-+
-+		timeo = splice_recv_wait(sk, s, timeo);
-+	}
-+}
-+
-+static int splice_send_ring(struct sock *sk, struct sk_psock *psock,
-+			    struct msghdr *msg, size_t size, int flags)
-+{
-+	struct sk_psock_splice *self_s, *peer_s;
-+	struct sk_psock *peer;
-+	int total = 0;
-+
-+	if (msg->msg_flags & MSG_OOB)
-+		return 0;
-+
-+	self_s = rcu_dereference_protected(psock->splice, 1);
-+	if (!self_s)
-+		return 0;
-+
-+	while (size > 0) {
-+		size_t done, space = 0;
-+
-+		/* All peer / peer->sk accesses happen under RCU. If the ring
-+		 * has space, grab the peer's ring_ref before dropping RCU: that
-+		 * pins peer_s (and its ring) so the copy below can run outside
-+		 * RCU and fault/sleep normally. peer_sk is *not* pinned by the
-+		 * ref, so it must not be touched after rcu_read_unlock().
-+		 */
-+		peer_s = NULL;
-+		rcu_read_lock();
-+		peer = rcu_dereference(self_s->peer);
-+		if (peer) {
-+			struct sock *peer_sk = peer->sk;
-+			struct sk_psock_splice *ps = rcu_dereference(peer->splice);
-+
-+			if (ps && READ_ONCE(ps->ring_buf) &&
-+			    !sk->sk_err && !(sk->sk_shutdown & SEND_SHUTDOWN) &&
-+			    skb_queue_empty(&peer_sk->sk_receive_queue)) {
-+				space = splice_ring_space(ps);
-+				if (space && percpu_ref_tryget_live(&ps->ring_ref))
-+					peer_s = ps;
-+			}
-+		}
-+		rcu_read_unlock();
-+		if (!peer_s)
-+			break;
-+
-+		/* Holding peer_s->ring_ref: peer_s and its ring stay alive.
-+		 * The copy touches only the ring, never peer_sk, so a normal
-+		 * faulting copy is safe here.
-+		 */
-+		done = splice_ring_write(peer_s, &msg->msg_iter,
-+					 min(size, space));
-+		percpu_ref_put(&peer_s->ring_ref);
-+
-+		if (!done)
-+			break;
-+		total += done;
-+		size  -= done;
-+	}
-+
-+	/* Wake exactly once, after the loop, re-deref'ing peer under RCU.
-+	 * Doing this inside the loop would carry the _sync hint repeatedly
-+	 * and cost a redundant wake per wraparound iteration.
-+	 */
-+	if (total) {
-+		rcu_read_lock();
-+		peer = rcu_dereference(self_s->peer);
-+		if (peer)
-+			splice_wake_sync(peer->sk);
-+		rcu_read_unlock();
-+	}
-+	return total;
-+}
-+
-+__bpf_kfunc_start_defs();
-+
-+/**
-+ * bpf_sock_splice_pair - pair two stream sockets for opportunistic
-+ *			  loopback splice.
-+ * @peer:  the other socket, retrieved via sockhash lookup. This kfunc is
-+ *	   KF_RELEASE: it consumes the reference the sockhash
-+ *	   bpf_map_lookup_elem acquired on @peer (a sockmap/sockhash lookup
-+ *	   is an acquire - see is_acquire_function() in the verifier).
-+ *	   Consuming it here is required, not merely convenient: a sock_ops
-+ *	   program cannot call bpf_sk_release (the helper is not available
-+ *	   to that program type), so a release kfunc is the only way the
-+ *	   program can avoid leaking the acquired reference.
-+ * @skops: sock_ops context; ctx->sk is one side of the pair.
-+ *
-+ * Atomically installs the splice peering on both sides. Both sockets
-+ * must be SOCK_STREAM, of the same address family, with psocks attached
-+ * (typically via prior bpf_sock_hash_update), and neither already
-+ * paired. Currently only TCP_ESTABLISHED is accepted; AF_UNIX
-+ * SOCK_STREAM support is planned (the generic name reflects that
-+ * extension path).
-+ *
-+ * After this call, sendmsg attempts a direct iov-to-iov copy into the
-+ * peer's currently published recv iov; any bytes the splice path did
-+ * not consume (because the peer is not in recvmsg) fall back to the
-+ * normal TCP send path so the sender never blocks. Recvmsg first drains
-+ * the socket's TCP rcv_queue (preserving stream ordering) and otherwise
-+ * publishes the user iov for a sender to copy into. No skb, no sk_msg,
-+ * and no verdict-program involvement on the splice fast path.
-+ *
-+ * Pairing is torn down automatically on close, disconnect, shutdown, or
-+ * RST.
-+ *
-+ * Return: 0 on success; -EEXIST if either side is already paired (race
-+ * loser); -EINVAL on state validation failure; -ENOENT if no psock
-+ * exists on either side; -ENOMEM on splice-state allocation failure.
-+ */
-+__bpf_kfunc int bpf_sock_splice_pair(struct sock *peer,
-+				     struct bpf_sock_ops_kern *skops)
-+{
-+	struct sk_psock_splice *self_s, *peer_s;
-+	struct sk_psock *p_self, *p_peer;
-+	struct sock *sk;
-+	int ret;
-+
-+	if (!skops || !peer) {
-+		ret = -EINVAL;
-+		goto out_release;
-+	}
-+	sk = skops->sk;
-+	if (!sk || sk == peer) {
-+		ret = -EINVAL;
-+		goto out_release;
-+	}
-+
-+	ret = splice_validate(sk, peer);
-+	if (ret)
-+		goto out_release;
-+
-+	p_self = sk_psock_get(sk);
-+	if (!p_self) {
-+		ret = -ENOENT;
-+		goto out_release;
-+	}
-+	p_peer = sk_psock_get(peer);
-+	if (!p_peer) {
-+		sk_psock_put(sk, p_self);
-+		ret = -ENOENT;
-+		goto out_release;
-+	}
-+
-+	self_s = splice_get_or_alloc(p_self);
-+	peer_s = self_s ? splice_get_or_alloc(p_peer) : NULL;
-+	if (!self_s || !peer_s) {
-+		/* If self_s succeeded but peer_s failed, self_s stays
-+		 * attached to p_self; it isn't leaked (freed at psock
-+		 * destroy) and is reusable for a future pair attempt.
-+		 */
-+		ret = -ENOMEM;
-+		goto out_put;
-+	}
-+
-+	if (splice_ring_alloc(self_s) || splice_ring_alloc(peer_s)) {
-+		ret = -ENOMEM;
-+		goto out_put;
-+	}
-+
-+	splice_lock_pair(self_s, peer_s);
-+	if (self_s->peer || peer_s->peer) {
-+		ret = -EEXIST;
-+		goto out_unlock;
-+	}
-+
-+	/* Each side keeps a psock ref on the other for the duration. */
-+	if (!sk_psock_get(sk)) {
-+		ret = -ENOENT;
-+		goto out_unlock;
-+	}
-+	if (!sk_psock_get(peer)) {
-+		sk_psock_put(sk, p_self);
-+		ret = -ENOENT;
-+		goto out_unlock;
-+	}
-+	rcu_assign_pointer(self_s->peer, p_peer);
-+	rcu_assign_pointer(peer_s->peer, p_self);
-+	ret = 0;
-+
-+out_unlock:
-+	splice_unlock_pair(self_s, peer_s);
-+out_put:
-+	sk_psock_put(peer, p_peer);
-+	sk_psock_put(sk, p_self);
-+out_release:
-+	/* KF_RELEASE: consume the caller's refcount on @peer (taken by
-+	 * bpf_map_lookup_elem on the sockhash). All exit paths come
-+	 * through here.
-+	 */
-+	if (peer && sk_is_refcounted(peer))
-+		sock_gen_put(peer);
-+	return ret;
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(bpf_tcp_splice_kfunc_set)
-+BTF_ID_FLAGS(func, bpf_sock_splice_pair, KF_RELEASE)
-+BTF_KFUNCS_END(bpf_tcp_splice_kfunc_set)
-+
-+static const struct btf_kfunc_id_set bpf_tcp_splice_kfunc_id_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &bpf_tcp_splice_kfunc_set,
-+};
-+
-+static int __init bpf_tcp_splice_init(void)
-+{
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS,
-+					 &bpf_tcp_splice_kfunc_id_set);
-+}
-+late_initcall(bpf_tcp_splice_init);
-+
- #endif /* CONFIG_BPF_SYSCALL */
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
