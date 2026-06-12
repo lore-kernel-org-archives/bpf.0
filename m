@@ -1,112 +1,149 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A10C37B028
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 02:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EDF374A1B;
+	Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781229828; cv=none; b=JrJ8coPUXRv1OZZSfvf+dW/8n6Pb28AaGyo4ScinT/nXSW30Th8bvYKfCRui254RG+qvdJopnZU9LA9W2gG8TObdowpHuJmkXWNlJy2oeXdwMxmB392xp1hDLyLr+qO+OEiNjbhA0XVFQdtFrzgqXhg+7e5By6uIA0KmBwRaQL4=
+	t=1781230250; cv=none; b=JIO+zsLciigIgnQZUqANKqmTG2MLMCaKiRH2UTM+92bsvVpA1/cflTXVS7bTXsqyBy8Oc4F6rV28ABy+zPOOALHEr9e+BPUn9FGXJRGQYydl3VBjRiABPryXTVAmQrpS2y+sq68vnYHP+g5njlqlvq62qU8bJSdkFHSzzFwBqIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781229828; c=relaxed/simple;
-	bh=m67m23a4xG0qobqWHnalNzioJ8dJ8P8FvC6Fy+Hmk/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I3PG5h5SE61s3H4UGXrY5EuqlgVZVAqZutgLdC5Atf9ZP2lnaG0Gub/Iho7RxXCflZTeGmetqel0u1NTDtVf4w7JmzL2qnomY2yY6vQbQ4Xa0J3lhaJP17fstQqyKU+kvxe1ChJmBdiESrAtUe2Ug2TbnjhlcNUUFR2JMu50I68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I26CQV6r; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781230250; c=relaxed/simple;
+	bh=wwbF+tsZQrpd6kwFDfZR5ljQW6+9hebJQLVJMjVNQFs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=fHhuyt68y6zUF4mgDWtc+C6v5EzFRjhXprPfOrZnZo3SPqJAnA0LVA0tycWP5RJz5jcMcvoOeApajOemYNvhrHmA+VGRSoFwIzUW4yNOdJ+jplZ0j+2enn5IP3dim+LwjaWodkt6Fynn0xxRD5UI7ew3vXSkvENX11Rg3MK+3j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HthUEHhU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I26CQV6r"
-Message-ID: <8906e52a-8206-4e7b-a51c-d3dc0c77da43@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781229812;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KQP9CqQmvWyk3jJqtDYRhh6E+VRdGuATnnUeQW3MGWs=;
-	b=I26CQV6r+6O8OeLQfow8n27dnUYT+oXNxXWZbECaNDxp/c2krrgOJd1lq/VpOzWrCteDjg
-	D4TyOiMdFeCo2ZxeZclgo9OCWcYuGD8kVho6PT9xxR5My6MMR6cYnq67xH969ombestDOQ
-	VI9FfgsSHjNo/MtlKV41OCHdrsIef+o=
-Date: Fri, 12 Jun 2026 10:03:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HthUEHhU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BE41F000E9;
+	Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781230248;
+	bh=cVQ9qlqsIn4q8GxhJe6rtO+ljHE4Bqr7eLlZm7l2/gM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HthUEHhUWtgnfRNg+aAbVQjzbsIsiIjrQrIAFgN9+lrW6nAzK8V3NKY1JAVDJXULA
+	 wjovXDkzIMilC84BziWCNo6gSA7Gd9SlwPLeeF0dTYI3530skdTzHi3mUC1d3qvOaP
+	 Xn2iFCy75CNKu/JrLHibeaSQpyPx/KqmDb9f1aQ5kxia6VVlm//1lTbeWx1L2ee4a9
+	 EfR7slKI8oEuQL0jp77fT8de/HfOn5E/B44saBlHRyPtw2dYhqzV1aHQ22XDV9rZHM
+	 +L71qKvxBi9UHTUmGe6CqKc3YFCmtcJUi1RE07/RgKB9RXtDQiltPGpPAzS09kjMFW
+	 xigKGC98B3sDQ==
+Content-Type: multipart/mixed; boundary="===============5717406214657926375=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 1/7] bpf, sockmap: reject overflowing copy + len in
- bpf_msg_push_data()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Weiming Shi <bestswngs@gmail.com>, Xiang Mei <xmei5@asu.edu>,
- Xinyu Ma <mmmxny@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>,
- Shuah Khan <shuah@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Sechang Lim <rhkrqnwk98@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Cong Wang <cong.wang@bytedance.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260611123538.156005-1-jiayuan.chen@linux.dev>
- <20260611123538.156005-2-jiayuan.chen@linux.dev>
- <DJ6DKMNBR4UX.27HEZMGEPEF7T@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <DJ6DKMNBR4UX.27HEZMGEPEF7T@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <fe2e906f9235c7786e45b393a48da682d9adaaed96389cbb109e3132b63ef783@mail.kernel.org>
+In-Reply-To: <20260612011452.134466-2-xiyou.wangcong@gmail.com>
+References: <20260612011452.134466-2-xiyou.wangcong@gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/5] tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback splice
+From: bot+bpf-ci@kernel.org
+To: xiyou.wangcong@gmail.com,netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,hemanthmalla@gmail.com,zijianzhang@bytedance.com,xiyou.wangcong@gmail.com,cwang@multikernel.io,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
+
+--===============5717406214657926375==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f36b6..549f37077244 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
 
-On 6/12/26 12:53 AM, Alexei Starovoitov wrote:
-> On Thu Jun 11, 2026 at 5:34 AM PDT, Jiayuan Chen wrote:
->> From: Weiming Shi <bestswngs@gmail.com>
->>
->> When the scatterlist ring is full or nearly full, bpf_msg_push_data()
->> enters a copy fallback path and computes copy + len for the page
->> allocation size. Since len comes from BPF with arg3_type = ARG_ANYTHING
->> and both are u32, a crafted len can wrap the sum to a small value,
->> causing an undersized allocation followed by an out-of-bounds memcpy.
->>
->>   BUG: unable to handle page fault for address: ffffed104089a402
->>   Oops: Oops: 0000 [#1] SMP KASAN NOPTI
->>   Call Trace:
->>    __asan_memcpy (mm/kasan/shadow.c:105)
->>    bpf_msg_push_data (net/core/filter.c:2852 net/core/filter.c:2788)
->>    bpf_prog_9ed8b5711920a7d7+0x2e/0x36
->>    sk_psock_msg_verdict (net/core/skmsg.c:934)
->>    tcp_bpf_sendmsg (net/ipv4/tcp_bpf.c:421 net/ipv4/tcp_bpf.c:584)
->>    __sys_sendto (net/socket.c:2206)
->>    do_syscall_64 (arch/x86/entry/syscall_64.c:94)
->>    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
->>
->> Add an overflow check before the allocation.
->>
->> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
->> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
->> Tested-by: Xiang Mei <xmei5@asu.edu>
->> Tested-by: Xinyu Ma <mmmxny@gmail.com>
->> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->> Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
->> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> That's not the right way to post somebody else patches.
-> You need to keep their authorship and SOB (as you did),
-> but you also need to add your SOB after theirs.
+[ ... ]
+
+> @@ -756,4 +814,753 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
+>  		newsk->sk_prot = sk->sk_prot_creator;
+>  }
 >
-> also pls target bpf-next.
+> +static int splice_send_ring(struct sock *sk, struct sk_psock *psock,
+> +			    struct msghdr *msg, size_t size, int flags)
+> +{
+> +	struct sk_psock_splice *self_s, *peer_s;
+> +	struct sk_psock *peer;
+> +	int total = 0;
+> +
+> +	if (msg->msg_flags & MSG_OOB)
+> +		return 0;
+> +
+> +	self_s = rcu_dereference_protected(psock->splice, 1);
+> +	if (!self_s)
+> +		return 0;
+> +
+> +	while (size > 0) {
+> +		size_t done, space = 0;
+> +
+> +		/* All peer / peer->sk accesses happen under RCU. If the ring
+> +		 * has space, grab the peer's ring_ref before dropping RCU: that
+> +		 * pins peer_s (and its ring) so the copy below can run outside
+> +		 * RCU and fault/sleep normally. peer_sk is *not* pinned by the
+> +		 * ref, so it must not be touched after rcu_read_unlock().
+> +		 */
+> +		peer_s = NULL;
+> +		rcu_read_lock();
+> +		peer = rcu_dereference(self_s->peer);
+> +		if (peer) {
+> +			struct sock *peer_sk = peer->sk;
+> +			struct sk_psock_splice *ps = rcu_dereference(peer->splice);
+> +
+> +			if (ps && READ_ONCE(ps->ring_buf) &&
+> +			    !sk->sk_err && !(sk->sk_shutdown & SEND_SHUTDOWN) &&
+> +			    skb_queue_empty(&peer_sk->sk_receive_queue)) {
+> +				space = splice_ring_space(ps);
+> +				if (space && percpu_ref_tryget_live(&ps->ring_ref))
+> +					peer_s = ps;
+> +			}
+> +		}
+> +		rcu_read_unlock();
+> +		if (!peer_s)
+> +			break;
+> +
+> +		/* Holding peer_s->ring_ref: peer_s and its ring stay alive.
+> +		 * The copy touches only the ring, never peer_sk, so a normal
+> +		 * faulting copy is safe here.
+> +		 */
+> +		done = splice_ring_write(peer_s, &msg->msg_iter,
+> +					 min(size, space));
+> +		percpu_ref_put(&peer_s->ring_ref);
+> +
+> +		if (!done)
+> +			break;
+> +		total += done;
+> +		size  -= done;
+> +	}
+> +
+> +	/* Wake exactly once, after the loop, re-deref'ing peer under RCU.
+> +	 * Doing this inside the loop would carry the _sync hint repeatedly
+> +	 * and cost a redundant wake per wraparound iteration.
+> +	 */
+> +	if (total) {
+> +		rcu_read_lock();
+> +		peer = rcu_dereference(self_s->peer);
+> +		if (peer)
+> +			splice_wake_sync(peer->sk);
+> +		rcu_read_unlock();
+> +	}
+> +	return total;
+> +}
+
+Is the flags parameter needed? The function signature includes an int
+flags parameter, but the function body never references it. The only
+flag checked is msg->msg_flags for MSG_OOB.
+
+The caller tcp_bpf_splice_sendmsg computes this value as:
+
+int flags = (msg->msg_flags & ~MSG_SENDPAGE_DECRYPTED) |
+            MSG_NO_SHARED_FRAGS;
+
+but it appears to go unused. Should it be dropped from the signature,
+or is there intended handling that was omitted?
 
 
-Thanks Alexei, and sorry for the noise -- I'm still new to handling other
-people's patches.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-I'll keep their authorship and SOB and add my own SOB and retarget to 
-bpf-next.
-
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27388683867
+--===============5717406214657926375==--
