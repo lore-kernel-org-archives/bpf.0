@@ -1,34 +1,73 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2053043CE;
-	Fri, 12 Jun 2026 01:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAA023C51D
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 01:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781226626; cv=none; b=lmx2m9YW5hKXFtvuHz+jJjIeSKnrzBghLGA4Hx++59THv8rIFcI5204RmQhy2CDNXUN8nNul+0csNRAdv4LkLQdxD4f/fIraXmdl8s8lwNRjsvqPKBn4L8ROyISkDELvExiqded/hrHnbJ9KWUYiONM6c5LuZMUtiIoogGucvn4=
+	t=1781226923; cv=none; b=l6QxicnPL7W/SkxCr1rhsCtdD/YwdJw8hK4ZMgzRBWInYzxq0t+l+fuqhG81E7vKag6lmXnVtx9rfA5B//1mwOw3RgOUbsXnlIDh7kclmalrJCem7JIgGuM8Y8y3HMKoOGWnXR8u7qXqqX86w+1c9/eqUV8kp2QV/l8+BC2abk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781226626; c=relaxed/simple;
-	bh=pNiKlJ6NbmzWPwwAd1NDkeKjChv85ysLybtmH1wQAEg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bfsFuhR90Dzx+Dq0FMKmee3IJL0LRnXnAiconYuhNvFolVdrpQJrHipbcFMJJO68oqKrv4U4SkLDO1ZXzoWC0VhICyTS1B/u9ZbMdgVnzdUja+MPoobUwHMoX9HlHBb6wri0+uC4NsnbiQvrbiQROphSkT17g41WBnXEFPg+Dgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx4ep8XCtqUE0TAA--.51440S3;
-	Fri, 12 Jun 2026 09:10:20 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCx_8J5XCtqUG+jAA--.47689S2;
-	Fri, 12 Jun 2026 09:10:18 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3] bpf: Fix unaligned interpreter panic on JIT fallback path
-Date: Fri, 12 Jun 2026 09:10:16 +0800
-Message-ID: <20260612011016.25701-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1781226923; c=relaxed/simple;
+	bh=V5Ji/NbotjurvNaHKkaocD+v8CNqcnqv7GAUeTEbeKg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hrGbz6bECaxeqdFT4f/J4B7SwvuURP55ZE/UzJleQ7mWUYAi1Gk+HNwCNKNpATeIrEMA+QPEamKv+YeGYrHkT9zAW4jASmbdGikNCs3/wpiN2n8ke316OGopP7I1Vr6tCuqBkX9ld578SZbRr/r5tIP8Gsha/CVZqpMoHzJ6FPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S20/LuN8; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S20/LuN8"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-13832028e9fso413944c88.1
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 18:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781226920; x=1781831720; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lq4yPWnUXbIU2vFF9P4WExiS18HxKoN6rV5qe+S+suM=;
+        b=S20/LuN8PPgMvvnqfxT7/IK+q/Cga3NYPnU8pbVahqvR+zZpKnpilHMKvvHoGR6E0C
+         gCt+xyEOJc6mDX4BivJlq3slLuSCfYpTVkTaRC+l4rcOwdpBTl8Q9wW+Mmkeqbb5R0G2
+         7r22pXT6gag65obcK/9G9GHX5uzkXLiaN0Hn7rNAugs/HCpw/sLq+kpqeDyPKmI683Ph
+         Kwu3SONNpLPuFa+LZw8MmAtypuDX7LArdTlS6PXEBQ2/UXxaU75PUCsJnu43JvokPOzf
+         91GMioutnhXO2mbuhZnY2vZ2ttk93L3iuPLNj3ui1Z2/R04e+j8LMHfZB7XGOoX6w2Wc
+         i1gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781226920; x=1781831720;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lq4yPWnUXbIU2vFF9P4WExiS18HxKoN6rV5qe+S+suM=;
+        b=VxVnUjuE6EZKXBPGNsZE2tYQWg3WrkHOPiOq4tjxNiZ+7OJI8Pxm96/VCVjL3jmZuM
+         EDt5rdxqTy5olnJYAlZYt17Q1OoLYm9vtQdCoqLHJY40FCkFzjOy8nrYXJNzK2F4GmIn
+         0BSLafByE0wMp3tOx+vfxhLdelcOLHdhb3NDdBOmtm6nDbM6xXauoJct4xk+bU5UjcSA
+         r0x2x/TYFnti7EiLyqMW2GlScxv232TiGsYd1O3Bmj8jUBVxfHBlQ1tiexuP8rzQtoXT
+         +msXzdwYvsz41KF1Q4WA06PcOzmV1ZYn4GVCAu/QKozfxl6UYWhanAjqg07PV2hsXU13
+         wEvA==
+X-Gm-Message-State: AOJu0Yzipua4TImHj8M8vDVZV0xbNflWXzIzhCc2GlL+qWJN29n86b2T
+	y8JfG3cXDnP1v9F0gj9O/PHROItjW7uCX0fJweHCJ2HzLmqk//f6xZxo
+X-Gm-Gg: Acq92OH6Jyn6dUDcNWK/ISWWlPJCXg53HwuBUCg8sNfQm5Mz89mi4P+3rmo2Qsi7jYo
+	xga+YeD2uPtTRxavIpI6H5Oa4Qr3rE/QWl99aFzRsvn5TY3bgH1HEETeJyb+lXXr/+HlzYO0Tgg
+	V8UP99DI/Vc+V8tyOS48GAK38wwcoGJmnJ2+9ZWNzMklfQeTS2j1DGIyLeDHCl+6qAWtT3cCSSj
+	UhIccy6AXojDXV3+mn6kS69JIfbwXlzN6GK8ciZyvIfjnFyLs901tGFMRGDbbTdhtTA/yz9uiG7
+	RimCUPd2+NDJqeQqdn5rI1DtKu8GUu5ZhO1KwEzrsBQyV/bgV7YbkR6mg1W8hL8Xfqlbuux0zR/
+	W4UDFLw8P5onmIDmLpeo5enbD1SsTcWS6o7oYwDmhTebS1loBupgz+99Byr/O2Begw/Vb9dZKZi
+	Pwm1ovj9a34JtBh16g7VCIJ7pE37XLxGfhlvFGygZdVmobijQO0xgHZ2QjejibHOqf1A==
+X-Received: by 2002:a05:7022:41a1:b0:136:5c88:d928 with SMTP id a92af1059eb24-1384bb74299mr276844c88.19.1781226919626;
+        Thu, 11 Jun 2026 18:15:19 -0700 (PDT)
+Received: from pop-os.scu.edu ([129.210.115.107])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b975e55sm596257c88.13.2026.06.11.18.15.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 18:15:19 -0700 (PDT)
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	hemanthmalla@gmail.com,
+	zijianzhang@bytedance.com,
+	Cong Wang <xiyou.wangcong@gmail.com>
+Subject: [RFC PATCH bpf-next 0/5] tcp: opportunistic loopback splice for BPF-paired sockets
+Date: Thu, 11 Jun 2026 18:14:47 -0700
+Message-ID: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,141 +75,72 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx_8J5XCtqUG+jAA--.47689S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxury3uFWUGF1kWFyfZr4kZrc_yoWrXr43pF
-	95Cw4akr4UXF4Ig3y7JwsFvw15Kw48uay5GayfKr1FkF4FqrnrW3WUKw1FgFsxGr4j9F1x
-	Zr42vFy29a48JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
 
-When an architecture implements bpf_jit_inlines_helper_call(), such
-as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
-the helper call offset (insn->imm) during the bpf_do_misc_fixups()
-phase if the helper is expected to be inlined by the JIT compiler.
-As a result, insn->imm remains as the raw helper enum ID.
+This series adds an opportunistic "loopback splice" fast path for two
+locally-connected TCP sockets that a sock_ops BPF program pairs at
+handshake completion. Once paired, sendmsg copies the user payload into
+a per-direction in-kernel byte ring and recvmsg drains it on the other
+side; both copies happen in their own task's mm, so the fast path incurs
+no skb construction, no softirq, and no TCP protocol-state processing.
 
-However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0)
-or if the JIT compilation later dynamically fails (e.g., due to OOM
-during bpf_jit_alloc_exec()), the core BPF subsystem falls back to
-the BPF interpreter.
+The underlying TCP connection stays fully real: sequence numbers are
+frozen at post-handshake values, so FIN/RST/keepalive keep flowing
+through the normal paths and the pair tears down via a regular close.
+Pairing is opt-in per flow and fallback is per-message - handshake-style
+traffic takes the TCP path, the bulk phase takes the ring, on the same
+socket. Nothing leaves the host and applications need no changes: no new
+address family, no LD_PRELOAD, no source modification.
 
-When the fallback interpreter executes (__bpf_call_base + insn->imm)
-with the unpatched raw helper ID, it jumps into an unaligned invalid
-address space, triggering a fatal instruction alignment fault (ADEF)
-or illegal memory access kernel panic.
+The target use cases are co-located endpoints that speak plain TCP:
+ - regular TCP loopback (127.0.0.1) between processes on the same host;
+ - container sidecar deployments - e.g. a service-mesh sidecar proxy and
+   its application in the same pod, talking over loopback or a veth pair -
+   where the per-skb veth+bridge cost is exactly what the ring sidesteps.
 
-This issue impacts all architectures that support helper inlining.
-Introduce a late fixup pass via bpf_fixup_fallback_inline_helpers()
-in __bpf_prog_select_runtime() to fix it.
+Highlights (TCP_RR, 1 KB request/response, netperf, pinned CPUs,
+baseline TCP vs splice; full tables across message sizes and TCP_STREAM
+in patches 1 and 2):
 
-When JIT compilation fails or is disabled, the helper call offsets
-originally skipped for inlining are rewritten to relative memory
-offsets right before transferring control to the interpreter.
+  loopback (127.0.0.1):
+    without busy-poll:   105.8k -> 235.1k tps  (2.2x)
+    with busy-poll 50us: 106.1k -> 713.0k tps  (6.7x)
 
-A bounds check on insn->imm against __BPF_FUNC_MAX_ID is added to
-ensure already-patched address offsets of regular non-inlined helpers
-are safely filtered out during traversal.
+  container (netns + veth + bridge):
+    without busy-poll:    99.9k -> 233.9k tps  (2.3x)
+    with busy-poll 50us: 100.4k -> 704.9k tps  (7.0x)
 
-1. Test case (test_panic.c):
+Synchronous-RPC (TCP_RR) at a 1 KB message wins ~2.2x without busy
+polling and ~6.7x with it (the win grows toward smaller messages and
+narrows toward 64 KB), because the ring removes the per-cycle kernel TCP
+receive-path cost and the receiver can spin on the ring directly -
+loopback delivers via the per-CPU backlog and exposes no pollable
+napi_id, so the generic sk_busy_loop() is a no-op there. Bulk streaming
+is roughly neutral on bare-metal loopback but wins decisively (up to
+~6x) container-to-container, where per-skb veth+bridge cost dominates
+the path the ring sidesteps.
 
-  #include <linux/bpf.h>
-  #include <bpf/bpf_helpers.h>
-
-  SEC("kprobe/sys_getpid")
-  int test_panic(void *ctx)
-  {
-  	struct task_struct *task;
-
-  	task = (struct task_struct *)bpf_get_current_task();
-  	if (task)
-  		bpf_printk("Task address: %p\n", task);
-
-  	return 0;
-  }
-
-  char LICENSE[] SEC("license") = "GPL";
-
-2. Reproduction steps:
-
-  $ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
-  $ sudo sysctl -w net.core.bpf_jit_enable=0
-  $ sudo bpftool prog load test_panic.o /sys/fs/bpf/test_panic autoattach
-  $ sudo cat /sys/kernel/debug/tracing/trace_pipe
-
-3. Panic information on LoongArch:
-
-  Kernel ade access[#1]:
-  ...
-      ra: 9000000000486e50 ___bpf_prog_run+0x1370/0x36b0
-     ERA: 9000000000485383 __bpf_prog_ret0_warn+0x13/0x20
-  ...
-   ESTAT: 00080000 [ADEF] (IS= ECode=8 EsubCode=0)
-
-Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/core.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Cong Wang (5):
+  tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback
+    splice
+  tcp_bpf: busy-poll the splice ring before parking the receiver
+  selftests/bpf: add tcp_splice basic round-trip test
+  bpf: allow SO_BUSY_POLL in bpf_setsockopt()
+  selftests/bpf: set SO_BUSY_POLL from the tcp_splice sockops prog
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 649cce41e13f..14bb71853a15 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2608,6 +2608,31 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
- 	return prog;
- }
- 
-+/* Fix up helper call offsets for inlined helpers on JIT fallback path. */
-+static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
-+{
-+	struct bpf_insn *insn = fp->insnsi;
-+	const struct bpf_func_proto *fn;
-+	int i;
-+
-+	if (!env || !env->ops->get_func_proto)
-+		return;
-+
-+	for (i = 0; i < fp->len; i++, insn++) {
-+		if (bpf_helper_call(insn)) {
-+			/* Filter out already-patched address offsets. */
-+			if (insn->imm >= __BPF_FUNC_MAX_ID)
-+				continue;
-+
-+			if (bpf_jit_inlines_helper_call(insn->imm)) {
-+				fn = env->ops->get_func_proto(insn->imm, env->prog);
-+				if (fn && fn->func)
-+					insn->imm = fn->func - __bpf_call_base;
-+			}
-+		}
-+	}
-+}
-+
- struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
- 					   int *err)
- {
-@@ -2643,6 +2668,9 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
- 			*err = -ENOTSUPP;
- 			return fp;
- 		}
-+
-+		if (!fp->jited)
-+			bpf_fixup_fallback_inline_helpers(env, fp);
- 	} else {
- 		*err = bpf_prog_offload_compile(fp);
- 		if (*err)
+ include/linux/skmsg.h                         |   9 +
+ include/net/tcp.h                             |   8 +
+ net/core/filter.c                             |   1 +
+ net/core/skmsg.c                              |   3 +
+ net/ipv4/tcp_bpf.c                            | 847 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/tcp_splice.c     | 206 +++++
+ .../selftests/bpf/progs/test_tcp_splice.c     | 125 +++
+ 7 files changed, 1198 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_splice.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tcp_splice.c
+
+
+base-commit: 30dee2c176e7954f63d1fa3e52d172f30beb9bfb
 -- 
-2.42.0
+2.43.0
 
