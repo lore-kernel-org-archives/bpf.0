@@ -1,109 +1,151 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFDE40D586
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 00:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612081A6808
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 00:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781222910; cv=none; b=SZ72SrCBqfiZXrK0ewYwzxHqze3FyeBmL6dDGY3swnpqxuyzz/xnv+6o3Jbid35byA79eFNtFg6KWjpvJ4Ms4n4uSgxFs1Fbr+/nEMk4dd08fnxFgwyHk4mzKO+yOyjFuwCiiKz0b5dmggRo5OO0Q4UFrERNI3v9l8v4SPFIukc=
+	t=1781223487; cv=none; b=lBYuRTZiHN8e7twstcaFzo+naMxnxVhOmFYiz91ukYWoh7mJKxOpPO1zM7xJlmrttyHbXjWdLmOndVHUoSkTPg83vdspz7uWC9SG+JJpT4PvU9W4ylIKfyt7fTNS8wCLJjVUDVqCmlXKXVdDVloqfJYgXS6DgZBZGnTqkK6ZLkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781222910; c=relaxed/simple;
-	bh=CdX8Qwb4P1o/hcHptjiAg9CZgwE1KcXgvFcvzc961dA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gtp0/g5oq8EYbzVTMDssL2CH0IzfjFPLkGCynUv1FLLFQTunbPK7QCPWTxzyTePgiUqbUuALtd4xzmwrya4vdTp8cwYGpITE9I5OphNxPfmg+Zh6ZGDSGmii4x1UV05nC21q/sen3PyFpuW0olP/cvVPElcbrwqAv8FZnaUYX6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IQYdYFyl; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781223487; c=relaxed/simple;
+	bh=nrJEujpdtWenU75xWFosdMAwzUUl2fVjUsBe4NrU64U=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pdwkJ0+PHIhM7JAIFUu5C7xokUej2eHgAcBDInn3gnDBD//EgOa5ZjtMnZXBo5RIDOc+wbUj1HpuUxLUy8dtdnIrREdDIydkae1ro88/QfqDxaEvb//g1VUA7BOP60KHstK4JiLEjMNvlXYdUSyGGZ6o+49DFt+zhyf2sH53cv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eYOKrmbp; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IQYdYFyl"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51761d27612so3839691cf.3
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 17:08:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eYOKrmbp"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c0c36f1cc0so7160655ad.3
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 17:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781222908; x=1781827708; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yKG4KW6S/RXhkFtQLuUCBdwnT8PSZQpyI8y4jFz+S04=;
-        b=IQYdYFyl5haIjJPowgCvMDhVmGhtOlKqPrIZwLERV+tl6jHyj6ISRn57hCkZTTpLzs
-         JzLps3HqWFoOAr2raldq8vDOgdAE5Kq5VvjYqsmNKJV6OPfYgQ781t7tclzV4LB6gCQW
-         kLPlEaMUon4Mmg7AlbmECD2tvq51cCpQtznOYNnmD70zH4AxA1JYDfQk3JNYPmX4q1SE
-         P6ADQudmVeMRITf+sSgHlbBnfjyyiwyfvbicNFD9ak16OjZxTxZ3cJbxVcG/iPRWwexU
-         7lDd4el6GkSzywOJSC76M7VGV5bNSNOy5EtwErIPUDDwZdYOkQq3NOvguXeI/ouSB7FF
-         vC5g==
+        d=google.com; s=20251104; t=1781223486; x=1781828286; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jw+mb2Oix6vlzmX2fEritHAtIrKXijXb9hNuLq3RszM=;
+        b=eYOKrmbpLYV8EgRFUXPJr2IIoaPZJapAFc+fyNDYgCYdJC9ukFnDbWfHt4MvtmYlFp
+         WpW+rGYDhm4emvSvGO4d5Z32nTglwh6gPsOteq+WgMBB/Cns6Y9xNCJcSfTYWAb5dr2h
+         u90gCdsL9Ugi4Ri/qV2PtTFgdSvFcpohBXmAbFzz1bF1EkJCOC7p1XThW7b0G8gLW70B
+         acmxTYL7LbufO2Tgdjjuu4jEqjdoxuBjRJeY7V/ch9A5+LggZdBTSpkfFyEyQaM7zEhX
+         M4/jV1t/4a2TjV5FGc7mxGzXYHT8lKKKJk9owpWfJxXsrBcSgn6j26MjvY1ayj+4SeD2
+         5n0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781222908; x=1781827708;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yKG4KW6S/RXhkFtQLuUCBdwnT8PSZQpyI8y4jFz+S04=;
-        b=M7Aj4sxjs9UJGJpUVEmTnT1ovTH4RXzYlmxZKBg4BhdROrc9YmunquweUIoz7Uwivy
-         /DFQOqbKCuHDGZ20ICWyXKMVxCt1EvqX6Vhf+UZ08IsQFywSONlny8jNjz6e9VIMu7xD
-         R6zGdUNU0GQyLGghsZma1J4JhGu1+lpry93/+0xpavwtoUwWh5irOZWGWlwd6es+BD7r
-         EXLhsqB9fyK6YG10IVPw9rWCN9d4qituA5hw/I5YKxtQ7P0ismrqWLPTF6Y1zrnGbNGZ
-         0MjYVMgSPl2VWTZ5ZP6+ZYK9/yVME/NxHliL1oD68SrK6fAp5ZvfRXSFz+89FOBoV5o/
-         P+Xw==
-X-Forwarded-Encrypted: i=1; AFNElJ/ruw/flASDvqx5D9VQ4VloxalLH7tntrwBmjI/w1dTSICnYW0JjCLM79J81TLyPY9t4u0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg+bHRfwDXe8tFEvcthTzXR+m8ZfcrnR0jyldXxSQb4btuUxbY
-	/4sjpZ9aq73wBl+ABKRJWgpx5s4r1AFtLqvyeBIJJBisqwL/TwrF+0si
-X-Gm-Gg: Acq92OHL5fI5kThzzakpbpQ/5REsuT/Pr3GdFoi6lrVgQe+R/zg/5hObhB5WwfxXUjp
-	NylwrIiYf5IQsvD9xM3V6RKJTjJZDIZ42XZoPYt/R9XA/VvyF/geA1DqFin0RScliCrbW2qbEEZ
-	wGJ94uJtx7Fi6GowQBY2Pd+QJmIeO1/XGW1e5S5Dsvyo8cfawHW7da/iUrSlwWmZHu1Ta9oRR+2
-	aXt/IsAqnD3aqOHpJWgLUjvvbizBZe969NeXBmxEXQFGz03EZvKyvWgZJovjylBzWYt6v4EUXDo
-	onHj7A57iRRYpGvQd8Vvaizpam1bTr2sfbj5FAtNwQJHpomRn/CWDMabn79hSwmXYCmVdLPCiKn
-	hoAxq3+n0SBvoTGh9L21zyqy9wSW8Ozqyunyjr2PdD5TE7ALOeioF5Zo8v0lMBh8OO/6WuhjOHp
-	/aHvPELwQwNA9QO7B1r70xPYIHwBUnkUXOILey+Klif8M1UA0honcP0inhl4LOj4oiE01+fL2aN
-	x9VyCDwsb5jbcxG6BFmQj9sGg==
-X-Received: by 2002:a05:622a:8c1b:b0:517:c65c:3dba with SMTP id d75a77b69052e-517fe5edd81mr5583751cf.38.1781222908419;
-        Thu, 11 Jun 2026 17:08:28 -0700 (PDT)
-Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-517fb79df4dsm6590911cf.15.2026.06.11.17.08.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 17:08:27 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: alex.roberts109@outlook.com,
-	Kees Cook <kees@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	David Windsor <dwindsor@gmail.com>
-Subject: Re: [PATCH] Add LoadPin support for eBPF program loading
-Date: Thu, 11 Jun 2026 20:08:25 -0400
-Message-ID: <20260612000825.105100-1-dwindsor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d@outlook.com>
-References: <20260611-b4-rfc-loadpin-ebpf-v1-1-11a6c8e6170d@outlook.com>
+        d=1e100.net; s=20251104; t=1781223486; x=1781828286;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jw+mb2Oix6vlzmX2fEritHAtIrKXijXb9hNuLq3RszM=;
+        b=GtSeGtW7YFvBZQdEHaLUd0Uk8yU2A6hHcIMH2z7D6CK/sOaz0PjK/rlsdBhEBNt2gp
+         t+Om1YTeMA5XjPkn4lYHIP5vzKGJXwCi8zglj2dLiKltVKaNG25XhBaO0+GABEOdKaWy
+         ttWjmNxhjAYr6zUoqPAy9IAdq9EfmdgVqvAgDANL2QCm+Fd/ELsBlSXDVBQ6Z5SIle+3
+         yTB1Ty+9AGxeZOMAPx4Bba9pfF6Z3ioU6wKXOz9bGVblKimic2AHYraizf0IqjXX15DK
+         wRj4YrymnES1rjMAd8UwUyLmRRf2YJtnTlCquCfWnYfNOJ8qyKiD54ZB9bKRNkX9uzRD
+         nPew==
+X-Forwarded-Encrypted: i=1; AFNElJ/UUDz6zxx42XDJS2mzlUc31d+7qATWj/cHNyxs2IfPdsgy4g89K7RACv5NwJnW1DHHYgI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcwJ97UKKt5CrXWma5rv5RcRYAOqR7PUVLrY6QwPdak6JRnM2b
+	4ZlkOlqu8o9MQHJs4e8i4ehbfLi3ABny+H2v1cpdhifdxo4UaWV4eUPXmLCK8nBTh39k4lG8rGg
+	DnM6HGw==
+X-Received: from plbbh3.prod.google.com ([2002:a17:902:a983:b0:2ae:ceb3:f968])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e54c:b0:2c1:f262:495f
+ with SMTP id d9443c01a7336-2c41235c4acmr6889605ad.26.1781223485353; Thu, 11
+ Jun 2026 17:18:05 -0700 (PDT)
+Date: Fri, 12 Jun 2026 00:17:31 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
+Message-ID: <20260612001803.23341-1-kuniyu@google.com>
+Subject: [PATCH v1 bpf-next/net 0/5] bpf: Support RX/TX HW timestamp proxy.
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 11, 2026 at 01:59:10PM -0500, Alex Roberts wrote:
-> +static int loadpin_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
-> +				  struct bpf_token *token, bool is_kernel)
-> +{
-> +	int res = 0;
-> +	struct file *exe_file = NULL;
-> +	struct mm_struct *mm = current->mm;
-> +
-> +	if (is_kernel || !mm)
-> +		return 0;
-> +
-> +	exe_file = get_mm_exe_file(mm);
-> +	if (!exe_file)
-> +		return 0;
-> +
-> +	res = loadpin_check(exe_file, READING_EBPF);
+We have some hosts where packets come from special hardware
+and are provided directly to userspace, bypassing the kernel
+networking stack.
 
-Why are we checking current here? IIUC this will be whoever calls
-bpf(2), which would be the loader, which would then be able to load bpf
-programs from an untrusted source.
+When standard socket applications are run on these hosts,
+a userspace proxy is required to mediate traffic between the
+hardware and the applications.
 
-In the kmod case loadpin_check() sees the .ko itself.
+            +---------+                 +----------------------+
+            |  proxy  |                 |  socket application  |
+            +---------+                 +----------------------+
+              ^     ^                               ^
+  userspace   |     |                               |
+  -----------| |-----------------------------------------------
+             | |    |    +---------------------+    | skb
+             | |    `--->|  virtual interface  |<---'
+  kernel     | |   skb   +---------------------+
+  -----------| |-----------------------------------------------
+              |
+              v
+       +------------+
+       |  hardware  |
+       +------------+
+
+However, even though the hardware fully supports timestamping,
+the HW timestamps are not directly accessible to the socket
+applications because the skb is consumed/injected by the proxy.
+
+This series extends ethtool and adds BPF kfuncs to transparently
+support HW timestamp on such a setup.
+
+Patch 1 is pure net-next patch to advertise fake timestamping
+capability on virtual interfaces (e.g. ipvlan, geneve, etc).
+
+Patch 2 is misc cleanup.
+
+Patch 3 & 4 add kfunc to proxy RX/TX hwtstamp.
+
+Patch 5 is selftest to demonstrate how it works.
+
+Note the test requires this iproute2 commit:
+https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c9a9f12aa619288fd3d4e16bc4b3c73b655a4efe
+
+
+Kuniyuki Iwashima (5):
+  ethtool: Introduce ETHTOOL_MSG_TSINFO_SET for virtual interfaces.
+  bpf: Rename bpf_kfunc_set_tcp_reqsk to bpf_kfunc_set_sched_cls.
+  bpf: Add bpf_skb_set_hwtstamp().
+  bpf: Add kfunc to proxy TX HW Timestamp.
+  selftest: bpf: Add test for hwtstamp proxy.
+
+ Documentation/netlink/specs/ethtool.yaml      |  13 +
+ include/linux/filter.h                        |   2 +
+ include/linux/netdevice.h                     |  11 +
+ include/linux/skbuff.h                        |  13 +
+ include/net/tcx.h                             |   1 +
+ include/uapi/linux/bpf.h                      |   1 +
+ .../uapi/linux/ethtool_netlink_generated.h    |   1 +
+ include/uapi/linux/pkt_cls.h                  |   3 +-
+ kernel/bpf/verifier.c                         |  13 +-
+ net/core/dev.c                                |  39 ++
+ net/core/dev_ioctl.c                          |  31 +-
+ net/core/filter.c                             |  91 ++-
+ net/ethtool/common.c                          |   4 +
+ net/ethtool/netlink.c                         |   8 +
+ net/ethtool/netlink.h                         |   1 +
+ net/ethtool/tsconfig.c                        |   7 +-
+ net/ethtool/tsinfo.c                          | 123 +++-
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  10 +
+ .../selftests/bpf/prog_tests/proxy_hwtstamp.c | 580 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/proxy_hwtstamp.c      | 234 +++++++
+ 21 files changed, 1169 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/proxy_hwtstamp.c
+
+-- 
+2.54.0.1136.gdb2ca164c4-goog
+
