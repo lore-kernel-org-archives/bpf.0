@@ -1,163 +1,158 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212E2396562
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEBC3451C6
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781289814; cv=pass; b=WPt4oLS/OjAsMoh4nyzM9SqIdu7PcsflL8r0JOhDat0gvBRg/2WrMvo5z3lxBQho9u5j8fsuZpIXpGVTZmYalzMPYCXcFyEVJQXg/LjkE2L/5jdYVvepQwD0RqGYF9PeB0oiD1K20EbjT2vk9CdcWO5XsI9iVoCNF6N6cHAl6vA=
+	t=1781290529; cv=pass; b=S854sRWV5mCsKOjny65iJB3ZumImas5iCygHPA4IMYXnYi9dnRck8CKu1ooIQF7kljEiiWtPdi3w0k1jAaZW3vGCPv45cxU+cvVwSkRTW9iVxkkznp/dZoVjWxSzsM3MdUrTgvknrizhdqpn715/zPIdu4jA0lgmwqmZuWDhHJ0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781289814; c=relaxed/simple;
-	bh=IQZpujVP87VTdmXVxfTNfi9J/0IXL9EHLyAaVdEbWQw=;
+	s=arc-20240116; t=1781290529; c=relaxed/simple;
+	bh=YEBunFSHRGDNumLMfC5wR4SHihWDvjTENa69vkBW9iw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LFuhstzYZB4USi+Gf3pnbeVyZuVppcu5NPWvX03j2Bn72WcQe59nS6Akd2ocXHSOPV8AkwAsHvAg4ivO+hYAE5aHiCz613+rwKoH9hJ3gdcv3J0c5FSBFU5ryXQHXS8g02cQoGquvRvTG3TEgjbYuCkAi4DZ68/uuzq+rJww1ko=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FNqgjgKD; arc=pass smtp.client-ip=74.125.82.44
+	 To:Cc:Content-Type; b=rw+P0+NURfFSvqq9z9b3UdwFp4l296UzxNyc9KD0iHW/6HAtiPf8xkc6pvRIiA9QZKCPLVMi+s5sdVs3lICycjWSNYHn235eD2GMaVdUMKViDIIHNYylcRNa8nGF72H3PlJzAjjq9wTlz9yBvY4wYJRQImMIoUorf4GfbejDJ3Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NUXtngYM; arc=pass smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNqgjgKD"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-137dd3af345so1324103c88.0
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 11:43:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781289812; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NUXtngYM"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-13807d2f898so1562995c88.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 11:55:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781290527; cv=none;
         d=google.com; s=arc-20240605;
-        b=GmkpFWlOlcYhb2/hWZNutxfjqSNzyJA7C5hze5HsF7IPRZpoNi4Dd6yYXqEBVmy57v
-         tzZEYKUmjGl2scyc64E0/0y3tBoT+/gkpP16EtHrmFaP/fwHKtn97JjpWG03FvHRgBCF
-         G7HEen6nabGJmynb23SRMN4SAZEWF1Nto3T0ThWQTmpuvz9o+kqLO1PgK4K0R88AjFPy
-         8tILuCQcULwWYZkYNXgE8vn4hEVt9NTIJkU7/0qPEjNDXKHVs+eAJOKXqw5tYfmOQLnF
-         RYrbcP5e/QZ9wA1h45auKn+Dj0Sj6c2jmYiL0m4DlGVm6gXrRbbh0/ZWtiNeBCUFquHX
-         4buw==
+        b=Jb5wDOqwe96+eelErbMBAOZmM0Vcm2HBD3+QSzOXC0sPQcalCznXyUQex8oToIiIbO
+         uKNQMPFCdbMkzLG3FozklL/3NwCvxOksNkBd/VT5W7Sp3OkGGSt1kfJuTF5eZZ0s0BsF
+         AnUO/hyseRtvOOcrESw07ANWs1u+l7B9J5zfQUFd5udRc9icbL9FgVrIUfDgOR1smJse
+         CI0JVK1IwrKUkAyQtdt6vHsrNSPzRAyROhpXHW9iAWJc9eipfr0Zxb8Devq5tnLiAD33
+         LgSjoZzXcRl1dTqubUEPHVv+qq2lU/E7uSzGks2nKnjpSHfn3gUE5ULUOQ66eTqbfAdh
+         mviw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
-        fh=SMN6aGEIJ9520ZfVb29NSv23iIPBBhGcX/AuFXkgSiE=;
-        b=WXni1gfo+JyUq20qi+ZOygfEUukFpiJtoNxzpKb4dKSMg4L6fBFOp9MqWG93XWa3Dn
-         irI6ruVuYe6ic+krgfbq8l5BxGM9UpncUbEfj4x6w6YVD6mN2+QyPV9lrnr4pxhFRxS3
-         1uI57xuvMyOQXYG+zJp5zuuixq2IKT1LAnwU4kT0jTxXwtZ+4rELSBUoz6KnHEo+PV+L
-         FQXSHwHtaus5+zY6/c93yqd1W8HAqinMAIS8b0IOqvv0t7prPRg72D64tjqFgut6DQQX
-         mYGazkzo+ueZ7oqchpI0JVXdFWiJROR1gmYMSCYzwEtcVlicGyVfD0TShg4vQZY3o5E+
-         iPqA==;
+        bh=+VG0vtUWvBGovF7rROnctTtU6VOb+iUw0EGb9SMXyc8=;
+        fh=xk3t0WUh7D3GsBXtLqfg0DjunLqxeROqrLveNHq/olU=;
+        b=BGogVq/dDyVn6mhCHI9Wzakcsm6RFfQ86r9gwDIy1R/BVykyOla0h+KskQn+kiz6zB
+         JeBgJNQZOMjYNT3liwuFkTr51b3OJ1w/LfRDPNqZhLaXbko8cjB2GnJ/JQGszF3k3F7Z
+         71wk/pMfmokgt+XDx31QKl4Fg3O2MaTmdFR4oFJdSOuGs17OMntNY/J3AArcbwAmeRJy
+         Xr/OO8At6KjMjuf1o0yIqoA+h1lOiXQy1ga8xebxAQ5BKIc82GDDjiURX1Ui4mIDtAHr
+         NIWf2BeB8sC9yFOviZW/K28S+97qB2Cu6tZeGIoc+qARNbUeSkxw+NOkJNAcvQiaS35l
+         QfWA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781289812; x=1781894612; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781290527; x=1781895327; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
-        b=FNqgjgKDckM/ef/CMXnPTNMN1jfEk8s4gs8f9SetKVyxbd+n4K1AEEwZ3OYV0H9yw4
-         TndiQagpsw9Dv0OpqPJmlWl/X2s99mp5geH0oRQ5iP5EWzQbOgGz1/OmDiNiRxXKEqLg
-         PthTVFY+8Zzjbo3qsNgag8YlB9qYdkUToYF5pC4fTCsnpQZNIT/38ySyjf4F+HbiFg+j
-         eFNaOxY7BZnmnuXq2mqSLvVgyERmOmN5pmLO8lgUad0/tjRIBIN2N6LgM7+el73WXaS0
-         dlu5/OuXV50SmD3cWcZzGLqXCgD4lKqGiYuSS/HbmTtMIjARhWiMh4+a9NrxSxm+LeFy
-         LH7A==
+        bh=+VG0vtUWvBGovF7rROnctTtU6VOb+iUw0EGb9SMXyc8=;
+        b=NUXtngYMsejP3RYB0EmQraDRaroggi4WPq5D6VZrp6JM1EyKU1FAuNxv09IP8Yk20r
+         4mpze1aj0lbtAu2jIgwU1GuuwcyB024sIs9hDkg3xLLqUahGk0pFks2MPfPw4QtJDBYO
+         i1u8XTRTjNx2lKO6sQ3pO0xlIAAbLoQqAXpePe96ZByYF3hsg2qImFNqlghm80ahiYOG
+         nusqDN/g8QAxr8xsm//jYHJP82jsR+bgPVqJYC0jwOAzKS1P/xLreQqRpKOYQecMALxj
+         SYCGBEVEfmOKUhyQ7Uu0xw72imZtCzYwU+/OqT4vghMzodgx1wIFciaKD71qPohfQY6Y
+         9sSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781289812; x=1781894612;
+        d=1e100.net; s=20251104; t=1781290527; x=1781895327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZuYKYCkwO9VPPo9z/rSbFexmMoWoCjN3fygPjKuaDfI=;
-        b=DFuI5Abs1a+6PQ0yNYYKsYR/nr4q+d9Yi4QZH5IQS9rQ1uBdlXmFS3VZ779CSWsjdB
-         190tWiQyzfqoMRl/LuGMLhEnvbVOKzIA+PcYZKAJ+sNlPcY+U2u/nxWe8kSUkiaWBMaC
-         drk0TNBkw1aTN7fj9LA5+ebOria3ZZ0AvgeGgKwffpSuhB0WGQE19G2zf6C5TjZBC6gR
-         BC4ZnIk6FAaYivy9U3MfMZeitA1STI9KjnO8p6EMrGmmIO/sRfqngOtV238aJIj4OTRL
-         DCbpag6OmuGPO09EgAT6QdVH3Wxsjt5CuYlcKq5r2babAAdbhpwLeic/KJKjJj1Sw2P0
-         NFNw==
-X-Forwarded-Encrypted: i=1; AFNElJ/ND2idKS4ItRPi1+vZcUEvYSDj3KyQWB7OgaK6ejIltThPgztik6Uk7r0qzu1HebhoTI8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYWnlFCe66KH7/JVxtzYxZx9cDqb34RGDxPp/2DR6VT/Jl6GLY
-	q5jqNy55jJ1xOavxSxxCqVxLcuCQ34eIv2EjZg+76jiY46oi7iALA2naW3Id7HDyIQeN4dRRXnF
-	biR1/flh2pWWzp8ZMWiFKlmbdEKaKcmILbfsiExeM
-X-Gm-Gg: Acq92OGc8iD5peedka7KVHYLU5w8YZ8qcBplmMYBB56yWKUloJ3qYujWLvo38QG6TsV
-	xy/MyUwYm4ofcHpVd8QsMQS3f0VWl+m2kW/MW0ncc92oj9Sv7o2hZdAjUZydHHbx5od7bw5jz83
-	Yiys/+5Zbscp7VwszwLcqyZpsxwW/aqdEc5j4LbF5pSnFVVur+hOrzsfcUqhl8bzhVEHvJZYRP2
-	QrnogfZYhqv0H2390nckjO59bPMNHHujCOPFeA/uih5xMMIoqUt7sRjkovYOMdkgDoMwyrY/TAR
-	2FrqxuVOutam62EhyHPxcgNnUc9bemxnVsUI5H9ALw7AtE+48a7+1YPPbsQ3lqIxLaI30NSMfAo
-	TYyGu7jYeyadVeLppLOpO1Z+MP+Hj0pHaSpdg5vP6dPWFNYagDVKO
-X-Received: by 2002:a05:7022:418:b0:137:fe07:8a2d with SMTP id
- a92af1059eb24-1386f24121cmr436470c88.6.1781289811262; Fri, 12 Jun 2026
- 11:43:31 -0700 (PDT)
+        bh=+VG0vtUWvBGovF7rROnctTtU6VOb+iUw0EGb9SMXyc8=;
+        b=q9dfMYJIGM2G6CLyltvyWTAPCx6GgFEyzYuRf/arIZdHLt8poQPsyy86pjjbaNQ/7Y
+         vwA5W4V7dTTwESb5TdntFk+C957SbK3azeMkHzMnoT9a7V1rT83IIyfXb5Ogg67+eehQ
+         YtYzT2SajS83Tx93AwX9MmAW/54heJC2+jCjMJS7P/yP5XxbVnjsdDlcafKhGLhcR09r
+         7F2NmD77sC5SPcoq2WO5SJ0vNf2uEzKoMbGf53526CDLsYSjbIDAuMGRN+M1TjhP8pcU
+         tvrQxSGJjmEw7yYRWapB4zcCZ1qUPIQXRST+ESUTJQHyahwGxtFTxSgygV2G49iUsQ79
+         zIdw==
+X-Forwarded-Encrypted: i=1; AFNElJ/YUJXxzEDiBWf+n2OMi0w/oA1alT2mVTAwEzYj85yGhi8GYfsNiEqWfNgd+82PWmIjBUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yysknfg4EeHoxwsKXxQ2Sn9PY98ZArMXD9EZ1PZWTH6RyGb6GOJ
+	QbE8Q10sGWqNjb/949wbzHn/OVKHaE+zUk4opNn0dmx7uafBQyfPvWwi6oA6n5f2r7zXVHRBJqn
+	AfoGSOhemZhfk/GTPe65N8Y39Eh79C8Hxi43GMlU4
+X-Gm-Gg: Acq92OF7qqGQuFareVAxEwwjYOplWNtVeJfzkmsiJZ94798qHI6jd7T5+iPx/8zGfml
+	fqrDGxHhfk7qI2l6IxQ1bvG+eVKhpBpDMj8SX2tLLZAYovmW1ZxEjHrokdRCZKitfJ+jNrSXnM7
+	Z8mw08YD/jg9EJjyID5GXuSYdsUXB6mIFm7RwxqBXV6CmBbdYAgUilOeOSj2xQ/TOzR3NkHJsP0
+	6nhEX1rZPQGjs3DD+ntJe9fOeRN2qEuSbBnJcYrUjb2N9FRNKqvym46qK56kU4r9KURVx8UBAaZ
+	v1OVS7P2d7l1y4owDfx6lvgtF9SErxs5VRjLqpNQISp19oNwzjhJbGmzm7MZdFxdtwDTsvlAMPf
+	RsoG8AOuAIQGZRb1qh+RzXqqS+YtkgVKkZMITNxd2iMDCZsVkwaZi
+X-Received: by 2002:a05:7022:629:b0:137:f875:c1e8 with SMTP id
+ a92af1059eb24-1384bb6939amr1718651c88.19.1781290526219; Fri, 12 Jun 2026
+ 11:55:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612130919.299124-1-jiayuan.chen@linux.dev> <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
-In-Reply-To: <CAADnVQKL26zPepqOf_FtuA6ALQEtFJmiKU12iahdvfeAyJ7XhA@mail.gmail.com>
+References: <20260612001803.23341-6-kuniyu@google.com> <20260612003138.E67A01F00A3A@smtp.kernel.org>
+ <CAAVpQUCRU1ie22PbegWgGnfyWw9V0wSTjgQpw=5Wwb2RZ=su+w@mail.gmail.com> <DJ775MFSG561.2SI6FNLLV8NG5@gmail.com>
+In-Reply-To: <DJ775MFSG561.2SI6FNLLV8NG5@gmail.com>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 12 Jun 2026 11:43:17 -0700
-X-Gm-Features: AVVi8CfZ2Yztrdd9Cz0a8Cioo193fVEec7AtKDsitODSamBkyRtcTNl8C85ikBY
-Message-ID: <CAAVpQUBmiyfW-3FjssDUmbOXyA+QbsFyATEs2D38ZbWfpNQE+w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/7] bpf, skmsg: some fixes for skmsg
+Date: Fri, 12 Jun 2026 11:55:14 -0700
+X-Gm-Features: AVVi8CfGFiXpNBZTAVmql2XQgWnU7gXYvHBtNP2-sFXgWrH5--YEOApHj6Xd1Kk
+Message-ID: <CAAVpQUAWh__B6C05kt4ph30KD+CDPjh3_kD-DaBEOo4WavaERw@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next/net 5/5] selftest: bpf: Add test for hwtstamp proxy.
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, Shuah Khan <shuah@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Sechang Lim <rhkrqnwk98@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 10:10=E2=80=AFAM Alexei Starovoitov
+On Fri, Jun 12, 2026 at 9:04=E2=80=AFAM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, Jun 12, 2026 at 6:09=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.=
-dev> wrote:
+> On Thu Jun 11, 2026 at 11:03 PM PDT, Kuniyuki Iwashima wrote:
+> > On Thu, Jun 11, 2026 at 5:31=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+> >>
+> >> Thank you for your contribution! Sashiko AI review found 5 potential i=
+ssue(s) to consider:
+> >> - [High] Comparing a potentially negative return value to `sizeof()` c=
+auses failure handling to be skipped, erroneously dropping packets.
+> >> - [Medium] Incorrect struct cast for SO_TIMESTAMPING_NEW cmsg data cau=
+ses test failures on 32-bit systems.
+> >> - [Medium] Typo in the test assertion prevents verification of TX time=
+stamp keys.
+> >> - [Low] Multi-line comments violate the BPF subsystem comment style.
+> >> - [Low] The `buf_cmsg` array is not fully initialized before being pas=
+sed to `sendmsg()`, passing uninitialized stack data to the kernel.
+> >> --
+> >>
+> >> commit e747f30190af013f6f5cc858f0dacb86e902e2d2
+> >> Author: Kuniyuki Iwashima <kuniyu@google.com>
+> >>
+> >> selftest: bpf: Add test for hwtstamp proxy.
+> >>
+> >> This selftest simulates the hardware timestamp proxy scenario using tw=
+o
+> >> UDP sockets, simulating a userspace proxy via a GENEVE device.
+> >>
+> >> > diff --git a/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c=
+ b/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+> >> > new file mode 100644
+> >> > index 0000000000000..d0f90f22bea22
+> >> > --- /dev/null
+> >> > +++ b/tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+> >> [ ... ]
+> >> > +char *ipv4_commands[] =3D {
+> >> > +     "ip link set dev lo up",
+> >> > +     "ip link add geneve0 type geneve local " APP_SRC_IPV4 " extern=
+al",
+> >> > +     "ip addr add " APP_SRC_IPV4 "/24 dev geneve0",
+> >> > +     "ip link set dev geneve0 address aa:bb:cc:dd:ee:ff",
+> >> > +     "ip link set dev geneve0 up",
+> >> > +     "ip route add " APP_DST_IPV4 "/32 dev geneve0",
+> >> > +     /* We do not forward ARP to the wire in this test,
+> >> > +      * so a static neighbour entry is needed for APP_DST_IPV4.
+> >> > +      */
+> >>
+> >> [Severity: Low]
+> >> Does this multi-line comment format violate the BPF subsystem comment =
+style?
+> >> It seems the subsystem guidelines prefer the opening /* on its own lin=
+e for
+> >> multi-line comments.
 > >
-> >
-> > All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
-> > Kuniyuki and Sechang Lim, which have already been reviewed by me and Jo=
-hn and Jakub.
-> >
-> > https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.co=
-m/
-> > https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.=
-com/
-> > https://lore.kernel.org/bpf/20260424190310.1520555-2-bestswngs@gmail.co=
-m/
-> > https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.co=
-m/
-> > https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.co=
-m/
-> > https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
-> >
-> > The automated reviewer (sashiko) may still flag a few other potential
-> > issues on top of this series. After looking into them, they are either
-> > already covered by the patches here, or only reachable under very narro=
-w
-> > conditions that require a specially crafted BPF program and an unusual
-> > sk_msg ring state, so they are not practical to trigger and are left ou=
-t
-> > of this series. I'm collecting these fixes together because the same
-> > problems have been re-sent many times in slightly different forms, and =
-I
-> > hope this series can be prioritized for merging so the duplicates can
-> > finally settle. With so many AI-generated patches floating around for
-> > these spots, leaving them unmerged just keeps wasting maintainer review
-> > cycles on the same issues.
-> >
-> >
-> > v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
-> >         Reverse xmas tree style is used suggested by Cong.
-> >         (not all code match reverse xmas tree due to variable dependenc=
-y)
-> > v1->v2: fix problem when fix the conflict.
-> >
+> > Gray zone, this is rather net one :)
 >
-> Kuniyuki,
->
-> one patch is yours. thanks.
-> Please help review the rest.
+> bot is correct on this one :) BPF prefers normal kernel coding style.
 
-Sure, will look into it.
+Fair, will follow that ;)
 
-Thanks
+Thanks !
