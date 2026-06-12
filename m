@@ -1,160 +1,176 @@
-Received: from mail-yw1-f194.google.com (mail-yw1-f194.google.com [209.85.128.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDE63090C6
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 01:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.194
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781226579; cv=pass; b=UHCw+jKy7bijhqxcRn14X70G5acmRkx2WLIswvK5tnVWUyfgWJl6dUU7vVxeOEZw+KZF1B+Go8ZLJ7UkkJrn2GAy84JxoWsbGSuTo1woL92hzSsUHliNxZbRwKMk+IDiIK7KNL8OzmiQSwagS+FGAjHAPKTHpFBqbA5JeYdc+uM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781226579; c=relaxed/simple;
-	bh=9gi2TnyLTtIq3LPG+G/+Ly7DV11ab410M+WEj0lWYhQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DeJL39IlETVpXz1lYhddyOAynMKwszjg+yzwPLVI2veT1XPtZnJyCU1zShtfF2w67X5RYw4XBqjKSIdnrA/c4nELBglWOsfVcC4Ar/kDYAu5NbRX2d/iz4AyhBOAEZQm9qrHvM25dGJjuhmAcmglNMLpIyp+X0SPZdviWmTcUTk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HoMITiJO; arc=pass smtp.client-ip=209.85.128.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HoMITiJO"
-Received: by mail-yw1-f194.google.com with SMTP id 00721157ae682-7efac480dc6so4148947b3.2
-        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 18:09:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781226576; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Sv3waljFvOjrVT6D8/nKDklPbfJ/BYOjd5PgiJUTEE+ZO4EyGNqeKyp2DTW92SXG2o
-         2jNclm94+yUhIBaRbfYF8SxuESFeAeHMqR6RrhEBo17KV7n4TJwf3+lqRXHqDwtH1LLI
-         qYHD6Dis6wSl5mmwYvb+nZ5HTP4JuDnR7K2iauWuIlTa3VGal/PrqdcOKJoQoJ6Fr5zT
-         gLh8A57vSPErWvnPW724h2ubrLzTOzb4+kH+lA2/u6db2Z+daeUxCg/wLYSJlxlqz6lW
-         uuzECa4XV21SiL/5aiocwf7+3z+cKGKAnoKxfkkUnuL1HU5TwH4Qts/x576YZ0Z5whqU
-         SGXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2bgbKh1ieMb+0wJeVI6j8Crjj/CHbtDXar3nNWZb+WA=;
-        fh=58vWo/0S4wV7hqLiRYqP/uFZKDxydYGdJAnl+Eobsbc=;
-        b=Op7yphXNXCR04EYX0O1BcIgqddw+3RUzi1ho8DrW/ozpZ9au4leqq5CV2F7pqPOc7P
-         ixYLaqgGbGSWnLsMe5R5ktBZMA3BhE5qhszUlklCm+N6YFBDLxXFPcSXx0m5sFg2llv2
-         +2OjeXV/Wx1vPx/oD63Y1jZ1dhi8pTaeNyq5oVzXaQCjKiQIZPnDiUjcR1eIxaqriKMB
-         eX6knLwgpleJdDt63TXJo02zldy7V5aNi0I8f8bp0ssnzSDkOrjYK1T7PuyAzDNtKFVE
-         s2ivyys/UMJOb0L3ePhR6CNGFW7y9AwrMktrZkhUgwpj1dQ/CWGfBmdy6x9M20/8r9lS
-         EJkQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781226576; x=1781831376; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2bgbKh1ieMb+0wJeVI6j8Crjj/CHbtDXar3nNWZb+WA=;
-        b=HoMITiJOeAjZWLDIRpHf4JkHIMjvzp213v8BBhbfEyog5/dTD3TwNqE9rzn5op+cih
-         jMr0LjEOPB11k7ZzAlYjZZgUEHuZMjuhTEV0+TWX/eX3a4lBHWGiqf7XIFi1THBX4m5i
-         O2R0U5lStbEXFBKp5JCV8Lm/MMASI7qAr5H4ey/Je6B9xEvjxCXjRSD/dm+BwRZ6VTUH
-         wMjJtXFkxD0YXO0wfBqmm7BGMMvGePNll5/d/mfozzMTJanE9LQzBGXFCjRaQ0rGNyEv
-         9SaPH+p+A80MF92owNPppm05ngz3CBHwKC/fyJHeZgV0AkKt+hDQWkX7I+6ocTxipkoV
-         kprg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781226576; x=1781831376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2bgbKh1ieMb+0wJeVI6j8Crjj/CHbtDXar3nNWZb+WA=;
-        b=Amg1q46YIuNjxx6AeLgSzXGeIyhoXc2aNm2DWUv46vWrP5ZZd/6lnQWkWNhXhp03gi
-         XT4nh5q7Gi4yuDcGzpO+To65tvXdhXTK4ckHCB8mlxdVUxiol53YQrDWBpvZOvmw/LDn
-         iRZsqMYS8uCuwSor7lrpM1hQS4EVjE2DJCU6mf4xXkRKo6Md/E8oLJyYrQJgW/VFFBnx
-         GQ7fbcau/npVplGrXPC50gaVEcJ+77eojhkRC21FoZavfaWI+0UMeYTbIxAzKDGR72gC
-         gOswmcoNulouwFQHuyDv/zroaPWIratla+aGX2x2Hpg6SsW26BVRtr82z9bZ4XtxZX1P
-         tZiQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+vRc4Moubc72Y4DStKOUPisfo5f5WkMYlqGyRmN2CLFkLc5x9iWEHGal+bCxZzwctrMjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmnL8UgYk8COp1yLDTMqmLUkvLs7GPWAHY/l/kbtzgYAYXhFRR
-	5SuSFzHczM/1SCM9TS2fdSPV34e2TnIDhrU8bmpYUvilbQMGnM3DxUDuVC6vQbL6nBMFXb+XHCI
-	mbRbJZR7fmwNzlhpPk8XWseIwjRAtshc=
-X-Gm-Gg: Acq92OFxcUL2R5ucQXZfAj6ADA8xVjZpGc7mI9/yYdZRq9iF/WigVAy9N+dXX0HRA5Q
-	tgt1y5tdjdhIxETWiyis4EUVdBoGSMCuvWIWOI9/wfsDpAGY2xBiptDl1kaaa6kyOxp4K8z/qmn
-	7v9R+Zp0IL5FCHXp7xJEMUyCshAuIjsnm8ZaaLmvGDGIofOvZrubcr8azOfGnUzCljMAhQIMDii
-	mJkUbF5O3J1wgvrbwLJKTs/AheVGshDqtEd8Bo4wqbWqoqWH31oNS90tZFn14kW2jOFsOeQgNWc
-	wQKfCn+7Eg==
-X-Received: by 2002:a05:690c:63c2:b0:7dc:7ccb:33a1 with SMTP id
- 00721157ae682-7f7b862ebbbmr7194657b3.23.1781226576049; Thu, 11 Jun 2026
- 18:09:36 -0700 (PDT)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2053043CE;
+	Fri, 12 Jun 2026 01:10:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781226626; cv=none; b=lmx2m9YW5hKXFtvuHz+jJjIeSKnrzBghLGA4Hx++59THv8rIFcI5204RmQhy2CDNXUN8nNul+0csNRAdv4LkLQdxD4f/fIraXmdl8s8lwNRjsvqPKBn4L8ROyISkDELvExiqded/hrHnbJ9KWUYiONM6c5LuZMUtiIoogGucvn4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781226626; c=relaxed/simple;
+	bh=pNiKlJ6NbmzWPwwAd1NDkeKjChv85ysLybtmH1wQAEg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bfsFuhR90Dzx+Dq0FMKmee3IJL0LRnXnAiconYuhNvFolVdrpQJrHipbcFMJJO68oqKrv4U4SkLDO1ZXzoWC0VhICyTS1B/u9ZbMdgVnzdUja+MPoobUwHMoX9HlHBb6wri0+uC4NsnbiQvrbiQROphSkT17g41WBnXEFPg+Dgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Cx4ep8XCtqUE0TAA--.51440S3;
+	Fri, 12 Jun 2026 09:10:20 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCx_8J5XCtqUG+jAA--.47689S2;
+	Fri, 12 Jun 2026 09:10:18 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3] bpf: Fix unaligned interpreter panic on JIT fallback path
+Date: Fri, 12 Jun 2026 09:10:16 +0800
+Message-ID: <20260612011016.25701-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611071242.2485058-1-dongml2@chinatelecom.cn> <aisBEUmSJa1vkFYo@boxer>
-In-Reply-To: <aisBEUmSJa1vkFYo@boxer>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Fri, 12 Jun 2026 09:09:39 +0800
-X-Gm-Features: AVVi8Cem7Z_iAE0cAcLpfhNtsEYe4ISMI5m8TQRa6PlH_Zbru4XArHRge9Hviwk
-Message-ID: <CADxym3Y_2NPr0ktHxdgh6NKd4xnoq8TrMYG=QRMdhm9g2Q1zwQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/3] xsk: support tx napi busy_poll
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: jasowang@redhat.com, mst@redhat.com, xuanzhuo@linux.alibaba.com, 
-	eperezma@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	magnus.karlsson@intel.com, sdf@fomichev.me, horms@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	bjorn@kernel.org, kerneljasonxing@gmail.com, netdev@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx_8J5XCtqUG+jAA--.47689S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxury3uFWUGF1kWFyfZr4kZrc_yoWrXr43pF
+	95Cw4akr4UXF4Ig3y7JwsFvw15Kw48uay5GayfKr1FkF4FqrnrW3WUKw1FgFsxGr4j9F1x
+	Zr42vFy29a48JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
 
-On Fri, Jun 12, 2026 at 2:40=E2=80=AFAM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Thu, Jun 11, 2026 at 03:12:39PM +0800, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <dongml2@chinatelecom.cn>
-> >
-> > For now, we use sk_busy_loop() in __xsk_sendmsg() to send the data in t=
-x
-> > ring. The sk_busy_loop() will poll on the target NAPI. However, for the
-> > nic driver that support the tx napi, such as virtio-net, it can't sched=
-ule
-> > the tx NAPI, but only the rx NAPI. If we enable the busy_poll for xsk a=
-nd
-> > use virtio-net, we can't send data, as the rx NAPI in virtio-net doesn'=
-t
-> > handle the packet sending.
->
-> Am I reading this right that you decided to break busy-poll support for
-> zero-copy drivers that happen to handle transmit side from Rx NAPI contex=
-t
-> in favor of supporting virtio-net?
+When an architecture implements bpf_jit_inlines_helper_call(), such
+as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
+the helper call offset (insn->imm) during the bpf_do_misc_fixups()
+phase if the helper is expected to be inlined by the JIT compiler.
+As a result, insn->imm remains as the raw helper enum ID.
 
-Oh, nop. This series only has an impact for virtio-net. For the other
-driver, the logic doesn't change.
+However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0)
+or if the JIT compilation later dynamically fails (e.g., due to OOM
+during bpf_jit_alloc_exec()), the core BPF subsystem falls back to
+the BPF interpreter.
 
-I added a "tx_napi" field to struct nap_struct. For now, only virtio-net
-will initialize it, as only virtio-net has the "tx napi".
+When the fallback interpreter executes (__bpf_call_base + insn->imm)
+with the unpatched raw helper ID, it jumps into an unaligned invalid
+address space, triggering a fatal instruction alignment fault (ADEF)
+or illegal memory access kernel panic.
 
-In __napi_busy_loop(), we will use the napi->tx_napi, if it is not NULL
-and we are in the tx code path(sk_tx_busy_loop), instead of napi.
+This issue impacts all architectures that support helper inlining.
+Introduce a late fixup pass via bpf_fixup_fallback_inline_helpers()
+in __bpf_prog_select_runtime() to fix it.
 
-Thanks!
-Menglong Dong
+When JIT compilation fails or is disabled, the helper call offsets
+originally skipped for inlining are rewritten to relative memory
+offsets right before transferring control to the interpreter.
 
->
-> >
-> > Fix this by introduce the sk_tx_busy_loop(), which will poll on the tx
-> > NAPI if available. To get the tx NAPI from the napi_id, we add the
-> > "tx_napi" field to napi_struct, which is ugly :/
-> >
-> > Another choice is to call virtnet_xsk_xmit() in virtnet_poll() too. But
-> > this a little contradict the design of tx NAPI.
-> >
-> > Menglong Dong (3):
-> >   net: busy-poll: introduce sk_tx_busy_loop()
-> >   virtio_net: initialize napi.tx_napi in virtnet_alloc_queues()
-> >   xsk: replace sk_busy_loop with sk_tx_busy_loop in __xsk_sendmsg()
-> >
-> >  drivers/net/virtio_net.c  |  1 +
-> >  include/linux/netdevice.h |  1 +
-> >  include/net/busy_poll.h   | 41 ++++++++++++++++++++++++++++++++++++---
-> >  net/core/dev.c            | 23 +++++-----------------
-> >  net/xdp/xsk.c             |  2 +-
-> >  5 files changed, 46 insertions(+), 22 deletions(-)
-> >
-> > --
-> > 2.54.0
-> >
+A bounds check on insn->imm against __BPF_FUNC_MAX_ID is added to
+ensure already-patched address offsets of regular non-inlined helpers
+are safely filtered out during traversal.
+
+1. Test case (test_panic.c):
+
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
+
+  SEC("kprobe/sys_getpid")
+  int test_panic(void *ctx)
+  {
+  	struct task_struct *task;
+
+  	task = (struct task_struct *)bpf_get_current_task();
+  	if (task)
+  		bpf_printk("Task address: %p\n", task);
+
+  	return 0;
+  }
+
+  char LICENSE[] SEC("license") = "GPL";
+
+2. Reproduction steps:
+
+  $ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
+  $ sudo sysctl -w net.core.bpf_jit_enable=0
+  $ sudo bpftool prog load test_panic.o /sys/fs/bpf/test_panic autoattach
+  $ sudo cat /sys/kernel/debug/tracing/trace_pipe
+
+3. Panic information on LoongArch:
+
+  Kernel ade access[#1]:
+  ...
+      ra: 9000000000486e50 ___bpf_prog_run+0x1370/0x36b0
+     ERA: 9000000000485383 __bpf_prog_ret0_warn+0x13/0x20
+  ...
+   ESTAT: 00080000 [ADEF] (IS= ECode=8 EsubCode=0)
+
+Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/core.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 649cce41e13f..14bb71853a15 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2608,6 +2608,31 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
+ 	return prog;
+ }
+ 
++/* Fix up helper call offsets for inlined helpers on JIT fallback path. */
++static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
++{
++	struct bpf_insn *insn = fp->insnsi;
++	const struct bpf_func_proto *fn;
++	int i;
++
++	if (!env || !env->ops->get_func_proto)
++		return;
++
++	for (i = 0; i < fp->len; i++, insn++) {
++		if (bpf_helper_call(insn)) {
++			/* Filter out already-patched address offsets. */
++			if (insn->imm >= __BPF_FUNC_MAX_ID)
++				continue;
++
++			if (bpf_jit_inlines_helper_call(insn->imm)) {
++				fn = env->ops->get_func_proto(insn->imm, env->prog);
++				if (fn && fn->func)
++					insn->imm = fn->func - __bpf_call_base;
++			}
++		}
++	}
++}
++
+ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
+ 					   int *err)
+ {
+@@ -2643,6 +2668,9 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 			*err = -ENOTSUPP;
+ 			return fp;
+ 		}
++
++		if (!fp->jited)
++			bpf_fixup_fallback_inline_helpers(env, fp);
+ 	} else {
+ 		*err = bpf_prog_offload_compile(fp);
+ 		if (*err)
+-- 
+2.42.0
+
