@@ -1,148 +1,113 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A795730566C;
-	Fri, 12 Jun 2026 01:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D4837756C
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 01:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781226986; cv=none; b=dsacEjxK0zBTu3vNCl51xbrvMbmfEFBIZOsEd0BFvKMCqBdT4XxceiDzihpQGxNkiw3vvVV2Y3yKF+YOETWj9ymO9GX8gSR7LbhvmwRZJMtGgdTt7prao55jEiiovzK1s6dnoR6XubnyffF8211/9NenL3yiSrwT1w/9XMPM1+o=
+	t=1781227577; cv=none; b=Ss8OOqfgckjNUCrCN5N5VXaztjGmK78+tfeu6fa1oUbJfNha6jcro0e/hk1XRGVRv6CuLwYk8GBQbiTOdqxOmsqfomu6GH3Xz5kYXIv+ubBiROjM11oQ25yXxOfGhA0v4CntCN+ZBmgfwQ2OJVhC2emrSsq4d8AWF3EM54h0iV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781226986; c=relaxed/simple;
-	bh=3nTdHJdjlXmAp/wNFCBcxKPU++qEyD5ygE8fXLT4UjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmS4nVYv0IfEp2wsq2U3MdcPilusyBoD8DRkNOu0p7xuIjMezTbL2rrFSjnMRjrlLBD3Ong6SHXWtFsqUoBGOpRtUdDEUw5iGUUt5uavwP5ltrtmJpXYxjh4VvsN+5Fx2vYSs1Ss7EJX8LfXBknhoxstWQ2vh4l9Ut7iycekLs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx3enmXStqvk0TAA--.51083S3;
-	Fri, 12 Jun 2026 09:16:22 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCxvsLgXStqTHCjAA--.47687S5;
-	Fri, 12 Jun 2026 09:16:22 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
-Date: Fri, 12 Jun 2026 09:16:16 +0800
-Message-ID: <20260612011616.27771-4-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260612011616.27771-1-yangtiezhu@loongson.cn>
-References: <20260612011616.27771-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1781227577; c=relaxed/simple;
+	bh=SYFc5W6M7z5v8qPsY83BVZv17S42E4r5qWMcDCBkPYk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f6bxPgPOAcxnnJWBf+dSUBx6IfXCle7P7XqGDLGkq04Yp5863T2QIVcKoKZBAxPYHbfiS4QKdXlot08cjl67FhDioZfaF1BS6m0qo7ZO0OEnxC4us6kNCGcE2kYkBxw/ZSBXTDCqng7l3uhcWHOvP1ReigDYoXRUOHSlWtm1m+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyPLrZau; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyPLrZau"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD3D1F000E9;
+	Fri, 12 Jun 2026 01:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781227574;
+	bh=pZFu2+M062+c4d+ZZ1vfsYkVDPT0D6vwbNa1gOYGSlo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lyPLrZautZvSYpKtMYd/5sUlNdg08ObagcjRPgGY9baqTntWA4x41pPqV+dcRoI/z
+	 Rc6WOEq+iTrQqT0jDFI13i+AlB//QSkyLQVfBTxMU/MqUwRcfkWB5895I8MAcsX4xG
+	 pBmwVFneev0nevNUkL34G8hcmovY+vZFhFnLdVpGB6ub8JtuYJiq1TPV7GWhKhFl6v
+	 INQkHxfQwAK6Z1DU9Frxy9rC9+WzZGBOFk5whbldrKPKAi2FgoStd7Av7n0EnivahT
+	 8xdDzwVrE2SyuH7P0YQpFGnaiSEwKYHpUloZAhuogIG7+icsPKhMqY4RQV1IijZ0Gy
+	 WObs1GvAjAEfA==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next 5/5] selftests/bpf: set SO_BUSY_POLL from
+ the tcp_splice sockops prog
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cong Wang" <xiyou.wangcong@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260612011452.134466-6-xiyou.wangcong@gmail.com>
+References: <20260612011452.134466-6-xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 12 Jun 2026 01:26:13 +0000
+Message-Id: <20260612012614.1AD3D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxvsLgXStqTHCjAA--.47687S5
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CrykWw4UurW7JFW8ZF1xXrc_yoW5Jr1UpF
-	4UCrsIkr4DWa4FqFWxJr4kZryYqws5Wry3GFyYgayak3Z7Zry5tr1fKw13tFn5Ar409a4x
-	Z390krsYkF4UXagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1q6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AK
-	xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUoxR6UUUUU
 
-The pointer to thread_info is always available in the $tp register,
-the call to bpf_get_smp_processor_id() can be inlined into a single
-load instruction.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The BPF global variable `busy_poll_us` is never initialized by t=
+he userspace test runner, rendering the newly added `SO_BUSY_POLL` test log=
+ic unreachable dead code.
+- [Low] Multi-line comment does not follow BPF subsystem guidelines.
+--
 
-(1) Here is the sample test.c:
+commit c9396935bece9a3118a940f3f318b60c9109d778
+Author: Cong Wang <xiyou.wangcong@gmail.com>
 
-  #include <linux/bpf.h>
-  #include <bpf/bpf_helpers.h>
+selftests/bpf: set SO_BUSY_POLL from the tcp_splice sockops prog
 
-  SEC("raw_tp/sys_enter")
-  int test_cpuid(void *ctx)
-  {
-	  return bpf_get_smp_processor_id();
-  }
-  char _license[] SEC("license") = "GPL";
+Set SO_BUSY_POLL (busy_poll_us) on each paired socket via
+bpf_setsockopt() so the splice receiver busy-polls the ring instead of
+parking - without net.core.busy_read or an application setsockopt.
 
-(2) Here are the test steps:
+> diff --git a/tools/testing/selftests/bpf/progs/test_tcp_splice.c b/tools/=
+testing/selftests/bpf/progs/test_tcp_splice.c
+> index 09c7f0f9e3110..da43f00046c0f 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tcp_splice.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tcp_splice.c
 
-  sudo yum install libbpf-devel kernel-devel bpftool
-  clang -target bpf -O2 -c test.c -o test.o
-  sudo sysctl -w net.core.bpf_jit_enable=1
-  sudo bpftool prog show name test_cpuid
-  sudo rm -f /sys/fs/bpf/test_cpuid
-  sudo bpftool prog load test.o /sys/fs/bpf/test_cpuid
-  ID=$(sudo bpftool prog show pinned /sys/fs/bpf/test_cpuid | grep -oE '^[0-9]+')
-  sudo bpftool prog dump jited id $ID
+[ ... ]
 
-(3) Here are the test results:
+> @@ -71,6 +80,21 @@ int sockops_splice(struct bpf_sock_ops *skops)
+>  	if (skops->family !=3D 2 /* AF_INET */)
+>  		return 0;
+> =20
+> +	/* Enable busy-poll on this socket. Both endpoints run this callback,
+> +	 * so each sets its own socket; this must happen here, before the
 
-Before: 6 instructions
+[Severity: Low]
+This isn't a bug, but the BPF subsystem multi-line comment style requires
+the opening /* to be on its own line. Should this be updated to match the
+modern kernel comment style?
 
-  ...
-  64:	lu12i.w	$t1, 1213
-  68:	ori	$t1, $t1, 1680
-  6c:	lu32i.d	$t1, 0
-  70:	lu52i.d	$t1, $t1, -1792
-  74:	jirl	$ra, $t1, 0
-  78:	move	$a5, $a0
-  ...
+> +	 * peer-not-found early return below, because pairing is asymmetric -
+> +	 * only the second side to establish finds a peer and calls
+> +	 * bpf_sock_splice_pair. Setting it only on the pairing side would
+> +	 * leave the other side without busy-poll. bpf_setsockopt acts on
+> +	 * skops->sk only - there is no variant to set the peer - but the peer
+> +	 * sets itself when its own ESTABLISHED callback fires.
+> +	 */
+> +	if (busy_poll_us) {
+> +		int us =3D busy_poll_us;
+> +
+> +		bpf_setsockopt(skops, SOL_SOCKET, SO_BUSY_POLL, &us, sizeof(us));
+> +	}
 
-After: 1 instruction
+[Severity: Medium]
+Is the global variable busy_poll_us ever initialized by the userspace test
+runner?
 
-  ...
-  64:	ld.wu	$a5, $tp, 16
-  ...
+Since BPF .bss variables are zero-initialized by default, it appears that
+skel->bss->busy_poll_us is never assigned a value in the userspace setup
+code (like prog_tests/tcp_splice.c). Does this mean the if (busy_poll_us)
+condition will always evaluate to false, leaving the new SO_BUSY_POLL logic
+unreachable and untested?
 
-This is similar with commit 2ddec2c80b44 ("riscv, bpf: inline
-bpf_get_smp_processor_id()").
+> +
+>  	mk_key(skops, &self_key, 0);
+>  	mk_key(skops, &peer_key, 1);
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/net/bpf_jit.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index b93b67d22c26..4f2493c549f1 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
- #include <linux/memory.h>
-+#include <asm/asm-offsets.h>
- #include "bpf_jit.h"
- 
- #define LOONGARCH_MAX_REG_ARGS 8
-@@ -1154,6 +1155,12 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			break;
- 		}
- 
-+		/* Implement helper call to bpf_get_smp_processor_id() inline */
-+		if (insn->src_reg == 0 && insn->imm == BPF_FUNC_get_smp_processor_id) {
-+			emit_insn(ctx, ldwu, regmap[BPF_REG_0], LOONGARCH_GPR_TP, TI_CPU);
-+			break;
-+		}
-+
- 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
- 					    &func_addr, &func_addr_fixed);
- 		if (ret < 0)
-@@ -2380,6 +2387,7 @@ bool bpf_jit_inlines_helper_call(s32 imm)
- 	switch (imm) {
- 	case BPF_FUNC_get_current_task:
- 	case BPF_FUNC_get_current_task_btf:
-+	case BPF_FUNC_get_smp_processor_id:
- 		return true;
- 	default:
- 		return false;
--- 
-2.42.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612011452.1344=
+66-1-xiyou.wangcong@gmail.com?part=3D5
