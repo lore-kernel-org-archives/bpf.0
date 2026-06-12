@@ -1,130 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68CD6367291
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781303827; cv=none; b=q5h4Ze54FBYKYvmUgIihnByYOZkb/1RsnQ7e+tV8DEPtSl/2K1qTrtR3NVDq7W1oEB2gYix7Ce2O8BBTcZl7SJ/fxMemnbTSpxMnr4aiZ4f92BgRjDMg3WumwdwP5eq7BtxF81+HefX9CeWs/UdjMaW9+mj7L1lIVIgvViR374k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781303827; c=relaxed/simple;
-	bh=4PJ01UDdspMcH2A835EkNvIyr24rXQ21CsjuihaN/lM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VMFgdgKpM8kolkqmrOS27IcbCNuEnVjWxeiKPZ0uh8gW1PwkYjH0zFoG0QU571dhiefL2Iy29/n1k5b+fIIq9V0kaY+f/2wpQSz3sIq+dpOCcfHSDYU0+i/zn1rnhQH4J6yYxbltKysucAXt+9wUxHH1rDozTaEoptKKbyGG65M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V7JXpa4t; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8BC3672AF
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 22:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781303846; cv=pass; b=RL8Z78SFb321t714fjkcGweSI1hvzrFbcahMmGPlFZOFBgvL7vJrC1NUmrJizuZ5PZ/R1QUAtv83lrFx1SkJY0Op+kSRqKbjjGRlg5NPpX1rLlk+rMTBYJ7tEH7/VIcYQW4mQykJPmycnDWSrAAyP4kzSOqqdWx9LJdooNZv4Bs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781303846; c=relaxed/simple;
+	bh=shUFY6eR6Kw5Jk/HnGXs1qKYsFlLO2yzvOdsRkuoJPo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DCbVM3dLO2bWFzAzL94vz06+iTS/yfajor1UDJV5+x7AcHTXzdZ0n42fmg3Bt7H2zdbR3Cb8FymouJX8K9e31piMiYDVDTM9Cn0UDJBwguSktW7xIloM6jc8zyVoxT+U6vAkQN0OAKx/nWKkyqqD1u0pZY1OaspjY6izq5EJAhQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b=TaShrjAj; arc=pass smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V7JXpa4t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801BD1F000E9;
-	Fri, 12 Jun 2026 22:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781303826;
-	bh=RwzIle1ZJcqoO4jUAijV7KOIqLVsc8UvM3luLxIddqs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=V7JXpa4trfX2XCdbW+672QkdTxND9SYEplEiziOa0XyIjeOi4JJ/EWSMXtQk27Q2n
-	 dlfQDtvtysooxMCHMOOemgBq/gJ3JVpjIxYfxh6+WBRK1s1i4QGSnXMcMHTTIFPFjI
-	 r5erEmvnjtlT/ZeU+2glBf+Ti48NXNOzjlgBuEHgoZz3iVwu56nY6SRCGvCaNEnQVZ
-	 HJhgMXwWdTdcq1aEYPOhp1PlZewzqCPHRmxqaZwx85u6LvDw5U8WrRUwiX/LfbJIuo
-	 n+EIKAMO9XFWto3h6G+Ng6ZWctBTVrnYj4aXE2VrowmUNt3AXWykHY7rU6voS3IJNq
-	 2pA01AirUDCZg==
-Content-Type: multipart/mixed; boundary="===============4534556307114987586=="
+	dkim=pass (2048-bit key) header.d=amacapital-net.20251104.gappssmtp.com header.i=@amacapital-net.20251104.gappssmtp.com header.b="TaShrjAj"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5aa5f11deb2so1580643e87.3
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 15:37:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781303844; cv=none;
+        d=google.com; s=arc-20240605;
+        b=G8UjLnrmGXELGtbpw2gd++qc0PjO62GhXi2PYP/Azl0EMDR+ri1d2a/Vgb+NsjWQHo
+         gnrM+jFebwXeYvfxUKzSYLhfIc8zTEaTMirTVsKzJV8qBORrzMNczvSC4Fs+Nul+Ffhj
+         D0pQAqITYDfcTHBWg49YJlsq6RqIgWqQbZjzdQ8ukII1HLbkYaQrJyAQs6b/fTpu94vY
+         Tzz0kwWHD229TitPkUrspihtpkrwxbYWbThKk4hMtTvwvsqhS1quiXGYDnIsLeIuinOf
+         4J4iHJ/afWI4NioHvH46YNPslhoWo+bVElrDRObON5hj8kjGRPiHrjKOr4cUc1bZrhdg
+         FK+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qRDSVPYX4+J1umfJso5OGIHxT/OMTh7WFNoojXu+zAc=;
+        fh=MSKF0fHpmqxTYNMJo6+Kk/lt0TmwhFY8RmhxLPDCO/U=;
+        b=AuxTpn6g7UzNBw1dZ1H6QK50VKTrhZ4kQzImLwc8sJw5zls0IUUA797sGguGFls4cp
+         rvablWU076BUqt/m7FfbfWN8h1txNFTNf03CI+cM3ehWQB2KlgJt/I3TuHju4rc8RiZW
+         S5L9nWljpblwpeSKlLZ0WeZHREnz/dajJj23ShZwC6ul4/iEDWU/q6UxdkCUi3KRk1rK
+         YfTaU/jRdPo79SykrLkF2F1cLFvAONScABvfD4/Y5oe/3D0wdapv2qcWZvqKJZBAV1Gl
+         7aGQrAS+sVXgpCXCTtOV7z9vmpX4EYyCYTBMZWtH1PiXdEONrKCku/AdpW05+Qte6ZNL
+         LxQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20251104.gappssmtp.com; s=20251104; t=1781303844; x=1781908644; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qRDSVPYX4+J1umfJso5OGIHxT/OMTh7WFNoojXu+zAc=;
+        b=TaShrjAjgi5eEEKjZwZIK9g8dYI3HAYovmptN2gJS7+AFEB2LY9o+uYTZij3Lu8iwk
+         61FPviWA9esTk0MX67f7B1HcwKuc8Kj3gX8DXPLTDVP1BmT9QwBE3Mumw/Dv43vYUTfb
+         lJzyHkLOjyWc0pEYGrk9aVQBFfa1kTNv3pKwQF3pFIwbLYWf2FA2npmu26a/FOMuxds0
+         M9ORl4ESEikx53mGD9PSJy3JEm+TGPQ9+hPbhbnRNKzPJjv85RGiVhu/pPJ5r6mYwQ+y
+         D4STn9oyv+CDFtVWVHN5JsQyBAa7sCAkoXV/ru+5EOeAVPa5pWf8dFaf3mCGqTyCamDB
+         A19A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781303844; x=1781908644;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qRDSVPYX4+J1umfJso5OGIHxT/OMTh7WFNoojXu+zAc=;
+        b=JpgZ4pAebQHZE/UKaZfrfMMp8iDzDBOWxZLfhJWcp6gYPrVkvAameENeRhP8Xtsk/F
+         v0+3vxzJ2m727otf5Xm0qVwcycBW2ISdvI+c2Zi1kY8pLWHjBLUh2AkKDSlR4Er5ypCu
+         4g10ktDB3OqlVJbmlAjTShDWrrZNtAmFxrdFiAcpjWXkTidaLJSYkEKY+v3znWb2ssys
+         SpV4P+6/7oxgNZnD/Gd0/Hnv+uK8P9/+bYQud0lardWAGxFSieOdpy87ls8PLBfuZmXv
+         fzurlYrWmMqrC/pxWi7xG9NhiU1V3rpOLND4kvEiX/s7ne80sJxVwFUSZuWXLaYyCliX
+         DhYg==
+X-Forwarded-Encrypted: i=1; AFNElJ/vnfxZnH1pWXLuotucXqKjj4RaBXSigGVuJ8ZfK43r3a4QvhTOnHctILTtPMReqbymAow=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxF1zIzC0Plkpw1Ghq7VL+lvs7Bb2RJTut3Luh+mAyPnY0bwKnA
+	1NC1z0zHp3qaubjDwz/zswli1kH5zvEejxPYcukzZcFlHJUtV/zhpV0UB6+szipGrlCEgKnWW48
+	IbHvWvuGzp+kp1sKoMVAhlwWbV2/4gLqay6CbmA02
+X-Gm-Gg: Acq92OErmRao5hGA68CnKQhklsg0XJrY0xSJIkzC5Bzcdt/DtuyKirO5enJAMl5iFGo
+	D18fmZkYqATJrZD6gJCYgSLptOUzLN1tfsAyiw1jlsLdgPySJku0n6tdKFU9HlwYxhouRKhYjnH
+	hI/mekq2DYizzrYzi+Rf0dEkmZNdXpoYbCY1KFfQI6wvXazMGLZYciYbkzYhRAVV+GxgCAIm6CW
+	0QobqgprvXZhC7iusGx0REDmoUjptUfqFnaVSG7imfBxf04N8MlFLEX0lVT/egzXlRytVS1zQnf
+	6EXh
+X-Received: by 2002:ac2:596c:0:b0:5aa:6e3e:6772 with SMTP id
+ 2adb3069b0e04-5ad2db5c247mr1075245e87.29.1781303843459; Fri, 12 Jun 2026
+ 15:37:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f9a5887f90f678d4fbbb021bd603652762132041a16f93a84a99f3607195ebb1@mail.kernel.org>
-In-Reply-To: <20260612220651.2507843-1-ihor.solodrai@linux.dev>
-References: <20260612220651.2507843-1-ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2] bpf: Better build_id caching in stack_map_get_build_id_offset()
-From: bot+bpf-ci@kernel.org
-To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org
-Cc: bpf@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 12 Jun 2026 22:37:05 +0000 (UTC)
+References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
+ <20260526-seccomp-combined-v1-1-304b1cc3ad24@hill-daniel.co.uk>
+ <CAAFS_9HpxOgHn+qfzSpLjV4Mj_CURiwxFOaK9GO0DdBg8xgNYw@mail.gmail.com>
+ <CALCETrUArQBzUS2mAhYxDS-unze_gnQ7efv1qeBke-ux=2KdkQ@mail.gmail.com> <CAO1UbGcJEhwtHcxy5zcc8cH=YjfSDiDa2o-o8o+LMbkmL7WFcQ@mail.gmail.com>
+In-Reply-To: <CAO1UbGcJEhwtHcxy5zcc8cH=YjfSDiDa2o-o8o+LMbkmL7WFcQ@mail.gmail.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Fri, 12 Jun 2026 15:37:11 -0700
+X-Gm-Features: AVVi8Ceyq6egGC6bWwlZ6FOzqJh71mRJI4TuVDzpkA7OZy5VNWaUOs1BEOkAoEI
+Message-ID: <CALCETrXrAs5R_u-Y=1qCg2PvW=xx=hMZovBBv9UmKPkVCedv9Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+To: clubby789 <clubby789@gmail.com>
+Cc: Will Drewry <wad@chromium.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============4534556307114987586==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 77ba03216c09..822b5cb188ea 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-
-[ ... ]
-
-> @@ -343,8 +410,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->  	struct mmap_unlock_irq_work *work = NULL;
->  	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
->  	bool has_user_ctx = user && current && current->mm;
-> -	struct vm_area_struct *vma, *prev_vma = NULL;
-> -	const unsigned char *prev_build_id = NULL;
-> +	struct stack_map_build_id_cache cache = {};
-> +	struct vm_area_struct *vma;
->  	int i;
+On Fri, Jun 12, 2026 at 3:02=E2=80=AFPM clubby789 <clubby789@gmail.com> wro=
+te:
 >
->  	if (may_fault && has_user_ctx) {
-
-[ ... ]
-
-> @@ -365,27 +432,29 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+> On Fri, Jun 12, 2026 at 10:24=E2=80=AFPM Andy Lutomirski <luto@amacapital=
+.net> wrote:
+> >
+> > I wonder if It would be reasonable to have the kernel do this on
+> > behalf of the user program that's asking for STRICT.  The
+> > implementation would probably be trivial.
 >
->  	for (i = 0; i < trace_nr; i++) {
->  		u64 ip = READ_ONCE(id_offs[i].ip);
-> -		u64 offset;
->
-> -		if (prev_build_id && range_in_vma(prev_vma, ip, ip)) {
-> -			vma = prev_vma;
-> -			offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
-> -			stack_map_build_id_set_valid(&id_offs[i], offset, prev_build_id);
-> +		if (!stack_map_build_id_set_from_cache(&cache, &id_offs[i], ip))
->  			continue;
-> -		}
-> +
->  		vma = find_vma(current->mm, ip);
->  		if (!vma || vma_is_anonymous(vma) ||
->  		    fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
-> -			/* per entry fall back to ips */
-> +			/* per entry fall back to ips; cache build-ID-less range */
->  			stack_map_build_id_set_ip(&id_offs[i]);
-> -			prev_vma = vma;
-> -			prev_build_id = NULL;
-> +			if (vma)
-> +				stack_map_build_id_cache_set_unresolved(&cache,
-> +						vma->vm_start, vma->vm_end);
->  			continue;
->  		}
-> -		offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
-> -		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
-> -		prev_vma = vma;
-> -		prev_build_id = id_offs[i].build_id;
-> +		/* mmap_lock is held for the whole loop, so the cached VMA
-> +		 * fields stay valid; no file pinning is needed here.
-> +		 */
-                ^^^^
+> I experimented with this approach after the initial AI review, but it
+> turned out surprisingly complex,
+> requiring a decent amount of refactoring to allow installing
+> kernel-resident programs.
 
-This isn't a bug, but should the comment text start on the line after the
-opening /* to match the BPF multi-line comment style?
+Maybe so.  But there is a function bpf_prog_create (as opposed to
+bpf_prog_create_from_user).
 
-The other multi-line comments added in this patch follow that convention,
-such as in the new stack_map_build_id_cache structure and the helper
-functions.
+> The filter
+> itself is also rather complex (mostly due to needing to account for
+> BPF jump sizes, which differ
+> as different configs (uprobe, uretprobe, SECCOMP_ARCH_COMPAT) have
+> different logic., and I'd worry about
+> keeping logic synced.
 
-> +		stack_map_build_id_set_valid(&id_offs[i],
-> +			stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip),
-> +			id_offs[i].build_id);
-> +		stack_map_build_id_cache_set_resolved(&cache, NULL, id_offs[i].build_id,
-> +						      vma->vm_start, vma->vm_end,
-> +						      vma->vm_pgoff);
->  	}
->  	bpf_mmap_unlock_mm(work, current->mm);
->  }
+Perhaps you and your AI could elaborate?  What are these jump sizes?
 
+In any case, I think the actual issue is that the STRICT filter's
+failure case doesn't quite correspond to any of the FILTER actions.
+So maybe it's too complex to be worthwhile.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27446103592
---===============4534556307114987586==--
+--Andy
