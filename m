@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBF43644C6;
-	Fri, 12 Jun 2026 23:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8070B3546E8;
+	Fri, 12 Jun 2026 23:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781306415; cv=none; b=h0BXaPvfhdzjVb3vuoqm2hm6ufT5j8TZiE/rbMLTUPd5CuRdGTxf5X0EsBetzgLu54dodBu59tLWiMTMCzcuNQeWfiuDNKE/YPC05bRE4uIdl/kHc/Ue1kZPcgHDnbwtIUbKRms8LeR+wqiHe5WdkPztJt+ZAa6zWu+YyW7Ve/E=
+	t=1781308216; cv=none; b=FD0yKj0t7mDfk+gOcyvebunBxE6uuBTgHfjcV12F/16Z+UBHMkXOuIJm0fygfSdVhYHOyoaUtTGAN30CyUAqHllCuDxpBR3kSSe+/FJM7AnmRVZE4thMXYghA1nCBOr3ph3IwwU/ASPkEyz+dHzJV/qaTlE5IsOOvJsPiqKFpsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781306415; c=relaxed/simple;
-	bh=se+Brg3iZu5ZDrzfwlW+igux18U7p0I3qdK4R1T2E2s=;
+	s=arc-20240116; t=1781308216; c=relaxed/simple;
+	bh=4j8HnP7rDNK4QGg7B7GKrNRwpXoVrbMfpTMJ0Vvd2ow=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bw38H/fBhHetSaWopC06RDdDLbgoUNfL5q3QCUJOl/yr7vVcT/nh1PFohaPdQAhb3P/sRuoYJXW7rOuVRgU/IFXRYLXMfFzgU+mVGebY1n1NHSsLQlY0+lRgMsruHpFK9M36e5Cmd3B938JbcKHrgh3/qFaA6pjLCBMlqbzysqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLElf77Z; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=rLYADsJ8NLtdPG4ToUwytJnmeYTEBN8cnJvgBDA9eWgS6/PLvhibvXiEiokweGukBlhjtBNXOKjQ6rRBgN5Gcm1PXw64RIlrjnitxd77K9WPFavzx/zD/DcjOx5RZxJvRSCLB+ePcK08BC/R49QWlUlkhw/JAremdSJ2C1+zJbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NYoD/P5z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLElf77Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4301F000E9;
-	Fri, 12 Jun 2026 23:20:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NYoD/P5z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 408141F000E9;
+	Fri, 12 Jun 2026 23:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781306414;
-	bh=LCbQ8yvIig1Ed/P0kwB2fXLSkVMGX7ng/sfDKoyIOD0=;
+	s=k20260515; t=1781308215;
+	bh=aaZ+4PABV+T/iXUfkYWgt6xGpyJ508C8HavaF5zsDyI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=iLElf77ZHH4L4GkvxBI+YFu40wsnzSyyNNGwD15EtloG8tezDUBi1FXlkKSpjzmkF
-	 7JltrAFTQvU2J7HhlqCWwW76kA42eL6IOXCTH6aKcyU3M3qHDgUk10mU1Zw6K6dzVD
-	 xbf8n7NHTV/ehpv+AJoJjHKnRF6YHztpgUc+PmO8FPm9J8iKNQ9S2x4gNbrDHGe2QU
-	 e+Uo0hb2dSybAMn5DbiSAVmAp/IAWHg/9SVhGTVIExsdQH5S149quFWS1gUHymLCvg
-	 zxC+G0pUC/0gHkUsQ3DxiTnm3Z2/P8DTUDZIixo/KKulZjYR0ovrg8V5oL509iNZVJ
-	 vOP6v+SXlbk8w==
+	b=NYoD/P5zL8VnyxziOoashuNMYOIRQDqROApC9ge0Q3+a4m9/k9zThotBLxI4HBUdV
+	 6bEgQuKwCa3VbAArvCvi9acG8W9kEAfa+/gr18BVNjzrF9zY4ajTpRn63tyWahBf88
+	 tbS96e9GIUb7+yxWvo5gE7+Hwn71Jw4j64hIxk9Q3hmX0dYfjlF+kSfBTfsvvjDtDI
+	 u3wzF4nGYj5bNk45oFopTplwg2v6shRMesCz1AD6VkLHLIVKznSxTY0fr1b9CgpVHu
+	 Ubjts1hYL08GVp12IpUJ//VNRHjNRMn4wHc8DtiYW80ZFf/HcN7YZMMKPJKUVSU3Ac
+	 G5uJ9Z2I2Zkqw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 196ED39E9601;
-	Fri, 12 Jun 2026 23:20:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1980A39E9602;
+	Fri, 12 Jun 2026 23:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] docs: net: more adjustments to docs
+Subject: Re: [PATCH net v3] tcp: clear sock_ops cb flags before force-closing
+ a
+ child socket
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178130641063.1287691.4628986985390612274.git-patchwork-notify@kernel.org>
-Date: Fri, 12 Jun 2026 23:20:10 +0000
-References: <20260609201224.1191391-1-kuba@kernel.org>
-In-Reply-To: <20260609201224.1191391-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org
+ <178130821163.1294761.4991260743602842712.git-patchwork-notify@kernel.org>
+Date: Fri, 12 Jun 2026 23:50:11 +0000
+References: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+In-Reply-To: <20260611092923.1895982-1-rhkrqnwk98@gmail.com>
+To: Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: edumazet@google.com, ncardwell@google.com, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, kuniyu@google.com, horms@kernel.org,
+ brakmo@fb.com, ast@kernel.org, jiayuan.chen@linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue,  9 Jun 2026 13:12:21 -0700 you wrote:
-> A few small updates to the docs. Mostly typos this time.
-> This is trying to prepare docs for getting fed directly
-> into AI reviews.
+On Thu, 11 Jun 2026 09:29:18 +0000 you wrote:
+> A child socket inherits the listener's bpf_sock_ops_cb_flags via
+> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
+> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
+> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
+> without it.
 > 
-> Jakub Kicinski (3):
->   docs: net: fix minor issues with XDP metadata docs
->   docs: net: tls-offload: document tls_dev_del, tls_dev_resync, and
->     rekey
->   docs: net: fix minor issues with devlink docs
+> If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
+> calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,1/3] docs: net: fix minor issues with XDP metadata docs
-    https://git.kernel.org/netdev/net-next/c/6213cf54adad
-  - [net-next,2/3] docs: net: tls-offload: document tls_dev_del, tls_dev_resync, and rekey
-    (no matching commit)
-  - [net-next,3/3] docs: net: fix minor issues with devlink docs
-    (no matching commit)
+  - [net,v3] tcp: clear sock_ops cb flags before force-closing a child socket
+    https://git.kernel.org/netdev/net/c/990348e5bb45
 
 You are awesome, thank you!
 -- 
