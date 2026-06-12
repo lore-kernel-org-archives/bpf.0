@@ -1,81 +1,148 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845F127281E;
-	Fri, 12 Jun 2026 14:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7EE331EBF;
+	Fri, 12 Jun 2026 14:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781273480; cv=none; b=TfKuL7AkmI8NLo2oFp9eN4OAHJohEufDPH7I5VKKdbaqeFRqHObzTgu8omdS+mah2JBa0w1E8AvaY4GTzTYtCPDOvoo4FNWL80BPd9ZSBe6mBUNOXdQECwqGZMsrDhL5X/6G+WsngX321ea/GBb7+IYcgDskSReAftIoNGkv01U=
+	t=1781275459; cv=none; b=JWXpAV4Eeef2nZIZDPu34U7dzvAN2qpM9Xb2P6OSlRw/Dndp33AjBb+Skkcnh2f7lQQTPLZxEcWqzxhaYtDtl/Gegc6JSClWI5weLUxWP80UbjlL/mgQr32GXJKQodB67BSl1XUGMhsaTN8cIHTX0aFj02Djjnmha00RlUfpEAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781273480; c=relaxed/simple;
-	bh=oPO49LavRySQArjb5xLNZiJKs+3Af93bbmhsdT5XVJU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y3MG3v5T6nnIelh3nbdd8PdAR8BDyt1yNmXYTaoBLmwvnrZdkTTVHaaRm0tYPuKddbAGy5XuBixuIVZ09yB1QvXN2QP7T3T/HJpUvnu4yalUMA7GcTkcyGFeBqDnymoFkFZ52GVlMTKaB2KojN0v6H9zUVl8U91fhy1TWuxQUUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=i5wQLgmW; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	s=arc-20240116; t=1781275459; c=relaxed/simple;
+	bh=dxFtqWQ70XB/DaGOcbVC90PMg8yesbWzoM+TwcPqJdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JRIuAVhC5uhMJo+LVJQgq7nhrUDF+ViJCjNr/AyUyMtLI76+XJ0M1+FHHDEpn4EBEqsx9oecygBMHQ0avZYVHDhWzV253Oj1Bb56ntARKOOgi8polxKCLa2lp6/xR8N+V9R91zfpq7hcg1FHT/LBG4bep01CImf4Yfho7ZIJkjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3Xlhxzd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="i5wQLgmW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1781273446;
-	bh=oPO49LavRySQArjb5xLNZiJKs+3Af93bbmhsdT5XVJU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=i5wQLgmWaja2kvmVXruFK277J38lpjUw0u/q0aHXsIk2gPyzUixoLxj/qjYli/ey6
-	 6Y/iHV5w7SZjtdH7VUcm16T3b9Px7FbKKQuaPbEAhS7OqbmUEZiBbhB2rZYvBNU2UQ
-	 zQjhQNaKxQl0Tf7cJIQAL9Ni3crlE9YUf7PUcoQg=
-Received: from [192.168.178.68] (pd9eaa69d.dip0.t-ipconnect.de [217.234.166.157])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65CEAiDH000903
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 12 Jun 2026 16:10:44 +0200 (CEST)
-Message-ID: <5c326cb0-9b7c-4d67-8f80-0c9be1e8fcba@tu-dortmund.de>
-Date: Fri, 12 Jun 2026 16:10:43 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3Xlhxzd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE041F00A3A;
+	Fri, 12 Jun 2026 14:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781275458;
+	bh=n9aTJjJwU1L9XEBdVRGWsY/1ImnvN4E/KMlZX2tVWDg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=E3Xlhxzd+m3y5iDwefNy32rmo7fIhHyKTP4J+ETI+4nN5UWbMN9N8KoDF3xr3hoJ/
+	 r99CC64PSLdS7N4IVizA5Gaom73abuvDqkM5GzT3e4uK1ImKx5Cz07EOMuWLcBsnyg
+	 am7YwIZO4+cLhii4drTRF6JmPt8TQwgMXj2wCp3CAjleMMh6UQ0hgnNIQaQ8DPrPbZ
+	 7OxwrRP/c83qNQEXs28AO74N2kOVhmk2wPnLITfKtYVMbMjjbBoWnx9mFCVxsOrMCh
+	 yf70RRBgKb7PPh1vI9icfaouNq87BxuVK+jnf3gOO5xxuZselitvQc4jXWgZGyVZ00
+	 SeXPRAG+hfPBA==
+Date: Fri, 12 Jun 2026 10:44:15 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "bpf" <bpf@vger.kernel.org>, "linux-trace-kernel"
+ <linux-trace-kernel@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <songliubraving@fb.com>,
+ "Yonghong Song" <yhs@fb.com>, "Menglong Dong" <menglong8.dong@gmail.com>
+Subject: Re: [PATCHv7 bpf-next 03/29] ftrace: Add add_ftrace_hash_entry
+ function
+Message-ID: <20260612104415.0becd517@robin>
+In-Reply-To: <DJ6EGJ8S87HP.2WOTGYK374XKI@gmail.com>
+References: <20260603110554.29590-1-jolsa@kernel.org>
+ <20260603110554.29590-4-jolsa@kernel.org>
+ <20260609102922.3c489f76@fedora>
+ <DJ4LJUWPD2BF.1TY4Z3WY2V0H5@gmail.com>
+ <20260610113536.77172ad1@robin>
+ <CAADnVQ+RhRiUp8FeptdVKZimGd-Wv8C+NbW5U4hh+7Hi5abQxw@mail.gmail.com>
+ <20260611094648.04622890@gandalf.local.home>
+ <DJ6EGJ8S87HP.2WOTGYK374XKI@gmail.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
-To: hawk@kernel.org, netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Chris Arges <carges@cloudflare.com>,
-        Mike Freemon <mfreemon@cloudflare.com>,
-        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
-References: <20260612083530.1650245-1-hawk@kernel.org>
-Content-Language: en-US
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <20260612083530.1650245-1-hawk@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 6/12/26 10:35, hawk@kernel.org wrote:
-> From: Jesper Dangaard Brouer <hawk@kernel.org>
+On Thu, 11 Jun 2026 10:35:11 -0700
+"Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
+
+
+> AI finds things to consider, but when they're considered and postponned
+> to future it doesn't understand that and keep reporting the same thing
+> every revision. So it might look like that patches are landing with
+> outstanding AI complains, but this is not the case.
+
+Well, if someone just asked me to give an ack then I would have. But I
+have other things to work on. Especially since everything I do at the
+moment is 100% hobby related. The chores my wife gives me now have
+priority ;-)
+
+I'll start a new job come Monday.
+
 > 
-> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
-> latency by dynamically limiting in-flight packets in the ptr_ring and
-> moving buffering into the qdisc where AQM algorithms can act on it.
+> btw since patches touch ftrace from time to time should we add your
+> ftrace testsuite to bpf CI ?
 
-LGTM, thanks for the detailed changelog :)
+That's actually a good idea.
 
-Maybe we should stop searching for the perfect tx-usecs value.
-100us is probably fine for most hardware to not have a performance
-regression. And lowering it does not really improve the RTT anyways.
-Do you agree?
+> How automated is it?
 
-Nevertheless, I will compile and run the benchmarks again.
+Very. In fact it's public. Although it's been a few years since I
+updated the git repos.
 
-I will go on vacation from 15th to 24th of June, so I will not be able
-to contribute code or run benchmarks then.
+I have two qemu images (currently private, but I can update them and
+share). Where one is a 32bit x86 image and the other is a 64bit image.
 
-Thanks,
-Simon
+The 64bit image hostname is called tracetest and the 32bit image's
+hostname is tracetest-32. Both with root password of test0000.
 
+The tests loaded on the image is here:
+
+  https://github.com/rostedt/ftrace-tests
+
+And the ktests I run are here:
+
+  https://github.com/rostedt/ftrace-ktests
+
+I would run the ktest like;
+
+  ktest.pl -DPATCH_CHECKOUT:=<SHA/BRANCH> -DPATCH_START:=<first-commit> tracetest-64.conf
+
+And in another window
+
+  ktest.pl -DPATCH_CHECKOUT:=<SHA/BRANCH> -DPATCH_START:=<first-commit> tracetest-32.conf
+
+For example:
+
+  ktest.pl -DPATCH_CHECKOUT:=trace/ftrace/core -DPATCH_START:=b5d6d3f73d0bac4a7e3a061372f6da166fc6ee5c tracetest-64.conf
+
+And that will run 40 tests (I added some more since my last push, so
+github doesn't have 40) and build, boot, install, test on the qemu
+64bit image. It starts out testing commits from
+b5d6d3f73d0bac4a7e3a061372f6da166fc6ee5c and going through to
+trace/ftrace/core. Note, the PATCH_START needs to be in the history of
+the PATCH_CHECKOUT otherwise the test will fail.
+
+If you want to run these, let me know and I can help with the setup.
+It's what I gave Masami to test as well.
+
+> 
+> >  
+> >> 
+> >> While at it, please review Mykyta's set:
+> >> https://patchwork.kernel.org/user/todo/netdevbpf/?series=1096695
+> >> 
+> >> It's also been pending for almost a month now.  
+> >
+> > Have a better link? I just get a blank page as "TODO" is set to what I have.  
+> 
+> Ohh. I meant this set:
+> https://lore.kernel.org/bpf/CAEf4BzZFjsEv3aLktwdCZF6EXoCL+eefX+6xa3XGrhBmfO1SqA@mail.gmail.com/
+> where you said that you'll think more about it after pto.
+
+I came back on Tuesday and have yet to catch up on all the email I
+ignored while away :-p
+
+> Would be great to land it now for this merge window, so we have
+> discoverability right now and if better approach comes in the future
+> we can adjust to it later.
+>  
+
+I'll take a look at it.
+
+-- Steve
