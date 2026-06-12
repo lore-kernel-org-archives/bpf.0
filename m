@@ -1,148 +1,118 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF2C37C0FF
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 10:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB5E35E1DB
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 10:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781259533; cv=none; b=D0Bpdczs0mhaXY5hbM6wJFxHCatnQuGEpD2NE7DMHNdn4hIjO8v9JkzDe0odKhlti0FRZYZIthXIjLJQahITIJgiaFFOgaREQPulzvMB6vsJ1sFT/SpDC9muWSxpa9tcj2x9bBCxNWkVKPimstzB1tB8F+R/5D5GsiCF6XhJiNg=
+	t=1781259578; cv=none; b=nBLhNArQ8vl7bXUQ5XbZJlbp+Ggq4M+avnoGFMlmUQJSpyVFMRnWeBU7iGTzJAwHPUUgGrk+Q9qjfchJNTef05h0HtLalNKMh2WeEZg9SSA7g7ucHuPVF6si4VaMsRTJrIvLa4TAJem/Kw+l/S9+yIU8PQDauiS58QPjxNY6dg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781259533; c=relaxed/simple;
-	bh=Iu+WsPA3d5zC/vpm66sf0PXFm63IcdCvAGgoL0vzIyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OiwB5xuKSX5v9NXOPRz3ezuQBmVOv81h/gP2K1heFdXIm3Pf7trS3RM65IvugnaYCAEYx1q2raPjnlQTvdAJl6GB5jXPdpMT+hFrbCWlBEj+FnfzzUeshTrl6Z6p1H9o+e0xz3ZBs80Z89CWBsl/osrtrsPS6k3CVk2PdJ1QCRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bBME3aOj; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1781259578; c=relaxed/simple;
+	bh=6cCTGhLLRy0oxXc8sVeasdOAezlcvEddbRmgmiBe77c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=fRXxeyeGuNdvry6lSVIvlBn0rZJ0ll1fNxb9UgJ07Z03l/fY1Le/Ko7ZCDHWl5zUJdhfCgZcDXKCiUJYYmHrlAfELT6VHe7b68OFzv7MzNJXuNj/d0IaNoVwtfAn/FomSfNyxGkjwdihH7uP8MsKELnQOH6+chpwuaCUUU8LutY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YYouIm2m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bBME3aOj"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso9556135e9.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 03:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781259530; x=1781864330; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZYS51t2QXr2ZWiJCJ2esfR2JgSuWZes3mVwU5icUks=;
-        b=bBME3aOjy09Ne3TOuJciwQgMQrD3QA56oZBnha0V1aiAml8vZFjlLytwRDLcbAjTfK
-         gs0paoiXwr+SoduVvkIUms0MRhDY4psKxnYztyMXaCgHdKmYEU1TrRrQrbGmf78LFKLy
-         Nb7MwXBQq6cZ5ahJc1jkRoGezwCEYiQdNVic+lM3Sq67OQ6+JDEzb5aqGGVaMTwwdG8l
-         Y1dVVIssm8yet7XPKGHJgxwSWw7e8nfefziTDbuAI1WXNifv4/FxN7bnwKl7QZznlsK+
-         /L52yU+EIT8vhOhbInFxE4932yW9o6b9QOztuVi07hqQf1r1TUk1zeLIEwTU7TKGdYaS
-         IVHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781259530; x=1781864330;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wZYS51t2QXr2ZWiJCJ2esfR2JgSuWZes3mVwU5icUks=;
-        b=b2RWtNzrLotMn5UdSDPZU72VqwtQuK3jVQmK93UxrVMgJZyGoFzVEddJCBCPLznNCJ
-         ERCQ63DL4Rbpcrl46Nug/RYn99JwUQzS/KRqVtkxNodet3XohOcCTDalhBJ6teSQdn7Y
-         xoD/Kvkh4Rm/FXcZ00kKuUjee+MIc1iwI9kJnx1QdtcbmlBTjxXFPfgfEaD8btopwGE7
-         iRt5cjWyi63OmQF3nRR72fUz7U0Txwi9jXZexjlvKsJ1L1eCwAAiwn4J1sfoJYQkpDg3
-         sRMCuSgdScUhxggEMYQOh+1hUh2ZmcQoUE7057cIwKRVh5V7Eu+EFt/s0UiLbO8RMeO/
-         8qEQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8DhJhUbbQgaTuvizf86aNAwsjUZ+xibCXspXgR0dVE4+cC1QVTsbfz4CgeLnw1XIDjGVg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySkKN+p1mmPX8tKZkmtui8MPdoR2ExsTo9CImlzyXP8UpnagUX
-	DEXG6kcLt0ttFTi3sRWJuogpl9eLR0jd8GsZW9qRcvr7x38InZ/lq82m3E/kpHrsnPk=
-X-Gm-Gg: Acq92OECJJt434KjrFHv9R7qyguzCvqN2JrDR8kny7cm9ia1y4tlwzygH1owSkl88cb
-	4xOxgQp7XfTEhEVoRABExfCcpCPRCQGjvH9zWbCMyyn8syMKOsl5wBoynTLg5AnTJ2qKYGyfyZS
-	WR3de5s2ohTJHhVWbkOfGmQxPFyxTwCqJkaFxVmDXpa/zsidrfxrSlUWZ3Aa/KaXHI2rWNv01l8
-	91hCVtIbiDACpAsJo6sNwMN52Q3wcNwiAlZJoiGLh0JMnZH81TQxxbJRUTkidPLuocEMsTvZmH7
-	Oa+K9EHttoTZOkJTcAt046InnYv7n+R1IL+JjC+8YY7tO5y/+XnobZY8nwApsOL8tujqqXN1TNC
-	Ag7xf1YBx7aGy9AbCXlL+6RF9dleHoH2YUdS+k7/jEwg18Esi5rmcCk+4xIujxWcobYaAzskDV3
-	KZYyxj4mFkwx03oS8dFqQFsuX+ygU/adYbtZ938CRa
-X-Received: by 2002:a05:600c:5493:b0:490:3c15:7146 with SMTP id 5b1f17b1804b1-490ec4f26ecmr26968165e9.19.1781259530302;
-        Fri, 12 Jun 2026 03:18:50 -0700 (PDT)
-Received: from u94a (27-51-56-85.adsl.fetnet.net. [27.51.56.85])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081eb95342sm2857806eec.29.2026.06.12.03.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 03:18:48 -0700 (PDT)
-Date: Fri, 12 Jun 2026 18:18:39 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Zhenzhong Wu <jt26wzz@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, 
-	haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, eddyz87@gmail.com, 
-	stable@vger.kernel.org, mykolal@fb.com, tamird@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: add helper retval linked scalar
- pruning selftest
-Message-ID: <aivZ9jYGw6QRxLQQ@u94a>
-References: <20260611160749.391279-1-jt26wzz@gmail.com>
- <DJ6DMGTPWXJN.1YKSBHULQ1PB9@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YYouIm2m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9D31F000E9;
+	Fri, 12 Jun 2026 10:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781259576;
+	bh=6cCTGhLLRy0oxXc8sVeasdOAezlcvEddbRmgmiBe77c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=YYouIm2miKaOuDmfvKNZZgYPyx18+CPtRQJ0XNQKmnOO8tuwyjTY/Ij9f7+sMnntL
+	 MUFXdbmhxpuHJ2iE2htKRdNY9QUf3O/3uxR4qT+NLI36hy3olgvWzbmRJKCnH/+g/V
+	 d29uaSZxT16+y71urh3AoxvR5bJTYkTzvev+9t4NnGHuHiRIPP5z/U6gFq3xYrIIrZ
+	 rtt1D/rUAQUUQXCDhTVS1F3cJPKqpiYjbYB4ixsZnZlV8vNVuIdH3YiBuy3fbyQK2D
+	 vlePFjzEfs7JnjVcIZKWnV64RFAFIIS1wbxHmR+IiJc3bRQaz90jKkl52Guq+jWYFR
+	 DSTve7c8wUWWg==
+Content-Type: multipart/mixed; boundary="===============4411795330648335045=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DJ6DMGTPWXJN.1YKSBHULQ1PB9@gmail.com>
+Message-Id: <c583f2e8a802e4e3107c70ee7725ee5d6c5be5b257670d66b543f9c82b0b457d@mail.kernel.org>
+In-Reply-To: <20260612093818.18609-2-ziye@zju.edu.cn>
+References: <20260612093818.18609-2-ziye@zju.edu.cn>
+Subject: Re: [PATCH bpf-next 1/2] bpf: support shift operations with non-const src operand
+From: bot+bpf-ci@kernel.org
+To: ziye@zju.edu.cn,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,ziye@zju.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 12 Jun 2026 10:19:36 +0000 (UTC)
 
-On Thu, Jun 11, 2026 at 09:55:55AM -0700, Alexei Starovoitov wrote:
-> On Thu Jun 11, 2026 at 9:07 AM PDT, Zhenzhong Wu wrote:
-> > Add a verifier runtime test for a branch pattern where a helper return
-> > value and a related scalar stay live across the same control-flow
-> > sequence. Rust/Aya-generated eBPF can naturally produce this shape when
-> > a match on a helper status keeps data derived before the helper call
-> > live across the same branches. Such code commonly uses the helper return
-> > value in r0, where 0 means success, producing an r0 == 0 / r0 != 0
-> > branch shape.
-[...]
-> > +SEC("tc")
-> > +__description("helper retval linked scalar pruning")
-> > +__success __retval(0)
-> > +__naked void helper_retval_linked_scalar_pruning(void)
-> > +{
-> > +	asm volatile (
-> > +	"r7 = *(u32 *)(r1 + %[__sk_buff_data_end]);"
-> > +	"r5 = *(u32 *)(r1 + %[__sk_buff_data]);"
-> > +	"r7 -= r5;"
-> > +	"r2 = 0;"
-> > +	"r3 = r10;"
-> > +	"r3 += -8;"
-> > +	"r4 = 1;"
-> > +	"call %[bpf_skb_load_bytes];"
-> > +	"r0 += 1;"
-> > +	"r6 = 1;"
-> > +	/* success path keeps r7 independent; failure path links r7 to r0. */
-> > +	"if r0 == 1 goto l0_%=;"
-> 
-> this exercises linked registers with BPF_ADD_CONST logic.
-> We already have such tests. Why do we need this one?
-> How is it different?
+--===============4411795330648335045==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-BPF_ADD_CONST wasn't what was meant to be tested.
+PiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi92ZXJpZmllci5jIGIva2VybmVsL2JwZi92ZXJpZmll
+ci5jCj4gaW5kZXggZWI0NmE4MWE4YzUxLi5jZWMwNTFhNGU5NDIgMTAwNjQ0Cj4gLS0tIGEva2Vy
+bmVsL2JwZi92ZXJpZmllci5jCj4gKysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCgpbIC4uLiBd
+Cgo+IEBAIC0xNDM4NywxOCArMTQzOTEsNDQgQEAgc3RhdGljIHZvaWQgc2NhbGFyX21pbl9tYXhf
+cnNoKHN0cnVjdCBicGZfcmVnX3N0YXRlICpkc3RfcmVnLAo+ICBzdGF0aWMgdm9pZCBzY2FsYXIz
+Ml9taW5fbWF4X2Fyc2goc3RydWN0IGJwZl9yZWdfc3RhdGUgKmRzdF9yZWcsCj4gIAkJCQkgIHN0
+cnVjdCBicGZfcmVnX3N0YXRlICpzcmNfcmVnKQo+ICB7Cj4gLQl1NjQgdW1pbl92YWwgPSByZWdf
+dTMyX21pbihzcmNfcmVnKTsKPiArCXUzMiB1bWluX3ZhbCA9IHJlZ191MzJfbWluKHNyY19yZWcp
+Owo+ICsJdTMyIHVtYXhfdmFsID0gcmVnX3UzMl9tYXgoc3JjX3JlZyk7Cj4gKwlzMzIgc21pbiA9
+IHJlZ19zMzJfbWluKGRzdF9yZWcpOwo+ICsJczMyIHNtYXggPSByZWdfczMyX21heChkc3RfcmVn
+KTsKPgo+ICsJLyoKPiArCSAqIEJQRl9BUlNIIG9uIDMyLWJpdCBzdWJyZWdpc3Rlci4gVGhlIHNo
+aWZ0IGFtb3VudCBbdW1pbiwgdW1heF0KPiArCSAqIG1heSBiZSBub24tY29uc3RhbnQsIHNvIHdl
+IGNvbnNlcnZhdGl2ZWx5IGRlcml2ZSBzaWduZWQgYm91bmRzOgo+ICsJICoKPiArCSAqICAgc21p
+biA+PSAwOiBub24tbmVnYXRpdmUgdmFsdWU7IHJpZ2h0LXNoaWZ0IHJlZHVjZXMgbWFnbml0dWRl
+Lgo+ICsJICogICAgICAgICAgICAgIHJlc3VsdCBpbiBbczMyX21heCA+PiB1bWF4X3ZhbCwgczMy
+X21pbiA+PiB1bWluX3ZhbF0KPiArCSAqICAgICAgICAgICAgICBlLmcuIFs0LDhdID4+IFsxLDJd
+IOKGkiBbMSw0XQoKVGhlIGNvbW1lbnQgZm9yIHRoZSBzbWluID49IDAgYnJhbmNoIGRlc2NyaWJl
+cyB0aGUgcmVzdWx0IGFzCltzMzJfbWF4ID4+IHVtYXhfdmFsLCBzMzJfbWluID4+IHVtaW5fdmFs
+XSwgYnV0IHRoZSBjb2RlIGJlbG93IGNvbXB1dGVzCltzbWluID4+IHVtYXhfdmFsLCBzbWF4ID4+
+IHVtaW5fdmFsXToKCj4gIAlpZiAodW1pbl92YWwgPT0gdW1heF92YWwpIHsKPiAgLi4uCj4gIAl9
+IGVsc2Ugewo+ICAJCWlmIChzbWluID49IDApCj4gIAkJCXJlZ19zZXRfc3JhbmdlMzIoZHN0X3Jl
+ZywgKHUzMikoc21pbiA+PiB1bWF4X3ZhbCksCj4gIAkJCQkJICh1MzIpKHNtYXggPj4gdW1pbl92
+YWwpKTsKClRoZSB3b3JrZWQgZXhhbXBsZSBpbiB0aGUgY29tbWVudCBtYXRjaGVzIHRoZSBjb2Rl
+IHJhdGhlciB0aGFuIHRoZQpwcm9zZSBmb3JtdWxhOiBbNCw4XSA+PiBbMSwyXSBnaXZlcyBbND4+
+MiwgOD4+MV0gPSBbMSw0XSBhcyB3cml0dGVuIGluCnRoZSBleGFtcGxlLCB3aGVyZWFzIFtzMzJf
+bWF4Pj51bWF4LCBzMzJfbWluPj51bWluXSA9IFs4Pj4yLCA0Pj4xXSA9ClsyLDJdLiAgU2hvdWxk
+IHRoZSBjb21tZW50IHJlYWQgW3MzMl9taW4gPj4gdW1heF92YWwsIHMzMl9tYXggPj4gdW1pbl92
+YWxdCnNvIGl0IGFncmVlcyB3aXRoIHRoZSBjb2RlIGFuZCB0aGUgZXhhbXBsZT8KCj4gKwkgKiAg
+IHNtYXggPCAgMDogbmVnYXRpdmUgdmFsdWU7IHJpZ2h0LXNoaWZ0IGluY3JlYXNlcyAodG93YXJk
+IDApLgo+ICsJICogICAgICAgICAgICAgIHJlc3VsdCBpbiBbczMyX21pbiA+PiB1bWluX3ZhbCwg
+czMyX21heCA+PiB1bWF4X3ZhbF0KPiArCSAqICAgICAgICAgICAgICBlLmcuIFstOCwtNF0gPj4g
+WzEsMl0g4oaSIFstNCwtMV0KPiArCSAqICAgbWl4ZWQ6ICAgICByZXN1bHQgaW4gW3MzMl9taW4g
+Pj4gdW1pbl92YWwsIHMzMl9tYXggPj4gdW1pbl92YWxdCj4gKwkgKiAgICAgICAgICAgICAgZS5n
+LiBbLTgsOF0gPj4gWzEsMl0g4oaSIFstNCw0XQo+ICsJICoKPiArCSAqIHZhcl9vZmYgaXMgc2V0
+IHRvIHRudW1fdW5rbm93biBiZWNhdXNlIHdpdGhvdXQgYSBjb25zdGFudCBzaGlmdAo+ICsJICog
+YW1vdW50IHdlIGNhbm5vdCBwcmVjaXNlbHkgdHJhY2sgd2hpY2ggYml0cyByZW1haW4ga25vd24u
+Cj4gKwkgKi8KClsgLi4uIF0KCj4gQEAgLTE0NDA4LDE0ICsxNDQzOCwzNiBAQCBzdGF0aWMgdm9p
+ZCBzY2FsYXJfbWluX21heF9hcnNoKHN0cnVjdCBicGZfcmVnX3N0YXRlICpkc3RfcmVnLAo+ICAJ
+CQkJc3RydWN0IGJwZl9yZWdfc3RhdGUgKnNyY19yZWcpCj4gIHsKPiAgCXU2NCB1bWluX3ZhbCA9
+IHJlZ191bWluKHNyY19yZWcpOwo+ICsJdTY0IHVtYXhfdmFsID0gcmVnX3VtYXgoc3JjX3JlZyk7
+Cj4gKwlzNjQgc21pbiA9IHJlZ19zbWluKGRzdF9yZWcpOwo+ICsJczY0IHNtYXggPSByZWdfc21h
+eChkc3RfcmVnKTsKPgo+ICsJLyoKPiArCSAqIEJQRl9BUlNIIChhcml0aG1ldGljIHJpZ2h0IHNo
+aWZ0KSBvbiA2NC1iaXQgcmVnaXN0ZXIuCj4gKwkgKiBTYW1lIHRocmVlLWJyYW5jaCBsb2dpYyBh
+cyB0aGUgMzItYml0IHZhcmlhbnQgKHNjYWxhcjMyX21pbl9tYXhfYXJzaCk6Cj4gKwkgKgo+ICsJ
+ICogICBzbWluID49IDA6IHJlc3VsdCBpbiBbc21heCA+PiB1bWF4X3ZhbCwgc21pbiA+PiB1bWlu
+X3ZhbF0KPiArCSAqICAgICAgICAgICAgICBlLmcuIFs0LDhdID4+IFsxLDJdIOKGkiBbMSw0XQoK
+VGhlIHNhbWUgbWlzbWF0Y2ggYXBwZWFycyBpbiB0aGUgNjQtYml0IHZhcmlhbnQuICBUaGUgY29t
+bWVudCBzdGF0ZXMgdGhlCnNtaW4gPj0gMCBicmFuY2ggcHJvZHVjZXMgW3NtYXggPj4gdW1heF92
+YWwsIHNtaW4gPj4gdW1pbl92YWxdLCBidXQgdGhlCmNvZGUgY29tcHV0ZXMgW3NtaW4gPj4gdW1h
+eF92YWwsIHNtYXggPj4gdW1pbl92YWxdOgoKPiAgCWlmICh1bWluX3ZhbCA9PSB1bWF4X3ZhbCkg
+ewo+ICAuLi4KPiAgCX0gZWxzZSB7Cj4gIAkJaWYgKHNtaW4gPj0gMCkKPiAgCQkJcmVnX3NldF9z
+cmFuZ2U2NChkc3RfcmVnLCBzbWluID4+IHVtYXhfdmFsLCBzbWF4ID4+IHVtaW5fdmFsKTsKCkFn
+YWluIHRoZSBleGFtcGxlIFs0LDhdID4+IFsxLDJdIOKGkiBbMSw0XSBtYXRjaGVzIHRoZSBjb2Rl
+LCBub3QgdGhlCmZvcm11bGEgW3NtYXg+PnVtYXgsIHNtaW4+PnVtaW5dID0gWzg+PjIsIDQ+PjFd
+ID0gWzIsMl0uICBDb3VsZCB0aGUKY29tbWVudCBiZSB1cGRhdGVkIHRvIFtzbWluID4+IHVtYXhf
+dmFsLCBzbWF4ID4+IHVtaW5fdmFsXT8KCj4gKwkgKiAgIHNtYXggPCAgMDogcmVzdWx0IGluIFtz
+bWluID4+IHVtaW5fdmFsLCBzbWF4ID4+IHVtYXhfdmFsXQo+ICsJICogICAgICAgICAgICAgIGUu
+Zy4gWy04LC00XSA+PiBbMSwyXSDihpIgWy00LC0xXQo+ICsJICogICBtaXhlZDogICAgIHJlc3Vs
+dCBpbiBbc21pbiA+PiB1bWluX3ZhbCwgc21heCA+PiB1bWluX3ZhbF0KPiArCSAqICAgICAgICAg
+ICAgICBlLmcuIFstOCw4XSA+PiBbMSwyXSDihpIgWy00LDRdCj4gKwkgKgo+ICsJICogdmFyX29m
+ZiBpcyBzZXQgdG8gdG51bV91bmtub3duIHNpbmNlIGEgbm9uLWNvbnN0YW50IHNoaWZ0IGFtb3Vu
+dAo+ICsJICogcHJldmVudHMgcHJlY2lzZSBiaXQgdHJhY2tpbmcuCj4gKwkgKi8KCgotLS0KQUkg
+cmV2aWV3ZWQgeW91ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9yIGVtYWlsIHJlcGx5IHdo
+eSBpdCdzIG5vdCBhIGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMv
+dm10ZXN0L2Jsb2IvbWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJIHJ1biBzdW1tYXJ5OiBo
+dHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlvbnMvcnVucy8yNzQwODU1
+MjAyOQ==
 
-The main logic is r7.id == r0.id only happens on "if r0 == 1 goto l0_%="
-fall through, and does not have such link otherwise. I only check tests
-added in commit c0087d59e504 ("selftests/bpf: tests for per-insn
-sync_linked_regs() precision tracking"), but it doesn't seem like such
-conditional linking was tested. 
-
-The other rational is that this seem like a common pattern that is
-genereated from Rust-based BPF program.
-
-> > +	/* success path keeps r7 independent; failure path links r7 to r0. */
-> > +	"if r0 == 1 goto l0_%=;"
-> > +	"r7 = r0;"
-         ^^^^^^^ conditional scalar linking
-
-> > +"l0_%=: if r0 != 1 goto l1_%=;"
-> > +	"r7 <<= 32;"
-> > +	"r7 >>= 32;"
-> > +	"if r7 != %[test_data_len] goto l1_%=;"
-> > +	"r0 = 0;"
-> > +	"exit;"
-> > +"l1_%=: r0 = r6;"
-> > +	"exit;"
-> > +	:
-> > +	: __imm(bpf_skb_load_bytes),
-> > +	  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-> > +	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-> > +	  __imm_const(test_data_len, TEST_DATA_LEN)
-> > +	: __clobber_all);
-> > +}
-[...]
+--===============4411795330648335045==--
