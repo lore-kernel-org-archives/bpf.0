@@ -1,181 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0850734E75A
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 03:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781234991; cv=none; b=L6c7NOUxE247iUQp/FwYfMjPD7I70/R0+k5Udi7V9R8Gn0LF1tm2na8Wf2va4pWxEg1vp8HqR2UTwONkZM1zqAubcu6lJcOm4AACrxLD4317LptCpCiAkh82esS8ui0SA3o2iQTaYdApIMmmV3CZAGg3nsZHb6kmn9p0cBVu37g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781234991; c=relaxed/simple;
-	bh=u5rh4Qqvi0s8OCODrI+xGQAYGLWCohZPG7lsp4zENrk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RAL0rnhm9GUv7x9OcebJK71cuAe3Rqj0OaVmxWN7QelyoWk9lAss8MXQtL9r2gKiXTeTxusVrRWUtuX2rs54WLu4J1gqNCdmsO6ITgiKtAYq2R3cUeXsB/ivQT9Uq6FcipBhq951+t6dNqHG2krkYa76Mbv188Zg2lnRiI9CdtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNjH1Zv/; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB0C3290BD
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 03:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781235433; cv=pass; b=FnrNJTgOYU3y4kAcvv01YJUN+1yxUEhUa0pPMbFdvj/IoAf3X8529MfFqh8Iigmoy0nulc5dzbNEgqoXwwbLy/72ffRYMPQirk+hAuTVowQhWnW1reroGzXJZoufezi0vooiwOKBEyM7r5cigGZzcYNqy7f2xaamx3VMnnUjOFI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781235433; c=relaxed/simple;
+	bh=f9eM4QECuMJVJ64dYWKjBS1Ex/yKf9yovNHknSmTlro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Es0dG/DtG58GDm+YvGXoneJs5rl1CASGYDqOYK5u5MAmlbc1y2B+EabdKzAi+P8+R2STDq/aXvHq2mpudJwVrJDVlQGT8T/P2RT0TDFp85TpZggEq6Gp6xEm+rdGho0JtChF3M+VOz2UwEMVmamQTwHvreKY7oxGD3/PgUCF/cY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AszGR0ef; arc=pass smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNjH1Zv/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A3F1F000E9;
-	Fri, 12 Jun 2026 03:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781234989;
-	bh=r/afzwc3Zr+i70BaarjTjjwiIBDNpMX+J826I2mpbSY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mNjH1Zv/ix2CIqoiMqGHGRAgKjC5XfE7ZNzy94ZougxpKXIzSndVJif+Y98YxESLP
-	 YV5Wc76doplPVWPOQZIhYXx+50epO0JE3GE1ZbyjKc7QHN71cUNuuwN0+rNWQcCgpu
-	 L/yKqLiSK1D3xquG1CqUeVhhejX9sSr2DsFX+prdNGyEmS1lrSqNy1ofntfpbXTxud
-	 Jroj4d18AjkkJR6259snic+HhQhfyKfEsGRD57P1N3Ah0MlmqmFDvv9L2Kwzhb1rqc
-	 Batu4Y9bnnvMbSqO4y5PfSOU9FHJyKB7OatnmD5ZUvRlDPkPWG3m7SLuesMvCX0sSa
-	 Dj1teaExkPouQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 2/5] tcp_bpf: busy-poll the splice ring
- before parking the receiver
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cong Wang" <xiyou.wangcong@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260612011452.134466-3-xiyou.wangcong@gmail.com>
-References: <20260612011452.134466-3-xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 12 Jun 2026 03:29:48 +0000
-Message-Id: <20260612032949.68A3F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AszGR0ef"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c85ba774551so188322a12.0
+        for <bpf@vger.kernel.org>; Thu, 11 Jun 2026 20:37:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781235432; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CMnCUZMYz5xdKY6vFHzTNwDczWyZSuanm4HuoeQ9MD4PD0K2n0naZ1Wwv/MHI3TQ3M
+         1ZMnl6w2vWynqNqEngwwawQtZI0rLkIS1lPdESpk17IAl9fpWnnMlIdw84J2XxW2qH4s
+         1GUD9N1DtDht3zapTtIj1iQOz/rYzssTNqFzf/+e2MwRo8lGrtePFnQa56PQHHQ7/Nk6
+         6JmoscxnFm9xCbt4oWmDuU6uhlbldf7t7tjG9NFVgtnyThk/yjl25F8fV8IWohExquVn
+         DmYVOP2n+D7Ts6UnUpBWNGr0T0/a93kxquSpHRt21M9Co9gActK4hT7uNJe8fgf2+03K
+         E3hA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hZuKy8KsBKoVzcM4mWt3Qcn4TgT+cGVHbQHSYBpfjC0=;
+        fh=VPhyqwcWTNwH1jfpIXD5bSCYUcddy6K5jarc0QIKW3w=;
+        b=D9Q9tbsBOm9RZSx0DPTjDncXyQRj1xOiHjTe1d0CRNo61rGnVt35qbiyaRchMB7IiT
+         axjSsu2kJIphXvCk1BevVrIOPTSe+C64gpBk45aR+9nhwDy49rYhYGgBcqqISujMhCmO
+         0B/unBG6BalHL2KTE6VJfHBAlcbk89PlZHD5s1fgraS8SS7ZD0TJI4gk/ng0G/s4asKR
+         HFoSFb0Ycn/jUWT/zqm+xDtfTWiibhYXrSb9CJ7ZiZLD9GKodu/2yVg6QS4XtluZKIuZ
+         Vf0xBhgdMG+q2/uryPbrLG+XtFEOZPEQK7uWnWo9WfufADj8qe22DIgvxF6u40Ul0aZg
+         W7lg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781235432; x=1781840232; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hZuKy8KsBKoVzcM4mWt3Qcn4TgT+cGVHbQHSYBpfjC0=;
+        b=AszGR0efURKv8R8m3r5xUF5tjCTzx9ZtypU7J4Vw5u6BUY9QOylE0GcZcdXO/bQG7Q
+         0qQAtsvS0yjKfew586AvYVBpqFiBlTR2j8vnKuuaJtPaO5C1O/oRDn+KjsJI0Rbmv4xQ
+         3RHmYViuAHHOQmCs3uoFfl7/h+SVfZY51x2liYvzNuTfepbJI6Z33pxwMgvvY7TjKilP
+         9Qn6RR7+tTf5CASFz7Sv698P/o3HwL4SFDM6HnMStd4yQ/HylWVpYa/Qv2GKLxZiyELT
+         xRUXYeTBp1MJd8m9elf7Whp8QhVcnWkpYuPVEQxK81qJj3kI0uR4xv8z48+xghfqzP18
+         /W5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781235432; x=1781840232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hZuKy8KsBKoVzcM4mWt3Qcn4TgT+cGVHbQHSYBpfjC0=;
+        b=NXQ0PZwpAHp+rpcsw8HgdCq2Ej7pR9+XEbZlUPkDSgMZZf8KNYZz/+kFPPeCzVzTAb
+         i+UPE2AFJab2PuKv6RtYFjzSm27GlvmgxBrD4SghDPnLOWXEkWZw986RhOdFvCmg0EvP
+         lF0yHEEvTm6833T3fUS6UG1/XnOBU1vZkCyEiEXqkaFLeGYTvVcwpYi71zCPa9BSf30e
+         bmipCDrNAnb4xKWVEfCIXfNvETmOFg1kS3qTGPMl7gR5n1myc69bdmEr/GLIEcpbRWMF
+         HdBjQPYRzLG8UDFu9oRrOymhHjyhTNM3iZUpD/1qVaJp1R8vBKdj8bokCyje5DRPV12y
+         okBw==
+X-Forwarded-Encrypted: i=1; AFNElJ8TtwvsYMeUnPJwtkdv7H2tddjtSgXCQ0fmZ7y5bgs47ag7xuB/fk4t4YUgRoOgReKjJaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS6WWm6pIxtxB3mQZeYrcqZ7HNKKxKaR8D7T4/uD3gDbqjUI/k
+	kcjQtPN1boyoIhBlbV5Kk3+rfEz69ucKm55ni8k45mJr6hKvlzEGS/xl4xDFUFG3aZYGlRLzmAS
+	xmrPZlCeVG7PUT76+kDwVSC1qADbV4s1h3Ru6
+X-Gm-Gg: Acq92OFxYUmxsHkXZlLPeBO9CljX2UYxylRNHlYHlrvmAxbkPGUeU/e7aHSW4zumBTC
+	brAY2JJ6NbTugyY45hek01DdI+ZYDE4E9xRxH/OFEXEKQRSNonRLlpPxGV8yGi5LQFu8bOiWnbY
+	BUvxeTXc/aLfxKYj9JTMnn5kqTqPMRS9du9XUvOmRGZWe8P3SQAyVgTCFB2gDkP+oVhbgU0G3LU
+	XWbO1B/OuRHprJkOKUZPRvCW7KKhn1k88oqqWXWVGM0KEjh8NR8aMHLRQESFVptW3KeCGyI2iUr
+	mbeDfHXk/o8U7eBmlvSpJogg0F7Q5z0TC2sM10sQ/uPC9p0+iBwRzn/jed8qnm9ccftmmCaEPXL
+	4uz8BVXrpj+5frMo1zlGav52J
+X-Received: by 2002:a05:6a00:130f:b0:842:7fc8:eba with SMTP id
+ d2e1a72fcca58-8434cb0aee8mr976470b3a.11.1781235431674; Thu, 11 Jun 2026
+ 20:37:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260612001803.23341-1-kuniyu@google.com> <20260612001803.23341-5-kuniyu@google.com>
+In-Reply-To: <20260612001803.23341-5-kuniyu@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 11 Jun 2026 20:37:00 -0700
+X-Gm-Features: AVVi8Cc3LWqeHHmqgGwv1rpYa72x9cqFhMV1KKvuFVbN6h0AgGgzm1GevRLaZhg
+Message-ID: <CAADnVQJjHDbpAt2=Jkytz1GxHebPXeSEM2drekh=7vXhgQBkmw@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next/net 4/5] bpf: Add kfunc to proxy TX HW Timestamp.
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Missing `need_resched()` check in `splice_busy_loop()` allows an u=
-nprivileged user to monopolize a CPU, causing soft lockups and denial of se=
-rvice.
-- [High] `tcp_bpf_splice_recvmsg` incorrectly returns `-EINTR` instead of `=
--ERESTARTSYS` for blocking sockets when interrupted by a signal, breaking `=
-SA_RESTART` semantics.
-- [High] Providing an invalid memory buffer to `recvmsg` on a spliced socke=
-t causes an uninterruptible infinite loop in kernel space, leading to Denia=
-l of Service.
---
+On Thu, Jun 11, 2026 at 5:18=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
+m> wrote:
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index b4ac1180f5a8..bd9343288928 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -4706,6 +4706,14 @@ struct bpf_hwtstamp {
+>         u64 reserved;
+>  } __packed;
+>
+> +struct bpf_tx_tstamp_cmpl {
+> +       u32 tskey;
+> +       __be16 protocol;
+> +       u16 network_offset;
+> +       u16 payload_offset;
+> +       u16 reserved;
+> +} __packed;
 
-commit 8f0193a527ddda6d7d50681be8a081f8bc267f16
-Author: Cong Wang <xiyou.wangcong@gmail.com>
+Here and in the prior patch..
+let's not penalize modern architectures like x86 and arm64
+just because somebody has sparc on the shelf that collects dust.
 
-tcp_bpf: busy-poll the splice ring before parking the receiver
+Also don't use 'u16 reserved'. 'u16 :16' is better from backward compat pov=
+.
 
-This commit adds an optional bounded busy-poll of the ring before parking,
-reusing the socket's SO_BUSY_POLL budget via sk_can_busy_loop() and
-sk_busy_loop_timeout(). It spins directly on the in-kernel ring without
-polling a NAPI instance.
+And consider addressing sashiko findings.
+Everything with [high] or [critical] most likely needs to be fixed.
+[medium] and below is a grey zone.
 
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index 549f370772446..9c4421a74225b 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-
-[ ... ]
-
-> @@ -1255,6 +1256,33 @@ static long splice_recv_wait(struct sock *sk, stru=
-ct sk_psock_splice *s,
->  					splice_recv_ready(sk, s), timeo);
->  }
-> =20
-> +/* Bounded busy-poll on the ring before parking the receiver. Reuses the
-> + * socket's SO_BUSY_POLL budget (sk_ll_usec) via sk_can_busy_loop() and
-> + * sk_busy_loop_timeout(); the default budget of 0 makes sk_can_busy_loo=
-p()
-> + * false so this is a no-op unless the application (or net.core.busy_rea=
-d)
-> + * opted in.
-> + *
-> + * Unlike sk_busy_loop() / napi_busy_loop(), this spins on the in-kernel
-> + * ring directly rather than polling a NAPI instance, so it is effective=
- on
-> + * loopback - which delivers via the per-CPU backlog and exposes no
-> + * pollable napi_id. Keeping the receiver hot lets a synchronous sender's
-> + * small writes accumulate in the ring without a wakeup per message.
-> + */
-> +static void splice_busy_loop(struct sock *sk, struct sk_psock_splice *s)
-> +{
-> +	unsigned long start;
-> +
-> +	if (!sk_can_busy_loop(sk))
-> +		return;
-> +
-> +	start =3D busy_loop_current_time();
-> +	do {
-> +		cpu_relax();
-> +		if (splice_recv_ready(sk, s) || signal_pending(current))
-> +			return;
-> +	} while (!sk_busy_loop_timeout(sk, start));
-
-[Severity: High]
-Does this loop need a need_resched() check or a call to cond_resched()?
-
-Because an unprivileged user can set SO_BUSY_POLL to an extremely large
-value (up to INT_MAX microseconds), triggering this path via recvmsg()
-could cause the thread to spin on the CPU without yielding.
-
-On non-preemptible kernels, this might completely starve other tasks,
-stall RCU grace periods, and trigger watchdog soft lockups.
-
-> +}
-> +
->  /* prot->sock_is_readable for paired-splice sockets. tcp_stream_is_reada=
-ble()
-
-[ ... ]
-
-> @@ -1349,6 +1377,16 @@ static int tcp_bpf_splice_recvmsg(struct sock *sk,
->  			return 0;
->  		}
-> =20
-> +		/* Spin on the ring for the SO_BUSY_POLL budget before
-> +		 * sleeping. If the spin observes data, re-read from the
-> +		 * loop head; otherwise (budget expired or a terminal
-> +		 * condition) proceed to park - splice_recv_wait() returns
-> +		 * immediately for terminal conditions.
-> +		 */
-> +		splice_busy_loop(sk, s);
-> +		if (splice_ring_has_data(s))
-> +			continue;
-
-[Severity: High]
-Could this result in an infinite loop if a user provides an invalid
-buffer to recvmsg?
-
-If the user buffer is unmapped memory, copy_to_iter() in splice_ring_read()
-called earlier in the loop might safely fault and return 0. If
-splice_ring_read() returns 0, the ring's tail pointer isn't advanced, and
-the data remains in the ring buffer.
-
-tcp_bpf_splice_recvmsg() seems to treat the 0 return as an empty read
-rather than an -EFAULT error. When it subsequently checks
-splice_ring_has_data() here, it will evaluate to true because the data is
-still present.
-
-This triggers the continue statement, which loops back immediately,
-potentially creating a tight infinite loop in the kernel.
-
-> +
->  		timeo =3D splice_recv_wait(sk, s, timeo);
-
-[Severity: High]
-Could this cause the system call to incorrectly return -EINTR instead of
--ERESTARTSYS when interrupted by a signal?
-
-When splice_recv_wait() uses wait_event_interruptible_timeout() and is
-interrupted, it returns -ERESTARTSYS (-512). This return value directly
-overwrites the timeo variable here.
-
-On the next loop iteration, signal_pending(current) would evaluate to true,
-and the error code is computed via sock_intr_errno(timeo). Because timeo
-is now -512 instead of MAX_SCHEDULE_TIMEOUT, sock_intr_errno() might
-incorrectly return -EINTR instead of -ERESTARTSYS, which breaks SA_RESTART
-semantics.
-
->  	}
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612011452.1344=
-66-1-xiyou.wangcong@gmail.com?part=3D2
+pw-bot: cr
