@@ -1,193 +1,124 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7204E23EA83;
-	Fri, 12 Jun 2026 12:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A49A38B7D2
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 12:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781267883; cv=none; b=KCKrAPceFSIDRYvbJS06se9W4w01uwdBGFvxGBCU33lIpUCEGk2J+Z/74xt+HToomGCF+7caUk8IXyhrUC2BkQFDjYV2bzTnihmtQ2fP9SJBK4rY+bCthnld5hkOPZkEquFhSblbc1nZR8p/vq9WYOVG1s6JqALUVXBI0HV0vUQ=
+	t=1781269074; cv=none; b=Q0r8AjKcxsOqJ8KMsmvjLoSz+s2evmwQePEB6aVc2MVjxzXoaSc1No2oFRbESn+h33udaNs2HVnlWM9bc8PZTOGAZ32lqOOdjlpRGVZpLfng0H3Gbl8fZtYSSaDPr+u303WfoON/R8aEQNVVYiwbMVFZcNFrPBJfpgYxfgEq7G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781267883; c=relaxed/simple;
-	bh=mRjsxTK/0C9WX6/C/aL+iF6znFLgdk/KXtkySFn1/vU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G/7ScQK8ra/kJny7VymgJNlZn2yNxK2gJyfIYEoub2671pM3k/G7AE5ml0kOWpG+v6ldLoFkHMUTFaBhhIlCBoH0JcCg3emFGugmFlZ0Vm90ZVe2UYS7HeHwfglYIPUsssM9leXU2Lsbe8WVekqe+nzKVpelzh8QhmF8qSMKz+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gcJtW13DgzKHMVP;
-	Fri, 12 Jun 2026 20:37:07 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 7656D4056B;
-	Fri, 12 Jun 2026 20:37:47 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgC3Xwua_StqjRMZBg--.59258S2;
-	Fri, 12 Jun 2026 20:37:47 +0800 (CST)
-Message-ID: <093f957d-3d3a-4ce7-b59b-06203c556629@huaweicloud.com>
-Date: Fri, 12 Jun 2026 20:37:46 +0800
+	s=arc-20240116; t=1781269074; c=relaxed/simple;
+	bh=DtWnRXqB7uvOVeX+OMQCwnhgJjDbTelfSd2KW6wObsM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JONJsnMzanrTnbl0b+522TRuME2/f54eUYnwDVRKXEHlkaegNd0wR66v7iKMWssJIHj01QOkOFqVnR66QRN2J2KdG36wPfnoBaty4wapLvcdFgqeKGblRuANw0MKmOVRgghqy2Mg3vWB0vuu3jfN9LWdHIrgLgCoEo3NzjMWMeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNjNWMTO; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNjNWMTO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124221F000E9;
+	Fri, 12 Jun 2026 12:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781269073;
+	bh=bruhVyYPlS3/Tmnus4gL9tdJ59uUxbkypiOZgxKCQvA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lNjNWMTOB3OLNFyJ8h6yTvhfjbbWEu1RtnvOpY5gQRrkuXurlt8DSi8jh9GYsPtqn
+	 0SzRF6C1uWAQzpExMQA38Kpmpjpf9RBKMaeHYFtXL0abfY9bCe6/VdbbcyGLV3+G6W
+	 nsd3q+2XiAY/bIlMgXjJP2yv8hGHCGTgutnkhj3gkN1/VSvESOmDD8hi+yjaOp6XqE
+	 ce0tMtiuVRF6R2BrIINg1VV1gY2xV+H2NEyT+2swaK+WRwvffLGuM2LxOfRs/JtmjC
+	 +qKEO9m7lFHhNlDBy3TSRadfYyYuLcuty3xb3olU8pLXOPLAOvf4a8cOP1D1u4zg2R
+	 +PhSI40I93bWA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf, sockmap: fix use-after-free when the stream
+ parser resizes the skb
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
+References: <20260612123553.2724240-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 12 Jun 2026 12:57:52 +0000
+Message-Id: <20260612125753.124221F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] bpf: Fix unaligned interpreter panic on JIT
- fallback path
-Content-Language: en-US
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260611101216.30153-1-yangtiezhu@loongson.cn>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260611101216.30153-1-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgC3Xwua_StqjRMZBg--.59258S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryfGw4DtrWrCw1kCw1xKrg_yoWrCFy8pF
-	ykGw1akr4DXFW29a4xJa12vw1Ygw48Ga45Ga4fK3WFkFs0qrn7WF1UKw10gFsxGr48CF1I
-	vw42yF129w1kJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 6/11/2026 6:12 PM, Tiezhu Yang wrote:
-> When an architecture implements bpf_jit_inlines_helper_call(), such
-> as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
-> the helper call offset (insn->imm) during the bpf_do_misc_fixups()
-> phase if the helper is expected to be inlined by the JIT compiler.
-> As a result, insn->imm remains as the raw helper enum ID.
-> 
-> However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0)
-> or if the JIT compilation later dynamically fails (e.g., due to OOM
-> during bpf_jit_alloc_exec()), the core BPF subsystem falls back to
-> the BPF interpreter.
-> 
-> When the fallback interpreter executes (__bpf_call_base + insn->imm)
-> with the unpatched raw helper ID, it jumps into an unaligned invalid
-> address space, triggering a fatal instruction alignment fault (ADEF)
-> or illegal memory access kernel panic.
-> 
-> This issue impacts all architectures that support helper inlining.
-> Introduce a late fixup pass via bpf_fixup_fallback_inline_helpers()
-> in __bpf_prog_select_runtime() to fix it.
-> 
-> When JIT compilation fails or is disabled, the helper call offsets
-> originally skipped for inlining are rewritten to relative memory
-> offsets right before transferring control to the interpreter.
-> 
-> A bounds check on insn->imm against __BPF_FUNC_MAX_ID is added to
-> ensure already-patched address offsets of regular non-inlined helpers
-> are safely filtered out during traversal.
-> 
-> 1. Test case (test_panic.c):
-> 
->    #include <linux/bpf.h>
->    #include <bpf/bpf_helpers.h>
-> 
->    SEC("kprobe/sys_getpid")
->    int test_panic(void *ctx)
->    {
->    	struct task_struct *task;
-> 
->    	task = (struct task_struct *)bpf_get_current_task();
->    	if (task)
->    		bpf_printk("Task address: %p\n", task);
-> 
->    	return 0;
->    }
-> 
->    char LICENSE[] SEC("license") = "GPL";
-> 
-> 2. Reproduction steps:
-> 
->    $ clang -target bpf -O2 -g -c test_panic.c -o test_panic.o
->    $ sudo sysctl -w net.core.bpf_jit_enable=0
->    $ sudo bpftool prog load test_panic.o /sys/fs/bpf/test_panic autoattach
->    $ sudo cat /sys/kernel/debug/tracing/trace_pipe
-> 
-> 3. Panic information on LoongArch:
-> 
->    Kernel ade access[#1]:
->    ...
->        ra: 9000000000486e50 ___bpf_prog_run+0x1370/0x36b0
->       ERA: 9000000000485383 __bpf_prog_ret0_warn+0x13/0x20
->    ...
->     ESTAT: 00080000 [ADEF] (IS= ECode=8 EsubCode=0)
-> 
-> Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->   kernel/bpf/core.c | 28 ++++++++++++++++++++++++++++
->   1 file changed, 28 insertions(+)
-> 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 649cce41e13f..5785c8cb4dbe 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2608,6 +2608,31 @@ static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struc
->   	return prog;
->   }
->   
-> +/* Fix up helper call offsets for inlined helpers on JIT fallback path. */
-> +static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env *env, struct bpf_prog *fp)
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] BPF program modifications to the packet payload and the `cb` array=
+ are lost for fragmented packets, breaking API contracts and state passing.
+- [High] Returning 0 on `skb_clone` allocation failure causes a structural =
+connection stall.
+--
 
-The function name is a bit long for a static function
+commit b299b25e2b7e463fddbfdeb09ab2432fcc43e867
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-> +{
-> +	struct bpf_insn *insn = fp->insnsi;
-> +	const struct bpf_func_proto *fn;
-> +	int i;
-> +
-> +	if (!env || !env->ops->get_func_proto)
-> +		return;
-> +
-> +	for (i = 0; i < fp->len; i++, insn++) {
-> +		if (insn->code == (BPF_JMP | BPF_CALL) && insn->src_reg == 0) {
-> +			/* Filter out already-patched address offsets. */
-> +			if (insn->imm >= __BPF_FUNC_MAX_ID)
+bpf, sockmap: fix use-after-free when the stream parser resizes the skb
 
-The check is redundant, since bpf_jit_inlines_helper_call() already
-filters out insn->imm numbers that is not a valid helper id.
+This commit fixes a use-after-free in the stream parser when a BPF program
+resizes the skb. It runs the parser on a clone of the skb when the message
+spans multiple fragments and the program can modify the packet data.
 
-> +				continue;
-> +
-> +			if (bpf_jit_inlines_helper_call(insn->imm)) {
-> +				fn = env->ops->get_func_proto(insn->imm, env->prog);
-> +				if (fn && fn->func)
-> +					insn->imm = fn->func - __bpf_call_base;
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index e1850caf1a71a..97e5bc5f38c35 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -1149,9 +1149,29 @@ static int sk_psock_strp_parse(struct strparser *s=
+trp, struct sk_buff *skb)
+>  	rcu_read_lock();
+>  	prog =3D READ_ONCE(psock->progs.stream_parser);
+>  	if (likely(prog)) {
+[ ... ]
+> +		if (skb_has_frag_list(skb) && prog->aux->changes_pkt_data) {
+> +			parse_skb =3D skb_clone(skb, GFP_ATOMIC);
+> +			if (!parse_skb) {
+> +				rcu_read_unlock();
+> +				return 0;
+
+[Severity: High]
+Does returning 0 here cause a connection stall?
+
+In the strparser framework (__strp_recv), a return value of 0 from parse_msg
+explicitly signals that it needs more data to determine the message length.
+This causes the parser to consume the current bytes and suspend parsing unt=
+il
+new data arrives.
+
+If the sender has transmitted a complete request and is waiting for a respo=
+nse,
+will the connection stall indefinitely since no new data will arrive?
+
 > +			}
 > +		}
-> +	}
-> +}
-> +
->   struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct bpf_prog *fp,
->   					   int *err)
->   {
-> @@ -2643,6 +2668,9 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->   			*err = -ENOTSUPP;
->   			return fp;
->   		}
-> +
-> +		if (!fp->jited)
-> +			bpf_fixup_fallback_inline_helpers(env, fp);
->   	} else {
->   		*err = bpf_prog_offload_compile(fp);
->   		if (*err)
+> +		parse_skb->sk =3D psock->sk;
+> +		ret =3D bpf_prog_run_pin_on_cpu(prog, parse_skb);
+> +		parse_skb->sk =3D NULL;
+> +		if (parse_skb !=3D skb)
+> +			consume_skb(parse_skb);
 
-I tested it on arm64 and the patch works.
+[Severity: High]
+If the BPF program modifies the cb array or packet payload on the clone
+(parse_skb), do these changes get silently discarded when consume_skb()
+is called?
 
-Tested-by: Xu Kuohai <xukuohai@huawei.com>
+BPF sk_skb programs are explicitly permitted to use the cb array (the first
+20 bytes of skb->cb) to pass state between the stream parser and stream
+verdict programs.
 
+When the program runs on a transient clone, modifications to the cb array or
+the packet payload are lost when the clone is freed. For non-fragmented
+packets, the program runs on the original skb and modifications persist.
+
+Could this structural inconsistency break BPF programs that rely on state
+passing, or allow attackers to bypass BPF security policies by artificially
+fragmenting traffic?
+
+>  	}
+>  	rcu_read_unlock();
+>  	return ret;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612123553.2724=
+240-1-rhkrqnwk98@gmail.com?part=3D1
