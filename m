@@ -1,149 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EDF374A1B;
-	Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0850734E75A
+	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 03:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781230250; cv=none; b=JIO+zsLciigIgnQZUqANKqmTG2MLMCaKiRH2UTM+92bsvVpA1/cflTXVS7bTXsqyBy8Oc4F6rV28ABy+zPOOALHEr9e+BPUn9FGXJRGQYydl3VBjRiABPryXTVAmQrpS2y+sq68vnYHP+g5njlqlvq62qU8bJSdkFHSzzFwBqIA=
+	t=1781234991; cv=none; b=L6c7NOUxE247iUQp/FwYfMjPD7I70/R0+k5Udi7V9R8Gn0LF1tm2na8Wf2va4pWxEg1vp8HqR2UTwONkZM1zqAubcu6lJcOm4AACrxLD4317LptCpCiAkh82esS8ui0SA3o2iQTaYdApIMmmV3CZAGg3nsZHb6kmn9p0cBVu37g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781230250; c=relaxed/simple;
-	bh=wwbF+tsZQrpd6kwFDfZR5ljQW6+9hebJQLVJMjVNQFs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fHhuyt68y6zUF4mgDWtc+C6v5EzFRjhXprPfOrZnZo3SPqJAnA0LVA0tycWP5RJz5jcMcvoOeApajOemYNvhrHmA+VGRSoFwIzUW4yNOdJ+jplZ0j+2enn5IP3dim+LwjaWodkt6Fynn0xxRD5UI7ew3vXSkvENX11Rg3MK+3j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HthUEHhU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781234991; c=relaxed/simple;
+	bh=u5rh4Qqvi0s8OCODrI+xGQAYGLWCohZPG7lsp4zENrk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RAL0rnhm9GUv7x9OcebJK71cuAe3Rqj0OaVmxWN7QelyoWk9lAss8MXQtL9r2gKiXTeTxusVrRWUtuX2rs54WLu4J1gqNCdmsO6ITgiKtAYq2R3cUeXsB/ivQT9Uq6FcipBhq951+t6dNqHG2krkYa76Mbv188Zg2lnRiI9CdtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNjH1Zv/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HthUEHhU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BE41F000E9;
-	Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNjH1Zv/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A3F1F000E9;
+	Fri, 12 Jun 2026 03:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781230248;
-	bh=cVQ9qlqsIn4q8GxhJe6rtO+ljHE4Bqr7eLlZm7l2/gM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HthUEHhUWtgnfRNg+aAbVQjzbsIsiIjrQrIAFgN9+lrW6nAzK8V3NKY1JAVDJXULA
-	 wjovXDkzIMilC84BziWCNo6gSA7Gd9SlwPLeeF0dTYI3530skdTzHi3mUC1d3qvOaP
-	 Xn2iFCy75CNKu/JrLHibeaSQpyPx/KqmDb9f1aQ5kxia6VVlm//1lTbeWx1L2ee4a9
-	 EfR7slKI8oEuQL0jp77fT8de/HfOn5E/B44saBlHRyPtw2dYhqzV1aHQ22XDV9rZHM
-	 +L71qKvxBi9UHTUmGe6CqKc3YFCmtcJUi1RE07/RgKB9RXtDQiltPGpPAzS09kjMFW
-	 xigKGC98B3sDQ==
-Content-Type: multipart/mixed; boundary="===============5717406214657926375=="
+	s=k20260515; t=1781234989;
+	bh=r/afzwc3Zr+i70BaarjTjjwiIBDNpMX+J826I2mpbSY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mNjH1Zv/ix2CIqoiMqGHGRAgKjC5XfE7ZNzy94ZougxpKXIzSndVJif+Y98YxESLP
+	 YV5Wc76doplPVWPOQZIhYXx+50epO0JE3GE1ZbyjKc7QHN71cUNuuwN0+rNWQcCgpu
+	 L/yKqLiSK1D3xquG1CqUeVhhejX9sSr2DsFX+prdNGyEmS1lrSqNy1ofntfpbXTxud
+	 Jroj4d18AjkkJR6259snic+HhQhfyKfEsGRD57P1N3Ah0MlmqmFDvv9L2Kwzhb1rqc
+	 Batu4Y9bnnvMbSqO4y5PfSOU9FHJyKB7OatnmD5ZUvRlDPkPWG3m7SLuesMvCX0sSa
+	 Dj1teaExkPouQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next 2/5] tcp_bpf: busy-poll the splice ring
+ before parking the receiver
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cong Wang" <xiyou.wangcong@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260612011452.134466-3-xiyou.wangcong@gmail.com>
+References: <20260612011452.134466-3-xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 12 Jun 2026 03:29:48 +0000
+Message-Id: <20260612032949.68A3F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <fe2e906f9235c7786e45b393a48da682d9adaaed96389cbb109e3132b63ef783@mail.kernel.org>
-In-Reply-To: <20260612011452.134466-2-xiyou.wangcong@gmail.com>
-References: <20260612011452.134466-2-xiyou.wangcong@gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/5] tcp_bpf: add bpf_sock_splice_pair kfunc for opportunistic loopback splice
-From: bot+bpf-ci@kernel.org
-To: xiyou.wangcong@gmail.com,netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,hemanthmalla@gmail.com,zijianzhang@bytedance.com,xiyou.wangcong@gmail.com,cwang@multikernel.io,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 12 Jun 2026 02:10:48 +0000 (UTC)
 
---===============5717406214657926375==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Missing `need_resched()` check in `splice_busy_loop()` allows an u=
+nprivileged user to monopolize a CPU, causing soft lockups and denial of se=
+rvice.
+- [High] `tcp_bpf_splice_recvmsg` incorrectly returns `-EINTR` instead of `=
+-ERESTARTSYS` for blocking sockets when interrupted by a signal, breaking `=
+SA_RESTART` semantics.
+- [High] Providing an invalid memory buffer to `recvmsg` on a spliced socke=
+t causes an uninterruptible infinite loop in kernel space, leading to Denia=
+l of Service.
+--
+
+commit 8f0193a527ddda6d7d50681be8a081f8bc267f16
+Author: Cong Wang <xiyou.wangcong@gmail.com>
+
+tcp_bpf: busy-poll the splice ring before parking the receiver
+
+This commit adds an optional bounded busy-poll of the ring before parking,
+reusing the socket's SO_BUSY_POLL budget via sk_can_busy_loop() and
+sk_busy_loop_timeout(). It spins directly on the in-kernel ring without
+polling a NAPI instance.
 
 > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index cc0bd73f36b6..549f37077244 100644
+> index 549f370772446..9c4421a74225b 100644
 > --- a/net/ipv4/tcp_bpf.c
 > +++ b/net/ipv4/tcp_bpf.c
 
 [ ... ]
 
-> @@ -756,4 +814,753 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
->  		newsk->sk_prot = sk->sk_prot_creator;
+> @@ -1255,6 +1256,33 @@ static long splice_recv_wait(struct sock *sk, stru=
+ct sk_psock_splice *s,
+>  					splice_recv_ready(sk, s), timeo);
 >  }
->
-> +static int splice_send_ring(struct sock *sk, struct sk_psock *psock,
-> +			    struct msghdr *msg, size_t size, int flags)
+> =20
+> +/* Bounded busy-poll on the ring before parking the receiver. Reuses the
+> + * socket's SO_BUSY_POLL budget (sk_ll_usec) via sk_can_busy_loop() and
+> + * sk_busy_loop_timeout(); the default budget of 0 makes sk_can_busy_loo=
+p()
+> + * false so this is a no-op unless the application (or net.core.busy_rea=
+d)
+> + * opted in.
+> + *
+> + * Unlike sk_busy_loop() / napi_busy_loop(), this spins on the in-kernel
+> + * ring directly rather than polling a NAPI instance, so it is effective=
+ on
+> + * loopback - which delivers via the per-CPU backlog and exposes no
+> + * pollable napi_id. Keeping the receiver hot lets a synchronous sender's
+> + * small writes accumulate in the ring without a wakeup per message.
+> + */
+> +static void splice_busy_loop(struct sock *sk, struct sk_psock_splice *s)
 > +{
-> +	struct sk_psock_splice *self_s, *peer_s;
-> +	struct sk_psock *peer;
-> +	int total = 0;
+> +	unsigned long start;
 > +
-> +	if (msg->msg_flags & MSG_OOB)
-> +		return 0;
+> +	if (!sk_can_busy_loop(sk))
+> +		return;
 > +
-> +	self_s = rcu_dereference_protected(psock->splice, 1);
-> +	if (!self_s)
-> +		return 0;
-> +
-> +	while (size > 0) {
-> +		size_t done, space = 0;
-> +
-> +		/* All peer / peer->sk accesses happen under RCU. If the ring
-> +		 * has space, grab the peer's ring_ref before dropping RCU: that
-> +		 * pins peer_s (and its ring) so the copy below can run outside
-> +		 * RCU and fault/sleep normally. peer_sk is *not* pinned by the
-> +		 * ref, so it must not be touched after rcu_read_unlock().
-> +		 */
-> +		peer_s = NULL;
-> +		rcu_read_lock();
-> +		peer = rcu_dereference(self_s->peer);
-> +		if (peer) {
-> +			struct sock *peer_sk = peer->sk;
-> +			struct sk_psock_splice *ps = rcu_dereference(peer->splice);
-> +
-> +			if (ps && READ_ONCE(ps->ring_buf) &&
-> +			    !sk->sk_err && !(sk->sk_shutdown & SEND_SHUTDOWN) &&
-> +			    skb_queue_empty(&peer_sk->sk_receive_queue)) {
-> +				space = splice_ring_space(ps);
-> +				if (space && percpu_ref_tryget_live(&ps->ring_ref))
-> +					peer_s = ps;
-> +			}
-> +		}
-> +		rcu_read_unlock();
-> +		if (!peer_s)
-> +			break;
-> +
-> +		/* Holding peer_s->ring_ref: peer_s and its ring stay alive.
-> +		 * The copy touches only the ring, never peer_sk, so a normal
-> +		 * faulting copy is safe here.
-> +		 */
-> +		done = splice_ring_write(peer_s, &msg->msg_iter,
-> +					 min(size, space));
-> +		percpu_ref_put(&peer_s->ring_ref);
-> +
-> +		if (!done)
-> +			break;
-> +		total += done;
-> +		size  -= done;
-> +	}
-> +
-> +	/* Wake exactly once, after the loop, re-deref'ing peer under RCU.
-> +	 * Doing this inside the loop would carry the _sync hint repeatedly
-> +	 * and cost a redundant wake per wraparound iteration.
-> +	 */
-> +	if (total) {
-> +		rcu_read_lock();
-> +		peer = rcu_dereference(self_s->peer);
-> +		if (peer)
-> +			splice_wake_sync(peer->sk);
-> +		rcu_read_unlock();
-> +	}
-> +	return total;
+> +	start =3D busy_loop_current_time();
+> +	do {
+> +		cpu_relax();
+> +		if (splice_recv_ready(sk, s) || signal_pending(current))
+> +			return;
+> +	} while (!sk_busy_loop_timeout(sk, start));
+
+[Severity: High]
+Does this loop need a need_resched() check or a call to cond_resched()?
+
+Because an unprivileged user can set SO_BUSY_POLL to an extremely large
+value (up to INT_MAX microseconds), triggering this path via recvmsg()
+could cause the thread to spin on the CPU without yielding.
+
+On non-preemptible kernels, this might completely starve other tasks,
+stall RCU grace periods, and trigger watchdog soft lockups.
+
 > +}
+> +
+>  /* prot->sock_is_readable for paired-splice sockets. tcp_stream_is_reada=
+ble()
 
-Is the flags parameter needed? The function signature includes an int
-flags parameter, but the function body never references it. The only
-flag checked is msg->msg_flags for MSG_OOB.
+[ ... ]
 
-The caller tcp_bpf_splice_sendmsg computes this value as:
+> @@ -1349,6 +1377,16 @@ static int tcp_bpf_splice_recvmsg(struct sock *sk,
+>  			return 0;
+>  		}
+> =20
+> +		/* Spin on the ring for the SO_BUSY_POLL budget before
+> +		 * sleeping. If the spin observes data, re-read from the
+> +		 * loop head; otherwise (budget expired or a terminal
+> +		 * condition) proceed to park - splice_recv_wait() returns
+> +		 * immediately for terminal conditions.
+> +		 */
+> +		splice_busy_loop(sk, s);
+> +		if (splice_ring_has_data(s))
+> +			continue;
 
-int flags = (msg->msg_flags & ~MSG_SENDPAGE_DECRYPTED) |
-            MSG_NO_SHARED_FRAGS;
+[Severity: High]
+Could this result in an infinite loop if a user provides an invalid
+buffer to recvmsg?
 
-but it appears to go unused. Should it be dropped from the signature,
-or is there intended handling that was omitted?
+If the user buffer is unmapped memory, copy_to_iter() in splice_ring_read()
+called earlier in the loop might safely fault and return 0. If
+splice_ring_read() returns 0, the ring's tail pointer isn't advanced, and
+the data remains in the ring buffer.
 
+tcp_bpf_splice_recvmsg() seems to treat the 0 return as an empty read
+rather than an -EFAULT error. When it subsequently checks
+splice_ring_has_data() here, it will evaluate to true because the data is
+still present.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This triggers the continue statement, which loops back immediately,
+potentially creating a tight infinite loop in the kernel.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27388683867
---===============5717406214657926375==--
+> +
+>  		timeo =3D splice_recv_wait(sk, s, timeo);
+
+[Severity: High]
+Could this cause the system call to incorrectly return -EINTR instead of
+-ERESTARTSYS when interrupted by a signal?
+
+When splice_recv_wait() uses wait_event_interruptible_timeout() and is
+interrupted, it returns -ERESTARTSYS (-512). This return value directly
+overwrites the timeo variable here.
+
+On the next loop iteration, signal_pending(current) would evaluate to true,
+and the error code is computed via sock_intr_errno(timeo). Because timeo
+is now -512 instead of MAX_SCHEDULE_TIMEOUT, sock_intr_errno() might
+incorrectly return -EINTR instead of -ERESTARTSYS, which breaks SA_RESTART
+semantics.
+
+>  	}
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612011452.1344=
+66-1-xiyou.wangcong@gmail.com?part=3D2
