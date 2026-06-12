@@ -1,125 +1,211 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C2B2BE7D1
-	for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 16:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B781B3E3142;
+	Fri, 12 Jun 2026 16:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781280544; cv=none; b=eg6bOou/liJuDjVlmKMT2FET5DTlmn+l/InssnvAHdWhwLC0TDDnRPm0TyVL0tXEsA0A/7MX1ib0XLfYmKOrJ2Pkxwu6l9M7ofDgiGuAvdMXrEf6yENWr498lE2+MAzICLWKSt9jL28ckZ2FI1obTiSw7dr/snlMuE+yNWtxWgw=
+	t=1781281819; cv=none; b=kInGhAg2mI7/l+NR2G8VJeGXorDLImuPtz8rtd2RPOvnm0YKvl2XBdnEDmSiPLnLHJejOLAtnluxA+IeCfmamMkS9BocBcGI53C1HIhnVilJl0X5hbhkQ2XWhBN8FOjYsSRq6kaS+ao2EABgSaOGRllR6XU76JYL4vDjpuPzPoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781280544; c=relaxed/simple;
-	bh=U1lRkll2oz5K3pVNqBq5FE4g7ax9tYc5BRLvPHoA+EI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=eOe5E5npastvZBmG7lCyWn7Gc6TfAyIEi57MrKYZJajtZvKwIoeHBSFsnnnWvVhgHfw++BzVf6i3v+M10W83wqgjDobun5HnolFrfn6/3M3uIW6q7r1/h5xMH9NqAVhTGbIycMHigSyCIt0+0LPj7bSof307XLByeitcNwhAKS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i4UuHK/q; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781281819; c=relaxed/simple;
+	bh=pGBQjDj2aJeWPsYi7TaMdnIvSJr91BPbvr/nvzbC5t4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HhYnlYW+yYkiFIDerbD9pt1lVb1ACVsqkmaJ0YD3Dcn67gmBgDi8mGMdtW3YfyxnMEJJUPEKdZcshQTPyEOgkqMNvigc2XrM64KoZpXz8tfieFU/GG7rYNp7REWR1+BKAAqFm/NFqsBq1HiLVOp4hRh1y20GjGfaXeSIX1VggbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=C83N6X9Y; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kXVVRqdH; arc=none smtp.client-ip=103.168.172.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i4UuHK/q"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7f811da1eedso4756007b3.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 09:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781280542; x=1781885342; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kKkZ3cbvIq+p1hLvOachp17H2BDqTQp7OAr6BDxrA6M=;
-        b=i4UuHK/qQ40FgpXoPnhoRm38lpLRiC1hG+qdw+UdRixj8xCCkBkmoVhxnua5pFydBG
-         h/ehFoWtlh2fhfnhXXPSdwr+APfSUJLrXtJ53aDC47GFRNL5qGpp7SgC2aLYN5toepGJ
-         rCyECNgR1+exWZCNs++pMsB/YI6l1HWnaK8PM2pYkLT5CgeegpjdilK9vpO0/bPFFrgo
-         Hh3eiMBFA76NsSXSRg6TL9bdok9C9Q2roukX8MLc+gtxxuQK8djODGbYum54lE9FWfG2
-         azXNIWG0Dj3k0/nGnVBfYmE43tsWKPRh0qomEYqgPM7+pXvfv3hecZ7X2SmZ9VUQxBCB
-         ENzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781280542; x=1781885342;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kKkZ3cbvIq+p1hLvOachp17H2BDqTQp7OAr6BDxrA6M=;
-        b=aeMI44CTTjM4903sadSveilLX81wlHaaA6JXLy8LRrsDhpglZEiV+T6tMJSeuzNwho
-         jbi28XUJXieNr/fUQYml3lPGq5D15zOt8yWpWHlXvzH7Bsj6apIrHjQuZ0/s22YPmanZ
-         6AxgC0DBBNjKHMtmnWnnzh5Mb2x+dBfs+Wbdsvr+rvj7q9H1rD2Urgu5AZumVP3fuXD4
-         dIOxovANEV2gLeObKEUATjI1Hby6X0KtaSDw3JY0n35q86g7uPo2V8Ko2lg4tWzzXFBo
-         gxSTgQSVd7ux4G4sQ2YbeQizpTGMklYF1c4Dl0/guL5AxJ5fdVAHbgs/7mcclwsOGt0C
-         aTiw==
-X-Forwarded-Encrypted: i=1; AFNElJ9PTxCs0MgljcUTbqVp2h8vIKmpBshrLks549zZQhby0xHeYmyQVpILZyTkrFlF8J2ZS0c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXX4DVQS7iJcO7vd2Xo/F+tv1eOevYPMFA0pHXv+pszfH3WeGt
-	sVFKkKU5UShKJr8NOJUMc/FwcW4yc61yDiGguI7QP9jzGKLi+w7IYA8q
-X-Gm-Gg: Acq92OF7SdKN/nBN8YUWaeyerMoS4vKYVg15+2kAoN8/MUxKrdn98OYjk5fS4x5RsME
-	Qa5GtWFPJeu+IS0vlyKQEZ3f9DDYY9jQ/FKflRxi6e7Ptit2TxO3ixdDOiHIjDnmTd6bDPuJaeM
-	Rp1/I8Dkk55pzR1Up9cYh+2EyRATgz68g9YFs6174A9B+l63pjPWex4LufFbMk+ZjrHnT+Q3+ak
-	q0XzPwYTrsUeeHLlJodywJBO4naWO+aJTqi49R2ruuwetKrXIW+m5K5C7yPyqjn7depnkZbh3bt
-	If0rx0Bzofu0OZZ8kQU5QMiC4H21Nj7mJP8dZyQkPY10y8J7XQ6y+CMzbfWk4jc87o8D/4wFi2S
-	/rUIGtreOYKzIyPRgNRPVcL5PKQzIKUXXiwifxXWom+IWa+Wo9PFBxq363ip5ci2g5SUuD2HZ7X
-	E5jBR685puAvOW3T9XOXPe8+kh6kYlgAyZNR8P+J2MepWXl2C0yMch/v87bZYy9liKi17EQuj+v
-	QBkdmGXYAXSYeaFiA==
-X-Received: by 2002:a05:690c:6e13:b0:7bd:6114:4002 with SMTP id 00721157ae682-7f7b901a3ccmr32849557b3.40.1781280542330;
-        Fri, 12 Jun 2026 09:09:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:72::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7f7712f3c11sm12244747b3.41.2026.06.12.09.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 09:09:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="C83N6X9Y";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kXVVRqdH"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.phl.internal (Postfix) with ESMTP id 8C4C91380117;
+	Fri, 12 Jun 2026 12:30:11 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Fri, 12 Jun 2026 12:30:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1781281811; x=
+	1781289011; bh=JPWIUmv7o85y77DNU8cNkhUSgD6pQKzFSK9Rh6/dB9M=; b=C
+	83N6X9YVBl5cOmSZUJ9pC7/NcHioDQkEIDEmefxCV83WSGiqh/zG75U49EB9gNhL
+	eQpdLKC50sfDjQ4PbF+RcylSPmYW5yqXjsADA5m+Jq6fFd2WjMJZA55Kwx9nqPyC
+	s7+aHctdevRwRuwAkavgBpQswSCu2I9VCNOISXpoZeNhgTZaYJEfzkUTnmj9zUpT
+	YHT+bldDdgWkEyedj9bOnubtID67wUBwk3B0hE8yFL7LFc5ZVtH++D60wklkWoKa
+	xVRjuBrHOfMeV5C/GSvl73VZ0bkw3aVDRgpVh5/PqHyIS4KhE1nu86Amh9A2g070
+	N2dKgqER2ir9ciEG7/SWg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1781281811; x=1781289011; bh=JPWIUmv7o85y77DNU8cNkhUSgD6pQKzFSK9
+	Rh6/dB9M=; b=kXVVRqdH7NvGJXoomPyI6L1DzGjLvTGSK7GqXxbO8y6STXl5Cy8
+	FO12TsMfGrtscwVdx2I6SEESmPG6my7nx7Pi/COQT78eF0DepOXU+yc6teBVfKEz
+	Q53UbIxlDWxjzh3SH/BA/esBm7NuZDpgRmgW+rBK7DA4WFXf95grtkomaU6A+s9j
+	HzcWVDJY/GnMeOAoLLv4c1Tz09K3/p22w0XIpgAys7IU1oXs4w2kSsUyXCbObfGL
+	CaJC7Kjla63UwECAzQM6mbFvy1LJs5Gkl252AwMDKsX8dN4uhk7lfPircRMVNRPZ
+	ppqhj2mOeOZKg4vMHRAFfKK2wqWxgnqk3zQ==
+X-ME-Sender: <xms:ETQsah_K7dW98Y7oWvRFzjwl-EXYcJ85m4Z6fFaK78ow6-uglhnJ_g>
+    <xme:ETQsag1M1XeMtw0fS9WBkhBQApkqYi6eS3774AtIiGSmhsCZUHJmySkmcvvuSUw4k
+    RyXpBxMVeN7Jt4FvEKPT1Uj7r-o_fP-HnyYks3VZQW-4OP_VhUPQDo>
+X-ME-Received: <xmr:ETQsauZT-l7MZqAyxCUqmNjUGoCdvz8UwJyew_oLWjRjomajE6yeReV56bq97g>
+X-ME-Proxy-Cause: dmFkZTETIJWWZf8ko10xeT8E6KYd8EuVMIA0Cz31xlXx76CsNvlZ3aEUn7dUUu82qH57kj
+    f2RHsSsq+OSFmAT1A70MvbNlhjJU6JKSZ4oW1PC5b87cZH2YRQGUPuqTBi7c5zWzu2BTi8
+    1Y9gwX6IOu2TYJdFRacCRB2gCTH+AZAvbt3kMiMJ8pFUIikJM6Ltb60os/2XTy9AHUgqvg
+    58puxntgllAItlimqthqFv3/AIZJHUe5YEKQPXEQAVE+RLo6418I8sItQ0/B6/ggIpj+c4
+    FUJfO8C9CSTsYwkKmfBBbTLWCdzFN8hsWOk9I+5WcJO9zCIsY9nSYflQbQMCh3Jpc+0Wgr
+    GLqM/erXuyvNJftHPZTjsinHEcVMkhqjCBFAsUH6AWO6HUh5v8CgRKQCXFQkpYPzIgPK0h
+    Hypq56bGvBWafx3fie7CNXDMlxtDDLaXfJ72nz70XhumfvirXDwWwx/3iIbI5YZpROWJTM
+    Gj+eWGH+usWort9ZVE8kvc2SAQm6jXEkgAHvTmY0CY5NTuCMG4FsNfSl9rqzPKAg3xub3Z
+    yl0CpSRjxScDZx2J9epC9Bn8dGm7oa9h7iovTPUR6m4BR+sXOMylFJnMsgEkQsdwIIhKUM
+    /ZkwABCnDfq+K7P45sX42uD8BxHWFpGcASDaQ9x4HKuU/3ss9eE9+OWbSSBw
+X-ME-Proxy: <xmx:ETQsaktLkBo8-R-vi0ogXEisCQDRbozJSPTJqsStYKwiqyP5VMuq9A>
+    <xmx:ETQsatAacXQ-QWA8VdFLims196dSrzFIKwCDiVKO1qMhay_FJ11sMA>
+    <xmx:ETQsanCUzn4c11x6bRq2zYJEALigfkvbqOuT7MssNJSSlGq3cTfsVA>
+    <xmx:ETQsavkWZt5zXs3ROnobBNlkThMvcgjfbT92xbLC2piqVmgCVFa2-A>
+    <xmx:EzQsaktksHf3FF8v3WOEzbmdHkMnPkTQw8lNY5r6T56sCgVCCZlvyox5>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 Jun 2026 12:30:07 -0400 (EDT)
+Date: Fri, 12 Jun 2026 17:30:02 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] kasan: Fix false-positive wild-memory-access on x86
+ under 5-level paging
+Message-ID: <aiwxWk0gOV4ZlKcT@thinkstation>
+References: <20260610175651.647515-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 12 Jun 2026 09:09:00 -0700
-Message-Id: <DJ7793EEL4P5.1HFCXFENJM2VT@gmail.com>
-To: "Tianci Cao" <ziye@zju.edu.cn>, <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
- <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
- <tangyazhou518@outlook.com>, <shenghaoyuan0928@163.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: support shift operations with
- non-const src operand
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260612093818.18609-1-ziye@zju.edu.cn>
- <20260612093818.18609-2-ziye@zju.edu.cn>
-In-Reply-To: <20260612093818.18609-2-ziye@zju.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260610175651.647515-1-ihor.solodrai@linux.dev>
 
-On Fri Jun 12, 2026 at 2:38 AM PDT, Tianci Cao wrote:
-> Currently, the BPF verifier only allows shift operations when the shift
-> amount is a known constant. This is overly restrictive for cases where
-> the shift amount is bounded but not fully determined at verification time=
-.
-> For example, the following code is rejected by the verifier even though
-> the shift amount is bounded to [1, 4]:
->
->     u32 shift =3D bpf_get_prandom_u32();
->     shift &=3D 3;    // shift is in range [0, 3]
->     shift +=3D 1;    // shift is in range [1, 4]
->     r1 <<=3D shift;  // non-const but bounded shift amount
+On Wed, Jun 10, 2026 at 10:56:51AM -0700, Ihor Solodrai wrote:
+> On x86_64 with 5-level paging (LA57) and inline generic KASAN, the
+> following flaky splat may be observed on boot:
+> 
+>     BUG: KASAN: wild-memory-access in do_raw_spin_lock+0xcf/0x260
+>     Write of size 4 at addr ff110001000c90b8 by task swapper/0/0
+> 
+>     CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.1.0-rc5-gcba33e0b2907 #1 PREEMPT(full)
+>     Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+>     Call Trace:
+>      <IRQ>
+>      dump_stack_lvl+0x54/0x70
+>      kasan_report+0x117/0x150
+>      ? do_raw_spin_lock+0xcf/0x260
+>      kasan_check_range+0x264/0x2c0
+>      do_raw_spin_lock+0xcf/0x260
+>      handle_edge_irq+0x35/0x770
+>      ? do_raw_spin_unlock+0x51/0x2a0
+>      __common_interrupt+0xae/0x120
+>      common_interrupt+0x7c/0x90
+>      </IRQ>
+>      <TASK>
+>      asm_common_interrupt+0x26/0x40
+>     RIP: 0010:identify_cpu+0x2b2/0x3460
+>     Code: 00 41 c7 07 00 00 00 00 4d 89 e6 49 c1 ee 03 43 0f b6 04 06 84 c0 0f 85 a3 1c 00 00 41 c7 04 24 00 00 00 00 31 c0 31 c9 0f a2 <89> c7 42 0f b6 44 05 00 84 c0 0f 85 ad 1c 00 00 41 89 3f 48 8b 44
+>     RSP: 0000:ffffffff97807df0 EFLAGS: 00000246
+>     RAX: 0000000000000020 RBX: 00000000756e6547 RCX: 000000006c65746e
+>     RDX: 0000000049656e69 RSI: 0000000000000000 RDI: ffffffff98632fd8
+>     RBP: 1ffffffff30c65fc R08: dffffc0000000000 R09: 0000000000000004
+>     R10: ffffffff98632fc4 R11: fffffbfff30c65fb R12: ffffffff98633050
+>     R13: ffffffff98633048 R14: 1ffffffff30c660a R15: ffffffff98632fe0
+>      identify_boot_cpu+0xd/0xd0
+>      arch_cpu_finalize_init+0x24/0x1f0
+>      start_kernel+0x31e/0x3e0
+>      x86_64_start_reservations+0x24/0x30
+>      x86_64_start_kernel+0x13a/0x140
+>      common_startup_64+0x12c/0x137
+>      </TASK>
+> 
+> It fires very early in boot. If kasan_multi_shot is set, the reports
+> are non-fatal and keep repeating, and the boot CPU wedges before
+> userspace is reached. The accessed addresses are valid 5-level kernel
+> pointers, so the report is a false positive.
+> 
+> The root cause is in generic KASAN not seeing
+> cpu_feature_enabled(X86_FEATURE_LA57) set, because the bit is cleared
+> in identify_cpu() when the offending interrupt happens [1]:
+> 
+>   memset(&c->x86_capability, 0, ...);   /* clears X86_FEATURE_LA57 */
+>   ...
+>   get_cpu_cap(c);                       /* re-reads CPUID, restores it */
+> 
+> addr_has_metadata() then uses the 4-level threshold, and 5-level
+> kernel addresses fall below it, so kasan_check_range() reports them as
+> wild-memory-access.
+> 
+> Define USE_EARLY_PGTABLE_L5 in mm/kasan/generic.c so
+> addr_has_metadata() uses the stable variable, as
+> arch/x86/mm/kasan_init_64.c already does.
+> 
 
-Rejected? I don't believe so. The verifier accepts it, but falls
-back to conservative.
+I'd rather not push USE_EARLY_PGTABLE_L5 into generic KASAN code.
 
-> Modify the shift helper functions (scalar_min_max_lsh,
-> scalar32_min_max_lsh, scalar_min_max_rsh, scalar32_min_max_rsh,
-> scalar_min_max_arsh, scalar32_min_max_arsh) to handle non-const
-> but bounded shift amounts.
->
-> Update is_safe_to_compute_dst_reg_range() to remove the src_is_const
-> check for shift operations. This approach ensures the verifier
-> remains sound while allowing more programs to pass verification.
->
-> Also modify the comment on is_safe_to_compute_dst_reg_range.
-> Shifts by more than insn bitness are legal in the BPF ISA; they are
-> currently implementation-defined behaviour of the underlying architecture=
-,
-> rather than UB, and have been made legal for performance reasons.
-> See: https://lore.kernel.org/bpf/20210706112502.2064236-47-sashal@kernel.=
-org
+It's an x86 paging detail in arch-independent files. It's incomplete
+(report.c and report_generic.c also call addr_has_metadata()). And it's
+a permanent slowdown on the KASAN hot path -- pgtable_l5_enabled()
+becomes a runtime load of __pgtable_l5_enabled on every check, whereas
+cpu_feature_enabled() gets patched to a constant after alternatives.
 
-What this is for?
-Do you see such code generated by compiler in real programs?
-Does it cause issues with accepting such _real_ programs ?
+And it leaves the real bug in place: the window where
+boot_cpu_data.x86_capability reads back zero is visible to *any*
+cpu_feature_enabled() caller in interrupt context, not just KASAN.
 
-If not, sorry, we should not complicate the verifier for theoretical case.
+The window is opened by identify_cpu() itself, so fix it there:
 
-pw-bot: cr
+	diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+	--- a/arch/x86/kernel/cpu/common.c
+	+++ b/arch/x86/kernel/cpu/common.c
+	@@ -2003,6 +2003,7 @@ static void generic_identify(struct cpuinfo_x86 *c)
+	  */
+	 static void identify_cpu(struct cpuinfo_x86 *c)
+	 {
+	+	unsigned long flags;
+	 	int i;
+	@@ -2022,12 +2023,21 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+	 	c->x86_cache_alignment = c->x86_clflush_size;
+	+
+	+	/*
+	+	 * x86_capability is cleared and repopulated from CPUID below. On
+	+	 * the boot CPU this runs with IRQs on and before alternatives are
+	+	 * patched, so cpu_feature_enabled() reads the live bits; an
+	+	 * interrupt in this window sees e.g. X86_FEATURE_LA57 as disabled.
+	+	 */
+	+	local_irq_save(flags);
+	 	memset(&c->x86_capability, 0, sizeof(c->x86_capability));
+	 #ifdef CONFIG_X86_VMX_FEATURE_NAMES
+	 	memset(&c->vmx_capability, 0, sizeof(c->vmx_capability));
+	 #endif
+	 	generic_identify(c);
+	+	local_irq_restore(flags);
+
+save/restore keeps it correct for the secondary-CPU callers that already run
+with IRQs off.
+
+I reproduced your splat with parallel TCG guests (-cpu max, kasan_multi_shot):
+~10% of boots hit it, 0/~200 with the above.
+
+I am not sure how wide the irq-off window suppose to be. I scoped it to
+memset() .. generic_identify(), where LA57 is restored. Later code
+(apply_forced_caps(), ->c_init(), setup_sm*p()) only refines bits.
+
+Widen it to be defensive, or keep it tight?
+
+Any better solution?
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
