@@ -1,129 +1,171 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C001846A
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 00:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EB13957E
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 01:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781311469; cv=none; b=rAwHI8V/ivoxIiUZBunwIGYNTkmNG9MmCzBBYxkNwcnMqyDaACx6IA3BB+AskOC4gTyW5uzgu4CogBn5Oczkj3gwLTIGxDtTfIgUxXsg6LbjT/hTnZd0D1Yx9HpedY1NUWgrxnya2kQ9TOTWbDpnIZ4p3po+XQJ6l10OSLV0R1s=
+	t=1781312443; cv=none; b=BlH8ntQZj/xxylY6T/xikm6/ecAxTEeWFli8Vmd1+Yk1BuJprzD+JKpZ/BcCBSHdlVxYbM18r1RGr1+BLKFV4VlyTvL2a86yO4Pa4LgTavF3bjnpGpcT2sPcB+GSt2ex6HUqwMfqyDxOJatSi4h7eH0sjolB+V7OimX5Zs/WowA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781311469; c=relaxed/simple;
-	bh=Tn7ej/8bpTZPZT3FAt7K90hmxt6AummHBhAcDjCJFgE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ChpPojXbfoz8mg5ci/kAJnLxFz0gCID6sPp5v4djTTGuRgII3SKnLqPV8sZCKjDJ1ytDr8IjqhnH87g8q73cmmSDa05dpoXu/XHdkinbWPjrNm1WmQ3oq+MRMGNh48e3Mo4KRSXGdcDFfwLLPcOp7KuJVy3+N49rDUQKr+qp7VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RmIdU2jV; arc=none smtp.client-ip=209.85.216.74
+	s=arc-20240116; t=1781312443; c=relaxed/simple;
+	bh=JcOgNfYX5Fr+NIiNpGfDBLZGynCBhQ9Kevw5R9SUXOI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rnvp1nxzxsS2E7E+MMVWwkp4sQ3o+b8U70TzJAPT5EoixIcwmAbLr9MdafAkfNjCMOiqnZKBUSLSlxhI39W0eAK4e5+FXIY8o98+1AziVbgyhDxfayXje6ROf9cfdUg7rj081MojwaLSd9vzlVAnJIem6bmf+kPYSKqY4BM+gsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IjSeLpfY; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RmIdU2jV"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-36d98b828c8so2207790a91.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:44:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IjSeLpfY"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2c10cd7df22so21416915ad.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781311468; x=1781916268; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdSWAaXQJk4NhbjCX9jOP5RFV/noRIR3yFDGGrPquyo=;
-        b=RmIdU2jV1C8CJe8EPYElgzSqa4i3FnlGMQUTTrCvBUGO6hYkI7peMDOp327jmjwCUI
-         22ZlRhzD6JwbeTtqSYIsy1h5IIn0JBVZt8td7l5fAH5F/gSpY6j9plesYh9+xRAbLCcF
-         apweIUx0biRGGTFHrBMyiNv0fvqnd04vLVCjWx4gmtdphroRCUJJxPlwg+0Csn1KUAtb
-         w911zRrHf48+iYgZHtIWwkKN/o2/0aYA1uHg16LP6exg8J1V3qSdGyksLWf1m0OEEb+1
-         d9nWdnkgM2FPJO4DD1I+ZDmZ1xohQ+24xcWoYFa7tjf4BfzyWvX4sTe4X1Z2mN+RI5+1
-         05Ig==
+        d=google.com; s=20251104; t=1781312442; x=1781917242; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rfnHQTzprvfZIViqMRRKupB/GjOqKriHJyW+HN00hFg=;
+        b=IjSeLpfY32buFZ58u0xA9jovQllopEI9dytbx8tDtAb7LkX1ajd48WvT/P8U2MxclI
+         /80n/PLTcfrPa7ZEa9X32Rc3BxJp5V+e4pqQ+fzcKOBZeLZBxtwatYnWjqDz1NW8pX9k
+         qjarmiykamtTTxLBjPsOUHRnaoQB1ptD8MHz8I+0MkRWwTWHFwrMqKAVpXbh1HMFEX8K
+         x00WiBpPJ1TA1JhQAJ9vYU3GeRNkUHpIndD8oYMKvFkGu01YHBzhxXDvPcGCGc021uQK
+         UYf6agJLkz2SEVoOX9kex2WjNRSMzLOIOgg6u4zyVgvnAnGI1HL5wFfH92Nyx74v3q4k
+         F3Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781311468; x=1781916268;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdSWAaXQJk4NhbjCX9jOP5RFV/noRIR3yFDGGrPquyo=;
-        b=XPK2B4romUNXEv5G5OzQcbs+eDl0a93h7BrDspoO99/HPH1ciD+cBiWYniy1NcCoYv
-         NHUJwt1WMbs5YlB61E1WSAlFru2thJY2SpNjMID6R4BNTGb8t/N1vKCPn9uvmAsxVAUL
-         Lj33Hc2BkQ8hGtNCM2nuOt+BXgofkU8Y/fsTpKn3NLUhLiSYdbkKea63+902qdkqqNKm
-         XJkoqzVHw5wdeVABGb6+aZKstH+85FrSBu+ClonYDHlZAwArtx0qOBwZDFDr9RP4Yfg9
-         mlwSMonz7aI4DxH9ELxi52fLWMfzIWRrWk2Mk9CQ+F9+ZDRfhsr9Xa4PzyypZPEhmXCY
-         LDTA==
-X-Forwarded-Encrypted: i=1; AFNElJ9m/ISf8dTtLM4Hk336rHxo0ObAv90SsVMVpJ+TfHVnWgMuOdRgLMJP45lTovcYwtmOmmw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbUQIVVv1OUm5mC5cv1jBTkr7tYlsQp0T+vTAMZbGbFR1fpn67
-	ZY889vW1fYcOCe+HYimcBmBBTcOTimsTRf31uclVDtoU6jSsQkH7p4PJ6GhSSXORYJYd2cuDQaR
-	Zl4Yg6w==
-X-Received: from pjyt12.prod.google.com ([2002:a17:90a:e50c:b0:36b:a12c:2f0])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c:b0:368:ea0c:1b75
- with SMTP id 98e67ed59e1d1-37a01c36550mr5265091a91.6.1781311467684; Fri, 12
- Jun 2026 17:44:27 -0700 (PDT)
-Date: Sat, 13 Jun 2026 00:44:23 +0000
-In-Reply-To: <20260612130919.299124-7-jiayuan.chen@linux.dev>
+        d=1e100.net; s=20251104; t=1781312442; x=1781917242;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rfnHQTzprvfZIViqMRRKupB/GjOqKriHJyW+HN00hFg=;
+        b=B835Myam2DmUFV6RkgOwOiB24oLQUWoHx7qAi9EcohAnBe0PcCDPngKRsajxapJpwk
+         yRAmGe8cQYihUXu+1kKFx6Z7t/gp7jMt/+6DtMJuMraGdA6ouLfTH9DhomUeJUKLOCXL
+         dchV0FWgG1TcQ0E7Kc+2hrfwZkSk7BiAxwd6ebw5el7fnemxZCxhvtucnLi/EsKY4LAk
+         YwUHl004J15rLmwu9dkFvNv/2nVoy8Jz6oBz9hqdvWPk+hnXhUbJVOqtkveY4nujyQJV
+         aqReNEo5f2fF+FFoQ0jbdsVgfhMRiiCqmth35Lbc5WxM5lVJByBkbc0N+wCgy6uwZ4Qp
+         WcFQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9fG4XU50XAfx0mFrjXP9UV9osPFgon9anNXoBkkvtOP1MlCL0UpYX3xswpmqefFw7+L2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMkjeORssIWmf24FngT4mIH1kHx4pvEj5sb5xbx5Yuqp0Lj5UJ
+	P1nf3EfPuVboqbok8ehYWpgo4fT0QjGSj+RyjK72BYU9V5DTUbF3BDwhOT/IeE0VPUroaaRurvA
+	pl+sfCA==
+X-Received: from plbjx8.prod.google.com ([2002:a17:903:1388:b0:2bc:c1af:322f])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:4b47:b0:2c1:98b7:ecf3
+ with SMTP id d9443c01a7336-2c41235e35cmr60019365ad.23.1781312441612; Fri, 12
+ Jun 2026 18:00:41 -0700 (PDT)
+Date: Sat, 13 Jun 2026 00:59:57 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260612130919.299124-7-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260613004425.1347589-1-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next v3 6/7] bpf, sockmap: fix integer overflow in
- bpf_msg_pop_data() bounds check
+Message-ID: <20260613010039.1362312-1-kuniyu@google.com>
+Subject: [PATCH v2 bpf-next/net 0/5] bpf: Support RX/TX HW timestamp proxy.
 From: Kuniyuki Iwashima <kuniyu@google.com>
-To: jiayuan.chen@linux.dev
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	cong.wang@bytedance.com, daniel@iogearbox.net, davem@davemloft.net, 
-	eddyz87@gmail.com, edumazet@google.com, emil@etsalapatis.com, hawk@kernel.org, 
-	horms@kernel.org, ihor.solodrai@linux.dev, jakub@cloudflare.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	martin.lau@linux.dev, memxor@gmail.com, netdev@vger.kernel.org, 
-	pabeni@redhat.com, rhkrqnwk98@gmail.com, sdf@fomichev.me, shuah@kernel.org, 
-	song@kernel.org, yonghong.song@linux.dev, 
-	Kuniyuki Iwashima <kuniyu@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-Date: Fri, 12 Jun 2026 21:07:50 +0800
-> From: Sechang Lim <rhkrqnwk98@gmail.com>
-> 
-> start and len are u32, so
-> 
-> 	u64 last = start + len;
-> 
-> evaluates start + len in 32-bit and wraps before storing it in last.
-> The bounds check
-> 
-> 	if (start >= offset + l || last > msg->sg.size)
-> 		return -EINVAL;
-> 
-> can then be passed with an out-of-range start/len, after which the pop
-> loop runs off the end of the scatterlist and sk_msg_shift_left() calls
-> put_page() on the empty msg->sg.end slot:
-> 
->   Oops: general protection fault, probably for non-canonical address
->   0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
->   KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->   RIP: 0010:sk_msg_shift_left net/core/filter.c:2957 [inline]
->   RIP: 0010:____bpf_msg_pop_data net/core/filter.c:3103 [inline]
->   RIP: 0010:bpf_msg_pop_data+0x753/0x1a10 net/core/filter.c:2984
->   Call Trace:
->    <TASK>
->    bpf_prog_4cc92c278f4d5d56+0x1b1/0x1e8
->    bpf_prog_run_pin_on_cpu+0x107/0x320 include/linux/filter.h:746
->    sk_psock_msg_verdict+0x357/0x7f0 net/core/skmsg.c:934
->    tcp_bpf_send_verdict net/ipv4/tcp_bpf.c:420 [inline]
->    tcp_bpf_sendmsg+0x766/0x1ae0 net/ipv4/tcp_bpf.c:583
->    __sock_sendmsg+0x153/0x1c0 net/socket.c:802
->    __sys_sendto+0x326/0x430 net/socket.c:2265
->    __x64_sys_sendto+0xe3/0x100 net/socket.c:2268
->    do_syscall_64+0x14c/0x480
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
->    </TASK>
-> 
-> Widen the addition with a (u64) cast so the bound is evaluated in
-> 64-bit and a len near U32_MAX no longer wraps below msg->sg.size.
-> 
-> While here, change pop from int to u32. It counts bytes against the
-> unsigned scatterlist lengths and can never be negative, so the signed
-> type only invites sign-confusion in the pop loop.
-> 
-> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+We have some hosts where packets come from special hardware
+and are provided directly to userspace, bypassing the kernel
+networking stack.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+When standard socket applications are run on these hosts,
+a userspace proxy is required to mediate traffic between the
+hardware and the applications.
+
+            +---------+                 +----------------------+
+            |  proxy  |                 |  socket application  |
+            +---------+                 +----------------------+
+              ^     ^                               ^
+  userspace   |     |                               |
+  -----------| |-----------------------------------------------
+             | |    |    +---------------------+    | skb
+             | |    `--->|  virtual interface  |<---'
+  kernel     | |   skb   +---------------------+
+  -----------| |-----------------------------------------------
+              |
+              v
+       +------------+
+       |  hardware  |
+       +------------+
+
+However, even though the hardware fully supports timestamping,
+the HW timestamps are not directly accessible to the socket
+applications because the skb is consumed/injected by the proxy.
+
+This series extends ethtool and adds BPF kfuncs to transparently
+support HW timestamp on such a setup.
+
+Patch 1 is pure net-next patch to advertise fake timestamping
+capability on virtual interfaces (e.g. ipvlan, geneve, etc).
+
+Patch 2 is misc cleanup.
+
+Patch 3 & 4 add kfunc to proxy RX/TX hwtstamp.
+
+Patch 5 is selftest to demonstrate how it works.
+
+Note the test requires this iproute2 commit:
+https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c9a9f12aa619288fd3d4e16bc4b3c73b655a4efe
+
+
+Changes:
+  v2:
+    * Patch 3:
+      * Remove __packed and use unnamed bit-field in struct bpf_hwtstamp (Alexei Starovoitov)
+      * Use skb_unclone() instead of skb_heaeder_clone() (Sashiko)
+
+    * Patch 4
+      * Remove __packed and use unnamed bit-field in struct bpf_tx_tstamp_cmpl (Alexei Starovoitov)
+      * Check !skb_at_tc_ingress() in bpf_skb_complete_tx_tstamp() (Sashiko)
+      * Use skb_unclone() instead of skb_heaeder_clone() (Sashiko)
+
+    * Patch 5
+      * Use scm_timestamping64 (Sashiko)
+      * Correct saw_tskey check (Sashiko)
+      * Fix retval check for bpf_skb_get_tunnel_opt() with (int) cast (Sashiko)
+      * bpf-style comment
+
+  v1: https://lore.kernel.org/bpf/20260612001803.23341-1-kuniyu@google.com/
+
+
+Kuniyuki Iwashima (5):
+  ethtool: Introduce ETHTOOL_MSG_TSINFO_SET for virtual interfaces.
+  bpf: Rename bpf_kfunc_set_tcp_reqsk to bpf_kfunc_set_sched_cls.
+  bpf: Add bpf_skb_set_hwtstamp().
+  bpf: Add kfunc to proxy TX HW Timestamp.
+  selftest: bpf: Add test for hwtstamp proxy.
+
+ Documentation/netlink/specs/ethtool.yaml      |  13 +
+ include/linux/filter.h                        |   2 +
+ include/linux/netdevice.h                     |  11 +
+ include/linux/skbuff.h                        |  13 +
+ include/net/tcx.h                             |   1 +
+ include/uapi/linux/bpf.h                      |   1 +
+ .../uapi/linux/ethtool_netlink_generated.h    |   1 +
+ include/uapi/linux/pkt_cls.h                  |   3 +-
+ kernel/bpf/verifier.c                         |  13 +-
+ net/core/dev.c                                |  39 ++
+ net/core/dev_ioctl.c                          |  31 +-
+ net/core/filter.c                             |  98 ++-
+ net/ethtool/common.c                          |   4 +
+ net/ethtool/netlink.c                         |   8 +
+ net/ethtool/netlink.h                         |   1 +
+ net/ethtool/tsconfig.c                        |   7 +-
+ net/ethtool/tsinfo.c                          | 123 +++-
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  10 +
+ .../selftests/bpf/prog_tests/proxy_hwtstamp.c | 588 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/proxy_hwtstamp.c      | 236 +++++++
+ 21 files changed, 1186 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/proxy_hwtstamp.c
+
+-- 
+2.54.0.1136.gdb2ca164c4-goog
+
