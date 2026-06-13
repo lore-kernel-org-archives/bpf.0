@@ -1,62 +1,65 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D6117A2EA
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 22:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DD931AAAF
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 22:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781390909; cv=none; b=UEu+x3OVjEb3kLkOBd44bcq4D9yIbRFLPNXf9v4IOIbPe8WAZ+xooVvBiCjvGLdrAyBBl15Z48IZWeyhC1PP77OR9VpayioFEkEsbEQ6uWtnl43NC3rW86V8a47IJtQtuVZXDKqL8AGtXcSYHncbYGOzgJrwW5DTRVftC265CSk=
+	t=1781390909; cv=none; b=FiukA2qteZlL7QbpkzyxE9SYHaO4oawiVzjujLhNqIw6pv7gH9yZizfRZtf12WVZk7dm515sCQWy4J1my08boeVx8cCCNdOLsbRkNvOM/Yg0lqoNariwkormBd4+X6hZunjBrDoGmMh4QDAGbo1/Fz5LKOFdGfPIrEdewzkFnFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1781390909; c=relaxed/simple;
-	bh=d5fX4qIbgXRNZdaC9K1ucEiP0A07xoskHV2sDuv0M1A=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=aE9DHhzz6uTFB2/8y44gYAGrA3XHOvQiq3DrsW6xsVSgc5j3b3AkgPE26pdGoTwuDUyhe8NGEg+JgLYc2fIQuhvLZZPbBA3Hxvu+rmJ9+apIzghq2pNRI6gNt5ZMSdsqZmRDrovDuwDYAExC/cE8fclOPAP0uQlQ7ZxfDx/2EvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fSEu+eaw; arc=none smtp.client-ip=209.85.210.202
+	bh=f2kSPASKVpGleWFrc0xO5xsyxuYP/0eq08GQNxzTz74=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=p62KaUmc5QtbvXnIyvJj79gW8O/OSpDRkOSshBfMUWb355oI7CnLzWvOk0xj+ScZpM1VLtSKy3Xr4oibT4vij1h4V4OkMx0B8PrSql9QKz7itmADv5nOU2R6R7edi66IOBQhRg9/o719e/IGePPRw7Kz93IBxsFTIe/u1jQveP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=it2tGyYq; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fSEu+eaw"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84256bee9a9so1435545b3a.1
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 15:48:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="it2tGyYq"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2c0c32f4b1bso20615255ad.2
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 15:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781390907; x=1781995707; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aL2b3deTS0RPd2vEcIj2m3DwJ9yZbae4RFnSu+99SDA=;
-        b=fSEu+eawRWzqBETMeUVuZAaPjkt9iYC+zVGVXjwKLpd0bWLK+Rg6of8TQLWH3TOmSF
-         6uFZ6vftj4eImdI3KG4OkeTFzqA/gcFjmNKuEeCZ3InzcWdkr/WzRvRpqFr8BtTH6Cqk
-         i4GZnMJl4rvrDc6UVTqLJ57Xgt04OaTIIhbUyVEn3gILGBoFaxCek8X9L/uqE136zNh5
-         fw5amXC8IljP4OdxkIfT7XcSMqz9CXTUPdQt5SZe6GZd5vDdolIXUl3adca61tlZBctf
-         ShQ0ZPA0FFdMnRtqlbA+9K+qRdrf2lvzvzdROR6DQ72wbkGDXdbPZPnFbF6TLYzKh9R6
-         dfxg==
+        d=google.com; s=20251104; t=1781390908; x=1781995708; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6NY2wqsqZ4pNc5w4n8thORvec/7okeYqsyH3VQnt9XM=;
+        b=it2tGyYqX1gB9HLMij0KRomOHQ9Ojyr3qqadKjtX4eI4PCMuwP4wntUGvigihsIC/W
+         /upv27NLrq5zDgbOgsCTurdBCmhFlj49rORoj59Mt3wR3ydqFzTpfsRqVK/6pdcr+aEL
+         M0KU/LPLhGRL6Zlq/Wghs++VfTmlEpx8L+J5Ot0wCO+P7eit7w11BiDk9+9recWxdIsl
+         BFwiSH/RfkD2fsxubxu1YK3U70HeiGbvm0y57Ed+gLn85tfa+AF47JtPidAuPAuZ14yq
+         ulyHH54W8vf2qDsvPOcGyFIAtIHMpwacC3cpl9famiB8i66et2IscPO/IhKGKCvzVSLB
+         Trwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781390907; x=1781995707;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aL2b3deTS0RPd2vEcIj2m3DwJ9yZbae4RFnSu+99SDA=;
-        b=pJPJDvIKWDxnZk5aw6MeuWDmwdnxIlVeGpE+Fqxy/VAUn1lpsKQiB2WvSCOBcTd0vI
-         3x6x78Gb6qCyEKOdRG64IK/hlbBbpnwafvaBnrT3dQUv3D9yzzCAjCjceOiEMHXek+xi
-         0IDTvcoNvih8L3xQwNvRkh1snRmu1SB6/MAn2/xfDpJ94wG+sm96XzP6MDz8tNXGB0zC
-         1W4lNwgXs7LsHri+HhNcgsBmCIvg73W1O7SvVC6405W6eKQmM/IRoOIHq2ArxElhP2GF
-         yp7wsMgt5A701C3xRhFVCqPjCr/tsTarOam0b49CI7nG5kzAp59u/dDR7s9DITOVJTvM
-         SPKQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Xk7Sxqv0RptRSahe2kek8eBoj3WwTHagshWauyriVhsqv/9Oe3aV6zyds8Dr3ZXZ877g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFhjgBIrWpU6uzbwe/u/4bix2mCd2wSj4+8A51lu4aC6gS9Bvn
-	kfd0W5Rg97iCBQMBjPaZYQ0L+QHLVH5vb9UiIu1UKRhM+9IYVycBRfnKwWbUMK59i24f37kliHR
-	aLI08ng==
-X-Received: from pfbea27.prod.google.com ([2002:a05:6a00:4c1b:b0:842:3b3a:5198])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:198d:b0:842:66af:5bf2
- with SMTP id d2e1a72fcca58-844e1a98edcmr5092893b3a.38.1781390906763; Sat, 13
- Jun 2026 15:48:26 -0700 (PDT)
-Date: Sat, 13 Jun 2026 22:48:04 +0000
+        d=1e100.net; s=20251104; t=1781390908; x=1781995708;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6NY2wqsqZ4pNc5w4n8thORvec/7okeYqsyH3VQnt9XM=;
+        b=DKHQcN7okEFlOScs256ReyhxPq5JEqpPm6OptGvx2ywEQgNbEjb9tSmLeBkCYbPnHc
+         ue+KWvDUGGxK/PzYlTf0Mf+NpRsc91Oqkr/1WTHLasGmBZ0Yhd7FL46k+1wzQUg3u33A
+         AbwcTUIK+stHi4XBMCsmGiDJERYQ08+BP6S+au3Gn+YM8HzK3x9P42zic5G80S5ESiGW
+         p3d/U2BjZBn/J9MmPu2WTUfg09xRnXchnZ58weJJkwqiTzZzZpBWfCmmZ/bELQka4GmD
+         KBPUPZEpvUk9jYY80AOdPimDaJDmz89YxXheAg1R/yp53X8Azi3z7Jcn18X8NSphKJf7
+         3Z1Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9EQvixu77gi9rM7/NIhgQScY6urg7nXwcBbB2hRkbcQ+tfIkv0r/UzxtqlhK5ySrdfmao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ6E9TSiNKpIHDZ6wXvAF4OEnhK88HG3oxuiU7BoQwrRyc5Kbg
+	Yo3LMDrtMZvVH5XmIr+Vw6Lk9acZOC/TY+ukZwrIA5rqrFq8zboa1d9TaO2hWNtDQOVhnu6Ubnw
+	TztkfYA==
+X-Received: from plbmo13.prod.google.com ([2002:a17:903:a8d:b0:2bf:202c:50cc])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:acb:b0:2c0:a746:7b16
+ with SMTP id d9443c01a7336-2c6641e3058mr52436855ad.22.1781390907653; Sat, 13
+ Jun 2026 15:48:27 -0700 (PDT)
+Date: Sat, 13 Jun 2026 22:48:05 +0000
+In-Reply-To: <20260613224823.2399535-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260613224823.2399535-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260613224823.2399535-1-kuniyu@google.com>
-Subject: [PATCH v3 bpf-next 0/4] bpf: Support RX/TX HW timestamp proxy.
+Message-ID: <20260613224823.2399535-2-kuniyu@google.com>
+Subject: [PATCH v3 bpf-next 1/4] bpf: Rename bpf_kfunc_set_tcp_reqsk to bpf_kfunc_set_sched_cls.
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
@@ -69,92 +72,55 @@ Cc: Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-We have some hosts where packets come from special hardware
-and are provided directly to userspace, bypassing the kernel
-networking stack.
+Currently bpf_kfunc_set_tcp_reqsk is registered for
+BPF_PROG_TYPE_SCHED_CLS.
 
-When standard socket applications are run on these hosts,
-a userspace proxy is required to mediate traffic between the
-hardware and the applications.
+We will add more kfuncs there, but the name is too specific.
 
-            +---------+                 +----------------------+
-            |  proxy  |                 |  socket application  |
-            +---------+                 +----------------------+
-              ^     ^                               ^
-  userspace   |     |                               |
-  -----------| |-----------------------------------------------
-             | |    |    +---------------------+    | skb
-             | |    `--->|  virtual interface  |<---'
-  kernel     | |   skb   +---------------------+
-  -----------| |-----------------------------------------------
-              |
-              v
-       +------------+
-       |  hardware  |
-       +------------+
+Let's rename it to bpf_kfunc_set_sched_cls.
 
-However, even though the hardware fully supports timestamping,
-the HW timestamps are not directly accessible to the socket
-applications because the skb is consumed/injected by the proxy.
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/core/filter.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-This series extends ethtool and adds BPF kfuncs to transparently
-support HW timestamp on such a setup.
-
-Patch 1 is misc cleanup.
-
-Patch 2 & 3 add kfunc to proxy RX/TX hwtstamp.
-
-Patch 4 is selftest to demonstrate how it works.
-
-Note the test requires this iproute2 commit:
-https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c9a9f12aa619288fd3d4e16bc4b3c73b655a4efe
-
-
-Changes:
-  v3:
-    * Drop ethtool patch and rebase on bpf-next.git
-    * Patch 4: Drop bpf_kfunc.h change
-
-  v2: https://lore.kernel.org/bpf/20260613010039.1362312-1-kuniyu@google.com/
-    * Patch 3:
-      * Remove __packed and use unnamed bit-field in struct bpf_hwtstamp (Alexei Starovoitov)
-      * Use skb_unclone() instead of skb_heaeder_clone() (Sashiko)
-
-    * Patch 4
-      * Remove __packed and use unnamed bit-field in struct bpf_tx_tstamp_cmpl (Alexei Starovoitov)
-      * Check !skb_at_tc_ingress() in bpf_skb_complete_tx_tstamp() (Sashiko)
-      * Use skb_unclone() instead of skb_heaeder_clone() (Sashiko)
-
-    * Patch 5
-      * Use scm_timestamping64 (Sashiko)
-      * Correct saw_tskey check (Sashiko)
-      * Fix retval check for bpf_skb_get_tunnel_opt() with (int) cast (Sashiko)
-      * bpf-style comment
-
-  v1: https://lore.kernel.org/bpf/20260612001803.23341-1-kuniyu@google.com/
-
-
-Kuniyuki Iwashima (4):
-  bpf: Rename bpf_kfunc_set_tcp_reqsk to bpf_kfunc_set_sched_cls.
-  bpf: Add bpf_skb_set_hwtstamp().
-  bpf: Add kfunc to proxy TX HW Timestamp.
-  selftest: bpf: Add test for hwtstamp proxy.
-
- include/linux/filter.h                        |   2 +
- include/linux/skbuff.h                        |  13 +
- include/net/tcx.h                             |   1 +
- include/uapi/linux/bpf.h                      |   1 +
- include/uapi/linux/pkt_cls.h                  |   3 +-
- kernel/bpf/verifier.c                         |  13 +-
- net/core/dev.c                                |  39 ++
- net/core/filter.c                             |  98 ++-
- .../selftests/bpf/prog_tests/proxy_hwtstamp.c | 588 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/proxy_hwtstamp.c      | 236 +++++++
- 11 files changed, 988 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/proxy_hwtstamp.c
- create mode 100644 tools/testing/selftests/bpf/progs/proxy_hwtstamp.c
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9590877b0714..823c62481dbf 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12498,9 +12498,9 @@ BTF_KFUNCS_START(bpf_kfunc_check_set_sock_addr)
+ BTF_ID_FLAGS(func, bpf_sock_addr_set_sun_path)
+ BTF_KFUNCS_END(bpf_kfunc_check_set_sock_addr)
+ 
+-BTF_KFUNCS_START(bpf_kfunc_check_set_tcp_reqsk)
++BTF_KFUNCS_START(bpf_kfunc_check_set_sched_cls)
+ BTF_ID_FLAGS(func, bpf_sk_assign_tcp_reqsk)
+-BTF_KFUNCS_END(bpf_kfunc_check_set_tcp_reqsk)
++BTF_KFUNCS_END(bpf_kfunc_check_set_sched_cls)
+ 
+ BTF_KFUNCS_START(bpf_kfunc_check_set_sock_ops)
+ BTF_ID_FLAGS(func, bpf_sock_ops_enable_tx_tstamp)
+@@ -12526,9 +12526,9 @@ static const struct btf_kfunc_id_set bpf_kfunc_set_sock_addr = {
+ 	.set = &bpf_kfunc_check_set_sock_addr,
+ };
+ 
+-static const struct btf_kfunc_id_set bpf_kfunc_set_tcp_reqsk = {
++static const struct btf_kfunc_id_set bpf_kfunc_set_sched_cls = {
+ 	.owner = THIS_MODULE,
+-	.set = &bpf_kfunc_check_set_tcp_reqsk,
++	.set = &bpf_kfunc_check_set_sched_cls,
+ };
+ 
+ static const struct btf_kfunc_id_set bpf_kfunc_set_sock_ops = {
+@@ -12556,7 +12556,7 @@ static int __init bpf_kfunc_init(void)
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_set_xdp);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+ 					       &bpf_kfunc_set_sock_addr);
+-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_sched_cls);
+ 	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS, &bpf_kfunc_set_sock_ops);
+ }
+ late_initcall(bpf_kfunc_init);
 -- 
 2.54.0.1136.gdb2ca164c4-goog
 
