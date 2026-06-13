@@ -1,64 +1,64 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6339638B140
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 01:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B625E39E6D4
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 01:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781314271; cv=none; b=lcfu4arEMaA0//yd8w8rwLhzjTWlfZObhVw0PQOhAyLwy5BIPrL2X3HsR0qJS42ZwhIRspUN/iW9e/kd7OfiJc7ao5alz9deRjyTK8g3I2qxcQhvyuRjYHrSvThUtvHQ6UaoDRP+9LtO7A4X7cdbyRg24IRfGMKIz/VuacURJ74=
+	t=1781314619; cv=none; b=ZdWOMvW7HMg+CEiQpvzDDmrjDn9Ni/m3rjRgfxMBTnqz/mQF5yufPfQGtUem1Nxve9YkyeCFtTCTxXrDw2s/javDGZ3Tr37Dv49gkQ6/P0DCdWUXQE8Zug+lETwrGdjkosY+VoK9W5fMs+EEsty361NdlOdUkw/vm1shpMS8KGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781314271; c=relaxed/simple;
-	bh=o3Ppwk8Pxo2eOnZQYuZg32wpqsbKuSlPC70ZBZfMUGY=;
+	s=arc-20240116; t=1781314619; c=relaxed/simple;
+	bh=ATCD8YWcyycCwAf5daRrjVD1RP8gGZsuumqpfm7uutY=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=f38Z3L2K64VFQbhydgS1hrt4YjZ67qqd/ZiS6t9q6fto3p168fdi/0eGP+dmTxoljbR8lg8hPMPgHCYSJgoD4imZfwiOd6y8gaVYA68cDTV9Z+SdMO6rtdmewGeozKJiOgl2sF4MBlMuPSFA0N58y8q6SMeZKVLwyC5UB50zBig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sD2wrGBW; arc=none smtp.client-ip=209.85.161.41
+	 References:In-Reply-To; b=KqnwzX7kXSPyScQKKwS30rV0yQTja/iCBVkd72N7MvH+C6+v4Lh3YxiqbO/B5O0cgrYNzOyGEF4zDij3uXiFdMM/2ggIralxiYDahAdi1nxS8X6U8oFJzh7VxY6MeIde06YqbAHld+oc+ydK0meXb8OZuCnwN9YUp3Xv/Z+7VX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CpY886Fr; arc=none smtp.client-ip=209.85.210.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sD2wrGBW"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-69ed219d3ecso1088222eaf.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:31:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CpY886Fr"
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7e6b5c374e5so1772218a34.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781314269; x=1781919069; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781314617; x=1781919417; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kG4r8a+egx6Sz73/hv1qlVjU+AH9cIZy42JaiVuxTy4=;
-        b=sD2wrGBW1v1TO4G+NK2K1onVahwaXCkFrFHZNAzpVS9IAQyNzTPDOq/YwDBJqGd+f/
-         5d/XDE9xnaHNLWkHeu94SEWDk3QPI/WiH8Nt+rY55B9jN0NCZMf6Q7XRvP97ncq3hjH9
-         aVC+kFXmUHbHdRwYGVVgIE2jwNMNHcj/QZztqXAAKKHGC7cNdZ4bZ0siUVSVimZRziJc
-         Ct5KqZRdP4LXwA/JQV2aXHxqVpzKU9gK1F7aNV7vJp83Y6Y2PD8goZLSf9VuYZbWCxa/
-         sBlyDMZv44wY7iajctdXHsvwt9xQ/+b6xenxMIr9wg/+dS6kTTWpYuYWqh7cYOlLEFVb
-         GLfg==
+        bh=uvfgZCv77btIU2CurjCFxTmu/1bI2beZuVQe8JJi27c=;
+        b=CpY886FrNj4EQww+vVk87tNbyjOoMjx5GMiDePF0Y5cfPIi/mYw+Z5j18KHqIZZEbg
+         FcDVvF609q7lA5/qi9oCQWCW/F0JTLseILy9f1ltPgHuI+ERjGzNq4trVID7nckeTiEB
+         lcKYy7CuOQtxw0uLSNFJtBBqYZhraCvIM0i2GpgkCGt3IMvKQZhG5pmOwRGoFDizFjrC
+         0j5mLhEc8kclUYhZE5PWjZLar0R1iPaX0IzytiUn2tQUaz5KdiQ18c6McNxBWis8E8zg
+         ocTy7QMIm5+h12O4CGNre7BV46gPOqf+3Jng+FbkUF/Gr+3vBXrpw2cD9ivkz806XQEi
+         c7Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781314269; x=1781919069;
+        d=1e100.net; s=20251104; t=1781314617; x=1781919417;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kG4r8a+egx6Sz73/hv1qlVjU+AH9cIZy42JaiVuxTy4=;
-        b=hCr8MbIqFDW5yqtpohgoY1SLmya0qb6SoxI+X2exbg/IRNWR2weW3vyFFhOkuEccfz
-         ON4g4LSuXmWO/2LTXnVEMxhvNRTJO1xdLGaWQjsuIg1Dl4JWnFWWwvzC8iVGnYudP/3y
-         U5IfthsR8a5yvdbo/USGgOTPCJwa7nP0iDzwH54gKLe3kHduZlVwWv1UwJr1juQgVSTO
-         5MgQb4piQTUIyjFSumS4xCI7/yl9bK0+w53qDsHqzwpwW68+S63n3mlIC6ZNLn5vBC2E
-         kF+S/g4NnmeUccWnEhnZs6emkLnRXI307Dmo0qJ1cOjwHeQTxjk3fQG+WkUS5Yn7sPf9
-         2JhA==
-X-Forwarded-Encrypted: i=1; AFNElJ9LCdbV9UcHFYLMtZVdD3u+4bFGVHNXoWDeiXYFswbZl3GkiyCs3iKAsEha1euQsQPs8c8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy65TSBal/1rfeC3P5RyS0JlMLp8Hmmc6pOeZqVGKkgJ5unpT9l
-	k1+K67oHpA2bop3Q0f0Yfupl8f42uf7gMOHSj3KPR4Y/q44HYGjW0mIB
-X-Gm-Gg: Acq92OG2wy0i6gmvAuVHyUdSLLm9AjuwG9Q5Lh6fYHbevEqbg/I4eu7lXdFoepM3VAN
-	P5Y5qCGmarla3aOh8wliac6PgZxWnZVWUquRy17gT5cK8+yds1/RwYLRsF4NmLlWv12ttOtlZtA
-	vehTpQUxPUAFd9xu0sah4IFfwDrH1GSPmRan/SgMivkGNZuLh2bMgB/jNT447rS/0j4uYMcHRUU
-	vmG3559IUWF/La4UDZci+PZlE623TfzBZVBxAbjl9Br7mqzHW6RTC6taxx0/11gZ0iGq1o1BQyf
-	RD9P2Waz6KDkEClJ0XAyQu8JgJsRkCLt7ARJoKHgWO3hOEWsZUvIe29pyoGOAPk+k4kib2VmYQ4
-	NZ98d3PHVF/ENoLL5hZrzB+UDhnuyksx9wsYeDI6h7dMgAninybaE9hDPvVRLySQ01OaqTyxtsW
-	Kg4V96qo6/hlJMpAQOak+2JQF0DAUSF0iQwtEw5UDFfZ08K1kp8ReVRe1PCHSXpsDAsrQGGvUK4
-	R4YSFEqdj+vikMD1A==
-X-Received: by 2002:a05:6820:1787:b0:69d:7a88:9cde with SMTP id 006d021491bc7-69edc73e0a1mr3369586eaf.26.1781314269167;
-        Fri, 12 Jun 2026 18:31:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:45::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4426abf2782sm3492674fac.8.2026.06.12.18.31.06
+        bh=uvfgZCv77btIU2CurjCFxTmu/1bI2beZuVQe8JJi27c=;
+        b=nDKTQgI6FvLqgoNYPOcT/evEf3vbyxvH8d1UqMqw7WUhj0uokdoh3vJOJyORUbLxeB
+         DpDD7w4LN7XXV+A5PPYh0WNAcgOdnRwTW5j3YzIWR93gWW+w1CNocPkgFNQ/TloHQE1+
+         kXuVO6KVfru2/Ap0PyfboFxsvDUR7DJVwBfCrTTI3dJgKfQhQLlfYU6IKuyvXibKxJR2
+         gc+EdLbk/+pOP8myTvzki3gO0Rdh+c1h27OCX5/ZjmSh3pS1yZxRy/Kjkw2WwJ19C6Ra
+         CAIQV6EIi/jWarwNQD8YyUfcckpTiMfaC7K+q3R6O5CkJVa4g8fkJdUfgBG+0acBUuEM
+         uhnw==
+X-Forwarded-Encrypted: i=1; AFNElJ+PLUllnU9SKxpQ26yRDTygm/iTeB9c/pY/MnpIlnBdaVd28xJIksAhqWmHSmuM++KnFsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrwBvOJRc7yaNh07K1a5fGywnMDGNBYk9xOaUtnFOT7Z6k3Aaq
+	Y0ZsgjCeOK1ZcwmkBJKHCO+rNC6icEDQNaoyk7S74vVMF75BJXajM/4B
+X-Gm-Gg: Acq92OHDx/NpkcMagLDQhtyH3Hq2LTLOhi24HI6Lp22j8HjrOIPC6Nd4rcPLmlAd1vk
+	EWNQ14YA6dp7RW3Fv59C7QptmQilPBaMI9ZjkaoOJJo1taLAsAjbciYaNX3THiMGPmken/suH8k
+	kdBUsW0HhiiqWtAG0rNVvCEd+2hV6Xdv7CV/SQLx2XdTBpwtN2GV7sf99/ZVwr2VcKg9mqA8/pF
+	oTYZNZbjrRMxEOkYu9IwyUmuTskOMwF7Ayv6kKwWCbkh3xn3x/2E8iMCF6ehp3/JgLP3bpkfLYy
+	tG5bj0H+7jduRSvsBaEd50fRLCjmzENnWzCKdcHqEG03CYdkP4X/bYjgvTPqLyIOam51muh1Q8m
+	pR+m/l4JPO4+068JVbNlhnb0U5dKEnRSIv/8/IllfTicyfBDLRPXM0C/s7lX2qBjE1DIxLZU256
+	HqxnYwWOaMYBBqJua0EkaASAGRBdG8LVlKdPnq6Jt5wIs+7aP6hwOE8BF05fBg+xUoy78IJtZFL
+	Sp80AzaoU+X2lY9
+X-Received: by 2002:a05:6808:159c:b0:486:cab8:cb7e with SMTP id 5614622812f47-4872dd9f213mr3099133b6e.1.1781314616544;
+        Fri, 12 Jun 2026 18:36:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:6::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-487315b016csm2006539b6e.18.2026.06.12.18.36.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 18:31:08 -0700 (PDT)
+        Fri, 12 Jun 2026 18:36:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,78 +67,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 12 Jun 2026 18:31:06 -0700
-Message-Id: <DJ7J7GXSJCRS.2FA4LT0RF9GZ5@gmail.com>
-Cc: "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>, "David S .
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
- "Kuniyuki Iwashima" <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next/net 5/5] selftest: bpf: Add test for
- hwtstamp proxy.
+Date: Fri, 12 Jun 2026 18:36:54 -0700
+Message-Id: <DJ7JBWTVOBVX.1YKW7ULLZC9Z4@gmail.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <bestswngs@gmail.com>,
+ <bpf@vger.kernel.org>, <cong.wang@bytedance.com>, <daniel@iogearbox.net>,
+ <davem@davemloft.net>, <eddyz87@gmail.com>, <edumazet@google.com>,
+ <emil@etsalapatis.com>, <hawk@kernel.org>, <horms@kernel.org>,
+ <ihor.solodrai@linux.dev>, <jakub@cloudflare.com>,
+ <john.fastabend@gmail.com>, <jolsa@kernel.org>, <kuba@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@linux.dev>, <memxor@gmail.com>, <mmmxny@gmail.com>,
+ <netdev@vger.kernel.org>, <pabeni@redhat.com>, <rhkrqnwk98@gmail.com>,
+ <sdf@fomichev.me>, <shuah@kernel.org>, <song@kernel.org>, <xmei5@asu.edu>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 3/7] bpf, sockmap: zero-initialize pages
+ allocated in bpf_msg_push_data
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Andrii Nakryiko" <andrii@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Eduard Zingerman" <eddyz87@gmail.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>, <jiayuan.chen@linux.dev>
 X-Mailer: aerc
-References: <20260613010039.1362312-1-kuniyu@google.com>
- <20260613010039.1362312-6-kuniyu@google.com>
-In-Reply-To: <20260613010039.1362312-6-kuniyu@google.com>
+References: <20260612130919.299124-4-jiayuan.chen@linux.dev>
+ <20260613002906.1336958-1-kuniyu@google.com>
+In-Reply-To: <20260613002906.1336958-1-kuniyu@google.com>
 
-On Fri Jun 12, 2026 at 6:00 PM PDT, Kuniyuki Iwashima wrote:
-> diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/sel=
-ftests/bpf/bpf_kfuncs.h
-> index 7dad01439391..8d119b10ed0d 100644
-> --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-> +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-> @@ -92,4 +92,14 @@ extern int bpf_set_dentry_xattr(struct dentry *dentry,=
- const char *name__str,
->  				const struct bpf_dynptr *value_p, int flags) __ksym __weak;
->  extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *na=
-me__str) __ksym __weak;
-> =20
-> +extern int bpf_skb_scrub_tx_tstamp(struct __sk_buff *s) __ksym __weak;
-> +
-> +struct bpf_hwtstamp;
-> +extern int bpf_skb_set_hwtstamp(struct __sk_buff *s,
-> +				struct bpf_hwtstamp *attrs, int attrs__sz) __ksym __weak;
-> +
-> +struct bpf_tx_tstamp_cmpl;
-> +extern int bpf_skb_complete_tx_tstamp(struct __sk_buff *s,
-> +				      struct bpf_tx_tstamp_cmpl *attrs,
-> +				      int attrs__sz) __ksym __weak;
+On Fri Jun 12, 2026 at 5:28 PM PDT, Kuniyuki Iwashima wrote:
+> From: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Date: Fri, 12 Jun 2026 21:07:47 +0800
+>> From: Weiming Shi <bestswngs@gmail.com>
+>>=20
+>> bpf_msg_push_data() allocates pages via alloc_pages() without
+>> __GFP_ZERO. In the non-copy path, the entire page of uninitialized
+>> heap content is added directly to the sk_msg scatterlist, which is
+>> then transmitted over TCP to userspace via tcp_bpf_push(). In the
+>> copy path, a gap of len bytes between the front and back memcpy
+>> regions is similarly left uninitialized.
+>>=20
+>> This leads to a kernel heap information leak: stale page content
+>> including kernel pointers from the direct-map and vmemmap regions
+>> is transmitted to userspace, which can be used to defeat KASLR.
+>>=20
+>> Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
+>> page is always zeroed before it enters the scatterlist.
+>>=20
+>> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel=
+.org
+>> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+>> Tested-by: Xiang Mei <xmei5@asu.edu>
+>> Tested-by: Xinyu Ma <mmmxny@gmail.com>
+>> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> ---
+>>  net/core/filter.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 3e555f276ba80..6e345ca65ca14 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -2832,7 +2832,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg=
+, u32, start,
+>>  	if (unlikely(copy + len < copy))
+>>  		return -EINVAL;
+>> =20
+>> -	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+>> +	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZE=
+RO,
+>
+> This is a red flag.
+>
+> We have a bunch of KMSAN reports due to raw/packet sockets,
+> which requires CAP_NET_ADMIN, and leave them unfixed although
+> some people attempted to "fix" them by adding __GFP_ZERO to
+> __alloc_skb().
 
-...
+yep. It's a bpf prog responsibility to avoid garbage in the payload.
 
-> diff --git a/tools/testing/selftests/bpf/progs/proxy_hwtstamp.c b/tools/t=
-esting/selftests/bpf/progs/proxy_hwtstamp.c
-> new file mode 100644
-> index 000000000000..e13963f2393e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/proxy_hwtstamp.c
-> @@ -0,0 +1,236 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright 2026 Google LLC */
-> +
-> +#include "vmlinux.h"
-
-Please update your pahole. It must be old, since you had
-the need to add kfuncs defs into bpf_kfuncs.h.
-pahole was improved couple years ago and all kfuncs now
-in vmlinux.h automatically.
-
-Overall, the set looks good to me, but I would like
-to see an ack for networking bits from somebody.
-
-bpf-next/net was the right subj to use, but this is very late
-into release cycle, so I prefer to land it to bpf-next/master
-and send together with main bpf-next PR.
-
-Kuba,
-is is ok with you? thoughts on patchset overall?
-
+pw-bot: cr
