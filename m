@@ -1,81 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEB63385BE;
-	Sat, 13 Jun 2026 13:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B7C63B9;
+	Sat, 13 Jun 2026 13:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781356749; cv=none; b=QPgPn9XkXpRDwsPOdqXiOo4Yl6hSxZSB3KlNe6euNilqEOb3D6x23Q9XOKZBFmiqNLHtxxnPcdOLcd0eg0IrrBOW8vY5n4mtIpMQqar1OK1l2RI4DXAr+wJyCrwyTDzmv0OEZvnM4IbumFxgStoynNUrgNz1tPjEPMEo6/lXwH8=
+	t=1781359091; cv=none; b=u35mYmWIb7N1z8K/88GSGFA0X9jXBNMdtgkOwzgJqomG2/xQvFCm7LgOJsy8d4P3h77mMqoHacNOMiMhJlnXyZrZdQ7ekE/tZzlQdVUWtMceSktRpxh3a/klutaykhiahsXpeSJ8fA1OC10+xRfzNq4/5PUyEy8dtQ2oRqIeXbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781356749; c=relaxed/simple;
-	bh=Je9mnpo2iJQK1ZavRpDv9+ntBJkhMsgtNSFGSh/Cagc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=KAGcuPUFn0aPEybuZFpOOGMe42V+YZ7SaKIoLD+Ys+rXq6ZLVqiYSwN0P1An9+Q/4uQz/mACZYoaZ+yl2TAvJzrpj4LgNZsz/0XobvDkyAV3jU+CQcpPsvoFWN5DzDAEzmmsue5Ms5hLcBSHZdcuIQE9F9hBOWKpX/FrGDK/WkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCUYzeFh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781359091; c=relaxed/simple;
+	bh=MGHTiIUOviutCRVwxnnDgRYWU2f8IfdfRQ1F5rszzU0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ix3PcUptbns+EF88KOaByNmGeIsXNhRSNm2aKOO4uN27X+XgUROmPR+Yl5m++q8RPYdaULRVdsIyRtM2jZHsTWiuh9N8Z7KotnCvUqpGoYdon2VIvN5zFnxCOSydtT6l1Tt2qCst/NbjNCk1w7tC/5VCnQiHlKAvCte+L1Pg+TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=f6D5Q1/d; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCUYzeFh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3FF1F000E9;
-	Sat, 13 Jun 2026 13:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781356747;
-	bh=Pcv+tDLnl3RDVKfKClvYLK4JyN6vPpKaR2OvJizXI7U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=XCUYzeFhC19/G1cc+WMia0px/YQkDhHE6Adw17/UfGPnwanbX3BZ5+PBjbFtd0dcG
-	 sZW8rVWK1bKMVjlJanHOAw7uBwVJjWVMHzpxODOsHRvZSsp3SFuinclkEGVlCxa22+
-	 PjJrOspmMRu0HbT4/nJrlpTh5pSROilRGWQqvx1wXd+cl5Ih9bHC/xCMdm4B9/M3j/
-	 NZew33EhuTKmbooXHH2ZPSEvz9RHOprueKNxzVtKr9yDpozTqi8yyU8HCaalcSIVTg
-	 Km0Q/fz4x77Yh62fr3WleeK6JlWsNDm0guKT65TalNpnwRdBd1fNp7jUREaKFWTVeA
-	 gxvqFOz0fqL7Q==
-Content-Type: multipart/mixed; boundary="===============3119736226609335315=="
+	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="f6D5Q1/d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
+	s=unimail; t=1781359053;
+	bh=MGHTiIUOviutCRVwxnnDgRYWU2f8IfdfRQ1F5rszzU0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=f6D5Q1/d50W4n8SSgF7rG2bLxSNoEGdr9bdFJ+EOXRNWggjl4kn1KceBDsXVmAp6c
+	 OYalAEuVWUg/uWmIIGdKGvTReB38XuvjjpnCViuG9l0MgmTIaC1B8QDXDvGpguTiJ4
+	 5TDjEkiSvSxKe04LZQcul3jrXqJBgEvOsAe2TED8=
+Received: from [192.168.178.68] (pd9eaa69d.dip0.t-ipconnect.de [217.234.166.157])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65DDvVHv018453
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sat, 13 Jun 2026 15:57:31 +0200 (CEST)
+Message-ID: <74a6b90c-7d67-4047-8467-3757cd1f91a6@tu-dortmund.de>
+Date: Sat, 13 Jun 2026 15:57:30 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <761cbcacba01d6be7fc7d0d606a08b979787cbb531d0002fe9a7e656e4ba5de8@mail.kernel.org>
-In-Reply-To: <20260613-f01-03-scalar-add-bpf-next-v2-v2-2-ce07bec3f72b@mails.tsinghua.edu.cn>
-References: <20260613-f01-03-scalar-add-bpf-next-v2-v2-2-ce07bec3f72b@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover scalar add from rdonly untrusted memory
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: eddyz87@gmail.com,memxor@gmail.com,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 13 Jun 2026 13:19:07 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
+To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        hawk@kernel.org, netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Chris Arges <carges@cloudflare.com>,
+        Mike Freemon <mfreemon@cloudflare.com>,
+        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
+References: <20260612083530.1650245-1-hawk@kernel.org>
+ <5c326cb0-9b7c-4d67-8f80-0c9be1e8fcba@tu-dortmund.de>
+ <4ddf3bcb-db5d-4821-ab32-577de93973a7@tu-berlin.de>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <4ddf3bcb-db5d-4821-ab32-577de93973a7@tu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============3119736226609335315==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 6/12/26 19:21, Jonas Köppeler wrote:
+> On 6/12/26 16:10, Simon Schippers wrote:
+>> On 6/12/26 10:35, hawk@kernel.org wrote:
+>>> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>
+>>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+>>> latency by dynamically limiting in-flight packets in the ptr_ring and
+>>> moving buffering into the qdisc where AQM algorithms can act on it.
+>>
+>> LGTM, thanks for the detailed changelog :)
+>>
+>> Maybe we should stop searching for the perfect tx-usecs value.
+>> 100us is probably fine for most hardware to not have a performance
+>> regression. And lowering it does not really improve the RTT anyways.
+>> Do you agree?
+> I agree, I already thought that it just might be a very lucky case when using 50us where something accidentally aligns nicely. Interestingly, I could also reproduce that 50us was consistently a little better compared to 100us on an Intel CPU. Maybe if I get the time, I'll have another look at it, but in general I think 50us or 100us does not really matter.
+> 
 
-> selftests/bpf: Cover scalar add from rdonly untrusted memory
->
-> Add a verifier test for scalar += rdonly_untrusted_mem. The program gets a
-> read-only untrusted memory value from bpf_rdonly_cast(..., 0), adds it to a
-> scalar destination, and then applies a bitwise operation to the result.
->
-> The addition itself is allowed, but the result must be tracked as a
-> pointer. The verifier should reject the following bitwise operation instead
-> of preserving stale scalar state.
->
-> Add coverage for scalar -= pointer and scalar ^= pointer as well. This
-> prevents the early return from bypassing normal pointer ALU rejection.
->
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Interesting.
 
-This selftest covers the early return in adjust_ptr_min_max_vals() that left
-stale scalar state on the destination for scalar += rdonly_untrusted_mem,
-which could let a later pointer ALU operation be accepted. That early return
-came in with f2362a57aeff, and the companion functional fix carries a
-Fixes: tag, but this selftest commit does not.
+I ran the benchmarks again, the results are at [1].
+I tested values between 0-9us, 10-90us, 100, 500, 1000, 5000 and 10000us.
 
-Should this include:
+TLDR: Throughput is fine for everything > 0us. RTT only improves
+      slightly for < 100us. So 100us is fine.
 
-  Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+[1] https://github.com/simoschip2000/veth-backpressure-performance-testing/blob/v7/results/tx-usecs/text_sweep.txt
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27467222513
---===============3119736226609335315==--
+>>
+>> Nevertheless, I will compile and run the benchmarks again.
+>>
+>> I will go on vacation from 15th to 24th of June, so I will not be able
+>> to contribute code or run benchmarks then.
+>>
+>> Thanks,
+>> Simon
+>>
+> 
