@@ -1,140 +1,148 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867F73D1712
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 08:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5746737AA9A
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 08:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781339104; cv=none; b=ZVsinXzZ2wiPY79IMFAobUc8bGXadf1MgGMdShyiUSUvocHQJ09tSUyq5OEzPcejukheEKIv7gswirwUXMhBOSFtN2Fg8Fx1PlY8pNiX+EgArUvL86BYIkSGIhMWOBVlZuwq+SKUTQVx6UQOimUn277NsuDYUBWqFxUAItMRqF0=
+	t=1781339768; cv=none; b=qWujPz8Pfvw946IEaLSsgiNWLYAws2UKd3qqYofeeVcbqAnJzKsOG1wTbuaH8KJs0f9EDoUy67+1kGVrtrfirAuwjBqSIx+UTc/MyeTeSvJOXQS8TEzCxsTmZ3nc2QAeZlS5CQJwOD4OQKTT+TenlqHpFgJaW/gGGy5us2JGrmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781339104; c=relaxed/simple;
-	bh=uNZREjdTngEAW+wmgiqIS/P1uka5G/KGrFlcH/PgfwY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pzm/liZD7KK63/UrhGEwwNrxftPHdGNtn1lVxPOEf5n62s6tS722oRG60+pOpTyRjx72hoRKR2BarGkiDX4c+akyHBRrR7hOvmkF+Rc/l4sbijiMkcEdN10ahKH7tnlviVywGZnqeqVwqC4EvtDLUl8iml7U40fN7WMPt00l4tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y6fdZcCU; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781339768; c=relaxed/simple;
+	bh=XyDt+6x2x1nQN/wNXHV2Tg91LNZNQygk7XNBZPHdv/Y=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=gcY+qntXV9t7etvINfaSeBZVgUlqTqH7rj9Nk0O5vfKBK8ohkRMqpkApsIOkiLuQiZUX3QeUT+Myc20eTeUmXT890pdGnaB/0bem5lcIki8YmGoj5UTwykgoBZJ/C/E5dG1y7cjgOFAo4Q5Ee+CGvdrTTKNT0voPWvqp0aFkOlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jNtrWEon; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y6fdZcCU"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36d6bb38b44so1237230a91.0
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 01:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781339096; x=1781943896; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SAVQv8WjEXijxzfisDbV6w9rhix2ecFSLNzXIn6EOaY=;
-        b=Y6fdZcCUBd/J8Sl7J/ue523hT9ZrKEo6h0wdQJl+zQ53csFyWAWbJv4wZOvIHPZI+/
-         T17ePuWoX2W9ApWIjpoldzrrbioO7wxxy5jdRCzvZ7+Zb0ugwDaRw2QLVsuBMHPNoptT
-         jbDjFnLYMgP0uYxOAvffzlIDK2ZYshVYQ3KZO0w7o8WwnhQzyzuTajTRINd3KtidoePB
-         DcgKleCQ4/9kX+jek33taf823iN40yezN4ttsr/8McvGFwMC4nCUFBOcPh41OiUV0Hzy
-         YtglMYhSGjcYkLf9BcPOVWOevO92Do6CAhm/XAmrl5Ajwcx9HKiXyhjDU4wZZBgOGdJd
-         Vt+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781339096; x=1781943896;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SAVQv8WjEXijxzfisDbV6w9rhix2ecFSLNzXIn6EOaY=;
-        b=ooQMRn94Mw+SCM23S1CNl2FoP/eqnemiyu4B2CZPuXanHX+dqVcUa9L2LL3nTfQYoK
-         2xWBksPhATLk5iXmWffsGMLjFmPxBka+ln8NLz8FydugmgCpXHjs9PeJo3hqw9vU+0As
-         ybQMwGTVk5Km5XVvXikVOXKDBlVhYaIudIYsc+7Mik/PZss2IVTSqHqGhi4QWtjjcPQ8
-         8SGSePqExY3Ozxi0CABH0eUCORNfUrvrMhRowlNxUKunOVgw9M00ss+lO1JpfLHWKtd8
-         I9P27OyxlXi3woX6Heu+w4J9RuLt/oemAY+Z4x4eNCVOqPmeqGLfxJMSTqJZg90voYW5
-         qQIA==
-X-Forwarded-Encrypted: i=1; AFNElJ84FIcx4jRZVuTTvtrRGE1JUVqcFTBGqBd7IR3N9MLeqr1keSH2S2vz5Eb7sZwzLYZyTRs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWwKluhWleBIw5YiTQHPDh2BudULYa6jd6dsigrteENi5qmdKg
-	CLW6RHCITrRR00D7/vrZjAPKT4V0o8pc9f3t6oH0ZBhZ+d5aThOout3s
-X-Gm-Gg: Acq92OGLkQCVfE5AQ++EZJeloJm0WoQOFtdhx7noZPPOzK43UF0uRln4FyvDDMPXWZH
-	PHnyMpY4o7bl9Ht4GRxw+tVH4mFn+MPEh6VwaUYU4jHfpIF8TKde4d643A1kWrlae80ooVyWqcz
-	9ycpYmzjz9OMhGfVy5S6ptYQt07Odg+ezcBbnj8gMNQS155VxejUlKYi9dq2ixesEalm+BygyJQ
-	9fcRI0F+DNrvbjPQhf196uvtVdAAwMyllVTtDZhfKHDu37D4IapgITkV8QuS9nf+dMw99EH6aD5
-	yklWmNvRD25l23E36/ck2U26Bdlxt6AXVAhWG9f4c05RbOkZCB6uv9zpP57nYES71JZaPTU2Z7L
-	N75Ia21LuqsbGk6IZid9myAWrtAfOUq7E6cIefpNC3OcCLacis+D6LGX7XAZ+Wn1o/Ced5M51US
-	D9SKIL/Lk7AmOn243IP3QkTBoAvalNhvQ6tA9jlML2kNRJVMstzaDTTe6aBocgSw==
-X-Received: by 2002:a17:90a:d44e:b0:36d:b424:4f17 with SMTP id 98e67ed59e1d1-37a01847870mr6803728a91.1.1781339096450;
-        Sat, 13 Jun 2026 01:24:56 -0700 (PDT)
-Received: from cps-manycore-1.. ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37a25ecd5f4sm5070360a91.11.2026.06.13.01.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 01:24:56 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>,
-	Liu Jian <liujian56@huawei.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Cong Wang <cwang@multikernel.io>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf, sockmap: fix BUG_ON in skb_to_sgvec() on a resized ingress skb
-Date: Sat, 13 Jun 2026 08:24:31 +0000
-Message-ID: <20260613082442.3252576-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jNtrWEon"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69951F000E9;
+	Sat, 13 Jun 2026 08:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781339765;
+	bh=LuqwmUwm8KRQDlJkJNT2aZvuPLZkILOQDzsfGnO0jgI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jNtrWEonHU/8JaIs+54Orb3i16XhS3J4FgouLQKA1kqCWS7SIVLI+QEV6zmsqRI4H
+	 cL4l5DAb8BkxhzNRE2IaMLNf1POy48Sc/F06Zsz17mWH7xxOXahyMOwTfzLCytBsRZ
+	 GS0/06kym0tDB/XCmnSBURyq7qRmVCrVpmZO7+xLfzC7tpkuGn73eSlUQYC9941pjT
+	 1OhfAKwVpZfmBlK8WbpQSLpWw0kQEke6WQhWC0q7eQAB/7VKZ9BlTZE84NeLbF7jrS
+	 mjdwWE335xokTb36avQ7xvcQbj+Ct3mm1Rp24L7bIPm026Jj7neh6VfR0XyEm5XBqV
+	 /ef6V8dyUHryw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v7 2/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+Reply-To: sashiko-reviews@lists.linux.dev
+To: hawk@kernel.org
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260612083530.1650245-3-hawk@kernel.org>
+References: <20260612083530.1650245-3-hawk@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 13 Jun 2026 08:36:05 +0000
+Message-Id: <20260613083605.A69951F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-sk_psock_skb_ingress_enqueue() maps a received message into a scatterlist
-with skb_to_sgvec(skb, sg, off, len). On the SK_SKB strparser path off and
-len come from the message's strp_msg (stm->offset and stm->full_len), set
-by the stream parser. strparser does not trim the skb, so normally
-skb->len - off >= full_len and len is within the skb.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-An SK_SKB verdict (or parser) program may call bpf_skb_change_tail() and
-shrink the skb after full_len was recorded. len then covers more bytes than
-the skb holds, __skb_to_sgvec() walks past the data and trips BUG_ON(len):
+Pre-existing issues:
+- [High] The attempt to clear DRV_XOFF during teardown incorrectly checks n=
+etif_running(dev), leaving the peer's TX queue stalled for 16 seconds on in=
+terface restart.
+--
 
-  kernel BUG at net/core/skbuff.c:5286!
-  RIP: 0010:__skb_to_sgvec+0x78c/0x790
-  Call Trace:
-   <IRQ>
-   skb_to_sgvec+0x32/0x90
-   sk_psock_skb_ingress_enqueue+0x42/0x370
-   sk_psock_skb_ingress_self+0x1a8/0x200
-   sk_psock_verdict_apply+0x33c/0x360
-   sk_psock_strp_read+0x24a/0x370
-   __strp_recv+0x66d/0xda0
-   __tcp_read_sock+0x13d/0x590
-   tcp_bpf_strp_read_sock+0x195/0x320
-   strp_data_ready+0x267/0x340
-   sk_psock_strp_data_ready+0x1ce/0x350
-   tcp_data_queue+0x1364/0x2fd0
-   </IRQ>
+commit 9a6517a905c3dcf9d565963659494eab75fbf1f5
+Author: Jesper Dangaard Brouer <hawk@kernel.org>
+Subject: veth: implement Byte Queue Limits (BQL) for latency reduction
 
-Clamp len to skb->len - off, and drop the message if off is already past
-the skb. sk_psock_skb_ingress_enqueue() is the only skb_to_sgvec() caller
-and both ingress paths (verdict SK_PASS and the backlog worker) reach it.
-The clamp is a no-op unless the skb was shrunk.
+This commit implements Byte Queue Limits (BQL) in the veth driver to give
+qdiscs visibility into the ptr_ring fill level and reduce base latency. It
+charges a fixed unit per packet rather than byte lengths, and introduces
+logic to drain leftover ring entries and balance DQL accounting at teardown.
 
-Fixes: 7303524e04af ("skmsg: Lose offset info in sk_psock_skb_ingress")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- net/core/skmsg.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0cfb19b760dd5..a3505627f49e4 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index e1850caf1a71..2961178ebd1e 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -550,6 +550,10 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
- {
- 	int num_sge, copied;
- 
-+	if (off >= skb->len)
-+		return -EINVAL;
-+	len = min_t(u32, len, skb->len - off);
-+
- 	/* skb_to_sgvec will fail when the total number of fragments in
- 	 * frag_list and frags exceeds MAX_MSG_FRAGS. For example, the
- 	 * caller may aggregate multiple skbs.
--- 
-2.43.0
+[ ... ]
 
+> @@ -1085,11 +1155,49 @@ static void veth_napi_del_range(struct net_device=
+ *dev, int start, int end)
+>  	}
+>  	synchronize_net();
+> =20
+> +	/* This rq's frames were BQL-charged on the peer's txq[i]. */
+> +	peer =3D rtnl_dereference(priv->peer);
+> +
+>  	for (i =3D start; i < end; i++) {
+>  		struct veth_rq *rq =3D &priv->rq[i];
+> +		struct netdev_queue *txq;
+> +		unsigned int n_bql;
+> =20
+>  		rq->rx_notify_masked =3D false;
+> +
+> +		/* Drain leftover ring frames, counting BQL-charged SKBs that
+> +		 * were charged via netdev_tx_sent_queue() but never consumed.
+> +		 */
+> +		n_bql =3D veth_ptr_ring_drain(&rq->xdp_ring);
+>  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+> +
+> +		if (!peer || i >=3D peer->num_tx_queues)
+> +			continue;
+> +
+> +		txq =3D netdev_get_tx_queue(peer, i);
+> +
+> +		/* Balance the peer txq's DQL accounting by completing the
+> +		 * outstanding charges instead of netdev_tx_reset_queue():
+> +		 * dql_reset() races with a concurrent producer, while
+> +		 * netdev_tx_completed_queue() is the normal single-completer
+> +		 * path and is safe here -- NAPI is gone (synchronize_net()
+> +		 * above) and the producer stopped charging BQL once it
+> +		 * observed rq->napi =3D=3D NULL.  Completing every charge drives
+> +		 * DQL inflight to 0 and clears STACK_XOFF.
+> +		 */
+> +		if (n_bql)
+> +			netdev_tx_completed_queue(txq, n_bql,
+> +						  n_bql * VETH_BQL_UNIT);
+> +
+> +		/* DRV_XOFF is independent of BQL/STACK_XOFF: a concurrent
+> +		 * veth_xmit() may have set it between rcu_assign_pointer(napi,
+> +		 * NULL) and synchronize_net(); with NAPI gone nothing else
+> +		 * clears it.  The completion above only clears STACK_XOFF, so
+> +		 * still wake the txq to clear DRV_XOFF -- but only when the
+> +		 * device is still up.
+> +		 */
+> +		if (netif_running(dev))
+> +			netif_tx_wake_queue(txq);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but the attempt to clear DRV_XOFF
+during teardown relies on netif_running(dev) which will always be false
+during dev_close().
+
+Will this leave the peer's TX queue stalled?
+
+When the local RX ring fills up, veth_xmit() stops the peer's TX queue
+by setting the __QUEUE_STATE_DRV_XOFF bit. During device close, the
+driver core in __dev_close_many() clears the __LINK_STATE_START bit before
+the ndo_stop callback is reached. Because of this, netif_running(dev) will
+always evaluate to false when veth_napi_del_range() is called.
+
+Consequently, the netif_tx_wake_queue() call is bypassed and the peer's
+transmit queue remains frozen. When the local device is brought back up,
+nothing clears the DRV_XOFF bit on the peer, leaving the transmit path
+completely stalled until the TX watchdog timer expires 16 seconds later.
+
+Could this check be adjusted or removed so the peer's queue can be
+properly woken and cleared of DRV_XOFF during teardown?
+
+>  	}
+> =20
+>  	for (i =3D start; i < end; i++) {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260612083530.1650=
+245-1-hawk@kernel.org?part=3D2
