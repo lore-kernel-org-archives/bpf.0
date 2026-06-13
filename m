@@ -1,78 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17BB3909BF;
-	Sat, 13 Jun 2026 10:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34FB27F4F5
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 11:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781345323; cv=none; b=rLpyo9f9l2HsR1NXE6BkZiCQ28FMQdD3wB3AAenI4QjBQ5TzPPqQwRREhVtyp0uziQUIvZ38RKrjmo/L+hrgwN2K5TM7ug5GDR1TSzDBxsoDugZv0WdN8EKIRT0cnqTRQ4gbsIBADaGQoQ4jA0PzX2t/zXE18lbQuyX/z+Z2Ro0=
+	t=1781349232; cv=none; b=WMBPzMsUSl9TlBTOQhdhBrkBz7VYRZJmPXFKe9VcBGTX7ezWbX2wr/bnK5Ss1jMgbeuKra3j+UY+V4juiYbKP+jkxw7wpYajnSaW6s3+x+S6oav/OHKYZYQYh/5CMvn3aTGwJr7jTDZR5reVmkRIphb7h0MEp9Z6zBB8BHy2mx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781345323; c=relaxed/simple;
-	bh=Ef7HNdyDPLgfCtHo4DIt+8/moiePaugDe16TPlsY72I=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f2MXm32jsvcrUHub8jj1awXuiKte5ZSXuNu6dYjasOBW75C4a5AbugHk6283ZCDogtOPlGZnBBI3A+V4xG9CKdE4z3ewJuxl2Uz+C/MuR8TNw8y/8vxqDt8WJnBe4dq0mcMKvR6ZQw9dcyczd8ZsMIAmEypW/c9Tie+miAdvX2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=osRuQIup; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781349232; c=relaxed/simple;
+	bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=K8Fxhgi1OTdYcunL9OJlhxmqwSikOx2AN0ASgb3KlEjBMzzogRNli9IVtfehxzm+2G6DRaMhzq53J0ADGDCjY9zz4hTfzrvdP+1BpZjhmQZLyiDncpH62x6QObhGnazmHXC3zJYCvxIqGIcj3uHkC4/2JX77hWLEi/pv71KsSgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0SX42UR; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osRuQIup"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACF91F000E9;
-	Sat, 13 Jun 2026 10:08:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781345320;
-	bh=KfcA7WfRFlSvgpvh1BSvxl9MDGfbCusTyhMTRDnX370=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=osRuQIupp3vQ3pQgZdUZrM3B7uXdK9KVsD40ZVR+hBcM7yLkKzROibo5KI4whWayR
-	 wwEkEURZUQhZ0N1mBnHUdWt3WmJW6s5Rb8aG2k/xKn8q/lAz95jbeoi38jbdcD0m8Z
-	 3FpzNOANtSSotSkdU7iUXTY6lIcAH8uDhx54RlSboKNrdy2AtQYItERFGHUMGN95Ox
-	 R/UwYibnTJ+qYH4SycOduvCn5j5zVlTEZYZ76xCYao/HQh5OwAPJqM1M0ozVf+m4Ia
-	 Jwb8kvhegmVpxAO5PlcSVFu2wwkZQpqYN4Xnd9ulJQQAc7BAJl6H5/p6xpCGpqxmQW
-	 QwyxwIJbEl7Aw==
-Content-Type: multipart/mixed; boundary="===============7171513845860102744=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0SX42UR"
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c85893bce34so763944a12.1
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 04:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781349231; x=1781954031; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
+        b=A0SX42UR+dr7i20KCcjqhXciUWycVzi5MlzodH8DbOmmleV817AdZswSMxPVZN6imW
+         LIFjjfAdMJLwN9MKcYQUC2F/9amclGu0dZsj3zb6HLR6BKMcU7/vF1ZlHZvOTgOfGwDQ
+         9bdSHEsvIA3pD6njIU23RNVmMNJYFJpgdJgHv+vQJVQii2BKsd0GzkycmjhJeqWQDgkP
+         ZkZtEy2jods9MPfyey4wfamFpU76sojA09PH2sekmT9yf6RQ65mHjjHPdO7lv0eyrEJD
+         B2OBxeoM6oOV4QFOKfUhBRtpe4K7VMOraaLPOChkfSZKQZ2Ff0ipWutuDHlGHP0brCT5
+         1EtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781349231; x=1781954031;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
+        b=CU7cc01UIhrn7nC6zjji677zzv2rvvOuBhfTw/gKGxBz5uJcWaq5tPYMmFz3rBVGdx
+         WeVb8ZPEhM2xwx8esDbqX2Ujm3qM8Dg4zlPkHa85MFZE+xykl7KeNbkHSpE9OuqdrGll
+         q6NAF80YI5wWQLowEzcM3mp6Ny3ytsENkM2wwHcNcmkflmegcdNEi7fFFXKfCT9Aeeqc
+         gfiDItEfu0O7aEDA4lUG/zAeRVhbsXP7cxz+Y61UfqPN2kl95Tm2Ou537p6g2OnJ2xGu
+         M66jMq5WpNkQAi4OSBYauNyGX4uWu2jykjnmfRk6lsGju4aiXtlcPnB19Lfc/qvgQXrR
+         9nKA==
+X-Forwarded-Encrypted: i=1; AFNElJ9hJ53tiahxWtbnb2rp9eY/s/pKr6/Lf7utvjfnzx0xdsqHpgpgX08A29I4xTmfrekjdU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+4y4Gf4M6eRlyuKKHe6l1zY/mwMokvR9tgcu8b8flkFMNqxea
+	oOztMTq3GNxaN6La6WIVjQI8XThlQB/5JRIEf+nC4QnWzul/28AzeQzZ
+X-Gm-Gg: Acq92OHnSG3lW3bw2SeW2u02KZRonuuUGnX3b/k+mnkppec9aGVHRbdbX/lDpXCvpXg
+	LMvO99I+8S78hz4/VFWgHsOfzE/qNuJQ496m7A6cv+fX6RrAYaIdYVOaPzMAv+THmOw0A7WhVFm
+	KYxmsKLr725RUMlvExfbuaXTJBjqT9Mlu5dfI9whexVVIO1/MJik1qgcSdsF/yY9VszkoJVgi5e
+	4BadbdvXhtIqPZnggdEZDRIzfLVnOvUWWqL77+ug5ikC3jLJTNSFPhrXcU7du3F3Hvcfr2FF9CQ
+	LroyCzAEKh4BUHqaJuK6GAjxPzfeqRZ0bpwftB8SqtUyTf+yjzuvku+Lzgs7YhCHM8CRVd9WVwb
+	DAkT8H9yrhgaxMcEy2eL/56wpGI4DDR9Zo4u5qEf3azc5uMzJNfQB75Qv7CbLS/UIFVAKjB0PWT
+	93PN6iEBU2y9lY2p2jaA==
+X-Received: by 2002:a05:6a00:1a87:b0:835:3d5e:1dd3 with SMTP id d2e1a72fcca58-844e1ab2741mr3547181b3a.42.1781349231058;
+        Sat, 13 Jun 2026 04:13:51 -0700 (PDT)
+Received: from laptop ([175.204.13.24])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b05921bsm4759876b3a.59.2026.06.13.04.13.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jun 2026 04:13:50 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack reads
+Date: Sat, 13 Jun 2026 20:13:46 +0900
+Message-ID: <20260613111346.271837-1-random6.xyz@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <DJ6MABD6AW71.4585Y3MKTIGC@etsalapatis.com>
+References: <DJ6MABD6AW71.4585Y3MKTIGC@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f0385494341533e89742d110b6d3bc34e50a06de8a9f1c3c0d4e699836aea283@mail.kernel.org>
-In-Reply-To: <20260613-f01-02-gotox-bpf-next-v2-send-v2-2-ff980bc5a329@mails.tsinghua.edu.cn>
-References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-2-ff980bc5a329@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add cross-subprog gotox target coverage
-From: bot+bpf-ci@kernel.org
-To: gnq25@mails.tsinghua.edu.cn,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,a.s.protopopov@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,gnq25@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 13 Jun 2026 10:08:39 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============7171513845860102744==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Jun 11, 2026 at 07:43:12PM -0400, Emil Tsalapatis wrote:
+> Correctness of the patch aside, is this a problem ever see in real
+> programs? Unless I'm missing something this is extra complexity in the
+> verifier to address a theoretical possibility.
 
->     selftests/bpf: Add cross-subprog gotox target coverage
->
->     Add a gotox regression test with two one-entry INSN_ARRAY maps. CFG can
->     model a map whose target stays in the main subprog, while the verified path
->     can load a different map whose target is the first instruction of another
->     subprog.
->
->     That second target is outside the subprog that contains this gotox
->     instruction, so program load must be rejected with -EINVAL.
->
->     Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+I don't have a confirmed deployed-program regression at this point, so I
+will not present this as a production regression.
 
-This looks like a regression test for the cross-subprog gotox target
-behaviour enforced by its series companion "bpf: Enforce gotox targets
-against subprog bounds", which carries a Fixes: tag pointing at the commit
-that introduced check_indirect_jump() and the gotox handling.
+I did check whether the pattern is reachable from normal C codegen. A
+small helper-based BPF C reproducer is lowered by clang 22.1.6 at both
+-O2 and -O3 into the spilled scalar-zero plus variable-offset stack byte
+load pattern. The unpatched verifier rejects that object after the loaded
+byte becomes imprecise, while the patched verifier keeps the zero fact and
+accepts it.
 
-Should this test carry the same tag so it can be backported alongside the
-fix?
+Given that, I changed the target from bpf to bpf-next for v2 and added
+this context to both the cover letter and the 1/2 commit message.
 
-  Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27463372471
---===============7171513845860102744==--
+Thanks,
+Woojin
