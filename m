@@ -1,132 +1,113 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F2B1F09A5
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 00:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F272E222590
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 00:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781310549; cv=none; b=hClQ3Dq6Cuq9PsGaBbPOu1OeAdatGsNWDpZeNm5lYzwI4VvICpWQM5e3bgsBprtyqZ9Obd6GTyCrwKw9l/m0ruXgxlvDuojDwqNYZXLjwuPThKtaWQiMNsy9HQuqZX0gh7zXWX/HngzRC5mOylkjt48l4btJLcJSNsXE3k60KI4=
+	t=1781311263; cv=none; b=FIaFdWw6xeAcrBkVGqcDZZNLfpw3kVGBc4dNmaWOqbXwDvmmYErUsJ4ViXndml5u5UqgHrBXEYZhtgCEPqRnjw5juNVx0I0GT+eiSMyaR93Aa0AR5DKIUGaDqe1jZOFL9dEm9ODUFJv+Yc/GbJtyh2F6KjOGhleo9qgDT+4F2CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781310549; c=relaxed/simple;
-	bh=QgXc4ODljJhWTTpaw445TVamF/nyBWaAo/I/wBG/rxw=;
+	s=arc-20240116; t=1781311263; c=relaxed/simple;
+	bh=nqBmvPVSuONjQVqzPSMr32HkpDt0vtwCdsouKbN1iw8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YP/jBQ5WnaI7loB4BCVNW7WYEorAx1EOyOdkltQRHFgVusmisQc1lvbN3cB5c4h8kliJ7gS77j5zy6jSadJkZK7sRqdi+IKgOlJnH1zcx2m6FD+0n7k6OZgroDCw9hluIOlUg5DedcNymUW1xdj10nYUPvyBeeugXQNg/5SmrHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GgfahnZQ; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=s2A0uZdZxJ53K3nAnKJbegIql94elaLf19Wy/a51ddR0r9eAw/EqC/w8QamHjTIf1NYUfFHnFuwKy5lAIFe2f5V6eRZ40LhhZetDYbUSpoeIf7Lp/k/usTlOw9Gss2eAOcGOF/C3+q3N9uyQ6GX5y34HqNPETlE4fzF5wb6q44c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ETmbmN5s; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GgfahnZQ"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2c354050c34so14001515ad.3
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:29:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ETmbmN5s"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-842278a630dso1966304b3a.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 17:41:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781310548; x=1781915348; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781311261; x=1781916061; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUh6D4rBcGOJpXdbW9cjRObx5ZfnYBi6zdUUzwINyao=;
-        b=GgfahnZQrDLbK9ff4h7onSM3J8k8edLC0IeZsMQ3zTs5hIgSLN33JCo0G5hnVRPAxI
-         yI6hhCsAOFWhLQWph7JAtLchoGGadyXAigHE6ktPTnaaqz8MVKNp/aG6tf1y+k8IcXrr
-         aVdCYn4H4xGMV+EZd2tvnjosIPW1I5pmMSaf9agrPjKTjKP/dnP6SnDDLq2Z1sKGQ8hQ
-         WyZQNb9VXzm77534zFmH77B/P82tH0F6YK+qkI4wRqKBaVD9kojNaaQ5egLJNuPJ75er
-         d3YTaM+NZWQ31AfMvFWD7pIXbxOyxGno0gtrHkdDRBdNn+GLUl4WBy4lGk2jmcBsQwaa
-         Y8nA==
+        bh=JYBMbR4kq4DVj1z4XvYsJCTDnmw6aLGbpem+9EfbHqw=;
+        b=ETmbmN5s1MHr5rMQeaCNEIjGg1Q7zCAsI8YKpJQ3/1b44T1dAdI9GkZEQTp1EfczPW
+         /rwj5XtBZsHqa/RsbF5RUbSg67jVD4EEVW0+D4Y3zfLP0zR+f8DQpevSPcBR48WCgF/y
+         St9aqqY+P9f60mo9Ru1SKZGb+ffP5ZIMmibG6D80DdRKR9Q/7b0BmEYVwoJaJqn0wS6O
+         bSdVSb7VY4Q9ZHbPaSuRIfy8IZMzacVXor8HQwKT3C3hWeYXmMzN20WcQlNUk7Mx1m1v
+         sg3BG5XxH9E+zKcQUhT59FqSxfUwH2l5cJbjtdFg8nrLgylTJclkOva7fu3fDf8W0hgq
+         TZWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781310548; x=1781915348;
+        d=1e100.net; s=20251104; t=1781311261; x=1781916061;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUh6D4rBcGOJpXdbW9cjRObx5ZfnYBi6zdUUzwINyao=;
-        b=XTXq1/I2DmXzzhb7rPRHwlsiAFcUB8u9WhwWQiX4799HBNfpgD1VYsa87XTSmDa301
-         y7FRN/8Dfs886NZA3aX4gMhKCm/v3tH7jlCGJ8A6bUi8qtRvAP8Bv8G2fuU3OBmLIExX
-         gXDMKUOs0ZtZZHPcbHGUoym3kbTGHiTk/HCiCWphvU/CApvemusqEJQtB5LPqf9SgjPo
-         D5SLOSqig/v5lM4PHwztWw97wOJ2Qy4hVsDXalTn/LbdVDvUj3wBafO3gYjOtcy3XsJ8
-         Hh22bHB8XXw9UNcXXt6m42EqPoustZI5rSC1xCr/G05Pi4lcevmwKEUFT8hrFF1htxLe
-         uTUw==
-X-Forwarded-Encrypted: i=1; AFNElJ9tDHl8KCBgkoWXKeQcOU9uFZe37gHtHNRmTU7ggWmToHJ25Ly0cK5T24uDhVNuuM18Xfc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbJi400ItsJfK1zFfi7sMk5G1f6NkFBR1Sz7onqBa+DR/VIAoh
-	iXQp3UTfpMLBwPR7ZMY3wKGQ5Ut1uneGbfVcCPq5P9uRE/leSGg/BGfFzi0VYfwtRyUsAcLyLlo
-	qKH//OQ==
-X-Received: from plbjx9.prod.google.com ([2002:a17:903:1389:b0:2bd:9bd8:749b])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cec7:b0:2c1:f29a:b554
- with SMTP id d9443c01a7336-2c664271df6mr18671095ad.21.1781310547424; Fri, 12
- Jun 2026 17:29:07 -0700 (PDT)
-Date: Sat, 13 Jun 2026 00:28:38 +0000
-In-Reply-To: <20260612130919.299124-4-jiayuan.chen@linux.dev>
+        bh=JYBMbR4kq4DVj1z4XvYsJCTDnmw6aLGbpem+9EfbHqw=;
+        b=M68MS4p/yhbAKbF5h/0/LJmv6wqca1PZzCVI/T5GP/TZ2poDyvfK30scnBFlKLzuDN
+         vA/5Zrz364yhSxC9Y+xepj7qRDKZR7Tm7lAeknhYGctxUt5SNAWkS3F2g65gdhiCgKUL
+         9t/Yff8OFo2SCN7+6yXWtc/xxvEDCC+UL8Mj+nrzvnaDNp3PxMuQAb4tB7/qK78JVkdr
+         GeJRCNuw7JugQfEiy+HjsEkMP+CDgscw+BbvbWZkQby903AsFOUGlv9LbcAX2tM6GjJJ
+         8biKUenn3eF3TR+u1tYQ50bjDeA7V/ihBjUPF+dG+btYpRomw8fPNpL9nq+yxH5xwLCd
+         VgTg==
+X-Forwarded-Encrypted: i=1; AFNElJ8dwx/luIYEmJIAf2JxUhF+ecUqJ5bndk1bSTeyymDv7d2c5U8hsnaBEmwfkAvLUhsCnQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnyEtiRWGCmTZCfo34HITtVvQvu+VQ4jSSgkSOwhrx9Tb2zw9Y
+	JnQ0oyjSbIJLCQw/rXm9grCd7olpLG8n2MVJ/bxtsX5MBWo0vvpv8/K9e+3XbUGUvfXYDSNecos
+	N2nFHYQ==
+X-Received: from pfbmy11-n1.prod.google.com ([2002:a05:6a00:6d4b:10b0:842:4be5:5ed6])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3c84:b0:841:dca1:8b69
+ with SMTP id d2e1a72fcca58-844e193a47cmr2006688b3a.5.1781311260910; Fri, 12
+ Jun 2026 17:41:00 -0700 (PDT)
+Date: Sat, 13 Jun 2026 00:40:41 +0000
+In-Reply-To: <20260612130919.299124-5-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260612130919.299124-4-jiayuan.chen@linux.dev>
+References: <20260612130919.299124-5-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.54.0.1136.gdb2ca164c4-goog
-Message-ID: <20260613002906.1336958-1-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next v3 3/7] bpf, sockmap: zero-initialize pages
- allocated in bpf_msg_push_data
+Message-ID: <20260613004059.1345029-1-kuniyu@google.com>
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, sockmap: keep sk_msg copy state in sync
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: jiayuan.chen@linux.dev
-Cc: andrii@kernel.org, ast@kernel.org, bestswngs@gmail.com, 
+Cc: 2045gemini@gmail.com, andrii@kernel.org, ast@kernel.org, 
 	bpf@vger.kernel.org, cong.wang@bytedance.com, daniel@iogearbox.net, 
 	davem@davemloft.net, eddyz87@gmail.com, edumazet@google.com, 
 	emil@etsalapatis.com, hawk@kernel.org, horms@kernel.org, 
 	ihor.solodrai@linux.dev, jakub@cloudflare.com, john.fastabend@gmail.com, 
 	jolsa@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	mmmxny@gmail.com, netdev@vger.kernel.org, pabeni@redhat.com, 
-	rhkrqnwk98@gmail.com, sdf@fomichev.me, shuah@kernel.org, song@kernel.org, 
-	xmei5@asu.edu, yonghong.song@linux.dev
+	netdev@vger.kernel.org, pabeni@redhat.com, rhkrqnwk98@gmail.com, 
+	rollkingzzc@gmail.com, sdf@fomichev.me, shuah@kernel.org, song@kernel.org, 
+	stable@vger.kernel.org, yonghong.song@linux.dev, 
+	Kuniyuki Iwashima <kuniyu@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
-Date: Fri, 12 Jun 2026 21:07:47 +0800
-> From: Weiming Shi <bestswngs@gmail.com>
+Date: Fri, 12 Jun 2026 21:07:48 +0800
+> From: Zhang Cen <rollkingzzc@gmail.com>
 > 
-> bpf_msg_push_data() allocates pages via alloc_pages() without
-> __GFP_ZERO. In the non-copy path, the entire page of uninitialized
-> heap content is added directly to the sk_msg scatterlist, which is
-> then transmitted over TCP to userspace via tcp_bpf_push(). In the
-> copy path, a gap of len bytes between the front and back memcpy
-> regions is similarly left uninitialized.
+> SK_MSG uses msg->sg.copy as per-scatterlist-entry provenance. Entries
+> with this bit set are copied before data/data_end are exposed to SK_MSG
+> BPF programs for direct packet access.
 > 
-> This leads to a kernel heap information leak: stale page content
-> including kernel pointers from the direct-map and vmemmap regions
-> is transmitted to userspace, which can be used to defeat KASLR.
+> bpf_msg_pull_data(), bpf_msg_push_data(), and bpf_msg_pop_data()
+> rewrite the sk_msg scatterlist ring by collapsing, splitting, and
+> shifting entries. These operations move msg->sg.data[] entries, but the
+> parallel copy bitmap can be left behind on the old slot. A copied entry
+> can then return to msg->sg.start with its copy bit clear and be exposed
+> as directly writable packet data.
 > 
-> Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
-> page is always zeroed before it enters the scatterlist.
+> This corruption path requires an attached SK_MSG BPF program that calls
+> the mutating helpers; ordinary sockmap/TLS traffic that never runs
+> push/pop/pull helper sequences is not affected.
 > 
-> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+> Keep msg->sg.copy synchronized with scatterlist entry moves, preserve
+> the copy bit when an entry is split, clear it when a helper replaces an
+> entry with a private page, and clear slots vacated by pull-data
+> compaction.
+> 
+> Fixes: 015632bb30da ("bpf: sk_msg program helper bpf_sk_msg_pull_data")
 > Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Tested-by: Xiang Mei <xmei5@asu.edu>
-> Tested-by: Xinyu Ma <mmmxny@gmail.com>
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Han Guidong <2045gemini@gmail.com>
+> Reviewed-by: John Fastabend <john.fastabend@gmail.com>
 > Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> Signed-off-by: Han Guidong <2045gemini@gmail.com>
+> Signed-off-by: Zhang Cen <rollkingzzc@gmail.com>
 > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  net/core/filter.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 3e555f276ba80..6e345ca65ca14 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2832,7 +2832,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
->  	if (unlikely(copy + len < copy))
->  		return -EINVAL;
->  
-> -	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-> +	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZERO,
 
-This is a red flag.
-
-We have a bunch of KMSAN reports due to raw/packet sockets,
-which requires CAP_NET_ADMIN, and leave them unfixed although
-some people attempted to "fix" them by adding __GFP_ZERO to
-__alloc_skb().
-
-
-
->  			   get_order(copy + len));
->  	if (unlikely(!page))
->  		return -ENOMEM;
-> -- 
-> 2.43.0
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
