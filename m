@@ -1,63 +1,63 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16882327C00
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 18:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAE323D7CE
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 18:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781375677; cv=none; b=B/xGaBKQ5c5JHtt2kbYAjG6K3PZEnl6zIfF2DQb5Svs6bWGINkFhagLW8d5BOk5Q8iM8UmYXRNrlY7/CyS0Zmrn6XQaAT370HE2/raVucwVX67vzIodkrG8BGfjsyNfKaEQT9123X5AIIQwdNBtmDuEhOu0pvYL4sZCClMcFYfY=
+	t=1781375678; cv=none; b=SM3duh+CwtUQYINog+x1X1Wej9+RaosXW7J4kIrJEnahtByOkHfn9QdcXsT2+beDkvwjPkzISMg5XnDQQ42bcWlsHqlcw26mtZf/c7hpuJS70MqCdO+GE+sb5lZ9gQUgLuaKrvTYN6Gv27rOIBQgqaONwfK3B34BvDbcaQ0TqFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781375677; c=relaxed/simple;
-	bh=4XBejezJwJUWg3ebsSGgxMlB7tycHo/ivdoQZ42t6Cg=;
+	s=arc-20240116; t=1781375678; c=relaxed/simple;
+	bh=GAKLF6aJLsrCYkl7Wo8RMDaiJFXvHtwXW6Fc3rVfCck=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jtf7eftnBHG+LRyYYAy5rwRxW88P76o6jwe8EOyh5JLaY+XLMwhOEj9UGawMREaSW7yJfXuJmiBEm04+1lTUtIVnmnrKtOTp6yXLMwkrC6aa3gi/xgiGrVbzZfesGLQX03uHJhEOwjV253hhiClkNl/lr8JifiKSf0qme6ws/GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=DZlPyhiR; arc=none smtp.client-ip=74.125.82.45
+	 MIME-Version; b=fVJ3dDodRYw/7sA2a6mMKVH6ho4zgYZeXl9kH9ebW1/W52CmkZgEgvktHYX5QxsbygNLjvApj6WyW6eI9uxXiV4wi7WQNdCcCLiLVU9wuoGtPbJpwt2sz95YnqhAea/Jc+5Ef3Ggo2QrjvJkw/dzTyPk2AVzMi3LLD79oTs/exg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=HdhOnMAm; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="DZlPyhiR"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-137dd3b29d5so126161c88.0
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 11:34:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="HdhOnMAm"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-304da3b4508so253358eec.2
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 11:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1781375675; x=1781980475; darn=vger.kernel.org;
+        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1781375677; x=1781980477; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9k/pxlb3nzhZvX5D10rXnPFy/NJtoITQ+9ZSRRvEAWA=;
-        b=DZlPyhiRC9wivcDlTa32yBMRUH9EnJ/h432dzAdwb9wAyrDiDTGVyr7/reQkf0ltNm
-         llFyHseB+QtaSNTLVqisZ1hnAF/TBtLlqve5J/bHeWwwpz2/emawsm494BjUJr1KfByP
-         Q4/QgQFCe0OHGtVd7a80fUqUcPl6Ab8Fc3pfF05Dbg5aiLkkv0QX08psZYRrTUillGjr
-         4pRdTje1oItsCjxh3/Lxry46S+ViXoOxZeuxIPrDTLfeV1jDfQ6BdCJR+F3yOXywX4Zt
-         XXdF6uvruJBA1VaO5hUN+quROzrTQNnslPpWvdCrXnPsR0NPK6u2exoIp6IuWy/oyKAF
-         Yc2A==
+        bh=yVRa8MFqgEcIxTeX5DcRDdMMa2fq5Bm7zRkC5sjv8Ls=;
+        b=HdhOnMAmMZ4UwlWs4b0beZGyoJ9232KwVD1bLiyLKl12vpVkvEfJU75vLSNMrelIZN
+         kaFx568M4A/FamZWg44rTYUTyfliXL6olKmovUkUm7HaIRagz9I3NdRgyhijgjVg45Wg
+         dQCSwxpFF+OuBJAE2KPKCsoiUcG7RYsZSQoLAK9xcuh7j1sIVbWBCmAt8GEndCU3wO0b
+         yJwq1OyqTkKJP6qmZXr4cdQhZiOwSVxi563a6RHtW8QDsotXKbu4OamPv7RsIn61H18Z
+         V/GNxWSdqprvSWo13LnWPhAOiZavQ/oHhq29sEIQDXhnYPgwqr3H81d+hWVDXp+/4uWb
+         vWvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781375675; x=1781980475;
+        d=1e100.net; s=20251104; t=1781375677; x=1781980477;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9k/pxlb3nzhZvX5D10rXnPFy/NJtoITQ+9ZSRRvEAWA=;
-        b=p7RAvHvLSlja1VjEtXR1GjGULABT6+ryYlMit/fXj/DteU6zcF2VwHrKbPedtgo8sS
-         diCNn+p/NvBJerZWGycrfUoe8njzXCgYLnSEzf9hymIMHUkkLuPCj+i5eg2fC7mGXamU
-         Vp8kazTupwFi8nCKMfZpbIsT3nPQINd8foSSHAQagC+qseBunOIUro7+W7P29p84Bb+8
-         5p6hLGIKD0hi38JdBrTQOiS+2aqS2shBNZvVo6cGHRIchjPIAz6lNK3I4FOoSGiNK6Ub
-         8Pu8x7boTnfvmp7GKGwRiV5xL22kw6oUqyxDLupZ6li+HnnoJUSD0+gDxyxj4FIgHC3F
-         97LQ==
-X-Gm-Message-State: AOJu0YwneF1kd1HhCQyT5cbvmu/gswxmO+JF8fs3+gYqpX0yGYMjizDJ
-	hH5pkfvHbIWBPNU8dI4+d4mMG2gMqKRrs3jkiKkNV2kQevhmlG4ZsD6f8yiE0xESHND02nbRaoV
-	FrxIN
-X-Gm-Gg: Acq92OE8GY5T6GoTPWagqenbp7q/OwkZJ8+dzOZ7OSZfE+K76wRY5lMZinUoPbzT1M0
-	4MQv8WCeM8S2B8R/tTWLXtAR1J6zPe6ji2B9g4D8a90Aw7JNhKfbxa9CRkJr1uj2+crTukGtxJD
-	F63g84VVd0q5M4+Gt9Ubk22bwtvOX1AMi6UJWF7dwn+sR1DTfVtlSzN/kcClV3CC2Yb871jUt0M
-	pjtEFMcQJTzY0SKbWmrwIsugkpJHCdqYHSaEfTb+0IZdIZOZKFHz3A9OIJ/TMooxbjgGG7M5Hm0
-	TYICdWYSoxj0ico7oT6wHAVV0sab0EXkaDyD7Wcq0Gsv6Bf+7nbHXhHrUPEv25YmP3P3sCgrks3
-	a8DNNV6LjMeLK6xn4/qBhCGANDvUTUazYpoZkzNIs1mDk3XvfoCymaULJORIjhS2rkY3GYi6qC5
-	TBfe5nI8/Hy4A=
-X-Received: by 2002:a05:7300:7495:b0:304:c73b:79fd with SMTP id 5a478bee46e88-308200b9c28mr1937100eec.5.1781375675021;
-        Sat, 13 Jun 2026 11:34:35 -0700 (PDT)
+        bh=yVRa8MFqgEcIxTeX5DcRDdMMa2fq5Bm7zRkC5sjv8Ls=;
+        b=r61a+qfM8c1Yx5i4UmLKcU8gt7Ot/hQPOWl7bs/HbQFhcIZcWiQBUpF2R/qKQv0M4O
+         mfy0p23wjAZf3mm2O9SnAc4NoqAMxsRlGbB8/dhzoM7fs/rAOOjAC85i5NV+FNblKYY7
+         1b+dkWHEkR3lE3IV5V1B13ja6fX9lreMNcj6188h8Vzv3UM6tzwGQLtr+VveViq/ziCK
+         BS7KP8utesIXgG90T5OmZa71Ow+QHLUxYKnIechVo0QBNFptDuRY3CN/9vFfXsE+5YGM
+         kZK0XQHPJtjURkVRbzY9mbwGNAnJu+82unlTDQ7njzg7AXypEFPplI/wxkO8eEhJ9xYd
+         gS6A==
+X-Gm-Message-State: AOJu0YxqMPByESoFhLqnOKhn0tLOD01ULDm7m3iNQPB9SZo0ldZV8+8i
+	UOHuq8o4+mfnunjNNKyiq5gV7lP02O/qpKzFX62q49Q8G/TjQcSk58m8Zqg8UXYao21ZknOBLcH
+	8dEfw
+X-Gm-Gg: Acq92OE3ow7wvq1L1aZud58T02TOKmR6y6WkWp+LmKqfGWrAwrt9CbFaBOdYlp0aJI1
+	B0svMmyYLq2cfrkEIIgdyHJ8mjFkvqI6dEI9QAQy/v9L/EBkfJH5kF0GXsS42iki6yMoXt0fIqd
+	G/BQM2f/Vn/yJI14NkSoZWWZzp36820dYOkWjvi+zSbqLtDP2c6zO7CPLUpL+Q4Hu/DZqkmI5XP
+	BobVvy/41mpfxj1VIwvl4Z+02ch566C11RE3VcSzd8kCLer/uyPHHVkbh0AL/BTAzv+LOs4i3gq
+	j899PEJdm4ZQUKRfnXcypQvHrrdJrFJ4RtmlAN5SgZJCLUyb7FfAZfjPZvrQHbHHhcA8o8ZPCoO
+	GDHNX2F2czTbOa7NGZMbGtaR05ocLzGupsC54EOAcavaW3Hzz60mjHQq0Qwjnkd1ZrTEFLT6376
+	Efdmn+xZnjeMw=
+X-Received: by 2002:a05:7300:640e:b0:2e5:faa9:ca76 with SMTP id 5a478bee46e88-308200bc9fbmr1859223eec.7.1781375676545;
+        Sat, 13 Jun 2026 11:34:36 -0700 (PDT)
 Received: from t14.. ([2001:5a8:47ec:d700:7881:81f1:548c:e2d3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e48e412sm9181543eec.4.2026.06.13.11.34.34
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e48e412sm9181543eec.4.2026.06.13.11.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 11:34:34 -0700 (PDT)
+        Sat, 13 Jun 2026 11:34:36 -0700 (PDT)
 From: Jordan Rife <jordan@jrife.io>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jordan@jrife.io>,
@@ -67,9 +67,9 @@ Cc: Jordan Rife <jordan@jrife.io>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH v1 bpf-next 1/2] bpf: Support BPF_F_INGRESS with bpf_redirect_peer
-Date: Sat, 13 Jun 2026 11:34:05 -0700
-Message-ID: <20260613183424.1198073-2-jordan@jrife.io>
+Subject: [PATCH v1 bpf-next 2/2] selftests/bpf: Add tests for bpf_redirect_peer with BPF_F_INGRESS
+Date: Sat, 13 Jun 2026 11:34:06 -0700
+Message-ID: <20260613183424.1198073-3-jordan@jrife.io>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260613183424.1198073-1-jordan@jrife.io>
 References: <20260613183424.1198073-1-jordan@jrife.io>
@@ -81,219 +81,149 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We have several use cases where a pod injects traffic into the datapath
-of another so that the traffic appears to have originated from that
-pod. One such use case is a synthetic flow generator which injects
-synthetic traffic into a pod's datapath to enable dynamic probing and
-debugging. Another is a transparent proxy where connections originating
-from one pod are redirected towards another which proxies that
-connection. The new connection is bound to the IP of the original pod
-using IP_TRANSPARENT and its traffic is injected into that pod's
-datapath and handled as if it had originated there. This can be used for
-mTLS, etc.
-
-We use bpf_redirect(BPF_F_INGRESS) to direct traffic leaving the proxy,
-flow generator, etc. towards the target pod, ensuring that eBPF programs
-that are meant to intercept traffic leaving that pod are executed.
-However, this doesn't work with netkit.
-
-With netkit, an ingress redirection from proxy to workload skips eBPF
-programs that are meant to intercept traffic leaving the pod, since they
-reside on the netkit peer device. One workaround is to attach the
-same program to both the netkit peer device and the TCX ingress hook for
-the netkit pair's primary interface, but
-
-a) This seems hacky and we need to be careful not to run the same
-   program twice for the same skb in cases where we want to pass that
-   traffic to the host stack.
-b) We're trying to keep the proxy redirection / traffic injection
-   systems as modular and separated from Cilium as possible, the system
-   that manages netkit setup and core eBPF programming.
-
-It would be handy if instead we could redirect traffic directly from
-one netkit peer device to another. This patch proposes an extension
-to bpf_redirect_peer to allow us to do just that.
-
-With this patch, the BPF_F_INGRESS flag tells bpf_redirect_peer to emit
-the skb in the egress direction of the target interface's peer device
-While the main use case is netkit, I suppose you could also use this
-mode with veth as well if, e.g., there were some eBPF programs attached
-to that side of the veth pair that needed to intercept traffic.
-
- +---------------------------------------------------------------------+
- | +-------------------------+         6. bpf_redirect_neigh(eth0)     |
- | | pod (10.244.0.10)       |           ------------------------      |
- | |                         |          |                        |     |
- | |              +--------+ |          |      +---------+       |     |
- | | 1. packet -->|        | |          |      |         |       |     |
- | |    leaves ^  | netkit |<===========|======| netkit  |       |     |
- | |           |  | peer   |=======(eBPF)=====>| primary |       |     |
- | |           |  |        | |          |      |         |       |     |
- | |           |  +--------+ |          |      +---------+       |     |
- | |           |             |          | 2. bpf_redirect        v     |
- | +-----------|-------------+          |___________________   +-------|
- |             |                                            |  | eth0  |
- |             | 5. bpf_redirect_peer(BPF_F_INGRESS)        |  +-------|
- |             |________________________                    |          |
- | +-------------------------+          |                   |          |
- | | proxy (10.244.0.11)     |          |                   |          |
- | | IP_TRANSPARENT          |          |                   |          |
- | |              +--------+ |          |      +---------+  |          |
- | | 3. packet <--|        | |          |      |         |<--          |
- | |    enters    | netkit |<===========|======| netkit  |             |
- | |    [proxy]   | peer   |=======(eBPF)=====>| primary |             |
- | | 4. packet -->|        | |                 |         |             |
- | |    leaves    +--------+ |                 +---------+             |
- | |    sip=10.244.0.10      |                                         |
- | +-------------------------+                                         |
- +---------------------------------------------------------------------+
-
-Using the proxy use case as an example, in step 5 we would redirect
-traffic leaving the proxy towards the pod's peer device using
-bpf_redirect_peer(BPF_F_INGRESS).
-
-As a bonus, since the skb doesn't have to go through the backlog queue
-it can take full advantage of netkit's performance benefits. I set up a
-test where outgoing iperf3 traffic is injected into the datapath of
-another pod using either bpf_redirect_peer(BPF_F_INGRESS) or
-bpf_redirect(BPF_F_INGRESS). I used Cilium's eBPF host routing mode
-which skips the host stack and uses BPF redirect helpers to do all the
-routing.
-
-  (net.ipv4.tcp_congestion_control=cubic,mtu=1500,100GiB link,Cilium
-   eBPF host routing mode)
-
-BASELINE [bpf_redirect(BPF_F_INGRESS)]
-  1. [iperf pod] ==bpf_redirect([pod b], BPF_F_INGRESS)==> [pod b]
-  2. [pod b]     ==bpf_redirect_neigh([eth0])==>           eth0
-  3. eth0        ==over network==>                         [host b]
-
-  [ ID] Interval           Transfer     Bitrate         Retr
-  [  5]   0.00-60.00  sec   231 GBytes  33.0 Gbits/sec  12060     sender
-  [  5]   0.00-60.00  sec   230 GBytes  33.0 Gbits/sec            receiver
-
-TEST [bpf_redirect_peer(BPF_F_INGRESS)]
-  1. [iperf pod] ==bpf_redirect_peer([pod b], BPF_F_INGRESS)==> [pod b]
-  2. [pod b]     ==bpf_redirect_neigh([eth0])==>                eth0
-  3. eth0        ==over network==>                              [host b]
-
-  [ ID] Interval           Transfer     Bitrate         Retr
-  [  5]   0.00-60.00  sec   272 GBytes  38.9 Gbits/sec    0       sender
-  [  5]   0.00-60.00  sec   272 GBytes  38.9 Gbits/sec            receiver
-
-In this test, using bpf_redirect_peer(BPF_F_INGRESS) for the hop from
-[iperf pod] to [pod b] led to ~18% more throughput compared to
-bpf_redirect(BPF_F_INGRESS).
+Extend redirect tests to cover bpf_redirect_peer(BPF_F_INGRESS). SRC
+redirects to DST using bpf_redirect_peer(BPF_F_INGRESS) then traffic is
+hairpinned into DST using bpf_redirect(BPF_F_INGRESS).
 
 Signed-off-by: Jordan Rife <jordan@jrife.io>
 ---
- include/uapi/linux/bpf.h       | 16 +++++++++-------
- net/core/filter.c              | 14 ++++++++------
- tools/include/uapi/linux/bpf.h | 16 +++++++++-------
- 3 files changed, 26 insertions(+), 20 deletions(-)
+ .../selftests/bpf/prog_tests/tc_redirect.c    | 68 +++++++++++++++++++
+ .../selftests/bpf/progs/test_tc_peer.c        | 22 ++++++
+ 2 files changed, 90 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 11dd610fa5fa..dd0f2c3aea58 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5074,17 +5074,19 @@ union bpf_attr {
-  * 	Description
-  * 		Redirect the packet to another net device of index *ifindex*.
-  * 		This helper is somewhat similar to **bpf_redirect**\ (), except
-- * 		that the redirection happens to the *ifindex*' peer device and
-- * 		the netns switch takes place from ingress to ingress without
-- * 		going through the CPU's backlog queue.
-+ * 		that the redirection happens to the *ifindex*' peer device. If
-+ * 		*flags* is 0, the netns switch takes place from ingress to
-+ * 		ingress without going through the CPU's backlog queue. If the
-+ * 		**BPF_F_INGRESS** flag is provided then redirection happens in
-+ * 		the egress direction of the peer device.
-  *
-  * 		*skb*\ **->mark** and *skb*\ **->tstamp** are not cleared during
-  * 		the netns switch.
-  *
-- * 		The *flags* argument is reserved and must be 0. The helper is
-- * 		currently only supported for tc BPF program types at the
-- * 		ingress hook and for veth and netkit target device types. The
-- * 		peer device must reside in a different network namespace.
-+ * 		If the *flags* argument is 0, the helper is currently only
-+ * 		supported for tc BPF program types at the ingress hook and for
-+ * 		veth and netkit target device types. The peer device must reside
-+ * 		in a different network namespace.
-  * 	Return
-  * 		The helper returns **TC_ACT_REDIRECT** on success or
-  * 		**TC_ACT_SHOT** on error.
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9590877b0714..c24fdf744f75 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2529,16 +2529,18 @@ int skb_do_redirect(struct sk_buff *skb)
- 	if (unlikely(!dev))
- 		goto out_drop;
- 	if (flags & BPF_F_PEER) {
--		if (unlikely(!skb_at_tc_ingress(skb)))
--			goto out_drop;
- 		dev = skb_get_peer_dev(dev);
- 		if (unlikely(!dev ||
- 			     !(dev->flags & IFF_UP) ||
- 			     net_eq(net, dev_net(dev))))
- 			goto out_drop;
--		skb->dev = dev;
--		dev_sw_netstats_rx_add(dev, skb->len);
- 		skb_scrub_packet(skb, false);
-+		if (flags & BPF_F_INGRESS)
-+			return __bpf_redirect(skb, dev, 0);
-+		if (unlikely(!skb_at_tc_ingress(skb)))
-+			goto out_drop;
-+		dev_sw_netstats_rx_add(dev, skb->len);
-+		skb->dev = dev;
- 		return -EAGAIN;
- 	}
- 	return flags & BPF_F_NEIGH ?
-@@ -2575,10 +2577,10 @@ BPF_CALL_2(bpf_redirect_peer, u32, ifindex, u64, flags)
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index 64fbda082309..af8968b89ad7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -192,6 +192,8 @@ static int create_netkit(int mode, char *prim, char *peer)
+ 	req.n.nlmsg_len += sizeof(struct ifinfomsg);
+ 	addattr_l(&req.n, sizeof(req), IFLA_IFNAME, peer, strlen(peer));
+ 	addattr_nest_end(&req.n, peer_info);
++	addattr32(&req.n, sizeof(req), IFLA_NETKIT_SCRUB,
++		  NETKIT_SCRUB_NONE);
+ 	addattr_nest_end(&req.n, data);
+ 	addattr_nest_end(&req.n, linkinfo);
+ 
+@@ -405,6 +407,24 @@ static int netns_load_bpf(const struct bpf_program *src_prog,
+ 	return -1;
+ }
+ 
++static struct bpf_link *netns_attach_nk(const char *ns, int ifindex,
++					struct bpf_program *prog)
++{
++	LIBBPF_OPTS(bpf_netkit_opts, optl);
++	struct nstoken *nstoken = NULL;
++	struct bpf_link *link = NULL;
++
++	nstoken = open_netns(ns);
++	if (!ASSERT_OK_PTR(nstoken, "setns"))
++		goto cleanup;
++
++	link = bpf_program__attach_netkit(prog, ifindex, &optl);
++cleanup:
++	if (nstoken)
++		close_netns(nstoken);
++	return link;
++}
++
+ static void test_tcp(int family, const char *addr, __u16 port)
  {
- 	struct bpf_redirect_info *ri = bpf_net_ctx_get_ri();
+ 	int listen_fd = -1, accept_fd = -1, client_fd = -1;
+@@ -1082,6 +1102,53 @@ static void test_tc_redirect_peer(struct netns_setup_result *setup_result)
+ 	close_netns(nstoken);
+ }
  
--	if (unlikely(flags))
-+	if (unlikely(flags & ~BPF_F_INGRESS))
- 		return TC_ACT_SHOT;
++static void test_tc_redirect_peer_ing(struct netns_setup_result *setup_result)
++{
++	struct test_tc_peer *skel;
++	struct nstoken *nstoken;
++	int err;
++
++	nstoken = open_netns(NS_FWD);
++	if (!ASSERT_OK_PTR(nstoken, "setns fwd"))
++		return;
++
++	skel = test_tc_peer__open();
++	if (!ASSERT_OK_PTR(skel, "test_tc_peer__open"))
++		goto done;
++
++	skel->rodata->IFINDEX_SRC = setup_result->ifindex_src_fwd;
++	skel->rodata->IFINDEX_DST = setup_result->ifindex_dst_fwd;
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc_src_ing,
++		  BPF_NETKIT_PRIMARY), 0, "src_prog_attach_type");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc_dst_ing,
++		  BPF_NETKIT_PRIMARY), 0, "dst_prog_attach_type");
++
++	err = test_tc_peer__load(skel);
++	if (!ASSERT_OK(err, "test_tc_peer__load"))
++		goto done;
++
++	skel->links.tc_src_ing = netns_attach_nk(NS_SRC,
++						 setup_result->ifindex_src,
++						 skel->progs.tc_src_ing);
++	if (!ASSERT_OK_PTR(skel->links.tc_src_ing, "attach_src"))
++		goto done;
++	skel->links.tc_dst_ing = netns_attach_nk(NS_DST,
++						 setup_result->ifindex_dst,
++						 skel->progs.tc_dst_ing);
++	if (!ASSERT_OK_PTR(skel->links.tc_dst_ing, "attach_dst"))
++		goto done;
++
++	if (!ASSERT_OK(set_forwarding(false), "disable forwarding"))
++		goto done;
++
++	test_connectivity();
++
++done:
++	if (skel)
++		test_tc_peer__destroy(skel);
++	close_netns(nstoken);
++}
++
+ static int tun_open(char *name)
+ {
+ 	struct ifreq ifr;
+@@ -1280,6 +1347,7 @@ static void *test_tc_redirect_run_tests(void *arg)
  
--	ri->flags = BPF_F_PEER;
-+	ri->flags = BPF_F_PEER | flags;
- 	ri->tgt_index = ifindex;
+ 	RUN_TEST(tc_redirect_peer, MODE_VETH);
+ 	RUN_TEST(tc_redirect_peer, MODE_NETKIT);
++	RUN_TEST(tc_redirect_peer_ing, MODE_NETKIT);
+ 	RUN_TEST(tc_redirect_peer_l3, MODE_VETH);
+ 	RUN_TEST(tc_redirect_peer_l3, MODE_NETKIT);
+ 	RUN_TEST(tc_redirect_neigh, MODE_VETH);
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_peer.c b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+index 365eacb5dc34..1f2345f05fcd 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_peer.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+@@ -34,6 +34,28 @@ int tc_src(struct __sk_buff *skb)
+ 	return bpf_redirect_peer(IFINDEX_DST, 0);
+ }
  
- 	return TC_ACT_REDIRECT;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 11dd610fa5fa..dd0f2c3aea58 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5074,17 +5074,19 @@ union bpf_attr {
-  * 	Description
-  * 		Redirect the packet to another net device of index *ifindex*.
-  * 		This helper is somewhat similar to **bpf_redirect**\ (), except
-- * 		that the redirection happens to the *ifindex*' peer device and
-- * 		the netns switch takes place from ingress to ingress without
-- * 		going through the CPU's backlog queue.
-+ * 		that the redirection happens to the *ifindex*' peer device. If
-+ * 		*flags* is 0, the netns switch takes place from ingress to
-+ * 		ingress without going through the CPU's backlog queue. If the
-+ * 		**BPF_F_INGRESS** flag is provided then redirection happens in
-+ * 		the egress direction of the peer device.
-  *
-  * 		*skb*\ **->mark** and *skb*\ **->tstamp** are not cleared during
-  * 		the netns switch.
-  *
-- * 		The *flags* argument is reserved and must be 0. The helper is
-- * 		currently only supported for tc BPF program types at the
-- * 		ingress hook and for veth and netkit target device types. The
-- * 		peer device must reside in a different network namespace.
-+ * 		If the *flags* argument is 0, the helper is currently only
-+ * 		supported for tc BPF program types at the ingress hook and for
-+ * 		veth and netkit target device types. The peer device must reside
-+ * 		in a different network namespace.
-  * 	Return
-  * 		The helper returns **TC_ACT_REDIRECT** on success or
-  * 		**TC_ACT_SHOT** on error.
++SEC("tc")
++int tc_dst_ing(struct __sk_buff *skb)
++{
++	if (!skb->mark) {
++		skb->mark = 0x1;
++		return bpf_redirect_peer(IFINDEX_SRC, BPF_F_INGRESS);
++	}
++
++	return bpf_redirect(IFINDEX_DST, 0);
++}
++
++SEC("tc")
++int tc_src_ing(struct __sk_buff *skb)
++{
++	if (!skb->mark) {
++		skb->mark = 0x1;
++		return bpf_redirect_peer(IFINDEX_DST, BPF_F_INGRESS);
++	}
++
++	return bpf_redirect(IFINDEX_SRC, 0);
++}
++
+ SEC("tc")
+ int tc_dst_l3(struct __sk_buff *skb)
+ {
 -- 
 2.43.0
 
