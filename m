@@ -1,35 +1,35 @@
 Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B7C63B9;
-	Sat, 13 Jun 2026 13:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291C8281532;
+	Sat, 13 Jun 2026 14:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781359091; cv=none; b=u35mYmWIb7N1z8K/88GSGFA0X9jXBNMdtgkOwzgJqomG2/xQvFCm7LgOJsy8d4P3h77mMqoHacNOMiMhJlnXyZrZdQ7ekE/tZzlQdVUWtMceSktRpxh3a/klutaykhiahsXpeSJ8fA1OC10+xRfzNq4/5PUyEy8dtQ2oRqIeXbI=
+	t=1781360099; cv=none; b=snlc1Ba9CTQWEjx3PoDvsvfS/i0gpH4RH4pLaOUWn4JaQRVeTwdB00DiyfVvR2GtKNjuUo93xMIeMUHVybcOvHmk0tcAHBYFSo2TnQS/4f1/vNsa5obgyTi0VF6XuVn0pAXxiDdotxX40gYKWRSo/f/Anc08fGEv/OxcCnXuNAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781359091; c=relaxed/simple;
-	bh=MGHTiIUOviutCRVwxnnDgRYWU2f8IfdfRQ1F5rszzU0=;
+	s=arc-20240116; t=1781360099; c=relaxed/simple;
+	bh=qQ8W96WP+lSqweOpcKDTC6+K7WCn2R8DsbMBXX4Xe3A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ix3PcUptbns+EF88KOaByNmGeIsXNhRSNm2aKOO4uN27X+XgUROmPR+Yl5m++q8RPYdaULRVdsIyRtM2jZHsTWiuh9N8Z7KotnCvUqpGoYdon2VIvN5zFnxCOSydtT6l1Tt2qCst/NbjNCk1w7tC/5VCnQiHlKAvCte+L1Pg+TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=f6D5Q1/d; arc=none smtp.client-ip=129.217.128.51
+	 In-Reply-To:Content-Type; b=SuetTI1Vshh8zCHgFmPfmDDpdnnIFDr543oIJCjDSxbEajS4SgifCFAmvB5/siLOspKnQ5ivAOn14wxJfjrIw4uHDySNfdgdR7AduSHnOqmC/OCGc7FbQPeICPct2FELLnNGKjmiaLICDMo+RRn5B+zlg2w/sBbUrTf/ncYIr3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=NHlnwxN0; arc=none smtp.client-ip=129.217.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="f6D5Q1/d"
+	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="NHlnwxN0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-dortmund.de;
-	s=unimail; t=1781359053;
-	bh=MGHTiIUOviutCRVwxnnDgRYWU2f8IfdfRQ1F5rszzU0=;
+	s=unimail; t=1781360072;
+	bh=qQ8W96WP+lSqweOpcKDTC6+K7WCn2R8DsbMBXX4Xe3A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=f6D5Q1/d50W4n8SSgF7rG2bLxSNoEGdr9bdFJ+EOXRNWggjl4kn1KceBDsXVmAp6c
-	 OYalAEuVWUg/uWmIIGdKGvTReB38XuvjjpnCViuG9l0MgmTIaC1B8QDXDvGpguTiJ4
-	 5TDjEkiSvSxKe04LZQcul3jrXqJBgEvOsAe2TED8=
+	b=NHlnwxN0/Q9X+vB7DngAk5fMqILIejNKq3+VDCbHgFKCRDW8KP3zU+IzyJ/S2eyjo
+	 WaprUJksEHM6Bcr3TQj7N2ZZ7UVKF1piJwsoNMjWuiyij5BJNZPnP9fWYlPXBRGHMS
+	 irla4tJffOjvEd1dlRAbY70ywnbTZ6FW1tr+JtU8=
 Received: from [192.168.178.68] (pd9eaa69d.dip0.t-ipconnect.de [217.234.166.157])
 	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65DDvVHv018453
+	by unimail.uni-dortmund.de (8.19.0.1/8.19.0.1) with ESMTPSA id 65DEEU9v000324
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sat, 13 Jun 2026 15:57:31 +0200 (CEST)
-Message-ID: <74a6b90c-7d67-4047-8467-3757cd1f91a6@tu-dortmund.de>
-Date: Sat, 13 Jun 2026 15:57:30 +0200
+	Sat, 13 Jun 2026 16:14:30 +0200 (CEST)
+Message-ID: <f120fd22-1ee5-4d5b-9cdd-71804353e6a7@tu-dortmund.de>
+Date: Sat, 13 Jun 2026 16:14:30 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,63 +37,290 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
-To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        hawk@kernel.org, netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
+Subject: Re: [PATCH net-next v7 5/5] veth: time-based BQL completion
+ coalescing via ethtool tx-usecs
+To: hawk@kernel.org, netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com,
+        =?UTF-8?Q?Jonas_K=C3=B6ppeler?=
+ <j.koeppeler@tu-berlin.de>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Chris Arges <carges@cloudflare.com>,
-        Mike Freemon <mfreemon@cloudflare.com>,
-        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
+        Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
 References: <20260612083530.1650245-1-hawk@kernel.org>
- <5c326cb0-9b7c-4d67-8f80-0c9be1e8fcba@tu-dortmund.de>
- <4ddf3bcb-db5d-4821-ab32-577de93973a7@tu-berlin.de>
+ <20260612083530.1650245-6-hawk@kernel.org>
 Content-Language: en-US
 From: Simon Schippers <simon.schippers@tu-dortmund.de>
-In-Reply-To: <4ddf3bcb-db5d-4821-ab32-577de93973a7@tu-berlin.de>
+In-Reply-To: <20260612083530.1650245-6-hawk@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 6/12/26 19:21, Jonas Köppeler wrote:
-> On 6/12/26 16:10, Simon Schippers wrote:
->> On 6/12/26 10:35, hawk@kernel.org wrote:
->>> From: Jesper Dangaard Brouer <hawk@kernel.org>
->>>
->>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
->>> latency by dynamically limiting in-flight packets in the ptr_ring and
->>> moving buffering into the qdisc where AQM algorithms can act on it.
->>
->> LGTM, thanks for the detailed changelog :)
->>
->> Maybe we should stop searching for the perfect tx-usecs value.
->> 100us is probably fine for most hardware to not have a performance
->> regression. And lowering it does not really improve the RTT anyways.
->> Do you agree?
-> I agree, I already thought that it just might be a very lucky case when using 50us where something accidentally aligns nicely. Interestingly, I could also reproduce that 50us was consistently a little better compared to 100us on an Intel CPU. Maybe if I get the time, I'll have another look at it, but in general I think 50us or 100us does not really matter.
+On 6/12/26 10:35, hawk@kernel.org wrote:
+> From: Simon Schippers <simon.schippers@tu-dortmund.de>
 > 
-
-Interesting.
-
-I ran the benchmarks again, the results are at [1].
-I tested values between 0-9us, 10-90us, 100, 500, 1000, 5000 and 10000us.
-
-TLDR: Throughput is fine for everything > 0us. RTT only improves
-      slightly for < 100us. So 100us is fine.
-
-[1] https://github.com/simoschip2000/veth-backpressure-performance-testing/blob/v7/results/tx-usecs/text_sweep.txt
-
->>
->> Nevertheless, I will compile and run the benchmarks again.
->>
->> I will go on vacation from 15th to 24th of June, so I will not be able
->> to contribute code or run benchmarks then.
->>
->> Thanks,
->> Simon
->>
+> Per-packet BQL completion forces DQL to converge on limit=2, causing
+> excessive NAPI scheduling overhead and qdisc requeues.
 > 
+> Accumulate BQL completions and flush them when a configurable time
+> threshold (tx-usecs) is exceeded, letting DQL discover a limit that
+> bounds actual queuing delay to the configured interval. Coalescing
+> state persists across NAPI polls in struct veth_rq so completions can
+> accumulate beyond a single budget=64 cycle.
+> 
+> The flush condition is:
+> 
+> state->time + bql_flush_ns <= current_time || state->n_bql > dql.limit
+> 
+> Flushing when n_bql exceeds dql.limit handles BQL starvation.
+> 
+> The comparison is strictly greater-than because netdev_tx_sent_queue()
+> always lets the producer exceed the limit by one before it stops, so
+> n_bql == dql.limit is a normal in-flight state. dql.limit lives in
+> the same cacheline as the completion path, so the check is cheap.
+> 
+> Add ethtool tx-usecs support for runtime tuning. Default is 100 us;
+> setting tx-usecs to 0 disables coalescing and falls back to per-packet
+> completion.
+> 
+>   ethtool -C <veth-dev> tx-usecs 500  # 500us coalescing
+>   ethtool -C <veth-dev> tx-usecs 0    # per-packet (no coalescing)
+> 
+> Co-developed-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> Co-developed-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+> Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+> Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
+> ---
+>  drivers/net/veth.c | 123 ++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 117 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 2473f730734b..c62d87a8402c 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/bpf_trace.h>
+>  #include <linux/net_tstamp.h>
+>  #include <linux/skbuff_ref.h>
+> +#include <linux/sched/clock.h>
+>  #include <net/page_pool/helpers.h>
+>  
+>  #define DRV_NAME	"veth"
+> @@ -50,6 +51,7 @@
+>   * delay => 64 * 250 ms = 16 s.
+>   */
+>  #define VETH_WATCHDOG_TIMEOUT_MS	(64 * 250)
+> +#define VETH_BQL_COAL_TX_USECS	100 /* default tx-usecs for BQL batching */
+>  
+>  struct veth_stats {
+>  	u64	rx_drops;
+> @@ -69,6 +71,11 @@ struct veth_rq_stats {
+>  	struct u64_stats_sync	syncp;
+>  };
+>  
+> +struct veth_bql_state {
+> +	u64	time;	/* sched_clock() when current coalescing window started */
+> +	uint	n_bql;	/* BQL completions batched in the current window */
+> +};
+> +
+>  struct veth_rq {
+>  	struct napi_struct	xdp_napi;
+>  	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
+> @@ -76,6 +83,7 @@ struct veth_rq {
+>  	struct bpf_prog __rcu	*xdp_prog;
+>  	struct xdp_mem_info	xdp_mem;
+>  	struct veth_rq_stats	stats;
+> +	struct veth_bql_state	bql_state;
+>  	bool			rx_notify_masked;
+>  	struct ptr_ring		xdp_ring;
+>  	struct xdp_rxq_info	xdp_rxq;
+> @@ -88,6 +96,7 @@ struct veth_priv {
+>  	struct bpf_prog		*_xdp_prog;
+>  	struct veth_rq		*rq;
+>  	unsigned int		requested_headroom;
+> +	unsigned int		tx_coal_usecs;	/* BQL completion coalescing */
+>  };
+>  
+>  struct veth_xdp_tx_bq {
+> @@ -272,7 +281,56 @@ static void veth_get_channels(struct net_device *dev,
+>  static int veth_set_channels(struct net_device *dev,
+>  			     struct ethtool_channels *ch);
+>  
+> +static int veth_get_coalesce(struct net_device *dev,
+> +			     struct ethtool_coalesce *ec,
+> +			     struct kernel_ethtool_coalesce *kernel_coal,
+> +			     struct netlink_ext_ack *extack)
+> +{
+> +	struct veth_priv *priv = netdev_priv(dev);
+> +
+> +	ec->tx_coalesce_usecs = priv->tx_coal_usecs;
+> +	return 0;
+> +}
+> +
+> +static int veth_set_coalesce(struct net_device *dev,
+> +			     struct ethtool_coalesce *ec,
+> +			     struct kernel_ethtool_coalesce *kernel_coal,
+> +			     struct netlink_ext_ack *extack)
+> +{
+> +	struct veth_priv *priv = netdev_priv(dev);
+> +	struct net_device *peer;
+> +
+> +	/* The coalescing window delays BQL completions, so keep tx-usecs well
+> +	 * below the tx_timeout watchdog; otherwise a large value could stall a
+> +	 * stopped queue long enough to trip a false watchdog timeout. Cap at
+> +	 * half the watchdog to leave a generous safety margin. tx-usecs is
+> +	 * microseconds, the watchdog is milliseconds.
+> +	 */
+> +	if (ec->tx_coalesce_usecs > VETH_WATCHDOG_TIMEOUT_MS / 2 * USEC_PER_MSEC) {
+> +		NL_SET_ERR_MSG_MOD(extack,
+> +				   "tx-usecs must stay below half the tx_timeout watchdog");
+> +		return -ERANGE;
+> +	}
+> +
+> +	/* Paired with READ_ONCE in veth_xdp_rcv(). */
+> +	WRITE_ONCE(priv->tx_coal_usecs, ec->tx_coalesce_usecs);
+> +
+> +	/* veth_xdp_rcv() reads each device's own value, so mirror it onto
+> +	 * the peer to keep the pair symmetric: both directions coalesce
+> +	 * with the same tx-usecs. Called under RTNL, rtnl_dereference() is safe.
+> +	 */
+> +	peer = rtnl_dereference(priv->peer);
+> +	if (peer) {
+> +		struct veth_priv *peer_priv = netdev_priv(peer);
+> +
+> +		WRITE_ONCE(peer_priv->tx_coal_usecs, ec->tx_coalesce_usecs);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct ethtool_ops veth_ethtool_ops = {
+> +	.supported_coalesce_params = ETHTOOL_COALESCE_TX_USECS,
+>  	.get_drvinfo		= veth_get_drvinfo,
+>  	.get_link		= ethtool_op_get_link,
+>  	.get_strings		= veth_get_strings,
+> @@ -282,6 +340,8 @@ static const struct ethtool_ops veth_ethtool_ops = {
+>  	.get_ts_info		= ethtool_op_get_ts_info,
+>  	.get_channels		= veth_get_channels,
+>  	.set_channels		= veth_set_channels,
+> +	.get_coalesce		= veth_get_coalesce,
+> +	.set_coalesce		= veth_set_coalesce,
+>  };
+>  
+>  /* general routines */
+> @@ -969,13 +1029,54 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	return NULL;
+>  }
+>  
+> +static void veth_bql_maybe_complete(struct veth_bql_state *state,
+> +				    struct netdev_queue *peer_txq,
+> +				    u64 bql_flush_ns)
+> +{
+> +	u64 current_time;
+> +
+> +	/* There is no reason to complete with 0 and
+> +	 * peer_txq could go away.
+> +	 */
+> +	if (!state->n_bql || !peer_txq)
+> +		return;
+> +
+> +	current_time = sched_clock();
+> +
+> +	/* We complete if:
+> +	 * 1. We reach bql_flush_ns.
+> +	 * 2. We potentially have BQL starvation.
+> +	 */
+> +	if (state->time + bql_flush_ns <= current_time ||
+> +	    state->n_bql > peer_txq->dql.limit) {
+
+Both Sashiko-Nipa and Sashiko-Gemini are right, this is missing a 
+#ifdef CONFIG_BQL. Not sure what is the best way to add them.
+And for the struct we could maybe do:
+
+#ifdef CONFIG_BQL
+struct veth_bql_state {
+    u64	time;	/* sched_clock() when current coalescing window started */
+    uint	n_bql;	/* BQL completions batched in the current window */
+};
+#else
+struct veth_bql_state {};
+#endif
+
+> +		netdev_tx_completed_queue(peer_txq, state->n_bql,
+> +					  state->n_bql * VETH_BQL_UNIT);
+> +		state->time = current_time;
+> +		state->n_bql = 0;
+> +	}
+> +}
+> +
+>  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct veth_xdp_tx_bq *bq,
+>  			struct veth_stats *stats,
+>  			struct netdev_queue *peer_txq)
+>  {
+> +	struct veth_priv *priv = netdev_priv(rq->dev);
+> +	struct veth_bql_state *state = &rq->bql_state;
+>  	int i, done = 0, n_xdpf = 0;
+>  	void *xdpf[VETH_XDP_BATCH];
+> +	u64 bql_flush_ns;
+> +
+> +	/* Mirrored to both peers; paired with WRITE_ONCE() in veth_set_coalesce */
+> +	bql_flush_ns = (u64)READ_ONCE(priv->tx_coal_usecs) * 1000;
+> +
+> +	/* Clamp stored timestamp in case we migrated to a CPU with a behind
+> +	 * sched_clock(); tries to reduce late BQL flushes.
+> +	 */
+> +	state->time = min(state->time, sched_clock());
+> +
+> +	/* Flush completions that timed out since the previous NAPI poll. */
+> +	veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+>  
+>  	for (i = 0; i < budget; i++) {
+>  		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
+> @@ -1000,12 +1101,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			}
+>  		} else {
+>  			/* ndo_start_xmit */
+> -			bool bql_charged = veth_ptr_is_bql(ptr);
+>  			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+>  
+> +			if (veth_ptr_is_bql(ptr))
+> +				state->n_bql++;
+>  			stats->xdp_bytes += skb->len;
+> -			if (peer_txq && bql_charged)
+> -				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+>  
+>  			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+>  			if (skb) {
+> @@ -1015,6 +1115,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  					napi_gro_receive(&rq->xdp_napi, skb);
+>  			}
+>  		}
+> +		veth_bql_maybe_complete(state, peer_txq, bql_flush_ns);
+>  		done++;
+
+Sashiko-Nipa reports:
+
+"If veth_xdp_rcv() finishes and returns a done count less than the budget,
+NAPI will go to sleep in veth_poll(). Do we need to unconditionally flush
+any stranded BQL completions in veth_poll() before sleeping?
+If completions are left in rq->bql_state indefinitely across NAPI idle
+periods, it might present an artificially massive delay to DQL. This could
+cause DQL to mistakenly conclude the hardware is extremely slow and
+aggressively shrink dql.limit to its minimum, crippling throughput on
+subsequent bursts."
+
+Again the issue that I found to be non-problematic in [1] and can be
+seen by an BQL inflight > 0 when for example pktgen suddenly stops.
+
+If we would "unconditionally flush any stranded BQL completions in
+veth_poll() before sleeping" we would *not* accumulate BQL completions
+across NAPI polls but we want to do that.
+
+Do you agree?
+
+[1] https://lore.kernel.org/netdev/c8650d3a-e488-4279-b28f-549d766c23a1@tu-dortmund.de/
