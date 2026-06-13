@@ -1,167 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C078262A6
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 23:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781392268; cv=none; b=H5lzOkrQDlLhEMT2FOfgj5N3KuMQL4sRuvl/i6cKaXC9nB75i/NgRz+kTK4hIlgi2KesYI4ZQ50oB/mknF7JTVA6o69FgJrlUnkrc3w9bTJpH1iqoybE/Pe1E6qhUVcW1yayny9qPPtMXCUtIGf0MoSClxXUxM9A8MSU8QArITU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781392268; c=relaxed/simple;
-	bh=/fL972U5yVTvH/Va9pzT34bXQGrWaBPS8LL1MhECerQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gabWb6DTHFLYYrfSTP/TuEFP5r4gwf1ULySPPuAv8cLueLHyjFfjczTR0gkIZJrKlqn8emwG20JksF2T8rVGTvR56j6zhjN6qW+8o6DftMxq9d7ci4yABC91jHfgVRxIj6CrVI+/cuG69Y/JE4ExQQhyca95sxmhbaPLKP8lzJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IVSm5mJK; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805133C06
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 23:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781392712; cv=pass; b=Jl2qsLuMIDvD0NUU1eSOdnkfv0Fsm4icajrhOw3UCvBj4/V3aZvYOF7di6vE2q4Jo+br4BaqOIReBxT62Q2yPVxnJH+8jb70NRfoXDbXvdOTgE9uqoos8jxbNEy6+g0/c0AoamJp66/RouxdT7Lk1/yVRok5Z7j3ThDWK3olGmw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781392712; c=relaxed/simple;
+	bh=ZR6CRlm+kjUynyI/TJRUEnDkvMkUBO9Ysvtfa/jLYNs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AyEFMA0Z18QSDOqWgjAm0XKjCUWplj3HIgd8qrgE8XVpjtxNm7VQ2TStY6g47pS3VMUf+5l+RcPB3fn9t4CKQesJuG1MBsi9oZet0ruQhLveasLzZz8ja3rOjsB8UAk1CKo1/XUGD5F5pzGq9aF4AS2jGh9M6cdAIVKd2E8cd5o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k1RVJlSe; arc=pass smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IVSm5mJK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D2F1F000E9;
-	Sat, 13 Jun 2026 23:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781392267;
-	bh=a0amtZbCT6BZ5DUnHPaSFiOV8K4fYhTy9XygqZtE91U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IVSm5mJKocXhADXrbJxGD8QTsIa6aeA6phtRfMl78yqL7bnA1u7PP5ifQqhc2pfXc
-	 tS0WSMRHZz2op7A+6185fGOmZyVieYdW0WyRh58KLxC8CrD48EbxJNL+a6LFIe4d6+
-	 t0GHjgHJsQfsAiQoUvYbLFxlYnhLxIuwdF2rner7zNK3hWGCqoS9ED1VZywUfIpCTP
-	 07ohPY9SjF/UkiCs/Ip62wz9a5OKsW2+Lntf4uDq+A5uS1aMByLCbf+QpOTDKaAChL
-	 vv+CZYjWLj6xLfaALhkmd5I7qUAcz3QM76lCeRi9SgvGTDgDana5FMppnRYd9YsNN9
-	 NymTGUMRVhsCg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 3/4] bpf: Add kfunc to proxy TX HW
- Timestamp.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260613224823.2399535-4-kuniyu@google.com>
-References: <20260613224823.2399535-4-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 13 Jun 2026 23:11:06 +0000
-Message-Id: <20260613231106.E1D2F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k1RVJlSe"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1384ebe7a10so1864951c88.1
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 16:18:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781392711; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QReUX0H9ZaVyNydRs8TRG7v9sGITqcPAUfw9/cOvy1xqL2T+6udhCr2gGr85Naz6eh
+         GBcNdMQ8g8yG86VC+82rRvqux/ACENHckiHR0TLiIshcrie1iicbqYFk2KuYH+o7Rfog
+         Abi+L3ZECdI0KQddxUoo478mA4f6tEzJ54oBD8Ldaz/kcePM3+6xAySUHukOralq1Jvm
+         4owZcHjMVS/kdQd9vpQyphxS84ZLVMWvhWAzYXhq52wTginmTmKMcdO9tiiaMDMKFNOQ
+         8I1mu4bKNC6W+Orp4FEzCxLJpOAI96Rnyf5ybVvsMLF9/d1x9p04DLoVioG5nYYupZrz
+         Z6wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hrh3mtw21uDqAv+fInBxgdwwmlvcEY/ppShhIMRJqV8=;
+        fh=5gVUz/RD0ySsunI1KsYGqL+IetUOkkDDN767WQP5vtM=;
+        b=GYoDQlPrXFBiXKlt8OhXPxSDb1ngebnllLa02aWY/16jMxI+9CuzmtSXvfXhG6m8jU
+         ChpHRl7HF8+D91iGjRfQnYig7BGDZyYLl8NPpyss2gT+7tmANWU8kHFPt5LHZAARuQt3
+         C4cmp6Ydndn2kOH/c9/gC3/PEa9d2DsGWjR+2u2UXT0qiAgXB58828nJVF7EwVGcOPPL
+         vGf/6fIYpF2GDP8KACuk81Gu9Qu4jdc0xnM+6BsY8qb2h/xS3jRCETBcdAfiWgdbLNMn
+         Z60ezQa3WWYVUDDf/jv8Wglb1lE668xCcTXHnIgb8LUun9dPmTiI3sLOv7Qm7Is5TJ7Z
+         +ObQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781392711; x=1781997511; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hrh3mtw21uDqAv+fInBxgdwwmlvcEY/ppShhIMRJqV8=;
+        b=k1RVJlSeqUhRHAWLeR5bCLHief97nYMl+zbIqJBKCpn3asDCW/ooMhqoY6bxTr2mXU
+         hHzd0j+Vgovum/i24MivwBymcjy8OswC2vPHkSzW8rdk2Bq/n7vzupAHpQK/nvm6CG55
+         V2vplDHZjo0nsrRhRe+odo84tBi/Hoqvqjn0hpN+s+BcJZNNiweyK7xw6F6GSi8xe8Rz
+         qzF/SzIqhzfFCBVUpZpfeK5RM+zvX6XOkRHk16Ajhiq80ZuBR9MNgh2jbvwdBDIBwhIZ
+         zoqyGNRVP3FXOlxlgD6TOaV3md7cQgySn7b2bCcqnuqRCPN9uiO1MZ02TAEIcL6qDspr
+         4eOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781392711; x=1781997511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hrh3mtw21uDqAv+fInBxgdwwmlvcEY/ppShhIMRJqV8=;
+        b=gIa0L9kyuwZ9k4sgW+BauyEm4ElKXyKPE/fmvhMeMc2LeoTSwJQJPpxH2kOfxSDmBG
+         4jkI5f43JVUnlyQqfFs5MLxNWMTfkAqiK2jmD9p9bs0NrUAf7KYRPdFro2jKIVp+lS3p
+         4Iuj2vRSGdyGzyO1FfUTDUaUvquB0m0ELCHq45xpVHWcIjmDBjOK6JUqMOUP5Pi4jOdD
+         Gxgeq3u43jqj3qgJdJY0Tm8Q79i1oVcg7P6iqE1iq37Yx6Oip+fbNAOrpbbqJqWf5suC
+         SupGr0V/PoV24MSfvFTAs2lgEsU9o5r5Fhr6iWbTcUIxYyiJ2x2cfY3VhL1eQFqkg420
+         2C8A==
+X-Forwarded-Encrypted: i=1; AFNElJ/J5KUlUAUSHZdZb/qyMJ3Hwuftb3HRNG4Z2pHvtfPilDRY6GvMoLDbgUQMeHGsNkCgY9k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH1s0LzybV2ImQvz6eXwUCDv/fcW41XnVoOLSxxc6kPfBhsuCt
+	T6ZxyG8VOv0PzCV1c0WFn4bACnuE623lenQ4hVEsRdiAKzlMEaHTTzL5LNa1RVEHYYlrQk45NBB
+	RJQegvYU9BmURVFSjVgwyCNoMT3Jf2qRvwCRjDIG+
+X-Gm-Gg: Acq92OGuxCJM8Qo67rf19E+n8z/qXO1LufZkby4HUJENo7Fv5PhZj/30SoE5YTzwTVL
+	EDGgazwPx92+6Oo10FWs58ew1BTg6W4ffKJCq3TgtI/lVa/awcQ793q1tDUJcsQLHtggQUZKaAz
+	RJRVLn9uX8vJwaitztPJRhHW5EdyCJMxGoEbS/cuP7KZozbtI8Zyvno0o8RrFHXHVrDmTI3ZaJB
+	iW8ht92EayIPXdpkkRxn3fw3/t8NFhaYCS9KDoKCMhzL/5HI5AC2XErm2rOTIvvXT9sK1iuGhhU
+	FUhph7XQK6h6ztI6lb3PlxyI2ltOYolOlAODDfQLKRxlXu784B1DkvdmSWJYNuCNboSxn/9nref
+	+e5brubkNIc37EJ4ocHHnUYg+QXH3/3ZuSAF/a/1yCizk52e/CRAr
+X-Received: by 2002:a05:7022:4394:b0:138:33cc:d886 with SMTP id
+ a92af1059eb24-1384bb1c329mr3810295c88.3.1781392709721; Sat, 13 Jun 2026
+ 16:18:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260613010039.1362312-1-kuniyu@google.com> <20260613102041.55e3b50e@kernel.org>
+ <CAAVpQUBP_21b5MB8MS-wFwg9BUdcgMoNxi8s479YQHH9g5ahCw@mail.gmail.com> <20260613154750.0a2355a4@kernel.org>
+In-Reply-To: <20260613154750.0a2355a4@kernel.org>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Sat, 13 Jun 2026 16:18:18 -0700
+X-Gm-Features: AVVi8CfWRjua43N5R25Ec3lhUHEDNvyeW-Rh2Ag46NdaoqpMNy3Y7Ggc1m-MHFQ
+Message-ID: <CAAVpQUA0hA8DmR3Yaww-KjbdmoFK2b25hqec5zz9tdnKHjYJCw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next/net 0/5] bpf: Support RX/TX HW timestamp proxy.
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Stale `BPF_RI_F_TX_TS_CMPL` flag is leaked across nested BPF netwo=
-rk context executions, allowing state corruption.
-- [High] Insufficient bounds checking in `bpf_skb_complete_tx_tstamp` combi=
-ned with uninitialized `skb->cb` allows BPF programs to trigger an out-of-b=
-ounds read and leak kernel memory to userspace.
---
+On Sat, Jun 13, 2026 at 3:47=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Sat, 13 Jun 2026 14:43:46 -0700 Kuniyuki Iwashima wrote:
+> > On Sat, Jun 13, 2026 at 10:20=E2=80=AFAM Jakub Kicinski <kuba@kernel.or=
+g> wrote:
+> > > On Sat, 13 Jun 2026 00:59:57 +0000 Kuniyuki Iwashima wrote:
+> > > > When standard socket applications are run on these hosts,
+> > > > a userspace proxy is required to mediate traffic between the
+> > > > hardware and the applications.
+> > > >
+> > > >             +---------+                 +----------------------+
+> > > >             |  proxy  |                 |  socket application  |
+> > > >             +---------+                 +----------------------+
+> > > >               ^     ^                               ^
+> > > >   userspace   |     |                               |
+> > > >   -----------| |-----------------------------------------------
+> > > >              | |    |    +---------------------+    | skb
+> > > >              | |    `--->|  virtual interface  |<---'
+> > > >   kernel     | |   skb   +---------------------+
+> > > >   -----------| |-----------------------------------------------
+> > > >               |
+> > > >               v
+> > > >        +------------+
+> > > >        |  hardware  |
+> > > >        +------------+
+> > >
+> > > The first patch looks kinda nonsensical but then I saw this diagram.
+> > > Looks like you're vibe coding an integration that makes it easier to
+> > > treat netdev as a slow path for a user networking stack.
+> > > Please tell me if I'm missing anything otherwise add my nack if you
+> > > repost.
+> >
+> > Hmm, what would be a better way to tell users that HW TS is
+> > available on tunnel devices ?
+> >
+> > Other options were 1) add attribute to tie the tunnel to a physical
+> > device and use its ndo_hwtstamp_set/get, or 2) add bpf retval
+> > hook in the path like update_socket_protocol().
+>
+> Can you explain the use case for HW timestamps on tunnels?
+> I see you have some diagrams in patches 3 and 4 but the motivation
+> isn't really explained, and we have 250 patches in the queue still.
+> Not much time to play detective right now :/
 
-commit a5f7ad9bfc54080207dfab0d4ae903bce6f3888c
-Author: Kuniyuki Iwashima <kuniyu@google.com>
+To be clear, this series is not related to Swift.
 
-bpf: Add kfunc to proxy TX HW Timestamp.
+Our RPC library capture timestamps as many places as possible
+so that we can visualise the RPC calls and know/debug where the
+latency comes from: application, library, kernel, network.
 
-This commit adds two kfuncs, bpf_skb_scrub_tx_tstamp() and
-bpf_skb_complete_tx_tstamp(), to proxy TX hardware timestamps for socket
-applications using SCM_TIMESTAMPING. It extracts the timestamp and enqueues
-a regenerated skb to the sender's error queue.
+This is not specific to tunnels and applied to all workloads running
+on container w/ virtual devices and init_net w/ physical devices.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 0c6c270d9f7d1..a45cdf38616ac 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4456,6 +4456,41 @@ tcx_run(const struct bpf_mprog_entry *entry, struc=
-t sk_buff *skb,
->  	return tcx_action_code(skb, ret);
->  }
-> =20
-> +static int skb_do_completion(struct sk_buff *skb)
-> +{
-> +	enum skb_drop_reason drop_reason =3D SKB_DROP_REASON_TC_INGRESS;
-> +	struct bpf_redirect_info *ri =3D bpf_net_ctx_get_ri();
-> +	struct bpf_tx_tstamp_cmpl *txtscmpl;
-> +
-> +	if (!(ri->kern_flags & BPF_RI_F_TX_TS_CMPL))
-> +		goto drop;
 
-[Severity: High]
-Does this code leak the BPF_RI_F_TX_TS_CMPL flag across nested executions?
+>
+> > Or do you think applications should handle ENOTSUP by ioctl
+> > as soft error and always set SOF_TIMESTAMPING_XXX_HARDWARE
+> > since the underlying physical device may support it ?
+>
+> And explain the deployment model and API semantics you have in mind.
 
-If a nested execution occurs (for example, via bpf_clone_redirect()
-triggering a synchronous sch_handle_ingress() on a tunnel device), the
-inner execution reuses the outer execution's bpf_net_context. If the inner
-BPF program sets the BPF_RI_F_TX_TS_CMPL flag and returns TC_ACT_ERRQUEUE,
-skb_do_completion() processes the inner packet but leaves the flag set in
-ri->kern_flags.
+The application first calls ioctl(SIOCSHWTSTAMP) and only when
+hwtstamp is supported, it uses SOF_TIMESTAMPING_XXX_HARDARE.
 
-When the outer execution resumes and returns TCX_ERRQUEUE,
-skb_do_completion() will be invoked again on the outer packet, incorrectly
-applying the inner execution's stale txtscmpl attributes. Should
-ri->kern_flags have the BPF_RI_F_TX_TS_CMPL bit cleared after processing?
+The doc mentions ioctl(SIOCSHWTSTAMP) may overwrite the
+configuration and ioctl(SIOCGHWTSTAMP) is not always implemented.
+https://docs.kernel.org/networking/timestamping.html
 
-> +
-> +	if (skb_unclone(skb, GFP_ATOMIC))
-> +		goto drop;
-> +
-> +	__skb_push(skb, skb->mac_len);
-> +
-> +	txtscmpl =3D &ri->txtscmpl;
-> +
-> +	drop_reason =3D pskb_may_pull_reason(skb, txtscmpl->payload_offset);
-> +	if (drop_reason)
-> +		goto drop;
-> +
-> +	skb->protocol =3D txtscmpl->protocol;
-> +	skb_set_network_header(skb, txtscmpl->network_offset);
-> +	__skb_pull(skb, txtscmpl->payload_offset);
+But it does not say ioctl(SIOCSHWTSTAMP) may fail although
+SOF_TIMESTAMPING_XXX_HARDARE could be supported.
 
-[Severity: High]
-Does this pull, combined with the uninitialized skb->cb, set up the
-conditions for an out-of-bounds read?
 
-Because skb->cb is not cleared here, it retains its contents from the TC
-layer (struct qdisc_skb_cb). The BPF program can control qdisc_skb_cb->data
-via the __sk_buff->cb array. If the BPF program manipulated the cb array to
-set a large optlen, and payload_offset only guarantees linear buffer space
-up to the end of the 20-byte IP header (as verified in
-bpf_skb_complete_tx_tstamp), ip_cmsg_recv_opts() could read past the
-validated linear buffer and leak adjacent kernel heap memory to userspace.
-
-Should skb->cb be cleared or initialized before handing off the skb to the
-socket error queue?
-
-[ ... ]
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bd8c9a7b7505a..c8d00067536be 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-
-[ ... ]
-
-> @@ -12396,6 +12396,67 @@ __bpf_kfunc int bpf_skb_set_hwtstamp(struct __sk=
-_buff *s,
-
-[ ... ]
-
-> +	delta =3D attrs->payload_offset - attrs->network_offset;
-> +	switch (attrs->protocol) {
-> +	case htons(ETH_P_IP):
-> +		if (delta < (s32)sizeof(struct iphdr) || !sk_is_inet(sk))
-> +			return -EINVAL;
-> +		break;
-
-[Severity: High]
-Is this bounds check sufficient to prevent out-of-bounds reads during IP
-options parsing?
-
-This only validates that payload_offset - network_offset >=3D
-sizeof(struct iphdr) (20 bytes).=20
-
-Because skb->cb is not cleared in skb_do_completion() before placing the
-packet on the socket's error queue, an attacker can set cb[1] (which aligns
-with optlen in struct inet_skb_parm) via the __sk_buff->cb array. When a
-socket application reads the error queue with IP_CMSG_RECVOPTS enabled,
-ip_cmsg_recv_opts() will interpret the uninitialized skb->cb as
-struct inet_skb_parm and read optlen bytes past this 20-byte IP header.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613224823.2399=
-535-1-kuniyu@google.com?part=3D3
+>
+> > Anyway, I'm happy to drop patch 1 for now and explore options.
+>
+> Not patch 1, all of it. I get the feeling y'all are sitting on a pile
+> of Swift related code that needs to be made upstreamable. Odd series
+> like this make me think it's never going to happen.
+>
+> > (Believe it or not, I haven't let AI write code because I don't
+> >  want AI to take over the most fun part.)
