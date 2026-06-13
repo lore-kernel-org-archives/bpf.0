@@ -1,82 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA3439E9AD;
-	Sat, 13 Jun 2026 03:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781322016; cv=none; b=nPuOrBp7cyEvCWb8Ox5+U26DDMzQE5G2uXRCNkRpjINChiHTP1UWmOk5xCQImRjvunQ9J8hSb/z8BtAYbHzIC64BdfyJAYUycq3OHL61QXk9IVyIZ5GCpdsq+vHH7ZX5ltOyI12fa3YY9ldEa6oM2EuX/UmijDJ3Ht+JCxPTmMA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781322016; c=relaxed/simple;
-	bh=iVNTNmW7AfPOJsRka9dUIfK1/SA81v8w6HGedDsUdWs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aAHbB9wvuqaTwL4dHISLhTcslQFUdA40eapS/oZ+4F/cia2SN63Cn0Tqi8b+yC8v72KuH/KSLVnCC8Cp9QrnQ5UeYhmbh878pB+O+aNIyJnmXgXuqQ0SZ0hP2nsgwt+x07RTfLiGb4fa/VGMzHrm9Rw2bWEbfEZ68/5C7B2jG7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8H+g6F2; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA6038F63D
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 03:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781322205; cv=pass; b=ORBDMcv5X2eDKn961kFZb5QFpCaXHBPtC4BP0cIdq/Ma09oDhVby88LsUzXA0b+8dFc648d8klF+rnpM8KBDIWANnMO6LW6srFo+NAuKOG3pKmPBgMfXvvqqIn0oFMORQEIHsbNYSKqVslXJ53kaylmFIFiWs2yDfvB0X3yLQZo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781322205; c=relaxed/simple;
+	bh=6g1VC+dw6fAg19W4wJnrVzOTNCJQ03941hAWJbJIOys=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ePhTnUTldrFOpJ6EBG9zOSMFlLpY+m4THA7mjBPUe74SfASquC433X97NrtWXimn1QYEp3zCG1RduSPekY3gxXNZStGON3++YHV7ux1NX9pciFvY1WnpaJzyXRpzuOsQnpYzr1OVoGzLGdnKebWCYLoemUb6lByR+Ku0pjToJIU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h2EKWwZt; arc=pass smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8H+g6F2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CA91F000E9;
-	Sat, 13 Jun 2026 03:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781322014;
-	bh=13bqDkCdcR0uhLPX4wI6VvKsDwP1Uaa3YIKoaR069C8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=d8H+g6F2Uo56gwnTgCjul4niytS3G4Ocplxu3xQ6ahUSZ2g4PyfhJcyhRGxgnhaGE
-	 2ayYJ926svxMxLYdexgreDQOVIVHCOnJ4ybR5lmak/g0WUo+FNbnHAqthyuDR/e+Sv
-	 48JwHGY71+2tuY4GQ24aPRlAp/z7KhgivtM/7mhv2yT5oRGuKwfyaa1Z1BQkUgT3PU
-	 BEUpluXhbGDhBYRTPoE9f3/TyDTc17EVGeJDR1eMsnR79z3Fq7IqJdXPMTsD8eZBPA
-	 AqgdOo6mJJs/wfYsZ2/tG73NzksYxeiBkKCub/3vh/+y7mU3zgc3dLcVhLWgzXRslx
-	 FvYg+NWc5FnXg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9397539E9607;
-	Sat, 13 Jun 2026 03:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h2EKWwZt"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-bef47b1ac01so223678266b.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 20:43:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781322202; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VI+weK0sYSq8VjWY6IWdYbEPBbAQHqihRp4aOkj8xFU0VD3cbxCUuZdp5m25YBiTAy
+         zmgT0cZYEsnuShvO0sspihO25OJXJY4KwyMLSeKTD1VTwYROJKAA8IrNiH8RV9r/aM4E
+         F9dj9JJOmy4zk9BfDPKSXSf/COP7ZoBoICPsXaTSvEcBpNNtnTreAURhnN3YcmgZqY09
+         M4rFGOv013BftT2qKSXoAzAjy5hWlqEQqxhNugQnawUFwJqoRhAraIUabMCdTfimqqbQ
+         PKRs/voZ1692NaYeYmjSSq7eCAr0OQKJLsu8mEWdVjlt4/bOY+tc4CfwBk8VWvpByQhC
+         czug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UEwj+IHBbN3WTeFz3qyjlWd8XyyoB7WQ6QnNQf7pvac=;
+        fh=SyIGEUOhyFU41Gmf/oaS1x9aa68g5H7P8kDt8vfgofM=;
+        b=if9dsM8R6BHQgz8w8gofGmCWuPuaBsDQ3+L0aI8Smf54T2zWy47bqrfsfxrrDnlCmA
+         Dthpw/Uc+2QPsz2dxhPv9bxlttSxzv2O2apmeDb4A7pFFk+3C+CUuhpNNSCDcxtvd+VE
+         7MMQ0sJt1S2oshkIQBC8eAYeRAAXDHmM22h16x4zUcUhHxrUuO2VyVOfSBAH0B9EZ9A8
+         cNnu3XG8ETdi237jRqj2rN/h6zedw14k384bM9bPELQvm28pZLXNz7CClR5D5BRJ8GLU
+         2e3b27CQe26NiC9fjteUqGKESIutm+3y9jAflW8iHb0qDwFEi6tnrGPXBDz1u74nvkzn
+         FThw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781322202; x=1781927002; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UEwj+IHBbN3WTeFz3qyjlWd8XyyoB7WQ6QnNQf7pvac=;
+        b=h2EKWwZtioOtxU+BIz/baaueY/flSUeVcaBL8r4iVHIoSNOqc3pw9gFXNDE+iE2NyW
+         i3+mHtE/FQU/UbJrkvKU99SirVqb7Ac0OcHnKeUWx1MyX348avrNP27xNS8JLwjvxC+R
+         dYVWeJX4KHbVUY/V2oM4diw0a0pGXltYnkeBtwBHivneSiJQ6uHC+g+o6wRYD7z6bb4Q
+         XNtL1DvoZ9W9mC6H/qLyaHi9CtYdUb3wCMR9TPLHObir/2kEb9YDPd3i6VsrIWyoqh9I
+         IGg1uSIs8JxeUGSxWn0TsRl7d2V7vBf36EOOrlUyarQ/yb43cPVt97cOtVa6QGSx7ekU
+         MXzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781322202; x=1781927002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UEwj+IHBbN3WTeFz3qyjlWd8XyyoB7WQ6QnNQf7pvac=;
+        b=Q/rJrvZJp6vbvpjTMUhDG2/Q2P6jd7/t9IqAOOQYj/+uInG+HmwselvVMuPWbBD1O7
+         WHaqtJN1N3Y3goFjw9kgNAp0CwKN7XiuQYZGsCOEJtOcdmveAb3Rhws1o5mU9PnbhlKt
+         Eryakxg/M6xKT3+roQq6fTGN6NuYv7kX5UKOLCj0DF3kQbA/0ObEnJad4v6TuPo+w8TD
+         MFgcYfMYR1A1IKP/WjJTgpArRWX6TqOrR0hvkRnG+b4anSQKMVIsk9C5MJ77KwsgD+lD
+         kSmfPYqtWePVImOdOy4//CDbN4fYheAcSDDEnFeFNmBW/QFnsT942FbBYtwqqdQct70J
+         ++1Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/wI3gAgNqoYxYIP8/WKA2sWmXZnOQr1eAM6sOPbRMAKnETO6+Nsg/kX8pQcu1k+g6qPCA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOmOxLJMCIRqVL4kcig+G3OEG7G2jo6H4ahjldd6jesHHqFFfa
+	bdyPOhXAPccjukAQso2BLCrquMScqUXk3ftksw0Mtir4D4TBh9mUrvfMvp5vr3h6RMqz9/2eXaB
+	o3xxKWgOBxZuq0SU9s81qNXubAZudT/meDIRxi+U4
+X-Gm-Gg: Acq92OGCsbRwiDOtdjj+iTw+s+uya2vw21QUb0RjAY9KCiCFyuEsqQdR4y4oNZ+7QQC
+	HpNN8wgeipSa8UawDjaWLh65Ouh1SzD66uCF5iunktggvK4jOTeKx7D5rq+UMvnv3IDKmexEjFz
+	Df38DEsm1FXai2OIUKZMaGI5ZKgZ8lXNPBfgelcQdP8q5r+WvYoPY/cpeq4fvCXK8B++2ew3E6m
+	q6CpQNQv0tFqwh/sDtp8CTyB0wiEJGX88C2wrKWeENL9wh2MEWj4deSzLO4i494PV8Mjr74lUCu
+	539gxjEYWme4hiUu+9xcGezXdPnqgezlo/1A8gu4xr/q0RflKNmsrm0HmLNo0bAtdbBktNvVqI+
+	hE4OOkosCgTQagnD0oqGttFFAFOTqWuEUcDmWdXQWHeTV37b0RA1kgcMqBaQC/Ik=
+X-Received: by 2002:a17:907:8b92:b0:baf:e47:1b6a with SMTP id
+ a640c23a62f3a-bfe2a217e07mr217607466b.24.1781322201586; Fri, 12 Jun 2026
+ 20:43:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] bpf: Fix setting retval to -EPERM for cgroup
- hooks not returning errno
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178132201113.1349961.7433371950134456676.git-patchwork-notify@kernel.org>
-Date: Sat, 13 Jun 2026 03:40:11 +0000
-References: <20260610201724.733943-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20260610201724.733943-1-xukuohai@huaweicloud.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev,
- mattbobrowski@google.com, kpsingh@kernel.org, sdf@fomichev.me,
- zhuyifei@google.com
+References: <20260613010039.1362312-1-kuniyu@google.com> <20260613010039.1362312-2-kuniyu@google.com>
+ <aiy_eV7RP2nPlxmJ@devvm7509.cco0.facebook.com>
+In-Reply-To: <aiy_eV7RP2nPlxmJ@devvm7509.cco0.facebook.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 12 Jun 2026 20:43:07 -0700
+X-Gm-Features: AVVi8CdubgUn6NuoVme7O0oFJFs08u5cj-F7wrSgd6J27XwpuOhByoTjw26cSpY
+Message-ID: <CAAVpQUAP+d6yCmPSdYyQ9UYB1ZcNkQCCHLDqNp+0Rh3bGXdRTg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next/net 1/5] ethtool: Introduce
+ ETHTOOL_MSG_TSINFO_SET for virtual interfaces.
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Jun 12, 2026 at 7:30=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> On 06/13, Kuniyuki Iwashima wrote:
+> > Before enabling SO_TIMESTAMPING, applications typically try to
+> > enable hardware timestamping on network interfaces via SIOCSHWTSTAMP
+> > (or ETHTOOL_MSG_TSCONFIG_SET).
+> >
+> > The timestamping capability on an interface can be checked via
+> > ETHTOOL_MSG_TSINFO_GET:
+> >
+> >   # ethtool -T eth0
+> >   Time stamping parameters for eth0:
+> >   Capabilities:
+> >       hardware-transmit
+> >       software-transmit
+> >       hardware-receive
+> >       software-receive
+> >       software-system-clock
+> >       hardware-raw-clock
+> >   PTP Hardware Clock: none
+> >   Hardware Transmit Timestamp Modes:
+> >       off
+> >       on
+> >   Hardware Receive Filter Modes:
+> >       none
+> >       all
+> >
+> > These operations rely on the driver implementing two callbacks,
+> > dev->netdev_ops->ndo_hwtstamp_{get,set}().
+> >
+> > However, among all virtual network interfaces, only bond and
+> > macvlan currently implement them.
+> >
+> > As a result, most virtual interfaces cannot advertise the
+> > capabilities of their underlying devices:
+> >
+> >   # ip link add ipvl0 link eth0 type ipvlan mode l2 bridge
+> >   # ethtool -T ipvl0
+> >   Time stamping parameters for ipvl0:
+> >   Capabilities:
+> >       software-receive
+> >       software-system-clock
+> >   PTP Hardware Clock: none
+> >   Hardware Transmit Timestamp Modes: none
+> >   Hardware Receive Filter Modes: none
+> >
+> > While these callbacks could be implemented in each virtual
+> > interface, this approach is limited to those directly linked
+> > to a physical device.
+> >
+> > Not all virtual interfaces are tied to real hardware; for
+> > instance, packets from UDP tunnel devices eventually pass
+> > through physical devices and can be hardware-timestamped there.
+> >
+> > Let's allow configuring the hardware timestamping capability on
+> > virtual interfaces via ETHTOOL_MSG_TSINFO_SET.
+>
+> I don't have a lot of state on this, but when adding xdp hw timestamping
+> I remember fighting a lot with those apis. Now we are adding another
+> one, but (seemingly?) for sw devices. Can you explain a bit more about
+> why can't existing SIOCGHWTSTAMP (or ETHTOOL_MSG_TSCONFIG_SET) fallback
+> to your new dev->tsinfo.enabled codepaths for the devices that
+> don't implement the ops?
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Simply because we mainly need this for ipvlan and geneve
+so limited the condition to cover such sw devices only.
 
-On Wed, 10 Jun 2026 20:17:22 +0000 you wrote:
-> This series fixes the issue reported by sashiko in [1]. The issue is that,
-> when a cgroup BPF program exits with 0, bpf_prog_run_array_cg() sets
-> the hook return value to -EPERM if it is not a valid errno. This is
-> correct for errno-based hooks, which return 0 on success and negative
-> errno on failure, but wrong for void and boolean LSM hooks. Boolean
-> LSM hooks should only return true or false, and void LSM hooks have
-> no return value at all.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Fix setting retval to -EPERM for cgroup hooks not returning errno
-    https://git.kernel.org/bpf/bpf-next/c/4c71303c8374
-  - [bpf-next,2/2] selftests/bpf: Add retval test for bool and errno LSM cgroup hooks
-    https://git.kernel.org/bpf/bpf-next/c/cec842377617
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+If needed, we can loosen the limitation and support sw devices
+ w/ ops (bonding/macvlan) and even hw devices too.
