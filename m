@@ -1,148 +1,111 @@
-Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB4F265623
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 02:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0278437FF67
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 03:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781317851; cv=none; b=mOqeslBdltFg8Ao02oiVGG9iXJqPSWJ71rLRdynjowrZs19kkxu+64s/kFLhq3JF6Z+sIeRg6pcyBOQsk2XUZyZPaz97+jl9CqLQQGNAjus7hyZ7rRN936U8aQOmLr3sPxrz29kTss8t6PaJsKJWlL56alGfnFgqwnTbYlYDv6c=
+	t=1781320172; cv=none; b=ME/TleuUeTFM3oxGDqELxzvT3VM/iLVjCadfrSZNZFaiAnJYk+EYWS3AkUyDIZU7upAQFTMFg8BbydZfvqHw7bKDQ5wmlTCrl95Ob00CXLyiVFVfZcmb500zsgtg8dJ7Ela0W24MMNqIqVuXBkPuRtZUfI92DIY9+XPkGQQymyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781317851; c=relaxed/simple;
-	bh=HgbZyHvGeCzljg7Sr9TXApppcDGF9vIDEw/qZU2nt/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a1gNR6uJ6L/JYAhQ0m+8ZadcPGzLt2gy6zHG9wjdOHvOXfQf7LRnXn7rs/Yh/cqEJ6b1TiYD755YTFGL6/ZcKHsnKdRCGcNEHWt3hY8Pm+uJGYL1sNZEpVvLb4rjDzeqWj8uzULfei5LWr4lf31ncSNOf/dfQQtt3z2k2OHm2mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abNE/kxG; arc=none smtp.client-ip=209.85.210.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781320172; c=relaxed/simple;
+	bh=HBb4UYXrfgCeUyPPzgEusyH309x00Z5wFgyiBQQs8/E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AMyfkoqzUA2K+89eFGTMVpRCJdfXUxG8qADu3cJXVIfNa9Q0Pbv8x9d6LECHFhrWxeIPrPbp2etOJnkceJ1hiyKLQUlaJTkH/WdudgvlbiGRYFCsnmZjhCmSNTUTCVgHZUdVwrR2HV91lTDf518GXmELaht172sixacMhPps8Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o29cMITa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abNE/kxG"
-Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-8422524cb38so712328b3a.0
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 19:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781317848; x=1781922648; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=64T+SialQZ6697/fNGFMpzn29D2cLqJP0AzHPR78vug=;
-        b=abNE/kxG4jFrmvT+x4EyYoOkMxu8RF+7qYCjxIQq7kzrGVNJvTvpllxX1RwqMl27bn
-         FVEH7O8alCnS1mvbdhIf7aZhwwOn7YsG8F3BKVfWx7n4spcb7CDptJqKDazt0+O+OThw
-         3m9qyotXWUT/wQed6jf4fVU+fzpKnc1ZdUQQ5Ap1eTyKXb1ifQL8aN95bzpcCEgEtPxU
-         WBcYLHemZTFB4PJj0JjOoFN4f9PeCSm27u3KlRgOKXgKQ3QTVC67RD4VLkN6EQLT7fI9
-         +pwAooyaPI7kOsBx6S8DAWTks/4B7dT46X1S4r5kV4k2LBZbcOJphNuA8thRwkVNYdtD
-         kzxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781317848; x=1781922648;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=64T+SialQZ6697/fNGFMpzn29D2cLqJP0AzHPR78vug=;
-        b=DwvyYkBby1y3PDTQLAlRVc5qX6hOUOaLK/7Y3uoFXnoURymTQqMktN9oqQscDbAsyd
-         fxLMemWw4Q4DaNGEc11HHPq3hPpZ3X6JgqcytDz40c4eevY5qCYWRM9MyBDRZ+e3DFDb
-         P/uib7cn23Hyyza6VOJRy3XUwiyo6FUWPkj6378zyxZQtR7s6o2+IcN3xV4tQ+SkRRQB
-         PQdX0SwVI6/nKWeMCgYFPn8XPHz7fp6tEzVGjig1vP53i3ekJQIUx3DGA2iPivcyN8Bj
-         Tahy2Gm1fI+QbN9RNuR7TRyFOhZuC30nlyzAnmHxebQLe6BgMXRPF5DYBpZqXOj5Qzvn
-         Vv+A==
-X-Forwarded-Encrypted: i=1; AFNElJ8wtgRyLZzCYrpZ9eKgCFlFdgTX3rsXGkCIjOTrsjhRvrGl+bHgn2M0Pu7BuKTmY+RAZqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgjWfLSchcXKl3rFHjzWAWkZTvjC45IT8+LvlTLoojSc3ZMtTD
-	cTwLISXi33u5d1zVd8mOlWbMnaPsLMnLH1zP2I6W+VWPoSNp2Bfb+BKj
-X-Gm-Gg: Acq92OEHL4PgiCLw8y7fhLoJjcSPxc7UCNKsCCbPNB9QGVkdRUbsJ0zeelp8/Xhnkbr
-	SmXRtMsxAt8Sk9zmyF0KWHpahBNdcwXfvyHI73tqA2/08udVI4TEnVCdk32zt9DhApA6rhdx4X3
-	ODDNQx19sCLJbZ6yhK/TpdLOlgumB1ZHB1GLboGFLQ4Hwi58zmCK6oUKXkkCEjSWAFDCzKJBlGg
-	f+wEkGa6adlKQFxCSfY2WtlBuFh4RknwigXsEZAZ1FAVnyH4B6QziHJcl/BiKoVBLD3MdaM+NWR
-	3F7oxTJTORWn2IAj3N2zAbASrVJFuQ6duJVBIe5kQGvVzRq7cFq+zBUWIiMTh2N3qRp6fFUGrlj
-	9nY7RzoPL/YqSRHmtjVIJa9m4bqDZM+Ksi0tLW/LsNmwzRa0xxTJZRvJSplK32qCvOFfYMOdGO5
-	qhCZh2KFcTyhLX1/2n
-X-Received: by 2002:a05:6a00:288f:b0:837:a211:4ee2 with SMTP id d2e1a72fcca58-844e1a83861mr2129907b3a.38.1781317848278;
-        Fri, 12 Jun 2026 19:30:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4f::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b04808dsm3630627b3a.52.2026.06.12.19.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2026 19:30:47 -0700 (PDT)
-Date: Fri, 12 Jun 2026 19:29:05 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next/net 1/5] ethtool: Introduce
- ETHTOOL_MSG_TSINFO_SET for virtual interfaces.
-Message-ID: <aiy_eV7RP2nPlxmJ@devvm7509.cco0.facebook.com>
-References: <20260613010039.1362312-1-kuniyu@google.com>
- <20260613010039.1362312-2-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o29cMITa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB381F000E9
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 03:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781320166;
+	bh=gxoKB2uWK+QQ3B6N3Q9fcz80qSN1v1nZkDnDdt5gB54=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=o29cMITaWHPTagfYA7LubU6ArEICi78QHdiU5JqXuqebbqT7CXcW9mdTJu0FErqap
+	 c/w1/Q8y/gxLjIGdGFU4yXiIC90nFf7oUYOdUlnnQS2nF1Uz4L343ClwfXhkw3L6Tj
+	 E7M2NgItR/j73wY9mKbPNNZK4lXRSAsKxeTBNYeYh+sma73Hq4QtjftgmkqoyQywEj
+	 2XURNulgMD0eqn2YETgQvTChEmVKsND1Q3EFmZ5dHf8NHohbqG3FUNbtYIIkboRFFv
+	 6e3uVyQLkrhIesmlnQIKYZiZ0ZTAhpeFiHANSNLGhZFKvTl632NgzcrzrbaQpheqxH
+	 ZJqj5hstRAZmw==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-69170548d0eso2293789a12.2
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 20:09:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8/skR4kkXUKQa8dSmPrjvdQJ1w8Y5wf5mOSboPoyShT8GS8+6hXiYF0R5+0OcMG5abP9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5DuCSdG+lkBvTNbbwVH8abZ6jmq/+OPLS4ulwu1DwPcUMG9BV
+	gdf+l+hRQ1cNec7fSsQu9McZUNjYglk7YMXl0eTbo3hbRVFbifuwWjt1kyqmFQlzq2S0YWsdYDn
+	wrRSrjY5mamNrPgYKC+VW19zOvMPy1HM=
+X-Received: by 2002:a05:6402:5384:b0:691:9832:5055 with SMTP id
+ 4fb4d7f45d1cf-693c6bbe399mr604578a12.28.1781320165026; Fri, 12 Jun 2026
+ 20:09:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260613010039.1362312-2-kuniyu@google.com>
+References: <20260609041407.122384-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260609041407.122384-1-dongtai.guo@linux.dev>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 13 Jun 2026 11:09:17 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
+X-Gm-Features: AVVi8CfUS1A9itaMh0NPx1l-dx88pXs6Dti2wPZ_FTDIwF2_p8hnrwVFiMDJ4Tw
+Message-ID: <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] LoongArch: BPF: per-CPU addr MOV and timed may_goto
+To: George Guo <dongtai.guo@linux.dev>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, 
+	WANG Xuerui <kernel@xen0n.name>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, loongarch@lists.linux.dev, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	George Guo <guodongtai@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06/13, Kuniyuki Iwashima wrote:
-> Before enabling SO_TIMESTAMPING, applications typically try to
-> enable hardware timestamping on network interfaces via SIOCSHWTSTAMP
-> (or ETHTOOL_MSG_TSCONFIG_SET).
-> 
-> The timestamping capability on an interface can be checked via
-> ETHTOOL_MSG_TSINFO_GET:
-> 
->   # ethtool -T eth0
->   Time stamping parameters for eth0:
->   Capabilities:
->   	hardware-transmit
->   	software-transmit
->   	hardware-receive
->   	software-receive
->   	software-system-clock
->   	hardware-raw-clock
->   PTP Hardware Clock: none
->   Hardware Transmit Timestamp Modes:
->   	off
->   	on
->   Hardware Receive Filter Modes:
->   	none
->   	all
-> 
-> These operations rely on the driver implementing two callbacks,
-> dev->netdev_ops->ndo_hwtstamp_{get,set}().
-> 
-> However, among all virtual network interfaces, only bond and
-> macvlan currently implement them.
-> 
-> As a result, most virtual interfaces cannot advertise the
-> capabilities of their underlying devices:
-> 
->   # ip link add ipvl0 link eth0 type ipvlan mode l2 bridge
->   # ethtool -T ipvl0
->   Time stamping parameters for ipvl0:
->   Capabilities:
->   	software-receive
->   	software-system-clock
->   PTP Hardware Clock: none
->   Hardware Transmit Timestamp Modes: none
->   Hardware Receive Filter Modes: none
-> 
-> While these callbacks could be implemented in each virtual
-> interface, this approach is limited to those directly linked
-> to a physical device.
-> 
-> Not all virtual interfaces are tied to real hardware; for
-> instance, packets from UDP tunnel devices eventually pass
-> through physical devices and can be hardware-timestamped there.
-> 
-> Let's allow configuring the hardware timestamping capability on
-> virtual interfaces via ETHTOOL_MSG_TSINFO_SET.
+Hi, Tiezhu and Hengqi,
 
-I don't have a lot of state on this, but when adding xdp hw timestamping
-I remember fighting a lot with those apis. Now we are adding another
-one, but (seemingly?) for sw devices. Can you explain a bit more about
-why can't existing SIOCGHWTSTAMP (or ETHTOOL_MSG_TSCONFIG_SET) fallback
-to your new dev->tsinfo.enabled codepaths for the devices that
-don't implement the ops?
+Any comments about this series?
+
+Huacai
+
+On Tue, Jun 9, 2026 at 12:14=E2=80=AFPM George Guo <dongtai.guo@linux.dev> =
+wrote:
+>
+> From: George Guo <guodongtai@kylinos.cn>
+>
+> This series enables two independent BPF JIT features on LoongArch, each
+> advertised to the verifier via the corresponding bpf_jit_supports_*()
+> hook:
+>
+> Patch 1 implements the internal-only BPF_MOV that resolves a per-CPU
+> address from its per-CPU offset. LoongArch keeps the current CPU's
+> per-CPU offset in $r21 (__my_cpu_offset), so the resolution is a single
+> add of $r21 to the source register. This is used by verifier/JIT
+> inlining (e.g. bpf_get_smp_processor_id() and per-CPU map lookups) and
+> is not exposed to BPF users.
+>
+> Patch 2 implements arch_bpf_timed_may_goto() (in a small assembly stub
+> with a custom calling convention passing the count/timestamp slot offset
+> in BPF_REG_AX) and advertises it, so the verifier lowers may_goto into
+> the timed, wall-clock-bounded variant instead of a fixed iteration
+> counter.
+>
+> Tested on a LoongArch (Loongson-3A5000) QEMU/KVM guest with
+> CONFIG_PAGE_SIZE_16KB and CONFIG_UNWINDER_ORC:
+>  - patch 1: test_progs cpumask and percpu map cases pass;
+>  - patch 2: test_progs iters (incl. the cond_break / may_goto loop
+>    cases) all pass.
+>
+> George Guo (2):
+>   LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
+>   LoongArch: BPF: Add timed may_goto support
+>
+>  arch/loongarch/include/asm/inst.h       |  1 +
+>  arch/loongarch/net/Makefile             |  2 +-
+>  arch/loongarch/net/bpf_jit.c            | 27 ++++++++++++++-
+>  arch/loongarch/net/bpf_timed_may_goto.S | 44 +++++++++++++++++++++++++
+>  4 files changed, 72 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/loongarch/net/bpf_timed_may_goto.S
+>
+> --
+> 2.25.1
+>
