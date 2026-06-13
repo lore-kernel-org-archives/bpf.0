@@ -1,289 +1,169 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7100730DED5
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 22:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D561230DED5
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 22:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781388215; cv=pass; b=te7fqbZsY1zDIzywAPSaKg0qblYPCLHhfSjJIsCiKY2D1UEdzxLQVDqDhLAltJimLfI9g+/uPXkq5jPUL5IK8uy7sUU876Gpk7EERrbw5nqkotpFBvxr82ts7+waeS8o3kONBFSDZPHUpiIl1Ac/rzdPCmBslkPFK3AXvc9ig3E=
+	t=1781388546; cv=pass; b=Oyoy4DLNce59oc7DA63WlfPwhxBYzd1XKnTWMHqEwO7ImEbYPvYO1p81oi96GuyAfqztMlv9rdMHxbi94uofuY0OdqS3mfQGQNK+0EvZCK63e9rcRnX6hKv23rujnnN0dkLGxixMqqY8K3mfnmus76JyVSXe4AA6y3baRNgASjE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781388215; c=relaxed/simple;
-	bh=CC2KOyzJo9c2S8ETDKWxWGYPm6Xl7L/vh9sZj+qsAq0=;
+	s=arc-20240116; t=1781388546; c=relaxed/simple;
+	bh=u1HnSCHVThXuBtisnQ9xUVpTnFom1owuSIlE6XNhBOE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t5MLsN8B3HmagDY3DvvAmK+Rmd77690eAoj5TCBK6K+0r5goC6oF5KJLWK5MfwyaHWM+4iuFmTxPV8eolH26FhZLeMmtvpJz6cICLCkPzMIp5E6j4KPuJs2alEuN210Q3wGbjaHeMvE4llQ65XEclqF1CxQ0sw/Kfj7xIFQ5IXI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=okfb8Ms8; arc=pass smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=hTsurXmLgSN6szOcdnMRhMFf9zo8EiUpaYGtVflT3HH4gtx5JOFXv14BuAQ3G2AU3VwaHL61R2Xt0n9w4z0rTxvXA9MNivHalc884J2EB0BiFFzG4ab5mTCqCe81B0YunDqIxvFAnalEpMgIvRE8C/PBWt+VGo65d23XfD1bW+k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wgE7Q1Vc; arc=pass smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="okfb8Ms8"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-68d234218bcso3683629a12.2
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 15:03:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781388213; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wgE7Q1Vc"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-68d234218bcso3687426a12.2
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 15:09:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781388543; cv=none;
         d=google.com; s=arc-20240605;
-        b=Xkba9MEENOwiYMgFI9/s0eOwhmYXr3hSkO5FKwEy6ajKzzTmID+1cAuOmBl7DOIgEz
-         jzFW0eAVBuDO7/U8k52AROAqUFHzDH6/CxGXTtQulRn8L7T1AmOYP3g+V2oy7hK1DeUj
-         L4ZIp0GuJbOy2RecuyRAUu9IjOMLSoMh6MO9RtHKHCpv98XC4hBDR8wIfq3JNvJzMaw6
-         7zJgKEAxc8UUJq2abNmiolvIahgrHA8l3AG4NZLDP6+T2UikKbN/tEnMiKZQPU/6pYVv
-         kt9qIxdhKOs9RsZJhQz/JaYKysYYd5xwz06zUIBh+PZgLqt+HePR9nV2JcGSPvGeJC89
-         FYCw==
+        b=hBOKdRyEOrSRJDXaLYFJE39Jf5PZZGweQGmGhRX7hkZ2AsMjN5KaCoxQmMJya6hsWK
+         gZQpUIdl2RxeYiAkFV28kMpN7F1R3oea6EsIK3aIv01+x2IaejFkicTvW04ggyY5g6Kp
+         h09b/RD8NuGSL+cg7Spvd2SpEg8FqlOv4GcGQGhaYZXDKRmjH3IxaOrvlKhD11MPS49H
+         4SdqazAhZosw26b9fTD/6uY6TEjFeA9sxIqWmQnxkkwLeKyY8/bbpIK/YFWbRjL2prBn
+         FKQ8sW81gRdXEk1TJmCWO65amxnhSfVw6zujhLTon95ZjFyXfqj9d1WxwZ/zYeEludmK
+         hy2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=qysF8lJhFwPgtIThDB7gwFIAI+ONbPrwLoXuG9PR2+A=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=TKOrWE8YE9ynjbBFfDgg0ilJxcsLp59CLMwrC8TTVZqIjoVUnmklDtJASoWS7TOIn1
-         vsNJAxnHwQVttVxyj+AVy6QHakR1arpskvDASgLuBgHaHnUATGjTqS4+qljzHwSfqJwA
-         XKU4PaIQMY9o4qfttl6LA9TjjdxrbPCLfXwLMoTlkeXm0jzuOl89cAifHl//TDNh7sQA
-         QILXveBjsykLhfkWeC/scXRv642Oy8n97kJWrupEQKUTpllW5RaOIfkOsnxkkbyAlr//
-         +yQvn+yeKfsM5op8T3S5ll40IJxFX+QP2Lv3JYLhabfpTSgcmjkaxt0o4PaGDIhNJaHZ
-         zW7Q==;
+        bh=k6+Vrq96PhkNTNuOuWwoEyF7xtWRs4MqDJ7y2u6EUlw=;
+        fh=9Vkrs/YOQgKYa1Ktcchy+brRCyIeCKVYMX8oo/RATV8=;
+        b=CjdQ8hLw8vK+ZSJbwCuNr7RRgCpsqx4xl/MqLzBNqbbCKJjNKJJENDs371lJPyNIj7
+         ry+wFY2sefcYlsr2hynlYxjASEeAk/PCEVSxb38SjLqAtUR0uGe/wZMAa3Q5+0I7oHud
+         nlMOAh8ucs/IeBdxMNo6+bwVHcI3udFRDQQhxqRHjcqjZ5RmwdktVjPYmJsv3LoNHp2U
+         TEQ9WZSFNvz8Xjp1IbUDk2GEH5e8Dd5s6GCPV1yEG/JcuH0eWWoOzJngd0VZmj/O5+Fw
+         YQMLvSNLo9qVSTxW+0T2tQNOw6HD0QpyrradQeZa726ESgsTPQu1sclzvyLO5j7h/Lcv
+         rd/A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781388213; x=1781993013; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1781388543; x=1781993343; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qysF8lJhFwPgtIThDB7gwFIAI+ONbPrwLoXuG9PR2+A=;
-        b=okfb8Ms86TWDTH19jmKAr7ZnwEroFSoAivZA+/N0Mfs5BssWqY5ksxiiX1q7WHq8Gf
-         2SG0Ve9z+fRv3E00jdnZK/grusZjjL1eozp5+Vphwax+cH2i0BhEkvi2RlkvbaJ2oU18
-         oYF6Vny15eIttnavmlQxsGWgiC7m/kR/kv3VEBTNF0jO0LzFbXwUiFYgqu/W96h1Pe/V
-         6+ZMyHocuOPjEoi66P2ZQwK3QhWyNcf6n5XMu8TOyRsPBIONj+hIwgIK+ddkpN3RzOZ6
-         ekhco3FrTVlh0ZZs77NEfC8S7wUkU81C+3jtDOzlyrZVhePaN6jzReho6k5D+KZUjSOC
-         iRrw==
+        bh=k6+Vrq96PhkNTNuOuWwoEyF7xtWRs4MqDJ7y2u6EUlw=;
+        b=wgE7Q1VcM19IKuVqMwyqyW1PpcC4m4BCCOfM3r37uuknQIst1SH6YErRsk5UTK9gsV
+         LKoVvh+nenWgCwr75oeSaOnPP3cERwb0jCgOZV6TA0zOdZpgf+h0wzd0Bayami2ufZ03
+         GYQdPMxBWfbJUYDvBWfdQ/9Gv3gmI1CSsyigCo5LBd/SHdssZgDO7EeCRdwryVtagqIg
+         VgcWLH/oV1Hc1dYk4kXXWiJ9VOp/gSIm0yh8gT3XxdOGKab6Cz0mTJIe2yeD38rZh/g8
+         blfhaEqeiwS36U3A0bpWYWADlmQDrbVa3ldLgfoxXvlE8ECF+uzZ6gdGmMwPxfSYYlYY
+         +WSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781388213; x=1781993013;
+        d=1e100.net; s=20251104; t=1781388543; x=1781993343;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=qysF8lJhFwPgtIThDB7gwFIAI+ONbPrwLoXuG9PR2+A=;
-        b=nW+wLw197ZqJJMU6Rgc/JHyZf+ml7ratOCihn1sMEMBNaDnp6tX+7Qw/XTvovWWehc
-         VaDdzW99NVNMKoMe63vMk/wWWA71EPDzXBGVGVSo7YO+9+j63sTLVe3tQInL5MpEGC78
-         XC8gd+RmzoSnGtZctTrCse/i3yWd/g+Tp5FdsOw9aibQq4OvzVMZ6kxPO3cbqFCu2j/G
-         53Y49EW43mgzRQrtayyXDEKrzQie+/V3twF4Z8kJelYxtxKvHwwxg6TZLckND+mr70i/
-         elkMcj5wSw0b5Yb9YEv6YroKDP79WvlRrijjcSRN3xl1JYdDB/QJxqQGa7dlnoqpuc6I
-         Uw6g==
-X-Gm-Message-State: AOJu0YzO2p7vmtsd/QhvJBAMfbufzMbIW7KK6GdR/fYWPpJOm+01NMkN
-	3i6NRH8ViVBEO8AZMDLK4gBbQQdJHNZuQ5+oYkmi3P0FU1XwdiVq4ZyxMtfCfThkMOvCOcUMoXX
-	beacwigijNWLKGcJTMcnDg1hDFXqYsI5GMiDEnG7m
-X-Gm-Gg: Acq92OGt0EGeeIsrie4fIptZZUF+QZi/QW9mGhZiSLFpnMn9amM8ppWCYtP54X4uECx
-	/6zvTY/pVefLaKdpRujeO+plJaGxTY5TiPDtOHbMJeHrCYCh0eeEKmhZ58R84suk7YUzJn2NE7v
-	AwwXvwKBWi1XTiBM9V0X9gVWjYxwjPkz60g0mxSHcSM+Fe33LSUZi4xJWSpYr3gMqyZaFf1zwwX
-	za2oZ83qqeXW0W9iYbsBLd2T7dSEIlic9x8ag5ULUR4b10XQ3WIubrHxu6pIXeT/7BHuPXoo395
-	7nyS0enkptjaQHCajVQ8kpMoH6inVSANbm8oiqbXi1cTybNI0eEsNJjztrbitn258Hpd5mo2fcG
-	DYceMS1JilfY+KfJ4yNG61cavjI1bnn4vbBJhO/FguWjQixF0Mw8T
-X-Received: by 2002:a05:6402:3982:b0:691:b5aa:5a5c with SMTP id
- 4fb4d7f45d1cf-693c6a838ecmr1690850a12.20.1781388212377; Sat, 13 Jun 2026
- 15:03:32 -0700 (PDT)
+        bh=k6+Vrq96PhkNTNuOuWwoEyF7xtWRs4MqDJ7y2u6EUlw=;
+        b=Makbt4eDoy2uUQ1hxhx+GffFeaqTNij2kzGPSMeVvdvuBx1Ql4GVtip7aeVlGPnID1
+         1zWOq7vkp5DAs4nKQkcNWA/t9pfF8Iglhn+gG0wtGGnSzbgEz4DF8MC5tSUQ742CNZfP
+         SmbiQ96RSEq7Y8P7MyKt0diwuKi0GYd49/jZrgSgb/UoaKS1wNSvExsD3yFpMbZHSQRd
+         cn50OiCZ5AIqcyowpGBpziYk/hOqBCN8icD/Ao03wUEXUapw+AR7fzbaExV4BBFQ6VyF
+         CqdrsODs/0xAJKwC/r+/8RL65ju2NJ3uMvXRm3H1qNm8D7SxtWU7jq9BGI4xoYrzIeFh
+         s3Ug==
+X-Forwarded-Encrypted: i=1; AFNElJ/mTo1TQ3bF38CYdc0M3rcgDMGDawcFIIJoimnI4Pg+vuDsmBB1B+mYInlvxSoyHN+NkWw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmukiEEz4VeQ5NTJiA6QRq+GTXun/X+BuOXceYZ0ZX0Qe6JQn6
+	IEO2vKxo9C2ZmppWvcrlWOxxUEIrX5wWSxblU+DPb4NvXiDV+WVz3M4t5myT2z9dr1znmoSbx5Y
+	JUopshjHfO3+dDB7Q7AgSSWgkQ96eO+vcsMNFDPhT
+X-Gm-Gg: Acq92OGYsbAfzs9ItubFohdd3fKeUVkIX3VqoZVUjnTJN4fwNFhPK+PP0UfUonE92tK
+	W3YQvurklK4IRap8Np0Nz5p6EH61AlrYuOYmecPNFT+9hBg2CxPH5rsc07By8pIiE95lMqAKT9s
+	I+OfC1ggQJgepDbYtvnovQr6ktJKARNePuUlQ5reuQSaG4Ol8iUXMwTfoToZabHZ8h5bEEx3qHZ
+	DuuX2hd1yTCVunbezK90EDcVB+f6bCKW7pNZSfN1lZC60c4zyNZ1XESIqhUMk8gX51uKv12gpTN
+	I1oqDRMTJxfvdqjUsQdPYE7SIaVxosT6vQPkXmbOkewOhrfAlOymF29qvY/HVMhjc7Oys9ZYi+q
+	kWppXiEHCp8Hi8osXZ5hQJSf/Ex+fvzz95nS4l6FTb6CkN5Af6Vx2
+X-Received: by 2002:a05:6402:5d6:b0:687:261a:3391 with SMTP id
+ 4fb4d7f45d1cf-693c6a0fc25mr1832702a12.6.1781388542833; Sat, 13 Jun 2026
+ 15:09:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260613010039.1362312-5-kuniyu@google.com> <20260613012052.C30831F000E9@smtp.kernel.org>
-In-Reply-To: <20260613012052.C30831F000E9@smtp.kernel.org>
+References: <20260613010039.1362312-1-kuniyu@google.com> <20260613010039.1362312-6-kuniyu@google.com>
+ <DJ7J7GXSJCRS.2FA4LT0RF9GZ5@gmail.com>
+In-Reply-To: <DJ7J7GXSJCRS.2FA4LT0RF9GZ5@gmail.com>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Sat, 13 Jun 2026 15:03:18 -0700
-X-Gm-Features: AVVi8Cd2fngs2ft348K_ehIGvxfiiaA919q7ioHY0qEDUuYMap8QhqfoyVbRUDQ
-Message-ID: <CAAVpQUAJ9s8DXVnt2Kxyga3HLqDcp+Jh0AvzhzrK0m3t1qg3OQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next/net 4/5] bpf: Add kfunc to proxy TX HW Timestamp.
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Sat, 13 Jun 2026 15:08:49 -0700
+X-Gm-Features: AVVi8CdakJMzctkrvjodmRckFwRELd3t3VXEyGMSLlrDt2719g-DiXG6dDDAc4E
+Message-ID: <CAAVpQUAs+7fGK7GBuFSCfNunL8joGmCDt6aw+HOfsouKKxZBKA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next/net 5/5] selftest: bpf: Add test for hwtstamp proxy.
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 12, 2026 at 6:20=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Fri, Jun 12, 2026 at 6:31=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [High] Incompatible `payload_offset` semantics and bounds checking betw=
-een `tcx`, `cls_bpf`, and `bpf_skb_complete_tx_tstamp()` leads to false rej=
-ections or packet corruption.
-> - [High] Blindly clearing skb_shinfo(skb)->tx_flags destroys the SKBTX_DE=
-V_ZEROCOPY flag, causing a permanent memory leak and application hang.
-> --
->
-> commit 07c148630f8e93ce45f5ce41dcd9ee675f05a799
-> Author: Kuniyuki Iwashima <kuniyu@google.com>
->
-> bpf: Add kfunc to proxy TX HW Timestamp.
->
-> The commit adds two kfuncs, bpf_skb_scrub_tx_tstamp() and
-> bpf_skb_complete_tx_tstamp(), to proxy TX hardware timestamps. This allow=
-s
-> socket applications to receive TX hardware timestamps via SCM_TIMESTAMPIN=
-G.
->
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index 0c6c270d9f7d1..a45cdf38616ac 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -4456,6 +4456,41 @@ tcx_run(const struct bpf_mprog_entry *entry, str=
-uct sk_buff *skb,
-> >       return tcx_action_code(skb, ret);
-> >  }
+> On Fri Jun 12, 2026 at 6:00 PM PDT, Kuniyuki Iwashima wrote:
+> > diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/s=
+elftests/bpf/bpf_kfuncs.h
+> > index 7dad01439391..8d119b10ed0d 100644
+> > --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > @@ -92,4 +92,14 @@ extern int bpf_set_dentry_xattr(struct dentry *dentr=
+y, const char *name__str,
+> >                               const struct bpf_dynptr *value_p, int fla=
+gs) __ksym __weak;
+> >  extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *=
+name__str) __ksym __weak;
 > >
-> > +static int skb_do_completion(struct sk_buff *skb)
-> > +{
-> > +     enum skb_drop_reason drop_reason =3D SKB_DROP_REASON_TC_INGRESS;
-> > +     struct bpf_redirect_info *ri =3D bpf_net_ctx_get_ri();
-> > +     struct bpf_tx_tstamp_cmpl *txtscmpl;
+> > +extern int bpf_skb_scrub_tx_tstamp(struct __sk_buff *s) __ksym __weak;
 > > +
-> > +     if (!(ri->kern_flags & BPF_RI_F_TX_TS_CMPL))
-> > +             goto drop;
+> > +struct bpf_hwtstamp;
+> > +extern int bpf_skb_set_hwtstamp(struct __sk_buff *s,
+> > +                             struct bpf_hwtstamp *attrs, int attrs__sz=
+) __ksym __weak;
 > > +
-> > +     if (skb_unclone(skb, GFP_ATOMIC))
-> > +             goto drop;
-> > +
-> > +     __skb_push(skb, skb->mac_len);
-> > +
-> > +     txtscmpl =3D &ri->txtscmpl;
-> > +
-> > +     drop_reason =3D pskb_may_pull_reason(skb, txtscmpl->payload_offse=
-t);
-> > +     if (drop_reason)
-> > +             goto drop;
-> > +
-> > +     skb->protocol =3D txtscmpl->protocol;
-> > +     skb_set_network_header(skb, txtscmpl->network_offset);
-> > +     __skb_pull(skb, txtscmpl->payload_offset);
-> > +
-> > +     skb_shinfo(skb)->tskey =3D txtscmpl->tskey;
-> > +     skb_shinfo(skb)->tx_flags =3D SKBTX_HW_TSTAMP_NOBPF;
+> > +struct bpf_tx_tstamp_cmpl;
+> > +extern int bpf_skb_complete_tx_tstamp(struct __sk_buff *s,
+> > +                                   struct bpf_tx_tstamp_cmpl *attrs,
+> > +                                   int attrs__sz) __ksym __weak;
 >
-> [Severity: High]
-> Does this direct assignment cause a memory leak if the packet was sent wi=
-th
-> MSG_ZEROCOPY?
+> ...
 >
-> If the user application sends a packet with MSG_ZEROCOPY, tx_flags contai=
-ns
-> SKBTX_DEV_ZEROCOPY
+> > diff --git a/tools/testing/selftests/bpf/progs/proxy_hwtstamp.c b/tools=
+/testing/selftests/bpf/progs/proxy_hwtstamp.c
+> > new file mode 100644
+> > index 000000000000..e13963f2393e
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/proxy_hwtstamp.c
+> > @@ -0,0 +1,236 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright 2026 Google LLC */
+> > +
+> > +#include "vmlinux.h"
+>
+> Please update your pahole. It must be old, since you had
+> the need to add kfuncs defs into bpf_kfuncs.h.
+> pahole was improved couple years ago and all kfuncs now
+> in vmlinux.h automatically.
 
-This is pure hallucination.  No such flag exists.
-
-
-> and a reference to ubuf_info is held. Blindly overwriting
-> tx_flags here erases SKBTX_DEV_ZEROCOPY. This prevents skb_release_data()
-> from calling skb_zcopy_clear() when the SKB is freed, leaking the ubuf_in=
-fo
-> reference and causing the userspace socket to hang indefinitely waiting f=
-or
-> the completion notification.
->
-> Can we mask out only the timestamp flags or preserve SKBTX_DEV_ZEROCOPY?
->
-> > +     __skb_tstamp_tx(skb, NULL, skb_hwtstamps(skb), skb->sk, SCM_TSTAM=
-P_SND);
-> > +
-> > +     consume_skb(skb);
-> > +     return NET_RX_SUCCESS;
->
-> [ ... ]
->
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index bee1e7eee5eae..fce2d24aad487 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -12396,6 +12396,67 @@ __bpf_kfunc int bpf_skb_set_hwtstamp(struct __=
-sk_buff *s,
-> >       return 0;
-> >  }
-> >
-> > +__bpf_kfunc int bpf_skb_scrub_tx_tstamp(struct __sk_buff *s)
-> > +{
-> > +     struct sk_buff *skb =3D (struct sk_buff *)s;
-> > +
-> > +     if (skb_at_tc_ingress(skb))
-> > +             return -EINVAL;
-> > +
-> > +     if (skb_unclone(skb, GFP_ATOMIC))
-> > +             return -ENOMEM;
-> > +
-> > +     skb_shinfo(skb)->tx_flags =3D 0;
->
-> [Severity: High]
-> Does clearing tx_flags here also destroy SKBTX_DEV_ZEROCOPY?
-
-Same here.
+Good to know this.  I was able to build selftest without
+bpf_kfunc.h change with the latest pahole.
 
 >
-> Similar to skb_do_completion(), if a user application sends a packet with
-> MSG_ZEROCOPY, blindly clearing tx_flags to 0 erases SKBTX_DEV_ZEROCOPY.
-> When the SKB is ultimately freed after transmission, skb_release_data()
-> will not call skb_zcopy_clear(), leading to a leaked ubuf_info reference
-> and hanging the userspace socket waiting for completion.
+> Overall, the set looks good to me, but I would like
+> to see an ack for networking bits from somebody.
 >
-> > +
-> > +     bpf_compute_data_pointers(skb);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +__bpf_kfunc int bpf_skb_complete_tx_tstamp(struct __sk_buff *s,
-> > +                                        struct bpf_tx_tstamp_cmpl *att=
-rs,
-> > +                                        int attrs__sz)
-> > +{
-> > +     int defined_sz =3D offsetofend(struct bpf_tx_tstamp_cmpl, payload=
-_offset);
-> > +     struct sk_buff *skb =3D (struct sk_buff *)s;
-> > +     struct bpf_redirect_info *ri;
-> > +     struct sock *sk =3D skb->sk;
-> > +     s32 delta;
-> > +
-> > +     if (attrs__sz !=3D sizeof(*attrs) ||
-> > +         memchr_inv((char *)attrs + defined_sz, 0, sizeof(u16)))
-> > +             return -EINVAL;
-> > +
-> > +     if (!sk || !sk_fullsock(sk))
-> > +             return -EINVAL;
-> > +
-> > +     if (!skb_at_tc_ingress(skb))
-> > +             return -EINVAL;
-> > +
-> > +     if (attrs->payload_offset > skb->len)
->
-> [Severity: High]
-> Are there incompatible payload_offset semantics between here and legacy T=
-C?
+> bpf-next/net was the right subj to use, but this is very late
+> into release cycle, so I prefer to land it to bpf-next/master
+> and send together with main bpf-next PR.
 
-No, both are offsets from the ethhdr.
+I'll repost to bpf-next without patch 1.
 
-
->
-> In skb_do_completion(), skb->mac_len is unconditionally pushed before pul=
-ling
-> txtscmpl->payload_offset:
->
->         __skb_push(skb, skb->mac_len);
->         txtscmpl =3D &ri->txtscmpl;
->         drop_reason =3D pskb_may_pull_reason(skb, txtscmpl->payload_offse=
-t);
->
-> This structurally requires payload_offset to be relative to the MAC heade=
-r.
-> However, for BPF programs attached via legacy TC (cls_bpf), the MAC heade=
-r
-> is not pushed prior to ingress execution, meaning skb->len excludes mac_l=
-en.
->
-> If a MAC-relative offset is provided, it will exceed skb->len for small
-> payloads (e.g., empty TCP ACKs where mac_len + offset > total_len - mac_l=
-en),
-> causing a false -EINVAL rejection.
->
-> Conversely, if a BPF program compensates by sending a network-relative of=
-fset
-> to pass this validation, it will cause skb_do_completion() to pull from t=
-he
-> MAC header incorrectly, corrupting the packet.
->
-> > +             return -EINVAL;
-> > +
-> > +     delta =3D attrs->payload_offset - attrs->network_offset;
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613010039.13=
-62312-1-kuniyu@google.com?part=3D4
+It's okay to drop patch 1 for now (since SO_TIMESTAMPING
+is not tied to device capability, and while it's not ideal, we can
+change the application for a while), and I can explore possible
+options in the next cycle in net-next.
