@@ -1,50 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BF33F7AA9;
-	Sat, 13 Jun 2026 17:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B5A2C3768;
+	Sat, 13 Jun 2026 17:25:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781371250; cv=none; b=TvXTH7ghog3SVS9M0iTmcqxA1uhWEixcq5GMwOP0Ou1G8UDgl521xsVh8PEFW9axHwlr8dZg1yeB3W0vFR85SNGz/fK1BVbM+B2o98KM/vNr+NhwBaJWMmA+17XBODT1UgutbpJNDOyxG8BcKVYWg2s1nb02By4DvQeMNd7E7jI=
+	t=1781371556; cv=none; b=Xw304U/AEv/OKSLOUUkl2zABlZqnwMvm7/slUKXw71AMbhp0ORk6nAAD/7QEoa7+I4Xrrenm12OetfzYZqiEjFlOPt2ayiBLl5GoFDzz8LUl3dxlMKBHP0h/LLwhkjBmOTvauZYCM1k6dv9d7bBobBV+SwW5lsiEr65df85jS9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781371250; c=relaxed/simple;
-	bh=hfk5YAAsiowp1e92uAcaKnJUV1q7hmOhlevtJ1ZDvWU=;
+	s=arc-20240116; t=1781371556; c=relaxed/simple;
+	bh=XQt8n1j62y4Z33sOEEHpLj2LyMhlFYqQz2yKhwdHTxE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C5CDXy6fKTN7VuUG5RM5XGpQ5aXLyLdwMFWh/Ho9Dw7bAHGD1z5+sqhKbwWkDBxvE1Ixjt52xsSODN9tcamWQ7sY/a8VIbEwyMWAAwWxKYTi6hIF9wdN2SG0Pyn5N1aF8AH76rBqRJ1mWYg7SqRWLLv0UfHUEwXBGw5KwS6oGX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VEvW9C3t; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=bm6zL4gpbi7yAescsh+na0OhTwSLi2J+tCQG5a9NBVUjnbr0zR/PNhgI0A9OFH4dXHJDIipV6w5mAwga/AMaqYVygf9vA964s284eWXPhtYUFllVqLZK13bvTgMq4MOhLmOJRu67d3Buci/k7WGZRSheu+qrf3gumAQDsbJVv9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+lmQSVS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VEvW9C3t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9681F00A3A;
-	Sat, 13 Jun 2026 17:20:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+lmQSVS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61EF1F000E9;
+	Sat, 13 Jun 2026 17:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781371248;
-	bh=FoVaSKJSHc5duMbhcL5wvJ7B8xalCf3jU1lyZ6ND/SI=;
+	s=k20260515; t=1781371555;
+	bh=XQt8n1j62y4Z33sOEEHpLj2LyMhlFYqQz2yKhwdHTxE=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=VEvW9C3tdLdhJJh/2/ibZxdf1mGm7heCaLMrwdHrIywbvu+dnV6V4u/nVczs/Wukd
-	 u3ysLU0RmEkYOcuR59h8NK8pqaHsxwSXrngEYSn68PPEAymrCtvbx50bolSeYfJfs4
-	 7omFPj/96fEDCpEeHeCHMFsHInUddFbB37DRzU77JAoNwr/BKKRha5I6qo+ShXNP8A
-	 ifxdgfwBkuU4cwkjP+FwfEfHhhQoJkJxf/L/fi7rnaV/b/raNg4P+8+02lR0UW9Ga/
-	 hpado6xpG1fd2m+xiGMWfmb5Mc2VvTZ0BATxs6+GikkZlsWpz471q4zNIt/gJ6iPb1
-	 v0BMPg2l4pe3g==
-Date: Sat, 13 Jun 2026 10:20:41 -0700
+	b=M+lmQSVSP5qBsE4r0JwtuP00ps8iY6kFWwQnKCoYfE+tXicK6gwVqXw6tYfgHI8Uj
+	 SOwbJxyybi8KdRTeMWT44alCU0z/pfRBrYJx6RDp6pS6zNs0u+Ne/sseIw+KiP9oGs
+	 hY5N9XWXOHAxAE36TdKhjyFDSUw7Lo8mhtxG5rot0bMP8QxAC/HqsNyOmY93FKEtl5
+	 e8/bPcQelAJHaTGOLumVF78EhSGd46DRmUFw0Lnr11a/+QwnzAXn2SzPsChFREgW5m
+	 GOzxXKHSAnqWa2nRhIoyCPNwF9zRYm/Hu4fCLrScqHE2Z0cATfNKhF46Rzj0nqV9k4
+	 yp27bqABvZdHA==
+Date: Sat, 13 Jun 2026 10:25:49 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Stanislav
- Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Willem de Bruijn
- <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next/net 0/5] bpf: Support RX/TX HW timestamp
- proxy.
-Message-ID: <20260613102041.55e3b50e@kernel.org>
-In-Reply-To: <20260613010039.1362312-1-kuniyu@google.com>
-References: <20260613010039.1362312-1-kuniyu@google.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, davem@davemloft.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org,
+ jiayuan.chen@linux.dev, toke@redhat.com, menglong.dong@linux.dev,
+ emil@etsalapatis.com
+Subject: Re: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on
+ private skb
+Message-ID: <20260613102549.0061a875@kernel.org>
+In-Reply-To: <20260612114032.244616-2-sun.jian.kdev@gmail.com>
+References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+	<20260612114032.244616-2-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,29 +51,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 13 Jun 2026 00:59:57 +0000 Kuniyuki Iwashima wrote:
-> When standard socket applications are run on these hosts,
-> a userspace proxy is required to mediate traffic between the
-> hardware and the applications.
-> 
->             +---------+                 +----------------------+
->             |  proxy  |                 |  socket application  |
->             +---------+                 +----------------------+
->               ^     ^                               ^
->   userspace   |     |                               |
->   -----------| |-----------------------------------------------
->              | |    |    +---------------------+    | skb
->              | |    `--->|  virtual interface  |<---'
->   kernel     | |   skb   +---------------------+
->   -----------| |-----------------------------------------------
->               |
->               v
->        +------------+
->        |  hardware  |
->        +------------+
+On Fri, 12 Jun 2026 19:40:31 +0800 Sun Jian wrote:
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
 
-The first patch looks kinda nonsensical but then I saw this diagram.
-Looks like you're vibe coding an integration that makes it easier to
-treat netdev as a slow path for a user networking stack.
-Please tell me if I'm missing anything otherwise add my nack if you
-repost.
+I did not suggest this
