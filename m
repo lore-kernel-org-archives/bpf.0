@@ -1,122 +1,148 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D701DFFD
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 01:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB4F265623
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 02:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781315138; cv=none; b=cSHcey/vaOU9vmeruKWOIxO9G7v837fXQBZSw9jbsVLtqMmGE3aUqeu39cYF5lfn1TwMF4JATJkn5yFikjCyrcwWTjQHOQ1U+TCTu2dMpuDUBaO/hgXdU1Jg8v/RkdsrL7UyzY9sShl9mvitWSGb1vzY1u0vZdwSf2iQe/OWwas=
+	t=1781317851; cv=none; b=mOqeslBdltFg8Ao02oiVGG9iXJqPSWJ71rLRdynjowrZs19kkxu+64s/kFLhq3JF6Z+sIeRg6pcyBOQsk2XUZyZPaz97+jl9CqLQQGNAjus7hyZ7rRN936U8aQOmLr3sPxrz29kTss8t6PaJsKJWlL56alGfnFgqwnTbYlYDv6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781315138; c=relaxed/simple;
-	bh=B/MBdySuhNaMXHjJulAyzWkzXJcOuRRIe9fHeh3B8x0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=W2IFf8FO7M0QrlLJNGTF4Zc5yfIIoup0fx+kxp0/AaaNuV99P4WSdz17TroViYkcdokCGWY+Yk6rCK4jH2uytYLKi36jP7SY7WMu216o/8XgC0g6cOxd6uuh5p/wO6XaUer1YRHCJHe6c2WEIeSNAoR0QJe9QayCRjkqM17jG1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCAOe+pU; arc=none smtp.client-ip=209.85.222.179
+	s=arc-20240116; t=1781317851; c=relaxed/simple;
+	bh=HgbZyHvGeCzljg7Sr9TXApppcDGF9vIDEw/qZU2nt/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a1gNR6uJ6L/JYAhQ0m+8ZadcPGzLt2gy6zHG9wjdOHvOXfQf7LRnXn7rs/Yh/cqEJ6b1TiYD755YTFGL6/ZcKHsnKdRCGcNEHWt3hY8Pm+uJGYL1sNZEpVvLb4rjDzeqWj8uzULfei5LWr4lf31ncSNOf/dfQQtt3z2k2OHm2mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abNE/kxG; arc=none smtp.client-ip=209.85.210.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCAOe+pU"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-9158c621ebbso186889485a.2
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 18:45:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abNE/kxG"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-8422524cb38so712328b3a.0
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2026 19:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781315136; x=1781919936; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SMzUxMvNhBtUJndLxxok/r/+YSwP+zstTo1WTZAN5zE=;
-        b=GCAOe+pUA/zZHBmaLiXM0KZkqZSzR306NzaTiYavuQg1tfIUJAHUXKvIPk758CNqvy
-         ZAiIlbutLbNxnbaAn9QvqHZtrJYrDC+dR6FxCPBG1EAA4rxJwbZcBqC2+LSazt1KK5oE
-         LYLr3uZkS+D4n4AZo0BBa8HPq9dI+zI/5gE6eSFBFVAuSSFLnue6S7CP0QATK/I6m7VL
-         URl0+DhirH0LLC1MV/k9v327VEBcma4qIXh3A8FVFua44pSEucbkWCY7iLzWbNQ693SD
-         wS7RwAQe0okxNw4DSV5Ww3+t12SeKggHvezKTaShIyrc+YidbJ4JtzzCiT/HGDkz+1Ci
-         HTmg==
+        d=gmail.com; s=20251104; t=1781317848; x=1781922648; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=64T+SialQZ6697/fNGFMpzn29D2cLqJP0AzHPR78vug=;
+        b=abNE/kxG4jFrmvT+x4EyYoOkMxu8RF+7qYCjxIQq7kzrGVNJvTvpllxX1RwqMl27bn
+         FVEH7O8alCnS1mvbdhIf7aZhwwOn7YsG8F3BKVfWx7n4spcb7CDptJqKDazt0+O+OThw
+         3m9qyotXWUT/wQed6jf4fVU+fzpKnc1ZdUQQ5Ap1eTyKXb1ifQL8aN95bzpcCEgEtPxU
+         WBcYLHemZTFB4PJj0JjOoFN4f9PeCSm27u3KlRgOKXgKQ3QTVC67RD4VLkN6EQLT7fI9
+         +pwAooyaPI7kOsBx6S8DAWTks/4B7dT46X1S4r5kV4k2LBZbcOJphNuA8thRwkVNYdtD
+         kzxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781315136; x=1781919936;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SMzUxMvNhBtUJndLxxok/r/+YSwP+zstTo1WTZAN5zE=;
-        b=sLIs7pGbPLBN68yKlLe/ldu/Ovv2RiNlntlnLt07y1Lyjr8bjEBVXg78NLFr0N9a3t
-         r0twziXjMH/fZtvNuYrO8j8vVXKMDSzOXsXLEIdiJComlclhCMHRZzvvPiqg1UBu93kd
-         Q+ktVCab8GlKFuXgLyGxUrnIAVKQ1pYkTxpsUp5DgfnmO+9xBHyGrJHvMOMu5CKjJF7L
-         7kcTxZIjcEBRDdIER/nZuRR6UzIWWivy/mQRugi83ZscFF7NfTpwDAzD/IXR5zmxM9eT
-         fVmvxWSdyjPy2vBnRdffRbjpcikgX7hKtUY8RFoyZZBqfsSEF8oiIszk7pytECUHVmX+
-         lFHg==
-X-Gm-Message-State: AOJu0YyxMCRKAvxTEkIQ0FN/6aJdLIyEY/+0WRnH12QfpsBruk960EJN
-	GOuKBF/cJa1JiLlXmNH62pfj1rs4qRpOOGo4R3b0YWXQzKUJSKiSGST6
-X-Gm-Gg: Acq92OFWj+zKo2U0bj8gQq2wuqI1pN7dFZOvoXWoogo0WXgQYGYilyufUHw+G9K2B6U
-	LbuU2HLlAcjFtCT1fU6UHiemvyBJ2eKPlyta36THG2PiB9LteoxvHXFLDmleJ5+0VzYRrREppb0
-	RWpcdjonD6GC1fQf4p49unhJodStJcdCdsh0HPo6ewAXsLRl0r9SxRnUY4UdBhVqDcApWXtO0CC
-	BLhh40SVTPDUt0k1BJFcYv9W2QZ+QZNSyw5tUNNtp4ReNIX4pkw/usfFGLiRsWxIPPl/h+sptGh
-	jHiMsvmHZ4VVH6M9m/ZKxuv9cD9umx295nS5Rilcnq1KnOKeCCRvpVm1Pwj9r8X1pt+IG/4FskA
-	74O4QjprUH5Y9w3K3f/qXKbTTWmoBuIy02WHSDS6PsLU7sqEf3TteKb7wJERjUapNh5ZaHiJY5/
-	syEUIuDN9HnsvvkHeYb45sDQoujLM5UpdnNvUgSQgDPYyd2aHOy95pHtle3drdmAld2GOqcg9g9
-	sS1/ksNvrx5qSp7NQ==
-X-Received: by 2002:a05:620a:f13:b0:914:babf:9f56 with SMTP id af79cd13be357-917f1b5abc6mr367245985a.39.1781315135742;
-        Fri, 12 Jun 2026 18:45:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4b::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8d300f6af40sm41224886d6.8.2026.06.12.18.45.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 18:45:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781317848; x=1781922648;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=64T+SialQZ6697/fNGFMpzn29D2cLqJP0AzHPR78vug=;
+        b=DwvyYkBby1y3PDTQLAlRVc5qX6hOUOaLK/7Y3uoFXnoURymTQqMktN9oqQscDbAsyd
+         fxLMemWw4Q4DaNGEc11HHPq3hPpZ3X6JgqcytDz40c4eevY5qCYWRM9MyBDRZ+e3DFDb
+         P/uib7cn23Hyyza6VOJRy3XUwiyo6FUWPkj6378zyxZQtR7s6o2+IcN3xV4tQ+SkRRQB
+         PQdX0SwVI6/nKWeMCgYFPn8XPHz7fp6tEzVGjig1vP53i3ekJQIUx3DGA2iPivcyN8Bj
+         Tahy2Gm1fI+QbN9RNuR7TRyFOhZuC30nlyzAnmHxebQLe6BgMXRPF5DYBpZqXOj5Qzvn
+         Vv+A==
+X-Forwarded-Encrypted: i=1; AFNElJ8wtgRyLZzCYrpZ9eKgCFlFdgTX3rsXGkCIjOTrsjhRvrGl+bHgn2M0Pu7BuKTmY+RAZqQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgjWfLSchcXKl3rFHjzWAWkZTvjC45IT8+LvlTLoojSc3ZMtTD
+	cTwLISXi33u5d1zVd8mOlWbMnaPsLMnLH1zP2I6W+VWPoSNp2Bfb+BKj
+X-Gm-Gg: Acq92OEHL4PgiCLw8y7fhLoJjcSPxc7UCNKsCCbPNB9QGVkdRUbsJ0zeelp8/Xhnkbr
+	SmXRtMsxAt8Sk9zmyF0KWHpahBNdcwXfvyHI73tqA2/08udVI4TEnVCdk32zt9DhApA6rhdx4X3
+	ODDNQx19sCLJbZ6yhK/TpdLOlgumB1ZHB1GLboGFLQ4Hwi58zmCK6oUKXkkCEjSWAFDCzKJBlGg
+	f+wEkGa6adlKQFxCSfY2WtlBuFh4RknwigXsEZAZ1FAVnyH4B6QziHJcl/BiKoVBLD3MdaM+NWR
+	3F7oxTJTORWn2IAj3N2zAbASrVJFuQ6duJVBIe5kQGvVzRq7cFq+zBUWIiMTh2N3qRp6fFUGrlj
+	9nY7RzoPL/YqSRHmtjVIJa9m4bqDZM+Ksi0tLW/LsNmwzRa0xxTJZRvJSplK32qCvOFfYMOdGO5
+	qhCZh2KFcTyhLX1/2n
+X-Received: by 2002:a05:6a00:288f:b0:837:a211:4ee2 with SMTP id d2e1a72fcca58-844e1a83861mr2129907b3a.38.1781317848278;
+        Fri, 12 Jun 2026 19:30:48 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4f::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b04808dsm3630627b3a.52.2026.06.12.19.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 19:30:47 -0700 (PDT)
+Date: Fri, 12 Jun 2026 19:29:05 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next/net 1/5] ethtool: Introduce
+ ETHTOOL_MSG_TSINFO_SET for virtual interfaces.
+Message-ID: <aiy_eV7RP2nPlxmJ@devvm7509.cco0.facebook.com>
+References: <20260613010039.1362312-1-kuniyu@google.com>
+ <20260613010039.1362312-2-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 12 Jun 2026 18:45:33 -0700
-Message-Id: <DJ7JIJEZ333Z.28J0XFPQ1RAFC@gmail.com>
-Cc: <bpf@vger.kernel.org>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Better build_id caching in
- stack_map_get_build_id_offset()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>
-X-Mailer: aerc
-References: <20260612220651.2507843-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260612220651.2507843-1-ihor.solodrai@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260613010039.1362312-2-kuniyu@google.com>
 
-On Fri Jun 12, 2026 at 3:06 PM PDT, Ihor Solodrai wrote:
-> +static void stack_map_build_id_cache_set_resolved(struct stack_map_build=
-_id_cache *cache,
-> +						  struct file *file,
-> +						  const unsigned char *build_id,
-> +						  unsigned long vm_start,
-> +						  unsigned long vm_end,
-> +						  unsigned long vm_pgoff)
-> +{
-> +	if (cache->resolved.file)
-> +		fput(cache->resolved.file);
-> +	cache->resolved.file =3D file;
-> +	cache->resolved.build_id =3D build_id;
-> +	cache->resolved.vm_start =3D vm_start;
-> +	cache->resolved.vm_end =3D vm_end;
-> +	cache->resolved.vm_pgoff =3D vm_pgoff;
-> +}
+On 06/13, Kuniyuki Iwashima wrote:
+> Before enabling SO_TIMESTAMPING, applications typically try to
+> enable hardware timestamping on network interfaces via SIOCSHWTSTAMP
+> (or ETHTOOL_MSG_TSCONFIG_SET).
+> 
+> The timestamping capability on an interface can be checked via
+> ETHTOOL_MSG_TSINFO_GET:
+> 
+>   # ethtool -T eth0
+>   Time stamping parameters for eth0:
+>   Capabilities:
+>   	hardware-transmit
+>   	software-transmit
+>   	hardware-receive
+>   	software-receive
+>   	software-system-clock
+>   	hardware-raw-clock
+>   PTP Hardware Clock: none
+>   Hardware Transmit Timestamp Modes:
+>   	off
+>   	on
+>   Hardware Receive Filter Modes:
+>   	none
+>   	all
+> 
+> These operations rely on the driver implementing two callbacks,
+> dev->netdev_ops->ndo_hwtstamp_{get,set}().
+> 
+> However, among all virtual network interfaces, only bond and
+> macvlan currently implement them.
+> 
+> As a result, most virtual interfaces cannot advertise the
+> capabilities of their underlying devices:
+> 
+>   # ip link add ipvl0 link eth0 type ipvlan mode l2 bridge
+>   # ethtool -T ipvl0
+>   Time stamping parameters for ipvl0:
+>   Capabilities:
+>   	software-receive
+>   	software-system-clock
+>   PTP Hardware Clock: none
+>   Hardware Transmit Timestamp Modes: none
+>   Hardware Receive Filter Modes: none
+> 
+> While these callbacks could be implemented in each virtual
+> interface, this approach is limited to those directly linked
+> to a physical device.
+> 
+> Not all virtual interfaces are tied to real hardware; for
+> instance, packets from UDP tunnel devices eventually pass
+> through physical devices and can be hardware-timestamped there.
+> 
+> Let's allow configuring the hardware timestamping capability on
+> virtual interfaces via ETHTOOL_MSG_TSINFO_SET.
 
-sorry for broken record.
-claude's copy paste doesn't bother you?
-It could have been:
-
-struct resolved *res =3D &cache->resolved;
-if (res->file)
-	fput(res->file);
-res->file =3D file;
-res->build_id =3D build_id;
-res->vm_start =3D vm_start;
-res->vm_end =3D vm_end;
-res->vm_pgoff =3D vm_pgoff;
-
-or
-
-cache->resolved =3D (struct resolved) { file, build_iud, vm_start, emnv_end=
-, vm_pgoff };
-
-and probably other options to make a code easier for humans to read.
-
-You have to explictly tell claude to deduplicate otherwise it keeps
-copy pasting left and right.
+I don't have a lot of state on this, but when adding xdp hw timestamping
+I remember fighting a lot with those apis. Now we are adding another
+one, but (seemingly?) for sw devices. Can you explain a bit more about
+why can't existing SIOCGHWTSTAMP (or ETHTOOL_MSG_TSCONFIG_SET) fallback
+to your new dev->tsinfo.enabled codepaths for the devices that
+don't implement the ops?
