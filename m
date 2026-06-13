@@ -1,104 +1,149 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062D9387369
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 21:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781385941; cv=none; b=tdesZa5qFtILUavrwpMqtGebrtDPbDHaIsyCzNMcmeulD03Ap4/hdJq9SUoyKmMBtpi+3qyAzElGKuQIDWRNBoV77Jb3YEWW2Mjv16xC57A1wJBn9Q+AWXm/TpDKsPmS7mZo/tunyG5sAdpIiwamn5OTmRAfScJREmcCjGBqXhs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781385941; c=relaxed/simple;
-	bh=sUW26/GjdOj1Qq716n0nbWsrEvJOhcLVVVNk0Yh/U80=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bT4BMJ3I2HHZ+XycRZm0fXt+1nTxOEm6V3Xj8JBr8DVzU/q9v7eD3vxr/ei3gYVUXMLpPSCbBuM59xi0pmJ3qRjm2xn/1Hk52GuL4QKHE63WOlXT8toYwcCBP3ob0dFUeME/tLTm1JD4qo1QCC4zj0wP289Gc6nD6U3PaYlF1yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=multikernel.io; spf=pass smtp.mailfrom=multikernel.io; dkim=pass (2048-bit key) header.d=multikernel-io.20251104.gappssmtp.com header.i=@multikernel-io.20251104.gappssmtp.com header.b=BHISyfx5; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=multikernel.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=multikernel.io
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139AE1F099C
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 21:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781387044; cv=pass; b=F5rkBMqt3+xFm6ONJ1ZQoKB3dMFTV6h8Dv0re+d4Fh8CeG6Z9H4Hqak5lNQbYm7pLHmQxY+ykf6gZRlcfya5NmRYfxQDJeCQNouAsuyQyZcyH+9bQ0SLtWik3RYubO87L+RTk03OugZ9tqNC4adUSGHEqY9BT/sY8onfjF/dg2c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781387044; c=relaxed/simple;
+	bh=shGqwXIT/9k1CTZiY7lQbAjqDdaUMQMO41xsdAlkuHk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b4NDZ2bIDt6OFPneYn8BiWpdAmpDAvGdxGHn6sO/Nj7py7kNnDkfIKidvBrnbpv7EIbogw/vHZ4f0z+8Bx7Tvl2ZMJoPQ09e6/+yQa5mcbN+IBMX1OYg7vGx8kP/976dpxrQH95e/kpoXIcc0bIdpl3i6C9VrGVruDSL9+i1gLI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yn5cGcaX; arc=pass smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=multikernel-io.20251104.gappssmtp.com header.i=@multikernel-io.20251104.gappssmtp.com header.b="BHISyfx5"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1384ebe7a10so1749778c88.1
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 14:25:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yn5cGcaX"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6914a658115so2632166a12.0
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 14:44:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781387040; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lNFx3jl8dl1/Q7CPPijcWtUgX+1pznCZkvcL1/JLSd0zXCO9e7RrPDMSsmsbnbA0xY
+         lSvt8DKfoQGRVlrL+T8OKvAmmTMden+NbMjhodmmxecPmf8FNN1t1J+Vi3dVo8AjF7Xd
+         ARB2Z/VMUwFdra5lIS9z3lXmvQLz0GoqbSkr/pakLl/YVjWJRRbzMyx7ZotzD3iiDta1
+         2W1//6kFBfPFfYOEBRmVKmIJQnNNjZ6rKoF9vy/smSW40T+bXrItnKeqbRbdyhyvyzaQ
+         sX/bIOD7DDmVScMow0UUX3I65RenGcAHGih4w+xo4PkO9wdAh25IFxLNTq0mb1Xk32tO
+         65rQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QzdEIs8IbYBJwlFunPACllXp2t7V7kjH0qnCjgXYRcg=;
+        fh=8OFWPgbFS/cAac3Qfaw1hp4Reojld9FM0k1oYfwaADU=;
+        b=Z2RZEnhYrxDwk9DVYWoiZRnH7HqXNdLzHfO+dA3P9GICqjezLMnWOePX9fKKFLL8UZ
+         ndeMjQshCSWiJr9ZI9ErzLPKxr2ofYMsoHuaqNkzSlbQqJP5Bt5VYUsPyqwOPZgsuyq/
+         5RXmDJyEZCZqlozyIOSBMQ9acublARppiVzJFoU5E6fNRbE75O+9X3luNM0nN5Mvp0p/
+         e1E5x1052RyCGLoNzSH9fJqrIgjm+G+5yncPvdoMCc1yKt8Bucj38de1YXLlY/AmYRfi
+         GYDVJCjhdgz2j+byhM2/N0wQzKPx5DLXHc6G28/VxF4jRN9/xsQSrvVz7hFxggD45Qmw
+         TwwQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=multikernel-io.20251104.gappssmtp.com; s=20251104; t=1781385939; x=1781990739; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+8RVh2EafPzCmCimjzyybRSe3Diu63saSE546mxfPho=;
-        b=BHISyfx5VmPeS35iXRH8apZp8aWFKTyb4hmP0wNq0Yz5O11xLjkBWFQFh2HZ/MJCbS
-         3MHqjkkLv38ysjPFW1o3rBq8yunJPekHcqerVqoJWcg2elCA8cy/ecvF3Zl/3NmyqwIQ
-         Syx+1LkOoTUJe4kkYJKGx7iIAx9FpC9dyAx++E60TidPLtIqEPM3qWfy0i2r195ZnIae
-         3zJbVoYWubx0v63WuImZhorq7w2FdF2Rcu7l7Iil3WILrNT/dYtquF9SRiK+yKX0+Gm5
-         ux54pbIBivA3iFViikm9gON67J6mp8E/yPrngmnxhvLeDlglgz+NyrSTksrHGYMpQc4+
-         nU2g==
+        d=google.com; s=20251104; t=1781387040; x=1781991840; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QzdEIs8IbYBJwlFunPACllXp2t7V7kjH0qnCjgXYRcg=;
+        b=Yn5cGcaXeR3/B/k5z0AVfO6kbuIVcEeLXkkjZ7Q1lrooW6yLC4Z1opSA8qcKhQex0f
+         2+uN22TcHYOZ3lV9bCb+y7VVrVnxbODatgwAZfGduna5IbXKU3fFWIIudwJHuJtt4pJo
+         MDIgxo6ocNeKn8lerymXf1Sbqv9ur0VR4Q92lLw8w3HkX56IPBEhjoskNB2SZdveWWq3
+         grGuIlT+mBS5yHM6UNIBTrLPpX167zIGi1J9zfPv077li51jgnK7loL2vDCGQXY+LukY
+         RaLaKDNMKO5alLFnn+uK/trCXOX9tLqnsv2bOuY8kMbc7LtTEAaXA0RbBV5VhnaYxOKf
+         e0hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781385939; x=1781990739;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+8RVh2EafPzCmCimjzyybRSe3Diu63saSE546mxfPho=;
-        b=ZAE8xl4TBIckYJfm21T/K7pqYiGPMVciV3TIWTanwq/j2FjvXM9VZxyCWXz8dh7zOb
-         JkV3FA69lKY7hWndWkA4WArxGExP6R4WigKIcyRlexQY9BQSiOP/UEYr+TXNSCTE3wp1
-         R6n8SjykGMSn/GxO9fG879EIvmfVsCWdDmEyuGJw7qfiM5Rw9GXHm/cWzEsmlu6pD9SC
-         mlgGr3Rn+cZJ3u2D2kLAu+iXNN4/YyMrbWI3OuqRowMq5U7DnJzbmPFErxXgZzqoKFnK
-         9DLamx3zEoOgjBqidr1JdW5GJz94t3HFvjpCn7GeEGj5zvgSRXUrDVMtVnfkWrsy8t9e
-         HaRw==
-X-Forwarded-Encrypted: i=1; AFNElJ/Me0KzN9XF0+ZWhOVyAkWBfcA9t2NUHSH6uPbR/orCjakcxdOC02/hqgNVedqTI8+3FAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7Mh5IH6iDtGjsl+2NQ7PYRaTEOZBEAMRCseVnDRxgw/9HF5vY
-	EsHj3CkPJAwAypFbxR2ztJsYRPwBtnd7GpfqX0Ls7Bo1sVxqZcmjc3JdXyoisHzwGis=
-X-Gm-Gg: Acq92OEyOmeS8Cy+W8us1jmm5xQPBfVJfgn3vKT1SQkcIV2SnhU1V+UM02KmuHbed7l
-	BoJvbQAooLOCcp+bjjjK1bVJtUHMqKQ6UHAWYOgTJBuahTlRb+BDjbHPu0ZuGGzkDv2sUa5w1vd
-	8Hgc5SbeYIoAXew+1arS9wQ3DnbfsVAPzU5AINh8iCBhzG3nVxoLZhWK+ZdK0ILiVmLo4U4BZGH
-	G+OMKCMc7XOnd4AhklqbYwDsV8nuW9kd2ToN539fAvscLfvMoW1zJZZMbJjfoYefJ+ioRJtX1GL
-	cfwMa7Ikh5stgqdw6P5YKdNWQiTFpP4RTpwrJdfCxXhpjIpRpfE/YKqj4ikYi0Z0lFXqZzF8VZs
-	T8LZ40TQ5QVCCMBZ/HPypRuyLafYXWuGXubVN9jbTSxCuoTGuy+c6w4YWr9DXAJLzw4cRzscknH
-	aQShbD1LrNr4XB4xeawAg0xjNEc1zm9QvH+equ0KZmSRdBxxSuy24D1v/5
-X-Received: by 2002:a05:7022:6183:b0:136:ac69:b0e8 with SMTP id a92af1059eb24-1384bb37863mr4425156c88.15.1781385939038;
-        Sat, 13 Jun 2026 14:25:39 -0700 (PDT)
-Received: from localhost ([2601:647:6802:dbc0:56d6:c5c3:3b81:a8d0])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b964853sm6012730c88.11.2026.06.13.14.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 14:25:38 -0700 (PDT)
-Date: Sat, 13 Jun 2026 14:25:37 -0700
-From: Cong Wang <cwang@multikernel.io>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Network Development <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Hemanth Malla <hemanthmalla@gmail.com>, zijianzhang@bytedance.com
-Subject: Re: [RFC PATCH bpf-next 0/5] tcp: opportunistic loopback splice for
- BPF-paired sockets
-Message-ID: <ai3K0dBQaPqDGl6X@pop-os.localdomain>
-References: <20260612011452.134466-1-xiyou.wangcong@gmail.com>
- <CAADnVQ+KTNKkf_Tc-RZR-g8wEfJU4qWcOPnjDbA2=PEtZsYnYg@mail.gmail.com>
- <20260613105730.0ca1ca07@kernel.org>
+        d=1e100.net; s=20251104; t=1781387040; x=1781991840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QzdEIs8IbYBJwlFunPACllXp2t7V7kjH0qnCjgXYRcg=;
+        b=Od/0mlhnqhietMYKgWz4Z+rvZgOX6gLAG648xBb09oLCmMsp5cWSGu20DpvJdQr00z
+         E/owpWy9dw2MqGGIRHd5zCB7aV7QbrdiO3Hn1tzP5SR/ADVkK/EIGYyZ81ChYW0oF6Hh
+         DCElNrqRPk+YnsY7c0IXtk2O67D0OSXkoBI53N1sGiEHg8W9ObtsCiiwVKBT6ITTIQwI
+         aej9YxCjSKvrF3VrK4XkTfyMPBRR0oNv2c07IbLNrwyCtsZul65jqlCIKSiLoI1dZS0q
+         clcbGCcqr+90yZg2NIDHrwpgtI+bfqHJHFt2HWbFpbx3Hmg4ilPWI/hxA6MrNE3DULeq
+         KhWw==
+X-Forwarded-Encrypted: i=1; AFNElJ8bfUJWSr553C3Jys4OzeP9jeb+lMWgQFtRG7/NhKvdfw59dazh9htGelCTGERpWDhCdIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjjxhxxalxqpMh+VvMWgDU+6xkzxrYhD+ZdJMZE855jMILvkK9
+	U6ZkTW8Uxdpoy5N+VTiZiTvZqgRcyU1W9u5CcpSY6KxycHWQxbXWI9itAxj3YYvi8Kqu4TTVIsL
+	UTiamtzn8OqAiEnYGJ1LdumGuNangnn3vag9ex1Vr
+X-Gm-Gg: Acq92OEinWDDANDj+c4U5XPMrL6ig7uLvwS2Uq0j4gUkiE21JR6KNH1l8cHgbks5ue1
+	uKS22axVZ59j39fW0/gEd+nKSe+fj7ALQ2Su6Orf6oKj2qoelBfWVrmACD97SrgyDFJNfqlFobZ
+	4kfbPIQrnzw5mViIu9TpRi4caPg/kOUirgeZyBtDaKG32FYsKHQ2IJnJ1Kd6uuN0cklLnkmiWs5
+	tJl0ANXWT3mT1n5aQ+0hD4YtvOEA0SbA+P0Weakhl4uuCISBDNE9X/pxa7ArjH9BtRAZeYcR9DE
+	UrFTdmsL/RRSDJsOeSqph1ciZvN4b+0lu5SMflgO9YOL9IBcKIUHwJixLU6xjA+u0zKFuhEQf+W
+	begnR1qBPYgMmyO3jJxqMDsmA2dbEgjggZybHQX0PQbuUS+Z2K5sLBLX2FBsr4+k=
+X-Received: by 2002:a05:6402:390a:b0:68e:4c0:f599 with SMTP id
+ 4fb4d7f45d1cf-693784de192mr3613711a12.5.1781387039742; Sat, 13 Jun 2026
+ 14:43:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260613105730.0ca1ca07@kernel.org>
+References: <20260613010039.1362312-1-kuniyu@google.com> <20260613102041.55e3b50e@kernel.org>
+In-Reply-To: <20260613102041.55e3b50e@kernel.org>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Sat, 13 Jun 2026 14:43:46 -0700
+X-Gm-Features: AVVi8Ccn4RYCTXqzMYwrPCruXfWWhOo7OhdWRurpDqUSjxzTS9ZYmbEdgW-fxsU
+Message-ID: <CAAVpQUBP_21b5MB8MS-wFwg9BUdcgMoNxi8s479YQHH9g5ahCw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next/net 0/5] bpf: Support RX/TX HW timestamp proxy.
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 13, 2026 at 10:57:30AM -0700, Jakub Kicinski wrote:
-> On Fri, 12 Jun 2026 09:01:43 -0700 Alexei Starovoitov wrote:
-> > Just saying that the code is free nowadays, so whether it's 1k lines
-> > or 10 lines is irrelevant for the discussion.
-> > 
-> > As far as the idea goes, I think, it would be interesting in pre-AI era,
-> > but today splice and friends are a prime target for bugs and more bugs.
-> > skmsg and tcp_bpf are reeling from unfixed bugs too,
-> > so my take is that we should not add any new features to skmsg
-> > and instead deprecate what is already there.
-> 
-> 100% agreed. There are so many unfixed skmsg bugs it's hard to know
-> were to start :( Kernel "intelligence" to help unoptimized applications
-> is particularly unappealing right now.
+On Sat, Jun 13, 2026 at 10:20=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Sat, 13 Jun 2026 00:59:57 +0000 Kuniyuki Iwashima wrote:
+> > When standard socket applications are run on these hosts,
+> > a userspace proxy is required to mediate traffic between the
+> > hardware and the applications.
+> >
+> >             +---------+                 +----------------------+
+> >             |  proxy  |                 |  socket application  |
+> >             +---------+                 +----------------------+
+> >               ^     ^                               ^
+> >   userspace   |     |                               |
+> >   -----------| |-----------------------------------------------
+> >              | |    |    +---------------------+    | skb
+> >              | |    `--->|  virtual interface  |<---'
+> >   kernel     | |   skb   +---------------------+
+> >   -----------| |-----------------------------------------------
+> >               |
+> >               v
+> >        +------------+
+> >        |  hardware  |
+> >        +------------+
+>
+> The first patch looks kinda nonsensical but then I saw this diagram.
+> Looks like you're vibe coding an integration that makes it easier to
+> treat netdev as a slow path for a user networking stack.
+> Please tell me if I'm missing anything otherwise add my nack if you
+> repost.
 
-You are absolutely right. :)
+Hmm, what would be a better way to tell users that HW TS is
+available on tunnel devices ?
 
-Thanks for offering opportunity for me to make profit out of it.
+Other options were 1) add attribute to tie the tunnel to a physical
+device and use its ndo_hwtstamp_set/get, or 2) add bpf retval
+hook in the path like update_socket_protocol().
+
+Or do you think applications should handle ENOTSUP by ioctl
+as soft error and always set SOF_TIMESTAMPING_XXX_HARDWARE
+since the underlying physical device may support it ?
+
+Anyway, I'm happy to drop patch 1 for now and explore options.
+
+(Believe it or not, I haven't let AI write code because I don't
+ want AI to take over the most fun part.)
