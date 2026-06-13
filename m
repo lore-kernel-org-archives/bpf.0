@@ -1,82 +1,81 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34FB27F4F5
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 11:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117E727F4F5
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 11:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781349232; cv=none; b=WMBPzMsUSl9TlBTOQhdhBrkBz7VYRZJmPXFKe9VcBGTX7ezWbX2wr/bnK5Ss1jMgbeuKra3j+UY+V4juiYbKP+jkxw7wpYajnSaW6s3+x+S6oav/OHKYZYQYh/5CMvn3aTGwJr7jTDZR5reVmkRIphb7h0MEp9Z6zBB8BHy2mx4=
+	t=1781349244; cv=none; b=KXwL1ELY3cYBa/Ozd0AuczH+CSer3SpvUja9sklQ7LecFD1psVXaGnfp4R+tYPBXWAKDDoEQxBEvB7mjtIt0T0YpfSYUzccrGA+TX/bSlNBKitcvVJrDZyXi/MgNUpVg8bCxkJkk4MzLLC64/FoVmaiVR24OK4UH3ElgdB+rxBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781349232; c=relaxed/simple;
-	bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
+	s=arc-20240116; t=1781349244; c=relaxed/simple;
+	bh=FGccconlS/lqLJQtEwD7wIomPE1kfVOSxWGYcx0WB2s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K8Fxhgi1OTdYcunL9OJlhxmqwSikOx2AN0ASgb3KlEjBMzzogRNli9IVtfehxzm+2G6DRaMhzq53J0ADGDCjY9zz4hTfzrvdP+1BpZjhmQZLyiDncpH62x6QObhGnazmHXC3zJYCvxIqGIcj3uHkC4/2JX77hWLEi/pv71KsSgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0SX42UR; arc=none smtp.client-ip=209.85.215.195
+	 MIME-Version; b=WdumhAojIKyd+desMQiL3U+ic3n8z8ubwMP5EVS+gsRozKY6vsXj12lv1uG0h5kuAU80D35lER9oFHxyEET0KJ7qpkMN6cr27pkylkm5ulUIZzlZLcxwOIACx4SE/LMd4GQeWUJ2Sztot6beYSCSuCfV+b+0U+Q3iDeMjheG9MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJIUt1XD; arc=none smtp.client-ip=209.85.210.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0SX42UR"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c85893bce34so763944a12.1
-        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 04:13:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJIUt1XD"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-842848fd613so1750101b3a.3
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 04:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781349231; x=1781954031; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1781349242; x=1781954042; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
-        b=A0SX42UR+dr7i20KCcjqhXciUWycVzi5MlzodH8DbOmmleV817AdZswSMxPVZN6imW
-         LIFjjfAdMJLwN9MKcYQUC2F/9amclGu0dZsj3zb6HLR6BKMcU7/vF1ZlHZvOTgOfGwDQ
-         9bdSHEsvIA3pD6njIU23RNVmMNJYFJpgdJgHv+vQJVQii2BKsd0GzkycmjhJeqWQDgkP
-         ZkZtEy2jods9MPfyey4wfamFpU76sojA09PH2sekmT9yf6RQ65mHjjHPdO7lv0eyrEJD
-         B2OBxeoM6oOV4QFOKfUhBRtpe4K7VMOraaLPOChkfSZKQZ2Ff0ipWutuDHlGHP0brCT5
-         1EtQ==
+        bh=FGccconlS/lqLJQtEwD7wIomPE1kfVOSxWGYcx0WB2s=;
+        b=fJIUt1XDAAQSS9StLxp32lv7gp7d1jMsILimhPi0x9/7JKwGNjqHBu9liv2OTOliKB
+         bIaqo6bwEBppCSshY2pGddWCOt6zeN60in+z3O2dGE7Q9Y2ps8XeaxeecJ97XB0Ig8bA
+         pRPI6LNujK051/Hz+EUpoVAz4x0Xquww9i+lpJmJfSDUZLxUAtU8kl0FyO8wBBjP6jjL
+         NJO4Ml35+rddAa0ih0KW4/bpHp7onPKneHjoKin6fRTyDHgA4bWedXg1RcrqWMNiKiiC
+         NFo0O/izc+iWniaONTPXGFeXi4+44bawYcbDJO16X+mDrNeOrWxpmbCaRBp2yo4TFHu1
+         LLuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781349231; x=1781954031;
+        d=1e100.net; s=20251104; t=1781349242; x=1781954042;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vRdqAJy7vcRa6nIl+Ykkw3JIzh0pljguy21zEtESKGI=;
-        b=CU7cc01UIhrn7nC6zjji677zzv2rvvOuBhfTw/gKGxBz5uJcWaq5tPYMmFz3rBVGdx
-         WeVb8ZPEhM2xwx8esDbqX2Ujm3qM8Dg4zlPkHa85MFZE+xykl7KeNbkHSpE9OuqdrGll
-         q6NAF80YI5wWQLowEzcM3mp6Ny3ytsENkM2wwHcNcmkflmegcdNEi7fFFXKfCT9Aeeqc
-         gfiDItEfu0O7aEDA4lUG/zAeRVhbsXP7cxz+Y61UfqPN2kl95Tm2Ou537p6g2OnJ2xGu
-         M66jMq5WpNkQAi4OSBYauNyGX4uWu2jykjnmfRk6lsGju4aiXtlcPnB19Lfc/qvgQXrR
-         9nKA==
-X-Forwarded-Encrypted: i=1; AFNElJ9hJ53tiahxWtbnb2rp9eY/s/pKr6/Lf7utvjfnzx0xdsqHpgpgX08A29I4xTmfrekjdU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+4y4Gf4M6eRlyuKKHe6l1zY/mwMokvR9tgcu8b8flkFMNqxea
-	oOztMTq3GNxaN6La6WIVjQI8XThlQB/5JRIEf+nC4QnWzul/28AzeQzZ
-X-Gm-Gg: Acq92OHnSG3lW3bw2SeW2u02KZRonuuUGnX3b/k+mnkppec9aGVHRbdbX/lDpXCvpXg
-	LMvO99I+8S78hz4/VFWgHsOfzE/qNuJQ496m7A6cv+fX6RrAYaIdYVOaPzMAv+THmOw0A7WhVFm
-	KYxmsKLr725RUMlvExfbuaXTJBjqT9Mlu5dfI9whexVVIO1/MJik1qgcSdsF/yY9VszkoJVgi5e
-	4BadbdvXhtIqPZnggdEZDRIzfLVnOvUWWqL77+ug5ikC3jLJTNSFPhrXcU7du3F3Hvcfr2FF9CQ
-	LroyCzAEKh4BUHqaJuK6GAjxPzfeqRZ0bpwftB8SqtUyTf+yjzuvku+Lzgs7YhCHM8CRVd9WVwb
-	DAkT8H9yrhgaxMcEy2eL/56wpGI4DDR9Zo4u5qEf3azc5uMzJNfQB75Qv7CbLS/UIFVAKjB0PWT
-	93PN6iEBU2y9lY2p2jaA==
-X-Received: by 2002:a05:6a00:1a87:b0:835:3d5e:1dd3 with SMTP id d2e1a72fcca58-844e1ab2741mr3547181b3a.42.1781349231058;
-        Sat, 13 Jun 2026 04:13:51 -0700 (PDT)
+        bh=FGccconlS/lqLJQtEwD7wIomPE1kfVOSxWGYcx0WB2s=;
+        b=qIe4dffl9NJOjioeA4Fqk6MW/AamTRIhNTbNCxe+DxduYrpEFMATle0p/rwiBMaojT
+         WB9kBRxem2ReoTJDSfDzDkbuTGIzu83dlaQq0s737Wtkq5lttS9n7TIyohYV/rdr9Kul
+         G06Xn+Va5K2JIJgJvrCfs6B9hESpAwa39OzWRITD5reBXs7/JJlMXl1+t5SmEmf/3Con
+         iwlGUuJYvxFM+69PLRc/qz2AAjyrbvyLka6UEWrUm+JNxbCmqQjk7ew33t9fu5EBCEDY
+         4NLFm72HCO3d+V4I+5jG0hmoOxmk3NIBazZSoSmwjpy3jg+6WCWCIUwUyYUR7JuRGLfk
+         BLxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+nZR06mQKt+O+KOdEdrcioFVX7NoVYJ9fi2DC8WxdFhM2vrzTCBaDrJaCXADqgy4U3RHw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxthBHkjRT9HARdKRMmewCRNKMCV/0x/uVjM0aZGR9mgXWiDWyK
+	iJM6tGAQrWpSVaPNGBB/exfurOfUI1ukzkWp0MfPDfSsBvnNVvz5XOGp
+X-Gm-Gg: Acq92OFMbxHrGUD9RtOmArxY6EOIJjVxypKmLW/s5Lxd8jll6W0/rA3nkPEQj3kc0ZF
+	sdisYNBghYk3aoDqBTPJZMx2EqyAZGM+xhJ/VeiQ8lifNsDs0gOEsv3L1ZhX7mwKKE3GVZyX+ww
+	gDmeTONXmdaMpXcCECrCRUPolbEmYjfMg3F55jI/KNSvVajsGTwCM4VUyIZn1v91rnOR8yo4cfK
+	8ZM49OpcZqukuFDqs3Xc++DvSff7Q7Hx/pd3I7G+9g+rDp/h/NUu0faSro3fB9y7LiEV0EfTw0d
+	3gVS+OdfaISGld4Ioz+0HdikNUwEWG3EbJX89fUOQbHL7XXz3ImA3oNG/yF6Kqulx6v3woHMnKp
+	AdSqXhv/4q/JVrRmH1adUxXqlwmZN7aC+DER8YbbInqRKHLajpjSmmcRZR0R2TG7qzECPI1JfS9
+	HLzlfeC/WCdnG4mL+Gng==
+X-Received: by 2002:a05:6a00:9514:b0:842:6fce:6171 with SMTP id d2e1a72fcca58-8434ce50e1amr6839535b3a.3.1781349242409;
+        Sat, 13 Jun 2026 04:14:02 -0700 (PDT)
 Received: from laptop ([175.204.13.24])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434b05921bsm4759876b3a.59.2026.06.13.04.13.48
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434afd100esm5663874b3a.34.2026.06.13.04.13.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2026 04:13:50 -0700 (PDT)
+        Sat, 13 Jun 2026 04:14:01 -0700 (PDT)
 From: Woojin Ji <random6.xyz@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	bpf@vger.kernel.org
 Subject: Re: [PATCH bpf] bpf: Track spilled zero scalars for var-off stack reads
-Date: Sat, 13 Jun 2026 20:13:46 +0900
-Message-ID: <20260613111346.271837-1-random6.xyz@gmail.com>
+Date: Sat, 13 Jun 2026 20:13:58 +0900
+Message-ID: <20260613111358.272079-1-random6.xyz@gmail.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DJ6MABD6AW71.4585Y3MKTIGC@etsalapatis.com>
-References: <DJ6MABD6AW71.4585Y3MKTIGC@etsalapatis.com>
+In-Reply-To: <76cf1da72418d905cfd52dc9e0efa7c37cf8ba76.camel@gmail.com>
+References: <76cf1da72418d905cfd52dc9e0efa7c37cf8ba76.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,23 +84,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 11, 2026 at 07:43:12PM -0400, Emil Tsalapatis wrote:
-> Correctness of the patch aside, is this a problem ever see in real
-> programs? Unless I'm missing something this is extra complexity in the
-> verifier to address a theoretical possibility.
+On Fri, Jun 12, 2026 at 03:27:42PM -0700, Eduard Zingerman wrote:
+> On Thu, 2026-06-11 at 19:11 +0900, Woojin Ji wrote:
+> > mark_reg_stack_read() currently treats a variable-offset stack read as
+> > known-zero only when every byte in the read range has STACK_ZERO type.
 
-I don't have a confirmed deployed-program regression at this point, so I
-will not present this as a production regression.
-
-I did check whether the pattern is reachable from normal C codegen. A
-small helper-based BPF C reproducer is lowered by clang 22.1.6 at both
--O2 and -O3 into the spilled scalar-zero plus variable-offset stack byte
-load pattern. The unpatched verifier rejects that object after the loaded
-byte becomes imprecise, while the patched verifier keeps the zero fact and
-accepts it.
-
-Given that, I changed the target from bpf to bpf-next for v2 and added
-this context to both the cover letter and the 1/2 commit message.
+Thanks, I rebased the series onto the current bpf-next and split the
+selftests into a separate second patch for v2.
 
 Thanks,
 Woojin
