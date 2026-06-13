@@ -1,34 +1,33 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3BF319601;
-	Sat, 13 Jun 2026 09:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B9032B115;
+	Sat, 13 Jun 2026 09:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781343237; cv=none; b=VWieEegdDoaL+ZDo30nwsQJ99iEUbXXTXxWGKE8CSdDacUS9G1ZdtjtTc92mEk8g8W7d4noKeS4fVJ4XQA/1c2Tc6Bc8rOWn3XZIHeRPYsaDIg56vr7OhPVtjXg+k6qggVOqEQT4xJ3kQtPfq3JldLuf1GzMyas8ZNsE4OMY6cU=
+	t=1781343239; cv=none; b=SMhW0uO6jcbaeElpsvng5yF+9KCMttrepDVzVBTO5vV3WxT9GcGexfi44EVAN2DeFzsOViYsIXf7AUU7nFK3wHf5txr+v0swFKI519qPtROJoQa1erUQVOCV6t3nrVj0OYMk+qOG8uIgvrJXLhCG+EpCSuugQC5WaYdHHhJiFew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781343237; c=relaxed/simple;
-	bh=kNNImhD37BvWpcdlX5GY4MacUV41wLiV6qX/QHjr45s=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 In-Reply-To:References:To:Cc; b=f/0KLSv3VpSHB7UEhP9SI/tkf8EVF7b1fHeuT1IAEL2iMPpEQZwJkI8++bx1Z7d32shzuyJO9MeSyQ8ExQXzfoEy3WK56bhA95rNFdAiKsV/di54JxyEd7K0tANRYsUplbtLVcoJVmG1hrWZYOLKbPBxy2b0XWtJq6bM9GLCdKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=lXS5Hc7P; arc=none smtp.client-ip=162.243.161.220
+	s=arc-20240116; t=1781343239; c=relaxed/simple;
+	bh=wQWDW/hWzSxaSX86E8RPR9Sf16S+QxCzaYcRXjhmW9I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jpkcuqH/BybdPHlrgXD9XX+tX38kyoKqEr0I+96Djmar8d3maq+gfLZGn5i6C4qghosFQs50Tz1HGm96guc1oRapQwjf5ZGq1jZkR0AaTc0eWFbDvBBsvSm5wLngDEAYH+yGdwXRBvbgesNlgItRjflvl4NgOShX/q4RdGr7sZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=UKcMn+v6; arc=none smtp.client-ip=52.229.168.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="lXS5Hc7P"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="UKcMn+v6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	In-Reply-To:References:To:Cc; bh=QrI11tozgugh0E+hoBVmvLCggPJX5Wl
-	q6qP4G9d79EQ=; b=lXS5Hc7PttIVtnRmrimQmzHZ77GEMMQk5s9RA9GJ4XB63uQ
-	6Krpci2jxKgC5s+00FoGLB5tZTqm9ev2G9YvFMiNTMxtiklox7WZYEj3St7GdSdQ
-	wdmbVRZvOjbEeUG01xX+ZI17BuJXnwsKnJM6OfyNtrrlt0I9yv0tbZU6iPLA=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=zy0pZFrvI2JW/FXoq918GmjuWgYA9IE
+	tZSLGnRKtlww=; b=UKcMn+v6spRnWUEopocxsxla09W5pp3x2wd6kOmGqf87dlZ
+	cByUhXrXFTRixMDD3SMsUoogS251+2hnAlEMC1r9mKNjTFefgfGJHGucONtz51CM
+	VISyl99C6o6NHcf0s7sNDWLZ6iwpmz1VL7FfcwwQVCaA1rwBaWm8+qxRmInc=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web3 (Coremail) with SMTP id ygQGZQB3wo_8Iy1qpi9lAg--.5250S2;
+	by web3 (Coremail) with SMTP id ygQGZQB3wo_8Iy1qpi9lAg--.5250S3;
 	Sat, 13 Jun 2026 17:33:48 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next v2 0/2] bpf: Enforce gotox targets against subprog
+Date: Sat, 13 Jun 2026 17:33:45 +0800
+Subject: [PATCH bpf-next v2 1/2] bpf: Enforce gotox targets against subprog
  bounds
-Date: Sat, 13 Jun 2026 17:33:44 +0800
-Message-Id: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,13 +36,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPgjLWoC/3WOyw6CMBBFf4XM2iFteQiu/A/DorQD1GghtBAM4
- d8tEJcu72POnRUcjYYc3KIVRpqNM70NQlwiUJ20LaHRQYNgImc5T7BhHJnAtvf9gvXQoKXF4yz
- QkdVYqLRQZZJdtSYIjGGkxiwH/wG/NlRn4qb6Scrv+L3bGef78XO8MvPj4lxl5b/VYGKdplzni
- eRZVt7f0rxc7J2xbTfJmPQUKwvVtm1fY1/7veoAAAA=
-X-Change-ID: 20260613-f01-02-gotox-bpf-next-v2-send-8c48c9357dde
-In-Reply-To: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
-References: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+Message-Id: <20260613-f01-02-gotox-bpf-next-v2-send-v2-1-ff980bc5a329@mails.tsinghua.edu.cn>
+References: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
+In-Reply-To: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -52,17 +47,17 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781343229; l=1956;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781343229; l=2930;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=kNNImhD37BvWpcdlX5GY4MacUV41wLiV6qX/QHjr45s=;
- b=Yq5+dhNQ0bSybeeLl7uSa8XVf2e5TSKYue0bcikSUoPooEjyPZaUzpmLapinPDz+ZahVPUf3F
- iw2I7yxN0OaDwmOXsZjMyZQJzA2vl+uMqOan2p3GgONhGwcV94i7mZL
+ bh=wQWDW/hWzSxaSX86E8RPR9Sf16S+QxCzaYcRXjhmW9I=;
+ b=InFQ37QONsEOHtvmbqrxeLjrXwIRg4Zah008AWJfPk1yqNNT1mp173/l+H1G2/YsQzDcTqwHe
+ 1cm7RmQ06hpBOr9agi/sqVVHaOS8aO+S74htN5KU+HK3Au8zB0zv2Q1
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ygQGZQB3wo_8Iy1qpi9lAg--.5250S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur1kuFWDGr4fKF1UZryxKrg_yoW8Zr18pF
-	y8Zr4fKr48tayIg3WayF48X345CFZ5Gry5GF1xtw1fJr15KrykKr4fKa4avF9xJFWrZ3y8
-	Way0qFsxWF4DZFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:ygQGZQB3wo_8Iy1qpi9lAg--.5250S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF4xuFWrCF4xJryUAr1DWrg_yoW5Ar18pa
+	1vg3s3tF4kJFZ2grnFyF48A3y3KFWjg3y5CrWxX34xtw15t3s8KFW8KF95ZF9xAF4Skr1I
+	9FWjv39xG3y7AFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
@@ -76,55 +71,80 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7ur1kuFWDGr4fKF1UZryxKrg_yoW8Zr18pF
 	v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
 	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
 	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0YXd5UUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQARA2oshq+BhQAEs8
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgIRA2osh5yAmgABsU
 
-For gotox, CFG construction models the indirect-jump target set in
-insn_aux_data->jt, but do_check() later follows targets from the runtime
-PTR_TO_INSN register's own INSN_ARRAY map. If the same gotox can be
-reached with PTR_TO_INSN values from different maps, do_check() can accept
-a target outside the subprog that CFG allowed for the gotox instruction.
+CFG construction records the modeled gotox target set in
+insn_aux_data->jt. It includes INSN_ARRAY maps based on whether the map
+target is in the current subprog. check_indirect_jump() later validates and
+follows the current PTR_TO_INSN register's actual INSN_ARRAY map. The
+verifier does not check that targets copied from that map stay inside the
+same subprog as the gotox instruction.
 
-On x86, that can transfer control into another subprog without a matching
-BPF call frame and crash when the program is run.
+This lets one gotox instruction observe two different INSN_ARRAY maps. CFG
+can select a map whose target is in the current subprog. Another path to
+the same gotox can carry a PTR_TO_INSN value from a map whose target points
+at a different subprog. The verifier then accepts a cross-subprog edge that
+CFG construction did not allow for this gotox instruction.
 
-Fix this by rejecting gotox map targets outside the current gotox subprog.
-Add a regression test covering the two-map cross-subprog case.
+On x86, gotox becomes a raw indirect jump in the JIT image. Accepting a
+target outside the gotox subprog can enter another subprog without a
+matching BPF call frame and crash when executed. Validation observed a GPF
+in bpf_test_run().
 
-Validation:
+Fix this by requiring every target copied from the actual PTR_TO_INSN
+map to stay within the subprog that contains the current gotox instruction.
+Reject the program before pushing verifier states for any cross-subprog
+target.
 
-  unpatched bpf-next 7bfb93e3475b with the new selftest:
-    bpf_gotox/check-cross-subprog-gotox-target: FAIL
-    cross_subprog_gotox_prog_load: actual 23 != expected -22
-    __TEST_PROGS_RC__=1
-
-  patched bpf-next 7bfb93e3475b + this series:
-    bpf_gotox/check-cross-subprog-gotox-target: OK
-    ./test_progs -t bpf_gotox/check-cross-subprog-gotox-target
-    Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-    __TEST_PROGS_RC__=0
-
-v1 -> v2:
-  - Validate gotox runtime targets against the current subprog bounds instead
-    of scanning the CFG jump table.
-  - Fix the selftest expected error from -EACCES to -EINVAL.
-
-v1:
-  https://lore.kernel.org/bpf/20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn/
-
+Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
-Nuoqi Gui (2):
-      bpf: Enforce gotox targets against subprog bounds
-      selftests/bpf: Add cross-subprog gotox target coverage
+ kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
- kernel/bpf/verifier.c                              | 21 +++++++
- tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
- 2 files changed, 94 insertions(+)
----
-base-commit: 7bfb93e3475be9de894f1cecd3a727d3e1649b03
-change-id: 20260613-f01-02-gotox-bpf-next-v2-send-8c48c9357dde
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index eb46a81a8c51..98d3fa2f162a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17145,9 +17145,11 @@ static int indirect_jump_min_max_index(struct bpf_verifier_env *env,
+ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ {
+ 	struct bpf_verifier_state *other_branch;
++	struct bpf_subprog_info *subprog;
+ 	struct bpf_reg_state *dst_reg;
+ 	struct bpf_map *map;
+ 	u32 min_index, max_index;
++	int subprog_start, subprog_end;
+ 	int err = 0;
+ 	int n;
+ 	int i;
+@@ -17188,6 +17190,25 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+ 		return -EINVAL;
+ 	}
+ 
++	subprog = bpf_find_containing_subprog(env, env->insn_idx);
++	if (verifier_bug_if(!subprog, env,
++			    "gotox insn %d is outside subprog bounds\n",
++			    env->insn_idx))
++		return -EFAULT;
++	subprog_start = subprog->start;
++	subprog_end = (subprog + 1)->start;
++
++	for (i = 0; i < n; i++) {
++		u32 target = env->gotox_tmp_buf->items[i];
++
++		if (target < subprog_start || target >= subprog_end) {
++			verbose(env,
++				"gotox target %u from map id=%d is outside subprog [%d,%d)\n",
++				target, map->id, subprog_start, subprog_end);
++			return -EINVAL;
++		}
++	}
++
+ 	for (i = 0; i < n - 1; i++) {
+ 		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+ 		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
 
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+-- 
+2.34.1
 
