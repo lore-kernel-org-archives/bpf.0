@@ -1,222 +1,73 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A0C38B14C
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 16:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7433E4501;
+	Sat, 13 Jun 2026 17:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781367928; cv=none; b=LfLStRZUg8W3ovX7nLtKyvKVz2wCy8QwfURKOdE9yRGhBKwH+3k+RlUPclhA14OAf+FPLtJ94cMQL8PDyuD68P1+gyL4Zlaq8eFKg4uhL13gpTH3dSN5C5mTUKppJepiuhs2Uf8FCiWuZL9uVLmWkjkUXeSgUMwl9PznnlerbwY=
+	t=1781370477; cv=none; b=ZrUBpnHQHx1FEJlcagKcMKsBmwWM/ccoCjba+8wACqRrPVJSBFgiz+sm8BRjUnaIqE6TjoqGqZ0rHZw6uXjN8JoN9CVRtlJaaKJDCjelSAf1wqua9mO7gUocgHy/1x1iaJ+2vzhsjyjzGkdZZM4hqJB9j+tSZinIm4O4qz65FZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781367928; c=relaxed/simple;
-	bh=Tgz5fbE2F6BnrKPj3NravBmADjbAGqgeaiswNj+n42M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rs9+3o6MW3UwF5ix3vK+ykt85bqgPTP63kutb7iQSizxGDcffMQjFf7H6NVigaDc81xKEuApM6cIQ5fKDA06/wFL/00kojEsWdKVCBE30NL9KzFV3OlW/QQzBbMd9LAGxtKKEE6hywoMCihssskHNGOBkLj0LtD8FrYh0a5NrlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wB6dZb11; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781370477; c=relaxed/simple;
+	bh=Dqm6AL3CLEzNOgzwcPR03gSbOJANOwQzOOBM3duUxm8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RWO3Ry1H160UWAfvzDEw4SWLFIimAJD/4gIi1kUiYIDRuZWN9/6meCnzHZMEqc4pGcDgpRPt9beHk8JSrVMoK/yFxDYjNBZ6TY/Nlv9c5Km4x5fQgYR25mcvTsnnfqgqV1XQx5ntnfA62TvDPtdtkF+1+B0xWFBy6Eq6+6drB4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hE8VkXE4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wB6dZb11"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781367924;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eEq9q/jnE/hhTQbdBCDPVl5f7XKJflv20xFeGiECkR8=;
-	b=wB6dZb11onUfE5CbpWiuuTENg6gLRBjGR9qbtHQnN9+ooSJWpO6sETM7nzLgMTKdc/GO8L
-	MeVZNzfyjm6oZLJpN4KvYTFiM0lDYNo+WKYssAPgKZytPo/kbs4NePf8JueA7ObEsnZk1Y
-	95gvVjyOEhLk093WNd1ndDfG7pFFhLQ=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add test to verify the fix for bpf_setsockopt() helper
-Date: Sun, 14 Jun 2026 00:24:43 +0800
-Message-ID: <20260613162443.60515-3-leon.hwang@linux.dev>
-In-Reply-To: <20260613162443.60515-1-leon.hwang@linux.dev>
-References: <20260613162443.60515-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hE8VkXE4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449ED1F000E9;
+	Sat, 13 Jun 2026 17:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781370475;
+	bh=Dqm6AL3CLEzNOgzwcPR03gSbOJANOwQzOOBM3duUxm8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=hE8VkXE4ZBTtuORu9ZgLuIwT7WvzNnBTzZYtIXZPhJ9ihtv7Ck5x0DjKjhVAZUrO7
+	 F1NPB/6Z3QlAPDGsa5Ff03WyDKmBVTz8Wik1hSl+k/Ghrx+HFyTZ3UhQe3cVo+94a8
+	 d1i0tmAxoSgIOO2/SSaO3x3yBtOpdBKkzPNmJn8X7sngJSfvn0kVo0MKTo6edF1QLn
+	 ECbxuSahxjB71/qrrc4APGVw1eitBX+45sTql3PqPo6e1zD6yN48+l7b2X3FlnEjhm
+	 udj0CHJX5VEmSqWdAMTq4Xt4hO7Xw+CHa4aFc3ZcdrR7uuhV/7i6YELndil1GNzzNY
+	 EIxOIxIxd2OrA==
+Content-Type: multipart/mixed; boundary="===============4728993374088295216=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <0f02feb3541edb69219f9f3b5dd90dc139e1554b325983fc4bb016e187cdaa7e@mail.kernel.org>
+In-Reply-To: <20260613162443.60515-2-leon.hwang@linux.dev>
+References: <20260613162443.60515-2-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Fix bpf_get/setsockopt to tos for ipv4-mapped ipv6 socket
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,ihor.solodrai@linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,zhoufeng.zf@bytedance.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 13 Jun 2026 17:07:54 +0000 (UTC)
 
-Verify the fix by:
+--===============4728993374088295216==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-1. Attach cgroup sockops prog.
-2. Build a tcp connection using ipv4 addr in ipv6 socket.
-3. Verify the return value of bpf_setsockopt() helper.
+> When TCP over IPv4 via INET6 API, bpf_get/setsockopt with ipv4 will
+> fail, because sk->sk_family is AF_INET6. With ipv6 will success, not
+> take effect, because inet_csk(sk)->icsk_af_ops is ipv6_mapped and
+> use ip_queue_xmit, inet_sk(sk)->tos.
+> To relax this restriction, allow getting/setting tos for those possible
+> ipv4-mapped ipv6 sockets.
+> Fixes: ee7f1e1302f5 ("bpf: Change bpf_setsockopt(SOL_IP) to reuse do_ip_setsockopt()")
+> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 
-Assisted-by: Codex:gpt-5.5-xhigh
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+In an earlier review round it was suggested that "bpf_get/setsockopt
+with ipv4 will fail" should read "bpf_get/setsockopt with SOL_IP will
+fail", since the call uses the SOL_IP level rather than an ipv4 option.
+
+The body here still reads "with ipv4 will fail" - was the s/ipv4/SOL_IP/
+reword intended to be picked up?
+
+
 ---
- .../selftests/bpf/prog_tests/setget_sockopt.c | 78 +++++++++++++++++++
- .../selftests/bpf/progs/setget_sockopt.c      | 23 ++++++
- 2 files changed, 101 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c b/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-index 77fe1bfb7504..4e91d9b615ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-@@ -199,6 +199,83 @@ static void test_nonstandard_opt(int family)
- 	bpf_link__destroy(getsockopt_link);
- }
- 
-+static int connect_to_v4mapped_v6_fd(int server_fd)
-+{
-+	struct sockaddr_storage addr;
-+	struct sockaddr_in *addr4 = (void *)&addr;
-+	socklen_t addrlen = sizeof(addr);
-+	struct sockaddr_in6 addr6 = {};
-+	int fd = -1, v6only = 0, err;
-+
-+	err = getsockname(server_fd, (struct sockaddr *)&addr, &addrlen);
-+	if (!ASSERT_OK(err, "getsockname"))
-+		return -1;
-+
-+	fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket"))
-+		return -1;
-+
-+	err = settimeo(fd, 0);
-+	if (!ASSERT_OK(err, "settimeo"))
-+		goto err_out;
-+
-+	err = setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &v6only, sizeof(v6only));
-+	if (!ASSERT_OK(err, "clear_v6only"))
-+		goto err_out;
-+
-+	addr6.sin6_family = AF_INET6;
-+	addr6.sin6_port = addr4->sin_port;
-+	addr6.sin6_addr.s6_addr[10] = 0xff;
-+	addr6.sin6_addr.s6_addr[11] = 0xff;
-+	memcpy(&addr6.sin6_addr.s6_addr[12], &addr4->sin_addr, sizeof(addr4->sin_addr));
-+
-+	err = connect(fd, (struct sockaddr *)&addr6, sizeof(addr6));
-+	if (!ASSERT_OK(err, "connect"))
-+		goto err_out;
-+
-+	return fd;
-+
-+err_out:
-+	close(fd);
-+	return -1;
-+}
-+
-+static void test_v4mapped_v6_ip_tos(void)
-+{
-+	struct setget_sockopt__bss *bss = skel->bss;
-+	int sfd = -1, fd = -1, got = 0, exp = 0x1c;
-+	socklen_t optlen;
-+
-+	memset(bss, 0, sizeof(*bss));
-+	bss->v4mapped_v6_ip_tos_enable = 1;
-+	bss->v4mapped_v6_ip_tos_ret = -1;
-+	bss->v4mapped_v6_ip_tos_val = exp;
-+
-+	sfd = start_server(AF_INET, SOCK_STREAM, addr4_str, 0, 0);
-+	if (!ASSERT_GE(sfd, 0, "start_server"))
-+		goto err_out;
-+
-+	fd = connect_to_v4mapped_v6_fd(sfd);
-+	if (!ASSERT_GE(fd, 0, "connect_to_v4mapped_v6_fd"))
-+		goto err_out;
-+
-+	ASSERT_GT(bss->v4mapped_v6_ip_tos_cnt, 0, "v4mapped_v6_ip_tos_cnt");
-+	ASSERT_EQ(bss->v4mapped_v6_ip_tos_ret, 0, "v4mapped_v6_ip_tos_ret");
-+
-+	optlen = sizeof(got);
-+	if (!ASSERT_OK(getsockopt(fd, SOL_IP, IP_TOS, &got, &optlen), "getsockopt_ip_tos"))
-+		goto err_out;
-+
-+	ASSERT_EQ(got, exp, "ip_tos");
-+
-+err_out:
-+	bss->v4mapped_v6_ip_tos_enable = 0;
-+	if (fd >= 0)
-+		close(fd);
-+	if (sfd >= 0)
-+		close(sfd);
-+}
-+
- void test_setget_sockopt(void)
- {
- 	cg_fd = test__join_cgroup(CG_NAME);
-@@ -238,6 +315,7 @@ void test_setget_sockopt(void)
- 	test_ktls(AF_INET);
- 	test_nonstandard_opt(AF_INET);
- 	test_nonstandard_opt(AF_INET6);
-+	test_v4mapped_v6_ip_tos();
- 
- done:
- 	setget_sockopt__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
-index d330b1511979..636a7cd8e2fa 100644
---- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
-+++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
-@@ -387,6 +387,24 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 	return 1;
- }
- 
-+int v4mapped_v6_ip_tos_enable;
-+int v4mapped_v6_ip_tos_ret;
-+int v4mapped_v6_ip_tos_cnt;
-+int v4mapped_v6_ip_tos_val;
-+
-+static void test_v4mapped_v6_ip_tos(struct bpf_sock_ops *skops)
-+{
-+	int tos = v4mapped_v6_ip_tos_val;
-+
-+	if (!v4mapped_v6_ip_tos_enable || skops->op != BPF_SOCK_OPS_TCP_CONNECT_CB)
-+		return;
-+	if (skops->family != AF_INET6)
-+		return;
-+
-+	v4mapped_v6_ip_tos_cnt++;
-+	v4mapped_v6_ip_tos_ret = bpf_setsockopt(skops, IPPROTO_IP, IP_TOS, &tos, sizeof(tos));
-+}
-+
- SEC("sockops")
- int skops_sockopt(struct bpf_sock_ops *skops)
- {
-@@ -401,6 +419,11 @@ int skops_sockopt(struct bpf_sock_ops *skops)
- 	if (!sk)
- 		return 1;
- 
-+	if (v4mapped_v6_ip_tos_enable) {
-+		test_v4mapped_v6_ip_tos(skops);
-+		return 1;
-+	}
-+
- 	switch (skops->op) {
- 	case BPF_SOCK_OPS_TCP_LISTEN_CB:
- 		nr_listen += !(bpf_test_sockopt(skops, sk) ||
--- 
-2.54.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27472657322
+--===============4728993374088295216==--
