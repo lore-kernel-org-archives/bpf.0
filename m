@@ -1,57 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B5A2C3768;
-	Sat, 13 Jun 2026 17:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781371556; cv=none; b=Xw304U/AEv/OKSLOUUkl2zABlZqnwMvm7/slUKXw71AMbhp0ORk6nAAD/7QEoa7+I4Xrrenm12OetfzYZqiEjFlOPt2ayiBLl5GoFDzz8LUl3dxlMKBHP0h/LLwhkjBmOTvauZYCM1k6dv9d7bBobBV+SwW5lsiEr65df85jS9k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781371556; c=relaxed/simple;
-	bh=XQt8n1j62y4Z33sOEEHpLj2LyMhlFYqQz2yKhwdHTxE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bm6zL4gpbi7yAescsh+na0OhTwSLi2J+tCQG5a9NBVUjnbr0zR/PNhgI0A9OFH4dXHJDIipV6w5mAwga/AMaqYVygf9vA964s284eWXPhtYUFllVqLZK13bvTgMq4MOhLmOJRu67d3Buci/k7WGZRSheu+qrf3gumAQDsbJVv9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+lmQSVS; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AFF2D9ED1
+	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 17:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781373228; cv=pass; b=Eh0xsOwSN2THNzFoBZRmfWaiQJJT6JHQra82kZS8XWnnB2HANqeSo/I0cmpIkyZlF2xwYZmLsrLsqkeHd+7v8mVoxsij2wOoD76LAe9xVm35M24LuzebZR7PYATZHocNMWRZoXaTqRZPlN5qvzN5zsAOHD3TfgchevyRe8VhfsU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781373228; c=relaxed/simple;
+	bh=cHOHNOyUyYBfHV0o1Nf3hriSXuDIGz3neaaapYBjf38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qr5Z2ksTNcy3WEg/+6DdL/lXeTK7nbWExQey/XVt7S3VGKFdlsfn+/7XXgJbgEy/UcoUN+VyQZji+Puv2GUXVzZ2wkeudxxpeI1OBJhHJ0paMJV8vmDh3AlgXYUTF09s+oANdmsuJSiq7SIDna0bHpB/pAITw20jhCq1PW06ank=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OexkXffG; arc=pass smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+lmQSVS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61EF1F000E9;
-	Sat, 13 Jun 2026 17:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781371555;
-	bh=XQt8n1j62y4Z33sOEEHpLj2LyMhlFYqQz2yKhwdHTxE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=M+lmQSVSP5qBsE4r0JwtuP00ps8iY6kFWwQnKCoYfE+tXicK6gwVqXw6tYfgHI8Uj
-	 SOwbJxyybi8KdRTeMWT44alCU0z/pfRBrYJx6RDp6pS6zNs0u+Ne/sseIw+KiP9oGs
-	 hY5N9XWXOHAxAE36TdKhjyFDSUw7Lo8mhtxG5rot0bMP8QxAC/HqsNyOmY93FKEtl5
-	 e8/bPcQelAJHaTGOLumVF78EhSGd46DRmUFw0Lnr11a/+QwnzAXn2SzPsChFREgW5m
-	 GOzxXKHSAnqWa2nRhIoyCPNwF9zRYm/Hu4fCLrScqHE2Z0cATfNKhF46Rzj0nqV9k4
-	 yp27bqABvZdHA==
-Date: Sat, 13 Jun 2026 10:25:49 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, davem@davemloft.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org,
- jiayuan.chen@linux.dev, toke@redhat.com, menglong.dong@linux.dev,
- emil@etsalapatis.com
-Subject: Re: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on
- private skb
-Message-ID: <20260613102549.0061a875@kernel.org>
-In-Reply-To: <20260612114032.244616-2-sun.jian.kdev@gmail.com>
-References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
-	<20260612114032.244616-2-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OexkXffG"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c85825bbc4fso1246554a12.2
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 10:53:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781373226; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XFJ3kNSBM/gQxg75pmwMJ8Bk4qjgMs1viiX/L/7kxod3JMYrqUlgw4CJOYdtRkNuuP
+         AnGkQ3fqNJyI6V3YD6GebYsHUVIBy/5I2G0J17Ty63RtIr7Jk/FnFU0CMc2eTBXW88Kt
+         B5IHHq3NtuGt8/F4KNM5tshWI2TFawBlIIkBhxYDPajtaXWPCXwg3qTcUlzWd1jo3ET5
+         0KUspIgtGy1gcgTQMfOXElRAZIAOzz0z97smm1YvYNHbiBlpnPogY99/Bs1lW/6fO1GA
+         /uITcgWMefrCGqtbZZkGRVW1WZDNXjrQyCDIqfSQIk6hlTKuLqFxBYaBRsBDghCFrQww
+         Zsww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=cHOHNOyUyYBfHV0o1Nf3hriSXuDIGz3neaaapYBjf38=;
+        fh=I3Zdq+sBtJm01Atz3mSF67XvVAf75jx3ZsrrjaWKFhU=;
+        b=XGuBCbgnjdURcI7ii7f5o+0wRc9QaReF7F+Ic4LXKtn3QMLzjQ5QpWYjuWv4v9sIoZ
+         Y0K8nT6fBon5aqIsgY4XpmJNKK0No5b2aV9q8ZIGZhaPtqHGsj3MZo9Le27UGPjs0jZ5
+         cdnHLJg1DqfzfmKKqz3P3hKoWB9kxmQmtneaujcMeSXtqupl1q4E1W35HZMqKBAWunvp
+         mpWbUX/+Z6TK/uXcuhGUKnpRf6wv/u7WCarHWd9blpgymmMaMpFhrRSSUQFpto0743cw
+         eO74uLnq/WcAYW1Q4B8BJ/CwWG+8UNUc7z0IjqN5XIa61zlDIOXGIt3CH0gVmNAdGxQY
+         QUjw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781373226; x=1781978026; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cHOHNOyUyYBfHV0o1Nf3hriSXuDIGz3neaaapYBjf38=;
+        b=OexkXffGeEZa7FMR2Kr9By6VvGTV4HKf7rbZtOaIBuiQqRxP8BqdeFsTAhUYuMDuyV
+         wI/Kc9ATBTeWgAqZgvV1dTK32g4Mk8zCJlvW7Q2eTtp4ZOC6PnxBNu1U+XRdXRS8krRq
+         19i2wpqsPNlOIMaCXmpmTg7pEnj/v2O3gdpv2q/gMy66OJ5BABTDJFDfNob085tqYtZO
+         TFqk/WZRYI7DfWe3tibOPNcjqmqnLkm20pzui/k+w4VOAFVMMsxKwXp1xQMQX8kMsxed
+         nLa+0BtxQdKLCkuoQcd8x3wuM02EFZkkfSoWL6UAcdQkiazCIi55W91zx0Y72DoAY4s6
+         iFCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781373226; x=1781978026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cHOHNOyUyYBfHV0o1Nf3hriSXuDIGz3neaaapYBjf38=;
+        b=PAY9WGpdDRKYv4qPmDFAGKcwkKUORBWf42s5JjDuMhGMSjC0axF3PwsVPN2RzCZCBB
+         rcoMs4zUUbkwzlOtn+HB9i1NNs/0vJhlJFd78J33Zwu1rX2Ph3+nMZs4dOy6y1Oj9izC
+         VTSVtvDkHlWZzrO+7hrn5v9PT55cRLJwUheaXd7Bs34yU7nfmY/K1rXQBRa+fre1gS4Z
+         zZvmyhvojvGDVh0FNByrBUIGsYtux2R21v7DvlurBYdSFkhgJlRVcpQbp8faR5prCpgP
+         p0N8cfCczV/pjBcTlKK8P2WNuLVTPjii2NHu2G++WkslB6ocVHandHCrUMacTDrVuGG9
+         /A8w==
+X-Forwarded-Encrypted: i=1; AFNElJ+Fv1Q2m02/5lBmizWIatsDZLmvYlGrRIyslcuAEM31oCTd40Sj5AGESUoOJdTbAM2J1tE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvg8gA0EJh4Wips+aQPRSjo9aUMq0Xr+gfoaGmrTEXptUiS9Fq
+	ZL0YREHq8tcQ9w7vTu/cP6bvvT3YOmoFGv52SOm71bVM4EiDVOdB2hnue8wRVK9VScGGuKYLkiD
+	T0AaT1IJNp1cXk02nyzvmfF60qEmS8OA=
+X-Gm-Gg: Acq92OEZU/Yt1iNuCuIc1sIIvPdZZbHWEFsmUwSU/PNAGo/tQSd2/3Fm9S9WQI/y0se
+	/ROMJBSIX7BkSVdL5jKiQxe9T7npqqE0z3jmpd+iGFgsJ9nsX1WF+G+Yk4jR6X2TtPMPDQth91M
+	CdI0cmiUt9IbKGp5n/wAHesLS2Q37NbQJl8Wsf116zsQfo/59WmnK2mkQU8ZGYjliyKQwsjmT8k
+	CvuD62pSwVgI+bX4fIHFhWPPAV3mbNd06DCs0+JBWR6UW0NRelLR9X777JUx6Rd/PZMzoiRfsKg
+	g8ZjlKX+YqBJAISXxrsXlwrD2fyBMoID9ARm7zFsNosh/heDxsgjQhaTvKnqBUgr1B60Y1iZ8nI
+	Y/UsrcO3UwMa7ocoFs7CY2UFlR1amzGOfXM0=
+X-Received: by 2002:a05:6a21:487:b0:3b4:b2d7:c146 with SMTP id
+ adf61e73a8af0-3b7840eb437mr8380305637.21.1781373226415; Sat, 13 Jun 2026
+ 10:53:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260612114032.244616-1-sun.jian.kdev@gmail.com>
+ <20260612114032.244616-2-sun.jian.kdev@gmail.com> <20260613102549.0061a875@kernel.org>
+In-Reply-To: <20260613102549.0061a875@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 13 Jun 2026 10:53:35 -0700
+X-Gm-Features: AVVi8Cf92xxqHllCzGcs1Wzm4G1Syt1-QC_TVzr88S1xZSnhQVts2Q0JSSNR-Ec
+Message-ID: <CAADnVQJyOR0hppTmhbTRS8Sp5ci-L0fmQ6V+R9eiJDop_95rVA@mail.gmail.com>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Run generic devmap egress prog on private skb
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Sun Jian <sun.jian.kdev@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Menglong Dong <menglong.dong@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 12 Jun 2026 19:40:31 +0800 Sun Jian wrote:
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+On Sat, Jun 13, 2026 at 10:25=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Fri, 12 Jun 2026 19:40:31 +0800 Sun Jian wrote:
+> > Suggested-by: Jakub Kicinski <kuba@kernel.org>
+>
+> I did not suggest this
 
-I did not suggest this
+ohh. I didn't follow discussion closely.
+Do you want me to revert the whole set or just remove that line?
