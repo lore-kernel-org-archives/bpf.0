@@ -1,132 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533CA221DB6
-	for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 08:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3BF319601;
+	Sat, 13 Jun 2026 09:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781339869; cv=none; b=OgzTIiZBWmVDyz4F2I6myhN4yp7FcC6yJQjvdV/8IFSfNO/7YMPTXZXQaI1ebzIg/WKs9VlwR9FP0YYXC9ClSvyPSMk34Elrr7aU6FMcoxLgusznnDJScdw0gTd45q6QLOdSmP8XBr4WRd86AJe9zgb66f6sd7A5245tLqRiygk=
+	t=1781343237; cv=none; b=VWieEegdDoaL+ZDo30nwsQJ99iEUbXXTXxWGKE8CSdDacUS9G1ZdtjtTc92mEk8g8W7d4noKeS4fVJ4XQA/1c2Tc6Bc8rOWn3XZIHeRPYsaDIg56vr7OhPVtjXg+k6qggVOqEQT4xJ3kQtPfq3JldLuf1GzMyas8ZNsE4OMY6cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781339869; c=relaxed/simple;
-	bh=l+UdaRbck7sBmkgyy2131wcQdkIFYCYv91wfDFy8zg0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IDmCFTedmO7RKBxoo3DxM94eMk02QYM5h8Ch/5uSp9j1YxuVYsykoFJzs3uC2wVYe4+2CQRSH7yTEDk+dxq2YNWtK6tRV5DtHEHLNsRJeQ4pp/o3Orpkf52PQdNMevzqELWMVUQxdtmPfi2OEcF2VvG0vPVroZLg1xY9U/Fl6qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyewXCL8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781343237; c=relaxed/simple;
+	bh=kNNImhD37BvWpcdlX5GY4MacUV41wLiV6qX/QHjr45s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 In-Reply-To:References:To:Cc; b=f/0KLSv3VpSHB7UEhP9SI/tkf8EVF7b1fHeuT1IAEL2iMPpEQZwJkI8++bx1Z7d32shzuyJO9MeSyQ8ExQXzfoEy3WK56bhA95rNFdAiKsV/di54JxyEd7K0tANRYsUplbtLVcoJVmG1hrWZYOLKbPBxy2b0XWtJq6bM9GLCdKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=lXS5Hc7P; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyewXCL8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2991F000E9;
-	Sat, 13 Jun 2026 08:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781339867;
-	bh=Ucc+cVPg2baYTD/cpkyFwFGoD5pSOePGZt1zyhPronU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AyewXCL8VTUEVgiSHNcid9OPc8vhrn5wWmW8n1rtwBJmoOTSapNkp6O1rXMT/3Q2j
-	 GRNNceYtHk1EHV6BpXxEKyFh4MznCnTnK/P783rf373HRx52m57Spi+waFOAk3AXfP
-	 f/DAyu9PO/9a677vhRSHtzN0xwdUgLl2rqdAV5pL9uumQJvwYA8ngg3xTvr6fxbaqA
-	 4ByeCIYSlS4p1a8VRjckGT2r+vyuhCKuFTh65Y5eRt8k5BEfV0wmjwU7Alj2l7HFok
-	 lQAwk0uT+7m1CRWVU1x90vA2+z/w6muaXQVlp79nxIfAVxEqXGzQMeTwq9kSftlx+T
-	 vl5+/TGoyg45A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: fix BUG_ON in skb_to_sgvec() on a
- resized ingress skb
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260613082442.3252576-1-rhkrqnwk98@gmail.com>
-References: <20260613082442.3252576-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 13 Jun 2026 08:37:47 +0000
-Message-Id: <20260613083747.CA2991F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="lXS5Hc7P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	In-Reply-To:References:To:Cc; bh=QrI11tozgugh0E+hoBVmvLCggPJX5Wl
+	q6qP4G9d79EQ=; b=lXS5Hc7PttIVtnRmrimQmzHZ77GEMMQk5s9RA9GJ4XB63uQ
+	6Krpci2jxKgC5s+00FoGLB5tZTqm9ev2G9YvFMiNTMxtiklox7WZYEj3St7GdSdQ
+	wdmbVRZvOjbEeUG01xX+ZI17BuJXnwsKnJM6OfyNtrrlt0I9yv0tbZU6iPLA=
+Received: from [127.0.0.1] (unknown [101.6.30.195])
+	by web3 (Coremail) with SMTP id ygQGZQB3wo_8Iy1qpi9lAg--.5250S2;
+	Sat, 13 Jun 2026 17:33:48 +0800 (CST)
+From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next v2 0/2] bpf: Enforce gotox targets against subprog
+ bounds
+Date: Sat, 13 Jun 2026 17:33:44 +0800
+Message-Id: <20260613-f01-02-gotox-bpf-next-v2-send-v2-0-ff980bc5a329@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPgjLWoC/3WOyw6CMBBFf4XM2iFteQiu/A/DorQD1GghtBAM4
+ d8tEJcu72POnRUcjYYc3KIVRpqNM70NQlwiUJ20LaHRQYNgImc5T7BhHJnAtvf9gvXQoKXF4yz
+ QkdVYqLRQZZJdtSYIjGGkxiwH/wG/NlRn4qb6Scrv+L3bGef78XO8MvPj4lxl5b/VYGKdplzni
+ eRZVt7f0rxc7J2xbTfJmPQUKwvVtm1fY1/7veoAAAA=
+X-Change-ID: 20260613-f01-02-gotox-bpf-next-v2-send-8c48c9357dde
+In-Reply-To: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+References: <20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Anton Protopopov <a.s.protopopov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781343229; l=1956;
+ i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
+ bh=kNNImhD37BvWpcdlX5GY4MacUV41wLiV6qX/QHjr45s=;
+ b=Yq5+dhNQ0bSybeeLl7uSa8XVf2e5TSKYue0bcikSUoPooEjyPZaUzpmLapinPDz+ZahVPUf3F
+ iw2I7yxN0OaDwmOXsZjMyZQJzA2vl+uMqOan2p3GgONhGwcV94i7mZL
+X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
+ pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
+X-CM-TRANSID:ygQGZQB3wo_8Iy1qpi9lAg--.5250S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur1kuFWDGr4fKF1UZryxKrg_yoW8Zr18pF
+	y8Zr4fKr48tayIg3WayF48X345CFZ5Gry5GF1xtw1fJr15KrykKr4fKa4avF9xJFWrZ3y8
+	Way0qFsxWF4DZFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
+	z4vE14v_GFWl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0YXd5UUUUU==
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQARA2oshq+BhQAEs8
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Returning -EINVAL when an SKB is shrunk by a BPF program causes th=
-e `sk_psock_backlog` worker to incorrectly treat the valid shrink as a fata=
-l error, leading to an unintended broken pipe (EPIPE).
---
+For gotox, CFG construction models the indirect-jump target set in
+insn_aux_data->jt, but do_check() later follows targets from the runtime
+PTR_TO_INSN register's own INSN_ARRAY map. If the same gotox can be
+reached with PTR_TO_INSN values from different maps, do_check() can accept
+a target outside the subprog that CFG allowed for the gotox instruction.
 
-commit 54e4eaf90ac6a727b56c416746a6a961673b62f5
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+On x86, that can transfer control into another subprog without a matching
+BPF call frame and crash when the program is run.
 
-bpf, sockmap: fix BUG_ON in skb_to_sgvec() on a resized ingress skb
+Fix this by rejecting gotox map targets outside the current gotox subprog.
+Add a regression test covering the two-map cross-subprog case.
 
-This commit prevents a BUG_ON when a BPF program shrinks an ingress SKB.
-It accomplishes this by clamping the length to skb->len - off and
-returning -EINVAL if off is already past the SKB length.
+Validation:
 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index e1850caf1a71a..2961178ebd1e1 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -550,6 +550,10 @@ static int sk_psock_skb_ingress_enqueue(struct sk_bu=
-ff *skb,
->  {
->  	int num_sge, copied;
-> =20
-> +	if (off >=3D skb->len)
-> +		return -EINVAL;
-> +	len =3D min_t(u32, len, skb->len - off);
-> +
+  unpatched bpf-next 7bfb93e3475b with the new selftest:
+    bpf_gotox/check-cross-subprog-gotox-target: FAIL
+    cross_subprog_gotox_prog_load: actual 23 != expected -22
+    __TEST_PROGS_RC__=1
 
-[Severity: High]
-Could returning -EINVAL here cause the sk_psock_backlog() worker to
-incorrectly treat a valid SKB shrink as a permanent error?
+  patched bpf-next 7bfb93e3475b + this series:
+    bpf_gotox/check-cross-subprog-gotox-target: OK
+    ./test_progs -t bpf_gotox/check-cross-subprog-gotox-target
+    Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+    __TEST_PROGS_RC__=0
 
-If an SKB is queued to the backlog worker, sk_psock_backlog() uses a
-do { ... } while (len) loop to process stm->full_len:
+v1 -> v2:
+  - Validate gotox runtime targets against the current subprog bounds instead
+    of scanning the CFG jump table.
+  - Fix the selftest expected error from -EACCES to -EINVAL.
 
-net/core/skmsg.c:sk_psock_backlog()
-    ...
-    do {
-        ret =3D -EIO;
-        if (!sock_flag(psock->sk, SOCK_DEAD))
-            ret =3D sk_psock_handle_skb(psock, skb, off, len, ingress);
-        if (ret <=3D 0) {
-            if (ret =3D=3D -EAGAIN) {
-                ...
-            }
-            /* Hard errors break pipe and stop xmit. */
-            sk_psock_report_error(psock, ret ? -ret : EPIPE);
-            sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
-            goto end;
-        }
-        off +=3D ret;
-        len -=3D ret;
-    } while (len);
+v1:
+  https://lore.kernel.org/bpf/20260609-f01-02-gotox-bpf-next-v1-0-b441d63a1559@mails.tsinghua.edu.cn/
 
-If a BPF program shrinks an SKB so skb->len is 50, but stm->full_len
-(len) is 100 and off is 0, the first loop iteration will process the
-clamped 50 bytes.
+Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+---
+Nuoqi Gui (2):
+      bpf: Enforce gotox targets against subprog bounds
+      selftests/bpf: Add cross-subprog gotox target coverage
 
-On the second iteration, the loop passes off=3D50 and len=3D50 to
-sk_psock_handle_skb(). This evaluates if (off >=3D skb->len) and returns
--EINVAL. The backlog worker then treats this as a hard error, calling
-sk_psock_report_error() and permanently destroying the socket's TX state.
+ kernel/bpf/verifier.c                              | 21 +++++++
+ tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+---
+base-commit: 7bfb93e3475be9de894f1cecd3a727d3e1649b03
+change-id: 20260613-f01-02-gotox-bpf-next-v2-send-8c48c9357dde
 
-Additionally, is there an inconsistency in how sk_psock_verdict_apply()
-handles this clamped length?
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-net/core/skmsg.c:sk_psock_verdict_apply()
-    ...
-    err =3D sk_psock_skb_ingress_self(psock, skb, off, len, false);
-    if (err < 0) {
-    ...
-
-If the same shrunk SKB is processed directly by sk_psock_verdict_apply(),
-the clamped positive length is treated as a success. The remaining bytes
-of stm->full_len are ignored without error, rather than dropping the SKB.
-
-This seems to create a situation where the behavior (silent truncation vs
-broken pipe) depends entirely on backlog queue timing.
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613082442.3252=
-576-1-rhkrqnwk98@gmail.com?part=3D1
