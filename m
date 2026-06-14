@@ -1,139 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D202B175A9A
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 08:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B00390C8C
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 08:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781424529; cv=none; b=OuQJ/ndMt5tDFHUckU0gvzi//1T9puxdn0tpMQzmxVIgXRZsOKwMGam5dfsuJknXoz46Bt4sIfd0RMrhnlJSNtY09pIEl9xLqCnU0q6P8kSQm67+w1exjDxk4UOuxVPCRQ0BTOvgIE03gSaHOka6x5gVv5swgSJIOrcQn+aOfmU=
+	t=1781424562; cv=none; b=mI+BKdsD3HkkvtGBsfNvF9z6IVRpafa+zeXBSP/E7yIrcATWb1r0g4R54r+XlTVop2oIw/yq6/SHO2j3zTcDhHIT6kGRYCKyKK1SAi5oZgguvhPALkGfGq+M78mlGNjZA6enFUFogrrTY9xPw3ddWEYIRf7OMFwZfCTuyvjHR+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781424529; c=relaxed/simple;
-	bh=SruTDzHrszRAg/xVHGqD5ga3V+s8LHPqWRHNHiV3L88=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=G7a6tUlCguDJrHCHPl46zN8ue8FApS+miVwUBcIa0RkGEeCCC5PKj+v+gnGZzxfpGJntj3Nj4faW24UTtY3oDJKrzmc6GAtbuRBD1MxJjF5Js2IA0dQ+WXRONAjZc1TIppSI9Dwh3oAjDP8S3LqquwD40bdQqJoZOLYGDv8L4mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KK/JAdsL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781424562; c=relaxed/simple;
+	bh=O7QCnYsmC9T7DqPOfcZPmAFSh4iJuMkXDFQ2B/VoU+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vgad7FAYNc7xlCvJ69+G3PCGXiUmVklpUUrXawwxmSRzJSktgHXbyUWYJ4PbCSmWllO1fCTUfJHo5ScmJd2OHZYmgrdgSoyNLtQgVX15WJBhd9gZczPYqQlAsVkTfX1J8WT5LStQEVC2576/zj9PIlGG63mD8IUUIfjVaD3sY9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C6HwtYwH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=SP9T8oCW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KK/JAdsL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0AD1F000E9;
-	Sun, 14 Jun 2026 08:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781424528;
-	bh=OnUxKiZshxBkLPX3biqZ4f5Bf6tBYllnsryPB7ZEENg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KK/JAdsLP/VcLYJ+LNV7wJ+BxGF7k74l3f9zJ8WjBhTGHQ7V3Ra4sQEpKinuUx+L3
-	 IgPlhoxroBgV3BNJ/J4AUbGizrU9JRkXF/SSlU/brKVk5D4k7J/CdB/ScNK25HuRvX
-	 5g4KopRXryr41fBkfSsIZYfu1GDWewifSA79irQLmdOaipacX3RN6depNuQIpeRI1z
-	 3BbfnRjCwAbTH9VmNsUE2IcU6fMCGO/EWn9SEq5q/ezHvOf3j2PY6eYjaR20A4WZBl
-	 F/gmtMXQT+6tCzI+rSHqAW/EQdzl2/h4E+/vM2o2rVxyiqli6t91UCbgiJ09UWhGsh
-	 oPf3TRDGklnBg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260613080831.236636-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260613080831.236636-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 14 Jun 2026 08:08:47 +0000
-Message-Id: <20260614080848.3B0AD1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C6HwtYwH";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="SP9T8oCW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781424560;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8gpPUZzZ8NEOkby5BaEtAw32WWn5h8dDgNhgJeg12mI=;
+	b=C6HwtYwHMSarbCtPGv1svCZIaiv1W9/vd8bj/ZtCgrAGiP7FwPMeJ543qLsOEaq3nesY8L
+	sKmhWRjxxJhYy5T+a9XR2crlQ19IFesVy9D453rTDfe9tyLkS1yXVh4mgVFkp2123B1GuI
+	qTI2HqA4zpL2lY15ipE05++33vDMw34=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-39-CX8TRrDkM8CytO2ZSXaF_w-1; Sun, 14 Jun 2026 04:09:19 -0400
+X-MC-Unique: CX8TRrDkM8CytO2ZSXaF_w-1
+X-Mimecast-MFC-AGG-ID: CX8TRrDkM8CytO2ZSXaF_w_1781424558
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-45ef2bd566bso1355339f8f.0
+        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 01:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1781424558; x=1782029358; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8gpPUZzZ8NEOkby5BaEtAw32WWn5h8dDgNhgJeg12mI=;
+        b=SP9T8oCWqVVVcrkAQFVsxVYjNEf89yz2Ocr5X/iqBxCvvsuBu/GoCf5ta0bgt/9mq5
+         Ws7bRFUV2P1amYgjoZ3bx1Fkq8Vs4Dlx+50tnovSJN8Hn1UMQtJgyd9xy/BegRcPGD2A
+         cv69napl/DsyTAzKGZad79ghBZ2drHepUQ1QqbTNV/10RSRdBgCzqjSACioRA5a/Bbz9
+         KbWTDie4yNvRK/uYjOIowBRlaHfpGNEctni+PJvZITAV08Xip6IWFMB6gWWvOIH1pxMP
+         uKCsnFSqIVJxS/w48BNelVog+jHiVxpEdFbft//jnfk3RYaFEpz21MilvSQa4qHNxnNZ
+         y6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781424558; x=1782029358;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8gpPUZzZ8NEOkby5BaEtAw32WWn5h8dDgNhgJeg12mI=;
+        b=Nwuz29VmANePR+tDjCHnunnEXaJiJ3ksvjVQCF5aV1TGXq9FQSBSy3AMKMEZlXqq/6
+         +SkgE2yraH12bdrDqvUfOaKM778mDlQmYBGti3d1sSu0Qx5KGI1y8GopM5Rtkkz+FhMt
+         +j0ZMlgleYphXJq9EDRE5s1WLg/e4vOzZliyavE9rL5mqIpZoLbvSglt/jRLHyc/yPgK
+         F5+uIYF950pT067w8hD6vNtLC+DYGZd4kb6Zm8Owf/5GERKNNyt+f182F4sNRnFc4xE8
+         5quEGQeI2gr9OYpZfzOI3o+R+JSqbM8diJEXT/8KVYr1+a3NlzVQ6+RPFHFsFHClnb5r
+         /stQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Ss3xyK4G52JuRJOBNxk4f/GO6N1U7ZC3oriwBf3kGcF82HS9gGhOOEXe2ZC7rNCn+Q+w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoHHA2SCpJT8Vs748yCRmc515fp6YwAz7Yv0a9UZ8ezSTYv9mm
+	rNum1HkSN3XqiIstx1yNtqISV0ivY6tHgtglioG3hRS/U1QSUHXVKYP94NUO+LlZ/o1+egZ0phT
+	9ev6ajapwfrLhBfZnbSpCrGgOIhPYMJqoWHCiAc4J5WL3ZedRe0Np0w==
+X-Gm-Gg: Acq92OEpEMSjXCqlMCFtbkok9DvF2WnCLF6Z4XCxSB52ebTYO/sjeNJ7bi1GDHb1U/y
+	NGDjUl753a7S8RWGcmGl4U27iiox4GJJdVJwQPWwqEwEIi8OVfb3zxTyc+vfJLQKGcNKwVKeXQl
+	y/SUAhmUoDEyk8yp0bx1ipel5Rv2TdHY9uijePpYN1h7xlyL4BRkZnr9qmRJqUpzejJk8fwnq/T
+	k5mUcaJ3cJbCQnzQY51fixr9p6NbDpUDJGkIFGQsq8Uhc6FDcG+e4lvI5gpVGLk0Z+AvQadrSeL
+	Aw7299fatr8zu/vQeVNpTXFNvm+eym3HE+6SfGMrZSf9OgrL8K2O4xrLGhVbCasRCwHFCfYZTWf
+	prMz2+umk9uP+5yzsaBfEaC3AODff8T5O5XdrtwYNEfTZyEE9daBGBzk=
+X-Received: by 2002:a05:6000:25fa:b0:45e:f5b6:7bf9 with SMTP id ffacd0b85a97d-46074b84e56mr6664953f8f.31.1781424558007;
+        Sun, 14 Jun 2026 01:09:18 -0700 (PDT)
+X-Received: by 2002:a05:6000:25fa:b0:45e:f5b6:7bf9 with SMTP id ffacd0b85a97d-46074b84e56mr6664920f8f.31.1781424557589;
+        Sun, 14 Jun 2026 01:09:17 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.25.72])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2dbfb1sm24168006f8f.35.2026.06.14.01.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Jun 2026 01:09:16 -0700 (PDT)
+Message-ID: <cbfca457-d118-44cf-b51e-9b0221ae0973@redhat.com>
+Date: Sun, 14 Jun 2026 10:09:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/5] tls: reject the combination of TLS and
+ sockmap
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, bpf@vger.kernel.org, jakub@cloudflare.com,
+ john.fastabend@gmail.com, sd@queasysnail.net
+References: <20260614014102.461064-1-kuba@kernel.org>
+ <20260614014102.461064-2-kuba@kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260614014102.461064-2-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Missing validation for `mss_now` in the `bbr_tso_segs` BPF kfunc a=
-llows a divide-by-zero kernel panic.
-- [Low] Missing EXPORT_SYMBOL for tcp_tso_autosize causes a build failure w=
-hen tcp_bbr is compiled as a module.
---
 
-commit 44d0693bc14ccae351456d523fdf83240793c554
-Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-tcp: Replace min_tso_segs() with tso_segs() CC callback for TCP Prague
+On 6/14/26 3:40 AM, Jakub Kicinski wrote:
+> TLS and sockmap (BPF psock) integration hides a lot of latent bugs.
+> Bugs which may be more or less relevant for real users but they
+> are definitely exploitable.
+> 
+> We could not find anyone actively using this integration so let's
+> reject this config. Adding a TLS socket to a sockmap was already
+> rejected by sk_psock_init() through the inet_csk_has_ulp() check.
+> We need to reject the attempts to configure the TLS keys (rather
+> than adding the ULP itself) because checking prior to the ULP
+> installation is tricky without risking a race with sockmap getting
+> added in parallel (sockmap does not hold the socket lock).
 
-This patch replaces the min_tso_segs() callback with a tso_segs() callback
-to provide an explicit TSO segment number for each data burst, overriding
-tcp_tso_autosize().
+Aren't both tls_ctx_create() and sk_psock_init() under (write) the
+callback lock? Isn't that enough to avoid races?
 
-> diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-> index 82378a2bfd1e1..15536564246c0 100644
-> --- a/net/ipv4/tcp_bbr.c
-> +++ b/net/ipv4/tcp_bbr.c
-[ ... ]
-> @@ -297,11 +297,19 @@ static void bbr_set_pacing_rate(struct sock *sk, u3=
-2 bw, int gain)
->  }
-> =20
->  /* override sysctl_tcp_min_tso_segs */
-> -__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
-> +static u32 bbr_min_tso_segs(struct sock *sk)
->  {
->  	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
->  }
-> =20
-> +__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
-> +{
-> +	u32 min_tso;
-> +
-> +	min_tso =3D bbr_min_tso_segs(sk);
-> +	return tcp_tso_autosize(sk, mss_now, min_tso);
+/P
 
-[Severity: High]
-Does this code allow a division by zero panic?
-
-The BPF verifier does not enforce positive non-zero bounds on plain scalar
-arguments. If a BPF program passes 0 for mss_now to bbr_tso_segs(), it is
-passed unvalidated to tcp_tso_autosize(), where it is used as a divisor:
-
-net/ipv4/tcp_output.c:tcp_tso_autosize() {
-    ...
-    return max_t(u32, bytes / mss_now, min_tso_segs);
-}
-
-This executes a division by zero, causing an immediate kernel panic. While
-BPF programs require privileges, crashing the kernel via a kfunc violates
-BPF safety guarantees.
-
-> +}
-> +
->  static u32 bbr_tso_segs_goal(struct sock *sk)
->  {
->  	struct tcp_sock *tp =3D tcp_sk(sk);
-[ ... ]
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index 26dd751ec72ab..14fde0aa14beb 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const str=
-uct tcp_sock *tp,
->   * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowan=
-ce
->   * is below 1500 bytes after 6 * ~500 usec =3D 3ms.
->   */
-> -static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-> -			    int min_tso_segs)
-> +u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
-> +		     int min_tso_segs)
-
-[Severity: Low]
-Does this cause a build failure when tcp_bbr is compiled as a loadable modu=
-le?
-
-Because tcp_tso_autosize() is called from bbr_tso_segs() in tcp_bbr.c but
-does not have an EXPORT_SYMBOL or EXPORT_SYMBOL_GPL declaration, building
-CONFIG_TCP_CONG_BBR=3Dm will fail with an undefined symbol error during mod=
-post.
-
->  {
->  	unsigned long bytes;
->  	u32 r;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613080831.2366=
-36-1-chia-yu.chang@nokia-bell-labs.com?part=3D1
