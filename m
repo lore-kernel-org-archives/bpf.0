@@ -1,213 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBDE2DC792;
-	Sun, 14 Jun 2026 01:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4371DA62E;
+	Sun, 14 Jun 2026 01:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781401276; cv=none; b=SGyGSsOCI8tgHetLdghd0ym6ZyYm6ku5fUm8KKcGnIZX+pjRmcAfIkCH8WfkyThzp+nH4RgQyIa12nlDo3WOQoHpfWi9kDXtiZsfSM6HV9OMfAuE+JCZ8TQ2zXo+6hgyflq/SItg/jRyivYehFc+JX6KoOs0qt4bMBENjTYpmn8=
+	t=1781401738; cv=none; b=DlI33o/FEEqanO5MdyxEdx89s3na1uWGgKPQbs3UI3poRbWCneIf+weWQRcLlrA4WTlqgibdxsbkAcQt2Qm/fcYVsU+d5k7MXJAa7gS3biycN32I5reg5pn3rUbErRr42rQ+l38Wh64bw/L2IGtziV77ksb+korwunfl18m/t3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781401276; c=relaxed/simple;
-	bh=Dfq4rqHWCwT3nPKj71n9zKUiELt4N2MN2Kq2IUB8e/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PGJKMgIvuR7M7iGseclx8+KHkg4tPLPJ8LR6Tnrf4q0ECOZX2K107qy7EvtNw/14FPfBTfxRfMlBL7nqeFxm9IokfCBJAxd8dSrPSVxnG6OkDSiDp8b5tWdh9mlzxGIpzTX4eG+7ff/99ffpooAGup1a1Y2iC22DWhQ2yonXsl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHVZ2fM8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781401738; c=relaxed/simple;
+	bh=YeEP+WqCxnv2RnQpadTTC+q/SBm19DgQ7NfxB2XwN00=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FBj7DZQQCC7E3traCwNHO3zcwJb3JoAeZdXUoRnsTPuwL58By8PAR9w0MaJtVzmP/tG+LxnhqbQe8T7M2FfDj6rUvxzo3diyhOpo4Ahu6Wk0Q17pCy7hJJlqzj7d8JMVKAB78+NfTr+8O0kPPvkeZYJZ5ZI61a9+PmMXFhXtfpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KX9vI8Vq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHVZ2fM8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226521F00A3A;
-	Sun, 14 Jun 2026 01:41:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KX9vI8Vq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697511F000E9;
+	Sun, 14 Jun 2026 01:48:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781401273;
-	bh=/6EDfIZXeHHODbKy06fZZgFvI36Mh7h4earTSixEw2A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=CHVZ2fM8ybyBfBu13yBRlI+LagVafzzz0P7wwFG/8lCtXi0QNyEGHF6jDnOtUk6dJ
-	 SS1xD6oA0bZ82sF+bgLnEq6kdn5wZIodvc9eaNm0QBY+EHuBpm8h9xRHOlhpCP8zrL
-	 iUUzwqhD/NoOCTqxdP0ot+NlRK9hoXIG4vfh+EhBDcStQpkUr2JWmrIOlVdLQMqRd3
-	 RNlP1PbNP8ZCPFrM0fT/mCAi6/B6A1pp5bCWPrG+57LFFpD8197aRYAry4BqL+QAdE
-	 Y+VAPtpLcLKn3GUsEnyF3ebzAO+sou7sabIm3TyTvKrQ2qzzB31kxs6rJJWuyWgihP
-	 8dWxLl6pQOomw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	jakub@cloudflare.com,
-	john.fastabend@gmail.com,
-	sd@queasysnail.net,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 4/5] selftests/bpf: drop the unused kTLS program from test_sockmap
-Date: Sat, 13 Jun 2026 18:40:59 -0700
-Message-ID: <20260614014102.461064-5-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260614014102.461064-1-kuba@kernel.org>
-References: <20260614014102.461064-1-kuba@kernel.org>
+	s=k20260515; t=1781401737;
+	bh=qVtgME4gMEoVa5tgfXnYNnnTRLVRhPpsyIl4+EaBT/4=;
+	h=From:Subject:Date:To:Cc;
+	b=KX9vI8VqJjHcprbN4iJZkgM/Xvl8s9DLoU9ggUCD6IddIokkI2oyCeAlg95vFrFH5
+	 W0cYLimIzoVQXeqd+Jn2tbh063jwT+BjmrPJBT8Yh1IxMR+3ntr+nnkx+Ne5A+Se7E
+	 ETPAeCioKxjyrSjq7/2XXbib308q8gjoSZhYrbosbY3dPTwSdOVRsMsO2VfU6JcMvt
+	 z3/8osT4n9RxP/aPWNTJouKCYAKSgyQrnUSX9f82BL9btWV4fbwWi+8nUfKkBQLI6I
+	 1xrzbKhKEC63g4FTZJVVX62Gls/J7Ol+iPnOyQ3wU1vUPD11aluh5fODVjv556jmd1
+	 RUi9vUWqJpLOQ==
+From: Tamir Duberstein <tamird@kernel.org>
+Subject: [PATCH bpf 0/6] libbpf: Fix ring buffer consumption
+Date: Sat, 13 Jun 2026 21:48:43 -0400
+Message-Id: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQ7CMAwEv1LtGUtNKiLgK4hDHZxiDqGKKUKq+
+ ncMHGd3Z1eYNBXDqVvR5KWmj+oQdh3ybayTkF6dEfuY+hQG4rlQ0zrxUqjoW4zkOB54yCnEPcO
+ 9ucmvcO0Mn+PyD23hu+Tn9w3b9gG1uFN4egAAAA==
+X-Change-ID: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>, 
+ Xu Kuohai <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
+ Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
+ Tamir Duberstein <tamird@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2159; i=tamird@kernel.org;
+ h=from:subject:message-id; bh=YeEP+WqCxnv2RnQpadTTC+q/SBm19DgQ7NfxB2XwN00=;
+ b=owGbwMvMwCV2wYdPVfy60HTG02pJDFl6HE1i7a7f7v8qEX51o+HDHt8VH7ZdKDwq5CO8wf2su
+ FPXzrplHRNZGMS4GCzFFFkSRQ/tTU+9vUc2891xmDmsTCBDpEUaGICAhYEvNzGv1EjHSM9U21DP
+ 0EjHQMeYgYtTAKZa8DrD/+AJBfWKzOIpCvqP6lcJTDgzheXBjKuSqcxe8pXTL5dmCDD8Yn79rzg
+ 8TXPblJmxq1NnrbmeVXqo5dBhWa7lnm92F9qs4wAA
+X-Developer-Key: i=tamird@kernel.org; a=openpgp;
+ fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-With the sockmap + kTLS tests gone, the BPF-side support in test_sockmap
-is dead: the tls_sock_map map and bpf_prog3 (which redirected skbs into
-it) are no longer referenced. Remove them, along with the now-unused
-bpf_write_pass() helper.
+Fix several correctness issues in libbpf's ring buffer consumer.
 
-bpf_prog3 was progs[2], so renumber the progs[] users in test_sockmap.c:
-the sockops program drops to progs[2] and the sk_msg tx programs to
-progs[3..7]. Shrink the map/prog arrays from 9 to 8 and drop the
-tls_sock_map entry (the last one) from map_names[] to match.
+A zero record bound currently consumes one record. A NULL callback is
+accepted during manager construction but crashes when callback-based
+consumption reaches the ring. Position counters stop consumption after
+wrapping because they are compared by magnitude.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The consumer can also miss a readiness notification after publishing its
+position and checking for new data without a full StoreLoad barrier. Use
+compiler atomics and add the missing barrier, including when retrying a
+busy record after publishing earlier records.
+
+Callback traversal does not follow the overwrite position maintained by
+BPF_F_RB_OVERWRITE maps. Reject callback consumption of those maps, as
+discussed here:
+https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com/
+
+Andrew Werner found the position-wrap and missed-wakeup failures while
+implementing Aya's ring buffer reader. Aya's original implementation
+contains the equality reasoning and edge-triggered regression test:
+https://github.com/aya-rs/aya/commit/e2cf734490bc188bcedb1eac92d23d81123e42cd
+
+Aya later corrected the consumer ordering with the same explicit fence:
+https://github.com/aya-rs/aya/commit/7277a57ea8cdb74918d3096a4b22b6d814481973
+
+Assisted-by: Codex:gpt-5.5
+Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 ---
- .../selftests/bpf/progs/test_sockmap_kern.h   | 56 -------------------
- tools/testing/selftests/bpf/test_sockmap.c    | 23 ++++----
- 2 files changed, 11 insertions(+), 68 deletions(-)
+Tamir Duberstein (6):
+      libbpf: ringbuf: Honor zero consume bounds
+      libbpf: ringbuf: Prevent NULL callback crash
+      libbpf: ringbuf: Handle position counter wrap
+      libbpf: ringbuf: Use compiler atomics
+      libbpf: ringbuf: Prevent missed wakeups
+      libbpf: ringbuf: Reject overwrite callback use
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_kern.h b/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-index f48f85f1bd70..284a2f2e50cf 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-@@ -85,13 +85,6 @@ struct {
- 	__type(value, int);
- } sock_skb_opts SEC(".maps");
- 
--struct {
--	__uint(type, TEST_MAP_TYPE);
--	__uint(max_entries, 20);
--	__uint(key_size, sizeof(int));
--	__uint(value_size, sizeof(int));
--} tls_sock_map SEC(".maps");
--
- SEC("sk_skb/stream_parser")
- int bpf_prog1(struct __sk_buff *skb)
- {
-@@ -135,55 +128,6 @@ int bpf_prog2(struct __sk_buff *skb)
- 
- }
- 
--static inline void bpf_write_pass(struct __sk_buff *skb, int offset)
--{
--	int err = bpf_skb_pull_data(skb, 6 + offset);
--	void *data_end;
--	char *c;
--
--	if (err)
--		return;
--
--	c = (char *)(long)skb->data;
--	data_end = (void *)(long)skb->data_end;
--
--	if (c + 5 + offset < data_end)
--		memcpy(c + offset, "PASS", 4);
--}
--
--SEC("sk_skb/stream_verdict")
--int bpf_prog3(struct __sk_buff *skb)
--{
--	int err, *f, ret = SK_PASS;
--	const int one = 1;
--
--	f = bpf_map_lookup_elem(&sock_skb_opts, &one);
--	if (f && *f) {
--		__u64 flags = 0;
--
--		ret = 0;
--		flags = *f;
--
--		err = bpf_skb_adjust_room(skb, -13, 0, 0);
--		if (err)
--			return SK_DROP;
--		err = bpf_skb_adjust_room(skb, 4, 0, 0);
--		if (err)
--			return SK_DROP;
--		bpf_write_pass(skb, 0);
--#ifdef SOCKMAP
--		return bpf_sk_redirect_map(skb, &tls_sock_map, ret, flags);
--#else
--		return bpf_sk_redirect_hash(skb, &tls_sock_map, &ret, flags);
--#endif
--	}
--	err = bpf_skb_adjust_room(skb, 4, 0, 0);
--	if (err)
--		return SK_DROP;
--	bpf_write_pass(skb, 13);
--	return ret;
--}
--
- SEC("sockops")
- int bpf_sockmap(struct bpf_sock_ops *skops)
- {
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 32d6068df4b3..ac814eb63edb 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -55,10 +55,10 @@ int s1, s2, c1, c2, p1, p2;
- int test_cnt;
- int passed;
- int failed;
--int map_fd[9];
--struct bpf_map *maps[9];
--struct bpf_program *progs[9];
--struct bpf_link *links[9];
-+int map_fd[8];
-+struct bpf_map *maps[8];
-+struct bpf_program *progs[8];
-+struct bpf_link *links[8];
- 
- int txmsg_pass;
- int txmsg_redir;
-@@ -967,7 +967,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 	}
- 
- 	/* Attach to cgroups */
--	err = bpf_prog_attach(bpf_program__fd(progs[3]), cg_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	err = bpf_prog_attach(bpf_program__fd(progs[2]), cg_fd, BPF_CGROUP_SOCK_OPS, 0);
- 	if (err) {
- 		fprintf(stderr, "ERROR: bpf_prog_attach (groups): %d (%s)\n",
- 			err, strerror(errno));
-@@ -983,15 +983,15 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 
- 	/* Attach txmsg program to sockmap */
- 	if (txmsg_pass)
--		tx_prog = progs[4];
-+		tx_prog = progs[3];
- 	else if (txmsg_redir)
--		tx_prog = progs[5];
-+		tx_prog = progs[4];
- 	else if (txmsg_apply)
--		tx_prog = progs[6];
-+		tx_prog = progs[5];
- 	else if (txmsg_cork)
--		tx_prog = progs[7];
-+		tx_prog = progs[6];
- 	else if (txmsg_drop)
--		tx_prog = progs[8];
-+		tx_prog = progs[7];
- 	else
- 		tx_prog = NULL;
- 
-@@ -1218,7 +1218,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 		fprintf(stderr, "unknown test\n");
- out:
- 	/* Detach and zero all the maps */
--	bpf_prog_detach2(bpf_program__fd(progs[3]), cg_fd, BPF_CGROUP_SOCK_OPS);
-+	bpf_prog_detach2(bpf_program__fd(progs[2]), cg_fd, BPF_CGROUP_SOCK_OPS);
- 
- 	for (i = 0; i < ARRAY_SIZE(links); i++) {
- 		if (links[i])
-@@ -1724,7 +1724,6 @@ char *map_names[] = {
- 	"sock_bytes",
- 	"sock_redir_flags",
- 	"sock_skb_opts",
--	"tls_sock_map",
- };
- 
- static int populate_progs(char *bpf_file)
--- 
-2.54.0
+ tools/lib/bpf/libbpf.h                           |  34 +++-
+ tools/lib/bpf/ringbuf.c                          |  84 +++++++--
+ tools/testing/selftests/bpf/prog_tests/ringbuf.c | 229 +++++++++++++++++++++++
+ 3 files changed, 323 insertions(+), 24 deletions(-)
+---
+base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+change-id: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
+
+Best regards,
+--  
+Tamir Duberstein <tamird@kernel.org>
 
