@@ -1,60 +1,62 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7DE39734A
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 16:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E453CAA59
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 16:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781456331; cv=none; b=qNqDQQe9nNNpc/IK+/5dnzoh3v93mBQrY7b5gkbfkdfIa+a5+k62bxP/sVHdJqUyG+6FI0jLEtV4/Aq1rHcodqaQ0Ly4OkBDoYierl9rC+jcd1znv1d/uIVrs0zlKJltDSoXo1BSZdnc8W8WzcKn0pvSq28QPhkD5Ev5DDB+gxc=
+	t=1781456337; cv=none; b=R2NAeNrC93x0wl+S+hbU/pfLCXtdcqLrpO2XwLKl6O8zVMH4Pu1oGUsHYcT1VEN24kEkZrUvA+TAvENJHOfZIeHvveY1fMpiDK59PpDEauiY9FiBDbQ+MZfVDEKFjgF6mhSQoRBNeluMUFkw3qbrbUY7o1uGBm6Jt3Cj5Fgdwks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781456331; c=relaxed/simple;
-	bh=7IdpY+k79B2YWJ0CnSLw1j3KS2sj8jUBaBz9rtQMWbA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B1wOvkDsG/DHHr7IK0bDijvaegpT8/ef64GTvBMapsCEIusSUKst1qGDKTIvuyJLB1T7slXGV3H+NIMiq5KPK93y6AfRmB56UJXQmJhfmXD1AiQ7LnF1zEjQmEq4n3mt9VBdjKJLhX9QQThqytdDCHxXcwTx9GPd8YopDK0880U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AtA8T52z; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1781456337; c=relaxed/simple;
+	bh=tDOldBU8ANQdcfpAg0WlF2ZyfCTHU7ejX15XECtLzmc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fImSlRm9t9P7osgs9lVDLgyMSb7r8jpDE8HgPlBZEFiYLgIOHIQQzMfEUfNKIJ6WwPmOsO64OimFDoIyyjWYVvqVlqj/eh8M3gts1jVCNeiuAqka7/JTFBrqm5xQInfnDlX1mlFIyJOWVjfWOn0N2AXe/ubxgLW64i24Dphp7PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLc3chxC; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AtA8T52z"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c0b9328c4aso18727215ad.0
-        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 09:58:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLc3chxC"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bf30d530bdso26089825ad.3
+        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 09:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781456329; x=1782061129; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+Bwa8OE8aYBzyp2EbWsiox6q4n51csJQ5PupXYRyz4=;
-        b=AtA8T52zX+u9rl054YgX1dT7TMEVomrJ4e/9/2zqsw/FH5+qeBpxoKCux5gBNRNUEQ
-         kGvOfw7sEB4CXLFRHTMxhX+jJLyFcI8MLiN8ALZhPwJhbe57ygp93DIY0zrMxHCI51he
-         l8zAqWnYRhWHPwzwSy9rTuc5TNlLXNV2zlw6IptcDMdV281qknM0/3EDN+/x3p5qU11q
-         GxIGJ/WbdmLxXAkuQ64E2u5jFhUmEdjUoxi6YOl0XwQRsMyZoCzZtGB85oF231P0eYGE
-         IXpO5zhurVHzvpCWljxPfdITlTMfm/rfmhvp5qu2hLSRb8ujFjKL3mHXrEm3GQb+Frp+
-         UTig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781456329; x=1782061129;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781456335; x=1782061135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G+Bwa8OE8aYBzyp2EbWsiox6q4n51csJQ5PupXYRyz4=;
-        b=syGEpnMaYdydL3zEovhLm0R4pMJf41BI26ldf0VuPOTLvfTyTH3U6Mg01OGgDBRKuN
-         +RvhxGYK7O4dJTihe2e6+qeagaxLtZER0GnBZkvJnvdDyx5qL7Mj2mUwHQOqfP1Zd1Fj
-         5x+TINZZQuKOZrGEyN+QNAsayzGwa25+Gq/itfoGlgc1t0FSDHhKdaPkvSC2ONjpWHAk
-         wp3QwYW/anKwAWrGyl2J09q1cewJT3H6E6MeWYp1GS40bvBJd8elD0l4G3fG8nPnrTWW
-         c1jXaIg9lnJDR9a8KxGgLHhZs+dhLnHHzXFP4UYbbsAifgt+zTK/43trW9BTcaj6eaZN
-         FBag==
-X-Gm-Message-State: AOJu0YyfVbhffFe7udRnbWemvNU+MRvZR2fdcTR6SShCI5R8nfkR/qPp
-	pxNC06sGkuVcvIDSRiEnMV9PJhupH39HUad7ovvb3ybLGy3GW10EjegjnVtJecz190Y=
-X-Gm-Gg: Acq92OGyOCzXreLKwiLup4Qk2BSrAHQXuSnm+OrwRdaT8z6+HJ5pdB6ZA/ShYQyDvjo
-	YYqilA2IA7zVFuzqKTwmGi0nbhg+EseYTjGUeWav3CD6m3fCOEKkiI9LsYK77MR+G6iY6G4emJb
-	8+13+XH7ADdEYGKbPdC9lmGEssrchVktT/shVu2zI0gdQauqLgoiiLY19DmrIgFs4Zr67xZG1DQ
-	D/5c9dYs6bryDbYfKF/sywho5aPfYQVGky0b3pnNNwhbl87qaMF+de8v4vMk/jqdLFw8DJ3SVYD
-	vuuQgKuB/ELysp6yvuriwAQjh60eHiKWhv8l+9UOYQ2ft1PZ3w3SaMPPdCP0v9JK7v2VgxOFGO7
-	TXm06jG2wtlGzaSECw92FPg2Dt6wBdhi67Te+cLE1OtPDvBx4djclyA5fFLuHi5ua9EoszDuHcl
-	ZgfS0hslT19lwjUsmkoMOnikSqEdoE6j0=
-X-Received: by 2002:a17:903:198e:b0:2bd:8395:fedd with SMTP id d9443c01a7336-2c412b30fabmr116699975ad.37.1781456329262;
-        Sun, 14 Jun 2026 09:58:49 -0700 (PDT)
+        bh=RvqEiBQ8Ghd8jedIxX08j3W0zOEcAaQXIWCwRTojgWE=;
+        b=dLc3chxCWWhd0+7VVYYhiCHjKnMAETvMwflIBBN+Q1q41gokcI4DNBVKF2gDZLRo6e
+         6WBstaGm4d4BT0ylisvINQOUzKh3XbiUnbRzIWLqbjjgh3PhziGDGsgKnk7fSaOfWhET
+         ZNyOg8uemD3lM4KWnG+wDwQNFYjVK7TBAUs0N47RU0GCFTngUxHqMpNWTVNnhDuF9ICf
+         43wrtfpysRfgq3XzU9xtSCYTQAgomiY7GQyZaoeNT7wKKD3fMqCCF2qSsabs3enaMS1X
+         oiCzpcV1W3E9m8Bg/F1uzO/xtspdtVf6a6g1V1bltTK5LVC7e6m4BTpFSFz7j+It8Koy
+         Cd/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781456335; x=1782061135;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RvqEiBQ8Ghd8jedIxX08j3W0zOEcAaQXIWCwRTojgWE=;
+        b=SQ14ER6xbv6Bl8YXQV3HqZqrBobACtHMhqpcfFCqd/ReahlqG6FR3xO6W/DJ5FuQW7
+         UAsrZonTjJD9P5eVN9sDH1VCoOlqLkQ3kUiE8KszM7EOGaWLCijUMMByAvB6MtQML/8P
+         xcpRwcvR8e08ZpDS2yc75Z3TIeBXYy5VJc9QgrtRub5EY9a6WDn26pULUvhwwgNtmiPh
+         27G0GFRbzt+DTujKhpGochdQ6MZ8nOuoa08lty//wNstXIVpdXgBn+pjwrp8PjtI8Bxx
+         U2mmwNf5iS9pP4ND0FqBzy9vAjffaSBQvJL6WhaUN6HMMxxsEkmnatoe/R5yLguwsBUq
+         ybuw==
+X-Gm-Message-State: AOJu0YwRhEr80FbeXYJgifEnZazD2eudWs/Ga3pWipfpAoLnDudieBPB
+	CKRCl1sFT3BiVzZ4w0i7G38m7AyouuemcRg8b89JL2UHeL+zHbuoIWxQhvcp+iVt4jQ=
+X-Gm-Gg: Acq92OGqD+Ew/HEhGOBZ6gb88Ho6MysfesSHVgHrMlGFkJH/NYCAkXL7B3sVz6YZBVU
+	4w5nkwJgKe6l+qDlGAAtvp7XhXKpSnE/DEhMesiqi8x0BuL8PNB1F7QKpEPH8p2KHMyxpgg0PAl
+	hmCcfE1CoFukTMNrSq36XS5Ya8xhETUYX5tc6QcujeG/aA3251riIeZsQ4GOvCJSjArLpnt1tR+
+	NdK0yusd1AkMBRnpl6TBSEvrIycvJ1L8UaP59+xQmA67RvVhw5e6n3JUxUG0SaaT9XTSukWqFm5
+	wh/U4iUvvmlq+z21215VVtK0uPbRsOX9cA14cPcO6hP2o0jhUhZr5vGVU8xttnFfOL6O6J5AN29
+	P/SE7HO9qJ89t2+ZKL9ud8FZLbcI1C71u0sabYRQZ4QXxYmjF9SZJyB5jACJP7Oz6WiWtYIOByw
+	tidi4mao8SEN7RUzkt9jKHjNyZV80NVrY=
+X-Received: by 2002:a17:903:41cc:b0:2c0:f807:56b6 with SMTP id d9443c01a7336-2c66419831emr83733365ad.4.1781456335325;
+        Sun, 14 Jun 2026 09:58:55 -0700 (PDT)
 Received: from DESKTOP-MUHC17F.lan ([188.253.121.147])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42fbb5b79sm74457405ad.36.2026.06.14.09.58.43
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42fbb5b79sm74457405ad.36.2026.06.14.09.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2026 09:58:48 -0700 (PDT)
+        Sun, 14 Jun 2026 09:58:54 -0700 (PDT)
 From: Zhenzhong Wu <jt26wzz@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -74,11 +76,14 @@ Cc: netdev@vger.kernel.org,
 	shung-hsi.yu@suse.com,
 	stable@vger.kernel.org,
 	mykolal@fb.com,
-	tamird@kernel.org
-Subject: [PATCH stable 6.6.y v3 0/4] bpf: linked scalar precision fixes
-Date: Mon, 15 Jun 2026 00:58:37 +0800
-Message-ID: <cover.1781194510.git.jt26wzz@gmail.com>
+	tamird@kernel.org,
+	Hao Sun <sunhao.th@gmail.com>
+Subject: [PATCH stable 6.6.y v3 1/4] bpf: Track equal scalars history on per-instruction level
+Date: Mon, 15 Jun 2026 00:58:38 +0800
+Message-ID: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1781194510.git.jt26wzz@gmail.com>
+References: <cover.1781194510.git.jt26wzz@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,173 +92,547 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Eduard Zingerman <eddyz87@gmail.com>
 
-This v3 targets 6.6.y and changes the backport strategy based on review
-feedback on v2.
+[ Upstream commit 4bf79f9be434e000c8e12fe83b2f4402480f1460 ]
 
-The original observed failure was found in Rust/Aya-generated eBPF
-around helper calls. Rust match lowering can keep a helper return value
-and a scalar filled through a by-reference helper argument in the same
-enum-style control flow. That makes it easy for the verifier-visible
-scalar values to become linked by scalar id.
+Use bpf_verifier_state->jmp_history to track which registers were
+updated by find_equal_scalars() (renamed to collect_linked_regs())
+when conditional jump was verified. Use recorded information in
+backtrack_insn() to propagate precision.
 
-The relevant verifier-log bytecode from the original reproducer is
-below. The later instructions only store r7 into a map so user space can
-observe which branch the verifier kept.
+E.g. for the following program:
 
-  15: (85) call bpf_get_func_ret#184    ; R0_w=scalar() fp-8_w=mmmmmmmm
-  16: (79) r7 = *(u64 *)(r10 -8)        ; R7_w=scalar() R10=fp0
-  17: (15) if r0 == 0x0 goto pc+1       ; R0_w=scalar()
-  18: (bf) r7 = r0                    ; R0=scalar(id=1) R7=scalar(id=1)
-  19: (55) if r0 != 0x0 goto pc+6       ; R0=0
-  20: (67) r7 <<= 32                    ; R7_w=0
-  21: (77) r7 >>= 32                    ; R7_w=0
-  22: (b7) r1 = 1                       ; R1_w=1
-  23: (55) if r7 != 0xf goto pc+1
+            while verifying instructions
+  1: r1 = r0              |
+  2: if r1 < 8  goto ...  | push r0,r1 as linked registers in jmp_history
+  3: if r0 > 16 goto ...  | push r0,r1 as linked registers in jmp_history
+  4: r2 = r10             |
+  5: r2 += r0             v mark_chain_precision(r0)
 
-The important verifier state shape is:
+            while doing mark_chain_precision(r0)
+  5: r2 += r0             | mark r0 precise
+  4: r2 = r10             |
+  3: if r0 > 16 goto ...  | mark r0,r1 as precise
+  2: if r1 < 8  goto ...  | mark r0,r1 as precise
+  1: r1 = r0              v
 
-  1. The program checks "if r0 == 0". The jump target is the success
-     path, and the fallthrough path is the failure path.
+Technically, do this as follows:
+- Use 10 bits to identify each register that gains range because of
+  sync_linked_regs():
+  - 3 bits for frame number;
+  - 6 bits for register or stack slot number;
+  - 1 bit to indicate if register is spilled.
+- Use u64 as a vector of 6 such records + 4 bits for vector length.
+- Augment struct bpf_jmp_history_entry with a field 'linked_regs'
+  representing such vector.
+- When doing check_cond_jmp_op() remember up to 6 registers that
+  gain range because of sync_linked_regs() in such a vector.
+- Don't propagate range information and reset IDs for registers that
+  don't fit in 6-value vector.
+- Push a pair {instruction index, linked registers vector}
+  to bpf_verifier_state->jmp_history.
+- When doing backtrack_insn() check if any of recorded linked
+  registers is currently marked precise, if so mark all linked
+  registers as precise.
 
-  2. On the failure path, "r7 = r0" gives r0 and r7 the same scalar id.
-     The real success path skips that assignment, so r7 is independent
-     there.
+This also requires fixes for two test_verifier tests:
+- precise: test 1
+- precise: test 2
 
-  3. At the later "if r0 != 0" check, an affected verifier can explore
-     an impossible continuation where r0 is zero and r7 is narrowed
-     through the shared scalar id as well.
+Both tests contain the following instruction sequence:
 
-  4. That impossible continuation reaches the return-value comparison
-     with the wrong r7 value. When the real success path is analyzed
-     later, state pruning can consider it safe against the earlier
-     cached verifier state and skip the real continuation.
+19: (bf) r2 = r9                      ; R2=scalar(id=3) R9=scalar(id=3)
+20: (a5) if r2 < 0x8 goto pc+1        ; R2=scalar(id=3,umin=8)
+21: (95) exit
+22: (07) r2 += 1                      ; R2_w=scalar(id=3+1,...)
+23: (bf) r1 = r10                     ; R1_w=fp0 R10=fp0
+24: (07) r1 += -8                     ; R1_w=fp-8
+25: (b7) r3 = 0                       ; R3_w=0
+26: (85) call bpf_probe_read_kernel#113
 
-The root cause is verifier scalar state tracking, not helper-specific
-behavior. A helper return value in r0 and another scalar can become
-linked by scalar id on one branch. The real success path can skip that
-assignment, so the two verifier states are not equivalent.
+The call to bpf_probe_read_kernel() at (26) forces r2 to be precise.
+Previously, this forced all registers with same id to become precise
+immediately when mark_chain_precision() is called.
+After this change, the precision is propagated to registers sharing
+same id only when 'if' instruction is backtracked.
+Hence verification log for both tests is changed:
+regs=r2,r9 -> regs=r2 for instructions 25..20.
 
-The relevant pruning point is that regsafe()/states_equal() accepted
-the real success-path state against an earlier cached state where r0 was
-an imprecise scalar and r7 constraints were loose enough to cover the
-current r7. In the impossible path, r0 and r7 are linked by scalar id
-after instruction 18. In the real success path, instruction 18 is
-skipped and that scalar-id relationship does not exist. These states
-should therefore not be treated as equivalent for pruning.
-
-The upstream linked-scalar precision series fixes that root cause by
-recording, in jmp_history, which linked registers were synchronized at
-each conditional jump and by using that per-instruction history during
-precision backtracking. This covers both the original r0 == 0 /
-r0 != 0 shape and the r0 == 1 / r0 != 1 shape used by the separate
-runtime selftest.
-
-A Rust/Aya-specific runtime reproducer/selftest discussed in the v2
-thread has been submitted separately to bpf-next for review:
-
-  https://lore.kernel.org/bpf/20260611160749.391279-1-jt26wzz@gmail.com/
-
-That reproducer keeps the same helper-return/control-flow shape but
-shifts the success value to 1 before branching. This avoids depending
-on the not-equal-zero refinement and exercises linked scalar precision
-during state pruning directly. It uses bpf_skb_load_bytes() in the
-normal tc test-run path and does not require fexit attach or
-bpf_get_func_ret(). It is not included in this stable series because
-per review feedback it should go through bpf-next first before being
-considered for stable.
-
-Targeted results for that separate helper-status runtime reproducer are:
-
-  v6.6.142 + reproducer:                                  FAIL
-  v6.6.142 + v2 d028/9e backport path + reproducer:      FAIL
-  v6.6.142 + this linked-scalars series + reproducer:    PASS
-  bpf-next + reproducer:                                  PASS
-
-Changes since v2:
-  - update the subject from the v2 not-equal title to reflect the
-    linked-scalar precision backport used in this version;
-  - replace the d028f87517d6/9e314f5d8682 backport path with the full
-    upstream linked-scalar precision-tracking series suggested during
-    review;
-  - drop the custom Rust/Aya selftest from the stable series and point
-    to the separate bpf-next review instead;
-  - adapt the linked_regs_broken_link_2 selftest log expectations for
-    6.6.y, where the verifier does not derive the same non-constant
-    JMP_X scalar-vs-scalar range used by the upstream log check;
-  - keep 6.6.y as the first stable target and document that older LTS
-    trees need separate adaptations.
-
-v2:
-  https://lore.kernel.org/r/20260607170959.823755-1-jt26wzz@gmail.com/
-
-RFC v1:
-  https://lore.kernel.org/r/20260601180400.1381736-1-jt26wzz@gmail.com/
-
-Backport details:
-
-This series is based on v6.6.142 / stable/linux-6.6.y commit
-924b4a879cbb ("Linux 6.6.142"). I would like it applied to 6.6.y first.
-The same issue is reproducible on 6.1.y, 5.15.y, and 5.10.y, but those
-trees need separate older-layout adaptations.
-
-Instead of backporting the d028f87517d6 not-equal refinement plus the
-9e314f5d8682 range-combining prerequisite, this series backports the
-full upstream linked-scalar precision-tracking series:
-
-  4bf79f9be434
-    bpf: Track equal scalars history on per-instruction level
-  842edb5507a1
-    bpf: Remove mark_precise_scalar_ids()
-  bebc17b1c03b
-    selftests/bpf: Tests for per-insn sync_linked_regs() precision
-    tracking
-  cfbf25481d6d
-    selftests/bpf: Update comments find_equal_scalars->sync_linked_regs
-
-Upstream series:
-  https://lore.kernel.org/r/20240718202357.1746514-1-eddyz87@gmail.com/
-
-Patches 1 and 2 are the verifier changes from that upstream series. The
-main 6.6.y-specific verifier adaptation is in patch 1: 6.6.y does not
-yet have the newer BPF_ADD_CONST scalar-id representation, so
-sync_linked_regs() is adapted to the older scalar-id layout. Patch 2
-then follows on top of that adapted layout.
-
-Patches 3 and 4 bring the upstream verifier selftests and comment
-updates. Patch 3 has one 6.6.y-specific log adaptation:
-linked_regs_broken_link_2 keeps the "div by zero" reject check, but
-drops the upstream mark_precise log expectations because 6.6.y does not
-derive the scalar-vs-scalar range for that non-constant JMP_X
-comparison. Patch 4 only updates the two pre-existing comments that are
-present in 6.6.y.
-
-Relevant QEMU selftest results on 6.6.y with this backport:
-
-  verifier_scalar_ids passed all 18 subtests, including the newly
-  backported linked-scalar precision tests and the related
-  check_ids_in_regsafe tests.
-
-Thanks to Shung-Hsi Yu for reviewing v2 and suggesting the upstream
-linked-scalar precision series as the preferred backport direction.
-
-Eduard Zingerman (4):
-  bpf: Track equal scalars history on per-instruction level
-  bpf: Remove mark_precise_scalar_ids()
-  selftests/bpf: Tests for per-insn sync_linked_regs() precision
-    tracking
-  selftests/bpf: Update comments find_equal_scalars->sync_linked_regs
-
+Fixes: 904e6ddf4133 ("bpf: Use scalar ids in mark_chain_precision()")
+Reported-by: Hao Sun <sunhao.th@gmail.com>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20240718202357.1746514-2-eddyz87@gmail.com
+Closes: https://lore.kernel.org/bpf/CAEf4BzZ0xidVCqB47XnkXcNhkPWF6_nTV7yt+_Lf0kcFEut2Mg@mail.gmail.com/
+[ zhenzhong: backport to 6.6.y verifier layout and adapt
+  sync_linked_regs() to the pre-BPF_ADD_CONST scalar-id code. ]
+Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
+---
  include/linux/bpf_verifier.h                  |   4 +
- kernel/bpf/verifier.c                         | 367 +++++++++++-------
- .../selftests/bpf/progs/verifier_scalar_ids.c | 253 ++++++++----
- .../selftests/bpf/progs/verifier_spill_fill.c |   4 +-
+ kernel/bpf/verifier.c                         | 256 ++++++++++++++++--
  .../bpf/progs/verifier_subprog_precision.c    |   2 +-
- .../testing/selftests/bpf/verifier/precise.c  |   2 +-
- 6 files changed, 417 insertions(+), 215 deletions(-)
+ 3 files changed, 239 insertions(+), 23 deletions(-)
 
-
-base-commit: 924b4a879cbb75aef37c160b955b92f6894b11a4
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index dba211d3b..9a3b93c24 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -345,6 +345,10 @@ struct bpf_jmp_history_entry {
+ 	u32 prev_idx : 22;
+ 	/* special flags, e.g., whether insn is doing register stack spill/load */
+ 	u32 flags : 10;
++	/* additional registers that need precision tracking when this
++	 * jump is backtracked, vector of six 10-bit records
++	 */
++	u64 linked_regs;
+ };
+ 
+ /* Maximum number of register states that can exist at once */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0d90236d0..3cc0fc902 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3461,9 +3461,87 @@ static bool is_jmp_point(struct bpf_verifier_env *env, int insn_idx)
+ 	return env->insn_aux_data[insn_idx].jmp_point;
+ }
+ 
++#define LR_FRAMENO_BITS	3
++#define LR_SPI_BITS	6
++#define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
++#define LR_SIZE_BITS	4
++#define LR_FRAMENO_MASK	((1ull << LR_FRAMENO_BITS) - 1)
++#define LR_SPI_MASK	((1ull << LR_SPI_BITS)     - 1)
++#define LR_SIZE_MASK	((1ull << LR_SIZE_BITS)    - 1)
++#define LR_SPI_OFF	LR_FRAMENO_BITS
++#define LR_IS_REG_OFF	(LR_SPI_BITS + LR_FRAMENO_BITS)
++#define LINKED_REGS_MAX	6
++
++struct linked_reg {
++	u8 frameno;
++	union {
++		u8 spi;
++		u8 regno;
++	};
++	bool is_reg;
++};
++
++struct linked_regs {
++	int cnt;
++	struct linked_reg entries[LINKED_REGS_MAX];
++};
++
++static struct linked_reg *linked_regs_push(struct linked_regs *s)
++{
++	if (s->cnt < LINKED_REGS_MAX)
++		return &s->entries[s->cnt++];
++
++	return NULL;
++}
++
++/* Use u64 as a vector of 6 10-bit values, use first 4-bits to track
++ * number of elements currently in stack.
++ * Pack one history entry for linked registers as 10 bits in the following format:
++ * - 3-bits frameno
++ * - 6-bits spi_or_reg
++ * - 1-bit  is_reg
++ */
++static u64 linked_regs_pack(struct linked_regs *s)
++{
++	u64 val = 0;
++	int i;
++
++	for (i = 0; i < s->cnt; ++i) {
++		struct linked_reg *e = &s->entries[i];
++		u64 tmp = 0;
++
++		tmp |= e->frameno;
++		tmp |= e->spi << LR_SPI_OFF;
++		tmp |= (e->is_reg ? 1 : 0) << LR_IS_REG_OFF;
++
++		val <<= LR_ENTRY_BITS;
++		val |= tmp;
++	}
++	val <<= LR_SIZE_BITS;
++	val |= s->cnt;
++	return val;
++}
++
++static void linked_regs_unpack(u64 val, struct linked_regs *s)
++{
++	int i;
++
++	s->cnt = val & LR_SIZE_MASK;
++	val >>= LR_SIZE_BITS;
++
++	for (i = 0; i < s->cnt; ++i) {
++		struct linked_reg *e = &s->entries[i];
++
++		e->frameno =  val & LR_FRAMENO_MASK;
++		e->spi     = (val >> LR_SPI_OFF) & LR_SPI_MASK;
++		e->is_reg  = (val >> LR_IS_REG_OFF) & 0x1;
++		val >>= LR_ENTRY_BITS;
++	}
++}
++
+ /* for any branch, call, exit record the history of jmps in the given state */
+ static int push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifier_state *cur,
+-			    int insn_flags)
++			    int insn_flags, u64 linked_regs)
+ {
+ 	u32 cnt = cur->jmp_history_cnt;
+ 	struct bpf_jmp_history_entry *p;
+@@ -3479,6 +3557,10 @@ static int push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifier_st
+ 			  "verifier insn history bug: insn_idx %d cur flags %x new flags %x\n",
+ 			  env->insn_idx, env->cur_hist_ent->flags, insn_flags);
+ 		env->cur_hist_ent->flags |= insn_flags;
++		WARN_ONCE(env->cur_hist_ent->linked_regs != 0,
++			  "verifier insn history bug: insn_idx %d linked_regs != 0: %#llx\n",
++			  env->insn_idx, env->cur_hist_ent->linked_regs);
++		env->cur_hist_ent->linked_regs = linked_regs;
+ 		return 0;
+ 	}
+ 
+@@ -3493,6 +3575,7 @@ static int push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifier_st
+ 	p->idx = env->insn_idx;
+ 	p->prev_idx = env->prev_insn_idx;
+ 	p->flags = insn_flags;
++	p->linked_regs = linked_regs;
+ 	cur->jmp_history_cnt = cnt;
+ 	env->cur_hist_ent = p;
+ 
+@@ -3668,6 +3751,11 @@ static inline bool bt_is_reg_set(struct backtrack_state *bt, u32 reg)
+ 	return bt->reg_masks[bt->frame] & (1 << reg);
+ }
+ 
++static inline bool bt_is_frame_reg_set(struct backtrack_state *bt, u32 frame, u32 reg)
++{
++	return bt->reg_masks[frame] & (1 << reg);
++}
++
+ static inline bool bt_is_frame_slot_set(struct backtrack_state *bt, u32 frame, u32 slot)
+ {
+ 	return bt->stack_masks[frame] & (1ull << slot);
+@@ -3717,6 +3805,42 @@ static void fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask)
+ 	}
+ }
+ 
++/* If any register R in hist->linked_regs is marked as precise in bt,
++ * do bt_set_frame_{reg,slot}(bt, R) for all registers in hist->linked_regs.
++ */
++static void bt_sync_linked_regs(struct backtrack_state *bt, struct bpf_jmp_history_entry *hist)
++{
++	struct linked_regs linked_regs;
++	bool some_precise = false;
++	int i;
++
++	if (!hist || hist->linked_regs == 0)
++		return;
++
++	linked_regs_unpack(hist->linked_regs, &linked_regs);
++	for (i = 0; i < linked_regs.cnt; ++i) {
++		struct linked_reg *e = &linked_regs.entries[i];
++
++		if ((e->is_reg && bt_is_frame_reg_set(bt, e->frameno, e->regno)) ||
++		    (!e->is_reg && bt_is_frame_slot_set(bt, e->frameno, e->spi))) {
++			some_precise = true;
++			break;
++		}
++	}
++
++	if (!some_precise)
++		return;
++
++	for (i = 0; i < linked_regs.cnt; ++i) {
++		struct linked_reg *e = &linked_regs.entries[i];
++
++		if (e->is_reg)
++			bt_set_frame_reg(bt, e->frameno, e->regno);
++		else
++			bt_set_frame_slot(bt, e->frameno, e->spi);
++	}
++}
++
+ static bool calls_callback(struct bpf_verifier_env *env, int insn_idx);
+ 
+ /* For given verifier state backtrack_insn() is called from the last insn to
+@@ -3756,6 +3880,12 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 		print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
+ 	}
+ 
++	/* If there is a history record that some registers gained range at this insn,
++	 * propagate precision marks to those registers, so that bt_is_reg_set()
++	 * accounts for these registers.
++	 */
++	bt_sync_linked_regs(bt, hist);
++
+ 	if (class == BPF_ALU || class == BPF_ALU64) {
+ 		if (!bt_is_reg_set(bt, dreg))
+ 			return 0;
+@@ -3985,7 +4115,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 			 */
+ 			bt_set_reg(bt, dreg);
+ 			bt_set_reg(bt, sreg);
+-			 /* else dreg <cond> K
++		} else if (BPF_SRC(insn->code) == BPF_K) {
++			 /* dreg <cond> K
+ 			  * Only dreg still needs precision before
+ 			  * this insn, so for the K-based conditional
+ 			  * there is nothing new to be marked.
+@@ -4003,6 +4134,10 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 			/* to be analyzed */
+ 			return -ENOTSUPP;
+ 	}
++	/* Propagate precision marks to linked registers, to account for
++	 * registers marked as precise in this function.
++	 */
++	bt_sync_linked_regs(bt, hist);
+ 	return 0;
+ }
+ 
+@@ -4354,7 +4489,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno)
+ 
+ 		/* If some register with scalar ID is marked as precise,
+ 		 * make sure that all registers sharing this ID are also precise.
+-		 * This is needed to estimate effect of find_equal_scalars().
++		 * This is needed to estimate effect of sync_linked_regs().
+ 		 * Do this at the last instruction of each state,
+ 		 * bpf_reg_state::id fields are valid for these instructions.
+ 		 *
+@@ -4368,7 +4503,7 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int regno)
+ 		 *     ...
+ 		 *   --- state #1 {r1.id = A, r2.id = A} ---
+ 		 *     ...
+-		 *     if (r2 > 10) goto exit; // find_equal_scalars() assigns range to r1
++		 *     if (r2 > 10) goto exit; // sync_linked_regs() assigns range to r1
+ 		 *     ...
+ 		 *   --- state #2 {r1.id = A, r2.id = A} ---
+ 		 *     r3 = r10
+@@ -4736,7 +4871,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	}
+ 
+ 	if (insn_flags)
+-		return push_jmp_history(env, env->cur_state, insn_flags);
++		return push_jmp_history(env, env->cur_state, insn_flags, 0);
+ 	return 0;
+ }
+ 
+@@ -5032,7 +5167,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 		insn_flags = 0; /* we are not restoring spilled register */
+ 	}
+ 	if (insn_flags)
+-		return push_jmp_history(env, env->cur_state, insn_flags);
++		return push_jmp_history(env, env->cur_state, insn_flags, 0);
+ 	return 0;
+ }
+ 
+@@ -13540,7 +13675,7 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 		ptr_reg = dst_reg;
+ 	else
+ 		/* Make sure ID is cleared otherwise dst_reg min/max could be
+-		 * incorrectly propagated into other registers by find_equal_scalars()
++		 * incorrectly propagated into other registers by sync_linked_regs()
+ 		 */
+ 		dst_reg->id = 0;
+ 	if (BPF_SRC(insn->code) == BPF_X) {
+@@ -13700,7 +13835,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 					 */
+ 					if (need_id)
+ 						/* Assign src and dst registers the same ID
+-						 * that will be used by find_equal_scalars()
++						 * that will be used by sync_linked_regs()
+ 						 * to propagate min/max range.
+ 						 */
+ 						src_reg->id = ++env->id_gen;
+@@ -13746,7 +13881,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 						copy_register_state(dst_reg, src_reg);
+ 						/* Make sure ID is cleared if src_reg is not in u32
+ 						 * range otherwise dst_reg min/max could be incorrectly
+-						 * propagated into src_reg by find_equal_scalars()
++						 * propagated into src_reg by sync_linked_regs()
+ 						 */
+ 						if (!is_src_reg_u32)
+ 							dst_reg->id = 0;
+@@ -14564,19 +14699,78 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
+ 	return true;
+ }
+ 
+-static void find_equal_scalars(struct bpf_verifier_state *vstate,
+-			       struct bpf_reg_state *known_reg)
++static void __collect_linked_regs(struct linked_regs *reg_set, struct bpf_reg_state *reg,
++				  u32 id, u32 frameno, u32 spi_or_reg, bool is_reg)
+ {
+-	struct bpf_func_state *state;
++	struct linked_reg *e;
++
++	if (reg->type != SCALAR_VALUE || reg->id != id)
++		return;
++
++	e = linked_regs_push(reg_set);
++	if (e) {
++		e->frameno = frameno;
++		e->is_reg = is_reg;
++		e->regno = spi_or_reg;
++	} else {
++		reg->id = 0;
++	}
++}
++
++/* For all R being scalar registers or spilled scalar registers
++ * in verifier state, save R in linked_regs if R->id == id.
++ * If there are too many Rs sharing same id, reset id for leftover Rs.
++ */
++static void collect_linked_regs(struct bpf_verifier_state *vstate, u32 id,
++				struct linked_regs *linked_regs)
++{
++	struct bpf_func_state *func;
+ 	struct bpf_reg_state *reg;
++	int i, j;
+ 
+-	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+-		if (reg->type == SCALAR_VALUE && reg->id == known_reg->id) {
++	for (i = vstate->curframe; i >= 0; i--) {
++		func = vstate->frame[i];
++		for (j = 0; j < BPF_REG_FP; j++) {
++			reg = &func->regs[j];
++			__collect_linked_regs(linked_regs, reg, id, i, j, true);
++		}
++		for (j = 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
++			if (!is_spilled_reg(&func->stack[j]))
++				continue;
++			reg = &func->stack[j].spilled_ptr;
++			__collect_linked_regs(linked_regs, reg, id, i, j, false);
++		}
++	}
++
++	if (linked_regs->cnt == 1)
++		linked_regs->cnt = 0;
++}
++
++/* For all R in linked_regs, copy known_reg range into R
++ * if R->id == known_reg->id.
++ */
++static void sync_linked_regs(struct bpf_verifier_state *vstate, struct bpf_reg_state *known_reg,
++			     struct linked_regs *linked_regs)
++{
++	struct bpf_reg_state *reg;
++	struct linked_reg *e;
++	int i;
++
++	for (i = 0; i < linked_regs->cnt; ++i) {
++		e = &linked_regs->entries[i];
++		reg = e->is_reg ? &vstate->frame[e->frameno]->regs[e->regno]
++				: &vstate->frame[e->frameno]->stack[e->spi].spilled_ptr;
++		if (reg->type != SCALAR_VALUE || reg == known_reg)
++			continue;
++		if (reg->id != known_reg->id)
++			continue;
++		{
+ 			s32 saved_subreg_def = reg->subreg_def;
++
+ 			copy_register_state(reg, known_reg);
+ 			reg->subreg_def = saved_subreg_def;
+ 		}
+-	}));
++	}
+ }
+ 
+ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+@@ -14587,6 +14781,7 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 	struct bpf_reg_state *regs = this_branch->frame[this_branch->curframe]->regs;
+ 	struct bpf_reg_state *dst_reg, *other_branch_regs, *src_reg = NULL;
+ 	struct bpf_reg_state *eq_branch_regs;
++	struct linked_regs linked_regs = {};
+ 	u8 opcode = BPF_OP(insn->code);
+ 	bool is_jmp32;
+ 	int pred = -1;
+@@ -14704,6 +14899,21 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 		return 0;
+ 	}
+ 
++	/* Push scalar registers sharing same ID to jump history,
++	 * do this before creating 'other_branch', so that both
++	 * 'this_branch' and 'other_branch' share this history
++	 * if parent state is created.
++	 */
++	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
++		collect_linked_regs(this_branch, src_reg->id, &linked_regs);
++	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
++		collect_linked_regs(this_branch, dst_reg->id, &linked_regs);
++	if (linked_regs.cnt > 0) {
++		err = push_jmp_history(env, this_branch, 0, linked_regs_pack(&linked_regs));
++		if (err)
++			return err;
++	}
++
+ 	other_branch = push_stack(env, *insn_idx + insn->off + 1, *insn_idx,
+ 				  false);
+ 	if (!other_branch)
+@@ -14746,8 +14956,9 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 						    src_reg, dst_reg, opcode);
+ 			if (src_reg->id &&
+ 			    !WARN_ON_ONCE(src_reg->id != other_branch_regs[insn->src_reg].id)) {
+-				find_equal_scalars(this_branch, src_reg);
+-				find_equal_scalars(other_branch, &other_branch_regs[insn->src_reg]);
++				sync_linked_regs(this_branch, src_reg, &linked_regs);
++				sync_linked_regs(other_branch, &other_branch_regs[insn->src_reg],
++						 &linked_regs);
+ 			}
+ 
+ 		}
+@@ -14759,8 +14970,9 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 
+ 	if (dst_reg->type == SCALAR_VALUE && dst_reg->id &&
+ 	    !WARN_ON_ONCE(dst_reg->id != other_branch_regs[insn->dst_reg].id)) {
+-		find_equal_scalars(this_branch, dst_reg);
+-		find_equal_scalars(other_branch, &other_branch_regs[insn->dst_reg]);
++		sync_linked_regs(this_branch, dst_reg, &linked_regs);
++		sync_linked_regs(other_branch, &other_branch_regs[insn->dst_reg],
++				 &linked_regs);
+ 	}
+ 
+ 	/* if one pointer register is compared to another pointer
+@@ -16182,7 +16394,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 *
+ 		 * First verification path is [1-6]:
+ 		 * - at (4) same bpf_reg_state::id (b) would be assigned to r6 and r7;
+-		 * - at (5) r6 would be marked <= X, find_equal_scalars() would also mark
++		 * - at (5) r6 would be marked <= X, sync_linked_regs() would also mark
+ 		 *   r7 <= X, because r6 and r7 share same id.
+ 		 * Next verification path is [1-4, 6].
+ 		 *
+@@ -16915,7 +17127,7 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+ 			 * the current state.
+ 			 */
+ 			if (is_jmp_point(env, env->insn_idx))
+-				err = err ? : push_jmp_history(env, cur, 0);
++				err = err ? : push_jmp_history(env, cur, 0, 0);
+ 			err = err ? : propagate_precision(env, &sl->state);
+ 			if (err)
+ 				return err;
+@@ -17181,7 +17393,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (is_jmp_point(env, env->insn_idx)) {
+-			err = push_jmp_history(env, state, 0);
++			err = push_jmp_history(env, state, 0, 0);
+ 			if (err)
+ 				return err;
+ 		}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+index 4b8b0f45d..a188e26f0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+@@ -141,7 +141,7 @@ __msg("mark_precise: frame0: last_idx 14 first_idx 9")
+ __msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
+ __msg("mark_precise: frame0: regs=r6 stack= before 12: (27) r6 *= 4")
+ __msg("mark_precise: frame0: regs=r6 stack= before 11: (25) if r6 > 0x3 goto pc+4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 10: (bf) r6 = r0")
++__msg("mark_precise: frame0: regs=r0,r6 stack= before 10: (bf) r6 = r0")
+ __msg("mark_precise: frame0: regs=r0 stack= before 9: (85) call bpf_loop")
+ /* State entering callback body popped from states stack */
+ __msg("from 9 to 17: frame1:")
 -- 
 2.43.0
+
