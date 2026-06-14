@@ -1,62 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20913A9014;
-	Sat, 13 Jun 2026 23:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E7E7263B;
+	Sun, 14 Jun 2026 01:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781395071; cv=none; b=lPiczVsNm1DBmfWa9sHla5rQrrLuPwkVl8hXpIUP4f6lp4yXTb0gw/Uq6O3CrbkNZQEF5X8nnl6y8Dts4+p7HZpC5hebUrp3UXJlHolQRyBWraJ3TLQOcySXLxinKO3nGymFwRSlNLufYrpesQusBdEzIe5SYRkPwe5+h4zaw4U=
+	t=1781401271; cv=none; b=H4jRE0puvV/fsVH3F/BgPJGbH+pISfLa9ytINV5VL/Uak8iBzvBZGTbGSax9R2cFt3uVVNDXvvYtXMLT9DG6toulAMJ9wHaxuC6VtNrbM4LblRZjYl4J3PZUyIaOQeU+k2OelSQBHMlhDT5iy72j7eox4P/3ETJfsphvtSDXzvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781395071; c=relaxed/simple;
-	bh=YG2cubYPjLHIC+ys6upSP0Wm9Bo/6TfID6JfaDk0S/I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tJFprgyVtgH9Jvh3xyAKovwpAr+40cG3CDDfx+2bzOBaeW6HL9o5WGgs9HOYczpMqlPVjVsh2MrqPPgtC2ud6qr4fmrkQu7WFTpUb0wuXafXo1xCJ1N+grZu06N3fI4KKU8hQ7aE5QVU/1oT8IygCjU5jin1aHhUMz8N+hA1JnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PfdIllRq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781401271; c=relaxed/simple;
+	bh=JbZdSQrPsoMtCoCsQlptOjGGwGXcWES02t3ZM4IaYqE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WN30PHUTHIn1a5sLy+6yEFwM609MtpkRnU6Sdo80qH9ctFfDRo7yQKUlIT8fxabu5GGnOAwkqc8U7Eu2rBjlFRUyA/fCwz6/Kp3jWKHmP2BA+D1ad0MfI4PLeTUv4npScTgd5I9C0avg1cuZrt1OqTsDy/XkWKD7GarivfsLGKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aA0axU2h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PfdIllRq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85F81F000E9;
-	Sat, 13 Jun 2026 23:57:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aA0axU2h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9749D1F000E9;
+	Sun, 14 Jun 2026 01:41:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781395070;
-	bh=YG2cubYPjLHIC+ys6upSP0Wm9Bo/6TfID6JfaDk0S/I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PfdIllRqsO4bdUGRPWYy7XNJJuIc2HR+5d0Ubp53CFofvJEolQsIH4fn5zfTSP+Hp
-	 CAzJ9TXHT1VmXm12NmbWzTgtUH6o+3mz7kNXVjyExuF/6AhmjgDX8c91B2Y/0GXbrS
-	 G9n0FX8vmuXWx5L3q6OBxW+K/URJj3ORiIsuoVBzPDjT6f6+3aIZqPZkGBTQ+Vai9F
-	 ObcIDvVXa1ThlVBsM+J47zXJsh3vGw6CNCtyPS3sYkryM47bfRKMY9URJBU94P+1jf
-	 dGIBnQsnORqPFA1G7hHRY001VwD3s6ZqkceMy42kxfz4GmbUgyVH4J5gVLPgypxVi6
-	 RgVvQGCQRp5IA==
-Date: Sat, 13 Jun 2026 16:57:49 -0700
+	s=k20260515; t=1781401270;
+	bh=H2kWOLsf3qvRadBE6Tkjq3oEXqykXbMUDicFB5vUenA=;
+	h=From:To:Cc:Subject:Date;
+	b=aA0axU2hVYwip/24PcDgxNB4zkkKDLjFpi3oqBAVMNDaoAyAr7CkCLj1ALyhA0IXV
+	 Er4wWr2AOOt4cIVmYRzM0oqy/q9lIYElntDWfCuPPEZxXhqemZyYiXf08ZloeEyKm8
+	 QT9fSjIK83svkl/gTFvq7nJ8+fXmbf9tRGFmU8UqBkkoGSNrbiwRJOyL4BXoAp5p/S
+	 TAZ8ZMnBBSmvbWRqtv+XiQfaMu5SN4IDRB2Uh5uh2y8APd+QrH7SSlcZdjMFM8AfSG
+	 IE7MCr0HpzwA1ecIOyijMraIfuAj+eAXvkpKR9ClAxonpTXc7TVnmQE0hxfpaMbi6Q
+	 mmIvPf+l7Gcyg==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Yiming Qian <yimingqian591@gmail.com>
-Cc: security@kernel.org, John Fastabend <john.fastabend@gmail.com>, Jakub
- Sitnicki <jakub@cloudflare.com>, Sabrina Dubroca <sd@queasysnail.net>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, keenanat2000@gmail.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net v2] net: skmsg: preserve sg.copy across SG
- transforms
-Message-ID: <20260613165749.32fbdae6@kernel.org>
-In-Reply-To: <20260610062137.49075-1-yimingqian591@gmail.com>
-References: <20260610062137.49075-1-yimingqian591@gmail.com>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	jakub@cloudflare.com,
+	john.fastabend@gmail.com,
+	sd@queasysnail.net,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 0/5] tls: reject the combination of TLS and sockmap
+Date: Sat, 13 Jun 2026 18:40:55 -0700
+Message-ID: <20260614014102.461064-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Jun 2026 06:21:36 +0000 Yiming Qian wrote:
-> The sk_msg sg.copy bitmap is part of the scatterlist entry ownership
-> state. A set bit tells sk_msg_compute_data_pointers() not to expose the
-> entry through writable BPF ctx->data. This protects entries backed by
-> pages that are not private to the sk_msg, such as splice-backed file
-> page-cache pages.
+There are no known TLS+sockmap users and it has some known
+hard to solve bugs. Let's reject this configuration as we
+discussed a number of times.
 
-Note to other maintainers: please don't commit this yet.
-I will send a de-feature for TLS+sockmap to net-next,
-if this is in the tree the CI won't ingest it (once CI
-goes thru we can merge and fix the conflict).
+Jakub Kicinski (5):
+  tls: reject the combination of TLS and sockmap
+  tls: remove dead sockmap (psock) handling from the SW path
+  selftests/bpf: remove sockmap + ktls tests
+  selftests/bpf: drop the unused kTLS program from test_sockmap
+  selftests/bpf: test that TLS crypto is rejected on a sockmap socket
+
+ include/linux/skmsg.h                         |   9 -
+ .../selftests/bpf/progs/test_sockmap_kern.h   |  56 ---
+ net/core/skmsg.c                              |  52 +--
+ net/tls/tls_main.c                            |  19 +-
+ net/tls/tls_sw.c                              | 399 ++---------------
+ .../selftests/bpf/prog_tests/sockmap_ktls.c   | 420 +++---------------
+ .../selftests/bpf/progs/test_sockmap_ktls.c   |  61 ---
+ tools/testing/selftests/bpf/test_sockmap.c    | 250 +----------
+ 8 files changed, 119 insertions(+), 1147 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
+
+-- 
+2.54.0
+
