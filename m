@@ -1,111 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61258BE9
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 01:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B35C1A6800
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 02:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781402364; cv=none; b=kSEPGlA5kzBszsEJpMOPLez1SubMPME1dIu+6aZY/WdveXAvAPN5uOeml75bHyqiolrKcKLHM4D74VWc6dOE5+KEVPfKKZZubgiXNpiqzfQMUp0ry3+PtgyzPul4c/UqJdlqi4wN6OYh/TLauyPWxpZ6aRpzcTBTmo0apMN+C+w=
+	t=1781402753; cv=none; b=B0sZQQQhugYXVkoID1az0hxFSVjcvSUaAaeG/LnCB2hvCk0BZrlKB6KilSJm/vr+TIMk628nbEZZleqBJMaqv6levRpqzt/BgIgdKVLWUsO7ALK6jGusEa/LSxlm/Mo+3AsrGrNJXA0f1OroCgG9U72pilQ2AMtDzkfWWPQwtl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781402364; c=relaxed/simple;
-	bh=64ycfqUQF3hDlD22szamPn6bsGLecriwVe1eHgm73Eg=;
+	s=arc-20240116; t=1781402753; c=relaxed/simple;
+	bh=BJ9CoV2JTgdvKvoHGH6ODr+5FX0AMc2b2w5JaFHv4Ew=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YwWHI8LgNJvnez587o2eAnkUqVc6F6mvaeb2OfznMrcfiI/w2KOrLt/u/BfIl8Vd/7hLM8OIbuGhZdAIB456YN2ZFW2wQL3PD+ckbnWVIdW2G64pqbF3UcdxvPPwCI2AaRq54Sm8rrBIfdCEXLsasKjpHSYFPdY+APW+DTiemXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a43Jd8B2; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nuKV1LOzhPT2WQ18Kp939jvwJ2rAicQPil//3sdG6jwjbbldrxBaFPHQxg/KvFh06E1HYr7Y4Vh3x1hI8XG3OOOSppBPzd++eGn2C13m7yAYfbj1iIG3v19gDU4tPfzRdat8Zhgn9/0Rf0r0dBRsH8e6MFJ8uqwVtV2Kpeox6oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J6XBT5dg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a43Jd8B2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC301F000E9;
-	Sun, 14 Jun 2026 01:59:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J6XBT5dg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022A11F000E9;
+	Sun, 14 Jun 2026 02:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781402363;
-	bh=bRoGoyiBjtFo+2/C8UPMPgTABIV4/KRyTAnt4egLOos=;
+	s=k20260515; t=1781402752;
+	bh=/b1Fo36fNirwrY4t2vAd3yBCCYknWOaNKOVh84iT+t0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=a43Jd8B2hC68P3KLbadeXBM0Z6/nwfZnHHTwHuJxBtsl6hpvPklr9Pmus0xNAWxg1
-	 yB3Z02BY1AIw/IBOHgDryIWp7sZBXfokvRee9iA6fR6uf+qTZx4NF3eIejqJP1n9BX
-	 eY6IQsl1lCjUMX3mV7Lxdsty+R+t3ORf6rcmCn0USio9NFb6mquB7maDrA5LraE2Is
-	 Cs+QfhrtkfioZS/Quj+QQPkTmiB917ReKKNAsT0Mc5vvh66l0iJjktOne4UIUfO2ca
-	 ZkvEfL0lKt3uvGtzXvG0tcDbe6voHQ4JDPULwmDxLdblacdQjpUkwnWmrO9iLTBm0x
-	 vfkVhf9BL1Mxw==
+	b=J6XBT5dgQNpuqaWPEo1j+VMej9pIViBIReLKsNk0KCCQw4TuYvRGUMrho/1z2oNiy
+	 0/eM7AwX1Pme71xiebsXYZQc3dADct0KnqfUTjwhE0Rz07jFE26vT872E2Z17ySCmW
+	 9o62a+sFagmPyVGIzJdtgVVf7lIs1YisjM5c96StLYyYQ5UgDVhtG0wqvhdKUILhXH
+	 aw2yiLXgKVXKrJrpDSmRMtDas8G/FTD6CAR/G61h53B0Mw90yaFghnf/TZJwzdbBUy
+	 0lnysL8CzxSa4TB3sv5u7zcORiln+WwWohCJg7dyDfmtZo6+vGvdRHh5+DymGgquHs
+	 Uxn8SjJQzgnOw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 4/6] libbpf: ringbuf: Use compiler atomics
+Subject: Re: [PATCH bpf 3/6] libbpf: ringbuf: Handle position counter wrap
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tamir Duberstein" <tamird@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-4-e623481cb724@kernel.org>
-References: <20260613-bpf-ringbuf-fixes-v1-4-e623481cb724@kernel.org>
+In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org>
+References: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 14 Jun 2026 01:59:22 +0000
-Message-Id: <20260614015923.3BC301F000E9@smtp.kernel.org>
+Date: Sun, 14 Jun 2026 02:05:51 +0000
+Message-Id: <20260614020552.022A11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] 32-bit monitoring applications using the BPF ring buffer on a 64-b=
-it kernel will permanently stall after processing 4GB of events due to an u=
-nsigned long pointer type mismatch for producer/consumer positions.
+- [High] `__bpf_ringbuf_reserve` in the kernel permanently fails allocation=
+s after 32-bit position wrap-around.
+- [High] Kernel-side `__bpf_user_ringbuf_peek` incorrectly handles 32-bit w=
+rap-around, leading to permanent stalls and bypassing bounds checks.
+- [High] 32-bit userspace running on a 64-bit kernel permanently breaks BPF=
+ ring buffers after 4GB of data is processed due to pointer size mismatches.
 --
 
-commit b302f5c853774170c0ab9e37b85abcc4d647ac3b
+commit ce5e8d811804f9ff598195a7f394512f77c373b0
 Author: Tamir Duberstein <tamird@kernel.org>
 
-libbpf: ringbuf: Use compiler atomics
+libbpf: ringbuf: Handle position counter wrap
 
-This commit replaces architecture-specific smp_* helpers with portable comp=
-iler
-atomics for shared memory accesses in the consumer-side ring buffer code.
+Ring buffer positions are unsigned long counters and can wrap on 32-bit
+systems. ringbuf_process_ring() stops consuming when producer_pos wraps
+below consumer_pos because it compares the counters by magnitude.
 
 > diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index b7adce37b5196..1c24a83f59d5c 100644
+> index ae7fa79b62170..b7adce37b5196 100644
 > --- a/tools/lib/bpf/ringbuf.c
 > +++ b/tools/lib/bpf/ringbuf.c
-[ ... ]
-> @@ -284,14 +284,16 @@ static int64_t ringbuf_process_ring(struct ring *r,=
- size_t n)
->  				err =3D r->sample_cb(r->ctx, sample, len);
->  				if (err < 0) {
->  					/* update consumer pos and bail out */
-> -					smp_store_release(r->consumer_pos,
-> -							  cons_pos);
-> +					__atomic_store_n(r->consumer_pos,
-> +							 cons_pos,
-> +							 __ATOMIC_RELEASE);
->  					return err;
->  				}
->  				cnt++;
->  			}
-> =20
-> -			smp_store_release(r->consumer_pos, cons_pos);
-> +			__atomic_store_n(r->consumer_pos, cons_pos,
-> +					 __ATOMIC_RELEASE);
+> @@ -268,7 +268,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
+ize_t n)
+>  	do {
+>  		got_new_data =3D false;
+>  		prod_pos =3D smp_load_acquire(r->producer_pos);
+> -		while (cons_pos < prod_pos) {
+> +		while (cons_pos !=3D prod_pos) {
+>  			len_ptr =3D r->data + (cons_pos & r->mask);
+>  			len =3D smp_load_acquire(len_ptr);
+>=20
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does this write to
-consumer_pos safely handle a 32-bit userspace application running on a
-64-bit kernel?
+This is a pre-existing issue, but does this fix fully resolve the behavior
+for 32-bit userspace applications running on 64-bit kernels?
 
-In the kernel, struct bpf_ringbuf defines consumer_pos and producer_pos as
-unsigned long, which are 64 bits. However, in libbpf's struct ring,
-consumer_pos is mapped as an unsigned long pointer, which is only 32 bits
-in a 32-bit userspace environment.
+Looking further down in ringbuf_process_ring(), userspace updates the
+consumer position:
 
-When the 32-bit user process updates consumer_pos via __atomic_store_n(), it
-only overwrites the lower 32 bits of the 64-bit value on little-endian
-systems. Once the true consumer position exceeds 4GB, the userspace 32-bit
-value wraps to 0. Writing 0 to the lower 32 bits while the upper 32 bits
-remain 0 causes the kernel to see consumer_pos drop to 0, while the 64-bit
-producer_pos continues climbing past 4GB.
+    __atomic_store_n(r->consumer_pos, cons_pos, __ATOMIC_RELEASE);
 
-This causes the kernel's bpf_ringbuf_has_space() to see a delta larger than
-the ring buffer mask, incorrectly treating the buffer as completely full and
-permanently dropping all subsequent events for that buffer.
+On a 32-bit architecture, this writes 4 bytes. However, the 64-bit kernel
+defines consumer_pos as an 8-byte unsigned long. When the 32-bit userspace
+counter wraps at 4GB, it writes 0 to the lower 4 bytes while leaving the
+upper 4 bytes unchanged.
+
+Could this cause the kernel's bpf_ringbuf_has_space() to perceive an
+instant drop in the consumer position, making it evaluate the ring buffer
+as permanently full?
+
+[Severity: High]
+This is a pre-existing issue, but does the kernel side have a similar
+wrap-around issue in __bpf_ringbuf_reserve()?
+
+kernel/bpf/ringbuf.c:__bpf_ringbuf_reserve() {
+    ...
+    while (pend_pos < prod_pos) {
+        ...
+    }
+    ...
+}
+
+Since pend_pos and prod_pos are unsigned longs, on 32-bit kernels, does
+this magnitude comparison fail when producer_pos wraps around to a small
+value? It appears pend_pos would freeze at its pre-wrap value, causing
+bpf_ringbuf_has_space() to permanently return false and deny future
+allocations.
+
+[Severity: High]
+This is also a pre-existing issue, but does __bpf_user_ringbuf_peek() have
+a related wrap-around bug on 32-bit systems?
+
+kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
+    u64 cons_pos, prod_pos;
+    ...
+    prod_pos =3D smp_load_acquire(&rb->producer_pos);
+    ...
+    cons_pos =3D smp_load_acquire(&rb->consumer_pos);
+    if (cons_pos >=3D prod_pos)
+        ...
+}
+
+Because rb->producer_pos and rb->consumer_pos are 32-bit unsigned longs on
+32-bit systems, are they zero-extended to 64-bit u64 variables? If
+producer_pos wraps around while consumer_pos is still large, does the
+64-bit promotion cause the magnitude comparison to evaluate to true,
+permanently stalling consumption by returning -ENODATA?
+
+Additionally, would the 64-bit subtraction (prod_pos - cons_pos) yield a
+massive value that defeats the bounds check?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613-bpf-ringbu=
-f-fixes-v1-0-e623481cb724@kernel.org?part=3D4
+f-fixes-v1-0-e623481cb724@kernel.org?part=3D3
