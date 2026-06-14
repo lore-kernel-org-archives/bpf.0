@@ -1,143 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B35C1A6800
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 02:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B3820459A
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 02:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781402753; cv=none; b=B0sZQQQhugYXVkoID1az0hxFSVjcvSUaAaeG/LnCB2hvCk0BZrlKB6KilSJm/vr+TIMk628nbEZZleqBJMaqv6levRpqzt/BgIgdKVLWUsO7ALK6jGusEa/LSxlm/Mo+3AsrGrNJXA0f1OroCgG9U72pilQ2AMtDzkfWWPQwtl4=
+	t=1781405472; cv=none; b=khRkQMzflnxSsb73x7KPuC5SYvHLL5kcihy28r36lfjY/7BeQAFXxQGaZK/xEis/BHQ9RCnOBZmL5hi/+0L2yo6nw1gu9wUK/nBo0ZbsGds4TKKv2e2hcxEwK+YkyHZB0+lweToInUjRYVH7XJ1EorYMZUJsMy7YhfDPk5ZH/aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781402753; c=relaxed/simple;
-	bh=BJ9CoV2JTgdvKvoHGH6ODr+5FX0AMc2b2w5JaFHv4Ew=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nuKV1LOzhPT2WQ18Kp939jvwJ2rAicQPil//3sdG6jwjbbldrxBaFPHQxg/KvFh06E1HYr7Y4Vh3x1hI8XG3OOOSppBPzd++eGn2C13m7yAYfbj1iIG3v19gDU4tPfzRdat8Zhgn9/0Rf0r0dBRsH8e6MFJ8uqwVtV2Kpeox6oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J6XBT5dg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781405472; c=relaxed/simple;
+	bh=gg7dpLrmLc7oiiuhaL1cHZuaxegy00uI7onhcqKxofo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HcSLMLMeU7J7DMf1zhFTKtH+IyDRMH4DTvcmFosjmk0sWgvXR2RJZUXmn/Rpsr9UttMLSjEWxpMz6C39JMG5PUGDLk0KB94qiGCS0jmSykvgs5t1WSJFSPoJlch3iCtbXgMmjQxP9/GQzsrJ3YwfPk8NbSGGOzYoy7067wl4lFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ifpPTiwc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J6XBT5dg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022A11F000E9;
-	Sun, 14 Jun 2026 02:05:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ifpPTiwc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE521F00A3E
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 02:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781402752;
-	bh=/b1Fo36fNirwrY4t2vAd3yBCCYknWOaNKOVh84iT+t0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J6XBT5dgQNpuqaWPEo1j+VMej9pIViBIReLKsNk0KCCQw4TuYvRGUMrho/1z2oNiy
-	 0/eM7AwX1Pme71xiebsXYZQc3dADct0KnqfUTjwhE0Rz07jFE26vT872E2Z17ySCmW
-	 9o62a+sFagmPyVGIzJdtgVVf7lIs1YisjM5c96StLYyYQ5UgDVhtG0wqvhdKUILhXH
-	 aw2yiLXgKVXKrJrpDSmRMtDas8G/FTD6CAR/G61h53B0Mw90yaFghnf/TZJwzdbBUy
-	 0lnysL8CzxSa4TB3sv5u7zcORiln+WwWohCJg7dyDfmtZo6+vGvdRHh5+DymGgquHs
-	 Uxn8SjJQzgnOw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 3/6] libbpf: ringbuf: Handle position counter wrap
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tamir Duberstein" <tamird@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org>
-References: <20260613-bpf-ringbuf-fixes-v1-3-e623481cb724@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 14 Jun 2026 02:05:51 +0000
-Message-Id: <20260614020552.022A11F000E9@smtp.kernel.org>
+	s=k20260515; t=1781405470;
+	bh=zsOFJiQWZo2PUzZwgIwveMuD9BU2S6/VAbRPL9C2H2I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=ifpPTiwcBd4dDy/jXvQTJsoz1cjK0pIFhHSaI0qvf9ETP7wkhKwXsGBLzkbn5+Suy
+	 mzRiCRe3W9DdiZSFFTtn9WMcItHAhYRVxp5/W5Wfu04nv+bH46lQutQrQ5YZVb8N4E
+	 JjwP7jdLI9U1XsILyZClJ4+LIpCiX9+TLj4WPW8ZElMm5sA3I2WklrR/YQ++4/BAXR
+	 jP5seQexvwSj06qo/VICfQINoz5toTrW2J0QDSuRbYlAaQAUEbj6/nE+b38dhoMJxP
+	 JaIiYVLG9mxpmFlucGhVhYrkz8GkTRPrgQHCZCc8Fe+SAF+B9rNFN3Je7XArri3jdj
+	 9UpaABXgmW2tA==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-691c5776f95so4234576a12.3
+        for <bpf@vger.kernel.org>; Sat, 13 Jun 2026 19:51:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/fQU31HM+555qpQGlDBikNrrYT9pf7mryJYoKGxBS20S7GwJ9vqkQwg/jtZAjU3ZzsJFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcTWH8/fix4n55dvdogXbEnhnbABJfxil2/N3xTll7NyiKUfN2
+	4SL/Zj7lXrwVzajj51TkBhKugWWISiA9NfN1MhCKjD5B+dtWUVwr9ckxbu+Mhky5025jFVeloCm
+	n1Dbp6OyGVQlsaFdSZSUR1ubUQpjn4F0=
+X-Received: by 2002:a05:6402:ea9:b0:691:3fb2:2172 with SMTP id
+ 4fb4d7f45d1cf-693788fa1d3mr3530698a12.3.1781405468983; Sat, 13 Jun 2026
+ 19:51:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260612011616.27771-1-yangtiezhu@loongson.cn>
+In-Reply-To: <20260612011616.27771-1-yangtiezhu@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 14 Jun 2026 10:51:32 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com>
+X-Gm-Features: AVVi8CegOAzFfmmxV07n83RvAu6ldqrUGS5b4IQcKcHgluUfVlLTDQW772jxAwA
+Message-ID: <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Move thread_info into task_struct for LoongArch
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+Hi, Tiezhu,
 
-Pre-existing issues:
-- [High] `__bpf_ringbuf_reserve` in the kernel permanently fails allocation=
-s after 32-bit position wrap-around.
-- [High] Kernel-side `__bpf_user_ringbuf_peek` incorrectly handles 32-bit w=
-rap-around, leading to permanent stalls and bypassing bounds checks.
-- [High] 32-bit userspace running on a 64-bit kernel permanently breaks BPF=
- ring buffers after 4GB of data is processed due to pointer size mismatches.
---
+I have queued this series for 7.2, does the below series depend on this one=
+?
 
-commit ce5e8d811804f9ff598195a7f394512f77c373b0
-Author: Tamir Duberstein <tamird@kernel.org>
+https://lore.kernel.org/loongarch/20260521125636.26744-1-yangtiezhu@loongso=
+n.cn/T/#t
+https://lore.kernel.org/loongarch/20260428080051.20938-1-yangtiezhu@loongso=
+n.cn/T/#t
 
-libbpf: ringbuf: Handle position counter wrap
+Huacai
 
-Ring buffer positions are unsigned long counters and can wrap on 32-bit
-systems. ringbuf_process_ring() stops consuming when producer_pos wraps
-below consumer_pos because it compares the counters by magnitude.
-
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index ae7fa79b62170..b7adce37b5196 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -268,7 +268,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->  	do {
->  		got_new_data =3D false;
->  		prod_pos =3D smp_load_acquire(r->producer_pos);
-> -		while (cons_pos < prod_pos) {
-> +		while (cons_pos !=3D prod_pos) {
->  			len_ptr =3D r->data + (cons_pos & r->mask);
->  			len =3D smp_load_acquire(len_ptr);
->=20
-
-[Severity: High]
-This is a pre-existing issue, but does this fix fully resolve the behavior
-for 32-bit userspace applications running on 64-bit kernels?
-
-Looking further down in ringbuf_process_ring(), userspace updates the
-consumer position:
-
-    __atomic_store_n(r->consumer_pos, cons_pos, __ATOMIC_RELEASE);
-
-On a 32-bit architecture, this writes 4 bytes. However, the 64-bit kernel
-defines consumer_pos as an 8-byte unsigned long. When the 32-bit userspace
-counter wraps at 4GB, it writes 0 to the lower 4 bytes while leaving the
-upper 4 bytes unchanged.
-
-Could this cause the kernel's bpf_ringbuf_has_space() to perceive an
-instant drop in the consumer position, making it evaluate the ring buffer
-as permanently full?
-
-[Severity: High]
-This is a pre-existing issue, but does the kernel side have a similar
-wrap-around issue in __bpf_ringbuf_reserve()?
-
-kernel/bpf/ringbuf.c:__bpf_ringbuf_reserve() {
-    ...
-    while (pend_pos < prod_pos) {
-        ...
-    }
-    ...
-}
-
-Since pend_pos and prod_pos are unsigned longs, on 32-bit kernels, does
-this magnitude comparison fail when producer_pos wraps around to a small
-value? It appears pend_pos would freeze at its pre-wrap value, causing
-bpf_ringbuf_has_space() to permanently return false and deny future
-allocations.
-
-[Severity: High]
-This is also a pre-existing issue, but does __bpf_user_ringbuf_peek() have
-a related wrap-around bug on 32-bit systems?
-
-kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
-    u64 cons_pos, prod_pos;
-    ...
-    prod_pos =3D smp_load_acquire(&rb->producer_pos);
-    ...
-    cons_pos =3D smp_load_acquire(&rb->consumer_pos);
-    if (cons_pos >=3D prod_pos)
-        ...
-}
-
-Because rb->producer_pos and rb->consumer_pos are 32-bit unsigned longs on
-32-bit systems, are they zero-extended to 64-bit u64 variables? If
-producer_pos wraps around while consumer_pos is still large, does the
-64-bit promotion cause the magnitude comparison to evaluate to true,
-permanently stalling consumption by returning -ENODATA?
-
-Additionally, would the 64-bit subtraction (prod_pos - cons_pos) yield a
-massive value that defeats the bounds check?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260613-bpf-ringbu=
-f-fixes-v1-0-e623481cb724@kernel.org?part=3D3
+On Fri, Jun 12, 2026 at 9:16=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> Based on 7.1-rc7, tested with stress-ng, successfully passed
+> the 10-hours stress testing suite, and UnixBench benchmarking
+> shows a steady performance lift across all core counts.
+>
+> Thanks Huacai, Wang Rui, sashiko-bot and bot+bpf-ci for your
+> review comments and valuable suggestions.
+>
+> Tiezhu Yang (3):
+>   LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
+>   LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+>   LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
+>
+>  .../core/thread-info-in-task/arch-support.txt |  2 +-
+>  arch/loongarch/Kconfig                        |  1 +
+>  arch/loongarch/include/asm/current.h          | 31 +++++++++++++++++++
+>  arch/loongarch/include/asm/smp.h              |  3 +-
+>  arch/loongarch/include/asm/stackframe.h       |  9 ++++--
+>  arch/loongarch/include/asm/switch_to.h        |  6 ++--
+>  arch/loongarch/include/asm/thread_info.h      | 10 ------
+>  arch/loongarch/kernel/asm-offsets.c           |  6 ++--
+>  arch/loongarch/kernel/entry.S                 |  7 +++--
+>  arch/loongarch/kernel/head.S                  | 18 ++++++-----
+>  arch/loongarch/kernel/process.c               |  2 ++
+>  arch/loongarch/kernel/relocate.c              |  2 +-
+>  arch/loongarch/kernel/setup.c                 |  1 +
+>  arch/loongarch/kernel/smp.c                   |  6 ++--
+>  arch/loongarch/kernel/switch.S                | 14 +++++----
+>  arch/loongarch/kernel/traps.c                 |  8 +++++
+>  arch/loongarch/net/bpf_jit.c                  | 26 ++++++++++++++++
+>  17 files changed, 114 insertions(+), 38 deletions(-)
+>  create mode 100644 arch/loongarch/include/asm/current.h
+>
+> --
+> 2.42.0
+>
+>
