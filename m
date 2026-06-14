@@ -1,186 +1,107 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162A5218592
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 18:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5DE2DC344
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 19:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781460312; cv=none; b=s1AT41OF+Akx6c4Mnwsky3z1+6krq5bALl4jo+JI9WzETX37vJEw/x9tb+mnEIjaKEbpcsf5P6nWR4Nw43x3YUcvEDr0rXnfqkk8djKDq0X+IRxc4jvjKs7IfdPPYpZNXIbbZa40YyFL4eycb9wliiq6ZlTv6hmBSwb6XiCsMiY=
+	t=1781464330; cv=none; b=X75kTYwFlTYzd2cSHOYoBWCbicuBirAzLbhFCB2m+d/iuwZVYiqZH0E1eZ19UFttcqcN0Fyihv/Zw0bQ1n6MBBVo5s0donyj1X73/2bzB4bdk5Y3iJcLDVcfQy/QeoT8yMBzjqTeu82jgX/SaaYa41BQS+a+KqvBkJfgnr9qjrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781460312; c=relaxed/simple;
-	bh=JW8FVJjTWsEThSF8JuDPEQLVO8P4vvAGBguPLz2MzXQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L7VwEZTN/d7KwlMnu1VxM704eLE2egwtzG8L4Z+n87Rd/7uoi6ny3GDNxGvRsOFrDgWH473YeoNAkBmax1RfBSz1Jj0kE94Khc2/Zsrn7tEo4HCFySl1maGeXoMZ3ZdxtwczxKsdaKrnyIKJDOuw2RN+V/Q9ZiipOvDghtMBjpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fl4uK8Bs; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781464330; c=relaxed/simple;
+	bh=w8H8VF4ay2nFrbeburyYYNENKSJcO+w6YhkDtVoSxMI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=oCLmuV/smxeSq9zJ7hylGZ0WxHlj0duyolTWBFmXbfY3Fm6i6MTjy5uvSfU2EpCx2Ys06830nquc4QrMlAvgcTrVhzNWiO+z0OShdXG5EH4+3xB+y/sD009XQufrq0XUWR7bGT7XflLhGrhXM8Kf1zz+SPeA/pBBiwMhajNp4hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ydp5yoLK; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fl4uK8Bs"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490b64c8311so26644695e9.3
-        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 11:05:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ydp5yoLK"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c0115a3794bso108556066b.0
+        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 12:12:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781460309; x=1782065109; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ODX1HfUpj996EHRxNq42AhNa5RpVxfOswnO9waGWRWU=;
-        b=Fl4uK8BsJaZJVqgss5hjKhcnd5Y12cSDM9HyD7qTiBSnX8H8JuXzMKvycKW/iwWPGz
-         6en+ISzeURkRnKGV98nxK0GfZlc/Lxz+x8ISsNvO5OYSVwkw3PkmwD9UQPVV/SLJskzI
-         VtUSrXSCYvHohqidwpH3wmlVulFlt5d0/Tf3NbrqHGgkFFdluXk3ifKlgl3crzW4oIQ4
-         6MHFGyoEe8KrCml7MmQRy1OEabM7/HjQVFcsks5o5RJ0j9o14EzMHaLY1L+40qCrcEQX
-         ZtrLSlDYwBqtUNRqbZyPGwwyx0i1k5ZpZoUJrzSdfUywYCKhvTqSq9dGsIklXpIYhrQQ
-         +r6A==
+        d=cloudflare.com; s=google09082023; t=1781464328; x=1782069128; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lQbr/DVUC2MJPasVAk/HJTfXKnamDXGW7esLMB8WW/M=;
+        b=Ydp5yoLKUAgfhAqvsp7GVRJh0ShPQ2nKG5dhnWDBIULD5G13YZygIlKYn26RNhhPn5
+         ire0ed8isgPdiq7omhcHXhkMSlNtxj7ghvPCWijfj9I1ts3MzMsDVSl1NHkuR9BbHxzD
+         NYQA8enkDO/HLx+ebvsk41gO0pyJjhEbcbCvizN3miaeFZy+SxadFn9kEvuZIf1Ofj9v
+         sQVd7hH1Xb+Z8CBH00XnZzEVFEeN75P2uqP9M8maEsWmzMmyd13RYC5f0XxOML1G9cWp
+         F3mXcwQ8rbNzFgnExqHHZhxgEDq/JzTPQ3sYsaURv8qwcfPq9VXJumMH37Cpzj/fDLS0
+         S3ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781460309; x=1782065109;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ODX1HfUpj996EHRxNq42AhNa5RpVxfOswnO9waGWRWU=;
-        b=ki/DIbsXYKHpfW1gskiroaPltV8xeFKt12Ye5yQ2hKhoMMiM7gxXREUOR6fMRGkRu5
-         Ym0nAr716ltmBbouS8cedFG6SCsgZXgPjyRtOK1aazrmdk90u5ILiwxk9avyjfdclRDw
-         6UtbHk2tu4udLzzsx9yY+mtF3w6z0d8cACI0/9+GOoFnID1N/h0dME+yZz4jXRE94+Ya
-         rc51d2NzfC0XCPYa9uLhbMCbNyIGEqdUlBt6jYwCQGgUzAg7/pTDRPkpylQdWouTk36I
-         /Y8QgAmAp9Z8U0rylI1VprOaCSTyilgrxGZYkN+rVjSWJALUpKzGeYvb/ceIOUNxfv9x
-         TDhA==
-X-Gm-Message-State: AOJu0Yx/gkXAR05dybLAFRmPjdFi1NDLCTMAreAk97KOUhe7T+BmjML0
-	7ObhNjAARcTHC0gzaBTwonuUW0u4Pc74D3EY4UTMnl8wd4hzl8mqakIT31NT8lHu0pw=
-X-Gm-Gg: Acq92OH+NVvC+90FOPhrKEobguA9Kgl0G1sAVY53BUX0RFocgjS2EQVc4vWdsdZaV7M
-	CWY9R2uNHiFTWopKRbVY9JZNq0YgWnZsFz5veSybzyadY2SkQKFpeZwMv22L0g1+ApfGkjOrexW
-	Rt+jfhjDnRQxTd3tcNNMbSjgELyjqtqG6U/y01FvASuuMqZqewu6JN+NDse+sp+E9OiLSUrWXOr
-	q5IIIcDuYLsFvN3VKXlq98/6cXFHZcOfPH3OjT7uQRZvPxpgDCVDZXRxkazYWXw5vYiLPB7Dr6p
-	hGMBG3xl5qsgw11mQTMWZOUxEpWflOVEf2ycjHyWsgpq26MWO6GqNY4AtPk26ywOSX3cxxxEixb
-	Urs4KEdadbd7CSagAtuTberpJ5OSB6HB/NA2NYdUobSJHMU5bU4L41z5sd9GcYQpnmyLKyFktj6
-	yD78o3/TFhmY7VFMrU3p+k6WY/B/j0mkiQZ3FDNpWzZ23NIe/CosPAWm5TxAs+T0dF/Dmx3FQ0G
-	bzX
-X-Received: by 2002:a05:600c:3b16:b0:491:e3be:1363 with SMTP id 5b1f17b1804b1-491e3be13b3mr127467695e9.0.1781460309301;
-        Sun, 14 Jun 2026 11:05:09 -0700 (PDT)
-Received: from ds-pc.. (host86-147-161-204.range86-147.btcentralplus.com. [86.147.161.204])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49220345528sm205543945e9.8.2026.06.14.11.05.08
+        d=1e100.net; s=20251104; t=1781464328; x=1782069128;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lQbr/DVUC2MJPasVAk/HJTfXKnamDXGW7esLMB8WW/M=;
+        b=PY9BQXv3HRp860aM1+N4sUpQ5AqD7R4RZKD84EclgTC+siQNvHcijNgXlufpDNL3me
+         9MdGNBhlQ1Ztb3CrlWVPDISFju9y6uG76SrK0/qKgpfs5QjxCSDOC5Jl0Z6rfbvx21fw
+         E1ljVDiN5jAiOn4t9+NHTGrQpQC4oCKActIEV4IFccC+vyxJo20cgBbEGLIS6GiIDyz7
+         t2J9eo0WYiZ1+Lrdr9eFNovjL+TRLeE2bBxEtJuME/8v1xRe5r6OlFUaUHYQ4zjyDb1w
+         OeVG4xudArvlSTxfNifqBf2nvO557utui4BszzaqmJdCersV2D33ImOMskUA75NjYPXp
+         dpNQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9U9bc600cM6tCMmXR1YDp8EHH5HVsqQ6eeNW5IcbzOVOqFX7PcztaC0mYfxCP37ttqjw0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2cEjW0IlegdO1p06RsmoiPCqxVC+B/d4HZvtRMCDslzMEG81l
+	sIFS/+ByfXeoPpvmGzHwEcaB9BKex95viuphaYpFywUu955pazm1qGuEE+sq6+WFABTuNgpRk4A
+	bZP8q
+X-Gm-Gg: Acq92OGfWUjLqHT3lgSBRYblJbSXgqQ0xlLMoWizoecXcULEAqvPBflBkXSBfqfzY+A
+	5QbUGG8NPjoJom4ZuuYvpOIjiOJER4IeGft0U9keJ9/DxrFYuDoNZ7cmHKeJrv6L6fTjh19xGxN
+	/4NAORdo7yddrD1P18i10ICdF9TVLA4aXr/7ZgQI/72TlSVr/FbaijLcZXmdYVxqFo6yeOEab6R
+	pLJi49Mbgc0t/wvk5bU/gNt0dHP77qhKH5LDmFImaohezTfoX0C6yQ3c64HmoOmsmXZYYoIL2dE
+	dKDAuqCyucQvyVWCAQEoehCc1K1LOcfRJc1Ae1uJ9sS7jSFS8jwF6Ye2jvJ7VwySPRAXlOO+uBf
+	TZ0WbSDlSwm3+vGsDb+whwTmf3pbmMosN9Hf3cjXsKPDRSD1SkJ8izYA//8Vu+66nGrcyCrhpfG
+	0qJ98M7ObRgA+NlvEygO9dntN4MA==
+X-Received: by 2002:a17:906:cc58:b0:bcc:e8f:c3a8 with SMTP id a640c23a62f3a-bff4bbffc88mr220569866b.29.1781464327163;
+        Sun, 14 Jun 2026 12:12:07 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c01d667f63asm68108466b.19.2026.06.14.12.12.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2026 11:05:08 -0700 (PDT)
-From: Dhiraj Shah <find.dhiraj@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org
-Subject: [PATCH v2] selftests/bpf: Add arena direct-value boundary test
-Date: Sun, 14 Jun 2026 19:04:40 +0100
-Message-ID: <20260614180440.1073941-1-find.dhiraj@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260614163352.1060813-1-find.dhiraj@gmail.com>
-References: <20260614163352.1060813-1-find.dhiraj@gmail.com>
+        Sun, 14 Jun 2026 12:12:05 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
+  andrew+netdev@lunn.ch,  horms@kernel.org,  bpf@vger.kernel.org,
+  john.fastabend@gmail.com,  sd@queasysnail.net
+Subject: Re: [PATCH net-next 1/5] tls: reject the combination of TLS and
+ sockmap
+In-Reply-To: <cbfca457-d118-44cf-b51e-9b0221ae0973@redhat.com> (Paolo Abeni's
+	message of "Sun, 14 Jun 2026 10:09:15 +0200")
+References: <20260614014102.461064-1-kuba@kernel.org>
+	<20260614014102.461064-2-kuba@kernel.org>
+	<cbfca457-d118-44cf-b51e-9b0221ae0973@redhat.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Sun, 14 Jun 2026 21:12:05 +0200
+Message-ID: <87bjddc4xm.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add coverage for direct map value access against BPF_MAP_TYPE_ARENA.
-For a one-page arena, an offset of PAGE_SIZE - 1 is valid, while
-PAGE_SIZE is one byte past the end of the mapping and must be rejected.
+On Sun, Jun 14, 2026 at 10:09 AM +02, Paolo Abeni wrote:
+> On 6/14/26 3:40 AM, Jakub Kicinski wrote:
+>> TLS and sockmap (BPF psock) integration hides a lot of latent bugs.
+>> Bugs which may be more or less relevant for real users but they
+>> are definitely exploitable.
+>> 
+>> We could not find anyone actively using this integration so let's
+>> reject this config. Adding a TLS socket to a sockmap was already
+>> rejected by sk_psock_init() through the inet_csk_has_ulp() check.
+>> We need to reject the attempts to configure the TLS keys (rather
+>> than adding the ULP itself) because checking prior to the ULP
+>> installation is tricky without risking a race with sockmap getting
+>> added in parallel (sockmap does not hold the socket lock).
+>
+> Aren't both tls_ctx_create() and sk_psock_init() under (write) the
+> callback lock? Isn't that enough to avoid races?
 
-Skip the test when arena maps are not supported by the target
-architecture.
++1, but we would have to tweak inet_csk_has_ulp() to check for
+icsk_ulp_data in addition to icsk_ulp_ops. Only icsk_ulp_data is set
+under sk_callback_lock.
 
-This covers the off-by-one case in arena direct-value range checking.
+espintcp faces the same race...
 
-Signed-off-by: Dhiraj Shah <find.dhiraj@gmail.com>
----
-Changes in v2:
-- Skip the test when BPF_MAP_TYPE_ARENA is unsupported.
-
- .../bpf/prog_tests/arena_direct_value.c       | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-new file mode 100644
-index 000000000000..d58790a66cc8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <bpf/bpf.h>
-+#include <errno.h>
-+#include <linux/filter.h>
-+#include <sys/mman.h>
-+#include <sys/user.h>
-+#ifndef PAGE_SIZE
-+#include <unistd.h>
-+#define PAGE_SIZE getpagesize()
-+#endif
-+
-+static int create_arena(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_MMAPABLE,
-+	);
-+
-+	return bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0, 1, &opts);
-+}
-+
-+static int load_direct_value_prog(int map_fd, int off)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_LD_MAP_VALUE(BPF_REG_1, map_fd, off),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	return bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
-+			     insns, ARRAY_SIZE(insns), NULL);
-+}
-+
-+static void test_direct_value_boundary(void)
-+{
-+	void *area = MAP_FAILED;
-+	int map_fd, prog_fd;
-+
-+	map_fd = create_arena();
-+	if (map_fd < 0 && errno == EOPNOTSUPP) {
-+		test__skip();
-+		return;
-+	}
-+	if (!ASSERT_OK_FD(map_fd, "create_arena"))
-+		return;
-+
-+	area = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
-+	if (!ASSERT_NEQ(area, MAP_FAILED, "arena_mmap"))
-+		goto out;
-+
-+	prog_fd = load_direct_value_prog(map_fd, PAGE_SIZE - 1);
-+	if (ASSERT_OK_FD(prog_fd, "last_valid_byte"))
-+		close(prog_fd);
-+
-+	prog_fd = load_direct_value_prog(map_fd, PAGE_SIZE);
-+	if (!ASSERT_LT(prog_fd, 0, "one_past_end"))
-+		close(prog_fd);
-+
-+out:
-+	if (area != MAP_FAILED)
-+		munmap(area, PAGE_SIZE);
-+	close(map_fd);
-+}
-+
-+void test_arena_direct_value(void)
-+{
-+	if (test__start_subtest("direct_value_boundary"))
-+		test_direct_value_boundary();
-+}
--- 
-2.43.0
 
