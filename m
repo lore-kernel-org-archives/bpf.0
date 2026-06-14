@@ -1,134 +1,178 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BFC3CAE9E
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 16:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0295C2D780E
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 17:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781456354; cv=none; b=MdPsmEZm1QRex8Zo+5Id9K42ZEO5iCAEn2cRr/7WWcltK5LV61mQKYakmtGel+y59XlJAYpewm2uUMD3efXd3A1NPGGkshp7yY2Bt7QRuZY7v6pbeIR5s5uzQzCJB08ir4FviGSeMsrWjUuVai+bTaw9KjvFNz8C15ewsHPoRKY=
+	t=1781457057; cv=none; b=n81hF6fVHU+gtqq61jjLlSPDK5cDw6JDveLZlIp3vFjKlykYCs/c696jne0DggJIfxojVk2ermyhfTCLDvmBLfjtSh6alayKsxmvG2jeY23yV6zXtMXwmJzv1PJud/466Y61U7Xn6NayPQI2irhRXk0CZ2fY94aDWbZPRtg3GzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781456354; c=relaxed/simple;
-	bh=FrdCFvpw9MoOQ0+PkoEs5DFfpaCKlDpBo6fwG5E9ypo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OAEfGPb+9oAPni5V5No2QMUXtrjR4PanYSniNZK6rADszl0hJ6VAZ03drzthPIFZ8tX+uVZfSv5ZmBwc4IOqDYVQbmpWQWk6B+rX1I7+e9r22l6tGwPFsAGMg7Pf4Qiax5lCAwypLAgogNprGNMt2sxbx6qDic7LonONBEc2r2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2FSOKdF; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781457057; c=relaxed/simple;
+	bh=RaWo0PxJ9CyUsyxoJN8tmp5zP63k1aQMEK7JGE7q/OQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=PNdUr/3RELe9Yz2OheugHGwyvQxBJScX71mQLjT0wcpffveQRPz0rKPp6n/toTTty0BTy8/deOyLc7jYgM86CdmDjd+G3KtOELLMiy3cVjwfKzx5qRS099+ZuOS9+iwQdXZq+Xu0ZdIPVyM9XFAXr0is9736WbodRZflPEgQ7Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZm2RdK6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2FSOKdF"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36baeec21dcso1609694a91.3
-        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 09:59:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781456353; x=1782061153; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z3rN8waOyeNHOu4xKjl7MMlKsb/kdxpH+0daFeUyAvA=;
-        b=G2FSOKdFwQB13J5J8gIr5yRDvQTS4MNA42/W8Ff/ytJadLTWEpV4xOolmHCDa4e2vg
-         lW2u2IsxAQEnZZYxBiQVmXJlaNY0UReLg+yq2Epses5U8MnRJaoqUZoRzkcdfJbr9lWt
-         G+FJZV54xgAbL/mZXNatMVBCh2Tx8V8nfreOMJYLB5rTGX+ZMEb6qy8m+hlI9Yrm+Tjs
-         IScyLeZkFDk8i++cTsKcWqPl75ed2YLmmPFoaC8a7oeeKAkOIesR3xvPlbtf31tZglWH
-         aivb+hHGeEVxZlr/sJltVaWdVHtDL1an5td7hyOF9J5OD4iCzQ2VKjtI8cmvyswz8Ugx
-         f1Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781456353; x=1782061153;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=z3rN8waOyeNHOu4xKjl7MMlKsb/kdxpH+0daFeUyAvA=;
-        b=OaGgaXJzi3C5nazi/YFJH75qY3TBQzUs6k5drIjdJ/bZVSo4LnaQTDi9lhPAbL1grB
-         Hrln12daBBBf+L4KEtsFAcjWU0qFW7ZDU/n3Ar0vgZESfj0mSS3yEmSQVSZejSkAQHit
-         uEvByO3kp8SHjmGQ0C8lf3VJCN4+IEOCOq2ZODldI6mFMhZsCBaM6uw4Pd8rGeY2ARx3
-         hRZBVNWqGM9y9erwq7qciZL0U5poUE0J0P78YmB6OwbMzoxeAtWdPCmVboUS7HQswIO/
-         Wh0byo4eHDQQVltvBaH4rUiH07uPcbQbx+VlQVQNV4WxLPSDd9sJuN4RY3ElB/6J4dmD
-         pjwQ==
-X-Gm-Message-State: AOJu0YzwKusizsj0mtvQmrHagvUT+x+vuuxGcKvfrshyIhIe/QivsTil
-	lGuPuGtBCzV+RqA6np40P6g4qyBXUSH9ClcO81jstmVHD1fw2exb93NbD5cq/OAOutk=
-X-Gm-Gg: Acq92OEck0hdVNU+w9COtN7dPNlghLAArhfAZM0sgLS6VqPOsciHhYOZ7UxXMJAtr0w
-	gmEaL5QRuv+gsrfGj21xsHKEHmSzvKW462DacrkmS3hn8H9d1C0Q4QT+2dTXM1xCLf6a2azIN9b
-	jvxCRMKaygB5SYlwL8e1Es1B52RukIx1viyJ/VpR2ewoP5ljrDIjR+u2mmZrHAkGVMhIvXi98Oa
-	//tCYrtP+9g3+Ib/FrZLNWmB7pY4SZk9Krea6yzCCiJYBWPvpYFN4OtJuuVdQtdTSoO1lbqQECa
-	LAai4/HjTyA5wOQHHiMjovdsuIMi4Sa2O4NK17elUzTOlhGY7SiH7PsrEuQb4XYSKWaYKesSfMm
-	E03Oixi6Ie2xWxWE8drhYD84puF4J2FpFO5vvBVeT44D+vtdqtFp3g8k4u7DaskIgXPrlFxd+ov
-	tmb3UuVSAAxnAgMU3gcvjuMlkz+RjDqq4=
-X-Received: by 2002:a17:903:3887:b0:2b2:4d36:7ba with SMTP id d9443c01a7336-2c40e0350d2mr121454055ad.0.1781456352693;
-        Sun, 14 Jun 2026 09:59:12 -0700 (PDT)
-Received: from DESKTOP-MUHC17F.lan ([188.253.121.147])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42fbb5b79sm74457405ad.36.2026.06.14.09.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2026 09:59:12 -0700 (PDT)
-From: Zhenzhong Wu <jt26wzz@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	menglong8.dong@gmail.com,
-	eddyz87@gmail.com,
-	shung-hsi.yu@suse.com,
-	stable@vger.kernel.org,
-	mykolal@fb.com,
-	tamird@kernel.org
-Subject: [PATCH stable 6.6.y v3 4/4] selftests/bpf: Update comments find_equal_scalars->sync_linked_regs
-Date: Mon, 15 Jun 2026 00:58:41 +0800
-Message-ID: <3b5b6d9879fac3fb22b76c8249bd7c71609e1c39.1781194510.git.jt26wzz@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1781194510.git.jt26wzz@gmail.com>
-References: <cover.1781194510.git.jt26wzz@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZm2RdK6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901CB1F000E9;
+	Sun, 14 Jun 2026 17:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781457055;
+	bh=1i+rsmGE7K/o2w/oeLHuZQucao4M/sRK4VhcRV1fjjU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=WZm2RdK6elVwlC3eNoQGxrbe1uQF/x2YnMTgBJjKR9O4FAvMrPH1ucQj81k9eitj2
+	 4fMVJpavdK++VnNHojE3tbmmO/J63MIkZNKbkRZ+mHazToQMM0xmgetdLZtd9CmfHX
+	 WUOFjSuZFu8/CuAppOkWSKdW5fzXEAF6FBwE3Ms/3iC2PmADsXAV4cvbypeA/1DzQF
+	 eUPtQwAobZ4NWZJbk4+Lm8d5ZeeYvR85BoGgdxWF07+ZDDOGTng6e7yJsacc+s519s
+	 J4PjyC53mcXZ/CyzRcdkZNgFpwbm8RgE1S4ItQFa16tRT99EQ8buMTcbShzit+nLy1
+	 DNpdJ/AH3x2ag==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH stable 6.6.y v3 1/4] bpf: Track equal scalars history on
+ per-instruction level
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Zhenzhong Wu" <jt26wzz@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
+References: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 14 Jun 2026 17:10:55 +0000
+Message-Id: <20260614171055.901CB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Flawed tracking of linked registers in collect_linked_regs() waste=
+s array capacity, leading to silent clearing of valid scalar IDs and precis=
+ion loss.
+--
 
-[ Upstream commit cfbf25481d6dec0089c99c9d33a2ea634fe8f008 ]
+commit 1fe1c2de8417cc37930a0c9654b28c2004c45842
+Author: Eduard Zingerman <eddyz87@gmail.com>
+Subject: bpf: Track equal scalars history on per-instruction level
 
-find_equal_scalars() is renamed to sync_linked_regs(),
-this commit updates existing references in the selftests comments.
+This commit tracks registers updated by collect_linked_regs() during
+conditional jumps using jmp_history, and propagates precision via
+backtrack_insn().
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20240718202357.1746514-5-eddyz87@gmail.com
-[ zhenzhong: only two pre-existing comments still needed updating in 6.6.y. ]
-Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
----
- tools/testing/selftests/bpf/progs/verifier_spill_fill.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Link: https://lore.kernel.org/bpf/20240718202357.1746514-2-eddyz87@gmail.com
+Closes: https://lore.kernel.org/bpf/CAEf4BzZ0xidVCqB47XnkXcNhkPWF6_nTV7yt+_=
+Lf0kcFEut2Mg@mail.gmail.com/
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 1f71f596d..07a2527a8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -392,7 +392,7 @@ __naked void spill_32bit_of_64bit_fail(void)
- 	*(u32*)(r10 - 8) = r1;				\
- 	/* 32-bit fill r2 from stack. */		\
- 	r2 = *(u32*)(r10 - 8);				\
--	/* Compare r2 with another register to trigger find_equal_scalars.\
-+	/* Compare r2 with another register to trigger sync_linked_regs.\
- 	 * Having one random bit is important here, otherwise the verifier cuts\
- 	 * the corners. If the ID was mistakenly preserved on spill, this would\
- 	 * cause the verifier to think that r1 is also equal to zero in one of\
-@@ -431,7 +431,7 @@ __naked void spill_16bit_of_32bit_fail(void)
- 	*(u16*)(r10 - 8) = r1;				\
- 	/* 16-bit fill r2 from stack. */		\
- 	r2 = *(u16*)(r10 - 8);				\
--	/* Compare r2 with another register to trigger find_equal_scalars.\
-+	/* Compare r2 with another register to trigger sync_linked_regs.\
- 	 * Having one random bit is important here, otherwise the verifier cuts\
- 	 * the corners. If the ID was mistakenly preserved on spill, this would\
- 	 * cause the verifier to think that r1 is also equal to zero in one of\
--- 
-2.43.0
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14699,19 +14699,78 @@ static bool try_match_pkt_pointers(const struct=
+ bpf_insn *insn,
+>  	return true;
+>  }
+> =20
+> -static void find_equal_scalars(struct bpf_verifier_state *vstate,
+> -			       struct bpf_reg_state *known_reg)
+> +static void __collect_linked_regs(struct linked_regs *reg_set, struct bp=
+f_reg_state *reg,
+> +				  u32 id, u32 frameno, u32 spi_or_reg, bool is_reg)
+>  {
+> -	struct bpf_func_state *state;
+> +	struct linked_reg *e;
+> +
+> +	if (reg->type !=3D SCALAR_VALUE || reg->id !=3D id)
+> +		return;
+> +
+> +	e =3D linked_regs_push(reg_set);
+> +	if (e) {
+> +		e->frameno =3D frameno;
+> +		e->is_reg =3D is_reg;
+> +		e->regno =3D spi_or_reg;
+> +	} else {
+> +		reg->id =3D 0;
+> +	}
 
+[Severity: High]
+When the array capacity is exhausted (which could happen prematurely due
+to the duplication and cleanup issues mentioned below), this silently clears
+reg->id =3D 0.
+
+Could this precision loss cause the verifier to unnecessarily reject valid =
+BPF
+programs that rely on equal scalar precision propagation?
+
+> +}
+> +
+> +/* For all R being scalar registers or spilled scalar registers
+> + * in verifier state, save R in linked_regs if R->id =3D=3D id.
+> + * If there are too many Rs sharing same id, reset id for leftover Rs.
+> + */
+> +static void collect_linked_regs(struct bpf_verifier_state *vstate, u32 i=
+d,
+> +				struct linked_regs *linked_regs)
+> +{
+
+[ ... ]
+
+> +	for (i =3D vstate->curframe; i >=3D 0; i--) {
+> +		func =3D vstate->frame[i];
+> +		for (j =3D 0; j < BPF_REG_FP; j++) {
+> +			reg =3D &func->regs[j];
+> +			__collect_linked_regs(linked_regs, reg, id, i, j, true);
+> +		}
+> +		for (j =3D 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
+> +			if (!is_spilled_reg(&func->stack[j]))
+> +				continue;
+> +			reg =3D &func->stack[j].spilled_ptr;
+> +			__collect_linked_regs(linked_regs, reg, id, i, j, false);
+> +		}
+> +	}
+> +
+> +	if (linked_regs->cnt =3D=3D 1)
+> +		linked_regs->cnt =3D 0;
+> +}
+
+[Severity: High]
+Does this correctly discard isolated registers if the array is already
+populated?
+
+If linked_regs already contains elements from a previous
+collect_linked_regs() call for src_reg, adding a single isolated dst_reg
+will increase the total count beyond 1. This bypasses the linked_regs->cnt =
+=3D=3D 1
+cleanup logic, leaving the isolated register in the array and wasting capac=
+ity.
+
+[ ... ]
+
+> @@ -14899,6 +14899,21 @@ static int check_cond_jmp_op(struct bpf_verifier=
+_env *env,
+>  		return 0;
+>  	}
+> =20
+> +	/* Push scalar registers sharing same ID to jump history,
+> +	 * do this before creating 'other_branch', so that both
+> +	 * 'this_branch' and 'other_branch' share this history
+> +	 * if parent state is created.
+> +	 */
+> +	if (BPF_SRC(insn->code) =3D=3D BPF_X && src_reg->type =3D=3D SCALAR_VAL=
+UE && src_reg->id)
+> +		collect_linked_regs(this_branch, src_reg->id, &linked_regs);
+> +	if (dst_reg->type =3D=3D SCALAR_VALUE && dst_reg->id)
+> +		collect_linked_regs(this_branch, dst_reg->id, &linked_regs);
+
+[Severity: High]
+If src_reg->id and dst_reg->id are identical, does this sequence append
+all associated registers into linked_regs twice? Since LINKED_REGS_MAX is
+only 6, this duplication might quickly exhaust the array capacity.
+
+> +	if (linked_regs.cnt > 0) {
+> +		err =3D push_jmp_history(env, this_branch, 0, linked_regs_pack(&linked=
+_regs));
+> +		if (err)
+> +			return err;
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781194510.gi=
+t.jt26wzz@gmail.com?part=3D1
