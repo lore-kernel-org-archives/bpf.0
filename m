@@ -1,178 +1,212 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0295C2D780E
-	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 17:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6182F7F1F
+	for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 17:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781457057; cv=none; b=n81hF6fVHU+gtqq61jjLlSPDK5cDw6JDveLZlIp3vFjKlykYCs/c696jne0DggJIfxojVk2ermyhfTCLDvmBLfjtSh6alayKsxmvG2jeY23yV6zXtMXwmJzv1PJud/466Y61U7Xn6NayPQI2irhRXk0CZ2fY94aDWbZPRtg3GzU=
+	t=1781457058; cv=none; b=QIymGFaRzdhYY3zaYKhHUvbYAF1XbhoDf+BWTXZ2stVk8p48G1UFhbxyoJMx5/CyalnBVS8Y+Y5VOQIafv3Izh/kxaNcVFf8RIJUdOignzOU4j1CvcJdXepQu4yOEjUDWAhra9tohNCGTgjKm2t9rzJad9RIym9VGO1DginR9RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781457057; c=relaxed/simple;
-	bh=RaWo0PxJ9CyUsyxoJN8tmp5zP63k1aQMEK7JGE7q/OQ=;
+	s=arc-20240116; t=1781457058; c=relaxed/simple;
+	bh=mif3gOEoWl8VuMEp6Wz6D8WUxMF+dtckAcbzP5u8Qy4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PNdUr/3RELe9Yz2OheugHGwyvQxBJScX71mQLjT0wcpffveQRPz0rKPp6n/toTTty0BTy8/deOyLc7jYgM86CdmDjd+G3KtOELLMiy3cVjwfKzx5qRS099+ZuOS9+iwQdXZq+Xu0ZdIPVyM9XFAXr0is9736WbodRZflPEgQ7Jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZm2RdK6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qUYpqAR+mBbQrnX7Si+CpdK3HhfYI+mPzZQKC9m5MQCMyB0k9nf7kBeuPxvqOpUrV8/Yjyv7mLpT7mM8KarwBmgamjIfQMRUtTxJ9D18zGML7LXN4oaO/+cC2/2ae+iV6cFyEVSYPU9Bxz2RgDVPYOiHlB74vDq0/8tVvFQvKLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4MDS1iU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZm2RdK6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901CB1F000E9;
-	Sun, 14 Jun 2026 17:10:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4MDS1iU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DD81F00A3A;
+	Sun, 14 Jun 2026 17:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781457055;
-	bh=1i+rsmGE7K/o2w/oeLHuZQucao4M/sRK4VhcRV1fjjU=;
+	s=k20260515; t=1781457056;
+	bh=d8y6Z3uKOxku73yuz86fnJExt917NPcDe9B9lyOWZ1s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WZm2RdK6elVwlC3eNoQGxrbe1uQF/x2YnMTgBJjKR9O4FAvMrPH1ucQj81k9eitj2
-	 4fMVJpavdK++VnNHojE3tbmmO/J63MIkZNKbkRZ+mHazToQMM0xmgetdLZtd9CmfHX
-	 WUOFjSuZFu8/CuAppOkWSKdW5fzXEAF6FBwE3Ms/3iC2PmADsXAV4cvbypeA/1DzQF
-	 eUPtQwAobZ4NWZJbk4+Lm8d5ZeeYvR85BoGgdxWF07+ZDDOGTng6e7yJsacc+s519s
-	 J4PjyC53mcXZ/CyzRcdkZNgFpwbm8RgE1S4ItQFa16tRT99EQ8buMTcbShzit+nLy1
-	 DNpdJ/AH3x2ag==
+	b=L4MDS1iUfJ+Y5sqjEQGYLDRke4rlXBn/79ggq519BRtBrmv9uTIVTF8OVTOLcpl4Y
+	 2L9hztyaWEob9KCdu67zwX8z2GlY77Cff4f4GleHD3uJ4J4w3+t+6Z6EiIFTmp15Wr
+	 WxSfRGTVKz/Aolh0X8/1WVx7SAdAxuBzR0p5mJeiGtT9tarIR+uF1fqcmcBHUma4Gs
+	 WCciniaIZwL/tI+C3xAiCRFrDRFSt5o5b97cLrQEDJEHgeoBuzpg6cXY+0uPUtQuTr
+	 5E2+yRQ3PWWDqmmyl0i6hfZFy66RK4cZywlHQIY5ISKc4xvr9sH0413D9crTumpwTK
+	 nsuCL3kPrRFGA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH stable 6.6.y v3 1/4] bpf: Track equal scalars history on
- per-instruction level
+Subject: Re: [PATCH stable 6.6.y v3 3/4] selftests/bpf: Tests for per-insn
+ sync_linked_regs() precision tracking
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhenzhong Wu" <jt26wzz@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
-References: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
+In-Reply-To: <7701766e65ee2b13c8951e918ebde4cc3fc1263f.1781194510.git.jt26wzz@gmail.com>
+References: <7701766e65ee2b13c8951e918ebde4cc3fc1263f.1781194510.git.jt26wzz@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sun, 14 Jun 2026 17:10:55 +0000
-Message-Id: <20260614171055.901CB1F000E9@smtp.kernel.org>
+Message-Id: <20260614171056.16DD81F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Flawed tracking of linked registers in collect_linked_regs() waste=
-s array capacity, leading to silent clearing of valid scalar IDs and precis=
-ion loss.
+- [Low] Newly added multi-line comments violate the strict BPF subsystem co=
+mment style by placing text on the same line as the opening `/*`.
+- [Low] A comment in `linked_regs_bpf_x_dst` incorrectly claims to force `r=
+0` to be precise, but the corresponding code actually targets `r3`.
+- [Low] A comment in `linked_regs_too_many_regs` incorrectly states that `r=
+{0-4}` will be precise, missing `r5`.
 --
 
-commit 1fe1c2de8417cc37930a0c9654b28c2004c45842
+commit 85ad29f2c85dcd0b0ee951c5fc1bc2711d79a7a5
 Author: Eduard Zingerman <eddyz87@gmail.com>
-Subject: bpf: Track equal scalars history on per-instruction level
 
-This commit tracks registers updated by collect_linked_regs() during
-conditional jumps using jmp_history, and propagates precision via
-backtrack_insn().
+selftests/bpf: Tests for per-insn sync_linked_regs() precision tracking
 
-Link: https://lore.kernel.org/bpf/20240718202357.1746514-2-eddyz87@gmail.com
-Closes: https://lore.kernel.org/bpf/CAEf4BzZ0xidVCqB47XnkXcNhkPWF6_nTV7yt+_=
-Lf0kcFEut2Mg@mail.gmail.com/
+This commit adds test cases to verify precision tracking for scalars gaining
+range because of sync_linked_regs(). It includes checks for when more than 6
+registers might gain range, precision propagation, and adds a reproducer
+for a precision tracking bug.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -14699,19 +14699,78 @@ static bool try_match_pkt_pointers(const struct=
- bpf_insn *insn,
->  	return true;
+Link: https://lore.kernel.org/bpf/20240718202357.1746514-4-eddyz87@gmail.com
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/to=
+ols/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> index f70392bf696c6..2eb85eb3a06cc 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+> @@ -47,6 +47,72 @@ __naked void linked_regs_bpf_k(void)
+>  	: __clobber_all);
 >  }
 > =20
-> -static void find_equal_scalars(struct bpf_verifier_state *vstate,
-> -			       struct bpf_reg_state *known_reg)
-> +static void __collect_linked_regs(struct linked_regs *reg_set, struct bp=
-f_reg_state *reg,
-> +				  u32 id, u32 frameno, u32 spi_or_reg, bool is_reg)
->  {
-> -	struct bpf_func_state *state;
-> +	struct linked_reg *e;
-> +
-> +	if (reg->type !=3D SCALAR_VALUE || reg->id !=3D id)
-> +		return;
-> +
-> +	e =3D linked_regs_push(reg_set);
-> +	if (e) {
-> +		e->frameno =3D frameno;
-> +		e->is_reg =3D is_reg;
-> +		e->regno =3D spi_or_reg;
-> +	} else {
-> +		reg->id =3D 0;
-> +	}
-
-[Severity: High]
-When the array capacity is exhausted (which could happen prematurely due
-to the duplication and cleanup issues mentioned below), this silently clears
-reg->id =3D 0.
-
-Could this precision loss cause the verifier to unnecessarily reject valid =
-BPF
-programs that rely on equal scalar precision propagation?
-
-> +}
-> +
-> +/* For all R being scalar registers or spilled scalar registers
-> + * in verifier state, save R in linked_regs if R->id =3D=3D id.
-> + * If there are too many Rs sharing same id, reset id for leftover Rs.
+> +/* Registers r{0,1,2} share same ID when 'if r1 > ...' insn is processed,
+> + * check that verifier marks r{1,2} as precise while backtracking
+> + * 'if r1 > ...' with r0 already marked.
 > + */
-> +static void collect_linked_regs(struct bpf_verifier_state *vstate, u32 i=
-d,
-> +				struct linked_regs *linked_regs)
-> +{
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem multi-line comment style requires
+the opening /* to be on its own line, rather than starting text on the first
+line.
+
+> +SEC("socket")
+> +__success __log_level(2)
 
 [ ... ]
 
-> +	for (i =3D vstate->curframe; i >=3D 0; i--) {
-> +		func =3D vstate->frame[i];
-> +		for (j =3D 0; j < BPF_REG_FP; j++) {
-> +			reg =3D &func->regs[j];
-> +			__collect_linked_regs(linked_regs, reg, id, i, j, true);
-> +		}
-> +		for (j =3D 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
-> +			if (!is_spilled_reg(&func->stack[j]))
-> +				continue;
-> +			reg =3D &func->stack[j].spilled_ptr;
-> +			__collect_linked_regs(linked_regs, reg, id, i, j, false);
-> +		}
-> +	}
-> +
-> +	if (linked_regs->cnt =3D=3D 1)
-> +		linked_regs->cnt =3D 0;
+> +/* Registers r{0,1,2} share same ID when 'if r1 > r3' insn is processed,
+> + * check that verifier marks r{0,1,2} as precise while backtracking
+> + * 'if r1 > r3' with r3 already marked.
+> + */
+
+[Severity: Low]
+This isn't a bug, but here's another instance where the multi-line comment
+starts text on the opening line instead of placing the /* on its own line.
+
+> +SEC("socket")
+> +__success __log_level(2)
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__msg("frame0: regs=3Dr3 stack=3D before 5: (2d) if r1 > r3 goto pc+0")
+> +__msg("frame0: parent state regs=3Dr0,r1,r2,r3 stack=3D:")
+> +__msg("frame0: regs=3Dr0,r1,r2,r3 stack=3D before 4: (b7) r3 =3D 7")
+> +__naked void linked_regs_bpf_x_dst(void)
+> +{
+> +	asm volatile (
+> +	/* r0 =3D random number up to 0xff */
+> +	"call %[bpf_ktime_get_ns];"
+> +	"r0 &=3D 0xff;"
+> +	/* tie r0.id =3D=3D r1.id =3D=3D r2.id */
+> +	"r1 =3D r0;"
+> +	"r2 =3D r0;"
+> +	"r3 =3D 7;"
+> +	"if r1 > r3 goto +0;"
+> +	/* force r0 to be precise, this eventually marks r1 and r2 as
+> +	 * precise as well because of shared IDs
+> +	 */
+> +	"r4 =3D r10;"
+> +	"r4 +=3D r3;"
+
+[Severity: Low]
+This isn't a bug, but should the comment here say "force r3 to be precise"
+instead of "force r0"? The code actually targets r3, so this appears to be
+a copy-paste error from linked_regs_bpf_x_src.
+
+> +	"r0 =3D 0;"
+> +	"exit;"
+> +	:
+> +	: __imm(bpf_ktime_get_ns)
+> +	: __clobber_all);
 > +}
 
-[Severity: High]
-Does this correctly discard isolated registers if the array is already
-populated?
+[ ... ]
 
-If linked_regs already contains elements from a previous
-collect_linked_regs() call for src_reg, adding a single isolated dst_reg
-will increase the total count beyond 1. This bypasses the linked_regs->cnt =
-=3D=3D 1
-cleanup logic, leaving the isolated register in the array and wasting capac=
-ity.
+> +SEC("socket")
+> +__success __log_level(2)
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +/* check thar r0 and r6 have different IDs after 'if',
+> + * collect_linked_regs() can't tie more than 6 registers for a single in=
+sn.
+> + */
+
+[Severity: Low]
+This isn't a bug, but just a quick note that this multi-line comment also
+doesn't follow the preferred BPF style of having the opening /* on its own
+line.
+
+> +__msg("8: (25) if r0 > 0x7 goto pc+0         ; R0=3Dscalar(id=3D1")
+> +__msg("9: (bf) r6 =3D r6                       ; R6_w=3Dscalar(id=3D2")
+> +/* check that r{0-5} are marked precise after 'if' */
+> +__msg("frame0: regs=3Dr0 stack=3D before 8: (25) if r0 > 0x7 goto pc+0")
+> +__msg("frame0: parent state regs=3Dr0,r1,r2,r3,r4,r5 stack=3D:")
+> +__naked void linked_regs_too_many_regs(void)
+> +{
+> +	asm volatile (
+> +	/* r0 =3D random number up to 0xff */
+> +	"call %[bpf_ktime_get_ns];"
+> +	"r0 &=3D 0xff;"
+> +	/* tie r{0-6} IDs */
+> +	"r1 =3D r0;"
+> +	"r2 =3D r0;"
+> +	"r3 =3D r0;"
+> +	"r4 =3D r0;"
+> +	"r5 =3D r0;"
+> +	"r6 =3D r0;"
+> +	/* propagate range for r{0-6} */
+> +	"if r0 > 7 goto +0;"
+> +	/* make r6 appear in the log */
+> +	"r6 =3D r6;"
+> +	/* force r0 to be precise,
+> +	 * this would cause r{0-4} to be precise because of shared IDs
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but could the comment mention r{0-5} will be precise inst=
+ead
+of r{0-4}? The __msg assertion properly verifies regs=3Dr0,r1,r2,r3,r4,r5, =
+so
+the text might be accidentally omitting r5.
+
+> +	"r7 =3D r10;"
+> +	"r7 +=3D r0;"
+> +	"r0 =3D 0;"
+> +	"exit;"
+> +	:
+> +	: __imm(bpf_ktime_get_ns)
+> +	: __clobber_all);
+> +}
 
 [ ... ]
 
-> @@ -14899,6 +14899,21 @@ static int check_cond_jmp_op(struct bpf_verifier=
-_env *env,
->  		return 0;
->  	}
-> =20
-> +	/* Push scalar registers sharing same ID to jump history,
-> +	 * do this before creating 'other_branch', so that both
-> +	 * 'this_branch' and 'other_branch' share this history
-> +	 * if parent state is created.
-> +	 */
-> +	if (BPF_SRC(insn->code) =3D=3D BPF_X && src_reg->type =3D=3D SCALAR_VAL=
-UE && src_reg->id)
-> +		collect_linked_regs(this_branch, src_reg->id, &linked_regs);
-> +	if (dst_reg->type =3D=3D SCALAR_VALUE && dst_reg->id)
-> +		collect_linked_regs(this_branch, dst_reg->id, &linked_regs);
+> +/* Check that mark_chain_precision() for one of the conditional jump
+> + * operands does not trigger equal scalars precision propagation.
+> + */
 
-[Severity: High]
-If src_reg->id and dst_reg->id are identical, does this sequence append
-all associated registers into linked_regs twice? Since LINKED_REGS_MAX is
-only 6, this duplication might quickly exhaust the array capacity.
+[Severity: Low]
+This isn't a bug, but this multi-line comment starts text on the opening
+line, similar to the ones above.
 
-> +	if (linked_regs.cnt > 0) {
-> +		err =3D push_jmp_history(env, this_branch, 0, linked_regs_pack(&linked=
-_regs));
-> +		if (err)
-> +			return err;
-> +	}
+> +SEC("socket")
+> +__success __log_level(2)
+> +__msg("3: (25) if r1 > 0x100 goto pc+0")
+> +__msg("frame0: regs=3Dr1 stack=3D before 2: (bf) r1 =3D r0")
+> +__naked void cjmp_no_linked_regs_trigger(void)
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781194510.gi=
-t.jt26wzz@gmail.com?part=3D1
+t.jt26wzz@gmail.com?part=3D3
