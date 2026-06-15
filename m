@@ -1,137 +1,160 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161203C13F1;
-	Mon, 15 Jun 2026 07:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B313BFE2D
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 07:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781509915; cv=none; b=HxdEpqR6JWMmhXY7/umQ8GZU3tHGqkh3n3ZHKEQyA1JhPaKulU9zYJbgJruQHpt8gW7Ro594x7QdmjfS1T027uo3grYelgmUT53BS84z1gJTCENm6TPQESUEK4J7dgJ7G3o6joktUKmDTrgVieQXN1FJbpSNRMi6AsWSK/tHzOk=
+	t=1781510344; cv=none; b=jcuHNU2HKzaoJUU1vW3d6SZ7YFXVIVE8EQekfrUVcT+2BnsVgBeym9ZpfqdDENh0EXuIl1dO7UQlsUWy9OJjcBZ6xpoDru6eO/IEn9LN0lafsMohefw3BipCx9SzkJTy+hUvpv1QbNfGqprirYaag2LKBzyqzj4+sFQ8Z6mr7Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781509915; c=relaxed/simple;
-	bh=+O/aknDOAU54SHW0tAJSTtpg9g1Vzt6FSt3KcuF3lm4=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=aAuqmZ/A1N8ksdbXx8pgQuVmdR2lyzx9RrM13jK7qBjcbSMpo8YFnkDwfzKyXlmoDWmKCtWrmIEseP4Y0/p4pxB3MN96oDolr4v7A/YetpsVjpj+CkeyvxRaaGCcNdjtmYAB/a/n/2R/V1RDxQN2UHI1pgbfOcb2wRwCJTecuzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx9OgVry9q2kAUAA--.47127S3;
-	Mon, 15 Jun 2026 15:51:49 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJBxpsASry9qVummAA--.20475S3;
-	Mon, 15 Jun 2026 15:51:47 +0800 (CST)
-Subject: Re: [PATCH v3 0/3] Move thread_info into task_struct for LoongArch
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20260612011616.27771-1-yangtiezhu@loongson.cn>
- <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com>
- <e23e6781-d39d-d7fa-10ec-8d09349103ed@loongson.cn>
- <CAAhV-H6jJpEnNTUF0CF60fDB5ShNT+C59NEH=YodJtepFQgrKQ@mail.gmail.com>
- <833e2fca-6a41-786c-356d-6480ca168e44@loongson.cn>
- <CAAhV-H5LORpNeTycjmHFobOZEA5w=spSkxJuOajuizz-941zQg@mail.gmail.com>
- <CAADnVQLAgYFQ=BRi+hKwt5pp7fffqsvD0rXzn6Nk9jJQ=6uUZA@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c3b8242e-c436-bfa4-5081-0484457dcd6b@loongson.cn>
-Date: Mon, 15 Jun 2026 15:51:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1781510344; c=relaxed/simple;
+	bh=QRFykM/dRrqvda6J19hWdhbvvCSJWoUxH6upTIIoa7Y=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LSmLwjkhu7X+Skg0OJ4+UPX9iuCecECFCPzHV09m29ar7IXO402ZSZbG6EbdDrEtV8mGU4od2EX46+01Jm1zf0nuMowUKQefNenNOWrNCp5ExiluyVBQQgQH8iNzaBEAqliXLQALjSEZ8EHADb4T/dVyItyBOfhXSabvHmX2Vog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=svyUSTfz; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="svyUSTfz"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4921e4dd62dso15262705e9.0
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 00:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781510341; x=1782115141; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DJ2yQjvmZ3fwNrdGj/6ndgBVMLizxNTABMhDzt/9sHI=;
+        b=svyUSTfza6zCkmuk+c47J1GKY8xLcq9k1Cn/GRisDlgwpzTULLGCbjjxsEoQ+BF5IC
+         hPsTgwFtfjMwdsNwagcwp9ukfxhoxjlWj8FY2G3x5EvjiGnjcnHHPS1iTm3Sv92zyBCY
+         ApgOw5coiFUmCUQVHeOum0WBGRFTnDrTBzGrMPaamwHQDZhNQ0KNPe2/c0zBeJutUTZE
+         ++yn1ttrfYLe1cs+spOofkol6d6AfbR77bynDHId2/mHq/DqRYkyNGL66nXMU5wwbEFn
+         14hpgta4x9HXMKf1TQfJS9T+jGDVJw8yzT2nFXCMZLC5wScwk7v2O5Ulprr/zu7CmBPv
+         Wb7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781510341; x=1782115141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DJ2yQjvmZ3fwNrdGj/6ndgBVMLizxNTABMhDzt/9sHI=;
+        b=j1glEn450u6smXolv/70ppnce0ljvBgvUzb0aCMkio9Bp42he5aNn84KcK39QCYJLx
+         r7dYagm/umzsBq89Ti5vhsp0LE1THmkcM1kkWju67YrHjIxTy2XsaOFEtH7s3SI1oZIx
+         Tl+QsDKuyX6YD3MrSfkLgeacqKEjPMQKJ5QgySUqxO4KEfrQ23V6aphg9JkHbqmTRsli
+         SvuWszqQCJdFG1Xfq2gzko7/ysM/8NVEXVCYjYE7gMoeriLDp94Ssi+A3gQ8oLfoA/II
+         yLuM/Vn+45CEG9wg9+U+deI/C0ydZE8ApzTRSSQFZJP4hfrtbjot0Oks6GPOOCI52EDD
+         rNaA==
+X-Gm-Message-State: AOJu0YzPOERQa8h1pa6cbCUmnCUCSAXBM3GxbiWFLD1qYCgCJWb+yyKZ
+	muOitkVzmDT6twpmM/IJQtivMFXVI26o6e8+pyQBkI9D0X5I+fm7OMKr
+X-Gm-Gg: Acq92OFSU+VA7+tbCSyeGAFImBgMxUAFmi/wFYVZed4g1uFB4J9t4kcVRhqyfMm8MMb
+	wXnexWlNxlROiq5lOzxyy10evDZMkvDZRa7YMzsUTqy19jSGutuEXwxm0OwbAxkLWQEDVqebcaL
+	Mo4nQrl16pLr3rrZFjYp3Owgo4qMypb13NPByBUEYH0DfSo2S6Zc518j2dDIaTl4ZNZMcnHZDpG
+	vtbiXVgdP8LMXcmbVvo+mTMtJzIkYSVSxQ5q8nseqHH+9f8LLXbueLFg3BungEu7Cz+WXvUaeo1
+	cwBqKQ/Gm0KUmnZHHe7sjFIRZaCqT8lY12iGW8mt8W+ftLDQ7lhza3EKAp7FC+lbIqVG3MX9vMh
+	ZQWeqiq9fGry5Y9DitD9hh1KZzzAl9fowdZn9jSaKhEOfp+D77I/Xafp9DI6AI8EBh6jx7f5LNI
+	rekBNs+5HQEy4=
+X-Received: by 2002:a05:600c:1595:b0:48e:8eb0:4957 with SMTP id 5b1f17b1804b1-490ea9ace2bmr97919875e9.2.1781510340941;
+        Mon, 15 Jun 2026 00:59:00 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2e6a8fsm32532456f8f.37.2026.06.15.00.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 00:59:00 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 15 Jun 2026 09:58:58 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv3 bpf-next 1/7] bpf: Guard __get_user acesss with
+ access_ok for uprobe_multi data
+Message-ID: <ai-wwq183bfjoxkg@krava>
+References: <20260611114230.950379-2-jolsa@kernel.org>
+ <20260611115503.AC16D1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQLAgYFQ=BRi+hKwt5pp7fffqsvD0rXzn6Nk9jJQ=6uUZA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxpsASry9qVummAA--.20475S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxur47XryrJF13KryUZF13GFX_yoW5CF1kp3
-	ySka1YkF4DKr17AFZrt3s8uFyftr13GrW8Xwn8JryUCrn0vw1rGry3Kr4UuFyDurWFkr1j
-	9r4jq3srCa4DJagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
-	aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-	xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r
-	1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
-	W8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-	cVc_UUUUU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260611115503.AC16D1F00893@smtp.kernel.org>
 
-On 2026/6/15 上午11:45, Alexei Starovoitov wrote:
-> On Sun, Jun 14, 2026 at 8:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->>
->> On Mon, Jun 15, 2026 at 11:16 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>>
->>> On 2026/6/15 上午10:23, Huacai Chen wrote:
->>>> On Mon, Jun 15, 2026 at 9:41 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>>>>
->>>>> On 2026/6/14 上午10:51, Huacai Chen wrote:
->>>>>> Hi, Tiezhu,
->>>>>>
->>>>>> I have queued this series for 7.2, does the below series depend on this one?
->>>>>>
->>>>>> https://lore.kernel.org/loongarch/20260521125636.26744-1-yangtiezhu@loongson.cn/T/#t
->>>>>
->>>>> This is independent on CONFIG_THREAD_INFO_IN_TASK.
->>>>>
->>>>>> https://lore.kernel.org/loongarch/20260428080051.20938-1-yangtiezhu@loongson.cn/T/#t
->>>>>
->>>>> This is dependent on CONFIG_THREAD_INFO_IN_TASK.
->>>>>
->>>>> But anyway, I plan to send new version for the above two series of
->>>>> selftests once this "Move thread_info into task_struct for LoongArch"
->>>>> series is merged into the mainline, maybe after 7.2-rc1.
->>>>>
->>>>> Because the code under selftests need to be updated, for example,
->>>>> it can use bpf_get_current_task_btf()->thread_info.preempt_count
->>>>> for get_preempt_count(), and it should use ld.wu rather than ld.w
->>>>> for bpf_get_smp_processor_id().
->>>> You can update new versions now, then they can be merged together.
->>>
->>> Thanks for your suggestion.
->>>
->>> However, considering that these selftest patches need to be
->>> routed through the BPF tree (rather than the LoongArch tree),
->>> updating them right now during the active merge window might
->>> be inappropriate and risky.
->>>
->>> Given that these selftests strictly depend on the "move
->>> thread_info into task_struct" core changes, sending them to
->>> the BPF list now could cause cross-tree dependency issues and
->>> potential build breakages if the core series undergoes any late
->>> adjustments before hitting mainline.
->>>
->>> Moreover, because these are selftest adaptations rather than
->>> urgent bug fixes, they aren't high-priority for this immediate
->>> window. I will rebase and submit the new version to the BPF tree
->>> right after 7.2-rc1, once the LoongArch base infrastructure is
->>> securely merged into the mainline.
->> In history most arch-specific selftests are merged via arch trees,
->> including perf, bpf, ftrace, kvm and so on.
+On Thu, Jun 11, 2026 at 11:55:02AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
-> This is not true at all.
-> All bpf selftests are going through bpf-next tree.
-> For example, x86 and arm64 bpf JIT changes always go
-> through bpf-next.
-> loongarch is causing problems this way by taking bpf JIT changes
-> into the loongarch tree.
+> Pre-existing issues:
+> - [High] Missing access_ok() check for the usyms array in bpf_kprobe_multi_link_attach() allows arbitrary kernel memory read.
+> --
+> 
+> commit e5440667240e003d50bb838ad4b19e526ef6c703
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> bpf: Guard __get_user acesss with access_ok for uprobe_multi data
+> 
+> This patch adds access_ok checks for uprobe_multi arrays before calling
+> __get_user. It ensures that the user space data bounds are safe.
+> 
+> Link: https://lore.kernel.org/bpf/20260610145235.CB1441F00893@smtp.kernel.org/
+> 
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> 
+> [ ... ]
+> 
+> > @@ -3261,6 +3262,16 @@ int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> >  	uref_ctr_offsets = u64_to_user_ptr(attr->link_create.uprobe_multi.ref_ctr_offsets);
+> >  	ucookies = u64_to_user_ptr(attr->link_create.uprobe_multi.cookies);
+> >  
+> > +	/*
+> > +	 * All uoffsets/uref_ctr_offsets/ucookies arrays have the same value
+> > +	 * size, we need to check their address range is safe for __get_user
+> > +	 * calls.
+> > +	 */
+> > +	size = sizeof(*uoffsets) * cnt;
+> > +	if (!access_ok(uoffsets, size) || !access_ok(uref_ctr_offsets, size) ||
+> > +	    !access_ok(ucookies, size))
+> > +		return -EFAULT;
+> 
+> [Severity: High]
+> This is a pre-existing issue, but while you are adding these access checks
+> for uprobes, does bpf_kprobe_multi_link_attach() have an identical missing
+> check for the usyms array?
+> 
+> Looking at bpf_kprobe_multi_link_attach(), it calls copy_user_syms() with
+> the unchecked user pointer usyms:
+> 
+> kernel/trace/bpf_trace.c:bpf_kprobe_multi_link_attach() {
+>     ...
+> 		struct user_syms us;
+> 
+> 		err = copy_user_syms(&us, usyms, cnt);
+> 		if (err)
+> 			goto error;
+>     ...
+> }
+> 
+> And copy_user_syms() iteratively calls __get_user(usymbol, usyms + i)
+> without any prior access checks on the array:
+> 
+> kernel/trace/bpf_trace.c:copy_user_syms() {
+>     ...
+> 	for (p = buf, i = 0; i < cnt; i++) {
+> 		if (__get_user(usymbol, usyms + i)) {
+> 			err = -EFAULT;
+> 			goto error;
+> 		}
+>     ...
+> }
+> 
+> Since __get_user() bypasses bounds checking, couldn't an attacker provide
+> a kernel address for usyms and read arbitrary kernel memory into usymbol?
+> 
+> A subsequent strncpy_from_user() call would use usymbol as its source
+> pointer, potentially acting as a side-channel oracle to leak kernel
+> information or bypass kernel address layout randomization.
+> 
+> Should copy_user_syms() or bpf_kprobe_multi_link_attach() also include
+> an access_ok() check for the usyms array?
 
-I will prepare and send the new version of bpf selftests patches
-based on the bpf-next repo shortly. In the cover letter, I will
-explicitly state the dependency on the "Move thread_info into
-task_struct for LoongArch" series.
+I'm not sure it's possible to exploit it, but the contract for __get_user is
+clear, so I think we should call access_ok also in here, I'll send the fix
 
-I will leave it to you and the LoongArch maintainer to decide on
-the best way and timing for the actual merge.
-
-Thanks,
-Tiezhu
-
+jirka
