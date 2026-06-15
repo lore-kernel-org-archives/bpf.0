@@ -1,192 +1,133 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23B338A70A
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 18:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0740F366548;
+	Mon, 15 Jun 2026 19:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781549852; cv=none; b=XbH37eDCx0YWAO8myx7B3cGAB47kpuw4wPrdQ05TNKLlq4ZBbk2todZz72XWrRQ3lDGg5hXUPP80kWLGWHq44yARup7Varx9uSGBugRl6HaKprhULLeftWgQuYWyGHq/M7+zXYN5l/Gbmm9c8irwQAqwVkW0q4O0yCRKM9siW6s=
+	t=1781551575; cv=none; b=RdCDYjbLOjOIsZMBV03CW4hUqZGHMYXs2WQH08qCzAk2dJjYvBnQ5ClYsA9+BkXrztgj0tSBXrMUFwDFhAYOh5Voi4rCN2FLIpVNRXCoyiWyc30tspTq7+rK3frUSUvgY4EcyycEqPVbGeDLv1Vwk3zHLyxPYzh62T4oKw7rXRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781549852; c=relaxed/simple;
-	bh=Rv211AAZWVf3eg5TtZvs0VcD4jYUp+BaOvOBc1iSjtA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Yt94xsr1oSt3kurTHFZHM2b/J5jdxIQbsv8IRfrPopcyCfvHzOKx7S78UUtR+Po+In6JJkr5ruW36GFz0XR9KRqk2I+C2vqb4NZyqp8ThIDk11wl/Ur9IvDJet7LQ5LyclQurXDAzZr73cldj4TfE8Nj1Sdaf+czXIFGqxmajuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aN1Fimjt; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781551575; c=relaxed/simple;
+	bh=Kt7JepatYiaDYrc83/aTUL0FSumc4vfp3Zw2NvHMWNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ueUcIn1rjVkaOwMRbRHEmgXG560R9yiMK2wmr2UBIyMmPegqlYQv80/N0wcKCGDelccaSbFMDebi6hzDhu/LFFDt3rWJDIdYkt1KXJcE4C8a/HVh0x5YyXsWzmz66b6k5G4F7mQc8xgEHiCrKZEVv7cn/8dYazQYAGG2ZM1+ROI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LVzDT/Ex; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aN1Fimjt"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-307d0405e07so5615727eec.1
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 11:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781549850; x=1782154650; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NfxSmumVC7kO1aFYBkSO1/54oChlZSPcKBbevd1gdIM=;
-        b=aN1FimjtBgBJXaTar9YKVG3E/SypEQ2zVAxOpaezBGTKSfr5zLI8RoAjHUxc/cJq0b
-         HJQxnUnIPanqhNtsnPhEAcb3eut1SfriPuGBGvugfJW1LXvgz8w2gIa4YU3a7hR1zeDq
-         rQM0YN2i3jsib96Sz5ZU/LN4gjrc19ZfXHmkm15VP2adQgjM5ke0rRHIlrzn60NCQ4Hr
-         zHZIeqLPwBKUMXhtpf6VV77Kncfxj1DFsJG1opJRlxWQDR4wDjtvR15y6VeywLHCYLzk
-         M47HGRlW+lpGCIT92Tni+uhdYw6LfDDrwHRAOb6HfyQ064ULpG6zdaFzjQGmql+IHtHY
-         exHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781549850; x=1782154650;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfxSmumVC7kO1aFYBkSO1/54oChlZSPcKBbevd1gdIM=;
-        b=ka46n9+7o+V56aFbIDkOwQysU2Nms/2YujD+jBMD7uI2xDq0ACjyJTXWbyG1tfxqW3
-         zmn2cvaTdwzNQLj+GVSltU3/Cp4qukxkxRO9UcK7dIfsftXp7SltZFY+3wo4pVW6JUgv
-         1wz8NRpnqZ/QIQr/VufdGQsiI4K9FHaexfpgQc2Zj9Nyz439EsXTLjqyiBB5TAiiMRQg
-         8sor0sqwGwMZpg4RURXRlHBC6JznVdh/wIlZsseCQWyyG3pB9FGjUeyV8+YpC0H0pbvn
-         FZecdn5negU//ySgkHsrgMnTPI1lzUJ00NJ/OeHeHwfNhHI4V5O9PEo0iYmbpHxGHtwY
-         1TBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9UjB2vT/QCJxwKywzkiule75gPFq8IxiuhgSlPAzufi9p9j3XhukeBAwTyQYJjICUwXMY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf4OWNehaF4GzM97a3lXaTapQt/aCNYQmJNc6m6CFfW01CGNlD
-	7sEYB/q1PMXxhvQmHmVYGLqp9igrHyZMmiO5w8RJDmv7ohYpiLSa1JAr
-X-Gm-Gg: Acq92OFzneQv9xD1FGak/MWQ1YqL5/LShFkVe/qKYATAYMtwAMfMtAJ1mm44DPR6+Jb
-	8dvRnqG8ETSMhK335Sgfysi/ecfzZ6nMt88i3yavCH/LLpkxNnYUs9UR3oEgYSoZ+UJmrms2X2i
-	qaM/QO2OouFXnHyKYaKsMWBdCiwP0ZZLMniVJI87v9hAdYKiM9VY6E3qxQPHrkKSN88QYf1dkLV
-	mBCfowX5LmuGRdwmKyLVS0MQ02/CJpH9q/0V8UTituqVpRD/wGa8HDPdgVNMZtmS0a+lxLNHCy1
-	KMwS9lXFpvWJcs8VWoAc7YyYJSN93KWogqL5UbkCqm1RHp8flY2KaasJGlS8uT4KJ09SS4u1n9w
-	NQYcu5oLlLS+Bctgg41nD6MVwgg719odz5DhWnbdD9AsHxSUxfooSyYukbHW0tFQmAHloakjiwO
-	XnMxeMD0LE41JjjN79tkMmuBNkAcNUS1yPBXaf81NFZ/Xdl5p89CiLIo7ldRaPpC+0rrXDtOvY1
-	xkT9fo=
-X-Received: by 2002:a05:7300:6d21:b0:2c5:220c:5670 with SMTP id 5a478bee46e88-30935239b09mr5981695eec.2.1781549849677;
-        Mon, 15 Jun 2026 11:57:29 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:755:4880:8bc0:de02? ([2620:10d:c090:500::3:317a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e5d810fsm16201007eec.12.2026.06.15.11.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 11:57:29 -0700 (PDT)
-Message-ID: <0930f05c6aff27dd5680c10fed14bd369df42400.camel@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Allow type tag BTF records to succeed
- other modifier records
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, memxor@gmail.com,
- daniel@iogearbox.net, 	mattbobrowski@google.com, Yonghong Song
- <yonghong.song@linux.dev>, Vineet Gupta	 <vineet.gupta@linux.dev>
-Date: Mon, 15 Jun 2026 11:57:27 -0700
-In-Reply-To: <20260615180614.4376-1-emil@etsalapatis.com>
-References: <20260615180614.4376-1-emil@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LVzDT/Ex"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 0FE4D20B7167; Mon, 15 Jun 2026 12:25:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0FE4D20B7167
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1781551553;
+	bh=UTL6An4CoAyf1IcOJ8/3F+Xidzg64tut6XSjHQdabtY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LVzDT/ExANWTEy9J0XIGztF1eoUYEUfWKvWIMxZWbMwzbj4IMIhPM9oUbDmNx8bvd
+	 4pFoVA/dJGLRViK8oOvAncerx3ugF5Qtg+zsmb+7cZrZkPbGTStdhTZ/K+Dsr+/8Ql
+	 WyFKTFL0N7NrftktIZZwuwpenQoUY4ayRK1+7gWI=
+Date: Mon, 15 Jun 2026 12:25:53 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+	horms@kernel.org, shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
+	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
+	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com,
+	pavan.chebbi@broadcom.com
+Cc: kuba@kernel.org
+Subject: Re: [PATCH net-next v10 0/2] net: mana: add ethtool private flag for
+ full-page RX buffers
+Message-ID: <ajBRwYftEol8IE49@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260602202801.1873742-1-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260602202801.1873742-1-dipayanroy@linux.microsoft.com>
 
-On Mon, 2026-06-15 at 14:06 -0400, Emil Tsalapatis wrote:
-> As of recently, Clang is able to attach type tag records to modifier BTF
-> records. This is useful for using typedefs that encompass a base type
-> and a type tag, e.g.:
->=20
-> typedef struct rbtree __arena rbtree_t;
->=20
-> Modify btf_check_type_tags() so that it allows this sequence of records.
-> The function now only checks for record loops in BTF modifier record
-> chains. Rename to btf_check_modifier_chain_length to reflect this.
->=20
-> Also expand the BTF modifier traversal code to take into account that
-> type record can be interleaved with other modifier records. In effect
-> this means traversing all modifiers to collect the type tags.
->=20
-> Also modify existing selftests to now accept modifier records (const,
-> typedef) that point to type tag records.
->=20
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: Vineet Gupta <vineet.gupta@linux.dev>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
+On Tue, Jun 02, 2026 at 01:24:37PM -0700, Dipayaan Roy wrote:
+> On some ARM64 platforms with 4K PAGE_SIZE, utilizing page_pool
+> fragments for allocation in the RX refill path (~2kB buffer per fragment)
+> causes 15-20% throughput regression under high connection counts
+> (>16 TCP streams at 180+ Gbps). Using full-page buffers on these
+> platforms shows no regression and restores line-rate performance.
+> 
+> This behavior is observed on a single platform; other platforms
+> perform better with page_pool fragments, indicating this is not a
+> page_pool issue but platform-specific.
+> 
+> This series adds an ethtool private flag "full-page-rx" to let the
+> user opt in to one RX buffer per page:
+> 
+>   ethtool --set-priv-flags eth0 full-page-rx on
+> 
+> There is no behavioral change by default. The flag can be persisted
+> via udev rule for affected platforms.
+> 
+> This series depends on the following fixes now merged in net-next:
+>   17bfe0a8c014 ("net: mana: add NULL guards in teardown path to prevent panic")
+>   5b05aa36ee24 ("net: mana: skip redundant detach on already-detached port")
+> 
+> Changes in v10:
+>   - Rebased on net-next which now includes the prerequisite fixes.
+>   - Recovery logic in mana_set_priv_flags() leverages the idempotent
+>     mana_detach() from the merged fixes.
+> Changes in v9:
+>   - Added correct tree.
+> Changes in v8:
+>   - Fixed queue_reset_work recovery by restoring port_is_up before
+>     scheduling reset so the handler can properly re-attach.
+>   - Simplified "err && schedule_port_reset" to "schedule_port_reset".
+> Changes in v7:
+>   - Rebased onto net-next.
+>   - Retained private flag approach after David Wei's testing on
+>     Grace (ARM64) confirmed that fragment mode outperforms
+>     full-page mode on other platforms, validating this is a
+>     single-platform workaround rather than a generic issue.
+> Changes in v6:
+>   - Added missed maintainers.
+> Changes in v5:
+>   - Split prep refactor into separate patch (patch 1/2)
+> Changes in v4:
+>   - Dropping the smbios string parsing and add ethtool priv flag
+>     to reconfigure the queues with full page rx buffers.
+> Changes in v3:
+>   - changed u8* to char*
+> Changes in v2:
+>   - separate reading string index and the string, remove inline.
+> 
+> Dipayaan Roy (2):
+>   net: mana: refactor mana_get_strings() and mana_get_sset_count() to
+>     use switch
+>   net: mana: force full-page RX buffers via ethtool private flag
+> 
+>  drivers/net/ethernet/microsoft/mana/mana_en.c |  22 ++-
+>  .../ethernet/microsoft/mana/mana_ethtool.c    | 178 +++++++++++++++---
+>  include/net/mana/mana.h                       |   8 +
+>  3 files changed, 177 insertions(+), 31 deletions(-)
+> 
+> -- 
+> 2.43.0
+>
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Hi Jakub,
 
-Looks correct, two nits below.
+Just a gentle ping on this series. The approach was agreed upon, and it
+has picked up a few Reviewed-by tags as well.
 
-[...]
+Please let me know if you need anything else from me, or if I should
+resend it to collect the tags.
 
-> @@ -5860,11 +5866,10 @@ struct btf_struct_meta *btf_find_struct_meta(cons=
-t struct btf *btf, u32 btf_id)
->  	return bsearch(&btf_id, tab->types, tab->cnt, sizeof(tab->types[0]), bt=
-f_id_cmp_func);
->  }
-> =20
-> -static int btf_check_type_tags(struct btf_verifier_env *env,
-> +static int btf_check_modifier_chain_length(struct btf_verifier_env *env,
->  			       struct btf *btf, int start_id)
-                             ^^^^
-Nit:                      formatting
-
->  {
->  	int i, n, good_id =3D start_id - 1;
-> -	bool in_tags;
-> =20
->  	n =3D btf_nr_types(btf);
->  	for (i =3D start_id; i < n; i++) {
-
-[...]
-
-> @@ -7024,19 +7021,43 @@ bool btf_ctx_access(int off, int size, enum bpf_a=
-ccess_type type,
->  	info->btf_id =3D t->type;
->  	t =3D btf_type_by_id(btf, t->type);
-> =20
-> -	if (btf_type_is_type_tag(t) && !btf_type_kflag(t)) {
-> -		tag_value =3D __btf_name_by_offset(btf, t->name_off);
-> -		if (strcmp(tag_value, "user") =3D=3D 0)
-> +	while (btf_type_is_modifier(t)) {
-
-Nit: similar logic is repeated in the btf_struct_walk()
-     Can it be abstracted away? E.g. by adding some sort
-     of `collect_type_tag_flags` that would accumulate the
-     bits for MEM_USER, MEM_PERCPU, MEM_RCU?
-
-> +		const char *new_tag;
-> +
-> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
-> +			goto skip_modifier;
-> +
-> +		new_tag =3D __btf_name_by_offset(btf, t->name_off);
-> +		if (strcmp(new_tag, "user") =3D=3D 0) {
->  			info->reg_type |=3D MEM_USER;
-> -		if (strcmp(tag_value, "percpu") =3D=3D 0)
-> +		} else if (strcmp(new_tag, "percpu") =3D=3D 0) {
->  			info->reg_type |=3D MEM_PERCPU;
-> -	}
-> +		} else {
-> +			/*
-> +			 * If we fail to match on the tag value just ignore it.
-> +			 * Tracing programs have the same BTF as the function
-> +			 * being traced, possibly including type tags BPF is not
-> +			 * aware of. We cannot possibly account for them so ignore
-> +			 * them.
-> +			 */
-> +			goto skip_modifier;
-> +		}
-> =20
-> -	/* skip modifiers */
-> -	while (btf_type_is_modifier(t)) {
-> +		/* Only a single tag value supported. */
-> +		if (tag_value) {
-> +			bpf_log(log,
-> +				"func '%s' arg%d type %s has multiple type tags\n",
-> +				tname, arg, btf_type_str(t));
-> +			return false;
-> +		}
-> +
-> +		tag_value =3D new_tag;
-> +
-> +skip_modifier:
->  		info->btf_id =3D t->type;
->  		t =3D btf_type_by_id(btf, t->type);
->  	}
-> +
->  	if (!btf_type_is_struct(t)) {
->  		bpf_log(log,
->  			"func '%s' arg%d type %s is not a struct\n",
-
-[...]
+Thanks,
+Dipayaan Roy
+ 
