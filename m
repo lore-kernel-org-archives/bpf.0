@@ -1,191 +1,155 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C68E3E5A27;
-	Mon, 15 Jun 2026 12:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629673E5A35;
+	Mon, 15 Jun 2026 12:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781525319; cv=none; b=PQsc9GByny3LA+066Df6RNWKYIMjFyQMsvd8L0OIktp9U5ivlNSi5367wmBIR1HnksZkJ+djDU542QJmyChg3Aheiao6dPip2hU8Hd1F1rKGcB7nkhnECqekPp1MbKKekB2eqDAq971bqQgbZ0iI1NXn7ZlMoSRKQZMqzqN8nlY=
+	t=1781525396; cv=none; b=okUnlUxIaMVp+uNVP/VekUPcS7t/hTEUaTLi6KcuIW8lqcOQAQ2CsbYCeO5uVWOHmKLHKgqS2nTk3NWkt0bUdlfgy0vHd51PZ/x6iZZvPan4XaNurADfoqosa1GQPei9pFYkDSiDUcYkWwc3NpWpe3qdHWYFxj3VknsLArs48dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781525319; c=relaxed/simple;
-	bh=xENrRWFNXuS6xq/5GkioW3KfKBBoBO3WYjsm4D8fsSA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q1TE3T3hP3jMwuTVGB57u35TbFSlTJS4kLttiOqxaOAgzHgv5WpXgKzYmVgFik1h2M8ocYLQ5HxqLKXth4jBIOKfEb2qL9TDWwRRFWaLmKH151jeujBwUBa5xiBr03Lt4SBeeViGK7BE8je2z0xwxUEyRg4Oudfdn4ngKt+4N7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Ag5MBtsN; arc=none smtp.client-ip=13.76.78.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781525396; c=relaxed/simple;
+	bh=y79DKARTRp3ByzlsQ9zaQTiO3Mofc2bj4NCvmUXvhQU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ihophNpMfBZShkDv0nm6RNBvpsVRnWqsRzb3SLJykvAhvqh98NQcBKNZ2ySVr7oCA4wsQ55Yq50GO3Aq4vFpRlcaKk9yVtiuuFLDuv/uILU9D+uiQE4vMi8XcM7PPlM/CzMUy6tIAU45zxX6ZV+VwDlIQ8y+uM4zyaZOMAY+tT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TE+ps8XH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Ag5MBtsN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=3ObGa
-	VQFun/9BcHL7UjFxf26skvy0iZtdy+4Fcepbas=; b=Ag5MBtsN6Ge6U1SBwUBGE
-	Byy8LGVc1gK5LF/hQRuXhTpHcO2UozM1A9kG/e4maqVrLJj0eZ6KwIgvauCJglsG
-	Tdf0h4N9JzmgjoLOQcqr65wYiKoS61stWgva4Dr8JJctaXhkSbhgzgJoCfrYBVp4
-	24wXVK9mwjfAfaKa+/xp9c=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web5 (Coremail) with SMTP id zAQGZQCnX7846y9q0ZFxAg--.40573S2;
-	Mon, 15 Jun 2026 20:08:29 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: bpf@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
-Date: Mon, 15 Jun 2026 12:08:23 +0000
-Message-Id: <20260615120823.156382-1-chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TE+ps8XH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99EA21F000E9;
+	Mon, 15 Jun 2026 12:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781525395;
+	bh=tjqdHbY15oVIxfVv0cACnUVqN/cL5lJGeUfwDUXAu3k=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TE+ps8XHBvpIURiOLbINBKwAYAeIgqIuoSBhTld0ahZyxG9jCabqyYxpGXTWG+wYK
+	 nWTL24WQoOC7l/v7p6l8IWliQnXbFHgdp4LM9ca20GHF4fWjK65wG0zLroxdAIC6e+
+	 whs7SNcF0BoB8rrlN5AhqRf8kaSKuPEhc4yQwTiApe/UobZbMkDxuRW8TRTJNTs3Jg
+	 q7XnP/jIzdM4PAPIY0ykAdIQFxUJJ99gSvAB690fuM8AIYf5DOj+CyemCk3qlLj+TA
+	 DID3wNbSGuzhpiRlNG/gb2XP+0yjWJtb13QsKceDLGrV0Mqth8aSm1AFEXrH5A+SON
+	 3ZesSsbmEmFDw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] net/smc: fix out-of-bounds read in
+ smc_clcsock_data_ready()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, bpf@vger.kernel.org, "Heiko
+ Carstens" <hca@linux.ibm.com>
+In-Reply-To: <20260614120931.4041687-1-rhkrqnwk98@gmail.com>
+References: <20260614120931.4041687-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 12:09:54 +0000
+Message-Id: <20260615120954.99EA21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zAQGZQCnX7846y9q0ZFxAg--.40573S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF1xtF48XrWfKFy3Gr4Uurg_yoWrGw18pa
-	ykC3y3WrW0ya13Xr17JrWfZa15Kr4rXr1fGrZ8ta4fX3ykXr95ZF1rKr10vrs0k345WrWa
-	ka42qay5uFs5JwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r
-	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67
-	AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr
-	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbjg43UU
-	UUU==
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add verifier tests for direct packet pointers kept live across skb dynptr
-writer kfunc calls.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-The writer cases must reject because stale packet pointers must not remain
-usable after the kfunc can mutate skb packet storage.
+Pre-existing issues:
+- [Critical] Incomplete fix leaves inherited fallback callbacks vulnerable,=
+ leading to KASAN slab-out-of-bounds read and control-flow hijack.
+- [High] Silent hang of accepted child sockets when a listener is attached =
+to a BPF sockmap.
+--
 
-Add a bpf_dynptr_copy() control where the skb dynptr is only the source.
-That case must continue to load because it does not write through the
-skb-backed dynptr.
+commit 155a3b6116a31fce47421ad7bb5710d26c0e0b82
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../testing/selftests/bpf/progs/dynptr_fail.c | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
+net/smc: fix out-of-bounds read in smc_clcsock_data_ready()
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 344fb2aa0813d..bd51c9b93742a 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1274,6 +1274,95 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
- 	return SK_PASS;
- }
- 
-+char dynptr_kfunc_data[8] = "test";
-+char dynptr_kfunc_dst[8];
-+
-+extern int bpf_dynptr_copy(const struct bpf_dynptr *dst, __u64 dst_off,
-+			   const struct bpf_dynptr *src, __u64 src_off,
-+			   __u64 size) __ksym __weak;
-+extern int bpf_dynptr_memset(const struct bpf_dynptr *ptr, __u64 offset,
-+			     __u64 size, __u8 val) __ksym __weak;
-+extern int bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dptr,
-+					__u64 off, __u64 size,
-+					const void *unsafe_ptr__ign) __ksym __weak;
-+
-+/* Direct packet pointers are invalidated after a dynptr kfunc writes to an skb */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_memset(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_dynptr_memset(&ptr, 0, 1, 0);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+/* Direct packet pointers are invalidated after bpf_dynptr_copy() writes to an skb */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_copy_dst(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &dst);
-+	bpf_dynptr_from_mem(dynptr_kfunc_data, sizeof(dynptr_kfunc_data), 0, &src);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+/* Direct packet pointers stay valid when an skb dynptr is only copied from */
-+SEC("?tc")
-+__success
-+int skb_pkt_ptr_valid_after_dynptr_copy_src(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &src);
-+	bpf_dynptr_from_mem(dynptr_kfunc_dst, sizeof(dynptr_kfunc_dst), 0, &dst);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	return *data;
-+}
-+
-+/* Direct packet pointers are invalidated after probe-read writes to an skb dynptr */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_probe_read_kernel_dynptr(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_probe_read_kernel_dynptr(&ptr, 0, 1, dynptr_kfunc_data);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
- /* Read-only skb data slice is invalidated on write to skb metadata */
- SEC("?tc")
- __failure __msg("invalid mem access 'scalar'")
--- 
-2.34.1
+This patch fixes an out-of-bounds read when smc_clcsock_data_ready() is
+called on a passive-open child socket that has had its sk_user_data cleared
+by sk_clone_lock() and subsequently populated by a BPF sock_ops program. It
+restores the inherited sk_data_ready in smc_tcp_syn_recv_sock() before
+sk_user_data can be reused.
 
+> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+> index b5db69073e20f..152971e8ad179 100644
+> --- a/net/smc/af_smc.c
+> +++ b/net/smc/af_smc.c
+> @@ -156,6 +156,12 @@ static struct sock *smc_tcp_syn_recv_sock(const stru=
+ct sock *sk,
+>  	if (child) {
+>  		rcu_assign_sk_user_data(child, NULL);
+> =20
+> +		/*
+> +		 * the child inherited the listen-specific sk_data_ready();
+> +		 * restore it here, as sk_user_data may be reused before accept
+> +		 */
+> +		child->sk_data_ready =3D smc->clcsk_data_ready;
+
+[Severity: Critical]
+This isn't a bug introduced by this patch, but does restoring only
+child->sk_data_ready leave the other inherited fallback callbacks vulnerabl=
+e?
+
+If an SMC socket is forced into fallback mode before listen() is called,
+such as via setsockopt(TCP_FASTOPEN), smc_fback_replace_callbacks() replaces
+all four socket callbacks (sk_state_change, sk_data_ready, sk_write_space,
+and sk_error_report) with fallback handlers.
+
+When a connection is accepted, sk_clone_lock() copies all four fallback
+callbacks to the child TCP socket and zeroes sk_user_data.
+
+If a BPF cgroup hook runs bpf_sock_hash_update() on the child socket,
+sk_user_data is populated with a sk_psock.
+
+Could a subsequent socket event trigger the inherited smc_fback_state_chang=
+e()
+and cause an out-of-bounds read?
+
+net/smc/af_smc.c:smc_fback_state_change() {
+    read_lock_bh(&clcsk->sk_callback_lock);
+    smc =3D smc_clcsock_user_data(clcsk);
+    if (smc)
+        smc_fback_forward_wakeup(smc, clcsk,
+                                 smc->clcsk_state_change);
+    read_unlock_bh(&clcsk->sk_callback_lock);
+}
+
+smc_clcsock_user_data() would mistakenly cast the sk_psock to a struct
+smc_sock, and dereference smc->clcsk_state_change past the end of the
+sk_psock object.
+
+Should child->sk_state_change, child->sk_write_space, and
+child->sk_error_report also be restored here?
+
+[ ... ]
+
+[Severity: High]
+This is a pre-existing issue, but does a similar inheritance problem exist
+in the BPF sockmap subsystem itself?
+
+When a listener socket is added to a BPF sockmap, its sk_data_ready callback
+is replaced with sk_psock_strp_data_ready(), and its sk_user_data is marked
+with the SK_USER_DATA_NOCOPY flag.
+
+When an incoming connection is accepted, sk_clone_lock() copies the
+listener's sk_data_ready pointer to the new child socket but zeroes out
+sk_user_data.
+
+The TCP BPF cloning hook (tcp_bpf_clone()) restores the child's sk_prot but
+does not restore its sk_data_ready callback.
+
+When the child socket receives data, it invokes the inherited callback:
+
+net/core/skmsg.c:sk_psock_strp_data_ready() {
+    struct sk_psock *psock;
+
+    rcu_read_lock();
+    psock =3D sk_psock(sk);
+    if (likely(psock)) {
+        ...
+}
+
+Since sk_user_data is NULL, sk_psock(sk) evaluates to NULL. Does this cause
+sk_psock_strp_data_ready() to return immediately without invoking
+sock_def_readable(), permanently depriving the child socket of readiness
+notifications and silently hanging applications waiting in epoll_wait()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260614120931.4041=
+687-1-rhkrqnwk98@gmail.com?part=3D1
