@@ -1,100 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6053C454E
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 09:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10FD3C0A0D;
+	Mon, 15 Jun 2026 09:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781514510; cv=none; b=buG1pRYrjpAKxR5jSACP04otziuedkm3052ehQHjHmRSLiLBjAk8F3MOuGXnht9s2ht9M7R/RIhq+sHVSg0NW05TgcM3eJp6AkWcTeorQrN5tHsaEnxZ5+ZruqKyU81JB9wcsLyJ2tL2DVKKFDa5xfCv3DU3fK1dkoBhO/6c7E4=
+	t=1781514517; cv=none; b=dhXcdZE6HCKtMqDtqVTBNwYHVkVViwyMbmFrqbc38FIvnZ7pDqRdzr1PDG+q5jljLAXFjKHTNGuVNNf7ARkAE2Pz+NLxwJlD9vCviKRhvR7ywHnYHIppheyV+FLa8+MVXb+24e0QoqMqyti5fx/k8OqjP70AFDKODio2zdxIyv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781514510; c=relaxed/simple;
-	bh=R7p6E16k0VNq1ZpHV76mBycnecxb6edNFkj/8svE+to=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WmcCyk5H8SfIV2MSlBB7LOFPYe1AM7TleiSQN6H8U6AS9uyUubAvARROYiaef8sctLLjTbWVmcvA3i0t340Qu/Ed6++l+spHwsd1/eGRQMsNattne7MOdIamKlUW0NjeQa7to5ifiSK/nRxTgEji/CNDf65T9bOxb+qr6swYjJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZemJhi1U; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZemJhi1U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6CC1F000E9;
-	Mon, 15 Jun 2026 09:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781514507;
-	bh=R7p6E16k0VNq1ZpHV76mBycnecxb6edNFkj/8svE+to=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZemJhi1Un0lVvstr9Y1U9I4Z80jO78+BuV/SCk0Vc1T5uroG0y+2uCCYZJfue9kvK
-	 hT8eVgXAAE0zL/E7eNBm5Yc3OjFw1ygotVOW7UwgpPas1PmB6ivCxx9yNloN2C87rm
-	 kTqspD23CljL76/FgwRmFFguxg6qk/fS0SW2HcwBLca0HqezK3CLBZgURHK3dKRdAs
-	 vt3zEK5+A+USxsBaUtLYIbkCVMgzYGJeHMlDhzWgeoNzHZWQxWXmebyLidmupIQIrc
-	 usTYuMjPIhkc9qhh5Xr8fYhxAUdZk9dXPqDHit967ceMGl+68bXERBfMob58Chk0or
-	 DA6zuf8Em5TSQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover rdonly_cast dynptr slice
- lifetime
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-2-2dd0a369e153@mails.tsinghua.edu.cn>
-References: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-2-2dd0a369e153@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 09:08:26 +0000
-Message-Id: <20260615090827.0C6CC1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1781514517; c=relaxed/simple;
+	bh=ktQ3gGs6h5tUKX+MwCKTqRQnHTjGY8sISQtky2XhLyM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=myH6Z67bgxuqL2tLVJsBmgcqX1q3eKI828RbzT/n8+G2XBZdhEXu5zqgyHZhMVwGzz5tE49ZxRJrY+1aCdHcWyeerh2js2m6jRYUBd4BxeYa9FC3JsU4O+lnTWxfA0uXQN1VgF8OWVTYtsRclP4RgntNnuF8fK6/DHWLb+GZrHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxhngQwS9q4EcUAA--.28453S3;
+	Mon, 15 Jun 2026 17:08:32 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxjcIEwS9qFPmmAA--.52334S3;
+	Mon, 15 Jun 2026 17:08:21 +0800 (CST)
+Subject: Re: [PATCH v1 0/2] LoongArch: BPF: per-CPU addr MOV and timed
+ may_goto
+To: Huacai Chen <chenhuacai@kernel.org>, George Guo <dongtai.guo@linux.dev>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, WANG Xuerui <kernel@xen0n.name>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, George Guo <guodongtai@kylinos.cn>
+References: <20260609041407.122384-1-dongtai.guo@linux.dev>
+ <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ab8e2b43-dbb7-629c-052e-a9a269268b88@loongson.cn>
+Date: Mon, 15 Jun 2026 17:08:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxjcIEwS9qFPmmAA--.52334S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Jw13WF48JryfCrW3Aw4fZwc_yoWDGFg_W3
+	98W342kw4rGFsxta1Iqa13ZFWSqw4jkr1rtryjgF18Jr9YyFWqkF93CFyfXws7Kw4rCFnI
+	gw1DXayYvry7ZosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
+	UU=
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comments do not follow the BPF subsystem comment style g=
-uidelines. The opening `/*` must be on its own line.
---
+On 2026/6/13 上午11:09, Huacai Chen wrote:
+> Hi, Tiezhu and Hengqi,
+> 
+> Any comments about this series?
 
-commit 23e88c2468fdbcf78bd114cff5b73d79a87a4337
-Author: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+This is a preliminary review during the current merge window.
 
-selftests/bpf: Cover rdonly_cast dynptr slice lifetime
+Based on the DWARF for the LoongArch Architecture specification,
+GCC disassembly, the kernel's ORC definition (unwind_orc.c), and
+the BPF JIT stack layout defined in build_prologue(), the saving
+position of $ra in your trampoline is incorrect.
 
-This commit adds verifier tests for bpf_rdonly_cast() alias lifetime. It
-covers casting a ringbuf dynptr slice, releasing the dynptr, reading through
-the cast alias, and stack-overwrite invalidations.
+build_prologue() explicitly shows that LoongArch BPF JIT expects
+$ra to be stored at the highest slot right below the original $sp.
+Furthermore, the ORC unwinder strictly mandates .ra_offset = -8
+(PREV_SP - 8). Storing $ra at 0($sp) (which is PREV_SP - 64)
+breaks both JIT conventions and kernel stack unwinding.
 
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-> index b62773ce5219b..7ffe55ba28663 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+Since we are currently in the Merge Window, please take your time
+to rebase this patchset against the latest tree and send a v2 after
+the merge window closes (post -rc1), and please wait for more time
+to get more comments.
 
-[ ... ]
+Thanks,
+Tiezhu
 
-> +/* A read-only cast alias from an overwritten dynptr should be invalidat=
-ed
-> + * even when a clone still holds the underlying reference.
-> + */
-> +SEC("?raw_tp")
-> +__failure __msg("invalid mem access 'scalar'")
-> +int dynptr_rdonly_cast_slice_after_overwrite(void *ctx)
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? The opening /* is typically expected to be on its
-own line.
-
-[ ... ]
-
-> +/* A read-only cast alias from a clone should remain valid after overwri=
-ting
-> + * the original dynptr while the clone still holds the reference.
-> + */
-> +SEC("?raw_tp")
-> +__success
-> +int dynptr_rdonly_cast_clone_slice_after_parent_overwrite(void *ctx)
-
-[Severity: Low]
-This isn't a bug, but similar to the comment above, should the opening /*
-be placed on its own line to match the expected multi-line comment style
-for the BPF subsystem?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615-f01-09-rdo=
-nly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn?part=3D2
