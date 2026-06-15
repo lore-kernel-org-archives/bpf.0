@@ -1,117 +1,86 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE0F246782
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 04:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781498138; cv=pass; b=A7SUh+iwzVzi/zeL3v8C5mtVPmj7yjEa7bdaTXKu01hxQCfbSlP+DTPfmj1RJ08cqfdU0AD16Y4hZz91f+//MIBajIdwCiTDEBmLJBq3GoP0qdebn5PhP8h8pPvsD1SdPt7UI5FlvAmThiQ0TD+ZOt42QFUxUHLSefTddx0MObg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781498138; c=relaxed/simple;
-	bh=kr69be3ayWAg9sIFtBTykti8WXAgb/Wv3JT797c4NMs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rzDxemEiglDZDh7ccHXidDwW/aUHdBl1k1+OqFnNU+1jgEleVIXqAlLEUrwyZP2zgzgSqiu/AujULCBpkKPyccltV1TKSCfU6w+MI2VVtiFjxCcn1gb9lIjDznIixFi36B3J1PS5I2NkAPZbL8dSk9svYqS/tV5G5KR5ptE/sks=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FL/zxuTQ; arc=pass smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE902233937
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 04:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781498420; cv=none; b=J1wb+4Eo5BgvUeoWkpqANebHmPDddPanyXqNK7P+/b0mcOj5+bGDF1LJUOgAg0VPJt83NdmzBQrcbQjFVUfVp1qSsqYdu9n1weZVf4TZAzZyRGOo8q3fyyiXmn0Ia/qsJCY3pKTSuR8GtpRaPeUJkWQhk8hUEIEuh51f3FNSxqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781498420; c=relaxed/simple;
+	bh=Pm6WYlwSPoEmR1olUS77BbzRebJzSG4Eeb6pUG0Tb20=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JpbeEvn9r0PPChH/HcUXrYyRLJ0wuteOika5cjjIuFDZjrSkRw26uE6jjnC+62ygorF+jKqf1ve69TFESb/m5Yk/ZmHNojrvvFi58ALA/AoK4ae7sxIZ2lIxUaORvU60AxJi8HmPxJIUkrwO40dT+LY74p21l0qrH9fzvgfDSTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ch7Gw7iE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FL/zxuTQ"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-36babe2c4bdso1633513a91.1
-        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 21:35:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781498137; cv=none;
-        d=google.com; s=arc-20240605;
-        b=U/PbAYVKaVJmj8wN+FAxZuc3x+Gg1oERfHH2tAstcGciC9d1AjsD5kgpVzOsnBu2J6
-         2hLAmvte4Ot9uXkHjRYzNO3HigsVM61GW2o+cWzykMMt8pYnwDcVb7UbLAUR9HzDMVrD
-         AuUGXv80aQce02hsodwqglbbmxbjLNocpgDQXzvCn4+8m+YVkfuMcWS2gX2kWX9DY8hH
-         yenWXpeQ6D1z4TxF0sbebtvF5TEQP7aRc2bMhLNCkLxXUgfGu4oilCuDRSg9ycvzIm7O
-         xV/okDnPhF93YrIYYDN/118V5+BtVusPMO4CsMe/RjfuHt9yIrBW+V3u4+W48otV2aKg
-         TyFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kr69be3ayWAg9sIFtBTykti8WXAgb/Wv3JT797c4NMs=;
-        fh=Ux2T8GjMPdpwJRXCKSaOAApXySOz+17JSwVu/s7STxI=;
-        b=hUkw1kniemXTX7S24UNDt3CG6ov7P9m0TKvyv+Pa6LZFYZmrz4oM4jjFKL6b7C6V16
-         noG48rsb8aXudu2h0kUNyF9U6MSCjgdpN3rANuRPjVx/i9XJrEZFCyArdKiRBEGKF32E
-         SBEvyhUOT3/8vPQ8r+JuK3qvdR5hg3oZi9Pw0Gu5crUMIey70SBg8qq03sUfznfgdDml
-         7YRe0X+7d8WTwmbqGOlaoPc3W50WL+Ix2kyhhGBJzRl1BNOSt5erksyIaXL0pnQDOank
-         QfkA+Z580A+9jIU0DJLcazBGshk8yagLIt3+IINhVmU1xYJFelY1VsDZM3GEPxCMkzRW
-         5TMQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781498137; x=1782102937; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kr69be3ayWAg9sIFtBTykti8WXAgb/Wv3JT797c4NMs=;
-        b=FL/zxuTQzxfYR/GES+gSClPZ0VDDeUr4phSltscsM0dqVmv87Sjv6NxwcpAWdp4RAd
-         D/wGUe8a1YSmlxChBX0+4pUA5cO1HwVZt3U2gBlVOGfJKNk0qhRWulkVUkQYZOXGORSD
-         UZ+0+E08iguuvZyxPW1GKpxPLQ34OvXFHRwrVPTdSpcQQYC+Hx/7VGnWHPLpNmfv1s+F
-         jrUPqkpJBIP0P1B9Vngs251KT8/GGyvTxLAiSXTH2204tOOHOBgJyVenInGwRKv8xAZO
-         eNKDwJOx1x/4FMYle5CUQPpWgs/dkDGYNM4Mxa4Erqez3RblNTy9HrsWfrUSRHCNxnHM
-         rlyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781498137; x=1782102937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kr69be3ayWAg9sIFtBTykti8WXAgb/Wv3JT797c4NMs=;
-        b=besNDOOKYVfkSkrQ0Q9bRIKA0AOaNy1J71mnS03bNJHMbqKpX2SJ/1HkQAJIf9VLmR
-         CTSLe91qMQlBISFI5c8Pt8sd/4MxhwKQyCgYd34/DCL9v2MKENNRhVdut+AIHL/orxap
-         e1l7GcrwPJjPrhwv9avvmnNDF4qDwQID90+3fDxEZvWPoTXHszRtCn3fxUvYXGjN0Oau
-         NOf9GKPw2u5naKiwGe/tzYy2QfLapfpslyFtPsN/cT5E2xuTiuW/rFFBZqU/JCObCPtv
-         eMbKuR7+aTg9GH2XC6z/srXfUIR+MCC4dAFqNrHJn8G/NdssPDZd7BB61LorK6Ypohn1
-         6Ktg==
-X-Gm-Message-State: AOJu0YyiXtKvg7GkVWPmGWbLF4z8RfQN8iFrvQM4sI5Iki7Qf61wECOP
-	WKZ0xHzGpg6zPeH2sJlm+BdpVTomUi3V2A6bRekq5iTsVLCZs/vOituM5h1z2QBGuB9CL2lkKIc
-	iEMIAq2dTY/8+hxaRXFnrvzD5IJEDnec=
-X-Gm-Gg: Acq92OHNL3JqiPvWE3C0K8mCaAUVx9gg4KGMhIOvblwiJJFV8WSwrqW6fUzIb52hFUH
-	9ssrr/hwcPog6xFCfIxCj+zfHAxiN3c5g96ao7Pc1lftdN5QO2bLcNHWwdWl5c/e/9TKrvKXNaA
-	jHCXZ//NzpSYYuJcgh96awPR3r8ijY+IVpUgCwWMjzkvK4qanbQjXH0ZPPLrAKyw+9JSnx2nAPb
-	f8SgzU9iyMzb8BdrFIV/Rs7Px9iUHhXzqs6xLZXBoNVdMNMx1sWmG3tcJ9S9f/X6DbjE7qrMx8V
-	ZR0pWmU6zRnJbTf+qX9lAzDJr4RdEjLBZi0hbtDYtbqScJkh59LKjmIV97Wa2OQFJrxi+to0xQ0
-	i4+MY3EQVpRpSu7ini9OB4zWz
-X-Received: by 2002:a17:90b:184b:b0:368:83e6:ca95 with SMTP id
- 98e67ed59e1d1-379fee6a86amr13337116a91.0.1781498136914; Sun, 14 Jun 2026
- 21:35:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ch7Gw7iE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2DF1F000E9;
+	Mon, 15 Jun 2026 04:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781498419;
+	bh=tT4ThXy0ovTMawgnIXx9F4iQe79FFAbw0eIy0ykOrZU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ch7Gw7iElPN9qgVFM+//n5SA7xGeedWAAhxUPOCasV/Up7nTw+EYpI24vMkuNri/t
+	 Gf8hvYZ2OI7ojExlCKpxE/SO7NduwG1hCda3TWeeM7G1OdGXSYSx/CUQs1NdLu06IV
+	 l0cAf0semy3Xc4NXs4s2NWvcrTGDVI666XXhgIBw4mpiKbJ81CRJknHu2J0VTsO1Zn
+	 eZxP30l7oxh0XlMRilEe9WHPhcmSf0Mr5iWOpGvjrHqTLeLd7ULjtaV5vZDW6sA9/+
+	 iKr+kzIPX+yE0SKwVJkUJJsxjtNPC0Adpys6hJUPxvwsrcGjmGklo71vJhECi6Sbh+
+	 b7syALsmuIb+g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197CC3A566E0;
+	Mon, 15 Jun 2026 04:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260614163352.1060813-1-find.dhiraj@gmail.com>
-In-Reply-To: <20260614163352.1060813-1-find.dhiraj@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 14 Jun 2026 21:35:25 -0700
-X-Gm-Features: AVVi8CeSjG5b0oVhd8RvAHScR8HE8jXbxyorXU7-8c5VKOTa6az8Pno987o9DGY
-Message-ID: <CAADnVQK5XpDAnqY-x6DNBYn_bK42AgayT7A2Smxvs1v9=0RzBQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Add arena direct-value boundary test
-To: Dhiraj Shah <find.dhiraj@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 0/6] bpf, skmsg: some fixes for skmsg
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178149841464.2427889.2279258322725016008.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Jun 2026 04:40:14 +0000
+References: <20260615021959.140010-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260615021959.140010-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
 
-On Sun, Jun 14, 2026 at 9:34=E2=80=AFAM Dhiraj Shah <find.dhiraj@gmail.com>=
- wrote:
->
-> Add coverage for direct map value access against BPF_MAP_TYPE_ARENA.
-> For a one-page arena, an offset of PAGE_SIZE - 1 is valid, while
-> PAGE_SIZE is one byte past the end of the mapping and must be rejected.
->
-> This covers the off-by-one case in arena direct-value range checking.
->
-> Signed-off-by: Dhiraj Shah <find.dhiraj@gmail.com>
+Hello:
 
-Sorry, not every branch in the kernel needs a selftest.
-I don't think we need to spend CI cycles for every future patch
-to test for this unlikely regression.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-pw-bot: cr
+On Mon, 15 Jun 2026 10:19:53 +0800 you wrote:
+> All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
+> Kuniyuki and Sechang Lim, which have already been reviewed by me and John and Jakub.
+> 
+> https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
+> https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.com/
+> https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
+> https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
+> https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v4,1/6] bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+    https://git.kernel.org/bpf/bpf-next/c/0c0a8ed85349
+  - [bpf-next,v4,2/6] bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
+    https://git.kernel.org/bpf/bpf-next/c/f3f34ca45b96
+  - [bpf-next,v4,3/6] bpf, sockmap: keep sk_msg copy state in sync
+    https://git.kernel.org/bpf/bpf-next/c/2ccbc9a38746
+  - [bpf-next,v4,4/6] sockmap: Fix use-after-free in udp_bpf_recvmsg()
+    https://git.kernel.org/bpf/bpf-next/c/c010995b29c8
+  - [bpf-next,v4,5/6] bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+    https://git.kernel.org/bpf/bpf-next/c/a48802fb2cd2
+  - [bpf-next,v4,6/6] selftests/bpf: add test for bpf_msg_pop_data() overflow
+    https://git.kernel.org/bpf/bpf-next/c/70b139d0483c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
