@@ -1,94 +1,165 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB93E2F7F0F
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 09:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E783DA7E3
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 09:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781516198; cv=none; b=ZxqUzqgV1ojNpWxzZRO8Htmm6seesb+PFFuptNI3KGzI6jpz6iv0S+Zrzk0DkDypUWBKvKxYvBDLF+D5WxdmTh4YPJteUxXVrOqK/JouVspue0WhbDGlLLYT6XG+YJGpjN6a5xqRirzXCIZu84ViYemVg2m3OnRutHqLBlQ+QAc=
+	t=1781516405; cv=none; b=NLgrzK+G8pw5+5p1txMHjWBjmpa82pjvl2apJnC+6IyI7eBLlxOS8WzdTPEM/ZB39rWY0dJE0YCM32hofKk0KVGKCIMfFC/ReRl6Zap50Bt6JQVB+UPpRQPdLBbC9wONZsYKLFuSRIlkmZQTYLYX0y7nVXwb7HBVXUUbiLAAGHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781516198; c=relaxed/simple;
-	bh=VmF5v62cc1NkFDCbD05zoYa2Jf2Oc5ZRzO/8/yuDtZM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=JYWgHVdoAybLXf1ls18Dd5LmnJNtbZWgLicch68I8szRFboeUsJYPwidxMWuc9lcAdpma/O7FXaHukAGjmTuUrlHxuUPh9Ap7PRxFakkodBHMLfP5u32BXjy073W6m2R8nGV/z1SbAWCUlBkeyVzpNf4itMWxlmCBsw4L34+Qmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=U4Fi2qJm reason="signature verification failed"; arc=none smtp.client-ip=13.76.78.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781516405; c=relaxed/simple;
+	bh=yuZOjeKUQvuOh9Mb8jFUvO3r6PfArjCEIg/DDAG8xb4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Lvj7CEIbvk/3qk+MxpqRe92bWOfuZe1nwh9PjCtq/O6BOMKV/A+D3QcdBYrKX4b8Trncxoklx5+iGnoTwREaxLGfmQCW/wUX+p6Rma5KtRha7qOjs2luxJa2WO0qYpAyBN9kBpkTJmSkYHD1l7FLi4ymdfMDqptxtpcRmiU9HOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UyNbsDRQ; arc=none smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="U4Fi2qJm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UyNbsDRQ"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b3e03939so23109605e9.1
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
-	Subject:In-Reply-To:References:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID; bh=RQFhuO/HnA3f+FeJvjwfwnH
-	JxK48RWLq0bfJgQhSXbU=; b=U4Fi2qJmgr1pCkXzi2r1u2yI1QZsHXcuN5QdAC6
-	L+Hq6dOD8v9xAzkME6YAayFIKI3s9IcfeIQxMpdmURokIIMNJSoeivIYgvuhjjvu
-	gqXHZQuLzWqxfPxJ71WrOB1CI7NkO2FqNJip2TAwwwN/yRJm65rtMFxewB+WhM8k
-	ka54=
-Received: from gnq25$mails.tsinghua.edu.cn ( [183.173.82.101] ) by
- ajax-webmail-web2 (Coremail) ; Mon, 15 Jun 2026 17:36:31 +0800 (GMT+08:00)
-Date: Mon, 15 Jun 2026 17:36:31 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: Re: [PATCH bpf 2/2] selftests/bpf: Cover dynptr probe-read
- kfunc capability gate
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
- 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
-In-Reply-To: <20260615084155.8ECDA1F000E9@smtp.kernel.org>
-References: <20260615-f01-07-dynptr-probe-read-cap-v1-2-e626cd61a381@mails.tsinghua.edu.cn>
- <20260615084155.8ECDA1F000E9@smtp.kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        d=gmail.com; s=20251104; t=1781516403; x=1782121203; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30D3lk2m4MPe1WlWUP+Xy2TkeorO71aGo8DIuGzIXbw=;
+        b=UyNbsDRQ1oPgXaifIFyAikgrMXaHTPWofKkeVM0347UeQRKl62NelmEkUC5BnBmJ8u
+         NU8DhSuItVrj7dKhwKefywPKAT/IoEE9G3lv02H/7aTMzw3tnqz747oC+CtcljoTNGCh
+         444TF/pSG8G6pJN19nmVxqCUjzAGatsImBduwH2LEU9o+kEU46mx1fuaiq7yxuX5WfNH
+         RxSq1Ms9MFSfl7UgPiOsLbEcIG3+EhLnVkMLcHVnEng2vfcbODWESzcJHVbJcUbtc+ZX
+         CTvg4Fgo/n2BpN2VfUiZH2mzr30CvKsc172Khn8hWC/BZQoh4x+QGvoQ+0HUEmqnNiSa
+         xJqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781516403; x=1782121203;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=30D3lk2m4MPe1WlWUP+Xy2TkeorO71aGo8DIuGzIXbw=;
+        b=LX3OlNav7D+MSxzBWtTND0jhErMlIwYnMlHGOqIcYzyAVWhZy0m/N9GCJfwQxJXILq
+         f56GFpPfzbweH3UUyNhYi4lvASoHxftpVwrqzf9szp7BGkS0W7LVQqLWwqQr8yUYY8My
+         keAuBMsiftWM3U+AE6rnnYwhUzkdv33W7iQV3d5ul/cDmK9HYjgZbFWzyczJjtjNxo1S
+         PmCNg3pvwyB4dnlYXr2j6ey+dq+Z3gaEha+R+M9tOdqlvk668anv6fDflZTQIX7cTd0W
+         MTe6q9iSUt8t3xXjOIh/0k287qpeANGKpzuegMBvVi6/lppsRFZXUvhsTr836iI5e73U
+         anqA==
+X-Forwarded-Encrypted: i=1; AFNElJ+Gqw3rnt/hGI+SUo3l5r6g/kNaiK7cQu5cFfYvmhp3W0sCyPV+U5F+K1UXnbUevbwPOQ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDTsHqQ4Bn0GS4K9qTAMJrbXEHBdJyDWmqYIg7U8zjW0PPSS44
+	d8IsXL6sOVHbXyKKvLtUyNiVe0uZ12w9HhtIT55RMxB3k2iYjAfXGLh8
+X-Gm-Gg: Acq92OFwmZxHzMgPQx4q+p74qjUCdhUEvKmHXaMquQWPp3vFS1NkIL7OpHfLSCDgzrv
+	jOidN+jzQ4E1y5xrGSVqhhD/l3KVKOAvlFb3ByaTQE5fqX6xDgSo70ux79UpfACnydLqyLee6zJ
+	KO6gr15dc6w5GMA42obijbhULiyUebyyOGrQJjuaixTHb/JZKIRkPLa/eE7/GL6D/9UOAUTePit
+	aLQO4x12SH62k8g5uJkBJBzvTeRFOpdWvQIH0sxAbOs3fNh5RZNUMHJEtRGrtAUnDahF/D4C1XP
+	yx9xXvveI62JgAkYbJWImece8KkUqHGpibZz0O3QhJO19pM1sIzDDBi5tvfq4n4t2N3rZ+TjGab
+	ej1w7O/0OsxxeVj1PuCWiQuB2cm47F32wL7nQIMkpfBrLbH9eHhlahDfl6K6mKLFo+sk2fx1U0Q
+	5PkwtBd1pTn1uph2kHTXClKFUGOekPU55rsgJfU3DSZbg9GFOaHtmkgfIzlKZtt7U5Ftz4GHmML
+	nzfXEPbPK8nTeUzA3J+hgHS9U7t1HIAU8tXa1IbRtrs7PYl/BkyGMXzOsqZmWU6wQ==
+X-Received: by 2002:a05:600c:8b2a:b0:490:4b89:5372 with SMTP id 5b1f17b1804b1-490ec50a338mr160503935e9.11.1781516402495;
+        Mon, 15 Jun 2026 02:40:02 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49220304180sm233055375e9.4.2026.06.15.02.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 02:40:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-ID: <41aba881.7e105.19ecaa3c6bd.Coremail.gnq25@mails.tsinghua.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID:yQQGZQCXcZmfxy9qLJdPAg--.16760W
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQETA2ovr0If+gA
-	IsV
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Jun 2026 11:40:01 +0200
+Message-Id: <DJ9IUWKK7EFS.XXLT3ZAGOPC4@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 0/2] bpf: Preserve rdonly_cast dynptr slice lifetime
+X-Mailer: aerc 0.21.0
+References: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
+In-Reply-To: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiBzYXNoaWtvLWJvdEBrZXJu
-ZWwub3JnCj4gU2VuZCB0aW1lOk1vbmRheSwgMTUvMDYvMjAyNiAxNjo0MTo1NQo+IFRvOiAiTnVv
-cWkgR3VpIiA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1LmNuPgo+IENjOiBicGZAdmdlci5rZXJu
-ZWwub3JnCj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYgMi8yXSBzZWxmdGVzdHMvYnBmOiBDb3Zl
-ciBkeW5wdHIgcHJvYmUtcmVhZCBrZnVuYyBjYXBhYmlsaXR5IGdhdGUKPiAKPiBUaGFuayB5b3Ug
-Zm9yIHlvdXIgY29udHJpYnV0aW9uISBTYXNoaWtvIEFJIHJldmlldyBmb3VuZCAxIHBvdGVudGlh
-bCBpc3N1ZShzKSB0byBjb25zaWRlcjoKPiAtIFtNZWRpdW1dIFRoZSBjb21taXQgbWVzc2FnZSBj
-bGFpbXMgdG8gZGVjbGFyZSBleHBsaWNpdCBrZnVuYyBwcm90b3R5cGVzIGxvY2FsbHkgaW4gYGR5
-bnB0cl9zdWNjZXNzLmNgLCBidXQgdGhlIHBhdGNoIGZhaWxzIHRvIGluY2x1ZGUgdGhlc2UgZGVj
-bGFyYXRpb25zLgo+IC0tCj4gCj4gY29tbWl0IGQzZGVkYTFiZmQ1MGUwYWY2NmUwZGNlZDAwNTQy
-M2VkZDk5YzBkMDMKPiBBdXRob3I6IE51b3FpIEd1aSA8Z25xMjVAbWFpbHMudHNpbmdodWEuZWR1
-LmNuPgo+IAo+IHNlbGZ0ZXN0cy9icGY6IENvdmVyIGR5bnB0ciBwcm9iZS1yZWFkIGtmdW5jIGNh
-cGFiaWxpdHkgZ2F0ZQo+IAo+IFRoaXMgY29tbWl0IGFkZHMgc2VsZnRlc3QgcHJvZ3JhbXMgdG8g
-dmVyaWZ5IHRoYXQgdGhlIG5vZmF1bHQgcHJvYmUtcmVhZAo+IGR5bnB0ciBrZnVuY3MgZmFpbCB3
-aXRoIC1FQUNDRVMgd2hlbiBjYWxsZWQgd2l0aG91dCBDQVBfUEVSRk1PTiBhbmQKPiBDQVBfU1lT
-X0FETUlOLiBJdCB0ZXN0cyB0aGUgcG9saWN5IGJvdW5kYXJ5IGZvciB0aGVzZSBrZnVuY3MgdXNp
-bmcKPiBjYXBhYmlsaXRpZXMuCj4gCj4gPiBBZGQgZm9jdXNlZCBkeW5wdHIgc2VsZnRlc3QgcHJv
-Z3JhbXMgdGhhdCBsb2FkIHNvY2tldC1maWx0ZXIgcHJvZ3JhbXMgdXNpbmcKPiA+IGJwZl9keW5w
-dHJfZnJvbV9tZW0oKSBmb2xsb3dlZCBieSBlYWNoIG5vZmF1bHQgcHJvYmUtcmVhZCBkeW5wdHIg
-a2Z1bmM6Cj4gPiBicGZfcHJvYmVfcmVhZF91c2VyX2R5bnB0cigpLCBicGZfcHJvYmVfcmVhZF9r
-ZXJuZWxfZHlucHRyKCksCj4gPiBicGZfcHJvYmVfcmVhZF91c2VyX3N0cl9keW5wdHIoKSwgYW5k
-IGJwZl9wcm9iZV9yZWFkX2tlcm5lbF9zdHJfZHlucHRyKCkuCj4gPiBEZWNsYXJlIHRoZSBkeW5w
-dHIga2Z1bmNzIHVzZWQgYnkgdGhpcyBCUEYgb2JqZWN0IGxvY2FsbHkgaW4KPiA+IGR5bnB0cl9z
-dWNjZXNzLmMgc28gdGhlIGR5bnB0ciBCUEYgb2JqZWN0IGJ1aWxkcyB3aXRoIGV4cGxpY2l0IHBy
-b3RvdHlwZXMuCj4gCj4gW1NldmVyaXR5OiBNZWRpdW1dCj4gSXMgdGhpcyBkZXNjcmlwdGlvbiBh
-Y2N1cmF0ZSBmb3IgdGhlIGluY2x1ZGVkIGNoYW5nZXM/Cj4gCj4gVGhlIGNvbW1pdCBtZXNzYWdl
-IG1lbnRpb25zIGFkZGluZyBleHBsaWNpdCBsb2NhbCBkZWNsYXJhdGlvbnMgZm9yIHRoZSBkeW5w
-dHIKPiBrZnVuY3MgaW4gZHlucHRyX3N1Y2Nlc3MuYywgYnV0IHRoZXNlIGRlY2xhcmF0aW9ucyBk
-byBub3QgYXBwZWFyIHRvIGJlCj4gaW5jbHVkZWQgaW4gdGhlIGNvZGUuIFdlcmUgdGhleSBhY2Np
-ZGVudGFsbHkgb21pdHRlZCBmcm9tIHRoaXMgcGF0Y2gsIG9yCj4gaXMgdGhlIGNvbW1pdCBtZXNz
-YWdlIG91dGRhdGVkPwo+IAo+IC0tIAo+IFNhc2hpa28gQUkgcmV2aWV3IMK3IGh0dHBzOi8vc2Fz
-aGlrby5kZXYvIy9wYXRjaHNldC8yMDI2MDYxNS1mMDEtMDctZHlucHRyLXByb2JlLXJlYWQtY2Fw
-LXYxLTAtZTYyNmNkNjFhMzgxQG1haWxzLnRzaW5naHVhLmVkdS5jbj9wYXJ0PTIKClRoaXMgc2Vu
-dGVuY2UgaXMgc3RhbGUgZnJvbSBhbiBlYXJsaWVyIHZlcnNpb24gb2YgdGhlIHBhdGNoLiBUaGUK
-Y3VycmVudCBwYXRjaCBubyBsb25nZXIgYWRkcyBsb2NhbCBkZWNsYXJhdGlvbnMgaW4gZHlucHRy
-X3N1Y2Nlc3MuYywgCnNvIEknbGwgZHJvcCB0aGF0IHNlbnRlbmNlIGZyb20gdGhlIGNvbW1pdCBt
-ZXNzYWdlLgo=
+On Mon Jun 15, 2026 at 10:57 AM CEST, Nuoqi Gui wrote:
+> bpf_rdonly_cast() is an identity operation at runtime, but the verifier
+> currently assigns the result fresh return-state metadata. When the source
+> pointer comes from bpf_dynptr_slice(), that drops the relationship needed
+> to invalidate the alias when the dynptr is released.
+>
+> Preserve the dynptr-slice lifetime metadata across bpf_rdonly_cast(), and
+> add verifier selftests covering cases where a dynptr slice is cast and th=
+en
+> read after the dynptr is released or after the originating dynptr stack s=
+lot is
+> overwritten while a clone still holds the reference. Also cover the valid=
+ clone
+> case where the cast alias is derived from the clone and remains usable af=
+ter
+> the original dynptr is overwritten.
+>
+> This fixes regressions introduced by 66e3a13e7c2c ("bpf: Add
+> bpf_dynptr_slice and bpf_dynptr_slice_rdwr") and a35b9af4ec2c ("bpf: Add =
+a
+> kfunc for generic type cast").
+>
+> Impact is bounded to verifier lifetime tracking for CAP-required BPF
+> programs. The evidence confirms stale read acceptance after dynptr releas=
+e,
+> including a typed field-read shape, but does not demonstrate unprivileged
+> reachability, cross-context disclosure, controlled reuse, arbitrary kerne=
+l
+> read, write-capable aliasing, privilege escalation, crash, or KASAN/UAF
+> signal. No CVE, embargo, or security escalation is claimed.
+>
+> Validation:
+> - The new dynptr_fail.c subtests exercise the verifier's dynptr-slice
+>   lifetime invariant across bpf_rdonly_cast(): a cast alias of a
+>   bpf_dynptr_slice() result must be invalidated when the dynptr is releas=
+ed or
+>   its stack slot overwritten, while a cast alias derived from a surviving=
+ clone
+>   must stay usable.
+
+Won't fix. The semantics of bpf_rdonly_cast() do not require soruce provena=
+nce
+tracking, and thus don't need any invalidation. It can take any unknown val=
+ue
+and produces safe to read pointer. Please try to reason about whether it's =
+a
+real issue before posting AI's output directly.
+
+pw-bot: cr
+
+> - Unpatched bpf at 76f62d237538: test_progs -t dynptr FAILs as expected,
+>   because the four __failure subtests
+>   (dynptr_rdonly_cast_{,typed_}slice_after_{release,overwrite}) are wrong=
+ly
+>   accepted - the stale read survives dynptr release.
+> - Patched with this series: test_progs -t dynptr PASSes, because those fo=
+ur
+>   casts are now rejected with "invalid mem access 'scalar'" and the two
+>   __success clone subtests remain accepted (all six dynptr_rdonly_cast_*
+>   subtests OK, rc 0).
+>
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+> ---
+> Nuoqi Gui (2):
+>       bpf: Preserve dynptr slice lifetime across rdonly_cast
+>       selftests/bpf: Cover rdonly_cast dynptr slice lifetime
+>
+>  include/linux/bpf_verifier.h                    |   5 +
+>  kernel/bpf/verifier.c                           |  36 ++++--
+>  tools/testing/selftests/bpf/progs/dynptr_fail.c | 160 ++++++++++++++++++=
+++++++
+>  3 files changed, 193 insertions(+), 8 deletions(-)
+> ---
+> base-commit: 76f62d237538b456354a44e796a541cde03c6e28
+> change-id: 20260615-f01-09-rdonly-cast-dynptr-lifetime-de114e5a1838
+>
+> Best regards,
+> --
+> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+
