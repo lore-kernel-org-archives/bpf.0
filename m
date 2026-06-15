@@ -1,120 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1893E3159;
-	Mon, 15 Jun 2026 11:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4093E3C5A;
+	Mon, 15 Jun 2026 11:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781522707; cv=none; b=B+5B7A6egGZfkQW/4RynBpQepmc7LK3FWlVr1EJSUapgCcp/2mRdUXuOo+bDX/y4phzcYOqqI3VVQmRG1X23PWgeVJl4VkD33ePzW9Q0ismWtwVePDfK5EH8gzGD1aeOWN3jYTp+KPbWe6G9K0HsjDFoJHsoXmdEKdwlUW1fUbw=
+	t=1781522750; cv=none; b=G0LweWeuiSFm4bFf0cl7rW5cs+UHJsPN4FC9u6uOLj/it8OBSNAMYUPeK4lRtY1185hC7d4aPLr85AHI0dKGMZqE/FSbo09cU+BZHMqFtXnJFdG1ZL5LXNgK901ollq0GEMqusm99rv9kZhr7UtUfLoj7g74DYWQcfrGGD+SFUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781522707; c=relaxed/simple;
-	bh=L67UhP7sztmmFyMog22+2GLMZsO+ikluCnU0mn1N9gs=;
+	s=arc-20240116; t=1781522750; c=relaxed/simple;
+	bh=jqIm/OTRWHpq1R7LiGnVVBXBqewd1OxVaR0y/VahwNE=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TwCS7yrOk6qQYTDTx5EBVWe/xN4GAl/T/WVAe02jKwucVJnuQ2WdopE3YOEgcHIUk5wH3vZ7rnKJgyiIrUe3bn0a1fY9aQ/muSLlGbhAfR5+UrUzj6blL8iRjqpDD2x7qQzVp3kbqpNmJiopgirvMouC4LwEESp9v81kX27RSsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pvk1XbyN; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=iGWZA3ZYBjAyV+6FqeSIU7wAkbCALN6WQk6zKdKSUvhCIPvo7/ZtcWLEJXrDP6Jd0/HKg0P6Es0s3gTmdEX4uyx3QW58Ypm9cyR4Vetw0fMfJ1xBfgIolRUoTdLTlgryJ2Ov+4qlOCmsdcf1b4ehYM6wfzpGweQvg61izS06eQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhAO7l8Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pvk1XbyN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131D51F00A3A;
-	Mon, 15 Jun 2026 11:25:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhAO7l8Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B7B1F000E9;
+	Mon, 15 Jun 2026 11:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781522706;
-	bh=gdsWK2qHCF2RtCgp14Fch2ef6bV6blmJUbTrHpW+Eo0=;
+	s=k20260515; t=1781522748;
+	bh=xwU/lmEPCwSMwcraYo4LXRTGY9NpSGAExrQprcalm+E=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=Pvk1XbyN/O4ohWnPQBr1D/BNK9CZjjthGoALQC7uOtZYnvGhwqZgKnfvwH7p38rkk
-	 NSNwEjuQ8WBhzatcbvfJc57P4SHteKmP/t9ODdLXkEwy4nPsOuu9ryVgPFlGpVUlYd
-	 YDyzITj+LLDcvWtfngyImfqWi4vslPKxmuFm7Ct/C/IAmkX8Ec18CzrBuXaDN8pj6/
-	 toSPNazy1784geJtAMmWwAAR/g7gDvCAVS6TF52DDjY554sYVSBh7NkRHggBpl0ovi
-	 qIVjvmc72HQRduCOIKJLCaXFelAg0kUk64Q36I1QaPPXNHpPK2M4+ONW10I/jSYA6q
-	 GA3opq13YZ0tQ==
+	b=OhAO7l8ZQMFUerve51mU6l63EXx1aZePX1sUIsipHC6TbYmaGDkMgQdoCNiw0O23P
+	 L9EkhvEPj0SbrpRQDY8bj7BxMjgTbqMwTSMLJeIdVEO32rk3Yx8TrPycKWDlZ5hAP8
+	 Wplmeim7uyi0trV53XeWDIq5TMUSndzhUKtFruKeHjYguV65LgBYqEIP1p84yiCn9r
+	 yr9ScrTltZzpd+CkrZQGgH0/m+oXxjgBhLHJPnZjhHHXwH3Mu59HChOAhM8QSahMfu
+	 K3J7CNX1+ruzIxe8vSnpnmyqcQ83EwRwUu/JPyTb+oTcnmwBJn0V8Y+3zoWyMUALPE
+	 r2zTi/l4iQITQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH for-next v3 4/9] mm/slab: use call_rcu() in unknown
- context if irqs are enabled
+Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
+ trigger _nolock APIs
 Reply-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-4-70a54f3775bb@kernel.org>
-References: <20260615-kfree_rcu_nolock-v3-4-70a54f3775bb@kernel.org>
+Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
+References: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 11:25:05 +0000
-Message-Id: <20260615112506.131D51F00A3A@smtp.kernel.org>
+Date: Mon, 15 Jun 2026 11:25:48 +0000
+Message-Id: <20260615112548.70B7B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Acquiring a local_trylock inside a raw_spinlock_t wait context tri=
-ggers a lockdep Invalid wait context warning.
+- [Medium] Global kprobe execution introduces a data race on shared KUnit c=
+ontext variables, which will trigger KCSAN warnings.
+- [Low] The `test_nolock()` function is conditionally compiled only when `C=
+ONFIG_PERF_EVENTS` is enabled, but it is called unconditionally by `slab_kp=
+robe_pre_handler()` when `CONFIG_KPROBES` and `CONFIG_SMP` are enabled.
 --
 
-commit 05f00697f28bd84542538d9e89bbc00e3f7a427a
+commit d19f8bc8e3ea86ee712ab0dede8b68fd72d0fbcf
 Author: Harry Yoo (Oracle) <harry@kernel.org>
 
-mm/slab: use call_rcu() in unknown context if irqs are enabled
+mm/slab, slub_kunit: register kprobe to trigger _nolock APIs
+   =20
+This patch modifies the slub_kunit test to attach a kprobe pre-handler
+to test the kmalloc_nolock() and kfree_nolock() APIs. It introduces a
+wrapper function slab_attach_kprobe_locked() that is invoked when
+slab_lockdep_assert_held() is called.
 
-This commit modifies the fallback logic for deferred RCU freeing in the
-slab allocator. It now uses call_rcu() even in an unknown context as long
-as interrupts are enabled.
+Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a9=
+2d9a4@kernel.org [1]
 
-Link: https://lore.kernel.org/linux-mm/CAADnVQKRVD5ZSnEKbZZU7w86gHbGHUug2pv=
-zpgZTngNS+fg4rw@mail.gmail.com
+> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
+> index 11255fc8eb781..01d808cb77faf 100644
+> --- a/lib/tests/slub_kunit.c
+> +++ b/lib/tests/slub_kunit.c
+[ ... ]
+> @@ -326,13 +334,10 @@ static struct perf_event_attr sw_attr =3D {
+>  	.sample_freq =3D 100000,
+>  };
+> =20
+> -static void overflow_handler_test_nolock(struct perf_event *event,
+> -					 struct perf_sample_data *data,
+> -					 struct pt_regs *regs)
+> +static void test_nolock(struct test_nolock_context *ctx)
+>  {
+>  	void *objp;
+>  	gfp_t gfp;
+> -	struct test_nolock_context *ctx =3D event->overflow_handler_context;
+> =20
+>  	/* __GFP_ACCOUNT to test kmalloc_nolock() in alloc_slab_obj_exts() */
+>  	gfp =3D (ctx->callback_count % 2) ? 0 : __GFP_ACCOUNT;
+> @@ -347,6 +352,15 @@ static void overflow_handler_test_nolock(struct perf=
+_event *event,
+>  	ctx->callback_count++;
+>  }
 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index b0d38d5153865..6a3552b70683d 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -6158,8 +6158,8 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *=
-obj, bool allow_spin)
->  	if (likely(rcu_sheaf->size < s->sheaf_capacity)) {
->  		rcu_sheaf =3D NULL;
->  	} else {
-> -		if (unlikely(!allow_spin)) {
-> -			/* call_rcu() cannot be called in an unknown context */
-> +		/* call_rcu() disables IRQs to protect percpu data structures */
+[ ... ]
 
-[Severity: High]
-This isn't a bug introduced by this patch, but since you are modifying
-__kfree_rcu_sheaf() here, can this function trigger an invalid wait context
-warning in lockdep?
+> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *reg=
+s)
+> +{
+> +	struct test_nolock_context *ctx;
+> +
+> +	ctx =3D container_of(p, struct test_nolock_context, kprobe);
+> +	test_nolock(ctx);
 
-According to the RCU guidelines, kvfree_call_rcu() is frequently called
-while holding a raw_spinlock_t (such as pi_lock in kernel/sched/core.c)
-and from hardirq context:
+[Severity: Low]
+If the kernel is built with CONFIG_KPROBES=3Dy and CONFIG_SMP=3Dy, but
+CONFIG_PERF_EVENTS=3Dn, will this result in a build failure?
 
-mm/slab_common.c:kvfree_call_rcu() {
-    ...
-    if (kfree_rcu_sheaf(ptr))
-        return;
-    ...
-}
+The test_nolock() function is defined inside an ifdef CONFIG_PERF_EVENTS
+block earlier in the file, but it is called here unconditionally when
+kprobes are enabled.
 
-This calls into __kfree_rcu_sheaf(), which unconditionally attempts to
-acquire a local_lock earlier in the function:
+[Severity: Medium]
+Because slab_attach_kprobe_locked() is a global function called by SLUB
+internals system-wide, could multiple CPUs hit this kprobe concurrently
+during the test?
 
-mm/slub.c:__kfree_rcu_sheaf() {
-    ...
-    if (!local_trylock(&s->cpu_sheaves->lock))
-        goto fail;
-    ...
-}
+If other CPUs perform slab operations, they will trigger
+slab_kprobe_pre_handler() and concurrently pass the shared kprobe_ctx to
+test_nolock(). This would cause multiple threads to modify shared integers
+like ctx->callback_count++, ctx->alloc_ok++, and ctx->alloc_fail++ without
+atomics or locks, potentially leading to lost updates and KCSAN warnings.
 
-Because local_lock has a lower lockdep wait type than raw_spinlock_t,
-does this wait context inversion violate nesting rules and trigger
-warnings?=20
-
-Guarding lock_map_acquire_try with !IS_ENABLED(CONFIG_PREEMPT_RT) does not
-prevent this because local_trylock internally checks wait contexts
-regardless. Could this lead to panics on systems with panic_on_warn enabled?
-
-> +		if (unlikely(!allow_spin && irqs_disabled())) {
->  			rcu_sheaf->size--;
->  			local_unlock(&s->cpu_sheaves->lock);
->  			goto fail;
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615-kfree_rcu_=
-nolock-v3-0-70a54f3775bb@kernel.org?part=3D4
+nolock-v3-0-70a54f3775bb@kernel.org?part=3D2
