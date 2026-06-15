@@ -1,127 +1,83 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6843D3B9949
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 22:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6A118EB0;
+	Mon, 15 Jun 2026 23:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781563901; cv=none; b=u0llu0MESknRpsQPWjt5ARaj29mE0DL6JmYylq+eF3VVlh64ahrBbc4QKUzvcbQE3nn7fyOeEY9+XkyrUfLKoNEvD9bvhbk8nzAEG4EqzgqwkXHR/zuYnq1ZbYL4ODxJZbeaJjpRuOvlp9iNLSLzTAgPJZxCSUJn/X04mwtN2Rs=
+	t=1781565371; cv=none; b=rWgIB10Ts2bH4ouqugOKelHw2ih1wjAd0tXu0wKGJHCUeeKz+uwDDIZ0mp0tbrqGXgj+ziHE9tdHT/d/4SEekDwHBPjI3Vkd3T92vGq1bXP0+vjpwpfz12mGePCxI2HI1599S5WCVKULiyALOo7VzkQAxxLSYGi5pgSwV2pFgbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781563901; c=relaxed/simple;
-	bh=ujAjSm7BhxUMJVslQmleewg+/DVfcJZ1Gp/kz42YP3M=;
+	s=arc-20240116; t=1781565371; c=relaxed/simple;
+	bh=eMn8aDsbUSTDVO7DTdxWIMDLPPYN75Q0md1zRQ0MLwA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KNPYyMpKp05rYJy+oAKwvqhLt09c6LK338qvKW6QEsRu9wmb9+4LDPm9DTk9gqHZZAodD/eiZt+oli1Q6SG/7PON2veK8PY/YJ2kP1l2uvsIPYwmJfyRHXyZv7/ijs1hoKmUQCMRsI3rrBcW3+bpZvk+l/4rQDCDMoOcYR63NpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jJnI8+oY; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YiNBGADUqsFk1PPWyKbuoB7J4IgzdEKQuPo2TWMhZ/SqZN4XYB6wKOZiH/6eQkGrgnsumanaZQHmb+23n6aNNd9sAb7NbdUM8ntA3LAR6KqTcFwLxZ5Moi+dysRT9l9eXrz5/S7Mq5PNGofki3bkOP6+JSqjUEMibsqpsbFX3yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNYgJf29; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jJnI8+oY"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490ac10e337so26525765e9.3
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 15:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781563898; x=1782168698; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uaij0ssiVLSTJF7l7+mwMdVljWqS/GPd6aqJhzAQirw=;
-        b=jJnI8+oYnPGKCz46aKZOuPWQYTSJIPRsolTSYqKCWQAgDyxI1SUBQmqFPHVks2+TpB
-         4iXUTu4TTtWwNv9roSa/ClXgKgXKToEWTkT5BT1YsaXY0a0ggqk0Itry41UPBWBcZx0C
-         j6EyCnwFF4AW2Picfnn1NUNOzYJyfPmMqXugAScEXFMIGSbi/W1/C78bkBUiTLVluXcf
-         u3FhIRglS783WShkExW2P+uIZbMqLgPGCGcUvPcfBSc0F26elNnxjbXSnVXwPr7BoKts
-         aM1OlsjHoXBbJqJG5ZNbuq1j4NVigLqHwX44DiwSdmYm6d8mC17tDemNvS19f5Gnx132
-         n6OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781563898; x=1782168698;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uaij0ssiVLSTJF7l7+mwMdVljWqS/GPd6aqJhzAQirw=;
-        b=hXgWXTwvLWizgAgduff2sgnLYNKShMiXn9Cua3uKfSXwDmmg5MjfLE3v7X2hbN9682
-         CsMenhEsotWVyby6/JJelZAY8L4x7UZtNcG3e1hE4zkvBgigTfpH9XB7rMFg1m971R3v
-         4vXpOs04wjGeNPp7ssemyywJYs4IJa1GJbFsCzQxT6RusUEm07W0YZnuV9JoMQkqgQ7X
-         4Othrtsxe5/HmdC2NdsnvWtg28SmLgNbR/+gJCaAP7CAZhS+dqx7jmaze/0NITCqqQ+O
-         67FesnwrnyZi1ZUYOYBzZHR0ZkWnDpVvtQjMpYSWoOdKxpBv0Vkbl+6JalAI4t12ybaU
-         d6Hg==
-X-Gm-Message-State: AOJu0Ywl3xnxuEiv4cY7UhA/cz/04XdnZBdtfYCtE6qKpX+e5HPZKpO2
-	E9Rob+w4Z+mPuazkQSE66l+x7PSO629/Rf0en475xODA+pZMds+XEWaS
-X-Gm-Gg: Acq92OGC9DsgLjSDOSZHsRl+pQrBBEt5gcxDkRGbHQFfAnhnUJJl3R+hYM7F3X51MwU
-	51zrGPXCAi1RSCPZPDVxKMBGp/+DSGPwLtyCxK/hsCLJQX/uL1d2lm09VGYGryZwnWQGw4h33PH
-	tDhoh+50Mh9LO2hM7oCj0/Qq5fAZQ1fwYOnsl9itVvlXYvxQifmLSh3ELsXV7pAb10JU0kOjedG
-	0TqWyx9hMgVRAp8HeQsR6VQK8O8ni78yAwCkZR5qwOb81EHQlNeQsWRs5+4T7Klu8wZlSrZEjiL
-	vCi1aBtcgHezXOyk01f38RBY3Qo4Ev17RT06+A6Y2LA3TAGeVr2PgJ9zODVWEYi07X8GA1LQLhi
-	ndHJTaaPoD74JzPhS9ayyZQAwcWniYeGBOOCqUt8LMhHAyWZNrZydF+RSALhPW6SntnRzlIAa9L
-	qW9PG+ondLyPI0x/xjemiIU7uLxH2SdIzdE+myURFxRGlqTTxO+xLexQJssXaZ5zETH15AYSOHY
-	7FanO+N+qIrJgTS+YU1rDyCzw8uzUcf+TjO/gGZVBXrw2ZPP/vskvtAPaMX162V5Ek5iGrrhBZr
-	RTBDa/ewtugX8jUfQ3o2hRW7Hm5VY0Hflw0ch4up1l0=
-X-Received: by 2002:a05:600c:3b02:b0:492:2f3c:d0ed with SMTP id 5b1f17b1804b1-4922f3cd1a2mr28492865e9.30.1781563897718;
-        Mon, 15 Jun 2026 15:51:37 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e009a0d3db09e2f2ffb.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:9a0d:3db0:9e2f:2ffb])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2cd6c2sm38392917f8f.30.2026.06.15.15.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 15:51:36 -0700 (PDT)
-Date: Tue, 16 Jun 2026 00:51:34 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Zhenzhong Wu <jt26wzz@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
-	haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com,
-	eddyz87@gmail.com, shung-hsi.yu@suse.com, stable@vger.kernel.org,
-	mykolal@fb.com, tamird@kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH stable 6.6.y v3 0/4] bpf: linked scalar precision fixes
-Message-ID: <ajCB9jXBzPyaDNSQ@mail.gmail.com>
-References: <cover.1781194510.git.jt26wzz@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNYgJf29"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE8F1F000E9;
+	Mon, 15 Jun 2026 23:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781565370;
+	bh=GRH8yIzqLR3v4Izgh6VsTtJPcd4MPPnKk7ieqqGaUK8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iNYgJf29bbMZEekZSSvPc5l/sTl+ZO3JIv18asgC9/wk/nCrsaLdKBQp/cQj3TQYt
+	 Ngo0isBlQCE0jMRBZrM4I16C/GYCBfkREkaDJg/VTgXTQJFxpxVMSzppNO5Y55lz3R
+	 dhznE1qgtL7918jG2E1Ca/ksWNB0frkw3fI9B6gP3TLHaLVxiyHTyclCWD9an0RQsL
+	 OtZevU4AUVlBbFWKOqd1zfL/wEEVD1OUELtF44Hn3fuqCcRlvvdj+1tb4scga7WSyL
+	 sZnlPs1FHUU87yyg+L++sbzCXApzYimKPKGXVigJSxhThq9HxdhDCbjeSraUKlfiOC
+	 0wKdaIH6XQzlA==
+Date: Mon, 15 Jun 2026 16:16:10 -0700
+From: Kees Cook <kees@kernel.org>
+To: Jamie Hill-Daniel <clubby789@gmail.com>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+Subject: Re: [PATCH RESEND 0/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
+ with `SECCOMP_MODE_FILTER`
+Message-ID: <202606151615.312A45613@keescook>
+References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
+ <202606122110.28245E2D@keescook>
+ <CAO1UbGcbueeqLPOFA+=cJKjQxgXr1pW1vGFR-zNOT7rqsUqs+w@mail.gmail.com>
+ <202606151535.F32ACD538@keescook>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1781194510.git.jt26wzz@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202606151535.F32ACD538@keescook>
 
-On Mon, Jun 15, 2026 at 12:58:37AM +0800, Zhenzhong Wu wrote:
-> Hi,
+On Mon, Jun 15, 2026 at 03:38:35PM -0700, Kees Cook wrote:
+> On Mon, Jun 15, 2026 at 05:23:53PM +0100, Jamie Hill-Daniel wrote:
+> > On Sat, Jun 13, 2026 at 5:14 AM Kees Cook <kees@kernel.org> wrote:
+> > > On Tue, May 26, 2026 at 04:32:14PM +0100, Jamie Hill-Daniel wrote:
+> > > > Link: https://github.com/moby/moby/issues/42082
+> > >
+> > > This doesn't show any particular application, just a demo program.
+> > >
+> > > I'd *really* prefer to only add complexity to seccomp if it is
+> > > absolutely needed.
+> > 
+> > When I filed the original issue it was attempting a minimised
+> > reproduction; I was trying to run some legacy binary in a container
+> > that I unfortunately don't have the context for any more.
+> > I've submitted another series that should hopefully address some of
+> > the concerns raised here, including complexity.
 > 
-> This v3 targets 6.6.y and changes the backport strategy based on review
-> feedback on v2.
+> Right, I think I'd prefer the legacy binary be adjusted instead. And not
+> adding complexity to seccomp given the issue isn't actually a problem
+> any more. :)
 
-[...]
+And here's a wrapper, if there's no source for the binary:
+https://github.com/kees/kernel-tools/blob/trunk/seccomp/strict_launcher.c
 
-> Relevant QEMU selftest results on 6.6.y with this backport:
-> 
->   verifier_scalar_ids passed all 18 subtests, including the newly
->   backported linked-scalar precision tests and the related
->   check_ids_in_regsafe tests.
+(This could probably be improved...)
 
-The first patch in this backport series is actually breaking the
-"precise: test 1" selftest from test_verifier. You can see the full
-error at [1]. I haven't yet checked if it's the test or the backport
-that needs to be adjusted.
+-Kees
 
-1: https://github.com/shunghsiyu/libbpf/actions/runs/27575831217/job/81523786835
-
-> 
-> Thanks to Shung-Hsi Yu for reviewing v2 and suggesting the upstream
-> linked-scalar precision series as the preferred backport direction.
-> 
-> Eduard Zingerman (4):
->   bpf: Track equal scalars history on per-instruction level
->   bpf: Remove mark_precise_scalar_ids()
->   selftests/bpf: Tests for per-insn sync_linked_regs() precision
->     tracking
->   selftests/bpf: Update comments find_equal_scalars->sync_linked_regs
-> 
->  include/linux/bpf_verifier.h                  |   4 +
->  kernel/bpf/verifier.c                         | 367 +++++++++++-------
->  .../selftests/bpf/progs/verifier_scalar_ids.c | 253 ++++++++----
->  .../selftests/bpf/progs/verifier_spill_fill.c |   4 +-
->  .../bpf/progs/verifier_subprog_precision.c    |   2 +-
->  .../testing/selftests/bpf/verifier/precise.c  |   2 +-
->  6 files changed, 417 insertions(+), 215 deletions(-)
-> 
-> 
-> base-commit: 924b4a879cbb75aef37c160b955b92f6894b11a4
-> -- 
-> 2.43.0
+-- 
+Kees Cook
