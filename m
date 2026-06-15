@@ -1,38 +1,38 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DD523E358
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A344F23909F
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781490045; cv=none; b=jUtLD3eD2AJLCR72bLnHgT9aHc7efK13IFAL5Vh5elg5gE53eb/M5Hh9l0FAaQfPsWlynnGzZ/n9DmQ0rkVltYpdXHH3H5h1JzkemMKpg1zra7PjwU8kUF8RGLfJlimPVwPDXjcSPZoGlxO10/P9rssepzD62a+GM84zlsAGg/k=
+	t=1781490046; cv=none; b=Qr3g2uz/gMl7hW59MLdGntww1lc5Bwe60BsBL3ZVrjJqLj199cVptdXOgu1qkVt63FZAPevDiSmIbqzBIn4AzkWPSZxBsNuhNultZzxZrqrJnmneRMzKd5HLspEYLARBZbUhq5esaWieTQL7xbbjIJ15fZtfQ9rHcfCyPWsDjU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781490045; c=relaxed/simple;
-	bh=zsWBQcN4kH5BawwGx5jEyeauY/IaYxVk5STEBl5LGGQ=;
+	s=arc-20240116; t=1781490046; c=relaxed/simple;
+	bh=dRcr5Wyd6AR5IhYXjRKqkPYmkTrAvw8YBPPtdRo+N2c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HLbiwj39MpCFjTccBCFFJoe71iFsij2iCHWMUW2UvsqozszyeeZRplxvYC8zTZM9hrxg+R2S+NdeOfkYbtMrCPbCF0/QoRCigjOQDmuN0rIsQCLH3Ncf40XvLfKybksm+rTyc6HhJslN/lvMOJD7gBW16Z6PJIRt9MfsIzVXeUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fhc1SLH/; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=pQomrgGKYLy5+zEBCSroOVzaqc7fU+onP8HS49dLiF5OJS+r5L4MBuXfgPLWRtvmUTJKjD9/ocQBtdJ++LfDmJ++RtBXotGnd/OQqvgKR+Hm1UoZj1cQ3LTF4sYFSD+kP4ktvNGO/2zQZ9bBo5IHHgJOno7lxo3/E+xDTkZdBXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qL/HkE2e; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fhc1SLH/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qL/HkE2e"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781490042;
+	t=1781490038;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=D7PM1J5t08m7qp7sECfBEeZ5YPcr3dy9O8wQKAdiSCc=;
-	b=fhc1SLH/kJ2iYAK/R6Y4y/qsYr/uB1UbbS7ck/83zPerktHCwUluy0u4RKBhm+gLIqeaIz
-	aQa/U4siZ39jeRrDWauhHIEYAIyXKhMhZb1TMPenVHglPLwWXW72emWX+lAOIb/pg72L63
-	z+u7JaKqXKQhuuKlDHaqiOigZv9aPXU=
+	bh=7XMFHX5N7Ly8Cm49i62t1Q7gPj8FSwoizjEa1Fh3CiU=;
+	b=qL/HkE2e7QNIwYrBkQZL361c7f3/ovZ9XSS3V3BoQhX41UfoPWeCzw3fJzsAb1yMLfyTLO
+	TfRZllgOB2WcV81w0JV5e9Rek4Hk04p9gPyhmlvKFAR92j7aTMVURUdy2RdY3SdQg/abGR
+	jrePkkoIE3yMBiq+j6ZiwbbW6XyyGcQ=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: jiayuan.chen@linux.dev
-Subject: [PATCH bpf-next v4 6/6] selftests/bpf: add test for bpf_msg_pop_data() overflow
-Date: Mon, 15 Jun 2026 10:19:59 +0800
-Message-ID: <20260615021959.140010-7-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v4 4/6] sockmap: Fix use-after-free in udp_bpf_recvmsg()
+Date: Mon, 15 Jun 2026 10:19:57 +0800
+Message-ID: <20260615021959.140010-5-jiayuan.chen@linux.dev>
 In-Reply-To: <20260615021959.140010-1-jiayuan.chen@linux.dev>
 References: <20260615021959.140010-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -44,130 +44,188 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Sechang Lim <rhkrqnwk98@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
 
-Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
-close to U32_MAX, which overflows the start + len bounds check. The sk_msg
-program records the return value over a sendmsg and the test checks that
-the call is rejected with -EINVAL.
+syzbot reported use-after-free of struct sk_msg in sk_msg_recvmsg(). [0]
 
+sk_msg_recvmsg() peeks sk_msg from psock->ingress_msg under a lock,
+but its processing is lockless.
+
+Thus, sk_msg_recvmsg() must be serialised by callers, otherwise
+multiple threads could touch the same sk_msg.
+
+For example, TCP uses lock_sock(), and AF_UNIX uses unix_sk(sk)->iolock.
+
+Initially, udp_bpf_recvmsg() had used lock_sock(), but the cited
+commit removed it.
+
+Let's serialise sk_msg_recvmsg() with lock_sock() in udp_bpf_recvmsg().
+
+Note that holding spin_lock_bh(&sk->sk_receive_queue.lock) is not
+an option due to copy_page_to_iter() in sk_msg_recvmsg().
+
+[0]:
+BUG: KASAN: slab-use-after-free in sk_msg_recvmsg+0xb54/0xc30 net/core/skmsg.c:428
+Read of size 4 at addr ffff88814cdcf000 by task syz.0.24/6020
+
+CPU: 1 UID: 0 PID: 6020 Comm: syz.0.24 Not tainted syzkaller #0 PREEMPT(full)
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 01/13/2026
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xba/0x230 mm/kasan/report.c:482
+ kasan_report+0x117/0x150 mm/kasan/report.c:595
+ sk_msg_recvmsg+0xb54/0xc30 net/core/skmsg.c:428
+ udp_bpf_recvmsg+0x4bd/0xe00 net/ipv4/udp_bpf.c:84
+ inet_recvmsg+0x260/0x270 net/ipv4/af_inet.c:891
+ sock_recvmsg_nosec net/socket.c:1078 [inline]
+ sock_recvmsg+0x1a8/0x270 net/socket.c:1100
+ ____sys_recvmsg+0x1e6/0x4a0 net/socket.c:2812
+ ___sys_recvmsg+0x215/0x590 net/socket.c:2854
+ do_recvmmsg+0x334/0x800 net/socket.c:2949
+ __sys_recvmmsg net/socket.c:3023 [inline]
+ __do_sys_recvmmsg net/socket.c:3046 [inline]
+ __se_sys_recvmmsg net/socket.c:3039 [inline]
+ __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3039
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fb319f9aeb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb31ad97028 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
+RAX: ffffffffffffffda RBX: 00007fb31a216090 RCX: 00007fb319f9aeb9
+RDX: 0000000000000001 RSI: 0000200000000400 RDI: 0000000000000004
+RBP: 00007fb31a008c1f R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000040000021 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fb31a216128 R14: 00007fb31a216090 R15: 00007ffe21dd0a98
+ </TASK>
+
+Allocated by task 6019:
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
+ kasan_kmalloc include/linux/kasan.h:263 [inline]
+ __kmalloc_cache_noprof+0x3d1/0x6e0 mm/slub.c:5780
+ kmalloc_noprof include/linux/slab.h:957 [inline]
+ kzalloc_noprof include/linux/slab.h:1094 [inline]
+ alloc_sk_msg net/core/skmsg.c:510 [inline]
+ sk_psock_skb_ingress_self+0x60/0x350 net/core/skmsg.c:612
+ sk_psock_verdict_apply net/core/skmsg.c:1038 [inline]
+ sk_psock_verdict_recv+0x7d9/0x8d0 net/core/skmsg.c:1236
+ udp_read_skb+0x73e/0x7e0 net/ipv4/udp.c:2045
+ sk_psock_verdict_data_ready+0x12d/0x550 net/core/skmsg.c:1257
+ __udp_enqueue_schedule_skb+0xc54/0x10b0 net/ipv4/udp.c:1789
+ __udp_queue_rcv_skb net/ipv4/udp.c:2346 [inline]
+ udp_queue_rcv_one_skb+0xac5/0x19c0 net/ipv4/udp.c:2475
+ __udp4_lib_mcast_deliver+0xc06/0xcf0 net/ipv4/udp.c:2585
+ __udp4_lib_rcv+0x10f6/0x2620 net/ipv4/udp.c:2724
+ ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207
+ ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241
+ NF_HOOK+0x336/0x3c0 include/linux/netfilter.h:318
+ dst_input include/net/dst.h:474 [inline]
+ ip_sublist_rcv_finish+0x221/0x2a0 net/ipv4/ip_input.c:584
+ ip_list_rcv_finish net/ipv4/ip_input.c:628 [inline]
+ ip_sublist_rcv+0x5c6/0xa70 net/ipv4/ip_input.c:644
+ ip_list_rcv+0x3f1/0x450 net/ipv4/ip_input.c:678
+ __netif_receive_skb_list_ptype net/core/dev.c:6195 [inline]
+ __netif_receive_skb_list_core+0x7e5/0x810 net/core/dev.c:6242
+ __netif_receive_skb_list net/core/dev.c:6294 [inline]
+ netif_receive_skb_list_internal+0x995/0xcf0 net/core/dev.c:6385
+ netif_receive_skb_list+0x54/0x410 net/core/dev.c:6437
+ xdp_recv_frames net/bpf/test_run.c:269 [inline]
+ xdp_test_run_batch net/bpf/test_run.c:350 [inline]
+ bpf_test_run_xdp_live+0x1946/0x1cf0 net/bpf/test_run.c:379
+ bpf_prog_test_run_xdp+0x81c/0x1160 net/bpf/test_run.c:1396
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4703
+ __sys_bpf+0x5cb/0x920 kernel/bpf/syscall.c:6182
+ __do_sys_bpf kernel/bpf/syscall.c:6274 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6272 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6272
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Freed by task 6021:
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
+ poison_slab_object mm/kasan/common.c:253 [inline]
+ __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:285
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ slab_free_hook mm/slub.c:2540 [inline]
+ slab_free mm/slub.c:6674 [inline]
+ kfree+0x1be/0x650 mm/slub.c:6882
+ kfree_sk_msg include/linux/skmsg.h:385 [inline]
+ sk_msg_recvmsg+0xaa8/0xc30 net/core/skmsg.c:483
+ udp_bpf_recvmsg+0x4bd/0xe00 net/ipv4/udp_bpf.c:84
+ inet_recvmsg+0x260/0x270 net/ipv4/af_inet.c:891
+ sock_recvmsg_nosec net/socket.c:1078 [inline]
+ sock_recvmsg+0x1a8/0x270 net/socket.c:1100
+ ____sys_recvmsg+0x1e6/0x4a0 net/socket.c:2812
+ ___sys_recvmsg+0x215/0x590 net/socket.c:2854
+ do_recvmmsg+0x334/0x800 net/socket.c:2949
+ __sys_recvmmsg net/socket.c:3023 [inline]
+ __do_sys_recvmmsg net/socket.c:3046 [inline]
+ __se_sys_recvmmsg net/socket.c:3039 [inline]
+ __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3039
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Fixes: 9f2470fbc4cb ("skmsg: Improve udp_bpf_recvmsg() accuracy")
+Reported-by: syzbot+9307c991a6d07ce6e6d8@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e0.GAE@google.com/
 Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
- .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+ net/ipv4/udp_bpf.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index d2846579285f2..cb3229711f93a 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -14,6 +14,7 @@
- #include "test_sockmap_pass_prog.skel.h"
- #include "test_sockmap_drop_prog.skel.h"
- #include "test_sockmap_change_tail.skel.h"
-+#include "test_sockmap_msg_pop_data.skel.h"
- #include "bpf_iter_sockmap.skel.h"
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index 9f33b07b14813..ad57c4c9eaab6 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -50,7 +50,9 @@ static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+ 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ 	ret = udp_msg_has_data(sk, psock);
+ 	if (!ret) {
++		release_sock(sk);
+ 		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
++		lock_sock(sk);
+ 		ret = udp_msg_has_data(sk, psock);
+ 	}
+ 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+@@ -79,6 +81,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		goto out;
+ 	}
  
- #include "sockmap_helpers.h"
-@@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(void)
- 	test_sockmap_change_tail__destroy(skel);
- }
- 
-+static void test_sockmap_msg_verdict_pop_data(void)
-+{
-+	struct test_sockmap_msg_pop_data *skel;
-+	int err, map, verdict;
-+	int c1 = -1, p1 = -1, sent;
-+	int zero = 0;
-+	char *buf;
-+	const size_t len = 32 * 1024;
++	lock_sock(sk);
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+ 	if (!copied) {
+@@ -90,11 +93,17 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		if (data) {
+ 			if (psock_has_data(psock))
+ 				goto msg_bytes_ready;
 +
-+	skel = test_sockmap_msg_pop_data__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
++			release_sock(sk);
 +
-+	verdict = bpf_program__fd(skel->progs.prog_msg_pop_data);
-+	map = bpf_map__fd(skel->maps.sock_map);
+ 			ret = sk_udp_recvmsg(sk, msg, len, flags);
+ 			goto out;
+ 		}
+ 		copied = -EAGAIN;
+ 	}
 +
-+	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
++	release_sock(sk);
 +
-+	err = create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
-+	if (!ASSERT_OK(err, "create_pair"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out_close;
-+
-+	buf = calloc(len, 1);
-+	if (!ASSERT_OK_PTR(buf, "calloc"))
-+		goto out_close;
-+
-+	sent = xsend(c1, buf, len, 0);
-+	ASSERT_EQ(sent, (ssize_t)len, "xsend");
-+	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow");
-+
-+	free(buf);
-+
-+out_close:
-+	close(c1);
-+	close(p1);
-+out:
-+	test_sockmap_msg_pop_data__destroy(skel);
-+}
-+
- static void test_sockmap_skb_verdict_peek_helper(int map)
- {
- 	int err, c1, p1, zero = 0, sent, recvd, avail;
-@@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_fionread(false);
- 	if (test__start_subtest("sockmap skb_verdict change tail"))
- 		test_sockmap_skb_verdict_change_tail();
-+	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
-+		test_sockmap_msg_verdict_pop_data();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
- 		test_sockmap_skb_verdict_peek();
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-new file mode 100644
-index 0000000000000..301e65b95256c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+#define POP_START 0x48a3
-+#define POP_LEN   0xfffffffd
-+
-+long pop_data_ret = 1;
-+
-+SEC("sk_msg")
-+int prog_msg_pop_data(struct sk_msg_md *msg)
-+{
-+	if (msg->size <= POP_START)
-+		return SK_PASS;
-+
-+	pop_data_ret = bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 	ret = copied;
+ out:
+ 	sk_psock_put(sk, psock);
 -- 
 2.43.0
 
