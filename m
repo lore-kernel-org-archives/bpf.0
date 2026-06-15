@@ -1,195 +1,137 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE203EB0FA;
-	Mon, 15 Jun 2026 12:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C9B3EFD15
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 12:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781526524; cv=none; b=V5Or6RWXEqqitmkHKN2TQzodTeqE7kQV2GR5OA0BgaoagREGxcy79Qw4RBqdLNWTZtCyeJev+XhcbmJNDWEURML+Irfp9q7gzhPpu2LVXuKwWYv0p4HHYLClwQ6MclNqAFKyk5kG2kPnAqE+2FrhoPAwMpyiavqW+G6HiRjgN4g=
+	t=1781528014; cv=none; b=Jn+Q4DGnHcG7niz64unmsjQvrYlSFLk0NG+H4P7Sq6xzELTlzb5c1BPOkdbmy2EbgK72qN/KShqhKBOA7ujdPEQJsooDgP+dhOjImUp+wy9hzDCegQJcwzCRInr+0wFB5pOyw31Zz/+X+FpfzhwPpbHUZT5GjNFFm4LJ1QSKtDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781526524; c=relaxed/simple;
-	bh=xENrRWFNXuS6xq/5GkioW3KfKBBoBO3WYjsm4D8fsSA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=l2o4LnE4lgTIANIL/k/jGYagVCtWD82lMt2d/rjl2a6WqMT6h/XmZ1h3Ce2EQ0D6d/Hr9xD5V+3R+M9goLKdXj+xELhBWzMNmiQvN2cdMwMNEBoRVI0EqlwuzBb8YjgnfOaZYpX96Y0oMtm1rg1shgtuhpj9ar4sbLQN4Eexpio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=EzjZdKW3; arc=none smtp.client-ip=52.229.168.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781528014; c=relaxed/simple;
+	bh=A/4tMZh2v40NKp5aNyV+Uh+HYZksppLIFMK4STyxD+c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=s7d7Ah+6QlwtcScxDf3pzYQ3Pp2pLIVEMu/JPAa2cfIhcm819iJb+dpA35hyA1uCP9G9a2s3mQdBf43uvXpkJpkgMQCx4E4qCUlOQSTzxstvQPdHlYuA6n87gj0KorJ8PNWv+E5SkUU4Zpm50lpvanna99ztYAh++fkZXDe0l0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHOgxngX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="EzjZdKW3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=3ObGaVQFun/9BcHL7UjFxf26skvy0iZtdy
-	+4Fcepbas=; b=EzjZdKW3V3EgjxDYRV1P0NQomrtoRr3JZOyGnBpA708gtyAWUL
-	phAht185F36UcKGWWL52/Ed3XtQWsvi5IVFYd79It7jHAjzuNOC+X7epZ9LRXaf8
-	yiojqpjh4OhP6Tzrue+0bL+yUOTmmdScCWvSVC5mwmaurqjjM+Tr6WBq4=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQAH4Jfb7y9qtBtQAg--.40734S4;
-	Mon, 15 Jun 2026 20:28:27 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: bpf@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
-Date: Mon, 15 Jun 2026 12:28:10 +0000
-Message-Id: <9591bc15599a4c09a0aeb1815f1a7cf72c84c01f.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHOgxngX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DDE1F000E9;
+	Mon, 15 Jun 2026 12:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781528013;
+	bh=Wkd57XFfKNNZGt0LoRRrTXDl93dhx7svf0k9MbOYOwM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LHOgxngXxzXIKhLyATmQJn/Te3enfSe8VEJGIuhUvT0C1wewr8eiFnPmy68XYtkHJ
+	 +UwPv2DI3z0XRimaKF3rXtdpVx2yGRS1oA3xsohrncPgnZSLKE5TgutKdDs53XNlQw
+	 T0n3eN4bdchjI8lHSmQw3+ArO9JO3oINKpuH229FwRAPhqEpFwkImHZ+HIS6N4iSl/
+	 wJiwt29PleI+6tLubtYKvODkdsK6KmrWPDJJ1sA3j0UCWvLXagrkaDMt3yF1ZKxG8H
+	 MarJzhNYVD4LOHCbqi9jSDUx5BAKocZhffDiGxCpF8bU9KeQHMEFm0d7Xvijv/apTe
+	 NLVDflEqZdxZQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix packet pointer invalidation for skb
+ dynptr writes
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <72711041414b27e996c6a25f6fd72903acee589f.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
+References: <72711041414b27e996c6a25f6fd72903acee589f.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 12:53:32 +0000
+Message-Id: <20260615125333.42DDE1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQAH4Jfb7y9qtBtQAg--.40734S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF1xtF48XrWfKFy3Gr4Uurg_yoWrGw18pa
-	ykC3y3WrW0ya13Xr17JrWfZa15Kr4rXr1fGrZ8ta4fX3ykXr95ZF1rKr10vrs0k345WrWa
-	ka42qay5uFs5JwUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUljb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-	8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
-	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcV
-	CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv
-	6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0x
-	vYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
-	xVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
-	kI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY
-	1x0262kKe7AKxVWrXVW3AwCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
-	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JF
-	I_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_
-	Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr
-	1UYxBIdaVFxhVjvjDU0xZFpf9x0zE1CJ_UUUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add verifier tests for direct packet pointers kept live across skb dynptr
-writer kfunc calls.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Static CFG analysis incorrectly assumes dynptr writers do not chan=
+ge packet data, leading to Use-After-Free via global subprograms and frepla=
+ce.
+--
 
-The writer cases must reject because stale packet pointers must not remain
-usable after the kfunc can mutate skb packet storage.
+commit 1c2eddecfcf22d7859e70204534b70a21c8883bc
+Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-Add a bpf_dynptr_copy() control where the skb dynptr is only the source.
-That case must continue to load because it does not write through the
-skb-backed dynptr.
+bpf: Fix packet pointer invalidation for skb dynptr writes
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../testing/selftests/bpf/progs/dynptr_fail.c | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
+This patch modifies the verifier to treat skb dynptr writer kfuncs as
+packet-changing operations, ensuring that direct packet pointers are
+invalidated after calls like bpf_dynptr_copy or bpf_dynptr_memset.
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 344fb2aa0813d..bd51c9b93742a 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1274,6 +1274,95 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
- 	return SK_PASS;
- }
- 
-+char dynptr_kfunc_data[8] = "test";
-+char dynptr_kfunc_dst[8];
-+
-+extern int bpf_dynptr_copy(const struct bpf_dynptr *dst, __u64 dst_off,
-+			   const struct bpf_dynptr *src, __u64 src_off,
-+			   __u64 size) __ksym __weak;
-+extern int bpf_dynptr_memset(const struct bpf_dynptr *ptr, __u64 offset,
-+			     __u64 size, __u8 val) __ksym __weak;
-+extern int bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dptr,
-+					__u64 off, __u64 size,
-+					const void *unsafe_ptr__ign) __ksym __weak;
-+
-+/* Direct packet pointers are invalidated after a dynptr kfunc writes to an skb */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_memset(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_dynptr_memset(&ptr, 0, 1, 0);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+/* Direct packet pointers are invalidated after bpf_dynptr_copy() writes to an skb */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_copy_dst(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &dst);
-+	bpf_dynptr_from_mem(dynptr_kfunc_data, sizeof(dynptr_kfunc_data), 0, &src);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+/* Direct packet pointers stay valid when an skb dynptr is only copied from */
-+SEC("?tc")
-+__success
-+int skb_pkt_ptr_valid_after_dynptr_copy_src(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &src);
-+	bpf_dynptr_from_mem(dynptr_kfunc_dst, sizeof(dynptr_kfunc_dst), 0, &dst);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	return *data;
-+}
-+
-+/* Direct packet pointers are invalidated after probe-read writes to an skb dynptr */
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_probe_read_kernel_dynptr(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_probe_read_kernel_dynptr(&ptr, 0, 1, dynptr_kfunc_data);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
- /* Read-only skb data slice is invalidated on write to skb metadata */
- SEC("?tc")
- __failure __msg("invalid mem access 'scalar'")
--- 
-2.34.1
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2abc79dbf281c..5ea51bd284f84 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
+[ ... ]
+
+> @@ -11229,7 +11260,33 @@ static bool is_kfunc_bpf_preempt_enable(struct b=
+pf_kfunc_call_arg_meta *meta)
+> =20
+>  bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
+>  {
+> -	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data];
+> +	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data] ||
+> +	       meta->pkt_dynptr_write;
+> +}
+
+[Severity: High]
+Does this modification cause issues during the control flow graph analysis
+phase?
+
+Looking at kernel/bpf/cfg.c, check_cfg() calls bpf_is_kfunc_pkt_changing()
+using a statically fetched meta where register states are not yet available:
+
+kernel/bpf/cfg.c:check_cfg() {
+    ...
+    if (ret =3D=3D 0 && bpf_is_kfunc_pkt_changing(&meta))
+        mark_subprog_changes_pkt_data(env, t);
+    ...
+}
+
+Since pkt_dynptr_write is only evaluated later during check_kfunc_args()
+based on register states, will it always be false during CFG analysis?
+
+If so, it seems this might leave the changes_pkt_data flag incorrectly set
+to false for subprograms mutating packets via dynptr writers.
+
+Could this lead to use-after-free scenarios with global subprograms or
+freplace? For example, if a global subprogram's dynptr argument is
+defaulted to BPF_DYNPTR_TYPE_LOCAL in btf_prepare_func_args():
+
+kernel/bpf/verifier.c:btf_prepare_func_args() {
+    ...
+    } else if (arg->arg_type =3D=3D ARG_PTR_TO_DYNPTR) {
+        __mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_LOCAL, true, ++env->id_gen, =
+0);
+    ...
+}
+
+Will the dynptr write evade detection entirely, leaving the caller with
+stale, uninvalidated packet pointers?
+
+> +
+> +static bool dynptr_type_pkt_data(enum bpf_dynptr_type type)
+> +{
+> +	return type =3D=3D BPF_DYNPTR_TYPE_SKB ||
+> +	       type =3D=3D BPF_DYNPTR_TYPE_SKB_META;
+> +}
+
+[ ... ]
+
+> @@ -12214,6 +12271,9 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+>  						  &meta->ref_obj, &meta->dynptr);
+>  			if (ret < 0)
+>  				return ret;
+> +			if (is_kfunc_pkt_dynptr_writer(meta, i) &&
+> +			    dynptr_type_pkt_data(meta->dynptr.type))
+> +				meta->pkt_dynptr_write =3D true;
+>  			break;
+>  		}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781525896.gi=
+t.chenyy23@mails.tsinghua.edu.cn?part=3D1
