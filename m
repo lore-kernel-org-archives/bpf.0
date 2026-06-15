@@ -1,95 +1,121 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10FD3C0A0D;
-	Mon, 15 Jun 2026 09:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60823D45E5;
+	Mon, 15 Jun 2026 09:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.175.55.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781514517; cv=none; b=dhXcdZE6HCKtMqDtqVTBNwYHVkVViwyMbmFrqbc38FIvnZ7pDqRdzr1PDG+q5jljLAXFjKHTNGuVNNf7ARkAE2Pz+NLxwJlD9vCviKRhvR7ywHnYHIppheyV+FLa8+MVXb+24e0QoqMqyti5fx/k8OqjP70AFDKODio2zdxIyv8=
+	t=1781515076; cv=none; b=ev19QiXPXGRv1htIefSFOfOsxobMYK4T3ylK+IVAtoYMJK70m/kGDT5vk9ZdXAjXaXNQlpfBdG5aWKU9xxkGFhgJFaLpXqdN6w50I6jttmq5fSzDOTEAdrQ89IUifZ6+v0TmihUpFThywEDwgr3THSdrvh2kHJn7GQRdEdocgPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781514517; c=relaxed/simple;
-	bh=ktQ3gGs6h5tUKX+MwCKTqRQnHTjGY8sISQtky2XhLyM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=myH6Z67bgxuqL2tLVJsBmgcqX1q3eKI828RbzT/n8+G2XBZdhEXu5zqgyHZhMVwGzz5tE49ZxRJrY+1aCdHcWyeerh2js2m6jRYUBd4BxeYa9FC3JsU4O+lnTWxfA0uXQN1VgF8OWVTYtsRclP4RgntNnuF8fK6/DHWLb+GZrHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8CxhngQwS9q4EcUAA--.28453S3;
-	Mon, 15 Jun 2026 17:08:32 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxjcIEwS9qFPmmAA--.52334S3;
-	Mon, 15 Jun 2026 17:08:21 +0800 (CST)
-Subject: Re: [PATCH v1 0/2] LoongArch: BPF: per-CPU addr MOV and timed
- may_goto
-To: Huacai Chen <chenhuacai@kernel.org>, George Guo <dongtai.guo@linux.dev>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, WANG Xuerui <kernel@xen0n.name>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, George Guo <guodongtai@kylinos.cn>
-References: <20260609041407.122384-1-dongtai.guo@linux.dev>
- <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <ab8e2b43-dbb7-629c-052e-a9a269268b88@loongson.cn>
-Date: Mon, 15 Jun 2026 17:08:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1781515076; c=relaxed/simple;
+	bh=qfQ58n9oHsRYP01gI+csZuGNrOtKWMuRT3bXUvtJ5jw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=oLOjQ60jBUHAJKiewhcnJv3xfxqD62OPw0LkKd+bghlhFCifJQ6rnBszetK/veNH7PtkXbtKtzMo3vIlXGJOrK8UuZgDTLgF5DxRiLyXOMMZfuTxnszNiw/x0gti6fn+BGBnOO6FQua3COCzZo6WrKqYgViTkQlbdpdybpe24wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=fail (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=n/qrYQfe reason="signature verification failed"; arc=none smtp.client-ip=52.175.55.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="n/qrYQfe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:Date:From:To:Cc:
+	Subject:In-Reply-To:References:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID; bh=P4sv6J3esrqdzmKWfSvX2FI
+	40kWzMg2wyBsGXQjI36I=; b=n/qrYQfeRXShP4vfotrLf0Zy04I5eWwSCV9i2i9
+	gdWA1z5ssa/q7rOwJ6UNZhIELiisK/1eMkuYmOXmaMPXqXM7Xrud9KpYqgf7nWNZ
+	Y3UVtMBCiA7qTRx/SFi5D+2eN92e0IBHKBOTq07+gu8fdMRZeO8IPaoS0nYJqtgP
+	2ypg=
+Received: from gnq25$mails.tsinghua.edu.cn ( [183.173.82.101] ) by
+ ajax-webmail-web2 (Coremail) ; Mon, 15 Jun 2026 17:17:36 +0800 (GMT+08:00)
+Date: Mon, 15 Jun 2026 17:17:36 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: Re: [PATCH bpf-next 1/2] bpf: Preserve pointer spill metadata
+ during half-slot cleanup
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT5 build
+ 20250909(015d6f0a) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-4df55a87-4b50-4a66-85a0-70f79cb6c8b5-tsinghua.edu.cn
+In-Reply-To: <ba187060a5a8232b69cbd080223bd36f806556fc877c07f470b938870b9e4a05@mail.kernel.org>
+References: <20260615-f01-06-half-slot-pointer-spill-v1-1-47f1c18a8965@mails.tsinghua.edu.cn>
+ <ba187060a5a8232b69cbd080223bd36f806556fc877c07f470b938870b9e4a05@mail.kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H76pzANGo3kx7FNNRJu+9F8XFzZ7+Qu-WE3oXO=jM1=oA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxjcIEwS9qFPmmAA--.52334S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Jw13WF48JryfCrW3Aw4fZwc_yoWDGFg_W3
-	98W342kw4rGFsxta1Iqa13ZFWSqw4jkr1rtryjgF18Jr9YyFWqkF93CFyfXws7Kw4rCFnI
-	gw1DXayYvry7ZosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
-	UU=
+Message-ID: <3e477c52.7e0a2.19eca927613.Coremail.gnq25@mails.tsinghua.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:yQQGZQBH1Zwwwy9qQIVPAg--.53904W
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQETA2ovr0If+gA
+	Hsa
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On 2026/6/13 上午11:09, Huacai Chen wrote:
-> Hi, Tiezhu and Hengqi,
-> 
-> Any comments about this series?
-
-This is a preliminary review during the current merge window.
-
-Based on the DWARF for the LoongArch Architecture specification,
-GCC disassembly, the kernel's ORC definition (unwind_orc.c), and
-the BPF JIT stack layout defined in build_prologue(), the saving
-position of $ra in your trampoline is incorrect.
-
-build_prologue() explicitly shows that LoongArch BPF JIT expects
-$ra to be stored at the highest slot right below the original $sp.
-Furthermore, the ORC unwinder strictly mandates .ra_offset = -8
-(PREV_SP - 8). Storing $ra at 0($sp) (which is PREV_SP - 64)
-breaks both JIT conventions and kernel stack unwinding.
-
-Since we are currently in the Merge Window, please take your time
-to rebase this patchset against the latest tree and send a v2 after
-the merge window closes (post -rc1), and please wait for more time
-to get more comments.
-
-Thanks,
-Tiezhu
-
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiBib3QrYnBmLWNpQGtlcm5l
+bC5vcmcKPiBTZW5kIHRpbWU6TW9uZGF5LCAxNS8wNi8yMDI2IDE2OjQ4OjQ5Cj4gVG86IGducTI1
+QG1haWxzLnRzaW5naHVhLmVkdS5jbiwgYXN0QGtlcm5lbC5vcmcsIGRhbmllbEBpb2dlYXJib3gu
+bmV0LCBhbmRyaWlAa2VybmVsLm9yZywgZWRkeXo4N0BnbWFpbC5jb20sIG1lbXhvckBnbWFpbC5j
+b20sIG1hcnRpbi5sYXVAbGludXguZGV2LCBzb25nQGtlcm5lbC5vcmcsIHlvbmdob25nLnNvbmdA
+bGludXguZGV2LCBqb2xzYUBrZXJuZWwub3JnLCBlbWlsQGV0c2FsYXBhdGlzLmNvbSwgc2h1YWhA
+a2VybmVsLm9yZwo+IENjOiBicGZAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnLCBsaW51eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnLCBnbnEyNUBtYWlscy50
+c2luZ2h1YS5lZHUuY24sIGFzdEBrZXJuZWwub3JnLCBhbmRyaWlAa2VybmVsLm9yZywgZGFuaWVs
+QGlvZ2VhcmJveC5uZXQsIG1hcnRpbi5sYXVAa2VybmVsLm9yZywgZWRkeXo4N0BnbWFpbC5jb20s
+IHlvbmdob25nLnNvbmdAbGludXguZGV2LCBjbG1AbWV0YS5jb20sIGlob3Iuc29sb2RyYWlAbGlu
+dXguZGV2Cj4gU3ViamVjdDogUmU6IFtQQVRDSCBicGYtbmV4dCAxLzJdIGJwZjogUHJlc2VydmUg
+cG9pbnRlciBzcGlsbCBtZXRhZGF0YSBkdXJpbmcgaGFsZi1zbG90IGNsZWFudXAKPiAKPiA+ICAg
+ICBicGY6IFByZXNlcnZlIHBvaW50ZXIgc3BpbGwgbWV0YWRhdGEgZHVyaW5nIGhhbGYtc2xvdCBj
+bGVhbnVwCj4gPgo+ID4gICAgIF9fY2xlYW5fZnVuY19zdGF0ZSgpIGNsZWFucyBkZWFkIHN0YWNr
+IHNsb3RzIGluIDQtYnl0ZSBoYWx2ZXMuIFdoZW4gdGhlCj4gPiAgICAgaGlnaCBoYWxmIG9mIGEg
+U1RBQ0tfU1BJTEwgc2xvdCBpcyBkZWFkIGFuZCB0aGUgbG93IGhhbGYgcmVtYWlucyBsaXZlLAo+
+ID4gICAgIGNsZWFudXAgY29udmVydHMgdGhlIGxpdmUgbG93IGhhbGYgdG8gU1RBQ0tfTUlTQyBv
+ciBTVEFDS19aRVJPIGFuZCBjbGVhcnMKPiA+ICAgICB0aGUgc2F2ZWQgc3BpbGxlZF9wdHIgbWV0
+YWRhdGEuCj4gPgo+ID4gICAgIFRoYXQgY29udmVyc2lvbiBpcyBzYWZlIG9ubHkgZm9yIHNjYWxh
+ciBzcGlsbHMuIEZvciBhIHBvaW50ZXIgc3BpbGwsIHRoaXMKPiA+ICAgICBtZXRhZGF0YSBjbGVh
+ciBsZXRzIGEgbGF0ZXIgMzItYml0IGZpbGwgZnJvbSB0aGUgc3RpbGwtbGl2ZSBoYWxmIGF2b2lk
+IHRoZQo+ID4gICAgIG5vcm1hbCBub24tc2NhbGFyIHJlZ2lzdGVyLWZpbGwgY2hlY2sgYW5kIGJl
+IHRyZWF0ZWQgYXMgYW4gb3JkaW5hcnkgc2NhbGFyCj4gPiAgICAgc3RhY2sgcmVhZC4KPiA+Cj4g
+PiAgICAgTGVhdmUgbm9uLXNjYWxhciBzcGlsbCBzbG90cyBpbnRhY3QgaW4gdGhpcyBoYWxmLWxp
+dmUgc2hhcGUuIFRoaXMgaXMKPiA+ICAgICBjb25zZXJ2YXRpdmUgZm9yIHBydW5pbmcgYW5kIHBy
+ZXNlcnZlcyB0aGUgZXhpc3RpbmcKPiA+ICAgICBjaGVja19zdGFja19yZWFkX2ZpeGVkX29mZigp
+IHJlamVjdGlvbiBwYXRoIGZvciBwYXJ0aWFsIGZpbGxzIGZyb20gcG9pbnRlcgo+ID4gICAgIHNw
+aWxscy4KPiA+Cj4gPiAgICAgRml4ZXM6IDJjYjI3MTU4YWRiMyAoImJwZjogcG9pc29uIGRlYWQg
+c3RhY2sgc2xvdHMiKQo+ID4gICAgIFNpZ25lZC1vZmYtYnk6IE51b3FpIEd1aSA8Z25xMjVAbWFp
+bHMudHNpbmdodWEuZWR1LmNuPgo+IAo+IElzIHRoZSBGaXhlczogdGFnIHBvaW50aW5nIGF0IHRo
+ZSByaWdodCBjb21taXQ/Cj4gCj4gVGhlIGNvbW1pdCByZWZlcmVuY2VkLCAyY2IyNzE1OGFkYjMg
+KCJicGY6IHBvaXNvbiBkZWFkIHN0YWNrIHNsb3RzIiksIGFkZHMKPiBTVEFDS19QT0lTT04gaGFu
+ZGxpbmcgaW4ga2VybmVsL2JwZi92ZXJpZmllci5jIGFuZCBkb2VzIG5vdCBjb250YWluIHRoZQo+
+IGhhbGYtc2xvdCBjbGVhbnVwIGxvZ2ljIGJlaW5nIGNvcnJlY3RlZCBoZXJlLgo+IAo+IFRoZSA0
+LWJ5dGUgaGFsZi1zbG90IGNsZWFudXAgaW4gX19jbGVhbl9mdW5jX3N0YXRlKCkgdGhhdCBkb3du
+Z3JhZGVzIGEKPiBzdGlsbC1saXZlIFNUQUNLX1NQSUxMIGxvdyBoYWxmIHRvIFNUQUNLX01JU0Mv
+U1RBQ0tfWkVSTyBhbmQgY2xlYXJzIHRoZQo+IHNhdmVkIHNwaWxsZWRfcHRyIG1ldGFkYXRhIHdp
+dGhvdXQgY2hlY2tpbmcgZm9yIFNDQUxBUl9WQUxVRSB3YXMgaW50cm9kdWNlZAo+IGJ5IGJlMjMy
+NjZiNGEwOCAoImJwZjogNC1ieXRlIHByZWNpc2UgY2xlYW5fdmVyaWZpZXJfc3RhdGUiKS4gVGhh
+dCBjb21taXQKPiBhZGRlZCB0aGUgbG9fbGl2ZS9oaV9saXZlIG1vZGVsIGFuZCB0aGUgZXhhY3Qg
+YmxvY2sgdGhpcyBwYXRjaCBjb3JyZWN0czoKPiAKPiAJaWYgKGxvX2xpdmUgJiYgc3R5cGUgPT0g
+U1RBQ0tfU1BJTEwpIHsKPiAKPiBiZTIzMjY2YjRhMDggcHJlZGF0ZXMgYm90aCAyY2IyNzE1OGFk
+YjMgYW5kIHRoaXMgZml4LiBTaG91bGQgdGhlIHRhZyBiZToKPiAKPiAgIEZpeGVzOiBiZTIzMjY2
+YjRhMDggKCJicGY6IDQtYnl0ZSBwcmVjaXNlIGNsZWFuX3ZlcmlmaWVyX3N0YXRlIikKPiAKPiAK
+PiAtLS0KPiBBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1h
+aWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgo+IFNlZTogaHR0cHM6Ly9naXRodWIuY29tL2tl
+cm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1kCj4gCj4g
+Q0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0
+aW9ucy9ydW5zLzI3NTMzMzA0NTYwCgpZZXMsIGJlMjMyNjZiNGEwOCBpcyB0aGUgcmlnaHQgRml4
+ZXMgdGFyZ2V0LgoKClRoZSBidWcgaXMgaW4gdGhlIGhhbGYtc2xvdCBjbGVhbnVwIGxvZ2ljIGlu
+dHJvZHVjZWQgYnkgdGhhdCBjb21taXQ6CndoZW4gdGhlIGhpZ2ggaGFsZiBpcyBkZWFkIGFuZCB0
+aGUgbG93IGhhbGYgcmVtYWlucyBsaXZlLCBpdCBjYW4gZG93bmdyYWRlCnRoZSBzdGlsbC1saXZl
+IFNUQUNLX1NQSUxMIGJ5dGVzIHRvIFNUQUNLX01JU0MvU1RBQ0tfWkVSTyBhbmQgY2xlYXIgdGhl
+CnNwaWxsZWRfcHRyIG1ldGFkYXRhLgoKMmNiMjcxNThhZGIzIG9ubHkgY2hhbmdlZCB0aGUgZGVh
+ZC1zbG90IG1hcmtlciB0byBTVEFDS19QT0lTT04gYW5kIGRpZCBub3QKaW50cm9kdWNlIHRoYXQg
+aGFsZi1zbG90IHNwaWxsIGNsZWFudXAgYmVoYXZpb3IuCgpJIHdpbGwgdXBkYXRlIHRoZSB0YWcg
+dG86CkZpeGVzOiBiZTIzMjY2YjRhMDggKCJicGY6IDQtYnl0ZSBwcmVjaXNlIGNsZWFuX3Zlcmlm
+aWVyX3N0YXRlIikK
