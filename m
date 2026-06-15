@@ -1,113 +1,256 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292A3409630
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 16:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781540647; cv=pass; b=YJMC/pR8dKgDQc/Yd/n+ZqMPQhSrIKzRZCt3X4g4mqPw6qvULpQpgkSph9e+wsRjVPZWDukszE4gLzfycPPmu3wOKnC71le8BAoSn3dx/6hOj/pJ1K7eJqymEOe/ZYjQY1ucAd7IJl5OYTMB8Ch9a1ZZibeEI/5aIdEIhMdTGSQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781540647; c=relaxed/simple;
-	bh=eQLhmoMuXBduJxrYARdnWqAklKjp0V88w5VZfDoHa+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=khUdFpcOEAYEEkoVOUrxWcHPq4FA/G4x4tUxjSq2xBvt2V9SLTgVowujxaYj0QnAik3w8Sj5N1brD1RS2vNM0UNWk0Q9uPbmaEhki+wdO9M1S/pi8Kce5OCxB15sennoEQoEg8rQjexdicQDaPr24Jq42yA2iqQmW616kmqQ/9Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=riVSEkz7; arc=pass smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F71409E14;
+	Mon, 15 Jun 2026 16:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781540804; cv=none; b=hS2O53kdGPY0W+1e2xwnmWLF9gE/NBIIctuKhh1U7Q0zx1PkhmCDAr+nqjbqcldOicjaRj0EhyX2juD1R64cFFNInB1nScu/gBhR8Yjd0NcZWX9tZMrjgKU8U0cev9njT8WEV4OLwXxgtZ7UmsYyRQXgiksT9T/R6YssF690XkY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781540804; c=relaxed/simple;
+	bh=r0jeugGYwDbCkRzUZPQiz8N1uK0xqgeuWtEQnZmE5eU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ppNuUNrhm8CRAuNZ5K6WC9j3ALbm8fFshfVAgXDXgvasz8nvJPD991eDj0JM0wXVg0uNhA4s3MPTTQLGb1S0z/GOZIFr6qGOG0ppHrjP8HUw3eF9rsugXFk+Rp67/HGCduamnwMXQoWjE7tpwXuo24J6FWHc07zI1BlEWyIHGhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ap667TYD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="riVSEkz7"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-516d0db9372so29309551cf.2
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 09:24:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781540645; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Qn2NnDgJavWU7Dtf8gbrEPluWOTUBe1U87zJuf68w1ofOkk3002dIjQEQgOsm4vcR8
-         75N+M3uvoSdFRh8ouDQZ2pkMLrinB+hZN0P4iMtNUs5Rtdr4ojt73rdGvvJypJ5REZTL
-         u8STcjmHDPJGlKAEWEsZaCiWRTW64h5ZVGJChNfBdyUSYMRRpszLwg7qofHYFN3ziLxL
-         oP8LS5Qie6m/zFNeUtXHV1Gb6gmVL920l+EMaC/tZgNpHm1A2mfmJo0Ul/t0aQia+l00
-         WRCp8umwDrUeQS8N+OeXsIuXS8qE28i1XSUvhZbFK3XhtQGI8u6MKZkSDw+thN9fL+a8
-         QZ0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eQLhmoMuXBduJxrYARdnWqAklKjp0V88w5VZfDoHa+k=;
-        fh=HPLlnHRFYMDc1dRPPN7JHzAUavWE8CnwD5lepMByUjc=;
-        b=R0/OHAFH4EmyZGhVPKQVObBmc2wa7UXXy4I+Xf/fsmXNhzyvl/dcAWewjGXwQ0K7iM
-         VNSDM15Ln43tB6agxWwkxIFs7zYf3e0+dJBaLk0kNs441wOrB5WdI4Y/n5XJFoxbJmZs
-         PZyyIMK5UOJyP1S8TUA90lPnTtOh7NF/xhmE3pdN4Tf7kg02shpILI/4+VrPKDNgD0z0
-         cFXVRn5YjXTqBbhdNKz3esrZTCkucY3QXtuKV1ku2pXT5IKwhZuQDIYoiic7GZsDCfeo
-         lJH2pnoZyYXJT5DOY/NhXoEBLBnBD2H8CEDjbKDnC0GwUugfFK3X7HNJryMkHVAGC3eG
-         BIYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781540645; x=1782145445; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eQLhmoMuXBduJxrYARdnWqAklKjp0V88w5VZfDoHa+k=;
-        b=riVSEkz7XxUTuP8nSx0Dp99mlriG5qz82I5qUJYNDyLVWu054EDivQ2JfNvzrKCsK/
-         EMk6lXXPhy/apOp4ULHXajvQlP751dBSwQRC653uBAwiuekAUuTYBY6TefucML5/UebR
-         L6j2/p2T73dKz2twpHKJHmfndK/2DUdduHNerglo11iMK0axPBtScFv0DeyTkzok1i8e
-         jAMrwMu4AUVU43fC91Pq5i7YqAomQYWHb63hsDoXTPW+C+Do8RF9uTVNbOQLjUfrL5fZ
-         f4fUvm52FHVns1Cv9tlj9k386LCXeRL8vQHcG3dzvKeLcoTtTXUI3oExsxpSE7QC7x1K
-         Yo1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781540645; x=1782145445;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eQLhmoMuXBduJxrYARdnWqAklKjp0V88w5VZfDoHa+k=;
-        b=ndMhWHD21nbFjcz/54T6qEnvfLRvARs3d9W7yW8vbsooQTh4URpiUIL0IGKX96qxfB
-         +ltdHX+SdyJRPSHfML2s08NLmdf5H6m9S1dpwW1JwS5hHl/FAoNm8AALOb4yEWbwsM7m
-         BKkMXxpi0KlD9VhcluUmL03e6ixx+JqokHhNoSDkfVrD+m2RMdIHv2UG48uuYMY/OxtN
-         sOG/XMoPqlTGN7xaIBg0svbrjZkvZ02n5hhfifEg4oVMQMCPp+uvVb3fuWIWE9VPmvds
-         Y6gSMv/v7Emw5W5NlfdigY1BoX5oTp71YXz8aWghNCOlVzmY8GaGBvLdWuGMoA/HuHnK
-         H2Vg==
-X-Forwarded-Encrypted: i=1; AFNElJ+2Kmtexbew9S7P/qcZgi2b3s3Zt8GtZWhjbEA+Zu4PwXVYwvEt32SjoTBFwYLCn7bw2VI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyml4DPhqGx6jth6mI3MvM/ZIEtFInd9RG/3V4QqTZfMNwL1AQI
-	hMjvfkXp1Riru5kzHYUsJ/7JCW2dfLd4MMKYdljHkew68cr8XoN5g9GjVQUPWjWoGgVWSaE09n/
-	ZIoj+6HbAYLqdTXLIV3rK4ThktVpZg50=
-X-Gm-Gg: Acq92OGKUq3geGTYTQhWIXc8sC2zmzW3c/S64HZoZIGHFqLtjo/4gM5Rt9qMwqbj5aW
-	5q47KBFWU3iob9bZm9n0zJ8k3xc+TPOXeMTJDQsTF6Kdu6Zz5MJNWaBCAEbPML/F8IjViAEn+gB
-	teQaTIhwzmYs+XxAbVY6SyWauUY1k8l43LW8MRwdyw90dsjrF6JtI+yrzz744nC8siYzgWDlUjz
-	auIJmKtudMBh9sKN/q/Gp53bq2skzjuyr4bw2z0RDoQcXRNTcZja1pLBtdlAFaLNw3xJ1G1wOq4
-	hTSEQu/N32J67TdsVN+lz3mxh+eJpcWPxCDSF7MP/sOZo3w6y881PHTd4QUHvBDc5drCgz5tMg=
-	=
-X-Received: by 2002:ac8:5f4a:0:b0:519:89f6:1270 with SMTP id
- d75a77b69052e-51989f615bcmr14389951cf.38.1781540644718; Mon, 15 Jun 2026
- 09:24:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ap667TYD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3584E1F000E9;
+	Mon, 15 Jun 2026 16:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781540803;
+	bh=3RDPe8QlQX3vqPNTwmYb6T6ji9UzSM8G/R2P7/Qsjog=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Ap667TYDCOn1BGQ4YVIgnfzcTkV/81Z5PKY3aNATnu9ePc2htEFi7Lt2xKP7Yf1z5
+	 hIxgBDteJBxBOUC17GTXzVnCNHrDa8FJLgSld9lOTT1FeguBGyVMktESnyc9mlmNG5
+	 JR5TMgy8VPoHtGMgT4Khw2zMLbjHWQ7D+UKI8amr09933NWXS6W9zP4EFnnLKxCJ9x
+	 bEZSzuUAbvb5h43zy/8U7a4518Z/zSw3HKVoNifMe9oz0br4NCtMgpmihJFEZvyPpA
+	 Cv9MGwNzZj3+DwtGyFzbNiL/qFY3KRpBVIVRbeL/VPH2DIEYFNXZNegZ1dSi9ni/zi
+	 doTzqGRuBGDPw==
+Content-Type: multipart/mixed; boundary="===============2919116835290385840=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk> <202606122110.28245E2D@keescook>
-In-Reply-To: <202606122110.28245E2D@keescook>
-From: Jamie Hill-Daniel <clubby789@gmail.com>
-Date: Mon, 15 Jun 2026 17:23:53 +0100
-X-Gm-Features: AVVi8CcijWf0YMFkvXRNQBYYFFLxMTeisXVBFVgbN6ptgvwthmuJ0Jfz7cifjsw
-Message-ID: <CAO1UbGcbueeqLPOFA+=cJKjQxgXr1pW1vGFR-zNOT7rqsUqs+w@mail.gmail.com>
-Subject: Re: [PATCH RESEND 0/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
- with `SECCOMP_MODE_FILTER`
-To: Kees Cook <kees@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <3d8e0694c62b87eec4aee4f35e6b91636b2c2f4c8bbc1790f612446d0d58a3e8@mail.kernel.org>
+In-Reply-To: <5a2ca20101d9446d3a92815a8a3cc27b84db1754.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
+References: <5a2ca20101d9446d3a92815a8a3cc27b84db1754.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,bpf@vger.kernel.org
+Cc: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,john.fastabend@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 15 Jun 2026 16:26:42 +0000 (UTC)
 
-On Sat, Jun 13, 2026 at 5:14=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
-> On Tue, May 26, 2026 at 04:32:14PM +0100, Jamie Hill-Daniel wrote:
-> > Link: https://github.com/moby/moby/issues/42082
->
-> This doesn't show any particular application, just a demo program.
->
-> I'd *really* prefer to only add complexity to seccomp if it is
-> absolutely needed.
+--===============2919116835290385840==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-When I filed the original issue it was attempting a minimised
-reproduction; I was trying to run some legacy binary in a container
-that I unfortunately don't have the context for any more.
-I've submitted another series that should hopefully address some of
-the concerns raised here, including complexity.
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> @@ -1232,6 +1232,189 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
+>  	return SK_PASS;
+>  }
+>
+> +char dynptr_writer_data[8] = "test";
+> +char dynptr_writer_dst[8];
+> +
+> +extern int bpf_dynptr_copy(struct bpf_dynptr *dst, __u64 dst_off,
+> +			   struct bpf_dynptr *src, __u64 src_off,
+> +			   __u64 size) __ksym __weak;
+> +extern int bpf_dynptr_memset(struct bpf_dynptr *ptr, __u64 offset,
+> +			     __u64 size, __u8 val) __ksym __weak;
+> +extern int bpf_probe_read_kernel_dynptr(struct bpf_dynptr *dptr,
+> +					__u64 off, __u64 size,
+> +					const void *unsafe_ptr__ign) __ksym __weak;
+> +
+> +__noinline int global_dynptr_helper_write(struct bpf_dynptr *ptr)
+> +{
+> +	return bpf_dynptr_write(ptr, 0, dynptr_writer_data, 1, 0);
+> +}
+> +
+> +__noinline int global_dynptr_helper_write_and_read(struct __sk_buff *skb,
+> +						   struct bpf_dynptr *ptr)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_write(ptr, 0, dynptr_writer_data, 1, 0);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +__noinline int global_dynptr_kfunc_memset(struct bpf_dynptr *ptr)
+> +{
+> +	return bpf_dynptr_memset(ptr, 0, 1, 0);
+> +}
+> +
+> +__noinline int global_dynptr_kfunc_memset_and_read(struct __sk_buff *skb,
+> +						   struct bpf_dynptr *ptr)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_memset(ptr, 0, 1, 0);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_after_global_dynptr_write(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr ptr;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +	global_dynptr_helper_write(&ptr);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_inside_global_dynptr_write(struct __sk_buff *skb)
+> +{
+> +	struct bpf_dynptr ptr;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +
+> +	return global_dynptr_helper_write_and_read(skb, &ptr);
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_after_dynptr_memset(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr ptr;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +	bpf_dynptr_memset(&ptr, 0, 1, 0);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_after_global_dynptr_memset(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr ptr;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +	global_dynptr_kfunc_memset(&ptr);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_inside_global_dynptr_memset(struct __sk_buff *skb)
+> +{
+> +	struct bpf_dynptr ptr;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +
+> +	return global_dynptr_kfunc_memset_and_read(skb, &ptr);
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_after_dynptr_copy_dst(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr dst, src;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &dst);
+> +	bpf_dynptr_from_mem(dynptr_writer_data, sizeof(dynptr_writer_data), 0, &src);
+> +	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__success
+> +int skb_pkt_ptr_valid_after_dynptr_copy_src(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr dst, src;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &src);
+> +	bpf_dynptr_from_mem(dynptr_writer_dst, sizeof(dynptr_writer_dst), 0, &dst);
+> +	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
+> +
+> +	return *data;
+> +}
+> +
+> +SEC("?tc")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int skb_pkt_ptr_invalid_after_probe_read_kernel_dynptr(struct __sk_buff *skb)
+> +{
+> +	__u8 *data = (void *)(long)skb->data;
+> +	__u8 *data_end = (void *)(long)skb->data_end;
+> +	struct bpf_dynptr ptr;
+> +
+> +	if (data + 1 > data_end)
+> +		return SK_DROP;
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &ptr);
+> +	bpf_probe_read_kernel_dynptr(&ptr, 0, 1, dynptr_writer_data);
+> +
+> +	/* this should fail */
+> +	return *data;
+> +}
+
+This patch series was NACKed by Alexei Starovoitov in v3 with the comment
+"nack. pw-bot: cr" (change requested). The companion verifier fix patch
+(patch 1/2 in the series) was rejected, which blocks this selftest patch
+from landing. A v4 was posted to address the helper-side bpf_dynptr_write()
+case, but has not yet received maintainer feedback.
+
+Are there plans to address the maintainer feedback and resubmit the series?
+
+Reference: https://lore.kernel.org/bpf/DJ9QS5OUJTSG.1DSRYHG6GAG3H@gmail.com/
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27557183694
+--===============2919116835290385840==--
