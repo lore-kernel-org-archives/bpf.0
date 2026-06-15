@@ -1,74 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856112459C5
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5721339B1;
+	Mon, 15 Jun 2026 02:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781491789; cv=none; b=gSPqIKHxPt1bS1nGEieH/5FNebQDnG3nTWKprPRo1ZBgM60kDcacvINVV2kUVShsPK83lelI41DMsllmamNmEAAchVby4LEsTjQ3fwAXJuUtXTHG+wzBYDHMBAkJVYrIHINXEOwcCkBajcC1Su+/6Gmkj736BJExMqAACgrnhbU=
+	t=1781491812; cv=none; b=iqhN/1HT/KSUH8t30LnIiBL5He1rBEPV9xzb3PylnHajv2L9k78pi/YwB7ab1bf6+ydk4U0Os5pdd7HYsXaokZvVoNP78FgBW0z/BLWqXnTPz8tNUd2Qv9JzTAZ6PUHSY7GhfpQbBk88Ex+rv01+NB7CxQJHENPGAuCR1CjpiR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781491789; c=relaxed/simple;
-	bh=znV0qOImaIbwJ3lzkSgO1ldSMmE/YarnWTDfWKlgzd0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SOXb4WxJDm5Dh0P6b8mayFMymq2n2p7tyw/hsZYwjcBkytdeoEMjJ2gx7fIAvFjZjaqTnUG2tZLAM232VPj+jfxEg0Qx0ypF65EdmxTpobd97Ab6coObGHihyH2CjCGzmffeS/Gv12otaxOJsnZBbfk8HRMDUdUdw2SjyWtxP+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctxqfScq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781491812; c=relaxed/simple;
+	bh=ArqE8hlYc0WgrlPQIyT0nba0TOXxB446xlhApazixyc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=OsqupvHGPUAwfhOMkao1M4IDQRboatZ0MeGDlhH0V1s+Fhtu70Vw5XBY2I/IHDJgtYVR1oblQcp0w/m/YSjgeyDJJU+x9vzl5ftSvJZJFdhYrKhEpuJPYHoRkislR0taAsMNeyh9REkxfPBmWNbVK0QNV4QoMPS8y8OEE7HgXUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6+KJILG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctxqfScq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D43AF1F000E9;
-	Mon, 15 Jun 2026 02:49:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6+KJILG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A001F000E9;
+	Mon, 15 Jun 2026 02:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781491788;
-	bh=WtHmvXsyqlt99m+2BhnfdbMt47wfZfe9drYUtMG/6/s=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ctxqfScqQbakseC5QHsvq/qqZzfGwmiiwN5NSZf2whs9nw7pp8quhnNa7SyMeNkNw
-	 mjrBds93o3Zir6WlwQ774H9Enk06slXG8NYeReo33BP2LncN5MuKk+PWRkXjXIqC3U
-	 fw7oOLjpVWkCBDsIMEdGw72CL0sQAHmyx40SENP4K4DQBj01vOWcCemTHe4LAFiVov
-	 YR2SDV8iXGi5unkk7BP617cVRPPk+8KdUbvEtevL1H9f2lQg1p+Jf5ICSFEobH8tkO
-	 gk65VNwl+NVh6iKZs/NMnPTO5m//ImHJfdY1eYI5xyE3G7e64P1W3fLIguJj6b9xdU
-	 TOVFOcgZtq8cQ==
-Content-Type: multipart/mixed; boundary="===============0456616277806906634=="
+	s=k20260515; t=1781491810;
+	bh=eaJjKx1kWkRUvF6gX4B4+RSWSQoKzBtFhNek2L+25q4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=W6+KJILGa0i0gapvwj8DjaTJzeD41Q13o9M2/5Ms6xYRhW2noexzYEDotpan1ml8m
+	 QU4f/8YoPNY9Hz42CC+w7KO6Qtx0Rnz57KF8qYLlFq66X9pwe5QKF9QUIwb9KwicZf
+	 Thou+nUbt3UxZ9U6Nbu3nH8ds4msd0obmrPcOZmqCtAPyrDEKVLgzQle6sGp70HNFF
+	 2vj5DiJMaao+6eEC6giO1LrQlKe40/WPDR1AP8BeIATtDX0/agcPfaUi0OyE/An4Wn
+	 NzRaXJ/CiO4RVwp1INnAI0sRY2PP5pfZWPPK7PXBMC6lsDWOVyI69E5i70YTZXDt3S
+	 kbYkjw8jdbGzQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9389B3A566D3;
+	Mon, 15 Jun 2026 02:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e79bc5a7b24d6d92f1eb959d46518377e51e340bb09f2572c6a387b0f220f339@mail.kernel.org>
-In-Reply-To: <20260615021959.140010-3-jiayuan.chen@linux.dev>
-References: <20260615021959.140010-3-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v4 2/6] bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 15 Jun 2026 02:49:47 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/bpf: Add test for sleepable lsm_cgroup
+ rejection
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178149180616.2395239.5373951589434426010.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Jun 2026 02:50:06 +0000
+References: <20260611143549.703914-1-dwindsor@gmail.com>
+In-Reply-To: <20260611143549.703914-1-dwindsor@gmail.com>
+To: David Windsor <dwindsor@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
---===============0456616277806906634==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2872,7 +2872,7 @@ struct scatterlist sge, nsge, nnsge, rsge = {0}, *psge;
->
->  		psge->length = start - offset;
->  		rsge.length -= psge->length;
-> -		rsge.offset += start;
-> +		rsge.offset += start - offset;
->
->  		sk_msg_iter_var_next(i);
->  		sg_unmark_end(psge);
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-This looks correct. Would it be helpful to include a test case or
-reproducer with this fix? Jiayuan Chen noted in the review discussion
-that it took significant effort to reproduce this issue, and having test
-coverage would help prevent regressions in the future.
+On Thu, 11 Jun 2026 10:35:49 -0400 you wrote:
+> Confirm the verifier rejects loading a sleepable BPF_LSM_CGROUP program,
+> as introduced in commit 5b038319be44 ("bpf: Reject sleepable
+> BPF_LSM_CGROUP programs at load time").
+> 
+> Signed-off-by: David Windsor <dwindsor@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/progs/verifier_lsm.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests/bpf: Add test for sleepable lsm_cgroup rejection
+    https://git.kernel.org/bpf/bpf-next/c/05ae621d4e3c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27520503350
---===============0456616277806906634==--
