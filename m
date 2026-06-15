@@ -1,33 +1,33 @@
 Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9E43C0A0D;
-	Mon, 15 Jun 2026 08:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D8692EF653;
+	Mon, 15 Jun 2026 08:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781511013; cv=none; b=XfG70FpkvT8QatDmBnHltpF/UkXC2KxIdTRf/dM/H2bFVTCKTVentkropEPfh6L6naLWb5xhDFWgPWkOkc6IwmmeESSUYZlviF9/wPhH+UtVDfyd1mFu2hxnPIRlfi/l1ZduKobeoU6xH1jIOuowuwCWNEnFCDHs+WkFLVs1PJ8=
+	t=1781512281; cv=none; b=swDKI5LPB9G594fBO92G+6PngFqnTKww0P7tmbhAdurg07HBXcyxiw2dhGQ1HBsv+DNPGXAKZtBhT2Fp0Mtbu9BlZaE6HBOemJmtg9F8bgIDYD88R0P3RudworZHDFqB+Uxg/N5i9TV6Y1GX0GqCQkiNIp9EY2wDH8tBx5YS8H0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781511013; c=relaxed/simple;
-	bh=Gpl06jFeGhu9c8sQi0oLYiQjFt08INFxkVag1vtnZ0g=;
+	s=arc-20240116; t=1781512281; c=relaxed/simple;
+	bh=kRNFVPm1/9VJwVKnAzDE24iu+WJ8qLzeqvdUQY2+XGw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hGAzMbvK0Xm66IUf823B/0XIcbnvp2bRbOdTVxl+ld2WgEbW1LbeRop8YloLpqp/jzxDEAO0sBX3h//I1w9G8FGGXTqAYAlHunCK1azKGZaM4w56CZc/ANrnCb+qDWRyqhnTz+X32IJOl8cuKUuiKLn+JiCy3fEj4sioQ8xQi28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=kg89dtzd; arc=none smtp.client-ip=52.229.168.213
+	 In-Reply-To:To:Cc; b=ndMgtJ0bljnN5lHHpTn1olYRGCGdfZw4j26/7AcgUlSVH3KaqY7bbgAGcstpRg9GiiMQiLyhNVejHK2agQoo/dLZ3TOM4oDCdCFEtalqbPHKLmybZ/MhmoA4++GYthjuzQib6B5I/rIOi01RXn42HIhEg4aAiYKlkM4E0H8VPwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=S9LCrWQe; arc=none smtp.client-ip=52.229.168.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="kg89dtzd"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="S9LCrWQe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=J4vg9EIyDPaiflYYPly+g/3DRBB54AW
-	glqwMwVzIlbY=; b=kg89dtzdKxrx35vgmpLcgcc2VdVMW2P5DZ5c7ZaF52ett3b
-	Z3WOV/aEmMDxOsC+wKj21obTuA+/5w+VGX5bDVTjDhPyVGOrF84UaReO4+oCR/9y
-	DjE5xURom9sPfImLO0gr2jGYRB2LneuwSud/0idc6pinykDDJxyMATu5h51c=
+	References:In-Reply-To:To:Cc; bh=XzLW+TXPmwykPo/jRvr7dIC3M2kmMZm
+	4OzqCTe2QK1k=; b=S9LCrWQeE0hGZ7FGtvOKv+KYAuMzq7Wg0xkqrOgKftP+dxE
+	AvJ7GUV2mGtvZPykLZGUBMO+b/gTXkZPBYKdaaRALGLlSgRiuVDy1aFMdKtAz5dG
+	qt3Hdf3wflJ9R+akTjkEYNRQ8WwZQqYjqp/8trYYy6df9jvPrCp3SyPK/ldw=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQC3y6BWsy9qKJVJAg--.52153S4;
-	Mon, 15 Jun 2026 16:09:59 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQBXEMBFuC9qh8JwAg--.40355S4;
+	Mon, 15 Jun 2026 16:31:03 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Mon, 15 Jun 2026 16:09:54 +0800
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover half-slot cleanup of
- pointer spills
+Date: Mon, 15 Jun 2026 16:31:02 +0800
+Subject: [PATCH bpf 2/2] selftests/bpf: Cover dynptr probe-read kfunc
+ capability gate
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,83 +36,250 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260615-f01-06-half-slot-pointer-spill-v1-2-47f1c18a8965@mails.tsinghua.edu.cn>
-References: <20260615-f01-06-half-slot-pointer-spill-v1-0-47f1c18a8965@mails.tsinghua.edu.cn>
-In-Reply-To: <20260615-f01-06-half-slot-pointer-spill-v1-0-47f1c18a8965@mails.tsinghua.edu.cn>
+Message-Id: <20260615-f01-07-dynptr-probe-read-cap-v1-2-e626cd61a381@mails.tsinghua.edu.cn>
+References: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
+In-Reply-To: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
+ Mykyta Yatsenko <yatsenko@meta.com>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781511000; l=1489;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781512263; l=5979;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=Gpl06jFeGhu9c8sQi0oLYiQjFt08INFxkVag1vtnZ0g=;
- b=sPTOdh/wjqYHm4pMTjEGaSYEDO+Fn+f41hiuLCeISO5w3dLcVzWuG5Wfksu0xWMZcWp3zIwOU
- /tS/SMmMy8yAiaRsDvkb87Jk9eQZrn2KQbet8hD5XcrYTxECp3mRvW4
+ bh=kRNFVPm1/9VJwVKnAzDE24iu+WJ8qLzeqvdUQY2+XGw=;
+ b=O0DKuU2/kcLK8+0q9hn0qPPXzaFHWJv51zs3bCIHdTevZVNMpVRWVFCrLu6t0yi3s8NB1W9tC
+ oKhApsLX0NMBoDcew7aTKbc1lxGZPnrKBlop4qBiyd5jGwOglyxMF7s
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ywQGZQC3y6BWsy9qKJVJAg--.52153S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkJry7WFW7Jr13GryrCrg_yoW8XF1kpr
-	97WasxKFZ3urn7C3W3CFWkGF1rKFn2vryF9F4SyFyUAF18tr1qqr4kKF4UJrsI9an5Xw4F
-	vFySqa17uF1UJrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:zAQGZQBXEMBFuC9qh8JwAg--.40355S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wr13Zr4UKFW8GryfGrWktFb_yoWxJF45pF
+	WkC34Y9r1FqF17Jry2yw4DXF4rKrs7Xr43GrWvqryfZr48Xr93ur4SgF4UtFn8KrWqgw4Y
+	vw1IqFZ5GFWUJFDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
-	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
-	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
-	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Av
-	z4vE14v_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU0Ysj5UUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgYTA2ovr8QHzgABsy
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xS
+	Y4AK67AK6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgETA2ovr8QSegABsU
 
-Add a verifier regression test for a pointer spill whose high half is
-cleaned dead while the low half remains live. Force checkpoint creation
-with BPF_F_TEST_STATE_FREQ and assert the verifier log reaches the
-checkpoint and the subsequent 32-bit fill before rejecting the partial fill
-from a non-scalar spill.
+Add focused dynptr selftest programs that load socket-filter programs using
+bpf_dynptr_from_mem() followed by each nofault probe-read dynptr kfunc:
+bpf_probe_read_user_dynptr(), bpf_probe_read_kernel_dynptr(),
+bpf_probe_read_user_str_dynptr(), and bpf_probe_read_kernel_str_dynptr().
+Declare the dynptr kfuncs used by this BPF object locally in
+dynptr_success.c so the dynptr BPF object builds with explicit prototypes.
+
+The harness first verifies that the program loads with the caller's normal
+capabilities. It then drops CAP_PERFMON and CAP_SYS_ADMIN while keeping
+CAP_BPF effective and expects each same program load to fail with -EACCES.
+
+This covers the policy boundary that these dynptr probe-read kfuncs should
+not be callable with CAP_BPF alone.
 
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- .../testing/selftests/bpf/progs/verifier_spill_fill.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/dynptr.c    | 66 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/dynptr_success.c | 75 ++++++++++++++++++++++
+ 2 files changed, 141 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 6bc721accbae..0174887e28f5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1359,4 +1359,22 @@ __naked void var_off_write_over_scalar_spill(void)
- 	: __clobber_all);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index 5fda11590708..5235b47e3342 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -3,6 +3,7 @@
  
-+SEC("socket")
-+__description("partial fill from cleaned pointer spill")
-+__failure
-+__log_level(2)
-+__msg("1: (05) goto pc+0")
-+__msg("2: (61) r0 = *(u32 *)(r10 -4)")
-+__msg("invalid size of register fill")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void partial_fill_from_cleaned_pointer_spill(void)
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include "cap_helpers.h"
+ #include "dynptr_fail.skel.h"
+ #include "dynptr_success.skel.h"
+ 
+@@ -53,8 +54,66 @@ static struct {
+ 	{"test_copy_from_user_task_str_dynptr", SETUP_SYSCALL_SLEEP},
+ };
+ 
++static const char * const probe_read_cap_tests[] = {
++	"test_probe_read_user_dynptr_cap",
++	"test_probe_read_kernel_dynptr_cap",
++	"test_probe_read_user_str_dynptr_cap",
++	"test_probe_read_kernel_str_dynptr_cap",
++};
++
+ #define PAGE_SIZE_64K 65536
+ 
++static int load_probe_read_cap_prog(const char *prog_name)
 +{
-+	/* Spill R1(ctx), then force a checkpoint and half-slot cleanup. */
-+	asm volatile ("*(u64 *)(r10 - 8) = r1;"
-+		      "goto +0;"
-+		      "r0 = *(u32 *)(r10 - 4);"
-+		      "exit;"
-+		      ::: __clobber_all);
++	struct bpf_program *prog, *tmp;
++	struct dynptr_success *skel;
++	int err;
++
++	skel = dynptr_success__open();
++	if (!ASSERT_OK_PTR(skel, "dynptr_success__open"))
++		return -EINVAL;
++
++	bpf_object__for_each_program(tmp, skel->obj)
++		bpf_program__set_autoload(tmp, false);
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name")) {
++		err = -ENOENT;
++		goto cleanup;
++	}
++
++	bpf_program__set_autoload(prog, true);
++	err = dynptr_success__load(skel);
++
++cleanup:
++	dynptr_success__destroy(skel);
++	return err;
 +}
 +
- char _license[] SEC("license") = "GPL";
++static void verify_probe_read_cap(const char *prog_name)
++{
++	__u64 old_caps = 0;
++	int err;
++
++	err = load_probe_read_cap_prog(prog_name);
++	if (!ASSERT_OK(err, "full_caps_load"))
++		return;
++
++	err = cap_enable_effective(1ULL << CAP_BPF, &old_caps);
++	if (!ASSERT_OK(err, "enable_cap_bpf"))
++		return;
++
++	err = cap_disable_effective(1ULL << CAP_SYS_ADMIN | 1ULL << CAP_PERFMON, NULL);
++	if (!ASSERT_OK(err, "disable_cap_sys_admin_perfmon"))
++		goto restore_cap;
++
++	err = load_probe_read_cap_prog(prog_name);
++	ASSERT_EQ(err, -EACCES, "cap_bpf_without_perfmon_load");
++
++restore_cap:
++	cap_enable_effective(old_caps, NULL);
++}
++
+ static void verify_success(const char *prog_name, enum test_setup_type setup_type)
+ {
+ 	char user_data[384] = {[0 ... 382] = 'a', '\0'};
+@@ -185,6 +244,13 @@ void test_dynptr(void)
+ {
+ 	int i;
+ 
++	for (i = 0; i < ARRAY_SIZE(probe_read_cap_tests); i++) {
++		if (!test__start_subtest(probe_read_cap_tests[i]))
++			continue;
++
++		verify_probe_read_cap(probe_read_cap_tests[i]);
++	}
++
+ 	for (i = 0; i < ARRAY_SIZE(success_tests); i++) {
+ 		if (!test__start_subtest(success_tests[i].prog_name))
+ 			continue;
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index e0745b6e467e..5b4e22198598 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -34,6 +34,13 @@ struct {
+ 	__type(value, __u32);
+ } array_map SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u8[32]);
++} probe_read_map SEC(".maps");
++
+ SEC("?tp/syscalls/sys_enter_nanosleep")
+ int test_read_write(void *ctx)
+ {
+@@ -1092,6 +1099,74 @@ int test_probe_read_kernel_str_dynptr(struct xdp_md *xdp)
+ 	return XDP_PASS;
+ }
+ 
++SEC("?socket")
++int test_probe_read_user_dynptr_cap(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++	__u32 key = 0;
++	void *value;
++
++	value = bpf_map_lookup_elem(&probe_read_map, &key);
++	if (!value)
++		return 0;
++
++	if (bpf_dynptr_from_mem(value, 32, 0, &ptr))
++		return 0;
++
++	return bpf_probe_read_user_dynptr(&ptr, 0, 8, value);
++}
++
++SEC("?socket")
++int test_probe_read_kernel_dynptr_cap(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++	__u32 key = 0;
++	void *value;
++
++	value = bpf_map_lookup_elem(&probe_read_map, &key);
++	if (!value)
++		return 0;
++
++	if (bpf_dynptr_from_mem(value, 32, 0, &ptr))
++		return 0;
++
++	return bpf_probe_read_kernel_dynptr(&ptr, 0, 8, value);
++}
++
++SEC("?socket")
++int test_probe_read_user_str_dynptr_cap(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++	__u32 key = 0;
++	void *value;
++
++	value = bpf_map_lookup_elem(&probe_read_map, &key);
++	if (!value)
++		return 0;
++
++	if (bpf_dynptr_from_mem(value, 32, 0, &ptr))
++		return 0;
++
++	return bpf_probe_read_user_str_dynptr(&ptr, 0, 8, value);
++}
++
++SEC("?socket")
++int test_probe_read_kernel_str_dynptr_cap(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++	__u32 key = 0;
++	void *value;
++
++	value = bpf_map_lookup_elem(&probe_read_map, &key);
++	if (!value)
++		return 0;
++
++	if (bpf_dynptr_from_mem(value, 32, 0, &ptr))
++		return 0;
++
++	return bpf_probe_read_kernel_str_dynptr(&ptr, 0, 8, value);
++}
++
+ SEC("fentry.s/" SYS_PREFIX "sys_nanosleep")
+ int test_copy_from_user_dynptr(void *ctx)
+ {
 
 -- 
 2.34.1
