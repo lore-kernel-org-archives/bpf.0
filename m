@@ -1,32 +1,32 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A3F831F98D;
-	Mon, 15 Jun 2026 08:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FB92F7F15;
+	Mon, 15 Jun 2026 08:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781512281; cv=none; b=FsiacmTbnXc1f9Hgx+H9wb3dDGENv6GsWjCkbGif8zL1/qq8QCpkW4HFQZSobg8y6PGWofSHq558pG1mIPA5YdCqvFAingV7MoIiOHzw2hpHSQjzQjeZcausEBBODiBdEpT4PIwJlfAo9KFIIuMC4+K8b1fwFIBWOZcLQZsAp4g=
+	t=1781512282; cv=none; b=iYNPA2Ylj+wTLxwEKWksBao+htfoxuj/LH0HJluuakIpDpC5Ky3bySGsM4mOb20+WLEUqjsrxQU2laHcrwueJjvbEgbOKfHYCwN2c9ZBZrVUK77/l7+wWYpM+wBcM+UwpHcPjcxuC1A/FhFYE90Lo8z6reU3+bPuXi7wup1fe+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781512281; c=relaxed/simple;
-	bh=fnHmn/L2U1Ki5jyeYPn/Pw0TmAC+tWw9ZL4zm2/qfBU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pz18hkhrVMEmZdh++wtL53+7fEZLJQ3whhMcPAeFNmKdeO2Q97vOaYHp+h4LgLuj3cJDWk6MQ60VwX8slV4XSwaQj5lrhbzO+0crxzgBu0m33ePYHCjQZO8KflOrn7CdKqY2NmOmfx8hWCsUM9/IiTafK1EL2gXzu0nxq53NOWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=UAJ9E4/i; arc=none smtp.client-ip=13.76.78.106
+	s=arc-20240116; t=1781512282; c=relaxed/simple;
+	bh=w9TgtjeoWg1QRC8HtVLI/HGroA6AaS7WzzbbfIu42s0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IgSl1d2xy/PKkWZdL8/bn8FWWAcGlF+CZtfMxk65m/31vCB+SaI+J2v7G3ckeB1dXLSLtGnZp36hE+cL1KwmsDStiXOOqHe3ePcQ3RVJeN5BlFlCv8+7Aa3xxFAWdW209WrwhjMQLL4fwHbZEH5kp7NegqCRjWCLAIYZVNFhVmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=nxDOZOm7; arc=none smtp.client-ip=162.243.161.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="UAJ9E4/i"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="nxDOZOm7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=XXpEe3YEYe37uv0l9jZeSvNRdfTtGE+zPc9xZXY5amQ=; b=UAJ9E4
-	/iNM7hB26WwlFyTpj4FtYf1NLII6U0Q80tNjatsbl2+bDPGVUAHD6KYBk7/8kG7o
-	exAXs1Yw1yaJqtnE25GlpbY+sibdWoVEUwvNKz+62AFSBaOUqkK8SmtQRePO3rL6
-	m0gkM1vHWeYzxt7kGBBHUeJPBET0tbpiJKaPs=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=Pn9vM5BBoMlYJ1DxDQ2zsk7QezY4+f5
+	JZSm7cp8EMik=; b=nxDOZOm7WGcA29mH8vkNbzxkAQ+MEOwgCsHEhIjF+CRpYYg
+	yIV5d4oJUk/oIB4n5CRRFqXZqSKgugxKK95W0IlMN+fWi14st6VGySZhjkoZPPnR
+	K57xm5yj/rMnu4hH4zOxehG/1ExrlV5XrWodujqigHRyHZfF5lUi2/Wfb/Ug=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQBXEMBFuC9qh8JwAg--.40355S2;
-	Mon, 15 Jun 2026 16:31:01 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQBXEMBFuC9qh8JwAg--.40355S3;
+	Mon, 15 Jun 2026 16:31:02 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf 0/2] bpf: Gate dynptr probe-read kfuncs like helpers
-Date: Mon, 15 Jun 2026 16:31:00 +0800
-Message-Id: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
+Date: Mon, 15 Jun 2026 16:31:01 +0800
+Subject: [PATCH bpf 1/2] bpf: Gate dynptr probe-read kfuncs like helpers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,10 +35,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAES4L2oC/yXMPQ7CMAxA4atUnrHkVDSVuApiyI8DZkgtpyBQ1
- bsTYHxv+DZobMINTsMGxk9pstQe7jBAuoV6ZZTcG0YaPXk3YSGHNGN+V10N1ZbIaBwypqB4zMw
- zeR/LVKATalzk9ePPELXA5T/bI945rV8Y9v0D+xSaaoUAAAA=
-X-Change-ID: 20260615-f01-07-dynptr-probe-read-cap-4dee7066bf5f
+Message-Id: <20260615-f01-07-dynptr-probe-read-cap-v1-1-e626cd61a381@mails.tsinghua.edu.cn>
+References: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
+In-Reply-To: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -48,17 +47,17 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781512263; l=2183;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781512263; l=2543;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=fnHmn/L2U1Ki5jyeYPn/Pw0TmAC+tWw9ZL4zm2/qfBU=;
- b=S9RIVsHssWpzqQ/h4Bly9TVd0QrCAtKD9IlNTFvHXfGyNYCtiLn4o+vSWFEHYkeo+IzW838pi
- b7d/Ib0Fk3LAMbdYzMUs9Ogwin2kDGYIPLzo4tuTK6rqOxEl0KRw/39
+ bh=w9TgtjeoWg1QRC8HtVLI/HGroA6AaS7WzzbbfIu42s0=;
+ b=9oC4nFMAc2/qDOnnO8YhTh0NWtB657zd8o3qwF9cPtod9fj52R46R0iiCHZamncVHzLk0+N/N
+ 7H5BYEUYPEpDnnhiI5nfAYM4D8OwnTP2ZXeH1n2x9/yWxm0Jop9Qi81
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQBXEMBFuC9qh8JwAg--.40355S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1fWF1xCFW8ZF4DWFyDJrb_yoW8trWDpF
-	yvk34Y9r1kWFnrA343Jw47WrWrtw1kWr4fGF97try3Zr4qgrZ5ZrWI9FWUKrnxKwsFgr4F
-	v3y2q3s3GF1UArDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:zAQGZQBXEMBFuC9qh8JwAg--.40355S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF4kXFykuw47urWrtw4rGrg_yoW5Xr1fpF
+	s5C34Ykr18t3Z3Zasrtws5WryFyw1kJF4xCFn7GFyxZw4vqrZ8Z34I9F15Jr93Kr1jgrW3
+	Xw10v3sI93WUGFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUU9m1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
@@ -70,57 +69,78 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1fWF1xCFW8ZF4DWFyDJrb_yoW8trWDpF
 	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
 	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
 	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
 	0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JjcIDcUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgQTA2ovr8QSdwAAsd
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQQTA2ovr0IOQAAEs3
 
-The dynptr probe-read kfuncs are registered as common kfuncs. That lets a
-program with the generic kfunc privilege gate call
-bpf_probe_read_kernel_dynptr(), while the legacy bpf_probe_read_kernel()
-helper is exposed only with CAP_PERFMON and is blocked by kernel-read
-lockdown.
+The bpf_probe_read_{user,kernel}{,_str}_dynptr() kfuncs provide
+probe-read style nofault copies into dynptr-backed BPF memory. Their
+legacy helper counterparts are exposed only to programs with CAP_PERFMON,
+and the kernel-read helpers are additionally blocked by
+LOCKDOWN_BPF_READ_KERNEL.
 
-Gate the four nofault probe-read dynptr kfuncs with CAP_PERFMON, and apply
-the existing LOCKDOWN_BPF_READ_KERNEL policy to the kernel-read dynptr
-variants. Add focused selftests that expect CAP_BPF without CAP_PERFMON
-to be insufficient for bpf_probe_read_user_dynptr(),
-bpf_probe_read_kernel_dynptr(), bpf_probe_read_user_str_dynptr(), and
-bpf_probe_read_kernel_str_dynptr().
+The dynptr kfuncs are registered in the common kfunc set, so the verifier
+currently allows them with the generic kfunc privilege gate. Add a common
+kfunc filter that mirrors the helper policy for these probe-read dynptr
+kfuncs: require CAP_PERFMON for all four nofault probe-read variants and
+apply the existing lockdown check to the kernel-read variants.
 
-Bounded impact:
-- Requires privileged BPF program loading with CAP_BPF.
-- No unprivileged trigger, arbitrary disclosure primitive, memory
-  corruption, privilege escalation, CVE, embargo, or security escalation is
-  claimed.
-
-Validation:
-- The focused dynptr selftest loader exercises the CAP_BPF-only program load
-  boundary for bpf_probe_read_user_dynptr(),
-  bpf_probe_read_kernel_dynptr(), bpf_probe_read_user_str_dynptr(), and
-  bpf_probe_read_kernel_str_dynptr().
-- Unpatched bpf at 8496d9020ff37 ("Merge branch 'arena_direct_access'"):
-  FAIL as expected because all four programs still load with CAP_BPF and
-  without CAP_PERFMON.
-- Patched with this series: PASS because all four same programs are rejected
-  with -EACCES when loaded with CAP_BPF and without CAP_PERFMON.
+This preserves the existing dynptr copy implementation while aligning the
+capability policy with the legacy probe-read helpers.
 
 Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
-
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
-Nuoqi Gui (2):
-      bpf: Gate dynptr probe-read kfuncs like helpers
-      selftests/bpf: Cover dynptr probe-read kfunc capability gate
+ kernel/bpf/helpers.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
- kernel/bpf/helpers.c                               | 32 +++++++++
- tools/testing/selftests/bpf/prog_tests/dynptr.c    | 66 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/dynptr_success.c | 75 ++++++++++++++++++++++
- 3 files changed, 173 insertions(+)
----
-base-commit: 8496d9020ff37a33c2a7b2fc84350fd03ffbde78
-change-id: 20260615-f01-07-dynptr-probe-read-cap-4dee7066bf5f
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 9ca195104667..fbef89196f85 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4961,9 +4961,41 @@ BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
+ BTF_ID_FLAGS(func, bpf_timer_cancel_async)
+ BTF_KFUNCS_END(common_btf_ids)
+ 
++#ifdef CONFIG_BPF_EVENTS
++BTF_KFUNCS_START(probe_read_dynptr_kfunc_ids)
++BTF_ID_FLAGS(func, bpf_probe_read_user_dynptr)
++BTF_ID_FLAGS(func, bpf_probe_read_kernel_dynptr)
++BTF_ID_FLAGS(func, bpf_probe_read_user_str_dynptr)
++BTF_ID_FLAGS(func, bpf_probe_read_kernel_str_dynptr)
++BTF_KFUNCS_END(probe_read_dynptr_kfunc_ids)
++
++BTF_KFUNCS_START(probe_read_kernel_dynptr_kfunc_ids)
++BTF_ID_FLAGS(func, bpf_probe_read_kernel_dynptr)
++BTF_ID_FLAGS(func, bpf_probe_read_kernel_str_dynptr)
++BTF_KFUNCS_END(probe_read_kernel_dynptr_kfunc_ids)
++#endif
++
++static int common_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
++{
++#ifdef CONFIG_BPF_EVENTS
++	if (!btf_id_set8_contains(&probe_read_dynptr_kfunc_ids, kfunc_id))
++		return 0;
++
++	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
++		return -EACCES;
++
++	if (btf_id_set8_contains(&probe_read_kernel_dynptr_kfunc_ids, kfunc_id) &&
++	    security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0)
++		return -EACCES;
++#endif
++
++	return 0;
++}
++
+ static const struct btf_kfunc_id_set common_kfunc_set = {
+ 	.owner = THIS_MODULE,
+ 	.set   = &common_btf_ids,
++	.filter = common_kfunc_filter,
+ };
+ 
+ static int __init kfunc_init(void)
 
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+-- 
+2.34.1
 
