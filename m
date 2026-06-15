@@ -1,64 +1,63 @@
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42E93B637A
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 21:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDDF36EA8E
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 21:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781558967; cv=none; b=pXnUue9p9YFHbKyOR25sGnJdvvv/Uz0r63a8eNTaNCks5gL7YsbMLewLiGFcUsNcSQO5H07ejGQN5qAuxwEAvvjwk3Ibwtzgz5cn7ei4y9zUxCL8HgWeIQ7qBVOC4/cp9tBM6ZJtJKKq079id8nZb3DrFqSpAjXFe/lK/wPGoPQ=
+	t=1781560413; cv=none; b=F2PNlJ9XonxTYLpMM3JoniLmy4+VreUUVEIFs9BNth2m+WeIoogSNWXzd96KYl7KJeL+R7dlwup6W6LMPLPjqy+YaD7GNwUuHF+DMdw9v9aEotOF55XTHySgtr6n8pRJQWaaOiVnWyN9PSta2vyWvsipmXPw16Y4Mwrd/XuCF6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781558967; c=relaxed/simple;
-	bh=rNvdyzbUoXMVk3xtHbEFF9hvMw4FG4kSsUInu9i58fw=;
+	s=arc-20240116; t=1781560413; c=relaxed/simple;
+	bh=krc4C0aOyhys5IHF7Q2ZQw6WG6LZf9FhuifvQZV5D4c=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=W9P0zoB8kRMiI+9jGmMfSKY97W4XYGMrjb6R7VPlQD9e0JUVEn/26C6ZHXWE1DfBCh4fAB2v3paFFtBvw9Ip7cCtIj6c1PpYsvP6YcngSVKMZdT1r2vcHntMjWr+V21GUF2TUC3/vMlntqEHliexyVM60/ixrZcPPnhBVSfMU30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IP/4NxJo; arc=none smtp.client-ip=209.85.167.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 References:In-Reply-To; b=YbScp/lYnm2b38ox7aqzDIm7yPsMoSczmvTScu18gZj3yDOTt7basJ6r+UzmLWXalyc7BCAxhCyucBPvz7Rrc397eof/ue0lV7X3widQHGRSJVd5jQ+ONm2f5ptD4vdCvJBvK2gGBTdvtgun45F+nOGrD4MK5td6MlQj9+YAXWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=UOgGDNjU; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IP/4NxJo"
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4863a7dac63so2319997b6e.1
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 14:29:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="UOgGDNjU"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304e83724bfso5283598eec.0
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 14:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781558965; x=1782163765; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781560410; x=1782165210; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H8fRTrzwESqu+d4IERJzTYfMwrtXeimkMnJ+xEbFDmw=;
-        b=IP/4NxJoZMH8dfhJjRL9ogCGp1ZYkxKWRWbUhvCxV+PqWT4prCNwGWgdnhaaDnqcc6
-         YTjKJLeJkdnPvEV2vJh/sQQYZb64XAhcgQQX6RSlXKZ44cYYoq7RQoAo0idzhaQsaep+
-         wJ5tskCZWbaFkcshrYFRqJsAf0nJdRRyCSBIQizEumFrR6eGkDskHYsjcAsGNfN++upF
-         P/M6OJoS0t1OVZsJX1QNowqU49SGwPck9n68TNM4QGzcjGcxvBgPtKnUkgx1EfCBJp1Z
-         QfBvkQDwsLCGtjNK+q4eEewi+++FxkdJdM3Zlr84sLL6dPJEVKk79nm7tSAYwLyPhzKU
-         pOhQ==
+        bh=2uAi4ngEJufnnfkL8J9c+G1dQ4aqUKqtbYnmsEnXy/4=;
+        b=UOgGDNjUSkMxnhWsso44wgJ6V8Eaitqxor5UO+LP6c0+w3Q9n6COEk4+Pqz7O51QVw
+         3AUzdq4uVzlrV/yqryBw1qD3drXkXIESq9K3xmNn4RAgpEvPR15CSalTX1HUFyGoW8mD
+         DN5GK4pXjXwaOse3YTFgtHJB8qNVe5yrKh0w1Ael0ESd3XL8SPDBYJk+CNqplaqzQERi
+         2BQ3JI6+mncm7EqFaDwUT8KWC69/uAIvcXHaTeptAt3OhKQkdclQTHM7KWHWeKQ33OEB
+         ZIdMoUN9cwVj8py1zeSOVRcirWa/SIpHO9BAOj6t3uPjtuIqfZoTUAIuUKWjcCG5RYoI
+         Q9sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781558965; x=1782163765;
+        d=1e100.net; s=20251104; t=1781560410; x=1782165210;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=H8fRTrzwESqu+d4IERJzTYfMwrtXeimkMnJ+xEbFDmw=;
-        b=UjQ6rCA/JRa3e5LsJoPuT+8Pn1n33M0PdXXbPNEhs+Qod25k77VpRRSoau80qXpN6y
-         XVp7LCHlApaqBH4Q7QSFatx9ZP3RuQ2zWj51WIO9+KFvPWdu7nXHEvsODLDlQofTYT4e
-         M9PaxPVTZS8UwEJculNqamLOvBwNfC6gHYeQRdCqph8IJOJfuuwOtjRudUlKMWRnLFwF
-         y6bMFZghxi5asS9H1Ifq0ZQdxmI5oBgpR50ipy/Vdoeems7dIpE/fPrkuCGHxJqGnHdT
-         Lh9L75VZ2aMiDn6frLGZjyaC6WzXhDRryCnLLyQKXr9MvNK+YJKwQ1mSnSi6N1vBZOz5
-         0Osg==
-X-Forwarded-Encrypted: i=1; AFNElJ/JMLEqKVTCZ7s1H1lqFNE+abPDK4EJ6xsIQESbaq9ylSQ2+ZkaixqvqCPvu1pC96XM5hU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1w7j0jKlRxbqNUwZ1jzTlfzB6G8oT+K/sM3h5oMP1L5lRxAg8
-	pd2Mr8HATu2W0wmSHVnEc+1sLYZuFhLpJpO428vt3jgCMUmFjtVh2U2g
-X-Gm-Gg: Acq92OHHbg00AD6yUIRypvIHcLcq1Mz4xWTiwnLoeuxRWe/EPT/hDNN2QxwDo/FZ9o7
-	Iw2YGCDApG2g0B7Ku16YQR3LCd3slC/IHD+P+4jbFiqzY/ms7pvbw8wdvsJ0Hty2lnsK0vWA0vO
-	G5z3nyynL0NudyUerOkAPOkOf4GZ6BJ8asXRTIY5iLqB2wSJ0sT5NWAZ/QZCGqpfgxPwksWsVKd
-	+ZjooOq5UQBg+uUDXQE4ZeI02/nFm9CCPR5Tc+0idTtH1OKpTCtYtNUtUT56kk3C5tDHY+fpP46
-	0tL5l1k7BDVgdMpFL1IzrSFTyBgsNBmT2rIR27Pd/mLHHgKT1dS2HoDDIb1LgvSyhlPZmC2jfck
-	g6VNSKtUI/XVduo8K1uR65p6x3l30cfU06baSz7HEf+wZzk6YF7B7zzy5l+n5n49JFPsNdck/v0
-	CuSvxOuR5/cPYcA0uX5Iu2SGz7qXxipS4XCGSjKhtKqiufBkcTPJMzu5pIfR7mVH9S0ow87h0JF
-	e0C6TzwP22pjpJ0iA==
-X-Received: by 2002:a05:6809:19:10b0:472:b43a:3063 with SMTP id 5614622812f47-4884d07604bmr470583b6e.38.1781558964622;
-        Mon, 15 Jun 2026 14:29:24 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:54::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f5bb911sm5204742a34.11.2026.06.15.14.29.23
+        bh=2uAi4ngEJufnnfkL8J9c+G1dQ4aqUKqtbYnmsEnXy/4=;
+        b=ri4FXxMxsmt4nXYM1n/rCxf3dNVQO5L2Es+t7al/d8kDU+QEtMcoCAX97fGggF8ERk
+         ba5kanXHye0Q3zxB1fF1td1z7HJjHzhRAOx9Ni55I4R6W2cYUMT7CLH9rIzU+LXN2jbk
+         pmUvdv6kSGD8Stjn1gUyu+VNsmbYG38SGNUm5iz/vEfAhWDyQJArqZmYlYwVzi0yDPn0
+         5Kh/C1beiP+LTaCCKFQ+YdUXSERsMsMsa+VokFXw7uu63DF2Txeckd1ocs1SjJbMZAVa
+         2DKLllxHaRbS54bEYbHO+jeg6g4Rl6DbDs9ifclswf2tK6GmEg3lvFtP6VnefzHb1z/D
+         RHOA==
+X-Forwarded-Encrypted: i=1; AFNElJ81rNI5cVy97IsubFRw9ekLRwyuPZn3VTKcx/ivVNpTnxR6cx0WsIs3mDaUfR5bADj2tMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys64Q4Dg2PJ+2l7kK+/0SuCnD+efjbUW2etWlkuRDk6wsfRz89
+	CrA91xL1rMuwog0e6e0fe/9FSSjiWDeqZ3d56NZDmDmL/fvzxk6EO5CDb0igI06IgVc=
+X-Gm-Gg: Acq92OHnJwe8LW29nq2tVZPiuN+G6XMVY6sE3L1UI8LEtniWd43OvhLVciuOK4rEBoV
+	8l5sgsN7tG83CbJc+KDxNkhsw+aFj1sd8S29ZfIeJkjo4ag+fCAoFZPJOmmyLghYwH4FYb7zOX2
+	f8zJGmvUpUzMqp2eN9+CxuoeIub1zPFHqsHqcyOebjbMwblGVKVDMblj+tWa8S+J0ocILBAw9BI
+	Q1vMJx+Xc0ytlHYZrUS+s3uNabyOG1S2hEdWf9OFKR/e0MWlgh1v3OBpyOYpPeY7QZjztT0IJQC
+	DcHHJqtpZJ4DWP1BIfMQvbn6+xTXWGHjGY2zRC/k0Txo0QNl3PLzZ9c3RbJOceqCegyuNJrd/U6
+	riDCWtMzdUWkzzK9m5yeK/fqCyIdRMomyc0JCLtaM+Bxz4r20OTZTNYjrYd8OzMBkHO8zdP6v8n
+	MRJr+W
+X-Received: by 2002:a05:7301:2f85:b0:304:c520:4e14 with SMTP id 5a478bee46e88-30ba59d5cafmr689519eec.11.1781560410391;
+        Mon, 15 Jun 2026 14:53:30 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::bff7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e5d0828sm17835533eec.10.2026.06.15.14.53.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2026 14:29:23 -0700 (PDT)
+        Mon, 15 Jun 2026 14:53:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,140 +66,139 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Jun 2026 14:29:22 -0700
-Message-Id: <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Quentin Monnet"
- <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>
-Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
- xlated insns for global percpu data
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260615152646.27639-1-leon.hwang@linux.dev>
- <20260615152646.27639-12-leon.hwang@linux.dev>
-In-Reply-To: <20260615152646.27639-12-leon.hwang@linux.dev>
+Date: Mon, 15 Jun 2026 17:53:28 -0400
+Message-Id: <DJ9YGGSOPDXL.25P9XNKMTW64H@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <mattbobrowski@google.com>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Vineet Gupta" <vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf: Allow type tag BTF records to succeed
+ other modifier records
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260615180614.4376-1-emil@etsalapatis.com>
+ <0930f05c6aff27dd5680c10fed14bd369df42400.camel@gmail.com>
+In-Reply-To: <0930f05c6aff27dd5680c10fed14bd369df42400.camel@gmail.com>
 
-On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
-> Add a test to verify global percpu data related xlated insns:
+On Mon Jun 15, 2026 at 2:57 PM EDT, Eduard Zingerman wrote:
+> On Mon, 2026-06-15 at 14:06 -0400, Emil Tsalapatis wrote:
+>> As of recently, Clang is able to attach type tag records to modifier BTF
+>> records. This is useful for using typedefs that encompass a base type
+>> and a type tag, e.g.:
+>>=20
+>> typedef struct rbtree __arena rbtree_t;
+>>=20
+>> Modify btf_check_type_tags() so that it allows this sequence of records.
+>> The function now only checks for record loops in BTF modifier record
+>> chains. Rename to btf_check_modifier_chain_length to reflect this.
+>>=20
+>> Also expand the BTF modifier traversal code to take into account that
+>> type record can be interleaved with other modifier records. In effect
+>> this means traversing all modifiers to collect the type tags.
+>>=20
+>> Also modify existing selftests to now accept modifier records (const,
+>> typedef) that point to type tag records.
+>>=20
+>> Cc: Yonghong Song <yonghong.song@linux.dev>
+>> Cc: Vineet Gupta <vineet.gupta@linux.dev>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
 >
-> 1. ld_imm64: compare xlated one with the one in ELF object file.
-> 2. mov64_percpu_reg: it is added by verifier.
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 >
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  .../bpf/prog_tests/global_data_init.c         | 87 +++++++++++++++++++
->  .../bpf/progs/test_global_percpu_data.c       | 11 +++
->  2 files changed, 98 insertions(+)
+> Looks correct, two nits below.
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/=
-tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index e4c290492ff8..fcc2c4ec8644 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> @@ -279,6 +279,91 @@ static void test_global_percpu_data_verifier_log(voi=
-d)
->  	RUN_TESTS(test_global_percpu_data);
->  }
-> =20
-> +static int find_ld_imm64(const struct bpf_insn *insns, size_t insn_cnt, =
-struct bpf_insn *ld_imm64)
-> +{
-> +	size_t i;
-> +
-> +	for (i =3D 0; i < insn_cnt; i++) {
-> +		if (insns[i].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) {
-> +			ld_imm64[0] =3D insns[i];
-> +			ld_imm64[1] =3D insns[i + 1];
-> +			return i;
-> +		}
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +
-> +/*
-> + * Special (internal-only) form of mov, used to resolve per-CPU addrs:
-> + * dst_reg =3D src_reg + <percpu_base_off>
-> + * BPF_ADDR_PERCPU is used as a special insn->off value.
-> + */
-> +#define BPF_ADDR_PERCPU	(-1)
-> +
-> +#define BPF_MOV64_PERCPU_REG(DST, SRC)				\
-> +	((struct bpf_insn) {					\
-> +		.code  =3D BPF_ALU64 | BPF_MOV | BPF_X,		\
-> +		.dst_reg =3D DST,					\
-> +		.src_reg =3D SRC,					\
-> +		.off   =3D BPF_ADDR_PERCPU,			\
-> +		.imm   =3D 0 })
-> +
-> +static __u64 ld_imm64_to_u64(const struct bpf_insn *insn)
-> +{
-> +	return ((__u64)(__u32) insn[1].imm << 32) | (__u32) insn[0].imm;
-> +}
-> +
-> +static void test_global_percpu_data_xlated(void)
-> +{
-> +	struct bpf_insn ld_imm64_raw[2], ld_imm64_xlated[2], mov64_percpu_reg, =
-*insns =3D NULL;
-> +	size_t insn_sz =3D sizeof(struct bpf_insn);
-> +	struct test_global_percpu_data *skel;
-> +	struct bpf_program *prog;
-> +	int idx, err;
-> +	__u32 cnt;
-> +
-> +	skel =3D test_global_percpu_data__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-> +		return;
-> +
-> +	prog =3D skel->progs.verifier_percpu_read;
-> +	idx =3D find_ld_imm64(bpf_program__insns(prog), bpf_program__insn_cnt(p=
-rog), ld_imm64_raw);
-> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 raw"))
-> +		goto out;
-> +
-> +	err =3D test_global_percpu_data__load(skel);
-> +	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-> +		goto out;
-> +
-> +	err =3D get_xlated_program(bpf_program__fd(prog), &insns, &cnt);
-> +	if (!ASSERT_OK(err, "get_xlated_program"))
-> +		goto out;
-> +
-> +	idx =3D find_ld_imm64(insns, cnt, ld_imm64_xlated);
-> +	if (!ASSERT_GE(idx, 0, "find_ld_imm64 xlated"))
-> +		goto out;
-> +
-> +	if (!ASSERT_GT(cnt, idx + 2, "xlated insn count"))
-> +		goto out;
-> +
-> +	ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm64 opco=
-de");
-> +	ASSERT_TRUE(ld_imm64_xlated[0].dst_reg =3D=3D ld_imm64_raw[0].dst_reg, =
-"ld_imm64 dst_reg");
-> +	/*
-> +	 * The xlated instruction has the map ID in imm and the offset
-> +	 * in the next instruction's imm. The raw instruction just has
-> +	 * the offset in its imm.
-> +	 */
-> +	ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw), "ld_im=
-m64 off");
-> +
-> +	mov64_percpu_reg =3D BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_reg, ld_i=
-mm64_raw[0].dst_reg);
-> +	ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64_percpu=
-_reg");
+> [...]
+>
+>> @@ -5860,11 +5866,10 @@ struct btf_struct_meta *btf_find_struct_meta(con=
+st struct btf *btf, u32 btf_id)
+>>  	return bsearch(&btf_id, tab->types, tab->cnt, sizeof(tab->types[0]), b=
+tf_id_cmp_func);
+>>  }
+>> =20
+>> -static int btf_check_type_tags(struct btf_verifier_env *env,
+>> +static int btf_check_modifier_chain_length(struct btf_verifier_env *env=
+,
+>>  			       struct btf *btf, int start_id)
+>                              ^^^^
+> Nit:                      formatting
 
-If the point of the test was to check that percpu_array_map_direct_value_me=
-ta()
-computes 'off' correctly then it failed to achieve that goal.
-It checks that map ID is correct which is a pointless test.
-Either make it a real test or drop this patch.
+Ack.
 
-pw-bot: cr
+>
+>>  {
+>>  	int i, n, good_id =3D start_id - 1;
+>> -	bool in_tags;
+>> =20
+>>  	n =3D btf_nr_types(btf);
+>>  	for (i =3D start_id; i < n; i++) {
+>
+> [...]
+>
+>> @@ -7024,19 +7021,43 @@ bool btf_ctx_access(int off, int size, enum bpf_=
+access_type type,
+>>  	info->btf_id =3D t->type;
+>>  	t =3D btf_type_by_id(btf, t->type);
+>> =20
+>> -	if (btf_type_is_type_tag(t) && !btf_type_kflag(t)) {
+>> -		tag_value =3D __btf_name_by_offset(btf, t->name_off);
+>> -		if (strcmp(tag_value, "user") =3D=3D 0)
+>> +	while (btf_type_is_modifier(t)) {
+>
+> Nit: similar logic is repeated in the btf_struct_walk()
+>      Can it be abstracted away? E.g. by adding some sort
+>      of `collect_type_tag_flags` that would accumulate the
+>      bits for MEM_USER, MEM_PERCPU, MEM_RCU?
+>
+
+I was thinking maybe of having the matching strcmp()s be a callback,
+then having common code for iterating over the tags. I will refactor
+for the next version.
+
+>> +		const char *new_tag;
+>> +
+>> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
+>> +			goto skip_modifier;
+>> +
+>> +		new_tag =3D __btf_name_by_offset(btf, t->name_off);
+>> +		if (strcmp(new_tag, "user") =3D=3D 0) {
+>>  			info->reg_type |=3D MEM_USER;
+>> -		if (strcmp(tag_value, "percpu") =3D=3D 0)
+>> +		} else if (strcmp(new_tag, "percpu") =3D=3D 0) {
+>>  			info->reg_type |=3D MEM_PERCPU;
+>> -	}
+>> +		} else {
+>> +			/*
+>> +			 * If we fail to match on the tag value just ignore it.
+>> +			 * Tracing programs have the same BTF as the function
+>> +			 * being traced, possibly including type tags BPF is not
+>> +			 * aware of. We cannot possibly account for them so ignore
+>> +			 * them.
+>> +			 */
+>> +			goto skip_modifier;
+>> +		}
+>> =20
+>> -	/* skip modifiers */
+>> -	while (btf_type_is_modifier(t)) {
+>> +		/* Only a single tag value supported. */
+>> +		if (tag_value) {
+>> +			bpf_log(log,
+>> +				"func '%s' arg%d type %s has multiple type tags\n",
+>> +				tname, arg, btf_type_str(t));
+>> +			return false;
+>> +		}
+>> +
+>> +		tag_value =3D new_tag;
+>> +
+>> +skip_modifier:
+>>  		info->btf_id =3D t->type;
+>>  		t =3D btf_type_by_id(btf, t->type);
+>>  	}
+>> +
+>>  	if (!btf_type_is_struct(t)) {
+>>  		bpf_log(log,
+>>  			"func '%s' arg%d type %s is not a struct\n",
+>
+> [...]
+
