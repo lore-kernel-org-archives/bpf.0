@@ -1,367 +1,119 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E493AE1B4
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 19:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39FC3AB272
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 20:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781553356; cv=none; b=ZrSoKVifpcoFz+5xswPKGh81nGWJuDiUiX/jMfm495IUQqbhHsdUq+hsJxzjd2SWXR0d+19ME9NLNkM1io/YZn/v84IAGqlUdWrfMh/rlvJ8uMSIqSGF1w3ey1skHmTp6ja4qjvDonE+oblTcGmSoVkcoyNutyE8HXcJKc+WMIs=
+	t=1781553718; cv=none; b=BNgIWFxmqBXNHlP5NhygSfwcrVhdVWlCWYdNdYIF4YWKRL9iCJwAmN/lAvzSZMt51z/+0al4KOVhlJva9EqlwXWxgPvww86PM3AD9jz4jfawbC87ZokryqjWN6jvqEIEJTv6S4G+iaq8RvhJABh8QzzFIhAghJwc7aYq9P37yoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781553356; c=relaxed/simple;
-	bh=4miUmQg82T7NiZ7JRBuRcIpzijb5tnJEJkye+NUXnek=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=efcEAsPT1fcPHn5Is8mUnayDUwYfrbjGDU7YwGyiKkb11k0d8NRZnbRMzmBJSGUCiogUC3U+wJFRBjQxiDIu00BHRr7lHeyVYNRdtAN7mGfELB4dbZnYq2f6/idKLZmscY5bMPe8y9GGLuL9l0sb/e8V8x7acgudo3ndIzIV5C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y72MVxtI; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781553718; c=relaxed/simple;
+	bh=t8wGM2SNC1ZbIykMA3lZWDIYfskaWmiv8ePp9cK/vJI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=utrl9XEhz352DS6jEAkMFRyavQ8NAo25lslq7Dr1EX1KKjs3uiPLxKXYJkTxLbebg9tqJ4MK4tSo5/gjPSXCdiIFgX09PVHsw3bRGPWeTmvOcqvIibABSh0JQwpdyxTxrntW7mFKRCRCkqXiYzl7Wz+u7nVes2pggBuvE75dAJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REfJrHTI; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y72MVxtI"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781553351;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YJaWvPwJ6xSRdimvv6mc97zfcJbZlqnzAAuzUBPgH7g=;
-	b=Y72MVxtIR9xkyLDdQEx7DrO7tDW+V56ndv8g/1BteEUeq2AhWjRHLaP2WfcoHPTsXnGmoN
-	0v+6M0eea7Z8UYIYI7Vg3hhapJwcuqN+tuR3Ro9LSZme5c5888N8SxIw88S9+gbN6GPugB
-	Q6repvvvFcJ98MkZzemrAj8McvRzCws=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>
-Cc: bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3] bpf: Better build_id caching in stack_map_get_build_id_offset()
-Date: Mon, 15 Jun 2026 12:55:36 -0700
-Message-ID: <20260615195536.1065107-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REfJrHTI"
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7e6f922e49fso2908398a34.0
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 13:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781553717; x=1782158517; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t8wGM2SNC1ZbIykMA3lZWDIYfskaWmiv8ePp9cK/vJI=;
+        b=REfJrHTInBiVRv//3tKuAYZhJuYowOkkjM7C3kh11hlWYd4enPG0QSLMve9dcPQl20
+         1xkE9nXQdVpbSiBGFdVXpCplJLS3fJwruL4KirS07InOJz87vrOE6mKjRvW/gtF6E68A
+         58MIbcEIkz8Gr+55aFBJR+i7F8teH5DfAOSQZF+ZHa4TmjCpxd6GEudrmMsa9df3Ugar
+         3iRoVQzSF/feot0dP9/SfdL61WX0XKDeHvshKzJ4cpXMVLJLViXRGVXwcD0xOP7TiM2S
+         dwHQktxyNOM1G6FDtkzri9wNQ9zVBya/IrCzW8fVoHfWrhC9dMBtiE3TWa8xC7GypRJV
+         x8zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781553717; x=1782158517;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t8wGM2SNC1ZbIykMA3lZWDIYfskaWmiv8ePp9cK/vJI=;
+        b=EtcOYbVm2REeWDcpNkdRWiIFTr3iRCuePTUbIBD0yPV6xI2jVz/oVxfc8SHaeF7VLX
+         jbBrM1mEoGoxUMKizr4b9EtyD3ooqM6bRA64l73a0YDVtVe0x1/p3wfWqOK27BWmAuQ/
+         2keqvqdzKAHrFCzFFvtdLhnS/2rQuq0d+NSTE4jUzo3OjzwhvLmMRAfntIBf2NcqYL3+
+         Pb7/XpWdmhaGu4meoK6tedLybuQHBJOXdsuTqfFp5eV5N5wpRXcAGVs8do11aHQZfmFp
+         5bpW//pzZtHWzcrfdstmNQ99PrnDzYNxu+XtwvYkbab9sOW1Gb5C4TK8h+XEh2dGBBA9
+         X17g==
+X-Forwarded-Encrypted: i=1; AFNElJ8g6cnTQE9qaH51NQFHvskAYvjGxbmKe/D10DyOEXWA44SjBuKQSSTdjfcgmmWe7ChPa7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZfECfbuVHN1emqEGk3Tt2bU0bzzKJPZX2Y93TaRT9jqcYEvSL
+	IcG6PhtCIsP54yj73yT7jubqGUC063ckI/5pouDPalRY9OUuVC9TATs/
+X-Gm-Gg: Acq92OHNZ2jWUTj6k6gidVL//rP8bsA5N+g558G7KUp8KfZPs+lV+zwrtB0Tkusf1ah
+	1MWUuqiZy/WVyDLCH3Q3Am8dasj6YTSjZi1j/dfawJfByXq3DBZBOiPo4ar7dZ+7ezRkDjBDZt9
+	lsP0q3dAo8NaZPHpm2ZGqX5O3dxe2k1lCmUlayr5rp0rpmFzrJdObgZp3cv59l0PoRKRFJq9X4t
+	FEtX3lCXRRaMg9K61yOlC2cJNCdvSGlDBgkmmnPpydHOSf4AdjFhj055HnmCm8LSTrHs/nRseyE
+	VP6GfBF1RdGXZSzunkUuodz32F8rfLTC9bDcRaiJAlktQ/BX0ukkbc0oPRqWWaG6qxFneIv+y3k
+	8zMCxu1uG9D+A0eJ5a15FlN3JCEbzbbIQQsaSfsgUlyXYBs3cLA+02G2kneeDkyjs3uqojm+Dz+
+	9ezjB5MIDmE66JB81AR3a4ta2htxzqrIlxy7hwchBzaau4ZqwouehjgqZZ72wp1CZN69dymhKfW
+	BEtRvHm9u6g5bUUKjn+0vUYBuc=
+X-Received: by 2002:a05:6830:d11:b0:7e6:d542:aa with SMTP id 46e09a7af769-7e8fc512f82mr716552a34.23.1781553716566;
+        Mon, 15 Jun 2026 13:01:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f6b8624sm4773335a34.16.2026.06.15.13.01.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jun 2026 13:01:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Jun 2026 13:01:54 -0700
+Message-Id: <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
+To: "Harry Yoo (Oracle)" <harry@kernel.org>, "Vlastimil Babka"
+ <vbabka@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Hao Li"
+ <hao.li@linux.dev>, "Christoph Lameter" <cl@gentwo.org>, "David Rientjes"
+ <rientjes@google.com>, "Roman Gushchin" <roman.gushchin@linux.dev>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Puranjay Mohan" <puranjay@kernel.org>, "Amery Hung" <ameryhung@gmail.com>,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Paul E.
+ McKenney" <paulmck@kernel.org>, "Frederic Weisbecker"
+ <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
+ "Joel Fernandes" <joelagnelf@nvidia.com>, "Josh Triplett"
+ <josh@joshtriplett.org>, "Boqun Feng" <boqun@kernel.org>, "Uladzislau
+ Rezki" <urezki@gmail.com>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
+ "Zqiang" <qiang.zhang@linux.dev>, "Pedro Falcato" <pfalcato@suse.de>,
+ "Suren Baghdasaryan" <surenb@google.com>
+Cc: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>, <rcu@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
+ when HW PMU is not available
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
 
-This patch is a follow up to recent implementation of
-stack_map_get_build_id_offset_sleepable() [1].
+On Mon Jun 15, 2026 at 4:05 AM PDT, Harry Yoo (Oracle) wrote:
+> slub_kunit uses hardware perf events to invoke _nolock() APIs from NMI
+> context. However, creating a HW perf event fails when there is no
+> hardware PMU, or when running in a virtualized environment without a
+> virtual PMU configured.
+>
+> Since tests are often performed in virtualized environments, fall back
+> to a SW perf event so that the test can still run, even if it cannot
+> cover IRQ-disabled sections.
 
-stack_map_get_build_id_offset() and its sleepable variant each cached
-only the last successfully resolved VMA, with separate bookkeeping in
-each function. A run of IPs in a VMA with no usable build ID will
-repeat the lookup for every frame: find_vma() in the non-sleepable
-path, a VMA lock and a blocking build_id_parse_file() in the sleepable.
+Frankly, I wouldn't bother with this fallback, since it completely misses
+irq disabled section which is the one to test with *_nolock().
+VMs need to configured properly. Even nested VMs support
+PERF_COUNT_HW_CPU_CYCLES.
 
-Factor the per-call cache into a shared struct stack_map_build_id_cache
-with two independent slots [2][3], used by both functions:
-
-  * resolved   - last VMA that produced a build ID (file, build_id and
-                 range), reused to skip the lookup and the parse;
-  * unresolved - last VMA with no usable build ID (range only), reused to
-                 emit a raw IP without another lookup or parse.
-
-Keeping the slots independent means a build-ID-less VMA no longer evicts
-the last resolved build ID, so a trace alternating between a binary and a
-region without one stops re-resolving the binary on every return.
-
-The shared lookup tests [vm_start, vm_end), matching the sleepable path;
-the non-sleepable path previously reused a build ID for ip == vm_end
-(range_in_vma() is inclusive) and now re-resolves it correctly.
-
-[1] https://lore.kernel.org/bpf/20260525223948.1920986-1-ihor.solodrai@linux.dev/
-[2] https://lore.kernel.org/bpf/CAEf4Bza2fRDGhLQoPE-EzM7F34xaEJfi5Exmxb-iWVUN3F06=g@mail.gmail.com/
-[3] https://lore.kernel.org/bpf/CAEf4BzZXJFr=1iiVx937ht=4PYQkQHg=eFk810zhMDzXQG3ihw@mail.gmail.com/
-
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
----
-
-v2->v3:
-  * more refactoring, no functional changes
-    * define and use struct stack_map_cached_vma as a cache slot type
-    * use compound literals where appropriate
-    * add `res = &cache.resolved` local in stack_map_get_build_id_offset_sleepable()
-    * minor comment fixups
-v2: https://lore.kernel.org/bpf/20260612220651.2507843-1-ihor.solodrai@linux.dev/
-
-v1->v2:
-  * nits in attempt to de-claudify the diff (Alexei)
-    * factor out local variables in stack_map_build_id_set_from_cache()
-      to make the conditions more readable
-    * make comments more concise
-  * I am ignoring the issue flagged by sashiko, since it's unrelated
-    to the patch
-v1: https://lore.kernel.org/bpf/20260609210749.3448062-1-ihor.solodrai@linux.dev/
-
----
- kernel/bpf/stackmap.c | 183 ++++++++++++++++++++++++++++++------------
- 1 file changed, 130 insertions(+), 53 deletions(-)
-
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 77ba03216c09..41fe87d7302f 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -175,6 +175,95 @@ static inline void stack_map_build_id_set_valid(struct bpf_stack_build_id *id,
- 		memcpy(id->build_id, build_id, BUILD_ID_SIZE_MAX);
- }
- 
-+/*
-+ * A cached VMA lookup result. The range [vm_start, vm_end) is always set.
-+ * vm_pgoff, file, build_id are set only when the build ID was resolved.
-+ * Zero vm_end marks the slot empty. build_id aliases the id_offs[] entry.
-+ */
-+struct stack_map_cached_vma {
-+	unsigned long vm_start;
-+	unsigned long vm_end;
-+	unsigned long vm_pgoff;
-+	struct file *file; /* pinned in the sleepable path; NULL otherwise */
-+	const unsigned char *build_id;
-+};
-+
-+/*
-+ * Per stack_map_get_build_id_offset() call cache of the last VMA with a build ID
-+ * resolved and the last VMA with no usable build ID. Adjacent stack frames tend
-+ * to land in the same VMA or the same backing file, so caching the last result
-+ * of each kind lets us skip unnecessary VMA lookups and build ID parse calls.
-+ * Keeping the two slots independent means a build-ID-less VMA doesn't evict the
-+ * last resolved build ID.
-+ */
-+struct stack_map_build_id_cache {
-+	struct stack_map_cached_vma resolved;
-+	struct stack_map_cached_vma unresolved;
-+};
-+
-+/*
-+ * Fill @id from a cached range covering @ip. On a hit this writes @id (resolved
-+ * range -> build ID + offset, unresolved range -> raw ip) and returns 0; on a
-+ * miss it leaves @id untouched and returns -ENOENT.
-+ */
-+static int stack_map_build_id_set_from_cache(struct stack_map_build_id_cache *cache,
-+					     struct bpf_stack_build_id *id, u64 ip)
-+{
-+	unsigned long vm_start, vm_end, vm_pgoff;
-+	u64 offset;
-+
-+	vm_start = cache->resolved.vm_start;
-+	vm_end = cache->resolved.vm_end;
-+	if (vm_end && ip >= vm_start && ip < vm_end) {
-+		vm_pgoff = cache->resolved.vm_pgoff;
-+		offset = stack_map_build_id_offset(vm_pgoff, vm_start, ip);
-+		stack_map_build_id_set_valid(id, offset, cache->resolved.build_id);
-+		return 0;
-+	}
-+
-+	vm_start = cache->unresolved.vm_start;
-+	vm_end = cache->unresolved.vm_end;
-+	if (vm_end && ip >= vm_start && ip < vm_end) {
-+		stack_map_build_id_set_ip(id);
-+		return 0;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+/*
-+ * Record @vma's build ID as the last resolved one. @file is the pinned backing
-+ * file in the sleepable path (released when evicted), or NULL otherwise.
-+ */
-+static void stack_map_build_id_cache_set_resolved(struct stack_map_build_id_cache *cache,
-+						  struct file *file,
-+						  const unsigned char *build_id,
-+						  unsigned long vm_start,
-+						  unsigned long vm_end,
-+						  unsigned long vm_pgoff)
-+{
-+	if (cache->resolved.file)
-+		fput(cache->resolved.file);
-+	cache->resolved = (struct stack_map_cached_vma){
-+		.vm_start = vm_start,
-+		.vm_end = vm_end,
-+		.vm_pgoff = vm_pgoff,
-+		.file = file,
-+		.build_id = build_id,
-+	};
-+}
-+
-+/* Record [vm_start, vm_end) as a range with no usable build ID. */
-+static void stack_map_build_id_cache_set_unresolved(struct stack_map_build_id_cache *cache,
-+						    unsigned long vm_start,
-+						    unsigned long vm_end)
-+{
-+	cache->unresolved = (struct stack_map_cached_vma){
-+		.vm_start = vm_start,
-+		.vm_end = vm_end,
-+	};
-+}
-+
- struct stack_map_vma_lock {
- 	struct vm_area_struct *vma;
- 	struct mm_struct *mm;
-@@ -244,15 +333,9 @@ static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
- static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
- 						    u32 trace_nr)
- {
--	struct mm_struct *mm = current->mm;
--	struct stack_map_vma_lock lock = { .mm = mm };
--	struct {
--		struct file *file;
--		const unsigned char *build_id;
--		unsigned long vm_start;
--		unsigned long vm_end;
--		unsigned long vm_pgoff;
--	} cache = {};
-+	struct stack_map_vma_lock lock = { .mm = current->mm };
-+	struct stack_map_build_id_cache cache = {};
-+	struct stack_map_cached_vma *res = &cache.resolved;
- 	unsigned long vm_pgoff, vm_start, vm_end;
- 	struct vm_area_struct *vma;
- 	struct file *file;
-@@ -262,44 +345,39 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- 	for (u32 i = 0; i < trace_nr; i++) {
- 		ip = READ_ONCE(id_offs[i].ip);
- 
--		/*
--		 * Range cache fast path: if ip falls within the previously
--		 * resolved VMA range, reuse the cache build_id without
--		 * re-acquiring the VMA lock.
--		 */
--		if (cache.build_id && ip >= cache.vm_start && ip < cache.vm_end) {
--			offset = stack_map_build_id_offset(cache.vm_pgoff, cache.vm_start, ip);
--			stack_map_build_id_set_valid(&id_offs[i], offset, cache.build_id);
-+		if (!stack_map_build_id_set_from_cache(&cache, &id_offs[i], ip))
- 			continue;
--		}
- 
- 		vma = stack_map_lock_vma(&lock, ip);
- 		if (!vma) {
- 			stack_map_build_id_set_ip(&id_offs[i]);
- 			continue;
- 		}
-+
-+		vm_pgoff = vma->vm_pgoff;
-+		vm_start = vma->vm_start;
-+		vm_end = vma->vm_end;
-+
- 		if (vma_is_anonymous(vma) || !vma->vm_file) {
--			stack_map_build_id_set_ip(&id_offs[i]);
- 			stack_map_unlock_vma(&lock);
-+			stack_map_build_id_set_ip(&id_offs[i]);
-+			stack_map_build_id_cache_set_unresolved(&cache, vm_start, vm_end);
- 			continue;
- 		}
- 
- 		file = vma->vm_file;
--		vm_pgoff = vma->vm_pgoff;
--		vm_start = vma->vm_start;
--		vm_end = vma->vm_end;
- 		offset = stack_map_build_id_offset(vm_pgoff, vm_start, ip);
- 
- 		/*
--		 * Same backing file as previous (e.g. different VMAs
--		 * of the same ELF binary). Reuse the cache build_id.
-+		 * Same backing file as the last resolved VMA (another mapping
-+		 * of the same ELF binary): reuse its build_id without re-parsing.
- 		 */
--		if (file == cache.file) {
-+		if (file == res->file) {
- 			stack_map_unlock_vma(&lock);
--			stack_map_build_id_set_valid(&id_offs[i], offset, cache.build_id);
--			cache.vm_start = vm_start;
--			cache.vm_end = vm_end;
--			cache.vm_pgoff = vm_pgoff;
-+			stack_map_build_id_set_valid(&id_offs[i], offset, res->build_id);
-+			res->vm_start = vm_start;
-+			res->vm_end = vm_end;
-+			res->vm_pgoff = vm_pgoff;
- 			continue;
- 		}
- 
-@@ -310,21 +388,17 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- 		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
- 			stack_map_build_id_set_ip(&id_offs[i]);
- 			fput(file);
-+			stack_map_build_id_cache_set_unresolved(&cache, vm_start, vm_end);
- 			continue;
- 		}
- 
- 		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
--		if (cache.file)
--			fput(cache.file);
--		cache.file = file;
--		cache.build_id = id_offs[i].build_id;
--		cache.vm_start = vm_start;
--		cache.vm_end = vm_end;
--		cache.vm_pgoff = vm_pgoff;
-+		stack_map_build_id_cache_set_resolved(&cache, file, id_offs[i].build_id,
-+						      vm_start, vm_end, vm_pgoff);
- 	}
- 
--	if (cache.file)
--		fput(cache.file);
-+	if (res->file)
-+		fput(res->file);
- }
- 
- /*
-@@ -343,8 +417,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	struct mmap_unlock_irq_work *work = NULL;
- 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
- 	bool has_user_ctx = user && current && current->mm;
--	struct vm_area_struct *vma, *prev_vma = NULL;
--	const unsigned char *prev_build_id = NULL;
-+	struct stack_map_build_id_cache cache = {};
-+	struct vm_area_struct *vma;
- 	int i;
- 
- 	if (may_fault && has_user_ctx) {
-@@ -365,27 +439,30 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 
- 	for (i = 0; i < trace_nr; i++) {
- 		u64 ip = READ_ONCE(id_offs[i].ip);
--		u64 offset;
- 
--		if (prev_build_id && range_in_vma(prev_vma, ip, ip)) {
--			vma = prev_vma;
--			offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
--			stack_map_build_id_set_valid(&id_offs[i], offset, prev_build_id);
-+		if (!stack_map_build_id_set_from_cache(&cache, &id_offs[i], ip))
- 			continue;
--		}
-+
- 		vma = find_vma(current->mm, ip);
- 		if (!vma || vma_is_anonymous(vma) ||
- 		    fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
--			/* per entry fall back to ips */
-+			/* per entry fall back to ips; cache build-ID-less range */
- 			stack_map_build_id_set_ip(&id_offs[i]);
--			prev_vma = vma;
--			prev_build_id = NULL;
-+			if (vma)
-+				stack_map_build_id_cache_set_unresolved(&cache,
-+						vma->vm_start, vma->vm_end);
- 			continue;
- 		}
--		offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
--		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
--		prev_vma = vma;
--		prev_build_id = id_offs[i].build_id;
-+		/*
-+		 * mmap_lock is held for the whole loop, so the cached VMA
-+		 * fields stay valid; no file pinning is needed here.
-+		 */
-+		stack_map_build_id_set_valid(&id_offs[i],
-+			stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip),
-+			id_offs[i].build_id);
-+		stack_map_build_id_cache_set_resolved(&cache, NULL, id_offs[i].build_id,
-+						      vma->vm_start, vma->vm_end,
-+						      vma->vm_pgoff);
- 	}
- 	bpf_mmap_unlock_mm(work, current->mm);
- }
--- 
-2.54.0
+Also in overflow_handler_test_nolock()
+I would add
+even->hw.interrupts =3D 0;
+to the end to make sure it actually stress tests things.
+Without it NMIs are not firing quickly enough.
 
