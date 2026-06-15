@@ -1,96 +1,90 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159623DBD57
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 10:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83CE3DB635
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 10:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781517919; cv=none; b=YT7plVefA/Wzo60wBralucUdh2x6B+1w+7GPkpF19dz03t7yqbrZQxaoOjlBIYqBSnoGJ0GsOb7b1L3CQAPuH0gehr/OktRdpBcuwcCRUBo6hZJg8sSHYXsdRzYnl38rnPuWRtkVuBZ9istjCXQzSRdDET7ZIst4QWMWxaH32OE=
+	t=1781519143; cv=none; b=payiqUWIe/H6XPE1i5f8jnAOnso1xGL54CLX8avzXumdpwFalTgV5vks6iUUhpKrqTqF7UzGhLL0Helo+fwhfwGT27lfNeXGmPdlTDIhfnI8gsW8G1E7hMpUD+ojp98Ee2axHuAdd1vixHbGb25caTozhHx/GJROEGEGs53w1ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781517919; c=relaxed/simple;
-	bh=OapWD31uSsDKIvHXHB85c6FEXRB2lgQVk8YWNChvW+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o7Ojch2M5BTWcgKemDNlG6HRV0sG+dA+fb2vXCW7FgsbjaIvkmITDNyMhSHksUGH3FF/YxSPZ0Gik4Z5p4potfGfnkqvdmD3KR3cGktbHD/eCPzZV/4SiKJ0haFMm+EzBO4JWgNooOF9+MfnRyM8Kw4U9ZYXKXv6iqlkfR2t9XM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cxf+tczi9qPE0UAA--.52756S3;
-	Mon, 15 Jun 2026 18:05:16 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxzsJTzi9qlgOnAA--.55069S6;
-	Mon, 15 Jun 2026 18:05:15 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Test jited inline of bpf_get_smp_processor_id() for LoongArch
-Date: Mon, 15 Jun 2026 18:05:06 +0800
-Message-ID: <20260615100506.19558-5-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260615100506.19558-1-yangtiezhu@loongson.cn>
-References: <20260615100506.19558-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1781519143; c=relaxed/simple;
+	bh=T+ZeaBKqkpB9Rc1KVtbFaC1VeczpvrQOxFt8xKDacnM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mlb2alm6E+IZrEKwTCthh9J8B/UFVxbUBl4MqS+KIw64cFfKAXFDkjHVyY5eqo3IEU2C0xVQKF5FuXPesbnWKqxtivAkL0S6FrbxqJ/8FPIy+54/85NdyqETKkEXxZeihff+qp6iCMDEtTNX/xV1pp/EmaJNFk3YerXlBJa8HAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5GaqZ7/; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5GaqZ7/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B9011F00A3A;
+	Mon, 15 Jun 2026 10:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781519142;
+	bh=osWsZWzWrCtNIhz0fNAitCTuYbLzHLCWkCE2ZZHa6Tc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Y5GaqZ7/8tABtgYBe7zePoItdBuPVYDQDqhAzHDoC7+DbdileCbx1F9b6wA+etnBd
+	 Cx877ghumoZoEwaxGQf30de1qdNQfmTnakL/jm5s9n/tYyQuihU6frJCCg/bNrVDTi
+	 LSq/zSv5YMlUCySP4yGFzca4MAILh/DMZzqI4mH5w03NDBCT/mvegf9rMEtVscypHU
+	 GnE/qrz96pGqRMTB9O7ZrQgkm4CxovZumb5rcqlootE8of8IS2C2tMKgL7EbMAgnjR
+	 C7ULHFqKI6wZTsS4bUAGmeseTC9agP2STquucxkZyDrdEe5AxG3rwhjHt7yhQStEgS
+	 CRDQoBeixQRzA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Test jited inline of
+ bpf_get_current_task() for LoongArch
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260615100506.19558-4-yangtiezhu@loongson.cn>
+References: <20260615100506.19558-4-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 10:25:41 +0000
+Message-Id: <20260615102542.4B9011F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxzsJTzi9qlgOnAA--.55069S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7GFWkGr1xtryDCrW8uF13WrX_yoW8JF1kpF
-	yku3sFyw18GFy2gayxCF4UJFy5XFn5Z3yrZr1093yDGF18Jr1DJr93Kr1ayr98uFZY93sY
-	va12qF4Sga4UZabCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzKZXUUUUU
 
-Add the testcase for the jited inline of bpf_get_smp_processor_id(),
-only for LoongArch currently.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The selftest expects `bpf_get_current_task()` to be JIT-inlined =
+to `move $a5, $tp` on LoongArch, but the required kernel JIT implementation=
+ is missing, causing the test to fail.
+--
 
-Here is the test result on LoongArch:
+commit f8173ba138660b46dd1d6b8e58aa91f97cddc7a8
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-  $ sudo ./test_progs -t verifier_jit_inline
-  #604/1   verifier_jit_inline/inline_bpf_get_current_task:OK
-  #604/2   verifier_jit_inline/inline_bpf_get_smp_processor_id:OK
-  #604     verifier_jit_inline:OK
-  Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+selftests/bpf: Test jited inline of bpf_get_current_task() for LoongArch
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- .../testing/selftests/bpf/progs/verifier_jit_inline.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+This commit adds a selftest expectation for the JIT-inlined version of
+bpf_get_current_task() on LoongArch.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-index 8560577f2557..02e562f56f9d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
-@@ -21,4 +21,15 @@ int inline_bpf_get_current_task(void)
- 	return 0;
- }
- 
-+SEC("fentry/bpf_fentry_test2")
-+__success __retval(0)
-+__arch_loongarch
-+__jited("	ld.wu	$a5, $tp, 16")
-+int inline_bpf_get_smp_processor_id(void)
-+{
-+	bpf_get_smp_processor_id();
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.42.0
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/to=
+ols/testing/selftests/bpf/progs/verifier_jit_inline.c
+> index 76d80605ec7fd..8560577f25576 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
+> @@ -12,6 +12,8 @@ __arch_arm64
+>  __jited("	mrs	x8, SP_EL0")
+>  __arch_riscv64
+>  __jited("	mv	a5, tp")
+> +__arch_loongarch
+> +__jited("	move	$a5, $tp")
 
+[Severity: Medium]
+Is the corresponding kernel patch implementing this JIT inline missing from
+the tree?
+
+Without the logic in arch/loongarch/net/bpf_jit.c to inline
+BPF_FUNC_get_current_task, the BPF JIT emits a standard helper function
+call rather than the expected instruction sequence.
+
+Will this cause the selftest to unconditionally fail?
+
+>  int inline_bpf_get_current_task(void)
+>  {
+>  	bpf_get_current_task();
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615100506.1955=
+8-1-yangtiezhu@loongson.cn?part=3D3
