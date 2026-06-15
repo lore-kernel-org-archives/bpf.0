@@ -1,204 +1,122 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDDF36EA8E
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 21:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDAA2E7162;
+	Mon, 15 Jun 2026 22:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781560413; cv=none; b=F2PNlJ9XonxTYLpMM3JoniLmy4+VreUUVEIFs9BNth2m+WeIoogSNWXzd96KYl7KJeL+R7dlwup6W6LMPLPjqy+YaD7GNwUuHF+DMdw9v9aEotOF55XTHySgtr6n8pRJQWaaOiVnWyN9PSta2vyWvsipmXPw16Y4Mwrd/XuCF6c=
+	t=1781560820; cv=none; b=LeNBuaNNajj0NI535B1jy2YPOxr6IlP8GVqSPBLch9uOWgKqxXlvuUW7N16EDL6HNppqh6tvLJwr7UkbW1QUoelZ4XsGXxQ/CsC07XzUJmwLVt2U02OUuViWuPVGzWqVOGIjc0hh/ZPbuF1qvfQ89t33Tvj0MYcoXOq7o46b8FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781560413; c=relaxed/simple;
-	bh=krc4C0aOyhys5IHF7Q2ZQw6WG6LZf9FhuifvQZV5D4c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=YbScp/lYnm2b38ox7aqzDIm7yPsMoSczmvTScu18gZj3yDOTt7basJ6r+UzmLWXalyc7BCAxhCyucBPvz7Rrc397eof/ue0lV7X3widQHGRSJVd5jQ+ONm2f5ptD4vdCvJBvK2gGBTdvtgun45F+nOGrD4MK5td6MlQj9+YAXWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=UOgGDNjU; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781560820; c=relaxed/simple;
+	bh=P9XxLDFHqeMGTRhUDfC5zHJ1bjX28E+A9t2YdBgnULo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qmcIAwtAS2Roi7PzlhRA+NA57hQbB/Cdrowj5CUKq1yrrFPy2CYNGPZ4ErCinurRrlDZxfyoaE7o2761V8usWbqUN6Lczoy+8WDXPBuhk4UyLUB4J4Bq9+yX8D3b0j6TlTtDsnsK0+TJk4vL1e8yDHwz4frEjsAmv8L8d9og0Yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=mVmVEORi; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fsDMmv8z; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="UOgGDNjU"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-304e83724bfso5283598eec.0
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 14:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781560410; x=1782165210; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2uAi4ngEJufnnfkL8J9c+G1dQ4aqUKqtbYnmsEnXy/4=;
-        b=UOgGDNjUSkMxnhWsso44wgJ6V8Eaitqxor5UO+LP6c0+w3Q9n6COEk4+Pqz7O51QVw
-         3AUzdq4uVzlrV/yqryBw1qD3drXkXIESq9K3xmNn4RAgpEvPR15CSalTX1HUFyGoW8mD
-         DN5GK4pXjXwaOse3YTFgtHJB8qNVe5yrKh0w1Ael0ESd3XL8SPDBYJk+CNqplaqzQERi
-         2BQ3JI6+mncm7EqFaDwUT8KWC69/uAIvcXHaTeptAt3OhKQkdclQTHM7KWHWeKQ33OEB
-         ZIdMoUN9cwVj8py1zeSOVRcirWa/SIpHO9BAOj6t3uPjtuIqfZoTUAIuUKWjcCG5RYoI
-         Q9sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781560410; x=1782165210;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2uAi4ngEJufnnfkL8J9c+G1dQ4aqUKqtbYnmsEnXy/4=;
-        b=ri4FXxMxsmt4nXYM1n/rCxf3dNVQO5L2Es+t7al/d8kDU+QEtMcoCAX97fGggF8ERk
-         ba5kanXHye0Q3zxB1fF1td1z7HJjHzhRAOx9Ni55I4R6W2cYUMT7CLH9rIzU+LXN2jbk
-         pmUvdv6kSGD8Stjn1gUyu+VNsmbYG38SGNUm5iz/vEfAhWDyQJArqZmYlYwVzi0yDPn0
-         5Kh/C1beiP+LTaCCKFQ+YdUXSERsMsMsa+VokFXw7uu63DF2Txeckd1ocs1SjJbMZAVa
-         2DKLllxHaRbS54bEYbHO+jeg6g4Rl6DbDs9ifclswf2tK6GmEg3lvFtP6VnefzHb1z/D
-         RHOA==
-X-Forwarded-Encrypted: i=1; AFNElJ81rNI5cVy97IsubFRw9ekLRwyuPZn3VTKcx/ivVNpTnxR6cx0WsIs3mDaUfR5bADj2tMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys64Q4Dg2PJ+2l7kK+/0SuCnD+efjbUW2etWlkuRDk6wsfRz89
-	CrA91xL1rMuwog0e6e0fe/9FSSjiWDeqZ3d56NZDmDmL/fvzxk6EO5CDb0igI06IgVc=
-X-Gm-Gg: Acq92OHnJwe8LW29nq2tVZPiuN+G6XMVY6sE3L1UI8LEtniWd43OvhLVciuOK4rEBoV
-	8l5sgsN7tG83CbJc+KDxNkhsw+aFj1sd8S29ZfIeJkjo4ag+fCAoFZPJOmmyLghYwH4FYb7zOX2
-	f8zJGmvUpUzMqp2eN9+CxuoeIub1zPFHqsHqcyOebjbMwblGVKVDMblj+tWa8S+J0ocILBAw9BI
-	Q1vMJx+Xc0ytlHYZrUS+s3uNabyOG1S2hEdWf9OFKR/e0MWlgh1v3OBpyOYpPeY7QZjztT0IJQC
-	DcHHJqtpZJ4DWP1BIfMQvbn6+xTXWGHjGY2zRC/k0Txo0QNl3PLzZ9c3RbJOceqCegyuNJrd/U6
-	riDCWtMzdUWkzzK9m5yeK/fqCyIdRMomyc0JCLtaM+Bxz4r20OTZTNYjrYd8OzMBkHO8zdP6v8n
-	MRJr+W
-X-Received: by 2002:a05:7301:2f85:b0:304:c520:4e14 with SMTP id 5a478bee46e88-30ba59d5cafmr689519eec.11.1781560410391;
-        Mon, 15 Jun 2026 14:53:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::bff7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e5d0828sm17835533eec.10.2026.06.15.14.53.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2026 14:53:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="mVmVEORi";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fsDMmv8z"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id AE5FD1400109;
+	Mon, 15 Jun 2026 18:00:16 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Mon, 15 Jun 2026 18:00:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1781560816; x=
+	1781647216; bh=Kvm0JNUboIg8eJ7KwJVZkhaAicq/QT9fy1LvExWaAn8=; b=m
+	VmVEORiGUinBG9ERHFYm02ZZQOTlHfyB11SDcgHgB5S3mOMUXdOaY8qk5DyzTims
+	xOz/hUvBxGP5XNr0Y5Pyzrib/6xdcza4kMOw5acY4ZdhcVR6+L5iaO8JQgvy/ABA
+	KRLaA/gFyMQ1pACGUqXe7R0MVfBJh+T2BVO6nj6NIv4xUZhC4MwiWihy5PqHqBs5
+	qH/EJqSSdMtJw2wCthCD3zhYg/fybEqvckPiukQkINXyt5APYVExNDC6yKe/Mmwr
+	zncevxTH/wRLuGs8uUAZn8JSU0zqIJrG4yzkkHgV4flF8wqWOYs4S6OQVItD60Et
+	fg0OIxxs5Qc85rjyphQXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1781560816; x=1781647216; bh=Kvm0JNUboIg8eJ7KwJVZkhaAicq/QT9fy1L
+	vExWaAn8=; b=fsDMmv8znP7OZKpaYwIhMU5zSaOHYG0IuC9zsWCs9SrG2h5rUo7
+	INrBLaoRphKNOnbX0BkqEN3+W6G4Hvh6/fU+nmcykJhJ1UZiDx9A6+cI5mEoK4eI
+	GVtK5+hccEHGGK8dlzraJTIoVZUS2bHvSZy2XCFoLa06e+F1yUBiyDS2gZrpgx0M
+	PQEU+rYoRAheUPPgp/Vl5PgWvJzOT51ctmsGOmKUp9uBDocOx8wh7VO4j2yXDR65
+	wK0NnOEVEvJUxbPZ8jnTHA8iM35MiIqii8IPRuzLYgYgEKGBkd7IxvZ6yWbGq08Y
+	gkDb5t1F0qrAR3Q7QgST86BkgXO1uaMz8Jw==
+X-ME-Sender: <xms:8HUwap6BAUhjuDVpT0oQ0J4IUkqrHVbFMapEUiQ0gQ9zJlRJIEJlpg>
+    <xme:8HUwap8lNbXx0lSxXMa7Vp7Som2GUuzsNEjpWzYnngouWjgYGuckV1Zneb6jFqdyF
+    SiV-YV21G_ROtsOMrBJOAy44rOHNZquk3yiE3fFe5gYhh7ZS6qA9v-K>
+X-ME-Received: <xmr:8HUwarG2H9RP9uzmzuO2vzxKneVgjbcaOpJmjU2KN7pocEpJv1bsUNROkreoSRde0avSIHf4HwgeUxEGOpuUkec>
+X-ME-Proxy-Cause: dmFkZTEAeC7d8fxAsNbMlR0neJsYLsUtMZshbRwlQFmF6AxFfaQvHNRa59tUo+wVMejbkI
+    Vrgqc16k5RuGDu/WeM+p9BvueGmVHcENJ8fZAFvAPh/xahKSlExhWjo28U3WQX5FNYMLJg
+    /5LZ+xVXvRa7d1dLC4MMUoOaiFAl3soxNuOw1ZEVNRkUHZnKDGafK/6xZJ6QMfW6AfCXAu
+    Y+7CV/BH97zXuhMo4XN0mio0OuQ7nq/O9UAcr0LClDw6DjM1i9qzCo/q5gNQMXhS1ikLMj
+    6WDs6CLdbuawKkRs8vUk7yO3kkzxmKSNgjsGz0NT999GCM3bvhcQ6MVQ5txEBePV0O4yjI
+    Vj60e0X1y5EouMFBEt34Lh62NO7ASLMaWVvSwKH0Rw8AIvNcQpakxjkhG6ygbQB7utHZPV
+    xJ90xElIViArSsbc6v/s+yWvPUotNNOiEZ/ThSXwrJLtWvpfCtqx4TgIPKcYQVCKmvY3zz
+    v7DQynF/lcG1FxRqEXnZsJx6krI3ArH7Q0ZqMjPwDwKVai213FMorqKfoyaB/vQ6w55PSV
+    +FCa2WtQgb7sCYLAsumC7/2V68IBXksUB96KGhEL5a6SIijJqQNvxlhb7hrHmb7f7zSSkm
+    hfRjfHAUaAFlrXAeh+XYHYjpTtN6vwPAIat2tvZJ3hQ4H6AVu41mbvm5x8Aw
+X-ME-Proxy: <xmx:8HUwauVG0pFS91dSsWO170N1wG8b4GPtD4ibrXwa3ayQcN7ZM2GX5g>
+    <xmx:8HUwan9WFodJzHJ9Cqk2CfR0ITqX9S8CLfdt-sM2g8-qJb9k20okvw>
+    <xmx:8HUwar7-vjfiEPe7eTs_yhNRUXxImU7kL4RRryyzir4yzcOb6UHGhg>
+    <xmx:8HUwagnt03nPxRzqY0VQH4BDxC3dprwv3KXSsk20w6trn2SCObADHA>
+    <xmx:8HUwahnF7i02m0CaAsef9Ny3jYfcD6LnWYhZ4oddiU6jSCKwvKmLVu8G>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Jun 2026 18:00:15 -0400 (EDT)
+Date: Tue, 16 Jun 2026 00:00:13 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	andrew+netdev@lunn.ch, horms@kernel.org, bpf@vger.kernel.org,
+	john.fastabend@gmail.com
+Subject: Re: [PATCH net-next 1/5] tls: reject the combination of TLS and
+ sockmap
+Message-ID: <ajB17YvTfkZlsAAk@krikkit>
+References: <20260614014102.461064-1-kuba@kernel.org>
+ <20260614014102.461064-2-kuba@kernel.org>
+ <87tsr3bq2m.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Jun 2026 17:53:28 -0400
-Message-Id: <DJ9YGGSOPDXL.25P9XNKMTW64H@etsalapatis.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
- <daniel@iogearbox.net>, <mattbobrowski@google.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Vineet Gupta" <vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next] bpf: Allow type tag BTF records to succeed
- other modifier records
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260615180614.4376-1-emil@etsalapatis.com>
- <0930f05c6aff27dd5680c10fed14bd369df42400.camel@gmail.com>
-In-Reply-To: <0930f05c6aff27dd5680c10fed14bd369df42400.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87tsr3bq2m.fsf@cloudflare.com>
 
-On Mon Jun 15, 2026 at 2:57 PM EDT, Eduard Zingerman wrote:
-> On Mon, 2026-06-15 at 14:06 -0400, Emil Tsalapatis wrote:
->> As of recently, Clang is able to attach type tag records to modifier BTF
->> records. This is useful for using typedefs that encompass a base type
->> and a type tag, e.g.:
->>=20
->> typedef struct rbtree __arena rbtree_t;
->>=20
->> Modify btf_check_type_tags() so that it allows this sequence of records.
->> The function now only checks for record loops in BTF modifier record
->> chains. Rename to btf_check_modifier_chain_length to reflect this.
->>=20
->> Also expand the BTF modifier traversal code to take into account that
->> type record can be interleaved with other modifier records. In effect
->> this means traversing all modifiers to collect the type tags.
->>=20
->> Also modify existing selftests to now accept modifier records (const,
->> typedef) that point to type tag records.
->>=20
->> Cc: Yonghong Song <yonghong.song@linux.dev>
->> Cc: Vineet Gupta <vineet.gupta@linux.dev>
->> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
->> ---
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->
-> Looks correct, two nits below.
->
-> [...]
->
->> @@ -5860,11 +5866,10 @@ struct btf_struct_meta *btf_find_struct_meta(con=
-st struct btf *btf, u32 btf_id)
->>  	return bsearch(&btf_id, tab->types, tab->cnt, sizeof(tab->types[0]), b=
-tf_id_cmp_func);
->>  }
->> =20
->> -static int btf_check_type_tags(struct btf_verifier_env *env,
->> +static int btf_check_modifier_chain_length(struct btf_verifier_env *env=
-,
->>  			       struct btf *btf, int start_id)
->                              ^^^^
-> Nit:                      formatting
+2026-06-15, 20:45:21 +0200, Jakub Sitnicki wrote:
+> On Sat, Jun 13, 2026 at 06:40 PM -07, Jakub Kicinski wrote:
+> > TLS and sockmap (BPF psock) integration hides a lot of latent bugs.
+> > Bugs which may be more or less relevant for real users but they
+> > are definitely exploitable.
+> >
+> > We could not find anyone actively using this integration so let's
+> > reject this config. Adding a TLS socket to a sockmap was already
+> > rejected by sk_psock_init() through the inet_csk_has_ulp() check.
+> > We need to reject the attempts to configure the TLS keys (rather
+> > than adding the ULP itself) because checking prior to the ULP
+> > installation is tricky without risking a race with sockmap getting
+> > added in parallel (sockmap does not hold the socket lock).
+> >
+> > This patch is a minimal rejection of the feature. Subsequent patch
+> > in the series will do a light dead code removal. Full cleanup would
+> > require a major rewrite of the Tx path, we don't need skmsg any more.
+> >
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > ---
+> 
+> SGTM until we can come up with a generic way to exclude sockmapped
+> sockets from ktls and espintcp.
 
-Ack.
+And possibly ovpn too.
 
->
->>  {
->>  	int i, n, good_id =3D start_id - 1;
->> -	bool in_tags;
->> =20
->>  	n =3D btf_nr_types(btf);
->>  	for (i =3D start_id; i < n; i++) {
->
-> [...]
->
->> @@ -7024,19 +7021,43 @@ bool btf_ctx_access(int off, int size, enum bpf_=
-access_type type,
->>  	info->btf_id =3D t->type;
->>  	t =3D btf_type_by_id(btf, t->type);
->> =20
->> -	if (btf_type_is_type_tag(t) && !btf_type_kflag(t)) {
->> -		tag_value =3D __btf_name_by_offset(btf, t->name_off);
->> -		if (strcmp(tag_value, "user") =3D=3D 0)
->> +	while (btf_type_is_modifier(t)) {
->
-> Nit: similar logic is repeated in the btf_struct_walk()
->      Can it be abstracted away? E.g. by adding some sort
->      of `collect_type_tag_flags` that would accumulate the
->      bits for MEM_USER, MEM_PERCPU, MEM_RCU?
->
+Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
-I was thinking maybe of having the matching strcmp()s be a callback,
-then having common code for iterating over the tags. I will refactor
-for the next version.
-
->> +		const char *new_tag;
->> +
->> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
->> +			goto skip_modifier;
->> +
->> +		new_tag =3D __btf_name_by_offset(btf, t->name_off);
->> +		if (strcmp(new_tag, "user") =3D=3D 0) {
->>  			info->reg_type |=3D MEM_USER;
->> -		if (strcmp(tag_value, "percpu") =3D=3D 0)
->> +		} else if (strcmp(new_tag, "percpu") =3D=3D 0) {
->>  			info->reg_type |=3D MEM_PERCPU;
->> -	}
->> +		} else {
->> +			/*
->> +			 * If we fail to match on the tag value just ignore it.
->> +			 * Tracing programs have the same BTF as the function
->> +			 * being traced, possibly including type tags BPF is not
->> +			 * aware of. We cannot possibly account for them so ignore
->> +			 * them.
->> +			 */
->> +			goto skip_modifier;
->> +		}
->> =20
->> -	/* skip modifiers */
->> -	while (btf_type_is_modifier(t)) {
->> +		/* Only a single tag value supported. */
->> +		if (tag_value) {
->> +			bpf_log(log,
->> +				"func '%s' arg%d type %s has multiple type tags\n",
->> +				tname, arg, btf_type_str(t));
->> +			return false;
->> +		}
->> +
->> +		tag_value =3D new_tag;
->> +
->> +skip_modifier:
->>  		info->btf_id =3D t->type;
->>  		t =3D btf_type_by_id(btf, t->type);
->>  	}
->> +
->>  	if (!btf_type_is_struct(t)) {
->>  		bpf_log(log,
->>  			"func '%s' arg%d type %s is not a struct\n",
->
-> [...]
-
+-- 
+Sabrina
