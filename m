@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2FE2F8EB0;
-	Mon, 15 Jun 2026 11:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E63F212F89;
+	Mon, 15 Jun 2026 11:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781523836; cv=none; b=PqLbG6q7bjg/dFgmrPbIccIIF+X9vG9H5/V6GQkFA3vJQH19nMvgycZRrqme5naPJGggYIuMtAGRxgO9O/pgZ2DlP1ho+7RsYlVhYSJK7uE+bRXeSafGekYkhtgiiygOynVsm20f9P/vY6a10kR4+XO/53PuHl37XDwDY44GcSI=
+	t=1781524166; cv=none; b=Q1LkYtJiYBJTU2DrC5GMBHWbAgQ1htkk79sAeaOiyxKCyrE0Af7CmnkIEzhpoiwVjvfguq2wXJxEe0Qyi3s8xhiGMx+5kuAhDkx4fnD6gfgDONcP2JTHcmBD8mBj3OXjJAjzVxSfAkXhTPDoAdcx8wcn3RsQajILf3W0a+pbzH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781523836; c=relaxed/simple;
-	bh=RCiIXvizblKQpQa/TTrmhxPru5a0n9e1kAiCcPlZzWM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=np9vX1Kyzhr8d8CZvg43ixp2ZBJs/cq57coePzvYpX+ALuyl6XdiSlGHThnV0UkZWLWim6J/hAhHK0+ysd26Fodvd1ETLiax41cMLP7Mx808raN9MX2r0bDEOJFDJICAVvjvId51ttYMr2B1MzMEHx1dsf7OVRntfYH7Jl9uvnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuYLpI/W; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781524166; c=relaxed/simple;
+	bh=X+zxELVkhr6gRAtXq5j4YN3pvyGr6heMwx2jqv1eqBw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=csGWeYpBuR/uejICMAmNLeUm1bE59nERrT6TcfHvBVTKyKatnQ+WHedJL7l6clSSCeVVh1kGYO+vo9i+r7txIM8YqkghbLJUVeNKujzy5QIIMIdupJJH3NvKOV9O0XX75X86bIUu+7rYQ3XxeXXYrVsuQ1KRVVPSI5Su/DiYHgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEw+KAKo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuYLpI/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80E51F000E9;
-	Mon, 15 Jun 2026 11:43:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEw+KAKo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D491F000E9;
+	Mon, 15 Jun 2026 11:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781523835;
-	bh=DyvOEHKVCEkg7/agKguOd/UADGZvo/0DOwYS+FJxvWA=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=fuYLpI/WXj53VFQJ9EzBpY0RaK6so1ueSSvXPbByr1lDhJGL+yNCu22OC49iaWqGH
-	 VDudECuLAi+mQoTMfzLDDxdYZdLH0RAUjnulVFr8Y2kHE/g5IVoApAMZdPqQHxXiSm
-	 qdlTWdFtKGn+2FEFia/jh+N2Eo6i/vj+9I10WE/IFnJgk23vsmAVWWkIBH9Ah5TRoG
-	 pKjxRsJD6jtPjVadSvwo3ZLUq9IkIRdICH1luUOHHUuQe76ks/XGNN5c/O8IY+V5xa
-	 TURqXwiv/vq5VXXDaROxVG8GGjP+h+7rRuvVXCUsFuxrU2gic1QEcxmwAShjw3G7qY
-	 squlwVnqH8qtQ==
-Message-ID: <9c120401-0e1e-41d8-b662-10339e302c91@kernel.org>
-Date: Mon, 15 Jun 2026 20:43:44 +0900
+	s=k20260515; t=1781524165;
+	bh=NqRcBEf3cpBlAxRxD81om6Hb6nO5tAf5Wi1yiOZJ8GE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=AEw+KAKoyMIt5WUA0I+U+zx52uQMZaoXINZiiPEWIquiun/uiYDSxVYTwE8oULF/u
+	 RhaJMoo6G0XQIXH++yQU6ZUaytHDOXbs07S4afKqRIABqnm7jAoGEVN+OeumGXE5Fs
+	 sh59nAMWLtM0dev1x0cbgC9awXS1Uz4xmDd5APFVu1yW5BjCbPPTsALxPGsZGawoTj
+	 rfvZsbbclcfK/jrR+gny+hNhEigtUTXuasQPhBYwUk7AS1KPBnqBTLvGiDhTrX0MCE
+	 ug5zZCRvRm/U4h/2MmIGoJwbNAQCYe3CI2kEzMZQwWv1shxYJzRLSk1x5jhCLEmNwV
+	 AcLD45iSyVhJQ==
+Message-ID: <f6e87467-2fa1-4edc-a739-9899be36196c@kernel.org>
+Date: Mon, 15 Jun 2026 13:49:18 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,300 +35,101 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 0/9] mm/slab: introduce kfree_rcu_nolock() and
- improve slub_kunit coverage
-From: Harry Yoo <harry@kernel.org>
-To: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+Subject: Re: [PATCH 1/8] mm: Add ptep_try_set() for lockless empty-slot
+ installs
+To: Tejun Heo <tj@kernel.org>, Will Deacon <will@kernel.org>
+Cc: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260522172219.1423324-1-tj@kernel.org>
+ <20260522172219.1423324-2-tj@kernel.org> <ai50IpfcvBiTZ7Ss@willie-the-truck>
+ <ai8PO0NThJeuQYzy@slm.duckdns.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------10ViNcef5i8ibbRYt2VHD6RX"
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------10ViNcef5i8ibbRYt2VHD6RX
-Content-Type: multipart/mixed; boundary="------------J2SxSCJedZHomL0Ld69od8Yj";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <9c120401-0e1e-41d8-b662-10339e302c91@kernel.org>
-Subject: Re: [PATCH for-next v3 0/9] mm/slab: introduce kfree_rcu_nolock() and
- improve slub_kunit coverage
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
-
---------------J2SxSCJedZHomL0Ld69od8Yj
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <ai8PO0NThJeuQYzy@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Now I'm investigating and fixing pre-existing two kmalloc_nolock() bugs
-and (hopefully) planning to post the fixes later this week.
+On 6/14/26 22:29, Tejun Heo wrote:
+> Hello,
+> 
+> On Sun, Jun 14, 2026 at 10:28:02AM +0100, Will Deacon wrote:
+>>> +/*
+>>> + * Note: strictly-zero compare is narrower than pte_none(), but the gap is
+>>> + * harmless: a fresh kernel PTE has no software bits set.
+>>> + */
+>>
+>> This comment really confused me :/
+>>
+>> What is a "fresh" kernel PTE and why do you specifically call out "software
+>> bits" if the CAS requires all 64 bits to be 0? Why is that narrower than
+>> pte_none() given that pte_none() for arm64 is:
+>>
+>> #define pte_none(pte)           (!pte_val(pte))
+> 
+> Yeah, that's complete non-sense for arm. The comment is about x86's
+> pte_none() excluding DIRTY and ACCESSED due to an erratum when testing none
+> and how that doesn't matter here. This shouldn't have been copied to arm.
+> I'll send a patch to remove that.
 
-I will later rebase the this series onto Vlastimil's slab_alloc_flags v3
-and the kmalloc_nolock() fixes, and address human and sashiko's
-comments.
+Is BPF maybe picking up patches from other subsystems up too early without
+waiting for acks?
 
-But this should be enough for review.
-
-Thanks!
-
-On 6/15/26 8:05 PM, Harry Yoo (Oracle) wrote:
-> Not the best time to post a series, but didn't want to delay posting
-> the series for too long. no pressures ;)  This is aimed to be queued
-> for review and testing after the merge window closes.
->=20
-> This series is based on next-20260612, and is also available on
-> git.kernel.org [3].
->=20
-> To RCU folks: It would be great if you could kindly take a quick look a=
-t
-> patch 4 and either ack or nack the patch ;)
->=20
-> To BPF folks: Ulad asked to share workloads to measure performance
-> of kfree_rcu_nolock(). Unfortunately, I focused more on correctness
-> and have not spent much effort on that. It would be nice if BPF folks
-> could help evaluate it on their relevant workloads.
->=20
-> To PREEMPT_RT folks: The most relevant part is allowing
-> kfree_rcu_sheaf() on PREEMPT_RT (patch 6). It carefully avoids sleeping=
-
-> by acquiring the locks via local_trylock() or spin_trylock_irqsave()
-> to avoid sleeping within a raw spinlock. When trylock or unlock is
-> unsafe, kmalloc_nolock() always fails.
->=20
-> Changes since RFC v2
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> Reduced complexity and intrusiveness (Uladzislau Rezki)
-> -------------------------------------------------------
->=20
-> While discussing concerns about the complexity of adding allow_spin
-> handling with Ulad (Thanks!), I realized that adding complexity to the
-> kvfree_rcu batching is not strictly necessary: only slab objects need t=
-o
-> be batched, they are already batched by rcu sheaves, and slab already
-> supports unknown context. So it is enough to implement only a minimal
-> fallback for the sheaves path.
->=20
-> I tried to avoid making intrusive changes to the existing kvfree_rcu
-> path as much as possible. struct rcu_ptr is renamed to kfree_rcu_head
-> following Vlastimil's suggestion, and it is used only in the
-> kfree_rcu_nolock() path for now.
->=20
-> As a result, the complexity is significantly reduced and the series
-> became much less intrusive. This is also reflected well in the diffstat=
-
-> below.
->=20
-> RFC v2 diffstat:
->   8 files changed, 514 insertions(+), 163 deletions(-)
->=20
-> v3 diffstat:
->   6 files changed, 370 insertions(+), 105 deletions(-)
->=20
-> v3 diffstat (slub_kunit improvements - patch 1, 2, 9 excluded):
->   5 files changed, 199 insertions(+), 66 deletions(-)
->=20
-> kfree_rcu_sheaf() PREEMPT_RT support (Vlastimil Babka)
-> ------------------------------------------------------
->=20
-> As suggested by Vlastimil (Thanks!), kfree_rcu_sheaf() can now be used
-> on PREEMPT_RT as well, by always assuming allow_spin is false on
-> PREEMPT_RT.
->=20
-> slub_kunit enhancements
-> -----------------------
->=20
-> - Currently the test is skipped when there is no hardware PMU. This can=
-
->   happen on machines without a PMU, or in virtualized environments
->   (e.g., automated testing or virtme). Implement a fallback based on SW=
-
->   perf events so that the test can still run in such environments, even=
-
->   though the coverage is slightly smaller.
->=20
-> - While testing on PREEMPT_RT, I found that kmalloc_nolock() fails ever=
-y
->   time, so the fallback path is not properly tested. This is a limitati=
-on
->   of perf events: the handler is called in NMI (HW perf events) or
->   interrupt context (SW perf events), where kmalloc_nolock() cannot
->   succeed.
->=20
->   slub_kunit now registers a kprobe pre-handler at the points in the sl=
-ab
->   allocator where lockdep_assert_held() is invoked. The pre-handler cal=
-ls
->   kmalloc_nolock() and friends, to improve coverage on PREEMPT_RT inste=
-ad
->   of relying on perf events.
->=20
-> One thing that needs to be further explored
-> -------------------------------------------
->=20
-> The global deferred_free_by_rcu (introduced by patch 8) list for the
-> fallback should probably be per-CPU [5].
->=20
-> Actual Cover Letter
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> This series improves kmalloc_nolock() and kfree_nolock() coverage
-> in slub_kunit (patch 1 and 2) and introduces kfree_rcu_nolock() for
-> an unknown context as suggested by Alexei Starovoitov.
->=20
-> Unknown context means the caller does not know whether spinning on a lo=
-ck
-> is safe (e.g., a BPF program attached to an arbitrary kernel function o=
-r
-> in NMI context).
->=20
-> The slab allocator already supports unknown context via kmalloc_nolock(=
-)
-> and kfree_nolock(), but te slab allocator does not support freeing
-> objects by RCU in unknown context.
->=20
-> It is not ideal to have completely separate batching for unknown contex=
-t
-> because the worst scenario where spinning on a lock would lead to
-> deadlock is very rare, and in most cases, it is safe to use the
-> existing mechanism (kfree_rcu_sheaf()).
->=20
-> Since most part of the slab allocator already supports unknown context
-> and sheaves support batching kvfree_rcu() calls for slab objects,
-> implement kfree_rcu_nolock() with minimal changes by teaching
-> kfree_rcu_sheaf() how to support unknown context and making
-> it a little bit harder to allocate an empty sheaf, instead of making
-> intrusive changes to the existing kvfree_rcu batching logic.
->=20
-> kfree_rcu_nolock() tries to free the object to the rcu sheaf if
-> trylock succeeds. Once the rcu sheaf becomes full, it is submitted to
-> RCU via call_rcu() if spinning is allowed or IRQs are enabled (to avoid=
-
-> calling call_rcu() in the middle of call_rcu()). Otherwise, call_rcu()
-> is deferred via irq work.
->=20
-> In unknown context, when there is no sheaf available, kfree_rcu_sheaf()=
-
-> falls back to defer_kfree_rcu(), which inserts the object to a global
-> lockless list [5] and those objects are freed after synchronize_rcu() i=
-n
-> a workqueue.
->=20
-> Unlike kfree_rcu(), only the 2-argument variant is supported.
-> This is because the last resort of the 1-arg variant is
-> synchronize_rcu(), which cannot be used in an unknown context.
->=20
-> As suggested by Alexei Starovoitov, kfree_rcu_nolock() can be used with=
-
-> struct kfree_rcu_head (8 bytes), which is smaller than struct rcu_head
-> (16 bytes).
->=20
-> For more background and future plans, please see [4].
->=20
-> [1] RFC v1: https://lore.kernel.org/linux-mm/20260206093410.160622-1-ha=
-rry.yoo@oracle.com
->=20
-> [2] RFC v2: https://lore.kernel.org/linux-mm/20260416091022.36823-1-har=
-ry@kernel.org
->=20
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/harry/linux.git/log=
-/?h=3Dkfree_rcu_nolock-v3r3
->=20
-> [4] kmalloc_nolock() follow-ups, including kfree_rcu_nolock(),
->     https://lore.kernel.org/linux-mm/esepccfhqg7m6jo76ns2znj2cnuaepx2xv=
-w5zaygtwohq4psma@563ypprp6rr3
->=20
-> [5] However, we should probably make the list percpu because,
->     unlike RFC v2, it can be triggered more frequently under memory
->     pressure.
->=20
->     https://lore.kernel.org/linux-mm/805c33d7-3a7b-470c-bd9d-065717a3e3=
-e2@paulmck-laptop
->=20
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
-> ---
-> Harry Yoo (Oracle) (9):
->       slub_kunit: fall back to SW perf events when HW PMU is not availa=
-ble
->       mm/slab, slub_kunit: register kprobe to trigger _nolock APIs
->       mm/slab: handle the !allow_spin case in kfree_rcu_sheaf()
->       mm/slab: use call_rcu() in unknown context if irqs are enabled
->       mm/slab: extend deferred free mechanism to handle rcu sheaves
->       mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
->       mm/slab: introduce kfree_rcu_nolock()
->       mm/slab: introduce struct kfree_rcu_head and use in kfree_rcu_nol=
-ock()
->       slub_kunit: extend the test for kfree_rcu_nolock()
->=20
->  include/linux/rcupdate.h |  12 +++
->  include/linux/types.h    |   4 +
->  lib/tests/slub_kunit.c   | 174 ++++++++++++++++++++++++++++------
->  mm/slab.h                |   5 +-
->  mm/slab_common.c         |  38 ++++++--
->  mm/slub.c                | 242 ++++++++++++++++++++++++++++++++++-----=
---------
->  6 files changed, 370 insertions(+), 105 deletions(-)
-> ---
-> base-commit: c425609d6ac4012c8bbf01ec2e10e801b1923a7b
-> change-id: 20260615-kfree_rcu_nolock-e5502555992f
->=20
-> Best regards,
-
---=20
+-- 
 Cheers,
-Harry / Hyeonggon
 
---------------J2SxSCJedZHomL0Ld69od8Yj--
-
---------------10ViNcef5i8ibbRYt2VHD6RX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCai/lcAAKCRCGXBN6rc5S
-1mXxAP4+e/OYEoIRSjG5ySSQjKnJWweua3EF2N5shwcUUTRkvQD/U83GisrSL79q
-EVrJpmNKT3n6zrZKzJ+O/XCk5dMxrA4=
-=a5NM
------END PGP SIGNATURE-----
-
---------------10ViNcef5i8ibbRYt2VHD6RX--
+David
