@@ -1,96 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9AB3C5DBF
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 15:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E073FF893
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 15:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781538120; cv=none; b=oD3wscaH2ju9H+ULu4HbQqJgZEOj6wyi5FnXZw51u6EMq5/ywh6hf8LsS/evPQEJXmJ+oPbJZv5lxnOkcJ/hX9ez28+6+xHPKfR3B+/GUGSBdvSRlijbgTu8POiVD9bEMzblTYjo7JjPdoiUx7oQv15SUMhYtY38VdAdbPY0lBU=
+	t=1781538332; cv=none; b=J7hKk1zYmV9h2h/PpuKIDrMNDgyVnDa1hhpIAWvTxlDAi+rM+X1vwR1Nkocn/8cg279N84xFc+vNLkMqXcxT3+7rwOEsa3SdIAQTEEciVZ9cY3pHjKTseZQIs/eaa+vBRRLuB0meAqcAS+ZejqmG8Q4VGbOusGPazhTkM585fE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781538120; c=relaxed/simple;
-	bh=WcdvzlNci0zoZkhputJlp2C2mCcnhAlQEDeJGXB9zbw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RaVoz1DxZ+UaYINXS/n2U8d/ucl5AaAxWyxB9CHbgF6WOOkdH+97mlXjgOC45QPsWgpksqHv/4CwW1xb0ZTEWzMsKcQ5gwhdzeislgIO68L/f8uNpe09X8qgJz8lj7u8STls53seiPl5EYCa042Tomz6hH18Xtc65UZuDC/+Lvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvAch1ic; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781538332; c=relaxed/simple;
+	bh=QqoAvbiyQQgUhV16qDYAHCAa0swk4FHa96i9AC8gypc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=fKaKh8OKnW4MQ33Tn/UIeR9G1sL87Mn7mlNe3yWLLvqgU+Hb8OiXRvXDX9Tc2mHtld19IO3KNT2wAUkcvl6SGmjihDBUVoeA8JcgJOtkJXWoAOTw6iSM3tzLY+0JKx97G6AfEB1YJmFqFP6se20mk/skr5PYp7b3HbLE+MUVY6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pcz+cu6H; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvAch1ic"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF531F000E9;
-	Mon, 15 Jun 2026 15:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781538118;
-	bh=PyukyWKRXGDLQvHldXDxUXpyc+a5pfVhp8Jwju6Io6A=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mvAch1icKAd4SHx3zgN1Vsv8LAjnFZtMgLRtPdLYON+pWVTrhL4QXawxFqMfUqqgG
-	 tYB2zmeXNJFAOXAL/8afxSruSWFmP0nZXBv1p474NXrSR2w1vRRew3vstkvAVY/yYw
-	 k9mM+N19Cu+6Q+TS4mh0+1fWK0b+TO1fOAW6780gB0wT27X25ETd6Ye4qHcwQDcyFr
-	 aEIf4neM3HH99ojcKxBTUKwXVinLUtYImIcYEPk9AKhUM0dT1QYv+B8WU92Y7j9VOg
-	 SC8Dyf/HgNfpmVadTiZi9QRfGDWL06tLMAAZ0POEwkZj+xhbR3vZ8T/qM5BCVD9UoB
-	 /GXphx6Tn3Zsw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 06/12] libbpf: Add support for global percpu
- data
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260615152646.27639-7-leon.hwang@linux.dev>
-References: <20260615152646.27639-7-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 15:41:57 +0000
-Message-Id: <20260615154158.5CF531F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pcz+cu6H"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-43d26679a6aso2034672fac.2
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 08:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781538330; x=1782143130; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QqoAvbiyQQgUhV16qDYAHCAa0swk4FHa96i9AC8gypc=;
+        b=pcz+cu6Hi6dIbLwYDDhcL23Gj5VRH8IiUq54cePSY9wv1fXAYSfaxPPPwX6sKTahB5
+         DyAfoEYXjHf2b1nX3wi2u14S860c6+tGeo8zAgoeLzsm43n7PCmDrOCMPp/hdsFBUVlb
+         tUBMwMgtMJhxvicVdhXisZk+pgNU5d+hQlz7u+yJQl3idV1auneXw1LcLI2rETa7yKvV
+         7OhfEOYEne4/Ua5PNZlooJVxRirI3fVh238ayywj6kyYa9bjKp6NBFV0FDgA3qYtLgI4
+         7NBnNOVXnmEyTtAOdFPm6u8uHKUESDymd2e/lAsTogfAF0Hh+OtHe3RmE+gJlFZIW1/q
+         hmjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781538330; x=1782143130;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QqoAvbiyQQgUhV16qDYAHCAa0swk4FHa96i9AC8gypc=;
+        b=KFd//i7NNqlJyqNoK8qEVdyaMKnsnWYvNnhr/dpscaUpluDsHWlNfWXanMMehS39y3
+         IwZNs8YpBK1S3ov9f9yAmFPQjH5/1C9aLhcM/iGx8hxvnODseM70L7BDWzX6Y9jDXumY
+         7RltE1G02jcUh5SJjA1hsL9YYZZtmGdkvL2YiWw4Km2gWl5JlJ5iaxQg6uTBWUnADg9g
+         k1drRAY30I3UqT22nWD1/9A15sfuYBYsSjO/Hw/sqwbKsE6lGgqV4bceTS05gCA4+w1/
+         EqDF20rHhwRijYrOvZMAPCBmx06SIqGlf202SwrajIf0pqH6BVFvRPCQpyvzs476Ajee
+         wvdA==
+X-Forwarded-Encrypted: i=1; AFNElJ9qRjwGvyEObFdm59hhdtRK85BtlgVYpiPM4a/UakSWF6nq6o8r2wYL/CzrQONpV3uvQ2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVEGwifwiKTHYYRaYJzBe4sGq4RzkbAeRWykU+N4DzSBBbwa6I
+	w3Jlnv4GqlIxHSEmZBo5ctrKEvrrqZ53oPoqSZOyjAyjnv33jWMKoRxo
+X-Gm-Gg: Acq92OFzNa8hZerCwOTyEhsRGBGdfxC0INj/lY26IfWmxqdJhpySUOBsGYjq88WhQHM
+	fhhhtKjFPxI3zgT/h7NeekVGq0tgWXAsKiWZfvUCurM2ITlBLRoWXaO+TSsgz4BtD6EvnKgOKm1
+	ejojCFn5kBgJbQSHopaJA3bukniRAuc/wfYLHtHyBNiQ1+U91zufQkwmZSdhdC7DRjuicK3Igyx
+	lt0+8MPKV/LkHHaEJqM3ln7K8SAU9rujPTrtNCt/6zQRlB316BgOEbnM8U71kfMFEUkFQSTURAO
+	VmuXhtjb9fQaQyZtguVx1FyU7/x8VSp3/Wf9jdXf1LjBUaQIQ1quVWocPM6UHDCsoIj2Jhwcgfr
+	/T5MrcKd38smrQXDoOaBZM4xWrvkMhiLpKzVIJJAmAjEsXwyFf3NKshLd1Eh7SAz73OPDZYBeaT
+	Uo9Vq4M0eRRdHL/HrD6Dnmv4VBbSWLVJdnpXqxB/LDVyqzajuEbiXC+L20tVFc76CvIXPw9XKE1
+	hPiMftTxJAfZl+QhKAYoobiLbR2
+X-Received: by 2002:a05:6820:f00e:b0:69e:5175:de1 with SMTP id 006d021491bc7-69edc76c580mr9255765eaf.41.1781538329976;
+        Mon, 15 Jun 2026 08:45:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:54::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-44308afc5a5sm137996fac.5.2026.06.15.08.45.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jun 2026 08:45:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Jun 2026 08:45:28 -0700
+Message-Id: <DJ9QMPLAXOGG.2PDC3A2MUENPC@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/4] selftests/bpf: Add some tests for
+ LoongArch
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>
+Cc: <loongarch@lists.linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260615100506.19558-1-yangtiezhu@loongson.cn>
+In-Reply-To: <20260615100506.19558-1-yangtiezhu@loongson.cn>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Missing endianness conversion for `flags` in `bpf_gen__map_update_=
-elem` breaks cross-compiled BPF skeleton loaders.
---
+On Mon Jun 15, 2026 at 3:05 AM PDT, Tiezhu Yang wrote:
+> This series is based on the latest master branch of bpf-next tree.
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
+>
+> Dependency Note:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This series strictly depends on the following LoongArch core series,
+> which moves thread_info into task_struct:
+>
+> "Move thread_info into task_struct for LoongArch"
+> https://lore.kernel.org/loongarch/20260612011616.27771-1-yangtiezhu@loong=
+son.cn/
 
-commit fc64dc7d301e1cf5be2bffba25f597b23162b717
-Author: Leon Hwang <leon.hwang@linux.dev>
+Pls repost when this patch appears in bpf-next.
 
-libbpf: Add support for global percpu data
-
-This commit adds support for global percpu data in libbpf by introducing a
-new ".percpu" section. It updates the gen_loader to populate the percpu_arr=
-ay
-map using the BPF_F_ALL_CPUS flag.
-
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index d79695f01c87f..7ceb096f18ecb 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-
-[ ... ]
-
-> @@ -1198,6 +1198,7 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, =
-int map_idx, void *pvalue,
->  	int zero =3D 0;
-> =20
->  	memset(&attr, 0, attr_size);
-> +	attr.flags =3D flags;
-
-[Severity: High]
-Does this assignment need to use tgt_endian() to support cross-compilation?
-
-When libbpf generates a skeleton loader for a target architecture with a
-different endianness than the host, fields populated into the union bpf_attr
-blob usually need to be converted to the target byte order.
-
-For global percpu data maps, this flag will be BPF_F_ALL_CPUS (0x10). If a
-little-endian host generates a skeleton for a big-endian target, a direct
-assignment of the 64-bit value could result in it being interpreted as
-0x1000000000000000 by the target kernel, which would cause the sys_bpf
-call to fail with -EINVAL.
-
-> =20
->  	value =3D add_data(gen, pvalue, value_size);
->  	key =3D add_data(gen, &zero, sizeof(zero));
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615152646.2763=
-9-1-leon.hwang@linux.dev?part=3D6
+pw-bot: cr
