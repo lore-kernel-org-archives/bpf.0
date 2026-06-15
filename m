@@ -1,137 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C9B3EFD15
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 12:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B1F378D63;
+	Mon, 15 Jun 2026 12:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781528014; cv=none; b=Jn+Q4DGnHcG7niz64unmsjQvrYlSFLk0NG+H4P7Sq6xzELTlzb5c1BPOkdbmy2EbgK72qN/KShqhKBOA7ujdPEQJsooDgP+dhOjImUp+wy9hzDCegQJcwzCRInr+0wFB5pOyw31Zz/+X+FpfzhwPpbHUZT5GjNFFm4LJ1QSKtDo=
+	t=1781528322; cv=none; b=CkcqfEl5/wZN/MlVNULLUIIlWZD60TvPwTysdbr+fwe2z2A4K3AWdLppCGr6FlfEN1KHQYwZeJlI9SLYW8FEPxkb8z7y+zDBmHVTGuUUGHZsrTyfdNajJxJyawCyq2mysxEo8P1UDIsWRNZf7DDONBjg/3LGfPL6yANPY6FJvfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781528014; c=relaxed/simple;
-	bh=A/4tMZh2v40NKp5aNyV+Uh+HYZksppLIFMK4STyxD+c=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=s7d7Ah+6QlwtcScxDf3pzYQ3Pp2pLIVEMu/JPAa2cfIhcm819iJb+dpA35hyA1uCP9G9a2s3mQdBf43uvXpkJpkgMQCx4E4qCUlOQSTzxstvQPdHlYuA6n87gj0KorJ8PNWv+E5SkUU4Zpm50lpvanna99ztYAh++fkZXDe0l0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHOgxngX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781528322; c=relaxed/simple;
+	bh=IM3dJKkwKyjufiuTnVdZPgRCLrPDyuQRh+tKDGzVpVw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=tLp+G0EVTtnyUQr8yTT/9pvcsMz4scV8eAt8eDli8sKRUceiVAtVm1iqco+h16VfRu/NVdFFGokXsRnqgOI3QQbmCHBsSS9e/l/UjIDEjea/eQg2IfRg3o5oiLGSc9FPGKSruHE0WASLdxus+uzA3gw5qfCY1MD2xi9D/9IOmno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqLM5APk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHOgxngX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DDE1F000E9;
-	Mon, 15 Jun 2026 12:53:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqLM5APk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80ADD1F000E9;
+	Mon, 15 Jun 2026 12:58:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781528013;
-	bh=Wkd57XFfKNNZGt0LoRRrTXDl93dhx7svf0k9MbOYOwM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LHOgxngXxzXIKhLyATmQJn/Te3enfSe8VEJGIuhUvT0C1wewr8eiFnPmy68XYtkHJ
-	 +UwPv2DI3z0XRimaKF3rXtdpVx2yGRS1oA3xsohrncPgnZSLKE5TgutKdDs53XNlQw
-	 T0n3eN4bdchjI8lHSmQw3+ArO9JO3oINKpuH229FwRAPhqEpFwkImHZ+HIS6N4iSl/
-	 wJiwt29PleI+6tLubtYKvODkdsK6KmrWPDJJ1sA3j0UCWvLXagrkaDMt3yF1ZKxG8H
-	 MarJzhNYVD4LOHCbqi9jSDUx5BAKocZhffDiGxCpF8bU9KeQHMEFm0d7Xvijv/apTe
-	 NLVDflEqZdxZQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix packet pointer invalidation for skb
- dynptr writes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <72711041414b27e996c6a25f6fd72903acee589f.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
-References: <72711041414b27e996c6a25f6fd72903acee589f.1781525896.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 12:53:32 +0000
-Message-Id: <20260615125333.42DDE1F000E9@smtp.kernel.org>
+	s=k20260515; t=1781528320;
+	bh=8lR/ezmey1Vj+wiH0lEfov/xGGidpFJa9T2B63E5xHE=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=dqLM5APkTWkXETEWh5qs66ltoy10skp/3eIwTWShVJwXY/8Txy559XYvAmANhzQSl
+	 4jf9xop6SWO/KuidmRuXwI3u5qcKePOsOOV5TCDOuPljal1o3nUCPqt9+oST8/Qqkf
+	 VQzg5drzlod/pGxIOVBwWDhg78jSSf5t8KZZfFkVVryAX9JHitzAMtMO32y2JzY+KL
+	 WTsWlE6hv+oZRF3k0NjQtXJPPU0tX6jw34CdikAVDrKXvRnJdvYY1c/Yp4RvF5XFAv
+	 5yjTxmOrDn47jAtmzh4I15CWJHSaqD0+i+txzQFvgMVlhd1DsvrrpF0S7Dj9YTZPIE
+	 aTvwIEnXAtwow==
+Message-ID: <f731686b-4d22-4d22-b5b4-2409a165122b@kernel.org>
+Date: Mon, 15 Jun 2026 21:58:28 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
+ when HW PMU is not available
+From: Harry Yoo <harry@kernel.org>
+To: Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------CvbAk04er1zxFKbGiuTC0MZw"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Static CFG analysis incorrectly assumes dynptr writers do not chan=
-ge packet data, leading to Use-After-Free via global subprograms and frepla=
-ce.
---
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------CvbAk04er1zxFKbGiuTC0MZw
+Content-Type: multipart/mixed; boundary="------------NG9kPQSC4jZrLFe1DxL7i2Ih";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <f731686b-4d22-4d22-b5b4-2409a165122b@kernel.org>
+Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
+ when HW PMU is not available
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
 
-commit 1c2eddecfcf22d7859e70204534b70a21c8883bc
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+--------------NG9kPQSC4jZrLFe1DxL7i2Ih
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-bpf: Fix packet pointer invalidation for skb dynptr writes
 
-This patch modifies the verifier to treat skb dynptr writer kfuncs as
-packet-changing operations, ensuring that direct packet pointers are
-invalidated after calls like bpf_dynptr_copy or bpf_dynptr_memset.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf281c..5ea51bd284f84 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+On 6/15/26 8:05 PM, Harry Yoo (Oracle) wrote:
+> slub_kunit uses hardware perf events to invoke _nolock() APIs from NMI
+> context. However, creating a HW perf event fails when there is no
+> hardware PMU, or when running in a virtualized environment without a
+> virtual PMU configured.
+>=20
+> Since tests are often performed in virtualized environments, fall back
+> to a SW perf event so that the test can still run, even if it cannot
+> cover IRQ-disabled sections.
+>=20
+> For the sheaves path, IRQs are not disabled until the barn is accessed.=
 
-[ ... ]
+> So some coverage is still expected.
+>=20
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> ---
+>  lib/tests/slub_kunit.c | 70 +++++++++++++++++++++++++++++++++++++++---=
+--------
+>  1 file changed, 55 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
+> index fa6d31dbca16..11255fc8eb78 100644
+> --- a/lib/tests/slub_kunit.c
+> +++ b/lib/tests/slub_kunit.c
+> @@ -303,6 +303,7 @@ struct test_nolock_context {
+>  	int alloc_ok;
+>  	int alloc_fail;
+>  	struct perf_event *event;
+> +	bool is_perf_type_hw;
+>  };
 
-> @@ -11229,7 +11260,33 @@ static bool is_kfunc_bpf_preempt_enable(struct b=
-pf_kfunc_call_arg_meta *meta)
-> =20
->  bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
->  {
-> -	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data];
-> +	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data] ||
-> +	       meta->pkt_dynptr_write;
-> +}
-
-[Severity: High]
-Does this modification cause issues during the control flow graph analysis
-phase?
-
-Looking at kernel/bpf/cfg.c, check_cfg() calls bpf_is_kfunc_pkt_changing()
-using a statically fetched meta where register states are not yet available:
-
-kernel/bpf/cfg.c:check_cfg() {
-    ...
-    if (ret =3D=3D 0 && bpf_is_kfunc_pkt_changing(&meta))
-        mark_subprog_changes_pkt_data(env, t);
-    ...
-}
-
-Since pkt_dynptr_write is only evaluated later during check_kfunc_args()
-based on register states, will it always be false during CFG analysis?
-
-If so, it seems this might leave the changes_pkt_data flag incorrectly set
-to false for subprograms mutating packets via dynptr writers.
-
-Could this lead to use-after-free scenarios with global subprograms or
-freplace? For example, if a global subprogram's dynptr argument is
-defaulted to BPF_DYNPTR_TYPE_LOCAL in btf_prepare_func_args():
-
-kernel/bpf/verifier.c:btf_prepare_func_args() {
-    ...
-    } else if (arg->arg_type =3D=3D ARG_PTR_TO_DYNPTR) {
-        __mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_LOCAL, true, ++env->id_gen, =
-0);
-    ...
-}
-
-Will the dynptr write evade detection entirely, leaving the caller with
-stale, uninvalidated packet pointers?
-
-> +
-> +static bool dynptr_type_pkt_data(enum bpf_dynptr_type type)
-> +{
-> +	return type =3D=3D BPF_DYNPTR_TYPE_SKB ||
-> +	       type =3D=3D BPF_DYNPTR_TYPE_SKB_META;
-> +}
-
-[ ... ]
-
-> @@ -12214,6 +12271,9 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_kfunc_call_
->  						  &meta->ref_obj, &meta->dynptr);
->  			if (ret < 0)
->  				return ret;
-> +			if (is_kfunc_pkt_dynptr_writer(meta, i) &&
-> +			    dynptr_type_pkt_data(meta->dynptr.type))
-> +				meta->pkt_dynptr_write =3D true;
->  			break;
->  		}
+nit: should have checked struct perf_event.type instead of introducing
+a new field. Will fix.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781525896.gi=
-t.chenyy23@mails.tsinghua.edu.cn?part=3D1
+Cheers,
+Harry / Hyeonggon
+
+
+--------------NG9kPQSC4jZrLFe1DxL7i2Ih--
+
+--------------CvbAk04er1zxFKbGiuTC0MZw
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCai/29AAKCRCGXBN6rc5S
+1iiwAQCO/i4dUtvI7De9GTEkWrLWtNQjNkDEq/w/FjLTcTPUzgEA9cf42RSUBsjk
+fmWcqz6vNOsWUTT4bQl5mQxgr4phsgM=
+=XeJc
+-----END PGP SIGNATURE-----
+
+--------------CvbAk04er1zxFKbGiuTC0MZw--
