@@ -1,29 +1,29 @@
 Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A805D401A36;
-	Mon, 15 Jun 2026 15:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F893FF887;
+	Mon, 15 Jun 2026 15:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781536579; cv=none; b=bf+R4Y6Y2W8w6zFZcnBd1hsmluU6clr6IIi/no17B+5HOP3e6u911A1DNw4jNLpSS0KOQ8KE8WxAMzu7MzUn2PcHokTbfWYON/HTWoT60FIvlBLBWSiSBTN/VgjR10ox3gLckCpikYuJHMTjOcFy4q0ZuDD6VqgU+CAjDpB14Eg=
+	t=1781536580; cv=none; b=HtbKV6le71oVB6EztImCqrdQOvSgNWhHvAY25WFVIRq7ca/E1Lyds8vQRE0qsyp3tku1rFJuEtBV+5wh1Y/yCA2Q32XdtvZecci3A02uKOuEU7qe9jPgc9ZGGvewdl43FgH72unmfqIYrQmsEkDqTnAucYlb8K+3SWkZcErJdqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781536579; c=relaxed/simple;
-	bh=QqqfXJ9HH4u5xDa0Pti3jWVJafeUhtriKpciO3BrL2U=;
+	s=arc-20240116; t=1781536580; c=relaxed/simple;
+	bh=qeudFOh/ejfAM2AAyECfXbVu52fFsHoWUuZCibU0URU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CMIRyAPs0nC2DBYpOkAQtbjyt0oTBWAOFTSd+/O7LdwS7e7918XzJgD5jr1lv/S2ykKWOdQ4czKqYRExebgBKRVW6hb2BLF+3+d+R6tNMrO7TGOoudWja5uon0INQLJZFfyOin+Ew5B7g5YhOCaERHdftkPZcyhszEZWWrilldQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=gKuFFndN; arc=none smtp.client-ip=209.97.182.222
+	 MIME-Version; b=PhFvnyJ97ANWNoT4GFqcKjGQ1J39wkmql35er3qTrF0AsUxtNk8nDdirE0CUWeFyqKJay/ISbpHtEblyav4loOCoi761QyVes3bM3Oc5ilG7q6j8TX1aIOVcPLBxUuLxlO5EkNbWq0ME9RJ7eXGvZdTjqFZzfXL4GjqPdc+79e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=BMV/6/dW; arc=none smtp.client-ip=209.97.182.222
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="gKuFFndN"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="BMV/6/dW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
 	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=PwuM/XsN5XcenQTNng8pXB6BgMbvxx/HeQ
-	/8im9muJA=; b=gKuFFndNRvGHRA4pWqgRtWiAfUpg9iYOQ7dBrzuQb8S/wSx/Nn
-	T7Wh4Z8Yjr71RESYgdS2vgK8jn1sX9GSdKW9rQpWhFB/V9TVBWRrM1UY3dAs3ZjP
-	l8kwaS9E1QvAJKd3pJHVaorXfiy2eHS/GYuusktk3/hy2kC7wHwUVkfUQ=
+	Content-Transfer-Encoding; bh=Yr88zWYn/8Iexu2f7Nm2od4ZmJgFE9HMS0
+	SLKBFUFwk=; b=BMV/6/dWUSvASFzV2oH5j4H4v3n2J/tj5JhJu/qi1o7R3po7Q4
+	Po9OktQRQI8KRebmsQOfQ4dsW7B+9qOO3QdQIf3coADigbyrzrjfGSBX6i43qOGf
+	CFvpMV4nZ9C1THmqCJF+r0MgabwV1M18j7pu00grmut+cbZmbvX4TqPiE=
 Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web5 (Coremail) with SMTP id zAQGZQDXj78mFzBqGxJyAg--.21012S4;
-	Mon, 15 Jun 2026 23:16:09 +0800 (CST)
+	by web5 (Coremail) with SMTP id zAQGZQDXj78mFzBqGxJyAg--.21012S3;
+	Mon, 15 Jun 2026 23:16:08 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
@@ -41,9 +41,9 @@ Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
-Date: Mon, 15 Jun 2026 15:15:49 +0000
-Message-Id: <5a2ca20101d9446d3a92815a8a3cc27b84db1754.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf v4 1/2] bpf: Fix packet pointer invalidation for skb dynptr writes
+Date: Mon, 15 Jun 2026 15:15:48 +0000
+Message-Id: <76830c72d48ea174272d4a2ee9d5cc0f3ef02c8d.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
 References: <cover.1781531784.git.chenyy23@mails.tsinghua.edu.cn> <cover.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
@@ -54,13 +54,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zAQGZQDXj78mFzBqGxJyAg--.21012S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFy3Xr1rXry3WF13GF4DJwb_yoWxJw4UpF
-	ykCry7XrW0yay7Wr17JrW3Za1Fgr4rWr13GrZ8ta4xXFWDJr95ZFn5Kw10qrn0y3sxWrWa
-	yayIqay5uF4kXrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:zAQGZQDXj78mFzBqGxJyAg--.21012S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxKw48Ww1xZw4UWw1UGry7GFg_yoWfArWfpF
+	s5Cr9F9r4kta1ftrnrJF47ZrW5tr4Iq3yxCFykKa4S9F48Wr98Zr1UKw18tas8tF1jyrW2
+	va10vrW5ZryUK3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
 	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
 	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
@@ -71,221 +71,234 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxtFy3Xr1rXry3WF13GF4DJwb_yoWxJw4UpF
 	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
 	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
 	4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
-	6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUUBHq7UUUUU==
+	6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRicTmPUUUUU==
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add verifier tests for stale direct packet pointers after skb dynptr
-writes through bpf_dynptr_write() and dynptr writer kfuncs.
+skb-backed dynptr writers can mutate packet data, but not all verifier
+paths invalidate checked direct packet pointers after those writes.
 
-Cover global subprogram cases for both caller-side packet pointer
-invalidation and local packet pointer invalidation inside the subprogram
-body. These cases exercise the static CFG summary path and the precise
-verifier path for unspecialized global dynptr arguments.
+bpf_dynptr_write() handles skb and skb-meta dynptrs in the normal helper
+path, but global subprogram dynptr arguments are verified as
+unspecialized local dynptr pointers. Treat CONST_PTR_TO_DYNPTR local
+arguments as possibly packet-backed for packet pointer invalidation.
 
-Also cover direct kfunc writes through bpf_dynptr_memset(),
-bpf_dynptr_copy() when the skb dynptr is the destination, and probe-read
-into an skb dynptr. Keep a source-only bpf_dynptr_copy() case as a
-positive control.
+Global subprogram summaries are computed during CFG analysis before
+register states exist. Add conservative static CFG predicates for
+bpf_dynptr_write() and skb dynptr writer kfuncs so caller-side packet
+pointers are invalidated after global calls that may write packet data.
 
+Keep the normal verifier invalidation precise: helpers and kfuncs still
+use the checked dynptr argument and only invalidate when the written
+dynptr is, or may be, skb-backed. Source-only dynptr arguments remain
+unchanged.
+
+Fixes: b5964b968ac6 ("bpf: Add skb dynptrs")
+Fixes: daec295a7094 ("bpf/helpers: Introduce bpf_dynptr_copy kfunc")
+Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
+Fixes: 5fc5d8fded57 ("bpf: Add bpf_dynptr_memset() kfunc")
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- .../testing/selftests/bpf/progs/dynptr_fail.c | 183 ++++++++++++++++++
- 1 file changed, 183 insertions(+)
+ include/linux/bpf_verifier.h |  3 ++
+ include/linux/filter.h       |  5 ++
+ kernel/bpf/cfg.c             |  4 +-
+ kernel/bpf/verifier.c        | 88 ++++++++++++++++++++++++++++++++++--
+ 4 files changed, 95 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index b62773ce5219b..f8bd0483b68d0 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1232,6 +1232,189 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
- 	return SK_PASS;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 185b2aa43a420..b550e5a702081 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1332,6 +1332,7 @@ struct bpf_kfunc_call_arg_meta {
+ 	u32 ref_obj_id;
+ 	u8 release_regno;
+ 	bool r0_rdonly;
++	bool pkt_dynptr_write;
+ 	u32 ret_btf_id;
+ 	u64 r0_size;
+ 	u32 subprogno;
+@@ -1389,6 +1390,8 @@ static inline bool bpf_is_kfunc_sleepable(struct bpf_kfunc_call_arg_meta *meta)
+ {
+ 	return meta->kfunc_flags & KF_SLEEPABLE;
+ }
++
++bool bpf_kfunc_may_change_pkt_data(struct bpf_kfunc_call_arg_meta *meta);
+ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta);
+ struct bpf_iarray *bpf_iarray_realloc(struct bpf_iarray *old, size_t n_elem);
+ int bpf_copy_insn_array_uniq(struct bpf_map *map, u32 start, u32 end, u32 *off);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 88a241aac36a2..48485ca84d395 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1172,6 +1172,11 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp
+ u64 arch_bpf_timed_may_goto(void);
+ u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *);
+ bool bpf_helper_changes_pkt_data(enum bpf_func_id func_id);
++static inline bool bpf_helper_may_change_pkt_data(enum bpf_func_id func_id)
++{
++	return bpf_helper_changes_pkt_data(func_id) ||
++	       func_id == BPF_FUNC_dynptr_write;
++}
+ 
+ static inline bool bpf_dump_raw_ok(const struct cred *cred)
+ {
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 26d37066465f3..54a2130f1e465 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -483,7 +483,7 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ 			 */
+ 			if (ret == 0 && fp->might_sleep)
+ 				mark_subprog_might_sleep(env, t);
+-			if (bpf_helper_changes_pkt_data(insn->imm))
++			if (bpf_helper_may_change_pkt_data(insn->imm))
+ 				mark_subprog_changes_pkt_data(env, t);
+ 			if (insn->imm == BPF_FUNC_tail_call) {
+ 				ret = visit_abnormal_return_insn(env, t);
+@@ -516,7 +516,7 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ 			 */
+ 			if (ret == 0 && bpf_is_kfunc_sleepable(&meta))
+ 				mark_subprog_might_sleep(env, t);
+-			if (ret == 0 && bpf_is_kfunc_pkt_changing(&meta))
++			if (ret == 0 && bpf_kfunc_may_change_pkt_data(&meta))
+ 				mark_subprog_changes_pkt_data(env, t);
+ 			if (ret == 0 && bpf_is_throw_kfunc(insn))
+ 				mark_subprog_might_throw(env, t);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7fb88e1cd7c4d..51468faa76a47 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9155,6 +9155,23 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
+ 	}));
  }
  
-+char dynptr_writer_data[8] = "test";
-+char dynptr_writer_dst[8];
-+
-+extern int bpf_dynptr_copy(struct bpf_dynptr *dst, __u64 dst_off,
-+			   struct bpf_dynptr *src, __u64 src_off,
-+			   __u64 size) __ksym __weak;
-+extern int bpf_dynptr_memset(struct bpf_dynptr *ptr, __u64 offset,
-+			     __u64 size, __u8 val) __ksym __weak;
-+extern int bpf_probe_read_kernel_dynptr(struct bpf_dynptr *dptr,
-+					__u64 off, __u64 size,
-+					const void *unsafe_ptr__ign) __ksym __weak;
-+
-+__noinline int global_dynptr_helper_write(struct bpf_dynptr *ptr)
++static bool dynptr_type_pkt_data(enum bpf_dynptr_type type)
 +{
-+	return bpf_dynptr_write(ptr, 0, dynptr_writer_data, 1, 0);
++	return type == BPF_DYNPTR_TYPE_SKB ||
++	       type == BPF_DYNPTR_TYPE_SKB_META;
 +}
 +
-+__noinline int global_dynptr_helper_write_and_read(struct __sk_buff *skb,
-+						   struct bpf_dynptr *ptr)
++static bool dynptr_may_be_pkt_data(const struct bpf_reg_state *reg,
++				   enum bpf_dynptr_type type)
 +{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
++	if (dynptr_type_pkt_data(type))
++		return true;
 +
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_write(ptr, 0, dynptr_writer_data, 1, 0);
-+
-+	/* this should fail */
-+	return *data;
++	/* Global subprog dynptr args are verified as unspecialized LOCAL. */
++	return reg->type == CONST_PTR_TO_DYNPTR &&
++	       type == BPF_DYNPTR_TYPE_LOCAL;
 +}
 +
-+__noinline int global_dynptr_kfunc_memset(struct bpf_dynptr *ptr)
+ enum {
+ 	AT_PKT_END = -1,
+ 	BEYOND_PKT_END = -2,
+@@ -10520,8 +10537,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
+ 			return -EFAULT;
+ 
+-		if (dynptr_type == BPF_DYNPTR_TYPE_SKB ||
+-		    dynptr_type == BPF_DYNPTR_TYPE_SKB_META)
++		if (dynptr_may_be_pkt_data(reg, dynptr_type))
+ 			/* this will trigger clear_all_pkt_pointers(), which will
+ 			 * invalidate all dynptr slices associated with the skb
+ 			 */
+@@ -11157,6 +11173,16 @@ enum special_kfunc_type {
+ 	KF_bpf_xdp_pull_data,
+ 	KF_bpf_dynptr_slice,
+ 	KF_bpf_dynptr_slice_rdwr,
++	KF_bpf_dynptr_copy,
++	KF_bpf_dynptr_memset,
++	KF_bpf_probe_read_user_dynptr,
++	KF_bpf_probe_read_kernel_dynptr,
++	KF_bpf_probe_read_user_str_dynptr,
++	KF_bpf_probe_read_kernel_str_dynptr,
++	KF_bpf_copy_from_user_dynptr,
++	KF_bpf_copy_from_user_str_dynptr,
++	KF_bpf_copy_from_user_task_dynptr,
++	KF_bpf_copy_from_user_task_str_dynptr,
+ 	KF_bpf_dynptr_clone,
+ 	KF_bpf_percpu_obj_new_impl,
+ 	KF_bpf_percpu_obj_new,
+@@ -11232,6 +11258,27 @@ BTF_ID_UNUSED
+ #endif
+ BTF_ID(func, bpf_dynptr_slice)
+ BTF_ID(func, bpf_dynptr_slice_rdwr)
++BTF_ID(func, bpf_dynptr_copy)
++BTF_ID(func, bpf_dynptr_memset)
++#ifdef CONFIG_BPF_EVENTS
++BTF_ID(func, bpf_probe_read_user_dynptr)
++BTF_ID(func, bpf_probe_read_kernel_dynptr)
++BTF_ID(func, bpf_probe_read_user_str_dynptr)
++BTF_ID(func, bpf_probe_read_kernel_str_dynptr)
++BTF_ID(func, bpf_copy_from_user_dynptr)
++BTF_ID(func, bpf_copy_from_user_str_dynptr)
++BTF_ID(func, bpf_copy_from_user_task_dynptr)
++BTF_ID(func, bpf_copy_from_user_task_str_dynptr)
++#else
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++BTF_ID_UNUSED
++#endif
+ BTF_ID(func, bpf_dynptr_clone)
+ BTF_ID(func, bpf_percpu_obj_new_impl)
+ BTF_ID(func, bpf_percpu_obj_new)
+@@ -11362,9 +11409,35 @@ static bool is_kfunc_bpf_preempt_enable(struct bpf_kfunc_call_arg_meta *meta)
+ 	return meta->func_id == special_kfunc_list[KF_bpf_preempt_enable];
+ }
+ 
++static bool is_kfunc_pkt_dynptr_writer(struct bpf_kfunc_call_arg_meta *meta, u32 arg)
 +{
-+	return bpf_dynptr_memset(ptr, 0, 1, 0);
++	u32 func_id = meta->func_id;
++
++	if (arg != 0)
++		return false;
++
++	return func_id == special_kfunc_list[KF_bpf_dynptr_copy] ||
++	       func_id == special_kfunc_list[KF_bpf_dynptr_memset] ||
++	       func_id == special_kfunc_list[KF_bpf_probe_read_user_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_probe_read_kernel_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_probe_read_user_str_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_probe_read_kernel_str_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_copy_from_user_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_copy_from_user_str_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_copy_from_user_task_dynptr] ||
++	       func_id == special_kfunc_list[KF_bpf_copy_from_user_task_str_dynptr];
 +}
 +
-+__noinline int global_dynptr_kfunc_memset_and_read(struct __sk_buff *skb,
-+						   struct bpf_dynptr *ptr)
++bool bpf_kfunc_may_change_pkt_data(struct bpf_kfunc_call_arg_meta *meta)
 +{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_memset(ptr, 0, 1, 0);
-+
-+	/* this should fail */
-+	return *data;
++	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data] ||
++	       is_kfunc_pkt_dynptr_writer(meta, 0);
 +}
 +
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_global_dynptr_write(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
+ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data];
++	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data] ||
++	       meta->pkt_dynptr_write;
+ }
+ 
+ static enum kfunc_ptr_arg_type
+@@ -12327,6 +12400,15 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id);
+ 			if (ret < 0)
+ 				return ret;
++			if (is_kfunc_pkt_dynptr_writer(meta, i)) {
++				enum bpf_dynptr_type type;
 +
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	global_dynptr_helper_write(&ptr);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_inside_global_dynptr_write(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+
-+	return global_dynptr_helper_write_and_read(skb, &ptr);
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_memset(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_dynptr_memset(&ptr, 0, 1, 0);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_global_dynptr_memset(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	global_dynptr_kfunc_memset(&ptr);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_inside_global_dynptr_memset(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+
-+	return global_dynptr_kfunc_memset_and_read(skb, &ptr);
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_dynptr_copy_dst(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &dst);
-+	bpf_dynptr_from_mem(dynptr_writer_data, sizeof(dynptr_writer_data), 0, &src);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
-+SEC("?tc")
-+__success
-+int skb_pkt_ptr_valid_after_dynptr_copy_src(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr dst, src;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &src);
-+	bpf_dynptr_from_mem(dynptr_writer_dst, sizeof(dynptr_writer_dst), 0, &dst);
-+	bpf_dynptr_copy(&dst, 0, &src, 0, 1);
-+
-+	return *data;
-+}
-+
-+SEC("?tc")
-+__failure __msg("invalid mem access 'scalar'")
-+int skb_pkt_ptr_invalid_after_probe_read_kernel_dynptr(struct __sk_buff *skb)
-+{
-+	__u8 *data = (void *)(long)skb->data;
-+	__u8 *data_end = (void *)(long)skb->data_end;
-+	struct bpf_dynptr ptr;
-+
-+	if (data + 1 > data_end)
-+		return SK_DROP;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	bpf_probe_read_kernel_dynptr(&ptr, 0, 1, dynptr_writer_data);
-+
-+	/* this should fail */
-+	return *data;
-+}
-+
- /* Read-only skb data slice is invalidated on write to skb metadata */
- SEC("?tc")
- __failure __msg("invalid mem access 'scalar'")
++				type = dynptr_get_type(env, reg);
++				if (type == BPF_DYNPTR_TYPE_INVALID)
++					return -EFAULT;
++				if (dynptr_may_be_pkt_data(reg, type))
++					meta->pkt_dynptr_write = true;
++			}
+ 
+ 			if (!(dynptr_arg_type & MEM_UNINIT)) {
+ 				int id = dynptr_id(env, reg);
 -- 
 2.34.1
 
