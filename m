@@ -1,38 +1,38 @@
 Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02571F2B88
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DD523E358
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781490040; cv=none; b=a52hl0vmAbDmvEo46dJ3ksj8Hppqhc/+4QSHgm36gZ6NPzDOPeUoyvuEofY9cOAwnNuDXd2KLfRU0TSJ2esM6c2L3W1eQbhz2z3x6zaG1u7oG5MYYw97sz0ALKLU63buZMpDWN/j/vNN01C34C955s60UfBQ8iedbsxoF9mZeWM=
+	t=1781490045; cv=none; b=jUtLD3eD2AJLCR72bLnHgT9aHc7efK13IFAL5Vh5elg5gE53eb/M5Hh9l0FAaQfPsWlynnGzZ/n9DmQ0rkVltYpdXHH3H5h1JzkemMKpg1zra7PjwU8kUF8RGLfJlimPVwPDXjcSPZoGlxO10/P9rssepzD62a+GM84zlsAGg/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781490040; c=relaxed/simple;
-	bh=1w2t5xwKCOTpkRcDZDgTinCia+ZKNisyMGeYwcKq+Bo=;
+	s=arc-20240116; t=1781490045; c=relaxed/simple;
+	bh=zsWBQcN4kH5BawwGx5jEyeauY/IaYxVk5STEBl5LGGQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VygoONOORPt/bYKDZiQn0CczfKzik/h8F8M2V30Td3qnS8ghNoUT8Dc4PbEtZ5+3lrDHcI40W7hyG2z2WJI3GsNZ2cRzeuiAj8givB0d4fso49mrCXJJizNoWJeqtOw9qFd6QfA6u2y1xL08jDsogr1Q8rKpUYd0Q0fdtMLRt3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dbH/H1fp; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=HLbiwj39MpCFjTccBCFFJoe71iFsij2iCHWMUW2UvsqozszyeeZRplxvYC8zTZM9hrxg+R2S+NdeOfkYbtMrCPbCF0/QoRCigjOQDmuN0rIsQCLH3Ncf40XvLfKybksm+rTyc6HhJslN/lvMOJD7gBW16Z6PJIRt9MfsIzVXeUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fhc1SLH/; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dbH/H1fp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fhc1SLH/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781490037;
+	t=1781490042;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rtnfw+y2HHk1vRYoWesaZROZbXaIhRhS+gXZvqnDV1Y=;
-	b=dbH/H1fpuiBZbxrMusqkhymoyZjYl6ddH2+yn15Svdu60/0lV4Pgm6Rv0Cc16SJ3g4FCVD
-	h95QmlTcVGUG3Bpic2WimRdpIrLUGCCPjFgGSFIEJVFc9HV8FW0XMCKugoGjrupkilxV8R
-	IYJTn3AB1GTWw19H3lZxu+P22+W+3EY=
+	bh=D7PM1J5t08m7qp7sECfBEeZ5YPcr3dy9O8wQKAdiSCc=;
+	b=fhc1SLH/kJ2iYAK/R6Y4y/qsYr/uB1UbbS7ck/83zPerktHCwUluy0u4RKBhm+gLIqeaIz
+	aQa/U4siZ39jeRrDWauhHIEYAIyXKhMhZb1TMPenVHglPLwWXW72emWX+lAOIb/pg72L63
+	z+u7JaKqXKQhuuKlDHaqiOigZv9aPXU=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: jiayuan.chen@linux.dev
-Subject: [PATCH bpf-next v4 3/6] bpf, sockmap: keep sk_msg copy state in sync
-Date: Mon, 15 Jun 2026 10:19:56 +0800
-Message-ID: <20260615021959.140010-4-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v4 6/6] selftests/bpf: add test for bpf_msg_pop_data() overflow
+Date: Mon, 15 Jun 2026 10:19:59 +0800
+Message-ID: <20260615021959.140010-7-jiayuan.chen@linux.dev>
 In-Reply-To: <20260615021959.140010-1-jiayuan.chen@linux.dev>
 References: <20260615021959.140010-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -44,283 +44,130 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Zhang Cen <rollkingzzc@gmail.com>
+From: Sechang Lim <rhkrqnwk98@gmail.com>
 
-SK_MSG uses msg->sg.copy as per-scatterlist-entry provenance. Entries
-with this bit set are copied before data/data_end are exposed to SK_MSG
-BPF programs for direct packet access.
+Add a test in sockmap_basic.c that calls bpf_msg_pop_data() with a length
+close to U32_MAX, which overflows the start + len bounds check. The sk_msg
+program records the return value over a sendmsg and the test checks that
+the call is rejected with -EINVAL.
 
-bpf_msg_pull_data(), bpf_msg_push_data(), and bpf_msg_pop_data()
-rewrite the sk_msg scatterlist ring by collapsing, splitting, and
-shifting entries. These operations move msg->sg.data[] entries, but the
-parallel copy bitmap can be left behind on the old slot. A copied entry
-can then return to msg->sg.start with its copy bit clear and be exposed
-as directly writable packet data.
-
-This corruption path requires an attached SK_MSG BPF program that calls
-the mutating helpers; ordinary sockmap/TLS traffic that never runs
-push/pop/pull helper sequences is not affected.
-
-Keep msg->sg.copy synchronized with scatterlist entry moves, preserve
-the copy bit when an entry is split, clear it when a helper replaces an
-entry with a private page, and clear slots vacated by pull-data
-compaction.
-
-Fixes: 015632bb30da ("bpf: sk_msg program helper bpf_sk_msg_pull_data")
-Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-Cc: stable@vger.kernel.org
-Co-developed-by: Han Guidong <2045gemini@gmail.com>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Signed-off-by: Han Guidong <2045gemini@gmail.com>
-Signed-off-by: Zhang Cen <rollkingzzc@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/core/filter.c | 88 ++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 83 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 +++++++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 3e555f276ba80..f605ab528b1af 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2654,6 +2654,38 @@ static void sk_msg_reset_curr(struct sk_msg *msg)
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index d2846579285f2..cb3229711f93a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -14,6 +14,7 @@
+ #include "test_sockmap_pass_prog.skel.h"
+ #include "test_sockmap_drop_prog.skel.h"
+ #include "test_sockmap_change_tail.skel.h"
++#include "test_sockmap_msg_pop_data.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
+ 
+ #include "sockmap_helpers.h"
+@@ -666,6 +667,51 @@ static void test_sockmap_skb_verdict_change_tail(void)
+ 	test_sockmap_change_tail__destroy(skel);
  }
  
-+static bool sk_msg_elem_is_copy(const struct sk_msg *msg, u32 i)
++static void test_sockmap_msg_verdict_pop_data(void)
 +{
-+	return test_bit(i, msg->sg.copy);
++	struct test_sockmap_msg_pop_data *skel;
++	int err, map, verdict;
++	int c1 = -1, p1 = -1, sent;
++	int zero = 0;
++	char *buf;
++	const size_t len = 32 * 1024;
++
++	skel = test_sockmap_msg_pop_data__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	verdict = bpf_program__fd(skel->progs.prog_msg_pop_data);
++	map = bpf_map__fd(skel->maps.sock_map);
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	err = create_pair(AF_INET, SOCK_STREAM, &c1, &p1);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem"))
++		goto out_close;
++
++	buf = calloc(len, 1);
++	if (!ASSERT_OK_PTR(buf, "calloc"))
++		goto out_close;
++
++	sent = xsend(c1, buf, len, 0);
++	ASSERT_EQ(sent, (ssize_t)len, "xsend");
++	ASSERT_EQ(skel->data->pop_data_ret, -EINVAL, "pop_data_rejects overflow");
++
++	free(buf);
++
++out_close:
++	close(c1);
++	close(p1);
++out:
++	test_sockmap_msg_pop_data__destroy(skel);
 +}
 +
-+static void sk_msg_clear_elem_copy(struct sk_msg *msg, u32 i)
-+{
-+	__clear_bit(i, msg->sg.copy);
-+}
-+
-+static void sk_msg_set_elem_copy(struct sk_msg *msg, u32 i)
-+{
-+	__set_bit(i, msg->sg.copy);
-+}
-+
-+static void sk_msg_clear_copy_range(struct sk_msg *msg, u32 start, u32 end)
-+{
-+	while (start != end) {
-+		sk_msg_clear_elem_copy(msg, start);
-+		sk_msg_iter_var_next(start);
-+	}
-+}
-+
-+static void sk_msg_sg_move(struct sk_msg *msg, u32 dst, u32 src)
-+{
-+	msg->sg.data[dst] = msg->sg.data[src];
-+	if (sk_msg_elem_is_copy(msg, src))
-+		sk_msg_set_elem_copy(msg, dst);
-+	else
-+		sk_msg_clear_elem_copy(msg, dst);
-+}
-+
- static const struct bpf_func_proto bpf_msg_cork_bytes_proto = {
- 	.func           = bpf_msg_cork_bytes,
- 	.gpl_only       = false,
-@@ -2692,7 +2724,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg, u32, start,
- 	 * account for the headroom.
- 	 */
- 	bytes_sg_total = start - offset + bytes;
--	if (!test_bit(i, msg->sg.copy) && bytes_sg_total <= len)
-+	if (!sk_msg_elem_is_copy(msg, i) && bytes_sg_total <= len)
- 		goto out;
- 
- 	/* At this point we need to linearize multiple scatterlist
-@@ -2738,6 +2770,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg, u32, start,
- 	} while (i != last_sge);
- 
- 	sg_set_page(&msg->sg.data[first_sge], page, copy, 0);
-+	sk_msg_clear_elem_copy(msg, first_sge);
- 
- 	/* To repair sg ring we need to shift entries. If we only
- 	 * had a single entry though we can just replace it and
-@@ -2747,8 +2780,14 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg, u32, start,
- 	shift = last_sge > first_sge ?
- 		last_sge - first_sge - 1 :
- 		NR_MSG_FRAG_IDS - first_sge + last_sge - 1;
--	if (!shift)
-+	if (!shift) {
-+		sk_msg_clear_elem_copy(msg, msg->sg.end);
- 		goto out;
-+	}
-+
-+	i = first_sge;
-+	sk_msg_iter_var_next(i);
-+	sk_msg_clear_copy_range(msg, i, last_sge);
- 
- 	i = first_sge;
- 	sk_msg_iter_var_next(i);
-@@ -2762,16 +2801,18 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg, u32, start,
- 		if (move_from == msg->sg.end)
- 			break;
- 
--		msg->sg.data[i] = msg->sg.data[move_from];
-+		sk_msg_sg_move(msg, i, move_from);
- 		msg->sg.data[move_from].length = 0;
- 		msg->sg.data[move_from].page_link = 0;
- 		msg->sg.data[move_from].offset = 0;
-+		sk_msg_clear_elem_copy(msg, move_from);
- 		sk_msg_iter_var_next(i);
- 	} while (1);
- 
- 	msg->sg.end = msg->sg.end - shift > msg->sg.end ?
- 		      msg->sg.end - shift + NR_MSG_FRAG_IDS :
- 		      msg->sg.end - shift;
-+	sk_msg_clear_elem_copy(msg, msg->sg.end);
- out:
- 	sk_msg_reset_curr(msg);
- 	msg->data = sg_virt(&msg->sg.data[first_sge]) + start - offset;
-@@ -2792,8 +2833,10 @@ static const struct bpf_func_proto bpf_msg_pull_data_proto = {
- BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	   u32, len, u64, flags)
+ static void test_sockmap_skb_verdict_peek_helper(int map)
  {
-+	bool sge_copy = false, nsge_copy = false, nnsge_copy = false;
- 	struct scatterlist sge, nsge, nnsge, rsge = {0}, *psge;
- 	u32 new, i = 0, l = 0, space, copy = 0, offset = 0;
-+	bool rsge_copy = false;
- 	u8 *raw, *to, *from;
- 	struct page *page;
- 
-@@ -2869,6 +2912,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 			sk_msg_iter_var_prev(i);
- 		psge = sk_msg_elem(msg, i);
- 		rsge = sk_msg_elem_cpy(msg, i);
-+		rsge_copy = sk_msg_elem_is_copy(msg, i);
- 
- 		psge->length = start - offset;
- 		rsge.length -= psge->length;
-@@ -2894,23 +2938,34 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	/* Shift one or two slots as needed */
- 	sge = sk_msg_elem_cpy(msg, new);
- 	sg_unmark_end(&sge);
-+	sge_copy = sk_msg_elem_is_copy(msg, new);
- 
- 	nsge = sk_msg_elem_cpy(msg, i);
-+	nsge_copy = sk_msg_elem_is_copy(msg, i);
- 	if (rsge.length) {
- 		sk_msg_iter_var_next(i);
- 		nnsge = sk_msg_elem_cpy(msg, i);
-+		nnsge_copy = sk_msg_elem_is_copy(msg, i);
- 		sk_msg_iter_next(msg, end);
- 	}
- 
- 	while (i != msg->sg.end) {
- 		msg->sg.data[i] = sge;
-+		if (sge_copy)
-+			sk_msg_set_elem_copy(msg, i);
-+		else
-+			sk_msg_clear_elem_copy(msg, i);
- 		sge = nsge;
-+		sge_copy = nsge_copy;
- 		sk_msg_iter_var_next(i);
- 		if (rsge.length) {
- 			nsge = nnsge;
-+			nsge_copy = nnsge_copy;
- 			nnsge = sk_msg_elem_cpy(msg, i);
-+			nnsge_copy = sk_msg_elem_is_copy(msg, i);
- 		} else {
- 			nsge = sk_msg_elem_cpy(msg, i);
-+			nsge_copy = sk_msg_elem_is_copy(msg, i);
- 		}
- 	}
- 
-@@ -2918,13 +2973,18 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	/* Place newly allocated data buffer */
- 	sk_mem_charge(msg->sk, len);
- 	msg->sg.size += len;
--	__clear_bit(new, msg->sg.copy);
-+	sk_msg_clear_elem_copy(msg, new);
- 	sg_set_page(&msg->sg.data[new], page, len + copy, 0);
- 	if (rsge.length) {
- 		get_page(sg_page(&rsge));
- 		sk_msg_iter_var_next(new);
- 		msg->sg.data[new] = rsge;
-+		if (rsge_copy)
-+			sk_msg_set_elem_copy(msg, new);
-+		else
-+			sk_msg_clear_elem_copy(msg, new);
- 	}
-+	sk_msg_clear_elem_copy(msg, msg->sg.end);
- 
- 	sk_msg_reset_curr(msg);
- 	sk_msg_compute_data_pointers(msg);
-@@ -2950,27 +3010,38 @@ static void sk_msg_shift_left(struct sk_msg *msg, int i)
- 	do {
- 		prev = i;
- 		sk_msg_iter_var_next(i);
--		msg->sg.data[prev] = msg->sg.data[i];
-+		sk_msg_sg_move(msg, prev, i);
- 	} while (i != msg->sg.end);
- 
- 	sk_msg_iter_prev(msg, end);
-+	sk_msg_clear_elem_copy(msg, msg->sg.end);
- }
- 
- static void sk_msg_shift_right(struct sk_msg *msg, int i)
- {
- 	struct scatterlist tmp, sge;
-+	bool tmp_copy, sge_copy;
- 
- 	sk_msg_iter_next(msg, end);
- 	sge = sk_msg_elem_cpy(msg, i);
-+	sge_copy = sk_msg_elem_is_copy(msg, i);
- 	sk_msg_iter_var_next(i);
- 	tmp = sk_msg_elem_cpy(msg, i);
-+	tmp_copy = sk_msg_elem_is_copy(msg, i);
- 
- 	while (i != msg->sg.end) {
- 		msg->sg.data[i] = sge;
-+		if (sge_copy)
-+			sk_msg_set_elem_copy(msg, i);
-+		else
-+			sk_msg_clear_elem_copy(msg, i);
- 		sk_msg_iter_var_next(i);
- 		sge = tmp;
-+		sge_copy = tmp_copy;
- 		tmp = sk_msg_elem_cpy(msg, i);
-+		tmp_copy = sk_msg_elem_is_copy(msg, i);
- 	}
-+	sk_msg_clear_elem_copy(msg, msg->sg.end);
- }
- 
- BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
-@@ -3027,8 +3098,10 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 	 */
- 	if (start != offset) {
- 		struct scatterlist *nsge, *sge = sk_msg_elem(msg, i);
-+		bool sge_copy = sk_msg_elem_is_copy(msg, i);
- 		int a = start - offset;
- 		int b = sge->length - pop - a;
-+		u32 sge_idx = i;
- 
- 		sk_msg_iter_var_next(i);
- 
-@@ -3041,6 +3114,10 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 				sg_set_page(nsge,
- 					    sg_page(sge),
- 					    b, sge->offset + pop + a);
-+				if (sge_copy)
-+					sk_msg_set_elem_copy(msg, i);
-+				else
-+					sk_msg_clear_elem_copy(msg, i);
- 			} else {
- 				struct page *page, *orig;
- 				u8 *to, *from;
-@@ -3057,6 +3134,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 				memcpy(to, from, a);
- 				memcpy(to + a, from + a + pop, b);
- 				sg_set_page(sge, page, a + b, 0);
-+				sk_msg_clear_elem_copy(msg, sge_idx);
- 				put_page(orig);
- 			}
- 			pop = 0;
+ 	int err, c1, p1, zero = 0, sent, recvd, avail;
+@@ -1373,6 +1419,8 @@ void test_sockmap_basic(void)
+ 		test_sockmap_skb_verdict_fionread(false);
+ 	if (test__start_subtest("sockmap skb_verdict change tail"))
+ 		test_sockmap_skb_verdict_change_tail();
++	if (test__start_subtest("sockmap msg_verdict pop_data overflow"))
++		test_sockmap_msg_verdict_pop_data();
+ 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
+ 		test_sockmap_skb_verdict_peek();
+ 	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+new file mode 100644
+index 0000000000000..301e65b95256c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++} sock_map SEC(".maps");
++
++#define POP_START 0x48a3
++#define POP_LEN   0xfffffffd
++
++long pop_data_ret = 1;
++
++SEC("sk_msg")
++int prog_msg_pop_data(struct sk_msg_md *msg)
++{
++	if (msg->size <= POP_START)
++		return SK_PASS;
++
++	pop_data_ret = bpf_msg_pop_data(msg, POP_START, POP_LEN, 0);
++	return SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
