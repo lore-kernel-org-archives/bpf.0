@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA9340803B
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 15:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9784140626D
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 15:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781537987; cv=none; b=NmCgI0rt3Ke9FUDMM7Cleo8wwFrVblpuiOAhZBUrBpt7xB98mImu8Y62g6VQoR7MteOaXogAPY5uZJM1LPm8MOvWp9oBlUYVKKIz3lh6e+Lq+bk8gTI3BofJwTl/m37YyzZ4X7obZT1naU2zefv5U/BA/GD4xxqBvevHTOgVqGY=
+	t=1781538050; cv=none; b=PVZHrzfLvjJDpBvGFMOA2GRCOvLB4P3Wtry0nBVRkMr/lbV3ibpLr6fOjZTfprWtxETKEYOSDETNyBgcHyq/UNa7G0SxUwLvpEY10AfZ5Y8fdxFR7EephRFOVReusXsm6BODgZbyWoi/2fVZNrFklxgrGtPDO/aR4+kt0o0HPRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781537987; c=relaxed/simple;
-	bh=6IXWwzNdqSTgGkLNAUxip4aq9ljzXVPLqWgPBbA4kBg=;
+	s=arc-20240116; t=1781538050; c=relaxed/simple;
+	bh=PK4Wm2GZ5RkA1l6QLug8G/v9mfi8d3lVnWBvBfNnWzw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I0mHw7iObl9VB+5S055FekNzPGPmq27YDNPYS/MoBKEdlfijmM/ymbKoClvH5xXGzgouOn1IkDrEmKnJYyd+/2/sxu45NNhvfBsXXSrHZIehDrkhfR2cckNoT4nlRIXsvqTddmkM5DwBPKiwFSP1qeMG/Gnknq/7zJ83+V2Oqq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J6DH5Vay; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qR/UT99Y6nsm84RaoXtgLkGwBq7xQ4YULE7OxJt+LJf1CC59BS3slmStfzLZrMJ1jA9PkW4Ha8qw3nPHNd4QjlIRNIgohl62ULauHFDAzVlDAFRhG7R+dP448C4/Z4ooG6ouSP2F4LIKDFRROkaD/N9eWIiyQNg1lhIG6mVMGCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MOMeJGsu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J6DH5Vay"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E49B1F000E9;
-	Mon, 15 Jun 2026 15:39:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MOMeJGsu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4161F000E9;
+	Mon, 15 Jun 2026 15:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781537986;
-	bh=DhauY8fpJn9LziXBs4nDwU1sF29v4logAtaAB11xKeg=;
+	s=k20260515; t=1781538049;
+	bh=HlAeYgHTFaDG5kP94g8EaPcdJXnOvOCPwUTkFHcSgco=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J6DH5Vay87MdUpmcOhZmB2jnqEs9qRbFo9k4zXbzchH1mi4t9ikij8iPq0s8mjfgh
-	 JDhlg5PM53Ude0fcHFNYXgjVkhx4n3M7Cp3rGK3/cTyEE+P8H3aimRgfntk5T1U1t/
-	 oLH/iPg1xDFY5vFIYnxfAkcUsg4rUyb0baDrKp7Lj5XsjDbEcxO/q12eXJiEjM/HiA
-	 Xgrno0FHkrBcro+YfWZCdsVM83jMY/rx7JUSYtnGc7EEp+sE2yMS6vlN6reYr8p6Qo
-	 mWJmF3QfQjkpb3jpI1a//UKAvC7aegIkuhcC1pMdU3MFkueocwj50YQYweRIBksh2L
-	 GeGCDJ5N5SuXA==
+	b=MOMeJGsuWEUoEAUvTpLmNHPBy0mR4iWevlMH3rCADIKxXfeO32zugYIy93Eg/WgxQ
+	 /mSqY7IvdDkYHOiyTuxsPsHAWJXHnl/nF808Sg7gBgXwwvpHjIFl6+cD4kksWgZ5Rk
+	 M4CunXt7cUsLdVJgBPBsP1SlJZgYLUr1l9FrWJEWYnWSx6Gom8rFaH8S8MFQ88lSyz
+	 gL7aaQQtqG0t0TtuYzvewqeIjY7z1lLJ/kh7crvYzX8AUXaQiMWNPYz+UQIdV9UOY9
+	 6m2CjySDo0eRkggmtYtAsXRzoM0pufdxAeEPBEEX/oEMk409GQiuuZ4Cti2kk4wmta
+	 DSYSNLRXjiriw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix packet pointer invalidation for skb
- dynptr writes
+Subject: Re: [PATCH bpf-next v6 10/12] selftests/bpf: Add tests to verify
+ verifier log for global percpu data
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
+To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <76830c72d48ea174272d4a2ee9d5cc0f3ef02c8d.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
-References: <76830c72d48ea174272d4a2ee9d5cc0f3ef02c8d.1781535194.git.chenyy23@mails.tsinghua.edu.cn>
+In-Reply-To: <20260615152646.27639-11-leon.hwang@linux.dev>
+References: <20260615152646.27639-11-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Jun 2026 15:39:45 +0000
-Message-Id: <20260615153946.8E49B1F000E9@smtp.kernel.org>
+Date: Mon, 15 Jun 2026 15:40:49 +0000
+Message-Id: <20260615154049.6A4161F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,83 +46,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Critical] Bypasses in the packet pointer invalidation logic for global s=
-ubprogram dynptrs allow Use-After-Free of reallocated SKB data.
+- [Low] Incorrect `data_len` argument passed to `bpf_snprintf` makes the ne=
+gative test brittle.
 --
 
-commit 3d7aef2edf3e68f7deac1e4457119dd95d6770d0
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+commit d5b0b79b30e924d1fec11028be9289d47ccc5221
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-bpf: Fix packet pointer invalidation for skb dynptr writes
+selftests/bpf: Add tests to verify verifier log for global percpu data
 
-skb-backed dynptr writers can mutate packet data, but not all verifier
-paths invalidate checked direct packet pointers after those writes.
-This patch treats CONST_PTR_TO_DYNPTR local arguments as possibly
-packet-backed for packet pointer invalidation.
+This commit adds new eBPF programs to verify the verifier log correctly
+rejects bpf_strncmp and bpf_snprintf when a percpu array map is used as a
+const string. It also updates the prog test to execute these new checks.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4d..51468faa76a47 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c =
+b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> index ba92ffb0ca499..2222ad3a49bd7 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
 
 [ ... ]
 
-> @@ -9155,6 +9155,23 @@ static void clear_all_pkt_pointers(struct bpf_veri=
-fier_env *env)
->  	}));
->  }
-> =20
-> +static bool dynptr_type_pkt_data(enum bpf_dynptr_type type)
+> +SEC("?kprobe")
+> +__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be =
+used as const string")
+> +int verifier_snprintf(void *ctx)
 > +{
-> +	return type =3D=3D BPF_DYNPTR_TYPE_SKB ||
-> +	       type =3D=3D BPF_DYNPTR_TYPE_SKB_META;
+> +	u64 args[] =3D { data };
+> +	char buf[128];
+> +	int len;
+> +
+> +	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, 1);
+
+[Severity: Low]
+Should this be passing sizeof(args) instead of 1?
+
+The bpf_snprintf helper requires data_len to be the size of the data array
+in bytes. Passing 1 makes the test brittle if the verifier's argument
+evaluation order changes in the future, as it would fail on the data_len
+argument before checking the fmt argument.
+
+> +	if (len > 0)
+> +		bpf_printk("snprintf: %s\n", buf);
+> +	return 0;
 > +}
-> +
-> +static bool dynptr_may_be_pkt_data(const struct bpf_reg_state *reg,
-> +				   enum bpf_dynptr_type type)
-> +{
-> +	if (dynptr_type_pkt_data(type))
-> +		return true;
-> +
-> +	/* Global subprog dynptr args are verified as unspecialized LOCAL. */
-> +	return reg->type =3D=3D CONST_PTR_TO_DYNPTR &&
-> +	       type =3D=3D BPF_DYNPTR_TYPE_LOCAL;
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: Critical]
-This is a pre-existing issue, but does this incomplete fix leave two bypass=
-es
-for packet pointer invalidation?
-
-First, if the BPF program clones the global dynptr using bpf_dynptr_clone(),
-the clone is stored on the stack and typed as PTR_TO_STACK (inheriting
-BPF_DYNPTR_TYPE_LOCAL). If a dynptr writer like bpf_dynptr_write() is then
-called on the clone, it appears dynptr_may_be_pkt_data() will return false
-since the register type is PTR_TO_STACK instead of CONST_PTR_TO_DYNPTR. This
-would skip clear_all_pkt_pointers() entirely.
-
-Second, if the BPF program obtains a direct slice from the global dynptr via
-bpf_dynptr_slice_rdwr(), the returned pointer gets the type
-PTR_TO_MEM | DYNPTR_TYPE_LOCAL. If a dynptr writer is subsequently called on
-the original global dynptr, clear_all_pkt_pointers() is triggered but fails
-to invalidate the slice because reg_is_dynptr_slice_pkt() explicitly ignores
-DYNPTR_TYPE_LOCAL slices:
-
-kernel/bpf/verifier.c:reg_is_dynptr_slice_pkt() {
-	return base_type(reg->type) =3D=3D PTR_TO_MEM &&
-	       (reg->type &
-		(DYNPTR_TYPE_SKB | DYNPTR_TYPE_XDP | DYNPTR_TYPE_SKB_META));
-}
-
-Could both scenarios allow a Use-After-Free read/write on the reallocated s=
-kb
-data?
-
-> +}
-> +
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1781535194.gi=
-t.chenyy23@mails.tsinghua.edu.cn?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615152646.2763=
+9-1-leon.hwang@linux.dev?part=3D10
