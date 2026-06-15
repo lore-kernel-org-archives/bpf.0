@@ -1,36 +1,40 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAC5155757
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C93323909F
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781490035; cv=none; b=O69SNLzxhBAKdreNSF3MWvk5Piree31tpmwbD6KMVP1gxKxJ7/cwJrLeH9R2b/9wR/TA2vNEm19KWEj15/lIB2OGKaYeS9eyu5w9AHF2vrn7ojPqFvIsPNlZfxFzNGqSdhgipkle81g8526y3W6v0jcmmw+pwOqRmxZEi96SdEw=
+	t=1781490037; cv=none; b=Jd4Wyph53PetJy3y1FHlx2E0FdsgwY3V/o/66nLgN2zASI8/7RKhVSPkWsIOrOIQxWRdQ0inYcneMduuHQL9eEUim4BDuspuihS9eroghEnNeQdTB/0NRsbAf7+dMNYt2xuqWjLF3wKNYNjMb15xeyP2nDo37gldJ2eYzviTDS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781490035; c=relaxed/simple;
-	bh=X2sAx85wAAyGhm/EoqXJLnY16L/SUw5rsAhFLQf8iG0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EiOP+EPxuCMPVPCMb8aV5AlxWlQTxkg66HFDJGwLPpsJ7lITtWG1CPgcW5Rm2c9J/BsUec0Vh0v7Kii+40F6Nl1SEeeviwImqQMbttNqSl2NVwJ3RkZojJ/gt5NZKPN0FxCdrBC4BBpw1XiVSaV6B2jcQ4Qa3ABRnlSEYuBMyIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dQ2bTrZJ; arc=none smtp.client-ip=91.218.175.182
+	s=arc-20240116; t=1781490037; c=relaxed/simple;
+	bh=uwybBJJJS67trTAs68fbSohQDQntqGwBcy6+LwRg8z8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RHfENNyge1fCGyovJnffp+2dgZXP7Ym54qsYe9GPhhsJf8cQCJUDX/M9FlCW14X/M/pdQh9tIQNdBXXytSMYYZvRWazp6bPASCA3+cQaZp2E4IMsD13aEJ3d7TrBqy1y+xk3t/v+4w2bSBhcV6vJW/LKYx4/0gjpxGh1FeFvvQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=doNJOq35; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dQ2bTrZJ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="doNJOq35"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781490032;
+	t=1781490034;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=No35Lw/b39ChO3VZp7VlHxwv6aJUeGevbRD6Ukvn+S8=;
-	b=dQ2bTrZJhAB9Ib/Efydn/XjuFmzZ2JYTZsRms2PZG3DdNjo5qyd9++BC3SNfxsGhn7ro5P
-	Kw7PBc3nGnAnREmZByh4rCUyjsRiY5ZZdHIWgja+IX9TGpodd5NWb/pPlzHQhNvKEwKjGE
-	0t0gX2rgqsU2LML1qByS1Y0tZmegyT0=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+4wRjg/VBX6jMXCUra998SaBMXKUnzqQsMOSm/pi5ks=;
+	b=doNJOq35ajZRo3gd0o1g5q3TQMFcPpqOGyUjRBwVJQr4KMzA05DWEPslwIOCchnkqn4NL9
+	g2TGWR21ghGOssJyfT6mZZyv6HHYTYaTJqjQE23q44Q6GfvoG2CBTsBjJFh32HR1nfbcKF
+	WCvEbt5w8hsNTaWoejycPOWsTJsDDig=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: jiayuan.chen@linux.dev
-Subject: [PATCH bpf-next v4 0/6] bpf, skmsg: some fixes for skmsg
-Date: Mon, 15 Jun 2026 10:19:53 +0800
-Message-ID: <20260615021959.140010-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v4 1/6] bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+Date: Mon, 15 Jun 2026 10:19:54 +0800
+Message-ID: <20260615021959.140010-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260615021959.140010-1-jiayuan.chen@linux.dev>
+References: <20260615021959.140010-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,62 +44,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
+From: Weiming Shi <bestswngs@gmail.com>
 
-All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
-Kuniyuki and Sechang Lim, which have already been reviewed by me and John and Jakub.
+When the scatterlist ring is full or nearly full, bpf_msg_push_data()
+enters a copy fallback path and computes copy + len for the page
+allocation size. Since len comes from BPF with arg3_type = ARG_ANYTHING
+and both are u32, a crafted len can wrap the sum to a small value,
+causing an undersized allocation followed by an out-of-bounds memcpy.
 
-https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
-https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.com/
-https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
-https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
-https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+ BUG: unable to handle page fault for address: ffffed104089a402
+ Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+ Call Trace:
+  __asan_memcpy (mm/kasan/shadow.c:105)
+  bpf_msg_push_data (net/core/filter.c:2852 net/core/filter.c:2788)
+  bpf_prog_9ed8b5711920a7d7+0x2e/0x36
+  sk_psock_msg_verdict (net/core/skmsg.c:934)
+  tcp_bpf_sendmsg (net/ipv4/tcp_bpf.c:421 net/ipv4/tcp_bpf.c:584)
+  __sys_sendto (net/socket.c:2206)
+  do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+  entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
 
-The automated reviewer (sashiko) may still flag a few other potential
-issues on top of this series. After looking into them, they are either
-already covered by the patches here, are the BPF program's own
-responsibility (e.g. initializing the payload it pushes) and intentionally
-left out, or only reachable under very narrow conditions that require a
-specially crafted BPF program and an unusual sk_msg ring state, so they are
-not practical to trigger and are left out of this series. I'm collecting
-these fixes together because the same
-problems have been re-sent many times in slightly different forms, and I
-hope this series can be prioritized for merging so the duplicates can
-finally settle. With so many AI-generated patches floating around for
-these spots, leaving them unmerged just keeps wasting maintainer review
-cycles on the same issues.
+Add an overflow check before the allocation.
 
+Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+Tested-by: Xiang Mei <xmei5@asu.edu>
+Tested-by: Xinyu Ma <mmmxny@gmail.com>
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ net/core/filter.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v3->v4: Carry Kuniyuki Iwashima's reviewed-by tag.
-        Drop the __GFP_ZERO patch; initializing the pushed payload is the
-        BPF program's responsibility, not the kernel's (per maintainer
-        feedback).
-        https://lore.kernel.org/bpf/20260612130919.299124-1-jiayuan.chen@linux.dev/
-v2->v3: Target to bpf-next and carry Emil's reviewed-by tag.
-        Reverse xmas tree style is used suggested by Cong.
-        (not all code match reverse xmas tree due to variable dependency)
-v1->v2: fix problem when fix the conflict.
-
-Kuniyuki Iwashima (1):
-  sockmap: Fix use-after-free in udp_bpf_recvmsg()
-
-Sechang Lim (2):
-  bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
-  selftests/bpf: add test for bpf_msg_pop_data() overflow
-
-Weiming Shi (2):
-  bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
-  bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
-
-Zhang Cen (1):
-  bpf, sockmap: keep sk_msg copy state in sync
-
- net/core/filter.c                             | 97 +++++++++++++++++--
- net/ipv4/udp_bpf.c                            |  9 ++
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 48 +++++++++
- .../bpf/progs/test_sockmap_msg_pop_data.c     | 27 ++++++
- 4 files changed, 173 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_pop_data.c
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9590877b0714f..3c8f1cedb217f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2829,6 +2829,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+ 	if (!space || (space == 1 && start != offset))
+ 		copy = msg->sg.data[i].length;
+ 
++	if (unlikely(copy + len < copy))
++		return -EINVAL;
++
+ 	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+ 			   get_order(copy + len));
+ 	if (unlikely(!page))
 -- 
 2.43.0
 
