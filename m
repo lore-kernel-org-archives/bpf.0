@@ -1,165 +1,116 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E783DA7E3
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 09:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7613DB63F
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 10:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781516405; cv=none; b=NLgrzK+G8pw5+5p1txMHjWBjmpa82pjvl2apJnC+6IyI7eBLlxOS8WzdTPEM/ZB39rWY0dJE0YCM32hofKk0KVGKCIMfFC/ReRl6Zap50Bt6JQVB+UPpRQPdLBbC9wONZsYKLFuSRIlkmZQTYLYX0y7nVXwb7HBVXUUbiLAAGHk=
+	t=1781517918; cv=none; b=J4bb9VH9F65HfCHjSCCOYhej75yKw/Jlt3Dm1PwcmBFDaPlRUDH2zN4iQasOntShyZVoIEC8UBec1RSQYJ3MPDwAvcyugSoUVT0p7CHIB5Fgpb93JpW4a9c7UZtQCcOWfhphXUo/O+f+fioXfpsPT29xRoKCO45bDnVWcI20LzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781516405; c=relaxed/simple;
-	bh=yuZOjeKUQvuOh9Mb8jFUvO3r6PfArjCEIg/DDAG8xb4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Lvj7CEIbvk/3qk+MxpqRe92bWOfuZe1nwh9PjCtq/O6BOMKV/A+D3QcdBYrKX4b8Trncxoklx5+iGnoTwREaxLGfmQCW/wUX+p6Rma5KtRha7qOjs2luxJa2WO0qYpAyBN9kBpkTJmSkYHD1l7FLi4ymdfMDqptxtpcRmiU9HOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UyNbsDRQ; arc=none smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UyNbsDRQ"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-490b3e03939so23109605e9.1
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781516403; x=1782121203; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=30D3lk2m4MPe1WlWUP+Xy2TkeorO71aGo8DIuGzIXbw=;
-        b=UyNbsDRQ1oPgXaifIFyAikgrMXaHTPWofKkeVM0347UeQRKl62NelmEkUC5BnBmJ8u
-         NU8DhSuItVrj7dKhwKefywPKAT/IoEE9G3lv02H/7aTMzw3tnqz747oC+CtcljoTNGCh
-         444TF/pSG8G6pJN19nmVxqCUjzAGatsImBduwH2LEU9o+kEU46mx1fuaiq7yxuX5WfNH
-         RxSq1Ms9MFSfl7UgPiOsLbEcIG3+EhLnVkMLcHVnEng2vfcbODWESzcJHVbJcUbtc+ZX
-         CTvg4Fgo/n2BpN2VfUiZH2mzr30CvKsc172Khn8hWC/BZQoh4x+QGvoQ+0HUEmqnNiSa
-         xJqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781516403; x=1782121203;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=30D3lk2m4MPe1WlWUP+Xy2TkeorO71aGo8DIuGzIXbw=;
-        b=LX3OlNav7D+MSxzBWtTND0jhErMlIwYnMlHGOqIcYzyAVWhZy0m/N9GCJfwQxJXILq
-         f56GFpPfzbweH3UUyNhYi4lvASoHxftpVwrqzf9szp7BGkS0W7LVQqLWwqQr8yUYY8My
-         keAuBMsiftWM3U+AE6rnnYwhUzkdv33W7iQV3d5ul/cDmK9HYjgZbFWzyczJjtjNxo1S
-         PmCNg3pvwyB4dnlYXr2j6ey+dq+Z3gaEha+R+M9tOdqlvk668anv6fDflZTQIX7cTd0W
-         MTe6q9iSUt8t3xXjOIh/0k287qpeANGKpzuegMBvVi6/lppsRFZXUvhsTr836iI5e73U
-         anqA==
-X-Forwarded-Encrypted: i=1; AFNElJ+Gqw3rnt/hGI+SUo3l5r6g/kNaiK7cQu5cFfYvmhp3W0sCyPV+U5F+K1UXnbUevbwPOQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDTsHqQ4Bn0GS4K9qTAMJrbXEHBdJyDWmqYIg7U8zjW0PPSS44
-	d8IsXL6sOVHbXyKKvLtUyNiVe0uZ12w9HhtIT55RMxB3k2iYjAfXGLh8
-X-Gm-Gg: Acq92OFwmZxHzMgPQx4q+p74qjUCdhUEvKmHXaMquQWPp3vFS1NkIL7OpHfLSCDgzrv
-	jOidN+jzQ4E1y5xrGSVqhhD/l3KVKOAvlFb3ByaTQE5fqX6xDgSo70ux79UpfACnydLqyLee6zJ
-	KO6gr15dc6w5GMA42obijbhULiyUebyyOGrQJjuaixTHb/JZKIRkPLa/eE7/GL6D/9UOAUTePit
-	aLQO4x12SH62k8g5uJkBJBzvTeRFOpdWvQIH0sxAbOs3fNh5RZNUMHJEtRGrtAUnDahF/D4C1XP
-	yx9xXvveI62JgAkYbJWImece8KkUqHGpibZz0O3QhJO19pM1sIzDDBi5tvfq4n4t2N3rZ+TjGab
-	ej1w7O/0OsxxeVj1PuCWiQuB2cm47F32wL7nQIMkpfBrLbH9eHhlahDfl6K6mKLFo+sk2fx1U0Q
-	5PkwtBd1pTn1uph2kHTXClKFUGOekPU55rsgJfU3DSZbg9GFOaHtmkgfIzlKZtt7U5Ftz4GHmML
-	nzfXEPbPK8nTeUzA3J+hgHS9U7t1HIAU8tXa1IbRtrs7PYl/BkyGMXzOsqZmWU6wQ==
-X-Received: by 2002:a05:600c:8b2a:b0:490:4b89:5372 with SMTP id 5b1f17b1804b1-490ec50a338mr160503935e9.11.1781516402495;
-        Mon, 15 Jun 2026 02:40:02 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49220304180sm233055375e9.4.2026.06.15.02.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 02:40:02 -0700 (PDT)
+	s=arc-20240116; t=1781517918; c=relaxed/simple;
+	bh=/6R93NxMEysDRMXCCzHKnzpYhn1kBnV3ZX9Yk1I1LGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WrkEOnDlUOgR/rjw/YhMT77WgwzViw9ihg7MwTSOUFTNTXZSJbJH6vCWsNGvclM4PJUA0Mi65l8UlK1TnlWTeu+gqUheZrkQ1EuXrD/krrE209jG34NyYuaIuYqHc+9WN3FGM46PckC1Ig9uHnPRWxJtQePhkjDSS+oHmRR4DPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8DxFOhbzi9qNU0UAA--.47355S3;
+	Mon, 15 Jun 2026 18:05:15 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxzsJTzi9qlgOnAA--.55069S4;
+	Mon, 15 Jun 2026 18:05:12 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/4] selftests/bpf: Add __arch_loongarch to limit test cases for LoongArch
+Date: Mon, 15 Jun 2026 18:05:04 +0800
+Message-ID: <20260615100506.19558-3-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260615100506.19558-1-yangtiezhu@loongson.cn>
+References: <20260615100506.19558-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Jun 2026 11:40:01 +0200
-Message-Id: <DJ9IUWKK7EFS.XXLT3ZAGOPC4@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf 0/2] bpf: Preserve rdonly_cast dynptr slice lifetime
-X-Mailer: aerc 0.21.0
-References: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
-In-Reply-To: <20260615-f01-09-rdonly-cast-dynptr-lifetime-v1-0-2dd0a369e153@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxzsJTzi9qlgOnAA--.55069S4
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJr4DGr13uFWrGw1xXFyDXFc_yoW8tr4fpa
+	y8AasYkr1xt3W3XF17GrW5uFWxKrn7X3y5XFW8WrW8Zrs8X3s7Jr1xKFW3Gr98XrWrWw45
+	AaykK3Zxu3W8ZFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
 
-On Mon Jun 15, 2026 at 10:57 AM CEST, Nuoqi Gui wrote:
-> bpf_rdonly_cast() is an identity operation at runtime, but the verifier
-> currently assigns the result fresh return-state metadata. When the source
-> pointer comes from bpf_dynptr_slice(), that drops the relationship needed
-> to invalidate the alias when the dynptr is released.
->
-> Preserve the dynptr-slice lifetime metadata across bpf_rdonly_cast(), and
-> add verifier selftests covering cases where a dynptr slice is cast and th=
-en
-> read after the dynptr is released or after the originating dynptr stack s=
-lot is
-> overwritten while a clone still holds the reference. Also cover the valid=
- clone
-> case where the cast alias is derived from the clone and remains usable af=
-ter
-> the original dynptr is overwritten.
->
-> This fixes regressions introduced by 66e3a13e7c2c ("bpf: Add
-> bpf_dynptr_slice and bpf_dynptr_slice_rdwr") and a35b9af4ec2c ("bpf: Add =
-a
-> kfunc for generic type cast").
->
-> Impact is bounded to verifier lifetime tracking for CAP-required BPF
-> programs. The evidence confirms stale read acceptance after dynptr releas=
-e,
-> including a typed field-read shape, but does not demonstrate unprivileged
-> reachability, cross-context disclosure, controlled reuse, arbitrary kerne=
-l
-> read, write-capable aliasing, privilege escalation, crash, or KASAN/UAF
-> signal. No CVE, embargo, or security escalation is claimed.
->
-> Validation:
-> - The new dynptr_fail.c subtests exercise the verifier's dynptr-slice
->   lifetime invariant across bpf_rdonly_cast(): a cast alias of a
->   bpf_dynptr_slice() result must be invalidated when the dynptr is releas=
-ed or
->   its stack slot overwritten, while a cast alias derived from a surviving=
- clone
->   must stay usable.
+Make it possible to limit certain tests to loongarch, just like it is
+already done for x86_64, arm64, riscv64, and s390x.
 
-Won't fix. The semantics of bpf_rdonly_cast() do not require soruce provena=
-nce
-tracking, and thus don't need any invalidation. It can take any unknown val=
-ue
-and produces safe to read pointer. Please try to reason about whether it's =
-a
-real issue before posting AI's output directly.
+This is a follow up patch of:
 
-pw-bot: cr
+  commit ee7fe84468b1 ("selftests/bpf: __arch_* macro to limit test cases to specific archs")
+  commit 1e4e6b9e260d ("selftests/bpf: Add __arch_s390x macro")
 
-> - Unpatched bpf at 76f62d237538: test_progs -t dynptr FAILs as expected,
->   because the four __failure subtests
->   (dynptr_rdonly_cast_{,typed_}slice_after_{release,overwrite}) are wrong=
-ly
->   accepted - the stale read survives dynptr release.
-> - Patched with this series: test_progs -t dynptr PASSes, because those fo=
-ur
->   casts are now rejected with "invalid mem access 'scalar'" and the two
->   __success clone subtests remain accepted (all six dynptr_rdonly_cast_*
->   subtests OK, rc 0).
->
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
-> Nuoqi Gui (2):
->       bpf: Preserve dynptr slice lifetime across rdonly_cast
->       selftests/bpf: Cover rdonly_cast dynptr slice lifetime
->
->  include/linux/bpf_verifier.h                    |   5 +
->  kernel/bpf/verifier.c                           |  36 ++++--
->  tools/testing/selftests/bpf/progs/dynptr_fail.c | 160 ++++++++++++++++++=
-++++++
->  3 files changed, 193 insertions(+), 8 deletions(-)
-> ---
-> base-commit: 76f62d237538b456354a44e796a541cde03c6e28
-> change-id: 20260615-f01-09-rdonly-cast-dynptr-lifetime-de114e5a1838
->
-> Best regards,
-> --
-> Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 1 +
+ tools/testing/selftests/bpf/test_loader.c    | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 9eeb5b0b63d6..b0c441384f20 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -158,6 +158,7 @@
+ #define __arch_arm64		__arch("ARM64")
+ #define __arch_riscv64		__arch("RISCV64")
+ #define __arch_s390x		__arch("s390x")
++#define __arch_loongarch	__arch("LOONGARCH")
+ #define __caps_unpriv(caps)	__test_tag("test_caps_unpriv=" EXPAND_QUOTE(caps))
+ #define __load_if_JITed()	__test_tag("load_mode=jited")
+ #define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index abdb9e6e3713..3ce32d134e2c 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -377,6 +377,7 @@ enum arch {
+ 	ARCH_ARM64	= 0x4,
+ 	ARCH_RISCV64	= 0x8,
+ 	ARCH_S390X	= 0x10,
++	ARCH_LOONGARCH	= 0x20,
+ };
+ 
+ static int get_current_arch(void)
+@@ -389,6 +390,8 @@ static int get_current_arch(void)
+ 	return ARCH_RISCV64;
+ #elif defined(__s390x__)
+ 	return ARCH_S390X;
++#elif defined(__loongarch__)
++	return ARCH_LOONGARCH;
+ #endif
+ 	return ARCH_UNKNOWN;
+ }
+@@ -580,6 +583,8 @@ static int parse_test_spec(struct test_loader *tester,
+ 				arch = ARCH_RISCV64;
+ 			} else if (strcmp(val, "s390x") == 0) {
+ 				arch = ARCH_S390X;
++			} else if (strcmp(val, "LOONGARCH") == 0) {
++				arch = ARCH_LOONGARCH;
+ 			} else {
+ 				PRINT_FAIL("bad arch spec: '%s'\n", val);
+ 				err = -EINVAL;
+-- 
+2.42.0
 
