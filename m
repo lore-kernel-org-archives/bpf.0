@@ -1,86 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE902233937
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 04:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9E43BBFDE
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 07:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781498420; cv=none; b=J1wb+4Eo5BgvUeoWkpqANebHmPDddPanyXqNK7P+/b0mcOj5+bGDF1LJUOgAg0VPJt83NdmzBQrcbQjFVUfVp1qSsqYdu9n1weZVf4TZAzZyRGOo8q3fyyiXmn0Ia/qsJCY3pKTSuR8GtpRaPeUJkWQhk8hUEIEuh51f3FNSxqA=
+	t=1781507944; cv=none; b=Mzg8EDkhIJ4X9A20kZnLNKxIX31YRQdPrJ3wfWECMWjO+rivWskyevc6VDae404b8K8wP5PBBIo20yxA3eS0fGo6uLMNLzgrSWQlbOxqeKIq/1lccn6an/jq0IpMT9IrXmEGsSE7ySghtdPJcIHgtSMT/FGxiyBOpiSj+efTfvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781498420; c=relaxed/simple;
-	bh=Pm6WYlwSPoEmR1olUS77BbzRebJzSG4Eeb6pUG0Tb20=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JpbeEvn9r0PPChH/HcUXrYyRLJ0wuteOika5cjjIuFDZjrSkRw26uE6jjnC+62ygorF+jKqf1ve69TFESb/m5Yk/ZmHNojrvvFi58ALA/AoK4ae7sxIZ2lIxUaORvU60AxJi8HmPxJIUkrwO40dT+LY74p21l0qrH9fzvgfDSTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ch7Gw7iE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781507944; c=relaxed/simple;
+	bh=ToszQBcjmnEz2uQaZ9TydQRtREww+YjB2pPthPaFGTI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qXJVZigLGD6lNx2lCf1XiNVREmonpExobPOZ9LhBt+mWFmdSv5i5Nj6EH4+k8zGt/6JAiBrzPBwlpzVqUgYWMmNVluFYiD+hTBGczW0Ps5Z8/87310wSVhS4KSksMhypvwIuUsYKaHJUformUHTceFKMDor97SqiM+6HVIyxAoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ly5pCZ2i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ch7Gw7iE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2DF1F000E9;
-	Mon, 15 Jun 2026 04:40:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ly5pCZ2i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0671F000E9;
+	Mon, 15 Jun 2026 07:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781498419;
-	bh=tT4ThXy0ovTMawgnIXx9F4iQe79FFAbw0eIy0ykOrZU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ch7Gw7iElPN9qgVFM+//n5SA7xGeedWAAhxUPOCasV/Up7nTw+EYpI24vMkuNri/t
-	 Gf8hvYZ2OI7ojExlCKpxE/SO7NduwG1hCda3TWeeM7G1OdGXSYSx/CUQs1NdLu06IV
-	 l0cAf0semy3Xc4NXs4s2NWvcrTGDVI666XXhgIBw4mpiKbJ81CRJknHu2J0VTsO1Zn
-	 eZxP30l7oxh0XlMRilEe9WHPhcmSf0Mr5iWOpGvjrHqTLeLd7ULjtaV5vZDW6sA9/+
-	 iKr+kzIPX+yE0SKwVJkUJJsxjtNPC0Adpys6hJUPxvwsrcGjmGklo71vJhECi6Sbh+
-	 b7syALsmuIb+g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197CC3A566E0;
-	Mon, 15 Jun 2026 04:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1781507943;
+	bh=xRqxwDmV+ySIG1pHv3Z1rQ2E17IQj1Xlp6uVgSnrwXM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ly5pCZ2iGq6phpwiOBlsTHetB+VHmM3qE2Uqu7k/LXBbshJdDlMmmgiRskQXoCW1U
+	 L9BbzBzxFeZlvbZCQsDIh5SQPLPcb7ILI8OFz78mzw0q56lKyypwCX1oAs42zprqMl
+	 hb9k/R+T80nZW+5kZpM016QAUY+dqmPJWaaGw9a/vTFi3rHpW8gT7bXdqRa01z7sVC
+	 0LWA2da7BPvpHEqSG4GYEHq31dUkZbpoSllBmz9mB0scBctjJRMEwVClHjtkv+f8jD
+	 C2BOfRe8IdJwZZYwza91TwKtLqm9NFLij25oGav9KjHHx0YnJd1PfN1sHGb9lutG6y
+	 plcgibYI/CMjA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback for TCP Prague
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 07:19:02 +0000
+Message-Id: <20260615071903.2B0671F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/6] bpf, skmsg: some fixes for skmsg
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178149841464.2427889.2279258322725016008.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 04:40:14 +0000
-References: <20260615021959.140010-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260615021959.140010-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] BPF programs can cause a kernel panic by passing `mss_now =3D=3D 0=
+` to the `bbr_tso_segs` kfunc, leading to a division by zero.
+- [Medium] The `tcp_tso_autosize` function is not registered as a BPF kfunc=
+, preventing BPF congestion control algorithms from reusing default TSO aut=
+osizing logic.
+--
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+commit 39a9bf39a3860ba9dd1b2bed8669b97491df87c6
+Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-On Mon, 15 Jun 2026 10:19:53 +0800 you wrote:
-> All fixes are from previous patches sent by Weiming Shi, Zhang Cen,
-> Kuniyuki and Sechang Lim, which have already been reviewed by me and John and Jakub.
-> 
-> https://lore.kernel.org/bpf/20260610081218.506709-2-rhkrqnwk98@gmail.com/
-> https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.com/
-> https://lore.kernel.org/bpf/20260424191602.1522411-3-bestswngs@gmail.com/
-> https://lore.kernel.org/bpf/20260423155807.1245644-2-bestswngs@gmail.com/
-> https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
-> 
-> [...]
+tcp: Replace min_tso_segs() with tso_segs() CC callback for TCP Prague
 
-Here is the summary with links:
-  - [bpf-next,v4,1/6] bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
-    https://git.kernel.org/bpf/bpf-next/c/0c0a8ed85349
-  - [bpf-next,v4,2/6] bpf, sockmap: Fix wrong rsge offset in bpf_msg_push_data()
-    https://git.kernel.org/bpf/bpf-next/c/f3f34ca45b96
-  - [bpf-next,v4,3/6] bpf, sockmap: keep sk_msg copy state in sync
-    https://git.kernel.org/bpf/bpf-next/c/2ccbc9a38746
-  - [bpf-next,v4,4/6] sockmap: Fix use-after-free in udp_bpf_recvmsg()
-    https://git.kernel.org/bpf/bpf-next/c/c010995b29c8
-  - [bpf-next,v4,5/6] bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
-    https://git.kernel.org/bpf/bpf-next/c/a48802fb2cd2
-  - [bpf-next,v4,6/6] selftests/bpf: add test for bpf_msg_pop_data() overflow
-    https://git.kernel.org/bpf/bpf-next/c/70b139d0483c
+This patch replaces existing min_tso_segs() with tso_segs() CC callbak
+for CC algorithm to provides explicit tso segment number of each data
+burst and overrides tcp_tso_autosize().
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
+> --- a/net/ipv4/tcp_bbr.c
+> +++ b/net/ipv4/tcp_bbr.c
+[ ... ]
+> @@ -297,11 +297,19 @@ static void bbr_set_pacing_rate(struct sock *sk, u3=
+2 bw, int gain)
+>  }
+> =20
+>  /* override sysctl_tcp_min_tso_segs */
+> -__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
+> +static u32 bbr_min_tso_segs(struct sock *sk)
+>  {
+>  	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
+>  }
+> =20
+> +__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
+> +{
+> +	u32 min_tso;
+> +
+> +	min_tso =3D bbr_min_tso_segs(sk);
+> +	return tcp_tso_autosize(sk, mss_now, min_tso);
+> +}
 
+[Severity: High]
+Can a buggy BPF program trigger a divide-by-zero panic here?
 
+Since bbr_tso_segs() is exposed as a BPF kfunc, the verifier does not
+restrict the value ranges of scalar arguments like mss_now. If mss_now is 0,
+it is passed directly to tcp_tso_autosize(), where it is used as a divisor:
+
+tcp_tso_autosize()
+    ...
+    return max_t(u32, bytes / mss_now, min_tso_segs);
+
+Does this need an explicit check for mss_now =3D=3D 0 to prevent a local de=
+nial
+of service?
+
+> +
+>  static u32 bbr_tso_segs_goal(struct sock *sk)
+>  {
+>  	struct tcp_sock *tp =3D tcp_sk(sk);
+[ ... ]
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+[ ... ]
+> @@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, =
+unsigned int mss_now,
+> =20
+>  	return max_t(u32, bytes / mss_now, min_tso_segs);
+>  }
+> +EXPORT_SYMBOL(tcp_tso_autosize);
+
+[Severity: Medium]
+Is there a way for out-of-tree BPF congestion controls to reuse the default
+autosizing logic?
+
+With the removal of min_tso_segs, BPF congestion control algorithms that
+want a custom minimum TSO size must implement tso_segs and handle the
+autosizing themselves. However, while tcp_tso_autosize() is exported to C
+modules here, it does not appear to be registered as a BPF kfunc (e.g., via
+BTF_KFUNCS_START).
+
+Does this force BPF developers to either lose custom minimum TSO sizing
+capabilities or duplicate the tcp_tso_autosize() logic within their BPF
+programs?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260614071756.2396=
+86-1-chia-yu.chang@nokia-bell-labs.com?part=3D1
