@@ -1,103 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F0030E0E4;
-	Mon, 15 Jun 2026 18:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34B32E6116
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 18:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781548786; cv=none; b=uInBvcOBuSyFMwL8DKGkIvliUKRKHmHyEyAvoDqqpxo8EZ67ZYFyAr6bMj1mmHEshrWBtIILyIxkJNRX2dSIjCYHuqHS7bMuVsrg0WmBhK+HoEDgFALg2tmqeJuecwr0EZirRGxqQSCcIkOFMQg8FqZ/Sa+/wnnMlHUIrbRE+M4=
+	t=1781549128; cv=none; b=NUTjNNrXSkLfwPXC/N+f8GhLiI6+kEtVlYW2r8U8mxmtXilq1Xop52n1ICum7ogfzrNafgbXnguMbXcsxD4JQBwxWvKg+457OIrbR6QAISerbsdGA++coJ10IgLdOaYCmnPa7Rp/PeVeon5IoIlCekw34HQqXbo2egMOZuvryEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781548786; c=relaxed/simple;
-	bh=8IzHOxxoDVy4Ie+xULeDCZS7NlKodbk1gByjESBaMY0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=TU/vuZQD5ucPJWfvKjdW5RpjK+zbpcGBF2nBPThI/zJbIcGBWO6ptfVxidgdexvA6tqm1PxR/Gof9mou1EVO5h0uk+IGqOafvCOQV92sPkvJ4obMzpV2mpZ+19RVTCHHtLiZBoA5sShuZghSeAJh0yB94PauudrHPF7dfaZAFTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtjoLS6y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781549128; c=relaxed/simple;
+	bh=y2PIwVUXoCW9TnSY2n/aKtOQkJRqNDHne/v+icBH9dY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WWJimiMKA0s3uvUntoLJyk8vti4J7S2xrDruE/pI1Ar6WSX8Ksdcbsb5zjCvIfYIV+WSSivGnMXP5uzGYcvdBAr4qDDUzv7cbTzssCXrFYNJb520H4+UWt6FaqYkta1lhrG5H4sHNKPUK6cT/jgWlxwJxAEF7T6kOgk995a7O9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=AecFFvZC; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtjoLS6y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CB01F000E9;
-	Mon, 15 Jun 2026 18:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781548783;
-	bh=8cjaxnVTkKtFxEZxU+TnoyaBRvRzZYYcWmbAlrHkSvo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MtjoLS6ygVe0ce64V4vA/hBOpyJqMOUNl2lvLgfqWVHkhLN5/RMJ8i6v+/TX4SCk6
-	 EaT7CTjXNb4dLcpC9yD+kcU0o5n/P0F5qxsFERXpdnw4uR6vReIofMSvAPxRSAkRug
-	 4wLygnwx5kkMJMzYAJ7UUmwiGnX2mfaiFXZ7On2zsOiSJOj0SfXv5Sl9OGeGjcJSbu
-	 +5jH9g0jKrMTSglsdms3a7F3Sk4fQAp5Y361qsphN+2cFyq/kgOVryCUvo97DhULU0
-	 H89a0j+Pk75J+RQ/3I6I49DzANdup6ADqyam+TXXdYhKonsy3e2K6hmBfZ5DL5pijv
-	 QbPRyXLXBRDlw==
-Content-Type: multipart/mixed; boundary="===============3705424124499032894=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="AecFFvZC"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-68d23430690so6893832a12.3
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 11:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1781549124; x=1782153924; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y2PIwVUXoCW9TnSY2n/aKtOQkJRqNDHne/v+icBH9dY=;
+        b=AecFFvZCFUH+cdH3xWC23SZCDdYeUbTajF5x2BOZ9BujrUyVGpfbKNhK6GDYs2fp+N
+         fQhk/eclpof/q8Hr6r6g90pavh/L5kjBaugKJEmmLI+3gE/00OBCvS51QGIBWJwjqZ/x
+         ihijKdSUBNQGrcnXtMvNaEtmdQpH844E2JOvwcl8HjMlyuxZaAkJMbfosyHng5oyC2Er
+         nmMhtQU43pCHTiX254XOvSGxYR2NU+mxysr69PKVxiwzQphaeeewXOYHacfx82xWtVAQ
+         3WZ1r+Udf7PEPInyWWMV08aK7AFq7Dwt9RVIxD4loVIULKs3hF5Gethnac+pyYz21OYv
+         2eZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781549124; x=1782153924;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y2PIwVUXoCW9TnSY2n/aKtOQkJRqNDHne/v+icBH9dY=;
+        b=EUcsPMIuBN5MlCoQAjif8jpRQO1RyHpJRSSNCt2broQpJmZ+hy0VhR68DAiL34TMkO
+         VKmJ1I6oRqZYcMGMXEWqTl8wNEYYE/xCNXszkQl/7LcrSAK88nPHREw3gwIzm9DfeFwM
+         GgU4crKM2vZTxpV8l/Ah3+vF4FZ0Ajg0gKrta8i/DM1ZgC9LIRqi9OaaFk4kcRlsXua1
+         a/jzE+EYp+m8oxfwfsidTC2WPE2y5ud4dfqvaVpJZX8wiPlWYdGKiK9kVvHfrbvg919W
+         vLbCDcmYHBwrIYOLTP6eGs6ggxSDuBhirOKzBW0Kz0ROpes/lw6Hjk0FaaIeypKBsOyn
+         SL1Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/NW3RlwmGXrHn+IvnYctigYKo/FKSATqwcz9+GJikC1W5jbF7G30WjOO0137UqLaLzvrk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ7B3dyT9aZFw1UChIueXOG9pUBIZOmRk+8R8NjrM3FPF9G9fJ
+	2w6BP4jtodlCxakClffVdrsdx6Q5KtCuLihdjhq5cVvTYvcP6aGc4QtWTsbEosBrj0E=
+X-Gm-Gg: Acq92OFYVWufvHjuAFLuU2MXHYy7Qqckw+HIWsXHszMYfCfnsiwamPPqiA2UC1J1h5E
+	3IZNSHWUP8uQPPLUjpMLS+Bb2j75u/r8BffY4hZV6yNs32dVHwF9J4YjtGkctJ87hOo+DXFyGcd
+	TGYR5p0xmNmnYnBq6pIhpzMENgNgx5Q+HlOudkgg9hrvILg4wo3Kbuz7RDfVQoutfi05RdPSQ6M
+	45/7pbuZbijXR2YRoSoxNIG+auk5r2NHxPU48D4KwHPp4IytRNC/OZVjW39v/AaX4aXwCtSHuRn
+	XsCrdrex4tNjgyRyUtp5ok/RMcUuzsyeoOdo24BCiYKZfy321x6An+Cv5cIFCGoSeyEVLRk36qZ
+	oAMm+WyKUPmSwnqwujtl9gmMvliKdtvkyhrqad9k94K2dNdTnQj5ncpQljakj3C+zFAK8aUQDgD
+	SkeIu6UXbTnL3Cf1mpDvSU7WgXtM+GhJW7o7w7
+X-Received: by 2002:a17:906:8473:b0:bfe:ed35:e85a with SMTP id a640c23a62f3a-bff4c9eaf3bmr461429766b.50.1781549124175;
+        Mon, 15 Jun 2026 11:45:24 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bfdb5223309sm513470166b.28.2026.06.15.11.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 11:45:22 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
+  pabeni@redhat.com,  andrew+netdev@lunn.ch,  horms@kernel.org,
+  bpf@vger.kernel.org,  john.fastabend@gmail.com,  sd@queasysnail.net
+Subject: Re: [PATCH net-next 1/5] tls: reject the combination of TLS and
+ sockmap
+In-Reply-To: <20260614014102.461064-2-kuba@kernel.org> (Jakub Kicinski's
+	message of "Sat, 13 Jun 2026 18:40:56 -0700")
+References: <20260614014102.461064-1-kuba@kernel.org>
+	<20260614014102.461064-2-kuba@kernel.org>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Mon, 15 Jun 2026 20:45:21 +0200
+Message-ID: <87tsr3bq2m.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <22a4e602da5c745be6947e9ebf41759432280a7697b74614d84c55ba9c10aed5@mail.kernel.org>
-In-Reply-To: <7feeed42d8b97d0db0eab2c1c30aa86f110fe49c.1781539814.git.chenyy23@mails.tsinghua.edu.cn>
-References: <7feeed42d8b97d0db0eab2c1c30aa86f110fe49c.1781539814.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Add skb dynptr writer packet invalidation tests
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,bpf@vger.kernel.org
-Cc: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,john.fastabend@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 15 Jun 2026 18:39:43 +0000 (UTC)
+Content-Type: text/plain
 
---===============3705424124499032894==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> index b62773ce5219..aa9374dbdb11 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> @@ -1232,6 +1232,244 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
->  	return SK_PASS;
->  }
+On Sat, Jun 13, 2026 at 06:40 PM -07, Jakub Kicinski wrote:
+> TLS and sockmap (BPF psock) integration hides a lot of latent bugs.
+> Bugs which may be more or less relevant for real users but they
+> are definitely exploitable.
 >
+> We could not find anyone actively using this integration so let's
+> reject this config. Adding a TLS socket to a sockmap was already
+> rejected by sk_psock_init() through the inet_csk_has_ulp() check.
+> We need to reject the attempts to configure the TLS keys (rather
+> than adding the ULP itself) because checking prior to the ULP
+> installation is tricky without risking a race with sockmap getting
+> added in parallel (sockmap does not hold the socket lock).
+>
+> This patch is a minimal rejection of the feature. Subsequent patch
+> in the series will do a light dead code removal. Full cleanup would
+> require a major rewrite of the Tx path, we don't need skmsg any more.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
 
-[ ... ]
+SGTM until we can come up with a generic way to exclude sockmapped
+sockets from ktls and espintcp.
 
-> +SEC("?tc")
-> +__failure __msg("invalid mem access 'scalar'")
-> +int skb_pkt_ptr_invalid_after_global_dynptr_write(struct __sk_buff *skb)
-> +{
-> +	__u8 *data = (void *)(long)skb->data;
-> +	__u8 *data_end = (void *)(long)skb->data_end;
-> +	struct bpf_dynptr ptr;
-> +
-> +	if (data + 1 > data_end)
-> +		return SK_DROP;
-> +
-> +	bpf_dynptr_from_skb(skb, 0, &ptr);
-> +	global_dynptr_helper_write(&ptr);
-> +
-> +	/* this should fail */
-> +	return *data;
-> +}
-
-These new cases all assert __failure with __msg("invalid mem access
-'scalar'"), meaning they expect the verifier to invalidate the direct
-packet pointer after a skb dynptr write.
-
-This expectation matches the verifier behavior change in the companion
-patch 1/2 of the series. That verifier change was rejected during review:
-Alexei Starovoitov replied "Nack. You misunderstand what
-bpf_is_kfunc_pkt_changing() is doing." and later "There is nothing to
-fix.", stating the existing verifier behavior is correct.
-
-If the existing verifier behavior is correct and packet pointers are not
-invalidated by these dynptr writes, would these __failure expectations
-hold? It looks like they encode the disputed behavior from the rejected
-patch 1/2, so should this selftest patch land on its own?
-
-The author appears to have agreed in the discussion and withdrawn the
-series. Was this patch intended to be dropped along with patch 1/2?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27565623381
---===============3705424124499032894==--
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
