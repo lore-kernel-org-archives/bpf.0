@@ -1,139 +1,140 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EB41DA62E;
-	Mon, 15 Jun 2026 01:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310842459C5
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 01:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781486650; cv=none; b=jIZ/N+ixn3ncyLlvr4eD8c/+KEAofdYUN8d70pZxFrqwc3gGH20wJaAkKzqtsboCj+wWrc5I1l0IXKsrn9zsLMY43QrFwLC01stR8K9iZOXDW/ea0zC4VB8GWLTvkQvSALGWWt3Cjs7OtB6nO7eNchNdFiNR4GVglmgd/iPZack=
+	t=1781487685; cv=none; b=oI/TPNdD8bZD1pjoSGWl70xaCrtHMdNwjI3/TWkm3qsxiTVcRcVnL1rZJMK8dvYIWpEIBgCaPIBfkMoptz6+wjBdhppWLvYB65wxKLH1a5a//9yXZESUGtJssmp6dl0DAdqA61abIxsq/zP/NgewcM5ksuwsv3DQ62VoO0Zs3zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781486650; c=relaxed/simple;
-	bh=l5IZV0u1np2bYmJeRpGYCRX+6r++EXUep8GaWJEAvuQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Ff/sFuUoHUrbQn5lESA7tupLna+Dp4+YTc7T8f5U3+hQ77PL3MxHNTn6+I5kfd/pOZl2Mbpd/QFl+ncfsEKzTMLFMZll6l5JpT5KHl1Lat47YkWdfOYIOdMUU8P8nSq7FhMCgq7aYEqdLiN/Utrv1MpfH+1H4KcnPGNMCvEKbJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Ax_ukwVC9qGCcUAA--.52398S3;
-	Mon, 15 Jun 2026 09:24:00 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCx+8ElVC9qAZemAA--.55405S3;
-	Mon, 15 Jun 2026 09:23:50 +0800 (CST)
-Subject: Re: [PATCH bpf-next v2] bpf: Fix unaligned interpreter panic on JIT
- fallback path
-To: Xu Kuohai <xukuohai@huaweicloud.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260611101216.30153-1-yangtiezhu@loongson.cn>
- <093f957d-3d3a-4ce7-b59b-06203c556629@huaweicloud.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <9c84609b-3b82-9a43-0f25-4ac632109819@loongson.cn>
-Date: Mon, 15 Jun 2026 09:23:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1781487685; c=relaxed/simple;
+	bh=R8i5XWLC7qRkJ/M2VFpHtjQsEPiRV5btngrp8QxckaU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QHxxCwa1FC4vq/OJNZmBaszzLz0SJCZcJimgiLGy4Fx24Zj/pvMg2ue0ScEOlAMw2mUBjz3f72K2YGFBG+iLvHCC9YdW+Gm1XMnpuHFvsprUUaPxLKZ9a+3d86090e0j5/yI60UzcYBjhEtfyHlz3nRZ2nwiHOjwByz2+2J6MFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcD7XJMO; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcD7XJMO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC871F000E9;
+	Mon, 15 Jun 2026 01:41:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781487683;
+	bh=7eS+QnheZ9F2E5MGCeQHz54pAWNHz5kUsBJla3ISqoQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fcD7XJMOy+RDnNaPy88sc48RnP7q2KRBEaOb8DIWGUx/LkcNEe0rPF51folMakPdR
+	 kytzJAtMqGEes+KzgeTjTtKzlt1/B18P8a1p18iNUPsf4XRNLuq22YAEAk+yDvJ2bc
+	 +IuZKhGenrxyhku/6Lu8dZ64cZ3alo7USGcrAZmPAqHmNf1f9IcgzqtmQu8AV7tMhe
+	 QYNq/Ywm9682TNCV1BYEYGc7Pb9qrSJJuzOJOGkZz4MK3y9J9pE22KCI8uqga7u8KX
+	 cNBuE8LymbQL3nIEOjm4hj4FchL+Wf9pJcyztOjOJ+4E3YiqbYOdvr1NPTyVl4s3EJ
+	 i3+c98lMyUO+A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 1/5] tls: reject the combination of TLS and
+ sockmap
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jakub Kicinski" <kuba@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260614014102.461064-2-kuba@kernel.org>
+References: <20260614014102.461064-2-kuba@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 01:41:23 +0000
+Message-Id: <20260615014123.9EC871F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <093f957d-3d3a-4ce7-b59b-06203c556629@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx+8ElVC9qAZemAA--.55405S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCry7XFy7WrW8Ar18KFWkKrX_yoW5WF1UpF
-	1kJrWUCryUJFs3Xry7Jr1UXFy5Jr4UJ3WUJr1rXFyUJF47Xr1jgF1UWr1vgr15Jr48Jr1U
-	Ar4jvrnrZr15JFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
 
-On 2026/6/12 下午8:37, Xu Kuohai wrote:
-> On 6/11/2026 6:12 PM, Tiezhu Yang wrote:
->> When an architecture implements bpf_jit_inlines_helper_call(), such
->> as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
->> the helper call offset (insn->imm) during the bpf_do_misc_fixups()
->> phase if the helper is expected to be inlined by the JIT compiler.
->> As a result, insn->imm remains as the raw helper enum ID.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-...
+Pre-existing issues:
+- [Critical] The patch attempts to reject the combination of TLS and sockma=
+p during key configuration, but leaves a critical vulnerability where attac=
+hing the TLS ULP to a socket already in a sockmap causes global protocol st=
+ate corruption, infinite loops in unrelated sockets, and silently bypasses =
+BPF sk_msg policies.
+--
 
->> +static void bpf_fixup_fallback_inline_helpers(struct bpf_verifier_env 
->> *env, struct bpf_prog *fp)
-> 
-> The function name is a bit long for a static function
+commit 12fd2fff4db720c6f124011a38950efdbcd77414
+Author: Jakub Kicinski <kuba@kernel.org>
 
-If there are no objections, I will shorten the static function
-name to bpf_fixup_inline_helpers() in v4.
+tls: reject the combination of TLS and sockmap
 
->> +{
->> +    struct bpf_insn *insn = fp->insnsi;
->> +    const struct bpf_func_proto *fn;
->> +    int i;
->> +
->> +    if (!env || !env->ops->get_func_proto)
->> +        return;
->> +
->> +    for (i = 0; i < fp->len; i++, insn++) {
->> +        if (insn->code == (BPF_JMP | BPF_CALL) && insn->src_reg == 0) {
->> +            /* Filter out already-patched address offsets. */
->> +            if (insn->imm >= __BPF_FUNC_MAX_ID)
-> 
-> The check is redundant, since bpf_jit_inlines_helper_call() already
-> filters out insn->imm numbers that is not a valid helper id.
+This commit attempts to reject the combination of TLS and sockmap by
+returning -EINVAL in do_tls_setsockopt_conf() if a psock is attached.
+The goal is to prevent latent bugs while removing dead code.
 
-Yes, I see your point. If insn->imm is an invalid helper ID,
-bpf_jit_inlines_helper_call() will hit the default branch and
-return false, making the prior check redundant. I will clean
-this up.
+> diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+> index 13c88a7b8787d..8e7ba018988d2 100644
+> --- a/net/tls/tls_main.c
+> +++ b/net/tls/tls_main.c
+> @@ -643,6 +643,17 @@ static int do_tls_setsockopt_conf(struct sock *sk, s=
+ockptr_t optval,
+[ ... ]
+>  	int rc =3D 0;
+>  	int conf;
+> =20
+> +	/* TLS and sockmap are mutually exclusive. A socket already in a
+> +	 * sockmap (i.e. with a psock attached) cannot be upgraded to TLS.
+> +	 * sockmap rejects TLS sockets already (see sk_psock_init()).
+> +	 */
+> +	rcu_read_lock();
+> +	if (sk_psock(sk)) {
+> +		rcu_read_unlock();
+> +		return -EINVAL;
+> +	}
+> +	rcu_read_unlock();
+> +
+[Severity: Critical]
+This isn't a bug introduced by this patch, but does this check happen too
+late to prevent global protocol state corruption?
 
->> +                continue;
->> +
->> +            if (bpf_jit_inlines_helper_call(insn->imm)) {
->> +                fn = env->ops->get_func_proto(insn->imm, env->prog);
->> +                if (fn && fn->func)
->> +                    insn->imm = fn->func - __bpf_call_base;
->> +            }
->> +        }
->> +    }
->> +}
->> +
->>   struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env 
->> *env, struct bpf_prog *fp,
->>                          int *err)
->>   {
->> @@ -2643,6 +2668,9 @@ struct bpf_prog 
->> *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>               *err = -ENOTSUPP;
->>               return fp;
->>           }
->> +
->> +        if (!fp->jited)
->> +            bpf_fixup_fallback_inline_helpers(env, fp);
->>       } else {
->>           *err = bpf_prog_offload_compile(fp);
->>           if (*err)
-> 
-> I tested it on arm64 and the patch works.
-> 
-> Tested-by: Xu Kuohai <xukuohai@huawei.com>
+If an unprivileged user adds an established TCP socket to a sockmap, the
+socket's sk_prot is changed to tcp_bpf_prots. If they then attach the TLS U=
+LP,
+tls_init() executes and immediately calls tls_build_proto() before this
+key configuration check is ever reached:
 
-Thanks for your review and the Tested-by tag.
+net/tls/tls_main.c:tls_init() {
+    ...
+    tls_build_proto(sk);
+    ...
+}
 
-Thanks,
-Tiezhu
+This function reads the socket's current sk_prot and uses it to rebuild the
+global tls_prots array:
 
+net/tls/tls_main.c:tls_build_proto() {
+    ...
+    struct proto *prot =3D READ_ONCE(sk->sk_prot);
+    ...
+    build_protos(tls_prots[TLSV4], prot);
+    ...
+}
+
+Because sk_prot is tcp_bpf_prots, the unhash handler in the tls_prots array=
+=20
+is permanently overwritten with sock_map_unhash.
+
+Any subsequent normal TLS socket will inherit this corrupted global array.
+When the normal TLS socket is closed, sock_map_unhash() is invoked. Since
+the normal socket has no psock, it attempts to fall back to the original
+unhash function, leading to an infinite retry loop:
+
+net/core/sock_map.c:sock_map_unhash() {
+    ...
+    saved_unhash =3D READ_ONCE(sk->sk_prot)->unhash;
+    if (unlikely(saved_unhash =3D=3D sock_map_unhash))
+        goto retry;
+    ...
+}
+
+Because sk->sk_prot points to the corrupted tls_prots array, it reads
+sock_map_unhash again, causing a kernel hard lockup.
+
+Could a check be placed in tls_init() or tcp_set_ulp() instead, to prevent
+ULP attachment entirely before tls_build_proto() is called?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260614014102.4610=
+64-1-kuba@kernel.org?part=3D1
