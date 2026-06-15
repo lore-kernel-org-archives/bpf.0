@@ -1,159 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B1F378D63;
-	Mon, 15 Jun 2026 12:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0833B3F485C
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 13:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781528322; cv=none; b=CkcqfEl5/wZN/MlVNULLUIIlWZD60TvPwTysdbr+fwe2z2A4K3AWdLppCGr6FlfEN1KHQYwZeJlI9SLYW8FEPxkb8z7y+zDBmHVTGuUUGHZsrTyfdNajJxJyawCyq2mysxEo8P1UDIsWRNZf7DDONBjg/3LGfPL6yANPY6FJvfA=
+	t=1781530774; cv=none; b=XFR63OBPQ9eZuNi6qRiaAS9M+lGpmKo/1326Dty+MCFh9VwwPyta9n0U6ga97NC1cuH4oSDXB8+6nkrUFFiVU46w309UwTlLFfQ/iHOVcHrgOJ6+Qg+I8h0QJ9D62O3MujKwgJxGyCHcM+iS2chGNyp8WiHE9yLO9++aAUcK19s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781528322; c=relaxed/simple;
-	bh=IM3dJKkwKyjufiuTnVdZPgRCLrPDyuQRh+tKDGzVpVw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=tLp+G0EVTtnyUQr8yTT/9pvcsMz4scV8eAt8eDli8sKRUceiVAtVm1iqco+h16VfRu/NVdFFGokXsRnqgOI3QQbmCHBsSS9e/l/UjIDEjea/eQg2IfRg3o5oiLGSc9FPGKSruHE0WASLdxus+uzA3gw5qfCY1MD2xi9D/9IOmno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqLM5APk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781530774; c=relaxed/simple;
+	bh=Uken4tM4LxzRAW3DPWFxQEaIbrL9f7E0s+GyqkDZQbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lyVDFayI6PsCqgCx6XcmXaIYjdpM0YDl8Ygg+91k0RlSA1Jc0C58irWPEQ70BxIISBlBGasmMYxp7aLKaVszX1BC+s8ncPFQzq4TyLj1YrX02aX3CpA7hLEqfn3KfXtxeyDzOZ3UD8Z1J1cwEQV0Dt52+XAAo0SRtjI1rjcFMkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bdt3nHF5; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqLM5APk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80ADD1F000E9;
-	Mon, 15 Jun 2026 12:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781528320;
-	bh=8lR/ezmey1Vj+wiH0lEfov/xGGidpFJa9T2B63E5xHE=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=dqLM5APkTWkXETEWh5qs66ltoy10skp/3eIwTWShVJwXY/8Txy559XYvAmANhzQSl
-	 4jf9xop6SWO/KuidmRuXwI3u5qcKePOsOOV5TCDOuPljal1o3nUCPqt9+oST8/Qqkf
-	 VQzg5drzlod/pGxIOVBwWDhg78jSSf5t8KZZfFkVVryAX9JHitzAMtMO32y2JzY+KL
-	 WTsWlE6hv+oZRF3k0NjQtXJPPU0tX6jw34CdikAVDrKXvRnJdvYY1c/Yp4RvF5XFAv
-	 5yjTxmOrDn47jAtmzh4I15CWJHSaqD0+i+txzQFvgMVlhd1DsvrrpF0S7Dj9YTZPIE
-	 aTvwIEnXAtwow==
-Message-ID: <f731686b-4d22-4d22-b5b4-2409a165122b@kernel.org>
-Date: Mon, 15 Jun 2026 21:58:28 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bdt3nHF5"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-45fd45e596cso1885900f8f.1
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 06:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781530771; x=1782135571; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=crU/YWEeXaonCN7cJRF0MeFCZ4XnzfssYJGTp4fDCnc=;
+        b=Bdt3nHF5hGSg8d0r7B0cj2jqsYQBSlO+7FeZSaKD4H0o3EaOuzFqDclquYq18IBYbY
+         VUoAE+YdasM9jcPJTvIDc5Iy5VWYV2nMeNR7FjQfqDHnruNZBr2Ya48ojvyBgX9s124a
+         BgHIGRQjgc8ZwVkQ7+j7Hfmb6cD5aCaenutKjBOXigMVdpwoyzrgMsBE2NV5lHCcIzki
+         1/H7d1u2WBGx7UomjC/6hKaH/cCJ33Avsg0sIWcyqyd6KhuOShJJijcv9f+eUoU+x9VI
+         eNlAqLHFaoPwsyOXb4JQgqrmPB1Kxia38QoNreaep5IK3JptMrdroDJqJQorkyIxk97h
+         vzXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781530771; x=1782135571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=crU/YWEeXaonCN7cJRF0MeFCZ4XnzfssYJGTp4fDCnc=;
+        b=DhdGvENrBAu4CddkbPS1h+CI9LYf4/i7h+BmZkolD8H3PzEb6ezymgJ7hG8dh4kFbY
+         UEBhRVuQtivFM93roH80kqNYT7Iko1zOK4Xtl51pQG0cFpSZ0OHKJBk3tB36eRxRzFji
+         GP71EO1P5l178xDVWU0Ge4OFHauf977uBWLWxL5j5rUw5zuMlLTH7/zpz4+YwITroQoD
+         ybbHY2SOi9fubtmOTQjnryEmUzqhKloMsMi8HF4wV6dK5RxVDtE0NzNLTsUp0YMos2SH
+         JCjWH+j3XBAmsT6A1304XEf+5k9JIA/IsCN88RPEANq1cW+WOtOXHgVk/VBpqbT2uQzI
+         9xtQ==
+X-Gm-Message-State: AOJu0YzEfIlpItJI4SGrpQzwBRUgs7NZjqBV8SnYmBCD3eBfpSnKqpG5
+	4ANf3x04PD4J/xctZYpenSqkVXbu0SDaXIJm3Tcu4Z/7/QuB3BtIgH0H
+X-Gm-Gg: Acq92OEH0Re13lPJD3LAXi/wn0P65M7gUISoCTNvYNgnUXobxLlLWA59e333gcC1zv8
+	9EqCymyR9yBpWYJL3n7hE4EJxuXWxml4TStnz0ym8uL8LPRpfF8oY6ro7zYlK8Q3tFgBy5VT0nK
+	PUsY2TEc11Tgpgow4JJ8gUaw8+U0/7UESHEKfCGkBq5nXGzU8VX3pUTVc27mrlECYb0ORuGGJA9
+	fdQjgmhISCh3VoquN0UkbGeBJemxnGsOTm1i34OEITm+EjXzW2ezNUl9etibE2ELpIcyXLdV6dU
+	/BJJXubN4VWs38QrjIQZHwoWZtG8JKolW3BOY2oEccO8P45AXx11t4wH+i83OcAbS33R12p0hj2
+	CregWdZFp3rh2MaLLH9gP929jlZ5Ua3AQstm1BaDlrzmj57vd+SzMCR//ad1kRXbPYzr6pUp8my
+	iEkq0257458gqIQ9/HNdl9S9PPuhHNZLTKC5OO3vVpFfSHL/ybImSLiHDkCBZBtVJLuV+6j9E6V
+	ZiPAe6LVrQEqnU8B9lIbV1poq6aPfIDHt5pZe7i8Xt5wROjl3HAkBB67qAXFrRugjK9OqLyBHdu
+	YYxW+JAJ9MrG2PPXtVkXts8Ow3iiqwYC3wYeRFNwy+U=
+X-Received: by 2002:a5d:5d81:0:b0:460:1f34:cf80 with SMTP id ffacd0b85a97d-4606da622ffmr21403888f8f.18.1781530771203;
+        Mon, 15 Jun 2026 06:39:31 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e009a0d3db09e2f2ffb.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:9a0d:3db0:9e2f:2ffb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f263945sm35148433f8f.8.2026.06.15.06.39.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 06:39:30 -0700 (PDT)
+Date: Mon, 15 Jun 2026 15:39:28 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf: Fix partial copy of non-linear skb test_run
+ output
+Message-ID: <ajAAkIv0R3ztfc5g@mail.gmail.com>
+References: <20260615073856.152479-1-sun.jian.kdev@gmail.com>
+ <20260615073856.152479-2-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
- when HW PMU is not available
-From: Harry Yoo <harry@kernel.org>
-To: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------CvbAk04er1zxFKbGiuTC0MZw"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260615073856.152479-2-sun.jian.kdev@gmail.com>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------CvbAk04er1zxFKbGiuTC0MZw
-Content-Type: multipart/mixed; boundary="------------NG9kPQSC4jZrLFe1DxL7i2Ih";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <f731686b-4d22-4d22-b5b4-2409a165122b@kernel.org>
-Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
- when HW PMU is not available
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+On Mon, Jun 15, 2026 at 03:38:55PM +0800, Sun Jian wrote:
+> For non-linear skbs, bpf_test_finish() derives the linear head copy
+> length from copy_size - frag_size. This only matches the skb head length
+> when copy_size is the full packet size.
+> 
+> When userspace provides a short data_out buffer, copy_size is clamped to
+> that buffer size. If copy_size is smaller than frag_size, the computed
+> length becomes negative and bpf_test_finish() returns -ENOSPC before
+> copying the packet prefix or updating data_size_out.
 
---------------NG9kPQSC4jZrLFe1DxL7i2Ih
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Thanks for fixing this!
 
+> 
+> Compute the linear head length from the skb layout instead, and clamp the
+> head copy length to copy_size. This preserves the expected partial-copy
+> semantics: return -ENOSPC, copy the packet prefix that fits in data_out,
+> and report the full packet length through data_size_out.
+> 
+> Fixes: 838baa351cee ("bpf: Craft non-linear skbs in BPF_PROG_TEST_RUN")
 
+Wouldn't this bug actually go back to 7855e0db150ad ("bpf: test_run:
+add xdp_shared_info pointer in bpf_test_finish signature") and also
+affect the XDP bpf_prog_test_run_xdp()? If so, could you also add a
+selftest that covers it for XDP?
 
-On 6/15/26 8:05 PM, Harry Yoo (Oracle) wrote:
-> slub_kunit uses hardware perf events to invoke _nolock() APIs from NMI
-> context. However, creating a HW perf event fails when there is no
-> hardware PMU, or when running in a virtualized environment without a
-> virtual PMU configured.
->=20
-> Since tests are often performed in virtualized environments, fall back
-> to a SW perf event so that the test can still run, even if it cannot
-> cover IRQ-disabled sections.
->=20
-> For the sheaves path, IRQs are not disabled until the barn is accessed.=
-
-> So some coverage is still expected.
->=20
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 > ---
->  lib/tests/slub_kunit.c | 70 +++++++++++++++++++++++++++++++++++++++---=
---------
->  1 file changed, 55 insertions(+), 15 deletions(-)
->=20
-> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-> index fa6d31dbca16..11255fc8eb78 100644
-> --- a/lib/tests/slub_kunit.c
-> +++ b/lib/tests/slub_kunit.c
-> @@ -303,6 +303,7 @@ struct test_nolock_context {
->  	int alloc_ok;
->  	int alloc_fail;
->  	struct perf_event *event;
-> +	bool is_perf_type_hw;
->  };
-
-nit: should have checked struct perf_event.type instead of introducing
-a new field. Will fix.
-
---=20
-Cheers,
-Harry / Hyeonggon
-
-
---------------NG9kPQSC4jZrLFe1DxL7i2Ih--
-
---------------CvbAk04er1zxFKbGiuTC0MZw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCai/29AAKCRCGXBN6rc5S
-1iiwAQCO/i4dUtvI7De9GTEkWrLWtNQjNkDEq/w/FjLTcTPUzgEA9cf42RSUBsjk
-fmWcqz6vNOsWUTT4bQl5mQxgr4phsgM=
-=XeJc
------END PGP SIGNATURE-----
-
---------------CvbAk04er1zxFKbGiuTC0MZw--
+>  net/bpf/test_run.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 2bc04feadfab..976e8fa31bc9 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -453,19 +453,16 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+>  	}
+>  
+>  	if (data_out) {
+> -		int len = sinfo ? copy_size - frag_size : copy_size;
+> -
+> -		if (len < 0) {
+> -			err = -ENOSPC;
+> -			goto out;
+> -		}
+> +		u32 head_len = size - frag_size;
+> +		u32 len = min(copy_size, head_len);
+>  
+>  		if (copy_to_user(data_out, data, len))
+>  			goto out;
+>  
+>  		if (sinfo) {
+> -			int i, offset = len;
+> +			u32 offset = len;
+>  			u32 data_len;
+> +			int i;
+>  
+>  			for (i = 0; i < sinfo->nr_frags; i++) {
+>  				skb_frag_t *frag = &sinfo->frags[i];
+> -- 
+> 2.43.0
+> 
