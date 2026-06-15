@@ -1,86 +1,90 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE2F223DFB;
-	Mon, 15 Jun 2026 01:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F692CCC5
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 01:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781487703; cv=none; b=OvxHAsul3oG6Ik7V6wZrxutAM+QYpyD2y/HRn9ij1p11tAYP3GGhFGvNOeAoAOR+DWl8241eQCmfkc9ocs08qCDtTEY1K7HPqnXDZraCloGSRJ+RzOkhPoRosOeHaG7FKQNiO8VIJg41YUMO1q5p2S8NP7UCG6/P7ExzmeyGs5E=
+	t=1781488174; cv=none; b=VZbGv1JCK3Fwr+tELp4Mq0y5yvY4RZsxyXpGe4BY0KWWjS0lrSR58nehZ0VwDg/BPO514NA0EVpZ/BrksJbpw8x5gChsRKKeszsDzEyzzuYEUVjtDARfaCkwL3tsIzz14ItE3m7wooK6062K73kGlu2un6nxs7yn8+6kRKpPc+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781487703; c=relaxed/simple;
-	bh=l0becU38gb5UdfjnYBQjZDJm2SNhPlgps2cnz5VIK6A=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ljqVRwqbMCEqQSuxhEhqFauT+bZe7/m/KNoTaFO6OA3m1nGSUgygqAahN/JO9w2JHrBAAuiRffagkc6/sbKmMwSp9sEdIcuLSu3jjJxbq1RwOpwg5S1qTvvzI6zZFHOdKwPh/s81vHBLGqbEwd+EAOEjuvsp+XXBdH3TAIgnuls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxLupMWC9qGSgUAA--.52654S3;
-	Mon, 15 Jun 2026 09:41:33 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxD8NJWC9qKJumAA--.54237S3;
-	Mon, 15 Jun 2026 09:41:29 +0800 (CST)
-Subject: Re: [PATCH v3 0/3] Move thread_info into task_struct for LoongArch
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260612011616.27771-1-yangtiezhu@loongson.cn>
- <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <e23e6781-d39d-d7fa-10ec-8d09349103ed@loongson.cn>
-Date: Mon, 15 Jun 2026 09:41:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1781488174; c=relaxed/simple;
+	bh=KltaF6PhiiYHXydkZQTOHE7CWs7Uc5vJx8ckI9GWbEQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dD1Fg0jwVGLjSvlQ3t5CTtnNkzSjXZj/gYJqSCiADhILlGJvVo3hxoiyrbPUbfih50v0MWuGiVo0JsyTmnIKa6HN6QzO1R/KSLDjCs726rJ3ypWUqxy361+OTA1wQ+0NJFekR4BNx4u04XIjWksNiwieogsa3IxmF+QQiKj84+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XXFcrg0M; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XXFcrg0M"
+Message-ID: <f8d1b14f-e577-44bf-baf7-fe9da871889d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781488170;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KltaF6PhiiYHXydkZQTOHE7CWs7Uc5vJx8ckI9GWbEQ=;
+	b=XXFcrg0MtpNMNomWtUxq/Hoc8mcVoO8tbr+9wYIxqvahoXfJCtErSvmIlrGUvRmENisCEX
+	bUxwC0/k1QHD8msADB7BglT4Cp6XSvMwB+yqh0jm95tiLUsS9zOHS+O7+P9un4GW7qs5sD
+	yOakivdFos1rN1xP0f2NgdjkUu7QA0I=
+Date: Mon, 15 Jun 2026 09:49:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Subject: Re: [PATCH bpf-next v2] bpf: Fix unaligned interpreter panic on JIT
+ fallback path
 Content-Language: en-US
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Puranjay Mohan <puranjay@kernel.org>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260611101216.30153-1-yangtiezhu@loongson.cn>
+ <093f957d-3d3a-4ce7-b59b-06203c556629@huaweicloud.com>
+ <9c84609b-3b82-9a43-0f25-4ac632109819@loongson.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <9c84609b-3b82-9a43-0f25-4ac632109819@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxD8NJWC9qKJumAA--.54237S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrZr1xurW7Wr1Dtw47uFWkKrX_yoWfZrcE9r
-	Z7Cr9rGw48Jrs7WayIga4rAr45tFyS9F4rKa1Iq3s2g3s8K3srWF4Sgr1Yyr4fXrZ7GrZI
-	gan0ga4fuw1j9osvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	JVW8Jr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17
-	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
-	JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
-	v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
-	67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2
-	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jjwZcUUUUU=
+X-Migadu-Flow: FLOW_OUT
 
-On 2026/6/14 上午10:51, Huacai Chen wrote:
-> Hi, Tiezhu,
-> 
-> I have queued this series for 7.2, does the below series depend on this one?
-> 
-> https://lore.kernel.org/loongarch/20260521125636.26744-1-yangtiezhu@loongson.cn/T/#t
+On 15/6/26 09:23, Tiezhu Yang wrote:
+> On 2026/6/12 下午8:37, Xu Kuohai wrote:
+>> On 6/11/2026 6:12 PM, Tiezhu Yang wrote:
+>>> When an architecture implements bpf_jit_inlines_helper_call(), such
+>>> as LoongArch, ARM64, and RISC-V, the BPF verifier skips rewriting
+>>> the helper call offset (insn->imm) during the bpf_do_misc_fixups()
+>>> phase if the helper is expected to be inlined by the JIT compiler.
+>>> As a result, insn->imm remains as the raw helper enum ID.
+>
+> ...
+>
+>>> +static void bpf_fixup_fallback_inline_helpers(struct
+>>> bpf_verifier_env *env, struct bpf_prog *fp)
+>>
+>> The function name is a bit long for a static function
+>
+> If there are no objections, I will shorten the static function
+> name to bpf_fixup_inline_helpers() in v4.
+>
 
-This is independent on CONFIG_THREAD_INFO_IN_TASK.
+I think bpf_fixup_inline_helpers() is not accurate, since it is to fix
+those non-inline helpers here. bpf_fixup_non_inline_helpers() is a
+candidate. However, a shorter name is preferred.
 
-> https://lore.kernel.org/loongarch/20260428080051.20938-1-yangtiezhu@loongson.cn/T/#t
+Please provide changelog btw. For a single patch, you can provide
+changelog here.
 
-This is dependent on CONFIG_THREAD_INFO_IN_TASK.
-
-But anyway, I plan to send new version for the above two series of
-selftests once this "Move thread_info into task_struct for LoongArch"
-series is merged into the mainline, maybe after 7.2-rc1.
-
-Because the code under selftests need to be updated, for example,
-it can use bpf_get_current_task_btf()->thread_info.preempt_count
-for get_preempt_count(), and it should use ld.wu rather than ld.w
-for bpf_get_smp_processor_id().
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+Changelog:
+v3 -> v4: xxx
+---
+ kernel/bpf/core.c | 28 ++++++++++++++++++++++++++++
 
 Thanks,
-Tiezhu
-
+Leon
