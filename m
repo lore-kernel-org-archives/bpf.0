@@ -1,83 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6A118EB0;
-	Mon, 15 Jun 2026 23:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D2A257827
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 23:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781565371; cv=none; b=rWgIB10Ts2bH4ouqugOKelHw2ih1wjAd0tXu0wKGJHCUeeKz+uwDDIZ0mp0tbrqGXgj+ziHE9tdHT/d/4SEekDwHBPjI3Vkd3T92vGq1bXP0+vjpwpfz12mGePCxI2HI1599S5WCVKULiyALOo7VzkQAxxLSYGi5pgSwV2pFgbo=
+	t=1781565712; cv=none; b=cpztDQMoAW3B+TLenY1h51WFc1+PvDD2YrY2ZIW8Y2jHe3CbP7wmrsjQDPEcl8E2Xu88gXPMNqG4wfhl2nLnjWIFCz9n1WSoeNn/19qBNAg7jBv6oadb3O3nPhacM2FVt/DPXdycUc6cUb1hDOY8VFlDGqC//u33PLdQMqEAdns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781565371; c=relaxed/simple;
-	bh=eMn8aDsbUSTDVO7DTdxWIMDLPPYN75Q0md1zRQ0MLwA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YiNBGADUqsFk1PPWyKbuoB7J4IgzdEKQuPo2TWMhZ/SqZN4XYB6wKOZiH/6eQkGrgnsumanaZQHmb+23n6aNNd9sAb7NbdUM8ntA3LAR6KqTcFwLxZ5Moi+dysRT9l9eXrz5/S7Mq5PNGofki3bkOP6+JSqjUEMibsqpsbFX3yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNYgJf29; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781565712; c=relaxed/simple;
+	bh=+bKP6RNU3Lnhj+rdcITSOzQWYmJ2s6yMJ9InXzg3GJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DWtaZXhE8Gcb45iUpN/Br8hwDRZd3C8GspVsxocp9vW8j3FAYSXdoqiOyJVHyl4BD7gRmunRA6JsnA99AjPoF7sb+BBu5bHu9YsRvEI+FkKYvx9P1KJWxhNk9LP4shn9Y1zNxPtxApyehLLnZUwBN8UPJknB6U+k3EBXj82943U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiHuSdEg; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNYgJf29"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE8F1F000E9;
-	Mon, 15 Jun 2026 23:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781565370;
-	bh=GRH8yIzqLR3v4Izgh6VsTtJPcd4MPPnKk7ieqqGaUK8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iNYgJf29bbMZEekZSSvPc5l/sTl+ZO3JIv18asgC9/wk/nCrsaLdKBQp/cQj3TQYt
-	 Ngo0isBlQCE0jMRBZrM4I16C/GYCBfkREkaDJg/VTgXTQJFxpxVMSzppNO5Y55lz3R
-	 dhznE1qgtL7918jG2E1Ca/ksWNB0frkw3fI9B6gP3TLHaLVxiyHTyclCWD9an0RQsL
-	 OtZevU4AUVlBbFWKOqd1zfL/wEEVD1OUELtF44Hn3fuqCcRlvvdj+1tb4scga7WSyL
-	 sZnlPs1FHUU87yyg+L++sbzCXApzYimKPKGXVigJSxhThq9HxdhDCbjeSraUKlfiOC
-	 0wKdaIH6XQzlA==
-Date: Mon, 15 Jun 2026 16:16:10 -0700
-From: Kees Cook <kees@kernel.org>
-To: Jamie Hill-Daniel <clubby789@gmail.com>
-Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Subject: Re: [PATCH RESEND 0/2] seccomp: Allow using `SECCOMP_MODE_STRICT`
- with `SECCOMP_MODE_FILTER`
-Message-ID: <202606151615.312A45613@keescook>
-References: <20260526-seccomp-combined-v1-0-304b1cc3ad24@hill-daniel.co.uk>
- <202606122110.28245E2D@keescook>
- <CAO1UbGcbueeqLPOFA+=cJKjQxgXr1pW1vGFR-zNOT7rqsUqs+w@mail.gmail.com>
- <202606151535.F32ACD538@keescook>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiHuSdEg"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e6cee520ccso2668340a34.1
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 16:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781565710; x=1782170510; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fy5hRbHFiNdXG0PzaLsKXyxOkKyeJ6SKuWdrQQj/R0E=;
+        b=HiHuSdEg/lEgyLF7S5g9eHenc3TH8367HorbKF8dtskOJJMU8yhGOJ5+tsFtS2NhjT
+         rM00OnyfXFZCH4PMBHaZr/lxSiVDE9iQ528hgQ8nflg70xrDxt9E0XyY52W22nq+HrV3
+         PdKRM+FRBBsUAPEAUVX0gjoiKxoEaTRxLzQPMtnX3VYHnmaatTAZdbmuXvG1DAiZdLrf
+         HRIMrIIcUtcatDbOpFzrZf4xO87xcXlMZqSXYVI6gN7ggQxzZdg1td8XmbLTaJS9ih1i
+         JB1EtqH8f2AILpnzevqkUPwmWwz97UC8S/LM3Q9SSAyH28v22tpoA5TYofiOvJCD0sug
+         M1Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781565710; x=1782170510;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fy5hRbHFiNdXG0PzaLsKXyxOkKyeJ6SKuWdrQQj/R0E=;
+        b=GPMi3E5eRugI07g97Ralac6p9AIJzgt/wbBgW+gYjDuT3RGotH2lIbImTcoNCI+mbT
+         cmnLr8yUlopuhMZLtOLATAoRsQ88LrkOhsxy9RzIZwHP70PL8jmai6+7XnobWnmeQX34
+         mdI3CFMiTP3VOF86IjtE2cJCJNYvPNrnT7jkEAywp4wtJFhrukumZBhByJDJ9JfX6wxO
+         4mdSSESO7GyEuPFx5KqDFwdygI5wJt+9uDDx15CCDOpOGZQPSwvwI/6lLNmmTLofuiDj
+         KfXf1UmrbDvi106onDxovdrUK2Dn6YAY2fIAfQg03+2CT8WB7j8s4iRlnzwblPPL569z
+         styg==
+X-Gm-Message-State: AOJu0YzYZVk/pPuLgcrBTojA8QjoIe1RC8btKT/obNxPg0pxRChbWtlL
+	gGr0gP8UFf47K3VP7cOtiXN40SfskAAfcUgKS58QOJA4RU+gEpTC8T2My+pu6z+7
+X-Gm-Gg: Acq92OFQy1yMJPQNtC4ek457glG5HEybiF3Z66E9hLGpBNUtfOJ712xZogTCtk1Ra3P
+	xLaHOx+/76Q/RRyMWpkJJ4sLpNjZGWtAouBlDdncVPc+rG6ri8xymIRXM49cylTdv3nCRe1Gvbe
+	TMNJ1tNDFPu0O0uTZ0dU8g2IFT3Jox8U8gDxYplu5b+53jMcxQnkksdy8Nz5FY+BngXAw10RYQz
+	FzD5OqjoDa1cf8GHJdVrU6C50tfXfZ0yn1hbCqWCWU934+elLVrhRFJhJgBQ13uf//FRK6iJRH5
+	hcaWSvc5C9/EnkSWoHq/bVnslTDV49mE+p1vYh23SVeVu/x+deaVEsxKoQyadqmSrPy5kgFCpMq
+	qKcsP4LjoIJaOI7qwZ2gR+TsRGOL6/tVxzbUkqqiTaN6aZZFLKbEbxgCVXvJW1as6M3+A7DU6X1
+	QrAS3D7rYA6zYdNrk1cpObmd5RcyMQW2cp8Cnb35HgOs5lhKKeKoiicfxuazTCLt99SSdfP905c
+	whR7St5yM+DbnzNsgeZPRu7pKjnvNmjcEZidquqYdZ83RPlTOY=
+X-Received: by 2002:a05:6830:3591:b0:7dc:d7e5:8d43 with SMTP id 46e09a7af769-7e8fc80b251mr1087385a34.2.1781565710314;
+        Mon, 15 Jun 2026 16:21:50 -0700 (PDT)
+Received: from MacBookPro.lan ([2600:6c4e:600:3c6:100c:91d9:c41d:6cb7])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f5bc0e1sm5184642a34.12.2026.06.15.16.21.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 15 Jun 2026 16:21:49 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next] bpf: Emit verbose message when prog-specific btf_struct_access rejects a write
+Date: Mon, 15 Jun 2026 16:21:46 -0700
+Message-ID: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202606151535.F32ACD538@keescook>
 
-On Mon, Jun 15, 2026 at 03:38:35PM -0700, Kees Cook wrote:
-> On Mon, Jun 15, 2026 at 05:23:53PM +0100, Jamie Hill-Daniel wrote:
-> > On Sat, Jun 13, 2026 at 5:14 AM Kees Cook <kees@kernel.org> wrote:
-> > > On Tue, May 26, 2026 at 04:32:14PM +0100, Jamie Hill-Daniel wrote:
-> > > > Link: https://github.com/moby/moby/issues/42082
-> > >
-> > > This doesn't show any particular application, just a demo program.
-> > >
-> > > I'd *really* prefer to only add complexity to seccomp if it is
-> > > absolutely needed.
-> > 
-> > When I filed the original issue it was attempting a minimised
-> > reproduction; I was trying to run some legacy binary in a container
-> > that I unfortunately don't have the context for any more.
-> > I've submitted another series that should hopefully address some of
-> > the concerns raised here, including complexity.
-> 
-> Right, I think I'd prefer the legacy binary be adjusted instead. And not
-> adding complexity to seccomp given the issue isn't actually a problem
-> any more. :)
+From: Alexei Starovoitov <ast@kernel.org>
 
-And here's a wrapper, if there's no source for the binary:
-https://github.com/kees/kernel-tools/blob/trunk/seccomp/strict_launcher.c
+When BPF_WRITE goes through a PTR_TO_BTF_ID register, check_ptr_to_btf_access()
+delegates to env->ops->btf_struct_access(). Most implementations
+(bpf_scx_btf_struct_access, tc_cls_act_btf_struct_access, etc.) return
+-EACCES for disallowed fields without logging anything, so the verifier
+rejects the program with an empty message. For example a scx program doing
 
-(This could probably be improved...)
+  1: R1=trusted_ptr_task_struct()
+  ...
+  4: (7b) *(u64 *)(r1 +0) = r2
+  verification time 83 usec
+  the program is rejected
 
--Kees
+leaves the user guessing which field is off-limits.
+Emit verbose message.
 
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2abc79dbf281..030505c8f3e2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5786,6 +5786,10 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 			return -EFAULT;
+ 		}
+ 		ret = env->ops->btf_struct_access(&env->log, reg, off, size);
++		if (ret < 0)
++			verbose(env,
++				"%s cannot write into ptr_%s at off=%d size=%d\n",
++				reg_arg_name(env, argno), tname, off, size);
+ 	} else {
+ 		/* Writes are permitted with default btf_struct_access for
+ 		 * program allocated objects (which always have id > 0),
 -- 
-Kees Cook
+2.53.0-Meta
+
