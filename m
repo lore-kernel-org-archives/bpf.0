@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A28B2FFFB5;
-	Mon, 15 Jun 2026 23:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C6127FD51;
+	Mon, 15 Jun 2026 23:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781566823; cv=none; b=VYDNtD58scE2IrJO3PjLUSEm85rv4aQR/l/PQy7L6db6/5moBboJY3+D6jz7p12v/e1UOWHvJ7gFWF2rGDyR1rtE8LX3eyHkrbSJ9wddf8t8eel3kYN2h4m/vLnP00+59XD1Fq9BWPwlveXgva3ZtCAypT6XQcf5juc0Z57zTzI=
+	t=1781566832; cv=none; b=NbLAClD03u7W7xWCBXO7bEMFjrOaQ7yG1ymk+S2pLxVYs4nvSJ8MgRVHi4lbB9zlrLXXbpkc+boLUMyHGU/io1hy7hGITZmygI6d8iuYIAM2ngwPuQrCy9fY/eZvzJd7UfnMuuR6eG8BcIb6vvkE382n8MqXc13TPWWvOKYQMrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781566823; c=relaxed/simple;
-	bh=HHdUfbaEjQ41R9T6Q1Qd+ec2nt8+WSsNqfTCq1pmptU=;
+	s=arc-20240116; t=1781566832; c=relaxed/simple;
+	bh=YWFhuLh47LIuayAiYIm3986IlaylnHH07h8VfodK68U=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bw+amFtcZeY17XtV72n2AcUde3HF3xtEzD0sHin4nBiJ4u0k1PNWEwDSPI35Sa6TJkAfuylSeusG52+zPJ+pKlZUbk1Rvr6zeiZ4y3BENJzumB04Y4PkV6fT25Br0EaN4Jg3aPcsV25Q/q5rDuT/is/xbuDamKqL2siLpnl4g/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEoY0qeQ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=IVuzs4veS94TyAEsX9JZdzXwkf3NTUGbHmcjH0rkYy3yybJtyq21M+Gr09kWpbY/PiE3Gj2Mp7lb5+z1GrkrACJAAv8Pg5dy3OK1y9S50Yf6BuoPLbPuIrEPiLHXNLc0klLB7yeCP+ZtNyGLegZWtlTbpvQw7TIk2QqjnRC4h+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S997qUK6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEoY0qeQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67BD1F000E9;
-	Mon, 15 Jun 2026 23:40:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S997qUK6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9E11F000E9;
+	Mon, 15 Jun 2026 23:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781566821;
-	bh=WzzZkl0ITKGF+e89UCTNrQ3QOTm2s+mNTX72P5uC134=;
+	s=k20260515; t=1781566830;
+	bh=0HG/R2bpOUkgG08uopBzx3JjVKz2/3HN1JP1LTvWEOc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=AEoY0qeQ6ryZxCtIx8/jTZzyAqawRslLOub3uUTkYMX0kiicXnwmjkT+oK4NhxzGF
-	 EQ7Clm9X03BRFRHtMMxlM12FqgogeM39l96olju/Cz3JSbq8H5FNB4szo83f3KRRmi
-	 WN6VVVLB5Fhyabn0d/I+19gDZa5dP7kYodSIveQNLNuB+qkBgdk0BBbmfxAF2NsUOJ
-	 hc77OMZA8O8rRqOM93gqmpdoz8C9v91aJxCYGRGVDmic4JX5fnlASBDdbMweeq4K9z
-	 ordxeihikraCNS9LC7EHq/7Fp5KucgMJ0OMp4WF39JJpsxxH3u81TyBzcFpPNUxOy/
-	 d08IJJQWk/7pg==
+	b=S997qUK6RKKv1he7OdNjuWK4MJQAH2p6y4j2o86GRE4k6ZN/RDa70tfvb7JnuSBYF
+	 cV/pS9yhDC/7PhpnY4cSNKCAW4s2ohMxsM3LGaQpZ3NGuShpUvcZSpyDHlmeO9f1AR
+	 l3B5pRqKl/mvmbUfJQulY/M12AQPQKu/w8ID9GK8OJ2XnxH7uFDppVGnadNGZiF36L
+	 oWBva62MzGekwdZvx2g2JvsPXKwbBAkrL35Y6AJNGRoVma1mqx9n+q6uAPugTSqDbg
+	 J07xTrmLlbloW/EPBFOhM39NjHHs/iI/TYaLilez1AziFuN3JiGZGpkgBCYZyT4Qmu
+	 6xPaI4ucSV1Zw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198093839A08;
-	Mon, 15 Jun 2026 23:40:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568963839A08;
+	Mon, 15 Jun 2026 23:40:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,49 +37,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/4] ICSSG XDP zero copy bug fixes
+Subject: Re: [PATCH v14] selftests: net: add local ECMP rehash test
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178156681669.339383.12184092559832097375.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 23:40:16 +0000
-References: <20260611185744.2498070-1-m-malladi@ti.com>
-In-Reply-To: <20260611185744.2498070-1-m-malladi@ti.com>
-To: Meghana Malladi <m-malladi@ti.com>
-Cc: diogo.ivo@siemens.com, haokexin@gmail.com, vadim.fedorenko@linux.dev,
- devnexen@gmail.com, horms@kernel.org, jacob.e.keller@intel.com,
- sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
- daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, kuba@kernel.org,
- edumazet@google.com, davem@davemloft.net, andrew+netdev@lunn.ch,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com,
- rogerq@kernel.org, danishanwar@ti.com
+ <178156682488.339383.9205404821532401957.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Jun 2026 23:40:24 +0000
+References: <20260615042158.1600746-3-ntspring@meta.com>
+In-Reply-To: <20260615042158.1600746-3-ntspring@meta.com>
+To: Neil Spring <ntspring@meta.com>
+Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
+ kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, martin.lau@linux.dev,
+ daniel@iogearbox.net
 
 Hello:
 
-This series was applied to netdev/net.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri, 12 Jun 2026 00:27:40 +0530 you wrote:
-> This patch series fixes bugs introduced while adding xdp
-> zero copy support in the icssg driver.
+On Sun, 14 Jun 2026 21:21:58 -0700 you wrote:
+> Add ecmp_rehash.sh with nine scenarios verifying that TCP rehash
+> selects a different local ECMP path for IPv6:
 > 
-> Patch 1/4: Fix wakeup handling for Rx when available CPPI
-> descriptor is zero
-> Patch 2,3/4: Fix destination tag in CPPI descriptor to enable
-> proper Tx xmit for HSR offload mode with XDP and zero copy
-> Patch 4/4: Fix Tx copy wakeup handling for XDP zero copy
+>   - SYN retransmission (forward path blocked during setup)
+>   - SYN/ACK retransmission (reverse path blocked during setup)
+>   - Midstream RTO (forward path blocked on established connection)
+>   - Midstream ACK rehash (reverse path blocked on established connection)
+>   - PLB rehash (ECN-driven congestion on established connection)
+>   - Hash policy 1 negative test (rehash attempted but path unchanged)
+>   - No flowlabel leak (client mp_hash does not alter on-wire flowlabel)
+>   - Dst rebuild consistency (dst invalidation does not change path)
+>   - Syncookie server path consistency (SYN-ACK and post-cookie ACKs
+>     use the same ECMP path)
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,1/4] net: ti: icssg-prueth: Fix AF_XDP fill ring alloc and wakeup condition
-    https://git.kernel.org/netdev/net/c/dfb787f7d157
-  - [net,2/4] net: ti: icssg: Use undirected TX tag for native XDP in HSR offload mode
-    https://git.kernel.org/netdev/net/c/bcbf73d98195
-  - [net,3/4] net: ti: icssg: Use undirected TX tag for XDP zero copy in HSR offload mode
-    https://git.kernel.org/netdev/net/c/f9691288413c
-  - [net,4/4] net: ti: icssg: Fix XSK zero copy TX during application wakeup
-    (no matching commit)
+  - [v14] selftests: net: add local ECMP rehash test
+    https://git.kernel.org/netdev/net-next/c/ae57a5533243
 
 You are awesome, thank you!
 -- 
