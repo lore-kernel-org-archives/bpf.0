@@ -1,93 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FE51F4CB3
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451C0405F7
+	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781490177; cv=none; b=WU6g8yTkV9vzZh6V/JsizWsTGfXtV9Gz0ExSqTsUqMC0vZQeX0spzBZwPyR+U9f8wb6GO/ugB3UnumM754S/dDABsDuGx6JtHbFBAtYmZ+M3U97TkwpEEibl3JwNg8mvJbccEbt9Y4xfc4MqWZ3dnMgwFJKE7+wOGZWPH/2xRLQ=
+	t=1781490768; cv=none; b=PBRzjx2wb3t1xBZelqqLHp3nNhPCBZUBuvJZIrVTZ3RvE89JZxlwxiq0tm87P+kRLuXB5kYiShh0o34q0vBftm3Eed0BOy/3MBoJDb3cD6OHMAC6iGjI5jhNqxyGG1Oq0ijF4zlfcgcvXnEnt0dUAOqROZCE9vTgNw9SNax/8eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781490177; c=relaxed/simple;
-	bh=xCsUMh1nS0mbpecrkieLhDPcw/OPT3goLS49yYxNSRU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OBva/6cKq5v9smwk8T+SEMxCha7HTW85ij19dIXIfoCIWrMogHTuDoPHjMR//wEeKVCoicdzSvrD1TYHNj+Wz+47z2i/TufLRVk9PAc4SOhB4he2GvfoMd1/BNzoJB+U0+LyRRZIWW337NzRQIkGsKlDHjC/eyrcK+rGJcr7khM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dul78nW2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781490768; c=relaxed/simple;
+	bh=ATBka2ySohlcSnp4EWe9iJGGS4bl5NcIluKZDi6q/xk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nwaJ5qZsXg+XAdGonVL0W/y2wNfL+jRGJPbWQueRr8Dom9DM7VXjfxD/IigKh0+uojxm2I35/IkzcouGyGXGpQOvl4BTQLmSb2kJAHJhoAj62eYdx6kZTRUfZKHE+JY1Sar+pJ1o+mIJR9Rp4I+LbxB61V4NZ9jqyK0bLapUO0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAjkN3G0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dul78nW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348FF1F00A3A
-	for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 02:22:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAjkN3G0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CD61F000E9;
+	Mon, 15 Jun 2026 02:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781490176;
-	bh=xCsUMh1nS0mbpecrkieLhDPcw/OPT3goLS49yYxNSRU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=dul78nW2dqUIKlU/reSDfwr6HPyemYksu2t0et3SRTXnr2JD5WO0Z/Tcw0I9RLuQT
-	 xiypR5l0gB67CA9nrd5d55k+RRtIuMJbLSzVMOETWWGqSimIlZEzHqrZpnONI4Hcdc
-	 hngPMiN1RBG0maMvNqvnoAY0TvSnSPpvT6+CRM9I0jlLVe0qQT/3Ndpu3B1AXWPovA
-	 S0OqHuoCU60cIKfYn568mUV8ys5sM0KbaHCmoS83Q7sTaV5rUVSNmSTPoyWlFwsXnH
-	 8LWmEAwCjQ/UuHSeAZANN+TU+r6jP8b6KGKtX9VLPW19vXdtziAawxrxOsLrKPD9Z4
-	 vQXxYQNtDirMg==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-68d23396ed3so4879762a12.1
-        for <bpf@vger.kernel.org>; Sun, 14 Jun 2026 19:22:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ81wwjNlIX8oWLXv/UuyFeIy236ofhoo3rPsStWpUErsuoqZV3T7JDwrfIZGASSI9yZ0Lg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2dz5w5gdfJluKHG/GxPC5PBAulTYCt1gW8OtDpYjXSGtfsAhV
-	KUJbzXBO9Har5kvWO4QqV4x1QvxJvYs0Cl/7e8EAFuA7hcdlM/lcW7UjqXKwZltg/S8JJUYvpBN
-	PgWGROm312V8EMwXBUK22XmvAIp14MeM=
-X-Received: by 2002:a05:6402:380b:b0:681:eb80:df17 with SMTP id
- 4fb4d7f45d1cf-693778c3ae1mr5156233a12.3.1781490174933; Sun, 14 Jun 2026
- 19:22:54 -0700 (PDT)
+	s=k20260515; t=1781490767;
+	bh=APYz5oH8atIf3QVciolsRS3bm/aD4Ze5MHS/tgSdZq8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XAjkN3G0FB+tgHpX1WF4QtTJ+7t4n0xbPgxtTS66L2b9L/i/aoc5qcZCme92rqSFz
+	 C2H5FgB1/wlNjMt+yBywHdN6Pe0tGy7vuBHJsTDikJyNrTopdm0of5ghBlW5+YHH2z
+	 Ks9PHkLxEfqC8bu8U8Ml1wrnu8blkl5YFx7TIteLgguGMr6fGeOA4iKDM0UVDn2gTK
+	 9ks9hhZnx+K2LjdHRKlqCvQBQVS0UbVmes0aG/jVL4HdWZounX2yt1K3bmqrdzyrKE
+	 nx+ol4f83kbitqZna76AjhhztYgRwDJV51at/LQC+EctQ4irH252TSEWkoY/4MbuSD
+	 2Y2HGCFDtViYQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] bpf, sockmap: reject overflowing copy +
+ len in bpf_msg_push_data()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260615021959.140010-2-jiayuan.chen@linux.dev>
+References: <20260615021959.140010-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 15 Jun 2026 02:32:46 +0000
+Message-Id: <20260615023246.E1CD61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260612011616.27771-1-yangtiezhu@loongson.cn>
- <CAAhV-H4daHGFoAiXrwcNXj=T1kZm5jRRwd_sCiv7ksjR2ynHgw@mail.gmail.com> <e23e6781-d39d-d7fa-10ec-8d09349103ed@loongson.cn>
-In-Reply-To: <e23e6781-d39d-d7fa-10ec-8d09349103ed@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 15 Jun 2026 10:23:17 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6jJpEnNTUF0CF60fDB5ShNT+C59NEH=YodJtepFQgrKQ@mail.gmail.com>
-X-Gm-Features: AVVi8CdShvgPGBApSdXR2DwBr9UP7oVXAZR20TrhilIR-50IQzpsobXGkoxYJ5Y
-Message-ID: <CAAhV-H6jJpEnNTUF0CF60fDB5ShNT+C59NEH=YodJtepFQgrKQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Move thread_info into task_struct for LoongArch
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 15, 2026 at 9:41=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> On 2026/6/14 =E4=B8=8A=E5=8D=8810:51, Huacai Chen wrote:
-> > Hi, Tiezhu,
-> >
-> > I have queued this series for 7.2, does the below series depend on this=
- one?
-> >
-> > https://lore.kernel.org/loongarch/20260521125636.26744-1-yangtiezhu@loo=
-ngson.cn/T/#t
->
-> This is independent on CONFIG_THREAD_INFO_IN_TASK.
->
-> > https://lore.kernel.org/loongarch/20260428080051.20938-1-yangtiezhu@loo=
-ngson.cn/T/#t
->
-> This is dependent on CONFIG_THREAD_INFO_IN_TASK.
->
-> But anyway, I plan to send new version for the above two series of
-> selftests once this "Move thread_info into task_struct for LoongArch"
-> series is merged into the mainline, maybe after 7.2-rc1.
->
-> Because the code under selftests need to be updated, for example,
-> it can use bpf_get_current_task_btf()->thread_info.preempt_count
-> for get_preempt_count(), and it should use ld.wu rather than ld.w
-> for bpf_get_smp_processor_id().
-You can update new versions now, then they can be merged together.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Huacai
+Pre-existing issues:
+- [Critical] Appending to the end of a full or nearly full message scatterl=
+ist reads an out-of-bounds or unrelated `length`, causing a heap buffer ove=
+rflow or massive information leak.
+- [High] Allocating a new page without `__GFP_ZERO` in `bpf_msg_push_data()=
+` leaks uninitialized kernel heap memory.
+--
 
->
-> Thanks,
-> Tiezhu
->
+commit d474d4a6051d7bd721dc6d3aa5d5f0dff7f6ec9d
+Author: Weiming Shi <bestswngs@gmail.com>
+
+bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+
+When the scatterlist ring is full or nearly full, bpf_msg_push_data()
+enters a copy fallback path and computes copy + len for the page
+allocation size. Since len comes from BPF with arg3_type =3D ARG_ANYTHING
+and both are u32, a crafted len can wrap the sum to a small value,
+causing an undersized allocation followed by an out-of-bounds memcpy.
+
+Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 57b00c6cc8cc1..4b159045881dd 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2829,6 +2829,9 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg,=
+ u32, start,
+>  	if (!space || (space =3D=3D 1 && start !=3D offset))
+>  		copy =3D msg->sg.data[i].length;
+
+[Severity: Critical]
+This is a pre-existing issue, but does bpf_msg_push_data() read an
+out-of-bounds or unrelated length when appending to the end of a full or
+nearly full message scatterlist?
+
+If appending exactly at the end of the message (start =3D=3D offset + l), t=
+he loop
+terminates with i =3D=3D msg->sg.end. If there is exactly one available slot
+(space =3D=3D 1), the condition space =3D=3D 1 && start !=3D offset evaluat=
+es to true,
+causing this line to execute.
+
+Since i =3D=3D msg->sg.end, this reads the length of an unused, empty slot =
+(stale
+data). This stale value dictates the allocation size and is added to the new
+scatterlist element's length (msg->sg.data[new].length =3D len + copy). This
+causes the scatterlist element to advertise a length much larger than the
+actually initialized data, triggering massive out-of-bounds reads during
+transmission and leaking thousands of bytes of kernel memory.
+
+Additionally, if the scatterlist ring is entirely full (space =3D=3D 0),
+msg->sg.end equals msg->sg.start. Thus, copy incorrectly reads the length of
+the first element in the ring, while the subsequent code consolidates the l=
+ast
+element. This results in allocating a page sized for the first element but
+memcpy-ing the last element's data into it. If the last element is larger t=
+han
+the first, this causes a deterministic heap buffer overflow.
+
+> =20
+> +	if (unlikely(copy + len < copy))
+> +		return -EINVAL;
+> +
+>  	page =3D alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+>  			   get_order(copy + len));
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does alloc_pages() here in
+bpf_msg_push_data() leak uninitialized kernel heap memory?
+
+This allocates a new page but intentionally skips initializing the newly
+inserted len bytes region, copying only the front and back portions of the =
+old
+scatterlist element. Because the allocation does not include the __GFP_ZERO
+flag, the inserted space contains whatever data previously occupied that ke=
+rnel
+heap page.
+
+If the BPF program does not subsequently overwrite this region before the
+message is transmitted, the uninitialized kernel memory is sent over the
+network or exposed to user space.
+
+>  	if (unlikely(!page))
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615021959.1400=
+10-1-jiayuan.chen@linux.dev?part=3D1
