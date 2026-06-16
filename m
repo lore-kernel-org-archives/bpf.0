@@ -1,138 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8CF43E490;
-	Tue, 16 Jun 2026 16:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C4D44E045;
+	Tue, 16 Jun 2026 16:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781625851; cv=none; b=ObyAjpVQ6i6IWM596edg79QsjamM63MmahBJYlSmxsynFg7MaEGNlKEYDiC/CZZeUwS/2bZthcoJGKbw02x623fXQqaXfFqxEIBfdBg6AQh/+Aar5/tnuTj5IyAPUlnMYnk8CfeBDkpB453ytuQh2F0FIZEpH+MhyXQivo/Ovoo=
+	t=1781626219; cv=none; b=QbmIkXtLW8toOnJvoVsaO/3T7ZeWyb4/WwjWXeL8bqY6urT+w8oGnv5V91oRdg3pjxFuB0xzVyW6aVJ88T0q6Nu6Yz6gk8gDqkDRw6MJQkmUIZR0DBW9yPOghrlSzrdkqMaw4975smVwcW+JoRSKI3fmhqizCCbFj8ncMnreAZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781625851; c=relaxed/simple;
-	bh=T6To9B6ZmqXvnt/Vl2eVS+dXQKx8dem6fFJoC57u6ng=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jVIhnLurwMMAYKevZJoVIv/pT9RfztV5tnRP+N+i03iYInLdQFrNZnYE8rQqBCy5JHV4f9J6RE067ow1Y6f51R5aqULrNfGgklMfhXIO36uTEJelETYNeIqs9PZLZJXfupPri9Htvps9/8xiMFWanepdTQB9XUqEigOPRXVHKyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bAWxZa/q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781626219; c=relaxed/simple;
+	bh=ogTgS1jVkWDMupmCeIfpN/zACidCFcsMLCYNh0k14Mk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=u4krbXjaVrZwvc/WwBa55OgkWw264pNo92pFjyn3y19j0ierdR2Oz+6MlHMOMtIHDn3Y+skrgjtOGbEMvxuckU4g8rH3erehCTH/fxfPjEQLb2jJ2nKGQUrw9rRC3aMvuVs0pMQUkB3wD6Va7vDDE+3clGXSO7JdgxYE3+vPArU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8cNWj6Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bAWxZa/q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F321B1F000E9;
-	Tue, 16 Jun 2026 16:04:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8cNWj6Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC4C71F000E9;
+	Tue, 16 Jun 2026 16:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781625850;
-	bh=kU0zLg0QkTQTfWO/20I2HgY3rXXs+o94Zmsz2NZ2hgQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bAWxZa/qnFFcu9sfoF1dbG120pIYNw86CVVnbaG/Vpundlq2aX2lSnnQCHfeFDDlR
-	 uxzKbXBLr1xogP0wSP/Qp81TPrXDtPt5Abg2uKhF0WNQCiEaELjXiZ7SfirSrnn3u3
-	 oiktpOXvd09DaBIlcxV0pPjcBnn/oT0X6lpONyALck8rC9EYydAePP74GU59y+1MRS
-	 zI1yhfbbcrpXgjXYeDr7jiw52F1gfsA35BivPLXAP/KP4p7YvHrWG6B4lDCa9auybj
-	 CO4k9lqS4qKdZWVpsZ6GWHioEw2GCWOsyhTsC4+09/dSmur6tbyqXc2hfaUijrZcSm
-	 c/EPflZUzWEeg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 4/4] selftests/bpf: Adjust wasted entries threshold
- for ARM64 BRBE
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260616155716.2631508-5-puranjay@kernel.org>
-References: <20260616155716.2631508-5-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 16 Jun 2026 16:04:09 +0000
-Message-Id: <20260616160409.F321B1F000E9@smtp.kernel.org>
+	s=k20260515; t=1781626217;
+	bh=iOEMBj+SMmhTxgAMAdDbP7Hgv7+uyAEdMJ2s+ta4Zmk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=W8cNWj6ZJ76nq1ZaMGWDK2BPGXPMMqaFkkJkaZMD69BX/dP2pcJlPKYlxftlzeVUM
+	 Klt5erPAuRdRaNLWEETqEz5ohL9DptSUFxFO5OaJgkG+hnX2gcBDdF0NJxxTc7nY2l
+	 avtQhogcxxA9+wcEDUQpo0aEqcKLn0aaKNP3d+PfyKEprUKGNxBrK2WExhs/Zwwdsw
+	 yJRPBJ3UhcCc8AXvsEsNZ1YISAkV5tat1w5T2SUBI/04GHZ1TI8e6HzeIwHo5EwknE
+	 Oi5G3pwy5Vfc/ihfETEiQi1Bwg4L9jCu06NIVtbJ1z6u7/ZOi+viakUsL+zZf+9bA+
+	 ri1a8qf4tjfCQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9391E3930ABA;
+	Tue, 16 Jun 2026 16:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/5] tls: reject the combination of TLS and
+ sockmap
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178162621239.1143794.13386729126363922107.git-patchwork-notify@kernel.org>
+Date: Tue, 16 Jun 2026 16:10:12 +0000
+References: <20260614014102.461064-1-kuba@kernel.org>
+In-Reply-To: <20260614014102.461064-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ bpf@vger.kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com,
+ sd@queasysnail.net
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The test skip threshold for `total_entries` was not adjusted for=
- the increased ARM64 overhead, leading to guaranteed test failures on hardw=
-are with 16 branch entries.
-- [Medium] The ARM64 threshold for `wasted_entries` provides zero margin fo=
-r environmental variations, making the test extremely brittle.
---
+Hello:
 
-commit 08ff160f53fde2f401cb063e6cbc84b6bc9a9970
-Author: Puranjay Mohan <puranjay@kernel.org>
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+On Sat, 13 Jun 2026 18:40:55 -0700 you wrote:
+> There are no known TLS+sockmap users and it has some known
+> hard to solve bugs. Let's reject this configuration as we
+> discussed a number of times.
+> 
+> Jakub Kicinski (5):
+>   tls: reject the combination of TLS and sockmap
+>   tls: remove dead sockmap (psock) handling from the SW path
+>   selftests/bpf: remove sockmap + ktls tests
+>   selftests/bpf: drop the unused kTLS program from test_sockmap
+>   selftests/bpf: test that TLS crypto is rejected on a sockmap socket
+> 
+> [...]
 
-The commit adjusts the wasted entries threshold in the get_branch_snapshot =
-test
-for ARM64. It raises the threshold to accommodate the ~13 wasted entries
-generated by the ARM64 BPF trampoline compared to ~7 on x86.
+Here is the summary with links:
+  - [net-next,1/5] tls: reject the combination of TLS and sockmap
+    https://git.kernel.org/netdev/net-next/c/460e6486617c
+  - [net-next,2/5] tls: remove dead sockmap (psock) handling from the SW path
+    https://git.kernel.org/netdev/net-next/c/79511603a65b
+  - [net-next,3/5] selftests/bpf: remove sockmap + ktls tests
+    https://git.kernel.org/netdev/net-next/c/faf89584e436
+  - [net-next,4/5] selftests/bpf: drop the unused kTLS program from test_sockmap
+    https://git.kernel.org/netdev/net-next/c/6af8971d910e
+  - [net-next,5/5] selftests/bpf: test that TLS crypto is rejected on a sockmap socket
+    https://git.kernel.org/netdev/net-next/c/5949a7cf11e6
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c=
- b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-> index 0394a1156d99d..8d1a3480767fe 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-> @@ -116,13 +116,18 @@ void serial_test_get_branch_snapshot(void)
-> =20
->  	ASSERT_GT(skel->bss->test1_hits, 6, "find_looptest_in_lbr");
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[Severity: Medium]
-Since this patch increases the expected wasted entries to ~13 on ARM64, doe=
-s the
-skip threshold also need to be updated?
 
-Right above this line, the test skips if total_entries is too small:
-
-    if (skel->bss->total_entries < 16) {
-        /* too few entries for the hit/waste test */
-        test__skip();
-        goto cleanup;
-    }
-
-On an ARM64 system with a 16-entry BRBE buffer, the skip condition evaluates
-to false, but with 13 wasted entries, only 3 remain for hits. This would ca=
-use
-the ASSERT_GT check to deterministically fail rather than gracefully skippi=
-ng.
-
-Could the threshold be adjusted to account for the additional ARM64 overhead
-(e.g., needing at least 13 + 7 =3D 20 entries)?
-
-> -	/* Given we stop LBR in software, we will waste a few entries.
-> +	/* Given we stop LBR/BRBE in software, we will waste a few entries.
->  	 * But we should try to waste as few as possible entries. We are at
-> -	 * about 7 on x86_64 systems.
-> -	 * Add a check for < 10 so that we get heads-up when something
-> -	 * changes and wastes too many entries.
-> +	 * about 7 on x86_64 and about 13 on arm64 systems (the arm64 BPF
-> +	 * trampoline generates more branches than x86_64).
-> +	 * Add a check so that we get heads-up when something changes and
-> +	 * wastes too many entries.
->  	 */
-> +#if defined(__aarch64__)
-> +	ASSERT_LT(skel->bss->wasted_entries, 14, "check_wasted_entries");
-
-[Severity: Medium]
-Does this threshold provide enough margin for variations in kernel configur=
-ation?
-
-The commit message notes there are about 13 wasted entries. Using < 14 means
-the test will fail if exactly 14 entries are wasted, leaving no margin for
-error.=20
-
-Minor variations like KASAN, PREEMPT_RCU, or different compiler code
-generation could add a single branch to __bpf_prog_enter_recur and cause th=
-is
-test to become flaky.
-
-For comparison, the x86 threshold is < 10 for an expected 7 entries, giving
-a 2-3 branch margin. Could the ARM64 threshold be relaxed slightly to preve=
-nt
-spurious failures?
-
-> +#else
->  	ASSERT_LT(skel->bss->wasted_entries, 10, "check_wasted_entries");
-> +#endif
-> =20
->  cleanup:
->  	get_branch_snapshot__destroy(skel);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260616155716.2631=
-508-1-puranjay@kernel.org?part=3D4
