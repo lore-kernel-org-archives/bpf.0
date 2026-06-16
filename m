@@ -1,210 +1,402 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B13330FF20
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 06:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A101FC7FB;
+	Tue, 16 Jun 2026 06:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781592820; cv=none; b=qVxHQ9wKRO7PUV55/P+3fVAOptINyj3YvTrB//OAX0zM8wmiT2t0TEqO7ZHP+4QDmDPd8k+y+bBdY+sZ6ar3TpXPALXcSg/vKHmIpsIqeymkeyQaw8tMT6P8cyi7hFUeCxSZSR1NuC8KfvTixsnO7c2moqZXUarcIJRPDqaqxbg=
+	t=1781593073; cv=none; b=trohbD0U1m4CDqXVz9Cf3YAN3IcFdnpzyn4YVoA5GeSihJyLf2iDGc+C53kJI4ykZomQP9Gq3z5Zt79CRaDWlQvGYa3IjrVJf8k40D5YFMYqyUL98UnzDN0d4GvkesiMSwwJoe5u3Dzfgyz52zNRERrb+jK6zOodup14zP9Pz4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781592820; c=relaxed/simple;
-	bh=FtzjIdGBmXPdBVqQqp0OKnPq2Aj8qUFPkZb0y+c03Rs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=a8aRN3WJVMYwcZCESgPQ7Jxf/Hr8UgOWBnYHioI49OiVqGZpGYAlEbNZT0ph1+eO7g3emJuRu94RXzdsY+QiAalitW8mJ9a+xysXeQqDnGjIb4X5QlyJg1Jjc3IfBa4FQXK5KlWmvxEobWTQDLUqRGnbA3JYcgpjjau5olGb30Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=AAPLxm/1; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781593073; c=relaxed/simple;
+	bh=ShF/kWa2CviwYqZxt7Rlzm9lYLieHp0PQcJ0ZicPi+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s4VUMpTGzItEOrVhJXBNl2LlfQwfukJXx5bqAraw6fjA7Lf9o6QZH8OTB3z+I1ApONLqHexwEbp0qqIx6zo8VaXZGFaRV79h+1+SbHP5cCn5YyyjK9Zr9LJE+jddeZrPSVUypwNff5BMo/qrCLF6b71GSlSM1sykYVAQD7xgee0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fG0ASzzB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="AAPLxm/1"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-36b903567fdso4766605a91.1
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 23:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781592817; x=1782197617; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NAMbizAsvE1IYkvWb+JTaAfoViw+PfXliSYcH4bZRMM=;
-        b=AAPLxm/1jeu3jgFZ3Z8cCssDwEvIoTrhiRVyHwlSCQ5cpnkmB/rqWyvnNrp3Nqj2hh
-         oUtaVY+WsyB/ZRV0XWh5ksjByByplhN2uRUkeNFzJ4azGuWd4XZQknwhBtqZ8/+uNum1
-         O/8SLRCH24aknB68goVlk30Z9DSoW4/l0UqZSzQSSD9vruIeqeqkvoiHN3v7I8FzVfjD
-         vZ/BO5UX9HnRNvIxPU1mhBOD3qJ4kjtlT/MSzYHd+z7pa9u4mnJVyFckyrbzw/leUy/F
-         gC/VMSL5jhm7yx5zS7zeJQm/zlkmX+jC2dknewWbhBXwMMU8t0FB8mD4NU4Tuyip3AZx
-         jR3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781592817; x=1782197617;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NAMbizAsvE1IYkvWb+JTaAfoViw+PfXliSYcH4bZRMM=;
-        b=KNhoVmANUzMQIIthXEajZDRwIex03mMfwFxWw4XBpiLA7jBHCwwZUNH61i+NqZn8nH
-         PKm2864bbUG8dDlTKnZ3+Am+lPGp0yeWAE52TkAltrHUZ29qwBff1t1kgzI3fPSnUwP4
-         OSi69NyLsypyzbxodcPScBpzrO/Jfs61YY1QZOKjIguyGjXLlRRTytLK9lAuvfo8NEHq
-         QAsA9Qhgm+C04/Y3le/t75/z8+C3BI06fWAbFnktZTaEU0y/pTPM5atLAMB9QCrh0DRZ
-         ll68Me+uOgjS0JpdjHX/vfGZEpFLIkaycw9EHabMAWBH9ExAyIbrwjKzhTL+l2Xjl8Bd
-         nlTA==
-X-Forwarded-Encrypted: i=1; AFNElJ+3bEPjS+AdkCPsKa08N6Q/dHO9s9UlQq95175jTOntdRKdE1PHdMgDciQmS92UNLKusSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytvGzTGl7gg5SqTO/mTQ01vQI2GVPIWwFmGihxLZbcS6yEV8nJ
-	oVUvyKRaQu8dYpxJKRx6bqGw38IhYKnlsHhG6jIgUkleYBXqvI54PpIPWCV7l4O6rJ0=
-X-Gm-Gg: Acq92OGLa0OmZW1GLrFj8RdiyEslKJd5nPdtfJkk5iat+99adJ+30ubr7OHJXKtiBrN
-	ZBTs9D6lwjH6QLPf199ruty8QGEGU8Np6XOLtilKtGmANi7077efxE9MIl+t31DfDoG3locX56W
-	/BcqPYDg7As0dci4SUnU4jXzJOnA06ocDvNVkhUdbaX4Dqo1G8O6BB7lT4q0BSqYpBtJW3cIhl0
-	Uv4gjQRvfBHKIvV+q1BUE1Mnr49ZJO8hRq8h6YMb9P3vhAlyNGFgM+fx9hmA0Pdh/JNn1gl9ivi
-	GASj2w1QWFN10LZzhFI/VM9lFb30pVqynGl4DheV3oVsBy6mkbHwx5q0YD5HAdFitC/UyVv0Cwf
-	rSYd46edjhoSd4BY9/Ivh/C6QnOsy6xCNVYqNo5Env7MeVLB+nfRdxpl35mlWDK68VGmtge4fTU
-	O7DbuMpF5Y05webPUXq6TJ9id+T0nIa7ygUwpmkXpZKJc7yK9Flu60pBzs
-X-Received: by 2002:a17:90b:5388:b0:36b:9c4a:e05d with SMTP id 98e67ed59e1d1-37c52909376mr2464111a91.17.1781592817310;
-        Mon, 15 Jun 2026 23:53:37 -0700 (PDT)
-Received: from localhost (d206-116-244-52.bchsia.telus.net. [206.116.244.52])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c52092ee3sm1838204a91.0.2026.06.15.23.53.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2026 23:53:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fG0ASzzB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6291A1F000E9;
+	Tue, 16 Jun 2026 06:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781593072;
+	bh=5YYnjwXkhIaJkMK4KVBBMhIkUoLKifb+v7A8S2YfApM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fG0ASzzB2I00G5iVEAds9Q0q7Bms6RNkBLE07l71xjSDi1o26hZfRZfswbg31vdsK
+	 ce5IeSOVRKXGkI/hpwduGQILYFHaUrY+2ssX4eXph+FypjmNykxQW8fD0dDu7qA5xq
+	 DRvPVbYt8/y6/e0z7neaIY8iRXWRnxCcZU1l9CWmZHCq4kTr0ascmZ+KjtYJOC9YJi
+	 IN6OL83bQhAqlgkSTAib+xvaI0FH55lUdY0CPs/orNwXoBsZkAUT8/cP6T019r5GxX
+	 rVW4XyLhkNnHxNeac/MHoNNQJdlBJM37Ii+dZrmKRkrHsClpnDXYcFjw3+kn87wsIn
+	 P7w3/bYbfhirg==
+Message-ID: <a64777b0-dfdf-4cc4-bb3a-87f25ca394bf@kernel.org>
+Date: Tue, 16 Jun 2026 08:57:44 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
+ trigger _nolock APIs
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jun 2026 02:53:36 -0400
-Message-Id: <DJA9Y0YAOZG3.1TEPN0383EAL2@etsalapatis.com>
-Cc: "Alan Maguire" <alan.maguire@oracle.com>, "Jiri Olsa"
- <jolsa@kernel.org>, <bpf@vger.kernel.org>, <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 03/14] selftests/bpf: Fix resolve_btfids
- test reads of BTF ID sets in PIE builds
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260601221805.821394-1-ihor.solodrai@linux.dev>
- <20260601221805.821394-4-ihor.solodrai@linux.dev>
-In-Reply-To: <20260601221805.821394-4-ihor.solodrai@linux.dev>
+Content-Transfer-Encoding: 7bit
 
-On Mon Jun 1, 2026 at 6:17 PM EDT, Ihor Solodrai wrote:
-> TL;DR
->
-> On aarch64 with gcc toolchain, when test_progs is linked as a PIE,
-> reads of BTF ID array by C name return garbage because the GNU
-> assembler on aarch64 unconditionally folds .local symbol references
-> into section+addend form, and GOT slots cannot carry an addend per the
-> AArch64 ELF spec.
->
-> Fix by marking the test's BTF ID objects with hidden visibility, which
-> makes gcc emit a direct access that bypasses the GOT entirely.
->
-> Details below.
->
-> The subsequent patches adding kfunc checks to resolve_btfids test may
-> cause test failures on aarch64 / gcc-15:
->
->   test_resolve_btfids:FAIL:kfunc_set_flags  actual 13 !=3D expected 1
->   test_resolve_btfids:FAIL:kfunc_set_cnt    actual 0  !=3D expected 4
->
-> The test defines its BTF ID sets with the same macros as the kernel
-> and reads them back directly by C name (in the same way as the kernel
-> code does).
->
-> test_kfunc_set is a .local symbol emitted into .BTF_ids by inline asm
-> and declared to the compiler as a plain default-visibility
-> extern, that is:
->     extern struct btf_id_set8 test_kfunc_set;
->
-> Depending on the build environment, test_progs may be linked as a
-> position-independent executable (for example, gcc defaults to -fpie
-> [1]). In a PIE, taking the address of a default-visibility extern is
-> routed through the GOT (Global Offset Table) [2].
->
-> The GNU assembler's adjust_reloc_syms() pass (gas/write.c [3])
-> replaces references to local symbols with the corresponding section
-> symbol, folding the symbol's offset into the relocation addend.  On
-> aarch64 this conversion is unconditional: tc_fix_adjustable() is
-> defined to 1 for all fixups (gas/config/tc-aarch64.h [4]), so even
-> GOT-generating relocations are subject to it.  The resulting object
-> file therefore contains:
->
->   R_AARCH64_ADR_GOT_PAGE      .BTF_ids + 0x54
->   R_AARCH64_LD64_GOT_LO12_NC  .BTF_ids + 0x54
->
-> However, the AArch64 ELF specification mandates that GOT-generating
-> relocations must have a zero addend [5].  The +0x54 is therefore not
-> honored: the linker creates a GOT slot pointing at the .BTF_ids base,
-> and every access through that slot reads offset 0 instead of 0x54.
->
-> This is purely a read-side problem, specific to the PIE test binary on
-> aarch64 with gcc toolchain. resolve_btfids patches the set header
-> correctly and the .BTF_ids bytes in test_progs are correct. vmlinux is
-> unaffected because it is built with -fno-PIE [6] and reaches .BTF_ids
-> with direct, addend-preserving relocations rather than the GOT. clang
-> is unaffected because LLVM's assembler retains the original symbol for
-> GOT relocations instead of converting to section+addend [7].
->
-> To mitigate this issue, mark the test's BTF ID objects hidden with a
-> visibility pragma so that gcc treats them as non-interposable and
-> emits a direct access instead of a GOT load. This keeps the natural
-> by-name access, works in both PIE and non-PIE builds, and needs no
-> change to the BTF_ID macros or resolve_btfids.
+On 6/15/26 13:05, Harry Yoo (Oracle) wrote:
+> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
+> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
+> 
+> Register a kprobe pre-handler to invoke kmalloc_nolock() and
+> kfree_nolock() in the middle of the slab allocator. However, do not
+> register the handler on UP kernels [1].
+> 
+> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
+> is held, add a wrapper function for lockdep_assert_held() that calls
+> a no-op function slab_attach_kprobe_locked() on debug builds. The
+> function is optimized away when neither CONFIG_PROVE_LOCKING nor
+> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
+> 
+> The function calls barrier() to prevent the compiler from optimizing
+> away its callsites. Otherwise, the compiler may consider the function
+> does not have any side effect and remove callsites.
+> 
+> Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a92d9a4@kernel.org [1]
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 
-(This is missing your SOB)
+Looks very useful!
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
->
-> [1] https://gcc.gnu.org/onlinedocs/gnat_ugn/Position-Independent-Executab=
-le-PIE-Enabled-by-Default-on-Linux.html
-> [2] https://gcc.gnu.org/wiki/Visibility
-> [3] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dblob;f=3Dgas/wri=
-te.c#l922
-> [4] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dblob;f=3Dgas/con=
-fig/tc-aarch64.h#l279
-> [5] https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst#=
-5733relocation-operations
-> [6] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Makefile?h=3Dv7.1-rc6#n593
-> [7] https://github.com/llvm/llvm-project/blob/4b3bc46d1d794b8ed78b75ccd35=
-a6cc30235bf31/llvm/lib/MC/ELFObjectWriter.cpp#L1213-L1224
->
 > ---
-> ---
->  .../selftests/bpf/prog_tests/resolve_btfids.c  | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/to=
-ols/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> index d742ecb2ca8e..d0e51979d455 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> @@ -32,6 +32,23 @@ asm (
->  ".balign 4, 0;                            \n"
->  ".popsection;                             \n");
-> =20
-> +/*
-> + * The BTF ID arrays below are .local symbols placed in .BTF_ids by
-> + * inline asm, and are read here directly by C name. To the compiler
-> + * they are plain, default-visibility extern objects.
-> + *
-> + * When test_progs is linked as a position-independent executable (PIE),
-> + * taking the address of such an extern is routed through the GOT. The
-> + * GNU assembler on aarch64 unconditionally converts references to
-> + * .local symbols into section + addend form (".BTF_ids + <offset>"),
-> + * but a GOT slot cannot carry an addend (the AArch64 ELF spec mandates
-> + * zero), so the linker resolves it to the .BTF_ids base.
-> + *
-> + * Mark these symbols hidden so the compiler treats them as
-> + * non-interposable and emits a direct, addend-preserving PC-relative
-> + * access instead of a GOT load, in both PIE and non-PIE builds.
-> + */
-> +#pragma GCC visibility push(hidden)
->  BTF_ID_LIST(test_list_local)
->  BTF_ID_UNUSED
->  BTF_ID(typedef, S)
-> @@ -60,6 +77,7 @@ BTF_ID(union,   U)
->  BTF_ID(func,    func)
->  BTF_SET_END(test_set)
-> =20
-> +#pragma GCC visibility pop
->  static int
->  __resolve_symbol(struct btf *btf, int type_id)
+>  lib/tests/slub_kunit.c | 82 +++++++++++++++++++++++++++++++++++++++++++-------
+>  mm/slub.c              | 36 ++++++++++++++++------
+>  2 files changed, 98 insertions(+), 20 deletions(-)
+> 
+> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
+> index 11255fc8eb78..01d808cb77fa 100644
+> --- a/lib/tests/slub_kunit.c
+> +++ b/lib/tests/slub_kunit.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/delay.h>
+>  #include <linux/perf_event.h>
+> +#include <linux/kprobes.h>
+>  #include "../mm/slab.h"
+>  
+>  static struct kunit_resource resource;
+> @@ -292,7 +293,8 @@ static void test_krealloc_redzone_zeroing(struct kunit *test)
+>  	kmem_cache_destroy(s);
+>  }
+>  
+> -#ifdef CONFIG_PERF_EVENTS
+> +#if defined(CONFIG_PERF_EVENTS) || (defined(CONFIG_KPROBES) && defined(CONFIG_SMP))
+> +#define SLUB_KUNIT_TEST_KMALLOC_KFREE_NOLOCK
+>  #define NR_ITERATIONS 1000
+>  #define NR_OBJECTS 1000
+>  static void *objects[NR_OBJECTS];
+> @@ -302,10 +304,16 @@ struct test_nolock_context {
+>  	int callback_count;
+>  	int alloc_ok;
+>  	int alloc_fail;
+> +#ifdef CONFIG_PERF_EVENTS
+>  	struct perf_event *event;
+>  	bool is_perf_type_hw;
+> +#endif
+> +#ifdef CONFIG_KPROBES
+> +	struct kprobe kprobe;
+> +#endif
+>  };
+>  
+> +#ifdef CONFIG_PERF_EVENTS
+>  static struct perf_event_attr hw_attr = {
+>  	.type = PERF_TYPE_HARDWARE,
+>  	.config = PERF_COUNT_HW_CPU_CYCLES,
+> @@ -326,13 +334,10 @@ static struct perf_event_attr sw_attr = {
+>  	.sample_freq = 100000,
+>  };
+>  
+> -static void overflow_handler_test_nolock(struct perf_event *event,
+> -					 struct perf_sample_data *data,
+> -					 struct pt_regs *regs)
+> +static void test_nolock(struct test_nolock_context *ctx)
 >  {
+>  	void *objp;
+>  	gfp_t gfp;
+> -	struct test_nolock_context *ctx = event->overflow_handler_context;
+>  
+>  	/* __GFP_ACCOUNT to test kmalloc_nolock() in alloc_slab_obj_exts() */
+>  	gfp = (ctx->callback_count % 2) ? 0 : __GFP_ACCOUNT;
+> @@ -347,6 +352,15 @@ static void overflow_handler_test_nolock(struct perf_event *event,
+>  	ctx->callback_count++;
+>  }
+>  
+> +static void overflow_handler_test_nolock(struct perf_event *event,
+> +					 struct perf_sample_data *data,
+> +					 struct pt_regs *regs)
+> +{
+> +	struct test_nolock_context *ctx = event->overflow_handler_context;
+> +
+> +	test_nolock(ctx);
+> +}
+> +
+>  static bool enable_perf_events(struct test_nolock_context *ctx)
+>  {
+>  	struct perf_event *event;
+> @@ -382,17 +396,60 @@ static void disable_perf_events(struct test_nolock_context *ctx)
+>  	perf_event_disable(ctx->event);
+>  	perf_event_release_kernel(ctx->event);
+>  }
+> +#else
+> +static bool enable_perf_events(struct test_nolock_context *ctx) { return false; }
+> +static void disable_perf_events(struct test_nolock_context *ctx) { }
+> +#endif
+> +
+> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *regs)
+> +{
+> +	struct test_nolock_context *ctx;
+> +
+> +	ctx = container_of(p, struct test_nolock_context, kprobe);
+> +	test_nolock(ctx);
+> +	return 0;
+> +}
+> +
+> +static bool register_slab_kprobes(struct test_nolock_context *ctx)
+> +{
+> +	ctx->kprobe.symbol_name = "slab_attach_kprobe_locked";
+> +	ctx->kprobe.pre_handler = slab_kprobe_pre_handler;
+> +
+> +	if (register_kprobe(&ctx->kprobe))
+> +		return false;
+> +	return true;
+> +}
+> +
+> +static void unregister_slab_kprobes(struct test_nolock_context *ctx)
+> +{
+> +	kunit_info(ctx->test, "kprobes: callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
+> +		   ctx->callback_count, ctx->alloc_ok, ctx->alloc_fail);
+> +	unregister_kprobe(&ctx->kprobe);
+> +}
+> +#else
+> +static bool register_slab_kprobes(struct test_nolock_context *ctx) { return false; }
+> +static void unregister_slab_kprobes(struct test_nolock_context *ctx) { }
+> +#endif
+>  
+>  static void test_kmalloc_kfree_nolock(struct kunit *test)
+>  {
+>  	int i, j;
+> -	struct test_nolock_context ctx = { .test = test };
+> +	struct test_nolock_context perf_ctx = { .test = test };
+> +	struct test_nolock_context kprobe_ctx = { .test = test };
+>  	bool alloc_fail = false;
+>  	bool perf_events_enabled;
+> +	bool slab_kprobes_enabled;
+>  
+> -	perf_events_enabled = enable_perf_events(&ctx);
+> -	if (!perf_events_enabled)
+> -		kunit_skip(test, "Failed to create perf event");
+> +	perf_events_enabled = enable_perf_events(&perf_ctx);
+> +	slab_kprobes_enabled = register_slab_kprobes(&kprobe_ctx);
+> +
+> +	if (!perf_events_enabled && !slab_kprobes_enabled)
+> +		kunit_skip(test, "Failed to enable perf event and kprobe, skipping");
+> +	else if (!perf_events_enabled)
+> +		kunit_info(test, "Failed to create perf event");
+> +	if (!slab_kprobes_enabled)
+> +		kunit_info(test, "Failed to register kprobe pre-handler");
+>  
+>  	for (i = 0; i < NR_ITERATIONS; i++) {
+>  		for (j = 0; j < NR_OBJECTS; j++) {
+> @@ -412,7 +469,10 @@ static void test_kmalloc_kfree_nolock(struct kunit *test)
+>  	}
+>  
+>  cleanup:
+> -	disable_perf_events(&ctx);
+> +	if (perf_events_enabled)
+> +		disable_perf_events(&perf_ctx);
+> +	if (slab_kprobes_enabled)
+> +		unregister_slab_kprobes(&kprobe_ctx);
+>  
+>  	if (alloc_fail)
+>  		kunit_skip(test, "Allocation failed");
+> @@ -444,7 +504,7 @@ static struct kunit_case test_cases[] = {
+>  	KUNIT_CASE(test_kfree_rcu_wq_destroy),
+>  	KUNIT_CASE(test_leak_destroy),
+>  	KUNIT_CASE(test_krealloc_redzone_zeroing),
+> -#ifdef CONFIG_PERF_EVENTS
+> +#ifdef SLUB_KUNIT_TEST_KMALLOC_KFREE_NOLOCK
+>  	KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock),
+>  #endif
+>  	{}
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 813fb863254d..87ca154ccd80 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -908,6 +908,24 @@ static inline unsigned int obj_exts_offset_in_object(struct kmem_cache *s)
+>  }
+>  #endif
+>  
+> +/*
+> + * A no-op function used to attach kprobe handlers in slub_kunit tests.
+> + * The barrier is needed to prevent the compiler from optimizing out callsites.
+> + */
+> +#if defined(CONFIG_DEBUG_VM) || defined(CONFIG_PROVE_LOCKING)
+> +static noinline void slab_attach_kprobe_locked(void)
+> +{
+> +	barrier();
+> +}
+> +#else
+> +static inline void slab_attach_kprobe_locked(void) { }
+> +#endif
+> +
+> +#define slab_lockdep_assert_held(lock) do {	\
+> +	lockdep_assert_held(lock);		\
+> +	slab_attach_kprobe_locked();	\
+> +} while (0)
+> +
+>  #ifdef CONFIG_SLUB_DEBUG
+>  
+>  /*
+> @@ -1665,7 +1683,7 @@ static void add_full(struct kmem_cache *s,
+>  	if (!(s->flags & SLAB_STORE_USER))
+>  		return;
+>  
+> -	lockdep_assert_held(&n->list_lock);
+> +	slab_lockdep_assert_held(&n->list_lock);
+>  	list_add(&slab->slab_list, &n->full);
+>  }
+>  
+> @@ -1674,7 +1692,7 @@ static void remove_full(struct kmem_cache *s, struct kmem_cache_node *n, struct
+>  	if (!(s->flags & SLAB_STORE_USER))
+>  		return;
+>  
+> -	lockdep_assert_held(&n->list_lock);
+> +	slab_lockdep_assert_held(&n->list_lock);
+>  	list_del(&slab->slab_list);
+>  }
+>  
+> @@ -2866,7 +2884,7 @@ static unsigned int __sheaf_flush_main_batch(struct kmem_cache *s)
+>  	void *objects[PCS_BATCH_MAX];
+>  	struct slab_sheaf *sheaf;
+>  
+> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>  	pcs = this_cpu_ptr(s->cpu_sheaves);
+>  	sheaf = pcs->main;
+> @@ -3545,7 +3563,7 @@ __add_partial(struct kmem_cache_node *n, struct slab *slab, enum add_mode mode)
+>  static inline void add_partial(struct kmem_cache_node *n,
+>  				struct slab *slab, enum add_mode mode)
+>  {
+> -	lockdep_assert_held(&n->list_lock);
+> +	slab_lockdep_assert_held(&n->list_lock);
+>  	__add_partial(n, slab, mode);
+>  }
+>  
+> @@ -3559,7 +3577,7 @@ static inline void clear_node_partial_state(struct kmem_cache_node *n,
+>  static inline void remove_partial(struct kmem_cache_node *n,
+>  					struct slab *slab)
+>  {
+> -	lockdep_assert_held(&n->list_lock);
+> +	slab_lockdep_assert_held(&n->list_lock);
+>  	list_del(&slab->slab_list);
+>  	clear_node_partial_state(n, slab);
+>  }
+> @@ -3575,7 +3593,7 @@ static void *alloc_single_from_partial(struct kmem_cache *s,
+>  {
+>  	void *object;
+>  
+> -	lockdep_assert_held(&n->list_lock);
+> +	slab_lockdep_assert_held(&n->list_lock);
+>  
+>  #ifdef CONFIG_SLUB_DEBUG
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+> @@ -4646,7 +4664,7 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>  	struct node_barn *barn;
+>  	bool allow_spin;
+>  
+> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>  	/* Bootstrap or debug cache, back off */
+>  	if (unlikely(!cache_has_sheaves(s))) {
+> @@ -5786,7 +5804,7 @@ static void __pcs_install_empty_sheaf(struct kmem_cache *s,
+>  		struct slub_percpu_sheaves *pcs, struct slab_sheaf *empty,
+>  		struct node_barn *barn)
+>  {
+> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>  	/* This is what we expect to find if nobody interrupted us. */
+>  	if (likely(!pcs->spare)) {
+> @@ -5837,7 +5855,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>  	bool put_fail;
+>  
+>  restart:
+> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>  	/* Bootstrap or debug cache, back off */
+>  	if (unlikely(!cache_has_sheaves(s))) {
+> 
 
