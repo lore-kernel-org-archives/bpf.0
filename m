@@ -1,158 +1,195 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583653BED44
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 02:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBD413777E;
+	Tue, 16 Jun 2026 04:06:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781576471; cv=none; b=TlblqMnGjRQQZDgiP1ZgVMeaOBFnCrLWVQIvJ510A00LbtWJ5Hg4bCzm3VhzFwOge2QqH3UEyej2odbL5zQyCS0ExUMtOqPaxwMOtp3bboka4sAdcBo2Q8WpPDd1z7JiQjDptQ5Nr0tzTLPHMmu5lQo/ay+SfMouodKutk+vc9Y=
+	t=1781582817; cv=none; b=SDSDbXCAHC0jCKvQhxxDj60KnB4u5S03k8Ug7LrjZ7G6nMEYMHyynzqLOzmexwrpSgf9f2KRS/6zfll+oCXPE51oDchSPioT/nR3B2LnKMsMYfHj3ojas62ikul4jaYn+Q5Kj9pU/+2qqXf7kwaaykEKeBCp7E7GNwMdd4RWAgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781576471; c=relaxed/simple;
-	bh=6oQjwVA9B/dpSWzK7h9TRxrdJBhQIxFcZOvgsR0/5us=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U1xOuHhAWp1n1P1H+k2Gle2/GN5j5a1V6De4Exiv8tsH4+ph/J8aMUfVkBIi9DZS1kGUlmbALz9K881kKnTHBIcQy4fAZSxSw6RGdD4GAlsigTokvNZB0NI4RvqMfFJA8Zgacgafkh/3ucqk8U9iK6Dc7DeIeJAW1Ooqe0MrL5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIMoxbEO; arc=none smtp.client-ip=74.125.82.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781582817; c=relaxed/simple;
+	bh=Pj6RjeROqlAnNK/PPMQJJvR5uQR1Sp0iWb3vsHF5I4M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UtsPlTCfgidAywJ9II93LPQzhBosR85pNy8Gf3hgwCeHR7irVtf41z6o4biHZaCQ3o0NES6Up0LqFDJUgyrdiGsuMdEifuf54vMgIBkHMPxNQFIylHSZOo3+FYXMx19PVr5JHveTp5MVJ8i7Bu4tzMNgyMuTZ7TqPK3kdqvgXaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nWszITv7; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIMoxbEO"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-137335bc3caso4809131c88.0
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 19:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781576469; x=1782181269; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6IEVsqYp5cYVGQwVC9lenyJSUbd6i5nZsgE+48XJIA=;
-        b=ZIMoxbEOXQ6pGUtgFpkwr05AiChx8CIlKWCEyvpQPDVdTDXiL5rQoyzRQAd3j4mLCx
-         sFJUuwUOxEEtUBLyuP0+wP28rOtgaQM0UL9dbmc+xsvTUt+AWtzVdM4vpAifl5U+ISJ9
-         3Vt5f64aL0ULrJLtRopi50VZ7qdiAnreGZoTnZzxlzozuie/e3LeW6prZgiWJR/ApCYN
-         0+5LE/BWElCgeXCyZDy/0EjuJ489Ta8gJ16j5KjJq1pfw8uMx6Gg4O6paixfM/TZMO7K
-         6gvbDOJ/nWV6Yvj72IM5ys9kyLw5ICcvDEBuegYsFjvzDXXXFKKYA8XzXdG4U3AdSExg
-         9UIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781576469; x=1782181269;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a6IEVsqYp5cYVGQwVC9lenyJSUbd6i5nZsgE+48XJIA=;
-        b=GYX9HZUC8nnCwoSBwnBpbcALsAo09R2ptKuSM1SA4pMQfbxdNptXNUJZFRf6w5AGkR
-         mDuoqmaRkfnYgR1qSHywSmG9wI9Gz3fnERzt2RpqP+y3YblXRw/PVVg9aBXHbz8Nzy1b
-         rdw7HXo1TQtpZ1Kdbd8yGI5h0YPYm4Svke7cYtIJ28NtT07NIWG/+Xccz454PKyMnphU
-         A6bukx0D+1KVybaEm0vKKnWEBZRM+b3OB+9V+hcWbjt5OLOBghW4l7oSe810HmskRT6M
-         4dQDNMoMN4wgUQIbEMasWRzD+9AuTzhzl/gsK6jd1cHScKR8ikLKdomoj02PwNjnNJG5
-         ufRg==
-X-Forwarded-Encrypted: i=1; AFNElJ/BhALQRIyfzUi2DAYFVRALoJte95SoFr9kLN5uw+z6Dp4EJZKa0LHhtbGwSiFW+Ti9VFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjgBNbbxjTlKdKyTkxZGRfYDv57t4nHQjmd4P4AtrhRc5b00od
-	E5GKDyRX1izkoUzINfdUGPEXjsDwedAXTmufrjZXnZc1lNQMEy38QbxC
-X-Gm-Gg: Acq92OFthKchzkz2b91MjqiQTJAr9WJqq6KJnXSXbrlu0NSpzbZc5W3QsuQRPkomX3+
-	PNTnd3DLzAhiXmIUJYODvBgawm2hf/DzxPr9KP1WWDCeZ8hgpAX8ZnZnIkF5AbIsg9JSwPzfewu
-	IJKA5s2i5uiCCVH2BSHnpAB4bSx6HGwaHesVzObGXsIjOa24Bu8y/Jr4n3AXtm8p4y65Sv2D4Lz
-	7dT7ayaVXzkA0Gctl9cYlZ5r5zGKdIGxvJrTxikHZASyrWUXoB4JxOzoodzdR9h+SMXIbCkUkkO
-	60o+uw/9eEa0t+OD1MvAHAMqGehK6nOwgtKo+t+Ycyxg12a7pB79WOi/ZPi5BZeaMs8XG7ESNSi
-	xJClU1kemUQ0ACYPZc2csd5XdbJngbW28Emj5KFoMTgZxYyf2M0tjRgVQpRzy/6F+ub0moMQ7dk
-	Dt6pfRSlNZb1zqQRehIQx47Zy+6D06DgMf2zuNx8l/vflnI70AzURWDHWOyQ==
-X-Received: by 2002:a05:7022:250c:b0:137:64ad:76d0 with SMTP id a92af1059eb24-13985e99350mr720917c88.7.1781576469334;
-        Mon, 15 Jun 2026 19:21:09 -0700 (PDT)
-Received: from google.com ([2a00:79e0:2039:4:7d96:5166:93ee:6926])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b919ef9sm12517464c88.7.2026.06.15.19.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 19:21:08 -0700 (PDT)
-Date: Tue, 16 Jun 2026 10:21:02 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Pu Lehui <pulehui@huawei.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, luke.r.nels@gmail.com,
-	xi.wang@gmail.com, pjw@kernel.org, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, jolsa@kernel.org, alex@ghiti.fr,
-	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, marscheng@google.com,
-	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/3] riscv, bpf: Fix signed operations and
- add 32 bit atomics
-Message-ID: <ajCzDo7bnUqE0DiW@google.com>
-References: <20260511221648.3251464-1-visitorckw@gmail.com>
- <ajAlwK990NFUAMwq@google.com>
- <216ee1df-2945-4266-9c70-ebcd36faeb7f@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nWszITv7"
+Message-ID: <bfa1e3a0-515f-4c08-ae53-469003d5509c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781582812;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdV/J46DH9/5jvehz571UOxEQLGpCsaQFxCHqaToNkg=;
+	b=nWszITv7/M2HR9wMzcmSDjGyDZ5XpAyABGSIs2PX3M53MvRTUO5iKoQ0r/NBG5MrONjNFD
+	N8vyPXJHn/H2EFWfctzXCTWZBDXjM7z0ao0C95p4v6yrmz1D6Wmhfb1Lf+Hj0Z34fmWwyP
+	finLt+N2wf8+qh4Gg/yu25fSoKnwBOg=
+Date: Mon, 15 Jun 2026 21:06:48 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <216ee1df-2945-4266-9c70-ebcd36faeb7f@huawei.com>
+Subject: Re: [PATCH dwarves v5 00/11] pahole: Encode true signatures in kernel
+ BTF
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260523165712.1225231-1-yonghong.song@linux.dev>
+ <84234995-4664-4f03-81fe-38b22482a319@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <84234995-4664-4f03-81fe-38b22482a319@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Lehui,
 
-On Tue, Jun 16, 2026 at 09:41:21AM +0800, Pu Lehui wrote:
-> 
-> 
-> On 2026/6/16 0:18, Kuan-Wei Chiu wrote:
-> > Hi,
-> > 
-> > On Mon, May 11, 2026 at 10:16:45PM +0000, Kuan-Wei Chiu wrote:
-> > > Fix miscompiled signed operations and expands 32 bit atomic support in
-> > > the RV32 BPF JIT.
-> > > 
-> > > The current implementation ignores the instruction offset field used by
-> > > the bpf instruction set to specify BPF_SDIV/BPF_SMOD and BPF_MOVSX.
-> > > This causes these operations to be treated as unsigned or
-> > > zero-extended, leading to test_bpf failures. Fix this by checking the
-> > > offset and emitting the correct instructions.
-> > > 
-> > > Additionally, we leverage the mandatory A extension to natively support
-> > > 32 bit bpf atomics (and, or, xor, xchg) by mapping them directly to
-> > > amo*.w instructions. BPF_CMPXCHG continues to fall back to the
-> > > interpreter.
-> > > 
-> > > As a result, test_bpf.ko now runs with 0 failures, and the total number
-> > > of successfully JIT'ed test cases increases from 843 to 902.
-> > 
-> > Is there anything else I need to do for this patchset to land?
-> 
-> Hi Kuan-wei, it seems Luke and Xi haven't been as active in the community
-> for a while, I'll make time to cover the review and testing for this.
 
-Thank you for stepping in to help with the review and testing.
-I really appreciate it.
+On 6/15/26 10:17 AM, Alan Maguire wrote:
+> On 23/05/2026 17:57, Yonghong Song wrote:
+>> Current vmlinux BTF encoding is based on the source level signatures.
+>> But the compiler may do some optimization and changed the signature.
+>> If the user tried with source level signature, their initial implementation
+>> may have wrong results and then the user need to check what is the
+>> problem and work around it, e.g. through kprobe since kprobe does not
+>> need vmlinux BTF.
+>>
+>> Majority of changed signatures are due to dead argument elimination.
+>> The following is a more complex one. The original source signature:
+>>    typedef struct {
+>>          union {
+>>                  void            *kernel;
+>>                  void __user     *user;
+>>          };
+>>          bool            is_kernel : 1;
+>>    } sockptr_t;
+>>    typedef sockptr_t bpfptr_t;
+>>    static int map_create(union bpf_attr *attr, bpfptr_t uattr) { ... }
+>> After compiler optimization, the signature becomes:
+>>    static int map_create(union bpf_attr *attr, bool uattr__is_kernel) { ... }
+>> In the above, uattr__is_kernel corresponds to 'is_kernel' field in sockptr_t.
+>> This makes it easier for developers to understand what changed.
+>>
+>> The new signature needs to properly follow ABI specification based on
+>> locations. Otherwise, that signature should be discarded. For example,
+>>
+>>      0x0242f1f7:   DW_TAG_subprogram
+>>                      DW_AT_name      ("memblock_find_in_range")
+>>                      DW_AT_calling_convention        (DW_CC_nocall)
+>>                      DW_AT_type      (0x0242decc "phys_addr_t")
+>>                      ...
+>>      0x0242f22e:     DW_TAG_formal_parameter
+>>                        DW_AT_location        (indexed (0x14a) loclist = 0x005595bc:
+>>                           [0xffffffff87a000f9, 0xffffffff87a00178): DW_OP_reg5 RDI
+>>                           [0xffffffff87a00178, 0xffffffff87a001be): DW_OP_reg14 R14
+>>                           [0xffffffff87a001be, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg5 RDI), DW_OP_stack_value
+>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg14 R14)
+>>                        DW_AT_name    ("start")
+>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>                        ...
+>>      0x0242f239:     DW_TAG_formal_parameter
+>>                        DW_AT_location        (indexed (0x14b) loclist = 0x005595e6:
+>>                           [0xffffffff87a000f9, 0xffffffff87a00175): DW_OP_reg4 RSI
+>>                           [0xffffffff87a00175, 0xffffffff87a001b8): DW_OP_reg3 RBX
+>>                           [0xffffffff87a001b8, 0xffffffff87a001c7): DW_OP_entry_value(DW_OP_reg4 RSI), DW_OP_stack_value
+>>                           [0xffffffff87a001c7, 0xffffffff87a00214): DW_OP_reg3 RBX)
+>>                        DW_AT_name    ("end")
+>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>                        ...
+>>      0x0242f245:     DW_TAG_formal_parameter
+>>                        DW_AT_location        (indexed (0x14c) loclist = 0x00559610:
+>>                           [0xffffffff87a001e3, 0xffffffff87a001ef): DW_OP_breg4 RSI+0)
+>>                        DW_AT_name    ("size")
+>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>                        ...
+>>      0x0242f250:     DW_TAG_formal_parameter
+>>                        DW_AT_const_value     (4096)
+>>                        DW_AT_name    ("align")
+>>                        DW_AT_type    (0x0242decc "phys_addr_t")
+>>                        ...
+>>
+>> The third argument should correspond to RDX for x86_64. But the location suggests that
+>> the parameter value is stored in the address with 'RSI + 0'. It is not clear whether
+>> the parameter value is stored in RDX or not. So we have to discard this funciton in
+>> vmlinux BTF to avoid incorrect true signatures.
+>>
+>> For llvm, any function having
+>>    DW_AT_calling_convention        (DW_CC_nocall)
+>> in dwarf DW_TAG_subprogram will indicate that this function has signature changed.
+>> I did experiment with latest bpf-next. For x86_64, there are 69103 kernel functions
+>> and 875 kernel functions having signature changed. A series of patches are intended
+>> to ensure true signatures are properly represented. Eventually, only 18 functions
+>> cannot have true signatures due to locations.
+>>
+>> For arm64, there are 863 kernel functions having signature changed, and
+>> 70 functions cannot have true signatures due to locations. I checked those
+>> functions and look like llvm arm64 backend more relaxed to compute parameter
+>> values.
+>>
+>> For full testing, I enabled true signature support in kernel scripts/Makefile.btf like below:
+>>    -pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes
+>>    +pahole-flags-$(call test-ge, $(pahole-ver), 130) += --btf_features=attributes --btf_features=+true_signature
+>>
+>> For the patch set, Patch 1 introduced usage of DW_AT_calling_convention, which
+>> can precisely identify which function has signature changed. This can filter
+>> majority of functions where their signature won't change. Patch 2 did a prescan
+>> of parameter registers to accommodate some cases where the optimization could
+>> happen but didn't. Patches 3 to 9 tried to find functions with true signature.
+>> Patch 10 enables to btf encoder to properly generate BTF.
+>> Patch 11 includes a few tests.
+>>
+>> Changelog:
+>>    v4 -> v5:
+>>      - v4: https://lore.kernel.org/bpf/20260326013144.2901265-1-yonghong.song@linux.dev/
+>>      - Check info.signature_changed only under clang.
+>>      - Fix an uninitialized varable issue (var reg_dix) for gcc.
+>>    v3 -> v4:
+>>      - v3: https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.dev/
+>>      - Add simple prescan of parameter registers in order to get true signatures
+>>        for those functions where optimization could happen but compiler didn't do it.
+>>      - Do not create a new name (e.g. "uattr__is_kernel") with malloc at parameter_reg()
+>>        stage. Instead remember both "uattr" and "is_kernel" and later generate the
+>>        name "uattr_is_kernel" in btf encoder.
+>>      - Add comments to explain how to handle parameters which may take two registers.
+>>      - Fix some test failures on aarch64.
+>>    v2 -> v3:
+>>      - v2: https://lore.kernel.org/bpf/20260309153215.1917033-1-yonghong.song@linux.dev/
+>>      - Change tests by using newly added test_lib.sh.
+>>      - Simplify to get bool variable producer_clang.
+>>      - Try to avoid producer_clang appearance in dwarf_loader.c in order to avoid
+>>        clear separation between clang and gcc.
+>>    v1 -> v2:
+>>      - v1: https://lore.kernel.org/bpf/20260305225455.1151066-1-yonghong.song@linux.dev/
+>>      - Added producer_clang guarding in btf_encoder. Otherwise, gcc kernel build
+>>        will crash pahole.
+>>      - Fix an early return in parameter__reg() which didn't do pthread_mutex_unlock()
+>>        which caused the deadlock for arm64.
+>>      - Add a few more places to guard with producer_clang and conf->true_signature
+>>        to maintain the previous behavior if not clang or conf->true_signature is false.
+>>
+> In order to be a bit more concrete about a proposed way forward, I'm thinking something
+> along the lines of the attached patch (which should apply on top of this whole series);
+> rather than doing prescans etc, we record param info as we go as we do today, and once done
+> compute true signature info. This saves some complexity around prescan of params etc, so
+> is a bit more  consistent with what's there today. Ideally we'd be able to enhance DWARF
+> processing for both cases (you have some great improvements in that area in this series),
+> and unify the representation of modified signatures where feasible. Let me know what you think.
 
-Since Luke and Xi haven't been active for a while, I was wondering if
-we should consider updating the MAINTAINERS file to reflect the current
-status?
+Thanks Alan! I agree that we should have as much common codes as possible for clang and gcc.
+I will check and try to understand your new patch. If everything is fine, I will incorporate
+this patch into the patch series.
 
-Also, if you need extra hands, I'd be glad to help review and test
-future RV32 BPF patches.
+Yonghong
 
-Regards,
-Kuan-Wei
+>
+> Thanks!
+>
+> Alan
 
-> 
-> Regards,
-> Lehui
-> 
-> > 
-> > Regards,
-> > Kuan-wei
-> > 
-> > > ---
-> > > - Add missing Fixes tags.
-> > > - Fix memory ordering by emitting aq=1, rl=1
-> > > 
-> > > Kuan-Wei Chiu (3):
-> > >    riscv, bpf: Fix support for BPF_SDIV and BPF_SMOD in RV32 JIT
-> > >    riscv, bpf: Fix support for BPF_MOVSX in RV32 JIT
-> > >    riscv, bpf: Add 32 bit atomic operations to RV32 JIT
-> > > 
-> > >   arch/riscv/net/bpf_jit_comp32.c | 101 +++++++++++++++++++++++++++-----
-> > >   1 file changed, 85 insertions(+), 16 deletions(-)
-> > > 
-> > > -- 
-> > > 2.54.0.563.g4f69b47b94-goog
-> > > 
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
