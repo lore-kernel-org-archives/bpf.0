@@ -1,167 +1,146 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D793D7D80;
-	Tue, 16 Jun 2026 05:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A843D3331
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 05:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781588619; cv=none; b=L/hfk/2oW7zZNw/hg5d2SGIrUq9Doju82AvNzXcQFxhA8JttqjEYg0bxdfLKkLW2l3rjS22nIUpHamRKUE9074OoC79g0YoEcGGy6XB6B60usPMLnzz9kxCazBXnS46Pfz22y07bnoCIb1z6GzQqPDeclwKEMujKs+mfxsrTJ7U=
+	t=1781589113; cv=none; b=bO2FjAvD9jWuvEgAKUz5BHTuOwTpEE0HUgkGM3iBQtB4uDJk6cjEEk6wft8dyg0RpnQKAzhVh50zMMK61GlW6hHy/u698vYLJ6/2O2X8ZTHpharFc2ELyPNHrPbKLS+uWZOvkSDLXeLSLUUe1OFCaLvTSX+FMGUT5Bo9tNIG9GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781588619; c=relaxed/simple;
-	bh=VSQU9cOEKrvQCM65ZGRkHFZDUETisknBmP9P7m6Dc+0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lKHDf66ZEfVift7Z2q7+1gAyt+sM8rtfhWW+5hBWF4ToLsJakLwsoZAxe+xi6t+k5ljniNeZy1JHbsCl2VzzBqfoGnZ1SIjpzsgc7eVanf2PSb/fTqdv7rrnR9OP8oHdKlBN3M9z4cWZJ1IYXBb60pA0+H6y93p+37z2FXG7lXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ngjL2mdQ; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1781589113; c=relaxed/simple;
+	bh=7BG2QmmZRLh5N3+eiC64oaFFvrrLDzoLyfL/lriehHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l0IV11KFO+3nHTMbjvIfYfnC//VJbqLfU+Q4lr/o0c40szUbDDMsSqRCY/SUvIvQrMTjwPgJgTavsMFLsgKwiFibkYfCEfJZW2/T+MgYBNKFHoAjfgCRujEH7vZY9VWj9HMwkiHaMvFroNanfy269CQHfd3fMuZrlGpNgZtICsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QxDfpumc; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ngjL2mdQ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QxDfpumc"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso52216665e9.2
+        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 22:51:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=QUc0qs8GSG7QX1lLB/HeBhB/tBAfRhhTnJ
-	jBoOVXWe4=; b=ngjL2mdQXrM6CpI+H9zJgZJ0yG82+foLH7e2MxPhpEzq+dNi7P
-	RLadrZD+hEWN4Ro+OvfVulDzZ30Mktz7pxbNpORy4PYEOcNca15n2j2WECbMgLLU
-	kJfe9Ule3hmjkefzn367umXTx7+8B7NOnoyItl1rqRkrX5jELhH+uK4Dk=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQBXMZlM4jBqXCpTAg--.51787S3;
-	Tue, 16 Jun 2026 13:42:47 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: bpf@vger.kernel.org,
-	netfilter-devel@vger.kernel.org
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	pablo@netfilter.org,
-	fw@strlen.de,
-	phil@nwl.cc,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	kartikey406@gmail.com,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpf: Guard conntrack opts error writes
-Date: Tue, 16 Jun 2026 05:42:34 +0000
-Message-Id: <70aeec0ab762aebe65129cf6052e132c7329edc2.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+        d=suse.com; s=google; t=1781589109; x=1782193909; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pn+WbxeK/3ieMZ9WvMfWf1pVnmuN4tJPxKr7sK9EIcY=;
+        b=QxDfpumcliIkLkFyq2V538vW9GarjHCMoWbjN4HO8T6s/IiDNpncAa0mI5H4wdn/e0
+         2wJQDN0duell/pBFWpiRxlH/rx95giBgzcgD2VZ7/Xx6pXrTa5qEJIhfuN/TWR4EbWU8
+         pD1dM+RTYz9kjj8R6jAHI9PCvEmMvrnZy9qnsy6SNI8eMC83e4bZhq6PcZtpS4hRHmMW
+         fuRAnjH3iBxl/p7geKLZs9qwBBPfgIWIxvSSuosapzeO18oKP41Gc9WUig5HXSYSz+En
+         xdZ0j7pZdcayL5dGVLvPUfSL0b9imeKgdXiNL+RsMhqo6X1lko2slE4zbQt7HZ1564xR
+         rBNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781589109; x=1782193909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pn+WbxeK/3ieMZ9WvMfWf1pVnmuN4tJPxKr7sK9EIcY=;
+        b=SOWsd43DkZUSGlCEryG5btghyoWZ3sh393Mer2h1nGZC8Dmczwu1UJ4l26QWvIgsWa
+         cmE5/0ifmofsr1Vc1YuaAYZElFi9DexJR8zsVnTHx3SKmyqEA3g1jnMGgt0nH1hZd1g1
+         rhaI3aajhfvu5RPbBTNFqNBeNRed4kveh3SdZmgw5mDMnaAiSZMUjfTwWB+sE3VdaZGC
+         O+LqI85Vdvr+55OpSSW7fTGwJ/y4NY+j9skOPHz3k9in6aEd8cLBml7a9fgZZFBGDvVf
+         Akl6s77HHNhs/Cik1jGc4PZP9gsCz1Oykq3U/6pPo/KPycIASo20a8ctw/6zOA58JHKi
+         kcmQ==
+X-Gm-Message-State: AOJu0YxrXpnFnClH3ZmuLeEec/OvYNbFewuCTfSqZdUeTqseTFZfGHm4
+	44iO642SFQiE1R2W3XU4WMDTHL/Dz9e0ewMwb0biHsYCnkGGFUrSYapj3d3ivg0geqIJL+2ycuj
+	KFjSw
+X-Gm-Gg: Acq92OH0KybGY89uuC5Ogha6dLarMVThx+VT+GVt9ByVxj/XdTmPhCAMz0hC8mYCbOc
+	YB5HSeql+acDa07VSIbmVyVl49wkuYCZUpEmnsHk1fBeIqYVOvqBPuxaYGXTf56RKHctH318UPS
+	MO1c4UwiEwypz2DAbJFex4rRxZqs9l2uJVgHeV3Dljvey/OsFmKjXKNkL8w0L0HfV23sjW9E8Pg
+	1fONOfbWX5fjmLkNQbLYmBY+/IF5dH0p1ap23zt5TfUgg10sY06f7OoAdR3/JhDwvZTxk86iDdf
+	1/iMqzhc563jZl2kqlCO542Pi7oYZpE6OL4KakY69NpLXMie2CPYguesGIt6nXYevzxagoOnCND
+	KOnaO7uNtkB7btBCyr5S4qUPYVwposJXa/CRb8Olkw+/2zPaK6CaNTDtp4/njt0kygPRtjw8tDi
+	Ph3uC7ti9sls5k6TiY5Nt/PPtumrsqHS6pgEapQhKXlaYPgQ==
+X-Received: by 2002:a05:600c:1f8c:b0:488:d6eb:e63c with SMTP id 5b1f17b1804b1-492200768abmr192521925e9.15.1781589109336;
+        Mon, 15 Jun 2026 22:51:49 -0700 (PDT)
+Received: from u94a (39-12-139-247.adsl.fetnet.net. [39.12.139.247])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30b6191bf9asm12009774eec.31.2026.06.15.22.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 22:51:48 -0700 (PDT)
+Date: Tue, 16 Jun 2026 13:51:39 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Zhenzhong Wu <jt26wzz@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, 
+	eddyz87@gmail.com, stable@vger.kernel.org, mykolal@fb.com, tamird@kernel.org, 
+	Hao Sun <sunhao.th@gmail.com>
+Subject: Re: [PATCH stable 6.6.y v3 1/4] bpf: Track equal scalars history on
+ per-instruction level
+Message-ID: <ajDiLjjSYPp5p7KF@u94a>
+References: <cover.1781194510.git.jt26wzz@gmail.com>
+ <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQBXMZlM4jBqXCpTAg--.51787S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry5uFy7ZFWxGw47tF48tFb_yoW5Zr4DpF
-	Z2k3s5Aryayrs0ya1Fya1xJw1Y9an5uw1UCryrJ39akrsxW3WYgFyIgr4jvF93CF4rAr43
-	trs5W3Z8C3WkAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_GrWl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRqjgcUUUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f27d335fa6280d5eb04e7b27a7e3d7e7ac1d641.1781194510.git.jt26wzz@gmail.com>
 
-The conntrack lookup and allocation kfuncs take an opts pointer
-together with an opts__sz argument. The verifier checks only the memory
-range described by opts__sz, but the wrappers unconditionally write
-opts->error whenever the internal lookup or allocation helper returns an
-error.
+On Mon, Jun 15, 2026 at 12:58:38AM +0800, Zhenzhong Wu wrote:
+[...]
+> +/* For all R being scalar registers or spilled scalar registers
+> + * in verifier state, save R in linked_regs if R->id == id.
+> + * If there are too many Rs sharing same id, reset id for leftover Rs.
+> + */
+> +static void collect_linked_regs(struct bpf_verifier_state *vstate, u32 id,
+> +				struct linked_regs *linked_regs)
+> +{
+> +	struct bpf_func_state *func;
+>  	struct bpf_reg_state *reg;
+> +	int i, j;
+>  
+> -	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+> -		if (reg->type == SCALAR_VALUE && reg->id == known_reg->id) {
+> +	for (i = vstate->curframe; i >= 0; i--) {
+> +		func = vstate->frame[i];
+> +		for (j = 0; j < BPF_REG_FP; j++) {
+> +			reg = &func->regs[j];
+> +			__collect_linked_regs(linked_regs, reg, id, i, j, true);
+> +		}
+> +		for (j = 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
+> +			if (!is_spilled_reg(&func->stack[j]))
+> +				continue;
+> +			reg = &func->stack[j].spilled_ptr;
+> +			__collect_linked_regs(linked_regs, reg, id, i, j, false);
+> +		}
+> +	}
+> +
+> +	if (linked_regs->cnt == 1)
+> +		linked_regs->cnt = 0;
 
-For an invalid size smaller than the end of opts->error, that write can
-land outside the verifier-checked range. Keep returning NULL for invalid
-arguments, but only report the error through opts->error when the
-supplied size includes the field.
+This part seems new, not found on the original commit, and also not in
+bpf-next. Can you add some more explaining (in the notes before your
+signed-off-by) regarding why this is needed?
 
-This preserves error reporting for the supported 12-byte and 16-byte
-layouts, and for other invalid sizes that still include opts->error.
+> +}
+[...]
+> @@ -14704,6 +14899,21 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+>  		return 0;
+>  	}
+>  
+> +	/* Push scalar registers sharing same ID to jump history,
+> +	 * do this before creating 'other_branch', so that both
+> +	 * 'this_branch' and 'other_branch' share this history
+> +	 * if parent state is created.
+> +	 */
+> +	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
+> +		collect_linked_regs(this_branch, src_reg->id, &linked_regs);
+> +	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
+> +		collect_linked_regs(this_branch, dst_reg->id, &linked_regs);
+> +	if (linked_regs.cnt > 0) {
 
-Fixes: b4c2b9593a1c ("net/netfilter: Add unstable CT lookup helpers for XDP and TC-BPF")
-Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- net/netfilter/nf_conntrack_bpf.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+Same here, the original commit and bpf-next has the '> 1' conditional,
+where as your has '> 0'. Can you also added some explanation on this
+part?
 
-diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-index 40c261cd0af38..3c182024ec509 100644
---- a/net/netfilter/nf_conntrack_bpf.c
-+++ b/net/netfilter/nf_conntrack_bpf.c
-@@ -65,6 +65,11 @@ enum {
- 	NF_BPF_CT_OPTS_SZ = 16,
- };
- 
-+static bool bpf_ct_opts_has_error(u32 opts_len)
-+{
-+	return opts_len >= offsetofend(struct bpf_ct_opts, error);
-+}
-+
- static int bpf_nf_ct_tuple_parse(struct bpf_sock_tuple *bpf_tuple,
- 				 u32 tuple_len, u8 protonum, u8 dir,
- 				 struct nf_conntrack_tuple *tuple)
-@@ -298,7 +303,8 @@ bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
- 	nfct = __bpf_nf_ct_alloc_entry(dev_net(ctx->rxq->dev), bpf_tuple, tuple__sz,
- 				       opts, opts__sz, 10);
- 	if (IS_ERR(nfct)) {
--		opts->error = PTR_ERR(nfct);
-+		if (bpf_ct_opts_has_error(opts__sz))
-+			opts->error = PTR_ERR(nfct);
- 		return NULL;
- 	}
- 
-@@ -332,7 +338,8 @@ bpf_xdp_ct_lookup(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
- 	caller_net = dev_net(ctx->rxq->dev);
- 	nfct = __bpf_nf_ct_lookup(caller_net, bpf_tuple, tuple__sz, opts, opts__sz);
- 	if (IS_ERR(nfct)) {
--		opts->error = PTR_ERR(nfct);
-+		if (bpf_ct_opts_has_error(opts__sz))
-+			opts->error = PTR_ERR(nfct);
- 		return NULL;
- 	}
- 	return nfct;
-@@ -364,7 +371,8 @@ bpf_skb_ct_alloc(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
- 	net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
- 	nfct = __bpf_nf_ct_alloc_entry(net, bpf_tuple, tuple__sz, opts, opts__sz, 10);
- 	if (IS_ERR(nfct)) {
--		opts->error = PTR_ERR(nfct);
-+		if (bpf_ct_opts_has_error(opts__sz))
-+			opts->error = PTR_ERR(nfct);
- 		return NULL;
- 	}
- 
-@@ -398,7 +406,8 @@ bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
- 	caller_net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
- 	nfct = __bpf_nf_ct_lookup(caller_net, bpf_tuple, tuple__sz, opts, opts__sz);
- 	if (IS_ERR(nfct)) {
--		opts->error = PTR_ERR(nfct);
-+		if (bpf_ct_opts_has_error(opts__sz))
-+			opts->error = PTR_ERR(nfct);
- 		return NULL;
- 	}
- 	return nfct;
--- 
-2.34.1
-
+> +		err = push_jmp_history(env, this_branch, 0, linked_regs_pack(&linked_regs));
+> +		if (err)
+> +			return err;
+> +	}
+> +
+...
