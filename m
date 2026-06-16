@@ -1,102 +1,196 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE743563E8
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 22:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557F5391829
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 22:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781647575; cv=none; b=suMIx0Kk8+hP1Gjtaz9EVCsQNu71bgJoOXgYAulHnxceFDhVY2g50abqKKjcIDfpZ/sQhV6eDiS3rkKnv3v+e+XXy+x9gNXjixFwar7WTd/KN5dFyUG7fgMDzXwJ9vhV0hidnox5EG2OYUR1ULbGDBdmXmkQY51F7tZYegZF6eY=
+	t=1781649266; cv=none; b=s5YpondSl4qUNKM9aa75uTJWJF5VSmOKcyHktRPo2R1dscyHhPaV2wBrLBB1p2FtcVkZ4jBx8yFlh6GIAlxUEdhN7+CWhuslEPxGgZGIr9yVpH2WQSsrKGKUMHUdSd4FbdqlzaNG55RTCpvv+uHDe8J897sZJw3vxMOyZzKKEe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781647575; c=relaxed/simple;
-	bh=SIl3T/y6XKz2CSlLjTLbn53bB4naiteyTJvlcUtHyS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SuDTfx9CtP/TbXkUlA136BcgnO8VeLFsezlQ1lqBvkA1PDNMcx4l3y5M+j0XpaJlB+7BFvaHxMde3cNphuFGH8VVUVfoMeI2XNI2NuND6Cba7javIdeAqNqsGuQnNG5w/H8OIxO9zazAGu/PFvysbX+W6QvCkvbdxW3kqKvF2Ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qa32olrU; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781649266; c=relaxed/simple;
+	bh=+k+Z5QT8jwp2bFgq5LnQarAVCm6xtVohhvDgImufK9I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=lt6bTlKx55GPpo4zp/ytAUaqXywT0Mk+0p6fujd4EhEXXNH1xgeWs89PpFn6VysQY394f+UQSAg0ibDEMLP1pVBWo/IL1zeIaLbOV5TaEOKQidMcvbwLwl5CfGfIsSCHBDK2Ewe9h3bWOsBNdeOFc+OlhsQmxFyqWh1+lNuNStc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=R/2h6asC; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qa32olrU"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso44457455e9.1
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 15:06:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="R/2h6asC"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-13810b63a1aso11370832c88.1
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 15:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781647572; x=1782252372; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qjc2krrqahq+APUkDAlJCVHal69icYfN/Ux7mYOZdFA=;
-        b=qa32olrUm5hksv6d18/YPAqoaRz2NeanXAfe4AK4sVsqNv4Yni+CWBg4IgUp4kiWKe
-         yjDmJqB2Vcy9SkbxuAqL7GVUl/weBIqIj1MQEj5G9ExJyuQwLUjTXMB4wSAnfhtT7OnH
-         w/iDtLXPcUSZbT0vP5dARzkMDKli/UivUGfHEjKIpcM2enpyLtG8Zn/Ax1KOl1+GKtTZ
-         x9ZBxfGWdBpjrR72oA3Ag69DSPQZuMQdRs9avNl9wbCYUT23T3uhP0U5vjGVcIVzxyjX
-         RdwZe6zByoFLZp5KLnZDVoe25Wf1e36cWvoZM57H14xrPJ3yPWTDmWFUo+iiIlQ/Q778
-         OXwg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781649263; x=1782254063; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MD5iZFuM9ZopY66WGxBJxUk9sqbEsapLkycXT2EpEGQ=;
+        b=R/2h6asC6iYJaz6+jj9LMjgxjwPi7mM3ZZNfOAyFvCMwbWcpodwzbzijY/iuEYIkNO
+         DtRMmQABUM7IfbI8wXTbMR/T/2k3LrLICoaDzIAhuDL+H2pcW3zULb3WemuHb6CVMyOy
+         NBh+k6WLXtC62G1Z3tJFnozyasl3X/9AInT+PM7wLqUkKlOsm1BFVWMazQHyD93E9FQ9
+         h417s2SK4yERe10W2FDqPiPwyuXnAdSz4RKgqytBhuNkR2n/Rf92fFVxKyiSMbadc1gu
+         GGbf18sZYrJGsTcdiGK96jZnPonSYEGUjFWUBW0uY2iYmhX9RwRlfQ/jLHaVPm/CKszG
+         HWXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781647572; x=1782252372;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qjc2krrqahq+APUkDAlJCVHal69icYfN/Ux7mYOZdFA=;
-        b=Ajh5IWdNFwCmdsonYzEVtmo0suDHToY0F0M3BTJpH+ba1C1jasb/AtWJAQ06L8Kv89
-         bjCwudD53rLeR6dqhRZnjd87fJu+uqGeWh+qEglRqD6rMMSRho5WnFZdaI8rV9aJbT7l
-         YZbkq41/V7YTxFGHPk+E2FykNV4JknIB8vQCR71UC3Wi2d6g8OGIlfnnRe6n9V/tdVp8
-         C98pKhHMFzJb8xYWxVaXbeOQ9EhNbEdqFMkG9Co7vUDkvzPvsk7mBo+rHoiR9JsQ64Ia
-         GYcT6PR3K9HeaehfrRPvKvLCt4nvTZ6Mhv4piC6FFgGcz/YZv3v+xaxf+yZq28it8n0x
-         mQMw==
-X-Gm-Message-State: AOJu0YwC0KpUjJYD03b/SyVKCDEFF7hYqmIWGS6mWeKancbKOx75vUVN
-	6HNFKbIcgFhjzPSoQN6M4MyXdiL9gyl716t50WKwXcSR6ck48QLnBEcK
-X-Gm-Gg: Acq92OHnMigZv9qRVxPf4HUxcPiqKw1gZOdvc3soFWaJQN3ePOXYwiSVCO8qCcidQJA
-	0qOs6dL8jxliJJfZgCtKAzY3SJ4vEZX9JOY1FOBfam4FcDe2h/x51IHXM2HFg1h7kOVOyiDQyzb
-	wkDrj5ZUSckrtnOaT7M9okV6oHc1RXM2+oN/zfBX7DS0UWQUM8ybZi3gp0RbtnKWJTx8qVwclM3
-	GUbkg6CSTuiiGRt76F07B97OJlJ8Fi+5VoGtqjhYzXL8NhC/UhpzEDp7xi/tSbjcMBdZmz4GQNj
-	eP7bdumGpzCNN5XAMeRyxwrELbs2lDcRouiPT0ngbVzncto0jRMUcEU6gn/at3TK/PoXV9eH/TX
-	2TfDlgYzYHvcIgqHUMuXeF01v89MESBkejAxuQOt2G9LNthvoW9s9OcsxJcT6hlGWPtHvaoJQZ5
-	y3vOYur/ARS63Nl6V4Wg99gusbpfOX910/0IEBJp6N5oTHFzx/JTl5j58MPEyZ7FON2cE8T6SAs
-	8riM5q4FinN6Sv1HMsDA081GYcuRKTWHeWvFidUT+dKWAtmvg7KkaVX2epNDmJYf6GUBJfURCOC
-	euj5GVrJeqtvnyqOySNXWsNeeJOoc1opqN6s8wUiCtw=
-X-Received: by 2002:a05:600c:e557:20b0:490:e5c1:b8bf with SMTP id 5b1f17b1804b1-492333bfa01mr15869775e9.13.1781647572241;
-        Tue, 16 Jun 2026 15:06:12 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e004325bddd753d2e35.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:4325:bddd:753d:2e35])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49233be5901sm10431785e9.1.2026.06.16.15.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 15:06:11 -0700 (PDT)
-Date: Wed, 17 Jun 2026 00:06:09 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Jordan Rife <jordan@jrife.io>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: Re: [PATCH v1 bpf-next 0/2] bpf: bpf_redirect_peer egress redirection
-Message-ID: <ajHI0eUUqJpAmKvb@mail.gmail.com>
-References: <20260613183424.1198073-1-jordan@jrife.io>
- <ajAXF8Nvg91xU4f2@mail.gmail.com>
- <CABi4-ogYKX9T_gWcXsKSs5-y=3GA_WqwfyjobmCxexTtQ_H86w@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1781649263; x=1782254063;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MD5iZFuM9ZopY66WGxBJxUk9sqbEsapLkycXT2EpEGQ=;
+        b=Y01hFI3EvkTqyQ9PFDcS0cGkl+Jtr0KDQ+RFD2yIfWDQZCSEX5YAFJEbKsicaIGQJJ
+         6x9b24lYjMPkJukVhmZ25GtIeftfM+vKiuqqLyi9TExeXvilG5ur0Z7wtjHu6yxglyAm
+         kPwaGiKpTIRhzeRa5WvPnSlW8/Z/n5dGtay1vdF/4U0edJIAd6wMwcDGPi1oY4vkBuHF
+         M4NHh+v7be4N+FAfV5O5/tX9/V72r6w9Wr3Zsq1gkqTDCVyakwyqPZR8VC4qL0CFWywe
+         w3rmp2qnVtr2BeOdKR2PBfymwaiXU3lpyvn5aY0AOcflEoaI0EK0Fkuftb2Cl6n+syZF
+         pp2Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8XgdrU110HNITvMRhGZ9x4KdZFpp9EyWJuVcwV2HsZzGItTq66alcOQfWzqrG3RuZA6dg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbKHIiZ+aszfBmEhm94yPhVVS3EwYlqWKhSXB7v8Ob0e62PUcv
+	c134uaHaXNP83ZYqKBWyG5aUNBfvYEzTLiqzO+BP2UvhV+jV5fBy/YFYQorbG3CM0Tg=
+X-Gm-Gg: Acq92OHQTyZARS9IeHgTawgblGo1FmyAG1eiYoCF2W2XG8+gjPdP8KIuk2taLauPqBh
+	HnACEd0HD1ethCs86qfnpc2+U1bHudxKMiB2QKOMynWuUdPgvKIiChNKOMeND2IdBU0rfSlQAf9
+	V+Y7JPG6zcGzPdW6w7KeFqCwkgK1pHqLhvu28o2nTaMs12OHsq+7Ll7sW3Y96Jz2gBSmUZ88jdb
+	+sMftOYmmH4HcI56o5NbLnG5HdJmXs/IXoqTxfnuSKNiO1MMOB9YPoppyc7SgmMnud4QM+QO9TE
+	+akmFLuNNo6DY1lXU9AZMtXpR9sMsAIdd1pTFqpfneSs9hWDIzwYrjrc22ZzAI8gyujPGBYePQU
+	4kkf1hRwW4OJJ/+83CRqWgPGf1aKhnWfYdE8hDVNTIvpYiYbnhvtjBI9FyLwikuejFBXXMBwM/B
+	SZINk1
+X-Received: by 2002:a05:7022:6b82:b0:12f:c7c3:f5ab with SMTP id a92af1059eb24-1398f66bbd2mr534919c88.2.1781649263283;
+        Tue, 16 Jun 2026 15:34:23 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::1a8e])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1384b97570asm14146633c88.12.2026.06.16.15.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2026 15:34:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABi4-ogYKX9T_gWcXsKSs5-y=3GA_WqwfyjobmCxexTtQ_H86w@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 16 Jun 2026 18:34:19 -0400
+Message-Id: <DJATYAJ7LUNT.NHNYXVW1RTGV@etsalapatis.com>
+Cc: <pablo@netfilter.org>, <fw@strlen.de>, <phil@nwl.cc>,
+ <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+ <pabeni@redhat.com>, <horms@kernel.org>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <shuah@kernel.org>, <kartikey406@gmail.com>, <coreteam@netfilter.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover small conntrack opts
+ error writes
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>, <bpf@vger.kernel.org>,
+ <netfilter-devel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+ <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+In-Reply-To: <c4c898dd23181b676ebf6b6b4d9c54f51bb69c75.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
 
-On Tue, Jun 16, 2026 at 01:49:26PM -0700, Jordan Rife wrote:
-> > IMO, calling it BPF_F_EGRESS would be less confusing. It's a shame we
-> > can't have the same flag API between bpf_redirect() and
-> > bpf_redirect_peer(), but this is creating inconsistent semantics for
-> > the terms egress/ingress across the two helpers.
-> 
-> Yeah, one annoying thing about BPF_F_EGRESS is that it would only
-> apply to bpf_redirect_peer, so you still have inconsistencies across
+On Tue Jun 16, 2026 at 1:42 AM EDT, Yiyang Chen wrote:
+> Add a conntrack kfunc regression check for opts__sz values that do not
+> cover opts->error. The BPF program initializes opts->error with a guard
+> value, calls the lookup and allocation kfuncs with opts__sz set to
+> sizeof(opts->netns_id), and verifies that the guard is still intact
+> after the kfunc returns NULL.
+>
+> Without the conntrack wrapper guard, the kfunc error path overwrites
+> that guard with -EINVAL even though the verifier checked only the first
+> four bytes of the options object.
+>
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 
-Yes, that's what I meant by "we can't have the same flag API" :)
-Alternatively, we could define BPF_F_EGRESS as 1ULL << 1, for both
-helpers, but I'm not sure it's worth it. Maybe Daniel will have another
-idea?
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> helpers. Perhaps this is less weird than having BPF_F_INGRESS perform
-> an egress redirection though.
-> 
-> Jordan
+> ---
+>  .../testing/selftests/bpf/prog_tests/bpf_nf.c |  6 +++++
+>  .../testing/selftests/bpf/progs/test_bpf_nf.c | 26 +++++++++++++++++++
+>  2 files changed, 32 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/test=
+ing/selftests/bpf/prog_tests/bpf_nf.c
+> index b33dba4b126e2..14d4c1793aed5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -5,6 +5,8 @@
+>  #include "test_bpf_nf.skel.h"
+>  #include "test_bpf_nf_fail.skel.h"
+> =20
+> +#define CT_OPTS_ERROR_GUARD 0x12345678
+> +
+>  static char log_buf[1024 * 1024];
+> =20
+>  struct {
+> @@ -119,6 +121,10 @@ static void test_bpf_nf_ct(int mode)
+>  	ASSERT_EQ(skel->bss->test_einval_reserved_new, -EINVAL, "Test EINVAL fo=
+r reserved in new struct not set to 0");
+>  	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for ne=
+tns_id < -1");
+>  	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for le=
+n__opts !=3D NF_BPF_CT_OPTS_SZ");
+> +	ASSERT_EQ(skel->bss->test_einval_len_opts_small_lookup, CT_OPTS_ERROR_G=
+UARD,
+> +		  "Test no error write for lookup opts__sz before error field");
+> +	ASSERT_EQ(skel->bss->test_einval_len_opts_small_alloc, CT_OPTS_ERROR_GU=
+ARD,
+> +		  "Test no error write for alloc opts__sz before error field");
+>  	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4p=
+roto !=3D TCP or UDP");
+>  	ASSERT_EQ(skel->bss->test_enonet_netns_id, -ENONET, "Test ENONET for ba=
+d but valid netns_id");
+>  	ASSERT_EQ(skel->bss->test_enoent_lookup, -ENOENT, "Test ENOENT for fail=
+ed lookup");
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/test=
+ing/selftests/bpf/progs/test_bpf_nf.c
+> index 076fbf03a1268..df43649ecb785 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -10,6 +10,8 @@
+>  #define EINVAL 22
+>  #define ENOENT 2
+> =20
+> +#define CT_OPTS_ERROR_GUARD 0x12345678
+> +
+>  #define NF_CT_ZONE_DIR_ORIG (1 << IP_CT_DIR_ORIGINAL)
+>  #define NF_CT_ZONE_DIR_REPL (1 << IP_CT_DIR_REPLY)
+> =20
+> @@ -19,6 +21,8 @@ int test_einval_reserved =3D 0;
+>  int test_einval_reserved_new =3D 0;
+>  int test_einval_netns_id =3D 0;
+>  int test_einval_len_opts =3D 0;
+> +int test_einval_len_opts_small_lookup =3D 0;
+> +int test_einval_len_opts_small_alloc =3D 0;
+>  int test_eproto_l4proto =3D 0;
+>  int test_enonet_netns_id =3D 0;
+>  int test_enoent_lookup =3D 0;
+> @@ -124,6 +128,28 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, stru=
+ct bpf_sock_tuple *, u32,
+>  	else
+>  		test_einval_len_opts =3D opts_def.error;
+> =20
+> +	opts_def.error =3D CT_OPTS_ERROR_GUARD;
+> +	ct =3D lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> +		       sizeof(opts_def.netns_id));
+> +	if (ct) {
+> +		bpf_ct_release(ct);
+> +		test_einval_len_opts_small_lookup =3D -EINVAL;
+> +	} else {
+> +		test_einval_len_opts_small_lookup =3D opts_def.error;
+> +	}
+> +
+> +	opts_def.error =3D CT_OPTS_ERROR_GUARD;
+> +	ct =3D alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> +		      sizeof(opts_def.netns_id));
+> +	if (ct) {
+> +		ct =3D bpf_ct_insert_entry(ct);
+> +		if (ct)
+> +			bpf_ct_release(ct);
+> +		test_einval_len_opts_small_alloc =3D -EINVAL;
+> +	} else {
+> +		test_einval_len_opts_small_alloc =3D opts_def.error;
+> +	}
+> +
+>  	opts_def.l4proto =3D IPPROTO_ICMP;
+>  	ct =3D lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+>  		       sizeof(opts_def));
+
