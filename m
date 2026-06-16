@@ -1,125 +1,235 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF6250C06
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 04:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E963C3542E5;
+	Tue, 16 Jun 2026 04:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781584435; cv=none; b=RlWjTH/rA62B9dR3tNUozgoaABwdGK7LWkVlwIf4DsXS9Av+/3NpQTG1rIahQao9XQ/SwGHSjqoWhaBZT7OeSqKNkYEKrz0gv/nLhRVhNfNY/N1WzxnNwLg0ooC6WVAiu8F181yR4UUC2f5wQfSfZnpKQpDtugcbSxFjFAl+pJw=
+	t=1781585859; cv=none; b=OZ/74SxJc7acWjYsjybr7JI58Xkoaa4wNdz5tGE9UjpF2U1Kso96Epw8OhfOm1vpHopcf8Ijvm4AgtKCaVdIpEoqflACmjLo7SKhwrhvDWV7UFytrngaZ3zvmQzgDG+YFMO+h5Cnvi/Gsol7R5TVtt+UTf544Tb/vImOpDZvzzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781584435; c=relaxed/simple;
-	bh=LUKEtGqgxTHViq6iBN8Jg2duqnbgRJYePDpTCKI4HrY=;
+	s=arc-20240116; t=1781585859; c=relaxed/simple;
+	bh=Bp/aybc+Fw0mk1v4eOxPCUpmO4mwvF90GnzTNmTxuc0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OSdE93/SbPVXCPe5oFNSsJC6C88+IOj3zS75sTU01WSFuGqY8E2f8pGUJxLvJ69XaZpRf2oIFWSLci3jmSROxHdrTwyeIVbUZ2S0ilX6IDso/fw5NZA3yx6Ex4ZmnkzWuwSgcOclILnn1FLLXUwVTH42mvPVrrsXlfcUJMx77is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ft8/ERt5; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=iZAZ+OUgAkCVqjBJbJfZdOyIkMLc0nVaXtRBFggixFpIJtKJPfYujmzGkJCvyoEqfsrwIagfcRCMI76bY7sCiWBWN7AzY6qEcF5YIvT2PhCNpK0H/f+NQnOmZOc+wGNMS03vkUpF8kRA3QLhB2xAoVIPgS+2KBUUotowQKyZHeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i981j6Qm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ft8/ERt5"
-Message-ID: <b1efbbb0-d2ea-4050-aef7-e35db35bd8d9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781584431;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8Gq0+z1rQrdFQFlUMw8WzxC/rc8erTBIXTVTj5Az1WQ=;
-	b=ft8/ERt5YZeIoJPxdApVC4NzHxWQvvl4MECoVLr2tnBDD1p5in2moBAac77BQNpA88Zm2X
-	KTBocwtr1LScgPRSqjo+FMk7U9UEaZXYugT1HPqfqmXsHgpoPtcz1MSUvySzIZ/6acYFle
-	vvAsLFKyP4xD08dGHYPDHiEqnyLkGN0=
-Date: Tue, 16 Jun 2026 12:33:35 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i981j6Qm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108641F000E9;
+	Tue, 16 Jun 2026 04:57:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781585857;
+	bh=JuQtaqTB4nsvLfp0tjVnNx6v78IJDyXO+cU/C/K0qxQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=i981j6QmlqgwZM0yJoyYkQzMcjjnFHvu2sw3xxnDhjlfL6pX+C+62ccK5LsczeiYY
+	 Lp+zeQN+s/SZrqON0LcvyqrwkL48kgp6xuY+3BI6mXMrTody+/05GOu4DMeakEcxTZ
+	 JR0nsRNbrej3X2cSiRzVMpeC2jy2mr0UXNqSoG0xf8dULCHzQiEfi0KsIa1N28y2P/
+	 des0h9UCgforAe1V/Z14ajWu/MeYBvo62RKxCIk1bed9eaxMppli1Zztot9RTvkY9h
+	 xUll88R4cWh0Atg8eHAv61wHFC9AjNQja9krZ0j+C1OxQ7PqDpt1FEfQabMlgKJ4c1
+	 VhXvIJYL7Hf0w==
+Message-ID: <1f95030c-0671-40ce-88fd-69a1127237d0@kernel.org>
+Date: Tue, 16 Jun 2026 13:57:30 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 11/12] selftests/bpf: Add test to verify
- xlated insns for global percpu data
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 0/9] mm/slab: introduce kfree_rcu_nolock() and
+ improve slub_kunit coverage
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <DJ9WNQFQ2B2R.1JSNL1RNABV6Q@gmail.com>
 Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260615152646.27639-1-leon.hwang@linux.dev>
- <20260615152646.27639-12-leon.hwang@linux.dev>
- <DJ9XY0Y2D2R8.16S9E0QFFMLQS@gmail.com>
- <d9eaffaa-6bbd-4af1-97cd-e5e37917c526@linux.dev>
- <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQLnnSrHDbw4OQCPrXz38wZ15PC1HuS1-aSB7LZxOQhd1g@mail.gmail.com>
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <DJ9WNQFQ2B2R.1JSNL1RNABV6Q@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0aQfkGi0vp62EoirKhGNqyKE"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0aQfkGi0vp62EoirKhGNqyKE
+Content-Type: multipart/mixed; boundary="------------kz1RVuIKqjrpvUfzfdOKNjp9";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <1f95030c-0671-40ce-88fd-69a1127237d0@kernel.org>
+Subject: Re: [PATCH for-next v3 0/9] mm/slab: introduce kfree_rcu_nolock() and
+ improve slub_kunit coverage
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <DJ9WNQFQ2B2R.1JSNL1RNABV6Q@gmail.com>
+In-Reply-To: <DJ9WNQFQ2B2R.1JSNL1RNABV6Q@gmail.com>
+
+--------------kz1RVuIKqjrpvUfzfdOKNjp9
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-On 16/6/26 12:23, Alexei Starovoitov wrote:
-> On Mon, Jun 15, 2026 at 9:19 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 16/6/26 05:29, Alexei Starovoitov wrote:
->>> On Mon Jun 15, 2026 at 8:26 AM PDT, Leon Hwang wrote:
->> [...]
->>>> +    ASSERT_EQ(ld_imm64_xlated[0].code, ld_imm64_raw[0].code, "ld_imm64 opcode");
->>>> +    ASSERT_TRUE(ld_imm64_xlated[0].dst_reg == ld_imm64_raw[0].dst_reg, "ld_imm64 dst_reg");
->>>> +    /*
->>>> +     * The xlated instruction has the map ID in imm and the offset
->>>> +     * in the next instruction's imm. The raw instruction just has
->>>> +     * the offset in its imm.
->>>> +     */
->>>> +    ASSERT_EQ(ld_imm64_xlated[1].imm, ld_imm64_to_u64(ld_imm64_raw), "ld_imm64 off");
->>>> +
->>>> +    mov64_percpu_reg = BPF_MOV64_PERCPU_REG(ld_imm64_raw[0].dst_reg, ld_imm64_raw[0].dst_reg);
->>>> +    ASSERT_MEMEQ(&insns[idx + 2], &mov64_percpu_reg, insn_sz, "mov64_percpu_reg");
->>>
->>> If the point of the test was to check that percpu_array_map_direct_value_meta()
->>> computes 'off' correctly then it failed to achieve that goal.
->>
->> It was to check the 'off' and the mov64_percpu_reg insn.
->>
->> To avoid relying on the insns loaded from ELF obj, use raw insns to
->> check the 'off' with a percpu_array map:
->>
->>         struct bpf_insn raw_insns[] = {
->>                 BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
->>                 BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0),
->>                 BPF_EXIT_INSN(),
->>         };
->>
->>         skel = test_global_percpu_data__open_and_load();
->>         exp_off = offsetof(struct test_global_percpu_data__percpu,
->> struct_data.nums[6]);
->>         raw_insns[0].imm = bpf_map__fd(skel->maps.percpu);
->>         raw_insns[1].imm = exp_off;
->>
->>         prog_fd = bpf_prog_load(...);
->>         err = get_xlated_program(prog_fd, &insns, &cnt);
->>         idx = find_percpu_ld_imm64(insns, cnt);
->>
->>         ASSERT_EQ(insns[idx + 1].imm, exp_off, "exp_off");
->>
->> Would this achieve that goal?
-> 
-> Hmm. There is nothing like that in the patch.
-> What are you talking about?
-> Some future improvement to the patch?
 
-It is future improvement to the patch. Sorry, it is too far from the patch.
 
-> My question was about the patch you posted.
-> What was the point of it?
+On 6/16/26 5:28 AM, Alexei Starovoitov wrote:
+> On Mon Jun 15, 2026 at 4:05 AM PDT, Harry Yoo (Oracle) wrote:
+>> Not the best time to post a series, but didn't want to delay posting
+>> the series for too long. no pressures ;)  This is aimed to be queued
+>> for review and testing after the merge window closes.
+>>
+>> This series is based on next-20260612, and is also available on
+>> git.kernel.org [3].
+>>
+>> To RCU folks: It would be great if you could kindly take a quick look =
+at
+>> patch 4 and either ack or nack the patch ;)
+>>
+>> To BPF folks: Ulad asked to share workloads to measure performance
+>> of kfree_rcu_nolock(). Unfortunately, I focused more on correctness
+>> and have not spent much effort on that. It would be nice if BPF folks
+>> could help evaluate it on their relevant workloads.
+>=20
+> kfree_rcu_nolock() needs to replace bpf_mem_alloc which is backbone
+> of bpf maps and bpf local storage.
 
-The point of the patch was to check that
-percpu_array_map_direct_value_meta() computes 'off' correctly against
-the 'off' encoded in ELF obj, and a mov64_percpu_reg insn should be
-added after loading the prog.
+> So all of the selftests/bpf/benchs/run_bench_*.sh
 
-Thanks,
-Leon
+Didn't notice it was a thing, thanks!
 
+> will exercise it one way or the other the replacement is complete.
+> In other words performance is absolutely critical.
+>
+>> To PREEMPT_RT folks: The most relevant part is allowing
+>> kfree_rcu_sheaf() on PREEMPT_RT (patch 6). It carefully avoids sleepin=
+g
+>> by acquiring the locks via local_trylock() or spin_trylock_irqsave()
+>> to avoid sleeping within a raw spinlock. When trylock or unlock is
+>> unsafe, kmalloc_nolock() always fails.
+>>
+>> Changes since RFC v2
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>
+>> Reduced complexity and intrusiveness (Uladzislau Rezki)
+>> -------------------------------------------------------
+>>
+>> While discussing concerns about the complexity of adding allow_spin
+>> handling with Ulad (Thanks!), I realized that adding complexity to the=
+
+>> kvfree_rcu batching is not strictly necessary: only slab objects need =
+to
+>> be batched, they are already batched by rcu sheaves, and slab already
+>> supports unknown context. So it is enough to implement only a minimal
+>> fallback for the sheaves path.
+>>
+>> I tried to avoid making intrusive changes to the existing kvfree_rcu
+>> path as much as possible. struct rcu_ptr is renamed to kfree_rcu_head
+>> following Vlastimil's suggestion, and it is used only in the
+>> kfree_rcu_nolock() path for now.
+>>
+>> As a result, the complexity is significantly reduced and the series
+>> became much less intrusive. This is also reflected well in the diffsta=
+t
+>> below.
+>=20
+> Overall looks good to me.
+
+Thanks!
+
+> btw sashiko was confused in few cases.
+> Not everything that it flags needs a fix. Sometimes it's not an issue a=
+t all.
+> It only sounds like one.
+
+Right, most of the comments are false positives.
+But there is one comment that looks like a real bug...
+
+Sashiko wrote:
+> This is a pre-existing issue, but can concurrent lockless calls to
+> deferred_work_barrier() cause an rcuwait race on PREEMPT_RT, leading to=
+
+> permanent task hangs?
+>
+> The function iterates over all CPUs, invoking irq_work_sync() on each
+> CPU's deferred work object. On PREEMPT_RT, irq_work_sync() relies on
+> rcuwait_wait_event() to block until completion,
+
+Yes. If CONFIG_PREEPMT_RT is enabled and irq_work doesn't have
+IRQ_WORK_HARD_IRQ, irq_work_sync() calls rcuwait_wait_event().
+
+> and the rcuwait
+> synchronization primitive strictly allows only one waiter at a time.
+
+Hmm yeah, include/linux/rcuwait.h says:
+| The caller is responsible for locking around rcuwait_wait_event(),
+| and [prepare_to/finish]_rcuwait() such that writes to @task are
+| properly serialized.
+
+> Because deferred_work_barrier() is called without any global
+> serialization (for instance, in kmem_cache_destroy() and
+> kvfree_rcu_barrier_on_cache(), and now in flush_all_rcu_sheaves()),
+
+Yes, without slab_mutex held.
+
+> multiple threads can enter irq_work_sync() for the same work object
+> concurrently.
+>=20
+> This overwrites the waiter task pointer, meaning only one task will be
+> woken up when the work completes, leaving the other tasks hanging
+> permanently in an uninterruptible sleep.
+
+I think this is indeed a pre-existing issue that needs to be resolved.
+Looks like we now have one more bug to fix ;-)
+
+--=20
+Cheers,
+Harry / Hyeonggon
+
+--------------kz1RVuIKqjrpvUfzfdOKNjp9--
+
+--------------0aQfkGi0vp62EoirKhGNqyKE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajDXugAKCRCGXBN6rc5S
+1vZEAQDurL03QvXhFDoJpREYt4Pq3uvJV2fqE7TNTAFfOooefQEAp57qIxNBol8F
+8WVsYmh64E0qC0iSp7wTPtY13dK3JA0=
+=A+n3
+-----END PGP SIGNATURE-----
+
+--------------0aQfkGi0vp62EoirKhGNqyKE--
