@@ -1,136 +1,120 @@
-Received: from mail-m1024.netease.com (mail-m1024.netease.com [154.81.10.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423942868B5;
-	Tue, 16 Jun 2026 14:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=154.81.10.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B86444105C;
+	Tue, 16 Jun 2026 15:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781619874; cv=none; b=gFQ9F/ERUvDod0PRpbDkn0BH03W8j737iZhxEgN5irMd8ZcJmqgLZFqjLTTI2rtcZNn3ARniColg/2f4bdYgK5uIks459CbHD4mOZeP/7KqsZA6ZMTkyGguBipb0VMP8kOKWDcYtOwRoPQYZ5VYU0Y6skTDr4CLikLe03HIuFPY=
+	t=1781623198; cv=none; b=jUsn77YwIcHVWJTfgXyszttSJk4QkM6+Y0755hEMonU4FBH8wnqRjYlyw+n3HXlQP1KWR8a6VOGKYavT2c2numjtncnIIzYITyp8SrmwbBTiLDHdJdgT4dUOdqVnh1QklCxLoVgMcQbicrpW5Odj/A5vrIoUoEu+/Q/261CHm/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781619874; c=relaxed/simple;
-	bh=SVJYD7cXhxJ03FCB0/aNXIXtObxXr/c/c0buXeK2qaY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TDp9mWx8OS24kyIRsDt55d3spsDlSvUO3Yg5lI3WbESVQO0LsuFiLAdQaHODjfanY1gQZqCcMTzImcGunUFOew5L4linwAWMO8iK6pqccIbrsbjDuQJ7E75OlGgoZeW3kJ+NeiRhnXu2Ep5jqE8BqbV0gF58KY10o8vTHS/25VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=Y1IZTbeY; arc=none smtp.client-ip=154.81.10.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+	s=arc-20240116; t=1781623198; c=relaxed/simple;
+	bh=JlUmJ5DBcsfUYQX4vTIw4k1KT8v4/azxh62j2Yp9PoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WBN/mh++M4M1CL0c7DgKNF+LA5o1yNVf527lC0EnjUYcfh/cTvQObni5qDOLk8BYc/hLWOeAe4tgEBajzbHeivxlGPpXC5mzNR8EB4sMQdNsbSnOcERdmo16miKA1I7TWfvSAM09ROG233/YYeD7kNWnPZvtA10ew3RPJahSDbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mHNEtl8R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="Y1IZTbeY"
-Received: from DESKTOP-SUEFNF9.taila7e912.ts.net (unknown [221.228.238.82])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 429c4f9f3;
-	Tue, 16 Jun 2026 22:24:27 +0800 (GMT+08:00)
-From: Dawei Feng <dawei.feng@seu.edu.cn>
-To: akiyano@amazon.com
-Cc: darinzon@amazon.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	sameehj@amazon.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	Dawei Feng <dawei.feng@seu.edu.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH net] net: ena: clean up XDP TX queues when regular TX setup fails
-Date: Tue, 16 Jun 2026 22:24:24 +0800
-Message-Id: <20260616142424.4005130-1-dawei.feng@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mHNEtl8R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B128D1F000E9;
+	Tue, 16 Jun 2026 15:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781623196;
+	bh=VfbnHY+aIdC82PGEHGtuLsQPBx8FLWY1rXe+qSv98R8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=mHNEtl8RbNvTGPTjX3pTBwPHUIhqntugKsjms91Ls7d61c5mmVyuH+GHfghcDdZSf
+	 /nj7LafsGUp8ljfbv63H7uY34K5fpgjQh4rjja9+ps6pad72/qnzQs1BiHxiRIk2fo
+	 B5Crbz5sDRCq5okwRknKNZImddxeI6GJ2BRpPygnNMrUx4tBM7acfOgOMz9w5YH7kf
+	 JlMP/6iVUSX5Qfu17S7v6LuM2+H4nfUo0klMVovuNkWlpkxVm59Rlk8RnS82YjkNMp
+	 hBg6JVIezzCk91zmmovFSBIwW1/DbYzebsj0R8QTgJYcYTYqes/yI0/LETGFkutney
+	 moeafmV/dqjGw==
+Date: Tue, 16 Jun 2026 08:19:54 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Meghana Malladi <m-malladi@ti.com>
+Cc: <diogo.ivo@siemens.com>, <haokexin@gmail.com>,
+ <vadim.fedorenko@linux.dev>, <devnexen@gmail.com>, <horms@kernel.org>,
+ <jacob.e.keller@intel.com>, <sdf@fomichev.me>, <john.fastabend@gmail.com>,
+ <hawk@kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+ <pabeni@redhat.com>, <edumazet@google.com>, <davem@davemloft.net>,
+ <andrew+netdev@lunn.ch>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, Vignesh Raghavendra
+ <vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
+Subject: Re: [PATCH net 4/4] net: ti: icssg: Fix XSK zero copy TX during
+ application wakeup
+Message-ID: <20260616081954.0d12aa13@kernel.org>
+In-Reply-To: <ed0bc332-0196-4613-8066-9b94f8ed0013@ti.com>
+References: <20260611185744.2498070-1-m-malladi@ti.com>
+	<20260611185744.2498070-5-m-malladi@ti.com>
+	<20260615162157.3748bcda@kernel.org>
+	<ed0bc332-0196-4613-8066-9b94f8ed0013@ti.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9ed0d1bf7903a2kunm774c128946f2d
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDShpKVkNOGUxLT0hMHkwdTFYeHw
-	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJSUpVSUlDVUlIQ1VDSVlXWRYaDxIVHRRZQVlPS0hVSktISk
-	9ITFVKS0tVSkJLS1kG
-DKIM-Signature: a=rsa-sha256;
-	b=Y1IZTbeYxBzyAh6DkFJL0o9f9Pz6FGQrtNcjPmnbU1NOy9C70vVUM12N9JyprMUbkL7UNOnHthqlK7DAOZNpMqRI/B0Cz42oT2p1ZwCqpNDExwiTZGwg3rW4KXqfm/XYzK9V8fV6hdNnZqf8oYTP2dPYCMacicErfyCoJUIRcGM=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=QLL7PjdV8PJ+1f56KcngZn3slyFDPp7fenaeMRexXvI=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-create_queues_with_size_backoff() creates XDP TX queues before setting
-up the regular TX path. If the subsequent allocation or creation of
-regular TX queues fails, the error handling paths omit the teardown of the
-XDP TX queues, leading to a resource leak.
+On Tue, 16 Jun 2026 16:41:00 +0530 Meghana Malladi wrote:
+> On 6/16/26 04:51, Jakub Kicinski wrote:
+> > On Fri, 12 Jun 2026 00:27:44 +0530 Meghana Malladi wrote:  
+> >> @@ -169,9 +169,6 @@ static int emac_xsk_xmit_zc(struct prueth_emac *emac,
+> >>   
+> >>   		num_tx++;
+> >>   	}
+> >> -
+> >> -	xsk_tx_release(tx_chn->xsk_pool);
+> >> -	return num_tx;  
+> > 
+> > Why are you deleting this?
+> >   
+> 
+> xsk_sendmsg() also calls this without an rcu-lock when transmitting the 
+> packets if the xmit was successful, so I was assuming it is not required 
+> and I removed this.
 
-Fix this by explicitly destroying the XDP TX queue subset at the two
-missing failure points.
+I think you still need it. Besides, seems like a separate cleanup.
 
-The bug was first flagged by an experimental analysis tool we are
-developing for kernel memory-management bugs while analyzing
-v6.13-rc1. The tool is still under development and is not yet publicly
-available. Manual inspection confirms that the bug is still
-present in v7.1-rc7.
+> >>   void prueth_xmit_free(struct prueth_tx_chn *tx_chn,
+> >> @@ -279,9 +276,6 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
+> >>   		num_tx++;
+> >>   	}
+> >>   
+> >> -	if (!num_tx)
+> >> -		return 0;  
+> > 
+> > Does something prevent us from running all this code if budget is 0?
+> > If budget is 0 we can complete normal Tx with skbs but we must
+> > not touch any AF-XDP related state.
+> 
+> Can you elaborate more, I couldn't interpret your comment here
 
-An x86_64 allyesconfig build showed no new warnings. As we do not have
-an ENA device to test with, no runtime testing was able to be performed.
+netpoll may call napi from any context, including from IRQ.
+It uses budget of 0 to indicate that it's trying to only reap tx
+completions, without doing any Rx or XDP work. XDPs can't be called
+from IRQ context.
 
-Fixes: 548c4940b9f1 ("net: ena: Implement XDP_TX action")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dawei Feng <dawei.feng@seu.edu.cn>
----
- drivers/net/ethernet/amazon/ena/ena_netdev.c | 23 ++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+> >>   	netif_txq = netdev_get_tx_queue(ndev, chn);
+> >>   	netdev_tx_completed_queue(netif_txq, num_tx, total_bytes);
+> >>   
+> >> @@ -306,7 +300,9 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
+> >>   
+> >>   		netif_txq = netdev_get_tx_queue(ndev, chn);
+> >>   		txq_trans_cond_update(netif_txq);  
+> > 
+> > This looks misplaced, now we will hit it even if we didn't complete
+> > or submit any Tx.
+> 
+> This code needs to be hit for packet transmission in zero copy mode.
+> emac_xsk_xmit_zc() submits the packets to the DMA in NAPI context,
+> when application wakes up the driver and triggers NAPI. Once DMA 
+> transfer is done, irq gets triggered NAPI gets called which will handle 
+> the tx packet completion + submit next Tx batch packets to the DMA.
+> 
+> if (tx_chn->xsk_pool) -> check ensure this hits and runs for zero copy 
+> only. Also above check (!num_tx) returns early during the application 
+> wakeup (where budget is zero), hence it is removed.
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 92d149d4f091..5d05020a6d05 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -752,6 +752,18 @@ static void ena_destroy_all_tx_queues(struct ena_adapter *adapter)
- 	}
- }
- 
-+static void ena_destroy_xdp_tx_queues(struct ena_adapter *adapter)
-+{
-+	u16 ena_qid;
-+	int i;
-+
-+	for (i = adapter->xdp_first_ring;
-+	     i < adapter->xdp_first_ring + adapter->xdp_num_queues; i++) {
-+		ena_qid = ENA_IO_TXQ_IDX(i);
-+		ena_com_destroy_io_queue(adapter->ena_dev, ena_qid);
-+	}
-+}
-+
- static void ena_destroy_all_rx_queues(struct ena_adapter *adapter)
- {
- 	u16 ena_qid;
-@@ -2078,14 +2090,21 @@ static int create_queues_with_size_backoff(struct ena_adapter *adapter)
- 		rc = ena_setup_tx_resources_in_range(adapter,
- 						     0,
- 						     adapter->num_io_queues);
--		if (rc)
-+		if (rc) {
-+			ena_destroy_xdp_tx_queues(adapter);
-+			ena_free_all_io_tx_resources_in_range(adapter,
-+							      adapter->xdp_first_ring,
-+							      adapter->xdp_num_queues);
- 			goto err_setup_tx;
-+		}
- 
- 		rc = ena_create_io_tx_queues_in_range(adapter,
- 						      0,
- 						      adapter->num_io_queues);
--		if (rc)
-+		if (rc) {
-+			ena_destroy_xdp_tx_queues(adapter);
- 			goto err_create_tx_queues;
-+		}
- 
- 		rc = ena_setup_all_rx_resources(adapter);
- 		if (rc)
--- 
-2.34.1
-
+I'm commenting on txq_trans_cond_update(), you're calling it
+effectively on every NAPI call when XSK is bound, whether
+Tx is making progress or not.
