@@ -1,92 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C86644BCB8;
-	Tue, 16 Jun 2026 15:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA1739282C;
+	Tue, 16 Jun 2026 15:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781623386; cv=none; b=rjfm1wYShytlF3Ot+symI+yNIUMwIAPH1eeV+eEXids9Z5dgKTCYpJMgXjfGbhtXUT677QdDY7Dg3BeyVSPQoLQXrGsewB/eRdgJrB2I+KlTKOacvSS0RYdqoLaLEYHpucCk8y4lpqtMeuSxaTjLmYM2grCtrqa46GbJ+vj5omM=
+	t=1781625023; cv=none; b=FcP5QHm8LymTGHQeEiuGjfB+Tz93r7uJv685jmV2FNKMCOpZIISstXCB703xjVzQfqsNO4cqbPFrXHcdnB/LgidtYl3q0GzGF0cCrU+TVOEcgJ1NW8iRKM2B9ckqXW0zN5GME+8rjIWq8cGkK9W7Zvvji7nkPZ4KNhvMqY9CZR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781623386; c=relaxed/simple;
-	bh=epA1r6GiMx7JHmbS/clLse1iSFl+j4KCb4HpFi3L6Tw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M+W5lrWOeFPWegDicb3641EhAAbZA29P7zFGbZrXqWcAWErOb0mjPnhH1Inz9Eq62+30cwQZ54/3pG/IhjrZxwCuCFRe7Rv4JQKksTHuvTdRM0a1khTo0Ax4IMHpjWe/esU6Ud8tqBhcPtRGIxr1Sfq5X5Nabg6IJJINQYAqhfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4kMTGuD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781625023; c=relaxed/simple;
+	bh=TwBV8VPYVxSy1EgFWxObclBgVWNGRE9JBaZgyorMpnk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lRQ+E7m9Bj8iw5SswWyv6i8zzKj5CvVf0YLGiH2INIv6dbom277HoB24h2bZ8Idy/hasHYN8+7L2ymlkEk+r4n2jNajKA6fZop4y1ynnNKgojYkLf6t4l6QsS4zStp2Wg7M4UyCr3HkHeoebs3TPbahV+dY6LvllUZCd1wt+SFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhlZFyfo; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4kMTGuD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E21B1F00A3A;
-	Tue, 16 Jun 2026 15:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781623385;
-	bh=hv3h9P487Z/2V1mgo4zQS3Oy7NlqKKmp31AJLcXoCVc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=k4kMTGuDMCmD6OS9LfuXYbkRWW31lLBNhI6ik+zHXuJot7rwzAwrbAGDBim2ZvwtB
-	 fGfPhqSLO4L/iLhILtd69p8v+zRV3cVKl7VBDxpT8D+OTLkJLU75kHEn7tRCSRXZf5
-	 oxCarQDMtggvI+p2Du6GihVTitESMoFa3CN5SYLq0wTssC0nnyD3QhyZy7epPEmgJD
-	 jTM6dJ8DeKZTeDE+3FrxoelU+UgEmctdA/tDp/3y/SFHL1EofQQ+/QKepzKY+L0S8p
-	 gS7B9r35GKdbCyfNNARm2N6SAdp6UE1wFDK4AHzXEW6RUDWuHiwHohMoV62V8/+43x
-	 99FWIDTvJCEZg==
-Date: Tue, 16 Jun 2026 08:23:02 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-Cc: "edumazet@google.com" <edumazet@google.com>, "ncardwell@google.com"
- <ncardwell@google.com>, "jolsa@kernel.org" <jolsa@kernel.org>,
- "yonghong.song@linux.dev" <yonghong.song@linux.dev>, "song@kernel.org"
- <song@kernel.org>, "linux-kselftest@vger.kernel.org"
- <linux-kselftest@vger.kernel.org>, "memxor@gmail.com" <memxor@gmail.com>,
- "shuah@kernel.org" <shuah@kernel.org>, "martin.lau@linux.dev"
- <martin.lau@linux.dev>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
- <andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
- "horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
- <dsahern@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "pabeni@redhat.com"
- <pabeni@redhat.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
- "stephen@networkplumber.org" <stephen@networkplumber.org>,
- "davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
- <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
- <donald.hunter@gmail.com>, "kuniyu@google.com" <kuniyu@google.com>,
- "ij@kernel.org" <ij@kernel.org>, "Koen De Schepper (Nokia)"
- <koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
- <g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
- <ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
- <mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
- "rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
- <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com"
- <vidhi_goel@apple.com>
-Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Message-ID: <20260616082302.3618bd90@kernel.org>
-In-Reply-To: <PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260615185102.5e8de52d@kernel.org>
-	<20260615191704.31be22da@kernel.org>
-	<PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhlZFyfo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781625022; x=1813161022;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TwBV8VPYVxSy1EgFWxObclBgVWNGRE9JBaZgyorMpnk=;
+  b=FhlZFyfolpeApEpPYBex115yGRidBo62ZAHC8J9xL+lKbePBnf/nk5tD
+   XFkfwHVe09c5wRU4MYS0x1ZAlIvCpPEhc9IgGM1+zPDKG0R363uPyOjje
+   3gI8/IuYDDm2aSYCfz+Pj76iW1+Ga72fUGBoANU8f+wAEkeaR+u4I2XQN
+   Bp4uU9mYGmIIhWMntKwCZ84bTH2nQo6cfqZlSK9LBKQDw1rlvOurQp3dl
+   HeRhVCsj8+UAMt2FSpsXexDun4jA6oz6JIJqmcsCGcNAnpLJFM2xx9H3g
+   EZF1hION5jxRbqAIoBsche6x4uZgT8jIz1fvHbRggTPspO6yubkhmOtVC
+   A==;
+X-CSE-ConnectionGUID: npAVwhvhQWevZV2u5DR6+Q==
+X-CSE-MsgGUID: lTHJMGAGTeOQgjcn2sQrbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11818"; a="86232985"
+X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
+   d="scan'208";a="86232985"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 08:50:21 -0700
+X-CSE-ConnectionGUID: Vlbj8AqaSmypbcOatriXHg==
+X-CSE-MsgGUID: zhg1Np77Q4Ke3T7HM9ZF4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
+   d="scan'208";a="247684278"
+Received: from brc05.iind.intel.com (HELO brc05..) ([10.190.162.156])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 08:50:18 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	stfomichev@gmail.com,
+	kernelxing@tencent.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Cc: bpf@vger.kernel.org
+Subject: [PATCH net-next 0/3] selftests/xsk: stabilize timeout test behavior
+Date: Tue, 16 Jun 2026 21:19:51 +0530
+Message-ID: <20260616154955.1492560-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 16 Jun 2026 12:23:11 +0000 Chia-Yu Chang (Nokia) wrote:
-> > On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:  
-> > > On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.com
-> > > Eric, Neal, looks good?
-> > >
-> > > The min rtt thing in tcp_tso_autosize() helps a bit but if the sender 
-> > > gets congested for a longer stretch min_rtts on new connections are 
-> > > high and we're back to sending small TSO, keeping the sender overloaded.
-> > > Which is to say - I _hope_ this also solves some of Meta's problems :)  
-> > 
-> > Ugh, I didn't see the Sashiko report, it's only CCed to the author and bpf@, not to netdev :/
-> > 
-> > The zero-check sounds legit. Let's revisit this after the merge window.  
-> 
-> Thanks for the comment, I will take action after the merge window.
-> 
-> And, please correct me if I am wrong, the next eligible submission is expected from 30-June, right?
+This series improves AF_XDP selftests by making timeout handling
+explicit and fixing sources of non-determinism in xsk timeout tests.
 
-It usually opens Monday morning (PST) so Jun 29th
+Patch 1 introduces test_spec::poll_tmout and removes implicit
+dependence on RX UMEM setup state for timeout behavior.
+
+Patch 2 fixes thread harness sequencing by attaching XDP programs
+before worker startup, removing signal-based termination, and using
+barrier synchronization only for dual-thread runs.
+
+Patch 3 restores shared_umem after POLL_TXQ_FULL so test-local
+configuration does not leak into subsequent cases on shared-netdev
+runs.
+
+Together these changes make timeout handling easier to follow and
+improve selftest stability, especially on real NIC runs.
+
+Tushar Vyavahare (3):
+  selftests/xsk: make poll timeout mode explicit
+  selftests/xsk: fix timeout thread harness sequencing
+  selftests/xsk: restore shared_umem after POLL_TXQ_FULL
+
+ .../selftests/bpf/prog_tests/test_xsk.c       | 96 +++++++++++--------
+ .../selftests/bpf/prog_tests/test_xsk.h       |  2 +
+ 2 files changed, 56 insertions(+), 42 deletions(-)
+
+-- 
+2.43.0
+
