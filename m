@@ -1,146 +1,299 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C75F314A98;
-	Tue, 16 Jun 2026 07:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CAD35A384;
+	Tue, 16 Jun 2026 07:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781594213; cv=none; b=W1eh2XdfTNq79h4T5sr/I/ueUtz+sBM/WEqou5SjXMXW4imU0AbsggDDYTe8YzjCMLxFgmoEvPBRGztcHTQnJSTt/RFx8XM/hagSUGaYMZuwDr88Jz83EnRL1/LZ8pWPbzCQvBrO8AjEqfwt75g17Htic8S5qksOUDrdgTtHt08=
+	t=1781596518; cv=none; b=Xkc2xjQPM3KoHrJAgFDGoRA86DLshJXCxzCZMw4MoFQRcVN0oD4qwc1If/p30rE9wUjBUNsBWnFsMkBlxqjyKk5MeZgx6o7HMVKcCuTvbXYWqAm/oeeN+UfXLGx/fY46n8GvIIddZvJvNbtIEsdWfo1elgU7nWsVzsy9i7VzbA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781594213; c=relaxed/simple;
-	bh=JJvclFFT4XihspyYQV8fTcvSA19V8bdOxJ7beK7bQ/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aPRXGgVDtzKrBSGtmDeg+PpO0Jg+y4We01sd/9A1KPAkjGNw6Ob7nmUHnFnrKooGeediL79Eb9oblqOZLZiXE9VnNFfzK/9QiPUOQKkpmet+LWpIh5lxccoUrXOWGV9ROXREss/bq1gM/IDTHa7YYUdHEiuLhHsWMqWdygQz5Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ikzt/GbZ; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1781596518; c=relaxed/simple;
+	bh=eJdqyv4hJpz+5xYRRlWO8e2A6D+CHZ+zYvuR3m+8C+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dS1SI3pbJZTOcigx3RPfQbYebHHOB4TO8NRLCjf5ape8CwHy0UiqJAEMiEGUNI3iE2esOxe/e7DTxCSvf6w8YnCudxMbLMc71RA/uH2zSioPIsHj6w0qxQaS5VGMHa1Avk3hZOWelVRwve7SDx/k/mwzjQMsq4T+VOyR3Vsi/kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkdPriGn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ikzt/GbZ"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1781594200; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=UeT/ZGSsk/AdS30HaVQrJg6VIQfwE5v65FXMb4s19jA=;
-	b=Ikzt/GbZABA3D2yhujb/zZPwx8GoRfKs3og4PtERj1Sn0JrcDApfU7gLaDBCm3GVl08xBLFts3DFbl3PnAlFYJpzAnuPlhwLQdvwehAOxXgqHQdrMPt+XPO6ETEtgz6Q7E97Vz7Ihj7Rol219od9fuYs8lnmEHbqR/6bGZ5OaGs=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X5-RGDy_1781594199;
-Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0X5-RGDy_1781594199 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 16 Jun 2026 15:16:39 +0800
-Date: Tue, 16 Jun 2026 15:16:39 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com    >
-To: Sechang Lim <rhkrqnwk98@gmail.com>
-Cc: "D . Wythe" <alibuda@linux.alibaba.com>,
-	Dust Li <dust.li@linux.alibaba.com>,
-	Sidraya Jayagond <sidraya@linux.ibm.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Mahanta Jambigi <mjambigi@linux.ibm.com>,
-	Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>, Simon Horman <horms@kernel.org>,
-	Ursula Braun <ubraun@linux.ibm.com>,
-	Karsten Graul <kgraul@linux.ibm.com>,
-	Guvenc Gulce <guvenc@linux.ibm.com>, netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net/smc: fix out-of-bounds read in
- smc_clcsock_data_ready()
-Message-ID: <20260616071639.GA104390@j66a10360.sqa.eu95>
-References: <20260614120931.4041687-1-rhkrqnwk98@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkdPriGn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 228D21F000E9;
+	Tue, 16 Jun 2026 07:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781596516;
+	bh=n8yo6IeeQUch0PIwpPtioYGk9SmXvxlaWBe70kkkR6g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=QkdPriGnJTwVj05m+T5Ki7nROr14VsrYgXqzl3WhfN6z5X6o97l6fEr+yv4mwKqlA
+	 egTkmsB603voSA1Lzh3+IWSacBh7KwYcZLAr6LGc9ci+uzG79Lv3CGn5XxXD/2J8iQ
+	 PzrwDdzl/KcLcDH7Jub2Ntu8EK9HrtMD9R8tyCHLUkT9aTUpmzBcha6lOZtXUg4//s
+	 VAKDL1cTrOTlI1ihwV4RnevI0BoWph25XnR8MgDcT0OpWDLWSJBLLBgZ+kuNw6dY2g
+	 hgb+EujlBevwthD6KMkeJKCK42JL92MWjmTmzbzx6H13AVXC1q0gHPVUSNgzzBL6aq
+	 i8jZ42xICef+g==
+Message-ID: <4d7ebcd5-f3b7-4c73-94f1-b7d3ac12a521@kernel.org>
+Date: Tue, 16 Jun 2026 09:55:09 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260614120931.4041687-1-rhkrqnwk98@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 3/9] mm/slab: handle the !allow_spin case in
+ kfree_rcu_sheaf()
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-3-70a54f3775bb@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260615-kfree_rcu_nolock-v3-3-70a54f3775bb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jun 14, 2026 at 12:09:30PM +0000, Sechang Lim wrote:
-> smc_clcsock_data_ready() is installed on the listen socket and reads its
-> sk_user_data as an smc_sock. A passive-open child inherits this callback,
-> but sk_clone_lock() clears the child's sk_user_data because it is tagged
-> SK_USER_DATA_NOCOPY. smc_tcp_syn_recv_sock() restores the child's af_ops,
-> but the inherited sk_data_ready() is left in place until accept.
+On 6/15/26 13:05, Harry Yoo (Oracle) wrote:
+> Teach kfree_rcu_sheaf() how to handle the !allow_spin case. Try to get
+> an empty sheaf from pcs->spare or the barn even when spinning is not
+> allowed. Unlike __pcs_replace_full_main(), try harder to allocate
+> an empty sheaf because the fallback path will be more expensive than
+> kfree_nolock().
+
+You mean that it will try to allocate an empty sheaf, while
+__pcs_replace_full_main() doesn't with allow_spin == false.
+I just noticed the comment there is a bit stale... nevermind.
+
 > 
-> In that window the child is established. A cgroup sock_ops program can run
-> bpf_sock_hash_update() on it from tcp_init_transfer(); sk_psock_init()
-> stores a sk_psock in the NULL sk_user_data. The inherited callback then
-> reads sk_user_data via smc_clcsock_user_data(), which masks only
-> SK_USER_DATA_NOCOPY, mistakes the sk_psock for an smc_sock, and reads a
-> callback pointer past the end of the sk_psock:
+> When trylock fails or the kernel observes non-NULL pcs->rcu_free after
+> lock acquisition, free the sheaf instead of putting it to the barn.
+> This is rare and not worth complicating the code.
 > 
->   BUG: KASAN: slab-out-of-bounds in smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->   Read of size 8 at addr ffff8880013b8674 by task syz.6.12484/67930
->    <IRQ>
->    smc_clcsock_data_ready+0x84/0x200 net/smc/af_smc.c:2637
->    tcp_urg+0x24d/0x360 net/ipv4/tcp_input.c:6264
->    tcp_rcv_state_process+0x280d/0x4940 net/ipv4/tcp_input.c:7336
->    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
->    tcp_v4_rcv+0x1eaa/0x2a00 net/ipv4/tcp_ipv4.c:2186
->    ip_protocol_deliver_rcu+0x226/0x420 net/ipv4/ip_input.c:207
->    ip_local_deliver_finish+0x35a/0x5f0 net/ipv4/ip_input.c:241
->    __netif_receive_skb_one_core+0x1e5/0x210 net/core/dev.c:6216
->    process_backlog+0x631/0x1470 net/core/dev.c:6682
->    __napi_poll+0xb3/0x320 net/core/dev.c:7749
->    net_rx_action+0x4fa/0xcb0 net/core/dev.c:7969
->    handle_softirqs+0x236/0x800 kernel/softirq.c:622
->    </IRQ>
+> Since call_rcu() cannot be called in an unknown context,
+> kfree_rcu_sheaf() fails when the rcu sheaf becomes full.
 > 
->   Allocated by task 67930:
->    sk_psock_init+0x142/0x740 net/core/skmsg.c:766
->    sock_map_link+0x646/0xdf0 net/core/sock_map.c:279
->    sock_hash_update_common+0xd3/0x990 net/core/sock_map.c:1010
->    bpf_sock_hash_update+0x114/0x170 net/core/sock_map.c:1229
->    __cgroup_bpf_run_filter_sock_ops+0x74/0xa0 kernel/bpf/cgroup.c:1727
->    tcp_init_transfer+0x1085/0x1100 net/ipv4/tcp_input.c:6693
->    tcp_rcv_state_process+0x241e/0x4940 net/ipv4/tcp_input.c:7231
->    tcp_child_process+0x371/0xa50 net/ipv4/tcp_minisocks.c:1002
-> 
-> Restore the inherited sk_data_ready() in smc_tcp_syn_recv_sock(), where the
-> child's sk_user_data is already cleared, rather than only at accept.
-> 
-> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
-> Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 > ---
->  net/smc/af_smc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  mm/slab.h        |  2 +-
+>  mm/slab_common.c |  2 +-
+>  mm/slub.c        | 39 ++++++++++++++++++++++++++++++---------
+>  3 files changed, 32 insertions(+), 11 deletions(-)
 > 
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index b5db69073e20..152971e8ad17 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -156,6 +156,12 @@ static struct sock *smc_tcp_syn_recv_sock(const struct sock *sk,
->  	if (child) {
->  		rcu_assign_sk_user_data(child, NULL);
+> diff --git a/mm/slab.h b/mm/slab.h
+> index 509f330654b8..b1bd33a16544 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -429,7 +429,7 @@ static inline bool is_kmalloc_normal(struct kmem_cache *s)
+>  	return !(s->flags & (SLAB_CACHE_DMA|SLAB_ACCOUNT|SLAB_RECLAIM_ACCOUNT));
+>  }
 >  
-> +		/*
-> +		 * the child inherited the listen-specific sk_data_ready();
-> +		 * restore it here, as sk_user_data may be reused before accept
-> +		 */
-> +		child->sk_data_ready = smc->clcsk_data_ready;
-
-One concern:
-
-smc_clcsock_user_data_rcu() together with refcount_inc_not_zero() only
-pins the smc_sock; it does not guarantee anything about the lifetime or
-consistency of smc->clcsk_data_ready. In the listen-close path,
-smc_clcsock_restore_cb() clears that field under sk_callback_lock,
-while smc_tcp_syn_recv_sock() reads it without any lock. These are
-independent protection domains. If close wins the race,
-child->sk_data_ready can end up NULL and the next data arrival will
-crash.
-
-Also, I don't object to this fix, but I'd rather see the underlying cause
-addressed directly. The real issue seems to be the conflict between
-SMC's sk_user_data and sk_psock. Maybe there is a cleaner solution, e.g.
-always setting user_data.
-
+> -bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj);
+> +bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, bool allow_spin);
+>  void flush_all_rcu_sheaves(void);
+>  void flush_rcu_sheaves_on_cache(struct kmem_cache *s);
+>  
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index b6426d7ceec9..bc1a8ec938d9 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1605,7 +1605,7 @@ static bool kfree_rcu_sheaf(void *obj)
+>  
+>  	s = slab->slab_cache;
+>  	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) == numa_mem_id()))
+> -		return __kfree_rcu_sheaf(s, obj);
+> +		return __kfree_rcu_sheaf(s, obj, /* allow_spin = */ true);
+>  
+>  	return false;
+>  }
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 87ca154ccd80..b0d38d515386 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2815,7 +2815,8 @@ static inline struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s,
+>  	return __alloc_empty_sheaf(s, gfp, alloc_flags, s->sheaf_capacity);
+>  }
+>  
+> -static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+> +static void __free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf,
+> +			       bool allow_spin)
+>  {
+>  	/*
+>  	 * If the sheaf was created with SLAB_ALLOC_NO_RECURSE flag then its
+> @@ -2827,11 +2828,20 @@ static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+>  		mark_obj_codetag_empty(sheaf);
+>  
+>  	VM_WARN_ON_ONCE(sheaf->size > 0);
+> -	kfree(sheaf);
 > +
->  		/* v4-mapped sockets don't inherit parent ops. Don't restore. */
->  		if (inet_csk(child)->icsk_af_ops == inet_csk(sk)->icsk_af_ops)
->  			inet_csk(child)->icsk_af_ops = smc->ori_af_ops;
-> -- 
-> 2.43.0
+> +	if (likely(allow_spin))
+> +		kfree(sheaf);
+> +	else
+> +		kfree_nolock(sheaf);
+
+Hmm what if the sheaf wasn't allocated with kmalloc_nolock()?
+
+>  
+>  	stat(s, SHEAF_FREE);
+>  }
+>  
+> +static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+> +{
+> +	__free_empty_sheaf(s, sheaf, /* allow_spin = */ true);
+> +}
+> +
+>  static unsigned int
+>  refill_objects(struct kmem_cache *s, void **p, gfp_t gfp, unsigned int min,
+>  	       unsigned int max);
+> @@ -3132,7 +3142,6 @@ static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn,
+>   * intended action due to a race or cpu migration. Thus they do not check the
+>   * empty or full sheaf limits for simplicity.
+>   */
+> -
+>  static void barn_put_empty_sheaf(struct node_barn *barn, struct slab_sheaf *sheaf)
+>  {
+>  	unsigned long flags;
+> @@ -6065,7 +6074,7 @@ static void rcu_free_sheaf(struct rcu_head *head)
+>   */
+>  static DEFINE_WAIT_OVERRIDE_MAP(kfree_rcu_sheaf_map, LD_WAIT_CONFIG);
+>  
+> -bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+> +bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj, bool allow_spin)
+>  {
+>  	struct slub_percpu_sheaves *pcs;
+>  	struct slab_sheaf *rcu_sheaf;
+> @@ -6081,9 +6090,10 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>  	pcs = this_cpu_ptr(s->cpu_sheaves);
+>  
+>  	if (unlikely(!pcs->rcu_free)) {
+> -
+>  		struct slab_sheaf *empty;
+>  		struct node_barn *barn;
+> +		unsigned int alloc_flags = SLAB_ALLOC_DEFAULT;
+> +		gfp_t gfp = GFP_NOWAIT;
+>  
+>  		/* Bootstrap or debug cache, fall back */
+>  		if (unlikely(!cache_has_sheaves(s))) {
+> @@ -6103,7 +6113,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>  			goto fail;
+>  		}
+>  
+> -		empty = barn_get_empty_sheaf(barn, true);
+> +		empty = barn_get_empty_sheaf(barn, allow_spin);
+
+Here we might be getting a sheaf allocated previously with kmalloc().
+
+>  
+>  		if (empty) {
+>  			pcs->rcu_free = empty;
+> @@ -6112,20 +6122,25 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>  
+>  		local_unlock(&s->cpu_sheaves->lock);
+>  
+> -		empty = alloc_empty_sheaf(s, GFP_NOWAIT, SLAB_ALLOC_DEFAULT);
+> +		if (unlikely(!allow_spin)) {
+> +			alloc_flags = SLAB_ALLOC_TRYLOCK;
+> +			gfp = 0;
+
+Maybe __GFP_NOWARN?
+Here we would get a sheaf with kmalloc_nolock() so that's ok even if it's
+later freed by someone else by kfree(), right.
+
+> +		}
+> +
+> +		empty = alloc_empty_sheaf(s, gfp, alloc_flags);
+>  
+>  		if (!empty)
+>  			goto fail;
+>  
+>  		if (!local_trylock(&s->cpu_sheaves->lock)) {
+> -			barn_put_empty_sheaf(barn, empty);
+> +			__free_empty_sheaf(s, empty, allow_spin);
+
+Well we could still use the barn with allow_spin == true.
+But more crucially, here we might be freeing with kfree_nolock() a sheaf
+from the barn previously allocated with kmalloc()?
+Maybe we need to track if it's the case and defer-free it or something.
+
+Also maybe there could be a wrapper kfree_maybe_nolock() (~better name?)
+That means "I want to kfree safely in kfree_nolock() context something that
+MIGHT have been kmalloc()"
+And maybe depending on the debugging options that make kmalloc() ->
+kfree_nolock() incompatible, if those are not enabled, it wouldn't have to
+defer, but proceed normally?
+
+>  			goto fail;
+>  		}
+>  
+>  		pcs = this_cpu_ptr(s->cpu_sheaves);
+>  
+>  		if (unlikely(pcs->rcu_free))
+> -			barn_put_empty_sheaf(barn, empty);
+> +			__free_empty_sheaf(s, empty, allow_spin);
+>  		else
+>  			pcs->rcu_free = empty;
+>  	}
+> @@ -6143,6 +6158,12 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>  	if (likely(rcu_sheaf->size < s->sheaf_capacity)) {
+>  		rcu_sheaf = NULL;
+>  	} else {
+> +		if (unlikely(!allow_spin)) {
+> +			/* call_rcu() cannot be called in an unknown context */
+> +			rcu_sheaf->size--;
+> +			local_unlock(&s->cpu_sheaves->lock);
+> +			goto fail;
+> +		}
+>  		pcs->rcu_free = NULL;
+>  		rcu_sheaf->node = numa_node_id();
+>  	}
+> 
+
