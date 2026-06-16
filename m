@@ -1,114 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B884730BB9B
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 09:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2EC3AE713
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 09:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781601888; cv=none; b=ojp7GuDfEMCgXtyNVuKqqAfOVA3OrjMNrJ9TpEPiXxuKFlWn1cSrGF8avFB89xcn0Tzh8s6V+tjGK9fCROvkEhyJiN02zLDBQnO0MRkMRfFyV/HMLg1F7AuwBMJmoaLWebtW2spRYPtP5Y6tNGzL9BNhKvjBoAYo2rHioVUn3pw=
+	t=1781602286; cv=none; b=PSSW6MoOHTpmjSpu6PjvvRYKGjiTmnCA0PqlvalLkecNyE9QwKZVIqbL+RLHiRdqkeKjSllQ/zFuBEB9AhXHHQKZMsAsV+ysIZUq3FiXcJUdqvXXZsCVjbb7sGEpAE5yBH8V5+m5UMNEPg/HarUSyjIrtiuERFVAAxLi9u9tTM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781601888; c=relaxed/simple;
-	bh=E8aE+jQ5bIPXEVOw1nfqzvryyrOMRddKUGBQE7u+lRI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AIJk5MBBqyJJvU7gyWmcracHP2lEp/2lMEb5s1KaXLTU/OpfauO2eYxROq3tw88bhShNKMtPUiR+/xe/duqsyE0OFU2vNnrcV3cTFEPZfvWzgNtV9cHfwweI3q8lyNyXL7vkQ6Jv66evQvrUJnAmtZjuIG9U23e+FmF58LcptyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mud/tzRZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781602286; c=relaxed/simple;
+	bh=W9h2vOBocmHv8yyrIINbKPNLrEdNr/MHz6FXnnLhIHs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mlWq2CXwYZdwKUe5gcvlwedfzXzUJPbcvx+12UjCyNxnjYHOP6TZYH0x3lwfQyuIJpZVsd8Z+JQMUlvla8HuJghsDHrHWDMFmyDOFSuPoxRqQ95F2MAWb78r5dLch2H6DJO9CFsiL1fw5bexLQw16vqHQKguFODHUCwtkgb1Foo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VPZGHktG; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mud/tzRZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B6891F000E9;
-	Tue, 16 Jun 2026 09:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781601887;
-	bh=oz/JUHCYhnVL72ncGnLIXDNqypQ4bgdjGCZrdTNaWlI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Mud/tzRZTqE9sakGN5inLPwF6kZFuoLPG2a6cXgMtpZLfakzScy33fgcM/72xu6Qe
-	 f8b23lmo7agzmkN/B2JmPKImLBbzQuQgapTGbI74kV3nzkYR9MUvy9ERl8wB+cZTQi
-	 v9kPuaNIWQAIMCWpvvjQdtRD0ARdWhx8BCqKp9tzEA5Glv9oHgGGO7zbjH/Qp0meQa
-	 0DgHif67wzv2cFMphLXFn2WdDw37XHq1P6EmRhqGFmBpyyKq1/apO4gNP7t3g4GO3D
-	 QsKEaSlQU0cTD+opMvUBXPI9swhbN2wzf/ednJOrfNoFQ3amzW+F67PAohK/UEnQuo
-	 gSfUBW1GYlyZQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: fix lock inversion between stab->lock
- and sk_callback_lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sechang Lim" <rhkrqnwk98@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260616091153.2966617-1-rhkrqnwk98@gmail.com>
-References: <20260616091153.2966617-1-rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 16 Jun 2026 09:24:46 +0000
-Message-Id: <20260616092447.1B6891F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VPZGHktG"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c0c2d792c8so27329155ad.1
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 02:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781602285; x=1782207085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ub/HkQc7hVDHHCyEiXac763qR/8PT/efz8C9QeD8xAU=;
+        b=VPZGHktG+D3GfGjxuEa5dEoeuKRF90HZPl7OlmzuAZCfBLnfslBYLWtY9Vh2RWitgP
+         pY2hWCVyajpytDVM1BUjN+iqc4R9Ngh9dDX7D7I/uWIaNoBW77JWuBJIeZE5SjW6xrPj
+         BYx9qWM9CHd3C/iSXNmmWjWxvAc8W5wkrryDFfK6IztIjyHMZi7Oi7JwZDbwauu62B5M
+         iq3Uo7JqGVGqMK1k9mC0567m+Hvqfb/UssKX4GmZXu4AK3q2wInqx+dnyXXV3BlSDxuv
+         r6WEXqUGvDIZIW5K1WEZPViCyRXwOEDEvOAHdPD5LHkctmJlaiXIYTGJYX77MnHyB8Zu
+         awRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781602285; x=1782207085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ub/HkQc7hVDHHCyEiXac763qR/8PT/efz8C9QeD8xAU=;
+        b=HrNjKthFdi0vsR6+0YtgXFWqZvUwRFASCRnxRfYbuiiDTe4MMVq0AqsXZW+hs5vid5
+         WVAGB3a5JUFbNr44508gX9iP6pSRut1LW2qLW1uyT9qIL2Tbj6gtWWB4zj/DejPxLaM1
+         yFchvA1KtR5h5EBWIzuzxJZEgKmsHndIbYEi2hSS7RKsMo18yuSdbLKe0xQ9a4uPOFVN
+         6GGfqCFREefLEZymurnTQmaIVnkQvRmPpg8+ONsa+c3lt1uHz/tswHDyIRK6U/pLPENQ
+         LXny0tnHu2cvd9EDLfWBtrllsaLl0nOVZxg57UqIuZRXyFvQDqYfP54eCa5kNv0v6PO+
+         owGQ==
+X-Gm-Message-State: AOJu0YyczQ2mK1g2Jb2/LDOuALRE5LvmZArfTkW4bD5S1Tys6zsbYb8k
+	ra5q08vrs7oxxAcfgK7Qb/ciKkfnpNzFj4VyJcOLbAUOgCehbqsCqA8snFsyPHwoeHc=
+X-Gm-Gg: Acq92OF19LO4kSF334R6JIqB+1j75GEeBUmWpMbtE4CHiqf6Ev4r6EIjUnpc+8XvxVh
+	2m+gDGbL6PaF6RlUCdTEMb5BOJDufoiEZ82bR1u4ALe6v7+RbnmUQ/1Ev7ttL7jK5zdcdRyg2Vz
+	0NLh7yWN9P893LmHCyqdjVu5ZI0gyr0o2QVVtF1Ys3Us9awxlfMGeIT7EGaAm6GFsgSESfjU5/Q
+	iM5pW3Bj56kpqFliEWcHdCibMPtsgjtNg44RSo3tvJ0oVnnKuFTHI/5XyPzzOR3jPrd+amR9TbO
+	s/ReIStnUfFslVnVr2gGrIa/HtcWTC3U077w9aSaJO0R0UoKT9EA4TFbkqOUEdtUHLihomTR4zO
+	fzp9C9QESTdqhRM+AtCQSMnL6IUp4MuUFz09fr5YXSg/UKp0XMcAV4qJ/0Bw2Q57dU0Z75FFkj/
+	LncEcO3IP+9AAlsOtMNMmzjlT+0vtn7ajWdnVj80qZtx599lKiCkINCKDydH+2XTE=
+X-Received: by 2002:a17:902:c952:b0:2c2:dadd:940 with SMTP id d9443c01a7336-2c69a0d46dcmr28361895ad.2.1781602284852;
+        Tue, 16 Jun 2026 02:31:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a12:a304:100::209f])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c42f7c6c52sm127329545ad.22.2026.06.16.02.31.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 02:31:24 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	toke@redhat.com,
+	lorenzo@kernel.org,
+	paul.chaignon@gmail.com
+Subject: [PATCH bpf v2 0/2] Fix partial copy of non-linear test_run output
+Date: Tue, 16 Jun 2026 17:31:01 +0800
+Message-ID: <20260616093103.471444-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+When BPF_PROG_TEST_RUN returns non-linear output and userspace provides a
+short data_out buffer, bpf_test_finish() can return -ENOSPC before copying
+the packet prefix or updating data_size_out.
 
-Pre-existing issues:
-- [High] The patch resolves a circular locking dependency between `stab->lo=
-ck` and `sk_callback_lock` for `sockmap`, but completely misses the identic=
-al circular locking dependency between `bucket->lock` and `sk_callback_lock=
-` for `sockhash`.
---
+Fix this by deriving the linear copy length from the packet layout rather
+than from the already-clamped copy_size. Add selftest coverage for both
+non-linear skb and XDP frags paths.
 
-commit ca126c8c2f5577ef6bb462f6d0bbf16156b6795a
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+---
 
-bpf, sockmap: fix lock inversion between stab->lock and sk_callback_lock
+Changes in v2:
 
-This patch resolves a circular locking dependency between stab->lock and
-sk_callback_lock in the sockmap code. It prevents a deadlock by releasing
-stab->lock prior to calling sock_map_unref() during element updates and
-deletions.
+* Fix the Fixes tag to point to the commit that introduced the shared
+  non-linear copy-out logic.
+* Drop skb-specific wording from the fix commit.
+* Move the selftest from skb_load_bytes.c to prog_run_opts.c.
+* Add XDP frags coverage in addition to non-linear skb coverage.
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 99e3789492a09..390bd5ee46d44 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-[ ... ]
-> @@ -505,9 +505,10 @@ static int sock_map_update_common(struct bpf_map *ma=
-p, u32 idx,
-> =20
->  	sock_map_add_link(psock, link, map, &stab->sks[idx]);
->  	stab->sks[idx] =3D sk;
-> +	spin_unlock_bh(&stab->lock);
-> +
->  	if (osk)
->  		sock_map_unref(osk, &stab->sks[idx]);
-> -	spin_unlock_bh(&stab->lock);
->  	return 0;
->  out_unlock:
->  	spin_unlock_bh(&stab->lock);
+v1:
+https://lore.kernel.org/bpf/20260615073856.152479-1-sun.jian.kdev@gmail.com/
 
-[Severity: High]
-This is a pre-existing issue, but while fixing the lock inversion for sockm=
-ap,
-does the identical circular locking dependency still exist for sockhash bet=
-ween
-bucket->lock and sk_callback_lock?
+Tested with:
+  ./test_progs -t prog_run_opts -v
+  ./test_progs -t skb_load_bytes -v
+  ./test_progs -t xdp_pull_data -v
 
-Looking at sock_hash_delete_from_link() in net/core/sock_map.c,
-sock_map_unref() is called while the bucket lock is still held:
+Sun Jian (2):
+  bpf: Fix partial copy of non-linear test_run output
+  selftests/bpf: Cover partial copy of non-linear test_run output
 
-		hlist_del_rcu(&elem->node);
-		sock_map_unref(elem->sk, elem);
-		sock_hash_free_elem(htab, elem);
-	}
-	spin_unlock_bh(&bucket->lock);
+ net/bpf/test_run.c                            | 11 ++-
+ .../selftests/bpf/prog_tests/prog_run_opts.c  | 72 +++++++++++++++++++
+ .../selftests/bpf/progs/test_pkt_access.c     | 12 ++++
+ 3 files changed, 88 insertions(+), 7 deletions(-)
 
-This pattern is also present in sock_hash_delete_elem() and
-sock_hash_update_common() in the same file.
+Range-diff:
+1:  3691b07aa440 ! 1:  e5a0c426d4cb bpf: Fix partial copy of non-linear skb test_run output
+    @@ Metadata
+     Author: Sun Jian <sun.jian.kdev@gmail.com>
+     
+      ## Commit message ##
+    -    bpf: Fix partial copy of non-linear skb test_run output
+    +    bpf: Fix partial copy of non-linear test_run output
+     
+    -    For non-linear skbs, bpf_test_finish() derives the linear head copy
+    -    length from copy_size - frag_size. This only matches the skb head length
+    -    when copy_size is the full packet size.
+    +    For non-linear test_run output, bpf_test_finish() derives the linear
+    +    data copy length from copy_size - frag_size. This only matches the
+    +    linear data length when copy_size is the full packet size.
+     
+         When userspace provides a short data_out buffer, copy_size is clamped to
+         that buffer size. If copy_size is smaller than frag_size, the computed
+         length becomes negative and bpf_test_finish() returns -ENOSPC before
+         copying the packet prefix or updating data_size_out.
+     
+    -    Compute the linear head length from the skb layout instead, and clamp the
+    -    head copy length to copy_size. This preserves the expected partial-copy
+    -    semantics: return -ENOSPC, copy the packet prefix that fits in data_out,
+    -    and report the full packet length through data_size_out.
+    +    Compute the linear data length from the packet layout instead, and clamp
+    +    the linear copy length to copy_size. This preserves the expected
+    +    partial-copy semantics: return -ENOSPC, copy the packet prefix that fits
+    +    in data_out, and report the full packet length through data_size_out.
+     
+    -    Fixes: 838baa351cee ("bpf: Craft non-linear skbs in BPF_PROG_TEST_RUN")
+    +    Fixes: 7855e0db150ad ("bpf: test_run: add xdp_shared_info pointer in bpf_test_finish signature")
+         Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+     
+      ## net/bpf/test_run.c ##
+2:  663847520f0b < -:  ------------ selftests/bpf: Cover partial copy of non-linear skb test_run output
+-:  ------------ > 2:  680506532d97 selftests/bpf: Cover partial copy of non-linear test_run output
+-- 
+2.43.0
 
-Could this lead to the same ABBA deadlock if a thread updates or deletes an
-element in a SOCKHASH map (acquiring bucket->lock and then sk_callback_lock=
- via
-sock_map_unref), while concurrently a stream parser holds sk_callback_lock =
-for
-read and a TC program triggers bpf_map_delete_elem() on the same bucket?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260616091153.2966=
-617-1-rhkrqnwk98@gmail.com?part=3D1
