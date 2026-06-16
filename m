@@ -1,402 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A101FC7FB;
-	Tue, 16 Jun 2026 06:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72009346E66
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 07:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781593073; cv=none; b=trohbD0U1m4CDqXVz9Cf3YAN3IcFdnpzyn4YVoA5GeSihJyLf2iDGc+C53kJI4ykZomQP9Gq3z5Zt79CRaDWlQvGYa3IjrVJf8k40D5YFMYqyUL98UnzDN0d4GvkesiMSwwJoe5u3Dzfgyz52zNRERrb+jK6zOodup14zP9Pz4k=
+	t=1781593654; cv=none; b=dOZu9tPKLZLD7BFiN65KKoJLITJ8tRGRpucCebkdtXjEK+O3kScP+m6T3Jn04uze4PXtVUZkwe9JvxQ0CUkVGcgpHWR1kZ2yq/sf7cC85N5fRn67aHazdWBS7WuOgd/Yi/XCYpY1K4+nShWSJGfu5MWePeRckSk+hyM40b9XZXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781593073; c=relaxed/simple;
-	bh=ShF/kWa2CviwYqZxt7Rlzm9lYLieHp0PQcJ0ZicPi+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s4VUMpTGzItEOrVhJXBNl2LlfQwfukJXx5bqAraw6fjA7Lf9o6QZH8OTB3z+I1ApONLqHexwEbp0qqIx6zo8VaXZGFaRV79h+1+SbHP5cCn5YyyjK9Zr9LJE+jddeZrPSVUypwNff5BMo/qrCLF6b71GSlSM1sykYVAQD7xgee0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fG0ASzzB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781593654; c=relaxed/simple;
+	bh=mPXdKYwDz0xk4Rh5YVPEDuEuCc1dfd+SD4yHv3OITxI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=M8ogJ7W4Xmg1MdzTNhFxuOs7Jgs+NL3sRLJiveIoXSv87yCDBIWGqTH3G9JpkEnAH3k6yWr/ArV+ICWDrqeu4gMPktPxk38PWhin2/t7i1uEDHmm35hvBFaGVIkU0OVtBAcixEUvDdVGwA6hMnM4X0tnaOktP7gJ00fi5X2hNfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MopNBGn3; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fG0ASzzB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6291A1F000E9;
-	Tue, 16 Jun 2026 06:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781593072;
-	bh=5YYnjwXkhIaJkMK4KVBBMhIkUoLKifb+v7A8S2YfApM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fG0ASzzB2I00G5iVEAds9Q0q7Bms6RNkBLE07l71xjSDi1o26hZfRZfswbg31vdsK
-	 ce5IeSOVRKXGkI/hpwduGQILYFHaUrY+2ssX4eXph+FypjmNykxQW8fD0dDu7qA5xq
-	 DRvPVbYt8/y6/e0z7neaIY8iRXWRnxCcZU1l9CWmZHCq4kTr0ascmZ+KjtYJOC9YJi
-	 IN6OL83bQhAqlgkSTAib+xvaI0FH55lUdY0CPs/orNwXoBsZkAUT8/cP6T019r5GxX
-	 rVW4XyLhkNnHxNeac/MHoNNQJdlBJM37Ii+dZrmKRkrHsClpnDXYcFjw3+kn87wsIn
-	 P7w3/bYbfhirg==
-Message-ID: <a64777b0-dfdf-4cc4-bb3a-87f25ca394bf@kernel.org>
-Date: Tue, 16 Jun 2026 08:57:44 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MopNBGn3"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-36b9ec98144so3352885a91.1
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 00:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781593648; x=1782198448; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=efFAPo1eL0J3dsu2A5wxzYPQWfYJHzDPadyLXJxvyQo=;
+        b=MopNBGn3xlChpNwDv7oIYdpe7aF4VI1YHvh4+h0rQZlcPqH+v3roqIVSg5KWg+7nBG
+         ZS/3qLh/pktH6GDzG81IRpniVpwuuTCNvUnLMYUUDlvvk2u43OU+7EBM4iV9lbELn9yT
+         k9U55TE4R4Krm0gpsS7NwHlzErGldQgn5yrSkMBLXa3Xuza1U5LXEi9y+eurvLcUK84t
+         FJFOzBPromP7TYIMlTYGYphpOyioWQwf3cmLN9Iqi0OadtqxcuOWMavzihR48ALJVw4m
+         oGRSc5x52FscVTwj7F6sEenOhzPP0cjcKhOa1pMU7Q2IwAywPALlENrf4tO2RouwvzlK
+         jf+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781593648; x=1782198448;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=efFAPo1eL0J3dsu2A5wxzYPQWfYJHzDPadyLXJxvyQo=;
+        b=jb8zsUurwCekRx/aVbrvjBXF6K95+UJsKCP8A9L61WkQy4xUciZPKZuIxBBt/5Q3SV
+         BEANfMBRvMzAgW9byjUSg8xl0mfMmerSXQqko9ziAK/7Mopx2dt1xde+OZqNU7w8F4sp
+         sS4S5VBnJjud7Kv3CKlWjQcdLirS43DkEHN2p11w3Eo02x92nt2hmzaeirD4vpFYSz+A
+         PcNELlmofx1V41PjwPtcqZ6vqDByyd2gGUvM2lugAONB5/91YdDOnnzflz7+04c0prgo
+         VLjf1FUteAXCKr34aPn9iMA9xwbXnk8FeVdsnEQsCR+HZQT6/Pi0RDczcaxZlJ3AjoCE
+         +nxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8bounxVAWb7zxEtkyKsKSn508HzRUbyOT9kUtfa7hU7RTfBNgSdW9q+6CVZoOctudLgMM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdjMmQFu/sQ71oyJjPlzyx5ce3I8VqzgKnDjAg8qLFSZCvrj2C
+	WCFMfYbYayGLsmMPZDiywVLdXqlcI1jLQ1HbQMcNi/U12dqa2VOJV4H0RTz5gpjPvMc=
+X-Gm-Gg: Acq92OEvxtiYPP7L9mYlmxC7QApY0oDUn73BoQLhYXAYZE0iiY071SONoEmPPdJBST3
+	b0bw+LixNEt2Z3MwG8FPPHQ2EEpYq0Uuoj/80ID+oFErSTtlgUYggNq8gVJjI1O7JkJYnH1I23V
+	uKfZghnnBz7XEKd534gA//VP6tYE+LKTuRuTSDtGW2gQ3nTt4GhLaivz2poSbXY8sRopvu2k3du
+	YrwFyAiwKBarwg1HeOBZoT7BsEDGatkOTwN3IFTS3EeylelWmuUWIV21ewoNqIviWXndCbvYjUw
+	24tK6UgMoQ0B8hWGetbTpHXJKXtKNNhen2vRkfbDZV62IEGmXnBBxEVTuE/C7XE7AUy3zY2PD03
+	qeMu7PzKhnzkoKL9anYuJTrZsdqnqgmOy3z84VhC5kHKP2ZDQog0ObMNNSAMmDNd/pDKQiKVUyy
+	58y0IkwirLjfLRWEF3Lq9Yj92jXsbrHS0v4FbehHeRnr2VMwXK75AvmB6X
+X-Received: by 2002:a17:90b:4c09:b0:368:3d3e:efa6 with SMTP id 98e67ed59e1d1-37c523fb93cmr2722990a91.20.1781593647586;
+        Tue, 16 Jun 2026 00:07:27 -0700 (PDT)
+Received: from localhost (d206-116-244-52.bchsia.telus.net. [206.116.244.52])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-379e810f98fsm5811867a91.2.2026.06.16.00.07.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2026 00:07:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 2/9] mm/slab, slub_kunit: register kprobe to
- trigger _nolock APIs
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-2-70a54f3775bb@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 16 Jun 2026 03:07:26 -0400
+Message-Id: <DJAA8M3U5PJ7.W84BYRNJA7UY@etsalapatis.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Alan Maguire" <alan.maguire@oracle.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, <bpf@vger.kernel.org>, <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 04/14] selftests/bpf: Add kfunc set test to
+ resolve_btfids
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260601221805.821394-1-ihor.solodrai@linux.dev>
+ <20260601221805.821394-5-ihor.solodrai@linux.dev>
+In-Reply-To: <20260601221805.821394-5-ihor.solodrai@linux.dev>
 
-On 6/15/26 13:05, Harry Yoo (Oracle) wrote:
-> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
-> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
-> 
-> Register a kprobe pre-handler to invoke kmalloc_nolock() and
-> kfree_nolock() in the middle of the slab allocator. However, do not
-> register the handler on UP kernels [1].
-> 
-> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
-> is held, add a wrapper function for lockdep_assert_held() that calls
-> a no-op function slab_attach_kprobe_locked() on debug builds. The
-> function is optimized away when neither CONFIG_PROVE_LOCKING nor
-> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
-> 
-> The function calls barrier() to prevent the compiler from optimizing
-> away its callsites. Otherwise, the compiler may consider the function
-> does not have any side effect and remove callsites.
-> 
-> Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a92d9a4@kernel.org [1]
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+On Mon Jun 1, 2026 at 6:17 PM EDT, Ihor Solodrai wrote:
+> Extend the resolve_btfids selftest to cover kfunc sets defined with
+> BTF_KFUNCS_START/BTF_KFUNCS_END.
+>
+> The test verifies that resolve_btfids correctly processes BTF_ID_FLAGS,
+> resolves function IDs, and checks the kfunc set is sorted.
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Looks very useful!
-Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+One nit below.
 
 > ---
->  lib/tests/slub_kunit.c | 82 +++++++++++++++++++++++++++++++++++++++++++-------
->  mm/slub.c              | 36 ++++++++++++++++------
->  2 files changed, 98 insertions(+), 20 deletions(-)
-> 
-> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-> index 11255fc8eb78..01d808cb77fa 100644
-> --- a/lib/tests/slub_kunit.c
-> +++ b/lib/tests/slub_kunit.c
-> @@ -8,6 +8,7 @@
->  #include <linux/rcupdate.h>
->  #include <linux/delay.h>
->  #include <linux/perf_event.h>
-> +#include <linux/kprobes.h>
->  #include "../mm/slab.h"
->  
->  static struct kunit_resource resource;
-> @@ -292,7 +293,8 @@ static void test_krealloc_redzone_zeroing(struct kunit *test)
->  	kmem_cache_destroy(s);
->  }
->  
-> -#ifdef CONFIG_PERF_EVENTS
-> +#if defined(CONFIG_PERF_EVENTS) || (defined(CONFIG_KPROBES) && defined(CONFIG_SMP))
-> +#define SLUB_KUNIT_TEST_KMALLOC_KFREE_NOLOCK
->  #define NR_ITERATIONS 1000
->  #define NR_OBJECTS 1000
->  static void *objects[NR_OBJECTS];
-> @@ -302,10 +304,16 @@ struct test_nolock_context {
->  	int callback_count;
->  	int alloc_ok;
->  	int alloc_fail;
-> +#ifdef CONFIG_PERF_EVENTS
->  	struct perf_event *event;
->  	bool is_perf_type_hw;
+>  .../selftests/bpf/prog_tests/resolve_btfids.c | 56 +++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/btf_data.c  | 10 ++++
+>  2 files changed, 66 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/to=
+ols/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> index d0e51979d455..f6fd79b9dd23 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> @@ -10,6 +10,10 @@
+>  #include <linux/btf_ids.h>
+>  #include "test_progs.h"
+> =20
+> +#ifndef KF_FASTCALL
+> +#define KF_FASTCALL (1 << 12)
 > +#endif
-> +#ifdef CONFIG_KPROBES
-> +	struct kprobe kprobe;
-> +#endif
+> +
+>  struct symbol {
+>  	const char	*name;
+>  	int		 type;
+> @@ -26,6 +30,17 @@ struct symbol test_symbols[] =3D {
+>  	{ "func",    BTF_KIND_FUNC,    -1 },
 >  };
->  
-> +#ifdef CONFIG_PERF_EVENTS
->  static struct perf_event_attr hw_attr = {
->  	.type = PERF_TYPE_HARDWARE,
->  	.config = PERF_COUNT_HW_CPU_CYCLES,
-> @@ -326,13 +334,10 @@ static struct perf_event_attr sw_attr = {
->  	.sample_freq = 100000,
->  };
->  
-> -static void overflow_handler_test_nolock(struct perf_event *event,
-> -					 struct perf_sample_data *data,
-> -					 struct pt_regs *regs)
-> +static void test_nolock(struct test_nolock_context *ctx)
+> =20
+> +struct kfunc_symbol {
+> +	const char	*name;
+> +	s32		 id;
+> +	u32		 flags;
+> +};
+> +
+> +static struct kfunc_symbol kfunc_symbols[] =3D {
+> +	{ "kfunc_a", -1, 0 },
+> +	{ "kfunc_b", -1, KF_FASTCALL },
+> +};
+> +
+>  /* Align the .BTF_ids section to 4 bytes */
+>  asm (
+>  ".pushsection " BTF_IDS_SECTION " ,\"a\"; \n"
+> @@ -77,7 +92,13 @@ BTF_ID(union,   U)
+>  BTF_ID(func,    func)
+>  BTF_SET_END(test_set)
+> =20
+> +BTF_KFUNCS_START(test_kfunc_set)
+> +BTF_ID_FLAGS(func, kfunc_a)
+> +BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+> +BTF_KFUNCS_END(test_kfunc_set)
+> +
+>  #pragma GCC visibility pop
+> +
+>  static int
+>  __resolve_symbol(struct btf *btf, int type_id)
 >  {
->  	void *objp;
->  	gfp_t gfp;
-> -	struct test_nolock_context *ctx = event->overflow_handler_context;
->  
->  	/* __GFP_ACCOUNT to test kmalloc_nolock() in alloc_slab_obj_exts() */
->  	gfp = (ctx->callback_count % 2) ? 0 : __GFP_ACCOUNT;
-> @@ -347,6 +352,15 @@ static void overflow_handler_test_nolock(struct perf_event *event,
->  	ctx->callback_count++;
+> @@ -108,6 +129,18 @@ __resolve_symbol(struct btf *btf, int type_id)
+>  			test_symbols[i].id =3D type_id;
+>  	}
+> =20
+> +	if (BTF_INFO_KIND(type->info) =3D=3D BTF_KIND_FUNC) {
+> +		str =3D btf__name_by_offset(btf, type->name_off);
+> +		if (str) {
+
+This can be rewritten to collapse the nesting:
+if (BTF_INFO_KIND(type->info) !=3D BTF_KIND_FUNC)=20
+	return 0;
+
+str =3D btf__name_by_offset(btf, type->name_off);
+if (!str)
+	return 0;
+
+<the rest>
+
+> +			for (i =3D 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+> +				if (kfunc_symbols[i].id >=3D 0)
+> +					continue;
+> +				if (!strcmp(str, kfunc_symbols[i].name))
+> +					kfunc_symbols[i].id =3D type_id;
+> +			}
+> +		}
+> +	}
+> +
+>  	return 0;
 >  }
->  
-> +static void overflow_handler_test_nolock(struct perf_event *event,
-> +					 struct perf_sample_data *data,
-> +					 struct pt_regs *regs)
-> +{
-> +	struct test_nolock_context *ctx = event->overflow_handler_context;
+> =20
+> @@ -162,6 +195,29 @@ void test_resolve_btfids(void)
+>  			ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check");
+>  	}
+> =20
+> +	/* Check BTF_KFUNCS_START(test_kfunc_set) */
+> +	ASSERT_EQ(test_kfunc_set.flags, BTF_SET8_KFUNCS, "kfunc_set_flags");
+> +	ASSERT_EQ(test_kfunc_set.cnt, ARRAY_SIZE(kfunc_symbols), "kfunc_set_cnt=
+");
 > +
-> +	test_nolock(ctx);
-> +}
+> +	for (i =3D 0; i < test_kfunc_set.cnt; i++) {
+> +		bool found =3D false;
 > +
->  static bool enable_perf_events(struct test_nolock_context *ctx)
+> +		for (j =3D 0; j < ARRAY_SIZE(kfunc_symbols); j++) {
+> +			if (kfunc_symbols[j].id !=3D (s32)test_kfunc_set.pairs[i].id)
+> +				continue;
+> +			found =3D true;
+> +			ASSERT_EQ(test_kfunc_set.pairs[i].flags,
+> +				  kfunc_symbols[j].flags, "kfunc_flags_check");
+> +			break;
+> +		}
+> +
+> +		ASSERT_TRUE(found, "kfunc_id_found");
+> +
+> +		if (i > 0)
+> +			ASSERT_LE(test_kfunc_set.pairs[i - 1].id,
+> +				  test_kfunc_set.pairs[i].id, "kfunc_sort_check");
+> +	}
+> +
+>  out:
+>  	btf__free(btf);
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/btf_data.c b/tools/testing=
+/selftests/bpf/progs/btf_data.c
+> index baa525275bde..8587658012c3 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_data.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_data.c
+> @@ -48,3 +48,13 @@ int func(struct root_struct *root)
 >  {
->  	struct perf_event *event;
-> @@ -382,17 +396,60 @@ static void disable_perf_events(struct test_nolock_context *ctx)
->  	perf_event_disable(ctx->event);
->  	perf_event_release_kernel(ctx->event);
+>  	return 0;
 >  }
-> +#else
-> +static bool enable_perf_events(struct test_nolock_context *ctx) { return false; }
-> +static void disable_perf_events(struct test_nolock_context *ctx) { }
-> +#endif
 > +
-> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
-> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *regs)
+> +int kfunc_a(struct root_struct *root)
 > +{
-> +	struct test_nolock_context *ctx;
-> +
-> +	ctx = container_of(p, struct test_nolock_context, kprobe);
-> +	test_nolock(ctx);
 > +	return 0;
 > +}
 > +
-> +static bool register_slab_kprobes(struct test_nolock_context *ctx)
+> +int kfunc_b(struct root_struct *root)
 > +{
-> +	ctx->kprobe.symbol_name = "slab_attach_kprobe_locked";
-> +	ctx->kprobe.pre_handler = slab_kprobe_pre_handler;
-> +
-> +	if (register_kprobe(&ctx->kprobe))
-> +		return false;
-> +	return true;
+> +	return 0;
 > +}
-> +
-> +static void unregister_slab_kprobes(struct test_nolock_context *ctx)
-> +{
-> +	kunit_info(ctx->test, "kprobes: callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
-> +		   ctx->callback_count, ctx->alloc_ok, ctx->alloc_fail);
-> +	unregister_kprobe(&ctx->kprobe);
-> +}
-> +#else
-> +static bool register_slab_kprobes(struct test_nolock_context *ctx) { return false; }
-> +static void unregister_slab_kprobes(struct test_nolock_context *ctx) { }
-> +#endif
->  
->  static void test_kmalloc_kfree_nolock(struct kunit *test)
->  {
->  	int i, j;
-> -	struct test_nolock_context ctx = { .test = test };
-> +	struct test_nolock_context perf_ctx = { .test = test };
-> +	struct test_nolock_context kprobe_ctx = { .test = test };
->  	bool alloc_fail = false;
->  	bool perf_events_enabled;
-> +	bool slab_kprobes_enabled;
->  
-> -	perf_events_enabled = enable_perf_events(&ctx);
-> -	if (!perf_events_enabled)
-> -		kunit_skip(test, "Failed to create perf event");
-> +	perf_events_enabled = enable_perf_events(&perf_ctx);
-> +	slab_kprobes_enabled = register_slab_kprobes(&kprobe_ctx);
-> +
-> +	if (!perf_events_enabled && !slab_kprobes_enabled)
-> +		kunit_skip(test, "Failed to enable perf event and kprobe, skipping");
-> +	else if (!perf_events_enabled)
-> +		kunit_info(test, "Failed to create perf event");
-> +	if (!slab_kprobes_enabled)
-> +		kunit_info(test, "Failed to register kprobe pre-handler");
->  
->  	for (i = 0; i < NR_ITERATIONS; i++) {
->  		for (j = 0; j < NR_OBJECTS; j++) {
-> @@ -412,7 +469,10 @@ static void test_kmalloc_kfree_nolock(struct kunit *test)
->  	}
->  
->  cleanup:
-> -	disable_perf_events(&ctx);
-> +	if (perf_events_enabled)
-> +		disable_perf_events(&perf_ctx);
-> +	if (slab_kprobes_enabled)
-> +		unregister_slab_kprobes(&kprobe_ctx);
->  
->  	if (alloc_fail)
->  		kunit_skip(test, "Allocation failed");
-> @@ -444,7 +504,7 @@ static struct kunit_case test_cases[] = {
->  	KUNIT_CASE(test_kfree_rcu_wq_destroy),
->  	KUNIT_CASE(test_leak_destroy),
->  	KUNIT_CASE(test_krealloc_redzone_zeroing),
-> -#ifdef CONFIG_PERF_EVENTS
-> +#ifdef SLUB_KUNIT_TEST_KMALLOC_KFREE_NOLOCK
->  	KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock),
->  #endif
->  	{}
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 813fb863254d..87ca154ccd80 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -908,6 +908,24 @@ static inline unsigned int obj_exts_offset_in_object(struct kmem_cache *s)
->  }
->  #endif
->  
-> +/*
-> + * A no-op function used to attach kprobe handlers in slub_kunit tests.
-> + * The barrier is needed to prevent the compiler from optimizing out callsites.
-> + */
-> +#if defined(CONFIG_DEBUG_VM) || defined(CONFIG_PROVE_LOCKING)
-> +static noinline void slab_attach_kprobe_locked(void)
-> +{
-> +	barrier();
-> +}
-> +#else
-> +static inline void slab_attach_kprobe_locked(void) { }
-> +#endif
-> +
-> +#define slab_lockdep_assert_held(lock) do {	\
-> +	lockdep_assert_held(lock);		\
-> +	slab_attach_kprobe_locked();	\
-> +} while (0)
-> +
->  #ifdef CONFIG_SLUB_DEBUG
->  
->  /*
-> @@ -1665,7 +1683,7 @@ static void add_full(struct kmem_cache *s,
->  	if (!(s->flags & SLAB_STORE_USER))
->  		return;
->  
-> -	lockdep_assert_held(&n->list_lock);
-> +	slab_lockdep_assert_held(&n->list_lock);
->  	list_add(&slab->slab_list, &n->full);
->  }
->  
-> @@ -1674,7 +1692,7 @@ static void remove_full(struct kmem_cache *s, struct kmem_cache_node *n, struct
->  	if (!(s->flags & SLAB_STORE_USER))
->  		return;
->  
-> -	lockdep_assert_held(&n->list_lock);
-> +	slab_lockdep_assert_held(&n->list_lock);
->  	list_del(&slab->slab_list);
->  }
->  
-> @@ -2866,7 +2884,7 @@ static unsigned int __sheaf_flush_main_batch(struct kmem_cache *s)
->  	void *objects[PCS_BATCH_MAX];
->  	struct slab_sheaf *sheaf;
->  
-> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
->  
->  	pcs = this_cpu_ptr(s->cpu_sheaves);
->  	sheaf = pcs->main;
-> @@ -3545,7 +3563,7 @@ __add_partial(struct kmem_cache_node *n, struct slab *slab, enum add_mode mode)
->  static inline void add_partial(struct kmem_cache_node *n,
->  				struct slab *slab, enum add_mode mode)
->  {
-> -	lockdep_assert_held(&n->list_lock);
-> +	slab_lockdep_assert_held(&n->list_lock);
->  	__add_partial(n, slab, mode);
->  }
->  
-> @@ -3559,7 +3577,7 @@ static inline void clear_node_partial_state(struct kmem_cache_node *n,
->  static inline void remove_partial(struct kmem_cache_node *n,
->  					struct slab *slab)
->  {
-> -	lockdep_assert_held(&n->list_lock);
-> +	slab_lockdep_assert_held(&n->list_lock);
->  	list_del(&slab->slab_list);
->  	clear_node_partial_state(n, slab);
->  }
-> @@ -3575,7 +3593,7 @@ static void *alloc_single_from_partial(struct kmem_cache *s,
->  {
->  	void *object;
->  
-> -	lockdep_assert_held(&n->list_lock);
-> +	slab_lockdep_assert_held(&n->list_lock);
->  
->  #ifdef CONFIG_SLUB_DEBUG
->  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
-> @@ -4646,7 +4664,7 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
->  	struct node_barn *barn;
->  	bool allow_spin;
->  
-> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
->  
->  	/* Bootstrap or debug cache, back off */
->  	if (unlikely(!cache_has_sheaves(s))) {
-> @@ -5786,7 +5804,7 @@ static void __pcs_install_empty_sheaf(struct kmem_cache *s,
->  		struct slub_percpu_sheaves *pcs, struct slab_sheaf *empty,
->  		struct node_barn *barn)
->  {
-> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
->  
->  	/* This is what we expect to find if nobody interrupted us. */
->  	if (likely(!pcs->spare)) {
-> @@ -5837,7 +5855,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
->  	bool put_fail;
->  
->  restart:
-> -	lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-> +	slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
->  
->  	/* Bootstrap or debug cache, back off */
->  	if (unlikely(!cache_has_sheaves(s))) {
-> 
 
