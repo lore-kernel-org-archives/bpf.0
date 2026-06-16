@@ -1,126 +1,120 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D8230C142
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 01:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E0F37AA94;
+	Tue, 16 Jun 2026 01:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781573038; cv=none; b=TM6EApdq0aJJZwA1Uib9H/3V5D+PnVmG7DnsB1yggOMy8ZFsBU0ITF+nRiG6Q+Sor5iYvQ+7xAorpjKbK4bYut98tE+vRBx148JhBfen12/plRa4KbtnPYGLbF2B1/NiFiF8J83BPvt1yh7hYRFBqQHlzvQkZ9UssV0Yq6wpSgM=
+	t=1781574094; cv=none; b=PjiQx5NwUFP7eEtWuX7U1CP95dALicGdyaeuJ019QjetaQIjcYVnc5wiwdz49nmbBW+JRw0OeHiJiS2E9KK2ktgst5+3eHFClt9cPBMy/+8p87Zl3zqIQUKhkijPJNgGxKZobt0k+atEiUW86mc59W8P3BZlHWJwF3T/oYW+biI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781573038; c=relaxed/simple;
-	bh=Vc+maRlzHSDoYgXfsGWeigzOmsNl+6MqXcgQJ7qxxOY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=BjTUuOCBGKPIpwxzHnnlDoZFvD5Tzdb5c1Wcby8V2kLEbMYM/P2VbIBHw0F1JkyAN56iA4OfIzo1EB/I2nLcEOLZRvUzSwDOFnT3+0m5XVZtH/d5vM9pps3BPoqMbQV3eJLMh91hWyCoHtoYahgcN1WW2sIpXi2VoBr2L0XDXdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=EREuNalo; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781574094; c=relaxed/simple;
+	bh=AHxawmRiBCIKc3s43aVtrhuIkD9XvPkxFBysIIrVzdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=JGofhs9b570ZD6wwxPyeCHpbZTFATDdiH/0s9WVG6x4TdlshDYNTdOLu6fNu0eD0obPQWCGiRfT4vEAlhN8wmKhDG2Gh+GxbblWJ6B6juWkoxk/4sirQgMtvmVV3nMZmbgWhcyMM4VjA6ECu9FYp46WmFgTd9PJm3VvATSrT5fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=E9E2RAsa; arc=none smtp.client-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="EREuNalo"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-30bb2df6fbbso2963eec.0
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 18:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781573036; x=1782177836; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qe8YWslIf9gm4jvk0v+TWmxJ3R0XMoL65QlDf+Vgrpk=;
-        b=EREuNaloN0WsSzoyocZoPxGoo81yGmMbRIOUmTt3de4gYMDOqBfMJvr63MwpT33uic
-         Hd+n0UQZyptCYfy038G7D36yOaVCLpvIhAXjgD9jto1SLncTlA+ulJfzNVjXL1OnjoU3
-         sqSzMhRn927C66cqh6Y/KISYFOVNNiJ10c7z+u8DzTKM4bZ0Puw1hj8kbezCr2XE4B9M
-         Llz5+2cJYqCakDFIhpNlVbNcax+rqbGLtQh3lbETK+DRXKHjVSMPnXCx7s9kDLcX3JHo
-         TDsiH+e077YZ1EgvFEkwpHRtyekPQtBG6qgLjtbulNRIPe0vKycRGxcj1prdXrPZw9UA
-         Radw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781573036; x=1782177836;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qe8YWslIf9gm4jvk0v+TWmxJ3R0XMoL65QlDf+Vgrpk=;
-        b=hqUzB6cI04n71aMjdJi4SLabqe6Yf12BVtcS1VZKovs8+7P87QRMlC/YCtTcQV0YSL
-         XiscgbYfc8WZE0w7bPGQy9/gbXD/FRd1dEgovufbg7gNGSD1VZ1rFb1GMi8+HqdKzv5j
-         tXvTfkkYIOcNgAp5WZaBRZ9wZgJFTeaoixRF+dkSE+irC6tUTMzF5WhmoCY00FQYu1Hd
-         /6IS2zGUWA8Anxspfw45qxy3txPN/539YJGFjyJypihjqWICm659ptIGa8/fAjiVWYio
-         1o/O1/9uwUlmswMUzwWCeb1TlRC6CGmj8SkmuzihpvzpZP9U1OyCb9n7ximjJ2peqALc
-         yjBA==
-X-Forwarded-Encrypted: i=1; AFNElJ/rlGsPbzJheBgtDaGiwXtOifJe3YmDo+AIk/1hA7rL8GqE7+1JANqGgeYTFLNDIb3JdYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNPPtsz/bqOZE3KDCByXsEAN2V2nraCoDaKEkB7KfN0conp2XK
-	1e3UfCvBIbpb1qtkCRLt6Pjdjg38ml+YIpnJy23ku/z/GIDs3aPMt09ejEugwt2/T7k=
-X-Gm-Gg: Acq92OGObqR8G6eINpQ2/JzXAGy+joO4cwZ0oJNjCn0RHgP0mPblYgRs5rwzOJ/Cd/H
-	1Gt54mYNpXTbnwf+tNB/TYTz+A2TFwK7cVDvDoyejU3vytddCrPG7ANKDUWqJMJb7iyJsILcZJu
-	GNnvRGdDhyIeKuKnUE3OsUxnQ0bB+Zv4J/N5WxLyNP1sdlFR1wmUQ3yjlgH1G/G8sMcYNExZx6A
-	jLvwAbV/7fANlw/izGoxbYpRy8dAX+IpwtclmWaCeicfoUGwm4ShsXQu6kkawDqIjNBRibjH/U5
-	AvXLiCK0tz3mBBmlCAj5zCWQxwbMcMnOjUlfiH550mrl+h8zD+G92grJR2Iln02xv3UNC+TRJ3O
-	m76Jr0alqABV+pAHi7nnaqn74LgM8YFkma9/nyvFB6FMayGfHrZ2T+lGo3EJ0sKsm3KRo2a+X9L
-	cwEID3
-X-Received: by 2002:a05:7300:6415:b0:2ce:3aa1:d39b with SMTP id 5a478bee46e88-30ba5ec50c5mr1143193eec.20.1781573035527;
-        Mon, 15 Jun 2026 18:23:55 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::bff7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e48e412sm18153448eec.4.2026.06.15.18.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2026 18:23:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="E9E2RAsa"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=wsOFNkJBmgV+d21//gqWitPG9/QNviG/zuToqCNtEVM=;
+	b=E9E2RAsaJ94APIHxGlkEkQt88JFU0JVTVH93EDXbzItkhDgzOJiw8t82twD0tOvOt8qPc3TqM
+	MXrR8xwV+A1BBreYcFNG7+9MW8CQtsbjLFV3Tr8r1OR/ZZbEHzea76B977JaYxh4fijaWo526m+
+	Hh8/Zior8DUaB+ls431ixjY=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4gfTyt1wpDz1cyt0;
+	Tue, 16 Jun 2026 09:33:26 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id C0F25405D0;
+	Tue, 16 Jun 2026 09:41:22 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 16 Jun
+ 2026 09:41:21 +0800
+Message-ID: <216ee1df-2945-4266-9c70-ebcd36faeb7f@huawei.com>
+Date: Tue, 16 Jun 2026 09:41:21 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Jun 2026 21:23:53 -0400
-Message-Id: <DJA2XL0AL5VW.XDNYFNSCBML0@etsalapatis.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
- <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Emit verbose message when prog-specific
- btf_struct_access rejects a write
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260615232146.5491-1-alexei.starovoitov@gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 0/3] riscv, bpf: Fix signed operations and add
+ 32 bit atomics
+Content-Language: en-US
+To: Kuan-Wei Chiu <visitorckw@gmail.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>, <luke.r.nels@gmail.com>, <xi.wang@gmail.com>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>
+CC: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<jolsa@kernel.org>, <alex@ghiti.fr>, <jserv@ccns.ncku.edu.tw>,
+	<eleanor15x@gmail.com>, <marscheng@google.com>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20260511221648.3251464-1-visitorckw@gmail.com>
+ <ajAlwK990NFUAMwq@google.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <ajAlwK990NFUAMwq@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-On Mon Jun 15, 2026 at 7:21 PM EDT, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> When BPF_WRITE goes through a PTR_TO_BTF_ID register, check_ptr_to_btf_ac=
-cess()
-> delegates to env->ops->btf_struct_access(). Most implementations
-> (bpf_scx_btf_struct_access, tc_cls_act_btf_struct_access, etc.) return
-> -EACCES for disallowed fields without logging anything, so the verifier
-> rejects the program with an empty message. For example a scx program doin=
-g
->
->   1: R1=3Dtrusted_ptr_task_struct()
->   ...
->   4: (7b) *(u64 *)(r1 +0) =3D r2
->   verification time 83 usec
->   the program is rejected
->
-> leaves the user guessing which field is off-limits.
-> Emit verbose message.
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> ---
->  kernel/bpf/verifier.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2abc79dbf281..030505c8f3e2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5786,6 +5786,10 @@ static int check_ptr_to_btf_access(struct bpf_veri=
-fier_env *env,
->  			return -EFAULT;
->  		}
->  		ret =3D env->ops->btf_struct_access(&env->log, reg, off, size);
-> +		if (ret < 0)
-> +			verbose(env,
-> +				"%s cannot write into ptr_%s at off=3D%d size=3D%d\n",
-> +				reg_arg_name(env, argno), tname, off, size);
->  	} else {
->  		/* Writes are permitted with default btf_struct_access for
->  		 * program allocated objects (which always have id > 0),
+On 2026/6/16 0:18, Kuan-Wei Chiu wrote:
+> Hi,
+> 
+> On Mon, May 11, 2026 at 10:16:45PM +0000, Kuan-Wei Chiu wrote:
+>> Fix miscompiled signed operations and expands 32 bit atomic support in
+>> the RV32 BPF JIT.
+>>
+>> The current implementation ignores the instruction offset field used by
+>> the bpf instruction set to specify BPF_SDIV/BPF_SMOD and BPF_MOVSX.
+>> This causes these operations to be treated as unsigned or
+>> zero-extended, leading to test_bpf failures. Fix this by checking the
+>> offset and emitting the correct instructions.
+>>
+>> Additionally, we leverage the mandatory A extension to natively support
+>> 32 bit bpf atomics (and, or, xor, xchg) by mapping them directly to
+>> amo*.w instructions. BPF_CMPXCHG continues to fall back to the
+>> interpreter.
+>>
+>> As a result, test_bpf.ko now runs with 0 failures, and the total number
+>> of successfully JIT'ed test cases increases from 843 to 902.
+> 
+> Is there anything else I need to do for this patchset to land?
 
+Hi Kuan-wei, it seems Luke and Xi haven't been as active in the 
+community for a while, I'll make time to cover the review and testing 
+for this.
+
+Regards,
+Lehui
+
+> 
+> Regards,
+> Kuan-wei
+> 
+>> ---
+>> - Add missing Fixes tags.
+>> - Fix memory ordering by emitting aq=1, rl=1
+>>
+>> Kuan-Wei Chiu (3):
+>>    riscv, bpf: Fix support for BPF_SDIV and BPF_SMOD in RV32 JIT
+>>    riscv, bpf: Fix support for BPF_MOVSX in RV32 JIT
+>>    riscv, bpf: Add 32 bit atomic operations to RV32 JIT
+>>
+>>   arch/riscv/net/bpf_jit_comp32.c | 101 +++++++++++++++++++++++++++-----
+>>   1 file changed, 85 insertions(+), 16 deletions(-)
+>>
+>> -- 
+>> 2.54.0.563.g4f69b47b94-goog
+>>
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
