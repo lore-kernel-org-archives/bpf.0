@@ -1,128 +1,237 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B6336DA1F;
-	Tue, 16 Jun 2026 13:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2775318139
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 13:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781615044; cv=none; b=G8luU2X6LyyOQ82VdUMoJ9fzr6/9K1Znu1OTmAlQygrtLN3IfiNOWLz9SFk/hBLLaIoXXpyZaAidifo8Obgou/JfGNLmtlXfOHM2IN/IOSMCIgG0b3uSkgk1cdq6bw9k36/u6SUs1Dh0I052DuTzOkmCa/60jZI7B34yne0Dpns=
+	t=1781615873; cv=none; b=QWGTj58BLlxTkeMAPtRKfVYUdoQRWgDKsznlGwW56na59uNfPVd9Y7D9KQu/H/TR0jAhJDjF1za2fN5kLA1XJNrl8dw611+ZMnLX1BzKdLrIWMEMOM286AXjt5w8No81mL069a1Cd0Gcm0geETZRp2hSrrhWflz0oPS/lLHGTd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781615044; c=relaxed/simple;
-	bh=pe6J/LvImM5r4mEXDr+JluASt6zjfEqpr8lA7MRPMN8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e5SaUOoeg4GQgfZNVyJh+o1o/uXnUHgJUSeppWwKHkWpwg+wNysT6dTscs9roXmsKKK4RQhWsfquOZHOn7KohSJAoyGba902XJ5+C50IYJkhAuzNOgiZGTa20+AIR0GDlZ7+JOBG5XQ69Uc3DxfKm0SqTzVJ1TD5XrYRmQOs3hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HyNXVSea; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781615873; c=relaxed/simple;
+	bh=EGERGdCx2kYeS7W9iwSbT/bvqw0eSLVjuKRazBmEJAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qN/sbh9ZoyCVdGr9v+TEYX0oVRxBDe/73Qj/P/QcISc+TwUD7X6G44mOKDUDw5BR7ntnDBwQSIIgsFbzW43R0bobrMJZdxZNOzp3q4iyY0mYGK3pWPlPLmK8FvziO4WjNyAVVTXlLdIUsq/r5r95ETxDcu3Q6WZXTIdRjVsVGIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gcS+eXT1; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HyNXVSea"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACBE1F000E9;
-	Tue, 16 Jun 2026 13:03:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781615042;
-	bh=6ivLywrrSHwPKDCv4Fss7Y4cM3VDXiemBVxnQlsPST0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=HyNXVSeagMddXS2kPFGV0H6xtRUv1KN0ahxQpe9Wg8TCUaun13AlZ21HiosOlC9Tl
-	 h6cH3gc3KcCoY8ijHeXZIc/HSQVc8/Sv0QGPxZW8rvmoLgr+KBA6DSaavGJXzQwwFr
-	 6bA0AneowLUus1AXnHpryxQot4qXcAFB+b9gRiprqbGhDrcQKfpbAa/cjI/Ye4dXPb
-	 OdKdmaBZ2bBMuM5YUqGvJ7xp9Ycl7ytwXMfcNNMgh92jFGhZ1uA7plMZZ537ceu++8
-	 X4QkYFM/jL1l1qmN050Glu449dRoNHgGW1gIAX9s/D1GUYsx9mUfa/fCpTm8Skapo8
-	 X5TrmmfdX9Adw==
-Message-ID: <7a5c9346-cda5-4cff-907d-6f5acadd4d56@kernel.org>
-Date: Tue, 16 Jun 2026 15:03:54 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gcS+eXT1"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490bc6a7958so43838055e9.1
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 06:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781615867; x=1782220667; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=85JsgvYD1YLd3UTUsIZxYoHmTb8gB/2tl6mfyWcf1Bg=;
+        b=gcS+eXT1DV6Kk1SiY7/E/IqA9dag6Mp38ZE4sRl4baYb2SXdnpMJTHsk/z8fXqLK7Z
+         EI5aD0epiICHZNv4RDDf1g2UfWFLrLC/DfiYJ8mPQQ/B8EgN0zyWSQkkH5oLY7jBoByW
+         9alOdozBbCr9yb6n8vWnoWKjZNZOlZZEvaaBKv5DKDgxhHzyOT0zlTyCj+5nsXSF/+vz
+         A3XP4Qh0RRLDqimUZsgzLSjZ+Ez+5RrLXWl1kw8BzUkSQlVBOuxH3jPz3DX1j4PHPgZ+
+         jH20l0y6fPrd1BMqRkTscinXjP1zrKAXoWa1ExUVEJT3aRBpqiJOLZDDXSFbB+5T4jIl
+         3D1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781615867; x=1782220667;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=85JsgvYD1YLd3UTUsIZxYoHmTb8gB/2tl6mfyWcf1Bg=;
+        b=l7Hsh4gCQQgxk9zgvXbasdqQTL/ANrYboonmmjFz+Trfo+PDqXxacym1YLK1x6RC7O
+         gNe68l/2DVyU813yc7xyV0RsCFXdyog4/lln9ky0psNRJBeYqHpoJ4NLOX2O0tQdd1QM
+         8oBOLBHnRCBzrbz/WKhKMVqrQzyjRqWchKdFrTy3/trsg4FfkhVcWxWUuofHXRgEasU1
+         2NchdZgVNZ64yTDX8Y/SlbfkwraiI2sKg5XMe/6IBD/gqQPoqi9WzcewiRFZaZJXyl6q
+         z+si6HgQh0N4ny2LUGbDwDn5hFfr0Uh6CAiL5TRgp/aPHswP/QiT6AXJFI1Wqm8pAnHN
+         pgSQ==
+X-Gm-Message-State: AOJu0Yw2lONu4mjiDtuaiIAxRi0s3aaEDLcS74n002K/j9jT8A3J4YpW
+	bT0Bw0KMsqft4yfbKcEN9Cj5KQj2RxVvMs+PRLkeE0M+dlYEqzAHAy/k
+X-Gm-Gg: Acq92OGPLm4lpZxBqNa2fZVUg5wA5JFCwaMmb7Ik07bNMgxZBBg1NvHv3pWUSX9Cwen
+	gZEbowWtnJKN/IfN3adAIqvl68HjcfddFN9lxx/7u+Y1Ut2bcTTfS176Kzi6vEjHHu7tEyLGP7b
+	o0iLLHstbk1a2vuzgTvmZEyGHjYZRU6qPhKFtd8lvjEHSnfYXqFKeKWzZF/ktpfXDMWDHqSVh+Q
+	Ule4tdOJ4zUYicnD0zkkNFrrGMSShixeLLwQznm6h12Apju8vMS9Qah/UwWRDmzr0IL1Vr+v9Yi
+	kJhpusCFDVIAIMVnIQPoHd7yEjsinYAo0rW/qdW8q/kaMMw/aud9sa6MvEELf5hyHC/5vKiBk03
+	+q917LDNc5jlCWGf54FCQq+z+iqH7Jf39LLTECbiR2bGAiTdfFQtIvaiZ2lOyDvVvvsGGmh/l9c
+	PYDpzHHQju6MBGzr1ahVaVeTEo5v2LX0UFIRa2uXkwwrORuLNp/yiarGn/UN5VifnhgLrDZUPgh
+	AyEzjiUv6UYrg52BvTnotEdkLUHgh1nLR4mdg87Ioy0yCURR4Z6QJVZ9WfRXynYKDyOu4bPefbf
+	0gFYihtpKcoL4tQE8dAmFDIwqNecc7tWpisUuGcJ+M0=
+X-Received: by 2002:a05:600c:810b:b0:489:32b:ac0b with SMTP id 5b1f17b1804b1-4922fac1214mr55599015e9.6.1781615866488;
+        Tue, 16 Jun 2026 06:17:46 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e004325bddd753d2e35.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:4325:bddd:753d:2e35])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a4601esm67361305e9.1.2026.06.16.06.17.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 06:17:45 -0700 (PDT)
+Date: Tue, 16 Jun 2026 15:17:43 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+	toke@redhat.com, lorenzo@kernel.org
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Cover partial copy of
+ non-linear test_run output
+Message-ID: <ajFM97xoXuDAUsuw@mail.gmail.com>
+References: <20260616093103.471444-1-sun.jian.kdev@gmail.com>
+ <20260616093103.471444-3-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 5/9] mm/slab: extend deferred free mechanism
- to handle rcu sheaves
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-5-70a54f3775bb@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260615-kfree_rcu_nolock-v3-5-70a54f3775bb@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260616093103.471444-3-sun.jian.kdev@gmail.com>
 
-On 6/15/26 13:05, Harry Yoo (Oracle) wrote:
-> __kfree_rcu_sheaf() cannot invoke call_rcu() when spinning is not
-> allowed and IRQs are disabled. To relax the limitation, extend the
-> deferred free fallback so that a full rcu sheaf can be submitted to
-> call_rcu() via the existing IRQ work.
+On Tue, Jun 16, 2026 at 05:31:03PM +0800, Sun Jian wrote:
+> prog_run_opts already verifies that BPF_PROG_TEST_RUN returns -ENOSPC
+> for a short data_out buffer while still reporting the full output size
+> through data_size_out.
 > 
-> Since the deferred mechanism does more than deferred free of objects,
-> rename the struct to deferred_percpu_work and adjust names accordingly.
+> Add the same coverage for non-linear test_run output. Use pass-through
+> TC and XDP programs with a 9000-byte packet, a 64-byte linear data area,
+> and a 100-byte data_out buffer. The expected output spans both the linear
+> data and the first fragment.
 > 
-> When a sheaf is queued on an IRQ work, it is detached from
-> pcs->rcu_free but call_rcu() is not invoked until the irq_work runs.
-> To keep the kvfree_rcu barrier's promise, call irq_work_sync() on each
-> CPU before calling rcu_barrier().
+> Verify that test_run returns -ENOSPC, reports the full packet length
+> through data_size_out, and copies the packet prefix into data_out for
+> both non-linear skb and XDP frags paths.
 > 
-> In the meantime, remove the TODO item as apparently there is no simple
-> and effective way to achieve that.
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/prog_run_opts.c  | 72 +++++++++++++++++++
+>  .../selftests/bpf/progs/test_pkt_access.c     | 12 ++++
+>  2 files changed, 84 insertions(+)
 > 
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> index 01f1d1b6715a..71af1ff02023 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
+> @@ -4,6 +4,10 @@
+>  
+>  #include "test_pkt_access.skel.h"
+>  
+> +#define NONLINEAR_PKT_LEN 9000
+> +#define NONLINEAR_LINEAR_DATA_LEN 64
+> +#define SHORT_OUT_LEN 100
+> +
+>  static const __u32 duration;
+>  
+>  static void check_run_cnt(int prog_fd, __u64 run_cnt)
+> @@ -20,6 +24,71 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
+>  	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
+>  }
+>  
+> +static void init_pkt(__u8 *pkt, size_t len)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < len; i++)
+> +		pkt[i] = i & 0xff;
+> +}
+> +
+> +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *skel)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +	__u8 pkt[NONLINEAR_PKT_LEN];
+> +	__u8 out[SHORT_OUT_LEN];
+> +	struct __sk_buff skb = {};
+> +	int prog_fd, err;
+> +
+> +	init_pkt(pkt, sizeof(pkt));
 
-LGTM.
-Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Can't we reuse pkt_v4 by reducing the linear area to ETH_HLEN?
 
+> +	memset(out, 0xa5, sizeof(out));
+
+Why is this needed?
+
+> +
+> +	skb.data_end = NONLINEAR_LINEAR_DATA_LEN;
+> +
+> +	topts.data_in = pkt;
+> +	topts.data_size_in = sizeof(pkt);
+> +	topts.data_out = out;
+> +	topts.data_size_out = sizeof(out);
+> +	topts.ctx_in = &skb;
+> +	topts.ctx_size_in = sizeof(skb);
+> +
+> +	prog_fd = bpf_program__fd(skel->progs.tc_pass_prog);
+> +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> +
+> +	ASSERT_EQ(err, -ENOSPC, "skb_nonlinear_partial_err");
+> +	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "skb_nonlinear_partial_data_size_out");
+> +	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "skb_nonlinear_partial_data_out");
+> +}
+> +
+> +static void test_xdp_nonlinear_data_out_partial(struct test_pkt_access *skel)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +	__u8 pkt[NONLINEAR_PKT_LEN];
+> +	__u8 out[SHORT_OUT_LEN];
+> +	struct xdp_md ctx = {};
+> +	int prog_fd, err;
+> +
+> +	init_pkt(pkt, sizeof(pkt));
+> +	memset(out, 0xa5, sizeof(out));
+> +
+> +	ctx.data = 0;
+> +	ctx.data_end = NONLINEAR_LINEAR_DATA_LEN;
+> +
+> +	topts.data_in = pkt;
+> +	topts.data_size_in = sizeof(pkt);
+> +	topts.data_out = out;
+> +	topts.data_size_out = sizeof(out);
+> +	topts.ctx_in = &ctx;
+> +	topts.ctx_size_in = sizeof(ctx);
+> +
+> +	prog_fd = bpf_program__fd(skel->progs.xdp_frags_pass_prog);
+> +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> +
+> +	ASSERT_EQ(err, -ENOSPC, "xdp_nonlinear_partial_err");
+> +	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "xdp_nonlinear_partial_data_size_out");
+> +	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "xdp_nonlinear_partial_data_out");
+> +}
+> +
+>  void test_prog_run_opts(void)
+>  {
+>  	struct test_pkt_access *skel;
+> @@ -69,6 +138,9 @@ void test_prog_run_opts(void)
+>  	run_cnt += topts.repeat;
+>  	check_run_cnt(prog_fd, run_cnt);
+>  
+> +	test_skb_nonlinear_data_out_partial(skel);
+> +	test_xdp_nonlinear_data_out_partial(skel);
+> +
+>  cleanup:
+>  	if (skel)
+>  		test_pkt_access__destroy(skel);
+> diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> index bce7173152c6..cd284401eebd 100644
+> --- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> +++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+> @@ -150,3 +150,15 @@ int test_pkt_access(struct __sk_buff *skb)
+>  
+>  	return TC_ACT_UNSPEC;
+>  }
+> +
+> +SEC("tc")
+> +int tc_pass_prog(struct __sk_buff *skb)
+> +{
+> +	return TC_ACT_OK;
+> +}
+
+Once we're reusing pkt_v4, maybe we can also reuse the existing BPF
+program?
+
+> +
+> +SEC("xdp.frags")
+> +int xdp_frags_pass_prog(struct xdp_md *ctx)
+> +{
+> +	return XDP_PASS;
+> +}
+> -- 
+> 2.43.0
+> 
