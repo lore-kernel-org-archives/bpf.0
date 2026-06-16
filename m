@@ -1,61 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81D73ABDA8
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 22:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0C03AB47B
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 22:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781649281; cv=none; b=giD4zyL464cmjvRNFMiwdUyWRXs/PXgGFgFQfJDWIJe1RqXGXuKE7W69FrV8geEQSlwBtYA2TcG9qhclZg24W75SKBEtNujuWqAJ9Z5hUT2xy379VY86Hz9KcXzQocWGkJJ81O4fQmZfbE1+D4T0ZOiLqRKTSQ73u4XeRp5I34I=
+	t=1781649290; cv=none; b=EK3coyMIMn8YrevvvqLTaBs5b77IQ8a9UeMrqrXIXwKpe7K+iHpk06ZuLiRSGoRQDkfXcfeHpufXw8eH4hUkCDiAqPLhKfMYPid/R+kC/3L/U7RkXrCm2rn3ZQmqMCbRlk/ZGhe+ws3KRMbZcZhN/daajus+cVB7XJX/6mqxuFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781649281; c=relaxed/simple;
-	bh=OZ3v3p89lKDikS0IfPxvKaGvXHvDdXsNQEDqB4p0bL4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ETAY3pekBRqN1G6Q1MK3ETqftwpeN/UBlHqNBt05elxuLvoW3GpuheNfdBe5d7r+Zp5XPJne/Iqe8LFHxtmqIK7/Us2o93sUKKGTtJwJDgRI0o5N2cZpC8qyChrrYri6T/AeDQvi9ZJlZ1BGGW4QTms8rtETuKVat3GSFO6Wcmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvAJ+Dus; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1781649290; c=relaxed/simple;
+	bh=MREMlX9+LgltRptf+kqR2KqPhCAifCYS3oH3GLnZZxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bmtgFY1wDN7s+/iJyzDNgbBC2kzAmoWP/hmgax/GJ7t3Kd6JXdx0/lmLtc1qOFfgKXyUEdL54kSo7F3qMCuJaSkzhR+G1u5BAVHmdbOEu66fTPPN2Af+TZwtwg9BB+bSbf3vX5sNBtNodqTKCuNmgWjuvaGqDi2rVAsU27wPFl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0GawATe; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvAJ+Dus"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36babe2c4bdso3145988a91.1
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 15:34:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0GawATe"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36bdda53d99so1942486a91.0
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 15:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781649279; x=1782254079; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kkSM7CRG0CC6kcvO2OHpZm+lASBIVuUwk6oCMY9xGJg=;
-        b=mvAJ+DuslN49jxCqwS88LNzPldk8svqcyOSrwFQiGzkJ6sv1E3BjkVCATHaE6eNKvS
-         sLkticXOUO8xW9W8vzTLwfxUjU9kjQgzPOFyF7f+qJa8MJctFYZ/8GCWyRgdehngDjdt
-         kTcBihlF/kr1HDMsEqCnKKDhTVl7aU6J1v4XARWOVsPNvv/hT/AJ8XPzTCC/UxHK9dSa
-         JE92gyxUqXqg4xX8+hs0nKRsz4WR/5F6NCF/7JGDdNif3wMkE8WqdD3cwCWBRf/uvS47
-         tfQPKOZk/ed0j5f2JQiE9/FRutq7yTimdGXPB5CIcNAiujDv8Oc+fCnyWle7KS9/Edmg
-         W0HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781649279; x=1782254079;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1781649288; x=1782254088; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kkSM7CRG0CC6kcvO2OHpZm+lASBIVuUwk6oCMY9xGJg=;
-        b=hL8MEcUHwWStwD+959vFe/j8A7UQpz1EwQx0Jx7ASPqI33IZZF06DdrRL9Rcpg9QCD
-         qQ1G4ml+StiKuBxanot/fdXE35M2XGtWv/mG8JIIHfBABqufOYE+i3cTES0SpaSmfqR0
-         rzLdogagaDw/gm7H+FAyVshHjYNPkNErWRo+ASVZUWetthVaCayvkTfRKZAQkFEgD1dw
-         dASBq9wBGGZ62wT6GnmOzx8DKNOHKZv+uhwNqwNzPRzwS86vX5mL+uNYz401riBbvDXZ
-         6ub/VaZjP8RFL/AwuQi1Uby6MDD/96Uqwsw5Fou4VUt+IOd0R5WNo1Q1BaIKoKq46KPu
-         KdMw==
-X-Forwarded-Encrypted: i=1; AFNElJ8z8QuIRLnG9b+XjC+8XD6qrFFOFBZKbmnK9X9z3OPZhuLoBZvz/jebVaj71z3trUET1UU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjcUWKeZtUFH7Nzdc3DVrnb+ggQv2FHQHf2HV/H8RTwzLwYU8u
-	v1snv+FyR3WaISzrzZW646NsP7zqhRj09SS2eh8gMFjgSrq+2MJbOXjd
-X-Gm-Gg: AfdE7cmpMv7RGSZj2Vu47rdIMufjrNtTnMmnGkci/lA9Xj1bsV3W6H6gTEFLFDt/Va8
-	jkyiaom4x/V6u3PsJX+sS54Li1s9EsLan/JuY7ydpdkCkzzK0xhXCqwI4oy2UqENFJ2gxHAUphf
-	VEcG2Z+Kf7OVmREu8L1P9EtnsjZa2kLu3kTlFEEyTzOd3kTkwyQJXPz9lNN99d5shp92JKC5bpR
-	XYHbqP1CcY3Z9+0CoMN8Vr7v42OXxx62DeDZoPoH7o4FOzxbpVFxMJhHLv4y+nb+1uqgeLsQw99
-	UeYw7UDV/mylJ7YtvxpAM9ToyqhEQJmCaXfzxu2mKHJ+JYJI5nUKa3fmW/xE9QXhaMi6BL6WfFs
-	yrhzYovLAYO+VfrHWo7YWfTAsJARsskRP7JCqClCul62Zf37mwqGI7ry88aWlF998xzbbCJhBgM
-	BkoHB1uByv3LKPjo1Yx5a34/l4NQJ3sK56BdS99AW0No9qEYze9RLAUnyAdaOAuC8ucyD6urA=
-X-Received: by 2002:a17:90b:3b8c:b0:36b:ba9b:7efb with SMTP id 98e67ed59e1d1-37c92ea5ae0mr1239070a91.5.1781649278714;
-        Tue, 16 Jun 2026 15:34:38 -0700 (PDT)
+        bh=ipTVbRJPrzwAu2tBqpowbpcPQxDZEeCQYuQNdgsgv14=;
+        b=i0GawATehAtCjIJ0YgoTI1ZrS8nOQXtGatbWqSQFLsXgEoRhWnO4RHVqUWv3miNwgZ
+         rz4AYj4ZeOyWSy+PGklpZ/shTz/EAz/YKiFAHyS9g31hAjfbEveczIDwnoVtjcj8TMIV
+         8ocGN6YViRoX/D0kj6fG5SxHi9+Fn5KvnYNz4kgJPCjOqXySJ5y5Ab7a5HkxhljyZYyD
+         6lc0RBJzQNqYPPog1v3/znpqMtpmW6Xu2Rpb+vAqabEYXOnV2cW4TLWIbH2M/9dqOUCu
+         bXRdalvDHrXRDYR+YOSTSEW2DZ6J7bf18gqEwjzuT8tgoRzsYOCY8h4YBHHLZrQ/53hB
+         LMFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781649288; x=1782254088;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ipTVbRJPrzwAu2tBqpowbpcPQxDZEeCQYuQNdgsgv14=;
+        b=bZfOB4T23/vIuTxjHk784uUB0cJShqunNQXg6uml0kze+dvKwucNDWkuSAgm7pdy4R
+         xcuQZnNfotBdioRgwqKqyi+Mwier5Uqz79dZx80h0MrjkqI3geA2FJdD39J1U5I7Ovyy
+         iOGA9plxB7HhGnJaQzXZpwPLWzaQZYRRdd8TvXUaxPsRVeo9k+lq3W7HrMnR3XMcOxlR
+         WY7ETIGzNklwsyJY6YfS2epzybAsa8RioEdLqyPWPQiNG4VW5QOgoLfOb7w72hrjpruo
+         5S3NkXq79NFnkpwrrz99tAkG+UaLs3bHkJZEtz4ViWuPsuAX30Fm7Vkr6i9T0SNmYtmB
+         J2GA==
+X-Forwarded-Encrypted: i=1; AFNElJ+2AobPZZBIVYm6mFa3C71tqT95bcCEznAcxVqI/x54UmgaW6EtCLDDc5f401cwZSFnyvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX7/0wzgdaCKlC5RfE9eyqLY88iRYCpvIKnoPf7qqjRvqHq8vc
+	qwwofIcc5hEFvl3L4lr6r1rhaq74lVy8VUO5tx656moakbL/ucya9fYg
+X-Gm-Gg: AfdE7ck6+FG3PufnCJWF/+sWVaOjAYTBWnZSUX7YEeg0XC6CIXXbDWrAgFiDFWRJvfv
+	JAyBo/SoZT4miEMqLXlzLIO8YuJHItc5D2xZ91PrqWAlZl04y43AfF40yYhbdrYl6Mz5rEmXWix
+	8vZsoIkXRetvNI3ebJiEOhNAXHna6mx89YCVfSz4EKkhS49anvk8r2EXYwrHK/BTZuUSubNpY3T
+	9PyDLoSgDmUUXoP8qvcaL69ud70xa2mrbRTHO7QSJ74bBWEhngC6rWMzMEpge7JrO57RGDKU5ZX
+	E03fL3TZIVhF90eOXelFMw5ds5gA2UE4czWx396YCoVilB3RqH1nIa3Iz8hHepU1SP+NouTmvGh
+	aXJP6IUofjiW57o33GgWMrQ9o4SAY5vcr5ZFQqcgx+PuSY0s29I9gZqF5wqMaKiQyxVjw9NNIQd
+	KkWZFx0LUWAdAvHRGRLElX2cHeWzeKXZ8WCEqqfq6fvFFewRDXqVSWnIs+c+ZTeTAI6QMAFIA=
+X-Received: by 2002:a17:90b:2583:b0:35e:d015:d675 with SMTP id 98e67ed59e1d1-37c9345bc79mr1251791a91.7.1781649287777;
+        Tue, 16 Jun 2026 15:34:47 -0700 (PDT)
 Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c52092ee3sm4216898a91.0.2026.06.16.15.34.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c52092ee3sm4216898a91.0.2026.06.16.15.34.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 15:34:38 -0700 (PDT)
+        Tue, 16 Jun 2026 15:34:47 -0700 (PDT)
 From: Avinash Duduskar <avinash.duduskar@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -89,110 +91,90 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/4] bpf: bidirectional VLAN support for bpf_fib_lookup()
-Date: Wed, 17 Jun 2026 04:04:22 +0530
-Message-ID: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
+Subject: [PATCH bpf-next v2 1/4] bpf: Initialize the l3mdev field for the fib lookup flow
+Date: Wed, 17 Jun 2026 04:04:23 +0530
+Message-ID: <20260616223426.3568080-2-avinash.duduskar@gmail.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
+References: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-v1 added a single flag, BPF_FIB_LOOKUP_VLAN, to resolve a VLAN egress to
-its underlying real device plus the VLAN tag. v2 fixes a QinQ bug the bpf
-ci bot found, adds the input direction Toke asked for, adds selftests,
-and prepends a fix for a pre-existing l3mdev/VRF lookup bug in the helper.
+bpf_ipv4_fib_lookup() and bpf_ipv6_fib_lookup() build the flow key on
+the stack with a bare "struct flowi4 fl4;" / "struct flowi6 fl6;" and
+fill it field by field, but never set flowi4_l3mdev / flowi6_l3mdev.
 
-Patch 1 is an independent fix: bpf_fib_lookup() never initialized the
-flow's flowi_l3mdev field, so on the fib-rules path it is read before it
-is written. The VRF master is then not resolved and the l3mdev rule fails
-to match, so a slave ingress can fail to select its VRF table, today,
-with no part of this series. The helper already initializes every other
-rules-path flow field (mark, tun_key, uid); l3mdev was added to that set
-later and this one was missed. CONFIG_INIT_STACK_ALL_ZERO (the default)
-masks it, which is why the VRF selftests in patch 4 pass with or without
-it; built with CONFIG_INIT_STACK_ALL_PATTERN a plain bpf_fib_lookup over a
-VRF slave returns NOT_FWDED without the patch and resolves with it. It is
-first so the VRF behaviour the later patches document and test is well
-defined. If you would rather take it through bpf or net on its own, I am
-happy to send it separately. It will not apply cleanly before v6.18,
-where the flowi4_dscp context line reads flowi4_tos, so a stable backport
-needs a trivial context fixup.
+On the non-DIRECT path the lookup goes through the fib rules whenever the
+netns has custom rules, which a VRF installs:
 
-Changes v1 -> v2:
+	bpf_ipv4_fib_lookup() -> fib_lookup() -> __fib_lookup()
+	  -> l3mdev_update_flow()   reads !fl->flowi_l3mdev
+	  -> fib_rules_lookup() -> fib_rule_match()
+	       -> l3mdev_fib_rule_match()   uses fl->flowi_l3mdev
 
-- Fix QinQ handling (found by the bpf ci bot): resolve the immediate
-  parent with vlan_dev_priv(dev)->real_dev instead of
-  vlan_dev_real_dev() (which walks to the bottom of a stack), and only
-  swap when that parent is a real device; stacked VLANs are left
-  unchanged. The egress block is guarded with CONFIG_VLAN_8021Q.
+l3mdev_update_flow() resolves the l3mdev master from the ingress device
+only while the field is still zero:
 
-- Add BPF_FIB_LOOKUP_VLAN_INPUT for the input direction (requested by
-  Toke): supply the packet tag, run the lookup on the matching VLAN
-  subinterface. Exclusive with BPF_FIB_LOOKUP_TBID (shared union) and
-  BPF_FIB_LOOKUP_OUTPUT (ingress-only); both return -EINVAL. Taking the
-  tag as lookup input follows the approach David Ahern suggested in the
-  2021 fwmark discussion:
-  https://lore.kernel.org/bpf/6248c547-ad64-04d6-fcec-374893cc1ef2@gmail.com/
+	if (fl->flowi_iif > LOOPBACK_IFINDEX && !fl->flowi_l3mdev) {
+		dev = dev_get_by_index_rcu(net, fl->flowi_iif);
+		if (dev)
+			fl->flowi_l3mdev = l3mdev_master_ifindex_rcu(dev);
+	}
 
-- Both directions are network-namespace aware: a VLAN device can be
-  moved to another netns while registered on its parent, so the egress
-  swap is skipped (foreign parent ifindex is meaningless) and the input
-  resolution fails closed for a device in another netns.
+Left at a nonzero stack value the resolution is skipped, and
+l3mdev_fib_rule_match() then tests that value as an ifindex, so the VRF
+master is not resolved and the rule fails to match: an ingress enslaved
+to a VRF can fail to select its table. The same value is also read just
+before that, by FIB rules matching on an L3 master device
+(l3mdev_fib_rule_iif_match()/_oif_match()), so an "ip rule iif/oif <vrf>"
+mismatches the same way.
 
-- Add 36 selftest cases plus a cross-netns subtest in
-  prog_tests/fib_lookup.c, covering both directions, the neighbour path,
-  OUTPUT and DIRECT|TBID, VRF (rule and DIRECT), resolution semantics
-  (802.1ad, PCP/DEI, QinQ-inner, bond master and port), the frag-needed
-  mtu_result, the error returns on both families, and the netns boundary
-  in both directions.
+The helper already initializes the other flow fields the rules path
+consumes (flowi4_mark, flowi4_tun_key.tun_id, flowi4_uid and the v6
+counterparts); flowi*_l3mdev was added to that set afterwards and this
+helper was never updated to match. ip_route_input_slow() likewise zeroes
+the field before its input lookup. Do the same here.
 
-- Document both flags and the now-bidirectional h_vlan_proto/h_vlan_TCI
-  fields.
+CONFIG_INIT_STACK_ALL_ZERO masks this by default, but it depends on
+compiler support (CC_HAS_AUTO_VAR_INIT_ZERO), so INIT_STACK_NONE builds,
+including older toolchains that fall back to it, are exposed. Built with
+INIT_STACK_ALL_PATTERN, a plain bpf_fib_lookup (no VLAN, no DIRECT) over a
+VRF slave whose destination is routed only in the VRF table returns
+BPF_FIB_LKUP_RET_NOT_FWDED, and resolves with this patch; reverting these
+two lines flips it back. The series' VRF selftests pass on the default
+config either way, so they do not exercise this fix.
 
-Open questions (defaults chosen, noted here in case a maintainer prefers
-otherwise):
+Fixes: 40867d74c374 ("net: Add l3mdev index to flow struct and avoid oif reset for port devices")
+Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+---
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-1. An unmatched, down, or foreign-netns tag returns
-   BPF_FIB_LKUP_RET_NOT_FWDED, matching the DIRECT path when
-   fib_get_table() finds no table, rather than a new return code.
-
-2. BPF_FIB_LOOKUP_OUTPUT | BPF_FIB_LOOKUP_VLAN_INPUT is rejected with
-   -EINVAL; restricting now keeps relaxing later backward-compatible.
-
-3. The name BPF_FIB_LOOKUP_VLAN_INPUT reads oddly next to
-   BPF_FIB_LOOKUP_OUTPUT. A pair like _VLAN_EGRESS/_VLAN_INGRESS is an
-   option while nothing is merged.
-
-4. With BPF_FIB_LOOKUP_VLAN, the tc-path mtu check that runs when
-   tot_len is not set follows params->ifindex, so after a swap it
-   checks against the parent device rather than the VLAN device (the
-   route-mtu path via tot_len is unaffected). Checking against the
-   VLAN device would preserve the pre-flag semantics if that is
-   preferred.
-
-On the bot's comment-style note: the new comments keep the form that
-prevails in net/core/filter.c, and checkpatch --strict is clean.
-
-v1: https://lore.kernel.org/all/20260609172052.81613-1-avinash.duduskar@gmail.com/
-
-
-Avinash Duduskar (4):
-  bpf: Initialize the l3mdev field for the fib lookup flow
-  bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
-  bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag to bpf_fib_lookup() helper
-  selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
-
- include/uapi/linux/bpf.h                      |  63 ++-
- net/core/filter.c                             | 119 ++++-
- tools/include/uapi/linux/bpf.h                |  63 ++-
- .../selftests/bpf/prog_tests/fib_lookup.c     | 494 +++++++++++++++++-
- 4 files changed, 726 insertions(+), 13 deletions(-)
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9590877b0714..6fa172cb1348 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6162,6 +6162,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ 	fl4.flowi4_dscp = inet_dsfield_to_dscp(params->tos);
+ 	fl4.flowi4_scope = RT_SCOPE_UNIVERSE;
+ 	fl4.flowi4_flags = 0;
++	fl4.flowi4_l3mdev = 0;
+ 
+ 	fl4.flowi4_proto = params->l4_protocol;
+ 	fl4.daddr = params->ipv4_dst;
+@@ -6307,6 +6308,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ 	fl6.flowlabel = params->flowinfo;
+ 	fl6.flowi6_scope = 0;
+ 	fl6.flowi6_flags = 0;
++	fl6.flowi6_l3mdev = 0;
+ 	fl6.mp_hash = 0;
+ 
+ 	fl6.flowi6_proto = params->l4_protocol;
 
 base-commit: 140fa23df957b51385aa847986d44ad7f59b0563
 -- 
