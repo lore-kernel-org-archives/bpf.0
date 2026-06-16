@@ -1,145 +1,188 @@
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010071.outbound.protection.outlook.com [52.101.85.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590D4426ECA
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 10:59:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781607559; cv=none; b=gYPB70x75Bi8mFTInNVUqDaHnQ1MIqoXPW9aXGTNCaUFojp0d9rlEqfBPi74TWLIiSgx3mMhHbAZFRu3eNosCAE70BvNtFyaeemGeHu7Lt2n56Es+OPZGblBCU5+GFwzSjT/W04mODQIMaXY7IUvBzDdxsUPd6R9486wiYwFW6w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781607559; c=relaxed/simple;
-	bh=BYiitEcXHhRh6eR+a46Lb8G8JNceCCN8CajnI0gLC0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rJ524Dl3bb/5QHR3OQTnwFASqxza/r+pEpzDK+AjOAWsHgd3JW3JGJXayE2t7wK3dbO2570G6GuAX3+/bftZhWDrs5VhIjtB6qepsf/Mr4e/SvMy/qKbuFrlKf9ja8QARfQzKlqWUJ8CV63cM+HpCdopto8aMqDfV5iBmZRB3nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wz4/3xcF; arc=none smtp.client-ip=209.85.218.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3B0369965;
+	Tue, 16 Jun 2026 11:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781608273; cv=fail; b=VbvtsGaMfYy90QxgogL4/F3e4+OUyEA1KIMrvpvXPwPEEzF7D2z90jhM3DKvAu3bEWvq/kkiTDQhq2WpZ647ZxqgePvNP14bdLVgFcS5bNtdGj+gURzwPNjGDmtcHuhBjnsP+DYcbwhzuvO6wrelRxhIJ+5aUl2R4Eh2F1zsY5s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781608273; c=relaxed/simple;
+	bh=55znOYGsRqslWUPQV52B/T7hBbYextIzfitEW/7H7R8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tL95W7WLWFJfwYDQ1Xi1TDCNT22vKVYbxQ2QBGoTmpmFFzGvaAgCjd6cVEL9+jelbjxB5Um66Ss0LZDN1W7ayyrTvqXFz7kWy4jzzik6i6fJIOkVq+qqNHHTxLwFVRGQ+8Jn2xn6S1orH6AstrLbepRsflsbJf0gDdRUO0M2D8M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cwDgQc48; arc=fail smtp.client-ip=52.101.85.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wz4/3xcF"
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-bec4639953dso730380466b.1
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 03:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781607557; x=1782212357; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBInyREsNJJq2tfrHgYP7popCDV3FF08GB9ZJkZM/f8=;
-        b=Wz4/3xcFxSEDbnfYo/5iJ67sYaZec+0QGGxA3BVFa3c4HqZQUHfXVfpiyc8fzo2cwR
-         YYIFwmPUiXWAaVu0jhNcRSVJuDKI0yTrtIPMKf/Jdx78234KspOn4WWYwOKSX0C9FU3g
-         gThfv2bUE6XVO5ijCJnSkzDq4khLzbaaQSGC+bcfuipRP1Ui/42be9wotXTHTiFYvoj2
-         yyKbRdm1gprdcjuoCTDQBQcbLGS/clULujUGoApfALz9hAAITioKT8vU+jDI26nogD0H
-         Xd25M9NtW4rK4MAwSjYOUjRt205cmRNUUuIwA+vKp1FsleVD3PGmIFS2XgmMC4PgMh3D
-         WUzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781607557; x=1782212357;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cBInyREsNJJq2tfrHgYP7popCDV3FF08GB9ZJkZM/f8=;
-        b=ajj9vzz5FiViYc7CDyjGUD3suOp3ktX225vWOQWLNjdM9rYsqDacrtlzAPTzTXUrXP
-         32LwbYeWoW3PQe9KEyo2wq8lYtuKVa7vzFMg+xo2hbvhqdTTieg1lvGj50c6WYmDnMGz
-         Qi8lSCxKCzjXtZbruc1vd82qi+tZB6QBNnNDDPbotOVBlFLoigCqNG6HamYvYA0gVcHQ
-         fh07RGeu2WCt8S8UXonidJQdm6ciUInHSUDhF90Mj+cni9sYLwpMbb9xfECEioYDrgdB
-         d3uw50H00HZPZvVAxxDQ2lZMRiFtX9TrkBbqP0S7nyqor0uv5yPLK/xwNOr0uf2RCSYS
-         MUYg==
-X-Forwarded-Encrypted: i=1; AFNElJ8ZmhsXygslwuT1Lo6h9bc4Ww4WrMR6oGYdNFXzMY2QRrtFjrpY8s/RWDpxPcCHlHeHhGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv0XIETqXMJ5EwHbanSOFZHJWYCmWCyFJw6IiAlQJjXn+zRnUu
-	SxgVrZF7jPr3wGj4giaKWUB7B4ZfiLXdXPAfw90WkcCAenaxaQuMJHNZsXkHzTvRJ4ukIA==
-X-Gm-Gg: Acq92OE04axBsrsc6B+aPP335P8aRnJLJlDq72TCPWYJUzT1zcl0C/4H/EYHOCMDStj
-	1x+ZVFCffptPwFJ6TWlVAu+feVnoSTY2ygKt+Wc6M9q/kMZu9W/DG0QN5Hhetqz1lLkh7tQVq9Q
-	gVzvpq2F0PMT5eAiHKfUD7QU3bOW/JfvbE70EnUalZiK3/IS3D6CXWV3/7uZ46TrHNcHeRo2YFV
-	BwolDssUDbNTQnSX5qnGThlmEy0JnirjBLGVDzZHA9y6lBAioilJ8PbOWg9kBIPwTJKjO2ve0tI
-	8K1UvlQ6al4b4ZSbPPHH4Q1lCTAC/2UgRNWVjjvBq4oLJ0IfaW7QMkzh6lCOB6grpMG8dzoHCQN
-	YGtyb6vd6sv4DC7gpjHhUL7GLkvKY5vgBHLaPZ9ic/dSZvQ8HaAsw5z48+aopFllJi9TjJBuMqC
-	tVTLH2GJsrz91jaVTzrKxY+aOTqnnNUCYxi6grFKuIyhtgy8KjHsFnP+Kej9LiMizvm8r2
-X-Received: by 2002:ac2:59cf:0:b0:5aa:6c2f:2a20 with SMTP id 2adb3069b0e04-5ad427a8bf2mr621532e87.30.1781600513392;
-        Tue, 16 Jun 2026 02:01:53 -0700 (PDT)
-Received: from cherrypc.astra-academy.ru (109-252-17-231.nat.spd-mgts.ru. [109.252.17.231])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5ad2e1715d4sm3301048e87.34.2026.06.16.02.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 02:01:52 -0700 (PDT)
-From: Nazar Kalashnikov <nazarkalashnikov0@gmail.com>
-To: stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nazar Kalashnikov <nazarkalashnikov0@gmail.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Dongli Zhang <dongli.zhang@oracle.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Si-Wei Liu <si-wei.liu@oracle.com>,
-	Willem de Bruijn <willemb@google.com>,
-	lvc-project@linuxtesting.org,
-	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH 5.10/5.15/6.1/6.6/6.12/6.18] tap: free page on error paths in tap_get_user_xdp()
-Date: Tue, 16 Jun 2026 12:02:01 +0300
-Message-ID: <20260616090202.693916-1-nazarkalashnikov0@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cwDgQc48"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BWLiHuLKAhGKbGnm2ZVxjLfP2psm+CnpLGaxMcMjYfP5KJihaqt26ifX8rJsm4msXFdMvte5d0L7jldDpFm3Z1zo1ZcnksZWoX2+MsQSQEzrylJtR96NwtNToZmm9x6tv2eRAWBU4LoVS7mVMrlY1KOnEsX09AesvEQig96CASR8jT6QBNksHGNopGPH5GfcvB4feVPbEG4xnn1stddO1MbpNKSVrwj1Rw75JriicXDF7Xop+5AUwz7qlXqL3SX92OePc2G9OPzccVwUQW9Yjupej6dH9UIX5pP+Q7WA7756GOT5kgcNh3hULc4gL5Bb3Y9YosK/cRSo1arMY0O4gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xrXdi6srfp0Ao/tvJZ9Wyvr5NlHDCnKq/XdFuOkOCfU=;
+ b=Cywj/EXb9ZGRIIFCZYaXOXMoeJlRAh+aJ+9EO/S/gI/mlp+ZAmCKw1IEADT+9w13cB3VgWs9lgOoJz0eMbDV9ofXoGTU0N+1BcdH5qrAPgUjm0mKs/VLXJcAYGYuiO92WWW8sHAOjMww/Xy+lsi1PS+YTvxnewx/nm0IgxHtorshZGrqYk4I+u+uZPcu+12oshU0O1KKIy0LZQxn1UEpb4D7S2FWZaqg6HBfkyyb3cYNmnxSv2X+XrbCxedbQTiTfMfE4dhPt/KwfKR6vMgypgVhmCOCUFPQZUccKUgwXCyaWwPZcCXiEzAkqL6IHp53vLVd3BVWHtr/l05/JEJeOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xrXdi6srfp0Ao/tvJZ9Wyvr5NlHDCnKq/XdFuOkOCfU=;
+ b=cwDgQc48CHXNO66E5eJI7LdzNl61cUyVOEYPxErj12FZ2d+WWxwVjcqylA3HeK8kMk/0EWSju7PZJuvQuVAGyCnTNACcDXgNG7aHoY2+tc4/l782DgZJZPqNa7DHFYWI+e8DOTwj38mlHytjQzo2mgz2QBF/xaXddoI7MTEoOK0=
+Received: from CYZPR19CA0019.namprd19.prod.outlook.com (2603:10b6:930:8e::28)
+ by CY8PR10MB6826.namprd10.prod.outlook.com (2603:10b6:930:9d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
+ 2026 11:11:08 +0000
+Received: from DS3PEPF0000C37B.namprd04.prod.outlook.com
+ (2603:10b6:930:8e:cafe::1d) by CYZPR19CA0019.outlook.office365.com
+ (2603:10b6:930:8e::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.113.18 via Frontend Transport; Tue,
+ 16 Jun 2026 11:11:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
+Received: from lewvzet201.ext.ti.com (198.47.23.195) by
+ DS3PEPF0000C37B.mail.protection.outlook.com (10.167.23.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.139.8 via Frontend Transport; Tue, 16 Jun 2026 11:11:08 +0000
+Received: from DLEE200.ent.ti.com (157.170.170.75) by lewvzet201.ext.ti.com
+ (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 16 Jun
+ 2026 06:11:07 -0500
+Received: from DLEE201.ent.ti.com (157.170.170.76) by DLEE200.ent.ti.com
+ (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 16 Jun
+ 2026 06:11:07 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE201.ent.ti.com
+ (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
+ Transport; Tue, 16 Jun 2026 06:11:07 -0500
+Received: from [172.24.231.93] (ti.dhcp.ti.com [172.24.231.93] (may be forged))
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 65GBB03k3480225;
+	Tue, 16 Jun 2026 06:11:01 -0500
+Message-ID: <ed0bc332-0196-4613-8066-9b94f8ed0013@ti.com>
+Date: Tue, 16 Jun 2026 16:41:00 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 4/4] net: ti: icssg: Fix XSK zero copy TX during
+ application wakeup
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <diogo.ivo@siemens.com>, <haokexin@gmail.com>,
+	<vadim.fedorenko@linux.dev>, <devnexen@gmail.com>, <horms@kernel.org>,
+	<jacob.e.keller@intel.com>, <sdf@fomichev.me>, <john.fastabend@gmail.com>,
+	<hawk@kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+	<pabeni@redhat.com>, <edumazet@google.com>, <davem@davemloft.net>,
+	<andrew+netdev@lunn.ch>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, Vignesh Raghavendra
+	<vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
+References: <20260611185744.2498070-1-m-malladi@ti.com>
+ <20260611185744.2498070-5-m-malladi@ti.com>
+ <20260615162157.3748bcda@kernel.org>
+Content-Language: en-US
+From: Meghana Malladi <m-malladi@ti.com>
+In-Reply-To: <20260615162157.3748bcda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37B:EE_|CY8PR10MB6826:EE_
+X-MS-Office365-Filtering-Correlation-Id: 149d6917-7978-4d46-e157-08decb97f738
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|36860700016|23010399003|376014|82310400026|1800799024|56012099006|4143699003|6133799003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	wdG9YScI2ByOTzBg8XFkctAIV8akMtbj2ZiCVP0UB1kgquAMvsGjYjcdEFUw4sCP+qMZmOjKgjeWjlyAiSracSXro/Au1V1aBm2TT8d9egku/x9g0yvUlMgCf3eVvip6DY5Lk7EZb+aiNwyFB2T4rcVD//S3uJTdKkJMbN7mmtFyfWXeLOVokcw3RUKAnk9/owl6/24TR0qMG2J4Wl6qxKpccJ2PI5Nzheu3cIYlwWoUkSFnbV9i+ZpA4OlmU1o/TmzNAUKJ2QN9bN7/O+C8xEOex4f43VN/cAEMQFyvi/lVOnoHsAlcDTblkucXebPddeGeLVDVYCqP1GJyUIBj+I4BshaTgGDdjU7qCfeTYsFh+XVbbcDd97kK4yAO5F7RnDjdoxx/gaitvWk7gry99nj3Rh8xXrp8WAso4Hmgrl+V4AYBrPK2IMHNJfwyEDQ65ZgVbPMu5fn3P/LqnT+Acs2s87CoWsBqwl26vSngT+QjdBKnul5gI0SAvYmHZ5k/E9dkg9YyapG3+wk2KAKHBDFaJNse3w3XxhSEMgp7B6RlBUZE1ljcZqRrRXieoXKuyQXnNy1fmng8vKqhHwqAETwW5u+dJkFnd9JtKpdr8Y7+1hUoWqFSHfNvaNknxY7RKz0Q82/MreCX40muTIOG4dpOEfqzz1IL4AQNCwd08ik4T/p5mSOxc7ybjsKvBz0JrpSiaB7MevS4qhWmHjsq42OLjLi44saeEITgko9RWQI=
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(36860700016)(23010399003)(376014)(82310400026)(1800799024)(56012099006)(4143699003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	CUVkqNsLYvV/rBPD9VHoduBxEYhuM0QyNikvvJSSTDXZri2tcM2jy5CvS+mg2CMD0B18Q8vWWdhbGnqz0TJdM0PgZmlSWL5tcI9wyU3xWccHiu89zQDUE3/lXgWwelu8ulqHyj2kxHklWYf8ey7bIR5Tw2EKC5GwHFCYl4J7YL79KUAsHS0M5S8QGvQDlmd+eKV3YccLslNxytHupiRxlf0PTaGmb+Yj+NGTjDaki3/4v0pn8xe6+Inn+us7SRF4NznTEUbTO43ppKmTkRPET73gu2Z4TWfXukFxbT9ggmTvDXUFU2QG4lpvjKNB5ueLGNdrPd4lQZKWH60RdPVE/8o3+vbu8KJWzn6Sw8ARkzpVxmSh287Yw4O6HmIf9kqJ0b9VmyI76sclPwCvPVgKICONxmFLrwZKEnG59j35S6QR2n5vnLq1WCBVmnzXofUn
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2026 11:11:08.0318
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 149d6917-7978-4d46-e157-08decb97f738
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF0000C37B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6826
 
-From: Weiming Shi <bestswngs@gmail.com>
+Hi Jakub,
 
-commit 3bcf7aec6a9d16438f2cec29f5d7c8d5b8edf9b2 upstream.
+On 6/16/26 04:51, Jakub Kicinski wrote:
+> On Fri, 12 Jun 2026 00:27:44 +0530 Meghana Malladi wrote:
+>> @@ -169,9 +169,6 @@ static int emac_xsk_xmit_zc(struct prueth_emac *emac,
+>>   
+>>   		num_tx++;
+>>   	}
+>> -
+>> -	xsk_tx_release(tx_chn->xsk_pool);
+>> -	return num_tx;
+> 
+> Why are you deleting this?
+> 
 
-tap_get_user_xdp() rejects a frame shorter than ETH_HLEN with -EINVAL,
-and returns -ENOMEM when build_skb() fails. Both paths jump to the err
-label without freeing the page that vhost_net_build_xdp() allocated for
-the frame. tap_sendmsg() discards the per-buffer return value and always
-returns 0, so vhost_tx_batch() takes the success path and never frees
-the page; each rejected frame in a batch leaks one page-frag chunk.
+xsk_sendmsg() also calls this without an rcu-lock when transmitting the 
+packets if the xmit was successful, so I was assuming it is not required 
+and I removed this.
 
-Free the page on both error paths, before the skb is built. This is the
-tap counterpart of the same leak in tun_xdp_one().
+>>   }
+>>   
+>>   void prueth_xmit_free(struct prueth_tx_chn *tx_chn,
+>> @@ -279,9 +276,6 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
+>>   		num_tx++;
+>>   	}
+>>   
+>> -	if (!num_tx)
+>> -		return 0;
+> 
+> Does something prevent us from running all this code if budget is 0?
+> If budget is 0 we can complete normal Tx with skbs but we must
+> not touch any AF-XDP related state.
+> 
 
-Fixes: 0efac27791ee ("tap: accept an array of XDP buffs through sendmsg()")
-Fixes: ed7f2afdd0e0 ("tap: add missing verification for short frame")
-Reported-by: Xiang Mei <xmei5@asu.edu>
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-Reviewed-by: Dongli Zhang <dongli.zhang@oracle.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Link: https://patch.msgid.link/20260521163230.1478627-2-bestswngs@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Nazar Kalashnikov <nazarkalashnikov0@gmail.com>
----
-Backport fix for CVE-2026-46320
- drivers/net/tap.c | 2 ++
- 1 file changed, 2 insertions(+)
+Can you elaborate more, I couldn't interpret your comment here
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 6fd3b14273b3..b51ce7af1b20 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -1052,6 +1052,7 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
- 	int err, depth;
- 
- 	if (unlikely(xdp->data_end - xdp->data < ETH_HLEN)) {
-+		put_page(virt_to_head_page(xdp->data));
- 		err = -EINVAL;
- 		goto err;
- 	}
-@@ -1061,6 +1062,7 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
- 
- 	skb = build_skb(xdp->data_hard_start, buflen);
- 	if (!skb) {
-+		put_page(virt_to_head_page(xdp->data));
- 		err = -ENOMEM;
- 		goto err;
- 	}
--- 
-2.47.3
+>>   	netif_txq = netdev_get_tx_queue(ndev, chn);
+>>   	netdev_tx_completed_queue(netif_txq, num_tx, total_bytes);
+>>   
+>> @@ -306,7 +300,9 @@ int emac_tx_complete_packets(struct prueth_emac *emac, int chn,
+>>   
+>>   		netif_txq = netdev_get_tx_queue(ndev, chn);
+>>   		txq_trans_cond_update(netif_txq);
+> 
+> This looks misplaced, now we will hit it even if we didn't complete
+> or submit any Tx.
+> 
+
+This code needs to be hit for packet transmission in zero copy mode.
+emac_xsk_xmit_zc() submits the packets to the DMA in NAPI context,
+when application wakes up the driver and triggers NAPI. Once DMA 
+transfer is done, irq gets triggered NAPI gets called which will handle 
+the tx packet completion + submit next Tx batch packets to the DMA.
+
+if (tx_chn->xsk_pool) -> check ensure this hits and runs for zero copy 
+only. Also above check (!num_tx) returns early during the application 
+wakeup (where budget is zero), hence it is removed.
+
+>> +		__netif_tx_lock(netif_txq, smp_processor_id());
+>>   		emac_xsk_xmit_zc(emac, chn);
+>> +		__netif_tx_unlock(netif_txq);
+>>   	}
+
