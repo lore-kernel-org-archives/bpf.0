@@ -1,165 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C521EEA49;
-	Tue, 16 Jun 2026 05:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 413273D5C3E;
+	Tue, 16 Jun 2026 05:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781587434; cv=none; b=fTIn7Kc/HJzk8FdQr2veJCGdUw5dHmisnsdp8P2T9j/v9ElYg6YgN5L0iucyGT39FRArVi/fqmLZC6RVcGeiHBkfla5PuKcL41LRqJF7TSiBS+M5QBSboUPD6baPCE0mCLdDvDMaZJ+Nc64YLzKiS747jYP3zNO93uWcDR3xG9w=
+	t=1781588605; cv=none; b=I04JucIIc2kKiKKh1edeHtcWfWToAQIQjLTp2MLydPhwQ15m1uQ9ofBGNk9kFaYe9uLs4PlvMZdiBJ0tfKS+Zz9gx99LpXCuUcPWKt0kc+7zCMay4piS3E7glKjuKpfr1E7r0AxXCVCApLamTZHP4UIbNvdPpBgmD+RkNDJ841I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781587434; c=relaxed/simple;
-	bh=QxH5qOTe/YG8RUrLabSR6EzwwhszMJWlBSsZ8Mep+KM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jQbxYWsC+bWlwy5IrsnyGH2P9SZZ1He4A++GEkIblW0TIwTioPLzPqzrfcsGRthwyCmXz7sRtHLfHdo0EAanKfaQ7o3Jn0wOXE/fRiHJggu1DQe+eNEJt3eJwsGwivBRHxRYEzRArd+Iv0vHf3VibONlVKugs5EujC7G8Q/dZjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kG6Aojvq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781588605; c=relaxed/simple;
+	bh=aox1OEzILyupUKRfAf5WXYTLGdCgpSAUw1nXj1c9c3U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pGYIm7QF4Q80TiUbJgma+9WgCFn1Mr0+JbFES3DztWDwWtL56zqXsHlKYYk29h113s+WBkFIVx/f9zkpAIfpmKObSOVcUSDA3VCov9kbxBV1yBUvH4l43NYXMBDgVFmyBK9OvJmtSNqPppesWHkaQgsi0yx8ouYjcxgPK7RtaQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=CDljHQDG; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kG6Aojvq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C171F000E9;
-	Tue, 16 Jun 2026 05:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781587433;
-	bh=QxH5qOTe/YG8RUrLabSR6EzwwhszMJWlBSsZ8Mep+KM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kG6Aojvqf2S6KeFzC84yjhG9VPPJBAAYbiSvfpHpD23VaszvHKOoEq1AKHv7GwTXm
-	 Rno48p8+6FfjRUIJn2gOhE14/u4zwiqzzhnJi6MJBBZtTJMoJyb52CYCJ0tZ238uv/
-	 wZDyjBqf7GPF1gzLERDXSkItxwy8/cZCjbbyQhdRFwiWgRR8d66Tgd7KgLtlOJxEt0
-	 7AtmV9S1Zxk6Dihh3DANuMrX8oyOh1Osfhlz91nfVtaM21z9vwEPdOnnBoUAsjz7BJ
-	 s250yj4kdW/xFc8WMx57LqE5tduMZD0g4rXh2jFwp5CCdasx0njIzJWr0uAtuAHHzn
-	 5H4saBl9Of6eA==
-Message-ID: <327e2eeb-b9e4-44b8-a933-9ad783d34ed7@kernel.org>
-Date: Tue, 16 Jun 2026 14:23:45 +0900
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="CDljHQDG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=2rtcz
+	yrLWjdHUmehNAsDWNO7AjrwAppVwrlY8MnURsc=; b=CDljHQDGyicQPFl/SEJIF
+	P5Bblv4tyJwIoSH7kTotIb1nhjT/k/DUk/qVM0TWZgd/OAb/Dg6TEbzJ99Iho9bV
+	RoZGrolznZqWW4Dm83FMsUgrZxI/ApHNNWtWApzbwdr7SYr8SR5Ogl8qxUX5XTj3
+	pTRh/WvXRpioiwOdwmDaBA=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQBXMZlM4jBqXCpTAg--.51787S2;
+	Tue, 16 Jun 2026 13:42:45 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: bpf@vger.kernel.org,
+	netfilter-devel@vger.kernel.org
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	pablo@netfilter.org,
+	fw@strlen.de,
+	phil@nwl.cc,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	kartikey406@gmail.com,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Guard conntrack opts error writes
+Date: Tue, 16 Jun 2026 05:42:33 +0000
+Message-Id: <cover.1781586477.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
- when HW PMU is not available
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
- <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------rP7fGiX08FjSBMo4mTOXAahH"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQBXMZlM4jBqXCpTAg--.51787S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF45WF4DtF4fZFyUAr1DWrg_yoW8Zr17pa
+	yrGwn0yr97Jay7J3Z2vFW8tF15Can7A3yrCFn8JryrAwnaqry8JFWSgryUWF9xGF1fZw1Y
+	vr4Fgr98Cr18AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK67
+	AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRqFAQU
+	UUUU=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------rP7fGiX08FjSBMo4mTOXAahH
-Content-Type: multipart/mixed; boundary="------------3SbEaLSYHxVUNx3lobFuFikg";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <327e2eeb-b9e4-44b8-a933-9ad783d34ed7@kernel.org>
-Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
- when HW PMU is not available
-References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
- <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
- <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
-In-Reply-To: <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
+The conntrack lookup/allocation kfuncs expose an opts/opts__sz pair.
+The verifier checks the caller-provided opts__sz range, but the wrappers
+currently write opts->error after internal errors even when opts__sz is too
+small to include that field.
 
---------------3SbEaLSYHxVUNx3lobFuFikg
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Patch 1 writes opts->error only when opts__sz includes it.
+Patch 2 adds a bpf_nf regression check that keeps a guard in opts->error
+while passing opts__sz covering only netns_id.
+
+The regression check follows the existing bpf_nf test shape.  Before the
+fix, the guard is overwritten with -EINVAL even though opts__sz covers only
+the first four bytes of the options object.  After the fix, the kfunc still
+returns NULL for the invalid size, but the guard remains intact.
+
+Validation, rebased and tested on bpf-next master e4287bf34f97
+("selftests/bpf: Work around llvm stack overflow in crypto progs"):
+
+  git diff --check origin/master..HEAD: OK
+  scripts/checkpatch.pl --strict on 1/2 and 2/2: OK
+  make O=/root/ebpf-verifier-bug-detection/kernel-build/bpf-next \
+    net/netfilter/nf_conntrack_bpf.o: OK
+  git am of exported 1/2 and 2/2 on a fresh worktree at base: OK
+  range-diff between branch commits and git-am result: equivalent
+
+The local direct clang build of test_bpf_nf.c is blocked by the local
+kernel BTF/config: this environment's generated vmlinux.h lacks
+struct nf_conn.mark, which is used by pre-existing test_bpf_nf.c code.
+The changed kernel object and generated patch application were validated.
+
+Yiyang Chen (2):
+  bpf: Guard conntrack opts error writes
+  selftests/bpf: Cover small conntrack opts error writes
+
+ net/netfilter/nf_conntrack_bpf.c              | 17 +++++++++---
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c |  6 +++++
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 26 +++++++++++++++++++
+ 3 files changed, 45 insertions(+), 4 deletions(-)
 
 
+base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
+-- 
+2.34.1
 
-On 6/16/26 5:01 AM, Alexei Starovoitov wrote:
-> On Mon Jun 15, 2026 at 4:05 AM PDT, Harry Yoo (Oracle) wrote:
->> slub_kunit uses hardware perf events to invoke _nolock() APIs from NMI=
-
->> context. However, creating a HW perf event fails when there is no
->> hardware PMU, or when running in a virtualized environment without a
->> virtual PMU configured.
->>
->> Since tests are often performed in virtualized environments, fall back=
-
->> to a SW perf event so that the test can still run, even if it cannot
->> cover IRQ-disabled sections.
->=20
-> Frankly, I wouldn't bother with this fallback, since it completely miss=
-es
-> irq disabled section which is the one to test with *_nolock().
-
-Right, it only covers percpu sheaves locks.
-
-> VMs need to configured properly. Even nested VMs support
-> PERF_COUNT_HW_CPU_CYCLES.
-
-And now that even VMs that are not properly configured can test it using
-kprobe with _some_ coverage, we don't really need the fallback.
-
-Will drop the fallback.
-
-> Also in overflow_handler_test_nolock()
-> I would add
-> even->hw.interrupts =3D 0;
-> to the end to make sure it actually stress tests things.
-> Without it NMIs are not firing quickly enough.
-
-Will do.
-
-Thanks!
-
---=20
-Cheers,
-Harry / Hyeonggon
-
---------------3SbEaLSYHxVUNx3lobFuFikg--
-
---------------rP7fGiX08FjSBMo4mTOXAahH
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajDd4gAKCRCGXBN6rc5S
-1mG/AQD+6bsjWeb6zEOVUA7ge6HdSL9IweB0GLSChJQcA/DgyAEAmysfWrQosnQc
-o3L/HYTVOn3F0X9ZEn1ONdfMyvCtdgk=
-=qy9q
------END PGP SIGNATURE-----
-
---------------rP7fGiX08FjSBMo4mTOXAahH--
