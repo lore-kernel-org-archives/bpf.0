@@ -1,32 +1,33 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927E7466B4B;
-	Tue, 16 Jun 2026 16:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B38F332637;
+	Tue, 16 Jun 2026 16:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781629095; cv=none; b=hyayCGNl5JK2KVAVvzlLF2sTEhE8PHO2t9pwXxw3pYq9+4hgqL0K0uI6Dn9qfq5vKtpegKbzKdDV7vsyN3LBLpdeyfBEgs6OSHZTL8kFprR0lucGfDgxHjzDZ5zMhuSteOSAfc0N19QQ/w+gIxZH3iVMuJ2qrhUYiJlnUrvDftg=
+	t=1781629097; cv=none; b=GMDFHF/QqgHj0c6UioZNamEx+k9YjOvaFm4dDlFad5/bhXflRdtxCARUfyCoGjJ8fM3+mtfW9GapjTX/PqzO1Fur3Wp16SX9Aj1T54QBKUYZm1wdp6JiSTIT+0sV0rvVzfobvPezeoaJdWdUTchDLI5r14dGy+rF50Twn5A5x74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781629095; c=relaxed/simple;
-	bh=dJ/hGazGTwv12VEPOnHnWO3uZ09QCV7h0s9LI3Ox/Qk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dWOndd7sAnbLa6iMFLu9Uo2Gp34GSnMsBnJdALC/X/GizOlS8pyjiorVa63jjHm+ndI3hMeP6rcMhrb+aVmgXsO9FOt8Mx24erDverWRdsEL/Zqa/LuCIJgFeg6RbNBSRW+eyUZJI7dZtTEoHpgMuBuTorPk1ZKJH8G4iGB2pCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=V09X0x1G; arc=none smtp.client-ip=209.97.182.222
+	s=arc-20240116; t=1781629097; c=relaxed/simple;
+	bh=I1tZMP+mPvdhMwhM5zszm9Zo3eB8aZqikSghsJIhhOw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uKCgQQ1B1JFzT61AVE1I8V4/gMyYR4zuFVkCLWyO2sFQFyHW/8Nub1cX1K3Thp2O5BihdvtGYY6nFvfBctkkmb0PwIB2tnDtOIBkOFTBDTe2kcNRxoWvk/pVNWO8aVKOTBO1XnmOnMdXVKsWDthOJcPxOoCUwhOYK6eUmFZFZK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=SCC4V3F4; arc=none smtp.client-ip=13.75.44.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="V09X0x1G"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="SCC4V3F4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=ifT9P6/eUKBe78AheIbgUae/qU2YB3D
-	aI9+vCqxPBn8=; b=V09X0x1GOPFwGQzIVkYcZrnQbfXOm4k/VsNhHQJznd14CJA
-	7s4BkypMRD3RHqDSEogw0zj8mlvCs/qU5d1Ykaeo16ot1ylWHCmvpamo7RCHWIpt
-	sYKqsQPo8TPWlUuR6zXE2uoHB7GoPF5SWCoXat1MQL9wxxJaayrGhPT01KWs=
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=FKciIDidIunA4WWPY4okzzywVAc+s2gTjjuVLSN+lbY=; b=SCC4V3
+	F410PIDTtTKTn4gaNxSQkkxRCs8OA4DqYbGwAjIptvrcj1jcA3U/zge5EGD8zwu4
+	dqFH8y6zb5WHdtYXlQF272/06T7EekfpuzlkZcdpSfW5d4qTFtFLX8HCq0LDAiAb
+	E3X7ZYBcS3sUWe8bVrOWuHpNkoxooTaVxZTek=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web4 (Coremail) with SMTP id ywQGZQBneJ2VgDFqKUxPAg--.57407S3;
+	by web4 (Coremail) with SMTP id ywQGZQBneJ2VgDFqKUxPAg--.57407S2;
 	Wed, 17 Jun 2026 00:57:57 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Wed, 17 Jun 2026 00:57:55 +0800
-Subject: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
+Subject: [PATCH bpf 0/2] bpf: Fix stack slot index for Spectre v4 nospec
+ checks
+Date: Wed, 17 Jun 2026 00:57:54 +0800
+Message-Id: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,9 +36,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAJKAMWoC/yWNywrCMBAAf6Xs2YUkkCr+injIY6OrkoRsKoXSf
+ zfqceYws4FQYxI4Txs0erNwyQP0YYJwd/lGyHEwGGVmNWuLSWnUGqW78MRcpFJAeZWOnCOtSNp
+ ab1yI9nSEEamNEq+/wQV8TXD9S1n8g0L/pmHfP1EIRMeHAAAA
+X-Change-ID: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -48,17 +50,17 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781629079; l=1483;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781629079; l=1575;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=dJ/hGazGTwv12VEPOnHnWO3uZ09QCV7h0s9LI3Ox/Qk=;
- b=UGZCHtDTQLmRGX3R1maDgcNfjlB3Jr05NV3jpRSnJaJTtATRzEg8ZqAAyPYUPNYSRsSktv3y8
- MkzsI7eEZR8D0rdD1JRpHutIwGTiWGt0qa1DPylju4edgN27piAaCXi
+ bh=I1tZMP+mPvdhMwhM5zszm9Zo3eB8aZqikSghsJIhhOw=;
+ b=VUps/GOoTZRevQ8PQBV6imO53lQhahbMspktgu3dqXj151VEbFPK6UId2Hr0qiZ8VbQqyawIf
+ uogspxawJjTCVrKADpVcpwyrz35eSZvVtO7dX5fs2WH8tS4LTJG1ThX
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:ywQGZQBneJ2VgDFqKUxPAg--.57407S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF45tF1xAFykCw4kAw4rGrg_yoW8Xr45pr
-	ykWFy2ganrKasrWFnFvF4v9ryrGa1kW3y7GFWjv34FvF1rX348WasYgFy5XFyFyFyrXw4S
-	qF1FyrZIyw1Uu3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:ywQGZQBneJ2VgDFqKUxPAg--.57407S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4Dtw1DuFWrtw1xJF1UZFb_yoW8Xw4xpa
+	4v9F1Sqa4DGFy7GF1ay3W0gryrWr1kGr47Xr1Sqw1UZF4FgryxGFZaga4UXw1Fyas3XayF
+	vFW3Xr90kayUAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUU9G1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1U
@@ -72,42 +74,41 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7AF45tF1xAFykCw4kAw4rGrg_yoW8Xr45pr
 	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
 	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
 	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU8TqcUUUUUU==
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQEAA2oxeAYIdwAAsZ
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgUAA2oxd6sIBAABsO
 
-check_stack_write_fixed_off() computes the byte slot for a fixed-offset
-stack write as -off - 1, and records each written byte in slot_type[] with
-(slot - i) % BPF_REG_SIZE.
+check_stack_write_fixed_off() uses one byte-indexing scheme when checking
+whether a fixed-offset stack write needs Spectre v4 sanitization, and another
+scheme when recording the write into slot_type[].
 
-The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
-4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
-pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write updates
-bytes 7..4. That can leave the second half-slot write without nospec_result
-even though the bytes being overwritten still require sanitization.
+For sub-8-byte writes this can make the sanitization check look at bytes that
+are not overwritten by the write. A zeroed lower half-slot followed by a write
+to the upper half-slot can therefore miss the nospec barrier for the second
+write.
 
-Use the same slot index in the sanitization pre-check that the write path uses
-when updating slot_type[].
+Use the same stack-byte index for the sanitization check and the slot update,
+and add a focused verifier selftest that expects both half-slot writes to emit
+nospec when the loader has CAP_BPF but not CAP_PERFMON.
+
+Bounded impact: this fixes verifier/JIT Spectre v4 mitigation emission for a
+fixed-offset stack-write corner case. No architectural verifier memory-safety
+bypass, exploit chain, CVE, embargo, or security escalation is claimed.
 
 Fixes: e4f4db47794c ("bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation")
+
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Nuoqi Gui (2):
+      bpf: Fix stack slot index in nospec checks
+      selftests/bpf: Cover stack nospec slot indexing
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2abc79dbf281c..50e80dbbc1784 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3479,7 +3479,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 		bool sanitize = reg && is_spillable_regtype(reg->type);
- 
- 		for (i = 0; i < size; i++) {
--			u8 type = state->stack[spi].slot_type[i];
-+			u8 type = state->stack[spi].slot_type[(slot - i) %
-+							      BPF_REG_SIZE];
- 
- 			if (type != STACK_MISC && type != STACK_ZERO) {
- 				sanitize = true;
+ kernel/bpf/verifier.c                              |  3 ++-
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+---
+base-commit: e4287bf34f97a88c7d9322f5bde828724c073a6b
+change-id: 20260615-f01-11-stack-nospec-slot-index-e155b2acd587
 
--- 
-2.34.1
+Best regards,
+--  
+Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
