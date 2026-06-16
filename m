@@ -1,145 +1,192 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65667399007
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 21:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4253F39C636
+	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 21:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781644456; cv=none; b=bnEK98aokmuQpeRJ4ur1cutJfvlkmykMIX9IBu8N6d8RhmmVPHe1mRuuZ0Dcq8W5Gdd7d8KwS8wrsDdHVyf/DHQXDvCFuJXBYMKJTVohMt3rnjZv3mIJ5oHm6UI8JHPYu9Vgle04o7t+3it0njCjdWaAKkQTVOz7SFohWUrGWh4=
+	t=1781646436; cv=none; b=dT4Q+HV9n6SzUFcL2gGzPYNuRrrzHiXvILh23D4CdOUk9cuHdoTFBZ2yAC6/LzpMyKPijpr6Qjp4jeVVJmuVNwtT9C+tj0kj4M6IEh7VtjUnRTR4Pu1WBYOTFpizDIS+WN5q/QoRaf/wJqEMd/2m0a4puCeVYntxr3+pMESbAlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781644456; c=relaxed/simple;
-	bh=szkiZMk/51Dn59gZAVp5UYnh69ioTUYKzeBduM21+TE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Z8DMHSrQluRVb7Pf4xsQ5bWmkw1nwHEJnUAmRaG1Jv0STVdqWqAOjEQUiaEgsVDOMPkV5cFN07IBtVG+XRA8i6doOVPNdYRQIG9Q927IUvSm9w7/TY3tbodFzXMV2rAo6RXKH8y1spRXJuCkomvDtNndp6XvobVa1c2mAfu/Y8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MrEQhncq; arc=none smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1781646436; c=relaxed/simple;
+	bh=EP8WzJM9f4tD04pJNHeXtemwXaQnAlZmGRo6vVnD3Jw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uDfjFD3rkA8rBQ4OaEHRNncb/ci6yagcPGgYhuEz5KXtMwCxKtv8zOh8JGakqKNFqzm2Quk7kTVHrpIb7fjjygLu22fs5y4fNhST50jzIT76QRcIkBrjpRMzCPkSE47vG5FtUiymCY0A2htBrcswMsotqa63es2cyRujvW1lbDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uwl8PbE9; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MrEQhncq"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-304d8362a58so240116eec.1
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 14:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1781644455; x=1782249255; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c17Bx16QV5sl8RyBSVDSL07SiEznBKCXYOLNi/brxf0=;
-        b=MrEQhncqmacAwuD+IhhHv/AvLjg8onI+AK5Sc/N+wrFW6GVJt+GtMPURg0j/QOwnXL
-         jz6Na2vvniMbHUxUuUFhAxYGkXr+KlN6hoWpPTu670lAKabH9SJ45/2OF+crovFC9QHQ
-         nb51bqqryLe7tRogJjboV75iDcmFRPs6EF0cZB7nTMEFOtuhefEOXFwKjze4WvNJuLu0
-         9D461955t3G77ka3tSwyb5FJAsDT20JACtpcl3VQ6OMECf5NyA8oGsJY9bypfIsxssLh
-         FIBNGWfXF+9h3blXb5ppQ3SG97OdRKzbnYSWW9a7bDvs+0FvN4gtm29ROJSsLC4sn6uv
-         nHoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781644455; x=1782249255;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c17Bx16QV5sl8RyBSVDSL07SiEznBKCXYOLNi/brxf0=;
-        b=TGG1AS8kSQqy4M5SIZA6U2FWHzC4BNQxdGb73Kr904UTKPRCVujjz2CqAyT4poUKCZ
-         UVng7qn4k7Qh7YOZWiWnMqmUYO6sOMZMeCcKj3AOSNDpjzEt1Rbia7FYWCykWS4n7o0y
-         s5rvqz/wonuQC0t12DbBeleyRTBEcl1JPmpXQDYvyiui+rS5ii2Kk8/pBrGLOgUG0v4Y
-         L9ViiXBKGMgBTlpY0a8iDxWOHpBQ24AWfWLGfxcr4UVinFDArLuX9GN0vlpk0LZYElE3
-         ro2tdWHRK16jj9UqqOJ61JfmL7PEDydXhE6swPMzj/28RywwCeeFhmzrxhIFVf/K28ER
-         pyPg==
-X-Forwarded-Encrypted: i=1; AFNElJ/W8C/aCDLX8bOASWt4v5YLprgD/NoskemdxwpbYT/LXIwIddbeQ9QDRANMQ+kG6aomIYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3FwSj3S2Nj35AKB9Hxo08gPfJ87sAZQtPM1do+iijPiC62tij
-	d9RHer7iZ53A0bg772YKQpzm/1JH7CakmY6/yQhN2xWWc4RDrHXp7a+y+U6KO4pVnQo=
-X-Gm-Gg: AfdE7ckAqyAyc4Cb2lgeYrZm+i49GVmsJmICQSQ1eVVBAY4qLfUswZKk6uzMZn97y8r
-	146RqoqBQl/R2Iwcs2WB6CSk6i1gWgArd/uTtJsDlE2DImT5At2VqSaj37roZYs8ilF7ZHlGEmp
-	TzZxJlFprJwLJgBkztg1tGdUlkP+H7bxZjLl3Pz0JNqTKG31Zoer6ChEfxvc6APjILa5WlFM/kK
-	db8AClMbfvbhQa8theZz9KFYEEF45WDcZEpggkgdsXelRSmZV/mYdlmA/MM19NaE+Y2U0pCyOrp
-	7MDhHGF6g93Fos4L4/K20fJSYFhVx2NtvCX+2vmN//mUJkb9K5sGMNdG40Mt7Slv4btdYM9b1RF
-	68JFvY8PxnJhdKtsBPWWUmk7pkjiPyppEH/x9FGjU2xyhGmFsxtIIqhFvs2ABOZirkFDW2pCCMZ
-	cumsCN
-X-Received: by 2002:a05:7300:1912:b0:30b:b4b5:4979 with SMTP id 5a478bee46e88-30bcf50dac8mr197992eec.12.1781644454518;
-        Tue, 16 Jun 2026 14:14:14 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::1a8e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081eb95450sm25214840eec.28.2026.06.16.14.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 14:14:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uwl8PbE9"
+Message-ID: <2d2329ac-5394-4eac-926a-990c83eabaa1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1781646429;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8ytJJED0V5o5ZE5j301pDRjAf2BxYSXlReJ3reV7A+E=;
+	b=uwl8PbE93vRyCphXxIKTObalSJjhQC84FTD2BR3+9HZ+eL8a5k2SA9N04kGOxX2B1vadQZ
+	lD/lPioScu/ntlU3q+7jZxAar0I+0wuWLu6ntP5c8bcag+4iAyxCwdKlOQu/9j6qDNsTeN
+	LPZKVB3JYg/uvYwHiCjU/7fWGJMO0KI=
+Date: Tue, 16 Jun 2026 14:47:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v1 05/14] resolve_btfids: Index BTF ID symbols by
+ address
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260601221805.821394-1-ihor.solodrai@linux.dev>
+ <20260601221805.821394-6-ihor.solodrai@linux.dev>
+ <CAEf4BzYevwUOY34KOdjRd9cv5uXdxEwy13+6vHmNo_h4ryyT5g@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAEf4BzYevwUOY34KOdjRd9cv5uXdxEwy13+6vHmNo_h4ryyT5g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jun 2026 17:14:12 -0400
-Message-Id: <DJAS8Y6NFDM3.2UBTXDT6CKACA@etsalapatis.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Luis Gerhorst" <luis.gerhorst@fau.de>, "Shuah
- Khan" <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot indexing
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn> <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue Jun 16, 2026 at 12:57 PM EDT, Nuoqi Gui wrote:
-> Add a verifier test for the fixed-offset stack write case where two 4-byt=
-e
-> stores initialize opposite halves of the same stack slot.
->
-> The test uses the CAP_BPF-without-CAP_PERFMON loader lane so Spectre v4
-> mitigation remains active. It expects both half-slot writes to emit nospe=
-c
-> in the translated program.
->
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+On 6/3/26 4:45 PM, Andrii Nakryiko wrote:
+> On Mon, Jun 1, 2026 at 3:19 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> Keep an address-sorted index of parsed .BTF_ids symbols so code that
+>> the original BTF_ID symbol name can be recovered from an entry
+>> address.
+>>
+>> Use the index in find_kfunc_flags() to scan BTF_SET8_KFUNCS entries
+>> directly and match each entry back to the requested kfunc.
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  tools/bpf/resolve_btfids/main.c | 103 +++++++++++++++++++++++++-------
+>>  1 file changed, 80 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+>> index f8a91fa7584f..43512af13148 100644
+>> --- a/tools/bpf/resolve_btfids/main.c
+>> +++ b/tools/bpf/resolve_btfids/main.c
+>> @@ -119,6 +119,11 @@ struct btf_id {
+>>         Elf64_Addr       addr[ADDR_CNT];
+>>  };
+>>
+>> +struct addr_sym {
+>> +       Elf64_Addr       addr;
+>> +       const char      *name;
+>> +};
+>> +
+>>  struct object {
+>>         const char *path;
+>>         const char *btf_path;
+>> @@ -150,6 +155,10 @@ struct object {
+>>         int nr_structs;
+>>         int nr_unions;
+>>         int nr_typedefs;
+>> +
+>> +       struct addr_sym *addr_syms;
+>> +       int nr_addr_syms;
+>> +       int max_addr_syms;
+> 
+> nit: max seems misnamed, it's "capacity", so I'd choose
+> "addr_syms_cnt" and "addr_syms_cap" naming (I believe libbpf does that
+> relatively consistently)
+> 
+>>  };
+>>
+>>  #define KF_IMPLICIT_ARGS (1 << 16)
+> 
+> [...]
+> 
+>>         for (next = rb_first(&obj->sets); next; next = rb_next(next)) {
+>>                 set_id = rb_entry(next, struct btf_id, rb_node);
+>>                 if (set_id->kind != BTF_ID_KIND_SET8 || set_id->addr_cnt != 1)
+>>                         continue;
+>>
+>> -               set_lower_addr = set_id->addr[0];
+>> -               set_upper_addr = set_lower_addr + set_id->cnt * sizeof(u64);
+>> +               set_addr = set_id->addr[0];
+>> +               idx = (set_addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+> 
+> where is this +1 coming from? we have some reserved zero entry in
+> .BTF_ids section? I'd understand if this was symbols table, where we
+> do have zero entry, but I'm not quite following here...
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+We do a +1 in find_kfunc_flags() three times for slightly different reasons:
 
-Trivial style nits.
+  // Here we extract the *set* flags from the header
+  idx = (set_addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+  set_flags = elf_data_ptr[idx];
 
-> ---
->  .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++=
-++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/=
-testing/selftests/bpf/progs/verifier_unpriv.c
-> index c16f8382cf17d..9ebbd4b531df1 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> @@ -976,4 +976,27 @@ l0_%=3D:	exit;						\
->  	: __clobber_all);
->  }
-> =20
-> +SEC("socket")
-> +__description("noperfmon: Spectre v4 stack write slot index")
-> +__success __success_unpriv
-> +__caps_unpriv(CAP_BPF)
-> +__retval(0)
-> +#ifdef SPEC_V4
-> +__xlated_unpriv("r0 =3D 0")
-> +__xlated_unpriv("*(u32 *)(r10 -4) =3D r0")
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("*(u32 *)(r10 -8) =3D r0")
+  [...]
 
-No whitespace to the right of -
+  // here we skip the btf_id_set header
+  Elf64_Addr addr = set_addr + sizeof(u64) * (i + 1);
 
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("exit")
-> +#endif
-> +__naked void stack_write_nospec_slot_index(void)
-> +{
-> +	asm volatile ("					\
-> +	r0 =3D 0;						\
-> +	*(u32 *)(r10 - 4) =3D r0;			\
-> +	*(u32 *)(r10 - 8) =3D r0;			\
+  [...]
 
-Unaligned \=20
+  // and here we extract the flags from a pair
+  idx = (addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+  return elf_data_ptr[idx];
 
-> +	exit;						\
-> +"	::: __clobber_all);
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
+I think the way to make it less confusing is to cast the data pointer
+to struct btf_id_set8 before inspecting it, and read the fields.
+
+I'll do that in v2.
+
+
+> 
+> 
+> 
+>> +               set_flags = elf_data_ptr[idx];
+>> +               if (!(set_flags & BTF_SET8_KFUNCS))
+>> +                       continue;
+>>
+>> -               for (u32 i = 0; i < kfunc_id->addr_cnt; i++) {
+>> -                       addr = kfunc_id->addr[i];
+>> -                       /*
+>> -                        * Lower bound is exclusive to skip the 8-byte header of the set.
+>> -                        * Upper bound is inclusive to capture the last entry at offset 8*cnt.
+>> -                        */
+>> -                       if (set_lower_addr < addr && addr <= set_upper_addr) {
+>> -                               pr_debug("found kfunc %s in BTF_ID_FLAGS %s\n",
+>> -                                        kfunc_id->name, set_id->name);
+>> -                               idx = addr - obj->efile.idlist_addr;
+>> -                               idx = idx / sizeof(u32) + 1;
+>> -                               flags = elf_data_ptr[idx];
+>> -
+>> -                               return flags;
+>> -                       }
+>> +               for (u32 i = 0; i < set_id->cnt; i++) {
+>> +                       Elf64_Addr addr = set_addr + sizeof(u64) * (i + 1);
+>> +                       const char *name = find_name_by_addr(obj, addr);
+>> +
+>> +                       if (!name || strcmp(name, kfunc_id->name) != 0)
+>> +                               continue;
+>> +
+>> +                       pr_debug("found kfunc %s in BTF_ID_FLAGS %s\n",
+>> +                                kfunc_id->name, set_id->name);
+>> +
+>> +                       idx = (addr - obj->efile.idlist_addr) / sizeof(u32) + 1;
+>> +                       return elf_data_ptr[idx];
+>>                 }
+>>         }
+>>
+>> @@ -1575,6 +1631,7 @@ int main(int argc, const char **argv)
+>>         btf_id__free_all(&obj.typedefs);
+>>         btf_id__free_all(&obj.funcs);
+>>         btf_id__free_all(&obj.sets);
+>> +       free(obj.addr_syms);
+>>         if (obj.efile.elf) {
+>>                 elf_end(obj.efile.elf);
+>>                 close(obj.efile.fd);
+>> --
+>> 2.54.0
+>>
 
