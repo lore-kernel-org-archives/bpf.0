@@ -1,122 +1,130 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D81426D0A
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 10:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16E343CECD;
+	Tue, 16 Jun 2026 10:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781604266; cv=none; b=hO4g8tvkx6P0EmMquP/gZc2tXb6pa67Y0BFY8gk8Eya8neJIleqKc5aU1kSDCc5rdpHhlncx0dnHD7zUdHMwJglXMoEjwP+TDuQXbuthWnoQBNvhmyN08QxVojlqUcp+ed9bi3SCs7/F63zp+h3niNgSSPFED217B3oaI06M0LA=
+	t=1781604834; cv=none; b=e95vIZvJYSV4dISEAB+4W9sWusTSXHfa08C4bOYTBwf5ETK7u6J75NIKpyTxh2+VMe+uVPfLQsXPStyY/EpsJ9oRDSHRLTsOC7zbVJuGsJBpPj+tA7Fr57SCrgFMaWdPlmBDjGRnVPcYk0G1szI5k5Trn9QYgzh06xGtd3s+UKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781604266; c=relaxed/simple;
-	bh=TIIjdlJ1X8AiPK1RSlH0x9/gUJnCBnzteMJ7p4ST+kQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SmJHHGhwslkDdQFG0X9OMwlJ1Rwm78Hve9Joxg3kgmKrZydXktFw/OkfgDXHmysrLo5YSCMoyKlixdH8X5VC8raatmR5gHZS73vepycvK/WLM4YBIqs2L9zJZKvsXkD/aVVeA/6urUV0vwqs1hgnMu40moR7itzRSkyxoavxJkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=aLdyCTz8; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1781604834; c=relaxed/simple;
+	bh=h39yfY9vKWcnHsup000s5QqqY2OYLsCc/BA54RYV6Fw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EdELQyoRNjqnN13t/3t+nqhjRGZ8D9wehBXXq3wLUh27+RBWN3qK6JzX7wNPiyww2DSAZD8594O2jCOI7l0aCGOSN+pJBwNzk+LNYx6wJq0qACJOJjruCj2XsjXjrSZRN2SOiNGIsRQdDjLTJ44PInWiFbzgof+XclPxB3WsQ2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=KLRdeFA2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AkG//VcB; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aLdyCTz8"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-68c1630159bso4644165a12.2
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 03:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1781604263; x=1782209063; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mcc40ssZ1K96Uavp2GwOvrRk3/YMLKSUvUHIzWqkOLo=;
-        b=aLdyCTz8BxLb2pE1vibPX7G9oJV1/kj0dy8k3ph3UnhioQS5hZhY5lD5YX+9JE8uOB
-         Nqf4kCfkyaxnz/Zm6N8mCDq7Bxn9uWZP3Bip2K2tFoTb266D/dv48U1iGi0rULXS2YWj
-         vZjAedcZkYI7uyy8WAqwrtTMZApuJ7VirSnUjUyUVBGSkHhxwGW3lvQskcEd7Kcdpdps
-         /Wr8zoy7aVQR+PddCHSo0/y2pIu4BpUlddj30UuTGtbmLO8hll2KQt9UFgH0MLtEAros
-         1S8Y0tRUXC2p3M0PucOuuEL6euv9cXR3bHRQCVkhS36Ptbx1KGZ/HvQsJqs98YSd45Ne
-         gSQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781604263; x=1782209063;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Mcc40ssZ1K96Uavp2GwOvrRk3/YMLKSUvUHIzWqkOLo=;
-        b=dR05/A8cXFq5/aW4cAq6JbCl0pMEDnZHbwnhzcWRpLWUcoIo87F+bbi06JgS41V4IM
-         6pxnPs9i6EKZJolbwCCo70bAchrMIL/2YzLeQkwHI0/OxER7nPO1xvZZE6weRpMOf/kg
-         9dI3i41qFCoJD/+sE3hph0JQpuSDy7TYaoqLcNo0vuVOOEmNojKYH++cFP9RQnWqZ36a
-         kFykW17m0kBOC7DoWQxCqmIqIIb1s3uW79PYJfNzALuUZ1UW/cOUW4sooJNGqup6Sr6d
-         J6bPKVhJ7Vcj9+cidPFth4gAK4ehcrOQWuPmTsFxAI6VLjbEVJy/SGmIJx16zWU5trmm
-         NPsA==
-X-Forwarded-Encrypted: i=1; AFNElJ/E3driduOp6Sl3UPEzvO/xHxYtQPIxvuQgewutgd2HXHzCpSJ2BGJGE2mNxCRYnA6ZcLs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk25Y5ZBuhpHRZYBy7Ib3A+0bUwY6PX/fbBWTTBslZzS+CGkKw
-	p4S/l6l95Jtq+76TNlG7+wuIT74gwQNbdX30J0nRPtYOdtCB9El11hrfm84m2bJKsFk=
-X-Gm-Gg: Acq92OH4VGAQ5ZELPKOrw7aXjtDRXKJVFLH1XgqIHPz7xk2HH3OcnnOeUyjCk2VGCuP
-	Nv2j1tq6sXVFqsRvLZFxlBhIXx9KultVjDTu37zdF3ZqhgMnEh47vEl28G3nnKRH6kCryUOVBIS
-	ejJYv7Nn2Dq4ipi+vFvZRoF0fmRBxVHMwKKugTwQ6BqblogWS8MvQxUW6Nj4KEVOy2a6o//FIma
-	CXo7Lm20KNwxWtTvItTQxVCjXWaj9gX7UW0jpQ5YfVrnFr8AvBLSEH+95P+huM0Tcj441Obe575
-	fR/vdj7es40Ck9/aMH/e7iDrmED3o2zsH0M7erDtqjdZPFyXXnNqxLJhUW/g/QkA8mDN/DER6pL
-	0Ttj2pqat7vxUJsQhARjWx8B5GNyVdl59eVboCZTlM19YcfOgxOkNBKAnnjjZXRC0qbrDJtBJOe
-	UJJAVjsYi9XMfCb2QR0Z/uOYMWXw==
-X-Received: by 2002:a17:906:209a:b0:bfe:ed06:565e with SMTP id a640c23a62f3a-bfeed065926mr404990866b.51.1781604260716;
-        Tue, 16 Jun 2026 03:04:20 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bfdb8341ba5sm623905066b.42.2026.06.16.03.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 03:04:20 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
-  pabeni@redhat.com,  andrew+netdev@lunn.ch,  horms@kernel.org,
-  bpf@vger.kernel.org,  john.fastabend@gmail.com,  sd@queasysnail.net
-Subject: Re: [PATCH net-next 3/5] selftests/bpf: remove sockmap + ktls tests
-In-Reply-To: <20260614014102.461064-4-kuba@kernel.org> (Jakub Kicinski's
-	message of "Sat, 13 Jun 2026 18:40:58 -0700")
-References: <20260614014102.461064-1-kuba@kernel.org>
-	<20260614014102.461064-4-kuba@kernel.org>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Tue, 16 Jun 2026 12:04:19 +0200
-Message-ID: <87ik7iby3g.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="KLRdeFA2";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AkG//VcB"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 32199140013C;
+	Tue, 16 Jun 2026 06:13:52 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Tue, 16 Jun 2026 06:13:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1781604832; x=1781691232; bh=yscGnKM6Pn
+	1eN1WlHGZpo/1egnmUAfNS3O+ct8E0NcQ=; b=KLRdeFA2u+bknoVpi6wLPAu7Yt
+	iJdd2/Ii38ypS/HihS6Z208HihWl6c/A269wVfmNZUcYPRy3GjKQGkOU6gC1HxyP
+	2BUp6/woB2mslX+AU9Ho0gYMwxvcFE5p64q0CWPnBqZsatmqrd6lvrhXAclNpPka
+	qebzk6gT/6/oXGsthzXU43MbVuF1ZoTNub6E/rCc+Mh/Hb3o11fRbMGKaaHDQnkW
+	yZgJCWGQYI0QOG3RMmWA5ea0dX0dhcka3E1BwGV4ca1zS1Otyh772wajEB5/iW40
+	Y0WY/5C2T066kl8/Cw/jLhklnwm7p9trBzdOUuIa9GmAUmOhq/1Gx0nvF+3A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1781604832; x=1781691232; bh=yscGnKM6Pn1eN1WlHGZpo/1egnmUAfNS3O+
+	ct8E0NcQ=; b=AkG//VcBlWPkGp5+QX0CqU957h5/2UEj/XMYVfh5TkBa5JAEwFD
+	GZ8so3d42RbYMkqnnoEzqiPcSJIGRn536ajBRJAI/4q/OKVIM+UpxSBtaPLzNUwV
+	lJtrA0FNiuhAUbnnGbSavDm5A2neCdBdjRhYIggcHSxvHWcerXwmZX1XrSC3Pcad
+	kmue6YuS+5uAhjahkx89P++vVaEXZ49ff/6J49vcIttgBpjtKp6p4Z4Y3S3jyjBo
+	mCBw3GcrZRNAZAyg7ZFfkpAFrb0+gxXM4VHkLmT3YxnqfLr//pzLvX31thfL64Vi
+	aEZ7t4WQHG4AgF1k9ymbDXashyytfdr6TNQ==
+X-ME-Sender: <xms:3yExasOq_hfD91-KgcnzcWI-InKHHQ9H-HHRzn9NZAoVno9NOjh6jA>
+    <xme:3yExauo0oR8mN_VBvyV2z1-LxDwp8eZq_lCpXCWi-YTr2iBxkchLqxEuY-6_EOc8a
+    r6WETbqjxZD-JCQ-kB--2PzVfIzJwjaT4rvI4k60d1ry0KMag>
+X-ME-Received: <xmr:3yExam5hIbugwhUOCO_yLy-bHdS_WgFM3aglR68GwbEZAhD7kNSGvV61>
+X-ME-Proxy-Cause: dmFkZTFXmFjhiZ/J01Wd7/tv5c36hbRy67DrxzHLzGUvqVoob6gyrI5rUk2TRsZF3TxXXy
+    Eqgfu+llVeu6X32bw3wTR93BrAokj6h+nD5mSFQR4EGjTjQgXkzrvdL1oZSrLLHJ5ZaEXP
+    eaW04bkL9ANOpZ7eqEK9sl2/phNYVie5S4DBbmqvXJ0eCIm06lqXVM0lQBIw/hHOkFNqfb
+    AydGSX9A4rVRRF1ozlS604g7aojkY6CaiA4+XH+1yJ6XUBOQRJQ5hCsI91GjHNRmhlzUQo
+    PVL9+m9l+5dHMCHIJ1uQ0rbTva8xA/YVRH20faRhiH6bLyY/lpTO7/3+HUanxXwMnE9Of5
+    q6wYPNxxCAigFA3VjxcRBu4F0rl7MLCy61b1Hco2V1UgkgiypxPIJIROEQcnjinGrDAz42
+    6lFtYSILqUoo/GUYk91Be7xYKOFGgSI5BD3CvpndRESrU3vmNpE/RaD4bUZbmB1UUtFGMx
+    ye/XEzKUNThptMfX88SZhVxjwt/wnco1txQiuCkWjjXst6uijKmWxjnYHlg47bqVb8sR3D
+    AlCdyKGyB24en+/TRzzXfEdyuh/kbAwuSDoIjBF7O75Ohd+l8rkFEahWX8+yNoIixeT4Pn
+    x8Z1W31Tk/QVtuv3+xtJIVxNI5hpbcDragT9TeS9YWwZL+1+N5CJgPZ13c7Q
+X-ME-Proxy: <xmx:3yExak8eKc29oJxfcfyK0Od4a-87_oCLG8W7UXqv6u5hrVb5PsXG_Q>
+    <xmx:3yExaicnt6lfrQcLSaZi-mmr0qYemsDudfJuWTVe2e4R7J3yeMRy-g>
+    <xmx:3yExag1XSy9XrCi1pGc5bJxCCqyfXk1xkzZBnsX_ihulF2q77cYF6A>
+    <xmx:3yExarpV1hTtDrxhQ9JhKiBTEVTSk53lv6J_cGdraz6-SgpZJDtotw>
+    <xmx:4CExauycks29AcIPDqsus0W6Sv8WnerBEUU0rBmVMLdUsXvbFirkjbpb>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Jun 2026 06:13:49 -0400 (EDT)
+Date: Tue, 16 Jun 2026 15:42:45 +0530
+From: Greg KH <greg@kroah.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: stable@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
+	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-kernel@vger.kernel.org>,
+	"open list:BPF [MISC]" <bpf@vger.kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH stable 6.1 v2 5/5] perf build: Remove
+ -Wno-unused-but-set-variable from the flex flags when building with clang <
+ 13.0.0
+Message-ID: <2026061639-curfew-hexagon-386b@gregkh>
+References: <20260520163320.3073037-1-florian.fainelli@broadcom.com>
+ <20260520163320.3073037-6-florian.fainelli@broadcom.com>
+ <6541a5f4-a150-44b9-af27-8712cdafc1ae@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6541a5f4-a150-44b9-af27-8712cdafc1ae@broadcom.com>
 
-On Sat, Jun 13, 2026 at 06:40 PM -07, Jakub Kicinski wrote:
-> The combination of sockmap and TLS is no longer supported - installing
-> the TLS ULP on a sockmap socket (and vice versa) is now rejected. Remove
-> the tests that exercise the combination along with their BPF program;
-> the file covered nothing but sockmap sockets holding kTLS contexts.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  .../selftests/bpf/prog_tests/sockmap_ktls.c   | 355 ------------------
->  .../selftests/bpf/progs/test_sockmap_ktls.c   |  61 ---
->  tools/testing/selftests/bpf/test_sockmap.c    | 227 +----------
->  3 files changed, 1 insertion(+), 642 deletions(-)
->  delete mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> index 6ed8e149e3d5..cda6b22cf759 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
+On Wed, May 20, 2026 at 09:35:02AM -0700, Florian Fainelli wrote:
+> On 5/20/26 09:33, Florian Fainelli wrote:
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > 
+> > clang < 13.0.0 doesn't grok -Wno-unused-but-set-variable, so just remove
+> > it to avoid:
+> > 
+> >    error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
+> >    make[4]: *** [/git/perf-6.5.0-rc4/tools/build/Makefile.build:128: /tmp/build/perf/util/pmu-flex.o] Error 1
+> >    make[4]: *** Waiting for unfinished jobs....
+> > 
+> > Fixes: ddc8e4c966923ad1 ("perf build: Disable fewer bison warnings")
+> > Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > Cc: Ian Rogers <irogers@google.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: Namhyung Kim <namhyung@kernel.org>
+> > Link: https://lore.kernel.org/lkml/ZNUSWr52jUnVaaa%2F@kernel.org/
+> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> > Change-Id: I8db8a372d1e83d26fbe8beda2bcf4d1a871a2b80
+> 
+> Argh, sorry the Change-Id snuck in there, let me know if you need me to
+> resubmit.
 
-[...]
-
->  static void run_ktls_test(int family, int sotype)
->  {
->  	if (test__start_subtest("tls simple offload"))
->  		test_sockmap_ktls_offload(family, sotype);
-
-Nit: We probably don't need to keep this one test around.
-It tests pure kTLS and overlaps with selftests/net/tls.c.
-
-> -	if (test__start_subtest("tls tx cork"))
-> -		test_sockmap_ktls_tx_cork(family, sotype, false);
-> -	if (test__start_subtest("tls tx cork with push"))
-> -		test_sockmap_ktls_tx_cork(family, sotype, true);
-> -	if (test__start_subtest("tls tx egress with no buf"))
-> -		test_sockmap_ktls_tx_no_buf(family, sotype, true);
-> -	if (test__start_subtest("tls tx with pop"))
-> -		test_sockmap_ktls_tx_pop(family, sotype);
-> -	if (test__start_subtest("tls verdict with tls rx"))
-> -		test_sockmap_ktls_verdict_with_tls_rx(family, sotype);
->  }
-
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+I got it, no worries.
