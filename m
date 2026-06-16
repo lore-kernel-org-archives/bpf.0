@@ -1,270 +1,165 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31BC3CDBA9
-	for <bpf@vger.kernel.org>; Tue, 16 Jun 2026 05:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C521EEA49;
+	Tue, 16 Jun 2026 05:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781587340; cv=none; b=DCpDs/EIGo43Na6a6+KwaBZoQTbCupYsa9IXxtX9UKo78EpYVSA0Tt5BfkGGfPJE37S/U50T0UwoorCF/tuJkaVCRKkmS1eRC8UuSVbun7wnMpFjNldIiCnfqVfubQn/roT5mG1E5D32+hy8yJshpmedAsG/u+SEHxUztX551U4=
+	t=1781587434; cv=none; b=fTIn7Kc/HJzk8FdQr2veJCGdUw5dHmisnsdp8P2T9j/v9ElYg6YgN5L0iucyGT39FRArVi/fqmLZC6RVcGeiHBkfla5PuKcL41LRqJF7TSiBS+M5QBSboUPD6baPCE0mCLdDvDMaZJ+Nc64YLzKiS747jYP3zNO93uWcDR3xG9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781587340; c=relaxed/simple;
-	bh=dqoipzF6+ExSpX45zhDMk8Yes4fw664LmDW31qDISNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6pVwrm9/pGh4MD0b5naVa7mYzmcYcitp6miqlr+X/Ra+WcLnfjwEvcrttYz2vhpouAEBa7cYsxkMoPBkbXklAeR56VgRLEL1RFfPwJNXNBATjdgbAElNBtqOIcENYCe6zfO9CAASfL6p4mCcuRApwfLwvmJ84seQOWIcfNOQ0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ESRr4cRS; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1781587434; c=relaxed/simple;
+	bh=QxH5qOTe/YG8RUrLabSR6EzwwhszMJWlBSsZ8Mep+KM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jQbxYWsC+bWlwy5IrsnyGH2P9SZZ1He4A++GEkIblW0TIwTioPLzPqzrfcsGRthwyCmXz7sRtHLfHdo0EAanKfaQ7o3Jn0wOXE/fRiHJggu1DQe+eNEJt3eJwsGwivBRHxRYEzRArd+Iv0vHf3VibONlVKugs5EujC7G8Q/dZjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kG6Aojvq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ESRr4cRS"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-490aebf33e9so18619565e9.3
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2026 22:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781587337; x=1782192137; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c67ojuRwymIv2WV684kE6WTrX7TOd/HRM9iLQb+9g+s=;
-        b=ESRr4cRSqrhMOe1ev+f2EewUbL5d4jQx39lwxtotWVR8q6kQmxtaB27oJDhhlwOkmt
-         DdJmY1F0Xh6zLzytJycF9FQgIhOc1A366IzbB5WyLkwhHZ9QgcY934UJw6m2zVeFwKkh
-         nxasVpVxSETOdUVUMqNhQUN7E1muZg05DfrUt1jCNKhpEGdckSkGMQNc7RuCGE5oBmeE
-         n1+19p2SC7MUzNKu1K1fM20VQyr0J+x7tTi14KmRNWrI7kprUqnu8Dz7bX7dNfKscgU0
-         zhfKuOpjgvwnDfoTtvW2zY+AR/Ku2oiWouCOOZ347bNxUSn5llsW3qUvSdWN16K5Zrvl
-         225Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781587337; x=1782192137;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c67ojuRwymIv2WV684kE6WTrX7TOd/HRM9iLQb+9g+s=;
-        b=qqY0QWeCgZKJohc1G4JomBlnGaMvdVe9wNPDkuNkrc96L+gjFd45nh19mqp/QrXfj5
-         EKerOjE9EY3hJWDEt3hJKok/JPwe9d/agmEgjzdfiyyTujd2sosQrfpbHRVRSdfluO3S
-         lU4owD/PJ3V3CWaIWk0ggoXAyuwSHOdFT28BmYL32VnwTdsnCwjfhvINcGALZUrjn6+B
-         iQpbSOkB2LCbUGPlE9OT7UjzRon4OGUvyegKOXQ/HeIiixHTLjFc2KGH/YaukICr2j74
-         B7a3l70EDS/Q4LunlG4ye0ofluEjEY2oo/8GHfPyJkRy2wkK5qy7TXvaRr4BDasEAk51
-         hyMA==
-X-Forwarded-Encrypted: i=1; AFNElJ+WLjOaUzOihTZH3fDAUEHPTPPMB8rZfGnxan6Nz2KEAqe7qHrBIKxfMvcZ79keVFrAOPs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbIsC16wiIkssVluNIvS7ZFN8w3K8mWTLseRJQKLDMju8DoyXj
-	qQAnYV7LxUVDOZ5XgURm8hZ4ifZD9Z+KcqOHgPl9TY1pojkcQWXr9RYDbUvfdF2sSd4=
-X-Gm-Gg: Acq92OEdvcMDWscALITGO4Xp/N8FsUHGV+5TLqmHrScamxgk3EzJadVaDfZCxpxzIE0
-	NdPb5gFKw6xtRLEAxCAs8kEItQuG+3mCeUWVZxVNZo31KQ05V32ybdOdH8ItPxLQRwzVxPfqIqV
-	BpQb6R/S37GLp2v34jsHXiCifFutwmfX45yPrtKz60I2Ao6+seQnglG0QYzYT1aMFCI5OFlrciO
-	TtT0pZq/h61oj8NXh80yFQ6rP2G+kFjyqcVUoqSWxN7MUG2Q3ytRSC1atuG9jSx5teeRLf/xWIM
-	ihXhGtFLzDDuypumu/465jsy+VqC2bwNwLPU4sIo7txnu29XfM0kQpM+Rrg118NlNQIPZlXE11m
-	cylAtIkH00XLVNWRTNvf8SGB71ylxHWp0gL/sNvCAJ8IzJvh8ESoXfxCDk7VTFVPOAClo2TUr2R
-	Y4RyjbVyGF+GWspiUHEFTECy0L4h00EsVr8grwwimCxoZxQN+qCGw3u0hr
-X-Received: by 2002:a05:600c:8b81:b0:491:a220:6e48 with SMTP id 5b1f17b1804b1-4922ffbeca3mr25712055e9.32.1781587337243;
-        Mon, 15 Jun 2026 22:22:17 -0700 (PDT)
-Received: from u94a (39-12-139-247.adsl.fetnet.net. [39.12.139.247])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e48bfa7sm17563707eec.5.2026.06.15.22.22.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 22:22:15 -0700 (PDT)
-Date: Tue, 16 Jun 2026 13:22:00 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Zhenzhong Wu <jt26wzz@gmail.com>
-Cc: Sasha Levin <sashal@kernel.org>, 
-	Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, menglong8.dong@gmail.com, 
-	eddyz87@gmail.com, stable@vger.kernel.org, mykolal@fb.com, tamird@kernel.org
-Subject: Re: [PATCH stable 6.6.y v3 0/4] bpf: linked scalar precision fixes
-Message-ID: <ajC3d44N4s0sdEBB@u94a>
-References: <cover.1781194510.git.jt26wzz@gmail.com>
- <ajCB9jXBzPyaDNSQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kG6Aojvq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C171F000E9;
+	Tue, 16 Jun 2026 05:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781587433;
+	bh=QxH5qOTe/YG8RUrLabSR6EzwwhszMJWlBSsZ8Mep+KM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=kG6Aojvqf2S6KeFzC84yjhG9VPPJBAAYbiSvfpHpD23VaszvHKOoEq1AKHv7GwTXm
+	 Rno48p8+6FfjRUIJn2gOhE14/u4zwiqzzhnJi6MJBBZtTJMoJyb52CYCJ0tZ238uv/
+	 wZDyjBqf7GPF1gzLERDXSkItxwy8/cZCjbbyQhdRFwiWgRR8d66Tgd7KgLtlOJxEt0
+	 7AtmV9S1Zxk6Dihh3DANuMrX8oyOh1Osfhlz91nfVtaM21z9vwEPdOnnBoUAsjz7BJ
+	 s250yj4kdW/xFc8WMx57LqE5tduMZD0g4rXh2jFwp5CCdasx0njIzJWr0uAtuAHHzn
+	 5H4saBl9Of6eA==
+Message-ID: <327e2eeb-b9e4-44b8-a933-9ad783d34ed7@kernel.org>
+Date: Tue, 16 Jun 2026 14:23:45 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ajCB9jXBzPyaDNSQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
+ when HW PMU is not available
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+ <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------rP7fGiX08FjSBMo4mTOXAahH"
 
-On Tue, Jun 16, 2026 at 12:51:34AM +0200, Paul Chaignon wrote:
-> On Mon, Jun 15, 2026 at 12:58:37AM +0800, Zhenzhong Wu wrote:
-> > Hi,
-> > 
-> > This v3 targets 6.6.y and changes the backport strategy based on review
-> > feedback on v2.
-> 
-> [...]
-> 
-> > Relevant QEMU selftest results on 6.6.y with this backport:
-> > 
-> >   verifier_scalar_ids passed all 18 subtests, including the newly
-> >   backported linked-scalar precision tests and the related
-> >   check_ids_in_regsafe tests.
-> 
-> The first patch in this backport series is actually breaking the
-> "precise: test 1" selftest from test_verifier. You can see the full
-> error at [1]. I haven't yet checked if it's the test or the backport
-> that needs to be adjusted.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------rP7fGiX08FjSBMo4mTOXAahH
+Content-Type: multipart/mixed; boundary="------------3SbEaLSYHxVUNx3lobFuFikg";
+ protected-headers="v1"
+From: Harry Yoo <harry@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <327e2eeb-b9e4-44b8-a933-9ad783d34ed7@kernel.org>
+Subject: Re: [PATCH for-next v3 1/9] slub_kunit: fall back to SW perf events
+ when HW PMU is not available
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-1-70a54f3775bb@kernel.org>
+ <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
+In-Reply-To: <DJ9W31UCKPW5.R2LKIC72ZQ68@gmail.com>
 
-I had a quick look, and believe it was that test that needs to be
-adjusted to include r9 into the precise register set.
+--------------3SbEaLSYHxVUNx3lobFuFikg
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-So unless Sasha have other preference, I suggest Zhenzhong send a v4,
-with changes to tools/testing/selftests/bpf/verifier/precise.c
-(including "r9" the the expected verifier output) merged into "bpf:
-Track equal scalars history on per-instruction level".
 
----
 
-The program under test is:
+On 6/16/26 5:01 AM, Alexei Starovoitov wrote:
+> On Mon Jun 15, 2026 at 4:05 AM PDT, Harry Yoo (Oracle) wrote:
+>> slub_kunit uses hardware perf events to invoke _nolock() APIs from NMI=
 
-  00: BPF_MOV64_IMM(BPF_REG_0, 1),
-  01: BPF_LD_MAP_FD(BPF_REG_6, 0),
-  03: BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-  04: BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-  05: BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-  06: BPF_ST_MEM(BPF_DW, BPF_REG_FP, -8, 0),
-  07: BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-  08: BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-  09: BPF_EXIT_INSN(),
+>> context. However, creating a HW perf event fails when there is no
+>> hardware PMU, or when running in a virtualized environment without a
+>> virtual PMU configured.
+>>
+>> Since tests are often performed in virtualized environments, fall back=
 
-  10: BPF_MOV64_REG(BPF_REG_9, BPF_REG_0),
+>> to a SW perf event so that the test can still run, even if it cannot
+>> cover IRQ-disabled sections.
+>=20
+> Frankly, I wouldn't bother with this fallback, since it completely miss=
+es
+> irq disabled section which is the one to test with *_nolock().
 
-  11: BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-  12: BPF_MOV64_REG(BPF_REG_2, BPF_REG_FP),
-  13: BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-  14: BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-  15: BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-  16: BPF_EXIT_INSN(),
+Right, it only covers percpu sheaves locks.
 
-  17: BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
+> VMs need to configured properly. Even nested VMs support
+> PERF_COUNT_HW_CPU_CYCLES.
 
-  18: BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8), /* map_value_ptr -= map_value_ptr */
-  19: BPF_MOV64_REG(BPF_REG_2, BPF_REG_9),
-  20: BPF_JMP_IMM(BPF_JLT, BPF_REG_2, 8, 1),
-  21: BPF_EXIT_INSN(),
+And now that even VMs that are not properly configured can test it using
+kprobe with _some_ coverage, we don't really need the fallback.
 
-  22: BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 1), /* R2=scalar(umin=1, umax=8) */
-  23: BPF_MOV64_REG(BPF_REG_1, BPF_REG_FP),
-  24: BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-  25: BPF_MOV64_IMM(BPF_REG_3, 0),
-  26: BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
-  27: BPF_EXIT_INSN(),
+Will drop the fallback.
 
-The test was expecting the following line in the verifier log that was
-shown during the backtracking start at instruction 26 (call
-bpf_probe_read_kernel#113) 
+> Also in overflow_handler_test_nolock()
+> I would add
+> even->hw.interrupts =3D 0;
+> to the end to make sure it actually stress tests things.
+> Without it NMIs are not firing quickly enough.
 
-  mark_precise: frame0: regs=r2 stack= before 20: (a5) if r2 < 0x8 goto pc+1
-  mark_precise: frame0: parent state regs=r2 stack=: ...
-  mark_precise: frame0: last_idx 19 first_idx 10 ...
+Will do.
 
-But after applying the patchset, we now got an additional register r9 in
-the precise set:
+Thanks!
 
-  mark_precise: frame0: regs=r2 stack= before 20: (a5) if r2 < 0x8 goto pc+1
-  mark_precise: frame0: parent state regs=r2,r9 stack=: ....
-  mark_precise: frame0: last_idx 19 first_idx 10 ...
+--=20
+Cheers,
+Harry / Hyeonggon
 
-The additional r9 in the precise set seems actually correct, this is
-because r2 and r9 share the same scalar ID at instruction 20 (before the
-link got broken in instruction 21), and hence at that point, both
-register should be marked as precise.
+--------------3SbEaLSYHxVUNx3lobFuFikg--
 
----
+--------------rP7fGiX08FjSBMo4mTOXAahH
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-In upstream the test already has the expected verifier log to include
-r9, and hence no failure, but it simply comes from the fact that r2 and
-r9 maintain a link even after instruction 22 (r2 += 1).
+-----BEGIN PGP SIGNATURE-----
 
-  commit 98d7ca374ba4b39e7535613d40e159f09ca14da2
-  Author: Alexei Starovoitov <ast@kernel.org>
-  Date:   Wed Jun 12 18:38:13 2024 -0700
-  
-      bpf: Track delta between "linked" registers.
-  ...
-  --- a/tools/testing/selftests/bpf/verifier/precise.c
-  +++ b/tools/testing/selftests/bpf/verifier/precise.c
-  @@ -39,12 +39,12 @@
-   	.result = VERBOSE_ACCEPT,
-   	.errstr =
-   	"mark_precise: frame0: last_idx 26 first_idx 20\
-  -	mark_precise: frame0: regs=r2 stack= before 25\
-  -	mark_precise: frame0: regs=r2 stack= before 24\
-  -	mark_precise: frame0: regs=r2 stack= before 23\
-  -	mark_precise: frame0: regs=r2 stack= before 22\
-  -	mark_precise: frame0: regs=r2 stack= before 20\
-  -	mark_precise: frame0: parent state regs=r2 stack=:\
-  +	mark_precise: frame0: regs=r2,r9 stack= before 25\
-  +	mark_precise: frame0: regs=r2,r9 stack= before 24\
-  +	mark_precise: frame0: regs=r2,r9 stack= before 23\
-  +	mark_precise: frame0: regs=r2,r9 stack= before 22\
-  +	mark_precise: frame0: regs=r2,r9 stack= before 20\
-  +	mark_precise: frame0: parent state regs=r2,r9 stack=:\
-   	mark_precise: frame0: last_idx 19 first_idx 10\
-   	mark_precise: frame0: regs=r2,r9 stack= before 19\
-   	mark_precise: frame0: regs=r9 stack= before 18\
-  ...
+iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCajDd4gAKCRCGXBN6rc5S
+1mG/AQD+6bsjWeb6zEOVUA7ge6HdSL9IweB0GLSChJQcA/DgyAEAmysfWrQosnQc
+o3L/HYTVOn3F0X9ZEn1ONdfMyvCtdgk=
+=qy9q
+-----END PGP SIGNATURE-----
 
----
-
-Full test log below
-
-  #492/p precise: test 1 FAIL
-  Unexpected verifier log!
-  EXP: mark_precise: frame0: parent state regs=r2 stack=:
-  RES:
-  func#0 @0
-  0: R1=ctx(off=0,imm=0) R10=fp0
-  0: (b7) r0 = 1                        ; R0_w=1
-  1: (18) r6 = 0xffff9eb644619000       ; R6_w=map_ptr(off=0,ks=4,vs=48,imm=0)
-  3: (bf) r1 = r6                       ; R1_w=map_ptr(off=0,ks=4,vs=48,imm=0) R6_w=map_ptr(off=0,ks=4,vs=48,imm=0)
-  4: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
-  5: (07) r2 += -8                      ; R2_w=fp-8
-  6: (7a) *(u64 *)(r10 -8) = 0          ; R10=fp0 fp-8_w=00000000
-  7: (85) call bpf_map_lookup_elem#1    ; R0_w=map_value_or_null(id=1,off=0,ks=4,vs=48,imm=0)
-  8: (55) if r0 != 0x0 goto pc+1        ; R0_w=0
-  9: (95) exit
-  
-  from 8 to 10: R0=map_value(off=0,ks=4,vs=48,imm=0) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R10=fp0 fp-8=0000mmmm
-  10: R0=map_value(off=0,ks=4,vs=48,imm=0) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R10=fp0 fp-8=0000mmmm
-  10: (bf) r9 = r0                      ; R0=map_value(off=0,ks=4,vs=48,imm=0) R9_w=map_value(off=0,ks=4,vs=48,imm=0)
-  11: (bf) r1 = r6                      ; R1_w=map_ptr(off=0,ks=4,vs=48,imm=0) R6=map_ptr(off=0,ks=4,vs=48,imm=0)
-  12: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
-  13: (07) r2 += -8                     ; R2_w=fp-8
-  14: (85) call bpf_map_lookup_elem#1   ; R0_w=map_value_or_null(id=2,off=0,ks=4,vs=48,imm=0)
-  15: (55) if r0 != 0x0 goto pc+1       ; R0_w=0
-  16: (95) exit
-  
-  from 15 to 17: R0_w=map_value(off=0,ks=4,vs=48,imm=0) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R9_w=map_value(off=0,ks=4,vs=48,imm=0) R10=fp0 fp-8=0000mmmm
-  17: R0_w=map_value(off=0,ks=4,vs=48,imm=0) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R9_w=map_value(off=0,ks=4,vs=48,imm=0) R10=fp0 fp-8=0000mmmm
-  17: (bf) r8 = r0                      ; R0_w=map_value(off=0,ks=4,vs=48,imm=0) R8_w=map_value(off=0,ks=4,vs=48,imm=0)
-  18: (1f) r9 -= r8                     ; R8_w=map_value(off=0,ks=4,vs=48,imm=0) R9_w=scalar()
-  19: (bf) r2 = r9                      ; R2=scalar(id=3) R9=scalar(id=3)
-  20: (a5) if r2 < 0x8 goto pc+1        ; R2=scalar(id=3,umin=8)
-  21: (95) exit
-  
-  from 20 to 22: R0=map_value(off=0,ks=4,vs=48,imm=0) R2=scalar(id=3,umax=7,var_off=(0x0; 0x7)) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R8=map_value(off=0,ks=4,vs=48,imm=0) R9=scalar(id=3,umax=7,var_off=(0x0; 0x7)) R10=fp0 fp-8=0000mmmm
-  22: R0=map_value(off=0,ks=4,vs=48,imm=0) R2=scalar(id=3,umax=7,var_off=(0x0; 0x7)) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R8=map_value(off=0,ks=4,vs=48,imm=0) R9=scalar(id=3,umax=7,var_off=(0x0; 0x7)) R10=fp0 fp-8=0000mmmm
-  22: (07) r2 += 1                      ; R2_w=scalar(umin=1,umax=8,var_off=(0x0; 0xf))
-  23: (bf) r1 = r10                     ; R1_w=fp0 R10=fp0
-  24: (07) r1 += -8                     ; R1_w=fp-8
-  25: (b7) r3 = 0                       ; R3_w=0
-  26: (85) call bpf_probe_read_kernel#113
-  mark_precise: frame0: last_idx 26 first_idx 20 subseq_idx -1
-  mark_precise: frame0: regs=r2 stack= before 25: (b7) r3 = 0
-  mark_precise: frame0: regs=r2 stack= before 24: (07) r1 += -8
-  mark_precise: frame0: regs=r2 stack= before 23: (bf) r1 = r10
-  mark_precise: frame0: regs=r2 stack= before 22: (07) r2 += 1
-  mark_precise: frame0: regs=r2 stack= before 20: (a5) if r2 < 0x8 goto pc+1
-  mark_precise: frame0: parent state regs=r2,r9 stack=:  R0_rw=map_value(off=0,ks=4,vs=48,imm=0) R2_rw=Pscalar(id=3) R6=map_ptr(off=0,ks=4,vs=48,imm=0) R8_w=map_value(off=0,ks=4,vs=48,imm=0) R9_w=Pscalar(id=3) R10=fp0 fp-8_r=0000mmmm
-  mark_precise: frame0: last_idx 19 first_idx 10 subseq_idx 20
-  mark_precise: frame0: regs=r2,r9 stack= before 19: (bf) r2 = r9
-  mark_precise: frame0: regs=r9 stack= before 18: (1f) r9 -= r8
-  mark_precise: frame0: regs=r8,r9 stack= before 17: (bf) r8 = r0
-  mark_precise: frame0: regs=r0,r9 stack= before 15: (55) if r0 != 0x0 goto pc+1
-  mark_precise: frame0: regs=r0,r9 stack= before 14: (85) call bpf_map_lookup_elem#1
-  mark_precise: frame0: regs=r9 stack= before 13: (07) r2 += -8
-  mark_precise: frame0: regs=r9 stack= before 12: (bf) r2 = r10
-  mark_precise: frame0: regs=r9 stack= before 11: (bf) r1 = r6
-  mark_precise: frame0: regs=r9 stack= before 10: (bf) r9 = r0
-  mark_precise: frame0: parent state regs= stack=:  R0_rw=map_value(off=0,ks=4,vs=48,imm=0) R6_rw=map_ptr(off=0,ks=4,vs=48,imm=0) R10=fp0 fp-8_rw=0000mmmm
-  27: R0_w=scalar()
-  27: (95) exit
-  processed 27 insns (limit 1000000) max_states_per_insn 0 total_states 2 peak_states 2 mark_read 1
-
-[...]
+--------------rP7fGiX08FjSBMo4mTOXAahH--
