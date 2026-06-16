@@ -1,49 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4698D248886;
-	Tue, 16 Jun 2026 01:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF63B37B413;
+	Tue, 16 Jun 2026 02:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781574824; cv=none; b=uHNMVcvrXGgiHCqpUFaJ3ggglXHVn5Y6hjBKUyLnfaTh7b8LqUC+rG8jS2EzlHEWneqZZnG3hw+B+aXfdweL21St/dK/r3AVn4WGjp4Rzjc1ESOgo4wvNIQS8979MH37HmunC4z3bVnNaiTtdXKERtWDh+4RpXJ9oORokgQEjJM=
+	t=1781576227; cv=none; b=PVwmllBjv9fIvXWSxqMt8Hi9Thw61Ej3gAmRfZajEutcnXoziHxtWwJrgnrG46JVK3yOAeCVvNGgaBchvxEluW6yjXX2Oe8XfQVWmXw2mistMd9GzjtHxHSbrgqoBclI1c5aPANj3OwmUds8bpV9m0YWe3vzTfM6yXvfFu4eRp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781574824; c=relaxed/simple;
-	bh=kNeCfqEenlY04WlHne1AA7F6OaLYPtklWk5bpmTB1Kc=;
+	s=arc-20240116; t=1781576227; c=relaxed/simple;
+	bh=iYuwh/QjPCaFltZgY1oNyGfCkwfgJLRV5G8y/pey57o=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qTOi71oxTXwyGNNaTWG58uAr1yo/V+8Z0DK95oDJlVH38ADm6pooTkHU8eT5XgRdhTqdbANVCi/RCAlUSiBaN/TUi6/GI9BCMBCYj5Ua+PyltXKx+T4tYuPl98yY3jKnBr7dv4BetMqbPJmuyX7XyJ/ujnPpcYRP9eTrwfIl40k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1fwelov; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=dDwyFBXPviVRojsR9lz2pUixS+AkXHmOkoMenmN6JcArVvgoIg1fD02gTj/McWu8yE9fav7qzQO1tephnUuFpleif7+ah3gmC2610VsjDOgVhWOfhxrU12SM8YVwJbAY2j4RhLTYxBI/IJuo3lnFGqNF+lva9AobhhaBS4CREbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OStTHS9c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1fwelov"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 439FD1F000E9;
-	Tue, 16 Jun 2026 01:53:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OStTHS9c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E4D1F000E9;
+	Tue, 16 Jun 2026 02:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781574823;
-	bh=cC/Qq17Q/gmbCF8jfLZDR9hb9OX1RM4b10Kgps4ijI0=;
+	s=k20260515; t=1781576226;
+	bh=xD+Oip3IRpQPzSxenYyTvneudjF43QmGVA6/28MSifo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=k1fwelovHEcxdGS4GGIR0EPViVWaXXA79N1xszdfnw4umHPw9c/8FiwX3tB3vG5UI
-	 NanEBVxW6cIstuX/34IHyW9Q/GAduANP0rFzwIM/em6UzV7JsaP3+oWYH3tneG0ANj
-	 yE4cZyzE3RsHdIyR/ZPCQXEWnzzeWW78EynuAyXfyCfWXrM/Eo+5IG4NNQdq0OXQjV
-	 L36/lMPQLL3zP+689zpC14rC/MOuK4yLsS6LPGyj8kkc8eCpDJLZVLd8z3WsWNU3hY
-	 AH0VdMLa6yXC8wMAFRWDfG5ohMI8pDpwuo8u/rrpWdAn7+9FFrVgPH85EmT8geOsoR
-	 SNWHPyAdFuC2Q==
-Date: Mon, 15 Jun 2026 18:53:41 -0700
+	b=OStTHS9ceHewKrSU9o18QwJHMw4AaB6qp16uTX1ZTaLPmPIBVJ1pSMw1/lJ3jQeA+
+	 G1Vj/m3qrDZP/n3iLx4qkdSkdRQD7RAXYKDxBmdm/4HEpJs6zXA5x6lFVaHtN17NAI
+	 hw74FSwUS74Zigh7lKdAGeN2AS+22bqzFTCbWu0athb/SR13nF5ZZT3dcoGyc1vCHL
+	 BHjECOGWU8Y7vIwGaDgVr1A4bbBgAtxKo1f8Q6Qn65+vqV6m5HJXYSEBJOYKaMqWjV
+	 i75kqeYQMypXa9zyHUjO7tSEBlL7sd/dgKS8PXvUFzFLOPYGDDsrrFm92iX/5Qa371
+	 H7KQ1oHer7+Qw==
+Date: Mon, 15 Jun 2026 19:17:04 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: hawk@kernel.org
-Cc: netdev@vger.kernel.org, kernel-team@cloudflare.com,
- simon.schippers@tu-dortmund.de, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Chris Arges <carges@cloudflare.com>, Mike
- Freemon <mfreemon@cloudflare.com>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?=
- =?UTF-8?B?bnNlbg==?= <toke@toke.dk>, Jonas =?UTF-8?B?S8O2cHBlbGVy?=
- <j.koeppeler@tu-berlin.de>, Breno Leitao <leitao@debian.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL)
- support
-Message-ID: <20260615185341.339a4dd8@kernel.org>
-In-Reply-To: <20260612083530.1650245-1-hawk@kernel.org>
-References: <20260612083530.1650245-1-hawk@kernel.org>
+To: edumazet@google.com, ncardwell@google.com
+Cc: chia-yu.chang@nokia-bell-labs.com, jolsa@kernel.org,
+ yonghong.song@linux.dev, song@kernel.org, linux-kselftest@vger.kernel.org,
+ memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ horms@kernel.org, dsahern@kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
+ stephen@networkplumber.org, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, kuniyu@google.com, ij@kernel.org,
+ koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
+ ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
+ cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
+ vidhi_goel@apple.com
+Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback for TCP Prague
+Message-ID: <20260615191704.31be22da@kernel.org>
+In-Reply-To: <20260615185102.5e8de52d@kernel.org>
+References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
+	<20260615185102.5e8de52d@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,10 +56,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 12 Jun 2026 10:35:23 +0200 hawk@kernel.org wrote:
-> Subject: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
+On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:
+> On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.com
+> wrote:
+> > This patch replaces existing min_tso_segs() with tso_segs() CC callbak
+> > for CC algorithm to provides explicit tso segment number of each data
+> > burst and overrides tcp_tso_autosize().
+> > 
+> > No functional change.  
+> 
+> Eric, Neal, looks good?
+> 
+> The min rtt thing in tcp_tso_autosize() helps a bit but if the sender
+> gets congested for a longer stretch min_rtts on new connections are
+> high and we're back to sending small TSO, keeping the sender overloaded.
+> Which is to say - I _hope_ this also solves some of Meta's problems :)
 
-I'm calling it a day and dropping all remaining net-next patches from
-pw since the merge window has started, sorry. You know the drill...
--- 
-pw-bot: defer
+Ugh, I didn't see the Sashiko report, it's only CCed to the author and
+bpf@, not to netdev :/
+
+The zero-check sounds legit. Let's revisit this after the merge window.
