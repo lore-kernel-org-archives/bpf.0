@@ -1,221 +1,285 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010059.outbound.protection.outlook.com [52.101.84.59])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A8C317161;
-	Tue, 16 Jun 2026 12:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781612597; cv=fail; b=eC5nCWppP3PsKABKF+wSfp+Ht2aTmFvk+OyPAb164OheS10Ulq0La75Rr0egXbF/Fv1q/lHq+5Oz12br6tXE/QpvV+skXBjtfxc7lN0VH0lT7G7cuPDXo7m6nEtdkd0xFNcbWUNwdljhojdyMW8Is4JpZIAaW7qA+AMuU9gGdwY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781612597; c=relaxed/simple;
-	bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uqJQcqFTwIdr/LYeYKGOSh+XvldU8LXgOwTswJyN70h+vmS5cRhP6dPvghHJ/rWbqcp2QTGUrHdyLXpD6qTQ/88by3tPR4zkP8RyXMAKU3WklKbL5if8aHh4VDZmBypJf+5hhfPwE5TbSyB6OzsB2wrnnWR7zSS8tJTY1e7/X1M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=RYEwiFOc; arc=fail smtp.client-ip=52.101.84.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5973382DC;
+	Tue, 16 Jun 2026 12:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781614113; cv=none; b=HPkDLfDny15Sv3OJ0XBvt++JAspG/pWN/Y+9SrEqIw6RoTcVjYWocqF/HBy+OU1OLHwoFgK3BH90Fw+lHm/YWGcH+5bJh9oKDsts5u2mRAZyzi1wEIGQaRW4jG1brq6u5dXum+LUcf+bBMP+jp0UKYiWWfDH2RCyTlLcWMn62r4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781614113; c=relaxed/simple;
+	bh=hVhWc268az8O4PtBUHVZMCEiBnAJT+yxM0hFZ11kP+4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ovClt7shQlmLiwGz+srFUI3VcjKRLVw6gUNvUOo6LI2nf9UjalrJR4pV9xBHsJFBk7j2qIdf0V8VklI09YuELC6hGdadurEllKlJtqrbwNXqX7GoOAPmRx+HVXVGwlgg+8Vd0kB+kywl0W+Q/r59gqzZ4rUAkVJyAXhL4nUP2zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K08yR9Lr; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="RYEwiFOc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wHZJoo8hRQygt868Ec7wzcUihnJ3Kc7V0U0HbLJTQHLZjP/ZY9wsNibA+5MGiZNSsYLIGObHpesIDUMC7HMXe5A13Zs6kxTXSxtU0gZSF5Tsr42lCGWwXudggAmnv391pKula0H6f3uGsobQYDczQZG+nxcihiFb6d8UuqD10wjF9WuEtXq/m6kL8D6UPWLs6G5sXVjyBcXBGW4esOWsj3TtmNI5zKZQEOtmqDs176SxCuMfC94oL1Rk1UuONRBtTXwuCZmsMXM1jphB0wtmGUKFtLsWnRFrsmLOvkwAmFoZxVrt2dAvcSV2ODX4fKsaHlyMZVABwBNamkEaHafn5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
- b=myFKiFCR6WBYhaTz4uWeShv0odyw9INbHMBt8wAGAnOwPSFDewaXrJc2qk7ZyA7E2L8QQqHolvhc/AJCyHJvO9Lm/4bfqVo3YupDq28NG9DpXgtkVJc2wAQbYUCf1Y6PrDqBFgc4UEuQiDNmTYUeNeReaGgyLZa6YxHJ/JrTTekOZZc2mpHxb210VXyqXt/H7cZaAHE5U9VS4TMDGpxs0w3AXSHfVPsXV5k/yKBB1PO5pl55YjM6gLCSIhwCz5peuX4TCnmGC8l+V/6A/OZHGgSpEZ2IjLZW5cpBP1isiEq1vhEfO4+9AIdNKElUzlOwx/14zbb382rtqFGiPSzLKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IQpHO5ax+8oOywQFnYPIhZNfiZIh+EAAUy8qWkHQwbc=;
- b=RYEwiFOcddwTL+et/kh97oeIcYc/xi3+n0FyTN5MYpx0l6UzDht5Gvh81SRyYMC/oUmgIhP1pnnPUGJStq+HLb3SzEZ0oR1cQN8i3KbaN57VIBKT3fcjvU6nrHF5LSN0yOvIj/PdwAc1Uq02nTlB8GmPM6STMUWr06iOXLKDjTlcXXjeZeOKgskSYRLJy/11c/KuUcHRd9JiGgdXtsXAJKZXJjx+XAWgVWLF9kRNxRaE4zL0osr5tx9suYitsS/q9DLYK4oQA7M4ffMV07gWyYlVG3QvkABzQG7iPdjlTLRJEaoxfOUPaff2hq6Xit4jADwEho+/QGuk5hOqcORHgg==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by OSKPR07MB10469.eurprd07.prod.outlook.com (2603:10a6:e10:97::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Tue, 16 Jun
- 2026 12:23:11 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5%4]) with mapi id 15.21.0113.015; Tue, 16 Jun 2026
- 12:23:11 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: Jakub Kicinski <kuba@kernel.org>, "edumazet@google.com"
-	<edumazet@google.com>, "ncardwell@google.com" <ncardwell@google.com>
-CC: "jolsa@kernel.org" <jolsa@kernel.org>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "song@kernel.org" <song@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"memxor@gmail.com" <memxor@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "ast@kernel.org"
-	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com"
-	<eddyz87@gmail.com>, "horms@kernel.org" <horms@kernel.org>,
-	"dsahern@kernel.org" <dsahern@kernel.org>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
-	<jhs@mojatatu.com>, "stephen@networkplumber.org"
-	<stephen@networkplumber.org>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "kuniyu@google.com" <kuniyu@google.com>,
-	"ij@kernel.org" <ij@kernel.org>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Thread-Topic: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback for TCP Prague
-Thread-Index: AQHc+84N6RcutbkfqUyYk6P3JjhYGrZAbY8AgAAHRgCAAKg9wA==
-Date: Tue, 16 Jun 2026 12:23:11 +0000
-Message-ID:
- <PAXPR07MB7984585F9348BB3F000EB330A3E52@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260614071756.239686-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260615185102.5e8de52d@kernel.org> <20260615191704.31be22da@kernel.org>
-In-Reply-To: <20260615191704.31be22da@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|OSKPR07MB10469:EE_
-x-ms-office365-filtering-correlation-id: d81d2116-b6de-4f44-4f74-08decba207ed
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|23010399003|366016|1800799024|56012099006|11063799006|3023799007|4143699003|6133799003|38070700021|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- PgMOD0iS2IqLl01CXw/Xk+haHmpvgOypPWK3nKpnL1y6XehLG2ounJdidoPtpYL1eQ0WWB6dFexgZE548Zp1nJ6KIzRbr5VEgXNLr3zwfvPbVKfW2hnYMeOgCBsiXugM6OToC4TlgUFXcwyH2zlsOrHdlfkkfITIKnq7zb6Sz9+p1WK9Eh8MDEmevzUrc1wcj9FqnILZLOT6+LYRuSi9d7wP51XzYC1eyYuyGgTxInxiVuCXSu/ceGU6YalbQWdebqkuDiCvRnptzZUZ9MZyx952/+gebpzHTmKIsa5IuvZM0yz912WDgAAqW3DC0g2zI6Arn4Z17nQv36SDUgi0/RD7rs7gXAklYVd0zm5D3HproJFNB+3CCkHW5S+iz3I5zr7iObV64D8OR5G+qoEFwJq8cecsnCGnLoDV4ElrBkrPOhG9P5ix/4NTIgwO4h/y4y2eGk5KLVinTrYX0qb74FHaAhD/gcDB2HhhUi2cf8SFlgkzJr9s81meH0X6LcREj0UZERZ1jc0F0i98kGbEMx0OAhHXRKVk1Lim46Or4csv9UVNWOHZg0Sc+qb1OOURuj+dFNSetdIUNrPp+wy7Uim6FIe9cVJ7Dt1Rze9Y9aNRFVjnlGFTqyQPtwBEUF8B0PN1TABwmW3PgHvtX0I8OepnxloBjvEXY4PhMOqItw/HPojlr2NWtcqM/Z+Ek/BKy4wLQWbbWqN9NIoQTxKtI7rEB3mjV41iToNbekQ/3LD4aLGdIKiIv7/UKlEypBYx
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(366016)(1800799024)(56012099006)(11063799006)(3023799007)(4143699003)(6133799003)(38070700021)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?z3Ajbw8TWwPFcQjMpwkVfC+/PmV76hLslRobNso7aqhC3wM2Lk8E/lTK1j98?=
- =?us-ascii?Q?1Tuv0ChvlBxwJ+xuW2RJ57VqQbhdf2lZ4LEEd1jtLP4KBRKX4tk0cxFAGs+T?=
- =?us-ascii?Q?j7yVndnDCTtSIxflTKKrrLjCQB61t6MALrkHA3sQ04/SLuJw62+PvYUo448i?=
- =?us-ascii?Q?DM7o+EwQxge1v/WgNsnqJWcVLG5QfU8Xyj2VBEIglofCMXcR4cNLxuGTiFLW?=
- =?us-ascii?Q?w4OZDf9gEkwdOQIhne8F5UesvIDKiCBEluZFhQnALYxmYjL2fLSNv9Jdv/31?=
- =?us-ascii?Q?moTmk6Z1Hdm9v+Vqmbn+XnF9PapbAU490ezrYNH/mcvpU23yXKgCf8bN3QEV?=
- =?us-ascii?Q?HKybauI6M75xI2FX9j70CBHl30+EbrNLzvVvr0cm+b2qjZ6P4V4sglYCDPyu?=
- =?us-ascii?Q?45vhV/z03IeEdSBfud0frGpw9P0IcBGJr/RYoi78WcMyGhO2Svj8ioLkNEz/?=
- =?us-ascii?Q?UuQO40jptGAKqBnbnJPOkdsDBubrcl2WfrdvnUKelH7eJIgRdBS80s2+CoPB?=
- =?us-ascii?Q?Qkvx9HbekVMLZXg+F6zH4CnyyF6zAUyONqSDX9xA9rfb3/nJ4IFKeB1xkSFu?=
- =?us-ascii?Q?DN7V0hXE9D1mZNE/mOp+0jckxkzuRz8LtnnNorSiNABwC0dW7HuJDt4CV8uE?=
- =?us-ascii?Q?gMflSEkgTENetQG3sODrQuS43mHnB4c70qj/ltFe50Yo+Tp0D3GYqneu/jWY?=
- =?us-ascii?Q?EWGt5E3OKm0x6hVsrMK5SJcDCO4YBaWauJWo3dMGWuqctFQm2QiaKm6+RrX0?=
- =?us-ascii?Q?0uC72yOwjMGdzcJwx79wpni78W4eLnMTaeGmLCdFpoNbg7i1Alp7jjc7Sy4t?=
- =?us-ascii?Q?rsRFdykGa812WZv935w1rIDKqRrnGeYe+v7DQYYmG54LQY6Kjayrv2cOdjnc?=
- =?us-ascii?Q?qX8VznTL2Ep+166TNlsDH0wElAa20Jno8lL5lqx3hv0U1KpU/PF6qSHvYAna?=
- =?us-ascii?Q?sA6dNmin6cK7fzf4Clnf8rzB5sR+mPRhtp2gK+GrqNsxQmmFmajJOJhGX2tz?=
- =?us-ascii?Q?F9OIl7s2VgWGu4uaYB1xpuglCISf5FJ/xlMTvhqAq8dc3c9bBmzvaMFZksEH?=
- =?us-ascii?Q?/K8YiZGjZmD9ey1Tbf5lCry9uSQR8svpCH/vpyk6lbssBpwUY2XbX4GbNusC?=
- =?us-ascii?Q?SLLT+PQzR5iwRoOlATnTc3XbsahinWzW7iTHC7pLQbA0OprH30AI0ggqqY3z?=
- =?us-ascii?Q?ExE2ywRGHZPiNrvl8XDbZuz8rvanCHZS7W2SXHiWSyn8YXDVvzARZJ6li7fa?=
- =?us-ascii?Q?QD7Nee6eYEJxWeIL0RUJx+T4NQIFxqCiPUeFrQunCzUQS5IEI9+7CIL0KdHn?=
- =?us-ascii?Q?Rts44KXblpJF8Wj4I+TOeBfA/h/Azy6khvzMSOeIxITLKHsZBR730DqXnBt3?=
- =?us-ascii?Q?zKjKVenWqE1f319Sx9NvyEEfybdIVIFqhcStCxZH/mqAbukNWWz0w/in20wI?=
- =?us-ascii?Q?Xt0R3bXOyrZj3cdJF5ZsbeO0b1EitnyxtRD0f/zAg3mGPiPVTSnfy6WbFCov?=
- =?us-ascii?Q?T0YwOxAGy+KptYJ3VWAOvexeT8uHaRqaa41w0iMEAfO/0TBJWcxA0Y4Jp66B?=
- =?us-ascii?Q?2w4KrksZE2sZr/kGJSDGvn+B7Mz875BkleP+nm4pcy0unoRNZgEmWCWj0V6x?=
- =?us-ascii?Q?SkzyXx9+cV/TOkb87OVQvVzu1SUtCVcwKbM0zBGialh41y0t/pynRRJre2r8?=
- =?us-ascii?Q?sl+WmYRfWWcWI95JlQe8LqJ1labJChOX0wdFNS3jz3jsTLJz4gJnICNKfKzu?=
- =?us-ascii?Q?nDR59E1hbz2vPHP1a1E9j/Y6DHyZ/Hc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K08yR9Lr"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65GAIkkg1135632;
+	Tue, 16 Jun 2026 12:48:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=JmZjVLyYt2Jdu0KiD3Xh8P5rAdhxowVUkLDvUuq0E
+	X8=; b=K08yR9LrIdQmzmqPZFlrFeJQDp0pspi7w2fRtRNhqNvXLAsypvjYCoIro
+	7W8mlg2DrJYjxw4MF8Fk1XeIePVrtBe7+IhtYyt2uY3NetaGJW7OfP9ueQ6z5uKw
+	0EBUvGAMDhGJgw4FjV1yZt8W1i8WTPVU03YedC7id4fd4FD1TArSaXtqxZzoySLT
+	AL+sWjJZpj58EZCPhhQq7YCEgTSOxROE6uywN7Lr8/IoZKR5uDfIwS63s4WJnSSx
+	LnuLBDVRTMhquGaifPdx/owTmQ+fWT5o3l4iAphRW2eUFehCXDFbSBkH65aFshMw
+	cHSul6SeXfY4V0iSyikrAw6Wtavxg==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4es1u0n5k0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jun 2026 12:48:13 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65GCYi4V022470;
+	Tue, 16 Jun 2026 12:48:12 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4esm7y3438-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jun 2026 12:48:12 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65GCm9ft49611198
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Jun 2026 12:48:09 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DFE592004B;
+	Tue, 16 Jun 2026 12:48:08 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DEBD620040;
+	Tue, 16 Jun 2026 12:48:06 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 16 Jun 2026 12:48:06 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [bpf v8 0/7] powerpc/bpf: address missing verifier selftest coverage
+Date: Tue, 16 Jun 2026 12:47:34 -0400
+Message-ID: <20260616164741.32252-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d81d2116-b6de-4f44-4f74-08decba207ed
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2026 12:23:11.1204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yYUWn/9w515Nr51eZXSxbbbciO+v6BaDRCB30R83SFC4PYmJVBS5Dv45PJuVipYjK9COfMij/WrmYJHhN4FpzespZ5JvhIpevykSPJlwdLn/rQ+YnDer2BbcxsYRHUrI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR07MB10469
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VuZiljQB4oj4qLq5Q97hRpmRhHKDyf6U
+X-Authority-Analysis: v=2.4 cv=XdK5Co55 c=1 sm=1 tr=0 ts=6a31460d cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=fKsxTWJvHqBfRfrz3VUA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjE2MDEzMCBTYWx0ZWRfX+DHT9Sq8XXNC
+ 6LZNm0xfczrX2zbOE5er10f271yyJxK2LHsDdd3bbwvbKJfMPFQ+fzSYn9Ar5A0VzgXXlT+L3rp
+ cKVS25M9ze5BM7dG1J1Ki4odXDDvY4K21j494pKO4imwD68ZTA0teJe93kBWfzsgu+hG+eO1ZQ9
+ P4gkBvD6vsgZFWYPr9Oncvph2gY1yZ0rR+TLNx4PVJqkiSnF0NytkItH6uhNpng37WHyGxnBmxD
+ Y9lY8OPs7zt8tFwGYbDWyPee31tIXBCWkdeGofb1ahweHurdeojevq7xa1SU//+8Toh2ywSi4RH
+ SdoV6zUDWWjEzIMLwMQa/pqyWxzyfd1uXmjRrz5dJQbCk7Pzv/aN6x+v+QzU0dVTMPLWeHOjm9b
+ 3s3npZSBELMcJh7CKZUbTh3avbVKkEo62gu27HsuB4E5P9IIH0AJAZZoGkcABArbiBFXFVxUob4
+ LwlFZ3FJgn0HkKV1wBw==
+X-Proofpoint-ORIG-GUID: VuZiljQB4oj4qLq5Q97hRpmRhHKDyf6U
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjE2MDEzMCBTYWx0ZWRfX2Kf0hzOieB+M
+ zTmGQJFpll8yfixwDN2zjl/oa5/e6aGskb7zPDCnrQ8JBUSXcIe20CVkGGzaOH9lBM6h6F2ay04
+ Fe8rhNoaGE9di6ZrQkO/sUVa0Vpir0A=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-16_03,2026-06-15_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606160130
 
-git send-email --to=3D'jolsa@kernel.org' --to=3D'yonghong.song@linux.dev' -=
--to=3D'song@kernel.org' --to=3D'linux-kselftest@vger.kernel.org' --to=3D'me=
-mxor@gmail.com' --to=3D'shuah@kernel.org' --to=3D'martin.lau@linux.dev' --t=
-o=3D'ast@kernel.org' --to=3D'daniel@iogearbox.net' --to=3D'andrii@kernel.or=
-g' --to=3D'eddyz87@gmail.com' --to=3D'horms@kernel.org' --to=3D'dsahern@ker=
-nel.org' --to=3D'bpf@vger.kernel.org' --to=3D'netdev@vger.kernel.org' --to=
-=3D'pabeni@redhat.com' --to=3D'jhs@mojatatu.com' --to=3D'kuba@kernel.org' -=
--to=3D'stephen@networkplumber.org' --to=3D'davem@davemloft.net' --to=3D'edu=
-mazet@google.com' --to=3D'andrew+netdev@lunn.ch' --to=3D'donald.hunter@gmai=
-l.com' --to=3D'kuniyu@google.com' --to=3D'ij@kernel.org' --to=3D'ncardwell@=
-google.com' --to=3D'koen.de_schepper@nokia-bell-labs.com' --to=3D'g.white@c=
-ablelabs.com' --to=3D'ingemar.s.johansson@ericsson.com' --to=3D'mirja.kuehl=
-ewind@ericsson.com' --to=3D'cheshire@apple.com' --to=3D'rs.ietf@gmx.at' --t=
-o=3D'Jason_Livingood@comcast.com' --to=3D'vidhi_goel@apple.com' ~/L4S_patch=
-es_20260613/linux_net_next_prague_series0/*.patch --from=3D'chia-yu.chang@n=
-okia-bell-labs.com' --smtp-server=3D'mailrelay.int.nokia.com' --smtp-server=
--port=3D25
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>=20
-> Sent: Tuesday, June 16, 2026 4:17 AM
-> To: edumazet@google.com; ncardwell@google.com
-> Cc: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; jolsa@kern=
-el.org; yonghong.song@linux.dev; song@kernel.org; linux-kselftest@vger.kern=
-el.org; memxor@gmail.com; shuah@kernel.org; martin.lau@linux.dev; ast@kerne=
-l.org; daniel@iogearbox.net; andrii@kernel.org; eddyz87@gmail.com; horms@ke=
-rnel.org; dsahern@kernel.org; bpf@vger.kernel.org; netdev@vger.kernel.org; =
-pabeni@redhat.com; jhs@mojatatu.com; stephen@networkplumber.org; davem@dave=
-mloft.net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; kuniyu@google.co=
-m; ij@kernel.org; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-lab=
-s.com>; g.white@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kueh=
-lewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@co=
-mcast.com; vidhi_goel@apple.com
-> Subject: Re: [PATCH v2 net-next 1/1] tcp: Replace min_tso_segs() with tso=
-_segs() CC callback for TCP Prague
->=20
->=20
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->=20
->=20
->=20
-> On Mon, 15 Jun 2026 18:51:02 -0700 Jakub Kicinski wrote:
-> > On Sun, 14 Jun 2026 09:17:56 +0200 chia-yu.chang@nokia-bell-labs.com
-> > wrote:
-> > > This patch replaces existing min_tso_segs() with tso_segs() CC=20
-> > > callbak for CC algorithm to provides explicit tso segment number of=20
-> > > each data burst and overrides tcp_tso_autosize().
-> > >
-> > > No functional change.
-> >
-> > Eric, Neal, looks good?
-> >
-> > The min rtt thing in tcp_tso_autosize() helps a bit but if the sender=20
-> > gets congested for a longer stretch min_rtts on new connections are=20
-> > high and we're back to sending small TSO, keeping the sender overloaded=
-.
-> > Which is to say - I _hope_ this also solves some of Meta's problems :)
->=20
-> Ugh, I didn't see the Sashiko report, it's only CCed to the author and bp=
-f@, not to netdev :/
->=20
-> The zero-check sounds legit. Let's revisit this after the merge window.
+The first patch in series is fix patch, correcting memory alignment with
+8-byte boundary for long branch address field. The subsequent patches
+enables verifier selftests on powerpc. The fifth patch in the series fixes
+incorrect comparator usage for comparing tailcall info with tailcall
+threshold. The last patch fixes JIT buffer overflow for large BPF progs.
 
-Thanks for the comment, I will take action after the merge window.
+Issue Details:
+--------------
 
-And, please correct me if I am wrong, the next eligible submission is expec=
-ted from 30-June, right?
-Thanks!
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
 
-Chia-Yu
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
+
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ...
+
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
+
+    Observation:
+    Can't disasm instruction at offset 76 as this address has
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
+
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
+
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
+
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
+
+    Update the dummy_tramp_addr field offset calculation from the end
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
+
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
+
+v7->v8:
+  Fixed bot identified issues of alt_exit_addr and BPF_EXIT
+  Fixed 32-bit ppc function signature mismatch
+
+v6->v7:
+  Fixed JIT buffer overflow in case of large BPF progs
+  Addressed remaining bot comments
+
+v5->v6:
+  Changed alignment NOP emittion dependency on fimage layout
+  Adjust tail truncate length for 32-bit ppc
+  Addressed few minor bot comments
+
+v4->v5:
+  Handled alignment NOP emit logic and corresponding stub offsets
+  Handled image buffer overflow problem in last pass
+  Above changes took care of other bot reviews
+  Included LLVMDisposeMessage() for graceful freeing
+  Adjusted parameters in bpf_jit_build_fentry_stubs for ppc32
+  Adjusted expected JIT inst. in tailcall test for
+CONFIG_PPC_KERNEL_PCREL config
+  Added fix patch at last for inaccurate use of cmplwi inst. 
+
+v3->v4:
+  Changed logic for emitting alignment NOP
+
+v2->v3:
+  Removed fixed NOP from bottom of long branch stub
+  Rebased on top of bpf-next
+
+v1->v2:
+  Added fix-patch to correct memory alignment in-place
+  Moved the optional alignmnet NOP before OOL stub
+
+[v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
+[v3]: https://lore.kernel.org/bpf/20260411221413.44304-1-adubey@linux.ibm.com
+[v4]: https://lore.kernel.org/bpf/20260517214043.12975-1-adubey@linux.ibm.com
+[v5]: https://lore.kernel.org/bpf/20260519233812.18787-1-adubey@linux.ibm.com
+[v6]: https://lore.kernel.org/bpf/20260529015855.364704-1-adubey@linux.ibm.com
+[v7]: https://lore.kernel.org/bpf/20260611153826.31187-1-adubey@linux.ibm.com
+
+Abhishek Dubey (7):
+  powerpc/bpf: fix alignment of long branch trampoline address
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  powerpc64/bpf: fix compare instruction emitted for tailcall
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+  powerpc/bpf: fix buffer overflow in JIT for large BPF programs
+
+ arch/powerpc/net/bpf_jit.h                    | 13 +++-
+ arch/powerpc/net/bpf_jit_comp.c               | 75 +++++++++++++------
+ arch/powerpc/net/bpf_jit_comp32.c             |  7 +-
+ arch/powerpc/net/bpf_jit_comp64.c             | 15 ++--
+ .../selftests/bpf/jit_disasm_helpers.c        | 27 ++++++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 8 files changed, 176 insertions(+), 36 deletions(-)
+
+-- 
+2.52.0
+
