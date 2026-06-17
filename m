@@ -1,190 +1,138 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D224E3CBE96
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 21:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781730404; cv=none; b=PJgXZNsQ11w9AisZStghdJgyNuCwUeCBY8ORloBTI8oS5rUur7EKvio9E7QD6aILLwpaqxgeXRwaEMpROFd0ICyCQuhWQhlI5QqAznkZTYtHMOudA9fmuT3tV1V6LaOJrv1YPp1kikKJhha7xPc1oxGNntPmeShygY3xIabqIMM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781730404; c=relaxed/simple;
-	bh=LJT+v5Bj7CztO7u20P11FOf/BO9PC+sXLiHUJnwCRKI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GH4RFn9g43bWWxsxQM0+t9QclMq3TtRAofXYR+vPOfEnGGupMVHOto79t7zyOzg72vFzDcd8IAd1YYmW666j6MQGWDxg53nYMYsgeacrQTobn6cKuRO1hjqsijZzsw1V/UZrqN7bVK55vxWp5F/mx1bq01Uq3El/MFZikPTnQOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sEed93wU; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE343F5BE4
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 21:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781730405; cv=pass; b=CQrn2n3ApoUjdJpYYnxw3EEkgvmVGE5JVJaS8DD+ZDUhG/LnHi2OnHxJ7obn3tfgZjhpd4qefJ9WuZHQEK6zXxmAckb2+f3rQ5YvrY8KCnQrn5s9AYXxfQnvNhY/EnX5Dm8CdIAB4ArIy9iHuWAxWKYComR2LeN+cyb4FHvTmQ8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781730405; c=relaxed/simple;
+	bh=9zZbQ01sdGHuw/o33OWrkcBJ/OuWawGIIqbeIIAKBU4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZYuRATMJfViDQsL2/QQr4oHr4R/vc5opa/ggr4idJy8vcdyAGP0KO+EadonKwI8Xya6WIkXdbU6VovYLW9ljiqMBAfeqJ+jxj144hv9Ng3ogvqrYQVg6BttlVsQng64OCRCw7thl0G7HVRWfdURU8Kk4DuYyuRA4uE6iZ7/oXI4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpPJc2RW; arc=pass smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sEed93wU"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781730401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xKHh8fcalZlmNQ1lD/ahVWX0x8o3tOFgR03MiYmd4yk=;
-	b=sEed93wU9coMCyN/wnau1I0ufVh5ZvBMoULBSOPc9qFiWBiQgwREHfkCam6RFQZdkTKT7S
-	OhG9w1bMk3VgEgtcYmmbUyqi952mVPHIWzn/umOraLAZRvrv7E8FKTDVn3SZPP7fETPGNA
-	62XN8x3AOawWfirNw6zpKP7RBlkBVSY=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/4] selftests/bpf: Modernize resolve_btfids test scaffolding
-Date: Wed, 17 Jun 2026 14:06:17 -0700
-Message-ID: <20260617210619.1562858-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
-References: <20260617210619.1562858-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpPJc2RW"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-36ba285e98bso179455a91.2
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 14:06:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781730404; cv=none;
+        d=google.com; s=arc-20240605;
+        b=i2dQ37riIS+RHx/JoqaTaMfDOPUj+B3/lJz8kbHWF3zbYWVDm8/oaRF6BMs9IBgMZG
+         7h9RIKVmux9yFunaUz8pVlf2H6cr+sA7g3V3fg9VLG5YvOd/UnouqgtKG2hijlCyCK0q
+         JiWuik5YdJG5wPVhKbK5MhTRdEuGTqCV8FUV8L+RSPurGGjBgTjHnGCSZ3aEgPY5wpSi
+         dhPycoPBFCRqx8GtFMjpbHScafBGMLz46jSk0uiuh8od9UDhH0AKvrKkrzm0Q5F7boGS
+         RGvhOl1qbqQXAqBRoH1KLD42CgPEZ4qlMMDS7bI5bWQPvG+c3Mm3WXfQKcNBShD8ogc9
+         FgqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=np4Ad6HoqJslb4MIdJr2xIiKOz1hID1M1Fyl3DqqXZ0=;
+        fh=2Bhn4L5v9Zj6bc/u5RNkUhNMd6q+aWFLx40BfRBKbnE=;
+        b=dBw48k3Ja21MRILVPtVqDlPVN4JVuwHxyDH0osrb6FdWxmVPWY3Jh1KkwV53Vzf3T2
+         5SOqNYgUXxwvSGNKl6aseQc4Ch5KjMfvCnMZQMEAPWp/l62AaaXQi+lFeD46WyonHScW
+         BLe4tFMjUKY5eskdbvOCZGpX7YpPUJSDPbX1XovBAGX4ktqb4ITRIhr8Ikc045WmzLDG
+         qiZfHKREjqz0+UI+hU6/EUyniPRswmYahzrHomoW0s5u2824BYnCrKacGlOaIQouR2iM
+         sVtm/cjn2cEAiy5DS/outygfoXZlMohAnLcuGFVXqh82CvlRdhO1Y83AxZ/QD9ITKxsM
+         XK8A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781730404; x=1782335204; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=np4Ad6HoqJslb4MIdJr2xIiKOz1hID1M1Fyl3DqqXZ0=;
+        b=PpPJc2RWUW5ODz++bm2BzsM1gJswPh797+1oC2iux17CTckH2jEEXIDcA0zOigJ0i5
+         9x+uKohIga7llWJLW23JhNEeLcRDHKDBstL9WIbW+rpLCwZbKGx+/AqjdzWjxmgiqHkt
+         nvzQJOvE58GkYX44cLZNGmF/pzUWJbM1jruJ/mHKU3jtN6ueqO6KQXCod/Rc5RjUVgYs
+         KngxScNYyfVsl13Jxx/c5fgO0zLm/3RmqUZ82B6KfMTTeOOTgfyY8zi9GRawkNYjDwrL
+         iX2TfhGYhQan5tZod4rBbryFvZRULkYZcJ4tn+3zWmlWaSrsjmcRMUd7oHgIksd7wvav
+         a1Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781730404; x=1782335204;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=np4Ad6HoqJslb4MIdJr2xIiKOz1hID1M1Fyl3DqqXZ0=;
+        b=OgcAHVe5eKIHwcvuEPKZ9t53C3JrgLFZvfuM5bdffgl/SKf8uML82cGW0rns7LC7Kr
+         UpBsEUFwKrWCpjrWtelWR1UxUR7cVwe/K+BpUbrMhObxUeiNeqKk/PL28T2rutg8FbTu
+         sobqlTnxXvpWAH7q5D5bRtCiDZgjm1qq6w5AS6SK8MIDADyDQJ7qdYGCx3DddNCx/Yjg
+         v49aUhLvjwxD74/v3xO//PFr7dVUV6mebMkHRnUYDrmiAVCYFZ2VP4wmBTJ+1zMRk5Is
+         iIn/NXWIwR7MGtPLRHUn28xB8m9GSOcHZDmPaiyAvfAjTW/hHKjBDqcW+hGsJPP33Yq0
+         3V2w==
+X-Forwarded-Encrypted: i=1; AFNElJ+v8G+lhMvliiBvo+j/yQ29MCPC7O4qbxla7T7mnbS8L8QIUQoxqIOF+GCYnj+YkxxR1YI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXCt6RMrEKDKtPBrPQd1rttyPjTDHPG79sI1AqrMQ2c/+md78i
+	0Qs58J7JbcuXEKeYmuy1wPtq5TloIo3U9xZHnle6v5UfZECple4JDaEehfI9VvL/tz1QFCScJLU
+	X9Jo4H7WzDsTJQ/yMlto2rKQTca8MKHU=
+X-Gm-Gg: AfdE7ckZCiZSb856Egv3PTcThC9S49IIbZOA2/yK+S7/RczeSpca4zjS634/sclMK1X
+	tSM6akhRt2BuDYCHrLDuDlePHHCd1dD4SJpCv5NvOz2oGE77bL95bKJGo/i99ABsbfTWxZXh2zB
+	FwFxwfkq3b1rw+ieGJLcL9yquqyaoL0ZrdBbXabfS+1Lqxq2EV834RH/ZAuFGgvlDksw/nsIoQa
+	pAPHitlKvZCJINqsyr2YOvJKTyTdGpTW5fTIqLy4TNgFPGikBtMQfCP0cYb5xUZB1g6EFOHYLjv
+	OcUymn4gcCDADDU3y3bLblS5BSfpslUx85JgigNNGipbINUm0Ub3SHYQPQCAyVrNPYyaDPjfH3X
+	BTivKXPHl3ASodEg39Bh5AWUD
+X-Received: by 2002:a17:90b:164e:b0:37c:6505:e7c3 with SMTP id
+ 98e67ed59e1d1-37c9ecff3aemr5523695a91.22.1781730403938; Wed, 17 Jun 2026
+ 14:06:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260617202147.78347-1-jp.kobryn@linux.dev>
+In-Reply-To: <20260617202147.78347-1-jp.kobryn@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 17 Jun 2026 14:06:31 -0700
+X-Gm-Features: AVVi8Cd260eIQwhzGPEZLA2uVsQtbeQyANVfuu2LDFQ8_RZ7E4bOAvVo27OLPZo
+Message-ID: <CAADnVQJ=q7hJkt=ekLD_a5KjJ_+icdwgsY61rujjLMKAKByvWw@mail.gmail.com>
+Subject: Re: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
+To: JP Kobryn <jp.kobryn@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Refactor resolve_btfids test in order to:
-  * use newer ASSERT_* macros instead of CHECK
-  * extend the lifetime of loaded BTF to enable additional checks
-  * cleanup unused/unnecessary code
+On Wed, Jun 17, 2026 at 1:22=E2=80=AFPM JP Kobryn <jp.kobryn@linux.dev> wro=
+te:
+>
+> The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They a=
+re
+> only referenced by BPF programs and resolved through BTF.
+>
+> Since no external linkage is needed, mark these functions static.
+>
+> Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg pointer=
+s")
+> Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc")
+> Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statistics=
+ and events")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp@i=
+ntel.com/
+> Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
+> ---
+>  mm/bpf_memcontrol.c | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
+>
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d7647..eff79bb2c758 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
+>   *
+>   * Return: A pointer to the root memory cgroup.
+>   */
+> -__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
+> +__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- .../selftests/bpf/prog_tests/resolve_btfids.c | 60 +++++++------------
- 1 file changed, 20 insertions(+), 40 deletions(-)
+sashiko disappoints. It couldn't notice that kfuncs should not be static.
+We have few "__bpf_kfunc static" in net/ipv4/
+that work by sort-of "luck", since their addresses are taken.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-index 41dfaaabb73f..e549780697c7 100644
---- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-+++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -10,7 +10,7 @@
- #include <linux/btf_ids.h>
- #include "test_progs.h"
- 
--static int duration;
-+#define BTF_DATA_FILE "resolve_btfids.test.o.BTF"
- 
- struct symbol {
- 	const char	*name;
-@@ -70,10 +70,8 @@ __resolve_symbol(struct btf *btf, int type_id)
- 	unsigned int i;
- 
- 	type = btf__type_by_id(btf, type_id);
--	if (!type) {
--		PRINT_FAIL("Failed to get type for ID %d\n", type_id);
-+	if (!ASSERT_OK_PTR(type, "btf__type_by_id"))
- 		return -1;
--	}
- 
- 	for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
- 		if (test_symbols[i].id >= 0)
-@@ -83,10 +81,8 @@ __resolve_symbol(struct btf *btf, int type_id)
- 			continue;
- 
- 		str = btf__name_by_offset(btf, type->name_off);
--		if (!str) {
--			PRINT_FAIL("Failed to get name for BTF ID %d\n", type_id);
-+		if (!ASSERT_OK_PTR(str, "btf__name_by_offset"))
- 			return -1;
--		}
- 
- 		if (!strcmp(str, test_symbols[i].name))
- 			test_symbols[i].id = type_id;
-@@ -95,25 +91,15 @@ __resolve_symbol(struct btf *btf, int type_id)
- 	return 0;
- }
- 
--static int resolve_symbols(void)
-+static int resolve_symbols(struct btf *btf)
- {
--	struct btf *btf;
-+	__u32 nr = btf__type_cnt(btf);
- 	int type_id;
--	__u32 nr;
--
--	btf = btf__parse_raw("resolve_btfids.test.o.BTF");
--	if (CHECK(libbpf_get_error(btf), "resolve",
--		  "Failed to load BTF from resolve_btfids.test.o.BTF\n"))
--		return -1;
--
--	nr = btf__type_cnt(btf);
- 
- 	for (type_id = 1; type_id < nr; type_id++) {
- 		if (__resolve_symbol(btf, type_id))
--			break;
-+			return -1;
- 	}
--
--	btf__free(btf);
- 	return 0;
- }
- 
-@@ -121,25 +107,22 @@ void test_resolve_btfids(void)
- {
- 	__u32 *test_list, *test_lists[] = { test_list_local, test_list_global };
- 	unsigned int i, j;
--	int ret = 0;
-+	struct btf *btf;
- 
--	if (resolve_symbols())
-+	btf = btf__parse_raw(BTF_DATA_FILE);
-+	if (!ASSERT_OK_PTR(btf, "btf_parse"))
- 		return;
- 
-+	if (resolve_symbols(btf))
-+		goto out;
-+
- 	/* Check BTF_ID_LIST(test_list_local) and
- 	 * BTF_ID_LIST_GLOBAL(test_list_global) IDs
- 	 */
- 	for (j = 0; j < ARRAY_SIZE(test_lists); j++) {
- 		test_list = test_lists[j];
--		for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
--			ret = CHECK(test_list[i] != test_symbols[i].id,
--				    "id_check",
--				    "wrong ID for %s (%d != %d)\n",
--				    test_symbols[i].name,
--				    test_list[i], test_symbols[i].id);
--			if (ret)
--				return;
--		}
-+		for (i = 0; i < ARRAY_SIZE(test_symbols); i++)
-+			ASSERT_EQ(test_list[i], test_symbols[i].id, test_symbols[i].name);
- 	}
- 
- 	/* Check BTF_SET_START(test_set) IDs */
-@@ -153,15 +136,12 @@ void test_resolve_btfids(void)
- 			break;
- 		}
- 
--		ret = CHECK(!found, "id_check",
--			    "ID %d not found in test_symbols\n",
--			    test_set.ids[i]);
--		if (ret)
--			break;
-+		ASSERT_TRUE(found, "id_in_test_symbols");
- 
--		if (i > 0) {
--			if (!ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check"))
--				return;
--		}
-+		if (i > 0)
-+			ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check");
- 	}
-+
-+out:
-+	btf__free(btf);
- }
--- 
-2.54.0
+In general kfuncs cannot be declared static.
 
+pw-bot: cr
