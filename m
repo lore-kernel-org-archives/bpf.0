@@ -1,129 +1,147 @@
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218ED3128BE;
-	Wed, 17 Jun 2026 08:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD84A3806B0;
+	Wed, 17 Jun 2026 09:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.154.54.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781686379; cv=none; b=Seb1dPTm4ieYTc4RuucYsC42APVAFIVjI0GfltqMjOqtyvhC7r+VHdf+p0EXR5NuAgVw9A0RDrop8FkEwSY4LEU+gFdF6VfsC5KHg4xL4Y50DSC2992KOgIXHtsBeOzsNTBHBxbpGtxSIsGfO0bBkShuNxKjMW4RIAUL9dVHHQg=
+	t=1781686907; cv=none; b=htBzMe97HSNmXmE1c9I0B86rc3qK1mBQdiJt2BG77Y6sFb38R/mSS17y9l6/WIoJ7aYHE4vsNC0o3MH0zR4fk0wStz+uyDzzbL1SflrvC9zCJRhCft47DEW/WplLJ4VChm0A/e5i99+bZnqZnE4uZpFXXEhBo+7lbpY3GB28GMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781686379; c=relaxed/simple;
-	bh=pUvQSNLWLRh7OpfgodfrsgtToT9DzCGSyR/QzanlZTA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=blkW1Ox0zw8l93WA4LiV2Y+gv5Z6iiaY2EE8KT1IlP03IqPx07uEEMSxn9Ed/j3t3onpziTKwjdEGW89LZOK1xgVLVSJJtHLjpg/B+jPdL39K3tiE/oF0XF2fj/5DX+WGB8t6U9Pv/QCGpq1pNPP/k0vosyREKUt7rFc0HJF3VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=U8O7i/mO; arc=none smtp.client-ip=131.188.11.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1781686907; c=relaxed/simple;
+	bh=+cUEx/4nC8if+p2TEByB7beE86sydJey7waA5ZPFHMU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P5uoVX4Cok2KbGFN7xanCFrdd0sWokPo7HYC1/Ftapt4wA4dPeBfD7REo5AcIwVSXAA0DCPExga1PeM0tClzOSC3/oiHPWHZhYoDMPTxAPHePrKUs0DAFZcB96eqtoS79XM3dYws6u7frKa+Oq18/wL/2Ht708RSUwG3kQvQp8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=lyBb/BD8; arc=none smtp.client-ip=43.154.54.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="U8O7i/mO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1781685955; bh=EnC+xQ4kjAflTt/HOK2e1CKwIXuOTQTQ4uzmcNK7l4w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=U8O7i/mOH0wiYi63S/ed+enhvGbhDDC2J+vtgA0p5pjaRr5qEsz22ixJcMGdvhEcw
-	 BwnPOmws5mCBdlcInMHUlJIqxlS8UzyjGjEJey4rr9XOiI35zxuQXSye0yA5sAVFAm
-	 BnjHqhFVq6h13T9Yr8nf9x5eHPJtw5qXyA9qoLFVyLhAYi2uxyzOVLLdkS1zq3ex4v
-	 fZ6PbVwD/cJMDwB1I6882xFY43K6Ucn0frybtQZAiiGA6AOs1Yg2kSyUREYina0F4E
-	 ZPty9+V4DE9IQgBM897cNiYvuLLcWQs1s5B9WFjybcGVXXsx2igmfx56Vpe2yRA7ui
-	 TJH+vg7p4iqrQ==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ggHWR51djzPjj5;
-	Wed, 17 Jun 2026 10:45:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:d9e
-Received: from localhost (unknown [IPv6:2001:620:618:5b8:2:80b3:0:d9e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1+7VQ1Fq7UmwSr5wNINd1K9w5LBzRtcyQg=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ggHWN4LgxzPkny;
-	Wed, 17 Jun 2026 10:45:52 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,  Eduard Zingerman
- <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  John
- Fastabend <john.fastabend@gmail.com>,  Martin KaFai Lau
- <martin.lau@linux.dev>,  Shuah Khan <shuah@kernel.org>,
-  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover stack nospec slot indexing
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
-	(Nuoqi Gui's message of "Wed, 17 Jun 2026 00:57:56 +0800")
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
-	<20260617-f01-11-stack-nospec-slot-index-v1-2-e3a080b0cd7e@mails.tsinghua.edu.cn>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Wed, 17 Jun 2026 10:45:50 +0200
-Message-ID: <871pe5v9kx.fsf@fau.de>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="lyBb/BD8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1781686886;
+	bh=lC4QGp+UmxNg9LSB5P56oG/6FYbTf4hSTwsbH8IMmkY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=lyBb/BD857on0nG0v2OwbeGqKhfEnE+XxIIMEIpTQdr3xxADl6hLRiOoXP082JA70
+	 4aTqKzNhxIu3bFT5IVgGfhfqPp+12NrjlbsgS50OTqa5PeKHeGm+SjdmEo0ifd7Bvo
+	 lZzP4Q2HCncnjkM5fqaV6ogF9dLZa/6SDvOuKdPw=
+X-QQ-mid: esmtpsz21t1781686882t3bed5a0c
+X-QQ-Originating-IP: 88P24GbtHUbVU1LThAswkmHOtutJQfwOAYDd5pHG3Wo=
+Received: from Shurima ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 17 Jun 2026 17:01:19 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 10453321506301856924
+EX-QQ-RecipientCnt: 14
+From: Yichong Chen <chenyichong@uniontech.com>
+To: qmo@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chenyichong@uniontech.com
+Subject: [PATCH] tools/bpf/bpftool: Fix vmlinux BTF leak in cgroup commands
+Date: Wed, 17 Jun 2026 17:01:17 +0800
+Message-ID: <24357C69B4405079+20260617090117.280222-1-chenyichong@uniontech.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NyPaQtJYQgeo9GkaKnHVRsMpdfr1sMrMcuQKrNkj+6NsxmWyBbxuX8e0
+	fK7829JtCm17xh7IlJibUICgEs7crKMosDerjJXAE7+OFsvMyT15nAdC2512n+i0m6URjXh
+	jHw3oM+/vuaO+5lNlXBOzOevP3ejmHcHrgyZq1SCSafeqzPxXp4mKYVwNedZ/y3BJn7rfYa
+	xiSZ4YCYA/e+xaqyHJ6G6bHfYAwEllfqEvSZOwX7YpPtufI9Kf98x11ujQs//l5Artqwopp
+	+SHMggNdyRM2gWsNEsPh7kILVdUo2NC3WZYmOXphUb4oi5mYWfcJWCtv8w8FJlj7nnoqQgE
+	A6VLsoXvY8/8TbkZpqq8NtLHtKJHJTmmeNL6uldNs0UxYUDtgzM6G/mCQcYhlHxLy2AJh7i
+	z44+RXn7ewZonuBwFdHIA+0jOQocpNtPm97AS9EiTGlxrSDyzAJdSIF3FO7ozNZPprbXsWC
+	O9G9auZ0g82sDpEu3oJjbl6FfEgfE38ne4Tm9NRgwpHoxpx9vLMkAaX884HH29FR6VWf24J
+	bzL2NXHGcN21aiCN16zv0xO+Awm+Y2MAfjd3GcGE7YGh8/0yQpT0zazDMUfOJ2nlXaHsfO+
+	P2bX9rNW1PAL4eT5ktwShiiCOagrArntX+eVBrWigPe9oyfOjmQ75xYWOV5/9rTHfP+5puA
+	Vhe6JGchaM1XsLk2m38hC2jd1Y/SniIgZ1ExqxGEantNeZUMtfcPBZ2smLSIdd9GDMjp67p
+	K5Qjhx0GAH0jdXwFYmoMf1vHVnrQN4CUZbffTQY4ShpY2zqNylUl9tFmZ9Y6cpb03bUmuhz
+	BRiKcyqJ5qCtckzEWmEsV+O2WU2KvB4uRePFiFoSl94qfour+WpbnGGOe67VmI/bWTwIlDv
+	cV40Wz7DC8vWhw/W/BjbeNaSE6k3NhSCf/8JOzYpHj9U/xbJ+SRt45T/qOTK+7l0gnerTU5
+	MQLVg4ULVLmn1yPFoAkRAzV4sxmTTSDStCA4k6kfu4K1c35Z8S/3ocAf71vwH5UKJcMixlL
+	BsWi/GAZnGzfuG6jq97ECrDiGy5wMmyrPNlrJKDv3FNujYnAGN
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn> writes:
+bpftool cgroup show and tree call libbpf_find_kernel_btf() to
+resolve attach_btf names, but never release the returned BTF object.
 
-> Add a verifier test for the fixed-offset stack write case where two 4-byte
-> stores initialize opposite halves of the same stack slot.
->
-> The test uses the CAP_BPF-without-CAP_PERFMON loader lane so Spectre v4
-> mitigation remains active. It expects both half-slot writes to emit nospec
-> in the translated program.
->
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
->  .../testing/selftests/bpf/progs/verifier_unpriv.c  | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> index c16f8382cf17d..9ebbd4b531df1 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> @@ -976,4 +976,27 @@ l0_%=:	exit;						\
->  	: __clobber_all);
->  }
->  
-> +SEC("socket")
-> +__description("noperfmon: Spectre v4 stack write slot index")
-> +__success __success_unpriv
-> +__caps_unpriv(CAP_BPF)
+For cgroup tree, do_show_tree_fn() is called once for each cgroup
+visited by nftw(). When more than one cgroup has attached programs,
+each callback overwrites btf_vmlinux with a new object and loses the
+previous allocation.
 
-Not sure if the conditions that led Kartikeya and Eduard to add
-__caps_unpriv(CAP_BPF) explicitly for some tests also apply here.
+Load vmlinux BTF only once during a tree walk and release it when
+cgroup show or tree completes. Reset btf_vmlinux_id at the same time
+so batch mode starts with clean state.
 
-It seems adding it to this test will not provide much benefit because
-the other tests in verifier_unpriv.c already assume
-sysctl_unprivileged_bpf_disabled=0.
+Fixes: 596f5fb2ea2a ("bpftool: implement cgroup tree for BPF_LSM_CGROUP")
+Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+---
+ tools/bpf/bpftool/cgroup.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Because this already affects the more restricted 'unpriv process under
-sysctl_unprivileged_bpf_disabled=0 without CAP_BPF' environment, I
-suggest dropping __caps_unpriv(CAP_BPF) it.
+diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+index ec356deb27c9..ce69d1e5468e 100644
+--- a/tools/bpf/bpftool/cgroup.c
++++ b/tools/bpf/bpftool/cgroup.c
+@@ -78,6 +78,13 @@ static unsigned int query_flags;
+ static struct btf *btf_vmlinux;
+ static __u32 btf_vmlinux_id;
+ 
++static void free_btf_vmlinux(void)
++{
++	btf__free(btf_vmlinux);
++	btf_vmlinux = NULL;
++	btf_vmlinux_id = 0;
++}
++
+ static enum bpf_attach_type parse_attach_type(const char *str)
+ {
+ 	const char *attach_type_str;
+@@ -388,6 +395,8 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
++	free_btf_vmlinux();
++
+ exit_cgroup:
+ 	close(cgroup_fd);
+ exit:
+@@ -437,7 +446,9 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
+ 		printf("%s\n", fpath);
+ 	}
+ 
+-	btf_vmlinux = libbpf_find_kernel_btf();
++	if (!btf_vmlinux)
++		btf_vmlinux = libbpf_find_kernel_btf();
++
+ 	for (i = 0; i < ARRAY_SIZE(cgroup_attach_types); i++)
+ 		show_bpf_progs(cgroup_fd, cgroup_attach_types[i], ftw->level);
+ 
+@@ -540,6 +551,7 @@ static int do_show_tree(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
++	free_btf_vmlinux();
+ 	free(cgroup_alloced);
+ 
+ 	return ret;
+-- 
+2.51.0
 
-> +__retval(0)
-> +#ifdef SPEC_V4
-> +__xlated_unpriv("r0 = 0")
-> +__xlated_unpriv("*(u32 *)(r10 -4) = r0")
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("*(u32 *)(r10 -8) = r0")
-> +__xlated_unpriv("nospec")
-> +__xlated_unpriv("exit")
-> +#endif
-> +__naked void stack_write_nospec_slot_index(void)
-> +{
-> +	asm volatile ("					\
-> +	r0 = 0;						\
-> +	*(u32 *)(r10 - 4) = r0;			\
-> +	*(u32 *)(r10 - 8) = r0;			\
-> +	exit;						\
-> +"	::: __clobber_all);
-> +}
-> +
->  char _license[] SEC("license") = "GPL";
-
-Acked-by: Luis Gerhorst <luis.gerhorst@fau.de>
