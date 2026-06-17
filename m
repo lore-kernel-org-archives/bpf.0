@@ -1,33 +1,33 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E7347DD64;
-	Wed, 17 Jun 2026 15:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419F9481AA7;
+	Wed, 17 Jun 2026 15:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781709647; cv=none; b=MnrQ6TgFUxX+VnR5G+QIFlhF8gZXzvVv/PCrjC8LJA0dJLLHO7CvUFjT1DakVNYeEwozgWIZjbtC28LlYs2nsXpcmIfAKV1VOsnei7ZfFW66IAaVzgKLJPBzWbiUSrfXAQOVP4MBrqyx8OgVGu7T9uWy7OU8PRjzMvJPZTb8zFU=
+	t=1781709650; cv=none; b=Y8Ja8/vgczhQMzuMMYhD/e2hPFY89AHFEn9meR7tfJkCYNVTj3A1WIm+Z/UfkUX63W3osAcADoaEJM1eZFGsmhVS6Ek7dPB7y1iAdThFsnZ7Z/+Ze5eiGZNemTBVLy/Wi/VDMXPvjqWhtoCDFCwvPqHKrjtbb3uu6c/XCNNCVL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781709647; c=relaxed/simple;
-	bh=xxSMyiyIWZCLNOXvVfnN2XjxhJMl38vibdmw8HH4SjA=;
+	s=arc-20240116; t=1781709650; c=relaxed/simple;
+	bh=/3cT6/MhgGbgWHYHdGdJMSDotpdaCYD7/6XePN4Ag+4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jSoHiXAjKVwzi2H+y4ymj6nGi4wqWODAIQvdgV1DyV/gz3ncH6Q2dWtd1gSQ5dACkhcYvGhENCX0T2XPBQhz1jbBwCx5xHnANGP5tCN8+aJUd5eksse/VYIgiqlGlP41Ww5KYRMJZ0eJcLLfOO6bS3kSLzIdQKC1BszYZfrZHUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=QEkB0HvG; arc=none smtp.client-ip=162.243.164.118
+	 In-Reply-To:To:Cc; b=sD1K1OESU2og3Pn7yR/+DQd3TvXSSsPSKoDyCvCeAczBUIRTquBl6KC0/BCEsCa61OCZkAhoMkIMuEPJxbeJnwymCw8Dm2j+7KBZ3DTvO/tpBId680BreD9i/ECkMdWZ0vq0vxWee6R4uQ6XbbDHBtdRBuLk0+/jQclTOl7erA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=lQ/7TPrt; arc=none smtp.client-ip=207.46.229.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="QEkB0HvG"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="lQ/7TPrt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=l9g4qUlwh8jYYn4wE6ky9fxMpRaXYWC
-	3azIJs+136CQ=; b=QEkB0HvGYEuQU4u8FvXoHBiwoegdt5f0/6dFcy4gOptH+lt
-	auZHZeoY/BejSBuWodqLgBnBtoQOxupY6Rb3JbphJF2bQkIKSl++hnSe60/Or5Kl
-	c9vZmJ7DC6iyhXX3uWqmsDriWFej5hXoFCd4PLP7xl6TkCK+1Mhmznjf9+Fc=
+	References:In-Reply-To:To:Cc; bh=YHIMrE00tiSeqczPY0zTpyedcE0Qcv4
+	5NVyWz5XWQRU=; b=lQ/7TPrtXuO8TrGnJnLUY6MRVX7SNpmecszdoJHHK1WEakp
+	sky9rQU+ChMdvgMx7EAQCQCaEI1Xg5CzaFV0B3bGoVgOesQAsf0CsChFLggRYyNA
+	H9mbd2n4SMSxweyx3aJYP8kz2zc46Q6sWbopTGZElAWpyDli293ld1vkjJSE=
 Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXcJg6uzJqVHJaAg--.59129S4;
+	by web2 (Coremail) with SMTP id yQQGZQCXcJg6uzJqVHJaAg--.59129S3;
 	Wed, 17 Jun 2026 23:20:27 +0800 (CST)
 From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Wed, 17 Jun 2026 23:20:21 +0800
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover half-slot cleanup of
- pointer spills
+Date: Wed, 17 Jun 2026 23:20:20 +0800
+Subject: [PATCH bpf-next v2 1/2] bpf: Preserve pointer spill metadata
+ during half-slot cleanup
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,7 +36,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260617-f01-06-half-slot-pointer-spill-v2-2-42b9cdc3cf64@mails.tsinghua.edu.cn>
+Message-Id: <20260617-f01-06-half-slot-pointer-spill-v2-1-42b9cdc3cf64@mails.tsinghua.edu.cn>
 References: <20260617-f01-06-half-slot-pointer-spill-v2-0-42b9cdc3cf64@mails.tsinghua.edu.cn>
 In-Reply-To: <20260617-f01-06-half-slot-pointer-spill-v2-0-42b9cdc3cf64@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -49,17 +49,17 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781709629; l=1537;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781709629; l=2233;
  i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=xxSMyiyIWZCLNOXvVfnN2XjxhJMl38vibdmw8HH4SjA=;
- b=EYrlHREFgjcsY/FfWgWBJjWcWzI1i5uzhppx6DPEUeUoIf7KcrOQgACuClPmhA+qViivzcd+x
- qTyrgpovgXCBWoujtKKSANXRAnAgekQerFF+lhE7LRePH77na5/X3Au
+ bh=/3cT6/MhgGbgWHYHdGdJMSDotpdaCYD7/6XePN4Ag+4=;
+ b=hSIEumNL7QHykwy8dMHp+XuIVy5ye+vHx5QVoiz3kQ0FTjwMd49QcXsSxaa+vmKMzV2dZMDo3
+ 0A541bw+NoDB1ZGI1sWpd0jtxCE+Z9YPdhr4CmZ4SCYICq+rlpAJrVg
 X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
  pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yQQGZQCXcJg6uzJqVHJaAg--.59129S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkJry7WFWfXF48AFy3XFb_yoW8Xw45pr
-	97WasxtFZ5urn7C3W3AFWkGF1rKF1vqryF9F4SyFyUJF18tr1qqr4kKF4UJrsIkan5Xw4F
-	vFySq3ZrWF1UJrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:yQQGZQCXcJg6uzJqVHJaAg--.59129S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyxuFWfGw1UGr1Dur1ftFb_yoW8uFyDpr
+	yDG3W7Gr4kJ3WI93ZFvF1kKr98GF4kJ3y8KF1UGryxWFyrGry2vFs09ay5Za1SqFWkA3yr
+	Ar4FqrZ0k3WDCFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
 	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
@@ -70,50 +70,64 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkJry7WFWfXF48AFy3XFb_yoW8Xw45pr
 	Y4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
 	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
 	6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+	AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
 	s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
 	1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU4uc_DUUUU
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgMBA2oytAoJJgACsI
+X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQMBA2oytN4IlQAAsv
 
-Add a verifier regression test for a pointer spill whose high half is
-cleaned dead while the low half remains live. Force checkpoint creation
-with BPF_F_TEST_STATE_FREQ and assert the verifier log reaches the
-checkpoint and the subsequent 32-bit fill before rejecting the partial fill
-from a non-scalar spill.
+__clean_func_state() cleans dead stack slots in 4-byte halves. When the
+high half of a STACK_SPILL slot is dead and the low half remains live,
+cleanup converts the live low half to STACK_MISC or STACK_ZERO and clears
+the saved spilled_ptr metadata.
 
+That conversion is safe only for scalar spills. For a pointer spill, this
+metadata clear lets a later 32-bit fill from the still-live half avoid the
+normal non-scalar register-fill check and be treated as an ordinary scalar
+stack read.
+
+Leave non-scalar spill slots intact in this half-live shape. This is
+conservative for pruning and preserves the existing
+check_stack_read_fixed_off() rejection path for partial fills from pointer
+spills.
+
+Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 ---
- .../testing/selftests/bpf/progs/verifier_spill_fill.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ kernel/bpf/states.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 6bc721accbae..0174887e28f5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1359,4 +1359,22 @@ __naked void var_off_write_over_scalar_spill(void)
- 	: __clobber_all);
- }
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 32f346ce3ffc..ea2153cf28d0 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -436,12 +436,10 @@ static void __clean_func_state(struct bpf_verifier_env *env,
+ 				continue;
  
-+SEC("socket")
-+__description("partial fill from cleaned pointer spill")
-+__failure
-+__log_level(2)
-+__msg("1: (05) goto pc+0")
-+__msg("2: (61) r0 = *(u32 *)(r10 -4)")
-+__msg("invalid size of register fill")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void partial_fill_from_cleaned_pointer_spill(void)
-+{
-+	/* Spill R1(ctx), then force a checkpoint and half-slot cleanup. */
-+	asm volatile ("*(u64 *)(r10 - 8) = r1;"
-+		      "goto +0;"
-+		      "r0 = *(u32 *)(r10 - 4);"
-+		      "exit;"
-+		      ::: __clobber_all);
-+}
+ 			/*
+-			 * Only destroy spilled_ptr when hi half is dead.
+-			 * If hi half is still live with STACK_SPILL, the
+-			 * spilled_ptr metadata is needed for correct state
+-			 * comparison in stacksafe().
+-			 * is_spilled_reg() is using slot_type[7], but
+-			 * is_spilled_scalar_after() check either slot_type[0] or [4]
++			 * Only scalar spills can be degraded to raw stack bytes
++			 * when their high half is dead. Pointer spills need the
++			 * saved spilled_ptr metadata so partial fills keep
++			 * rejecting as non-scalar register fills.
+ 			 */
+ 			if (!hi_live) {
+ 				struct bpf_reg_state *spill = &st->stack[i].spilled_ptr;
+@@ -449,6 +447,9 @@ static void __clean_func_state(struct bpf_verifier_env *env,
+ 				if (lo_live && stype == STACK_SPILL) {
+ 					u8 val = STACK_MISC;
+ 
++					if (spill->type != SCALAR_VALUE)
++						continue;
 +
- char _license[] SEC("license") = "GPL";
+ 					/*
+ 					 * 8 byte spill of scalar 0 where half slot is dead
+ 					 * should become STACK_ZERO in lo 4 bytes.
 
 -- 
 2.34.1
