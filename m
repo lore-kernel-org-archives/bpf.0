@@ -1,176 +1,119 @@
-Received: from mail-yx1-f68.google.com (mail-yx1-f68.google.com [74.125.224.68])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466083F0751
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 12:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781697622; cv=pass; b=ubm+r+kyqLj2GCzb3TsHge/iV9sAk0VqvBEYtKhdJ+EAyUXjzkTDWBZ53ZklRxTBA/IPfqTfzjr032e/wauhS474lDJfwpQYt96VktK/HjlbtJVbq/h6eXqiYglINIrlfPkWn8q1af/Wslsm1JPlGdu7cZCJTM8/Ogn2XSyz3MM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781697622; c=relaxed/simple;
-	bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XiO7UE5EKEaXk7mLoSptvc13NNGOgtCkvU34Ldoo+Lsbhl3voi9s0qPjwqM58rv0eEllmacl+QqHFgTBIXg44rjvwY4BvBqp3vSCGu+ljgsXubyqptroPOMJ675Z9qyltf3qkc2XwGPiAHg3UthAAhP2ydLP5Xxu90YCJk6kqtg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKKasQGQ; arc=pass smtp.client-ip=74.125.224.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F3B2F3C18
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 12:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781698100; cv=none; b=bPDRd8P01Ao60/aWUOEKtPpoEV87P5TUuDN8jxpqUjd/qzp8UvOTah3q205L5NQkovoo6co2iSZJLuUX5MPnSTFBk00W4jynkN0auP9ihOvld13Xv3954qa3pCsYXgAjc7Mo2guuMABm4I5Hf25iwGmzWjCctP1yZdTwPN8yqQY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781698100; c=relaxed/simple;
+	bh=YjsAhYXUodz7nc4xjdfUxVayCu7T92r33C55MOfrInU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jIy8zl0l164FWy4YNhD4k+Z+wQ2VU29cXlOUjJWXzL8jKMyGka5po9iyQlZXD1coxoFgQXGXH/iE783rJYVcfe+5abJixfzZr8Hxiwaj52cFeQXt6uNlJuDrXlLughBYJZ6c4JiPT9J0JFGF6qSrhs53L0f5Q0d28PSq8zF4E9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkpWpsan; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKKasQGQ"
-Received: by mail-yx1-f68.google.com with SMTP id 956f58d0204a3-660512d80b4so1065051d50.1
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 05:00:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781697618; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dgj0/92M7IEcE5mhJwbu8xnkscaLl04wTBO/E4ZTv+08u5T+v6z480dGh15G2FzTew
-         2Wd4mA/68jV0sTVJa8FPEn2GH5WBKjxuhuGr9F0RZCklkzJ1V2WXstP43C16yTUuLfjw
-         2NoqSLmYMPJdqgaS0+VqhycrRL1DXVNzEvXDibRf3tpYaoXpULXefTft81VDy3uCRwIz
-         lFPe1p32o3c+8siBaH0hzf0jnnjwedIl7P2GTW93U0b8IqaeJ21usfC47XlzRjZ8NTcJ
-         UQRGCs1Fm0Wuh5qhiVDRFsT0CstTIT921IWLLSt/7Qzc5GHjuGf0Wll+wQNnEp504bKS
-         ZovA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
-        fh=EvvwhkXYzdSjFibnMsr+0ei5uyYGaJ3ZHKo9b54o4Mw=;
-        b=iiMjEaJQNs6g62jMGWnPy7uteBW5zxsRogCnL3apYCPGVTIGzNbNmxOXt/uVCRf3k9
-         DqtUPY7vnc+VsjYOcaboN94QNEnkdWT6522qVh3/3dLSLGixtRPWC/MmKuz1RacDDHPP
-         Re5NhBdq3TZ9A0ndBga2d+EoXDga/aVSk4jxzPgQe4wNzv8iiqddqPkB3G/DzsIbY2fV
-         MZwAOGTxE3fFcU98LIFFS0H492Y5Ei3xvS/KSCltiZqIk1VLC4qzY4D0GIIF3nRgIcnc
-         pm+OXWjZhSZgEzjFeIQzCtwoqQhIcpzhopHONjLmzQMW3F9iUVD6ITn7asRvYcUFr5zL
-         hDJg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkpWpsan"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490c0c92cffso37822435e9.2
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 05:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781697618; x=1782302418; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
-        b=fKKasQGQAyaUMtkjvtNnqJDg9XHwD33ASWPqISkI9Esv/eA2Gfvz+JNuom6/vOcjRf
-         n/NVyDLmeYTL4KS8qJ3lJmUzD3fqbUtWTMdRqxU2WbvFIdo6LDZ+IcpHNcM4eomL9uu0
-         8XwgcQVzDij2C5iwve8JJ5h7BAlBkhPDCYohbUo7NHSWxt6bCfIN9+uz+aBTWILmcLYB
-         lF5Ebe4G6pvBII6qp+ev8Wq8UKJZZCwwMeoLjvFFUNsD9qRj0PT+ijS83ooEkl3McGSk
-         b8rrq0ACFdIXJdGB45s6vnrpJJrjN8bD/lgx5/gQd/t7yogsk4kH/DJ9icypPn8Ib9Wq
-         UAcA==
+        d=gmail.com; s=20251104; t=1781698097; x=1782302897; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a0jOMZCcA1H7BGnP4Ncr7NnGD7quAU2khlteKx4MJN0=;
+        b=FkpWpsantnKAFhI2b+a2A2WgmVrui8g4xddO1qZi0zQpARTHfc7fqytYWT1+VK43TV
+         N4Ud0ch2bExcsdANmWtGHdpoaC0O5YeEQ1agzSkSP0GifIU1XSUwJZaHg5VGqIEDVK2c
+         8HkuzcbTIBfJRKvCYgQVKocpfTxHrwq1OFshK43TVP4VpdRTDr0SIoDqpxfV0DDUO5in
+         Omrjfp2Wus+n/rU5g+ROolPnATccDXMQtgk6wTwRu75bY/F5//932PuXYosGOey42PAG
+         zjli1oFed2E//4kTDdeCBaukRVhljUwHnqlxkuW6TgDhohhkclNsICH1QMzcU+sY4/61
+         X92Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781697618; x=1782302418;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9ymoeEPidKfzkZONuR4B16ek9eOD8FYaVaAsgJjxHfc=;
-        b=YeeVs8d5zxgkkIRhPdkKjv/dH2cupHmSUaiBoK3yeb5tcxBdxYkX1Ji4xGLdstExCK
-         lcnV82frnnkARA6Y97EEe9QJKVly2eBaqPlkhfwiDmhLVC1Hoj6u4+/s4JbBpD+ROI7m
-         jcruAQ+K9AeHEhRdjwxCFo+01x0wu/UxknyKrEe/DsuHB9B0DQ9JhjAVYH0z6K8HUaZU
-         sM5Dfv4qaGw2OJSE7FQJ32LnGx62mp1mvHR8gQ4ULCQWTfb73S6RTudS3wsXf0bJlCUc
-         PfyXQe4SmG3kwtg3NBPxk20hbm3vNOxfnI4IPIZa5ft9lVgM/oBwvLJAdC0mQZacvxx+
-         BYKg==
-X-Forwarded-Encrypted: i=1; AFNElJ/FipLh3lvksmDYAN6mJpSE9lWYLBfabP/6t12FdyfilORKJ2BXPz4Htqub4HUqp8iFudU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsQUPJMischR6bfjzFRYb2JcnFJUPSptOP5I+RqTa5wwbpl1zf
-	4BNDZrma1ymuQUc4f7pWFN6s/Gh21Ba3uAbHfJNXRiaeZ4IBGKxUnn9tQzxsAlKVpChPqv+eSjn
-	pmg7pY2VWRzaCelSvjmnBwUNr9Bm5Btw=
-X-Gm-Gg: AfdE7cl9UdWFUJ/fCw7vSBo0WqX72t0fTKAn6YJQnCQveSKjo1jObMVQ3FO/9hgj3CI
-	2TDAhoI5hBX44tpVtTTPbw8VmN6TkBG/zOjGPMTwfbtvXImS6o+0lmVSnccCMKish98HCqiHTd4
-	no/eU3oO2y81xT6fI3hDHIN8f+H7A+loRq0LUN/rUgf93UpTjd+qCPqtzyxin3oc6wSywleDvtT
-	KwuEj2sZvE71xlQVAp3SH7goLXuUKZzS+Yb48DTK/fGWTjzYEzwvdG5oH6fxzFaL2yzz/mVjNw=
-X-Received: by 2002:a05:690e:1306:b0:654:3fca:3515 with SMTP id
- 956f58d0204a3-662ced30a5dmr1739473d50.30.1781697617856; Wed, 17 Jun 2026
- 05:00:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781698097; x=1782302897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a0jOMZCcA1H7BGnP4Ncr7NnGD7quAU2khlteKx4MJN0=;
+        b=NRkO86K4OUUsMJEr2eYAo06zf4lIyCg+IdPi+uhtkY0DXvCU7gYTikK3TXN10kLLVZ
+         SQYiuGnF4Jw1PcBi2DGyoWki3Gesi6V9sdm0vkGTIE5hNCflAJHiVrqgqwyGTfRxUUhy
+         FCMEJNKE6a6eUeDb/wP2SRuPK66Pfe4oHMy46fKFVECZtTOig3Ukw9+xg9c1dldZbcd8
+         0Z/m9mVUmzLH5jp30kS/hxK/Yn4QGT4tZZ/aS727Wy3/An3HeX9x+/csoVhd+c3ujAtO
+         WRLa5bsu2EKgZcEqUqHbWSbX7JD4IDRJJHC+irMEvlTXCBPQlXNawioZZJsr4hd61Lbd
+         r3gw==
+X-Forwarded-Encrypted: i=1; AFNElJ+KCQOrR95jVRrCeqnFP5VmC1fG/ZU40OdmYmj4/p1uoqAtf+orZbrhbRCziyNVC3kQhKo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9kfgxuhudonIFsbMqNGVShKg9F13oWFNfm0fkjrmQeW1wJsen
+	s2APz80RYPJSeexhc2IO+ofkmmeSrC04HYm7ICr9/ULGNK47oVjoJPM=
+X-Gm-Gg: Acq92OHvn9XntxhTAYCLSysCQ7s+ZWJwbTPURD4+aq68Q9Y8Ma/m+J8me24aScBqOfF
+	6I6cW/H40tBS/zM+Gn1rX44p+zZ8mcuNcPmKWOKTzyHb80Oln/UHLzx+AKYSNngyTw5jFnoLUNp
+	ZEfnB2cEGlgFMMhinOEHuUMfTsVs15X3riRKPHCy0sdo5WuHXeRovDlgkpx2UegwNay2t8D+2YJ
+	jDxVo3SugyR+e9rvpZ9SaKv5R/IuGkjZE3PlSElUAEpXAtU03yWxsXoA6bPdMJpW1rt3Uc9Xwaj
+	LnhQvq//0wnqEALDRPhJiCZaqPi/8mQ0fi/5sJ+L8Wyg6YoquBELikIOiIUmcIShm+MrmVOE5b1
+	L9+lT3GjVIi7FdYPKCMBXH+KkGfUTzY24qZ+F+x7qZhKa3503E0tvHbk57ZQ17QQJpEIf
+X-Received: by 2002:a05:600c:4fcb:b0:492:3214:cbe6 with SMTP id 5b1f17b1804b1-4923341f59dmr55904685e9.23.1781698096974;
+        Wed, 17 Jun 2026 05:08:16 -0700 (PDT)
+Received: from debian.. ([2001:41d0:303:db6b::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49230a4ff67sm153691355e9.6.2026.06.17.05.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2026 05:08:16 -0700 (PDT)
+From: Tristan Madani <tristmd@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Xu Kuohai <xukuohai@huawei.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	Tristan Madani <tristan@talencesecurity.com>
+Subject: [PATCH] bpf: Reset register bounds before narrowing retval range in check_mem_access()
+Date: Wed, 17 Jun 2026 12:08:15 +0000
+Message-ID: <20260617120815.3910671-1-tristmd@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260611071242.2485058-1-dongml2@chinatelecom.cn>
- <20260611071242.2485058-2-dongml2@chinatelecom.cn> <20260613112113.55d9313f@kernel.org>
- <TYn10tJ2SIGF1pAhF26DRQ@linux.dev> <ajJrckiXEUztBQDz@boxer>
-In-Reply-To: <ajJrckiXEUztBQDz@boxer>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Wed, 17 Jun 2026 20:00:06 +0800
-X-Gm-Features: AVVi8CceZgHFM8mfvFHKtEXFCMHWNlKB0MljWDwvRAc_BYBHABk8LGbFC_ALR_Q
-Message-ID: <CADxym3aXnGwna-TKQmJ24UD1XNmq3hsapRQXQtwKF=YC-qqrOA@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/3] net: busy-poll: introduce sk_tx_busy_loop()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Menglong Dong <menglong.dong@linux.dev>, Jakub Kicinski <kuba@kernel.org>, jasowang@redhat.com, 
-	mst@redhat.com, xuanzhuo@linux.alibaba.com, eperezma@redhat.com, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	pabeni@redhat.com, magnus.karlsson@intel.com, sdf@fomichev.me, 
-	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, bjorn@kernel.org, kerneljasonxing@gmail.com, 
-	netdev@vger.kernel.org, virtualization@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 17, 2026 at 5:40=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Sun, Jun 14, 2026 at 06:12:46PM +0800, Menglong Dong wrote:
-> > On 2026/6/14 02:21, Jakub Kicinski wrote:
-> > > On Thu, 11 Jun 2026 15:12:40 +0800 menglong8.dong@gmail.com wrote:
-[...]
-> >
-> > I'm not sure if it is a good idea to introduce the sk_tx_busy_loop().
-> > Maybe we can modify the driver instead by using the same NAPI
-> > for both data sending and receiving, just like others do. The
-> > advantage of introduce sk_tx_busy_loop() is that we can split the
-> > data sending and receiving, which maybe more efficient.
->
-> Would be good if you back your changes by any performance numbers. I
-> believe that drivers do tx processing via rx napi as before AF_XDP it was
-> only about cleaning up writebacks, AF_XDP added more weight via actual tx
-> descriptors submission.
->
-> Maybe you can vibe-code virtio-net to work only with rx napi and see what
-> are the results.
+From: Tristan Madani <tristan@talencesecurity.com>
 
-Hi, Maciej. I have not done such performance testing yet. It's a good
-and interesting
-idea to do such testing on viriot-net, and I'll do it. If there is no obvio=
-us
-performance differences, I'll modify virtio-net by sending data via rx napi
-instead.
+When the BPF verifier processes a context load of an LSM hook return
+value, it calls __mark_reg_s32_range() to narrow the register to the
+hook's valid range. However, __mark_reg_s32_range() intersects the new
+range with the register's existing bounds using max_t()/min_t() rather
+than replacing them.
 
->
-> Side note/question - Do you have a tx-only use case for AF_XDP ? I am
-> planning (for a long time actually) to implement asymmetric AF_XDP
-> sockets. Currently for ZC scenarios xsk socket occupies both rx and tx
-> queues even when you do rx or tx only.
+If the destination register carries stale bounds from a prior instruction
+(e.g. BPF_MOV64_IMM), the intersection can produce a range narrower than
+reality. The verifier then believes it knows the register's exact value,
+while at runtime the actual hook return value is loaded, creating a
+verifier/runtime mismatch that can be used to bypass BPF memory safety
+checks.
 
-I think this is an interesting idea, and will be helpful in some cases.
-I'm improving the performance of MySQL with AF_XDP. For this case,
-tx-only is not suitable, as data reading and writing are both needed.
+The else branch already calls mark_reg_unknown() to reset register state
+before any narrowing. Apply the same reset in the is_retval path so
+stale bounds are cleared before __mark_reg_s32_range() intersects.
 
-But for the other case, such as Redis, data reading is mostly. And in
-this case, I think it's a good idea to use such "tx-only" ZC AF_XDP.
+Fixes: 5d99e198be27 ("bpf, lsm: Add check for BPF LSM return value")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tristan Madani <tristan@talencesecurity.com>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-In my case, I don't want to occupy the whole NIC or the whole queue
-with AF_XDP, and the other users can use the NIC too. However, the
-ZC of AF_XDP has a little additional overhead to the skb in rx path,
-as there is an extra data copy.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 54c6953a8b84..7e30dddc7721 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7532,6 +7532,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 			 */
+ 			if (info.reg_type == SCALAR_VALUE) {
+ 				if (info.is_retval && get_func_retval_range(env->prog, &range)) {
++					mark_reg_unknown(env, regs, value_regno);
+ 					err = __mark_reg_s32_range(env, regs, value_regno,
+ 								   range.minval, range.maxval);
+ 					if (err)
+-- 
+2.47.3
 
-If such "tx-only" ZC is supported, the performance of AF_XDP is still
-good in the read mostly case, and doesn't have additional overhead to
-others too.
-
-I haven't used AF_XDP for such a "reading mostly" case yet, so I'm not
-sure if I'm right ;)
-
-Thanks!
-Menglong Dong
-
->
-> >
-> > >
-> > > Third, this series does not apply.
-> >
-> > Ah, I'll rebase this series if a V2 is acceptable.
-> >
-> > Thanks!
-> > Menglong Dong
-> >
-> > >
-> > >
-> >
-> >
-> >
-> >
