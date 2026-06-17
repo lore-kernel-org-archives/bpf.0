@@ -1,122 +1,166 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7452397350;
-	Wed, 17 Jun 2026 09:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781690213; cv=none; b=jHGGHuqGTePwO0MeJFDjXP2QxRIS6QQyHOY9C6zVGS6CMixbR5FGEdF7XOmHDm38vJa2z48cAJnGTpDQm+XhwemNNAgcLP2VWDZXm1m0l7EOGLV4/QKvgfWaKMQtLPMigm/pc8Ve/Bkv6baIcu9ZID2X7NtiFkIEIZ4FbP8Gcds=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781690213; c=relaxed/simple;
-	bh=TMrxxp+guFwn7mx2uuBTxRYwnDhlyn6YX+jNWTXrEZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqQC5jORwR+mtnRl3s/G7+Y9HD4DdEAvP9W2wC7ui7PbboXJvgM8xtl2GQq2IJLtXGKT5jXW8Sd/dMPQv2I0sGaZeliUNdWhOwINWIA+TBJirLGKcaSk5t1bG8sy/X1lVUNfzf+lgvAVuBBQ2kA2UYU3x5zRZuC/IltaCmXRsHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Qd8S+ZKg; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6A83D1CD7
+	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 10:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781690636; cv=pass; b=a9mxIL+Jibw2Awd7TcTtjUrlOXKIwC98e9XyezE47pR+MzB0kCCzyhrR78Rx03HNfzcFjjU7FgTuKXnZmDjV9PBuszWcLtzRBlJl0w8GWV5APD2ed7gSBkV5uSkiG1D+fMgqcih58LD8Oy46NzIXD+wNiyazfnJxO0GnDOtwvkw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781690636; c=relaxed/simple;
+	bh=uNWxnj3qi2+ykxztSlNloYhZMOqtxnahieXViRSeMXE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GxImqkyxmgt5WMvQQRYi4xgDMMXc/9NNnOgv46TlnsJwut9Tsn+V9Q/Hmz6C64qNAtKyGKRSGc1hX2cRK34vanTe8sZhWY1t8egt2PbjCk3YMwycxCY06+2lzv3mAcZ+nKMujVoaXJ1W0TuEjHtF7sGawZA9idryZGpvkWHT6gU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1a8Soi5; arc=pass smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Qd8S+ZKg"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=oLxX7ht6PGsl2o0YP4hYtKgmC02cD+LgWZ1kDpuKHFM=; b=Qd8S+ZKgSOE8XHU0beH2cFuhrM
-	eSEUO1ONcVtDiitZrZ+MR08/5LIZLMfrZ+5FNuLYkr6wnIPo0m/sTQVC5d+X4eydBGoZXYayixDpj
-	3NWmME1/vlazZpoHcxoAlqm92lYVtYbfdxZg0oWRP8Rciln+AZ6YMrw1EuwiZAkxkAEgfHn2nKUjc
-	9puLaWCmzkm3CaZ5/SW6EtsLyFhgjEDCf6nFYLXwsvi/j/06Vmel1dI76CZEcL1KKywYCpvm0Kd1p
-	y76vC+/KMRcxT3QAdFtOFeqwhFmUymz18EZTJVbw7OI3NpujYkR7kyoNm0N+O5h8yqNB/0gGI+05X
-	udD30Ifg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wZn0W-00EXAK-1v;
-	Wed, 17 Jun 2026 09:56:28 +0000
-Date: Wed, 17 Jun 2026 02:56:23 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v4 6/7] Documentation: bootconfig: document build-time
- cmdline rendering
-Message-ID: <ajJu2KlfVyuUH-VA@gmail.com>
-References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
- <20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
- <20260610233720.82fe59cf42aa57659c2e5697@kernel.org>
- <ail6rQnRYKsXPxyF@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1a8Soi5"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5aa2c25c632so5608986e87.1
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 03:03:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781690630; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZfQf0LXYl4wkxqwdtCsYiZ4/iLVbnLys71Nw67G2xJ2T+JA8wE8lU/2vuwlzmbberH
+         RC8ecEFwjOIuzS8m1Jjq4HBNhc43IMNO3i0RbaZZ59MflhN/qqcb/NMgCdIhAtrdM7nx
+         DhkgTHGy5LxiqC7lG5e6bYSOat9GJdPTEYMdrYJ+SvyVBpp2+R602cZ8ue9FSH5irEDl
+         dPGAmwmyrGu1JGYFnlYmdkC/oT7pA0sFbhhGB9bqd8GTbmBAl1OWg6CEOXhaxmyq0C8r
+         H2a4nxYW0w/Ahbd7wDgbD++sAm2sB1Hu4CdM0poG0IUnOM/xOi4+URO+wlw3C0MzMIqR
+         sQvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NavSmjCORSGnrcL8EH/P2IOvDWqUXT9HSOh3FGii4Es=;
+        fh=Vf1F683dbeFVC428sP4xvPwD+d/5d5oCmssWaK/guh4=;
+        b=KhbYs+zOzR5IsFs1T1GRAJBuKWWkpvMPD/uGPzPHCilhyofF3AUag0rQqn7c0hSyB9
+         kulh2vUhsxa/TZYhAL21lDCE/N8s+SGBOR6WbinVRbRiPd+q2vXKmGby3AdoR0XhXPO7
+         PbVI0JshbHKhnQmy7/b1p/8+bBNcFR/F7ZjjALwxCfkdaYY4KmHK9qg0A5NK49UCUfWV
+         yGmetOEM0h2F8gzhgxnni8pOgY0+xCYrpPjyZTUZkQceFYpUZi/kHnlnnlKxiQNl5zyF
+         oiUA+OrxbZrwPhkdTpkeAFKCKUvZaDQBMe5K3QVwLroCLFED96Q+vhKcA4rtSJ2VUMHt
+         Xb5A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781690630; x=1782295430; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NavSmjCORSGnrcL8EH/P2IOvDWqUXT9HSOh3FGii4Es=;
+        b=L1a8Soi57fiumVgzxWUfcNfs3kwh96pLANkcqdK4skZehwSXPZpYsr44CzVspx2Fb4
+         TUePM0UzzUk/1h/w9Agj3oBlsfGbE8D3fxdo0sin4/tBSiLTOoLoiv8JS3Rbyz1Z2HbG
+         xPVLM54kZpbZ87LtexU9rk/s11TE6oGo+DoZX04tOgaUJ7Sb6IFUw+ipviO71CTT+2Kg
+         rX+RJvQcVGt+bD7an+Ez7OEsx7/oC4mdRutKk133MlIu4qVnXZFNOhPLYhxtQTfN4Md+
+         YAUVEiqTG+xLPse0n+Un7K3WUNx6M3F3w+Hjmd1XlkbhhYHMdLQPJaixjaHM0agZFmnT
+         vRgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781690630; x=1782295430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NavSmjCORSGnrcL8EH/P2IOvDWqUXT9HSOh3FGii4Es=;
+        b=tX3KrFi7nahfK/NOAv9c49bWfdQomvWuUk8d0aVUY1aA/nYwaROcyt7rFzbAqeYeDJ
+         g/qlLDR8vIb8kMfUs846jqW4Vc4VHcTESvcBV+LopbfRyKjSi4Zbu4qew47zV7ns+yQl
+         bM5O6cWzwQUdk4nrPvErV1kN0rBBGrvhJCEHWTbXAodQt4d4/VBm+SEl0z+ks+oiSTDp
+         0XFCWZAqnWoXEkXKQIjJ0EKpnoFSApcr+WqlWfxx78Na9Ne05iafHMKeqXAPfC7NMyKo
+         4mnCmm/28cITSvyUzy2+wjXE36H2odItZcThj7I899UC6xeDEtPym2ByRS0hq9naFgfH
+         2J2w==
+X-Forwarded-Encrypted: i=1; AFNElJ+pBUsJtYV80YYRNeBDo3m2c7A/xaGkcVzj60xjSEtKe4nodBS2LwYrVas3Aqt7gU7HK98=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2Ijs7qtqGm8b1Uvfd7+hRLd7O8VO065eK9vRWQ8ZlM1mQ+k5W
+	udA2WHOfIsDL3nY93l+kJWqObznug0atzDj4FRqxbL74cU99pLo1ZQNuiIys9loYeGeBet/g4ab
+	0tIYzlPQKv7jqF5R78MFm5Wb8NgCILcs=
+X-Gm-Gg: AfdE7ckl1KZxuWeo9kmxfprX1zbUY2xSqFE0+Ph0L0Y1x5iWMlF3x6RVWLOYqe+8Odi
+	KFQi6tifCu2jPsCseQl70fiU78/UsMCaOcfg2v2ziWhxFozFtud+ruYWKXr6V1zBauW6kuR+K8N
+	HflptrpjWo7kx7VM/tyo4vU0CsoAoyHJIiMXuRZIv6ormMDoTBzYwVm7Gd8xFlKMa0VDaHQ7i3R
+	CcX8wc9Nj/H2ykQuWNtVGoQYc1bras+weGGgxUd/61utoTm/2el7DFR/3scCl5ADIjoiyBRUWQY
+	7NHii3dFJgxng5dS/5x8YzXSZ4TkMIvj3nFtEepYII1CRK0STnN91u/1F2qaBv9uW4SHgD8VEWq
+	RaYmL4vT4tcE=
+X-Received: by 2002:a05:6512:3c9b:b0:5aa:6dff:cf1f with SMTP id
+ 2adb3069b0e04-5ad46ffd388mr940205e87.45.1781690629647; Wed, 17 Jun 2026
+ 03:03:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ail6rQnRYKsXPxyF@gmail.com>
-X-Debian-User: leitao
+References: <20260616154955.1492560-1-tushar.vyavahare@intel.com>
+ <CAL+tcoDr0gtCPeGi1yOUtg+ZD2YxEbjAy41LBgG63b8-=CStcw@mail.gmail.com> <ajJsMj0QMOF5I8qq@boxer>
+In-Reply-To: <ajJsMj0QMOF5I8qq@boxer>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Wed, 17 Jun 2026 18:03:10 +0800
+X-Gm-Features: AVVi8Cdp26ThLaA66Ypf5qUBe6fIsAARte4Jy6SOTxHSkFiChwA96WKCdQw9Ckk
+Message-ID: <CAL+tcoD9yf9kTTK335RjTiFL5FrigXgNs650O2Lnu8_LxXRhwQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/3] selftests/xsk: stabilize timeout test behavior
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Tushar Vyavahare <tushar.vyavahare@intel.com>, netdev@vger.kernel.org, 
+	magnus.karlsson@intel.com, stfomichev@gmail.com, kernelxing@tencent.com, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, 
+	daniel@iogearbox.net, tirthendu.sarkar@intel.com, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 10, 2026 at 07:58:10AM -0700, Breno Leitao wrote:
-> On Wed, Jun 10, 2026 at 11:37:20PM +0900, Masami Hiramatsu wrote:
-> > To avoid confusion, when this option is used, shouldn't we treat it
-> > the same way as if embedded command lines were enabled, and either
-> > not display it in /proc/bootconfig (or always display it, by merging
-> > the rendered string)?
-> 
-> You're right that EMBED_CMDLINE breaks it: the embedded kernel.* keys
-> are already in boot_command_line before setup_boot_config() ever sees
-> the initrd bconf, so a user reading /proc/bootconfig would see only
-> the initrd keys while parse_early_param() acted on the embedded ones.
-> That's exactly the split-state Sashiko was circling around.
-> 
-> Both options you suggest work for me, but they pull in opposite
-> directions and I'd rather not guess wrong on the user-facing
-> contract.  Which do you prefer for v5?
-> 
->   (a) Don't display embedded in /proc/bootconfig -- keep the current
->       "file shows the active bootconfig source" behavior and document
->       that with EMBED_CMDLINE=y, the kernel.* subtree may have been
->       applied separately via the cmdline.
-> 
->   (b) Always display embedded by merging the rendered string into
->       /proc/bootconfig when EMBED_CMDLINE=y, so the file reflects
->       what was actually applied.
-> 
-> Happy to go either way
+On Wed, Jun 17, 2026 at 5:43=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Wed, Jun 17, 2026 at 07:39:06AM +0800, Jason Xing wrote:
+> > Hi Tushar,
+> >
+> > On Tue, Jun 16, 2026 at 11:50=E2=80=AFPM Tushar Vyavahare
+> > <tushar.vyavahare@intel.com> wrote:
+> > >
+> > > This series improves AF_XDP selftests by making timeout handling
+> > > explicit and fixing sources of non-determinism in xsk timeout tests.
+> > >
+> > > Patch 1 introduces test_spec::poll_tmout and removes implicit
+> > > dependence on RX UMEM setup state for timeout behavior.
+> > >
+> > > Patch 2 fixes thread harness sequencing by attaching XDP programs
+> > > before worker startup, removing signal-based termination, and using
+> > > barrier synchronization only for dual-thread runs.
+> > >
+> > > Patch 3 restores shared_umem after POLL_TXQ_FULL so test-local
+> > > configuration does not leak into subsequent cases on shared-netdev
+> > > runs.
+> > >
+> > > Together these changes make timeout handling easier to follow and
+> > > improve selftest stability, especially on real NIC runs.
+> >
+> > net-next is closed, but in the meantime I'll review the series ASAP.
+> >
+> > BTW, another thing about selftests I had in my mind is that are you
+> > planning to work on this [1]?
+>
+> This one is on me. I took your changes Jason and aligned ZC batching side
+> to this behavior, followed by xskxceiver adjustment. I am planning to sen=
+d
+> this today EOD, however let's see how badly internal Sashiko will kick my
+> ass.
 
-Following up on my own mail rather than leaving it fully open: after
-looking at the code more, I'd like to recommend (a).
-
-The deciding factor is ordering. EMBED_CMDLINE only works because the
-embedded "kernel" keys are folded into boot_command_line in
-setup_arch(), before parse_early_param() -- which is long before
-setup_boot_config() looks at the initrd.
-
-So for early params the embedded values are necessarily applied first, and an
-initrd bootconfig cannot override them no matter how we present
-/proc/bootconfig. That makes the embedded cmdline behave like a build-time
-CONFIG_CMDLINE rather than a bootconfig source, and (a) is the option that
-describes it honestly: it shows in /proc/cmdline, and /proc/bootconfig keeps
-meaning "the bootconfig tree that was parsed".
-
-(a) is also what the tree already does -- saved_boot_config is built
-only from the XBC tree, the rendered string never enters it -- so it is
-no new code on the /proc side and keeps the series small.
-
-(b) would pull the flattened cmdline string back into the structured
-tree view and need dedup against the initrd keys, which muddies what
-/proc/bootconfig means for little gain.
-
-So unless you'd rather have (b), I'll take (a) for v5 and extend
-bootconfig.rst to cover the four sources (bootloader cmdline, embedded
-cmdline, initrd bootconfig, embedded bootconfig).
-
-I'll also document the sharp edge -- with both an embedded cmdline and an
-initrd bootconfig, early params reflect the embedded values because the initrd
-is not parsed yet.
+Thanks. We'll see :)
 
 Thanks,
---breno
+Jason
+
+>
+> >
+> > [1]: https://lore.kernel.org/all/20260520004244.55663-1-kerneljasonxing=
+@gmail.com/
+> >
+> > Thanks,
+> > Jason
+> >
+> > >
+> > > Tushar Vyavahare (3):
+> > >   selftests/xsk: make poll timeout mode explicit
+> > >   selftests/xsk: fix timeout thread harness sequencing
+> > >   selftests/xsk: restore shared_umem after POLL_TXQ_FULL
+> > >
+> > >  .../selftests/bpf/prog_tests/test_xsk.c       | 96 +++++++++++------=
+--
+> > >  .../selftests/bpf/prog_tests/test_xsk.h       |  2 +
+> > >  2 files changed, 56 insertions(+), 42 deletions(-)
+> > >
+> > > --
+> > > 2.43.0
+> > >
+> > >
+> >
