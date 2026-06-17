@@ -1,146 +1,147 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9B33B8139
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 20:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74D237B00F;
+	Wed, 17 Jun 2026 20:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781727735; cv=none; b=ckz2THvfPbu9g8gBH2NnAYZxO+IT5XGd6vIh9np8UrTmyztU21ZgpcHKUgZ2tHb3TLO77+du4C8yew1Co58t7YnE+7jsK5BiBBRsMa4iiUMF2JYlXfsQVwWz7iCHGSq42aej6BRmc8HNuK8HhWO2WgXS/5zULIMTsGkboSw5n5E=
+	t=1781728837; cv=none; b=TW8BBnKZkgeuHe4Gp4G+w+jbm0pruR91xDAVOPFqaZonZ0I0UN17oCRnwdiqFjvXB+3L2qP6UlyM8p84tduRXBZ1LSYlIB8LoVw2m728kHlvmaaAEsckcBf00700u1vl4YGx0KOPuecOgO4q4tKPPItKStLQEpmh+dLG3j6PlRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781727735; c=relaxed/simple;
-	bh=CceglT3qlCWH4/jTzpi9DWCh866J7068WN2/OhvFVKY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IKg1jx7EkK8SyFOFBahbSVSCaLbBeFqdcb/XOdQ2fbpYyKxnIpn5FCQ0pO8QU394Gm/2IpKWrPhF0xpXabpluo/c8AefvtX5QOwN/TJ8MDcN7e1x2itAkuyU/DGqeZIScepqrtjqJgtHNAlJNtR8XgObb7SanjqNHxqf6/8DddQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=amAb0OIv; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781728837; c=relaxed/simple;
+	bh=5XhIsKQCjWFjO3PQebkYOOJNGb2YyRKBd9WuB3miT9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HX3NM1YSlrMWTNbzVG0COZPTNWYe95ki5F57Vw62PtmZdENhKkMvJNeFH+F5nFcc0ueHOPb1vhsAHEKFrh6MUCNzLxydhx8h2qxU100LPHFd+QTSR73AGyaSmIfb8Q+OnpoNVg473mau7B/NDMKYvomdX4uFfTiUWEmWruIhOSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gylbkn5P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="amAb0OIv"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781727730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bFbB1BtfczxDB+uTNT4qTGVZYo6BQXoVhZaGmDWFja4=;
-	b=amAb0OIvInfXWf4o2w+HJ/T068r7UoZcCTSudJaDxT5hZfiBMINHEYeQ8cAqMRg3iJKM/E
-	RT36vA4HAan0H+wug1L0XuHSxyIWCiM8cq/56X//0l5pyUgMGRNAOS958zWEEj188Xe0Lz
-	Ee4BduE0YQNFbT45bLzYHlcaEh4+K3M=
-From: JP Kobryn <jp.kobryn@linux.dev>
-To: roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	akpm@linux-foundation.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/bpf_memcontrol: mark BPF memcg kfuncs static
-Date: Wed, 17 Jun 2026 13:21:47 -0700
-Message-ID: <20260617202147.78347-1-jp.kobryn@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gylbkn5P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DF81F000E9;
+	Wed, 17 Jun 2026 20:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781728836;
+	bh=VvEnwrbAPa/pJg7QIpc03r+TzOKPlfQjHrFj1uoaMwc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=gylbkn5PU4X+qaVT2pQyl74j/WSjRQWrKsuURN7hn4ompKgYAjbhUzMRoBi+GSCUO
+	 cLIDzdgF692xY3/wUsGWcMxF2jPcw7Zg6qPxMDMEUYJgMjEh5ZDQt+uEg+lC2hlvsa
+	 0elmDj41ytZWORBXtwvwLGcZWnfpS1xHQ/hCQQNsoYdu8MdSJj1OUoi7zWh925Z+1/
+	 ydwZ7ia3625Hjxq0keojNKHc/pMJHyNlL3Bp2/jJjx6LLaQ9HUGfHl+gdIW5qFBEdw
+	 Z/oJtM6GAU0Dko3RbCVsKcX+gako9fxvDVuxF4mqMLGKEFq7vQHwv7WEmTs8GHBY5d
+	 Lyczkdkin9Y7Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id E9DC2CE1113; Wed, 17 Jun 2026 13:40:35 -0700 (PDT)
+Date: Wed, 17 Jun 2026 13:40:35 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Harry Yoo <harry@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Pedro Falcato <pfalcato@suse.de>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	rcu@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH for-next v3 6/9] mm/slab: allow kfree_rcu_sheaf() on
+ PREEMPT_RT
+Message-ID: <03da8742-3790-4428-84b8-11911bf44c9e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260615-kfree_rcu_nolock-v3-0-70a54f3775bb@kernel.org>
+ <20260615-kfree_rcu_nolock-v3-6-70a54f3775bb@kernel.org>
+ <f3a56a5a-f10b-46dc-bc99-28449ade1661@kernel.org>
+ <40591888-3a87-433e-b3d2-cda1cab543be@kernel.org>
+ <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d8ca1ed-bc53-417f-944b-d78eecd1e6a5@kernel.org>
 
-The kfuncs in bpf_memcontrol.c are not called by in-kernel C code. They are
-only referenced by BPF programs and resolved through BTF.
+On Wed, Jun 17, 2026 at 07:38:16AM +0200, Vlastimil Babka (SUSE) wrote:
+> On 6/17/26 07:14, Harry Yoo wrote:
+> > 
+> > 
+> > On 6/17/26 2:24 AM, Vlastimil Babka (SUSE) wrote:
+> >> On 6/15/26 13:06, Harry Yoo (Oracle) wrote:
+> >>> As suggested by Vlastimil Babka, kfree_rcu_sheaf() can be used
+> >>> on PREEMPT_RT if we always assume spinning is not allowed on PREEMPT_RT.
+> >>> This is because local_trylock and spinlock_t are safe to use with
+> >>> trylock variant as long as the kernel does not spin and the context is
+> >>> not NMI and not hardirq.
+> >>>
+> >>> Now that __kfree_rcu_sheaf() knows how to handle allow_spin = false,
+> >>> relax the limitation and try the sheaves path on PREEMPT_RT as well.
+> >>>
+> >>> Keep the lockdep map on non RT kernels. However, do not use the lockdep
+> >>> map on PREEMPT_RT to avoid suppressing valid lockdep warnings.
+> >>>
+> >>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162@kernel.org
+> >>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+> >>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> >> 
+> >> LGTM, but maybe unnecessary pessimistic wrt call_rcu() on PREEMPT_RT?
+> >> I thought (in the Link: above) we'd only need to downgrade allow_spin to
+> >> false on PREEMPT_RT for handling sheaves movement from/to barn and
+> >> alloc_empty_sheaf(), but call_rcu() would be safe from kfree_rcu() even on
+> >> RT?
+> > 
+> > Indeed. Good point, thanks!
+> > 
+> > Hmm, but I'm not sure that it's worth the complexity given that
+> > PREEMPT_RT tries very hard to avoid disabling IRQs...
+> > 
+> >> Or is the irqs_disabled() condition rare enough so we don't care?
+> > 
+> > Given that most users don't call kfree_rcu() under raw spinlock or
+> > IRQs-disabled section on PREEMPT_RT, I think it's okay to keep it as is
+> > (it's not making things worse, at least) and wait for call_rcu_nolock()?
+> 
+> Sounds good.
+> 
+> > On a side note, I don't have much idea on what needs to call kfree_rcu()
+> > under a raw spinlock, other than set_cpus_allowed_force(), which should
+> > really be using kfree_nolock() instead of kfree_rcu() once we support
+> > kmalloc() -> kfree_nolock():
+> 
+> Looks like the case. Well if the fallback path of kfree_nolock() that is
+> irq_work_queue() is indeed safe here.
+> 
+> >> 	/*
+> >> 	 * Because this is called with p->pi_lock held, it is not possible
+> >> 	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
+> >> 	 * kfree_rcu().
+> >> 	 */
+> >> 	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
+> > 
+> > Any thoughts, RCU/RT folks?
 
-Since no external linkage is needed, mark these functions static.
+For the call_rcu*() counterparts, I am currently considering making the
+existing functions check for interrupts disabled, using irq_work_queue()
+in that case.  I suppose that I could use raise_softirq() in the
+use_softirq=1 case when in_hardirq().  Either way, the check should be
+cheap compared to rest of the processing.  The additional rcu_barrier()
+work required is of course way down in the noise compared to acquiring
+a global mutex.
 
-Fixes: 5904db9891f8 ("mm: introduce BPF kfuncs to deal with memcg pointers")
-Fixes: 5c7db3239c9f ("mm: introduce bpf_get_root_mem_cgroup() BPF kfunc")
-Fixes: 99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statistics and events")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202606150332.Xy4Egd9s-lkp@intel.com/
-Signed-off-by: JP Kobryn <jp.kobryn@linux.dev>
----
- mm/bpf_memcontrol.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+In your case, kfree_rcu() can be quite a bit lighter weight, though.
+So the extra checks might not be lost in the noise.
 
-diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-index 716df49d7647..eff79bb2c758 100644
---- a/mm/bpf_memcontrol.c
-+++ b/mm/bpf_memcontrol.c
-@@ -20,7 +20,7 @@ __bpf_kfunc_start_defs();
-  *
-  * Return: A pointer to the root memory cgroup.
-  */
--__bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
-+__bpf_kfunc static struct mem_cgroup *bpf_get_root_mem_cgroup(void)
- {
- 	if (mem_cgroup_disabled())
- 		return NULL;
-@@ -41,7 +41,7 @@ __bpf_kfunc struct mem_cgroup *bpf_get_root_mem_cgroup(void)
-  * Return: A pointer to a mem_cgroup structure after bumping
-  * the corresponding css's reference counter.
-  */
--__bpf_kfunc struct mem_cgroup *
-+__bpf_kfunc static struct mem_cgroup *
- bpf_get_mem_cgroup(struct cgroup_subsys_state *css)
- {
- 	struct mem_cgroup *memcg = NULL;
-@@ -75,7 +75,7 @@ bpf_get_mem_cgroup(struct cgroup_subsys_state *css)
-  * Releases a previously acquired memcg reference.
-  * Implements KF_RELEASE semantics.
-  */
--__bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
-+__bpf_kfunc static void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
- {
- 	css_put(&memcg->css);
- }
-@@ -89,8 +89,8 @@ __bpf_kfunc void bpf_put_mem_cgroup(struct mem_cgroup *memcg)
-  *
-  * Return: The current value of the corresponding events counter.
-  */
--__bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
--						   enum vm_event_item event)
-+__bpf_kfunc static unsigned long
-+bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg, enum vm_event_item event)
- {
- 	if (unlikely(!memcg_vm_event_item_valid(event)))
- 		return (unsigned long)-1;
-@@ -110,7 +110,7 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
-  *
-  * Return: The current memory cgroup size in bytes.
-  */
--__bpf_kfunc unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
-+__bpf_kfunc static unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
- {
- 	return page_counter_read(&memcg->memory) * PAGE_SIZE;
- }
-@@ -122,8 +122,8 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_usage(struct mem_cgroup *memcg)
-  *
-  * Return: The current value of the memory event counter.
-  */
--__bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg,
--						       enum memcg_memory_event event)
-+__bpf_kfunc static unsigned long
-+bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg, enum memcg_memory_event event)
- {
- 	if (unlikely(event >= MEMCG_NR_MEMORY_EVENTS))
- 		return (unsigned long)-1;
-@@ -140,7 +140,8 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *memcg,
-  *
-  * Return: The value of the page state counter in bytes.
-  */
--__bpf_kfunc unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int idx)
-+__bpf_kfunc static unsigned long
-+bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int idx)
- {
- 	if (unlikely(!memcg_stat_item_valid(idx)))
- 		return (unsigned long)-1;
-@@ -154,7 +155,7 @@ __bpf_kfunc unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, in
-  *
-  * Propagate memory cgroup's statistics up the cgroup tree.
-  */
--__bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
-+__bpf_kfunc static void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
- {
- 	mem_cgroup_flush_stats(memcg);
- }
--- 
-2.54.0
+Thoughts?
 
+								Thanx, Paul
