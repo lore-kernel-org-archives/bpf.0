@@ -1,132 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B43B3C4545
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 09:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7452397350;
+	Wed, 17 Jun 2026 09:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781689539; cv=none; b=R5EBpiw6MGhDcw51Cx0uAhJgrGpljuZSQaWQA3A04tgdj87TeSxZa21N404ahN+/g/pL3+AcH1qkcxwNwhPzxuxAd4CVGmrmqXhmBebgjMkeUQgiRYzcrvXyfplF6/BtvJh7/eRiKzXzPGjCQWON9Qt4EADS6uuW8ByQq/NRS5A=
+	t=1781690213; cv=none; b=jHGGHuqGTePwO0MeJFDjXP2QxRIS6QQyHOY9C6zVGS6CMixbR5FGEdF7XOmHDm38vJa2z48cAJnGTpDQm+XhwemNNAgcLP2VWDZXm1m0l7EOGLV4/QKvgfWaKMQtLPMigm/pc8Ve/Bkv6baIcu9ZID2X7NtiFkIEIZ4FbP8Gcds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781689539; c=relaxed/simple;
-	bh=MicREHmOGFaL/o66xLNzbDDWGUe5t+NGwdkozT9+Z/w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b77MdbsZwxT9FMmd17TLGKvLJvm8XUbdE9xCQ6ryAW+bJuxN0US2vrwTEud7fIh9Ew1i3OFKqhBZl3MQUngsiJEvD19GTNlezSgTeP8NIMA4EK2yEPsCnZw6EnL3K7F1WPh4WseBKLPs7UwnNP1o+K/wQ6AJKfUaTYV8l7KTDAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EBozsrzq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781690213; c=relaxed/simple;
+	bh=TMrxxp+guFwn7mx2uuBTxRYwnDhlyn6YX+jNWTXrEZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqQC5jORwR+mtnRl3s/G7+Y9HD4DdEAvP9W2wC7ui7PbboXJvgM8xtl2GQq2IJLtXGKT5jXW8Sd/dMPQv2I0sGaZeliUNdWhOwINWIA+TBJirLGKcaSk5t1bG8sy/X1lVUNfzf+lgvAVuBBQ2kA2UYU3x5zRZuC/IltaCmXRsHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Qd8S+ZKg; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EBozsrzq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EEF1F000E9;
-	Wed, 17 Jun 2026 09:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781689538;
-	bh=FXjJsP6xWf03P95+CtLkthSuF8tBDA30OXw30ealebc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EBozsrzqh7EpTrg3LdzRYjY0bnVmOmK/eXK4+CgZZ0t79V60ZcCNWmdY9sodcaJRI
-	 F6hBnzT9q2ru6ao2FdSLmYqqJTL7JVo6WHeqiM3es/tcb19J8jLuCKO66niq4z8+UV
-	 0YIguJHJ9dwGzSIVgQft7j5fVS2blbTfRKMxcQbH3BxGy+2RMttleNXv2zTBcZlekq
-	 /aEELRNMabc6EHWzqYrPvXl+KBKb4FN/nssoSpuYZrgOkalkv6vqepH1z2DcLD5krA
-	 +xFoGQDEa0jLZItZlY0cAq3eI085jgrhLPH7pVhBbSgpXS5nVArATatauMT/OZmz54
-	 feVvzAbOioLmQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Cover partial copy of
- non-linear test_run output
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sun Jian" <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260617093557.63880-3-sun.jian.kdev@gmail.com>
-References: <20260617093557.63880-1-sun.jian.kdev@gmail.com>
- <20260617093557.63880-3-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Jun 2026 09:45:37 +0000
-Message-Id: <20260617094537.D1EEF1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Qd8S+ZKg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=oLxX7ht6PGsl2o0YP4hYtKgmC02cD+LgWZ1kDpuKHFM=; b=Qd8S+ZKgSOE8XHU0beH2cFuhrM
+	eSEUO1ONcVtDiitZrZ+MR08/5LIZLMfrZ+5FNuLYkr6wnIPo0m/sTQVC5d+X4eydBGoZXYayixDpj
+	3NWmME1/vlazZpoHcxoAlqm92lYVtYbfdxZg0oWRP8Rciln+AZ6YMrw1EuwiZAkxkAEgfHn2nKUjc
+	9puLaWCmzkm3CaZ5/SW6EtsLyFhgjEDCf6nFYLXwsvi/j/06Vmel1dI76CZEcL1KKywYCpvm0Kd1p
+	y76vC+/KMRcxT3QAdFtOFeqwhFmUymz18EZTJVbw7OI3NpujYkR7kyoNm0N+O5h8yqNB/0gGI+05X
+	udD30Ifg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wZn0W-00EXAK-1v;
+	Wed, 17 Jun 2026 09:56:28 +0000
+Date: Wed, 17 Jun 2026 02:56:23 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v4 6/7] Documentation: bootconfig: document build-time
+ cmdline rendering
+Message-ID: <ajJu2KlfVyuUH-VA@gmail.com>
+References: <20260609-bootconfig_using_tools-v4-0-73c463f03a97@debian.org>
+ <20260609-bootconfig_using_tools-v4-6-73c463f03a97@debian.org>
+ <20260610233720.82fe59cf42aa57659c2e5697@kernel.org>
+ <ail6rQnRYKsXPxyF@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ail6rQnRYKsXPxyF@gmail.com>
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Uninitialized stack buffer `out` is read if the BPF test run fai=
-ls.
---
+On Wed, Jun 10, 2026 at 07:58:10AM -0700, Breno Leitao wrote:
+> On Wed, Jun 10, 2026 at 11:37:20PM +0900, Masami Hiramatsu wrote:
+> > To avoid confusion, when this option is used, shouldn't we treat it
+> > the same way as if embedded command lines were enabled, and either
+> > not display it in /proc/bootconfig (or always display it, by merging
+> > the rendered string)?
+> 
+> You're right that EMBED_CMDLINE breaks it: the embedded kernel.* keys
+> are already in boot_command_line before setup_boot_config() ever sees
+> the initrd bconf, so a user reading /proc/bootconfig would see only
+> the initrd keys while parse_early_param() acted on the embedded ones.
+> That's exactly the split-state Sashiko was circling around.
+> 
+> Both options you suggest work for me, but they pull in opposite
+> directions and I'd rather not guess wrong on the user-facing
+> contract.  Which do you prefer for v5?
+> 
+>   (a) Don't display embedded in /proc/bootconfig -- keep the current
+>       "file shows the active bootconfig source" behavior and document
+>       that with EMBED_CMDLINE=y, the kernel.* subtree may have been
+>       applied separately via the cmdline.
+> 
+>   (b) Always display embedded by merging the rendered string into
+>       /proc/bootconfig when EMBED_CMDLINE=y, so the file reflects
+>       what was actually applied.
+> 
+> Happy to go either way
 
-commit f204128d45018a80c7b9b142c6d9a253204b22bd
-Author: Sun Jian <sun.jian.kdev@gmail.com>
+Following up on my own mail rather than leaving it fully open: after
+looking at the code more, I'd like to recommend (a).
 
-selftests/bpf: Cover partial copy of non-linear test_run output
-   =20
-This commit adds selftest coverage for partial copies of non-linear test_run
-output for TC and XDP programs. It verifies that test_run returns -ENOSPC,
-reports the full packet length, and copies the packet prefix into the
-provided buffer.
+The deciding factor is ordering. EMBED_CMDLINE only works because the
+embedded "kernel" keys are folded into boot_command_line in
+setup_arch(), before parse_early_param() -- which is long before
+setup_boot_config() looks at the initrd.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c b/too=
-ls/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> index 01f1d1b6715a6..9cc898e6a9f71 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/prog_run_opts.c
-[ ... ]
-> @@ -20,6 +24,69 @@ static void check_run_cnt(int prog_fd, __u64 run_cnt)
->  	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt=
-, info.run_cnt);
->  }
-> =20
-> +static void init_pkt(__u8 *pkt, size_t len)
-> +{
-> +	size_t i;
-> +
-> +	for (i =3D 0; i < len; i++)
-> +		pkt[i] =3D i & 0xff;
-> +}
-> +
-> +static void test_skb_nonlinear_data_out_partial(struct test_pkt_access *=
-skel)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
-> +	__u8 pkt[NONLINEAR_PKT_LEN];
-> +	__u8 out[SHORT_OUT_LEN];
+So for early params the embedded values are necessarily applied first, and an
+initrd bootconfig cannot override them no matter how we present
+/proc/bootconfig. That makes the embedded cmdline behave like a build-time
+CONFIG_CMDLINE rather than a bootconfig source, and (a) is the option that
+describes it honestly: it shows in /proc/cmdline, and /proc/bootconfig keeps
+meaning "the bootconfig tree that was parsed".
 
-[Severity: Medium]
-Should out[] be explicitly zero-initialized?
+(a) is also what the tree already does -- saved_boot_config is built
+only from the XBC tree, the rendered string never enters it -- so it is
+no new code on the /proc side and keeps the series small.
 
-If bpf_prog_test_run_opts() fails with an unexpected error and doesn't write
-to the userspace buffer, the ASSERT_EQ macros below won't abort the test.
-This means the subsequent ASSERT_OK(memcmp(...)) call will read uninitializ=
-ed
-stack memory, which can trigger undefined behavior and Memory Sanitizer (MS=
-AN)
-warnings.
+(b) would pull the flattened cmdline string back into the structured
+tree view and need dedup against the initrd keys, which muddies what
+/proc/bootconfig means for little gain.
 
-> +	struct __sk_buff skb =3D {};
-> +	int prog_fd, err;
-> +
-[ ... ]
-> +	prog_fd =3D bpf_program__fd(skel->progs.tc_pass_prog);
-> +	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-> +
-> +	ASSERT_EQ(err, -ENOSPC, "skb_nonlinear_partial_err");
-> +	ASSERT_EQ(topts.data_size_out, sizeof(pkt), "skb_nonlinear_partial_data=
-_size_out");
-> +	ASSERT_OK(memcmp(out, pkt, sizeof(out)), "skb_nonlinear_partial_data_ou=
-t");
-> +}
-> +
-> +static void test_xdp_nonlinear_data_out_partial(struct test_pkt_access *=
-skel)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
-> +	__u8 pkt[NONLINEAR_PKT_LEN];
-> +	__u8 out[SHORT_OUT_LEN];
+So unless you'd rather have (b), I'll take (a) for v5 and extend
+bootconfig.rst to cover the four sources (bootloader cmdline, embedded
+cmdline, initrd bootconfig, embedded bootconfig).
 
-[Severity: Medium]
-Could we also zero-initialize this buffer for the same reason?
+I'll also document the sharp edge -- with both an embedded cmdline and an
+initrd bootconfig, early params reflect the embedded values because the initrd
+is not parsed yet.
 
-> +	struct xdp_md ctx =3D {};
-> +	int prog_fd, err;
-> +
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617093557.6388=
-0-1-sun.jian.kdev@gmail.com?part=3D2
+Thanks,
+--breno
