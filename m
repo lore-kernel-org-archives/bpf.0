@@ -1,163 +1,157 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACFC2E1F0E;
-	Wed, 17 Jun 2026 06:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849C634FF79;
+	Wed, 17 Jun 2026 07:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781679207; cv=none; b=duEz6aTMNnBEuPAUirOs21SNw8xxMRfANd1R08kebaN2V6AUcElEz0Rs5SVmIExByL7y46LsF1mfejojEG/nj13uzyaP9awx9jceAfnTXcffxGekhBglTb77p991Rk8cVKV8UpC49x004ZDtgoBLRcFaImOQWVS2lxqwZRbACdQ=
+	t=1781679752; cv=none; b=czEv77ryxTZ6URTOEPQ0/bAbAMT3XRvCaQil4wcnUiB9hmP7UiotBwq4abk5eer1x7chn/0N30Ykj28VNdlwWVr8LWsNAc3biNKrr7E6eANwIcYKiX4MYOHrTpAalyUHrOdOWd7fzcbUzv6kWKOn4m4RLd/5cIgAhNTgNl2KkFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781679207; c=relaxed/simple;
-	bh=H1X1/oNYM1aeqlFUyVZqyRGobeAlI7aFGCTriW22C44=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZmONHAFbTr6hAGc+S4dRILjujDiJHY8NO01nsLvHL9z14Tz0GB8uzSK2Fm6MVm4E7T+sr/6HP4srtkrjIN67v3BfaWxE3dXLQTDoIjJtmGQa/4plfSr2LIfIaMuJoQWDjBkLRAX18Ps3o+51Dvam/VBgajfop5Sek0X7tAoBnJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=l7pba1O4; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1781679752; c=relaxed/simple;
+	bh=QC/m4Ge72NarEgPPZnenQ8Z2ImAe81ATwGkWWw5fkVI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LNT23tYVWgv0lSig91ldhoinbxw546Z7OOOlVjyPFqJHz/PkblWut+3xShtOe8CuMfm6iCa/MX5eByHMYhmI4eLQ9ETxEGJRAXWqzooA57GlNwFD6xsyPgmYCzWm6IcG20RaQNK6VUq9n0eKtBCkf0v9cBxA3SJTsdzfJu2qbUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eq8F7qx0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="l7pba1O4"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=djA+SxTM/4DdX0nuhSS9rd5BRl3y7xbZwe5Na5XIBDQ=;
-	b=l7pba1O4Jax4lanbsZdumec7DcFKMwARlx0KpuNousaYNfUrBf9Wx+Vh2Z0fpYcucI5n9WO8Z
-	3twZ1jC6VjuG1jaZXqq9L8j5rLAwc+MJBKwKywMfXH1cq0wW9eE3WepYC5nOTcTNCLIABjO2Yc5
-	7fr2PYmgDBIf9a0lxOZCkJ0=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4ggDrJ3RjJz1K97S;
-	Wed, 17 Jun 2026 14:45:20 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9E3B4405D0;
-	Wed, 17 Jun 2026 14:53:17 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 17 Jun
- 2026 14:53:16 +0800
-Message-ID: <c20a7c0e-121f-474c-945a-2a4705a45bd5@huawei.com>
-Date: Wed, 17 Jun 2026 14:53:16 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eq8F7qx0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03CB1F000E9;
+	Wed, 17 Jun 2026 07:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781679751;
+	bh=vP8VNXwJPI7kFbdNWCLWfd1RxXCQsIHlr7yJImNXR7Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Eq8F7qx0ErUZyeimSpoAey3+Aak+f6qnsF9u//0UVvYGt9DWzgwE4+ZSmeNs20ocp
+	 kq7Zb7gdkpog4og1ERcRiwq/lHETSPI14E4fKVWeqJxfc6+OASvdEnK6dhanjYcQkZ
+	 CJ8p8EN0tyKjefPr/c21+8W+9SceGgkIrqkSxrrq4mNJb0OXDlIk7rZWlM/n+Ezwq2
+	 q1jG4rx3JYsWXxDSRkLaOWbK0Q0lJc2yiOXjRyKoLMkdQxVs1EbkPD4okC2DJPcZMK
+	 8km8mIkk+RilbbFHALZkwG8VPXTxSLcqhuMrq/nOU2Vg3BeE/A0sxdLggj2C8/GBdM
+	 CaB3BTCr21b6w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] tools/sched_ext: scx_flatcg: Fix inverted vtime delta
+ accounting
+Reply-To: sashiko-reviews@lists.linux.dev
+To: luoliang@kylinos.cn
+Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
+In-Reply-To: <20260617064805.3901965-1-luoliang@kylinos.cn>
+References: <20260617064805.3901965-1-luoliang@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 17 Jun 2026 07:02:30 +0000
+Message-Id: <20260617070230.F03CB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/3] riscv, bpf: Fix support for BPF_SDIV and
- BPF_SMOD in RV32 JIT
-Content-Language: en-US
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<eddyz87@gmail.com>, <memxor@gmail.com>, <luke.r.nels@gmail.com>,
-	<xi.wang@gmail.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <alex@ghiti.fr>,
-	<jserv@ccns.ncku.edu.tw>, <eleanor15x@gmail.com>, <marscheng@google.com>,
-	<bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20260511221648.3251464-1-visitorckw@gmail.com>
- <20260511221648.3251464-2-visitorckw@gmail.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260511221648.3251464-2-visitorckw@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemf100007.china.huawei.com (7.202.181.221)
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-lgtm, just some nits
+New issues:
+- [High] Artificial clamping of `cvtime` at `S64_MAX` causes cgroup starvat=
+ion.
 
-On 2026/5/12 6:16, Kuan-Wei Chiu wrote:
-> The current rv32 bpf jit compiler incorrectly treats BPF_SDIV and
-> BPF_SMOD as unsigned operations. The BPF instruction set allows
-> signed division and modulo by reusing the BPF_DIV and BPF_MOD opcodes
-> with the instruction offset set to 1.
-> 
-> Update the emit_alu_r32() function to accept an 'is_sdiv' variable and
-> emit the correct div and rem instructions when the offset is 1.
-> 
-> Before this patch:
-> [   44.161771] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-> [   44.167385] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-> [   44.171053] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
-> [   44.172081] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
-> 
-> After this patch:
-> [   16.002192] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 95 PASS
-> [   16.002983] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 1059 PASS
-> [   16.017167] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 136 PASS
-> [   16.023002] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 109 PASS
-> 
-> Fixes: ec0e2da95f72 ("bpf: Support new signed div/mod instructions.")
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> ---
->   arch/riscv/net/bpf_jit_comp32.c | 19 ++++++++++++++-----
->   1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-> index 592dd86fbf81..7396899ea276 100644
-> --- a/arch/riscv/net/bpf_jit_comp32.c
-> +++ b/arch/riscv/net/bpf_jit_comp32.c
-> @@ -509,7 +509,7 @@ static void emit_alu_r64(const s8 *dst, const s8 *src,
->   }
->   
->   static void emit_alu_r32(const s8 *dst, const s8 *src,
-> -			 struct rv_jit_context *ctx, const u8 op)
-> +			 struct rv_jit_context *ctx, const u8 op, bool is_sdiv)
+Pre-existing issues:
+- [High] RB-tree node comparison breaks when virtual time naturally wraps a=
+round.
+--
 
-let's combind `op` and `is_sdiv` to `const struct bpf_insn *insn`, and 
-better to name `is_signed = insn->off == 1`
+commit 4fba932e11addf1840854e2adfbd301dff527f34
+Author: Liang Luo <luoliang@kylinos.cn>
 
->   {
->   	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
->   	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
-> @@ -539,10 +539,16 @@ static void emit_alu_r32(const s8 *dst, const s8 *src,
->   		emit(rv_mul(lo(rd), lo(rd), lo(rs)), ctx);
->   		break;
->   	case BPF_DIV:
-> -		emit(rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
-> +		if (is_sdiv)
-> +			emit(rv_div(lo(rd), lo(rd), lo(rs)), ctx);
-> +		else
-> +			emit(rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
->   		break;
->   	case BPF_MOD:
-> -		emit(rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
-> +		if (is_sdiv)
-> +			emit(rv_rem(lo(rd), lo(rd), lo(rs)), ctx);
-> +		else
-> +			emit(rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
+tools/sched_ext: scx_flatcg: Fix inverted vtime delta accounting
 
-how about
-emit(is_signed ? rv_rem(lo(rd) : rv_remu(lo(rd), lo(rd), lo(rs)), ctx)
+This commit fixes inverted vtime delta accounting in try_pick_next_cgroup()
+and fcg_dispatch(). It addresses an issue where early yields were penalized
+and overruns resulted in massive positive cvtime_delta values due to unsign=
+ed
+underflow. The patch applies the refund using a signed domain to correctly
+reduce virtual time without wrapping.
 
->   		break;
->   	case BPF_LSH:
->   		emit(rv_sll(lo(rd), lo(rd), lo(rs)), ctx);
-> @@ -959,6 +965,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   	u8 code = insn->code;
->   	s16 off = insn->off;
->   	s32 imm = insn->imm;
-> +	bool is_sdiv = false;
->   
->   	const s8 *dst = bpf2rv32[insn->dst_reg];
->   	const s8 *src = bpf2rv32[insn->src_reg];
-> @@ -1041,7 +1048,9 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   			emit_imm32(tmp2, imm, ctx);
->   			src = tmp2;
->   		}
-> -		emit_alu_r32(dst, src, ctx, BPF_OP(code));
-> +		if ((BPF_OP(code) == BPF_DIV || BPF_OP(code) == BPF_MOD) && insn->off == 1)
-> +			is_sdiv = true;
-> +		emit_alu_r32(dst, src, ctx, BPF_OP(code), is_sdiv);
->   		break;
->   
->   	case BPF_ALU | BPF_MOV | BPF_K:
-> @@ -1065,7 +1074,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   		 * src is ignored---choose tmp2 as a dummy register since it
->   		 * is not on the stack.
->   		 */
-> -		emit_alu_r32(dst, tmp2, ctx, BPF_OP(code));
-> +		emit_alu_r32(dst, tmp2, ctx, BPF_OP(code), false);
->   		break;
->   
->   	case BPF_ALU | BPF_END | BPF_FROM_LE:
+> diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatc=
+g.bpf.c
+> index fec3595818269..a37f5b876da8f 100644
+> --- a/tools/sched_ext/scx_flatcg.bpf.c
+> +++ b/tools/sched_ext/scx_flatcg.bpf.c
+> @@ -249,15 +249,26 @@ static void cgrp_refresh_hweight(struct cgroup *cgr=
+p, struct fcg_cgrp_ctx *cgc)
+> =20
+>  static void cgrp_cap_budget(struct cgv_node *cgv_node, struct fcg_cgrp_c=
+tx *cgc)
+>  {
+> -	u64 delta, cvtime, max_budget;
+> +	s64 delta;
+> +	u64 cvtime, max_budget;
+> =20
+>  	/*
+>  	 * A node which is on the rbtree can't be pointed to from elsewhere yet
+>  	 * and thus can't be updated and repositioned. Instead, we collect the
+>  	 * vtime deltas separately and apply it asynchronously here.
+>  	 */
+> -	delta =3D __sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_delta);
+> -	cvtime =3D cgv_node->cvtime + delta;
+> +	delta =3D (s64)__sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_del=
+ta);
+> +	/*
+> +	 * cvtime_delta may be negative (early-yield refund from fcg_dispatch()=
+).
+> +	 * Apply it in the signed domain and clamp the resulting cvtime at zero
+> +	 * so that a refund larger than the accumulated cvtime doesn't roll the
+> +	 * field negative.
+> +	 */
+> +	s64 vtime =3D (s64)cgv_node->cvtime + delta;
+> +
+> +	if (vtime < 0)
+> +		vtime =3D 0;
+> +	cvtime =3D (u64)vtime;
+
+[Severity: High]
+Does casting the absolute unsigned virtual time cgv_node->cvtime to s64
+cause issues when cvtime crosses S64_MAX?
+
+Because cvtime is scaled by inverse weight and advanced by the number of
+active CPUs, a lowest-weight cgroup on a multi-core machine can exceed S64_=
+MAX
+in just 18-20 minutes of runtime. Once cvtime crosses S64_MAX, the (s64)
+cast yields a negative number, causing the clamping logic to reset the
+cgroup's cvtime to 0.
+
+With its virtual time near 0 while all other cgroups are near S64_MAX, could
+this cause the affected cgroup to be exclusively prioritized by the schedul=
+er,
+completely starving the system until its cvtime catches up again?
+
+[ ... ]
+
+While reviewing this patch, I noticed a pre-existing issue nearby:
+
+tools/sched_ext/scx_flatcg.bpf.c:cgv_node_less() {
+	struct cgv_node *cgc_a, *cgc_b;
+
+	cgc_a =3D container_of(a, struct cgv_node, rb_node);
+	cgc_b =3D container_of(b, struct cgv_node, rb_node);
+
+	return cgc_a->cvtime < cgc_b->cvtime;
+}
+
+[Severity: High]
+This is a pre-existing issue, but does using standard unsigned comparison
+for cvtime break the RB-tree sorting when virtual time naturally wraps arou=
+nd?
+
+Because cvtime is scaled by inverse weight and advanced by all active CPUs
+simultaneously, it can naturally wrap around U64_MAX in tens of minutes for
+low-weight cgroups on large multi-core machines. When a cgroup's cvtime wra=
+ps
+back near 0, the unsigned comparison incorrectly considers it strictly smal=
+ler
+than all other non-wrapped cgroups.
+
+Could this keep the wrapped cgroup at the front of the RB-tree and prioriti=
+ze
+it indefinitely, starving all other cgroups until its cvtime catches up to
+U64_MAX again? Should this comparison use the wrap-safe time_before() macro?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617064805.3901=
+965-1-luoliang@kylinos.cn?part=3D1
