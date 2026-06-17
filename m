@@ -1,81 +1,131 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80033803DB
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 11:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1BA394793;
+	Wed, 17 Jun 2026 11:18:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781694558; cv=none; b=i3b+cS11OxYBUXJbRmFruc/vvLI5QQPuBrWdnxt5fDDJqVzqtP2JwF5BQd4q7jetgr2X+Q7S8jcfpNXd3yJvxWdOpsuZ/RcFjqcjBLaxO/vXs6D1xk+gthouv8vRaC2w2YNM2n1zzCB6RqXGUNrYPEY+4/sjO68vnHdeSr75IAk=
+	t=1781695127; cv=none; b=Bj11N6hvG5LTQH9R9cuNwgSHvwJqgVMBi/5pp5LqG6aqxvZ+ExNHIib55UusH7UB1sN01Q39CUX9AiWTCBo8NocE7wWlA+A4zxK+JWSxKBkIVmFDfEz5FTgmAUDVXKPCrjbJ31niB0sc5UKKK2C0YE1BBNrFLIvwsHj1s6ViHUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781694558; c=relaxed/simple;
-	bh=XzP0Cyg7IV+GZuzJzF01SzhIskMBRbALCcY9nKUynKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HD6UAjo2gbcC1iKIInQ1Vge55w7Cnx/6FclDz+dwUInJGT7GUEU52yXJQEO2RayTy65CVSH0X1+8PWJTSECgUmR0QRGckMICQJiZ9KNEwN6aRFrqy4GpawhMBr5pNNnb0YLUy63D4xFMIIL7ns0zJFK5tCyT8dg1Pe7NlH/ohCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HJvYPWTP; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1781695127; c=relaxed/simple;
+	bh=RlnSDe8jTbvt6nTll+OU8DpOGpiGyEo+2R+RdH0TcI0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HUl2xH7FRq1UHtJ+wKKLQYtZAdHwlukh7KSBLYj3xYi2BZKKiH1HdulP6C3t8YUUS++gl5HRy5mv1QKFjbb8dLT+tqFpRsxEcLIkb/c1PVuJS/tOtqej0WEYJ9pXo7VL7EY4H4eGtti3pdy+O9QZUv2AQ4nNJcZn03oIc/tWAYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CesLbRwW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HJvYPWTP"
-Message-ID: <14d43777-e979-42b4-a9ec-cc5d46f4e01e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1781694544;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hit5OWWdmyaqHN3p4Sv7rLdforBDEson2Ovw95DWC3o=;
-	b=HJvYPWTPl7x7tkSX4cfnotjTzOBWQd9dE5AfyePTqFzwNeijn7f70P0KFkpnlILfgL1h7z
-	tGGAm8eqzsxC/ndCNRdvXEsbJWpeq/4ndE35vBrPyIJJdJnWld0l/9T7ez7JgQqwEM4xcj
-	PuAJ8MNaEblHLune/5T2sOpib1FndjE=
-Date: Wed, 17 Jun 2026 19:08:40 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CesLbRwW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC011F00A3D;
+	Wed, 17 Jun 2026 11:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781695124;
+	bh=UfBJt+LNJ9jrCs3poe+MX0Rqq/0jXvVOHqHItbwOlTI=;
+	h=From:Subject:Date:To:Cc;
+	b=CesLbRwWZAsJTqbNT62CZ83MCeUQlmp9s8DXamFQmeRrCZjrYTA6b7+umICkOH2Hd
+	 0MwUg6MWMIr4/7U/EXfDqChhkayKF2WgKTTeCdBFZLXHxO8AP3M+1UW3QONcK/hmjO
+	 +1tTbq1xsYYru2VPF0mT6Hg5OXc5jVW++mu0XnXg0EAVYWsZGHk33T2ju+WFRspxsV
+	 SyuGsB4yS/F6jrCaGpq8qsFaWvJe9LEs/LWU4t77PqYI2JanrlHrVI4C7N+dZNmbxD
+	 WO3ibszcJ6HT63yPelw5pdhLdflH/W9xlgzwmdQkJ36wV68nX06a2PVjftAquU8buH
+	 2Dw8XDTGBkgKw==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/2] Add bpf_sock_read_xattr() kfunc to read socket xattrs
+Date: Wed, 17 Jun 2026 13:18:26 +0200
+Message-Id: <20260617-work-bpf-sock-xattr-v1-0-a1276f7c9da3@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 1/2] bpf: Fix stack slot index in nospec checks
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Luis Gerhorst
- <luis.gerhorst@fau.de>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260617-f01-11-stack-nospec-slot-index-v1-0-e3a080b0cd7e@mails.tsinghua.edu.cn>
- <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260617-f01-11-stack-nospec-slot-index-v1-1-e3a080b0cd7e@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIKCMmoC/yWMQQ6CMBBFr0Jm7RhAU8CrEBdtnUolaclMRRLC3
+ W11+V7+fzsIsSeBW7UD0+rFx5ChOVVgJx2ehP6RGdq6VbVqOvxEntEsDiXaGTedEuOlI3u1w9D
+ 0vYL8XJic337V8f5neZsX2VRSZWG0EBrWwU5FrU7ORcFxfAHX3FbIkgAAAA==
+X-Change-ID: 20260617-work-bpf-sock-xattr-37ec4c991886
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, linux-fsdevel@vger.kernel.org, 
+ netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.16-dev-4090c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3624; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=RlnSDe8jTbvt6nTll+OU8DpOGpiGyEo+2R+RdH0TcI0=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQZNfVLzxTxKW92D9i7LHWGX0l+zjX/hLYb3i7Bdn9LE
+ 9tWKl7uKGVhEONikBVTZHFoNwmXW85TsdkoUwNmDisTyBAGLk4BmMghYUaGv8ZJN6af+Ri1abdO
+ 3U2JsgdRVYy1hxw3Zly4d6BWeNH8HkaGl3Oa1meujo5Kj983/V/uYcvvOobx7xfzX0xl+Zz/81U
+ QMwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
+In c8db08110cbe ("Merge tag 'vfs-7.1-rc1.xattr' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs")
+we added support for extended attributes for sockets. This comes in two
+flavors: sockfs and non-sockfs/filesystem sockets. Filesystem sockets
+are actual filesystem objects so reading xattrs must use dedicated fs
+helpers such as bpf_get_dentry_xattr() and bpf_get_file_xattr(). Those
+are inherently sleeping operations. Sockfs sockets on the other hand
+don't need to use sleeping operations as the underlying data structure
+is lockless. In addition, retrieval of sockfs extended attributes often
+happens from LSM hooks that only provide struct socket and it's
+completely nonsensical to grab a reference to a file, then force a
+sleeping operation to retrieve the xattr and drop the reference. We know
+that the sockfs file cannot go away while the LSM hook runs.
 
-On 6/17/26 12:57 AM, Nuoqi Gui wrote:
-> check_stack_write_fixed_off() computes the byte slot for a fixed-offset
-> stack write as -off - 1, and records each written byte in slot_type[] with
-> (slot - i) % BPF_REG_SIZE.
->
-> The Spectre v4 sanitization pre-check uses slot_type[i] instead. For a
-> 4-byte write at fp-8 after the lower half of fp-8 has been zeroed, the
-> pre-check scans bytes 0..3 and sees STACK_ZERO while the actual write updates
-> bytes 7..4. That can leave the second half-slot write without nospec_result
-> even though the bytes being overwritten still require sanitization.
->
-> Use the same slot index in the sanitization pre-check that the write path uses
-> when updating slot_type[].
->
-> Fixes: e4f4db47794c ("bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
+This series adds a bpf_sock_read_xattr() kfunc that, given a struct
+socket, reads a user.* extended attribute from the socket's sockfs inode
+into a bpf_dynptr. Together with fsetxattr() from userspace this lets a
+process label a socket with a user.* xattr and have a BPF LSM program
+retrieve that label locklessly. The kfunc mirrors the existing
+bpf_cgroup_read_xattr(), including the restriction to the user.*
+namespace.
 
+systemd uses user.* xattrs on sockets to implement socket rate limiting
+and to tag sockets for other purposes [1] such as implementing a varlink
+registry. There is currently no efficient way for a BPF program to read
+those labels back. The new helper allows a listening socket marked with
+an extended attribute to be read back during bind/connect and then act
+on the connect()ing socket. Extended attributes make it possible to
+allow an unprivileged user manager such as systemd --user to mark
+sockets from userspace and then rediscover them or implement policies.
 
-I think the Fixes tag should be  2039f26f3aca ("bpf: Fix leakage due to 
-insufficient speculative store bypass mitigation") ?
+The kfunc is registered KF_RCU and only for BPF LSM programs. A struct
+socket is only guaranteed to live in sockfs when an LSM socket hook hands
+it out, which is what keeps SOCK_INODE() valid. Sockets that embed struct
+socket outside sockfs (tun, tap) are only reachable from tracing programs
+and are excluded by the registration. (Btw, for consistency it would
+be nice to force allocation of struct socket from sockfs instead of
+simply embedding it in e.g., struct tun_file which makes the SOCKFS_I()
+pattern a hazard - at least outside of sockfs functions.)
 
-Otherwise, looks good to me.
+The read never sleeps and takes no lock. For sockfs the value lives in
+the inode's in-memory xattr store and simple_xattr_get() resolves it
+with an RCU-protected rhashtable lookup, taking neither the inode lock
+nor any xattr lock. The kfunc is therefore usable from both sleepable
+and non-sleepable LSM hooks.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Link: https://github.com/systemd/systemd/pull/40559 [1]
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Christian Brauner (2):
+      fs: Add bpf_sock_read_xattr() kfunc to read socket xattrs
+      selftests/bpf: Add test for bpf_sock_read_xattr() kfunc
+
+ fs/bpf_fs_kfuncs.c                                 | 37 ++++++++++++
+ include/linux/net.h                                |  1 +
+ net/socket.c                                       | 25 ++++++++
+ tools/testing/selftests/bpf/bpf_experimental.h     |  3 +
+ .../testing/selftests/bpf/prog_tests/sock_xattr.c  | 67 ++++++++++++++++++++++
+ .../testing/selftests/bpf/progs/sock_read_xattr.c  | 54 +++++++++++++++++
+ 6 files changed, 187 insertions(+)
+---
+base-commit: 6b5a2b7d9bc156e505f09e698d85d6a1547c1206
+change-id: 20260617-work-bpf-sock-xattr-37ec4c991886
 
