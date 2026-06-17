@@ -1,279 +1,220 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38EA3A2E0A
-	for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 09:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781689383; cv=none; b=el6SGJWptjaW1Y0h429IgwoABgBSPsRTMbm/qTkXMbILfH/tUBdfCYKxTxEW7bVTvqZdz8rOHx5iflZuK0rRRnGbi7475nYExq5yHpqVUeBmmiXSEBV5cNEBPGQVPJEplnXZqofGD+xXHyh6gnjzf0uFV6PNRJ06TgQebwf/tMQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781689383; c=relaxed/simple;
-	bh=6dk1V2FkwIjUDraVd9ebLKZ6skrFu0NoYQrzqg9QeDE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rNL1+dftwA2GQoUpdwNPmPgSSxkjJ2JZFyeSvIRsFKaa5g7Qdg5RL8hzqckJXXZpRS9s6d8hxZ9kGoBefh5f3CEJ6GlzjJGIyaQDrkuiL44DBkrjBb1Sgo3eKrHIrmxiVoIBBaJxVRprFc55GyJJCbLx18L/TwD8aRfj2pJSPxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VlfJXt3l; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ExKhtE1L; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FF539A06F;
+	Wed, 17 Jun 2026 09:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781689405; cv=fail; b=S4wsr/Ezyy6sxwlcRPSk9fXdXdmaHqVE64NuaLHPq0yFpCvTeRj4stpGqLFjgWJcLFytdob/6uggRzI2JYEZUY3LvhvBEMXVdiPlkH77ciw/Yf2qgTi+vduPBpgPegxUqD/jz+zG3AHL6ixPFS4bKWv8y4yS1B0mhE4GRWemS44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781689405; c=relaxed/simple;
+	bh=1COQ/sGJzl/4EnEHt1WdKGxdrQjhVpAuEydonsnWpGo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fJsm3uzu6ah5ufJW1wiZNnjUFGa2fR98hLm0JyTWhB89J2gwXH+jF/ouXwqjXFLzjMfUBU07I6owsWxB5+xGgNOyToPXqiK1+cAyg8+Pnc9JKMGp+eH7M2WLoOwSMQ5Ib+7jZMPDL5mcoAGPvXKzvJxXeT2xH2OX3ZvNshFWtYY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HcM3lVM3; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VlfJXt3l";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ExKhtE1L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781689381;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
-	b=VlfJXt3lZwGcmUNe6qWTUZasBUwGguXRgLVKVDrMatyHIvNlMh0NiNYHw2qv09At3qFBNH
-	eDN/p8Jxwe4CNnb4OydEYO4VyCWIfy6e+KtlsYiky2tWXl2YOSTnMwvXM6fZpskHGVObP4
-	ZkJSHNN6slt4Dl3X1+2KP1/z2hsEi+g=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-205-2azdPO5MOoCou5YHuauJKw-1; Wed, 17 Jun 2026 05:42:57 -0400
-X-MC-Unique: 2azdPO5MOoCou5YHuauJKw-1
-X-Mimecast-MFC-AGG-ID: 2azdPO5MOoCou5YHuauJKw_1781689377
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-45ef4931de5so469522f8f.1
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2026 02:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781689377; x=1782294177; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
-        b=ExKhtE1LQVvWuOJR+cmR/EVFSOQuYdEGrodZfVZ0P0/AEM35HQep2W4Jra0kkFagGy
-         LRdD9nmY/mlIvtPM8vqcw6eV/WmOfAIi15FcYVp1ELeXhmth3kesItjJW01n0sR3Ja1f
-         x3iVpwDU+SIci+9fo6+Oj+t797ibT8PVcHuHPZ1XoWqEoWcMtxiUeoeQjwMdP23WSAHu
-         KBRooVSupDi91wmsKJM6r+MYHX/D7pv2GYy+GFzVIzZlKrD/PFYkfgtAhio3v3oE/vdr
-         GSS7UkkbgJ6Ivx9av4ceOes3MM/4stPEybdw1NtTmc1DjQb9pahB9jcv54JrpLUrjS8n
-         nNqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781689377; x=1782294177;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ozmBpImS8oeWooI3eg5F7+EjraI/5E3NnIle2PdR8uw=;
-        b=WkCrum1RosLz7P0zwz3ZtdVKXHCV3+NiZKLtmimRpO6IS8hrzleWIXNzgKheI5+unu
-         GLtJ3wJN3vdXBQeSoCa6Z64ryZRtSFga848JzYdBaAJWpwYAy6ceYJW1W9DtkFtP/yB7
-         4hu6kTa5yIFGKwMeQViiXdmcY40KaM1MLFq9KXAMsc5bRRj8sm0C+HMg+kZEy3qq8A91
-         qztBvFGvRN9wGs032Ob1Val0Yqm5Oru2XQi9pxvFVkKneFbAyruSA6Wl6RuEF+KtBRhi
-         CZ4wzOAHD0l08cTfDtv3HL6XPOM+qH9JJrb9eb196OMyvTMCNvafPTFVJ80oA0TT1ZXP
-         RTdA==
-X-Forwarded-Encrypted: i=1; AFNElJ8dwNpP1h82tF6xtfkLmGQ+PYOsFczpu+6DlXFnZpxcTF0Aq8cSpBBTAZkZ+D8MMve3CV8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlQXZcLhst0fIaHO7TzDRYtNcnKbviTjRhzZxQuOKacQa2J/0z
-	H9DZpEXh9lQxYYkIgpETlL3K1byXh7bhljbota8xlCNagyp0H6KBQxCqpWtSFSND5hNuKZyKQRm
-	2WLb4BrXRQCCVe2qCHmie4RUQB01e8WDAqT1SGtD7tx66RRAD0FiFGw==
-X-Gm-Gg: Acq92OGJID1uFFKn9o9SuUSMbZiQkFcShqmPF2/1MD1nFe+jm6Cv4ImS3fnvgh5b0fp
-	0YSxbwwLIuiPQy9s2uAyAhWkROdl2fRC22Fm35dObzkufOmPLQBG7ESzl36pehWo88EtE5eyGQr
-	6+ggUHlluehI1tGHCVSASarhv3pLWhUaGmmQ2v+Ga81tPynF7Y1UZvD+/5R9AA64gDxk6ABWd/W
-	iGjpthLRiVfoCvInmpGGnbyaIIVoY4cTvzvmNX4ZbD+SsVjorED2rnOeJDIZGYR5h7VMdy/ZyGU
-	GHkAJDCP72WooBz0V35NQrzRLzTpO/dewc2YuwM/HcJ7QR1QrG80yFlqY1jOnL4h/ErOtiV5I5Q
-	Nh7TSnJSXNhMZfqboRdhufqAtw1PbGPrvNj5j3w==
-X-Received: by 2002:a05:600c:46cf:b0:490:b4cb:3866 with SMTP id 5b1f17b1804b1-492340e7632mr28942935e9.10.1781689376596;
-        Wed, 17 Jun 2026 02:42:56 -0700 (PDT)
-X-Received: by 2002:a05:600c:46cf:b0:490:b4cb:3866 with SMTP id 5b1f17b1804b1-492340e7632mr28942185e9.10.1781689375972;
-        Wed, 17 Jun 2026 02:42:55 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4922fa8b423sm146401065e9.11.2026.06.17.02.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 02:42:55 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D20C38074C9; Wed, 17 Jun 2026 11:42:53 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Avinash Duduskar <avinash.duduskar@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Shuah Khan
- <shuah@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Mykyta
- Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>, Amery
- Hung <ameryhung@gmail.com>, Eyal Birger <eyal.birger@gmail.com>, Rong Tao
- <rongtao@cestc.cn>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag
- to bpf_fib_lookup() helper
-In-Reply-To: <20260616223426.3568080-4-avinash.duduskar@gmail.com>
-References: <20260616223426.3568080-1-avinash.duduskar@gmail.com>
- <20260616223426.3568080-4-avinash.duduskar@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Wed, 17 Jun 2026 11:42:53 +0200
-Message-ID: <874ij1h59e.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HcM3lVM3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781689404; x=1813225404;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=1COQ/sGJzl/4EnEHt1WdKGxdrQjhVpAuEydonsnWpGo=;
+  b=HcM3lVM3xGBj6IDJe6P6ZHjy324Xhifaxlf56RPmGGNeAQYbw++80Ob+
+   27ELQxRVoQHKmRjqC7nNWoXEBKe2POT23OBIHVQbQvqm5wkyBlc+AaJlh
+   7gy2UhYftZIAcNfISFtusQZHt0Ebm4+OrZGLWRtFg9oPkk3L5qZhv+r7V
+   yllMDuClBzmzxj5JAfa1Uom2jTEwZTC217h5R/QRuK9CWCvgjr/eIMOoR
+   E4K+05GyOFRX2O16imIxJfZaKFRHgrW6890cpu44OuMJbNiLDtD7y+UXs
+   VN66bixRgAp+rD4lYsomTx7OGQa8fNDF/vV9xGjgGUqiTRGkWUmhZzl9o
+   Q==;
+X-CSE-ConnectionGUID: clF0YM/CRFmTOVzgRKXoAQ==
+X-CSE-MsgGUID: IcLNdPE2SB+W9SXox8Jrfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="82534208"
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="82534208"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2026 02:43:23 -0700
+X-CSE-ConnectionGUID: 347vwwewQVmtgL1W/7auwg==
+X-CSE-MsgGUID: 2+FWEcsXQCC4XxKTBtEEXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="252322630"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2026 02:43:24 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 17 Jun 2026 02:43:22 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Wed, 17 Jun 2026 02:43:22 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.8) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Wed, 17 Jun 2026 02:43:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OEnj/0AC7yOPQCv85yAwCri6O4moFsG8m/q2zVvjQKcUVBlBlMsY/bVpMS0uRvrFcw7HyFgYI+VlJicbwRpYIiPbC76YE0fU6mk8gbXjyd0KLQr4Dc2gpBtyaA9+aMHELxCJwPO8NJE0QmnaG318TrnlHauUoZpMnrTK+IfAgK62TkE39ht3Upf2NNVfWeyvj5dB4+8ZqU3ULjJb4RAQzOnsUrYr63cxG7YR+RvnixhEQEIk74Su4eO69guysFVs1FPOOorGL4GuiB+l4QNQGCOaTXONjfAZ+/ybMC2+zqLG3SB4MFwzN6mK0AhVGK8eT1OscAYpL2tl8LnfwiXJAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vcq3MWvYn4F9lwcFsQZzGLpSgwkPolStj+IysGluTVY=;
+ b=HGMOpl17vgRpWYC8/JJ80TwDAzRmKwVy9C1h7cSvNrqv5LbEsM8Y1XhRY/PrVooA9I7aEoAmGAFka9uwtaiDrCldM+vVxKR54kTe/8f1szmet5conbJVK4BPGYb5Ki3hgbUKp+aW8L2hOqhEZ4AuntPRqe6O6TPJ3//F+yQrRz5Z6rCY641IYzZRmAmw/2kXST6GYKIe/XLl3/tTjmv498sOT/dSX1mYBUXkNU5Vcj3jjAjcxxZj3DkYYs5q9BIn4TU3FM4xs/jRVBxmf26WRfqEe+Mb2tQciiX7h81WDd94QQviX2QT7dHHDpNyOTqLnN/SLpYddEJFauxmMPxVFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by DM4PR11MB6118.namprd11.prod.outlook.com (2603:10b6:8:b2::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.11; Wed, 17 Jun
+ 2026 09:43:20 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::61e9:afe6:c2c0:722%3]) with mapi id 15.21.0113.015; Wed, 17 Jun 2026
+ 09:43:20 +0000
+Date: Wed, 17 Jun 2026 11:43:14 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+CC: Tushar Vyavahare <tushar.vyavahare@intel.com>, <netdev@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>,
+	<kernelxing@tencent.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<tirthendu.sarkar@intel.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/3] selftests/xsk: stabilize timeout test
+ behavior
+Message-ID: <ajJsMj0QMOF5I8qq@boxer>
+References: <20260616154955.1492560-1-tushar.vyavahare@intel.com>
+ <CAL+tcoDr0gtCPeGi1yOUtg+ZD2YxEbjAy41LBgG63b8-=CStcw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoDr0gtCPeGi1yOUtg+ZD2YxEbjAy41LBgG63b8-=CStcw@mail.gmail.com>
+X-ClientProxiedBy: DU2PR04CA0068.eurprd04.prod.outlook.com
+ (2603:10a6:10:232::13) To IA1PR11MB6097.namprd11.prod.outlook.com
+ (2603:10b6:208:3d7::17)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|DM4PR11MB6118:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a1ef158-3c19-4b43-1290-08decc54dde6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|23010399003|1800799024|18002099003|22082099003|4143699003|11063799006|56012099006|6133799003;
+X-Microsoft-Antispam-Message-Info: SHajhrusbnlFwJWvEzpR/eQUDGhbuGjbFMWqe21ApsgEDq7GGiYpSHXaPMlga/HekdzU1O0CASD6uiB9ADLuabf5hC8yDDB6xQJLkznUzJVGLBAD+wO0yCmRUFviF2FLWtbi/Oi54c715aSyvO34/0IVUfEB1PK6MY73jSELYg/OxPQbDUcAPJbeAlCiwarpsVrpARXNqlr1egLxrHoeLQ1JfdU35GLbDMx3ly1C07RTUXTby6c1VSpuGp4v+OXL8jiVs5blgS9ab1EfE9dbrOOm21tzR2/iEnj2f485WRDqiFhRG99ZVudKj8KUg5razwmEclEBlp1ES7ubHpHwDzhFrfXg835a35NRYK/2UP+6eIvMgQ2mKMW9E4427Ygky0IurHqVcb8tWpXora2erAlcU0kZPc3tOccn19Hk32t7CHZokbWFlM+2EjCtT2utNM1K/qKcJdk+I+0XyTCs+zTkFmpicNXc/0VgKTXVgNnVA3BoF7uzbvU02ArtmiTUgP+IgkFrbDUMpvYFzoyAoUujumMznx07YVyLbsWs8KsnVqRUWS6aW69ACQE4Z8V5XZhkW5/pznNOa3dXcO+MMQfADydfKhEVRbjgOvLPKuliOlfos5qkHL5u5PTOGxQ7uO/7Y0bJv69pEj/HR+6yWto/8DH8ls0oBkVhFrZpekWE+eaKum5OugvnuiHrRFUFqxIo6pcTiuFnG9pNDM3zVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(1800799024)(18002099003)(22082099003)(4143699003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y1dHdFV2M1AwQzVMVERFSkozQjRRNkpDaVI5a3FqUHFyeVliQTE3bG80Uldr?=
+ =?utf-8?B?cXNTdytrR3dwQmhSWEl3aFFIMGZxcnJtZkp0cmNUZFVKREhlQXpBQW5RcGI5?=
+ =?utf-8?B?NjQvaEFoY2JLQjdiQkY4QVZCZGZ4cDJDclAwa0gvc0JVSkhQZktXMndlZVNR?=
+ =?utf-8?B?UWZ2K0JjR09Kc014T2ZlbVhxeENoK3lRQmhWRmkzZFQveFZyUlVWSVRZR0lp?=
+ =?utf-8?B?VnFMcEFqdmJESjBSU2o4ZGMvVlZPSTFwQ3dLODhsR3d2QzUrYWlBNklQMDA1?=
+ =?utf-8?B?R1NoY2QwM2llemZ1Q1RJcWZYY2E1ZWFXNmRZblJCMnVUVW1vMmFqUXFFM3JK?=
+ =?utf-8?B?ZktKbmdNcXFZYlcrTWoxQWV6SzVFM3Q4TVhrN2JkMlBVUjJ5UVBJQThtdVdp?=
+ =?utf-8?B?RUdwUEhvWm5UNUNGUURVL3A4STcyWEJacWJ6eUJDU2hUTXpjZkl6c3pTZkZF?=
+ =?utf-8?B?SVdXWXlzVFU4L0oyeS9sc0swU3hXVGw1TU16ZHVrQkx4WjhVc0FaQndiWktL?=
+ =?utf-8?B?c09RNmVmTythN0RpVXNHak55OEZRYjVtOXNBNFFsUjl4cEt0WHh1WFdjNUc1?=
+ =?utf-8?B?Vyt3czEwMnJOU1Q5c3BObXVSWHBmZ00vajNtTmN0dnE0N0g1SFhndVNRTTVx?=
+ =?utf-8?B?MmhPZ0RJaGdzaDVjTy83ekRiQ3BiTmlhRU5WSmF5eTN3bGNhb2FZckFsbXU5?=
+ =?utf-8?B?cWp1b2RGOWlKaHVhL3YzWWFXUmJNUWVHYmpJdThOQzg3SE9tWE9VVy82ZmFx?=
+ =?utf-8?B?YThLampIOXpvSzB2SjR3d1F5dmtqR3VoYUtvd3JmbEZrYU1hRzZJM3pMNm8v?=
+ =?utf-8?B?d3NTVU1JYkZMQTNUeThtcXhDWE1SNE4xNmhtVmZyMUJzanN0TFlMREVaWUlL?=
+ =?utf-8?B?NDE0QXRnTVlsTlpKRGpZVmUrcHNJR1RvZkdHYXg0Vy93UFhFQXB0NnJXMkpv?=
+ =?utf-8?B?d1JLcUpkdGxNTEFDSVZUa29KQnhwNkgwczF1R2JUandKWmphcE41Nk50MkFv?=
+ =?utf-8?B?S05RaDRmK3JydEFpZmhCQWZiZ0NLb1Y5REJFRHhkdGtNTStiVW9sZTdBeUxw?=
+ =?utf-8?B?a0cwS3lWMExDMmFwNlFuRVowTHdoM2VJeUFabDg2WWw3VW85dTdXRlp5MVVY?=
+ =?utf-8?B?RlJneGJveW8ra0NkQnMwRk14TzFnSVZGTkFISStGT0JWckxBbS91dzZIbVhP?=
+ =?utf-8?B?STRIa2UrNjIwTWQ0emdCbHRYczFYaG1TUjJOVkQyMEFJakQ3a2x2UG9wWDBv?=
+ =?utf-8?B?N3MzZWhRRnlnTExubFpEZFprTXpReDhGWDhoV0RkeDBLRFF2R1NLY1ZIMk5t?=
+ =?utf-8?B?dHRtTHJ1Z3REc1JHd2pRL2hJUmVqeHMvZjhOZGZobHY1Y3QvTm5Gb0xVejRR?=
+ =?utf-8?B?bWlqclRadG9KMXVjSVR5Y0lBdndJVFRJNmJPWTJ1dWt0Ly9DQnMwSFFzem5z?=
+ =?utf-8?B?Vk9rZ3N2TWJmTW50NjRkdVBpU2d3NnpZektXa0FqMUJ1MU9pV1htbkU3d0tk?=
+ =?utf-8?B?MXc5bFNOcnNSeHpOdkhDVndXSFErbEVLWlVDOVh5MURmTk4zWUFtVFZrZHhl?=
+ =?utf-8?B?RDFlSWxEZnBxamhiSE55MTh2VS9IV1NxTUFkQzdzWVFrdkhWSys5c0JVOSt4?=
+ =?utf-8?B?aFRCRlBTajhVUFNUNGt0ejlOYkhUeHdrNFE2S3QxMEZPSnltdGQ3UE9ySmtV?=
+ =?utf-8?B?eWtlTUM2QzNHL3JmNW5EajFmNGVmTXFRUGFzRVZUL1UrYWhxT0F2QXczZnA0?=
+ =?utf-8?B?OGJWZjZQaktZT1M0R1JWeUI4U1VKYjZEbkU5MzJqYTVISUd5SC9xQjZZc3VM?=
+ =?utf-8?B?NkN3ckNJL3FEZk14aFBVdURoM1hlVGZkbGRDcEVBZjNxaytMN0libVBqV3Zk?=
+ =?utf-8?B?S3VUOW4xQnBSalRraW1mSUV4ai9jSVBHTDJVa2VsOWdBRGpuQk1DZjBVTmpF?=
+ =?utf-8?B?akhCZk43eUduc3NRcmsrYThMbGw3OXRNVWNlSm5GLzhxY0FkMmpyNm9BdVM5?=
+ =?utf-8?B?cGsrMDQ5TWFHTTcxRG9QSGlYOW1KR2MwQWxrQlRaWFJzTDhPYkgzZXRtdkw5?=
+ =?utf-8?B?NjVpN0thY1RJQUh6TVR3N3hldVZtSXlGT2VtUnhsRXZIcmhOYnRSb0F0cmxs?=
+ =?utf-8?B?OGg5Q0dDQXBYREtMdC96NDZHeFBOZyttcUx2NnUwOE16N1ZlOWVxc1hZNG9t?=
+ =?utf-8?B?VGxKZkFLZTYwbXNDWUNqNGpHWG9pWDBCUFFuTEFnVzNvQVVnZHltZG1UbEts?=
+ =?utf-8?B?R2hEdng3SXlMUFYvcFdUb2kwYWpreGdraURkeTNpMnU1VStlU2d0dkFXbmtP?=
+ =?utf-8?B?QnlBcC8zUVUrOUMraExwVVBTTTlSVVNIbC9aN1ovaVNyTjRtL29Vb0xScVNK?=
+ =?utf-8?Q?7epdhqoYtkFFvZuo=3D?=
+X-Exchange-RoutingPolicyChecked: jHKfKLmHEjPSMzQUex6RrRu208R89Ck4WoEr157WwrmeZTK8WV0Z1MeCwamXTx4o5PoQtHsRrWjsMcztNbspjxE2CJjYIbv9kbrpEobi2uuoCqudqrVqx4cyNlZvk/MNDL0eg+2qpIG1tc6iYpGTARIJaz4xvCV1RNH7w5q7JI6pdBW3kLFnuQYNk7nAOOF+/L0LyuSJGXJpqzBHX2IX3D/1B9oKaC4rgOKk36S3IyAaoSNtQCPDgEQPtqhenzCmBiBe493Mqd6K8X48fYvFiBhtAkuupiNaO0vARBsAUkE7A0+9hk/89Z3IGzK2dh7m4OEF+1MZNmvX7NqhnMEGnw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a1ef158-3c19-4b43-1290-08decc54dde6
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2026 09:43:20.6350
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: benmF9nu1opLXeV9tksCXnxrywjT5RuPLCoVUSurAGUuwlxg5+FXUc3KjsQP/UD1h4ITdz7scyw1nSgtAe8lfLy0VfXwxFHtKfN8O4YCCR0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6118
+X-OriginatorOrg: intel.com
 
-Avinash Duduskar <avinash.duduskar@gmail.com> writes:
+On Wed, Jun 17, 2026 at 07:39:06AM +0800, Jason Xing wrote:
+> Hi Tushar,
+> 
+> On Tue, Jun 16, 2026 at 11:50 PM Tushar Vyavahare
+> <tushar.vyavahare@intel.com> wrote:
+> >
+> > This series improves AF_XDP selftests by making timeout handling
+> > explicit and fixing sources of non-determinism in xsk timeout tests.
+> >
+> > Patch 1 introduces test_spec::poll_tmout and removes implicit
+> > dependence on RX UMEM setup state for timeout behavior.
+> >
+> > Patch 2 fixes thread harness sequencing by attaching XDP programs
+> > before worker startup, removing signal-based termination, and using
+> > barrier synchronization only for dual-thread runs.
+> >
+> > Patch 3 restores shared_umem after POLL_TXQ_FULL so test-local
+> > configuration does not leak into subsequent cases on shared-netdev
+> > runs.
+> >
+> > Together these changes make timeout handling easier to follow and
+> > improve selftest stability, especially on real NIC runs.
+> 
+> net-next is closed, but in the meantime I'll review the series ASAP.
+> 
+> BTW, another thing about selftests I had in my mind is that are you
+> planning to work on this [1]?
 
-> BPF_FIB_LOOKUP_VLAN resolves a VLAN egress. The reverse is also
-> useful: an XDP program receiving a VLAN-tagged frame on a physical
-> device wants the lookup to behave as if the packet had arrived on the
-> corresponding VLAN subinterface, so iif-based policy routing and VRF
-> table selection use the right ingress.
->
-> Add BPF_FIB_LOOKUP_VLAN_INPUT. When set, params->h_vlan_proto and
-> params->h_vlan_TCI are read as an input VLAN tag and the matching VLAN
-> device of params->ifindex is resolved with __vlan_find_dev_deep_rcu().
-> The device must be up and in the same network namespace as
-> params->ifindex (a VLAN device can be moved to another netns while
-> registered on its parent; receive would deliver into that other
-> namespace, which a lookup here cannot represent). If params->ifindex
-> is itself a VLAN device, its inner (QinQ) subinterface is matched.
-> For a bond or team, a tag on a port matches no device and returns
-> NOT_FWDED; pass the master's ifindex.
-> The lookup then runs with the resolved device as the ingress;
-> params->ifindex itself is not modified on the input side. When the
-> resolved device is enslaved to a VRF, both the full lookup (via the
-> l3mdev rule) and BPF_FIB_LOOKUP_DIRECT (via l3mdev_fib_table_rcu())
-> select the VRF's table from the resolved ingress. That follows from
-> feeding the resolved device to the flow as the ingress
-> (fl4.flowi4_iif =3D dev->ifindex), which is what makes l3mdev resolve
-> the VRF master from the subinterface rather than from
-> params->ifindex.
->
-> The two failure classes get different treatment on purpose. A
-> h_vlan_proto other than 802.1Q/802.1ad is API misuse and returns
-> -EINVAL, since it would otherwise reach the WARN in vlan_proto_idx()
-> with a program-controlled value. An unmatched VID, a device that is
-> down, or one in another namespace is a data outcome and returns
-> BPF_FIB_LKUP_RET_NOT_FWDED, matching the DIRECT path when
-> fib_get_table() finds no table and mirroring real ingress, where the
-> receive path drops such frames. A VID of 0 (a priority tag) is looked
-> up literally and normally fails the same way; receive instead
-> processes such frames untagged, so callers should not set the flag for
-> priority tags. Proceeding on the physical device for any of these
-> would be fail-open for the policy-routing cases above.
->
-> The h_vlan fields share a union with tbid, so the flag cannot be
-> combined with BPF_FIB_LOOKUP_TBID. It describes ingress, so it also
-> cannot be combined with BPF_FIB_LOOKUP_OUTPUT. Both combinations
-> return -EINVAL; restricting now keeps a later relaxation backward
-> compatible. Combining with BPF_FIB_LOOKUP_VLAN is allowed: the tag is
-> consumed on the ingress side and the egress tag is written on
-> success.
->
-> Under !CONFIG_VLAN_8021Q the __vlan_find_dev_deep_rcu() stub returns
-> NULL, so every lookup with the flag returns NOT_FWDED, which is
-> correct since no VLAN device can exist.
->
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
-> ---
->  include/uapi/linux/bpf.h       | 34 ++++++++++++++-
->  net/core/filter.c              | 80 +++++++++++++++++++++++++++++++---
->  tools/include/uapi/linux/bpf.h | 34 ++++++++++++++-
->  3 files changed, 141 insertions(+), 7 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index f77aa9472bf1..57e28da3336a 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3552,6 +3552,35 @@ union bpf_attr {
->   *			reports the route mtu in *params*->mtu_result, and on
->   *			the tc path without tot_len the mtu check runs after
->   *			the swap, against the parent device.
-> + *		**BPF_FIB_LOOKUP_VLAN_INPUT**
-> + *			Treat *params*->h_vlan_proto and *params*->h_vlan_TCI
-> + *			as an input VLAN tag (e.g. parsed from the packet) and
-> + *			run the lookup as if ingress had happened on the VLAN
-> + *			subinterface carrying that tag for *params*->ifindex,
-> + *			rather than on *params*->ifindex itself. The VID is the
-> + *			low 12 bits of *params*->h_vlan_TCI;
-> + *			*params*->h_vlan_proto must be ETH_P_8021Q or
-> + *			ETH_P_8021AD in network byte order (any other value
-> + *			returns **-EINVAL**). The
-> + *			subinterface is the one configured for that tag on
-> + *			*params*->ifindex; if *params*->ifindex is itself a
-> + *			VLAN device, its inner (QinQ) subinterface is matched.
-> + *			For a bond or team, a tag on a port matches no
-> + *			device and returns NOT_FWDED; pass the master's
-> + *			ifindex.
-> + *			If no matching subinterface exists, or it is not up,
-> + *			or it was moved to another network namespace, the
-> + *			lookup returns **BPF_FIB_LKUP_RET_NOT_FWDED**,
-> + *			mirroring real ingress, which drops a frame whose tag
-> + *			is unconfigured or whose VLAN device is down. A VID of
-> + *			0 (a priority-tagged frame) is looked up literally like
-> + *			any other VID; receive instead processes such frames
-> + *			untagged on the device itself, so do not set this flag
-> + *			for priority tags.
-> + *			Cannot be combined with **BPF_FIB_LOOKUP_TBID** (both
-> + *			use the same input fields) or **BPF_FIB_LOOKUP_OUTPUT**
-> + *			(this flag is ingress-only); doing so returns
-> + *			**-EINVAL**.
+This one is on me. I took your changes Jason and aligned ZC batching side
+to this behavior, followed by xskxceiver adjustment. I am planning to send
+this today EOD, however let's see how badly internal Sashiko will kick my
+ass.
 
-This comment is also overly long - please trim.
-
->   *
->   *		*ctx* is either **struct xdp_md** for XDP programs or
->   *		**struct sk_buff** tc cls_act programs.
-> @@ -7348,6 +7377,7 @@ enum {
->  	BPF_FIB_LOOKUP_SRC     =3D (1U << 4),
->  	BPF_FIB_LOOKUP_MARK    =3D (1U << 5),
->  	BPF_FIB_LOOKUP_VLAN    =3D (1U << 6),
-> +	BPF_FIB_LOOKUP_VLAN_INPUT =3D (1U << 7),
->  };
->=20=20
->  enum {
-> @@ -7416,7 +7446,9 @@ struct bpf_fib_lookup {
->  		struct {
->  			/* output with BPF_FIB_LOOKUP_VLAN: set from the
->  			 * resolved egress VLAN device (see the flag); zeroed
-> -			 * on other successful lookups.
-> +			 * on other successful lookups. input with
-> +			 * BPF_FIB_LOOKUP_VLAN_INPUT: the VLAN tag to scope
-> +			 * the lookup by.
->  			 */
->  			__be16	h_vlan_proto;
->  			__be16	h_vlan_TCI;
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index b37a12321fba..cfbdd842ce61 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -6158,6 +6158,41 @@ static int bpf_fib_set_fwd_params(struct net_devic=
-e *dev,
->=20=20
->  	return 0;
->  }
-> +
-> +/* With BPF_FIB_LOOKUP_VLAN_INPUT the caller passes the packet's VLAN ta=
-g in
-> + * params->h_vlan_proto and params->h_vlan_TCI; the lookup is done as if
-> + * ingress had happened on the matching VLAN subinterface of *dev. Resol=
-ve
-> + * it and store it in *dev. params is not modified.
-> + *
-> + * A protocol other than 802.1Q/802.1AD is API misuse (it would otherwise
-> + * reach the WARN in vlan_proto_idx()), so it is rejected with -EINVAL. =
-An
-> + * unmatched VID, a matching device that is down, or one that was moved
-> + * to another netns (receive would deliver into that netns' stack, which
-> + * a lookup here cannot represent) is a data outcome, reported as
-> + * NOT_FWDED, the same way the DIRECT path reports a missing table. Under
-> + * !CONFIG_VLAN_8021Q __vlan_find_dev_deep_rcu() returns NULL, so every
-> + * call returns NOT_FWDED, which is correct since no subinterface can
-> + * exist.
-> + */
-
-As in the previous patch, please drop this comment.
-
-> +static int bpf_fib_vlan_input_dev(struct net_device **dev,
-> +				  const struct bpf_fib_lookup *params)
-> +{
-
-Just return the dev pointer and use ERR_PTR for errors? That's what we
-usually do for these kinds of functions.
-
--Toke
-
+> 
+> [1]: https://lore.kernel.org/all/20260520004244.55663-1-kerneljasonxing@gmail.com/
+> 
+> Thanks,
+> Jason
+> 
+> >
+> > Tushar Vyavahare (3):
+> >   selftests/xsk: make poll timeout mode explicit
+> >   selftests/xsk: fix timeout thread harness sequencing
+> >   selftests/xsk: restore shared_umem after POLL_TXQ_FULL
+> >
+> >  .../selftests/bpf/prog_tests/test_xsk.c       | 96 +++++++++++--------
+> >  .../selftests/bpf/prog_tests/test_xsk.h       |  2 +
+> >  2 files changed, 56 insertions(+), 42 deletions(-)
+> >
+> > --
+> > 2.43.0
+> >
+> >
+> 
