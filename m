@@ -1,157 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849C634FF79;
-	Wed, 17 Jun 2026 07:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B20839C012;
+	Wed, 17 Jun 2026 07:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781679752; cv=none; b=czEv77ryxTZ6URTOEPQ0/bAbAMT3XRvCaQil4wcnUiB9hmP7UiotBwq4abk5eer1x7chn/0N30Ykj28VNdlwWVr8LWsNAc3biNKrr7E6eANwIcYKiX4MYOHrTpAalyUHrOdOWd7fzcbUzv6kWKOn4m4RLd/5cIgAhNTgNl2KkFI=
+	t=1781681420; cv=none; b=PIA1zmjMvsdJh1WJpy+WHlm+ch7aAprZp9Bl6MxloXgkJxMLz+VA82SvDg4eSoYnmV+jkErZ10xbLLaV8BMlNhN5/3FXq7jqIOCk9FnOmVLCn/5zmtYOpEJj7+4xCTD63MOcKr1xbKhgJIeTvbjdR0NphgaQ8a9jh4s0yyvGaNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781679752; c=relaxed/simple;
-	bh=QC/m4Ge72NarEgPPZnenQ8Z2ImAe81ATwGkWWw5fkVI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LNT23tYVWgv0lSig91ldhoinbxw546Z7OOOlVjyPFqJHz/PkblWut+3xShtOe8CuMfm6iCa/MX5eByHMYhmI4eLQ9ETxEGJRAXWqzooA57GlNwFD6xsyPgmYCzWm6IcG20RaQNK6VUq9n0eKtBCkf0v9cBxA3SJTsdzfJu2qbUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eq8F7qx0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781681420; c=relaxed/simple;
+	bh=m5AOnezOQdbgPnq0bYL7H4+rLwUtXUfQiRIhvU82yM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=LJP/poRZ+LaHw2I4O81pu62cqziudlWLDBPeNH0eXH32oYhjXUG0KCMCDHTiMMdF8YI2UnnC0Sh1828yCkT06MCKwiMs+UAc2c7x1FLxxzh9WxeZXxO5C+By47+WwfllTb4fXWqRaoiwwB8ExDAelCENOFWuyINmtf2AlnIspLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Vl7t1HdC; arc=none smtp.client-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eq8F7qx0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03CB1F000E9;
-	Wed, 17 Jun 2026 07:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781679751;
-	bh=vP8VNXwJPI7kFbdNWCLWfd1RxXCQsIHlr7yJImNXR7Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Eq8F7qx0ErUZyeimSpoAey3+Aak+f6qnsF9u//0UVvYGt9DWzgwE4+ZSmeNs20ocp
-	 kq7Zb7gdkpog4og1ERcRiwq/lHETSPI14E4fKVWeqJxfc6+OASvdEnK6dhanjYcQkZ
-	 CJ8p8EN0tyKjefPr/c21+8W+9SceGgkIrqkSxrrq4mNJb0OXDlIk7rZWlM/n+Ezwq2
-	 q1jG4rx3JYsWXxDSRkLaOWbK0Q0lJc2yiOXjRyKoLMkdQxVs1EbkPD4okC2DJPcZMK
-	 8km8mIkk+RilbbFHALZkwG8VPXTxSLcqhuMrq/nOU2Vg3BeE/A0sxdLggj2C8/GBdM
-	 CaB3BTCr21b6w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] tools/sched_ext: scx_flatcg: Fix inverted vtime delta
- accounting
-Reply-To: sashiko-reviews@lists.linux.dev
-To: luoliang@kylinos.cn
-Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
-In-Reply-To: <20260617064805.3901965-1-luoliang@kylinos.cn>
-References: <20260617064805.3901965-1-luoliang@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Jun 2026 07:02:30 +0000
-Message-Id: <20260617070230.F03CB1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Vl7t1HdC"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=r72SZ0T5nPg5YOaeX9GzZ5PhvkCNhJKsFZeacJsMyXc=;
+	b=Vl7t1HdCfBihnCzda/CLpC1pp2eNZcxuD23b1uR5Y7zyk7M1RyBoP8rd1LN1f4kvUCj/YhkQC
+	oWIuSQxui3bJlsK+KE2UT600MzS7vG735SE+8HzvU0okVGvzp2KlqgwYzQrWz+b27ONc0oFvDST
+	Bxz8Tm3GjUyLPKqZVg01Dfg=
+Received: from mail.maildlp.com (unknown [172.19.163.214])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4ggFfm2DdNz1cypx;
+	Wed, 17 Jun 2026 15:22:08 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8C04D4056C;
+	Wed, 17 Jun 2026 15:30:05 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 17 Jun
+ 2026 15:30:04 +0800
+Message-ID: <2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com>
+Date: Wed, 17 Jun 2026 15:30:03 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/3] riscv, bpf: Fix support for BPF_MOVSX in
+ RV32 JIT
+Content-Language: en-US
+To: Kuan-Wei Chiu <visitorckw@gmail.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>, <luke.r.nels@gmail.com>, <xi.wang@gmail.com>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>
+CC: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<jolsa@kernel.org>, <alex@ghiti.fr>, <jserv@ccns.ncku.edu.tw>,
+	<eleanor15x@gmail.com>, <marscheng@google.com>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20260511221648.3251464-1-visitorckw@gmail.com>
+ <20260511221648.3251464-3-visitorckw@gmail.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260511221648.3251464-3-visitorckw@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
 
-New issues:
-- [High] Artificial clamping of `cvtime` at `S64_MAX` causes cgroup starvat=
-ion.
 
-Pre-existing issues:
-- [High] RB-tree node comparison breaks when virtual time naturally wraps a=
-round.
---
+On 2026/5/12 6:16, Kuan-Wei Chiu wrote:
+> The current rv32 bpf jit compiler incorrectly treats BPF_MOVSX as a
+> standard zero-extended move operation. The bpf instruction set allows
+> sign-extension moves by reusing the BPF_MOV opcode with the instruction
+> offset set to 8, 16, or 32.
+> 
+> Update the bpf_jit_emit_insn() function to check the offset field for
+> both ALU and ALU64 MOV operations. If the offset is non-zero, emit the
+> correct slli and srai instructions to perform the sign extension.
+> 
+> Before this patch:
+> [   19.549705] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> [   19.551354] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> [   19.552576] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> [   19.553542] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> [   19.554807] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 ret 2 != 1 (0x2 != 0x1)FAIL (1 times)
+> 
+> After this patch:
+> [   17.931172] test_bpf: #82 ALU_MOVSX | BPF_B jited:1 125 PASS
+> [   17.932198] test_bpf: #83 ALU_MOVSX | BPF_H jited:1 124 PASS
+> [   17.933039] test_bpf: #84 ALU64_MOVSX | BPF_B jited:1 124 PASS
+> [   17.933918] test_bpf: #85 ALU64_MOVSX | BPF_H jited:1 124 PASS
+> [   17.934751] test_bpf: #86 ALU64_MOVSX | BPF_W jited:1 122 PASS
+> 
+> Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
 
-commit 4fba932e11addf1840854e2adfbd301dff527f34
-Author: Liang Luo <luoliang@kylinos.cn>
+not a fix, the fixes tag should remove. And the title should `Add 
+support for xxx`
 
-tools/sched_ext: scx_flatcg: Fix inverted vtime delta accounting
+others lgtm,
 
-This commit fixes inverted vtime delta accounting in try_pick_next_cgroup()
-and fcg_dispatch(). It addresses an issue where early yields were penalized
-and overruns resulted in massive positive cvtime_delta values due to unsign=
-ed
-underflow. The patch applies the refund using a signed domain to correctly
-reduce virtual time without wrapping.
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
 
-> diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatc=
-g.bpf.c
-> index fec3595818269..a37f5b876da8f 100644
-> --- a/tools/sched_ext/scx_flatcg.bpf.c
-> +++ b/tools/sched_ext/scx_flatcg.bpf.c
-> @@ -249,15 +249,26 @@ static void cgrp_refresh_hweight(struct cgroup *cgr=
-p, struct fcg_cgrp_ctx *cgc)
-> =20
->  static void cgrp_cap_budget(struct cgv_node *cgv_node, struct fcg_cgrp_c=
-tx *cgc)
->  {
-> -	u64 delta, cvtime, max_budget;
-> +	s64 delta;
-> +	u64 cvtime, max_budget;
-> =20
->  	/*
->  	 * A node which is on the rbtree can't be pointed to from elsewhere yet
->  	 * and thus can't be updated and repositioned. Instead, we collect the
->  	 * vtime deltas separately and apply it asynchronously here.
->  	 */
-> -	delta =3D __sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_delta);
-> -	cvtime =3D cgv_node->cvtime + delta;
-> +	delta =3D (s64)__sync_fetch_and_sub(&cgc->cvtime_delta, cgc->cvtime_del=
-ta);
-> +	/*
-> +	 * cvtime_delta may be negative (early-yield refund from fcg_dispatch()=
-).
-> +	 * Apply it in the signed domain and clamp the resulting cvtime at zero
-> +	 * so that a refund larger than the accumulated cvtime doesn't roll the
-> +	 * field negative.
-> +	 */
-> +	s64 vtime =3D (s64)cgv_node->cvtime + delta;
+> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp32.c | 32 ++++++++++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
+> index 7396899ea276..f8509950fed4 100644
+> --- a/arch/riscv/net/bpf_jit_comp32.c
+> +++ b/arch/riscv/net/bpf_jit_comp32.c
+> @@ -974,6 +974,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   	switch (code) {
+>   	case BPF_ALU64 | BPF_MOV | BPF_X:
+> +		if (insn->off != 0) {
+> +			const s8 *rd = bpf_get_reg64(dst, tmp1, ctx);
+> +			const s8 *rs = bpf_get_reg64(src, tmp2, ctx);
 > +
-> +	if (vtime < 0)
-> +		vtime =3D 0;
-> +	cvtime =3D (u64)vtime;
-
-[Severity: High]
-Does casting the absolute unsigned virtual time cgv_node->cvtime to s64
-cause issues when cvtime crosses S64_MAX?
-
-Because cvtime is scaled by inverse weight and advanced by the number of
-active CPUs, a lowest-weight cgroup on a multi-core machine can exceed S64_=
-MAX
-in just 18-20 minutes of runtime. Once cvtime crosses S64_MAX, the (s64)
-cast yields a negative number, causing the clamping logic to reset the
-cgroup's cvtime to 0.
-
-With its virtual time near 0 while all other cgroups are near S64_MAX, could
-this cause the affected cgroup to be exclusively prioritized by the schedul=
-er,
-completely starving the system until its cvtime catches up again?
-
-[ ... ]
-
-While reviewing this patch, I noticed a pre-existing issue nearby:
-
-tools/sched_ext/scx_flatcg.bpf.c:cgv_node_less() {
-	struct cgv_node *cgc_a, *cgc_b;
-
-	cgc_a =3D container_of(a, struct cgv_node, rb_node);
-	cgc_b =3D container_of(b, struct cgv_node, rb_node);
-
-	return cgc_a->cvtime < cgc_b->cvtime;
-}
-
-[Severity: High]
-This is a pre-existing issue, but does using standard unsigned comparison
-for cvtime break the RB-tree sorting when virtual time naturally wraps arou=
-nd?
-
-Because cvtime is scaled by inverse weight and advanced by all active CPUs
-simultaneously, it can naturally wrap around U64_MAX in tens of minutes for
-low-weight cgroups on large multi-core machines. When a cgroup's cvtime wra=
-ps
-back near 0, the unsigned comparison incorrectly considers it strictly smal=
-ler
-than all other non-wrapped cgroups.
-
-Could this keep the wrapped cgroup at the front of the RB-tree and prioriti=
-ze
-it indefinitely, starving all other cgroups until its cvtime catches up to
-U64_MAX again? Should this comparison use the wrap-safe time_before() macro?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260617064805.3901=
-965-1-luoliang@kylinos.cn?part=3D1
+> +			if (insn->off == 8) {
+> +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
+> +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
+> +			} else if (insn->off == 16) {
+> +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
+> +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
+> +			} else {
+> +				emit(rv_addi(lo(rd), lo(rs), 0), ctx);
+> +			}
+> +			emit(rv_srai(hi(rd), lo(rd), 31), ctx);
+> +			bpf_put_reg64(dst, rd, ctx);
+> +			break;
+> +		}
+> +		fallthrough;
+>   
+>   	case BPF_ALU64 | BPF_ADD | BPF_X:
+>   	case BPF_ALU64 | BPF_ADD | BPF_K:
+> @@ -1024,6 +1042,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   			emit_zext64(dst, ctx);
+>   			break;
+>   		}
+> +		if (insn->off != 0) {
+> +			const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
+> +			const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
+> +
+> +			if (insn->off == 8) {
+> +				emit(rv_slli(lo(rd), lo(rs), 24), ctx);
+> +				emit(rv_srai(lo(rd), lo(rd), 24), ctx);
+> +			} else if (insn->off == 16) {
+> +				emit(rv_slli(lo(rd), lo(rs), 16), ctx);
+> +				emit(rv_srai(lo(rd), lo(rd), 16), ctx);
+> +			}
+> +			bpf_put_reg32(dst, rd, ctx);
+> +			break;
+> +		}
+>   		fallthrough;
+>   
+>   	case BPF_ALU | BPF_ADD | BPF_X:
